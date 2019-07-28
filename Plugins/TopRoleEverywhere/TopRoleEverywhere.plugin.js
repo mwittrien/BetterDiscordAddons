@@ -3,7 +3,7 @@
 class TopRoleEverywhere {
 	getName () {return "TopRoleEverywhere";}
 
-	getVersion () {return "2.8.2";}
+	getVersion () {return "2.8.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -29,9 +29,10 @@ class TopRoleEverywhere {
 				font-size: 10px;
 				font-weight: 500;
 				height: 15px;
-				line-height: 13px;
+				line-height: 12px;
 				margin-left: 6px;
 				padding: 1px 2px;
+				position: relative;
 				text-indent: 0px !important;
 				vertical-align: top;
 				white-space: nowrap;
@@ -41,9 +42,11 @@ class TopRoleEverywhere {
 				text-overflow: ellipsis;
 				text-transform: uppercase;
 			}
-			${BDFDB.dotCN.messagegroupcompact} .TRE-tag {
-				margin-left: 2px;
-				margin-right: 6px;
+			${BDFDB.dotCN.messagegroup} .TRE-tag {
+				bottom: 2px;
+			}
+			.BE-badges + .TRE-tag {
+				margin-left: 0;
 			}`;
 
 		this.tagMarkup = `<div class="TRE-tag"><div class="role-inner"></div></div>`;

@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";} 
 
-	getVersion () {return "1.4.0";}
+	getVersion () {return "1.4.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -49,8 +49,11 @@ class BadgesEverywhere {
 			.BE-badge.BE-badge-chat.BE-badge-CurrentGuildBoost {
 				top: -1px !important;
 			}
-			${BDFDB.dotCN.messageheadercompact} .BE-badge.BE-badge-chat.BE-badge-CurrentGuildBoost {
-				top: -2px !important;
+			.BE-badge.BE-badge-chat:not(.BE-badge-CurrentGuildBoost) {
+				top: 3px !important;
+			}
+			.BE-badge.BE-badge-chat.BE-badge-CurrentGuildBoost {
+				top: 2px !important;
 			}
 			.BE-badge:not(.BE-badge-settings):first-of-type {
 				margin-left: 5px !important;

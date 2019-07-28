@@ -4961,8 +4961,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		${BDFDB.dotCN.messageheadercozymeta} > span.popout-open,
 		${BDFDB.dotCN.messageheadercozymeta} > span[class=""] {
 			display: inline-flex;
-			align-items: center;
+			align-items: baseline;
 		}
+		${BDFDB.dotCNS.messageheadercompact + BDFDB.dotCN.bottag},
 		${BDFDB.dotCNS.messageheadercompact + BDFDB.dotCN.messageusername} {
 			text-indent: 0px;
 		}

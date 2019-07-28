@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.4.7";}
+	getVersion () {return "3.4.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -61,6 +61,9 @@ class EditUsers {
 			}
 			${BDFDB.dotCN.userprofilebottag} {
 				bottom: 3px;
+			}
+			${BDFDB.dotCN.bottagmessagecozy} {
+				bottom: 2px;
 			}
 			${BDFDB.dotCN.bottagmessagecompact} {
 				margin-right: 6px;
