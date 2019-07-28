@@ -21,7 +21,7 @@ https://raw.githubusercontent.com/Dddsasul/TeamKappa-theme/master/JustBlack.them
 https://raw.githubusercontent.com/denBot/Cyan-Firewatch/master/cyan-firewatch.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My%20Theme%20Collection/Calm_and_Peaceful_Street.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My%20Theme%20Collection/CleanGreenForest.theme.css
-https://github.com/DevilsLynAvenged/DevilsLynAvenged/blob/master/My%20Theme%20Collection/The_Great_Mountain_Site.theme.css
+https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My%20Theme%20Collection/The_Great_Mountain_Site.theme.css
 https://raw.githubusercontent.com/fluffingtons/fulldark/master/fulldark.theme.css
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/AdjustableServerWidth/AdjustableServerWidth.theme.css
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/HorizontalServerlist/zHorizontalServerlist.theme.css
