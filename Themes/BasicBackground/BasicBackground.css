@@ -338,6 +338,10 @@
 	border-radius: 15px !important;
 	top: 0 !important;
 	bottom: 0 !important;
+	transition: border-radius 3s ease !important;
+}
+.expandedFolderBackground-2sPsd-:not(.collapsed-1GMuSb) {
+	border-radius: 15px 15px 24px 24px !important;
 }
 .expandedFolderBackground-2sPsd-:not(.collapsed-1GMuSb).hover-2ji_A7,
 .folder-21wGz3 {
