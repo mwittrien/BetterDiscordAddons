@@ -17,7 +17,7 @@ window.onmessage = function (e) {
 					document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERNAME/gi, e.data.username);
 				}
 				if (e.data.id) document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERID/gi, e.data.id);
-				if (e.data.avatar) document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_AVATAR/gi, "url(" + e.data.avatar.split('"').join('') + "?size=)");
+				if (e.data.avatar) document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_AVATAR/gi, e.data.avatar.split('"').join('') + "?size=");
 				if (e.data.discriminator) document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_DISCRIMINATOR/gi, e.data.discriminator);
 				if (e.data.nativecss) {
 					var theme = document.createElement("link");
