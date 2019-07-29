@@ -1864,56 +1864,27 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	
 	BDFDB.markChannelAsRead = function (channels) {
 		if (!channels) return;
-		var UnreadUtils = BDFDB.WebModules.findByProperties("getOldestUnreadMessageId");
-		var APIModule = BDFDB.WebModules.findByProperties("getAPIBaseURL");
-		var DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
-		if (!UnreadUtils || !APIModule || !DiscordConstants) return;
-		channels = Array.isArray(channels) ? channels : (typeof channels == "string" || typeof channels == "number" ? Array.of(channels) : Array.from(channels));
-		var limitcheck, multi = channels.length > 1, unread = () => {
-			var channel = channels.pop();
-			if (!channel) clearTimeout(limitcheck);
-			else {
-				let id = Node.prototype.isPrototypeOf(channel) ? (BDFDB.getChannelID(channel) || BDFDB.getDmID(channel)) : channel && typeof channel == 'object' ? channel.id : channel;
-				let messageid = id ? UnreadUtils.getOldestUnreadMessageId(id) : null;
-				if (id && messageid) {
-					clearTimeout(limitcheck);
-					if (channels) limitcheck = setTimeout(() => {
-						BDFDB.showToast("You have been rate limited by Discord for too quickly marking a lot of channels as unread, please wait a bit...", {type:"error"});
-					}, 10000);
-					APIModule.post({body:{}, url:DiscordConstants.Endpoints.MESSAGE_ACK(id, messageid)}).then(() => {
-						setTimeout(unread, Math.floor((Math.random() * (3000 - 1000)) + 1000)); 
-					});
-				}
-				else unread();
-			}
+		var AckUtils = BDFDB.WebModules.findByProperties("localAck", "bulkAck");
+		if (!AckUtils) return;
+		var unreadchannels = [];
+		for (let cha of channels = Array.isArray(channels) ? channels : (typeof channels == "string" || typeof channels == "number" ? Array.of(channels) : Array.from(channels))) {
+			let id = Node.prototype.isPrototypeOf(cha) ? (BDFDB.getChannelID(cha) || BDFDB.getDmID(cha)) : cha && typeof cha == 'object' ? cha.id : cha;
+			if (id) unreadchannels.push(id);
 		}
-		unread();
+		if (unreadchannels.length > 0) AckUtils.bulkAck(unreadchannels);
 	};
 
 	BDFDB.markGuildAsRead = function (servers) {
 		if (!servers) return;
-		var APIModule = BDFDB.WebModules.findByProperties("getAPIBaseURL");
-		var DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
-		if (!APIModule || !DiscordConstants) return;
-		servers = Array.isArray(servers) ? servers : (typeof servers == "string" || typeof servers == "number" ? Array.of(servers) : Array.from(servers));
-		var limitcheck, multi = servers.length > 1, unread = () => {
-			var server = servers.pop();
-			if (!server) clearTimeout(limitcheck);
-			else {
-				let id = Node.prototype.isPrototypeOf(server) ? BDFDB.getServerID(server) : server && typeof server == 'object' ? server.id : server;
-				if (id) {
-					clearTimeout(limitcheck);
-					if (multi) limitcheck = setTimeout(() => {
-						BDFDB.showToast("You have been rate limited by Discord for too quickly marking a lot of servers as unread, please wait a bit...", {type:"error"});
-					}, 10000);
-					APIModule.post({body:{}, url:DiscordConstants.Endpoints.GUILD_ACK(id)}).then(() => {
-						setTimeout(unread, Math.floor((Math.random() * (3000 - 1000)) + 1000)); 
-					});
-				}
-				else unread();
-			}
+		var GuildChannels = BDFDB.WebModules.findByProperties("getChannels", "getDefaultChannel"), AckUtils = BDFDB.WebModules.findByProperties("localAck", "bulkAck");
+		if (!GuildChannels || !AckUtils) return;
+		var unreadchannels = [];
+		for (let server of Array.isArray(servers) ? servers : (typeof servers == "string" || typeof servers == "number" ? Array.of(servers) : Array.from(servers))) {
+			let id = Node.prototype.isPrototypeOf(server) ? BDFDB.getServerID(server) : server && typeof server == 'object' ? server.id : server;
+			let channels = id ? GuildChannels.getChannels(id) : null;
+			if (channels) for (let type in channels) if (Array.isArray(channels[type])) for (let channelobj of channels[type]) unreadchannels.push(channelobj.channel.id);
 		}
-		unread();
+		if (unreadchannels.length > 0) AckUtils.bulkAck(unreadchannels);
 	};
 
 	BDFDB.saveAllData = function (data, plugin, key) {
