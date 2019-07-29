@@ -1007,7 +1007,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.isColorBlindModeEnabled = function () {
-		return !!document.querySelector('[mask="url(#svg-mask-status-idle)"],[mask="url(#svg-mask-status-dnd)"],[mask="url(#svg-mask-status-offline)"],[mask="url(#svg-mask-status-streaming)"]');
+		return true;
 	};
 
 	BDFDB.getReactInstance = function (node) {
