@@ -943,7 +943,7 @@ class EditUsers {
 		if (data.tag) {
 			let member = data.ignoreTagColor ? (this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {}) : {};
 			let color3 = BDFDB.colorCONVERT(!data.ignoreTagColor ? data.color3 : member.colorString, "RGB");
-			let color4 = !data.ignoreTagColor && data.color4 ? BDFDB.colorCONVERT(data.color4, "RGB") : (BDFDB.colorISBRIGHT(color3) ? "black" : "white");
+			let color4 = !data.ignoreTagColor && data.color4 ? BDFDB.colorCONVERT(data.color4, "RGB") : (color3 ? (BDFDB.colorISBRIGHT(color3) ? "black" : "white") : null);
 			let tag = document.createElement("span");
 			tag.className = "EditUsers-tag " + BDFDB.disCN.bottagregular + (selector ? (" " + selector) : "");
 			tag.innerText = data.tag;
