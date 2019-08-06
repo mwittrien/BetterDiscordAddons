@@ -187,7 +187,7 @@ class TopRoleEverywhere {
 			BDFDB.addClass(tag, type + "-tag");
 			if (!settings.useOtherStyle) tag.style.setProperty("border", "1px solid " + borderColor, "important");
 			tag.style.setProperty("background", bgColor, "important");
-			tag.style.setProperty("order", 11, "important", "important");
+			tag.style.setProperty("order", 11, "important");
 			let inner = tag.querySelector(".role-inner");
 			inner.style.setProperty("color", textColor, "important");
 			inner.style.setProperty("background-image", bgInner, "important");
