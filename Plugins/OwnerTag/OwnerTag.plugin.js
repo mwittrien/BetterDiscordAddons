@@ -3,7 +3,7 @@
 class OwnerTag {
 	getName () {return "OwnerTag";}
 
-	getVersion () {return "1.1.4";}
+	getVersion () {return "1.1.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class OwnerTag {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["New Structure","Fixed issues that will occur once the avatar/name changes from canary will hit stable/ptb"]]
+			"fixed":[["Coloring issues","Fixed some coloring issues with inverted tags"]]
 		};
 		
 		this.patchModules = {
@@ -153,7 +153,7 @@ class OwnerTag {
 	}
 	
 	processUserProfile (instance, wrapper) {
-		if (instance.props && BDFDB.getData("addInUserProfil", this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.nametag), "profile", BDFDB.disCN.bottagnametag, wrapper);
+		if (instance.props && BDFDB.getData("addInUserProfil", this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.nametag), "profile", BDFDB.disCNS.bottagnametag + BDFDB.disCN.userprofilebottag, wrapper);
 	}
 
 	processMessageUsername (instance, wrapper, methodnames) {
@@ -189,8 +189,7 @@ class OwnerTag {
 		let EditUsersData = BDFDB.isPluginEnabled("EditUsers") ? window.bdplugins.EditUsers.plugin.getUserData(info.id, wrapper) : {};
 		if (!settings.useCrown) {
 			let tag = BDFDB.htmlToElement(`<span class="owner-tag ${isowner ? "owner-tag-owner" : "owner-tag-admin"} owner-${type}-tag ${(settings.useRoleColor ? "owner-tag-rolecolor " : "") + BDFDB.disCN.bottag + (selector ? (" " + selector) : "")}" style="order: 10 !important;">${BDFDB.getData(isowner ? "ownTagName" : "ownAdminTagName", this, "inputs")}</span>`);
-			let invert = false;
-			if (container && container.firstElementChild && !BDFDB.containsClass(container.firstElementChild, BDFDB.disCN.userpopoutheadernormal, BDFDB.disCN.userprofiletopsectionnormal), false) invert = true;
+			let invert = container && container.firstElementChild && !(BDFDB.containsClass(container.firstElementChild, BDFDB.disCN.userpopoutheadernormal) || BDFDB.containsClass(container.firstElementChild, BDFDB.disCN.userprofiletopsectionnormal));
 			BDFDB.addClass(tag, invert ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular);
 			let tagcolor = BDFDB.colorCONVERT(EditUsersData.color1 || member.colorString, "RGB");
 			let isbright = BDFDB.colorISBRIGHT(tagcolor);

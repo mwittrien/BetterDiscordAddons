@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.4.9";}
+	getVersion () {return "3.5.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditUsers {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["TRE issue","Fixed"]]
+			"fixed":[["Coloring issues","Fixed some coloring issues with inverted tags"]]
 		};
 		
 		this.labels = {}; 
@@ -56,12 +56,11 @@ class EditUsers {
 			${BDFDB.dotCN.userpopoutheaderbottagwithnickname} {
 				bottom: 4px;
 			}
-			${BDFDB.dotCNS.userpopoutheadertagwithnickname + BDFDB.dotCN.userpopoutheaderbottagwithnickname} {
+			${BDFDB.dotCN.userpopoutheaderbottagwithnickname} {
 				bottom: 0px;
 			}
-			${BDFDB.dotCN.userprofilebottag} {
-				bottom: 3px;
-			}
+			${BDFDB.dotCNS.userpopoutheadernamewrapper + BDFDB.dotCN.bottag},
+			${BDFDB.dotCN.userprofilebottag},
 			${BDFDB.dotCN.bottagmessagecozy} {
 				bottom: 2px;
 			}
@@ -546,7 +545,7 @@ class EditUsers {
 		if (username) {
 			this.changeName(instance.props.user, username);
 			this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
-			this.addTag(instance.props.user, username.parentElement, BDFDB.disCN.bottagnametag);
+			this.addTag(instance.props.user, username.parentElement, BDFDB.disCN.bottagnametag, wrapper);
 		}
 	}
 
@@ -555,7 +554,7 @@ class EditUsers {
 		if (username) {
 			this.changeName(instance.props.user, username);
 			this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
-			this.addTag(instance.props.user, username.parentElement, BDFDB.disCN.bottagnametag);
+			this.addTag(instance.props.user, username.parentElement, BDFDB.disCNS.userprofilebottag + BDFDB.disCN.bottagnametag, wrapper);
 		}
 	}
 
@@ -889,10 +888,9 @@ class EditUsers {
 	changeBotTags (data, username, member) {
 		for (let tag of username.parentElement.parentElement.querySelectorAll(BDFDB.dotCN.bottag)) if (!BDFDB.containsClass(tag, "TRE-tag")) {
 			let isBRCenabled = BDFDB.isPluginEnabled("BetterRoleColors");
-			let invert = tag.className.indexOf(BDFDB.disCN.bottaginvert) > -1;
 			let tagcolor =  BDFDB.colorCONVERT(data.color1 || (isBRCenabled || BDFDB.containsClass(tag, "owner-tag-rolecolor") ? member.colorString : null), "RGB");
 			tagcolor = BDFDB.colorISBRIGHT(tagcolor) ? BDFDB.colorCHANGE(tagcolor, -0.3) : tagcolor;
-			tag.style.setProperty(invert ? "color" : "background-color", tagcolor, "important");
+			tag.style.setProperty(BDFDB.containsClass(tag, BDFDB.disCN.bottaginvert) ? "color" : "background-color", tagcolor, "important");
 		}
 	}
 
@@ -936,7 +934,7 @@ class EditUsers {
 		}
 	}
 
-	addTag (info, wrapper, selector = "") {
+	addTag (info, wrapper, selector = "", container) {
 		if (!info || !wrapper || !wrapper.parentElement || BDFDB.containsClass(wrapper, BDFDB.disCN.accountinfodetails) || BDFDB.containsClass(wrapper, "discord-tag")) return;
 		BDFDB.removeEles(wrapper.querySelectorAll(".EditUsers-tag"));
 		let data = this.getUserData(info.id, wrapper);
@@ -945,10 +943,11 @@ class EditUsers {
 			let color3 = BDFDB.colorCONVERT(!data.ignoreTagColor ? data.color3 : member.colorString, "RGB");
 			let color4 = !data.ignoreTagColor && data.color4 ? BDFDB.colorCONVERT(data.color4, "RGB") : (color3 ? (BDFDB.colorISBRIGHT(color3) ? "black" : "white") : null);
 			let tag = document.createElement("span");
-			tag.className = "EditUsers-tag " + BDFDB.disCN.bottagregular + (selector ? (" " + selector) : "");
+			let invert = container && !color3 && !color4 && container.firstElementChild && !(BDFDB.containsClass(container.firstElementChild, BDFDB.disCN.userpopoutheadernormal) || BDFDB.containsClass(container.firstElementChild, BDFDB.disCN.userprofiletopsectionnormal));
+			tag.className = "EditUsers-tag " + (!invert ? BDFDB.disCN.bottagregular : BDFDB.disCN.bottaginvert) + (selector ? (" " + selector) : "");
 			tag.innerText = data.tag;
-			tag.style.setProperty("background-color", color3, "important");
-			tag.style.setProperty("color", color4, "important");
+			tag.style.setProperty("background-color", !invert ? color3 : color4, "important");
+			tag.style.setProperty("color", !invert ? color4 : color3, "important");
 			wrapper.appendChild(tag);
 		}
 	}
