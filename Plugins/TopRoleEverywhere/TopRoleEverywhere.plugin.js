@@ -3,7 +3,7 @@
 class TopRoleEverywhere {
 	getName () {return "TopRoleEverywhere";}
 
-	getVersion () {return "2.8.4";}
+	getVersion () {return "2.8.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class TopRoleEverywhere {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Classes & Positioning","Fixes some display issues"]]
+			"fixed":[["Classes & Positioning","Fixes some display issues"],["Themes","Fixed issues for themes that abuse !important"]]
 		};
 		
 		this.patchModules = {
@@ -185,13 +185,13 @@ class TopRoleEverywhere {
 			}
 			else if (settings.showOwnerRole && info.id == guild.ownerId) roleText = "Owner";
 			BDFDB.addClass(tag, type + "-tag");
-			if (!settings.useOtherStyle) tag.style.setProperty("border", "1px solid " + borderColor);
-			tag.style.setProperty("background", bgColor);
-			tag.style.setProperty("order", 11, "important");
+			if (!settings.useOtherStyle) tag.style.setProperty("border", "1px solid " + borderColor, "important");
+			tag.style.setProperty("background", bgColor, "important");
+			tag.style.setProperty("order", 11, "important", "important");
 			let inner = tag.querySelector(".role-inner");
-			inner.style.setProperty("color", textColor);
-			inner.style.setProperty("background-image", bgInner);
-			inner.style.setProperty("-webkit-background-clip", "text");
+			inner.style.setProperty("color", textColor, "important");
+			inner.style.setProperty("background-image", bgInner, "important");
+			inner.style.setProperty("-webkit-background-clip", "text", "important");
 			inner.textContent = roleText;
 
 			if (oldwidth && oldwidth < 100 && BDFDB.getRects(username).width < 100) {
@@ -212,13 +212,13 @@ class TopRoleEverywhere {
 				idTextColor = settings.darkIdTag ? "white" : "black";
 			}
 			BDFDB.addClass(idtag, "id-tag");
-			idtag.style.setProperty("border", "1px solid " + idBorderColor);
-			idtag.style.setProperty("background", idBgColor);
+			idtag.style.setProperty("border", "1px solid " + idBorderColor, "important");
+			idtag.style.setProperty("background", idBgColor, "important");
 			idtag.style.setProperty("order", 12, "important");
 			let idinner = idtag.querySelector(".role-inner");
-			idinner.style.setProperty("color", idTextColor);
-			idinner.style.setProperty("background-image", idBgInner); 
-			idinner.style.setProperty("-webkit-background-clip", "text");
+			idinner.style.setProperty("color", idTextColor, "important");
+			idinner.style.setProperty("background-image", idBgInner, "important"); 
+			idinner.style.setProperty("-webkit-background-clip", "text", "important");
 			idinner.textContent = info.id;
 		}
 	}
