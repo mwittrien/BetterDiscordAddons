@@ -475,8 +475,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.createTooltip = function (text, anker, options = {}) {
 		if (!text || !anker || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
-		var tooltips = document.querySelector(BDFDB.dotCN.tooltips);
-		if (!tooltips) return null;
+		var tooltipsnative = document.querySelector(BDFDB.dotCN.tooltips);
+		if (!tooltipsnative) return null;
+		var tooltips = document.querySelector(".BDFDB-tooltips");
+		if (!tooltips) {
+			tooltips = tooltipsnative.cloneNode();
+			BDFDB.addClass(tooltips, "BDFDB-tooltips");
+			tooltipsnative.parentElement.insertBefore(tooltips, tooltipsnative.nextSibling);
+		}
 		var id = Math.round(Math.random() * 10000000000000000);
 		var tooltip = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.tooltip} BDFDB-tooltip tooltip-${id}"><div class="${BDFDB.disCN.tooltipinner}"></div></div>`);
 		tooltip.anker = anker;
@@ -501,7 +507,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		
 		BDFDB.updateTooltipPosition(tooltip);
 		
-		var remove = () => {tooltip.remove();};
+		var remove = () => {
+			tooltip.remove();
+			if (!tooltips.firstElementChild) BDFDB.removeEles(tooltips);
+		};
 		var observer = new MutationObserver(changes => {
 			changes.forEach(change => {
 				var nodes = Array.from(change.removedNodes);
@@ -510,7 +519,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				var parentmatch = nodes.some(n => n.contains(anker));
 				if (tooltipmath || ownmatch || parentmatch) {
 					observer.disconnect();
-					tooltip.remove();
+					remove();
 					anker.removeEventListener('mouseleave', remove);
 					BDFDB.removeLocalStyle('BDFDBcustomTooltip' + id, tooltips);
 				}
@@ -4987,8 +4996,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		#pluginNotice #outdatedPlugins span:hover {
 			text-decoration: underline;
 		}
-		${BDFDB.dotCN.tooltipinner} {
-			z-index: 100000000;
+		.BDFDB-tooltips, .BDFDB-tooltip {
+			z-index: 3002;
 		}
 		${BDFDB.dotCN.tooltipinner}.tooltip-customcolor ${BDFDB.dotCN.tooltippointer} {
 			border-top-color: inherit !important;
