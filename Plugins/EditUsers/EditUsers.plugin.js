@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.4.8";}
+	getVersion () {return "3.4.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditUsers {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Typing","Fixed the issue where changes would disappear when a user is typing"],["New Structure","Fixed issues that will occur once the avatar/name changes from canary will hit stable/ptb"]]
+			"fixed":[["TRE issue","Fixed"]]
 		};
 		
 		this.labels = {}; 
@@ -887,7 +887,7 @@ class EditUsers {
 	}
 	
 	changeBotTags (data, username, member) {
-		for (let tag of username.parentElement.parentElement.querySelectorAll(BDFDB.dotCN.bottag)) {
+		for (let tag of username.parentElement.parentElement.querySelectorAll(BDFDB.dotCN.bottag)) if (!BDFDB.containsClass(tag, "TRE-tag")) {
 			let isBRCenabled = BDFDB.isPluginEnabled("BetterRoleColors");
 			let invert = tag.className.indexOf(BDFDB.disCN.bottaginvert) > -1;
 			let tagcolor =  BDFDB.colorCONVERT(data.color1 || (isBRCenabled || BDFDB.containsClass(tag, "owner-tag-rolecolor") ? member.colorString : null), "RGB");
