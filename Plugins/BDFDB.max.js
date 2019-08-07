@@ -3451,6 +3451,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.GuildChannels = BDFDB.WebModules.findByProperties('positionedContainer', 'unreadBar');
 	DiscordClassModules.GuildDm = BDFDB.WebModules.find(module => typeof module['pill'] == 'string' && Object.keys(module).length == 1);
 	DiscordClassModules.GuildEdges = BDFDB.WebModules.findByProperties('wrapper', 'edge', 'autoPointerEvents')
+	DiscordClassModules.GuildFolder = BDFDB.WebModules.findByProperties('folder', 'expandedGuilds')
 	DiscordClassModules.GuildHeader = BDFDB.WebModules.findByProperties('header', 'name', 'hasDropdown');
 	DiscordClassModules.GuildIcon = BDFDB.WebModules.findByProperties('acronym', 'selected', 'wrapper');
 	DiscordClassModules.GuildSettingsBanned = BDFDB.WebModules.findByProperties('bannedUser', 'bannedUserAvatar');
@@ -3952,6 +3953,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		guildedge: ['GuildEdges', 'edge'],
 		guildedgemiddle: ['GuildEdges', 'middle'],
 		guildedgewrapper: ['GuildEdges', 'wrapper'],
+		guildfolder: ['GuildFolder', 'folder'],
+		guildfolderexpandendbackground: ['GuildFolder', 'expandedFolderBackground'],
+		guildfolderexpandendbackgroundcollapsed: ['GuildFolder', 'collapsed'],
+		guildfolderexpandendbackgroundhover: ['GuildFolder', 'hover'],
+		guildfolderexpandedguilds: ['GuildFolder', 'expandedGuilds'],
+		guildfoldericonwrapperclosed: ['GuildFolder', 'closedFolderIconWrapper'],
+		guildfoldericonwrapperexpanded: ['GuildFolder', 'expandedFolderIconWrapper'],
+		guildfolderwrapper: ['GuildFolder', 'wrapper'],
 		guildheader: ['GuildHeader', 'container'],
 		guildheaderbanner: ['GuildHeader', 'banner'],
 		guildheaderbannerimage: ['GuildHeader', 'bannerImage'],
