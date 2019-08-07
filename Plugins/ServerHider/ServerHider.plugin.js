@@ -197,7 +197,7 @@ class ServerHider {
 		if (document.querySelector(".BDFDB-modal")) return;
 		if (instance.props && instance.props.target && instance.props.type.indexOf("GUILD_ICON_") == 0 && !menu.querySelector(".serverhider-item")) {
 			let serverContextEntry = BDFDB.htmlToElement(this.serverContextEntryMarkup);
-			let devgroup = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:["DeveloperModeGroup","MessageDeveloperModeGroup"]}));
+			let devgroup = BDFDB.getContextMenuDevGroup(menu);
 			if (devgroup) devgroup.parentElement.insertBefore(serverContextEntry, devgroup);
 			else menu.appendChild(serverContextEntry, menu);
 			let hideritem = serverContextEntry.querySelector(".serverhider-item");

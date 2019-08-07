@@ -1261,6 +1261,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	if (LibraryModules.React && LibraryModules.ReactDOM) {
 		BDFDB.React = Object.assign({}, LibraryModules.React, LibraryModules.ReactDOM);
 		BDFDB.React.findDOMNodeSafe = function (instance) {
+			if (Node.prototype.isPrototypeOf(instance)) return instance;
 			if (!instance || !instance.updater || typeof instance.updater.isMounted !== 'function' || !instance.updater.isMounted(instance)) return null;
 			var node = LibraryModules.ReactDOM.findDOMNode(instance) || BDFDB.getReactValue(instance, 'child.stateNode');
 			return Node.prototype.isPrototypeOf(node) ? node : null;
@@ -1279,8 +1280,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', module + ' not initialized in LibraryModules');
 	}
 
-	BDFDB.WebModules.patchtypes = ['before', 'instead', 'after'];
-	BDFDB.WebModules.patchmap = {
+	var webModulesPatchtypes = ['before', 'instead', 'after'];
+	var webModulesPatchmap = {
 		Account: 'FluxContainer(Account)',
 		BannedCard: 'BannedUser',
 		InvitationCard: 'InviteRow',
@@ -1290,7 +1291,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		Note: 'FluxContainer(Note)',
 		WebhookCard: 'Webhook'
 	};
-	BDFDB.WebModules.notfindablemodules = {
+	var webModulesNotFindableModules = {
 		AuthWrapper: 'loginscreen',
 		BannedCard: 'guildsettingsbannedcard',
 		ChannelMember: 'member',
@@ -1318,7 +1319,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		V2C_ThemeCard: '_repoheader'
 	};
 	BDFDB.WebModules.patch = function (module, modulefunctions, plugin, patchfunctions) {
-		if (!module || !modulefunctions || !plugin || !Object.keys(patchfunctions).some(type => BDFDB.WebModules.patchtypes.includes(type))) return null;
+		if (!module || !modulefunctions || !plugin || !Object.keys(patchfunctions).some(type => webModulesPatchtypes.includes(type))) return null;
 		const plugname = (typeof plugin === 'string' ? plugin : plugin.name).toLowerCase();
 		const surpressErrors = (callback, errorstring) => (...args) => {
 			try {return callback(...args);}
@@ -1331,7 +1332,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			const originalfunction = module[modulefunction];
 			if (!module.BDFDBpatch[modulefunction]) {
 				module.BDFDBpatch[modulefunction] = {};
-				for (let type of BDFDB.WebModules.patchtypes) module.BDFDBpatch[modulefunction][type] = {};
+				for (let type of webModulesPatchtypes) module.BDFDBpatch[modulefunction][type] = {};
 				module.BDFDBpatch[modulefunction].originalMethod = originalfunction;
 				module[modulefunction] = function () {
 					const data = {
@@ -1358,7 +1359,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					return data.returnValue;
 				};
 			}
-			for (let type of BDFDB.WebModules.patchtypes) if (typeof patchfunctions[type] == 'function') module.BDFDBpatch[modulefunction][type][plugname] = patchfunctions[type];
+			for (let type of webModulesPatchtypes) if (typeof patchfunctions[type] == 'function') module.BDFDBpatch[modulefunction][type][plugname] = patchfunctions[type];
 		}
 		const cancel = () => {BDFDB.WebModules.unpatch(module, modulefunctions, plugin);};
 		if (plugin && typeof plugin == 'object') {
@@ -1374,12 +1375,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		modulefunctions = Array.isArray(modulefunctions) ? modulefunctions : Array.of(modulefunctions);
 		for (let modulefunction of modulefunctions) {
 			if (module[modulefunction] && module.BDFDBpatch[modulefunction]) {
-				for (let type of BDFDB.WebModules.patchtypes) {
+				for (let type of webModulesPatchtypes) {
 					if (plugname) delete module.BDFDBpatch[modulefunction][type][plugname];
 					else delete module.BDFDBpatch[modulefunction][type];
 				}
 				var empty = true;
-				for (let type of BDFDB.WebModules.patchtypes) if (!BDFDB.isObjectEmpty(module.BDFDBpatch[modulefunction][type])) empty = false;
+				for (let type of webModulesPatchtypes) if (!BDFDB.isObjectEmpty(module.BDFDBpatch[modulefunction][type])) empty = false;
 				if (empty) {
 					module[modulefunction] = module.BDFDBpatch[modulefunction].originalMethod;
 					delete module.BDFDBpatch[modulefunction];
@@ -1394,7 +1395,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.WebModules.forceAllUpdates = function (plugin, selectedtype) {
-		selectedtype = selectedtype && BDFDB.WebModules.patchmap[selectedtype] ? BDFDB.WebModules.patchmap[selectedtype] + ' ' + selectedtype : selectedtype;
+		selectedtype = selectedtype && webModulesPatchmap[selectedtype] ? webModulesPatchmap[selectedtype] + ' ' + selectedtype : selectedtype;
 		if (BDFDB.isObject(plugin) && BDFDB.isObject(plugin.patchModules) && (!selectedtype || plugin.patchModules[selectedtype])) {
 			const app = document.querySelector(BDFDB.dotCN.app);
 			const bdsettings = document.querySelector('#bd-settingspane-container ' + BDFDB.dotCN.scrollerwrap);
@@ -1420,17 +1421,17 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.WebModules.patchModules = function (plugin) {
 		if (BDFDB.isObject(plugin) && BDFDB.isObject(plugin.patchModules)) {
 			for (let type in plugin.patchModules) {
-				var mapped = BDFDB.WebModules.patchmap[type];
+				var mapped = webModulesPatchmap[type];
 				if (mapped) {
 					plugin.patchModules[mapped + ' ' + type] = plugin.patchModules[type];
 					delete plugin.patchModules[type];
-					if (!BDFDB.WebModules.notfindablemodules[type]) patchInstance(BDFDB.WebModules.findByName(mapped), mapped + ' ' + type);
+					if (!webModulesNotFindableModules[type]) patchInstance(BDFDB.WebModules.findByName(mapped), mapped + ' ' + type);
 				}
-				else if (!BDFDB.WebModules.notfindablemodules[type]) patchInstance(BDFDB.WebModules.findByName(type), type);
+				else if (!webModulesNotFindableModules[type]) patchInstance(BDFDB.WebModules.findByName(type), type);
 			}
-			for (let type in BDFDB.WebModules.notfindablemodules) {
-				var patchtype = BDFDB.WebModules.patchmap[type] ? BDFDB.WebModules.patchmap[type] + ' ' + type : type;
-				if (DiscordClasses[BDFDB.WebModules.notfindablemodules[type]] && plugin.patchModules[patchtype]) checkForInstance(BDFDB.WebModules.notfindablemodules[type], patchtype);
+			for (let type in webModulesNotFindableModules) {
+				var patchtype = webModulesPatchmap[type] ? webModulesPatchmap[type] + ' ' + type : type;
+				if (DiscordClasses[webModulesNotFindableModules[type]] && plugin.patchModules[patchtype]) checkForInstance(webModulesNotFindableModules[type], patchtype);
 			}
 			function patchInstance(instance, type) {
 				if (instance) {
@@ -2988,6 +2989,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		menu.style.setProperty('left', (e.pageX + mrects.width > arects.width ? (newpos.pageX < 0 ? 10 : newpos.pageX) : e.pageX) + 'px');
 		menu.style.setProperty('top', (e.pageY + mrects.height > arects.height ? (newpos.pageY < 0 ? 10 : newpos.pageY) : e.pageY) + 'px');
 		BDFDB.initElements(menu);
+	};
+	
+	BDFDB.getContextMenuDevGroup = function (menu) {
+		let text = BDFDB.LanguageStrings.COPY_ID;
+		for (let item of menu.querySelectorAll(BDFDB.dotCN.contextmenuitem)) if (item.textContent == text) return BDFDB.getParentEle(BDFDB.dotCN.contextmenuitemgroup, item);
 	};
 
 	BDFDB.appendContextMenu = function (menu, e = BDFDB.mousePosition) {

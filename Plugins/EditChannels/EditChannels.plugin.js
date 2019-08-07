@@ -243,7 +243,7 @@ class EditChannels {
 	onChannelContextMenu (instance, menu) {
 		if (instance.props && instance.props.channel && !menu.querySelector(".localchannelsettings-item")) {
 			let channelContextEntry = BDFDB.htmlToElement(this.channelContextEntryMarkup);
-			let devgroup = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:["DeveloperModeGroup","MessageDeveloperModeGroup"]}));
+			let devgroup = BDFDB.getContextMenuDevGroup(menu);
 			if (devgroup) devgroup.parentElement.insertBefore(channelContextEntry, devgroup);
 			else menu.appendChild(channelContextEntry, menu);
 			let settingsitem = channelContextEntry.querySelector(".localchannelsettings-item");

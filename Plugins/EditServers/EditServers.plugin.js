@@ -302,7 +302,7 @@ class EditServers {
 	onGuildContextMenu (instance, menu) {
 		if (instance.props && instance.props.target && instance.props.guild && !menu.querySelector(".localserversettings-item")) {
 			let serverContextEntry = BDFDB.htmlToElement(this.serverContextEntryMarkup);
-			let devgroup = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:["DeveloperModeGroup","MessageDeveloperModeGroup"]}));
+			let devgroup = BDFDB.getContextMenuDevGroup(menu);
 			if (devgroup) devgroup.parentElement.insertBefore(serverContextEntry, devgroup);
 			else menu.appendChild(serverContextEntry, menu);
 			let settingsitem = serverContextEntry.querySelector(".localserversettings-item");

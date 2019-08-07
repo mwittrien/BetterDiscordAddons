@@ -326,7 +326,7 @@ class ChatAliases {
 
 	appendItem (menu, text) {
 		let chataliasesContextEntry = BDFDB.htmlToElement(this.chataliasesContextEntryMarkup);
-		let devgroup = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:["DeveloperModeGroup","MessageDeveloperModeGroup"]}));
+		let devgroup = BDFDB.getContextMenuDevGroup(menu);
 		if (devgroup) devgroup.parentElement.insertBefore(chataliasesContextEntry, devgroup);
 		else menu.appendChild(chataliasesContextEntry, menu);
 		chataliasesContextEntry.querySelector(".chataliases-item").addEventListener("click", () => {

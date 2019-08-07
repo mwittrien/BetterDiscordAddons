@@ -513,7 +513,7 @@ class ServerFolders {
 		if (document.querySelector(".BDFDB-modal")) return;
 		if (instance.props && instance.props.target && instance.props.guild && instance.props.type == "GUILD_ICON_BAR" && !menu.querySelector(".serverfolders-item")) {
 			let serverContextEntry = BDFDB.htmlToElement(this.serverContextEntryMarkup);
-			let devgroup = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:["DeveloperModeGroup","MessageDeveloperModeGroup"]}));
+			let devgroup = BDFDB.getContextMenuDevGroup(menu);
 			if (devgroup) devgroup.parentElement.insertBefore(serverContextEntry, devgroup);
 			else menu.appendChild(serverContextEntry, menu);
 			let folderitem = serverContextEntry.querySelector(".serverfolders-item");

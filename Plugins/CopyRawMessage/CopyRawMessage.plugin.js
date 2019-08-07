@@ -76,7 +76,7 @@ class CopyRawMessage {
 	onMessageContextMenu (instance, menu) {
 		if (instance.props && instance.props.message && instance.props.message.content && instance.props.target && !menu.querySelector(".copyrawmessage-item")) {
 			let messageContextEntry = BDFDB.htmlToElement(this.messageContextEntryMarkup);
-			let devgroup = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:["DeveloperModeGroup","MessageDeveloperModeGroup"]}));
+			let devgroup = BDFDB.getContextMenuDevGroup(menu);
 			if (devgroup) devgroup.parentElement.insertBefore(messageContextEntry, devgroup);
 			else menu.appendChild(messageContextEntry, menu);
 			let copyrawmessageitem = messageContextEntry.querySelector(".copyrawmessage-item");
