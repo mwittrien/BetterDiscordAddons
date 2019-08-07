@@ -3,7 +3,7 @@
 class TopRoleEverywhere {
 	getName () {return "TopRoleEverywhere";}
 
-	getVersion () {return "2.8.5";}
+	getVersion () {return "2.8.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class TopRoleEverywhere {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Classes & Positioning","Fixes some display issues"],["Themes","Fixed issues for themes that abuse !important"]]
+			"fixed":[["Overflow","Long role names now properly overflow with overflow ellipsis .... AGAIN"],["Themes","Fixed issues for themes that abuse !important"]]
 		};
 		
 		this.patchModules = {
@@ -21,10 +21,13 @@ class TopRoleEverywhere {
 		};
 
 		this.css = `
+			.TRE-tag {
+				white-space: nowrap;
+			}
 			.TRE-tag .role-inner {
+				display: block;
 				overflow: hidden;
 				text-overflow: ellipsis;
-				text-transform: uppercase;
 			}
 			.BE-badges + .TRE-tag {
 				margin-left: 0;
