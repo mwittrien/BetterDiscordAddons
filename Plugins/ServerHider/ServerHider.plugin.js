@@ -3,7 +3,7 @@
 class ServerHider {
 	getName () {return "ServerHider";}
 
-	getVersion () {return "6.0.7";}
+	getVersion () {return "6.0.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -249,7 +249,7 @@ class ServerHider {
 				container.appendChild(entry);
 				let name = entry.querySelector(".serverhiderName");
 				name.innerText = info.name || "";
-				name.parentElement.insertBefore(this.createCopyOfServer(info), name);
+				name.parentElement.insertBefore(BDFDB.createServerDivCopy(info, {click: () => {BDFDB.removeEles(serverHiderModal);}, menu: true, size: 48}), name);
 				let hidecheckbox = entry.querySelector(".serverhiderCheckbox");
 				hidecheckbox.checked = !BDFDB.isEleHidden(info.div);
 				hidecheckbox.addEventListener("click", e => {
@@ -258,24 +258,6 @@ class ServerHider {
 			}
 		}
 		BDFDB.appendModal(serverHiderModal);
-	}
-
-	createCopyOfServer (info) {
-		let serverCopy = info.div.cloneNode(true);
-		BDFDB.removeEles(serverCopy.querySelectorAll(BDFDB.dotCNC.guildpill + BDFDB.dotCNC.guildbadgewrapper + "mask"));
-		serverCopy.style.setProperty("margin", "0");
-		serverCopy.style.setProperty("width", "48px");
-		serverCopy.style.setProperty("height", "48px");
-		serverCopy.style.setProperty("overflow", "hidden");
-		serverCopy.style.setProperty("border-radius", "50%");
-		serverCopy.querySelector("foreignObject").removeAttribute("mask");
-		BDFDB.toggleEles(serverCopy, true);
-		serverCopy.addEventListener("click", e => {
-			BDFDB.stopEvent(e);
-			info.div.querySelector("a").click();
-		});
-		serverCopy.addEventListener("contextmenu", e => {BDFDB.openGuildContextMenu(info.div, e);});
-		return serverCopy;
 	}
 
 	toggleServer (info, target, visible) {

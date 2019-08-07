@@ -3,7 +3,7 @@
 class EmojiStatistics {
 	getName () {return "EmojiStatistics";}
 
-	getVersion () {return "2.8.3";}
+	getVersion () {return "2.8.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,8 +11,7 @@ class EmojiStatistics {
 
 	initConstructor () {
 		this.changelog = {
-			"added":[["Total Amounts","Added the total amount in the header title for each category"]],
-			"fixed":[["Reload","Fixed the issue where clicking a sever in the statistics modal would reload Discord"]]
+			"fixed":[["Context Menu & Tooltips","fixed"]]
 		};
 		
 		this.labels = {};
@@ -333,7 +332,7 @@ class EmojiStatistics {
 				}
 			}
 			var emojiEntry = BDFDB.htmlToElement(this.emojiserverEntryMarkup);
-			emojiEntry.querySelector(".modal-emojiserver-icon").appendChild(this.createCopyOfServer(info));
+			emojiEntry.querySelector(".modal-emojiserver-icon").appendChild(BDFDB.createServerDivCopy(info, {click: () => {BDFDB.removeEles(emojiInformationModal);}, menu: true, size: 48}));
 			emojiEntry.querySelector(".modal-emojiname-label").innerText = info.name || "";
 			emojiEntry.querySelector(".modal-emojitotal-label").innerText = amountGlobal + amountLocal;
 			emojiEntry.querySelector(".modal-emojiglobal-label").innerText = amountGlobal;
@@ -366,24 +365,6 @@ class EmojiStatistics {
 			if (entriescontainer.childElementCount) entriescontainer.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.modaldivider}"></div>`));
 			entriescontainer.appendChild(entry.div);
 		}
-	}
-
-	createCopyOfServer (info) {
-		let serverCopy = info.div.cloneNode(true);
-		BDFDB.removeEles(serverCopy.querySelectorAll(BDFDB.dotCNC.guildpill + BDFDB.dotCNC.guildbadgewrapper + "mask"));
-		serverCopy.style.setProperty("margin", "0");
-		serverCopy.style.setProperty("width", "48px");
-		serverCopy.style.setProperty("height", "48px");
-		serverCopy.style.setProperty("overflow", "hidden");
-		serverCopy.style.setProperty("border-radius", "50%");
-		serverCopy.querySelector("foreignObject").removeAttribute("mask");
-		BDFDB.toggleEles(serverCopy, true);
-		serverCopy.addEventListener("click", e => {
-			BDFDB.stopEvent(e);
-			info.div.querySelector("a").click();
-		});
-		serverCopy.addEventListener("contextmenu", e => {BDFDB.openGuildContextMenu(info.div, e);});
-		return serverCopy;
 	}
 
 	setLabelsByLanguage () {

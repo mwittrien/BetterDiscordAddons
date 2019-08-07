@@ -1815,7 +1815,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (Node.prototype.isPrototypeOf(eleOrInfoOrId)) return BDFDB.getParentEle(BDFDB.dotCN.guildouter, eleOrInfoOrId);
 		else {
 			let id = typeof eleOrInfoOrId == 'object' ? eleOrInfoOrId.id : eleOrInfoOrId;
-			if (id) return BDFDB.getParentEle(BDFDB.dotCN.guildouter, document.querySelector(`${BDFDB.dotCNS.guilds + BDFDB.dotCN.guildiconwrapper}[href*="/channels/${id}"]`)) || BDFDB.createServerDivCopy(id);
+			if (id) return BDFDB.getParentEle(BDFDB.dotCN.guildouter, document.querySelector(`${BDFDB.dotCNS.guilds + BDFDB.dotCN.guildiconwrapper}[href*="/channels/${id}"]`)) || BDFDB.createServerDivCopy(id, {pill: true, hover: true, click: true, menu: true});
 		}
 		return null;
 	};
@@ -1828,15 +1828,15 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		return null;
 	};
 	
-	BDFDB.createServerDivCopy = function (infoOrId, functionality = {pill: false, hover: false, click:false, menu:false}) {
+	BDFDB.createServerDivCopy = function (infoOrId, functionality = {pill: false, hover: false, click:false, menu:false, size:null}) {
 		let id = typeof infoOrId == 'object' ? infoOrId.id : infoOrId;
 		let guild = id ? LibraryModules.GuildStore.getGuild(id) : null;
 		if (guild) {
 			let randomid = Math.round(Math.random() * 10000000000000000);
-			let div = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.guildouter + BDFDB.disCN._bdguild}" style="border-radius: 50%; overflow: hidden;"><div class="${BDFDB.disCNS.guildpill + BDFDB.disCN.guildpillwrapper}"><span class="${BDFDB.disCN.guildpillitem}" style="opacity: 0; height: 8px; transform: translate3d(0px, 0px, 0px);"></span></div><div class="${BDFDB.disCN.guildcontainer}" draggable="false"><div class="${BDFDB.disCN.guildinner}"><svg width="48" height="48" viewBox="0 0 48 48" class="${BDFDB.disCN.guildsvg}"><mask id="" fill="black" x="0" y="0" width="48" height="48"><path d="M48 24C48 37.2548 37.2548 48 24 48C10.7452 48 0 37.2548 0 24C0 10.7452 10.7452 0 24 0C37.2548 0 48 10.7452 48 24Z" fill="white"></path><rect x="28" y="-4" width="24" height="24" rx="12" ry="12" transform="translate(20 -20)" fill="black"></rect><rect x="28" y="28" width="24" height="24" rx="12" ry="12" transform="translate(20 20)" fill="black"></rect></mask><foreignObject mask="" x="0" y="0" width="48" height="48"><a class="${BDFDB.disCN.guildiconwrapper}" aria-label="${guild.name}" draggable="false">${guild.icon ? `<img class="${BDFDB.disCN.guildicon}" src="${BDFDB.getGuildIcon(guild.id)}?size=128" alt="" width="48" height="48" draggable="false" aria-hidden="true"></img>` : `<div class="${BDFDB.disCN.guildiconacronym}" aria-hidden="true" style="font-size: ${guild.acronym.length > 5 ? 10 : (guild.acronym.length > 4 ? 12 : (guild.acronym.length > 3 ? 14 : (guild.acronym.length > 1 ? 16 : 18)))}px;">${guild.acronym}</div>`}</a></foreignObject></svg><div class="${BDFDB.disCN.guildbadgewrapper}"></div></div></div><div class="${BDFDB.disCN.guildedgewrapper}" aria-hidden="true"><span class="${BDFDB.disCN.guildedge}"></span><span class="${BDFDB.disCN.guildedgemiddle}"></span><span class="${BDFDB.disCN.guildedge}"></span></div></div>`);
+			let div = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.guildouter + BDFDB.disCN._bdguild}"><div class="${BDFDB.disCNS.guildpill + BDFDB.disCN.guildpillwrapper}"><span class="${BDFDB.disCN.guildpillitem}" style="opacity: 0; height: 8px; transform: translate3d(0px, 0px, 0px);"></span></div><div class="${BDFDB.disCN.guildcontainer}" draggable="false" style="border-radius: 50%; overflow: hidden;"><div class="${BDFDB.disCN.guildinner}"><svg width="48" height="48" viewBox="0 0 48 48" class="${BDFDB.disCN.guildsvg}"><mask id="" fill="black" x="0" y="0" width="48" height="48"><path d="M48 24C48 37.2548 37.2548 48 24 48C10.7452 48 0 37.2548 0 24C0 10.7452 10.7452 0 24 0C37.2548 0 48 10.7452 48 24Z" fill="white"></path><rect x="28" y="-4" width="24" height="24" rx="12" ry="12" transform="translate(20 -20)" fill="black"></rect><rect x="28" y="28" width="24" height="24" rx="12" ry="12" transform="translate(20 20)" fill="black"></rect></mask><foreignObject mask="" x="0" y="0" width="48" height="48"><a class="${BDFDB.disCN.guildiconwrapper}" aria-label="${guild.name}"${functionality.click ? ' href="channels/"' + guild.id + '/' + LibraryModules.LastChannelStore.getChannelId(guild.id) + '"' : ''} draggable="false">${guild.icon ? `<img class="${BDFDB.disCN.guildicon}" src="${BDFDB.getGuildIcon(guild.id)}?size=128" alt="" width="48" height="48" draggable="false" aria-hidden="true"></img>` : `<div class="${BDFDB.disCN.guildiconacronym}" aria-hidden="true" style="font-size: ${guild.acronym.length > 5 ? 10 : (guild.acronym.length > 4 ? 12 : (guild.acronym.length > 3 ? 14 : (guild.acronym.length > 1 ? 16 : 18)))}px;">${guild.acronym}</div>`}</a></foreignObject></svg><div class="${BDFDB.disCN.guildbadgewrapper}"></div></div></div><div class="${BDFDB.disCN.guildedgewrapper}" aria-hidden="true"><span class="${BDFDB.disCN.guildedge}"></span><span class="${BDFDB.disCN.guildedgemiddle}"></span><span class="${BDFDB.disCN.guildedge}"></span></div></div>`);
+			let divinner = div.querySelector(BDFDB.dotCN.guildcontainer);
 			BDFDB.toggleEles(div.querySelector(BDFDB.dotCN.guildpillwrapper), functionality.pill);
 			if (functionality.hover) {
-				let divinner = div.querySelector(BDFDB.dotCN.guildcontainer);
 				let diviconwrapper = div.querySelector(BDFDB.dotCN.guildiconwrapper);
 				let divpillitem = div.querySelector(BDFDB.dotCN.guildpillitem);
 				
@@ -1845,7 +1845,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				let borderRadius = new LibraryModules.Animations.Value(0);
 				borderRadius
 					.interpolate({inputRange: [0, 1], outputRange: [50, 30]})
-					.addListener((value) => {diviconwrapper.style.setProperty("border-radius", `${value.value}%`);});
+					.addListener((value) => {divinner.style.setProperty("border-radius", `${value.value}%`);});
 
 				let pillHeight = new LibraryModules.Animations.Value(0);
 				pillHeight
@@ -1884,11 +1884,37 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					}
 				});
 			}
-			if (functionality.click) div.addEventListener("click", e => {LibraryModules.GuildUtils.transitionToGuildSync(guild.id);});
-			if (functionality.menu) div.addEventListener("contextmenu", e => {BDFDB.openGuildContextMenu(guild.id, e);});
+			if (functionality.click) divinner.addEventListener("click", e => {
+				BDFDB.stopEvent(e);
+				LibraryModules.GuildUtils.transitionToGuildSync(guild.id);
+				if (typeof functionality.click == "function") functionality.click();
+			});
+			if (functionality.menu) divinner.addEventListener("contextmenu", e => {
+				BDFDB.openGuildContextMenu(guild.id, e);
+				if (typeof functionality.menu == "function") functionality.menu();
+			});
+			if (functionality.size) {
+				div.style.setProperty("margin", "0", "important");
+				div.style.setProperty("width", functionality.size + "px", "important");
+				div.style.setProperty("height", functionality.size + "px", "important");
+			}
 			return div;
 		}
 		else return null;
+	};
+	
+	BDFDB.openGuildContextMenu = function (eleOrInfoOrId, e = BDFDB.mousePosition) {
+		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getServerID(eleOrInfoOrId) : typeof eleOrInfoOrId == 'object' ? eleOrInfoOrId.id : eleOrInfoOrId;
+		let guild = LibraryModules.GuildStore.getGuild(id);
+		if (guild) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
+			return BDFDB.React.createElement(BDFDB.WebModules.findByName("GuildContextMenu"), Object.assign({}, e, {
+				type: LibraryModules.DiscordConstants.ContextMenuTypes.GUILD_ICON_BAR,
+				guild: guild,
+				badge: LibraryModules.MentionUtils.getMentionCount(guild.id),
+				link: LibraryModules.DiscordConstants.Routes.CHANNEL(guild.id, LibraryModules.LastChannelStore.getChannelId(guild.id)),
+				selected: guild.id == LibraryModules.LastGuildStore.getGuildId()
+			}));
+		});
 	};
 
 	BDFDB.readChannelList = function () {
@@ -3033,20 +3059,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			hint.style.setProperty('width', '32px', 'important');
 			hint.style.setProperty('max-width', '32px', 'important');
 		}
-	};
-	
-	BDFDB.openGuildContextMenu = function (eleOrInfoOrId, e = BDFDB.mousePosition) {
-		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getServerID(eleOrInfoOrId) : typeof eleOrInfoOrId == 'object' ? eleOrInfoOrId.id : eleOrInfoOrId;
-		let guild = LibraryModules.GuildStore.getGuild(id);
-		if (guild) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-			return BDFDB.React.createElement(BDFDB.WebModules.findByName("GuildContextMenu"), Object.assign({}, e, {
-				type: LibraryModules.DiscordConstants.ContextMenuTypes.GUILD_ICON_BAR,
-				guild: guild,
-				badge: LibraryModules.MentionUtils.getMentionCount(guild.id),
-				link: LibraryModules.DiscordConstants.Routes.CHANNEL(guild.id, LibraryModules.LastChannelStore.getChannelId(guild.id)),
-				selected: guild.id == LibraryModules.LastGuildStore.getGuildId()
-			}));
-		});
 	};
 
 	BDFDB.createMessageOptionPopout = function (button) {
