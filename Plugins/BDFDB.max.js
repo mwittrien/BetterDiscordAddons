@@ -1229,8 +1229,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	LibraryModules.AckUtils = BDFDB.WebModules.findByProperties('localAck', 'bulkAck');;
 	LibraryModules.Animations = BDFDB.WebModules.findByProperties('spring', 'decay');
 	LibraryModules.BadgeUtils = BDFDB.WebModules.findByProperties('getBadgeCountString', 'getBadgeWidthForValue');
-	LibraryModules.CurrentUserStore = BDFDB.WebModules.findByProperties('getCurrentUser');
 	LibraryModules.ChannelStore = BDFDB.WebModules.findByProperties('getChannel', 'getChannels');
+	LibraryModules.ContextMenuUtils = BDFDB.WebModules.findByProperties('closeContextMenu', 'openContextMenu');
+	LibraryModules.CurrentUserStore = BDFDB.WebModules.findByProperties('getCurrentUser');
 	LibraryModules.DirectMessageUtils = BDFDB.WebModules.findByProperties('addRecipient', 'openPrivateChannel');
 	LibraryModules.DiscordConstants = BDFDB.WebModules.findByProperties('Permissions', 'ActivityTypes');
 	LibraryModules.GuildStore = BDFDB.WebModules.findByProperties('getGuild', 'getGuilds');
@@ -3037,12 +3038,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.openGuildContextMenu = function (eleOrInfoOrId, e = BDFDB.mousePosition) {
 		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getServerID(eleOrInfoOrId) : typeof eleOrInfoOrId == 'object' ? eleOrInfoOrId.id : eleOrInfoOrId;
 		let guild = LibraryModules.GuildStore.getGuild(id);
-		if (guild) BDFDB.WebModules.findByProperties("openContextMenu").openContextMenu(e, function (e) {
+		if (guild) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
 			return BDFDB.React.createElement(BDFDB.WebModules.findByName("GuildContextMenu"), Object.assign({}, e, {
 				type: LibraryModules.DiscordConstants.ContextMenuTypes.GUILD_ICON_BAR,
 				guild: guild,
 				badge: LibraryModules.MentionUtils.getMentionCount(guild.id),
-				link: LibraryModules.DiscordConstants.Routes.CHANNEL(guild.id, LibraryModules.LastChannelStore.getChannelId("421640039714521088")),
+				link: LibraryModules.DiscordConstants.Routes.CHANNEL(guild.id, LibraryModules.LastChannelStore.getChannelId(guild.id)),
 				selected: guild.id == LibraryModules.LastGuildStore.getGuildId()
 			}));
 		});
