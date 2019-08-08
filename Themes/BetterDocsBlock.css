@@ -215,3 +215,29 @@ body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdocs." i]::after
     background-position: 3px !important;
     background-size: 14% !important;
 }
+
+#pubslayerroot:empty:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: #36393f;
+}
+#pubslayerroot:empty:after {
+	content: "Caution: \a \a If you are seeing this, then the public server page is broken. Try exiting this screen via [ESC] or via a mouseclick, if this does not work try pressing [Ctrl] + [R]. Your client will reload and your screen should be back to normal. Either wait till the feature is fixed and stop clicking the 'public' button or disable the button in [Usersettings → Settings → Public Servers]. \a Please do not ask about this in the support servers, you will get the same answer in there. There is nothing you can do to fix this except for waiting.";
+	position: absolute;
+	display: inline;
+	margin-top: auto;
+	top: 28vh;
+	right: 10vw;
+	left: 10vw;
+	background: #202225;
+	border-radius: 10px;
+	white-space: pre-wrap;
+	padding: 5vh 5vw;
+	font-size: 20px;
+	line-height: 30px;
+	color: #DDD;
+}
