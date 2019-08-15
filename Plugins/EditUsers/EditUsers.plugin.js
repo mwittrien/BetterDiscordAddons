@@ -396,9 +396,9 @@ class EditUsers {
 		BDFDB.setColorSwatches(userSettingsModal, color3);
 		BDFDB.setColorSwatches(userSettingsModal, color4);
 
-		let ignoredswatches = userSettingsModal.querySelectorAll(".swatches[swatchnr='3'], .swatches[swatchnr='4']");
+		let ignoredswatches = userSettingsModal.querySelectorAll(`.swatches[swatchnr='3'] ${BDFDB.dotCN.colorpickerswatch}, .swatches[swatchnr='4'] ${BDFDB.dotCN.colorpickerswatch}`);
 
-		BDFDB.toggleClass(ignoredswatches, "disabled", ignoretagcolorinput.checked);
+		BDFDB.toggleClass(ignoredswatches, BDFDB.disCN.colorpickerswatchdisabled, ignoretagcolorinput.checked);
 
 		BDFDB.appendModal(userSettingsModal);
 
@@ -406,7 +406,7 @@ class EditUsers {
 			userurlinput.disabled = removeiconinput.checked;
 		});
 		ignoretagcolorinput.addEventListener("click", () => {
-			BDFDB.toggleClass(ignoredswatches, "disabled", ignoretagcolorinput.checked);
+			BDFDB.toggleClass(ignoredswatches, BDFDB.disCN.colorpickerswatchdisabled, ignoretagcolorinput.checked);
 		});
 		userurlinput.addEventListener("input", () => {
 			this.checkUrl(userurlinput);

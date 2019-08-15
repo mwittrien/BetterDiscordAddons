@@ -3171,7 +3171,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 		else setSwatch(swatches.querySelector(BDFDB.dotCNS.colorpickerrow + BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchnocolor), null, true);
 		BDFDB.addChildEventListener(swatches, 'click', BDFDB.dotCN.colorpickerswatch, e => {
-			if (BDFDB.containsClass(swatches, 'disabled')) return;
+			if (BDFDB.containsClass(swatches, 'disabled') || BDFDB.containsClass(e.currentTarget, BDFDB.disCN.colorpickerswatchdisabled)) return;
 			else if (BDFDB.containsClass(e.currentTarget, BDFDB.disCN.colorpickerswatchcustom)) {
 				BDFDB.openColorPicker(swatches, e.currentTarget, e.currentTarget.style.backgroundColor);
 			}
