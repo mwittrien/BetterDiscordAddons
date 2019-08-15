@@ -1597,7 +1597,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				BDFDB.removeClass(settingsbutton, BDFDB.disCN._bdv2tooltipopen);
 			});
 			settingsbutton.addEventListener('click', () => {
-				var settingsmodal = BDFDB.htmlToElement(`<span class="BDFDB-modal BDFDB-settingsmodal ${plugin.id}-settingsmodal"><div class="${BDFDB.disCN.backdrop}"></div><div class="${BDFDB.disCN.modal}"><div class="${BDFDB.disCN.modalinner}"><div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}" style="width:600px !important;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex:0 0 auto;"><div class="${BDFDB.disCN.flexchild}" style="flex:1 1 auto;"><h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">${plugin.name} Settings</h4></div><button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"><svg class="" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div></button></div><div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}"><div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner}"></div></div></div></div></div></span>`);
+				var settingsmodal = BDFDB.htmlToElement(`<span class="BDFDB-modal BDFDB-settingsmodal ${plugin.id}-settingsmodal"><div class="${BDFDB.disCN.backdrop}"></div><div class="${BDFDB.disCN.modal}"><div class="${BDFDB.disCN.modalinner}"><div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}" style="width:600px !important;"><div class="${BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex:0 0 auto;"><div class="${BDFDB.disCN.flexchild}" style="flex:1 1 auto;"><h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">${plugin.name} Settings</h4></div><button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"><svg class="" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div></button></div><div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}"><div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner}"></div></div></div></div></div></span>`);
 				var settingshtml = plugin.getSettingsPanel();
 				settingsmodal.querySelector(BDFDB.dotCN.modalsubinner).appendChild(typeof settingshtml == 'string' ? BDFDB.htmlToElement(settingshtml) : settingshtml);
 				if (typeof plugin.onSettingsClosed === 'function') BDFDB.addChildEventListener(settingsmodal, 'click', BDFDB.dotCNC.modalclose + BDFDB.dotCN.backdrop, () => {
@@ -2898,7 +2898,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.createSearchBar = function (size = "small") {
 		if (typeof size != "string" || !["small","medium","large"].includes(size.toLowerCase())) size = "small";
 		var sizeclass = DiscordClassModules.SearchBar[size] ? (" " + BDFDB.disCN["searchbar" + size]) : "";
-		var searchBar = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.searchbar + sizeclass}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.searchbarinner}"><input class="${BDFDB.disCN.searchbarinput}" type="text" spellcheck="false" placeholder="" value=""><div tabindex="0" class="${BDFDB.disCN.searchbariconlayout + sizeclass}" role="button"><div class="${BDFDB.disCN.searchbariconwrap}"><svg name="Search" class="${BDFDB.disCNS.searchbaricon + BDFDB.disCN.searchbarvisible}" width="18" height="18" viewBox="0 0 18 18"><g fill="none" fill-rule="evenodd"><path fill="currentColor" d="M3.60091481,7.20297313 C3.60091481,5.20983419 5.20983419,3.60091481 7.20297313,3.60091481 C9.19611206,3.60091481 10.8050314,5.20983419 10.8050314,7.20297313 C10.8050314,9.19611206 9.19611206,10.8050314 7.20297313,10.8050314 C5.20983419,10.8050314 3.60091481,9.19611206 3.60091481,7.20297313 Z M12.0057176,10.8050314 L11.3733562,10.8050314 L11.1492281,10.5889079 C11.9336764,9.67638651 12.4059463,8.49170955 12.4059463,7.20297313 C12.4059463,4.32933105 10.0766152,2 7.20297313,2 C4.32933105,2 2,4.32933105 2,7.20297313 C2,10.0766152 4.32933105,12.4059463 7.20297313,12.4059463 C8.49170955,12.4059463 9.67638651,11.9336764 10.5889079,11.1492281 L10.8050314,11.3733562 L10.8050314,12.0057176 L14.8073185,16 L16,14.8073185 L12.2102538,11.0099776 L12.0057176,10.8050314 Z"></path></g></svg><svg name="Clear" class="${BDFDB.disCNS.searchbaricon + BDFDB.disCN.searchbarclear}" width="12" height="12" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div></div></div></div>`);
+		var searchBar = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.searchbar + sizeclass}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.searchbarinner}"><input class="${BDFDB.disCN.searchbarinput}" type="text" spellcheck="false" placeholder="" value=""><div tabindex="0" class="${BDFDB.disCN.searchbariconlayout + sizeclass}" role="button"><div class="${BDFDB.disCN.searchbariconwrap}"><svg name="Search" class="${BDFDB.disCNS.searchbaricon + BDFDB.disCN.searchbarvisible}" width="18" height="18" viewBox="0 0 18 18"><g fill="none" fill-rule="evenodd"><path fill="currentColor" d="M3.60091481,7.20297313 C3.60091481,5.20983419 5.20983419,3.60091481 7.20297313,3.60091481 C9.19611206,3.60091481 10.8050314,5.20983419 10.8050314,7.20297313 C10.8050314,9.19611206 9.19611206,10.8050314 7.20297313,10.8050314 C5.20983419,10.8050314 3.60091481,9.19611206 3.60091481,7.20297313 Z M12.0057176,10.8050314 L11.3733562,10.8050314 L11.1492281,10.5889079 C11.9336764,9.67638651 12.4059463,8.49170955 12.4059463,7.20297313 C12.4059463,4.32933105 10.0766152,2 7.20297313,2 C4.32933105,2 2,4.32933105 2,7.20297313 C2,10.0766152 4.32933105,12.4059463 7.20297313,12.4059463 C8.49170955,12.4059463 9.67638651,11.9336764 10.5889079,11.1492281 L10.8050314,11.3733562 L10.8050314,12.0057176 L14.8073185,16 L16,14.8073185 L12.2102538,11.0099776 L12.0057176,10.8050314 Z"></path></g></svg><svg name="Clear" class="${BDFDB.disCNS.searchbaricon + BDFDB.disCN.searchbarclear}" width="12" height="12" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div></div></div></div>`);
 		BDFDB.initElements(searchBar);
 		return searchBar;
 	};
@@ -2906,7 +2906,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.createSelectMenu = function (inner, value, type = "", dark = BDFDB.getDiscordTheme() == BDFDB.disCN.themedark) {
 		if (typeof inner != "string" || (typeof value != "string" && typeof value != "number")) return BDFDB.htmlToElement(`<div></div>`);
 		var suffix = dark ? "dark" : "light";
-		return `<div class="${BDFDB.disCN.selectwrap} BDFDB-select" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.select}" type="${type}" value="${value}"><div class="${BDFDB.disCNS.selectcontrol + BDFDB.disCN["selectcontrol" + suffix]}"><div class="${BDFDB.disCN.selectvalue}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCNS.selectsingle + BDFDB.disCN["selectsingle" + suffix]}">${inner}</div><input readonly="" tabindex="0" class="${BDFDB.disCN.selectdummyinput}" value=""></div><div class="${BDFDB.disCN.selectarrowzone}"><div aria-hidden="true" class="${BDFDB.disCNS.selectarrowcontainer + BDFDB.disCN["selectarrowcontainer" + suffix]}"><svg height="20" width="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false" class="${BDFDB.disCN.selectarrow}"><path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path></svg></div></div></div></div></div>`;
+		return `<div class="${BDFDB.disCN.selectwrap} BDFDB-select" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.select}" type="${type}" value="${value}"><div class="${BDFDB.disCNS.selectcontrol + BDFDB.disCN["selectcontrol" + suffix]}"><div class="${BDFDB.disCN.selectvalue}"><div class="${BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCNS.selectsingle + BDFDB.disCN["selectsingle" + suffix]}">${inner}</div><input readonly="" tabindex="0" class="${BDFDB.disCN.selectdummyinput}" value=""></div><div class="${BDFDB.disCN.selectarrowzone}"><div aria-hidden="true" class="${BDFDB.disCNS.selectarrowcontainer + BDFDB.disCN["selectarrowcontainer" + suffix]}"><svg height="20" width="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false" class="${BDFDB.disCN.selectarrow}"><path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path></svg></div></div></div></div></div>`;
 	};
 
 	BDFDB.openDropdownMenu = function (e, callback, createinner, values, selector = "", dark = BDFDB.getDiscordTheme() == BDFDB.disCN.themedark) {
@@ -2970,7 +2970,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (!BDFDB.isObject(plugin) || !text) return;
 		var callback = typeof arguments[2] == "function" ? arguments[2] : (typeof arguments[3] == "function" ? arguments[3] : null);
 		var header = typeof arguments[2] == "string" ? arguments[2] : "Are you sure?";
-		let confirmModal = BDFDB.htmlToElement(`<span class="${plugin.name}-modal BDFDB-confirmation-modal BDFDB-modal"><div class="${BDFDB.disCN.backdrop}"></div><div class="${BDFDB.disCN.modal}"><div class="${BDFDB.disCN.modalinner}"><div class="${BDFDB.disCNS.modalsub + BDFDB.disCNS.modalmini + BDFDB.disCN.modalminisize}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex:0 0 auto;"><div class="${BDFDB.disCN.flexchild}" style="flex:1 1 auto;"><h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">${header}</h4><div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}">${plugin.name}</div></div><button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"><svg class="" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div></button></div><div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}"><div class="${BDFDB.disCNS.scroller + BDFDB.disCNS.modalsubinner + BDFDB.disCN.modalminicontent}"><div class="${BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.selectable}message-content" style="padding-bottom:20px;">${text}</div></div> </div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}"><button type="button" class="btn-ok ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"></div></button><button type="button" class="btn-cancel ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlooklink + BDFDB.disCNS.buttoncolorwhite + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div></div></div></div></span>`);
+		let confirmModal = BDFDB.htmlToElement(`<span class="${plugin.name}-modal BDFDB-confirmation-modal BDFDB-modal"><div class="${BDFDB.disCN.backdrop}"></div><div class="${BDFDB.disCN.modal}"><div class="${BDFDB.disCN.modalinner}"><div class="${BDFDB.disCNS.modalsub + BDFDB.disCNS.modalmini + BDFDB.disCN.modalminisize}"><div class="${BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex:0 0 auto;"><div class="${BDFDB.disCN.flexchild}" style="flex:1 1 auto;"><h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">${header}</h4><div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}">${plugin.name}</div></div><button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"><svg class="" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div></button></div><div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}"><div class="${BDFDB.disCNS.scroller + BDFDB.disCNS.modalsubinner + BDFDB.disCN.modalminicontent}"><div class="${BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.selectable}message-content" style="padding-bottom:20px;">${text}</div></div> </div><div class="${BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}"><button type="button" class="btn-ok ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"></div></button><button type="button" class="btn-cancel ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlooklink + BDFDB.disCNS.buttoncolorwhite + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div></div></div></div></span>`);
 		BDFDB.appendModal(confirmModal);
 		if (typeof callback == 'function') confirmModal.querySelector('.btn-ok').addEventListener('click', () => {
 			setTimeout(() => {callback();}, 300);
@@ -3128,6 +3128,30 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		document.addEventListener('mousedown', mousedown);
 	};
 
+	var setSwatch = (swatch, color, selected) => {
+		if (!swatch) return;
+		else if (selected) {
+			BDFDB.addClass(swatch, 'selected');
+			var iscustom = BDFDB.containsClass(swatch, BDFDB.disCN.colorpickerswatchcustom);
+			color= BDFDB.colorCONVERT(color, 'RGB');
+			var bright = color ? BDFDB.colorISBRIGHT(color) : false;
+			swatch.appendChild(BDFDB.htmlToElement(`<svg class="swatch-checkmark" name="Checkmark" aria-hidden="false" width="${iscustom ? 32 : 16}" height="${iscustom ? 24 : 16}" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="${bright ? '#000000' : '#ffffff'}" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg>`));
+			if (iscustom) {
+				BDFDB.removeClass(swatch, BDFDB.disCN.colorpickerswatchnocolor);
+				swatch.style.setProperty('background-color', color, 'important');
+				swatch.querySelector(BDFDB.dotCN.colorpickerswatchdropperfg).setAttribute('fill', bright ? '#000000' : '#ffffff');
+			}
+		}
+		else {
+			BDFDB.removeClass(swatch, 'selected');
+			BDFDB.removeEles(swatch.querySelectorAll(".swatch-checkmark"));
+			if (BDFDB.containsClass(swatch, BDFDB.disCN.colorpickerswatchcustom)) {
+				BDFDB.addClass(swatch, BDFDB.disCN.colorpickerswatchnocolor);
+				swatch.style.removeProperty('background-color');
+				swatch.querySelector(BDFDB.dotCN.colorpickerswatchdropperfg).setAttribute('fill', '#ffffff');
+			}
+		}
+	};
 	BDFDB.setColorSwatches = function (container, currentcolor) {
 		if (!Node.prototype.isPrototypeOf(container)) return;
 		
@@ -3135,251 +3159,120 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (!swatches) return;
 		swatches.setAttribute('swatchnr', parseInt(container.querySelectorAll('.swatches[swatchnr]').length + 1));
 		
-		var colorlist = ['rgb(82,233,30)', 'rgb(46,204,113)', 'rgb(26,188,156)', 'rgb(52,152,219)', 'rgb(52,84,219)', 'rgb(134,30,233)', 'rgb(155,89,182)', 'rgb(233,30,99)', 'rgb(233,65,30)', 'rgb(231,76,60)', 'rgb(230,126,34)', 'rgb(241,196,15)', 'rgb(199,204,205)', 'rgb(112,128,136)', 'rgb(99,99,99)', 'rgb(255,255,255)', 'rgb(59,173,20)', 'rgb(31,139,76)', 'rgb(17,128,106)', 'rgb(32,102,148)', 'rgb(32,57,148)', 'rgb(109,20,173)', 'rgb(113,54,138)', 'rgb(173,20,87)', 'rgb(173,32,20)', 'rgb(153,45,34)', 'rgb(168,67,0)', 'rgb(194,124,14)', 'rgb(151,156,159)', 'rgb(93,104,109)', 'rgb(44,44,44)'];
+		var colorlist = [null, 'rgb(82,233,30)', 'rgb(46,204,113)', 'rgb(26,188,156)', 'rgb(52,152,219)', 'rgb(52,84,219)', 'rgb(134,30,233)', 'rgb(155,89,182)', 'rgb(233,30,99)', 'rgb(233,65,30)', 'rgb(231,76,60)', 'rgb(230,126,34)', 'rgb(241,196,15)', 'rgb(199,204,205)', 'rgb(112,128,136)', 'rgb(99,99,99)', 'rgb(255,255,255)', 'rgb(59,173,20)', 'rgb(31,139,76)', 'rgb(17,128,106)', 'rgb(32,102,148)', 'rgb(32,57,148)', 'rgb(109,20,173)', 'rgb(113,54,138)', 'rgb(173,20,87)', 'rgb(173,32,20)', 'rgb(153,45,34)', 'rgb(168,67,0)', 'rgb(194,124,14)', 'rgb(151,156,159)', 'rgb(93,104,109)', 'rgb(44,44,44)'];
+		var colorrows = [colorlist.slice(0, parseInt(colorlist.length/2)), colorlist.slice(parseInt(colorlist.length/2))];
+		colorlist.shift();
 		
-		swatches.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.margintop4}" style="flex:1 1 auto;"><div class="ui-color-picker-swatch large color custom" style="background-color:rgb(0, 0, 0);"><svg class="color-picker-dropper" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16"><path class="color-picker-dropper-fg" fill="currentColor" style="color:rgb(255,255,255) !important;" d="M14.994 1.006C13.858-.257 11.904-.3 10.72.89L8.637 2.975l-.696-.697-1.387 1.388 5.557 5.557 1.387-1.388-.697-.697 1.964-1.964c1.13-1.13 1.3-2.985.23-4.168zm-13.25 10.25c-.225.224-.408.48-.55.764L.02 14.37l1.39 1.39 2.35-1.174c.283-.14.54-.33.765-.55l4.808-4.808-2.776-2.776-4.813 4.803z"></path></svg></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.wrap} ui-color-picker-row" style="flex:1 1 auto;"><div class="ui-color-picker-swatch small nocolor"></div>${colorlist.map(c => '<div class="ui-color-picker-swatch small color" style="background-color: ' + c + ';"></div>').join('')}</div></div>`));
+		swatches.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.margintop8}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.marginreset}" style="flex: 0 0 auto;"><div aria-label="" class=""><button type="button" class="${BDFDB.disCNS.colorpickerswatch + BDFDB.disCNS.colorpickerswatchcustom + BDFDB.disCN.colorpickerswatchnocolor}" style="margin-left: 0;"><svg class="${BDFDB.disCN.colorpickerswatchdropper}" width="14" height="14" viewBox="0 0 16 16"><g fill="none"><path d="M-4-4h24v24H-4z"/><path class="${BDFDB.disCN.colorpickerswatchdropperfg}" fill="#ffffff" d="M14.994 1.006C13.858-.257 11.904-.3 10.72.89L8.637 2.975l-.696-.697-1.387 1.388 5.557 5.557 1.387-1.388-.697-.697 1.964-1.964c1.13-1.13 1.3-2.985.23-4.168zm-13.25 10.25c-.225.224-.408.48-.55.764L.02 14.37l1.39 1.39 2.35-1.174c.283-.14.54-.33.765-.55l4.808-4.808-2.776-2.776-4.813 4.803z"/></g></svg></button></div></div><div class="${BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.flexmarginreset}" style="flex: 1 1 auto;">${colorrows.map(row => '<div class="' + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.wrap + BDFDB.disCN.colorpickerrow + '">' + row.map(c => '<button type="button" class="' + BDFDB.disCN.colorpickerswatch + (c ? "" : (" " + BDFDB.disCN.colorpickerswatchnocolor)) + '" style="background-color: ' + c + ';"></button>').join('') + '</div>').join('')}</div></div>`));
+		
 		if (currentcolor && !BDFDB.colorCOMPARE(currentcolor, [0, 0, 0, 0])) {
 			var selection = colorlist.indexOf(BDFDB.colorCONVERT(currentcolor, 'RGB'));
-			setSwatch(selection > -1 ? swatches.querySelectorAll('.ui-color-picker-swatch.small.color')[selection] : swatches.querySelector('.ui-color-picker-swatch.large.custom'), currentcolor, true);
+			setSwatch(selection > -1 ? swatches.querySelectorAll(BDFDB.dotCNS.colorpickerrow + BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor)[selection] : swatches.querySelector(BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchcustom), currentcolor, true);
 		}
-		else setSwatch(swatches.querySelector('.ui-color-picker-swatch.small.nocolor'), null, true);
-		BDFDB.addChildEventListener(swatches, 'click', '.ui-color-picker-swatch', e => {
+		else setSwatch(swatches.querySelector(BDFDB.dotCNS.colorpickerrow + BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchnocolor), null, true);
+		BDFDB.addChildEventListener(swatches, 'click', BDFDB.dotCN.colorpickerswatch, e => {
 			if (BDFDB.containsClass(swatches, 'disabled')) return;
-			else if (BDFDB.containsClass(e.currentTarget, 'custom')) {
-				BDFDB.openColorPicker(e.currentTarget.style.backgroundColor).then(selectedcolor => {
-					setSwatch(swatches.querySelector('.ui-color-picker-swatch.selected'), null, false);
-					setSwatch(swatches.querySelector('.ui-color-picker-swatch.custom'), selectedcolor, true);
-				});
+			else if (BDFDB.containsClass(e.currentTarget, BDFDB.disCN.colorpickerswatchcustom)) {
+				BDFDB.openColorPicker(swatches, e.currentTarget, e.currentTarget.style.backgroundColor);
 			}
 			else {
-				setSwatch(swatches.querySelector('.ui-color-picker-swatch.selected'), null, false);
+				setSwatch(swatches.querySelector(BDFDB.dotCN.colorpickerswatch + ".selected"), null, false);
 				setSwatch(e.currentTarget, e.currentTarget.style.getPropertyValue('background-color'), true);
 			}
 		});
-		function setSwatch(swatch, color, selected) {
-			if (!swatch) return;
-			if (selected) {
-				BDFDB.addClass(swatch, 'selected');
-				if (color) swatch.style.setProperty('border-color', BDFDB.colorINV(color, 'RGB'), 'important');
-				else swatch.style.removeProperty('border-color');
-				if (color && BDFDB.containsClass(swatch, 'custom')) {
-					var comp = BDFDB.colorCONVERT(color, 'RGBCOMP');
-					swatch.style.setProperty('background-color', BDFDB.colorCONVERT(color, 'RGB'), 'important');
-					swatch.querySelector('.color-picker-dropper-fg').style.setProperty('color', comp[0] > 150 && comp[1] > 150 && comp[2] > 150 ? '#000' : '#FFF', 'important');
-				}
-			}
-			else {
-				BDFDB.removeClass(swatch, 'selected');
-				swatch.style.removeProperty('border-color');
-			}
-		}
 	};
 
 	BDFDB.getSwatchColor = function (container, nr) {
 		if (!Node.prototype.isPrototypeOf(container)) return;
 		
-		var swatch = container.querySelector(`.swatches[swatchnr="${nr}"] .ui-color-picker-swatch.selected`);
+		var swatch = container.querySelector(`.swatches[swatchnr="${nr}"] ${BDFDB.dotCN.colorpickerswatch}.selected`);
 		return swatch ? BDFDB.colorCONVERT(swatch.style.getPropertyValue('background-color'), 'RGBCOMP') : null;
 	};
 
-	BDFDB.openColorPicker = function (color) {
-		return new Promise(resolve => {
-			color = BDFDB.colorCONVERT(color, 'RGB') || 'rgb(0,0,0)';
-			var librarystrings = BDFDB.getLibraryStrings();
-			var inputs = {
-				HEX:	{type:'text',		name:'hex',			group:'HEX',	min:null,	max:null,	length:7,		unit:'',	default:'#000000'},
-				R:		{type:'number',		name:'red',			group:'RGB',	min:0,		max:255,	length:null,	unit:'',	default:0},
-				G:		{type:'number',		name:'green',		group:'RGB',	min:0,		max:255,	length:null,	unit:'',	default:0},
-				B:		{type:'number',		name:'blue',		group:'RGB',	min:0,		max:255,	length:null,	unit:'',	default:0},
-				H:		{type:'number',		name:'hue',			group:'HSL',	min:0,		max:360,	length:null,	unit:'°',	default:0},
-				S:		{type:'number',		name:'saturation',	group:'HSL',	min:0,		max:100,	length:null,	unit:'%',	default:0},
-				L:		{type:'number',		name:'lightness',	group:'HSL',	min:0,		max:100,	length:null,	unit:'%',	default:0}
+	BDFDB.openColorPicker = function (swatches, target, color) {
+		if (!swatches || !target) return;
+		color = BDFDB.colorCONVERT(color, 'HEX') || '#000000';
+		var [h, s, l] = BDFDB.colorCONVERT(color, 'HSLCOMP');
+			 
+		var targetrects = BDFDB.getRects(target);
+		var colorPicker = BDFDB.htmlToElement(`<div role="dialog" class="BDFDB-colorpicker ${BDFDB.disCNS.popoutnoarrow + BDFDB.disCNS.popoutnoshadow + BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottom + BDFDB.disCNS.popoutarrowalignmenttop + BDFDB.disCN.themeundefined}" style="z-index: 2001; visibility: visible; left: ${targetrects.left + targetrects.width/2}px; top: ${targetrects.top + targetrects.height}px; transform: translateX(-50%) translateY(0%) translateZ(0px);"><div class="${BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.colorpicker}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.colorpickerinner}"><div class="${BDFDB.disCN.colorpickersaturation}"><div class="saturation-color" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; background: ${BDFDB.colorCONVERT([h, '100%', '100%'], 'RGB')} !important;"><style>.saturation-white {background: -webkit-linear-gradient(to right, #fff, rgba(255,255,255,0));background: linear-gradient(to right, #fff, rgba(255,255,255,0));}.saturation-black {background: -webkit-linear-gradient(to top, #000, rgba(0,0,0,0));background: linear-gradient(to top, #000, rgba(0,0,0,0));}</style><div class="saturation-white" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="saturation-black" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"></div><div class="saturation-cursor" style="position: absolute; top: 55.2941%; left: 44.7368%; cursor: default;"><div style="width: 4px; height: 4px; box-shadow: rgb(255, 255, 255) 0px 0px 0px 1.5px, rgba(0, 0, 0, 0.3) 0px 0px 1px 1px inset, rgba(0, 0, 0, 0.4) 0px 0px 1px 2px; border-radius: 50%; transform: translate(-2px, -2px);"></div></div></div></div></div><div class="${BDFDB.disCN.colorpickerhue}"><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="hue-horizontal" style="padding: 0px 2px; position: relative; height: 100%;"><style>.hue-horizontal {background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);background: -webkit-linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);}.hue-vertical {background: linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);background: -webkit-linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);}</style><div class="hue-cursor" style="position: absolute; left: 0%;"><div style="margin-top: 1px; width: 4px; border-radius: 1px; height: 8px; box-shadow: rgba(0, 0, 0, 0.6) 0px 0px 2px; background: rgb(255, 255, 255); transform: translateX(-2px);"></div></div></div></div></div></div><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.colorpickerhexinput + BDFDB.disCN.margintop8}"><input class="${BDFDB.disCN.inputdefault}" maxlength="7" name="" type="text" placeholder="" value="${color}"></input></div></div></div>`);
+		document.querySelector(BDFDB.dotCN.popouts).appendChild(colorPicker);
+
+		var removePopout = e => {
+			if (!colorPicker.contains(e.target)) {
+				document.removeEventListener("mousedown", removePopout);
+				colorPicker.remove();
+			}
+		};
+		document.addEventListener("mousedown", removePopout);
+		
+		var hexinput = colorPicker.querySelector(BDFDB.dotCNS.colorpickerhexinput + BDFDB.dotCN.input);
+		var satpane = colorPicker.querySelector('.saturation-color');
+		var huepane = colorPicker.querySelector('.hue-horizontal');
+		var satcursor = colorPicker.querySelector('.saturation-cursor');
+		var huecursor = colorPicker.querySelector('.hue-cursor');
+		
+		var satpanerects = BDFDB.getRects(satpane);
+		var sMinX = satpanerects.left;
+		var sMaxX = sMinX + satpanerects.width;
+		var sMinY = satpanerects.top;
+		var sMaxY = sMinY + satpanerects.height;
+		var huepanerects = BDFDB.getRects(huepane);
+		var hMinX = huepanerects.left;
+		var hMaxX = hMinX + huepanerects.width;
+		
+		update(false);
+		satpane.addEventListener('mousedown', e => {
+			s = BDFDB.mapRange([sMinX, sMaxX], [0, 100], e.clientX) + '%';
+			l = BDFDB.mapRange([sMinY, sMaxY], [100, 0], e.clientY) + '%';
+			update(true);
+			var mouseup = () => {
+				document.removeEventListener('mouseup', mouseup);
+				document.removeEventListener('mousemove', mousemove);
 			};
-			var colorPickerModal = BDFDB.htmlToElement(`<span class="colorpicker-modal BDFDB-modal"><div class="${BDFDB.disCN.backdrop}"></div><div class="${BDFDB.disCN.modal}"><div class="${BDFDB.disCN.modalinner}"><div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex:0 0 auto;"><div class="${BDFDB.disCN.flexchild}" style="flex:1 1 auto;"><h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">${librarystrings.colorpicker_modal_header_text}</h4></div><button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"><svg class="" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div></button></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.modalsubinner + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.nowrap} colorpicker-container" style="flex:1 1 auto;"><div class="colorpicker-color"><div class="colorpicker-white" style="background:linear-gradient(to right, #fff, transparent) !important;"><div class="colorpicker-black" style="background:linear-gradient(to top, #000, transparent) !important;"><div class="colorpicker-pickercursor" style="left:-999999px; top:-999999px;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1"><circle cx="7" cy="7" r="6" style="color:black !important;" stroke="currentColor" stroke-width="2" fill="none" /></svg></div><div class="colorpicker-pickerpane"></div></div></div></div><div class="colorpicker-slider" style="background:linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%) !important;"><div class="colorpicker-slidercursor" style="top:-999999px;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1"><path style="color:grey !important;" stroke="currentColor" fill="white" d="M 0 0, l 5 5, l -5 5, m 31 0, l -5 -5, l 5 -5"></path></svg></div><div class="colorpicker-sliderpane"></div></div><div class="colorpicker-controls"><div class="colorpicker-previewcontainer"><div class="colorpicker-preview-0 selected" style="background-color:#808080;"></div><div class="colorpicker-preview-2" style="background-color:#808080;"></div></div><div class="colorpicker-inputs ${BDFDB.disCNS.card + BDFDB.disCN.cardprimaryeditable}">${Object.keys(inputs).map((key, i) => '<div class="colorpicker-input ' + (BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.aligncenter + BDFDB.disCNS.justifycenter + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.nowrap) + '"><div class="' + (BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCN.nowrap) + '" style="flex:1 1 20%"><h5 class="' + (BDFDB.disCNS.h5 + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold) + '">' + key + ':</h5></div><div class="' + (inputs[key].type == 'number' ? 'inputNumberWrapper inputNumberWrapperMini ' : '') + (BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCN.directioncolumn) + '" style="flex:1 1 70%;">' + (inputs[key].type == 'number' ? '<span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span>' : '') + '<input type="' + inputs[key].type + '"' + (!isNaN(inputs[key].min) && inputs[key].min !== null ? ' min="' + inputs[key].min + '"' : '') + (!isNaN(inputs[key].max) && inputs[key].max !== null ? ' max="' + inputs[key].max + '"' : '') + (!isNaN(inputs[key].length) && inputs[key].length !== null ? ' maxlength="' + inputs[key].length + '"' : '') + ' group="' + inputs[key].group + '" placeholder="' + inputs[key].default + '" class="' + (BDFDB.disCNS.inputmini + BDFDB.disCNS.input + BDFDB.disCN.size16) + ' colorpicker-' + inputs[key].name + '"></div><div class="' + (BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCN.nowrap) + '" style="flex:1 1 10%"><h5 class="' + (BDFDB.disCNS.h5 + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold) + '">' + inputs[key].unit + '</h5></div></div>').join('')}</div></div></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}"><button type="button" class="btn-ok ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div></div></div></div></span>`);
-			BDFDB.appendModal(colorPickerModal);
-			BDFDB.addChildEventListener(colorPickerModal, 'click', '.btn-ok', () => {
-				resolve(colorPickerModal.querySelector('[class^="colorpicker-preview-"].selected').style.getPropertyValue('background-color'));
-			});
-			BDFDB.addChildEventListener(colorPickerModal, 'click', BDFDB.dotCNC.backdrop + BDFDB.dotCN.modalclose, () => {
-				resolve(null);
-			});
-			
-			var hex = '#000000', r = 0, g = 0, b = 0, h = 0, s = 0, l = 0;
-			
-			var hexinput = colorPickerModal.querySelector('.colorpicker-hex');
-			var hinput = colorPickerModal.querySelector('.colorpicker-hue');
-			var sinput = colorPickerModal.querySelector('.colorpicker-saturation');
-			var linput = colorPickerModal.querySelector('.colorpicker-lightness');
-			var rinput = colorPickerModal.querySelector('.colorpicker-red');
-			var ginput = colorPickerModal.querySelector('.colorpicker-green');
-			var binput = colorPickerModal.querySelector('.colorpicker-blue');
-			
-			var ppane = colorPickerModal.querySelector('.colorpicker-pickerpane');
-			var pcursor = colorPickerModal.querySelector('.colorpicker-pickercursor');
-			var pcursorinner = colorPickerModal.querySelector('circle');
-			
-			var spane = colorPickerModal.querySelector('.colorpicker-sliderpane');
-			var scursor = colorPickerModal.querySelector('.colorpicker-slidercursor');
-			var scursorinner = colorPickerModal.querySelector('path');
-			
-			var pX = 0;
-			var pY = 0;
-			var pHalfW, pHalfH, pMinX, pMaxX, pMinY, pMaxY;
-			var sY = 0;
-			var sHalfH, sMinY, sMaxY;
-			[h, s, l] = BDFDB.colorCONVERT(color, 'HSLCOMP');
-			updateValues();
-			setTimeout(() => {updateCursorColors();}, 300);
-			ppane.addEventListener('mousedown', e => {
-				BDFDB.appendLocalStyle('BDFDBcrossHairColorPicker', '* {cursor:crosshair !important;}');
-				switchPreview(e.button);
-				updateCursorValues();
-				pX = e.clientX - pHalfW;
-				pY = e.clientY - pHalfH;
-				updateCursorPositions();
-				s = BDFDB.mapRange([pMinX - pHalfW, pMaxX - pHalfW], [0, 100], pX) + '%';
-				l = BDFDB.mapRange([pMinY - pHalfH, pMaxY - pHalfH], [100, 0], pY) + '%';
-				updateValues();
-				var mouseup = () => {
-					BDFDB.removeLocalStyle('BDFDBcrossHairColorPicker');
-					document.removeEventListener('mouseup', mouseup);
-					document.removeEventListener('mousemove', mousemove);
-				};
-				var mousemove = e2 => {
-					pX = e2.clientX > pMaxX ? pMaxX - pHalfW : e2.clientX < pMinX ? pMinX - pHalfW : e2.clientX - pHalfW;
-					pY = e2.clientY > pMaxY ? pMaxY - pHalfH : e2.clientY < pMinY ? pMinY - pHalfH : e2.clientY - pHalfH;
-					updateCursorPositions();
-					s = BDFDB.mapRange([pMinX - pHalfW, pMaxX - pHalfW], [0, 100], pX) + '%';
-					l = BDFDB.mapRange([pMinY - pHalfH, pMaxY - pHalfH], [100, 0], pY) + '%';
-					updateValues();
-				};
-				document.addEventListener('mouseup', mouseup);
-				document.addEventListener('mousemove', mousemove);
-			});
-			spane.addEventListener('mousedown', e => {
-				BDFDB.appendLocalStyle('BDFDBcrossHairColorPicker', '* {cursor:crosshair !important;}');
-				switchPreview(e.button);
-				updateCursorValues();
-				sY = e.clientY - sHalfH;
-				updateCursorPositions();
-				h = BDFDB.mapRange([sMinY - sHalfH, sMaxY - sHalfH], [360, 0], sY);
-				updateValues();
-				var mouseup = () => {
-					BDFDB.removeLocalStyle('BDFDBcrossHairColorPicker');
-					document.removeEventListener('mouseup', mouseup);
-					document.removeEventListener('mousemove', mousemove);
-				};
-				var mousemove = e2 => {
-					sY = e2.clientY > sMaxY ? sMaxY - sHalfH : e2.clientY < sMinY ? sMinY - sHalfH : e2.clientY - sHalfH;
-					updateCursorPositions();
-					h = BDFDB.mapRange([sMinY - sHalfH, sMaxY - sHalfH], [360, 0], sY);
-					updateValues();
-				};
-				document.addEventListener('mouseup', mouseup);
-				document.addEventListener('mousemove', mousemove);
-			});
-			BDFDB.addChildEventListener(colorPickerModal, 'input', BDFDB.dotCN.inputmini, e => {
-				updateInputs(e.currentTarget.getAttribute('group'));
-			});
-			BDFDB.addChildEventListener(colorPickerModal, 'click', '[class^="colorpicker-preview-"]', e => {
-				var oldpreview = colorPickerModal.querySelector('[class^="colorpicker-preview-"].selected');
-				oldpreview.style.setProperty('border-color', 'transparent');
-				BDFDB.removeClass(oldpreview, 'selected');
-				BDFDB.addClass(e.currentTarget, 'selected');
-				[h, s, l] = BDFDB.colorCONVERT(e.currentTarget.style.getPropertyValue('background-value'), 'HSLCOMP');
-				updateValues();
-				updateCursorColors();
-			});
-			function switchPreview(which) {
-				var oldpreview = colorPickerModal.querySelector('[class^="colorpicker-preview-"].selected');
-				oldpreview.style.removeProperty('border-color');
-				BDFDB.removeClass(oldpreview, 'selected');
-				BDFDB.addClass(colorPickerModal.querySelector('.colorpicker-preview-' + which), 'selected');
-			}
-			function updateInputs(type) {
-				switch (type) {
-					case 'RGB':
-						r = processInput(rinput), g = processInput(ginput), b = processInput(binput);
-						[h, s, l] = BDFDB.colorCONVERT([r, g, b], 'HSLCOMP');
-						hexinput.value = BDFDB.colorCONVERT([r, g, b], 'HEX');
-						hinput.value = Math.round(h), sinput.value = Math.round(parseInt(s)), linput.value = Math.round(parseInt(l));
-						rinput.value = r, ginput.value = g, binput.value = b;
-						break;
-					case 'HSL':
-						h = processInput(hinput), s = processInput(sinput) + '%', l = processInput(linput) + '%';
-						[r, g, b] = BDFDB.colorCONVERT([h, s, l], 'RGBCOMP');
-						hexinput.value = BDFDB.colorCONVERT([r, g, b], 'HEX');
-						hinput.value = h, sinput.value = parseInt(s), linput.value = parseInt(l);
-						rinput.value = r, ginput.value = g, binput.value = b;
-						break;
-					case 'HEX':
-						hex = hexinput.value;
-						if (/^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.test(hex)) {
-							[h, s, l] = BDFDB.colorCONVERT(hex, 'HSLCOMP');
-							[r, g, b] = BDFDB.colorCONVERT(hex, 'RGBCOMP');
-							hinput.value = Math.round(h), sinput.value = Math.round(parseInt(s)), linput.value = Math.round(parseInt(l));
-							rinput.value = r, ginput.value = g, binput.value = b;
-						}
-						break;
-				}
-				updatePreviews();
-				updateCursorColors();
-			}
-			function processInput(input) {
-				var value = parseInt(input.value);
-				var min = parseInt(input.getAttribute('min'));
-				var max = parseInt(input.getAttribute('max'));
-				return isNaN(value) ? input.getAttribute('placeholder') : value < min ? min : value > max ? max : value;
-			}
-			function updateCursorColors() {
-				updateCursorValues();
-				pX = BDFDB.mapRange([0, 100], [pMinX - pHalfW, pMaxX - pHalfW], parseInt(s));
-				pY = BDFDB.mapRange([100, 0], [pMinY - pHalfH, pMaxY - pHalfH], parseInt(l));
-				sY = BDFDB.mapRange([360, 0], [sMinY - sHalfH, sMaxY - sHalfH], h);
-				updateCursorPositions();
-				pcursorinner.style.setProperty('color', BDFDB.colorINV([r, g, b], 'RGB'), 'important');
-				scursorinner.style.setProperty('color', BDFDB.colorCONVERT([h, '100%', '100%'], 'RGB'), 'important');
-			}
-			function updateCursorValues() {
-				var ppanerects = BDFDB.getRects(ppane);
-				var pcursorrects = BDFDB.getRects(pcursor);
-				pHalfW = pcursorrects.width / 2;
-				pHalfH = pcursorrects.height / 2;
-				pMinX = ppanerects.left;
-				pMaxX = pMinX + ppanerects.width;
-				pMinY = ppanerects.top;
-				pMaxY = pMinY + ppanerects.height;
-				var spanerects = BDFDB.getRects(spane);
-				var scursorrects = BDFDB.getRects(scursor);
-				sHalfH = scursorrects.height / 2;
-				sMinY = spanerects.top;
-				sMaxY = sMinY + spanerects.height;
-			}
-			function updateCursorPositions() {
-				pcursor.style.setProperty('left', pX - pMinX + 'px', 'important');
-				pcursor.style.setProperty('top', pY - pMinY + 'px', 'important');
-				scursor.style.setProperty('top', sY - sMinY + 'px', 'important');
-			}
-			function updateValues() {
-				[r, g, b] = BDFDB.colorCONVERT([h, s, l], 'RGBCOMP');
-				hexinput.value = BDFDB.colorCONVERT([r, g, b], 'HEX');
-				hinput.value = Math.round(h), sinput.value = Math.round(parseInt(s)), linput.value = Math.round(parseInt(l));
-				rinput.value = Math.round(r), ginput.value = Math.round(g), binput.value = Math.round(b);
-				updatePreviews();
-				pcursorinner.style.setProperty('color', BDFDB.colorINV([r, g, b], 'RGB'), 'important');
-				scursorinner.style.setProperty('color', BDFDB.colorCONVERT([h, '100%', '100%'], 'RGB'), 'important');
-			}
-			function updatePreviews() {
-				colorPickerModal.querySelector('.colorpicker-color').style.setProperty('background-color', BDFDB.colorCONVERT([h, '100%', '100%'], 'RGB'), 'important');
-				var preview = colorPickerModal.querySelector('[class^="colorpicker-preview-"].selected');
-				preview.style.setProperty('background-color', BDFDB.colorCONVERT([r, g, b], 'RGB'), 'important');
-				preview.style.setProperty('border-color', BDFDB.colorINV([r, g, b], 'RGB'), 'important');
+			var mousemove = e2 => {
+				s = BDFDB.mapRange([sMinX, sMaxX], [0, 100], e2.clientX) + '%';
+				l = BDFDB.mapRange([sMinY, sMaxY], [100, 0], e2.clientY) + '%';
+				update(true);
+			};
+			document.addEventListener('mouseup', mouseup);
+			document.addEventListener('mousemove', mousemove);
+		});
+		huepane.addEventListener('mousedown', e => {
+			h = BDFDB.mapRange([hMinX, hMaxX], [0, 360], e.clientX);
+			update(true);
+			var mouseup = () => {
+				document.removeEventListener('mouseup', mouseup);
+				document.removeEventListener('mousemove', mousemove);
+			};
+			var mousemove = e2 => {
+				h = BDFDB.mapRange([hMinX, hMaxX], [0, 360], e2.clientX);
+				update(true);
+			};
+			document.addEventListener('mouseup', mouseup);
+			document.addEventListener('mousemove', mousemove);
+		});
+		hexinput.addEventListener('input', e => {
+			if (/^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.test(hexinput.value)) {
+				[h, s, l] = BDFDB.colorCONVERT(hexinput.value, 'HSLCOMP');
+				update(false);
 			}
 		});
+		function update (setinput) {
+			satpane.style.setProperty('background', BDFDB.colorCONVERT([h, '100%', '100%'], 'RGB'), 'important');
+			satcursor.style.setProperty('left', s, 'important');
+			satcursor.style.setProperty('top', BDFDB.mapRange([0, 100], [100, 0], parseFloat(l)) + '%', 'important');
+			huecursor.style.setProperty('left', BDFDB.mapRange([0, 360], [0, 100], h) + '%', 'important');
+			setSwatch(swatches.querySelector(BDFDB.dotCN.colorpickerswatch + ".selected"), null, false);
+			setSwatch(swatches.querySelector(BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatch), [h, s, l], true);
+			if (setinput) hexinput.value = BDFDB.colorCONVERT([h, s, l], 'HEX');
+		}
 	};
 
 	BDFDB.mapRange = function (from, to, value) {
-		return parseFloat(to[0]) + (parseFloat(value) - parseFloat(from[0])) * (parseFloat(to[1]) - parseFloat(to[0])) / (parseFloat(from[1]) - parseFloat(from[0]));
+		if (parseFloat(value) < parseFloat(from[0])) return parseFloat(to[0]);
+		else if (parseFloat(value) > parseFloat(from[1])) return parseFloat(to[1]);
+		else return parseFloat(to[0]) + (parseFloat(value) - parseFloat(from[0])) * (parseFloat(to[1]) - parseFloat(to[0])) / (parseFloat(from[1]) - parseFloat(from[0]));
 	};
 
 	BDFDB.shake = function () {
@@ -3502,7 +3395,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		selectValue: 'css-1hwfws3',
 		splashBackground: 'splashBackground-1FRCko',
 		themeDark: 'theme-dark',
-		themeLight: 'theme-light'
+		themeLight: 'theme-light',
+		themeUndefined: 'theme-undefined'
 	};
 	
 	DiscordClassModules.AccountDetails = BDFDB.WebModules.findByProperties('usernameContainer', 'container');
@@ -3538,6 +3432,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.ChannelTextAreaButton = BDFDB.WebModules.findByProperties('buttonWrapper', 'active');
 	DiscordClassModules.ChannelWindow = BDFDB.WebModules.findByProperties('chat', 'channelTextArea');
 	DiscordClassModules.Checkbox = BDFDB.WebModules.findByProperties('checkboxWrapper', 'round');
+	DiscordClassModules.ColorPicker = BDFDB.WebModules.findByProperties('colorPickerCustom', 'customColorPickerInput');
+	DiscordClassModules.ColorPickerInner = BDFDB.WebModules.findByProperties('saturation', 'hue', 'wrapper');
 	DiscordClassModules.ContextMenu = BDFDB.WebModules.findByProperties('contextMenu', 'itemGroup');
 	DiscordClassModules.ContextMenuCheckbox = BDFDB.WebModules.findByProperties('checkboxInner', 'checkboxElement');
 	DiscordClassModules.Cursor = BDFDB.WebModules.findByProperties('cursorDefault', 'userSelectNone');
@@ -3878,6 +3774,19 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		checkboxwrapperdisabled: ['Checkbox', 'checkboxWrapperDisabled'],
 		clickable: ['Message', 'clickOverride'],
 		clickable: ['Message', 'clickOverride'],
+		colorpicker: ['ColorPicker', 'colorPickerCustom'],
+		colorpickerhexinput: ['ColorPicker', 'customColorPickerInput'],
+		colorpickerhue: ['ColorPickerInner', 'hue'],
+		colorpickerinner: ['ColorPickerInner', 'wrapper'],
+		colorpickerrow: ['ColorPicker', 'colorPickerRow'],
+		colorpickersaturation: ['ColorPickerInner', 'saturation'],
+		colorpickerswatch: ['ColorPicker', 'colorPickerSwatch'],
+		colorpickerswatchcustom: ['ColorPicker', 'custom'],
+		colorpickerswatchdefault: ['ColorPicker', 'default'],
+		colorpickerswatchdisabled: ['ColorPicker', 'disabled'],
+		colorpickerswatchdropper: ['ColorPicker', 'colorPickerDropper'],
+		colorpickerswatchdropperfg: ['ColorPicker', 'colorPickerDropperFg'],
+		colorpickerswatchnocolor: ['ColorPicker', 'noColor'],
 		contentregion: ['SettingsWindow', 'contentRegion'],
 		contextmenu: ['ContextMenu', 'contextMenu'],
 		contextmenucheckbox: ['ContextMenuCheckbox', 'checkbox'],
@@ -4567,6 +4476,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		themedark: ['NotFound', 'themeDark'],
 		themeghosthairline: ['Scroller', 'themeGhostHairline'],
 		themelight: ['NotFound', 'themeLight'],
+		themeundefined: ['NotFound', 'themeUndefined'],
 		title: ['SettingsItems', 'title'],
 		titlebar: ['TitleBar', 'titleBar'],
 		titledefault: ['SettingsItems', 'titleDefault'],
@@ -5566,46 +5476,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		.BDFDB-modal ${BDFDB.dotCN.checkboxcontainer}:before,
 		.BDFDB-settings ${BDFDB.dotCN.checkboxcontainer}:before {
 			display: none;
-		}	
+		}
 		.BDFDB-modal .swatches.disabled {
 			cursor: no-drop;
 			filter: grayscale(70%) brightness(50%);
 		}
-		.BDFDB-modal .swatches .ui-color-picker-row {
-			display: flex !important; 
-			flex-wrap: wrap !important; 
-			overflow: visible !important;
-			min-width: 482px !important;
-		}
-		.BDFDB-modal .swatches .ui-color-picker-swatch {
-			box-sizing: border-box;
-			cursor: pointer;
-			min-width: 30px;
-			min-height: 30px;
-			margin-bottom: 5px;
-			margin-top: 5px;
-			border: 4px solid transparent;
-			border-radius: 12px;
-		}		
-		.BDFDB-modal .swatches.disabled .ui-color-picker-swatch {
+		.BDFDB-modal .swatches.disabled ${BDFDB.dotCN.colorpickerswatch} {
 			cursor: no-drop;
-		}
-		.BDFDB-modal .swatches .ui-color-picker-swatch.large {
-			min-width: 70px;
-			min-height: 70px;
-			border-radius: 25px;
-		}
-		.BDFDB-modal .swatches .ui-color-picker-swatch.nocolor {
-			border-color: red;
-			background: url('data:image/svg+xml; utf8, <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><path d="M 0 0 l 22 22 M 22 0 l -22 22" stroke="red" stroke-width="3"/></svg>') center/contain;
-		}
-		.BDFDB-modal .swatches .ui-color-picker-swatch.nocolor.selected {
-			border-color: black;
-		}
-		.BDFDB-modal .swatches .color-picker-dropper {
-			position: relative;
-			left: 40px;
-			top: 10px;
 		}
 		.BDFDB-modal ${BDFDB.dotCN.inputdefault}.valid {
 			background-color: rgba(67,181,129,.5);
