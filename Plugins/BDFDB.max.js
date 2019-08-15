@@ -3152,6 +3152,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			}
 		}
 	};
+	
 	BDFDB.setColorSwatches = function (container, currentcolor) {
 		if (!Node.prototype.isPrototypeOf(container)) return;
 		
@@ -3179,6 +3180,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				setSwatch(swatches.querySelector(BDFDB.dotCN.colorpickerswatch + ".selected"), null, false);
 				setSwatch(e.currentTarget, e.currentTarget.style.getPropertyValue('background-color'), true);
 			}
+		});
+		BDFDB.addChildEventListener(swatches, 'mouseenter', BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchcustom, e => {
+			BDFDB.createTooltip(BDFDB.LanguageStrings.CUSTOM_COLOR, e.currentTarget, {type: 'bottom'});
+		});
+		BDFDB.addChildEventListener(swatches, 'mouseenter', BDFDB.dotCNS.colorpickerrow + BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchnocolor, e => {
+			BDFDB.createTooltip(BDFDB.LanguageStrings.DEFAULT, e.currentTarget, {type: 'bottom'});
 		});
 	};
 
