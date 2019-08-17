@@ -1780,7 +1780,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			if (!eleOrInfoOrId) return null;
 			let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getServerID(eleOrInfoOrId) : typeof eleOrInfoOrId == 'object' ? eleOrInfoOrId.id : eleOrInfoOrId;
 			id = typeof id == 'number' ? id.toFixed() : id;
-			if (id && LibraryModules.UnreadUtils.hasUnread(id)) found.push(eleOrInfoOrId);
+			if (id && (LibraryModules.UnreadUtils.hasUnread(id) || LibraryModules.MentionUtils.getMentionCount(id) > 0)) found.push(eleOrInfoOrId);
 		}
 		return found;
 	};
