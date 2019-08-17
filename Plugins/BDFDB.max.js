@@ -2361,20 +2361,23 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		return gradientstring += ")";
 	};
 
-	BDFDB.setInnerText = function (node, string) {
+	BDFDB.setInnerText = function (node, stringOrNode) {
 		if (!node || !Node.prototype.isPrototypeOf(node)) return;
-		var textnode = null;
-		for (let child of node.childNodes) if (child.nodeType == Node.TEXT_NODE) {
+		var textnode = node.nodeType == Node.TEXT_NODE ? node : null;
+		if (!textnode) for (let child of node.childNodes) if (child.nodeType == Node.TEXT_NODE || BDFDB.containsClass(child, "BDFDB-textnode")) {
 			textnode = child;
 			break;
 		}
-		if (textnode) textnode.textContent = string;
-		else {
-			textnode = document.createTextNode(string);
-			node.appendChild(textnode);
+		if (textnode) {
+			if (Node.prototype.isPrototypeOf(stringOrNode) && stringOrNode.nodeType != Node.TEXT_NODE) {
+				BDFDB.addClass(stringOrNode, "BDFDB-textnode");
+				node.replaceChild(stringOrNode, textnode);
+			}
+			else if (Node.prototype.isPrototypeOf(textnode) && textnode.nodeType != Node.TEXT_NODE) node.replaceChild(document.createTextNode(stringOrNode), textnode);
+			else textnode.textContent = stringOrNode;
 		}
+		else node.appendChild(Node.prototype.isPrototypeOf(stringOrNode) ? stringOrNode : document.createTextNode(stringOrNode));
 	};
-
 
 	BDFDB.getInnerText = function (node) {
 		if (!node || !Node.prototype.isPrototypeOf(node)) return;
