@@ -2268,18 +2268,26 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		function processHSL(comp) {let h = parseFloat(comp.shift().toString().replace(/[^0-9\.\-]/g, ''));h = isNaN(h) || h > 360 ? 360 : h < 0 ? 0 : h;return [h].concat(comp.map(sl => {return processSL(sl);}));};
 	};
 
-	BDFDB.colorSETALPHA = function (color, a, conv) {
-		var rgbcomp = BDFDB.colorCONVERT(color, 'RGBCOMP');
-		if (rgbcomp) {
+	var setAlpha = (color, a, conv) => {
+		var comp = BDFDB.colorCONVERT(color, 'RGBCOMP');
+		if (comp) {
 			a = a.toString();
 			a = (a.indexOf('%') > -1 ? 0.01 : 1) * parseFloat(a.replace(/[^0-9\.\-]/g, ''));
 			a = isNaN(a) || a > 1 ? 1 : a < 0 ? 0 : a;
-			rgbcomp[3] = a;
+			comp[3] = a;
 			conv = (conv || BDFDB.colorTYPE(color)).toUpperCase();
 			conv = conv == 'HSL' || conv == 'RGB' ? conv + 'A' : conv;
-			return BDFDB.colorCONVERT(rgbcomp, conv);
+			return BDFDB.colorCONVERT(comp, conv);
 		}
 		return null;
+	};
+	BDFDB.colorSETALPHA = function (color, a, conv) {
+		if (BDFDB.isObject(color)) {
+			var newcolor = {};
+			for (let pos in color) newcolor[pos] = setAlpha(color[pos], a, conv);
+			return newcolor;
+		}
+		else return setAlpha(color, a, conv);
 	};
 
 	var colorChange = (color, value, conv) => {
@@ -2357,7 +2365,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.colorGRADIENT = function (colorobj, direction = 'to right') {
 		var sortedgradient = {};
 		var gradientstring = 'linear-gradient(' + direction;
-		for (let pos of Object.keys(colorobj).sort()) gradientstring += `, ${BDFDB.colorCONVERT(colorobj[pos], 'HEX')} ${pos*100}%`
+		for (let pos of Object.keys(colorobj).sort()) gradientstring += `, ${colorobj[pos]} ${pos*100}%`
 		return gradientstring += ")";
 	};
 
