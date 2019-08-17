@@ -91,9 +91,9 @@ class ShowHiddenChannels {
 				showAllowedUsers:		{value:true,	inner:true,		description:"Specifically allowed Users:"},
 				showDeniedRoles:		{value:true,	inner:true,		description:"Denied Roles:"},
 				showDeniedUsers:		{value:true,	inner:true,		description:"Specifically denied Users:"},
-				showTopic:				{value:false, 	inner:true,		description:"The Topic of the Channel:"},
-				showChannelCategory:	{value:false, 	inner:true,		description:"The Category of the Channel:"},
-				showVoiceUsers:			{value:false, 	inner:true,		description:"All currently connected Users of a Voice Channel:"}
+				showTopic:				{value:false, 	inner:true,		description:"The Topic of the Channel (only for hidden):"},
+				showChannelCategory:	{value:false, 	inner:true,		description:"The Category of the Channel (only for hidden):"},
+				showVoiceUsers:			{value:false, 	inner:true,		description:"All currently connected Users of a Voice Channel (only for hidden/locked):"}
 			},
 			amounts: {
 				hoverDelay:				{value:0, 		min:0,	description:"Tooltip delay in millisec:"}

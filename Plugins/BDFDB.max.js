@@ -497,7 +497,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			BDFDB.addClass(tooltipinner, BDFDB.disCN['tooltip' + options.type.toLowerCase()]);
 			tooltipinner.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.tooltippointer}"></div>`));
 		}
-		if (tooltipinner.style.borderColor && tooltipinner.style.backgroundColor) BDFDB.addClass(tooltipinner, 'tooltip-customcolor');
+		if (tooltipinner.style.getPropertyValue("border-color") && (tooltipinner.style.getPropertyValue("background-color") || tooltipinner.style.getPropertyValue("background-image"))) BDFDB.addClass(tooltipinner, 'tooltip-customcolor');
 		else if (options.color && BDFDB.disCN['tooltip' + options.color.toLowerCase()]) BDFDB.addClass(tooltipinner, BDFDB.disCN['tooltip' + options.color.toLowerCase()]);
 		else BDFDB.addClass(tooltipinner, BDFDB.disCN.tooltipblack);
 		tooltips.appendChild(tooltip);
