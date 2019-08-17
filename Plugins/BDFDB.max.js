@@ -2361,26 +2361,20 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		return gradientstring += ")";
 	};
 
-	BDFDB.setInnerText = function (node, stringOrNode) {
+	BDFDB.setInnerText = function (node, string) {
 		if (!node || !Node.prototype.isPrototypeOf(node)) return;
 		var textnode = null;
-		for (let child of node.childNodes) if (child.nodeType == Node.TEXT_NODE || BDFDB.containsClass(child, "BDFDB-textnode")) {
+		for (let child of node.childNodes) if (child.nodeType == Node.TEXT_NODE) {
 			textnode = child;
 			break;
 		}
-		if (textnode) {
-			if (Node.prototype.isPrototypeOf(stringOrNode)) {
-				BDFDB.addClass(stringOrNode, "BDFDB-textnode");
-				node.replaceChild(stringOrNode, textnode);
-			}
-			else if (Node.prototype.isPrototypeOf(textnode)) node.replaceChild(document.createTextNode(stringOrNode), textnode);
-			else textnode.textContent = stringOrNode;
-		}
+		if (textnode) textnode.textContent = string;
 		else {
-			textnode = Node.prototype.isPrototypeOf(stringOrNode) ? stringOrNode : document.createTextNode(stringOrNode);
+			textnode = document.createTextNode(string);
 			node.appendChild(textnode);
 		}
 	};
+
 
 	BDFDB.getInnerText = function (node) {
 		if (!node || !Node.prototype.isPrototypeOf(node)) return;
