@@ -2282,19 +2282,28 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		return null;
 	};
 
+	var colorChange = (color, value, conv) => {
+		var comp = BDFDB.colorCONVERT(color, 'RGBCOMP');
+		if (comp) {
+			if (parseInt(value) !== value) {
+				value = value.toString();
+				value = (value.indexOf('%') > -1 ? 0.01 : 1) * parseFloat(value.replace(/[^0-9\.\-]/g, ''));
+				value = isNaN(value) ? 0 : value;
+				return BDFDB.colorCONVERT([Math.round(comp[0] * (1 + value)), Math.round(comp[1] * (1 + value)), Math.round(comp[2] * (1 + value))], conv || BDFDB.colorTYPE(color));
+			}
+			else return BDFDB.colorCONVERT([Math.round(comp[0] + value), Math.round(comp[1] + value), Math.round(comp[2] + value)], conv || BDFDB.colorTYPE(color));
+		}
+		return null;
+	};
 	BDFDB.colorCHANGE = function (color, value, conv) {
 		value = parseFloat(value);
 		if (color && typeof value == 'number' && !isNaN(value)) {
-			var comp = BDFDB.colorCONVERT(color, 'RGBCOMP');
-			if (comp) {
-				if (parseInt(value) !== value) {
-					value = value.toString();
-					value = (value.indexOf('%') > -1 ? 0.01 : 1) * parseFloat(value.replace(/[^0-9\.\-]/g, ''));
-					value = isNaN(value) ? 0 : value;
-					return BDFDB.colorCONVERT([Math.round(comp[0] * (1 + value)), Math.round(comp[1] * (1 + value)), Math.round(comp[2] * (1 + value))], conv || BDFDB.colorTYPE(color));
-				}
-				else return BDFDB.colorCONVERT([Math.round(comp[0] + value), Math.round(comp[1] + value), Math.round(comp[2] + value)], conv || BDFDB.colorTYPE(color));
+			if (BDFDB.isObject(color)) {
+				var newcolor = {};
+				for (let pos in color) newcolor[pos] = colorChange(color[pos], value, conv);
+				return newcolor;
 			}
+			else return colorChange(color, value, conv);
 		}
 		return null;
 	};
@@ -2344,17 +2353,31 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		function isRGB(comp) {return comp.slice(0, 3).every(rgb => rgb.toString().indexOf('%') == -1 && parseFloat(rgb) == parseInt(rgb));};
 		function isHSL(comp) {return comp.slice(1, 3).every(hsl => hsl.toString().indexOf('%') == hsl.length - 1);};
 	};
+	
+	BDFDB.colorGRADIENT = function (colorobj, direction = 'to right') {
+		var sortedgradient = {};
+		var gradientstring = 'linear-gradient(' + direction;
+		for (let pos of Object.keys(colorobj).sort()) gradientstring += `, ${BDFDB.colorCONVERT(colorobj[pos], 'HEX')} ${pos*100}%`
+		return gradientstring += ")";
+	};
 
-	BDFDB.setInnerText = function (node, string) {
+	BDFDB.setInnerText = function (node, stringOrNode) {
 		if (!node || !Node.prototype.isPrototypeOf(node)) return;
 		var textnode = null;
-		for (let child of node.childNodes) if (child.nodeType == Node.TEXT_NODE) {
+		for (let child of node.childNodes) if (child.nodeType == Node.TEXT_NODE || BDFDB.containsClass(child, "BDFDB-textnode")) {
 			textnode = child;
 			break;
 		}
-		if (textnode) textnode.textContent = string;
+		if (textnode) {
+			if (Node.prototype.isPrototypeOf(stringOrNode)) {
+				BDFDB.addClass(stringOrNode, "BDFDB-textnode");
+				node.replaceChild(stringOrNode, textnode);
+			}
+			else if (Node.prototype.isPrototypeOf(textnode)) node.replaceChild(document.createTextNode(stringOrNode), textnode);
+			else textnode.textContent = stringOrNode;
+		}
 		else {
-			textnode = document.createTextNode(string);
+			textnode = Node.prototype.isPrototypeOf(stringOrNode) ? stringOrNode : document.createTextNode(stringOrNode);
 			node.appendChild(textnode);
 		}
 	};
@@ -3133,22 +3156,28 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		else if (selected) {
 			BDFDB.addClass(swatch, 'selected');
 			var iscustom = BDFDB.containsClass(swatch, BDFDB.disCN.colorpickerswatchcustom);
-			color= BDFDB.colorCONVERT(color, 'RGB');
-			var bright = color ? BDFDB.colorISBRIGHT(color) : false;
-			swatch.appendChild(BDFDB.htmlToElement(`<svg class="swatch-checkmark" name="Checkmark" aria-hidden="false" width="${iscustom ? 32 : 16}" height="${iscustom ? 24 : 16}" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="${bright ? '#000000' : '#ffffff'}" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg>`));
+			var isgradient = color && BDFDB.isObject(color);
+			var selectedcolor = !isgradient ? BDFDB.colorCONVERT(color, 'RGB') : BDFDB.colorGRADIENT(color);
+			var bright = selectedcolor && !isgradient ? BDFDB.colorISBRIGHT(selectedcolor) : false;
+			if (!swatch.querySelector(".swatch-checkmark")) swatch.appendChild(BDFDB.htmlToElement(`<svg class="swatch-checkmark" name="Checkmark" aria-hidden="false" width="${iscustom ? 32 : 16}" height="${iscustom ? 24 : 16}" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="${bright ? '#000000' : '#ffffff'}" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg>`));
 			if (iscustom) {
 				BDFDB.removeClass(swatch, BDFDB.disCN.colorpickerswatchnocolor);
-				swatch.style.setProperty('background-color', color, 'important');
 				swatch.querySelector(BDFDB.dotCN.colorpickerswatchdropperfg).setAttribute('fill', bright ? '#000000' : '#ffffff');
+				if (selectedcolor) {
+					if (isgradient) swatch.gradient = color;
+					swatch.style.setProperty(isgradient ? 'background-image' : 'background-color', selectedcolor, 'important');
+				}
 			}
 		}
 		else {
+			delete swatch.gradient;
 			BDFDB.removeClass(swatch, 'selected');
 			BDFDB.removeEles(swatch.querySelectorAll(".swatch-checkmark"));
 			if (BDFDB.containsClass(swatch, BDFDB.disCN.colorpickerswatchcustom)) {
 				BDFDB.addClass(swatch, BDFDB.disCN.colorpickerswatchnocolor);
-				swatch.style.removeProperty('background-color');
 				swatch.querySelector(BDFDB.dotCN.colorpickerswatchdropperfg).setAttribute('fill', '#ffffff');
+				swatch.style.removeProperty('background-color');
+				swatch.style.removeProperty('background-image');
 			}
 		}
 	};
@@ -3174,7 +3203,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		BDFDB.addChildEventListener(swatches, 'click', BDFDB.dotCN.colorpickerswatch, e => {
 			if (BDFDB.containsClass(swatches, 'disabled') || BDFDB.containsClass(e.currentTarget, BDFDB.disCN.colorpickerswatchdisabled)) return;
 			else if (BDFDB.containsClass(e.currentTarget, BDFDB.disCN.colorpickerswatchcustom)) {
-				BDFDB.openColorPicker(swatches, e.currentTarget, e.currentTarget.style.backgroundColor);
+				BDFDB.openColorPicker(swatches, e.currentTarget, e.currentTarget.gradient || e.currentTarget.style.getPropertyValue("background-color"));
 			}
 			else {
 				setSwatch(swatches.querySelector(BDFDB.dotCN.colorpickerswatch + ".selected"), null, false);
@@ -3193,16 +3222,17 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (!Node.prototype.isPrototypeOf(container)) return;
 		
 		var swatch = container.querySelector(`.swatches[swatchnr="${nr}"] ${BDFDB.dotCN.colorpickerswatch}.selected`);
-		return swatch ? BDFDB.colorCONVERT(swatch.style.getPropertyValue('background-color'), 'RGBCOMP') : null;
+		return swatch ? swatch.gradient || BDFDB.colorCONVERT(swatch.style.getPropertyValue('background-color'), 'RGBCOMP') : null;
 	};
 
 	BDFDB.openColorPicker = function (swatches, target, color) {
 		if (!swatches || !target) return;
-		color = BDFDB.colorCONVERT(color, 'HEX') || '#000000';
-		var [h, s, l] = BDFDB.colorCONVERT(color, 'HSLCOMP');
+		var isgradient = color && BDFDB.isObject(color);
+		var selectedcolor = BDFDB.colorCONVERT(isgradient ? color[Object.keys(color)[0]] : color, 'HEX') || '#000000';
+		var [h, s, l] = BDFDB.colorCONVERT(selectedcolor, 'HSLCOMP');
 			 
 		var targetrects = BDFDB.getRects(target);
-		var colorPicker = BDFDB.htmlToElement(`<div role="dialog" class="BDFDB-colorpicker ${BDFDB.disCNS.popoutnoarrow + BDFDB.disCNS.popoutnoshadow + BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottom + BDFDB.disCNS.popoutarrowalignmenttop + BDFDB.disCN.themeundefined}" style="z-index: 2001; visibility: visible; left: ${targetrects.left + targetrects.width/2}px; top: ${targetrects.top + targetrects.height}px; transform: translateX(-50%) translateY(0%) translateZ(0px);"><div class="${BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.colorpicker}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.colorpickerinner}"><div class="${BDFDB.disCN.colorpickersaturation}"><div class="saturation-color" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; background: ${BDFDB.colorCONVERT([h, '100%', '100%'], 'RGB')} !important;"><style>.saturation-white {background: -webkit-linear-gradient(to right, #fff, rgba(255,255,255,0));background: linear-gradient(to right, #fff, rgba(255,255,255,0));}.saturation-black {background: -webkit-linear-gradient(to top, #000, rgba(0,0,0,0));background: linear-gradient(to top, #000, rgba(0,0,0,0));}</style><div class="saturation-white" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="saturation-black" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"></div><div class="saturation-cursor" style="position: absolute; top: 55.2941%; left: 44.7368%; cursor: default;"><div style="width: 4px; height: 4px; box-shadow: rgb(255, 255, 255) 0px 0px 0px 1.5px, rgba(0, 0, 0, 0.3) 0px 0px 1px 1px inset, rgba(0, 0, 0, 0.4) 0px 0px 1px 2px; border-radius: 50%; transform: translate(-2px, -2px);"></div></div></div></div></div><div class="${BDFDB.disCN.colorpickerhue}"><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="hue-horizontal" style="padding: 0px 2px; position: relative; height: 100%;"><style>.hue-horizontal {background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);background: -webkit-linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);}.hue-vertical {background: linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);background: -webkit-linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);}</style><div class="hue-cursor" style="position: absolute; left: 0%;"><div style="margin-top: 1px; width: 4px; border-radius: 1px; height: 8px; box-shadow: rgba(0, 0, 0, 0.6) 0px 0px 2px; background: rgb(255, 255, 255); transform: translateX(-2px);"></div></div></div></div></div></div><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.colorpickerhexinput + BDFDB.disCN.margintop8}"><input class="${BDFDB.disCN.inputdefault}" maxlength="7" name="" type="text" placeholder="" value="${color}"></input></div></div></div>`);
+		var colorPicker = BDFDB.htmlToElement(`<div role="dialog" class="BDFDB-colorpicker ${BDFDB.disCNS.popoutnoarrow + BDFDB.disCNS.popoutnoshadow + BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottom + BDFDB.disCNS.popoutarrowalignmenttop + BDFDB.disCN.themeundefined}" style="z-index: 2001; visibility: visible; left: ${targetrects.left + targetrects.width/2}px; top: ${targetrects.top + targetrects.height}px; transform: translateX(-50%) translateY(0%) translateZ(0px);"><div class="${BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.colorpicker}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.colorpickerinner}"><div class="${BDFDB.disCN.colorpickersaturation}"><div class="saturation-color" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; background: ${BDFDB.colorCONVERT([h, '100%', '100%'], 'RGB')} !important;"><style>.saturation-white {background: -webkit-linear-gradient(to right, #fff, rgba(255,255,255,0));background: linear-gradient(to right, #fff, rgba(255,255,255,0));}.saturation-black {background: -webkit-linear-gradient(to top, #000, rgba(0,0,0,0));background: linear-gradient(to top, #000, rgba(0,0,0,0));}</style><div class="saturation-white" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="saturation-black" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"></div><div class="saturation-cursor" style="position: absolute; top: 55.2941%; left: 44.7368%; cursor: default;"><div style="width: 4px; height: 4px; box-shadow: rgb(255, 255, 255) 0px 0px 0px 1.5px, rgba(0, 0, 0, 0.3) 0px 0px 1px 1px inset, rgba(0, 0, 0, 0.4) 0px 0px 1px 2px; border-radius: 50%; transform: translate(-2px, -2px);"></div></div></div></div></div><div class="${BDFDB.disCN.colorpickerhue}"><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="hue-horizontal" style="padding: 0px 2px; position: relative; height: 100%;"><style>.hue-horizontal {background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);background: -webkit-linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);}.hue-vertical {background: linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);background: -webkit-linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);}</style><div class="hue-cursor" style="position: absolute; left: 0%;"><div style="margin-top: 1px; width: 4px; border-radius: 1px; height: 8px; box-shadow: rgba(0, 0, 0, 0.6) 0px 0px 2px; background: rgb(255, 255, 255); transform: translateX(-2px);"></div></div></div></div></div><div class="gradient-bar" style="position: relative; height: 8px; margin: 27px 2px 2px 2px;${!isgradient ? ' display: none;' : ''}"><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="gradient-horizontal" style="padding: 0px 2px; position: relative; height: 100%; background-color: ${selectedcolor};"><div class="gradient-cursor edge selected" style="position: absolute; left: 0%;"><div style="background-color: ${selectedcolor} !important;"></div></div><div class="gradient-cursor edge" style="position: absolute; left: 100%;"><div style="background-color: ${isgradient ? BDFDB.colorCONVERT(color[1], 'HEX') : selectedcolor} !important;"></div></div></div></div></div></div><div class="${BDFDB.disCNS.horizontal + BDFDB.disCNS.colorpickerhexinput + BDFDB.disCN.margintop8}"><input class="${BDFDB.disCN.inputdefault}" maxlength="7" name="" type="text" placeholder="" value="${selectedcolor}"></input><div class="gradient-button${isgradient ? ' selected' : ''}" style="transform: rotate(-90deg); margin: 2px 0 0 5px; cursor: pointer; border-radius: 5px; height: 36px;"><svg width="36" height="36" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="#f6f6f7"><path d="M469.333333 384h85.333334v85.333333h-85.333334z m-85.333333 85.333333h85.333333v85.333334H384z m170.666667 0h85.333333v85.333334h-85.333333z m85.333333-85.333333h85.333333v85.333333h-85.333333zM298.666667 384h85.333333v85.333333H298.666667z m512-256H213.333333c-46.933333 0-85.333333 38.4-85.333333 85.333333v597.333334c0 46.933333 38.4 85.333333 85.333333 85.333333h597.333334c46.933333 0 85.333333-38.4 85.333333-85.333333V213.333333c0-46.933333-38.4-85.333333-85.333333-85.333333zM384 768H298.666667v-85.333333h85.333333v85.333333z m170.666667 0h-85.333334v-85.333333h85.333334v85.333333z m170.666666 0h-85.333333v-85.333333h85.333333v85.333333z m85.333334-298.666667h-85.333334v85.333334h85.333334v85.333333h-85.333334v-85.333333h-85.333333v85.333333h-85.333333v-85.333333h-85.333334v85.333333H384v-85.333333H298.666667v85.333333H213.333333v-85.333333h85.333334v-85.333334H213.333333V213.333333h597.333334v256z"></path></svg></div></div></div><div class="move-corner" style="width: 10px; height: 10px; cursor: move; position: absolute; top: 0; left: 0;"></div><div class="move-corner" style="width: 10px; height: 10px; cursor: move; position: absolute; top: 0; right: 0;"></div><div class="move-corner" style="width: 10px; height: 10px; cursor: move; position: absolute; bottom: 0; right: 0;"></div><div class="move-corner" style="width: 10px; height: 10px; cursor: move; position: absolute; bottom: 0; left: 0;"></div></div>`);
 		document.querySelector(BDFDB.dotCN.popouts).appendChild(colorPicker);
 
 		var removePopout = e => {
@@ -3214,25 +3244,104 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		document.addEventListener("mousedown", removePopout);
 		
 		var hexinput = colorPicker.querySelector(BDFDB.dotCNS.colorpickerhexinput + BDFDB.dotCN.input);
+		var gradientbutton = colorPicker.querySelector('.gradient-button');
+		var gradientbar = colorPicker.querySelector('.gradient-bar');
+		var gradientpane = colorPicker.querySelector('.gradient-horizontal');
 		var satpane = colorPicker.querySelector('.saturation-color');
 		var huepane = colorPicker.querySelector('.hue-horizontal');
 		var satcursor = colorPicker.querySelector('.saturation-cursor');
 		var huecursor = colorPicker.querySelector('.hue-cursor');
 		
-		var satpanerects = BDFDB.getRects(satpane);
-		var sMinX = satpanerects.left;
-		var sMaxX = sMinX + satpanerects.width;
-		var sMinY = satpanerects.top;
-		var sMaxY = sMinY + satpanerects.height;
-		var huepanerects = BDFDB.getRects(huepane);
-		var hMinX = huepanerects.left;
-		var hMaxX = hMinX + huepanerects.width;
+		if (BDFDB.myData.id != "278543574059057154") BDFDB.toggleEles(gradientbutton, false);
 		
-		update(false);
+		var gMinX, gMaxX, sMinX, sMaxX, sMinY, sMaxY, hMinX, hMaxX;
+		
+		updateRects();
+		
+		if (isgradient) for (let pos in color) if (pos > 0 && pos < 1) gradientpane.appendChild(BDFDB.htmlToElement(`<div class="gradient-cursor" style="position: absolute; left: ${pos * 100}%;"><div style="background-color: ${color[pos]} !important;"></div></div>`));
+		
+		updateColors(false);
+		
+		BDFDB.addChildEventListener(colorPicker, "mousedown", ".move-corner", e => {
+			var rects = BDFDB.getRects(colorPicker);
+			var transform = getComputedStyle(colorPicker, null).getPropertyValue("transform").replace(/[^0-9,-]/g,"").split(",");
+			var left = rects.left - (transform.length > 4 ? parseFloat(transform[4]) : 0);
+			var top = rects.top - (transform.length > 4 ? parseFloat(transform[5]) : 0);
+			var oldX = e.pageX;
+			var oldY = e.pageY;
+			var mouseup = () => {
+				BDFDB.removeLocalStyle("disableTextSelection");
+				document.removeEventListener("mouseup", mouseup);
+				document.removeEventListener("mousemove", mousemove);
+			};
+			var mousemove = e2 => {
+				left = left - (oldX - e2.pageX);
+				top = top - (oldY - e2.pageY);
+				oldX = e2.pageX;
+				oldY = e2.pageY;
+				colorPicker.style.setProperty("left", left + "px", "important");
+				colorPicker.style.setProperty("top", top + "px", "important");
+				updateRects();
+			};
+			document.addEventListener("mouseup", mouseup);
+			document.addEventListener("mousemove", mousemove);
+		});
+		gradientpane.addEventListener('mousedown', e => {
+			setImmediate(() => {
+				if (BDFDB.containsClass(e.target.parentElement, "gradient-cursor")) {
+					if (e.which == 1) {
+						if (!BDFDB.containsClass(e.target.parentElement, "selected")) {
+							BDFDB.removeClass(gradientpane.querySelectorAll(".gradient-cursor.selected"), "selected");
+							BDFDB.addClass(e.target.parentElement, "selected");
+							[h, s, l] = BDFDB.colorCONVERT(e.target.style.getPropertyValue("background-color"), 'HSLCOMP');
+							updateColors(true);
+						}
+						if (!BDFDB.containsClass(e.target.parentElement, "edge")) {
+							var mouseup = () => {
+								document.removeEventListener('mouseup', mouseup);
+								document.removeEventListener('mousemove', mousemove);
+							};
+							var mousemove = e2 => {
+								e.target.parentElement.style.setProperty("left", BDFDB.mapRange([gMinX, gMaxX], [1, 99], e2.clientX) + '%');
+								updateGradient();
+							};
+							document.addEventListener('mouseup', mouseup);
+							document.addEventListener('mousemove', mousemove);
+						}
+					}
+					else if (e.which == 3 && !BDFDB.containsClass(e.target.parentElement, "edge")) {
+						BDFDB.removeEles(e.target.parentElement);
+						if (BDFDB.containsClass(e.target.parentElement, "selected")) {
+							var firstcursor = gradientpane.querySelector(".gradient-cursor");
+							BDFDB.addClass(firstcursor, "selected");
+							[h, s, l] = BDFDB.colorCONVERT(firstcursor.firstElementChild.style.getPropertyValue("background-color"), 'HSLCOMP');
+						}
+						updateColors(true);
+					}
+				}
+				else if (gradientpane == e.target && e.which == 1) {
+					BDFDB.removeClass(gradientpane.querySelectorAll(".gradient-cursor.selected"), "selected");
+					var newcursor = BDFDB.htmlToElement(`<div class="gradient-cursor selected" style="position: absolute; left: ${BDFDB.mapRange([gMinX, gMaxX], [1, 99], e.clientX)}%;"><div style="background-color: #000000 !important;"></div></div>`);
+					gradientpane.appendChild(newcursor);
+					[h, s, l] = [0, "0%", "0%"];
+					updateColors(true);
+					var mouseup = () => {
+						document.removeEventListener('mouseup', mouseup);
+						document.removeEventListener('mousemove', mousemove);
+					};
+					var mousemove = e2 => {
+						newcursor.style.setProperty("left", BDFDB.mapRange([gMinX, gMaxX], [1, 99], e2.clientX) + '%');
+						updateGradient();
+					};
+					document.addEventListener('mouseup', mouseup);
+					document.addEventListener('mousemove', mousemove);
+				}
+			});
+		});
 		satpane.addEventListener('mousedown', e => {
 			s = BDFDB.mapRange([sMinX, sMaxX], [0, 100], e.clientX) + '%';
 			l = BDFDB.mapRange([sMinY, sMaxY], [100, 0], e.clientY) + '%';
-			update(true);
+			updateColors(true);
 			var mouseup = () => {
 				document.removeEventListener('mouseup', mouseup);
 				document.removeEventListener('mousemove', mousemove);
@@ -3240,21 +3349,21 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			var mousemove = e2 => {
 				s = BDFDB.mapRange([sMinX, sMaxX], [0, 100], e2.clientX) + '%';
 				l = BDFDB.mapRange([sMinY, sMaxY], [100, 0], e2.clientY) + '%';
-				update(true);
+				updateColors(true);
 			};
 			document.addEventListener('mouseup', mouseup);
 			document.addEventListener('mousemove', mousemove);
 		});
 		huepane.addEventListener('mousedown', e => {
 			h = BDFDB.mapRange([hMinX, hMaxX], [0, 360], e.clientX);
-			update(true);
+			updateColors(true);
 			var mouseup = () => {
 				document.removeEventListener('mouseup', mouseup);
 				document.removeEventListener('mousemove', mousemove);
 			};
 			var mousemove = e2 => {
 				h = BDFDB.mapRange([hMinX, hMaxX], [0, 360], e2.clientX);
-				update(true);
+				updateColors(true);
 			};
 			document.addEventListener('mouseup', mouseup);
 			document.addEventListener('mousemove', mousemove);
@@ -3262,17 +3371,53 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		hexinput.addEventListener('input', e => {
 			if (/^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.test(hexinput.value)) {
 				[h, s, l] = BDFDB.colorCONVERT(hexinput.value, 'HSLCOMP');
-				update(false);
+				updateColors(false);
 			}
 		});
-		function update (setinput) {
+		gradientbutton.addEventListener('click', e => {
+			isgradient = !isgradient;
+			BDFDB.toggleEles(gradientbar, isgradient);
+			BDFDB.toggleClass(gradientbutton, "selected", isgradient);
+			updateColors(true);
+		});
+		function updateRects () {
+			var hidden = BDFDB.isEleHidden(gradientbar);
+			if (hidden) BDFDB.toggleEles(gradientbar);
+			var gradientpanerects = BDFDB.getRects(gradientpane);
+			if (hidden) BDFDB.toggleEles(gradientbar);
+			gMinX = gradientpanerects.left;
+			gMaxX = gMinX + gradientpanerects.width;
+			var satpanerects = BDFDB.getRects(satpane);
+			sMinX = satpanerects.left;
+			sMaxX = sMinX + satpanerects.width;
+			sMinY = satpanerects.top;
+			sMaxY = sMinY + satpanerects.height;
+			var huepanerects = BDFDB.getRects(huepane);
+			hMinX = huepanerects.left;
+			hMaxX = hMinX + huepanerects.width;
+		}
+		function updateColors (setinput) {
 			satpane.style.setProperty('background', BDFDB.colorCONVERT([h, '100%', '100%'], 'RGB'), 'important');
 			satcursor.style.setProperty('left', s, 'important');
 			satcursor.style.setProperty('top', BDFDB.mapRange([0, 100], [100, 0], parseFloat(l)) + '%', 'important');
 			huecursor.style.setProperty('left', BDFDB.mapRange([0, 360], [0, 100], h) + '%', 'important');
+			var hex = BDFDB.colorCONVERT([h, s, l], 'HEX');
 			setSwatch(swatches.querySelector(BDFDB.dotCN.colorpickerswatch + ".selected"), null, false);
-			setSwatch(swatches.querySelector(BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatch), [h, s, l], true);
-			if (setinput) hexinput.value = BDFDB.colorCONVERT([h, s, l], 'HEX');
+			if (isgradient) {
+				gradientpane.querySelector(".gradient-cursor.selected").firstElementChild.style.setProperty("background-color", hex);
+				updateGradient();
+			}
+			else {
+				setSwatch(swatches.querySelector(BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatch), [h, s, l], true);
+			}
+			if (setinput) hexinput.value = hex;
+		}
+		function updateGradient () {
+			gradientpane.style.removeProperty("background-color");
+			var gradient = {};
+			for (let cursor of gradientpane.querySelectorAll(".gradient-cursor")) gradient[parseFloat(cursor.style.getPropertyValue("left"))/100] = cursor.firstElementChild.style.getPropertyValue("background-color");
+			gradientpane.style.setProperty("background-image", BDFDB.colorGRADIENT(gradient));
+			setSwatch(swatches.querySelector(BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatch), gradient, true);
 		}
 	};
 
@@ -5490,6 +5635,80 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 		.BDFDB-modal .swatches.disabled ${BDFDB.dotCN.colorpickerswatch} {
 			cursor: no-drop;
+		}
+		.BDFDB-modal ${BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchcustom}[style*="background"] {
+			border: none;
+		}
+		${BDFDB.dotCNS.themelight + BDFDB.dotCN.colorpickersaturation} > div > div > div > div {
+			box-shadow: rgb(200, 200, 200) 0px 0px 0px 1.5px, rgba(0, 0, 0, 0.6) 0px 0px 1px 1px inset, rgba(0, 0, 0, 0.6) 0px 0px 1px 2px !important;
+		}
+		${BDFDB.dotCNS.themelight + BDFDB.dotCN.colorpickerhue} > div > div > div > div {
+			background: rgb(200, 200, 200) !important;
+			box-shadow: rgba(0, 0, 0, 1) 0px 0px 2px !important;
+		}
+		.BDFDB-colorpicker .gradient-button svg {
+			cursor: pointer;
+			opacity: 0.3;
+			transition: all 200ms ease;
+		}
+		.BDFDB-colorpicker .gradient-button svg:hover {
+			opacity: 0.6;
+		}
+		.BDFDB-colorpicker .gradient-button.selected svg,
+		.BDFDB-colorpicker .gradient-button.selected svg:hover {
+			opacity: 1;
+		}
+		${BDFDB.dotCN.themelight} .BDFDB-colorpicker .gradient-button svg {
+			fill: #4f545c;
+		}
+		${BDFDB.dotCN.themedark} .BDFDB-colorpicker .gradient-button svg {
+			fill: #fff;
+		}
+		.BDFDB-colorpicker .gradient-bar .gradient-horizontal {
+			border-radius: 3px;
+		}
+		.BDFDB-colorpicker .gradient-bar .gradient-cursor {
+			position: absolute;
+		}
+		.BDFDB-colorpicker .gradient-bar .gradient-cursor > div {
+			height: 8px;
+			width: 8px;
+			margin-top: -15px;
+			border: 1px solid rgb(128, 128, 128);
+			border-radius: 3px;
+			transform: translateX(-5px);
+		}
+		.BDFDB-colorpicker .gradient-bar .gradient-cursor > div:before {
+			content: "";
+			position: absolute;
+			border: 3px solid transparent;
+			border-top-width: 5px;
+			border-top-color: rgb(128, 128, 128);
+			width: 0;
+			height: 0;
+			top: 100%;
+			left: -50%;
+			transform: translateX(5px);
+		}
+		.BDFDB-colorpicker .gradient-bar .gradient-cursor.edge > div:before {
+			border-right-width: 0;
+			border-left-width: 5px;
+		}
+		.BDFDB-colorpicker .gradient-bar .gradient-cursor.edge  ~ .gradient-cursor.edge > div:before {
+			border-right-width: 5px;
+			border-left-width: 0;
+		}
+		${BDFDB.dotCN.themelight} .BDFDB-colorpicker .gradient-bar .gradient-cursor.selected > div {
+			border-color: rgb(55, 55, 55);
+		}
+		${BDFDB.dotCN.themelight} .BDFDB-colorpicker .gradient-bar .gradient-cursor.selected > div:before {
+			border-top-color: rgb(55, 55, 55);
+		}
+		${BDFDB.dotCN.themedark} .BDFDB-colorpicker .gradient-bar .gradient-cursor.selected > div {
+			border-color: rgb(200, 200, 200);
+		}
+		${BDFDB.dotCN.themedark} .BDFDB-colorpicker .gradient-bar .gradient-cursor.selected > div:before {
+			border-top-color: rgb(200, 200, 200);
 		}
 		.BDFDB-modal ${BDFDB.dotCN.inputdefault}.valid {
 			background-color: rgba(67,181,129,.5);
