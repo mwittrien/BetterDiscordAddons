@@ -3,7 +3,7 @@
 class OwnerTag {
 	getName () {return "OwnerTag";}
 
-	getVersion () {return "1.1.5";}
+	getVersion () {return "1.1.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,11 +11,11 @@ class OwnerTag {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Coloring issues","Fixed some coloring issues with inverted tags"]]
+			"fixed":[["DM Groups","Now works properly in DM Groups"]]
 		};
 		
 		this.patchModules = {
-			"ChannelMember":["componentDidMount","componentDidUpdate"],
+			"MemberListItem":["componentDidMount","componentDidUpdate"],
 			"MessageUsername":["componentDidMount","componentDidUpdate"],
 			"UserPopout":["componentDidMount","componentDidUpdate"],
 			"UserProfile":["componentDidMount","componentDidUpdate"],
@@ -144,7 +144,7 @@ class OwnerTag {
 		this.SettingsUpdated = true;
 	}
 
-	processChannelMember (instance, wrapper) {
+	processMemberListItem (instance, wrapper) {
 		if (instance.props && BDFDB.getData("addInMemberList", this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.nametag), "list", BDFDB.disCN.bottagnametag, null);
 	}
 	

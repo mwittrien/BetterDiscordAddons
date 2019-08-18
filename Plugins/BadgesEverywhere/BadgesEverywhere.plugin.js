@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";} 
 
-	getVersion () {return "1.4.2";}
+	getVersion () {return "1.4.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,11 +11,11 @@ class BadgesEverywhere {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Shifting","Resized badges to stop the username from shifting so much"]]
+			"fixed":[["DM Groups","Now works properly in DM Groups"]]
 		};
 		
 		this.patchModules = {
-			"ChannelMember":"componentDidMount",
+			"MemberListItem":"componentDidMount",
 			"MessageUsername":"componentDidMount",
 			"UserPopout":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
@@ -221,7 +221,7 @@ class BadgesEverywhere {
 
 	// begin of own functions
 
-	processChannelMember (instance, wrapper) {
+	processMemberListItem (instance, wrapper) {
 		if (instance.props && BDFDB.getData("showInMemberList", this, "settings")) this.addBadges(instance.props.user, wrapper.querySelector(BDFDB.dotCN.nametag), "list");
 	}
 

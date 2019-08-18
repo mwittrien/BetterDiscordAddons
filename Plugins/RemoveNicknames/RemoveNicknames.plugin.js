@@ -3,7 +3,7 @@
 class RemoveNicknames {
 	getName () {return "RemoveNicknames";}
 
-	getVersion () {return "1.2.3";}
+	getVersion () {return "1.2.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,11 +11,11 @@ class RemoveNicknames {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["New Structure","Fixed issues that will occur once the avatar/name changes from canary will hit stable/ptb"]]
+			"fixed":[["DM Groups","Now works properly in DM Groups"]]
 		};
 		
 		this.patchModules = {
-			"ChannelMember":"componentDidMount",
+			"MemberListItem":"componentDidMount",
 			"MessageUsername":"componentDidMount",
 			"TypingUsers":"componentDidUpdate",
 			"Clickable":"componentDidMount",
@@ -126,7 +126,7 @@ class RemoveNicknames {
 		return settings.addNickname ? (settings.swapPositions ? (member.nick + " (" + username + ")") : (username + " (" + member.nick + ")")) : username;
 	}
 
-	processChannelMember (instance, wrapper) {
+	processMemberListItem (instance, wrapper) {
 		let user = BDFDB.getReactValue(instance, "props.user");
 		if (user) {
 			let username = wrapper.querySelector(BDFDB.dotCN.memberusername);

@@ -11,11 +11,11 @@ class TopRoleEverywhere {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Overflow","Long role names now properly overflow with overflow ellipsis .... AGAIN"],["Themes","Fixed issues for themes that abuse !important"]]
+			"fixed":[["DM Groups","Now works properly in DM Groups"]]
 		};
 		
 		this.patchModules = {
-			"ChannelMember":"componentDidMount",
+			"MemberListItem":"componentDidMount",
 			"MessageUsername":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
@@ -124,7 +124,7 @@ class TopRoleEverywhere {
 
 	// begin of own functions
 
-	processChannelMember (instance, wrapper) {
+	processMemberListItem (instance, wrapper) {
 		if (instance.props && BDFDB.getData("showInMemberList", this, "settings")) {
 			this.addRoleTag(instance.props.user, wrapper.querySelector(BDFDB.dotCN.memberusername), "list", BDFDB.disCN.bottagnametag);
 		}

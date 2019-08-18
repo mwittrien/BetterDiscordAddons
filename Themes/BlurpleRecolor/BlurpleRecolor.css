@@ -170,6 +170,7 @@
 }
 
 /* TOOLTIP / POPOUT */
+.content-N9xlZF,
 .tooltip-2QfLtc.tooltipBrand-g03Nz8:not(.tooltip-customcolor),
 .tooltip-1OS-Ti.brand-3tBTjG:not(.tooltip-customcolor) {
 	color: rgb(255,255,255) !important;
@@ -178,6 +179,7 @@
 .tooltip-1OS-Ti.right-KM_vfY.brand-3tBTjG:not(.tooltip-customcolor):after {
 	border-right-color: rgb(var(--vaccentcolor)) !important;
 }
+.pointer-2Cnz1N,
 .popoutTopRight-3BzFIE.arrowAlignmentTop-iGQczz:before,
 .popoutRight-2ZVwL-.arrowAlignmentTop-iGQczz:before,
 .tooltip-2QfLtc.tooltipBrand-g03Nz8:not(.tooltip-customcolor) .tooltipPointer-3ZfirK,
@@ -408,6 +410,7 @@
 .theme-light .premiumPlanName-24zBVw,
 .theme-light .headerIcon-3bqya6,
 .theme-light .container-2mdxGH,
+.content-N9xlZF .button-1ZJXz,
 .wrapper-3WhCwL,
 .foreground-2EIns2,
 .durationThumbnail-2_vk0i,
