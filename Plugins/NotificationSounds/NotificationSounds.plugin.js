@@ -3,7 +3,7 @@
 class NotificationSounds {
 	getName () {return "NotificationSounds";}
 
-	getVersion () {return "3.3.3";}
+	getVersion () {return "3.3.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class NotificationSounds {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["New Select Classes","The Dropdown-Select element got new classes on canary, this update will prevent stable from breaking once the class change is pushed to stable"]]
+			"fixed":[["Go Live","Maybe fix the Go Live Bug, maybe not"]]
 		};
 		
 		this.patchModules = {
@@ -252,7 +252,7 @@ class NotificationSounds {
 
 			var SoundUtils = BDFDB.WebModules.findByProperties("playSound", "createSound");
 			BDFDB.WebModules.patch(SoundUtils, "playSound", this, {instead: e => {
-				setImmediate(() => {
+				if (this.choices[type]) setImmediate(() => {
 					let type = e.methodArguments[0];
 					if (type == "message1") {
 						if (this.firedEvents["dm"]) this.firedEvents["dm"] = false;
@@ -261,6 +261,7 @@ class NotificationSounds {
 					}
 					else this.playAudio(type);
 				});
+				else e.callOriginalMethod();
 			}});
 			BDFDB.WebModules.patch(SoundUtils, "createSound", this, {after: e => {
 				let type = e.methodArguments[0];
