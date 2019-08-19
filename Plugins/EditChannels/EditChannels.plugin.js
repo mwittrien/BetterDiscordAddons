@@ -3,7 +3,7 @@
 class EditChannels {
 	getName () {return "EditChannels";}
 
-	getVersion () {return "3.9.8";}
+	getVersion () {return "3.9.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditChannels {
 
 	initConstructor () {
 		this.changelog = {
-			"added":[["Inheriting","You can now inherit the color of a category to the channels below it"]]
+			"improved":[["<span style='-webkit-background-clip: text; color: transparent; background-image: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%)'>Color Gradients</span>","You can now use color gradients to edit channels"]]
 		};
 		
 		this.labels = {};
@@ -152,6 +152,7 @@ class EditChannels {
 		BDFDB.addEventListener(this, settingspanel, "click", ".reset-button", () => {
 			BDFDB.openConfirmModal(this, "Are you sure you want to reset all channels?", () => {
 				BDFDB.removeAllData(this, "channels");
+				this.changeAppTitle();
 				BDFDB.WebModules.forceAllUpdates(this);
 			});
 		});
@@ -203,6 +204,10 @@ class EditChannels {
 			this.GuildChannels = BDFDB.WebModules.findByProperties("getChannels","getDefaultChannel");
 			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
 			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
+			
+			var observer = new MutationObserver(() => {this.changeAppTitle();});
+			BDFDB.addObserver(this, document.head.querySelector("title"), {name:"appTitleObserver",instance:observer}, {childList:true});
+			this.changeAppTitle();
 
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
@@ -260,6 +265,7 @@ class EditChannels {
 					resetitem.addEventListener("click", () => {
 						BDFDB.closeContextMenu(menu);
 						BDFDB.removeData(instance.props.channel.id, this, "channels");
+						this.changeAppTitle();
 						BDFDB.WebModules.forceAllUpdates(this);
 					});
 				}
@@ -298,6 +304,7 @@ class EditChannels {
 
 			if (name == null && color == null) BDFDB.removeData(info.id, this, "channels");
 			else BDFDB.saveData(info.id, {name,color,inheritColor}, this, "channels");
+			this.changeAppTitle();
 			BDFDB.WebModules.forceAllUpdates(this);
 		});
 		channelnameinput.focus();
@@ -447,7 +454,17 @@ class EditChannels {
 	processStandardSidebarView (instance, wrapper) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
+			this.changeAppTitle();
 			BDFDB.WebModules.forceAllUpdates(this);
+		}
+	}
+	
+	changeAppTitle () {
+		let channel = this.ChannelUtils.getChannel(this.LastChannelStore.getChannelId());
+		let title = document.head.querySelector("title");
+		if (title && channel && channel.type != 1) {
+			let data = this.getChannelData(channel.id, channel.parent_id, title);
+			BDFDB.setInnerText(title, "@" + (data.name || channel.name));
 		}
 	}
 
@@ -457,26 +474,33 @@ class EditChannels {
 			if (channelname.EditChannelsChangeObserver && typeof channelname.EditChannelsChangeObserver.disconnect == "function") channelname.EditChannelsChangeObserver.disconnect();
 			let data = this.getChannelData(info.id, info.parent_id, channelname);
 			if (data.name || data.color || channelname.parentElement.getAttribute("changed-by-editchannels")) {
+				let isgradient = data.color && BDFDB.isObject(data.color);
 				let color = this.chooseColor(channelname, data.color);
-				channelname.style.setProperty("color", color, "important");
-				BDFDB.setInnerText(channelname, data.name || info.name); 
+				if (isgradient) {
+					channelname.style.removeProperty("color");
+					BDFDB.setInnerText(channelname, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(color)} !important;">${BDFDB.encodeToHTML(data.name || info.name)}</span>`));
+				}
+				else {
+					channelname.style.setProperty("color", color, "important");
+					BDFDB.setInnerText(channelname, data.name || info.name);
+				}
 				let iconparent = BDFDB.containsClass(channelname, BDFDB.disCN.quickswitchresultmatch) ? channelname.parentElement.parentElement : channelname.parentElement;
 				if (!BDFDB.containsClass(channelname, BDFDB.disCN.autocompletedescription)) {
 					let settings = BDFDB.getAllData(this, "settings");
 					iconparent.querySelectorAll('svg [stroke]:not([stroke="none"]').forEach(icon => {
-						let iconcolor = color && BDFDB.getParentEle(BDFDB.dotCN.channelheadertitle, icon) ? BDFDB.colorSETALPHA(color, 0.6) : color;
+						let iconcolor = color && BDFDB.getParentEle(BDFDB.dotCN.channelheadertitle, icon) ? BDFDB.colorSETALPHA(isgradient ? color[0] : color, 0.6) : (isgradient ? color[0] : color);
 						if (!icon.getAttribute("oldstroke")) icon.setAttribute("oldstroke", icon.getAttribute("stroke"));
 						icon.setAttribute("stroke", iconcolor && settings.changeChannelIcon ? iconcolor : icon.getAttribute("oldstroke"), "important");
 						icon.style.setProperty("stroke", iconcolor && settings.changeChannelIcon ? iconcolor : icon.getAttribute("oldstroke"), "important");
 					});
 					iconparent.querySelectorAll('svg [fill]:not([fill="none"]').forEach(icon => {
-						let iconcolor = color && BDFDB.getParentEle(BDFDB.dotCN.channelheadertitle, icon) ? BDFDB.colorSETALPHA(color, 0.6) : color;
+						let iconcolor = color && BDFDB.getParentEle(BDFDB.dotCN.channelheadertitle, icon) ? BDFDB.colorSETALPHA(isgradient ? color[0] : color, 0.6) : (isgradient ? color[0] : color);
 						if (!icon.getAttribute("oldfill")) icon.setAttribute("oldfill", icon.getAttribute("fill"));
 						icon.setAttribute("fill", iconcolor && settings.changeChannelIcon ? iconcolor : icon.getAttribute("oldfill"), "important");
 						icon.style.setProperty("fill", iconcolor && settings.changeChannelIcon ? iconcolor : icon.getAttribute("oldfill"), "important");
 					});
 					let unread = iconparent.parentElement.querySelector(BDFDB.dotCN.channelunread);
-					if (unread) unread.style.setProperty("background-color", color && settings.changeUnreadIndicator ? color : null, "important");
+					if (unread) unread.style.setProperty("background-color", color && settings.changeUnreadIndicator ? (isgradient ? color[0] : color) : null, "important");
 				}
 				if (data.name || data.color) {
 					channelname.parentElement.setAttribute("changed-by-editchannels", true);
@@ -520,8 +544,14 @@ class EditChannels {
 		if (channelname.EditChannelsChangeObserver && typeof channelname.EditChannelsChangeObserver.disconnect == "function") channelname.EditChannelsChangeObserver.disconnect();
 		let data = this.getChannelData(info.id, info.parent_id, channelname);
 		if (data.name || data.color || channelname.getAttribute("changed-by-editchannels")) {
-			channelname.style.setProperty("color", this.chooseColor(channelname, data.color), "important");
-			BDFDB.setInnerText(channelname, "#" + (data.name || info.name));
+			if (BDFDB.isObject(data.color)) {
+				channelname.style.removeProperty("color");
+				BDFDB.setInnerText(channelname, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(this.chooseColor(channelname, data.color))} !important;">${BDFDB.encodeToHTML("#" + (data.name || info.name))}</span>`));
+			}
+			else {
+				channelname.style.setProperty("color", this.chooseColor(channelname, data.color), "important");
+				BDFDB.setInnerText(channelname, "#" + (data.name || info.name));
+			}
 			if (data.name || data.color) {
 				channelname.setAttribute("changed-by-editchannels", true);
 				channelname.EditChannelsChangeObserver = new MutationObserver((changes, _) => {
@@ -546,8 +576,13 @@ class EditChannels {
 		mention.removeEventListener("mouseover", mention.mouseoverListenerEditChannels);
 		mention.removeEventListener("mouseout", mention.mouseoutListenerEditChannels);
 		let data = this.getChannelData(info.id, info.parent_id, mention);
-		let color = BDFDB.colorCONVERT(data.color, "RGBCOMP");
-		BDFDB.setInnerText(mention, "#" + (data.name || info.name));
+		let name = "#" + (data.name || info.name);
+		
+		let isgradient = data.color && BDFDB.isObject(data.color);
+		let color = isgradient ? BDFDB.colorGRADIENT(data.color) : BDFDB.colorCONVERT(data.color, "RGB");
+		let color0_1 = isgradient ? BDFDB.colorGRADIENT(BDFDB.colorSETALPHA(data.color, 0.1, "RGB")) : BDFDB.colorSETALPHA(data.color, 0.1, "RGB");
+		let color0_7 = isgradient ? BDFDB.colorGRADIENT(BDFDB.colorSETALPHA(data.color, 0.7, "RGB")) : BDFDB.colorSETALPHA(data.color, 0.7, "RGB");
+		
 		if (mention.EditChannelsHovered) colorHover();
 		else colorDefault();
 		mention.mouseoverListenerEditChannels = () => {
@@ -568,12 +603,20 @@ class EditChannels {
 		});
 		mention.EditChannelsChangeObserver.observe(mention, {attributes:true});
 		function colorDefault() {
-			mention.style.setProperty("color", color ? "rgb(" + color[0] + "," + color[1] + "," + color[2] + ")" : null, "important");
-			mention.style.setProperty("background", color ? "rgba(" + color[0] + "," + color[1] + "," + color[2] + ",.1)" : null, "important");
+			mention.style.setProperty("background", color0_1, "important");
+			if (isgradient) {
+				mention.style.removeProperty("color");
+				BDFDB.setInnerText(mention, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${color} !important;">${BDFDB.encodeToHTML(name)}</span>`));
+			}
+			else {
+				mention.style.setProperty("color", color, "important");
+				BDFDB.setInnerText(mention, name);
+			}
 		}
 		function colorHover() {
-			mention.style.setProperty("color", color ? "#FFFFFF" : null, "important");
-			mention.style.setProperty("background", color ? "rgba(" + color[0] + "," + color[1] + "," + color[2] + ",.7)" : null, "important");
+			mention.style.setProperty("background", color0_7, "important");
+			mention.style.setProperty("color", data.color ? "#FFFFFF" : null, "important");
+			BDFDB.setInnerText(mention, name);
 		}
 	}
 
@@ -584,7 +627,7 @@ class EditChannels {
 			let classname = channelname.className ? channelname.className.toLowerCase() : "";
 			if (classname.indexOf("muted") > -1 || classname.indexOf("locked") > -1) color = BDFDB.colorCHANGE(color, -0.5);
 			else if (hovered || classname.indexOf("selected") > -1 || classname.indexOf("hovered") > -1 || classname.indexOf("unread") > -1 || classname.indexOf("connected") > -1) color = BDFDB.colorCHANGE(color, 0.5);
-			return BDFDB.colorCONVERT(color, "RGB");
+			return BDFDB.isObject(color) ? color : BDFDB.colorCONVERT(color, "RGB");
 		}
 		return null;
 	}

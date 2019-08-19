@@ -3257,8 +3257,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		var satcursor = colorPicker.querySelector('.saturation-cursor');
 		var huecursor = colorPicker.querySelector('.hue-cursor');
 		
-		if (BDFDB.myData.id != "278543574059057154") BDFDB.toggleEles(gradientbutton, false);
-		
 		var gMinX, gMaxX, sMinX, sMaxX, sMinY, sMaxY, hMinX, hMaxX;
 		
 		updateRects();
