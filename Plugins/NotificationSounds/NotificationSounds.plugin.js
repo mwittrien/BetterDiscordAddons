@@ -252,8 +252,8 @@ class NotificationSounds {
 
 			var SoundUtils = BDFDB.WebModules.findByProperties("playSound", "createSound");
 			BDFDB.WebModules.patch(SoundUtils, "playSound", this, {instead: e => {
+				let type = e.methodArguments[0];
 				if (this.choices[type]) setImmediate(() => {
-					let type = e.methodArguments[0];
 					if (type == "message1") {
 						if (this.firedEvents["dm"]) this.firedEvents["dm"] = false;
 						else if (this.firedEvents["mentioned"]) this.firedEvents["mentioned"] = false;
