@@ -3383,6 +3383,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			BDFDB.toggleClass(gradientbutton, "selected", isgradient);
 			updateColors(true);
 		});
+		gradientbutton.addEventListener('mouseenter', e => {
+			BDFDB.createTooltip(gradientbutton, "Color Gradient", {type: "bottom"});
+		});
 		function updateRects () {
 			var hidden = BDFDB.isEleHidden(gradientbar);
 			if (hidden) BDFDB.toggleEles(gradientbar);
