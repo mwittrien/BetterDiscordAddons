@@ -1226,7 +1226,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 	
 	var LibraryModules = {};
-	LibraryModules.AckUtils = BDFDB.WebModules.findByProperties('localAck', 'bulkAck');;
+	LibraryModules.AckUtils = BDFDB.WebModules.findByProperties('localAck', 'bulkAck');
+	LibraryModules.APIModule = BDFDB.WebModules.findByProperties('getAPIBaseURL');
 	LibraryModules.Animations = BDFDB.WebModules.findByProperties('spring', 'decay');
 	LibraryModules.BadgeUtils = BDFDB.WebModules.findByProperties('getBadgeCountString', 'getBadgeWidthForValue');
 	LibraryModules.ChannelStore = BDFDB.WebModules.findByProperties('getChannel', 'getChannels');
