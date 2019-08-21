@@ -1165,21 +1165,23 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 	};
 
-	BDFDB.WebModules = {};
-	BDFDB.WebModules.find = function (filter) {
-		if (!BDFDB.WebModules.find.req) {
+	var getWebModuleReq = () => {
+		if (!getWebModuleReq.req) {
 			const id = "BDFDB-WebModules";
 			const req = typeof(window.webpackJsonp) == "function" ? window.webpackJsonp([], {[id]: (module, exports, req) => exports.default = req}, [id]).default : window.webpackJsonp.push([[], {[id]: (module, exports, req) => module.exports = req}, [[id]]]);
 			delete req.m[id];
 			delete req.c[id];
-			BDFDB.WebModules.find.req = req;
+			getWebModuleReq.req = req;
 		}
-		for (let m in BDFDB.WebModules.find.req.c) {
-			if (BDFDB.WebModules.find.req.c.hasOwnProperty(m)) {
-				var module = BDFDB.WebModules.find.req.c[m].exports;
-				if (module && module.__esModule && module.default && filter(module.default)) return module.default;
-				if (module && filter(module)) return module;
-			}
+		return getWebModuleReq.req;
+	};
+	BDFDB.WebModules = {};
+	BDFDB.WebModules.find = function (filter) {
+		var req = getWebModuleReq();
+		for (let i in req.c) if (req.c.hasOwnProperty(i)) {
+			var m = req.c[i].exports;
+			if (m && m.__esModule && m.default && filter(m.default)) return m.default;
+			if (m && filter(m)) return m;
 		}
 	};
 
@@ -1189,10 +1191,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		var cachestring = JSON.stringify(properties);
 		if (BDFDB.WebModules.cachedData.prop[cachestring]) return BDFDB.WebModules.cachedData.prop[cachestring];
 		else {
-			var module = BDFDB.WebModules.find(module => properties.every(prop => module[prop] !== undefined));
-			if (module) {
-				BDFDB.WebModules.cachedData.prop[cachestring] = module;
-				return module;
+			var m = BDFDB.WebModules.find(m => properties.every(prop => m[prop] !== undefined));
+			if (m) {
+				BDFDB.WebModules.cachedData.prop[cachestring] = m;
+				return m;
 			}
 			else console.warn(`%c[BDFDB]%c`, 'color:#3a71c1; font-weight:700;', '', cachestring + ' [properties] not found in WebModules');
 		}
@@ -1202,10 +1204,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		var cachestring = JSON.stringify(name);
 		if (BDFDB.WebModules.cachedData.name[cachestring]) return BDFDB.WebModules.cachedData.name[cachestring];
 		else {
-			var module = BDFDB.WebModules.find(module => module.displayName === name);
-			if (module) {
-				BDFDB.WebModules.cachedData.name[cachestring] = module;
-				return module;
+			var m = BDFDB.WebModules.find(m => m.displayName === name);
+			if (m) {
+				BDFDB.WebModules.cachedData.name[cachestring] = m;
+				return m;
 			}
 			else console.warn(`%c[BDFDB]%c`, 'color:#3a71c1; font-weight:700;', '', cachestring + ' [name] not found in WebModules');
 		}
@@ -1216,10 +1218,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		var cachestring = JSON.stringify(protoprops);
 		if (BDFDB.WebModules.cachedData.proto[cachestring]) return BDFDB.WebModules.cachedData.proto[cachestring];
 		else {
-			var module = BDFDB.WebModules.find(module => module.prototype && protoprops.every(prop => module.prototype[prop] !== undefined));
-			if (module) {
-				BDFDB.WebModules.cachedData.proto[cachestring] = module;
-				return module;
+			var m = BDFDB.WebModules.find(m => m.prototype && protoprops.every(prop => m.prototype[prop] !== undefined));
+			if (m) {
+				BDFDB.WebModules.cachedData.proto[cachestring] = m;
+				return m;
 			}
 			else console.warn(`%c[BDFDB]%c`, 'color:#3a71c1; font-weight:700;', '', cachestring + ' [prototypes] not found in WebModules');
 		}
@@ -1276,10 +1278,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			return myDataUser ? myDataUser[item] : null;
 		}
 	});
-	
-	if (BDFDB.myData.id == "278543574059057154") for (let module in LibraryModules) if (!LibraryModules[module]) {
-		console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', module + ' not initialized in LibraryModules');
-	}
 
 	var webModulesPatchtypes = ['before', 'instead', 'after'];
 	var webModulesPatchmap = {
@@ -3693,9 +3691,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.UserProfile = BDFDB.WebModules.findByProperties('topSectionNormal', 'tabBarContainer');
 	DiscordClassModules.Video = BDFDB.WebModules.findByProperties('video', 'fullScreen');
 	DiscordClassModules.Voice = BDFDB.WebModules.findByProperties('avatarSpeaking', 'voiceUser');
-	if (BDFDB.myData.id == "278543574059057154") for (let module in DiscordClassModules) if (!DiscordClassModules[module]) {
-		console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', module + ' not initialized in DiscordClassModules');
-	}
 	BDFDB.DiscordClassModules = Object.assign({}, DiscordClassModules);
 
 	var DiscordClasses = {
@@ -6018,4 +6013,109 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			reloadLib();
 		}
 	},10000);
+	
+	if (BDFDB.myData.id == "278543574059057154") {
+		for (let module in DiscordClassModules) if (!DiscordClassModules[module]) console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', module + ' not initialized in DiscordClassModules');
+		for (let module in LibraryModules) if (!LibraryModules[module]) console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', module + ' not initialized in LibraryModules');
+		
+		BDFDB.WebModules.DevFuncs = {};
+		BDFDB.WebModules.DevFuncs.findPropAny = function (strings) {
+			strings = Array.isArray(strings) ? strings : Array.from(arguments);
+			var req = getWebModuleReq(); window.t = {"$filter":(prop => strings.every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
+			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
+				let m = req.c[i].exports; 
+				if (m && typeof m == "object") for (let j in m) if (window.t.$filter(j)) window.t[j + "_" + i] = m;
+				if (m && typeof m == "object" && typeof m.default == "object") for (let j in m.default) if (window.t.$filter(j)) window.t[j + "_default_" + i] = m.default;
+			}
+			console.clear();
+			console.log(window.t);
+		};
+		BDFDB.WebModules.DevFuncs.findPropFunc = function (strings) {
+			strings = Array.isArray(strings) ? strings : Array.from(arguments);
+			var req = getWebModuleReq(); window.t = {"$filter":(prop => strings.every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
+			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
+				let m = req.c[i].exports; 
+				if (m && typeof m == "object") for (let j in m) if (window.t.$filter(j) && typeof m[j] != "string") window.t[j + "_" + i] = m;
+				if (m && typeof m == "object" && typeof m.default == "object") for (let j in m.default) if (window.t.$filter(j) && typeof m.default[j] != "string") window.t[j + "_default_" + i] = m.default;
+			}
+			console.clear();
+			console.log(window.t);
+		};
+		BDFDB.WebModules.DevFuncs.findPropStringLib = function (strings) {
+			strings = Array.isArray(strings) ? strings : Array.from(arguments);
+			var req = getWebModuleReq(); window.t = {"$filter":(prop => strings.every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
+			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
+				let m = req.c[i].exports; 
+				if (m && typeof m == "object") for (let j in m) if (window.t.$filter(j) && typeof m[j] == "string" && /^[A-z0-9]+\-[A-z0-9_-]{6}$/.test(m[j])) window.t[j + "_" + i] = m;
+				if (m && typeof m == "object" && typeof m.default == "object") for (let j in m.default) if (window.t.$filter(j) && typeof m.default[j] == "string" && /^[A-z0-9]+\-[A-z0-9_-]{6}$/.test(m.default[j])) window.t[j + "_default_" + i] = m.default;
+			}
+			console.clear();
+			console.log(window.t);
+		};
+		BDFDB.WebModules.DevFuncs.findNameAny = function (strings) {
+			strings = Array.isArray(strings) ? strings : Array.from(arguments);
+			var req = getWebModuleReq(); window.t = {"$filter":(modu => strings.some(string => modu.displayName && modu.displayName.toLowerCase().indexOf(string.toLowerCase()) > -1 || modu.string && modu.string.toLowerCase().indexOf(string.toLowerCase()) > -1))};
+			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
+				let m = req.c[i].exports;
+				if (m && (typeof m == "object" || typeof m == "function") && window.t.$filter(m)) window.t[(m.displayName || m.name) + "_" + i] = m;
+				if (m && (typeof m == "object" || typeof m == "function") && m.default && (typeof m.default == "object" || typeof m.default == "function") && window.t.$filter(m.default)) window.t[(m.default.displayName || m.default.name) + "_" + i] = m.default;
+			}
+			console.clear();
+			console.log(window.t);
+		};
+		BDFDB.WebModules.DevFuncs.findCodeAny = function (strings) {
+			strings = Array.isArray(strings) ? strings : Array.from(arguments);
+			var req = getWebModuleReq(); window.t = {"$filter":(prop => strings.every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
+			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
+				let m = req.c[i].exports; 
+				if (m && typeof m == "object") for (let j in m) {
+					let f = m[j];
+					if (typeof f == "function" && window.t.$filter(f.toString())) window.t[j + "_module_" + i] = {string:f.toString(), func:f, module:m};
+				}
+				if (m && typeof m == "object" && typeof m.default == "object") for (let j in m.default) {
+					let f = m.default[j];
+					if (typeof f == "function" && window.t.$filter(f.toString())) window.t[j + "_default_" + i] = {string:f.toString(), func:f, module:m.default};
+				}
+			}
+			for (let i in req.m) { 
+				let f = req.m[i];
+				if (typeof f == "function" && window.t.$filter(f.toString())) window.t["funtion_" + i] = {string:f.toString(), func:f};
+			}
+			console.clear();
+			console.log(window.t);
+		};
+		BDFDB.WebModules.DevFuncs.getAllModules = function () {
+			var req = getWebModuleReq(); window.t = {};
+			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
+				let m = req.c[i].exports;
+				if (m && typeof m == "object") window.t[i] = m;
+			}
+			console.clear();
+			console.log(window.t);
+		};
+		BDFDB.WebModules.DevFuncs.getAllStringLibs = function () {
+			var req = getWebModuleReq(); window.t = [];
+			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
+				let m = req.c[i].exports;
+				if (m && typeof m == "object" && !Array.isArray(m) && Object.keys(m).length > 0) {
+					var string = true, stringlib = false;
+					for (let j in m) {
+						if (typeof m[j] != "string") string = false;
+						if (typeof m[j] == "string" && /^[A-z0-9]+\-[A-z0-9_-]{6}$/.test(m[j])) stringlib = true;
+					}
+					if (string && stringlib) window.t.push(m);
+				}
+				if (m && typeof m == "object" && m.default && typeof m.default == "object" && !Array.isArray(m.default) && Object.keys(m.default).length > 0) {
+					var string = true, stringlib = false;
+					for (let j in m.default) {
+						if (typeof m.default[j] != "string") string = false;
+						if (typeof m.default[j] == "string" && /^[A-z0-9]+\-[A-z0-9_-]{6}$/.test(m.default[j])) stringlib = true;
+					}
+					if (string && stringlib) window.t.push(m.default);
+				}
+			}
+			console.clear();
+			console.log(window.t);
+		};
+	}
 })();
