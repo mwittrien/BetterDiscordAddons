@@ -6117,5 +6117,15 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			console.clear();
 			console.log(window.t);
 		};
+		BDFDB.WebModules.DevFuncs.listen = function (strings) {
+			strings = Array.isArray(strings) ? strings : Array.from(arguments);
+			BDFDB.WebModules.DevFuncs.listenstop();
+			BDFDB.WebModules.DevFuncs.listen.p = BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties(strings), strings[0], "WebpackSearch", {before: e => {
+				console.log(e);
+			}});
+		};
+		BDFDB.WebModules.DevFuncs.listenstop = function () {
+			if (BDFDB.WebModules.DevFuncs.listen.p == "function") BDFDB.WebModules.DevFuncs.listen.p();
+		};
 	}
 })();
