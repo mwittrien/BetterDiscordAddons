@@ -5664,7 +5664,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}		
 		.BDFDB-modal ${BDFDB.dotCN.checkboxcontainer},
 		.BDFDB-settings ${BDFDB.dotCN.checkboxcontainer} {
-			margin-left: 10px;
+			display: flex;
+			align-items: center;
+			flex-direction: column;
+			margin-right: 5px;
+			margin-left: 5px;
 		}		
 		.BDFDB-modal ${BDFDB.dotCN.checkboxcontainer}:before,
 		.BDFDB-settings ${BDFDB.dotCN.checkboxcontainer}:before {
