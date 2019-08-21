@@ -2741,6 +2741,26 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				if (!BDFDB.containsClass(ele, BDFDB.disCN.settingsitemselected)) setTabitem(ele, 0);
 			});
 		});
+		container.querySelectorAll(".BDFDB-tableheader").forEach(ele => {
+			var container = BDFDB.getParentEle(".BDFDB-modal, .BDFDB-settings", ele);
+			var columns = ele.querySelectorAll(".BDFDB-tableheadercolumn");
+			if (container && columns.length) {
+				let maxwidth = 0;
+				for (let column of columns) {
+					let width = BDFDB.getRects(column).width;
+					maxwidth = width > maxwidth ? width : maxwidth;
+				}
+				for (let column of columns) column.style.setProperty("width", `${maxwidth}px`);
+				container["BDFDB-tableheader-maxwidth"] = maxwidth;
+			}
+		});
+		container.querySelectorAll(".BDFDB-tablecheckbox").forEach(ele => {
+			var container = BDFDB.getParentEle(".BDFDB-modal, .BDFDB-settings", ele);
+			if (container && container["BDFDB-tableheader-maxwidth"]) {
+				var style = getComputedStyle(ele);
+				ele.style.setProperty("width", `${container["BDFDB-tableheader-maxwidth"] - parseInt(style.marginLeft) - parseInt(style.marginRight)}px`);
+			}
+		});
 		container.querySelectorAll('.BDFDB-textscrollwrapper').forEach(ele => {
 			var inner = ele.querySelector('.BDFDB-textscroll');
 			if (inner) {
