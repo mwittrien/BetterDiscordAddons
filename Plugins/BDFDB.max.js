@@ -769,6 +769,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (BDFDB.isObject(obj)) obj[Object.keys(obj).length] = value;
 	};
 
+	BDFDB.mapObject = function (obj, keyname) {
+		if (BDFDB.isObject(obj) && typeof keyname == "string") {
+			var newobj;
+			for (let key in obj) newobj[key] = obj[key][keyname];
+		}
+	};
+
 	BDFDB.deepAssign = function (obj, ...objs) {
 		if (!objs.length) return obj;
 		var nextobj = objs.shift();
