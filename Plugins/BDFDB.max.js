@@ -2741,28 +2741,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				if (!BDFDB.containsClass(ele, BDFDB.disCN.settingsitemselected)) setTabitem(ele, 0);
 			});
 		});
-		container.querySelectorAll(".BDFDB-tableheader").forEach(ele => {
-			var container = BDFDB.getParentEle(".BDFDB-modal, .BDFDB-settings", ele);
-			var text = ele.querySelector(".BDFDB-tableheadertext");
-			var columns = ele.querySelectorAll(".BDFDB-tableheadercolumn");
-			if (container && text && columns.length) {
-				let maxwidth = 0;
-				for (let column of columns) {
-					let width = BDFDB.getRects(column).width;
-					maxwidth = width > maxwidth ? width : maxwidth;
-				}
-				for (let column of columns) column.style.setProperty("width", `${maxwidth}px`, "!important");
-				text.style.setProperty("width", `${565 - maxwidth}px`, "!important");
-				container["BDFDB-tableheader-maxwidth"] = maxwidth;
-			}
-		});
-		container.querySelectorAll(".BDFDB-tablecheckbox").forEach(ele => {
-			var container = BDFDB.getParentEle(".BDFDB-modal, .BDFDB-settings", ele);
-			if (container && container["BDFDB-tableheader-maxwidth"]) {
-				var style = getComputedStyle(ele);
-				ele.style.setProperty("width", `${container["BDFDB-tableheader-maxwidth"] - parseInt(style.marginLeft) - parseInt(style.marginRight)}px`, "!important");
-			}
-		});
 		container.querySelectorAll('.BDFDB-textscrollwrapper').forEach(ele => {
 			var inner = ele.querySelector('.BDFDB-textscroll');
 			if (inner) {
@@ -2827,6 +2805,39 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			BDFDB.replaceClass(container.querySelectorAll(BDFDB.dotCN.selectsinglelight), BDFDB.disCN.selectsinglelight, BDFDB.disCN.selectsingledark);
 			BDFDB.replaceClass(container.querySelectorAll(BDFDB.dotCN.selectarrowcontainerlight), BDFDB.disCN.selectarrowcontainerlight, BDFDB.disCN.selectarrowcontainerdark);
 		}
+		
+		var executeDelayedIfNotAppened = () => {
+			container.querySelectorAll('.BDFDB-tableheader').forEach(ele => {
+				var panel = BDFDB.getParentEle('.BDFDB-modal, .BDFDB-settings', ele);
+				var text = ele.querySelector('.BDFDB-tableheadertext');
+				var columns = ele.querySelectorAll('.BDFDB-tableheadercolumn');
+				if (panel && text && columns.length) {
+					let maxwidth = 0;
+					for (let column of columns) {
+						let width = BDFDB.getRects(column).width;
+						maxwidth = width > maxwidth ? width : maxwidth;
+					}
+					maxwidth += 4;
+					for (let column of columns) {
+						column.style.setProperty('flex', `0 0 ${maxwidth}px`, 'important');
+						column.style.setProperty('text-align', 'center', 'important');
+					}
+					text.style.setProperty('flex', `0 0 ${565 - (columns.length * maxwidth)}px`, 'important');
+					columns[0].parentElement.style.setProperty('flex', `0 0 ${columns.length * maxwidth}px`, 'important');
+					panel['BDFDB-tableheader-maxwidth'] = maxwidth;
+				}
+			});
+			container.querySelectorAll('.BDFDB-tablecheckbox').forEach(ele => {
+				var panel = BDFDB.getParentEle('.BDFDB-modal, .BDFDB-settings', ele);
+				if (panel && panel['BDFDB-tableheader-maxwidth']) {
+					var style = getComputedStyle(ele);
+					ele.style.setProperty('flex', ` 0 0 ${panel['BDFDB-tableheader-maxwidth'] - parseInt(style.marginLeft) - parseInt(style.marginRight)}px`, '!important');
+				}
+			});
+		};
+		
+		if (document.contains(container)) executeDelayedIfNotAppened();
+		else setImmediate(() => {executeDelayedIfNotAppened();});
 		
 		function setSwitch(switchitem, triggered) {
 			var checked = switchitem.checked;
