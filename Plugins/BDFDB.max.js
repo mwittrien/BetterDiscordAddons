@@ -2822,7 +2822,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 						column.style.setProperty('flex', `0 0 ${maxwidth}px`, 'important');
 						column.style.setProperty('text-align', 'center', 'important');
 					}
-					text.style.setProperty('flex', `0 0 ${565 - (columns.length * maxwidth)}px`, 'important');
+					text.style.setProperty('flex', `0 0 ${556 - (columns.length * maxwidth)}px`, 'important');
 					columns[0].parentElement.style.setProperty('flex', `0 0 ${columns.length * maxwidth}px`, 'important');
 					panel['BDFDB-tableheader-maxwidth'] = maxwidth;
 				}
