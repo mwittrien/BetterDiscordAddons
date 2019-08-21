@@ -2743,14 +2743,16 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		});
 		container.querySelectorAll(".BDFDB-tableheader").forEach(ele => {
 			var container = BDFDB.getParentEle(".BDFDB-modal, .BDFDB-settings", ele);
+			var text = ele.querySelector(".BDFDB-tableheadertext");
 			var columns = ele.querySelectorAll(".BDFDB-tableheadercolumn");
-			if (container && columns.length) {
+			if (container && text && columns.length) {
 				let maxwidth = 0;
 				for (let column of columns) {
 					let width = BDFDB.getRects(column).width;
 					maxwidth = width > maxwidth ? width : maxwidth;
 				}
-				for (let column of columns) column.style.setProperty("width", `${maxwidth}px`);
+				for (let column of columns) column.style.setProperty("width", `${maxwidth}px`, "!important");
+				text.style.setProperty("width", `${565 - maxwidth}px`, "!important");
 				container["BDFDB-tableheader-maxwidth"] = maxwidth;
 			}
 		});
@@ -2758,7 +2760,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			var container = BDFDB.getParentEle(".BDFDB-modal, .BDFDB-settings", ele);
 			if (container && container["BDFDB-tableheader-maxwidth"]) {
 				var style = getComputedStyle(ele);
-				ele.style.setProperty("width", `${container["BDFDB-tableheader-maxwidth"] - parseInt(style.marginLeft) - parseInt(style.marginRight)}px`);
+				ele.style.setProperty("width", `${container["BDFDB-tableheader-maxwidth"] - parseInt(style.marginLeft) - parseInt(style.marginRight)}px`, "!important");
 			}
 		});
 		container.querySelectorAll('.BDFDB-textscrollwrapper').forEach(ele => {
