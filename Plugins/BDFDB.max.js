@@ -2616,6 +2616,15 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (BDFDB.containsClass(container, 'DevilBro-settings')) BDFDB.addClass(container, 'BDFDB-settings');
 		var islighttheme = BDFDB.getDiscordTheme() == BDFDB.disCN.themelight;
 		var languagestrings = BDFDB.getLibraryStrings();
+		container.querySelectorAll(".BDFDB-containerarrow").forEach(ele => {
+			if (BDFDB.containsClass(ele.nextElementSibling, "BDFDB-collapsecontainer")) {
+				if (BDFDB.containsClass(ele, "closed")) BDFDB.toggleEles(ele.nextElementSibling, false);
+				addInitEventListener(ele, 'click', e => {
+					BDFDB.toggleEles(ele.nextElementSibling, BDFDB.containsClass(ele, "closed"));
+					BDFDB.toggleClass(ele, "closed");
+				});
+			}
+		});
 		container.querySelectorAll(BDFDB.dotCN.switchinner).forEach(ele => {
 			setSwitch(ele, false);
 			addInitEventListener(ele, 'click', e => {
@@ -5368,6 +5377,19 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		.BDFDB-modal ${BDFDB.dotCN.title + BDFDB.notCN.cursorpointer},
 		.BDFDB-settings ${BDFDB.dotCN.title + BDFDB.notCN.cursorpointer} {
 			cursor: default !important;
+		}
+		.BDFDB-modal .BDFDB-containerarrow,
+		.BDFDB-settings .BDFDB-containerarrow {
+			background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxOS4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iQ2FscXVlXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSItOTUwIDUzMiAxOCAxOCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAtOTUwIDUzMiAxOCAxODsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4NCgkuc3Qwe2ZpbGw6bm9uZTt9DQoJLnN0MXtmaWxsOm5vbmU7c3Ryb2tlOiNGRkZGRkY7c3Ryb2tlLXdpZHRoOjEuNTtzdHJva2UtbWl0ZXJsaW1pdDoxMDt9DQo8L3N0eWxlPg0KPHBhdGggY2xhc3M9InN0MCIgZD0iTS05MzIsNTMydjE4aC0xOHYtMThILTkzMnoiLz4NCjxwb2x5bGluZSBjbGFzcz0ic3QxIiBwb2ludHM9Ii05MzYuNiw1MzguOCAtOTQxLDU0My4yIC05NDUuNCw1MzguOCAiLz4NCjwvc3ZnPg0K);
+			height: 16px;
+			width: 16px;
+			display: inline-block;
+			transition: transform .3s ease;
+			transform: rotate(0);
+		}
+		.BDFDB-modal .BDFDB-containerarrow.closed,
+		.BDFDB-settings .BDFDB-containerarrow.closed {
+			transform: rotate(-90deg);
 		}
 		.BDFDB-settings .BDFDB-settings-inner {
 			padding-left: 15px;
