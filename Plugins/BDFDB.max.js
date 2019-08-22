@@ -417,8 +417,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			if (icon) BDFDB.addClass(toast, 'icon');
 		}
 		else if (color) {
-			color = BDFDB.colorCONVERT(color, 'RGB');
-			if (color) toast.style.setProperty('background-color', color, 'important');
+			var rgbcolor = BDFDB.colorCONVERT(color, 'RGB');
+			if (rgbcolor) toast.style.setProperty('background-color', rgbcolor, 'important');
 		}
 		BDFDB.addClass(toast, selector);
 		toasts.appendChild(toast);
@@ -2417,10 +2417,24 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.getRects = function (node) {
 		var rects = {};
 		if (Node.prototype.isPrototypeOf(node) && node.nodeType != Node.TEXT_NODE) {
-			var hidden = BDFDB.isEleHidden(node);
-			if (hidden) BDFDB.toggleEles(node);
+			var hidenode = node;
+			while (hidenode) {
+				var hidden = BDFDB.isEleHidden(hidenode);
+				if (hidden) {
+					BDFDB.toggleEles(hidenode, true);
+					hidenode.BDFDBgetRectsHidden = true;
+				}
+				hidenode = hidenode.parentElement;
+			}
 			rects = node.getBoundingClientRect();
-			if (hidden) BDFDB.toggleEles(node);
+			hidenode = node;
+			while (hidenode) {
+				if (hidenode.BDFDBgetRectsHidden) {
+					BDFDB.toggleEles(hidenode, false);
+					delete hidenode.BDFDBgetRectsHidden;
+				}
+				hidenode = hidenode.parentElement;
+			}
 		}
 		return rects;
 	};
@@ -2619,36 +2633,41 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		container.querySelectorAll(".BDFDB-containertext").forEach(ele => {
 			if (BDFDB.containsClass(ele.nextElementSibling, "BDFDB-collapsecontainer")) {
 				if (BDFDB.containsClass(ele.firstElementChild, "closed")) BDFDB.toggleEles(ele.nextElementSibling, false);
-				addInitEventListener(ele, 'click', e => {
+				ele.BDFDBinitElement = () => {
 					BDFDB.toggleEles(ele.nextElementSibling, BDFDB.containsClass(ele.firstElementChild, "closed"));
 					BDFDB.toggleClass(ele.firstElementChild, "closed");
-				});
+				};
+				addInitEventListener(ele, 'click', ele.BDFDBinitElement);
 			}
 		});
 		container.querySelectorAll(BDFDB.dotCN.switchinner).forEach(ele => {
 			setSwitch(ele, false);
-			addInitEventListener(ele, 'click', e => {
+			ele.BDFDBinitElement = () => {
 				setSwitch(ele, true);
-			});
+			};
+			addInitEventListener(ele, 'click', ele.BDFDBinitElement);
 		});
 		container.querySelectorAll(BDFDB.dotCNS.checkboxwrapper + BDFDB.dotCN.checkboxinput).forEach(ele => {
-			setCheckbox(ele, false);
-			addInitEventListener(ele, 'click', e => {
-				setCheckbox(ele, true);
-			});
+			setCheckbox(ele);
+			ele.BDFDBinitElement = () => {
+				setCheckbox(ele);
+			};
+			addInitEventListener(ele, 'click', ele.BDFDBinitElement);
 		});
 		container.querySelectorAll(BDFDB.dotCN.giffavoritebutton).forEach(ele => {
 			setGifFavButton(ele);
-			addInitEventListener(ele, 'click', e => {
+			ele.BDFDBinitElement = () => {
 				BDFDB.toggleClass(ele, BDFDB.disCN.giffavoriteselected);
 				setGifFavButton(ele);
-			});
+			};
+			addInitEventListener(ele, 'click', ele.BDFDBinitElement);
 		});
 		container.querySelectorAll('.file-navigator').forEach(ele => {
-			addInitEventListener(ele, 'click', e => {
+			ele.BDFDBinitElement = () => {
 				var input = ele.querySelector('input[type="file"]');
 				if (input) input.click();
-			});
+			};
+			addInitEventListener(ele, 'click', ele.BDFDBinitElement);
 		});
 		container.querySelectorAll('input[type="file"]').forEach(ele => {
 			addInitEventListener(ele, 'change', e => {
@@ -5377,6 +5396,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		.BDFDB-modal ${BDFDB.dotCN.title + BDFDB.notCN.cursorpointer},
 		.BDFDB-settings ${BDFDB.dotCN.title + BDFDB.notCN.cursorpointer} {
 			cursor: default !important;
+		}
+		.BDFDB-modal .BDFDB-settings-inner .BDFDB-containertext,
+		.BDFDB-settings .BDFDB-settings-inner .BDFDB-containertext {
+			margin-left: -18px;
 		}
 		.BDFDB-modal .BDFDB-containerarrow,
 		.BDFDB-settings .BDFDB-containerarrow {
