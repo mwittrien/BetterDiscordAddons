@@ -6,4 +6,4 @@
 [paypal-badge]: https://img.shields.io/badge/Paypal-Donate!-%2300457C.svg?logo=paypal&style=flat
 [paypal-link]: https://paypal.me/MircoWittrien
 
-Notifies you when a friend either logs in or out. Click the Online Friend-Counter to display a timelog of the current session.
+Notifies you when a Friend or a User your choose to observe changing his online status, can be configured individually in the settings.

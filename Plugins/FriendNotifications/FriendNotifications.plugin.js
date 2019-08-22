@@ -3,22 +3,23 @@
 class FriendNotifications {
 	getName () {return "FriendNotifications";}
 
-	getVersion () {return "1.1.9";}
+	getVersion () {return "1.2.1";}
 
 	getAuthor () {return "DevilBro";}
 
-	getDescription () {return "Notifies you when a friend either logs in or out. Click the Online Friend-Counter to display a timelog of the current session.";}
+	getDescription () {return "Notifies you when a Friend or a User your choose to observe changing his online status, can be configured individually in the settings.";}
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["Missing Friend Counter","Falls back to a check interval if the Online Counter isn't rendered. Timelog can now also be viewed in the settings"]]
+			"improved":[["New Settings Interface","Completely new settings interface to more easily customize your notifications"],["New Options","You can now observe users for any kind of status changes (online, mobile, idle, dnd, streaming, offline)"],["Merged FriendNotifications and StalkerNotifications","Since both of these plugins now work the same, I decided to merge them. FriendNotifications will be continued and StalkerNotifications will be disconntinued. You can find the old StalkerNotifications settings in the FriendNotifications settings. <i style='color:rgb(200, 100, 100); font-weight: 800;'>All old configurations of FriendNotifications and StalkerNotifications should have been merged</i>"]]
 		};
 		
 		this.patchModules = {
-			"FriendsOnline":["componentDidMount","componentDidUpdate"]
+			"FriendsOnline":"componentDidMount",
+			"StandardSidebarView":"componentWillUnmount"
 		};
 
-		this.friendsOnlineList = {};
+		this.userStatusStore = {};
 
 		this.checkInterval = null;
 
@@ -80,11 +81,6 @@ class FriendNotifications {
 				background-position: center;
 				border-radius: 50%;
 			}
-			.${this.name}-settings .avatar-list {
-				display: flex;
-				align-items: center;
-				flex-wrap: wrap;
-			}
 			.${this.name}-settings .type-toast, .${this.name}-settings .type-desktop {
 				border-radius: 3px;
 				padding: 0 3px;
@@ -100,11 +96,11 @@ class FriendNotifications {
 			}
 			.${this.name}-settings .settings-avatar {
 				margin: 5px;
-				width: 50px;
-				height: 50px;
+				width: 35px;
+				height: 35px;
 				background-size: cover;
 				background-position: center;
-				border: 5px solid #7289DA;
+				border: 3px solid #7289DA;
 				border-radius: 50%;
 				box-sizing: border-box;
 				cursor: pointer;
@@ -115,50 +111,102 @@ class FriendNotifications {
 			.${this.name}-settings .settings-avatar.disabled {
 				border-color: #36393F;
 				filter: grayscale(100%) brightness(50%);
+			} 
+			.${this.name}-settings .settings-avatar.disabled ~ * {
+				filter: grayscale(100%) brightness(50%);
 			}`;
 
 		this.defaults = {
+			configs: {
+				online: 			{value:true},
+				mobile: 			{value:true},
+				idle: 				{value:false},
+				dnd: 				{value:false},
+				streaming: 			{value:false},
+				offline: 			{value:true}
+			},
 			settings: {
 				muteOnDND:			{value:false, 	description:"Do not notify me when I am DnD:"},
-				onlyOnOnline:		{value:false, 	description:"Only notify me when a User logs in:"},
 				openOnClick:		{value:false, 	description:"Open the DM when you click a Notification:"}
 			},
 			notificationsounds: {
 				toastonline: 		{value:{url:null,song:null,mute:false}},
+				toastmobile: 		{value:{url:null,song:null,mute:false}},
+				toastidle: 			{value:{url:null,song:null,mute:false}},
+				toastdnd: 			{value:{url:null,song:null,mute:false}},
+				toaststreaming: 	{value:{url:null,song:null,mute:false}},
 				toastoffline: 		{value:{url:null,song:null,mute:false}},
 				desktoponline: 		{value:{url:null,song:null,mute:false}},
+				desktopmobile: 		{value:{url:null,song:null,mute:false}},
+				desktopidle: 		{value:{url:null,song:null,mute:false}},
+				desktopdnd: 		{value:{url:null,song:null,mute:false}},
+				desktopstreaming: 	{value:{url:null,song:null,mute:false}},
 				desktopoffline: 	{value:{url:null,song:null,mute:false}}
+			},
+			amounts: {
+				checkInterval:		{value:10, 		min:5,		description:"Check Users every X seconds:"}
 			}
 		};
 	}
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+		
 		let settings = BDFDB.getAllData(this, "settings");
 		let notificationsounds = BDFDB.getAllData(this, "notificationsounds");
-		let desktop = BDFDB.loadAllData(this, "desktop");
-		let disabled = BDFDB.loadAllData(this, "disabled");
+		let amounts = BDFDB.getAllData(this, "amounts");
+		
+		let friendIDs = this.FriendUtils.getFriendIDs();
+		let friends = BDFDB.loadAllData(this, "friends");
+		let nonfriends = BDFDB.loadAllData(this, "nonfriends");
+		
 		let settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
-		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
-		}
-		for (let key in notificationsounds) {
-			if (key.indexOf("desktop") == -1 || "Notification" in window) settingshtml += `<div class="${BDFDB.disCNS.flexchild + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h5 class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 1 1 auto;">${key} notification sound:</h5><h5 class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 0 0 auto;">Mute:</h5><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" option="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} mute-checkbox"${notificationsounds[key].mute ? " checked" : ""}></div></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" option="${key}" value="${notificationsounds[key].url ? notificationsounds[key].url : ""}" placeholder="Url or Filepath" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} songInput"></div><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} file-navigator" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div><input type="file" accept="audio/*,video/*" style="display:none!important;"></button><button type="button" option="${key}" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-save btn-savesong" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div></div>`;
-		}
-		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Click on a Icon to toggle <label class="type-toast">Toast</label> Notifications for that User:</h3></div>`;
-		if ("Notification" in window) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Rightclick on a Icon to toggle <label class="type-desktop">Desktop</label> Notifications for that User:</h3></div>`;
-		settingshtml += `<div class="avatar-list ${BDFDB.disCN.marginbottom8}">`;
-		for (let id of this.FriendUtils.getFriendIDs()) {
+		settingshtml += `<div class="${BDFDB.disCNS.h2 + BDFDB.disCNS.cursorpointer + BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4} BDFDB-containertext"><span class="BDFDB-containerarrow closed"></span>General Settings</div><div class="BDFDB-collapsecontainer">`;
+		for (let key in settings) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
+		for (let key in amounts) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%;">${this.defaults.amounts[key].description}</h3><div class="${BDFDB.disCN.inputwrapper} inputNumberWrapper ${BDFDB.disCNS.vertical +  BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn}" style="flex: 1 1 auto;"><span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span><input type="number"${(!isNaN(this.defaults.amounts[key].min) && this.defaults.amounts[key].min !== null ? ' min="' + this.defaults.amounts[key].min + '"' : '') + (!isNaN(this.defaults.amounts[key].max) && this.defaults.amounts[key].max !== null ? ' max="' + this.defaults.amounts[key].max + '"' : '')} option="${key}" value="${amounts[key]}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} amount-input"></div></div>`;
+		settingshtml += `</div><div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.marginbottom4}"></div>`;
+		settingshtml += `<div class="${BDFDB.disCNS.h2 + BDFDB.disCNS.cursorpointer + BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4} BDFDB-containertext"><span class="BDFDB-containerarrow closed"></span>Friend-List</div><div class="BDFDB-collapsecontainer">`;
+		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Click on an Icon to toggle <label class="type-toast">Toast</label> Notifications for that User:</h3></div>`;
+		if ("Notification" in window) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Rightclick on an Icon to toggle <label class="type-desktop">Desktop</label> Notifications for that User:</h3></div>`;
+		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Click/Rightclick on the table headers to batch set all Friends</h3></div>`;
+		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8} BDFDB-tableheader" table-id="friends" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild} BDFDB-tableheadertext"><div class="${BDFDB.disCNS.margintop8 + BDFDB.disCNS.tableheadersize + BDFDB.disCNS.size10 + BDFDB.disCNS.primary + BDFDB.disCNS.weightbold + BDFDB.disCN.cursorpointer} btn-batch" group="friends" config="desktop" style="display: inline-block; margin: 0 25px;">TYPE</div><div class="${BDFDB.disCNS.margintop8 + BDFDB.disCNS.tableheadersize + BDFDB.disCNS.size10 + BDFDB.disCNS.primary + BDFDB.disCNS.weightbold + BDFDB.disCN.cursorpointer} btn-batch" group="friends" config="disabled" style="display: inline-block;">DISABLE</div></h3><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifycenter + BDFDB.disCNS.alignend + BDFDB.disCN.nowrap} BDFDB-tableheadercolumns">`;
+		for (let config in this.defaults.configs) settingshtml += `<div class="${BDFDB.disCNS.margintop8 + BDFDB.disCNS.tableheadersize + BDFDB.disCNS.size10 + BDFDB.disCNS.primary + BDFDB.disCNS.weightbold + BDFDB.disCN.cursorpointer} BDFDB-tableheadercolumn" config="${config}" group="friends">${config.toUpperCase()}</div>`;
+		settingshtml += `</div></div><div class="BDFDB-settings-inner-list friend-list ${BDFDB.disCN.marginbottom8}">`;
+		for (let id of friendIDs) {
 			let user = this.UserUtils.getUser(id);
 			if (user) {
-				let data = BDFDB.loadData(user.id, "EditUsers", "users") || {};
-				settingshtml += `<div class="settings-avatar${desktop[id] ? " desktop" : ""}${disabled[id] ? " disabled" : ""}" user-id="${id}" style="background-image: url(${data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(user.id))});"></div>`;
+				let friend = friends[id] || (friends[id] = nonfriends[id] || this.createDefaultConfig());
+				settingshtml += this.createHoverCard(user, friend, "friends");
 			}
 		}
 		settingshtml += `</div>`;
-		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Batch set Users:</h3><button type="button" do-disable=true class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttoncolorprimary + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} disable-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Disable</div></button><button type="button" do-toast=true class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} toast-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Toast</div></button>${"Notification" in window ? `<button type="button" do-desktop=true class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorgreen + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} desktop-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Desktop</div></button>` : ``}</div>`;
+		settingshtml += `</div><div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.marginbottom4}"></div>`;
+		settingshtml += `<div class="${BDFDB.disCNS.h2 + BDFDB.disCNS.cursorpointer + BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4} BDFDB-containertext"><span class="BDFDB-containerarrow closed"></span>Non-Friend-List</div><div class="BDFDB-collapsecontainer">`;
+		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Click on a Icon to toggle <label class="type-toast">Toast</label> Notifications for that User:</h3></div>`;
+		if ("Notification" in window) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Rightclick on a Icon to toggle <label class="type-desktop">Desktop</label> Notifications for that User:</h3></div>`;
+		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Click/Rightclick on the table headers to batch set all Non-Friends</h3></div>`;
+		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%;">Add Non-Friend:</h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" value="" placeholder="UserID" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}" id="input-userid"></div><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-add btn-adduser" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div>`;
+		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8} BDFDB-tableheader" table-id="nonfriends" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild} BDFDB-tableheadertext"><div class="${BDFDB.disCNS.margintop8 + BDFDB.disCNS.tableheadersize + BDFDB.disCNS.size10 + BDFDB.disCNS.primary + BDFDB.disCNS.weightbold + BDFDB.disCN.cursorpointer} btn-batch" group="nonfriends" config="desktop" style="display: inline-block; margin: 0 25px;">TYPE</div><div class="${BDFDB.disCNS.margintop8 + BDFDB.disCNS.tableheadersize + BDFDB.disCNS.size10 + BDFDB.disCNS.primary + BDFDB.disCNS.weightbold + BDFDB.disCN.cursorpointer} btn-batch" group="nonfriends" config="disabled" style="display: inline-block;">DISABLE</div></h3><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifycenter + BDFDB.disCNS.alignend + BDFDB.disCN.nowrap} BDFDB-tableheadercolumns">`;
+		for (let config in this.defaults.configs) settingshtml += `<div class="${BDFDB.disCNS.margintop8 + BDFDB.disCNS.tableheadersize + BDFDB.disCNS.size10 + BDFDB.disCNS.primary + BDFDB.disCNS.weightbold + BDFDB.disCN.cursorpointer} BDFDB-tableheadercolumn" config="${config}" group="nonfriends">${config.toUpperCase()}</div>`;
+		settingshtml += `</div></div><div class="BDFDB-settings-inner-list nonfriend-list ${BDFDB.disCN.marginbottom8}">`;
+		for (let id in nonfriends) if (!friendIDs.includes(id)) {
+			let user = this.UserUtils.getUser(id);
+			if (user) {
+				let nonfriend = nonfriends[id] || (nonfriends[id] = this.createDefaultConfig());
+				settingshtml += this.createHoverCard(user, nonfriend, "nonfriends");
+			}
+		}
+		settingshtml += `</div>`;
+		settingshtml += `</div><div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.marginbottom4}"></div>`;
+		settingshtml += `<div class="${BDFDB.disCNS.h2 + BDFDB.disCNS.cursorpointer + BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4} BDFDB-containertext"><span class="BDFDB-containerarrow closed"></span>Timelog</div><div class="BDFDB-collapsecontainer">`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Timelog of LogIns/-Outs:</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-timelog" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Timelog</div></button></div>`;
+		settingshtml += `</div><div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.marginbottom4}"></div>`;
+		settingshtml += `<div class="${BDFDB.disCNS.h2 + BDFDB.disCNS.cursorpointer + BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4} BDFDB-containertext"><span class="BDFDB-containerarrow closed"></span>Sound Settings</div><div class="BDFDB-collapsecontainer">`;
+		for (let key in notificationsounds) if (key.indexOf("desktop") == -1 || "Notification" in window) settingshtml += `<div class="${BDFDB.disCNS.flexchild + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h5 class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 1 1 auto;">${key} notification sound:</h5><h5 class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 0 0 auto;">Mute:</h5><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" option="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} mute-checkbox"${notificationsounds[key].mute ? " checked" : ""}></div></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCNS.directioncolumn + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" option="${key}" value="${notificationsounds[key].url ? notificationsounds[key].url : ""}" placeholder="Url or Filepath" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} songInput"></div><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} file-navigator" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div><input type="file" accept="audio/*,video/*" style="display:none!important;"></button><button type="button" option="${key}" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-save btn-savesong" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div></div>`;
+		settingshtml += `</div>`;
 		settingshtml += `</div></div>`;
+		
+		BDFDB.saveAllData(friends, this, "friends");
 
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
@@ -171,42 +219,55 @@ class FriendNotifications {
 			notificationsound.mute = e.currentTarget.checked;
 			BDFDB.saveData(option, notificationsound, this, "notificationsounds");
 		});
-		BDFDB.addEventListener(this, settingspanel, "mouseenter", ".settings-avatar", e => {
-			let user = this.UserUtils.getUser(e.currentTarget.getAttribute("user-id"));
-			let data = BDFDB.loadData(user.id, "EditUsers", "users") || {};
-			BDFDB.createTooltip(data.name ? data.name : user.username, e.currentTarget, {type:"top"});
+		BDFDB.addEventListener(this, settingspanel, "click", ".settings-avatar", e => {
+			this.changeNotificationType(e.currentTarget, false, !BDFDB.containsClass(e.currentTarget, "disabled", "desktop", false));
 		});
 		BDFDB.addEventListener(this, settingspanel, "contextmenu", ".settings-avatar", e => {
 			if (!("Notification" in window)) return;
-			let desktopoff = !BDFDB.containsClass(e.currentTarget, "desktop");
-			let id = e.currentTarget.getAttribute("user-id");
-			BDFDB.removeClass(e.currentTarget, "disabled");
-			BDFDB.toggleClass(e.currentTarget, "desktop", desktopoff);
-			BDFDB.saveData(id, desktopoff, this, "desktop");
-			BDFDB.removeData(id, this, "disabled");
+			this.changeNotificationType(e.currentTarget, true, !(BDFDB.containsClass(e.currentTarget, "disabled") || !BDFDB.containsClass(e.currentTarget, "desktop")));
 		});
-		BDFDB.addEventListener(this, settingspanel, "click", ".settings-avatar", e => {
-			let disableoff = !BDFDB.containsClass(e.currentTarget, "disabled");
-			let id = e.currentTarget.getAttribute("user-id");
-			BDFDB.removeClass(e.currentTarget, "desktop");
-			BDFDB.toggleClass(e.currentTarget, "disabled", disableoff);
-			BDFDB.saveData(id, disableoff, this, "disabled");
-			BDFDB.removeData(id, this, "desktop");
+		BDFDB.addEventListener(this, settingspanel, "click", ".btn-batch", e => {
+			this.changeAllNotificationTypes(settingspanel, e.currentTarget, true);
 		});
-		BDFDB.addEventListener(this, settingspanel, "click", ".disable-all, .toast-all, .desktop-all", e => {
-			let disableon = e.currentTarget.getAttribute("do-disable");
-			let desktopon = e.currentTarget.getAttribute("do-desktop");
-			let disabledata = BDFDB.loadAllData(this, "disabled");
-			let desktopdata = BDFDB.loadAllData(this, "desktop");
-			settingspanel.querySelectorAll(".settings-avatar").forEach(avatar => {
-				let id = avatar.getAttribute("user-id");
-				BDFDB.toggleClass(avatar, "disabled", disableon);
-				BDFDB.toggleClass(avatar, "desktop", desktopon);
-				disableon ? disabledata[id] = true : delete disabledata[id];
-				desktopon ? desktopdata[id] = true : delete desktopdata[id];
-			});
-			BDFDB.saveAllData(disabledata, this, "disabled");
-			BDFDB.saveAllData(desktopdata, this, "desktop");
+		BDFDB.addEventListener(this, settingspanel, "contextmenu", ".btn-batch", e => {
+			this.changeAllNotificationTypes(settingspanel, e.currentTarget, false);
+		});
+		BDFDB.addEventListener(this, settingspanel, "click", BDFDB.dotCN.checkboxinput, e => {
+			if (BDFDB.containsClass(e.target, "remove-user")) return;
+			this.changeNotificationConfig(e.currentTarget);
+		});
+		BDFDB.addEventListener(this, settingspanel, "click", ".BDFDB-tableheadercolumn", e => {
+			this.changeAllNotificationConfigs(settingspanel, e.currentTarget, true);
+		});
+		BDFDB.addEventListener(this, settingspanel, "contextmenu", ".BDFDB-tableheadercolumn", e => {
+			this.changeAllNotificationConfigs(settingspanel, e.currentTarget, false);
+		});
+		BDFDB.addEventListener(this, settingspanel, "click", ".remove-user", e => {
+			let id = e.currentTarget.getAttribute("user-id");
+			let group = e.currentTarget.getAttribute("group");
+			if (id && group) {
+				BDFDB.removeData(id, this, group);
+				BDFDB.removeEles(BDFDB.getParentEle(BDFDB.dotCN.hovercard, e.currentTarget));
+			}
+		});
+		BDFDB.addEventListener(this, settingspanel, "click", ".btn-adduser", e => {
+			let idinput = settingspanel.querySelector("#input-userid");
+			let id = idinput.value;
+			idinput.value = "";
+			if (friendIDs.includes(id)) BDFDB.showToast("User is already a friend of yours. Please use the 'Friends' area to configure him/her.", {type:"error"});
+			else if (BDFDB.loadData(id, this, "nonfriends")) BDFDB.showToast("User is already being observed as a 'Non-Friend'.", {type:"error"});
+			else {
+				let user = this.UserUtils.getUser(id);
+				if (user) {
+					let data = this.createDefaultConfig();
+					BDFDB.saveData(user.id, data, this, "nonfriends");
+					let hovercard = BDFDB.htmlToElement(this.createHoverCard(user, data, "nonfriends"));
+					settingspanel.querySelector(".nonfriend-list").appendChild(hovercard);
+					BDFDB.initElements(hovercard);
+				}
+				else if (/.+#[0-9]{4}/.test(id)) BDFDB.showToast("A UserID does not consist of the username and discriminator.", {type:"error"});
+				else BDFDB.showToast("Please enter a valid UserID of a user that has been loaded in your client.", {type:"error"});
+			}
 		});
 		BDFDB.addEventListener(this, settingspanel, "click", ".btn-timelog", () => {this.showTimeLog();});
 
@@ -257,11 +318,28 @@ class FriendNotifications {
 			this.ChannelUtils = BDFDB.WebModules.findByProperties("getDMFromUserId");
 			this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties("selectPrivateChannel");
 			this.PrivateChannelUtils = BDFDB.WebModules.findByProperties("openPrivateChannel");
-			this.UserMetaStore = BDFDB.WebModules.findByProperties("getStatus", "getOnlineFriendCount");
-			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers");
-
-			for (let id of this.FriendUtils.getFriendIDs()) {
-				this.friendsOnlineList[id] = this.UserMetaStore.getStatus(id) != "offline";
+			this.MobileUtils = BDFDB.WebModules.findByProperties("isMobileOnline");
+			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers", "getUsers");
+			this.APIUtils = BDFDB.WebModules.findByProperties("getAPIBaseURL");
+			this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
+			
+			/* REMOVE AFTER SOME TIME - 22.08.2019 */
+			let oldFriendDataDesktop = BDFDB.loadAllData("FriendNotifications", "desktop");
+			let oldFriendDataDisabled = BDFDB.loadAllData("FriendNotifications", "disabled");
+			if (!BDFDB.isObjectEmpty(oldFriendDataDesktop) || !BDFDB.isObjectEmpty(oldFriendDataDisabled)) {
+				let friends = BDFDB.loadAllData(this, "friends")
+				for (let id in oldFriendDataDesktop) friends[id] = Object.assign(this.createDefaultConfig(), (friends[id] || {}), {desktop: oldFriendDataDesktop[id]});
+				for (let id in oldFriendDataDisabled) friends[id] = Object.assign(this.createDefaultConfig(), (friends[id] || {}), {disabled: oldFriendDataDesktop[id]});
+				BDFDB.saveAllData(friends, this, "friends");
+				BDFDB.removeAllData("FriendNotifications", "desktop");
+				BDFDB.removeAllData("FriendNotifications", "disabled");
+			}
+			let oldStalkerData = BDFDB.loadAllData("StalkerNotifications", "users");
+			if (!BDFDB.isObjectEmpty(oldStalkerData)) {
+				let nonfriends = BDFDB.loadAllData(this, "nonfriends")
+				for (let id in oldStalkerData) nonfriends[id] = Object.assign(this.createDefaultConfig(), oldStalkerData[id]);
+				BDFDB.saveAllData(nonfriends, this, "nonfriends");
+				require("fs").unlinkSync(require("path").join(BDFDB.getPluginsFolder(), "StalkerNotifications.config.json"));
 			}
 
 			this.startInterval();
@@ -282,6 +360,73 @@ class FriendNotifications {
 
 
 	// begin of own functions
+	
+	createHoverCard (user, data, group) {
+		let EUdata = BDFDB.loadData(user.id, "EditUsers", "users") || {};
+		var hovercardhtml = `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="settings-avatar${data.desktop ? " desktop" : ""}${data.disabled ? " disabled" : ""}" group="${group}" user-id="${user.id}" style="flex: 0 0 auto; background-image: url(${EUdata.removeIcon ? "" : (EUdata.url ? EUdata.url : BDFDB.getUserAvatar(user.id))});"></div><div class="BDFDB-textscrollwrapper" style="flex: 1 1 auto;"><div class="BDFDB-textscroll">${BDFDB.encodeToHTML(EUdata.name || user.username)}</div></div>`;
+		for (let config in this.defaults.configs) {
+			hovercardhtml += `<div class="${BDFDB.disCNS.checkboxcontainer + BDFDB.disCN.marginreset} BDFDB-tablecheckbox" table-id="${group}" style="flex: 0 0 auto;"><label class="${BDFDB.disCN.checkboxwrapper}"><input user-id="${user.id}" group="${group}" config="${config}" type="checkbox" class="${BDFDB.disCN.checkboxinputdefault}"${data[config] ? " checked" : ""}><div class="${BDFDB.disCNS.checkbox + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.checkboxround}"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
+		}
+		return hovercardhtml + `</div>${group == "nonfriends" ? `<div class="${BDFDB.disCN.hovercardbutton} remove-user" group="${group}" user-id="${user.id}"></div>` : ''}</div>`
+	}
+	
+	changeNotificationType (avatar, desktopon, disableon) {
+		let id = avatar.getAttribute("user-id");
+		let group = avatar.getAttribute("group");
+		if (id && group) {
+			let data = BDFDB.loadData(id, this, group) || this.createDefaultConfig();
+			data.desktop = desktopon;
+			data.disabled = disableon;
+			BDFDB.toggleClass(avatar, "desktop", desktopon);
+			BDFDB.toggleClass(avatar, "disabled", disableon);
+			BDFDB.saveData(id, data, this, group);
+		}
+	}
+	
+	changeAllNotificationTypes (settingspanel, tableheader, enable) {
+		let config = tableheader.getAttribute("config");
+		let group = tableheader.getAttribute("group");
+		if (config && group) {
+			let data = BDFDB.loadAllData(this, group);
+			if (config == "desktop") {
+				enable = !enable;
+				for (let id in data) data[id].disabled = false;
+				for (let avatar of settingspanel.querySelectorAll(`.settings-avatar[group="${group}"]`)) BDFDB.removeClass(avatar, "disabled");
+			}
+			for (let id in data) data[id][config] = enable;
+			for (let avatar of settingspanel.querySelectorAll(`.settings-avatar[group="${group}"]`)) BDFDB.toggleClass(avatar, config, enable);
+			BDFDB.saveAllData(data, this, group);
+		}
+	}
+	
+	changeNotificationConfig (checkbox) {
+		let id = checkbox.getAttribute("user-id");
+		let config = checkbox.getAttribute("config");
+		let group = checkbox.getAttribute("group");
+		if (id && config && group) {
+			let data = BDFDB.loadData(id, this, group) || this.createDefaultConfig();
+			data[config] = checkbox.checked;
+			BDFDB.saveData(id, data, this, group);
+		}
+	}
+	
+	changeAllNotificationConfigs (settingspanel, tableheader, enable) {
+		let config = tableheader.getAttribute("config");
+		let group = tableheader.getAttribute("group");
+		if (config && group) {
+			let data = BDFDB.loadAllData(this, group);
+			for (let id in data) data[id][config] = enable;
+			BDFDB.saveAllData(data, this, group);
+			for (let checkbox of settingspanel.querySelectorAll(`${BDFDB.dotCN.checkboxinput}[config="${config}"][group="${group}"]`)) {
+				checkbox.checked = enable;
+				if (typeof checkbox.BDFDBupdateElement == "function") checkbox.BDFDBupdateElement();
+			}
+		}
+	}
+	
+	createDefaultConfig () {
+		return Object.assign({desktop: false, disabled: false}, BDFDB.mapObject(this.defaults.configs, "value"));
+	}
 
 	saveAudio (settingspanel, option) {
 		let successSavedAudio = (parsedurl, parseddata) => {
@@ -320,61 +465,62 @@ class FriendNotifications {
 	processFriendsOnline (instance, wrapper) {
 		BDFDB.addEventListener(this, wrapper, "mouseenter", () => {BDFDB.createTooltip("Timelog", wrapper, {type:"right"});});
 		BDFDB.addEventListener(this, wrapper, "click", () => {this.showTimeLog();});
-		
-		clearInterval(this.checkInterval);
+	}
 
-		this.checkFriends();
+	processStandardSidebarView (instance, wrapper) {
+		if (this.SettingsUpdated) {
+			delete this.SettingsUpdated;
+			this.startInterval();
+		}
 	}
 	
-	checkFriends () {
-		let settings = BDFDB.getAllData(this, "settings");
-		for (let id of this.FriendUtils.getFriendIDs()) {
-			let online = this.UserMetaStore.getStatus(id) != "offline";
-			let user = this.UserUtils.getUser(id);
-			if (user && this.friendsOnlineList[id] != online && !BDFDB.loadData(id, this, "disabled")) {
-				this.timeLog.push({user, online, time: new Date()});
-				if (!(settings.onlyOnOnline && !online) && !(settings.muteOnDND && BDFDB.getUserStatus() == "dnd")) {
-					let data = BDFDB.loadData(user.id, "EditUsers", "users") || {};
-					let string = `${BDFDB.encodeToHTML(data.name ? data.name : user.username)} is ${online ? "online" : "offline"}.`;
-					let avatar = data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(user.id));
-					let openChannel = () => {
-						if (settings.openOnClick) {
-							let DMid = this.ChannelUtils.getDMFromUserId(user.id)
-							if (DMid) this.ChannelSwitchUtils.selectPrivateChannel(DMid);
-							else this.PrivateChannelUtils.openPrivateChannel(BDFDB.myData.id, user.id);
-							require("electron").remote.getCurrentWindow().maximize();
-						}
-					};
-					if (!BDFDB.loadData(id, this, "desktop")) {
-						let toast = BDFDB.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${string}</div></div>`, {html:true, timeout:5000, type:(online ? "success" : null), icon:false, selector:`friendnotifications-${online ? "online" : "offline"}-toast`});
-						toast.addEventListener("click", openChannel);
-						let notificationsound = BDFDB.getData(online ? "toastonline" : "toastoffline", this, "notificationsounds");
-						if (!notificationsound.mute && notificationsound.song) {
-							let audio = new Audio();
-							audio.src = notificationsound.song;
-							audio.play();
-						}
-					}
-					else {
-						let notificationsound = BDFDB.getData(online ? "desktoponline" : "desktopoffline", this, "notificationsounds");
-						BDFDB.showDesktopNotification(string, {icon:avatar, timeout:5000, click:openChannel, silent:notificationsound.mute, sound:notificationsound.song});
-					}
-				}
-			}
-			this.friendsOnlineList[id] = online;
-		}
+	getStatusWithMobile (id) {
+		let status = BDFDB.getUserStatus(id);
+		return status == "online" && this.MobileUtils.isMobileOnline(id) ? "mobile" : status;
 	}
 
 	startInterval () {
 		clearInterval(this.checkInterval);
-		let oldcount = this.UserMetaStore.getOnlineFriendCount(), newcount = 0;
+		let settings = BDFDB.getAllData(this, "settings");
+		let users = Object.assign(BDFDB.loadAllData(this, "nonfriends"), BDFDB.loadAllData(this, "friends"));
+		for (let id in users) this.userStatusStore[id] = this.getStatusWithMobile(id);
 		this.checkInterval = setInterval(() => {
-			newcount = this.UserMetaStore.getOnlineFriendCount();
-			if (oldcount != newcount) {
-				oldcount = newcount;
-				this.checkFriends();
+			for (let id in users) if (!users[id].disabled) {
+				let user = this.UserUtils.getUser(id);
+				let status = this.getStatusWithMobile(id);
+				if (user && this.userStatusStore[id] != status && users[id][status]) {
+					this.timeLog.push({user, status, time: new Date()});
+					if (!(settings.muteOnDND && BDFDB.getUserStatus() == "dnd")) {
+						let EUdata = BDFDB.loadData(user.id, "EditUsers", "users") || {};
+						let string = `${BDFDB.encodeToHTML(EUdata.name || user.username)} is ${status}.`;
+						let avatar = EUdata.removeIcon ? "" : (EUdata.url ? EUdata.url : BDFDB.getUserAvatar(user.id));
+						let openChannel = () => {
+							if (settings.openOnClick) {
+								let DMid = this.ChannelUtils.getDMFromUserId(user.id)
+								if (DMid) this.ChannelSwitchUtils.selectPrivateChannel(DMid);
+								else this.PrivateChannelUtils.openPrivateChannel(BDFDB.myData.id, user.id);
+								require("electron").remote.getCurrentWindow().maximize();
+							}
+						};
+						if (!users[id].desktop) {
+							let toast = BDFDB.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${string}</div></div>`, {html:true, timeout:5000, color:BDFDB.getUserStatusColor(status), icon:false, selector:`friendnotifications-${status}-toast`});
+							toast.addEventListener("click", openChannel);
+							let notificationsound = BDFDB.getData("toast" + status, this, "notificationsounds");
+							if (!notificationsound.mute && notificationsound.song) {
+								let audio = new Audio();
+								audio.src = notificationsound.song;
+								audio.play();
+							}
+						}
+						else {
+							let notificationsound = BDFDB.getData("desktop" + status, this, "notificationsounds");
+							BDFDB.showDesktopNotification(string, {icon:avatar, timeout:5000, click:openChannel, silent:notificationsound.mute, sound:notificationsound.song});
+						}
+					}
+				}
+				this.userStatusStore[id] = status;
 			}
-		},10000);
+		},BDFDB.getData("checkInterval", this, "amounts") * 1000);
 	}
 
 	showTimeLog () {
@@ -383,12 +529,12 @@ class FriendNotifications {
 		if (!container) return;
 		let logs = this.timeLog.slice(0).reverse();
 		for (let log of logs) {
-			if (container.childElementCount) container.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.modaldivider}"></div>`));
+			if (container.childElementCount) container.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.marginbottom4}"></div>`));
 			let data = BDFDB.loadData(log.user.id, "EditUsers", "users") || {};
 			let entry = BDFDB.htmlToElement(this.logEntryMarkup);
 			entry.querySelector(".log-time").innerText = `[${log.time.toLocaleTimeString()}]`;
 			entry.querySelector(".log-avatar").style.setProperty("background-image", `url(${data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(log.user.id))})`);
-			entry.querySelector(".log-description").innerText = `${data.name || log.user.username} is ${log.online ? "online" : "offline"}.`;
+			entry.querySelector(".log-description").innerText = `${data.name || log.user.username} is ${log.status}.`;
 			container.appendChild(entry)
 		}
 		BDFDB.appendModal(timeLogModal);

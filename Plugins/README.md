@@ -19,7 +19,7 @@
  - [Edit Users](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditUsers) - Allows you to change the icon, name, tag and color of users.
  - [Emoji Statistics](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EmojiStatistics) - Displays emojiinformation when hovering over an emoji in the emojipicker and adds a button to the emojipicker to open a statistics overview.
  - [Force Image Previews](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ForceImagePreviews) - Forces embedded Image Previews, if Discord doesn't do it itself.
- - [Friend Notifications](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/FriendNotifications) - Notifies you when a friend either logs in or out. Click the Online Friend-Counter to display a timelog of the current session.
+ - [Friend Notifications](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/FriendNotifications) - Notifies you when a Friend or a User your choose to observe changing his online status, can be configured individually in the settings.
  - [Google Search Replace](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleSearchReplace) - Replaces the default Google Text Search with a selection menu of several search engines.
  - [Google Translate Option](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleTranslateOption) - Adds a Google Translate option to your context menu, which will open the selected text in Google Translate.
  - [Image Gallery](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ImageGallery) - Allows the user to browse through images sent inside the same message.
@@ -45,7 +45,6 @@
  - [Show Hidden Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowHiddenChannels) - Displays all hidden channels that can't be accessed due to role restrictions in a new category.
  - [Show Image Details](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowImageDetails) - Display the name, size and dimensions of uploaded images (does not include embed images) in the chat as an header or as a tooltip.
  - [Spell Check](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpellCheck) - Adds a spellcheck to all textareas.
- - [Stalker Notifications](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/StalkerNotifications) - Lets you observe the status of people that aren't your friends.
  - [Steam Profile Link](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SteamProfileLink) - Opens a steam profile in steam instead of a browser when clicking the steamlink in a userprofile. With the help of square.
  - [Theme Repo](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeRepo) - Allows you to preview all themes from the theme repo and download them on the fly.
  - [Theme Settings](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeSettings) - Allows you to change Theme Variables within BetterDiscord.
