@@ -2633,41 +2633,41 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		container.querySelectorAll(".BDFDB-containertext").forEach(ele => {
 			if (BDFDB.containsClass(ele.nextElementSibling, "BDFDB-collapsecontainer")) {
 				if (BDFDB.containsClass(ele.firstElementChild, "closed")) BDFDB.toggleEles(ele.nextElementSibling, false);
-				ele.BDFDBinitElement = () => {
+				ele.BDFDBupdateElement = () => {
 					BDFDB.toggleEles(ele.nextElementSibling, BDFDB.containsClass(ele.firstElementChild, "closed"));
 					BDFDB.toggleClass(ele.firstElementChild, "closed");
 				};
-				addInitEventListener(ele, 'click', ele.BDFDBinitElement);
+				addInitEventListener(ele, 'click', ele.BDFDBupdateElement);
 			}
 		});
 		container.querySelectorAll(BDFDB.dotCN.switchinner).forEach(ele => {
 			setSwitch(ele, false);
-			ele.BDFDBinitElement = () => {
+			ele.BDFDBupdateElement = () => {
 				setSwitch(ele, true);
 			};
-			addInitEventListener(ele, 'click', ele.BDFDBinitElement);
+			addInitEventListener(ele, 'click', ele.BDFDBupdateElement);
 		});
 		container.querySelectorAll(BDFDB.dotCNS.checkboxwrapper + BDFDB.dotCN.checkboxinput).forEach(ele => {
 			setCheckbox(ele);
-			ele.BDFDBinitElement = () => {
+			ele.BDFDBupdateElement = () => {
 				setCheckbox(ele);
 			};
-			addInitEventListener(ele, 'click', ele.BDFDBinitElement);
+			addInitEventListener(ele, 'click', ele.BDFDBupdateElement);
 		});
 		container.querySelectorAll(BDFDB.dotCN.giffavoritebutton).forEach(ele => {
 			setGifFavButton(ele);
-			ele.BDFDBinitElement = () => {
+			ele.BDFDBupdateElement = () => {
 				BDFDB.toggleClass(ele, BDFDB.disCN.giffavoriteselected);
 				setGifFavButton(ele);
 			};
-			addInitEventListener(ele, 'click', ele.BDFDBinitElement);
+			addInitEventListener(ele, 'click', ele.BDFDBupdateElement);
 		});
 		container.querySelectorAll('.file-navigator').forEach(ele => {
-			ele.BDFDBinitElement = () => {
+			ele.BDFDBupdateElement = () => {
 				var input = ele.querySelector('input[type="file"]');
 				if (input) input.click();
 			};
-			addInitEventListener(ele, 'click', ele.BDFDBinitElement);
+			addInitEventListener(ele, 'click', ele.BDFDBupdateElement);
 		});
 		container.querySelectorAll('input[type="file"]').forEach(ele => {
 			addInitEventListener(ele, 'change', e => {
@@ -2940,9 +2940,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				}
 		};
 		function addInitEventListener(ele, action, callback) {
-			if (!ele.BDFDBinitElementsListeners) ele.BDFDBinitElementsListeners = {};
-			if (ele.BDFDBinitElementsListeners[action]) ele.removeEventListener(action, ele.BDFDBinitElementsListeners[action]);
-			ele.BDFDBinitElementsListeners[action] = callback;
+			if (!ele.BDFDBupdateElementsListeners) ele.BDFDBupdateElementsListeners = {};
+			if (ele.BDFDBupdateElementsListeners[action]) ele.removeEventListener(action, ele.BDFDBupdateElementsListeners[action]);
+			ele.BDFDBupdateElementsListeners[action] = callback;
 			ele.addEventListener(action, callback, true);
 		};
 	};
