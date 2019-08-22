@@ -2617,10 +2617,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		var islighttheme = BDFDB.getDiscordTheme() == BDFDB.disCN.themelight;
 		var languagestrings = BDFDB.getLibraryStrings();
 		container.querySelectorAll(".BDFDB-containerarrow").forEach(ele => {
-			if (BDFDB.containsClass(ele.nextElementSibling, "BDFDB-collapsecontainer")) {
-				if (BDFDB.containsClass(ele, "closed")) BDFDB.toggleEles(ele.nextElementSibling, false);
+			if (BDFDB.containsClass(ele.parentElement.nextElementSibling, "BDFDB-collapsecontainer")) {
+				if (BDFDB.containsClass(ele, "closed")) BDFDB.toggleEles(ele.parentElement.nextElementSibling, false);
 				addInitEventListener(ele, 'click', e => {
-					BDFDB.toggleEles(ele.nextElementSibling, BDFDB.containsClass(ele, "closed"));
+					BDFDB.toggleEles(ele.parentElement.nextElementSibling, BDFDB.containsClass(ele, "closed"));
 					BDFDB.toggleClass(ele, "closed");
 				});
 			}
@@ -5384,6 +5384,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			height: 16px;
 			width: 16px;
 			display: inline-block;
+			vertical-align: bottom;
 			transition: transform .3s ease;
 			transform: rotate(0);
 		}
