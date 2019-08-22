@@ -2843,7 +2843,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				var panel = BDFDB.getParentEle('.BDFDB-modal, .BDFDB-settings', ele);
 				var tableid = ele.getAttribute('table-id');
 				var text = ele.querySelector('.BDFDB-tableheadertext');
-				var columns = ele.querySelectorAll('.BDFDB-tableheadercolumn');
+				var columns = ele.querySelectorAll('.BDFDB-tableheadercolumns .BDFDB-tableheadercolumn');
 				if (panel && tableid && text && columns.length) {
 					let maxwidth = 0;
 					for (let column of columns) {
