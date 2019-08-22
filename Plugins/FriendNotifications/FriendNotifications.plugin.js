@@ -3,7 +3,7 @@
 class FriendNotifications {
 	getName () {return "FriendNotifications";}
 
-	getVersion () {return "1.2.1";}
+	getVersion () {return "1.2.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,8 @@ class FriendNotifications {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["New Settings Interface","Completely new settings interface to more easily customize your notifications"],["New Options","You can now observe users for any kind of status changes (online, mobile, idle, dnd, streaming, offline)"],["Merged FriendNotifications and StalkerNotifications","Since both of these plugins now work the same, I decided to merge them. FriendNotifications will be continued and StalkerNotifications will be disconntinued. You can find the old StalkerNotifications settings in the FriendNotifications settings. <i style='color:rgb(200, 100, 100); font-weight: 800;'>All old configurations of FriendNotifications and StalkerNotifications should have been merged</i>"]]
+			"improved":[["New Settings Interface","Completely new settings interface to more easily customize your notifications"],["New Options","You can now observe users for any kind of status changes (online, mobile, idle, dnd, streaming, offline)"],["Merged FriendNotifications and StalkerNotifications","Since both of these plugins now work the same, I decided to merge them. FriendNotifications will be continued and StalkerNotifications will be disconntinued. You can find the old StalkerNotifications settings in the FriendNotifications settings. <i style='color:rgb(200, 100, 100); font-weight: 800;'>All old configurations of FriendNotifications and StalkerNotifications should have been merged</i>"]],
+			"fixed":[["Settings Bug","Fixed the bug where disabling/changing settings for users would not work, unless the plugin was restarted"]]
 		};
 		
 		this.patchModules = {
@@ -248,6 +249,7 @@ class FriendNotifications {
 			if (id && group) {
 				BDFDB.removeData(id, this, group);
 				BDFDB.removeEles(BDFDB.getParentEle(BDFDB.dotCN.hovercard, e.currentTarget));
+				this.SettingsUpdated = true;
 			}
 		});
 		BDFDB.addEventListener(this, settingspanel, "click", ".btn-adduser", e => {
@@ -264,6 +266,7 @@ class FriendNotifications {
 					let hovercard = BDFDB.htmlToElement(this.createHoverCard(user, data, "nonfriends"));
 					settingspanel.querySelector(".nonfriend-list").appendChild(hovercard);
 					BDFDB.initElements(hovercard);
+					this.SettingsUpdated = true;
 				}
 				else if (/.+#[0-9]{4}/.test(id)) BDFDB.showToast("A UserID does not consist of the username and discriminator.", {type:"error"});
 				else BDFDB.showToast("Please enter a valid UserID of a user that has been loaded in your client.", {type:"error"});
@@ -380,6 +383,7 @@ class FriendNotifications {
 			BDFDB.toggleClass(avatar, "desktop", desktopon);
 			BDFDB.toggleClass(avatar, "disabled", disableon);
 			BDFDB.saveData(id, data, this, group);
+			this.SettingsUpdated = true;
 		}
 	}
 	
@@ -396,6 +400,7 @@ class FriendNotifications {
 			for (let id in data) data[id][config] = enable;
 			for (let avatar of settingspanel.querySelectorAll(`.settings-avatar[group="${group}"]`)) BDFDB.toggleClass(avatar, config, enable);
 			BDFDB.saveAllData(data, this, group);
+			this.SettingsUpdated = true;
 		}
 	}
 	
@@ -407,6 +412,7 @@ class FriendNotifications {
 			let data = BDFDB.loadData(id, this, group) || this.createDefaultConfig();
 			data[config] = checkbox.checked;
 			BDFDB.saveData(id, data, this, group);
+			this.SettingsUpdated = true;
 		}
 	}
 	
@@ -421,6 +427,7 @@ class FriendNotifications {
 				checkbox.checked = enable;
 				if (typeof checkbox.BDFDBupdateElement == "function") checkbox.BDFDBupdateElement();
 			}
+			this.SettingsUpdated = true;
 		}
 	}
 	
