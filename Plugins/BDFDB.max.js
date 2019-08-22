@@ -2808,9 +2808,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		var executeDelayedIfNotAppened = () => {
 			container.querySelectorAll('.BDFDB-tableheader').forEach(ele => {
 				var panel = BDFDB.getParentEle('.BDFDB-modal, .BDFDB-settings', ele);
+				var tableid = ele.getAttribute('table-id');
 				var text = ele.querySelector('.BDFDB-tableheadertext');
 				var columns = ele.querySelectorAll('.BDFDB-tableheadercolumn');
-				if (panel && text && columns.length) {
+				if (panel && tableid && text && columns.length) {
 					let maxwidth = 0;
 					for (let column of columns) {
 						let width = BDFDB.getRects(column).width;
@@ -2823,14 +2824,16 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					}
 					text.style.setProperty('flex', `0 0 ${556 - (columns.length * maxwidth)}px`, 'important');
 					columns[0].parentElement.style.setProperty('flex', `0 0 ${columns.length * maxwidth}px`, 'important');
-					panel['BDFDB-tableheader-maxwidth'] = maxwidth;
+					if (!BDFDB.isObject(panel['BDFDB-tableheader-maxwidth'])) panel['BDFDB-tableheader-maxwidth'] = {}
+					panel['BDFDB-tableheader-maxwidth'][tableid] = maxwidth;
 				}
 			});
 			container.querySelectorAll('.BDFDB-tablecheckbox').forEach(ele => {
 				var panel = BDFDB.getParentEle('.BDFDB-modal, .BDFDB-settings', ele);
-				if (panel && panel['BDFDB-tableheader-maxwidth']) {
+				var tableid = ele.getAttribute('table-id');
+				if (panel && tableid && BDFDB.isObject(panel['BDFDB-tableheader-maxwidth']) && panel['BDFDB-tableheader-maxwidth'][tableid]) {
 					var style = getComputedStyle(ele);
-					ele.style.setProperty('flex', ` 0 0 ${panel['BDFDB-tableheader-maxwidth'] - parseInt(style.marginLeft) - parseInt(style.marginRight)}px`, 'important');
+					ele.style.setProperty('flex', ` 0 0 ${panel['BDFDB-tableheader-maxwidth'][tableid] - parseInt(style.marginLeft) - parseInt(style.marginRight)}px`, 'important');
 				}
 			});
 		};
