@@ -410,11 +410,15 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			toasts = BDFDB.htmlToElement(`<div class="toasts bd-toasts" style="width:${width}px; left:${left}px; bottom:${bottom}px;"></div>`);
 			document.querySelector(BDFDB.dotCN.app).appendChild(toasts);
 		}
-		const {type = '', icon = true, timeout = 3000, html = false, selector = '', nopointer = false} = options;
+		const {type = '', icon = true, timeout = 3000, html = false, selector = '', nopointer = false, color = ''} = options;
 		var toast = BDFDB.htmlToElement(`<div class="toast bd-toast">${html === true ? text : BDFDB.encodeToHTML(text)}</div>`);
 		if (type) {
 			BDFDB.addClass(toast, 'toast-' + type);
 			if (icon) BDFDB.addClass(toast, 'icon');
+		}
+		else if (color) {
+			color = BDFDB.colorCONVERT(color, 'RGB');
+			if (color) toast.style.setProperty('background-color', color, 'important');
 		}
 		BDFDB.addClass(toast, selector);
 		toasts.appendChild(toast);
@@ -1736,6 +1740,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		status = typeof status == "string" ? status.toLowerCase() : null;
 		switch (status) {
 			case 'online': return '#43b581';
+			case 'mobile': return '#43b581';
 			case 'idle': return '#faa61a';
 			case 'dnd': return '#f04747';
 			case 'streaming': return '#593695';
