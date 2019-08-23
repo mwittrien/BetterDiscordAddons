@@ -119,12 +119,12 @@ class FriendNotifications {
 
 		this.defaults = {
 			configs: {
-				online: 			{value:true},
-				mobile: 			{value:true},
-				idle: 				{value:false},
-				dnd: 				{value:false},
-				streaming: 			{value:false},
-				offline: 			{value:true}
+				online: 			{value:true,	toasttext:"STATUS_ONLINE"},
+				mobile: 			{value:true,	toasttext:"STATUS_ONLINE_MOBILE"},
+				idle: 				{value:false,	toasttext:"STATUS_IDLE"},
+				dnd: 				{value:false,	toasttext:"STATUS_DND"},
+				streaming: 			{value:false,	toasttext:"STATUS_STREAMING"},
+				offline: 			{value:true,	toasttext:"STATUS_OFFLINE"}
 			},
 			settings: {
 				muteOnDND:			{value:false, 	description:"Do not notify me when I am DnD:"},
@@ -496,11 +496,11 @@ class FriendNotifications {
 				let user = this.UserUtils.getUser(id);
 				let status = this.getStatusWithMobile(id);
 				if (user && this.userStatusStore[id] != status && users[id][status]) {
-					this.timeLog.push({user, status, time: new Date()});
+					let EUdata = BDFDB.loadData(user.id, "EditUsers", "users") || {};
+					let string = `${BDFDB.encodeToHTML(EUdata.name || user.username)} changed status to '${BDFDB.LanguageStrings[this.defaults.configs[status].toasttext]}'`;
+					let avatar = EUdata.removeIcon ? "" : (EUdata.url ? EUdata.url : BDFDB.getUserAvatar(user.id));
+					this.timeLog.push({string, avatar, time: new Date()});
 					if (!(settings.muteOnDND && BDFDB.getUserStatus() == "dnd")) {
-						let EUdata = BDFDB.loadData(user.id, "EditUsers", "users") || {};
-						let string = `${BDFDB.encodeToHTML(EUdata.name || user.username)} is ${status}.`;
-						let avatar = EUdata.removeIcon ? "" : (EUdata.url ? EUdata.url : BDFDB.getUserAvatar(user.id));
 						let openChannel = () => {
 							if (settings.openOnClick) {
 								let DMid = this.ChannelUtils.getDMFromUserId(user.id)
@@ -537,11 +537,10 @@ class FriendNotifications {
 		let logs = this.timeLog.slice(0).reverse();
 		for (let log of logs) {
 			if (container.childElementCount) container.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.marginbottom4}"></div>`));
-			let data = BDFDB.loadData(log.user.id, "EditUsers", "users") || {};
 			let entry = BDFDB.htmlToElement(this.logEntryMarkup);
 			entry.querySelector(".log-time").innerText = `[${log.time.toLocaleTimeString()}]`;
-			entry.querySelector(".log-avatar").style.setProperty("background-image", `url(${data.removeIcon ? "" : (data.url ? data.url : BDFDB.getUserAvatar(log.user.id))})`);
-			entry.querySelector(".log-description").innerText = `${data.name || log.user.username} is ${log.status}.`;
+			entry.querySelector(".log-avatar").style.setProperty("background-image", `url(${log.avatar})`);
+			entry.querySelector(".log-description").innerText = log.string;
 			container.appendChild(entry)
 		}
 		BDFDB.appendModal(timeLogModal);
