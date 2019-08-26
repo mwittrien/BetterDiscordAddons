@@ -3,7 +3,7 @@
 class FriendNotifications {
 	getName () {return "FriendNotifications";}
 
-	getVersion () {return "1.2.3";}
+	getVersion () {return "1.2.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ class FriendNotifications {
 	initConstructor () {
 		this.changelog = {
 			"improved":[["New Settings Interface","Completely new settings interface to more easily customize your notifications"],["New Options","You can now observe users for any kind of status changes (online, mobile, idle, dnd, streaming, offline)"],["Merged FriendNotifications and StalkerNotifications","Since both of these plugins now work the same, I decided to merge them. FriendNotifications will be continued and StalkerNotifications will be disconntinued. You can find the old StalkerNotifications settings in the FriendNotifications settings. <i style='color:rgb(200, 100, 100); font-weight: 800;'>All old configurations of FriendNotifications and StalkerNotifications should have been merged</i>"]],
-			"fixed":[["Settings Bug","Fixed the bug where disabling/changing settings for users would not work, unless the plugin was restarted"]]
+			"fixed":[["Settings Bug","Fixed the bug where disabling/changing settings for users would not work, unless the plugin was restarted"],["Log Bug","Fixed the bug where the time log would display weirdly"]]
 		};
 		
 		this.patchModules = {
@@ -542,7 +542,7 @@ class FriendNotifications {
 			let entry = BDFDB.htmlToElement(this.logEntryMarkup);
 			entry.querySelector(".log-time").innerText = `[${log.time.toLocaleTimeString()}]`;
 			entry.querySelector(".log-avatar").style.setProperty("background-image", `url(${log.avatar})`);
-			entry.querySelector(".log-description").innerText = log.string;
+			entry.querySelector(".log-description").innerHTML = log.string;
 			container.appendChild(entry)
 		}
 		BDFDB.appendModal(timeLogModal);
