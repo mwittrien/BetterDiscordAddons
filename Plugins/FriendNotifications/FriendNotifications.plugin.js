@@ -497,7 +497,9 @@ class FriendNotifications {
 				let status = this.getStatusWithMobile(id);
 				if (user && this.userStatusStore[id] != status && users[id][status]) {
 					let EUdata = BDFDB.loadData(user.id, "EditUsers", "users") || {};
-					let string = `${BDFDB.encodeToHTML(EUdata.name || user.username)} changed status to '${BDFDB.LanguageStrings[this.defaults.configs[status].toasttext]}'`;
+					let toaststring = BDFDB.LanguageStrings[this.defaults.configs[status].toasttext];
+					let string = `${BDFDB.encodeToHTML(EUdata.name || user.username)} changed status to&nbsp;&nbsp;'<strong>${toaststring}</strong>'`;
+					let desktopstring = `${EUdata.name || user.username} changed status to '${toaststring}'`;
 					let avatar = EUdata.removeIcon ? "" : (EUdata.url ? EUdata.url : BDFDB.getUserAvatar(user.id));
 					this.timeLog.push({string, avatar, time: new Date()});
 					if (!(settings.muteOnDND && BDFDB.getUserStatus() == "dnd")) {
@@ -521,7 +523,7 @@ class FriendNotifications {
 						}
 						else {
 							let notificationsound = BDFDB.getData("desktop" + status, this, "notificationsounds");
-							BDFDB.showDesktopNotification(string, {icon:avatar, timeout:5000, click:openChannel, silent:notificationsound.mute, sound:notificationsound.song});
+							BDFDB.showDesktopNotification(desktopstring, {icon:avatar, timeout:5000, click:openChannel, silent:notificationsound.mute, sound:notificationsound.song});
 						}
 					}
 				}
