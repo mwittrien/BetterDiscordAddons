@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.5.1";}
+	getVersion () {return "3.5.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,8 +11,7 @@ class EditUsers {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["<span style='-webkit-background-clip: text; color: transparent; background-image: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%)'>Color Gradients</span>","You can now use color gradients to edit users"]],
-			"fixed":[["DM Groups","Now works properly in DM Groups"]]
+			"fixed":[["DM Header","Now works properly in DM Headers"]]
 		};
 		
 		this.labels = {}; 
@@ -707,7 +706,6 @@ class EditUsers {
 			if (username) {
 				let channel = this.ChannelUtils.getChannel(channel_id);
 				if (channel) {
-					return;
 					if (channel.type == 1) this.changeName(this.UserUtils.getUser(channel.recipients[0]), username);
 					else {
 						if (username.EditUsersChangeObserver && typeof username.EditUsersChangeObserver.disconnect == "function") username.EditUsersChangeObserver.disconnect();
