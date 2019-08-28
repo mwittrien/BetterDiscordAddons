@@ -4093,7 +4093,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		embedlowbackgroundopacity: ['Embed', 'lowBackgroundOpacity'],
 		embedmargin: ['Embed', 'embedMargin'],
 		embedmarginlarge: ['Embed', 'embedMarginLarge'],
-		embedmembeediumbackgroundopacity: ['Embed', 'mediumBackgroundOpacity'],
+		embedmediumbackgroundopacity: ['Embed', 'mediumBackgroundOpacity'],
 		embedpill: ['Embed', 'embedPill'],
 		embedprovider: ['Embed', 'embedProvider'],
 		embedproviderlink: ['Embed', 'embedProviderLink'],

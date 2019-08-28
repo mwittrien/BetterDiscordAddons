@@ -3,7 +3,7 @@
 class FriendNotifications {
 	getName () {return "FriendNotifications";}
 
-	getVersion () {return "1.2.5";}
+	getVersion () {return "1.2.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ class FriendNotifications {
 	initConstructor () {
 		this.changelog = {
 			"improved":[["Notification Message","You can now customize the message depending on the status"]],
-			"fixed":[["Settings Bug","Fixed the bug where disabling/changing settings for users would not work, unless the plugin was restarted"],["Log Bug","Fixed the bug where the time log would display weirdly"]]
+			"fixed":[["Mute Sound Bug","Fixed the bug where desktop notifications could not be muted"],["Settings Bug","Fixed the bug where disabling/changing settings for users would not work, unless the plugin was restarted"],["Log Bug","Fixed the bug where the time log would display weirdly"]]
 		};
 		
 		this.patchModules = {
@@ -223,10 +223,12 @@ class FriendNotifications {
 		BDFDB.addEventListener(this, settingspanel, "keyup", ".input-notificationstring", e => {this.saveNotificationString(e.currentTarget);});
 		BDFDB.addEventListener(this, settingspanel, "click", ".btn-savesong", e => {this.saveNotificationSound(e.currentTarget.parentElement.querySelector(BDFDB.dotCN.input));});
 		BDFDB.addEventListener(this, settingspanel, "click", ".mute-checkbox", e => {
-			let option = e.currentTarget.getAttribute("option");
-			let notificationsound = BDFDB.getData(option, this, "notificationsounds");
-			notificationsound.mute = e.currentTarget.checked;
-			BDFDB.saveData(option, notificationsound, this, "notificationsounds");
+			let config = e.currentTarget.getAttribute("config");
+			if (config) {
+				let notificationsound = BDFDB.getData(config, this, "notificationsounds");
+				notificationsound.mute = e.currentTarget.checked;
+				BDFDB.saveData(config, notificationsound, this, "notificationsounds");
+			}
 		});
 		BDFDB.addEventListener(this, settingspanel, "click", ".settings-avatar", e => {
 			this.changeNotificationType(e.currentTarget, false, !BDFDB.containsClass(e.currentTarget, "disabled", "desktop", false));
@@ -546,6 +548,7 @@ class FriendNotifications {
 						else {
 							let desktopstring = string.replace(/\$user/g, EUdata.name || user.username).replace(/\$status/g, libstring);
 							let notificationsound = notificationsounds["desktop" + status] || {};
+							console.log(notificationsound);
 							BDFDB.showDesktopNotification(desktopstring, {icon:avatar, timeout:5000, click:openChannel, silent:notificationsound.mute, sound:notificationsound.song});
 						}
 					}
