@@ -437,20 +437,20 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		return toast;
 	};
 
-	BDFDB.DesktopNotificationQueue = {queue:[], running:false};
+	var DesktopNotificationQueue = {queue:[], running:false};
 	BDFDB.showDesktopNotification = function (parsedcontent, parsedoptions = {}) {
 		var queue = () => {
-			BDFDB.DesktopNotificationQueue.queue.push({parsedcontent, parsedoptions});
+			DesktopNotificationQueue.queue.push({parsedcontent, parsedoptions});
 			runqueue();
 		};
 		var runqueue = () => {
-			if (!BDFDB.DesktopNotificationQueue.running) {
-				var notification = BDFDB.DesktopNotificationQueue.queue.shift();
+			if (!DesktopNotificationQueue.running) {
+				var notification = DesktopNotificationQueue.queue.shift();
 				if (notification) notify(notification.parsedcontent, notification.parsedoptions);
 			}
 		};
 		var notify = (content, options) => {
-			BDFDB.DesktopNotificationQueue.running = true;
+			DesktopNotificationQueue.running = true;
 			var muted = options.silent;
 			options.silent = options.silent || options.sound ? true : false;
 			var notification = new Notification(content, options);
@@ -468,7 +468,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			var close = () => {
 				audio.pause();
 				notification.close();
-				BDFDB.DesktopNotificationQueue.running = false;
+				DesktopNotificationQueue.running = false;
 				setTimeout(() => {runqueue();}, 1000);
 			};
 		};

@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.7.1";} 
+	getVersion () {return "1.7.2";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class GoogleTranslateOption {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["Classname","Classname fix"]]
+			"fixed":[["Translating/Untranslating Bug","Translating/Untranslating no longer breaks the features of native discord elements (clicking the username, spoilers, etc.)"]]
 		};
 		
 		this.labels = {};
@@ -164,6 +164,15 @@ class GoogleTranslateOption {
 				transform: translateY(-100%) !important;
 				border-radius: 3px 3px 0 0 !important;
 				margin-top: 1px !important;
+			}
+			${BDFDB.dotCN.message}.GTO-translated-message ${BDFDB.dotCN.messagemarkup} {
+				font-size: 0 !important;
+			}
+			${BDFDB.dotCN.message}.GTO-translated-message ${BDFDB.dotCN.messagemarkup} > .GTO-translation {
+				font-size: 0.9375rem !important;
+			}
+			${BDFDB.dotCN.message}.GTO-translated-message ${BDFDB.dotCN.messagemarkup} > :not(.GTO-translation)${BDFDB.notCN.messageheadercompact + BDFDB.notCN.messageedited} {
+				display: none !important;
 			}`;
 	}
 
@@ -250,7 +259,7 @@ class GoogleTranslateOption {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-			document.querySelectorAll(BDFDB.dotCN.message + ".translated").forEach(message => {
+			document.querySelectorAll(BDFDB.dotCN.message + ".GTO-translated-message").forEach(message => {
 				this.resetMessage(message);
 			});
 
@@ -277,7 +286,7 @@ class GoogleTranslateOption {
 			let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
 			if (!messagediv || pos == -1) return;
 			let pinentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:"MessagePinItem"}));
-			let messageTranslateContextEntry = BDFDB.htmlToElement(BDFDB.containsClass(messagediv, "translated") ? this.messageUntranslateContextEntryMarkup : this.messageTranslateContextEntryMarkup);
+			let messageTranslateContextEntry = BDFDB.htmlToElement(BDFDB.containsClass(messagediv, "GTO-translated-message") ? this.messageUntranslateContextEntryMarkup : this.messageTranslateContextEntryMarkup);
 			if (pinentry) pinentry.parentElement.insertBefore(messageTranslateContextEntry, pinentry.nextElementSibling);
 			else menu.insertBefore(messageTranslateContextEntry, menu.firstElementChild);
 			let translateitem = messageTranslateContextEntry.querySelector(".googletranslateoption-item");
@@ -402,7 +411,7 @@ class GoogleTranslateOption {
 		if (instance.props.message && instance.props.channel && instance._reactInternalFiber.memoizedProps.target && !wrapper.querySelector(".googletranslateoption-itembtn")) {
 			let {messagediv, pos} = this.getMessageAndPos(instance._reactInternalFiber.memoizedProps.target);
 			if (!messagediv || pos == -1) return;
-			let popoutTranslateEntry = BDFDB.htmlToElement(BDFDB.containsClass(messagediv, "translated") ? this.popoutUntranslateEntryMarkup : this.popoutTranslateEntryMarkup);
+			let popoutTranslateEntry = BDFDB.htmlToElement(BDFDB.containsClass(messagediv, "GTO-translated-message") ? this.popoutUntranslateEntryMarkup : this.popoutTranslateEntryMarkup);
 			wrapper.appendChild(popoutTranslateEntry);
 			popoutTranslateEntry.addEventListener("click", () => {
 				this.translateMessage(instance.props.message, instance._reactInternalFiber.memoizedProps.target, instance.props.channel);
@@ -422,23 +431,18 @@ class GoogleTranslateOption {
 		let {messagediv, pos} = this.getMessageAndPos(target);
 		if (!messagediv || pos == -1) return;
 		channel = channel ? channel : this.ChannelUtils.getChannel(message.channel_id);
-		if (!messagediv.querySelector(BDFDB.dotCN.messageedited + ".translated")) {
+		if (!messagediv.querySelector(BDFDB.dotCN.messageedited + ".GTO-translated")) {
 			var markup = messagediv.querySelector(BDFDB.dotCN.messagemarkup);
 			var fakemarkup = markup.cloneNode(true);
-			var oldhtml = markup.innerHTML;
-			let compactheader = fakemarkup.querySelector(BDFDB.dotCN.messageheadercompact);
-			if (compactheader) compactheader.remove();
+			BDFDB.removeEles(fakemarkup.querySelectorAll(BDFDB.dotCNC.messageheadercompact + BDFDB.dotCN.messageedited));
 			this.translateText(fakemarkup.innerHTML, "context", (translation, input, output) => {
 				if (translation) {
-					markup.GoogleTranslateOriginalHTML = oldhtml;
-					markup.innerHTML = (compactheader ? "<label></label>" : "") + translation.replace(/\n/g, "DevilBroBDFDBPlacerHolderN").replace(/\s/g, " ").replace(/DevilBroBDFDBPlacerHolderN/g, "\n").replace(/ *([<>]) */g, "$1");
-					let translatestamp = BDFDB.htmlToElement(`<time class="${BDFDB.disCN.messageedited} translated">(${this.labels.translated_watermark_text})</time>`);
-					translatestamp.addEventListener("mouseenter", () => {
-						BDFDB.createTooltip(`<div>From: ${input.name}</div><div>To: ${output.name}</div>`, translatestamp, {html:true, type:"top", selector:"translation-tooltip"});
+					let compactheader = markup.querySelector(BDFDB.dotCN.messageheadercompact);
+					markup.insertBefore(BDFDB.htmlToElement(`<label class="GTO-translation">${translation.replace(/\n/g, "BDFDB_GTO_PLACEHOLDER").replace(/\s/g, " ").replace(/BDFDB_GTO_PLACEHOLDER/g, "\n").replace(/ *([<>]) */g, "$1")}<time class="${BDFDB.disCN.messageedited} GTO-translated">(${this.labels.translated_watermark_text})</time></label>`), compactheader ? compactheader.nextSibling : markup.firstChild);
+					markup.querySelector(BDFDB.dotCN.messageedited + ".GTO-translated").addEventListener("mouseenter", e => {
+						BDFDB.createTooltip(`<div>From: ${input.name}</div><div>To: ${output.name}</div>`, e.currentTarget, {html:true, type:"top", selector:"translation-tooltip"});
 					});
-					markup.appendChild(translatestamp);
-					BDFDB.addClass(messagediv, "translated");
-					if (compactheader) markup.insertBefore(compactheader, markup.firstElementChild);
+					BDFDB.addClass(messagediv, "GTO-translated-message");
 				}
 			});
 		}
@@ -446,11 +450,8 @@ class GoogleTranslateOption {
 	}
 
 	resetMessage (messagediv) {
-		BDFDB.removeEles(messagediv.querySelector(BDFDB.dotCN.messageedited + ".translated"));
-		BDFDB.removeClass(messagediv, "translated");
-		let markup = messagediv.querySelector(BDFDB.dotCN.messagemarkup);
-		markup.innerHTML = markup.GoogleTranslateOriginalHTML;
-		delete markup.GoogleTranslateOriginalHTML;
+		BDFDB.removeEles(messagediv.querySelector(".GTO-translation"));
+		BDFDB.removeClass(messagediv, "GTO-translated-message");
 	}
 
 	translateText (text, type, callback) {
@@ -463,7 +464,7 @@ class GoogleTranslateOption {
 			}
 			callback(translation, input, output);
 		};
-		var translationError = (exceptions, input, output, toast) => {
+		var translationError = (exceptions, input, output, toast, test) => {
 			BDFDB.showToast("Could not translate message, you most likely got rate limited by Google for today due to too frequent usage of their Translate-API.", {type:"error",timeout:15000});
 			finishTranslation(null, exceptions, input, output, toast);
 		};
@@ -506,10 +507,10 @@ class GoogleTranslateOption {
 							finishTranslation(translation, exceptions, input, output, toast);
 						}
 						catch (err) {
-							translationError(exceptions, input, output, toast);
+							translationError(exceptions, input, output, toast, "a");
 						}
 					}
-					else translationError(exceptions, input, output, toast);
+					else translationError(exceptions, input, output, toast, "b");
 				});
 			}
 		}
