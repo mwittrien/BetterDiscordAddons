@@ -548,7 +548,6 @@ class FriendNotifications {
 						else {
 							let desktopstring = string.replace(/\$user/g, EUdata.name || user.username).replace(/\$status/g, libstring);
 							let notificationsound = notificationsounds["desktop" + status] || {};
-							console.log(notificationsound);
 							BDFDB.showDesktopNotification(desktopstring, {icon:avatar, timeout:5000, click:openChannel, silent:notificationsound.mute, sound:notificationsound.song});
 						}
 					}
