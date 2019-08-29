@@ -214,40 +214,41 @@
 .bd-pfbtn,
 .bda-settings-button,
 .btn-primary,
-.colorBrand-3pXr91:not(.lookFilled-1Gx00P) .spinnerItem-3GlVyU,
+.colorBrand-3pXr91:not([style*="background-color"]):not(.lookFilled-1Gx00P) .spinnerItem-3GlVyU,
 .platform-iik236.active-iLSdWQ .downloadButton-1bWXpg,
 .action-1lSjCi.create-3jownz .actionButton-2PeQbJ,
+.ui-button.brand.filled,
 .lookFilled-1Gx00P.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover,
-.lookFilled-1Gx00P.colorBrand-3pXr91 {
+.lookFilled-1Gx00P.colorBrand-3pXr91:not([style*="background-color"]) {
 	background: rgb(var(--vaccentcolor)) !important;
 }
 .searchSuggestion-2K8OBX:active,
 .searchSuggestion-2K8OBX:hover {
 	border-color: transparent !important;
 }
-.lookGhost-2Fn_0-.colorBrand-3pXr91 {
+.lookGhost-2Fn_0-.colorBrand-3pXr91:not([style*="background-color"]) {
 	color: rgb(var(--vaccentcolor)) !important;
 	background: rgba(var(--vaccentcolor),0.1) !important;
 }
-.lookOutlined-3sRXeN.colorBrand-3pXr91 {
+.lookOutlined-3sRXeN.colorBrand-3pXr91:not([style*="background-color"]) {
 	color: rgb(var(--vaccentcolor)) !important;
 	border-color: rgba(var(--vaccentcolor),0.7) !important;
 }
-.lookOutlined-3sRXeN.colorBrand-3pXr91:active,
-.lookOutlined-3sRXeN.colorBrand-3pXr91:hover {
+.lookOutlined-3sRXeN.colorBrand-3pXr91:not([style*="background-color"]):active,
+.lookOutlined-3sRXeN.colorBrand-3pXr91:not([style*="background-color"]):hover {
 	border-color: rgb(var(--vaccentcolor)) !important;
 }
-.lookOutlined-3sRXeN.colorBrand-3pXr91:active {
+.lookOutlined-3sRXeN.colorBrand-3pXr91:not([style*="background-color"]):active {
 	background: rgba(var(--vaccentcolor),0.1) !important;
 }
-.lookInverted-2D7oAl.colorBrand-3pXr91 {
+.lookInverted-2D7oAl.colorBrand-3pXr91:not([style*="background-color"]) {
 	color: rgb(var(--vaccentcolor)) !important;
 }
-.lookLink-9FtZy-.colorBrand-3pXr91 .contents-18-Yxp {
+.lookLink-9FtZy-.colorBrand-3pXr91:not([style*="background-color"]) .contents-18-Yxp {
 	color: rgb(var(--vaccentcolor)) !important;
 }
-.lookLink-9FtZy-.colorBrand-3pXr91:active .contents-18-Yxp, 
-.lookLink-9FtZy-.colorBrand-3pXr91:hover .contents-18-Yxp {
+.lookLink-9FtZy-.colorBrand-3pXr91:not([style*="background-color"]):active .contents-18-Yxp, 
+.lookLink-9FtZy-.colorBrand-3pXr91:not([style*="background-color"]):hover .contents-18-Yxp {
 	background-image: linear-gradient(0deg,transparent,transparent 1px,rgb(var(--vaccentcolor)) 0,rgb(var(--vaccentcolor)) 2px,transparent 0) !important;
 }
 .questionMark-CWEQZn:hover {
@@ -264,7 +265,8 @@
 .btn-primary:hover,
 .platform-iik236.active-iLSdWQ .downloadButton-1bWXpg:hover,
 .action-1lSjCi.create-3jownz:hover .actionButton-2PeQbJ,
-.lookFilled-1Gx00P.colorBrand-3pXr91:hover,
+.ui-button.brand.filled:hover,
+.lookFilled-1Gx00P.colorBrand-3pXr91:not([style*="background-color"]):hover,
 .lookFilled-1Gx00P.colorLink-35jkBc:hover {
 	background-image: linear-gradient(0deg,rgba(0,0,0,.1),rgba(0,0,0,.1)) !important;
 }
@@ -278,7 +280,8 @@
 .bda-settings-button:not(:disabled):active,
 .btn-primary:active,
 .platform-iik236.active-iLSdWQ .downloadButton-1bWXpg:active,
-.lookFilled-1Gx00P.colorBrand-3pXr91:active,
+.ui-button.brand.filled:active,
+.lookFilled-1Gx00P.colorBrand-3pXr91:not([style*="background-color"]):active,
 .lookFilled-1Gx00P.colorLink-35jkBc:active {
 	background-image: linear-gradient(0deg,rgba(0,0,0,.2),rgba(0,0,0,.2)) !important;
 }
