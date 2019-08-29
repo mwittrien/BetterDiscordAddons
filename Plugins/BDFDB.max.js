@@ -2591,7 +2591,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.htmlToElement = function (html) {
 		if (!html || !html.trim()) return null;
 		let template = document.createElement('template');
-		template.innerHTML = html.replace(/\t|\n|\r/g, '');
+		template.innerHTML = html;
 		if (template.content.childElementCount == 1) return template.content.firstElementChild;
 		else {
 			var wrapper = document.createElement("span");
