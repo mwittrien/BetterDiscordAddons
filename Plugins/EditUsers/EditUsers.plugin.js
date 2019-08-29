@@ -22,6 +22,7 @@ class EditUsers {
 			"UserPopout":["componentDidMount","componentDidUpdate"],
 			"UserProfile":["componentDidMount","componentDidUpdate"],
 			"FriendRow":"componentDidMount",
+			"VoiceUser":["componentDidMount","componentDidUpdate"],
 			"Account":["componentDidMount","componentDidUpdate"],
 			"AuditLog":"componentDidMount",
 			"BannedCard":"componentDidMount",
@@ -565,6 +566,14 @@ class EditUsers {
 			this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
 		}
 	}
+	
+	processVoiceUser (instance, wrapper) {
+		let user = instance.props.user;
+		if (user && wrapper.className) {
+			this.changeVoiceUser(user, wrapper.querySelector(BDFDB.dotCN.voicename), instance.props.speaking);
+			this.changeAvatar(user, this.getAvatarDiv(wrapper));
+		}
+	}
 
 	processAccount (instance, wrapper) {
 		let user = BDFDB.getReactValue(instance, "_reactInternalFiber.child.stateNode.props.currentUser");
@@ -735,13 +744,6 @@ class EditUsers {
 				var props = render().props;
 				if (props && props.user) this.changeMention(props.user, wrapper);
 				else if (props && props.userId) this.changeMention(this.UserUtils.getUser(props.userId), wrapper);
-			}
-		}
-		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.voiceuser) > -1) {
-			let user = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.user");
-			if (user) {
-				this.changeVoiceUser(user, wrapper.querySelector(BDFDB.dotCN.voicename));
-				this.changeAvatar(user, this.getAvatarDiv(wrapper));
 			}
 		}
 		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.quickswitchresult) > -1) {
@@ -1069,7 +1071,7 @@ class EditUsers {
 		}
 	}
 
-	changeVoiceUser (info, username) {
+	changeVoiceUser (info, username, speaking) {
 		if (!info || !username || !username.parentElement) return;
 		if (username.EditUsersChangeObserver && typeof username.EditUsersChangeObserver.disconnect == "function") username.EditUsersChangeObserver.disconnect();
 		username.removeEventListener("mouseover", username.mouseoverListenerEditUsers);
@@ -1092,7 +1094,7 @@ class EditUsers {
 				username.parentElement.parentElement.addEventListener("mouseout", username.mouseoutListenerEditUsers);
 				username.EditUsersChangeObserver = new MutationObserver((changes, _) => {
 					username.EditUsersChangeObserver.disconnect();
-					this.changeVoiceUser(info, username);
+					this.changeVoiceUser(info, username, speaking);
 				});
 				username.EditUsersChangeObserver.observe(username, {attributes:true});
 			}
@@ -1100,11 +1102,11 @@ class EditUsers {
 			function colorDefault() {
 				if (BDFDB.isObject(data.color1)) {
 					username.style.removeProperty("color");
-					BDFDB.setInnerText(username, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(!BDFDB.containsClass(username, BDFDB.disCN.voicenamespeaking) ? BDFDB.colorCHANGE(data.color1, -50) : data.color1)} !important;">${BDFDB.encodeToHTML(data.name || member.nick || info.username)}</span>`));
+					BDFDB.setInnerText(username, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(!speaking ? BDFDB.colorCHANGE(data.color1, -50) : data.color1)} !important;">${BDFDB.encodeToHTML(data.name || member.nick || info.username)}</span>`));
 				}
 				else {
 					var color1 = data.color1 || (BDFDB.isPluginEnabled("BetterRoleColors") ? member.colorString : "");
-					username.style.setProperty("color", !BDFDB.containsClass(username, BDFDB.disCN.voicenamespeaking) ? BDFDB.colorCHANGE(color1, -50, "RGB") : BDFDB.colorCONVERT(color1, "RGB"), "important");
+					username.style.setProperty("color", !speaking ? BDFDB.colorCHANGE(color1, -50, "RGB") : BDFDB.colorCONVERT(color1, "RGB"), "important");
 					BDFDB.setInnerText(username, data.name || member.nick || info.username);
 				}
 			}
@@ -1132,13 +1134,21 @@ class EditUsers {
 
 	getUserData (id, wrapper) {
 		let data = BDFDB.loadData(id, this, "users");
-		if (!data) return {};
+		if (!data) {
+			delete wrapper.EditUsersCachedDataState;
+			return {};
+		}
+		else if (wrapper.EditUsersCachedDataState) {
+			return data;
+		}
+		
 		let allenabled = true, settings = BDFDB.getAllData(this, "settings");
 		for (let i in settings) if (!settings[i]) {
 			allenabled = false;
 			break;
 		}
 		if (allenabled) return data;
+		
 		let key = null;
 		if (!BDFDB.containsClass(wrapper, BDFDB.disCN.mention) && BDFDB.getParentEle(BDFDB.dotCN.messagegroup, wrapper)) key = "changeInChatWindow";
 		else if (BDFDB.containsClass(wrapper, BDFDB.disCN.mention)) key = "changeInMentions";
@@ -1161,8 +1171,14 @@ class EditUsers {
 		else if (BDFDB.getParentEle(BDFDB.dotCN.searchpopout, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.searchpopoutdmaddpopout, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.quickswitcher, wrapper)) key = "changeInSearchPopout";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.accountinfo, wrapper)) key = "changeInUserAccount";
 		else if (wrapper.parentElement == document.head) key = "changeInAppTitle";
-
-		return !key || settings[key] ? data : {};
+		
+		if (!key || settings[key]) {
+			wrapper.EditUsersCachedDataState = true;
+			return data;
+		}
+		else {
+			return {};
+		}
 	}
 
 	addAutoCompleteMenu (textarea, channel) {
