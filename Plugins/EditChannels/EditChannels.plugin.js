@@ -3,7 +3,7 @@
 class EditChannels {
 	getName () {return "EditChannels";}
 
-	getVersion () {return "3.9.9";}
+	getVersion () {return "4.0.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditChannels {
 
 	initConstructor () {
 		this.changelog = {
-			"improved":[["<span style='-webkit-background-clip: text; color: transparent; background-image: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%)'>Color Gradients</span>","You can now use color gradients to edit channels"]]
+			"fixed":[["EditUsers bug","Fixed a bug that occured when EditUsers is enabled"]]
 		};
 		
 		this.labels = {};
@@ -401,9 +401,12 @@ class EditChannels {
 					else {
 						if (channel.type == 1) channel = this.UserUtils.getUser(channel.recipients[0]) || channel;
 						if (channelname.EditChannelsChangeObserver && typeof channelname.EditChannelsChangeObserver.disconnect == "function") channelname.EditChannelsChangeObserver.disconnect();
-						channelname.style.removeProperty("color");
-						channelname.style.removeProperty("background");
-						BDFDB.setInnerText(channelname, channel.name || channel.username);
+						if (BDFDB.isPluginEnabled("EditUsers")) bdplugins.EditUsers.plugin.changeName(channel, channelname);
+						else {
+							channelname.style.removeProperty("color");
+							channelname.style.removeProperty("background");
+							BDFDB.setInnerText(channelname, channel.name || channel.username);
+						}
 					}
 				}
 			}

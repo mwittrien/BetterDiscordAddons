@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.5.2";}
+	getVersion () {return "3.5.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditUsers {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["DM Header","Now works properly in DM Headers"]]
+			"fixed":[["EditChannels bug","Fixed a bug that occured when EditChannels is enabled"]]
 		};
 		
 		this.labels = {}; 
@@ -711,16 +711,19 @@ class EditUsers {
 	processHeaderBar (instance, wrapper) {
 		let channel_id = BDFDB.getReactValue(instance, "props.channelId") || BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.channelId");
 		if (channel_id) {
-			let username = wrapper.querySelector(BDFDB.dotCN.channelheaderheaderbartitle);
-			if (username) {
+			let channelname = wrapper.querySelector(BDFDB.dotCN.channelheaderheaderbartitle);
+			if (channelname) {
 				let channel = this.ChannelUtils.getChannel(channel_id);
 				if (channel) {
-					if (channel.type == 1) this.changeName(this.UserUtils.getUser(channel.recipients[0]), username);
+					if (channel.type == 1) this.changeName(this.UserUtils.getUser(channel.recipients[0]), channelname);
 					else {
-						if (username.EditUsersChangeObserver && typeof username.EditUsersChangeObserver.disconnect == "function") username.EditUsersChangeObserver.disconnect();
-						username.style.removeProperty("color");
-						username.style.removeProperty("background");
-						BDFDB.setInnerText(username, channel.name);
+						if (channelname.EditUsersChangeObserver && typeof channelname.EditUsersChangeObserver.disconnect == "function") channelname.EditUsersChangeObserver.disconnect();
+						if (BDFDB.isPluginEnabled("EditChannels")) bdplugins.EditChannels.plugin.changeChannel(channel, channelname);
+						else {
+							channelname.style.removeProperty("color");
+							channelname.style.removeProperty("background");
+							BDFDB.setInnerText(channelname, channel.name);
+						}
 					}
 				}
 			}
