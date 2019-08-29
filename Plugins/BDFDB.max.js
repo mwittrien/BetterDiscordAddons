@@ -2591,7 +2591,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.htmlToElement = function (html) {
 		if (!html || !html.trim()) return null;
 		let template = document.createElement('template');
-		template.innerHTML = html;
+		template.innerHTML = html.replace(/>[\t\r\n]+</g, "><");
 		if (template.content.childElementCount == 1) return template.content.firstElementChild;
 		else {
 			var wrapper = document.createElement("span");
@@ -2954,7 +2954,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (!BDFDB.appendModal.modals) return;
 		
 		var modal = BDFDB.containsClass(modalwrapper, BDFDB.disCN.modal) ? modalwrapper : modalwrapper.querySelector(BDFDB.dotCN.modal);
-		var backdrop = modal ? modal.previousSibling : null;
+		var backdrop = modal ? modal.previousElementSibling : null;
 		
 		var modalOpacity = new LibraryModules.Animations.Value(0);
 		modalOpacity
