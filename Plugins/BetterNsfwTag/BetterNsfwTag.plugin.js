@@ -3,17 +3,13 @@
 class BetterNsfwTag {
 	getName () {return "BetterNsfwTag";}
 
-	getVersion () {return "1.1.9";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Adds a more noticeable tag to NSFW channels.";}
 
 	initConstructor () {
-		this.changelog = {
-			"improved":[["Tag Width","Now forces a min-width to avoid the tag of being cut off on long channel names"]]
-		};
-		
 		this.patchModules = {
 			"ChannelItem":"componentDidMount"
 		};
@@ -79,7 +75,7 @@ class BetterNsfwTag {
 	processChannelItem (instance, wrapper) {
 		if (instance.props && instance.props.channel && instance.props.channel.nsfw) {
 			let channelname = wrapper.querySelector(BDFDB.dotCN.channelname);
-			if (channelname) channelname.parentElement.insertBefore(BDFDB.htmlToElement(`<span class="NSFW-tag ${BDFDB.disCNS.bottag + BDFDB.disCNS.bottagregular + BDFDB.disCN.bottagnametag}" style="background-color: rgb(241, 71, 71) !important; color: white !important; top: 0px; min-width: 28px;">NSFW</span>`), channelname.nextElementSibling);
+			if (channelname) channelname.parentElement.insertBefore(BDFDB.htmlToElement(`<span class="NSFW-tag ${BDFDB.disCNS.bottag + BDFDB.disCNS.bottagregular + BDFDB.disCN.bottagnametag}" style="background-color: rgb(241, 71, 71); color: white; top: 0px; min-width: 28px;">NSFW</span>`), channelname.nextElementSibling);
 		}
 	}
 }
