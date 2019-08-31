@@ -375,7 +375,7 @@ class JoinedAtDate {
 				};
 			case "zh-TW":	//chinese (traditional)
 				return {
-					joinedat_text:				"加入了 {{time}}"
+					joinedat_text:				"加入於 {{time}}"
 				};
 			case "ko":		//korean
 				return {
