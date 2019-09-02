@@ -322,7 +322,7 @@ class JoinedAtDate {
 					joinedat_text:				"Rejoint le {{time}}"
 				};
 			case "it":		//italian
-加入於				return {
+				return {
 					joinedat_text:				"Iscritto il {{time}}"
 				};
 			case "nl":		//dutch
