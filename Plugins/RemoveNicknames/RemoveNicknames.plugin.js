@@ -3,7 +3,7 @@
 class RemoveNicknames {
 	getName () {return "RemoveNicknames";}
 
-	getVersion () {return "1.2.4";}
+	getVersion () {return "1.2.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class RemoveNicknames {
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["DM Groups","Now works properly in DM Groups"]]
+			"added":[["Bot Nicknames","Added an option that allows you to keep the nicknames of bots"]]
 		};
 		
 		this.patchModules = {
@@ -24,9 +24,10 @@ class RemoveNicknames {
 
 		this.defaults = {
 			settings: {
-				replaceOwn:		{value:false, 	description:"Replace your own name:"},
-				addNickname:    {value:false, 	description:"Add nickname as parentheses:"},
-				swapPositions:	{value:false, 	description:"Swap the position of username and nickname:"}
+				replaceOwn:			{value:false, 	description:"Replace your own name:"},
+				replaceBots:		{value:true, 	description:"Replace the nickname of bots:"},
+				addNickname:		{value:false, 	description:"Add nickname as parentheses:"},
+				swapPositions:		{value:false, 	description:"Swap the position of username and nickname:"}
 			}
 		};
 	}
@@ -116,16 +117,6 @@ class RemoveNicknames {
 
 	// begin of own functions
 
-	getNewName (info) {
-		if (!info) return null;
-		let settings = BDFDB.getAllData(this, "settings");
-		let member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {};
-		let EditUsersData = (BDFDB.isPluginEnabled("EditUsers") ? BDFDB.loadData(info.id, "EditUsers", "users") : null) || {};
-		if (this.reseting || !member.nick || info.id == BDFDB.myData.id && !settings.replaceOwn) return EditUsersData.name || member.nick || info.username;
-		var username = EditUsersData.name || info.username;
-		return settings.addNickname ? (settings.swapPositions ? (member.nick + " (" + username + ")") : (username + " (" + member.nick + ")")) : username;
-	}
-
 	processMemberListItem (instance, wrapper) {
 		let user = BDFDB.getReactValue(instance, "props.user");
 		if (user) {
@@ -194,5 +185,15 @@ class RemoveNicknames {
 			delete this.SettingsUpdated;
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
+	}
+
+	getNewName (info) {
+		if (!info) return null;
+		let settings = BDFDB.getAllData(this, "settings");
+		let member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {};
+		let EditUsersData = (BDFDB.isPluginEnabled("EditUsers") ? BDFDB.loadData(info.id, "EditUsers", "users") : null) || {};
+		if (this.reseting || !member.nick || info.id == BDFDB.myData.id && !settings.replaceOwn || info.bot && !settings.replaceBots) return EditUsersData.name || member.nick || info.username;
+		var username = EditUsersData.name || info.username;
+		return settings.addNickname ? (settings.swapPositions ? (member.nick + " (" + username + ")") : (username + " (" + member.nick + ")")) : username;
 	}
 }

@@ -5,13 +5,13 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.8.0";} 
+	getVersion () {return "1.8.1";} 
 
 	getAuthor () {return "DevilBro";}
 
 	initConstructor () {
 		this.changelog = {
-			"fixed":[["New Structure","Fixed issues that will occur once the avatar/name changes from canary will hit stable/ptb"]]
+			"added":[["Update Option","Rightclicking/Using the 3-dot menu, will show an option to update a note in the notebook in case the original message changed"]]
 		};
 		
 		this.labels = {};
@@ -84,6 +84,14 @@ class PersonalPins {
 				</div>
 			</div>`;
 
+		this.messageUpdateContextEntryMarkup =
+			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
+				<div class="${BDFDB.disCN.contextmenuitem} personalpins-item personalpins-update-item">
+					<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_context_updateoption_text</div></span>
+					<div class="${BDFDB.disCN.contextmenuhint}"></div>
+				</div>
+			</div>`;
+
 		this.messageUnpinContextEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
 				<div class="${BDFDB.disCN.contextmenuitem} personalpins-item personalpins-unpin-item">
@@ -95,6 +103,11 @@ class PersonalPins {
 		this.popoutPinEntryMarkup = 
 			`<button role="menuitem" type="button" class="${BDFDB.disCNS.optionpopoutitem + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow} personalpins-itembtn personalpins-pin-itembtn">
 				<div class="${BDFDB.disCN.buttoncontents}">REPLACE_popout_pinoption_text</div>
+			</button>`;
+
+		this.popoutUpdateEntryMarkup = 
+			`<button role="menuitem" type="button" class="${BDFDB.disCNS.optionpopoutitem + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow} personalpins-itembtn personalpins-update-itembtn">
+				<div class="${BDFDB.disCN.buttoncontents}">REPLACE_popout_updateoption_text</div>
 			</button>`;
 
 		this.popoutUnpinEntryMarkup = 
@@ -245,7 +258,12 @@ class PersonalPins {
 
 	changeLanguageStrings () {
 		this.messagePinContextEntryMarkup = 	this.messagePinContextEntryMarkup.replace("REPLACE_context_pinoption_text", this.labels.context_pinoption_text);
+		this.messageUpdateContextEntryMarkup = 	this.messageUpdateContextEntryMarkup.replace("REPLACE_context_updateoption_text", this.labels.context_updateoption_text);
 		this.messageUnpinContextEntryMarkup = 	this.messageUnpinContextEntryMarkup.replace("REPLACE_context_unpinoption_text", this.labels.context_unpinoption_text);
+
+		this.popoutPinEntryMarkup = 			this.popoutPinEntryMarkup.replace("REPLACE_popout_pinoption_text", this.labels.popout_pinoption_text);
+		this.popoutUpdateEntryMarkup = 			this.popoutUpdateEntryMarkup.replace("REPLACE_popout_updateoption_text", this.labels.context_updateoption_text);
+		this.popoutUnpinEntryMarkup = 			this.popoutUnpinEntryMarkup.replace("REPLACE_popout_unpinoption_text", this.labels.context_unpinoption_text);
 
 		this.notesPopoutMarkup = 				this.notesPopoutMarkup.replace("REPLACE_popout_note_text", this.labels.popout_note_text);
 		this.notesPopoutMarkup = 				this.notesPopoutMarkup.replace("REPLACE_popout_channel_text", this.labels.popout_channel_text);
@@ -259,24 +277,36 @@ class PersonalPins {
 
 		this.sortPopoutMarkup = 				this.sortPopoutMarkup.replace("REPLACE_popout_messagesort_text", this.labels.popout_messagesort_text);
 		this.sortPopoutMarkup = 				this.sortPopoutMarkup.replace("REPLACE_popout_datesort_text", this.labels.popout_datesort_text);
-
-		this.popoutPinEntryMarkup = 			this.popoutPinEntryMarkup.replace("REPLACE_popout_pinoption_text", this.labels.popout_pinoption_text);
-		this.popoutUnpinEntryMarkup = 			this.popoutUnpinEntryMarkup.replace("REPLACE_popout_unpinoption_text", this.labels.context_unpinoption_text);
 	}
 
 	onMessageContextMenu (instance, menu) {
 		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(".personalpins-item")) {
+			let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
+			if (!messagediv || pos == -1) return;
 			let pinentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:"MessagePinItem"}));
-			let messagePinContextEntry = BDFDB.htmlToElement(this.getNoteData(instance.props.message, instance.props.target, instance.props.channel) ? this.messageUnpinContextEntryMarkup : this.messagePinContextEntryMarkup);
-			if (pinentry) pinentry.parentElement.insertBefore(messagePinContextEntry, pinentry.nextElementSibling);
-			else menu.insertBefore(messagePinContextEntry, menu.firstElementChild);
-			let pinitem = messagePinContextEntry.querySelector(".personalpins-item");
-			pinitem.addEventListener("click", () => {
+			let note = this.getNoteData(instance.props.message, instance.props.target, instance.props.channel);
+			let messagePinUnpinContextEntry = BDFDB.htmlToElement(note ? this.messageUnpinContextEntryMarkup : this.messagePinContextEntryMarkup);
+			if (pinentry) pinentry.parentElement.insertBefore(messagePinUnpinContextEntry, pinentry.nextElementSibling);
+			else menu.insertBefore(messagePinUnpinContextEntry, menu.firstElementChild);
+			messagePinUnpinContextEntry.firstElementChild.addEventListener("click", () => {
 				BDFDB.closeContextMenu(menu);
 				this.addMessageToNotes(instance.props.message, instance.props.target, instance.props.channel);
 			});
 			if (BDFDB.isPluginEnabled("MessageUtilities")) {
-				BDFDB.setContextHint(pinitem, window.bdplugins.MessageUtilities.plugin.getActiveShortcutString("__Note_Message"));
+				BDFDB.setContextHint(messagePinUnpinContextEntry.firstElementChild, window.bdplugins.MessageUtilities.plugin.getActiveShortcutString("__Note_Message"));
+			}
+			if (note) {
+				let newmarkup = this.getMarkup(messagediv).innerHTML;
+				let newaccessory = messagediv.querySelector(BDFDB.dotCN.messageaccessory).innerHTML;
+				if (note.markup != newmarkup || note.accessory != newaccessory) {
+					let messageUpdateContextEntry = BDFDB.htmlToElement(this.messageUpdateContextEntryMarkup);
+					if (pinentry) pinentry.parentElement.insertBefore(messageUpdateContextEntry, pinentry.nextElementSibling);
+					else menu.insertBefore(messageUpdateContextEntry, menu.firstElementChild);
+					messageUpdateContextEntry.firstElementChild.addEventListener("click", () => {
+						BDFDB.closeContextMenu(menu);
+						this.updateNoteData(note, newmarkup, newaccessory);
+					});
+				}	
 			}
 		}
 	}
@@ -315,9 +345,22 @@ class PersonalPins {
 		if (instance.props.message && instance.props.channel && instance._reactInternalFiber.memoizedProps.target && !wrapper.querySelector(".personalpins-itembtn")) {
 			let {messagediv, pos} = this.getMessageAndPos(instance._reactInternalFiber.memoizedProps.target);
 			if (!messagediv || pos == -1) return;
-			let popoutUnpinEntry = BDFDB.htmlToElement(this.getNoteData(instance.props.message, instance._reactInternalFiber.memoizedProps.target, instance.props.channel) ? this.popoutUnpinEntryMarkup : this.popoutPinEntryMarkup);
-			wrapper.appendChild(popoutUnpinEntry);
-			popoutUnpinEntry.addEventListener("click", () => {
+			let note = this.getNoteData(instance.props.message, instance._reactInternalFiber.memoizedProps.target, instance.props.channel);
+			if (note) {
+				let newmarkup = this.getMarkup(messagediv).innerHTML;
+				let newaccessory = messagediv.querySelector(BDFDB.dotCN.messageaccessory).innerHTML;
+				if (note.markup != newmarkup || note.accessory != newaccessory) {
+					let popoutUpdateEntry = BDFDB.htmlToElement(this.popoutUpdateEntryMarkup);
+					wrapper.appendChild(popoutUpdateEntry);
+					popoutUpdateEntry.addEventListener("click", () => {
+						this.updateNoteData(note, newmarkup, newaccessory);
+						instance.props.onClose();
+					});
+				}	
+			}
+			let popoutPinUnpinEntry = BDFDB.htmlToElement(note ? this.popoutUnpinEntryMarkup : this.popoutPinEntryMarkup);
+			wrapper.appendChild(popoutPinUnpinEntry);
+			popoutPinUnpinEntry.addEventListener("click", () => {
 				this.addMessageToNotes(instance.props.message, instance._reactInternalFiber.memoizedProps.target, instance.props.channel);
 				instance.props.onClose();
 			});
@@ -332,7 +375,7 @@ class PersonalPins {
 		notespopout.querySelector(BDFDB.dotCN.popoutheader).firstElementChild.appendChild(BDFDB.createSearchBar("small"));
 		container.appendChild(notespopout);
 		BDFDB.initElements(notespopout, this);
-		let buttonrects = BDFDB.getRects(button); 
+		let buttonrects = BDFDB.getRects(button);
 		notespopout.style.setProperty("left", buttonrects.left + buttonrects.width/2 + "px");
 		notespopout.style.setProperty("top", buttonrects.top + buttonrects.height + "px")
 		notespopout.querySelectorAll(BDFDB.dotCN.tabbarheaderitem).forEach(tab => {tab.addEventListener("click", () => {
@@ -534,8 +577,6 @@ class PersonalPins {
 					channelname = channelname + this.UserUtils.getUser(dmuser_id).username;
 				}
 			}
-			let markup = messagediv.querySelector(BDFDB.dotCN.messagemarkup).cloneNode(true);
-			markup.querySelectorAll(BDFDB.dotCN.messageheadercompact).forEach(h2 => {h2.remove();});
 			pins[guild_id][channel.id][message.id + "_" + pos] = BDFDB.sortObject({
 				"guild_id": guild_id,
 				"guild_name": guild.name ? guild.name : "Direct Messages",
@@ -551,13 +592,28 @@ class PersonalPins {
 				"author_name": message.author.username,
 				"avatar": BDFDB.getUserAvatar(message.author.id),
 				"content": message.content,
-				"markup": markup.innerHTML,
+				"markup": this.getMarkup(messagediv).innerHTML,
 				"accessory": messagediv.querySelector(BDFDB.dotCN.messageaccessory).innerHTML
 			});
 			BDFDB.saveAllData(pins, this, "pins");
 			BDFDB.showToast(this.labels.toast_noteadd_text, {type:"success"});
 		}
 		else this.removeNoteData(pins[guild_id][channel.id][message.id + "_" + pos]);
+	}
+	
+	updateNoteData (note, markup, accessory) {
+		let pins = BDFDB.loadAllData(this, "pins");
+		pins[note.guild_id][note.channel_id][note.id + "_" + note.pos].markup = markup;
+		pins[note.guild_id][note.channel_id][note.id + "_" + note.pos].accessory = accessory;
+		pins[note.guild_id][note.channel_id][note.id + "_" + note.pos] = BDFDB.sortObject(pins[note.guild_id][note.channel_id][note.id + "_" + note.pos]);
+		BDFDB.saveAllData(pins, this, "pins");
+		BDFDB.showToast(this.labels.toast_noteupdate_text, {type:"info"});
+	}
+	
+	getMarkup (messagediv) {
+		let markup = messagediv.querySelector(BDFDB.dotCN.messagemarkup).cloneNode(true);
+		markup.querySelectorAll(BDFDB.dotCN.messageheadercompact).forEach(h2 => {h2.remove();});
+		return markup;
 	}
 
 	getNoteData (message, target, channel) {
@@ -601,9 +657,11 @@ class PersonalPins {
 					popout_jump_text:				"Skok",
 					popout_copy_text:				"Kopija",
 					context_pinoption_text:			"Napominjemo poruku",
+					context_updateoption_text:		"Ažuriraj bilješku",
 					context_unpinoption_text:		"Uklonite bilješku",
 					popout_pinoption_text:			"Bilješka",
 					toast_noteadd_text:				"Poruka dodana u bilježnicu.",
+					toast_noteupdate_text:			"Poruka je ažurirana u bilježnici.",
 					toast_noteremove_text:			"Poruka uklonjena iz bilježnice."
 				};
 			case "da":		//danish
@@ -618,9 +676,11 @@ class PersonalPins {
 					popout_jump_text:				"Hop",
 					popout_copy_text:				"Kopi",
 					context_pinoption_text:			"Noter besked",
-					context_unpinoption_text:		"Fjern notatet",
+					context_updateoption_text:		"Opdater note",
+					context_unpinoption_text:		"Fjern note",
 					popout_pinoption_text:			"Noter",
 					toast_noteadd_text:				"Meddelelse tilføjet til notesbog.",
+					toast_noteupdate_text:			"Meddelelse opdateret i den notesbog.",
 					toast_noteremove_text:			"Meddelelse fjernet fra notesbog."
 				};
 			case "de":		//german
@@ -635,9 +695,11 @@ class PersonalPins {
 					popout_jump_text:				"Springen",
 					popout_copy_text:				"Kopieren",
 					context_pinoption_text:			"Nachricht notieren",
+					context_updateoption_text:		"Notiz aktualisieren",
 					context_unpinoption_text:		"Notiz entfernen",
 					popout_pinoption_text:			"Notieren",
 					toast_noteadd_text:				"Nachricht zum Notizbuch hinzugefügt.",
+					toast_noteupdate_text:			"Nachricht im Notizbuch aktualisiert.",
 					toast_noteremove_text:			"Nachricht aus dem Notizbuch entfernt."
 				};
 			case "es":		//spanish
@@ -652,9 +714,11 @@ class PersonalPins {
 					popout_jump_text:				"Ir a",
 					popout_copy_text:				"Copiar",
 					context_pinoption_text:			"Anotar mensaje",
-					context_unpinoption_text:		"Quitar la nota",
+					context_updateoption_text:		"Actualiza la nota",
+					context_unpinoption_text:		"Eliminar la nota",
 					popout_pinoption_text:			"Anotar",
 					toast_noteadd_text:				"Mensaje agregado al cuaderno.",
+					toast_noteupdate_text:			"Mensaje actualizado en el cuaderno.",
 					toast_noteremove_text:			"Mensaje eliminado del cuaderno."
 				};
 			case "fr":		//french
@@ -669,10 +733,12 @@ class PersonalPins {
 					popout_jump_text:				"Accéder",
 					popout_copy_text:				"Copier",
 					context_pinoption_text:			"Noter le message",
+					context_updateoption_text:		"Mettre à jour la note",
 					context_unpinoption_text:		"Enlevez la note",
 					popout_pinoption_text:			"Noter",
-					toast_noteadd_text:				"Message ajouté au bloc-notes.",
-					toast_noteremove_text:			"Message supprimé du bloc-notes."
+					toast_noteadd_text:				"Message ajouté au cahier.",
+					toast_noteupdate_text:			"Message mis à jour dans le cahier.",
+					toast_noteremove_text:			"Message supprimé du cahier."
 				};
 			case "it":		//italian
 				return {
@@ -686,9 +752,11 @@ class PersonalPins {
 					popout_jump_text:				"Vai",
 					popout_copy_text:				"Copiare",
 					context_pinoption_text:			"Annotare il messaggio",
+					context_updateoption_text:		"Aggiorna la nota",
 					context_unpinoption_text:		"Rimuovi la nota",
 					popout_pinoption_text:			"Annotare",
 					toast_noteadd_text:				"Messaggio aggiunto al blocco note.",
+					toast_noteupdate_text:			"Messaggio aggiornato nel blocco note.",
 					toast_noteremove_text:			"Messaggio rimosso dal blocco note."
 				};
 			case "nl":		//dutch
@@ -703,9 +771,11 @@ class PersonalPins {
 					popout_jump_text:				"Openen",
 					popout_copy_text:				"Kopiëren",
 					context_pinoption_text:			"Noteer bericht",
+					context_updateoption_text:		"Update de notitie",
 					context_unpinoption_text:		"Verwijder de notitie",
 					popout_pinoption_text:			"Noteer",
 					toast_noteadd_text:				"Bericht toegevoegd aan notitieblok.",
+					toast_noteupdate_text:			"Bericht bijgewerkt in het notitieblok.",
 					toast_noteremove_text:			"Bericht verwijderd van notitieblok."
 				};
 			case "no":		//norwegian
@@ -720,9 +790,11 @@ class PersonalPins {
 					popout_jump_text:				"Hoppe",
 					popout_copy_text:				"Kopiere",
 					context_pinoption_text:			"Notat ned meldingen",
+					context_updateoption_text:		"Oppdater notatet",
 					context_unpinoption_text:		"Fjern notatet",
 					popout_pinoption_text:			"Notere",
 					toast_noteadd_text:				"Melding lagt til i notisboken.",
+					toast_noteupdate_text:			"Melding oppdatert i notisbok.",
 					toast_noteremove_text:			"Melding fjernet fra notatboken."
 				};
 			case "pl":		//polish
@@ -737,9 +809,11 @@ class PersonalPins {
 					popout_jump_text:				"Skocz",
 					popout_copy_text:				"Kopiować",
 					context_pinoption_text:			"Notuj wiadomość",
+					context_updateoption_text:		"Zaktualizuj notatkę",
 					context_unpinoption_text:		"Usuń notatkę",
 					popout_pinoption_text:			"Notuj",
 					toast_noteadd_text:				"Wiadomość została dodana do notatnika.",
+					toast_noteupdate_text:			"Wiadomość zaktualizowana w notatniku.",
 					toast_noteremove_text:			"Wiadomość została usunięta z notatnika."
 				};
 			case "pt-BR":	//portuguese (brazil)
@@ -754,9 +828,11 @@ class PersonalPins {
 					popout_jump_text:				"Pular",
 					popout_copy_text:				"Copiar",
 					context_pinoption_text:			"Anote a mensagem",
+					context_updateoption_text:		"Atualize a nota",
 					context_unpinoption_text:		"Remova a nota",
 					popout_pinoption_text:			"Anotar",
 					toast_noteadd_text:				"Mensagem adicionada ao caderno.",
+					toast_noteupdate_text:			"Mensagem atualizada no caderno.",
 					toast_noteremove_text:			"Mensagem removida do caderno."
 				};
 			case "fi":		//finnish
@@ -771,9 +847,11 @@ class PersonalPins {
 					popout_jump_text:				"Siirry",
 					popout_copy_text:				"Kopioida",
 					context_pinoption_text:			"Huomaa viesti",
+					context_updateoption_text:		"Päivitä muistiinpano",
 					context_unpinoption_text:		"Poista muistiinpano",
 					popout_pinoption_text:			"Huomaa",
 					toast_noteadd_text:				"Viesti lisätty muistikirjaan.",
+					toast_noteupdate_text:			"Viesti päivitetty muistikirjaan.",
 					toast_noteremove_text:			"Viesti poistettiin muistikirjaan."
 				};
 			case "sv":		//swedish
@@ -788,9 +866,11 @@ class PersonalPins {
 					popout_jump_text:				"Hoppa",
 					popout_copy_text:				"Kopiera",
 					context_pinoption_text:			"Anteckna meddelande",
+					context_updateoption_text:		"Uppdatera noten",
 					context_unpinoption_text:		"Ta bort noten",
 					popout_pinoption_text:			"Anteckna",
 					toast_noteadd_text:				"Meddelandet läggs till i anteckningsboken.",
+					toast_noteupdate_text:			"Meddelandet uppdateras i anteckningsboken.",
 					toast_noteremove_text:			"Meddelande borttaget från anteckningsboken."
 				};
 			case "tr":		//turkish
@@ -805,9 +885,11 @@ class PersonalPins {
 					popout_jump_text:				"Git",
 					popout_copy_text:				"Kopyalamak",
 					context_pinoption_text:			"Mesajı not alın",
+					context_updateoption_text:		"Notu güncelle",
 					context_unpinoption_text:		"Notu kaldırmak",
 					popout_pinoption_text:			"Not almak",
 					toast_noteadd_text:				"Mesaj not defteri'ya eklendi.",
+					toast_noteupdate_text:			"Mesaj defterde güncellendi.",
 					toast_noteremove_text:			"Mesaj not defteri'dan kaldırıldı."
 				};
 			case "cs":		//czech
@@ -822,9 +904,11 @@ class PersonalPins {
 					popout_jump_text:				"Skok",
 					popout_copy_text:				"Kopírovat",
 					context_pinoption_text:			"Poznámka dolů zprávu",
+					context_updateoption_text:		"Aktualizujte poznámku",
 					context_unpinoption_text:		"Odstraňte poznámku",
 					popout_pinoption_text:			"Poznámka dolů",
 					toast_noteadd_text:				"Zpráva byla přidána do notebooku.",
+					toast_noteupdate_text:			"Zpráva byla v notebooku aktualizována.",
 					toast_noteremove_text:			"Zpráva byla odebrána z notebooku."
 				};
 			case "bg":		//bulgarian
@@ -839,10 +923,12 @@ class PersonalPins {
 					popout_jump_text:				"Направо",
 					popout_copy_text:				"Копирам",
 					context_pinoption_text:			"Oтбележете съобщението",
+					context_updateoption_text:		"Актуализирайте бележката",
 					context_unpinoption_text:		"Премахнете бележката",
 					popout_pinoption_text:			"Oтбележете",
 					toast_noteadd_text:				"Съобщението бе добавено към бележника.",
-					toast_noteremove_text:			"Съобщението е премахнато от преносимия компютър."
+					toast_noteupdate_text:			"Съобщението е актуализирано в бележника.",
+					toast_noteremove_text:			"Съобщението е премахнато от преносимия бележника."
 				};
 			case "ru":		//russian
 				return {
@@ -856,10 +942,12 @@ class PersonalPins {
 					popout_jump_text:				"Перейти",
 					popout_copy_text:				"Копировать",
 					context_pinoption_text:			"Записывать вниз",
+					context_updateoption_text:		"Обновить заметку",
 					context_unpinoption_text:		"Удалить заметку",
 					popout_pinoption_text:			"Записывать",
 					toast_noteadd_text:				"Сообщение добавлено в блокнот.",
-					toast_noteremove_text:			"Сообщение удалено из записной книжки."
+					toast_noteupdate_text:			"Сообщение обновлено в записной блокнот.",
+					toast_noteremove_text:			"Сообщение удалено из записной блокнот."
 				};
 			case "uk":		//ukrainian
 				return {
@@ -873,9 +961,11 @@ class PersonalPins {
 					popout_jump_text:				"Плиг",
 					popout_copy_text:				"Копіювати",
 					context_pinoption_text:			"Зверніть увагу на повідомлення",
+					context_updateoption_text:		"Оновіть нотатку",
 					context_unpinoption_text:		"Видаліть нотатку",
 					popout_pinoption_text:			"Занотуйте",
 					toast_noteadd_text:				"Повідомлення додається до ноутбука.",
+					toast_noteupdate_text:			"Повідомлення оновлено в ноутбука.",
 					toast_noteremove_text:			"Повідомлення видалено з ноутбука."
 				};
 			case "ja":		//japanese
@@ -890,9 +980,11 @@ class PersonalPins {
 					popout_jump_text:				"ジャンプ",
 					popout_copy_text:				"写す",
 					context_pinoption_text:			"ノートダウンメッセージ",
+					context_updateoption_text:		"メモを更新する",
 					context_unpinoption_text:		"メモを削除",
 					popout_pinoption_text:			"書き留める",
 					toast_noteadd_text:				"ノートブックにメッセージが追加されました.",
+					toast_noteupdate_text:			"ノートブックで更新されたメッセージ.",
 					toast_noteremove_text:			"ノートブックからメッセージが削除されました."
 				};
 			case "zh-TW":	//chinese (traditional)
@@ -907,9 +999,11 @@ class PersonalPins {
 					popout_jump_text:				"跳到",
 					popout_copy_text:				"複製",
 					context_pinoption_text:			"記下下來的消息",
+					context_updateoption_text:		"更新說明",
 					context_unpinoption_text:		"刪除備註",
 					popout_pinoption_text:			"記下",
 					toast_noteadd_text:				"消息添加到筆記本.",
+					toast_noteupdate_text:			"消息在筆記本中更新.",
 					toast_noteremove_text:			"消息從筆記本中刪除."
 				};
 			case "ko":		//korean
@@ -924,9 +1018,11 @@ class PersonalPins {
 					popout_jump_text:				"이동",
 					popout_copy_text:				"베끼다",
 					context_pinoption_text:			"메모 다운 메시지",
+					context_updateoption_text:		"메모 업데이트",
 					context_unpinoption_text:		"메모 삭제",
 					popout_pinoption_text:			"메모하다",
 					toast_noteadd_text:				"노트북에 메시지 추가됨.",
+					toast_noteupdate_text:			"노트북에서 메시지가 업데이트되었습니다.",
 					toast_noteremove_text:			"노트에서 메시지 삭제됨."
 				};
 			default:		//default: english
@@ -941,9 +1037,11 @@ class PersonalPins {
 					popout_jump_text:				"Jump",
 					popout_copy_text:				"Copy",
 					context_pinoption_text:			"Note Message",
+					context_updateoption_text:		"Update Note",
 					context_unpinoption_text:		"Remove Note",
 					popout_pinoption_text:			"Note",
 					toast_noteadd_text:				"Message added to notebook.",
+					toast_noteupdate_text:			"Message updated in the notebook.",
 					toast_noteremove_text:			"Message removed from notebook."
 				};
 		}
