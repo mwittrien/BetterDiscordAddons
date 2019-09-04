@@ -347,7 +347,7 @@ class RepoControls {
 				let path = global[`bd${type}s`] && global[`bd${type}s`][name] ? this.path.join(this.dirs[type], global[`bd${type}s`][name].filename) : null;
 				let stats = path ? this.fs.statSync(path) : null;
 				container.entries[name] = {
-					search:			(name + " " + " " + author + " " + description).toUpperCase(),
+					search:			(name + " " + author + " " + description).toUpperCase(),
 					origName: 		name,
 					name: 			(name).toUpperCase(),
 					version: 		(version).toUpperCase(),
