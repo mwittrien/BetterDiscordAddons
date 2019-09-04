@@ -110,6 +110,7 @@
 .modal-3c3bKg .slide-2pHaq5,
 .react-datepicker,
 .member-3W1lQa .content-OzHfo4,
+.carouselGradientEdge-2W94ou,
 .container-PNkimc,
 .container-1r6BKw,
 .titleBar-AC4pGV,
@@ -198,8 +199,8 @@
 .tierNoneContainer-3hhK3h,
 .tierHeaderLocked-1s2JJz,
 .tierHeaderLocked-1a2opw,
+.tierMarkerBackground-3q29am,
 .tierMarkerInProgress-24LMzJ,
-.barBackground-2EEiLw,
 .background-3xPPFc,
 .boostCount-UFqabz,
 .price-NUANu6,
@@ -328,6 +329,10 @@
 .guildsAdd-21_IdK {
 	border-color: transparent !important;
 	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
+}
+
+.barBackground-2EEiLw {
+	background: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 3%, rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 2)) 3%, rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 2)) 30.2%, rgba(0,0,0,0) 30.2%, rgba(0,0,0,0) 36.2%, rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 2)) 36.2%, rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 2)) 63.5%, rgba(0,0,0,0) 63.5%, rgba(0,0,0,0) 69.5%, rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 2)) 69.5%, rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 2)) 96.7%, rgba(0,0,0,0) 96.7%, rgba(0,0,0,0) 100%) !important;
 }
 
 .wrapper-21YSNc {
@@ -866,7 +871,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 }
 
 #app-mount .lookOutlined-3sRXeN {
-	background: none !important;
+	background: transparent !important;
 }
 #app-mount .headerButtonColor-G7_f-V,
 #app-mount .lookFilled-1Gx00P.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover,
@@ -2126,7 +2131,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	margin-bottom: 10px !important;
 }
 #ace_settingsmenu .ace_optionsMenuEntry:hover {
-	background: none !important;
+	background: transparent !important;
 }
 #ace_settingsmenu > *:last-child {
 	color: #f6f6f7 !important;
