@@ -9,15 +9,17 @@ class PluginRepo {
 
 	getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["Refetch","Fixed refetching occuring every x hours"]]
 		};
-		
+
 		this.patchModules = {
 			"V2C_List":"componentDidMount"
 		};
+	}
 
+	initConstructor () {
 		this.sortings = {
 			sort: {
 				name:			"Name",
@@ -337,7 +339,7 @@ class PluginRepo {
 			clearTimeout(this.loading.timeout);
 
 			BDFDB.removeEles(".pluginrepo-notice",".bd-pluginrepobutton",".pluginrepo-loadingicon",BDFDB.dotCN.app + " > .repo-loadingwrapper:empty");
-			
+
 			var frame = document.querySelector("iframe.discordSandbox");
 			if (frame) {
 				window.removeEventListener("message", frame.messageReceived);
@@ -437,7 +439,7 @@ class PluginRepo {
 		pluginRepoModal.querySelector("#input-hidedownloadable").checked = hiddenSettings.downloadable || options.showOnlyOutdated;
 		if (!BDFDB.isRestartNoMoreEnabled()) pluginRepoModal.querySelector("#RNMoption").remove();
 		else pluginRepoModal.querySelector("#input-rnmstart").checked = BDFDB.loadData("RNMstart", this, "RNMstart");
-		
+
 		if (options.forcedSort && this.sortings.sort[options.forcedSort]) {
 			var sortinput = pluginRepoModal.querySelector(".sort-filter " + BDFDB.dotCN.quickselectvalue);
 			orderinput.innerText = this.sortings.sort[options.forcedSort];
@@ -603,7 +605,7 @@ class PluginRepo {
 			let pos = entrypositions.indexOf(li.getAttribute("data-url"));
 			if (pos > -1) {
 				li.querySelectorAll(BDFDB.dotCNC._reponame + BDFDB.dotCNC._repoversion + BDFDB.dotCNC._repoauthor + BDFDB.dotCN._repodescription).forEach(ele => {
-					if (searchstring && searchstring.length > 2 || ele.querySelector(BDFDB.dotCN.highlight)) ele.innerHTML = BDFDB.highlightText(ele.innerText, searchstring); 
+					if (searchstring && searchstring.length > 2 || ele.querySelector(BDFDB.dotCN.highlight)) ele.innerHTML = BDFDB.highlightText(ele.innerText, searchstring);
 				});
 				li.style.setProperty("order", pos, "important");
 			}
@@ -794,7 +796,7 @@ class PluginRepo {
 					}
 				};
 				window.addEventListener("message", frame.messageReceived);
-				
+
 				document.body.appendChild(frame);
 			});
 		}
@@ -849,11 +851,11 @@ class PluginRepo {
 			}
 		}
 	}
-	
+
 	getLoadingTooltipText () {
 		return `Loading PluginRepo - [${Object.keys(this.loadedPlugins).length}/${Object.keys(this.grabbedPlugins).length}]`;
 	}
-	
+
 	getString (obj) {
 		var string = "";
 		if (typeof obj == "string") string = obj;

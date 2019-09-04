@@ -9,7 +9,7 @@ class WriteUpperCase {
 
 	getDescription () {return "Change input to uppercase.";}
 
-	initConstructor () {
+	constructor () {
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
 		};

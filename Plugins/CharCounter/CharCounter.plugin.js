@@ -9,17 +9,19 @@ class CharCounter {
 
 	getDescription () {return "Adds a charcounter in the chat.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["Nickname Modal","Fixed for the nickname modal"]]
 		};
-		
+
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
 			"Note":"componentDidMount",
 			"ChangeNickname":"componentDidMount"
 		};
+	}
 
+	initConstructor () {
 		this.maxLenghts = {
 			normal: 2000,
 			edit: 2000,
@@ -31,7 +33,7 @@ class CharCounter {
 		   
 		this.css = `
 			${BDFDB.dotCN.themelight} #charcounter {
-				color: #747f8d; 
+				color: #747f8d;
 				opacity: .7;
 			}
 			${BDFDB.dotCN.themedark} #charcounter {
@@ -47,7 +49,7 @@ class CharCounter {
 			#charcounter {
 				display: block;
 				position: absolute;
-				z-index: 1000; 
+				z-index: 1000;
 				pointer-events: none;
 				font-size: 15px;
 			}

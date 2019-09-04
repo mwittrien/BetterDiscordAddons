@@ -9,7 +9,7 @@ class ThemeSettings {
 
 	getDescription () {return "Allows you to change Theme Variables within BetterDiscord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page.";}
 
-	initConstructor () {
+	constructor () {
 		this.patchModules = {
 			"V2C_ThemeCard":"componentDidMount"
 		};

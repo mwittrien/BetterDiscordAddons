@@ -9,16 +9,18 @@ class BetterFriendCount {
 
 	getDescription () {return "Shows the amount of total and online friends and blocked users in the friends tab.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["New Structure","Fixed issues that will occur once the avatar/name changes from canary will hit stable/ptb"]]
 		};
-		
+
 		this.patchModules = {
 			"TabBar":"componentDidMount",
 			"FriendRow":["componentWillMount","componentWillUnmount"]
 		};
+	}
 
+	initConstructor () {
 		this.css = `
 			${BDFDB.dotCNS.friends + BDFDB.dotCNS.settingstabbar + BDFDB.dotCN.settingstabbarbadge}:not(.betterfriendcount-badge) {
 				display: none !important;
@@ -126,7 +128,7 @@ class BetterFriendCount {
 				break;
 		}
 	}
-	
+
 	createBadge (amount, type) {
 		return BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.settingstabbarbadge + BDFDB.disCN.guildbadgenumberbadge} betterfriendcount-badge ${type}" style="background-color: rgb(240, 71, 71); width: ${amount > 99 ? 30 : (amount > 9 ? 22 : 16)}px; padding-right: ${amount > 99 ? 0 : (amount > 9 ? 0 : 1)}px;">${amount}</div>`)
 	}

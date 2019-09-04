@@ -9,7 +9,7 @@ class BetterNsfwTag {
 
 	getDescription () {return "Adds a more noticeable tag to NSFW channels.";}
 
-	initConstructor () {
+	constructor () {
 		this.patchModules = {
 			"ChannelItem":"componentDidMount"
 		};

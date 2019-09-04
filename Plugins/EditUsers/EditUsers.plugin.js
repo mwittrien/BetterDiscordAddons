@@ -9,12 +9,12 @@ class EditUsers {
 
 	getDescription () {return "Allows you to change the icon, name, tag and color of users.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["EditChannels bug","Fixed a bug that occured when EditChannels is enabled"]]
 		};
-		
-		this.labels = {}; 
+
+		this.labels = {};
 
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
@@ -42,7 +42,9 @@ class EditUsers {
 			"MessageContent":["componentDidMount","componentDidUpdate"],
 			"StandardSidebarView":"componentWillUnmount"
 		};
+	}
 
+	initConstructor () {
 		this.avatarselector = BDFDB.dotCNC.guildicon + BDFDB.dotCNC.avatar + BDFDB.dotCNC.callavatarwrapper + BDFDB.dotCN.voiceavatarcontainer;
 
 		this.css = `
@@ -216,7 +218,7 @@ class EditUsers {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var settings = BDFDB.getAllData(this, "settings"); 
+		var settings = BDFDB.getAllData(this, "settings");
 		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Change User in:</h3></div><div class="BDFDB-settings-inner-list">`;
 		for (let key in settings) {
@@ -286,11 +288,11 @@ class EditUsers {
 			this.ChannelUtils = BDFDB.WebModules.findByProperties("getChannels","getChannel");
 			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
 			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
-			
+
 			var observer = new MutationObserver(() => {this.changeAppTitle();});
 			BDFDB.addObserver(this, document.head.querySelector("title"), {name:"appTitleObserver",instance:observer}, {childList:true});
 			this.changeAppTitle();
-			
+
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -500,7 +502,7 @@ class EditUsers {
 					if (autocompletemenu && (e.which == 9 || e.which == 13)) {
 						if (BDFDB.containsClass(autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement, "autocompleteEditUsersRow")) {
 							BDFDB.stopEvent(e);
-							this.swapWordWithMention(textarea); 
+							this.swapWordWithMention(textarea);
 						}
 					}
 					else if (autocompletemenu && (e.which == 38 || e.which == 40)) {
@@ -531,7 +533,7 @@ class EditUsers {
 			}
 		}
 	}
-	
+
 	processMemberListItem (instance, wrapper) {
 		let username = wrapper.querySelector(BDFDB.dotCN.memberusername);
 		if (username) {
@@ -566,7 +568,7 @@ class EditUsers {
 			this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
 		}
 	}
-	
+
 	processVoiceUser (instance, wrapper) {
 		let user = instance.props.user;
 		if (user && wrapper.className) {
@@ -611,7 +613,7 @@ class EditUsers {
 		if (instance.props && instance.props.user && instance.props.guild) {
 			let username = wrapper.querySelector(BDFDB.dotCN.guildsettingsbannedusername);
 			if (username) {
-				this.changeName3(instance.props.user, username); 
+				this.changeName3(instance.props.user, username);
 				this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
 			}
 		}
@@ -707,7 +709,7 @@ class EditUsers {
 	processHeaderBarContainer (instance, wrapper) {
 		this.processHeaderBar(instance, wrapper);
 	}
-	
+
 	processHeaderBar (instance, wrapper) {
 		let channel_id = BDFDB.getReactValue(instance, "props.channelId") || BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.channelId");
 		if (channel_id) {
@@ -792,7 +794,7 @@ class EditUsers {
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 	}
-	
+
 	changeAppTitle () {
 		let channel = this.ChannelUtils.getChannel(this.LastChannelStore.getChannelId());
 		let title = document.head.querySelector("title");
@@ -815,7 +817,7 @@ class EditUsers {
 			let isBRCenabled = BDFDB.isPluginEnabled("BetterRoleColors");
 			let usenick = !BDFDB.containsClass(username, BDFDB.disCN.userprofileusername) && !BDFDB.containsClass(username.parentElement, BDFDB.disCN.userprofilelistname, BDFDB.disCN.accountinfodetails, false) && member.nick;
 			let usemembercolor = !BDFDB.containsClass(username.parentElement, BDFDB.disCN.userprofilelistname) && (BDFDB.containsClass(username, BDFDB.disCN.memberusername, BDFDB.disCN.messageusername, false) || isBRCenabled);
-			
+
 			if (BDFDB.isObject(data.color1)) {
 				username.style.removeProperty("color");
 				BDFDB.setInnerText(username, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color1)} !important;">${BDFDB.encodeToHTML(data.name || (usenick ? member.nick : info.username))}</span>`));
@@ -824,9 +826,9 @@ class EditUsers {
 				username.style.setProperty("color", BDFDB.colorCONVERT(data.color1 || (usemembercolor ? member.colorString : null), "RGB"), "important");
 				BDFDB.setInnerText(username, data.name || (usenick ? member.nick : info.username));
 			}
-			
+
 			username.style.setProperty("background", BDFDB.isObject(data.color2) ? BDFDB.colorGRADIENT(data.color2) : BDFDB.colorCONVERT(data.color2, "RGB"), "important");
-			
+
 			if (data.name || data.color1 || data.color2) {
 				username.setAttribute("changed-by-editusers", true);
 				username.EditUsersChangeObserver = new MutationObserver((changes, _) => {
@@ -895,7 +897,7 @@ class EditUsers {
 			else username.removeAttribute("changed-by-editusers");
 		}
 	}
-	
+
 	changeBotTags (data, username, member) {
 		for (let tag of username.parentElement.parentElement.querySelectorAll(BDFDB.dotCN.bottag)) if (!BDFDB.containsClass(tag, "TRE-tag")) {
 			let isBRCenabled = BDFDB.isPluginEnabled("BetterRoleColors");
@@ -1032,13 +1034,13 @@ class EditUsers {
 		let data = this.getUserData(info.id, mention);
 		let member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {};
 		let name = "@" + (data.name ? data.name : (BDFDB.isPluginEnabled("RemoveNicknames") ? window.bdplugins.RemoveNicknames.plugin.getNewName(info) : member.nick || info.username));
-		
+
 		let isgradient = data.color1 && BDFDB.isObject(data.color1);
 		let datacolor = data.color1 || (BDFDB.isPluginEnabled("BetterRoleColors") ? member.colorString : null);
 		let color = isgradient ? BDFDB.colorGRADIENT(data.color1) : BDFDB.colorCONVERT(datacolor, "RGB");
 		let color0_1 = isgradient ? BDFDB.colorGRADIENT(BDFDB.colorSETALPHA(data.color1, 0.1, "RGB")) : BDFDB.colorSETALPHA(datacolor, 0.1, "RGB");
 		let color0_7 = isgradient ? BDFDB.colorGRADIENT(BDFDB.colorSETALPHA(data.color1, 0.7, "RGB")) : BDFDB.colorSETALPHA(datacolor, 0.7, "RGB");
-		
+
 		if (mention.EditUsersHovered) colorHover();
 		else colorDefault();
 		mention.mouseoverListenerEditUsers = () => {
@@ -1144,14 +1146,14 @@ class EditUsers {
 		else if (wrapper.EditUsersCachedDataState) {
 			return data;
 		}
-		
+
 		let allenabled = true, settings = BDFDB.getAllData(this, "settings");
 		for (let i in settings) if (!settings[i]) {
 			allenabled = false;
 			break;
 		}
 		if (allenabled) return data;
-		
+
 		let key = null;
 		if (!BDFDB.containsClass(wrapper, BDFDB.disCN.mention) && BDFDB.getParentEle(BDFDB.dotCN.messagegroup, wrapper)) key = "changeInChatWindow";
 		else if (BDFDB.containsClass(wrapper, BDFDB.disCN.mention)) key = "changeInMentions";
@@ -1174,7 +1176,7 @@ class EditUsers {
 		else if (BDFDB.getParentEle(BDFDB.dotCN.searchpopout, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.searchpopoutdmaddpopout, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.quickswitcher, wrapper)) key = "changeInSearchPopout";
 		else if (BDFDB.getParentEle(BDFDB.dotCN.accountinfo, wrapper)) key = "changeInUserAccount";
 		else if (wrapper.parentElement == document.head) key = "changeInAppTitle";
-		
+
 		if (!key || settings[key]) {
 			wrapper.EditUsersCachedDataState = true;
 			return data;
@@ -1240,7 +1242,7 @@ class EditUsers {
 		}
 		else {
 			let items = menu.querySelectorAll(BDFDB.dotCN.autocompleteselectable);
-			next = forward ? items[0] : items[items.length-1]; 
+			next = forward ? items[0] : items[items.length-1];
 		}
 		return next ? next : this.getNextSelection(menu, sibling, forward);
 	}
@@ -1254,7 +1256,7 @@ class EditUsers {
 			let discriminator = selected.querySelector(BDFDB.dotCN.autocompletedescriptiondiscriminator).textContent;
 			let userid = selected.getAttribute("userid");
 			BDFDB.removeEles(".autocompleteEditUsers", ".autocompleteEditUsersRow");
-			textarea.focus(); 
+			textarea.focus();
 			textarea.selectionStart = textarea.value.length - lastword.length;
 			textarea.selectionEnd = textarea.value.length;
 			document.execCommand("insertText", false, (username && discriminator ? ("@" + username + discriminator) : `<@!${userid}>`) + " ");

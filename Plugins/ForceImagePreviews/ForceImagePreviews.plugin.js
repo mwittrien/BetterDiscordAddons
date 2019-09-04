@@ -9,11 +9,11 @@ class ForceImagePreviews {
 
 	getDescription () {return "Forces embedded Image Previews, if Discord doesn't do it itself. Caution: Externals Images can contain malicious code and reveal your IP!";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["GIFs","Fixed the issue where gifs would be forced as a preview even tho the native preview was rendered"]]
 		};
-		
+
 		this.patchModules = {
 			"Message":"componentDidMount"
 		};
@@ -98,7 +98,7 @@ class ForceImagePreviews {
 	addItemToAccessory (previmage, links, accessory) {
 		let item = links.shift();
 		if (!item) return;
-		else if (item.embedded) this.addItemToAccessory(item, links, accessory); 
+		else if (item.embedded) this.addItemToAccessory(item, links, accessory);
 		else {
 			let itemsrc = this.parseSrc(item.src);
 			require("request")(itemsrc, (error, response, result) => {

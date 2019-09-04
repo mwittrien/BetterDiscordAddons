@@ -9,15 +9,17 @@ class ThemeRepo {
 
 	getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["Refetch","Fixed refetching occuring every x hours"]]
 		};
-		
+
 		this.patchModules = {
 			"V2C_List":"componentDidMount"
 		};
+	}
 
+	initConstructor () {
 		this.sortings = {
 			sort: {
 				name:			"Name",
@@ -39,7 +41,7 @@ class ThemeRepo {
 		this.cachedThemes = [];
 		this.grabbedThemes = [];
 		this.foundThemes = [];
-		this.loadedThemes = {}; 
+		this.loadedThemes = {};
 
 		this.updateInterval;
 
@@ -512,7 +514,7 @@ class ThemeRepo {
 
 		document.addEventListener("keyup", keyPressed);
 		window.addEventListener("message", messageReceived);
-		
+
 		var frame = BDFDB.htmlToElement(this.frameMarkup);
 		var themeRepoModal = BDFDB.htmlToElement(this.themeRepoModalMarkup);
 		var tabbar = themeRepoModal.querySelector(BDFDB.dotCN.tabbar);
@@ -531,7 +533,7 @@ class ThemeRepo {
 		themeRepoModal.querySelector("#input-hidedownloadable").checked = hiddenSettings.downloadable || options.showOnlyOutdated;
 		if (!BDFDB.isRestartNoMoreEnabled()) themeRepoModal.querySelector("#RNMoption").remove();
 		else themeRepoModal.querySelector("#input-rnmstart").checked = BDFDB.loadData("RNMstart", this, "RNMstart");
-		
+
 		if (options.forcedSort && this.sortings.sort[options.forcedSort]) {
 			var sortinput = themeRepoModal.querySelector(".sort-filter " + BDFDB.dotCN.quickselectvalue);
 			sortinput.innerText = this.sortings.sort[options.forcedSort];
@@ -763,7 +765,7 @@ class ThemeRepo {
 						NFLDreplace = NFLDreplace && NFLDreplace.length > 1 ? NFLDreplace[1] : null;
 					}
 					this.foundThemes = this.grabbedThemes.concat(ownlist);
-					
+
 					this.loading = {is:true, timeout:setTimeout(() => {
 						clearTimeout(this.loading.timeout);
 						if (this.started) {
@@ -884,7 +886,7 @@ class ThemeRepo {
 			});
 		}
 	}
-	
+
 	getLoadingTooltipText () {
 		return `Loading ThemeRepo - [${Object.keys(this.loadedThemes).length}/${Object.keys(this.grabbedThemes).length}]`;
 	}

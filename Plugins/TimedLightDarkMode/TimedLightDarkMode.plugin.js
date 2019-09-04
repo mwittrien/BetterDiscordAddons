@@ -9,16 +9,18 @@ class TimedLightDarkMode {
 
 	getDescription () {return "Allows you to automatically change light/dark mode depending on the time of day. Slider is added to the 'Appearance' settings.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"added":[["Current Time","Added a little indicator to show the current time on the slider"]],
 			"improved":[["Start up","Now properly checks the current time on start up and not only after the first check interval"]]
 		};
-		
+
 		this.patchModules = {
 			"RadioGroup":"componentDidMount"
 		};
-		
+	}
+
+	initConstructor () {
 		this.defaults = {
 			settings: {
 				running:	{value: true}
@@ -69,11 +71,11 @@ class TimedLightDarkMode {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			this.SettingsUtils = BDFDB.WebModules.findByProperties("updateRemoteSettings","updateLocalSettings");
-			
+
 			BDFDB.WebModules.forceAllUpdates(this);
-			
+
 			this.startInterval();
 		}
 		else {
@@ -84,16 +86,16 @@ class TimedLightDarkMode {
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			clearInterval(this.checkInterval);
-			
+
 			BDFDB.removeEles(".TLDM-settingsbox");
-			
+
 			BDFDB.unloadMessage(this);
 		}
 	}
 
-	
+
 	// begin of own functions
-	
+
 	processRadioGroup (instance, wrapper) {
 		if (instance.props && Array.isArray(instance.props.options) && instance.props.options[0] && instance.props.options[0].value == "light" && instance.props.options[1] && instance.props.options[1].value == "dark" && wrapper.parentElement.firstElementChild.innerText && wrapper.parentElement.firstElementChild.innerText.toUpperCase() == BDFDB.LanguageStrings.THEME.toUpperCase()) {
 			var settings = BDFDB.getAllData(this, "settings");
@@ -101,7 +103,7 @@ class TimedLightDarkMode {
 			var settingsbox = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.margintop8} TLDM-settingsbox"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><h5 class="${BDFDB.disCN.h5}">${BDFDB.LanguageStrings.THEME} Timer</h5><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings running" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings.running ? " checked" : ""}></div></div><div class="${BDFDB.disCNS.slider + BDFDB.disCN.margintop20}${!settings.running ? (" " + BDFDB.disCN.sliderdisabled): ""}"><input type="number" key="timer1" class="${BDFDB.disCN.sliderinput}" value="${values.timer1}" readonly=""><input type="number" key="timer2" class="${BDFDB.disCN.sliderinput}" value="${values.timer2}" readonly=""><div class="${BDFDB.disCN.slidertrack}"><div class="${BDFDB.disCN.slidermark}" style="left: 0%;"><div class="${BDFDB.disCN.slidermarkvalue}">00:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 12.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">03:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 25%;"><div class="${BDFDB.disCN.slidermarkvalue}">06:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 37.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">09:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 50%;"><div class="${BDFDB.disCN.slidermarkvalue}">12:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 62.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">15:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 75%;"><div class="${BDFDB.disCN.slidermarkvalue}">18:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 87.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">21:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 100%;"><div class="${BDFDB.disCN.slidermarkvalue}">24:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div></div><div class="${BDFDB.disCN.sliderbar}"><div class="${BDFDB.disCN.sliderbarfill}"></div></div><div class="${BDFDB.disCN.slidertrack}"><div class="${BDFDB.disCN.slidergrabber} timer-grabber" key="timer1" style="left: ${values.timer1}%;"></div><div class="${BDFDB.disCN.slidergrabber} timer-grabber" key="timer2" style="left: ${values.timer2}%;"></div><div class="${BDFDB.disCN.slidergrabber} date-grabber" key="current" style="left: ${this.getPercent(new Date())}%; cursor: help !important; height: 12px; margin-top: -7px;"></div></div></div></div>`);
 			wrapper.parentElement.appendChild(settingsbox);
 			var slider = settingsbox.querySelector(BDFDB.dotCN.slider);
-			
+
 			BDFDB.initElements(settingsbox, this);
 			this.updateSlider(slider, values);
 			BDFDB.addChildEventListener(settingsbox, "mousedown", BDFDB.dotCN.slidergrabber + ".timer-grabber", e => {this.dragSlider(e.currentTarget);});
@@ -112,7 +114,7 @@ class TimedLightDarkMode {
 			});
 		}
 	}
-	
+
 	startInterval () {
 		clearInterval(this.checkInterval);
 		if (BDFDB.getData("running", this, "settings")) {
@@ -131,17 +133,17 @@ class TimedLightDarkMode {
 			this.checkInterval = setInterval(check, 60000);
 		}
 	}
-	
+
 	checkTime (timerLOW, timerHIGH, time) {
 		return timerHIGH[0] > time[0] || timerHIGH[0] == time[0] && timerHIGH[1] >= time[1] || time[0] > timerLOW[0] || time[0] == timerLOW[0] && time[1] >= timerLOW[1];
 	}
-	
+
 	changeTheme (dark) {
 		var theme = BDFDB.getDiscordTheme();
 		if (dark && theme == BDFDB.disCN.themelight) this.SettingsUtils.updateRemoteSettings({theme:"dark"});
 		else if (!dark && theme == BDFDB.disCN.themedark) this.SettingsUtils.updateRemoteSettings({theme:"light"});
 	}
-	
+
 	showCurrentTime (grabber) {
 		var currenttime = new Date();
 		var currenthours = currenttime.getHours();
@@ -155,7 +157,7 @@ class TimedLightDarkMode {
 		};
 		grabber.addEventListener("mouseleave", mouseleave);
 	}
-	
+
 	dragSlider (grabber) {
 		var track = grabber.parentNode;
 		if (BDFDB.containsClass(track.parentNode, BDFDB.disCN.sliderdisabled)) return;
@@ -193,7 +195,7 @@ class TimedLightDarkMode {
 		document.addEventListener("mouseup", mouseup);
 		document.addEventListener("mousemove", mousemove);
 	}
-	
+
 	updateSlider (slider, values) {
 		var bar = slider.querySelector(BDFDB.dotCN.sliderbar);
 		var fill = slider.querySelector(BDFDB.dotCN.sliderbarfill);
@@ -203,21 +205,21 @@ class TimedLightDarkMode {
 		fill.style.setProperty("background-color", inverted ? "#66757F" : "#E0C460", "important");
 		bar.style.setProperty("background-color", inverted ? "#E0C460" : "#66757F", "important");
 	}
-	
+
 	getTime (percent, stringify) {
 		var time = BDFDB.mapRange([0, 100], [0, 1440], percent)/60;
 		var hours = Math.floor(time);
 		var minutes = Math.floor((time - hours) * 60);
 		return stringify ? (hours > 9 ? hours : ("0" + hours)) + ":" + (minutes > 9 ? minutes : ("0" + minutes)) : [hours,minutes];
 	}
-	
+
 	getPercent (time) {
 		if (!time) return 0;
 		var hours = Array.isArray(time) ? time[0] : (typeof time == "object" && typeof time.getHours == "function" ? time.getHours() : 0);
 		var minutes = Array.isArray(time) ? time[1] : (typeof time == "object" && typeof time.getMinutes == "function" ? time.getMinutes() : 0);
 		return BDFDB.mapRange([0, 1440], [0, 100], (hours * 60) + minutes);
 	}
-	
+
 	getHighTime (timer) {
 		var hours = timer[0];
 		var minutes = timer[1] - 1;

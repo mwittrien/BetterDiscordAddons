@@ -9,9 +9,11 @@ class GoogleSearchReplace {
 
 	getDescription () {return "Replaces the default Google Text Search with a selection menu of several search engines.";}
 
-	initConstructor () {
+	constructor () {
 		this.labels = {};
+	}
 
+	initConstructor () {
 		this.textUrlReplaceString = "DEVILBRO_BD_GOOGLESEARCHREPLACE_REPLACE_TEXTURL";
 
 		this.defaults = {
@@ -133,7 +135,7 @@ class GoogleSearchReplace {
 	onNativeContextMenu (instance, menu) {
 		if (instance.props && instance.props.type == "NATIVE_TEXT" && instance.props.value && !menu.querySelector(".reverseimagesearch-item")) {
 			let searchentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,props:["handleSearchWithGoogle"]}));
-			if (searchentry) this.appendItem(instance, searchentry, instance.props.value);
+			if (searchentry) this.appendItem(searchentry, instance.props.value);
 		}
 	}
 
@@ -142,12 +144,12 @@ class GoogleSearchReplace {
 			let text = document.getSelection().toString();
 			if (text) {
 				let searchentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,props:["handleSearchWithGoogle"]}));
-				if (searchentry) this.appendItem(instance, searchentry, text);
+				if (searchentry) this.appendItem(searchentry, text);
 			}
 		}
 	}
 
-	appendItem (instance, target, text) {
+	appendItem (target, text) {
 		let messageContextEntry = BDFDB.htmlToElement(this.messageContextEntryMarkup);
 		target.parentElement.insertBefore(messageContextEntry, target.nextElementSibling);
 		messageContextEntry.addEventListener("mouseenter", () => {
@@ -156,7 +158,7 @@ class GoogleSearchReplace {
 			for (let key in engines) if (!engines[key]) BDFDB.removeEles(messageContextSubMenu.querySelector("[engine='" + key + "']"));
 			if (messageContextSubMenu.querySelector(".GRS-item")) BDFDB.removeEles(messageContextSubMenu.querySelector(".alldisabled-item"));
 			BDFDB.addChildEventListener(messageContextSubMenu, "click", ".GRS-item", e => {
-				instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
+				BDFDB.closeContextMenu(target);
 				let engine = e.currentTarget.getAttribute("engine");
 				if (engine == "_all") {
 					for (let key in engines) if (key != "_all" && engines[key]) window.open(this.defaults.engines[key].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");

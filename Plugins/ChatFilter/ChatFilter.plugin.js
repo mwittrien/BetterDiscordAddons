@@ -9,16 +9,18 @@ class ChatFilter {
 
 	getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"added":[["ContextMenu","Added an contextmenu entry when right clicking a highlighted/selected word to allow you to faster add new aliases"]]
 		};
-		
+
 		this.patchModules = {
 			"Message":["componentDidMount","componentDidUpdate"],
 			"StandardSidebarView":"componentWillUnmount"
 		};
+	}
 
+	initConstructor () {
 		this.css = ` 
 			${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageaccessory}.blocked:not(.revealed),
 			${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messagemarkup}.blocked:not(.revealed) {
@@ -261,7 +263,7 @@ class ChatFilter {
 			});
 		}
 	}
-	
+
 	saveWord (wordvalue, replacevalue, rtype, configs = BDFDB.getAllData(this, "configs")) {
 		if (!wordvalue || !replacevalue) return;
 		wordvalue = wordvalue.trim();
@@ -350,7 +352,7 @@ class ChatFilter {
 					if (chara == "<") {
 						if (strings[count]) count++;
 					}
-					strings[count] = strings[count] ? strings[count] + chara : chara; 
+					strings[count] = strings[count] ? strings[count] + chara : chara;
 					if (chara == ">") {
 						count++;
 					}
@@ -478,17 +480,17 @@ class ChatFilter {
 			message.addEventListener("click", message.clickChatFilterListener);
 		}
 	}
-	
+
 	openAddModal (wordvalue) {
 		let chatfilterAddModal = BDFDB.htmlToElement(this.chatfilterAddModalMarkup);
 		let wordvalueinput = chatfilterAddModal.querySelector("#input-wordvalue");
 		let replacevalueinput = chatfilterAddModal.querySelector("#input-replacevalue");
 		let addbutton = chatfilterAddModal.querySelector(".btn-add");
-		
+
 		wordvalueinput.value = wordvalue || "";
 
 		BDFDB.appendModal(chatfilterAddModal);
-		
+
 		wordvalueinput.addEventListener("input", () => {
 			if (!wordvalueinput.value.trim()) {
 				addbutton.disabled = true;
@@ -503,7 +505,7 @@ class ChatFilter {
 				BDFDB.removeEles(".chatfilter-disabled-tooltip");
 			}
 		});
-		
+
 		BDFDB.addChildEventListener(chatfilterAddModal, "click", BDFDB.dotCNC.backdrop + BDFDB.dotCNC.modalclose + ".btn-add", () => {
 			BDFDB.removeEles(".chatfilter-disabled-tooltip");
 		});

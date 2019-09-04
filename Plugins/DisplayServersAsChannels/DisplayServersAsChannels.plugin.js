@@ -9,16 +9,18 @@ class DisplayServersAsChannels {
 
 	getDescription () {return "Display servers in a similar way as channels.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"added":[["Width settings","Added the option to change the width of the changed server list"]]
 		};
-		
+
 		this.patchModules = {
 			"Guilds":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
-		
+	}
+
+	initConstructor () {
 		this.verificationBadgeMarkup =
 			`<svg class="DSAC-verification-badge" name="Verified" width="24" height="24" viewBox="0 0 20 20">
 				<g fill="none" fill-rule="evenodd">
@@ -91,13 +93,13 @@ class DisplayServersAsChannels {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			BDFDB.addClass(document.body, "DSAC-styled");
-			
+
 			this.addCSS();
 
 			BDFDB.WebModules.forceAllUpdates(this);
-			
+
 			BDFDB.addEventListener(this, document, "mouseenter", BDFDB.dotCN.guildouter, e => {
 				if (e.currentTarget.querySelector(BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill + "+ *")) BDFDB.appendLocalStyle("HideAllToolTips" + this.name, `${BDFDB.dotCN.tooltip} {display: none !important;}`);
 			});
@@ -114,11 +116,11 @@ class DisplayServersAsChannels {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.removeClasses("DSAC-styled");
 			BDFDB.removeEles(".DSAC-verification-badge, .DSAC-name, .DSAC-icon");
-			
+
 			BDFDB.removeLocalStyle("HideAllToolTips" + this.name);
-			
+
 			BDFDB.removeLocalStyle("DSACStyle" + this.name);
-			
+
 			for (let changedSVG of document.querySelectorAll(BDFDB.dotCN.guildsvg + "[DSAC-oldViewBox")) {
 				changedSVG.setAttribute("viewBox", changedSVG.getAttribute("DSAC-oldViewBox"));
 				changedSVG.removeAttribute("DSAC-oldViewBox");
@@ -130,7 +132,7 @@ class DisplayServersAsChannels {
 
 
 	// begin of own functions
-	
+
 	processGuilds (instance, wrapper) {
 		var observer = new MutationObserver((changes, _) => {changes.forEach((change, i) => {if (change.addedNodes) {change.addedNodes.forEach((node) => {
 			if (node && BDFDB.containsClass(node, BDFDB.disCN.guildouter) && !node.querySelector(BDFDB.dotCN.guildserror)) {
@@ -182,7 +184,7 @@ class DisplayServersAsChannels {
 		}
 		this.changeSVG(div);
 	}
-	
+
 	changeButton (div) {
 		if (!div) return;
 		var guildbuttoninner = div.querySelector(BDFDB.dotCN.guildbuttoninner);
@@ -192,7 +194,7 @@ class DisplayServersAsChannels {
 		}
 		this.changeSVG(div);
 	}
-	
+
 	changeSVG (div) {
 		var guildsvg = div.querySelector(BDFDB.dotCN.guildsvg);
 		if (guildsvg && !guildsvg.getAttribute("DSAC-oldViewBox")) {
@@ -200,7 +202,7 @@ class DisplayServersAsChannels {
 			guildsvg.removeAttribute("viewBox");
 		}
 	}
-	
+
 	changeError (div) {
 		if (!div) return;
 		BDFDB.removeEles(div.querySelectorAll(".DSAC-name, .DSAC-icon"));
@@ -212,7 +214,7 @@ class DisplayServersAsChannels {
 		var data = BDFDB.loadData(folderdiv.id, "ServerFolders", "folders");
 		return data ? Object.assign({div:folderdiv}, data) : null;
 	}
-	
+
 	addCSS () {
 		var listwidth = BDFDB.getData("serverListWidth", this, "amounts");
 		BDFDB.appendLocalStyle("DSACStyle" + this.name, `

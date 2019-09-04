@@ -9,17 +9,19 @@ class EmojiStatistics {
 
 	getDescription () {return "Adds some helpful options to show you more information about emojis and emojiservers.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["Context Menu & Tooltips","fixed"]]
 		};
-		
+
 		this.labels = {};
 
 		this.patchModules = {
 			"EmojiPicker":"componentDidMount" 
 		};
+	}
 
+	initConstructor () {
 		this.css = `
 			.emojistatistics-tooltip,
 			.emoji-tooltip {
@@ -305,9 +307,9 @@ class EmojiStatistics {
 		var entries = [], index = 0, totalGlobal = 0, totalLocal = 0, totalCopies = 0;
 		BDFDB.addChildEventListener(titleEntry, "click", ".modal-sorttitle-label ", e => {
 			var oldTitle = e.currentTarget.innerText;
-			
+
 			this.resetTitles(titleEntry, totalGlobal, totalLocal, totalCopies);
-			
+
 			var reverse = oldTitle.indexOf("▼") < 0 ? false : true, sortKey = "index";
 			if (oldTitle.indexOf("▲") < 0) {
 				sortKey = e.currentTarget.getAttribute("sortkey");
@@ -343,14 +345,14 @@ class EmojiStatistics {
 			totalLocal += amountLocal;
 			totalCopies += amountCopies;
 		}
-			
+
 		this.resetTitles(titleEntry, totalGlobal, totalLocal, totalCopies);
 
 		BDFDB.appendModal(emojiInformationModal);
 
 		this.updateAllEntries(entriescontainer, entries);
 	}
-	
+
 	resetTitles (titleEntry, totalGlobal, totalLocal, totalCopies) {
 		titleEntry.querySelector(".modal-titlesname-label").innerText = this.labels.modal_titlesname_text;
 		titleEntry.querySelector(".modal-titlestotal-label").innerText = `${this.labels.modal_titlestotal_text} (${totalGlobal + totalLocal})`;

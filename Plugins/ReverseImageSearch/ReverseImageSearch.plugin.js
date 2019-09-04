@@ -9,11 +9,13 @@ class ReverseImageSearch {
 
 	getDescription () {return "Adds a reverse image search option to the context menu.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["Image Modal","Option is now also added to a contextmenu when you right click the image in the image modal"]]
 		};
-		
+	}
+
+	initConstructor () {
 		this.imgUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
 
 		this.defaults = {

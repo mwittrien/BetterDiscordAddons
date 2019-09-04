@@ -9,16 +9,19 @@ class SendLargeMessages {
 
 	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["Sending","Fixed the issue where Messages are not being sent"]]
 		};
+
 		this.labels = {};
 
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount"
 		};
+	}
 
+	initConstructor () {
 		this.messageDelay = 1000; //changing at own risk, might result in bans or mutes
 
 		this.css = `

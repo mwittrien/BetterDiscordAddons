@@ -9,15 +9,18 @@ class NotificationSounds {
 
 	getDescription () {return "Allows you to replace the native sounds of Discord with your own";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["Go Live","Maybe fix the Go Live Bug, maybe not"]]
 		};
-		
+
 		this.patchModules = {
 			"IncomingCalls":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
+	}
+
+	initConstructor () {
 
 		/* NEVER CHANGE THE SRC LINKS IN THE PLUGIN FILE, TO ADD NEW SONGS ADD THEM IN THE SETTINGS GUI IN THE PLUGINS PAGE */
 		this.types = {
@@ -96,7 +99,7 @@ class NotificationSounds {
 				"Voicechat Reconnect":		"/assets/471cfd0005b112ff857705e894bf41a6.mp3"
 			}
 		};
-		
+
 		this.orderTypes = {"category":true, "song":true};
 
 		this.settingsaudio = new Audio();
@@ -356,7 +359,7 @@ class NotificationSounds {
 		menuhtml += `</div></div>`;
 		return BDFDB.htmlToElement(menuhtml);
 	}
-	
+
 	saveSelectChoice (selectWrap, type, choice) {
 		if (type && choice) {
 			selectWrap.querySelector(BDFDB.dotCN.title).innerText = choice;
@@ -366,14 +369,14 @@ class NotificationSounds {
 				this.choices[type[0]].song = Object.keys(this.audios[choice])[0];
 				var settingspanel = BDFDB.getParentEle(".BDFDB-settings", selectWrap), songSelect = settingspanel ? settingspanel.querySelector(`${BDFDB.dotCN.select}[type="${type[0]} song"]`) : null;
 				if (songSelect) songSelect.outerHTML = BDFDB.createSelectMenu(this.createSelectChoice(this.choices[type[0]].song), this.choices[type[0]].song, type[0] + " song");
-					
+
 			}
 			this.choices[type[0]].src = this.audios[this.choices[type[0]].category][this.choices[type[0]].song];
 			this.choices[type[0]].src = this.choices[type[0]].src ? this.choices[type[0]].src : this.types[type[0]].src;
 			this.saveChoice(type[0], true);
 		}
 	}
-	
+
 	createSelectChoice (key) {
 		return `<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer}" style="padding: 0;">${key}</div>`;
 	}

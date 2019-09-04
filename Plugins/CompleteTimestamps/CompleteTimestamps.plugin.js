@@ -9,19 +9,19 @@ class CompleteTimestamps {
 
 	getDescription () {return "Replace all timestamps with complete timestamps.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["New Select Classes","The Dropdown-Select element got new classes on canary, this update will prevent stable from breaking once the class change is pushed to stable"]]
 		};
-		
+
 		this.patchModules = {
 			"MessageGroup":["componentDidMount","componentDidUpdate"],
 			"Embed":["componentDidMount","componentDidUpdate"],
 			"StandardSidebarView":"componentWillUnmount"
 		};
+	}
 
-		this.languages;
-
+	initConstructor () {
 		this.defaults = {
 			settings: {
 				showInChat:		{value:true, 	description:"Replace Chat Timestamp with Complete Timestamp:"},
@@ -185,7 +185,7 @@ class CompleteTimestamps {
 		BDFDB.toggleEles(ele.nextElementSibling);
 		BDFDB.saveData("hideInfo", BDFDB.isEleHidden(ele.nextElementSibling), this, "hideInfo");
 	}
-	
+
 	saveSelectChoice (selectWrap, type, choice) {
 		if (type && choice) {
 			selectWrap.querySelector(".languageName").innerText = this.languages[choice].name;
@@ -193,7 +193,7 @@ class CompleteTimestamps {
 			BDFDB.saveData(type, choice, this, "choices");
 		}
 	}
-	
+
 	createSelectChoice (choice) {
 		return `<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer} languageName" style="flex: 1 1 42%; padding: 0;">${this.languages[choice].name}</div><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer} languageTimestamp" style="flex: 1 1 58%; padding: 0;">${this.getTimestamp(this.languages[choice].id)}</div>`;
 	}

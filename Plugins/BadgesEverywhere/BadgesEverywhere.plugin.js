@@ -9,18 +9,20 @@ class BadgesEverywhere {
 
 	getDescription () {return "Displays Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout. Thanks for Zerebos' help.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["DM Groups","Now works properly in DM Groups"]]
 		};
-		
+
 		this.patchModules = {
 			"MemberListItem":"componentDidMount",
 			"MessageUsername":"componentDidMount",
 			"UserPopout":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
+	}
 
+	initConstructor () {
 		this.css = `
 			${BDFDB.dotCN.userpopoutcustomstatus}:not(:last-child) {
 				margin-top: 4px;
@@ -70,12 +72,12 @@ class BadgesEverywhere {
 			.BE-badge:not(.BE-badge-chat):not(.BE-badge-list).BE-size-21 {width:21px !important; min-width:21px !important;}
 			.BE-badge:not(.BE-badge-chat):not(.BE-badge-list).BE-size-22 {width:22px !important; min-width:22px !important;}
 			.BE-badge:not(.BE-badge-chat):not(.BE-badge-list).BE-size-24 {width:24px !important; min-width:24px !important;}
-			
+
 			.BE-badge.BE-badge-CurrentGuildBoost {height:14px !important; width:14px !important; min-width:14px !important;}
-			
+
 			.BE-badge.BE-badge-settings {width:30px !important;min-width:30px !important;}
-			
-			${BDFDB.dotCNS.member + BDFDB.dotCN.memberpremiumicon}:not(.BE-badge-CurrentGuildBoost-inner) {display: none;}`; 
+
+			${BDFDB.dotCNS.member + BDFDB.dotCN.memberpremiumicon}:not(.BE-badge-CurrentGuildBoost-inner) {display: none;}`;
 
 
 		this.requestedusers = {};
@@ -107,7 +109,7 @@ class BadgesEverywhere {
 				"CURRENT_GUILD_BOOST":			{value:true, 	name:"Current Nitro Guild Boost", 			markup:`<div class="BE-badge BE-badge-CurrentGuildBoost"><svg aria-label="Nitro boosting since May 31, 2019" name="PremiumGuildSubscriberBadge" class="BE-badge-CurrentGuildBoost-inner ${BDFDB.disCNS.memberpremiumicon + BDFDB.disCN.membericon}" aria-hidden="false" width="24" height="24" viewBox="0 0 8 12" style="margin: 0;"><path d="M4 0L0 4V8L4 12L8 8V4L4 0ZM7 7.59L4 10.59L1 7.59V4.41L4 1.41L7 4.41V7.59Z" fill="currentColor"></path><path d="M2 4.83V7.17L4 9.17L6 7.17V4.83L4 2.83L2 4.83Z" fill="currentColor"></path></svg></div>`},
 			}
 		};
-		
+
 		var UserFlags = BDFDB.WebModules.findByProperties("UserFlags").UserFlags;
 		for (let flagname in UserFlags) if (this.defaults.badges[flagname]) {
 			if (BDFDB.LanguageStringsCheck[this.defaults.badges[flagname].name]) this.defaults.badges[flagname].name = BDFDB.LanguageStrings[this.defaults.badges[flagname].name];
@@ -149,7 +151,7 @@ class BadgesEverywhere {
 		settingshtml += `</div></div></div>`;
 
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
-		
+
 		BDFDB.addClass(settingspanel.querySelectorAll(".BE-badge"), "BE-badge-settings");
 
 		BDFDB.initElements(settingspanel, this);
@@ -232,7 +234,7 @@ class BadgesEverywhere {
 			if (username && BDFDB.getData("showInChat", this, "settings")) this.addBadges(message.author, wrapper, "chat");
 		}
 	}
-	
+
 	processUserPopout (instance, wrapper) {
 		if (instance.props && BDFDB.getData("showInPopout", this, "settings")) this.addBadges(instance.props.user, wrapper.querySelector(BDFDB.dotCN.userpopoutheadertext), "popout");
 	}

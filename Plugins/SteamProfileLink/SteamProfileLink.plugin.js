@@ -9,7 +9,7 @@ class SteamProfileLink {
 
 	getDescription () {return "Opens any Steam links in Steam instead of your internet browser.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"improved":[["Activity + Store Links","Plugin now covers any links in the Discord Activity and Store"]]
 		};
@@ -71,11 +71,11 @@ class SteamProfileLink {
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.removeEles(".urlCheckFrame");
-			
+
 			BDFDB.unloadMessage(this);
 		}
 	}
-	
+
 	openInSteam (e, url) {
 		BDFDB.stopEvent(e);
 		require("request")(url, (error, response, body) => {

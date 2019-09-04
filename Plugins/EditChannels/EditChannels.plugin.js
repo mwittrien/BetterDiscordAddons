@@ -9,11 +9,11 @@ class EditChannels {
 
 	getDescription () {return "Allows you to rename and recolor channelnames.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["EditUsers bug","Fixed a bug that occured when EditUsers is enabled"]]
 		};
-		
+
 		this.labels = {};
 
 		this.patchModules = {
@@ -27,7 +27,9 @@ class EditChannels {
 			"Clickable":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
+	}
 
+	initConstructor () {
 		this.channelContextEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
 				<div class="${BDFDB.disCN.contextmenuitem} localchannelsettings-item ${BDFDB.disCN.contextmenuitemsubmenu}">
@@ -132,7 +134,7 @@ class EditChannels {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var settings = BDFDB.getAllData(this, "settings"); 
+		var settings = BDFDB.getAllData(this, "settings");
 		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		for (let key in settings) {
 			if (!this.defaults.settings[key].inner) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
@@ -204,7 +206,7 @@ class EditChannels {
 			this.GuildChannels = BDFDB.WebModules.findByProperties("getChannels","getDefaultChannel");
 			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
 			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
-			
+
 			var observer = new MutationObserver(() => {this.changeAppTitle();});
 			BDFDB.addObserver(this, document.head.querySelector("title"), {name:"appTitleObserver",instance:observer}, {childList:true});
 			this.changeAppTitle();
@@ -326,7 +328,7 @@ class EditChannels {
 					if (autocompletemenu && (e.which == 9 || e.which == 13)) {
 						if (BDFDB.containsClass(autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement, "autocompleteEditChannelsRow")) {
 							BDFDB.stopEvent(e);
-							this.swapWordWithMention(textarea); 
+							this.swapWordWithMention(textarea);
 						}
 					}
 					else if (autocompletemenu && (e.which == 38 || e.which == 40)) {
@@ -385,7 +387,7 @@ class EditChannels {
 			this.changeChannel(instance.props.channel, wrapper.querySelector(BDFDB.dotCN.channelname), true);
 		}
 	}
-	
+
 	processHeaderBarContainer (instance, wrapper) {
 		this.processHeaderBar(instance, wrapper);
 	}
@@ -461,7 +463,7 @@ class EditChannels {
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 	}
-	
+
 	changeAppTitle () {
 		let channel = this.ChannelUtils.getChannel(this.LastChannelStore.getChannelId());
 		let title = document.head.querySelector("title");
@@ -580,12 +582,12 @@ class EditChannels {
 		mention.removeEventListener("mouseout", mention.mouseoutListenerEditChannels);
 		let data = this.getChannelData(info.id, info.parent_id, mention);
 		let name = "#" + (data.name || info.name);
-		
+
 		let isgradient = data.color && BDFDB.isObject(data.color);
 		let color = isgradient ? BDFDB.colorGRADIENT(data.color) : BDFDB.colorCONVERT(data.color, "RGB");
 		let color0_1 = isgradient ? BDFDB.colorGRADIENT(BDFDB.colorSETALPHA(data.color, 0.1, "RGB")) : BDFDB.colorSETALPHA(data.color, 0.1, "RGB");
 		let color0_7 = isgradient ? BDFDB.colorGRADIENT(BDFDB.colorSETALPHA(data.color, 0.7, "RGB")) : BDFDB.colorSETALPHA(data.color, 0.7, "RGB");
-		
+
 		if (mention.EditChannelsHovered) colorHover();
 		else colorDefault();
 		mention.mouseoverListenerEditChannels = () => {
@@ -634,7 +636,7 @@ class EditChannels {
 		}
 		return null;
 	}
-	
+
 	getChannelData (id, categoryid, wrapper) {
 		let data = BDFDB.loadData(id, this, "channels");
 		let categorydata = categoryid ? BDFDB.loadData(categoryid, this, "channels") : null;
@@ -673,7 +675,7 @@ class EditChannels {
 				let channel = this.ChannelUtils.getChannel(id);
 				let category = channel && channel.parent_id ? this.ChannelUtils.getChannel(channel.parent_id) : null;
 				let catdata = (category ? channels[category.id] : null) || {};
-				if (channel && channel.type == 0) channelarray.push(Object.assign({lowercasename:channels[id].name.toLowerCase(),lowercasecatname:(catdata && catdata.name ? catdata.name.toLowerCase() : null),channel,category,catdata},channels[id])); 
+				if (channel && channel.type == 0) channelarray.push(Object.assign({lowercasename:channels[id].name.toLowerCase(),lowercasecatname:(catdata && catdata.name ? catdata.name.toLowerCase() : null),channel,category,catdata},channels[id]));
 			}
 			channelarray = BDFDB.sortArrayByKey(channelarray.filter(n => n.lowercasename.indexOf(lastword.toLowerCase().slice(1)) != -1 || (n.lowercasecatname && n.lowercasecatname.indexOf(lastword.toLowerCase().slice(1)) != -1)), "lowercasename");
 			if (channelarray.length) {
@@ -718,7 +720,7 @@ class EditChannels {
 		}
 		else {
 			let items = menu.querySelectorAll(BDFDB.dotCN.autocompleteselectable);
-			next = forward ? items[0] : items[items.length-1]; 
+			next = forward ? items[0] : items[items.length-1];
 		}
 		return next ? next : this.getNextSelection(menu, sibling, forward);
 	}
@@ -730,7 +732,7 @@ class EditChannels {
 		let lastword = words[words.length-1].trim();
 		if (channelid && lastword) {
 			BDFDB.removeEles(".autocompleteEditChannels", ".autocompleteEditChannelsRow");
-			textarea.focus(); 
+			textarea.focus();
 			textarea.selectionStart = textarea.value.length - lastword.length;
 			textarea.selectionEnd = textarea.value.length;
 			document.execCommand("insertText", false, `<#${channelid}> `);

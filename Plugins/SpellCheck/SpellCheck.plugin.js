@@ -9,15 +9,17 @@ class SpellCheck {
 
 	getDescription () {return "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["New Select Classes","The Dropdown-Select element got new classes on canary, this update will prevent stable from breaking once the class change is pushed to stable"]]
 		};
-		
+
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount"
 		};
+	}
 
+	initConstructor () {
 		this.languages = {};
 		this.langDictionary = [];
 		this.dictionary = [];
@@ -307,7 +309,7 @@ class SpellCheck {
 		BDFDB.saveData(lang, ownDictionary, this, "owndics");
 		this.dictionary = this.langDictionary.concat(ownDictionary);
 	}
-	
+
 	saveSelectChoice (selectWrap, type, choice) {
 		if (type && choice) {			
 			selectWrap.querySelector(BDFDB.dotCN.title).innerText = this.languages[choice].name;
@@ -325,7 +327,7 @@ class SpellCheck {
 			}
 		}
 	}
-	
+
 	createSelectChoice (choice) {
 		return `<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer}" style="padding:0;">${this.languages[choice].name}</div>`;
 	}

@@ -9,11 +9,11 @@ class OwnerTag {
 
 	getDescription () {return "Adds a Tag like Bottags to the Serverowner.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["DM Groups","Now works properly in DM Groups"]]
 		};
-		
+
 		this.patchModules = {
 			"MemberListItem":["componentDidMount","componentDidUpdate"],
 			"MessageUsername":["componentDidMount","componentDidUpdate"],
@@ -21,7 +21,9 @@ class OwnerTag {
 			"UserProfile":["componentDidMount","componentDidUpdate"],
 			"StandardSidebarView":"componentWillUnmount"
 		};
+	}
 
+	initConstructor () {
 		this.defaults = {
 			settings: {
 				addInChatWindow:		{value:true, 	inner:true,		description:"Messages"},
@@ -44,7 +46,7 @@ class OwnerTag {
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		var settings = BDFDB.getAllData(this, "settings");
-		var inputs = BDFDB.getAllData(this, "inputs"); 
+		var inputs = BDFDB.getAllData(this, "inputs");
 		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		for (let key in inputs) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%;">${this.defaults.inputs[key].description}</h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" option="${key}" value="${inputs[key]}" placeholder="${this.defaults.inputs[key].value}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}"></div></div>`;
@@ -114,7 +116,7 @@ class OwnerTag {
 			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
 
 			BDFDB.WebModules.forceAllUpdates(this);
-			
+
 			this.addHideCSS();
 		}
 		else {
@@ -125,9 +127,9 @@ class OwnerTag {
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.removeEles(".owner-tag, .owner-tag-crown");
-			
+
 			BDFDB.removeLocalStyle(this.name + "HideCrown");
-			
+
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -147,11 +149,11 @@ class OwnerTag {
 	processMemberListItem (instance, wrapper) {
 		if (instance.props && BDFDB.getData("addInMemberList", this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.nametag), "list", BDFDB.disCN.bottagnametag, null);
 	}
-	
+
 	processUserPopout (instance, wrapper) {
 		if (instance.props && BDFDB.getData("addInUserPopout", this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.nametag), "popout", BDFDB.disCN.bottagnametag, wrapper);
 	}
-	
+
 	processUserProfile (instance, wrapper) {
 		if (instance.props && BDFDB.getData("addInUserProfil", this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.nametag), "profile", BDFDB.disCNS.bottagnametag + BDFDB.disCN.userprofilebottag, wrapper);
 	}
@@ -206,7 +208,7 @@ class OwnerTag {
 			wrapper.insertBefore(crown, wrapper.querySelector(".TRE-tag,svg[name=MobileDevice]"));
 		}
 	}
-	
+
 	addHideCSS () {
 		var settings = BDFDB.getAllData(this, "settings");
 		if (settings.hideNativeCrown || settings.useCrown) BDFDB.appendLocalStyle(this.name + "HideCrown", `${BDFDB.dotCNS.member + BDFDB.dotCN.memberownericon}:not(.owner-tag-crown) {display: none;}`);

@@ -9,17 +9,19 @@ class RepoControls {
 
 	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["Canary/PTB","Fixed the plugin for canary and ptb"]]
 		};
-		
+
 		this.patchModules = {
 			"V2C_List":"componentDidMount",
 			"V2C_PluginCard": ["componentDidMount","componentDidUpdate"],
 			"V2C_ThemeCard": ["componentDidMount","componentDidUpdate"]
 		};
+	}
 
+	initConstructor () {
 		this.sortings = {
 			sort: {
 				name:			"Name",
@@ -398,7 +400,7 @@ class RepoControls {
 				if (searchstring && searchstring.length > 2) ele.innerHTML = BDFDB.highlightText(string, searchstring);
 				else ele.innerHTML = string;
 			}
-			else if (searchstring && searchstring.length > 2 || ele.querySelector(BDFDB.dotCN.highlight)) ele.innerHTML = BDFDB.highlightText(string, searchstring); 
+			else if (searchstring && searchstring.length > 2 || ele.querySelector(BDFDB.dotCN.highlight)) ele.innerHTML = BDFDB.highlightText(string, searchstring);
 		}
 	}
 

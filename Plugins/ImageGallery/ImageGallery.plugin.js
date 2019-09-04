@@ -9,14 +9,17 @@ class ImageGallery {
 
 	getDescription () {return "Allows the user to browse through images sent inside the same message.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["Prev/Next Image","Fixed bug where the previou/next image would sometimes be doubled with the current image on the first/last image"]]
 		};
-		
+
 		this.patchModules = {
 			"ImageModal":["componentDidMount","componentWillUnmount"]
-		}
+		};
+	}
+
+	initConstructor () {
 		this.eventFired = false;
 
 		this.imageMarkup = `<div class="${BDFDB.disCN.imagewrapper}" style="width: 100px; height: 100px;"><img src="" style="width: 100px; height: 100px; display: inline;"></div>`;
@@ -76,7 +79,7 @@ class ImageGallery {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 
-			BDFDB.WebModules.forceAllUpdates(this); 
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
 			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');

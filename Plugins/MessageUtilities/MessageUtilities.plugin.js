@@ -9,11 +9,13 @@ class MessageUtilities {
 
 	getDescription () {return "Offers a number of useful message options. Remap the keybindings in the settings.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["New Select Classes","The Dropdown-Select element got new classes on canary, this update will prevent stable from breaking once the class change is pushed to stable"]]
 		};
-		
+	}
+
+	initConstructor () {
 		this.bindings = {};
 
 		this.firedEvents = [];
@@ -176,7 +178,7 @@ class MessageUtilities {
 			});
 		});
 	}
-	
+
 	saveSelectChoice (selectWrap, type, choice) {
 		if (type && choice) {
 			selectWrap.querySelector(BDFDB.dotCN.title).innerText = this.clickMap[choice];
@@ -186,7 +188,7 @@ class MessageUtilities {
 			BDFDB.saveData(type[0], binding, this, "bindings");
 		}
 	}
-	
+
 	createSelectChoice (key) {
 		return `<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer}" style="padding: 0;">${this.clickMap[key]}</div>`;
 	}

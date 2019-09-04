@@ -9,11 +9,11 @@ class PersonalPins {
 
 	getAuthor () {return "DevilBro";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"added":[["Update Option","Rightclicking/Using the 3-dot menu, will show an option to update a note in the notebook in case the original message changed"]]
 		};
-		
+
 		this.labels = {};
 
 		this.patchModules = {
@@ -22,7 +22,9 @@ class PersonalPins {
 			"Message":"componentDidMount",
 			"MessageOptionPopout":"componentDidMount"
 		};
+	}
 
+	initConstructor () {
 		this.notesButtonMarkup =
 			`<div class="${BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable} notes-button">
 				<svg class="${BDFDB.disCN.channelheadericon}" name="Note" width="24" height="24" viewBox="-1 -1 23 23">
@@ -226,7 +228,7 @@ class PersonalPins {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this); 
+			BDFDB.loadMessage(this);
 
 			this.SelectChannelUtils = BDFDB.WebModules.findByProperties("selectPrivateChannel","selectChannel");
 			this.GuildUtils = BDFDB.WebModules.findByProperties("getGuilds","getGuild");
@@ -310,7 +312,7 @@ class PersonalPins {
 			}
 		}
 	}
-	
+
 	processHeaderBarContainer (instance, wrapper) {
 		this.processHeaderBar(instance, wrapper);
 	}
@@ -422,10 +424,10 @@ class PersonalPins {
 						notes = pins[guild_id] && pins[guild_id][channel.id] ? pins[guild_id][channel.id] : {};
 						break;
 					case "server":
-						if (pins[guild_id]) for (let channel in pins[guild_id]) notes = Object.assign(notes, pins[guild_id][channel]); 
+						if (pins[guild_id]) for (let channel in pins[guild_id]) notes = Object.assign(notes, pins[guild_id][channel]);
 						break;
 					case "allservers":
-						for (let server in pins) if (pins[server]) for (let channel in pins[server]) notes = Object.assign(notes, pins[server][channel]); 
+						for (let server in pins) if (pins[server]) for (let channel in pins[server]) notes = Object.assign(notes, pins[server][channel]);
 						break;
 				}
 				let noteArray = [];
@@ -600,7 +602,7 @@ class PersonalPins {
 		}
 		else this.removeNoteData(pins[guild_id][channel.id][message.id + "_" + pos]);
 	}
-	
+
 	updateNoteData (note, markup, accessory) {
 		let pins = BDFDB.loadAllData(this, "pins");
 		pins[note.guild_id][note.channel_id][note.id + "_" + note.pos].markup = markup;
@@ -609,7 +611,7 @@ class PersonalPins {
 		BDFDB.saveAllData(pins, this, "pins");
 		BDFDB.showToast(this.labels.toast_noteupdate_text, {type:"info"});
 	}
-	
+
 	getMarkup (messagediv) {
 		let markup = messagediv.querySelector(BDFDB.dotCN.messagemarkup).cloneNode(true);
 		markup.querySelectorAll(BDFDB.dotCN.messageheadercompact).forEach(h2 => {h2.remove();});

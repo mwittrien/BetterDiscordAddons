@@ -9,11 +9,11 @@ class GoogleTranslateOption {
 
 	getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["Embeds","Fixed the bug where some parts of an embed would vanish if the message above is translated"],["Translating/Untranslating Bug","Translating/Untranslating no longer breaks the features of native discord elements (clicking the username, spoilers, etc.)"]]
 		};
-		
+
 		this.labels = {};
 
 		this.patchModules = {
@@ -22,16 +22,18 @@ class GoogleTranslateOption {
 			"MessageOptionPopout":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
+	}
 
+	initConstructor () {
 		this.languages = {};
 
 		this.doTranslate = false;
 		this.translating = false;
-		
+
 		this.brailleConverter = {
 			"0":"⠴", "1":"⠂", "2":"⠆", "3":"⠒", "4":"⠲", "5":"⠢", "6":"⠖", "7":"⠶", "8":"⠦", "9":"⠔", "!":"⠮", "\"":"⠐", "#":"⠼", "$":"⠫", "%":"⠩", "&":"⠯", "'":"⠄", "(":"⠷", ")":"⠾", "*":"⠡", "+":"⠬", ",":"⠠", "-":"⠤", ".":"⠨", "/":"⠌", ":":"⠱", ";":"⠰", "<":"⠣", "=":"⠿", ">":"⠜", "?":"⠹", "@":"⠈", "a":"⠁", "b":"⠃", "c":"⠉", "d":"⠙", "e":"⠑", "f":"⠋", "g":"⠛", "h":"⠓", "i":"⠊", "j":"⠚", "k":"⠅", "l":"⠇", "m":"⠍", "n":"⠝", "o":"⠕", "p":"⠏", "q":"⠟", "r":"⠗", "s":"⠎", "t":"⠞", "u":"⠥", "v":"⠧", "w":"⠺", "x":"⠭", "y":"⠽", "z":"⠵", "[":"⠪", "\\":"⠳", "]":"⠻", "^":"⠘", "⠁":"a", "⠂":"1", "⠃":"b", "⠄":"'", "⠅":"k", "⠆":"2", "⠇":"l", "⠈":"@", "⠉":"c", "⠊":"i", "⠋":"f", "⠌":"/", "⠍":"m", "⠎":"s", "⠏":"p", "⠐":"\"", "⠑":"e", "⠒":"3", "⠓":"h", "⠔":"9", "⠕":"o", "⠖":"6", "⠗":"r", "⠘":"^", "⠙":"d", "⠚":"j", "⠛":"g", "⠜":">", "⠝":"n", "⠞":"t", "⠟":"q", "⠠":", ", "⠡":"*", "⠢":"5", "⠣":"<", "⠤":"-", "⠥":"u", "⠦":"8", "⠧":"v", "⠨":".", "⠩":"%", "⠪":"[", "⠫":"$", "⠬":"+", "⠭":"x", "⠮":"!", "⠯":"&", "⠰":";", "⠱":":", "⠲":"4", "⠳":"\\", "⠴":"0", "⠵":"z", "⠶":"7", "⠷":"(", "⠸":"_", "⠹":"?", "⠺":"w", "⠻":"]", "⠼":"#", "⠽":"y", "⠾":")", "⠿":"=", "_":"⠸"
 		};
-		
+
 		this.morseConverter = {
 			"0":"−−−−−", "1":"·−−−−", "2":"··−−−", "3":"···−−", "4":"····−", "5":"·····", "6":"−····", "7":"−−···", "8":"−−−··", "9":"−−−−·", "!":"−·−·−−", "\"":"·−··−·", "$":"···−··−", "&":"·−···", "'":"·−−−−·", "(":"−·−−·", ")":"−·−−·−", "+":"·−·−·", ",":"−−··−−", "-":"−····−", ".":"·−·−·−", "/":"−··−·", ":":"−−−···", ";":"−·−·−·", "=":"−···−", "?":"··−−··", "@":"·−−·−·", "a":"·−", "b":"−···", "c":"−·−·", "d":"−··", "e":"·", "f":"··−·", "g":"−−·", "h":"····", "i":"··", "j":"·−−−", "k":"−·−", "l":"·−··", "m":"−−", "n":"−·", "o":"−−−", "p":"·−−·", "q":"−−·−", "r":"·−·", "s":"···", "t":"−", "u":"··−", "v":"···−", "w":"·−−", "x":"−··−", "y":"−·−−", "z":"−−··", "·":"e", "··":"i", "···":"s", "····":"h", "·····":"5", "····−":"4", "···−":"v", "···−··−":"$", "···−−":"3", "··−":"u", "··−·":"f", "··−−··":"?", "··−−·−":"_", "··−−−":"2", "·−":"a", "·−·":"r", "·−··":"l", "·−···":"&", "·−··−·":"\"", "·−·−·":"+", "·−·−·−":".", "·−−":"w", "·−−·":"p", "·−−·−·":"@", "·−−−":"j", "·−−−−":"1", "·−−−−·":"'", "−":"t", "−·":"n", "−··":"d", "−···":"b", "−····":"6", "−····−":"-", "−···−":"=", "−··−":"x", "−··−·":"/", "−·−":"k", "−·−·":"c", "−·−·−·":";", "−·−·−−":"!", "−·−−":"y", "−·−−·":"(", "−·−−·−":")", "−−":"m", "−−·":"g", "−−··":"z", "−−···":"7", "−−··−−":",", "−−·−":"q", "−−−":"o", "−−−··":"8", "−−−···":":", "−−−−·":"9", "−−−−−":"0", "_":"··−−·−"
 		};
@@ -178,8 +180,8 @@ class GoogleTranslateOption {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var choices = 	BDFDB.getAllData(this, "choices"); 
-		var settings = 	BDFDB.getAllData(this, "settings"); 
+		var choices = 	BDFDB.getAllData(this, "choices");
+		var settings = 	BDFDB.getAllData(this, "settings");
 		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		for (let key in choices) {
 			let choice = this.getLanguageChoice(key);
@@ -519,7 +521,7 @@ class GoogleTranslateOption {
 			finishTranslation(translation, exceptions, input, output, toast);
 		}
 	}
-	
+
 	checkForSpecialCase (text, input) {
 		if (input.id == "binary" || input.id == "braille" || input.id == "morse") return input;
 		else if (input.id == "auto") {
@@ -533,7 +535,7 @@ class GoogleTranslateOption {
 				return {id: "morse", name: "Morse"};
 			}
 		}
-		return null; 
+		return null;
 	}
 
 	string2binary (string) {
@@ -603,7 +605,7 @@ class GoogleTranslateOption {
 			let text = [], i = 0;
 			string.split("").forEach(chara => { 
 				if (chara == "<" && text[i]) i++;
-				text[i] = text[i] ? text[i] + chara : chara; 
+				text[i] = text[i] ? text[i] + chara : chara;
 				if (chara == ">") i++;
 			});
 			for (let j in text) {
@@ -634,7 +636,7 @@ class GoogleTranslateOption {
 		BDFDB.addClass(button, "popout-open");
 		let translatepopout = BDFDB.htmlToElement(this.translatePopoutMarkup);
 		container.appendChild(translatepopout);
-		let buttonrects = BDFDB.getRects(button); 
+		let buttonrects = BDFDB.getRects(button);
 		translatepopout.style.setProperty("left", buttonrects.left + buttonrects.width + "px");
 		translatepopout.style.setProperty("top", buttonrects.top - buttonrects.height/2 + "px")
 
@@ -682,14 +684,14 @@ class GoogleTranslateOption {
 
 		BDFDB.initElements(translatepopout, this);
 	}
-	
+
 	saveSelectChoice (selectWrap, type, choice) {
 		if (type && choice) {
 			selectWrap.querySelector(BDFDB.dotCN.title).innerText = this.languages[choice].name;
 			BDFDB.saveData(type, choice, this, "choices");
 		}
 	}
-	
+
 	createSelectChoice (key) {
 		return `<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer}" style="flex: 1 1 auto;">${this.languages[key].name}</div>`;
 	}

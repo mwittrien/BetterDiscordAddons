@@ -1773,7 +1773,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	border-color: rgba(16,126,16,var(--vtransparencyalpha)) !important;
 }
 .root-SR8cQa .userInfoSection-2acyCx {
-	border-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 2)) !important;	
+	border-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 2)) !important;
 }
 .root-SR8cQa .body-3ND3kc {
 	border-radius: 0 0 5px 5px !important;
@@ -1789,7 +1789,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 	background: linear-gradient(90deg,rgba(var(--vtransparencycolor),0.3) 90%,rgba(var(--vtransparencycolor),0)) !important;
 }
 .root-SR8cQa .connectedAccount-36nQx7 {
-	border: none !important;	
+	border: none !important;
 	background: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 3)) !important;
 }
 .root-SR8cQa .connectedAccountOpenIcon-2cNbq5:hover {
@@ -2479,7 +2479,7 @@ html, span:not(.spinner-item) {
 	display: block;
 	width: 100%;
 	height: calc(100% - 15px);
-	position: absolute;	
+	position: absolute;
 	z-index: 200;
 	pointer-events: none;
 	left: 0px;
@@ -2590,7 +2590,7 @@ html, span:not(.spinner-item) {
 .replyer-icon:hover,
 .replyer[style*="cursor:pointer;color:rgba(255,255,255,.4) !important;position:relative;top:-1px;"]:hover {
 	border-radius: 3px;
-	opacity: 1 !important; 
+	opacity: 1 !important;
 	background-color: rgba(var(--vtransparencycolor),calc(var(--vtransparencyalpha) * 2)) !important
 }
 .citar-btn:active,
@@ -2725,9 +2725,9 @@ html:only-child > head + body > div#app-mount.appMount-3lHmkl > div.app-19_DXt >
 }
 html:only-child > head + body > div#app-mount.appMount-3lHmkl > div.app-19_DXt > div.app-2rEoOp.vertical-V37hAW.flex-1O1GKY.directionColumn-35P_nr > div.layers-3iHuyZ.vertical-V37hAW.flex-1O1GKY.directionColumn-35P_nr.spacer-1fA9zc > div.layer-3QrUeG + div.layer-3QrUeG > div > div.standardSidebarView-3F1I7i > div.sidebarRegion-VFTUkN > div.scrollerWrap-2lJEkd.scrollerThemed-2oenus.themeGhostHairline-DBD-2d.scrollerFade-1Ijw5y > div.scroller-2FKFPG.sidebarRegionScroller-3MXcoP > div.sidebar-CFHs9e > div.side-8zPYf6 > span#bd-settings-sidebar:before {
 	content: "DevilBro" !important;
-	font-size: 12px !important; 
-	font-weight: 600 !important; 
-	color: rgb(var(--vaccentcolor)) !important; 
+	font-size: 12px !important;
+	font-weight: 600 !important;
+	color: rgb(var(--vaccentcolor)) !important;
 	display: inline !important;
 	opacity: 1 !important;
 	padding: 0 !important;

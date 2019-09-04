@@ -9,16 +9,18 @@ class ShowImageDetails {
 
 	getDescription () {return "Display the name, size and dimensions of uploaded images (does not include embed images) in the chat as an header or as a tooltip.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["Spoilers","Properly works with images that are marked as spoilers now"],["Spoiler Crash","Fixed crash occuring when trying to reveal an inline spoiler"]]
 		};
-		
+
 		this.patchModules = {
 			"LazyImageZoomable":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
+	}
 
+	initConstructor () {
 		this.css = `
 			 .image-details .image-details-size {
 				 margin: 0 10px;

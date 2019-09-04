@@ -9,11 +9,11 @@ class EditServers {
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"improved":[["<span style='-webkit-background-clip: text; color: transparent; background-image: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%)'>Color Gradients</span>","You can now use color gradients to edit servers"]]
-		};	
-		
+		};
+
 		this.labels = {};
 
 		this.patchModules = {
@@ -22,7 +22,9 @@ class EditServers {
 			"GuildHeader":["componentDidMount","componentDidUpdate"],
 			"Clickable":"componentDidMount"
 		};
+	}
 
+	initConstructor () {
 		this.serverContextEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
 				<div class="${BDFDB.disCN.contextmenuitem} localserversettings-item ${BDFDB.disCN.contextmenuitemsubmenu}">
@@ -228,7 +230,7 @@ class EditServers {
 
 			this.GuildUtils = BDFDB.WebModules.findByProperties("getGuilds","getGuild");
 			this.CurrentGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
-			
+
 			BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties('getGuildBannerURL'), 'getGuildBannerURL', this, {instead:e => {
 				let guild = this.GuildUtils.getGuild(e.methodArguments[0].id);
 				if (guild) {
@@ -257,7 +259,7 @@ class EditServers {
 				this.updateGuildSidebar();
 			} catch (err) {}
 			BDFDB.saveAllData(data, this, "servers");
-			
+
 			for (let guildobj of BDFDB.readServerList()) if (guildobj.instance) {
 				delete guildobj.instance.props.guild.EditServersCachedBanner;
 			}
@@ -328,7 +330,7 @@ class EditServers {
 			});
 		}
 	}
-	
+
 	processGuild (instance, wrapper) {
 		if (instance.props && instance.props.guild) {
 			let icon = wrapper.querySelector(BDFDB.dotCN.guildicon + ":not(.fake-guildicon), " + BDFDB.dotCN.guildiconacronym + ":not(.fake-guildacronym)");
@@ -337,7 +339,7 @@ class EditServers {
 			this.changeTooltip(instance.props.guild, wrapper.querySelector(BDFDB.dotCN.guildcontainer), "right");
 		}
 	}
-	
+
 	processGuildIconWrapper (instance, wrapper) {
 		if (instance.props && instance.props.guild) {
 			let icon = wrapper.classList && BDFDB.containsClass(wrapper, BDFDB.disCN.avataricon) ? wrapper : wrapper.querySelector(BDFDB.dotCN.avataricon);
@@ -430,7 +432,7 @@ class EditServers {
 			serverbannerinput = null;
 			removebannerinput = null;
 		}
-		
+
 		BDFDB.addChildEventListener(serverSettingsModal, "click", ".btn-save", e => {
 			name = servernameinput.value.trim();
 			name = name ? name : null;
@@ -653,7 +655,7 @@ class EditServers {
 
 		return !key || settings[key] ? data : {};
 	}
-	
+
 	setBanner (id, data) {
 		data = data || {};
 		let guild = this.GuildUtils.getGuild(id);
@@ -661,7 +663,7 @@ class EditServers {
 		if (guild.EditServersCachedBanner === undefined) guild.EditServersCachedBanner = guild.banner;
 		guild.banner = data.removeBanner ? null : (data.banner || guild.EditServersCachedBanner);
 	}
-	
+
 	updateGuildSidebar() {
 		if (document.querySelector(BDFDB.dotCN.guildheader)) {
 			var ins = BDFDB.getOwnerInstance({node: document.querySelector(BDFDB.dotCN.app), name: ["GuildSidebar", "GuildHeader"], all: true, noCopies: true, depth: 99999999, time: 99999999});

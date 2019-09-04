@@ -9,11 +9,11 @@ class PinDMs {
 
 	getDescription () {return "Allows you to pin DMs, making them appear at the top of your DMs/Guild-list.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["Pinned DMs","Changed to new DM classes"]]
 		};
-		
+
 		this.patchModules = {
 			"Guilds":"componentDidMount",
 			"PrivateChannel":"componentDidMount",
@@ -21,7 +21,9 @@ class PinDMs {
 			"LazyScroller":"render",
 			"StandardSidebarView":"componentWillUnmount"
 		};
+	}
 
+	initConstructor () {
 		this.dmContextEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
 				<div class="${BDFDB.disCN.contextmenuitem} pindms-item ${BDFDB.disCN.contextmenuitemsubmenu}">
@@ -267,7 +269,7 @@ class PinDMs {
 			BDFDB.unloadMessage(this);
 		}
 	}
-	
+
 	onSwitch () {
 		for (let pin of document.querySelectorAll(".pinned-dm")) this.updatePinnedRecent(pin.getAttribute("channelid"));
 	}
@@ -327,7 +329,7 @@ class PinDMs {
 					if (dmsscrollerinstance) {
 						let dms = dmsscrollerinstance.return.return.return.memoizedProps.children;
 						let insertpoint = this.getInsertPoint(dms);
-						this.addPinnedDM(id, dms, insertpoint); 
+						this.addPinnedDM(id, dms, insertpoint);
 						this.forceUpdateScroller(dmsscrollerinstance.stateNode);
 					}
 					this.updatePinnedPositions("pinnedDMs");
@@ -553,7 +555,7 @@ class PinDMs {
 		for (let id in pinnedDMs) sortDM(id, pinnedDMs[id]);
 		sortedDMs = sortedDMs.filter(n => n);
 		for (let pos in sortedDMs) if (this.ChannelUtils.getChannel(sortedDMs[pos])) existingDMs.push(sortedDMs[pos]);
-		this.updatePinnedPositions(type); 
+		this.updatePinnedPositions(type);
 		return existingDMs;
 	}
 
@@ -696,26 +698,26 @@ class PinDMs {
 		if (Node.prototype.isPrototypeOf(pinneddmdiv)) {
 			let count = this.UnreadUtils.getUnreadCount(id);
 			let showpin = BDFDB.getData("showPinIcon", this, "settings");
-			
+
 			let dmdiv = BDFDB.getDmDiv(id);
 			let pinneddmiconwrapper = pinneddmdiv.querySelector(BDFDB.dotCN.guildiconwrapper);
 			let pinneddmdivpill = pinneddmdiv.querySelector(BDFDB.dotCN.guildpillitem);
 			let iconbadge = pinneddmdiv.querySelector(BDFDB.dotCN.guildupperbadge);
 			let notificationbadge = pinneddmdiv.querySelector(BDFDB.dotCN.guildlowerbadge);
-			
+
 			BDFDB.toggleClass(pinneddmdiv, "has-new-messages", count > 0);
 			let selected = this.CurrentChannelStore.getChannelId() == id;
 			pinneddmiconwrapper.style.setProperty("border-radius", selected ? "30%" : "50%");
 			pinneddmdivpill.style.setProperty("opacity", selected ? 1 : (count ? 0.7 : 0));
 			pinneddmdivpill.style.setProperty("height", selected ? "40px" : "8px");
 			pinneddmdivpill.style.setProperty("transform", "translate3d(0px, 0px, 0px)");
-			
+
 			BDFDB.toggleEles(iconbadge, showpin);
 			notificationbadge.firstElementChild.innerText = count;
 			notificationbadge.firstElementChild.style.setProperty("width", `${count > 99 ? 30 : (count > 9 ? 22 : 16)}px`);
 			notificationbadge.firstElementChild.style.setProperty("padding-right", `${count > 99 ? 0 : (count > 9 ? 0 : 1)}px`);
 			BDFDB.toggleEles(notificationbadge, count > 0);
-			
+
 			let masks = pinneddmdiv.querySelectorAll("mask rect");
 			masks[0].setAttribute("transform", showpin ? "translate(0 0)" : "translate(20 -20)");
 			masks[1].setAttribute("transform", count > 0 ? "translate(0 0)" : "translate(20 20)");
@@ -744,7 +746,7 @@ class PinDMs {
 		let divinner = div.querySelector(BDFDB.dotCN.guildinnerwrapper);
 		let diviconwrapper = div.querySelector(BDFDB.dotCN.guildiconwrapper);
 		let divpillitem = div.querySelector(BDFDB.dotCN.guildpillitem);
-		
+
 		let pillvisible = divpillitem.style.getPropertyValue("opacity") != 0;
 
 		let borderRadius = new this.Animations.Value(0);
@@ -776,14 +778,14 @@ class PinDMs {
 			.addListener((value) => {
 				divpillitem.style.setProperty("opacity", `${this.CurrentChannelStore.getChannelId() == id ? 1 : value.value}`);
 			});
-		
+
 		let animate = (v) => {
 			this.Animations.parallel([
 				this.Animations.timing(borderRadius, {toValue: v, duration: 200}),
 				this.Animations.spring(pillHeight, {toValue: v, friction: 5})
 			]).start();
 		};
-		
+
 		let animate2 = (v) => {
 			this.Animations.parallel([
 				this.Animations.timing(pillOpacity, {toValue: v, duration: 200}),

@@ -9,7 +9,7 @@ class MoveablePopups {
 
 	getDescription () {return "Adds the feature to move all popups and modals around like on a normal desktop. Ctrl + drag with your left mousebutton to drag element.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["Moved Modal Container","Fixed selector for new modal container"]]
 		};

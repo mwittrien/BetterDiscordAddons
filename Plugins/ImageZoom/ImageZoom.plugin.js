@@ -9,16 +9,18 @@ class ImageZoom {
 
 	getDescription () {return "Allows you to zoom in opened Images by holding left clicking on them in the Image Modal.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["Lense","Fixed the issue where the lesen wouldn't properly clip the zoomed image"]]
 		};
-		
+
 		this.patchModules = {
 			"ImageModal":["componentDidMount","componentWillUnmount"],
 			"Icon":["componentDidMount","componentWillUnmount"],
-		}
+		};
+	}
 
+	initConstructor () {
 		this.zoomSettingsContextMarkup = 
 			`<div class="${BDFDB.disCN.contextmenu} imagezoom-contextmenu">
 				<div class="${BDFDB.disCN.contextmenuitemgroup}">
@@ -112,7 +114,7 @@ class ImageZoom {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 
-			BDFDB.WebModules.forceAllUpdates(this); 
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
 			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
@@ -126,9 +128,9 @@ class ImageZoom {
 				delete img.ImageZoomMouseDownListener;
 				img.removeAttribute("draggable");
 			}
-			
+
 			BDFDB.removeEles(".imagezoom-contextmenu", ".imagezoom-separator", ".imagezoom-settings", ".imagezoom-lense", ".imagezoom-backdrop");
-			
+
 			BDFDB.unloadMessage(this);
 		}
 	}
@@ -175,16 +177,16 @@ class ImageZoom {
 					img.ImageZoomMouseDownListener = e => {
 						BDFDB.stopEvent(e);
 						BDFDB.appendLocalStyle("ImageZoomCrossHair", "* {cursor: crosshair !important;}");
-						
+
 						let imgrects = BDFDB.getRects(img);
 						let settings = BDFDB.getAllData(this, "settings");
-						
+
 						let lense = BDFDB.htmlToElement(`<div class="imagezoom-lense" style="clip-path: circle(${(settings.lensesize/2) + 2}px at center) !important; border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${settings.lensesize}px !important; height: ${settings.lensesize}px !important; position: fixed !important;"><div class="imagezoom-lense-inner" style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; clip-path: circle(${settings.lensesize/2}px at center) !important;"><${img.tagName} class="imagezoom-pane" src="${img.src}" style="width: ${imgrects.width * settings.zoomlevel}px; height: ${imgrects.height * settings.zoomlevel}px; position: fixed !important;"${img.tagName == "VIDEO" ? " loop autoplay" : ""}></${img.tagName}></div></div>`);
 						let pane = lense.querySelector(".imagezoom-pane");
 						let backdrop = BDFDB.htmlToElement(`<div class="imagezoom-backdrop" style="background: rgba(0,0,0,0.2) !important;"></div>`);
 						document.querySelector(BDFDB.dotCN.appmount).appendChild(lense);
 						document.querySelector(BDFDB.dotCN.appmount).appendChild(backdrop);
-						
+
 						let lenserects = BDFDB.getRects(lense), panerects = BDFDB.getRects(pane);
 						let halfW = lenserects.width / 2, halfH = lenserects.height / 2;
 						let minX = imgrects.left, maxX = minX + imgrects.width;
@@ -193,7 +195,7 @@ class ImageZoom {
 						lense.style.setProperty("top", e.clientY - halfH + "px", "important");
 						pane.style.setProperty("left", imgrects.left + ((settings.zoomlevel - 1) * (imgrects.left - e.clientX)) + "px", "important");
 						pane.style.setProperty("top", imgrects.top + ((settings.zoomlevel - 1) * (imgrects.top - e.clientY)) + "px", "important");
-						
+
 						let dragging = e2 => {
 							let x = e2.clientX > maxX ? maxX - halfW : e2.clientX < minX ? minX - halfW : e2.clientX - halfW;
 							let y = e2.clientY > maxY ? maxY - halfH : e2.clientY < minY ? minY - halfH : e2.clientY - halfH;
@@ -259,7 +261,7 @@ class ImageZoom {
 		document.addEventListener("mouseup", mouseup);
 		document.addEventListener("mousemove", mousemove);
 	}
-	
+
 	updateSlider	() {
 		var sY = 0;
 		var sHalfW = BDFDB.getRects(grabber).width/2;

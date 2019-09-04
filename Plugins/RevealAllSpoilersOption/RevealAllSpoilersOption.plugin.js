@@ -71,7 +71,7 @@ class RevealAllSpoilersOption {
 		}
 	}
 
-	
+
 	// begin of own functions
 
 	onMessageContextMenu (instance, menu) {
@@ -92,7 +92,7 @@ class RevealAllSpoilersOption {
 			}
 		}
 	}
-	
+
 	revealAllSpoilers (target) {
 		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.message, target);
 		if (!messagediv) return;

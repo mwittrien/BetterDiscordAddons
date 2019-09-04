@@ -9,7 +9,7 @@ class CopyRawMessage {
 
 	getDescription () {return "Adds a entry in the contextmenu when you right click a message that allows you to copy the raw contents of a message.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"added":[["Message 3-dot entry","Added the copy entry to the message 3-dot menu"]]
 		};
@@ -18,7 +18,9 @@ class CopyRawMessage {
 			"Message":"componentDidMount",
 			"MessageOptionPopout":"componentDidMount"
 		};
-		
+	}
+
+	initConstructor () {
 		this.messageCopyRawEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
 				<div class="${BDFDB.disCN.contextmenuitem} copyrawmessage-item">
@@ -84,9 +86,9 @@ class CopyRawMessage {
 		}
 	}
 
-	
+
 	// begin of own functions
-	
+
 	onMessageContextMenu (instance, menu) {
 		if (instance.props && instance.props.message && instance.props.message.content && instance.props.target && !menu.querySelector(".copyrawmessage-item")) {
 			let messageCopyRawEntry = BDFDB.htmlToElement(this.messageCopyRawEntryMarkup);

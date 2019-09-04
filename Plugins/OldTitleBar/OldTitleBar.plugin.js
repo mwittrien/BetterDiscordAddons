@@ -9,18 +9,20 @@ class OldTitleBar {
 
 	getDescription () {return "Reverts the title bar back to its former self.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["Mac OSX","Fixed the plugin for Mac OSX"]]
 		};
-		
+
 		this.patchModules = {
 			"HeaderBar":["componentDidMount","componentDidUpdate"],
 			"HeaderBarContainer":["componentDidMount","componentDidUpdate"],
 			"StandardSidebarView":["componentDidMount","componentWillUnmount"],
 			"AuthWrapper":["componentDidMount","componentWillUnmount"]
 		};
+	}
 
+	initConstructor () {
 		this.patched = false;
 
 		this.css = `
@@ -28,11 +30,11 @@ class OldTitleBar {
 			.hidden-by-OTB ${BDFDB.dotCN.titlebar} + ${BDFDB.dotCNS.app + BDFDB.dotCN.splashbackground}:before {
 				display: none !important;
 			}
-			
+
 			.hidden-by-OTB .platform-osx ${BDFDB.dotCN.guildswrapper} {
 				margin-top: 0;
 			}
-			
+
 			.hidden-by-OTB .platform-osx ${BDFDB.dotCN.guilds} {
 				padding-top: 10px;
 			}
@@ -95,7 +97,7 @@ class OldTitleBar {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var settings = BDFDB.getAllData(this, "settings"); 
+		var settings = BDFDB.getAllData(this, "settings");
 		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		for (let key in settings) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch${key == "displayNative" ? " nativetitlebar-switch" : ""}"${settings[key] ? " checked" : ""}></div></div>`;
@@ -273,7 +275,7 @@ class OldTitleBar {
 		var innerHTML = this.isMaximized() ? this.maxButtonInnerMax : this.maxButtonInnerMin;
 		document.querySelectorAll(".maxButtonOTB g").forEach(g => {g.innerHTML = innerHTML;});
 	}
-	
+
 	isMaximized () {
 		return window.screen.availWidth == window.outerWidth && window.screen.availHeight == window.outerHeight && window.screenX == 0 && window.screenY == 0;
 	}

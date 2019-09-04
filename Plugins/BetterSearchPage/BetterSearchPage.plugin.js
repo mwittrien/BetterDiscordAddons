@@ -9,16 +9,18 @@ class BetterSearchPage {
 
 	getDescription () {return "Adds some extra controls to the search results page.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["Canary/PTB","Fixed the plugin for canary and ptb"]]
 		};
-		
+
 		this.patchModules = {
 			"SearchResults":["componentDidMount","componentDidUpdate"],
 			"StandardSidebarView":"componentWillUnmount"
 		};
+	}
 
+	initConstructor () {
 		this.css = `
 			.BSP-pagination-button {
 				background: url('data:image/svg+xml; base64, PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZ2h0PSIyNSI+PGcgZmlsbD0iIzczN2Y4ZCIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZD0iTTE3LjMzOCAxMi40ODVjLTQuMTU2IDQuMTU2LTguMzEyIDguMzEyLTEyLjQ2OCAxMi40NjctMS40MDItMS40MDItMi44MDUtMi44MDQtNC4yMDctNC4yMDYgMi43NTYtMi43NTcgNS41MTMtNS41MTQgOC4yNy04LjI3QzYuMTc2IDkuNzIgMy40MTkgNi45NjMuNjYzIDQuMjA3TDQuODcgMGMtLjA1OC0uMDU5IDEyLjU1NSAxMi41NjIgMTIuNDY4IDEyLjQ4NXoiLz48cGF0aCB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGQ9Ik0xNy4zMzggMTIuNDg1Yy00LjE1NiA0LjE1Ni04LjMxMiA4LjMxMi0xMi40NjggMTIuNDY3LTEuNDAyLTEuNDAyLTIuODA1LTIuODA0LTQuMjA3LTQuMjA2IDIuNzU2LTIuNzU3IDUuNTEzLTUuNTE0IDguMjctOC4yN0M2LjE3NiA5LjcyIDMuNDE5IDYuOTYzLjY2MyA0LjIwN0w0Ljg3IDBjLS4wNTgtLjA1OSAxMi41NTUgMTIuNTYyIDEyLjQ2OCAxMi40ODV6IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMiAwKSIvPjwvZz48L3N2Zz4=') 50%/9px 12px no-repeat;
@@ -67,7 +69,7 @@ class BetterSearchPage {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var settings = BDFDB.getAllData(this, "settings"); 
+		var settings = BDFDB.getAllData(this, "settings");
 		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		for (let key in settings) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
@@ -118,7 +120,7 @@ class BetterSearchPage {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);     
+			BDFDB.loadMessage(this);
 
 			this.SearchNavigation = BDFDB.WebModules.findByProperties("searchNextPage","searchPreviousPage");
 

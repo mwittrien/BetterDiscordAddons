@@ -9,20 +9,20 @@ class CreationDate {
 
 	getDescription () {return "Displays the Creation Date of an Account in the UserPopout and UserModal.";}
 
-	initConstructor () {
+	constructor () {
 		this.changelog = {
 			"fixed":[["Showing at top","Fixed issue where dates would be listed at the top in the profile the first time a profile was opened or when a custom status is set"]]
 		};
-		
+
 		this.labels = {};
 
 		this.patchModules = {
 			"UserPopout":"componentDidMount",
 			"UserProfile":"componentDidMount"
 		};
+	}
 
-		this.languages;
-
+	initConstructor () {
 		this.css = `
 			${BDFDB.dotCNS.userpopout + BDFDB.dotCN.nametag} {
 				margin-bottom: 4px;
@@ -31,14 +31,14 @@ class CreationDate {
 				margin-right: 20px;
 			}
 			${BDFDB.dotCNS.themelight + BDFDB.dotCN.userpopoutheadernormal} .creationDate {
-				color: #b9bbbe; 
+				color: #b9bbbe;
 			}
 			${BDFDB.dotCNS.themelight + BDFDB.dotCN.userpopoutheader + BDFDB.notCN.userpopoutheadernormal} .creationDate,
 			${BDFDB.dotCNS.themedark + BDFDB.dotCN.userpopoutheader} .creationDate {
 				color: hsla(0,0%,100%,.6);
 			}
 			${BDFDB.dotCNS.themelight + BDFDB.dotCN.userprofiletopsectionnormal} .creationDate {
-				color: hsla(216,4%,74%,.6); 
+				color: hsla(216,4%,74%,.6);
 			}
 			${BDFDB.dotCN.themelight} [class*='topSection']${BDFDB.notCN.userprofiletopsectionnormal} .creationDate,
 			${BDFDB.dotCN.themedark} [class*='topSection'] .creationDate {
@@ -138,7 +138,7 @@ class CreationDate {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-			
+
 			this.languages = Object.assign({"own":{name:"Own",id:"own",integrated:false,dic:false}},BDFDB.languages);
 
 			BDFDB.WebModules.forceAllUpdates(this);
@@ -180,7 +180,7 @@ class CreationDate {
 		BDFDB.toggleEles(ele.nextElementSibling);
 		BDFDB.saveData("hideInfo", BDFDB.isEleHidden(ele.nextElementSibling), this, "hideInfo");
 	}
-	
+
 	saveSelectChoice (selectWrap, type, choice) {
 		if (type && choice) {
 			selectWrap.querySelector(".languageName").innerText = this.languages[choice].name;
@@ -188,7 +188,7 @@ class CreationDate {
 			BDFDB.saveData(type, choice, this, "choices");
 		}
 	}
-	
+
 	createSelectChoice (choice) {
 		return `<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer} languageName" style="flex: 1 1 42%; padding: 0;">${this.languages[choice].name}</div><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer} languageTimestamp" style="flex: 1 1 58%; padding: 0;">${this.getTimestamp(this.languages[choice].id)}</div>`;
 	}
