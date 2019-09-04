@@ -114,20 +114,25 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		var changelog = BDFDB.loadAllData(plugin, 'changelog');
 		if (!changelog.currentversion || BDFDB.checkVersions(plugin.version, changelog.currentversion)) {
 			changelog.currentversion = plugin.version;
-			var changeLogHTML = '';
-			var headers = {added: 'New Features', fixed: 'Bug Fixes', improved: 'Improvements', progress: 'Progress'};
-			for (let type in plugin.changelog) {
-				type = type.toLowerCase();
-				var classname = BDFDB.disCN['changelog' + type];
-				if (classname) {
-					changeLogHTML += `<h1 class="${classname + ' ' + BDFDB.disCN.margintop20}"${changeLogHTML.indexOf('<h1') == -1 ? 'style="margin-top: 0px !important;"' : ''}>${headers[type]}</h1><ul>`;
-					for (let log of plugin.changelog[type]) changeLogHTML += `<li><strong>${log[0]}</strong>${log[1] ? (': ' + log[1] + '.') : ''}</li>`;
-					changeLogHTML += `</ul>`
-				}
-			}
-			if (changeLogHTML) BDFDB.removeEles(BDFDB.openConfirmModal(plugin, changeLogHTML, BDFDB.LanguageStrings.CHANGE_LOG).querySelectorAll(".btn-cancel"));
 			BDFDB.saveAllData(changelog, plugin, 'changelog');
+			BDFDB.openChangeLogModal(plugin);
 		}
+	};
+	
+	BDFDB.openChangeLogModal = function (plugin) {
+		if (!BDFDB.isObject(plugin) || !plugin.changelog) return;
+		var changeLogHTML = '';
+		var headers = {added: 'New Features', fixed: 'Bug Fixes', improved: 'Improvements', progress: 'Progress'};
+		for (let type in plugin.changelog) {
+			type = type.toLowerCase();
+			var classname = BDFDB.disCN['changelog' + type];
+			if (classname) {
+				changeLogHTML += `<h1 class="${classname + ' ' + BDFDB.disCN.margintop20}"${changeLogHTML.indexOf('<h1') == -1 ? 'style="margin-top: 0px !important;"' : ''}>${headers[type]}</h1><ul>`;
+				for (let log of plugin.changelog[type]) changeLogHTML += `<li><strong>${log[0]}</strong>${log[1] ? (': ' + log[1] + '.') : ''}</li>`;
+				changeLogHTML += `</ul>`
+			}
+		}
+		if (changeLogHTML) BDFDB.removeEles(BDFDB.openConfirmModal(plugin, changeLogHTML, BDFDB.LanguageStrings.CHANGE_LOG).querySelectorAll(".btn-cancel"));
 	};
 
 	BDFDB.addObserver = function (plugin, eleOrSelec, observer, config = {childList: true}) {
@@ -5997,31 +6002,41 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			if (!author.firstElementChild && !description.firstElementChild && (author.innerText == "DevilBro" || author.innerText.indexOf("DevilBro,") == 0)) {
 				description.style.setProperty("display", "block", "important");
 				author.innerHTML = `<a class="${BDFDB.disCNS.anchor + BDFDB.disCN.anchorunderlineonhover}">DevilBro</a>${author.innerText.split("DevilBro").slice(1).join("DevilBro")}`;
-				author.addEventListener("click", () => {
-					if (BDFDB.myData.id == "278543574059057154") return;
-					let DMid = LibraryModules.ChannelStore.getDMFromUserId("278543574059057154")
+				author.addEventListener('click', () => {
+					if (BDFDB.myData.id == '278543574059057154') return;
+					let DMid = LibraryModules.ChannelStore.getDMFromUserId('278543574059057154')
 					if (DMid) LibraryModules.SelectChannelUtils.selectPrivateChannel(DMid);
-					else LibraryModules.DirectMessageUtils.openPrivateChannel(BDFDB.myData.id, "278543574059057154");
+					else LibraryModules.DirectMessageUtils.openPrivateChannel(BDFDB.myData.id, '278543574059057154');
 					let close = document.querySelector(BDFDB.dotCNS.settingsclosebuttoncontainer + BDFDB.dotCN.settingsclosebutton);
 					if (close) close.click();
 				});
+				let version = wrapper.querySelector(BDFDB.dotCN._repoversion);
+				if (version && data.changelog) {
+					BDFDB.removeEles(version.querySelectorAll('.BDFDB-versionchangelog'));
+					let changelogicon = BDFDB.htmlToElement(`<svg class="BDFDB-versionchangelog" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 510 510" style="margin: 0 2px -3px 6px;"><path fill="currentColor" d="M267.75,12.75c-89.25,0-168.3,48.45-209.1,122.4L0,76.5v165.75h165.75 l-71.4-71.4c33.15-63.75,96.9-107.1,173.4-107.1C372.3,63.75,459,150.45,459,255s-86.7,191.25-191.25,191.25 c-84.15,0-153-53.55-181.05-127.5H33.15c28.05,102,122.4,178.5,234.6,178.5C402.9,497.25,510,387.6,510,255 C510,122.4,400.35,12.75,267.75,12.75z M229.5,140.25V270.3l119.85,71.4l20.4-33.15l-102-61.2v-107.1H229.5z"></path></svg>`);
+					version.appendChild(changelogicon);
+					changelogicon.addEventListener('click', () => {BDFDB.openChangeLogModal(data);});
+					changelogicon.addEventListener('mouseenter', () => {
+						BDFDB.createTooltip(BDFDB.LanguageStrings.CHANGE_LOG, changelogicon, {type:'top', selector:'changelogicon-tooltip'});
+					});
+				}
 				let links = wrapper.querySelector(BDFDB.dotCN._repolinks);
 				if (links) {
-					if (links.firstElementChild) links.appendChild(document.createTextNode(" | "));
+					if (links.firstElementChild) links.appendChild(document.createTextNode(' | '));
 					let supportlink = BDFDB.htmlToElement(`<a class="${BDFDB.disCNS._repolink + BDFDB.disCN._repolink}-support" target="_blank">Support Server</a>`);
-					supportlink.addEventListener("click", e => {
+					supportlink.addEventListener('click', e => {
 						BDFDB.stopEvent(e);
 						let switchguild = () => {
-							LibraryModules.GuildUtils.transitionToGuildSync("410787888507256842");
+							LibraryModules.GuildUtils.transitionToGuildSync('410787888507256842');
 							let close = document.querySelector(BDFDB.dotCNS.settingsclosebuttoncontainer + BDFDB.dotCN.settingsclosebutton);
 							if (close) close.click();
 						};
-						if (LibraryModules.GuildStore.getGuild("410787888507256842")) switchguild();
-						else LibraryModules.InviteUtils.acceptInvite("Jx3TjNS").then(() => {switchguild();});
+						if (LibraryModules.GuildStore.getGuild('410787888507256842')) switchguild();
+						else LibraryModules.InviteUtils.acceptInvite('Jx3TjNS').then(() => {switchguild();});
 					});
 					links.appendChild(supportlink);
-					if (BDFDB.myData.id != "98003542823944192" && BDFDB.myData.id != "116242787980017679" && BDFDB.myData.id != "81388395867156480") {
-						links.appendChild(document.createTextNode(" | "));
+					if (BDFDB.myData.id != '98003542823944192' && BDFDB.myData.id != '116242787980017679' && BDFDB.myData.id != '81388395867156480') {
+						links.appendChild(document.createTextNode(' | '));
 						links.appendChild(BDFDB.htmlToElement(`<a class="${BDFDB.disCNS._repolink + BDFDB.disCN._repolink}-donations" href="https://www.paypal.me/MircoWittrien" target="_blank">Donations</a>`));
 					}
 				}
