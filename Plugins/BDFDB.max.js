@@ -6021,7 +6021,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				let version = wrapper.querySelector(BDFDB.dotCN._repoversion);
 				if (version && data.changelog) {
 					BDFDB.removeEles(version.querySelectorAll('.BDFDB-versionchangelog'));
-					let changelogicon = BDFDB.htmlToElement(`<span class="BDFDB-versionchangelog" style="white-space: pre !important;">   </span>`);
+					let changelogicon = BDFDB.htmlToElement(`<span class="BDFDB-versionchangelog" style="white-space: pre !important;">     </span>`);
 					version.appendChild(changelogicon);
 					changelogicon.addEventListener('click', () => {BDFDB.openChangeLogModal(data);});
 					changelogicon.addEventListener('mouseenter', () => {
