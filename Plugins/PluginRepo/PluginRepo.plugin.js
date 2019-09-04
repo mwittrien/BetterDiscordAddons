@@ -3,7 +3,7 @@
 class PluginRepo {
 	getName () {return "PluginRepo";} 
 
-	getVersion () {return "1.8.2";}
+	getVersion () {return "1.8.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class PluginRepo {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Refetch","Fixed refetching occuring every x hours"]]
+			"fixed":[["Repo Modal","Fixed an issue that prevented the repo modal from opening"]]
 		};
 
 		this.patchModules = {
@@ -442,8 +442,8 @@ class PluginRepo {
 
 		if (options.forcedSort && this.sortings.sort[options.forcedSort]) {
 			var sortinput = pluginRepoModal.querySelector(".sort-filter " + BDFDB.dotCN.quickselectvalue);
-			orderinput.innerText = this.sortings.sort[options.forcedSort];
-			orderinput.setAttribute('option', options.forcedSort);
+			sortinput.innerText = this.sortings.sort[options.forcedSort];
+			sortinput.setAttribute('option', options.forcedSort);
 		}
 		if (options.forcedOrder && this.sortings.order[options.forcedOrder]) {
 			var orderinput = pluginRepoModal.querySelector(".order-filter " + BDFDB.dotCN.quickselectvalue);
