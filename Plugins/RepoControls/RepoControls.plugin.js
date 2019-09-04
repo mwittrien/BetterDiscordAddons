@@ -3,7 +3,7 @@
 class RepoControls {
 	getName () {return "RepoControls";}
 
-	getVersion () {return "1.2.8";}
+	getVersion () {return "1.2.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class RepoControls {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Canary/PTB","Fixed the plugin for canary and ptb"]]
+			"fixed":[["Searchbug","Fixed an issue with the changelog button"]]
 		};
 
 		this.patchModules = {
@@ -347,7 +347,7 @@ class RepoControls {
 				let path = global[`bd${type}s`] && global[`bd${type}s`][name] ? this.path.join(this.dirs[type], global[`bd${type}s`][name].filename) : null;
 				let stats = path ? this.fs.statSync(path) : null;
 				container.entries[name] = {
-					search:			(name + " " + version + " " + author + " " + description).toUpperCase(),
+					search:			(name + " " + " " + author + " " + description).toUpperCase(),
 					origName: 		name,
 					name: 			(name).toUpperCase(),
 					version: 		(version).toUpperCase(),
@@ -393,7 +393,7 @@ class RepoControls {
 
 	changeTextToHTML (wrapper, searchstring) {
 		if (!wrapper || !wrapper.tagName) return;
-		for (let ele of wrapper.querySelectorAll(BDFDB.dotCNC._reponame + BDFDB.dotCNC._repoversion + BDFDB.dotCNC._repoauthor + BDFDB.dotCN._repodescription)) {
+		for (let ele of wrapper.querySelectorAll(BDFDB.dotCNC._reponame + BDFDB.dotCNC._repoauthor + BDFDB.dotCN._repodescription)) {
 			var string = ele.firstElementChild ? ele.innerHTML : ele.innerText;
 			if (BDFDB.containsClass(ele, BDFDB.disCN._repodescription)) {
 				ele.style.display = "block";
