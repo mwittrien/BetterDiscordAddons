@@ -604,7 +604,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		var layers = document.querySelector(BDFDB.dotCN.layers);
 		if (!layers) return;
 		var id = Math.round(Math.random() * 10000000000000000);
-		var notice = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.notice + BDFDB.disCNS.size14 + BDFDB.disCNS.weightmedium + BDFDB.disCN.height36} BDFDB-notice notice-${id}"><div class="${BDFDB.disCN.noticedismiss}" style="height:36px !important; top: 0 !important; right 0 !important; left: unset !important;"></div><span class="notice-message"></span></div>`);
+		var notice = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.notice + BDFDB.disCNS.size14 + BDFDB.disCNS.weightmedium + BDFDB.disCN.height36} BDFDB-notice notice-${id}"><div class="${BDFDB.disCN.noticedismiss}" style="height:36px !important; position: absolute !important; top: 0 !important; right: 0 !important; left: unset !important;"></div><span class="notice-message"></span></div>`);
 		layers.parentElement.insertBefore(notice, layers);
 		var noticemessage = notice.querySelector('.notice-message');
 		if (options.platform) for (let platform of options.platform.split(' ')) if (DiscordClasses["noticeicon" + platform]) {
