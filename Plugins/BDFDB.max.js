@@ -3714,7 +3714,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.Input = BDFDB.WebModules.findByProperties('inputMini', 'statusRed');
 	DiscordClassModules.Layers = BDFDB.WebModules.findByProperties('layer', 'layers');
 	DiscordClassModules.Margins = BDFDB.WebModules.findByProperties('marginBottom4', 'marginCenterHorz');
-	DiscordClassModules.Member = BDFDB.WebModules.findByProperties('member', 'memberInner');
+	DiscordClassModules.Member = BDFDB.WebModules.findByProperties('member', 'ownerIcon');
 	DiscordClassModules.MembersWrap = BDFDB.WebModules.findByProperties('membersWrap', 'membersGroup');
 	DiscordClassModules.Mention = BDFDB.WebModules.findByProperties('wrapperHover', 'wrapperNoHover');
 	DiscordClassModules.Message = BDFDB.WebModules.findByProperties('containerCozy', 'content');
@@ -4028,6 +4028,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		contextmenucheckboxdisabled: ['ContextMenuCheckbox', 'disabled'],
 		contextmenucheckboxinner: ['ContextMenuCheckbox', 'checkboxInner'],
 		contextmenucheckboxelement: ['ContextMenuCheckbox', 'checkboxElement'],
+		contextmenuclickable: ['ContextMenu', 'clickable'],
 		contextmenuhint: ['ContextMenu', 'hint'],
 		contextmenuinvertchildx: ['ContextMenu', 'invertChildX'],
 		contextmenuitem: ['ContextMenu', 'item'],
@@ -4041,6 +4042,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		contextmenuitemsubmenuhasscroller: ['ContextMenu', 'itemSubMenuHasScroller'],
 		contextmenulabel: ['ContextMenu', 'label'],
 		contextmenuscroller: ['ContextMenu', 'scroller'],
+		contextmenuselected: ['ContextMenu', 'selected'],
 		contextmenuslider: ['ContextMenu', 'slider'],
 		cooldownwrapper: ['Typing', 'cooldownWrapper'],
 		cursordefault: ['Cursor', 'cursorDefault'],
@@ -5197,18 +5199,18 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			text-overflow: ellipsis;
 		}
 
-		${BDFDB.dotCNS.message + BDFDB.dotCN.messageheadercozy} {
+		${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageheadercozy} {
 			padding-top: 0;
 		}
-		${BDFDB.dotCN.messageheadercompact} > span.popout-open,
-		${BDFDB.dotCN.messageheadercompact} > span[class=""],
-		${BDFDB.dotCN.messageheadercozymeta} > span.popout-open,
-		${BDFDB.dotCN.messageheadercozymeta} > span[class=""] {
+		${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageheadercompact} > span.popout-open,
+		${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageheadercompact} > span[class=""],
+		${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageheadercozymeta} > span.popout-open,
+		${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageheadercozymeta} > span[class=""] {
 			display: inline-flex;
 			align-items: baseline;
 		}
-		${BDFDB.dotCNS.messageheadercompact + BDFDB.dotCN.bottag},
-		${BDFDB.dotCNS.messageheadercompact + BDFDB.dotCN.messageusername} {
+		${BDFDB.dotCNS.messagegroup + BDFDB.dotCNS.messageheadercompact + BDFDB.dotCN.bottag},
+		${BDFDB.dotCNS.messagegroup + BDFDB.dotCNS.messageheadercompact + BDFDB.dotCN.messageusername} {
 			text-indent: 0px;
 		}
 
