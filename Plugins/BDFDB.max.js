@@ -1468,7 +1468,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					plugin.patchModules[patchtype] = plugin.patchModules[type];
 					delete plugin.patchModules[type];
 				}
-				if (!classOrBoolean) patchInstance(BDFDB.WebModules.findByName(type), patchtype);
+				if (!classOrBoolean) patchInstance(BDFDB.WebModules.findByName(mapped || type), patchtype);
 				else if (typeof classOrBoolean == 'boolean' || DiscordClasses[classOrBoolean]) checkForInstance(classOrBoolean, patchtype);
 			}
 			function patchInstance(instance, type) {
