@@ -1463,17 +1463,17 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			for (let type in plugin.patchModules) {
 				var mapped = webModulesPatchmap[type];
 				var classOrBoolean = webModulesNotFindableModules[type];
-				var patchtype = mapped ? mapped + ' ' + type : type;
+				var patchtype = mapped ? mapped + ' _  _ ' + type : type;
 				if (mapped) {
 					plugin.patchModules[patchtype] = plugin.patchModules[type];
 					delete plugin.patchModules[type];
 				}
-				if (!classOrBoolean) patchInstance(BDFDB.WebModules.findByName(mapped || type), patchtype);
+				if (!classOrBoolean) patchInstance(BDFDB.WebModules.findByName(patchtype.split(' _  _ ')[0]), patchtype);
 				else if (typeof classOrBoolean == 'boolean' || DiscordClasses[classOrBoolean]) checkForInstance(classOrBoolean, patchtype);
 			}
 			function patchInstance(instance, type) {
 				if (instance) {
-					var name = type.split(' ')[0];
+					var name = type.split(' _  _ ')[0];
 					instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 					instance = instance.displayName == name ? instance : BDFDB.getOwnerInstance({instance:instance, name, up:true});
 					if (instance) {
@@ -1540,7 +1540,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.WebModules.initiateProcess = function (plugin, instance, type, methodnames) {
 		if (BDFDB.isObject(plugin) && instance) {
 			plugin = plugin.name == '$BDFDB' ? BDFDBpatches : plugin;
-			type = (type.split(' ')[1] || type).replace(/[^A-z0-9]|_/g, '');
+			type = (type.split(' _ _ ')[1] || type).replace(/[^A-z0-9]|_/g, '');
 			type = type[0].toUpperCase() + type.slice(1);
 			if (typeof plugin['process' + type] == 'function') {
 				var wrapper = BDFDB.React.findDOMNodeSafe(instance);
