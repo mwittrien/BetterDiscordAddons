@@ -3210,7 +3210,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			target.appendChild(submenu);
 			var trects = BDFDB.getRects(target);
 			var irects = BDFDB.getRects(itemlayer);
-			itemlayer.style.setProperty('left', trects.left + + 'px');
+			itemlayer.style.setProperty('left', trects.left + 'px');
 			itemlayer.style.setProperty('top', (trects.top + irects.height > window.outerHeight ? trects.top - irects.height + trects.height : trects.top) + 'px');
 			var mouseleave = () => {
 				target.removeEventListener('mouseleave', mouseleave);
