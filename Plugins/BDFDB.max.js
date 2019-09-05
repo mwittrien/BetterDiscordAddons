@@ -527,7 +527,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		itemlayer.appendChild(node);
 		itemlayerconainer.appendChild(itemlayer);
 		
-		if (options.css) BDFDB.appendLocalStyle('BDFDBcustomItemLayer' + id, css, itemlayerconainer);
+		if (options.css) BDFDB.appendLocalStyle('BDFDBcustomItemLayer' + id, options.css, itemlayerconainer);
 					
 		if (BDFDB.isObject(options.ankerlistener)) for (let type in options.ankerlistener) {
 			if (typeof options.ankerlistener[type] == "function") anker.addEventListener(type, options.ankerlistener[type]);
@@ -1644,7 +1644,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				BDFDB.removeClass(settingsbutton, BDFDB.disCN._bdv2tooltipopen);
 			});
 			settingsbutton.addEventListener('click', () => {
-				var settingsmodal = BDFDB.htmlToElement(`<span class="BDFDB-modal BDFDB-settingsmodal ${plugin.id}-settingsmodal"><div class="${BDFDB.disCN.backdrop}"></div><div class="${BDFDB.disCN.modal}"><div class="${BDFDB.disCN.modalinner}"><div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}" style="width:600px !important;"><div class="${BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex:0 0 auto;"><div class="${BDFDB.disCN.flexchild}" style="flex:1 1 auto;"><h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">${plugin.name} Settings</h4></div><button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"><svg class="" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div></button></div><div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}"><div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner}"></div></div></div></div></div></span>`);
+				var settingsmodal = BDFDB.htmlToElement(`<span class="BDFDB-modal BDFDB-settingsmodal ${plugin.id}-settingsmodal"><div class="${BDFDB.disCN.backdrop}"></div><div class="${BDFDB.disCN.modal}"><div class="${BDFDB.disCN.modalinner}"><div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}" style="width:600px !important;"><div class="${BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex:0 0 auto;"><div class="${BDFDB.disCN.flexchild}" style="flex:1 1 auto;"><h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">${plugin.name} Settings</h4></div><button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"><svg class="" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div></button></div><div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}"><div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner}"></div></div></div></div></div></span>`);
 				var settingshtml = plugin.getSettingsPanel();
 				settingsmodal.querySelector(BDFDB.dotCN.modalsubinner).appendChild(typeof settingshtml == 'string' ? BDFDB.htmlToElement(settingshtml) : settingshtml);
 				if (typeof plugin.onSettingsClosed === 'function') BDFDB.addChildEventListener(settingsmodal, 'click', BDFDB.dotCNC.modalclose + BDFDB.dotCN.backdrop, () => {
@@ -2668,6 +2668,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (BDFDB.containsClass(container, 'DevilBro-settings')) BDFDB.addClass(container, 'BDFDB-settings');
 		var islighttheme = BDFDB.getDiscordTheme() == BDFDB.disCN.themelight;
 		var languagestrings = BDFDB.getLibraryStrings();
+		if (!DiscordClassModules.ContextMenu.subMenuContext) container.querySelectorAll(BDFDB.dotCN.contextmenuitemsubmenu + BDFDB.notCN.contextmenuitem).forEach(ele => { // REMOVE
+			BDFDB.addClass(ele, BDFDB.disCN.contextmenuitem);
+			BDFDB.removeEles(ele.querySelectorAll("svg"));
+		});
 		container.querySelectorAll(".BDFDB-containertext").forEach(ele => {
 			if (BDFDB.containsClass(ele.nextElementSibling, "BDFDB-collapsecontainer")) {
 				if (BDFDB.containsClass(ele.firstElementChild, "closed")) BDFDB.toggleEles(ele.nextElementSibling, false);
@@ -3110,7 +3114,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (!BDFDB.isObject(plugin) || !text) return;
 		var callback = typeof arguments[2] == "function" ? arguments[2] : (typeof arguments[3] == "function" ? arguments[3] : null);
 		var header = typeof arguments[2] == "string" ? arguments[2] : "Are you sure?";
-		let confirmModal = BDFDB.htmlToElement(`<span class="${plugin.name || plugin.getName()}-modal BDFDB-confirmation-modal BDFDB-modal"><div class="${BDFDB.disCN.backdrop}"></div><div class="${BDFDB.disCN.modal}"><div class="${BDFDB.disCN.modalinner}"><div class="${BDFDB.disCNS.modalsub + BDFDB.disCNS.modalmini + BDFDB.disCN.modalminisize}"><div class="${BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex:0 0 auto;"><div class="${BDFDB.disCN.flexchild}" style="flex:1 1 auto;"><h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">${header}</h4><div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}">${plugin.name || plugin.getName()}</div></div><button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"><svg class="" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div></button></div><div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}"><div class="${BDFDB.disCNS.scroller + BDFDB.disCNS.modalsubinner + BDFDB.disCN.modalminicontent}"><div class="${BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCN.selectable}message-content" style="padding-bottom:20px;">${text}</div></div> </div><div class="${BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}"><button type="button" class="btn-ok ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"></div></button><button type="button" class="btn-cancel ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlooklink + BDFDB.disCNS.buttoncolorwhite + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div></div></div></div></span>`);
+		let confirmModal = BDFDB.htmlToElement(`<span class="${plugin.name || plugin.getName()}-modal BDFDB-confirmation-modal BDFDB-modal"><div class="${BDFDB.disCN.backdrop}"></div><div class="${BDFDB.disCN.modal}"><div class="${BDFDB.disCN.modalinner}"><div class="${BDFDB.disCNS.modalsub + BDFDB.disCNS.modalmini + BDFDB.disCN.modalminisize}"><div class="${BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex:0 0 auto;"><div class="${BDFDB.disCN.flexchild}" style="flex:1 1 auto;"><h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">${header}</h4><div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}">${plugin.name || plugin.getName()}</div></div><button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"><svg class="" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div></button></div><div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}"><div class="${BDFDB.disCNS.scroller + BDFDB.disCNS.modalsubinner + BDFDB.disCN.modalminicontent}"><div class="${BDFDB.disCNS.modalminitext + BDFDB.disCNS.medium + BDFDB.disCNS.primary + BDFDB.disCN.selectable}">${text}</div></div> </div><div class="${BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}"><button type="button" class="btn-ok ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"></div></button><button type="button" class="btn-cancel ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlooklink + BDFDB.disCNS.buttoncolorwhite + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div></div></div></div></span>`);
 		BDFDB.appendModal(confirmModal);
 		if (typeof callback == 'function') confirmModal.querySelector('.btn-ok').addEventListener('click', () => {
 			setTimeout(() => {callback();}, 300);
@@ -3196,14 +3200,20 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			let top = trects.top + (trects.height - irects.height) / 2;
 			itemlayer.style.setProperty('top', (top < 0 ? 11 : (top > arects.height ? (arects.height - irects.height - 11) : top)) + 'px');
 			
+			var remove = () => {
+				document.removeEventListener('mouseout', mouseout);
+				target.removeEventListener('mouseleave', mouseleave);
+				itemlayer.remove();
+				BDFDB.removeClass(target, BDFDB.disCN.contextmenuitemselected);
+			};
 			var mouseout = e => {
-				if (!document.contains(itemlayer) || (!target.contains(e.target) && !itemlayer.contains(e.target))) {
-					document.removeEventListener('mouseout', mouseout);
-					itemlayer.remove();
-					BDFDB.removeClass(target, BDFDB.disCN.contextmenuitemselected);
-				}
+				if (!document.contains(itemlayer) || (!target.contains(e.target) && !BDFDB.getParentEle(BDFDB.dotCN.contextmenusubcontext, e.target))) remove();
+			};
+			var mouseleave = e => {
+				if (!document.contains(itemlayer) || (!e.toElement.contains(target) && !target.contains(e.toElement) && !itemlayer.contains(e.toElement))) remove();
 			};
 			document.addEventListener('mouseout', mouseout);
+			target.addEventListener('mouseleave', mouseleave);
 		}
 		else { // REMOVE
 			BDFDB.addClass(submenu, BDFDB.getDiscordTheme());
@@ -3722,7 +3732,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.Badge = BDFDB.WebModules.findByProperties('numberBadge', 'textBadge', 'iconBadge');
 	DiscordClassModules.BotTag = BDFDB.WebModules.findByProperties('botTag', 'botTagInvert');
 	DiscordClassModules.Button = BDFDB.WebModules.findByProperties('colorBlack', 'button');
-	DiscordClassModules.Call = BDFDB.WebModules.findByProperties('callAvatar', 'video');
+	DiscordClassModules.Call = BDFDB.WebModules.findByProperties('callAvatarWrapper', 'video');
 	DiscordClassModules.CallCurrent = BDFDB.WebModules.findByProperties('wrapper', 'fullScreen');
 	DiscordClassModules.CallDetails = BDFDB.WebModules.findByProperties('container', 'hotspot');
 	DiscordClassModules.CallIncoming = BDFDB.WebModules.findByProperties('incomingCall', 'container');
@@ -3833,8 +3843,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.Switch = BDFDB.WebModules.findByProperties('switchDisabled', 'valueChecked');
 	DiscordClassModules.Table = BDFDB.WebModules.findByProperties('stickyHeader', 'emptyStateText');
 	DiscordClassModules.Text = BDFDB.WebModules.findByProperties('defaultColor', 'defaultMarginh1');
-	DiscordClassModules.TextStyle = BDFDB.WebModules.findByProperties('height28', 'primary');
+	DiscordClassModules.TextSize = BDFDB.WebModules.findByProperties('size10', 'size14', 'size20');
+	DiscordClassModules.TextStyle = BDFDB.WebModules.findByProperties('large', 'primary', 'selectable');
 	DiscordClassModules.TextWeight = BDFDB.WebModules.findByProperties('weightBold', 'weightSemiBold');
+	DiscordClassModules.Title = BDFDB.WebModules.findByProperties('title', 'size18');
 	DiscordClassModules.TitleBar = BDFDB.WebModules.findByProperties('titleBar', 'wordmark');
 	DiscordClassModules.Tooltip = BDFDB.WebModules.findByProperties('tooltip', 'tooltipTop');
 	DiscordClassModules.Typing = BDFDB.WebModules.findByProperties('cooldownWrapper', 'typing');
@@ -3848,6 +3860,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		// REMOVE //
 		dmchannelselected: [DiscordClassModules.PrivateChannel.selected ? 'PrivateChannel' : 'NameContainer', 'selected'],
 		dmchannelname: [DiscordClassModules.PrivateChannel.name ? 'PrivateChannel' : 'NameContainer', 'name'],
+		membername: [DiscordClassModules.Member.nameTag ? 'Member' : 'NameContainer', DiscordClassModules.Member.nameTag ? 'nameTag' : 'nameAndDecorators'],
 		tooltips: ['ItemLayerContainer', 'layerContainer'],
 		// REMOVE //
 		_bdguild: ['BDrepo', 'bdGuild'],
@@ -3993,7 +4006,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		buttonspinner: ['Button', 'spinner'],
 		buttonspinneritem: ['Button', 'spinnerItem'],
 		buttonsubmitting: ['Button', 'submitting'],
-		callavatar: ['Call', 'callAvatar'],
+		callavatar: ['Call', DiscordClassModules.Call.callAvatar ? 'callAvatar' : 'callAvatarVideo'],
 		callavatarwrapper: ['Call', 'callAvatarWrapper'],
 		callcurrentcontainer: ['CallCurrent', 'wrapper'],
 		callcurrentdetails: ['CallDetails', 'container'],
@@ -4336,10 +4349,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		h5: ['Text', 'h5'],
 		h5defaultmargin: ['Text', 'defaultMarginh5'],
 		headertitle: ['Text', 'title'],
-		height16: ['Text', 'height16'],
-		height20: ['Text', 'height20'],
-		height24: ['Text', 'height24'],
-		height28: ['TextStyle', 'height28'],
+		height12: ['UserPopout', 'height12'],
+		height16: ['File', 'height16'],
+		height24: ['Title', 'height24'],
 		height36: ['Notice', 'height36'],
 		highlight: ['NotFound', 'highlight'],
 		homebutton: ['HomeIcon', 'button'],
@@ -4427,7 +4439,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		membercontent: ['Member', 'memberContent'],
 		membericon: ['Member', 'icon'],
 		memberinner: ['Member', 'memberInner'],
-		membername: [DiscordClassModules.Member.nameTag ? 'Member' : 'NameContainer', DiscordClassModules.Member.nameTag ? 'NameContainer' : 'nameAndDecorators'],
 		memberownericon: ['Member', 'ownerIcon'],
 		memberpremiumicon: ['Member', 'premiumIcon'],
 		members: ['MembersWrap', 'members'],
@@ -4522,6 +4533,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		modalmini: ['ModalMiniContent', 'modal'],
 		modalminicontent: ['ModalMiniContent', 'content'],
 		modalminisize: ['ModalMiniContent', 'size'],
+		modalminitext: ['HeaderBarTopic', 'content'],
 		modalseparator: ['Modal', 'separator'],
 		modalsizelarge: ['Modal', 'sizeLarge'],
 		modalsizemedium: ['Modal', 'sizeMedium'],
@@ -4712,13 +4724,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		settingstabbartoppill: ['Item', 'topPill'],
 		sidebarregion: ['SettingsWindow', 'sidebarRegion'],
 		sinkinteractions: ['Message', 'disableInteraction'],
-		size10: ['UserPopout', 'size10'],
-		size12: ['Text', 'size12'],
-		size14: ['Text', 'size14'],
-		size16: ['Text', 'size16'],
-		size18: ['Text', 'size18'],
-		size20: ['Text', 'size20'],
-		size24: ['TextStyle', 'size24'],
+		size10: ['TextSize', 'size10'],
+		size12: ['TextSize', 'size12'],
+		size14: ['TextSize', 'size14'],
+		size16: ['TextSize', 'size16'],
+		size18: ['Title', 'size18'],
+		size20: ['TextSize', 'size20'],
+		size24: ['TextSize', 'size24'],
 		slider: ['Slider', 'slider'],
 		sliderbar: ['Slider', 'bar'],
 		sliderbarfill: ['Slider', 'barFill'],
