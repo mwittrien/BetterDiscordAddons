@@ -3711,7 +3711,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.ImageWrapper = BDFDB.WebModules.findByProperties('clickable', 'imageWrapperBackground');
 	DiscordClassModules.InviteModal = BDFDB.WebModules.findByProperties('inviteRow', 'modal');
 	DiscordClassModules.Item = BDFDB.WebModules.findByProperties('item', 'side', 'header');
-	DiscordClassModules.Input = BDFDB.WebModules.findByProperties('inputMini', 'statusRed');
+	DiscordClassModules.Input = BDFDB.WebModules.findByProperties('inputMini', 'inputDefault');
 	DiscordClassModules.Layers = BDFDB.WebModules.findByProperties('layer', 'layers');
 	DiscordClassModules.Margins = BDFDB.WebModules.findByProperties('marginBottom4', 'marginCenterHorz');
 	DiscordClassModules.Member = BDFDB.WebModules.findByProperties('member', 'ownerIcon');
@@ -4221,6 +4221,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		guildheadername: ['GuildHeader', 'name'],
 		guildicon: ['GuildIcon', 'icon'],
 		guildiconacronym: ['GuildIcon', 'acronym'],
+		guildiconchildwrapper: ['GuildIcon', 'childWrapper'],
 		guildiconselected: ['GuildIcon', 'selected'],
 		guildiconwrapper: ['GuildIcon', 'wrapper'],
 		guildinner: ['Guild', 'wrapper'],
