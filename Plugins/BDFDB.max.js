@@ -484,115 +484,126 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.createTooltip = function (text, anker, options = {}) {
 		if (!text || !anker || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
-		var tooltipsnative = document.querySelector(BDFDB.dotCN.tooltips);
-		if (!tooltipsnative) return null;
-		var tooltips = document.querySelector(".BDFDB-tooltips");
-		if (!tooltips) {
-			tooltips = tooltipsnative.cloneNode();
-			BDFDB.addClass(tooltips, "BDFDB-tooltips");
-			tooltipsnative.parentElement.insertBefore(tooltips, tooltipsnative.nextSibling);
-		}
-		var id = Math.round(Math.random() * 10000000000000000);
-		var tooltip = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.tooltip} BDFDB-tooltip tooltip-${id}"><div class="${BDFDB.disCN.tooltipinner}"></div></div>`);
-		tooltip.anker = anker;
-		var tooltipinner = tooltip.firstElementChild ? tooltip.firstElementChild : tooltip;
+		var tooltip = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.tooltip}"></div>`);
 		if (options.id) tooltip.id = options.id.split(' ').join('');
 		if (options.selector) BDFDB.addClass(tooltip, options.selector);
-		if (options.css) BDFDB.appendLocalStyle('BDFDBcustomTooltip' + id, options.css, tooltips);
-		if (options.style) tooltipinner.style = options.style;
-		if (options.html === true) tooltipinner.innerHTML = text;
-		else tooltipinner.innerText = text;
+		if (options.style) tooltip.style = options.style;
+		if (options.html === true) tooltip.innerHTML = text;
+		else tooltip.innerText = text;
 		if (options.type && BDFDB.disCN['tooltip' + options.type.toLowerCase()]) {
-			BDFDB.addClass(tooltipinner, BDFDB.disCN['tooltip' + options.type.toLowerCase()]);
-			tooltipinner.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.tooltippointer}"></div>`));
+			BDFDB.addClass(tooltip, BDFDB.disCN['tooltip' + options.type.toLowerCase()]);
+			tooltip.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.tooltippointer}"></div>`));
 		}
-		if (tooltipinner.style.getPropertyValue("border-color") && (tooltipinner.style.getPropertyValue("background-color") || tooltipinner.style.getPropertyValue("background-image"))) BDFDB.addClass(tooltipinner, 'tooltip-customcolor');
-		else if (options.color && BDFDB.disCN['tooltip' + options.color.toLowerCase()]) BDFDB.addClass(tooltipinner, BDFDB.disCN['tooltip' + options.color.toLowerCase()]);
-		else BDFDB.addClass(tooltipinner, BDFDB.disCN.tooltipblack);
-		tooltips.appendChild(tooltip);
+		if (tooltip.style.getPropertyValue("border-color") && (tooltip.style.getPropertyValue("background-color") || tooltip.style.getPropertyValue("background-image"))) BDFDB.addClass(tooltip, 'tooltip-customcolor');
+		else if (options.color && BDFDB.disCN['tooltip' + options.color.toLowerCase()]) BDFDB.addClass(tooltip, BDFDB.disCN['tooltip' + options.color.toLowerCase()]);
+		else BDFDB.addClass(tooltip, BDFDB.disCN.tooltipblack);
 		if (!options.position || options.type) options.position = options.type;
 		if (!options.position || !['top','bottom','left','right'].includes(options.position.toLowerCase())) options.position = 'right';
 		tooltip.position = options.position.toLowerCase();
+		tooltip.anker = anker;
+		
+		BDFDB.appendItemLayer(tooltip, anker, {css:options.css, ankerlistener:{'mouseleave':() => {tooltip.parentElement.remove();}}});
 
 		BDFDB.updateTooltipPosition(tooltip);
-
-		var remove = () => {
-			tooltip.remove();
-			if (!tooltips.firstElementChild) BDFDB.removeEles(tooltips);
-		};
-		var observer = new MutationObserver(changes => {
-			changes.forEach(change => {
-				var nodes = Array.from(change.removedNodes);
-				var tooltipmath = nodes.indexOf(tooltip) > -1;
-				var ownmatch = nodes.indexOf(anker) > -1;
-				var parentmatch = nodes.some(n => n.contains(anker));
-				if (tooltipmath || ownmatch || parentmatch) {
-					observer.disconnect();
-					remove();
-					anker.removeEventListener('mouseleave', remove);
-					BDFDB.removeLocalStyle('BDFDBcustomTooltip' + id, tooltips);
-				}
-			});
-		});
-		observer.observe(document.body, {subtree:true, childList:true});
-		anker.addEventListener('mouseleave', remove);
+		
 		if (options.delay) {
 			BDFDB.toggleEles(tooltip);
 			setTimeout(() => {BDFDB.toggleEles(tooltip);}, options.delay);
 		}
 		return tooltip;
 	};
+	
+	BDFDB.appendItemLayer = function (node, anker, options = {}) {
+		var itemlayerconainernative = document.querySelector(BDFDB.dotCN.itemlayerconainer);
+		if (!itemlayerconainernative || !Node.prototype.isPrototypeOf(node) || !anker || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
+		var itemlayerconainer = document.querySelector(".BDFDB-itemlayerconainer");
+		if (!itemlayerconainer) {
+			itemlayerconainer = itemlayerconainernative.cloneNode();
+			BDFDB.addClass(itemlayerconainer, "BDFDB-itemlayerconainer");
+			itemlayerconainernative.parentElement.insertBefore(itemlayerconainer, itemlayerconainernative.nextSibling);
+		}
+		var id = Math.round(Math.random() * 10000000000000000);
+		var itemlayer = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.itemlayer} BDFDB-itemlayer itemlayer-${id}"></div>`);
+		itemlayer.appendChild(node);
+		itemlayerconainer.appendChild(itemlayer);
+		
+		if (options.css) BDFDB.appendLocalStyle('BDFDBcustomItemLayer' + id, css, itemlayerconainer);
+					
+		if (BDFDB.isObject(options.ankerlistener)) for (let type in options.ankerlistener) {
+			if (typeof options.ankerlistener[type] == "function") anker.addEventListener(type, options.ankerlistener[type]);
+			else delete options.ankerlistener[type];
+		}
+		
+		var observer = new MutationObserver(changes => {
+			changes.forEach(change => {
+				var nodes = Array.from(change.removedNodes);
+				var ownmatch = nodes.indexOf(itemlayer) > -1;
+				var ankermatch = nodes.indexOf(anker) > -1;
+				var parentmatch = nodes.some(n => n.contains(anker));
+				if (ownmatch || ankermatch || parentmatch) {
+					observer.disconnect();
+					itemlayer.remove();
+					BDFDB.removeLocalStyle('BDFDBcustomItemLayer' + id, itemlayerconainer);
+					if (!itemlayerconainer.firstElementChild) BDFDB.removeEles(itemlayerconainer);
+					if (BDFDB.isObject(options.ankerlistener)) for (let type in options.ankerlistener) anker.removeEventListener(type, options.ankerlistener[type]);
+				}
+			});
+		});
+		observer.observe(document.body, {subtree:true, childList:true});
+	};
 
 	BDFDB.updateTooltipPosition = function (tooltip) {
+		if (!Node.prototype.isPrototypeOf(tooltip)) return;
+		let itemlayer = BDFDB.getParentEle(BDFDB.dotCN.itemlayer, tooltip);
+		if (!Node.prototype.isPrototypeOf(itemlayer)) return;
+		tooltip = itemlayer.querySelector(BDFDB.dotCN.tooltip);
 		if (!Node.prototype.isPrototypeOf(tooltip) || !Node.prototype.isPrototypeOf(tooltip.anker) || !tooltip.position) return;
-		var left, top, ankerects = BDFDB.getRects(tooltip.anker), tooltiprects = BDFDB.getRects(tooltip), positionoffsets = {height: 0, width: 0};
+		var left, top, ankerects = BDFDB.getRects(tooltip.anker), itemlayerrects = BDFDB.getRects(itemlayer), apprects = BDFDB.getRects(document.body.firstElementChild), positionoffsets = {height: 0, width: 0};
 		var pointer = tooltip.querySelector(BDFDB.dotCN.tooltippointer);
 		if (pointer) positionoffsets = BDFDB.getRects(pointer);
 		switch (tooltip.position) {
 			case 'top':
-				top = ankerects.top - tooltiprects.height - positionoffsets.height + 2;
-				left = ankerects.left + (ankerects.width - tooltiprects.width) / 2;
+				top = ankerects.top - itemlayerrects.height - positionoffsets.height + 2;
+				left = ankerects.left + (ankerects.width - itemlayerrects.width) / 2;
 				break;
 			case 'bottom':
 				top = ankerects.top + ankerects.height + positionoffsets.height - 2;
-				left = ankerects.left + (ankerects.width - tooltiprects.width) / 2;
+				left = ankerects.left + (ankerects.width - itemlayerrects.width) / 2;
 				break;
 			case 'left':
-				top = ankerects.top + (ankerects.height - tooltiprects.height) / 2;
-				left = ankerects.left - tooltiprects.width - positionoffsets.width + 2;
+				top = ankerects.top + (ankerects.height - itemlayerrects.height) / 2;
+				left = ankerects.left - itemlayerrects.width - positionoffsets.width + 2;
 				break;
 			case 'right':
-				top = ankerects.top + (ankerects.height - tooltiprects.height) / 2;
+				top = ankerects.top + (ankerects.height - itemlayerrects.height) / 2;
 				left = ankerects.left + ankerects.width + positionoffsets.width - 2;
 				break;
 			}
-		tooltip.style.setProperty('top', top + 'px');
-		tooltip.style.setProperty('left', left + 'px');
-
-		var apprects = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount)), tooltiprects = BDFDB.getRects(tooltip);
-		var tooltippointer = tooltip.querySelector(BDFDB.dotCN.tooltippointer);
+		itemlayer.style.setProperty('top', top + 'px');
+		itemlayer.style.setProperty('left', left + 'px');
+		
 		if (tooltip.position == "top" || tooltip.position == "bottom") {
-			if (tooltiprects.left < 0) {
-				tooltip.style.setProperty('left', '5px');
-				tooltippointer.style.setProperty('margin-left', `${tooltiprects.left - 10}px`);
+			if (itemlayerrects.left < 0) {
+				itemlayer.style.setProperty('left', '5px');
+				tooltippointer.style.setProperty('margin-left', `${itemlayerrects.left - 10}px`);
 			}
 			else {
-				var rightmargin = apprects.width - (tooltiprects.left + tooltiprects.width);
+				var rightmargin = apprects.width - (itemlayerrects.left + itemlayerrects.width);
 				if (rightmargin < 0) {
-					tooltip.style.setProperty('left', apprects.width - tooltiprects.width - 5 + 'px');
+					itemlayer.style.setProperty('left', apprects.width - itemlayerrects.width - 5 + 'px');
 					tooltippointer.style.setProperty('margin-left', `${-1*rightmargin}px`);
 				}
 			}
 		}
 		else if (tooltip.position == "left" || tooltip.position == "right") {
-			if (tooltiprects.top < 0) {
-				tooltip.style.setProperty('top', '5px');
-				tooltippointer.style.setProperty('margin-top', `${tooltiprects.top - 10}px`);
+			if (itemlayerrects.top < 0) {
+				itemlayer.style.setProperty('top', '5px');
+				tooltippointer.style.setProperty('margin-top', `${itemlayerrects.top - 10}px`);
 			}
 			else {
-				var bottommargin = apprects.height - (tooltiprects.top + tooltiprects.height);
+				var bottommargin = apprects.height - (itemlayerrects.top + itemlayerrects.height);
 				if (bottommargin < 0) {
-					tooltip.style.setProperty('top', apprects.height - tooltiprects.height - 5 + 'px');
+					itemlayer.style.setProperty('top', apprects.height - itemlayerrects.height - 5 + 'px');
 					tooltippointer.style.setProperty('margin-top', `${-1*bottommargin}px`);
 				}
 			}
@@ -3109,14 +3120,15 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.updateContextPosition = function (menu, e = BDFDB.mousePosition) {
 		if (!Node.prototype.isPrototypeOf(menu)) return;
+		var itemlayer = BDFDB.getParentEle(BDFDB.dotCN.itemlayer, menu) || menu;
 		var arects = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount));
-		var mrects = BDFDB.getRects(menu);
+		var irects = BDFDB.getRects(itemlayer);
 		var newpos = {
-			pageX: e.pageX - mrects.width,
-			pageY: e.pageY - mrects.height
+			pageX: e.pageX - irects.width,
+			pageY: e.pageY - irects.height
 		};
-		menu.style.setProperty('left', (e.pageX + mrects.width > arects.width ? (newpos.pageX < 0 ? 10 : newpos.pageX) : e.pageX) + 'px');
-		menu.style.setProperty('top', (e.pageY + mrects.height > arects.height ? (newpos.pageY < 0 ? 10 : newpos.pageY) : e.pageY) + 'px');
+		itemlayer.style.setProperty('left', (e.pageX + irects.width > arects.width ? (newpos.pageX < 0 ? 11 : newpos.pageX) : e.pageX) + 'px');
+		itemlayer.style.setProperty('top', (e.pageY + irects.height > arects.height ? (newpos.pageY < 0 ? 11 : newpos.pageY) : e.pageY) + 'px');
 		BDFDB.initElements(menu);
 	};
 
@@ -3125,23 +3137,28 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		for (let item of menu.querySelectorAll(BDFDB.dotCN.contextmenuitem)) if (item.textContent == text) return BDFDB.getParentEle(BDFDB.dotCN.contextmenuitemgroup, item);
 	};
 
-	BDFDB.appendContextMenu = function (menu, e = BDFDB.mousePosition) {
+	BDFDB.appendContextMenu = function (menu, e = Object.assign({currentTarget: document.querySelector(BDFDB.dotCN.app)}, BDFDB.mousePosition)) {
 		if (!Node.prototype.isPrototypeOf(menu)) return;
-		var tooltips = document.querySelector(BDFDB.dotCN.tooltips);
-		if (!tooltips) return;
-		tooltips.parentElement.insertBefore(menu, tooltips);
+		var itemlayer = menu;
+		if (DiscordClassModules.ContextMenu.subMenuContext) {
+			BDFDB.appendItemLayer(menu, e.currentTarget);
+			itemlayer = menu.parentElement;
+		}
+		else { // REMOVE
+			var tooltips = document.querySelector(BDFDB.dotCN.tooltips);
+			if (!tooltips) return;
+			tooltips.parentElement.insertBefore(menu, tooltips);
+			BDFDB.addClass(menu, BDFDB.getDiscordTheme());
+		}
 		var arects = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount));
-		var mrects = BDFDB.getRects(menu);
-		BDFDB.toggleClass(menu, 'invertX', e.pageX + mrects.width > arects.width);
-		BDFDB.toggleClass(menu, 'invertY', e.pageY + mrects.height > arects.height);
-		BDFDB.toggleClass(menu, BDFDB.disCN.contextmenuinvertchildx, e.pageX + mrects.width > arects.width);
-		BDFDB.addClass(menu, BDFDB.getDiscordTheme());
+		var irects = BDFDB.getRects(itemlayer);
+		BDFDB.toggleClass(itemlayer, 'invertX', e.pageX + irects.width > arects.width);
+		BDFDB.toggleClass(itemlayer, 'invertY', e.pageY + irects.height > arects.height);
 		BDFDB.updateContextPosition(menu, e);
 		var mousedown = e2 => {
-			if (!document.contains(menu)) document.removeEventListener('mousedown', mousedown);
-			else if (!menu.contains(e2.target)) {
+			if (!document.contains(itemlayer) || !itemlayer.contains(e2.target) || (Node.prototype.isPrototypeOf(itemlayer.BDFDBsubmenu) && !itemlayer.BDFDBsubmenu.contains(e2.target))) {
 				document.removeEventListener('mousedown', mousedown);
-				menu.remove();
+				itemlayer.remove();
 			}
 			else {
 				var item = BDFDB.getParentEle(BDFDB.dotCN.contextmenuitem, e2.target);
@@ -3160,17 +3177,47 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.appendSubMenu = function (target, submenu) {
 		if (!Node.prototype.isPrototypeOf(target) || !Node.prototype.isPrototypeOf(submenu)) return;
-		target.appendChild(submenu);
-		var trects = BDFDB.getRects(target);
-		var mrects = BDFDB.getRects(submenu);
-		submenu.style.setProperty('left', trects.left + 'px');
-		submenu.style.setProperty('top', (trects.top + mrects.height > window.outerHeight ? trects.top - mrects.height + trects.height : trects.top) + 'px');
-		BDFDB.addClass(submenu, BDFDB.getDiscordTheme());
-		var mouseleave = () => {
-			target.removeEventListener('mouseleave', mouseleave);
-			submenu.remove();
-		};
-		target.addEventListener('mouseleave', mouseleave);
+		var itemlayer = submenu;
+		if (DiscordClassModules.ContextMenu.subMenuContext) {
+			BDFDB.addClass(target, BDFDB.disCN.contextmenuitemselected);
+			var submenuwrap = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.contextmenusubcontext}"></div>`);
+			submenuwrap.appendChild(submenu);
+			BDFDB.appendItemLayer(submenuwrap, target);
+			itemlayer = submenuwrap.parentElement;
+			
+			BDFDB.removeEles(target.BDFDBsubmenu);
+			var parentmenulayer = BDFDB.getParentEle(BDFDB.dotCN.itemlayer, target);
+			if (parentmenulayer) parentmenulayer.BDFDBsubmenu = itemlayer;
+			target.BDFDBsubmenu = itemlayer;
+			
+			var arects = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount)), trects = BDFDB.getRects(target), irects = BDFDB.getRects(itemlayer);
+			if (trects.left < arects.width/2) itemlayer.style.setProperty('left', (trects.left + trects.width + 12) + 'px');
+			else itemlayer.style.setProperty('right', (arects.width - trects.left + 12) + 'px');
+			let top = trects.top + (trects.height - irects.height) / 2;
+			itemlayer.style.setProperty('top', (top < 0 ? 11 : (top > arects.height ? (arects.height - irects.height - 11) : top)) + 'px');
+			
+			var mouseout = e => {
+				if (!document.contains(itemlayer) || (!target.contains(e.target) && !itemlayer.contains(e.target))) {
+					document.removeEventListener('mouseout', mouseout);
+					itemlayer.remove();
+					BDFDB.removeClass(target, BDFDB.disCN.contextmenuitemselected);
+				}
+			};
+			document.addEventListener('mouseout', mouseout);
+		}
+		else { // REMOVE
+			BDFDB.addClass(submenu, BDFDB.getDiscordTheme());
+			target.appendChild(submenu);
+			var trects = BDFDB.getRects(target);
+			var irects = BDFDB.getRects(itemlayer);
+			itemlayer.style.setProperty('left', trects.left + + 'px');
+			itemlayer.style.setProperty('top', (trects.top + irects.height > window.outerHeight ? trects.top - irects.height + trects.height : trects.top) + 'px');
+			var mouseleave = () => {
+				target.removeEventListener('mouseleave', mouseleave);
+				itemlayer.remove();
+			};
+			target.addEventListener('mouseleave', mouseleave);
+		}
 		BDFDB.initElements(submenu);
 	};
 
@@ -3246,6 +3293,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			callback();
 		});
 		popouts.appendChild(popout);
+		BDFDB.initElements(popout);
 		var mousedown = e => {
 			if (!document.contains(popout)) document.removeEventListener('mousedown', mousedown);
 			else if (!popout.contains(e.target)) {
@@ -3733,6 +3781,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.ImageWrapper = BDFDB.WebModules.findByProperties('clickable', 'imageWrapperBackground');
 	DiscordClassModules.InviteModal = BDFDB.WebModules.findByProperties('inviteRow', 'modal');
 	DiscordClassModules.Item = BDFDB.WebModules.findByProperties('item', 'side', 'header');
+	DiscordClassModules.ItemLayerContainer = BDFDB.WebModules.findByProperties('layer', 'layerContainer');
 	DiscordClassModules.Input = BDFDB.WebModules.findByProperties('inputMini', 'inputDefault');
 	DiscordClassModules.Layers = BDFDB.WebModules.findByProperties('layer', 'layers');
 	DiscordClassModules.Margins = BDFDB.WebModules.findByProperties('marginBottom4', 'marginCenterHorz');
@@ -3788,7 +3837,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.TextWeight = BDFDB.WebModules.findByProperties('weightBold', 'weightSemiBold');
 	DiscordClassModules.TitleBar = BDFDB.WebModules.findByProperties('titleBar', 'wordmark');
 	DiscordClassModules.Tooltip = BDFDB.WebModules.findByProperties('tooltip', 'tooltipTop');
-	DiscordClassModules.TooltipContainer = BDFDB.WebModules.findByProperties('layer', 'layerContainer');
 	DiscordClassModules.Typing = BDFDB.WebModules.findByProperties('cooldownWrapper', 'typing');
 	DiscordClassModules.UserPopout = BDFDB.WebModules.findByProperties('userPopout', 'headerPlaying');
 	DiscordClassModules.UserProfile = BDFDB.WebModules.findByProperties('topSectionNormal', 'tabBarContainer');
@@ -3797,6 +3845,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.DiscordClassModules = Object.assign({}, DiscordClassModules);
 
 	var DiscordClasses = {
+		// REMOVE //
+		dmchannelselected: [DiscordClassModules.PrivateChannel.selected ? 'PrivateChannel' : 'NameContainer', 'selected'],
+		dmchannelname: [DiscordClassModules.PrivateChannel.name ? 'PrivateChannel' : 'NameContainer', 'name'],
+		tooltips: ['ItemLayerContainer', 'layerContainer'],
+		// REMOVE //
 		_bdguild: ['BDrepo', 'bdGuild'],
 		_bdguildanimatable: ['BDrepo', 'bdGuildAnimatable'],
 		_bdguildaudio: ['BDrepo', 'bdGuildAudio'],
@@ -4063,10 +4116,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		contextmenuitemselected: ['ContextMenu', 'selected'],
 		contextmenuitemslider: ['ContextMenu', 'itemSlider'],
 		contextmenuitemsubmenu: ['ContextMenu', 'itemSubMenu'],
-		contextmenuitemsubmenuhasscroller: ['ContextMenu', 'itemSubMenuHasScroller'],
+		contextmenuitemsubmenucaret: ['ContextMenu', 'caret'],
 		contextmenulabel: ['ContextMenu', 'label'],
 		contextmenuscroller: ['ContextMenu', 'scroller'],
 		contextmenuslider: ['ContextMenu', 'slider'],
+		contextmenusubcontext: ['ContextMenu', 'subMenuContext'],
 		cooldownwrapper: ['Typing', 'cooldownWrapper'],
 		cursordefault: ['Cursor', 'cursorDefault'],
 		cursorpointer: ['Cursor', 'cursorPointer'],
@@ -4087,10 +4141,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		dmchannelactivityiconforeground: ['PrivateChannel', 'activityIconForeground'],
 		dmchannelactivitytext: ['PrivateChannel', 'activityText'],
 		dmchannelclose: ['PrivateChannel', DiscordClassModules.PrivateChannel.close ? 'close' : 'closeButton'],
-		dmchannelname: [DiscordClassModules.PrivateChannel.name ? 'PrivateChannel' : 'NameContainer', 'name'], //REMOVE
 		dmchannelnamewithactivity: ['PrivateChannel', 'nameWithActivity'],
 		dmchannels: ['PrivateChannelList', 'privateChannels'],
-		dmchannelselected: [DiscordClassModules.PrivateChannel.selected ? 'PrivateChannel' : 'NameContainer', 'selected'], //REMOVE
 		dmpill: ['GuildDm', 'pill'],
 		downloadlink: ['DownloadLink', 'downloadLink'],
 		ellipsis: ['PopoutActivity', 'ellipsis'],
@@ -4333,6 +4385,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		imagewrapperbackground: ['ImageWrapper', 'imageWrapperBackground'],
 		imagewrapperinner: ['ImageWrapper', 'imageWrapperInner'],
 		imagezoom: ['ImageWrapper', 'imageZoom'],
+		itemlayer: ['ItemLayerContainer', 'layer'],
+		itemlayerconainer: ['ItemLayerContainer', 'layerContainer'],
 		input: ['Input', 'input'],
 		inputdefault: ['Input', 'inputDefault'],
 		inputdisabled: ['Input', 'disabled'],
@@ -4373,7 +4427,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		membercontent: ['Member', 'memberContent'],
 		membericon: ['Member', 'icon'],
 		memberinner: ['Member', 'memberInner'],
-		membername: [DiscordClassModules.Member.nameTag ? 'Member' : 'NameContainer', DiscordClassModules.Member.nameTag ? 'NameContainer' : 'name'],
+		membername: [DiscordClassModules.Member.nameTag ? 'Member' : 'NameContainer', DiscordClassModules.Member.nameTag ? 'NameContainer' : 'nameAndDecorators'],
 		memberownericon: ['Member', 'ownerIcon'],
 		memberpremiumicon: ['Member', 'premiumIcon'],
 		members: ['MembersWrap', 'members'],
@@ -4478,6 +4532,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		modedisabled: ['FormText', 'modeDisabled'],
 		modeselectable: ['FormText', 'modeSelectable'],
 		namecontainername: ['NameContainer', 'name'],
+		namecontainernamewrapper: ['NameContainer', 'nameAndDecorators'],
 		namecontainerselected: ['NameContainer', 'selected'],
 		nametag: ['NameTag', 'nameTag'],
 		nochannel: ['ChannelWindow', 'noChannel'],
@@ -4742,17 +4797,15 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		titlebar: ['TitleBar', 'titleBar'],
 		titledefault: ['SettingsItems', 'titleDefault'],
 		titlemini: ['SettingsItems', 'titleMini'],
-		tooltip: ['TooltipContainer', 'layer'],
+		tooltip: ['Tooltip', 'tooltip'],
 		tooltipblack: ['Tooltip', 'tooltipBlack'],
 		tooltipbottom: ['Tooltip', 'tooltipBottom'],
 		tooltipbrand: ['Tooltip', 'tooltipBrand'],
 		tooltipgreen: ['Tooltip', 'tooltipGreen'],
-		tooltipinner: ['Tooltip', 'tooltip'],
 		tooltipleft: ['Tooltip', 'tooltipLeft'],
 		tooltippointer: ['Tooltip', 'tooltipPointer'],
 		tooltipred: ['Tooltip', 'tooltipRed'],
 		tooltipright: ['Tooltip', 'tooltipRight'],
-		tooltips: ['TooltipContainer', 'layerContainer'],
 		tooltiptop: ['Tooltip', 'tooltipTop'],
 		tooltipyellow: ['Tooltip', 'tooltipYellow'],
 		typing: ['Typing', 'typing'],
@@ -5291,10 +5344,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		#pluginNotice #outdatedPlugins span:hover {
 			text-decoration: underline;
 		}
-		.BDFDB-tooltips, .BDFDB-tooltip {
+		.BDFDB-itemlayerconainer, .BDFDB-itemlayer {
 			z-index: 3002;
 		}
-		${BDFDB.dotCN.tooltipinner}.tooltip-customcolor ${BDFDB.dotCN.tooltippointer} {
+		${BDFDB.dotCN.tooltip}.tooltip-customcolor ${BDFDB.dotCN.tooltippointer} {
 			border-top-color: inherit !important;
 		}
 		.toasts {
