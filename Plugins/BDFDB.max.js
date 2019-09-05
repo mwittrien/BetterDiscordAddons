@@ -1320,7 +1320,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		PopoutContainer: 'popout',
 		PrivateChannelCall: 'callcurrentcontainer',
 		MemberCard: 'guildsettingsmembercard',
-		Message: 'message',
+		Message: true,
 		MessageOptionPopout: 'optionpopout',
 		MessageUsername: 'messageusername',
 		NameTag: 'nametag',
@@ -1435,35 +1435,33 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (BDFDB.isObject(plugin) && BDFDB.isObject(plugin.patchModules)) {
 			for (let type in plugin.patchModules) {
 				var mapped = webModulesPatchmap[type];
+				var classOrBoolean = webModulesNotFindableModules[type];
+				var patchtype = mapped ? mapped + ' ' + type : type;
 				if (mapped) {
-					plugin.patchModules[mapped + ' ' + type] = plugin.patchModules[type];
+					plugin.patchModules[patchtype] = plugin.patchModules[type];
 					delete plugin.patchModules[type];
-					if (!webModulesNotFindableModules[type]) patchInstance(BDFDB.WebModules.findByName(mapped), mapped + ' ' + type);
 				}
-				else if (!webModulesNotFindableModules[type]) patchInstance(BDFDB.WebModules.findByName(type), type);
-			}
-			for (let type in webModulesNotFindableModules) {
-				var patchtype = webModulesPatchmap[type] ? webModulesPatchmap[type] + ' ' + type : type;
-				if (DiscordClasses[webModulesNotFindableModules[type]] && plugin.patchModules[patchtype]) checkForInstance(webModulesNotFindableModules[type], patchtype);
+				if (!classOrBoolean) patchInstance(BDFDB.WebModules.findByName(patchtype), patchtype);
+				else if (typeof classOrBoolean == 'boolean' || DiscordClasses[classOrBoolean]) checkForInstance(classOrBoolean, patchtype);
 			}
 			function patchInstance(instance, type) {
 				if (instance) {
-					var patchtype = type.split(' ')[0];
-					instance = instance.displayName == patchtype ? instance : BDFDB.getOwnerInstance({instance:instance, name:patchtype, up:true});
+					var name = type.split(' ')[0];
+					instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
+					instance = instance.displayName == name ? instance : BDFDB.getOwnerInstance({instance:instance, name, up:true});
 					if (instance) {
-						var patchinstance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
+						instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 						var patchfunction = {};
 						patchfunction[plugin.name == '$BDFDB' ? 'before' : 'after'] = e => {
 							if (global.BDFDB && typeof BDFDB === 'object' && BDFDB.loaded) BDFDB.WebModules.initiateProcess(plugin, e.thisObject, type, [e.originalMethodName]);
 						};
-						BDFDB.WebModules.patch(patchinstance.prototype, plugin.patchModules[type], plugin, patchfunction);
+						BDFDB.WebModules.patch(instance.prototype, plugin.patchModules[type], plugin, patchfunction);
 					}
 				}
 			}
-			function checkForInstance(classname, type) {
+			function checkForInstance(classOrBoolean, type) {
+				const app = document.querySelector(BDFDB.dotCN.app), bdsettings = document.querySelector('#bd-settingspane-container ' + BDFDB.dotCN.scrollerwrap);
 				var instancefound = false;
-				const app = document.querySelector(BDFDB.dotCN.app);
-				const bdsettings = document.querySelector('#bd-settingspane-container ' + BDFDB.dotCN.scrollerwrap);
 				if (app) {
 					var appins = BDFDB.getOwnerInstance({node:app, name:type, depth:99999999, time:99999999});
 					if (appins) {
@@ -1479,24 +1477,33 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					}
 				}
 				if (!instancefound) {
-					var found = false, instanceobserver = new MutationObserver(changes => {changes.forEach(change => {change.addedNodes.forEach(node => {
-						var ele = null;
-						if (!found && node.tagName && (ele = BDFDB.containsClass(node, BDFDB.disCN[classname]) ? node : node.querySelector(BDFDB.dotCN[classname])) != null) {
-							instance = BDFDB.getReactInstance(ele);
-							if (isCorrectInstance(instance, type)) {
-								found = true;
-								instanceobserver.disconnect();
-								patchInstance(instance, type);
-								BDFDB.WebModules.forceAllUpdates(plugin, type);
+					var found = false, isBool = typeof classOrBoolean == 'boolean', instanceobserver = new MutationObserver(cs => {cs.forEach(c => {c.addedNodes.forEach(n => {
+						if (found || !n || !n.tagName) return;
+						else if (isBool) {
+							var ins = BDFDB.getOwnerInstance({node:n, name:"Message", depth:99999999});
+							if (isCorrectInstance(ins, type)) foundInstance(ins);
+						}
+						else {
+							var ele = null;
+							if ((ele = BDFDB.containsClass(n, BDFDB.disCN[classOrBoolean]) ? n : n.querySelector(BDFDB.dotCN[classOrBoolean])) != null) {
+								var ins = BDFDB.getReactInstance(ele);
+								if (isCorrectInstance(ins, type)) foundInstance(ins);
 							}
 						}
 					});});});
 					BDFDB.addObserver(plugin, BDFDB.dotCN.appmount, {name:'checkForInstanceObserver', instance:instanceobserver, multi:true
 					}, {childList:true, subtree:true});
+					var foundInstance = instance => {
+						found = true;
+						instanceobserver.disconnect();
+						patchInstance(instance, type);
+						BDFDB.WebModules.forceAllUpdates(plugin, type);
+					};
 				}
 			}
 			function isCorrectInstance(instance, type) {
 				if (!instance) return false;
+				instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 				instance = instance.displayName == type ? instance : BDFDB.getOwnerInstance({instance:instance, name:type, up:true});
 				return instance && (type != 'V2C_PluginCard' && type != 'V2C_ThemeCard' || type == 'V2C_PluginCard' && BDFDB.checkWhichRepoPage() == 'plugins' || type == 'V2C_ThemeCard' && BDFDB.checkWhichRepoPage() == 'themes');
 			}
