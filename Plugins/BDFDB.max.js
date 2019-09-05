@@ -3759,7 +3759,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.OptionPopout = BDFDB.WebModules.findByProperties('container', 'button', 'item');
 	DiscordClassModules.PictureInPicture = BDFDB.WebModules.findByProperties('pictureInPicture', 'pictureInPictureWindow');
 	DiscordClassModules.PillWrapper = BDFDB.WebModules.find(module => typeof module['item'] == 'string' && typeof module['wrapper'] == 'string' && Object.keys(module).length == 2);
-	DiscordClassModules.PrivateChannel = BDFDB.WebModules.findByProperties('activity', 'channel');
+	DiscordClassModules.PrivateChannel = BDFDB.WebModules.findByProperties('channel');
 	DiscordClassModules.PrivateChannelList = BDFDB.WebModules.findByProperties('privateChannels', 'searchBar');
 	DiscordClassModules.Popout = BDFDB.WebModules.findByProperties('popout', 'arrowAlignmentTop');
 	DiscordClassModules.PopoutActivity = BDFDB.WebModules.findByProperties('ellipsis', 'activityActivityFeed');
