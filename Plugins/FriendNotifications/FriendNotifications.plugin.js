@@ -3,7 +3,7 @@
 class FriendNotifications {
 	getName () {return "FriendNotifications";}
 
-	getVersion () {return "1.2.6";}
+	getVersion () {return "1.2.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,12 +11,10 @@ class FriendNotifications {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["Notification Message","You can now customize the message depending on the status"]],
-			"fixed":[["Mute Sound Bug","Fixed the bug where desktop notifications could not be muted"],["Settings Bug","Fixed the bug where disabling/changing settings for users would not work, unless the plugin was restarted"],["Log Bug","Fixed the bug where the time log would display weirdly"]]
+			"fixed":[["Canary/PTB","Fixed bugs for complete new look in canary/ptb"]]
 		};
 
 		this.patchModules = {
-			"FriendsOnline":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
 	}
@@ -71,9 +69,6 @@ class FriendNotifications {
 			</div>`;
 
 		this.css = `
-			${BDFDB.dotCN.guilds} > ${BDFDB.dotCN.friendsonline} {
-				cursor: pointer;
-			}
 			.${this.name}-modal .log-time {
 				width: 110px;
 			}
@@ -491,11 +486,6 @@ class FriendNotifications {
 				});
 			}
 		}
-	}
-
-	processFriendsOnline (instance, wrapper) {
-		BDFDB.addEventListener(this, wrapper, "mouseenter", () => {BDFDB.createTooltip("Timelog", wrapper, {type:"right"});});
-		BDFDB.addEventListener(this, wrapper, "click", () => {this.showTimeLog();});
 	}
 
 	processStandardSidebarView (instance, wrapper) {

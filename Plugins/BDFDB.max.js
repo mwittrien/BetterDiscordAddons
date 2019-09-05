@@ -1311,7 +1311,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		ChannelMember: 'member',
 		CircleIconButton: 'guildbuttoncontainer',
 		EmojiPicker: 'emojipicker',
-		FriendsOnline: 'friendsonline',
 		FriendRow: 'friendsrow',
 		Guild: 'guildcontainer',
 		GuildHeader: 'guildheader',
@@ -3699,7 +3698,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.GuildSettingsInvite = BDFDB.WebModules.findByProperties('countdownColumn', 'inviteSettingsInviteRow');
 	DiscordClassModules.GuildSettingsMember = BDFDB.WebModules.findByProperties('member', 'membersFilterPopout');
 	DiscordClassModules.GuildServer = BDFDB.WebModules.findByProperties('blobContainer', 'pill');
-	DiscordClassModules.GuildsItems = BDFDB.WebModules.findByProperties('guildSeparator', 'guildsError', 'friendsOnline');
+	DiscordClassModules.GuildsItems = BDFDB.WebModules.findByProperties('guildSeparator', 'guildsError');
 	DiscordClassModules.GuildsWrapper = BDFDB.WebModules.findByProperties('scrollerWrap', 'unreadMentionsBar', 'wrapper');
 	DiscordClassModules.HeaderBar = BDFDB.WebModules.findByProperties('container', 'children', 'toolbar');
 	DiscordClassModules.HeaderBarExtras = BDFDB.WebModules.findByProperties('headerBarLoggedOut', 'search');
@@ -3718,7 +3717,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.Member = BDFDB.WebModules.findByProperties('member', 'memberInner');
 	DiscordClassModules.MembersWrap = BDFDB.WebModules.findByProperties('membersWrap', 'membersGroup');
 	DiscordClassModules.Mention = BDFDB.WebModules.findByProperties('wrapperHover', 'wrapperNoHover');
-	DiscordClassModules.Message = BDFDB.WebModules.findByProperties('message', 'content');
+	DiscordClassModules.Message = BDFDB.WebModules.findByProperties('containerCozy', 'content');
 	DiscordClassModules.MessageAccessory = BDFDB.WebModules.findByProperties('embedWrapper', 'gifFavoriteButton');
 	DiscordClassModules.MessageBody = BDFDB.WebModules.findByProperties('buttonContainer', 'isMentioned');
 	DiscordClassModules.MessageFile = BDFDB.WebModules.findByProperties('cancelButton', 'filenameLinkWrapper');
@@ -4167,7 +4166,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		friends: ['Friends', 'container'],
 		friendscolumn: ['Friends', 'friendsColumn'],
 		friendscolumnnamewrap: ['Friends', 'friendsColumnName'],
-		friendsonline: ['GuildsItems', 'friendsOnline'],
 		friendsrow: ['Friends', 'friendsRow'],
 		friendstable: ['Friends', 'friendsTable'],
 		friendstableheader: ['Friends', 'friendsTableHeader'],
