@@ -1242,36 +1242,52 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 	};
 
+	BDFDB.DiscordConstants = BDFDB.WebModules.findByProperties('Permissions', 'ActivityTypes');
+	
 	var LibraryModules = {};
 	LibraryModules.AckUtils = BDFDB.WebModules.findByProperties('localAck', 'bulkAck');
-	LibraryModules.APIModule = BDFDB.WebModules.findByProperties('getAPIBaseURL');
-	LibraryModules.Animations = BDFDB.WebModules.findByProperties('spring', 'decay');
+	LibraryModules.APIUtils = BDFDB.WebModules.findByProperties('getAPIBaseURL');
+	LibraryModules.AnimationUtils = BDFDB.WebModules.findByProperties('spring', 'decay');
 	LibraryModules.BadgeUtils = BDFDB.WebModules.findByProperties('getBadgeCountString', 'getBadgeWidthForValue');
 	LibraryModules.ChannelStore = BDFDB.WebModules.findByProperties('getChannel', 'getChannels');
 	LibraryModules.ContextMenuUtils = BDFDB.WebModules.findByProperties('closeContextMenu', 'openContextMenu');
 	LibraryModules.CurrentUserStore = BDFDB.WebModules.findByProperties('getCurrentUser');
 	LibraryModules.DirectMessageUtils = BDFDB.WebModules.findByProperties('addRecipient', 'openPrivateChannel');
-	LibraryModules.DiscordConstants = BDFDB.WebModules.findByProperties('Permissions', 'ActivityTypes');
+	LibraryModules.FriendUtils = BDFDB.WebModules.findByProperties('getFriendIDs', 'getRelationships');
+	LibraryModules.GuildBoostUtils = BDFDB.WebModules.findByProperties('getTierName', 'getUserLevel');
 	LibraryModules.GuildStore = BDFDB.WebModules.findByProperties('getGuild', 'getGuilds');
 	LibraryModules.GuildChannelStore = BDFDB.WebModules.findByProperties('getChannels', 'getDefaultChannel');
+	LibraryModules.GuildEmojiStore = BDFDB.WebModules.findByProperties('getGuildEmoji', 'getDisambiguatedEmojiContext');
 	LibraryModules.GuildUtils = BDFDB.WebModules.findByProperties('transitionToGuildSync');
+	LibraryModules.HistoryUtils = BDFDB.WebModules.findByProperties('transitionTo', 'replaceWith', 'getHistory');;
 	LibraryModules.IconUtils = BDFDB.WebModules.findByProperties('getGuildIconURL', 'getGuildBannerURL');
 	LibraryModules.InviteUtils = BDFDB.WebModules.findByProperties('acceptInvite', 'createInvite');
 	LibraryModules.LanguageStore = BDFDB.WebModules.findByProperties('getLanguages', 'Messages');
 	LibraryModules.LastChannelStore = BDFDB.WebModules.findByProperties('getLastSelectedChannelId');
 	LibraryModules.LastGuildStore = BDFDB.WebModules.findByProperties('getLastSelectedGuildId');
+	LibraryModules.LoginUtils = BDFDB.WebModules.findByProperties('login', 'logout');
 	LibraryModules.MemberStore = BDFDB.WebModules.findByProperties('getMember', 'getMembers');
 	LibraryModules.MentionUtils = BDFDB.WebModules.findByProperties('getMentionCount', 'getMentionCounts');
 	LibraryModules.MessageStore = BDFDB.WebModules.findByProperties('getMessage', 'getMessages');
-	LibraryModules.MessageUtils = BDFDB.WebModules.findByProperties('parse', 'isMentioned');
+	LibraryModules.MessageCreationUtils = BDFDB.WebModules.findByProperties('parse', 'isMentioned');
+	LibraryModules.MessagePinUtils = BDFDB.WebModules.findByProperties('pinMessage', 'unpinMessage');
+	LibraryModules.MessageUtils = BDFDB.WebModules.findByProperties('receiveMessage', 'editMessage');
 	LibraryModules.MutedUtils = BDFDB.WebModules.findByProperties('isGuildOrCategoryOrChannelMuted');
+	LibraryModules.NotificationSettingsUtils = BDFDB.WebModules.findByProperties('setDesktopType', 'setTTSType');
+	LibraryModules.NotificationSettingsStore = BDFDB.WebModules.findByProperties('getDesktopType', 'getTTSType');
 	LibraryModules.PermissionUtils = BDFDB.WebModules.findByProperties('getChannelPermissions', 'canUser');
+	LibraryModules.ReactionUtils = BDFDB.WebModules.findByProperties('addReaction', 'removeReaction');
+	LibraryModules.SearchPageUtils = BDFDB.WebModules.findByProperties('searchNextPage', 'searchPreviousPage');
 	LibraryModules.SelectChannelUtils = BDFDB.WebModules.findByProperties('selectChannel', 'selectPrivateChannel');
-	LibraryModules.StatusUtils = BDFDB.WebModules.findByProperties('getApplicationActivity', 'getStatus');
+	LibraryModules.SettingsUtils = BDFDB.WebModules.findByProperties('updateRemoteSettings', 'updateLocalSettings');
+	LibraryModules.SoundUtils = BDFDB.WebModules.findByProperties('playSound', 'createSound');
+	LibraryModules.StatusMetaUtils = BDFDB.WebModules.findByProperties('getApplicationActivity', 'getStatus');
 	LibraryModules.StreamingUtils = BDFDB.WebModules.findByProperties('isStreaming');
-	LibraryModules.UnreadUtils = BDFDB.WebModules.findByProperties('hasUnread', 'getUnreadGuilds');
+	LibraryModules.UnreadGuildUtils = BDFDB.WebModules.findByProperties('hasUnread', 'getUnreadGuilds');
+	LibraryModules.UploadChannelUtils = BDFDB.WebModules.findByProperties('getUnreadCount', 'getOldestUnreadMessageId');
 	LibraryModules.UserStore = BDFDB.WebModules.findByProperties('getUser', 'getUsers');
-
+	LibraryModules.VoiceUtils = BDFDB.WebModules.findByProperties('getAllVoiceStates', 'getVoiceStatesForChannel');
+	LibraryModules.ZoomUtils = BDFDB.WebModules.findByProperties('zoomTo', 'fontScaleTo');
 	BDFDB.LibraryModules = Object.assign({}, LibraryModules);
 
 	LibraryModules.React = BDFDB.WebModules.findByProperties('createElement', 'cloneElement');
@@ -1744,7 +1760,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.getUserStatus = function (id = BDFDB.myData.id) {
 		id = typeof id == 'number' ? id.toFixed() : id;
-		return LibraryModules.StreamingUtils.isStreaming(LibraryModules.StatusUtils.getApplicationActivity(id)) ? 'streaming' : LibraryModules.StatusUtils.getStatus(id);
+		return LibraryModules.StreamingUtils.isStreaming(LibraryModules.StatusMetaUtils.getApplicationActivity(id)) ? 'streaming' : LibraryModules.StatusMetaUtils.getStatus(id);
 	};
 
 	BDFDB.getUserStatusColor = function (status) {
@@ -1765,12 +1781,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		else return ((user.avatar ? '' : 'https://discordapp.com') + LibraryModules.IconUtils.getUserAvatarURL(user)).split('?')[0];
 	};
 
-	BDFDB.Permissions = Object.assign({}, LibraryModules.DiscordConstants.Permissions);
 	BDFDB.isUserAllowedTo = function (permission, id = BDFDB.myData.id, channelid = LibraryModules.LastChannelStore.getChannelId()) {
-		if (!BDFDB.Permissions[permission]) console.warn(`%c[BDFDB]%c`, 'color:#3a71c1; font-weight:700;', '', permission + ' not found in Permissions');
+		if (!BDFDB.DiscordConstants.Permissions[permission]) console.warn(`%c[BDFDB]%c`, 'color:#3a71c1; font-weight:700;', '', permission + ' not found in Permissions');
 		else {
 			var channel = LibraryModules.ChannelStore.getChannel(channelid);
-			if (channel) return LibraryModules.PermissionUtils.canUser(id, BDFDB.Permissions[permission], channel);
+			if (channel) return LibraryModules.PermissionUtils.canUser(id, BDFDB.DiscordConstants.Permissions[permission], channel);
 		}
 		return false;
 	};
@@ -1785,7 +1800,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.getParsedLength = function (string, channelid = LibraryModules.LastChannelStore.getChannelId()) {
 		if (!string) return 0;
 		var channel = LibraryModules.ChannelStore.getChannel(channelid);
-		var length = (string.indexOf('/') == 0 || string.indexOf('s/') == 0 || string.indexOf('+:') == 0) ? string.length : LibraryModules.MessageUtils.parse(channel, string).content.length;
+		var length = (string.indexOf('/') == 0 || string.indexOf('s/') == 0 || string.indexOf('+:') == 0) ? string.length : LibraryModules.MessageCreationUtils.parse(channel, string).content.length;
 		return length > string.length ? length : string.length;
 	};
 
@@ -1801,7 +1816,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			if (!eleOrInfoOrId) return null;
 			let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getServerID(eleOrInfoOrId) : typeof eleOrInfoOrId == 'object' ? eleOrInfoOrId.id : eleOrInfoOrId;
 			id = typeof id == 'number' ? id.toFixed() : id;
-			if (id && (LibraryModules.UnreadUtils.hasUnread(id) || LibraryModules.MentionUtils.getMentionCount(id) > 0)) found.push(eleOrInfoOrId);
+			if (id && (LibraryModules.UnreadGuildUtils.hasUnread(id) || LibraryModules.MentionUtils.getMentionCount(id) > 0)) found.push(eleOrInfoOrId);
 		}
 		return found;
 	};
@@ -1864,31 +1879,31 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 				let pillvisible = divpillitem.style.getPropertyValue("opacity") != 0;
 
-				let borderRadius = new LibraryModules.Animations.Value(0);
+				let borderRadius = new LibraryModules.AnimationUtils.Value(0);
 				borderRadius
 					.interpolate({inputRange: [0, 1], outputRange: [50, 30]})
 					.addListener((value) => {divinner.style.setProperty("border-radius", `${value.value}%`);});
 
-				let pillHeight = new LibraryModules.Animations.Value(0);
+				let pillHeight = new LibraryModules.AnimationUtils.Value(0);
 				pillHeight
 					.interpolate({inputRange: [0, 1], outputRange: [8, 20]})
 					.addListener((value) => {divpillitem.style.setProperty("height", `${value.value}px`);});
 
-				let pillOpacity = new LibraryModules.Animations.Value(0);
+				let pillOpacity = new LibraryModules.AnimationUtils.Value(0);
 				pillOpacity
 					.interpolate({inputRange: [0, 1], outputRange: [0, 0.7]})
 					.addListener((value) => {divpillitem.style.setProperty("opacity", `${value.value}`);});
 
 				let animate = (v) => {
-					LibraryModules.Animations.parallel([
-						LibraryModules.Animations.timing(borderRadius, {toValue: v, duration: 200}),
-						LibraryModules.Animations.spring(pillHeight, {toValue: v, friction: 5})
+					LibraryModules.AnimationUtils.parallel([
+						LibraryModules.AnimationUtils.timing(borderRadius, {toValue: v, duration: 200}),
+						LibraryModules.AnimationUtils.spring(pillHeight, {toValue: v, friction: 5})
 					]).start();
 				};
 
 				let animate2 = (v) => {
-					LibraryModules.Animations.parallel([
-						LibraryModules.Animations.timing(pillOpacity, {toValue: v, duration: 200}),
+					LibraryModules.AnimationUtils.parallel([
+						LibraryModules.AnimationUtils.timing(pillOpacity, {toValue: v, duration: 200}),
 					]).start();
 				};
 
@@ -1930,10 +1945,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		let guild = LibraryModules.GuildStore.getGuild(id);
 		if (guild) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
 			return BDFDB.React.createElement(BDFDB.WebModules.findByName("GuildContextMenu"), Object.assign({}, e, {
-				type: LibraryModules.DiscordConstants.ContextMenuTypes.GUILD_ICON_BAR,
+				type: BDFDB.DiscordConstants.ContextMenuTypes.GUILD_ICON_BAR,
 				guild: guild,
 				badge: LibraryModules.MentionUtils.getMentionCount(guild.id),
-				link: LibraryModules.DiscordConstants.Routes.CHANNEL(guild.id, LibraryModules.LastChannelStore.getChannelId(guild.id)),
+				link: BDFDB.DiscordConstants.Routes.CHANNEL(guild.id, LibraryModules.LastChannelStore.getChannelId(guild.id)),
 				selected: guild.id == LibraryModules.LastGuildStore.getGuildId()
 			}));
 		});
@@ -2815,7 +2830,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					}
 				});
 				function initAnimation() {
-					Animation = new LibraryModules.Animations.Value(0);
+					Animation = new LibraryModules.AnimationUtils.Value(0);
 					Animation
 						.interpolate({inputRange:[0, 1], outputRange:[0, (BDFDB.getRects(inner).width - BDFDB.getRects(ele).width) * -1]})
 						.addListener(v => {inner.style.setProperty('left', v.value + 'px', 'important');});
@@ -2823,7 +2838,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 						var w = p + parseFloat(inner.style.getPropertyValue('left')) / (BDFDB.getRects(inner).width - BDFDB.getRects(ele).width);
 						w = isNaN(w) || !isFinite(w) ? p : w;
 						w *= BDFDB.getRects(inner).width / (BDFDB.getRects(ele).width * 2);
-						LibraryModules.Animations.parallel([LibraryModules.Animations.timing(Animation, {toValue:p, duration:Math.sqrt(w**2) * 4000 / (ele.getAttribute('speed') || 1)})]).start();
+						LibraryModules.AnimationUtils.parallel([LibraryModules.AnimationUtils.timing(Animation, {toValue:p, duration:Math.sqrt(w**2) * 4000 / (ele.getAttribute('speed') || 1)})]).start();
 					};
 				}
 			}
@@ -2968,15 +2983,15 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		var modal = BDFDB.containsClass(modalwrapper, BDFDB.disCN.modal) ? modalwrapper : modalwrapper.querySelector(BDFDB.dotCN.modal);
 		var backdrop = modal ? modal.previousElementSibling : null;
 
-		var modalOpacity = new LibraryModules.Animations.Value(0);
+		var modalOpacity = new LibraryModules.AnimationUtils.Value(0);
 		modalOpacity
 			.interpolate({inputRange: [0, 1], outputRange: [0, 1]})
 			.addListener((value) => {if (modal) modal.style.setProperty("opacity", `${value.value}`);});
-		var modalTransform = new LibraryModules.Animations.Value(0);
+		var modalTransform = new LibraryModules.AnimationUtils.Value(0);
 		modalTransform
 			.interpolate({inputRange: [0, 1], outputRange: [0.7, 1]})
 			.addListener((value) => {if (modal) modal.style.setProperty("transform", `scale(${value.value}) translateZ(0px)`);});
-		var backdropOpacity = new LibraryModules.Animations.Value(0);
+		var backdropOpacity = new LibraryModules.AnimationUtils.Value(0);
 		backdropOpacity
 			.interpolate({inputRange: [0, 1], outputRange: [0, 0.85]})
 			.addListener((value) => {if (backdrop) {
@@ -2987,10 +3002,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			}});
 
 		var animate = (v) => {
-			LibraryModules.Animations.parallel([
-				LibraryModules.Animations.timing(modalOpacity, {toValue: v, duration: 250, easing: LibraryModules.Animations.Easing.inOut(LibraryModules.Animations.Easing.ease)}),
-				LibraryModules.Animations.timing(modalTransform, {toValue: v, duration: 250, easing: LibraryModules.Animations.Easing.inOut(LibraryModules.Animations.Easing.ease)}),
-				LibraryModules.Animations.timing(backdropOpacity, {toValue: v, duration: 200, delay:50}),
+			LibraryModules.AnimationUtils.parallel([
+				LibraryModules.AnimationUtils.timing(modalOpacity, {toValue: v, duration: 250, easing: LibraryModules.AnimationUtils.Easing.inOut(LibraryModules.AnimationUtils.Easing.ease)}),
+				LibraryModules.AnimationUtils.timing(modalTransform, {toValue: v, duration: 250, easing: LibraryModules.AnimationUtils.Easing.inOut(LibraryModules.AnimationUtils.Easing.ease)}),
+				LibraryModules.AnimationUtils.timing(backdropOpacity, {toValue: v, duration: 200, delay:50}),
 			]).start();
 		};
 
@@ -3722,7 +3737,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.Layers = BDFDB.WebModules.findByProperties('layer', 'layers');
 	DiscordClassModules.Margins = BDFDB.WebModules.findByProperties('marginBottom4', 'marginCenterHorz');
 	DiscordClassModules.Member = BDFDB.WebModules.findByProperties('member', 'ownerIcon');
-	DiscordClassModules.MemberInner = BDFDB.WebModules.findByProperties('nameAndDecorators', 'name');
 	DiscordClassModules.MembersWrap = BDFDB.WebModules.findByProperties('membersWrap', 'membersGroup');
 	DiscordClassModules.Mention = BDFDB.WebModules.findByProperties('wrapperHover', 'wrapperNoHover');
 	DiscordClassModules.Message = BDFDB.WebModules.findByProperties('containerCozy', 'content');
@@ -3738,13 +3752,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.ModalItems = BDFDB.WebModules.findByProperties('guildName', 'checkboxContainer');
 	DiscordClassModules.ModalMiniContent = BDFDB.WebModules.find(module => typeof module['modal'] == 'string' && typeof module['content'] == 'string' && typeof module['size'] == 'string' && Object.keys(module).length == 3);
 	DiscordClassModules.ModalWrap = BDFDB.WebModules.find(module => typeof module['modal'] == 'string' && typeof module['inner'] == 'string' && Object.keys(module).length == 2);
+	DiscordClassModules.NameContainer = BDFDB.WebModules.findByProperties('nameAndDecorators', 'name');
 	DiscordClassModules.NameTag = BDFDB.WebModules.findByProperties('bot', 'nameTag');
 	DiscordClassModules.Note = BDFDB.WebModules.find(module => typeof module['note'] == 'string' && Object.keys(module).length == 1);
 	DiscordClassModules.Notice = BDFDB.WebModules.findByProperties('notice', 'noticeFacebook');
 	DiscordClassModules.OptionPopout = BDFDB.WebModules.findByProperties('container', 'button', 'item');
 	DiscordClassModules.PictureInPicture = BDFDB.WebModules.findByProperties('pictureInPicture', 'pictureInPictureWindow');
 	DiscordClassModules.PillWrapper = BDFDB.WebModules.find(module => typeof module['item'] == 'string' && typeof module['wrapper'] == 'string' && Object.keys(module).length == 2);
-	DiscordClassModules.PrivateChannel = BDFDB.WebModules.findByProperties('activityIconForeground', 'channel');
+	DiscordClassModules.PrivateChannel = BDFDB.WebModules.findByProperties('activity', 'channel');
 	DiscordClassModules.PrivateChannelList = BDFDB.WebModules.findByProperties('privateChannels', 'searchBar');
 	DiscordClassModules.Popout = BDFDB.WebModules.findByProperties('popout', 'arrowAlignmentTop');
 	DiscordClassModules.PopoutActivity = BDFDB.WebModules.findByProperties('ellipsis', 'activityActivityFeed');
@@ -4071,11 +4086,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		dmchannelactivityicon: ['PrivateChannel', 'activityIcon'],
 		dmchannelactivityiconforeground: ['PrivateChannel', 'activityIconForeground'],
 		dmchannelactivitytext: ['PrivateChannel', 'activityText'],
-		dmchannelclose: ['PrivateChannel', 'close'],
-		dmchannelname: ['PrivateChannel', 'name'],
+		dmchannelclose: ['PrivateChannel', DiscordClassModules.PrivateChannel.close ? 'close' : 'closeButton'],
+		dmchannelname: [DiscordClassModules.PrivateChannel.name ? 'PrivateChannel' : 'NameContainer', 'name'], //REMOVE
 		dmchannelnamewithactivity: ['PrivateChannel', 'nameWithActivity'],
 		dmchannels: ['PrivateChannelList', 'privateChannels'],
-		dmchannelselected: ['PrivateChannel', 'selected'],
+		dmchannelselected: [DiscordClassModules.PrivateChannel.selected ? 'PrivateChannel' : 'NameContainer', 'selected'], //REMOVE
 		dmpill: ['GuildDm', 'pill'],
 		downloadlink: ['DownloadLink', 'downloadLink'],
 		ellipsis: ['PopoutActivity', 'ellipsis'],
@@ -4358,13 +4373,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		membercontent: ['Member', 'memberContent'],
 		membericon: ['Member', 'icon'],
 		memberinner: ['Member', 'memberInner'],
-		membername: [DiscordClassModules.Member.nameTag ? 'Member' : 'MemberInner', DiscordClassModules.Member.nameTag ? 'nameTag' : 'name'],
+		membername: [DiscordClassModules.Member.nameTag ? 'Member' : 'NameContainer', DiscordClassModules.Member.nameTag ? 'NameContainer' : 'name'],
 		memberownericon: ['Member', 'ownerIcon'],
 		memberpremiumicon: ['Member', 'premiumIcon'],
 		members: ['MembersWrap', 'members'],
 		membersgroup: ['MembersWrap', 'membersGroup'],
 		memberswrap: ['MembersWrap', 'membersWrap'],
-		memberusername: ['Member', DiscordClassModules.Member.nameTag ? 'username' : 'roleColor'],
+		memberusername: ['Member', DiscordClassModules.Member.username ? 'username' : 'roleColor'],
 		mention: ['NotFound', 'mention'],
 		mentionwrapper: ['Mention', 'wrapper'],
 		mentionwrapperhover: ['Mention', 'wrapperHover'],
@@ -4462,6 +4477,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		modedefault: ['FormText', 'modeDefault'],
 		modedisabled: ['FormText', 'modeDisabled'],
 		modeselectable: ['FormText', 'modeSelectable'],
+		namecontainername: ['NameContainer', 'name'],
+		namecontainerselected: ['NameContainer', 'selected'],
 		nametag: ['NameTag', 'nameTag'],
 		nochannel: ['ChannelWindow', 'noChannel'],
 		notice: ['Notice', 'notice'],
