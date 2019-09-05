@@ -3550,7 +3550,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.BDFDB = {
 		BDFDBundefined: 'BDFDB_undefined',
 		cardInner: 'card-inner',
-		overflowEllipsis: "overflowellipsis"
+		overflowEllipsis: 'overflowellipsis'
 	};
 	DiscordClassModules.BDrepo = {
 		bdGuild: 'bd-guild',
@@ -3703,7 +3703,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.HeaderBar = BDFDB.WebModules.findByProperties('container', 'children', 'toolbar');
 	DiscordClassModules.HeaderBarExtras = BDFDB.WebModules.findByProperties('headerBarLoggedOut', 'search');
 	DiscordClassModules.HeaderBarTopic = BDFDB.WebModules.findByProperties('topic', 'expandable', 'content');
-	DiscordClassModules.HomeIcon = BDFDB.WebModules.findByProperties("homeIcon");
+	DiscordClassModules.HomeIcon = BDFDB.WebModules.findByProperties('homeIcon');
 	DiscordClassModules.HotKeyRecorder = BDFDB.WebModules.findByProperties('editIcon', 'recording');
 	DiscordClassModules.HoverCard = BDFDB.WebModules.findByProperties('card', 'active');
 	DiscordClassModules.HoverCardButton = BDFDB.WebModules.find(module => typeof module['button'] == 'string' && Object.keys(module).length == 1);
@@ -3715,6 +3715,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.Layers = BDFDB.WebModules.findByProperties('layer', 'layers');
 	DiscordClassModules.Margins = BDFDB.WebModules.findByProperties('marginBottom4', 'marginCenterHorz');
 	DiscordClassModules.Member = BDFDB.WebModules.findByProperties('member', 'ownerIcon');
+	DiscordClassModules.MemberInner = BDFDB.WebModules.findByProperties('nameAndDecorators', 'name');
 	DiscordClassModules.MembersWrap = BDFDB.WebModules.findByProperties('membersWrap', 'membersGroup');
 	DiscordClassModules.Mention = BDFDB.WebModules.findByProperties('wrapperHover', 'wrapperNoHover');
 	DiscordClassModules.Message = BDFDB.WebModules.findByProperties('containerCozy', 'content');
@@ -4349,13 +4350,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		membercontent: ['Member', 'memberContent'],
 		membericon: ['Member', 'icon'],
 		memberinner: ['Member', 'memberInner'],
-		membernametag: ['Member', 'nameTag'],
+		membername: [DiscordClassModules.Member.nameTag ? 'Member' : 'MemberInner', DiscordClassModules.Member.nameTag ? 'nameTag' : 'name'],
 		memberownericon: ['Member', 'ownerIcon'],
 		memberpremiumicon: ['Member', 'premiumIcon'],
 		members: ['MembersWrap', 'members'],
 		membersgroup: ['MembersWrap', 'membersGroup'],
 		memberswrap: ['MembersWrap', 'membersWrap'],
-		memberusername: ['Member', 'username'],
+		memberusername: ['Member', DiscordClassModules.Member.nameTag ? 'username' : 'roleColor'],
 		mention: ['NotFound', 'mention'],
 		mentionwrapper: ['Mention', 'wrapper'],
 		mentionwrapperhover: ['Mention', 'wrapperHover'],
