@@ -1462,7 +1462,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (BDFDB.isObject(plugin) && BDFDB.isObject(plugin.patchModules)) {
 			for (let type in plugin.patchModules) {
 				var mapped = webModulesPatchmap[type];
-				var classOrBoolean = webModulesNotFindableModules[type];
+				var classOrBoolean = webModulesNotFindableModules[type.split(' _ _ ')[1] || type];
 				var patchtype = mapped ? mapped + ' _ _ ' + type : type;
 				if (mapped) {
 					plugin.patchModules[patchtype] = plugin.patchModules[type];
