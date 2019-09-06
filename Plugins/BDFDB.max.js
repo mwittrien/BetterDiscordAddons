@@ -267,7 +267,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.checkUpdate = function (plugname, url) {
 		if (BDFDB.isBDv2()) return;
-		require('request')(url, (error, response, result) => {
+		LibraryRequires.request(url, (error, response, result) => {
 			if (error) return;
 			var newversion = result.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
 			if (!newversion) return;
@@ -360,12 +360,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.downloadPlugin = function (plugname, url) {
-		require('request')(url, (error, response, result) => {
+		LibraryRequires.request(url, (error, response, result) => {
 			if (error) return console.warn(`%c[BDFDB]%c`, 'color:#3a71c1; font-weight:700;', '', 'Unable to get update for ' + plugname);
 			BDFDB.creationTime = 0;
 			var newversion = result.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
 			newversion = newversion.toString().replace(/['"]/g, '');
-			require('fs').writeFileSync(require('path').join(BDFDB.getPluginsFolder(), (bdplugins[plugname] ? bdplugins[plugname].filename : url.split("/").slice(-1)[0])), result);
+			LibraryRequires.fs.writeFileSync(LibraryRequires.path.join(BDFDB.getPluginsFolder(), (bdplugins[plugname] ? bdplugins[plugname].filename : url.split("/").slice(-1)[0])), result);
 			BDFDB.showToast(`${plugname} v${window.PluginUpdates.plugins[url].version} has been replaced by ${plugname} v${newversion}.`, {nopointer:true, selector:'plugin-updated-toast'});
 			var updatenotice = document.querySelector('#pluginNotice');
 			if (updatenotice) {
@@ -694,36 +694,32 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.getDiscordFolder = function () {
 		var built = BDFDB.getDiscordBuilt();
 		built = 'discord' + (built == 'stable' ? '' : built);
-		return require('path').resolve(require('electron').remote.app.getPath('appData'), built, BDFDB.getDiscordVersion());
+		return LibraryRequires.path.resolve(LibraryRequires.electron.remote.app.getPath('appData'), built, BDFDB.getDiscordVersion());
 	};
 
 	BDFDB.getPluginsFolder = function () {
-		var process = require('process');
-		var path = require('path');
-		if (process.env.injDir) return path.resolve(process.env.injDir, 'plugins/');
-		switch (process.platform) {
+		if (LibraryRequires.process.env.injDir) return LibraryRequires.path.resolve(LibraryRequires.process.env.injDir, 'plugins/');
+		switch (LibraryRequires.process.platform) {
 			case 'win32':
-				return path.resolve(process.env.appdata, 'BetterDiscord/plugins/');
+				return LibraryRequires.path.resolve(LibraryRequires.process.env.appdata, 'BetterDiscord/plugins/');
 			case 'darwin':
-				return path.resolve(process.env.HOME, 'Library/Preferences/BetterDiscord/plugins/');
+				return LibraryRequires.path.resolve(LibraryRequires.process.env.HOME, 'Library/Preferences/BetterDiscord/plugins/');
 			default:
-				if (process.env.XDG_CONFIG_HOME) return path.resolve(process.env.XDG_CONFIG_HOME, 'BetterDiscord/plugins/');
-				else return path.resolve(process.env.HOME, '.config/BetterDiscord/plugins/');
+				if (LibraryRequires.process.env.XDG_CONFIG_HOME) return LibraryRequires.path.resolve(LibraryRequires.process.env.XDG_CONFIG_HOME, 'BetterDiscord/plugins/');
+				else return LibraryRequires.path.resolve(LibraryRequires.process.env.HOME, '.config/BetterDiscord/plugins/');
 			}
 	};
 
 	BDFDB.getThemesFolder = function () {
-		var process = require('process');
-		var path = require('path');
-		if (process.env.injDir) return path.resolve(process.env.injDir, 'plugins/');
-		switch (process.platform) {
+		if (LibraryRequires.process.env.injDir) return LibraryRequires.path.resolve(LibraryRequires.process.env.injDir, 'plugins/');
+		switch (LibraryRequires.process.platform) {
 			case 'win32': 
-				return path.resolve(process.env.appdata, 'BetterDiscord/themes/');
+				return LibraryRequires.path.resolve(LibraryRequires.process.env.appdata, 'BetterDiscord/themes/');
 			case 'darwin': 
-				return path.resolve(process.env.HOME, 'Library/Preferences/BetterDiscord/themes/');
+				return LibraryRequires.path.resolve(LibraryRequires.process.env.HOME, 'Library/Preferences/BetterDiscord/themes/');
 			default:
-				if (process.env.XDG_CONFIG_HOME) return path.resolve(process.env.XDG_CONFIG_HOME, 'BetterDiscord/themes/');
-				else return path.resolve(process.env.HOME, '.config/BetterDiscord/themes/');
+				if (LibraryRequires.process.env.XDG_CONFIG_HOME) return LibraryRequires.path.resolve(LibraryRequires.process.env.XDG_CONFIG_HOME, 'BetterDiscord/themes/');
+				else return LibraryRequires.path.resolve(LibraryRequires.process.env.HOME, '.config/BetterDiscord/themes/');
 			}
 	};
 
@@ -984,9 +980,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (BDFDB.getDiscordBuilt.built) return BDFDB.getDiscordBuilt.built;
 		else {
 			var built = null;
-			try {built = require(require('electron').remote.app.getAppPath() + '/build_info.json').releaseChannel.toLowerCase();} 
+			try {built = require(LibraryRequires.electron.remote.app.getAppPath() + '/build_info.json').releaseChannel.toLowerCase();} 
 			catch (err) {
-				try {built = require(require('electron').remote.app.getAppPath().replace('\app.asar', '') + '/build_info.json').releaseChannel.toLowerCase();} 
+				try {built = require(LibraryRequires.electron.remote.app.getAppPath().replace('\app.asar', '') + '/build_info.json').releaseChannel.toLowerCase();} 
 				catch (err) {
 					var version = BDFDB.getDiscordVersion();
 					if (version) {
@@ -1006,7 +1002,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (BDFDB.getDiscordBuilt.version) return BDFDB.getDiscordBuilt.version;
 		else {
 			var version = null;
-			try {version = require('electron').remote.app.getVersion();}
+			try {version = LibraryRequires.electron.remote.app.getVersion();}
 			catch (version) {version = '';}
 			BDFDB.getDiscordBuilt.version = version;
 			return version;
@@ -1254,6 +1250,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.DiscordConstants = BDFDB.WebModules.findByProperties('Permissions', 'ActivityTypes');
+	
+	var LibraryRequires = {};
+	for (let name of ['child_process', 'electron', 'fs', 'path', 'process', 'request']) {
+		try {LibraryRequires[name] = require(name);} catch (err) {}
+	}
+	BDFDB.LibraryRequires = Object.assign({}, LibraryRequires);
 	
 	var LibraryModules = {};
 	LibraryModules.AckUtils = BDFDB.WebModules.findByProperties('localAck', 'bulkAck');
@@ -2064,44 +2066,44 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.saveAllData = function (data, plugin, key) {
-		var fs = require('fs'), configpath, plugname;
+		var configpath, plugname;
 		if (!BDFDB.isBDv2()) {
 			plugname = typeof plugin === 'string' ? plugin : plugin.name;
-			configpath = require('path').join(BDFDB.getPluginsFolder(), plugname + '.config.json');
+			configpath = LibraryRequires.path.join(BDFDB.getPluginsFolder(), plugname + '.config.json');
 		}
 		else {
 			plugname = typeof plugin === 'string' ? plugin.toLowerCase() : null;
 			var contentpath = plugname ? BDFDB.Plugins[plugname] ? BDFDB.Plugins[plugname].contentPath : null : plugin.contentPath;
 			if (!contentpath) return;
-			configpath = require('path').join(contentpath, 'settings.json');
+			configpath = LibraryRequires.path.join(contentpath, 'settings.json');
 		}
-		var exists = fs.existsSync(configpath);
+		var exists = LibraryRequires.fs.existsSync(configpath);
 		var config = !exists ? {} : typeof BDFDB.cachedData[plugname] !== 'undefined' ? BDFDB.cachedData[plugname] : BDFDB.readConfig(configpath);
 		config[key] = data;
 		if (BDFDB.isObjectEmpty(config[key])) delete config[key];
 		if (BDFDB.isObjectEmpty(config)) {
 			delete BDFDB.cachedData[plugname];
-			if (exists) fs.unlinkSync(configpath);
+			if (exists) LibraryRequires.fs.unlinkSync(configpath);
 		}
 		else {
 			BDFDB.cachedData[plugname] = config;
-			fs.writeFileSync(configpath, JSON.stringify(config, null, '	'));
+			LibraryRequires.fs.writeFileSync(configpath, JSON.stringify(config, null, '	'));
 		}
 	};
 
 	BDFDB.loadAllData = function (plugin, key) {
-		var fs = require('fs'), configpath, plugname;
+		var configpath, plugname;
 		if (!BDFDB.isBDv2()) {
 			plugname = typeof plugin === 'string' ? plugin : plugin.name;
-			configpath = require('path').join(BDFDB.getPluginsFolder(), plugname + '.config.json');
+			configpath = LibraryRequires.path.join(BDFDB.getPluginsFolder(), plugname + '.config.json');
 		}
 		else {
 			plugname = typeof plugin === 'string' ? plugin.toLowerCase() : null;
 			var contentpath = plugname ? BDFDB.Plugins[plugname] ? BDFDB.Plugins[plugname].contentPath : null : plugin.contentPath;
 			if (!contentpath) return {};
-			configpath = require('path').join(contentpath, 'settings.json');
+			configpath = LibraryRequires.path.join(contentpath, 'settings.json');
 		}
-		if (!fs.existsSync(configpath)) {
+		if (!LibraryRequires.fs.existsSync(configpath)) {
 			delete BDFDB.cachedData[plugname];
 			return {};
 		}
@@ -2111,27 +2113,27 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.removeAllData = function (plugin, key) {
-		var fs = require('fs'), configpath, plugname;
+		var configpath, plugname;
 		if (!BDFDB.isBDv2()) {
 			plugname = typeof plugin === 'string' ? plugin : plugin.name;
-			configpath = require('path').join(BDFDB.getPluginsFolder(), plugname + '.config.json');
+			configpath = LibraryRequires.path.join(BDFDB.getPluginsFolder(), plugname + '.config.json');
 		}
 		else {
 			plugname = typeof plugin === 'string' ? plugin.toLowerCase() : null;
 			var contentpath = plugname ? BDFDB.Plugins[plugname] ? BDFDB.Plugins[plugname].contentPath : null : plugin.contentPath;
 			if (!contentpath) return;
-			configpath = require('path').join(contentpath, 'settings.json');
+			configpath = LibraryRequires.path.join(contentpath, 'settings.json');
 		}
-		var exists = fs.existsSync(configpath);
+		var exists = LibraryRequires.fs.existsSync(configpath);
 		var config = !exists ? {} : typeof BDFDB.cachedData[plugname] !== 'undefined' ? BDFDB.cachedData[plugname] : BDFDB.readConfig(configpath);
 		delete config[key];
 		if (BDFDB.isObjectEmpty(config)) {
 			delete BDFDB.cachedData[plugname];
-			if (exists) fs.unlinkSync(configpath);
+			if (exists) LibraryRequires.fs.unlinkSync(configpath);
 		}
 		else {
 			BDFDB.cachedData[plugname] = config;
-			fs.writeFileSync(configpath, JSON.stringify(config, null, '	'));
+			LibraryRequires.fs.writeFileSync(configpath, JSON.stringify(config, null, '	'));
 		}
 	};
 
@@ -2150,7 +2152,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.readConfig = function (path) {
-		try {return JSON.parse(require('fs').readFileSync(path));}
+		try {return JSON.parse(LibraryRequires.fs.readFileSync(path));}
 		catch (err) {return {};}
 	};
 
@@ -6231,6 +6233,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	if (BDFDB.myData.id == "278543574059057154") {
 		for (let module in DiscordClassModules) if (!DiscordClassModules[module]) console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', module + ' not initialized in DiscordClassModules');
+		for (let require in LibraryRequires) if (!LibraryRequires[require]) console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', require + ' not initialized in LibraryRequires');
 		for (let module in LibraryModules) if (!LibraryModules[module]) console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', module + ' not initialized in LibraryModules');
 
 		BDFDB.WebModules.DevFuncs = {};
