@@ -615,7 +615,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		var layers = document.querySelector(BDFDB.dotCN.layers);
 		if (!layers) return;
 		var id = Math.round(Math.random() * 10000000000000000);
-		var notice = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.notice + BDFDB.disCNS.size14 + BDFDB.disCNS.weightmedium + BDFDB.disCN.height36} BDFDB-notice notice-${id}"><div class="${BDFDB.disCN.noticedismiss}" style="height:36px !important; position: absolute !important; top: 0 !important; right: 0 !important; left: unset !important;"></div><span class="notice-message"></span></div>`);
+		var notice = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.notice} BDFDB-notice notice-${id}"><div class="${BDFDB.disCN.noticedismiss}" style="height:36px !important; position: absolute !important; top: 0 !important; right: 0 !important; left: unset !important;"></div><span class="notice-message"></span></div>`);
 		layers.parentElement.insertBefore(notice, layers);
 		var noticemessage = notice.querySelector('.notice-message');
 		if (options.platform) for (let platform of options.platform.split(' ')) if (DiscordClasses["noticeicon" + platform]) {
@@ -3753,6 +3753,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.ColorPickerInner = BDFDB.WebModules.findByProperties('saturation', 'hue', 'wrapper');
 	DiscordClassModules.ContextMenu = BDFDB.WebModules.findByProperties('contextMenu', 'itemGroup');
 	DiscordClassModules.ContextMenuCheckbox = BDFDB.WebModules.findByProperties('checkboxInner', 'checkboxElement');
+	DiscordClassModules.CtaVerification = BDFDB.WebModules.findByProperties('attendeeCTA', 'verificationNotice');
 	DiscordClassModules.Cursor = BDFDB.WebModules.findByProperties('cursorDefault', 'userSelectNone');
 	DiscordClassModules.DmAddPopout = BDFDB.WebModules.findByProperties('friendSelected', 'popout');
 	DiscordClassModules.DownloadLink = BDFDB.WebModules.findByProperties('downloadLink', 'size12');
@@ -3811,7 +3812,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.ModalItems = BDFDB.WebModules.findByProperties('guildName', 'checkboxContainer');
 	DiscordClassModules.ModalMiniContent = BDFDB.WebModules.find(module => typeof module['modal'] == 'string' && typeof module['content'] == 'string' && typeof module['size'] == 'string' && Object.keys(module).length == 3);
 	DiscordClassModules.ModalWrap = BDFDB.WebModules.find(module => typeof module['modal'] == 'string' && typeof module['inner'] == 'string' && Object.keys(module).length == 2);
-	DiscordClassModules.NameContainer = BDFDB.WebModules.findByProperties('nameAndDecorators', 'name');
+	DiscordClassModules.NameContainer = DiscordClassModules.ContextMenu.subMenuContext ? BDFDB.WebModules.findByProperties('nameAndDecorators', 'name') : {};
 	DiscordClassModules.NameTag = BDFDB.WebModules.findByProperties('bot', 'nameTag');
 	DiscordClassModules.Note = BDFDB.WebModules.find(module => typeof module['note'] == 'string' && Object.keys(module).length == 1);
 	DiscordClassModules.Notice = BDFDB.WebModules.findByProperties('notice', 'noticeFacebook');
@@ -4121,7 +4122,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		contextmenuinvertchildx: ['ContextMenu', 'invertChildX'],
 		contextmenuitem: ['ContextMenu', 'item'],
 		contextmenuitembrand: ['ContextMenu', 'brand'],
-		contextmenuitemclickable: ['ContextMenu', 'clickable'],
+		contextmenuitemclickable: [DiscordClassModules.ContextMenu.subMenuContext ? 'ContextMenu' : 'NotFound', DiscordClassModules.ContextMenu.subMenuContext ? 'clickable' : '_'],
 		contextmenuitemdanger: ['ContextMenu', 'danger'],
 		contextmenuitemdisabled: ['ContextMenu', 'disabled'],
 		contextmenuitemgroup: ['ContextMenu', 'itemGroup'],
@@ -4129,7 +4130,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		contextmenuitemselected: ['ContextMenu', 'selected'],
 		contextmenuitemslider: ['ContextMenu', 'itemSlider'],
 		contextmenuitemsubmenu: ['ContextMenu', 'itemSubMenu'],
-		contextmenuitemsubmenucaret: ['ContextMenu', 'caret'],
+		contextmenuitemsubmenucaret: [DiscordClassModules.ContextMenu.subMenuContext ? 'ContextMenu' : 'NotFound', DiscordClassModules.ContextMenu.subMenuContext ? 'caret' : '_'],
 		contextmenulabel: ['ContextMenu', 'label'],
 		contextmenuscroller: ['ContextMenu', 'scroller'],
 		contextmenuslider: ['ContextMenu', 'slider'],
@@ -4724,13 +4725,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		settingstabbartoppill: ['Item', 'topPill'],
 		sidebarregion: ['SettingsWindow', 'sidebarRegion'],
 		sinkinteractions: ['Message', 'disableInteraction'],
-		size10: ['TextSize', 'size10'],
-		size12: ['TextSize', 'size12'],
-		size14: ['TextSize', 'size14'],
-		size16: ['TextSize', 'size16'],
+		size10: ['UserPopout', 'size10'],
+		size12: ['UserPopout', 'size12'],
+		size14: ['UserPopout', 'size14'],
+		size16: ['UserPopout', 'size16'],
 		size18: ['Title', 'size18'],
-		size20: ['TextSize', 'size20'],
+		size20: ['CtaVerification', 'size20'],
 		size24: ['TextSize', 'size24'],
+		size36: ['CtaVerification', 'size24'],
 		slider: ['Slider', 'slider'],
 		sliderbar: ['Slider', 'bar'],
 		sliderbarfill: ['Slider', 'barFill'],
