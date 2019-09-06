@@ -1095,7 +1095,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					var key = keys[i];
 					var value = instance[key];
 					var statenode = instance.stateNode ? instance.stateNode : (instance.return ? instance.return.stateNode : null);
-					if (statenode && !Node.prototype.isPrototypeOf(statenode) && (instance.type && config.name && config.name.some(name => instance.type.displayName === name.split(' ')[0] || instance.type.name === name.split(' ')[0]) || config.props && config.props.every(prop => statenode[prop] !== undefined) || config.defaultProps && config.defaultProps.every(prop => statenode[prop] !== undefined))) {
+					if (statenode && !Node.prototype.isPrototypeOf(statenode) && (instance.type && config.name && config.name.some(name => instance.type.displayName === name.split(' _  _ ')[0] || instance.type.name === name.split(' _  _ ')[0]) || config.props && config.props.every(prop => statenode[prop] !== undefined) || config.defaultProps && config.defaultProps.every(prop => statenode[prop] !== undefined))) {
 						if (config.all === undefined || !config.all) result = statenode;
 						else if (config.all) {
 							if (config.noCopies === undefined || !config.noCopies || config.noCopies && !statenode.BDFDBreactSearch) {
@@ -1103,7 +1103,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 								if (config.group) {
 									if (config.name && instance.type && (instance.type.displayName || instance.type.name)) {
 										var group = 'Default';
-										for (let name of config.name) if (instance.type.displayName === name.split(' ')[0] || instance.type.name === name.split(' ')[0]) {
+										for (let name of config.name) if (instance.type.displayName === name.split(' _  _ ')[0] || instance.type.name === name.split(' _  _ ')[0]) {
 											group = name;
 											break;
 										}
@@ -1435,7 +1435,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.WebModules.forceAllUpdates = function (plugin, selectedtype) {
-		selectedtype = selectedtype && webModulesPatchmap[selectedtype] ? webModulesPatchmap[selectedtype] + ' ' + selectedtype : selectedtype;
+		selectedtype = selectedtype && webModulesPatchmap[selectedtype] ? webModulesPatchmap[selectedtype] + ' _ _ ' + selectedtype : selectedtype;
 		if (BDFDB.isObject(plugin) && BDFDB.isObject(plugin.patchModules) && (!selectedtype || plugin.patchModules[selectedtype])) {
 			const app = document.querySelector(BDFDB.dotCN.app);
 			const bdsettings = document.querySelector('#bd-settingspane-container ' + BDFDB.dotCN.scrollerwrap);
@@ -1475,7 +1475,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				if (instance) {
 					var name = type.split(' _  _ ')[0];
 					instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
-					instance = instance.displayName == name ? instance : BDFDB.getOwnerInstance({instance:instance, name, up:true});
+					instance = instance.displayName == name ? instance : BDFDB.getOwnerInstance({instance, name, up:true});
 					if (instance) {
 						instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 						var patchfunction = {};
