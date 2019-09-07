@@ -3,7 +3,7 @@
 class ChatAliases {
 	getName () {return "ChatAliases";}
 
-	getVersion () {return "1.9.9";}
+	getVersion () {return "2.0.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ChatAliases {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["Min Length","Plugin now allows you to set a minimum character length required for the Autocomplete-Menu to show up to avoid the Autocomplete-Menu from opening on words like 'i' and 'a' in case an aliases starts with these letters, which could have prevented you from sending the message via enter before"]]
+			"fixed":[["File Aliases","Fixed the crash occuring when trying to send a file via an alias"]]
 		};
 
 		this.patchModules = {
@@ -40,8 +40,8 @@ class ChatAliases {
 
 		this.chataliasesContextEntryMarkup =
 			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
-				<div class="${BDFDB.disCN.contextmenuitem} chataliases-item">
-					<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">Add to ChatAliases</div></span>
+				<div class="${BDFDB.disCNS.contextmenuitem + BDFDB.disCN.contextmenuitemclickable} chataliases-item">
+					<div class="${BDFDB.disCN.contextmenulabel} BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">Add to ChatAliases</div></div>
 					<div class="${BDFDB.disCN.contextmenuhint}"></div>
 				</div>
 			</div>`;
@@ -54,7 +54,7 @@ class ChatAliases {
 						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
 								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
-									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">Add to ChatAliases</h4>
+									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">Add to ChatAliases</h4>
 									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
 								</div>
 								<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
@@ -162,7 +162,7 @@ class ChatAliases {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -183,8 +183,6 @@ class ChatAliases {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-
-			this.UploadModule = BDFDB.WebModules.findByProperties("instantBatchUpload");
 
 			this.aliases = BDFDB.loadAllData(this, "words");
 
@@ -255,10 +253,9 @@ class ChatAliases {
 	saveWord (wordvalue, replacevalue, fileselection, configs = BDFDB.getAllData(this, "configs")) {
 		if (!wordvalue || !replacevalue || !fileselection) return;
 		var filedata = null;
-		var fs = require("fs");
-		if (fileselection.files && fileselection.files[0] && fs.existsSync(replacevalue)) {
+		if (fileselection.files && fileselection.files[0] && BDFDB.LibraryRequires.fs.existsSync(replacevalue)) {
 			filedata = JSON.stringify({
-				data: fs.readFileSync(replacevalue).toString("base64"),
+				data: BDFDB.LibraryRequires.fs.readFileSync(replacevalue).toString("base64"),
 				name: fileselection.files[0].name,
 				type: fileselection.files[0].type
 			});
@@ -357,11 +354,13 @@ class ChatAliases {
 					textarea.selectionEnd = textarea.value.length;
 					if (document.activeElement == textarea) {
 						var messageInput = this.formatText(textarea.value);
-						if (messageInput && messageInput.text != null) {
-							document.execCommand("insertText", false, messageInput.text ? messageInput.text + " " : "");
-						}
-						if (messageInput && messageInput.files.length > 0 && (instance.props.channel.type == 1 || BDFDB.isUserAllowedTo("ATTACH_FILES"))) {
-							this.UploadModule.instantBatchUpload(instance.props.channel.id, messageInput.files);
+						if (messageInput) {
+							if (messageInput.text != null) {
+								document.execCommand("insertText", false, messageInput.text ? messageInput.text + " " : "");
+							}
+							if (messageInput.files.length > 0 && (instance.props.channel.type == 1 || BDFDB.isUserAllowedTo("ATTACH_FILES"))) {
+								BDFDB.LibraryModules.UploadUtils.instantBatchUpload(instance.props.channel.id, messageInput.files);
+							}
 						}
 					}
 				}
@@ -521,7 +520,7 @@ class ChatAliases {
 					tempstring1 = tempstring1.slice(result.index + result[0].length);
 					if (aliasdata.file && typeof aliasdata.filedata == "string") {
 						var filedata = JSON.parse(aliasdata.filedata);
-						files.push(new File([Buffer.from(filedata.data, "base64")], filedata.name, {type:filedata.type}));
+						files.push(new File([Uint8Array.from(atob(filedata.data), c => c.charCodeAt(0))], filedata.name, {type:filedata.type}));
 					}
 					if (aliasdata.regex && regstring.indexOf("^") == 0) result = null;
 				}
