@@ -3,7 +3,7 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.5.5";}
+	getVersion () {return "2.5.6";}
 
 	getAuthor () {return "DevilBro";}
 
