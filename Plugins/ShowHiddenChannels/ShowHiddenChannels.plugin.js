@@ -11,7 +11,7 @@ class ShowHiddenChannels {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["New Structure","Fixed issues that will occur once the avatar/name changes from canary will hit stable/ptb"]]
+			"fixed":[["Voice Channel","Fixes the bug where it doesnt show the connected users of a hidden/locked vocie channel"]]
 		};
 
 		this.patchModules = {
@@ -147,7 +147,7 @@ class ShowHiddenChannels {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -168,15 +168,6 @@ class ShowHiddenChannels {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-
-			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers", "getUser");
-			this.MemberUtils = BDFDB.WebModules.findByProperties("getMember", "getMembers");
-			this.GuildUtils = BDFDB.WebModules.findByProperties("getGuilds", "getGuild");
-			this.ChannelUtils = BDFDB.WebModules.findByProperties("getChannels", "getDMFromUserId");
-			this.VoiceUtils = BDFDB.WebModules.findByProperties("getAllVoiceStates", "getVoiceStatesForChannel");
-			this.GuildChannels = BDFDB.WebModules.findByProperties("getChannels", "getDefaultChannel");
-			this.ChannelTypes = BDFDB.WebModules.findByProperties("ChannelTypes").ChannelTypes;
-			this.Permissions = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes").Permissions;
 
 			BDFDB.WebModules.forceAllUpdates(this, "Channels");
 		}
@@ -203,11 +194,11 @@ class ShowHiddenChannels {
 	}
 
 	processChannelItem (instance, wrapper) {
-		if (instance.props && instance.props.channel) this.reappendHiddenContainer(this.GuildUtils.getGuild(instance.props.channel.guild_id));
+		if (instance.props && instance.props.channel) this.reappendHiddenContainer(BDFDB.LibraryModules.GuildStore.getGuild(instance.props.channel.guild_id));
 	}
 
 	processChannelCategoryItem (instance, wrapper) {
-		if (instance.props && instance.props.channel) this.reappendHiddenContainer(this.GuildUtils.getGuild(instance.props.channel.guild_id));
+		if (instance.props && instance.props.channel) this.reappendHiddenContainer(BDFDB.LibraryModules.GuildStore.getGuild(instance.props.channel.guild_id));
 	}
 
 	processStandardSidebarView (instance, wrapper) {
@@ -221,19 +212,19 @@ class ShowHiddenChannels {
 		BDFDB.removeEles(".container-hidden");
 		if (!guild) return;
 		this.currentGuild = guild.id;
-		var allChannels = this.ChannelUtils.getChannels();
-		var shownChannels = this.GuildChannels.getChannels(guild.id);
+		var allChannels = BDFDB.LibraryModules.ChannelStore.getChannels();
+		var shownChannels = BDFDB.LibraryModules.GuildChannelStore.getChannels(guild.id);
 		var hiddenChannels = {};
 
-		for (let type in this.ChannelTypes) hiddenChannels[this.ChannelTypes[type]] = [];
+		for (let type in BDFDB.DiscordConstants.ChannelTypes) hiddenChannels[BDFDB.DiscordConstants.ChannelTypes[type]] = [];
 
 		for (let channel_id in allChannels) {
 			var channel = allChannels[channel_id];
 			if (channel.guild_id == guild.id) {
 				var isHidden = true;
-				if (channel.type == this.ChannelTypes.GUILD_CATEGORY) {
-					for (let type in this.ChannelTypes) {
-						let shownChannelsOfType = this.ChannelTypes[type] == 0 && shownChannels.SELECTABLE ? shownChannels.SELECTABLE : shownChannels[this.ChannelTypes[type]];
+				if (channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY) {
+					for (let type in BDFDB.DiscordConstants.ChannelTypes) {
+						let shownChannelsOfType = BDFDB.DiscordConstants.ChannelTypes[type] == 0 && shownChannels.SELECTABLE ? shownChannels.SELECTABLE : shownChannels[BDFDB.DiscordConstants.ChannelTypes[type]];
 						if (shownChannelsOfType) for (let shownChannel of shownChannelsOfType) {
 							if (!channel.id || shownChannel.channel.parent_id == channel.id) {
 								isHidden = false;
@@ -249,10 +240,10 @@ class ShowHiddenChannels {
 
 		var settings = BDFDB.getAllData(this, "settings");
 		var count = 0;
-		for (let type in this.ChannelTypes) {
-			if (this.settingsMap[type] && !settings[this.settingsMap[type]]) hiddenChannels[this.ChannelTypes[type]] = [];
-			BDFDB.sortArrayByKey(hiddenChannels[this.ChannelTypes[type]], "name");
-			count += hiddenChannels[this.ChannelTypes[type]].length;
+		for (let type in BDFDB.DiscordConstants.ChannelTypes) {
+			if (this.settingsMap[type] && !settings[this.settingsMap[type]]) hiddenChannels[BDFDB.DiscordConstants.ChannelTypes[type]] = [];
+			BDFDB.sortArrayByKey(hiddenChannels[BDFDB.DiscordConstants.ChannelTypes[type]], "name");
+			count += hiddenChannels[BDFDB.DiscordConstants.ChannelTypes[type]].length;
 		}
 		hiddenChannels.count = count;
 
@@ -268,7 +259,7 @@ class ShowHiddenChannels {
 				BDFDB.saveData(guild.id, visibile, this, "categorystatus");
 			});
 
-			for (let type in this.ChannelTypes) for (let hiddenChannel of hiddenChannels[this.ChannelTypes[type]]) this.createChannel(guild, category, hiddenChannel, type);
+			for (let type in BDFDB.DiscordConstants.ChannelTypes) for (let hiddenChannel of hiddenChannels[BDFDB.DiscordConstants.ChannelTypes[type]]) this.createChannel(guild, category, hiddenChannel, type);
 
 			var isvisibile = BDFDB.loadData(guild.id, this, "categorystatus") === true;
 			BDFDB.toggleClass(wrapper, BDFDB.disCN.categorycollapsed, !isvisibile);
@@ -328,10 +319,11 @@ class ShowHiddenChannels {
 
 	createHiddenObjContextMenu (guild, channel, type, e) {
 		BDFDB.stopEvent(e);
-		var contextMenu = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.contextmenu} showhiddenchannels-contextmenu">${BDFDB.isPluginEnabled("PermissionsViewer") ? '<div class="' + BDFDB.disCN.contextmenuitemgroup + '"><div class="' + BDFDB.disCN.contextmenuitem + '" style="display: none !important;"></div></div>' : ''}<div class="${BDFDB.disCN.contextmenuitemgroup}"><div class="${BDFDB.disCN.contextmenuitem} permissionviewer-item"><span></span><div class="${BDFDB.disCN.contextmenuhint}"></div></div><div class="${BDFDB.disCN.contextmenuitem} copyid-item"><span>${BDFDB.LanguageStrings.COPY_ID}</span><div class="${BDFDB.disCN.contextmenuhint}"></div></div></div></div>`);
+		let isPermissionsViewerEnabled = BDFDB.isPluginEnabled("PermissionsViewer");
+		var contextMenu = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.contextmenu} showhiddenchannels-contextmenu">${isPermissionsViewerEnabled ? `<div class="${BDFDB.disCN.contextmenuitemgroup}"><div class="${BDFDB.disCNS.contextmenuitem + BDFDB.disCN.contextmenuitemclickable}" style="display: none !important;"></div></div>` : ``}<div class="${BDFDB.disCN.contextmenuitemgroup}"><div class="${BDFDB.disCNS.contextmenuitem + BDFDB.disCN.contextmenuitemclickable} permissionviewer-item"><div class="${BDFDB.disCN.contextmenulabel} BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll"></div></div><div class="${BDFDB.disCN.contextmenuhint}"></div></div><div class="${BDFDB.disCNS.contextmenuitem + BDFDB.disCN.contextmenuitemclickable} copyid-item"><div class="${BDFDB.disCN.contextmenulabel} BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">${BDFDB.LanguageStrings.COPY_ID}</div></div><div class="${BDFDB.disCN.contextmenuhint}"></div></div></div></div>`);
 		var permissionvieweritem = contextMenu.querySelector(".permissionviewer-item");
-		if (BDFDB.isPluginEnabled("PermissionsViewer")) {
-			permissionvieweritem.firstElementChild.innerText = window.bdplugins.PermissionsViewer.plugin.strings.contextMenuLabel;
+		if (isPermissionsViewerEnabled) {
+			permissionvieweritem.querySelector(".BDFDB-textscroll").innerText = window.bdplugins.PermissionsViewer.plugin.strings.contextMenuLabel;
 			permissionvieweritem.addEventListener("click", () => {
 				contextMenu.remove();
 				if (!Object.keys(channel.permissionOverwrites).length) BDFDB.showToast(`#${channel.name} has no permission overrides`, {type: "info"});
@@ -345,7 +337,7 @@ class ShowHiddenChannels {
 		contextMenu.__reactInternalInstance = reactInstance;
 		BDFDB.addChildEventListener(contextMenu, "click", ".copyid-item", e2 => {
 			contextMenu.remove();
-			require("electron").clipboard.write({text: channel.id});
+			BDFDB.LibraryRequires.electron.clipboard.write({text: channel.id});
 		});
 
 		BDFDB.appendContextMenu(contextMenu, e);
@@ -354,11 +346,11 @@ class ShowHiddenChannels {
 	showAccessRoles (guild, channel, e, allowed) {
 		if ((e.type != "mouseenter" && e.type != "mouseover") || !guild || !channel) return;
 		var settings = BDFDB.getAllData(this, "settings");
-		var myMember = this.MemberUtils.getMember(guild.id, BDFDB.myData.id);
+		var myMember = BDFDB.LibraryModules.MemberStore.getMember(guild.id, BDFDB.myData.id);
 		var allowedRoles = [], allowedUsers = [], overwrittenRoles = [], deniedRoles = [], deniedUsers = [];
 		var everyoneDenied = false;
 		for (let id in channel.permissionOverwrites) {
-			if (settings.showAllowedRoles && channel.permissionOverwrites[id].type == "role" && (guild.roles[id] && guild.roles[id].name != "@everyone") && ((channel.permissionOverwrites[id].allow | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow || (channel.permissionOverwrites[id].allow | this.Permissions.CONNECT) == channel.permissionOverwrites[id].allow)) {
+			if (settings.showAllowedRoles && channel.permissionOverwrites[id].type == "role" && (guild.roles[id] && guild.roles[id].name != "@everyone") && ((channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow || (channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].allow)) {
 				if (myMember.roles.includes(id) && !allowed) {
 					if (settings.showOverWrittenRoles) overwrittenRoles.push(guild.roles[id]);
 				}
@@ -366,18 +358,18 @@ class ShowHiddenChannels {
 					allowedRoles.push(guild.roles[id]);
 				}
 			}
-			else if (settings.showAllowedUsers && channel.permissionOverwrites[id].type == "member" && ((channel.permissionOverwrites[id].allow | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow || (channel.permissionOverwrites[id].allow | this.Permissions.CONNECT) == channel.permissionOverwrites[id].allow)) {
-				let user = this.UserUtils.getUser(id);
-				let member = this.MemberUtils.getMember(guild.id,id);
+			else if (settings.showAllowedUsers && channel.permissionOverwrites[id].type == "member" && ((channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow || (channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].allow)) {
+				let user = BDFDB.LibraryModules.UserStore.getUser(id);
+				let member = BDFDB.LibraryModules.MemberStore.getMember(guild.id,id);
 				if (user && member) allowedUsers.push(Object.assign({name:user.username,id:user.id},member));
 			}
-			if (settings.showDeniedRoles && channel.permissionOverwrites[id].type == "role" && ((channel.permissionOverwrites[id].deny | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny || (channel.permissionOverwrites[id].deny | this.Permissions.CONNECT) == channel.permissionOverwrites[id].deny)) {
+			if (settings.showDeniedRoles && channel.permissionOverwrites[id].type == "role" && ((channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny || (channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].deny)) {
 				deniedRoles.push(guild.roles[id]);
 				if (guild.roles[id] && guild.roles[id].name == "@everyone") everyoneDenied = true;
 			}
-			else if (settings.showDeniedUsers && channel.permissionOverwrites[id].type == "member" && ((channel.permissionOverwrites[id].deny | this.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny || (channel.permissionOverwrites[id].deny | this.Permissions.CONNECT) == channel.permissionOverwrites[id].deny)) {
-				let user = this.UserUtils.getUser(id);
-				let member = this.MemberUtils.getMember(guild.id, id);
+			else if (settings.showDeniedUsers && channel.permissionOverwrites[id].type == "member" && ((channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny || (channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].deny)) {
+				let user = BDFDB.LibraryModules.UserStore.getUser(id);
+				let member = BDFDB.LibraryModules.MemberStore.getMember(guild.id, id);
 				if (user && member) deniedUsers.push(Object.assign({name:user.username,id:user.id},member));
 			}
 		}
@@ -386,18 +378,18 @@ class ShowHiddenChannels {
 		}
 		var htmlString = ``;
 		if (settings.showChannelCategory && !allowed && channel.parent_id) {
-			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Category:</div><div class="${BDFDB.disCNS.flex + BDFDB.disCN.wrap}"><div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex + BDFDB.disCNS.aligncenter} SHC-category" style="border-color: rgba(255, 255, 255, 0.6); height: unset !important; padding-top: 5px; padding-bottom: 5px; max-width: ${window.outerWidth/3}px; text-transform: uppercase;">${BDFDB.encodeToHTML(this.ChannelUtils.getChannel(channel.parent_id).name)}</div></div>`;
+			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Category:</div><div class="${BDFDB.disCNS.flex + BDFDB.disCN.wrap}"><div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex + BDFDB.disCNS.aligncenter} SHC-category" style="border-color: rgba(255, 255, 255, 0.6); height: unset !important; padding-top: 5px; padding-bottom: 5px; max-width: ${window.outerWidth/3}px; text-transform: uppercase;">${BDFDB.encodeToHTML(BDFDB.LibraryModules.ChannelStore.getChannel(channel.parent_id).name)}</div></div>`;
 		}
 		if (settings.showTopic && !allowed && channel.topic && channel.topic.replace(/[\t\n\r\s]/g, "")) {
 			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Topic:</div><div class="${BDFDB.disCNS.flex + BDFDB.disCN.wrap}"><div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex + BDFDB.disCNS.aligncenter} SHC-topic" style="border-color: rgba(255, 255, 255, 0.6); height: unset !important; padding-top: 5px; padding-bottom: 5px; max-width: ${window.outerWidth/3}px">${BDFDB.encodeToHTML(channel.topic)}</div></div>`;
 		}
-		if (settings.showVoiceUsers && channel.type == this.ChannelTypes.GUILD_VOICE && (!allowed || e.currentTarget.querySelector(BDFDB.dotCN.channelmodelocked))) {
-			let voicestates = this.VoiceUtils.getVoiceStatesForChannel(guild.id, channel.id);
+		if (settings.showVoiceUsers && channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE && (!allowed || e.currentTarget.querySelector(BDFDB.dotCN.channelmodelocked))) {
+			let voicestates = BDFDB.LibraryModules.VoiceUtils.getVoiceStatesForChannel(channel);
 			if (voicestates.length > 0) {
 				htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Connected Voice Users:</div><div class="${BDFDB.disCNS.flex + BDFDB.disCN.wrap}">`;
 				for (let voicestate of voicestates) {
-					let user = this.UserUtils.getUser(voicestate.userId);
-					let member = this.MemberUtils.getMember(guild.id, voicestate.userId);
+					let user = BDFDB.LibraryModules.UserStore.getUser(voicestate.userId);
+					let member = BDFDB.LibraryModules.MemberStore.getMember(guild.id, voicestate.userId);
 					if (user && member) {
 						let color = member.colorString ? BDFDB.colorCONVERT(member.colorString, "RGBCOMP") : [255,255,255];
 						htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex + BDFDB.disCNS.aligncenter} SHC-voiceuser" style="padding-left: 0; border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCN.avatarwrapper}" role="img" aria-label="${user.username}" aria-hidden="false" style="width: 22px; height: 18px; z-index: 1003;"><svg width="18" height="18" viewBox="0 0 18 18" class="${BDFDB.disCN.avatarmask}" aria-hidden="true"><foreignObject x="0" y="0" width="18" height="18" mask="url(#svg-mask-avatar-default)"><img src="${BDFDB.getUserAvatar(user.id)}" alt=" " class="${BDFDB.disCN.avatar}" aria-hidden="true"></foreignObject></svg></div><div class="${BDFDB.disCN.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}">${BDFDB.encodeToHTML(member.nick || user.username)}</div></div>`;
