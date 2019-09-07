@@ -2911,7 +2911,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				var tableid = ele.getAttribute('table-id');
 				if (panel && tableid && BDFDB.isObject(panel['BDFDB-tableheader-maxwidth']) && panel['BDFDB-tableheader-maxwidth'][tableid]) {
 					var style = getComputedStyle(ele);
-					ele.style.setProperty('flex', ` 0 0 ${panel['BDFDB-tableheader-maxwidth'][tableid] - parseInt(style.marginLeft) - parseInt(style.marginRight)}px`, 'important');
+					ele.style.setProperty('flex', `0 0 ${panel['BDFDB-tableheader-maxwidth'][tableid] - parseInt(style.marginLeft) - parseInt(style.marginRight)}px`, 'important');
 				}
 			});
 		};
