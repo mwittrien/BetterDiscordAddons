@@ -4312,7 +4312,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		guildheadername: ['GuildHeader', 'name'],
 		guildicon: ['GuildIcon', 'icon'],
 		guildiconacronym: ['GuildIcon', 'acronym'],
-		guildiconchildwrapper: ['GuildIcon', 'childWrapper'],
+		guildiconchildwrapper: [DiscordClassModules.ContextMenu.subMenuContext ? 'GuildIcon' : 'NotFound', DiscordClassModules.ContextMenu.subMenuContext ? 'childWrapper' : '_'],
 		guildiconselected: ['GuildIcon', 'selected'],
 		guildiconwrapper: ['GuildIcon', 'wrapper'],
 		guildinner: ['Guild', 'wrapper'],
