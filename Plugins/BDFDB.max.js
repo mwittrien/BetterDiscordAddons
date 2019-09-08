@@ -1627,7 +1627,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				processContext(type, e.thisObject, e.returnValue, BDFDB.React.findDOMNodeSafe(e.thisObject));
 			}});
 		}
-
 		function processContext (type, instance, returnvalue, menu) {
 			if (instance && menu) {
 				if (type && typeof plugin[`on${type}ContextMenu`] === 'function') plugin[`on${type}ContextMenu`](instance, menu, returnvalue);
@@ -1635,22 +1634,15 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			}
 		}
 	};
-	for (let type of NoFluxContextMenus) {
-		let module = BDFDB.WebModules.findByName(type + 'ContextMenu');
+	var BDFDBpatchCMmodule = function (module) {
 		if (module) BDFDB.WebModules.patch(module.prototype, 'componentDidUpdate', BDFDB, {after: e => {
 			const updater = BDFDB.getReactValue(e, 'thisObject._reactInternalFiber.stateNode.props.onHeightUpdate');
 			if (updater) updater();
 			BDFDB.initElements(BDFDB.React.findDOMNodeSafe(e.thisObject));
 		}});
-	}
-	for (let type of FluxContextMenus) {
-		let module = BDFDB.WebModules.findByName('FluxContainer(' + type + 'ContextMenu)');
-		if (module) BDFDB.WebModules.patch(module.prototype, 'componentDidUpdate', BDFDB, {after: e => {
-			const updater = BDFDB.getReactValue(e, 'thisObject._reactInternalFiber.stateNode.props.onHeightUpdate');
-			if (updater) updater();
-			BDFDB.initElements(BDFDB.React.findDOMNodeSafe(e.thisObject));
-		}});
-	}
+	};
+	for (let type of NoFluxContextMenus) BDFDBpatchCMmodule(BDFDB.WebModules.findByName(type + 'ContextMenu'));
+	for (let type of FluxContextMenus) BDFDBpatchCMmodule(BDFDB.WebModules.findByName('FluxContainer(' + type + 'ContextMenu)'));
 
 	BDFDB.addSettingsButtonListener = function (plugin) {
 		if (BDFDB.isBDv2() && typeof plugin.getSettingsPanel === 'function') {
@@ -2849,6 +2841,21 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			addInitEventListener(ele, 'mouseleave', e => {
 				if (!BDFDB.containsClass(ele, BDFDB.disCN.settingsitemselected)) setTabitem(ele, 0);
 			});
+		});
+		container.querySelectorAll('.BDFDB-contextMenuItem ' + BDFDB.dotCN.contextmenulabel).forEach(ele => {
+			BDFDB.addClass(ele, 'BDFDB-textscrollwrapper');
+			ele.setAttribute('speed', 3);
+			ele.innerHTML = `<div class="BDFDB-textscroll">${BDFDB.encodeToHTML(ele.innerText)}</div>`;
+		});
+		container.querySelectorAll('.BDFDB-contextMenuItem ' + BDFDB.dotCN.contextmenuhint).forEach(ele => {
+			ele.innerHTML = `<div class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">${BDFDB.encodeToHTML(ele.innerText)}</div></div>`;
+			var width = BDFDB.getRects(ele.parentElement).width - (parseFloat(getComputedStyle(ele.parentElement).paddingLeft) + parseFloat(getComputedStyle(ele.parentElement).paddingRight));
+			ele.previousElementSibling.style.setProperty('width', width - 46 + 'px', 'important');
+			ele.previousElementSibling.style.setProperty('max-width', width - 46 + 'px', 'important');
+			ele.style.setProperty('top', getComputedStyle(ele.parentElement).paddingTop, 'important');
+			ele.style.setProperty('right', getComputedStyle(ele.parentElement).paddingRight, 'important');
+			ele.style.setProperty('width', '42px', 'important');
+			ele.style.setProperty('max-width', '42px', 'important');
 		});
 		container.querySelectorAll('.BDFDB-textscrollwrapper').forEach(ele => {
 			var inner = ele.querySelector('.BDFDB-textscroll');
@@ -6093,7 +6100,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		Message: ['componentDidMount','componentDidUpdate','render'],
 		MessageOptionPopout: 'componentDidMount'
 	};
-	BDFDB.WebModules.unpatchall(BDFDB);
 
 	BDFDB.WebModules.patch(LibraryModules.GuildStore, 'getGuild', BDFDB, {after: e => {
 		if (e.returnValue && e.methodArguments[0] == '410787888507256842' && !e.returnValue.banner) {
