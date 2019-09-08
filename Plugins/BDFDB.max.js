@@ -1608,7 +1608,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 	};
 
-	var NoFluxContextMenus = ['Analytics', 'Channel', 'Developer', 'Guild', 'GuildRole', 'Lfg', 'Message', 'Native', 'Screenshare', 'User', 'UserSettingsCog'];
+	var NoFluxContextMenus = ['Channel', 'Developer', 'Guild', 'GuildRole', 'Lfg', 'Message', 'Native', 'Screenshare', 'User', 'UserSettingsCog'];
 	var FluxContextMenus = ['Application', 'GroupDM'];
 	BDFDB.addContextListener = function (plugin) {
 		if (!BDFDB.isObject(plugin)) return;
