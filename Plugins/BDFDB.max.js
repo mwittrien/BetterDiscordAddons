@@ -1644,7 +1644,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}});
 	}
 	for (let type of FluxContextMenus) {
-		let module = BDFDB.WebModules.patch(BDFDB.WebModules.findByName('FluxContainer(' + type + 'ContextMenu)');
+		let module = BDFDB.WebModules.findByName('FluxContainer(' + type + 'ContextMenu)');
 		if (module) BDFDB.WebModules.patch(module.prototype, 'componentDidUpdate', BDFDB, {after: e => {
 			const updater = BDFDB.getReactValue(e, 'thisObject._reactInternalFiber.stateNode.props.onHeightUpdate');
 			if (updater) updater();
