@@ -113,6 +113,9 @@
 .carouselGradientEdge-2W94ou,
 .container-PNkimc,
 .container-1r6BKw,
+.channel-2QD9_O .layout-2DM8Md,
+.panels-j1Uci_,
+.privateChannels-1nO12o,
 .titleBar-AC4pGV,
 .titleWrapper-1l0xT9 .title-3qD0b-,
 .searchResultsWrap-2DKFzt .searchResult-3pzFAB:before,
@@ -158,6 +161,7 @@
 :not(.tab-content) > .standardSidebarView-3F1I7i,
 .card-3Qj_Yx,
 .container-1giJp5,
+.container-3baos1,
 .container-3baos1,
 .panel-VoWSbJ,
 .listeningAlong-2UPsxf,
@@ -261,6 +265,7 @@
 .ui-tab-bar-item:not(.selected):hover,
 .friendsRow-2yicud:hover,
 .channel-2QD9_O:hover a,
+a.channel-2QD9_O:hover,
 .member-3W1lQa:hover,
 .member-3W1lQa.popout-open,
 .input-3yHnCz,
@@ -639,7 +644,8 @@ input:disabled {
 	border-radius: 0 !important;
 }
 
-.channels-Ie2l6A > div:nth-child(2) {
+.channels-Ie2l6A > .panels-j1Uci_ > div:first-child,
+.channels-Ie2l6A > div:not(.panels-j1Uci_):nth-child(2) {
 	border-radius: 5px 5px 0 0 !important;
 }
 
@@ -843,6 +849,7 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 .item-26Dhrx[style*="background-color: rgb(114, 137, 218)"],
 .valueChecked-m-4IJZ:not([style*="background-color: rgba(255, 255, 255, 0.3)"]),
 .channel-2QD9_O.selected-1HYmZZ a,
+a.channel-2QD9_O.selected-aXhQR6,
 .content-20Aix8:active,
 .wrapper-1ucjTd.modeSelected-1zApJ_ .content-3at_AU,
 .wrapper-1ucjTd.modeSelected-1zApJ_:hover .content-3at_AU,
@@ -1022,8 +1029,10 @@ img[src="/assets/bfffd518c76d3f6bc5e96eb52e4ae2cf.svg"],
 
 .input-3Xdcic,
 .children-19S4PO .icon-22AiRD,
+.channel-2QD9_O.selected-aXhQR6 .linkButtonIcon-Mlm5d6,
 .channel-2QD9_O.selected-1HYmZZ .linkButtonIcon-Mlm5d6,
 .channel-2QD9_O:hover .linkButtonIcon-Mlm5d6,
+.channel-2QD9_O.selected-aXhQR6 .mobileIndicator-3gyhuE,
 .channel-2QD9_O.selected-1HYmZZ .mobileIndicator-3gyhuE,
 .channel-2QD9_O:hover .mobileIndicator-3gyhuE,
 .item-PXvHYJ.selected-3s45Ha:not(.tabBarItem-1b8RUP):not(.tabBarItem-1Cg-MI),

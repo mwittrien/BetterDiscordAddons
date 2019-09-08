@@ -1301,7 +1301,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	LibraryModules.UploadUtils = BDFDB.WebModules.findByProperties('upload', 'instantBatchUpload');
 	LibraryModules.UserStore = BDFDB.WebModules.findByProperties('getUser', 'getUsers');
 	LibraryModules.VoiceUtils = BDFDB.WebModules.findByProperties('getAllVoiceStates', 'getVoiceStatesForChannel');
-	LibraryModules.ZoomUtils = BDFDB.WebModules.findByProperties('zoomTo', 'fontScaleTo');
+	LibraryModules.ZoomUtils = BDFDB.WebModules.findByProperties('zoomTo', 'fontScaleTo') || BDFDB.WebModules.findByProperties('setZoom', 'setFontSize'); // REMOVE
 	BDFDB.LibraryModules = Object.assign({}, LibraryModules);
 
 	LibraryModules.React = BDFDB.WebModules.findByProperties('createElement', 'cloneElement');
@@ -3776,7 +3776,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.GuildDm = BDFDB.WebModules.find(module => typeof module['pill'] == 'string' && Object.keys(module).length == 1);
 	DiscordClassModules.GuildEdges = BDFDB.WebModules.findByProperties('wrapper', 'edge', 'autoPointerEvents')
 	DiscordClassModules.GuildFolder = BDFDB.WebModules.findByProperties('folder', 'expandedGuilds')
-	DiscordClassModules.GuildHeader = BDFDB.WebModules.findByProperties('header', 'name', 'hasDropdown');
+	DiscordClassModules.GuildHeader = BDFDB.WebModules.findByProperties('header', 'name', 'bannerImage');
 	DiscordClassModules.GuildIcon = BDFDB.WebModules.findByProperties('acronym', 'selected', 'wrapper');
 	DiscordClassModules.GuildSettingsBanned = BDFDB.WebModules.findByProperties('bannedUser', 'bannedUserAvatar');
 	DiscordClassModules.GuildSettingsInvite = BDFDB.WebModules.findByProperties('countdownColumn', 'inviteSettingsInviteRow');
