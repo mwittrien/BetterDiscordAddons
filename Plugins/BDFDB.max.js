@@ -4724,7 +4724,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		settingsseparator: ['Item', 'separator'],
 		settingstabbar: ['Friends', 'tabBar'],
 		settingstabbarbadge: ['Friends', 'badge'],
-		settingstabbarprimary: ['Friends', 'primary'],
 		settingstabbartoppill: ['Item', 'topPill'],
 		sidebarregion: ['SettingsWindow', 'sidebarRegion'],
 		sinkinteractions: ['Message', 'disableInteraction'],
