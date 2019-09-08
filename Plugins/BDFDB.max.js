@@ -1632,7 +1632,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			if (instance && menu) {
 				if (type && typeof plugin[`on${type}ContextMenu`] === 'function') plugin[`on${type}ContextMenu`](instance, menu, returnvalue);
 				else if (!type && typeof plugin[`onContextMenu`] === 'function') plugin[`onContextMenu`](instance, menu, returnvalue);
-				BDFDB.initElements(menu, plugin);
 			}
 		}
 	};
@@ -1641,6 +1640,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (module) BDFDB.WebModules.patch(module.prototype, 'componentDidUpdate', BDFDB, {after: e => {
 			const updater = BDFDB.getReactValue(e, 'thisObject._reactInternalFiber.stateNode.props.onHeightUpdate');
 			if (updater) updater();
+			BDFDB.initElements(BDFDB.React.findDOMNodeSafe(e.thisObject));
 		}});
 	}
 	for (let type of FluxContextMenus) {
@@ -1648,6 +1648,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (module) BDFDB.WebModules.patch(module.prototype, 'componentDidUpdate', BDFDB, {after: e => {
 			const updater = BDFDB.getReactValue(e, 'thisObject._reactInternalFiber.stateNode.props.onHeightUpdate');
 			if (updater) updater();
+			BDFDB.initElements(BDFDB.React.findDOMNodeSafe(e.thisObject));
 		}});
 	}
 
