@@ -3215,7 +3215,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				var result = [startchildren, -1];
 				for (let i in children) {
 					var displayname = children[i] && children[i].type ? children[i].type.displayName || children[i].type.name || "" : "";
-					if (names.some(name => displayname == name)) result = [children, i];
+					var label = children[i] && children[i].props ? children[i].props.label || "" : "";
+					if (names.some(name => displayname == name || label == name)) result = [children, i];
 					else if (children[i].props) result = search(children[i].props.children);
 					if (result[1] > -1) break;
 				}
