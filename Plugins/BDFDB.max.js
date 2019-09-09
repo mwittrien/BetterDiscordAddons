@@ -4683,6 +4683,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		nowrap: ['Flex', 'noWrap'],
 		optionpopout: ['OptionPopout', 'container'],
 		optionpopoutbutton: ['OptionPopout', 'button'],
+		optionpopoutbuttonicon: [!BDFDB.DiscordClassModules.OptionPopout.icon ? 'NotFound' : 'OptionPopout', !BDFDB.DiscordClassModules.OptionPopout.icon ? '_' : 'icon'], // REMOVE
 		optionpopoutitem: ['OptionPopout', 'item'],
 		overflowellipsis: ['BDFDB', 'overflowEllipsis'],
 		pictureinpicture: ['PictureInPicture', 'pictureInPicture'],
