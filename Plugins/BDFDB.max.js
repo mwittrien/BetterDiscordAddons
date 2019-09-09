@@ -1203,7 +1203,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 			var m = req.c[i].exports;
 			if (m && (typeof m == "object" || typeof m == "function") && filter(m)) return m;
-			for (let j in m) if (m[j] && (typeof m[j] == "object" || typeof m[j] == "function") && filter(m[j])) return m[j];
+			if (m && m.__esModule) for (let j in m) if (m[j] && (typeof m[j] == "object" || typeof m[j] == "function") && filter(m[j])) return m[j];
 		}
 	};
 
