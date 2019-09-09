@@ -1271,6 +1271,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.LibraryRequires = Object.assign({}, LibraryRequires);
 	
 	var LibraryComponents = {};
+	LibraryComponents.Button = BDFDB.WebModules.findByProperties('Colors', 'Hovers', 'Looks');
 	LibraryComponents.ContextMenuItem = BDFDB.WebModules.findByName('MenuItem');
 	LibraryComponents.ContextMenuItemGroup = BDFDB.WebModules.findByName('MenuGroup') || BDFDB.WebModules.findByString('{className:i.default.itemGroup}');
 	LibraryComponents.ContextMenuSubItem = BDFDB.WebModules.findByName('FluxContainer(SubMenuItem)');
@@ -1653,6 +1654,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (module && module.prototype) {
 			BDFDB.WebModules.patch(module.prototype, 'componentDidMount', BDFDB, {after: e => {
 				if (!e.thisObject.BDFDBforceRenderTimeout && typeof e.thisObject.render == 'function') e.thisObject.render();
+			}});
+			BDFDB.WebModules.patch(module.prototype, 'componentDidUpdate', BDFDB, {after: e => {
+				const updater = BDFDB.getReactValue(e, 'thisObject._reactInternalFiber.return.return.return.stateNode.updateOffsets');
+				if (updater) updater();
 			}});
 			BDFDB.WebModules.patch(module.prototype, 'render', BDFDB, {after: e => {
 				if (BDFDB.React.findDOMNodeSafe(e.thisObject)) {
