@@ -1659,6 +1659,17 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					e.thisObject.BDFDBforceRenderTimeout = true;
 					setTimeout(() => {delete e.thisObject.BDFDBforceRenderTimeout;}, 1000);
 				}
+				if (e.thisObject.props.message && !e.thisObject.props.target) {
+					const messageswrap = document.querySelector(BDFDB.dotCN.messages);
+					if (messageswrap) {
+						var messages = BDFDB.getOwnerInstance({node:messageswrap, name:"Message", all:true, noCopies:true, depth:99999999, time:99999999});
+						for (let i in messages) if (e.thisObject.props.message.id == messages[i].props.message.id) {
+							target = BDFDB.React.findDOMNodeSafe(messages[i]);
+							if (target) e.thisObject.props.target = target
+							break;
+						}
+					}
+				}
 			}});
 		}
 	};
@@ -6140,8 +6151,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		V2C_ThemeCard: ['componentDidMount','componentDidUpdate'],
 		UserPopout: ['componentDidMount'],
 		UserProfile: ['componentDidMount'],
-		Message: ['componentDidMount','componentDidUpdate','render'],
-		MessageOptionPopout: 'componentDidMount'
+		Message: ['componentDidMount','componentDidUpdate','render']
 	};
 
 	BDFDB.WebModules.patch(LibraryModules.GuildStore, 'getGuild', BDFDB, {after: e => {
@@ -6248,22 +6258,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			if (status) {
 				status.addEventListener("mouseenter", () => {BDFDB.addClass(avatar, "statusHovered")});
 				status.addEventListener("mouseleave", () => {BDFDB.removeClass(avatar, "statusHovered")});
-			}
-		}
-	};
-
-	BDFDB.processMessageOptionPopout = function (instance, wrapper, returnvalue) {
-		var target = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.return.memoizedProps.target");
-		if (target) instance.props.target = target;
-		else if (instance.props.message) {
-			const messageswrap = document.querySelector(BDFDB.dotCN.messages);
-			if (messageswrap) {
-				var messages = BDFDB.getOwnerInstance({node:messageswrap, name:"Message", all:true, noCopies:true, depth:99999999, time:99999999});
-				for (let i in messages) if (instance.props.message.id == messages[i].props.message.id) {
-					target = BDFDB.React.findDOMNodeSafe(messages[i]);
-					if (target) instance.props.target = target
-					break;
-				}
 			}
 		}
 	};
