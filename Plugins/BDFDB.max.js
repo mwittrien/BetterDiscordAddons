@@ -1615,7 +1615,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 		function patchContext (type, module) {
 			if (module && module.prototype) BDFDB.WebModules.patch(module.prototype, 'render', plugin, {after: e => {
-				let instance = e.thisObject, menu = BDFDB.React.findDOMNodeSafe(e.thisObject), returnvalue = e.returnvalue;
+				let instance = e.thisObject, menu = BDFDB.React.findDOMNodeSafe(e.thisObject), returnvalue = e.returnValue;
 				if (instance && menu && returnvalue) {
 					if (type && typeof plugin[`on${type}ContextMenu`] === 'function') plugin[`on${type}ContextMenu`](instance, menu, returnvalue);
 					else if (!type && typeof plugin[`onContextMenu`] === 'function') plugin[`onContextMenu`](instance, menu, returnvalue);
@@ -1624,7 +1624,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 		function patchPopout (type, module) {
 			if (module && module.prototype) BDFDB.WebModules.patch(module.prototype, 'render', plugin, {after: e => {
-				let instance = e.thisObject, popout = BDFDB.React.findDOMNodeSafe(e.thisObject), returnvalue = e.returnvalue;
+				let instance = e.thisObject, popout = BDFDB.React.findDOMNodeSafe(e.thisObject), returnvalue = e.returnValue;
 				if (instance && popout && returnvalue) {
 					if (type && typeof plugin[`on${type}Popout`] === 'function') plugin[`on${type}Popout`](instance, popout, returnvalue);
 				}
