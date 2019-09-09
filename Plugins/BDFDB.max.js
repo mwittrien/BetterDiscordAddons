@@ -1586,7 +1586,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.addOnSwitchListener = function (plugin) {
 		if (typeof plugin.onSwitch === 'function') {
 			BDFDB.removeOnSwitchListener(plugin);
-			var spacer = document.querySelector(`${BDFDB.dotCN.guildswrapper} + * > ${BDFDB.dotCN.chatspacer}`);
+			var spacer = document.querySelector(`${BDFDB.dotCN.guildswrapper} ~ * > ${BDFDB.dotCN.chatspacer}`);
 			if (spacer) {
 				var nochannelobserver = new MutationObserver(changes => {changes.forEach(change => {
 					if (change.target && BDFDB.containsClass(change.target, BDFDB.disCN.nochannel)) plugin.onSwitch();
