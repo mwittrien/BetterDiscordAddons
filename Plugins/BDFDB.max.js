@@ -1273,7 +1273,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	var LibraryComponents = {};
 	LibraryComponents.Button = BDFDB.WebModules.findByProperties('Colors', 'Hovers', 'Looks');
 	LibraryComponents.ContextMenuItem = BDFDB.WebModules.findByName('MenuItem');
-	LibraryComponents.ContextMenuItemGroup = BDFDB.WebModules.findByName('MenuGroup') || BDFDB.WebModules.findByString('{className:i.default.itemGroup}');
+	LibraryComponents.ContextMenuItemGroup = BDFDB.WebModules.findByString('{className:i.default.itemGroup}');
 	LibraryComponents.ContextMenuSubItem = BDFDB.WebModules.findByName('FluxContainer(SubMenuItem)');
 	LibraryComponents.ContextMenuToggleItem = BDFDB.WebModules.findByName('ToggleMenuItem');
 	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
@@ -1322,7 +1322,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	LibraryModules.UploadUtils = BDFDB.WebModules.findByProperties('upload', 'instantBatchUpload');
 	LibraryModules.UserStore = BDFDB.WebModules.findByProperties('getUser', 'getUsers');
 	LibraryModules.VoiceUtils = BDFDB.WebModules.findByProperties('getAllVoiceStates', 'getVoiceStatesForChannel');
-	LibraryModules.ZoomUtils = BDFDB.WebModules.findByProperties('zoomTo', 'fontScaleTo') || BDFDB.WebModules.findByProperties('setZoom', 'setFontSize'); // REMOVE
+	LibraryModules.ZoomUtils = BDFDB.WebModules.findByProperties('setZoom', 'setFontSize');
 	BDFDB.LibraryModules = Object.assign({}, LibraryModules);
 
 	LibraryModules.React = BDFDB.WebModules.findByProperties('createElement', 'cloneElement');
@@ -2746,10 +2746,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (BDFDB.containsClass(container, 'DevilBro-settings')) BDFDB.addClass(container, 'BDFDB-settings');
 		var islighttheme = BDFDB.getDiscordTheme() == BDFDB.disCN.themelight;
 		var languagestrings = BDFDB.getLibraryStrings();
-		if (!DiscordClassModules.ContextMenu.subMenuContext) container.querySelectorAll(BDFDB.dotCN.contextmenuitemsubmenu + BDFDB.notCN.contextmenuitem).forEach(ele => { // REMOVE
-			BDFDB.addClass(ele, BDFDB.disCN.contextmenuitem);
-			BDFDB.removeEles(ele.querySelectorAll("svg"));
-		});
 		container.querySelectorAll(".BDFDB-containertext").forEach(ele => {
 			if (BDFDB.containsClass(ele.nextElementSibling, "BDFDB-collapsecontainer")) {
 				if (BDFDB.containsClass(ele.firstElementChild, "closed")) BDFDB.toggleEles(ele.nextElementSibling, false);
@@ -3263,17 +3259,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.appendContextMenu = function (menu, e = Object.assign({currentTarget: document.querySelector(BDFDB.dotCN.app)}, BDFDB.mousePosition)) {
 		if (!Node.prototype.isPrototypeOf(menu)) return;
-		var itemlayer = menu;
-		if (DiscordClassModules.ContextMenu.subMenuContext) {
-			BDFDB.appendItemLayer(menu, e.currentTarget);
-			itemlayer = menu.parentElement;
-		}
-		else { // REMOVE
-			var tooltips = document.querySelector(BDFDB.dotCN.tooltips);
-			if (!tooltips) return;
-			tooltips.parentElement.insertBefore(menu, tooltips);
-			BDFDB.addClass(menu, BDFDB.getDiscordTheme());
-		}
+		var itemlayer = menu.parentElement;
+		BDFDB.appendItemLayer(menu, e.currentTarget);
+		itemlayer = menu;
 		var arects = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount));
 		var irects = BDFDB.getRects(itemlayer);
 		BDFDB.toggleClass(itemlayer, 'invertX', e.pageX + irects.width > arects.width);
@@ -3297,58 +3285,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (!BDFDB.isObject(nodeOrInstance)) return;
 		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.getOwnerInstance({node:nodeOrInstance, name:"ContextMenu", up:true}) : BDFDB.getOwnerInstance({instance:nodeOrInstance, name:"ContextMenu", up:true});
 		if (BDFDB.isObject(instance) && instance.props && typeof instance.props.closeContextMenu == "function") instance.props.closeContextMenu();
-	};
-
-	BDFDB.appendSubMenu = function (target, submenu) {
-		if (!Node.prototype.isPrototypeOf(target) || !Node.prototype.isPrototypeOf(submenu)) return;
-		var itemlayer = submenu;
-		if (DiscordClassModules.ContextMenu.subMenuContext) {
-			BDFDB.addClass(target, BDFDB.disCN.contextmenuitemselected);
-			var submenuwrap = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.contextmenusubcontext}"></div>`);
-			submenuwrap.appendChild(submenu);
-			BDFDB.appendItemLayer(submenuwrap, target);
-			itemlayer = submenuwrap.parentElement;
-			
-			BDFDB.removeEles(target.BDFDBsubmenu);
-			var parentmenulayer = BDFDB.getParentEle(BDFDB.dotCN.itemlayer, target);
-			if (parentmenulayer) parentmenulayer.BDFDBsubmenu = itemlayer;
-			target.BDFDBsubmenu = itemlayer;
-			
-			var arects = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount)), trects = BDFDB.getRects(target), irects = BDFDB.getRects(itemlayer);
-			if (trects.left < arects.width/2) itemlayer.style.setProperty('left', (trects.left + trects.width + 12) + 'px');
-			else itemlayer.style.setProperty('right', (arects.width - trects.left + 12) + 'px');
-			let top = trects.top + (trects.height - irects.height) / 2;
-			itemlayer.style.setProperty('top', (top < 0 ? 11 : (top > arects.height ? (arects.height - irects.height - 11) : top)) + 'px');
-			
-			var remove = () => {
-				document.removeEventListener('mouseout', mouseout);
-				target.removeEventListener('mouseleave', mouseleave);
-				itemlayer.remove();
-				BDFDB.removeClass(target, BDFDB.disCN.contextmenuitemselected);
-			};
-			var mouseout = e => {
-				if (!document.contains(itemlayer) || (!target.contains(e.target) && !BDFDB.getParentEle(BDFDB.dotCN.contextmenusubcontext, e.target))) remove();
-			};
-			var mouseleave = e => {
-				if (!document.contains(itemlayer) || (!e.toElement.contains(target) && !target.contains(e.toElement) && !itemlayer.contains(e.toElement))) remove();
-			};
-			document.addEventListener('mouseout', mouseout);
-			target.addEventListener('mouseleave', mouseleave);
-		}
-		else { // REMOVE
-			BDFDB.addClass(submenu, BDFDB.getDiscordTheme());
-			target.appendChild(submenu);
-			var trects = BDFDB.getRects(target);
-			var irects = BDFDB.getRects(itemlayer);
-			itemlayer.style.setProperty('left', trects.left + 'px');
-			itemlayer.style.setProperty('top', (trects.top + irects.height > window.outerHeight ? trects.top - irects.height + trects.height : trects.top) + 'px');
-			var mouseleave = () => {
-				target.removeEventListener('mouseleave', mouseleave);
-				itemlayer.remove();
-			};
-			target.addEventListener('mouseleave', mouseleave);
-		}
-		BDFDB.initElements(submenu);
 	};
 
 	BDFDB.setContextHint = function (item, text) {
@@ -3978,12 +3914,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.DiscordClassModules = Object.assign({}, DiscordClassModules);
 
 	var DiscordClasses = {
-		// REMOVE //
-		dmchannelselected: [DiscordClassModules.PrivateChannel.selected ? 'PrivateChannel' : 'NameContainer', 'selected'],
-		dmchannelname: [DiscordClassModules.PrivateChannel.name ? 'PrivateChannel' : 'NameContainer', 'name'],
-		membername: [DiscordClassModules.Member.nameTag ? 'Member' : 'NameContainer', DiscordClassModules.Member.nameTag ? 'nameTag' : 'nameAndDecorators'],
-		tooltips: ['ItemLayerContainer', 'layerContainer'],
-		// REMOVE //
 		_bdguild: ['BDrepo', 'bdGuild'],
 		_bdguildanimatable: ['BDrepo', 'bdGuildAnimatable'],
 		_bdguildaudio: ['BDrepo', 'bdGuildAudio'],
@@ -4198,7 +4128,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		channelmodeselected: ['Channel', 'modeSelected'],
 		channelmodeunread: ['Channel', 'modeUnread'],
 		channelname: ['Channel', 'name'],
-		channels: ['AppBase', DiscordClassModules.AppBase.channels ? 'channels' : 'sidebar'], // REMOVE
+		channels: ['AppBase', 'sidebar'],
 		channelselected: ['ChannelContainer', 'selected'],
 		channelsscroller: ['GuildChannels', 'scroller'],
 		channelunread: ['Channel', 'unread'],
@@ -4206,7 +4136,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		chat: ['ChannelWindow', 'chat'],
 		chatbase: ['AppBase', 'base'],
 		chatcontent: ['ChannelWindow', 'content'],
-		chatspacer: ['AppBase', DiscordClassModules.AppBase.spacer ? 'spacer' : 'content'], // REMOVE
+		chatspacer: ['AppBase', 'content'],
 		checkbox: ['Checkbox', 'checkbox'],
 		checkboxchecked: ['Checkbox', 'checked'],
 		checkboxcontainer: ['ModalItems', 'checkboxContainer'],
@@ -4429,7 +4359,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		guildheadername: ['GuildHeader', 'name'],
 		guildicon: ['GuildIcon', 'icon'],
 		guildiconacronym: ['GuildIcon', 'acronym'],
-		guildiconchildwrapper: [DiscordClassModules.ContextMenu.subMenuContext ? 'GuildIcon' : 'NotFound', DiscordClassModules.ContextMenu.subMenuContext ? 'childWrapper' : '_'],// REMOVE
+		guildiconchildwrapper: ['GuildIcon', 'childWrapper'],
 		guildiconselected: ['GuildIcon', 'selected'],
 		guildiconwrapper: ['GuildIcon', 'wrapper'],
 		guildinner: ['Guild', 'wrapper'],
@@ -4441,7 +4371,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		guildpillwrapper: ['PillWrapper', 'wrapper'],
 		guildplaceholder: ['GuildsItems', 'dragInner'],
 		guildplaceholdermask: ['GuildsItems', 'placeholderMask'],
-		guilds: [!DiscordClassModules.AppBase.guilds ? 'NotFound' : 'AppBase', !DiscordClassModules.AppBase.guilds ? '_' : 'guilds'], // REMOVE
+		guilds: ['AppBase', 'guilds'],
 		guildseparator: ['GuildsItems', 'guildSeparator'],
 		guildserror: ['GuildsItems', 'guildsError'],
 		guildsettingsbannedcard: ['GuildSettingsBanned', 'bannedUser'],
@@ -4566,7 +4496,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		members: ['MembersWrap', 'members'],
 		membersgroup: ['MembersWrap', 'membersGroup'],
 		memberswrap: ['MembersWrap', 'membersWrap'],
-		memberusername: ['Member', DiscordClassModules.Member.username ? 'username' : 'roleColor'], // REMOVE
+		memberusername: ['Member', 'roleColor'],
 		mention: ['NotFound', 'mention'],
 		mentionwrapper: ['Mention', 'wrapper'],
 		mentionwrapperhover: ['Mention', 'wrapperHover'],
@@ -4696,7 +4626,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		nowrap: ['Flex', 'noWrap'],
 		optionpopout: ['OptionPopout', 'container'],
 		optionpopoutbutton: ['OptionPopout', 'button'],
-		optionpopoutbuttonicon: [!BDFDB.DiscordClassModules.OptionPopout.icon ? 'NotFound' : 'OptionPopout', !BDFDB.DiscordClassModules.OptionPopout.icon ? '_' : 'icon'], // REMOVE
+		optionpopoutbuttonicon: ['OptionPopout', 'icon'],
 		optionpopoutitem: ['OptionPopout', 'item'],
 		overflowellipsis: ['BDFDB', 'overflowEllipsis'],
 		pictureinpicture: ['PictureInPicture', 'pictureInPicture'],
