@@ -1618,8 +1618,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			if (module && module.prototype) BDFDB.WebModules.patch(module.prototype, 'render', plugin, {after: e => {
 				let instance = e.thisObject, menu = BDFDB.React.findDOMNodeSafe(e.thisObject), returnvalue = e.returnValue;
 				if (instance && menu && returnvalue) {
-					if (type && typeof plugin[`on${type}ContextMenu`] === 'function') plugin[`on${type}ContextMenu`](instance, menu, returnvalue);
-					else if (!type && typeof plugin[`onContextMenu`] === 'function') plugin[`onContextMenu`](instance, menu, returnvalue);
+					if (type && typeof plugin[`on${type}ContextMenu`] === 'function') {
+						plugin[`on${type}ContextMenu`](instance, menu, returnvalue);
+						instance.forceUpdate();
+					}
+					else if (!type && typeof plugin[`onContextMenu`] === 'function') {
+						plugin[`onContextMenu`](instance, menu, returnvalue);
+						instance.forceUpdate();
+					}
 				}
 			}});
 		}
@@ -1627,7 +1633,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			if (module && module.prototype) BDFDB.WebModules.patch(module.prototype, 'render', plugin, {after: e => {
 				let instance = e.thisObject, popout = BDFDB.React.findDOMNodeSafe(e.thisObject), returnvalue = e.returnValue;
 				if (instance && popout && returnvalue) {
-					if (type && typeof plugin[`on${type}Popout`] === 'function') plugin[`on${type}Popout`](instance, popout, returnvalue);
+					if (type && typeof plugin[`on${type}Popout`] === 'function') {
+						plugin[`on${type}Popout`](instance, popout, returnvalue);
+						instance.forceUpdate();
+					}
 				}
 			}});
 		}
@@ -1641,6 +1650,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				const updater = BDFDB.getReactValue(e, 'thisObject._reactInternalFiber.stateNode.props.onHeightUpdate');
 				if (updater) updater();
 				BDFDB.initElements(BDFDB.React.findDOMNodeSafe(e.thisObject));
+				e.thisObject.BDFDBforceRenderTimeout = true;
+				setTimeout(() => {delete e.thisObject.BDFDBforceRenderTimeout;}, 1000);
 			}});
 			BDFDB.WebModules.patch(module.prototype, 'render', BDFDB, {after: e => {
 				if (BDFDB.React.findDOMNodeSafe(e.thisObject)) {
@@ -1658,6 +1669,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			BDFDB.WebModules.patch(module.prototype, 'componentDidUpdate', BDFDB, {after: e => {
 				const updater = BDFDB.getReactValue(e, 'thisObject._reactInternalFiber.return.return.return.stateNode.updateOffsets');
 				if (updater) updater();
+				e.thisObject.BDFDBforceRenderTimeout = true;
+				setTimeout(() => {delete e.thisObject.BDFDBforceRenderTimeout;}, 1000);
 			}});
 			BDFDB.WebModules.patch(module.prototype, 'render', BDFDB, {after: e => {
 				if (BDFDB.React.findDOMNodeSafe(e.thisObject)) {
