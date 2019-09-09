@@ -5408,6 +5408,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.appendLocalStyle('BDFDB', `
 		@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BetterDocsBlock.css);
 		
+		${BDFDB.dotCN.optionpopoutbutton} svg.BDFDB-undefined,
 		${BDFDB.dotCN.optionpopoutbutton} .BDFDB-undefined svg {
 			display: none;
 		}
