@@ -3224,9 +3224,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			if (!Array.isArray(children)) return [startchildren, -1];
 			else {
 				var result = [startchildren, -1];
-				for (let i in children) {
-					var displayname = children[i] && children[i].type ? children[i].type.displayName || children[i].type.name || "" : "";
-					var label = children[i] && children[i].props ? children[i].props.label || "" : "";
+				for (let i in children) if (children[i]) {
+					var displayname = children[i].type ? children[i].type.displayName || children[i].type.name || "" : "";
+					var label = children[i].props ? children[i].props.label || "" : "";
 					if (names.some(name => displayname == name || label == name)) result = [children, i];
 					else if (children[i].props) result = search(children[i].props.children);
 					if (result[1] > -1) break;
