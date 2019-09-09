@@ -2886,14 +2886,16 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			ele.innerHTML = `<div class="BDFDB-textscroll">${BDFDB.encodeToHTML(ele.innerText)}</div>`;
 		});
 		container.querySelectorAll('.BDFDB-contextMenuItem ' + BDFDB.dotCN.contextmenuhint).forEach(ele => {
-			ele.innerHTML = `<div class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">${BDFDB.encodeToHTML(ele.innerText)}</div></div>`;
-			var width = BDFDB.getRects(ele.parentElement).width - (parseFloat(getComputedStyle(ele.parentElement).paddingLeft) + parseFloat(getComputedStyle(ele.parentElement).paddingRight));
-			ele.previousElementSibling.style.setProperty('width', width - 46 + 'px', 'important');
-			ele.previousElementSibling.style.setProperty('max-width', width - 46 + 'px', 'important');
-			ele.style.setProperty('top', getComputedStyle(ele.parentElement).paddingTop, 'important');
-			ele.style.setProperty('right', getComputedStyle(ele.parentElement).paddingRight, 'important');
-			ele.style.setProperty('width', '42px', 'important');
-			ele.style.setProperty('max-width', '42px', 'important');
+			if (ele.innerText) {
+				ele.innerHTML = `<div class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">${BDFDB.encodeToHTML(ele.innerText)}</div></div>`;
+				var width = BDFDB.getRects(ele.parentElement).width - (parseFloat(getComputedStyle(ele.parentElement).paddingLeft) + parseFloat(getComputedStyle(ele.parentElement).paddingRight));
+				ele.previousElementSibling.style.setProperty('width', width - 46 + 'px', 'important');
+				ele.previousElementSibling.style.setProperty('max-width', width - 46 + 'px', 'important');
+				ele.style.setProperty('top', getComputedStyle(ele.parentElement).paddingTop, 'important');
+				ele.style.setProperty('right', getComputedStyle(ele.parentElement).paddingRight, 'important');
+				ele.style.setProperty('width', '42px', 'important');
+				ele.style.setProperty('max-width', '42px', 'important');
+			}
 		});
 		container.querySelectorAll('.BDFDB-textscrollwrapper').forEach(ele => {
 			var inner = ele.querySelector('.BDFDB-textscroll');
@@ -3072,7 +3074,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.appendModal = function (modalwrapper) {
 		if (!Node.prototype.isPrototypeOf(modalwrapper)) return;
 		if (BDFDB.containsClass(modalwrapper, 'DevilBro-modal')) BDFDB.addClass(modalwrapper, 'BDFDB-modal');
-		if (!BDFDB.appendModal.modals) BDFDB.appendModal.modals = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.app), name:"Modals"}));
+		if (!BDFDB.appendModal.modals) BDFDB.appendModal.modals = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.app), name:"Modals" depth:99999999, time:99999999}));
 		if (!BDFDB.appendModal.modals) return;
 
 		var modal = BDFDB.containsClass(modalwrapper, BDFDB.disCN.modal) ? modalwrapper : modalwrapper.querySelector(BDFDB.dotCN.modal);
@@ -5597,7 +5599,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		.toast.toast-warn.icon {
 			background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPiAgICA8cGF0aCBkPSJNMSAyMWgyMkwxMiAyIDEgMjF6bTEyLTNoLTJ2LTJoMnYyem0wLTRoLTJ2LTRoMnY0eiIvPjwvc3ZnPg==);
 		}
-		.quickSelectPopout {
+		.BDFDB-quickSelectPopout {
 			min-width: 210px !important;
 			position: relative !important;
 			width: auto !important;
