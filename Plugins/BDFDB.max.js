@@ -3218,11 +3218,16 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	
 	BDFDB.getContextMenuGroupAndIndex = function (startchildren, names) {
 		names = Array.isArray(names) ? names : (typeof names == "string" ? [names] : Array.from(names));
+		var startIsArray = Array.isArray(startchildren);
 		return search(startchildren);
 		function search (children) {
 			if (children && children.props && children.props.children) children = children.props.children;
 			if (!Array.isArray(children)) return [startchildren, -1];
 			else {
+				if (!startIsArray) {
+					startchildren = children;
+					startIsArray = true;
+				}
 				var result = [startchildren, -1];
 				for (let i in children) if (children[i]) {
 					var displayname = children[i].type ? children[i].type.displayName || children[i].type.name || "" : "";
