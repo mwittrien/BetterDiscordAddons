@@ -3074,7 +3074,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.appendModal = function (modalwrapper) {
 		if (!Node.prototype.isPrototypeOf(modalwrapper)) return;
 		if (BDFDB.containsClass(modalwrapper, 'DevilBro-modal')) BDFDB.addClass(modalwrapper, 'BDFDB-modal');
-		if (!BDFDB.appendModal.modals) BDFDB.appendModal.modals = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.app), name:"Modals" depth:99999999, time:99999999}));
+		if (!BDFDB.appendModal.modals || !document.contains(BDFDB.appendModal.modals)) BDFDB.appendModal.modals = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.app), name:"Modals" depth:99999999, time:99999999}));
 		if (!BDFDB.appendModal.modals) return;
 
 		var modal = BDFDB.containsClass(modalwrapper, BDFDB.disCN.modal) ? modalwrapper : modalwrapper.querySelector(BDFDB.dotCN.modal);
