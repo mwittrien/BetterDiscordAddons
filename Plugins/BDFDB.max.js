@@ -1187,7 +1187,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 	};
 
-	var getWebModuleReq = () => {
+	var getWebModuleReq = function () {
 		if (!getWebModuleReq.req) {
 			const id = "BDFDB-WebModules";
 			const req = typeof(window.webpackJsonp) == "function" ? window.webpackJsonp([], {[id]: (module, exports, req) => exports.default = req}, [id]).default : window.webpackJsonp.push([[], {[id]: (module, exports, req) => module.exports = req}, [[id]]]);
@@ -1202,8 +1202,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		var req = getWebModuleReq();
 		for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 			var m = req.c[i].exports;
-			if (m && m.__esModule && m.default && filter(m.default)) return m.default;
-			if (m && filter(m)) return m;
+			if (m && (typeof m == "object" || typeof m == "function") && filter(m)) return m;
+			for (let j in m) if (m[j] && (typeof m[j] == "object" || typeof m[j] == "function") && filter(m[j])) return m[j];
 		}
 	};
 
@@ -1241,10 +1241,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		else {
 			var m = BDFDB.WebModules.find(m => typeof m == "function" && m.toString().indexOf(string) > -1);
 			if (m) {
-				BDFDB.WebModules.cachedData.name[cachestring] = m;
+				BDFDB.WebModules.cachedData.string[cachestring] = m;
 				return m;
 			}
-			else console.warn(`%c[BDFDB]%c`, 'color:#3a71c1; font-weight:700;', '', cachestring + ' [name] not found in WebModules');
+			else console.warn(`%c[BDFDB]%c`, 'color:#3a71c1; font-weight:700;', '', cachestring + ' [string] not found in WebModules');
 		}
 	};
 
@@ -1336,7 +1336,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		};
 	};
 
-	var myDataUser = LibraryModules.CurrentUserStore.getCurrentUser();
+	var myDataUser = LibraryModules.CurrentUserStore && typeof LibraryModules.CurrentUserStore.getCurrentUser == 'function' ? LibraryModules.CurrentUserStore.getCurrentUser() : null;
 	BDFDB.myData = new Proxy(myDataUser || {}, {
 		get: function (list, item) {
 			if (!myDataUser) myDataUser = LibraryModules.CurrentUserStore.getCurrentUser();
@@ -1359,11 +1359,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		AuthWrapper: 'loginscreen',
 		BannedCard: 'guildsettingsbannedcard',
 		ChannelMember: 'member',
-		CircleIconButton: 'guildbuttoncontainer',
 		EmojiPicker: 'emojipicker',
 		FriendRow: 'friendsrow',
-		Guild: 'guildcontainer',
-		GuildHeader: 'guildheader',
 		InstantInviteModal: 'invitemodalwrapper',
 		InvitationCard: 'invitemodalinviterow',
 		InviteCard: 'guildsettingsinvitecard',
@@ -1371,8 +1368,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		PrivateChannelCall: 'callcurrentcontainer',
 		MemberCard: 'guildsettingsmembercard',
 		Message: true,
-		MessageOptionPopout: 'optionpopout',
-		MessageUsername: 'messageusername',
 		NameTag: 'nametag',
 		SearchResults: 'searchresultswrap',
 		TypingUsers: 'typing',
@@ -1690,7 +1685,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 	};
 
-	var LanguageStringsVars = {}, LanguageStrings = LibraryModules.LanguageStore ? Object.assign({}, LibraryModules.LanguageStore._proxyContext.defaultMessages) : {};
+	var LanguageStringsVars = {}, LanguageStrings = LibraryModules.LanguageStore && LibraryModules.LanguageStore._proxyContext ? Object.assign({}, LibraryModules.LanguageStore._proxyContext.defaultMessages) : {};
 	BDFDB.LanguageStrings = new Proxy(LanguageStrings, {
 		get: function (list, item) {
 			var stringobj = LibraryModules.LanguageStore.Messages[item];
