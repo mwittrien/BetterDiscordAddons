@@ -1,6 +1,6 @@
-if (global.BDFDB && typeof BDFDB.removeEventListener == 'function') BDFDB.removeEventListener(BDFDB);
-if (global.BDFDB && BDFDB.WebModules && typeof BDFDB.WebModules.unpatchall == 'function') BDFDB.WebModules.unpatchall(BDFDB);
-if (global.BDFDB && typeof BDFDB.killObservers == 'function') BDFDB.killObservers(BDFDB);
+if (window.BDFDB && typeof BDFDB.removeEventListener == 'function') BDFDB.removeEventListener(BDFDB);
+if (window.BDFDB && BDFDB.WebModules && typeof BDFDB.WebModules.unpatchall == 'function') BDFDB.WebModules.unpatchall(BDFDB);
+if (window.BDFDB && typeof BDFDB.killObservers == 'function') BDFDB.killObservers(BDFDB);
 var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api: BDFDB && BDFDB.BDv2Api ? BDFDB.BDv2Api : undefined, creationTime: performance.now(), cachedData: {}, pressedKeys: [], mousePosition: {pageX: 0, pageY: 0}, name: '$BDFDB'};
 (() => {
 	var id = Math.round(Math.random() * 10000000000000000);
@@ -1271,10 +1271,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.LibraryRequires = Object.assign({}, LibraryRequires);
 	
 	var LibraryComponents = {};
-	LibraryComponents.ContextMenuItem = BDFDB.WebModules.findByName("MenuItem");
-	LibraryComponents.ContextMenuItemGroup = BDFDB.WebModules.findByString("{className:i.default.itemGroup}");
-	LibraryComponents.ContextMenuSubItem = BDFDB.WebModules.findByName("FluxContainer(SubMenuItem)");
-	LibraryComponents.ContextMenuToggleItem = BDFDB.WebModules.findByName("ToggleMenuItem");
+	LibraryComponents.ContextMenuItem = BDFDB.WebModules.findByName('MenuItem');
+	LibraryComponents.ContextMenuItemGroup = BDFDB.WebModules.findByName('MenuGroup') || BDFDB.WebModules.findByString('{className:i.default.itemGroup}');
+	LibraryComponents.ContextMenuSubItem = BDFDB.WebModules.findByName('FluxContainer(SubMenuItem)');
+	LibraryComponents.ContextMenuToggleItem = BDFDB.WebModules.findByName('ToggleMenuItem');
 	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
 	
 	var LibraryModules = {};
@@ -1405,7 +1405,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 						originalMethodName: modulefunction,
 						callOriginalMethod: () => data.returnValue = data.originalMethod.apply(data.thisObject, data.methodArguments)
 					};
-					if (global.BDFDB && typeof BDFDB === 'object' && BDFDB.loaded && module.BDFDBpatch[modulefunction]) {
+					if (window.BDFDB && typeof BDFDB === 'object' && BDFDB.loaded && module.BDFDBpatch[modulefunction]) {
 						if (!BDFDB.isObjectEmpty(module.BDFDBpatch[modulefunction].before)) for (let id in BDFDB.sortObject(module.BDFDBpatch[modulefunction].before)) {
 							surpressErrors(module.BDFDBpatch[modulefunction].before[id], '`before` callback of ' + module[modulefunction].displayName)(data);
 						}
@@ -1512,7 +1512,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					if (instance) {
 						instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 						BDFDB.WebModules.patch(instance.prototype, plugin.patchModules[type], plugin, {after: e => {
-							if (global.BDFDB && typeof BDFDB === 'object' && BDFDB.loaded) BDFDB.WebModules.initiateProcess(plugin, e.thisObject, e.returnValue, type, [e.originalMethodName]);
+							if (window.BDFDB && typeof BDFDB === 'object' && BDFDB.loaded) BDFDB.WebModules.initiateProcess(plugin, e.thisObject, e.returnValue, type, [e.originalMethodName]);
 						}});
 					}
 				}
@@ -1586,7 +1586,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.addOnSwitchListener = function (plugin) {
 		if (typeof plugin.onSwitch === 'function') {
 			BDFDB.removeOnSwitchListener(plugin);
-			var spacer = document.querySelector(BDFDB.dotCN.guildswrapper + ' + * > ' + BDFDB.dotCN.chatspacer);
+			var spacer = document.querySelector(`${BDFDB.dotCN.guildswrapper} + * > ${BDFDB.dotCN.chatspacer}`);
 			if (spacer) {
 				var nochannelobserver = new MutationObserver(changes => {changes.forEach(change => {
 					if (change.target && BDFDB.containsClass(change.target, BDFDB.disCN.nochannel)) plugin.onSwitch();
@@ -4120,7 +4120,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		channelmodeselected: ['Channel', 'modeSelected'],
 		channelmodeunread: ['Channel', 'modeUnread'],
 		channelname: ['Channel', 'name'],
-		channels: ['AppBase', DiscordClassModules.AppBase.channels ? 'channels' : 'sidebar'],
+		channels: ['AppBase', DiscordClassModules.AppBase.channels ? 'channels' : 'sidebar'], // REMOVE
 		channelselected: ['ChannelContainer', 'selected'],
 		channelsscroller: ['GuildChannels', 'scroller'],
 		channelunread: ['Channel', 'unread'],
@@ -4128,7 +4128,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		chat: ['ChannelWindow', 'chat'],
 		chatbase: ['AppBase', 'base'],
 		chatcontent: ['ChannelWindow', 'content'],
-		chatspacer: ['AppBase', 'spacer'],
+		chatspacer: ['AppBase', DiscordClassModules.AppBase.spacer ? 'spacer' : 'content'], // REMOVE
 		checkbox: ['Checkbox', 'checkbox'],
 		checkboxchecked: ['Checkbox', 'checked'],
 		checkboxcontainer: ['ModalItems', 'checkboxContainer'],
@@ -4351,7 +4351,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		guildheadername: ['GuildHeader', 'name'],
 		guildicon: ['GuildIcon', 'icon'],
 		guildiconacronym: ['GuildIcon', 'acronym'],
-		guildiconchildwrapper: [DiscordClassModules.ContextMenu.subMenuContext ? 'GuildIcon' : 'NotFound', DiscordClassModules.ContextMenu.subMenuContext ? 'childWrapper' : '_'],
+		guildiconchildwrapper: [DiscordClassModules.ContextMenu.subMenuContext ? 'GuildIcon' : 'NotFound', DiscordClassModules.ContextMenu.subMenuContext ? 'childWrapper' : '_'],// REMOVE
 		guildiconselected: ['GuildIcon', 'selected'],
 		guildiconwrapper: ['GuildIcon', 'wrapper'],
 		guildinner: ['Guild', 'wrapper'],
@@ -4363,7 +4363,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		guildpillwrapper: ['PillWrapper', 'wrapper'],
 		guildplaceholder: ['GuildsItems', 'dragInner'],
 		guildplaceholdermask: ['GuildsItems', 'placeholderMask'],
-		guilds: ['AppBase', 'guilds'],
+		guilds: [!DiscordClassModules.AppBase.guilds ? 'NotFound' : 'AppBase', !DiscordClassModules.AppBase.guilds ? '_' : 'guilds'], // REMOVE
 		guildseparator: ['GuildsItems', 'guildSeparator'],
 		guildserror: ['GuildsItems', 'guildsError'],
 		guildsettingsbannedcard: ['GuildSettingsBanned', 'bannedUser'],
@@ -4488,7 +4488,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		members: ['MembersWrap', 'members'],
 		membersgroup: ['MembersWrap', 'membersGroup'],
 		memberswrap: ['MembersWrap', 'membersWrap'],
-		memberusername: ['Member', DiscordClassModules.Member.username ? 'username' : 'roleColor'],
+		memberusername: ['Member', DiscordClassModules.Member.username ? 'username' : 'roleColor'], // REMOVE
 		mention: ['NotFound', 'mention'],
 		mentionwrapper: ['Mention', 'wrapper'],
 		mentionwrapperhover: ['Mention', 'wrapperHover'],
@@ -6254,7 +6254,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 	},10000);
 	var crashInterval = setInterval(() => {
-		if (!global.BDFDB || typeof BDFDB != "object" || Object.keys(BDFDB).length < keys || !BDFDB.id) {
+		if (!window.BDFDB || typeof BDFDB != "object" || Object.keys(BDFDB).length < keys || !BDFDB.id) {
 			console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', 'reloading library due to internal error.');
 			clearInterval(crashInterval);
 			clearInterval(ndmInterval);
