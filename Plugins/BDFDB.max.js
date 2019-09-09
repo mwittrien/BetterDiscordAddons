@@ -1081,9 +1081,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 		else return singleinstance;
 
-		function getInstance(instance) {
+		function getInstance (instance) {
 			depth++;
-			if (!instance || Node.prototype.isPrototypeOf(instance) || BDFDB.getReactInstance(instance) || depth > maxdepth || performance.now() - start > maxtime) result = null;
+			if (!instance || Node.prototype.isPrototypeOf(instance) || BDFDB.getReactInstance(instance) || depth > maxdepth || performance.now() - start > maxtime) return null;
 			else {
 				var keys = Object.getOwnPropertyNames(instance);
 				var result = null;
@@ -3181,6 +3181,25 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.getContextMenuDevGroup = function (menu) {
 		let text = BDFDB.LanguageStrings.COPY_ID;
 		for (let item of menu.querySelectorAll(BDFDB.dotCN.contextmenuitem)) if (item.textContent == text) return BDFDB.getParentEle(BDFDB.dotCN.contextmenuitemgroup, item);
+	};
+	
+	BDFDB.getContextMenuGroupAndIndex = function (startchildren, names) {
+		if (!Array.isArray(startchildren)) return null;
+		names = Array.isArray(names) ? names : (typeof names == "string" ? [names] : Array.from(names));
+		return search(startchildren);
+		function search (children) {
+			if (!Array.isArray(children)) return [startchildren, -1];
+			else {
+				var result = [startchildren, -1];
+				for (let i in children) {
+					var displayname = children[i] && children[i].type ? children[i].type.displayName || children[i].type.name || "" : "";
+					if (names.some(name => displayname == name)) result = [children, i];
+					else if (children[i].props) result = search(children[i].props.children);
+					if (result[1] > -1) break;
+				}
+				return result;
+			}
+		}
 	};
 
 	BDFDB.appendContextMenu = function (menu, e = Object.assign({currentTarget: document.querySelector(BDFDB.dotCN.app)}, BDFDB.mousePosition)) {
