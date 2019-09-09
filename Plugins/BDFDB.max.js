@@ -1367,7 +1367,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		PopoutContainer: 'popout',
 		PrivateChannelCall: 'callcurrentcontainer',
 		MemberCard: 'guildsettingsmembercard',
-		Message: true,
 		NameTag: 'nametag',
 		SearchResults: 'searchresultswrap',
 		TypingUsers: 'typing',
@@ -1490,14 +1489,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (BDFDB.isObject(plugin) && BDFDB.isObject(plugin.patchModules)) {
 			for (let type in plugin.patchModules) {
 				var mapped = webModulesPatchmap[type];
-				var classOrBoolean = webModulesNotFindableModules[type.split(' _ _ ')[1] || type];
+				var classname = webModulesNotFindableModules[type.split(' _ _ ')[1] || type];
 				var patchtype = mapped ? mapped + ' _ _ ' + type : type;
 				if (mapped) {
 					plugin.patchModules[patchtype] = plugin.patchModules[type];
 					delete plugin.patchModules[type];
 				}
-				if (!classOrBoolean) patchInstance(BDFDB.WebModules.findByName(patchtype.split(' _ _ ')[0]), patchtype);
-				else if (typeof classOrBoolean == 'boolean' || DiscordClasses[classOrBoolean]) checkForInstance(classOrBoolean, patchtype);
+				if (!classname) patchInstance(BDFDB.WebModules.findByName(patchtype.split(' _ _ ')[0]), patchtype);
+				else if (DiscordClasses[classname]) checkForInstance(classname, patchtype);
 			}
 			function patchInstance(instance, type) {
 				if (instance) {
@@ -1512,7 +1511,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					}
 				}
 			}
-			function checkForInstance(classOrBoolean, type) {
+			function checkForInstance(classname, type) {
 				const app = document.querySelector(BDFDB.dotCN.app), bdsettings = document.querySelector('#bd-settingspane-container ' + BDFDB.dotCN.scrollerwrap);
 				var instancefound = false;
 				if (app) {
@@ -1530,28 +1529,21 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					}
 				}
 				if (!instancefound) {
-					var found = false, isBool = typeof classOrBoolean == 'boolean', instanceobserver = new MutationObserver(cs => {cs.forEach(c => {c.addedNodes.forEach(n => {
+					var found = false, instanceobserver = new MutationObserver(cs => {cs.forEach(c => {c.addedNodes.forEach(n => {
 						if (found || !n || !n.tagName) return;
-						else if (isBool) {
-							var ins = BDFDB.getOwnerInstance({node:n, name:"Message", depth:99999999});
-							if (isCorrectInstance(ins, type)) foundInstance(ins);
-						}
-						else {
-							var ele = null;
-							if ((ele = BDFDB.containsClass(n, BDFDB.disCN[classOrBoolean]) ? n : n.querySelector(BDFDB.dotCN[classOrBoolean])) != null) {
-								var ins = BDFDB.getReactInstance(ele);
-								if (isCorrectInstance(ins, type)) foundInstance(ins);
+						var ele = null;
+						if ((ele = BDFDB.containsClass(n, BDFDB.disCN[classOrBoolean]) ? n : n.querySelector(BDFDB.dotCN[classOrBoolean])) != null) {
+							var ins = BDFDB.getReactInstance(ele);
+							if (isCorrectInstance(ins, type)) {
+								found = true;
+								instanceobserver.disconnect();
+								patchInstance(ins, type);
+								BDFDB.WebModules.forceAllUpdates(plugin, type);
 							}
 						}
 					});});});
 					BDFDB.addObserver(plugin, BDFDB.dotCN.appmount, {name:'checkForInstanceObserver', instance:instanceobserver, multi:true
 					}, {childList:true, subtree:true});
-					var foundInstance = instance => {
-						found = true;
-						instanceobserver.disconnect();
-						patchInstance(instance, type);
-						BDFDB.WebModules.forceAllUpdates(plugin, type);
-					};
 				}
 			}
 			function isCorrectInstance(instance, type) {
