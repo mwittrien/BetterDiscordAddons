@@ -3235,10 +3235,22 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.getContextMenuGroupAndIndex = function (startchildren, names) {
 		names = Array.isArray(names) ? names : (typeof names == "string" ? [names] : Array.from(names));
 		var startIsArray = Array.isArray(startchildren);
+		var parent = startchildren;
 		return search(startchildren);
 		function search (children) {
-			while (children && !Array.isArray(children) && children.props && children.props.children) children = children.props.children;
-			if (!Array.isArray(children)) return [startchildren, -1];
+			while (children && !Array.isArray(children) && children.props && children.props.children) {
+				parent = children;
+				children = children.props.children;
+			}
+			if (children && !Array.isArray(children)) {
+				if (check(children) && parent && parent.props) {
+					var child = children;
+					parent.props.children = [];
+					parent.props.children.push(child);
+					return [parent.props.children, 0]
+				}
+				else return [startchildren, -1];
+			}
 			else {
 				if (!startIsArray) {
 					startchildren = children;
@@ -3246,14 +3258,20 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				}
 				var result = [startchildren, -1];
 				for (let i in children) if (children[i]) {
-					var displayname = children[i].type ? children[i].type.displayName || children[i].type.name || "" : "";
-					var label = children[i].props ? children[i].props.label || "" : "";
-					if (names.some(name => displayname == name || label == name)) result = [children, i];
-					else if (children[i].props) result = search(children[i].props.children);
+					if (check(children[i])) result = [children, i];
+					else if (children[i].props) {
+						parent = children[i];
+						result = search(children[i].props.children);
+					}
 					if (result[1] > -1) break;
 				}
 				return result;
 			}
+		}
+		function check (child) {
+			var displayname = child.type ? child.type.displayName || child.type.name || "" : "";
+			var label = child.props ? child.props.label || "" : "";
+			return names.some(name => displayname == name || label == name);
 		}
 	};
 
