@@ -1532,7 +1532,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					var found = false, instanceobserver = new MutationObserver(cs => {cs.forEach(c => {c.addedNodes.forEach(n => {
 						if (found || !n || !n.tagName) return;
 						var ele = null;
-						if ((ele = BDFDB.containsClass(n, BDFDB.disCN[classOrBoolean]) ? n : n.querySelector(BDFDB.dotCN[classOrBoolean])) != null) {
+						if ((ele = BDFDB.containsClass(n, BDFDB.disCN[classname]) ? n : n.querySelector(BDFDB.dotCN[classname])) != null) {
 							var ins = BDFDB.getReactInstance(ele);
 							if (isCorrectInstance(ins, type)) {
 								found = true;
