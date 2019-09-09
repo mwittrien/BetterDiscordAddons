@@ -1597,6 +1597,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	var NoFluxContextMenus = ['Channel', 'Developer', 'Guild', 'GuildRole', 'Lfg', 'Message', 'Native', 'Screenshare', 'User', 'UserSettingsCog'];
 	var FluxContextMenus = ['Application', 'GroupDM'];
+	var NoFluxPopouts = ['MessageOption'];
 	BDFDB.addContextListener = function (plugin) {
 		if (!BDFDB.isObject(plugin)) return;
 		for (let type of NoFluxContextMenus) {
@@ -1605,20 +1606,29 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		for (let type of FluxContextMenus) {
 			if (typeof plugin[`on${type}ContextMenu`] === 'function') patchContext(type, BDFDB.WebModules.findByName('FluxContainer(' + type + 'ContextMenu)'));
 		}
+		for (let type of NoFluxPopouts) {
+			if (typeof plugin[`on${type}Popout`] === 'function') patchPopout(type, BDFDB.WebModules.findByName(type + 'Popout'));
+		}
 		if (typeof plugin[`onContextMenu`] === 'function') for (let type of [].concat(NoFluxContextMenus, FluxContextMenus)) {
 			patchContext(null, BDFDB.WebModules.findByName(type + 'ContextMenu'));
 		}
 
 		function patchContext (type, module) {
 			if (module && module.prototype) BDFDB.WebModules.patch(module.prototype, 'render', plugin, {after: e => {
-				processContext(type, e.thisObject, e.returnValue, BDFDB.React.findDOMNodeSafe(e.thisObject));
+				let instance = e.thisObject, menu = BDFDB.React.findDOMNodeSafe(e.thisObject), returnvalue = e.returnvalue;
+				if (instance && menu && returnvalue) {
+					if (type && typeof plugin[`on${type}ContextMenu`] === 'function') plugin[`on${type}ContextMenu`](instance, menu, returnvalue);
+					else if (!type && typeof plugin[`onContextMenu`] === 'function') plugin[`onContextMenu`](instance, menu, returnvalue);
+				}
 			}});
 		}
-		function processContext (type, instance, returnvalue, menu) {
-			if (instance && menu) {
-				if (type && typeof plugin[`on${type}ContextMenu`] === 'function') plugin[`on${type}ContextMenu`](instance, menu, returnvalue);
-				else if (!type && typeof plugin[`onContextMenu`] === 'function') plugin[`onContextMenu`](instance, menu, returnvalue);
-			}
+		function patchPopout (type, module) {
+			if (module && module.prototype) BDFDB.WebModules.patch(module.prototype, 'render', plugin, {after: e => {
+				let instance = e.thisObject, menu = BDFDB.React.findDOMNodeSafe(e.thisObject), returnvalue = e.returnvalue;
+				if (instance && menu && returnvalue) {
+					if (type && typeof plugin[`on${type}Popout`] === 'function') plugin[`on${type}Popout`](instance, menu, returnvalue);
+				}
+			}});
 		}
 	};
 	var BDFDBpatchCMmodule = function (module) {
