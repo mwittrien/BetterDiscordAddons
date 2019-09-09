@@ -1624,22 +1624,47 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 		function patchPopout (type, module) {
 			if (module && module.prototype) BDFDB.WebModules.patch(module.prototype, 'render', plugin, {after: e => {
-				let instance = e.thisObject, menu = BDFDB.React.findDOMNodeSafe(e.thisObject), returnvalue = e.returnvalue;
-				if (instance && menu && returnvalue) {
-					if (type && typeof plugin[`on${type}Popout`] === 'function') plugin[`on${type}Popout`](instance, menu, returnvalue);
+				let instance = e.thisObject, popout = BDFDB.React.findDOMNodeSafe(e.thisObject), returnvalue = e.returnvalue;
+				if (instance && popout && returnvalue) {
+					if (type && typeof plugin[`on${type}Popout`] === 'function') plugin[`on${type}Popout`](instance, popout, returnvalue);
 				}
 			}});
 		}
 	};
-	var BDFDBpatchCMmodule = function (module) {
-		if (module) BDFDB.WebModules.patch(module.prototype, 'componentDidUpdate', BDFDB, {after: e => {
-			const updater = BDFDB.getReactValue(e, 'thisObject._reactInternalFiber.stateNode.props.onHeightUpdate');
-			if (updater) updater();
-			BDFDB.initElements(BDFDB.React.findDOMNodeSafe(e.thisObject));
-		}});
+	var BDFDBpatchContextMenuModule = function (module) {
+		if (module && module.prototype) {
+			BDFDB.WebModules.patch(module.prototype, 'componentDidMount', BDFDB, {after: e => {
+				if (!e.thisObject.BDFDBforceRenderTimeout && typeof e.thisObject.render == 'function') e.thisObject.render();
+			}});
+			BDFDB.WebModules.patch(module.prototype, 'componentDidUpdate', BDFDB, {after: e => {
+				const updater = BDFDB.getReactValue(e, 'thisObject._reactInternalFiber.stateNode.props.onHeightUpdate');
+				if (updater) updater();
+				BDFDB.initElements(BDFDB.React.findDOMNodeSafe(e.thisObject));
+			}});
+			BDFDB.WebModules.patch(module.prototype, 'render', BDFDB, {after: e => {
+				if (BDFDB.React.findDOMNodeSafe(e.thisObject)) {
+					e.thisObject.BDFDBforceRenderTimeout = true;
+					setTimeout(() => {delete e.thisObject.BDFDBforceRenderTimeout;}, 1000);
+				}
+			}});
+		}
 	};
-	for (let type of NoFluxContextMenus) BDFDBpatchCMmodule(BDFDB.WebModules.findByName(type + 'ContextMenu'));
-	for (let type of FluxContextMenus) BDFDBpatchCMmodule(BDFDB.WebModules.findByName('FluxContainer(' + type + 'ContextMenu)'));
+	var BDFDBpatchPopoutModule = function (module) {
+		if (module && module.prototype) {
+			BDFDB.WebModules.patch(module.prototype, 'componentDidMount', BDFDB, {after: e => {
+				if (!e.thisObject.BDFDBforceRenderTimeout && typeof e.thisObject.render == 'function') e.thisObject.render();
+			}});
+			BDFDB.WebModules.patch(module.prototype, 'render', BDFDB, {after: e => {
+				if (BDFDB.React.findDOMNodeSafe(e.thisObject)) {
+					e.thisObject.BDFDBforceRenderTimeout = true;
+					setTimeout(() => {delete e.thisObject.BDFDBforceRenderTimeout;}, 1000);
+				}
+			}});
+		}
+	};
+	for (let type of NoFluxContextMenus) BDFDBpatchContextMenuModule(BDFDB.WebModules.findByName(type + 'ContextMenu'));
+	for (let type of FluxContextMenus) BDFDBpatchContextMenuModule(BDFDB.WebModules.findByName('FluxContainer(' + type + 'ContextMenu)'));
+	for (let type of NoFluxPopouts) BDFDBpatchPopoutModule(BDFDB.WebModules.findByName(type + 'Popout'));
 
 	BDFDB.addSettingsButtonListener = function (plugin) {
 		if (BDFDB.isBDv2() && typeof plugin.getSettingsPanel === 'function') {
