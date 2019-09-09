@@ -3761,7 +3761,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.AccountDetails = BDFDB.WebModules.findByProperties('usernameContainer', 'container');
 	DiscordClassModules.ActivityFeed = BDFDB.WebModules.findByProperties('activityFeed');
 	DiscordClassModules.Anchor = BDFDB.WebModules.findByProperties('anchor', 'anchorUnderlineOnHover');
-	DiscordClassModules.AppBase = BDFDB.WebModules.findByProperties('container', 'channels');
+	DiscordClassModules.AppBase = BDFDB.WebModules.findByProperties('container', 'base');
 	DiscordClassModules.AppMount = BDFDB.WebModules.findByProperties('appMount');
 	DiscordClassModules.AppInner = BDFDB.WebModules.findByProperties('app');
 	DiscordClassModules.AppOuter = BDFDB.WebModules.find(module => typeof module.app == 'string' && module != DiscordClassModules.AppInner);
@@ -4120,7 +4120,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		channelmodeselected: ['Channel', 'modeSelected'],
 		channelmodeunread: ['Channel', 'modeUnread'],
 		channelname: ['Channel', 'name'],
-		channels: ['AppBase', 'channels'],
+		channels: ['AppBase', DiscordClassModules.AppBase.channels ? 'channels' : 'sidebar'],
 		channelselected: ['ChannelContainer', 'selected'],
 		channelsscroller: ['GuildChannels', 'scroller'],
 		channelunread: ['Channel', 'unread'],
@@ -4363,7 +4363,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		guildpillwrapper: ['PillWrapper', 'wrapper'],
 		guildplaceholder: ['GuildsItems', 'dragInner'],
 		guildplaceholdermask: ['GuildsItems', 'placeholderMask'],
-		guilds: ['GuildsWrapper', 'scroller'],
+		guilds: ['AppBase', 'guilds'],
 		guildseparator: ['GuildsItems', 'guildSeparator'],
 		guildserror: ['GuildsItems', 'guildsError'],
 		guildsettingsbannedcard: ['GuildSettingsBanned', 'bannedUser'],
@@ -4375,6 +4375,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		guildsettingsmembercard: ['GuildSettingsMember', 'member'],
 		guildsettingsmembername: ['GuildSettingsMember', 'name'],
 		guildsettingsmembernametag: ['GuildSettingsMember', 'nameTag'],
+		guildsscroller: ['GuildsWrapper', 'scroller'],
 		guildsscrollerwrap: ['GuildsWrapper', 'scrollerWrap'],
 		guildsvg: ['Guild', 'svg'],
 		guildswrapper: ['GuildsWrapper', 'wrapper'],
