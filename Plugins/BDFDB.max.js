@@ -3241,7 +3241,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		var startIsArray = Array.isArray(startchildren);
 		return search(startchildren);
 		function search (children) {
-			if (children && children.props && children.props.children) children = children.props.children;
+			while (children && !Array.isArray(children) && children.props && children.props.children) children = children.props.children;
 			if (!Array.isArray(children)) return [startchildren, -1];
 			else {
 				if (!startIsArray) {
