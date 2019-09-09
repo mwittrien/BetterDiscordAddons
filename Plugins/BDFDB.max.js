@@ -2957,11 +2957,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		BDFDB.removeClass(container.querySelectorAll('.tab-content'), 'open');
 		BDFDB.addClass(container.querySelector('.tab-content'), 'open');
 
-		container.querySelectorAll('.btn-save ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = languagestrings.btn_save_text;});
-		container.querySelectorAll('.btn-cancel ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = languagestrings.btn_cancel_text;});
+		container.querySelectorAll('.btn-save ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageStrings.SAVE;});
+		container.querySelectorAll('.btn-cancel ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageStrings.CANCEL;});
+		container.querySelectorAll('.btn-add ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageStrings.ADD;});
+		container.querySelectorAll('.btn-ok ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageStrings.OKAY;});
 		container.querySelectorAll('.btn-all ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = languagestrings.btn_all_text;});
-		container.querySelectorAll('.btn-add ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = languagestrings.btn_add_text;});
-		container.querySelectorAll('.btn-ok ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = languagestrings.btn_ok_text;});
 		container.querySelectorAll('.file-navigator ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = languagestrings.file_navigator_text;});
 
 		if (islighttheme) {
@@ -5115,11 +5115,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					toast_plugin_translated: 'prijevod na {{ownlang}}.',
 					colorpicker_modal_header_text: 'Birač boja',
 					file_navigator_text: 'Pregledajte datoteku',
-					btn_add_text: 'Dodati',
-					btn_cancel_text: 'Prekid',
 					btn_all_text: 'Sve',
-					btn_save_text: 'Uštedjeti',
-					btn_ok_text: 'OK',
 					search_placeholder: 'Traziti ...'
 				};
 			case 'da':
@@ -5129,11 +5125,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					toast_plugin_translated: 'oversat til {{ownlang}}.',
 					colorpicker_modal_header_text: 'Farvevælger',
 					file_navigator_text: 'Gennemse fil',
-					btn_add_text: 'Tilføje',
-					btn_cancel_text: 'Afbryde',
 					btn_all_text: 'Alle',
-					btn_save_text: 'Spare',
-					btn_ok_text: 'OK',
 					search_placeholder: 'Søge efter ...'
 				};
 			case 'de':
@@ -5143,11 +5135,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					toast_plugin_translated: 'auf {{ownlang}} übersetzt.',
 					colorpicker_modal_header_text: 'Farbauswahl',
 					file_navigator_text: 'Datei durchsuchen',
-					btn_add_text: 'Hinzufügen',
-					btn_cancel_text: 'Abbrechen',
 					btn_all_text: 'Alle',
-					btn_save_text: 'Speichern',
-					btn_ok_text: 'OK',
 					search_placeholder: 'Suchen nach ...'
 				};
 			case 'es':
@@ -5157,11 +5145,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					toast_plugin_translated: 'traducido a {{ownlang}}.',
 					colorpicker_modal_header_text: 'Selector de color',
 					file_navigator_text: 'Buscar archivo',
-					btn_add_text: 'Añadir',
-					btn_cancel_text: 'Cancelar',
 					btn_all_text: 'Todo',
-					btn_save_text: 'Guardar',
-					btn_ok_text: 'OK',
 					search_placeholder: 'Buscar ...'
 				};
 			case 'fr':
@@ -5171,11 +5155,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					toast_plugin_translated: 'traduit en {{ownlang}}.',
 					colorpicker_modal_header_text: 'Pipette à couleurs',
 					file_navigator_text: 'Parcourir le fichier',
-					btn_add_text: 'Ajouter',
-					btn_cancel_text: 'Abandonner',
 					btn_all_text: 'Tout',
-					btn_save_text: 'Enregistrer',
-					btn_ok_text: 'OK',
 					search_placeholder: 'Rechercher ...'
 				};
 			case 'it':
@@ -5185,11 +5165,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					toast_plugin_translated: 'tradotto in {{ownlang}}.',
 					colorpicker_modal_header_text: 'Raccoglitore di colore',
 					file_navigator_text: 'Sfoglia file',
-					btn_add_text: 'Inserisci',
-					btn_cancel_text: 'Cancellare',
 					btn_all_text: 'Tutto',
-					btn_save_text: 'Salvare',
-					btn_ok_text: 'OK',
 					search_placeholder: 'Cercare ...'
 				};
 			case 'nl':
@@ -5199,11 +5175,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					toast_plugin_translated: 'vertaald naar {{ownlang}}.',
 					colorpicker_modal_header_text: 'Kleur kiezer',
 					file_navigator_text: 'Bestand zoeken',
-					btn_add_text: 'Toevoegen',
-					btn_cancel_text: 'Afbreken',
 					btn_all_text: 'Alle',
-					btn_save_text: 'Opslaan',
-					btn_ok_text: 'OK',
 					search_placeholder: 'Zoeken ...'
 				};
 			case 'no':
@@ -5213,11 +5185,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					toast_plugin_translated: 'oversatt til {{ownlang}}.',
 					colorpicker_modal_header_text: 'Fargevelger',
 					file_navigator_text: 'Bla gjennom fil',
-					btn_add_text: 'Legg til',
-					btn_cancel_text: 'Avbryte',
 					btn_all_text: 'Alle',
-					btn_save_text: 'Lagre',
-					btn_ok_text: 'OK',
 					search_placeholder: 'Søk etter ...'
 				};
 			case 'pl':
@@ -5227,11 +5195,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					toast_plugin_translated: 'przetłumaczono na {{ownlang}}.',
 					colorpicker_modal_header_text: 'Narzędzie do wybierania kolorów',
 					file_navigator_text: 'Przeglądać plik',
-					btn_add_text: 'Dodaj',
-					btn_cancel_text: 'Anuluj',
 					btn_all_text: 'Wszystkie',
-					btn_save_text: 'Zapisz',
-					btn_ok_text: 'OK',
 					search_placeholder: 'Szukać ...'
 				};
 			case 'pt-BR':
@@ -5241,11 +5205,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					toast_plugin_translated: 'traduzido para {{ownlang}}.',
 					colorpicker_modal_header_text: 'Seletor de cores',
 					file_navigator_text: 'Procurar arquivo',
-					btn_add_text: 'Adicionar',
-					btn_cancel_text: 'Cancelar',
 					btn_all_text: 'Todo',
-					btn_save_text: 'Salvar',
-					btn_ok_text: 'OK',
 					search_placeholder: 'Procurar por ...'
 				};
 			case 'fi':
@@ -5255,11 +5215,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					toast_plugin_translated: 'käännetty osoitteeseen {{ownlang}}.',
 					colorpicker_modal_header_text: 'Värinvalitsija',
 					file_navigator_text: 'Selaa tiedostoa',
-					btn_add_text: 'Lisätä',
-					btn_cancel_text: 'Peruuttaa',
 					btn_all_text: 'Kaikki',
-					btn_save_text: 'Tallentaa',
-					btn_ok_text: 'OK',
 					search_placeholder: 'Etsiä ...'
 				};
 			case 'sv':
@@ -5269,11 +5225,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					toast_plugin_translated: 'översatt till {{ownlang}}.',
 					colorpicker_modal_header_text: 'Färgväljare',
 					file_navigator_text: 'Bläddra i fil',
-					btn_add_text: 'Lägg till',
-					btn_cancel_text: 'Avbryta',
 					btn_all_text: 'All',
-					btn_save_text: 'Spara',
-					btn_ok_text: 'OK',
 					search_placeholder: 'Söka efter ...'
 				};
 			case 'tr':
@@ -5283,11 +5235,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					toast_plugin_translated: '{{ownlang}} olarak çevrildi.',
 					colorpicker_modal_header_text: 'Renk seçici',
 					file_navigator_text: 'Dosyaya gözat',
-					btn_add_text: 'Eklemek',
-					btn_cancel_text: 'Iptal',
 					btn_all_text: 'Her',
-					btn_save_text: 'Kayıt',
-					btn_ok_text: 'Okey',
 					search_placeholder: 'Aramak ...'
 				};
 			case 'cs':
@@ -5297,11 +5245,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					toast_plugin_translated: 'přeložen do {{ownlang}}.',
 					colorpicker_modal_header_text: 'Výběr barev',
 					file_navigator_text: 'Procházet soubor',
-					btn_add_text: 'Přidat',
-					btn_cancel_text: 'Zrušení',
 					btn_all_text: 'Vše',
-					btn_save_text: 'Uložit',
-					btn_ok_text: 'OK',
 					search_placeholder: 'Hledat ...'
 				};
 			case 'bg':
@@ -5311,11 +5255,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					toast_plugin_translated: 'преведена на {{ownlang}}.',
 					colorpicker_modal_header_text: 'Избор на цвят',
 					file_navigator_text: 'Прегледайте файла',
-					btn_add_text: 'Добави',
-					btn_cancel_text: 'Зъбести',
 					btn_all_text: 'Bсичко',
-					btn_save_text: 'Cпасяване',
-					btn_ok_text: 'Добре',
 					search_placeholder: 'Търся ...'
 				};
 			case 'ru':
@@ -5325,11 +5265,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					toast_plugin_translated: 'переведен на {{ownlang}}.',
 					colorpicker_modal_header_text: 'Выбор цвета',
 					file_navigator_text: 'Просмотр файла',
-					btn_add_text: 'Добавить',
-					btn_cancel_text: 'Отмена',
 					btn_all_text: 'Все',
-					btn_save_text: 'Сохранить',
-					btn_ok_text: 'ОК',
 					search_placeholder: 'Искать ...'
 				};
 			case 'uk':
@@ -5339,11 +5275,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					toast_plugin_translated: 'перекладено {{ownlang}}.',
 					colorpicker_modal_header_text: 'Колір обкладинки',
 					file_navigator_text: 'Перегляньте файл',
-					btn_add_text: 'Додати',
-					btn_cancel_text: 'Скасувати',
 					btn_all_text: 'Все',
-					btn_save_text: 'Зберегти',
-					btn_ok_text: 'Добре',
 					search_placeholder: 'Шукати ...'
 				};
 			case 'ja':
@@ -5353,11 +5285,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					toast_plugin_translated: 'は{{ownlang}}に翻訳されました.',
 					colorpicker_modal_header_text: 'カラーピッカー',
 					file_navigator_text: 'ファイルを参照',
-					btn_add_text: '追加',
-					btn_cancel_text: 'キャンセル',
 					btn_all_text: 'すべて',
-					btn_save_text: 'セーブ',
-					btn_ok_text: 'はい',
 					search_placeholder: '検索する ...'
 				};
 			case 'zh-TW':
@@ -5367,11 +5295,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					toast_plugin_translated: '翻譯為{{ownlang}}.',
 					colorpicker_modal_header_text: '選色器',
 					file_navigator_text: '瀏覽文件',
-					btn_add_text: '加',
-					btn_cancel_text: '取消',
 					btn_all_text: '所有',
-					btn_save_text: '保存',
-					btn_ok_text: '好',
 					search_placeholder: '搜索 ...'
 				};
 			case 'ko':
@@ -5381,11 +5305,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					toast_plugin_translated: '{{ownlang}} 로 번역되었습니다.',
 					colorpicker_modal_header_text: '색상 선택 도구',
 					file_navigator_text: '파일 찾아보기',
-					btn_add_text: '더하다',
-					btn_cancel_text: '취소',
 					btn_all_text: '모든',
-					btn_save_text: '저장',
-					btn_ok_text: '승인',
 					search_placeholder: '검색 ...'
 				};
 			default:
@@ -5395,11 +5315,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					toast_plugin_translated: 'translated to {{ownlang}}.',
 					colorpicker_modal_header_text: 'Color Picker',
 					file_navigator_text: 'Browse File',
-					btn_add_text: 'Add',
-					btn_cancel_text: 'Cancel',
 					btn_all_text: 'All',
-					btn_save_text: 'Save',
-					btn_ok_text: 'OK',
 					search_placeholder: 'Search for ...'
 				};
 		}
