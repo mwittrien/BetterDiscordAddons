@@ -512,45 +512,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 		return tooltip;
 	};
-	
-	BDFDB.appendItemLayer = function (node, anker, options = {}) {
-		var itemlayerconainernative = document.querySelector(BDFDB.dotCN.itemlayerconainer);
-		if (!itemlayerconainernative || !Node.prototype.isPrototypeOf(node) || !anker || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
-		var itemlayerconainer = document.querySelector(".BDFDB-itemlayerconainer");
-		if (!itemlayerconainer) {
-			itemlayerconainer = itemlayerconainernative.cloneNode();
-			BDFDB.addClass(itemlayerconainer, "BDFDB-itemlayerconainer");
-			itemlayerconainernative.parentElement.insertBefore(itemlayerconainer, itemlayerconainernative.nextSibling);
-		}
-		var id = Math.round(Math.random() * 10000000000000000);
-		var itemlayer = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.itemlayer} BDFDB-itemlayer itemlayer-${id}"></div>`);
-		itemlayer.appendChild(node);
-		itemlayerconainer.appendChild(itemlayer);
-		
-		if (options.css) BDFDB.appendLocalStyle('BDFDBcustomItemLayer' + id, options.css, itemlayerconainer);
-					
-		if (BDFDB.isObject(options.ankerlistener)) for (let type in options.ankerlistener) {
-			if (typeof options.ankerlistener[type] == "function") anker.addEventListener(type, options.ankerlistener[type]);
-			else delete options.ankerlistener[type];
-		}
-		
-		var observer = new MutationObserver(changes => {
-			changes.forEach(change => {
-				var nodes = Array.from(change.removedNodes);
-				var ownmatch = nodes.indexOf(itemlayer) > -1;
-				var ankermatch = nodes.indexOf(anker) > -1;
-				var parentmatch = nodes.some(n => n.contains(anker));
-				if (ownmatch || ankermatch || parentmatch) {
-					observer.disconnect();
-					itemlayer.remove();
-					BDFDB.removeLocalStyle('BDFDBcustomItemLayer' + id, itemlayerconainer);
-					if (!itemlayerconainer.firstElementChild) BDFDB.removeEles(itemlayerconainer);
-					if (BDFDB.isObject(options.ankerlistener)) for (let type in options.ankerlistener) anker.removeEventListener(type, options.ankerlistener[type]);
-				}
-			});
-		});
-		observer.observe(document.body, {subtree:true, childList:true});
-	};
 
 	BDFDB.updateTooltipPosition = function (tooltip) {
 		if (!Node.prototype.isPrototypeOf(tooltip)) return;
@@ -608,6 +569,45 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				}
 			}
 		}
+	};
+	
+	BDFDB.appendItemLayer = function (node, anker, options = {}) {
+		var itemlayerconainernative = document.querySelector(BDFDB.dotCN.itemlayerconainer);
+		if (!itemlayerconainernative || !Node.prototype.isPrototypeOf(node) || !anker || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
+		var itemlayerconainer = document.querySelector(".BDFDB-itemlayerconainer");
+		if (!itemlayerconainer) {
+			itemlayerconainer = itemlayerconainernative.cloneNode();
+			BDFDB.addClass(itemlayerconainer, "BDFDB-itemlayerconainer");
+			itemlayerconainernative.parentElement.insertBefore(itemlayerconainer, itemlayerconainernative.nextSibling);
+		}
+		var id = Math.round(Math.random() * 10000000000000000);
+		var itemlayer = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.itemlayer} BDFDB-itemlayer itemlayer-${id}"></div>`);
+		itemlayer.appendChild(node);
+		itemlayerconainer.appendChild(itemlayer);
+		
+		if (options.css) BDFDB.appendLocalStyle('BDFDBcustomItemLayer' + id, options.css, itemlayerconainer);
+					
+		if (BDFDB.isObject(options.ankerlistener)) for (let type in options.ankerlistener) {
+			if (typeof options.ankerlistener[type] == "function") anker.addEventListener(type, options.ankerlistener[type]);
+			else delete options.ankerlistener[type];
+		}
+		
+		var observer = new MutationObserver(changes => {
+			changes.forEach(change => {
+				var nodes = Array.from(change.removedNodes);
+				var ownmatch = nodes.indexOf(itemlayer) > -1;
+				var ankermatch = nodes.indexOf(anker) > -1;
+				var parentmatch = nodes.some(n => n.contains(anker));
+				if (ownmatch || ankermatch || parentmatch) {
+					observer.disconnect();
+					itemlayer.remove();
+					BDFDB.removeLocalStyle('BDFDBcustomItemLayer' + id, itemlayerconainer);
+					if (!itemlayerconainer.firstElementChild) BDFDB.removeEles(itemlayerconainer);
+					if (BDFDB.isObject(options.ankerlistener)) for (let type in options.ankerlistener) anker.removeEventListener(type, options.ankerlistener[type]);
+				}
+			});
+		});
+		observer.observe(document.body, {subtree:true, childList:true});
 	};
 
 	BDFDB.createNotificationsBar = function (text, options = {}) {
@@ -1618,14 +1618,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			if (module && module.prototype) BDFDB.WebModules.patch(module.prototype, 'render', plugin, {after: e => {
 				let instance = e.thisObject, menu = BDFDB.React.findDOMNodeSafe(e.thisObject), returnvalue = e.returnValue;
 				if (instance && menu && returnvalue) {
-					if (type && typeof plugin[`on${type}ContextMenu`] === 'function') {
-						plugin[`on${type}ContextMenu`](instance, menu, returnvalue);
-						if (!instance.BDFDBforceUpdateTimeout && typeof instance.forceUpdate == 'function') instance.forceUpdate();
-					}
-					else if (!type && typeof plugin[`onContextMenu`] === 'function') {
-						plugin[`onContextMenu`](instance, menu, returnvalue);
-						if (!instance.BDFDBforceUpdateTimeout && typeof instance.forceUpdate == 'function') instance.forceUpdate();
-					}
+					if (type && typeof plugin[`on${type}ContextMenu`] === 'function') plugin[`on${type}ContextMenu`](instance, menu, returnvalue);
+					else if (!type && typeof plugin[`onContextMenu`] === 'function') plugin[`onContextMenu`](instance, menu, returnvalue);
 				}
 			}});
 		}
@@ -1644,14 +1638,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	var BDFDBpatchContextMenuModule = function (module) {
 		if (module && module.prototype) {
 			BDFDB.WebModules.patch(module.prototype, 'componentDidMount', BDFDB, {after: e => {
-				if (!e.thisObject.BDFDBforceRenderTimeout && !e.thisObject.BDFDBforceUpdateTimeout && typeof e.thisObject.render == 'function') e.thisObject.render();
+				if (!e.thisObject.BDFDBforceRenderTimeout && typeof e.thisObject.render == 'function') e.thisObject.render();
 			}});
 			BDFDB.WebModules.patch(module.prototype, 'componentDidUpdate', BDFDB, {after: e => {
 				const updater = BDFDB.getReactValue(e, 'thisObject._reactInternalFiber.stateNode.props.onHeightUpdate');
 				if (updater) updater();
 				BDFDB.initElements(BDFDB.React.findDOMNodeSafe(e.thisObject));
-				e.thisObject.BDFDBforceUpdateTimeout = true;
-				setTimeout(() => {delete e.thisObject.BDFDBforceUpdateTimeout;}, 1000);
 			}});
 			BDFDB.WebModules.patch(module.prototype, 'render', BDFDB, {after: e => {
 				if (BDFDB.React.findDOMNodeSafe(e.thisObject)) {
