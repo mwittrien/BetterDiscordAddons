@@ -1645,6 +1645,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				}
 			}});
 			BDFDB.WebModules.patch(module.prototype, 'render', BDFDB, {after: e => {
+				if (e.thisObject.props.BDFDBcontextMenu && e.thisObject.props.children && e.returnValue && e.returnValue.props) {
+					e.returnValue.props.children = e.thisObject.props.children;
+					delete e.thisObject.props.children;
+					delete e.thisObject.props.BDFDBcontextMenu;
+				}
 				if (BDFDB.React.findDOMNodeSafe(e.thisObject)) {
 					e.thisObject.BDFDBforceRenderTimeout = true;
 					setTimeout(() => {delete e.thisObject.BDFDBforceRenderTimeout;}, 1000);
@@ -3274,6 +3279,18 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			var label = child.props ? child.props.label || "" : "";
 			return names.some(name => displayname == name || label == name);
 		}
+	};
+	
+	BDFDB.openContextMenu = function (plugin, e, children) {
+		LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
+			return BDFDB.React.createElement(LibraryComponents.ContextMenu, Object.assign({}, e, {
+				BDFDBcontextMenu: true,
+				type: DiscordConstants.ContextMenuTypes.NATIVE_TEXT,
+				value: "",
+				className: `${BDFDB.disCN.contextmenu} BDFDB-contextMenu ${plugin.name}-contextMenuItem`,
+				children
+			}));
+		});
 	};
 
 	BDFDB.appendContextMenu = function (menu, e = Object.assign({currentTarget: document.querySelector(BDFDB.dotCN.app)}, BDFDB.mousePosition)) {
