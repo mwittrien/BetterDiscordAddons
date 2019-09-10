@@ -1469,16 +1469,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				if (filteredmodules.length > 0) {
 					try {
 						const appins = BDFDB.getOwnerInstance({node:app, name:filteredmodules, all:true, noCopies:true, group:true, depth:99999999, time:99999999});
-						for (let type in appins) for (let i in appins[type]) {
-							BDFDB.WebModules.initiateProcess(plugin, appins[type][i], null, type, ['componentDidMount', 'componentDidUpdate']);
-							if (typeof appins[type][i].render == "function") appins[type][i].render();
-						}
+						for (let type in appins) for (let i in appins[type]) BDFDB.WebModules.initiateProcess(plugin, appins[type][i], null, type, ['componentDidMount', 'componentDidUpdate', 'render']);
 						if (bdsettings) {
 							const bdsettingsins = BDFDB.getOwnerInstance({node:bdsettings, name:filteredmodules, all:true, noCopies:true, group:true, depth:99999999, time:99999999});
-							for (let type in bdsettingsins) for (let i in bdsettingsins[type]) {
-								BDFDB.WebModules.initiateProcess(plugin, bdsettingsins[type][i], null, type, ['componentDidMount', 'componentDidUpdate']);
-								if (typeof bdsettingsins[type][i].render == "function") bdsettingsins[type][i].render();
-							}
+							for (let type in bdsettingsins) for (let i in bdsettingsins[type]) BDFDB.WebModules.initiateProcess(plugin, bdsettingsins[type][i], null, type, ['componentDidMount', 'componentDidUpdate', 'render']);
 						}
 					}
 					catch (err) {console.error(`%c[${plugin.name}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not force update components! ' + err);}
