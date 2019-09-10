@@ -2897,13 +2897,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		container.querySelectorAll('.BDFDB-contextMenuItem ' + BDFDB.dotCN.contextmenuhint).forEach(ele => {
 			if (ele.innerText) {
 				ele.innerHTML = `<div class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">${BDFDB.encodeToHTML(ele.innerText)}</div></div>`;
-				var width = BDFDB.getRects(ele.parentElement).width - (parseFloat(getComputedStyle(ele.parentElement).paddingLeft) + parseFloat(getComputedStyle(ele.parentElement).paddingRight));
-				ele.previousElementSibling.style.setProperty('width', width - 46 + 'px', 'important');
-				ele.previousElementSibling.style.setProperty('max-width', width - 46 + 'px', 'important');
 				ele.style.setProperty('top', getComputedStyle(ele.parentElement).paddingTop, 'important');
 				ele.style.setProperty('right', getComputedStyle(ele.parentElement).paddingRight, 'important');
 				ele.style.setProperty('width', '42px', 'important');
 				ele.style.setProperty('max-width', '42px', 'important');
+				ele.style.setProperty('margin-left', '8px', 'important');
 			}
 		});
 		container.querySelectorAll('.BDFDB-textscrollwrapper').forEach(ele => {
