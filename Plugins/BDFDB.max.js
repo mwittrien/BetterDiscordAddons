@@ -3285,7 +3285,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
 			return BDFDB.React.createElement(LibraryComponents.ContextMenu, Object.assign({}, e, {
 				BDFDBcontextMenu: true,
-				type: DiscordConstants.ContextMenuTypes.NATIVE_TEXT,
+				type: BDFDB.DiscordConstants.ContextMenuTypes.NATIVE_TEXT,
 				value: "",
 				className: `${BDFDB.disCN.contextmenu} BDFDB-contextMenu ${plugin.name}-contextMenuItem`,
 				children
