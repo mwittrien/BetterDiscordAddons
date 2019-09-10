@@ -519,52 +519,52 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (!Node.prototype.isPrototypeOf(itemlayer)) return;
 		tooltip = itemlayer.querySelector(BDFDB.dotCN.tooltip);
 		if (!Node.prototype.isPrototypeOf(tooltip) || !Node.prototype.isPrototypeOf(tooltip.anker) || !tooltip.position) return;
-		var left, top, ankerects = BDFDB.getRects(tooltip.anker), itemlayerrects = BDFDB.getRects(itemlayer), apprects = BDFDB.getRects(document.body.firstElementChild), positionoffsets = {height: 0, width: 0};
+		var left, top, trects = BDFDB.getRects(tooltip.anker), irects = BDFDB.getRects(itemlayer), arects = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount)), positionoffsets = {height: 0, width: 0};
 		var pointer = tooltip.querySelector(BDFDB.dotCN.tooltippointer);
 		if (pointer) positionoffsets = BDFDB.getRects(pointer);
 		switch (tooltip.position) {
 			case 'top':
-				top = ankerects.top - itemlayerrects.height - positionoffsets.height + 2;
-				left = ankerects.left + (ankerects.width - itemlayerrects.width) / 2;
+				top = trects.top - irects.height - positionoffsets.height + 2;
+				left = trects.left + (trects.width - irects.width) / 2;
 				break;
 			case 'bottom':
-				top = ankerects.top + ankerects.height + positionoffsets.height - 2;
-				left = ankerects.left + (ankerects.width - itemlayerrects.width) / 2;
+				top = trects.top + trects.height + positionoffsets.height - 2;
+				left = trects.left + (trects.width - irects.width) / 2;
 				break;
 			case 'left':
-				top = ankerects.top + (ankerects.height - itemlayerrects.height) / 2;
-				left = ankerects.left - itemlayerrects.width - positionoffsets.width + 2;
+				top = trects.top + (trects.height - irects.height) / 2;
+				left = trects.left - irects.width - positionoffsets.width + 2;
 				break;
 			case 'right':
-				top = ankerects.top + (ankerects.height - itemlayerrects.height) / 2;
-				left = ankerects.left + ankerects.width + positionoffsets.width - 2;
+				top = trects.top + (trects.height - irects.height) / 2;
+				left = trects.left + trects.width + positionoffsets.width - 2;
 				break;
 			}
 		itemlayer.style.setProperty('top', top + 'px');
 		itemlayer.style.setProperty('left', left + 'px');
 		
 		if (tooltip.position == "top" || tooltip.position == "bottom") {
-			if (itemlayerrects.left < 0) {
+			if (irects.left < 0) {
 				itemlayer.style.setProperty('left', '5px');
-				tooltippointer.style.setProperty('margin-left', `${itemlayerrects.left - 10}px`);
+				tooltippointer.style.setProperty('margin-left', `${irects.left - 10}px`);
 			}
 			else {
-				var rightmargin = apprects.width - (itemlayerrects.left + itemlayerrects.width);
+				var rightmargin = arects.width - (irects.left + irects.width);
 				if (rightmargin < 0) {
-					itemlayer.style.setProperty('left', apprects.width - itemlayerrects.width - 5 + 'px');
+					itemlayer.style.setProperty('left', arects.width - irects.width - 5 + 'px');
 					tooltippointer.style.setProperty('margin-left', `${-1*rightmargin}px`);
 				}
 			}
 		}
 		else if (tooltip.position == "left" || tooltip.position == "right") {
-			if (itemlayerrects.top < 0) {
+			if (irects.top < 0) {
 				itemlayer.style.setProperty('top', '5px');
-				tooltippointer.style.setProperty('margin-top', `${itemlayerrects.top - 10}px`);
+				tooltippointer.style.setProperty('margin-top', `${irects.top - 10}px`);
 			}
 			else {
-				var bottommargin = apprects.height - (itemlayerrects.top + itemlayerrects.height);
+				var bottommargin = arects.height - (irects.top + irects.height);
 				if (bottommargin < 0) {
-					itemlayer.style.setProperty('top', apprects.height - itemlayerrects.height - 5 + 'px');
+					itemlayer.style.setProperty('top', arects.height - irects.height - 5 + 'px');
 					tooltippointer.style.setProperty('margin-top', `${-1*bottommargin}px`);
 				}
 			}
@@ -1027,9 +1027,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.getDiscordZoomFactor = function () {
-		var apprects = BDFDB.getRects(document.body.firstElementChild);
-		var widthzoom = Math.round(100 * window.outerWidth / apprects.width);
-		var heightzoom = Math.round(100 * window.outerHeight / apprects.height);
+		var arects = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount));
+		var widthzoom = Math.round(100 * window.outerWidth / arects.width);
+		var heightzoom = Math.round(100 * window.outerHeight / arects.height);
 		return widthzoom < heightzoom ? widthzoom : heightzoom;
 	};
 
@@ -1641,9 +1641,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				if (!e.thisObject.BDFDBforceRenderTimeout && typeof e.thisObject.render == 'function') e.thisObject.render();
 			}});
 			BDFDB.WebModules.patch(module.prototype, 'componentDidUpdate', BDFDB, {after: e => {
-				const updater = BDFDB.getReactValue(e, 'thisObject._reactInternalFiber.stateNode.props.onHeightUpdate');
-				if (updater) updater();
-				BDFDB.initElements(BDFDB.React.findDOMNodeSafe(e.thisObject));
+				var menu = BDFDB.React.findDOMNodeSafe(e.thisObject);
+				if (menu) {
+					BDFDB.initElements(menu);
+					const updater = BDFDB.getReactValue(e, 'thisObject._reactInternalFiber.stateNode.props.onHeightUpdate');
+					const mrects = BDFDB.getRects(menu), arects = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount));
+					if (updater && (mrects.top + mrects.height > arects.height)) updater();
+				}
 			}});
 			BDFDB.WebModules.patch(module.prototype, 'render', BDFDB, {after: e => {
 				if (BDFDB.React.findDOMNodeSafe(e.thisObject)) {
