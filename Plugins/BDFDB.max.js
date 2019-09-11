@@ -2082,6 +2082,25 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		return null;
 	};
 
+	BDFDB.openChannelContextMenu = function (eleOrInfoOrId, e = BDFDB.mousePosition) {
+		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getChannelID(eleOrInfoOrId) : typeof eleOrInfoOrId == 'object' ? eleOrInfoOrId.id : eleOrInfoOrId;
+		let channel = LibraryModules.ChannelStore.getChannel(id);
+		if (channel) {
+			let type = null;
+			for (let t in BDFDB.DiscordConstants.ChannelTypes) if (BDFDB.DiscordConstants.ChannelTypes[t] == channel.type) {
+				type = BDFDB.DiscordConstants.ContextMenuTypes[(t == "CATEGORY" ? "CHANNEL_" : "CHANNEL_LIST_") + t.replace("GUILD_", "")];
+				break;
+			}
+			if (type) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
+				return BDFDB.React.createElement(BDFDB.WebModules.findByName("ChannelContextMenu"), Object.assign({}, e, {
+					type,
+					channel,
+					selected: channel.id == LibraryModules.LastChannelStore.getChannelId()
+				}));
+			});
+		}
+	};
+
 	BDFDB.readDmList = function () {
 		var found = [], ins = BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.guilds), name:'DirectMessage', all:true, noCopies:true, depth:99999999, time:99999999});
 		for (let info in ins) if (ins[info].props && ins[info].props.channel && ins[info]._reactInternalFiber.child) found.push(Object.assign(new ins[info].props.channel.constructor(ins[info].props.channel), {div:BDFDB.React.findDOMNodeSafe(ins[info]), instance:ins[info]}));
@@ -3762,6 +3781,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		applicationStore: 'applicationStore-1pNvnv',
 		avatarStopAnimation: 'stop-animation',
 		badgeWrapper: 'wrapper-232cHJ',
+		categoryNameContainer: 'container-2ax-kl',
 		gameLibrary: 'gameLibrary-TTDw4Y',
 		guildChannels: 'container-PNkimc',
 		highlight: 'highlight',
@@ -4121,6 +4141,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		categoryiconvisibility: ['CategoryContainer', 'iconVisibility'],
 		categorymuted: ['Category', 'muted'],
 		categoryname: ['Category', 'name'],
+		categorynamecontainer: ['NotFound', 'categoryNameContainer'],
 		categoryselected: ['CategoryContainer', 'selected'],
 		categorywrapper: ['Category', 'wrapper'],
 		changelogadded: ['ChangeLog', 'added'],
