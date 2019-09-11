@@ -1641,6 +1641,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			BDFDB.WebModules.patch(module.prototype, 'render', BDFDB, {after: e => {
 				if (e.thisObject.props.BDFDBcontextMenu && e.thisObject.props.children && e.returnValue && e.returnValue.props) {
 					e.returnValue.props.children = e.thisObject.props.children;
+					delete e.thisObject.props.value;
 					delete e.thisObject.props.children;
 					delete e.thisObject.props.BDFDBcontextMenu;
 				}
