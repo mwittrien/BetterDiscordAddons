@@ -1334,6 +1334,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	LibraryComponents.ContextMenu = BDFDB.WebModules.findByName('NativeContextMenu');
 	LibraryComponents.ContextMenuItem = BDFDB.WebModules.findByName('MenuItem');
 	LibraryComponents.ContextMenuItemGroup = BDFDB.WebModules.findByString('{className:i.default.itemGroup}');
+	LibraryComponents.ContextMenuSliderItem = BDFDB.WebModules.findByName('SliderMenuItem');
 	LibraryComponents.ContextMenuSubItem = BDFDB.WebModules.findByName('FluxContainer(SubMenuItem)');
 	LibraryComponents.ContextMenuToggleItem = LibraryModules.React && LibraryModules.React.Component ? (class OtherItem extends LibraryModules.React.Component {
         handleToggle() {
