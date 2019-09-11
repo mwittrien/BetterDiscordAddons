@@ -3,7 +3,7 @@
 class ImageZoom {
 	getName () {return "ImageZoom";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ImageZoom {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Lense","Fixed the issue where the lesen wouldn't properly clip the zoomed image"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.patchModules = {
@@ -24,7 +24,7 @@ class ImageZoom {
 		this.zoomSettingsContextMarkup = 
 			`<div class="${BDFDB.disCN.contextmenu} imagezoom-contextmenu">
 				<div class="${BDFDB.disCN.contextmenuitemgroup}">
-					<div class="${BDFDB.disCN.contextmenuitem} zoomlevel-item ${BDFDB.disCN.contextmenuitemslider}">
+					<div class="${BDFDB.disCN.contextmenuitemslider} zoomlevel-item">
 						<div class="${BDFDB.disCN.contextmenulabel}"></div>
 						<div class="${BDFDB.disCNS.contextmenuslider + BDFDB.disCNS.slider + BDFDB.disCN.slidermini}" type="zoomlevel">
 							<input type="number" class="${BDFDB.disCN.sliderinput}" readonly="" value="">
@@ -37,7 +37,7 @@ class ImageZoom {
 							</div>
 						</div>
 					</div>
-					<div class="${BDFDB.disCN.contextmenuitem} lensesize-item ${BDFDB.disCN.contextmenuitemslider}">
+					<div class="${BDFDB.disCN.contextmenuitemslider} lensesize-item">
 						<div class="${BDFDB.disCN.contextmenulabel}"></div>
 						<div class="${BDFDB.disCNS.contextmenuslider + BDFDB.disCNS.slider + BDFDB.disCN.slidermini}" type="lensesize">
 							<input type="number" class="${BDFDB.disCN.sliderinput}" readonly="" value="">
@@ -92,7 +92,7 @@ class ImageZoom {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -138,7 +138,7 @@ class ImageZoom {
 
 	// begin of own functions
 
-	processImageModal (instance, wrapper, methodnames) {
+	processImageModal (instance, wrapper, returnvalue, methodnames) {
 		if (methodnames.includes("componentDidMount")) {
 			let modal = BDFDB.getParentEle(BDFDB.dotCN.modal, wrapper);
 			if (!modal) return;
@@ -155,22 +155,31 @@ class ImageZoom {
 					inner.firstElementChild.appendChild(settingslink);
 					let openContext = e => {
 						let settings = BDFDB.getAllData(this, "settings");
-						let zoomSettingsContext = BDFDB.htmlToElement(this.zoomSettingsContextMarkup);
-						for (let slideritem of zoomSettingsContext.querySelectorAll(BDFDB.dotCN.contextmenuitemslider)) {
-							let slider = slideritem.querySelector(BDFDB.dotCN.contextmenuslider);
-							let type = slider.getAttribute("type");
-							let value = settings[type];
-							let percent = BDFDB.mapRange([this.defaults.settings[type].min, this.defaults.settings[type].max], [0, 100], value);
-							let grabber = slider.querySelector(BDFDB.dotCN.slidergrabber);
-							grabber.style.setProperty("left", percent + "%");
-							grabber.addEventListener("mousedown", e => {this.dragSlider(slider, value, e);});
-							slider.querySelector(BDFDB.dotCN.sliderbarfill).style.setProperty("width", percent + "%");
-							slider.querySelector(BDFDB.dotCN.sliderinput).value = value;
-							slider.previousSibling.innerText = this.defaults.settings[type].name + ": " + value + this.defaults.settings[type].unit;
-						}
-						let zoomlevelitem = zoomSettingsContext.querySelector(".zoomlevel-item");
-						let lensesizeitem = zoomSettingsContext.querySelector(".lensesize-item");
-						BDFDB.appendContextMenu(zoomSettingsContext, e);
+						let items = [];
+						for (let type in settings) items.push(BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSliderItem, {
+							label: this.defaults.settings[type].name + ": " + settings[type] + this.defaults.settings[type].unit,
+							className: `BDFDB-contextMenuSliderItem ${this.name}-contextMenuSliderItem ${this.name}-${type}-contextMenuSliderItem`,
+							type,
+							defaultValue: BDFDB.mapRange([this.defaults.settings[type].min, this.defaults.settings[type].max], [0, 100], settings[type]),
+							onValueChange: value => {
+								BDFDB.saveData(type, Math.round(BDFDB.mapRange([0, 100], [this.defaults.settings[type].min, this.defaults.settings[type].max], value)), this, "settings");
+							},
+							onValueRender: value => {
+								setImmediate(() => {for (let slider of document.querySelectorAll(BDFDB.dotCN.contextmenuitemslider)) if (BDFDB.getReactValue(slider, "return.memoizedProps.type") == type) {
+									value = Math.round(BDFDB.mapRange([0, 100], [this.defaults.settings[type].min, this.defaults.settings[type].max], value));
+									let label = slider.querySelector(BDFDB.dotCN.contextmenulabel);
+									if (label) label.innerText = this.defaults.settings[type].name + ": " + value + this.defaults.settings[type].unit;
+									let bubble = slider.querySelector(BDFDB.dotCN.sliderbubble);
+									if (bubble) bubble.innerText = value + this.defaults.settings[type].unit;
+									break;
+								}});
+							}
+						}));
+						const itemGroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+							className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
+							children: items
+						});
+						BDFDB.openContextMenu(this, e, itemGroup);
 					};
 					settingslink.addEventListener("click", openContext);
 					settingslink.addEventListener("contextmenu", openContext);
@@ -223,49 +232,5 @@ class ImageZoom {
 		else if (methodnames.includes("componentWillUnmount")) {
 			BDFDB.removeEles(".imagezoom-contextmenu", ".imagezoom-separator", ".imagezoom-settings", ".imagezoom-lense", ".imagezoom-backdrop");
 		}
-	}
-
-	dragSlider (slider, value, e) {
-		var grabber = e.currentTarget;
-		var track = grabber.parentNode;
-		var slider = track.parentNode;
-		var input = slider.querySelector(BDFDB.dotCN.sliderinput);
-		var barfill = slider.querySelector(BDFDB.dotCN.sliderbarfill);
-		var type = slider.getAttribute("type");
-
-		BDFDB.appendLocalStyle("disableTextSelection", `*{user-select: none !important;}`);
-
-		var sY = 0;
-		var sHalfW = BDFDB.getRects(grabber).width/2;
-		var sMinX = BDFDB.getRects(track).left;
-		var sMaxX = sMinX + BDFDB.getRects(track).width;
-		var bubble = BDFDB.htmlToElement(`<span class="${BDFDB.disCN.sliderbubble}">${value + this.defaults.settings[type].unit}</span>`);
-		grabber.appendChild(bubble);
-		var mouseup = () => {
-			document.removeEventListener("mouseup", mouseup);
-			document.removeEventListener("mousemove", mousemove);
-			BDFDB.removeEles(bubble);
-			BDFDB.removeLocalStyle("disableTextSelection");
-			BDFDB.saveData(type, value, this, "settings");
-			slider.previousSibling.innerText = this.defaults.settings[type].name + ": " + value + this.defaults.settings[type].unit;
-		};
-		var mousemove = e2 => {
-			sY = e2.clientX > sMaxX ? sMaxX - sHalfW : (e2.clientX < sMinX ? sMinX - sHalfW : e2.clientX - sHalfW);
-			value = parseInt(BDFDB.mapRange([sMinX - sHalfW, sMaxX - sHalfW], [this.defaults.settings[type].min, this.defaults.settings[type].max], sY)*Math.pow(10, this.defaults.settings[type].digits))/Math.pow(10, this.defaults.settings[type].digits);
-			let percent = BDFDB.mapRange([sMinX - sHalfW, sMaxX - sHalfW], [0, 100], sY);
-			grabber.style.setProperty("left", percent + "%");
-			barfill.style.setProperty("width", percent + "%");
-			input.value = value;
-			bubble.innerText = value + this.defaults.settings[type].unit;
-		};
-		document.addEventListener("mouseup", mouseup);
-		document.addEventListener("mousemove", mousemove);
-	}
-
-	updateSlider	() {
-		var sY = 0;
-		var sHalfW = BDFDB.getRects(grabber).width/2;
-		var sMinX = BDFDB.getRects(track).left;
-		var sMaxX = sMinX + BDFDB.getRects(track).width;
 	}
 }
