@@ -2105,6 +2105,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				return BDFDB.React.createElement(BDFDB.WebModules.findByName("ChannelContextMenu"), Object.assign({}, e, {
 					type,
 					channel,
+					guild: LibraryModules.GuildStore.getGuild(channel.guild_id),
 					selected: channel.id == LibraryModules.LastChannelStore.getChannelId()
 				}));
 			});
