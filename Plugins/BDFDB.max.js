@@ -1270,15 +1270,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	}
 	BDFDB.LibraryRequires = Object.assign({}, LibraryRequires);
 	
-	var LibraryComponents = {};
-	LibraryComponents.Button = BDFDB.WebModules.findByProperties('Colors', 'Hovers', 'Looks');
-	LibraryComponents.ContextMenu = BDFDB.WebModules.findByName('NativeContextMenu');
-	LibraryComponents.ContextMenuItem = BDFDB.WebModules.findByName('MenuItem');
-	LibraryComponents.ContextMenuItemGroup = BDFDB.WebModules.findByString('{className:i.default.itemGroup}');
-	LibraryComponents.ContextMenuSubItem = BDFDB.WebModules.findByName('FluxContainer(SubMenuItem)');
-	LibraryComponents.ContextMenuToggleItem = BDFDB.WebModules.findByName('ToggleMenuItem');
-	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
-	
 	var LibraryModules = {};
 	LibraryModules.AckUtils = BDFDB.WebModules.findByProperties('localAck', 'bulkAck');
 	LibraryModules.APIUtils = BDFDB.WebModules.findByProperties('getAPIBaseURL');
@@ -1337,6 +1328,22 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			return Node.prototype.isPrototypeOf(node) ? node : null;
 		};
 	};
+	
+	var LibraryComponents = {};
+	LibraryComponents.Button = BDFDB.WebModules.findByProperties('Colors', 'Hovers', 'Looks');
+	LibraryComponents.ContextMenu = BDFDB.WebModules.findByName('NativeContextMenu');
+	LibraryComponents.ContextMenuItem = BDFDB.WebModules.findByName('MenuItem');
+	LibraryComponents.ContextMenuItemGroup = BDFDB.WebModules.findByString('{className:i.default.itemGroup}');
+	LibraryComponents.ContextMenuSubItem = BDFDB.WebModules.findByName('FluxContainer(SubMenuItem)');
+	LibraryComponents.ContextMenuToggleItem = LibraryModules.React && LibraryModules.React.Component ? (class OtherItem extends LibraryModules.React.Component {
+        handleToggle() {
+            this.props.active = !this.props.active;
+            if (this.props.action) this.props.action(this.props.active);
+            this.forceUpdate();
+        }
+        render() {return LibraryModules.React.createElement(BDFDB.WebModules.findByName('ToggleMenuItem'), Object.assign({}, this.props, {action: this.handleToggle.bind(this)}));}
+    }) : undefined;
+	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
 
 	var myDataUser = LibraryModules.CurrentUserStore && typeof LibraryModules.CurrentUserStore.getCurrentUser == 'function' ? LibraryModules.CurrentUserStore.getCurrentUser() : null;
 	BDFDB.myData = new Proxy(myDataUser || {}, {
@@ -6240,8 +6247,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	if (BDFDB.myData.id == "278543574059057154") {
 		for (let module in DiscordClassModules) if (!DiscordClassModules[module]) console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', module + ' not initialized in DiscordClassModules');
 		for (let require in LibraryRequires) if (!LibraryRequires[require]) console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', require + ' not initialized in LibraryRequires');
-		for (let component in LibraryComponents) if (!LibraryComponents[component]) console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', component + ' not initialized in LibraryComponents');
 		for (let module in LibraryModules) if (!LibraryModules[module]) console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', module + ' not initialized in LibraryModules');
+		for (let component in LibraryComponents) if (!LibraryComponents[component]) console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', component + ' not initialized in LibraryComponents');
 
 		BDFDB.WebModules.DevFuncs = {};
 		BDFDB.WebModules.DevFuncs.findPropAny = function (strings) {
