@@ -2430,6 +2430,9 @@ html, span:not(.spinner-item) {
 }
 
 /* MemberCount */
+#MemberCount {
+	background: transparent !important;
+}
 #MemberCount:after,
 #MemberCount:before {
 	content: "";
