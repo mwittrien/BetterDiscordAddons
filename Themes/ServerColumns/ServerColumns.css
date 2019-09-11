@@ -172,3 +172,7 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 	bottom: 0 !important;
 	left: 0 !important;
 }
+
+.base-3dtUhz{
+  left: calc(1px * ((var(--vguildsize) + 10) * var(--vcolumns) + 35 - 25)) !important;
+}
