@@ -6361,4 +6361,5 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			if (BDFDB.WebModules.DevFuncs.listen.p == "function") BDFDB.WebModules.DevFuncs.listen.p();
 		};
 	}
+	for (let component in LibraryComponents) if (!LibraryComponents[component]) LibraryComponents[component] = 'div';
 })();
