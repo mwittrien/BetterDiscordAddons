@@ -1332,8 +1332,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	
 	var LibraryComponents = {};
 	LibraryComponents.Button = BDFDB.WebModules.findByProperties('Colors', 'Hovers', 'Looks');
-	LibraryComponents.ContextMenu = BDFDB.WebModules.findByName('NativeContextMenu');
-	LibraryComponents.ContextMenuItem = BDFDB.WebModules.findByName('MenuItem') || BDFDB.WebModules.findByName('ContextMenuItem');
+	LibraryComponents.ContextMenu = BDFDB.WebModules.findByName('NativeContextMenu');;
+	LibraryComponents.ContextMenuItem = BDFDB.WebModules.findByString("{className:(0,l.default)(i.default.item,(t={},t[i.default.clickable]=!v");
 	LibraryComponents.ContextMenuItemGroup = BDFDB.WebModules.findByString('{className:i.default.itemGroup}');
 	LibraryComponents.ContextMenuSliderItem = BDFDB.WebModules.findByName('SliderMenuItem');
 	LibraryComponents.ContextMenuSubItem = BDFDB.WebModules.findByName('FluxContainer(SubMenuItem)');
