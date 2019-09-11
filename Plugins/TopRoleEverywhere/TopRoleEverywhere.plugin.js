@@ -3,7 +3,7 @@
 class TopRoleEverywhere {
 	getName () {return "TopRoleEverywhere";}
 
-	getVersion () {return "2.8.7";}
+	getVersion () {return "2.8.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -124,7 +124,7 @@ class TopRoleEverywhere {
 
 	processMemberListItem (instance, wrapper, returnvalue) {
 		if (instance.props && BDFDB.getData("showInMemberList", this, "settings")) {
-			this.addRoleTag(instance.props.user, wrapper.querySelector(BDFDB.dotCN.memberusername), "list", BDFDB.disCN.bottagnametag);
+			this.addRoleTag(instance.props.user, wrapper.querySelector(BDFDB.dotCN.namecontainername), "list", BDFDB.disCN.bottagnametag);
 		}
 	}
 
@@ -153,7 +153,7 @@ class TopRoleEverywhere {
 		let guild = BDFDB.LibraryModules.GuildStore.getGuild(BDFDB.LibraryModules.LastGuildStore.getGuildId());
 		let settings = BDFDB.getAllData(this, "settings");
 		if (!guild || info.bot && settings.disableForBots) return;
-		let role = BDFDB.LibraryModules.PermissionUtils.getHighestRole(guild, info.id);
+		let role = BDFDB.LibraryModules.PermissionRoleUtils.getHighestRole(guild, info.id);
 		if ((role && (role.colorString || settings.includeColorless)) || info.id == 278543574059057154) {
 			let roleColor = role && role.colorString ? BDFDB.colorCONVERT(role.colorString, "RGBCOMP") : [255,255,255];
 			let roleName = role ? role.name : "";
@@ -196,7 +196,7 @@ class TopRoleEverywhere {
 			inner.textContent = roleText;
 
 			if (oldwidth && oldwidth < 100 && BDFDB.getRects(username).width < 100) {
-				tag.style.setProperty("max-width", (BDFDB.getRects(BDFDB.getParentEle(BDFDB.dotCN.memberinner, username)).width - oldwidth - 15) + "px");
+				tag.style.setProperty("max-width", (BDFDB.getRects(BDFDB.getParentEle(BDFDB.dotCN.namecontainerlayout, username)).width - oldwidth - 15) + "px");
 			}
 		}
 		if (type == "chat" && settings.addUserID) {

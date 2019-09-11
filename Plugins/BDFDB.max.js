@@ -1302,6 +1302,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	LibraryModules.NotificationSettingsUtils = BDFDB.WebModules.findByProperties('setDesktopType', 'setTTSType');
 	LibraryModules.NotificationSettingsStore = BDFDB.WebModules.findByProperties('getDesktopType', 'getTTSType');
 	LibraryModules.PermissionUtils = BDFDB.WebModules.findByProperties('getChannelPermissions', 'canUser');
+	LibraryModules.PermissionRoleUtils = BDFDB.WebModules.findByProperties('getHighestRole', 'can');
 	LibraryModules.ReactionUtils = BDFDB.WebModules.findByProperties('addReaction', 'removeReaction');
 	LibraryModules.SearchPageUtils = BDFDB.WebModules.findByProperties('searchNextPage', 'searchPreviousPage');
 	LibraryModules.SelectChannelUtils = BDFDB.WebModules.findByProperties('selectChannel', 'selectPrivateChannel');
