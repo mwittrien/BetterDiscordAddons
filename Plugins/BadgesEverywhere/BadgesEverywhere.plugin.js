@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";} 
 
-	getVersion () {return "1.4.4";}
+	getVersion () {return "1.4.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -218,7 +218,7 @@ class BadgesEverywhere {
 	// begin of own functions
 
 	processMemberListItem (instance, wrapper, returnvalue) {
-		if (instance.props && BDFDB.getData("showInMemberList", this, "settings")) this.addBadges(instance.props.user, wrapper.querySelector(BDFDB.dotCN.namecontainername), "list");
+		if (instance.props && BDFDB.getData("showInMemberList", this, "settings")) this.addBadges(instance.props.user, wrapper.querySelector(BDFDB.dotCN.namecontainernamewrapper), "list");
 	}
 
 	processMessageUsername (instance, wrapper, returnvalue) {
