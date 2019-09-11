@@ -21,38 +21,6 @@ class ImageZoom {
 	}
 
 	initConstructor () {
-		this.zoomSettingsContextMarkup = 
-			`<div class="${BDFDB.disCN.contextmenu} imagezoom-contextmenu">
-				<div class="${BDFDB.disCN.contextmenuitemgroup}">
-					<div class="${BDFDB.disCN.contextmenuitemslider} zoomlevel-item">
-						<div class="${BDFDB.disCN.contextmenulabel}"></div>
-						<div class="${BDFDB.disCNS.contextmenuslider + BDFDB.disCNS.slider + BDFDB.disCN.slidermini}" type="zoomlevel">
-							<input type="number" class="${BDFDB.disCN.sliderinput}" readonly="" value="">
-							<div class="${BDFDB.disCN.slidertrack}"></div>
-							<div class="${BDFDB.disCN.sliderbar}">
-								<div class="${BDFDB.disCN.sliderbarfill}"></div>
-							</div>
-							<div class="${BDFDB.disCN.slidertrack}">
-								<div class="${BDFDB.disCN.slidergrabber}"></div>
-							</div>
-						</div>
-					</div>
-					<div class="${BDFDB.disCN.contextmenuitemslider} lensesize-item">
-						<div class="${BDFDB.disCN.contextmenulabel}"></div>
-						<div class="${BDFDB.disCNS.contextmenuslider + BDFDB.disCNS.slider + BDFDB.disCN.slidermini}" type="lensesize">
-							<input type="number" class="${BDFDB.disCN.sliderinput}" readonly="" value="">
-							<div class="${BDFDB.disCN.slidertrack}"></div>
-							<div class="${BDFDB.disCN.sliderbar}">
-								<div class="${BDFDB.disCN.sliderbarfill}"></div>
-							</div>
-							<div class="${BDFDB.disCN.slidertrack}">
-								<div class="${BDFDB.disCN.slidergrabber}"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>`;
-
 		this.css = `
 			.imagezoom-lense {
 				border: 2px solid rgb(114, 137, 218);
