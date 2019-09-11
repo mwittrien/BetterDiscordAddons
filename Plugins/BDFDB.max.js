@@ -2088,7 +2088,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (channel) {
 			let type = null;
 			for (let t in BDFDB.DiscordConstants.ChannelTypes) if (BDFDB.DiscordConstants.ChannelTypes[t] == channel.type) {
-				type = BDFDB.DiscordConstants.ContextMenuTypes[(t == "CATEGORY" ? "CHANNEL_" : "CHANNEL_LIST_") + t.replace("GUILD_", "")];
+				type = BDFDB.DiscordConstants.ContextMenuTypes[(t == "GUILD_CATEGORY" ? "CHANNEL_" : "CHANNEL_LIST_") + t.replace("GUILD_", "")];
 				break;
 			}
 			if (type) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
@@ -3781,7 +3781,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		applicationStore: 'applicationStore-1pNvnv',
 		avatarStopAnimation: 'stop-animation',
 		badgeWrapper: 'wrapper-232cHJ',
-		categoryNameContainer: 'container-2ax-kl',
+		nameContainerNameContainer: 'container-2ax-kl',
 		gameLibrary: 'gameLibrary-TTDw4Y',
 		guildChannels: 'container-PNkimc',
 		highlight: 'highlight',
@@ -4141,7 +4141,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		categoryiconvisibility: ['CategoryContainer', 'iconVisibility'],
 		categorymuted: ['Category', 'muted'],
 		categoryname: ['Category', 'name'],
-		categorynamecontainer: ['NotFound', 'categoryNameContainer'],
 		categoryselected: ['CategoryContainer', 'selected'],
 		categorywrapper: ['Category', 'wrapper'],
 		changelogadded: ['ChangeLog', 'added'],
@@ -4646,6 +4645,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		modedisabled: ['FormText', 'modeDisabled'],
 		modeselectable: ['FormText', 'modeSelectable'],
 		namecontainername: ['NameContainer', 'name'],
+		namecontainernameclickable: ['NameContainer', 'clickable'],
+		namecontainernamecontainer: ['NotFound', 'nameContainerNameContainer'],
 		namecontainernamewrapper: ['NameContainer', 'nameAndDecorators'],
 		namecontainerselected: ['NameContainer', 'selected'],
 		nametag: ['NameTag', 'nameTag'],
