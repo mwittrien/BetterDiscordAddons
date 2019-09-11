@@ -4211,6 +4211,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		dmchannelactivityicon: ['PrivateChannelActivity', 'icon'],
 		dmchannelactivitytext: ['PrivateChannelActivity', 'text'],
 		dmchannelclose: ['PrivateChannel', 'closeButton'],
+		dmchannelheader: ['PrivateChannelList', 'header'],
 		dmchannelnamewithactivity: ['PrivateChannel', 'nameWithActivity'],
 		dmchannels: ['PrivateChannelList', 'privateChannels'],
 		dmpill: ['GuildDm', 'pill'],
