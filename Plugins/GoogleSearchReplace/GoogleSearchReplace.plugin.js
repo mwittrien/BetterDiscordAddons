@@ -145,7 +145,7 @@ class GoogleSearchReplace {
 			className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-disabled-contextMenuItem`,
 			disabled: true
 		}));
-		let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, "SearchWithGoogle");
+		let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, "SearchWithGoogle");
 		const item = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
 			label: this.labels.context_googlesearchreplace_text,
 			className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-search-contextMenuSubItem`,

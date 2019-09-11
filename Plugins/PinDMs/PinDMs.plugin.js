@@ -223,7 +223,7 @@ class PinDMs {
 
 	onUserContextMenu (instance, menu, returnvalue) {
 		if (instance.props && instance.props.user && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
-			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, "UserCloseChatItem");
+			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, "UserCloseChatItem");
 			if (index > -1) {
 				let id = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(instance.props.user.id);
 				if (id) this.appendItem(menu, id, children, index);
@@ -234,7 +234,7 @@ class PinDMs {
 
 	onGroupDMContextMenu (instance, menu, returnvalue) {
 		if (instance.props && instance.props.channelId && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
-			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, "ChangeIcon");
+			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, "ChangeIcon");
 			if (index > -1) this.appendItem(menu, instance.props.channelId, children, index);
 		}
 	}

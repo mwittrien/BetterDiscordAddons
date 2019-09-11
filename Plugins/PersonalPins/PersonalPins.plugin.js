@@ -228,7 +228,7 @@ class PersonalPins {
 			let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
 			if (!messagediv || pos == -1) return;
 			let note = this.getNoteData(instance.props.message, instance.props.target, instance.props.channel);
-			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, "MessagePinItem");
+			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, "MessagePinItem");
 			const pinUnpinItem = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: this.labels[note ? "context_unpinoption_text" : "context_pinoption_text"],
 				hint: BDFDB.isPluginEnabled("MessageUtilities") ? window.bdplugins.MessageUtilities.plugin.getActiveShortcutString("__Note_Message") : null,
@@ -264,7 +264,7 @@ class PersonalPins {
 			let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
 			if (!messagediv || pos == -1) return;
 			let note = this.getNoteData(instance.props.message, instance.props.target, instance.props.channel);
-			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, [BDFDB.LanguageStrings.PIN, BDFDB.LanguageStrings.UNPIN]);
+			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, [BDFDB.LanguageStrings.PIN, BDFDB.LanguageStrings.UNPIN]);
 			const pinUnpinItem = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: this.labels[note ? "context_unpinoption_text" : "popout_pinoption_text"],
 				className: `${BDFDB.disCN.optionpopoutitem} BDFDB-popoutMenuItem ${this.name}-popoutMenuItem ${this.name}-${note ? "unpin" : "pin"}-popoutMenuItem`,

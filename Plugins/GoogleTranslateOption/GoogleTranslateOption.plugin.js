@@ -230,7 +230,7 @@ class GoogleTranslateOption {
 			let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
 			if (!messagediv || pos == -1) return;
 			let translated = BDFDB.containsClass(messagediv, "GTO-translated-message");
-			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, "MessagePinItem");
+			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, "MessagePinItem");
 			const translateUntranslateItem = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: translated ? this.labels.context_messageuntranslateoption_text : this.labels.context_messagetranslateoption_text,
 				hint: BDFDB.isPluginEnabled("MessageUtilities") ? window.bdplugins.MessageUtilities.plugin.getActiveShortcutString("__Translate_Message") : null,
@@ -245,7 +245,7 @@ class GoogleTranslateOption {
 			let text = document.getSelection().toString();
 			if (text) {
 				let GSRstring = BDFDB.getReactValue(bdplugins, "GoogleSearchReplace.plugin.labels.context_googlesearchreplace_text");
-				let [children2, index2] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, GSRstring ? ["SearchWithGoogle", GSRstring] : "SearchWithGoogle");
+				let [children2, index2] = BDFDB.getContextMenuGroupAndIndex(returnvalue, GSRstring ? ["SearchWithGoogle", GSRstring] : "SearchWithGoogle");
 				var foundtranslation, foundinput, foundoutput;
 				const searchTranslationItem = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 					label: this.labels.context_googletranslateoption_text,
@@ -283,7 +283,7 @@ class GoogleTranslateOption {
 			let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
 			if (!messagediv || pos == -1) return;
 			let translated = BDFDB.containsClass(messagediv, "GTO-translated-message");
-			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, [BDFDB.LanguageStrings.PIN, BDFDB.LanguageStrings.UNPIN]);
+			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, [BDFDB.LanguageStrings.PIN, BDFDB.LanguageStrings.UNPIN]);
 			const translateUntranslateItem = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: this.labels[translated ? "popout_untranslateoption_text" : "popout_translateoption_text"],
 				className: `${BDFDB.disCN.optionpopoutitem} BDFDB-popoutMenuItem ${this.name}-popoutMenuItem ${this.name}-${translated ? "untranslate" : "translate"}-popoutMenuItem`,

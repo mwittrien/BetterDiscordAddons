@@ -172,7 +172,7 @@ class SpellCheck {
 				}
 			}
 			if (word && this.isWordNotInDictionary(word)) {
-				let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
+				let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
 				let items = [];
 				let similarWords = this.getSimilarWords(word.toLowerCase().trim());
 				for (let suggestion of similarWords.sort()) items.push(BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {

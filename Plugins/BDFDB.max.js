@@ -544,28 +544,28 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		itemlayer.style.setProperty('left', left + 'px');
 		
 		if (tooltip.position == "top" || tooltip.position == "bottom") {
-			if (irects.left < 0) {
+			if (left < 0) {
 				itemlayer.style.setProperty('left', '5px');
-				tooltippointer.style.setProperty('margin-left', `${irects.left - 10}px`);
+				pointer.style.setProperty('margin-left', `${left - 10}px`);
 			}
 			else {
-				var rightmargin = arects.width - (irects.left + irects.width);
+				var rightmargin = arects.width - (left + irects.width);
 				if (rightmargin < 0) {
 					itemlayer.style.setProperty('left', arects.width - irects.width - 5 + 'px');
-					tooltippointer.style.setProperty('margin-left', `${-1*rightmargin}px`);
+					pointer.style.setProperty('margin-left', `${-1*rightmargin}px`);
 				}
 			}
 		}
 		else if (tooltip.position == "left" || tooltip.position == "right") {
-			if (irects.top < 0) {
+			if (top < 0) {
 				itemlayer.style.setProperty('top', '5px');
-				tooltippointer.style.setProperty('margin-top', `${irects.top - 10}px`);
+				pointer.style.setProperty('margin-top', `${top - 10}px`);
 			}
 			else {
-				var bottommargin = arects.height - (irects.top + irects.height);
+				var bottommargin = arects.height - (top + irects.height);
 				if (bottommargin < 0) {
 					itemlayer.style.setProperty('top', arects.height - irects.height - 5 + 'px');
-					tooltippointer.style.setProperty('margin-top', `${-1*bottommargin}px`);
+					pointer.style.setProperty('margin-top', `${-1*bottommargin}px`);
 				}
 			}
 		}
@@ -3252,11 +3252,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		itemlayer.style.setProperty('top', (e.pageY + irects.height > arects.height ? (newpos.pageY < 0 ? 11 : newpos.pageY) : e.pageY) + 'px');
 		BDFDB.initElements(menu);
 	};
-
-	BDFDB.getContextMenuDevGroup = function (menu) {
-		let text = BDFDB.LanguageStrings.COPY_ID;
-		for (let item of menu.querySelectorAll(BDFDB.dotCN.contextmenuitem)) if (item.textContent == text) return BDFDB.getParentEle(BDFDB.dotCN.contextmenuitemgroup, item);
-	};
 	
 	BDFDB.getContextMenuGroupAndIndex = function (startchildren, names) {
 		names = Array.isArray(names) ? names : (typeof names == "string" ? [names] : Array.from(names));
@@ -3269,11 +3264,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				children = children.props.children;
 			}
 			if (children && !Array.isArray(children)) {
-				if (check(children) && parent && parent.props) {
+				if (parent && parent.props) {
 					var child = children;
 					parent.props.children = [];
 					parent.props.children.push(child);
-					return [parent.props.children, 0]
+					return [parent.props.children, check(child) ? 0 : -1];
 				}
 				else return [startchildren, -1];
 			}
@@ -3313,56 +3308,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		});
 	};
 
-	BDFDB.appendContextMenu = function (menu, e = Object.assign({currentTarget: document.querySelector(BDFDB.dotCN.app)}, BDFDB.mousePosition)) {
-		if (!Node.prototype.isPrototypeOf(menu)) return;
-		var itemlayer = menu.parentElement;
-		BDFDB.appendItemLayer(menu, e.currentTarget);
-		itemlayer = menu;
-		var arects = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount));
-		var irects = BDFDB.getRects(itemlayer);
-		BDFDB.toggleClass(itemlayer, 'invertX', e.pageX + irects.width > arects.width);
-		BDFDB.toggleClass(itemlayer, 'invertY', e.pageY + irects.height > arects.height);
-		BDFDB.updateContextPosition(menu, e);
-		var mousedown = e2 => {
-			if (!document.contains(itemlayer) || !itemlayer.contains(e2.target) || (Node.prototype.isPrototypeOf(itemlayer.BDFDBsubmenu) && !itemlayer.BDFDBsubmenu.contains(e2.target))) {
-				document.removeEventListener('mousedown', mousedown);
-				itemlayer.remove();
-			}
-			else {
-				var item = BDFDB.getParentEle(BDFDB.dotCN.contextmenuitem, e2.target);
-				if (item && !BDFDB.containsClass(item, BDFDB.disCN.contextmenuitemdisabled, BDFDB.disCN.contextmenuitemsubmenu, BDFDB.disCN.contextmenuitemtoggle, BDFDB.disCN.contextmenuitemslider, false)) document.removeEventListener('mousedown', mousedown);
-			}
-		};
-		document.addEventListener('mousedown', mousedown);
-		BDFDB.initElements(menu);
-	};
-
 	BDFDB.closeContextMenu = function (nodeOrInstance) {
 		if (!BDFDB.isObject(nodeOrInstance)) return;
 		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.getOwnerInstance({node:nodeOrInstance, name:"ContextMenu", up:true}) : BDFDB.getOwnerInstance({instance:nodeOrInstance, name:"ContextMenu", up:true});
 		if (BDFDB.isObject(instance) && instance.props && typeof instance.props.closeContextMenu == "function") instance.props.closeContextMenu();
-	};
-
-	BDFDB.setContextHint = function (item, text) {
-		if (!text || !Node.prototype.isPrototypeOf(item)) return;
-		var hint = item.querySelector(BDFDB.dotCN.contextmenuhint);
-		if (hint) {
-			item.style.setProperty('position', 'relative', 'important');
-			hint.innerHTML = `<div class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">${BDFDB.encodeToHTML(text)}</div></div>`;
-			if (!BDFDB.containsClass(hint.previousElementSibling, 'BDFDB-textscrollwrapper')) {
-				BDFDB.addClass(hint.previousElementSibling, 'BDFDB-textscrollwrapper');
-				hint.previousElementSibling.setAttribute('speed', 3);
-				hint.previousElementSibling.innerHTML = `<div class="BDFDB-textscroll">${BDFDB.encodeToHTML(hint.previousElementSibling.innerText)}</div>`;
-			}
-			var width = BDFDB.getRects(item).width - (parseFloat(getComputedStyle(item).paddingLeft) + parseFloat(getComputedStyle(item).paddingRight));
-			hint.previousElementSibling.style.setProperty('width', width - 36 + 'px', 'important');
-			hint.previousElementSibling.style.setProperty('max-width', width - 36 + 'px', 'important');
-			hint.style.setProperty('position', 'absolute', 'important');
-			hint.style.setProperty('top', getComputedStyle(item).paddingTop, 'important');
-			hint.style.setProperty('right', getComputedStyle(item).paddingRight, 'important');
-			hint.style.setProperty('width', '32px', 'important');
-			hint.style.setProperty('max-width', '32px', 'important');
-		}
 	};
 
 	BDFDB.createMessageOptionPopout = function (button) {
@@ -3932,7 +3881,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.OptionPopout = BDFDB.WebModules.findByProperties('container', 'button', 'item');
 	DiscordClassModules.PictureInPicture = BDFDB.WebModules.findByProperties('pictureInPicture', 'pictureInPictureWindow');
 	DiscordClassModules.PillWrapper = BDFDB.WebModules.find(module => typeof module['item'] == 'string' && typeof module['wrapper'] == 'string' && Object.keys(module).length == 2);
-	DiscordClassModules.PrivateChannel = BDFDB.WebModules.findByProperties('channel');
+	DiscordClassModules.PrivateChannel = BDFDB.WebModules.findByProperties('channel', 'closeButton');
+	DiscordClassModules.PrivateChannelActivity = BDFDB.WebModules.findByProperties('activity', 'text');
 	DiscordClassModules.PrivateChannelList = BDFDB.WebModules.findByProperties('privateChannels', 'searchBar');
 	DiscordClassModules.Popout = BDFDB.WebModules.findByProperties('popout', 'arrowAlignmentTop');
 	DiscordClassModules.PopoutActivity = BDFDB.WebModules.findByProperties('ellipsis', 'activityActivityFeed');
@@ -4257,11 +4207,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		directiontransition: ['IconDirection', 'transition'],
 		disabled: ['SettingsItems', 'disabled'],
 		dmchannel: ['PrivateChannel', 'channel'],
-		dmchannelactivity: ['PrivateChannel', 'activity'],
-		dmchannelactivityicon: ['PrivateChannel', 'activityIcon'],
-		dmchannelactivityiconforeground: ['PrivateChannel', 'activityIconForeground'],
-		dmchannelactivitytext: ['PrivateChannel', 'activityText'],
-		dmchannelclose: ['PrivateChannel', DiscordClassModules.PrivateChannel.close ? 'close' : 'closeButton'],
+		dmchannelactivity: ['PrivateChannelActivity', 'activity'],
+		dmchannelactivityicon: ['PrivateChannelActivity', 'icon'],
+		dmchannelactivitytext: ['PrivateChannelActivity', 'text'],
+		dmchannelclose: ['PrivateChannel', 'closeButton'],
 		dmchannelnamewithactivity: ['PrivateChannel', 'nameWithActivity'],
 		dmchannels: ['PrivateChannelList', 'privateChannels'],
 		dmpill: ['GuildDm', 'pill'],
