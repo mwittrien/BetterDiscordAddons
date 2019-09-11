@@ -4644,6 +4644,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		modedefault: ['FormText', 'modeDefault'],
 		modedisabled: ['FormText', 'modeDisabled'],
 		modeselectable: ['FormText', 'modeSelectable'],
+		namecontainerlayout: ['NameContainer', 'layout'],
 		namecontainername: ['NameContainer', 'name'],
 		namecontainernameclickable: ['NameContainer', 'clickable'],
 		namecontainernamecontainer: ['NotFound', 'nameContainerNameContainer'],
