@@ -3,7 +3,7 @@
 class SendLargeMessages {
 	getName () {return "SendLargeMessages";}
 
-	getVersion () {return "1.5.3";}
+	getVersion () {return "1.5.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class SendLargeMessages {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Sending","Fixed the issue where Messages are not being sent"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.labels = {};
@@ -49,7 +49,7 @@ class SendLargeMessages {
 						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizelarge}">
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
 								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
-									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">REPLACE_modal_header_text</h4>
+									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">REPLACE_modal_header_text</h4>
 									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
 								</div>
 								<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
@@ -72,7 +72,7 @@ class SendLargeMessages {
 							</div>
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
 								<button type="button" class="btn-send ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
-									<div class="${BDFDB.disCN.buttoncontents}">REPLACE_btn_send_text</div>
+									<div class="${BDFDB.disCN.buttoncontents}"></div>
 								</button>
 							</div>
 						</div>
@@ -99,7 +99,7 @@ class SendLargeMessages {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -121,8 +121,6 @@ class SendLargeMessages {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 
-			this.clipboard = require("electron").clipboard;
-
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -142,11 +140,9 @@ class SendLargeMessages {
 
 	changeLanguageStrings () {
 		this.sendMessageModalMarkup = 		this.sendMessageModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
-		this.sendMessageModalMarkup = 		this.sendMessageModalMarkup.replace("REPLACE_btn_cancel_text", this.labels.btn_cancel_text);
-		this.sendMessageModalMarkup = 		this.sendMessageModalMarkup.replace("REPLACE_btn_send_text", this.labels.btn_send_text);
 	}
 
-	processChannelTextArea (instance, wrapper) {
+	processChannelTextArea (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.type && instance.props.type == "normal") {
 			var textarea = wrapper.querySelector("textarea");
 			if (!textarea) return;
@@ -166,7 +162,7 @@ class SendLargeMessages {
 				},100);
 			});
 			BDFDB.addEventListener(this, textarea, "paste", e => {
-				modaltext = textarea.value.slice(0, textarea.selectionStart) + this.clipboard.readText() + textarea.value.slice(textarea.selectionEnd);
+				modaltext = textarea.value.slice(0, textarea.selectionStart) + BDFDB.LibraryRequires.electron.clipboard.readText() + textarea.value.slice(textarea.selectionEnd);
 				setImmediate(() => {checkTextarea(textarea);});
 			});
 		}
@@ -280,189 +276,147 @@ class SendLargeMessages {
 					toast_allsent_text:					"Sve veliku poslane.",
 					modal_messages_translation:			"Vijesti",
 					modal_messages_warning:				"Nemojte slati previše veliku!",
-					modal_header_text:				 	"Pošalji veliku poruku:",
-					btn_cancel_text:					"Prekid",
-					btn_send_text:						"Poslati"
+					modal_header_text:				 	"Pošalji veliku poruku:"
 				};
 			case "da":		//danish
 				return {
 					toast_allsent_text:					"Alle beskeder sendes.",
 					modal_messages_translation:			"Beskeder",
 					modal_messages_warning:				"Send ikke for mange beskeder!",
-					modal_header_text:				 	"Send stor besked:",
-					btn_cancel_text:					"Afbryde",
-					btn_send_text:						"Sende"
+					modal_header_text:				 	"Send stor besked:"
 				};
 			case "de":		//german
 				return {
 					toast_allsent_text:					"Alle Nachrichten versendet.",
 					modal_messages_translation:			"Nachrichten",
 					modal_messages_warning:				"Schicke nicht zu viele Nachrichten!",
-					modal_header_text:				 	"Große Nachricht senden:",
-					btn_cancel_text:					"Abbrechen",
-					btn_send_text:						"Senden"
+					modal_header_text:				 	"Große Nachricht senden:"
 				};
 			case "es":		//spanish
 				return {
 					toast_allsent_text:					"Todos los mensajes enviados.",
 					modal_messages_translation:			"Mensajes",
 					modal_messages_warning:				"¡No envíe demasiados mensajes!",
-					modal_header_text:				 	"Enviar mensaje grande:",
-					btn_cancel_text:					"Cancelar",
-					btn_send_text:						"Enviar"
+					modal_header_text:				 	"Enviar mensaje grande:"
 				};
 			case "fr":		//french
 				return {
 					toast_allsent_text:					"Tous les messages envoyés",
 					modal_messages_translation:			"Messages",
 					modal_messages_warning:				"N'envoyez pas trop de messages!",
-					modal_header_text:				 	"Envoyer un gros message:",
-					btn_cancel_text:					"Abandonner",
-					btn_send_text:						"Envoyer"
+					modal_header_text:				 	"Envoyer un gros message:"
 				};
 			case "it":		//italian
 				return {
 					toast_allsent_text:					"Tutti i messaggi inviati.",
 					modal_messages_translation:			"Messaggi",
 					modal_messages_warning:				"Non inviare troppi messaggi!",
-					modal_header_text:				 	"Invia grande messaggio:",
-					btn_cancel_text:					"Cancellare",
-					btn_send_text:						"Inviare"
+					modal_header_text:				 	"Invia grande messaggio:"
 				};
 			case "nl":		//dutch
 				return {
 					toast_allsent_text:					"Alle berichten verzonden.",
 					modal_messages_translation:			"Berichten",
 					modal_messages_warning:				"Stuur niet te veel berichten!",
-					modal_header_text:				 	"Stuur een groot bericht:",
-					btn_cancel_text:					"Afbreken",
-					btn_send_text:						"Sturen"
+					modal_header_text:				 	"Stuur een groot bericht:"
 				};
 			case "no":		//norwegian
 				return {
 					toast_allsent_text:					"Alle meldinger sendt.",
 					modal_messages_translation:			"Meldinger",
 					modal_messages_warning:				"Ikke send for mange meldinger!",
-					modal_header_text:				 	"Send stor melding:",
-					btn_cancel_text:					"Avbryte",
-					btn_send_text:						"Sende"
+					modal_header_text:				 	"Send stor melding:"
 				};
 			case "pl":		//polish
 				return {
 					toast_allsent_text:					"Wszystkie wiadomości zostały wysłane.",
 					modal_messages_translation:			"Wiadomości",
 					modal_messages_warning:				"Nie wysyłaj zbyt wielu wiadomości!",
-					modal_header_text:					"Wyślij dużą wiadomość:",
-					btn_cancel_text:					"Anuluj",
-					btn_send_text:						"Wyślij"
+					modal_header_text:					"Wyślij dużą wiadomość:"
 				};
 			case "pt-BR":	//portuguese (brazil)
 				return {
 					toast_allsent_text:					"Todas as mensagens enviadas.",
 					modal_messages_translation:			"Mensagens",
 					modal_messages_warning:				"Não envie muitas mensagens!",
-					modal_header_text:				 	"Enviar mensagem grande:",
-					btn_cancel_text:					"Cancelar",
-					btn_send_text:						"Enviar"
+					modal_header_text:				 	"Enviar mensagem grande:"
 				};
 			case "fi":		//finnish
 				return {
 					toast_allsent_text:					"Kaikki lähetetyt viestit.",
 					modal_messages_translation:			"Viestien",
 					modal_messages_warning:				"Älä lähetä liian monta viestiä!",
-					modal_header_text:				 	"Lähetä suuri viesti:",
-					btn_cancel_text:					"Peruuttaa",
-					btn_send_text:						"Lähettää"
+					modal_header_text:				 	"Lähetä suuri viesti:"
 				};
 			case "sv":		//swedish
 				return {
 					toast_allsent_text:					"Alla meddelanden skickade.",
 					modal_messages_translation:			"Meddelanden",
 					modal_messages_warning:				"Skicka inte för många meddelanden!",
-					modal_header_text:				 	"Skicka stort meddelande:",
-					btn_cancel_text:					"Avbryta",
-					btn_send_text:						"Skicka"
+					modal_header_text:				 	"Skicka stort meddelande:"
 				};
 			case "tr":		//turkish
 				return {
 					toast_allsent_text:					"Tüm mesajlar gönderildi.",
 					modal_messages_translation:			"Mesajları",
 					modal_messages_warning:				"Çok fazla mesaj göndermeyin!",
-					modal_header_text:				 	"Büyük mesaj gönder:",
-					btn_cancel_text:					"Iptal",
-					btn_send_text:						"Göndermek"
+					modal_header_text:				 	"Büyük mesaj gönder:"
 				};
 			case "cs":		//czech
 				return {
 					toast_allsent_text:					"Všechny zprávy byly odeslány.",
 					modal_messages_translation:			"Zpráv",
 					modal_messages_warning:				"Neposílejte příliš mnoho zpráv!",
-					modal_header_text:				 	"Odeslat velkou zprávu:",
-					btn_cancel_text:					"Zrušení",
-					btn_send_text:						"Poslat"
+					modal_header_text:				 	"Odeslat velkou zprávu:"
 				};
 			case "bg":		//bulgarian
 				return {
 					toast_allsent_text:					"Всички изпратени съобщения.",
 					modal_messages_translation:			"Съобщения",
 					modal_messages_warning:				"Не изпращайте твърде много съобщения!",
-					modal_header_text:				 	"Изпратете голямо съобщение:",
-					btn_cancel_text:					"Зъбести",
-					btn_send_text:						"изпращам"
+					modal_header_text:				 	"Изпратете голямо съобщение:"
 				};
 			case "ru":		//russian
 				return {
 					toast_allsent_text:					"Все отправленные сообщения.",
 					modal_messages_translation:			"Сообщения",
 					modal_messages_warning:				"Не отправляйте слишком много сообщений!",
-					modal_header_text:				 	"Отправить сообщение:",
-					btn_cancel_text:					"Отмена",
-					btn_send_text:						"Послать"
+					modal_header_text:				 	"Отправить сообщение:"
 				};
 			case "uk":		//ukrainian
 				return {
 					toast_allsent_text:					"Всі повідомлення надіслано.",
 					modal_messages_translation:			"Повідомлення",
 					modal_messages_warning:				"Не надсилайте надто багато повідомлень!",
-					modal_header_text:				 	"Надіслати велике повідомлення:",
-					btn_cancel_text:					"Скасувати",
-					btn_send_text:						"Відправити"
+					modal_header_text:				 	"Надіслати велике повідомлення:"
 				};
 			case "ja":		//japanese
 				return {
 					toast_allsent_text:					"すべてのメッセージが送信されました。",
 					modal_messages_translation:			"メッセージ",
 					modal_messages_warning:				"あまりにも多くのメッセージを送信しないでください！",
-					modal_header_text:				 	"大きなメッセージを送信する：",
-					btn_cancel_text:					"キャンセル",
-					btn_send_text:						"送信"
+					modal_header_text:				 	"大きなメッセージを送信する："
 				};
 			case "zh-TW":	//chinese (traditional)
 				return {
 					toast_allsent_text:					"發送的所有消息。",
 					modal_messages_translation:			"消息",
 					modal_messages_warning:				"不要發送太多信息！",
-					modal_header_text:				 	"發送大信息：",
-					btn_cancel_text:					"取消",
-					btn_send_text:						"發送"
+					modal_header_text:				 	"發送大信息："
 				};
 			case "ko":		//korean
 				return {
 					toast_allsent_text:					"모든 메시지가 전송되었습니다.",
 					modal_messages_translation:			"메시지",
 					modal_messages_warning:				"너무 많은 메시지를 보내지 마십시오!",
-					modal_header_text:				 	"큰 메시지 보내기:",
-					btn_cancel_text:					"취소",
-					btn_send_text:						"보내다"
+					modal_header_text:				 	"큰 메시지 보내기:"
 				};
 			default:		//default: english
 				return {
 					toast_allsent_text:					"All messages sent.",
 					modal_messages_translation:			"Messages",
 					modal_messages_warning:				"Do not send too many messages!",
-					modal_header_text:		 			"Send large message:",
-					btn_cancel_text:					"Cancel",
-					btn_send_text:						"Send"
+					modal_header_text:		 			"Send large message:"
 				};
 		}
 	}

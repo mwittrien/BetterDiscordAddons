@@ -3,7 +3,7 @@
 class MessageUtilities {
 	getName () {return "MessageUtilities";}
 
-	getVersion () {return "1.5.1";}
+	getVersion () {return "1.5.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class MessageUtilities {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["New Select Classes","The Dropdown-Select element got new classes on canary, this update will prevent stable from breaking once the class change is pushed to stable"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 	}
 
@@ -110,7 +110,7 @@ class MessageUtilities {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -132,14 +132,10 @@ class MessageUtilities {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 
-			this.ChannelUtils = BDFDB.WebModules.findByProperties("getChannels","getChannel");
-			this.MessageActions = BDFDB.WebModules.findByProperties("startEditMessage", "endEditMessage");
-			this.PinActions = BDFDB.WebModules.findByProperties("pinMessage", "unpinMessage");
-
-			BDFDB.addEventListener(this, document, "click", BDFDB.dotCNC.message + BDFDB.dotCN.messagesystem, e => {
+			BDFDB.addEventListener(this, document, "click", BDFDB.dotCN.messagegroup + "> [aria-disabled]," + BDFDB.dotCN.messagesystem, e => {
 				this.onClick(e, 0, "onSglClick");
 			})
-			BDFDB.addEventListener(this, document, "dblclick", BDFDB.dotCNC.message + BDFDB.dotCN.messagesystem, e => {
+			BDFDB.addEventListener(this, document, "dblclick", BDFDB.dotCN.messagegroup + "> [aria-disabled]," + BDFDB.dotCN.messagesystem, e => {
 				this.onClick(e, 1, "onDblClick");
 			});
 			BDFDB.addEventListener(this, document, "keydown", BDFDB.dotCN.textareawrapchat, e => {
@@ -190,7 +186,7 @@ class MessageUtilities {
 	}
 
 	createSelectChoice (key) {
-		return `<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer}" style="padding: 0;">${this.clickMap[key]}</div>`;
+		return `<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer}" style="padding: 0;">${this.clickMap[key]}</div>`;
 	}
 
 	startRecording (settingspanel, e) {
@@ -272,16 +268,16 @@ class MessageUtilities {
 		let deletelink = messagediv.parentElement.querySelector(BDFDB.dotCNS.messagelocalbotmessage + BDFDB.dotCN.anchor);
 		if (deletelink) deletelink.click();
 		else {
-			let channel = this.ChannelUtils.getChannel(message.channel_id);
+			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 			if ((channel && BDFDB.isUserAllowedTo("MANAGE_MESSAGES")) || message.author.id == BDFDB.myData.id && message.type != 1 && message.type != 2 && message.type != 3) {
-				this.MessageActions.deleteMessage(message.channel_id, message.id, message.state != "SENT");
+				BDFDB.LibraryModules.MessageUtils.deleteMessage(message.channel_id, message.id, message.state != "SENT");
 			}
 		}
 	}
 
 	doEdit ({messagediv, pos, message}) {
 		if (message.author.id == BDFDB.myData.id && !messagediv.querySelector("textarea")) {
-			this.MessageActions.startEditMessage(message.channel_id, message.id, message.content);
+			BDFDB.LibraryModules.MessageUtils.startEditMessage(message.channel_id, message.id, message.content);
 		}
 	}
 
@@ -292,24 +288,24 @@ class MessageUtilities {
 
 	doPinUnPin ({messagediv, pos, message}) {
 		if (message.state == "SENT") {
-			let channel = this.ChannelUtils.getChannel(message.channel_id);
+			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 			if (channel && (channel.type == 1 || channel.type == 3 || BDFDB.isUserAllowedTo("MANAGE_MESSAGES")) && message.type == 0) {
-				if (message.pinned) this.PinActions.unpinMessage(channel, message.id);
-				else this.PinActions.pinMessage(channel, message.id);
+				if (message.pinned) BDFDB.LibraryModules.MessagePinUtils.unpinMessage(channel, message.id);
+				else BDFDB.LibraryModules.MessagePinUtils.pinMessage(channel, message.id);
 			}
 		}
 	}
 
 	doNote ({messagediv, pos, message}) {
 		if (BDFDB.isPluginEnabled(this.defaults.bindings.__Note_Message.plugin)) {
-			let channel = this.ChannelUtils.getChannel(message.channel_id);
+			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 			if (channel) window.bdplugins[this.defaults.bindings.__Note_Message.plugin].plugin.addMessageToNotes(message, messagediv, channel);
 		}
 	}
 
 	doTranslate ({messagediv, pos, message}) {
 		if (BDFDB.isPluginEnabled(this.defaults.bindings.__Translate_Message.plugin)) {
-			let channel = this.ChannelUtils.getChannel(message.channel_id);
+			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 			if (channel) window.bdplugins[this.defaults.bindings.__Translate_Message.plugin].plugin.translateMessage(message, messagediv, channel);
 		}
 	}
@@ -358,8 +354,8 @@ class MessageUtilities {
 	}
 
 	getMessageData (target) {
-		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.message, target) || BDFDB.getParentEle(BDFDB.dotCN.messagesystem, target);
-		let pos = messagediv ? Array.from(messagediv.parentElement.querySelectorAll(BDFDB.dotCNC.message + BDFDB.dotCN.messagesystem)).indexOf(messagediv) : -1;
+		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.messagegroup + "> [aria-disabled]", target) || BDFDB.getParentEle(BDFDB.dotCN.messagesystem, target);
+		let pos = messagediv ? Array.from(messagediv.parentElement.childNodes).filter(n => n.nodeType != Node.TEXT_NODE).indexOf(messagediv) : -1;
 		let instance = BDFDB.getReactInstance(messagediv);
 		let message = instance ? BDFDB.getKeyInformation({instance, key:"message", up:true}) : null;
 		return {messagediv, pos, message};

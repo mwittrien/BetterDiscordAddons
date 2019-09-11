@@ -3,7 +3,7 @@
 class ServerHider {
 	getName () {return "ServerHider";}
 
-	getVersion () {return "6.0.8";}
+	getVersion () {return "6.0.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ServerHider {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Server Object","Changes in the Server Object broke the plugin"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.labels = {};
@@ -30,7 +30,7 @@ class ServerHider {
 						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
 								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
-									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">REPLACE_modal_header_text</h4>
+									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">REPLACE_modal_header_text</h4>
 									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
 								</div>
 								<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
@@ -49,10 +49,10 @@ class ServerHider {
 							</div>
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
 								<button type="button" class="btn-ok ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
-									<div class="${BDFDB.disCN.buttoncontents}">REPLACE_btn_ok_text</div>
+									<div class="${BDFDB.disCN.buttoncontents}"></div>
 								</button>
 								<button type="button" class="btn-all ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlooklink + BDFDB.disCNS.buttoncolortransparent + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
-									<div class="${BDFDB.disCN.buttoncontents}">REPLACE_btn_all_text</div>
+									<div class="${BDFDB.disCN.buttoncontents}"></div>
 								</button>
 							</div>
 						</div>
@@ -65,28 +65,6 @@ class ServerHider {
 				<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCNS.flexchild + BDFDB.disCNS.overflowellipsis} serverhiderName" style="flex: 1 1 auto;"></h3>
 				<div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;">
 					<input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} serverhiderCheckbox">
-				</div>
-			</div>`;
-
-		this.serverContextEntryMarkup =
-			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
-				<div class="${BDFDB.disCN.contextmenuitem} serverhider-item ${BDFDB.disCN.contextmenuitemsubmenu}">
-					<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_context_serverhider_text</div></span>
-					<div class="${BDFDB.disCN.contextmenuhint}"></div>
-				</div>
-			</div>`;
-
-		this.serverContextSubMenuMarkup = 
-			`<div class="${BDFDB.disCN.contextmenu} serverhider-submenu">
-				<div class="${BDFDB.disCN.contextmenuitemgroup}">
-					<div class="${BDFDB.disCN.contextmenuitem} hideserver-item ${BDFDB.disCN.contextmenuitemdisabled}">
-						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_submenu_hideserver_text</div></span>
-						<div class="${BDFDB.disCN.contextmenuhint}"></div>
-					</div>
-					<div class="${BDFDB.disCN.contextmenuitem} openhidemenu-item">
-						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_submenu_openhidemenu_text</div></span>
-						<div class="${BDFDB.disCN.contextmenuhint}"></div>
-					</div>
 				</div>
 			</div>`;
 
@@ -138,7 +116,7 @@ class ServerHider {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -183,47 +161,52 @@ class ServerHider {
 	// begin of own functions
 
 	changeLanguageStrings () {
-		this.serverContextEntryMarkup = 	this.serverContextEntryMarkup.replace("REPLACE_context_serverhider_text", this.labels.context_serverhider_text);
-
-		this.serverContextSubMenuMarkup = 	this.serverContextSubMenuMarkup.replace("REPLACE_submenu_hideserver_text", this.labels.submenu_hideserver_text);
-		this.serverContextSubMenuMarkup = 	this.serverContextSubMenuMarkup.replace("REPLACE_submenu_openhidemenu_text", this.labels.submenu_openhidemenu_text);
-
 		this.serverHiderModalMarkup = 		this.serverHiderModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
-		this.serverHiderModalMarkup = 		this.serverHiderModalMarkup.replace("REPLACE_btn_ok_text", this.labels.btn_ok_text);
-		this.serverHiderModalMarkup = 		this.serverHiderModalMarkup.replace("REPLACE_btn_all_text", this.labels.btn_all_text);
 
 		this.serverEntryMarkup = 			this.serverEntryMarkup.replace("REPLACE_btn_visible_text", this.labels.btn_visible_text);
 	}
 
-	onGuildContextMenu (instance, menu) {
+	onGuildContextMenu (instance, menu, returnvalue) {
 		if (document.querySelector(".BDFDB-modal")) return;
-		if (instance.props && instance.props.target && instance.props.type.indexOf("GUILD_ICON_") == 0 && !menu.querySelector(".serverhider-item")) {
-			let serverContextEntry = BDFDB.htmlToElement(this.serverContextEntryMarkup);
-			let devgroup = BDFDB.getContextMenuDevGroup(menu);
-			if (devgroup) devgroup.parentElement.insertBefore(serverContextEntry, devgroup);
-			else menu.appendChild(serverContextEntry, menu);
-			let hideritem = serverContextEntry.querySelector(".serverhider-item");
-			hideritem.addEventListener("mouseenter", () => {
-				let serverContextSubMenu = BDFDB.htmlToElement(this.serverContextSubMenuMarkup);
-				let openitem = serverContextSubMenu.querySelector(".openhidemenu-item");
-				openitem.addEventListener("click", () => {
-					BDFDB.closeContextMenu(menu);
-					this.showServerModal();
-				});
-				if (instance.props.guild && !instance.props.target.getAttribute("folder")) {
-					let hideitem = serverContextSubMenu.querySelector(".hideserver-item");
-					BDFDB.removeClass(hideitem, BDFDB.disCN.contextmenuitemdisabled);
-					hideitem.addEventListener("click", () => {
-						BDFDB.closeContextMenu(menu);
-						this.toggleServer(instance.props.guild, instance.props.target, false);
-					});
-				}
-				BDFDB.appendSubMenu(hideritem, serverContextSubMenu);
+		if (instance.props && instance.props.target && instance.props.type.indexOf("GUILD_ICON_") == 0 && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
+			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
+			const itemgroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
+				children: [
+					BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+						label: this.labels.context_serverhider_text,
+						className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem`,
+						render: [BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+							className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
+							children: [
+								BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+									label: this.labels.submenu_openhidemenu_text,
+									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-hidemenu-ContextMenuItem`,
+									action: e => {
+										BDFDB.closeContextMenu(menu);
+										this.showServerModal();
+									}
+								}),
+								BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+									label: this.labels.submenu_hideserver_text,
+									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-hideserver-ContextMenuItem`,
+									disabled: !(instance.props.guild && !instance.props.target.getAttribute("folder")),
+									action: e => {
+										BDFDB.closeContextMenu(menu);
+										this.toggleServer(instance.props.guild, instance.props.target, false);
+									}
+								})
+							]
+						})]
+					})
+				]
 			});
+			if (index > -1) children.splice(index, 0, itemgroup);
+			else children.push(itemgroup);
 		}
 	}
 
-	processGuild (instance, wrapper, methodnames) {
+	processGuild (instance, wrapper, returnvalue, methodnames) {
 		if (instance.props && instance.props.guild) {
 			let hiddenservers = BDFDB.loadData("hiddenservers", this, "hiddenservers") || [];
 			if (methodnames.includes("componentDidMount")) this.toggleServer(instance.props.guild, wrapper, !hiddenservers.includes(instance.props.guild.id));
@@ -292,8 +275,6 @@ class ServerHider {
 			case "hr":		//croatian
 				return {
 					modal_header_text:				"Upravljanje popisom poslužitelja",
-					btn_ok_text:					"OK",
-					btn_all_text:					"Sve",
 					context_serverhider_text:		"Vidljivost poslužitelj",
 					submenu_hideserver_text:		"Sakrij poslužitelj",
 					submenu_openhidemenu_text:		"Upravljanje popisom poslužitelja"
@@ -301,8 +282,6 @@ class ServerHider {
 			case "da":		//danish
 				return {
 					modal_header_text:				"Styring af Serverliste",
-					btn_ok_text:					"OK",
-					btn_all_text:					"Alle",
 					context_serverhider_text:		"Server synlighed",
 					submenu_hideserver_text:		"Skjul Server",
 					submenu_openhidemenu_text:		"Styre Serverliste"
@@ -310,8 +289,6 @@ class ServerHider {
 			case "de":		//german
 				return {
 					modal_header_text:				"Verwaltung der Serverliste",
-					btn_ok_text:					"OK",
-					btn_all_text:					"Alle",
 					context_serverhider_text:		"Serversichtbarkeit",
 					submenu_hideserver_text:		"Server verstecken",
 					submenu_openhidemenu_text:		"Serverliste verwalten"
@@ -319,8 +296,6 @@ class ServerHider {
 			case "es":		//spanish
 				return {
 					modal_header_text:				"Administración de lista de servidores",
-					btn_ok_text:					"OK",
-					btn_all_text:					"Todo",
 					context_serverhider_text:		"Visibilidad del servidor",
 					submenu_hideserver_text:		"Ocultar servidor",
 					submenu_openhidemenu_text:		"Administrar lista de servidores"
@@ -328,8 +303,6 @@ class ServerHider {
 			case "fr":		//french
 				return {
 					modal_header_text:				"Gestion de la liste des serveurs",
-					btn_ok_text:					"OK",
-					btn_all_text:					"Tout",
 					context_serverhider_text:		"Visibilité du serveur",
 					submenu_hideserver_text:		"Cacher le serveur",
 					submenu_openhidemenu_text:		"Gérer la liste des serveurs"
@@ -337,8 +310,6 @@ class ServerHider {
 			case "it":		//italian
 				return {
 					modal_header_text:				"Gestione dell'elenco dei server",
-					btn_ok_text:					"OK",
-					btn_all_text:					"Tutto",
 					context_serverhider_text:		"Visibilità del server",
 					submenu_hideserver_text:		"Nascondi il server",
 					submenu_openhidemenu_text:		"Gestione elenco dei server"
@@ -346,8 +317,6 @@ class ServerHider {
 			case "nl":		//dutch
 				return {
 					modal_header_text:				"Beheer van de Serverlijst",
-					btn_ok_text:					"OK",
-					btn_all_text:					"Alle",
 					context_serverhider_text:		"Server zichtbaarheid",
 					submenu_hideserver_text:		"Verberg server",
 					submenu_openhidemenu_text:		"Beheer serverlijst"
@@ -355,8 +324,6 @@ class ServerHider {
 			case "no":		//norwegian
 				return {
 					modal_header_text:				"Administrasjon av serverlisten",
-					btn_ok_text:					"OK",
-					btn_all_text:					"Alle",
 					context_serverhider_text:		"Server synlighet",
 					submenu_hideserver_text:		"Skjul server",
 					submenu_openhidemenu_text:		"Administrer serverliste"
@@ -364,8 +331,6 @@ class ServerHider {
 			case "pl":		//polish
 				return {
 					modal_header_text:				"Zarządzanie listą serwerów",
-					btn_ok_text:					"OK",
-					btn_all_text:					"Wszystkie",
 					context_serverhider_text:		"Widoczność serwera",
 					submenu_hideserver_text:		"Ukryj serwer",
 					submenu_openhidemenu_text:		"Zarządzaj listą serwerów"
@@ -373,8 +338,6 @@ class ServerHider {
 			case "pt-BR":	//portuguese (brazil)
 				return {
 					modal_header_text:				"Gerenciamento da lista de servidores",
-					btn_ok_text:					"OK",
-					btn_all_text:					"Todo",
 					context_serverhider_text:		"Visibilidade do servidor",
 					submenu_hideserver_text:		"Ocultar servidor",
 					submenu_openhidemenu_text:		"Gerenciar lista de servidores"
@@ -382,8 +345,6 @@ class ServerHider {
 			case "fi":		//finnish
 				return {
 					modal_header_text:				"Palvelinluettelon hallinta",
-					btn_ok_text:					"OK",
-					btn_all_text:					"Kaikki",
 					context_serverhider_text:		"Palvelimen näkyvyys",
 					submenu_hideserver_text:		"Piilota palvelin",
 					submenu_openhidemenu_text:		"Hallinnoi palvelinluetteloa"
@@ -391,8 +352,6 @@ class ServerHider {
 			case "sv":		//swedish
 				return {
 					modal_header_text:				"Hantering av serverlistan",
-					btn_ok_text:					"OK",
-					btn_all_text:					"All",
 					context_serverhider_text:		"Server sikt",
 					submenu_hideserver_text:		"Dölj server",
 					submenu_openhidemenu_text:		"Hantera serverlistan"
@@ -400,8 +359,6 @@ class ServerHider {
 			case "tr":		//turkish
 				return {
 					modal_header_text:				"Sunucu Listesinin Yönetimi",
-					btn_ok_text:					"Okey",
-					btn_all_text:					"Her",
 					context_serverhider_text:		"Sunucu görünürlüğü",
 					submenu_hideserver_text:		"Sunucuyu Gizle",
 					submenu_openhidemenu_text:		"Sunucu Listesini Yönet"
@@ -409,8 +366,6 @@ class ServerHider {
 			case "cs":		//czech
 				return {
 					modal_header_text:				"Správa seznamu serverů",
-					btn_ok_text:					"OK",
-					btn_all_text:					"Vše",
 					context_serverhider_text:		"Viditelnost serveru",
 					submenu_hideserver_text:		"Skrýt server",
 					submenu_openhidemenu_text:		"Správa seznamu serverů"
@@ -418,8 +373,6 @@ class ServerHider {
 			case "bg":		//bulgarian
 				return {
 					modal_header_text:				"Управление на списъка със сървъри",
-					btn_ok_text:					"Добре",
-					btn_all_text:					"Bсичко",
 					context_serverhider_text:		"Видимост на сървъра",
 					submenu_hideserver_text:		"Скриване на сървър",
 					submenu_openhidemenu_text:		"Управление на списъка със сървъри"
@@ -427,8 +380,6 @@ class ServerHider {
 			case "ru":		//russian
 				return {
 					modal_header_text:				"Управление списком серверов",
-					btn_ok_text:					"ОК",
-					btn_all_text:					"Все",
 					context_serverhider_text:		"Видимость сервера",
 					submenu_hideserver_text:		"Скрыть сервер",
 					submenu_openhidemenu_text:		"Управление списком серверов"
@@ -436,8 +387,6 @@ class ServerHider {
 			case "uk":		//ukrainian
 				return {
 					modal_header_text:				"Управління списком серверів",
-					btn_ok_text:					"Добре",
-					btn_all_text:					"Все",
 					context_serverhider_text:		"Видимість сервера",
 					submenu_hideserver_text:		"Сховати сервер",
 					submenu_openhidemenu_text:		"Управління списком серверів"
@@ -445,8 +394,6 @@ class ServerHider {
 			case "ja":		//japanese
 				return {
 					modal_header_text:				"サーバリストの管理",
-					btn_ok_text:					"はい",
-					btn_all_text:					"すべて",
 					context_serverhider_text:		"サーバーの可視性",
 					submenu_hideserver_text:		"サーバーを隠す",
 					submenu_openhidemenu_text:		"サーバーリストを管理する"
@@ -454,8 +401,6 @@ class ServerHider {
 			case "zh-TW":	//chinese (traditional)
 				return {
 					modal_header_text:				"管理服务器列表",
-					btn_ok_text:					"好",
-					btn_all_text:					"所有",
 					context_serverhider_text:		"服務器可見性",
 					submenu_hideserver_text:		"隐藏服务器",
 					submenu_openhidemenu_text:		"管理服务器列表"
@@ -463,8 +408,6 @@ class ServerHider {
 			case "ko":		//korean
 				return {
 					modal_header_text:				"서버 목록 관리",
-					btn_ok_text:					"승인",
-					btn_all_text:					"모든",
 					context_serverhider_text:		"서버 가시성",
 					submenu_hideserver_text:		"서버 숨기기",
 					submenu_openhidemenu_text:		"서버 목록 관리"
@@ -472,8 +415,6 @@ class ServerHider {
 			default:		//default: english
 				return {
 					modal_header_text:				"Managing Serverlist",
-					btn_ok_text:					"OK",
-					btn_all_text:					"All",
 					context_serverhider_text:		"Server Visibility",
 					submenu_hideserver_text:		"Hide Server",
 					submenu_openhidemenu_text:		"Manage Serverlist"

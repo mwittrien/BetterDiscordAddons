@@ -3,7 +3,7 @@
 class OwnerTag {
 	getName () {return "OwnerTag";}
 
-	getVersion () {return "1.1.6";}
+	getVersion () {return "1.1.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class OwnerTag {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["DM Groups","Now works properly in DM Groups"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.patchModules = {
@@ -88,7 +88,7 @@ class OwnerTag {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -109,11 +109,6 @@ class OwnerTag {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-
-			this.MemberUtils = BDFDB.WebModules.findByProperties("getMembers", "getMember");
-			this.GuildUtils = BDFDB.WebModules.findByProperties("getGuilds","getGuild");
-			this.ChannelUtils = BDFDB.WebModules.findByProperties("getChannels","getChannel");
-			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
 
 			BDFDB.WebModules.forceAllUpdates(this);
 
@@ -146,19 +141,19 @@ class OwnerTag {
 		this.SettingsUpdated = true;
 	}
 
-	processMemberListItem (instance, wrapper) {
-		if (instance.props && BDFDB.getData("addInMemberList", this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.nametag), "list", BDFDB.disCN.bottagnametag, null);
+	processMemberListItem (instance, wrapper, returnvalue) {
+		if (instance.props && BDFDB.getData("addInMemberList", this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.namecontainernamewrapper), "list", BDFDB.disCN.bottagnametag, null);
 	}
 
-	processUserPopout (instance, wrapper) {
+	processUserPopout (instance, wrapper, returnvalue) {
 		if (instance.props && BDFDB.getData("addInUserPopout", this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.nametag), "popout", BDFDB.disCN.bottagnametag, wrapper);
 	}
 
-	processUserProfile (instance, wrapper) {
+	processUserProfile (instance, wrapper, returnvalue) {
 		if (instance.props && BDFDB.getData("addInUserProfil", this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.nametag), "profile", BDFDB.disCNS.bottagnametag + BDFDB.disCN.userprofilebottag, wrapper);
 	}
 
-	processMessageUsername (instance, wrapper, methodnames) {
+	processMessageUsername (instance, wrapper, returnvalue, methodnames) {
 		let message = BDFDB.getReactValue(instance, "props.message");
 		if (message && BDFDB.getData("addInChatWindow", this, "settings")) {
 			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
@@ -169,7 +164,7 @@ class OwnerTag {
 		}
 	}
 
-	processStandardSidebarView (instance, wrapper) {
+	processStandardSidebarView (instance, wrapper, returnvalue) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			BDFDB.removeEles(".owner-tag, .owner-tag-crown");
@@ -181,18 +176,18 @@ class OwnerTag {
 	addOwnerTag (info, channelid, wrapper, type, selector = "", container) {
 		if (!info || !wrapper || !wrapper.parentElement) return;
 		BDFDB.removeEles(wrapper.querySelectorAll(".owner-tag, .owner-tag-crown"));
-		let channel = this.ChannelUtils.getChannel(channelid || this.LastChannelStore.getChannelId());
+		let channel = BDFDB.LibraryModules.ChannelStore.getChannel(channelid || BDFDB.LibraryModules.LastChannelStore.getChannelId());
 		if (!channel) return;
-		let guild = this.GuildUtils.getGuild(channel.guild_id);
+		let guild = BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id);
 		let settings = BDFDB.getAllData(this, "settings");
 		let isowner = channel.ownerId == info.id || guild && guild.ownerId == info.id;
 		if (!(isowner || (settings.addForAdmins && BDFDB.isUserAllowedTo("ADMINISTRATOR", info.id)))) return;
-		let member = settings.useRoleColor ? (this.MemberUtils.getMember(channel.guild_id, info.id) || {}) : {};
-		let EditUsersData = BDFDB.isPluginEnabled("EditUsers") ? window.bdplugins.EditUsers.plugin.getUserData(info.id, wrapper) : {};
+		let member = settings.useRoleColor ? (BDFDB.LibraryModules.MemberStore.getMember(channel.guild_id, info.id) || {}) : {};
 		if (!settings.useCrown) {
 			let tag = BDFDB.htmlToElement(`<span class="owner-tag ${isowner ? "owner-tag-owner" : "owner-tag-admin"} owner-${type}-tag ${(settings.useRoleColor ? "owner-tag-rolecolor " : "") + BDFDB.disCN.bottag + (selector ? (" " + selector) : "")}" style="order: 10 !important;">${BDFDB.getData(isowner ? "ownTagName" : "ownAdminTagName", this, "inputs")}</span>`);
 			let invert = container && container.firstElementChild && !(BDFDB.containsClass(container.firstElementChild, BDFDB.disCN.userpopoutheadernormal) || BDFDB.containsClass(container.firstElementChild, BDFDB.disCN.userprofiletopsectionnormal));
 			BDFDB.addClass(tag, invert ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular);
+			let EditUsersData = BDFDB.isPluginEnabled("EditUsers") ? window.bdplugins.EditUsers.plugin.getUserData(info.id, wrapper) : {};
 			let tagcolor = BDFDB.colorCONVERT(EditUsersData.color1 || member.colorString, "RGB");
 			let isbright = BDFDB.colorISBRIGHT(tagcolor);
 			tagcolor = isbright ? (settings.useBlackFont ? tagcolor : BDFDB.colorCHANGE(tagcolor, -0.3)) : tagcolor;

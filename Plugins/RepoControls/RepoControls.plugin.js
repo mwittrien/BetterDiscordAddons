@@ -3,7 +3,7 @@
 class RepoControls {
 	getName () {return "RepoControls";}
 
-	getVersion () {return "1.2.9";}
+	getVersion () {return "1.3.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class RepoControls {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Searchbug","Fixed an issue with the changelog button"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.patchModules = {
@@ -67,9 +67,9 @@ class RepoControls {
 		this.sortPopoutMarkup =
 			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCN.popoutnoshadow} repocontrols-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
-					<div class="${BDFDB.disCN.contextmenu} quickSelectPopout">
+					<div class="${BDFDB.disCN.contextmenu} BDFDB-quickSelectPopout">
 						<div class="${BDFDB.disCN.contextmenuitemgroup}">
-							${Object.keys(this.sortings.sort).map((key, i) => `<div option="${key}" class="${BDFDB.disCN.contextmenuitem}">${this.sortings.sort[key]}</div>`).join("")}
+							${Object.keys(this.sortings.sort).map((key, i) => `<div option="${key}" class="${BDFDB.disCNS.contextmenuitem + BDFDB.disCN.contextmenuitemclickable}">${this.sortings.sort[key]}</div>`).join("")}
 						</div>
 					</div>
 				</div>
@@ -78,9 +78,9 @@ class RepoControls {
 		this.orderPopoutMarkup =
 			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCN.popoutnoshadow} repocontrols-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
-					<div class="${BDFDB.disCN.contextmenu} quickSelectPopout">
+					<div class="${BDFDB.disCN.contextmenu} BDFDB-quickSelectPopout">
 						<div class="${BDFDB.disCN.contextmenuitemgroup}">
-							${Object.keys(this.sortings.order).map((key, i) => `<div option="${key}" class="${BDFDB.disCN.contextmenuitem}">${this.sortings.order[key]}</div>`).join("")}
+							${Object.keys(this.sortings.order).map((key, i) => `<div option="${key}" class="${BDFDB.disCNS.contextmenuitem + BDFDB.disCN.contextmenuitemclickable}">${this.sortings.order[key]}</div>`).join("")}
 						</div>
 					</div>
 				</div>
@@ -165,7 +165,7 @@ class RepoControls {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -186,9 +186,7 @@ class RepoControls {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-
-			this.fs = require("fs");
-			this.path = require("path");
+			
 			this.dirs = {theme: BDFDB.getThemesFolder(), plugin: BDFDB.getPluginsFolder()};
 
 			BDFDB.WebModules.forceAllUpdates(this);
@@ -249,11 +247,11 @@ class RepoControls {
 		let name = wrapper.getAttribute("data-name");
 		let controls = wrapper.querySelector(BDFDB.dotCN._repocontrols);
 		if (!name || !controls) return;
-		let path = global[`bd${type}s`] && global[`bd${type}s`][name] ? this.path.join(this.dirs[type], global[`bd${type}s`][name].filename) : null;
+		let path = global[`bd${type}s`] && global[`bd${type}s`][name] ? BDFDB.LibraryRequires.path.join(this.dirs[type], global[`bd${type}s`][name].filename) : null;
 		if (!path) return;
 		let button = BDFDB.htmlToElement(this.editButtonMarkup);
 		button.addEventListener("click", () => {
-			if (!require("electron").shell.openItem(path)) BDFDB.showToast(`Unable to open ${type} "${name}".`, {type:"danger"});;
+			if (!BDFDB.LibraryRequires.electron.shell.openItem(path)) BDFDB.showToast(`Unable to open ${type} "${name}".`, {type:"danger"});;
 		});
 		button.addEventListener("mouseenter", e => {
 			BDFDB.createTooltip(`Edit ${type[0].toUpperCase() + type.slice(1)}`, e.currentTarget, {type:"top",selector:"repocontrols-editicon-tooltip"});
@@ -266,12 +264,12 @@ class RepoControls {
 		let name = wrapper.getAttribute("data-name");
 		let controls = wrapper.querySelector(BDFDB.dotCN._repocontrols);
 		if (!name || !controls) return;
-		let path = global[`bd${type}s`] && global[`bd${type}s`][name] ? this.path.join(this.dirs[type], global[`bd${type}s`][name].filename) : null;
+		let path = global[`bd${type}s`] && global[`bd${type}s`][name] ? BDFDB.LibraryRequires.path.join(this.dirs[type], global[`bd${type}s`][name].filename) : null;
 		if (!path) return;
 		let button = BDFDB.htmlToElement(this.deleteButtonMarkup);
 		button.addEventListener("click", () => {
 			let deleteFile = () => {
-				this.fs.unlink(path, (error) => {
+				BDFDB.LibraryRequires.fs.unlink(path, (error) => {
 					if (error) BDFDB.showToast(`Unable to delete ${type} "${name}".`, {type:"danger"});
 					else BDFDB.showToast(`Successfully deleted ${type} "${name}".`, {type:"success"});
 				});
@@ -344,8 +342,8 @@ class RepoControls {
 				let author = li.querySelector(BDFDB.dotCN._repoauthor).textContent;
 				let description = li.querySelector(BDFDB.dotCN._repodescription).textContent;
 				let enabled = li.querySelector(BDFDB.dotCN._repocheckbox).checked;
-				let path = global[`bd${type}s`] && global[`bd${type}s`][name] ? this.path.join(this.dirs[type], global[`bd${type}s`][name].filename) : null;
-				let stats = path ? this.fs.statSync(path) : null;
+				let path = global[`bd${type}s`] && global[`bd${type}s`][name] ? BDFDB.LibraryRequires.path.join(this.dirs[type], global[`bd${type}s`][name].filename) : null;
+				let stats = path ? BDFDB.LibraryRequires.fs.statSync(path) : null;
 				container.entries[name] = {
 					search:			(name + " " + author + " " + description).toUpperCase(),
 					origName: 		name,

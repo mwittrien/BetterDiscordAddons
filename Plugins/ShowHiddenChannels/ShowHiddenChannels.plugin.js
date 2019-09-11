@@ -3,7 +3,7 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.5.6";}
+	getVersion () {return "2.5.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ShowHiddenChannels {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Voice Channel","Fixes the bug where it doesnt show the connected users of a hidden/locked vocie channel"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.patchModules = {
@@ -23,7 +23,6 @@ class ShowHiddenChannels {
 	}
 
 	initConstructor () {
- 
 		this.categoryMarkup = 
 			`<div class="container-hidden">
 				<div class="${BDFDB.disCN.categorycontainerdefault} hidden-category" draggable="false">
@@ -31,7 +30,7 @@ class ShowHiddenChannels {
 						<svg class="${BDFDB.disCN.categoryicon}" width="24" height="24" viewBox="0 0 24 24">
 							<path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M16.59 8.59004L12 13.17L7.41 8.59004L6 10L12 16L18 10L16.59 8.59004Z"></path>
 						</svg>
-						<div class="${BDFDB.disCN.categoryname}">hidden</div>
+						<div class="${BDFDB.disCNS.categoryname + BDFDB.disCN.namecontainernamecontainer}">hidden</div>
 						<div class="${BDFDB.disCN.categorychildren}"></div>
 					</div>
 				</div>
@@ -186,22 +185,22 @@ class ShowHiddenChannels {
 
 	// begin of own functions
 
-	processChannels (instance, wrapper, methodnames) {
+	processChannels (instance, wrapper, returnvalue, methodnames) {
 		if (instance.props && instance.props.guild) {
 			if (methodnames.includes("componentDidMount")) this.appendHiddenContainer(instance.props.guild);
 			if (methodnames.includes("componentDidUpdate")) this.reappendHiddenContainer(instance.props.guild);
 		}
 	}
 
-	processChannelItem (instance, wrapper) {
+	processChannelItem (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.channel) this.reappendHiddenContainer(BDFDB.LibraryModules.GuildStore.getGuild(instance.props.channel.guild_id));
 	}
 
-	processChannelCategoryItem (instance, wrapper) {
+	processChannelCategoryItem (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.channel) this.reappendHiddenContainer(BDFDB.LibraryModules.GuildStore.getGuild(instance.props.channel.guild_id));
 	}
 
-	processStandardSidebarView (instance, wrapper) {
+	processStandardSidebarView (instance, wrapper, returnvalue) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			BDFDB.WebModules.forceAllUpdates(this, "Channels");
@@ -319,28 +318,7 @@ class ShowHiddenChannels {
 
 	createHiddenObjContextMenu (guild, channel, type, e) {
 		BDFDB.stopEvent(e);
-		let isPermissionsViewerEnabled = BDFDB.isPluginEnabled("PermissionsViewer");
-		var contextMenu = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.contextmenu} showhiddenchannels-contextmenu">${isPermissionsViewerEnabled ? `<div class="${BDFDB.disCN.contextmenuitemgroup}"><div class="${BDFDB.disCNS.contextmenuitem + BDFDB.disCN.contextmenuitemclickable}" style="display: none !important;"></div></div>` : ``}<div class="${BDFDB.disCN.contextmenuitemgroup}"><div class="${BDFDB.disCNS.contextmenuitem + BDFDB.disCN.contextmenuitemclickable} permissionviewer-item"><div class="${BDFDB.disCN.contextmenulabel} BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll"></div></div><div class="${BDFDB.disCN.contextmenuhint}"></div></div><div class="${BDFDB.disCNS.contextmenuitem + BDFDB.disCN.contextmenuitemclickable} copyid-item"><div class="${BDFDB.disCN.contextmenulabel} BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">${BDFDB.LanguageStrings.COPY_ID}</div></div><div class="${BDFDB.disCN.contextmenuhint}"></div></div></div></div>`);
-		var permissionvieweritem = contextMenu.querySelector(".permissionviewer-item");
-		if (isPermissionsViewerEnabled) {
-			permissionvieweritem.querySelector(".BDFDB-textscroll").innerText = window.bdplugins.PermissionsViewer.plugin.strings.contextMenuLabel;
-			permissionvieweritem.addEventListener("click", () => {
-				contextMenu.remove();
-				if (!Object.keys(channel.permissionOverwrites).length) BDFDB.showToast(`#${channel.name} has no permission overrides`, {type: "info"});
-				else window.bdplugins.PermissionsViewer.plugin.showModal(window.bdplugins.PermissionsViewer.plugin.createModalChannel(channel.name, channel, guild));
-			});
-		}
-		else BDFDB.removeEles(permissionvieweritem);
-		var reactInstance = BDFDB.React.createElement(contextMenu);
-		reactInstance.memoizedProps = {displayName:"ChannelDeleteGroup",guild,channel};
-		reactInstance.return = {memoizedProps:{type:("CHANNEL_LIST_" + type),guild,channel}};
-		contextMenu.__reactInternalInstance = reactInstance;
-		BDFDB.addChildEventListener(contextMenu, "click", ".copyid-item", e2 => {
-			contextMenu.remove();
-			BDFDB.LibraryRequires.electron.clipboard.write({text: channel.id});
-		});
-
-		BDFDB.appendContextMenu(contextMenu, e);
+		BDFDB.openChannelContextMenu(channel, e);
 	}
 
 	showAccessRoles (guild, channel, e, allowed) {

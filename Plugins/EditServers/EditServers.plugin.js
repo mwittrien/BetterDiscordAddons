@@ -3,7 +3,7 @@
 class EditServers {
 	getName () {return "EditServers";}
 
-	getVersion () {return "2.0.4";} 
+	getVersion () {return "2.0.5";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditServers {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["<span style='-webkit-background-clip: text; color: transparent; background-image: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%)'>Color Gradients</span>","You can now use color gradients to edit servers"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.labels = {};
@@ -25,28 +25,6 @@ class EditServers {
 	}
 
 	initConstructor () {
-		this.serverContextEntryMarkup =
-			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
-				<div class="${BDFDB.disCN.contextmenuitem} localserversettings-item ${BDFDB.disCN.contextmenuitemsubmenu}">
-					<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_context_localserversettings_text</div></span>
-					<div class="${BDFDB.disCN.contextmenuhint}"></div>
-				</div>
-			</div>`;
-
-		this.serverContextSubMenuMarkup = 
-			`<div class="${BDFDB.disCN.contextmenu} editservers-submenu">
-				<div class="${BDFDB.disCN.contextmenuitemgroup}">
-					<div class="${BDFDB.disCN.contextmenuitem} serversettings-item">
-						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_submenu_serversettings_text</div></span>
-						<div class="${BDFDB.disCN.contextmenuhint}"></div>
-					</div>
-					<div class="${BDFDB.disCN.contextmenuitem} resetsettings-item ${BDFDB.disCN.contextmenuitemdisabled}">
-						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_submenu_resetsettings_text</div></span>
-						<div class="${BDFDB.disCN.contextmenuhint}"></div>
-					</div>
-				</div>
-			</div>`;
-
 		this.serverSettingsModalMarkup =
 			`<span class="${this.name}-modal BDFDB-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
@@ -55,7 +33,7 @@ class EditServers {
 						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto; padding-bottom: 10px;">
 								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
-									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">REPLACE_modal_header_text</h4>
+									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">REPLACE_modal_header_text</h4>
 									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
 								</div>
 								<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
@@ -140,7 +118,7 @@ class EditServers {
 							</div>
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
 								<button type="button" class="btn-save ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
-									<div class="${BDFDB.disCN.buttoncontents}">REPLACE_btn_save_text</div>
+									<div class="${BDFDB.disCN.buttoncontents}"></div>
 								</button>
 							</div>
 						</div>
@@ -206,7 +184,7 @@ class EditServers {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -228,11 +206,8 @@ class EditServers {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 
-			this.GuildUtils = BDFDB.WebModules.findByProperties("getGuilds","getGuild");
-			this.CurrentGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
-
-			BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties('getGuildBannerURL'), 'getGuildBannerURL', this, {instead:e => {
-				let guild = this.GuildUtils.getGuild(e.methodArguments[0].id);
+			BDFDB.WebModules.patch(BDFDB.LibraryModules.IconUtils, 'getGuildBannerURL', this, {instead:e => {
+				let guild = BDFDB.LibraryModules.GuildStore.getGuild(e.methodArguments[0].id);
 				if (guild) {
 					if (e.methodArguments[0].id == "410787888507256842") return guild.banner;
 					let data = BDFDB.loadData(guild.id, this, "servers");
@@ -271,7 +246,7 @@ class EditServers {
 	onSwitch () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			BDFDB.removeClass(document.querySelector(".fake-guildacronym" + BDFDB.dotCN.guildiconselected), BDFDB.disCN.guildiconselected);
-			let guilddiv = BDFDB.getServerDiv(this.CurrentGuildStore.getGuildId());
+			let guilddiv = BDFDB.getServerDiv(BDFDB.LibraryModules.LastGuildStore.getGuildId());
 			if (guilddiv) BDFDB.addClass(guilddiv.querySelector(".fake-guildacronym"), BDFDB.disCN.guildiconselected);
 		}
 	}
@@ -279,11 +254,6 @@ class EditServers {
 	// begin of own functions
 
 	changeLanguageStrings () {
-		this.serverContextEntryMarkup = 	this.serverContextEntryMarkup.replace("REPLACE_context_localserversettings_text", this.labels.context_localserversettings_text);
-
-		this.serverContextSubMenuMarkup = 	this.serverContextSubMenuMarkup.replace("REPLACE_submenu_serversettings_text", this.labels.submenu_serversettings_text);
-		this.serverContextSubMenuMarkup = 	this.serverContextSubMenuMarkup.replace("REPLACE_submenu_resetsettings_text", this.labels.submenu_resetsettings_text);
-
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_servername_text", this.labels.modal_servername_text);
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_servershortname_text", this.labels.modal_servershortname_text);
@@ -298,40 +268,51 @@ class EditServers {
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_colorpicker2_text", this.labels.modal_colorpicker2_text);
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_colorpicker3_text", this.labels.modal_colorpicker3_text);
 		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_modal_colorpicker4_text", this.labels.modal_colorpicker4_text);
-		this.serverSettingsModalMarkup = 	this.serverSettingsModalMarkup.replace("REPLACE_btn_save_text", this.labels.btn_save_text);
 	}
-
-	onGuildContextMenu (instance, menu) {
-		if (instance.props && instance.props.target && instance.props.guild && !menu.querySelector(".localserversettings-item")) {
-			let serverContextEntry = BDFDB.htmlToElement(this.serverContextEntryMarkup);
-			let devgroup = BDFDB.getContextMenuDevGroup(menu);
-			if (devgroup) devgroup.parentElement.insertBefore(serverContextEntry, devgroup);
-			else menu.appendChild(serverContextEntry, menu);
-			let settingsitem = serverContextEntry.querySelector(".localserversettings-item");
-			settingsitem.addEventListener("mouseenter", () => {
-				let serverContextSubMenu = BDFDB.htmlToElement(this.serverContextSubMenuMarkup);
-				let serveritem = serverContextSubMenu.querySelector(".serversettings-item");
-				serveritem.addEventListener("click", () => {
-					BDFDB.closeContextMenu(menu);
-					this.showServerSettings(instance.props.guild);
-				});
-				if (BDFDB.loadData(instance.props.guild.id, this, "servers")) {
-					let resetitem = serverContextSubMenu.querySelector(".resetsettings-item");
-					BDFDB.removeClass(resetitem, BDFDB.disCN.contextmenuitemdisabled);
-					resetitem.addEventListener("click", () => {
-						BDFDB.closeContextMenu(menu);
-						BDFDB.removeData(instance.props.guild.id, this, "servers");
-						BDFDB.WebModules.forceAllUpdates(this);
-						this.updateGuildSidebar();
-						this.onSwitch();
-					});
-				}
-				BDFDB.appendSubMenu(settingsitem, serverContextSubMenu);
+	
+	onGuildContextMenu (instance, menu, returnvalue) {
+		if (instance.props && instance.props.guild && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
+			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
+			const itemgroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
+				children: [
+					BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+						label: this.labels.context_localserversettings_text,
+						className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-serversettings-contextMenuSubItem`,
+						render: [BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+							className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
+							children: [
+								BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+									label: this.labels.submenu_serversettings_text,
+									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-serversettings-ContextMenuItem`,
+									action: e => {
+										BDFDB.closeContextMenu(menu);
+										this.showServerSettings(instance.props.guild);
+									}
+								}),
+								BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+									label: this.labels.submenu_resetsettings_text,
+									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-resetsettings-ContextMenuItem`,
+									disabled: !BDFDB.loadData(instance.props.guild.id, this, "servers"),
+									action: e => {
+										BDFDB.closeContextMenu(menu);
+										BDFDB.removeData(instance.props.guild.id, this, "servers");
+										BDFDB.WebModules.forceAllUpdates(this);
+										this.updateGuildSidebar();
+										this.onSwitch();
+									}
+								})
+							]
+						})]
+					})
+				]
 			});
+			if (index > -1) children.splice(index, 0, itemgroup);
+			else children.push(itemgroup);
 		}
 	}
 
-	processGuild (instance, wrapper) {
+	processGuild (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.guild) {
 			let icon = wrapper.querySelector(BDFDB.dotCN.guildicon + ":not(.fake-guildicon), " + BDFDB.dotCN.guildiconacronym + ":not(.fake-guildacronym)");
 			if (!icon) return;
@@ -340,7 +321,7 @@ class EditServers {
 		}
 	}
 
-	processGuildIconWrapper (instance, wrapper) {
+	processGuildIconWrapper (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.guild) {
 			let icon = wrapper.classList && BDFDB.containsClass(wrapper, BDFDB.disCN.avataricon) ? wrapper : wrapper.querySelector(BDFDB.dotCN.avataricon);
 			if (!icon) return;
@@ -349,13 +330,13 @@ class EditServers {
 		}
 	}
 
-	processGuildHeader (instance, wrapper) {
+	processGuildHeader (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.guild) {
 			this.changeGuildName(instance.props.guild, wrapper.querySelector(BDFDB.dotCN.guildheadername));
 		}
 	}
 
-	processClickable (instance, wrapper) {
+	processClickable (instance, wrapper, returnvalue) {
 		if (!wrapper || !instance.props || !instance.props.className) return;
 		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.userprofilelistrow) > -1) {
 			let guild = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.guild");
@@ -368,7 +349,7 @@ class EditServers {
 			if (guild) this.changeGuildName(guild, wrapper.querySelector(BDFDB.dotCN.quickswitchresultmatch));
 			else {
 				let channel = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.memoizedProps.channel");
-				if (channel && channel.guild_id) this.changeGuildName(this.GuildUtils.getGuild(channel.guild_id), wrapper.querySelector(BDFDB.dotCN.quickswitchresultmisccontainer));
+				if (channel && channel.guild_id) this.changeGuildName(BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id), wrapper.querySelector(BDFDB.dotCN.quickswitchresultmisccontainer));
 			}
 		}
 	}
@@ -422,7 +403,7 @@ class EditServers {
 			});
 			urlinput.addEventListener("mouseleave", () => {
 				BDFDB.removeClass(urlinput, "hovering");
-				BDFDB.removeEles(BDFDB.dotCNS.tooltips + ".notice-tooltip");
+				BDFDB.removeEles(BDFDB.dotCNS.itemlayerconainer + ".notice-tooltip");
 			});
 		}
 		if (info.id == "410787888507256842") {
@@ -465,13 +446,13 @@ class EditServers {
 	}
 
 	checkUrl (input) {
-		BDFDB.removeEles(BDFDB.dotCNS.tooltips + ".notice-tooltip");
+		BDFDB.removeEles(BDFDB.dotCNS.itemlayerconainer + ".notice-tooltip");
 		if (!input.value) {
 			BDFDB.removeClass(input, "valid");
 			BDFDB.removeClass(input, "invalid");
 		}
 		else {
-			require("request")(input.value, (error, response, result) => {
+			BDFDB.LibraryRequires.request(input.value, (error, response, result) => {
 				if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
 					BDFDB.addClass(input, "valid");
 					BDFDB.removeClass(input, "invalid");
@@ -658,7 +639,7 @@ class EditServers {
 
 	setBanner (id, data) {
 		data = data || {};
-		let guild = this.GuildUtils.getGuild(id);
+		let guild = BDFDB.LibraryModules.GuildStore.getGuild(id);
 		if (!guild) return;
 		if (guild.EditServersCachedBanner === undefined) guild.EditServersCachedBanner = guild.banner;
 		guild.banner = data.removeBanner ? null : (data.banner || guild.EditServersCachedBanner);
@@ -694,9 +675,7 @@ class EditServers {
 					modal_colorpicker4_text:			"Boja fonta",
 					modal_ignoreurl_text:				"URL ignorirati",
 					modal_validurl_text:				"Vrijedi URL",
-					modal_invalidurl_text:				"Nevažeći URL",
-					btn_cancel_text:					"Prekid",
-					btn_save_text:						"Uštedjeti"
+					modal_invalidurl_text:				"Nevažeći URL"
 				};
 			case "da":		//danish
 				return {
@@ -719,9 +698,7 @@ class EditServers {
 					modal_colorpicker4_text:			"Skriftfarve",
 					modal_ignoreurl_text:				"Ignorer URL",
 					modal_validurl_text:				"Gyldig URL",
-					modal_invalidurl_text:				"Ugyldig URL",
-					btn_cancel_text:					"Afbryde",
-					btn_save_text:						"Spare"
+					modal_invalidurl_text:				"Ugyldig URL"
 				};
 			case "de":		//german
 				return {
@@ -744,9 +721,7 @@ class EditServers {
 					modal_colorpicker4_text:			"Schriftfarbe",
 					modal_ignoreurl_text:				"URL ignorieren",
 					modal_validurl_text:				"Gültige URL",
-					modal_invalidurl_text:				"Ungültige URL",
-					btn_cancel_text:					"Abbrechen",
-					btn_save_text:						"Speichern"
+					modal_invalidurl_text:				"Ungültige URL"
 				};
 			case "es":		//spanish
 				return {
@@ -769,9 +744,7 @@ class EditServers {
 					modal_colorpicker4_text:			"Color de fuente",
 					modal_ignoreurl_text:				"Ignorar URL",
 					modal_validurl_text:				"URL válida",
-					modal_invalidurl_text:				"URL inválida",
-					btn_cancel_text:					"Cancelar",
-					btn_save_text:						"Guardar"
+					modal_invalidurl_text:				"URL inválida"
 				};
 			case "fr":		//french
 				return {
@@ -794,9 +767,7 @@ class EditServers {
 					modal_colorpicker4_text:			"Couleur de la police",
 					modal_ignoreurl_text:				"Ignorer l'URL",
 					modal_validurl_text:				"URL valide",
-					modal_invalidurl_text:				"URL invalide",
-					btn_cancel_text:					"Abandonner",
-					btn_save_text:						"Enregistrer"
+					modal_invalidurl_text:				"URL invalide"
 				};
 			case "it":		//italian
 				return {
@@ -819,9 +790,7 @@ class EditServers {
 					modal_colorpicker4_text:			"Colore del carattere",
 					modal_ignoreurl_text:				"Ignora l'URL",
 					modal_validurl_text:				"URL valido",
-					modal_invalidurl_text:				"URL non valido",
-					btn_cancel_text:					"Cancellare",
-					btn_save_text:						"Salvare"
+					modal_invalidurl_text:				"URL non valido"
 				};
 			case "nl":		//dutch
 				return {
@@ -844,9 +813,7 @@ class EditServers {
 					modal_colorpicker4_text:			"Doopvontkleur",
 					modal_ignoreurl_text:				"URL negeren",
 					modal_validurl_text:				"Geldige URL",
-					modal_invalidurl_text:				"Ongeldige URL",
-					btn_cancel_text:					"Afbreken",
-					btn_save_text:						"Opslaan"
+					modal_invalidurl_text:				"Ongeldige URL"
 				};
 			case "no":		//norwegian
 				return {
@@ -869,9 +836,7 @@ class EditServers {
 					modal_colorpicker4_text:			"Skriftfarge",
 					modal_ignoreurl_text:				"Ignorer URL",
 					modal_validurl_text:				"Gyldig URL",
-					modal_invalidurl_text:				"Ugyldig URL",
-					btn_cancel_text:					"Avbryte",
-					btn_save_text:						"Lagre"
+					modal_invalidurl_text:				"Ugyldig URL"
 				};
 			case "pl":		//polish
 				return {
@@ -894,9 +859,7 @@ class EditServers {
 					modal_colorpicker4_text:			"Kolor czcionki",
 					modal_ignoreurl_text:				"Ignoruj URL",
 					modal_validurl_text:				"Prawidłowe URL",
-					modal_invalidurl_text:				"Nieprawidłowe URL",
-					btn_cancel_text:					"Anuluj",
-					btn_save_text:						"Zapisz"
+					modal_invalidurl_text:				"Nieprawidłowe URL"
 				};
 			case "pt-BR":	//portuguese (brazil)
 				return {
@@ -919,9 +882,7 @@ class EditServers {
 					modal_colorpicker4_text:			"Cor da fonte",
 					modal_ignoreurl_text:				"Ignorar URL",
 					modal_validurl_text:				"URL válido",
-					modal_invalidurl_text:				"URL inválida",
-					btn_cancel_text:					"Cancelar",
-					btn_save_text:						"Salvar"
+					modal_invalidurl_text:				"URL inválida"
 				};
 			case "fi":		//finnish
 				return {
@@ -944,9 +905,7 @@ class EditServers {
 					modal_colorpicker4_text:			"Fontinväri",
 					modal_ignoreurl_text:				"Ohita URL",
 					modal_validurl_text:				"Voimassa URL",
-					modal_invalidurl_text:				"Virheellinen URL",
-					btn_cancel_text:					"Peruuttaa",
-					btn_save_text:						"Tallentaa"
+					modal_invalidurl_text:				"Virheellinen URL"
 				};
 			case "sv":		//swedish
 				return {
@@ -969,9 +928,7 @@ class EditServers {
 					modal_colorpicker4_text:			"Fontfärg",
 					modal_ignoreurl_text:				"Ignorera URL",
 					modal_validurl_text:				"Giltig URL",
-					modal_invalidurl_text:				"Ogiltig URL",
-					btn_cancel_text:					"Avbryta",
-					btn_save_text:						"Spara"
+					modal_invalidurl_text:				"Ogiltig URL"
 				};
 			case "tr":		//turkish
 				return {
@@ -994,9 +951,7 @@ class EditServers {
 					modal_colorpicker4_text:			"Yazı rengi",
 					modal_ignoreurl_text:				"URL yoksay",
 					modal_validurl_text:				"Geçerli URL",
-					modal_invalidurl_text:				"Geçersiz URL",
-					btn_cancel_text:					"Iptal",
-					btn_save_text:						"Kayıt"
+					modal_invalidurl_text:				"Geçersiz URL"
 				};
 			case "cs":		//czech
 				return {
@@ -1019,9 +974,7 @@ class EditServers {
 					modal_colorpicker4_text:			"Barva fontu",
 					modal_ignoreurl_text:				"Ignorovat URL",
 					modal_validurl_text:				"Platná URL",
-					modal_invalidurl_text:				"Neplatná URL",
-					btn_cancel_text:					"Zrušení",
-					btn_save_text:						"Uložit"
+					modal_invalidurl_text:				"Neplatná URL"
 				};
 			case "bg":		//bulgarian
 				return {
@@ -1044,9 +997,7 @@ class EditServers {
 					modal_colorpicker4_text:			"Цвят на шрифта",
 					modal_ignoreurl_text:				"Игнориране на URL",
 					modal_validurl_text:				"Валиден URL",
-					modal_invalidurl_text:				"Невалиден URL",
-					btn_cancel_text:					"Зъбести",
-					btn_save_text:						"Cпасяване"
+					modal_invalidurl_text:				"Невалиден URL"
 				};
 			case "ru":		//russian
 				return {
@@ -1069,9 +1020,7 @@ class EditServers {
 					modal_colorpicker4_text:			"Цвет шрифта",
 					modal_ignoreurl_text:				"Игнорировать URL",
 					modal_validurl_text:				"Действительный URL",
-					modal_invalidurl_text:				"Неверная URL",
-					btn_cancel_text:					"Отмена",
-					btn_save_text:						"Cпасти"
+					modal_invalidurl_text:				"Неверная URL"
 				};
 			case "uk":		//ukrainian
 				return {
@@ -1094,9 +1043,7 @@ class EditServers {
 					modal_colorpicker4_text:			"Колір шрифту",
 					modal_ignoreurl_text:				"Ігнорувати URL",
 					modal_validurl_text:				"Дійсна URL",
-					modal_invalidurl_text:				"Недійсна URL",
-					btn_cancel_text:					"Скасувати",
-					btn_save_text:						"Зберегти"
+					modal_invalidurl_text:				"Недійсна URL"
 				};
 			case "ja":		//japanese
 				return {
@@ -1119,9 +1066,7 @@ class EditServers {
 					modal_colorpicker4_text:			"フォントの色",
 					modal_ignoreurl_text:				"URL を無視する",
 					modal_validurl_text:				"有効な URL",
-					modal_invalidurl_text:				"無効な URL",
-					btn_cancel_text:					"キャンセル",
-					btn_save_text:						"セーブ"
+					modal_invalidurl_text:				"無効な URL"
 				};
 			case "zh-TW":	//chinese (traditional)
 				return {
@@ -1144,9 +1089,7 @@ class EditServers {
 					modal_colorpicker4_text:			"字體顏色",
 					modal_ignoreurl_text:				"忽略 URL",
 					modal_validurl_text:				"有效的 URL",
-					modal_invalidurl_text:				"無效的 URL",
-					btn_cancel_text:					"取消",
-					btn_save_text:						"保存"
+					modal_invalidurl_text:				"無效的 URL"
 				};
 			case "ko":		//korean
 				return {
@@ -1169,9 +1112,7 @@ class EditServers {
 					modal_colorpicker4_text:			"글꼴 색깔",
 					modal_ignoreurl_text:				"URL 무시",
 					modal_validurl_text:				"유효한 URL",
-					modal_invalidurl_text:				"잘못된 URL",
-					btn_cancel_text:					"취소",
-					btn_save_text:						"저장"
+					modal_invalidurl_text:				"잘못된 URL"
 				};
 			default:		//default: english
 				return {
@@ -1194,9 +1135,7 @@ class EditServers {
 					modal_colorpicker4_text:			"Fontcolor",
 					modal_ignoreurl_text:				"Ignore URL",
 					modal_validurl_text:				"Valid URL",
-					modal_invalidurl_text:				"Invalid URL",
-					btn_cancel_text:					"Cancel",
-					btn_save_text:						"Save"
+					modal_invalidurl_text:				"Invalid URL"
 				};
 		}
 	}

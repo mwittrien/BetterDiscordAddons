@@ -3,7 +3,7 @@
 class EmojiStatistics {
 	getName () {return "EmojiStatistics";}
 
-	getVersion () {return "2.8.4";}
+	getVersion () {return "2.8.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EmojiStatistics {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Context Menu & Tooltips","fixed"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.labels = {};
@@ -105,7 +105,7 @@ class EmojiStatistics {
 						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizelarge}">
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
 								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
-									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">REPLACE_modal_header_text</h4>
+									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">REPLACE_modal_header_text</h4>
 									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
 								</div>
 								<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
@@ -125,7 +125,7 @@ class EmojiStatistics {
 							</div>
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
 								<button type="button" class="btn-ok ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
-									<div class="${BDFDB.disCN.buttoncontents}">REPLACE_btn_ok_text</div>
+									<div class="${BDFDB.disCN.buttoncontents}"></div>
 								</button>
 							</div>
 						</div>
@@ -202,7 +202,7 @@ class EmojiStatistics {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -224,8 +224,6 @@ class EmojiStatistics {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 
-			this.GuildEmojis = BDFDB.WebModules.findByProperties("getGuildEmoji", "getDisambiguatedEmojiContext");
-
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -245,8 +243,6 @@ class EmojiStatistics {
 
 	changeLanguageStrings () {
 		this.emojiInformationModalMarkup = 	this.emojiInformationModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
-		this.emojiInformationModalMarkup = 	this.emojiInformationModalMarkup.replace("REPLACE_btn_ok_text", this.labels.btn_ok_text);
-		this.emojiInformationModalMarkup = 	this.emojiInformationModalMarkup.replace("REPLACE_btn_all_text", this.labels.btn_all_text);
 
 		this.emojiserverTitlesMarkup = 		this.emojiserverTitlesMarkup.replace("REPLACE_modal_titlesicon-label", this.labels.modal_titlesicon_text);
 		this.emojiserverTitlesMarkup = 		this.emojiserverTitlesMarkup.replace("REPLACE_modal_titlesname_text", this.labels.modal_titlesname_text);
@@ -256,7 +252,7 @@ class EmojiStatistics {
 		this.emojiserverTitlesMarkup = 		this.emojiserverTitlesMarkup.replace("REPLACE_modal_titlescopies_text", this.labels.modal_titlescopies_text);
 	}
 
-	processEmojiPicker (instance, wrapper) {
+	processEmojiPicker (instance, wrapper, returnvalue) {
 		if (!wrapper.querySelector(".emojistatistics-button")) {
 			let emojipickerdiversityselector = document.querySelector(BDFDB.dotCN.emojipickerdiversityselector);
 			if (!emojipickerdiversityselector) return;
@@ -287,7 +283,7 @@ class EmojiStatistics {
 		this.emojiReplicaList = {};
 		this.emojiToServerList = {};
 		for (let serverObj of BDFDB.readServerList()) {
-			for (let emoji of this.GuildEmojis.getGuildEmoji(serverObj.id)) {
+			for (let emoji of BDFDB.LibraryModules.GuildEmojiStore.getGuildEmoji(serverObj.id)) {
 				this.emojiToServerList[emoji.url] = {emoji:emoji.allNamesString, server:serverObj.name};
 				if (emoji.managed) this.emojiReplicaList[emoji.name] = this.emojiReplicaList[emoji.name] != undefined;
 			}
@@ -324,7 +320,7 @@ class EmojiStatistics {
 
 		for (let info of BDFDB.readServerList()) {
 			let amountGlobal = 0, amountLocal = 0, amountCopies = 0;
-			for (let emoji of this.GuildEmojis.getGuildEmoji(info.id)) {
+			for (let emoji of BDFDB.LibraryModules.GuildEmojiStore.getGuildEmoji(info.id)) {
 				if (emoji.managed) {
 					amountGlobal++;
 					if (this.emojiReplicaList[emoji.name]) amountCopies++;
@@ -379,8 +375,7 @@ class EmojiStatistics {
 					modal_titlestotal_text:					"Cjelokupni:",
 					modal_titlesglobal_text:				"Globalno:",
 					modal_titleslocal_text:					"Kokalne:",
-					modal_titlescopies_text:				"Kopije:",
-					btn_ok_text:							"OK"
+					modal_titlescopies_text:				"Kopije:"
 				};
 			case "da":		//danish
 				return {
@@ -390,8 +385,7 @@ class EmojiStatistics {
 					modal_titlestotal_text:					"Total:",
 					modal_titlesglobal_text:				"Global:",
 					modal_titleslocal_text:					"Lokal:",
-					modal_titlescopies_text:				"Copies:",
-					btn_ok_text:							"OK"
+					modal_titlescopies_text:				"Copies:"
 				};
 			case "de":		//german
 				return {
@@ -401,8 +395,7 @@ class EmojiStatistics {
 					modal_titlestotal_text:					"Gesamt:",
 					modal_titlesglobal_text:				"Global:",
 					modal_titleslocal_text:					"Lokal:",
-					modal_titlescopies_text:				"Kopien:",
-					btn_ok_text:							"OK"
+					modal_titlescopies_text:				"Kopien:"
 				};
 			case "es":		//spanish
 				return {
@@ -412,8 +405,7 @@ class EmojiStatistics {
 					modal_titlestotal_text:					"Total:",
 					modal_titlesglobal_text:				"Global:",
 					modal_titleslocal_text:					"Local:",
-					modal_titlescopies_text:				"Copias:",
-					btn_ok_text:							"OK"
+					modal_titlescopies_text:				"Copias:"
 				};
 			case "fr":		//french
 				return {
@@ -423,8 +415,7 @@ class EmojiStatistics {
 					modal_titlestotal_text:					"Total:",
 					modal_titlesglobal_text:				"Global:",
 					modal_titleslocal_text:					"Local:",
-					modal_titlescopies_text:				"Copies:",
-					btn_ok_text:							"OK"
+					modal_titlescopies_text:				"Copies:"
 				};
 			case "it":		//italian
 				return {
@@ -434,8 +425,7 @@ class EmojiStatistics {
 					modal_titlestotal_text:					"Totale:",
 					modal_titlesglobal_text:				"Globale:",
 					modal_titleslocal_text:					"Locale:",
-					modal_titlescopies_text:				"Copie:",
-					btn_ok_text:							"OK"
+					modal_titlescopies_text:				"Copie:"
 				};
 			case "nl":		//dutch
 				return {
@@ -445,8 +435,7 @@ class EmojiStatistics {
 					modal_titlestotal_text:					"Totaal:",
 					modal_titlesglobal_text:				"Globaal:",
 					modal_titleslocal_text:					"Lokaal:",
-					modal_titlescopies_text:				"Kopieën:",
-					btn_ok_text:							"OK"
+					modal_titlescopies_text:				"Kopieën:"
 				};
 			case "no":		//norwegian
 				return {
@@ -456,8 +445,7 @@ class EmojiStatistics {
 					modal_titlestotal_text:					"Total:",
 					modal_titlesglobal_text:				"Global:",
 					modal_titleslocal_text:					"Lokal:",
-					modal_titlescopies_text:				"Kopier:",
-					btn_ok_text:							"OK"
+					modal_titlescopies_text:				"Kopier:"
 				};
 			case "pl":		//polish
 				return {
@@ -467,8 +455,7 @@ class EmojiStatistics {
 					modal_titlestotal_text:					"Całkowity:",
 					modal_titlesglobal_text:				"Światowy:",
 					modal_titleslocal_text:					"Lokalny:",
-					modal_titlescopies_text:				"Kopie:",
-					btn_ok_text:							"OK"
+					modal_titlescopies_text:				"Kopie:"
 				};
 			case "pt-BR":	//portuguese (brazil)
 				return {
@@ -478,8 +465,7 @@ class EmojiStatistics {
 					modal_titlestotal_text:					"Total:",
 					modal_titlesglobal_text:				"Global:",
 					modal_titleslocal_text:					"Local:",
-					modal_titlescopies_text:				"Cópias:",
-					btn_ok_text:							"OK"
+					modal_titlescopies_text:				"Cópias:"
 				};
 			case "fi":		//finnish
 				return {
@@ -489,8 +475,7 @@ class EmojiStatistics {
 					modal_titlestotal_text:					"Koko:",
 					modal_titlesglobal_text:				"Globaali:",
 					modal_titleslocal_text:					"Paikallinen:",
-					modal_titlescopies_text:				"Kopiot:",
-					btn_ok_text:							"OK"
+					modal_titlescopies_text:				"Kopiot:"
 				};
 			case "sv":		//swedish
 				return {
@@ -500,8 +485,7 @@ class EmojiStatistics {
 					modal_titlestotal_text:					"Total:",
 					modal_titlesglobal_text:				"Global:",
 					modal_titleslocal_text:					"Lokal:",
-					modal_titlescopies_text:				"Kopior:",
-					btn_ok_text:							"OK"
+					modal_titlescopies_text:				"Kopior:"
 				};
 			case "tr":		//turkish
 				return {
@@ -511,8 +495,7 @@ class EmojiStatistics {
 					modal_titlestotal_text:					"Toplam:",
 					modal_titlesglobal_text:				"Global:",
 					modal_titleslocal_text:					"Yerel:",
-					modal_titlescopies_text:				"Kopya:",
-					btn_ok_text:							"Okey"
+					modal_titlescopies_text:				"Kopya:"
 				};
 			case "cs":		//czech
 				return {
@@ -522,8 +505,7 @@ class EmojiStatistics {
 					modal_titlestotal_text:					"Celkový:",
 					modal_titlesglobal_text:				"Globální:",
 					modal_titleslocal_text:					"Místní:",
-					modal_titlescopies_text:				"Kopie:",
-					btn_ok_text:							"OK"
+					modal_titlescopies_text:				"Kopie:"
 				};
 			case "bg":		//bulgarian
 				return {
@@ -533,8 +515,7 @@ class EmojiStatistics {
 					modal_titlestotal_text:					"Oбщо:",
 					modal_titlesglobal_text:				"Cветовен:",
 					modal_titleslocal_text:					"Mестен:",
-					modal_titlescopies_text:				"Копия:",
-					btn_ok_text:							"Добре"
+					modal_titlescopies_text:				"Копия:"
 				};
 			case "ru":		//russian
 				return {
@@ -544,8 +525,7 @@ class EmojiStatistics {
 					modal_titlestotal_text:					"Всего:",
 					modal_titlesglobal_text:				"Mировой:",
 					modal_titleslocal_text:					"Местный:",
-					modal_titlescopies_text:				"Копии:",
-					btn_ok_text:							"ОК"
+					modal_titlescopies_text:				"Копии:"
 				};
 			case "uk":		//ukrainian
 				return {
@@ -555,8 +535,7 @@ class EmojiStatistics {
 					modal_titlestotal_text:					"Всього:",
 					modal_titlesglobal_text:				"Cвітовий:",
 					modal_titleslocal_text:					"Місцевий:",
-					modal_titlescopies_text:				"Копії:",
-					btn_ok_text:							"Добре"
+					modal_titlescopies_text:				"Копії:"
 				};
 			case "ja":		//japanese
 				return {
@@ -566,8 +545,7 @@ class EmojiStatistics {
 					modal_titlestotal_text:					"合計:",
 					modal_titlesglobal_text:				"グローバル:",
 					modal_titleslocal_text:					"地元:",
-					modal_titlescopies_text:				"コピー:",
-					btn_ok_text:							"はい"
+					modal_titlescopies_text:				"コピー:"
 				};
 			case "zh-TW":	//chinese (traditional)
 				return {
@@ -577,8 +555,7 @@ class EmojiStatistics {
 					modal_titlestotal_text:					"總:",
 					modal_titlesglobal_text:				"全球:",
 					modal_titleslocal_text:					"本地:",
-					modal_titlescopies_text:				"副本:",
-					btn_ok_text:							"好"
+					modal_titlescopies_text:				"副本:"
 				};
 			case "ko":		//korean
 				return {
@@ -588,8 +565,7 @@ class EmojiStatistics {
 					modal_titlestotal_text:					"합계:",
 					modal_titlesglobal_text:				"글로벌:",
 					modal_titleslocal_text:					"지방의:",
-					modal_titlescopies_text:				"사본:",
-					btn_ok_text:							"승인"
+					modal_titlescopies_text:				"사본:"
 				};
 			default:		//default: english
 				return {
@@ -599,8 +575,7 @@ class EmojiStatistics {
 					modal_titlestotal_text:					"Total:",
 					modal_titlesglobal_text:				"Global:",
 					modal_titleslocal_text:					"Local:",
-					modal_titlescopies_text:				"Copies:",
-					btn_ok_text:							"OK"
+					modal_titlescopies_text:				"Copies:"
 				};
 		}
 	}

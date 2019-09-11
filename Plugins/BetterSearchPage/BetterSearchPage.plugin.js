@@ -3,7 +3,7 @@
 class BetterSearchPage {
 	getName () {return "BetterSearchPage";}
 
-	getVersion () {return "1.0.7";}
+	getVersion () {return "1.0.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class BetterSearchPage {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Canary/PTB","Fixed the plugin for canary and ptb"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.patchModules = {
@@ -100,7 +100,7 @@ class BetterSearchPage {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -122,8 +122,6 @@ class BetterSearchPage {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 
-			this.SearchNavigation = BDFDB.WebModules.findByProperties("searchNextPage","searchPreviousPage");
-
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -141,11 +139,11 @@ class BetterSearchPage {
 
 	// begin of own functions
 
-	processSearchResults (instance, wrapper) {
+	processSearchResults (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.searchId) this.addNewControls(wrapper.querySelector(BDFDB.dotCN.searchresultspagination), instance.props.searchId);
 	}
 
-	processStandardSidebarView (instance, wrapper) {
+	processStandardSidebarView (instance, wrapper, returnvalue) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			BDFDB.removeEles(".BSP-pagination",".BSP-pagination-button",".BSP-pagination-jumpinput");
@@ -194,12 +192,12 @@ class BetterSearchPage {
 			}
 			else if (value < currentpage) {
 				for (; currentpage - value > 0; value++) {
-					this.SearchNavigation.searchPreviousPage(searchId);
+					BDFDB.LibraryModules.SearchPageUtils.searchPreviousPage(searchId);
 				}
 			}
 			else if (value > currentpage) {
 				for (; value - currentpage > 0; value--) {
-					this.SearchNavigation.searchNextPage(searchId);
+					BDFDB.LibraryModules.SearchPageUtils.searchNextPage(searchId);
 				}
 			}
 		};
@@ -207,16 +205,16 @@ class BetterSearchPage {
 			BDFDB.stopEvent(e);
 		});
 		BDFDB.addEventListener(this, searchResultsWrapper, "click", `.BSP-pagination ${BDFDB.dotCN.searchresultspaginationprevious + BDFDB.notCN.searchresultspaginationdisabled}`, () => {
-			this.SearchNavigation.searchPreviousPage(searchId);
+			BDFDB.LibraryModules.SearchPageUtils.searchPreviousPage(searchId);
 		});
 		BDFDB.addEventListener(this, searchResultsWrapper, "click", `.BSP-pagination ${BDFDB.dotCN.searchresultspaginationnext + BDFDB.notCN.searchresultspaginationdisabled}`, () => {
-			this.SearchNavigation.searchNextPage(searchId);
+			BDFDB.LibraryModules.SearchPageUtils.searchNextPage(searchId);
 		});
 		BDFDB.addEventListener(this, searchResultsWrapper, "click", `.BSP-pagination-first${BDFDB.notCN.searchresultspaginationdisabled}`, () => {
-			for (let i = 0; currentpage - 1 - i > 0; i++) this.SearchNavigation.searchPreviousPage(searchId);
+			for (let i = 0; currentpage - 1 - i > 0; i++) BDFDB.LibraryModules.SearchPageUtils.searchPreviousPage(searchId);
 		});
 		BDFDB.addEventListener(this, searchResultsWrapper, "click", `.BSP-pagination-last${BDFDB.notCN.searchresultspaginationdisabled}`, () => {
-			for (let i = 0; maxpage - currentpage - i > 0; i++) this.SearchNavigation.searchNextPage(searchId);
+			for (let i = 0; maxpage - currentpage - i > 0; i++) BDFDB.LibraryModules.SearchPageUtils.searchNextPage(searchId);
 		});
 		BDFDB.addEventListener(this, searchResultsWrapper, "click", `.BSP-pagination-jump${BDFDB.notCN.searchresultspaginationdisabled}`, e => {
 			doJump(e.currentTarget.parentElement.querySelector(`.BSP-pagination-jumpinput ${BDFDB.dotCN.inputmini}`));

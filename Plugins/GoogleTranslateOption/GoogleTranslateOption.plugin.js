@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.7.3";} 
+	getVersion () {return "1.7.4";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class GoogleTranslateOption {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Embeds","Fixed the bug where some parts of an embed would vanish if the message above is translated"],["Translating/Untranslating Bug","Translating/Untranslating no longer breaks the features of native discord elements (clicking the username, spoilers, etc.)"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.labels = {};
@@ -19,7 +19,7 @@ class GoogleTranslateOption {
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
 			"Message":"componentDidMount",
-			"MessageOptionPopout":"componentDidMount",
+			"MessageContent":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
 	}
@@ -51,43 +51,9 @@ class GoogleTranslateOption {
 			}
 		};
 
-		this.messageTranslateContextEntryMarkup =
-			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
-				<div class="${BDFDB.disCN.contextmenuitem} googletranslateoption-item googletranslateoption-translate-item">
-					<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_context_messagetranslateoption_text</div></span>
-					<div class="${BDFDB.disCN.contextmenuhint}"></div>
-				</div>
-			</div>`;
-
-		this.messageUntranslateContextEntryMarkup =
-			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
-				<div class="${BDFDB.disCN.contextmenuitem} googletranslateoption-item googletranslateoption-untranslate-item">
-					<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_context_messageuntranslateoption_text</div></span>
-					<div class="${BDFDB.disCN.contextmenuhint}"></div>
-				</div>
-			</div>`;
-
-		this.messageSearchContextEntryMarkup =
-			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
-				<div class="${BDFDB.disCN.contextmenuitem} googletranslateoption-item googletranslateoption-search-item">
-					<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_context_googletranslateoption_text</div></span>
-					<div class="${BDFDB.disCN.contextmenuhint}"></div>
-				</div>
-			</div>`;
-
-		this.popoutTranslateEntryMarkup = 
-			`<button type="button" class="${BDFDB.disCNS.optionpopoutitem + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow} googletranslateoption-itembtn googletranslateoption-translate-itembtn">
-				<div class="${BDFDB.disCN.buttoncontents}">REPLACE_popout_translateoption_text</div>
-			</button>`;
-
-		this.popoutUntranslateEntryMarkup = 
-			`<button type="button" class="${BDFDB.disCNS.optionpopoutitem + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow} googletranslateoption-itembtn googletranslateoption-untranslate-itembtn">
-				<div class="${BDFDB.disCN.buttoncontents}">REPLACE_popout_untranslateoption_text</div>
-			</button>`;
-
 		this.translateButtonMarkup = 
-			`<button type="button" class="${BDFDB.disCNS.textareabuttonwrapper + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow} translate-button-wrapper">
-				<div class="${BDFDB.disCNS.buttoncontents + BDFDB.disCNS.textareabutton + BDFDB.disCN.textareapickerbutton} translate-button-inner">
+			`<button type="button" class="${BDFDB.disCNS.textareabuttonwrapper + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow} translate-button">
+				<div class="${BDFDB.disCNS.buttoncontents + BDFDB.disCNS.textareabutton + BDFDB.disCN.textareapickerbutton}">
 					<svg version="1.1" xmlns="http://www.w3.org/2000/svg" class="${BDFDB.disCN.textareaicon}" viewBox="0 0 22 22" fill="currentColor">
 						<path d="M 19.794, 3.299 H 9.765 L 8.797, 0 h -6.598 C 0.99, 0, 0, 0.99, 0, 2.199 V 16.495 c 0, 1.21, 0.99, 2.199, 2.199, 2.199 H 9.897 l 1.1, 3.299 H 19.794 c 1.21, 0, 2.199 -0.99, 2.199 -2.199 V 5.498 C 21.993, 4.289, 21.003, 3.299, 19.794, 3.299 z M 5.68, 13.839 c -2.48, 0 -4.492 -2.018 -4.492 -4.492 s 2.018 -4.492, 4.492 -4.492 c 1.144, 0, 2.183, 0.407, 3.008, 1.171 l 0.071, 0.071 l -1.342, 1.298 l -0.066 -0.06 c -0.313 -0.297 -0.858 -0.643 -1.671 -0.643 c -1.441, 0 -2.612, 1.193 -2.612, 2.661 c 0, 1.468, 1.171, 2.661, 2.612, 2.661 c 1.507, 0, 2.161 -0.962, 2.337 -1.606 h -2.43 v -1.704 h 4.344 l 0.016, 0.077 c 0.044, 0.231, 0.06, 0.434, 0.06, 0.665 C 10.001, 12.036, 8.225, 13.839, 5.68, 13.839 z M 11.739, 9.979 h 4.393 c 0, 0 -0.374, 1.446 -1.715, 3.008 c -0.588 -0.676 -0.995 -1.336 -1.254 -1.864 h -1.089 L 11.739, 9.979 z M 13.625, 13.839 l -0.588, 0.583 l -0.72 -2.452 C 12.685, 12.63, 13.13, 13.262, 13.625, 13.839 z M 20.893, 19.794 c 0, 0.605 -0.495, 1.1 -1.1, 1.1 H 12.096 l 2.199 -2.199 l -0.896 -3.041 l 1.012 -1.012 l 2.953, 2.953 l 0.803 -0.803 l -2.975 -2.953 c 0.99 -1.138, 1.759 -2.474, 2.106 -3.854 h 1.397 V 8.841 H 14.697 v -1.144 h -1.144 v 1.144 H 11.398 l -1.309 -4.443 H 19.794 c 0.605, 0, 1.1, 0.495, 1.1, 1.1 V 19.794 z"/>
 					</svg>
@@ -110,7 +76,7 @@ class GoogleTranslateOption {
 						<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.choices[key].description}</h3>
 						${this.defaults.choices[key].direction == "Output" ? this.reverseButtonMarkup.replace("REPLACETYPE",key) : ""}
 					</div>
-					<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">${BDFDB.createSelectMenu(`<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer}" style="flex: 1 1 auto;"></div>`, this.defaults.choices[key].value, key)}</div>`).join("")}
+					<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">${BDFDB.createSelectMenu(`<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer}" style="flex: 1 1 auto;"></div>`, this.defaults.choices[key].value, key)}</div>`).join("")}
 					<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
 						<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.title + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Translate:</h3>
 						<div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCNS.switchthemedefault + BDFDB.disCN.switchvalueunchecked}" style="flex: 0 0 auto;">
@@ -129,18 +95,8 @@ class GoogleTranslateOption {
 				bottom: 0;
 				right: 9px;
 			}
-			${BDFDB.dotCN.textareabuttonwrapper}.popout-open ${BDFDB.dotCN.textareabutton}.translate-button-inner {
-				opacity: 1;
-			}
-			${BDFDB.dotCN.textareabuttonwrapper + BDFDB.dotCNS.textareabuttonactive + BDFDB.dotCN.textareabutton}.translate-button-inner {
+			${BDFDB.dotCN.textareabuttonwrapper}.translate-button.translating-active ${BDFDB.dotCN.textareaicon} {
 				color: #F04747 !important;
-			}
-			${BDFDB.dotCNS.textareabuttonwrapper + BDFDB.dotCN.textareabutton}.translate-button-inner ${BDFDB.dotCN.textareaicon} {
-				height: 24px;
-				width: 24px;
-			}
-			${BDFDB.dotCN.textareabuttonwrapper}.popout-open ${BDFDB.dotCN.textareabutton}.translate-button-inner ${BDFDB.dotCN.textareaicon} {
-				transform: none;
 			}
 			.reverse-button {
 				margin-top: -5px;
@@ -167,13 +123,13 @@ class GoogleTranslateOption {
 				border-radius: 3px 3px 0 0 !important;
 				margin-top: 1px !important;
 			}
-			${BDFDB.dotCN.message}.GTO-translated-message ${BDFDB.dotCNS.messagebody + BDFDB.dotCN.messagemarkup} {
+			${BDFDB.dotCN.messagegroup} .GTO-translated-message ${BDFDB.dotCNS.messagebody + BDFDB.dotCN.messagemarkup} {
 				font-size: 0 !important;
 			}
-			${BDFDB.dotCN.message}.GTO-translated-message ${BDFDB.dotCNS.messagebody + BDFDB.dotCN.messagemarkup} > .GTO-translation {
-				font-size: 0.9375rem !important;
+			${BDFDB.dotCN.messagegroup} .GTO-translated-message ${BDFDB.dotCNS.messagebody + BDFDB.dotCN.messagemarkup} > .GTO-translation {
+				font-size: 1rem !important;
 			}
-			${BDFDB.dotCN.message}.GTO-translated-message ${BDFDB.dotCNS.messagebody + BDFDB.dotCN.messagemarkup} > :not(.GTO-translation)${BDFDB.notCN.messageheadercompact + BDFDB.notCN.messageedited} {
+			${BDFDB.dotCN.messagegroup} .GTO-translated-message ${BDFDB.dotCNS.messagebody + BDFDB.dotCN.messagemarkup} > :not(.GTO-translation)${BDFDB.notCN.messageheadercompact + BDFDB.notCN.messageedited} {
 				display: none !important;
 			}`;
 	}
@@ -223,7 +179,7 @@ class GoogleTranslateOption {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -245,11 +201,6 @@ class GoogleTranslateOption {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 
-			this.GuildUtils = BDFDB.WebModules.findByProperties("getGuilds","getGuild");
-			this.ChannelUtils = BDFDB.WebModules.findByProperties("getChannels","getChannel");
-			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
-			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
-
 			this.setLanguage();
 
 			BDFDB.WebModules.forceAllUpdates(this);
@@ -261,11 +212,11 @@ class GoogleTranslateOption {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-			document.querySelectorAll(BDFDB.dotCN.message + ".GTO-translated-message").forEach(message => {
+			document.querySelectorAll(BDFDB.dotCN.messagegroup + " .GTO-translated-message").forEach(message => {
 				this.resetMessage(message);
 			});
 
-			BDFDB.removeEles(".translate-button-wrapper", ".popout-googletranslate");
+			BDFDB.removeEles(".translate-button", ".popout-googletranslate");
 
 			BDFDB.unloadMessage(this);
 		}
@@ -274,54 +225,74 @@ class GoogleTranslateOption {
 
 	// begin of own functions
 
-	changeLanguageStrings () {
-		this.messageTranslateContextEntryMarkup = 		this.messageTranslateContextEntryMarkup.replace("REPLACE_context_messagetranslateoption_text", this.labels.context_messagetranslateoption_text);
-		this.messageUntranslateContextEntryMarkup = 	this.messageUntranslateContextEntryMarkup.replace("REPLACE_context_messageuntranslateoption_text", this.labels.context_messageuntranslateoption_text);
-		this.messageSearchContextEntryMarkup = 			this.messageSearchContextEntryMarkup.replace("REPLACE_context_googletranslateoption_text", this.labels.context_googletranslateoption_text);
-
-		this.popoutTranslateEntryMarkup = 				this.popoutTranslateEntryMarkup.replace("REPLACE_popout_translateoption_text", this.labels.popout_translateoption_text);
-		this.popoutUntranslateEntryMarkup = 			this.popoutUntranslateEntryMarkup.replace("REPLACE_popout_untranslateoption_text", this.labels.popout_untranslateoption_text);
-	}
-
-	onMessageContextMenu (instance, menu) {
-		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(".googletranslateoption-item")) {
+	onMessageContextMenu (instance, menu, returnvalue) {
+		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(`${this.name}-contextMenuItem`)) {
 			let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
 			if (!messagediv || pos == -1) return;
-			let pinentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,name:"MessagePinItem"}));
-			let messageTranslateContextEntry = BDFDB.htmlToElement(BDFDB.containsClass(messagediv, "GTO-translated-message") ? this.messageUntranslateContextEntryMarkup : this.messageTranslateContextEntryMarkup);
-			if (pinentry) pinentry.parentElement.insertBefore(messageTranslateContextEntry, pinentry.nextElementSibling);
-			else menu.insertBefore(messageTranslateContextEntry, menu.firstElementChild);
-			let translateitem = messageTranslateContextEntry.querySelector(".googletranslateoption-item");
-			translateitem.addEventListener("click", () => {
-				BDFDB.closeContextMenu(menu);
-				this.translateMessage(instance.props.message, instance.props.target, instance.props.channel);
+			let translated = BDFDB.containsClass(messagediv, "GTO-translated-message");
+			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, "MessagePinItem");
+			const translateUntranslateItem = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+				label: translated ? this.labels.context_messageuntranslateoption_text : this.labels.context_messagetranslateoption_text,
+				hint: BDFDB.isPluginEnabled("MessageUtilities") ? window.bdplugins.MessageUtilities.plugin.getActiveShortcutString("__Translate_Message") : null,
+				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-${translated ? "untranslate" : "translate"}-contextMenuItem`,
+				action: e => {
+					BDFDB.closeContextMenu(menu);
+					this.translateMessage(instance.props.message, instance.props.target, instance.props.channel);
+				}
 			});
-			if (BDFDB.isPluginEnabled("MessageUtilities")) {
-				BDFDB.setContextHint(translateitem, window.bdplugins.MessageUtilities.plugin.getActiveShortcutString("__Translate_Message"));
-			}
+			if (index > -1) children.splice(index, 0, translateUntranslateItem);
+			else children.push(translateUntranslateItem);
 			let text = document.getSelection().toString();
 			if (text) {
-				let searchentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,props:["handleSearchWithGoogle"]}));
-				if (searchentry) {
-					let messageSearchContextEntry = BDFDB.htmlToElement(this.messageSearchContextEntryMarkup);
-					searchentry.parentElement.appendChild(messageSearchContextEntry);
-					let searchitem = messageSearchContextEntry.querySelector(".googletranslateoption-search-item");
-					searchitem.addEventListener("mouseenter", e => {
-						this.translateText(text, "context", (translation, input, output) => {
-							if (translation) {
-								var openGoogleSearch = () => {
+				let GSRstring = BDFDB.getReactValue(bdplugins, "GoogleSearchReplace.plugin.labels.context_googlesearchreplace_text");
+				let [children2, index2] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, GSRstring ? ["SearchWithGoogle", GSRstring] : "SearchWithGoogle");
+				var foundtranslation, foundinput, foundoutput;
+				const searchTranslationItem = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+					label: this.labels.context_googletranslateoption_text,
+					className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-searchtranslation-contextMenuItem`,
+					action: e => {
+						var item = BDFDB.getParentEle(BDFDB.dotCN.contextmenuitem, e.target);
+						if (item) {
+							var createTooltip = () => {
+								BDFDB.createTooltip(`From ${foundinput.name}:\n${text}\n\nTo ${foundoutput.name}:\n${foundtranslation}`, item, {type:"right", selector:"googletranslate-tooltip"});
+							};
+							if (foundtranslation && foundinput && foundoutput) {
+								if (document.querySelector(".googletranslate-tooltip")) {
 									BDFDB.closeContextMenu(menu);
-									window.open(this.getGoogleTranslatePageURL(input.id, output.id, text), "_blank");
-								};
-								searchitem.removeEventListener("click", openGoogleSearch);
-								searchitem.addEventListener("click", openGoogleSearch);
-								let rects = BDFDB.getRects(searchitem);
-								BDFDB.createTooltip(`From ${input.name}:\n${text}\n\nTo ${output.name}:\n${translation}`, searchitem, {type: "right",selector:"googletranslate-tooltip",style:`max-width: ${window.outerWidth - rects.left - rects.width}px !important;`});
+									window.open(this.getGoogleTranslatePageURL(foundinput.id, foundoutput.id, text), "_blank");
+								}
+								else createTooltip();
 							}
-						});
-					});
-				}
+							else this.translateText(text, "context", (translation, input, output) => {
+								if (translation) {
+									foundtranslation = translation, foundinput = input, foundoutput = output;
+									createTooltip();
+								}
+							});
+						}
+					}
+				});
+				if (index2 > -1) children2.splice(index2, 0, searchTranslationItem);
+				else children2.push(searchTranslationItem);
 			}
+		}
+	}
+
+	onMessageOptionPopout (instance, popout, returnvalue) {
+		if (instance.props.message && instance.props.channel && instance.props.target && !popout.querySelector(`${this.name}-popoutMenuItem`)) {
+			let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
+			if (!messagediv || pos == -1) return;
+			let translated = BDFDB.containsClass(messagediv, "GTO-translated-message");
+			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, [BDFDB.LanguageStrings.PIN, BDFDB.LanguageStrings.UNPIN]);
+			const translateUntranslateItem = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+				label: this.labels[translated ? "popout_untranslateoption_text" : "popout_translateoption_text"],
+				className: `${BDFDB.disCN.optionpopoutitem} BDFDB-popoutMenuItem ${this.name}-popoutMenuItem ${this.name}-${translated ? "untranslate" : "translate"}-popoutMenuItem`,
+				action: e => {
+					this.translateMessage(instance.props.message, instance.props.target, instance.props.channel);
+					instance.props.onClose();
+				}
+			});
+			children.splice(index + 1, 0, translateUntranslateItem);
 		}
 	}
 
@@ -344,17 +315,17 @@ class GoogleTranslateOption {
 		return choice;
 	}
 
-	processStandardSidebarView (instance, wrapper) {
+	processStandardSidebarView (instance, wrapper, returnvalue) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			this.setLanguage();
-			BDFDB.removeEles(".translate-button-wrapper");
+			BDFDB.removeEles(".translate-button");
 			BDFDB.WebModules.forceAllUpdates(this, "ChannelTextArea");
 		}
 	}
 
-	processChannelTextArea (instance, wrapper) {
-		if (instance.props && instance.props.type && instance.props.type == "normal" && !instance.props.disabled && !wrapper.querySelector(".translate-button-wrapper") && BDFDB.getData("addTranslateButton", this, "settings")) {
+	processChannelTextArea (instance, wrapper, returnvalue) {
+		if (instance.props && instance.props.type && instance.props.type == "normal" && !instance.props.disabled && !wrapper.querySelector(".translate-button") && BDFDB.getData("addTranslateButton", this, "settings")) {
 			let textarea = wrapper.querySelector("textarea");
 			if (textarea) {
 				var buttoncontainer = wrapper.querySelector(BDFDB.dotCN.textareapickerbuttons);
@@ -365,11 +336,11 @@ class GoogleTranslateOption {
 				});
 				translateButton.addEventListener("contextmenu", () => {
 					this.translating = !this.translating;
-					BDFDB.toggleClass(document.querySelectorAll(BDFDB.dotCNS.textareawrapchat + ".translate-button-wrapper"), BDFDB.disCN.textareabuttonactive, this.translating);
+					BDFDB.toggleClass(document.querySelectorAll(BDFDB.dotCNS.textareawrapchat + ".translate-button"), "translating-active", this.translating);
 				});
 				buttoncontainer.insertBefore(translateButton, buttoncontainer.firstElementChild);
 				BDFDB.addClass(translateButton, instance.props.type);
-				BDFDB.toggleClass(translateButton, BDFDB.disCN.textareabuttonactive, this.translating);
+				BDFDB.toggleClass(translateButton, "translating-active", this.translating);
 				BDFDB.addEventListener(this, textarea, "input", () => {
 					if (this.doTranslate) {
 						this.doTranslate = false;
@@ -398,33 +369,27 @@ class GoogleTranslateOption {
 		}
 	}
 
-	processMessage (instance, wrapper) {  
+	processMessage (instance, wrapper, returnvalue) {
 		if (instance.props && typeof instance.props.renderButtons == "function" && !wrapper.querySelector(BDFDB.dotCN.optionpopoutbutton) && BDFDB.getReactValue(instance, "props.message.author.id") != 1) {
 			let buttonwrap = wrapper.querySelector(BDFDB.dotCN.messagebuttoncontainer);
 			if (buttonwrap) {
-				let optionPopoutButton = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.optionpopoutbutton}"></div>`);
+				let optionPopoutButton = BDFDB.htmlToElement(`<div tabindex="0" class="${BDFDB.disCN.optionpopoutbutton}" aria-label="More Options" role="button"><svg name="OverflowMenu" class="${BDFDB.disCN.optionpopoutbuttonicon}" aria-hidden="false" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0z"></path><path fill="currentColor" d="M12 16c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2zm0-6c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2zm0-6c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2z"></path></g></svg></div>`);
 				optionPopoutButton.addEventListener("click", () => {BDFDB.createMessageOptionPopout(optionPopoutButton);});
 				buttonwrap.appendChild(optionPopoutButton);
 			}
 		}
 	}
 
-	processMessageOptionPopout (instance, wrapper) {
-		if (instance.props.message && instance.props.channel && instance._reactInternalFiber.memoizedProps.target && !wrapper.querySelector(".googletranslateoption-itembtn")) {
-			let {messagediv, pos} = this.getMessageAndPos(instance._reactInternalFiber.memoizedProps.target);
-			if (!messagediv || pos == -1) return;
-			let popoutTranslateEntry = BDFDB.htmlToElement(BDFDB.containsClass(messagediv, "GTO-translated-message") ? this.popoutUntranslateEntryMarkup : this.popoutTranslateEntryMarkup);
-			wrapper.appendChild(popoutTranslateEntry);
-			popoutTranslateEntry.addEventListener("click", () => {
-				this.translateMessage(instance.props.message, instance._reactInternalFiber.memoizedProps.target, instance.props.channel);
-				instance.props.onClose();
-			});
+	processMessageContent (instance, wrapper, returnvalue) {
+		if (instance.props && instance.props.message && instance.props.channel) {
+			let messagediv = BDFDB.getParentEle(".GTO-translated-message", wrapper);
+			if (messagediv && !wrapper.querySelector(".GTO-translation")) BDFDB.removeClass(messagediv, "GTO-translated-message");
 		}
 	}
 
 	getMessageAndPos (target) {
-		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.message, target);
-		let pos = messagediv ? Array.from(messagediv.parentElement.querySelectorAll(BDFDB.dotCN.message)).indexOf(messagediv) : -1;
+		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.messagegroup + "> [aria-disabled]", target);
+		let pos = messagediv ? Array.from(messagediv.parentElement.childNodes).filter(n => n.nodeType != Node.TEXT_NODE).indexOf(messagediv) : -1;
 		return {messagediv, pos};
 	}
 
@@ -432,7 +397,7 @@ class GoogleTranslateOption {
 		if (!message || !target) return;
 		let {messagediv, pos} = this.getMessageAndPos(target);
 		if (!messagediv || pos == -1) return;
-		channel = channel ? channel : this.ChannelUtils.getChannel(message.channel_id);
+		channel = channel ? channel : BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 		if (!messagediv.querySelector(BDFDB.dotCN.messageedited + ".GTO-translated")) {
 			var markup = messagediv.querySelector(BDFDB.dotCN.messagemarkup);
 			var fakemarkup = markup.cloneNode(true);
@@ -497,7 +462,7 @@ class GoogleTranslateOption {
 				finishTranslation(newtext, exceptions, input, output, toast);
 			}
 			else {
-				require("request")(this.getGoogleTranslateApiURL(input.id, output.id, newtext), (error, response, result) => {
+				BDFDB.LibraryRequires.request(this.getGoogleTranslateApiURL(input.id, output.id, newtext), (error, response, result) => {
 					if (!error && result) {
 						try {
 							result = JSON.parse(result);
@@ -632,8 +597,8 @@ class GoogleTranslateOption {
 
 	openTranslatePopout (button) {
 		let container = document.querySelector(BDFDB.dotCN.popouts);
-		if (!container || BDFDB.containsClass(button, "popout-open")) return;
-		BDFDB.addClass(button, "popout-open");
+		if (!container || BDFDB.containsClass(button, BDFDB.disCN.textareabuttonactive)) return;
+		BDFDB.addClass(button, BDFDB.disCN.textareabuttonactive);
 		let translatepopout = BDFDB.htmlToElement(this.translatePopoutMarkup);
 		container.appendChild(translatepopout);
 		let buttonrects = BDFDB.getRects(button);
@@ -669,7 +634,7 @@ class GoogleTranslateOption {
 		var translatecheckbox = translatepopout.querySelector("#translating-checkbox");
 		translatecheckbox.checked = this.translating;
 		translatecheckbox.addEventListener("click", () => {
-			BDFDB.toggleClass(button, BDFDB.disCN.textareabuttonactive, translatecheckbox.checked);
+			BDFDB.toggleClass(button, "translating-active", translatecheckbox.checked);
 			this.translating = translatecheckbox.checked;
 		});
 
@@ -677,7 +642,7 @@ class GoogleTranslateOption {
 			if (!translatepopout.contains(e.target)) {
 				document.removeEventListener("mousedown", removePopout);
 				translatepopout.remove();
-				setTimeout(() => {BDFDB.removeClass(button, "popout-open");},300);
+				setTimeout(() => {BDFDB.removeClass(button, BDFDB.disCN.textareabuttonactive);},300);
 			}
 		};
 		document.addEventListener("mousedown", removePopout);
@@ -693,7 +658,7 @@ class GoogleTranslateOption {
 	}
 
 	createSelectChoice (key) {
-		return `<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer}" style="flex: 1 1 auto;">${this.languages[key].name}</div>`;
+		return `<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer}" style="flex: 1 1 auto;">${this.languages[key].name}</div>`;
 	}
 
 	getGoogleTranslateApiURL (input, output, text) {

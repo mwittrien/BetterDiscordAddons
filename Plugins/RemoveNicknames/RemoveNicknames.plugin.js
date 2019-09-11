@@ -3,7 +3,7 @@
 class RemoveNicknames {
 	getName () {return "RemoveNicknames";}
 
-	getVersion () {return "1.2.5";}
+	getVersion () {return "1.2.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class RemoveNicknames {
 
 	constructor () {
 		this.changelog = {
-			"added":[["Bot Nicknames","Added an option that allows you to keep the nicknames of bots"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.patchModules = {
@@ -68,7 +68,7 @@ class RemoveNicknames {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -91,13 +91,6 @@ class RemoveNicknames {
 			BDFDB.loadMessage(this);
 
 			this.reseting = false;
-
-			this.RelationshipUtils = BDFDB.WebModules.findByProperties("isBlocked", "isFriend");
-			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers", "getUser");
-			this.MemberUtils = BDFDB.WebModules.findByProperties("getNicknames", "getNick");
-			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
-			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
-
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -119,7 +112,7 @@ class RemoveNicknames {
 
 	// begin of own functions
 
-	processMemberListItem (instance, wrapper) {
+	processMemberListItem (instance, wrapper, returnvalue) {
 		let user = BDFDB.getReactValue(instance, "props.user");
 		if (user) {
 			let username = wrapper.querySelector(BDFDB.dotCN.memberusername);
@@ -127,7 +120,7 @@ class RemoveNicknames {
 		}
 	}
 
-	processMessageUsername (instance, wrapper) {
+	processMessageUsername (instance, wrapper, returnvalue) {
 		let message = BDFDB.getReactValue(instance, "props.message");
 		if (message) {
 			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
@@ -135,14 +128,14 @@ class RemoveNicknames {
 		}
 	}
 
-	processTypingUsers (instance, wrapper) {
-		let users = !instance.props.typingUsers ? [] : Object.keys(instance.props.typingUsers).filter(id => id != BDFDB.myData.id).filter(id => !this.RelationshipUtils.isBlocked(id)).map(id => this.UserUtils.getUser(id)).filter(id => id != null);
+	processTypingUsers (instance, wrapper, returnvalue) {
+		let users = !instance.props.typingUsers ? [] : Object.keys(instance.props.typingUsers).filter(id => id != BDFDB.myData.id).filter(id => !BDFDB.LibraryModules.FriendUtils.isBlocked(id)).map(id => BDFDB.LibraryModules.UserStore.getUser(id)).filter(id => id != null);
 		wrapper.querySelectorAll("strong").forEach((username, i) => {
 			if (users[i] && username) BDFDB.setInnerText(username, this.getNewName(users[i]));
 		});
 	}
 
-	processClickable (instance, wrapper) {
+	processClickable (instance, wrapper, returnvalue) {
 		if (!wrapper || !instance.props || !instance.props.className) return;
 		if (instance.props.tag == "a" && instance.props.className.indexOf(BDFDB.disCN.anchorunderlineonhover) > -1) {
 			if (BDFDB.containsClass(wrapper.parentElement, BDFDB.disCN.messagesystemcontent) && wrapper.parentElement.querySelector("a") == wrapper) {
@@ -150,7 +143,7 @@ class RemoveNicknames {
 				if (message) {
 					BDFDB.setInnerText(wrapper, this.getNewName(message.author));
 					if (message.mentions.length == 1) {
-						let seconduser = this.UserUtils.getUser(message.mentions[0]);
+						let seconduser = BDFDB.LibraryModules.UserStore.getUser(message.mentions[0]);
 						let secondwrapper = wrapper.parentElement.querySelectorAll("a")[1];
 						if (seconduser && secondwrapper) BDFDB.setInnerText(secondwrapper, this.getNewName(seconduser));
 					}
@@ -163,7 +156,7 @@ class RemoveNicknames {
 			if (typeof render == "function") {
 				var props = render().props;
 				if (props && props.user) BDFDB.setInnerText(wrapper, "@" + this.getNewName(props.user, wrapper));
-				else if (props && props.userId) BDFDB.setInnerText(wrapper, "@" + this.getNewName(this.UserUtils.getUser(props.userId), wrapper));
+				else if (props && props.userId) BDFDB.setInnerText(wrapper, "@" + this.getNewName(BDFDB.LibraryModules.UserStore.getUser(props.userId), wrapper));
 			}
 		}
 		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.voiceuser) > -1) {
@@ -182,7 +175,7 @@ class RemoveNicknames {
 		}
 	}
 
-	processStandardSidebarView (instance, wrapper) {
+	processStandardSidebarView (instance, wrapper, returnvalue) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			BDFDB.WebModules.forceAllUpdates(this);
@@ -192,7 +185,7 @@ class RemoveNicknames {
 	getNewName (info) {
 		if (!info) return null;
 		let settings = BDFDB.getAllData(this, "settings");
-		let member = this.MemberUtils.getMember(this.LastGuildStore.getGuildId(), info.id) || {};
+		let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), info.id) || {};
 		let EditUsersData = (BDFDB.isPluginEnabled("EditUsers") ? BDFDB.loadData(info.id, "EditUsers", "users") : null) || {};
 		if (this.reseting || !member.nick || info.id == BDFDB.myData.id && !settings.replaceOwn || info.bot && !settings.replaceBots) return EditUsersData.name || member.nick || info.username;
 		var username = EditUsersData.name || info.username;

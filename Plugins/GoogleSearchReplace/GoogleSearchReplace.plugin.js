@@ -3,13 +3,17 @@
 class GoogleSearchReplace {
 	getName () {return "GoogleSearchReplace";}
 
-	getVersion () {return "1.1.8";}
+	getVersion () {return "1.1.9";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Replaces the default Google Text Search with a selection menu of several search engines.";}
 
 	constructor () {
+		this.changelog = {
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+		};
+		
 		this.labels = {};
 	}
 
@@ -35,23 +39,6 @@ class GoogleSearchReplace {
 				YouTube: 			{value:true, 	name:"YouTube", 			url:"https://www.youtube.com/results?q=" + this.textUrlReplaceString}
 			}
 		};
-
-		this.messageContextEntryMarkup =
-			`<div class="${BDFDB.disCN.contextmenuitem} googlereplacesearch-item ${BDFDB.disCN.contextmenuitemsubmenu}">
-				<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_context_googlesearchreplace_text</div></span>
-				<div class="${BDFDB.disCN.contextmenuhint}"></div>
-			</div>`;
-
-		this.messageContextSubMenuMarkup = 
-			`<div class="${BDFDB.disCN.contextmenu} googlereplacesearch-submenu">
-				<div class="${BDFDB.disCN.contextmenuitemgroup}">
-					<div class="${BDFDB.disCN.contextmenuitem} alldisabled-item ${BDFDB.disCN.contextmenuitemdisabled}">
-						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_submenu_disabled_text</div></span>
-						<div class="${BDFDB.disCN.contextmenuhint}"></div>
-					</div>
-					${Object.keys(this.defaults.engines).map((key, i) => `<div engine="${key}" class="${BDFDB.disCN.contextmenuitem} GRS-item"><span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">${this.defaults.engines[key].name}</div></span><div class="${BDFDB.disCN.contextmenuhint}"></div></div>`).join("")}
-				</div>
-			</div>`;
 	}
 
 	getSettingsPanel () {
@@ -90,7 +77,7 @@ class GoogleSearchReplace {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -126,48 +113,46 @@ class GoogleSearchReplace {
 
 	// begin of own functions
 
-	changeLanguageStrings () {
-		this.messageContextEntryMarkup = 	this.messageContextEntryMarkup.replace("REPLACE_context_googlesearchreplace_text", this.labels.context_googlesearchreplace_text);
-
-		this.messageContextSubMenuMarkup = 	this.messageContextSubMenuMarkup.replace("REPLACE_submenu_disabled_text", this.labels.submenu_disabled_text);
-	}
-
-	onNativeContextMenu (instance, menu) {
-		if (instance.props && instance.props.type == "NATIVE_TEXT" && instance.props.value && !menu.querySelector(".reverseimagesearch-item")) {
-			let searchentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,props:["handleSearchWithGoogle"]}));
-			if (searchentry) this.appendItem(searchentry, instance.props.value);
+	onNativeContextMenu (instance, menu, returnvalue) {
+		if (instance.props && instance.props.type == "NATIVE_TEXT" && instance.props.value && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
+			this.appendItem(menu, returnvalue, instance.props.value);
 		}
 	}
 
-	onMessageContextMenu (instance, menu) {
-		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(".googlereplacesearch-item")) {
+	onMessageContextMenu (instance, menu, returnvalue) {
+		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
 			let text = document.getSelection().toString();
-			if (text) {
-				let searchentry = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu,props:["handleSearchWithGoogle"]}));
-				if (searchentry) this.appendItem(searchentry, text);
-			}
+			if (text) this.appendItem(menu, returnvalue, text);
 		}
 	}
 
-	appendItem (target, text) {
-		let messageContextEntry = BDFDB.htmlToElement(this.messageContextEntryMarkup);
-		target.parentElement.insertBefore(messageContextEntry, target.nextElementSibling);
-		messageContextEntry.addEventListener("mouseenter", () => {
-			let messageContextSubMenu = BDFDB.htmlToElement(this.messageContextSubMenuMarkup);
-			let engines = BDFDB.getAllData(this, "engines");
-			for (let key in engines) if (!engines[key]) BDFDB.removeEles(messageContextSubMenu.querySelector("[engine='" + key + "']"));
-			if (messageContextSubMenu.querySelector(".GRS-item")) BDFDB.removeEles(messageContextSubMenu.querySelector(".alldisabled-item"));
-			BDFDB.addChildEventListener(messageContextSubMenu, "click", ".GRS-item", e => {
-				BDFDB.closeContextMenu(target);
-				let engine = e.currentTarget.getAttribute("engine");
-				if (engine == "_all") {
-					for (let key in engines) if (key != "_all" && engines[key]) window.open(this.defaults.engines[key].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
+	appendItem (menu, returnvalue, text) {
+		let engines = BDFDB.getAllData(this, "engines");
+		let items = [];
+		for (let key in engines) if (engines[key]) items.push(BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+			label: this.defaults.engines[key].name,
+			className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-engine-contextMenuItem`,
+			action: e => {
+				if (!e.shiftKey) BDFDB.closeContextMenu(menu);
+				if (key == "_all") {
+					for (let key2 in engines) if (key2 != "_all" && engines[key2]) window.open(this.defaults.engines[key2].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
 				}
-				else window.open(this.defaults.engines[engine].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
-			});
-			BDFDB.appendSubMenu(messageContextEntry, messageContextSubMenu);
+				else window.open(this.defaults.engines[key].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
+			}
+		}));
+		if (!items.length) items.push(BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+			label: this.labels.submenu_disabled_text,
+			className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-disabled-contextMenuItem`,
+			disabled: true
+		}));
+		let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, "SearchWithGoogle");
+		const item = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+			label: this.labels.context_googlesearchreplace_text,
+			className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-search-contextMenuSubItem`,
+			render: items
 		});
-		BDFDB.toggleEles(target, false);
+		if (index > -1) children.splice(index, 1, item);
+		else children.push(item);
 	}
 
 	setLabelsByLanguage () {

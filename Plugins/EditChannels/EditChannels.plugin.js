@@ -3,7 +3,7 @@
 class EditChannels {
 	getName () {return "EditChannels";}
 
-	getVersion () {return "4.0.0";}
+	getVersion () {return "4.0.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditChannels {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["EditUsers bug","Fixed a bug that occured when EditUsers is enabled"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.labels = {};
@@ -30,28 +30,6 @@ class EditChannels {
 	}
 
 	initConstructor () {
-		this.channelContextEntryMarkup =
-			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
-				<div class="${BDFDB.disCN.contextmenuitem} localchannelsettings-item ${BDFDB.disCN.contextmenuitemsubmenu}">
-					<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_context_localchannelsettings_text</div></span>
-					<div class="${BDFDB.disCN.contextmenuhint}"></div>
-				</div>
-			</div>`;
-
-		this.channelContextSubMenuMarkup = 
-			`<div class="${BDFDB.disCN.contextmenu} editchannels-submenu">
-				<div class="${BDFDB.disCN.contextmenuitemgroup}">
-					<div class="${BDFDB.disCN.contextmenuitem} channelsettings-item">
-						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_submenu_channelsettings_text</div></span>
-						<div class="${BDFDB.disCN.contextmenuhint}"></div>
-					</div>
-					<div class="${BDFDB.disCN.contextmenuitem} resetsettings-item ${BDFDB.disCN.contextmenuitemdisabled}">
-						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_submenu_resetsettings_text</div></span>
-						<div class="${BDFDB.disCN.contextmenuhint}"></div>
-					</div>
-				</div>
-			</div>`;
-
 		this.channelSettingsModalMarkup =
 			`<span class="${this.name}-modal BDFDB-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
@@ -60,7 +38,7 @@ class EditChannels {
 						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
 								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
-									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">REPLACE_modal_header_text</h4>
+									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">REPLACE_modal_header_text</h4>
 									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
 								</div>
 								<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
@@ -101,7 +79,7 @@ class EditChannels {
 							</div>
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
 								<button type="button" class="btn-save ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
-									<div class="${BDFDB.disCN.buttoncontents}">REPLACE_btn_save_text</div>
+									<div class="${BDFDB.disCN.buttoncontents}"></div>
 								</button>
 							</div>
 						</div>
@@ -179,7 +157,7 @@ class EditChannels {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -200,12 +178,6 @@ class EditChannels {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-
-			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers","getUser");
-			this.ChannelUtils = BDFDB.WebModules.findByProperties("getChannels","getChannel");
-			this.GuildChannels = BDFDB.WebModules.findByProperties("getChannels","getDefaultChannel");
-			this.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
-			this.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
 
 			var observer = new MutationObserver(() => {this.changeAppTitle();});
 			BDFDB.addObserver(this, document.head.querySelector("title"), {name:"appTitleObserver",instance:observer}, {childList:true});
@@ -235,44 +207,50 @@ class EditChannels {
 	// begin of own functions
 
 	changeLanguageStrings () {
-		this.channelContextEntryMarkup = 	this.channelContextEntryMarkup.replace("REPLACE_context_localchannelsettings_text", this.labels.context_localchannelsettings_text);
-
-		this.channelContextSubMenuMarkup = 	this.channelContextSubMenuMarkup.replace("REPLACE_submenu_channelsettings_text", this.labels.submenu_channelsettings_text);
-		this.channelContextSubMenuMarkup = 	this.channelContextSubMenuMarkup.replace("REPLACE_submenu_resetsettings_text", this.labels.submenu_resetsettings_text);
-
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_channelname_text", this.labels.modal_channelname_text);
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_colorpicker1_text", this.labels.modal_colorpicker1_text);
 		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_inheritcolor_text", this.labels.modal_inheritcolor_text);
-		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_btn_save_text", this.labels.btn_save_text);
 	}
 
-	onChannelContextMenu (instance, menu) {
-		if (instance.props && instance.props.channel && !menu.querySelector(".localchannelsettings-item")) {
-			let channelContextEntry = BDFDB.htmlToElement(this.channelContextEntryMarkup);
-			let devgroup = BDFDB.getContextMenuDevGroup(menu);
-			if (devgroup) devgroup.parentElement.insertBefore(channelContextEntry, devgroup);
-			else menu.appendChild(channelContextEntry, menu);
-			let settingsitem = channelContextEntry.querySelector(".localchannelsettings-item");
-			settingsitem.addEventListener("mouseenter", () => {
-				let channelContextSubMenu = BDFDB.htmlToElement(this.channelContextSubMenuMarkup);
-				let channelitem = channelContextSubMenu.querySelector(".channelsettings-item");
-				channelitem.addEventListener("click", () => {
-					BDFDB.closeContextMenu(menu);
-					this.showChannelSettings(instance.props.channel);
-				});
-				if (BDFDB.loadData(instance.props.channel.id, this, "channels")) {
-					let resetitem = channelContextSubMenu.querySelector(".resetsettings-item");
-					BDFDB.removeClass(resetitem, BDFDB.disCN.contextmenuitemdisabled);
-					resetitem.addEventListener("click", () => {
-						BDFDB.closeContextMenu(menu);
-						BDFDB.removeData(instance.props.channel.id, this, "channels");
-						this.changeAppTitle();
-						BDFDB.WebModules.forceAllUpdates(this);
-					});
-				}
-				BDFDB.appendSubMenu(settingsitem, channelContextSubMenu);
+	onChannelContextMenu (instance, menu, returnvalue) {
+		if (instance.props && instance.props.channel && !BDFDB.getParentEle(".container-hidden", instance.props.target) && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
+			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
+			const itemgroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
+				children: [
+					BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+						label: this.labels.context_localchannelsettings_text,
+						className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-channelsettings-contextMenuSubItem`,
+						render: [BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+							className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
+							children: [
+								BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+									label: this.labels.submenu_channelsettings_text,
+									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-channelsettings-ContextMenuItem`,
+									action: e => {
+										BDFDB.closeContextMenu(menu);
+										this.showChannelSettings(instance.props.channel);
+									}
+								}),
+								BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+									label: this.labels.submenu_resetsettings_text,
+									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-resetsettings-ContextMenuItem`,
+									disabled: !BDFDB.loadData(instance.props.channel.id, this, "channels"),
+									action: e => {
+										BDFDB.closeContextMenu(menu);
+										BDFDB.removeData(instance.props.channel.id, this, "channels");
+										this.changeAppTitle();
+										BDFDB.WebModules.forceAllUpdates(this);
+									}
+								})
+							]
+						})]
+					})
+				]
 			});
+			if (index > -1) children.splice(index, 0, itemgroup);
+			else children.push(itemgroup);
 		}
 	}
 
@@ -312,7 +290,7 @@ class EditChannels {
 		channelnameinput.focus();
 	}
 
-	processChannelTextArea (instance, wrapper) {
+	processChannelTextArea (instance, wrapper, returnvalue) {
 		let channel = BDFDB.getReactValue(instance, "props.channel");
 		if (channel) {
 			var textarea = wrapper.querySelector("textarea");
@@ -360,7 +338,7 @@ class EditChannels {
 		}
 	}
 
-	processAuditLog (instance, wrapper) {
+	processAuditLog (instance, wrapper, returnvalue) {
 		let channel = BDFDB.getReactValue(instance, "props.log.options.channel");
 		if (channel) {
 			let hooks = wrapper.querySelectorAll(`${BDFDB.dotCN.flexchild} > span${BDFDB.notCN.auditloguserhook}`);
@@ -368,7 +346,7 @@ class EditChannels {
 		} 
 	}
 
-	processInviteCard (instance, wrapper) {
+	processInviteCard (instance, wrapper, returnvalue) {
 		let invite = BDFDB.getReactValue(instance, "props.invite");
 		if (invite && invite.inviter && invite.channel) {
 			let channelname = wrapper.querySelector(BDFDB.dotCN.guildsettingsinvitechannelname);
@@ -376,32 +354,32 @@ class EditChannels {
 		}
 	}
 
-	processChannelCategoryItem (instance, wrapper) {
+	processChannelCategoryItem (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.channel) {
 			this.changeChannel(instance.props.channel, wrapper.querySelector(BDFDB.dotCN.categoryname), true);
 		}
 	}
 
-	processChannelItem (instance, wrapper) {
+	processChannelItem (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.channel) {
 			this.changeChannel(instance.props.channel, wrapper.querySelector(BDFDB.dotCN.channelname), true);
 		}
 	}
 
-	processHeaderBarContainer (instance, wrapper) {
+	processHeaderBarContainer (instance, wrapper, returnvalue) {
 		this.processHeaderBar(instance, wrapper);
 	}
 
-	processHeaderBar (instance, wrapper) {
+	processHeaderBar (instance, wrapper, returnvalue) {
 		let channel_id = BDFDB.getReactValue(instance, "props.channelId") || BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.channelId");
 		if (channel_id) {
 			let channelname = wrapper.querySelector(BDFDB.dotCN.channelheaderheaderbartitle);
 			if (channelname) {
-				let channel = this.ChannelUtils.getChannel(channel_id);
+				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(channel_id);
 				if (channel) {
 					if (channel.type == 0 || channel.type == 2) this.changeChannel(channel, channelname);
 					else {
-						if (channel.type == 1) channel = this.UserUtils.getUser(channel.recipients[0]) || channel;
+						if (channel.type == 1) channel = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]) || channel;
 						if (channelname.EditChannelsChangeObserver && typeof channelname.EditChannelsChangeObserver.disconnect == "function") channelname.EditChannelsChangeObserver.disconnect();
 						if (BDFDB.isPluginEnabled("EditUsers")) bdplugins.EditUsers.plugin.changeName(channel, channelname);
 						else {
@@ -415,18 +393,18 @@ class EditChannels {
 		}
 	}
 
-	processClickable (instance, wrapper) {
+	processClickable (instance, wrapper, returnvalue) {
 		if (!instance.props || !instance.props.className) return;
 		else if (instance.props.tag == "span" && instance.props.className.indexOf(BDFDB.disCN.mentionwrapper) > -1 && instance.props.className.indexOf(BDFDB.disCN.mention) == -1) {
 			let children = BDFDB.getReactValue(instance, "_reactInternalFiber.memoizedProps.children");
 			if (children && typeof children[0] == "string") {
 				let channelname = children[0].slice(1);
 				let categoryname = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.type.displayName") == "Tooltip" ? BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.memoizedProps.text") : null
-				let channelid = this.LastGuildStore.getGuildId();
-				let channels = channelid ? (this.GuildChannels.getChannels(channelid)[0] || this.GuildChannels.getChannels(channelid).SELECTABLE) : null;
+				let channelid = BDFDB.LibraryModules.LastGuildStore.getGuildId();
+				let channels = channelid ? (BDFDB.LibraryModules.GuildChannelStore.getChannels(channelid)[0] || BDFDB.LibraryModules.GuildChannelStore.getChannels(channelid).SELECTABLE) : null;
 				if (Array.isArray(channels)) for (let channel of channels) {
 					if (channelname == channel.channel.name) {
-						let category = categoryname ? this.ChannelUtils.getChannel(channel.channel.parent_id) : null;
+						let category = categoryname ? BDFDB.LibraryModules.ChannelStore.getChannel(channel.channel.parent_id) : null;
 						if (!category || category && categoryname == category.name) {
 							this.changeMention(channel.channel, wrapper, category || {});
 							break;
@@ -439,7 +417,7 @@ class EditChannels {
 			let channel = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.memoizedProps.channel");
 			if (channel) {
 				this.changeChannel(channel, wrapper.querySelector(BDFDB.dotCN.quickswitchresultmatch));
-				if (channel.parent_id) this.changeChannel(this.ChannelUtils.getChannel(channel.parent_id), wrapper.querySelector(BDFDB.dotCN.quickswitchresultnote));
+				if (channel.parent_id) this.changeChannel(BDFDB.LibraryModules.ChannelStore.getChannel(channel.parent_id), wrapper.querySelector(BDFDB.dotCN.quickswitchresultnote));
 			}
 		}
 		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.autocompleterow) > -1) {
@@ -456,7 +434,7 @@ class EditChannels {
 		}
 	}
 
-	processStandardSidebarView (instance, wrapper) {
+	processStandardSidebarView (instance, wrapper, returnvalue) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			this.changeAppTitle();
@@ -465,7 +443,7 @@ class EditChannels {
 	}
 
 	changeAppTitle () {
-		let channel = this.ChannelUtils.getChannel(this.LastChannelStore.getChannelId());
+		let channel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());
 		let title = document.head.querySelector("title");
 		if (title && channel && channel.type != 1) {
 			let data = this.getChannelData(channel.id, channel.parent_id, title);
@@ -672,8 +650,8 @@ class EditChannels {
 			if (!channels) return;
 			let channelarray = [];
 			for (let id in channels) if (channels[id].name) {
-				let channel = this.ChannelUtils.getChannel(id);
-				let category = channel && channel.parent_id ? this.ChannelUtils.getChannel(channel.parent_id) : null;
+				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(id);
+				let category = channel && channel.parent_id ? BDFDB.LibraryModules.ChannelStore.getChannel(channel.parent_id) : null;
 				let catdata = (category ? channels[category.id] : null) || {};
 				if (channel && channel.type == 0) channelarray.push(Object.assign({lowercasename:channels[id].name.toLowerCase(),lowercasecatname:(catdata && catdata.name ? catdata.name.toLowerCase() : null),channel,category,catdata},channels[id]));
 			}
@@ -751,9 +729,7 @@ class EditChannels {
 					modal_header_text:						"Postavke lokalnih kanala",
 					modal_channelname_text:					"Naziv lokalnog kanala",
 					modal_colorpicker1_text:				"Boja lokalnog kanala",
-					modal_inheritcolor_text:				"Naslijedi boju u potkanale",
-					btn_cancel_text:						"Prekid",
-					btn_save_text:							"Uštedjeti"
+					modal_inheritcolor_text:				"Naslijedi boju u potkanale"
 				};
 			case "da":		//danish
 				return {
@@ -763,9 +739,7 @@ class EditChannels {
 					modal_header_text:						"Lokal kanalindstillinger",
 					modal_channelname_text:					"Lokalt kanalnavn",
 					modal_colorpicker1_text:				"Lokal kanalfarve",
-					modal_inheritcolor_text:				"Arve farve til subkanaler",
-					btn_cancel_text:						"Afbryde",
-					btn_save_text:							"Spare"
+					modal_inheritcolor_text:				"Arve farve til subkanaler"
 				};
 			case "de":		//german
 				return {
@@ -775,9 +749,7 @@ class EditChannels {
 					modal_header_text:						"Lokale Kanaleinstellungen",
 					modal_channelname_text:					"Lokaler Kanalname",
 					modal_colorpicker1_text:				"Lokale Kanalfarbe",
-					modal_inheritcolor_text:				"Farbe an Unterkanäle vererben",
-					btn_cancel_text:						"Abbrechen",
-					btn_save_text:							"Speichern"
+					modal_inheritcolor_text:				"Farbe an Unterkanäle vererben"
 				};
 			case "es":		//spanish
 				return {
@@ -787,9 +759,7 @@ class EditChannels {
 					modal_header_text:						"Ajustes local de canal",
 					modal_channelname_text:					"Nombre local del canal",
 					modal_colorpicker1_text:				"Color local del canal",
-					modal_inheritcolor_text:				"Heredar color a sub-canales",
-					btn_cancel_text:						"Cancelar",
-					btn_save_text:							"Guardar"
+					modal_inheritcolor_text:				"Heredar color a sub-canales"
 				};
 			case "fr":		//french
 				return {
@@ -799,9 +769,7 @@ class EditChannels {
 					modal_header_text:						"Paramètres locale du canal",
 					modal_channelname_text:					"Nom local du canal",
 					modal_colorpicker1_text:				"Couleur locale de la chaîne",
-					modal_inheritcolor_text:				"Hériter de la couleur sur les sous-canaux",
-					btn_cancel_text:						"Abandonner",
-					btn_save_text:							"Enregistrer"
+					modal_inheritcolor_text:				"Hériter de la couleur sur les sous-canaux"
 				};
 			case "it":		//italian
 				return {
@@ -811,9 +779,7 @@ class EditChannels {
 					modal_header_text:						"Impostazioni locale canale",
 					modal_channelname_text:					"Nome locale canale",
 					modal_colorpicker1_text:				"Colore locale canale",
-					modal_inheritcolor_text:				"Eredita colore per sub-canali",
-					btn_cancel_text:						"Cancellare",
-					btn_save_text:							"Salvare"
+					modal_inheritcolor_text:				"Eredita colore per sub-canali"
 				};
 			case "nl":		//dutch
 				return {
@@ -823,9 +789,7 @@ class EditChannels {
 					modal_header_text:						"Lokale kanaalinstellingen",
 					modal_channelname_text:					"Lokale kanaalnaam",
 					modal_colorpicker1_text:				"Lokale kanaalkleur",
-					modal_inheritcolor_text:				"Overerving van kleuren naar subkanalen",
-					btn_cancel_text:						"Afbreken",
-					btn_save_text:							"Opslaan"
+					modal_inheritcolor_text:				"Overerving van kleuren naar subkanalen"
 				};
 			case "no":		//norwegian
 				return {
@@ -835,9 +799,7 @@ class EditChannels {
 					modal_header_text:						"Lokal kanalinnstillinger",
 					modal_channelname_text:					"Lokalt kanalnavn",
 					modal_colorpicker1_text:				"Lokal kanalfarge",
-					modal_inheritcolor_text:				"Arve farge til underkanaler",
-					btn_cancel_text:						"Avbryte",
-					btn_save_text:							"Lagre"
+					modal_inheritcolor_text:				"Arve farge til underkanaler"
 				};
 			case "pl":		//polish
 				return {
@@ -847,9 +809,7 @@ class EditChannels {
 					modal_header_text:						"Lokalne ustawienia kanału",
 					modal_channelname_text:					"Lokalna nazwa kanału",
 					modal_colorpicker1_text:				"Lokalny kolor kanału",
-					modal_inheritcolor_text:				"Dziedzicz kolor do podkanałów",
-					btn_cancel_text:						"Anuluj",
-					btn_save_text:							"Zapisz"
+					modal_inheritcolor_text:				"Dziedzicz kolor do podkanałów"
 				};
 			case "pt-BR":	//portuguese (brazil)
 				return {
@@ -859,9 +819,7 @@ class EditChannels {
 					modal_header_text:						"Configurações local do canal",
 					modal_channelname_text:					"Nome local do canal",
 					modal_colorpicker1_text:				"Cor local do canal",
-					modal_inheritcolor_text:				"Herdar cor aos sub-canais",
-					btn_cancel_text:						"Cancelar",
-					btn_save_text:							"Salvar"
+					modal_inheritcolor_text:				"Herdar cor aos sub-canais"
 				};
 			case "fi":		//finnish
 				return {
@@ -871,9 +829,7 @@ class EditChannels {
 					modal_header_text:						"Paikallinen kanavan asetukset",
 					modal_channelname_text:					"Paikallinen kanavanimi",
 					modal_colorpicker1_text:				"Paikallinen kanavanväri",
-					modal_inheritcolor_text:				"Hävitä väri alikanaville",
-					btn_cancel_text:						"Peruuttaa",
-					btn_save_text:							"Tallentaa"
+					modal_inheritcolor_text:				"Hävitä väri alikanaville"
 				};
 			case "sv":		//swedish
 				return {
@@ -883,9 +839,7 @@ class EditChannels {
 					modal_header_text:						"Lokal kanalinställningar",
 					modal_channelname_text:					"Lokalt kanalnamn",
 					modal_colorpicker1_text:				"Lokal kanalfärg",
-					modal_inheritcolor_text:				"Inherit färg till subkanaler",
-					btn_cancel_text:						"Avbryta",
-					btn_save_text:							"Spara"
+					modal_inheritcolor_text:				"Inherit färg till subkanaler"
 				};
 			case "tr":		//turkish
 				return {
@@ -895,9 +849,7 @@ class EditChannels {
 					modal_header_text:						"Yerel Kanal Ayarları",
 					modal_channelname_text:					"Yerel Kanal Adı",
 					modal_colorpicker1_text:				"Yerel Kanal Rengi",
-					modal_inheritcolor_text:				"Renkleri alt kanallara miras alma",
-					btn_cancel_text:						"Iptal",
-					btn_save_text:							"Kayıt"
+					modal_inheritcolor_text:				"Renkleri alt kanallara miras alma"
 				};
 			case "cs":		//czech
 				return {
@@ -907,9 +859,7 @@ class EditChannels {
 					modal_header_text:						"Místní nastavení kanálu",
 					modal_channelname_text:					"Místní název kanálu",
 					modal_colorpicker1_text:				"Místní barvy kanálu",
-					modal_inheritcolor_text:				"Zdědit barvu na subkanály",
-					btn_cancel_text:						"Zrušení",
-					btn_save_text:							"Uložit"
+					modal_inheritcolor_text:				"Zdědit barvu na subkanály"
 				};
 			case "bg":		//bulgarian
 				return {
@@ -919,9 +869,7 @@ class EditChannels {
 					modal_header_text:						"Настройки за локални канали",
 					modal_channelname_text:					"Локално име на канал",
 					modal_colorpicker1_text:				"Локален цветен канал",
-					modal_inheritcolor_text:				"Наследи цвета до подканали",
-					btn_cancel_text:						"Зъбести",
-					btn_save_text:							"Cпасяване"
+					modal_inheritcolor_text:				"Наследи цвета до подканали"
 				};
 			case "ru":		//russian
 				return {
@@ -931,9 +879,7 @@ class EditChannels {
 					modal_header_text:						"Настройки локального канала",
 					modal_channelname_text:					"Имя локального канала",
 					modal_colorpicker1_text:				"Цвет локального канала",
-					modal_inheritcolor_text:				"Наследовать цвет на подканалы",
-					btn_cancel_text:						"Отмена",
-					btn_save_text:							"Cпасти"
+					modal_inheritcolor_text:				"Наследовать цвет на подканалы"
 				};
 			case "uk":		//ukrainian
 				return {
@@ -943,9 +889,7 @@ class EditChannels {
 					modal_header_text:						"Налаштування локального каналу",
 					modal_channelname_text:					"Локальне ім'я каналу",
 					modal_colorpicker1_text:				"Колір місцевого каналу",
-					modal_inheritcolor_text:				"Успадковують колір до підканалів",
-					btn_cancel_text:						"Скасувати",
-					btn_save_text:							"Зберегти"
+					modal_inheritcolor_text:				"Успадковують колір до підканалів"
 				};
 			case "ja":		//japanese
 				return {
@@ -955,9 +899,7 @@ class EditChannels {
 					modal_header_text:						"ローカルチャネル設定",
 					modal_channelname_text:					"ローカルチャネル名",
 					modal_colorpicker1_text:				"ローカルチャネルの色",
-					modal_inheritcolor_text:				"サブチャンネルに色を継承",
-					btn_cancel_text:						"キャンセル",
-					btn_save_text:							"セーブ"
+					modal_inheritcolor_text:				"サブチャンネルに色を継承"
 				};
 			case "zh-TW":	//chinese (traditional)
 				return {
@@ -967,9 +909,7 @@ class EditChannels {
 					modal_header_text:						"本地頻道設置",
 					modal_channelname_text:					"本地頻道名稱",
 					modal_colorpicker1_text:				"本地頻道顏色",
-					modal_inheritcolor_text:				"繼承子通道的顏色",
-					btn_cancel_text:						"取消",
-					btn_save_text:							"保存"
+					modal_inheritcolor_text:				"繼承子通道的顏色"
 				};
 			case "ko":		//korean
 				return {
@@ -979,9 +919,7 @@ class EditChannels {
 					modal_header_text:						"로컬 채널 설정",
 					modal_channelname_text:					"로컬 채널 이름",
 					modal_colorpicker1_text:				"지역 채널 색깔",
-					modal_inheritcolor_text:				"하위 채널에 색상 상속",
-					btn_cancel_text:						"취소",
-					btn_save_text:							"저장"
+					modal_inheritcolor_text:				"하위 채널에 색상 상속"
 				};
 			default:		//default: english
 				return {
@@ -991,9 +929,7 @@ class EditChannels {
 					modal_header_text:						"Local Channelsettings",
 					modal_channelname_text:					"Local Channelname",
 					modal_colorpicker1_text:				"Local Channelcolor",
-					modal_inheritcolor_text:				"Inherit color to Sub-Channels",
-					btn_cancel_text:						"Cancel",
-					btn_save_text:							"Save"
+					modal_inheritcolor_text:				"Inherit color to Sub-Channels"
 				};
 		}
 	}

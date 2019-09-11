@@ -3,7 +3,7 @@
 class ReverseImageSearch {
 	getName () {return "ReverseImageSearch";}
 
-	getVersion () {return "3.4.2";}
+	getVersion () {return "3.4.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ReverseImageSearch {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Image Modal","Option is now also added to a contextmenu when you right click the image in the image modal"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 	}
 
@@ -33,26 +33,6 @@ class ReverseImageSearch {
 				Yandex: 	{value:true, 	name:"Yandex", 		url:"https://yandex.com/images/search?url=" + this.imgUrlReplaceString + "&rpt=imageview"}
 			}
 		};
-
-		this.messageContextEntryMarkup =
-			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
-				<div class="${BDFDB.disCN.contextmenuitem} reverseimagesearch-item ${BDFDB.disCN.contextmenuitemsubmenu}">
-					<span>Reverse Image Search</span>
-					<div class="${BDFDB.disCN.contextmenuhint}"></div>
-				</div>
-			</div>`;
-
-
-		this.messageContextSubMenuMarkup = 
-			`<div class="${BDFDB.disCN.contextmenu} reverseimagesearch-submenu">
-				<div class="${BDFDB.disCN.contextmenuitemgroup}">
-					<div class="${BDFDB.disCN.contextmenuitem} alldisabled-item ${BDFDB.disCN.contextmenuitemdisabled}">
-						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_submenu_disabled_text</div></span>
-						<div class="${BDFDB.disCN.contextmenuhint}"></div>
-					</div>
-					${Object.keys(this.defaults.engines).map((key, i) => `<div engine="${key}" class="${BDFDB.disCN.contextmenuitem} RIS-item"><span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">${this.defaults.engines[key].name}</div></span><div class="${BDFDB.disCN.contextmenuhint}"></div></div>`).join("")}
-				</div>
-			</div>`;
 	}
 
 	getSettingsPanel () {
@@ -91,7 +71,7 @@ class ReverseImageSearch {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -127,52 +107,60 @@ class ReverseImageSearch {
 
 	// begin of own functions
 
-	changeLanguageStrings () {
-		this.messageContextSubMenuMarkup = 	this.messageContextSubMenuMarkup.replace("REPLACE_submenu_disabled_text", this.labels.submenu_disabled_text);
-	}
-
-	onNativeContextMenu (instance, menu) {
-		if (instance.props && instance.props.type == "NATIVE_IMAGE" && (instance.props.href || instance.props.src) && !menu.querySelector(".reverseimagesearch-item")) {
-			this.appendItem(menu, instance.props.href || instance.props.src);
+	onNativeContextMenu (instance, menu, returnvalue) {
+		if (instance.props && instance.props.type == "NATIVE_IMAGE" && (instance.props.href || instance.props.src) && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
+			this.appendItem(menu, returnvalue, instance.props.href || instance.props.src);
 		}
 	}
 
-	onMessageContextMenu (instance, menu) {
+	onMessageContextMenu (instance, menu, returnvalue) {
 		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(".reverseimagesearch-item")) {
 			if (instance.props.attachment) {
-				this.appendItem(menu, instance.props.attachment.url);
+				this.appendItem(menu, returnvalue, instance.props.attachment.url);
 			}
 			if (instance.props.target.tagName == "A" && instance.props.message.embeds && instance.props.message.embeds[0] && instance.props.message.embeds[0].type == "image") {
-				this.appendItem(menu, instance.props.target.href);
-				BDFDB.updateContextPosition(menu);
+				this.appendItem(menu, returnvalue, instance.props.target.href);
 			}
 		}
 	}
 
-	appendItem (menu, url) {
+	appendItem (menu, returnvalue, url) {
 		if (url && url.indexOf("discordapp.com/assets/") == -1 && !url.endsWith(".mp4")) {
 			if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1) {
 				if (url.split("/https/").length != 1) url = "https://" + url.split("/https/")[url.split("/https/").length-1];
 				else if (url.split("/http/").length != 1) url = "http://" + url.split("/http/")[url.split("/http/").length-1];
 			}
-			let messageContextEntry = BDFDB.htmlToElement(this.messageContextEntryMarkup);
-			menu.appendChild(messageContextEntry);
-			let searchitem = messageContextEntry.querySelector(".reverseimagesearch-item");
-			searchitem.addEventListener("mouseenter", () => {
-				let messageContextSubMenu = BDFDB.htmlToElement(this.messageContextSubMenuMarkup);
-				let engines = BDFDB.getAllData(this, "engines");
-				for (let key in engines) if (!engines[key]) BDFDB.removeEles(messageContextSubMenu.querySelector("[engine='" + key + "']"));
-				if (messageContextSubMenu.querySelector(".RIS-item")) BDFDB.removeEles(messageContextSubMenu.querySelector(".alldisabled-item"));
-				BDFDB.addChildEventListener(messageContextSubMenu, "click", ".RIS-item", e => {
-					BDFDB.closeContextMenu(menu);
-					let engine = e.currentTarget.getAttribute("engine");
-					if (engine == "_all") {
-						for (let key in engines) if (key != "_all" && engines[key]) window.open(this.defaults.engines[key].url.replace(this.imgUrlReplaceString, encodeURIComponent(url)), "_blank");
+			let engines = BDFDB.getAllData(this, "engines");
+			let items = [];
+			for (let key in engines) if (engines[key]) items.push(BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+				label: this.defaults.engines[key].name,
+				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-engine-contextMenuItem`,
+				action: e => {
+					if (!e.shiftKey) BDFDB.closeContextMenu(menu);
+					if (key == "_all") {
+						for (let key2 in engines) if (key2 != "_all" && engines[key2]) window.open(this.defaults.engines[key2].url.replace(this.imgUrlReplaceString, encodeURIComponent(url)), "_blank");
 					}
-					else window.open(this.defaults.engines[engine].url.replace(this.imgUrlReplaceString, encodeURIComponent(url)), "_blank");
-				});
-				BDFDB.appendSubMenu(searchitem, messageContextSubMenu);
+					else window.open(this.defaults.engines[key].url.replace(this.imgUrlReplaceString, encodeURIComponent(url)), "_blank");
+				}
+			}));
+			if (!items.length) items.push(BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+				label: this.labels.submenu_disabled_text,
+				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-disabled-contextMenuItem`,
+				disabled: true
+			}));
+			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
+			const itemgroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
+				children: [
+					BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+						label: "Reverse Image Search",
+						className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-search-contextMenuSubItem`,
+						render: items
+					})
+				]
 			});
+			if (index > -1) children.splice(index, 0, itemgroup);
+			else children.push(itemgroup);
 		}
 	}
 

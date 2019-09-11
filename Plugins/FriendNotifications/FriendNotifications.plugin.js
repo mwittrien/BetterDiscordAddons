@@ -3,7 +3,7 @@
 class FriendNotifications {
 	getName () {return "FriendNotifications";}
 
-	getVersion () {return "1.2.7";}
+	getVersion () {return "1.2.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,9 +11,9 @@ class FriendNotifications {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Canary/PTB","Fixed bugs for complete new look in canary/ptb"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
-
+		
 		this.patchModules = {
 			"StandardSidebarView":"componentWillUnmount"
 		};
@@ -34,7 +34,7 @@ class FriendNotifications {
 						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
 								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
-									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">Friends LogIn/-Out Timelog</h4>
+									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">Friends LogIn/-Out Timelog</h4>
 								</div>
 								<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
 									<div class="${BDFDB.disCN.buttoncontents}">
@@ -155,7 +155,7 @@ class FriendNotifications {
 		let notificationsounds = BDFDB.getAllData(this, "notificationsounds");
 		let amounts = BDFDB.getAllData(this, "amounts");
 
-		let friendIDs = this.FriendUtils.getFriendIDs();
+		let friendIDs = BDFDB.LibraryModules.FriendUtils.getFriendIDs();
 		let friends = BDFDB.loadAllData(this, "friends");
 		let nonfriends = BDFDB.loadAllData(this, "nonfriends");
 
@@ -172,7 +172,7 @@ class FriendNotifications {
 		for (let config in this.defaults.notificationstrings) settingshtml += `<div class="${BDFDB.disCNS.margintop8 + BDFDB.disCNS.tableheadersize + BDFDB.disCNS.size10 + BDFDB.disCNS.primary + BDFDB.disCNS.weightbold + BDFDB.disCN.cursorpointer} BDFDB-tableheadercolumn" config="${config}" group="friends">${config.toUpperCase()}</div>`;
 		settingshtml += `</div></div><div class="BDFDB-settings-inner-list friend-list ${BDFDB.disCN.marginbottom8}">`;
 		for (let id of friendIDs) {
-			let user = this.UserUtils.getUser(id);
+			let user = BDFDB.LibraryModules.UserStore.getUser(id);
 			if (user) {
 				let friend = friends[id] || (friends[id] = nonfriends[id] || this.createDefaultConfig());
 				settingshtml += this.createHoverCard(user, friend, "friends");
@@ -189,7 +189,7 @@ class FriendNotifications {
 		for (let config in this.defaults.notificationstrings) settingshtml += `<div class="${BDFDB.disCNS.margintop8 + BDFDB.disCNS.tableheadersize + BDFDB.disCNS.size10 + BDFDB.disCNS.primary + BDFDB.disCNS.weightbold + BDFDB.disCN.cursorpointer} BDFDB-tableheadercolumn" config="${config}" group="nonfriends">${config.toUpperCase()}</div>`;
 		settingshtml += `</div></div><div class="BDFDB-settings-inner-list nonfriend-list ${BDFDB.disCN.marginbottom8}">`;
 		for (let id in nonfriends) if (!friendIDs.includes(id)) {
-			let user = this.UserUtils.getUser(id);
+			let user = BDFDB.LibraryModules.UserStore.getUser(id);
 			if (user) {
 				let nonfriend = nonfriends[id] || (nonfriends[id] = this.createDefaultConfig());
 				settingshtml += this.createHoverCard(user, nonfriend, "nonfriends");
@@ -266,7 +266,7 @@ class FriendNotifications {
 			if (friendIDs.includes(id)) BDFDB.showToast("User is already a friend of yours. Please use the 'Friends' area to configure him/her.", {type:"error"});
 			else if (BDFDB.loadData(id, this, "nonfriends")) BDFDB.showToast("User is already being observed as a 'Non-Friend'.", {type:"error"});
 			else {
-				let user = this.UserUtils.getUser(id);
+				let user = BDFDB.LibraryModules.UserStore.getUser(id);
 				if (user) {
 					let data = this.createDefaultConfig();
 					BDFDB.saveData(user.id, data, this, "nonfriends");
@@ -302,7 +302,7 @@ class FriendNotifications {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -324,15 +324,6 @@ class FriendNotifications {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 
-			this.FriendUtils = BDFDB.WebModules.findByProperties("getFriendIDs", "getRelationships");
-			this.ChannelUtils = BDFDB.WebModules.findByProperties("getDMFromUserId");
-			this.ChannelSwitchUtils = BDFDB.WebModules.findByProperties("selectPrivateChannel");
-			this.PrivateChannelUtils = BDFDB.WebModules.findByProperties("openPrivateChannel");
-			this.MobileUtils = BDFDB.WebModules.findByProperties("isMobileOnline");
-			this.UserUtils = BDFDB.WebModules.findByProperties("getUsers", "getUsers");
-			this.APIUtils = BDFDB.WebModules.findByProperties("getAPIBaseURL");
-			this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
-
 			/* REMOVE AFTER SOME TIME - 22.08.2019 */
 			let oldFriendDataDesktop = BDFDB.loadAllData("FriendNotifications", "desktop");
 			let oldFriendDataDisabled = BDFDB.loadAllData("FriendNotifications", "disabled");
@@ -349,7 +340,7 @@ class FriendNotifications {
 				let nonfriends = BDFDB.loadAllData(this, "nonfriends")
 				for (let id in oldStalkerData) nonfriends[id] = Object.assign(this.createDefaultConfig(), oldStalkerData[id]);
 				BDFDB.saveAllData(nonfriends, this, "nonfriends");
-				require("fs").unlinkSync(require("path").join(BDFDB.getPluginsFolder(), "StalkerNotifications.config.json"));
+				BDFDB.LibraryRequires.fs.unlinkSync(BDFDB.LibraryRequires.path.join(BDFDB.getPluginsFolder(), "StalkerNotifications.config.json"));
 			}
 
 			this.startInterval();
@@ -468,7 +459,7 @@ class FriendNotifications {
 				successSavedAudio(url, url);
 			}
 			else if (url.indexOf("http") == 0) {
-				require("request")(url, (error, response, result) => {
+				BDFDB.LibraryRequires.request(url, (error, response, result) => {
 					if (response) {
 						let type = response.headers["content-type"];
 						if (type && (type.indexOf("octet-stream") > -1 || type.indexOf("audio") > -1 || type.indexOf("video") > -1)) {
@@ -480,7 +471,7 @@ class FriendNotifications {
 				});
 			}
 			else {
-				require("fs").readFile(url, (error, response) => {
+				BDFDB.LibraryRequires.fs.readFile(url, (error, response) => {
 					if (error) BDFDB.showToast("Could not fetch file. Please make sure the file exists.", {type:"danger"});
 					else successSavedAudio(url, `data:audio/mpeg;base64,${response.toString("base64")}`);
 				});
@@ -488,7 +479,7 @@ class FriendNotifications {
 		}
 	}
 
-	processStandardSidebarView (instance, wrapper) {
+	processStandardSidebarView (instance, wrapper, returnvalue) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			this.startInterval();
@@ -497,7 +488,7 @@ class FriendNotifications {
 
 	getStatusWithMobile (id) {
 		let status = BDFDB.getUserStatus(id);
-		return status == "online" && this.MobileUtils.isMobileOnline(id) ? "mobile" : status;
+		return status == "online" && BDFDB.LibraryModules.StatusMetaUtils.isMobileOnline(id) ? "mobile" : status;
 	}
 
 	startInterval () {
@@ -509,7 +500,7 @@ class FriendNotifications {
 		for (let id in users) this.userStatusStore[id] = this.getStatusWithMobile(id);
 		this.checkInterval = setInterval(() => {
 			for (let id in users) if (!users[id].disabled) {
-				let user = this.UserUtils.getUser(id);
+				let user = BDFDB.LibraryModules.UserStore.getUser(id);
 				let status = this.getStatusWithMobile(id);
 				if (user && this.userStatusStore[id] != status && users[id][status]) {
 					let EUdata = BDFDB.loadData(user.id, "EditUsers", "users") || {};
@@ -521,10 +512,10 @@ class FriendNotifications {
 					if (!(settings.muteOnDND && BDFDB.getUserStatus() == "dnd")) {
 						let openChannel = () => {
 							if (settings.openOnClick) {
-								let DMid = this.ChannelUtils.getDMFromUserId(user.id)
-								if (DMid) this.ChannelSwitchUtils.selectPrivateChannel(DMid);
-								else this.PrivateChannelUtils.openPrivateChannel(BDFDB.myData.id, user.id);
-								require("electron").remote.getCurrentWindow().maximize();
+								let DMid = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(user.id)
+								if (DMid) BDFDB.LibraryModules.SelectChannelUtils.selectPrivateChannel(DMid);
+								else BDFDB.LibraryModules.DirectMessageUtils.openPrivateChannel(BDFDB.myData.id, user.id);
+								BDFDB.LibraryRequires.electron.remote.getCurrentWindow().maximize();
 							}
 						};
 						if (!users[id].desktop) {

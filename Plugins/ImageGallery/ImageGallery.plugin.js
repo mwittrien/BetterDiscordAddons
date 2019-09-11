@@ -3,7 +3,7 @@
 class ImageGallery {
 	getName () {return "ImageGallery";}
 
-	getVersion () {return "1.5.8";}
+	getVersion () {return "1.5.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ImageGallery {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Prev/Next Image","Fixed bug where the previou/next image would sometimes be doubled with the current image on the first/last image"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.patchModules = {
@@ -57,7 +57,7 @@ class ImageGallery {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -104,7 +104,7 @@ class ImageGallery {
 
 	// begin of own functions
 
-	processImageModal (instance, wrapper, methodnames) {
+	processImageModal (instance, wrapper, returnvalue, methodnames) {
 		if (this.closemodal && instance.props && instance.props.onClose) instance.props.onClose();
 		else if (methodnames.includes("componentDidMount")) {
 			let modal = BDFDB.getParentEle(BDFDB.dotCN.modal, wrapper);

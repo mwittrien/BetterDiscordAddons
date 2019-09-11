@@ -3,7 +3,7 @@
 class CharCounter {
 	getName () {return "CharCounter";}
 
-	getVersion () {return "1.3.5";}
+	getVersion () {return "1.3.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,12 +11,13 @@ class CharCounter {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Nickname Modal","Fixed for the nickname modal"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
-			"Note":"componentDidMount",
+			"UserPopout":"componentDidMount",
+			"UserProfile":"componentDidMount",
 			"ChangeNickname":"componentDidMount"
 		};
 	}
@@ -102,7 +103,7 @@ class CharCounter {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -143,15 +144,24 @@ class CharCounter {
 
 	// begin of own functions
 
-	processChannelTextArea (instance, wrapper) {
+	processChannelTextArea (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.type && this.maxLenghts[instance.props.type]) this.appendCounter(wrapper.querySelector("textarea"), instance.props.type, true);
 	}
 
-	processNote (instance, wrapper) {
+	processNote (instance, wrapper, returnvalue) {
+		console.log(wrapper);
 		this.appendCounter(wrapper.firstElementChild, BDFDB.containsClass(wrapper, BDFDB.disCN.usernotepopout) ? "popout" : (BDFDB.containsClass(wrapper, BDFDB.disCN.usernoteprofile) ? "profile" : null), false);
 	}
 
-	processChangeNickname (instance, wrapper) {
+	processUserPopout (instance, wrapper, returnvalue) {
+		this.appendCounter(wrapper.querySelector(BDFDB.dotCN.usernote).firstElementChild, "popout", false);
+	}
+
+	processUserProfile (instance, wrapper, returnvalue) {
+		this.appendCounter(wrapper.querySelector(BDFDB.dotCN.usernote).firstElementChild, "profile", false);
+	}
+
+	processChangeNickname (instance, wrapper, returnvalue) {
 		let reset = wrapper.querySelector(BDFDB.dotCN.reset);
 		if (reset && BDFDB.getInnerText(reset.firstElementChild) == BDFDB.LanguageStrings.RESET_NICKNAME) this.appendCounter(wrapper.querySelector(BDFDB.dotCN.inputdefault), "nickname", false);
 	}

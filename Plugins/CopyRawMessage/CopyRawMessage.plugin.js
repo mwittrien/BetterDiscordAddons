@@ -3,7 +3,7 @@
 class CopyRawMessage {
 	getName () {return "CopyRawMessage";}
 
-	getVersion () {return "1.0.1";}
+	getVersion () {return "1.0.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,28 +11,12 @@ class CopyRawMessage {
 
 	constructor () {
 		this.changelog = {
-			"added":[["Message 3-dot entry","Added the copy entry to the message 3-dot menu"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.patchModules = {
-			"Message":"componentDidMount",
-			"MessageOptionPopout":"componentDidMount"
+			"Message":"componentDidMount"
 		};
-	}
-
-	initConstructor () {
-		this.messageCopyRawEntryMarkup =
-			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
-				<div class="${BDFDB.disCN.contextmenuitem} copyrawmessage-item">
-					<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">Copy Raw Message</div></span>
-					<div class="${BDFDB.disCN.contextmenuhint}"></div>
-				</div>
-			</div>`;
-
-		this.popoutCopyRawEntryMarkup = 
-			`<button role="menuitem" type="button" class="${BDFDB.disCNS.optionpopoutitem + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow} copyrawmessage-itembtn">
-				<div class="${BDFDB.disCN.buttoncontents}">Copy raw</div>
-			</button>`;
 	}
 
 	//legacy
@@ -53,7 +37,7 @@ class CopyRawMessage {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -89,39 +73,50 @@ class CopyRawMessage {
 
 	// begin of own functions
 
-	onMessageContextMenu (instance, menu) {
-		if (instance.props && instance.props.message && instance.props.message.content && instance.props.target && !menu.querySelector(".copyrawmessage-item")) {
-			let messageCopyRawEntry = BDFDB.htmlToElement(this.messageCopyRawEntryMarkup);
-			let devgroup = BDFDB.getContextMenuDevGroup(menu);
-			if (devgroup) devgroup.parentElement.insertBefore(messageCopyRawEntry, devgroup);
-			else menu.appendChild(messageCopyRawEntry, menu);
-			let copyrawmessageitem = messageCopyRawEntry.querySelector(".copyrawmessage-item");
-			copyrawmessageitem.addEventListener("click", () => {
-				BDFDB.closeContextMenu(menu);
-				require("electron").clipboard.write({text:instance.props.message.content});
+	onMessageContextMenu (instance, menu, returnvalue) {
+		if (instance.props && instance.props.message && instance.props.message.content && instance.props.target && !menu.querySelector(`${this.name}-contextMenuItem`)) {
+			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
+			const itemgroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
+				children: [
+					BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+						label: BDFDB.LanguageStrings.COPY_TEXT + " (Raw)",
+						className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-copyraw-contextMenuItem`,
+						action: e => {
+							BDFDB.closeContextMenu(menu);
+							BDFDB.LibraryRequires.electron.clipboard.write({text:instance.props.message.content});
+						}
+					})
+				]
 			});
+			if (index > -1) children.splice(index, 0, itemgroup);
+			else children.push(itemgroup);
 		}
 	}
 
-	processMessage (instance, wrapper) {  
+	onMessageOptionPopout (instance, popout, returnvalue) {
+		if (instance.props.message && instance.props.channel && instance._reactInternalFiber.memoizedProps.target && !popout.querySelector(".copyrawmessage-itembtn")) {
+			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, BDFDB.LanguageStrings.DELETE);
+			const copyItem = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+				label: BDFDB.LanguageStrings.COPY_TEXT + " (Raw)",
+				className: `${BDFDB.disCN.optionpopoutitem} BDFDB-popoutMenuItem ${this.name}-popoutMenuItem ${this.name}-copyraw-popoutMenuItem`,
+				action: e => {
+					BDFDB.LibraryRequires.electron.clipboard.write({text:instance.props.message.content});
+					instance.props.onClose();
+				}
+			});
+			children.splice(index, 0, copyItem);
+		}
+	} 
+
+	processMessage (instance, wrapper, returnvalue) {
 		if (instance.props && typeof instance.props.renderButtons == "function" && !wrapper.querySelector(BDFDB.dotCN.optionpopoutbutton) && BDFDB.getReactValue(instance, "props.message.author.id") != 1) {
 			let buttonwrap = wrapper.querySelector(BDFDB.dotCN.messagebuttoncontainer);
 			if (buttonwrap) {
-				let optionPopoutButton = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.optionpopoutbutton}"></div>`);
+				let optionPopoutButton = BDFDB.htmlToElement(`<div tabindex="0" class="${BDFDB.disCN.optionpopoutbutton}" aria-label="More Options" role="button"><svg name="OverflowMenu" class="${BDFDB.disCN.optionpopoutbuttonicon}" aria-hidden="false" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0z"></path><path fill="currentColor" d="M12 16c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2zm0-6c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2zm0-6c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2z"></path></g></svg></div>`);
 				optionPopoutButton.addEventListener("click", () => {BDFDB.createMessageOptionPopout(optionPopoutButton);});
 				buttonwrap.appendChild(optionPopoutButton);
 			}
 		}
 	}
-
-	processMessageOptionPopout (instance, wrapper) {
-		if (instance.props.message && instance.props.channel && instance._reactInternalFiber.memoizedProps.target && !wrapper.querySelector(".copyrawmessage-itembtn")) {
-			let popoutCopyRawEntry = BDFDB.htmlToElement(this.popoutCopyRawEntryMarkup);
-			wrapper.appendChild(popoutCopyRawEntry);
-			popoutCopyRawEntry.addEventListener("click", () => {
-				require("electron").clipboard.write({text:instance.props.message.content});
-				instance.props.onClose();
-			});
-		}
-	} 
 }

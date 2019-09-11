@@ -3,13 +3,17 @@
 class WriteUpperCase {
 	getName () {return "WriteUpperCase";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "1.2.1";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Change input to uppercase.";}
 
 	constructor () {
+		this.changelog = {
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+		};
+		
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
 		};
@@ -32,7 +36,7 @@ class WriteUpperCase {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -70,7 +74,7 @@ class WriteUpperCase {
 
 	// begin of own functions
 
-	processChannelTextArea (instance, wrapper) {
+	processChannelTextArea (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.type) {
 			var textarea = wrapper.querySelector("textarea");
 			if (!textarea) return;

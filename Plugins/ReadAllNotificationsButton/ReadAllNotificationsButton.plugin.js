@@ -3,7 +3,7 @@
 class ReadAllNotificationsButton {
 	getName () {return "ReadAllNotificationsButton";}
 
-	getVersion () {return "1.4.9";}
+	getVersion () {return "1.5.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ReadAllNotificationsButton {
 
 	constructor () {
 		this.changelog = {
-			"added":[["Muted Servers","Added an extra contextmenu option to only read muted servers and also relabeled the other options"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.patchModules = {
@@ -22,31 +22,11 @@ class ReadAllNotificationsButton {
 	}
 
 	initConstructor () {
-		this.RANcontextMenuMarkup = 
-			`<div class="${BDFDB.disCN.contextmenu} RANbutton-contextmenu">
-				<div class="${BDFDB.disCN.contextmenuitemgroup}">
-					<div class="${BDFDB.disCN.contextmenuitem} readunreadguilds-item">
-						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_context_unreadguilds_text</div></span>
-						<div class="${BDFDB.disCN.contextmenuhint}"></div>
-					</div>
-					<div class="${BDFDB.disCN.contextmenuitem} readmutedguilds-item">
-						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_context_mutedguilds_text</div></span>
-						<div class="${BDFDB.disCN.contextmenuhint}"></div>
-					</div>
-					<div class="${BDFDB.disCN.contextmenuitem} readguilds-item">
-						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_context_guilds_text</div></span>
-						<div class="${BDFDB.disCN.contextmenuhint}"></div>
-					</div>
-					<div class="${BDFDB.disCN.contextmenuitem} readdms-item">
-						<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_context_dms_text</div></span>
-						<div class="${BDFDB.disCN.contextmenuhint}"></div>
-					</div>
-				</div>
-			</div>`;
-
 		this.RANbuttonMarkup = 
-			`<div class="${BDFDB.disCN.guildouter} RANbutton-frame" style="height: 20px;">
-				<div class="${BDFDB.disCN.guildiconacronym} RANbutton" style="height: 20px;">read all</div>
+			`<div class="${BDFDB.disCNS.guildouter} RANbutton-frame" style="height: 20px;">
+				<div class="${BDFDB.disCN.guildiconwrapper} RANbutton-inner" style="height: 20px;">
+					<div class="${BDFDB.disCNS.guildiconchildwrapper + BDFDB.disCN.guildiconacronym} RANbutton" style="height: 20px;">read all</div>
+				</div>
 			</div>`;
 
 		this.RAMbuttonMarkup = 
@@ -122,7 +102,7 @@ class ReadAllNotificationsButton {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -162,14 +142,7 @@ class ReadAllNotificationsButton {
 
 	// begin of own functions
 
-	changeLanguageStrings () {
-		this.RANcontextMenuMarkup = 	this.RANcontextMenuMarkup.replace("REPLACE_context_unreadguilds_text", this.labels.context_unreadguilds_text);
-		this.RANcontextMenuMarkup = 	this.RANcontextMenuMarkup.replace("REPLACE_context_mutedguilds_text", this.labels.context_mutedguilds_text);
-		this.RANcontextMenuMarkup = 	this.RANcontextMenuMarkup.replace("REPLACE_context_guilds_text", this.labels.context_guilds_text);
-		this.RANcontextMenuMarkup = 	this.RANcontextMenuMarkup.replace("REPLACE_context_dms_text", this.labels.context_dms_text);
-	}
-
-	processGuilds (instance, wrapper, methodnames) {
+	processGuilds (instance, wrapper, returnvalue, methodnames) {
 		if (methodnames.includes("componentDidMount") || (methodnames.includes("componentDidUpdate") && document.querySelector(".bd-guild ~ .RANbutton-frame"))) {
 			BDFDB.removeEles(".RANbutton-frame");
 			let insertnode = this.getInsertNode();
@@ -182,37 +155,58 @@ class ReadAllNotificationsButton {
 					if (settings.includeDMs) BDFDB.markChannelAsRead(BDFDB.readDmList());
 				});
 				ranbutton.addEventListener("contextmenu", e => {
-					let RANcontextMenu = BDFDB.htmlToElement(this.RANcontextMenuMarkup);
-					RANcontextMenu.querySelector(".readunreadguilds-item").addEventListener("click", () => {
-						BDFDB.removeEles(RANcontextMenu);
-						BDFDB.markGuildAsRead(BDFDB.readUnreadServerList());
+					const itemGroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+						className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
+						children: [
+							BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								label: this.labels.context_unreadguilds_text,
+								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-unreadguilds-contextMenuItem`,
+								action: e => {
+									BDFDB.closeContextMenu(BDFDB.getParentEle(BDFDB.dotCN.contextmenu, e.target));
+									BDFDB.markGuildAsRead(BDFDB.readUnreadServerList());
+								}
+							}),
+							BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								label: this.labels.context_mutedguilds_text,
+								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-mutedguilds-contextMenuItem`,
+								action: e => {
+									BDFDB.closeContextMenu(BDFDB.getParentEle(BDFDB.dotCN.contextmenu, e.target));
+									BDFDB.markGuildAsRead(BDFDB.readMutedServerList());
+								}
+							}),
+							BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								label: this.labels.context_guilds_text,
+								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-guilds-contextMenuItem`,
+								action: e => {
+									BDFDB.closeContextMenu(BDFDB.getParentEle(BDFDB.dotCN.contextmenu, e.target));
+									this.addPinnedRecent(instance.props.channel.id);
+									BDFDB.markGuildAsRead(BDFDB.readServerList());
+								}
+							}),
+							BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								label: this.labels.context_dms_text,
+								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-dms-contextMenuItem`,
+								action: e => {
+									BDFDB.closeContextMenu(BDFDB.getParentEle(BDFDB.dotCN.contextmenu, e.target));
+									BDFDB.markChannelAsRead(BDFDB.readDmList());
+								}
+							})
+						]
 					});
-					RANcontextMenu.querySelector(".readmutedguilds-item").addEventListener("click", () => {
-						BDFDB.removeEles(RANcontextMenu);
-						BDFDB.markGuildAsRead(BDFDB.readMutedServerList());
-					});
-					RANcontextMenu.querySelector(".readguilds-item").addEventListener("click", () => {
-						BDFDB.removeEles(RANcontextMenu);
-						BDFDB.markGuildAsRead(BDFDB.readServerList());
-					});
-					RANcontextMenu.querySelector(".readdms-item").addEventListener("click", () => {
-						BDFDB.removeEles(RANcontextMenu);
-						BDFDB.markChannelAsRead(BDFDB.readDmList());
-					});
-					BDFDB.appendContextMenu(RANcontextMenu, e);
+					BDFDB.openContextMenu(this, e, itemGroup);
 				});
 				BDFDB.addClass(wrapper, "RAN-added");
 			}
 		}
 	}
 
-	processDirectMessage (instance, wrapper, methodnames) {
+	processDirectMessage (instance, wrapper, returnvalue, methodnames) {
 		let ranbutton = document.querySelector(".RANbutton-frame");
 		let insertnode = this.getInsertNode();
 		if (ranbutton && insertnode) insertnode.parentElement.insertBefore(ranbutton, insertnode);
 	}
 
-	processRecentMentions (instance, wrapper) {
+	processRecentMentions (instance, wrapper, returnvalue) {
 		BDFDB.removeEles(".RAMbutton");
 		if (instance.props && instance.props.popoutName == "RECENT_MENTIONS_POPOUT" && BDFDB.getData("addClearButton", this, "settings")) {
 			let recentmentionstitle = wrapper.querySelector(BDFDB.dotCN.messagespopouttitle);

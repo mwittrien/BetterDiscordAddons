@@ -3,7 +3,7 @@
 class BetterFriendCount {
 	getName () {return "BetterFriendCount";}
 
-	getVersion () {return "1.1.6";}
+	getVersion () {return "1.1.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class BetterFriendCount {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["New Structure","Fixed issues that will occur once the avatar/name changes from canary will hit stable/ptb"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.patchModules = {
@@ -31,6 +31,7 @@ class BetterFriendCount {
 		`;
 
 		this.relationshipTypes = {};
+		for (let type in BDFDB.DiscordConstants.RelationshipTypes) this.relationshipTypes[BDFDB.DiscordConstants.RelationshipTypes[type]] = type;
 	}
 
 	//legacy
@@ -51,7 +52,7 @@ class BetterFriendCount {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -73,11 +74,6 @@ class BetterFriendCount {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 
-			this.FriendUtils = BDFDB.WebModules.findByProperties("getFriendIDs", "getRelationships");
-			this.UserMetaStore = BDFDB.WebModules.findByProperties("getStatus", "getOnlineFriendCount");
-			let RelationshipTypes = BDFDB.WebModules.findByProperties("RelationshipTypes").RelationshipTypes;
-			for (let type in RelationshipTypes) this.relationshipTypes[RelationshipTypes[type]] = type;
-
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -95,21 +91,21 @@ class BetterFriendCount {
 
 	// begin of own functions
 
-	processTabBar (instance, wrapper) {
+	processTabBar (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.children) for (let child of instance.props.children) if ((child.key || (child.props && child.props.id)) == "ADD_FRIEND") this.addCountNumbers(wrapper);
 	}
 
-	processFriendRow (instance, wrapper) {
+	processFriendRow (instance, wrapper, returnvalue) {
 		this.addCountNumbers();
 	}
 
 	addCountNumbers (wrapper = document.querySelector(BDFDB.dotCNS.friends + BDFDB.dotCN.settingstabbar)) {
 		if (!wrapper) return;
-		let tabitems = wrapper.querySelectorAll(BDFDB.dotCN.settingsitem + BDFDB.notCN.settingstabbarprimary);
+		let tabitems = wrapper.querySelectorAll(BDFDB.dotCN.settingsitem + BDFDB.dotCN.settingsitemthemed);
 		if (!tabitems || tabitems.length < 4) return;
 		BDFDB.removeEles(".betterfriendcount-badge");
 
-		let relationships = this.FriendUtils.getRelationships(), relationshipCount = {};
+		let relationships = BDFDB.LibraryModules.FriendUtils.getRelationships(), relationshipCount = {};
 		for (let type in this.relationshipTypes) relationshipCount[this.relationshipTypes[type]] = 0;
 		for (let id in relationships) relationshipCount[this.relationshipTypes[relationships[id]]]++;
 		for (let item of tabitems) switch (BDFDB.getReactValue(item, "return.memoizedProps.id") || BDFDB.getReactValue(item, "return.return.memoizedProps.id")) {
@@ -117,7 +113,7 @@ class BetterFriendCount {
 				item.appendChild(this.createBadge(relationshipCount.FRIEND, "friendcount"));
 				break;
 			case "ONLINE":
-				item.appendChild(this.createBadge(this.UserMetaStore.getOnlineFriendCount(), "onlinefriendcount"));
+				item.appendChild(this.createBadge(BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount(), "onlinefriendcount"));
 				break;
 			case "PENDING":
 				item.appendChild(this.createBadge(relationshipCount.PENDING_INCOMING, "requestincount"));

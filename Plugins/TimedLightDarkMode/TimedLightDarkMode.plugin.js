@@ -3,7 +3,7 @@
 class TimedLightDarkMode {
 	getName () {return "TimedLightDarkMode";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,8 +11,7 @@ class TimedLightDarkMode {
 
 	constructor () {
 		this.changelog = {
-			"added":[["Current Time","Added a little indicator to show the current time on the slider"]],
-			"improved":[["Start up","Now properly checks the current time on start up and not only after the first check interval"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.patchModules = {
@@ -50,7 +49,7 @@ class TimedLightDarkMode {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -71,8 +70,6 @@ class TimedLightDarkMode {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-
-			this.SettingsUtils = BDFDB.WebModules.findByProperties("updateRemoteSettings","updateLocalSettings");
 
 			BDFDB.WebModules.forceAllUpdates(this);
 
@@ -96,7 +93,7 @@ class TimedLightDarkMode {
 
 	// begin of own functions
 
-	processRadioGroup (instance, wrapper) {
+	processRadioGroup (instance, wrapper, returnvalue) {
 		if (instance.props && Array.isArray(instance.props.options) && instance.props.options[0] && instance.props.options[0].value == "light" && instance.props.options[1] && instance.props.options[1].value == "dark" && wrapper.parentElement.firstElementChild.innerText && wrapper.parentElement.firstElementChild.innerText.toUpperCase() == BDFDB.LanguageStrings.THEME.toUpperCase()) {
 			var settings = BDFDB.getAllData(this, "settings");
 			var values = BDFDB.getAllData(this, "values");
@@ -140,8 +137,8 @@ class TimedLightDarkMode {
 
 	changeTheme (dark) {
 		var theme = BDFDB.getDiscordTheme();
-		if (dark && theme == BDFDB.disCN.themelight) this.SettingsUtils.updateRemoteSettings({theme:"dark"});
-		else if (!dark && theme == BDFDB.disCN.themedark) this.SettingsUtils.updateRemoteSettings({theme:"light"});
+		if (dark && theme == BDFDB.disCN.themelight) BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({theme:"dark"});
+		else if (!dark && theme == BDFDB.disCN.themedark) BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({theme:"light"});
 	}
 
 	showCurrentTime (grabber) {

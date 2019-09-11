@@ -3,7 +3,7 @@
 class LastMessageDate {
 	getName () {return "LastMessageDate";}
 
-	getVersion () {return "1.0.6";}
+	getVersion () {return "1.0.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class LastMessageDate {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Showing at top","Fixed issue where dates would be listed at the top in the profile the first time a profile was opened or when a custom status is set"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.labels = {};
@@ -119,7 +119,7 @@ class LastMessageDate {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -141,14 +141,9 @@ class LastMessageDate {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 
-			this.CurrentGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
-			this.CurrentChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
-			this.APIModule = BDFDB.WebModules.findByProperties("getAPIBaseURL");
-			this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
+			this.languages = Object.assign({"own":{name:"Own",id:"own",integrated:false,dic:false}}, BDFDB.languages);
 
-			this.languages = Object.assign({"own":{name:"Own",id:"own",integrated:false,dic:false}},BDFDB.languages);
-
-			BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties("receiveMessage"), "receiveMessage", this, {after: e => {
+			BDFDB.WebModules.patch(BDFDB.LibraryModules.MessageUtils, "receiveMessage", this, {after: e => {
 				let message = e.methodArguments[1];
 				let guildid = message.guild_id || message.channel_id;
 				if (guildid && this.loadedusers[guildid] && this.loadedusers[guildid][message.author.id]) this.loadedusers[guildid][message.author.id] = new Date(message.timestamp);
@@ -203,16 +198,16 @@ class LastMessageDate {
 	}
 
 	createSelectChoice (choice) {
-		return `<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer} languageName" style="flex: 1 1 42%; padding: 0;">${this.languages[choice].name}</div><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer} languageTimestamp" style="flex: 1 1 58%; padding: 0;">${this.getTimestamp(this.languages[choice].id)}</div>`;
+		return `<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer} languageName" style="flex: 1 1 42%; padding: 0;">${this.languages[choice].name}</div><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.primary + BDFDB.disCNS.weightlight + BDFDB.disCN.cursorpointer} languageTimestamp" style="flex: 1 1 58%; padding: 0;">${this.getTimestamp(this.languages[choice].id)}</div>`;
 	}
 
-	processUserPopout (instance, wrapper) {
+	processUserPopout (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.user && BDFDB.getData("addInUserPopout", this, "settings")) {
 			this.addLastMessageDate(instance.props.user, wrapper.querySelector(BDFDB.dotCN.userpopoutheadertext), wrapper.parentElement);
 		}
 	}
 
-	processUserProfile (instance, wrapper) {
+	processUserProfile (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.user && BDFDB.getData("addInUserProfil", this, "settings")) {
 			this.addLastMessageDate(instance.props.user, wrapper.querySelector(BDFDB.dotCN.userprofileheaderinfo), null);
 		}
@@ -220,9 +215,9 @@ class LastMessageDate {
 
 	addLastMessageDate (info, container, popout) {
 		if (!info || info.discriminator == "0000" || !container || container.querySelector(".lastMessageDate")) return;
-		let guildid = this.CurrentGuildStore.getGuildId();
+		let guildid = BDFDB.LibraryModules.LastGuildStore.getGuildId();
 		let isguild = !!guildid;
-		guildid = guildid || this.CurrentChannelStore.getChannelId();
+		guildid = guildid || BDFDB.LibraryModules.LastChannelStore.getChannelId();
 		if (guildid) {
 			if (!this.loadedusers[guildid]) this.loadedusers[guildid] = {};
 			let addTimestamp = (timestamp) => {
@@ -244,7 +239,7 @@ class LastMessageDate {
 				}
 			};
 			if (this.loadedusers[guildid][info.id]) addTimestamp(this.loadedusers[guildid][info.id]);
-			else this.APIModule.get((isguild ? this.DiscordConstants.Endpoints.SEARCH_GUILD(guildid) : this.DiscordConstants.Endpoints.SEARCH_CHANNEL(guildid)) + "?author_id=" + info.id).then(result => {
+			else BDFDB.LibraryModules.APIUtils.get((isguild ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(guildid) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(guildid)) + "?author_id=" + info.id).then(result => {
 				if (result && result.body && result.body.messages && Array.isArray(result.body.messages[0])) {
 					for (let message of result.body.messages[0]) if (message.hit && message.author.id == info.id) {
 						let lastmessagedate = new Date(message.timestamp);

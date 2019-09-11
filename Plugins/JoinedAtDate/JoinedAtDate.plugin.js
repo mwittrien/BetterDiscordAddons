@@ -3,7 +3,7 @@
 class JoinedAtDate {
 	getName () {return "JoinedAtDate";}
 
-	getVersion () {return "1.1.2";}
+	getVersion () {return "1.1.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class JoinedAtDate {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Showing at top","Fixed issue where dates would be listed at the top in the profile the first time a profile was opened or when a custom status is set"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.labels = {};
@@ -46,7 +46,6 @@ class JoinedAtDate {
 			${BDFDB.dotCN.themedark} [class*='topSection'] .joinedAtDate {
 				color: hsla(0,0%,100%,.6);
 			}`;
-
 
 		this.defaults = {
 			settings: {
@@ -119,7 +118,7 @@ class JoinedAtDate {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -140,10 +139,6 @@ class JoinedAtDate {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-
-			this.CurrentGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
-			this.APIModule = BDFDB.WebModules.findByProperties("getAPIBaseURL");
-			this.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes", "StatusTypes");
 
 			this.languages = Object.assign({"own":{name:"Own",id:"own",integrated:false,dic:false}},BDFDB.languages);
 
@@ -196,16 +191,16 @@ class JoinedAtDate {
 	}
 
 	createSelectChoice (choice) {
-		return `<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer} languageName" style="flex: 1 1 42%; padding: 0;">${this.languages[choice].name}</div><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer} languageTimestamp" style="flex: 1 1 58%; padding: 0;">${this.getTimestamp(this.languages[choice].id)}</div>`;
+		return `<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer} languageName" style="flex: 1 1 42%; padding: 0;">${this.languages[choice].name}</div><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.primary + BDFDB.disCNS.weightlight + BDFDB.disCN.cursorpointer} languageTimestamp" style="flex: 1 1 58%; padding: 0;">${this.getTimestamp(this.languages[choice].id)}</div>`;
 	}
 
-	processUserPopout (instance, wrapper) {
+	processUserPopout (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.user && BDFDB.getData("addInUserPopout", this, "settings")) {
 			this.addJoinedAtDate(instance.props.user, wrapper.querySelector(BDFDB.dotCN.userpopoutheadertext), wrapper.parentElement);
 		}
 	}
 
-	processUserProfile (instance, wrapper) {
+	processUserProfile (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.user && BDFDB.getData("addInUserProfil", this, "settings")) {
 			this.addJoinedAtDate(instance.props.user, wrapper.querySelector(BDFDB.dotCN.userprofileheaderinfo), null);
 		}
@@ -213,7 +208,7 @@ class JoinedAtDate {
 
 	addJoinedAtDate (info, container, popout) {
 		if (!info || info.discriminator == "0000" || !container || container.querySelector(".joinedAtDate")) return;
-		let guildid = this.CurrentGuildStore.getGuildId();
+		let guildid = BDFDB.LibraryModules.LastGuildStore.getGuildId();
 		if (guildid) {
 			if (!this.loadedusers[guildid]) this.loadedusers[guildid] = {};
 			let addTimestamp = (timestamp) => {
@@ -235,7 +230,7 @@ class JoinedAtDate {
 				}
 			};
 			if (this.loadedusers[guildid][info.id]) addTimestamp(this.loadedusers[guildid][info.id]);
-			else this.APIModule.get(this.DiscordConstants.Endpoints.GUILD_MEMBER(guildid,info.id)).then(result => {
+			else BDFDB.LibraryModules.APIUtils.get(BDFDB.DiscordConstants.Endpoints.GUILD_MEMBER(guildid,info.id)).then(result => {
 				if (result && result.body) {
 					let joineddate = new Date(result.body.joined_at);
 					this.loadedusers[guildid][info.id] = joineddate;

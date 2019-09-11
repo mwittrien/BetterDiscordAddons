@@ -3,7 +3,7 @@
 class ForceImagePreviews {
 	getName () {return "ForceImagePreviews";}
 
-	getVersion () {return "1.1.2";}
+	getVersion () {return "1.1.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ForceImagePreviews {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["GIFs","Fixed the issue where gifs would be forced as a preview even tho the native preview was rendered"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.patchModules = {
@@ -37,7 +37,7 @@ class ForceImagePreviews {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -76,7 +76,7 @@ class ForceImagePreviews {
 
 	// begin of own functions
 
-	processMessage (instance, wrapper) {
+	processMessage (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.message) {
 			let accessory = wrapper.querySelector(BDFDB.dotCN.messageaccessory);
 			if (accessory) {
@@ -101,7 +101,7 @@ class ForceImagePreviews {
 		else if (item.embedded) this.addItemToAccessory(item, links, accessory);
 		else {
 			let itemsrc = this.parseSrc(item.src);
-			require("request")(itemsrc, (error, response, result) => {
+			BDFDB.LibraryRequires.request(itemsrc, (error, response, result) => {
 				if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") > -1) {
 					let imagethrowaway = document.createElement("img");
 					imagethrowaway.src = itemsrc;

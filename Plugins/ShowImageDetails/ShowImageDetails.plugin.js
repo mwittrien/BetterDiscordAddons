@@ -3,7 +3,7 @@
 class ShowImageDetails {
 	getName () {return "ShowImageDetails";}
 
-	getVersion () {return "1.1.4";}
+	getVersion () {return "1.1.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ShowImageDetails {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Spoilers","Properly works with images that are marked as spoilers now"],["Spoiler Crash","Fixed crash occuring when trying to reveal an inline spoiler"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.patchModules = {
@@ -81,7 +81,7 @@ class ShowImageDetails {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -131,7 +131,7 @@ class ShowImageDetails {
 		}
 	}
 
-	processLazyImageZoomable (instance, image) {
+	processLazyImageZoomable (instance, image, returnvalue) {
 		let attachment = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.memoizedProps.attachment");
 		if (attachment && !attachment.filename.endsWith(".bdemote.png") && !attachment.filename.endsWith(".bdemote.gif")) {
 			if (BDFDB.containsClass(image.parentElement.parentElement, BDFDB.disCN.spoilercontainer, BDFDB.disCN.spoilertext, false)) image = image.parentElement.parentElement;

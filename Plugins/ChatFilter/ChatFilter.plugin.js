@@ -3,7 +3,7 @@
 class ChatFilter {
 	getName () {return "ChatFilter";}
 
-	getVersion () {return "3.3.4";}
+	getVersion () {return "3.3.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ChatFilter {
 
 	constructor () {
 		this.changelog = {
-			"added":[["ContextMenu","Added an contextmenu entry when right clicking a highlighted/selected word to allow you to faster add new aliases"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.patchModules = {
@@ -45,14 +45,6 @@ class ChatFilter {
 			}
 		};
 
-		this.chatfilterContextEntryMarkup =
-			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
-				<div class="${BDFDB.disCN.contextmenuitem} chatfilter-item">
-					<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">Add to ChatFilter</div></span>
-					<div class="${BDFDB.disCN.contextmenuhint}"></div>
-				</div>
-			</div>`;
-
 		this.chatfilterAddModalMarkup =
 			`<span class="${this.name}-modal BDFDB-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
@@ -61,7 +53,7 @@ class ChatFilter {
 						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
 								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
-									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">Add to ChatFilter</h4>
+									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">Add to ChatFilter</h4>
 									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
 								</div>
 								<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
@@ -178,7 +170,7 @@ class ChatFilter {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -302,35 +294,43 @@ class ChatFilter {
 		BDFDB.saveData("hideInfo", BDFDB.isEleHidden(ele.nextElementSibling), this, "hideInfo");
 	}
 
-	onNativeContextMenu (instance, menu) {
-		if (instance.props && instance.props.value && instance.props.value.trim() && !menu.querySelector(".chatfilter-item")) {
-			if ((instance.props.type == "NATIVE_TEXT" || instance.props.type == "CHANNEL_TEXT_AREA") && BDFDB.getData("addContextMenu", this, "settings")) this.appendItem(menu, instance.props.value.trim());
+	onNativeContextMenu (instance, menu, returnvalue) {
+		if (instance.props && instance.props.value && instance.props.value.trim() && !menu.querySelector(`${this.name}-contextMenuItem`)) {
+			if ((instance.props.type == "NATIVE_TEXT" || instance.props.type == "CHANNEL_TEXT_AREA") && BDFDB.getData("addContextMenu", this, "settings")) this.appendItem(menu, returnvalue, instance.props.value.trim());
 		}
 	}
 
-	onMessageContextMenu (instance, menu) {
-		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(".chatfilter-item")) {
+	onMessageContextMenu (instance, menu, returnvalue) {
+		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(`${this.name}-contextMenuItem`)) {
 			let text = document.getSelection().toString().trim();
-			if (text && BDFDB.getData("addContextMenu", this, "settings")) this.appendItem(menu, text);
+			if (text && BDFDB.getData("addContextMenu", this, "settings")) this.appendItem(menu, returnvalue, text);
 		}
 	}
 
-	appendItem (menu, text) {
-		let chatfilterContextEntry = BDFDB.htmlToElement(this.chatfilterContextEntryMarkup);
-		let devgroup = BDFDB.getContextMenuDevGroup(menu);
-		if (devgroup) devgroup.parentElement.insertBefore(chatfilterContextEntry, devgroup);
-		else menu.appendChild(chatfilterContextEntry, menu);
-		chatfilterContextEntry.querySelector(".chatfilter-item").addEventListener("click", () => {
-			BDFDB.closeContextMenu(menu);
-			this.openAddModal(text);
+	appendItem (menu, returnvalue, text) {
+		let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
+		const itemgroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+			className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
+			children: [
+				BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+					label: "Add to ChatFilter",
+					className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-addalias-contextMenuItem`,
+					action: e => {
+						BDFDB.closeContextMenu(menu);
+						this.openAddModal(text);
+					}
+				})
+			]
 		});
+		if (index > -1) children.splice(index, 0, itemgroup);
+		else children.push(itemgroup);
 	}
 
-	processMessage (instance, wrapper) {
+	processMessage (instance, wrapper, returnvalue) {
 		wrapper.querySelectorAll(`${BDFDB.dotCNC.messagemarkup + BDFDB.dotCN.messageaccessory}`).forEach(message => {this.hideMessage(message);});
 	}
 
-	processStandardSidebarView (instance, wrapper) {
+	processStandardSidebarView (instance, wrapper, returnvalue) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			document.querySelectorAll(`${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored, ${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored`).forEach(message => {this.resetMessage(message);});

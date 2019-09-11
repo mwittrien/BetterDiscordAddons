@@ -3,20 +3,20 @@
 class RevealAllSpoilersOption {
 	getName () {return "RevealAllSpoilersOption";}
 
-	getVersion () {return "1.0.0";}
+	getVersion () {return "1.0.1";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Adds an entry to the message contextmenu to reveal all spoilers within a messageblock.";}
 
-	initConstructor () {
-		this.messageContextEntryMarkup =
-			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
-				<div class="${BDFDB.disCN.contextmenuitem} revealspoilers-item">
-					<span class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">Reveal all Spoilers</div></span>
-					<div class="${BDFDB.disCN.contextmenuhint}"></div>
-				</div>
-			</div>`;
+	constructor () {
+		this.changelog = {
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+		};
+
+		this.patchModules = {
+			"StandardSidebarView":"componentWillUnmount"
+		};
 	}
 
 
@@ -38,7 +38,7 @@ class RevealAllSpoilersOption {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -74,27 +74,32 @@ class RevealAllSpoilersOption {
 
 	// begin of own functions
 
-	onMessageContextMenu (instance, menu) {
-		if (instance.props && instance.props.message && instance.props.target && !menu.querySelector(".revealspoilers-item")) {
-			let messagediv = BDFDB.getParentEle(BDFDB.dotCN.message, instance.props.target);
+	onMessageContextMenu (instance, menu, returnvalue) {
+		if (instance.props && instance.props.message && instance.props.target && !menu.querySelector(`${this.name}-contextMenuItem`)) {
+			let messagediv = BDFDB.getParentEle(BDFDB.dotCN.messagegroup + "> [aria-disabled]", instance.props.target);
 			if (!messagediv || !messagediv.querySelector(BDFDB.dotCN.spoilerhidden)) return;
-			let devgroup = BDFDB.getContextMenuDevGroup(menu);
-			let messageContextEntry = BDFDB.htmlToElement(this.messageContextEntryMarkup);
-			if (devgroup) devgroup.parentElement.insertBefore(messageContextEntry, devgroup);
-			else menu.appendChild(messageContextEntry, menu);
-			let revealitem = messageContextEntry.querySelector(".revealspoilers-item");
-			revealitem.addEventListener("click", () => {
-				instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
-				this.revealAllSpoilers(messagediv);
+			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
+			const itemgroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
+				children: [
+					BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+						label: "Reveal all Spoilers",
+						hint: BDFDB.isPluginEnabled("MessageUtilities") ? window.bdplugins.MessageUtilities.plugin.getActiveShortcutString("__Reveal_Spoilers") : null,
+						className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-reveal-contextMenuItem`,
+						action: e => {
+							BDFDB.closeContextMenu(menu);
+							this.revealAllSpoilers(messagediv);
+						}
+					})
+				]
 			});
-			if (BDFDB.isPluginEnabled("MessageUtilities")) {
-				BDFDB.setContextHint(revealitem, window.bdplugins.MessageUtilities.plugin.getActiveShortcutString("__Reveal_Spoilers"));
-			}
+			if (index > -1) children.splice(index, 0, itemgroup);
+			else children.push(itemgroup);
 		}
 	}
 
 	revealAllSpoilers (target) {
-		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.message, target);
+		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.messagegroup + "> [aria-disabled]", target);
 		if (!messagediv) return;
 		for (let spoiler of messagediv.querySelectorAll(BDFDB.dotCN.spoilerhidden)) spoiler.click();
 	}

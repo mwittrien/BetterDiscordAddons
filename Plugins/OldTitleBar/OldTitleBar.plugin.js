@@ -3,7 +3,7 @@
 class OldTitleBar {
 	getName () {return "OldTitleBar";}
 
-	getVersion () {return "1.5.7";}
+	getVersion () {return "1.5.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class OldTitleBar {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Mac OSX","Fixed the plugin for Mac OSX"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.patchModules = {
@@ -35,7 +35,7 @@ class OldTitleBar {
 				margin-top: 0;
 			}
 
-			.hidden-by-OTB .platform-osx ${BDFDB.dotCN.guilds} {
+			.hidden-by-OTB .platform-osx ${BDFDB.dotCN.guildsscroller} {
 				padding-top: 10px;
 			}
 
@@ -116,9 +116,8 @@ class OldTitleBar {
 				if (this.patched) {
 					notifybar = BDFDB.createNotificationsBar("Changed nativebar settings, relaunch to see changes:", {type:"danger",btn:"Relaunch",id:"OldTitleBarNotifyBar"});
 					notifybar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", () => {
-						let app = require("electron").remote.app;
-						app.relaunch();
-						app.quit();
+						BDFDB.LibraryRequires.electron.remote.app.relaunch();
+						BDFDB.LibraryRequires.electron.remote.app.quit();
 					});
 				}
 			}
@@ -145,7 +144,7 @@ class OldTitleBar {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -171,7 +170,7 @@ class OldTitleBar {
 				this.changeMaximizeButtons();
 			});
 
-			this.window = require("electron").remote.getCurrentWindow();
+			this.window = BDFDB.LibraryRequires.electron.remote.getCurrentWindow();
 
 			this.patchMainScreen(BDFDB.getData("displayNative", this, "settings"));
 
@@ -198,19 +197,19 @@ class OldTitleBar {
 
 	// begin of own functions
 
-	processHeaderBar (instance, wrapper) {
+	processHeaderBar (instance, wrapper, returnvalue) {
 		this.addTitleBar();
 	}
 
-	processHeaderBarContainer (instance, wrapper) {
+	processHeaderBarContainer (instance, wrapper, returnvalue) {
 		this.addTitleBar();
 	}
 
-	processStandardSidebarView (instance, wrapper, methodnames) {
-		this.processAuthWrapper(instance, wrapper, methodnames);
+	processStandardSidebarView (instance, wrapper, returnvalue, methodnames) {
+		this.processAuthWrapper(instance, wrapper, returnvalue, methodnames);
 	}
 
-	processAuthWrapper (instance, wrapper, methodnames) {
+	processAuthWrapper (instance, wrapper, returnvalue, methodnames) {
 		if (methodnames.includes("componentDidMount")) {
 			this.addSettingsTitleBar(wrapper);
 		}

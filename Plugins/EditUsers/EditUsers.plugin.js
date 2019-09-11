@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.5.4";}
+	getVersion () {return "3.5.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditUsers {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["BotTags","No longer forces bottag color to be the same as the role color unless BetterRoleColors is enabled and the bottag option in BRC is enabled"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.labels = {};
@@ -71,28 +71,6 @@ class EditUsers {
 				margin-right: 6px;
 				bottom: 3px;
 			}`;
-
-		this.userContextEntryMarkup =
-			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
-				<div class="${BDFDB.disCN.contextmenuitemsubmenu} localusersettings-item">
-					<div class="${BDFDB.disCN.contextmenulabel} BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_context_localusersettings_text</div></div>
-					<svg class="${BDFDB.disCN.contextmenuitemsubmenucaret}" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M16.59 8.59004L12 13.17L7.41 8.59004L6 10L12 16L18 10L16.59 8.59004Z"></path></svg>
-				</div>
-			</div>`;
-
-		this.userContextSubMenuMarkup = 
-			`<div class="${BDFDB.disCN.contextmenu} editusers-submenu">
-				<div class="${BDFDB.disCN.contextmenuitemgroup}">
-					<div class="${BDFDB.disCNS.contextmenuitem + BDFDB.disCN.contextmenuitemclickable} usersettings-item">
-						<div class="${BDFDB.disCN.contextmenulabel} BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_submenu_usersettings_text</div></div>
-						<div class="${BDFDB.disCN.contextmenuhint}"></div>
-					</div>
-					<div class="${BDFDB.disCNS.contextmenuitem + BDFDB.disCNS.contextmenuitemclickable + BDFDB.disCN.contextmenuitemdisabled} resetsettings-item">
-						<div class="${BDFDB.disCN.contextmenulabel} BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">REPLACE_submenu_resetsettings_text</div></div>
-						<div class="${BDFDB.disCN.contextmenuhint}"></div>
-					</div>
-				</div>
-			</div>`;
 
 		this.userSettingsModalMarkup =
 			`<span class="${this.name}-modal BDFDB-modal">
@@ -181,7 +159,7 @@ class EditUsers {
 							</div>
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
 								<button type="button" class="btn-save ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
-									<div class="${BDFDB.disCN.buttoncontents}">REPLACE_btn_save_text</div>
+									<div class="${BDFDB.disCN.buttoncontents}"></div>
 								</button>
 							</div>
 						</div>
@@ -314,11 +292,6 @@ class EditUsers {
 	// begin of own functions
 
 	changeLanguageStrings () {
-		this.userContextEntryMarkup =		this.userContextEntryMarkup.replace("REPLACE_context_localusersettings_text", this.labels.context_localusersettings_text);
-
-		this.userContextSubMenuMarkup =		this.userContextSubMenuMarkup.replace("REPLACE_submenu_usersettings_text", this.labels.submenu_usersettings_text);
-		this.userContextSubMenuMarkup =		this.userContextSubMenuMarkup.replace("REPLACE_submenu_resetsettings_text", this.labels.submenu_resetsettings_text);
-
 		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
 		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_username_text", this.labels.modal_username_text);
 		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_usertag_text", this.labels.modal_usertag_text);
@@ -332,36 +305,46 @@ class EditUsers {
 		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_colorpicker2_text", this.labels.modal_colorpicker2_text);
 		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_colorpicker3_text", this.labels.modal_colorpicker3_text);
 		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_colorpicker4_text", this.labels.modal_colorpicker4_text);
-		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_btn_cancel_text", this.labels.btn_cancel_text);
-		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_btn_save_text", this.labels.btn_save_text);
 	}
-
-	onUserContextMenu (instance, menu) {
-		if (instance.props && instance.props.user && !menu.querySelector(".localusersettings-item")) {
-			let userContextEntry = BDFDB.htmlToElement(this.userContextEntryMarkup);
-			let devgroup = BDFDB.getContextMenuDevGroup(menu);
-			if (devgroup) devgroup.parentElement.insertBefore(userContextEntry, devgroup);
-			else menu.appendChild(userContextEntry, menu);
-			let settingsitem = userContextEntry.querySelector(".localusersettings-item");
-			settingsitem.addEventListener("mouseenter", () => {
-				let userContextSubMenu = BDFDB.htmlToElement(this.userContextSubMenuMarkup);
-				let useritem = userContextSubMenu.querySelector(".usersettings-item");
-				useritem.addEventListener("click", () => {
-					BDFDB.closeContextMenu(menu);
-					this.showUserSettings(instance.props.user);
-				});
-				if (BDFDB.loadData(instance.props.user.id, this, "users")) {
-					let resetitem = userContextSubMenu.querySelector(".resetsettings-item");
-					BDFDB.removeClass(resetitem, BDFDB.disCN.contextmenuitemdisabled);
-					resetitem.addEventListener("click", () => {
-						BDFDB.closeContextMenu(menu);
-						BDFDB.removeData(instance.props.user.id, this, "users");
-						this.changeAppTitle();
-						BDFDB.WebModules.forceAllUpdates(this);
-					});
-				}
-				BDFDB.appendSubMenu(settingsitem, userContextSubMenu);
+	
+	onUserContextMenu (instance, menu, returnvalue) {
+		if (instance.props && instance.props.user && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
+			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
+			const itemgroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
+				children: [
+					BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+						label: this.labels.context_localusersettings_text,
+						className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-usersettings-contextMenuSubItem`,
+						render: [BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+							className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
+							children: [
+								BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+									label: this.labels.submenu_usersettings_text,
+									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-usersettings-ContextMenuItem`,
+									action: e => {
+										BDFDB.closeContextMenu(menu);
+										this.showUserSettings(instance.props.user);
+									}
+								}),
+								BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+									label: this.labels.submenu_resetsettings_text,
+									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-resetsettings-ContextMenuItem`,
+									disabled: !BDFDB.loadData(instance.props.user.id, this, "users"),
+									action: e => {
+										BDFDB.closeContextMenu(menu);
+										BDFDB.removeData(instance.props.user.id, this, "users");
+										this.changeAppTitle();
+										BDFDB.WebModules.forceAllUpdates(this);
+									}
+								})
+							]
+						})]
+					})
+				]
 			});
+			if (index > -1) children.splice(index, 0, itemgroup);
+			else children.push(itemgroup);
 		}
 	}
 
@@ -413,7 +396,7 @@ class EditUsers {
 		});
 		userurlinput.addEventListener("mouseleave", () => {
 			BDFDB.removeClass(userurlinput, "hovering");
-			BDFDB.removeEles(BDFDB.dotCNS.tooltips + ".notice-tooltip");
+			BDFDB.removeEles(BDFDB.dotCNS.itemlayerconainer + ".notice-tooltip");
 		});
 		BDFDB.addChildEventListener(userSettingsModal, "click", ".btn-save", e => {
 			name = usernameinput.value.trim();
@@ -447,7 +430,7 @@ class EditUsers {
 	}
 
 	checkUrl (input) {
-		BDFDB.removeEles(BDFDB.dotCNS.tooltips + ".notice-tooltip");
+		BDFDB.removeEles(BDFDB.dotCNS.itemlayerconainer + ".notice-tooltip");
 		if (!input.value) {
 			BDFDB.removeClass(input, "valid");
 			BDFDB.removeClass(input, "invalid");
@@ -476,7 +459,7 @@ class EditUsers {
 		}
 	}
 
-	processChannelTextArea (instance, wrapper) {
+	processChannelTextArea (instance, wrapper, returnvalue) {
 		let channel = BDFDB.getReactValue(instance, "props.channel");
 		if (channel) {
 			var textarea = wrapper.querySelector("textarea");
@@ -527,7 +510,7 @@ class EditUsers {
 		}
 	}
 
-	processMemberListItem (instance, wrapper) {
+	processMemberListItem (instance, wrapper, returnvalue) {
 		let username = wrapper.querySelector(BDFDB.dotCN.memberusername);
 		if (username) {
 			this.changeName(instance.props.user, username);
@@ -536,7 +519,7 @@ class EditUsers {
 		}
 	}
 
-	processUserPopout (instance, wrapper) {
+	processUserPopout (instance, wrapper, returnvalue) {
 		let username = wrapper.querySelector(BDFDB.dotCNC.userpopoutheadertagusernamenonickname + BDFDB.dotCN.userpopoutheadernickname);
 		if (username) {
 			this.changeName(instance.props.user, username);
@@ -545,7 +528,7 @@ class EditUsers {
 		}
 	}
 
-	processUserProfile (instance, wrapper) {
+	processUserProfile (instance, wrapper, returnvalue) {
 		let username = wrapper.querySelector(BDFDB.dotCN.userprofileusername);
 		if (username) {
 			this.changeName(instance.props.user, username);
@@ -554,7 +537,7 @@ class EditUsers {
 		}
 	}
 
-	processFriendRow (instance, wrapper) {
+	processFriendRow (instance, wrapper, returnvalue) {
 		let username = wrapper.querySelector(BDFDB.dotCN.friendsusername);
 		if (username) {
 			this.changeName(instance.props.user, username);
@@ -562,7 +545,7 @@ class EditUsers {
 		}
 	}
 
-	processVoiceUser (instance, wrapper) {
+	processVoiceUser (instance, wrapper, returnvalue) {
 		let user = instance.props.user;
 		if (user && wrapper.className) {
 			this.changeVoiceUser(user, wrapper.querySelector(BDFDB.dotCN.voicename), instance.props.speaking);
@@ -570,7 +553,7 @@ class EditUsers {
 		}
 	}
 
-	processAccount (instance, wrapper) {
+	processAccount (instance, wrapper, returnvalue) {
 		let user = BDFDB.getReactValue(instance, "_reactInternalFiber.child.stateNode.props.currentUser");
 		if (user) {
 			this.changeName(user, wrapper.querySelector(BDFDB.dotCN.accountinfodetails).firstElementChild);
@@ -578,7 +561,7 @@ class EditUsers {
 		}
 	}
 
-	processMessageUsername (instance, wrapper) {
+	processMessageUsername (instance, wrapper, returnvalue) {
 		let message = BDFDB.getReactValue(instance, "props.message");
 		if (message) {
 			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
@@ -592,7 +575,7 @@ class EditUsers {
 		}
 	}
 
-	processAuditLog (instance, wrapper) {
+	processAuditLog (instance, wrapper, returnvalue) {
 		let log = BDFDB.getReactValue(instance, "props.log");
 		if (log && log.user) {
 			let hooks = wrapper.querySelectorAll(BDFDB.dotCN.auditloguserhook);
@@ -602,7 +585,7 @@ class EditUsers {
 		}
 	}
 
-	processBannedCard (instance, wrapper) {
+	processBannedCard (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.user && instance.props.guild) {
 			let username = wrapper.querySelector(BDFDB.dotCN.guildsettingsbannedusername);
 			if (username) {
@@ -612,7 +595,7 @@ class EditUsers {
 		}
 	}
 
-	processInviteCard (instance, wrapper) {
+	processInviteCard (instance, wrapper, returnvalue) {
 		let invite = BDFDB.getReactValue(instance, "props.invite");
 		if (invite && invite.inviter && invite.guild) {
 			let username = wrapper.querySelector(BDFDB.dotCN.guildsettingsinviteusername);
@@ -623,7 +606,7 @@ class EditUsers {
 		}
 	}
 
-	processMemberCard (instance, wrapper) {
+	processMemberCard (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.user && instance.props.guild) {
 			let username = wrapper.querySelector(BDFDB.dotCN.guildsettingsmembername);
 			if (username) {
@@ -633,7 +616,7 @@ class EditUsers {
 		}
 	}
 
-	processInvitationCard (instance, wrapper) {
+	processInvitationCard (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.user) {
 			let username = wrapper.querySelector(BDFDB.dotCN.invitemodalinviterowname);
 			if (username) {
@@ -643,14 +626,14 @@ class EditUsers {
 		}
 	}
 
-	processTypingUsers (instance, wrapper) {
+	processTypingUsers (instance, wrapper, returnvalue) {
 		let users = !instance.props.typingUsers ? [] : Object.keys(instance.props.typingUsers).filter(id => id != BDFDB.myData.id).filter(id => !BDFDB.LibraryModules.FriendUtils.isBlocked(id)).map(id => BDFDB.LibraryModules.UserStore.getUser(id)).filter(id => id != null);
 		wrapper.querySelectorAll(BDFDB.dotCNS.typing + "strong").forEach((username, i) => {
 			if (users[i] && username) this.changeName2(users[i], username);
 		});
 	}
 
-	processDirectMessage (instance, wrapper) {
+	processDirectMessage (instance, wrapper, returnvalue) {
 		let channel = BDFDB.getReactValue(instance, "props.channel");
 		if (channel && channel.type == 1) {
 			let user = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
@@ -664,7 +647,7 @@ class EditUsers {
 		}
 	}
 
-	processCallAvatar (instance, wrapper) {
+	processCallAvatar (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.id) {
 			let user = BDFDB.LibraryModules.UserStore.getUser(instance.props.id);
 			if (!user) {
@@ -680,30 +663,30 @@ class EditUsers {
 		}
 	}
 
-	processVideoTile (instance, wrapper) {
+	processVideoTile (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.user) this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
 	}
 
-	processPictureInPictureVideo (instance, wrapper) {
+	processPictureInPictureVideo (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.backgroundKey) {
 			let user = BDFDB.LibraryModules.UserStore.getUser(instance.props.backgroundKey);
 			if (user) this.changeAvatar(user, this.getAvatarDiv(wrapper));
 		}
 	}
 
-	processPrivateChannel (instance, wrapper) {
+	processPrivateChannel (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.user) {
-			let username = wrapper.querySelector(BDFDB.dotCN.dmchannelname);
+			let username = wrapper.querySelector(BDFDB.dotCN.namecontainername);
 			this.changePrivateChannel(instance.props.user, username && username.firstElementChild ? username.firstElementChild : username);
 			this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
 		}
 	}
 
-	processHeaderBarContainer (instance, wrapper) {
+	processHeaderBarContainer (instance, wrapper, returnvalue) {
 		this.processHeaderBar(instance, wrapper);
 	}
 
-	processHeaderBar (instance, wrapper) {
+	processHeaderBar (instance, wrapper, returnvalue) {
 		let channel_id = BDFDB.getReactValue(instance, "props.channelId") || BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.channelId");
 		if (channel_id) {
 			let channelname = wrapper.querySelector(BDFDB.dotCN.channelheaderheaderbartitle);
@@ -725,7 +708,7 @@ class EditUsers {
 		}
 	}
 
-	processClickable (instance, wrapper) {
+	processClickable (instance, wrapper, returnvalue) {
 		if (!wrapper || !instance.props || !instance.props.className) return;
 		if (instance.props.tag == "a" && instance.props.className.indexOf(BDFDB.disCN.anchorunderlineonhover) > -1) {
 			if (BDFDB.containsClass(wrapper.parentElement, BDFDB.disCN.messagesystemcontent) && wrapper.parentElement.querySelector("a") == wrapper) {
@@ -767,7 +750,7 @@ class EditUsers {
 		}
 	}
 
-	processMessageContent (instance, wrapper) {
+	processMessageContent (instance, wrapper, returnvalue) {
 		let message = BDFDB.getReactValue(instance, "props.message");
 		if (message && message.author) {
 			let markup = wrapper.querySelector(BDFDB.dotCN.messagemarkup);
@@ -780,7 +763,7 @@ class EditUsers {
 		}
 	}
 
-	processStandardSidebarView (instance, wrapper) {
+	processStandardSidebarView (instance, wrapper, returnvalue) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			this.changeAppTitle();
@@ -972,7 +955,7 @@ class EditUsers {
 		dmchannel.removeEventListener("mouseleave", dmchannel.mouseleaveListenerEditUsers);
 		let data = this.getUserData(info.id, username);
 		if (data.name || data.color1 || data.color2 || username.getAttribute("changed-by-editusers")) {
-			if (username.EditUsersHovered || BDFDB.containsClass(dmchannel, BDFDB.disCN.dmchannelselected)) colorHover();
+			if (username.EditUsersHovered || BDFDB.containsClass(dmchannel, BDFDB.disCN.namecontainerselected)) colorHover();
 			else colorDefault();
 
 			if (data.name || data.color1 || data.color2) {
@@ -1280,9 +1263,7 @@ class EditUsers {
 					modal_ignoreurl_text:				"URL ignorirati",
 					modal_ignoretagcolor_text:			"Upotrijebite boju uloga",
 					modal_validurl_text:				"Vrijedi URL",
-					modal_invalidurl_text:				"Nevažeći URL",
-					btn_cancel_text:					"Prekid",
-					btn_save_text:						"Uštedjeti"
+					modal_invalidurl_text:				"Nevažeći URL"
 				};
 			case "da":		//danish
 				return {
@@ -1304,9 +1285,7 @@ class EditUsers {
 					modal_ignoreurl_text:				"Ignorer URL",
 					modal_ignoretagcolor_text:			"Brug rollefarve",
 					modal_validurl_text:				"Gyldig URL",
-					modal_invalidurl_text:				"Ugyldig URL",
-					btn_cancel_text:					"Afbryde",
-					btn_save_text:						"Spare"
+					modal_invalidurl_text:				"Ugyldig URL"
 				};
 			case "de":		//german
 				return {
@@ -1328,9 +1307,7 @@ class EditUsers {
 					modal_ignoreurl_text:				"URL ignorieren",
 					modal_ignoretagcolor_text:			"Benutze Rollenfarbe",
 					modal_validurl_text:				"Gültige URL",
-					modal_invalidurl_text:				"Ungültige URL",
-					btn_cancel_text:					"Abbrechen",
-					btn_save_text:						"Speichern"
+					modal_invalidurl_text:				"Ungültige URL"
 				};
 			case "es":		//spanish
 				return {
@@ -1352,9 +1329,7 @@ class EditUsers {
 					modal_ignoreurl_text:				"Ignorar URL",
 					modal_ignoretagcolor_text:			"Usar color de rol",
 					modal_validurl_text:				"URL válida",
-					modal_invalidurl_text:				"URL inválida",
-					btn_cancel_text:					"Cancelar",
-					btn_save_text:						"Guardar"
+					modal_invalidurl_text:				"URL inválida"
 				};
 			case "fr":		//french
 				return {
@@ -1376,9 +1351,7 @@ class EditUsers {
 					modal_ignoreurl_text:				"Ignorer l'URL",
 					modal_ignoretagcolor_text:			"Utiliser la couleur de rôle",
 					modal_validurl_text:				"URL valide",
-					modal_invalidurl_text:				"URL invalide",
-					btn_cancel_text:					"Abandonner",
-					btn_save_text:						"Enregistrer"
+					modal_invalidurl_text:				"URL invalide"
 				};
 			case "it":		//italian
 				return {
@@ -1400,9 +1373,7 @@ class EditUsers {
 					modal_ignoreurl_text:				"Ignora l'URL",
 					modal_ignoretagcolor_text:			"Usa il colore del ruolo",
 					modal_validurl_text:				"URL valido",
-					modal_invalidurl_text:				"URL non valido",
-					btn_cancel_text:					"Cancellare",
-					btn_save_text:						"Salvare"
+					modal_invalidurl_text:				"URL non valido"
 				};
 			case "nl":		//dutch
 				return {
@@ -1424,9 +1395,7 @@ class EditUsers {
 					modal_ignoreurl_text:				"URL negeren",
 					modal_ignoretagcolor_text:			"Gebruik rolkleur",
 					modal_validurl_text:				"Geldige URL",
-					modal_invalidurl_text:				"Ongeldige URL",
-					btn_cancel_text:					"Afbreken",
-					btn_save_text:						"Opslaan"
+					modal_invalidurl_text:				"Ongeldige URL"
 				};
 			case "no":		//norwegian
 				return {
@@ -1448,9 +1417,7 @@ class EditUsers {
 					modal_ignoreurl_text:				"Ignorer URL",
 					modal_ignoretagcolor_text:			"Bruk rollefarge",
 					modal_validurl_text:				"Gyldig URL",
-					modal_invalidurl_text:				"Ugyldig URL",
-					btn_cancel_text:					"Avbryte",
-					btn_save_text:						"Lagre"
+					modal_invalidurl_text:				"Ugyldig URL"
 				};
 			case "pl":		//polish
 				return {
@@ -1472,9 +1439,7 @@ class EditUsers {
 					modal_ignoreurl_text:				"Ignoruj URL",
 					modal_ignoretagcolor_text:			"Użyj kolor roli",
 					modal_validurl_text:				"Prawidłowe URL",
-					modal_invalidurl_text:				"Nieprawidłowe URL",
-					btn_cancel_text:					"Anuluj",
-					btn_save_text:						"Zapisz"
+					modal_invalidurl_text:				"Nieprawidłowe URL"
 				};
 			case "pt-BR":	//portuguese (brazil)
 				return {
@@ -1496,9 +1461,7 @@ class EditUsers {
 					modal_ignoreurl_text:				"Ignorar URL",
 					modal_ignoretagcolor_text:			"Use a cor do papel",
 					modal_validurl_text:				"URL válido",
-					modal_invalidurl_text:				"URL inválida",
-					btn_cancel_text:					"Cancelar",
-					btn_save_text:						"Salvar"
+					modal_invalidurl_text:				"URL inválida"
 				};
 			case "fi":		//finnish
 				return {
@@ -1520,9 +1483,7 @@ class EditUsers {
 					modal_ignoreurl_text:				"Ohita URL",
 					modal_ignoretagcolor_text:			"Käytä rooliväriä",
 					modal_validurl_text:				"Voimassa URL",
-					modal_invalidurl_text:				"Virheellinen URL",
-					btn_cancel_text:					"Peruuttaa",
-					btn_save_text:						"Tallentaa"
+					modal_invalidurl_text:				"Virheellinen URL"
 				};
 			case "sv":		//swedish
 				return {
@@ -1544,9 +1505,7 @@ class EditUsers {
 					modal_ignoreurl_text:				"Ignorera URL",
 					modal_ignoretagcolor_text:			"Använd rollfärg",
 					modal_validurl_text:				"Giltig URL",
-					modal_invalidurl_text:				"Ogiltig URL",
-					btn_cancel_text:					"Avbryta",
-					btn_save_text:						"Spara"
+					modal_invalidurl_text:				"Ogiltig URL"
 				};
 			case "tr":		//turkish
 				return {
@@ -1568,9 +1527,7 @@ class EditUsers {
 					modal_ignoreurl_text:				"URL yoksay",
 					modal_ignoretagcolor_text:			"Rol rengini kullan",
 					modal_validurl_text:				"Geçerli URL",
-					modal_invalidurl_text:				"Geçersiz URL",
-					btn_cancel_text:					"Iptal",
-					btn_save_text:						"Kayıt"
+					modal_invalidurl_text:				"Geçersiz URL"
 				};
 			case "cs":		//czech
 				return {
@@ -1592,9 +1549,7 @@ class EditUsers {
 					modal_ignoreurl_text:				"Ignorovat URL",
 					modal_ignoretagcolor_text:			"Použijte barva role",
 					modal_validurl_text:				"Platná URL",
-					modal_invalidurl_text:				"Neplatná URL",
-					btn_cancel_text:					"Zrušení",
-					btn_save_text:						"Uložit"
+					modal_invalidurl_text:				"Neplatná URL"
 				};
 			case "bg":		//bulgarian
 				return {
@@ -1616,9 +1571,7 @@ class EditUsers {
 					modal_ignoreurl_text:				"Игнориране на URL",
 					modal_ignoretagcolor_text:			"Използвайте цвят на ролите",
 					modal_validurl_text:				"Валиден URL",
-					modal_invalidurl_text:				"Невалиден URL",
-					btn_cancel_text:					"Зъбести",
-					btn_save_text:						"Cпасяване"
+					modal_invalidurl_text:				"Невалиден URL"
 				};
 			case "ru":		//russian
 				return {
@@ -1640,9 +1593,7 @@ class EditUsers {
 					modal_ignoreurl_text:				"Игнорировать URL",
 					modal_ignoretagcolor_text:			"Использовать цвет ролей",
 					modal_validurl_text:				"Действительный URL",
-					modal_invalidurl_text:				"Неверная URL",
-					btn_cancel_text:					"Отмена",
-					btn_save_text:						"Cпасти"
+					modal_invalidurl_text:				"Неверная URL"
 				};
 			case "uk":		//ukrainian
 				return {
@@ -1664,9 +1615,7 @@ class EditUsers {
 					modal_ignoreurl_text:				"Ігнорувати URL",
 					modal_ignoretagcolor_text:			"Використовуйте рольовий колір",
 					modal_validurl_text:				"Дійсна URL",
-					modal_invalidurl_text:				"Недійсна URL",
-					btn_cancel_text:					"Скасувати",
-					btn_save_text:						"Зберегти"
+					modal_invalidurl_text:				"Недійсна URL"
 				};
 			case "ja":		//japanese
 				return {
@@ -1688,9 +1637,7 @@ class EditUsers {
 					modal_ignoreurl_text:				"URL を無視する",
 					modal_ignoretagcolor_text:			"ロールカラーを使用する",
 					modal_validurl_text:				"有効な URL",
-					modal_invalidurl_text:				"無効な URL",
-					btn_cancel_text:					"キャンセル",
-					btn_save_text:						"セーブ"
+					modal_invalidurl_text:				"無効な URL"
 				};
 			case "zh-TW":	//chinese (traditional)
 				return {
@@ -1712,9 +1659,7 @@ class EditUsers {
 					modal_ignoreurl_text:				"忽略 URL",
 					modal_ignoretagcolor_text:			"使用角色",
 					modal_validurl_text:				"有效的 URL",
-					modal_invalidurl_text:				"無效的 URL",
-					btn_cancel_text:					"取消",
-					btn_save_text:						"保存"
+					modal_invalidurl_text:				"無效的 URL"
 				};
 			case "ko":		//korean
 				return {
@@ -1736,9 +1681,7 @@ class EditUsers {
 					modal_ignoreurl_text:				"URL 무시",
 					modal_ignoretagcolor_text:			"역할 색상 사용",
 					modal_validurl_text:				"유효한 URL",
-					modal_invalidurl_text:				"잘못된 URL",
-					btn_cancel_text:					"취소",
-					btn_save_text:						"저장"
+					modal_invalidurl_text:				"잘못된 URL"
 				};
 			default:	//default: english
 				return {
@@ -1760,9 +1703,7 @@ class EditUsers {
 					modal_ignoreurl_text:				"Ignore URL",
 					modal_ignoretagcolor_text:			"Use Rolecolor",
 					modal_validurl_text:				"Valid URL",
-					modal_invalidurl_text:				"Invalid URL",
-					btn_cancel_text:					"Cancel",
-					btn_save_text:						"Save"
+					modal_invalidurl_text:				"Invalid URL"
 				};
 		}
 	}

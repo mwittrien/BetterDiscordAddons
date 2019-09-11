@@ -3,7 +3,7 @@
 class PluginRepo {
 	getName () {return "PluginRepo";} 
 
-	getVersion () {return "1.8.3";}
+	getVersion () {return "1.8.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class PluginRepo {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Repo Modal","Fixed an issue that prevented the repo modal from opening"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.patchModules = {
@@ -44,12 +44,6 @@ class PluginRepo {
 		this.loadedPlugins = {};
 
 		this.updateInterval;
-
-		this.settingsContextEntryMarkup =
-			`<div class="${BDFDB.disCN.contextmenuitem} pluginrepo-item">
-				<span>Plugin Repo</span>
-				<div class="${BDFDB.disCN.contextmenuhint}"></div>
-			</div>`;
 
 		this.pluginRepoIconMarkup =
 			`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="34" height="31" viewBox="0 0 400 382">
@@ -103,7 +97,7 @@ class PluginRepo {
 						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizelarge}">
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto; padding-bottom: 10px;">
 								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
-									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset} pluginAmount">Plugin Repository</h4>
+									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin} pluginAmount">Plugin Repository</h4>
 									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
 								</div>
 								<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
@@ -179,9 +173,9 @@ class PluginRepo {
 		this.sortPopoutMarkup =
 			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCN.popoutnoshadow} pluginrepo-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
-					<div class="${BDFDB.disCN.contextmenu} quickSelectPopout">
+					<div class="${BDFDB.disCN.contextmenu} BDFDB-quickSelectPopout">
 						<div class="${BDFDB.disCN.contextmenuitemgroup}">
-							${Object.keys(this.sortings.sort).map((key, i) => `<div option="${key}" class="${BDFDB.disCN.contextmenuitem}">${this.sortings.sort[key]}</div>`).join("")}
+							${Object.keys(this.sortings.sort).map((key, i) => `<div option="${key}" class="${BDFDB.disCNS.contextmenuitem + BDFDB.disCN.contextmenuitemclickable}">${this.sortings.sort[key]}</div>`).join("")}
 						</div>
 					</div>
 				</div>
@@ -190,9 +184,9 @@ class PluginRepo {
 		this.orderPopoutMarkup =
 			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCN.popoutnoshadow} pluginrepo-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
-					<div class="${BDFDB.disCN.contextmenu} quickSelectPopout">
+					<div class="${BDFDB.disCN.contextmenu} BDFDB-quickSelectPopout">
 						<div class="${BDFDB.disCN.contextmenuitemgroup}">
-							${Object.keys(this.sortings.order).map((key, i) => `<div option="${key}" class="${BDFDB.disCN.contextmenuitem}">${this.sortings.order[key]}</div>`).join("")}
+							${Object.keys(this.sortings.order).map((key, i) => `<div option="${key}" class="${BDFDB.disCNS.contextmenuitem + BDFDB.disCN.contextmenuitemclickable}">${this.sortings.order[key]}</div>`).join("")}
 						</div>
 					</div>
 				</div>
@@ -299,7 +293,7 @@ class PluginRepo {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -353,26 +347,19 @@ class PluginRepo {
 
 	// begin of own functions
 
-	onUserSettingsCogContextMenu (instance, menu) {
-		let observer = new MutationObserver(changes => {
-			changes.forEach(change => {
-				if (change.addedNodes) change.addedNodes.forEach(node => {
-					if (node.tagName && BDFDB.containsClass(node, BDFDB.disCN.contextmenu) && BDFDB.getReactValue(node, "return.return.return.memoizedProps.label") == "BandagedBD" && !node.querySelector(".pluginrepo-item")) {
-						let item = node.querySelectorAll(BDFDB.dotCN.contextmenuitem);
-						item = item[item.length-1];
-						var settingsContextEntry = BDFDB.htmlToElement(this.settingsContextEntryMarkup);
-						settingsContextEntry.addEventListener("click", () => {
-							if (!this.loading.is) BDFDB.closeContextMenu(menu);
-							this.openPluginRepoModal();
-						});
-						item.parentElement.insertBefore(settingsContextEntry, item.nextElementSibling);
-						var menurects = BDFDB.getRects(menu);
-						node.style.setProperty("top", (menurects.top - BDFDB.getRects(node).height + menurects.height) + "px");
-					}
-				});
+	onUserSettingsCogContextMenu (instance, menu, returnvalue) {
+		setImmediate(() => {for (let child of returnvalue.props.children) if (child && child.props && child.props.label == "BandagedBD" && Array.isArray(child.props.render)) {
+			const repoItem = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+				label: "Plugin Repo",
+				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-repo-contextMenuItem`,
+				action: e => {
+					if (!this.loading.is) BDFDB.closeContextMenu(menu);
+					this.openPluginRepoModal();
+				}
 			});
-		});
-		observer.observe(menu, {childList: true, subtree:true});
+			child.props.render.push(repoItem);
+			break;
+		}});
 	}
 
 	processV2CList (instance, wrapper) {
@@ -623,8 +610,7 @@ class PluginRepo {
 		var seps = ["\"", "\'", "\`"];
 		var newentriesdata = BDFDB.loadAllData(this, "newentriesdata"), ownlist = BDFDB.loadData("ownlist", this, "ownlist") || [];
 		this.cachedPlugins = (newentriesdata.urlbase64 ? atob(newentriesdata.urlbase64).split("\n") : []).concat(ownlist);
-		let request = require("request");
-		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/PluginRepo/res/PluginList.txt", (error, response, result) => {
+		BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/PluginRepo/res/PluginList.txt", (error, response, result) => {
 			if (!error && result) {
 				result = result.replace(/[\r\t]/g, "");
 				BDFDB.saveData("urlbase64", btoa(result), this, "newentriesdata");
@@ -710,7 +696,7 @@ class PluginRepo {
 				return;
 			}
 			let url = this.foundPlugins[i];
-			request(url, (error, response, body) => {
+			BDFDB.LibraryRequires.request(url, (error, response, body) => {
 				if (!response) {
 					if (url && BDFDB.getAllIndexes(this.foundPlugins, url).length < 2) this.foundPlugins.push(url);
 				}
@@ -867,7 +853,7 @@ class PluginRepo {
 	}
 
 	checkForNewPlugins () {
-		require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/PluginRepo/res/PluginList.txt", (error, response, result) => {
+		BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/PluginRepo/res/PluginList.txt", (error, response, result) => {
 			if (response && !BDFDB.equals(result.replace(/\t|\r/g, "").split("\n").filter(n => n), this.grabbedPlugins)) {
 				this.loading = {is:false, timeout:null, amount:0};
 				this.loadPlugins();
@@ -876,14 +862,14 @@ class PluginRepo {
 	}
 
 	downloadPlugin (data) {
-		require("request")(data.url, (error, response, body) => {
+		BDFDB.LibraryRequires.request(data.url, (error, response, body) => {
 			if (error) BDFDB.showToast(`Unable to download Plugin "${plugin.getName}".`, {type:"danger"});
 			else this.createPluginFile(data.url.split("/").pop(), body);
 		});
 	}
 
 	createPluginFile (filename, content) {
-		require("fs").writeFile(require("path").join(BDFDB.getPluginsFolder(), filename), content, (error) => {
+		BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.getPluginsFolder(), filename), content, (error) => {
 			if (error) BDFDB.showToast(`Unable to save Plugin "${filename}".`, {type:"danger"});
 			else BDFDB.showToast(`Successfully saved Plugin "${filename}".`, {type:"success"});
 		});
@@ -900,7 +886,7 @@ class PluginRepo {
 
 	deletePluginFile (data) {
 		let filename = data.url.split("/").pop();
-		require("fs").unlink(require("path").join(BDFDB.getPluginsFolder(), filename), (error) => {
+		BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.getPluginsFolder(), filename), (error) => {
 			if (error) BDFDB.showToast(`Unable to delete Plugin "${filename}".`, {type:"danger"});
 			else BDFDB.showToast(`Successfully deleted Plugin "${filename}".`);
 		});

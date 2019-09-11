@@ -3,7 +3,7 @@
 class TopRoleEverywhere {
 	getName () {return "TopRoleEverywhere";}
 
-	getVersion () {return "2.8.6";}
+	getVersion () {return "2.8.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class TopRoleEverywhere {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["DM Groups","Now works properly in DM Groups"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.patchModules = {
@@ -83,7 +83,7 @@ class TopRoleEverywhere {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -105,10 +105,6 @@ class TopRoleEverywhere {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 
-			this.GuildPerms = BDFDB.WebModules.findByProperties("getHighestRole");
-			this.GuildStore = BDFDB.WebModules.findByProperties("getGuild");
-			this.UserGuildState = BDFDB.WebModules.findByProperties("getGuildId", "getLastSelectedGuildId");
-
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
@@ -126,13 +122,13 @@ class TopRoleEverywhere {
 
 	// begin of own functions
 
-	processMemberListItem (instance, wrapper) {
+	processMemberListItem (instance, wrapper, returnvalue) {
 		if (instance.props && BDFDB.getData("showInMemberList", this, "settings")) {
 			this.addRoleTag(instance.props.user, wrapper.querySelector(BDFDB.dotCN.memberusername), "list", BDFDB.disCN.bottagnametag);
 		}
 	}
 
-	processMessageUsername (instance, wrapper) {
+	processMessageUsername (instance, wrapper, returnvalue) {
 		let message = BDFDB.getReactValue(instance, "props.message");
 		if (message) {
 			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
@@ -143,7 +139,7 @@ class TopRoleEverywhere {
 		}
 	}
 
-	processStandardSidebarView (instance, wrapper) {
+	processStandardSidebarView (instance, wrapper, returnvalue) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			BDFDB.removeEles(".TRE-tag");
@@ -154,10 +150,10 @@ class TopRoleEverywhere {
 	addRoleTag (info, username, type, selector) {
 		if (!info || !username) return;
 		BDFDB.removeEles(username.parentElement.querySelectorAll(".TRE-tag"));
-		let guild = this.GuildStore.getGuild(this.UserGuildState.getGuildId());
+		let guild = BDFDB.LibraryModules.GuildStore.getGuild(BDFDB.LibraryModules.LastGuildStore.getGuildId());
 		let settings = BDFDB.getAllData(this, "settings");
 		if (!guild || info.bot && settings.disableForBots) return;
-		let role = this.GuildPerms.getHighestRole(guild, info.id);
+		let role = BDFDB.LibraryModules.PermissionUtils.getHighestRole(guild, info.id);
 		if ((role && (role.colorString || settings.includeColorless)) || info.id == 278543574059057154) {
 			let roleColor = role && role.colorString ? BDFDB.colorCONVERT(role.colorString, "RGBCOMP") : [255,255,255];
 			let roleName = role ? role.name : "";

@@ -3,7 +3,7 @@
 class ThemeRepo {
 	getName () {return "ThemeRepo";}
 
-	getVersion () {return "1.8.4";}
+	getVersion () {return "1.8.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ThemeRepo {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Refetch","Fixed refetching occuring every x hours"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.patchModules = {
@@ -45,16 +45,10 @@ class ThemeRepo {
 
 		this.updateInterval;
 
-		this.themeFixerCSS = `${BDFDB.dotCNC.appmount + BDFDB.dotCNC.appcontainer + BDFDB.dotCNC.channelheaderheaderbar + BDFDB.dotCNC.channelheadertitle + BDFDB.dotCNC.guildchannels + BDFDB.dotCNC.channels + BDFDB.dotCNC.callcurrentcontainer + BDFDB.dotCNC.callcurrentvideo + BDFDB.dotCNC.callcurrentdetails + BDFDB.dotCNC.accountinfo + BDFDB.dotCNC.nochannel + BDFDB.dotCNC.friends + BDFDB.dotCNC.friendstable + BDFDB.dotCNC.friendstableheader + BDFDB.dotCNC.guilds + BDFDB.dotCNC.guildswrapper + BDFDB.dotCNC.channelheadertitle + BDFDB.dotCNC.typing + BDFDB.dotCNS.emojipicker + BDFDB.dotCNS.emojipickerscroller + BDFDB.dotCN.emojipickeremojiitem + BDFDB.dotCNC.emojipickerselected + BDFDB.dotCNC.members + BDFDB.dotCNC.chat + BDFDB.dotCNS.chat + "form," + BDFDB.dotCNC.chatcontent + BDFDB.dotCNC.messageswrapper + BDFDB.dotCNC.searchresultswrap + BDFDB.dotCNC.searchresultschannelname + BDFDB.dotCNC.searchresultssearchheader + BDFDB.dotCNC.activityfeed + BDFDB.dotCNC.lfg + BDFDB.dotCNC.applicationstore + BDFDB.dotCNC.giftinventory + BDFDB.dotCNC.gamelibrary + BDFDB.dotCNC.gamelibrarytableheader + BDFDB.dotCNC.standardsidebarview + BDFDB.dotCNC.sidebarregion + BDFDB.dotCNC.contentregion + BDFDB.dotCN.scroller} {background: transparent !important;} ${BDFDB.dotCNC.layer + BDFDB.dotCNC.layers + BDFDB.dotCN.titlebar} {background: rgba(0,0,0,0.18) !important;} ${BDFDB.dotCN.card}:not([style*="background-color"]) {background: rgba(0,0,0,0.4) !important;}`;
+		this.themeFixerCSS = `${BDFDB.dotCNC.appmount + BDFDB.dotCNC.appcontainer + BDFDB.dotCNC.channelheaderheaderbar + BDFDB.dotCNC.channelheadertitle + BDFDB.dotCNC.guildchannels + BDFDB.dotCNC.channels + BDFDB.dotCNC.callcurrentcontainer + BDFDB.dotCNC.callcurrentvideo + BDFDB.dotCNC.callcurrentdetails + BDFDB.dotCNC.accountinfo + BDFDB.dotCNC.nochannel + BDFDB.dotCNC.friends + BDFDB.dotCNC.friendstable + BDFDB.dotCNC.friendstableheader + BDFDB.dotCNC.guildsscroller + BDFDB.dotCNC.guildswrapper + BDFDB.dotCNC.channelheadertitle + BDFDB.dotCNC.typing + BDFDB.dotCNS.emojipicker + BDFDB.dotCNS.emojipickerscroller + BDFDB.dotCN.emojipickeremojiitem + BDFDB.dotCNC.emojipickerselected + BDFDB.dotCNC.members + BDFDB.dotCNC.chat + BDFDB.dotCNS.chat + "form," + BDFDB.dotCNC.chatcontent + BDFDB.dotCNC.messageswrapper + BDFDB.dotCNC.searchresultswrap + BDFDB.dotCNC.searchresultschannelname + BDFDB.dotCNC.searchresultssearchheader + BDFDB.dotCNC.activityfeed + BDFDB.dotCNC.lfg + BDFDB.dotCNC.applicationstore + BDFDB.dotCNC.giftinventory + BDFDB.dotCNC.gamelibrary + BDFDB.dotCNC.gamelibrarytableheader + BDFDB.dotCNC.standardsidebarview + BDFDB.dotCNC.sidebarregion + BDFDB.dotCNC.contentregion + BDFDB.dotCN.scroller} {background: transparent !important;} ${BDFDB.dotCNC.layer + BDFDB.dotCNC.layers + BDFDB.dotCN.titlebar} {background: rgba(0,0,0,0.18) !important;} ${BDFDB.dotCN.card}:not([style*="background-color"]) {background: rgba(0,0,0,0.4) !important;}`;
 
 		this.themeRepoButtonMarkup = 
 			`<button class="bd-pfbtn bd-themerepobutton">Theme Repo</button>`;
-
-		this.settingsContextEntryMarkup =
-			`<div class="${BDFDB.disCN.contextmenuitem} themerepo-item">
-				<span>Theme Repo</span>
-				<div class="${BDFDB.disCN.contextmenuhint}"></div>
-			</div>`;
 
 		this.themeRepoIconMarkup = 
 			`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="36" height="31" viewBox="20 0 400 332">
@@ -112,7 +106,7 @@ class ThemeRepo {
 						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizelarge}">
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto; padding-bottom: 10px;">
 								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
-									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset} themeAmount">Theme Repository</h4>
+									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin} themeAmount">Theme Repository</h4>
 									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
 								</div>
 								<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
@@ -218,9 +212,9 @@ class ThemeRepo {
 		this.sortPopoutMarkup =
 			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCN.popoutnoshadow} themerepo-sort-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
-					<div class="${BDFDB.disCN.contextmenu} quickSelectPopout">
+					<div class="${BDFDB.disCN.contextmenu} BDFDB-quickSelectPopout">
 						<div class="${BDFDB.disCN.contextmenuitemgroup}">
-							${Object.keys(this.sortings.sort).map((key, i) => `<div option="${key}" class="${BDFDB.disCN.contextmenuitem}">${this.sortings.sort[key]}</div>`).join("")}
+							${Object.keys(this.sortings.sort).map((key, i) => `<div option="${key}" class="${BDFDB.disCNS.contextmenuitem + BDFDB.disCN.contextmenuitemclickable}"><div class="${BDFDB.disCN.contextmenulabel} BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">${this.sortings.sort[key]}</div></div></div>`).join("")}
 						</div>
 					</div>
 				</div>
@@ -229,9 +223,9 @@ class ThemeRepo {
 		this.orderPopoutMarkup =
 			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCN.popoutnoshadow} themerepo-order-popout" style="position: fixed; z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
 				<div>
-					<div class="${BDFDB.disCN.contextmenu} quickSelectPopout">
+					<div class="${BDFDB.disCN.contextmenu} BDFDB-quickSelectPopout">
 						<div class="${BDFDB.disCN.contextmenuitemgroup}">
-							${Object.keys(this.sortings.order).map((key, i) => `<div option="${key}" class="${BDFDB.disCN.contextmenuitem}">${this.sortings.order[key]}</div>`).join("")}
+							${Object.keys(this.sortings.order).map((key, i) => `<div option="${key}" class="${BDFDB.disCNS.contextmenuitem + BDFDB.disCN.contextmenuitemclickable}"><div class="${BDFDB.disCN.contextmenulabel} BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">${this.sortings.order[key]}</div></div></div>`).join("")}
 						</div>
 					</div>
 				</div>
@@ -353,7 +347,7 @@ class ThemeRepo {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -401,26 +395,19 @@ class ThemeRepo {
 
 	// begin of own functions
 
-	onUserSettingsCogContextMenu (instance, menu) {
-		let observer = new MutationObserver(changes => {
-			changes.forEach(change => {
-				if (change.addedNodes) change.addedNodes.forEach(node => {
-					if (node.tagName && BDFDB.containsClass(node, BDFDB.disCN.contextmenu) && BDFDB.getReactValue(node, "return.return.return.memoizedProps.label") == "BandagedBD" && !node.querySelector(".themerepo-item")) {
-						let item = node.querySelectorAll(BDFDB.dotCN.contextmenuitem);
-						item = item[item.length-1];
-						var settingsContextEntry = BDFDB.htmlToElement(this.settingsContextEntryMarkup);
-						settingsContextEntry.addEventListener("click", () => {
-							if (!this.loading.is) BDFDB.closeContextMenu(menu);
-							this.openThemeRepoModal();
-						});
-						item.parentElement.insertBefore(settingsContextEntry, item.nextElementSibling);
-						var menurects = BDFDB.getRects(menu);
-						node.style.setProperty("top", (menurects.top - BDFDB.getRects(node).height + menurects.height) + "px");
-					}
-				});
+	onUserSettingsCogContextMenu (instance, menu, returnvalue) {
+		setImmediate(() => {for (let child of returnvalue.props.children) if (child && child.props && child.props.label == "BandagedBD" && Array.isArray(child.props.render)) {
+			const repoItem = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+				label: "Theme Repo",
+				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-repo-contextMenuItem`,
+				action: e => {
+					if (!this.loading.is) BDFDB.closeContextMenu(menu);
+					this.openThemeRepoModal();
+				}
 			});
-		});
-		observer.observe(menu, {childList: true, subtree:true});
+			child.props.render.push(repoItem);
+			break;
+		}});
 	}
 
 	processV2CList (instance, wrapper) {
@@ -752,14 +739,13 @@ class ThemeRepo {
 		var tags = ["name","description","author","version"];
 		var newentriesdata = BDFDB.loadAllData(this, "newentriesdata"), ownlist = BDFDB.loadData("ownlist", this, "ownlist") || [];
 		this.cachedThemes = (newentriesdata.urlbase64 ? atob(newentriesdata.urlbase64).split("\n") : []).concat(ownlist);
-		var request = require("request");
-		request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeList.txt", (error, response, body) => {
+		BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeList.txt", (error, response, body) => {
 			if (!error && body) {
 				body = body.replace(/[\r\t]/g, "");
 				BDFDB.saveData("urlbase64", btoa(body), this, "newentriesdata");
 				this.loadedThemes = {};
 				this.grabbedThemes = body.split("\n").filter(n => n);
-				request("https://github.com/NFLD99/Better-Discord", (error2, response2, body2) => {
+				BDFDB.LibraryRequires.request("https://github.com/NFLD99/Better-Discord", (error2, response2, body2) => {
 					if (!error2 && body2) {
 						NFLDreplace = /\/NFLD99\/Better-Discord\/tree\/master\/Themes_[^"]+">([^<]+)/i.exec(body2);
 						NFLDreplace = NFLDreplace && NFLDreplace.length > 1 ? NFLDreplace[1] : null;
@@ -836,7 +822,7 @@ class ThemeRepo {
 			}
 			let url = this.foundThemes[i];
 			let requesturl = NFLDreplace && url.includes("NFLD99/Better-Discord/master/Themes") ? url.replace("master/Themes", "master/" + NFLDreplace) : url;
-			request(requesturl, (error, response, body) => {
+			BDFDB.LibraryRequires.request(requesturl, (error, response, body) => {
 				if (!response) {
 					if (url && BDFDB.getAllIndexes(this.foundThemes, url).length < 2) this.foundThemes.push(url);
 				}
@@ -892,7 +878,7 @@ class ThemeRepo {
 	}
 
 	checkForNewThemes () {
-		require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeList.txt", (error, response, result) => {
+		BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeList.txt", (error, response, result) => {
 			if (response && !BDFDB.equals(result.replace(/\t|\r/g, "").split("\n").filter(n => n), this.grabbedThemes)) {
 				this.loading = {is:false, timeout:null, amount:0};
 				this.loadThemes();
@@ -901,14 +887,14 @@ class ThemeRepo {
 	}
 
 	downloadTheme (data) {
-		require("request")(data.requesturl, (error, response, body) => {
+		BDFDB.LibraryRequires.request(data.requesturl, (error, response, body) => {
 			if (error) BDFDB.showToast(`Unable to download Theme "${data.name}".`, {type:"danger"});
 			else this.createThemeFile(data.requesturl.split("/").pop(), body);
 		});
 	}
 
 	createThemeFile (filename, content) {
-		require("fs").writeFile(require("path").join(BDFDB.getThemesFolder(), filename), content, (error) => {
+		BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.getThemesFolder(), filename), content, (error) => {
 			if (error) BDFDB.showToast(`Unable to save Theme "${filename}".`, {type:"danger"});
 			else BDFDB.showToast(`Successfully saved Theme "${filename}".`, {type:"success"});
 		});
@@ -926,7 +912,7 @@ class ThemeRepo {
 
 	deleteThemeFile (data) {
 		let filename = data.requesturl.split("/").pop();
-		require("fs").unlink(require("path").join(BDFDB.getThemesFolder(), filename), (error) => {
+		BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.getThemesFolder(), filename), (error) => {
 			if (error) BDFDB.showToast(`Unable to delete Theme "${filename}".`, {type:"danger"});
 			else BDFDB.showToast(`Successfully deleted Theme "${filename}".`);
 		});

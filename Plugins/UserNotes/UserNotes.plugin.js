@@ -3,11 +3,17 @@
 class UserNotes {
 	getName () {return "UserNotes";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Allows you to write your own user notes wihtout a character limit.";}
+	
+	constructor () {
+		this.changelog = {
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+		};
+	}
 
 	initConstructor () {
 		this.css = `
@@ -18,14 +24,6 @@ class UserNotes {
 				resize: none;
 			}`;
 
-		this.userContextEntryMarkup =
-			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
-				<div class="${BDFDB.disCN.contextmenuitem} localusernotes-item">
-					<span>${BDFDB.LanguageStrings.USERS + " " + BDFDB.LanguageStrings.NOTE}</span>
-					<div class="${BDFDB.disCN.contextmenuhint}"></div>
-				</div>
-			</div>`;
-
 		this.userNotesModalMarkup =
 			`<span class="${this.name}-modal BDFDB-modal">
 				<div class="${BDFDB.disCN.backdrop}"></div>
@@ -34,7 +32,7 @@ class UserNotes {
 						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal2 + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
 								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
-									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.headertitle + BDFDB.disCNS.size16 + BDFDB.disCNS.height20 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.defaultcolor + BDFDB.disCNS.h4defaultmargin + BDFDB.disCN.marginreset}">${BDFDB.LanguageStrings.USERS + " " + BDFDB.LanguageStrings.NOTE}</h4>
+									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">${BDFDB.LanguageStrings.USERS + " " + BDFDB.LanguageStrings.NOTE}</h4>
 									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
 								</div>
 								<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
@@ -102,7 +100,7 @@ class UserNotes {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -139,14 +137,24 @@ class UserNotes {
 
 	// begin of own functions
 
-	onUserContextMenu (instance, menu) {
-		if (instance.props && instance.props.user && !menu.querySelector(".localusernotes-item")) {
-			let userContextEntry = BDFDB.htmlToElement(this.userContextEntryMarkup);
-			userContextEntry.querySelector(".localusernotes-item").addEventListener("click", () => {
-				instance._reactInternalFiber.return.memoizedProps.closeContextMenu();
-				this.openNotesModal(instance.props.user);
+	onUserContextMenu (instance, menu, returnvalue) {
+		if (instance.props && instance.props.user && !menu.querySelector(`${this.name}-contextMenuItem`)) {
+			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
+			const itemgroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
+				children: [
+					BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+						label: BDFDB.LanguageStrings.USERS + " " + BDFDB.LanguageStrings.NOTE,
+						className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-usernote-contextMenuItem`,
+						action: e => {
+							BDFDB.closeContextMenu(menu);
+							this.openNotesModal(instance.props.user);
+						}
+					})
+				]
 			});
-			menu.appendChild(userContextEntry);
+			if (index > -1) children.splice(index, 0, itemgroup);
+			else children.push(itemgroup);
 		}
 	}
 

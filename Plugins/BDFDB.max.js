@@ -1370,6 +1370,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		ChannelMember: 'member',
 		EmojiPicker: 'emojipicker',
 		FriendRow: 'friendsrow',
+		Guild: 'guildouter',
 		InstantInviteModal: 'invitemodalwrapper',
 		InvitationCard: 'invitemodalinviterow',
 		InviteCard: 'guildsettingsinvitecard',
@@ -2770,7 +2771,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.initElements = function (container, plugin) {
 		if (!Node.prototype.isPrototypeOf(container)) return;
-		if (BDFDB.containsClass(container, 'DevilBro-settings')) BDFDB.addClass(container, 'BDFDB-settings');
 		var islighttheme = BDFDB.getDiscordTheme() == BDFDB.disCN.themelight;
 		var languagestrings = BDFDB.getLibraryStrings();
 		container.querySelectorAll(".BDFDB-containertext").forEach(ele => {
@@ -3107,7 +3107,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.appendModal = function (modalwrapper) {
 		if (!Node.prototype.isPrototypeOf(modalwrapper)) return;
-		if (BDFDB.containsClass(modalwrapper, 'DevilBro-modal')) BDFDB.addClass(modalwrapper, 'BDFDB-modal');
 		if (!BDFDB.appendModal.modals || !document.contains(BDFDB.appendModal.modals)) BDFDB.appendModal.modals = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.app), name:"Modals", depth:99999999, time:99999999}));
 		if (!BDFDB.appendModal.modals) return;
 

@@ -3,7 +3,7 @@
 class ChatAliases {
 	getName () {return "ChatAliases";}
 
-	getVersion () {return "2.0.0";}
+	getVersion () {return "2.0.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ChatAliases {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["File Aliases","Fixed the crash occuring when trying to send a file via an alias"]]
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
 		this.patchModules = {
@@ -25,26 +25,18 @@ class ChatAliases {
 			configs: {
 				case: 		{value:false,		description:"Handle the wordvalue case sensitive"},
 				exact: 		{value:true,		description:"Handle the wordvalue as an exact word and not as part of a word"},
-				autoc: 		{value:true,		description:"Add this alias in the autocomplete menu (not for Regex)"},
-				regex: 		{value:false,		description:"Handle the wordvalue as a regex string"},
+				autoc: 		{value:true,		description:"Add this alias in the autocomplete menu (not for RegExp)"},
+				regex: 		{value:false,		description:"Handle the wordvalue as a RegExp string"},
 				file: 		{value:false,		description:"Handle the replacevalue as a filepath"}
 			},
 			settings: {
 				addContextMenu:		{value:true, 	description:"Add a ContextMenu entry to faster add new Aliases:"},
-				addAutoComplete:	{value:true, 	description:"Add an Autocomplete-Menu for Non-Regex Aliases:"}
+				addAutoComplete:	{value:true, 	description:"Add an Autocomplete-Menu for Non-RegExp Aliases:"}
 			},
 			amounts: {
 				minAliasLength:		{value:2, 		min:1,	description:"Minimal Character Length to open Autocomplete-Menu:"}
 			}
 		};
-
-		this.chataliasesContextEntryMarkup =
-			`<div class="${BDFDB.disCN.contextmenuitemgroup}">
-				<div class="${BDFDB.disCNS.contextmenuitem + BDFDB.disCN.contextmenuitemclickable} chataliases-item">
-					<div class="${BDFDB.disCN.contextmenulabel} BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">Add to ChatAliases</div></div>
-					<div class="${BDFDB.disCN.contextmenuhint}"></div>
-				</div>
-			</div>`;
 
 		this.chataliasesAddModalMarkup =
 			`<span class="${this.name}-modal BDFDB-modal">
@@ -310,38 +302,46 @@ class ChatAliases {
 		BDFDB.saveData("hideInfo", BDFDB.isEleHidden(ele.nextElementSibling), this, "hideInfo");
 	}
 
-	onNativeContextMenu (instance, menu) {
-		if (instance.props && instance.props.value && instance.props.value.trim() && !menu.querySelector(".chataliases-item")) {
-			if ((instance.props.type == "NATIVE_TEXT" || instance.props.type == "CHANNEL_TEXT_AREA") && BDFDB.getData("addContextMenu", this, "settings")) this.appendItem(menu, instance.props.value.trim());
+	onNativeContextMenu (instance, menu, returnvalue) {
+		if (instance.props && instance.props.value && instance.props.value.trim() && !menu.querySelector(`${this.name}-contextMenuItem`)) {
+			if ((instance.props.type == "NATIVE_TEXT" || instance.props.type == "CHANNEL_TEXT_AREA") && BDFDB.getData("addContextMenu", this, "settings")) this.appendItem(menu, returnvalue, instance.props.value.trim());
 		}
 	}
 
-	onMessageContextMenu (instance, menu) {
-		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(".chataliases-item")) {
+	onMessageContextMenu (instance, menu, returnvalue) {
+		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(`${this.name}-contextMenuItem`)) {
 			let text = document.getSelection().toString().trim();
-			if (text && BDFDB.getData("addContextMenu", this, "settings")) this.appendItem(menu, text);
+			if (text && BDFDB.getData("addContextMenu", this, "settings")) this.appendItem(menu, returnvalue, text);
 		}
 	}
 
-	appendItem (menu, text) {
-		let chataliasesContextEntry = BDFDB.htmlToElement(this.chataliasesContextEntryMarkup);
-		let devgroup = BDFDB.getContextMenuDevGroup(menu);
-		if (devgroup) devgroup.parentElement.insertBefore(chataliasesContextEntry, devgroup);
-		else menu.appendChild(chataliasesContextEntry, menu);
-		chataliasesContextEntry.querySelector(".chataliases-item").addEventListener("click", () => {
-			BDFDB.closeContextMenu(menu);
-			this.openAddModal(text);
+	appendItem (menu, returnvalue, text) {
+		let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue.props.children, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
+		const itemgroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+			className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
+			children: [
+				BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+					label: "Add to ChatAliases",
+					className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-addalias-contextMenuItem`,
+					action: e => {
+						BDFDB.closeContextMenu(menu);
+						this.openAddModal(text);
+					}
+				})
+			]
 		});
+		if (index > -1) children.splice(index, 0, itemgroup);
+		else children.push(itemgroup);
 	}
 
-	processStandardSidebarView (instance, wrapper) {
+	processStandardSidebarView (instance, wrapper, returnvalue) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 	}
 
-	processChannelTextArea (instance, wrapper) {
+	processChannelTextArea (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.channel && instance.props.type) {
 			var textarea = wrapper.querySelector("textarea");
 			if (!textarea) return;

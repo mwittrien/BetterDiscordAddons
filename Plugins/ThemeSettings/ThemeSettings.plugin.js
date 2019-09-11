@@ -3,13 +3,17 @@
 class ThemeSettings {
 	getName () {return "ThemeSettings";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Allows you to change Theme Variables within BetterDiscord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page.";}
 
 	constructor () {
+		this.changelog = {
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+		};
+		
 		this.patchModules = {
 			"V2C_ThemeCard":"componentDidMount"
 		};
@@ -33,7 +37,7 @@ class ThemeSettings {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -54,9 +58,7 @@ class ThemeSettings {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
-
-			this.fs = require("fs");
-			this.path = require("path");
+			
 			this.dir = BDFDB.getThemesFolder();
 
 			BDFDB.WebModules.forceAllUpdates(this);
@@ -151,8 +153,8 @@ class ThemeSettings {
 		BDFDB.initElements(settingspanel, this);
 
 		BDFDB.addEventListener(this, settingspanel, "click", ".update-button", () => {
-			let path = this.path.join(this.dir, theme.filename);
-			let css = this.fs.readFileSync(path).toString();
+			let path = BDFDB.LibraryRequires.path.join(this.dir, theme.filename);
+			let css = BDFDB.LibraryRequires.fs.readFileSync(path).toString();
 			if (css) {
 				let amount = 0;
 				for (let input of settingspanel.querySelectorAll(BDFDB.dotCN.input)) {
@@ -165,7 +167,7 @@ class ThemeSettings {
 					}
 				}
 				if (amount > 0) {
-					this.fs.writeFileSync(path, css);
+					BDFDB.LibraryRequires.fs.writeFileSync(path, css);
 					BDFDB.showToast(`Updated ${amount} variable${amount == 1 ? "" : "s"} in ${theme.filename}`, {type:"success"});
 				}
 				else BDFDB.showToast(`There are no changed variables to be updated in ${theme.filename}`, {type:"warning"});

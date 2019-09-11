@@ -33,7 +33,7 @@ class SteamProfileLink {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -78,8 +78,8 @@ class SteamProfileLink {
 
 	openInSteam (e, url) {
 		BDFDB.stopEvent(e);
-		require("request")(url, (error, response, body) => {
-			if (require("electron").shell.openExternal("steam://openurl/" + response.request.href));
+		BDFDB.LibraryRequires.request(url, (error, response, body) => {
+			if (BDFDB.LibraryRequires.electron.shell.openExternal("steam://openurl/" + response.request.href));
 			else window.open(response.request.href, "_blank");
 		});
 	}

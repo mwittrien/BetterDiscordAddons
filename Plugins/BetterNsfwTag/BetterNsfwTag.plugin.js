@@ -3,13 +3,17 @@
 class BetterNsfwTag {
 	getName () {return "BetterNsfwTag";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "1.2.1";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Adds a more noticeable tag to NSFW channels.";}
 
 	constructor () {
+		this.changelog = {
+			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+		};
+		
 		this.patchModules = {
 			"ChannelItem":"componentDidMount"
 		};
@@ -33,7 +37,7 @@ class BetterNsfwTag {
 			document.head.appendChild(libraryScript);
 			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
-				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.js", (error, response, body) => {
 					if (body) {
 						libraryScript = document.createElement("script");
 						libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -72,7 +76,7 @@ class BetterNsfwTag {
 
 	// begin of own functions
 
-	processChannelItem (instance, wrapper) {
+	processChannelItem (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.channel && instance.props.channel.nsfw) {
 			let channelname = wrapper.querySelector(BDFDB.dotCN.channelname);
 			if (channelname) channelname.parentElement.insertBefore(BDFDB.htmlToElement(`<span class="NSFW-tag ${BDFDB.disCNS.bottag + BDFDB.disCNS.bottagregular + BDFDB.disCN.bottagnametag}" style="background-color: rgb(241, 71, 71); color: white; top: 0px; min-width: 28px;">NSFW</span>`), channelname.nextElementSibling);
