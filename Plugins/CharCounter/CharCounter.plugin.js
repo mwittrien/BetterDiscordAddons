@@ -149,7 +149,6 @@ class CharCounter {
 	}
 
 	processNote (instance, wrapper, returnvalue) {
-		console.log(wrapper);
 		this.appendCounter(wrapper.firstElementChild, BDFDB.containsClass(wrapper, BDFDB.disCN.usernotepopout) ? "popout" : (BDFDB.containsClass(wrapper, BDFDB.disCN.usernoteprofile) ? "profile" : null), false);
 	}
 

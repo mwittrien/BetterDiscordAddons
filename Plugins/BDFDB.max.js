@@ -1329,23 +1329,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			return Node.prototype.isPrototypeOf(node) ? node : null;
 		};
 	};
-	
-	var LibraryComponents = {};
-	LibraryComponents.Button = BDFDB.WebModules.findByProperties('Colors', 'Hovers', 'Looks');
-	LibraryComponents.ContextMenu = BDFDB.WebModules.findByName('NativeContextMenu');;
-	LibraryComponents.ContextMenuItem = BDFDB.WebModules.findByString("{className:(0,l.default)(i.default.item,(t={},t[i.default.clickable]=!v");
-	LibraryComponents.ContextMenuItemGroup = BDFDB.WebModules.findByString('{className:i.default.itemGroup}');
-	LibraryComponents.ContextMenuSliderItem = BDFDB.WebModules.findByName('SliderMenuItem');
-	LibraryComponents.ContextMenuSubItem = BDFDB.WebModules.findByName('FluxContainer(SubMenuItem)');
-	LibraryComponents.ContextMenuToggleItem = LibraryModules.React && LibraryModules.React.Component ? (class OtherItem extends LibraryModules.React.Component {
-        handleToggle() {
-            this.props.active = !this.props.active;
-            if (this.props.action) this.props.action(this.props.active);
-            this.forceUpdate();
-        }
-        render() {return LibraryModules.React.createElement(BDFDB.WebModules.findByName('ToggleMenuItem'), Object.assign({}, this.props, {action: this.handleToggle.bind(this)}));}
-    }) : undefined;
-	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
 
 	var myDataUser = LibraryModules.CurrentUserStore && typeof LibraryModules.CurrentUserStore.getCurrentUser == 'function' ? LibraryModules.CurrentUserStore.getCurrentUser() : null;
 	BDFDB.myData = new Proxy(myDataUser || {}, {
@@ -5047,6 +5030,23 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			return classname;
 		}
 	};
+	
+	var LibraryComponents = {};
+	LibraryComponents.Button = BDFDB.WebModules.findByProperties('Colors', 'Hovers', 'Looks');
+	LibraryComponents.ContextMenu = BDFDB.WebModules.findByName('NativeContextMenu');
+	LibraryComponents.ContextMenuItem = BDFDB.WebModules.findByString("{className:(0,l.default)(i.default.item,(t={},t[i.default.clickable]=!v");
+	LibraryComponents.ContextMenuItemGroup = BDFDB.WebModules.findByString('{className:i.default.itemGroup}');
+	LibraryComponents.ContextMenuSliderItem = BDFDB.WebModules.findByName('SliderMenuItem');
+	LibraryComponents.ContextMenuSubItem = BDFDB.WebModules.findByName('FluxContainer(SubMenuItem)');
+	LibraryComponents.ContextMenuToggleItem = LibraryModules.React && LibraryModules.React.Component ? (class OtherItem extends LibraryModules.React.Component {
+        handleToggle() {
+            this.props.active = !this.props.active;
+            if (this.props.action) this.props.action(this.props.active);
+            this.forceUpdate();
+        }
+        render() {return LibraryModules.React.createElement(BDFDB.WebModules.findByName('ToggleMenuItem'), Object.assign({}, this.props, {action: this.handleToggle.bind(this)}));}
+    }) : undefined;
+	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
 
 	BDFDB.getLibraryStrings = function () {
 		switch (BDFDB.getDiscordLanguage().id) {
@@ -6304,7 +6304,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		BDFDB.WebModules.DevFuncs.listen = function (strings) {
 			strings = Array.isArray(strings) ? strings : Array.from(arguments);
 			BDFDB.WebModules.DevFuncs.listenstop();
-			BDFDB.WebModules.DevFuncs.listen.p = BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties(strings), strings[0], "WebpackSearch", {before: e => {
+			BDFDB.WebModules.DevFuncs.listen.p = BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties(strings), strings[0], "WebpackSearch", {after: e => {
 				console.log(e);
 			}});
 		};
