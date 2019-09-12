@@ -3,7 +3,7 @@
 class TopRoleEverywhere {
 	getName () {return "TopRoleEverywhere";}
 
-	getVersion () {return "2.8.8";}
+	getVersion () {return "2.8.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -23,6 +23,9 @@ class TopRoleEverywhere {
 
 	initConstructor () {
 		this.css = `
+			${BDFDB.dotCNS.member + BDFDB.dotCN.namecontainercontent} {
+				overflow: visible;
+			}
 			.TRE-tag {
 				white-space: nowrap;
 			}

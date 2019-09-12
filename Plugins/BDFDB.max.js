@@ -3801,7 +3801,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.ContextMenuCheckbox = BDFDB.WebModules.findByProperties('checkboxInner', 'checkboxElement');
 	DiscordClassModules.CtaVerification = BDFDB.WebModules.findByProperties('attendeeCTA', 'verificationNotice');
 	DiscordClassModules.Cursor = BDFDB.WebModules.findByProperties('cursorDefault', 'userSelectNone');
-	DiscordClassModules.DmAddPopout = BDFDB.WebModules.findByProperties('friendSelected', 'popout');
+	DiscordClassModules.DmAddPopout = BDFDB.WebModules.findByProperties('popout', 'searchBarComponent');
+	DiscordClassModules.DmAddPopoutItems = BDFDB.WebModules.findByProperties('friendSelected', 'friendWrapper');
 	DiscordClassModules.DownloadLink = BDFDB.WebModules.findByProperties('downloadLink', 'size12');
 	DiscordClassModules.Embed = BDFDB.WebModules.findByProperties('embed', 'embedAuthorIcon');
 	DiscordClassModules.EmbedActions = BDFDB.WebModules.findByProperties('iconPlay', 'iconWrapperActive');
@@ -4588,6 +4589,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		modeselectable: ['FormText', 'modeSelectable'],
 		namecontainer: ['NameContainer', 'container'],
 		namecontainerclickable: ['NameContainer', 'clickable'],
+		namecontainercontent: ['NameContainer', 'content'],
 		namecontainerlayout: ['NameContainer', 'layout'],
 		namecontainername: ['NameContainer', 'name'],
 		namecontainernamecontainer: ['NotFound', 'nameContainerNameContainer'],
@@ -4699,6 +4701,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		searchpopoutdatepicker: ['SearchPopout', 'datePicker'],
 		searchpopoutdatepickerhint: ['SearchPopout', 'datePickerHint'],
 		searchpopoutdmaddpopout: ['DmAddPopout', 'popout'],
+		searchpopoutddmaddfriend: ['DmAddPopoutItems', 'friend'],
+		searchpopoutddmaddfriendwrapper: ['DmAddPopoutItems', 'friendWrapper'],
 		searchpopoutdisplayavatar: ['SearchPopout', 'displayAvatar'],
 		searchpopoutdisplayusername: ['SearchPopout', 'displayUsername'],
 		searchpopoutdisplayednick: ['SearchPopout', 'displayedNick'],
