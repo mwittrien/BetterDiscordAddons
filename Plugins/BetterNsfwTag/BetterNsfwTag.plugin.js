@@ -79,7 +79,7 @@ class BetterNsfwTag {
 	processChannelItem (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.channel && instance.props.channel.nsfw) {
 			let channelname = wrapper.querySelector(BDFDB.dotCN.channelname);
-			if (channelname) channelname.parentElement.insertBefore(BDFDB.htmlToElement(`<span class="NSFW-tag ${BDFDB.disCNS.bottag + BDFDB.disCNS.bottagregular + BDFDB.disCN.bottagnametag}" style="background-color: rgb(241, 71, 71); color: white; top: 0px; min-width: 28px;">NSFW</span>`), channelname.nextElementSibling);
+			if (channelname) channelname.parentElement.insertBefore(BDFDB.htmlToElement(`<span class="NSFW-tag ${BDFDB.disCNS.bottag + BDFDB.disCNS.bottagregular + BDFDB.disCN.bottagnametag}" style="background-color: rgb(241, 71, 71); top: 0px; min-width: 28px;">NSFW</span>`), channelname.nextElementSibling);
 		}
 	}
 }
