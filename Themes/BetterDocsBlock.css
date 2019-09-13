@@ -65,6 +65,15 @@ body #app-mount .container-1YxwTf .markup-2BOw-j .anchor-3Z-8Bb[href*="://better
 	background-color: transparent !important;
 }
 
+body #app-mount .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" i],
+body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.discordsource." i],
+body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://discordsource." i],
+body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.betterdocs." i],
+body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdocs." i] {
+	max-width: 100vw !important;
+	min-width: 100vw !important;
+	width: 100vw !important;
+}
 body #app-mount .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" i]::after,
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.discordsource." i]::before,
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://discordsource." i]::before,
@@ -89,6 +98,10 @@ body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdocs." i]::befor
 	left: 0 !important;
 	letter-spacing: 0 !important;
 	margin: 0 !important;
+	max-height: unset !important;
+	max-width: unset !important;
+	min-height: unset !important;
+	min-width: unset !important;
 	overflow: hidden !important;
 	position: absolute !important;
     right: 0 !important;
