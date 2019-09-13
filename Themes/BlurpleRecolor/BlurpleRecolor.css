@@ -6,6 +6,8 @@
 	--vaccentcolor: var(--accentcolor,var(--daccentcolor));
 	--dlinkcolor: 0,176,244;
 	--vlinkcolor: var(--linkcolor,var(--dlinkcolor));
+	
+	--dfontwhite1: 255,255,255;
 }
 
 /* STORE */
@@ -164,7 +166,7 @@
 .acronym-2mOFsV:hover,
 .acronym-2mOFsV.selected-bZ3Lue,
 .button-OhfaWu.selected-wSa2KV {
-	color: white !important;
+	color: rgb(var(--fontwhite1, var(--dfontwhite1))) !important;
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
 #bd-pub-button {
