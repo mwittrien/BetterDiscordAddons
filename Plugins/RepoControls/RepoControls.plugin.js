@@ -3,7 +3,7 @@
 class RepoControls {
 	getName () {return "RepoControls";}
 
-	getVersion () {return "1.3.0";}
+	getVersion () {return "1.3.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -220,11 +220,11 @@ class RepoControls {
 
 	// begin of own functions
 
-	processV2CList (instance, container) {
+	processV2CList (instance, container, returnvalue) {
 		if (instance._reactInternalFiber.key) this.addControls(instance._reactInternalFiber.key.split("-")[0], container);
 	}
 
-	processV2CPluginCard (instance, wrapper, methodnames) {
+	processV2CPluginCard (instance, wrapper, returnvalue, methodnames) {
 		if (wrapper.querySelector(BDFDB.dotCN._reponame)) {
 			let settings = BDFDB.getAllData(this, "settings");
 			if (instance.props && settings.addDeleteButton) this.addDeleteButton("plugin", wrapper);
@@ -233,7 +233,7 @@ class RepoControls {
 		}
 	}
 
-	processV2CThemeCard (instance, wrapper, methodnames) {
+	processV2CThemeCard (instance, wrapper, returnvalue, methodnames) {
 		if (wrapper.querySelector(BDFDB.dotCN._reponame)) {
 			let settings = BDFDB.getAllData(this, "settings");
 			if (instance.props && settings.addDeleteButton) this.addDeleteButton("theme", wrapper);

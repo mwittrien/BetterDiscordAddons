@@ -2989,12 +2989,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				var text = ele.querySelector('.BDFDB-tableheadertext');
 				var columns = ele.querySelectorAll('.BDFDB-tableheadercolumns .BDFDB-tableheadercolumn');
 				if (panel && tableid && text && columns.length) {
-					let maxwidth = 0;
-					for (let column of columns) {
-						let width = BDFDB.getRects(column).width;
-						maxwidth = width > maxwidth ? width : maxwidth;
+					let maxwidth = BDFDB.isObject(panel['BDFDB-tableheader-maxwidth']) ? panel['BDFDB-tableheader-maxwidth'][tableid]) : 0;
+					if (!maxwidth) {
+						for (let column of columns) {
+							let width = BDFDB.getRects(column).width;
+							maxwidth = width > maxwidth ? width : maxwidth;
+						}
+						maxwidth += 4;
 					}
-					maxwidth += 4;
 					for (let column of columns) {
 						column.style.setProperty('flex', `0 0 ${maxwidth}px`, 'important');
 						column.style.setProperty('text-align', 'center', 'important');
@@ -3726,6 +3728,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		gameLibrary: 'gameLibrary-TTDw4Y',
 		guildChannels: 'container-PNkimc',
 		highlight: 'highlight',
+		hoverCardButton: 'button-2CgfFz',
 		loginScreen: 'wrapper-3Q5DdO',
 		lfg: 'lfg-3xoFkI',
 		mention: 'mention',
@@ -3834,7 +3837,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.HomeIcon = BDFDB.WebModules.findByProperties('homeIcon');
 	DiscordClassModules.HotKeyRecorder = BDFDB.WebModules.findByProperties('editIcon', 'recording');
 	DiscordClassModules.HoverCard = BDFDB.WebModules.findByProperties('card', 'active');
-	DiscordClassModules.HoverCardButton = BDFDB.WebModules.find(module => typeof module['button'] == 'string' && Object.keys(module).length == 1);
 	DiscordClassModules.IconDirection = BDFDB.WebModules.findByProperties('directionDown', 'directionUp');
 	DiscordClassModules.ImageWrapper = BDFDB.WebModules.findByProperties('clickable', 'imageWrapperBackground');
 	DiscordClassModules.InviteModal = BDFDB.WebModules.findByProperties('inviteRow', 'modal');
@@ -4424,7 +4426,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		hotkeytext: ['HotKeyRecorder', 'text'],
 		hovercard: ['HoverCard', 'card'],
 		hovercardinner: ['BDFDB', 'cardInner'],
-		hovercardbutton: ['HoverCardButton', 'button'],
+		hovercardbutton: ['NotFound', 'hoverCardButton'],
 		icon: ['EmbedActions', 'icon'],
 		iconactionswrapper: ['EmbedActions', 'wrapper'],
 		iconexternal: ['EmbedActions', 'iconExternal'],
