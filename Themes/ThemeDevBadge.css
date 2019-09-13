@@ -102,10 +102,10 @@
 	-webkit-mask: var(--themedevbadgebackdrop) center/cover no-repeat !important;
 	background: #FFFFFF !important;
 	position: absolute !important;
-	width: 20px !important;
-	height: 20px !important;
-	left: -3.5px !important;
-	bottom: -5px !important;
+	width: 23px !important;
+	height: 23px !important;
+	left: -6.5px !important;
+	bottom: -9px !important;
 	z-index: 1 !important;
 }
 .theme-dark .headerCozy-2N9HOL .wrapper-3t9DeA[user_by_BDFDB="278543574059057154"]:before {

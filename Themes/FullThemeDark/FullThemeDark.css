@@ -196,16 +196,15 @@
 #app-mount #bda-qem-favourite-container:only-child {
 	border-radius: 5px;
 }
-#app-mount .emojiPicker-3m1S-j,
-#app-mount .emojiPicker-3m1S-j .dimmer-3iH-5D,
 #app-mount #bda-qem,
 #app-mount #bda-qem-twitch-container,
 #app-mount #bda-qem-favourite-container {
-	width: 343px;
+	width: 344px;
 }
+#app-mount .emojiPicker-3m1S-j,
 #bda-qem-twitch-container,
 #bda-qem-favourite-container {
-	height: 326px;
+	height: 328px;
 }
 #app-mount .emojiPicker-3m1S-j .dimmer-3iH-5D.visible-3k45bQ {
 	display: none;
