@@ -760,7 +760,7 @@ a {
     color: hsla(0,0%,100%,.7) !important;
 }
 .theme-dark .container-3-pyIM .content-2M3n_H a {
-    color: #fff !important;
+    color: rgb(var(--fontwhite1, var(--dfontwhite1))) !important;
 }
 .colorLink-35jkBc:not(.lookFilled-1Gx00P) .spinnerItem-3GlVyU,
 .lookFilled-1Gx00P.hoverLink-i1fEKS.hasHover-3X1-zV:hover,
