@@ -795,7 +795,7 @@ class EditUsers {
 			let usemembercolor = !BDFDB.containsClass(username.parentElement, BDFDB.disCN.userprofilelistname) && (BDFDB.containsClass(username, BDFDB.disCN.memberusername, BDFDB.disCN.messageusername, false) || isBRCenabled);
 
 			if (BDFDB.isObject(data.color1)) {
-				username.style.removeProperty("color");
+				username.style.setProperty("color", BDFDB.colorCONVERT(data.color1[Object.keys(data.color1)[0]], "RGB"), "important");
 				BDFDB.setInnerText(username, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color1)} !important;">${BDFDB.encodeToHTML(data.name || (usenick ? member.nick : info.username))}</span>`));
 			}
 			else {
@@ -825,7 +825,7 @@ class EditUsers {
 		this.changeBotTags(data, username, member);
 		if (data.name || data.color1 || username.getAttribute("changed-by-editusers")) {
 			if (BDFDB.isObject(data.color1)) {
-				username.style.removeProperty("color");
+				username.style.setProperty("color", BDFDB.colorCONVERT(data.color1[Object.keys(data.color1)[0]], "RGB"), "important");
 				BDFDB.setInnerText(username, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color1)} !important;">${BDFDB.encodeToHTML(data.name || member.nick || info.username)}</span>`));
 			}
 			else {
@@ -854,7 +854,7 @@ class EditUsers {
 			}
 			else {
 				if (BDFDB.isObject(data.color1)) {
-					username.style.removeProperty("color");
+					username.style.setProperty("color", BDFDB.colorCONVERT(data.color1[Object.keys(data.color1)[0]], "RGB"), "important");
 					BDFDB.setInnerText(username, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color1)} !important;">${BDFDB.encodeToHTML(data.name || info.username)}</span>`));
 				}
 				else {

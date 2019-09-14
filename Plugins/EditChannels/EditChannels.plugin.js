@@ -460,7 +460,7 @@ class EditChannels {
 				let isgradient = data.color && BDFDB.isObject(data.color);
 				let color = this.chooseColor(channelname, data.color);
 				if (isgradient) {
-					channelname.style.removeProperty("color");
+					channelname.style.setProperty("color", BDFDB.colorCONVERT(data.color[Object.keys(data.color)[0]], "RGB"), "important");
 					BDFDB.setInnerText(channelname, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(color)} !important;">${BDFDB.encodeToHTML(data.name || info.name)}</span>`));
 				}
 				else {
@@ -528,7 +528,7 @@ class EditChannels {
 		let data = this.getChannelData(info.id, info.parent_id, channelname);
 		if (data.name || data.color || channelname.getAttribute("changed-by-editchannels")) {
 			if (BDFDB.isObject(data.color)) {
-				channelname.style.removeProperty("color");
+				channelname.style.setProperty("color", BDFDB.colorCONVERT(data.color[Object.keys(data.color)[0]], "RGB"), "important");
 				BDFDB.setInnerText(channelname, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(this.chooseColor(channelname, data.color))} !important;">${BDFDB.encodeToHTML("#" + (data.name || info.name))}</span>`));
 			}
 			else {
@@ -588,7 +588,7 @@ class EditChannels {
 		function colorDefault() {
 			mention.style.setProperty("background", color0_1, "important");
 			if (isgradient) {
-				mention.style.removeProperty("color");
+				mention.style.setProperty("color", BDFDB.colorCONVERT(data.color[Object.keys(data.color)[0]], "RGB"), "important");
 				BDFDB.setInnerText(mention, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${color} !important;">${BDFDB.encodeToHTML(name)}</span>`));
 			}
 			else {

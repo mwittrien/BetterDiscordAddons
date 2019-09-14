@@ -482,7 +482,7 @@ class EditServers {
 		let data = this.getGuildData(info.id, guildname);
 		if (data.name || data.color2 || guildname.getAttribute("changed-by-editservers")) {
 			if (BDFDB.isObject(data.color2)) {
-				guildname.style.removeProperty("color");
+				guildname.style.setProperty("color", BDFDB.colorCONVERT(data.color2[Object.keys(data.color2)[0]], "RGB"), "important");
 				BDFDB.setInnerText(guildname, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color2)} !important;">${BDFDB.encodeToHTML(data.name || info.name)}</span>`));
 			}
 			else {
@@ -527,7 +527,7 @@ class EditServers {
 						if (BDFDB.isObject(data.color1)) fakeicon.style.setProperty("background-image", BDFDB.colorGRADIENT(data.color1));
 						else fakeicon.style.setProperty("background-color", BDFDB.colorCONVERT(data.color1, "RGB"));
 					}
-					if (data.color2 && !BDFDB.isObject(data.color2)) fakeicon.style.setProperty("color", BDFDB.colorCONVERT(data.color2, "RGB"));
+					if (data.color2) fakeicon.style.setProperty("color", BDFDB.colorCONVERT(BDFDB.isObject(data.color2) ? data.color2[Object.keys(data.color2)[0]] : data.color2, "RGB"));
 					BDFDB.setInnerText(fakeicon, BDFDB.isObject(data.color2) ? BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color2)} !important;">${BDFDB.encodeToHTML(shortname)}</span>`) : shortname);
 					icon.parentElement.appendChild(fakeicon);
 					fakeicon.style.setProperty("font-size", this.getFontSize(fakeicon));
@@ -547,8 +547,7 @@ class EditServers {
 						icon.style.removeProperty("background-image");
 						icon.style.removeProperty("background-color");
 					}
-					if (data.color2 && !BDFDB.isObject(data.color2)) icon.style.setProperty("color", BDFDB.colorCONVERT(data.color2, "RGB"));
-					else icon.style.removeProperty("color");
+					if (data.color2) icon.style.setProperty("color", BDFDB.colorCONVERT(BDFDB.isObject(data.color2) ? data.color2[Object.keys(data.color2)[0]] : data.color2, "RGB"));
 					BDFDB.setInnerText(icon, BDFDB.isObject(data.color2) ? BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color2)} !important;">${BDFDB.encodeToHTML(shortname)}</span>`) : shortname);
 				}
 				icon.style.setProperty("font-size", this.getFontSize(icon));
