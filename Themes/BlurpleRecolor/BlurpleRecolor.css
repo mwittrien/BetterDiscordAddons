@@ -529,7 +529,7 @@
 	filter: saturate(50%) brightness(200%);
 }
 .newMessagesBar-mujexs button:last-child:not(:hover) {
-	color: rgba(var(--fontwhite1, var(--dfontwhite1)), 0.6) !important;
+	opacity: 0.6;
 }
 
 /* BACKGROUND */
