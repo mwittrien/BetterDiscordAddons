@@ -23,7 +23,7 @@ class ReadAllNotificationsButton {
 
 	initConstructor () {
 		this.RANbuttonMarkup = 
-			`<div class="${BDFDB.disCNS.guildouter} RANbutton-frame" style="height: 20px;">
+			`<div class="${BDFDB.disCN.guildouter} RANbutton-frame" style="height: 20px;">
 				<div class="${BDFDB.disCN.guildiconwrapper} RANbutton-inner" style="height: 20px;">
 					<div class="${BDFDB.disCNS.guildiconchildwrapper + BDFDB.disCN.guildiconacronym} RANbutton" style="height: 20px;">read all</div>
 				</div>
@@ -42,7 +42,6 @@ class ReadAllNotificationsButton {
 				cursor: pointer;
 				border-radius: 4px;
 				font-size: 12px;
-				font-weight: 500;
 				line-height: 1.3;
 			}
 		`;
