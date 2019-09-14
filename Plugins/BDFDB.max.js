@@ -2228,11 +2228,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.getAllData = function (plugin, key) {
+		plugin = typeof plugin == "string" && BDFDB.isObject(window.BdApi) ? window.BdApi.getPlugin(plugin) : plugin;
 		if (!BDFDB.isObject(plugin) || !plugin.defaults || !plugin.defaults[key]) return {};
 		var oldconfig = BDFDB.loadAllData(plugin, key), newconfig = {}, update = false;
 		for (let k in plugin.defaults[key]) {
 			if (oldconfig[k] == null) {
-				newconfig[k] = plugin.defaults[key][k].value;
+				newconfig[k] = BDFDB.isObject(plugin.defaults[key][k].value) ? BDFDB.deepAssign({}, plugin.defaults[key][k].value) : plugin.defaults[key][k].value;
 				update = true;
 			}
 			else newconfig[k] = oldconfig[k];
@@ -2989,7 +2990,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				var text = ele.querySelector('.BDFDB-tableheadertext');
 				var columns = ele.querySelectorAll('.BDFDB-tableheadercolumns .BDFDB-tableheadercolumn');
 				if (panel && tableid && text && columns.length) {
-					let maxwidth = BDFDB.isObject(panel['BDFDB-tableheader-maxwidth']) ? panel['BDFDB-tableheader-maxwidth'][tableid]) : 0;
+					let maxwidth = BDFDB.isObject(panel['BDFDB-tableheader-maxwidth']) ? panel['BDFDB-tableheader-maxwidth'][tableid] : 0;
 					if (!maxwidth) {
 						for (let column of columns) {
 							let width = BDFDB.getRects(column).width;
