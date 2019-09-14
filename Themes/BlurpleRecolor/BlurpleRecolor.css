@@ -456,8 +456,6 @@
 .tabBar-1E2ExX .primarySelected-3uHKZn,
 .tabBar-1E2ExX .primary-3j8BhM .badge-xFJoEU,
 .hasMore-3e72_v,
-.hasMore-3e72_v button,
-.hasMore-sul95G button,
 .whiteButton-1lwF-y,
 .announcingNitro-3Ptg6m,
 .action-1lSjCi.create-3jownz .actionHeader-2CT5c7,
@@ -531,7 +529,7 @@
 	filter: saturate(50%) brightness(200%);
 }
 .newMessagesBar-mujexs button:last-child:not(:hover) {
-	color: hsla(0,0%,100%,.6) !important;
+	color: rgba(var(--fontwhite1, var(--dfontwhite1)), 0.6) !important;
 }
 
 /* BACKGROUND */
