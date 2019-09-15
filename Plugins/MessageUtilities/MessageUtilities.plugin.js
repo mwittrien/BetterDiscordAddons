@@ -3,7 +3,7 @@
 class MessageUtilities {
 	getName () {return "MessageUtilities";}
 
-	getVersion () {return "1.5.2";}
+	getVersion () {return "1.5.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class MessageUtilities {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"fixed":[["Reset All","Fixed bug where you couldn't reset all keybindings in the settings at once"]]
 		};
 	}
 
@@ -160,13 +160,12 @@ class MessageUtilities {
 		BDFDB.openConfirmModal(this, "Are you sure you want to delete all key bindings?", () => {
 			BDFDB.removeAllData(this, "bindings");
 			let bindings = BDFDB.getAllData(this, "bindings");
-			settingspanel.querySelectorAll(BDFDB.dotCN.select).forEach((wrap) => {
-				let action = wrap.getAttribute("type");
-				let option = wrap.getAttribute("option");
-				wrap.setAttribute("value", bindings[action][option]);
-				wrap.querySelector(BDFDB.dotCN.title).innerText = this.clickMap[bindings[action][option]];
+			settingspanel.querySelectorAll(BDFDB.dotCN.select).forEach(wrap => {
+				let type = wrap.getAttribute("type").split(" ");
+				wrap.setAttribute("value", bindings[type[0]][type[1]]);
+				wrap.querySelector(BDFDB.dotCN.title).innerText = this.clickMap[bindings[type[0]][type[1]]];
 			});
-			settingspanel.querySelectorAll(BDFDB.dotCN.hotkeycontainer).forEach((wrap) => {
+			settingspanel.querySelectorAll(BDFDB.dotCN.hotkeycontainer).forEach(wrap => {
 				let action = wrap.getAttribute("type");
 				let option = wrap.getAttribute("option");
 				wrap.setAttribute("value", bindings[action][option]);
