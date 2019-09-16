@@ -7,6 +7,8 @@
 	--dlinkcolor: 0,176,244;
 	
 	--dfontwhite1: 255,255,255;
+}
+.theme-dark, .theme-light {
 	--text-link: rgb(var(--linkcolor,var(--dlinkcolor)));
 }
 
