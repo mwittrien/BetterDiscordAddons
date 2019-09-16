@@ -5,9 +5,9 @@
 	--daccentcolor: 114,137,218;
 	--vaccentcolor: var(--accentcolor,var(--daccentcolor));
 	--dlinkcolor: 0,176,244;
-	--vlinkcolor: var(--linkcolor,var(--dlinkcolor));
 	
 	--dfontwhite1: 255,255,255;
+	--text-link: rgb(var(--linkcolor,var(--dlinkcolor)));
 }
 
 /* STORE */
@@ -740,54 +740,6 @@
 [fill="#7289da"],
 [fill="#7289DA"] {
 	fill: rgb(var(--vaccentcolor)) !important;
-}
-
-/* LINKCOLOR */
-a {
-	color: rgb(var(--vlinkcolor));
-}
-:not(.searchLearnMore-3SQUAj):not(.wrapper-129saQ):not(.content-2M3n_H) > .anchor-3Z-8Bb:not(.searchBarTag-2xRzm8):not(.activityName-1IaRLn):not(.pruneLink-3V7wes):not(.channelLink-2TxEu3):not(.guildsError-3cFMtY):not(.guildsError-b7zR5H):not(.debugButton-1Zec0y):not(.removeButton-1hcZyG):not(.embedAuthorName-3mnTWj):not(.downloadButton-1bWXpg):not(.downloadLink-1ywL9o):not([style]),
-.genre-1Fi2SE,
-#bd-settings-sidebar a,
-.filenameLinkWrapper-1-14c5,
-.sampleLink-KPFu3I {
-	color: rgb(var(--vlinkcolor)) !important;
-}
-.uploadModalIn-1z07Bv .uploadDropModal-2kTwbc.error-kKl9o2 a.anchor-3Z-8Bb {
-    color: hsla(0,0%,100%,.7) !important;
-}
-.theme-dark .container-3-pyIM .content-2M3n_H a {
-    color: rgb(var(--fontwhite1, var(--dfontwhite1))) !important;
-}
-.colorLink-35jkBc:not(.lookFilled-1Gx00P) .spinnerItem-3GlVyU,
-.lookFilled-1Gx00P.hoverLink-i1fEKS.hasHover-3X1-zV:hover,
-.lookFilled-1Gx00P.colorLink-35jkBc {
-	background: rgb(var(--vlinkcolor)) !important;
-}
-.lookGhost-2Fn_0-.colorLink-35jkBc {
-	color: rgb(var(--vlinkcolor)) !important;
-	background: rgba(var(--vlinkcolor),0.1) !important;
-}
-.lookOutlined-3sRXeN.colorLink-35jkBc {
-	color: rgb(var(--vlinkcolor)) !important;
-	border-color: rgba(var(--vlinkcolor),0.7) !important;
-}
-.lookOutlined-3sRXeN.colorLink-35jkBc:active,
-.lookOutlined-3sRXeN.colorLink-35jkBc:hover {
-	border-color: rgb(var(--vlinkcolor)) !important;
-}
-.lookOutlined-3sRXeN.colorLink-35jkBc:active {
-	background: rgba(var(--vlinkcolor),0.1) !important;
-}
-.lookInverted-2D7oAl.colorLink-35jkBc {
-	color: rgb(var(--vlinkcolor)) !important;
-}
-.lookLink-9FtZy-.colorLink-35jkBc .contents-18-Yxp {
-	color: rgb(var(--vlinkcolor)) !important;
-}
-.lookLink-9FtZy-.colorLink-35jkBc:active .contents-18-Yxp, 
-.lookLink-9FtZy-.colorLink-35jkBc:hover .contents-18-Yxp {
-	background-image: linear-gradient(0deg,transparent,transparent 1px,rgb(var(--vlinkcolor)) 0,rgb(var(--vlinkcolor)) 2px,transparent 0) !important;
 }
 
 /* ICONS */

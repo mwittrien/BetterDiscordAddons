@@ -6318,6 +6318,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		BDFDB.WebModules.DevFuncs.listenstop = function () {
 			if (BDFDB.WebModules.DevFuncs.listen.p == "function") BDFDB.WebModules.DevFuncs.listen.p();
 		};
+		BDFDB.WebModules.DevFuncs.req = getWebModuleReq();
 	}
 	for (let component in LibraryComponents) if (!LibraryComponents[component]) {
 		LibraryComponents[component] = 'div';
