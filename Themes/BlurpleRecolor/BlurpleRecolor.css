@@ -5,11 +5,12 @@
 	--daccentcolor: 114,137,218;
 	--vaccentcolor: var(--accentcolor,var(--daccentcolor));
 	--dlinkcolor: 0,176,244;
+	--vlinkcolor: var(--linkcolor,var(--dlinkcolor));
 	
 	--dfontwhite1: 255,255,255;
 }
 .theme-dark, .theme-light {
-	--text-link: rgb(var(--linkcolor,var(--dlinkcolor)));
+	--text-link: rgb(var(--vlinkcolor));
 }
 
 /* STORE */
