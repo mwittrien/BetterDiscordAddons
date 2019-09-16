@@ -430,6 +430,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		toast.close = () => {
 			if (document.contains(toast)) {
 				BDFDB.addClass(toast, 'closing');
+				toast.style.setProperty("pointer-events", "none", "important");
 				setTimeout(() => {
 					toast.remove();
 					if (!toasts.querySelectorAll('.toast, .bd-toast').length) toasts.remove();
@@ -5330,7 +5331,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 		.BDFDB-notice {
 			transition: height 0.5s ease !important;
-			border-radius: 0 5px 0 0 !important;
+			border-radius: 0 !important;
 		}
 		.BDFDB-notice ${BDFDB.dotCN.noticeplatformicon} {
 			margin-top: -7px;
