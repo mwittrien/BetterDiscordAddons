@@ -3,7 +3,7 @@
 class EditChannels {
 	getName () {return "EditChannels";}
 
-	getVersion () {return "4.0.1";}
+	getVersion () {return "4.0.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -19,7 +19,7 @@ class EditChannels {
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
 			"AuditLog":"componentDidMount",
-			"InviteCard":"componentDidMount",
+			"InviteCard":"render",
 			"ChannelCategoryItem":["componentDidMount","componentDidUpdate"],
 			"ChannelItem":["componentDidMount","componentDidUpdate"],
 			"HeaderBar":["componentDidMount","componentDidUpdate"],

@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.5.5";}
+	getVersion () {return "3.5.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -25,9 +25,9 @@ class EditUsers {
 			"VoiceUser":["componentDidMount","componentDidUpdate"],
 			"Account":["componentDidMount","componentDidUpdate"],
 			"AuditLog":"componentDidMount",
-			"BannedCard":"componentDidMount",
-			"InviteCard":"componentDidMount",
-			"MemberCard":"componentDidMount",
+			"BannedCard":"render",
+			"InviteCard":"render",
+			"MemberCard":"render",
 			"InvitationCard":"componentDidMount",
 			"TypingUsers":"componentDidUpdate",
 			"MessageUsername":["componentDidMount","componentDidUpdate"],
@@ -598,7 +598,7 @@ class EditUsers {
 	processInviteCard (instance, wrapper, returnvalue) {
 		let invite = BDFDB.getReactValue(instance, "props.invite");
 		if (invite && invite.inviter && invite.guild) {
-			let username = wrapper.querySelector(BDFDB.dotCN.guildsettingsinviteusername);
+			let username = wrapper.querySelector(BDFDB.dotCN.username);
 			if (username) {
 				this.changeName2(invite.inviter, username, invite.guild.id);
 				this.changeAvatar(invite.inviter, this.getAvatarDiv(wrapper));
