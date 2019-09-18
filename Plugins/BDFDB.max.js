@@ -634,7 +634,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			BDFDB.removeClass(icon, BDFDB.disCN.noticeicon);
 			notice.insertBefore(icon, noticemessage);
 		}
-		if (options.btn) notice.appendChild(BDFDB.htmlToElement(`<button class="${BDFDB.disCNS.noticebutton + BDFDB.disCNS.size14 + BDFDB.disCN.weightmedium}">${options.btn}</button>`));
+		if (options.btn || options.button) notice.appendChild(BDFDB.htmlToElement(`<button class="${BDFDB.disCNS.noticebutton + BDFDB.disCNS.size14 + BDFDB.disCN.weightmedium}">${options.btn || options.button}</button>`));
 		if (options.id) notice.id = options.id.split(' ').join('');
 		if (options.selector) BDFDB.addClass(notice, options.selector);
 		if (options.css) BDFDB.appendLocalStyle('BDFDBcustomnotibar' + id, options.css);
@@ -4620,6 +4620,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		noticepremiumgrandfathered: ['Notice', 'noticePremiumGrandfathered'],
 		noticepremiumlogo: ['Notice', 'premiumLogo'],
 		noticepremiumtext: ['Notice', 'premiumText'],
+		noticerichpresence: ['Notice', 'noticeRichPresence'],
 		noticespotify: ['Notice', 'noticeSpotify'],
 		noticestreamer: ['Notice', 'noticeStreamerMode'],
 		noticesuccess: ['Notice', 'noticeSuccess'],
@@ -4869,6 +4870,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		tooltipbottom: ['Tooltip', 'tooltipBottom'],
 		tooltipbrand: ['Tooltip', 'tooltipBrand'],
 		tooltipgreen: ['Tooltip', 'tooltipGreen'],
+		tooltipgrey: ['Tooltip', 'tooltipGrey'],
 		tooltipleft: ['Tooltip', 'tooltipLeft'],
 		tooltippointer: ['Tooltip', 'tooltipPointer'],
 		tooltipred: ['Tooltip', 'tooltipRed'],
@@ -5413,9 +5415,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 		.toast.icon {
 			padding-left: 30px;
+			background-position: 6px 50%;
 			background-size: 20px 20px;
 			background-repeat: no-repeat;
-			background-position: 6px 50%;
 		}
 		.toast.toast-brand {
 			background-color: #7289DA;
@@ -5475,7 +5477,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		.toast.toast-success.icon {
 			background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPiAgICA8cGF0aCBkPSJNMTIgMkM2LjQ4IDIgMiA2LjQ4IDIgMTJzNC40OCAxMCAxMCAxMCAxMC00LjQ4IDEwLTEwUzE3LjUyIDIgMTIgMnptLTIgMTVsLTUtNSAxLjQxLTEuNDFMMTAgMTQuMTdsNy41OS03LjU5TDE5IDhsLTkgOXoiLz48L3N2Zz4=);
 		}
-
 		.toast.toast-warning,
 		.toast.toast-warn {
 			background-color: #FFA600;
