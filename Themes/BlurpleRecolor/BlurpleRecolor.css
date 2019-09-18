@@ -731,6 +731,11 @@
 .path-92Hmty:not(.path3-2l9TIX),
 .theme-dark .path2-1q7bG_,
 .wrapper-1u09nF[role="progressbar"] .foreground-2aE44H.path-3H_ZFA,
+[style*="stroke: slategray"],
+[style*="stroke: rgb(114, 137, 218)"],
+[style*="stroke: #7289da"],
+[style*="stroke: #7289DA"]
+[stroke="slategray"],
 [stroke="rgb(114, 137, 218)"],
 [stroke="#7289da"],
 [stroke="#7289DA"] {
@@ -739,6 +744,11 @@
 .verifiedInner-DViLz0.banner-1TiK82,
 .verifiedInner-DViLz0.withBanner-3j8ruM,
 .phoneVerificationModal-OzcDc3 path[fill="rgb(118,134,177)"],
+[fill*="stroke: slategray"],
+[fill*="stroke: rgb(114, 137, 218)"],
+[fill*="stroke: #7289da"],
+[fill*="stroke: #7289DA"]
+[fill="slategray"],
 [fill="rgb(114, 137, 218)"],
 [fill="#7289da"],
 [fill="#7289DA"] {
