@@ -3729,6 +3729,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		nameContainerNameContainer: 'container-2ax-kl',
 		gameLibrary: 'gameLibrary-TTDw4Y',
 		guildChannels: 'container-PNkimc',
+		guildBadgeWrapper: 'guild-badge-wrapper-deprecated',
 		highlight: 'highlight',
 		hoverCardButton: 'button-2CgfFz',
 		loginScreen: 'wrapper-3Q5DdO',
@@ -3820,7 +3821,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.Game = BDFDB.WebModules.findByProperties('game', 'gameName');
 	DiscordClassModules.GifFavoriteButton = BDFDB.WebModules.findByProperties('gifFavoriteButton', 'showPulse');
 	DiscordClassModules.GiftInventory = BDFDB.WebModules.find(module => typeof module['root'] == 'string' && typeof module['body'] == 'string' && (Object.keys(module).length == 2 || Object.keys(module).length == 3));
-	DiscordClassModules.Guild = BDFDB.WebModules.findByProperties('wrapper', 'badgeWrapper', 'svg');
+	DiscordClassModules.Guild = BDFDB.WebModules.findByProperties('wrapper', 'lowerBadge', 'svg');
 	DiscordClassModules.GuildChannels = BDFDB.WebModules.findByProperties('positionedContainer', 'unreadBar');
 	DiscordClassModules.GuildDm = BDFDB.WebModules.find(module => typeof module['pill'] == 'string' && Object.keys(module).length == 1);
 	DiscordClassModules.GuildEdges = BDFDB.WebModules.findByProperties('wrapper', 'edge', 'autoPointerEvents')
@@ -4328,7 +4329,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		guildbadgeiconbadge2: ['GuildsItems', 'iconBadge'],
 		guildbadgenumberbadge: ['Badge', 'numberBadge'],
 		guildbadgetextbadge: ['Badge', 'textBadge'],
-		guildbadgewrapper: ['Guild', 'badgeWrapper'],
+		guildbadgewrapper: BDFDB.DiscordClassModules.Guild.badgeWrapper ? ['Guild', 'badgeWrapper'] : ['NotFound', 'guildBadgeWrapper'], // REMOVE
 		guildbuttoncontainer: ['GuildsItems', 'circleButtonMask'],
 		guildbuttoninner: ['GuildsItems', 'circleIconButton'],
 		guildbuttonicon: ['GuildsItems', 'circleIcon'],
@@ -4336,7 +4337,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		guildbuttonselected: ['GuildsItems', 'selected'],
 		guildchannels: ['NotFound', 'guildChannels'],
 		guildcontainer: ['GuildServer', 'blobContainer'],
-		guilddragfix: ['Guild', 'dragfix'],
 		guildedge: ['GuildEdges', 'edge'],
 		guildedgemiddle: ['GuildEdges', 'middle'],
 		guildedgewrapper: ['GuildEdges', 'wrapper'],
