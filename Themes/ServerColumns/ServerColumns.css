@@ -1,6 +1,3 @@
-@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BetterDocsBlock.css);
-@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/ThemeDevBadge.css);
-
 :root {
 	--vcolumns: var(--columns, 3);
 	--vguildsize: var(--guildsize, 50);
@@ -60,10 +57,10 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 .wrapper-1Rf91z #server-search {
 	margin: 4px calc(1px * (((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2)) !important;
 }
-.wrapper-1Rf91z .pill-2uzAFe ~ .listItemWrapper-3X98Pc {
+.wrapper-1Rf91z .listItem-2P_4kh:first-child .listItemWrapper-3X98Pc {
 	margin: 0 calc(1px * (((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2)) 4px calc(1px * ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) + 2)) !important;
 }
-.wrapper-1Rf91z .pill-1m5BUr ~ .listItemWrapper-3X98Pc {
+.wrapper-1Rf91z .listItem-2P_4kh:first-child .pill-1m5BUr ~ .listItemWrapper-3X98Pc {
 	margin: 0 calc(1px * ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))) 0 calc(1px * (((0 * var(--valigndms)) + ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))))) !important;
 }
 .wrapper-1Rf91z .blobContainer-239gwq,
@@ -105,11 +102,10 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 	transform: scaleY(calc(var(--vguildsize)/50)) !important;
 }
 .wrapper-1Rf91z .pill-2uzAFe {
-	top: -2px !important;
 	left: calc(1px * ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) - 7)) !important;
 }
 .wrapper-1Rf91z .pill-1m5BUr {
-	left: calc(1px * (((13 * var(--valigndms)) + ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))) - 8)) !important;
+	left: calc(1px * ((var(--valigndms) + ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))) - 8)) !important;
 }
 .wrapper-1Rf91z .pill-31IEus,
 .wrapper-1Rf91z .pill-3YxEhL {
