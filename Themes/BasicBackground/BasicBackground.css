@@ -143,7 +143,9 @@ body,														/* body														*/
 #app-mount .messages-3amgkR,								/* messages													*/
 #app-mount .members-1998pB,									/* members				inner								*/
 #app-mount .pageWrapper-1PgVDX,								/* guilddiscovery											*/
-#app-mount .standardSidebarView-3F1I7i {					/* settings													*/
+#app-mount .standardSidebarView-3F1I7i,						/* settings													*/
+#app-mount .sidebarRegionScroller-3MXcoP,					/* settings				sidebarscroller						*/
+#app-mount .contentRegionScroller-26nc1e {					/* settings				contentscroller						*/
 	background: transparent;
 }
 
@@ -3235,11 +3237,11 @@ body:before {
 #app-mount .root-3-B5F3::-webkit-scrollbar {
 	width: 4px;
 }
-.role-2irmRk,
+.role-2irmRk:not([style]),
 .role-2irmRk[style*="border-color: rgba(185, 187, 190, 0.6)"] {
 	border-color: rgba(var(--fontwhite3), 0.6) !important;
 }
-.role-2irmRk .roleCircle-3xAZ1j,
+.role-2irmRk .roleCircle-3xAZ1j:not([style]),
 .role-2irmRk .roleCircle-3xAZ1j[style*="background-color: rgb(185, 187, 190)"] {
 	background-color: rgb(var(--fontwhite3)) !important;
 }
