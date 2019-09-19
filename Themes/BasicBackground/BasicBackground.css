@@ -552,6 +552,9 @@ body:before {
 .header-zu8eWb {
 	color: rgb(var(--fontwhite3));
 }
+.empty-388osJ {												/* loadingplaceholders										*/
+	fill: rgb(var(--vaccentcolor));
+}
 
 /* ----		5.4.	ACCOUNT/VOICE/GOLIVE			---- */
 
@@ -4698,6 +4701,9 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 
 /* ----		16.9.	TOOLTIPS						---- */
 
+.headerText-1h7zBw {
+	color: rgb(var(--fontwhite1));
+}
 #app-mount .tooltip-2QfLtc {
 	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
 	color: rgb(var(--fontwhite1));
