@@ -3,7 +3,7 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.4.6";}
+	getVersion () {return "1.4.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class PinDMs {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"fixed":[["Canary","Fixed bugs for the canary changes ... AGAIN"]]
 		};
 
 		this.patchModules = {
@@ -652,9 +652,11 @@ class PinDMs {
 			BDFDB.toggleClass(pinneddmdiv, "has-new-messages", count > 0);
 			let selected = BDFDB.LibraryModules.LastChannelStore.getChannelId() == id;
 			pinneddmiconwrapper.style.setProperty("border-radius", selected ? "30%" : "50%");
-			pinneddmdivpill.style.setProperty("opacity", selected ? 1 : (count ? 0.7 : 0));
-			pinneddmdivpill.style.setProperty("height", selected ? "40px" : "8px");
-			pinneddmdivpill.style.setProperty("transform", "translate3d(0px, 0px, 0px)");
+			if (pinneddmdivpill) {
+				pinneddmdivpill.style.setProperty("opacity", selected ? 1 : (count ? 0.7 : 0));
+				pinneddmdivpill.style.setProperty("height", selected ? "40px" : "8px");
+				pinneddmdivpill.style.setProperty("transform", "translate3d(0px, 0px, 0px)");
+			}
 
 			BDFDB.toggleEles(iconbadge, showpin);
 			notificationbadge.firstElementChild.innerText = count;
@@ -691,7 +693,7 @@ class PinDMs {
 		let diviconwrapper = div.querySelector(BDFDB.dotCN.guildiconwrapper);
 		let divpillitem = div.querySelector(BDFDB.dotCN.guildpillitem);
 
-		let pillvisible = divpillitem.style.getPropertyValue("opacity") != 0;
+		let pillvisible = divpillitem && divpillitem.style.getPropertyValue("opacity") != 0;
 
 		let borderRadius = new BDFDB.LibraryModules.AnimationUtils.Value(0);
 		borderRadius
@@ -710,7 +712,7 @@ class PinDMs {
 				outputRange: [8, 20]
 			})
 			.addListener((value) => {
-				divpillitem.style.setProperty("height", `${BDFDB.LibraryModules.LastChannelStore.getChannelId() == id ? 40 : value.value}px`);
+				if (divpillitem) divpillitem.style.setProperty("height", `${BDFDB.LibraryModules.LastChannelStore.getChannelId() == id ? 40 : value.value}px`);
 			});
 
 		let pillOpacity = new BDFDB.LibraryModules.AnimationUtils.Value(0);
@@ -720,7 +722,7 @@ class PinDMs {
 				outputRange: [0, 0.7]
 			})
 			.addListener((value) => {
-				divpillitem.style.setProperty("opacity", `${BDFDB.LibraryModules.LastChannelStore.getChannelId() == id ? 1 : value.value}`);
+				if (divpillitem) divpillitem.style.setProperty("opacity", `${BDFDB.LibraryModules.LastChannelStore.getChannelId() == id ? 1 : value.value}`);
 			});
 
 		let animate = (v) => {
@@ -737,7 +739,7 @@ class PinDMs {
 		};
 
 		divinner.addEventListener("mouseenter", () => {
-			pillvisible = divpillitem.style.getPropertyValue("opacity") != 0;
+			pillvisible = divpillitem && divpillitem.style.getPropertyValue("opacity") != 0;
 			if (BDFDB.LibraryModules.LastChannelStore.getChannelId() != id) {
 				animate(1);
 				if (!pillvisible) animate2(1);

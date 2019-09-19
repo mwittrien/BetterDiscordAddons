@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.3.6";}
+	getVersion () {return "6.3.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ServerFolders {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"fixed":[["Canary","Fixed bugs for the canary changes ... AGAIN"]]
 		};
 
 		this.labels = {};
@@ -1177,6 +1177,11 @@ class ServerFolders {
 		let guildiconwrapper = guildcopy.querySelector(BDFDB.dotCN.guildiconwrapper);
 		let guildicon = guildcopy.querySelector(BDFDB.dotCN.guildicon);
 		let guildpillitem = guildcopy.querySelector(BDFDB.dotCN.guildpillitem);
+		if (!guildpillitem) {
+			guildpillitem = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.guildpillwrapper + BDFDB.disCN.guildpill}"><span class="${BDFDB.disCN.guildpillitem}" style="opacity: 0; height: 8px; transform: translate3d(0px, 0px, 0px);"></span></div>`);
+			guildcopy.insertBefore(guildpillitem, guildcopy.firstElementChild);
+			guildpillitem = guildpillitem.firstElementChild;
+		}
 		guildcopy.setAttribute("guild", info.id);
 		guildcopy.setAttribute("folder", folderdiv.id);
 		guildiconwrapper.style.setProperty("border-radius", props.selected ? "30%" : "50%");
@@ -1404,7 +1409,7 @@ class ServerFolders {
 		let diviconwrapper = div.querySelector(BDFDB.dotCN.guildiconwrapper);
 		let divpillitem = div.querySelector(BDFDB.dotCN.guildpillitem);
 
-		let pillvisible = divpillitem.style.getPropertyValue("opacity") != 0;
+		let pillvisible = divpillitem && divpillitem.style.getPropertyValue("opacity") != 0;
 
 		let guild = div.getAttribute("guild");
 
@@ -1425,7 +1430,7 @@ class ServerFolders {
 				outputRange: [8, 20]
 			})
 			.addListener((value) => {
-				divpillitem.style.setProperty("height", `${value.value}px`);
+				if (divpillitem) divpillitem.style.setProperty("height", `${value.value}px`);
 			});
 
 		let pillOpacity = new BDFDB.LibraryModules.AnimationUtils.Value(0);
@@ -1435,7 +1440,7 @@ class ServerFolders {
 				outputRange: [0, 0.7]
 			})
 			.addListener((value) => {
-				divpillitem.style.setProperty("opacity", `${value.value}`);
+				if (divpillitem) divpillitem.style.setProperty("opacity", `${value.value}`);
 			});
 
 		let animate = (v) => {
@@ -1452,7 +1457,7 @@ class ServerFolders {
 		};
 
 		divinner.addEventListener("mouseenter", () => {
-			pillvisible = divpillitem.style.getPropertyValue("opacity") != 0;
+			pillvisible = divpillitem && divpillitem.style.getPropertyValue("opacity") != 0;
 			if (!guild || (BDFDB.LibraryModules.LastGuildStore.getGuildId() != guild)) {
 				animate(1);
 				if (!pillvisible) animate2(1);
