@@ -3,7 +3,7 @@
 class FriendNotifications {
 	getName () {return "FriendNotifications";}
 
-	getVersion () {return "1.2.9";}
+	getVersion () {return "1.3.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,8 @@ class FriendNotifications {
 
 	constructor () {
 		this.changelog = {
-			"added":[["Playing/Listening/Streaming","You can now listen for substatus like playing and listening, also added new placeholders like $game and $song to custom notifications"]]
+			"added":[["Playing/Listening/Streaming","You can now listen for substatus like playing and listening, also added new placeholders like $game and $song to custom notifications"],["Default disable","Option to disable notification for newly added friends"]],
+			"fixed":[["Startup spam","Fixed the spam of toasts on plugin start"],["Missing sounds","Fixed the missing sounds for playing/listening"]]
 		};
 		
 		this.patchModules = {
@@ -130,24 +131,16 @@ class FriendNotifications {
 				streaming: 			{value:"$user started streaming '$game'",			libstring:"STATUS_STREAMING",		init:false},
 				offline: 			{value:"$user changed status to '$status'",			libstring:"STATUS_OFFLINE",			init:true}
 			},
-			notificationsounds: {
-				toastonline: 		{value:{url:null,song:null,mute:false}},
-				toastmobile: 		{value:{url:null,song:null,mute:false}},
-				toastidle: 			{value:{url:null,song:null,mute:false}},
-				toastdnd: 			{value:{url:null,song:null,mute:false}},
-				toaststreaming: 	{value:{url:null,song:null,mute:false}},
-				toastoffline: 		{value:{url:null,song:null,mute:false}},
-				desktoponline: 		{value:{url:null,song:null,mute:false}},
-				desktopmobile: 		{value:{url:null,song:null,mute:false}},
-				desktopidle: 		{value:{url:null,song:null,mute:false}},
-				desktopdnd: 		{value:{url:null,song:null,mute:false}},
-				desktopstreaming: 	{value:{url:null,song:null,mute:false}},
-				desktopoffline: 	{value:{url:null,song:null,mute:false}}
-			},
+			notificationsounds: {},
 			amounts: {
 				checkInterval:		{value:10, 		min:5,		description:"Check Users every X seconds:"}
 			}
 		};
+		
+		for (let type in this.defaults.notificationstrings) {
+			this.defaults.notificationsounds["toast" + type] = {value:{url:null,song:null,mute:false}};
+			this.defaults.notificationsounds["desktop" + type] = {value:{url:null,song:null,mute:false}};
+		}
 
 		this.activityTypes = {};
 		for (let type in BDFDB.DiscordConstants.ActivityTypes) this.activityTypes[BDFDB.DiscordConstants.ActivityTypes[type]] = type;
@@ -501,7 +494,7 @@ class FriendNotifications {
 		let notificationstrings = BDFDB.getAllData(this, "notificationstrings");
 		let notificationsounds = BDFDB.getAllData(this, "notificationsounds");
 		let users = Object.assign({}, BDFDB.loadAllData(this, "nonfriends"), BDFDB.loadAllData(this, "friends"));
-		for (let id in users) this.userStatusStore[id] = this.getStatusWithMobileAndActivity(id, users[id]).name;
+		for (let id in users) this.userStatusStore[id] = this.getStatusWithMobileAndActivity(id, users[id]).statusname;
 		this.checkInterval = setInterval(() => {
 			for (let id in users) if (!users[id].disabled) {
 				let user = BDFDB.LibraryModules.UserStore.getUser(id);
