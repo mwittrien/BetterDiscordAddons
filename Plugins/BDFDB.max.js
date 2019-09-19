@@ -423,7 +423,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 		else if (color) {
 			var rgbcolor = BDFDB.colorCONVERT(color, 'RGB');
-			if (rgbcolor) toast.style.setProperty('background-color', rgbcolor, 'important');
+			if (rgbcolor) toast.style.setProperty('background-color', rgbcolor);
 		}
 		BDFDB.addClass(toast, selector);
 		toasts.appendChild(toast);
@@ -1854,6 +1854,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			case 'mobile': return '#43b581';
 			case 'idle': return '#faa61a';
 			case 'dnd': return '#f04747';
+			case 'playing': return '#7289da';
+			case 'listening': return '#1db954';
 			case 'streaming': return '#593695';
 			default: return '#747f8d';
 		}
@@ -2991,7 +2993,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				var text = ele.querySelector('.BDFDB-tableheadertext');
 				var columns = ele.querySelectorAll('.BDFDB-tableheadercolumns .BDFDB-tableheadercolumn');
 				if (panel && tableid && text && columns.length) {
-					let maxwidth = BDFDB.isObject(panel['BDFDB-tableheader-maxwidth']) ? panel['BDFDB-tableheader-maxwidth'][tableid] : 0;
+					let toobig = false, maxwidth = BDFDB.isObject(panel['BDFDB-tableheader-maxwidth']) ? panel['BDFDB-tableheader-maxwidth'][tableid] : 0;
 					if (!maxwidth) {
 						for (let column of columns) {
 							let width = BDFDB.getRects(column).width;
@@ -2999,10 +3001,23 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 						}
 						maxwidth += 4;
 					}
-					for (let column of columns) {
-						column.style.setProperty('flex', `0 0 ${maxwidth}px`, 'important');
-						column.style.setProperty('text-align', 'center', 'important');
+					if (columns.length * maxwidth > 300) {
+						toobig = true;
+						maxwidth = parseInt(290 / columns.length);
 					}
+					else if (maxwidth < 36) {
+						maxwidth = 36;
+					}
+					columns.forEach((column, i) => {
+						column.style.setProperty('flex', `0 0 ${maxwidth}px`, 'important');
+						if (toobig) {
+							if (i == 0) column.style.setProperty('margin-left', `${-1 * (10 + maxwidth/2)}px`, 'important');
+							column.style.setProperty('margin-top', '0', 'important');
+							column.style.setProperty('text-align', 'right', 'important');
+							column.style.setProperty('writing-mode', 'vertical-rl', 'important');
+						}
+						else column.style.setProperty('text-align', 'center', 'important');
+					});
 					text.style.setProperty('flex', `0 0 ${556 - (columns.length * maxwidth)}px`, 'important');
 					columns[0].parentElement.style.setProperty('flex', `0 0 ${columns.length * maxwidth}px`, 'important');
 					if (!BDFDB.isObject(panel['BDFDB-tableheader-maxwidth'])) panel['BDFDB-tableheader-maxwidth'] = {}

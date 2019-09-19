@@ -3,7 +3,7 @@
 class FriendNotifications {
 	getName () {return "FriendNotifications";}
 
-	getVersion () {return "1.2.8";}
+	getVersion () {return "1.2.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class FriendNotifications {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"added":[["Playing/Listening/Streaming","You can now listen for substatus like playing and listening, also added new placeholders like $game and $song to custom notifications"]]
 		};
 		
 		this.patchModules = {
@@ -116,16 +116,19 @@ class FriendNotifications {
 
 		this.defaults = {
 			settings: {
+				disableForNew:		{value:false, 	description:"Disable Notifications for newly added Friends:"},
 				muteOnDND:			{value:false, 	description:"Do not notify me when I am DnD:"},
 				openOnClick:		{value:false, 	description:"Open the DM when you click a Notification:"}
 			},
 			notificationstrings: {
-				online: 			{value:"$user changed status to '$status'",		libstring:"STATUS_ONLINE",			init:true},
-				mobile: 			{value:"$user changed status to '$status'",		libstring:"STATUS_ONLINE_MOBILE",	init:true},
-				idle: 				{value:"$user changed status to '$status'",		libstring:"STATUS_IDLE",			init:false},
-				dnd: 				{value:"$user changed status to '$status'",		libstring:"STATUS_DND",				init:false},
-				streaming: 			{value:"$user changed status to '$status'",		libstring:"STATUS_STREAMING",		init:false},
-				offline: 			{value:"$user changed status to '$status'",		libstring:"STATUS_OFFLINE",			init:true}
+				online: 			{value:"$user changed status to '$status'",			libstring:"STATUS_ONLINE",			init:true},
+				mobile: 			{value:"$user changed status to '$status'",			libstring:"STATUS_ONLINE_MOBILE",	init:true},
+				idle: 				{value:"$user changed status to '$status'",			libstring:"STATUS_IDLE",			init:false},
+				dnd: 				{value:"$user changed status to '$status'",			libstring:"STATUS_DND",				init:false},
+				playing: 			{value:"$user started playing '$game'",				statusname:"Playing",				init:false},
+				listening: 			{value:"$user started listening to '$song'",		statusname:"Listening",				init:false},
+				streaming: 			{value:"$user started streaming '$game'",			libstring:"STATUS_STREAMING",		init:false},
+				offline: 			{value:"$user changed status to '$status'",			libstring:"STATUS_OFFLINE",			init:true}
 			},
 			notificationsounds: {
 				toastonline: 		{value:{url:null,song:null,mute:false}},
@@ -145,6 +148,9 @@ class FriendNotifications {
 				checkInterval:		{value:10, 		min:5,		description:"Check Users every X seconds:"}
 			}
 		};
+
+		this.activityTypes = {};
+		for (let type in BDFDB.DiscordConstants.ActivityTypes) this.activityTypes[BDFDB.DiscordConstants.ActivityTypes[type]] = type;
 	}
 
 	getSettingsPanel () {
@@ -174,8 +180,14 @@ class FriendNotifications {
 		for (let id of friendIDs) {
 			let user = BDFDB.LibraryModules.UserStore.getUser(id);
 			if (user) {
-				let friend = friends[id] || (friends[id] = nonfriends[id] || this.createDefaultConfig());
-				settingshtml += this.createHoverCard(user, friend, "friends");
+				let friend = null;
+				if (friends[id]) {}
+				else if (nonfriends[id]) {
+					friends[id] = Object.assign({}, nonfriends[id]);
+					delete nonfriends[id];
+				}
+				else friends[id] = this.createDefaultConfig();
+				settingshtml += this.createHoverCard(user, friends[id], "friends");
 			}
 		}
 		settingshtml += `</div>`;
@@ -191,8 +203,8 @@ class FriendNotifications {
 		for (let id in nonfriends) if (!friendIDs.includes(id)) {
 			let user = BDFDB.LibraryModules.UserStore.getUser(id);
 			if (user) {
-				let nonfriend = nonfriends[id] || (nonfriends[id] = this.createDefaultConfig());
-				settingshtml += this.createHoverCard(user, nonfriend, "nonfriends");
+				delete friends[id];
+				settingshtml += this.createHoverCard(user, nonfriends[id] || (nonfriends[id] = this.createDefaultConfig()), "nonfriends");
 			}
 		}
 		settingshtml += `</div>`;
@@ -201,7 +213,7 @@ class FriendNotifications {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Timelog of LogIns/-Outs:</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-timelog" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Timelog</div></button></div>`;
 		settingshtml += `</div><div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.marginbottom4}"></div>`;
 		settingshtml += `<div class="${BDFDB.disCNS.h2 + BDFDB.disCNS.cursorpointer + BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4} BDFDB-containertext"><span class="BDFDB-containerarrow closed"></span>Notification Message Settings</div><div class="BDFDB-collapsecontainer">`;
-		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}">Allows you to configure your own message strings for the different statuses. <strong>$user</strong> is the placeholder for the username and <strong>$status</strong> for the statusname.</h3></div>`;
+		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}">Allows you to configure your own message strings for the different statuses. <strong>$user</strong> is the placeholder for the username, <strong>$status</strong> for the statusname, <strong>$game</strong> for the gamename, <strong>$song</strong> for the songname and <strong>$artist</strong> for the songartist.</h3></div>`;
 		for (let config in notificationstrings) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 30%;">${config.charAt(0).toUpperCase() + config.slice(1)} Message:</h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" config="${config}" value="${notificationstrings[config]}" placeholder="${this.defaults.notificationstrings[config].value}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} input-notificationstring"></div></div>`;
 		}
@@ -212,6 +224,7 @@ class FriendNotifications {
 		settingshtml += `</div></div>`;
 
 		BDFDB.saveAllData(friends, this, "friends");
+		BDFDB.saveAllData(nonfriends, this, "nonfriends");
 
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
@@ -324,25 +337,6 @@ class FriendNotifications {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 
-			/* REMOVE AFTER SOME TIME - 22.08.2019 */
-			let oldFriendDataDesktop = BDFDB.loadAllData("FriendNotifications", "desktop");
-			let oldFriendDataDisabled = BDFDB.loadAllData("FriendNotifications", "disabled");
-			if (!BDFDB.isObjectEmpty(oldFriendDataDesktop) || !BDFDB.isObjectEmpty(oldFriendDataDisabled)) {
-				let friends = BDFDB.loadAllData(this, "friends")
-				for (let id in oldFriendDataDesktop) friends[id] = Object.assign(this.createDefaultConfig(), (friends[id] || {}), {desktop: oldFriendDataDesktop[id]});
-				for (let id in oldFriendDataDisabled) friends[id] = Object.assign(this.createDefaultConfig(), (friends[id] || {}), {disabled: oldFriendDataDesktop[id]});
-				BDFDB.saveAllData(friends, this, "friends");
-				BDFDB.removeAllData("FriendNotifications", "desktop");
-				BDFDB.removeAllData("FriendNotifications", "disabled");
-			}
-			let oldStalkerData = BDFDB.loadAllData("StalkerNotifications", "users");
-			if (!BDFDB.isObjectEmpty(oldStalkerData)) {
-				let nonfriends = BDFDB.loadAllData(this, "nonfriends")
-				for (let id in oldStalkerData) nonfriends[id] = Object.assign(this.createDefaultConfig(), oldStalkerData[id]);
-				BDFDB.saveAllData(nonfriends, this, "nonfriends");
-				BDFDB.LibraryRequires.fs.unlinkSync(BDFDB.LibraryRequires.path.join(BDFDB.getPluginsFolder(), "StalkerNotifications.config.json"));
-			}
-
 			this.startInterval();
 
 			BDFDB.WebModules.forceAllUpdates(this);
@@ -430,7 +424,7 @@ class FriendNotifications {
 	}
 
 	createDefaultConfig () {
-		return Object.assign({desktop: false, disabled: false}, BDFDB.mapObject(this.defaults.notificationstrings, "init"));
+		return Object.assign({desktop: false, disabled: BDFDB.getData("disableForNew", this, "settings")}, BDFDB.mapObject(this.defaults.notificationstrings, "init"));
 	}
 
 	saveNotificationString (input) {
@@ -486,9 +480,19 @@ class FriendNotifications {
 		}
 	}
 
-	getStatusWithMobile (id) {
-		let status = BDFDB.getUserStatus(id);
-		return status == "online" && BDFDB.LibraryModules.StatusMetaUtils.isMobileOnline(id) ? "mobile" : status;
+	getStatusWithMobileAndActivity (id, config) {
+		let statusname = BDFDB.getUserStatus(id);
+		let status = {statusname, isactivity:false};
+		let activity = BDFDB.LibraryModules.StatusMetaUtils.getPrimaryActivity(id);
+		if (activity && this.activityTypes[activity.type]) {
+			let activityname = this.activityTypes[activity.type].toLowerCase();
+			if (this.defaults.notificationstrings[activityname] && config[activityname]) {
+				status = Object.assign({statusname:activityname, isactivity:true}, activity);
+				if (activityname == "listening" || activityname == "streaming") delete status.statusname;
+			}
+		}
+		if (status.statusname == "online" && BDFDB.LibraryModules.StatusMetaUtils.isMobileOnline(id)) status.statusname = "mobile";
+		return status;
 	}
 
 	startInterval () {
@@ -496,17 +500,18 @@ class FriendNotifications {
 		let settings = BDFDB.getAllData(this, "settings");
 		let notificationstrings = BDFDB.getAllData(this, "notificationstrings");
 		let notificationsounds = BDFDB.getAllData(this, "notificationsounds");
-		let users = Object.assign(BDFDB.loadAllData(this, "nonfriends"), BDFDB.loadAllData(this, "friends"));
-		for (let id in users) this.userStatusStore[id] = this.getStatusWithMobile(id);
+		let users = Object.assign({}, BDFDB.loadAllData(this, "nonfriends"), BDFDB.loadAllData(this, "friends"));
+		for (let id in users) this.userStatusStore[id] = this.getStatusWithMobileAndActivity(id, users[id]).name;
 		this.checkInterval = setInterval(() => {
 			for (let id in users) if (!users[id].disabled) {
 				let user = BDFDB.LibraryModules.UserStore.getUser(id);
-				let status = this.getStatusWithMobile(id);
-				if (user && this.userStatusStore[id] != status && users[id][status]) {
+				let status = this.getStatusWithMobileAndActivity(id, users[id]);
+				if (user && this.userStatusStore[id] != status.statusname && users[id][status.statusname]) {
 					let EUdata = BDFDB.loadData(user.id, "EditUsers", "users") || {};
-					let libstring = (BDFDB.LanguageStrings[this.defaults.notificationstrings[status].libstring] || "").toLowerCase();
-					let string = notificationstrings[status] || "$user changed status to $status";
+					let libstring = (this.defaults.notificationstrings[status.statusname].libstring ? BDFDB.LanguageStrings[this.defaults.notificationstrings[status.statusname].libstring] : (this.defaults.notificationstrings[status.statusname].statusname || "")).toLowerCase();
+					let string = notificationstrings[status.statusname] || "$user changed status to $status";
 					let toaststring = BDFDB.encodeToHTML(string).replace(/\$user/g, `<strong>${BDFDB.encodeToHTML(EUdata.name || user.username)}</strong>`).replace(/\$status/g, `<strong>${libstring}</strong>`);
+					if (status.isactivity) toaststring = toaststring.replace(/\$song|\$game/g, `<strong>${status.name || status.details}</strong>`).replace(/\$artist/g, `<strong>${status.state}</strong>`);
 					let avatar = EUdata.removeIcon ? "" : (EUdata.url ? EUdata.url : BDFDB.getUserAvatar(user.id));
 					this.timeLog.push({string:toaststring, avatar, time: new Date()});
 					if (!(settings.muteOnDND && BDFDB.getUserStatus() == "dnd")) {
@@ -519,9 +524,9 @@ class FriendNotifications {
 							}
 						};
 						if (!users[id].desktop) {
-							let toast = BDFDB.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${toaststring}</div></div>`, {html:true, timeout:5000, color:BDFDB.getUserStatusColor(status), icon:false, selector:`friendnotifications-${status}-toast`});
+							let toast = BDFDB.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${toaststring}</div></div>`, {html:true, timeout:5000, color:BDFDB.getUserStatusColor(status.statusname), icon:false, selector:`friendnotifications-${status.statusname}-toast`});
 							toast.addEventListener("click", openChannel);
-							let notificationsound = notificationsounds["toast" + status] || {};
+							let notificationsound = notificationsounds["toast" + status.statusname] || {};
 							if (!notificationsound.mute && notificationsound.song) {
 								let audio = new Audio();
 								audio.src = notificationsound.song;
@@ -530,12 +535,13 @@ class FriendNotifications {
 						}
 						else {
 							let desktopstring = string.replace(/\$user/g, EUdata.name || user.username).replace(/\$status/g, libstring);
-							let notificationsound = notificationsounds["desktop" + status] || {};
+							if (status.isactivity) desktopstring = desktopstring.replace(/\$song|\$game/g, status.name || status.details).replace(/\$artist/g, status.state);
+							let notificationsound = notificationsounds["desktop" + status.statusname] || {};
 							BDFDB.showDesktopNotification(desktopstring, {icon:avatar, timeout:5000, click:openChannel, silent:notificationsound.mute, sound:notificationsound.song});
 						}
 					}
 				}
-				this.userStatusStore[id] = status;
+				this.userStatusStore[id] = status.statusname;
 			}
 		},BDFDB.getData("checkInterval", this, "amounts") * 1000);
 	}
