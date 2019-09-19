@@ -43,6 +43,22 @@
 	--fontwhite4: 					120,120,120;
 }
 
+.theme-light, .theme-dark {
+	--header-primary: rgb(var(--fontwhite1));
+	--header-secondary: rgb(var(--fontwhite2));
+	--text-normal: rgb(var(--fontwhite2));
+	--text-muted: rgb(var(--fontwhite4));
+	--text-link: rgb(var(--vaccentcolor));
+	--channels-default: rgb(var(--fontwhite4));
+	--interactive-normal: rgb(var(--fontwhite3));
+	--interactive-hover: rgb(var(--fontwhite2));
+	--interactive-active: rgb(var(--fontwhite1));
+	--interactive-muted: rgb(var(--fontwhite4));
+	--elevation-low: 0 1px 5px 0 rgba(var(--transparencycolor), 0.3);
+	--elevation-high: 0 2px 10px 0 rgba(var(--transparencycolor), 0.3);
+	--logo-primary: rgb(var(--fontwhite1));
+}
+
 
 /* ~~~~		0.		TABLE OF CONTENTS				~~~~ */
 /*
@@ -3740,7 +3756,7 @@ body:before {
 	box-shadow: 0 1px 5px 0 rgba(var(--transparencycolor), 0.3);
 }
 #app-mount .elevationHigh-3A9Xbf, .lightElevationHigh-3usmGv, .darkElevationHigh-6iWpWi {
-	box-shadow: 0 2px 10px 0 rgba(var(--transparencycolor), 0.2);
+	box-shadow: 0 2px 10px 0 rgba(var(--transparencycolor), 0.3);
 }
 #app-mount .elevationBorderLow-2qgTRQ, .lightElevationBorderLow-3APXjz, .darkElevationBorderLow-39dDV7 {
 	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), 0.3), 0 1px 5px 0 rgba(var(--transparencycolor), 0.3);
