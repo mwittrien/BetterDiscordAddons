@@ -163,6 +163,18 @@ body,														/* body														*/
 	background-color: rgba(var(--vtransparencycolor), var(--vmemberlistransparency));
 }
 
+.themeDark-3Ap_7i, .themeLight-2aS1dz {						/* errorscreen												*/
+	background-color: transparent;
+	color: rgb(var(--fontwhite1));
+}
+#app-mount .note-450gs3 {
+	color: rgb(var(--fontwhite2));
+}
+#app-mount .image-3zK3Wt {
+	background-image: url(https://discordapp.com/assets/e9baf4b505eb54129f832556ea16538e.svg);
+	opacity: 0.6;
+}
+
 
 /* ~~~~		2.		BACKGROUND						~~~~ */
 
