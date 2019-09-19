@@ -54,8 +54,8 @@
 	--interactive-hover: rgb(var(--fontwhite2));
 	--interactive-active: rgb(var(--fontwhite1));
 	--interactive-muted: rgb(var(--fontwhite4));
-	--elevation-low: 0 1px 5px 0 rgba(var(--transparencycolor), 0.3);
-	--elevation-high: 0 2px 10px 0 rgba(var(--transparencycolor), 0.3);
+	--elevation-low: 0 1px 5px 0 rgba(var(--vtransparencycolor), 0.3);
+	--elevation-high: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	--logo-primary: rgb(var(--fontwhite1));
 }
 
@@ -1090,7 +1090,7 @@ body:before {
 	background-attachment: fixed;
 }
 .theme-brand .autocomplete-1vrmpx {
-	background: rgb(var(--accentcolor)) linear-gradient(rgba(var(--vtransparencycolor), 0.2), rgba(var(--vtransparencycolor), 0.2))!important;
+	background: rgb(var(--vaccentcolor)) linear-gradient(rgba(var(--vtransparencycolor), 0.2), rgba(var(--vtransparencycolor), 0.2))!important;
 }
 .theme-brand .autocomplete-1vrmpx:after,
 .theme-brand .autocomplete-1vrmpx:before {
@@ -2565,7 +2565,7 @@ body:before {
 	background-attachment: fixed;
 }
 #app-mount .topSectionNormal-2-vo2m {						/* modal				headernormal						*/
-	background-color: rgba(var(--transparencycolor), 0.2);
+	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 .body-3ND3kc {												/* modal				body								*/
 	background-color: transparent;
@@ -2643,9 +2643,9 @@ body:before {
 	background: transparent;
 }
 #app-mount .action-1lSjCi {
-	background-color: rgba(var(--transparencycolor), 0.2);
-	border-color: rgba(var(--transparencycolor), 0.2);
-	box-shadow: 0 2px 4px rgba(var(--transparencycolor), 0.1);
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+	border-color: rgba(var(--vtransparencycolor), 0.2);
+	box-shadow: 0 2px 4px rgba(var(--vtransparencycolor), 0.1);
 }
 #app-mount .actionBody-1qj65C {								/* modal				actiontext							*/
 	color: rgb(var(--fontwhite2));
@@ -2885,7 +2885,7 @@ body:before {
 	background-attachment: fixed;
 }
 #app-mount .input-2VB9rf {									/* modal				input								*/
-	background-color: rgba(var(--transparencycolor), 0.4);
+	background-color: rgba(var(--vtransparencycolor), 0.4);
 	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
 	color: rgb(var(--fontwhite1));
 }
@@ -2896,7 +2896,7 @@ body:before {
 	color: rgb(var(--fontwhite2));
 }
 #app-mount .resultFocused-3aIoYe {							/* modal				resultfocused						*/
-	background-color: rgba(var(--transparencycolor), 0.2);
+	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 #app-mount .contentUnread-3gTHvA {							/* modal				contentunread						*/
 	color: rgb(var(--fontwhite1));
@@ -2931,7 +2931,7 @@ body:before {
 
 #app-mount .friendSelected-1sa4bG,								/* modal				groupdmrow						*/
 #app-mount .inviteRow-2L02ae:hover {							/* modal				guildrow						*/
-	background-color: rgba(var(--transparencycolor), 0.2);
+	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 #app-mount .friend-3KALPe,										/* modal				groupdmrow						*/
 #app-mount .inviteRowName-1tVaxu {								/* modal				username						*/
@@ -3067,7 +3067,7 @@ body:before {
 .contextMenu-HLZMGh,										/* contextmenu			container (contextmenu)				*/
 .container-3cGP6G {											/* contextmenu			container (messagemenu)				*/
 	background: transparent;
-	box-shadow: 0 2px 10px 0 rgba(var(--transparencycolor), 0.2);
+	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
 }
 .menu-Sp6bN1,
 .contextMenu-HLZMGh,
@@ -3189,7 +3189,7 @@ body:before {
 	color: rgb(var(--fontwhite1));
 }
 #app-mount .headerNormal-T_seeN {							/* popout				headernormal						*/
-	background-color: rgba(var(--transparencycolor), 0.2);
+	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 .headerStreaming-2FjmGz {
 	background: #593695;
@@ -3265,7 +3265,7 @@ body:before {
 	color: rgba(var(--fontwhite2));
 }
 .note-3kmerW textarea:focus {
-	background-color: rgba(var(--transparencycolor), 0.2);
+	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 .note-3kmerW textarea::placeholder {
 	color: rgba(var(--fontwhite4));
@@ -3622,7 +3622,7 @@ body:before {
 	color: rgb(var(--fontwhite1));
 }
 #app-mount .focused-2bY0OD {
-	background-color: rgba(var(--transparencycolor), 0.2);
+	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 #app-mount .resultsGroup-r_nuzN:before {
 	border-top-color: rgba(var(--fontwhite4), 0.3);
@@ -3637,7 +3637,7 @@ body:before {
 	display: none;
 }
 #app-mount .option-96V44q.selected-rZcOL- {
-	background-color: rgba(var(--transparencycolor), 0.2);
+	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 #app-mount .option-96V44q.selected-rZcOL-:before {
 	background-color: rgb(var(--vaccentcolor));
@@ -3753,16 +3753,16 @@ body:before {
 }
 
 #app-mount .elevationLow-2lY09M, .lightElevationLow-3_Ybxi, .darkElevationLow-DABD7i {
-	box-shadow: 0 1px 5px 0 rgba(var(--transparencycolor), 0.3);
+	box-shadow: 0 1px 5px 0 rgba(var(--vtransparencycolor), 0.3);
 }
 #app-mount .elevationHigh-3A9Xbf, .lightElevationHigh-3usmGv, .darkElevationHigh-6iWpWi {
-	box-shadow: 0 2px 10px 0 rgba(var(--transparencycolor), 0.3);
+	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 }
 #app-mount .elevationBorderLow-2qgTRQ, .lightElevationBorderLow-3APXjz, .darkElevationBorderLow-39dDV7 {
-	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), 0.3), 0 1px 5px 0 rgba(var(--transparencycolor), 0.3);
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 1px 5px 0 rgba(var(--vtransparencycolor), 0.3);
 }
 #app-mount .elevationBorderHigh-2WYJ09, .lightElevationBorderHigh-2T98IF, .darkElevationBorderHigh-2U1nXW {
-	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), 0.3), 0 2px 10px 0 rgba(var(--transparencycolor), 0.2);
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
 }
 
 .pointerEvents-2zdfdO[fill="#ffffff"] {						/* status				whitedot							*/
@@ -4696,7 +4696,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 /* ----		16.8.	NOTIFICATIONBAR					---- */
 
 #app-mount .notice-2FJMB4 {
-	box-shadow: 0 1px 5px 0 rgba(var(--transparencycolor), 0.3);
+	box-shadow: 0 1px 5px 0 rgba(var(--vtransparencycolor), 0.3);
 	color: rgb(var(--fontwhite1));
 }
 #app-mount .button-1MICoQ:not(:hover) {
@@ -4750,7 +4750,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 .toast,
 .bd-toast {
 	background-color: rgb(var(--vaccentcolor));
-	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), 0.3), 0 2px 10px 0 rgba(var(--transparencycolor), 0.2);
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
 	color: rgb(var(--fontwhite1));
 }
 .toast.icon,
@@ -5025,7 +5025,7 @@ body #ace_settingsmenu_container > div {					/* customcsseditor		settings							
 	bottom: 10vh !important;
 	left: calc(50vw - 300px) !important;
 	border-radius: 5px;
-	box-shadow: 0 0 0 1px rgba(var(--transparencycolor), 0.6), 0 2px 10px 0 rgba(var(--transparencycolor), 0.2);
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.6), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
 	box-sizing: border-box;
 	padding-top: 50px;
 	transform: none;
@@ -5120,8 +5120,8 @@ body #ace_settingsmenu .ace_optionsMenuEntry select {
 	flex: 0 1 auto;
 	width: 200px;
 	float: none;
-	background-color: rgba(var(--transparencycolor), 0.1);
-	border-color: rgba(var(--transparencycolor), 0.3);
+	background-color: rgba(var(--vtransparencycolor), 0.1);
+	border-color: rgba(var(--vtransparencycolor), 0.3);
 	color: rgb(var(--fontwhite1));
 	height: 40px;
 	padding: 10px;
@@ -5386,27 +5386,27 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 	background-attachment: fixed;
 }
 #permissions-modal-wrapper .header {
-	background-color: rgba(var(--transparencycolor), 0.2);
-	box-shadow: 0 2px 3px 0 rgba(var(--transparencycolor), 0.2);
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+	box-shadow: 0 2px 3px 0 rgba(var(--vtransparencycolor), 0.2);
 	color: rgb(var(--fontwhite1));
 }
 #permissions-modal-wrapper .modal-body {
 	background-color: transparent;
 }
 #permissions-modal-wrapper .scroller-title {
-	border-bottom: 1px solid rgba(var(--transparencycolor), 0.3);
+	border-bottom: 1px solid rgba(var(--vtransparencycolor), 0.3);
 }
 #permissions-modal-wrapper .role-side {
-	background-color: rgba(var(--transparencycolor), 0.1);
+	background-color: rgba(var(--vtransparencycolor), 0.1);
 }
 #permissions-modal-wrapper .role-item {
 	color: rgb(var(--fontwhite2));
 }
 #permissions-modal-wrapper .role-item:hover {
-	background-color: rgba(var(--transparencycolor), 0.1);
+	background-color: rgba(var(--vtransparencycolor), 0.1);
 }
 #permissions-modal-wrapper .role-item.selected {
-	background-color: rgba(var(--transparencycolor), 0.2);
+	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 #permissions-modal-wrapper .perm-side {
 	background-color: transparent;
@@ -5513,7 +5513,7 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 	z-index: 100;
 }
 .theme-brand .bf-toolbar:after {
-	background: rgb(var(--accentcolor)) linear-gradient(rgba(var(--vtransparencycolor), 0.2), rgba(var(--vtransparencycolor), 0.2))!important;
+	background: rgb(var(--vaccentcolor)) linear-gradient(rgba(var(--vtransparencycolor), 0.2), rgba(var(--vtransparencycolor), 0.2))!important;
 }
 .theme-brand .bf-toolbar:before {
 	display: none;
