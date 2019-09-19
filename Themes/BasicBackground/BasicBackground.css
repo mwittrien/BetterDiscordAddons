@@ -5537,7 +5537,7 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 /* ~~~~		20.		UPDATENOTICE					~~~~ */
 
 html:only-child > head + body > div#app-mount.appMount-3lHmkl > div.app-19_DXt > div.app-2rEoOp.vertical-V37hAW.flex-1O1GKY.directionColumn-35P_nr:before {
-	content: "Your version of   BasicBackground   by DevilBro is outdated. Please download the newest version from:    https://github.com/mwittrien/BetterDiscordAddons/blob/master/Themes/BasicBackground/BasicBackground.theme.css" !important;
+	content: "Your version of   BasicBackground   by DevilBro is outdated. Please download the newest version from:    https://github.com/mwittrien/BetterDiscordAddons/blob/master/Themes/BasicBackground" !important;
 	display: var(--version1_0_5, block) !important;
 	background-color: #4a90e2 !important;
 	box-shadow: 0 1px 5px 0 rgba(var(--vtransparencycolor), 0.3) !important;
