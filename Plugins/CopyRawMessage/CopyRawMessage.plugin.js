@@ -1,4 +1,4 @@
-//META {"name":"CopyRawMessage"}*//
+//META{"name":"CopyRawMessage"}*//
 
 class CopyRawMessage {
 	getName () {return "CopyRawMessage";}

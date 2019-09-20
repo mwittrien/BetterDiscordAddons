@@ -1,4 +1,4 @@
-//META {"name":"ServerFolders","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerFolders","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ServerFolders/ServerFolders.plugin.js"}*//
+//META{"name":"ServerFolders","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerFolders","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ServerFolders/ServerFolders.plugin.js"}*//
 
 class ServerFolders {
 	getName () {return "ServerFolders";}

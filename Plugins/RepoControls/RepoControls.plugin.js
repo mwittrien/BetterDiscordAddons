@@ -1,4 +1,4 @@
-//META {"name":"RepoControls","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RepoControls","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/RepoControls/RepoControls.plugin.js"}*//
+//META{"name":"RepoControls","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RepoControls","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/RepoControls/RepoControls.plugin.js"}*//
 
 class RepoControls {
 	getName () {return "RepoControls";}

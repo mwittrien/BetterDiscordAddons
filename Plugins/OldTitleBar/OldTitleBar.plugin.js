@@ -1,4 +1,4 @@
-//META {"name":"OldTitleBar","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OldTitleBar","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/OldTitleBar/OldTitleBar.plugin.js"}*//
+//META{"name":"OldTitleBar","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OldTitleBar","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/OldTitleBar/OldTitleBar.plugin.js"}*//
 
 class OldTitleBar {
 	getName () {return "OldTitleBar";}

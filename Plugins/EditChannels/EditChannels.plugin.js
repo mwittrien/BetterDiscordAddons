@@ -1,4 +1,4 @@
-//META {"name":"EditChannels","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditChannels","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditChannels/EditChannels.plugin.js"}*//
+//META{"name":"EditChannels","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditChannels","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditChannels/EditChannels.plugin.js"}*//
 
 class EditChannels {
 	getName () {return "EditChannels";}

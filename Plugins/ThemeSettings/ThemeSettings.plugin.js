@@ -1,4 +1,4 @@
-//META {"name":"ThemeSettings","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeSettings","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ThemeSettings/ThemeSettings.plugin.js"}*//
+//META{"name":"ThemeSettings","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeSettings","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ThemeSettings/ThemeSettings.plugin.js"}*//
 
 class ThemeSettings {
 	getName () {return "ThemeSettings";}
