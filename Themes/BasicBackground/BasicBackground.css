@@ -3053,8 +3053,9 @@ body:before {
 #app-mount .themedPopout-1TrfdI,							/* themed popout		(for example mentionpopout)			*/
 #app-mount .popoutList-T9CKZQ {								/* listpopout			(for example auditlogs)				*/
 	background-color: transparent;
+	border: none;
 	border-radius: 5px;
-	box-shadow: 0 8px 16px rgba(var(--vtransparencycolor), 0.24);
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	color: rgb(var(--fontwhite1));
 	position: relative;
 }
@@ -3091,6 +3092,9 @@ body:before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	filter: blur(var(--vpopoutblur));
 	background-attachment: fixed;
+}
+.popout-googletranslate .themedPopout-1TrfdI {
+	margin-top: -427px !important;
 }
 #app-mount .quickSelectPopoutOption-opKBx9:hover {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
