@@ -82,6 +82,7 @@
 		4.	AUTOCOMPLETEMENU
 		5.	MEMBERLIST
 		6.	SEARCHPAGE
+		7.	CALL
 	7.	ACTIVITYPAGE
 	8.	LIBRARY
 	9.	STORE/NITRO
@@ -1316,6 +1317,53 @@ body:before {
 	color: rgb(var(--fontwhite1));
 }
 
+/* ----		6.7.	CALL							---- */
+
+#app-mount .incomingCallInner-2VmFiR {						/* popout				inner								*/
+	background: transparent;
+	border: none;
+}
+.incomingCallInner-2VmFiR:after,
+.incomingCallInner-2VmFiR:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.incomingCallInner-2VmFiR:after {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
+}
+.incomingCallInner-2VmFiR:before {
+	background: var(--vpopout) center/var(--vpopoutsize);
+	filter: blur(var(--vpopoutblur));
+	background-attachment: fixed;
+}
+#app-mount .members-2BNiuX {								/* popout				members							*/
+	color: rgb(var(--fontwhite1));
+}
+#app-mount .subtitle-1H8FPn {								/* popout				subtitle						*/
+	color: rgb(var(--fontwhite3));
+}
+
+#app-mount .wrapper-29NfPK {								/* call					wrapper							*/
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vguildchanneltransparency) * 0.8));
+}
+#app-mount .video-1FfuMD {									/* call					video							*/
+	background-color: transparent;
+}
+#app-mount .wrapper-29NfPK.minimum-2d6zH6 .actions-2vadYq .center-1Vp33r {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+	border: none;
+}
+.regionSelectPopout-p9-0_W {
+	width: 170px;
+}
 
 /* ~~~~		7.		ACTIVITYPAGE					~~~~ */
 
@@ -2977,18 +3025,22 @@ body:before {
 #app-mount .popout-2iWAc-:not(.noShadow-3pu20z) {
 	box-shadow: 0 0 1px rgba(var(--vtransparencycolor), 0.82), 0 1px 4px rgba(var(--vtransparencycolor), 0.1);
 }
-.popout-2iWAc-[style*="translateY(-100%)"] {
-	transform: unset !important;
+.popout-2iWAc-[style*="translateX(-50."] {
+	transform: translateX(-50%) !important;
 }
 .popout-2iWAc-[style*="translateX(-100%) translateY(-100%)"] {
 	transform: translateX(-100%) !important;
 }
-.popout-2iWAc-[style*="translateY(-100%)"] > *:only-child {
-	margin-top: -100%;
+.popout-2iWAc-[style*="translateY(-100%)"] {
+	transform: unset !important;
 }
+.popout-2iWAc-[style*="translateX(-50."] > *,
 .popout-2iWAc-[style*="translateX(-50%)"] > * {
 	margin-left: -50%;
 	transform: translateX(50%);
+}
+.popout-2iWAc-[style*="translateY(-100%)"] > *:only-child {
+	margin-top: -100%;
 }
 .popout-2iWAc-[style*="translateX(-100%)"] > * {
 	margin-left: -100%;
@@ -2996,15 +3048,19 @@ body:before {
 }
 
 #app-mount .container-2x5lvQ,								/* RTCpopout			(for example voicequality)			*/
+#app-mount .quickSelectPopout-X1hvgV,						/* quickselect			(for example regionselect)			*/
 #app-mount .themedPopout-1TrfdI,							/* themed popout		(for example mentionpopout)			*/
 #app-mount .popoutList-T9CKZQ {								/* listpopout			(for example auditlogs)				*/
 	background-color: transparent;
 	box-shadow: 0 8px 16px rgba(var(--vtransparencycolor), 0.24);
+	color: rgb(var(--fontwhite1));
 	overflow: hidden;
 	position: relative;
 }
 .container-2x5lvQ:after,
 .container-2x5lvQ:before,
+.quickSelectPopout-X1hvgV:after,
+.quickSelectPopout-X1hvgV:before,
 .themedPopout-1TrfdI:after,
 .themedPopout-1TrfdI:before,
 .popoutList-T9CKZQ:after,
@@ -3021,16 +3077,21 @@ body:before {
 	z-index: -1;
 }
 .container-2x5lvQ:after,
+.quickSelectPopout-X1hvgV:after,
 .themedPopout-1TrfdI:after,
 .popoutList-T9CKZQ:after {
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
 }
 .container-2x5lvQ:before,
+.quickSelectPopout-X1hvgV:before,
 .themedPopout-1TrfdI:before,
 .popoutList-T9CKZQ:before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	filter: blur(var(--vpopoutblur));
 	background-attachment: fixed;
+}
+#app-mount .quickSelectPopoutOption-opKBx9:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 #app-mount .container-2x5lvQ .header-2C89wJ {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
