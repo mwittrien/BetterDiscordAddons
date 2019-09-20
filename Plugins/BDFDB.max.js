@@ -3167,31 +3167,35 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		return searchBar;
 	};
 
-	BDFDB.createSelectMenu = function (inner, value, type = "", dark = BDFDB.getDiscordTheme() == BDFDB.disCN.themedark) {
-		if (typeof inner != "string" || (typeof value != "string" && typeof value != "number")) return BDFDB.htmlToElement(`<div></div>`);
-		var suffix = dark ? "dark" : "light";
+	BDFDB.createSelectMenu = function (inner, value, type = '', dark = BDFDB.getDiscordTheme() == BDFDB.disCN.themedark) {
+		if (typeof inner != 'string' || (typeof value != 'string' && typeof value != 'number')) return BDFDB.htmlToElement(`<div></div>`);
+		var suffix = dark ? 'dark' : 'light';
 		return `<div class="${BDFDB.disCN.selectwrap} BDFDB-select" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.select}" type="${type}" value="${value}"><div class="${BDFDB.disCNS.selectcontrol + BDFDB.disCN["selectcontrol" + suffix]}"><div class="${BDFDB.disCN.selectvalue}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCNS.selectsingle + BDFDB.disCN["selectsingle" + suffix]}">${inner}</div><input readonly="" tabindex="0" class="${BDFDB.disCN.selectdummyinput}" value=""></div><div class="${BDFDB.disCN.selectarrowzone}"><div aria-hidden="true" class="${BDFDB.disCNS.selectarrowcontainer + BDFDB.disCN["selectarrowcontainer" + suffix]}"><svg height="20" width="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false" class="${BDFDB.disCN.selectarrow}"><path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path></svg></div></div></div></div></div>`;
 	};
 
-	BDFDB.openDropdownMenu = function (e, callback, createinner, values, selector = "", dark = BDFDB.getDiscordTheme() == BDFDB.disCN.themedark) {
-		if (typeof callback != "function" || typeof createinner != "function" || !values || typeof values != "object") return;
+	BDFDB.openDropdownMenu = function (e, callback, createinner, values, above = false, dark = BDFDB.getDiscordTheme() == BDFDB.disCN.themedark) {
+		if (typeof callback != 'function' || typeof createinner != 'function' || !values || typeof values != 'object') return;
 		let selectControl = e.currentTarget;
 		let selectWrap = selectControl.parentElement;
 		if (BDFDB.containsClass(selectWrap, BDFDB.disCN.selectisopen)) return;
 
 		BDFDB.addClass(selectWrap, BDFDB.disCN.selectisopen);
 
-		var type = selectWrap.getAttribute("type");
-		var oldchoice = selectWrap.getAttribute("value");
-		var suffix = dark ? "dark" : "light";
+		var type = selectWrap.getAttribute('type');
+		var oldchoice = selectWrap.getAttribute('value');
+		var suffix = dark ? 'dark' : 'light';
 		var menuhtml = `<div class="${BDFDB.disCNS.selectmenuouter + BDFDB.disCN["selectmenuouter" + suffix]}"><div class="${BDFDB.disCN.selectmenu}">`;
 		for (var key in values) menuhtml += `<div value="${key}" class="${BDFDB.disCNS.selectoption + (key == oldchoice ? BDFDB.disCN["selectoptionselect" + suffix] : BDFDB.disCN["selectoption" + suffix])}" style="flex: 1 1 auto; display: flex;">${createinner(key)}</div>`;
 		menuhtml += `</div></div>`;
 		var selectMenu = BDFDB.htmlToElement(menuhtml);
-		if (selector) BDFDB.addClass(selectMenu, selector);
+		if (above) {
+			BDFDB.addClass(selectMenu, 'above-select');
+			selectMenu.style.setProperty('top', 'unset', 'important');
+			selectMenu.style.setProperty('bottom', BDFDB.getRects(selectWrap).height + 'px', 'important');
+		}
 		selectWrap.appendChild(selectMenu);
 
-		BDFDB.addChildEventListener(selectMenu, "mouseenter", BDFDB.dotCN.selectoption + BDFDB.notCN.selectoptionselectlight + BDFDB.notCN.selectoptionselectdark, e2 => {
+		BDFDB.addChildEventListener(selectMenu, 'mouseenter', BDFDB.dotCN.selectoption + BDFDB.notCN.selectoptionselectlight + BDFDB.notCN.selectoptionselectdark, e2 => {
 			if (dark) {
 				BDFDB.removeClass(e2.currentTarget, BDFDB.disCN.selectoptiondark);
 				BDFDB.addClass(e2.currentTarget, BDFDB.disCN.selectoptionhoverdark);
@@ -3201,7 +3205,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				BDFDB.addClass(e2.currentTarget, BDFDB.disCN.selectoptionhoverlight);
 			}
 		});
-		BDFDB.addChildEventListener(selectMenu, "mouseleave", BDFDB.dotCN.selectoption + BDFDB.notCN.selectoptionselectlight + BDFDB.notCN.selectoptionselectdark, e2 => {
+		BDFDB.addChildEventListener(selectMenu, 'mouseleave', BDFDB.dotCN.selectoption + BDFDB.notCN.selectoptionselectlight + BDFDB.notCN.selectoptionselectdark, e2 => {
 			if (dark) {
 				BDFDB.removeClass(e2.currentTarget, BDFDB.disCN.selectoptionhoverdark);
 				BDFDB.addClass(e2.currentTarget, BDFDB.disCN.selectoptiondark);
@@ -3211,20 +3215,20 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				BDFDB.addClass(e2.currentTarget, BDFDB.disCN.selectoptionlight);
 			}	
 		});
-		BDFDB.addChildEventListener(selectMenu, "mousedown", BDFDB.dotCN.selectoption, e2 => {
-			var newchoice = e2.currentTarget.getAttribute("value");
-			selectWrap.setAttribute("value", newchoice);
+		BDFDB.addChildEventListener(selectMenu, 'mousedown', BDFDB.dotCN.selectoption, e2 => {
+			var newchoice = e2.currentTarget.getAttribute('value');
+			selectWrap.setAttribute('value', newchoice);
 			callback(selectWrap, type, newchoice);
 		});
 
 		var removeMenu = e2 => {
 			if (e2.target.parentElement != selectMenu) {
-				document.removeEventListener("mousedown", removeMenu);
+				document.removeEventListener('mousedown', removeMenu);
 				selectMenu.remove();
 				setTimeout(() => {BDFDB.removeClass(selectWrap, BDFDB.disCN.selectisopen);},100);
 			}
 		};
-		document.addEventListener("mousedown", removeMenu);
+		document.addEventListener('mousedown', removeMenu);
 	};
 
 	BDFDB.openConfirmModal = function () {
@@ -5731,6 +5735,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			border-width: 1px;
 			border-style: solid;
 			border-image: initial;
+		}
+		.BDFDB-select ${BDFDB.dotCN.selectmenuouter}.above-select {
+			border-radius: 3px 3px 0 0;
 		}
 		.BDFDB-select ${BDFDB.dotCN.selectmenuouterlight} {
 			background-color: rgb(255, 255, 255);
