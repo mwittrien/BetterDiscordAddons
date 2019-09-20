@@ -3053,9 +3053,9 @@ body:before {
 #app-mount .themedPopout-1TrfdI,							/* themed popout		(for example mentionpopout)			*/
 #app-mount .popoutList-T9CKZQ {								/* listpopout			(for example auditlogs)				*/
 	background-color: transparent;
+	border-radius: 5px;
 	box-shadow: 0 8px 16px rgba(var(--vtransparencycolor), 0.24);
 	color: rgb(var(--fontwhite1));
-	overflow: hidden;
 	position: relative;
 }
 .container-2x5lvQ:after,
@@ -3075,6 +3075,7 @@ body:before {
 	width: unset;
 	height: unset;
 	pointer-events: none;
+	border-radius: 5px;
 	z-index: -1;
 }
 .container-2x5lvQ:after,
