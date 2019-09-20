@@ -3025,22 +3025,23 @@ body:before {
 #app-mount .popout-2iWAc-:not(.noShadow-3pu20z) {
 	box-shadow: 0 0 1px rgba(var(--vtransparencycolor), 0.82), 0 1px 4px rgba(var(--vtransparencycolor), 0.1);
 }
-.popout-2iWAc-[style*="translateX(-50."] {
-	transform: translateX(-50%) !important;
-}
-.popout-2iWAc-[style*="translateX(-100%) translateY(-100%)"] {
-	transform: translateX(-100%) !important;
-}
 .popout-2iWAc-[style*="translateY(-100%)"] {
 	transform: unset !important;
+}
+.popout-2iWAc-[style*="translateX(-50."],
+.popout-2iWAc-[style*="translateX(-50%)"] {
+	transform: translateX(-50%) !important;
+}
+.popout-2iWAc-[style*="translateX(-100%)"] {
+	transform: translateX(-100%) !important;
+}
+.popout-2iWAc-[style*="translateY(-100%)"] > *:only-child {
+	margin-top: -100%;
 }
 .popout-2iWAc-[style*="translateX(-50."] > *,
 .popout-2iWAc-[style*="translateX(-50%)"] > * {
 	margin-left: -50%;
 	transform: translateX(50%);
-}
-.popout-2iWAc-[style*="translateY(-100%)"] > *:only-child {
-	margin-top: -100%;
 }
 .popout-2iWAc-[style*="translateX(-100%)"] > * {
 	margin-left: -100%;
@@ -3488,10 +3489,10 @@ body:before {
 	color: rgb(var(--fontwhite2));
 }
 #app-mount #bda-qem button:hover {
-	background-color: rgba(var(--vtransparencycolor), 0.1);
+	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 #app-mount #bda-qem button.active {
-	background-color: rgba(var(--vtransparencycolor), 0.2);
+	background-color: rgba(var(--vtransparencycolor), 0.4);
 	color: rgb(var(--fontwhite1));
 }
 #app-mount .emojiPicker-3m1S-j .category-2U57w6,			/* picker				category							*/
