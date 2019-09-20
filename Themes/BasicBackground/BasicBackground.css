@@ -151,13 +151,18 @@ body,														/* body														*/
 #app-mount .chat-3bRxxu,									/* chat					container							*/
 #app-mount .noChannel-Z1DQK7,								/* nochannel												*/
 #app-mount .activityFeed-1C0EmJ,							/* activityfeed												*/
+#app-mount .scroller-1JpcIc,								/* activityfeed			scroller							*/
 #app-mount .gameLibrary-TTDw4Y,								/* library													*/
+#app-mount .scroller-1IIF0A,								/* library				scroller							*/
 #app-mount .root-1BQpZw,									/* giftinventory											*/
+#app-mount .scroller-5bBood,								/* giftinventory		scroller							*/
 #app-mount .applicationStore-1pNvnv,						/* store													*/
+#app-mount .scroller-9moviB,								/* nitropage			scroller							*/
 #app-mount .lfg-3xoFkI,										/* LFG														*/
 #app-mount .container-3gCOGc,								/* friends													*/
-#app-mount .scroller-2TZvBN,								/* guilds				inner								*/
-#app-mount .scroller-1JbKMe,								/* dmchannels			inner								*/
+#app-mount .friendsTableBody-1ZhKif,						/* friends				body								*/
+#app-mount .scroller-2TZvBN,								/* guilds				scroller							*/
+#app-mount .scroller-1JbKMe,								/* dmchannels			scroller							*/
 #app-mount .messages-3amgkR,								/* messages													*/
 #app-mount .members-1998pB,									/* members				inner								*/
 #app-mount .pageWrapper-1PgVDX,								/* guilddiscovery											*/
