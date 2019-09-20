@@ -97,6 +97,7 @@
 		5.	KEYBOARDSHORTCUTSMODAL
 		6.	QUICKSWITCHER
 		7.	INVITEMODAL
+		8.	LOGINSCREEN
 	15.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -925,7 +926,7 @@ body:before {
 
 #app-mount .message-2qRu38 {								/* deletemessage		container							*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
-	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 }
 
 /* ====		6.2.2.	EMBEDS							==== */
@@ -2442,7 +2443,7 @@ body:before {
 #app-mount .root-1gCeng,									/* modal				container (foldersettings)			*/
 #app-mount .modal-yWgWj- {									/* modal				container							*/
 	background-color: transparent;
-	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	position: relative;
 	overflow: hidden;
 }
@@ -2539,7 +2540,7 @@ body:before {
 
 #app-mount .root-SR8cQa {									/* modal				container							*/
 	background-color: transparent;
-	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	position: relative;
 	overflow: hidden;
 }
@@ -2733,7 +2734,7 @@ body:before {
 
 #app-mount .regionSelectModal-12e-57 {						/* modal				container							*/
 	background-color: transparent;
-	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	position: relative;
 	overflow: hidden;
 }
@@ -2807,7 +2808,7 @@ body:before {
 
 #app-mount .keyboardShortcutsModal-3piNz7 {					/* modal				container							*/
 	background-color: transparent;
-	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	position: relative;
 	overflow: hidden;
 }
@@ -2859,7 +2860,7 @@ body:before {
 
 #app-mount .quickswitcher-3JagVE {							/* modal				container							*/
 	background-color: transparent;
-	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	position: relative;
 	overflow: hidden;
 }
@@ -2886,7 +2887,7 @@ body:before {
 }
 #app-mount .input-2VB9rf {									/* modal				input								*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);
-	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
+	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	color: rgb(var(--fontwhite1));
 }
 #app-mount .input-2VB9rf::placeholder {
@@ -2950,6 +2951,24 @@ body:before {
 .tag-2gHSR7 {
 	background-color: rgb(var(--vaccentcolor));
 	color: rgb(var(--fontwhite1));
+}
+
+/* ----		14.8.	LOGINSCREEN						---- */
+
+#app-mount .wrapper-3Q5DdO {								/* login				wrapper								*/
+	background: transparent;
+}
+.wrapper-3Q5DdO:before,										/* login				winbuttonshadow						*/
+.wrapper-3Q5DdO .rightSplit-2US0xy,							/* login				background							*/
+.wrapper-3Q5DdO .canvas-3XuBXe {							/* login				movingshadow						*/
+	display: none;
+}
+#app-mount .authBox-hW6HRx {								/* login				modal								*/
+	background-color: rgba(var(--vtransparencycolor), 0.5);
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
+	color: rgb(var(--fontwhite3));
+	position: relative;
+	overflow: hidden;
 }
 
 
@@ -3089,7 +3108,7 @@ body:before {
 .contextMenu-HLZMGh,										/* contextmenu			container (contextmenu)				*/
 .container-3cGP6G {											/* contextmenu			container (messagemenu)				*/
 	background: transparent;
-	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 }
 .menu-Sp6bN1,
 .contextMenu-HLZMGh,
@@ -3180,7 +3199,7 @@ body:before {
 /* ----		15.2.	USERPOPOUT						---- */
 
 .userPopout-3XzG_A {										/* popout				container							*/
-	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2), 0 0 0 1px rgba(var(--vtransparencycolor), 0.6);
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 }
 .userPopout-3XzG_A:after,
 .userPopout-3XzG_A:before {
@@ -3589,7 +3608,7 @@ body:before {
 
 #app-mount .container-3ayLPN {								/* popout				wrapper								*/
 	background-color: transparent;
-	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
+	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	border: none;
 	overflow: hidden;
 	position: relative;
@@ -3763,7 +3782,7 @@ body:before {
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 1px 5px 0 rgba(var(--vtransparencycolor), 0.3);
 }
 #app-mount .elevationBorderHigh-2WYJ09, .lightElevationBorderHigh-2T98IF, .darkElevationBorderHigh-2U1nXW {
-	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 }
 
 .pointerEvents-2zdfdO[fill="#ffffff"] {						/* status				whitedot							*/
@@ -3821,6 +3840,9 @@ body:before {
 	color: rgb(var(--fontwhite4));
 }
 .h5-18_1nd {
+	color: rgb(var(--fontwhite3));
+}
+.subTitle-3TUjmF {
 	color: rgb(var(--fontwhite3));
 }
 .description-3_Ncsb,
@@ -4736,7 +4758,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	color: rgb(var(--fontwhite1));
 }
 #app-mount .tooltip-2QfLtc {
-	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
+	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	color: rgb(var(--fontwhite1));
 }
 #app-mount .tooltipBlack-PPG47z {
@@ -4751,7 +4773,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 .toast,
 .bd-toast {
 	background-color: rgb(var(--vaccentcolor));
-	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	color: rgb(var(--fontwhite1));
 }
 .toast.icon,
@@ -4824,7 +4846,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 #app-mount .bd-modal-inner {								/* modal				container							*/
 	background-color: transparent;
 	border: none;
-	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	position: relative;
 	overflow: hidden;
 }
@@ -5007,7 +5029,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 .contentRegion-3nDuYy #bd-customcss-attach-controls,
 #bd-customcss-detach-container #bd-customcss-attach-controls {
 	background-color: rgba(var(--vtransparencycolor), 0.5);
-	box-shadow: 0 1px 0 0 rgba(var(--fontwhite4), 0.3) inset;
+	box-shadow: inset 0 1px 0 0 rgba(var(--fontwhite4), 0.3);
 	color: rgb(var(--fontwhite1));
 }
 .standardSidebarView-3F1I7i #bd-customcss-attach-controls button,
@@ -5026,7 +5048,7 @@ body #ace_settingsmenu_container > div {					/* customcsseditor		settings							
 	bottom: 10vh !important;
 	left: calc(50vw - 300px) !important;
 	border-radius: 5px;
-	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.6), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	box-sizing: border-box;
 	padding-top: 50px;
 	transform: none;
@@ -5361,7 +5383,7 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 #permissions-modal-wrapper #permissions-modal {				/* modal				container							*/
 	background-color: transparent;
 	border: none;
-	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	position: relative;
 	overflow: hidden;
 }
@@ -5554,7 +5576,7 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 #app-mount .root-SR8cQa .wrapper-3t9DeA[user_by_BDFDB="278543574059057154"]:not(.statusHovered):hover + .headerInfo-30uryT:before,
 #app-mount .userPopout-3XzG_A .avatarWrapper-3H_478[user_by_BDFDB="278543574059057154"]:not(.statusHovered):hover .wrapper-3t9DeA:before {
 	background-color: rgb(var(--vaccentcolor)) !important;
-	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2) !important;
+	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3) !important;
 	color: rgb(var(--fontwhite1)) !important;
 }
 #app-mount .root-SR8cQa .wrapper-3t9DeA[user_by_BDFDB="278543574059057154"]:not(.statusHovered):hover + .headerInfo-30uryT:after {
