@@ -1,4 +1,4 @@
-//META{"name":"PersonalPins","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PersonalPins","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PersonalPins/PersonalPins.plugin.js"}*//
+//META {"name":"PersonalPins","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PersonalPins","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PersonalPins/PersonalPins.plugin.js"}*//
 
 class PersonalPins {
 	getName () {return "PersonalPins";}

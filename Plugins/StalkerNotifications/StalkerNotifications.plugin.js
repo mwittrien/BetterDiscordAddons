@@ -1,4 +1,4 @@
-//META{"name":"StalkerNotifications","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/StalkerNotifications","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/StalkerNotifications/StalkerNotifications.plugin.js"}*//
+//META {"name":"StalkerNotifications","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/StalkerNotifications","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/StalkerNotifications/StalkerNotifications.plugin.js"}*//
 
 class StalkerNotifications {
 	getName () {return "StalkerNotifications";}

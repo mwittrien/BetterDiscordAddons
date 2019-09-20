@@ -1,4 +1,4 @@
-//META{"name":"ThemeRepo","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeRepo","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ThemeRepo/ThemeRepo.plugin.js"}*//
+//META {"name":"ThemeRepo","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeRepo","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ThemeRepo/ThemeRepo.plugin.js"}*//
 
 class ThemeRepo {
 	getName () {return "ThemeRepo";}
@@ -546,7 +546,7 @@ class ThemeRepo {
 			frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"ThemeFixer",checked:themefixerinput.checked,css:this.themeFixerCSS},"*");
 		});
 		themeRepoModal.querySelector("#download-themefixer").addEventListener("click", e => {
-			this.createThemeFile("ThemeFixer.theme.css", `//META{"name":"ThemeFixer","description":"ThemeFixerCSS for transparent themes","author":"DevilBro","version":"1.0.1"}*//\n\n` + this.themeFixerCSS);
+			this.createThemeFile("ThemeFixer.theme.css", `//META {"name":"ThemeFixer","description":"ThemeFixerCSS for transparent themes","author":"DevilBro","version":"1.0.1"}*//\n\n` + this.themeFixerCSS);
 		});
 		BDFDB.addChildEventListener(themeRepoModal, "click", BDFDB.dotCNC.modalclose + BDFDB.dotCN.backdrop, () => {
 			frame.remove();
@@ -830,7 +830,7 @@ class ThemeRepo {
 					let theme = {};
 					let text = body;
 					if ((text.split("*//").length > 1 || text.indexOf("/**") == 0) && text.split("\n").length > 1) {
-						var hasMETAline = text.replace(/\s/g, "").indexOf("//META{");
+						var hasMETAline = text.replace(/\s/g, "").indexOf("//META {");
 						if (hasMETAline < 20 && hasMETAline > -1) {
 							var searchtext = text.replace(/\s*:\s*/g, ":").replace(/\s*}\s*/g, "}");
 							for (let tag of tags) {

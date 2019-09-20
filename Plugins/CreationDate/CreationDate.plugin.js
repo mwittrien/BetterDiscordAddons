@@ -1,4 +1,4 @@
-//META{"name":"CreationDate","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CreationDate","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CreationDate/CreationDate.plugin.js"}*//
+//META {"name":"CreationDate","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CreationDate","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CreationDate/CreationDate.plugin.js"}*//
 
 class CreationDate {
 	getName () {return "CreationDate";}

@@ -1,4 +1,4 @@
-//META{"name":"ForceImagePreviews","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ForceImagePreviews","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ForceImagePreviews/ForceImagePreviews.plugin.js"}*//
+//META {"name":"ForceImagePreviews","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ForceImagePreviews","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ForceImagePreviews/ForceImagePreviews.plugin.js"}*//
 
 class ForceImagePreviews {
 	getName () {return "ForceImagePreviews";}

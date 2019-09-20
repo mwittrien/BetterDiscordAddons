@@ -1,4 +1,4 @@
-//META{"name":"GoogleSearchReplace","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleSearchReplace","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/GoogleSearchReplace/GoogleSearchReplace.plugin.js"}*//
+//META {"name":"GoogleSearchReplace","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleSearchReplace","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/GoogleSearchReplace/GoogleSearchReplace.plugin.js"}*//
 
 class GoogleSearchReplace {
 	getName () {return "GoogleSearchReplace";}

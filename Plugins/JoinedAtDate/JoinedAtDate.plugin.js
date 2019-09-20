@@ -1,4 +1,4 @@
-﻿//META{"name":"JoinedAtDate","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/JoinedAtDate","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/JoinedAtDate/JoinedAtDate.plugin.js"}*//
+﻿//META {"name":"JoinedAtDate","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/JoinedAtDate","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/JoinedAtDate/JoinedAtDate.plugin.js"}*//
 
 class JoinedAtDate {
 	getName () {return "JoinedAtDate";}
