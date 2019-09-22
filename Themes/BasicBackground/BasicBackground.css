@@ -3353,14 +3353,43 @@ body:before {
 #app-mount .root-3-B5F3::-webkit-scrollbar {
 	width: 4px;
 }
-.role-2irmRk:not([style]),
-.role-2irmRk[style*="border-color: rgba(185, 187, 190, 0.6)"] {
+#app-mount .role-2irmRk {									/* body					role								*/
+	border-color: rgba(var(--fontwhite3), 0.6);
+	border-radius: 5px;
+	padding: 0 5px;
+	position: relative;
+}
+#app-mount .role-2irmRk[style*="border-color: rgba(185, 187, 190, 0.6)"] {
 	border-color: rgba(var(--fontwhite3), 0.6) !important;
 }
-.role-2irmRk .roleCircle-3xAZ1j:not([style]),
-.role-2irmRk .roleCircle-3xAZ1j[style*="background-color: rgb(185, 187, 190)"] {
+#app-mount .role-2irmRk .roleName-32vpEy {					/* body					rolename							*/
+	color: rgb(var(--fontwhite1));
+	margin: 0;
+	font-weight: normal;
+	position: relative;
+	height: 20px;
+	line-height: 20px;
+	z-index: 1000;
+	pointer-events: none;
+}
+#app-mount .role-2irmRk .roleCircle-3xAZ1j {				/* body					rolecircle							*/
+	position: absolute;
+	background-color: rgb(var(--fontwhite3));
+	border-radius: 3px;
+	opacity: 0.3;
+	height: 100%;
+	width: 100%;
+	left: 0;
+	top: 0;
+}
+#app-mount .role-2irmRk .roleCircle-3xAZ1j[style*="background-color: rgb(185, 187, 190)"] {
 	background-color: rgb(var(--fontwhite3)) !important;
 }
+#app-mount .role-2irmRk .roleCircleButton-377y0l:hover {	/* body					rolecirclebutton					*/
+	opacity: 1;
+	z-index: 2000;
+}
+
 .note-3kmerW textarea {										/* body					note								*/
 	color: rgba(var(--fontwhite2));
 }
