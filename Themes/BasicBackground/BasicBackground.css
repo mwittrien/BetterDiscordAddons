@@ -3036,29 +3036,24 @@ body:before {
 .popout-2iWAc-[style*="translateX(-100%)"] {
 	transform: translateX(-100%) !important;
 }
-.popout-2iWAc-[style*="translateY(-100%)"] > *:not(.scrollerWrap-2lJEkd):only-child {
+.popout-2iWAc-[style*="translateY(-100%)"] > *:only-child {
 	margin-top: -100%;
 }
-.popout-2iWAc-[style*="translateX(-50."] > *:not(.scrollerWrap-2lJEkd),
-.popout-2iWAc-[style*="translateX(-50%)"] > *:not(.scrollerWrap-2lJEkd) {
+.popout-2iWAc-[style*="translateX(-50."] > *,
+.popout-2iWAc-[style*="translateX(-50%)"] > * {
 	margin-left: -50%;
 	transform: translateX(50%);
 }
-.popout-2iWAc-[style*="translateX(-100%)"] > *:not(.scrollerWrap-2lJEkd) {
+.popout-2iWAc-[style*="translateX(-100%)"] > * {
 	margin-left: -100%;
 	transform: translateX(100%);
 }
-.popout-2iWAc-[style*="translateY(-100%)"] > *.scrollerWrap-2lJEkd:only-child > .scroller-2FKFPG {
-	margin-top: -100%;
+.popout-2iWAc-[style*="translateX(-50."] > *.scrollerWrap-2lJEkd,
+.popout-2iWAc-[style*="translateX(-50%)"] > *.scrollerWrap-2lJEkd {
+	margin-right: 50%;
 }
-.popout-2iWAc-[style*="translateX(-50."] > *.scrollerWrap-2lJEkd > .scroller-2FKFPG,
-.popout-2iWAc-[style*="translateX(-50%)"] > *.scrollerWrap-2lJEkd > .scroller-2FKFPG {
-	margin-left: -50%;
-	transform: translateX(50%);
-}
-.popout-2iWAc-[style*="translateX(-100%)"] > *.scrollerWrap-2lJEkd > .scroller-2FKFPG {
-	margin-left: -100%;
-	transform: translateX(100%);
+.popout-2iWAc-[style*="translateX(-100%)"] > *.scrollerWrap-2lJEkd {
+	margin-right: 100%;
 }
 
 #app-mount .container-2x5lvQ,								/* RTCpopout			(for example voicequality)			*/
