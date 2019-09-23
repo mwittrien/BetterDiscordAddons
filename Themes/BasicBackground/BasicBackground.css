@@ -3036,15 +3036,27 @@ body:before {
 .popout-2iWAc-[style*="translateX(-100%)"] {
 	transform: translateX(-100%) !important;
 }
-.popout-2iWAc-[style*="translateY(-100%)"] > *:only-child {
+.popout-2iWAc-[style*="translateY(-100%)"] > *:not(.scrollerWrap-2lJEkd):only-child {
 	margin-top: -100%;
 }
-.popout-2iWAc-[style*="translateX(-50."] > *,
-.popout-2iWAc-[style*="translateX(-50%)"] > * {
+.popout-2iWAc-[style*="translateX(-50."] > *:not(.scrollerWrap-2lJEkd),
+.popout-2iWAc-[style*="translateX(-50%)"] > *:not(.scrollerWrap-2lJEkd) {
 	margin-left: -50%;
 	transform: translateX(50%);
 }
-.popout-2iWAc-[style*="translateX(-100%)"] > * {
+.popout-2iWAc-[style*="translateX(-100%)"] > *:not(.scrollerWrap-2lJEkd) {
+	margin-left: -100%;
+	transform: translateX(100%);
+}
+.popout-2iWAc-[style*="translateY(-100%)"] > *.scrollerWrap-2lJEkd:only-child > .scroller-2FKFPG {
+	margin-top: -100%;
+}
+.popout-2iWAc-[style*="translateX(-50."] > *.scrollerWrap-2lJEkd > .scroller-2FKFPG,
+.popout-2iWAc-[style*="translateX(-50%)"] > *.scrollerWrap-2lJEkd > .scroller-2FKFPG {
+	margin-left: -50%;
+	transform: translateX(50%);
+}
+.popout-2iWAc-[style*="translateX(-100%)"] > *.scrollerWrap-2lJEkd > .scroller-2FKFPG {
 	margin-left: -100%;
 	transform: translateX(100%);
 }
@@ -4488,16 +4500,19 @@ body:before {
 .select-2TCrqx [class*="css-"][class*="-container"] {		/* select				container							*/
 	background-color: transparent;
 }
+#app-mount .lookFilled-1h1y05.select-1Pkeg4,
 .select-2TCrqx [class*="css-"][class*="-control"] {
 	background-color: rgba(var(--vtransparencycolor), 0.1);
 	border-color: rgba(var(--vtransparencycolor), 0.3);
 }
-.select-2TCrqx [class*="css-"][class*="-singleValue"] {
-	color: rgb(var(--fontwhite1));
+#app-mount .lookFilled-1h1y05.select-1Pkeg4:hover.selectOpen-hQuR6b,
+#app-mount .lookFilled-1h1y05.selectOpen-hQuR6b {
+	border-color: rgb(var(--vtransparencycolor)) rgb(var(--vtransparencycolor)) rgba(var(--vtransparencycolor), 0.3);
 }
-.select-2TCrqx [class*="css-"][class*="-placeholder"] {
-	color: rgb(var(--fontwhite1));
-}
+#app-mount .select-1Pkeg4,
+#app-mount .lookFilled-1h1y05 .arrow-2KJjTM,
+.select-2TCrqx [class*="css-"][class*="-singleValue"],
+.select-2TCrqx [class*="css-"][class*="-placeholder"],
 .select-2TCrqx [class*="css-"][class*="-indicatorContainer"] {
 	color: rgb(var(--fontwhite1));
 }
@@ -4516,12 +4531,15 @@ body:before {
 	background-color: rgba(var(--vtransparencycolor), 0.5);
 	color: rgb(var(--fontwhite1));
 }
+#app-mount .popout-2sKjHu,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"] {
 	background: transparent;
 	border: 1px solid rgba(var(--vtransparencycolor), 0.3);
 	box-shadow: 0px 1px 5px 0px rgba(var(--vtransparencycolor), 0.3);
 	overflow: hidden;
 }
+#app-mount .popout-2sKjHu:after,
+#app-mount .popout-2sKjHu:before,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]:after,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]:before {
 	content: "";
@@ -4535,9 +4553,11 @@ body:before {
 	pointer-events: none;
 	z-index: -1;
 }
+#app-mount .popout-2sKjHu:after,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]:after {
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
 }
+#app-mount .popout-2sKjHu:before,
 .select-2TCrqx > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"]:before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	filter: blur(var(--vpopoutblur));
@@ -4569,6 +4589,7 @@ body:before {
 }
 .clear-1pMieT .icon-3cZ1F_,
 .icon-1S6UIr.clear--Eywng,
+#app-mount .clearIcon-xXwSFS,
 #app-mount .clear-U3WkKp .clearIcon-2N9YIn,
 #app-mount .clear-U3WkKp .searchIcon-1a1-yA,
 #app-mount .clear-U3WkKp .searchIcon-32i2pb {
@@ -4576,6 +4597,7 @@ body:before {
 }
 .clear-1pMieT.iconLayout-1WxHy4:hover .icon-3cZ1F_,
 .iconLayout-3OgqU3:hover .icon-1S6UIr.clear--Eywng,
+#app-mount .clearIcon-xXwSFS:hover,
 #app-mount .clear-U3WkKp:hover .clearIcon-2N9YIn,
 #app-mount .clear-U3WkKp:hover .searchIcon-1a1-yA,
 #app-mount .clear-U3WkKp:hover .searchIcon-32i2pb {
