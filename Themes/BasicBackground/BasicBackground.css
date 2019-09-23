@@ -4516,16 +4516,19 @@ body:before {
 .select-2TCrqx [class*="css-"][class*="-indicatorContainer"] {
 	color: rgb(var(--fontwhite1));
 }
+#app-mount .optionNormal-12VR9V,
 .css-1aymab5-option,
 .css-ddw2o3-option {
 	background-color: rgba(var(--vtransparencycolor), 0.1);
 	color: rgb(var(--fontwhite2));
 }
+#app-mount .optionNormal-12VR9V:hover,
 .css-1gnr91b-option,
 .css-qgio2y-option {
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 	color: rgb(var(--fontwhite2));
 }
+#app-mount .optionActive-KkAdqq,
 .css-12o7ek3-option,
 .css-1kft5vg-option {
 	background-color: rgba(var(--vtransparencycolor), 0.5);
