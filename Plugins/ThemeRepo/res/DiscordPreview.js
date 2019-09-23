@@ -26,7 +26,7 @@ window.onmessage = function (e) {
 					theme.href = e.data.nativecss;
 					document.head.appendChild(theme);
 				}
-				if (e.data.app) document.querySelector(".preview-app").className = e.data.app;
+				if (e.data.html) document.documentElement.className = e.data.html;
 				if (e.data.titlebar) document.querySelector(".preview-titlebar").outerHTML = e.data.titlebar;
 				document.body.firstElementChild.style.removeProperty("display");
 				break;
