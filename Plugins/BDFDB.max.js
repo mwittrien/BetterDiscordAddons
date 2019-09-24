@@ -3467,7 +3467,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		return swatch ? swatch.gradient || BDFDB.colorCONVERT(swatch.style.getPropertyValue('background-color'), 'RGBCOMP') : null;
 	};
 
-	BDFDB.openColorPicker = function (container, target, color, options = {gradient: true, comp: false}) {
+	BDFDB.openColorPicker = function (container, target, color, options = {gradient: true, comp: false, alpha: false}) {
 		if (!container || !target) return;
 		var isswatches = BDFDB.containsClass(container, 'swatches');
 		var isgradient = color && BDFDB.isObject(color);
@@ -5876,14 +5876,32 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		.BDFDB-settings ${BDFDB.dotCN.checkboxcontainer}:before {
 			display: none;
 		}
-		.BDFDB-modal .swatches.disabled {
+		.BDFDB-modal .swatches.disabled,
+		.BDFDB-settings .swatches.disabled {
 			cursor: no-drop;
 			filter: grayscale(70%) brightness(50%);
 		}
-		.BDFDB-modal .swatches.disabled ${BDFDB.dotCN.colorpickerswatch} {
+		.BDFDB-modal ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchcustom + BDFDB.notCN.colorpickerswatchnocolor},
+		.BDFDB-settings ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchcustom + BDFDB.notCN.colorpickerswatchnocolor} {
+			overflow: hidden;
+		}
+		.BDFDB-modal ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchcustom + BDFDB.notCN.colorpickerswatchnocolor}:after,
+		.BDFDB-settings ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchcustom + BDFDB.notCN.colorpickerswatchnocolor}:after {
+			content: "";
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			background: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect x="0" y="0" width="4" height="4" fill="black"></rect><rect x="0" y="4" width="4" height="4" fill="white"></rect><rect x="4" y="0" width="4" height="4" fill="white"></rect><rect x="4" y="4" width="4" height="4" fill="black"></rect></svg>') center repeat;
+			z-index: -1;
+		}
+		.BDFDB-modal .swatches.disabled ${BDFDB.dotCN.colorpickerswatch},
+		.BDFDB-settings .swatches.disabled ${BDFDB.dotCN.colorpickerswatch} {
 			cursor: no-drop;
 		}
-		.BDFDB-modal ${BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchcustom}[style*="background"] {
+		.BDFDB-modal ${BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchcustom}[style*="background"],
+		.BDFDB-settings ${BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchcustom}[style*="background"] {
 			border: none;
 		}
 		${BDFDB.dotCNS.themelight + BDFDB.dotCN.colorpickersaturation} > div > div > div > div {
