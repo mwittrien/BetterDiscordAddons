@@ -117,7 +117,7 @@ class ThemeSettings {
 	getThemeVars (css) {
 		let vars = css.split(":root");
 		if (vars.length > 1) {
-			vars = vars[1].replace(/\/\*[^\/]+?\n[^\/]+?\*\//g, "").replace(/\t\(/g, " (").replace(/\t| {2,}/g, "").replace(/\n\/\*.*?\*\//g, "").replace(/[\n\r]/g, "");
+			vars = vars[1].replace(/\/\*[^\/]+?\n[^\/]+?\*\//g, "").replace(/\t\(/g, " (").replace(/\t| {2,}/g, "").replace(/\n\/\*.*?\*\//g, "").replace(/\r/g, "").replace(/\t+\n/g, "\n").replace(/\n[^-]+[^\n]+\n/g, "\n").replace(/\n/g, "");
 			vars = vars.split("{");
 			vars.shift();
 			vars = vars.join("{").replace(/\s*(:|;|--|\*)\s*/g, "$1");
