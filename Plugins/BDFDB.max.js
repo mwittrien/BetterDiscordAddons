@@ -503,7 +503,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		tooltip.position = options.position.toLowerCase();
 		tooltip.anker = anker;
 		
-		BDFDB.appendItemLayer(tooltip, anker, {css:options.css, ankerlistener:{'mouseleave':() => {tooltip.parentElement.remove();}}});
+		BDFDB.appendItemLayer(tooltip, anker, {css:options.css, ankerlistener:{'mouseleave':() => {BDFDB.removeEles(tooltip.parentElement);}}});
 
 		BDFDB.updateTooltipPosition(tooltip);
 		
