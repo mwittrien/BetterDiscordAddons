@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.7.4";} 
+	getVersion () {return "1.7.5";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class GoogleTranslateOption {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"added":[["Favorites","You can now add languages to your own favorites list, these languages will appear at the top of your choicemenu"]]
 		};
 
 		this.labels = {};
@@ -117,12 +117,6 @@ class GoogleTranslateOption {
 				padding: 0 10px;
 				width: 400px;
 			}
-			${BDFDB.dotCN.selectmenuouter}.inChat {
-				top: 0% !important;
-				transform: translateY(-100%) !important;
-				border-radius: 3px 3px 0 0 !important;
-				margin-top: 1px !important;
-			}
 			${BDFDB.dotCN.messagegroup} .GTO-translated-message ${BDFDB.dotCNS.messagebody + BDFDB.dotCN.messagemarkup} {
 				font-size: 0 !important;
 			}
@@ -201,7 +195,7 @@ class GoogleTranslateOption {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 
-			this.setLanguage();
+			this.setLanguages();
 
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
@@ -296,7 +290,7 @@ class GoogleTranslateOption {
 		}
 	}
 
-	setLanguage () {
+	setLanguages () {
 		this.languages = Object.assign({},
 			{"auto":	{name:"Auto",			id:"auto",		integrated:false,	dic:false}},
 			BDFDB.languages,
@@ -304,10 +298,13 @@ class GoogleTranslateOption {
 			{"braille":	{name:"Braille 6-dot",	id:"braille",	integrated:false,	dic:false}},
 			{"morse":	{name:"Morse",			id:"morse",		integrated:false,	dic:false}}
 		);
+		let favorites = BDFDB.loadAllData(this, "favorites")
+		for (let id in this.languages) this.languages[id].fav = favorites[id] != undefined ? 0 : 1;
+		this.languages = BDFDB.sortObject(this.languages, "fav");
 	}
 
 	getLanguageChoice (direction, place) {
-		this.setLanguage();
+		this.setLanguages();
 		var type = typeof place === "undefined" ? direction : direction.toLowerCase() + place.charAt(0).toUpperCase() + place.slice(1).toLowerCase();
 		var choice = BDFDB.getData(type, this, "choices");
 		choice = this.languages[choice] ? choice : Object.keys(this.languages)[0];
@@ -318,7 +315,7 @@ class GoogleTranslateOption {
 	processStandardSidebarView (instance, wrapper, returnvalue) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
-			this.setLanguage();
+			this.setLanguages();
 			BDFDB.removeEles(".translate-button");
 			BDFDB.WebModules.forceAllUpdates(this, "ChannelTextArea");
 		}
@@ -608,7 +605,16 @@ class GoogleTranslateOption {
 		BDFDB.addChildEventListener(translatepopout, "click", BDFDB.dotCN.selectcontrol, e => {
 			let type = BDFDB.getParentEle(BDFDB.dotCN.select, e.currentTarget).getAttribute("type");
 			let menulanguages = this.defaults.choices[type].direction == "Output" ? BDFDB.filterObject(this.languages, lang => {return lang.id != "auto";}) : this.languages;
-			BDFDB.openDropdownMenu(e, this.saveSelectChoice.bind(this), this.createSelectChoice.bind(this), menulanguages, "inChat");
+			let menu = BDFDB.openDropdownMenu(e, this.saveSelectChoice.bind(this), this.createSelectChoice.bind(this), menulanguages, true);
+			BDFDB.addChildEventListener(menu, "click", BDFDB.dotCN.giffavoritebutton, e => {
+				let choice = e.currentTarget.parentElement.getAttribute("value");
+				if (choice) {
+					let favorize = !BDFDB.loadData(choice, this, "favorites")
+					if (favorize) BDFDB.saveData(choice, true, this, "favorites");
+					else BDFDB.removeData(choice, this, "favorites");
+					this.setLanguages();
+				}
+			});
 		});
 		BDFDB.addChildEventListener(translatepopout, "click", ".reverse-button", e => {
 			let place = e.currentTarget.getAttribute("type").replace("output","");
@@ -658,7 +664,7 @@ class GoogleTranslateOption {
 	}
 
 	createSelectChoice (key) {
-		return `<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer}" style="flex: 1 1 auto;">${this.languages[key].name}</div>`;
+		return `<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer}" style="flex: 1 1 auto;">${this.languages[key].name}</div><div tabindex="0" class="${BDFDB.disCNS.giffavoritebutton + BDFDB.disCN.giffavoritecolor + (this.languages[key].fav == 0 ? ' ' + BDFDB.disCN.giffavoriteselected : '')}" role="button" style="width: 24px !important; height: 24px !important; position: relative !important; opacity: 1 !important; transform: none !important;"><svg class="${BDFDB.disCNS.giffavoriteicon}" name="Favorite" viewBox="2 2 20 20" width="24" height="24"></svg></div>`;
 	}
 
 	getGoogleTranslateApiURL (input, output, text) {

@@ -3199,6 +3199,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			selectMenu.style.setProperty('bottom', BDFDB.getRects(selectWrap).height + 'px', 'important');
 		}
 		selectWrap.appendChild(selectMenu);
+		BDFDB.initElements(selectMenu);
 
 		BDFDB.addChildEventListener(selectMenu, 'mouseenter', BDFDB.dotCN.selectoption + BDFDB.notCN.selectoptionselectlight + BDFDB.notCN.selectoptionselectdark, e2 => {
 			if (dark) {
@@ -3221,19 +3222,23 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			}	
 		});
 		BDFDB.addChildEventListener(selectMenu, 'mousedown', BDFDB.dotCN.selectoption, e2 => {
-			var newchoice = e2.currentTarget.getAttribute('value');
-			selectWrap.setAttribute('value', newchoice);
-			callback(selectWrap, type, newchoice);
+			if (!BDFDB.getParentEle(BDFDB.dotCN.giffavoritebutton, e2.target)) {
+				var newchoice = e2.currentTarget.getAttribute('value');
+				selectWrap.setAttribute('value', newchoice);
+				callback(selectWrap, type, newchoice);
+			}
 		});
 
 		var removeMenu = e2 => {
-			if (e2.target.parentElement != selectMenu) {
+			if (e2.target.parentElement != selectMenu && !BDFDB.getParentEle(BDFDB.dotCN.giffavoritebutton, e2.target)) {
 				document.removeEventListener('mousedown', removeMenu);
 				selectMenu.remove();
 				setTimeout(() => {BDFDB.removeClass(selectWrap, BDFDB.disCN.selectisopen);},100);
 			}
 		};
 		document.addEventListener('mousedown', removeMenu);
+		
+		return selectMenu;
 	};
 
 	BDFDB.openConfirmModal = function () {
