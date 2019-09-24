@@ -2794,6 +2794,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				setGifFavButton(ele);
 			};
 			addInitEventListener(ele, 'click', ele.BDFDBupdateElement);
+			var id = "FAV_s" + Math.round(Math.random() * 10000000000000000);
+			addInitEventListener(ele, 'mouseenter', () => {
+				BDFDB.removeEles(`#${id}_tooltip`);
+				BDFDB.createTooltip(BDFDB.LanguageStrings[`GIF_TOOLTIP_${BDFDB.containsClass(ele, BDFDB.disCN.giffavoriteselected) ? 'REMOVE_FROM' : 'ADD_TO'}_FAVORITES`], ele, {type:'top', id:id+_tooltip});
+			});
 		});
 		container.querySelectorAll('.file-navigator').forEach(ele => {
 			ele.BDFDBupdateElement = () => {
