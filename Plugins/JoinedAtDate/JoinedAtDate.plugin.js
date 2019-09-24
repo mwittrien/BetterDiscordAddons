@@ -3,7 +3,7 @@
 class JoinedAtDate {
 	getName () {return "JoinedAtDate";}
 
-	getVersion () {return "1.1.3";}
+	getVersion () {return "1.1.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class JoinedAtDate {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"fixed":[["Milliseconds","Milliseconds are now properlly formatted when leading zeros is enabled (9 => 009, 12 => 012)"]]
 		};
 
 		this.labels = {};
@@ -267,7 +267,7 @@ class JoinedAtDate {
 				.replace("$hour", settings.forceZeros && hour < 10 ? "0" + hour : hour)
 				.replace("$minute", minute < 10 ? "0" + minute : minute)
 				.replace("$second", second < 10 ? "0" + second : second)
-				.replace("$msecond", msecond)
+				.replace("$msecond", settings.forceZeros ? (msecond < 10 ? "00" + msecond : (msecond < 100 ? "0" + msecond : msecond)) : msecond)
 				.replace("$timemode", timemode)
 				.replace("$weekdayL", timeobj.toLocaleDateString(languageid,{weekday: "long"}))
 				.replace("$weekdayS", timeobj.toLocaleDateString(languageid,{weekday: "short"}))
