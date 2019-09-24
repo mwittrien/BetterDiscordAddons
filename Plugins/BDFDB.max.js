@@ -3467,8 +3467,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		return swatch ? swatch.gradient || BDFDB.colorCONVERT(swatch.style.getPropertyValue('background-color'), 'RGBCOMP') : null;
 	};
 
-	BDFDB.openColorPicker = function (swatches, target, color) {
-		if (!swatches || !target) return;
+	BDFDB.openColorPicker = function (container, target, color, options = {gradient: true, comp: false}) {
+		if (!container || !target) return;
+		var isswatches = BDFDB.containsClass(container, 'swatches');
 		var isgradient = color && BDFDB.isObject(color);
 		var selectedcolor = BDFDB.colorCONVERT(isgradient ? color[Object.keys(color)[0]] : color, 'HEX') || '#000000';
 		var [h, s, l] = BDFDB.colorCONVERT(selectedcolor, 'HSLCOMP');
@@ -3501,6 +3502,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (isgradient) for (let pos in color) if (pos > 0 && pos < 1) gradientpane.appendChild(BDFDB.htmlToElement(`<div class="gradient-cursor" style="position: absolute; left: ${pos * 100}%;"><div style="background-color: ${color[pos]} !important;"></div></div>`));
 
 		updateColors(false);
+		
+		if (!options.gradient) BDFDB.removeEles(colorPicker.querySelectorAll(".gradient-button, .gradient-bar"));
 
 		BDFDB.addChildEventListener(colorPicker, "mousedown", ".move-corner", e => {
 			var rects = BDFDB.getRects(colorPicker);
@@ -3645,13 +3648,21 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			satcursor.style.setProperty('top', BDFDB.mapRange([0, 100], [100, 0], parseFloat(l)) + '%', 'important');
 			huecursor.style.setProperty('left', BDFDB.mapRange([0, 360], [0, 100], h) + '%', 'important');
 			var hex = BDFDB.colorCONVERT([h, s, l], 'HEX');
-			setSwatch(swatches.querySelector(BDFDB.dotCN.colorpickerswatch + ".selected"), null, false);
-			if (isgradient) {
-				gradientpane.querySelector(".gradient-cursor.selected").firstElementChild.style.setProperty("background-color", hex);
-				updateGradient();
+			if (isswatches) {
+				setSwatch(container.querySelector(BDFDB.dotCN.colorpickerswatch + '.selected'), null, false);
+				if (isgradient) {
+					gradientpane.querySelector('.gradient-cursor.selected').firstElementChild.style.setProperty('background-color', hex);
+					updateGradient();
+				}
+				else {
+					setSwatch(container.querySelector(BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatch), [h, s, l], true);
+				}
 			}
 			else {
-				setSwatch(swatches.querySelector(BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatch), [h, s, l], true);
+				let input = container.querySelector(BDFDB.dotCN.input);
+				if (input) input.value = options.comp ? BDFDB.colorCONVERT(hex, 'RGBCOMP').join(',') : BDFDB.colorCONVERT(hex, 'RGB');
+				let swatch = container.querySelector('.single-swatch');
+				if (swatch) swatch.style.setProperty('background-color', hex, 'important');
 			}
 			if (setinput) hexinput.value = hex;
 		}
@@ -3660,7 +3671,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			var gradient = {};
 			for (let cursor of gradientpane.querySelectorAll(".gradient-cursor")) gradient[parseFloat(cursor.style.getPropertyValue("left"))/100] = cursor.firstElementChild.style.getPropertyValue("background-color");
 			gradientpane.style.setProperty("background-image", BDFDB.colorGRADIENT(gradient));
-			setSwatch(swatches.querySelector(BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatch), gradient, true);
+			setSwatch(container.querySelector(BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatch), gradient, true);
 		}
 	};
 
@@ -5984,8 +5995,18 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			background: rgba(0,0,0,.2);
 			box-shadow: 0 2px 3px 0 rgba(0,0,0,.1);
 		}
+		.BDFDB-modal .tab-content.open {
+			display: flex;
+			flex-direction: column;
+			flex-wrap: nowrap;
+			justify-content: flex-start;
+			align-items: stretch;
+		}
 		.BDFDB-modal .tab-content:not(.open) {
 			display: none;
+		}
+		.BDFDB-modal .tab-content.open > * {
+			padding: 0 20px 0 12px;
 		}
 		.colorpicker-modal .colorpicker-container {
 			padding: 10px 10px 10px 30px;
