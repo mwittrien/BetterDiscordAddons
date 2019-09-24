@@ -920,7 +920,7 @@ body:before {
 	background: rgb(var(--vaccentcolor)) !important;
 }
 
-.isLocalBot-38G0P0 {										/* botmessage			container							*/
+#app-mount .isLocalBot-38G0P0 {								/* botmessage			container							*/
 	background-image: none;
 }
 .localBotMessage-1cGMdw {									/* botmessage			details								*/
