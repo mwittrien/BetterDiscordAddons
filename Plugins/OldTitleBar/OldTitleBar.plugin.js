@@ -3,7 +3,7 @@
 class OldTitleBar {
 	getName () {return "OldTitleBar";}
 
-	getVersion () {return "1.5.8";}
+	getVersion () {return "1.5.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class OldTitleBar {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"fixed":[["Activity Page","Fixed the issue where no icosn woud be added on the activity page"]]
 		};
 
 		this.patchModules = {
@@ -225,8 +225,9 @@ class OldTitleBar {
 		var settings = BDFDB.getAllData(this, "settings");
 		if (BDFDB.getData("addOldBar", this, "settings")) {
 			var headerbar = BDFDB.htmlToElement(`<span class="headerbarOTB ${BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}"></span>`);
+			console.log(headerbar);
 			this.createButtons(headerbar);
-			let headerbaricon = document.querySelector(BDFDB.dotCN.channelheadertoolbar + " > " + BDFDB.dotCN.channelheadericonwrapper);
+			let headerbaricon = document.querySelector(BDFDB.dotCN.channelheaderchildren);
 			if (headerbaricon) headerbaricon.parentElement.appendChild(headerbar);
 			this.changeMaximizeButtons();
 		}
