@@ -3180,7 +3180,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.openDropdownMenu = function (e, callback, createinner, values, above = false, dark = BDFDB.getDiscordTheme() == BDFDB.disCN.themedark) {
 		if (typeof callback != 'function' || typeof createinner != 'function' || !values || (typeof values != 'object' && Array.isArray(values))) return;
-		let selectControl = (BDFDB.getParentEle(BDFDB.dotCN.select, e.currentTarget) || e.currentTarget).querySelector(BDFDB.dotCN.selectcontrol);
+		let selectControl = (BDFDB.getParentEle(BDFDB.dotCN.selectwrap, e.currentTarget) || e.currentTarget).querySelector(BDFDB.dotCN.selectcontrol);
 		let selectWrap = selectControl.parentElement;
 		if (BDFDB.containsClass(selectWrap, BDFDB.disCN.selectisopen)) return;
 
