@@ -225,7 +225,6 @@ class OldTitleBar {
 		var settings = BDFDB.getAllData(this, "settings");
 		if (BDFDB.getData("addOldBar", this, "settings")) {
 			var headerbar = BDFDB.htmlToElement(`<span class="headerbarOTB ${BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}"></span>`);
-			console.log(headerbar);
 			this.createButtons(headerbar);
 			let headerbaricon = document.querySelector(BDFDB.dotCN.channelheaderchildren);
 			if (headerbaricon) headerbaricon.parentElement.appendChild(headerbar);
