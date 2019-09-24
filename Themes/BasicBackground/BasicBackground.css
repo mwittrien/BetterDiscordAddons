@@ -1441,7 +1441,7 @@ body:before {
 }
 #app-mount .popout-3G62UL {									/* playingpopout		container							*/
 	background-color: transparent;
-	box-shadow: 0 8px 16px rgba(var(--vtransparencycolor), 0.24);
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 8px 16px 0 rgba(var(--vtransparencycolor), 0.3);
 	overflow: hidden;
 }
 .popout-3G62UL:after,
