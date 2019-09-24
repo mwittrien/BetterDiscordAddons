@@ -83,7 +83,7 @@ class SpellCheck {
 
 		BDFDB.addEventListener(this, settingspanel, "click", ".remove-word", e => {this.removeFromOwnDictionarye;});
 		BDFDB.addEventListener(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {
-			BDFDB.openDropdownMenu(e, this.saveSelectChoice.bind(this), this.createSelectChoice.bind(this), this.languages, "inSettings");
+			BDFDB.openDropdownMenu(e, this.saveSelectChoice.bind(this), this.createSelectChoice.bind(this), this.languages);
 		});
 		return settingspanel;
 	}

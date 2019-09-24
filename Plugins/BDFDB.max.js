@@ -3179,8 +3179,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.openDropdownMenu = function (e, callback, createinner, values, above = false, dark = BDFDB.getDiscordTheme() == BDFDB.disCN.themedark) {
-		if (typeof callback != 'function' || typeof createinner != 'function' || !values || typeof values != 'object') return;
-		let selectControl = e.currentTarget;
+		if (typeof callback != 'function' || typeof createinner != 'function' || !values || (typeof values != 'object' && Array.isArray(values))) return;
+		let selectControl = (BDFDB.getParentEle(BDFDB.dotCN.select, e.currentTarget) || e.currentTarget).querySelector(BDFDB.dotCN.selectcontrol);
 		let selectWrap = selectControl.parentElement;
 		if (BDFDB.containsClass(selectWrap, BDFDB.disCN.selectisopen)) return;
 
@@ -3190,7 +3190,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		var oldchoice = selectWrap.getAttribute('value');
 		var suffix = dark ? 'dark' : 'light';
 		var menuhtml = `<div class="${BDFDB.disCNS.selectmenuouter + BDFDB.disCN["selectmenuouter" + suffix]}"><div class="${BDFDB.disCN.selectmenu}">`;
-		for (var key in values) menuhtml += `<div value="${key}" class="${BDFDB.disCNS.selectoption + (key == oldchoice ? BDFDB.disCN["selectoptionselect" + suffix] : BDFDB.disCN["selectoption" + suffix])}" style="flex: 1 1 auto; display: flex;">${createinner(key)}</div>`;
+		if (Array.isArray(values)) for (var key of values) menuhtml += `<div value="${key}" class="${BDFDB.disCNS.selectoption + (key == oldchoice ? BDFDB.disCN["selectoptionselect" + suffix] : BDFDB.disCN["selectoption" + suffix])}" style="flex: 1 1 auto; display: flex;">${createinner(key)}</div>`;
+		else for (var key in values) menuhtml += `<div value="${key}" class="${BDFDB.disCNS.selectoption + (key == oldchoice ? BDFDB.disCN["selectoptionselect" + suffix] : BDFDB.disCN["selectoption" + suffix])}" style="flex: 1 1 auto; display: flex;">${createinner(key)}</div>`;
 		menuhtml += `</div></div>`;
 		var selectMenu = BDFDB.htmlToElement(menuhtml);
 		if (above) {

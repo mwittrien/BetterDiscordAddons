@@ -186,7 +186,7 @@ class NotificationSounds {
 			let songSelect = settingspanel.querySelector(`${BDFDB.dotCN.select}[type="${type[0]} song"]`);
 			let categorySelect = settingspanel.querySelector(`${BDFDB.dotCN.select}[type="${type[0]} category"]`);
 			let menuaudios = type[1] == "song" ? this.audios[categorySelect.getAttribute("value")] : this.audios;
-			BDFDB.openDropdownMenu(e, this.saveSelectChoice.bind(this), this.createSelectChoice.bind(this), menuaudios, "inSettings");
+			BDFDB.openDropdownMenu(e, this.saveSelectChoice.bind(this), this.createSelectChoice.bind(this), menuaudios);
 		});
 
 		return settingspanel;

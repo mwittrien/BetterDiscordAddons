@@ -86,7 +86,7 @@ class MessageUtilities {
 		BDFDB.addEventListener(this, settingspanel, "click", ".reset-recorder", e => {this.resetRecorder(settingspanel, e);})
 		BDFDB.addEventListener(this, settingspanel, "click", ".reset-button", () => {this.resetAll(settingspanel);});
 		BDFDB.addEventListener(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {
-			BDFDB.openDropdownMenu(e, this.saveSelectChoice.bind(this), this.createSelectChoice.bind(this), this.clickMap, "inSettings");
+			BDFDB.openDropdownMenu(e, this.saveSelectChoice.bind(this), this.createSelectChoice.bind(this), this.clickMap);
 		});
 
 		return settingspanel;
