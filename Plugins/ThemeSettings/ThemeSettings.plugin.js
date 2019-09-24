@@ -3,7 +3,7 @@
 class ThemeSettings {
 	getName () {return "ThemeSettings";}
 
-	getVersion () {return "1.1.2";}
+	getVersion () {return "1.1.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -117,7 +117,7 @@ class ThemeSettings {
 	getThemeVars (css) {
 		let vars = css.split(":root");
 		if (vars.length > 1) {
-			vars = vars[1].replace(/\/\*[^\/]+?\n[^\/]+?\*\//g, "").replace(/\t\(/g, " (").replace(/\t| {2,}/g, "").replace(/\n\/\*.*?\*\//g, "").replace(/\r/g, "").replace(/\t+\n/g, "\n").replace(/\n[^\{\}]-+[^\n]+\n/g, "\n").replace(/\n/g, "");
+			vars = vars[1].replace(/\/\*[^\/]+?\n[^\/]+?\*\//g, "").replace(/\t\(/g, " (").replace(/\t| {2,}/g, "").replace(/\n\/\*.*?\*\//g, "").replace(/\r/g, "").replace(/[\t\s]+\n/g, "\n").replace(/\n[^\{\}-]+[^\n]+/g, "\n").replace(/\n/g, "");
 			vars = vars.split("{");
 			vars.shift();
 			vars = vars.join("{").replace(/\s*(:|;|--|\*)\s*/g, "$1");
