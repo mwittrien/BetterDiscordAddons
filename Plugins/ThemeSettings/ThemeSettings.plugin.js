@@ -3,7 +3,7 @@
 class ThemeSettings {
 	getName () {return "ThemeSettings";}
 
-	getVersion () {return "1.1.1";}
+	getVersion () {return "1.1.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ThemeSettings {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"fixed":[["Parsing Bug","Fixed a small parsing bug with comments"]]
 		};
 		
 		this.patchModules = {
@@ -117,10 +117,10 @@ class ThemeSettings {
 	getThemeVars (css) {
 		let vars = css.split(":root");
 		if (vars.length > 1) {
-			vars = vars[1].replace(/\t| {2,}/g,"").replace(/\n\/\*.*?\*\//g,"").replace(/[\n\r]/g,"");
+			vars = vars[1].replace(/\/\*[^\/]+?\n[^\/]+?\*\//g, "").replace(/\t\(/g, " (").replace(/\t| {2,}/g, "").replace(/\n\/\*.*?\*\//g, "").replace(/[\n\r]/g, "");
 			vars = vars.split("{");
 			vars.shift();
-			vars = vars.join("{").replace(/\s*(:|;|--|\*)\s*/g,"$1");
+			vars = vars.join("{").replace(/\s*(:|;|--|\*)\s*/g, "$1");
 			vars = vars.split("}")[0];
 			return vars.slice(2).split(/;--|\*\/--/);
 		}
@@ -141,13 +141,15 @@ class ThemeSettings {
 			let varname = varstr.shift().trim();
 			varstr = varstr.join(":").split(/;[^A-z0-9]|\/\*/);
 			let varvalue = varstr.shift().trim();
-			let vardescription = varstr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
-			vardescription = vardescription && vardescription.indexOf("*") == 0 ? vardescription.slice(1) : vardescription;
-			var varcontainer = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%;">${varname[0].toUpperCase() + varname.slice(1)}:</h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" option="${varname}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}"></div></div>${vardescription ? '<div class="' + BDFDB.disCNS.description + BDFDB.disCNS.note + BDFDB.disCN.primary + ' BDFDB-textscrollwrapper" style="flex: 1 1 auto; max-width: ' + maxwidth + 'px !important;"><div class="BDFDB-textscroll">' + BDFDB.encodeToHTML(vardescription) + '</div></div>' : ""}${vars[vars.length-1] == varstr ? '' : '<div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.modaldividerdefault}"></div>'}</div>`);
-			let varinput = varcontainer.querySelector(BDFDB.dotCN.input);
-			varinput.value = varvalue || "";
-			varinput.setAttribute("placeholder", varvalue || "");
-			settingspanelinner.appendChild(varcontainer);
+			if (varvalue) {
+				let vardescription = varstr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
+				vardescription = vardescription && vardescription.indexOf("*") == 0 ? vardescription.slice(1) : vardescription;
+				var varcontainer = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%;">${varname[0].toUpperCase() + varname.slice(1)}:</h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" option="${varname}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}"></div></div>${vardescription ? '<div class="' + BDFDB.disCNS.description + BDFDB.disCNS.note + BDFDB.disCN.primary + ' BDFDB-textscrollwrapper" style="flex: 1 1 auto; max-width: ' + maxwidth + 'px !important;"><div class="BDFDB-textscroll">' + BDFDB.encodeToHTML(vardescription) + '</div></div>' : ""}${vars[vars.length-1] == varstr ? '' : '<div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.modaldividerdefault}"></div>'}</div>`);
+				let varinput = varcontainer.querySelector(BDFDB.dotCN.input);
+				varinput.value = varvalue || "";
+				varinput.setAttribute("placeholder", varvalue || "");
+				settingspanelinner.appendChild(varcontainer);
+			}
 		}
 
 		BDFDB.initElements(settingspanel, this);
