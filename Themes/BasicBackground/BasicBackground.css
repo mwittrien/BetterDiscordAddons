@@ -3029,6 +3029,10 @@ body:before {
 .popout-2iWAc-[style*="translateX(-50%)"] {
 	transform: translateX(-50%) !important;
 }
+.popout-2iWAc-[style*="translateX(-84."],
+.popout-2iWAc-[style*="translateX(-84%)"] {
+	transform: translateX(-84%) !important;
+}
 .popout-2iWAc-[style*="translateX(-100%)"] {
 	transform: translateX(-100%) !important;
 }
@@ -3039,6 +3043,11 @@ body:before {
 .popout-2iWAc-[style*="translateX(-50%)"] > * {
 	margin-left: -50%;
 	transform: translateX(50%);
+}
+.popout-2iWAc-[style*="translateX(-84."] > *,
+.popout-2iWAc-[style*="translateX(-84%)"] > * {
+	margin-left: -84%;
+	transform: translateX(84%);
 }
 .popout-2iWAc-[style*="translateX(-100%)"] > * {
 	margin-left: -100%;
