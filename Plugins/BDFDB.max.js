@@ -3752,17 +3752,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 	DiscordClassModules.NotFound = {
 		_: '',
-		applicationStore: 'applicationStore-1pNvnv',
 		avatarStopAnimation: 'stop-animation',
 		badgeWrapper: 'wrapper-232cHJ',
 		nameContainerNameContainer: 'container-2ax-kl',
-		gameLibrary: 'gameLibrary-TTDw4Y',
 		guildChannels: 'container-PNkimc',
 		guildBadgeWrapper: 'guild-badge-wrapper-deprecated',
 		highlight: 'highlight',
 		hoverCardButton: 'button-2CgfFz',
 		loginScreen: 'wrapper-3Q5DdO',
-		lfg: 'lfg-3xoFkI',
 		mention: 'mention',
 		select: 'css-1kj8ui-container',
 		selectArrow: 'css-19bqh2r',
@@ -3801,8 +3798,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.ActivityFeed = BDFDB.WebModules.findByProperties('activityFeed');
 	DiscordClassModules.Anchor = BDFDB.WebModules.findByProperties('anchor', 'anchorUnderlineOnHover');
 	DiscordClassModules.AppBase = BDFDB.WebModules.findByProperties('container', 'base');
-	DiscordClassModules.AppMount = BDFDB.WebModules.findByProperties('appMount');
 	DiscordClassModules.AppInner = BDFDB.WebModules.findByProperties('app');
+	DiscordClassModules.AppMount = BDFDB.WebModules.findByProperties('appMount');
+	DiscordClassModules.ApplicationStore = BDFDB.WebModules.findByProperties('applicationStore', 'navigation');
 	DiscordClassModules.AppOuter = BDFDB.WebModules.find(module => typeof module.app == 'string' && module != DiscordClassModules.AppInner);
 	DiscordClassModules.AuditLog = BDFDB.WebModules.findByProperties('auditLog');
 	DiscordClassModules.AuthBox = BDFDB.WebModules.findByProperties('authBox');
@@ -3848,10 +3846,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.FormText = BDFDB.WebModules.findByProperties('description', 'modeDefault');
 	DiscordClassModules.Friends = BDFDB.WebModules.findByProperties('friendsColumn', 'friendsRow');
 	DiscordClassModules.Game = BDFDB.WebModules.findByProperties('game', 'gameName');
+	DiscordClassModules.GameLibrary = BDFDB.WebModules.findByProperties('gameLibrary', 'scroller');
 	DiscordClassModules.GifFavoriteButton = BDFDB.WebModules.findByProperties('gifFavoriteButton', 'showPulse');
 	DiscordClassModules.GiftInventory = BDFDB.WebModules.find(module => typeof module['root'] == 'string' && typeof module['body'] == 'string' && (Object.keys(module).length == 2 || Object.keys(module).length == 3));
 	DiscordClassModules.Guild = BDFDB.WebModules.findByProperties('wrapper', 'lowerBadge', 'svg');
 	DiscordClassModules.GuildChannels = BDFDB.WebModules.findByProperties('positionedContainer', 'unreadBar');
+	DiscordClassModules.GuildDiscovery = BDFDB.WebModules.findByProperties('pageWrapper', 'guildCard');
 	DiscordClassModules.GuildDm = BDFDB.WebModules.find(module => typeof module['pill'] == 'string' && Object.keys(module).length == 1);
 	DiscordClassModules.GuildEdges = BDFDB.WebModules.findByProperties('wrapper', 'edge', 'autoPointerEvents')
 	DiscordClassModules.GuildFolder = BDFDB.WebModules.findByProperties('folder', 'expandedGuilds')
@@ -3876,6 +3876,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.ItemLayerContainer = BDFDB.WebModules.findByProperties('layer', 'layerContainer');
 	DiscordClassModules.Input = BDFDB.WebModules.findByProperties('inputMini', 'inputDefault');
 	DiscordClassModules.Layers = BDFDB.WebModules.findByProperties('layer', 'layers');
+	DiscordClassModules.LFG = DFDB.WebModules.findByProperties('lfg', 'topSectionHeader');
 	DiscordClassModules.Margins = BDFDB.WebModules.findByProperties('marginBottom4', 'marginCenterHorz');
 	DiscordClassModules.Member = BDFDB.WebModules.findByProperties('member', 'ownerIcon');
 	DiscordClassModules.MembersWrap = BDFDB.WebModules.findByProperties('membersWrap', 'membersGroup');
@@ -3989,7 +3990,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		app: ['AppOuter', 'app'],
 		appcontainer: ['AppBase', 'container'],
 		appmount: ['AppMount', 'appMount'],
-		applicationstore: ['NotFound', 'applicationStore'],
+		applicationstore: ['ApplicationStore', 'applicationStore'],
 		appold: ['AppInner', 'app'],
 		auditlog: ['AuditLog', 'auditLog'],
 		auditloguserhook: ['AuditLog', 'userHook'],
@@ -4134,6 +4135,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		channelheaderchildren: ['HeaderBar', 'children'],
 		channelheaderdivider: ['HeaderBar', 'divider'],
 		channelheaderheaderbar: ['HeaderBar', 'container'],
+		channelheaderheaderbarthemed: ['HeaderBar', 'themed'],
 		channelheaderheaderbartitle: ['HeaderBar', 'title'],
 		channelheadericon: ['HeaderBar', 'icon'],
 		channelheadericonbadge: ['HeaderBar', 'iconBadge'],
@@ -4154,6 +4156,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		channelmodeselected: ['Channel', 'modeSelected'],
 		channelmodeunread: ['Channel', 'modeUnread'],
 		channelname: ['Channel', 'name'],
+		channelpanels: ['AppBase', 'panels'],
 		channels: ['AppBase', 'sidebar'],
 		channelselected: ['ChannelContainer', 'selected'],
 		channelsscroller: ['GuildChannels', 'scroller'],
@@ -4339,7 +4342,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		friendstableheader: ['Friends', 'friendsTableHeader'],
 		friendsusername: ['Friends', 'username'],
 		game: ['Game', 'game'],
-		gamelibrary: ['NotFound', 'gameLibrary'],
+		gamelibrary: ['GameLibrary', 'gameLibrary'],
 		gamelibrarytable: ['Table', 'table'],
 		gamelibrarytableheader: ['Table', 'header'],
 		gamelibrarytablestickyheader: ['Table', 'stickyHeader'],
@@ -4366,6 +4369,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		guildbuttonselected: ['GuildsItems', 'selected'],
 		guildchannels: ['NotFound', 'guildChannels'],
 		guildcontainer: ['GuildServer', 'blobContainer'],
+		guilddiscovery: ['GuildDiscovery', 'pageWrapper'],
 		guildedge: ['GuildEdges', 'edge'],
 		guildedgemiddle: ['GuildEdges', 'middle'],
 		guildedgewrapper: ['GuildEdges', 'wrapper'],
@@ -4496,7 +4500,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		large: ['TextStyle', 'large'],
 		layer: ['Layers', 'layer'],
 		layers: ['Layers', 'layers'],
-		lfg: ['NotFound', 'lfg'],
+		lfg: ['LFG', 'lfg'],
 		loginscreen: ['NotFound', 'loginScreen'],
 		marginbottom4: ['Margins', 'marginBottom4'],
 		marginbottom8: ['Margins', 'marginBottom8'],

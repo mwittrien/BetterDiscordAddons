@@ -147,19 +147,24 @@ body,														/* body														*/
 #app-mount .layer-3QrUeG,									/* layer				container							*/
 #app-mount .container-PNkimc,								/* channels				inner								*/
 #app-mount .privateChannels-1nO12o,							/* dmchannels												*/
-#app-mount .panels-j1Uci_,									/* account/voice		container							*/
+#app-mount .panels-j1Uci_ > *,								/* account/voice		inner								*/
 #app-mount .chat-3bRxxu,									/* chat					container							*/
 #app-mount .noChannel-Z1DQK7,								/* nochannel												*/
 #app-mount .activityFeed-1C0EmJ,							/* activityfeed												*/
 #app-mount .gameLibrary-TTDw4Y,								/* library													*/
 #app-mount .root-1BQpZw,									/* giftinventory											*/
 #app-mount .applicationStore-1pNvnv,						/* store													*/
-#app-mount .lfg-3xoFkI,										/* LFG														*/
+#app-mount .lfg-3zDSPN,										/* LFG														*/
 #app-mount .container-3gCOGc,								/* friends													*/
 #app-mount .pageWrapper-1PgVDX,								/* guilddiscovery											*/
 #app-mount .scroller-2FKFPG,								/* scroller													*/
-#app-mount .standardSidebarView-3F1I7i {					/* settings													*/
+#app-mount .standardSidebarView-3F1I7i,						/* settings													*/
+#app-mount .contentRegion-3nDuYy {							/* settings				content								*/
 	background: transparent;
+}
+
+#app-mount .sidebarRegion-VFTUkN {							/* settings				sidebar								*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 
 #app-mount {												/* app-mount												*/
@@ -171,8 +176,11 @@ body,														/* body														*/
 #app-mount .sidebar-2K8pFh {								/* channels				container							*/
 	background-color: rgba(var(--vtransparencycolor), var(--vguildchanneltransparency));
 }
-#app-mount .panels-j1Uci_ > * {								/* account/voice		inner								*/
+#app-mount .panels-j1Uci_ {									/* account/voice		container							*/
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vguildchanneltransparency) / 1.5));
+}
+#app-mount .container-1r6BKw.themed-ANHk51 {				/* channelheader		container							*/
+	background-color: rgba(var(--vtransparencycolor), var(--vguildchanneltransparency));
 }
 #app-mount .membersWrap-2h-GB4 {							/* members				container							*/
 	background-color: rgba(var(--vtransparencycolor), var(--vmemberlistransparency));
@@ -585,11 +593,8 @@ body:before {
 
 /* ----		5.4.	ACCOUNT/VOICE/GOLIVE			---- */
 
-.panels-j1Uci_ > * {
+.panels-j1Uci_ > * {										/* account/voice		inner								*/
 	border: none;
-}
-.panels-j1Uci_ > *:first-child {
-	border-radius: 0 10px 0 0;
 }
 .panels-j1Uci_ > * + * {
 	border-top: 1px solid rgba(var(--fontwhite4), 0.2);
@@ -625,7 +630,6 @@ body:before {
 	color: rgb(var(--fontwhite1));
 }
 .container-1r6BKw.themed-ANHk51 {							/* header				themedcontainer						*/
-	background-color: rgba(var(--vtransparencycolor), var(--vguildchanneltransparency));
 	box-shadow: 0 1px 0 rgba(var(--vtransparencycolor), 0.2),0 1.5px 0 rgba(var(--vtransparencycolor), 0.05),0 2px 0 rgba(var(--vtransparencycolor), 0.05);
 }
 
@@ -1947,10 +1951,6 @@ body:before {
 
 /* ~~~~		12.		USERSETTINGS					~~~~ */
 
-.sidebarRegion-VFTUkN {										/* sidebar				container							*/
-	background-color: rgba(var(--vtransparencycolor), 0.2);
-}
-
 .themed-OHr7kt.item-PXvHYJ {								/* sidebar				item								*/
 	color: rgb(var(--fontwhite3));
 }
@@ -1999,10 +1999,6 @@ body:before {
 }
 #app-mount .keybind-KpFkfr {								/* closebutton			keybind								*/
 	color: rgb(var(--fontwhite4));
-}
-
-.contentRegion-3nDuYy {										/* settingsitems		container							*/
-	background-color: transparent;
 }
 
 .cardPrimary-1Hv-to, .cardPrimaryEditable-3KtE4g {			/* settingsitems		card								*/
