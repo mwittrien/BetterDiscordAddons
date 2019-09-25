@@ -3,7 +3,7 @@
 class OwnerTag {
 	getName () {return "OwnerTag";}
 
-	getVersion () {return "1.1.7";}
+	getVersion () {return "1.1.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class OwnerTag {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"improved":[["Transparent colors","Added compatibility for (semi-)transparent colors"]]
 		};
 
 		this.patchModules = {
@@ -188,7 +188,7 @@ class OwnerTag {
 			let invert = container && container.firstElementChild && !(BDFDB.containsClass(container.firstElementChild, BDFDB.disCN.userpopoutheadernormal) || BDFDB.containsClass(container.firstElementChild, BDFDB.disCN.userprofiletopsectionnormal));
 			BDFDB.addClass(tag, invert ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular);
 			let EditUsersData = BDFDB.isPluginEnabled("EditUsers") ? window.bdplugins.EditUsers.plugin.getUserData(info.id, wrapper) : {};
-			let tagcolor = BDFDB.colorCONVERT(EditUsersData.color1 || member.colorString, "RGB");
+			let tagcolor = BDFDB.colorCONVERT(EditUsersData.color1 || member.colorString, "RGBA");
 			let isbright = BDFDB.colorISBRIGHT(tagcolor);
 			tagcolor = isbright ? (settings.useBlackFont ? tagcolor : BDFDB.colorCHANGE(tagcolor, -0.3)) : tagcolor;
 			tag.style.setProperty(invert ? "color" : "background-color", tagcolor, "important");
@@ -196,7 +196,7 @@ class OwnerTag {
 			wrapper.insertBefore(tag, wrapper.querySelector(".TRE-tag,svg[name=MobileDevice]"));
 		}
 		else {
-			let crown = BDFDB.htmlToElement(`<svg name="Crown" class="owner-tag-crown ${isowner ? "owner-tag-owner" : "owner-tag-admin"} ${BDFDB.disCNS.membericon + BDFDB.disCN.memberownericon}" aria-hidden="false" width="24" height="24" viewBox="0 0 16 16"><g fill="none" fill-rule="evenodd"><path fill-rule="evenodd" clip-rule="evenodd" d="M13.6572 5.42868C13.8879 5.29002 14.1806 5.30402 14.3973 5.46468C14.6133 5.62602 14.7119 5.90068 14.6473 6.16202L13.3139 11.4954C13.2393 11.7927 12.9726 12.0007 12.6666 12.0007H3.33325C3.02725 12.0007 2.76058 11.792 2.68592 11.4954L1.35258 6.16202C1.28792 5.90068 1.38658 5.62602 1.60258 5.46468C1.81992 5.30468 2.11192 5.29068 2.34325 5.42868L5.13192 7.10202L7.44592 3.63068C7.46173 3.60697 7.48377 3.5913 7.50588 3.57559C7.5192 3.56612 7.53255 3.55663 7.54458 3.54535L6.90258 2.90268C6.77325 2.77335 6.77325 2.56068 6.90258 2.43135L7.76458 1.56935C7.89392 1.44002 8.10658 1.44002 8.23592 1.56935L9.09792 2.43135C9.22725 2.56068 9.22725 2.77335 9.09792 2.90268L8.45592 3.54535C8.46794 3.55686 8.48154 3.56651 8.49516 3.57618C8.51703 3.5917 8.53897 3.60727 8.55458 3.63068L10.8686 7.10202L13.6572 5.42868ZM2.66667 12.6673H13.3333V14.0007H2.66667V12.6673Z" fill="${isowner ? "currentColor" : "#b3b3b3"}"></path></svg>`);
+			let crown = BDFDB.htmlToElement(`<svg name="Crown" class="owner-tag-crown ${isowner ? "owner-tag-owner" : "owner-tag-admin"} ${BDFDB.disCN.memberownericon}" aria-hidden="false" width="24" height="24" viewBox="0 0 16 16"><g fill="none" fill-rule="evenodd"><path fill-rule="evenodd" clip-rule="evenodd" d="M13.6572 5.42868C13.8879 5.29002 14.1806 5.30402 14.3973 5.46468C14.6133 5.62602 14.7119 5.90068 14.6473 6.16202L13.3139 11.4954C13.2393 11.7927 12.9726 12.0007 12.6666 12.0007H3.33325C3.02725 12.0007 2.76058 11.792 2.68592 11.4954L1.35258 6.16202C1.28792 5.90068 1.38658 5.62602 1.60258 5.46468C1.81992 5.30468 2.11192 5.29068 2.34325 5.42868L5.13192 7.10202L7.44592 3.63068C7.46173 3.60697 7.48377 3.5913 7.50588 3.57559C7.5192 3.56612 7.53255 3.55663 7.54458 3.54535L6.90258 2.90268C6.77325 2.77335 6.77325 2.56068 6.90258 2.43135L7.76458 1.56935C7.89392 1.44002 8.10658 1.44002 8.23592 1.56935L9.09792 2.43135C9.22725 2.56068 9.22725 2.77335 9.09792 2.90268L8.45592 3.54535C8.46794 3.55686 8.48154 3.56651 8.49516 3.57618C8.51703 3.5917 8.53897 3.60727 8.55458 3.63068L10.8686 7.10202L13.6572 5.42868ZM2.66667 12.6673H13.3333V14.0007H2.66667V12.6673Z" fill="${isowner ? "currentColor" : "#b3b3b3"}"></path></svg>`);
 			crown.addEventListener("mouseenter", () => {
 				BDFDB.createTooltip(isowner ? (channel.type == 3 ? BDFDB.LanguageStrings.GROUP_OWNER : BDFDB.LanguageStrings.GUILD_OWNER) : BDFDB.LanguageStrings.ADMINISTRATOR, crown, {type: "top"});
 			});

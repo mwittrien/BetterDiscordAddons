@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.3.7";}
+	getVersion () {return "6.3.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ServerFolders {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Canary","Fixed bugs for the canary changes ... AGAIN"]]
+			"improved":[["Transparent colors","Added compatibility for (semi-)transparent colors"]]
 		};
 
 		this.labels = {};
@@ -888,9 +888,9 @@ class ServerFolders {
 			if (!newdata || !newdata.folderName) return;
 			var isgradient3 = newdata.color3 && BDFDB.isObject(newdata.color3);
 			var isgradient4 = newdata.color4 && BDFDB.isObject(newdata.color4);
-			var bgColor = newdata.color3 ? (!isgradient3 ? BDFDB.colorCONVERT(newdata.color3, "RGB") : BDFDB.colorGRADIENT(newdata.color3)) : "";
-			var fontColor = newdata.color4 ? (!isgradient4 ? BDFDB.colorCONVERT(newdata.color4, "RGB") : BDFDB.colorGRADIENT(newdata.color4)) : "";
-			BDFDB.createTooltip(isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(newdata.folderName)}</span>` : newdata.folderName, folderdivinner, {type:"right", selector:"guild-folder-tooltip", style:`${isgradient4 ? '' : 'color: ' + fontColor + ' !important; '}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.colorCONVERT(data.color3[0], "RGB") : bgColor} !important;`, html:isgradient3});
+			var bgColor = newdata.color3 ? (!isgradient3 ? BDFDB.colorCONVERT(newdata.color3, "RGBA") : BDFDB.colorGRADIENT(newdata.color3)) : "";
+			var fontColor = newdata.color4 ? (!isgradient4 ? BDFDB.colorCONVERT(newdata.color4, "RGBA") : BDFDB.colorGRADIENT(newdata.color4)) : "";
+			BDFDB.createTooltip(isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(newdata.folderName)}</span>` : newdata.folderName, folderdivinner, {type:"right", selector:"guild-folder-tooltip", style:`${isgradient4 ? '' : 'color: ' + fontColor + ' !important; '}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.colorCONVERT(data.color3[0], "RGBA") : bgColor} !important;`, html:isgradient3});
 		});
 		folderdiv.addEventListener("contextmenu", e => {
 			let newdata = BDFDB.loadData(folderdiv.id, this, "folders");
@@ -1203,9 +1203,9 @@ class ServerFolders {
 				let color4 = folderData.copyTooltipColor ? folderData.color4 : null;
 				let isgradient3 = color3 && BDFDB.isObject(color3);
 				let isgradient4 = color4 && BDFDB.isObject(color4);
-				let bgColor = color3 ? (!isgradient3 ? BDFDB.colorCONVERT(color3, "RGB") : BDFDB.colorGRADIENT(color3)) : "";
-				let fontColor = color4 ? (!isgradient4 ? BDFDB.colorCONVERT(color4, "RGB") : BDFDB.colorGRADIENT(color4)) : "";
-				BDFDB.createTooltip(isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(info.name)}</span>` : info.name, guildcopyinner, {type:"right", selector:"guild-folder-tooltip", style:`${isgradient4 ? '' : 'color: ' + fontColor + ' !important; '}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.colorCONVERT(color3[0], "RGB") : bgColor} !important;`, html:isgradient3});
+				let bgColor = color3 ? (!isgradient3 ? BDFDB.colorCONVERT(color3, "RGBA") : BDFDB.colorGRADIENT(color3)) : "";
+				let fontColor = color4 ? (!isgradient4 ? BDFDB.colorCONVERT(color4, "RGBA") : BDFDB.colorGRADIENT(color4)) : "";
+				BDFDB.createTooltip(isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(info.name)}</span>` : info.name, guildcopyinner, {type:"right", selector:"guild-folder-tooltip", style:`${isgradient4 ? '' : 'color: ' + fontColor + ' !important; '}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.colorCONVERT(color3[0], "RGBA") : bgColor} !important;`, html:isgradient3});
 			}
 			if (guildicon && guildicon.src && info.icon && info.icon.startsWith("a_") && info.features.has("ANIMATED_ICON") && guildicon.src.includes("discordapp.com/icons/")) {
 				guildicon.src = guildicon.src.replace(".webp", ".gif");

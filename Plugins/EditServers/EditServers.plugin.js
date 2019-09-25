@@ -3,7 +3,7 @@
 class EditServers {
 	getName () {return "EditServers";}
 
-	getVersion () {return "2.0.5";} 
+	getVersion () {return "2.0.6";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditServers {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"improved":[["Transparent colors","Added compatibility for (semi-)transparent colors"]]
 		};
 
 		this.labels = {};
@@ -482,11 +482,11 @@ class EditServers {
 		let data = this.getGuildData(info.id, guildname);
 		if (data.name || data.color2 || guildname.getAttribute("changed-by-editservers")) {
 			if (BDFDB.isObject(data.color2)) {
-				guildname.style.setProperty("color", BDFDB.colorCONVERT(data.color2[Object.keys(data.color2)[0]], "RGB"), "important");
+				guildname.style.setProperty("color", BDFDB.colorCONVERT(data.color2[Object.keys(data.color2)[0]], "RGBA"), "important");
 				BDFDB.setInnerText(guildname, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color2)} !important;">${BDFDB.encodeToHTML(data.name || info.name)}</span>`));
 			}
 			else {
-				guildname.style.setProperty("color", BDFDB.colorCONVERT(data.color2, "RGB"), "important");
+				guildname.style.setProperty("color", BDFDB.colorCONVERT(data.color2, "RGBA"), "important");
 				BDFDB.setInnerText(guildname, data.name || info.name);
 			}
 			if (data.name && BDFDB.containsClass(guildname, BDFDB.disCN.guildheadername) && BDFDB.getData("addOriginalTooltip", this, "settings")) {
@@ -525,9 +525,9 @@ class EditServers {
 					let fakeicon = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.guildiconacronym} fake-guildacronym" aria-label="Server Acronym"></div>`);
 					if (data.color1) {
 						if (BDFDB.isObject(data.color1)) fakeicon.style.setProperty("background-image", BDFDB.colorGRADIENT(data.color1));
-						else fakeicon.style.setProperty("background-color", BDFDB.colorCONVERT(data.color1, "RGB"));
+						else fakeicon.style.setProperty("background-color", BDFDB.colorCONVERT(data.color1, "RGBA"));
 					}
-					if (data.color2) fakeicon.style.setProperty("color", BDFDB.colorCONVERT(BDFDB.isObject(data.color2) ? data.color2[Object.keys(data.color2)[0]] : data.color2, "RGB"));
+					if (data.color2) fakeicon.style.setProperty("color", BDFDB.colorCONVERT(BDFDB.isObject(data.color2) ? data.color2[Object.keys(data.color2)[0]] : data.color2, "RGBA"));
 					BDFDB.setInnerText(fakeicon, BDFDB.isObject(data.color2) ? BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color2)} !important;">${BDFDB.encodeToHTML(shortname)}</span>`) : shortname);
 					icon.parentElement.appendChild(fakeicon);
 					fakeicon.style.setProperty("font-size", this.getFontSize(fakeicon));
@@ -541,13 +541,13 @@ class EditServers {
 				else {
 					if (data.color1) {
 						if (BDFDB.isObject(data.color1)) icon.style.setProperty("background-image", BDFDB.colorGRADIENT(data.color1));
-						else icon.style.setProperty("background-color", BDFDB.colorCONVERT(data.color1, "RGB"));
+						else icon.style.setProperty("background-color", BDFDB.colorCONVERT(data.color1, "RGBA"));
 					}
 					else {
 						icon.style.removeProperty("background-image");
 						icon.style.removeProperty("background-color");
 					}
-					if (data.color2) icon.style.setProperty("color", BDFDB.colorCONVERT(BDFDB.isObject(data.color2) ? data.color2[Object.keys(data.color2)[0]] : data.color2, "RGB"));
+					if (data.color2) icon.style.setProperty("color", BDFDB.colorCONVERT(BDFDB.isObject(data.color2) ? data.color2[Object.keys(data.color2)[0]] : data.color2, "RGBA"));
 					BDFDB.setInnerText(icon, BDFDB.isObject(data.color2) ? BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color2)} !important;">${BDFDB.encodeToHTML(shortname)}</span>`) : shortname);
 				}
 				icon.style.setProperty("font-size", this.getFontSize(icon));
@@ -581,10 +581,10 @@ class EditServers {
 		if (data.name || data.color3 || data.color4) {
 			var isgradient3 = data.color3 && BDFDB.isObject(data.color3);
 			var isgradient4 = data.color4 && BDFDB.isObject(data.color4);
-			var bgColor = data.color3 ? (!isgradient3 ? BDFDB.colorCONVERT(data.color3, "RGB") : BDFDB.colorGRADIENT(data.color3)) : "";
-			var fontColor = data.color4 ? (!isgradient4 ? BDFDB.colorCONVERT(data.color4, "RGB") : BDFDB.colorGRADIENT(data.color4)) : "";
+			var bgColor = data.color3 ? (!isgradient3 ? BDFDB.colorCONVERT(data.color3, "RGBA") : BDFDB.colorGRADIENT(data.color3)) : "";
+			var fontColor = data.color4 ? (!isgradient4 ? BDFDB.colorCONVERT(data.color4, "RGBA") : BDFDB.colorGRADIENT(data.color4)) : "";
 			wrapper.tooltipListenerEditServers = () => {
-				BDFDB.createTooltip(isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(data.name || info.name)}</span>` : (data.name || info.name), wrapper, {type, selector:"EditServers-tooltip", style:`${isgradient4 ? '' : 'color: ' + fontColor + ' !important; '}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.colorCONVERT(data.color3[0], "RGB") : bgColor} !important;`,css:`body ${BDFDB.dotCN.tooltip}:not(.EditServers-tooltip) {display: none !important;}`, html:isgradient3});
+				BDFDB.createTooltip(isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(data.name || info.name)}</span>` : (data.name || info.name), wrapper, {type, selector:"EditServers-tooltip", style:`${isgradient4 ? '' : 'color: ' + fontColor + ' !important; '}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.colorCONVERT(data.color3[0], "RGBA") : bgColor} !important;`,css:`body ${BDFDB.dotCN.tooltip}:not(.EditServers-tooltip) {display: none !important;}`, html:isgradient3});
 			};
 			wrapper.addEventListener("mouseenter", wrapper.tooltipListenerEditServers);
 			if (document.querySelector(BDFDB.dotCN.guildcontainer + ":hover") == wrapper) wrapper.tooltipListenerEditServers();
