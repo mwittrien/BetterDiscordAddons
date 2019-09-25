@@ -3,7 +3,7 @@
 class ThemeRepo {
 	getName () {return "ThemeRepo";}
 
-	getVersion () {return "1.8.5";}
+	getVersion () {return "1.8.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,9 @@ class ThemeRepo {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"added":[["Theme Generator","A new tab was added, that lets you generate your own custom themes"]],
+			"added":[["Preview","Hovering out of the themerepo now hides it and the backdrop to more swiftly let you take a look at the theme preview"]],
+			"fixed":[["Fixed","Theme Fixer CSS was fixed for the newest changes"]]
 		};
 
 		this.patchModules = {
@@ -42,10 +44,11 @@ class ThemeRepo {
 		this.grabbedThemes = [];
 		this.foundThemes = [];
 		this.loadedThemes = {};
+		this.generatorThemes = [];
 
 		this.updateInterval;
 
-		this.themeFixerCSS = `${BDFDB.dotCNC.appmount + BDFDB.dotCNC.appcontainer + BDFDB.dotCNC.channelheaderheaderbar + BDFDB.dotCNC.channelheadertitle + BDFDB.dotCNC.guildchannels + BDFDB.dotCNC.channels + BDFDB.dotCNC.callcurrentcontainer + BDFDB.dotCNC.callcurrentvideo + BDFDB.dotCNC.callcurrentdetails + BDFDB.dotCNC.accountinfo + BDFDB.dotCNC.nochannel + BDFDB.dotCNC.friends + BDFDB.dotCNC.friendstable + BDFDB.dotCNC.friendstableheader + BDFDB.dotCNC.guildsscroller + BDFDB.dotCNC.guildswrapper + BDFDB.dotCNC.channelheadertitle + BDFDB.dotCNC.typing + BDFDB.dotCNS.emojipicker + BDFDB.dotCNS.emojipickerscroller + BDFDB.dotCN.emojipickeremojiitem + BDFDB.dotCNC.emojipickerselected + BDFDB.dotCNC.members + BDFDB.dotCNC.chat + BDFDB.dotCNS.chat + "form," + BDFDB.dotCNC.chatcontent + BDFDB.dotCNC.messageswrapper + BDFDB.dotCNC.searchresultswrap + BDFDB.dotCNC.searchresultschannelname + BDFDB.dotCNC.searchresultssearchheader + BDFDB.dotCNC.activityfeed + BDFDB.dotCNC.lfg + BDFDB.dotCNC.applicationstore + BDFDB.dotCNC.giftinventory + BDFDB.dotCNC.gamelibrary + BDFDB.dotCNC.gamelibrarytableheader + BDFDB.dotCNC.standardsidebarview + BDFDB.dotCNC.sidebarregion + BDFDB.dotCNC.contentregion + BDFDB.dotCN.scroller} {background: transparent !important;} ${BDFDB.dotCNC.layer + BDFDB.dotCNC.layers + BDFDB.dotCN.titlebar} {background: rgba(0,0,0,0.18) !important;} ${BDFDB.dotCN.card}:not([style*="background-color"]) {background: rgba(0,0,0,0.4) !important;}`;
+		this.themeFixerCSS = `body, #app-mount, #app-mount ${BDFDB.dotCN.app}, #app-mount ${BDFDB.dotCN.appold}, #app-mount ${BDFDB.dotCN.layer}, #app-mount ${BDFDB.dotCN.guildchannels}, #app-mount ${BDFDB.dotCN.dmchannels}, #app-mount ${BDFDB.dotCN.channelpanels} > *, #app-mount ${BDFDB.dotCN.chat}, #app-mount ${BDFDB.dotCN.nochannel}, #app-mount ${BDFDB.dotCN.activityfeed}, #app-mount ${BDFDB.dotCN.gamelibrary}, #app-mount ${BDFDB.dotCN.gamelibrarytableheader}, #app-mount ${BDFDB.dotCN.giftinventory}, #app-mount ${BDFDB.dotCN.applicationstore}, #app-mount ${BDFDB.dotCN.lfg}, #app-mount ${BDFDB.dotCN.friends}, #app-mount ${BDFDB.dotCN.guilddiscovery}, #app-mount ${BDFDB.dotCN.scroller}, #app-mount ${BDFDB.dotCN.standardsidebarview}, #app-mount ${BDFDB.dotCN.contentregion} {background-color: transparent;} #app-mount ${BDFDB.dotCN.channelheaderchildren}:after {display: none;} #app-mount ${BDFDB.dotCN.guildswrapper} {background-color: rgba(0, 0, 0, 0.3);} #app-mount ${BDFDB.dotCN.channelheaderheaderbar + BDFDB.dotCN.channelheaderheaderbarthemed}, #app-mount ${BDFDB.dotCN.sidebarregion}, #app-mount ${BDFDB.dotCN.channels} {background-color: rgba(0, 0, 0, 0.2);} #app-mount ${BDFDB.dotCN.channelpanels} {background-color: rgba(0, 0, 0, 0.2);} #app-mount ${BDFDB.dotCN.memberswrap} {background-color: rgba(0, 0, 0, 0.2);}`;
 
 		this.themeRepoButtonMarkup = 
 			`<button class="bd-pfbtn bd-themerepobutton">Theme Repo</button>`;
@@ -123,6 +126,7 @@ class ThemeRepo {
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.marginbottom8 + BDFDB.disCN.tabbarcontainer}" style="flex: 0 0 auto; padding-right: 12px;">
 								<div class="${BDFDB.disCNS.tabbar + BDFDB.disCN.tabbartop}">
 									<div tab="themes" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbaritem}">Themes</div>
+									<div tab="generator" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbaritem}">Generator</div>
 									<div tab="settings" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbaritem}">Settings</div>
 								</div>
 								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.quickselect}">
@@ -143,6 +147,18 @@ class ThemeRepo {
 							<div tab="themes" class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline} tab-content">
 								<div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner}">
 									<ul class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN._repolist} themes" style="flex: 1 1 auto; display: flex !important; display: flex-direction: column !important; margin: unset !important; width: unset !important;"></ul>
+								</div>
+							</div>
+							<div tab="generator" class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline} tab-content">
+								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;">
+									<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 1 auto;">Generator Theme:</h3>
+									<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap} generator-select" style="flex: 1 1 auto;"></div>
+									<button type="button" id="download-generated" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-download" style="flex: 0 0 auto;">
+										<div class="${BDFDB.disCN.buttoncontents}"></div>
+									</button>
+								</div>
+								<div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner}">
+									<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.nowrap} variables" style="flex: 1 1 auto;"></div>
 								</div>
 							</div>
 							<div tab="settings" class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalsubinner} tab-content" style="flex: 1 1 auto;">
@@ -175,8 +191,8 @@ class ThemeRepo {
 								</div>
 								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;">
 									<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Download ThemeFixer</h3>
-									<button type="button" id="download-themefixer" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}" style="flex: 0 0 auto;">
-										<div class="${BDFDB.disCN.buttoncontents}">Download</div>
+									<button type="button" id="download-themefixer" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-download" style="flex: 0 0 auto;">
+										<div class="${BDFDB.disCN.buttoncontents}"></div>
 									</button>
 								</div>
 								<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;">
@@ -410,7 +426,7 @@ class ThemeRepo {
 		}});
 	}
 
-	processV2CList (instance, wrapper) {
+	processV2CList (instance, wrapper, returnvalue) {
 		if (!document.querySelector(".bd-themerepobutton") && window.PluginUpdates && window.PluginUpdates.plugins && instance._reactInternalFiber.key && instance._reactInternalFiber.key.split("-")[0] == "theme") {
 			var folderbutton = document.querySelector(BDFDB.dotCN._repofolderbutton);
 			if (folderbutton) {
@@ -484,11 +500,9 @@ class ThemeRepo {
 						var avatar = BDFDB.getUserAvatar();
 						var nativecss = document.querySelector("head link[rel='stylesheet'][integrity]");
 						nativecss = nativecss && nativecss.href ? nativecss.href : null;
-						var app = document.querySelector(BDFDB.dotCN.app);
-						app = app ? app.className : null;
 						var titlebar = document.querySelector(BDFDB.dotCN.titlebar);
 						titlebar = titlebar ? titlebar.outerHTML : null;
-						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"OnLoad",username,id,discriminator,avatar,nativecss,app,titlebar},"*");
+						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"OnLoad",username,id,discriminator,avatar,nativecss,html:document.documentElement.className,titlebar},"*");
 						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"DarkLight",checked:darklightinput.checked,light:BDFDB.disCN.themelight,dark:BDFDB.disCN.themedark},"*");
 						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"Normalize",checked:normalizeinput.checked},"*");
 						break;
@@ -496,6 +510,27 @@ class ThemeRepo {
 						keyPressed(e.data);
 						break;
 				}
+			}
+		};
+
+		var createSelectChoice = index => {
+			let theme = this.loadedThemes[this.generatorThemes[index-1]] || {name: "-----", author: "-----"};
+			return `<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer}" style="flex: 1 1 auto;"><strong>${BDFDB.encodeToHTML(theme.name)}</strong> by ${BDFDB.encodeToHTML(theme.author)}</div>`;
+		};
+
+		var saveSelectChoice = (selectWrap, type, index) => {
+			let theme = this.loadedThemes[this.generatorThemes[index-1]] || {name: "-----", author: "-----"};
+			selectWrap.querySelector(BDFDB.dotCN.title).innerHTML = `<strong>${BDFDB.encodeToHTML(theme.name)}</strong> by ${BDFDB.encodeToHTML(theme.author)}`;
+			themeRepoModal.querySelectorAll(".previewCheckbox").forEach(checkbox => {
+				checkbox.checked = false;
+				BDFDB.removeClass(checkbox.parentElement, BDFDB.disCN.switchvaluechecked);
+				BDFDB.addClass(checkbox.parentElement, BDFDB.disCN.switchvalueunchecked);
+			});
+			let container = themeRepoModal.querySelector(".variables");
+			BDFDB.removeEles(themeRepoModal.querySelectorAll(".varcontainer"));
+			if (container && theme.fullcss) {
+				frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"NewTheme",checked:true,css:theme.fullcss},"*");
+				this.createGeneratorVars(frame, container, theme);
 			}
 		};
 
@@ -548,10 +583,42 @@ class ThemeRepo {
 		themeRepoModal.querySelector("#download-themefixer").addEventListener("click", e => {
 			this.createThemeFile("ThemeFixer.theme.css", `//META{"name":"ThemeFixer","description":"ThemeFixerCSS for transparent themes","author":"DevilBro","version":"1.0.1"}*//\n\n` + this.themeFixerCSS);
 		});
+		themeRepoModal.querySelector("#download-generated").addEventListener("click", e => {
+			let inputs = themeRepoModal.querySelectorAll(".varinput");
+			if (!inputs.length) BDFDB.showToast(`Select a Theme to download a custom generated Theme.`, {type:"error"});
+			else {
+				let data = this.loadedThemes[this.generatorThemes[themeRepoModal.querySelector(".generator-select " + BDFDB.dotCN.select).getAttribute("value")-1]];
+				let css = data.fullcss;
+				for (let input of inputs) {
+					let oldvalue = input.getAttribute("placeholder");
+					let newvalue = input.value;
+					if (newvalue && newvalue.trim() && newvalue != oldvalue) {
+						let varname = input.getAttribute("option");
+						css = css.replace(new RegExp(`--${BDFDB.regEscape(varname)}(\\s*):(\\s*)${BDFDB.regEscape(oldvalue)}`,"g"),`--${varname}$1:$2${newvalue}`);
+					}
+				}
+				this.createThemeFile(data.name + ".theme.css", css);
+			}
+		});
 		BDFDB.addChildEventListener(themeRepoModal, "click", BDFDB.dotCNC.modalclose + BDFDB.dotCN.backdrop, () => {
 			frame.remove();
 			document.removeEventListener("keyup", keyPressed);
 			window.removeEventListener("message", messageReceived);
+		});
+		BDFDB.addChildEventListener(themeRepoModal, "mouseenter", BDFDB.dotCN.backdrop, e => {
+			if (!document.querySelector(BDFDB.dotCN.colorpicker)) {
+				for (let child of themeRepoModal.childNodes) {
+					child.style.setProperty("transition", "opacity .5s ease-in-out", "important");
+					child.style.setProperty("opacity", "0", "important");
+				}
+			}
+		});
+		BDFDB.addChildEventListener(themeRepoModal, "mouseleave", BDFDB.dotCN.backdrop, e => {
+			if (!document.querySelector(BDFDB.dotCN.colorpicker)) {
+				themeRepoModal.childNodes[0].style.setProperty("opacity", "0.85");
+				themeRepoModal.childNodes[1].style.setProperty("opacity", "1");
+				setTimeout(() => {for (let child of themeRepoModal.childNodes) child.style.removeProperty("transition");}, 500);
+			}
 		});
 		BDFDB.addChildEventListener(themeRepoModal, "keyup", BDFDB.dotCN.searchbarinput, () => {
 			clearTimeout(themeRepoModal.searchTimeout);
@@ -608,12 +675,89 @@ class ThemeRepo {
 			this.addEntry(frame, themeRepoModal, container, data);
 		}
 		this.sortEntries(themeRepoModal);
+		
+		var genselect = themeRepoModal.querySelector(".generator-select");
+		genselect.innerHTML = BDFDB.createSelectMenu(createSelectChoice("-----"), "-----");
+		genselect.addEventListener("click", e => {
+			BDFDB.openDropdownMenu(e, saveSelectChoice.bind(this), createSelectChoice.bind(this), ["-----"].concat(this.generatorThemes));
+		});
 
 		BDFDB.appendModal(themeRepoModal);
 
 		document.body.insertBefore(frame, document.body.firstElementChild);
 
 		themeRepoModal.querySelector(BDFDB.dotCN.searchbarinput).focus();
+	}
+	
+	createGeneratorVars (frame, container, data) {
+		let vars = data.fullcss.split(":root");
+		if (vars.length < 2) return;
+		vars = vars[1].replace(/\/\*[^\/]+?\n[^\/]+?\*\//g, "").replace(/\t\(/g, " (").replace(/\t| {2,}/g, "").replace(/\n\/\*.*?\*\//g, "").replace(/\r/g, "").replace(/[\t\s]+\n/g, "\n").replace(/\n[^\{\}-]+[^\n]+/g, "\n").replace(/\n/g, "");
+		vars = vars.split("{");
+		vars.shift();
+		vars = vars.join("{").replace(/\s*(:|;|--|\*)\s*/g, "$1");
+		vars = vars.split("}")[0];
+		vars = vars.slice(2).split(/;--|\*\/--/);
+		
+		var maxwidth = BDFDB.getRects(container).width - 80;
+		for (let varstr of vars) {
+			varstr = varstr.split(":");
+			let varname = varstr.shift().trim();
+			varstr = varstr.join(":").split(/;[^A-z0-9]|\/\*/);
+			let varvalue = varstr.shift().trim();
+			if (varvalue) {
+				let vardescription = varstr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
+				vardescription = vardescription && vardescription.indexOf("*") == 0 ? vardescription.slice(1) : vardescription;
+				let varcontainer = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20} varcontainer" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild} BDFDB-textscrollwrapper" style="flex: 0 0 30%;"><div class="BDFDB-textscroll">${varname[0].toUpperCase() + varname.slice(1)}</div></h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" option="${varname}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} varinput"></div><button type="button" class="${BDFDB.disCN.colorpickerswatch} single-swatch" style="background-color: black;"></button><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} file-navigator" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div><input type="file" accept="image/*" style="display:none!important;"></button></div>${vardescription ? `<div class="${BDFDB.disCNS.description + BDFDB.disCNS.note + BDFDB.disCN.primary} BDFDB-textscrollwrapper" style="flex: 1 1 auto; max-width: ${maxwidth}px !important;"><div class="BDFDB-textscroll">${BDFDB.encodeToHTML(vardescription)}</div></div>` : ""}${vars[vars.length-1] == varstr ? '' : `<div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.modaldividerdefault}"></div>`}</div>`);
+				let varinput = varcontainer.querySelector(BDFDB.dotCN.input);
+				varinput.value = varvalue;
+				varinput.setAttribute("placeholder", varvalue);
+				
+				let swatch = varcontainer.querySelector(".single-swatch");
+				let navigator = varcontainer.querySelector(".file-navigator");
+				
+				let iscolor = BDFDB.colorTYPE(varvalue);
+				let iscomp = !iscolor && /[0-9 ]+,[0-9 ]+,[0-9 ]+/g.test(varvalue);
+				let isurlfile = !iscolor && !iscolor && /url\(.+\)/gi.test(varvalue);
+				let isfile = !iscolor && !iscolor && !isurlfile && /(http(s)?):\/\/[(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(varvalue);
+				if (iscolor || iscomp) {
+					let color = iscomp ? BDFDB.colorCONVERT(varvalue.split(","), "RGB") : varvalue;
+					swatch.style.setProperty("background-color", color, "important");
+					swatch.addEventListener("click", e => {
+						BDFDB.openColorPicker(varcontainer, e.currentTarget, color, {gradient:false, comp:iscomp, alpha:iscolor, callback:updatePreview});
+					});
+				}
+				else BDFDB.removeEles(swatch);
+				if (isurlfile || isfile) {
+					navigator.addEventListener("change", e => {
+						let file = navigator.querySelector("input").files[0];
+						if (file && file.type.indexOf("image") == 0) varinput.value = `${isurlfile ? "url('" : ""}data:${file.type};base64,${BDFDB.LibraryRequires.fs.readFileSync(file.path).toString("base64")}${isurlfile ? "')" : ""}`;
+						else varinput.value = varvalue;
+						updatePreview();
+					});
+				}
+				else BDFDB.removeEles(navigator);
+				
+				container.appendChild(varcontainer);
+			}
+		}
+		let inputs = container.querySelectorAll(".varinput"), updateTimeout, updatePreview = () => {
+			clearTimeout(updateTimeout);
+			updateTimeout = setTimeout(() => {
+				let css = data.fullcss;
+				for (let input of inputs) {
+					let oldvalue = input.getAttribute("placeholder");
+					let newvalue = input.value;
+					if (newvalue && newvalue.trim() && newvalue != oldvalue) {
+						let varname = input.getAttribute("option");
+						css = css.replace(new RegExp(`--${BDFDB.regEscape(varname)}(\\s*):(\\s*)${BDFDB.regEscape(oldvalue)}`,"g"),`--${varname}$1:$2${newvalue}`);
+					}
+				}
+				frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"NewTheme",checked:true,css},"*");
+			}, 1000);
+		};
+		BDFDB.addChildEventListener(container, "change input", ".varinput", updatePreview);
+		BDFDB.initElements(container);
 	}
 
 	addEntry (frame, themeRepoModal, container, data) {
@@ -636,9 +780,6 @@ class ThemeRepo {
 			if (favorize) BDFDB.saveData(data.url, true, this, "favorites");
 			else BDFDB.removeData(data.url, this, "favorites");
 			themeRepoModal.entries[data.url] = data;
-		});
-		favbutton.addEventListener("mouseenter", e => {
-			BDFDB.createTooltip("Favorize", favbutton, {type:"top",selector:"themerepo-favicon-tooltip"});
 		});
 		let gitbutton = entry.querySelector(".gitIcon");
 		gitbutton.addEventListener("click", e => {
@@ -673,6 +814,9 @@ class ThemeRepo {
 			if (themeRepoModal.querySelector("#input-rnmstart").checked) setTimeout(() => {this.applyTheme(data);},3000);
 		});
 		entry.querySelector(".previewCheckbox").addEventListener("click", e => {
+			themeRepoModal.querySelector(".generator-select " + BDFDB.dotCN.select).setAttribute('value', "-----");
+			themeRepoModal.querySelector(".generator-select " + BDFDB.dotCN.title).innerHTML = `<strong>-----</strong> by -----`;
+			BDFDB.removeEles(themeRepoModal.querySelectorAll(".varcontainer"));
 			if (e.currentTarget.checked) themeRepoModal.querySelectorAll(".previewCheckbox").forEach(checkbox => {
 				if (e.currentTarget != checkbox) {
 					checkbox.checked = false;
@@ -810,6 +954,9 @@ class ThemeRepo {
 								});
 							}
 						}
+						BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/GeneratorList.txt", (error3, response3, body3) => {
+							if (!error3 && body3) for (let url of body3.replace(/[\r\t]/g, "").split("\n").filter(n => n)) if (this.loadedThemes[url]) this.generatorThemes.push(url);
+						});
 					});
 				});
 			}
@@ -837,7 +984,7 @@ class ThemeRepo {
 								let result = searchtext.split('"' + tag + '":"');
 								result = result.length > 1 ? result[1].split('",')[0].split('"}')[0] : null;
 								result = result && tag != "version" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
-								theme[tag] = result;
+								theme[tag] = result ? result.trim() : result;
 							}
 						}
 						else {
@@ -846,12 +993,13 @@ class ThemeRepo {
 								let result = searchtext.split('@' + tag + ' ');
 								result = result.length > 1 ? result[1].split('\n')[0] : null;
 								result = result && tag != "version" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
-								theme[tag] = result;
+								theme[tag] = result ? result.trim() : result;
 							}
 						}
 						let valid = true;
 						for (let tag of tags) if (theme[tag] === null) valid = false;
 						if (valid) {
+							theme.fullcss = text;
 							theme.css = hasMETAline < 20 && hasMETAline > -1 ? text.split("\n").slice(1).join("\n").replace(/[\r|\n|\t]/g, "") : text.replace(/[\r|\n|\t]/g, "");
 							theme.url = url;
 							theme.requesturl = requesturl;
@@ -865,7 +1013,7 @@ class ThemeRepo {
 				i++;
 				var loadingtooltip = document.querySelector(".themerepo-loading-tooltip");
 				if (loadingtooltip) {
-					BDFDB.setInnerText(loadingtooltip.firstElementChild, this.getLoadingTooltipText());
+					BDFDB.setInnerText(loadingtooltip, this.getLoadingTooltipText());
 					BDFDB.updateTooltipPosition(loadingtooltip);
 				}
 				getThemeInfo(callback);
@@ -904,8 +1052,7 @@ class ThemeRepo {
 		if (BDFDB.isThemeEnabled(data.name) == false) {
 			BDFDB.removeEles(`style#${data.name}`);
 			document.head.appendChild(BDFDB.htmlToElement(`<style id=${data.name}>${data.css}</style>`));
-			window.themeCookie[data.name] = true;
-			window.themeModule.saveThemeData();
+			window.themeModule.enableTheme(data.name);
 			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Applied Theme " + data.name + ".");
 		}
 	}
@@ -921,9 +1068,7 @@ class ThemeRepo {
 	removeTheme (data) {
 		if (BDFDB.isThemeEnabled(data.name) == true) {
 			BDFDB.removeEles(`style#${data.name}`);
-			window.themeCookie[data.name] = false;
-			delete window.bdthemes[data.name];
-			window.themeModule.saveThemeData();
+			window.themeModule.disableTheme(data.name);
 			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Removed Theme " + data.name + ".");
 		}
 	}

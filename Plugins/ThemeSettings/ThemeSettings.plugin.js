@@ -3,7 +3,7 @@
 class ThemeSettings {
 	getName () {return "ThemeSettings";}
 
-	getVersion () {return "1.1.3";}
+	getVersion () {return "1.1.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ThemeSettings {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Parsing Bug","Fixed a small parsing bug with comments"]]
+			"improved":[["Colorpicker & Filenavigator","The plugin now tries to guess if whether an input is used as a colorinput or a fileinput and adds elements to more easily change them"]]
 		};
 		
 		this.patchModules = {
@@ -144,10 +144,35 @@ class ThemeSettings {
 			if (varvalue) {
 				let vardescription = varstr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
 				vardescription = vardescription && vardescription.indexOf("*") == 0 ? vardescription.slice(1) : vardescription;
-				var varcontainer = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%;">${varname[0].toUpperCase() + varname.slice(1)}:</h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" option="${varname}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16}"></div></div>${vardescription ? '<div class="' + BDFDB.disCNS.description + BDFDB.disCNS.note + BDFDB.disCN.primary + ' BDFDB-textscrollwrapper" style="flex: 1 1 auto; max-width: ' + maxwidth + 'px !important;"><div class="BDFDB-textscroll">' + BDFDB.encodeToHTML(vardescription) + '</div></div>' : ""}${vars[vars.length-1] == varstr ? '' : '<div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.modaldividerdefault}"></div>'}</div>`);
+				let varcontainer = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20} varcontainer" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild} BDFDB-textscrollwrapper" style="flex: 0 0 30%;"><div class="BDFDB-textscroll">${varname[0].toUpperCase() + varname.slice(1)}</div></h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" option="${varname}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} varinput"></div><button type="button" class="${BDFDB.disCN.colorpickerswatch} single-swatch" style="background-color: black;"></button><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} file-navigator" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div><input type="file" accept="image/*" style="display:none!important;"></button></div>${vardescription ? `<div class="${BDFDB.disCNS.description + BDFDB.disCNS.note + BDFDB.disCN.primary} BDFDB-textscrollwrapper" style="flex: 1 1 auto; max-width: ${maxwidth}px !important;"><div class="BDFDB-textscroll">${BDFDB.encodeToHTML(vardescription)}</div></div>` : ""}${vars[vars.length-1] == varstr ? '' : `<div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.modaldividerdefault}"></div>`}</div>`);
 				let varinput = varcontainer.querySelector(BDFDB.dotCN.input);
-				varinput.value = varvalue || "";
-				varinput.setAttribute("placeholder", varvalue || "");
+				varinput.value = varvalue;
+				varinput.setAttribute("placeholder", varvalue);
+				
+				let swatch = varcontainer.querySelector(".single-swatch");
+				let navigator = varcontainer.querySelector(".file-navigator");
+				
+				let iscolor = BDFDB.colorTYPE(varvalue);
+				let iscomp = !iscolor && /[0-9 ]+,[0-9 ]+,[0-9 ]+/g.test(varvalue);
+				let isurlfile = !iscolor && !iscolor && /url\(.+\)/gi.test(varvalue);
+				let isfile = !iscolor && !iscolor && !isurlfile && /(http(s)?):\/\/[(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(varvalue);
+				if (iscolor || iscomp) {
+					let color = iscomp ? BDFDB.colorCONVERT(varvalue.split(","), "RGB") : varvalue;
+					swatch.style.setProperty("background-color", color, "important");
+					swatch.addEventListener("click", e => {
+						BDFDB.openColorPicker(varcontainer, e.currentTarget, color, {gradient:false, comp:iscomp, alpha:iscolor});
+					});
+				}
+				else BDFDB.removeEles(swatch);
+				if (isurlfile || isfile) {
+					navigator.addEventListener("change", e => {
+						let file = navigator.querySelector("input").files[0];
+						if (file && file.type.indexOf("image") == 0) varinput.value = `${isurlfile ? "url('" : ""}data:${file.type};base64,${BDFDB.LibraryRequires.fs.readFileSync(file.path).toString("base64")}${isurlfile ? "')" : ""}`;
+						else varinput.value = varvalue;
+					});
+				}
+				else BDFDB.removeEles(navigator);
+				
 				settingspanelinner.appendChild(varcontainer);
 			}
 		}
