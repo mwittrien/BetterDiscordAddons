@@ -3,7 +3,7 @@
 class PluginRepo {
 	getName () {return "PluginRepo";} 
 
-	getVersion () {return "1.8.5";}
+	getVersion () {return "1.8.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -875,9 +875,7 @@ class PluginRepo {
 
 	startPlugin (data) {
 		if (BDFDB.isPluginEnabled(data.name) == false) {
-			window.bdplugins[data.name].plugin.start();
-			window.pluginCookie[data.name] = true;
-			window.pluginModule.savePluginData();
+			window.pluginModule.startPlugin(data.name);
 			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Started Plugin " + data.name + ".");
 		}
 	}
@@ -892,10 +890,7 @@ class PluginRepo {
 
 	stopPlugin (data) {
 		if (BDFDB.isPluginEnabled(data.name) == true) {
-			window.bdplugins[data.name].plugin.stop();
-			window.pluginCookie[data.name] = false;
-			delete window.bdplugins[data.name];
-			window.pluginModule.savePluginData();
+			window.pluginModule.stopPlugin(data.name);
 			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Stopped Plugin " + data.name + ".");
 		}
 	}

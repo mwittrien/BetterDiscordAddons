@@ -6260,6 +6260,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		for (let id in window.bdplugins) if (containsNDM(id) || containsNDM(window.bdplugins[id].filename) || containsNDM(window.bdplugins[id].id) || containsNDM(window.bdplugins[id].name)) {
 			window.bdplugins[id].plugin.stop();
 			window.pluginCookie[id] = false;
+			window.pluginModule.stopPlugin(id);
 			window.pluginModule.savePluginData();
 		}
 	},10000);
