@@ -3468,7 +3468,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		return swatch ? swatch.gradient || BDFDB.colorCONVERT(swatch.style.getPropertyValue('background-color'), 'RGBCOMP') : null;
 	};
 
-	BDFDB.openColorPicker = function (container, target, color, options = {gradient: true, comp: false, alpha: false}) {
+	BDFDB.openColorPicker = function (container, target, color, options = {gradient: true, comp: false, alpha: false, callback: () => {}}) {
 		if (!container || !target) return;
 		var isswatches = BDFDB.containsClass(container, 'swatches');
 		var isgradient = color && BDFDB.isObject(color);
@@ -3666,6 +3666,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				if (swatch) swatch.style.setProperty('background-color', hex, 'important');
 			}
 			if (setinput) hexinput.value = hex;
+			options.callback();
 		}
 		function updateGradient () {
 			gradientpane.style.removeProperty("background-color");
