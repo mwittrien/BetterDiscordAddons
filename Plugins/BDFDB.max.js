@@ -2485,8 +2485,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.colorCOMPARE = function (color1, color2) {
 		if (color1 && color2) {
-			color1 = BDFDB.colorCONVERT(color1, 'RGBCOMP');
-			color2 = BDFDB.colorCONVERT(color2, 'RGBCOMP');
+			color1 = BDFDB.colorCONVERT(color1, 'RGBA');
+			color2 = BDFDB.colorCONVERT(color2, 'RGBA');
 			if (color1 && color2) return BDFDB.equals(color1, color2);
 		}
 		return null;
