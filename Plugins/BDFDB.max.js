@@ -2989,6 +2989,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		BDFDB.addClass(container.querySelector('.tab-content'), 'open');
 
 		container.querySelectorAll('.btn-save ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageStrings.SAVE;});
+		container.querySelectorAll('.btn-download ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageStrings.DOWNLOAD;});
 		container.querySelectorAll('.btn-cancel ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageStrings.CANCEL;});
 		container.querySelectorAll('.btn-add ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageStrings.ADD;});
 		container.querySelectorAll('.btn-ok ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageStrings.OKAY;});
@@ -6323,17 +6324,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		libraryScript.setAttribute("date", performance.now());
 		document.head.appendChild(libraryScript);
 	};
-	var ndm = "nodeletemessages";
-	var containsNDM = function (string) {return typeof string == "string" && string.toLowerCase().indexOf(ndm) > -1;};
-	var keys = Object.keys(BDFDB).length - 10;
-	var ndmInterval = setInterval(() => {
-		for (let id in window.bdplugins) if (containsNDM(id) || containsNDM(window.bdplugins[id].filename) || containsNDM(window.bdplugins[id].id) || containsNDM(window.bdplugins[id].name)) {
-			window.bdplugins[id].plugin.stop();
-			window.pluginCookie[id] = false;
-			window.pluginModule.stopPlugin(id);
-			window.pluginModule.savePluginData();
-		}
-	},10000);
 	var crashInterval = setInterval(() => {
 		if (!window.BDFDB || typeof BDFDB != "object" || Object.keys(BDFDB).length < keys || !BDFDB.id) {
 			console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', 'reloading library due to internal error.');
