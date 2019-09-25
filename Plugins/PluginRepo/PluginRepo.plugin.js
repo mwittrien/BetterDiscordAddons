@@ -3,7 +3,7 @@
 class PluginRepo {
 	getName () {return "PluginRepo";} 
 
-	getVersion () {return "1.8.4";}
+	getVersion () {return "1.8.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class PluginRepo {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"fixed":[["Small bug fixes","Just some small bug fixes"]]
 		};
 
 		this.patchModules = {
@@ -362,7 +362,7 @@ class PluginRepo {
 		}});
 	}
 
-	processV2CList (instance, wrapper) {
+	processV2CList (instance, wrapper, returnvalue) {
 		if (!document.querySelector(".bd-pluginrepobutton") && window.PluginUpdates && window.PluginUpdates.plugins && instance._reactInternalFiber.key && instance._reactInternalFiber.key.split("-")[0] == "plugin") {
 			var folderbutton = document.querySelector(BDFDB.dotCN._repofolderbutton);
 			if (folderbutton) {
@@ -515,9 +515,6 @@ class PluginRepo {
 			if (favorize) BDFDB.saveData(data.url, true, this, "favorites");
 			else BDFDB.removeData(data.url, this, "favorites");
 			pluginRepoModal.entries[data.url] = data;
-		});
-		favbutton.addEventListener("mouseenter", e => {
-			BDFDB.createTooltip("Favorize", favbutton, {type:"top",selector:"pluginrepo-favicon-tooltip"});
 		});
 		let gitbutton = entry.querySelector(".gitIcon");
 		gitbutton.addEventListener("click", e => {
@@ -732,7 +729,8 @@ class PluginRepo {
 								result = result[0].replace(new RegExp("\\\\" + separator, "g"), separator).split(separator);
 								if (result.length > 2) {
 									result = result.slice(1, -1).join(separator).replace(/\\n/g, "<br>").replace(/\\/g, "");
-									plugin[tag] = tag != "getVersion" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
+									result = tag != "getVersion" ? result.charAt(0).toUpperCase() + result.slice(1) : result;
+									plugin[tag] = result ? result.trim() : result;
 								}
 							}
 						}
@@ -754,7 +752,7 @@ class PluginRepo {
 				i++;
 				var loadingtooltip = document.querySelector(".pluginrepo-loading-tooltip");
 				if (loadingtooltip) {
-					BDFDB.setInnerText(loadingtooltip.firstElementChild, this.getLoadingTooltipText());
+					BDFDB.setInnerText(loadingtooltip, this.getLoadingTooltipText());
 					BDFDB.updateTooltipPosition(loadingtooltip);
 				}
 				getPluginInfo(callback);

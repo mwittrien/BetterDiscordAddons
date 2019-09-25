@@ -544,6 +544,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		itemlayer.style.setProperty('top', top + 'px');
 		itemlayer.style.setProperty('left', left + 'px');
 		
+		pointer.style.removeProperty('margin-left');
+		pointer.style.removeProperty('margin-top');
 		if (tooltip.position == "top" || tooltip.position == "bottom") {
 			if (left < 0) {
 				itemlayer.style.setProperty('left', '5px');
@@ -2811,8 +2813,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			addInitEventListener(ele, 'change', e => {
 				var input = ele.parentElement.parentElement.querySelector('input[type="text"]');
 				var file = ele.files[0];
-				if (input && file)
-					input.value = file.path;
+				if (input && file) input.value = file.path;
 			});
 		});
 		container.querySelectorAll(BDFDB.dotCN.input).forEach(ele => {
