@@ -3759,7 +3759,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.getTheme = function (themename, hasToBeEnabled = false) {
-		if (!hasToBeEnabled || BDFDB.isThemeEnabled(themename)) return window.bdthemes ? window.bdthemes[themename];
+		if (window.bdthemes && (!hasToBeEnabled || BDFDB.isThemeEnabled(themename))) return window.bdthemes[themename];
 		return null;
 	};
 
