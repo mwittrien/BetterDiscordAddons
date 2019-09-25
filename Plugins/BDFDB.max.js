@@ -6328,16 +6328,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (!window.BDFDB || typeof BDFDB != "object" || Object.keys(BDFDB).length < keys || !BDFDB.id) {
 			console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', 'reloading library due to internal error.');
 			clearInterval(crashInterval);
-			clearInterval(ndmInterval);
 			reloadLib();
 		}
 		else if (BDFDB.id != id) {
 			clearInterval(crashInterval);
-			clearInterval(ndmInterval);
 		}
 		else if (!BDFDB.creationTime || performance.now() - BDFDB.creationTime > 18000000) {
 			clearInterval(crashInterval);
-			clearInterval(ndmInterval);
 			reloadLib();
 		}
 	},10000);
