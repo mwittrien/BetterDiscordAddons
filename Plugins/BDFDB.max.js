@@ -3744,8 +3744,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		else return BDFDB.Plugins[plugname.toLowerCase()] ? BDFDB.Plugins[plugname.toLowerCase()].enabled : null;
 	};
 
-	BDFDB.getPlugin = function (plugname) {
-		if (BDFDB.isPluginEnabled(plugname)) return BdApi.getPlugin(plugname);
+	BDFDB.getPlugin = function (plugname, hasToBeEnabled = false) {
+		if (!hasToBeEnabled || BDFDB.isPluginEnabled(plugname)) return BdApi.getPlugin(plugname);
 		return null;
 	};
 
