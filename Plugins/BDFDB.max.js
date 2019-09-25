@@ -365,7 +365,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			BDFDB.creationTime = 0;
 			var newversion = result.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
 			newversion = newversion.toString().replace(/['"]/g, '');
-			LibraryRequires.fs.writeFileSync(LibraryRequires.path.join(BDFDB.getPluginsFolder(), (bdplugins[plugname] ? bdplugins[plugname].filename : url.split("/").slice(-1)[0])), result);
+			LibraryRequires.fs.writeFileSync(LibraryRequires.path.join(BDFDB.getPluginsFolder(), url.split("/").slice(-1)[0]), result);
 			BDFDB.showToast(`${plugname} v${window.PluginUpdates.plugins[url].version} has been replaced by ${plugname} v${newversion}.`, {nopointer:true, selector:'plugin-updated-toast'});
 			var updatenotice = document.querySelector('#pluginNotice');
 			if (updatenotice) {
@@ -3483,7 +3483,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		return swatch ? swatch.gradient || BDFDB.colorCONVERT(swatch.style.getPropertyValue('background-color'), 'RGBCOMP') : null;
 	};
 
-	BDFDB.openColorPicker = function (container, target, color, options = {gradient: true, comp: false, alpha: true, callback}) {
+	BDFDB.openColorPicker = function (container, target, color, options = {gradient: true, comp: false, alpha: true, callback: () => {}}) {
 		if (!container || !target) return;
 		var isswatches = BDFDB.containsClass(container, 'swatches');
 		var isgradient = color && BDFDB.isObject(color);
@@ -3740,8 +3740,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.isPluginEnabled = function (plugname) {
-		if (!BDFDB.isBDv2()) return window.bdplugins[plugname] && window.pluginCookie[plugname];
+		if (!BDFDB.isBDv2()) return BdApi.isPluginEnabled(plugname);
 		else return BDFDB.Plugins[plugname.toLowerCase()] ? BDFDB.Plugins[plugname.toLowerCase()].enabled : null;
+	};
+
+	BDFDB.getPlugin = function (plugname) {
+		if (BDFDB.isPluginEnabled(plugname)) return BdApi.getPlugin(plugname);
+		return null;
 	};
 
 	BDFDB.isRestartNoMoreEnabled = function () {
@@ -3749,7 +3754,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.isThemeEnabled = function (themename) {
-		if (!BDFDB.isBDv2()) return window.bdthemes[themename] && window.themeCookie[themename];
+		if (!BDFDB.isBDv2()) return BdApi.isThemeEnabled(themename)
 		else return BDFDB.Themes[themename.toLowerCase()] ? BDFDB.Themes[themename.toLowerCase()].enabled : null;
 	};
 
