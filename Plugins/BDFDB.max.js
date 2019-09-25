@@ -3758,6 +3758,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		else return BDFDB.Themes[themename.toLowerCase()] ? BDFDB.Themes[themename.toLowerCase()].enabled : null;
 	};
 
+	BDFDB.getTheme = function (themename, hasToBeEnabled = false) {
+		if (!hasToBeEnabled || BDFDB.isThemeEnabled(themename)) return window.bdthemes ? window.bdthemes[themename];
+		return null;
+	};
+
 	(BDFDB.setPluginCache = function () {
 		if (!BDFDB.isBDv2()) return;
 		BDFDB.Plugins = {};

@@ -84,7 +84,7 @@ class RevealAllSpoilersOption {
 				children: [
 					BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 						label: "Reveal all Spoilers",
-						hint: BDFDB.isPluginEnabled("MessageUtilities") ? window.bdplugins.MessageUtilities.plugin.getActiveShortcutString("__Reveal_Spoilers") : null,
+						hint: BDFDB.isPluginEnabled("MessageUtilities") ? BDFDB.getPlugin("MessageUtilities").getActiveShortcutString("__Reveal_Spoilers") : null,
 						className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-reveal-contextMenuItem`,
 						action: e => {
 							BDFDB.closeContextMenu(menu);

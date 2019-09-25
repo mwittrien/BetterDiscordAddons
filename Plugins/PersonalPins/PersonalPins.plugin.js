@@ -216,8 +216,8 @@ class PersonalPins {
 		this.notesPopoutMarkup = 				this.notesPopoutMarkup.replace("REPLACE_popout_sort_text", this.labels.popout_sort_text);
 		this.notesPopoutMarkup = 				this.notesPopoutMarkup.replace("REPLACE_popout_messagesort_text", this.labels.popout_messagesort_text);
 
-		this.messageMarkup = 					this.messageMarkup.replace("REPLACE_popout_jump_text", this.labels.popout_jump_text);
-		this.messageMarkup = 					this.messageMarkup.replace("REPLACE_popout_copy_text", this.labels.popout_copy_text);
+		this.messageMarkup = 					this.messageMarkup.replace("REPLACE_popout_jump_text", BDFDB.LanguageStrings.JUMP);
+		this.messageMarkup = 					this.messageMarkup.replace("REPLACE_popout_copy_text", BDFDB.LanguageStrings.COPY);
 
 		this.sortPopoutMarkup = 				this.sortPopoutMarkup.replace("REPLACE_popout_messagesort_text", this.labels.popout_messagesort_text);
 		this.sortPopoutMarkup = 				this.sortPopoutMarkup.replace("REPLACE_popout_datesort_text", this.labels.popout_datesort_text);
@@ -231,7 +231,7 @@ class PersonalPins {
 			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, "MessagePinItem");
 			const pinUnpinItem = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: this.labels[note ? "context_unpinoption_text" : "context_pinoption_text"],
-				hint: BDFDB.isPluginEnabled("MessageUtilities") ? window.bdplugins.MessageUtilities.plugin.getActiveShortcutString("__Note_Message") : null,
+				hint: BDFDB.isPluginEnabled("MessageUtilities") ? BDFDB.getPlugin("MessageUtilities").getActiveShortcutString("__Note_Message") : null,
 				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-${note ? "unpin" : "pin"}-contextMenuItem`,
 				action: e => {
 					BDFDB.closeContextMenu(menu);
@@ -414,12 +414,12 @@ class PersonalPins {
 		let channelname = messagedivider.querySelector(BDFDB.dotCN.messagespopoutchannelname);
 		channelname.innerText = (noteData.guild_id == "@me" ? " @" : " #") + (channel.name || noteData.channel_name);
 		if (noteData.guild_id != "@me" && BDFDB.isPluginEnabled("EditChannels")) {
-			window.bdplugins.EditChannels.plugin.changeChannel2({id:noteData.channel_id,name:noteData.channel_name}, channelname);
+			BDFDB.getPlugin("EditChannels").changeChannel2({id:noteData.channel_id,name:noteData.channel_name}, channelname);
 		}
 		else if (noteData.guild_id == "@me" && BDFDB.isPluginEnabled("EditUsers")) {
 			let dmuser_id = channel && channel.type == 1 ? channel.recipients[0] : noteData.dmuser_id;
 			if (dmuser_id) {
-				window.bdplugins.EditUsers.plugin.changeName2({id:dmuser_id,username:noteData.channel_name}, channelname);
+				BDFDB.getPlugin("EditUsers").changeName2({id:dmuser_id,username:noteData.channel_name}, channelname);
 				if (channelname.innerText.indexOf("@") != 0) channelname.innerText = "@" + channelname.innerText;
 			}
 		}
@@ -431,15 +431,16 @@ class PersonalPins {
 		username.innerText = user.username || noteData.author_name;
 		username.style.setProperty("color", member.colorString || noteData.color);
 		if (BDFDB.isPluginEnabled("EditUsers")) {
-			window.bdplugins.EditUsers.plugin.changeName({id:noteData.author_id,username:noteData.author_name}, username, noteData.guild_id);
-			if (user.id) window.bdplugins.EditUsers.plugin.changeAvatar({id:noteData.author_id,username:noteData.author_name}, avatar);
-			window.bdplugins.EditUsers.plugin.addTag({id:noteData.author_id,username:noteData.author_name}, username.parentElement, " " + BDFDB.disCN.bottagnametag);
+			let EditUsers = BDFDB.getPlugin("EditUsers");
+			EditUsers.changeName({id:noteData.author_id,username:noteData.author_name}, username, noteData.guild_id);
+			if (user.id) EditUsers.changeAvatar({id:noteData.author_id,username:noteData.author_name}, avatar);
+			EditUsers.addTag({id:noteData.author_id,username:noteData.author_name}, username.parentElement, " " + BDFDB.disCN.bottagnametag);
 		}
 		let timestamp = message.querySelector(BDFDB.dotCN.messagetimestampcozy);
 		timestamp.innerText = date.toLocaleString(BDFDB.getDiscordLanguage().id);
 		timestamp.setAttribute("datetime", date);
 		if (BDFDB.isPluginEnabled("CompleteTimestamps") && BDFDB.loadData("showInChat", "CompleteTimestamps", "settings")) {
-			window.bdplugins.CompleteTimestamps.plugin.changeTimestamp(timestamp);
+			BDFDB.getPlugin("CompleteTimestamps").changeTimestamp(timestamp);
 		}
 		message.querySelector(BDFDB.dotCN.messagemarkup).innerHTML = noteData.markup.replace(`<span class="edited">`,`<span class="${BDFDB.disCN.messageedited}">`);
 		message.querySelector(BDFDB.dotCN.messageaccessory).innerHTML = noteData.accessory;
@@ -607,8 +608,6 @@ class PersonalPins {
 					popout_sort_text:				"Poredaj po",
 					popout_messagesort_text:		"Vijesti-Datum",
 					popout_datesort_text:			"Bilješka-Datum",
-					popout_jump_text:				"Skok",
-					popout_copy_text:				"Kopija",
 					context_pinoption_text:			"Napominjemo poruku",
 					context_updateoption_text:		"Ažuriraj bilješku",
 					context_unpinoption_text:		"Uklonite bilješku",
@@ -626,8 +625,6 @@ class PersonalPins {
 					popout_sort_text:				"Sorter efter",
 					popout_messagesort_text:		"Meddelelse-Dato",
 					popout_datesort_text:			"Note-Dato",
-					popout_jump_text:				"Hop",
-					popout_copy_text:				"Kopi",
 					context_pinoption_text:			"Noter besked",
 					context_updateoption_text:		"Opdater note",
 					context_unpinoption_text:		"Fjern note",
@@ -645,8 +642,6 @@ class PersonalPins {
 					popout_sort_text:				"Sortieren nach",
 					popout_messagesort_text:		"Nachrichten-Datum",
 					popout_datesort_text:			"Notiz-Datum",
-					popout_jump_text:				"Springen",
-					popout_copy_text:				"Kopieren",
 					context_pinoption_text:			"Nachricht notieren",
 					context_updateoption_text:		"Notiz aktualisieren",
 					context_unpinoption_text:		"Notiz entfernen",
@@ -664,8 +659,6 @@ class PersonalPins {
 					popout_sort_text:				"Ordenar por",
 					popout_messagesort_text:		"Mensaje-Fecha",
 					popout_datesort_text:			"Nota-Fecha",
-					popout_jump_text:				"Ir a",
-					popout_copy_text:				"Copiar",
 					context_pinoption_text:			"Anotar mensaje",
 					context_updateoption_text:		"Actualiza la nota",
 					context_unpinoption_text:		"Eliminar la nota",
@@ -683,8 +676,6 @@ class PersonalPins {
 					popout_sort_text:				"Trier par",
 					popout_messagesort_text:		"Message-Date",
 					popout_datesort_text:			"Note-Date",
-					popout_jump_text:				"Accéder",
-					popout_copy_text:				"Copier",
 					context_pinoption_text:			"Noter le message",
 					context_updateoption_text:		"Mettre à jour la note",
 					context_unpinoption_text:		"Enlevez la note",
@@ -702,8 +693,6 @@ class PersonalPins {
 					popout_sort_text:				"Ordina per",
 					popout_messagesort_text:		"Messaggio-Data",
 					popout_datesort_text:			"Nota-Data",
-					popout_jump_text:				"Vai",
-					popout_copy_text:				"Copiare",
 					context_pinoption_text:			"Annotare il messaggio",
 					context_updateoption_text:		"Aggiorna la nota",
 					context_unpinoption_text:		"Rimuovi la nota",
@@ -721,8 +710,6 @@ class PersonalPins {
 					popout_sort_text:				"Sorteer op",
 					popout_messagesort_text:		"Bericht-Datum",
 					popout_datesort_text:			"Notitie-Datum",
-					popout_jump_text:				"Openen",
-					popout_copy_text:				"Kopiëren",
 					context_pinoption_text:			"Noteer bericht",
 					context_updateoption_text:		"Update de notitie",
 					context_unpinoption_text:		"Verwijder de notitie",
@@ -740,8 +727,6 @@ class PersonalPins {
 					popout_sort_text:				"Sorter etter",
 					popout_messagesort_text:		"Melding-Dato",
 					popout_datesort_text:			"Merknad-Dato",
-					popout_jump_text:				"Hoppe",
-					popout_copy_text:				"Kopiere",
 					context_pinoption_text:			"Notat ned meldingen",
 					context_updateoption_text:		"Oppdater notatet",
 					context_unpinoption_text:		"Fjern notatet",
@@ -759,8 +744,6 @@ class PersonalPins {
 					popout_sort_text:				"Sortuj według",
 					popout_messagesort_text:		"Wiadomość-Data",
 					popout_datesort_text:			"Notatka-Data",
-					popout_jump_text:				"Skocz",
-					popout_copy_text:				"Kopiować",
 					context_pinoption_text:			"Notuj wiadomość",
 					context_updateoption_text:		"Zaktualizuj notatkę",
 					context_unpinoption_text:		"Usuń notatkę",
@@ -778,8 +761,6 @@ class PersonalPins {
 					popout_sort_text:				"Ordenar por",
 					popout_messagesort_text:		"Mensagem-Data",
 					popout_datesort_text:			"Nota-Data",
-					popout_jump_text:				"Pular",
-					popout_copy_text:				"Copiar",
 					context_pinoption_text:			"Anote a mensagem",
 					context_updateoption_text:		"Atualize a nota",
 					context_unpinoption_text:		"Remova a nota",
@@ -797,8 +778,6 @@ class PersonalPins {
 					popout_sort_text:				"Järjestä",
 					popout_messagesort_text:		"Viesti-Päivämäärä",
 					popout_datesort_text:			"Huomaa-Päivämäärä",
-					popout_jump_text:				"Siirry",
-					popout_copy_text:				"Kopioida",
 					context_pinoption_text:			"Huomaa viesti",
 					context_updateoption_text:		"Päivitä muistiinpano",
 					context_unpinoption_text:		"Poista muistiinpano",
@@ -816,8 +795,6 @@ class PersonalPins {
 					popout_sort_text:				"Sortera efter",
 					popout_messagesort_text:		"Meddelande-Datum",
 					popout_datesort_text:			"Anteckningen-Datum",
-					popout_jump_text:				"Hoppa",
-					popout_copy_text:				"Kopiera",
 					context_pinoption_text:			"Anteckna meddelande",
 					context_updateoption_text:		"Uppdatera noten",
 					context_unpinoption_text:		"Ta bort noten",
@@ -835,8 +812,6 @@ class PersonalPins {
 					popout_sort_text:				"Göre sırala",
 					popout_messagesort_text:		"Mesaj-Tarih",
 					popout_datesort_text:			"Not-Tarih",
-					popout_jump_text:				"Git",
-					popout_copy_text:				"Kopyalamak",
 					context_pinoption_text:			"Mesajı not alın",
 					context_updateoption_text:		"Notu güncelle",
 					context_unpinoption_text:		"Notu kaldırmak",
@@ -854,8 +829,6 @@ class PersonalPins {
 					popout_sort_text:				"Seřazeno podle",
 					popout_messagesort_text:		"Zpráva-datum",
 					popout_datesort_text:			"Poznámka-datum",
-					popout_jump_text:				"Skok",
-					popout_copy_text:				"Kopírovat",
 					context_pinoption_text:			"Poznámka dolů zprávu",
 					context_updateoption_text:		"Aktualizujte poznámku",
 					context_unpinoption_text:		"Odstraňte poznámku",
@@ -873,8 +846,6 @@ class PersonalPins {
 					popout_sort_text:				"Сортиране по",
 					popout_messagesort_text:		"Съобщение-Дата",
 					popout_datesort_text:			"Забележка-Дата",
-					popout_jump_text:				"Направо",
-					popout_copy_text:				"Копирам",
 					context_pinoption_text:			"Oтбележете съобщението",
 					context_updateoption_text:		"Актуализирайте бележката",
 					context_unpinoption_text:		"Премахнете бележката",
@@ -892,8 +863,6 @@ class PersonalPins {
 					popout_sort_text:				"Сортировать по",
 					popout_messagesort_text:		"Сообщение-дата",
 					popout_datesort_text:			"Заметки-Дата",
-					popout_jump_text:				"Перейти",
-					popout_copy_text:				"Копировать",
 					context_pinoption_text:			"Записывать вниз",
 					context_updateoption_text:		"Обновить заметку",
 					context_unpinoption_text:		"Удалить заметку",
@@ -911,8 +880,6 @@ class PersonalPins {
 					popout_sort_text:				"Сортувати за",
 					popout_messagesort_text:		"Повідомлення-дата",
 					popout_datesort_text:			"Примітка-дата",
-					popout_jump_text:				"Плиг",
-					popout_copy_text:				"Копіювати",
 					context_pinoption_text:			"Зверніть увагу на повідомлення",
 					context_updateoption_text:		"Оновіть нотатку",
 					context_unpinoption_text:		"Видаліть нотатку",
@@ -930,8 +897,6 @@ class PersonalPins {
 					popout_sort_text:				"並び替え",
 					popout_messagesort_text:		"メッセージ-日付",
 					popout_datesort_text:			"注-日付",
-					popout_jump_text:				"ジャンプ",
-					popout_copy_text:				"写す",
 					context_pinoption_text:			"ノートダウンメッセージ",
 					context_updateoption_text:		"メモを更新する",
 					context_unpinoption_text:		"メモを削除",
@@ -949,8 +914,6 @@ class PersonalPins {
 					popout_sort_text:				"排序方式",
 					popout_messagesort_text:		"消息-日期",
 					popout_datesort_text:			"注-日期",
-					popout_jump_text:				"跳到",
-					popout_copy_text:				"複製",
 					context_pinoption_text:			"記下下來的消息",
 					context_updateoption_text:		"更新說明",
 					context_unpinoption_text:		"刪除備註",
@@ -968,8 +931,6 @@ class PersonalPins {
 					popout_sort_text:				"정렬 기준",
 					popout_messagesort_text:		"메시지-날짜",
 					popout_datesort_text:			"주-날짜",
-					popout_jump_text:				"이동",
-					popout_copy_text:				"베끼다",
 					context_pinoption_text:			"메모 다운 메시지",
 					context_updateoption_text:		"메모 업데이트",
 					context_unpinoption_text:		"메모 삭제",
@@ -987,8 +948,6 @@ class PersonalPins {
 					popout_sort_text:				"Sort by",
 					popout_messagesort_text:		"Message-Date",
 					popout_datesort_text:			"Note-Date",
-					popout_jump_text:				"Jump",
-					popout_copy_text:				"Copy",
 					context_pinoption_text:			"Note Message",
 					context_updateoption_text:		"Update Note",
 					context_unpinoption_text:		"Remove Note",

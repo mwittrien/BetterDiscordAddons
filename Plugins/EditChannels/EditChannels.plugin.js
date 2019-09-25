@@ -381,7 +381,7 @@ class EditChannels {
 					else {
 						if (channel.type == 1) channel = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]) || channel;
 						if (channelname.EditChannelsChangeObserver && typeof channelname.EditChannelsChangeObserver.disconnect == "function") channelname.EditChannelsChangeObserver.disconnect();
-						if (BDFDB.isPluginEnabled("EditUsers")) bdplugins.EditUsers.plugin.changeName(channel, channelname);
+						if (BDFDB.isPluginEnabled("EditUsers")) BDFDB.getPlugin("EditUsers").changeName(channel, channelname);
 						else {
 							channelname.style.removeProperty("color");
 							channelname.style.removeProperty("background");

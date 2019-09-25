@@ -1195,8 +1195,9 @@ class ServerFolders {
 		BDFDB.addClass(guildcopy, "copy");
 		BDFDB.toggleEles(guildcopy, true);
 		guildcopyinner.addEventListener("mouseenter", () => {
-			let ESdata = BDFDB.isPluginEnabled("EditServers") ? window.bdplugins.EditServers.plugin.getGuildData(info.id, guildcopyinner) : null;
-			if (ESdata && (ESdata.name || ESdata.color3 || ESdata.color4)) window.bdplugins.EditServers.plugin.changeTooltip(info, guildcopyinner, "right");
+			let EditServers = BDFDB.getPlugin("EditServers");
+			let ESdata = EditServers ? EditServers.getGuildData(info.id, guildcopyinner) : null;
+			if (ESdata && (ESdata.name || ESdata.color3 || ESdata.color4)) EditServers.changeTooltip(info, guildcopyinner, "right");
 			else {
 				let folderData = BDFDB.loadData(folderdiv.id, this, "folders") || {};
 				let color3 = folderData.copyTooltipColor ? folderData.color3 : null;
@@ -1212,7 +1213,7 @@ class ServerFolders {
 			}
 		});
 		guildcopyinner.addEventListener("mouseleave", () => {
-			if (guildicon && guildicon.src && info.icon && info.icon.startsWith("a_") && info.features.has("ANIMATED_ICON") && guildicon.src.includes("discordapp.com/icons/") && !this.isAutoPlayGif()) {
+			if (guildicon && guildicon.src && info.icon && info.icon.startsWith("a_") && info.features.has("ANIMATED_ICON") && guildicon.src.includes("discordapp.com/icons/") && !BDFDB.getReactValue(BDFDB.getPlugin("AutoPlayGifs", true), "settings.guildList")) {
 				guildicon.src = guildicon.src.replace(".gif", ".webp");
 			}
 		});
@@ -1280,10 +1281,6 @@ class ServerFolders {
 		this.addHoverBehaviour(guildcopy);
 
 		return guildcopy;
-	}
-
-	isAutoPlayGif () {
-		return BDFDB.isPluginEnabled("AutoPlayGifs") && window.bdplugins && window.bdplugins.AutoPlayGifs && window.bdplugins.AutoPlayGifs.plugin && window.bdplugins.AutoPlayGifs.plugin.settings && window.bdplugins.AutoPlayGifs.plugin.settings.guildList;
 	}
 
 	createDragPreview (div, e) {

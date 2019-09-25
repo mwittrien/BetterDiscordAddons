@@ -696,7 +696,7 @@ class EditUsers {
 					if (channel.type == 1) this.changeName(BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]), channelname);
 					else {
 						if (channelname.EditUsersChangeObserver && typeof channelname.EditUsersChangeObserver.disconnect == "function") channelname.EditUsersChangeObserver.disconnect();
-						if (BDFDB.isPluginEnabled("EditChannels")) bdplugins.EditChannels.plugin.changeChannel(channel, channelname);
+						if (BDFDB.isPluginEnabled("EditChannels")) BDFDB.getPlugin("EditChannels").changeChannel(channel, channelname);
 						else {
 							channelname.style.removeProperty("color");
 							channelname.style.removeProperty("background");
@@ -876,8 +876,8 @@ class EditUsers {
 
 	changeBotTags (data, username, member) {
 		for (let tag of username.parentElement.parentElement.querySelectorAll(BDFDB.dotCN.bottag)) if (!BDFDB.containsClass(tag, "TRE-tag")) {
-			let isBRCenabled = BDFDB.getReactValue(window.bdplugins, "BetterRoleColors.plugin.settings.modules.botTags");
-			let tagcolor =  BDFDB.colorCONVERT(data.color1 || (isBRCenabled || BDFDB.containsClass(tag, "owner-tag-rolecolor") ? member.colorString : null), "RGBA");
+			let isBRCbottagsEnabled = BDFDB.getReactValue(BDFDB.getPlugin("BetterRoleColors", true), "settings.modules.botTags");
+			let tagcolor =  BDFDB.colorCONVERT(data.color1 || (isBRCbottagsEnabled || BDFDB.containsClass(tag, "owner-tag-rolecolor") ? member.colorString : null), "RGBA");
 			tagcolor = BDFDB.colorISBRIGHT(tagcolor) ? BDFDB.colorCHANGE(tagcolor, -0.3) : tagcolor;
 			tag.style.setProperty(BDFDB.containsClass(tag, BDFDB.disCN.bottaginvert) ? "color" : "background-color", tagcolor, "important");
 		}
@@ -1009,7 +1009,7 @@ class EditUsers {
 		mention.removeEventListener("mouseout", mention.mouseoutListenerEditUsers);
 		let data = this.getUserData(info.id, mention);
 		let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), info.id) || {};
-		let name = "@" + (data.name ? data.name : (BDFDB.isPluginEnabled("RemoveNicknames") ? window.bdplugins.RemoveNicknames.plugin.getNewName(info) : member.nick || info.username));
+		let name = "@" + (data.name ? data.name : (BDFDB.isPluginEnabled("RemoveNicknames") ? BDFDB.getPlugin("RemoveNicknames").getNewName(info) : member.nick || info.username));
 
 		let isgradient = data.color1 && BDFDB.isObject(data.color1);
 		let datacolor = data.color1 || (BDFDB.isPluginEnabled("BetterRoleColors") ? member.colorString : null);

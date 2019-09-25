@@ -525,12 +525,12 @@ class PinDMs {
 						dmname = dmname + BDFDB.LibraryModules.UserStore.getUser(dmuser_id).username;
 					}
 				}
-				let EditUsersData = user && BDFDB.isPluginEnabled("EditUsers") ? window.bdplugins.EditUsers.plugin.getUserData(user.id, dmdiv) : {};
+				let EditUsersData = user && BDFDB.isPluginEnabled("EditUsers") ? BDFDB.getPlugin("EditUsers").getUserData(user.id, dmdiv) : {};
 				if (!EditUsersData.removeIcon) avatar.setAttribute("src", `${EditUsersData.url || BDFDB.getChannelIcon(id)}`);
 				avatar.setAttribute("channel", dmname);
 				if (user) avatar.setAttribute("user", user.username);
 				dmdivinner.addEventListener("mouseenter", () => {
-					let FreshEditUsersData = user && BDFDB.isPluginEnabled("EditUsers") ? window.bdplugins.EditUsers.plugin.getUserData(user.id, dmdiv) : {};
+					let FreshEditUsersData = user && BDFDB.isPluginEnabled("EditUsers") ? BDFDB.getPlugin("EditUsers").getUserData(user.id, dmdiv) : {};
 					BDFDB.createTooltip(FreshEditUsersData.name || dmname, dmdivinner, {selector:(BDFDB.isObjectEmpty(FreshEditUsersData) ? "" : "EditUsers-tooltip"),type:"right"});
 				});
 				avatar.parentElement.addEventListener("click", e => {

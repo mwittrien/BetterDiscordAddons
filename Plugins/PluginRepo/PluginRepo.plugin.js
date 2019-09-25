@@ -471,7 +471,7 @@ class PluginRepo {
 		pluginRepoModal.entries = {};
 		for (let url in this.loadedPlugins) {
 			let plugin = this.loadedPlugins[url];
-			let instPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
+			let instPlugin = BDFDB.getPlugin(plugin.getName);
 			if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase()) plugin.getState = this.getString(instPlugin.getVersion()) != plugin.getVersion ? 1 : 0;
 			else plugin.getState = 2;
 			let data = {
@@ -740,7 +740,7 @@ class PluginRepo {
 					if (valid) {
 						plugin.url = url;
 						this.loadedPlugins[url] = plugin;
-						var instPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
+						let instPlugin = BDFDB.getPlugin(plugin.getName);
 						if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion && PluginUpdates && PluginUpdates.plugins && !PluginUpdates.plugins[url]) outdated++;
 						if (!this.cachedPlugins.includes(url)) newentries++;
 					}
@@ -798,7 +798,7 @@ class PluginRepo {
 					if (BDFDB.isObject(plugin)) {
 						plugin.url = url;
 						this.loadedPlugins[url] = plugin;
-						var instPlugin = window.bdplugins[plugin.getName] ? window.bdplugins[plugin.getName].plugin : null;
+						let instPlugin = BDFDB.getPlugin(plugin.getName);
 						if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion) outdated++;
 						if (!this.cachedPlugins.includes(url)) newentries++;
 					}

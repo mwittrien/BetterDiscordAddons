@@ -655,7 +655,7 @@ class ThemeRepo {
 		themeRepoModal.entries = {};
 		for (let url in this.loadedThemes) {
 			let theme = this.loadedThemes[url];
-			let instTheme = window.bdthemes[theme.name];
+			let instTheme = BDFDB.getTheme(theme.name);
 			if (instTheme && instTheme.author.toUpperCase() == theme.author.toUpperCase()) theme.state = instTheme.version != theme.version ? 1 : 0;
 			else theme.state = 2;
 			let data = {
@@ -1004,7 +1004,7 @@ class ThemeRepo {
 							theme.url = url;
 							theme.requesturl = requesturl;
 							this.loadedThemes[url] = theme;
-							var instTheme = window.bdthemes[theme.name];
+							var instTheme = BDFDB.getTheme(theme.name);
 							if (instTheme && instTheme.author.toUpperCase() == theme.author.toUpperCase() && instTheme.version != theme.version) outdated++;
 							if (!this.cachedThemes.includes(url)) newentries++;
 						}

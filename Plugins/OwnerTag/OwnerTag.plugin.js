@@ -187,7 +187,7 @@ class OwnerTag {
 			let tag = BDFDB.htmlToElement(`<span class="owner-tag ${isowner ? "owner-tag-owner" : "owner-tag-admin"} owner-${type}-tag ${(settings.useRoleColor ? "owner-tag-rolecolor " : "") + BDFDB.disCN.bottag + (selector ? (" " + selector) : "")}" style="order: 10 !important;">${BDFDB.getData(isowner ? "ownTagName" : "ownAdminTagName", this, "inputs")}</span>`);
 			let invert = container && container.firstElementChild && !(BDFDB.containsClass(container.firstElementChild, BDFDB.disCN.userpopoutheadernormal) || BDFDB.containsClass(container.firstElementChild, BDFDB.disCN.userprofiletopsectionnormal));
 			BDFDB.addClass(tag, invert ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular);
-			let EditUsersData = BDFDB.isPluginEnabled("EditUsers") ? window.bdplugins.EditUsers.plugin.getUserData(info.id, wrapper) : {};
+			let EditUsersData = BDFDB.isPluginEnabled("EditUsers") ? BDFDB.getPlugin("EditUsers").getUserData(info.id, wrapper) : {};
 			let tagcolor = BDFDB.colorCONVERT(EditUsersData.color1 || member.colorString, "RGBA");
 			let isbright = BDFDB.colorISBRIGHT(tagcolor);
 			tagcolor = isbright ? (settings.useBlackFont ? tagcolor : BDFDB.colorCHANGE(tagcolor, -0.3)) : tagcolor;

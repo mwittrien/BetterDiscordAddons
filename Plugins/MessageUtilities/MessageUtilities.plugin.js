@@ -298,14 +298,14 @@ class MessageUtilities {
 	doNote ({messagediv, pos, message}) {
 		if (BDFDB.isPluginEnabled(this.defaults.bindings.__Note_Message.plugin)) {
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
-			if (channel) window.bdplugins[this.defaults.bindings.__Note_Message.plugin].plugin.addMessageToNotes(message, messagediv, channel);
+			if (channel) BDFDB.getPlugin(this.defaults.bindings.__Note_Message.plugin).addMessageToNotes(message, messagediv, channel);
 		}
 	}
 
 	doTranslate ({messagediv, pos, message}) {
 		if (BDFDB.isPluginEnabled(this.defaults.bindings.__Translate_Message.plugin)) {
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
-			if (channel) window.bdplugins[this.defaults.bindings.__Translate_Message.plugin].plugin.translateMessage(message, messagediv, channel);
+			if (channel) BDFDB.getPlugin(this.defaults.bindings.__Translate_Message.plugin).translateMessage(message, messagediv, channel);
 		}
 	}
 
@@ -325,7 +325,7 @@ class MessageUtilities {
 
 	doReveal ({messagediv, pos, message}) {
 		if (BDFDB.isPluginEnabled(this.defaults.bindings.__Reveal_Spoilers.plugin)) {
-			window.bdplugins[this.defaults.bindings.__Reveal_Spoilers.plugin].plugin.revealAllSpoilers(messagediv);
+			BDFDB.getPlugin(this.defaults.bindings.__Reveal_Spoilers.plugin).revealAllSpoilers(messagediv);
 		}
 	}
 
