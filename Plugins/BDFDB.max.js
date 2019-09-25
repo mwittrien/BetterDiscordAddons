@@ -3488,7 +3488,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		var isgradient = color && BDFDB.isObject(color);
 		var selectedcolor = BDFDB.colorCONVERT(isgradient ? color[Object.keys(color)[0]] : color, 'HEX') || '#000000';
 		var [h, s, l] = BDFDB.colorCONVERT(selectedcolor, 'HSLCOMP');
-		var a = BDFDB.colorGETALPHA(selectedcolor);
+		var a = BDFDB.colorGETALPHA(isgradient ? color[Object.keys(color)[0]] : color);
+		a = typeof a == undefined || a == null ? 1 : a;
 		
 		if (options.comp) options.alpha = false;
 			 
