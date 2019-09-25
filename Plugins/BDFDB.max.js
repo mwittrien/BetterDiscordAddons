@@ -2446,7 +2446,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				return isNaN(a) || a > 1 ? 1 : a < 0 ? 0 : a;
 			}
 		}
-		else return 0;
+		else return 1;
 	};
 
 	var colorChange = (color, value, conv) => {
