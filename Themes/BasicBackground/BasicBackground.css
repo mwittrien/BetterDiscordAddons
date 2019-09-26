@@ -2311,7 +2311,7 @@ body:before {
 	object-position: -9999999px -9999999px;
 }
 #app-mount .colorPickerSwatch-5GX3Ve.noColor-1pdBDm {		/* rolesettings			colorswatchnocolor					*/
-	border-color: rgba(var(--fontwhite1), 0.1);
+	border-color: rgba(var(--fontwhite1), 0.3);
 }
 #app-mount .colorPickerSwatch-5GX3Ve.noColor-1pdBDm .colorPickerDropperFg-3jYKWI {
 	fill: rgb(var(--fontwhite1));
