@@ -105,6 +105,7 @@
 		3.	EMOJIPICKER
 		4.	PINS/MENTIONS
 		5.	SEARCHPOPOUT
+		6.	COLORPICKER
 	16.	GENERAL
 		1.	TEXT
 		2.	BUTTONS
@@ -3878,6 +3879,62 @@ body:before {
 	display: flex;
 	justify-content: center;
 }
+
+
+/* ----		15.6.	COLORPICKER						---- */
+
+#app-mount .colorPickerCustom-2CWBn2 {						/* popout				wrapper								*/
+	background-color: transparent;
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
+	border: none;
+	border-radius: 3px;
+	overflow: hidden;
+}
+.colorPickerCustom-2CWBn2:after,
+.colorPickerCustom-2CWBn2:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.colorPickerCustom-2CWBn2:after {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.35));
+}
+.colorPickerCustom-2CWBn2:before {
+	background: var(--vpopout) center/var(--vpopoutsize);
+	filter: blur(var(--vpopoutblur));
+	background-attachment: fixed;
+}
+#app-mount .saturation-1FDvtn > div > div > div > div {							/* popout				saturationcursor					*/
+	box-shadow: rgb(var(--fontwhite1)) 0px 0px 0px 1.5px, rgba(var(--vtransparencycolor), 0.6) 0px 0px 1px 1px inset, rgba(var(--vtransparencycolor), 0.6) 0px 0px 1px 2px !important;
+}
+#app-mount .hue-13HAGb > div > div > div > div,									/* popout				huecursor							*/
+#app-mount .BDFDB-colorpicker .alpha-bar > div > div > div > div {				/* popout				alphacursor							*/
+	background: rgb(var(--fontwhite1)) !important;
+	box-shadow: rgba(var(--vtransparencycolor), 1) 0px 0px 2px !important;
+}
+#app-mount .BDFDB-colorpicker .gradient-button {								/* popout				gradientbutton						*/
+	color: rgb(var(--fontwhite1));
+}
+#app-mount .BDFDB-colorpicker .gradient-bar .gradient-cursor > div {			/* popout				gradientcursor						*/
+	border-color: rgb(var(--fontwhite4));
+}
+#app-mount .BDFDB-colorpicker .gradient-bar .gradient-cursor > div:before {		/* popout				gradientcursorpointer				*/
+	border-top-color: rgb(var(--fontwhite4));
+}
+#app-mount .BDFDB-colorpicker .gradient-bar .gradient-cursor.selected > div {
+	border-color: rgb(var(--fontwhite1));
+}
+#app-mount .BDFDB-colorpicker .gradient-bar .gradient-cursor.selected > div:before {
+	border-top-color: rgb(var(--fontwhite1));
+}
+
 
 
 /* ~~~~		16.		GENERAL							~~~~ */
