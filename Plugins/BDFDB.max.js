@@ -6106,7 +6106,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		.BDFDB-modal .tab-content:not(.open) {
 			display: none;
 		}
-		.BDFDB-modal .tab-content.open > * {
+		.BDFDB-modal *${BDFDB.notCN.modalsubinner} > .tab-content.open${BDFDB.notCN.modalsubinner} > * {
 			padding: 0 20px 0 12px;
 		}
 		.colorpicker-modal .colorpicker-container {

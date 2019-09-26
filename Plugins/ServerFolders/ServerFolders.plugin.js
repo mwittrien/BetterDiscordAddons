@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.3.8";}
+	getVersion () {return "6.3.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -688,7 +688,7 @@ class ServerFolders {
 			for (let pos of Object.keys(color2).sort()) svg += `<stop offset="${pos * 100}%" style="stop-color: ${color2[pos]};"></stop>`;
 			svg += `</linearGradient>`;
 		}
-		svg += `${paths.replace("REPLACE_FILL1", isgradient1 ? "url(#grad1)" : BDFDB.colorCONVERT(color1, "HEX")).replace("REPLACE_FILL2", isgradient2 ? "url(#grad2)" : BDFDB.colorCONVERT(color2, "HEX"))}</svg>`;
+		svg += `${paths.replace("REPLACE_FILL1", isgradient1 ? "url(#grad1)" : BDFDB.colorCONVERT(color1, "RGBA")).replace("REPLACE_FILL2", isgradient2 ? "url(#grad2)" : BDFDB.colorCONVERT(color2, "RGBA"))}</svg>`;
 		return `data:image/svg+xml;base64,${btoa(svg)}`;
 	}
 
