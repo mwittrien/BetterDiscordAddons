@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";} 
 
-	getVersion () {return "1.4.5";}
+	getVersion () {return "1.4.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class BadgesEverywhere {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"fixed":[["Padding in Memberlist","Fixed the padding in the memberlist"]]
 		};
 
 		this.patchModules = {
@@ -57,7 +57,7 @@ class BadgesEverywhere {
 				margin-left: 5px !important;
 			}
 			.BE-badge:not(.BE-badge-settings):last-of-type {
-				margin-right: 5px !important;
+				margin-right: 0 !important;
 			}
 			${BDFDB.dotCN.userprofiletopsectionplaying} .BE-badge.BE-badge-CurrentGuildBoost svg {
 				color: white !important;
@@ -75,7 +75,7 @@ class BadgesEverywhere {
 
 			.BE-badge.BE-badge-CurrentGuildBoost {height:14px !important; width:14px !important; min-width:14px !important;}
 
-			.BE-badge.BE-badge-settings {width:30px !important;min-width:30px !important;}
+			#app-mount .BE-badge.BE-badge-settings {width:30px !important;min-width:30px !important;}
 
 			${BDFDB.dotCNS.member + BDFDB.dotCN.memberpremiumicon}:not(.BE-badge-CurrentGuildBoost-inner) {display: none;}`;
 

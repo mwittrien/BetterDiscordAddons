@@ -3,7 +3,7 @@
 class TopRoleEverywhere {
 	getName () {return "TopRoleEverywhere";}
 
-	getVersion () {return "2.8.9";}
+	getVersion () {return "2.9.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class TopRoleEverywhere {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"fixed":[["Padding in Memberlist","Fixed the padding in the memberlist"]]
 		};
 
 		this.patchModules = {
@@ -33,9 +33,6 @@ class TopRoleEverywhere {
 				display: block;
 				overflow: hidden;
 				text-overflow: ellipsis;
-			}
-			.BE-badges + .TRE-tag {
-				margin-left: 0;
 			}`;
 
 		this.defaults = {
