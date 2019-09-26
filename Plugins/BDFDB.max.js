@@ -4462,6 +4462,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		guildfolderexpandendbackgroundcollapsed: ['GuildFolder', 'collapsed'],
 		guildfolderexpandendbackgroundhover: ['GuildFolder', 'hover'],
 		guildfolderexpandedguilds: ['GuildFolder', 'expandedGuilds'],
+		guildfolderguildicon: ['GuildFolder', 'guildIcon'],
 		guildfoldericonwrapper: ['GuildFolder', 'folderIconWrapper'],
 		guildfoldericonwrapperclosed: ['GuildFolder', 'closedFolderIconWrapper'],
 		guildfoldericonwrapperexpanded: ['GuildFolder', 'expandedFolderIconWrapper'],

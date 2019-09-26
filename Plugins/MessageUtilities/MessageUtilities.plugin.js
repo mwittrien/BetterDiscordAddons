@@ -31,19 +31,9 @@ class MessageUtilities {
 		this.keys = 	["key1","key2"];
 		this.defaults = {
 			settings: {
-				"clearOnEscape":			{value:true, 	description:"Clear chat input when Escape is pressed:"},
-				"Edit_Message":				{value:true},
-				"Delete_Message":			{value:true},
-				"Pin/Unpin_Message":		{value:true},
-				"React_to_Message":			{value:true},
-				"Copy_Raw":					{value:true},
-				"Copy_Link":				{value:true},
-				"__Note_Message":			{value:false},
-				"__Translate_Message":		{value:false},
-				"__Quote_Message":			{value:false},
-				"__Citate_Message":			{value:false},
-				"__Reveal_Spoilers":		{value:false}
+				"clearOnEscape":			{value:true, 	description:"Clear chat input when Escape is pressed:"}
 			},
+			toasts: {},
 			bindings: {
 				"Edit_Message":				{name:"Edit Message",									func:this.doEdit,			value:{click:1, 	key1:0, 	key2:0}},
 				"Delete_Message":			{name:"Delete Message",									func:this.doDelete,			value:{click:0, 	key1:46, 	key2:0}},
@@ -55,14 +45,20 @@ class MessageUtilities {
 				"__Translate_Message":		{name:"Translate Message (Google Translate Option)",	func:this.doTranslate,		value:{click:0, 	key1:20, 	key2:0}, 	plugin:"GoogleTranslateOption"},
 				"__Quote_Message":			{name:"Quote Message (Quoter)",							func:this.doQuote,			value:{click:0, 	key1:17, 	key2:87}, 	plugin:"Quoter"},
 				"__Citate_Message":			{name:"Quote Message (Citador)",						func:this.doCitate,			value:{click:0, 	key1:17, 	key2:78}, 	plugin:"Citador"},
-				"__Reveal_Spoilers":		{name:"Reveal All Spoilers (RevealAllSpoilersOption)",	func:this.doReveal,			value:{click:0, 	key1:17, 	key2:82}, 	plugin:"RevealAllSpoilersOption"}
+				"__Reveal_Spoilers":		{name:"Reveal All Spoilers (RevealAllSpoilersOption)",	func:this.doReveal,			value:{click:0, 	key1:17, 	key2:74}, 	plugin:"RevealAllSpoilersOption"}
 			}
 		};
+		for (let type in this.defaults.bindings) {
+			let nativeaction = type.indexOf("__") != 0;
+			this.defaults.settings[type] = {value:nativeaction};
+			if (nativeaction) this.defaults.toasts[type] = {value:type != "Edit_Message" && type != "React_to_Message"};
+		}
 	}
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let settings = BDFDB.getAllData(this, "settings"); 
+		let toasts = BDFDB.getAllData(this, "toasts"); 
 		let bindings = BDFDB.getAllData(this, "bindings");
 		let settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		for (let key in settings) {
@@ -70,7 +66,8 @@ class MessageUtilities {
 		}
 		for (let action in bindings) {
 			if (!this.defaults.bindings[action].plugin || BDFDB.isPluginEnabled(this.defaults.bindings[action].plugin)) {
-				settingshtml += `<div class="${action}-key-settings"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.bindings[action].name}:</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${action}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[action] ? " checked" : ""}></div></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">`;
+				settingshtml += `<div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.marginbottom4}"></div>`;
+				settingshtml += `<div class="${action}-key-settings"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.bindings[action].name}:</h3>${toasts[action] != undefined ? `<h5 class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 0 0 auto;">Toast:</h5><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="toasts ${action}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${toasts[action] ? " checked" : ""}></div>` : ''}<h5 class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 0 0 auto;">Enabled:</h5><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${action}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[action] ? " checked" : ""}></div></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">`;
 				for (let click of this.clicks) {
 					settingshtml += `<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 20%;"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin + BDFDB.disCN.marginbottom4}">${click}:</h5>${BDFDB.createSelectMenu(this.createSelectChoice(bindings[action][click]), bindings[action][click], action + " " + click)}</div>`;
 				}
@@ -265,7 +262,7 @@ class MessageUtilities {
 				let {messagediv, pos, message} = this.getMessageData(e.currentTarget);
 				if (messagediv && pos > -1 && message) {
 					BDFDB.stopEvent(e);
-					this.defaults.bindings[priorityaction].func.bind(this)({messagediv, pos, message});
+					this.defaults.bindings[priorityaction].func.bind(this)({messagediv, pos, message}, priorityaction);
 				}
 			}
 			this.cancelEvent(name);
@@ -279,69 +276,86 @@ class MessageUtilities {
 		return valid;
 	}
 
-	doDelete ({messagediv, pos, message}) {
+	doDelete ({messagediv, pos, message}, action) {
 		let deletelink = messagediv.parentElement.querySelector(BDFDB.dotCNS.messagelocalbotmessage + BDFDB.dotCN.anchor);
 		if (deletelink) deletelink.click();
 		else {
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 			if ((channel && BDFDB.isUserAllowedTo("MANAGE_MESSAGES")) || message.author.id == BDFDB.myData.id && message.type != 1 && message.type != 2 && message.type != 3) {
 				BDFDB.LibraryModules.MessageUtils.deleteMessage(message.channel_id, message.id, message.state != "SENT");
+				if (BDFDB.getData(action, this, "toasts")) BDFDB.showToast("Message has been deleted", {type:"success"});
 			}
 		}
 	}
 
-	doEdit ({messagediv, pos, message}) {
+	doEdit ({messagediv, pos, message}, action) {
 		if (message.author.id == BDFDB.myData.id && !messagediv.querySelector("textarea")) {
 			BDFDB.LibraryModules.MessageUtils.startEditMessage(message.channel_id, message.id, message.content);
+			if (BDFDB.getData(action, this, "toasts")) BDFDB.showToast("Started editing.", {type:"success"});
 		}
 	}
 
-	doOpenReact ({messagediv, pos, message}) {
+	doOpenReact ({messagediv, pos, message}, action) {
 		let reactButton = messagediv.querySelector(BDFDB.dotCN.emojipickerbutton);
-		if (reactButton) reactButton.click();
+		if (reactButton) {
+			reactButton.click();
+			if (BDFDB.getData(action, this, "toasts")) BDFDB.showToast("Reaction popout has been opened.", {type:"success"});
+		}
 	}
 
-	doPinUnPin ({messagediv, pos, message}) {
+	doPinUnPin ({messagediv, pos, message}, action) {
 		if (message.state == "SENT") {
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 			if (channel && (channel.type == 1 || channel.type == 3 || BDFDB.isUserAllowedTo("MANAGE_MESSAGES")) && message.type == 0) {
-				if (message.pinned) BDFDB.LibraryModules.MessagePinUtils.unpinMessage(channel, message.id);
-				else BDFDB.LibraryModules.MessagePinUtils.pinMessage(channel, message.id);
+				if (message.pinned) {
+					BDFDB.LibraryModules.MessagePinUtils.unpinMessage(channel, message.id);
+					if (BDFDB.getData(action, this, "toasts")) BDFDB.showToast("Message has been unpinned.", {type:"error"});
+				}
+				else {
+					BDFDB.LibraryModules.MessagePinUtils.pinMessage(channel, message.id);
+					if (BDFDB.getData(action, this, "toasts")) BDFDB.showToast("Message has been pinned.", {type:"success"});
+				}
 			}
 		}
 	}
 
-	doCopyRaw ({messagediv, pos, message}) {
-		if (message.content) BDFDB.LibraryRequires.electron.clipboard.write({text:message.content});
+	doCopyRaw ({messagediv, pos, message}, action) {
+		if (message.content) {
+			BDFDB.LibraryRequires.electron.clipboard.write({text:message.content});
+			if (BDFDB.getData(action, this, "toasts")) BDFDB.showToast("Raw message content has been copied.", {type:"success"});
+		}
 	}
 
-	doCopyLink ({messagediv, pos, message}) {
+	doCopyLink ({messagediv, pos, message}, action) {
 		let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
-		if (channel) BDFDB.LibraryRequires.electron.clipboard.write({text:`https://discordapp.com/channels/${channel.guild_id}/${channel.id}/${message.id}`});
+		if (channel) {
+			BDFDB.LibraryRequires.electron.clipboard.write({text:`https://discordapp.com/channels/${channel.guild_id}/${channel.id}/${message.id}`});
+			if (BDFDB.getData(action, this, "toasts")) BDFDB.showToast("Messagelink has been copied.", {type:"success"});
+		}
 	}
 
-	doNote ({messagediv, pos, message}) {
+	doNote ({messagediv, pos, message}, action) {
 		if (BDFDB.isPluginEnabled(this.defaults.bindings.__Note_Message.plugin)) {
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 			if (channel) BDFDB.getPlugin(this.defaults.bindings.__Note_Message.plugin).addMessageToNotes(message, messagediv, channel);
 		}
 	}
 
-	doTranslate ({messagediv, pos, message}) {
+	doTranslate ({messagediv, pos, message}, action) {
 		if (BDFDB.isPluginEnabled(this.defaults.bindings.__Translate_Message.plugin)) {
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 			if (channel) BDFDB.getPlugin(this.defaults.bindings.__Translate_Message.plugin).translateMessage(message, messagediv, channel);
 		}
 	}
 
-	doQuote ({messagediv, pos, message}) {
+	doQuote ({messagediv, pos, message}, action) {
 		if (BDFDB.isPluginEnabled(this.defaults.bindings.__Quote_Message.plugin)) {
 			let quoteButton = messagediv.querySelector(".btn-quote");
 			if (quoteButton) quoteButton.click();
 		}
 	}
 
-	doCitate ({messagediv, pos, message}) {
+	doCitate ({messagediv, pos, message}, action) {
 		if (BDFDB.isPluginEnabled(this.defaults.bindings.__Citate_Message.plugin)) {
 			console.log(messagediv.parentElement);
 			let citarButton = messagediv.parentElement.querySelector(".citar-btn");
@@ -349,7 +363,7 @@ class MessageUtilities {
 		}
 	}
 
-	doReveal ({messagediv, pos, message}) {
+	doReveal ({messagediv, pos, message}, action) {
 		if (BDFDB.isPluginEnabled(this.defaults.bindings.__Reveal_Spoilers.plugin)) {
 			BDFDB.getPlugin(this.defaults.bindings.__Reveal_Spoilers.plugin).revealAllSpoilers(messagediv);
 		}
