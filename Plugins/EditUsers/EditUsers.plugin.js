@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.5.9";}
+	getVersion () {return "3.6.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditUsers {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["Transparent colors","Added compatibility for (semi-)transparent colors"]]
+			"fixed":[["RemoveNicknames","Fixed a bug with RemoveNicknames"]]
 		};
 
 		this.labels = {};
@@ -1009,7 +1009,7 @@ class EditUsers {
 		mention.removeEventListener("mouseout", mention.mouseoutListenerEditUsers);
 		let data = this.getUserData(info.id, mention);
 		let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), info.id) || {};
-		let name = "@" + (data.name ? data.name : (BDFDB.isPluginEnabled("RemoveNicknames") ? BDFDB.getPlugin("RemoveNicknames").getNewName(info) : member.nick || info.username));
+		let name = "@" + (data.name ? data.name : (BDFDB.isPluginEnabled("RemoveNicknames") ? BDFDB.getPlugin("RemoveNicknames").getNewName(info, mention) : member.nick || info.username));
 
 		let isgradient = data.color1 && BDFDB.isObject(data.color1);
 		let datacolor = data.color1 || (BDFDB.isPluginEnabled("BetterRoleColors") ? member.colorString : null);
