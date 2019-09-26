@@ -3,7 +3,7 @@
 class MessageUtilities {
 	getName () {return "MessageUtilities";}
 
-	getVersion () {return "1.5.3";}
+	getVersion () {return "1.5.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,8 @@ class MessageUtilities {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Reset All","Fixed bug where you couldn't reset all keybindings in the settings at once"]]
+			"added":[["New Options","Copy raw message content & Copy message link"]],
+			"improved":[["Priorities","Hotkey+Click combos now got priorities, a double click has a higher priority than a single click & an action with two keys set has a high priority than an action with one key, this allows actions to be set for example to (1. Ctrl + Click and 2. Ctrl + D + Click) without executing both when Ctrl + D + Click is pressed, same goes for double clicks"]]
 		};
 	}
 
@@ -35,6 +36,8 @@ class MessageUtilities {
 				"Delete_Message":			{value:true},
 				"Pin/Unpin_Message":		{value:true},
 				"React_to_Message":			{value:true},
+				"Copy_Raw":					{value:true},
+				"Copy_Link":				{value:true},
 				"__Note_Message":			{value:false},
 				"__Translate_Message":		{value:false},
 				"__Quote_Message":			{value:false},
@@ -45,12 +48,14 @@ class MessageUtilities {
 				"Edit_Message":				{name:"Edit Message",									func:this.doEdit,			value:{click:1, 	key1:0, 	key2:0}},
 				"Delete_Message":			{name:"Delete Message",									func:this.doDelete,			value:{click:0, 	key1:46, 	key2:0}},
 				"Pin/Unpin_Message":		{name:"Pin/Unpin Message",								func:this.doPinUnPin,		value:{click:0, 	key1:17, 	key2:0}},
-				"React_to_Message":			{name:"React to Message",								func:this.doOpenReact,		value:{click:0, 	key1:9, 	key2:0}},
+				"React_to_Message":			{name:"React to Message",								func:this.doOpenReact,		value:{click:0, 	key1:17, 	key2:83}},
+				"Copy_Raw":					{name:"Copy raw Message",								func:this.doCopyRaw,		value:{click:0, 	key1:17, 	key2:68}},
+				"Copy_Link":				{name:"Copy Message Link",								func:this.doCopyLink,		value:{click:0, 	key1:17, 	key2:81}},
 				"__Note_Message":			{name:"Note Message (Pesonal Pins)",					func:this.doNote,			value:{click:0, 	key1:16, 	key2:0}, 	plugin:"PersonalPins"},
 				"__Translate_Message":		{name:"Translate Message (Google Translate Option)",	func:this.doTranslate,		value:{click:0, 	key1:20, 	key2:0}, 	plugin:"GoogleTranslateOption"},
-				"__Quote_Message":			{name:"Quote Message (Quoter)",							func:this.doQuote,			value:{click:0, 	key1:113, 	key2:0}, 	plugin:"Quoter"},
-				"__Citate_Message":			{name:"Quote Message (Citador)",						func:this.doCitate,			value:{click:0, 	key1:114, 	key2:0}, 	plugin:"Citador"},
-				"__Reveal_Spoilers":		{name:"Reveal All Spoilers (RevealAllSpoilersOption)",	func:this.doReveal,			value:{click:0, 	key1:115, 	key2:0}, 	plugin:"RevealAllSpoilersOption"}
+				"__Quote_Message":			{name:"Quote Message (Quoter)",							func:this.doQuote,			value:{click:0, 	key1:17, 	key2:87}, 	plugin:"Quoter"},
+				"__Citate_Message":			{name:"Quote Message (Citador)",						func:this.doCitate,			value:{click:0, 	key1:17, 	key2:78}, 	plugin:"Citador"},
+				"__Reveal_Spoilers":		{name:"Reveal All Spoilers (RevealAllSpoilersOption)",	func:this.doReveal,			value:{click:0, 	key1:17, 	key2:82}, 	plugin:"RevealAllSpoilersOption"}
 			}
 		};
 	}
@@ -132,11 +137,18 @@ class MessageUtilities {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 
-			BDFDB.addEventListener(this, document, "click", BDFDB.dotCN.messagegroup + "> [aria-disabled]," + BDFDB.dotCN.messagesystem, e => {
-				this.onClick(e, 0, "onSglClick");
+			let clickTimeout;
+			BDFDB.addEventListener(this, document, "click", BDFDB.dotCN.messagegroup + "> [aria-disabled]," + BDFDB.dotCN.messagegroup + "> * > [aria-disabled]," + BDFDB.dotCN.messagesystem, e => {
+				clearTimeout(clickTimeout);
+				clickTimeout = setTimeout(() => {
+					this.onClick(e, 0, "onSglClick");
+				}, 500);
 			})
-			BDFDB.addEventListener(this, document, "dblclick", BDFDB.dotCN.messagegroup + "> [aria-disabled]," + BDFDB.dotCN.messagesystem, e => {
-				this.onClick(e, 1, "onDblClick");
+			BDFDB.addEventListener(this, document, "dblclick", BDFDB.dotCN.messagegroup + "> [aria-disabled]," + BDFDB.dotCN.messagegroup + "> * > [aria-disabled]," + BDFDB.dotCN.messagesystem, e => {
+				clearTimeout(clickTimeout);
+				clickTimeout = setTimeout(() => {
+					this.onClick(e, 1, "onDblClick");
+				}, 500);
 			});
 			BDFDB.addEventListener(this, document, "keydown", BDFDB.dotCN.textareawrapchat, e => {
 				this.onKeyDown(e, e.which, "onKeyDown");
@@ -241,15 +253,19 @@ class MessageUtilities {
 		if (!this.isEventFired(name)) {
 			this.fireEvent(name);
 			let settings = BDFDB.getAllData(this, "settings");
-			let bindings = BDFDB.getAllData(this, "bindings");
-			for (let action in bindings) {
-				if (settings[action] && this.checkIfBindingIsValid(bindings[action], click)) {
-					let {messagediv, pos, message} = this.getMessageData(e.currentTarget);
-					if (messagediv && pos > -1 && message) {
-						BDFDB.stopEvent(e);
-						this.defaults.bindings[action].func.bind(this)({messagediv, pos, message});
-					}
-					break;
+			let bindings = BDFDB.filterObject(BDFDB.getAllData(this, "bindings"), action => {return settings[action]}, true);
+			let validactions = [], priorityaction = null;
+			for (let action in bindings) if (this.checkIfBindingIsValid(bindings[action], click)) validactions.push(action);
+			for (let action of validactions) {
+				let prioritybinding = bindings[priorityaction];
+				let binding = bindings[action];
+				if (!prioritybinding || binding.click > prioritybinding.click || binding.key2 != 0 && prioritybinding.key2 == 0) priorityaction = action;
+			}
+			if (priorityaction) {
+				let {messagediv, pos, message} = this.getMessageData(e.currentTarget);
+				if (messagediv && pos > -1 && message) {
+					BDFDB.stopEvent(e);
+					this.defaults.bindings[priorityaction].func.bind(this)({messagediv, pos, message});
 				}
 			}
 			this.cancelEvent(name);
@@ -295,6 +311,15 @@ class MessageUtilities {
 		}
 	}
 
+	doCopyRaw ({messagediv, pos, message}) {
+		if (message.content) BDFDB.LibraryRequires.electron.clipboard.write({text:message.content});
+	}
+
+	doCopyLink ({messagediv, pos, message}) {
+		let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
+		if (channel) BDFDB.LibraryRequires.electron.clipboard.write({text:`https://discordapp.com/channels/${channel.guild_id}/${channel.id}/${message.id}`});
+	}
+
 	doNote ({messagediv, pos, message}) {
 		if (BDFDB.isPluginEnabled(this.defaults.bindings.__Note_Message.plugin)) {
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
@@ -318,6 +343,7 @@ class MessageUtilities {
 
 	doCitate ({messagediv, pos, message}) {
 		if (BDFDB.isPluginEnabled(this.defaults.bindings.__Citate_Message.plugin)) {
+			console.log(messagediv.parentElement);
 			let citarButton = messagediv.parentElement.querySelector(".citar-btn");
 			if (citarButton) citarButton.click();
 		}
@@ -353,7 +379,7 @@ class MessageUtilities {
 	}
 
 	getMessageData (target) {
-		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.messagegroup + "> [aria-disabled]", target) || BDFDB.getParentEle(BDFDB.dotCN.messagesystem, target);
+		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.messagegroup + "> [aria-disabled]", target) || BDFDB.getParentEle(BDFDB.dotCN.messagegroup + "> * > [aria-disabled]", target) || BDFDB.getParentEle(BDFDB.dotCN.messagesystem, target);
 		let pos = messagediv ? Array.from(messagediv.parentElement.childNodes).filter(n => n.nodeType != Node.TEXT_NODE).indexOf(messagediv) : -1;
 		let instance = BDFDB.getReactInstance(messagediv);
 		let message = instance ? BDFDB.getKeyInformation({instance, key:"message", up:true}) : null;
@@ -369,6 +395,6 @@ class MessageUtilities {
 	}
 
 	cancelEvent (name) {
-		BDFDB.removeFromArray(this.firedEvents, name);
+		setTimeout(() => {BDFDB.removeFromArray(this.firedEvents, name)}, 1000);
 	}
 }

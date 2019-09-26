@@ -772,8 +772,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		return newobj;
 	};
 
-	BDFDB.filterObject = function (obj, filter) {
-		return Object.keys(obj).filter(key => filter(obj[key])).reduce((newobj, key) => (newobj[key] = obj[key], newobj), {});
+	BDFDB.filterObject = function (obj, filter, bykey = false) {
+		return Object.keys(obj).filter(key => filter(bykey ? key : obj[key])).reduce((newobj, key) => (newobj[key] = obj[key], newobj), {});
 	};
 
 	BDFDB.isObject = function (obj) {
@@ -3492,7 +3492,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.openColorPicker = function (container, target, color, options = {gradient: true, comp: false, alpha: true, callback: () => {}}) {
 		if (!container || !target) return;
 		
-		if (options.comp) options.alpha = false;
+		if (options.comp) {
+			options.gradient = false;
+			options.alpha = false;
+		}
 		if (typeof options.callback != 'function') options.callback = () => {};
 		
 		var hexformat = options.alpha ? 'HEXA' : 'HEX';
