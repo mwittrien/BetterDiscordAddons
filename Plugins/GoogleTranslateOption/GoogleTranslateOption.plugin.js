@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.7.5";} 
+	getVersion () {return "1.7.6";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class GoogleTranslateOption {
 
 	constructor () {
 		this.changelog = {
-			"added":[["Favorites","You can now add languages to your own favorites list, these languages will appear at the top of your choicemenu"]]
+			"improved":[["Embeds","Translating a message now also translates the embed descriptions (usually the maintext of embeds)"]]
 		};
 
 		this.labels = {};
@@ -117,13 +117,21 @@ class GoogleTranslateOption {
 				padding: 0 10px;
 				width: 400px;
 			}
-			${BDFDB.dotCN.messagegroup} .GTO-translated-message ${BDFDB.dotCNS.messagebody + BDFDB.dotCN.messagemarkup} {
+			${BDFDB.dotCN.messagegroup} .GTO-translated-message ${BDFDB.dotCNS.messagebody + BDFDB.dotCN.messagemarkup},
+			${BDFDB.dotCN.messagegroup} .GTO-translated-message ${BDFDB.dotCNS.messageaccessory + BDFDB.dotCN.embeddescription} {
 				font-size: 0 !important;
+				line-height: 0 !important;
 			}
 			${BDFDB.dotCN.messagegroup} .GTO-translated-message ${BDFDB.dotCNS.messagebody + BDFDB.dotCN.messagemarkup} > .GTO-translation {
 				font-size: 1rem !important;
+				line-height: 1.375 !important;
 			}
-			${BDFDB.dotCN.messagegroup} .GTO-translated-message ${BDFDB.dotCNS.messagebody + BDFDB.dotCN.messagemarkup} > :not(.GTO-translation)${BDFDB.notCN.messageheadercompact + BDFDB.notCN.messageedited} {
+			${BDFDB.dotCN.messagegroup} .GTO-translated-message ${BDFDB.dotCNS.messageaccessory + BDFDB.dotCN.embeddescription} > .GTO-translation {
+				font-size: 0.875rem !important;
+				line-height: 1rem !important;
+			}
+			${BDFDB.dotCN.messagegroup} .GTO-translated-message ${BDFDB.dotCNS.messagebody + BDFDB.dotCN.messagemarkup} > :not(.GTO-translation)${BDFDB.notCN.messageheadercompact + BDFDB.notCN.messageedited},
+			${BDFDB.dotCN.messagegroup} .GTO-translated-message ${BDFDB.dotCNS.messageaccessory + BDFDB.dotCN.embeddescription} > :not(.GTO-translation)${BDFDB.notCN.messageedited} {
 				display: none !important;
 			}`;
 	}
@@ -385,7 +393,7 @@ class GoogleTranslateOption {
 	}
 
 	getMessageAndPos (target) {
-		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.messagegroup + "> [aria-disabled]", target);
+		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.messagegroup + "> [aria-disabled]", target) || BDFDB.getParentEle(BDFDB.dotCN.messagegroup + "> * > [aria-disabled]", target);
 		let pos = messagediv ? Array.from(messagediv.parentElement.childNodes).filter(n => n.nodeType != Node.TEXT_NODE).indexOf(messagediv) : -1;
 		return {messagediv, pos};
 	}
@@ -397,16 +405,27 @@ class GoogleTranslateOption {
 		channel = channel ? channel : BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 		if (!messagediv.querySelector(BDFDB.dotCN.messageedited + ".GTO-translated")) {
 			var markup = messagediv.querySelector(BDFDB.dotCN.messagemarkup);
+			var accessory = messagediv.querySelector(BDFDB.dotCN.messageaccessory);
+			var embeddescriptions = messagediv.querySelectorAll(BDFDB.dotCN.embeddescription)
 			var fakemarkup = markup.cloneNode(true);
 			BDFDB.removeEles(fakemarkup.querySelectorAll(BDFDB.dotCNC.messageheadercompact + BDFDB.dotCN.messageedited));
-			this.translateText(fakemarkup.innerHTML, "context", (translation, input, output) => {
+			let string = fakemarkup.innerHTML;
+			if (embeddescriptions.length) for (let embeddescription of embeddescriptions) {
+				string += "\n__________________ __________________ __________________\n";
+				string += embeddescription.innerHTML;;
+			}
+			this.translateText(string, "context", (translation, input, output) => {
 				if (translation) {
+					BDFDB.addClass(messagediv, "GTO-translated-message");
+					let translations = translation.split("\n__________________ __________________ __________________\n");
 					let compactheader = markup.querySelector(BDFDB.dotCN.messageheadercompact);
-					markup.insertBefore(BDFDB.htmlToElement(`<label class="GTO-translation">${translation.replace(/\n/g, "BDFDB_GTO_PLACEHOLDER").replace(/\s/g, " ").replace(/BDFDB_GTO_PLACEHOLDER/g, "\n").replace(/> *(\n*) *</g, ">$1<").replace(/> +/g, "> ").replace(/ +</g, " <").replace(/> *([^ ]*) *<\//g, ">$1</").trim()}<time class="${BDFDB.disCN.messageedited} GTO-translated">(${this.labels.translated_watermark_text})</time></label>`), compactheader ? compactheader.nextSibling : markup.firstChild);
-					markup.querySelector(BDFDB.dotCN.messageedited + ".GTO-translated").addEventListener("mouseenter", e => {
+					markup.insertBefore(BDFDB.htmlToElement(`<label class="GTO-translation">${translations.shift().replace(/\n/g, "BDFDB_GTO_PLACEHOLDER").replace(/\s/g, " ").replace(/BDFDB_GTO_PLACEHOLDER/g, "\n").replace(/> *(\n*) *</g, ">$1<").replace(/> +/g, "> ").replace(/ +</g, " <").replace(/> *([^ ]*) *<\//g, ">$1</").trim()}<time class="${BDFDB.disCN.messageedited} GTO-translated">(${this.labels.translated_watermark_text})</time></label>`), compactheader ? compactheader.nextSibling : markup.firstChild);
+					if (embeddescriptions.length) for (let embeddescription of embeddescriptions) {
+						embeddescription.insertBefore(BDFDB.htmlToElement(`<label class="GTO-translation">${translations.shift().trim()}<time class="${BDFDB.disCN.messageedited} GTO-translated">(${this.labels.translated_watermark_text})</time></label>`), embeddescription.firstChild);
+					}
+					BDFDB.addChildEventListener(messagediv, "mouseenter", BDFDB.dotCN.messageedited + ".GTO-translated", e => {
 						BDFDB.createTooltip(`<div>From: ${input.name}</div><div>To: ${output.name}</div>`, e.currentTarget, {html:true, type:"top", selector:"translation-tooltip"});
 					});
-					BDFDB.addClass(messagediv, "GTO-translated-message");
 				}
 			});
 		}
@@ -414,7 +433,7 @@ class GoogleTranslateOption {
 	}
 
 	resetMessage (messagediv) {
-		BDFDB.removeEles(messagediv.querySelector(".GTO-translation"));
+		BDFDB.removeEles(messagediv.querySelectorAll(".GTO-translation"));
 		BDFDB.removeClass(messagediv, "GTO-translated-message");
 	}
 
