@@ -3,7 +3,7 @@
 class MessageUtilities {
 	getName () {return "MessageUtilities";}
 
-	getVersion () {return "1.5.5";}
+	getVersion () {return "1.5.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -145,7 +145,7 @@ class MessageUtilities {
 			})
 			BDFDB.addEventListener(this, document, "dblclick", BDFDB.dotCN.messagegroup + "> [aria-disabled]," + BDFDB.dotCN.messagegroup + "> * > [aria-disabled]," + BDFDB.dotCN.messagesystem, e => {
 				clearTimeout(clickTimeout);
-				this.onClick(e, 1, "onDblClick");
+				this.onClick(e, 1, BDFDB.pressedKeys, "onDblClick");
 			});
 			BDFDB.addEventListener(this, document, "keydown", BDFDB.dotCN.textareawrapchat, e => {
 				this.onKeyDown(e, e.which, BDFDB.pressedKeys, "onKeyDown");
