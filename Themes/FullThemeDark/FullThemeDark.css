@@ -206,6 +206,9 @@
 #bda-qem-favourite-container {
 	height: 328px;
 }
+#app-mount .emojiPicker-3m1S-j .scrollerWrap-PyxcLY {
+	height: 224px;
+}
 #app-mount .emojiPicker-3m1S-j .dimmer-3iH-5D.visible-3k45bQ {
 	display: none;
 }
@@ -253,6 +256,9 @@
 }
 #app-mount .emojiPicker-3m1S-j .noSearchResultsContainer-3Dee0U .wrapper-1GJGVj .sadImage-2ph8SI {
 	background-image: url(https://discordapp.com/assets/e25713e4eba8c1e069ceac8f90262f62.svg);
+}
+#app-mount .emojiPicker-3m1S-j .categories-1feg4n {
+	justify-content: space-evenly;
 }
 #app-mount .emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq {
 	transition: none;

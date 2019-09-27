@@ -3522,6 +3522,9 @@ body:before {
 #app-mount #bda-qem-favourite-container {
 	height: 328px;
 }
+#app-mount .emojiPicker-3m1S-j .scrollerWrap-PyxcLY {
+	height: 224px;
+}
 #app-mount #bda-qem {
 	height: 30px;
 }
@@ -3583,6 +3586,9 @@ body:before {
 #app-mount .emojiPicker-3m1S-j .emojiItem-109bjA.selected-39BZ4S {
 	background-color: rgb(var(--vaccentcolor));
 	border-radius: 5px;
+}
+#app-mount .emojiPicker-3m1S-j .categories-1feg4n {
+	justify-content: space-evenly;
 }
 #app-mount .emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq {
 	transition: none;
