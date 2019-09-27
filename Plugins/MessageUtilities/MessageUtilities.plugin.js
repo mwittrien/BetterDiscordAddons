@@ -3,7 +3,7 @@
 class MessageUtilities {
 	getName () {return "MessageUtilities";}
 
-	getVersion () {return "1.5.4";}
+	getVersion () {return "1.5.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,8 @@ class MessageUtilities {
 
 	constructor () {
 		this.changelog = {
-			"added":[["New Options","Copy raw message content & Copy message link"]],
+			"fixed":[["Double Click Delay","Delay on couble click was fixed"]],
+			"added":[["New Options","Copy raw message content & Copy message link"],["Toasts","You can enable/disable toasts for native actions"]],
 			"improved":[["Priorities","Hotkey+Click combos now got priorities, a double click has a higher priority than a single click & an action with two keys set has a high priority than an action with one key, this allows actions to be set for example to (1. Ctrl + Click and 2. Ctrl + D + Click) without executing both when Ctrl + D + Click is pressed, same goes for double clicks"]]
 		};
 	}
@@ -137,18 +138,17 @@ class MessageUtilities {
 			let clickTimeout;
 			BDFDB.addEventListener(this, document, "click", BDFDB.dotCN.messagegroup + "> [aria-disabled]," + BDFDB.dotCN.messagegroup + "> * > [aria-disabled]," + BDFDB.dotCN.messagesystem, e => {
 				clearTimeout(clickTimeout);
+				let keys = [].concat(BDFDB.pressedKeys);
 				clickTimeout = setTimeout(() => {
-					this.onClick(e, 0, "onSglClick");
+					this.onClick(e, 0, keys, "onSglClick");
 				}, 500);
 			})
 			BDFDB.addEventListener(this, document, "dblclick", BDFDB.dotCN.messagegroup + "> [aria-disabled]," + BDFDB.dotCN.messagegroup + "> * > [aria-disabled]," + BDFDB.dotCN.messagesystem, e => {
 				clearTimeout(clickTimeout);
-				clickTimeout = setTimeout(() => {
-					this.onClick(e, 1, "onDblClick");
-				}, 500);
+				this.onClick(e, 1, "onDblClick");
 			});
 			BDFDB.addEventListener(this, document, "keydown", BDFDB.dotCN.textareawrapchat, e => {
-				this.onKeyDown(e, e.which, "onKeyDown");
+				this.onKeyDown(e, e.which, BDFDB.pressedKeys, "onKeyDown");
 			});
 		}
 		else {
@@ -246,17 +246,16 @@ class MessageUtilities {
 		BDFDB.saveData(action, binding, this, "bindings");
 	}
 
-	onClick (e, click, name) {
+	onClick (e, click, keys, name) {
 		if (!this.isEventFired(name)) {
 			this.fireEvent(name);
 			let settings = BDFDB.getAllData(this, "settings");
 			let bindings = BDFDB.filterObject(BDFDB.getAllData(this, "bindings"), action => {return settings[action]}, true);
-			let validactions = [], priorityaction = null;
-			for (let action in bindings) if (this.checkIfBindingIsValid(bindings[action], click)) validactions.push(action);
-			for (let action of validactions) {
-				let prioritybinding = bindings[priorityaction];
+			let priorityaction = null;
+			for (let action in bindings) {
 				let binding = bindings[action];
-				if (!prioritybinding || binding.click > prioritybinding.click || binding.key2 != 0 && prioritybinding.key2 == 0) priorityaction = action;
+				let prioritybinding = bindings[priorityaction];
+				if (this.checkIfBindingIsValid(binding, click, keys) && (!bindings[priorityaction] || binding.click > prioritybinding.click || binding.key2 != 0 && prioritybinding.key2 == 0)) priorityaction = action;
 			}
 			if (priorityaction) {
 				let {messagediv, pos, message} = this.getMessageData(e.currentTarget);
@@ -269,10 +268,10 @@ class MessageUtilities {
 		}
 	}
 
-	checkIfBindingIsValid (binding, doneclick) {
+	checkIfBindingIsValid (binding, doneclick, keys) {
 		let valid = true;
 		for (let click of this.clicks) if (binding[click] != doneclick) valid = false;
-		for (let key of this.keys) if (!BDFDB.pressedKeys.includes(binding[key]) && binding[key] != 0) valid = false;
+		for (let key of this.keys) if (!keys.includes(binding[key]) && binding[key] != 0) valid = false;
 		return valid;
 	}
 
@@ -283,7 +282,7 @@ class MessageUtilities {
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 			if ((channel && BDFDB.isUserAllowedTo("MANAGE_MESSAGES")) || message.author.id == BDFDB.myData.id && message.type != 1 && message.type != 2 && message.type != 3) {
 				BDFDB.LibraryModules.MessageUtils.deleteMessage(message.channel_id, message.id, message.state != "SENT");
-				if (BDFDB.getData(action, this, "toasts")) BDFDB.showToast("Message has been deleted", {type:"success"});
+				if (BDFDB.getData(action, this, "toasts")) BDFDB.showToast("Message has been deleted.", {type:"success"});
 			}
 		}
 	}
