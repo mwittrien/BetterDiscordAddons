@@ -4260,7 +4260,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		checkboxwrapper: ['Checkbox', 'checkboxWrapper'],
 		checkboxwrapperdisabled: ['Checkbox', 'checkboxWrapperDisabled'],
 		clickable: ['Message', 'clickOverride'],
-		clickable: ['Message', 'clickOverride'],
 		colorpicker: ['ColorPicker', 'colorPickerCustom'],
 		colorpickerhexinput: ['ColorPicker', 'customColorPickerInput'],
 		colorpickerhue: ['ColorPickerInner', 'hue'],

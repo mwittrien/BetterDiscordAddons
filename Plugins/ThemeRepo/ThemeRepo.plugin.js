@@ -3,7 +3,7 @@
 class ThemeRepo {
 	getName () {return "ThemeRepo";}
 
-	getVersion () {return "1.8.6";}
+	getVersion () {return "1.8.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -13,7 +13,8 @@ class ThemeRepo {
 		this.changelog = {
 			"added":[["Theme Generator","A new tab was added, that lets you generate your own custom themes"]],
 			"added":[["Preview","Hovering out of the themerepo now hides it and the backdrop to more swiftly let you take a look at the theme preview"]],
-			"fixed":[["Fixed","Theme Fixer CSS was fixed for the newest changes"]]
+			"improved":[["Ctrl","Pressing Ctrl while inside a generator input no longer hides the modal"]],
+			"fixed":[["Theme Fixer","Theme Fixer CSS was fixed for the newest changes"]]
 		};
 
 		this.patchModules = {
@@ -482,8 +483,15 @@ class ThemeRepo {
 		}
 
 		var keyPressed = e => {
-			if (e.which == 17 && themeRepoModal.querySelector(BDFDB.dotCN.searchbarinput) != document.activeElement) BDFDB.toggleEles(themeRepoModal);
-			if (e.which == 27) frame.remove();
+			if (e.which == 17) {
+				var toggle = true;
+				for (let ele of themeRepoModal.querySelectorAll(".varinput, " + BDFDB.dotCN.searchbarinput)) if (ele == document.activeElement) {
+					toggle = false;
+					break;
+				}
+				if (toggle) BDFDB.toggleEles(themeRepoModal);
+			}
+			else if (e.which == 27) frame.remove();
 		};
 
 		var messageReceived = e => {
@@ -692,7 +700,7 @@ class ThemeRepo {
 	createGeneratorVars (frame, container, data) {
 		let vars = data.fullcss.split(":root");
 		if (vars.length < 2) return;
-		vars = vars[1].replace(/\/\*[^\/]+?\n[^\/]+?\*\//g, "").replace(/\t\(/g, " (").replace(/\t| {2,}/g, "").replace(/\n\/\*.*?\*\//g, "").replace(/\r/g, "").replace(/[\t\s]+\n/g, "\n").replace(/\n[^\{\}-]+[^\n]+/g, "\n").replace(/\n/g, "");
+		vars = vars[1].replace(/\t\(/g, " (").replace(/\r|\t| {2,}/g, "").replace(/\/\*\n*((?!\/\*|\*\/).|\n)*\n+((?!\/\*|\*\/).|\n)*\n*\*\//g, "").replace(/\n\/\*.*?\*\//g, "").replace(/\n/g, "");
 		vars = vars.split("{");
 		vars.shift();
 		vars = vars.join("{").replace(/\s*(:|;|--|\*)\s*/g, "$1");
