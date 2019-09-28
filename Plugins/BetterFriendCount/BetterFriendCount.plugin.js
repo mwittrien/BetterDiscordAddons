@@ -3,7 +3,7 @@
 class BetterFriendCount {
 	getName () {return "BetterFriendCount";}
 
-	getVersion () {return "1.1.7";}
+	getVersion () {return "1.1.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -92,7 +92,7 @@ class BetterFriendCount {
 	// begin of own functions
 
 	processTabBar (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.children) for (let child of instance.props.children) if ((child.key || (child.props && child.props.id)) == "ADD_FRIEND") this.addCountNumbers(wrapper);
+		if (instance.props && instance.props.children) for (let child of instance.props.children) if (child && (child.key || (child.props && child.props.id)) == "ADD_FRIEND") this.addCountNumbers(wrapper);
 	}
 
 	processFriendRow (instance, wrapper, returnvalue) {
