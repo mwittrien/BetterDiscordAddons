@@ -1053,12 +1053,25 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (!nodeOrInstance || !valuepath) return null;
 		let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.getReactInstance(nodeOrInstance) : nodeOrInstance;
 		if (!BDFDB.isObject(instance)) return null;
-		let found = instance;
-		for (let key of valuepath.split('.').filter(n => n)) {
-			found = found[key];
-			if (found == undefined) return null;
+		let found = instance, values = valuepath.split('.').filter(n => n);
+		for (let i = 0; i < values.length; i++) {
+			found = found[values[i]];
+			if (found == undefined && i < values.length-1) return null;
 		}
 		return found;
+	};
+
+	BDFDB.setReactValue = function (nodeOrInstance, valuepath, value) {
+		if (!nodeOrInstance || !valuepath || !value) return false;
+		let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.getReactInstance(nodeOrInstance) : nodeOrInstance;
+		if (!BDFDB.isObject(instance)) return false;
+		let found = instance, values = valuepath.split('.').filter(n => n);
+		for (let i = 0; i < values.length; i++) {
+			found = found[values[i]];
+			if (found == undefined && i < values.length-1) return false;
+		}
+		found = value;
+		return true;
 	};
 
 	BDFDB.getOwnerInstance = function (config) {
@@ -1349,6 +1362,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		InviteCard: 'InviteRow',
 		PopoutContainer: 'Popout',
 		MemberCard: 'Member',
+		MessageDeveloperModeGroup: 'FluxContainer(MessageDeveloperModeGroup)',
 		Note: 'FluxContainer(Note)',
 		WebhookCard: 'Webhook'
 	};
@@ -2937,7 +2951,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			ele.setAttribute('speed', 3);
 			ele.innerHTML = `<div class="BDFDB-textscroll">${BDFDB.encodeToHTML(ele.innerText)}</div>`;
 		});
-		container.querySelectorAll('.BDFDB-contextMenuItem ' + BDFDB.dotCN.contextmenuhint).forEach(ele => {
+		container.querySelectorAll('.BDFDB-contextMenuItemHint, .BDFDB-contextMenuItem ' + BDFDB.dotCN.contextmenuhint).forEach(ele => {
 			if (ele.innerText) {
 				ele.innerHTML = `<div class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">${BDFDB.encodeToHTML(ele.innerText)}</div></div>`;
 				ele.style.setProperty('top', getComputedStyle(ele.parentElement).paddingTop, 'important');
