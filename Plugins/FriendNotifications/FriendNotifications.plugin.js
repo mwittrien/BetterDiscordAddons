@@ -3,7 +3,7 @@
 class FriendNotifications {
 	getName () {return "FriendNotifications";}
 
-	getVersion () {return "1.3.0";}
+	getVersion () {return "1.3.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,8 +11,7 @@ class FriendNotifications {
 
 	constructor () {
 		this.changelog = {
-			"added":[["Playing/Listening/Streaming","You can now listen for substatus like playing and listening, also added new placeholders like $game and $song to custom notifications"],["Default disable","Option to disable notification for newly added friends"]],
-			"fixed":[["Startup spam","Fixed the spam of toasts on plugin start"],["Missing sounds","Fixed the missing sounds for playing/listening"]]
+			"fixed":[["Double notifications","It now should be impossible for the plugin to trigger double notifications, if this problem still occurs to you, then something is wrong on your end (double plugin file or two different versions at the same time)"]]
 		};
 		
 		this.patchModules = {
@@ -22,6 +21,7 @@ class FriendNotifications {
 
 	initConstructor () {
 		this.userStatusStore = {};
+		this.shownNotifications = {};
 
 		this.checkInterval = null;
 
@@ -495,6 +495,7 @@ class FriendNotifications {
 		let notificationsounds = BDFDB.getAllData(this, "notificationsounds");
 		let users = Object.assign({}, BDFDB.loadAllData(this, "nonfriends"), BDFDB.loadAllData(this, "friends"));
 		for (let id in users) this.userStatusStore[id] = this.getStatusWithMobileAndActivity(id, users[id]).statusname;
+		let intervaltime = BDFDB.getData("checkInterval", this, "amounts") * 1000;
 		this.checkInterval = setInterval(() => {
 			for (let id in users) if (!users[id].disabled) {
 				let user = BDFDB.LibraryModules.UserStore.getUser(id);
@@ -507,7 +508,8 @@ class FriendNotifications {
 					if (status.isactivity) toaststring = toaststring.replace(/\$song|\$game/g, `<strong>${status.name || status.details}</strong>`).replace(/\$artist/g, `<strong>${status.state}</strong>`);
 					let avatar = EUdata.removeIcon ? "" : (EUdata.url ? EUdata.url : BDFDB.getUserAvatar(user.id));
 					this.timeLog.push({string:toaststring, avatar, time: new Date()});
-					if (!(settings.muteOnDND && BDFDB.getUserStatus() == "dnd")) {
+					if (!(settings.muteOnDND && BDFDB.getUserStatus() == "dnd") && !this.shownNotifications[user.id]) {
+						this.shownNotifications[user.id] = true;
 						let openChannel = () => {
 							if (settings.openOnClick) {
 								let DMid = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(user.id)
@@ -532,11 +534,12 @@ class FriendNotifications {
 							let notificationsound = notificationsounds["desktop" + status.statusname] || {};
 							BDFDB.showDesktopNotification(desktopstring, {icon:avatar, timeout:5000, click:openChannel, silent:notificationsound.mute, sound:notificationsound.song});
 						}
+						setTimeout(() => {delete this.shownNotifications[user.id]}, intervaltime/2);
 					}
 				}
 				this.userStatusStore[id] = status.statusname;
 			}
-		},BDFDB.getData("checkInterval", this, "amounts") * 1000);
+		}, intervaltime);
 	}
 
 	showTimeLog () {

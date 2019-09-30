@@ -3,7 +3,7 @@
 class MessageUtilities {
 	getName () {return "MessageUtilities";}
 
-	getVersion () {return "1.5.7";}
+	getVersion () {return "1.5.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,8 @@ class MessageUtilities {
 	constructor () {
 		this.changelog = {
 			"improved":[["Delays","A delay is need to cancel the single click event in case a double click follows, the plugin now checks if an action with a double click might overwrite a single click (happens if they share the same keys), if this is not the case the plugin will trigger the single click action without delay now"]],
-			"added":[["Context Hints", "Added hints to native contextmenu items, hints can now be disabled in the settings"],["Toasts","You can enable/disable toasts for native actions"]]
+			"added":[["Context Hints", "Added hints to native contextmenu items, hints can now be disabled in the settings"],["Toasts","You can enable/disable toasts for native actions"]],
+			"fixed":[["Double Hints", "Fixed the issue where the contextmenu hitn would be added twice in rare cases"]]
 		};
 
 		this.patchModules = {
@@ -164,28 +165,31 @@ class MessageUtilities {
 		if (instance.props && instance.props.message && instance.props.channel && instance.props.target) {
 			let changed = false;
 			for (let itemlabel of menu.querySelectorAll(BDFDB.dotCN.contextmenulabel)) {
-				let action = null;
-				switch (itemlabel.innerText) {
-					case BDFDB.LanguageStrings.COPY_MESSAGE_LINK:
-						action = "Copy_Link";
-						break;
-					case BDFDB.LanguageStrings.EDIT_MESSAGE:
-						action = "Edit_Message";
-						break;
-					case BDFDB.LanguageStrings.PIN_MESSAGE:
-					case BDFDB.LanguageStrings.UNPIN_MESSAGE:
-						action = "Pin/Unpin_Message";
-						break;
-					case BDFDB.LanguageStrings.DELETE_MESSAGE:
-						action = "Delete_Message";
-						break;
-				}
-				if (action) {
-					let hintlabel = this.getActiveShortcutString(action);
-					if (hintlabel) {
-						changed = true;
-						BDFDB.addClass(itemlabel.nextElementSibling, "BDFDB-contextMenuItemHint");
-						BDFDB.setInnerText(itemlabel.nextElementSibling, hintlabel);
+				let hint = itemlabel.parentElement.querySelector(BDFDB.dotCN.contextmenuhint);
+				if (hint && !BDFDB.containsClass(hint, "BDFDB-contextMenuItemHint")) {
+					let action = null;
+					switch (itemlabel.innerText) {
+						case BDFDB.LanguageStrings.COPY_MESSAGE_LINK:
+							action = "Copy_Link";
+							break;
+						case BDFDB.LanguageStrings.EDIT_MESSAGE:
+							action = "Edit_Message";
+							break;
+						case BDFDB.LanguageStrings.PIN_MESSAGE:
+						case BDFDB.LanguageStrings.UNPIN_MESSAGE:
+							action = "Pin/Unpin_Message";
+							break;
+						case BDFDB.LanguageStrings.DELETE_MESSAGE:
+							action = "Delete_Message";
+							break;
+					}
+					if (action) {
+						let hintlabel = this.getActiveShortcutString(action);
+						if (hintlabel) {
+							changed = true;
+							BDFDB.addClass(hint, "BDFDB-contextMenuItemHint");
+							BDFDB.setInnerText(hint, hintlabel);
+						}
 					}
 				}
 			}
