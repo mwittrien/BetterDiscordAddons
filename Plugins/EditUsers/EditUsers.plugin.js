@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.6.0";}
+	getVersion () {return "3.6.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditUsers {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["RemoveNicknames","Fixed a bug with RemoveNicknames"]]
+			"fixed":[["Profile Pictures","Fixed places where profile pictures weren't changed properly"]]
 		};
 
 		this.labels = {};
@@ -655,10 +655,12 @@ class EditUsers {
 				if (channel && channel.type == 1) user = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
 			}
 			if (user) {
-				let avatar = wrapper.querySelector(BDFDB.dotCN.callavatar);
 				this.changeName2(user, wrapper.parentElement.querySelector(BDFDB.dotCN.callmembers));
-				this.changeAvatar(user, avatar);
-				if (BDFDB.containsClass(avatar, BDFDB.disCN.callvideo)) this.changeTooltip(user, avatar, "left");
+				let avatar = this.getAvatarDiv(wrapper);
+				if (avatar) {
+					this.changeAvatar(user, avatar);
+					if (BDFDB.containsClass(avatar.parentElement, BDFDB.disCN.callvideo)) this.changeTooltip(user, avatar.parentElement, "left");
+				}
 			}
 		}
 	}
@@ -1110,7 +1112,7 @@ class EditUsers {
 			wrapper = wrapper.parentElement;
 			avatar = wrapper.querySelector(this.avatarselector);
 		}
-		return avatar.firstElementChild || avatar;
+		return avatar.querySelector("img") || avatar.firstElementChild || avatar;
 	}
 
 	getUserData (id, wrapper) {
