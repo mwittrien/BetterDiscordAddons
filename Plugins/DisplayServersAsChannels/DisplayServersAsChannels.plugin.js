@@ -3,7 +3,7 @@
 class DisplayServersAsChannels {
 	getName () {return "DisplayServersAsChannels";}
 
-	getVersion () {return "1.2.8";}
+	getVersion () {return "1.2.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class DisplayServersAsChannels {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"fixed":[["Folder Styling","Fixed soem styling issues with native folders"]]
 		};
 
 		this.patchModules = {
@@ -265,32 +265,40 @@ class DisplayServersAsChannels {
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderexpandedguilds} {
 				height: auto !important;
 			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderexpandendbackground} {
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCN.guildfolderexpandendbackground} {
 				top: 0 !important;
-				right: 0 !important;
+				right: 2px !important;
 				bottom: 0 !important;
 				left: 8px !important;
 				width: unset !important;
 				border-radius: 3px;
 			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderexpandendbackground + BDFDB.dotCN.guildfolderexpandendbackgroundcollapsed} + ${BDFDB.dotCN.guildouter} {
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCN.guildfolderexpandendbackground} ~ ${BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} ~ ${BDFDB.dotCN.guildinner},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCN.guildfolderexpandendbackground} ~ ${BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} ~ * ${BDFDB.dotCN.guildinner},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCN.guildfolderexpandendbackground} ~ ${BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} ~ * ${BDFDB.dotCN.guildsvg},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCN.guildfolderexpandendbackground} ~ ${BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} ~ * ${BDFDB.dotCN.guildiconwrapper},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCN.guildfolderexpandendbackground} ~ ${BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} ~ * foreignObject,
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCN.guildfolderexpandendbackground} ~ ${BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} ~ * ${BDFDB.dotCN.guildfolder},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCN.guildfolderexpandendbackground} ~ ${BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} ~ * ${BDFDB.dotCN.guildfoldericonwrapper} {
+				width: ${listwidth - 18}px !important;
+			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCN.guildouter} {
+				margin: 2px 0 2px 3px !important;
+			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCN.guildfolderexpandendbackground + BDFDB.dotCN.guildfolderexpandendbackgroundcollapsed} ~ ${BDFDB.dotCN.guildouter} {
 				padding-left: 0 !important;
 				margin-left: 0 !important;
 			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderexpandendbackground + BDFDB.dotCN.guildfolderexpandendbackgroundcollapsed} + ${BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + ${BDFDB.dotCN.guildinner},
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderexpandendbackground + BDFDB.dotCN.guildfolderexpandendbackgroundcollapsed} + ${BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + * ${BDFDB.dotCN.guildinner},
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderexpandendbackground + BDFDB.dotCN.guildfolderexpandendbackgroundcollapsed} + ${BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + * ${BDFDB.dotCN.guildsvg},
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderexpandendbackground + BDFDB.dotCN.guildfolderexpandendbackgroundcollapsed} + ${BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + * ${BDFDB.dotCN.guildiconwrapper},
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderexpandendbackground + BDFDB.dotCN.guildfolderexpandendbackgroundcollapsed} + ${BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + * foreignObject,
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderexpandendbackground + BDFDB.dotCN.guildfolderexpandendbackgroundcollapsed} + ${BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + * ${BDFDB.dotCN.guildfolder},
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderexpandendbackground + BDFDB.dotCN.guildfolderexpandendbackgroundcollapsed} + ${BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + * ${BDFDB.dotCN.guildfoldericonwrapper} {
-				width: ${listwidth - 18}px !important;
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCN.guildfolderexpandendbackground + BDFDB.notCN.guildfolderexpandendbackgroundcollapsed} ~ ${BDFDB.dotCN.guildouter} {
+				padding-left: 0 !important;
+				margin-bottom: 0 !important;
 			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildfoldericonwrapper} {
-				border-radius: 3px;
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCN.guildfolderexpandendbackground + BDFDB.notCN.guildfolderexpandendbackgroundcollapsed} ~ ${BDFDB.dotCN.guildouter} > div {
+				margin-left: 0 !important
 			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildfoldericonwrapper} {
 				display: flex !important;
+				border-radius: 3px;
 			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildfoldericonwrapperexpanded},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildfoldericonwrapperclosed} {
@@ -298,13 +306,16 @@ class DisplayServersAsChannels {
 				width: unset !important;
 				flex: 0 1 auto !important;
 			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildfoldericonwrapperexpanded} {
+				margin-right: 3px !important;
+			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildfoldericonwrapper} .DSAC-name {
 				width: unset !important;
 			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildfoldericonwrapperclosed + BDFDB.dotCN.guildfolderguildicon} {
 				margin: 0 2px !important;
 			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderexpandendbackground + BDFDB.dotCN.guildfolderexpandendbackgroundcollapsed},
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCN.guildfolderexpandendbackground + BDFDB.dotCN.guildfolderexpandendbackgroundcollapsed},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer + BDFDB.dotCN.guildicon},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer + BDFDB.dotCN.guildiconacronym} {
 				display: none !important;
@@ -348,21 +359,16 @@ class DisplayServersAsChannels {
 				width: ${listwidth - 18}px !important;
 				display: flex !important;
 			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCN.guildouter} {
-				margin: 2px 0 2px 4px !important;
-			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + * ${BDFDB.dotCN.guildsvg},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + * ${BDFDB.dotCN.guildiconwrapper},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + * foreignObject,
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildfolder},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildbuttoninner},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildplaceholder} {
 				width: ${listwidth - 25}px !important;
 			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + ${BDFDB.dotCN.guildinner},
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + * ${BDFDB.dotCN.guildinner},
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildfoldericonwrapper} {
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + * ${BDFDB.dotCN.guildinner} {
 				width: ${listwidth - 28}px !important;
 			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + * foreignObject {
@@ -371,6 +377,9 @@ class DisplayServersAsChannels {
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} {
 				top: -8px;
 				transform: scaleY(calc(32/50));
+			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCN.guildfolderexpandendbackground} ~ ${BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper} {
+				left: -5px;
 			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCNS.dmpill + BDFDB.dotCN.guildpillitem} {
 				min-height: calc(8px * (50/32));
@@ -463,6 +472,7 @@ class DisplayServersAsChannels {
 				text-transform: capitalize !important;
 				text-align: left !important;
 			}
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCN.guildfolderexpandendbackground + BDFDB.notCN.guildfolderexpandendbackgroundcollapsed} ~ ${BDFDB.dotCN.guildouter} .DSAC-name,
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter}.folder.open .DSAC-name {
 				text-decoration: underline;
 			}
