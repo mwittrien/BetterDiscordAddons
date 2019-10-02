@@ -11,7 +11,7 @@ class DisplayServersAsChannels {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Folder Styling","Fixed soem styling issues with native folders"]]
+			"fixed":[["Folder Styling","Fixed some styling issues with native folders"]]
 		};
 
 		this.patchModules = {
