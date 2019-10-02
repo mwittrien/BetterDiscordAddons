@@ -19,9 +19,15 @@ https://raw.githubusercontent.com/CurimuChizu/CC-Themes/master/CC-Themes/ReZero.
 https://raw.githubusercontent.com/Dddsasul/TeamKappa-theme/master/ClearDiscord.theme.css
 https://raw.githubusercontent.com/Dddsasul/TeamKappa-theme/master/JustBlack.theme.css
 https://raw.githubusercontent.com/denBot/Cyan-Firewatch/master/cyan-firewatch.theme.css
+https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/BNHA.theme.css
+https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/BubblesReturns.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/Calm_and_Peaceful_Street.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/CleanGreenForest.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/Great_Mountain_Site.theme.css
+https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/Kemono_Friends.theme.css
+https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/TeamRam.theme.css
+https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/TeamRem.theme.css
+https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/Winter_Returns.theme.css
 https://raw.githubusercontent.com/fluffingtons/fulldark/master/fulldark.theme.css
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/AdjustableServerWidth/AdjustableServerWidth.theme.css
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/FrostedGlass/FrostedGlass.theme.css

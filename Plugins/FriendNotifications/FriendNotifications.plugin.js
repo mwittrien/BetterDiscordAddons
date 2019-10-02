@@ -3,7 +3,7 @@
 class FriendNotifications {
 	getName () {return "FriendNotifications";}
 
-	getVersion () {return "1.3.1";}
+	getVersion () {return "1.3.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,6 +11,7 @@ class FriendNotifications {
 
 	constructor () {
 		this.changelog = {
+			"added":[["Toast/Desktop Time","The amount of seconds a toast or desktop notification is on screen can now be configured in the settings"]],
 			"fixed":[["Double notifications","It now should be impossible for the plugin to trigger double notifications, if this problem still occurs to you, then something is wrong on your end (double plugin file or two different versions at the same time)"]]
 		};
 		
@@ -21,7 +22,6 @@ class FriendNotifications {
 
 	initConstructor () {
 		this.userStatusStore = {};
-		this.shownNotifications = {};
 
 		this.checkInterval = null;
 
@@ -133,6 +133,8 @@ class FriendNotifications {
 			},
 			notificationsounds: {},
 			amounts: {
+				toastTime:			{value:5, 		min:1,		description:"Amount of seconds a toast notification stays on screen:"},
+				desktopTime:		{value:5, 		min:1,		description:"Amount of seconds a desktop notification stays on screen:"},
 				checkInterval:		{value:10, 		min:5,		description:"Check Users every X seconds:"}
 			}
 		};
@@ -161,7 +163,7 @@ class FriendNotifications {
 		let settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		settingshtml += `<div class="${BDFDB.disCNS.h2 + BDFDB.disCNS.cursorpointer + BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4} BDFDB-containertext"><span class="BDFDB-containerarrow closed"></span>General Settings</div><div class="BDFDB-collapsecontainer">`;
 		for (let key in settings) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
-		for (let key in amounts) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%;">${this.defaults.amounts[key].description}</h3><div class="${BDFDB.disCN.inputwrapper} inputNumberWrapper ${BDFDB.disCNS.vertical}" style="flex: 1 1 auto;"><span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span><input type="number"${(!isNaN(this.defaults.amounts[key].min) && this.defaults.amounts[key].min !== null ? ' min="' + this.defaults.amounts[key].min + '"' : '') + (!isNaN(this.defaults.amounts[key].max) && this.defaults.amounts[key].max !== null ? ' max="' + this.defaults.amounts[key].max + '"' : '')} option="${key}" value="${amounts[key]}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} amount-input"></div></div>`;
+		for (let key in amounts) if (key.indexOf("desktop") == -1 || "Notification" in window) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCN.flexchild}" style="flex: 0 0 80%;">${this.defaults.amounts[key].description}</h3><div class="${BDFDB.disCN.inputwrapper} inputNumberWrapper ${BDFDB.disCNS.vertical}" style="flex: 1 1 auto;"><span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span><input type="number"${(!isNaN(this.defaults.amounts[key].min) && this.defaults.amounts[key].min !== null ? ' min="' + this.defaults.amounts[key].min + '"' : '') + (!isNaN(this.defaults.amounts[key].max) && this.defaults.amounts[key].max !== null ? ' max="' + this.defaults.amounts[key].max + '"' : '')} option="${key}" value="${amounts[key]}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.size16} amount-input"></div></div>`;
 		settingshtml += `</div><div class="${BDFDB.disCNS.modaldivider + BDFDB.disCN.marginbottom4}"></div>`;
 		settingshtml += `<div class="${BDFDB.disCNS.h2 + BDFDB.disCNS.cursorpointer + BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4} BDFDB-containertext"><span class="BDFDB-containerarrow closed"></span>Friend-List</div><div class="BDFDB-collapsecontainer">`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Click on an Icon to toggle <label class="type-toast">Toast</label> Notifications for that User:</h3></div>`;
@@ -491,11 +493,13 @@ class FriendNotifications {
 	startInterval () {
 		clearInterval(this.checkInterval);
 		let settings = BDFDB.getAllData(this, "settings");
+		let amounts = BDFDB.getAllData(this, "amounts");
 		let notificationstrings = BDFDB.getAllData(this, "notificationstrings");
 		let notificationsounds = BDFDB.getAllData(this, "notificationsounds");
 		let users = Object.assign({}, BDFDB.loadAllData(this, "nonfriends"), BDFDB.loadAllData(this, "friends"));
 		for (let id in users) this.userStatusStore[id] = this.getStatusWithMobileAndActivity(id, users[id]).statusname;
-		let intervaltime = BDFDB.getData("checkInterval", this, "amounts") * 1000;
+		let toasttime = (amounts.toastTime > amounts.checkInterval ? amounts.checkInterval : amounts.toastTime) * 1000;
+		let desktoptime = (amounts.desktopTime > amounts.checkInterval ? amounts.checkInterval : amounts.desktopTime) * 1000;
 		this.checkInterval = setInterval(() => {
 			for (let id in users) if (!users[id].disabled) {
 				let user = BDFDB.LibraryModules.UserStore.getUser(id);
@@ -508,8 +512,7 @@ class FriendNotifications {
 					if (status.isactivity) toaststring = toaststring.replace(/\$song|\$game/g, `<strong>${status.name || status.details}</strong>`).replace(/\$artist/g, `<strong>${status.state}</strong>`);
 					let avatar = EUdata.removeIcon ? "" : (EUdata.url ? EUdata.url : BDFDB.getUserAvatar(user.id));
 					this.timeLog.push({string:toaststring, avatar, time: new Date()});
-					if (!(settings.muteOnDND && BDFDB.getUserStatus() == "dnd") && !this.shownNotifications[user.id]) {
-						this.shownNotifications[user.id] = true;
+					if (!(settings.muteOnDND && BDFDB.getUserStatus() == "dnd")) {
 						let openChannel = () => {
 							if (settings.openOnClick) {
 								let DMid = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(user.id)
@@ -519,27 +522,28 @@ class FriendNotifications {
 							}
 						};
 						if (!users[id].desktop) {
-							let toast = BDFDB.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${toaststring}</div></div>`, {html:true, timeout:5000, color:BDFDB.getUserStatusColor(status.statusname), icon:false, selector:`friendnotifications-${status.statusname}-toast`});
-							toast.addEventListener("click", openChannel);
-							let notificationsound = notificationsounds["toast" + status.statusname] || {};
-							if (!notificationsound.mute && notificationsound.song) {
-								let audio = new Audio();
-								audio.src = notificationsound.song;
-								audio.play();
+							if (!document.querySelector(`.friendnotifications-${id}-toast`)) {
+								let toast = BDFDB.showToast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${toaststring}</div></div>`, {html:true, timeout:toasttime, color:BDFDB.getUserStatusColor(status.statusname), icon:false, selector:`friendnotifications-${status.statusname}-toast friendnotifications-${id}-toast`});
+								toast.addEventListener("click", openChannel);
+								let notificationsound = notificationsounds["toast" + status.statusname] || {};
+								if (!notificationsound.mute && notificationsound.song) {
+									let audio = new Audio();
+									audio.src = notificationsound.song;
+									audio.play();
+								}
 							}
 						}
 						else {
 							let desktopstring = string.replace(/\$user/g, EUdata.name || user.username).replace(/\$status/g, libstring);
 							if (status.isactivity) desktopstring = desktopstring.replace(/\$song|\$game/g, status.name || status.details).replace(/\$artist/g, status.state);
 							let notificationsound = notificationsounds["desktop" + status.statusname] || {};
-							BDFDB.showDesktopNotification(desktopstring, {icon:avatar, timeout:5000, click:openChannel, silent:notificationsound.mute, sound:notificationsound.song});
+							BDFDB.showDesktopNotification(desktopstring, {icon:avatar, timeout:desktoptime, click:openChannel, silent:notificationsound.mute, sound:notificationsound.song});
 						}
-						setTimeout(() => {delete this.shownNotifications[user.id]}, intervaltime/2);
 					}
 				}
 				this.userStatusStore[id] = status.statusname;
 			}
-		}, intervaltime);
+		}, amounts.checkInterval * 1000);
 	}
 
 	showTimeLog () {
