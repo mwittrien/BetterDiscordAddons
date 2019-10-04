@@ -5175,7 +5175,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	var LibraryComponents = {};
 	LibraryComponents.Button = BDFDB.WebModules.findByProperties('Colors', 'Hovers', 'Looks');
 	LibraryComponents.ContextMenu = BDFDB.WebModules.findByName('NativeContextMenu');
-	LibraryComponents.ContextMenuItem = BDFDB.WebModules.findByString("{className:(0,l.default)(i.default.item,(t={},t[i.default.clickable]=!v");
+	LibraryComponents.ContextMenuItem = BDFDB.WebModules.findByString('{className:i.default.label}', '{className:i.default.hint}');
 	LibraryComponents.ContextMenuItemGroup = BDFDB.WebModules.findByString('{className:i.default.itemGroup}');
 	LibraryComponents.ContextMenuSliderItem = BDFDB.WebModules.findByName('SliderMenuItem');
 	LibraryComponents.ContextMenuSubItem = BDFDB.WebModules.findByName('FluxContainer(SubMenuItem)');
@@ -6226,6 +6226,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	});
 	BDFDB.addEventListener(BDFDB, document, 'mousedown.BDFDBMousePosition', e => {
 		BDFDB.mousePosition = e;
+	});
+	BDFDB.addEventListener(BDFDB, window, 'focus.BDFDBPressedKeysReset', e => {
+		BDFDB.pressedKeys = [];
 	});
 
 	BDFDB.patchModules = {
