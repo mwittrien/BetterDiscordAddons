@@ -6222,6 +6222,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 	});
 	BDFDB.addEventListener(BDFDB, document, 'keyup.BDFDBPressedKeys', e => {
+		clearTimeout(keydowntimeouts[e.which]);
 		BDFDB.removeFromArray(BDFDB.pressedKeys, e.which, true);
 	});
 	BDFDB.addEventListener(BDFDB, document, 'mousedown.BDFDBMousePosition', e => {
