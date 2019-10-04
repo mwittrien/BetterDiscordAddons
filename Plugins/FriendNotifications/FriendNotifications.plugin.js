@@ -3,7 +3,7 @@
 class FriendNotifications {
 	getName () {return "FriendNotifications";}
 
-	getVersion () {return "1.3.2";}
+	getVersion () {return "1.3.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ class FriendNotifications {
 	constructor () {
 		this.changelog = {
 			"added":[["Toast/Desktop Time","The amount of seconds a toast or desktop notification is on screen can now be configured in the settings"]],
-			"fixed":[["Double notifications","It now should be impossible for the plugin to trigger double notifications, if this problem still occurs to you, then something is wrong on your end (double plugin file or two different versions at the same time)"]]
+			"fixed":[["Double notifications","It now should be impossible for the plugin to trigger double notifications, if this problem still occurs to you, then something is wrong on your end (double plugin file or two different versions at the same time)"],["Listening/Playing/Streaming","Fixed notifications not showing for those types"]]
 		};
 		
 		this.patchModules = {
@@ -483,7 +483,7 @@ class FriendNotifications {
 			let activityname = this.activityTypes[activity.type].toLowerCase();
 			if (this.defaults.notificationstrings[activityname] && config[activityname]) {
 				status = Object.assign({statusname:activityname, isactivity:true}, activity);
-				if (activityname == "listening" || activityname == "streaming") delete status.statusname;
+				if (activityname == "listening" || activityname == "streaming") delete status.name;
 			}
 		}
 		if (status.statusname == "online" && BDFDB.LibraryModules.StatusMetaUtils.isMobileOnline(id)) status.statusname = "mobile";
@@ -508,8 +508,8 @@ class FriendNotifications {
 					let EUdata = BDFDB.loadData(user.id, "EditUsers", "users") || {};
 					let libstring = (this.defaults.notificationstrings[status.statusname].libstring ? BDFDB.LanguageStrings[this.defaults.notificationstrings[status.statusname].libstring] : (this.defaults.notificationstrings[status.statusname].statusname || "")).toLowerCase();
 					let string = notificationstrings[status.statusname] || "$user changed status to $status";
-					let toaststring = BDFDB.encodeToHTML(string).replace(/\$user/g, `<strong>${BDFDB.encodeToHTML(EUdata.name || user.username)}</strong>`).replace(/\$status/g, `<strong>${libstring}</strong>`);
-					if (status.isactivity) toaststring = toaststring.replace(/\$song|\$game/g, `<strong>${status.name || status.details}</strong>`).replace(/\$artist/g, `<strong>${status.state}</strong>`);
+					let toaststring = BDFDB.encodeToHTML(string).replace(/'{0,1}\$user'{0,1}/g, `<strong>${BDFDB.encodeToHTML(EUdata.name || user.username)}</strong>`).replace(/'{0,1}\$status'{0,1}/g, `<strong>${libstring}</strong>`);
+					if (status.isactivity) toaststring = toaststring.replace(/'{0,1}\$song'{0,1}|'{0,1}\$game'{0,1}/g, `<strong>${status.name || status.details}</strong>`).replace(/'{0,1}\$artist'{0,1}/g, `<strong>${status.state}</strong>`);
 					let avatar = EUdata.removeIcon ? "" : (EUdata.url ? EUdata.url : BDFDB.getUserAvatar(user.id));
 					this.timeLog.push({string:toaststring, avatar, time: new Date()});
 					if (!(settings.muteOnDND && BDFDB.getUserStatus() == "dnd")) {
