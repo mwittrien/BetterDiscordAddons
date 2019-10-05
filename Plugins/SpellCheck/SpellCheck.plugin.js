@@ -3,7 +3,7 @@
 class SpellCheck {
 	getName () {return "SpellCheck";}
 
-	getVersion () {return "1.3.6";}
+	getVersion () {return "1.3.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class SpellCheck {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"fixed":[["Edit Textarea","Contextmenu now properly works in all textareas, like the edit message box"]]
 		};
 
 		this.patchModules = {
@@ -154,9 +154,19 @@ class SpellCheck {
 	// begin of own functions
 
 	onNativeContextMenu (instance, menu, returnvalue) {
-		if (instance.props && instance.props.target && instance.props.type == "CHANNEL_TEXT_AREA" && !menu.querySelector(`${this.name}-contextMenuItem`)) {
-			BDFDB.toggleEles(BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:menu, name:"NativeSpellcheckGroup"})), false);
-			var textarea = instance.props.target, word = null, length = 0;
+		if (instance.props && instance.props.target && instance.props.target.tagName == "TEXTAREA" && !menu.querySelector(`${this.name}-contextMenuItem`)) {
+			let [SCparent, SCindex] = BDFDB.getContextMenuGroupAndIndex(returnvalue, ["NativeSpellcheckGroup", "FluxContainer(NativeSpellcheckGroup)"]);
+			if (SCindex > -1) {
+				if (BDFDB.getKeyInformation({instance:instance._reactInternalFiber, key:"spellcheckEnabled"}) == true) {
+					clearTimeout(this.disableSpellcheckTimeout);
+					this.disableSpellcheckTimeout = setTimeout(() => {
+						BDFDB.LibraryModules.SpellCheckUtils.toggleSpellcheck();
+						delete this.disableSpellcheckTimeout;
+					}, 1000);
+				}
+				SCparent.splice(SCindex, 1);
+			}
+			let textarea = instance.props.target, word = null, length = 0;
 			if (textarea.value && (textarea.selectionStart || textarea.selectionEnd)) for (let splitword of textarea.value.split(/\s/g)) {
 				length += splitword.length + 1;
 				if (length > textarea.selectionStart) {
@@ -190,22 +200,26 @@ class SpellCheck {
 				}));
 				const itemgroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 					className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
-					children: [
-						BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
-							label: this.labels.context_spellcheck_text,
-							hint: word,
-							className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-addword-contextMenuItem`,
-							action: e => {
-								BDFDB.closeContextMenu(menu);
-								this.addToOwnDictionary(word);
-							}
-						}),
-						BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
-							label: this.labels.context_similarwords_text,
-							className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-suggestions-contextMenuSubItem`,
-							render: items
-						})
-					]
+					children: BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+						label: BDFDB.LanguageStrings.SPELLCHECK,
+						className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-spellcheck-contextMenuSubItem`,
+						render: [
+							BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								label: this.labels.context_spellcheck_text,
+								hint: word,
+								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-addword-contextMenuItem`,
+								action: e => {
+									BDFDB.closeContextMenu(menu);
+									this.addToOwnDictionary(word);
+								}
+							}),
+							BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+								label: this.labels.context_similarwords_text,
+								className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-suggestions-contextMenuSubItem`,
+								render: items
+							})
+						]
+					})
 				});
 				if (index > -1) children.splice(index, 0, itemgroup);
 				else children.push(itemgroup);

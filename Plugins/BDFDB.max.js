@@ -1324,6 +1324,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	LibraryModules.SelectChannelUtils = BDFDB.WebModules.findByProperties('selectChannel', 'selectPrivateChannel');
 	LibraryModules.SettingsUtils = BDFDB.WebModules.findByProperties('updateRemoteSettings', 'updateLocalSettings');
 	LibraryModules.SoundUtils = BDFDB.WebModules.findByProperties('playSound', 'createSound');
+	LibraryModules.SpellCheckUtils = BDFDB.WebModules.findByProperties('learnWord', 'toggleSpellcheck');
 	LibraryModules.StatusMetaUtils = BDFDB.WebModules.findByProperties('getApplicationActivity', 'getStatus');
 	LibraryModules.StreamingUtils = BDFDB.WebModules.findByProperties('isStreaming');
 	LibraryModules.UnreadGuildUtils = BDFDB.WebModules.findByProperties('hasUnread', 'getUnreadGuilds');
@@ -1642,7 +1643,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			BDFDB.WebModules.patch(module.prototype, 'componentDidUpdate', BDFDB, {after: e => {
 				var menu = BDFDB.React.findDOMNodeSafe(e.thisObject);
 				if (menu) {
-					BDFDB.initElements(menu);
 					const updater = BDFDB.getReactValue(e, 'thisObject._reactInternalFiber.stateNode.props.onHeightUpdate');
 					const mrects = BDFDB.getRects(menu), arects = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount));
 					if (updater && (mrects.top + mrects.height > arects.height)) updater();
@@ -6354,6 +6354,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.WebModules.forceAllUpdates(BDFDB);
 	
 	BDFDB.addContextListener(BDFDB);
+	
+	BDFDB.addObserver(BDFDB, document.querySelector(BDFDB.dotCN.itemlayerconainer), {name:"layerObserverBDFDB", instance:
+		new MutationObserver(changes => {changes.forEach(change => {change.addedNodes.forEach(node => {
+			if (node.tagName && (BDFDB.containsClass(node, BDFDB.disCN.contextmenu) || (node = node.querySelector(BDFDB.dotCN.contextmenu)) != null)) BDFDB.initElements(node);
+		})})})
+	}, {childList: true});
 
 	BDFDB.loaded = true;
 	var reloadLib = function () {
