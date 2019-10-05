@@ -150,6 +150,7 @@ class ReverseImageSearch {
 			for (let key in engines) if (engines[key]) items.push(BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: this.defaults.engines[key].name,
 				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-engine-contextMenuItem`,
+				danger: key == "_all",
 				action: e => {
 					if (!e.shiftKey) BDFDB.closeContextMenu(menu);
 					if (key == "_all") {
