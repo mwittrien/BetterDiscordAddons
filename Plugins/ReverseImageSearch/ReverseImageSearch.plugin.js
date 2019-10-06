@@ -3,7 +3,7 @@
 class ReverseImageSearch {
 	getName () {return "ReverseImageSearch";}
 
-	getVersion () {return "3.4.5";}
+	getVersion () {return "3.4.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ReverseImageSearch {
 
 	constructor () {
 		this.changelog = {
-			"added":[["User Avatars","Right clicking a suer avatar now also adds the Reverse Iamge Search option, this can be disabled in the plugin settings"]]
+			"added":[["New Options","Right clicking a user avatar/server icon/custom emoji now also adds a context menu entry to reverse iamge search the image, can be disabled"]]
 		};
 	}
 
@@ -20,7 +20,9 @@ class ReverseImageSearch {
 
 		this.defaults = {
 			settings: {
-				addUserAvatarEntry: 	{value:true, 	description:"Adds a reverse search entry when right clicking a user avatar."}
+				addUserAvatarEntry: 	{value:true, 	description:"User Avatars"},
+				addGuildIconEntry: 		{value:true, 	description:"Server Icons"},
+				addEmojiEntry: 			{value:true, 	description:"Custom Emojis/Emotes"}
 			},
 			engines: {
 				_all: 		{value:true, 	name:BDFDB.getLibraryStrings().btn_all_text, 	url:null},
@@ -43,9 +45,11 @@ class ReverseImageSearch {
 		let settings = 	BDFDB.getAllData(this, "settings");
 		let engines = BDFDB.getAllData(this, "engines");
 		let settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.size18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
+		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Add a contextmenu entry when right clicking</h3></div><div class="BDFDB-settings-inner-list">`;
 		for (let key in settings) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 		}
+		settingshtml += `</div>`;
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Search Engines:</h3></div><div class="BDFDB-settings-inner-list">`;
 		for (let key in engines) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.engines[key].name}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="engines ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${engines[key] ? " checked" : ""}></div></div>`;
@@ -114,10 +118,17 @@ class ReverseImageSearch {
 
 	// begin of own functions
 
+	onGuildContextMenu (instance, menu, returnvalue) {
+		if (instance.props && instance.props.guild && instance.props.target) {
+			let guildicon = BDFDB.containsClass(instance.props.target, BDFDB.disCN.avataricon) ? instance.props.target : instance.props.target.querySelector(BDFDB.dotCN.guildicon);
+			if (guildicon && BDFDB.getData("addGuildIconEntry", this, "settings")) this.appendItem(menu, returnvalue, guildicon.tagName == "IMG" ? guildicon.getAttribute("src") :  guildicon.style.getPropertyValue("background-image"));
+		}
+	}
+
 	onUserContextMenu (instance, menu, returnvalue) {
 		if (instance.props && instance.props.user && instance.props.target) {
-			let avatar = instance.props.target.querySelector(BDFDB.dotCN.avatar);
-			if (avatar && BDFDB.getData("addUserAvatarEntry", this, "settings")) this.appendItem(menu, returnvalue, avatar.getAttribute("src"));
+			let avatar = BDFDB.containsClass(instance.props.target, BDFDB.disCN.avataricon) ? instance.props.target : instance.props.target.querySelector(BDFDB.dotCN.avatar);
+			if (avatar && BDFDB.getData("addUserAvatarEntry", this, "settings")) this.appendItem(menu, returnvalue, avatar.tagName == "IMG" ? avatar.getAttribute("src") :  avatar.style.getPropertyValue("background-image"));
 		}
 	}
 
@@ -135,12 +146,15 @@ class ReverseImageSearch {
 			if (instance.props.target.tagName == "A" && instance.props.message.embeds && instance.props.message.embeds[0] && instance.props.message.embeds[0].type == "image") {
 				this.appendItem(menu, returnvalue, instance.props.target.href);
 			}
+			if (instance.props.target.tagName == "IMG" && BDFDB.containsClass(instance.props.target, "emoji", "emote", false) && BDFDB.getData("addEmojiEntry", this, "settings")) {
+				this.appendItem(menu, returnvalue, instance.props.target.src);
+			}
 		}
 	}
 
 	appendItem (menu, returnvalue, url) {
 		if (url && url.indexOf("discordapp.com/assets/") == -1 && !url.endsWith(".mp4")) {
-			url = url.replace(/\?size\=\d+$/, "?size=4096");
+			url = url.replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096");
 			if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1) {
 				if (url.split("/https/").length != 1) url = "https://" + url.split("/https/")[url.split("/https/").length-1];
 				else if (url.split("/http/").length != 1) url = "http://" + url.split("/http/")[url.split("/http/").length-1];
