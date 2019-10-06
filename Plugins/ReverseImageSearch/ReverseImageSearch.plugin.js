@@ -11,7 +11,7 @@ class ReverseImageSearch {
 
 	constructor () {
 		this.changelog = {
-			"added":[["New Options","Right clicking a user avatar/server icon/custom emoji now also adds a context menu entry to reverse iamge search the image, can be disabled"]]
+			"added":[["New Options","Right clicking a user avatar/server icon/custom emoji now also adds a context menu entry to reverse image search the image, can be disabled"]]
 		};
 	}
 
