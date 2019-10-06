@@ -3008,6 +3008,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		BDFDB.removeClass(container.querySelectorAll('.tab-content'), 'open');
 		BDFDB.addClass(container.querySelector('.tab-content'), 'open');
 
+		container.querySelectorAll('.btn-send ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageStrings.SEND;});
 		container.querySelectorAll('.btn-save ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageStrings.SAVE;});
 		container.querySelectorAll('.btn-download ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageStrings.DOWNLOAD;});
 		container.querySelectorAll('.btn-cancel ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageStrings.CANCEL;});
