@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.5.1";}
+	getVersion () {return "6.5.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -114,6 +114,7 @@ class ServerFolders {
 				contain: unset !important;
 				width: 100% !important;
 			}
+			${BDFDB.dotCN.guildfoldericonwrapper},
 			${BDFDB.dotCN.guildfolderexpandendbackground},
 			${BDFDB.dotCN.guildfolderexpandedguilds} {
 				display: none !important;
@@ -298,7 +299,6 @@ class ServerFolders {
 			for (let foldericon of document.querySelectorAll(BDFDB.dotCN.guildfolder)) {
 				foldericon.style.removeProperty("background-image");
 				foldericon.parentElement.parentElement.style.removeProperty("-webkit-mask");
-				BDFDB.toggleEles(foldericon.firstElementChild, true);
 			}
 			
 			BDFDB.unloadMessage(this);
@@ -771,7 +771,6 @@ class ServerFolders {
 				let icon = icontype != "closedicon" || data.useCloseIcon ? data.icons[icontype] : null;
 				if (icon) foldericon.style.setProperty("background-image", `url(${icon})`, "important");
 				else foldericon.style.removeProperty("background-image");
-				BDFDB.toggleEles(foldericon.firstElementChild, !icon);
 				
 				folderinner.removeEventListener("mouseenter", folderinner.ServerFoldersTooltipListener);
 				folderinner.removeEventListener("mousedown", folderinner.ServerFoldersClickListener);
