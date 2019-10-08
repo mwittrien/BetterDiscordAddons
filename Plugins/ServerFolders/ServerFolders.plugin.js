@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.5.3";}
+	getVersion () {return "6.5.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -12,6 +12,7 @@ class ServerFolders {
 	constructor () {
 		this.changelog = {
 			"improved":[["Native Folder Support","Yes, it's here finally. ServerFolders now uses native Folders to emulate the old ServerFolders behaviour. This means you can now finally organize your Servers in Folders the old way without loosing the support on your phone. Everything should be working as it's used to. Below is a list of stuff that is <strong style='color: yellow;'>NEW</strong>"]],
+			"fixed":[["Fixed?","Added back the option to create a Folder via the contextmenu, the amount of people which won't know how to create native Folders is worrying"]],
 			"added":[["Port your old Folders","If you got a config with old SevrerFolders data in your plugins folder, the Plugin will ask you to port them over to native Folders. If you missed clicking on 'Okay' reload the plugin to reprompt the question"],["Mute Folders","You can now mute Folders, this will automatically mute all Servers that are within a Folder"],["Mini Servers or close icon","Don't like using a close icon to show that a Folder is closed? No problem, you can switch back to using the miniature Server preview that the native Folders use in the Foldersettings (the default icon always uses the miniature Server preview)"],["Delete native Folder","The option to delete a Folder was added to the native Folder contextmenu, meaning you can now delete native Folders more easily, watchout there is no way to revert this!"],["Server Sorting","Sorting Servers within a Folder now properly sorts them in a native way, meaning if you sort them in ServerFolders they will also change order on your phone or when you disable ServerFolders again"]]
 		};
 		
@@ -114,7 +115,7 @@ class ServerFolders {
 				contain: unset !important;
 				width: 100% !important;
 			}
-			${BDFDB.dotCN.guildfoldericonwrapper},
+			${BDFDB.dotCN.guildfolder}[style*="background-image"] ${BDFDB.dotCN.guildfoldericonwrapper},
 			${BDFDB.dotCN.guildfolderexpandendbackground},
 			${BDFDB.dotCN.guildfolderexpandedguilds} {
 				display: none !important;
@@ -243,7 +244,7 @@ class ServerFolders {
 				let guildPositions = [];
 				let newfoldersdata = {};
 				for (let folderid in foldersdata) {
-					let newid = Math.floor(Math.random() * 4294967296);
+					let newid = this.generateID("folder");
 					let olddata = foldersdata[folderid];
 					guildFolders.push({
 						guildIds: olddata.servers,
@@ -386,8 +387,8 @@ class ServerFolders {
 					BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
 						label: this.labels.servercontext_serverfolders_text,
 						className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-guild-contextMenuSubItem`,
-						render: [
-							folder ? BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+						render: folder ? [
+							BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 								label: this.labels.serversubmenu_removefromfolder_text,
 								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-removefromfolder-contextMenuItem`,
 								danger: true,
@@ -395,7 +396,17 @@ class ServerFolders {
 									BDFDB.closeContextMenu(menu);
 									this.removeGuildFromFolder(folder.folderId, guildid);
 								}
-							}) : BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+							})
+						] : [
+							BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								label: this.labels.serversubmenu_createfolder_text,
+								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-createfolder-contextMenuItem`,
+								action: e => {
+									BDFDB.closeContextMenu(menu);
+									this.createFolder(guildid);
+								}
+							}),
+							BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
 								label: this.labels.serversubmenu_addtofolder_text,
 								className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-addtofolder-contextMenuSubItem`,
 								disabled: !addtofolderitems.length,
@@ -648,9 +659,15 @@ class ServerFolders {
 	}
 
 	generateID (prefix) {
-		let data = BDFDB.loadAllData(this, prefix + "s");
-		let id = prefix + "_" + Math.round(Math.random()*10000000000000000);
-		return data[id] ? this.generateID(prefix) : id;
+		if (prefix == "folder") {
+			let id = Math.floor(Math.random() * 4294967296);
+			return BDFDB.LibraryModules.FolderStore.guildFolders.every(n => !n.folderId || n.folderId != id) ? id : this.generateID(prefix);
+		}
+		else {
+			let data = BDFDB.loadAllData(this, prefix + "s");
+			let id = prefix + "_" + Math.round(Math.random()*10000000000000000);
+			return data[id] ? this.generateID(prefix) : id;
+		}
 	}
 
 	setIcons (modal, selection) {
@@ -1049,6 +1066,20 @@ class ServerFolders {
 		BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({guildPositions, guildFolders});
 	}
 	
+	createFolder (guildid) {
+		let oldGuildFolders = Object.assign({}, BDFDB.LibraryModules.FolderStore.guildFolders);
+		let guildFolders = [], guildPositions = [];
+		for (let i in oldGuildFolders) {
+			if (!oldGuildFolders[i].folderId && oldGuildFolders[i].guildIds[0] == guildid) guildFolders.push({
+				guildIds: [guildid],
+				folderId: this.generateID("folder")
+			});
+			else guildFolders.push(oldGuildFolders[i]);
+		}
+		for (let i in guildFolders) for (let guildid of guildFolders[i].guildIds) guildPositions.push(guildid);
+		BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({guildPositions, guildFolders});
+	}
+	
 	removeFolder (folderid) {
 		BDFDB.removeData(folderid, this, "folders");
 		BDFDB.removeEles(this.foldercontentguilds.querySelector(`${BDFDB.dotCN.guildouter}[folderid="${folderid}"]`));
@@ -1125,6 +1156,7 @@ class ServerFolders {
 			case "hr":		//croatian
 				return {
 					servercontext_serverfolders_text:		"Poslužitelj mapu",
+					serversubmenu_createfolder_text:		"Izradi mapu",
 					serversubmenu_addtofolder_text:			"Dodaj poslužitelj u mapu",
 					serversubmenu_removefromfolder_text:	"Ukloni poslužitelj iz mapu",
 					foldercontext_autoreadfolder_text:		"Auto: Označite kao pročitano",
@@ -1148,6 +1180,7 @@ class ServerFolders {
 			case "da":		//danish
 				return {
 					servercontext_serverfolders_text:		"Servermapper",
+					serversubmenu_createfolder_text:		"Opret mappe",
 					serversubmenu_addtofolder_text:			"Tilføj server til mappe",
 					serversubmenu_removefromfolder_text:	"Fjern server fra mappe",
 					foldercontext_autoreadfolder_text:		"Auto: Markér som læst",
@@ -1171,6 +1204,7 @@ class ServerFolders {
 			case "de":		//german
 				return {
 					servercontext_serverfolders_text:		"Serverordner",
+					serversubmenu_createfolder_text:		"Ordner erzeugen",
 					serversubmenu_addtofolder_text:			"Server zum Ordner hinzufügen",
 					serversubmenu_removefromfolder_text:	"Server aus Ordner entfernen",
 					foldercontext_autoreadfolder_text:		"Auto: Als gelesen markieren",
@@ -1194,6 +1228,7 @@ class ServerFolders {
 			case "es":		//spanish
 				return {
 					servercontext_serverfolders_text:		"Carpetas de servidor",
+					serversubmenu_createfolder_text:		"Crear carpeta",
 					serversubmenu_addtofolder_text:			"Añadir servidor a la carpeta",
 					serversubmenu_removefromfolder_text:	"Eliminar servidor de la carpeta",
 					foldercontext_autoreadfolder_text:		"Auto: Marcar como leído",
@@ -1217,6 +1252,7 @@ class ServerFolders {
 			case "fr":		//french
 				return {
 					servercontext_serverfolders_text:		"Dossiers du serveur",
+					serversubmenu_createfolder_text:		"Créer le dossier",
 					serversubmenu_addtofolder_text:			"Ajouter le serveur à un dossier",
 					serversubmenu_removefromfolder_text:	"Supprimer le serveur du dossier",
 					foldercontext_autoreadfolder_text:		"Auto: Marquer comme lu",
@@ -1241,6 +1277,7 @@ class ServerFolders {
 				return {
 					servercontext_serverfolders_text:		"Cartelle del server",
 					serversubmenu_addtofolder_text:			"Aggiungi il server alla cartella",
+					serversubmenu_createfolder_text:		"Creare una cartella",
 					serversubmenu_removefromfolder_text:	"Rimuovi il server dalla cartella",
 					foldercontext_autoreadfolder_text:		"Auto: Contrassegna come letto",
 					foldercontext_mutefolder_text:			"Disattiva cartella",
@@ -1264,6 +1301,7 @@ class ServerFolders {
 				return {
 					servercontext_serverfolders_text:		"Servermappen",
 					serversubmenu_addtofolder_text:			"Voeg server toe aan de map",
+					serversubmenu_createfolder_text:		"Map aanmaken",
 					serversubmenu_removefromfolder_text:	"Verwijder de server uit de map",
 					foldercontext_autoreadfolder_text:		"Auto: Markeren als gelezen",
 					foldercontext_mutefolder_text:			"Demp map",
@@ -1287,6 +1325,7 @@ class ServerFolders {
 				return {
 					servercontext_serverfolders_text:		"Servermapper",
 					serversubmenu_addtofolder_text:			"Legg til server i mappe",
+					serversubmenu_createfolder_text:		"Lag mappe",
 					serversubmenu_removefromfolder_text:	"Fjern server fra mappe",
 					foldercontext_autoreadfolder_text:		"Auto: Merk som les",
 					foldercontext_mutefolder_text:			"Demp mappe",
@@ -1310,6 +1349,7 @@ class ServerFolders {
 				return {
 					servercontext_serverfolders_text:		"Foldery serwera",
 					serversubmenu_addtofolder_text:			"Dodaj serwer do folderu",
+					serversubmenu_createfolder_text:		"Utwórz folder",
 					serversubmenu_removefromfolder_text:	"Usuń serwer z folderu",
 					foldercontext_autoreadfolder_text:		"Auto: Oznacz jako przeczytane",
 					foldercontext_mutefolder_text:			"Wycisz folder",
@@ -1333,6 +1373,7 @@ class ServerFolders {
 				return {
 					servercontext_serverfolders_text:		"Pastas de servidores",
 					serversubmenu_addtofolder_text:			"Adicionar servidor à pasta",
+					serversubmenu_createfolder_text:		"Criar pasta",
 					serversubmenu_removefromfolder_text:	"Remover servidor da pasta",
 					foldercontext_autoreadfolder_text:		"Auto: Marcar como lido",
 					foldercontext_mutefolder_text:			"Silenciar pasta",
@@ -1356,6 +1397,7 @@ class ServerFolders {
 				return {
 					servercontext_serverfolders_text:		"Palvelinkansiot",
 					serversubmenu_addtofolder_text:			"Lisää palvelin kansioon",
+					serversubmenu_createfolder_text:		"Luo kansio",
 					serversubmenu_removefromfolder_text:	"Poista palvelin kansioon",
 					foldercontext_autoreadfolder_text:		"Auto: merkitse luettavaksi",
 					foldercontext_mutefolder_text:			"Mykistä kansio",
@@ -1379,6 +1421,7 @@ class ServerFolders {
 				return {
 					servercontext_serverfolders_text:		"Servermappar",
 					serversubmenu_addtofolder_text:			"Lägg till server i mapp",
+					serversubmenu_createfolder_text:		"Skapa mapp",
 					serversubmenu_removefromfolder_text:	"Ta bort servern från mappen",
 					foldercontext_autoreadfolder_text:		"Auto: Markera som Läs",
 					foldercontext_mutefolder_text:			"Stäng mapp",
@@ -1402,6 +1445,7 @@ class ServerFolders {
 				return {
 					servercontext_serverfolders_text:		"Sunucu klasörleri",
 					serversubmenu_addtofolder_text:			"Klasöre sunucu ekle",
+					serversubmenu_createfolder_text:		"Klasör oluşturun",
 					serversubmenu_removefromfolder_text:	"Sunucuyu klasörden kaldır",
 					foldercontext_autoreadfolder_text:		"Oto: Okundu Olarak İşaretle",
 					foldercontext_mutefolder_text:			"Klasörü kapat",
@@ -1425,6 +1469,7 @@ class ServerFolders {
 				return {
 					servercontext_serverfolders_text:		"Složky serveru",
 					serversubmenu_addtofolder_text:			"Přidat server do složky",
+					serversubmenu_createfolder_text:		"Vytvořit složky",
 					serversubmenu_removefromfolder_text:	"Odebrat server ze složky",
 					foldercontext_autoreadfolder_text:		"Auto: Označit jako přečtené",
 					foldercontext_mutefolder_text:			"Ztlumte složky",
@@ -1448,6 +1493,7 @@ class ServerFolders {
 				return {
 					servercontext_serverfolders_text:		"Сървърни папки",
 					serversubmenu_addtofolder_text:			"Добавяне на сървър в папка",
+					serversubmenu_createfolder_text:		"Създай папка",
 					serversubmenu_removefromfolder_text:	"Премахване на сървър от папка",
 					foldercontext_autoreadfolder_text:		"Авто: Маркиране като четене",
 					foldercontext_mutefolder_text:			"Заглушаване на папката",
@@ -1471,6 +1517,7 @@ class ServerFolders {
 				return {
 					servercontext_serverfolders_text:		"Папки сервера",
 					serversubmenu_addtofolder_text:			"Добавить сервер в папку",
+					serversubmenu_createfolder_text:		"Создать папки",
 					serversubmenu_removefromfolder_text:	"Удалить сервер из папки",
 					foldercontext_autoreadfolder_text:		"Авто: Отметить как прочитанное",
 					foldercontext_mutefolder_text:			"Отключить папки",
@@ -1494,6 +1541,7 @@ class ServerFolders {
 				return {
 					servercontext_serverfolders_text:		"Папки сервера",
 					serversubmenu_addtofolder_text:			"Додати сервер до папки",
+					serversubmenu_createfolder_text:		"Створити папки",
 					serversubmenu_removefromfolder_text:	"Видалити папку з папки",
 					foldercontext_autoreadfolder_text:		"Авто: Позначити як прочитане",
 					foldercontext_mutefolder_text:			"Відключення папки",
@@ -1517,6 +1565,7 @@ class ServerFolders {
 				return {
 					servercontext_serverfolders_text:		"サーバーフォルダ",
 					serversubmenu_addtofolder_text:			"サーバーをフォルダに追加する",
+					serversubmenu_createfolder_text:		"フォルダーを作る",
 					serversubmenu_removefromfolder_text:	"サーバーをフォルダから削除する",
 					foldercontext_autoreadfolder_text:		"自動： 読み取りとしてマークする",
 					foldercontext_mutefolder_text:			"ミュートフォルダー",
@@ -1540,6 +1589,7 @@ class ServerFolders {
 				return {
 					servercontext_serverfolders_text:		"服務器文件夾",
 					serversubmenu_addtofolder_text:			"添加服務器到文件夾",
+					serversubmenu_createfolder_text:		"創建文件夾",
 					serversubmenu_removefromfolder_text:	"從文件夾中刪除服務器",
 					foldercontext_autoreadfolder_text:		"自動： 標記為已讀",
 					foldercontext_mutefolder_text:			"靜音文件夾",
@@ -1563,6 +1613,7 @@ class ServerFolders {
 				return {
 					servercontext_serverfolders_text:		"서버 폴더",
 					serversubmenu_addtofolder_text:			"폴더에 서버 추가",
+					serversubmenu_createfolder_text:		"폴더 만들기",
 					serversubmenu_removefromfolder_text:	"폴더에서 서버 제거",
 					foldercontext_autoreadfolder_text:		"자동: 읽은 상태로 표시",
 					foldercontext_mutefolder_text:			"폴더 음소거",
@@ -1586,6 +1637,7 @@ class ServerFolders {
 				return {
 					servercontext_serverfolders_text:		"Serverfolders",
 					serversubmenu_addtofolder_text:			"Add Server to Folder",
+					serversubmenu_createfolder_text:		"Create Folder",
 					serversubmenu_removefromfolder_text:	"Remove Server from Folder",
 					foldercontext_autoreadfolder_text:		"Auto: Mark As Read",
 					foldercontext_mutefolder_text:			"Mute Folder",
