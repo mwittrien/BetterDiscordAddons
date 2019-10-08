@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.5.4";}
+	getVersion () {return "6.5.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -246,11 +246,12 @@ class ServerFolders {
 				for (let folderid in foldersdata) {
 					let newid = this.generateID("folder");
 					let olddata = foldersdata[folderid];
+					let color1 = BDFDB.colorCONVERT(olddata.color1, "HEX");
 					guildFolders.push({
 						guildIds: olddata.servers,
 						folderId: newid,
 						folderName: olddata.folderName,
-						folderColor: olddata.color1 ? parseInt(BDFDB.colorCONVERT(olddata.color1, "HEX").slice(1), 16) : 7506394
+						folderColor: color1 ? parseInt(color1.slice(1), 16) : 7506394
 					});
 					guildsInFolders = guildsInFolders.concat(olddata.servers);
 					newfoldersdata[newid] = Object.assign({}, olddata);
