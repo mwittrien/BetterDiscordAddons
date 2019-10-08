@@ -2075,6 +2075,35 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		});
 	};
 
+	BDFDB.readFolderList = function () {
+		var found = [], ins = BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.guildswrapper), name:'GuildFolder', all:true, noCopies:true, depth:99999999, time:99999999});
+		for (let info in ins) if (ins[info].props && ins[info].props.folderId) {
+			found.push(Object.assign({}, ins[info].props, {div:BDFDB.React.findDOMNodeSafe(ins[info]), instance:ins[info]}));
+		}
+		return found;
+	};
+
+	BDFDB.getFolderID = function (div) {
+		if (!Node.prototype.isPrototypeOf(div) || !BDFDB.getReactInstance(div)) return;
+		div = BDFDB.getParentEle(BDFDB.dotCN.guildfolderwrapper, div);
+		if (!div) return;
+		return BDFDB.getReactValue(div, "return.stateNode.props.folderId");
+	};
+
+	BDFDB.getFolderDiv = function (eleOrInfoOrId) {
+		if (!eleOrInfoOrId) return null;
+		let info = BDFDB.getFolderData(eleOrInfoOrId);
+		return info ? info.div : null;
+	};
+
+	BDFDB.getFolderData = function (eleOrInfoOrId) {
+		if (!eleOrInfoOrId) return null;
+		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getChannelID(eleOrInfoOrId) : typeof eleOrInfoOrId == 'object' ? eleOrInfoOrId.id : eleOrInfoOrId;
+		id = typeof id == 'number' ? id.toFixed() : id;
+		for (let info of BDFDB.readFolderList()) if (info && info.folderId == id) return info;
+		return null;
+	};
+
 	BDFDB.readChannelList = function () {
 		var found = [], ins = BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.channels), name:['ChannelCategoryItem', 'ChannelItem', 'PrivateChannel'], all:true, noCopies:true, depth:99999999, time:99999999});
 		for (let info in ins) if (ins[info].props && !ins[info].props.ispin && ins[info].props.channel && ins[info]._reactInternalFiber.return) {
