@@ -2237,13 +2237,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 		var exists = LibraryRequires.fs.existsSync(configpath);
 		var config = !exists ? {} : typeof BDFDB.cachedData[plugname] !== 'undefined' ? BDFDB.cachedData[plugname] : BDFDB.readConfig(configpath);
-		config[key] = data;
+		config[key] = BDFDB.isObject(data) ? BDFDB.sortObject(data) : data;
 		if (BDFDB.isObjectEmpty(config[key])) delete config[key];
 		if (BDFDB.isObjectEmpty(config)) {
 			delete BDFDB.cachedData[plugname];
 			if (exists) LibraryRequires.fs.unlinkSync(configpath);
 		}
 		else {
+			config = BDFDB.sortObject(config);
 			BDFDB.cachedData[plugname] = BDFDB.deepAssign({}, config);
 			LibraryRequires.fs.writeFileSync(configpath, JSON.stringify(config, null, '	'));
 		}
@@ -2317,7 +2318,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.saveData = function (id, data, plugin, key) {
 		var config = BDFDB.loadAllData(plugin, key);
-		config[id] = data;
+		config[id] = BDFDB.isObject(data) ? BDFDB.sortObject(data) : data;
 		BDFDB.saveAllData(config, plugin, key);
 	};
 
