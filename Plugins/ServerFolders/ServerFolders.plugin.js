@@ -1002,8 +1002,10 @@ class ServerFolders {
 						let dropfolderdiv = BDFDB.getParentEle(BDFDB.dotCN.guildfolderwrapper, e3.target);
 						let newfolderid = dropfolderdiv ? BDFDB.getFolderID(dropfolderdiv) : null;
 						if (newfolderid) {
-							BDFDB.removeEles(guildcopy);
-							this.addGuildToFolder(newfolderid, guildid);
+							if (newfolderid != folderid) {
+								BDFDB.removeEles(guildcopy);
+								this.addGuildToFolder(newfolderid, guildid);
+							}
 						}
 						else if (hovcopy) {
 							this.foldercontentguilds.insertBefore(guildcopy, hovcopy.nextSibling);
