@@ -1969,7 +1969,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		return null;
 	};
 
-	BDFDB.createServerDivCopy = function (infoOrId, functionality = {badges:false, pill:false, hover:false, click:false, menu:false, size:null}) {
+	BDFDB.createServerDivCopy = function (infoOrId, functionality = {pill:false, hover:false, click:false, menu:false, size:null}) {
 		let id = typeof infoOrId == 'object' ? infoOrId.id : infoOrId;
 		let guild = id ? LibraryModules.GuildStore.getGuild(id) : null;
 		if (guild) {
@@ -1979,14 +1979,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			let div = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.guildouter + BDFDB.disCN._bdguild}"><div class="${BDFDB.disCNS.guildpill + BDFDB.disCN.guildpillwrapper}"><span class="${BDFDB.disCN.guildpillitem}" style="opacity: 0; height: 8px; transform: translate3d(0px, 0px, 0px);"></span></div><div class="${BDFDB.disCN.guildcontainer}" draggable="false" style="border-radius: 50%; overflow: hidden;"><div class="${BDFDB.disCN.guildinner}"><svg width="48" height="48" viewBox="0 0 48 48" class="${BDFDB.disCN.guildsvg}"><mask id="" fill="black" x="0" y="0" width="48" height="48"><path d="M48 24C48 37.2548 37.2548 48 24 48C10.7452 48 0 37.2548 0 24C0 10.7452 10.7452 0 24 0C37.2548 0 48 10.7452 48 24Z" fill="white"></path><rect x="28" y="-4" width="24" height="24" rx="12" ry="12" transform="translate(20 -20)" fill="black"></rect><rect x="28" y="28" width="24" height="24" rx="12" ry="12" transform="translate(20 20)" fill="black"></rect></mask><foreignObject mask="" x="0" y="0" width="48" height="48"><a class="${BDFDB.disCN.guildiconwrapper} ${selected ? (' ' + BDFDB.disCN.guildiconselected) : ''}" aria-label="${guild.name}"${functionality.click ? ' href="channels/"' + guild.id + '/' + LibraryModules.LastChannelStore.getChannelId(guild.id) + '"' : ''} draggable="false">${guild.icon ? `<img class="${BDFDB.disCN.guildicon}" src="${BDFDB.getGuildIcon(guild.id)}?size=128" alt="" width="48" height="48" draggable="false" aria-hidden="true"></img>` : `<div class="${BDFDB.disCNS.guildiconchildwrapper + BDFDB.disCN.guildiconacronym}" aria-hidden="true" style="font-size: ${guild.acronym.length > 5 ? 10 : (guild.acronym.length > 4 ? 12 : (guild.acronym.length > 3 ? 14 : (guild.acronym.length > 1 ? 16 : 18)))}px;">${guild.acronym}</div>`}</a></foreignObject></svg></div></div><div class="${BDFDB.disCN.guildedgewrapper}" aria-hidden="true"><span class="${BDFDB.disCN.guildedge}"></span><span class="${BDFDB.disCN.guildedgemiddle}"></span><span class="${BDFDB.disCN.guildedge}"></span></div></div>`);
 			let divinner = div.querySelector(BDFDB.dotCN.guildcontainer);
 			let divpillitem = div.querySelector(BDFDB.dotCN.guildpillitem);
-			
-			if (functionality.badges) {
-				let voicechannel = LibraryModules.ChannelStore.getChannel(LibraryModules.LastChannelStore.getVoiceChannelId());
-				let audioenabled = voicechannel && voicechannel.parent_id == guild.id;
-				if (audioenabled) divinner.firstElementChild.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.guildupperbadge}" style="opacity: 1; transform: translate(0px, 0px);"><div class="${BDFDB.disCNS.guildbadgeiconbadge2 + BDFDB.disCN.guildbadgeiconbadge}"><svg name="Nova_Speaker" class="${BDFDB.disCN.guildbadgeicon}" aria-hidden="false" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M11.383 3.07904C11.009 2.92504 10.579 3.01004 10.293 3.29604L6 8.00204H3C2.45 8.00204 2 8.45304 2 9.00204V15.002C2 15.552 2.45 16.002 3 16.002H6L10.293 20.71C10.579 20.996 11.009 21.082 11.383 20.927C11.757 20.772 12 20.407 12 20.002V4.00204C12 3.59904 11.757 3.23204 11.383 3.07904ZM14 5.00195V7.00195C16.757 7.00195 19 9.24595 19 12.002C19 14.759 16.757 17.002 14 17.002V19.002C17.86 19.002 21 15.863 21 12.002C21 8.14295 17.86 5.00195 14 5.00195ZM14 9.00195C15.654 9.00195 17 10.349 17 12.002C17 13.657 15.654 15.002 14 15.002V13.002C14.551 13.002 15 12.553 15 12.002C15 11.451 14.551 11.002 14 11.002V9.00195Z"></path></svg></div></div>`));
-				
-				BDFDB.toggleClass(div, BDFDB.disCN._bdguildaudio, audioenabled);
-			}
 			
 			BDFDB.toggleEles(divpillitem.parentElement, functionality.pill);
 			if (functionality.pill) {
@@ -2243,7 +2235,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			delete BDFDB.cachedData[plugname];
 			return {};
 		}
-		var config = typeof BDFDB.cachedData[plugname] !== 'undefined' ? BDFDB.cachedData[plugname] : BDFDB.readConfig(configpath);
+		var config = typeof BDFDB.cachedData[plugname] !== 'undefined' && typeof BDFDB.cachedData[plugname][key] !== 'undefined' ? BDFDB.cachedData[plugname] : BDFDB.readConfig(configpath);
 		BDFDB.cachedData[plugname] = config;
 		return config && typeof config[key] !== 'undefined' ? config[key] : {};
 	};
@@ -4001,6 +3993,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.Item = BDFDB.WebModules.findByProperties('item', 'side', 'header');
 	DiscordClassModules.ItemLayerContainer = BDFDB.WebModules.findByProperties('layer', 'layerContainer');
 	DiscordClassModules.Input = BDFDB.WebModules.findByProperties('inputMini', 'inputDefault');
+	DiscordClassModules.LayerModal = BDFDB.WebModules.findByProperties('root', 'small', 'medium');
 	DiscordClassModules.Layers = BDFDB.WebModules.findByProperties('layer', 'layers');
 	DiscordClassModules.LFG = BDFDB.WebModules.findByProperties('lfg', 'topSectionHeader');
 	DiscordClassModules.Margins = BDFDB.WebModules.findByProperties('marginBottom4', 'marginCenterHorz');
@@ -4624,6 +4617,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		justifyend: ['Flex', 'justifyEnd'],
 		justifystart: ['Flex', 'justifyStart'],
 		large: ['TextStyle', 'large'],
+		layermodal: ['LayerModal', 'root'],
+		layermodallarge: ['LayerModal', 'large'],
+		layermodalmedium: ['LayerModal', 'medium'],
+		layermodalsmall: ['LayerModal', 'small'],
 		layer: ['Layers', 'layer'],
 		layers: ['Layers', 'layers'],
 		lfg: ['LFG', 'lfg'],
