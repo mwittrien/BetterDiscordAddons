@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.5.2";}
+	getVersion () {return "6.5.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -389,11 +389,11 @@ class ServerFolders {
 						render: [
 							folder ? BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 								label: this.labels.serversubmenu_removefromfolder_text,
-								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-repo-contextMenuItem`,
+								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-removefromfolder-contextMenuItem`,
 								danger: true,
 								action: e => {
 									BDFDB.closeContextMenu(menu);
-									this.removeServerFromFolder(folder.folderId, guildid);
+									this.removeGuildFromFolder(folder.folderId, guildid);
 								}
 							}) : BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
 								label: this.labels.serversubmenu_addtofolder_text,
