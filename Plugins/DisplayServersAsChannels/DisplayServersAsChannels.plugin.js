@@ -3,7 +3,7 @@
 class DisplayServersAsChannels {
 	getName () {return "DisplayServersAsChannels";}
 
-	getVersion () {return "1.3.0";}
+	getVersion () {return "1.3.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class DisplayServersAsChannels {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Folder Styling","Fixed some styling issues with native folders created by the new ServerFolders update"]]
+			"fixed":[["Server Unclickable","Severs can now be clicked again to switch servers ... oof"],["Folder Styling","Fixed some styling issues with native folders created by the new ServerFolders update"]]
 		};
 
 		this.patchModules = {
@@ -138,8 +138,7 @@ class DisplayServersAsChannels {
 	processGuilds (instance, wrapper, returnvalue) {
 		var observer = new MutationObserver((changes, _) => {changes.forEach((change, i) => {if (change.addedNodes) {change.addedNodes.forEach((node) => {
 			if (node && BDFDB.containsClass(node, BDFDB.disCN.guildouter) && !node.querySelector(BDFDB.dotCN.guildserror)) {
-				if (BDFDB.containsClass(node, "folder")) this.changeServer(this.getFolderObject(node));
-				else this.changeServer(BDFDB.getServerData(node));
+				this.changeServer(BDFDB.getServerData(node));
 			}
 			if (node && node.tagName && (node = node.querySelector(BDFDB.dotCN.guildbuttoncontainer)) != null) {
 				this.changeButton(node);
@@ -227,11 +226,6 @@ class DisplayServersAsChannels {
 		BDFDB.removeEles(div.querySelectorAll(".DSAC-name, .DSAC-icon"));
 		div.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">Server Outage</div>`), div.firstChild);
 		div.appendChild(BDFDB.htmlToElement(`<div class="DSAC-icon">!</div>`));
-	}
-
-	getFolderObject (folderdiv) {
-		var data = BDFDB.loadData(folderdiv.id, "ServerFolders", "folders");
-		return data ? Object.assign({div:folderdiv}, data) : null;
 	}
 
 	addCSS () {
@@ -371,7 +365,7 @@ class DisplayServersAsChannels {
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + * ${BDFDB.dotCN.guildinner} {
 				width: ${listwidth - 28}px !important;
 			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + * ${BDFDB.dotCN.guildsvg} {
+			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCN.guildfolderexpandendbackground} ~ ${BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildsvg} {
 				position: static !important;
 				flex: 1 1 auto !important;
 			}
@@ -379,9 +373,6 @@ class DisplayServersAsChannels {
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} + * foreignObject {
 				mask: none !important;
 				-webkit-mask: none !important;
-			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCNS.guildcontainer + BDFDB.dotCN.guildsvg} {
-				display: none !important;
 			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill} {
 				top: -8px;
@@ -417,11 +408,6 @@ class DisplayServersAsChannels {
 				border-radius: 3px;
 				margin-left: 3px;
 				font-size: 0;
-			}
-			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpill} + * ${BDFDB.dotCN.guildbadgewrapper} {
-				display: flex;
-				flex: 0 0;
-				position: static;
 			}
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpill} + * ${BDFDB.dotCN.guildlowerbadge},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildpill} + * ${BDFDB.dotCN.guildupperbadge} {
