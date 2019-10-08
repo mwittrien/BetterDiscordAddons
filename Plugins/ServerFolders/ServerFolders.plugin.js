@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.5.0";}
+	getVersion () {return "6.5.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -539,7 +539,7 @@ class ServerFolders {
 						data.icons.openicon = folderIcons[data.iconID] ? (!isCustom ? this.createBase64SVG(folderIcons[data.iconID].openicon, data.color1, data.color2) : folderIcons[data.iconID].openicon) : null;
 						data.icons.closedicon = folderIcons[data.iconID] ? (!isCustom ? this.createBase64SVG(folderIcons[data.iconID].closedicon, data.color1, data.color2) : folderIcons[data.iconID].closedicon) : null;
 						BDFDB.saveData(folderid, data, this, "folders");
-						instance.handleColorChange(parseInt(BDFDB.colorCONVERT(data.color1 && BDFDB.isObject(data.color1) ? data.color1[Object.keys(data.color1)[0]] : data.color1, "HEX").slice(1), 16));
+						instance.handleColorChange(data.color1 ? parseInt(BDFDB.colorCONVERT(data.color1 && BDFDB.isObject(data.color1) ? data.color1[Object.keys(data.color1)[0]] : data.color1, "HEX").slice(1), 16) : null);
 						this.changeFolder(folderid);
 					}
 				});
