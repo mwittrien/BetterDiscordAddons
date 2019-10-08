@@ -2214,7 +2214,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			if (exists) LibraryRequires.fs.unlinkSync(configpath);
 		}
 		else {
-			BDFDB.cachedData[plugname] = config;
+			BDFDB.cachedData[plugname] = BDFDB.deepAssign({}, config);
 			LibraryRequires.fs.writeFileSync(configpath, JSON.stringify(config, null, '	'));
 		}
 	};
@@ -2236,8 +2236,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			return {};
 		}
 		var config = typeof BDFDB.cachedData[plugname] !== 'undefined' && typeof BDFDB.cachedData[plugname][key] !== 'undefined' ? BDFDB.cachedData[plugname] : BDFDB.readConfig(configpath);
-		BDFDB.cachedData[plugname] = config;
-		return config && typeof config[key] !== 'undefined' ? config[key] : {};
+		BDFDB.cachedData[plugname] = BDFDB.deepAssign({}, config);
+		return BDFDB.deepAssign({}, config && typeof config[key] !== 'undefined' ? config[key] : {});
 	};
 
 	BDFDB.removeAllData = function (plugin, key) {
@@ -3223,7 +3223,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.createSearchBar = function (size = "small") {
 		if (typeof size != "string" || !["small","medium","large"].includes(size.toLowerCase())) size = "small";
 		var sizeclass = DiscordClassModules.SearchBar[size] ? (" " + BDFDB.disCN["searchbar" + size]) : "";
-		var searchBar = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.searchbar + sizeclass}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.searchbarinner}"><input class="${BDFDB.disCN.searchbarinput}" type="text" spellcheck="false" placeholder="" value=""><div tabindex="0" class="${BDFDB.disCN.searchbariconlayout + sizeclass}" role="button"><div class="${BDFDB.disCN.searchbariconwrap}"><svg name="Search" class="${BDFDB.disCNS.searchbaricon + BDFDB.disCN.searchbarvisible}" width="18" height="18" viewBox="0 0 18 18"><g fill="none" fill-rule="evenodd"><path fill="currentColor" d="M3.60091481,7.20297313 C3.60091481,5.20983419 5.20983419,3.60091481 7.20297313,3.60091481 C9.19611206,3.60091481 10.8050314,5.20983419 10.8050314,7.20297313 C10.8050314,9.19611206 9.19611206,10.8050314 7.20297313,10.8050314 C5.20983419,10.8050314 3.60091481,9.19611206 3.60091481,7.20297313 Z M12.0057176,10.8050314 L11.3733562,10.8050314 L11.1492281,10.5889079 C11.9336764,9.67638651 12.4059463,8.49170955 12.4059463,7.20297313 C12.4059463,4.32933105 10.0766152,2 7.20297313,2 C4.32933105,2 2,4.32933105 2,7.20297313 C2,10.0766152 4.32933105,12.4059463 7.20297313,12.4059463 C8.49170955,12.4059463 9.67638651,11.9336764 10.5889079,11.1492281 L10.8050314,11.3733562 L10.8050314,12.0057176 L14.8073185,16 L16,14.8073185 L12.2102538,11.0099776 L12.0057176,10.8050314 Z"></path></g></svg><svg name="Clear" class="${BDFDB.disCNS.searchbaricon + BDFDB.disCN.searchbarclear}" width="12" height="12" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div></div></div></div>`);
+		var searchBar = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.searchbar + sizeclass}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.searchbarinner}"><input class="${BDFDB.disCN.searchbarinput}" type="text" spellcheck="false" placeholder="" value=""><div tabindex="0" class="${BDFDB.disCN.searchbariconlayout + sizeclass}" role="button"><div class="${BDFDB.disCN.searchbariconwrap}"><svg name="Search" class="${BDFDB.disCNS.searchbaricon + BDFDB.disCN.searchbarvisible}" width="18" height="18" viewBox="0 0 18 18"><g fill="none" fill-rule="evenodd"><path fill="currentColor" d="M3.60091481,7.20297313 C3.60091481,5.20983419 5.20983419,3.60091481 7.20297313,3.60091481 C9.19611206,3.60091481 10.8050314,5.20983419 10.8050314,7.20297313 C10.8050314,9.19611206 9.19611206,10.8050314 7.20297313,10.8050314 C5.20983419,10.8050314 3.60091481,9.19611206 3.60091481,7.20297313 Z M12.0057176,10.8050314 L11.3733562,10.8050314 L11.1492281,10.5889079 C11.9336764,9.67638651 12.4059463,8.49170955 12.4059463,7.20297313 C12.4059463,4.32933105 10.0766152,2 7.20297313,2 C4.32933105,2 2,4.32933105 2,7.20297313 C2,10.0766152 4.32933105,12.4059463 7.20297313,12.4059463 C8.49170955,12.4059463 9.67638651,11.9336764 10.5889079,11.1492281 L10.8050314,11.3733562 L10.8050314,12.0057176 L14.8073185,16 L16,14.8073185 L12.2102538,11.0099776 L12.0057176,10.8050314 Z"></path></g></svg><svg name="Clear" class="${BDFDB.disCNS.searchbaricon + BDFDB.disCN.searchbarclear}" width="12" height="12" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div></div></div></div>`);
 		BDFDB.initElements(searchBar);
 		return searchBar;
 	};
