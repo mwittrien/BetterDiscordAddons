@@ -39,6 +39,7 @@ window.onmessage = function (e) {
 				}
 				if (e.data.html) document.documentElement.className = e.data.html;
 				if (e.data.titlebar) document.querySelector(".preview-titlebar").outerHTML = e.data.titlebar;
+				document.body.firstElementChild.style.removeProperty("display");
 				break;
 			case "Eval":
 				window.evalResult = null;
