@@ -21,7 +21,7 @@ class ServerFolders {
 		this.patchModules = {
 			"Guilds":["componentDidMount","componentDidUpdate","componentWillUnmount"],
 			"GuildFolder":["componentDidMount","componentDidUpdate"],
-			"Guild":"componentDidUpdate",
+			"Guild":["componentDidMount","componentDidUpdate"],
 			"GuildFolderSettingsModal":"componentDidMount",
 			"StandardSidebarView":"componentWillUnmount"
 		};
@@ -274,9 +274,7 @@ class ServerFolders {
 				BDFDB.saveAllData(newfoldersdata, this, "folders");
 			});
 			
-
-			BDFDB.WebModules.forceAllUpdates(this, "Guilds");
-			BDFDB.WebModules.forceAllUpdates(this, "GuildFolder");
+			BDFDB.WebModules.forceAllUpdates(this);
 		}
 		else {
 			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
@@ -478,14 +476,24 @@ class ServerFolders {
 		this.folderStates[state.folderId] = state;
 	}
 
-	processGuild (instance, wrapper, returnvalue) {
+	processGuild (instance, wrapper, returnvalue, methodnames) {
 		if (!this.foldercontentguilds) return;
 		if (instance.props && instance.props.guild) {
-			let folder = this.getFolderOfGuildId(instance.props.guild.id);
-			if (folder) {
-				let state = this.getState(instance);
-				if (!BDFDB.equals(state, this.guildStates[instance.props.guild.id])) {
-					this.updateGuildInFolderContent(folder.folderId, instance.props.guild.id);
+			if (methodnames.includes("componentDidMount")) {
+				BDFDB.addEventListener(this, wrapper, "click", () => {setImmediate(() => {
+					let settings = BDFDB.getAllData(this, "settings");
+					if (settings.closeAllFolders) for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
+					else if (settings.closeTheFolder) {
+						let folder = this.getFolderOfGuildId(instance.props.guild.id);
+						if (folder && BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folder.folderId)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folder.folderId);
+					}
+				})});
+			}
+			if (methodnames.includes("componentDidUpdate")) {
+				let folder = this.getFolderOfGuildId(instance.props.guild.id);
+				if (folder) {
+					let state = this.getState(instance);
+					if (!BDFDB.equals(state, this.guildStates[instance.props.guild.id])) this.updateGuildInFolderContent(folder.folderId, instance.props.guild.id);
 				}
 			}
 		}
