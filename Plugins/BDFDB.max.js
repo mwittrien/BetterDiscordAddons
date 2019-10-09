@@ -3130,6 +3130,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		else setImmediate(() => {executeDelayedIfNotAppened();});
 
 		function setSwitch(switchitem, triggered) {
+			if (!switchitem) return;
 			var checked = switchitem.checked;
 			BDFDB.toggleClass(switchitem.parentElement, BDFDB.disCN.switchvaluechecked, checked);
 			BDFDB.toggleClass(switchitem.parentElement, BDFDB.disCN.switchvalueunchecked, !checked);
@@ -3150,32 +3151,36 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			}
 		};
 		function setCheckbox(checkbox) {
+			if (!checkbox) return;
 			var checkboxstyle = checkbox.parentElement.querySelector(BDFDB.dotCN.checkbox);
 			var checkboxstyleinner = checkboxstyle.querySelector('polyline');
 			if (checkbox.checked) {
 				BDFDB.addClass(checkboxstyle, BDFDB.disCN.checkboxchecked);
 				checkboxstyle.style.setProperty('background-color', 'rgb(67, 181, 129)');
 				checkboxstyle.style.setProperty('border-color', 'rgb(67, 181, 129)');
-				checkboxstyleinner.setAttribute('stroke', '#ffffff');
+				if (checkboxstyleinner) checkboxstyleinner.setAttribute('stroke', '#ffffff');
 			}
 			else {
 				BDFDB.removeClass(checkboxstyle, BDFDB.disCN.checkboxchecked);
 				checkboxstyle.style.removeProperty('background-color');
 				checkboxstyle.style.removeProperty('border-color');
-				checkboxstyleinner.setAttribute('stroke', 'transparent');
+				if (checkboxstyleinner) checkboxstyleinner.setAttribute('stroke', 'transparent');
 			}
 		};
 		function setGifFavButton(button) {
 			var selected = BDFDB.containsClass(button, BDFDB.disCN.giffavoriteselected);
 			var icon = button.querySelector(BDFDB.dotCN.giffavoriteicon);
-			icon.setAttribute('name', selected ? 'FavoriteFilled' : 'Favorite');
-			icon.innerHTML = selected ? '<path d="M0,0H24V24H0Z" fill="none"></path><path fill="currentColor" d="M12.5,17.6l3.6,2.2a1,1,0,0,0,1.5-1.1l-1-4.1a1,1,0,0,1,.3-1l3.2-2.8A1,1,0,0,0,19.5,9l-4.2-.4a.87.87,0,0,1-.8-.6L12.9,4.1a1.05,1.05,0,0,0-1.9,0l-1.6,4a1,1,0,0,1-.8.6L4.4,9a1.06,1.06,0,0,0-.6,1.8L7,13.6a.91.91,0,0,1,.3,1l-1,4.1a1,1,0,0,0,1.5,1.1l3.6-2.2A1.08,1.08,0,0,1,12.5,17.6Z"></path>' : '<path fill="currentColor" d="M19.6,9l-4.2-0.4c-0.4,0-0.7-0.3-0.8-0.6l-1.6-3.9c-0.3-0.8-1.5-0.8-1.8,0L9.4,8.1C9.3,8.4,9,8.6,8.6,8.7L4.4,9c-0.9,0.1-1.2,1.2-0.6,1.8L7,13.6c0.3,0.2,0.4,0.6,0.3,1l-1,4.1c-0.2,0.9,0.7,1.5,1.5,1.1l3.6-2.2c0.3-0.2,0.7-0.2,1,0l3.6,2.2c0.8,0.5,1.7-0.2,1.5-1.1l-1-4.1c-0.1-0.4,0-0.7,0.3-1l3.2-2.8C20.9,10.2,20.5,9.1,19.6,9zM12,15.4l-3.8,2.3l1-4.3l-3.3-2.9l4.4-0.4l1.7-4l1.7,4l4.4,0.4l-3.3,2.9l1,4.3L12,15.4z"></path>';
+			if (icon) {
+				icon.setAttribute('name', selected ? 'FavoriteFilled' : 'Favorite');
+				icon.innerHTML = selected ? '<path d="M0,0H24V24H0Z" fill="none"></path><path fill="currentColor" d="M12.5,17.6l3.6,2.2a1,1,0,0,0,1.5-1.1l-1-4.1a1,1,0,0,1,.3-1l3.2-2.8A1,1,0,0,0,19.5,9l-4.2-.4a.87.87,0,0,1-.8-.6L12.9,4.1a1.05,1.05,0,0,0-1.9,0l-1.6,4a1,1,0,0,1-.8.6L4.4,9a1.06,1.06,0,0,0-.6,1.8L7,13.6a.91.91,0,0,1,.3,1l-1,4.1a1,1,0,0,0,1.5,1.1l3.6-2.2A1.08,1.08,0,0,1,12.5,17.6Z"></path>' : '<path fill="currentColor" d="M19.6,9l-4.2-0.4c-0.4,0-0.7-0.3-0.8-0.6l-1.6-3.9c-0.3-0.8-1.5-0.8-1.8,0L9.4,8.1C9.3,8.4,9,8.6,8.6,8.7L4.4,9c-0.9,0.1-1.2,1.2-0.6,1.8L7,13.6c0.3,0.2,0.4,0.6,0.3,1l-1,4.1c-0.2,0.9,0.7,1.5,1.5,1.1l3.6-2.2c0.3-0.2,0.7-0.2,1,0l3.6,2.2c0.8,0.5,1.7-0.2,1.5-1.1l-1-4.1c-0.1-0.4,0-0.7,0.3-1l3.2-2.8C20.9,10.2,20.5,9.1,19.6,9zM12,15.4l-3.8,2.3l1-4.3l-3.3-2.9l4.4-0.4l1.7-4l1.7,4l4.4,0.4l-3.3,2.9l1,4.3L12,15.4z"></path>';
+			}
 			if (selected) {
 				BDFDB.addClass(button, BDFDB.disCN.giffavoriteshowpulse);
 				setTimeout(() => {BDFDB.removeClass(button, BDFDB.disCN.giffavoriteshowpulse);}, 500);
 			}
 		};
 		function setTabitem(item, state) {
+			if (!item) return;
 			switch (state) {
 				case 0:
 					BDFDB.removeClass(item, BDFDB.disCN.settingsitemselected);
