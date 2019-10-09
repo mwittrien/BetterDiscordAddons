@@ -4191,6 +4191,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		badgewrapper: ['NotFound', 'badgeWrapper'],
 		bottag: ['BotTag', 'botTag'],
 		bottaginvert: ['BotTag', 'botTagInvert'],
+		bottagmember: ['Member', 'botTag'],
 		bottagmessage: ['Message', 'botTag'],
 		bottagmessagecompact: ['Message', 'botTagCompact'],
 		bottagmessagecozy: ['Message', 'botTagCozy'],

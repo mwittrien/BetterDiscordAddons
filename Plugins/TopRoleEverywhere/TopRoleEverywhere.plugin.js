@@ -124,7 +124,7 @@ class TopRoleEverywhere {
 
 	processMemberListItem (instance, wrapper, returnvalue) {
 		if (instance.props && BDFDB.getData("showInMemberList", this, "settings")) {
-			this.addRoleTag(instance.props.user, wrapper.querySelector(BDFDB.dotCN.namecontainername), "list", BDFDB.disCN.bottagnametag);
+			this.addRoleTag(instance.props.user, wrapper.querySelector(BDFDB.dotCN.namecontainername), "list", BDFDB.disCN.bottagmember);
 		}
 	}
 

@@ -142,7 +142,7 @@ class OwnerTag {
 	}
 
 	processMemberListItem (instance, wrapper, returnvalue) {
-		if (instance.props && BDFDB.getData("addInMemberList", this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.namecontainernamewrapper), "list", BDFDB.disCN.bottagnametag, null);
+		if (instance.props && BDFDB.getData("addInMemberList", this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.namecontainernamewrapper), "list", BDFDB.disCN.bottagmember, null);
 	}
 
 	processUserPopout (instance, wrapper, returnvalue) {

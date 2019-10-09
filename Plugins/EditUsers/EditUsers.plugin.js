@@ -515,7 +515,7 @@ class EditUsers {
 		if (username) {
 			this.changeName(instance.props.user, username);
 			this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
-			this.addTag(instance.props.user, username.parentElement, BDFDB.disCN.bottagnametag);
+			this.addTag(instance.props.user, username.parentElement, BDFDB.disCN.bottagmember);
 		}
 	}
 
