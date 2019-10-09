@@ -1296,7 +1296,7 @@ class ServerFolders {
 					serversubmenu_addtofolder_text:			"Ajouter le serveur à un dossier",
 					serversubmenu_removefromfolder_text:	"Supprimer le serveur du dossier",
 					foldercontext_autoreadfolder_text:		"Auto: Marquer comme lu",
-					foldercontext_mutefolder_text:			"Couper le dossier",
+					foldercontext_mutefolder_text:			"Rendre muet le dossier",
 					foldercontext_removefolder_text:		"Supprimer le dossier",
 					modal_tabheader1_text:					"Dossier",
 					modal_tabheader2_text:					"Couleur du dossier",
