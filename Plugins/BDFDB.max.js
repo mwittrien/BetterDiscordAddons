@@ -3241,7 +3241,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			else if (e.which == 27 && backdrop) backdrop.click();
 		};
 		document.addEventListener('keydown', keydown);
-		BDFDB.addChildEventListener(modalwrapper, 'click', BDFDB.dotCNC.backdrop + BDFDB.dotCNC.modalclose + '.btn-close, .btn-save, .btn-send, .btn-cancel, .btn-ok', () => {
+		BDFDB.addChildEventListener(modalwrapper, 'click', BDFDB.dotCNC.backdrop + BDFDB.dotCNC.modalclose + '.btn-close, .btn-save, .btn-send, .btn-cancel, .btn-ok, .btn-done', () => {
 			document.removeEventListener('keydown', keydown);
 			animate(0);
 			setTimeout(() => {modalwrapper.remove();}, 300);
