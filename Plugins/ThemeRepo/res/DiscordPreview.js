@@ -18,7 +18,7 @@ window.onmessage = function (e) {
 					var oldhtml = document.body.innerHTML.split("REPLACE_CLASS_");
 					var newhtml = oldhtml.shift();
 					for (let html of oldhtml) {
-						let reg = /([A-z_]+)(.+)/.exec(html);
+						let reg = /([A-z0-9_]+)(.+)/.exec(html);
 						newhtml += window.disCN[reg[1]] + reg[2]
 					}
 					document.body.innerHTML = newhtml;
