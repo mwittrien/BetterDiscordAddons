@@ -3,7 +3,7 @@
 class PluginRepo {
 	getName () {return "PluginRepo";} 
 
-	getVersion () {return "1.8.6";}
+	getVersion () {return "1.8.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class PluginRepo {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Small bug fixes","Just some small bug fixes"]]
+			"improved":[["Preview","Now also uses Modules to grab classnames"]]
 		};
 
 		this.patchModules = {
@@ -773,7 +773,7 @@ class PluginRepo {
 					else if (typeof e.data === "object" && e.data.origin == "DiscordPreview") {
 						switch (e.data.reason) {
 							case "OnLoad":
-								frame.contentWindow.postMessage({origin:"PluginRepo",reason:"OnLoad"},"*");
+								frame.contentWindow.postMessage({origin:"PluginRepo",reason:"OnLoad",classes:JSON.stringify(BDFDB.DiscordClasses),classmodules:JSON.stringify(BDFDB.DiscordClassModules)},"*");
 								callback();
 								break;
 						}

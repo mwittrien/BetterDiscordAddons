@@ -3,7 +3,7 @@
 class ThemeRepo {
 	getName () {return "ThemeRepo";}
 
-	getVersion () {return "1.8.7";}
+	getVersion () {return "1.8.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,10 +11,7 @@ class ThemeRepo {
 
 	constructor () {
 		this.changelog = {
-			"added":[["Theme Generator","A new tab was added, that lets you generate your own custom themes"]],
-			"added":[["Preview","Hovering out of the themerepo now hides it and the backdrop to more swiftly let you take a look at the theme preview"]],
-			"improved":[["Ctrl","Pressing Ctrl while inside a generator input no longer hides the modal"]],
-			"fixed":[["Theme Fixer","Theme Fixer CSS was fixed for the newest changes"]]
+			"improved":[["Preview","Now also uses Modules to grab classnames"]]
 		};
 
 		this.patchModules = {
@@ -510,7 +507,7 @@ class ThemeRepo {
 						nativecss = nativecss && nativecss.href ? nativecss.href : null;
 						var titlebar = document.querySelector(BDFDB.dotCN.titlebar);
 						titlebar = titlebar ? titlebar.outerHTML : null;
-						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"OnLoad",username,id,discriminator,avatar,nativecss,html:document.documentElement.className,titlebar},"*");
+						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"OnLoad",classes:JSON.stringify(BDFDB.DiscordClasses),classmodules:JSON.stringify(BDFDB.DiscordClassModules),username,id,discriminator,avatar,nativecss,html:document.documentElement.className,titlebar},"*");
 						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"DarkLight",checked:darklightinput.checked,light:BDFDB.disCN.themelight,dark:BDFDB.disCN.themedark},"*");
 						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"Normalize",checked:normalizeinput.checked},"*");
 						break;

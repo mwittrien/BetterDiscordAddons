@@ -12,6 +12,17 @@ window.onmessage = function (e) {
 		switch (e.data.reason) {
 			case "OnLoad":
 				document.body.innerHTML = document.body.innerHTML.replace(/\t|\n|\r/g, "");
+				if (e.data.classes) window.DiscordClasses = JSON.parse(e.data.classes);
+				if (e.data.classmodules) window.DiscordClassModules = JSON.parse(e.data.classmodules);
+				if (window.DiscordClasses != undefined && window.DiscordClassModules != undefined)) {
+					var oldhtml = h.split('REPLACE_CLASS_');
+					var newhtml = oldhtml.shift();
+					for (let html of oldhtml) {
+						let reg = /([A-z_]+)(.+)/.exec(html);
+						newhtml += BDFDB.disCN[reg[1]] + reg[2]
+					}
+					document.body.innerHTML = newhtml;
+				}
 				if (e.data.username) {
 					document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERNAMESMALL/gi, e.data.username.toLowerCase());
 					document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERNAME/gi, e.data.username);
@@ -28,7 +39,6 @@ window.onmessage = function (e) {
 				}
 				if (e.data.html) document.documentElement.className = e.data.html;
 				if (e.data.titlebar) document.querySelector(".preview-titlebar").outerHTML = e.data.titlebar;
-				document.body.firstElementChild.style.removeProperty("display");
 				break;
 			case "Eval":
 				window.evalResult = null;
@@ -101,6 +111,32 @@ window.WebModulesFindByProperties = function (properties) {
 };
 window.WebModulesFindByName = function (name) {
 	return WebModulesFind(module => module.displayName === name) || "";
+};
+window.disCN = new Proxy({}, {
+	get: function (list, item) {
+		return window.getDiscordClass(item).replace('#', '');
+	}
+});
+window.getDiscordClass = function (item) {
+	var classname = "Preview_undefined";
+	if (window.DiscordClasses === undefined || window.DiscordClassModules === undefined) return classname;
+	else if (window.DiscordClasses[item] === undefined) {
+		console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', item + ' not found in window.DiscordClasses');
+		return classname;
+	} 
+	else if (!Array.isArray(window.DiscordClasses[item]) || window.DiscordClasses[item].length != 2) {
+		console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', item + ' is not an Array of Length 2 in window.DiscordClasses');
+		return classname;
+	}
+	else if (window.DiscordClassModules[window.DiscordClasses[item][0]] === undefined) {
+		console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', window.DiscordClasses[item][0] + ' not found in DiscordClassModules');
+		return classname;
+	}
+	else if (window.DiscordClassModules[window.DiscordClasses[item][0]][window.DiscordClasses[item][1]] === undefined) {
+		console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', window.DiscordClasses[item][1] + ' not found in ' + window.DiscordClasses[item][0] + ' in DiscordClassModules');
+		return classname;
+	}
+	else return classname = window.DiscordClassModules[window.DiscordClasses[item][0]][window.DiscordClasses[item][1]];
 };
 window.BDV2 = {};
 window.BDV2.react = window.React;
