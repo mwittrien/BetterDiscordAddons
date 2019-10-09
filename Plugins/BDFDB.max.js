@@ -635,7 +635,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			BDFDB.removeClass(icon, BDFDB.disCN.noticeicon);
 			notice.insertBefore(icon, noticemessage);
 		}
-		if (options.btn || options.button) notice.appendChild(BDFDB.htmlToElement(`<button class="${BDFDB.disCNS.noticebutton + BDFDB.disCNS.size14 + BDFDB.disCN.weightmedium}">${options.btn || options.button}</button>`));
+		if (options.btn || options.button) notice.appendChild(BDFDB.htmlToElement(`<button class="${BDFDB.disCNS.noticebutton + BDFDB.disCNS.titlesize14 + BDFDB.disCN.weightmedium}">${options.btn || options.button}</button>`));
 		if (options.id) notice.id = options.id.split(' ').join('');
 		if (options.selector) BDFDB.addClass(notice, options.selector);
 		if (options.css) BDFDB.appendLocalStyle('BDFDBcustomnotibar' + id, options.css);
@@ -1735,7 +1735,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				BDFDB.removeClass(settingsbutton, BDFDB.disCN._bdv2tooltipopen);
 			});
 			settingsbutton.addEventListener('click', () => {
-				var settingsmodal = BDFDB.htmlToElement(`<span class="BDFDB-modal BDFDB-settingsmodal ${plugin.id}-settingsmodal"><div class="${BDFDB.disCN.backdrop}"></div><div class="${BDFDB.disCN.modal}"><div class="${BDFDB.disCN.modalinner}"><div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}" style="width:600px !important;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex:0 0 auto;"><div class="${BDFDB.disCN.flexchild}" style="flex:1 1 auto;"><h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">${plugin.name} Settings</h4></div><button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"><svg class="" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div></button></div><div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}"><div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner}"></div></div></div></div></div></span>`);
+				var settingsmodal = BDFDB.htmlToElement(`<span class="BDFDB-modal BDFDB-settingsmodal ${plugin.id}-settingsmodal"><div class="${BDFDB.disCN.backdrop}"></div><div class="${BDFDB.disCN.modal}"><div class="${BDFDB.disCN.modalinner}"><div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}" style="width:600px !important;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex:0 0 auto;"><div class="${BDFDB.disCN.flexchild}" style="flex:1 1 auto;"><h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">${plugin.name} Settings</h4></div><button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"><svg class="" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div></button></div><div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.scrollerthemeghosthairline}"><div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner}"></div></div></div></div></div></span>`);
 				var settingshtml = plugin.getSettingsPanel();
 				settingsmodal.querySelector(BDFDB.dotCN.modalsubinner).appendChild(typeof settingshtml == 'string' ? BDFDB.htmlToElement(settingshtml) : settingshtml);
 				if (typeof plugin.onSettingsClosed === 'function') BDFDB.addChildEventListener(settingsmodal, 'click', BDFDB.dotCNC.modalclose + BDFDB.dotCN.backdrop, () => {
@@ -3340,7 +3340,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (!BDFDB.isObject(plugin) || !text) return;
 		var callback = typeof arguments[2] == "function" ? arguments[2] : (typeof arguments[3] == "function" ? arguments[3] : null);
 		var header = typeof arguments[2] == "string" ? arguments[2] : "Are you sure?";
-		let confirmModal = BDFDB.htmlToElement(`<span class="${plugin.name || plugin.getName()}-modal BDFDB-confirmation-modal BDFDB-modal"><div class="${BDFDB.disCN.backdrop}"></div><div class="${BDFDB.disCN.modal}"><div class="${BDFDB.disCN.modalinner}"><div class="${BDFDB.disCNS.modalsub + BDFDB.disCNS.modalmini + BDFDB.disCN.modalminisize}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex:0 0 auto;"><div class="${BDFDB.disCN.flexchild}" style="flex:1 1 auto;"><h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">${header}</h4><div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}">${plugin.name || plugin.getName()}</div></div><button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"><svg class="" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div></button></div><div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}"><div class="${BDFDB.disCNS.scroller + BDFDB.disCNS.modalsubinner + BDFDB.disCN.modalminicontent}"><div class="${BDFDB.disCNS.modalminitext + BDFDB.disCNS.medium + BDFDB.disCNS.primary + BDFDB.disCN.selectable}">${text}</div></div> </div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}"><button type="button" class="btn-ok ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"></div></button><button type="button" class="btn-cancel ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlooklink + BDFDB.disCNS.buttoncolorwhite + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div></div></div></div></span>`);
+		let confirmModal = BDFDB.htmlToElement(`<span class="${plugin.name || plugin.getName()}-modal BDFDB-confirmation-modal BDFDB-modal"><div class="${BDFDB.disCN.backdrop}"></div><div class="${BDFDB.disCN.modal}"><div class="${BDFDB.disCN.modalinner}"><div class="${BDFDB.disCNS.modalsub + BDFDB.disCNS.modalmini + BDFDB.disCN.modalminisize}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex:0 0 auto;"><div class="${BDFDB.disCN.flexchild}" style="flex:1 1 auto;"><h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">${header}</h4><div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}">${plugin.name || plugin.getName()}</div></div><button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"><svg class="" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div></button></div><div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.scrollerthemeghosthairline}"><div class="${BDFDB.disCNS.scroller + BDFDB.disCNS.modalsubinner + BDFDB.disCN.modalminicontent}"><div class="${BDFDB.disCNS.modalminitext + BDFDB.disCNS.medium + BDFDB.disCNS.primary + BDFDB.disCN.selectable}">${text}</div></div> </div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}"><button type="button" class="btn-ok ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"></div></button><button type="button" class="btn-cancel ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlooklink + BDFDB.disCNS.buttoncolorwhite + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div></div></div></div></span>`);
 		BDFDB.appendModal(confirmModal);
 		if (typeof callback == 'function') confirmModal.querySelector('.btn-ok').addEventListener('click', () => {
 			setTimeout(() => {callback();}, 300);
@@ -3908,12 +3908,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		_: '',
 		avatarStopAnimation: 'stop-animation',
 		badgeWrapper: 'wrapper-232cHJ',
-		nameContainerNameContainer: 'container-2ax-kl',
 		guildChannels: 'container-PNkimc',
 		guildBadgeWrapper: 'guild-badge-wrapper-deprecated',
 		highlight: 'highlight',
 		hoverCardButton: 'button-2CgfFz',
 		loginScreen: 'wrapper-3Q5DdO',
+		nameContainerNameContainer: 'container-2ax-kl',
 		mention: 'mention',
 		select: 'css-1kj8ui-container',
 		selectArrow: 'css-19bqh2r',
@@ -3945,7 +3945,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		splashBackground: 'splashBackground-1FRCko',
 		themeDark: 'theme-dark',
 		themeLight: 'theme-light',
-		themeUndefined: 'theme-undefined'
+		themeUndefined: 'theme-undefined',
+		voiceDraggable: 'draggable-1KoBzC'
 	};
 
 	DiscordClassModules.AccountDetails = BDFDB.WebModules.findByProperties('usernameContainer', 'container');
@@ -3976,11 +3977,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.Category = BDFDB.WebModules.findByProperties('wrapper', 'children', 'muted');
 	DiscordClassModules.CategoryContainer = BDFDB.WebModules.findByProperties('addButtonIcon', 'containerDefault');
 	DiscordClassModules.ChangeLog = BDFDB.WebModules.findByProperties('added', 'fixed', 'improved', 'progress');
-	DiscordClassModules.Channel = BDFDB.WebModules.findByProperties('wrapper', 'content', 'modeSelected');;
+	DiscordClassModules.Channel = BDFDB.WebModules.findByProperties('wrapper', 'content', 'modeSelected');
 	DiscordClassModules.ChannelContainer = BDFDB.WebModules.findByProperties('actionIcon', 'containerDefault');
+	DiscordClassModules.ChannelLimit = BDFDB.WebModules.findByProperties('users', 'total', 'wrapper');
 	DiscordClassModules.ChannelTextArea = BDFDB.WebModules.findByProperties('textArea', 'attachButtonDivider');
 	DiscordClassModules.ChannelTextAreaButton = BDFDB.WebModules.findByProperties('buttonWrapper', 'active');
-	DiscordClassModules.ChannelWindow = BDFDB.WebModules.findByProperties('chat', 'channelTextArea');
+	DiscordClassModules.ChatWindow = BDFDB.WebModules.findByProperties('chat', 'channelTextArea');
 	DiscordClassModules.Checkbox = BDFDB.WebModules.findByProperties('checkboxWrapper', 'round');
 	DiscordClassModules.ColorPicker = BDFDB.WebModules.findByProperties('colorPickerCustom', 'customColorPickerInput');
 	DiscordClassModules.ColorPickerInner = BDFDB.WebModules.findByProperties('saturation', 'hue', 'wrapper');
@@ -3997,12 +3999,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.File = BDFDB.WebModules.findByProperties('downloadButton', 'fileNameLink');
 	DiscordClassModules.Flex = BDFDB.WebModules.findByProperties('alignBaseline', 'alignCenter');
 	DiscordClassModules.FlexChild = BDFDB.WebModules.findByProperties('flexChild', 'flex');
+	DiscordClassModules.FlowerStar = BDFDB.WebModules.findByProperties('flowerStarContainer', 'flowerStar');
 	DiscordClassModules.FormText = BDFDB.WebModules.findByProperties('description', 'modeDefault');
 	DiscordClassModules.Friends = BDFDB.WebModules.findByProperties('friendsColumn', 'friendsRow');
 	DiscordClassModules.Game = BDFDB.WebModules.findByProperties('game', 'gameName');
 	DiscordClassModules.GameLibrary = BDFDB.WebModules.findByProperties('gameLibrary', 'scroller');
 	DiscordClassModules.GifFavoriteButton = BDFDB.WebModules.findByProperties('gifFavoriteButton', 'showPulse');
 	DiscordClassModules.GiftInventory = BDFDB.WebModules.find(module => typeof module['root'] == 'string' && typeof module['body'] == 'string' && (Object.keys(module).length == 2 || Object.keys(module).length == 3));
+	DiscordClassModules.GoLiveDetails = BDFDB.WebModules.findByProperties('panel', 'gameWrapper');
 	DiscordClassModules.Guild = BDFDB.WebModules.findByProperties('wrapper', 'lowerBadge', 'svg');
 	DiscordClassModules.GuildChannels = BDFDB.WebModules.findByProperties('positionedContainer', 'unreadBar');
 	DiscordClassModules.GuildDiscovery = BDFDB.WebModules.findByProperties('pageWrapper', 'guildCard');
@@ -4010,6 +4014,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.GuildEdges = BDFDB.WebModules.findByProperties('wrapper', 'edge', 'autoPointerEvents')
 	DiscordClassModules.GuildFolder = BDFDB.WebModules.findByProperties('folder', 'expandedGuilds')
 	DiscordClassModules.GuildHeader = BDFDB.WebModules.findByProperties('header', 'name', 'bannerImage');
+	DiscordClassModules.GuildHeaderButton = BDFDB.WebModules.findByProperties('button', 'open');
 	DiscordClassModules.GuildIcon = BDFDB.WebModules.findByProperties('acronym', 'selected', 'wrapper');
 	DiscordClassModules.GuildSettingsBanned = BDFDB.WebModules.findByProperties('bannedUser', 'bannedUserAvatar');
 	DiscordClassModules.GuildSettingsInvite = BDFDB.WebModules.findByProperties('countdownColumn', 'inviteSettingsInviteRow');
@@ -4031,6 +4036,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.Input = BDFDB.WebModules.findByProperties('inputMini', 'inputDefault');
 	DiscordClassModules.LayerModal = BDFDB.WebModules.findByProperties('root', 'small', 'medium');
 	DiscordClassModules.Layers = BDFDB.WebModules.findByProperties('layer', 'layers');
+	DiscordClassModules.LiveTag = BDFDB.WebModules.findByProperties('liveRed', 'live');
 	DiscordClassModules.LFG = BDFDB.WebModules.findByProperties('lfg', 'topSectionHeader');
 	DiscordClassModules.Margins = BDFDB.WebModules.findByProperties('marginBottom4', 'marginCenterHorz');
 	DiscordClassModules.Member = BDFDB.WebModules.findByProperties('member', 'ownerIcon');
@@ -4089,10 +4095,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.TitleBar = BDFDB.WebModules.findByProperties('titleBar', 'wordmark');
 	DiscordClassModules.Tooltip = BDFDB.WebModules.findByProperties('tooltip', 'tooltipTop');
 	DiscordClassModules.Typing = BDFDB.WebModules.findByProperties('cooldownWrapper', 'typing');
+	DiscordClassModules.UnreadBar = BDFDB.WebModules.findByProperties('active', 'bar', 'unread');
 	DiscordClassModules.UserPopout = BDFDB.WebModules.findByProperties('userPopout', 'headerPlaying');
 	DiscordClassModules.UserProfile = BDFDB.WebModules.findByProperties('topSectionNormal', 'tabBarContainer');
 	DiscordClassModules.Video = BDFDB.WebModules.findByProperties('video', 'fullScreen');
-	DiscordClassModules.Voice = BDFDB.WebModules.findByProperties('avatarSpeaking', 'voiceUser');
+	DiscordClassModules.VoiceChannel = BDFDB.WebModules.findByProperties('avatarSpeaking', 'voiceUser');
+	DiscordClassModules.VoiceChannelList = BDFDB.WebModules.findByProperties('list', 'collapsed');
+	DiscordClassModules.VoiceDetails = BDFDB.WebModules.findByProperties('container', 'customStatusContainer');
+	DiscordClassModules.VoiceDetailsPing = BDFDB.WebModules.findByProperties('rtcConnectionQualityBad', 'rtcConnectionQualityFine');
 	BDFDB.DiscordClassModules = Object.assign({}, DiscordClassModules);
 
 	var DiscordClasses = {
@@ -4179,6 +4189,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		avatariconsizelarge: ['AvatarIcon', 'iconSizeLarge'],
 		avatariconsizemedium: ['AvatarIcon', 'iconSizeMedium'],
 		avatariconsizemini: ['AvatarIcon', 'iconSizeMini'],
+		avatariconsizesmol: ['AvatarIcon', 'iconSizeSmol'],
 		avatariconsizesmall: ['AvatarIcon', 'iconSizeSmall'],
 		avatariconsizexlarge: ['AvatarIcon', 'iconSizeXLarge'],
 		avatarmask: ['Avatar', 'mask'],
@@ -4266,16 +4277,18 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		cardsuccessoutline: ['Card', 'cardSuccessOutline'],
 		cardwarning: ['Card', 'cardWarning'],
 		cardwarningoutline: ['Card', 'cardWarningOutline'],
+		categoryaddbutton: ['CategoryContainer', 'addButton'],
+		categoryaddbuttonicon: ['CategoryContainer', 'addButtonIcon'],
 		categorychildren: ['Category', 'children'],
 		categoryclickable: ['Category', 'clickable'],
 		categorycollapsed: ['Category', 'collapsed'],
 		categorycontainerdefault: ['CategoryContainer', 'containerDefault'],
 		categorydisabled: ['CategoryContainer', 'disabled'],
+		categoryforcevisible: ['CategoryContainer', 'forceVisible'],
 		categoryicon: ['Category', 'icon'],
 		categoryiconvisibility: ['CategoryContainer', 'iconVisibility'],
 		categorymuted: ['Category', 'muted'],
 		categoryname: ['Category', 'name'],
-		categoryselected: ['CategoryContainer', 'selected'],
 		categorywrapper: ['Category', 'wrapper'],
 		changelogadded: ['ChangeLog', 'added'],
 		changelogfixed: ['ChangeLog', 'fixed'],
@@ -4283,11 +4296,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		changelogprogress: ['ChangeLog', 'added'],
 		changelogtitle: ['ChangeLog', 'title'],
 		channelactionicon: ['ChannelContainer', 'actionIcon'],
+		channelchildicon: ['ChannelContainer', 'iconItem'],
+		channelchildiconbase: ['ChannelContainer', 'iconBase'],
 		channelchildren: ['Channel', 'children'],
 		channelcontainerdefault: ['ChannelContainer', 'containerDefault'],
 		channelcontent: ['Channel', 'content'],
 		channeldisabled: ['ChannelContainer', 'disabled'],
-		channelheaderchannelname: ['ChannelWindow', 'channelName'],
+		channelheaderchannelname: ['ChatWindow', 'channelName'],
 		channelheaderchildren: ['HeaderBar', 'children'],
 		channelheaderdivider: ['HeaderBar', 'divider'],
 		channelheaderheaderbar: ['HeaderBar', 'container'],
@@ -4298,29 +4313,40 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		channelheadericonclickable: ['HeaderBar', 'clickable'],
 		channelheadericonselected: ['HeaderBar', 'selected'],
 		channelheadericonwrapper: ['HeaderBar', 'iconWrapper'],
-		channelheadertitle: ['ChannelWindow', 'title'],
-		channelheadertitlewrapper: ['ChannelWindow', 'titleWrapper'],
+		channelheadertitle: ['ChatWindow', 'title'],
+		channelheadertitlewrapper: ['ChatWindow', 'titleWrapper'],
 		channelheadersearch: ['HeaderBarExtras', 'search'],
 		channelheadertoolbar: ['HeaderBar', 'toolbar'],
 		channelheadertoolbar2: ['HeaderBarExtras', 'toolbar'],
 		channelheadertopic: ['HeaderBarTopic', 'topic'],
 		channelicon: ['Channel', 'icon'],
 		channeliconvisibility: ['ChannelContainer', 'iconVisibility'],
+		channelmentionsbadge: ['ChannelContainer', 'mentionsBadge'],
 		channelmodeconnected: ['Channel', 'modeConnected'],
 		channelmodelocked: ['Channel', 'modeLocked'],
 		channelmodemuted: ['Channel', 'modeMuted'],
 		channelmodeselected: ['Channel', 'modeSelected'],
 		channelmodeunread: ['Channel', 'modeUnread'],
 		channelname: ['Channel', 'name'],
+		channelpanel: ['AppBase', 'activityPanel'],
 		channelpanels: ['AppBase', 'panels'],
 		channels: ['AppBase', 'sidebar'],
 		channelselected: ['ChannelContainer', 'selected'],
 		channelsscroller: ['GuildChannels', 'scroller'],
+		channelsunreadbar: ['GuildChannels', 'unreadBar'],
+		channelsunreadbarcontainer: ['GuildChannels', 'positionedContainer'],
+		channelsunreadbarbottom: ['GuildChannels', 'unreadBottom'],
+		channelsunreadbarunread: ['GuildChannels', 'unread'],
+		channelsunreadbartop: ['GuildChannels', 'unreadTop'],
 		channelunread: ['Channel', 'unread'],
+		channeluserlimit: ['ChannelLimit', 'wrapper'],
+		channeluserlimitcontainer: ['Channel', 'userLimit'],
+		channeluserlimittotal: ['ChannelLimit', 'total'],
+		channeluserlimitusers: ['ChannelLimit', 'users'],
 		channelwrapper: ['Channel', 'wrapper'],
-		chat: ['ChannelWindow', 'chat'],
+		chat: ['ChatWindow', 'chat'],
 		chatbase: ['AppBase', 'base'],
-		chatcontent: ['ChannelWindow', 'content'],
+		chatcontent: ['ChatWindow', 'content'],
 		chatspacer: ['AppBase', 'content'],
 		checkbox: ['Checkbox', 'checkbox'],
 		checkboxchecked: ['Checkbox', 'checked'],
@@ -4488,6 +4514,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		flexcenter: ['Flex', 'flexCenter'],
 		flexchild: ['FlexChild', 'flexChild'],
 		flexmarginreset: ['FlexChild', 'flexMarginReset'],
+		flexspacer: ['Flex', 'spacer'],
+		flowerstar: ['FlowerStar', 'flowerStar'],
+		flowerstarchild: ['FlowerStar', 'childContainer'],
+		flowerstarcontainer: ['FlowerStar', 'flowerStarContainer'],
 		formtext: ['FormText', 'formText'],
 		friends: ['Friends', 'container'],
 		friendscolumn: ['Friends', 'friendsColumn'],
@@ -4510,6 +4540,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		giffavoritesize: ['GifFavoriteButton', 'size'],
 		giffavoriteselected: ['GifFavoriteButton', 'selected'],
 		giftinventory: ['GiftInventory', 'root'],
+		goliveactions: ['GoLiveDetails',  'actions'],
+		golivebody: ['GoLiveDetails', 'body-GmmuPm'],
+		goliveclickablegamewrapper: ['GoLiveDetails', 'clickableGameWrapper'],
+		golivegameicon: ['GoLiveDetails', 'gameIcon'],
+		golivegamename: ['GoLiveDetails', 'gameName'],
+		golivegamewrapper: ['GoLiveDetails', 'gameWrapper'],
+		golivepanel: ['GoLiveDetails', 'panel'],
 		guildbadgebase: ['Badge', 'base'],
 		guildbadgeicon: ['Badge', 'icon'],
 		guildbadgeiconbadge: ['Badge', 'iconBadge'],
@@ -4526,8 +4563,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		guildcontainer: ['GuildServer', 'blobContainer'],
 		guilddiscovery: ['GuildDiscovery', 'pageWrapper'],
 		guildedge: ['GuildEdges', 'edge'],
+		guildedgehalf: ['GuildEdges', 'half'],
+		guildedgehigher: ['GuildEdges', 'higher'],
 		guildedgemiddle: ['GuildEdges', 'middle'],
 		guildedgewrapper: ['GuildEdges', 'wrapper'],
+		guildserror: ['GuildsItems', 'guildsError'],
+		guildserrorinner: ['GuildsItems', 'errorInner'],
 		guildfolder: ['GuildFolder', 'folder'],
 		guildfolderexpandendbackground: ['GuildFolder', 'expandedFolderBackground'],
 		guildfolderexpandendbackgroundcollapsed: ['GuildFolder', 'collapsed'],
@@ -4541,11 +4582,27 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		guildheader: ['GuildHeader', 'container'],
 		guildheaderbanner: ['GuildHeader', 'banner'],
 		guildheaderbannerimage: ['GuildHeader', 'bannerImage'],
-		guildheaderhasdropdown: ['GuildHeader', 'hasDropdown'],
+		guildheaderbannerimagecontainer: ['GuildHeader', 'animatedContainer'],
+		guildheaderbannervisible: ['GuildHeader', 'bannerVisible'],
+		guildheaderbutton: ['GuildHeaderButton', 'button'],
+		guildheaderbuttonopen: ['GuildHeaderButton', 'open'],
+		guildheaderclickable: ['GuildHeader', 'clickable'],
+		guildheaderhasbanner: ['GuildHeader', 'hasBanner'],
+		guildheadericoncontainer: ['GuildHeader', 'guildIconContainer'],
+		guildheadericonbgtiernone: ['GuildHeader', 'iconBackgroundTierNone'],
+		guildheadericonbgtierone: ['GuildHeader', 'iconBackgroundTierOne'],
+		guildheadericonbgtierthree: ['GuildHeader', 'iconBackgroundTierThree'],
+		guildheadericonbgtiertwo: ['GuildHeader', 'iconBackgroundTierTwo'],
+		guildheadericonpremiumgem: ['GuildHeader', 'premiumGuildIconGem'],
+		guildheadericontiernone: ['GuildHeader', 'iconTierNone'],
+		guildheadericontierone: ['GuildHeader', 'iconTierOne'],
+		guildheadericontierthree: ['GuildHeader', 'iconTierThree'],
+		guildheadericontiertwo: ['GuildHeader', 'iconTierTwo'],
 		guildheaderheader: ['GuildHeader', 'header'],
 		guildheadername: ['GuildHeader', 'name'],
 		guildicon: ['GuildIcon', 'icon'],
 		guildiconacronym: ['GuildIcon', 'acronym'],
+		guildiconacronymnested: ['GuildIcon', 'nested'],
 		guildiconchildwrapper: ['GuildIcon', 'childWrapper'],
 		guildiconselected: ['GuildIcon', 'selected'],
 		guildiconwrapper: ['GuildIcon', 'wrapper'],
@@ -4574,8 +4631,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		guildsscrollerwrap: ['GuildsWrapper', 'scrollerWrap'],
 		guildsvg: ['Guild', 'svg'],
 		guildswrapper: ['GuildsWrapper', 'wrapper'],
-		guildswrapperunreadmentionsindicatorbottom: ['GuildsWrapper', 'unreadMentionsIndicatorBottom'],
-		guildswrapperunreadmentionsindicatortop: ['GuildsWrapper', 'unreadMentionsIndicatorTop'],
+		guildswrapperunreadmentionsbar ['GuildsWrapper', 'unreadMentionsBar'],
+		guildswrapperunreadmentionsbarbottom: ['GuildsWrapper', 'unreadMentionsIndicatorBottom'],
+		guildswrapperunreadmentionsbartop: ['GuildsWrapper', 'unreadMentionsIndicatorTop'],
 		guildupperbadge: ['Guild', 'upperBadge'],
 		h1: ['Text', 'h1'],
 		h1defaultmargin: ['Text', 'defaultMarginh1'],
@@ -4659,8 +4717,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		layermodalmedium: ['LayerModal', 'medium'],
 		layermodalsmall: ['LayerModal', 'small'],
 		layer: ['Layers', 'layer'],
+		layerbase: ['Layers', 'baseLayer'],
 		layers: ['Layers', 'layers'],
 		lfg: ['LFG', 'lfg'],
+		livetag: ['LiveTag', 'live'],
+		livetaggray: ['LiveTag', 'liveGray'],
+		livetaglarge: ['LiveTag', 'liveLarge'],
+		livetagred: ['LiveTag', 'liveRed'],
+		livetagsmall: ['LiveTag', 'liveSmall'],
 		loginscreen: ['NotFound', 'loginScreen'],
 		marginbottom4: ['Margins', 'marginBottom4'],
 		marginbottom8: ['Margins', 'marginBottom8'],
@@ -4794,7 +4858,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		namecontainernamewrapper: ['NameContainer', 'nameAndDecorators'],
 		namecontainerselected: ['NameContainer', 'selected'],
 		nametag: ['NameTag', 'nameTag'],
-		nochannel: ['ChannelWindow', 'noChannel'],
+		nochannel: ['ChatWindow', 'noChannel'],
 		notice: ['Notice', 'notice'],
 		noticebrand: ['Notice', 'noticeBrand'],
 		noticebutton: ['Notice', 'button'],
@@ -4876,7 +4940,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		recentmentionspopout: ['RecentMentions', 'recentMentionsPopout'],
 		reset: ['CardStatus', 'reset'],
 		scroller: ['Scroller', 'scroller'],
+		scrollerfade: ['Scroller', 'scrollerFade'],
+		scrollersystempad: ['Scroller', 'systemPad'],
 		scrollerthemed: ['Scroller', 'scrollerThemed'],
+		scrollerthemeghost: ['Scroller', 'themeGhost'],
+		scrollerthemeghosthairline: ['Scroller', 'themeGhostHairline'],
+		scrollerthemeghosthairlinechannels: ['Scroller', 'themeGhostHairlineChannels'],
 		scrollerwrap: ['Scroller', 'scrollerWrap'],
 		searchbar: ['SearchBar', 'container'],
 		searchbarclear: ['SearchBar', 'clear'],
@@ -4972,14 +5041,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		settingstabbartoppill: ['Item', 'topPill'],
 		sidebarregion: ['SettingsWindow', 'sidebarRegion'],
 		sinkinteractions: ['Message', 'disableInteraction'],
-		size10: ['UserPopout', 'size10'],
-		size12: ['UserPopout', 'size12'],
-		size14: ['UserPopout', 'size14'],
-		size16: ['UserPopout', 'size16'],
-		size18: ['Title', 'size18'],
-		size20: ['CtaVerification', 'size20'],
+		size10: ['TextSize', 'size10'],
+		size12: ['TextSize', 'size12'],
+		size14: ['TextSize', 'size14'],
+		size16: ['TextSize', 'size16'],
+		size20: ['TextSize', 'size20'],
 		size24: ['TextSize', 'size24'],
-		size36: ['CtaVerification', 'size24'],
+		size32: ['TextSize', 'size32'],
 		slider: ['Slider', 'slider'],
 		sliderbar: ['Slider', 'bar'],
 		sliderbarfill: ['Slider', 'barFill'],
@@ -5045,7 +5113,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		textareapickerbuttons: ['ChannelTextArea', 'buttons'],
 		textareauploadinput: ['ChannelTextArea', 'uploadInput'],
 		textareawrapall: ['ChannelTextArea', 'channelTextArea'],
-		textareawrapchat: ['ChannelWindow', 'channelTextArea'],
+		textareawrapchat: ['ChatWindow', 'channelTextArea'],
 		textareawrapdisabled: ['ChannelTextArea', 'channelTextAreaDisabled'],
 		textareawrapenablednoattach: ['ChannelTextArea', 'channelTextAreaEnabledNoAttach'],
 		textlink: ['Notice', 'textLink'],
@@ -5058,6 +5126,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		titlebar: ['TitleBar', 'titleBar'],
 		titledefault: ['SettingsItems', 'titleDefault'],
 		titlemini: ['SettingsItems', 'titleMini'],
+		titlesize10: ['UserPopout', 'size10'],
+		titlesize12: ['UserPopout', 'size12'],
+		titlesize14: ['UserPopout', 'size14'],
+		titlesize16: ['UserPopout', 'size16'],
+		size18: ['Title', 'size18'],
+		titlesize18: ['Title', 'size18'],
+		titlesize20: ['CtaVerification', 'size20'],
+		titlesize36: ['CtaVerification', 'size36'],
 		tooltip: ['Tooltip', 'tooltip'],
 		tooltipblack: ['Tooltip', 'tooltipBlack'],
 		tooltipbottom: ['Tooltip', 'tooltipBottom'],
@@ -5071,6 +5147,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		tooltiptop: ['Tooltip', 'tooltipTop'],
 		tooltipyellow: ['Tooltip', 'tooltipYellow'],
 		typing: ['Typing', 'typing'],
+		unreadbar: ['UnreadBar', 'bar'],
+		unreadbaractive: ['UnreadBar', 'active'],
+		unreadbarcontainer: ['UnreadBar', 'container'],
+		unreadbaricon: ['UnreadBar', 'icon'],
+		unreadbarmention: ['UnreadBar', 'mention'],
+		unreadbartext: ['UnreadBar', 'text'],
+		unreadbarunread: ['UnreadBar', 'unread'],
 		userpopout: ['UserPopout', 'userPopout'],
 		userpopoutavatarwrapper: ['UserPopout', 'avatarWrapper'],
 		userpopoutcustomstatus: ['UserPopout', 'customStatus'],
@@ -5116,29 +5199,50 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		usernotepopout: ['UserPopout', 'note'],
 		usernoteprofile: ['UserProfile', 'note'],
 		vertical: ['Flex', 'vertical'],
-		voiceavatar: ['Voice', 'avatar'],
-		voiceavatarcontainer: ['Voice', 'avatarContainer'],
-		voiceavatarlarge: ['Voice', 'avatarLarge'],
-		voiceavatarsmall: ['Voice', 'avatarSmall'],
-		voiceavatarspeaking: ['Voice', 'avatarSpeaking'],
-		voiceclickable: ['Voice', 'clickable'],
-		voicecontent: ['Voice', 'content'],
-		voiceflipped: ['Voice', 'flipped'],
-		voiceicon: ['Voice', 'icon'],
-		voiceicons: ['Voice', 'icons'],
-		voiceiconspacing: ['Voice', 'iconSpacing'],
-		voicelist: ['Voice', 'list'],
-		voicelistcollapse: ['Voice', 'listCollapse'],
-		voicelistdefault: ['Voice', 'listDefault'],
-		voiceliveicon: ['Voice', 'liveIcon'],
-		voicename: ['Voice', 'username'],
-		voicenamefont: ['Voice', 'usernameFont'],
-		voicenamespeaking: ['Voice', 'usernameSpeaking'],
-		voicered: ['Voice', 'red'],
-		voiceselected: ['Voice', 'selected'],
-		voiceuser: ['Voice', 'voiceUser'],
-		voiceuserlarge: ['Voice', 'userLarge'],
-		voiceusersmall: ['Voice', 'userSmall'],
+		voiceavatar: ['VoiceChannel', 'avatar'],
+		voiceavatarcontainer: ['VoiceChannel', 'avatarContainer'],
+		voiceavatarlarge: ['VoiceChannel', 'avatarLarge'],
+		voiceavatarsmall: ['VoiceChannel', 'avatarSmall'],
+		voiceavatarspeaking: ['VoiceChannel', 'avatarSpeaking'],
+		voiceclickable: ['VoiceChannel', 'clickable'],
+		voicecontent: ['VoiceChannel', 'content'],
+		voicedetails: ['VoiceDetails', 'container'],
+		voicedetailsactive: ['VoiceDetails', 'active'],
+		voicedetailschannel: ['VoiceDetails', 'channel'],
+		voicedetailscustomstatuscontainer: ['VoiceDetails', 'customStatusContainer'],
+		voicedetailshotspot: ['VoiceDetails', 'hotspot'],
+		voicedetailsinactive: ['VoiceDetails', 'inactive'],
+		voicedetailsinner: ['VoiceDetails', 'inner'],
+		voicedetailslabelwrapper: ['VoiceDetails', 'labelWrapper'],
+		voicedetailsping: ['VoiceDetails',' ping'],
+		voicedetailsqualityaverage: ['VoiceDetails', 'rtcConnectionQualityAverage'],
+		voicedetailsqualitybad: ['VoiceDetails', 'rtcConnectionQualityBad-'],
+		voicedetailsqualityfine: ['VoiceDetails', 'rtcConnectionQualityFine'],
+		voicedetailsstatus: ['VoiceDetails', 'rtcConnectionStatus'],
+		voicedetailsstatusconnected: ['VoiceDetails', 'rtcConnectionStatusConnected'],
+		voicedetailsstatusconnecting: ['VoiceDetails', 'rtcConnectionStatusConnecting'],
+		voicedetailsstatuserror: ['VoiceDetails', 'rtcConnectionStatusError'],
+		voicedetailsstatustooltip: ['VoiceDetails', 'statusTooltip'],
+		voicedetailsstatuswithpopout: ['VoiceDetails', 'statusWithPopout'],
+		voicedraggable: ['NotFound', 'voiceDraggable'],
+		voiceflipped: ['VoiceChannel', 'flipped'],
+		voiceicon: ['VoiceChannel', 'icon'],
+		voiceicons: ['VoiceChannel', 'icons'],
+		voiceiconspacing: ['VoiceChannel', 'iconSpacing'],
+		voicelist: ['VoiceChannel', 'list'],
+		voicelist2: ['VoiceChannelList', 'list'],
+		voicelistcollapsed: ['VoiceChannel', 'listCollapse'],
+		voicelistcollapsed2: ['VoiceChannel', 'collapsed'],
+		voicelistdefault: ['VoiceChannel', 'listDefault'],
+		voiceliveicon: ['VoiceChannel', 'liveIcon'],
+		voicename: ['VoiceChannel', 'username'],
+		voicenamefont: ['VoiceChannel', 'usernameFont'],
+		voicenamespeaking: ['VoiceChannel', 'usernameSpeaking'],
+		voicered: ['VoiceChannel', 'red'],
+		voiceselected: ['VoiceChannel', 'selected'],
+		voiceuser: ['VoiceChannel', 'voiceUser'],
+		voiceuserlarge: ['VoiceChannel', 'userLarge'],
+		voiceusersmall: ['VoiceChannel', 'userSmall'],
 		weightbold: ['TextWeight', 'weightBold'],
 		weightlight: ['TextWeight', 'weightLight'],
 		weightmedium: ['TextWeight', 'weightMedium'],

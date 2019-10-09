@@ -50,7 +50,7 @@ class SendLargeMessages {
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
 								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
 									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">REPLACE_modal_header_text</h4>
-									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
+									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
 								</div>
 								<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
 									<div class="${BDFDB.disCN.buttoncontents}">
@@ -63,12 +63,12 @@ class SendLargeMessages {
 									</div>
 								</button>
 							</div>
-							<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCNS.themeghosthairline + BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCNS.flexchild + BDFDB.disCN.modalsubinner}" style="flex: 1 1 auto;">
+							<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCNS.scrollerthemeghosthairline + BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCNS.flexchild + BDFDB.disCN.modalsubinner}" style="flex: 1 1 auto;">
 								<textarea class="${BDFDB.disCNS.scroller + BDFDB.disCNS.inputdefault + BDFDB.disCN.input}" id="modal-inputtext"></textarea>
 							</div>
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCNS.nowrap + BDFDB.disCNS.modalsubinner + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;">
-								<h5 id="warning-message" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightbold + BDFDB.disCNS.h5defaultmargin}" style="flex: 1 1 auto;"></h5>
-								<h5 id="character-counter" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightmedium + BDFDB.disCNS.h5defaultmargin}" style="flex: 0 0 auto;"></h5>
+								<h5 id="warning-message" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightbold + BDFDB.disCNS.h5defaultmargin}" style="flex: 1 1 auto;"></h5>
+								<h5 id="character-counter" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightmedium + BDFDB.disCNS.h5defaultmargin}" style="flex: 0 0 auto;"></h5>
 							</div>
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
 								<button type="button" class="btn-send ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
