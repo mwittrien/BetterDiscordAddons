@@ -4631,7 +4631,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		guildsscrollerwrap: ['GuildsWrapper', 'scrollerWrap'],
 		guildsvg: ['Guild', 'svg'],
 		guildswrapper: ['GuildsWrapper', 'wrapper'],
-		guildswrapperunreadmentionsbar ['GuildsWrapper', 'unreadMentionsBar'],
+		guildswrapperunreadmentionsbar: ['GuildsWrapper', 'unreadMentionsBar'],
 		guildswrapperunreadmentionsbarbottom: ['GuildsWrapper', 'unreadMentionsIndicatorBottom'],
 		guildswrapperunreadmentionsbartop: ['GuildsWrapper', 'unreadMentionsIndicatorTop'],
 		guildupperbadge: ['Guild', 'upperBadge'],
