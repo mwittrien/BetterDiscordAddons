@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.5.5";}
+	getVersion () {return "6.5.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,8 +11,8 @@ class ServerFolders {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["Native Folder Support","Yes, it's here finally. ServerFolders now uses native Folders to emulate the old ServerFolders behaviour. This means you can now finally organize your Servers in Folders the old way without loosing the support on your phone. Everything should be working as it's used to. Below is a list of stuff that is <strong style='color: yellow;'>NEW</strong>"]],
-			"fixed":[["Fixed?","Added back the option to create a Folder via the contextmenu, the amount of people which won't know how to create native Folders is worrying"]],
+			"improved":[["Native Folder Support","Yes, it's here finally. ServerFolders now uses native Folders to emulate the old ServerFolders behaviour. This means you can now finally organize your Servers in Folders the old way without loosing the support on your phone. Everything should be working as it's used to. Below is a list of stuff that is <strong style='color: yellow;'>NEW</strong>"],["Folder Creation","Instead of creating a Folder with the targeted Server, a menu now opens that let's you select which Servers you want to add to the Folder before you create it"]],
+			"fixed":[["Fixed?","Added back the option to create a Folder via the contextmenu, the amount of people which won't know how to create native Folders is worrying"],["Theme Issues","Fixed some theme issues with themes like ClearVision"]],
 			"added":[["Port your old Folders","If you got a config with old SevrerFolders data in your plugins folder, the Plugin will ask you to port them over to native Folders. If you missed clicking on 'Okay' reload the plugin to reprompt the question"],["Mute Folders","You can now mute Folders, this will automatically mute all Servers that are within a Folder"],["Mini Servers or close icon","Don't like using a close icon to show that a Folder is closed? No problem, you can switch back to using the miniature Server preview that the native Folders use in the Foldersettings (the default icon always uses the miniature Server preview)"],["Delete native Folder","The option to delete a Folder was added to the native Folder contextmenu, meaning you can now delete native Folders more easily, watchout there is no way to revert this!"],["Server Sorting","Sorting Servers within a Folder now properly sorts them in a native way, meaning if you sort them in ServerFolders they will also change order on your phone or when you disable ServerFolders again"]]
 		};
 		
@@ -374,7 +374,7 @@ class ServerFolders {
 			let guildid = instance.props.guild.id;
 			let folders = this.getFolders();
 			let folder = this.getFolderOfGuildId(guildid);
-			let addtofolderitems = [];
+			let addtofolderitems = [], openguilds = BDFDB.LibraryModules.FolderStore.getSortedGuilds().filter(n => !n.folderId).map(n => n.guilds[0]);
 			for (let i = 0; i < folders.length; i++) addtofolderitems.push(BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: folders[i].folderName || (this.labels.modal_tabheader1_text + " #" + parseInt(i+1)),
 				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-addtofolder-contextMenuItem`,
@@ -384,6 +384,7 @@ class ServerFolders {
 				}
 			}));
 			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
+			const addType = !addtofolderitems.length ? "contextMenuItem" : "contextMenuSubItem";
 			const itemgroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 				children: [
@@ -404,14 +405,15 @@ class ServerFolders {
 							BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 								label: this.labels.serversubmenu_createfolder_text,
 								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-createfolder-contextMenuItem`,
+								disabled: !openguilds.length,
 								action: e => {
 									BDFDB.closeContextMenu(menu);
-									this.createFolder(guildid);
+									this.openFolderCreationMenu(openguilds, guildid);
 								}
 							}),
-							BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+							BDFDB.React.createElement(BDFDB.LibraryComponents[addType.charAt(0).toUpperCase() + addType.slice(1)], {
 								label: this.labels.serversubmenu_addtofolder_text,
-								className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-addtofolder-contextMenuSubItem`,
+								className: `BDFDB-${addType} ${this.name}-${addType} ${this.name}-addtofolder-${addType}`,
 								disabled: !addtofolderitems.length,
 								render: addtofolderitems
 							})
@@ -799,8 +801,9 @@ class ServerFolders {
 					var isgradient4 = data.color4 && BDFDB.isObject(data.color4);
 					var bgColor = data.color3 ? (!isgradient3 ? BDFDB.colorCONVERT(data.color3, "RGBA") : BDFDB.colorGRADIENT(data.color3)) : "";
 					var fontColor = data.color4 ? (!isgradient4 ? BDFDB.colorCONVERT(data.color4, "RGBA") : BDFDB.colorGRADIENT(data.color4)) : "";
+					var folderName = folder.folderName || BDFDB.getReactValue(wrapper, "return.stateNode.props.defaultFolderName");
 					folderinner.ServerFoldersTooltipListener = () => {
-						BDFDB.createTooltip(isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(folder.folderName)}</span>` : folder.folderName, folderinner, {type:"right", selector:"ServerFolders-tooltip", style:`${isgradient4 ? '' : 'color: ' + fontColor + ' !important; '}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.colorCONVERT(data.color3[0], "RGBA") : bgColor} !important;`,css:`body ${BDFDB.dotCN.tooltip}:not(.ServerFolders-tooltip) {display: none !important;}`, html:isgradient3});
+						BDFDB.createTooltip(isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(folderName)}</span>` : folderName, folderinner, {type:"right", selector:"ServerFolders-tooltip", style:`${isgradient4 ? '' : 'color: ' + fontColor + ' !important; '}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.colorCONVERT(data.color3[0], "RGBA") : bgColor} !important;`,css:`body ${BDFDB.dotCN.tooltip}:not(.ServerFolders-tooltip) {display: none !important;}`, html:isgradient3});
 					};
 					folderinner.addEventListener("mouseenter", folderinner.ServerFoldersTooltipListener);
 				}
@@ -1069,14 +1072,48 @@ class ServerFolders {
 		BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({guildPositions, guildFolders});
 	}
 	
-	createFolder (guildid) {
-		let oldGuildFolders = Object.assign({}, BDFDB.LibraryModules.FolderStore.guildFolders);
-		let guildFolders = [], guildPositions = [];
-		for (let i in oldGuildFolders) {
-			if (!oldGuildFolders[i].folderId && oldGuildFolders[i].guildIds[0] == guildid) guildFolders.push({
-				guildIds: [guildid],
-				folderId: this.generateID("folder")
+	openFolderCreationMenu (guilds, initguildid) {
+		let modal = BDFDB.htmlToElement(`<span class="${this.name}-modal BDFDB-modal"><div class="${BDFDB.disCN.backdrop}"></div><div class="${BDFDB.disCN.modal}"><div class="${BDFDB.disCN.modalinner}"><div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">${this.labels.serversubmenu_createfolder_text}</h4><div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.size12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div></div><button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"><svg name="Close" width="18" height="18" viewBox="0 0 12 12" style="flex: 0 1 auto;"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div></button></div><div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.themeghosthairline}"><div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner} entries"></div></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}"><button type="button" class="btn-done ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"></div></button><button type="button" class="btn-cancel ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlooklink + BDFDB.disCNS.buttoncolortransparent + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div></div></div></div></span>`);
+		
+		let targetedguildsids = {};
+			
+		let container = modal.querySelector(".entries");
+		BDFDB.addChildEventListener(modal, "click", ".btn-done", () => {
+			let ids = [];
+			for (let id in targetedguildsids) if (targetedguildsids[id]) ids.push(id);
+			this.createFolder(ids);
+		});
+
+		for (let guild of guilds) {
+			if (container.firstElementChild) container.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.modaldivider}"></div>`));
+			let entry = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4} entry" style="flex: 1 1 auto;">${BDFDB.createServerDivCopy(guild.id, {size: 48}).outerHTML}<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.size16 + BDFDB.disCNS.height24 + BDFDB.disCNS.flexchild + BDFDB.disCN.overflowellipsis}" style="flex: 1 1 auto; white-space: nowrap;">${BDFDB.encodeToHTML(guild.name)}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"></div></div>`);
+			container.appendChild(entry);
+			let switchinput = entry.querySelector(BDFDB.dotCN.switchinner);
+			switchinput.checked = guild.id == initguildid;
+			targetedguildsids[guild.id] = guild.id == initguildid;
+			switchinput.addEventListener("click", e => {
+				targetedguildsids[guild.id] = !targetedguildsids[guild.id];
 			});
+		}
+		BDFDB.appendModal(modal);
+	}
+	
+	createFolder (guildids) {
+		if (!guildids) return;
+		guildids = Array.isArray(guildids) ? guildids : Array.from(guildids);
+		if (!guildids.length) return;
+		let oldGuildFolders = Object.assign({}, BDFDB.LibraryModules.FolderStore.guildFolders);
+		let guildFolders = [], guildPositions = [], added = false;
+		for (let i in oldGuildFolders) {
+			if (!oldGuildFolders[i].folderId && guildids.includes(oldGuildFolders[i].guildIds[0])) {
+				if (!added) {
+					added = true;
+					guildFolders.push({
+						guildIds: guildids,
+						folderId: this.generateID("folder")
+					});
+				}
+			}
 			else guildFolders.push(oldGuildFolders[i]);
 		}
 		for (let i in guildFolders) for (let guildid of guildFolders[i].guildIds) guildPositions.push(guildid);
