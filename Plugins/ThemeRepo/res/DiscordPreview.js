@@ -14,7 +14,7 @@ window.onmessage = function (e) {
 				document.body.innerHTML = document.body.innerHTML.replace(/\t|\n|\r/g, "");
 				if (e.data.classes) window.DiscordClasses = JSON.parse(e.data.classes);
 				if (e.data.classmodules) window.DiscordClassModules = JSON.parse(e.data.classmodules);
-				if (window.disCN != undefined && window.DiscordClasses != undefined && window.DiscordClassModules != undefined)) {
+				if (window.disCN != undefined && window.DiscordClasses != undefined && window.DiscordClassModules != undefined) {
 					var oldhtml = document.body.innerHTML.split("REPLACE_CLASS_");
 					var newhtml = oldhtml.shift();
 					for (let html of oldhtml) {
