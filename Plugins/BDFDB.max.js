@@ -520,9 +520,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (!Node.prototype.isPrototypeOf(itemlayer)) return;
 		tooltip = itemlayer.querySelector(BDFDB.dotCN.tooltip);
 		if (!Node.prototype.isPrototypeOf(tooltip) || !Node.prototype.isPrototypeOf(tooltip.anker) || !tooltip.position) return;
-		var left, top, trects = BDFDB.getRects(tooltip.anker), irects = BDFDB.getRects(itemlayer), arects = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount)), positionoffsets = {height: 0, width: 0};
 		var pointer = tooltip.querySelector(BDFDB.dotCN.tooltippointer);
-		if (pointer) positionoffsets = BDFDB.getRects(pointer);
+		var left, top, trects = BDFDB.getRects(tooltip.anker), irects = BDFDB.getRects(itemlayer), arects = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount)), positionoffsets = {height: pointer ? 10 : 0, width: pointer ? 10 : 0};
 		switch (tooltip.position) {
 			case 'top':
 				top = trects.top - irects.height - positionoffsets.height + 2;
