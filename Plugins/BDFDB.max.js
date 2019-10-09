@@ -3908,6 +3908,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		_: '',
 		avatarStopAnimation: 'stop-animation',
 		badgeWrapper: 'wrapper-232cHJ',
+		channelPanelTitle: 'title-eS5yk3',
 		guildChannels: 'container-PNkimc',
 		guildBadgeWrapper: 'guild-badge-wrapper-deprecated',
 		highlight: 'highlight',
@@ -3943,6 +3944,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		selectSingleLight: 'css-6nrxdk-singleValue',
 		selectValue: 'css-1hwfws3',
 		splashBackground: 'splashBackground-1FRCko',
+		subtext: 'subtext-3CDbHg',
 		themeDark: 'theme-dark',
 		themeLight: 'theme-light',
 		themeUndefined: 'theme-undefined',
@@ -3950,6 +3952,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	DiscordClassModules.AccountDetails = BDFDB.WebModules.findByProperties('usernameContainer', 'container');
+	DiscordClassModules.AccountDetailsButtons = BDFDB.WebModules.findByProperties('button', 'enabled', 'disabled');
 	DiscordClassModules.ActivityFeed = BDFDB.WebModules.findByProperties('activityFeed');
 	DiscordClassModules.Anchor = BDFDB.WebModules.findByProperties('anchor', 'anchorUnderlineOnHover');
 	DiscordClassModules.AppBase = BDFDB.WebModules.findByProperties('container', 'base');
@@ -4003,6 +4006,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.FormText = BDFDB.WebModules.findByProperties('description', 'modeDefault');
 	DiscordClassModules.Friends = BDFDB.WebModules.findByProperties('friendsColumn', 'friendsRow');
 	DiscordClassModules.Game = BDFDB.WebModules.findByProperties('game', 'gameName');
+	DiscordClassModules.GameIcon = BDFDB.WebModules.findByProperties('gameIcon', 'small', 'xsmall');
 	DiscordClassModules.GameLibrary = BDFDB.WebModules.findByProperties('gameLibrary', 'scroller');
 	DiscordClassModules.GifFavoriteButton = BDFDB.WebModules.findByProperties('gifFavoriteButton', 'showPulse');
 	DiscordClassModules.GiftInventory = BDFDB.WebModules.find(module => typeof module['root'] == 'string' && typeof module['body'] == 'string' && (Object.keys(module).length == 2 || Object.keys(module).length == 3));
@@ -4088,6 +4092,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.Switch = BDFDB.WebModules.findByProperties('switchDisabled', 'valueChecked');
 	DiscordClassModules.Table = BDFDB.WebModules.findByProperties('stickyHeader', 'emptyStateText');
 	DiscordClassModules.Text = BDFDB.WebModules.findByProperties('defaultColor', 'defaultMarginh1');
+	DiscordClassModules.TextColor = BDFDB.WebModules.findByProperties('colorStandard', 'colorMuted', 'colorError');
 	DiscordClassModules.TextSize = BDFDB.WebModules.findByProperties('size10', 'size14', 'size20');
 	DiscordClassModules.TextStyle = BDFDB.WebModules.findByProperties('large', 'primary', 'selectable');
 	DiscordClassModules.TextWeight = BDFDB.WebModules.findByProperties('weightBold', 'weightSemiBold');
@@ -4142,8 +4147,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		_reposettingsclosed: ['BDrepo', 'settingsClosed'],
 		_repoversion: ['BDrepo', 'bdaVersion'],
 		accountinfo: ['AccountDetails', 'container'],
+		accountinfoavatar: ['AccountDetails', 'avatar'],
+		accountinfoavatarwrapper: ['AccountDetails', 'avatarWrapper'],
+		accountinfobutton: ['AccountDetailsButtons', 'button'],
+		accountinfobuttondisabled: ['AccountDetailsButtons', 'disabled'],
+		accountinfobuttonenabled: ['AccountDetailsButtons', 'enabled'],
 		accountinfodetails: ['AccountDetails', 'usernameContainer'],
-		accountinfousername: ['AccountDetails', 'username'],
+		accountinfonametag: ['AccountDetails', 'nameTag'],
 		activityfeed: ['ActivityFeed', 'activityFeed'],
 		alignbaseline: ['Flex', 'alignBaseline'],
 		aligncenter: ['Flex', 'alignCenter'],
@@ -4177,7 +4187,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		autocompleteselectable: ['Autocomplete', 'selectable'],
 		autocompleteselected: ['Autocomplete', 'selectorSelected'],
 		autocompleteselector: ['Autocomplete', 'selector'],
-		avatar: [DiscordClassModules.Avatar.avatar ? 'Avatar' : 'Message', 'avatar'],
+		avatar: ['Avatar', 'avatar'],
 		avatarcursordefault: ['Avatar', 'cursorDefault'],
 		avataricon: ['AvatarIcon', 'icon'],
 		avatariconactivelarge: ['AvatarIcon', 'iconActiveLarge'],
@@ -4329,6 +4339,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		channelmodeunread: ['Channel', 'modeUnread'],
 		channelname: ['Channel', 'name'],
 		channelpanel: ['AppBase', 'activityPanel'],
+		channelpaneltitle: ['NotFound', 'channelPanelTitle'],
 		channelpanels: ['AppBase', 'panels'],
 		channels: ['AppBase', 'sidebar'],
 		channelselected: ['ChannelContainer', 'selected'],
@@ -4358,6 +4369,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		checkboxwrapper: ['Checkbox', 'checkboxWrapper'],
 		checkboxwrapperdisabled: ['Checkbox', 'checkboxWrapperDisabled'],
 		clickable: ['Message', 'clickOverride'],
+		colorerror: ['TextColor', 'colorError'],
+		colormuted: ['TextColor', 'colorMuted'],
 		colorpicker: ['ColorPicker', 'colorPickerCustom'],
 		colorpickerhexinput: ['ColorPicker', 'customColorPickerInput'],
 		colorpickerhue: ['ColorPickerInner', 'hue'],
@@ -4371,6 +4384,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		colorpickerswatchdropper: ['ColorPicker', 'colorPickerDropper'],
 		colorpickerswatchdropperfg: ['ColorPicker', 'colorPickerDropperFg'],
 		colorpickerswatchnocolor: ['ColorPicker', 'noColor'],
+		colorstandard: ['TextColor', 'colorStandard'],
 		contentregion: ['SettingsWindow', 'contentRegion'],
 		contextmenu: ['ContextMenu', 'contextMenu'],
 		contextmenucheckbox: ['ContextMenuCheckbox', 'checkbox'],
@@ -4527,6 +4541,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		friendstableheader: ['Friends', 'friendsTableHeader'],
 		friendsusername: ['Friends', 'username'],
 		game: ['Game', 'game'],
+		gameicon: ['GameIcon', 'gameIcon'],
+		gameiconlarge: ['GameIcon', 'large'],
+		gameiconmedium: ['GameIcon', 'medium'],
+		gameiconsmall: ['GameIcon', 'small'],
+		gameiconxsmall: ['GameIcon', 'xsmall'],
 		gamelibrary: ['GameLibrary', 'gameLibrary'],
 		gamelibrarytable: ['Table', 'table'],
 		gamelibrarytableheader: ['Table', 'header'],
@@ -4541,7 +4560,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		giffavoriteselected: ['GifFavoriteButton', 'selected'],
 		giftinventory: ['GiftInventory', 'root'],
 		goliveactions: ['GoLiveDetails',  'actions'],
-		golivebody: ['GoLiveDetails', 'body-GmmuPm'],
+		golivebody: ['GoLiveDetails', 'body'],
 		goliveclickablegamewrapper: ['GoLiveDetails', 'clickableGameWrapper'],
 		golivegameicon: ['GoLiveDetails', 'gameIcon'],
 		golivegamename: ['GoLiveDetails', 'gameName'],
@@ -5069,6 +5088,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		splashbackground: ['NotFound', 'splashBackground'],
 		standardsidebarview: ['SettingsWindow', 'standardSidebarView'],
 		status: ['Avatar', 'status'],
+		subtext: ['NotFound', 'subtext'],
 		switch: ['Switch', 'switch'],
 		switchdisabled: ['Switch', 'switchDisabled'],
 		switchenabled: ['Switch', 'switchEnabled'],

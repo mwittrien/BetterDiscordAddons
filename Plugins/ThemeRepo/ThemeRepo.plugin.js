@@ -508,7 +508,7 @@ class ThemeRepo {
 						var titlebar = document.querySelector(BDFDB.dotCN.titlebar);
 						titlebar = titlebar ? titlebar.outerHTML : null;
 						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"OnLoad",classes:JSON.stringify(BDFDB.DiscordClasses),classmodules:JSON.stringify(BDFDB.DiscordClassModules),username,id,discriminator,avatar,nativecss,html:document.documentElement.className,titlebar},"*");
-						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"DarkLight",checked:darklightinput.checked,light:BDFDB.disCN.themelight,dark:BDFDB.disCN.themedark},"*");
+						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"DarkLight",checked:darklightinput.checked},"*");
 						frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"Normalize",checked:normalizeinput.checked},"*");
 						break;
 					case "KeyUp":

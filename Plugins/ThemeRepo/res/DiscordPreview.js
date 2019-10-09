@@ -57,8 +57,8 @@ window.onmessage = function (e) {
 				}
 				break;
 			case "DarkLight":
-				if (e.data.checked) document.body.innerHTML = document.body.innerHTML.replace(new RegExp(e.data.dark, "g"), e.data.light);
-				else document.body.innerHTML = document.body.innerHTML.replace(new RegExp(e.data.light, "g"), e.data.dark);
+				if (e.data.checked) document.body.innerHTML = document.body.innerHTML.replace(new RegExp(window.disCN.themedark, "g"), window.disCN.themelight);
+				else document.body.innerHTML = document.body.innerHTML.replace(new RegExp(window.disCN.themelight, "g"), window.disCN.themedark);
 				break;
 			case "Normalize":
 				var oldhtml = document.body.innerHTML.split('class="');
