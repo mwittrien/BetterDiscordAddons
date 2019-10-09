@@ -3060,6 +3060,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		container.querySelectorAll('.btn-add ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageStrings.ADD;});
 		container.querySelectorAll('.btn-all ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = languagestrings.btn_all_text;});
 		container.querySelectorAll('.btn-cancel ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageStrings.CANCEL;});
+		container.querySelectorAll('.btn-done ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageStrings.DONE;});
 		container.querySelectorAll('.btn-download ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageStrings.DOWNLOAD;});
 		container.querySelectorAll('.btn-ok ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageStrings.OKAY;});
 		container.querySelectorAll('.btn-save ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageStrings.SAVE;});
