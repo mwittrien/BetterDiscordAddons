@@ -3957,10 +3957,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.ActivityFeed = BDFDB.WebModules.findByProperties('activityFeed');
 	DiscordClassModules.Anchor = BDFDB.WebModules.findByProperties('anchor', 'anchorUnderlineOnHover');
 	DiscordClassModules.AppBase = BDFDB.WebModules.findByProperties('container', 'base');
-	DiscordClassModules.AppInner = BDFDB.WebModules.findByProperties('app');
+	DiscordClassModules.AppInner = BDFDB.WebModules.findByProperties('app', 'layers');
 	DiscordClassModules.AppMount = BDFDB.WebModules.findByProperties('appMount');
 	DiscordClassModules.ApplicationStore = BDFDB.WebModules.findByProperties('applicationStore', 'navigation');
-	DiscordClassModules.AppOuter = BDFDB.WebModules.find(module => typeof module.app == 'string' && module != DiscordClassModules.AppInner);
+	DiscordClassModules.AppOuter = BDFDB.WebModules.find(module => typeof module['app'] == 'string' && Object.keys(module).length == 1);
 	DiscordClassModules.AuditLog = BDFDB.WebModules.findByProperties('auditLog');
 	DiscordClassModules.AuthBox = BDFDB.WebModules.findByProperties('authBox');
 	DiscordClassModules.Autocomplete = BDFDB.WebModules.findByProperties('autocomplete', 'autocompleteRow');
@@ -4010,7 +4010,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	DiscordClassModules.GameIcon = BDFDB.WebModules.findByProperties('gameIcon', 'small', 'xsmall');
 	DiscordClassModules.GameLibrary = BDFDB.WebModules.findByProperties('gameLibrary', 'scroller');
 	DiscordClassModules.GifFavoriteButton = BDFDB.WebModules.findByProperties('gifFavoriteButton', 'showPulse');
-	DiscordClassModules.GiftInventory = BDFDB.WebModules.find(module => typeof module['root'] == 'string' && typeof module['body'] == 'string' && (Object.keys(module).length == 2 || Object.keys(module).length == 3));
+	DiscordClassModules.GiftInventory = BDFDB.WebModules.findByProperties('root', 'body', 'scroller');
 	DiscordClassModules.GoLiveDetails = BDFDB.WebModules.findByProperties('panel', 'gameWrapper');
 	DiscordClassModules.Guild = BDFDB.WebModules.findByProperties('wrapper', 'lowerBadge', 'svg');
 	DiscordClassModules.GuildChannels = BDFDB.WebModules.findByProperties('positionedContainer', 'unreadBar');
@@ -4169,6 +4169,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		app: ['AppOuter', 'app'],
 		appcontainer: ['AppBase', 'container'],
 		appmount: ['AppMount', 'appMount'],
+		applayers: ['AppInner', 'layers'],
 		applicationstore: ['ApplicationStore', 'applicationStore'],
 		appold: ['AppInner', 'app'],
 		auditlog: ['AuditLog', 'auditLog'],
@@ -4741,6 +4742,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		layer: ['Layers', 'layer'],
 		layerbase: ['Layers', 'baseLayer'],
 		layers: ['Layers', 'layers'],
+		layersbg: ['Layers', 'bg'],
 		lfg: ['LFG', 'lfg'],
 		livetag: ['LiveTag', 'live'],
 		livetaggray: ['LiveTag', 'liveGray'],
