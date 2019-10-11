@@ -19,7 +19,7 @@ window.onmessage = function (e) {
 					var newhtml = oldhtml.shift();
 					for (let html of oldhtml) {
 						let reg = /([A-z0-9_]+)(.+)/.exec(html);
-						newhtml += window.disCN[reg[1]] + reg[2]
+						newhtml += window.disCN[reg[1]] + reg[2];
 					}
 					document.body.innerHTML = newhtml;
 				}

@@ -3,7 +3,7 @@
 class ThemeRepo {
 	getName () {return "ThemeRepo";}
 
-	getVersion () {return "1.8.8";}
+	getVersion () {return "1.8.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ThemeRepo {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["Preview","Now also uses Modules to grab classnames"]]
+			"improved":[["ThemeFixer","Fixed and improved"]]
 		};
 
 		this.patchModules = {
@@ -45,8 +45,6 @@ class ThemeRepo {
 		this.generatorThemes = [];
 
 		this.updateInterval;
-
-		this.themeFixerCSS = `body, #app-mount, #app-mount ${BDFDB.dotCN.app}, #app-mount ${BDFDB.dotCN.appold}, #app-mount ${BDFDB.dotCN.layer}, #app-mount ${BDFDB.dotCN.guildchannels}, #app-mount ${BDFDB.dotCN.dmchannels}, #app-mount ${BDFDB.dotCN.channelpanels} > *, #app-mount ${BDFDB.dotCN.chat}, #app-mount ${BDFDB.dotCN.nochannel}, #app-mount ${BDFDB.dotCN.activityfeed}, #app-mount ${BDFDB.dotCN.gamelibrary}, #app-mount ${BDFDB.dotCN.gamelibrarytableheader}, #app-mount ${BDFDB.dotCN.giftinventory}, #app-mount ${BDFDB.dotCN.applicationstore}, #app-mount ${BDFDB.dotCN.lfg}, #app-mount ${BDFDB.dotCN.friends}, #app-mount ${BDFDB.dotCN.guilddiscovery}, #app-mount ${BDFDB.dotCN.scroller}, #app-mount ${BDFDB.dotCN.standardsidebarview}, #app-mount ${BDFDB.dotCN.contentregion} {background-color: transparent;} #app-mount ${BDFDB.dotCN.channelheaderchildren}:after {display: none;} #app-mount ${BDFDB.dotCN.guildswrapper} {background-color: rgba(0, 0, 0, 0.3);} #app-mount ${BDFDB.dotCN.channelheaderheaderbar + BDFDB.dotCN.channelheaderheaderbarthemed}, #app-mount ${BDFDB.dotCN.sidebarregion}, #app-mount ${BDFDB.dotCN.channels} {background-color: rgba(0, 0, 0, 0.2);} #app-mount ${BDFDB.dotCN.channelpanels} {background-color: rgba(0, 0, 0, 0.2);} #app-mount ${BDFDB.dotCN.memberswrap} {background-color: rgba(0, 0, 0, 0.2);}`;
 
 		this.themeRepoButtonMarkup = 
 			`<button class="bd-pfbtn bd-themerepobutton">Theme Repo</button>`;
@@ -583,10 +581,14 @@ class ThemeRepo {
 			if (customCSS && customCSS.innerText.length > 0) frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"CustomCSS",checked:customcssinput.checked,css:customCSS.innerText},"*");
 		});
 		themefixerinput.addEventListener("change", e => {
-			frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"ThemeFixer",checked:themefixerinput.checked,css:this.themeFixerCSS},"*");
+			BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeFixer.css", (error, response, body) => {
+				frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"ThemeFixer",checked:themefixerinput.checked,css:this.createFixerCSS(body)},"*");
+			});
 		});
 		themeRepoModal.querySelector("#download-themefixer").addEventListener("click", e => {
-			this.createThemeFile("ThemeFixer.theme.css", `//META{"name":"ThemeFixer","description":"ThemeFixerCSS for transparent themes","author":"DevilBro","version":"1.0.1"}*//\n\n` + this.themeFixerCSS);
+			BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeFixer.css", (error, response, body) => {
+				this.createThemeFile("ThemeFixer.theme.css", `//META{"name":"ThemeFixer","description":"ThemeFixerCSS for transparent themes","author":"DevilBro","version":"1.0.2"}*//\n\n` + this.createFixerCSS(body));
+			});
 		});
 		themeRepoModal.querySelector("#download-generated").addEventListener("click", e => {
 			let inputs = themeRepoModal.querySelectorAll(".varinput");
@@ -692,6 +694,16 @@ class ThemeRepo {
 		document.body.insertBefore(frame, document.body.firstElementChild);
 
 		themeRepoModal.querySelector(BDFDB.dotCN.searchbarinput).focus();
+	}
+	
+	createFixerCSS (body) {
+		var oldcss = body.replace(/\n/g, "\\n").replace(/\t/g, "\\t").replace(/\r/g, "\\r").split("REPLACE_CLASS_");
+		var newcss = oldcss.shift();
+		for (let str of oldcss) {
+			let reg = /([A-z0-9_]+)(.*)/.exec(str);
+			newcss += BDFDB.dotCN[reg[1]] + reg[2];
+		}
+		return newcss.replace(/\\n/g, "\n").replace(/\\t/g, "\t").replace(/\\r/g, "\r");
 	}
 	
 	createGeneratorVars (frame, container, data) {
