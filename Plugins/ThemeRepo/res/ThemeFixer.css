@@ -1,0 +1,41 @@
+body,
+#app-mount,
+#app-mount REPLACE_CLASS_app,
+#app-mount REPLACE_CLASS_appold,
+#app-mount REPLACE_CLASS_layersbg,
+#app-mount REPLACE_CLASS_layer,
+#app-mount REPLACE_CLASS_guildchannels,
+#app-mount REPLACE_CLASS_dmchannels,
+#app-mount REPLACE_CLASS_channelpanels > *,
+#app-mount REPLACE_CLASS_chat,
+#app-mount REPLACE_CLASS_nochannel,
+#app-mount REPLACE_CLASS_activityfeed,
+#app-mount REPLACE_CLASS_gamelibrary,
+#app-mount REPLACE_CLASS_gamelibrarytableheader,
+#app-mount REPLACE_CLASS_giftinventory,
+#app-mount REPLACE_CLASS_applicationstore,
+#app-mount REPLACE_CLASS_lfg,
+#app-mount REPLACE_CLASS_friends,
+#app-mount REPLACE_CLASS_guilddiscovery,
+#app-mount REPLACE_CLASS_scroller,
+#app-mount REPLACE_CLASS_standardsidebarview,
+#app-mount REPLACE_CLASS_contentregion {
+	background-color: transparent;
+}
+#app-mount REPLACE_CLASS_channelheaderchildren:after {
+	display: none;
+}
+#app-mount REPLACE_CLASS_guildswrapper {
+	background-color: rgba(0, 0, 0, 0.3);
+}
+#app-mount REPLACE_CLASS_channelheaderheaderbarREPLACE_CLASS_channelheaderheaderbarthemed,
+#app-mount REPLACE_CLASS_sidebarregion,
+#app-mount REPLACE_CLASS_channels {
+	background-color: rgba(0, 0, 0, 0.2);
+}
+#app-mount REPLACE_CLASS_channelpanels {
+	background-color: rgba(0, 0, 0, 0.2);
+}
+#app-mount REPLACE_CLASS_memberswrap {
+	background-color: rgba(0, 0, 0, 0.2);
+}

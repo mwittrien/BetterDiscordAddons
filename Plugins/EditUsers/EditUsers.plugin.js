@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.6.1";}
+	getVersion () {return "3.6.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -396,7 +396,7 @@ class EditUsers {
 		});
 		userurlinput.addEventListener("mouseleave", () => {
 			BDFDB.removeClass(userurlinput, "hovering");
-			BDFDB.removeEles(BDFDB.dotCNS.itemlayerconainer + ".notice-tooltip");
+			BDFDB.removeEles(BDFDB.dotCNS.itemlayercontainer + ".notice-tooltip");
 		});
 		BDFDB.addChildEventListener(userSettingsModal, "click", ".btn-save", e => {
 			name = usernameinput.value.trim();
@@ -430,7 +430,7 @@ class EditUsers {
 	}
 
 	checkUrl (input) {
-		BDFDB.removeEles(BDFDB.dotCNS.itemlayerconainer + ".notice-tooltip");
+		BDFDB.removeEles(BDFDB.dotCNS.itemlayercontainer + ".notice-tooltip");
 		if (!input.value) {
 			BDFDB.removeClass(input, "valid");
 			BDFDB.removeClass(input, "invalid");

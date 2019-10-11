@@ -3,7 +3,7 @@
 class EditServers {
 	getName () {return "EditServers";}
 
-	getVersion () {return "2.0.6";} 
+	getVersion () {return "2.0.7";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -403,7 +403,7 @@ class EditServers {
 			});
 			urlinput.addEventListener("mouseleave", () => {
 				BDFDB.removeClass(urlinput, "hovering");
-				BDFDB.removeEles(BDFDB.dotCNS.itemlayerconainer + ".notice-tooltip");
+				BDFDB.removeEles(BDFDB.dotCNS.itemlayercontainer + ".notice-tooltip");
 			});
 		}
 		if (info.id == "410787888507256842") {
@@ -446,7 +446,7 @@ class EditServers {
 	}
 
 	checkUrl (input) {
-		BDFDB.removeEles(BDFDB.dotCNS.itemlayerconainer + ".notice-tooltip");
+		BDFDB.removeEles(BDFDB.dotCNS.itemlayercontainer + ".notice-tooltip");
 		if (!input.value) {
 			BDFDB.removeClass(input, "valid");
 			BDFDB.removeClass(input, "invalid");

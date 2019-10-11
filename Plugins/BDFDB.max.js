@@ -574,20 +574,20 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 	
 	BDFDB.appendItemLayer = function (node, anker, options = {}) {
-		var itemlayerconainernative = document.querySelector(BDFDB.dotCN.itemlayerconainer);
-		if (!itemlayerconainernative || !Node.prototype.isPrototypeOf(node) || !anker || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
-		var itemlayerconainer = document.querySelector(".BDFDB-itemlayerconainer");
-		if (!itemlayerconainer) {
-			itemlayerconainer = itemlayerconainernative.cloneNode();
-			BDFDB.addClass(itemlayerconainer, "BDFDB-itemlayerconainer");
-			itemlayerconainernative.parentElement.insertBefore(itemlayerconainer, itemlayerconainernative.nextSibling);
+		var itemlayercontainernative = document.querySelector(BDFDB.dotCN.itemlayercontainer);
+		if (!itemlayercontainernative || !Node.prototype.isPrototypeOf(node) || !anker || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
+		var itemlayercontainer = document.querySelector(".BDFDB-itemlayercontainer");
+		if (!itemlayercontainer) {
+			itemlayercontainer = itemlayercontainernative.cloneNode();
+			BDFDB.addClass(itemlayercontainer, "BDFDB-itemlayercontainer");
+			itemlayercontainernative.parentElement.insertBefore(itemlayercontainer, itemlayercontainernative.nextSibling);
 		}
 		var id = Math.round(Math.random() * 10000000000000000);
 		var itemlayer = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.itemlayer} BDFDB-itemlayer itemlayer-${id}"></div>`);
 		itemlayer.appendChild(node);
-		itemlayerconainer.appendChild(itemlayer);
+		itemlayercontainer.appendChild(itemlayer);
 		
-		if (options.css) BDFDB.appendLocalStyle('BDFDBcustomItemLayer' + id, options.css, itemlayerconainer);
+		if (options.css) BDFDB.appendLocalStyle('BDFDBcustomItemLayer' + id, options.css, itemlayercontainer);
 					
 		if (BDFDB.isObject(options.ankerlistener)) for (let type in options.ankerlistener) {
 			if (typeof options.ankerlistener[type] == "function") anker.addEventListener(type, options.ankerlistener[type]);
@@ -603,8 +603,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				if (ownmatch || ankermatch || parentmatch) {
 					observer.disconnect();
 					itemlayer.remove();
-					BDFDB.removeLocalStyle('BDFDBcustomItemLayer' + id, itemlayerconainer);
-					if (!itemlayerconainer.firstElementChild) BDFDB.removeEles(itemlayerconainer);
+					BDFDB.removeLocalStyle('BDFDBcustomItemLayer' + id, itemlayercontainer);
+					if (!itemlayercontainer.firstElementChild) BDFDB.removeEles(itemlayercontainer);
 					if (BDFDB.isObject(options.ankerlistener)) for (let type in options.ankerlistener) anker.removeEventListener(type, options.ankerlistener[type]);
 				}
 			});
@@ -4717,7 +4717,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		imagewrapperinner: ['ImageWrapper', 'imageWrapperInner'],
 		imagezoom: ['ImageWrapper', 'imageZoom'],
 		itemlayer: ['ItemLayerContainer', 'layer'],
-		itemlayerconainer: ['ItemLayerContainer', 'layerContainer'],
+		itemlayercontainer: ['ItemLayerContainer', 'layerContainer'],
 		input: ['Input', 'input'],
 		inputdefault: ['Input', 'inputDefault'],
 		inputdisabled: ['Input', 'disabled'],
@@ -5366,7 +5366,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			classname = DiscordClassModules[DiscordClasses[item][0]][DiscordClasses[item][1]];
 			if (selector) {
 				classname = classname.split(' ').filter(n => n.indexOf('da-') != 0).join(selector ? '.' : ' ');
-				classname = classname ? classname : DiscordClassModules.BDFDB.BDFDBundefined;
+				classname = classname || DiscordClassModules.BDFDB.BDFDBundefined;
 			}
 			return classname;
 		}
@@ -5683,7 +5683,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		#pluginNotice #outdatedPlugins span:hover {
 			text-decoration: underline;
 		}
-		.BDFDB-itemlayerconainer, .BDFDB-itemlayer {
+		.BDFDB-itemlayercontainer, .BDFDB-itemlayer {
 			z-index: 3002;
 		}
 		${BDFDB.dotCN.tooltip}.tooltip-customcolor ${BDFDB.dotCN.tooltippointer} {
@@ -6555,7 +6555,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	
 	BDFDB.addContextListener(BDFDB);
 	
-	BDFDB.addObserver(BDFDB, document.querySelector(BDFDB.dotCN.itemlayerconainer), {name:"layerObserverBDFDB", instance:
+	BDFDB.addObserver(BDFDB, document.querySelector(BDFDB.dotCN.itemlayercontainer), {name:"layerObserverBDFDB", instance:
 		new MutationObserver(changes => {changes.forEach(change => {change.addedNodes.forEach(node => {
 			if (node.tagName && (BDFDB.containsClass(node, BDFDB.disCN.contextmenu) || (node = node.querySelector(BDFDB.dotCN.contextmenu)) != null)) BDFDB.initElements(node);
 		})})})
