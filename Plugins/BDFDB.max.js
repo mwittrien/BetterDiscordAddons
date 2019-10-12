@@ -121,18 +121,24 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.openChangeLogModal = function (plugin) {
 		if (!BDFDB.isObject(plugin) || !plugin.changelog) return;
-		var changeLogHTML = '';
-		var headers = {added: 'New Features', fixed: 'Bug Fixes', improved: 'Improvements', progress: 'Progress'};
+		var changeLogHTML = `<div class="${BDFDB.disCN.modalminicontent}>`, logs = false, headers = {
+			added: 'New Features',
+			fixed: 'Bug Fixes',
+			improved: 'Improvements',
+			progress: 'Progress'
+		};
 		for (let type in plugin.changelog) {
 			type = type.toLowerCase();
 			var classname = BDFDB.disCN['changelog' + type];
 			if (classname) {
+				logs = true;
 				changeLogHTML += `<h1 class="${classname + ' ' + BDFDB.disCN.margintop20}"${changeLogHTML.indexOf('<h1') == -1 ? 'style="margin-top: 0px !important;"' : ''}>${headers[type]}</h1><ul>`;
 				for (let log of plugin.changelog[type]) changeLogHTML += `<li><strong>${log[0]}</strong>${log[1] ? (': ' + log[1] + '.') : ''}</li>`;
 				changeLogHTML += `</ul>`
 			}
 		}
-		if (changeLogHTML) BDFDB.removeEles(BDFDB.openConfirmModal(plugin, changeLogHTML, BDFDB.LanguageStrings.CHANGE_LOG).querySelectorAll(".btn-cancel"));
+		changeLogHTML += `</div>`
+		if (logs) BDFDB.openConfirmModal(plugin, {header:BDFDB.LanguageStrings.CHANGE_LOG, html:changeLogHTML, cancelText:false, red:false});
 	};
 
 	BDFDB.addObserver = function (plugin, eleOrSelec, observer, config = {childList: true}) {
@@ -1316,6 +1322,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	LibraryModules.MessageCreationUtils = BDFDB.WebModules.findByProperties('parse', 'isMentioned');
 	LibraryModules.MessagePinUtils = BDFDB.WebModules.findByProperties('pinMessage', 'unpinMessage');
 	LibraryModules.MessageUtils = BDFDB.WebModules.findByProperties('receiveMessage', 'editMessage');
+	LibraryModules.ModalUtils = BDFDB.WebModules.findByProperties('push', 'update', 'pop', 'popWithKey');
 	LibraryModules.MutedUtils = BDFDB.WebModules.findByProperties('isGuildOrCategoryOrChannelMuted');
 	LibraryModules.NotificationSettingsUtils = BDFDB.WebModules.findByProperties('setDesktopType', 'setTTSType');
 	LibraryModules.NotificationSettingsStore = BDFDB.WebModules.findByProperties('getDesktopType', 'getTTSType');
@@ -1346,6 +1353,17 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			if (!instance || !instance.updater || typeof instance.updater.isMounted !== 'function' || !instance.updater.isMounted(instance)) return null;
 			var node = LibraryModules.ReactDOM.findDOMNode(instance) || BDFDB.getReactValue(instance, 'child.stateNode');
 			return Node.prototype.isPrototypeOf(node) ? node : null;
+		};
+		BDFDB.React.elementToReact = function (node) {
+			if (BDFDB.React.isValidElement(node)) return node;
+			else if (!Node.prototype.isPrototypeOf(node)) return BDFDB.React.createElement('DIV', {});
+			else if (node.nodeType == Node.TEXT_NODE) return node.nodeValue;
+			let attributes = {};
+			for (let attr of node.attributes) attributes[attr.name] = attr.value;
+			if (node.attributes.style) attributes.style = BDFDB.filterObject(node.style, n => node.style[n] && isNaN(parseInt(n)), true);
+			attributes.children = [];
+			for (let child of node.childNodes) attributes.children.push(BDFDB.React.elementToReact(child));
+			return BDFDB.React.createElement(node.tagName, attributes);
 		};
 	};
 
@@ -3333,19 +3351,37 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		return selectMenu;
 	};
 
-	BDFDB.openConfirmModal = function () {
-		if (arguments.length < 2) return;
-		var plugin = arguments[0];
-		var text = arguments[1];
-		if (!BDFDB.isObject(plugin) || !text) return;
-		var callback = typeof arguments[2] == "function" ? arguments[2] : (typeof arguments[3] == "function" ? arguments[3] : null);
-		var header = typeof arguments[2] == "string" ? arguments[2] : "Are you sure?";
-		let confirmModal = BDFDB.htmlToElement(`<span class="${plugin.name || plugin.getName()}-modal BDFDB-confirmation-modal BDFDB-modal"><div class="${BDFDB.disCN.backdrop}"></div><div class="${BDFDB.disCN.modal}"><div class="${BDFDB.disCN.modalinner}"><div class="${BDFDB.disCNS.modalsub + BDFDB.disCNS.modalmini + BDFDB.disCN.modalminisize}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex:0 0 auto;"><div class="${BDFDB.disCN.flexchild}" style="flex:1 1 auto;"><h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">${header}</h4><div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}">${plugin.name || plugin.getName()}</div></div><button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"><svg class="" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div></button></div><div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.scrollerthemeghosthairline}"><div class="${BDFDB.disCNS.scroller + BDFDB.disCNS.modalsubinner + BDFDB.disCN.modalminicontent}"><div class="${BDFDB.disCNS.modalminitext + BDFDB.disCNS.medium + BDFDB.disCNS.primary + BDFDB.disCN.selectable}">${text}</div></div> </div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}"><button type="button" class="btn-ok ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"></div></button><button type="button" class="btn-cancel ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlooklink + BDFDB.disCNS.buttoncolorwhite + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div></div></div></div></span>`);
-		BDFDB.appendModal(confirmModal);
-		if (typeof callback == 'function') confirmModal.querySelector('.btn-ok').addEventListener('click', () => {
-			setTimeout(() => {callback();}, 300);
+	BDFDB.openConfirmModal = function (plugin, config) {
+		if (!BDFDB.isObject(plugin) || !config) return;
+		if (!BDFDB.isObject(config)) { // REMOVE, OLD WAY
+			var text = config;
+			config = {text};
+			config.header = typeof arguments[2] == 'string' ? arguments[2] : null;
+			config.callback = typeof arguments[2] == 'function' ? arguments[2] : (typeof arguments[3] == 'function' ? arguments[3] : null);
+		}
+		let children = [];
+		if (typeof config.text == 'string') {
+			children.push(BDFDB.LibraryComponents.TextElement.default({
+				color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
+				children: [config.text]
+			}));
+		}
+		if (config.html) {
+			if (typeof config.html == 'string') children.push(BDFDB.React.elementToReact(BDFDB.htmlToElement(config.html)));
+			else if (Node.prototype.isPrototypeOf(config.html)) children.push(BDFDB.React.elementToReact(config.html));
+			else if (NodeList.prototype.isPrototypeOf(config.html)) for (let node of config.html) children.push(BDFDB.React.elementToReact(node));
+			else if (BDFDB.React.isValidElement(config.html)) children.push(config.html);
+		}
+		if (typeof config.header != 'string') config.header = "Are you sure?";
+		if (typeof config.confirmText != 'string') config.confirmText = BDFDB.LanguageStrings.OKAY;
+		if (typeof config.cancelText != 'string' && typeof config.cancelText != 'boolean' && config.cancelText != false) config.cancelText = BDFDB.LanguageStrings.CANCEL;
+		if (typeof config.onConfirm != 'function') config.onConfirm = () => {};
+		if (children.length) BDFDB.LibraryModules.ModalUtils.push(props => {
+			return BDFDB.React.createElement(BDFDB.WebModules.find(m => m.defaultProps && typeof m.key == 'function' && m.key() == 'confirm-modal'), Object.assign({
+				className: `${plugin.name || (typeof plugin.getName == 'function' ? plugin.getName() : 'BDFDB')}-modal BDFDB-confirmation-modal`,
+				children
+			}, config, props));
 		});
-		return confirmModal;
 	};
 
 	BDFDB.updateContextPosition = function (menu, e = BDFDB.mousePosition) {
@@ -5387,6 +5423,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
         }
         render() {return LibraryModules.React.createElement(BDFDB.WebModules.findByName('ToggleMenuItem'), Object.assign({}, this.props, {action: this.handleToggle.bind(this)}));}
     }) : undefined;
+	LibraryComponents.TextElement = BDFDB.WebModules.findByProperties('Sizes', 'Weights');
 	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
 
 	BDFDB.getLibraryStrings = function () {
