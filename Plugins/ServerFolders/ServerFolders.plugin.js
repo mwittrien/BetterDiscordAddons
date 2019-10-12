@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.5.6";}
+	getVersion () {return "6.5.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -12,8 +12,7 @@ class ServerFolders {
 	constructor () {
 		this.changelog = {
 			"improved":[["Native Folder Support","Yes, it's here finally. ServerFolders now uses native Folders to emulate the old ServerFolders behaviour. This means you can now finally organize your Servers in Folders the old way without loosing the support on your phone. Everything should be working as it's used to. Below is a list of stuff that is <strong style='color: yellow;'>NEW</strong>"],["Folder Creation","Instead of creating a Folder with the targeted Server, a menu now opens that let's you select which Servers you want to add to the Folder before you create it"]],
-			"fixed":[["Fixed?","Added back the option to create a Folder via the contextmenu, the amount of people which won't know how to create native Folders is worrying"],["Theme Issues","Fixed some theme issues with themes like ClearVision"]],
-			"added":[["Port your old Folders","If you got a config with old SevrerFolders data in your plugins folder, the Plugin will ask you to port them over to native Folders. If you missed clicking on 'Okay' reload the plugin to reprompt the question"],["Mute Folders","You can now mute Folders, this will automatically mute all Servers that are within a Folder"],["Mini Servers or close icon","Don't like using a close icon to show that a Folder is closed? No problem, you can switch back to using the miniature Server preview that the native Folders use in the Foldersettings (the default icon always uses the miniature Server preview)"],["Delete native Folder","The option to delete a Folder was added to the native Folder contextmenu, meaning you can now delete native Folders more easily, watchout there is no way to revert this!"],["Server Sorting","Sorting Servers within a Folder now properly sorts them in a native way, meaning if you sort them in ServerFolders they will also change order on your phone or when you disable ServerFolders again"]]
+			"fixed":[["Fixed?","Added back the option to create a Folder via the contextmenu, the amount of people which won't know how to create native Folders is worrying"],["Theme Issues","Fixed some theme issues with themes like ClearVision"],["Settings","Some fixes with the closing behaviour settings"]]
 		};
 		
 		this.labels = {};
@@ -458,7 +457,6 @@ class ServerFolders {
 					BDFDB.markGuildAsRead(instance.props.guildIds);
 				}, 10000);
 			}
-			this.toggleFolderContent();
 			if (state.expanded) setImmediate(() => {
 				for (let guildid of instance.props.guildIds) this.updateGuildInFolderContent(state.folderId, guildid);
 				if (this.clickedFolder == state.folderId && BDFDB.getData("closeOtherFolders", this, "settings")) for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (openFolderId != state.folderId) {
@@ -466,10 +464,12 @@ class ServerFolders {
 					BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
 				}
 				this.addSeparator(state.folderId);
+				this.toggleFolderContent();
 			});
 			else setTimeout(() => {
 				BDFDB.removeEles(this.foldercontent.querySelectorAll(`${BDFDB.dotCN.guildouter}[folderid="${state.folderId}"]`));
 				if (BDFDB.containsClass(this.foldercontentguilds.firstElementChild, "folderseparatorouter")) BDFDB.removeEles(this.foldercontentguilds.firstElementChild);
+				this.toggleFolderContent();
 			}, BDFDB.LibraryModules.FolderUtils.getExpandedFolders().size > 0 ? 0 : 300);
 			this.changeFolder(state.folderId, wrapper);
 		}
@@ -481,7 +481,12 @@ class ServerFolders {
 		if (instance.props && instance.props.guild) {
 			if (methodnames.includes("componentDidMount")) {
 				BDFDB.addEventListener(this, wrapper, "click", () => {setImmediate(() => {
+					let folder = this.getFolderOfGuildId(instance.props.guild.id);
+					let folderid = folder ? folder.folderId : null;
 					let settings = BDFDB.getAllData(this, "settings");
+					if (settings.closeAllFolders) for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (!folderid || openFolderId != folderid || !settings.forceOpenFolder) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
+					else if (folderid && settings.closeTheFolder && !settings.forceOpenFolder && BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folderid)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folderid);
+					
 					if (settings.closeAllFolders) for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
 					else if (settings.closeTheFolder) {
 						let folder = this.getFolderOfGuildId(instance.props.guild.id);
@@ -997,8 +1002,8 @@ class ServerFolders {
 			else {
 				BDFDB.LibraryModules.GuildUtils.transitionToGuildSync(guild.id);
 				let settings = BDFDB.getAllData(this, "settings");
-				if (settings.closeAllFolders) for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
-				else if (settings.closeTheFolder) if (BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folderId)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folderId);
+				if (settings.closeAllFolders) for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (openFolderId != folderid || !settings.forceOpenFolder) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
+				else if (settings.closeTheFolder && !settings.forceOpenFolder && BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folderid)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folderid);
 			}
 		});
 		guildcopy.addEventListener("contextmenu", e => {
