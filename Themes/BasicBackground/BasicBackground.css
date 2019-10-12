@@ -99,6 +99,7 @@
 		6.	QUICKSWITCHER
 		7.	INVITEMODAL
 		8.	LOGINSCREEN
+		9.	TERMACCEPTMODAL
 	15.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -3023,6 +3024,56 @@ body:before {
 	color: rgb(var(--fontwhite3));
 	position: relative;
 	overflow: hidden;
+}
+
+/* ----		14.9.	TERMACCEPTMODAL					---- */
+
+#app-mount .modal-DRZfgq {									/* modal				container							*/
+	background-color: transparent;
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
+	position: relative;
+	overflow: hidden;
+}
+.modal-DRZfgq:after,
+.modal-DRZfgq:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.modal-DRZfgq:after {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+}
+.modal-DRZfgq:before {
+	background: var(--vpopout) center/var(--vpopoutsize);
+	filter: blur(var(--vpopoutblur));
+	background-attachment: fixed;
+}
+
+[style*="/assets/a13cfdd7220132fff399a76c3ed64519.svg"],	/* modal				image								*/
+[src*="/assets/a13cfdd7220132fff399a76c3ed64519.svg"] {
+	filter: brightness(85%) invert(100%);
+	opacity: 0.7;
+}
+
+#app-mount .modal-DRZfgq .checked-3_4uQ9 {					/* modal				ackcheckbox							*/
+	background-color: rgb(var(--vaccentcolor));
+}
+#app-mount .modal-DRZfgq .checkbox-1ix_J3 [stroke="#7289da"] {
+	stroke: rgb(var(--fontwhite1)) !important;
+}
+#app-mount .ack-2yIUvY {									/* modal				acklabel							*/
+	color: rgb(var(--fontwhite2));
+}
+#app-mount .buttonContainer-3S_miP {						/* modal				footer							*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+	box-shadow: none;
 }
 
 
