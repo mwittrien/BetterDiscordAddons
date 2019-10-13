@@ -6677,6 +6677,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.addObserver(BDFDB, document.querySelector(BDFDB.dotCN.itemlayercontainer), {name:"layerObserverBDFDB", instance:
 		new MutationObserver(changes => {changes.forEach(change => {change.addedNodes.forEach(node => {
 			if (node.tagName && (BDFDB.containsClass(node, BDFDB.disCN.contextmenu) || (node = node.querySelector(BDFDB.dotCN.contextmenu)) != null)) BDFDB.initElements(node);
+			else if (node.tagName && (BDFDB.containsClass(node, 'BDFDB-modal') || (node = node.querySelector('.BDFDB-modal')) != null)) BDFDB.initElements(node);
 		})})})
 	}, {childList: true});
 
@@ -6704,7 +6705,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			clearInterval(crashInterval);
 			reloadLib();
 		}
-	},10000);
+	}, 10000);
 
 	if (BDFDB.myData.id == "278543574059057154") {
 		for (let module in DiscordClassModules) if (!DiscordClassModules[module]) console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', module + ' not initialized in DiscordClassModules');
