@@ -1292,6 +1292,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	LibraryModules.AnimationUtils = BDFDB.WebModules.findByProperties('spring', 'decay');
 	LibraryModules.BadgeUtils = BDFDB.WebModules.findByProperties('getBadgeCountString', 'getBadgeWidthForValue');
 	LibraryModules.ChannelStore = BDFDB.WebModules.findByProperties('getChannel', 'getChannels');
+	LibraryModules.ColorUtils = BDFDB.WebModules.findByProperties('hex2int', 'hex2rgb');
 	LibraryModules.ContextMenuUtils = BDFDB.WebModules.findByProperties('closeContextMenu', 'openContextMenu');
 	LibraryModules.CurrentUserStore = BDFDB.WebModules.findByProperties('getCurrentUser');
 	LibraryModules.DirectMessageUtils = BDFDB.WebModules.findByProperties('addRecipient', 'openPrivateChannel');
@@ -2416,9 +2417,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.colorCONVERT = function (color, conv, type) {
-		if (!color) return null;
+		if (color == undefined || color == null) return null;
 		conv = conv === undefined || !conv ? conv = 'RGBCOMP' : conv.toUpperCase();
-		type = type === undefined || !type || !['RGB', 'RGBA', 'RGBCOMP', 'HSL', 'HSLA', 'HSLCOMP', 'HEX'].includes(type.toUpperCase()) ? BDFDB.colorTYPE(color) : type.toUpperCase();
+		type = type === undefined || !type || !['RGB', 'RGBA', 'RGBCOMP', 'HSL', 'HSLA', 'HSLCOMP', 'HEX', 'HEXA', 'INT'].includes(type.toUpperCase()) ? BDFDB.colorTYPE(color) : type.toUpperCase();
 		if (conv == 'RGBCOMP') {
 			switch (type) {
 				case 'RGBCOMP':
@@ -2463,6 +2464,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				case 'HEXA':
 					var hex = /^#([a-f\d]{1})([a-f\d]{1})([a-f\d]{1})([a-f\d]{1})$|^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
 					return [parseInt(hex[1] + hex[1] || hex[5], 16).toString(), parseInt(hex[2] + hex[2] || hex[6], 16).toString(), parseInt(hex[3] + hex[3] || hex[7], 16).toString(), Math.floor(BDFDB.mapRange([0, 255], [0, 100], parseInt(hex[4] + hex[4] || hex[8], 16).toString()))/100];
+				case 'INT':
+					color = processINT(color);
+					return [(color >> 16 & 255).toString(), (color >> 8 & 255).toString(), (color & 255).toString()];
 				default:
 					return null;
 			}
@@ -2497,6 +2501,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					return ('#' + (0x1000000 + (rgbcomp[2] | rgbcomp[1] << 8 | rgbcomp[0] << 16)).toString(16).slice(1)).toUpperCase();
 				case 'HEXA':
 					return ('#' + (0x1000000 + (rgbcomp[2] | rgbcomp[1] << 8 | rgbcomp[0] << 16)).toString(16).slice(1) + Math.round(BDFDB.mapRange([0, 100], [0, 255], processA(rgbcomp[3]) * 100)).toString(16)).toUpperCase();
+				case 'INT':
+					return processINT(rgbcomp[2] | rgbcomp[1] << 8 | rgbcomp[0] << 16);
 				default:
 					return null;
 			}
@@ -2506,6 +2512,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		function processA(a) {if (a == undefined || a == null) {return 1;} else {a = a.toString();a = (a.indexOf('%') > -1 ? 0.01 : 1) * parseFloat(a.replace(/[^0-9\.\-]/g, ''));return isNaN(a) || a > 1 ? 1 : a < 0 ? 0 : a;}};
 		function processSL(sl) {if (sl == undefined || sl == null) {return "100%";} else {sl = parseFloat(sl.toString().replace(/[^0-9\.\-]/g, ''));return (isNaN(sl) || sl > 100 ? 100 : sl < 0 ? 0 : sl) + '%';}};
 		function processHSL(comp) {let h = parseFloat(comp.shift().toString().replace(/[^0-9\.\-]/g, ''));h = isNaN(h) || h > 360 ? 360 : h < 0 ? 0 : h;return [h].concat(comp.map(sl => {return processSL(sl);}));};
+		function processINT(c) {if (c == undefined || c == null) {return 16777215;} else {c = parseInt(c.toString().replace(/[^0-9]/g, ''));return isNaN(c) || c > 16777215 ? 16777215 : c < 0 ? 0 : c;}};
 	};
 
 	var setAlpha = (color, a, conv) => {
@@ -2558,7 +2565,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 	BDFDB.colorCHANGE = function (color, value, conv) {
 		value = parseFloat(value);
-		if (color && typeof value == 'number' && !isNaN(value)) {
+		if (color != undefined && color != null && typeof value == 'number' && !isNaN(value)) {
 			if (BDFDB.isObject(color)) {
 				var newcolor = {};
 				for (let pos in color) newcolor[pos] = colorChange(color[pos], value, conv);
@@ -2570,7 +2577,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.colorINV = function (color, conv) {
-		if (color) {
+		if (color != undefined && color != null) {
 			var comp = BDFDB.colorCONVERT(color, 'RGBCOMP');
 			if (comp) return BDFDB.colorCONVERT([255 - comp[0], 255 - comp[1], 255 - comp[2]], conv || BDFDB.colorTYPE(color));
 		}
@@ -2586,14 +2593,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		return null;
 	};
 
-	BDFDB.colorISBRIGHT = function (color, compare = 160) {
-		color = BDFDB.colorCONVERT(color, 'RGBCOMP');
-		if (!color) return false;
-		return parseInt(compare) < Math.sqrt(0.299 * color[0]**2 + 0.587 * color[1]**2 + 0.144 * color[2]**2);
+	BDFDB.colorISBRIGHT = function (color) {
+		color = BDFDB.colorCONVERT(color, 'INT');
+		if (color == undefined || color == null) return false;
+		return LibraryModules.ColorUtils.getDarkness(color) < 0.5;
 	};
 
 	BDFDB.colorTYPE = function (color) {
-		if (color) {
+		if (color != undefined && color != null) {
 			if (typeof color === 'object' && (color.length == 3 || color.length == 4)) {
 				if (isRGB(color)) return 'RGBCOMP';
 				else if (isHSL(color)) return 'HSLCOMP';
@@ -2610,6 +2617,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					else if (color.indexOf('HSLA(') == 0 && comp.length == 4 && isHSL(comp)) return 'HSLA';
 				}
 			}
+			else if (typeof color === 'number' && parseInt(color) == color && color > -1 && color < 16777216) return 'INT';
 		}
 		return null;
 		function isRGB(comp) {return comp.slice(0, 3).every(rgb => rgb.toString().indexOf('%') == -1 && parseFloat(rgb) == parseInt(rgb));};
@@ -5537,6 +5545,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	LibraryComponents.Flex = BDFDB.WebModules.findByProperties('Wrap', 'Direction', 'Child');
 	LibraryComponents.FormComponents = BDFDB.WebModules.findByProperties('FormSection', 'FormText');
 	LibraryComponents.ModalComponents = BDFDB.WebModules.findByProperties('ModalContent', 'ModalFooter');
+	LibraryComponents.SvgIcon = BDFDB.WebModules.findByProperties('Gradients', 'Names');
 	LibraryComponents.TextElement = BDFDB.WebModules.findByProperties('Sizes', 'Weights');
 	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
 
