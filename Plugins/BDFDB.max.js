@@ -3362,10 +3362,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	var modals = [];
 	BDFDB.openModal = function (plugin, config) {
 		if (!BDFDB.isObject(plugin) || !BDFDB.isObject(config)) return;
-		var modal, id, contentchildren = [], footerchildren = [], modalprops, cancels = [], closeModal = _ => {
+		var modal, modalobserver, id, contentchildren = [], footerchildren = [], modalprops, cancels = [], closeModal = _ => {
 			if (id) BDFDB.removeFromArray(modals, id);
 			if (typeof config.onClose == 'function') config.onClose(modal);
 			if (BDFDB.isObject(modalprops) && typeof modalprops.onClose == 'function') modalprops.onClose();
+			if (typeof modalobserver.disconnect == 'function') modalobserver.disconnect();
 		};
 		if (typeof config.text == 'string') {
 			contentchildren.push(LibraryComponents.TextElement.default({
@@ -3407,24 +3408,23 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			}
 		}
 		if (contentchildren.length) {
-			let callbacktick = 0, callbackinterval = setInterval(_ => {
-				if (callbacktick > 60) clearInterval(callbackinterval);
-				else if ((modal = document.querySelector(`${BDFDB.dotCN.itemlayercontainer} .BDFDB-modal-${id}`)) != null) {
-					clearInterval(callbackinterval);
-					BDFDB.initElements(modal);
+			id = BDFDB.generateID(modals);
+			modalobserver = new MutationObserver(changes => {changes.forEach(change => {change.addedNodes.forEach(node => {
+				if (node.tagName && (node = node.querySelector(`.BDFDB-modal-${id}`)) != null) {
+					modal = node;
 					if (typeof config.onOpen == 'function') config.onOpen(modal);
+					BDFDB.initElements(modal);
 				}
-				else callbacktick++;
-			}, 1000);
+			})})});
+			modalobserver.observe(document.querySelector(BDFDB.dotCN.itemlayercontainer), {subtree:true, childList:true});
 			LibraryModules.ModalUtils.openModal(props => {
 				modalprops = props;
-				id = BDFDB.generateID(modals);
 				let name = plugin.name || (typeof plugin.getName == "function" ? plugin.getName() : null);
 				name = typeof name == 'string' ? name : null;
 				let size = typeof config.size == 'string' && LibraryComponents.ModalComponents.ModalSize[config.size.toUpperCase()];
 				return BDFDB.React.createElement(function (e) {
 					return BDFDB.React.createDiscordElement(LibraryComponents.ModalComponents.ModalRoot, {
-						className: `BDFDB-modal BDFDB-modal-${id} ${name ? name + '-modal' : ''} ${config.selector ? config.selector : ''}`.trim(),
+						className: `BDFDB-modal BDFDB-modal-${id} ${name ? name + '-modal' : ''} ${props.transitionState == 2 ? 'BDFDB-modal-open' : ''} ${config.selector ? config.selector : ''}`.split(' ').filter(n => n).join(' '),
 						size: size ? size : LibraryComponents.ModalComponents.ModalSize.SMALL,
 						transitionState: e.transitionState
 					}, null, [
