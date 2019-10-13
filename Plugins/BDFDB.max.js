@@ -3353,8 +3353,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			if (BDFDB.isObject(modalprops) && typeof modalprops.onClose == 'function') modalprops.onClose();
 		};
 		if (typeof config.text == 'string') {
-			contentchildren.push(BDFDB.LibraryComponents.TextElement.default({
-				color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
+			contentchildren.push(LibraryComponents.TextElement.default({
+				color: LibraryComponents.TextElement.Colors.PRIMARY,
 				children: [config.text]
 			}));
 		}
@@ -3366,16 +3366,16 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 		if (typeof config.onClose != 'function') config.onClose = _ => {};
 		if (Array.isArray(config.buttons)) for (let button of config.buttons) if (button.contents) {
-			let color = typeof button.color == 'string' && BDFDB.LibraryComponents.Button.Colors[button.color.toUpperCase()];
-			let look = typeof button.look == 'string' && BDFDB.LibraryComponents.Button.Looks[button.look.toUpperCase()];
+			let color = typeof button.color == 'string' && LibraryComponents.Button.Colors[button.color.toUpperCase()];
+			let look = typeof button.look == 'string' && LibraryComponents.Button.Looks[button.look.toUpperCase()];
 			let click = typeof button.click == 'function' ? button.click : _ => {};
 			
 			if (button.cancel) cancels.push(click);
 			
-			footerchildren.push(BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.Button, {
+			footerchildren.push(BDFDB.React.createDiscordElement(LibraryComponents.Button, {
 				type: 'button',
-				look: look || (color ? BDFDB.LibraryComponents.Button.Looks.FILLED : BDFDB.LibraryComponents.Button.Looks.LINK),
-				color: color ? color : BDFDB.LibraryComponents.Button.Colors.PRIMARY,
+				look: look || (color ? LibraryComponents.Button.Looks.FILLED : LibraryComponents.Button.Looks.LINK),
+				color: color ? color : LibraryComponents.Button.Colors.PRIMARY,
 				onClick: _ => {
 					click();
 					if (button.close) {
@@ -3386,42 +3386,42 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			}, null, button.contents));
 		}
 		
-		if (contentchildren.length) BDFDB.LibraryModules.ModalUtils.openModal(props => {
+		if (contentchildren.length) LibraryModules.ModalUtils.openModal(props => {
 			modalprops = props;
 			let name = plugin.name || (typeof plugin.getName == "function" ? plugin.getName() : null);
 			name = typeof name == 'string' ? name : null;
-			let size = typeof config.size == 'string' && BDFDB.LibraryComponents.ModalComponents.ModalSize[config.size.toUpperCase()];
+			let size = typeof config.size == 'string' && LibraryComponents.ModalComponents.ModalSize[config.size.toUpperCase()];
 			return BDFDB.React.createElement(function (e) {
-				return BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.ModalComponents.ModalRoot, {
+				return BDFDB.React.createDiscordElement(LibraryComponents.ModalComponents.ModalRoot, {
 					className: `BDFDB-modal ${name ? name + '-modal' : ''} ${config.selector ? config.selector : ''}`.trim(),
-					size: size ? size : BDFDB.LibraryComponents.ModalComponents.ModalSize.SMALL,
+					size: size ? size : LibraryComponents.ModalComponents.ModalSize.SMALL,
 					transitionState: e.transitionState
 				}, null, [
-					BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.ModalComponents.ModalHeader, {
+					BDFDB.React.createDiscordElement(LibraryComponents.ModalComponents.ModalHeader, {
 						separator: false
 					}, null, [
-						BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.Flex.Child, {
+						BDFDB.React.createDiscordElement(LibraryComponents.Flex.Child, {
 							grow: 1,
 							shrink: 1
 						}, null, [
-							BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
-								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H4
+							BDFDB.React.createDiscordElement(LibraryComponents.FormComponents.FormTitle, {
+								tag: LibraryComponents.FormComponents.FormTitle.Tags.H4
 							}, null, typeof config.header == 'string' ? config.header : ""),
-							BDFDB.LibraryComponents.TextElement.default({
-								size: BDFDB.LibraryComponents.TextElement.Sizes.SMALL,
-								color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
+							LibraryComponents.TextElement.default({
+								size: LibraryComponents.TextElement.Sizes.SMALL,
+								color: LibraryComponents.TextElement.Colors.PRIMARY,
 								children: [typeof config.subheader == 'string' ? config.subheader : (name || "")]
 							})
 						]),
-						BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.ModalComponents.ModalCloseButton, {
+						BDFDB.React.createDiscordElement(LibraryComponents.ModalComponents.ModalCloseButton, {
 							onClick: _ => {
 								for (let cancel of cancels) cancel();
 								closeModal();
 							}
 						})
 					]),
-					BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.ModalComponents.ModalContent, {}, null, contentchildren),
-					footerchildren.length ? BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.ModalComponents.ModalFooter, {}, null, footerchildren) : null
+					BDFDB.React.createDiscordElement(LibraryComponents.ModalComponents.ModalContent, {}, null, contentchildren),
+					footerchildren.length ? BDFDB.React.createDiscordElement(LibraryComponents.ModalComponents.ModalFooter, {}, null, footerchildren) : null
 				])
 			}, props);
 		}, {
@@ -3432,23 +3432,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		});
 	};
 	
-	BDFDB.openConfirmModal = function (plugin, config) {
-		if (!BDFDB.isObject(plugin) || !config) return;
-		let click = config.onConfirm;
-		if (!BDFDB.isObject(config)) { // REMOVE, OLD WAY
-			var text = config;
-			config = {text};
-			config.header = typeof arguments[2] == 'string' ? arguments[2] : null;
-			click = typeof arguments[2] == 'function' ? arguments[2] : (typeof arguments[3] == 'function' ? arguments[3] : null);
-		}
-		if (typeof config.header != 'string') config.header = "Are you sure?";
-		click = typeof click == 'function' ? click : _ => {};
-		config.selector = 'BDFDB-confirmmodal';
-		config.buttons = [
-			{contents:BDFDB.LanguageStrings.OKAY, close: true, color:"RED", click},
-			{contents:BDFDB.LanguageStrings.CANCEL, close: true}
-		];
-		BDFDB.openModal(plugin, config);
+	BDFDB.openConfirmModal = function (plugin, text, callback) {
+		if (!BDFDB.isObject(plugin) || typeof text != 'string') return;
+		callback = typeof callback == 'function' ? callback : _ => {};
+		BDFDB.openModal(plugin, {text, header:'Are you sure?', selector:'BDFDB-confirmmodal', buttons:[
+			{contents:BDFDB.LanguageStrings.OKAY, close:true, color:"RED", click:callback},
+			{contents:BDFDB.LanguageStrings.CANCEL, close:true}
+		]});
 	};
 
 	BDFDB.openChangeLogModal = function (plugin) {
