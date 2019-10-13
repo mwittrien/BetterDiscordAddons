@@ -121,6 +121,16 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			BDFDB.openChangeLogModal(plugin);
 		}
 	};
+	
+	BDFDB.generateID = function (array) {
+		array = Array.isArray(array) ? array : null;
+		let id = Math.floor(Math.random() * 10000000000000000);
+		if (array && array.includes(id)) return BDFDB.generateID(array);
+		else {
+			array.push(id);
+			return id;
+		}
+	};
 
 	BDFDB.addObserver = function (plugin, eleOrSelec, observer, config = {childList: true}) {
 		if (!BDFDB.isObject(plugin) || !eleOrSelec || !observer) return;
@@ -560,6 +570,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 	};
 	
+	var itemlayers = [];
 	BDFDB.appendItemLayer = function (node, anker, options = {}) {
 		var itemlayercontainernative = document.querySelector(BDFDB.dotCN.itemlayercontainer);
 		if (!itemlayercontainernative || !Node.prototype.isPrototypeOf(node) || !anker || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
@@ -569,7 +580,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			BDFDB.addClass(itemlayercontainer, "BDFDB-itemlayercontainer");
 			itemlayercontainernative.parentElement.insertBefore(itemlayercontainer, itemlayercontainernative.nextSibling);
 		}
-		var id = Math.round(Math.random() * 10000000000000000);
+		var id = BDFDB.generateID(itemlayers);
 		var itemlayer = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.itemlayer} BDFDB-itemlayer itemlayer-${id}"></div>`);
 		itemlayer.appendChild(node);
 		itemlayercontainer.appendChild(itemlayer);
@@ -588,6 +599,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				var ankermatch = nodes.indexOf(anker) > -1;
 				var parentmatch = nodes.some(n => n.contains(anker));
 				if (ownmatch || ankermatch || parentmatch) {
+					BDFDB.removeFromArray(itemlayers, id);
 					observer.disconnect();
 					itemlayer.remove();
 					BDFDB.removeLocalStyle('BDFDBcustomItemLayer' + id, itemlayercontainer);
@@ -599,11 +611,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		observer.observe(document.body, {subtree:true, childList:true});
 	};
 
+	var notificationbars = [];
 	BDFDB.createNotificationsBar = function (text, options = {}) {
 		if (!text) return;
 		var layers = document.querySelector(BDFDB.dotCN.layers);
 		if (!layers) return;
-		var id = Math.round(Math.random() * 10000000000000000);
+		var id = BDFDB.generateID(notificationbars);
 		var notice = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.notice} BDFDB-notice notice-${id}"><div class="${BDFDB.disCN.noticedismiss}" style="height:36px !important; position: absolute !important; top: 0 !important; right: 0 !important; left: unset !important;"></div><span class="notice-message"></span></div>`);
 		layers.parentElement.insertBefore(notice, layers);
 		var noticemessage = notice.querySelector('.notice-message');
@@ -625,7 +638,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (options.btn || options.button) notice.appendChild(BDFDB.htmlToElement(`<button class="${BDFDB.disCNS.noticebutton + BDFDB.disCNS.titlesize14 + BDFDB.disCN.weightmedium}">${options.btn || options.button}</button>`));
 		if (options.id) notice.id = options.id.split(' ').join('');
 		if (options.selector) BDFDB.addClass(notice, options.selector);
-		if (options.css) BDFDB.appendLocalStyle('BDFDBcustomnotibar' + id, options.css);
+		if (options.css) BDFDB.appendLocalStyle('BDFDBcustomnotificationbar' + id, options.css);
 		if (options.style) notice.style = options.style;
 		if (options.html === true) noticemessage.innerHTML = text;
 		else {
@@ -654,7 +667,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				var fontcolor = comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? '#000' : '#FFF';
 				var backgroundcolor = BDFDB.colorCONVERT(comp, 'HEX');
 				var filter = comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? 'brightness(0%)' : 'brightness(100%)';
-				BDFDB.appendLocalStyle('BDFDBcustomnotibarColorCorrection' + id, `.BDFDB-notice.notice-${id}{background-color:${backgroundcolor} !important;}.BDFDB-notice.notice-${id} .notice-message {color:${fontcolor} !important;}.BDFDB-notice.notice-${id} ${BDFDB.dotCN.noticebutton} {color:${fontcolor} !important;border-color:${BDFDB.colorSETALPHA(fontcolor,0.25,'RGBA')} !important;}.BDFDB-notice.notice-${id} ${BDFDB.dotCN.noticebutton}:hover {color:${backgroundcolor} !important;background-color:${fontcolor} !important;}.BDFDB-notice.notice-${id} ${BDFDB.dotCN.noticedismiss} {filter:${filter} !important;}`);
+				BDFDB.appendLocalStyle('BDFDBcustomnotificationbarColorCorrection' + id, `.BDFDB-notice.notice-${id}{background-color:${backgroundcolor} !important;}.BDFDB-notice.notice-${id} .notice-message {color:${fontcolor} !important;}.BDFDB-notice.notice-${id} ${BDFDB.dotCN.noticebutton} {color:${fontcolor} !important;border-color:${BDFDB.colorSETALPHA(fontcolor,0.25,'RGBA')} !important;}.BDFDB-notice.notice-${id} ${BDFDB.dotCN.noticebutton}:hover {color:${backgroundcolor} !important;background-color:${fontcolor} !important;}.BDFDB-notice.notice-${id} ${BDFDB.dotCN.noticedismiss} {filter:${filter} !important;}`);
 			}
 			else BDFDB.addClass(notice, BDFDB.disCN.noticedefault);
 		}
@@ -672,8 +685,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			notice.style.setProperty('overflow', 'hidden', 'important');
 			notice.style.setProperty('height', '0px', 'important');
 			setTimeout(() => {
-				BDFDB.removeLocalStyle('BDFDBcustomnotibar' + id);
-				BDFDB.removeLocalStyle('BDFDBcustomnotibarColorCorrection' + id);
+				BDFDB.removeFromArray(notificationbars, id);
+				BDFDB.removeLocalStyle('BDFDBcustomnotificationbar' + id);
+				BDFDB.removeLocalStyle('BDFDBcustomnotificationbarColorCorrection' + id);
 				notice.remove();
 			}, 500);
 		});
@@ -1988,7 +2002,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (guild) {
 			let selected = LibraryModules.LastGuildStore.getGuildId() == guild.id;
 			let unread = LibraryModules.UnreadGuildUtils.hasUnread(guild.id);
-			let randomid = Math.round(Math.random() * 10000000000000000);
 			let div = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.guildouter + BDFDB.disCN._bdguild}"><div class="${BDFDB.disCNS.guildpill + BDFDB.disCN.guildpillwrapper}"><span class="${BDFDB.disCN.guildpillitem}" style="opacity: 0; height: 8px; transform: translate3d(0px, 0px, 0px);"></span></div><div class="${BDFDB.disCN.guildcontainer}" draggable="false" style="border-radius: 50%; overflow: hidden;"><div class="${BDFDB.disCN.guildinner}"><svg width="48" height="48" viewBox="0 0 48 48" class="${BDFDB.disCN.guildsvg}"><mask id="" fill="black" x="0" y="0" width="48" height="48"><path d="M48 24C48 37.2548 37.2548 48 24 48C10.7452 48 0 37.2548 0 24C0 10.7452 10.7452 0 24 0C37.2548 0 48 10.7452 48 24Z" fill="white"></path><rect x="28" y="-4" width="24" height="24" rx="12" ry="12" transform="translate(20 -20)" fill="black"></rect><rect x="28" y="28" width="24" height="24" rx="12" ry="12" transform="translate(20 20)" fill="black"></rect></mask><foreignObject mask="" x="0" y="0" width="48" height="48"><a class="${BDFDB.disCN.guildiconwrapper} ${selected ? (' ' + BDFDB.disCN.guildiconselected) : ''}" aria-label="${guild.name}"${functionality.click ? ' href="channels/"' + guild.id + '/' + LibraryModules.LastChannelStore.getChannelId(guild.id) + '"' : ''} draggable="false">${guild.icon ? `<img class="${BDFDB.disCN.guildicon}" src="${BDFDB.getGuildIcon(guild.id)}?size=128" alt="" width="48" height="48" draggable="false" aria-hidden="true"></img>` : `<div class="${BDFDB.disCNS.guildiconchildwrapper + BDFDB.disCN.guildiconacronym}" aria-hidden="true" style="font-size: ${guild.acronym.length > 5 ? 10 : (guild.acronym.length > 4 ? 12 : (guild.acronym.length > 3 ? 14 : (guild.acronym.length > 1 ? 16 : 18)))}px;">${guild.acronym}</div>`}</a></foreignObject></svg></div></div><div class="${BDFDB.disCN.guildedgewrapper}" aria-hidden="true"><span class="${BDFDB.disCN.guildedge}"></span><span class="${BDFDB.disCN.guildedgemiddle}"></span><span class="${BDFDB.disCN.guildedge}"></span></div></div>`);
 			let divinner = div.querySelector(BDFDB.dotCN.guildcontainer);
 			let divpillitem = div.querySelector(BDFDB.dotCN.guildpillitem);
@@ -3346,10 +3359,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		return selectMenu;
 	};
 
+	var modals = [];
 	BDFDB.openModal = function (plugin, config) {
 		if (!BDFDB.isObject(plugin) || !BDFDB.isObject(config)) return;
-		var contentchildren = [], footerchildren = [], modalprops, cancels = [], closeModal = _ => {
-			if (typeof config.onClose == 'function') config.onClose();
+		var modal, id, contentchildren = [], footerchildren = [], modalprops, cancels = [], closeModal = _ => {
+			if (id) BDFDB.removeFromArray(modals, id);
+			if (typeof config.onClose == 'function') config.onClose(modal);
 			if (BDFDB.isObject(modalprops) && typeof modalprops.onClose == 'function') modalprops.onClose();
 		};
 		if (typeof config.text == 'string') {
@@ -3365,79 +3380,96 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			else if (BDFDB.React.isValidElement(config.html)) contentchildren.push(config.html);
 		}
 		if (typeof config.onClose != 'function') config.onClose = _ => {};
-		if (Array.isArray(config.buttons)) for (let button of config.buttons) if (button.contents) {
-			let color = typeof button.color == 'string' && LibraryComponents.Button.Colors[button.color.toUpperCase()];
-			let look = typeof button.look == 'string' && LibraryComponents.Button.Looks[button.look.toUpperCase()];
-			let click = typeof button.click == 'function' ? button.click : _ => {};
-			
-			if (button.cancel) cancels.push(click);
-			
-			footerchildren.push(BDFDB.React.createDiscordElement(LibraryComponents.Button, {
-				type: 'button',
-				look: look || (color ? LibraryComponents.Button.Looks.FILLED : LibraryComponents.Button.Looks.LINK),
-				color: color ? color : LibraryComponents.Button.Colors.PRIMARY,
-				onClick: _ => {
-					click();
-					if (button.close) {
-						for (let cancel of cancels) if (cancel != click) cancel();
-						closeModal();
+		if (typeof config.onOpen != 'function') config.onOpen = _ => {};
+		if (Array.isArray(config.buttons)) for (let button of config.buttons) {
+			let contents = typeof button.contents == 'string'  ? button.contents : null;
+			let type = typeof button.type == 'string'  ? button.type : null;
+			if (contents || type) {
+				let color = typeof button.color == 'string' && LibraryComponents.Button.Colors[button.color.toUpperCase()];
+				let look = typeof button.look == 'string' && LibraryComponents.Button.Looks[button.look.toUpperCase()];
+				let click = typeof button.click == 'function' ? button.click : _ => {};
+				
+				if (button.cancel) cancels.push(click);
+				
+				footerchildren.push(BDFDB.React.createDiscordElement(LibraryComponents.Button, {
+					type: 'button',
+					className: type || "",
+					look: look || (color ? LibraryComponents.Button.Looks.FILLED : LibraryComponents.Button.Looks.LINK),
+					color: color ? color : LibraryComponents.Button.Colors.PRIMARY,
+					onClick: _ => {
+						click(modal);
+						if (button.close) {
+							for (let cancel of cancels) if (cancel != click) cancel(modal);
+							closeModal();
+						}
 					}
-				}
-			}, null, button.contents));
+				}, null, contents || 'placeholder'));
+			}
 		}
-		
-		if (contentchildren.length) LibraryModules.ModalUtils.openModal(props => {
-			modalprops = props;
-			let name = plugin.name || (typeof plugin.getName == "function" ? plugin.getName() : null);
-			name = typeof name == 'string' ? name : null;
-			let size = typeof config.size == 'string' && LibraryComponents.ModalComponents.ModalSize[config.size.toUpperCase()];
-			return BDFDB.React.createElement(function (e) {
-				return BDFDB.React.createDiscordElement(LibraryComponents.ModalComponents.ModalRoot, {
-					className: `BDFDB-modal ${name ? name + '-modal' : ''} ${config.selector ? config.selector : ''}`.trim(),
-					size: size ? size : LibraryComponents.ModalComponents.ModalSize.SMALL,
-					transitionState: e.transitionState
-				}, null, [
-					BDFDB.React.createDiscordElement(LibraryComponents.ModalComponents.ModalHeader, {
-						separator: false
+		if (contentchildren.length) {
+			let callbacktick = 0, callbackinterval = setInterval(_ => {
+				if (callbacktick > 60) clearInterval(callbackinterval);
+				else if ((modal = document.querySelector(`${BDFDB.dotCN.itemlayercontainer} .BDFDB-modal-${id}`)) != null) {
+					clearInterval(callbackinterval);
+					BDFDB.initElements(modal);
+					if (typeof config.onOpen == 'function') config.onOpen(modal);
+				}
+				else callbacktick++;
+			}, 1000);
+			LibraryModules.ModalUtils.openModal(props => {
+				modalprops = props;
+				id = BDFDB.generateID(modals);
+				let name = plugin.name || (typeof plugin.getName == "function" ? plugin.getName() : null);
+				name = typeof name == 'string' ? name : null;
+				let size = typeof config.size == 'string' && LibraryComponents.ModalComponents.ModalSize[config.size.toUpperCase()];
+				return BDFDB.React.createElement(function (e) {
+					return BDFDB.React.createDiscordElement(LibraryComponents.ModalComponents.ModalRoot, {
+						className: `BDFDB-modal BDFDB-modal-${id} ${name ? name + '-modal' : ''} ${config.selector ? config.selector : ''}`.trim(),
+						size: size ? size : LibraryComponents.ModalComponents.ModalSize.SMALL,
+						transitionState: e.transitionState
 					}, null, [
-						BDFDB.React.createDiscordElement(LibraryComponents.Flex.Child, {
-							grow: 1,
-							shrink: 1
+						BDFDB.React.createDiscordElement(LibraryComponents.ModalComponents.ModalHeader, {
+							separator: false
 						}, null, [
-							BDFDB.React.createDiscordElement(LibraryComponents.FormComponents.FormTitle, {
-								tag: LibraryComponents.FormComponents.FormTitle.Tags.H4
-							}, null, typeof config.header == 'string' ? config.header : ""),
-							LibraryComponents.TextElement.default({
-								size: LibraryComponents.TextElement.Sizes.SMALL,
-								color: LibraryComponents.TextElement.Colors.PRIMARY,
-								children: [typeof config.subheader == 'string' ? config.subheader : (name || "")]
+							BDFDB.React.createDiscordElement(LibraryComponents.Flex.Child, {
+								grow: 1,
+								shrink: 1
+							}, null, [
+								BDFDB.React.createDiscordElement(LibraryComponents.FormComponents.FormTitle, {
+									tag: LibraryComponents.FormComponents.FormTitle.Tags.H4
+								}, null, typeof config.header == 'string' ? config.header : ""),
+								LibraryComponents.TextElement.default({
+									size: LibraryComponents.TextElement.Sizes.SMALL,
+									color: LibraryComponents.TextElement.Colors.PRIMARY,
+									children: [typeof config.subheader == 'string' ? config.subheader : (name || "")]
+								})
+							]),
+							BDFDB.React.createDiscordElement(LibraryComponents.ModalComponents.ModalCloseButton, {
+								onClick: _ => {
+									for (let cancel of cancels) cancel(modal);
+									closeModal();
+								}
 							})
 						]),
-						BDFDB.React.createDiscordElement(LibraryComponents.ModalComponents.ModalCloseButton, {
-							onClick: _ => {
-								for (let cancel of cancels) cancel();
-								closeModal();
-							}
-						})
-					]),
-					BDFDB.React.createDiscordElement(LibraryComponents.ModalComponents.ModalContent, {}, null, contentchildren),
-					footerchildren.length ? BDFDB.React.createDiscordElement(LibraryComponents.ModalComponents.ModalFooter, {}, null, footerchildren) : null
-				])
-			}, props);
-		}, {
-			onCloseRequest: _ => {
-				for (let cancel of cancels) cancel();
-				closeModal();
-			}
-		});
+						BDFDB.React.createDiscordElement(LibraryComponents.ModalComponents.ModalContent, {}, null, contentchildren),
+						footerchildren.length ? BDFDB.React.createDiscordElement(LibraryComponents.ModalComponents.ModalFooter, {}, null, footerchildren) : null
+					])
+				}, props);
+			}, {
+				onCloseRequest: _ => {
+					for (let cancel of cancels) cancel(modal);
+					closeModal();
+				}
+			});
+		}
 	};
 	
 	BDFDB.openConfirmModal = function (plugin, text, callback) {
 		if (!BDFDB.isObject(plugin) || typeof text != 'string') return;
 		callback = typeof callback == 'function' ? callback : _ => {};
 		BDFDB.openModal(plugin, {text, header:'Are you sure?', selector:'BDFDB-confirmmodal', buttons:[
-			{contents:BDFDB.LanguageStrings.OKAY, close:true, color:"RED", click:callback},
-			{contents:BDFDB.LanguageStrings.CANCEL, close:true}
+			{type:"btn-ok", close:true, color:"RED", click:callback},
+			{type:"btn-cancel", close:true}
 		]});
 	};
 
@@ -5940,9 +5972,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			position: relative !important;
 			width: auto !important;
 		}
-		.BDFDB-modal ${BDFDB.dotCN.modalsizelarge} {
-			max-height: 80vh;
-		}
 		.BDFDB-modal ${BDFDB.dotCN.title + BDFDB.notCN.cursorpointer},
 		.BDFDB-settings ${BDFDB.dotCN.title + BDFDB.notCN.cursorpointer} {
 			cursor: default !important;
@@ -6677,7 +6706,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.addObserver(BDFDB, document.querySelector(BDFDB.dotCN.itemlayercontainer), {name:"layerObserverBDFDB", instance:
 		new MutationObserver(changes => {changes.forEach(change => {change.addedNodes.forEach(node => {
 			if (node.tagName && (BDFDB.containsClass(node, BDFDB.disCN.contextmenu) || (node = node.querySelector(BDFDB.dotCN.contextmenu)) != null)) BDFDB.initElements(node);
-			else if (node.tagName && (BDFDB.containsClass(node, 'BDFDB-modal') || (node = node.querySelector('.BDFDB-modal')) != null)) BDFDB.initElements(node);
 		})})})
 	}, {childList: true});
 
