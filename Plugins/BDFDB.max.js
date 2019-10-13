@@ -1056,7 +1056,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		let found = instance, values = valuepath.split('.').filter(n => n);
 		for (let i = 0; i < values.length; i++) {
 			found = found[values[i]];
-			if (found == undefined && i < values.length-1) return null;
+			if (found === undefined && i < values.length-1) return null;
 		}
 		return found;
 	};
@@ -1068,7 +1068,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		let found = instance, values = valuepath.split('.').filter(n => n);
 		for (let i = 0; i < values.length; i++) {
 			found = found[values[i]];
-			if (found == undefined && i < values.length-1) return false;
+			if (found === undefined && i < values.length-1) return false;
 		}
 		found = value;
 		return true;
@@ -2417,7 +2417,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.colorCONVERT = function (color, conv, type) {
-		if (color == undefined || color == null) return null;
+		if (color == null) return null;
 		conv = conv === undefined || !conv ? conv = 'RGBCOMP' : conv.toUpperCase();
 		type = type === undefined || !type || !['RGB', 'RGBA', 'RGBCOMP', 'HSL', 'HSLA', 'HSLCOMP', 'HEX', 'HEXA', 'INT'].includes(type.toUpperCase()) ? BDFDB.colorTYPE(color) : type.toUpperCase();
 		if (conv == 'RGBCOMP') {
@@ -2507,12 +2507,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					return null;
 			}
 		}
-		function processC(c) {if (c == undefined || c == null) {return 255;} else {c = parseInt(c.toString().replace(/[^0-9\-]/g, ''));return isNaN(c) || c > 255 ? 255 : c < 0 ? 0 : c;}};
+		function processC(c) {if (c == null) {return 255;} else {c = parseInt(c.toString().replace(/[^0-9\-]/g, ''));return isNaN(c) || c > 255 ? 255 : c < 0 ? 0 : c;}};
 		function processRGB(comp) {return comp.map(c => {return processC(c);});};
-		function processA(a) {if (a == undefined || a == null) {return 1;} else {a = a.toString();a = (a.indexOf('%') > -1 ? 0.01 : 1) * parseFloat(a.replace(/[^0-9\.\-]/g, ''));return isNaN(a) || a > 1 ? 1 : a < 0 ? 0 : a;}};
-		function processSL(sl) {if (sl == undefined || sl == null) {return "100%";} else {sl = parseFloat(sl.toString().replace(/[^0-9\.\-]/g, ''));return (isNaN(sl) || sl > 100 ? 100 : sl < 0 ? 0 : sl) + '%';}};
+		function processA(a) {if (a == null) {return 1;} else {a = a.toString();a = (a.indexOf('%') > -1 ? 0.01 : 1) * parseFloat(a.replace(/[^0-9\.\-]/g, ''));return isNaN(a) || a > 1 ? 1 : a < 0 ? 0 : a;}};
+		function processSL(sl) {if (sl == null) {return "100%";} else {sl = parseFloat(sl.toString().replace(/[^0-9\.\-]/g, ''));return (isNaN(sl) || sl > 100 ? 100 : sl < 0 ? 0 : sl) + '%';}};
 		function processHSL(comp) {let h = parseFloat(comp.shift().toString().replace(/[^0-9\.\-]/g, ''));h = isNaN(h) || h > 360 ? 360 : h < 0 ? 0 : h;return [h].concat(comp.map(sl => {return processSL(sl);}));};
-		function processINT(c) {if (c == undefined || c == null) {return 16777215;} else {c = parseInt(c.toString().replace(/[^0-9]/g, ''));return isNaN(c) || c > 16777215 ? 16777215 : c < 0 ? 0 : c;}};
+		function processINT(c) {if (c == null) {return 16777215;} else {c = parseInt(c.toString().replace(/[^0-9]/g, ''));return isNaN(c) || c > 16777215 ? 16777215 : c < 0 ? 0 : c;}};
 	};
 
 	var setAlpha = (color, a, conv) => {
@@ -2565,7 +2565,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 	BDFDB.colorCHANGE = function (color, value, conv) {
 		value = parseFloat(value);
-		if (color != undefined && color != null && typeof value == 'number' && !isNaN(value)) {
+		if (color != null && typeof value == 'number' && !isNaN(value)) {
 			if (BDFDB.isObject(color)) {
 				var newcolor = {};
 				for (let pos in color) newcolor[pos] = colorChange(color[pos], value, conv);
@@ -2577,7 +2577,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.colorINV = function (color, conv) {
-		if (color != undefined && color != null) {
+		if (color != null) {
 			var comp = BDFDB.colorCONVERT(color, 'RGBCOMP');
 			if (comp) return BDFDB.colorCONVERT([255 - comp[0], 255 - comp[1], 255 - comp[2]], conv || BDFDB.colorTYPE(color));
 		}
@@ -2593,14 +2593,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		return null;
 	};
 
-	BDFDB.colorISBRIGHT = function (color) {
+	BDFDB.colorISBRIGHT = function (color, value) {
 		color = BDFDB.colorCONVERT(color, 'INT');
-		if (color == undefined || color == null) return false;
-		return LibraryModules.ColorUtils.getDarkness(color) < 0.5;
+		if (color == null) return false;
+		return LibraryModules.ColorUtils.getDarkness(color) < (typeof value == 'number' ? value : 0.3);
 	};
 
 	BDFDB.colorTYPE = function (color) {
-		if (color != undefined && color != null) {
+		if (color != null) {
 			if (typeof color === 'object' && (color.length == 3 || color.length == 4)) {
 				if (isRGB(color)) return 'RGBCOMP';
 				else if (isHSL(color)) return 'HSLCOMP';
@@ -3730,7 +3730,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		var selectedcolor = BDFDB.colorCONVERT(isgradient ? color[Object.keys(color)[0]] : color, hexformat) || (options.alpha ? '#000000FF' : '#000000');
 		var [h, s, l] = BDFDB.colorCONVERT(selectedcolor, 'HSLCOMP');
 		var a = BDFDB.colorGETALPHA(isgradient ? color[Object.keys(color)[0]] : color);
-		a = typeof a == undefined || a == null ? 1 : a;
+		a = a == null ? 1 : a;
 			 
 		var targetrects = BDFDB.getRects(target);
 		var colorPicker = BDFDB.htmlToElement(`<div role="dialog" class="BDFDB-colorpicker ${BDFDB.disCNS.popoutnoarrow + BDFDB.disCNS.popoutnoshadow + BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottom + BDFDB.disCNS.popoutarrowalignmenttop + BDFDB.disCN.themeundefined}" style="z-index: 2001; visibility: visible; left: ${targetrects.left + targetrects.width/2}px; top: ${targetrects.top + targetrects.height}px; transform: translateX(-50%) translateY(0%) translateZ(0px);"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.colorpicker}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.colorpickerinner}"><div class="${BDFDB.disCN.colorpickersaturation}"><div class="saturation-color" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; background: ${BDFDB.colorCONVERT([h, '100%', '100%'], 'RGB')} !important;"><style>.saturation-white {background: -webkit-linear-gradient(to right, #fff, rgba(255,255,255,0));background: linear-gradient(to right, #fff, rgba(255,255,255,0));}.saturation-black {background: -webkit-linear-gradient(to top, #000, rgba(0,0,0,0));background: linear-gradient(to top, #000, rgba(0,0,0,0));}</style><div class="saturation-white" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="saturation-black" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"></div><div class="saturation-cursor" style="position: absolute; top: 55.2941%; left: 44.7368%; cursor: default;"><div style="width: 4px; height: 4px; box-shadow: rgb(255, 255, 255) 0px 0px 0px 1.5px, rgba(0, 0, 0, 0.3) 0px 0px 1px 1px inset, rgba(0, 0, 0, 0.4) 0px 0px 1px 2px; border-radius: 50%; transform: translate(-2px, -2px);"></div></div></div></div></div><div class="${BDFDB.disCN.colorpickerhue}"><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="hue-horizontal" style="padding: 0px 2px; position: relative; height: 100%;"><style>.hue-horizontal {background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);background: -webkit-linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);}.hue-vertical {background: linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);background: -webkit-linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);}</style><div class="hue-cursor" style="position: absolute; left: 0%;"><div style="margin-top: -4px !important; width: 4px; border-radius: 1px; height: 8px; box-shadow: rgba(0, 0, 0, 0.6) 0px 0px 2px; background: rgb(255, 255, 255); transform: translateX(-2px);"></div></div></div></div></div><div class="alpha-bar" style="position: relative; height: 8px; margin: 16px 0 8px;"><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="alpha-checker" style="padding: 0px 2px; position: relative; height: 100%; background-color: transparent;"></div></div><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="alpha-horizontal" style="padding: 0px 2px; position: relative; height: 100%;"><div class="alpha-cursor" style="position: absolute; left: 0%;"><div style="margin-top: -4px; width: 8px; border-radius: 3px; height: 16px; box-shadow: rgba(0, 0, 0, 0.6) 0px 0px 2px; background: rgb(255, 255, 255); transform: translateX(-2px);"></div></div></div></div></div><div class="gradient-bar" style="position: relative; height: 8px; margin: 27px 2px 2px 2px;${!isgradient ? ' display: none;' : ''}"><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="alpha-checker" style="padding: 0px 2px; position: relative; height: 100%; background-color: transparent;"></div></div><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="gradient-horizontal" style="padding: 0px 2px; position: relative; height: 100%; background-color: ${selectedcolor};"><div class="gradient-cursor edge selected" style="position: absolute; left: 0%;"><div style="background-color: ${selectedcolor} !important;"></div></div><div class="gradient-cursor edge" style="position: absolute; left: 100%;"><div style="background-color: ${isgradient ? BDFDB.colorCONVERT(color[1], 'RGBA') : selectedcolor} !important;"></div></div></div></div></div></div><div class="${BDFDB.disCNS.horizontal + BDFDB.disCNS.colorpickerhexinput + BDFDB.disCN.margintop8}"><input class="${BDFDB.disCN.inputdefault}" maxlength="${options.alpha ? 9 : 7}" name="" type="text" placeholder="${selectedcolor}" value="${selectedcolor}"></input><div class="gradient-button${isgradient ? ' selected' : ''}" style="transform: rotate(-90deg); margin: 2px 0 0 5px; cursor: pointer; border-radius: 5px; height: 36px;"><svg width="36" height="36" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M469.333333 384h85.333334v85.333333h-85.333334z m-85.333333 85.333333h85.333333v85.333334H384z m170.666667 0h85.333333v85.333334h-85.333333z m85.333333-85.333333h85.333333v85.333333h-85.333333zM298.666667 384h85.333333v85.333333H298.666667z m512-256H213.333333c-46.933333 0-85.333333 38.4-85.333333 85.333333v597.333334c0 46.933333 38.4 85.333333 85.333333 85.333333h597.333334c46.933333 0 85.333333-38.4 85.333333-85.333333V213.333333c0-46.933333-38.4-85.333333-85.333333-85.333333zM384 768H298.666667v-85.333333h85.333333v85.333333z m170.666667 0h-85.333334v-85.333333h85.333334v85.333333z m170.666666 0h-85.333333v-85.333333h85.333333v85.333333z m85.333334-298.666667h-85.333334v85.333334h85.333334v85.333333h-85.333334v-85.333333h-85.333333v85.333333h-85.333333v-85.333333h-85.333334v85.333333H384v-85.333333H298.666667v85.333333H213.333333v-85.333333h85.333334v-85.333334H213.333333V213.333333h597.333334v256z"></path></svg></div></div></div><div class="move-corner" style="width: 10px; height: 10px; cursor: move; position: absolute; top: 0; left: 0;"></div><div class="move-corner" style="width: 10px; height: 10px; cursor: move; position: absolute; top: 0; right: 0;"></div><div class="move-corner" style="width: 10px; height: 10px; cursor: move; position: absolute; bottom: 0; right: 0;"></div><div class="move-corner" style="width: 10px; height: 10px; cursor: move; position: absolute; bottom: 0; left: 0;"></div></div>`);
@@ -3897,7 +3897,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		hexinput.addEventListener('input', e => {
 			if (hexregex.test(hexinput.value)) {
 				[h, s, l, a] = BDFDB.colorCONVERT(hexinput.value, 'HSLCOMP');
-				if (a == undefined || a == null) a = 1;
+				if (a == null) a = 1;
 				updateColors(false);
 			}
 		});
@@ -4065,7 +4065,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		badgeWrapper: 'wrapper-232cHJ',
 		channelPanelTitle: 'title-eS5yk3',
 		guildChannels: 'container-PNkimc',
-		guildBadgeWrapper: 'guild-badge-wrapper-deprecated',
 		highlight: 'highlight',
 		hoverCardButton: 'button-2CgfFz',
 		loginScreen: 'wrapper-3Q5DdO',
@@ -4559,7 +4558,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		contextmenuhint: ['ContextMenu', 'hint'],
 		contextmenuitem: ['ContextMenu', 'item'],
 		contextmenuitembrand: ['ContextMenu', 'brand'],
-		contextmenuitemclickable: [DiscordClassModules.ContextMenu.subMenuContext ? 'ContextMenu' : 'NotFound', DiscordClassModules.ContextMenu.subMenuContext ? 'clickable' : '_'],
+		contextmenuitemclickable: ['ContextMenu', 'clickable'],
 		contextmenuitemdanger: ['ContextMenu', 'danger'],
 		contextmenuitemdisabled: ['ContextMenu', 'disabled'],
 		contextmenuitemgroup: ['ContextMenu', 'itemGroup'],
@@ -4567,7 +4566,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		contextmenuitemselected: ['ContextMenu', 'selected'],
 		contextmenuitemslider: ['ContextMenu', 'itemSlider'],
 		contextmenuitemsubmenu: ['ContextMenu', 'itemSubMenu'],
-		contextmenuitemsubmenucaret: [DiscordClassModules.ContextMenu.subMenuContext ? 'ContextMenu' : 'NotFound', DiscordClassModules.ContextMenu.subMenuContext ? 'caret' : '_'],
+		contextmenuitemsubmenucaret: ['ContextMenu', 'caret'],
 		contextmenulabel: ['ContextMenu', 'label'],
 		contextmenuscroller: ['ContextMenu', 'scroller'],
 		contextmenuslider: ['ContextMenu', 'slider'],
@@ -4734,7 +4733,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		guildbadgeiconbadge2: ['GuildsItems', 'iconBadge'],
 		guildbadgenumberbadge: ['Badge', 'numberBadge'],
 		guildbadgetextbadge: ['Badge', 'textBadge'],
-		guildbadgewrapper: BDFDB.DiscordClassModules.Guild.badgeWrapper ? ['Guild', 'badgeWrapper'] : ['NotFound', 'guildBadgeWrapper'], // REMOVE
 		guildbuttoncontainer: ['GuildsItems', 'circleButtonMask'],
 		guildbuttoninner: ['GuildsItems', 'circleIconButton'],
 		guildbuttonicon: ['GuildsItems', 'circleIcon'],
@@ -5524,17 +5522,16 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				classname = classname || DiscordClassModules.BDFDB.BDFDBundefined;
 			}
 			return classname;
-		}
-	};
+		}	
+	}
 	
-	var LibraryComponents = {};
 	LibraryComponents.Button = BDFDB.WebModules.findByProperties('Colors', 'Hovers', 'Looks');
 	LibraryComponents.ContextMenu = BDFDB.WebModules.findByName('NativeContextMenu');
 	LibraryComponents.ContextMenuItem = BDFDB.WebModules.findByString('{className:i.default.label}', '{className:i.default.hint}');
 	LibraryComponents.ContextMenuItemGroup = BDFDB.WebModules.findByString('{className:i.default.itemGroup}');
 	LibraryComponents.ContextMenuSliderItem = BDFDB.WebModules.findByName('SliderMenuItem');
 	LibraryComponents.ContextMenuSubItem = BDFDB.WebModules.findByName('FluxContainer(SubMenuItem)');
-	LibraryComponents.ContextMenuToggleItem = LibraryModules.React && LibraryModules.React.Component ? (class OtherItem extends LibraryModules.React.Component {
+	LibraryComponents.ContextMenuToggleItem = LibraryModules.React && LibraryModules.React.Component ? (class ContextMenuToggleItem extends LibraryModules.React.Component {
         handleToggle() {
             this.props.active = !this.props.active;
             if (this.props.action) this.props.action(this.props.active);
