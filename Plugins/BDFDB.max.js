@@ -5668,6 +5668,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	LibraryComponents.FormComponents = BDFDB.WebModules.findByProperties('FormSection', 'FormText');
 	LibraryComponents.ModalComponents = BDFDB.WebModules.findByProperties('ModalContent', 'ModalFooter');
 	LibraryComponents.SvgIcon = BDFDB.WebModules.findByProperties('Gradients', 'Names');
+	LibraryComponents.Switch = BDFDB.WebModules.findByName('Switch');
 	LibraryComponents.TextElement = BDFDB.WebModules.findByProperties('Sizes', 'Weights');
 	LibraryComponents.TextInput = BDFDB.WebModules.findByName('TextInput');
 	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
