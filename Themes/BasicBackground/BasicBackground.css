@@ -29,7 +29,7 @@
 	--vbackgroundsize:				var(--backgroundsize,				var(--dbackgroundsize));
 	--vbackgroundblur:				var(--backgroundblur,				var(--dblur));
 	
-	--vpopout:						var(--popout,						var(--dpopout));
+	--vpopout:						var(--popout,						var(--dbackground));
 	--vpopoutsize:					var(--popoutsize,					var(--dbackgroundsize));
 	--vpopoutblur:					var(--popoutblur,					var(--dblur));
 	
