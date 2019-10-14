@@ -107,6 +107,7 @@
 		4.	PINS/MENTIONS
 		5.	SEARCHPOPOUT
 		6.	COLORPICKER
+		7.	ADDROLE
 	16.	GENERAL
 		1.	TEXT
 		2.	BUTTONS
@@ -3945,7 +3946,6 @@ body:before {
 	justify-content: center;
 }
 
-
 /* ----		15.6.	COLORPICKER						---- */
 
 #app-mount .colorPickerCustom-2CWBn2 {						/* popout				wrapper								*/
@@ -4000,6 +4000,68 @@ body:before {
 	border-top-color: rgb(var(--fontwhite1));
 }
 
+/* ----		15.7.	ADDROLE							---- */
+
+#app-mount .container-VSDcQc {								/* popout				wrapper								*/
+	background-color: transparent;
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
+	border: none;
+	border-radius: 3px;
+	overflow: hidden;
+}
+.container-VSDcQc:after,
+.container-VSDcQc:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.container-VSDcQc:after {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.1));
+}
+.container-VSDcQc:before {
+	background: var(--vpopout) center/var(--vpopoutsize);
+	filter: blur(var(--vpopoutblur));
+	background-attachment: fixed;
+}
+#app-mount .autocompleteHeaderBackground-30T70q {			/* popout				header								*/
+	background: rgba(var(--vtransparencycolor), 0.3);
+	border-radius: 5px 5px 0 0;
+}
+#app-mount .container-VSDcQc .headerText-3i6A8K {			/* popout				headertext							*/
+	color: rgb(var(--fontwhite2));
+}
+#app-mount .container-VSDcQc .input-1ppKdn {				/* popout				headerinput							*/
+	color: rgb(var(--fontwhite1));
+}
+#app-mount .container-VSDcQc .input-1ppKdn::placeholder {
+	color: rgb(var(--fontwhite4));
+}
+#app-mount .autocompleteArrow-Zxoy9H {						/* popout				arrow								*/
+	display: none;
+}
+#app-mount .autocompleteShadow-iiGWFU {						/* popout				shadow								*/
+	box-shadow: 0 1px 5px 0 rgba(var(--vtransparencycolor), 0.3);
+}
+#app-mount .container-VSDcQc .sectionTag-pXyto9 {			/* popout				body								*/
+	background: transparent;
+	border-radius: 0 0 5px 5px;
+	color: rgb(var(--fontwhite3));
+}
+#app-mount .row-rrHHJU,										/* popout				row									*/
+#app-mount .row-rrHHJU span {								/* popout				rowspan								*/
+	color: rgb(var(--fontwhite2));
+}
+#app-mount .row-rrHHJU.selected-1pIgLL {
+	background: rgba(var(--vtransparencycolor), 0.2);
+	border-radius: 0 5px 5px 0;
+}
 
 
 /* ~~~~		16.		GENERAL							~~~~ */
