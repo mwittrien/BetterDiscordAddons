@@ -5553,22 +5553,35 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	LibraryComponents.Button = BDFDB.WebModules.findByProperties('Colors', 'Hovers', 'Looks');
 	LibraryComponents.ButtonItem = class ButtonItem extends BDFDB.React.Component {
 		render() {
+			let buttonprops = Object.assign({}, this.props);
+			delete buttonprops.className;
+			delete buttonprops.label;
+			delete buttonprops.hideBorder;
 			return BDFDB.React.createElement(LibraryComponents.Flex, {
-				className: this.props.className,
-				align: LibraryComponents.Flex.Align.START,
+				className: [this.props.className, this.props.disabled ? BDFDB.disCN.disabled : null].filter(n => n).join(' '),
+				direction: LibraryComponents.Flex.Direction.VERTICAL,
+				align: LibraryComponents.Flex.Align.STRETCH,
 				children: [
-					BDFDB.React.createElement(LibraryComponents.Flex.Child, {
-						wrap: true,
-						children: BDFDB.React.createElement("label", {
-							className: BDFDB.disCN.titledefault,
-							children: this.props.label
-						})
+					BDFDB.React.createElement(LibraryComponents.Flex, {
+						align: LibraryComponents.Flex.Align.CENTER,
+						children: [
+							BDFDB.React.createElement(LibraryComponents.Flex.Child, {
+								wrap: true,
+								children: BDFDB.React.createElement("label", {
+									className: BDFDB.disCN.titledefault,
+									children: this.props.label
+								})
+							}),
+							BDFDB.React.createElement(LibraryComponents.Flex.Child, {
+								grow: 0,
+								shrink: 0,
+								children: BDFDB.React.createElement(LibraryComponents.Button, buttonprops)
+							})
+						]
 					}),
-					BDFDB.React.createElement(LibraryComponents.Flex.Child, {
-						grow: 0,
-						shrink: 0,
-						children: BDFDB.React.createElement(LibraryComponents.Button, Object.assign({}, this.props, {className: null, label: null}))
-					})
+					!this.props.hideBorder ? BDFDB.React.createElement(LibraryComponents.FormComponents.FormDivider, {
+						className: BDFDB.disCN.modaldividerdefault
+					}) : null
 				]
 			})
 		}
