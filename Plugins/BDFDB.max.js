@@ -3379,10 +3379,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			}));
 		}
 		if (config.html) {
-			if (typeof config.html == 'string') contentchildren.push(BDFDB.React.elementToReact(BDFDB.htmlToElement(config.html)));
-			else if (Node.prototype.isPrototypeOf(config.html)) contentchildren.push(BDFDB.React.elementToReact(config.html));
-			else if (NodeList.prototype.isPrototypeOf(config.html)) for (let node of config.html) contentchildren.push(BDFDB.React.elementToReact(node));
-			else if (BDFDB.React.isValidElement(config.html)) contentchildren.push(config.html);
+			for (let ele of (Array.isArray(config.html) ? config.html : Array.from(config.html))) {
+				if (typeof ele == 'string') contentchildren.push(BDFDB.React.elementToReact(BDFDB.htmlToElement(ele)));
+				else if (Node.prototype.isPrototypeOf(ele)) contentchildren.push(BDFDB.React.elementToReact(ele));
+				else if (NodeList.prototype.isPrototypeOf(ele)) for (let node of ele) contentchildren.push(BDFDB.React.elementToReact(node));
+				else if (BDFDB.React.isValidElement(ele)) contentchildren.push(ele);
+			}
 		}
 		if (typeof config.onClose != 'function') config.onClose = _ => {};
 		if (typeof config.onOpen != 'function') config.onOpen = _ => {};
@@ -3414,7 +3416,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (contentchildren.length) {
 			id = BDFDB.generateID(modals);
 			modalobserver = new MutationObserver(changes => {changes.forEach(change => {change.addedNodes.forEach(node => {
-				if (node.tagName && (node = node.querySelector(`.BDFDB-modal-${id}`)) != null) {
+				if (node.tagName && (node = node.querySelector(`.BDFDB-modal-${id}.BDFDB-modal-open`)) != null) {
 					modal = node;
 					if (typeof config.onOpen == 'function') config.onOpen(modal);
 					BDFDB.initElements(modal);
@@ -5586,16 +5588,16 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 							background: BDFDB.isObject(this.props.color) ? BDFDB.colorGRADIENT(this.props.color) : BDFDB.colorCONVERT(this.props.color, 'RGBA')
 						})
 					}, null, [
-						this.props.isCustom || this.props.isSingle ? BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.SvgIcon, {
+						this.props.isCustom || this.props.isSingle ? BDFDB.React.createDiscordElement(LibraryComponents.SvgIcon, {
 							className: BDFDB.disCN.colorpickerswatchdropper,
 							foreground: BDFDB.disCN.colorpickerswatchdropperfg,
-							name: BDFDB.LibraryComponents.SvgIcon.Names.DROPPER,
+							name: LibraryComponents.SvgIcon.Names.DROPPER,
 							width: this.props.isCustom ? 14 : 10,
 							height: this.props.isCustom ? 14 : 10,
 							color: usewhite ? BDFDB.DiscordConstants.Colors.WHITE : BDFDB.DiscordConstants.Colors.BLACK
 						}) : null,
-						this.props.isSelected && !this.props.isSingle ? BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.SvgIcon, {
-							name: BDFDB.LibraryComponents.SvgIcon.Names.CHECKMARK,
+						this.props.isSelected && !this.props.isSingle ? BDFDB.React.createDiscordElement(LibraryComponents.SvgIcon, {
+							name: LibraryComponents.SvgIcon.Names.CHECKMARK,
 							width: this.props.isCustom ? 32 : 16,
 							height: this.props.isCustom ? 24 : 16,
 							color: usewhite ? BDFDB.DiscordConstants.Colors.WHITE : BDFDB.DiscordConstants.Colors.BLACK
@@ -5605,9 +5607,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			}
 		}
 		renderRow(colors) {
-			return BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.Flex, {
+			return BDFDB.React.createDiscordElement(LibraryComponents.Flex, {
 				className: BDFDB.disCN.colorpickerrow,
-				wrap: BDFDB.LibraryComponents.Flex.Wrap.WRAP
+				wrap: LibraryComponents.Flex.Wrap.WRAP
 			}, null, colors.map(color => {
 				return BDFDB.React.createDiscordElement(this.ColorSwatch, {
 					color: color,
@@ -5618,10 +5620,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			}));
 		}
 		render() {
-			return BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.Flex, {
+			return BDFDB.React.createDiscordElement(LibraryComponents.Flex, {
 				className: [BDFDB.disCN.colorpickerswatches, this.state.disabled ? BDFDB.disCN.colorpickerswatchesdisabled : null].filter(n => n).join(' '),
 			}, null, [
-				BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.Flex.Child, {
+				BDFDB.React.createDiscordElement(LibraryComponents.Flex.Child, {
 					shrink: 0,
 					grow: 0,
 					className: BDFDB.disCN.marginreset,
@@ -5638,8 +5640,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 						}
 					})
 				]),
-				this.state.colors.length ? BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.Flex, {
-					direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+				this.state.colors.length ? BDFDB.React.createDiscordElement(LibraryComponents.Flex, {
+					direction: LibraryComponents.Flex.Direction.VERTICAL,
 					className: BDFDB.disCN.flexmarginreset,
 					grow: 1
 				}, null, [
