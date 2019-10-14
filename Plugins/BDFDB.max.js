@@ -3376,8 +3376,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 		if (Array.isArray(config.buttons)) for (let button of config.buttons) {
 			let contents = typeof button.contents == 'string'  ? button.contents : null;
-			let type = typeof button.type == 'string'  ? button.type : null;
-			if (contents || type) {
+			if (contents) {
 				let color = typeof button.color == 'string' && LibraryComponents.Button.Colors[button.color.toUpperCase()];
 				let look = typeof button.look == 'string' && LibraryComponents.Button.Looks[button.look.toUpperCase()];
 				let click = typeof button.click == 'function' ? button.click : _ => {};
@@ -3386,7 +3385,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				
 				footerchildren.push(BDFDB.React.createElement(LibraryComponents.Button, {
 					type: 'button',
-					className: type || "",
 					look: look || (color ? LibraryComponents.Button.Looks.FILLED : LibraryComponents.Button.Looks.LINK),
 					color: color ? color : LibraryComponents.Button.Colors.PRIMARY,
 					onClick: _ => {
@@ -3396,9 +3394,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 							closeModal();
 						}
 					},
-					children: [
-						contents || 'placeholder'
-					]
+					children: contents
 				}));
 			}
 		}
@@ -3436,16 +3432,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 										children: [
 											BDFDB.React.createElement(LibraryComponents.FormComponents.FormTitle, {
 												tag: LibraryComponents.FormComponents.FormTitle.Tags.H4,
-												children: [
-													typeof config.header == 'string' ? config.header : ""
-												]
+												children: typeof config.header == 'string' ? config.header : ""
 											}),
 											BDFDB.React.createElement(LibraryComponents.TextElement, {
 												size: LibraryComponents.TextElement.Sizes.SMALL,
 												color: LibraryComponents.TextElement.Colors.PRIMARY,
-												children: [
-													typeof config.subheader == 'string' ? config.subheader : (name || "")
-												]
+												children: typeof config.subheader == 'string' ? config.subheader : (name || "")
 											})
 										]
 									}),
@@ -3479,8 +3471,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (!BDFDB.isObject(plugin) || typeof text != 'string') return;
 		callback = typeof callback == 'function' ? callback : _ => {};
 		BDFDB.openModal(plugin, {text, header:'Are you sure?', selector:'BDFDB-confirmmodal', buttons:[
-			{type:"btn-ok", close:true, color:"RED", click:callback},
-			{type:"btn-cancel", close:true}
+			{contents: BDFDB.LanguageStrings.OKAY, close:true, color:"RED", click:callback},
+			{contents: BDFDB.LanguageStrings.CANCEL, close:true}
 		]});
 	};
 
@@ -5559,6 +5551,27 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	
 	var LibraryComponents = {};
 	LibraryComponents.Button = BDFDB.WebModules.findByProperties('Colors', 'Hovers', 'Looks');
+	LibraryComponents.ButtonItem = class ButtonItem extends BDFDB.React.Component {
+		render() {
+			return BDFDB.React.createElement(LibraryComponents.Flex, {
+				align: LibraryComponents.Flex.Align.START,
+				children: [
+					BDFDB.React.createElement(LibraryComponents.Flex.Child, {
+						wrap: true,
+						children: BDFDB.React.createElement("label", {
+							className: BDFDB.disCN.titledefault,
+							children: this.props.label
+						})
+					}),
+					BDFDB.React.createElement(LibraryComponents.Flex.Child, {
+						grow: 0,
+						shrink: 0,
+						children: BDFDB.React.createElement(LibraryComponents.Button, Object.assign({}, this.props))
+					})
+				]
+			})
+		}
+	};
 	LibraryComponents.ColorSwatches = class ColorSwatches extends BDFDB.React.Component {
 		constructor(props) {
 			super(props);
