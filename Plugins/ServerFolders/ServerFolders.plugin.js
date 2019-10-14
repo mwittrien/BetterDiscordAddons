@@ -89,8 +89,7 @@ class ServerFolders {
 				width: 48px !important;
 				height: 48px !important;
 			}
-			${BDFDB.dotCN.guildouter}.serverfolders-dragpreview ${BDFDB.dotCN.guildpillwrapper},
-			${BDFDB.dotCN.guildouter}.serverfolders-dragpreview ${BDFDB.dotCN.guildbadgewrapper} {
+			${BDFDB.dotCN.guildouter}.serverfolders-dragpreview ${BDFDB.dotCN.guildpillwrapper} {
 				display: none !important;
 			}
 			${BDFDB.dotCN.guildouter}.serverfolders-dragpreview ${BDFDB.dotCN.guildiconacronym} {
@@ -140,7 +139,6 @@ class ServerFolders {
 							<div class="${BDFDB.disCN.guildplaceholder}"></div>
 						</foreignObject>
 					</svg>
-					<div class="${BDFDB.disCN.guildbadgewrapper}"></div>
 				</div>
 			</div>`;
 
@@ -247,12 +245,12 @@ class ServerFolders {
 				for (let folderid in foldersdata) {
 					let newid = this.generateID("folder");
 					let olddata = foldersdata[folderid];
-					let color1 = BDFDB.colorCONVERT(olddata.color1, "HEX");
+					let color1 = BDFDB.colorCONVERT(olddata.color1, "INT");
 					guildFolders.push({
 						guildIds: olddata.servers,
 						folderId: newid,
 						folderName: olddata.folderName,
-						folderColor: color1 ? parseInt(color1.slice(1), 16) : 7506394
+						folderColor: color1 != null && color1 != undefined ? color1 : 7506394
 					});
 					guildsInFolders = guildsInFolders.concat(olddata.servers);
 					newfoldersdata[newid] = Object.assign({}, olddata);
@@ -773,7 +771,7 @@ class ServerFolders {
 			color3: 			null,
 			color4: 			null
 		};
-		if (!config.color1) config.color1 = folder.folderColor ? BDFDB.colorCONVERT("#" + folder.folderColor.toString(16), "RGBCOMP") : ["0","0","0"];
+		if (!config.color1) config.color1 = BDFDB.colorCONVERT(folder.folderColor, "RGBCOMP") || ["0","0","0"];
 		return config;
 	}
 
