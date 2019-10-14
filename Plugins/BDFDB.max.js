@@ -3638,6 +3638,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		document.addEventListener('mousedown', mousedown);
 	};
 
+	// REMOVE ONCE REWRITTEN
 	var setSwatch = (swatch, color, selected) => {
 		if (!swatch) return;
 		else if (selected) {
@@ -3669,6 +3670,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 	};
 
+	// REMOVE ONCE REWRITTEN
 	BDFDB.setColorSwatches = function (container, currentcolor) {
 		if (!Node.prototype.isPrototypeOf(container)) return;
 
@@ -3705,11 +3707,17 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		});
 	};
 
-	BDFDB.getSwatchColor = function (container, nr) {
+	BDFDB.getSwatchColor = function (container, number) {
 		if (!Node.prototype.isPrototypeOf(container)) return;
 
-		var swatch = container.querySelector(`${BDFDB.dotCN.colorpickerswatches}[swatchnr="${nr}"] ${BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchselected}`);
-		return swatch ? swatch.gradient || BDFDB.colorCONVERT(swatch.style.getPropertyValue('background-color'), 'RGBCOMP') : null;
+		var swatches = container.querySelector(`${BDFDB.dotCN.colorpickerswatches}[swatchnr="${number}"]`);
+		if (!swatches) return null;
+		var ins = BDFDB.getReactInstance(swatches);
+		if (ins) return BDFDB.getReactValue(ins, 'return.return.stateNode.state.selectedColor');
+		else { // REMOVE ONCE REWRITTEN
+			var swatch = swatches.querySelector(`${BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchselected}`);
+			return swatch ? swatch.gradient || BDFDB.colorCONVERT(swatch.style.getPropertyValue('background-color'), 'RGBCOMP') : null;
+		}
 	};
 
 	BDFDB.openColorPicker = function (container, target, color, options = {gradient: true, comp: false, alpha: true, callback: _ => {}}) {
@@ -5622,6 +5630,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		render() {
 			return BDFDB.React.createDiscordElement(LibraryComponents.Flex, {
 				className: [BDFDB.disCN.colorpickerswatches, this.state.disabled ? BDFDB.disCN.colorpickerswatchesdisabled : null].filter(n => n).join(' '),
+				swatchnr: this.props.number != null ? this.props.number : 0,
 			}, null, [
 				BDFDB.React.createDiscordElement(LibraryComponents.Flex.Child, {
 					shrink: 0,

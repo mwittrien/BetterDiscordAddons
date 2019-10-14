@@ -30,63 +30,6 @@ class EditChannels {
 	}
 
 	initConstructor () {
-		this.channelSettingsModalMarkup =
-			`<span class="${this.name}-modal BDFDB-modal">
-				<div class="${BDFDB.disCN.backdrop}"></div>
-				<div class="${BDFDB.disCN.modal}">
-					<div class="${BDFDB.disCN.modalinner}">
-						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
-							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
-								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
-									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">REPLACE_modal_header_text</h4>
-									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
-								</div>
-								<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
-									<div class="${BDFDB.disCN.buttoncontents}">
-										<svg name="Close" width="18" height="18" viewBox="0 0 12 12" style="flex: 0 1 auto;">
-											<g fill="none" fill-rule="evenodd">
-												<path d="M0 0h12v12H0"></path>
-												<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
-											</g>
-										</svg>
-									</div>
-								</button>
-							</div>
-							<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.scrollerthemeghosthairline}">
-								<div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner}">
-									<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 1 1 auto;">
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_channelname_text</h3>
-										</div>
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-											<div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.titlesize16}" id="input-channelname"></div>
-										</div>
-										<div class="${BDFDB.disCNS.modaldivider + BDFDB.disCNS.modaldividerdefault + BDFDB.disCN.margintop20}"></div>
-									</div>
-									<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 1 1 auto;">
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
-											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker1_text</h3>
-										</div>
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8} swatches" style="flex: 1 1 auto;"></div>
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">REPLACE_modal_inheritcolor_text</h3>
-											<div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;">
-												<input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}" id="input-inheritcolor">
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
-								<button type="button" class="btn-save ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
-									<div class="${BDFDB.disCN.buttoncontents}"></div>
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</span>`;
-
 		this.css = `
 			${BDFDB.dotCN.guildsettingsinvitechannelname}[changed-by-editchannels] {
 				opacity: 1;
@@ -206,13 +149,6 @@ class EditChannels {
 
 	// begin of own functions
 
-	changeLanguageStrings () {
-		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
-		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_channelname_text", this.labels.modal_channelname_text);
-		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_colorpicker1_text", this.labels.modal_colorpicker1_text);
-		this.channelSettingsModalMarkup = 	this.channelSettingsModalMarkup.replace("REPLACE_modal_inheritcolor_text", this.labels.modal_inheritcolor_text);
-	}
-
 	onChannelContextMenu (instance, menu, returnvalue) {
 		if (instance.props && instance.props.channel && !BDFDB.getParentEle(".container-hidden", instance.props.target) && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
 			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
@@ -255,39 +191,66 @@ class EditChannels {
 	}
 
 	showChannelSettings (info) {
-		var {name,color,inheritColor} = BDFDB.loadData(info.id, this, "channels") || {}
+		var {name,color,inheritColor} = BDFDB.loadData(info.id, this, "channels") || {};
+		
+		BDFDB.openModal(this, {
+			size: "MEDIUM",
+			header: this.labels.modal_header_text,
+			subheader: info.name,
+			html: [
+				BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+					title: this.labels.modal_channelname_text,
+					className: BDFDB.disCN.marginbottom20 + " input-channelname"
+				}, null, [
+					BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.TextInput, {
+						value: name,
+						placeholder: info.name,
+						autoFocus: true
+					}),
+					BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+						className: BDFDB.disCN.modaldividerdefault
+					}),
+				]),
+				BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+					title: this.labels.modal_colorpicker1_text,
+					className: BDFDB.disCN.marginbottom20
+				}, null, BDFDB.React.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+					color: color,
+					number: 1
+				})),
+				BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.SwitchItem, {
+					className: BDFDB.disCN.marginbottom20 + " input-inheritcolor",
+					value: info.type == 4 && inheritColor,
+					disabled: info.type != 4,
+					hideBorder: true
+				}, null, this.labels.modal_inheritcolor_text)
+			],
+			buttons: [{
+				type: "btn-save",
+				color: "BRAND",
+				close: true,
+				click: modal => {
+					let channelnameinput = modal.querySelector(".input-channelname " + BDFDB.dotCN.input);
+					let inheritcolorinput = modal.querySelector(".input-inheritcolor " + BDFDB.dotCN.switchinner);
+					
+					name = channelnameinput.value.trim();
+					name = name ? name : null;
 
-		let channelSettingsModal = BDFDB.htmlToElement(this.channelSettingsModalMarkup);
-		let channelnameinput = channelSettingsModal.querySelector("#input-channelname");
-		let inheritcolorinput = channelSettingsModal.querySelector("#input-inheritcolor");
+					color = BDFDB.getSwatchColor(modal, 1);
+					if (color != null && !BDFDB.isObject(color)) {
+						if (color[0] < 30 && color[1] < 30 && color[2] < 30) color = BDFDB.colorCHANGE(color, 30);
+						else if (color[0] > 225 && color[1] > 225 && color[2] > 225) color = BDFDB.colorCHANGE(color, -30);
+					}
 
-		channelSettingsModal.querySelector(BDFDB.dotCN.modalguildname).innerText = info.name;
-		channelnameinput.value = name || "";
-		channelnameinput.setAttribute("placeholder", info.name);
-		if (info.type == 4) inheritcolorinput.checked = inheritColor;
-		else BDFDB.removeEles(inheritcolorinput.parentElement.parentElement);
-		BDFDB.setColorSwatches(channelSettingsModal, color);
+					inheritColor = inheritcolorinput.checked;
 
-		BDFDB.appendModal(channelSettingsModal);
-
-		BDFDB.addChildEventListener(channelSettingsModal, "click", ".btn-save", e => {
-			name = channelnameinput.value.trim();
-			name = name ? name : null;
-
-			color = BDFDB.getSwatchColor(channelSettingsModal, 1);
-			if (color) {
-				if (color[0] < 30 && color[1] < 30 && color[2] < 30) color = BDFDB.colorCHANGE(color, 30);
-				else if (color[0] > 225 && color[1] > 225 && color[2] > 225) color = BDFDB.colorCHANGE(color, -30);
-			}
-
-			inheritColor = inheritcolorinput.checked;
-
-			if (name == null && color == null) BDFDB.removeData(info.id, this, "channels");
-			else BDFDB.saveData(info.id, {name,color,inheritColor}, this, "channels");
-			this.changeAppTitle();
-			BDFDB.WebModules.forceAllUpdates(this);
+					if (name == null && color == null) BDFDB.removeData(info.id, this, "channels");
+					else BDFDB.saveData(info.id, {name,color,inheritColor}, this, "channels");
+					this.changeAppTitle();
+					BDFDB.WebModules.forceAllUpdates(this);
+				}
+			}]
 		});
-		channelnameinput.focus();
 	}
 
 	processChannelTextArea (instance, wrapper, returnvalue) {
