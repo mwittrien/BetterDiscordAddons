@@ -44,22 +44,20 @@ class PinDMs {
 									</a>
 								</foreignObject>
 							</svg>
-							<div class="${BDFDB.disCN.guildbadgewrapper}">
-								<div class="${BDFDB.disCN.guildupperbadge} pin-badge" style="opacity: 1; transform: translate(0px, 0px);">
-									<div class="${BDFDB.disCNS.guildbadgeiconbadge + BDFDB.disCN.guildbadgeiconbadge2}" style="width: 16px; padding-right: 1px;">
-										<svg class="${BDFDB.disCN.guildbadgeicon}" name="Nova_Pin" width="24" height="24" viewBox="0 0 520 520">
-											<g fill="white">
-												<path d="M291.31, 402.761L109.241, 220.693C79.073, 190.525, 30.166, 190.526, 0, 220.692l291.31, 291.31C321.474, 481.835, 321.476, 432.927, 291.31, 402.761z"></path>
-												<polygon points="273.104, 111.449 154.758, 211.589 300.412, 357.242 400.55, 238.898"></polygon>
-												<path d="M500.688, 175.174L336.827, 11.313c-15.085-15.085-39.539-15.083-54.621, 0c-15.082, 15.082-15.082, 39.538, 0, 54.62 l163.861, 163.861c15.083, 15.085, 39.539, 15.085, 54.621, 0.001C515.773, 214.712, 515.773, 190.257, 500.688, 175.174z"></path>
-												<polygon points="91.032, 366.346 0, 512 145.655, 420.967"></polygon>
-											</g>
-										</svg>
-									</div>
+							<div class="${BDFDB.disCN.guildupperbadge} pin-badge" style="opacity: 1; transform: translate(0px, 0px);">
+								<div class="${BDFDB.disCNS.guildbadgeiconbadge + BDFDB.disCN.guildbadgeiconbadge2}" style="width: 16px; padding-right: 1px;">
+									<svg class="${BDFDB.disCN.guildbadgeicon}" name="Nova_Pin" width="24" height="24" viewBox="0 0 520 520">
+										<g fill="white">
+											<path d="M291.31, 402.761L109.241, 220.693C79.073, 190.525, 30.166, 190.526, 0, 220.692l291.31, 291.31C321.474, 481.835, 321.476, 432.927, 291.31, 402.761z"></path>
+											<polygon points="273.104, 111.449 154.758, 211.589 300.412, 357.242 400.55, 238.898"></polygon>
+											<path d="M500.688, 175.174L336.827, 11.313c-15.085-15.085-39.539-15.083-54.621, 0c-15.082, 15.082-15.082, 39.538, 0, 54.62 l163.861, 163.861c15.083, 15.085, 39.539, 15.085, 54.621, 0.001C515.773, 214.712, 515.773, 190.257, 500.688, 175.174z"></path>
+											<polygon points="91.032, 366.346 0, 512 145.655, 420.967"></polygon>
+										</g>
+									</svg>
 								</div>
-								<div class="${BDFDB.disCN.guildlowerbadge}" style="opacity: 1; transform: translate(0px, 0px); display: none;">
-									<div class="${BDFDB.disCN.guildbadgenumberbadge}" style="background-color: rgb(240, 71, 71); width: 16px; padding-right: 1px;">0</div>
-								</div>
+							</div>
+							<div class="${BDFDB.disCN.guildlowerbadge}" style="opacity: 1; transform: translate(0px, 0px); display: none;">
+								<div class="${BDFDB.disCN.guildbadgenumberbadge}" style="background-color: rgb(240, 71, 71); width: 16px; padding-right: 1px;">0</div>
 							</div>
 						</div>
 					</div>
@@ -82,7 +80,6 @@ class PinDMs {
 									<div class="${BDFDB.disCN.guildplaceholder}"></div>
 								</foreignObject>
 							</svg>
-							<div class="${BDFDB.disCN.guildbadgewrapper}"></div>
 						</div>
 					</div>
 				</div>
