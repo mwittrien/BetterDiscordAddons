@@ -5669,6 +5669,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	LibraryComponents.ModalComponents = BDFDB.WebModules.findByProperties('ModalContent', 'ModalFooter');
 	LibraryComponents.SvgIcon = BDFDB.WebModules.findByProperties('Gradients', 'Names');
 	LibraryComponents.TextElement = BDFDB.WebModules.findByProperties('Sizes', 'Weights');
+	LibraryComponents.TextInput = BDFDB.WebModules.findByName('TextInput');
 	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
 
 	BDFDB.getLibraryStrings = function () {
@@ -6873,6 +6874,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		for (let component in LibraryComponents) if (!LibraryComponents[component]) console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', component + ' not initialized in LibraryComponents');
 
 		BDFDB.WebModules.DevFuncs = {};
+		BDFDB.WebModules.DevFuncs.findByIndex = function (index) {
+			var req = getWebModuleReq();
+			return req.c[index];
+		};
 		BDFDB.WebModules.DevFuncs.findPropAny = function (strings) {
 			strings = Array.isArray(strings) ? strings : Array.from(arguments);
 			var req = getWebModuleReq(); window.t = {"$filter":(prop => strings.every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
