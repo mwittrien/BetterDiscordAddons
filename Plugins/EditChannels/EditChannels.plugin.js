@@ -197,33 +197,40 @@ class EditChannels {
 			size: "MEDIUM",
 			header: this.labels.modal_header_text,
 			subheader: info.name,
-			html: [
-				BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+			children: [
+				BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 					title: this.labels.modal_channelname_text,
-					className: BDFDB.disCN.marginbottom20 + " input-channelname"
-				}, null, [
-					BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.TextInput, {
-						value: name,
-						placeholder: info.name,
-						autoFocus: true
-					}),
-					BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-						className: BDFDB.disCN.modaldividerdefault
-					}),
-				]),
-				BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+					className: BDFDB.disCN.marginbottom20 + " input-channelname",
+					children: [
+						BDFDB.React.createElement(BDFDB.LibraryComponents.TextInput, {
+							value: name,
+							placeholder: info.name,
+							autoFocus: true
+						}),
+						BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+							className: BDFDB.disCN.modaldividerdefault
+						})
+					]
+				}),
+				BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 					title: this.labels.modal_colorpicker1_text,
-					className: BDFDB.disCN.marginbottom20
-				}, null, BDFDB.React.createElement(BDFDB.LibraryComponents.ColorSwatches, {
-					color: color,
-					number: 1
-				})),
-				BDFDB.React.createDiscordElement(BDFDB.LibraryComponents.SwitchItem, {
+					className: BDFDB.disCN.marginbottom20,
+					children: [
+						BDFDB.React.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+							color: color,
+							number: 1
+						})
+					]
+				}),
+				BDFDB.React.createElement(BDFDB.LibraryComponents.SwitchItem, {
 					className: BDFDB.disCN.marginbottom20 + " input-inheritcolor",
 					value: info.type == 4 && inheritColor,
 					disabled: info.type != 4,
-					hideBorder: true
-				}, null, this.labels.modal_inheritcolor_text)
+					hideBorder: true,
+					children: [
+						this.labels.modal_inheritcolor_text
+					]
+				})
 			],
 			buttons: [{
 				type: "btn-save",
