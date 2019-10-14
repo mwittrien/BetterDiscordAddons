@@ -5554,6 +5554,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	LibraryComponents.ButtonItem = class ButtonItem extends BDFDB.React.Component {
 		render() {
 			return BDFDB.React.createElement(LibraryComponents.Flex, {
+				className: this.props.className,
 				align: LibraryComponents.Flex.Align.START,
 				children: [
 					BDFDB.React.createElement(LibraryComponents.Flex.Child, {
@@ -5566,7 +5567,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					BDFDB.React.createElement(LibraryComponents.Flex.Child, {
 						grow: 0,
 						shrink: 0,
-						children: BDFDB.React.createElement(LibraryComponents.Button, Object.assign({}, this.props))
+						children: BDFDB.React.createElement(LibraryComponents.Button, Object.assign({}, this.props, {className: null, label: null}))
 					})
 				]
 			})
