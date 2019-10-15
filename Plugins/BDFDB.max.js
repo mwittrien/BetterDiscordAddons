@@ -1348,14 +1348,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		};
 		BDFDB.React.elementToReact = function (node) {
 			if (BDFDB.React.isValidElement(node)) return node;
-			else if (!Node.prototype.isPrototypeOf(node)) return BDFDB.React.createElement('DIV', {});
+			else if (!Node.prototype.isPrototypeOf(node)) return LibraryModules.React.createElement('DIV', {});
 			else if (node.nodeType == Node.TEXT_NODE) return node.nodeValue;
 			let attributes = {};
 			for (let attr of node.attributes) attributes[attr.name] = attr.value;
 			if (node.attributes.style) attributes.style = BDFDB.filterObject(node.style, n => node.style[n] && isNaN(parseInt(n)), true);
 			attributes.children = [];
 			for (let child of node.childNodes) attributes.children.push(BDFDB.React.elementToReact(child));
-			return BDFDB.React.createElement(node.tagName, attributes);
+			return LibraryModules.React.createElement(node.tagName, attributes);
 		};
 	};
 
@@ -2074,7 +2074,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getServerID(eleOrInfoOrId) : typeof eleOrInfoOrId == 'object' ? eleOrInfoOrId.id : eleOrInfoOrId;
 		let guild = LibraryModules.GuildStore.getGuild(id);
 		if (guild) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-			return BDFDB.React.createElement(BDFDB.WebModules.findByName("GuildContextMenu"), Object.assign({}, e, {
+			return LibraryModules.React.createElement(BDFDB.WebModules.findByName("GuildContextMenu"), Object.assign({}, e, {
 				type: BDFDB.DiscordConstants.ContextMenuTypes.GUILD_ICON_BAR,
 				guild: guild,
 				badge: LibraryModules.MentionUtils.getMentionCount(guild.id),
@@ -2161,7 +2161,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				break;
 			}
 			if (type) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-				return BDFDB.React.createElement(BDFDB.WebModules.findByName("ChannelContextMenu"), Object.assign({}, e, {
+				return LibraryModules.React.createElement(BDFDB.WebModules.findByName("ChannelContextMenu"), Object.assign({}, e, {
 					type,
 					channel,
 					guild: LibraryModules.GuildStore.getGuild(channel.guild_id),
@@ -3359,7 +3359,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			if (typeof modalobserver.disconnect == 'function') modalobserver.disconnect();
 		};
 		if (typeof config.text == 'string') {
-			contentchildren.push(BDFDB.React.createElement(LibraryComponents.TextElement, {
+			contentchildren.push(LibraryModules.React.createElement(LibraryComponents.TextElement, {
 				color: LibraryComponents.TextElement.Colors.PRIMARY,
 				children: [config.text]
 			}));
@@ -3383,7 +3383,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				
 				if (button.cancel) cancels.push(click);
 				
-				footerchildren.push(BDFDB.React.createElement(LibraryComponents.Button, {
+				footerchildren.push(LibraryModules.React.createElement(LibraryComponents.Button, {
 					type: 'button',
 					look: look || (color ? LibraryComponents.Button.Looks.FILLED : LibraryComponents.Button.Looks.LINK),
 					color: color ? color : LibraryComponents.Button.Colors.PRIMARY,
@@ -3416,31 +3416,31 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				let name = plugin.name || (typeof plugin.getName == "function" ? plugin.getName() : null);
 				name = typeof name == 'string' ? name : null;
 				let size = typeof config.size == 'string' && LibraryComponents.ModalComponents.ModalSize[config.size.toUpperCase()];
-				return BDFDB.React.createElement(function (e) {
-					return BDFDB.React.createElement(LibraryComponents.ModalComponents.ModalRoot, {
+				return LibraryModules.React.createElement(function (e) {
+					return LibraryModules.React.createElement(LibraryComponents.ModalComponents.ModalRoot, {
 						className: [`BDFDB-modal`, `BDFDB-modal-${id}`, name ? `${name}-modal` : null, props.transitionState == 2 ? `BDFDB-modal-open` : null, config.selector ? config.selector : null].filter(n => n).join(' '),
 						size: size || LibraryComponents.ModalComponents.ModalSize.SMALL,
 						transitionState: e.transitionState,
 						children: [
-							BDFDB.React.createElement(LibraryComponents.ModalComponents.ModalHeader, {
+							LibraryModules.React.createElement(LibraryComponents.ModalComponents.ModalHeader, {
 								separator: false,
 								children: [
-									BDFDB.React.createElement(LibraryComponents.Flex.Child, {
+									LibraryModules.React.createElement(LibraryComponents.Flex.Child, {
 										grow: 1,
 										shrink: 1,
 										children: [
-											BDFDB.React.createElement(LibraryComponents.FormComponents.FormTitle, {
+											LibraryModules.React.createElement(LibraryComponents.FormComponents.FormTitle, {
 												tag: LibraryComponents.FormComponents.FormTitle.Tags.H4,
 												children: typeof config.header == 'string' ? config.header : ""
 											}),
-											BDFDB.React.createElement(LibraryComponents.TextElement, {
+											LibraryModules.React.createElement(LibraryComponents.TextElement, {
 												size: LibraryComponents.TextElement.Sizes.SMALL,
 												color: LibraryComponents.TextElement.Colors.PRIMARY,
 												children: typeof config.subheader == 'string' ? config.subheader : (name || "")
 											})
 										]
 									}),
-									BDFDB.React.createElement(LibraryComponents.ModalComponents.ModalCloseButton, {
+									LibraryModules.React.createElement(LibraryComponents.ModalComponents.ModalCloseButton, {
 										onClick: _ => {
 											for (let cancel of cancels) cancel(modal);
 											closeModal();
@@ -3448,10 +3448,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 									})
 								]
 							}),
-							BDFDB.React.createElement(LibraryComponents.ModalComponents.ModalContent, {
+							LibraryModules.React.createElement(LibraryComponents.ModalComponents.ModalContent, {
 								children: contentchildren
 							}),
-							footerchildren.length ? BDFDB.React.createElement(LibraryComponents.ModalComponents.ModalFooter, {
+							footerchildren.length ? LibraryModules.React.createElement(LibraryComponents.ModalComponents.ModalFooter, {
 								children: footerchildren
 							}) : null
 						]
@@ -3556,7 +3556,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	
 	BDFDB.openContextMenu = function (plugin, e, children) {
 		LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-			return BDFDB.React.createElement(LibraryComponents.ContextMenu, Object.assign({}, e, {
+			return LibraryModules.React.createElement(LibraryComponents.ContextMenu, Object.assign({}, e, {
 				BDFDBcontextMenu: true,
 				type: BDFDB.DiscordConstants.ContextMenuTypes.NATIVE_TEXT,
 				value: "",
@@ -5555,7 +5555,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	NativeSubComponents.ContextMenuToggleItem = BDFDB.WebModules.findByName('ToggleMenuItem');
 	
 	LibraryComponents.Button = BDFDB.WebModules.findByProperties('Colors', 'Hovers', 'Looks');
-	LibraryComponents.ColorSwatches = reactInitialized ? class ColorSwatches extends BDFDB.React.Component {
+	LibraryComponents.ColorSwatches = reactInitialized ? class ColorSwatches extends LibraryModules.React.Component {
 		constructor(props) {
 			super(props);
 			
@@ -5568,10 +5568,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			this.state = props;
 			
 			var swatches = this;
-			this.ColorSwatch = class ColorSwatch extends BDFDB.React.Component {
+			this.ColorSwatch = class ColorSwatch extends LibraryModules.React.Component {
 				render() {
 					let usewhite = !BDFDB.colorISBRIGHT(this.props.color);
-					return BDFDB.React.createElement('button', {
+					return LibraryModules.React.createElement('button', {
 						type: 'button',
 						className: [BDFDB.disCN.colorpickerswatch, this.props.isDisabled ? BDFDB.disCN.colorpickerswatchdisabled : null, this.props.isSelected ? BDFDB.disCN.colorpickerswatchselected : null, this.props.isCustom ? BDFDB.disCN.colorpickerswatchcustom : null, this.props.isSingle ? BDFDB.disCN.colorpickerswatchsingle : null, this.props.color == null ? BDFDB.disCN.colorpickerswatchnocolor : null].filter(n => n).join(' '),
 						disabled: this.props.isDisabled,
@@ -5597,7 +5597,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 							background: BDFDB.isObject(this.props.color) ? BDFDB.colorGRADIENT(this.props.color) : BDFDB.colorCONVERT(this.props.color, 'RGBA')
 						}),
 						children: [
-							this.props.isCustom || this.props.isSingle ? BDFDB.React.createElement(LibraryComponents.SvgIcon, {
+							this.props.isCustom || this.props.isSingle ? LibraryModules.React.createElement(LibraryComponents.SvgIcon, {
 								className: BDFDB.disCN.colorpickerswatchdropper,
 								foreground: BDFDB.disCN.colorpickerswatchdropperfg,
 								name: LibraryComponents.SvgIcon.Names.DROPPER,
@@ -5605,7 +5605,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 								height: this.props.isCustom ? 14 : 10,
 								color: usewhite ? BDFDB.DiscordConstants.Colors.WHITE : BDFDB.DiscordConstants.Colors.BLACK
 							}) : null,
-							this.props.isSelected && !this.props.isSingle ? BDFDB.React.createElement(LibraryComponents.SvgIcon, {
+							this.props.isSelected && !this.props.isSingle ? LibraryModules.React.createElement(LibraryComponents.SvgIcon, {
 								name: LibraryComponents.SvgIcon.Names.CHECKMARK,
 								width: this.props.isCustom ? 32 : 16,
 								height: this.props.isCustom ? 24 : 16,
@@ -5617,11 +5617,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			}
 		}
 		renderRow(colors) {
-			return BDFDB.React.createElement(LibraryComponents.Flex, {
+			return LibraryModules.React.createElement(LibraryComponents.Flex, {
 				className: BDFDB.disCN.colorpickerrow,
 				wrap: LibraryComponents.Flex.Wrap.WRAP,
 				children: colors.map(color => {
-					return BDFDB.React.createElement(this.ColorSwatch, {
+					return LibraryModules.React.createElement(this.ColorSwatch, {
 						color: color,
 						isCustom: false,
 						isSelected: !this.state.customSelected && color === this.state.selectedColor,
@@ -5631,17 +5631,17 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			});
 		}
 		render() {
-			return BDFDB.React.createElement(LibraryComponents.Flex, {
+			return LibraryModules.React.createElement(LibraryComponents.Flex, {
 				className: [BDFDB.disCN.colorpickerswatches, this.state.disabled ? BDFDB.disCN.colorpickerswatchesdisabled : null].filter(n => n).join(' '),
 				swatchnr: this.props.number != null ? this.props.number : 0,
 				children: [
-					BDFDB.React.createElement(LibraryComponents.Flex.Child, {
+					LibraryModules.React.createElement(LibraryComponents.Flex.Child, {
 						className: BDFDB.disCN.marginreset,
 						shrink: 0,
 						grow: 0,
 						wrap: true,
 						children: [
-							BDFDB.React.createElement(this.ColorSwatch, {
+							LibraryModules.React.createElement(this.ColorSwatch, {
 								color: this.state.customColor,
 								isSingle: !this.state.colors.length,
 								isCustom: this.state.colors.length > 0,
@@ -5653,7 +5653,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 							})
 						]
 					}),
-					this.state.colors.length ? BDFDB.React.createElement(LibraryComponents.Flex, {
+					this.state.colors.length ? LibraryModules.React.createElement(LibraryComponents.Flex, {
 						direction: LibraryComponents.Flex.Direction.VERTICAL,
 						className: BDFDB.disCN.flexmarginreset,
 						grow: 1,
@@ -5683,51 +5683,56 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	LibraryComponents.FormComponents = BDFDB.WebModules.findByProperties('FormSection', 'FormText');
 	LibraryComponents.ModalComponents = BDFDB.WebModules.findByProperties('ModalContent', 'ModalFooter');
 	LibraryComponents.SvgIcon = BDFDB.WebModules.findByProperties('Gradients', 'Names');
-	LibraryComponents.SettingsItem = reactInitialized ? class SettingsItem extends BDFDB.React.Component {
+	LibraryComponents.SettingsItem = reactInitialized ? class SettingsItem extends LibraryModules.React.Component {
+        handleSwitchChange(e) {
+			this.props.value = !this.props.value;
+			if (this.props.onChange) this.props.onChange(e);
+			this.forceUpdate();
+        }
 		render() {
 			if (typeof this.props.type != 'string' || !['BUTTON', 'SWITCH', 'TEXTINPUT'].includes(this.props.type.toUpperCase())) return null;
 			this.props.type = this.props.type.charAt(0).toUpperCase() + this.props.type.slice(1).toLowerCase();
 			let childcomponent = LibraryComponents[this.props.type];
 			if (!childcomponent) return;
-			if (this.props.mini && childcomponent.Sizes) this.props.size = childcomponent.Sizes.MINI || childcomponent.Sizes.SMALL;
-			let childprops = Object.assign({}, this.props);
+			if (this.props.mini && childcomponent.Sizes) this.props.size = childcomponent.Sizes.MINI || childcomponent.Sizes.MIN;
+			let childprops = Object.assign({}, this.props, this.props.type == 'Switch' ? {onChange: this.handleSwitchChange.bind(this)} : {});
 			delete childprops.className;
 			delete childprops.label;
 			delete childprops.note;
 			delete childprops.hideBorder;
 			delete childprops.type;
 			delete childprops.mini;
-			return BDFDB.React.createElement(LibraryComponents.Flex, {
+			return LibraryModules.React.createElement(LibraryComponents.Flex, {
 				className: [this.props.className, this.props.disabled ? BDFDB.disCN.disabled : null].filter(n => n).join(' '),
 				direction: LibraryComponents.Flex.Direction.VERTICAL,
 				align: LibraryComponents.Flex.Align.STRETCH,
 				children: [
-					BDFDB.React.createElement(LibraryComponents.Flex, {
+					LibraryModules.React.createElement(LibraryComponents.Flex, {
 						align: LibraryComponents.Flex.Align.CENTER,
 						children: [
-							BDFDB.React.createElement(LibraryComponents.Flex.Child, {
+							LibraryModules.React.createElement(LibraryComponents.Flex.Child, {
 								wrap: true,
-								children: BDFDB.React.createElement('label', {
+								children: LibraryModules.React.createElement('label', {
 									className: this.props.mini ? BDFDB.disCN.titlemini : BDFDB.disCN.titledefault,
 									children: this.props.label
 								})
 							}),
-							BDFDB.React.createElement(LibraryComponents.Flex.Child, {
+							LibraryModules.React.createElement(LibraryComponents.Flex.Child, {
 								grow: 0,
 								shrink: 0,
-								children: BDFDB.React.createElement(childcomponent, childprops)
+								children: LibraryModules.React.createElement(childcomponent, childprops)
 							})
 						]
 					}),
-					typeof this.props.note == 'string' ? BDFDB.React.createElement(LibraryComponents.Flex.Child, {
+					typeof this.props.note == 'string' ? LibraryModules.React.createElement(LibraryComponents.Flex.Child, {
 						className: BDFDB.disCN.note,
-						children: BDFDB.React.createElement(LibraryComponents.FormComponents.FormText, {
+						children: LibraryModules.React.createElement(LibraryComponents.FormComponents.FormText, {
 							disabled: this.props.disabled,
 							type: LibraryComponents.FormComponents.FormText.Types.DESCRIPTION,
 							children: this.props.note
 						})
 					}) : null,
-					!this.props.hideBorder ? BDFDB.React.createElement(LibraryComponents.FormComponents.FormDivider, {
+					!this.props.hideBorder ? LibraryModules.React.createElement(LibraryComponents.FormComponents.FormDivider, {
 						className: this.props.mini ? BDFDB.disCN.dividermini : BDFDB.disCN.dividerdefault
 					}) : null
 				]
