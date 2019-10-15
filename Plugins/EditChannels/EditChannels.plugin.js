@@ -208,7 +208,7 @@ class EditChannels {
 							autoFocus: true
 						}),
 						BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-							className: BDFDB.disCN.modaldividerdefault
+							className: BDFDB.disCN.dividerdefault
 						})
 					]
 				}),

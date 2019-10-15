@@ -332,7 +332,7 @@ class EmojiStatistics {
 	updateAllEntries (entriescontainer, entries) {
 		BDFDB.removeEles(entriescontainer.childNodes);
 		for (let entry of entries) {
-			if (entriescontainer.childElementCount) entriescontainer.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.modaldivider}"></div>`));
+			if (entriescontainer.childElementCount) entriescontainer.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.divider}"></div>`));
 			entriescontainer.appendChild(entry.div);
 		}
 	}

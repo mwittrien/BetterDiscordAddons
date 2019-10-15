@@ -229,7 +229,7 @@ class ServerHider {
 
 		for (let info of BDFDB.readServerList()) {
 			if (!info.div.getAttribute("folder")) {
-				if (container.firstElementChild) container.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.modaldivider}"></div>`));
+				if (container.firstElementChild) container.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.divider}"></div>`));
 				let entry = BDFDB.htmlToElement(this.serverEntryMarkup);
 				container.appendChild(entry);
 				let name = entry.querySelector(".serverhiderName");

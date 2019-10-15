@@ -3407,7 +3407,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				if (node.tagName && (node = node.querySelector(`.BDFDB-modal-${id}.BDFDB-modal-open`)) != null) {
 					modal = node;
 					if (typeof config.onOpen == 'function') config.onOpen(modal);
-					BDFDB.initElements(modal);
 				}
 			})})});
 			modalobserver.observe(document.querySelector(BDFDB.dotCN.itemlayercontainer), {subtree:true, childList:true});
@@ -4610,6 +4609,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		directiontransition: ['IconDirection', 'transition'],
 		disabled: ['SettingsItems', 'disabled'],
 		discriminator: ['NameTag', 'discriminator'],
+		divider: ['ModalDivider', 'divider'],
+		dividerdefault: ['SettingsItems', 'dividerDefault'],
+		dividermini: ['SettingsItems', 'dividerMini'],
+		modaldivider: ['ModalDivider', 'divider'], // REMOVE
+		modaldividerdefault: ['SettingsItems', 'dividerDefault'], // REMOVE
+		modaldividermini: ['SettingsItems', 'dividerMini'], // REMOVE
 		dmchannel: ['PrivateChannel', 'channel'],
 		dmchannelactivity: ['PrivateChannelActivity', 'activity'],
 		dmchannelactivityicon: ['PrivateChannelActivity', 'icon'],
@@ -5044,9 +5049,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		modal: ['ModalWrap', 'modal'],
 		modalclose: ['Modal', 'close'],
 		modalcontent: ['Modal', 'content'],
-		modaldivider: ['ModalDivider', 'divider'],
-		modaldividerdefault: ['SettingsItems', 'dividerDefault'],
-		modaldividermini: ['SettingsItems', 'dividerMini'],
 		modalfooter: ['Modal', 'footer'],
 		modalguildname: ['ModalItems', 'guildName'],
 		modalheader: ['Modal', 'header'],
@@ -5549,44 +5551,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}	
 	}
 	
-	var LibraryComponents = {};
+	var NativeSubComponents = {}, LibraryComponents = {}, reactInitialized = LibraryModules.React && LibraryModules.React.Component;
+	NativeSubComponents.ContextMenuToggleItem = BDFDB.WebModules.findByName('ToggleMenuItem');
+	
 	LibraryComponents.Button = BDFDB.WebModules.findByProperties('Colors', 'Hovers', 'Looks');
-	LibraryComponents.ButtonItem = class ButtonItem extends BDFDB.React.Component {
-		render() {
-			let buttonprops = Object.assign({}, this.props);
-			delete buttonprops.className;
-			delete buttonprops.label;
-			delete buttonprops.hideBorder;
-			return BDFDB.React.createElement(LibraryComponents.Flex, {
-				className: [this.props.className, this.props.disabled ? BDFDB.disCN.disabled : null].filter(n => n).join(' '),
-				direction: LibraryComponents.Flex.Direction.VERTICAL,
-				align: LibraryComponents.Flex.Align.STRETCH,
-				children: [
-					BDFDB.React.createElement(LibraryComponents.Flex, {
-						align: LibraryComponents.Flex.Align.CENTER,
-						children: [
-							BDFDB.React.createElement(LibraryComponents.Flex.Child, {
-								wrap: true,
-								children: BDFDB.React.createElement("label", {
-									className: BDFDB.disCN.titledefault,
-									children: this.props.label
-								})
-							}),
-							BDFDB.React.createElement(LibraryComponents.Flex.Child, {
-								grow: 0,
-								shrink: 0,
-								children: BDFDB.React.createElement(LibraryComponents.Button, buttonprops)
-							})
-						]
-					}),
-					!this.props.hideBorder ? BDFDB.React.createElement(LibraryComponents.FormComponents.FormDivider, {
-						className: BDFDB.disCN.modaldividerdefault
-					}) : null
-				]
-			})
-		}
-	};
-	LibraryComponents.ColorSwatches = class ColorSwatches extends BDFDB.React.Component {
+	LibraryComponents.ColorSwatches = reactInitialized ? class ColorSwatches extends BDFDB.React.Component {
 		constructor(props) {
 			super(props);
 			
@@ -5696,26 +5665,97 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				]
 			})
 		}
-	};
+	} : undefined;
 	LibraryComponents.ContextMenu = BDFDB.WebModules.findByName('NativeContextMenu');
 	LibraryComponents.ContextMenuItem = BDFDB.WebModules.findByString('{className:i.default.label}', '{className:i.default.hint}');
 	LibraryComponents.ContextMenuItemGroup = BDFDB.WebModules.findByString('{className:i.default.itemGroup}');
 	LibraryComponents.ContextMenuSliderItem = BDFDB.WebModules.findByName('SliderMenuItem');
 	LibraryComponents.ContextMenuSubItem = BDFDB.WebModules.findByName('FluxContainer(SubMenuItem)');
-	LibraryComponents.ContextMenuToggleItem = LibraryModules.React && LibraryModules.React.Component ? (class ContextMenuToggleItem extends LibraryModules.React.Component {
+	LibraryComponents.ContextMenuToggleItem = reactInitialized ? class ContextMenuToggleItem extends LibraryModules.React.Component {
         handleToggle() {
             this.props.active = !this.props.active;
             if (this.props.action) this.props.action(this.props.active);
             this.forceUpdate();
         }
-        render() {return LibraryModules.React.createElement(BDFDB.WebModules.findByName('ToggleMenuItem'), Object.assign({}, this.props, {action: this.handleToggle.bind(this)}));}
-    }) : undefined;
+        render() {return LibraryModules.React.createElement(NativeSubComponents.ContextMenuToggleItem, Object.assign({}, this.props, {action: this.handleToggle.bind(this)}));}
+    } : undefined;
 	LibraryComponents.Flex = BDFDB.WebModules.findByProperties('Wrap', 'Direction', 'Child');
 	LibraryComponents.FormComponents = BDFDB.WebModules.findByProperties('FormSection', 'FormText');
 	LibraryComponents.ModalComponents = BDFDB.WebModules.findByProperties('ModalContent', 'ModalFooter');
 	LibraryComponents.SvgIcon = BDFDB.WebModules.findByProperties('Gradients', 'Names');
+	LibraryComponents.SettingsItem = reactInitialized ? class SettingsItem extends BDFDB.React.Component {
+		render() {
+			if (typeof this.props.type != 'string' || !['BUTTON', 'SWITCH', 'TEXTINPUT'].includes(this.props.type.toUpperCase())) return null;
+			this.props.type = this.props.type.charAt(0).toUpperCase() + this.props.type.slice(1).toLowerCase();
+			let childcomponent = LibraryComponents[this.props.type];
+			if (!childcomponent) return;
+			if (this.props.mini && childcomponent.Sizes) this.props.size = childcomponent.Sizes.MINI || childcomponent.Sizes.SMALL;
+			let childprops = Object.assign({}, this.props);
+			delete childprops.className;
+			delete childprops.label;
+			delete childprops.note;
+			delete childprops.hideBorder;
+			delete childprops.type;
+			delete childprops.mini;
+			return BDFDB.React.createElement(LibraryComponents.Flex, {
+				className: [this.props.className, this.props.disabled ? BDFDB.disCN.disabled : null].filter(n => n).join(' '),
+				direction: LibraryComponents.Flex.Direction.VERTICAL,
+				align: LibraryComponents.Flex.Align.STRETCH,
+				children: [
+					BDFDB.React.createElement(LibraryComponents.Flex, {
+						align: LibraryComponents.Flex.Align.CENTER,
+						children: [
+							BDFDB.React.createElement(LibraryComponents.Flex.Child, {
+								wrap: true,
+								children: BDFDB.React.createElement('label', {
+									className: this.props.mini ? BDFDB.disCN.titlemini : BDFDB.disCN.titledefault,
+									children: this.props.label
+								})
+							}),
+							BDFDB.React.createElement(LibraryComponents.Flex.Child, {
+								grow: 0,
+								shrink: 0,
+								children: BDFDB.React.createElement(childcomponent, childprops)
+							})
+						]
+					}),
+					typeof this.props.note == 'string' ? BDFDB.React.createElement(LibraryComponents.Flex.Child, {
+						className: BDFDB.disCN.note,
+						children: BDFDB.React.createElement(LibraryComponents.FormComponents.FormText, {
+							disabled: this.props.disabled,
+							type: LibraryComponents.FormComponents.FormText.Types.DESCRIPTION,
+							children: this.props.note
+						})
+					}) : null,
+					!this.props.hideBorder ? BDFDB.React.createElement(LibraryComponents.FormComponents.FormDivider, {
+						className: this.props.mini ? BDFDB.disCN.dividermini : BDFDB.disCN.dividerdefault
+					}) : null
+				]
+			})
+		}
+	} : undefined;
+	LibraryComponents.SettingsSwitch = reactInitialized ? class SettingsSwitch extends LibraryModules.React.Component {
+        saveSettings(e) {
+            let keys = this.props.keys.filter(n => n);
+			let option = keys.shift();
+			if (this.props.plugin && option) {
+				var data = BDFDB.loadAllData(this.props.plugin, option);
+				var newdata = '';
+				for (let key of keys) newdata += `{"${key}":`;
+				newdata += e.currentTarget.checked + '}'.repeat(keys.length);
+				newdata = JSON.parse(newdata);
+				if (BDFDB.isObject(newdata)) BDFDB.deepAssign(data, newdata);
+				else data = newdata;
+				BDFDB.saveAllData(data, this.props.plugin, option);
+				this.props.plugin.SettingsUpdated = true;
+			}
+        }
+        render() {return LibraryModules.React.createElement(LibraryComponents.SettingsItem, Object.assign({keys:[]}, this.props, {
+			type: 'SWITCH',
+			onChange: this.saveSettings.bind(this)
+		}));}
+    } : undefined;
 	LibraryComponents.Switch = BDFDB.WebModules.findByName('Switch');
-	LibraryComponents.SwitchItem = BDFDB.WebModules.findByName('SwitchItem');
 	LibraryComponents.TextElement = BDFDB.WebModules.findByName('Text');
 	LibraryComponents.TextInput = BDFDB.WebModules.findByName('TextInput');
 	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
@@ -6496,13 +6536,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			cursor: no-drop;
 			filter: grayscale(70%) brightness(50%);
 		}
-		.BDFDB-modal ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault},
-		.BDFDB-settings ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault} {
+		.BDFDB-modal ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault + BDFDB.notCN.colorpickerswatchdisabled},
+		.BDFDB-settings ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault + BDFDB.notCN.colorpickerswatchdisabled} {
 			overflow: hidden;
 		}
 		.BDFDB-colorpicker .gradient-bar .gradient-cursor > div:after,
-		.BDFDB-modal ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault}:after,
-		.BDFDB-settings ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault}:after {
+		.BDFDB-modal ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault + BDFDB.notCN.colorpickerswatchdisabled}:after,
+		.BDFDB-settings ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault + BDFDB.notCN.colorpickerswatchdisabled}:after {
 			content: "";
 			position: absolute;
 			top: 0;
@@ -6521,8 +6561,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 		.BDFDB-colorpicker .alpha-checker,
 		.BDFDB-colorpicker .gradient-bar .gradient-cursor > div:after,
-		.BDFDB-modal ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault}:after,
-		.BDFDB-settings ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault}:after {
+		.BDFDB-modal ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault + BDFDB.notCN.colorpickerswatchdisabled}:after,
+		.BDFDB-settings ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault + BDFDB.notCN.colorpickerswatchdisabled}:after {
 			background: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect x="0" y="0" width="4" height="4" fill="black"></rect><rect x="0" y="4" width="4" height="4" fill="white"></rect><rect x="4" y="0" width="4" height="4" fill="white"></rect><rect x="4" y="4" width="4" height="4" fill="black"></rect></svg>') center repeat
 		}
 		.BDFDB-modal ${BDFDB.dotCN.colorpickerswatches + BDFDB.dotCN.colorpickerswatchesdisabled} ${BDFDB.dotCN.colorpickerswatch},
@@ -6919,6 +6959,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		for (let module in DiscordClassModules) if (!DiscordClassModules[module]) console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', module + ' not initialized in DiscordClassModules');
 		for (let require in LibraryRequires) if (!LibraryRequires[require]) console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', require + ' not initialized in LibraryRequires');
 		for (let module in LibraryModules) if (!LibraryModules[module]) console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', module + ' not initialized in LibraryModules');
+		for (let component in NativeSubComponents) if (!NativeSubComponents[component]) console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', component + ' not initialized in NativeSubComponents');
 		for (let component in LibraryComponents) if (!LibraryComponents[component]) console.warn(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', component + ' not initialized in LibraryComponents');
 
 		BDFDB.WebModules.DevFuncs = {};
@@ -7036,6 +7077,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		};
 		BDFDB.WebModules.DevFuncs.req = getWebModuleReq();
 	}
+	for (let component in NativeSubComponents) if (!NativeSubComponents[component]) NativeSubComponents[component] = 'div';
 	for (let component in LibraryComponents) if (!LibraryComponents[component]) {
 		LibraryComponents[component] = 'div';
 		BDFDB.LibraryComponents[component] = 'div';
