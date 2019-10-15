@@ -5707,6 +5707,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				direction: LibraryComponents.Flex.Direction.VERTICAL,
 				align: LibraryComponents.Flex.Align.STRETCH,
 				children: [
+					this.props.dividertop ? LibraryModules.React.createElement(LibraryComponents.FormComponents.FormDivider, {
+						className: this.props.mini ? BDFDB.disCN.marginbottom8 : BDFDB.disCN.marginbottom20
+					}) : null,
 					LibraryModules.React.createElement(LibraryComponents.Flex, {
 						align: LibraryComponents.Flex.Align.CENTER,
 						children: [
@@ -5732,8 +5735,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 							children: this.props.note
 						})
 					}) : null,
-					!this.props.hideBorder ? LibraryModules.React.createElement(LibraryComponents.FormComponents.FormDivider, {
-						className: this.props.mini ? BDFDB.disCN.dividermini : BDFDB.disCN.dividerdefault
+					this.props.dividerbottom ? LibraryModules.React.createElement(LibraryComponents.FormComponents.FormDivider, {
+						className: this.props.mini ? BDFDB.disCN.margintop8 : BDFDB.disCN.margintop20
 					}) : null
 				]
 			})
