@@ -3390,7 +3390,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					onItemSelect: (value, instance) => {
 						instance.props.selectedItem = value;
 						instance.forceUpdate();
-						let modal = BDFDB.getParentEle('.BDFDB-modal', LibraryModules.React.findDOMNodeSafe(instance));
+						let modal = BDFDB.getParentEle('.BDFDB-modal', BDFDB.React.findDOMNodeSafe(instance));
 						if (modal) for (let tabcontent of modal.querySelectorAll(BDFDB.dotCN.modaltabcontent)) {
 							let tabcontentinstance = BDFDB.getReactValue(tabcontent, 'return.return.stateNode');
 							if (tabcontentinstance) {
