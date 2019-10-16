@@ -5696,12 +5696,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			if (!childcomponent) return;
 			if (this.props.mini && childcomponent.Sizes) this.props.size = childcomponent.Sizes.MINI || childcomponent.Sizes.MIN;
 			let childprops = Object.assign({}, this.props, this.props.type == 'Switch' ? {onChange: this.handleSwitchChange.bind(this)} : {});
-			delete childprops.className;
+			childprops.className = this.props.childClassName;
+			delete childprops.dividerbottom;
+			delete childprops.dividertop;
 			delete childprops.label;
-			delete childprops.note;
-			delete childprops.hideBorder;
-			delete childprops.type;
 			delete childprops.mini;
+			delete childprops.note;
+			delete childprops.type;
 			return LibraryModules.React.createElement(LibraryComponents.Flex, {
 				className: [this.props.className, this.props.disabled ? BDFDB.disCN.disabled : null].filter(n => n).join(' '),
 				direction: LibraryComponents.Flex.Direction.VERTICAL,
