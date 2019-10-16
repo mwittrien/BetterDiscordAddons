@@ -1247,11 +1247,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 	};
 
-	BDFDB.WebModules.findByString = function (string) {
-		var cachestring = JSON.stringify(string);
+	BDFDB.WebModules.findByString = function (strings) {
+		strings = Array.isArray(strings) ? strings : Array.from(arguments);
+		var cachestring = JSON.stringify(strings);
 		if (BDFDB.WebModules.cachedData.string[cachestring]) return BDFDB.WebModules.cachedData.string[cachestring];
 		else {
-			var m = BDFDB.WebModules.find(m => typeof m == "function" && m.toString().indexOf(string) > -1);
+			var m = BDFDB.WebModules.find(m => strings.every(string => typeof m == "function" && m.toString().indexOf(string) > -1));
 			if (m) {
 				BDFDB.WebModules.cachedData.string[cachestring] = m;
 				return m;
@@ -1352,7 +1353,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			return BDFDB.React.createElement(node.tagName, attributes);
 		};
 		BDFDB.React.createElement = function (...arguments) {
-			return LibraryModules.React.createElement(...arguments) || null;
+			try {return LibraryModules.React.createElement(...arguments) || null;}
+			catch (err) {console.error(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not create react element! ' + err);}
+			return null;
 		};
 	};
 
@@ -5700,7 +5703,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	} : undefined;
 	LibraryComponents.ContextMenu = BDFDB.WebModules.findByName('NativeContextMenu');
 	LibraryComponents.ContextMenuItem = BDFDB.WebModules.findByString('default.label}', 'default.hint}', 'role:"menuitem"');
-	LibraryComponents.ContextMenuItemGroup = BDFDB.WebModules.findByString('"div",{className', '{className:i.default.itemGroup}');
+	LibraryComponents.ContextMenuItemGroup = BDFDB.WebModules.findByString('"div",{className', 'default.itemGroup}');
 	LibraryComponents.ContextMenuSliderItem = BDFDB.WebModules.findByName('SliderMenuItem');
 	LibraryComponents.ContextMenuSubItem = BDFDB.WebModules.findByName('FluxContainer(SubMenuItem)');
 	LibraryComponents.ContextMenuToggleItem = reactInitialized ? class ContextMenuToggleItem extends LibraryModules.React.Component {
