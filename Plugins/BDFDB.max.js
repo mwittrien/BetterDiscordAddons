@@ -2998,10 +2998,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		container.querySelectorAll(BDFDB.dotCNC.tabbaritem + BDFDB.dotCN.tabbarheaderitem).forEach(ele => {
 			setTabitem(ele, ele.parentElement.querySelector(BDFDB.dotCNC.tabbaritem + BDFDB.dotCN.tabbarheaderitem) == ele ? 2 : 0);
 			addInitEventListener(ele, 'click', e => {
-				BDFDB.removeClass(container.querySelectorAll(BDFDB.dotCN.modaltabcontent + BDFDB.dotCN.modaltabcontentopen), BDFDB.dotCN.modaltabcontentopen);
+				BDFDB.removeClass(container.querySelectorAll(BDFDB.dotCN.modaltabcontent + BDFDB.dotCN.modaltabcontentopen), BDFDB.disCN.modaltabcontentopen);
 				ele.parentElement.querySelectorAll(BDFDB.dotCNC.tabbaritem + BDFDB.dotCN.tabbarheaderitem).forEach(ele => {setTabitem(ele, 0);});
 				var tab = container.querySelector(`${BDFDB.dotCN.modaltabcontent}[tab="${ele.getAttribute('tab')}"]`);
-				if (tab) BDFDB.addClass(tab, BDFDB.dotCN.modaltabcontentopen);
+				if (tab) BDFDB.addClass(tab, BDFDB.disCN.modaltabcontentopen);
 				setTabitem(ele, 2);
 			});
 			addInitEventListener(ele, 'mouseenter', e => {
@@ -3070,8 +3070,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			}
 		});
 
-		BDFDB.removeClass(container.querySelectorAll(BDFDB.dotCN.modaltabcontent), BDFDB.dotCN.modaltabcontentopen);
-		BDFDB.addClass(container.querySelector(BDFDB.dotCN.modaltabcontent), BDFDB.dotCN.modaltabcontentopen);
+		BDFDB.removeClass(container.querySelectorAll(BDFDB.dotCN.modaltabcontent), BDFDB.disCN.modaltabcontentopen);
+		BDFDB.addClass(container.querySelector(BDFDB.dotCN.modaltabcontent), BDFDB.disCN.modaltabcontentopen);
 
 		container.querySelectorAll('.btn-add ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageStrings.ADD;});
 		container.querySelectorAll('.btn-all ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = languagestrings.btn_all_text;});
