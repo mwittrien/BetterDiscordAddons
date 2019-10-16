@@ -1051,8 +1051,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (!BDFDB.isObject(instance)) return null;
 		let found = instance, values = valuepath.split('.').filter(n => n);
 		for (let i = 0; i < values.length; i++) {
+			if (!found) return null;
 			found = found[values[i]];
-			if (found === undefined && i < values.length-1) return null;
 		}
 		return found;
 	};
@@ -2998,10 +2998,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		container.querySelectorAll(BDFDB.dotCNC.tabbaritem + BDFDB.dotCN.tabbarheaderitem).forEach(ele => {
 			setTabitem(ele, ele.parentElement.querySelector(BDFDB.dotCNC.tabbaritem + BDFDB.dotCN.tabbarheaderitem) == ele ? 2 : 0);
 			addInitEventListener(ele, 'click', e => {
-				BDFDB.removeClass(container.querySelectorAll('.tab-content.open'), 'open');
+				BDFDB.removeClass(container.querySelectorAll(BDFDB.dotCN.modaltabcontent + BDFDB.dotCN.modaltabcontentopen), BDFDB.dotCN.modaltabcontentopen);
 				ele.parentElement.querySelectorAll(BDFDB.dotCNC.tabbaritem + BDFDB.dotCN.tabbarheaderitem).forEach(ele => {setTabitem(ele, 0);});
-				var tab = container.querySelector(`.tab-content[tab="${ele.getAttribute('tab')}"]`);
-				if (tab) BDFDB.addClass(tab, 'open');
+				var tab = container.querySelector(`${BDFDB.dotCN.modaltabcontent}[tab="${ele.getAttribute('tab')}"]`);
+				if (tab) BDFDB.addClass(tab, BDFDB.dotCN.modaltabcontentopen);
 				setTabitem(ele, 2);
 			});
 			addInitEventListener(ele, 'mouseenter', e => {
@@ -3070,8 +3070,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			}
 		});
 
-		BDFDB.removeClass(container.querySelectorAll('.tab-content'), 'open');
-		BDFDB.addClass(container.querySelector('.tab-content'), 'open');
+		BDFDB.removeClass(container.querySelectorAll(BDFDB.dotCN.modaltabcontent), BDFDB.dotCN.modaltabcontentopen);
+		BDFDB.addClass(container.querySelector(BDFDB.dotCN.modaltabcontent), BDFDB.dotCN.modaltabcontentopen);
 
 		container.querySelectorAll('.btn-add ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageStrings.ADD;});
 		container.querySelectorAll('.btn-all ' + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = languagestrings.btn_all_text;});
@@ -3352,7 +3352,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	var modals = [];
 	BDFDB.openModal = function (plugin, config) {
 		if (!BDFDB.isObject(plugin) || !BDFDB.isObject(config)) return;
-		var modal, modalobserver, id, contentchildren = [], footerchildren = [], modalprops, cancels = [], closeModal = _ => {
+		var modal, modalobserver, id, headerchildren = [], contentchildren = [], footerchildren = [], modalprops, cancels = [], closeModal = _ => {
 			if (id) BDFDB.removeFromArray(modals, id);
 			if (typeof config.onClose == 'function') config.onClose(modal);
 			if (BDFDB.isObject(modalprops) && typeof modalprops.onClose == 'function') modalprops.onClose();
@@ -3364,15 +3364,45 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				children: [config.text]
 			}));
 		}
-		if (config.html) {
-			for (let ele of (Array.isArray(config.html) ? config.html : Array.from(config.html))) {
-				if (typeof ele == 'string') contentchildren.push(BDFDB.React.elementToReact(BDFDB.htmlToElement(ele)));
-				else if (Node.prototype.isPrototypeOf(ele)) contentchildren.push(BDFDB.React.elementToReact(ele));
-				else if (NodeList.prototype.isPrototypeOf(ele)) for (let node of ele) contentchildren.push(BDFDB.React.elementToReact(node));
-			}
-		}
 		if (config.children) {
-			for (let child of (Array.isArray(config.children) ? config.children : Array.from(config.children))) if (BDFDB.React.isValidElement(child)) contentchildren.push(child);
+			let selectedtab, tabs = [];
+			for (let child of (Array.isArray(config.children) ? config.children : Array.from(config.children))) if (LibraryModules.React.isValidElement(child)) {
+				if (child.type == LibraryComponents.ModalTabContent) {
+					if (!tabs.length) child.props.open = true;
+					else delete child.props.open;
+					tabs.push(LibraryModules.React.createElement(LibraryComponents.TabBar.Item, {
+						className: BDFDB.disCN.tabbaritem,
+						itemType: LibraryComponents.TabBar.Types.TOP,
+						id: child.props.tab,
+						children: child.props.tab,
+						'aria-label': child.props.tab
+					}));
+				}
+				contentchildren.push(child);
+			}
+			if (tabs.length) headerchildren.push(LibraryModules.React.createElement(LibraryComponents.Flex, {
+				className: BDFDB.disCN.tabbarcontainer,
+				children: LibraryModules.React.createElement(LibraryComponents.TabBar, {
+					className: BDFDB.disCN.tabbar,
+					type: LibraryComponents.TabBar.Types.TOP,
+					selectedItem: tabs[0].props.id,
+					children: tabs,
+					onItemSelect: (value, instance) => {
+						instance.props.selectedItem = value;
+						instance.forceUpdate();
+						let modal = BDFDB.getParentEle('.BDFDB-modal', LibraryModules.React.findDOMNodeSafe(instance));
+						if (modal) for (let tabcontent of modal.querySelectorAll(BDFDB.dotCN.modaltabcontent)) {
+							let tabcontentinstance = BDFDB.getReactValue(tabcontent, 'return.return.stateNode');
+							if (tabcontentinstance) {
+								if (tabcontentinstance.props.tab == value) tabcontentinstance.props.open = true;
+								else delete tabcontentinstance.props.open;
+								tabcontentinstance.forceUpdate();
+							}
+						}
+					}
+				}),
+				style: {marginBottom: 10}
+			}));
 		}
 		if (Array.isArray(config.buttons)) for (let button of config.buttons) {
 			let contents = typeof button.contents == 'string'  ? button.contents : null;
@@ -3423,7 +3453,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 						transitionState: e.transitionState,
 						children: [
 							LibraryModules.React.createElement(LibraryComponents.ModalComponents.ModalHeader, {
-								separator: false,
+								className: headerchildren.length ? BDFDB.disCN.modalheaderhassibling : null,
+								separator: config.headerseparator || false,
 								children: [
 									LibraryModules.React.createElement(LibraryComponents.Flex.Child, {
 										grow: 1,
@@ -3448,6 +3479,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 									})
 								]
 							}),
+							headerchildren.length ? LibraryModules.React.createElement(LibraryComponents.Flex, {
+								children: headerchildren
+							}) : null,
 							LibraryModules.React.createElement(LibraryComponents.ModalComponents.ModalContent, {
 								children: contentchildren
 							}),
@@ -3494,7 +3528,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			}
 		}
 		changeLogHTML += `</div>`
-		if (logs) BDFDB.openModal(plugin, {header:BDFDB.LanguageStrings.CHANGE_LOG, html:changeLogHTML, selector:'BDFDB-changelogmodal'});
+		if (logs) BDFDB.openModal(plugin, {header:BDFDB.LanguageStrings.CHANGE_LOG, children:BDFDB.React.elementToReact(BDFDB.htmlToElement(changeLogHTML)), selector:'BDFDB-changelogmodal'});
 	};
 
 	BDFDB.updateContextPosition = function (menu, e = BDFDB.mousePosition) {
@@ -4036,7 +4070,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		colorPickerSwatchesDisabled: 'disabled',
 		colorPickerSwatchSingle: 'single-swatch',
 		colorPickerSwatchSelected: 'selected',
-		overflowEllipsis: 'overflowellipsis'
+		overflowEllipsis: 'overflowellipsis',
+		modalHeaderHasSibling: 'headerHasSibling',
+		modalTabContent: 'tab-content',
+		modalTabContentOpen: 'open'
 	};
 	DiscordClassModules.BDrepo = {
 		bdGuild: 'bd-guild',
@@ -5052,6 +5089,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		modalfooter: ['Modal', 'footer'],
 		modalguildname: ['ModalItems', 'guildName'],
 		modalheader: ['Modal', 'header'],
+		modalheaderhassibling: ['BDFDB', 'modalHeaderHasSibling'],
 		modalinner: ['ModalWrap', 'inner'],
 		modalmini: ['ModalMiniContent', 'modal'],
 		modalminicontent: ['ModalMiniContent', 'content'],
@@ -5063,6 +5101,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		modalsizesmall: ['Modal', 'sizeSmall'],
 		modalsub: ['Modal', 'modal'],
 		modalsubinner: ['Modal', 'inner'],
+		modaltabcontent: ['BDFDB', 'modalTabContent'],
+		modaltabcontentopen: ['BDFDB', 'modalTabContentOpen'],
 		modedefault: ['FormText', 'modeDefault'],
 		modedisabled: ['FormText', 'modeDisabled'],
 		modeselectable: ['FormText', 'modeSelectable'],
@@ -5553,6 +5593,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	
 	var NativeSubComponents = {}, LibraryComponents = {}, reactInitialized = LibraryModules.React && LibraryModules.React.Component;
 	NativeSubComponents.ContextMenuToggleItem = BDFDB.WebModules.findByName('ToggleMenuItem');
+	NativeSubComponents.TabBar = BDFDB.WebModules.findByName('TabBar');
+	NativeSubComponents.TextInput = BDFDB.WebModules.findByName('TextInput');
 	
 	LibraryComponents.Button = BDFDB.WebModules.findByProperties('Colors', 'Hovers', 'Looks');
 	LibraryComponents.ColorSwatches = reactInitialized ? class ColorSwatches extends LibraryModules.React.Component {
@@ -5674,7 +5716,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	LibraryComponents.ContextMenuToggleItem = reactInitialized ? class ContextMenuToggleItem extends LibraryModules.React.Component {
         handleToggle() {
             this.props.active = !this.props.active;
-            if (this.props.action) this.props.action(this.props.active);
+            if (typeof this.props.action == 'function') this.props.action(this.props.active);
             this.forceUpdate();
         }
         render() {return LibraryModules.React.createElement(NativeSubComponents.ContextMenuToggleItem, Object.assign({}, this.props, {action: this.handleToggle.bind(this)}));}
@@ -5682,6 +5724,20 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	LibraryComponents.Flex = BDFDB.WebModules.findByProperties('Wrap', 'Direction', 'Child');
 	LibraryComponents.FormComponents = BDFDB.WebModules.findByProperties('FormSection', 'FormText');
 	LibraryComponents.ModalComponents = BDFDB.WebModules.findByProperties('ModalContent', 'ModalFooter');
+	LibraryComponents.ModalTabContent = reactInitialized ? class ModalTabContent extends LibraryModules.React.Component {
+        render() {
+			let props = Object.assign({}, this.props);
+			delete props.open;
+			return LibraryModules.React.createElement(LibraryComponents.Flex, Object.assign({tab:'unnamed'}, props, {
+				className: [BDFDB.disCN.modaltabcontent, this.props.open ? BDFDB.disCN.modaltabcontentopen : null, props.className].filter(n => n).join(' '),
+				direction: LibraryComponents.Flex.Direction.VERTICAL,
+				align: LibraryComponents.Flex.Align.STRETCH,
+				style: Object.assign({}, props.style, {
+					display: this.props.open ? null : 'none',
+					marginTop: 10
+				})}));
+		}
+    } : undefined;
 	LibraryComponents.SvgIcon = BDFDB.WebModules.findByProperties('Gradients', 'Names');
 	LibraryComponents.SettingsItem = reactInitialized ? class SettingsItem extends LibraryModules.React.Component {
         handleChange(e) {
@@ -5689,7 +5745,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				this.props.value = !this.props.value;
 				this.forceUpdate();
 			}
-			if (typeof this.props.onChange == 'function') this.props.onChange(e, this);
+			if (typeof this.props.onChange == 'function') this.props.onChange(this.props.value, this);
         }
 		render() {
 			if (typeof this.props.type != 'string' || !['BUTTON', 'SWITCH', 'TEXTINPUT'].includes(this.props.type.toUpperCase())) return null;
@@ -5746,14 +5802,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 	} : undefined;
 	LibraryComponents.SettingsSwitch = reactInitialized ? class SettingsSwitch extends LibraryModules.React.Component {
-        saveSettings(e) {
+        saveSettings(value) {
             let keys = this.props.keys.filter(n => n);
 			let option = keys.shift();
 			if (this.props.plugin && option) {
 				var data = BDFDB.loadAllData(this.props.plugin, option);
 				var newdata = '';
 				for (let key of keys) newdata += `{"${key}":`;
-				newdata += e.target.checked + '}'.repeat(keys.length);
+				newdata += value + '}'.repeat(keys.length);
 				newdata = JSON.parse(newdata);
 				if (BDFDB.isObject(newdata)) BDFDB.deepAssign(data, newdata);
 				else data = newdata;
@@ -5767,8 +5823,21 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}));}
     } : undefined;
 	LibraryComponents.Switch = BDFDB.WebModules.findByName('Switch');
+	LibraryComponents.TabBar = reactInitialized ? class TabBar extends LibraryModules.React.Component {
+        handleItemSelect(e) {
+            if (typeof this.props.onItemSelect == 'function') this.props.onItemSelect(e, this);
+        }
+        render() {return LibraryModules.React.createElement(NativeSubComponents.TabBar, Object.assign({}, this.props, {onItemSelect: this.handleItemSelect.bind(this)}));}
+    } : undefined;
+	if (LibraryComponents.TabBar) for (let key in NativeSubComponents.TabBar) if (key != 'displayName' && key != 'name') LibraryComponents.TabBar[key] = NativeSubComponents.TabBar[key];
 	LibraryComponents.TextElement = BDFDB.WebModules.findByName('Text');
-	LibraryComponents.TextInput = BDFDB.WebModules.findByName('TextInput');
+	LibraryComponents.TextInput = reactInitialized ? class TextInput extends LibraryModules.React.Component {
+        handleChange(e) {
+            if (typeof this.props.onChange == 'function') this.props.onChange(e, this);
+        }
+        render() {return LibraryModules.React.createElement(NativeSubComponents.TextInput, Object.assign({}, this.props, {onChange: this.handleChange.bind(this)}));}
+    } : undefined;
+	if (LibraryComponents.TextInput) for (let key in NativeSubComponents.TextInput) if (key != 'displayName' && key != 'name') LibraryComponents.TextInput[key] = NativeSubComponents.TextInput[key];
 	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
 
 	BDFDB.getLibraryStrings = function () {
@@ -6693,26 +6762,31 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			cursor: no-drop;
 			background-color: rgba(0, 0, 0, 0.5);
 		}
+		.BDFDB-modal ${BDFDB.dotCN.modalheader + BDFDB.dotCN.modalheaderhassibling} {
+			padding-bottom: 10px;
+		}
 		.BDFDB-modal ${BDFDB.dotCN.tabbarcontainer} {
-			border: none !important;
 			background: rgba(0, 0, 0, 0.1);
+			border: none !important;
 			box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.05);
 		}
 		${BDFDB.dotCN.themedark} .BDFDB-modal ${BDFDB.dotCN.tabbarcontainer} {
 			background: rgba(0, 0, 0, 0.2);
 			box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
 		}
-		.BDFDB-modal .tab-content.open {
+		/* REMOVE */
+		.BDFDB-modal ${BDFDB.dotCN.modaltabcontent + BDFDB.dotCN.modaltabcontentopen} {
 			display: flex;
 			flex-direction: column;
 			flex-wrap: nowrap;
 			justify-content: flex-start;
 			align-items: stretch;
 		}
-		.BDFDB-modal .tab-content:not(.open) {
+		.BDFDB-modal ${BDFDB.dotCN.modaltabcontent + BDFDB.notCN.modaltabcontentopen} {
 			display: none;
 		}
-		.BDFDB-modal *${BDFDB.notCN.modalsubinner} > .tab-content.open${BDFDB.notCN.modalsubinner} > * {
+		/* REMOVE */
+		.BDFDB-modal *${BDFDB.notCN.modalsubinner} > ${BDFDB.dotCN.modaltabcontent + BDFDB.dotCN.modaltabcontentopen + BDFDB.notCN.modalsubinner} > * {
 			padding: 0 20px 0 12px;
 		}
 		.colorpicker-modal .colorpicker-container {
