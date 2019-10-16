@@ -5699,8 +5699,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 	} : undefined;
 	LibraryComponents.ContextMenu = BDFDB.WebModules.findByName('NativeContextMenu');
-	LibraryComponents.ContextMenuItem = BDFDB.WebModules.findByString('{className:i.default.label}', '{className:i.default.hint}');
-	LibraryComponents.ContextMenuItemGroup = BDFDB.WebModules.findByString('{className:i.default.itemGroup}');
+	LibraryComponents.ContextMenuItem = BDFDB.WebModules.findByString('default.label}', 'default.hint}', 'role:"menuitem"');
+	LibraryComponents.ContextMenuItemGroup = BDFDB.WebModules.findByString('"div",{className', '{className:i.default.itemGroup}');
 	LibraryComponents.ContextMenuSliderItem = BDFDB.WebModules.findByName('SliderMenuItem');
 	LibraryComponents.ContextMenuSubItem = BDFDB.WebModules.findByName('FluxContainer(SubMenuItem)');
 	LibraryComponents.ContextMenuToggleItem = reactInitialized ? class ContextMenuToggleItem extends LibraryModules.React.Component {
