@@ -5684,10 +5684,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	LibraryComponents.ModalComponents = BDFDB.WebModules.findByProperties('ModalContent', 'ModalFooter');
 	LibraryComponents.SvgIcon = BDFDB.WebModules.findByProperties('Gradients', 'Names');
 	LibraryComponents.SettingsItem = reactInitialized ? class SettingsItem extends LibraryModules.React.Component {
-        handleSwitchChange(e) {
-			this.props.value = !this.props.value;
-			if (this.props.onChange) this.props.onChange(e);
-			this.forceUpdate();
+        handleChange(e) {
+			if (this.props.type == 'Switch') {
+				this.props.value = !this.props.value;
+				this.forceUpdate();
+			}
+			if (typeof this.props.onChange == 'function') this.props.onChange(e, this);
         }
 		render() {
 			if (typeof this.props.type != 'string' || !['BUTTON', 'SWITCH', 'TEXTINPUT'].includes(this.props.type.toUpperCase())) return null;
@@ -5695,7 +5697,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			let childcomponent = LibraryComponents[this.props.type];
 			if (!childcomponent) return;
 			if (this.props.mini && childcomponent.Sizes) this.props.size = childcomponent.Sizes.MINI || childcomponent.Sizes.MIN;
-			let childprops = Object.assign({}, this.props, this.props.type == 'Switch' ? {onChange: this.handleSwitchChange.bind(this)} : {});
+			let childprops = Object.assign({}, this.props, {onChange: this.handleChange.bind(this)});
 			childprops.className = this.props.childClassName;
 			delete childprops.dividerbottom;
 			delete childprops.dividertop;
@@ -5751,7 +5753,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				var data = BDFDB.loadAllData(this.props.plugin, option);
 				var newdata = '';
 				for (let key of keys) newdata += `{"${key}":`;
-				newdata += e.currentTarget.checked + '}'.repeat(keys.length);
+				newdata += e.target.checked + '}'.repeat(keys.length);
 				newdata = JSON.parse(newdata);
 				if (BDFDB.isObject(newdata)) BDFDB.deepAssign(data, newdata);
 				else data = newdata;
