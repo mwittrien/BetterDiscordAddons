@@ -1340,22 +1340,19 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	LibraryModules.ReactDOM = BDFDB.WebModules.findByProperties('render', 'findDOMNode');
 	if (LibraryModules.React && LibraryModules.ReactDOM) {
 		BDFDB.React = Object.assign({}, LibraryModules.React, LibraryModules.ReactDOM);
-		BDFDB.React.findDOMNodeSafe = function (instance) {
-			if (Node.prototype.isPrototypeOf(instance)) return instance;
-			if (!instance || !instance.updater || typeof instance.updater.isMounted !== 'function' || !instance.updater.isMounted(instance)) return null;
-			var node = LibraryModules.ReactDOM.findDOMNode(instance) || BDFDB.getReactValue(instance, 'child.stateNode');
-			return Node.prototype.isPrototypeOf(node) ? node : null;
-		};
 		BDFDB.React.elementToReact = function (node) {
 			if (BDFDB.React.isValidElement(node)) return node;
-			else if (!Node.prototype.isPrototypeOf(node)) return LibraryModules.React.createElement('DIV', {});
+			else if (!Node.prototype.isPrototypeOf(node)) return BDFDB.React.createElement('DIV', {});
 			else if (node.nodeType == Node.TEXT_NODE) return node.nodeValue;
 			let attributes = {};
 			for (let attr of node.attributes) attributes[attr.name] = attr.value;
 			if (node.attributes.style) attributes.style = BDFDB.filterObject(node.style, n => node.style[n] && isNaN(parseInt(n)), true);
 			attributes.children = [];
 			for (let child of node.childNodes) attributes.children.push(BDFDB.React.elementToReact(child));
-			return LibraryModules.React.createElement(node.tagName, attributes);
+			return BDFDB.React.createElement(node.tagName, attributes);
+		};
+		BDFDB.React.createElement = function (...arguments) {
+			return LibraryModules.React.createElement(...arguments) || null;
 		};
 	};
 
@@ -1579,10 +1576,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			type = (type.split(' _ _ ')[1] || type).replace(/[^A-z0-9]|_/g, '');
 			type = type[0].toUpperCase() + type.slice(1);
 			if (typeof plugin['process' + type] == 'function') {
-				var wrapper = BDFDB.React.findDOMNodeSafe(instance);
+				var wrapper = BDFDB.React.findDOMNode(instance);
 				if (wrapper) plugin['process' + type](instance, wrapper, returnvalue, methodnames);
 				else setImmediate(() => {
-					wrapper = BDFDB.React.findDOMNodeSafe(instance);
+					wrapper = BDFDB.React.findDOMNode(instance);
 					if (wrapper) plugin['process' + type](instance, wrapper, returnvalue, methodnames);
 				});
 			}
@@ -1632,7 +1629,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	
 	var BDFDBpatchContextMenuModulePlugin = function (plugin, type, module) {
 		if (module && module.prototype) BDFDB.WebModules.patch(module.prototype, 'render', plugin, {after: e => {
-			let instance = e.thisObject, menu = BDFDB.React.findDOMNodeSafe(e.thisObject), returnvalue = e.returnValue;
+			let instance = e.thisObject, menu = BDFDB.React.findDOMNode(e.thisObject), returnvalue = e.returnValue;
 			if (instance && menu && returnvalue && typeof plugin[`on${type}`] === 'function') {
 				plugin[`on${type}`](instance, menu, returnvalue);
 			}
@@ -1640,7 +1637,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 	var BDFDBpatchPopoutModulePlugin = function (plugin, type, module) {
 		if (module && module.prototype) BDFDB.WebModules.patch(module.prototype, 'render', plugin, {after: e => {
-			let instance = e.thisObject, popout = BDFDB.React.findDOMNodeSafe(e.thisObject), returnvalue = e.returnValue;
+			let instance = e.thisObject, popout = BDFDB.React.findDOMNode(e.thisObject), returnvalue = e.returnValue;
 			if (instance && popout && returnvalue && typeof plugin[`on${type}`] === 'function') {
 				plugin[`on${type}`](instance, popout, returnvalue);
 				if (!instance.BDFDBforceUpdateTimeout && typeof instance.forceUpdate == 'function') instance.forceUpdate();
@@ -1653,7 +1650,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				if (!e.thisObject.BDFDBforceRenderTimeout && typeof e.thisObject.render == 'function') e.thisObject.render();
 			}});
 			BDFDB.WebModules.patch(module.prototype, 'componentDidUpdate', BDFDB, {after: e => {
-				var menu = BDFDB.React.findDOMNodeSafe(e.thisObject);
+				var menu = BDFDB.React.findDOMNode(e.thisObject);
 				if (menu) {
 					const updater = BDFDB.getReactValue(e, 'thisObject._reactInternalFiber.stateNode.props.onHeightUpdate');
 					const mrects = BDFDB.getRects(menu), arects = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount));
@@ -1667,7 +1664,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					delete e.thisObject.props.children;
 					delete e.thisObject.props.BDFDBcontextMenu;
 				}
-				if (BDFDB.React.findDOMNodeSafe(e.thisObject)) {
+				if (BDFDB.React.findDOMNode(e.thisObject)) {
 					e.thisObject.BDFDBforceRenderTimeout = true;
 					setTimeout(() => {delete e.thisObject.BDFDBforceRenderTimeout;}, 1000);
 				}
@@ -1696,7 +1693,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				setTimeout(() => {delete e.thisObject.BDFDBforceUpdateTimeout;}, 1000);
 			}});
 			BDFDB.WebModules.patch(module.prototype, 'render', BDFDB, {after: e => {
-				if (BDFDB.React.findDOMNodeSafe(e.thisObject)) {
+				if (BDFDB.React.findDOMNode(e.thisObject)) {
 					e.thisObject.BDFDBforceRenderTimeout = true;
 					setTimeout(() => {delete e.thisObject.BDFDBforceRenderTimeout;}, 1000);
 				}
@@ -1705,7 +1702,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					if (messageswrap) {
 						var messages = BDFDB.getOwnerInstance({node:messageswrap, name:"Message", all:true, noCopies:true, depth:99999999, time:99999999});
 						for (let i in messages) if (e.thisObject.props.message.id == messages[i].props.message.id) {
-							target = BDFDB.React.findDOMNodeSafe(messages[i]);
+							target = BDFDB.React.findDOMNode(messages[i]);
 							if (target) e.thisObject.props.target = target
 							break;
 						}
@@ -1920,7 +1917,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.readServerList = function () {
 		var found = [], ins = BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.guilds), name: ['Guild','GuildIcon'], all:true, noCopies:true, depth:99999999, time:99999999});
-		for (let info in ins) if (ins[info].props && ins[info].props.guild) found.push(Object.assign(new ins[info].props.guild.constructor(ins[info].props.guild), {div:ins[info].handleContextMenu ? BDFDB.React.findDOMNodeSafe(ins[info]) : BDFDB.createServerDivCopy(ins[info].props.guild), instance:ins[info]}));
+		for (let info in ins) if (ins[info].props && ins[info].props.guild) found.push(Object.assign(new ins[info].props.guild.constructor(ins[info].props.guild), {div:ins[info].handleContextMenu ? BDFDB.React.findDOMNode(ins[info]) : BDFDB.createServerDivCopy(ins[info].props.guild), instance:ins[info]}));
 		return found;
 	};
 
@@ -2074,7 +2071,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getServerID(eleOrInfoOrId) : typeof eleOrInfoOrId == 'object' ? eleOrInfoOrId.id : eleOrInfoOrId;
 		let guild = LibraryModules.GuildStore.getGuild(id);
 		if (guild) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-			return LibraryModules.React.createElement(BDFDB.WebModules.findByName("GuildContextMenu"), Object.assign({}, e, {
+			return BDFDB.React.createElement(BDFDB.WebModules.findByName("GuildContextMenu"), Object.assign({}, e, {
 				type: BDFDB.DiscordConstants.ContextMenuTypes.GUILD_ICON_BAR,
 				guild: guild,
 				badge: LibraryModules.MentionUtils.getMentionCount(guild.id),
@@ -2087,7 +2084,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.readFolderList = function () {
 		var found = [], ins = BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.guildswrapper), name:'GuildFolder', all:true, noCopies:true, depth:99999999, time:99999999});
 		for (let info in ins) if (ins[info].props && ins[info].props.folderId) {
-			found.push(Object.assign({}, ins[info].props, {div:BDFDB.React.findDOMNodeSafe(ins[info]), instance:ins[info]}));
+			found.push(Object.assign({}, ins[info].props, {div:BDFDB.React.findDOMNode(ins[info]), instance:ins[info]}));
 		}
 		return found;
 	};
@@ -2116,7 +2113,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.readChannelList = function () {
 		var found = [], ins = BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.channels), name: ['ChannelCategoryItem', 'ChannelItem', 'PrivateChannel'], all:true, noCopies:true, depth:99999999, time:99999999});
 		for (let info in ins) if (ins[info].props && !ins[info].props.ispin && ins[info].props.channel && ins[info]._reactInternalFiber.return) {
-			var div = BDFDB.React.findDOMNodeSafe(ins[info]);
+			var div = BDFDB.React.findDOMNode(ins[info]);
 			div = div && BDFDB.containsClass(div.parentElement, BDFDB.disCN.categorycontainerdefault, BDFDB.disCN.channelcontainerdefault, false) ? div.parentElement : div;
 			found.push(Object.assign(new ins[info].props.channel.constructor(ins[info].props.channel), {div, instance:ins[info]}));
 		}
@@ -2161,7 +2158,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				break;
 			}
 			if (type) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-				return LibraryModules.React.createElement(BDFDB.WebModules.findByName("ChannelContextMenu"), Object.assign({}, e, {
+				return BDFDB.React.createElement(BDFDB.WebModules.findByName("ChannelContextMenu"), Object.assign({}, e, {
 					type,
 					channel,
 					guild: LibraryModules.GuildStore.getGuild(channel.guild_id),
@@ -2173,7 +2170,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.readDmList = function () {
 		var found = [], ins = BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.guilds), name:'DirectMessage', all:true, noCopies:true, depth:99999999, time:99999999});
-		for (let info in ins) if (ins[info].props && ins[info].props.channel && ins[info]._reactInternalFiber.child) found.push(Object.assign(new ins[info].props.channel.constructor(ins[info].props.channel), {div:BDFDB.React.findDOMNodeSafe(ins[info]), instance:ins[info]}));
+		for (let info in ins) if (ins[info].props && ins[info].props.channel && ins[info]._reactInternalFiber.child) found.push(Object.assign(new ins[info].props.channel.constructor(ins[info].props.channel), {div:BDFDB.React.findDOMNode(ins[info]), instance:ins[info]}));
 		return found;
 	};
 
@@ -3225,7 +3222,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.appendModal = function (modalwrapper) {
 		if (!Node.prototype.isPrototypeOf(modalwrapper)) return;
-		if (!BDFDB.appendModal.modals || !document.contains(BDFDB.appendModal.modals)) BDFDB.appendModal.modals = BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.app), name:"Modals", depth:99999999, time:99999999}));
+		if (!BDFDB.appendModal.modals || !document.contains(BDFDB.appendModal.modals)) BDFDB.appendModal.modals = BDFDB.React.findDOMNode(BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.app), name:"Modals", depth:99999999, time:99999999}));
 		if (!BDFDB.appendModal.modals) return;
 
 		var modal = BDFDB.containsClass(modalwrapper, BDFDB.disCN.modal) ? modalwrapper : modalwrapper.querySelector(BDFDB.dotCN.modal);
@@ -3355,7 +3352,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			if (BDFDB.isObject(modalprops) && typeof modalprops.onClose == 'function') modalprops.onClose();
 		};
 		if (typeof config.text == 'string') {
-			contentchildren.push(LibraryModules.React.createElement(LibraryComponents.TextElement, {
+			contentchildren.push(BDFDB.React.createElement(LibraryComponents.TextElement, {
 				color: LibraryComponents.TextElement.Colors.PRIMARY,
 				children: [config.text]
 			}));
@@ -3366,7 +3363,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				if (child.type == LibraryComponents.ModalTabContent) {
 					if (!tabs.length) child.props.open = true;
 					else delete child.props.open;
-					tabs.push(LibraryModules.React.createElement(LibraryComponents.TabBar.Item, {
+					tabs.push(BDFDB.React.createElement(LibraryComponents.TabBar.Item, {
 						className: BDFDB.disCN.tabbaritem,
 						itemType: LibraryComponents.TabBar.Types.TOP,
 						id: child.props.tab,
@@ -3376,9 +3373,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				}
 				contentchildren.push(child);
 			}
-			if (tabs.length) headerchildren.push(LibraryModules.React.createElement(LibraryComponents.Flex, {
+			if (tabs.length) headerchildren.push(BDFDB.React.createElement(LibraryComponents.Flex, {
 				className: BDFDB.disCN.tabbarcontainer,
-				children: LibraryModules.React.createElement(LibraryComponents.TabBar, {
+				children: BDFDB.React.createElement(LibraryComponents.TabBar, {
 					className: BDFDB.disCN.tabbar,
 					type: LibraryComponents.TabBar.Types.TOP,
 					selectedItem: tabs[0].props.id,
@@ -3386,7 +3383,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					onItemSelect: (value, instance) => {
 						instance.props.selectedItem = value;
 						instance.forceUpdate();
-						let modal = BDFDB.getParentEle('.BDFDB-modal', BDFDB.React.findDOMNodeSafe(instance));
+						let modal = BDFDB.getParentEle('.BDFDB-modal', BDFDB.React.findDOMNode(instance));
 						if (modal) for (let tabcontent of modal.querySelectorAll(BDFDB.dotCN.modaltabcontent)) {
 							let tabcontentinstance = BDFDB.getReactValue(tabcontent, 'return.return.stateNode');
 							if (tabcontentinstance) {
@@ -3409,7 +3406,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				
 				if (button.cancel) cancels.push(click);
 				
-				footerchildren.push(LibraryModules.React.createElement(LibraryComponents.Button, {
+				footerchildren.push(BDFDB.React.createElement(LibraryComponents.Button, {
 					type: 'button',
 					look: look || (color ? LibraryComponents.Button.Looks.FILLED : LibraryComponents.Button.Looks.LINK),
 					color: color || LibraryComponents.Button.Colors.PRIMARY,
@@ -3431,51 +3428,51 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			let oldTransitionState = 0;
 			LibraryModules.ModalUtils.openModal(props => {
 				modalprops = props;
-				return LibraryModules.React.createElement(class BDFDBModal extends LibraryModules.React.Component {
+				return BDFDB.React.createElement(class BDFDBModal extends LibraryModules.React.Component {
 					render () {
-						return LibraryModules.React.createElement(LibraryComponents.ModalComponents.ModalRoot, {
+						return BDFDB.React.createElement(LibraryComponents.ModalComponents.ModalRoot, {
 							className: [`BDFDB-modal`, name ? `${name}-modal` : null, config.selector ? config.selector : null].filter(n => n).join(' '),
 							size: size || LibraryComponents.ModalComponents.ModalSize.SMALL,
 							transitionState: props.transitionState,
 							children: [
-								LibraryModules.React.createElement(LibraryComponents.ModalComponents.ModalHeader, {
+								BDFDB.React.createElement(LibraryComponents.ModalComponents.ModalHeader, {
 									className: headerchildren.length ? BDFDB.disCN.modalheaderhassibling : null,
 									separator: config.headerseparator || false,
 									children: [
-										LibraryModules.React.createElement(LibraryComponents.Flex.Child, {
+										BDFDB.React.createElement(LibraryComponents.Flex.Child, {
 											grow: 1,
 											shrink: 1,
 											children: [
-												LibraryModules.React.createElement(LibraryComponents.FormComponents.FormTitle, {
+												BDFDB.React.createElement(LibraryComponents.FormComponents.FormTitle, {
 													tag: LibraryComponents.FormComponents.FormTitle.Tags.H4,
 													children: typeof config.header == 'string' ? config.header : ""
 												}),
-												LibraryModules.React.createElement(LibraryComponents.TextElement, {
+												BDFDB.React.createElement(LibraryComponents.TextElement, {
 													size: LibraryComponents.TextElement.Sizes.SMALL,
 													color: LibraryComponents.TextElement.Colors.PRIMARY,
 													children: typeof config.subheader == 'string' ? config.subheader : (name || "")
 												})
 											]
 										}),
-										LibraryModules.React.createElement(LibraryComponents.ModalComponents.ModalCloseButton, {
+										BDFDB.React.createElement(LibraryComponents.ModalComponents.ModalCloseButton, {
 											onClick: closeModal
 										})
 									]
 								}),
-								headerchildren.length ? LibraryModules.React.createElement(LibraryComponents.Flex, {
+								headerchildren.length ? BDFDB.React.createElement(LibraryComponents.Flex, {
 									children: headerchildren
 								}) : null,
-								LibraryModules.React.createElement(LibraryComponents.ModalComponents.ModalContent, {
+								BDFDB.React.createElement(LibraryComponents.ModalComponents.ModalContent, {
 									children: contentchildren
 								}),
-								footerchildren.length ? LibraryModules.React.createElement(LibraryComponents.ModalComponents.ModalFooter, {
+								footerchildren.length ? BDFDB.React.createElement(LibraryComponents.ModalComponents.ModalFooter, {
 									children: footerchildren
 								}) : null
 							]
 						});
 					}
 					componentDidMount () {
-						modal = BDFDB.React.findDOMNodeSafe(this);
+						modal = BDFDB.React.findDOMNode(this);
 						modal = modal && modal.parentElement ? modal.parentElement.querySelector('.BDFDB-modal') : null;
 						if (modal && props.transitionState == 2 && props.transitionState > oldTransitionState) config.onOpen(modal, this);
 						oldTransitionState = props.transitionState;
@@ -3583,7 +3580,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	
 	BDFDB.openContextMenu = function (plugin, e, children) {
 		LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-			return LibraryModules.React.createElement(LibraryComponents.ContextMenu, Object.assign({}, e, {
+			return BDFDB.React.createElement(LibraryComponents.ContextMenu, Object.assign({}, e, {
 				BDFDBcontextMenu: true,
 				type: BDFDB.DiscordConstants.ContextMenuTypes.NATIVE_TEXT,
 				value: "",
@@ -5606,7 +5603,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			this.ColorSwatch = class ColorSwatch extends LibraryModules.React.Component {
 				render() {
 					let usewhite = !BDFDB.colorISBRIGHT(this.props.color);
-					return LibraryModules.React.createElement('button', {
+					return BDFDB.React.createElement('button', {
 						type: 'button',
 						className: [BDFDB.disCN.colorpickerswatch, this.props.isDisabled ? BDFDB.disCN.colorpickerswatchdisabled : null, this.props.isSelected ? BDFDB.disCN.colorpickerswatchselected : null, this.props.isCustom ? BDFDB.disCN.colorpickerswatchcustom : null, this.props.isSingle ? BDFDB.disCN.colorpickerswatchsingle : null, this.props.color == null ? BDFDB.disCN.colorpickerswatchnocolor : null].filter(n => n).join(' '),
 						disabled: this.props.isDisabled,
@@ -5620,19 +5617,19 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 								});
 							}
 							if (this.props.isCustom || this.props.isSingle) {
-								let swatch = BDFDB.React.findDOMNodeSafe(this);
+								let swatch = BDFDB.React.findDOMNode(this);
 								if (swatch) BDFDB.openColorPicker(swatches, swatch, this.props.color, swatches.state.pickerConfig);
 							};
 						},
 						onMouseEnter: _ => {
-							let swatch = this.props.isCustom || this.props.isSingle || this.props.color == null ? BDFDB.React.findDOMNodeSafe(this) : null;
+							let swatch = this.props.isCustom || this.props.isSingle || this.props.color == null ? BDFDB.React.findDOMNode(this) : null;
 							if (swatch) BDFDB.createTooltip(this.props.isCustom || this.props.isSingle ? BDFDB.LanguageStrings.CUSTOM_COLOR : BDFDB.LanguageStrings.DEFAULT, swatch, {type: 'bottom'});
 						},
 						style: Object.assign({}, this.props.style, {
 							background: BDFDB.isObject(this.props.color) ? BDFDB.colorGRADIENT(this.props.color) : BDFDB.colorCONVERT(this.props.color, 'RGBA')
 						}),
 						children: [
-							this.props.isCustom || this.props.isSingle ? LibraryModules.React.createElement(LibraryComponents.SvgIcon, {
+							this.props.isCustom || this.props.isSingle ? BDFDB.React.createElement(LibraryComponents.SvgIcon, {
 								className: BDFDB.disCN.colorpickerswatchdropper,
 								foreground: BDFDB.disCN.colorpickerswatchdropperfg,
 								name: LibraryComponents.SvgIcon.Names.DROPPER,
@@ -5640,7 +5637,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 								height: this.props.isCustom ? 14 : 10,
 								color: usewhite ? BDFDB.DiscordConstants.Colors.WHITE : BDFDB.DiscordConstants.Colors.BLACK
 							}) : null,
-							this.props.isSelected && !this.props.isSingle ? LibraryModules.React.createElement(LibraryComponents.SvgIcon, {
+							this.props.isSelected && !this.props.isSingle ? BDFDB.React.createElement(LibraryComponents.SvgIcon, {
 								name: LibraryComponents.SvgIcon.Names.CHECKMARK,
 								width: this.props.isCustom ? 32 : 16,
 								height: this.props.isCustom ? 24 : 16,
@@ -5652,11 +5649,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			}
 		}
 		renderRow(colors) {
-			return LibraryModules.React.createElement(LibraryComponents.Flex, {
+			return BDFDB.React.createElement(LibraryComponents.Flex, {
 				className: BDFDB.disCN.colorpickerrow,
 				wrap: LibraryComponents.Flex.Wrap.WRAP,
 				children: colors.map(color => {
-					return LibraryModules.React.createElement(this.ColorSwatch, {
+					return BDFDB.React.createElement(this.ColorSwatch, {
 						color: color,
 						isCustom: false,
 						isSelected: !this.state.customSelected && color === this.state.selectedColor,
@@ -5666,17 +5663,17 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			});
 		}
 		render() {
-			return LibraryModules.React.createElement(LibraryComponents.Flex, {
+			return BDFDB.React.createElement(LibraryComponents.Flex, {
 				className: [BDFDB.disCN.colorpickerswatches, this.state.disabled ? BDFDB.disCN.colorpickerswatchesdisabled : null].filter(n => n).join(' '),
 				swatchnr: this.props.number != null ? this.props.number : 0,
 				children: [
-					LibraryModules.React.createElement(LibraryComponents.Flex.Child, {
+					BDFDB.React.createElement(LibraryComponents.Flex.Child, {
 						className: BDFDB.disCN.marginreset,
 						shrink: 0,
 						grow: 0,
 						wrap: true,
 						children: [
-							LibraryModules.React.createElement(this.ColorSwatch, {
+							BDFDB.React.createElement(this.ColorSwatch, {
 								color: this.state.customColor,
 								isSingle: !this.state.colors.length,
 								isCustom: this.state.colors.length > 0,
@@ -5688,7 +5685,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 							})
 						]
 					}),
-					this.state.colors.length ? LibraryModules.React.createElement(LibraryComponents.Flex, {
+					this.state.colors.length ? BDFDB.React.createElement(LibraryComponents.Flex, {
 						direction: LibraryComponents.Flex.Direction.VERTICAL,
 						className: BDFDB.disCN.flexmarginreset,
 						grow: 1,
@@ -5712,7 +5709,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
             if (typeof this.props.action == 'function') this.props.action(this.props.active);
             this.forceUpdate();
         }
-        render() {return LibraryModules.React.createElement(NativeSubComponents.ContextMenuToggleItem, Object.assign({}, this.props, {action: this.handleToggle.bind(this)}));}
+        render() {return BDFDB.React.createElement(NativeSubComponents.ContextMenuToggleItem, Object.assign({}, this.props, {action: this.handleToggle.bind(this)}));}
     } : undefined;
 	LibraryComponents.Flex = BDFDB.WebModules.findByProperties('Wrap', 'Direction', 'Child');
 	LibraryComponents.FormComponents = BDFDB.WebModules.findByProperties('FormSection', 'FormText');
@@ -5721,14 +5718,15 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
         render() {
 			let props = Object.assign({}, this.props);
 			delete props.open;
-			return LibraryModules.React.createElement(LibraryComponents.Flex, Object.assign({tab:'unnamed'}, props, {
+			return BDFDB.React.createElement(LibraryComponents.Flex, Object.assign({tab:'unnamed'}, props, {
 				className: [BDFDB.disCN.modaltabcontent, this.props.open ? BDFDB.disCN.modaltabcontentopen : null, props.className].filter(n => n).join(' '),
 				direction: LibraryComponents.Flex.Direction.VERTICAL,
 				align: LibraryComponents.Flex.Align.STRETCH,
 				style: Object.assign({}, props.style, {
 					display: this.props.open ? null : 'none',
 					marginTop: 10
-				})}));
+				})
+			}));
 		}
     } : undefined;
 	LibraryComponents.SvgIcon = BDFDB.WebModules.findByProperties('Gradients', 'Names');
@@ -5754,44 +5752,44 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			delete childprops.mini;
 			delete childprops.note;
 			delete childprops.type;
-			return LibraryModules.React.createElement(LibraryComponents.Flex, {
+			return BDFDB.React.createElement(LibraryComponents.Flex, {
 				className: [this.props.className, this.props.disabled ? BDFDB.disCN.disabled : null].filter(n => n).join(' '),
 				direction: LibraryComponents.Flex.Direction.VERTICAL,
 				align: LibraryComponents.Flex.Align.STRETCH,
 				children: [
-					this.props.dividertop ? LibraryModules.React.createElement(LibraryComponents.FormComponents.FormDivider, {
+					this.props.dividertop ? BDFDB.React.createElement(LibraryComponents.FormComponents.FormDivider, {
 						className: this.props.mini ? BDFDB.disCN.marginbottom8 : BDFDB.disCN.marginbottom20
 					}) : null,
-					LibraryModules.React.createElement(LibraryComponents.Flex, {
+					BDFDB.React.createElement(LibraryComponents.Flex, {
 						align: LibraryComponents.Flex.Align.CENTER,
 						children: [
-							LibraryModules.React.createElement(LibraryComponents.Flex.Child, {
+							BDFDB.React.createElement(LibraryComponents.Flex.Child, {
 								wrap: true,
-								children: LibraryModules.React.createElement('label', {
+								children: BDFDB.React.createElement('label', {
 									className: this.props.mini ? BDFDB.disCN.titlemini : BDFDB.disCN.titledefault,
 									children: this.props.label
 								})
 							}),
-							LibraryModules.React.createElement(LibraryComponents.Flex.Child, {
+							BDFDB.React.createElement(LibraryComponents.Flex.Child, {
 								grow: 0,
 								shrink: 0,
-								children: LibraryModules.React.createElement(childcomponent, childprops)
+								children: BDFDB.React.createElement(childcomponent, childprops)
 							})
 						]
 					}),
-					typeof this.props.note == 'string' ? LibraryModules.React.createElement(LibraryComponents.Flex.Child, {
+					typeof this.props.note == 'string' ? BDFDB.React.createElement(LibraryComponents.Flex.Child, {
 						className: BDFDB.disCN.note,
-						children: LibraryModules.React.createElement(LibraryComponents.FormComponents.FormText, {
+						children: BDFDB.React.createElement(LibraryComponents.FormComponents.FormText, {
 							disabled: this.props.disabled,
 							type: LibraryComponents.FormComponents.FormText.Types.DESCRIPTION,
 							children: this.props.note
 						})
 					}) : null,
-					this.props.dividerbottom ? LibraryModules.React.createElement(LibraryComponents.FormComponents.FormDivider, {
+					this.props.dividerbottom ? BDFDB.React.createElement(LibraryComponents.FormComponents.FormDivider, {
 						className: this.props.mini ? BDFDB.disCN.margintop8 : BDFDB.disCN.margintop20
 					}) : null
 				]
-			})
+			});
 		}
 	} : undefined;
 	LibraryComponents.SettingsSwitch = reactInitialized ? class SettingsSwitch extends LibraryModules.React.Component {
@@ -5810,7 +5808,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				this.props.plugin.SettingsUpdated = true;
 			}
         }
-        render() {return LibraryModules.React.createElement(LibraryComponents.SettingsItem, Object.assign({keys:[]}, this.props, {
+        render() {return BDFDB.React.createElement(LibraryComponents.SettingsItem, Object.assign({keys:[]}, this.props, {
 			type: 'SWITCH',
 			onChange: this.saveSettings.bind(this)
 		}));}
@@ -5820,7 +5818,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
         handleItemSelect(e) {
             if (typeof this.props.onItemSelect == 'function') this.props.onItemSelect(e, this);
         }
-        render() {return LibraryModules.React.createElement(NativeSubComponents.TabBar, Object.assign({}, this.props, {onItemSelect: this.handleItemSelect.bind(this)}));}
+        render() {return BDFDB.React.createElement(NativeSubComponents.TabBar, Object.assign({}, this.props, {onItemSelect: this.handleItemSelect.bind(this)}));}
     } : undefined;
 	if (LibraryComponents.TabBar) for (let key in NativeSubComponents.TabBar) if (key != 'displayName' && key != 'name') LibraryComponents.TabBar[key] = NativeSubComponents.TabBar[key];
 	LibraryComponents.TextElement = BDFDB.WebModules.findByName('Text');
@@ -5828,7 +5826,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
         handleChange(e) {
             if (typeof this.props.onChange == 'function') this.props.onChange(e, this);
         }
-        render() {return LibraryModules.React.createElement(NativeSubComponents.TextInput, Object.assign({}, this.props, {onChange: this.handleChange.bind(this)}));}
+        render() {return BDFDB.React.createElement(NativeSubComponents.TextInput, Object.assign({}, this.props, {onChange: this.handleChange.bind(this)}));}
     } : undefined;
 	if (LibraryComponents.TextInput) for (let key in NativeSubComponents.TextInput) if (key != 'displayName' && key != 'name') LibraryComponents.TextInput[key] = NativeSubComponents.TextInput[key];
 	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
