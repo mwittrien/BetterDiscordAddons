@@ -3,17 +3,11 @@
 class MoveablePopups {
 	getName () {return "MoveablePopups";}
 
-	getVersion () {return "1.1.3";}
+	getVersion () {return "1.1.4";}
 
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Adds the feature to move all popups and modals around like on a normal desktop. Ctrl + drag with your left mousebutton to drag element.";}
-
-	constructor () {
-		this.changelog = {
-			"fixed":[["Moved Modal Container","Fixed selector for new modal container"]]
-		};
-	}
 
 	//legacy
 	load () {}
@@ -88,7 +82,7 @@ class MoveablePopups {
 					}
 				);
 			});
-			BDFDB.addObserver(this, BDFDB.React.findDOMNodeSafe(BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.app), name:"Modals"})), {name:"modalObserver",instance:observer}, {childList: true});
+			BDFDB.addObserver(this, BDFDB.React.findDOMNode(BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.app), name:"Modals"})), {name:"modalObserver",instance:observer}, {childList: true});
 		}
 		else {
 			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
