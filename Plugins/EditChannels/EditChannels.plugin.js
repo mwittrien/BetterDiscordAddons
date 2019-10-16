@@ -56,29 +56,65 @@ class EditChannels {
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		var settings = BDFDB.getAllData(this, "settings");
-		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
-		for (let key in settings) {
-			if (!this.defaults.settings[key].inner) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
-		}
-		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Change Channel in:</h3></div><div class="BDFDB-settings-inner-list">`;
-		for (let key in settings) {
-			if (this.defaults.settings[key].inner) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
-		}
-		settingshtml += `</div>`;
-		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all Channels.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
-		settingshtml += `</div></div>`;
-
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
-
-		BDFDB.initElements(settingspanel, this);
-
-		BDFDB.addEventListener(this, settingspanel, "click", ".reset-button", () => {
-			BDFDB.openConfirmModal(this, "Are you sure you want to reset all channels?", () => {
-				BDFDB.removeAllData(this, "channels");
-				this.changeAppTitle();
-				BDFDB.WebModules.forceAllUpdates(this);
-			});
-		});
+		var settingsitems = [], inneritems = [];
+		var settingspanel = BDFDB.htmlToElement(`<div class="${this.name}-settings BDFDB-settings"></div>`);
+		
+		for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
+			className: BDFDB.disCN.marginbottom8,
+			plugin: this,
+			keys: ["settings", key],
+			label: this.defaults.settings[key].description,
+			value: settings[key]
+		}));
+		settingsitems.push(BDFDB.React.createElement(BDFDB.LibraryComponents.Flex, {
+			direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+			grow: 1,
+			children: [
+				BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+					className: BDFDB.disCN.marginbottom8,
+					tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H1,
+					children: "Change Channels in:"
+				}),
+				BDFDB.React.createElement(BDFDB.LibraryComponents.Flex, {
+					className: "BDFDB-settings-inner-list",
+					direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+					grow: 1,
+					children: inneritems
+				})
+			]
+		}));
+		settingsitems.push(BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsItem, {
+			type: "Button",
+			className: BDFDB.disCN.marginbottom8,
+			color: BDFDB.LibraryComponents.Button.Colors.RED,
+			label: "Reset all Channels",
+			onClick: _ => {
+				BDFDB.openConfirmModal(this, "Are you sure you want to reset all channels?", () => {
+					BDFDB.removeAllData(this, "channels");
+					this.changeAppTitle();
+					BDFDB.WebModules.forceAllUpdates(this);
+				});
+			},
+			children: BDFDB.LanguageStrings.RESET
+		}));
+		BDFDB.React.render(BDFDB.React.createElement(BDFDB.LibraryComponents.Flex, {
+			direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+			grow: 1,
+			children: [
+				BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+					className: BDFDB.disCNS.marginbottom20 + "BDFDB-settings-title",
+					tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H2,
+					children: this.name
+				}),
+				BDFDB.React.createElement(BDFDB.LibraryComponents.Flex, {
+					className: "BDFDB-settings-inner",
+					direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+					grow: 1,
+					children: settingsitems
+				})
+			]
+		}), settingspanel);
+		
 		return settingspanel;
 	}
 
@@ -222,26 +258,23 @@ class EditChannels {
 						})
 					]
 				}),
-				BDFDB.React.createElement(BDFDB.LibraryComponents.SwitchItem, {
+				BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsItem, {
+					type: "Switch",
 					className: BDFDB.disCN.marginbottom20 + " input-inheritcolor",
+					label: this.labels.modal_inheritcolor_text,
 					value: info.type == 4 && inheritColor,
-					disabled: info.type != 4,
-					hideBorder: true,
-					children: [
-						this.labels.modal_inheritcolor_text
-					]
+					disabled: info.type != 4
 				})
 			],
 			buttons: [{
-				type: "btn-save",
+				contents: BDFDB.LanguageStrings.SAVE,
 				color: "BRAND",
 				close: true,
 				click: modal => {
 					let channelnameinput = modal.querySelector(".input-channelname " + BDFDB.dotCN.input);
 					let inheritcolorinput = modal.querySelector(".input-inheritcolor " + BDFDB.dotCN.switchinner);
 					
-					name = channelnameinput.value.trim();
-					name = name ? name : null;
+					name = channelnameinput.value.trim() || null;
 
 					color = BDFDB.getSwatchColor(modal, 1);
 					if (color != null && !BDFDB.isObject(color)) {

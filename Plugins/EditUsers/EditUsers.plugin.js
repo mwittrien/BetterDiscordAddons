@@ -72,101 +72,6 @@ class EditUsers {
 				bottom: 3px;
 			}`;
 
-		this.userSettingsModalMarkup =
-			`<span class="${this.name}-modal BDFDB-modal">
-				<div class="${BDFDB.disCN.backdrop}"></div>
-				<div class="${BDFDB.disCN.modal}">
-					<div class="${BDFDB.disCN.modalinner}">
-						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
-							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto; padding-bottom: 10px;">
-								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
-									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">REPLACE_modal_header_text</h4>
-									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
-								</div>
-								<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
-									<div class="${BDFDB.disCN.buttoncontents}">
-										<svg name="Close" width="18" height="18" viewBox="0 0 12 12" style="flex: 0 1 auto;">
-											<g fill="none" fill-rule="evenodd">
-												<path d="M0 0h12v12H0"></path>
-												<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
-											</g>
-										</svg>
-									</div>
-								</button>
-							</div>
-							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.marginbottom8 + BDFDB.disCN.tabbarcontainer}" style="flex: 0 0 auto; padding-right: 12px;">
-								<div class="${BDFDB.disCNS.tabbar + BDFDB.disCN.tabbartop}">
-									<div tab="user" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbaritem}">REPLACE_modal_tabheader1_text</div>
-									<div tab="name" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbaritem}">REPLACE_modal_tabheader2_text</div>
-									<div tab="tag" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbaritem}">REPLACE_modal_tabheader3_text</div>
-								</div>
-							</div>
-							<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.scrollerthemeghosthairline}">
-								<div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner}">
-									<div tab="user" class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20} tab-content" style="flex: 1 1 auto;">
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_username_text</h3>
-										</div>
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-											<div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.titlesize16}" id="input-username"></div>
-										</div>
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_usertag_text</h3>
-										</div>
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-											<div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.titlesize16}" id="input-usertag"></div>
-										</div>
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_userurl_text</h3>
-										</div>
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-											<div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.titlesize16}" id="input-userurl"></div>
-										</div>
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">REPLACE_modal_removeicon_text</h3>
-											<div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;">
-												<input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}" id="input-removeicon">
-											</div>
-										</div>
-									</div>
-									<div tab="name" class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20} tab-content" style="flex: 1 1 auto;">
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
-											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker1_text</h3>
-										</div>
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8} swatches" style="flex: 1 1 auto;"></div>
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
-											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker2_text</h3>
-										</div>
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8} swatches" style="flex: 1 1 auto;"></div>
-									</div>
-									<div tab="tag" class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20} tab-content" style="flex: 1 1 auto;">
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
-											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker3_text</h3>
-										</div>
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8} swatches" style="flex: 1 1 auto;"></div>
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;">
-											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">REPLACE_modal_colorpicker4_text</h3>
-										</div>
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8} swatches" style="flex: 1 1 auto;"></div>
-										<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-											<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">REPLACE_modal_ignoretagcolor_text</h3>
-											<div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;">
-												<input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}" id="input-ignoretagcolor">
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
-								<button type="button" class="btn-save ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
-									<div class="${BDFDB.disCN.buttoncontents}"></div>
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</span>`;
-
 		this.defaults = {
 			settings: {
 				changeInChatTextarea:	{value:true, 	description:"Chat Textarea"},
@@ -194,29 +99,68 @@ class EditUsers {
 		};
 	}
 
-	getSettingsPanel () {
+	getSettingsPanel () {		
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		var settings = BDFDB.getAllData(this, "settings");
-		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
-		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Change User in:</h3></div><div class="BDFDB-settings-inner-list">`;
-		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
-		}
-		settingshtml += `</div>`;
-		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all Users.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
-		settingshtml += `</div></div>`;
-
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
-
-		BDFDB.initElements(settingspanel, this);
-
-		BDFDB.addEventListener(this, settingspanel, "click", ".reset-button", () => {
-			BDFDB.openConfirmModal(this, "Are you sure you want to reset all users?", () => {
-				BDFDB.removeAllData(this, "users");
-				this.changeAppTitle();
-				BDFDB.WebModules.forceAllUpdates(this);
-			});
-		});
+		var settingsitems = [], inneritems = [];
+		var settingspanel = BDFDB.htmlToElement(`<div class="${this.name}-settings BDFDB-settings"></div>`);
+		
+		for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
+			className: BDFDB.disCN.marginbottom8,
+			plugin: this,
+			keys: ["settings", key],
+			label: this.defaults.settings[key].description,
+			value: settings[key]
+		}));
+		settingsitems.push(BDFDB.React.createElement(BDFDB.LibraryComponents.Flex, {
+			direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+			grow: 1,
+			children: [
+				BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+					className: BDFDB.disCN.marginbottom8,
+					tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H1,
+					children: "Change Users in:"
+				}),
+				BDFDB.React.createElement(BDFDB.LibraryComponents.Flex, {
+					className: "BDFDB-settings-inner-list",
+					direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+					grow: 1,
+					children: inneritems
+				})
+			]
+		}));
+		settingsitems.push(BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsItem, {
+			type: "Button",
+			className: BDFDB.disCN.marginbottom8,
+			color: BDFDB.LibraryComponents.Button.Colors.RED,
+			label: "Reset all Users",
+			onClick: _ => {
+				BDFDB.openConfirmModal(this, "Are you sure you want to reset all users?", () => {
+					BDFDB.removeAllData(this, "users");
+					this.changeAppTitle();
+					BDFDB.WebModules.forceAllUpdates(this);
+				});
+			},
+			children: BDFDB.LanguageStrings.RESET
+		}));
+		BDFDB.React.render(BDFDB.React.createElement(BDFDB.LibraryComponents.Flex, {
+			direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+			grow: 1,
+			children: [
+				BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+					className: BDFDB.disCNS.marginbottom20 + "BDFDB-settings-title",
+					tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H2,
+					children: this.name
+				}),
+				BDFDB.React.createElement(BDFDB.LibraryComponents.Flex, {
+					className: "BDFDB-settings-inner",
+					direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+					grow: 1,
+					children: settingsitems
+				})
+			]
+		}), settingspanel);
+		
 		return settingspanel;
 	}
 
@@ -290,22 +234,6 @@ class EditUsers {
 
 
 	// begin of own functions
-
-	changeLanguageStrings () {
-		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
-		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_username_text", this.labels.modal_username_text);
-		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_usertag_text", this.labels.modal_usertag_text);
-		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_userurl_text", this.labels.modal_userurl_text);
-		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_removeicon_text", this.labels.modal_removeicon_text);
-		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_ignoretagcolor_text", this.labels.modal_ignoretagcolor_text);
-		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_tabheader1_text", this.labels.modal_tabheader1_text);
-		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_tabheader2_text", this.labels.modal_tabheader2_text);
-		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_tabheader3_text", this.labels.modal_tabheader3_text);
-		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_colorpicker1_text", this.labels.modal_colorpicker1_text);
-		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_colorpicker2_text", this.labels.modal_colorpicker2_text);
-		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_colorpicker3_text", this.labels.modal_colorpicker3_text);
-		this.userSettingsModalMarkup =		this.userSettingsModalMarkup.replace("REPLACE_modal_colorpicker4_text", this.labels.modal_colorpicker4_text);
-	}
 	
 	onUserContextMenu (instance, menu, returnvalue) {
 		if (instance.props && instance.props.user && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
@@ -349,116 +277,193 @@ class EditUsers {
 	}
 
 	showUserSettings (info) {
-		var {name,tag,url,removeIcon,ignoreTagColor,color1,color2,color3,color4} = BDFDB.loadData(info.id, this, "users") || {};
+		let data = BDFDB.loadData(info.id, this, "users") || {};
+		let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), info.id) || {};
+		
+		BDFDB.openModal(this, {
+			size: "MEDIUM",
+			header: this.labels.modal_header_text,
+			subheader: member.nick || info.username,
+			children: [
+				BDFDB.React.createElement(BDFDB.LibraryComponents.ModalTabContent, {
+					tab: this.labels.modal_tabheader1_text,
+					children: [
+						BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+							title: this.labels.modal_username_text,
+							className: BDFDB.disCN.marginbottom20 + " input-username",
+							children: [
+								BDFDB.React.createElement(BDFDB.LibraryComponents.TextInput, {
+									value: data.name,
+									placeholder: member.nick || info.username,
+									autoFocus: true
+								})
+							]
+						}),
+						BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+							title: this.labels.modal_usertag_text,
+							className: BDFDB.disCN.marginbottom20 + " input-usertag",
+							children: [
+								BDFDB.React.createElement(BDFDB.LibraryComponents.TextInput, {
+									value: data.tag
+								})
+							]
+						}),
+						BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+							title: this.labels.modal_useravatar_text,
+							className: BDFDB.disCN.marginbottom20 + " input-useravatar",
+							children: [
+								BDFDB.React.createElement(BDFDB.LibraryComponents.TextInput, {
+									inputClassName: !data.removeIcon && data.url ? BDFDB.disCN.inputsuccess : null,
+									value: data.url,
+									placeholder: BDFDB.getUserAvatar(info.id),
+									disabled: data.removeIcon,
+									onFocus: e => {
+										this.createNoticeTooltip(e.target);
+									},
+									onChange: (value, instance) => {
+										let input = BDFDB.React.findDOMNodeSafe(instance).firstElementChild;
+										clearTimeout(instance.checkTimeout);
+										if (value == null || !value.trim()) {
+											if (input) BDFDB.removeEles(input.tooltip);
+											instance.props.inputClassName = null;
+											instance.forceUpdate();
+										}
+										else instance.checkTimeout = setTimeout(() => {
+											BDFDB.LibraryRequires.request(value.trim(), (error, response, result) => {
+												if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
+													if (input) BDFDB.removeEles(input.tooltip);
+													instance.props.inputClassName = BDFDB.disCN.inputsuccess;
+												}
+												else {
+													this.createNoticeTooltip(input, true);
+													instance.props.inputClassName = BDFDB.disCN.inputerror;
+												}
+												delete instance.checkTimeout;
+												instance.forceUpdate();
+											});
+										}, 1000);
+									}
+								})
+							]
+						}),
+						BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsItem, {
+							type: "Switch",
+							className: BDFDB.disCN.marginbottom20 + " input-removeicon",
+							label: this.labels.modal_removeicon_text,
+							value: data.removeIcon,
+							onChange: (value, instance) => {
+								let avatarinputins = BDFDB.getReactValue(instance, "_reactInternalFiber.return.child.sibling.sibling.child.child.sibling.child.stateNode");
+								if (avatarinputins) {
+									avatarinputins.props.inputClassName = null;
+									avatarinputins.props.disabled = value;
+									avatarinputins.forceUpdate();
+								}
+							}
+						}),
+					]
+				}),
+				BDFDB.React.createElement(BDFDB.LibraryComponents.ModalTabContent, {
+					tab: this.labels.modal_tabheader2_text,
+					children: [
+						BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+							title: this.labels.modal_colorpicker1_text,
+							className: BDFDB.disCN.marginbottom20,
+							children: [
+								BDFDB.React.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+									color: data.color1,
+									number: 1
+								})
+							]
+						}),
+						BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+							title: this.labels.modal_colorpicker2_text,
+							className: BDFDB.disCN.marginbottom20,
+							children: [
+								BDFDB.React.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+									color: data.color2,
+									number: 2
+								})
+							]
+						})
+					]
+				}),
+				BDFDB.React.createElement(BDFDB.LibraryComponents.ModalTabContent, {
+					tab: this.labels.modal_tabheader3_text,
+					children: [
+						BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+							title: this.labels.modal_colorpicker3_text,
+							className: BDFDB.disCN.marginbottom20,
+							children: [
+								BDFDB.React.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+									color: data.color3,
+									number: 3,
+									disabled: data.ignoreTagColor
+								})
+							]
+						}),
+						BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+							title: this.labels.modal_colorpicker4_text,
+							className: BDFDB.disCN.marginbottom20,
+							children: [
+								BDFDB.React.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+									color: data.color4,
+									number: 4,
+									disabled: data.ignoreTagColor
+								})
+							]
+						}),
+						BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsItem, {
+							type: "Switch",
+							className: BDFDB.disCN.marginbottom20 + " input-ignoretagcolor",
+							label: this.labels.modal_ignoretagcolor_text,
+							value: data.ignoreTagColor,
+							onChange: (value, instance) => {
+								let colorpicker3ins = BDFDB.getReactValue(instance, "_reactInternalFiber.return.child.child.child.sibling.child.stateNode");
+								let colorpicker4ins = BDFDB.getReactValue(instance, "_reactInternalFiber.return.child.sibling.child.child.sibling.child.stateNode");
+								if (colorpicker3ins) colorpicker3ins.setState({disabled: value});
+								if (colorpicker4ins) colorpicker4ins.setState({disabled: value});
+							}
+						})
+					]
+				})
+			],
+			buttons: [{
+				contents: BDFDB.LanguageStrings.SAVE,
+				color: "BRAND",
+				close: true,
+				click: modal => {
+					let olddata = Object.assign({}, data);
+					
+					let channelnameinput = modal.querySelector(".input-channelname " + BDFDB.dotCN.input);
+					let usernameinput = modal.querySelector(".input-username " + BDFDB.dotCN.input);
+					let usertaginput = modal.querySelector(".input-usertag " + BDFDB.dotCN.input);
+					let useravatarinput = modal.querySelector(".input-useravatar " + BDFDB.dotCN.input);
+					let removeiconinput = modal.querySelector(".input-removeicon " + BDFDB.dotCN.switchinner);
+					let ignoretagcolorinput = modal.querySelector(".input-ignoretagcolor " + BDFDB.dotCN.switchinner);
+					
+					data.name = usernameinput.value.trim() || null;
+					data.tag = usertaginput.value.trim() || null;
+					data.removeIcon = removeiconinput.checked;
+					data.ignoreTagColor = ignoretagcolorinput.checked;
+					data.url = (!data.removeIcon && BDFDB.containsClass(useravatarinput, BDFDB.disCN.inputsuccess) ? useravatarinput.value.trim() : null) || null;
 
-		var member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), info.id) || {};
+					data.color1 = BDFDB.getSwatchColor(modal, 1);
+					data.color2 = BDFDB.getSwatchColor(modal, 2);
+					data.color3 = BDFDB.getSwatchColor(modal, 3);
+					data.color4 = BDFDB.getSwatchColor(modal, 4);
 
-		let userSettingsModal = BDFDB.htmlToElement(this.userSettingsModalMarkup);
-		let usernameinput = userSettingsModal.querySelector("#input-username");
-		let usertaginput = userSettingsModal.querySelector("#input-usertag");
-		let userurlinput = userSettingsModal.querySelector("#input-userurl");
-		let removeiconinput = userSettingsModal.querySelector("#input-removeicon");
-		let ignoretagcolorinput = userSettingsModal.querySelector("#input-ignoretagcolor");
-
-		userSettingsModal.querySelector(BDFDB.dotCN.modalguildname).innerText = member.nick || info.username;
-		usernameinput.value = name || "";
-		usernameinput.setAttribute("placeholder", member.nick || info.username);
-		usertaginput.value = tag || "";
-		userurlinput.value = url || "";
-		userurlinput.setAttribute("placeholder", BDFDB.getUserAvatar(info.id) || "");
-		BDFDB.toggleClass(userurlinput, "valid", userurlinput.value.length > 0);
-		userurlinput.disabled = removeIcon;
-		removeiconinput.checked = removeIcon;
-		ignoretagcolorinput.checked = ignoreTagColor;
-		BDFDB.setColorSwatches(userSettingsModal, color1);
-		BDFDB.setColorSwatches(userSettingsModal, color2);
-		BDFDB.setColorSwatches(userSettingsModal, color3);
-		BDFDB.setColorSwatches(userSettingsModal, color4);
-
-		let ignoredswatches = userSettingsModal.querySelectorAll(`.swatches[swatchnr='3'] ${BDFDB.dotCN.colorpickerswatch}, .swatches[swatchnr='4'] ${BDFDB.dotCN.colorpickerswatch}`);
-
-		BDFDB.toggleClass(ignoredswatches, BDFDB.disCN.colorpickerswatchdisabled, ignoretagcolorinput.checked);
-
-		BDFDB.appendModal(userSettingsModal);
-
-		removeiconinput.addEventListener("click", () => {
-			userurlinput.disabled = removeiconinput.checked;
-		});
-		ignoretagcolorinput.addEventListener("click", () => {
-			BDFDB.toggleClass(ignoredswatches, BDFDB.disCN.colorpickerswatchdisabled, ignoretagcolorinput.checked);
-		});
-		userurlinput.addEventListener("input", () => {
-			this.checkUrl(userurlinput);
-		});
-		userurlinput.addEventListener("mouseenter", () => {
-			BDFDB.addClass(userurlinput, "hovering");
-			this.createNoticeTooltip(userurlinput);
-		});
-		userurlinput.addEventListener("mouseleave", () => {
-			BDFDB.removeClass(userurlinput, "hovering");
-			BDFDB.removeEles(BDFDB.dotCNS.itemlayercontainer + ".notice-tooltip");
-		});
-		BDFDB.addChildEventListener(userSettingsModal, "click", ".btn-save", e => {
-			name = usernameinput.value.trim();
-			name = name ? name : null;
-
-			tag = usertaginput.value.trim();
-			tag = tag ? tag : null;
-
-			removeIcon = removeiconinput.checked;
-
-			ignoreTagColor = ignoretagcolorinput.checked;
-
-			url = !removeIcon && BDFDB.containsClass(userurlinput, "valid") ? userurlinput.value.trim() : null;
-			url = url ? url : null;
-
-			color1 = BDFDB.getSwatchColor(userSettingsModal, 1);
-			color2 = BDFDB.getSwatchColor(userSettingsModal, 2);
-			color3 = BDFDB.getSwatchColor(userSettingsModal, 3);
-			color4 = BDFDB.getSwatchColor(userSettingsModal, 4);
-
-			if (name == null && tag == null && url == null && !removeIcon && !ignoreTagColor && color1 == null && color2 == null && color3 == null && color4 == null) {
-				BDFDB.removeData(info.id, this, "users")
-			}
-			else {
-				BDFDB.saveData(info.id, {name,tag,url,removeIcon,ignoreTagColor,color1,color2,color3,color4}, this, "users");
-			}
-			this.changeAppTitle();
-			BDFDB.WebModules.forceAllUpdates(this);
-		});
-		usernameinput.focus();
-	}
-
-	checkUrl (input) {
-		BDFDB.removeEles(BDFDB.dotCNS.itemlayercontainer + ".notice-tooltip");
-		if (!input.value) {
-			BDFDB.removeClass(input, "valid");
-			BDFDB.removeClass(input, "invalid");
-		}
-		else {
-			BDFDB.LibraryRequires.request(input.value, (error, response, result) => {
-				if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
-					BDFDB.addClass(input, "valid");
-					BDFDB.removeClass(input, "invalid");
+					let changed = false;
+					if (Object.keys(data).every(key => data[key] == null || data[key] == false) && (changed = true)) BDFDB.removeData(info.id, this, "users");
+					else if (!BDFDB.equals(olddata, data) && (changed = true)) BDFDB.saveData(info.id, data, this, "users");
+					if (changed) {
+						this.changeAppTitle();
+						BDFDB.WebModules.forceAllUpdates(this);
+					}
 				}
-				else {
-					BDFDB.removeClass(input, "valid");
-					BDFDB.addClass(input, "invalid");
-				}
-				if (BDFDB.containsClass(input, "hovering")) this.createNoticeTooltip(input);
-			});
-		}
+			}]
+		});
 	}
-
-	createNoticeTooltip (input) {
-		var disabled = input.disabled;
-		var valid = BDFDB.containsClass(input, "valid");
-		var invalid = BDFDB.containsClass(input, "invalid");
-		if (disabled || valid || invalid) {
-			BDFDB.createTooltip(disabled ? this.labels.modal_ignoreurl_text : valid ? this.labels.modal_validurl_text : this.labels.modal_invalidurl_text, input, {type:"right",selector:"notice-tooltip",color: disabled ? "black" : invalid ? "red" : "green"});
-		}
-	}
-
+	
 	processChannelTextArea (instance, wrapper, returnvalue) {
 		let channel = BDFDB.getReactValue(instance, "props.channel");
 		if (channel) {
@@ -771,6 +776,14 @@ class EditUsers {
 			this.changeAppTitle();
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
+	}
+
+	createNoticeTooltip (input, isinvalid = false) {
+		if (!input) return;
+		BDFDB.removeEles(input.tooltip);
+		var invalid = isinvalid || BDFDB.containsClass(input, BDFDB.disCN.inputerror);
+		var valid = invalid ? false : BDFDB.containsClass(input, BDFDB.disCN.inputsuccess);
+		if (invalid || valid) input.tooltip = BDFDB.createTooltip(invalid ? this.labels.modal_invalidurl_text : this.labels.modal_validurl_text, input, {type:"right", selector:"notice-tooltip", color: invalid ? "red" : "green"});
 	}
 
 	changeAppTitle () {
@@ -1253,7 +1266,7 @@ class EditUsers {
 					modal_header_text:					"Lokalne korisničke postavke",
 					modal_username_text:				"Lokalno korisničko ime",
 					modal_usertag_text:					"Oznaka",
-					modal_userurl_text:					"Ikona",
+					modal_useravatar_text:				"Ikona",
 					modal_removeicon_text:				"Ukloni ikonu",
 					modal_tabheader1_text:				"Korisnik",
 					modal_tabheader2_text:				"Boja naziva",
@@ -1262,7 +1275,6 @@ class EditUsers {
 					modal_colorpicker2_text:			"Boja pozadine",
 					modal_colorpicker3_text:			"Boja oznaka",
 					modal_colorpicker4_text:			"Boja fonta",
-					modal_ignoreurl_text:				"URL ignorirati",
 					modal_ignoretagcolor_text:			"Upotrijebite boju uloga",
 					modal_validurl_text:				"Vrijedi URL",
 					modal_invalidurl_text:				"Nevažeći URL"
@@ -1275,7 +1287,7 @@ class EditUsers {
 					modal_header_text:					"Lokal brugerindstillinger",
 					modal_username_text:				"Lokalt brugernavn",
 					modal_usertag_text:					"Initialer",
-					modal_userurl_text:					"Ikon",
+					modal_useravatar_text:				"Ikon",
 					modal_removeicon_text:				"Fjern ikon",
 					modal_tabheader1_text:				"Bruger",
 					modal_tabheader2_text:				"Navnefarve",
@@ -1284,7 +1296,6 @@ class EditUsers {
 					modal_colorpicker2_text:			"Baggrundsfarve",
 					modal_colorpicker3_text:			"Etiketfarve",
 					modal_colorpicker4_text:			"Skriftfarve",
-					modal_ignoreurl_text:				"Ignorer URL",
 					modal_ignoretagcolor_text:			"Brug rollefarve",
 					modal_validurl_text:				"Gyldig URL",
 					modal_invalidurl_text:				"Ugyldig URL"
@@ -1297,7 +1308,7 @@ class EditUsers {
 					modal_header_text:					"Lokale Benutzereinstellungen",
 					modal_username_text:				"Lokaler Benutzername",
 					modal_usertag_text:					"Etikett",
-					modal_userurl_text:					"Icon",
+					modal_useravatar_text:				"Icon",
 					modal_removeicon_text:				"Entferne Icon",
 					modal_tabheader1_text:				"Benutzer",
 					modal_tabheader2_text:				"Namensfarbe",
@@ -1306,7 +1317,6 @@ class EditUsers {
 					modal_colorpicker2_text:			"Hintergrundfarbe",
 					modal_colorpicker3_text:			"Etikettfarbe",
 					modal_colorpicker4_text:			"Schriftfarbe",
-					modal_ignoreurl_text:				"URL ignorieren",
 					modal_ignoretagcolor_text:			"Benutze Rollenfarbe",
 					modal_validurl_text:				"Gültige URL",
 					modal_invalidurl_text:				"Ungültige URL"
@@ -1319,7 +1329,7 @@ class EditUsers {
 					modal_header_text:					"Ajustes local de usuario",
 					modal_username_text:				"Nombre local de usuario",
 					modal_usertag_text:					"Etiqueta",
-					modal_userurl_text:					"Icono",
+					modal_useravatar_text:				"Icono",
 					modal_removeicon_text:				"Eliminar icono",
 					modal_tabheader1_text:				"Usuario",
 					modal_tabheader2_text:				"Color del nombre",
@@ -1328,7 +1338,6 @@ class EditUsers {
 					modal_colorpicker2_text:			"Color de fondo",
 					modal_colorpicker3_text:			"Color de la etiqueta",
 					modal_colorpicker4_text:			"Color de fuente",
-					modal_ignoreurl_text:				"Ignorar URL",
 					modal_ignoretagcolor_text:			"Usar color de rol",
 					modal_validurl_text:				"URL válida",
 					modal_invalidurl_text:				"URL inválida"
@@ -1341,7 +1350,7 @@ class EditUsers {
 					modal_header_text:					"Paramètres locale d'utilisateur",
 					modal_username_text:				"Nom local d'utilisateur",
 					modal_usertag_text:					"Étiquette",
-					modal_userurl_text:					"Icône",
+					modal_useravatar_text:				"Icône",
 					modal_removeicon_text:				"Supprimer l'icône",
 					modal_tabheader1_text:				"Serveur",
 					modal_tabheader2_text:				"Couleur du nom",
@@ -1350,7 +1359,6 @@ class EditUsers {
 					modal_colorpicker2_text:			"Couleur de fond",
 					modal_colorpicker3_text:			"Couleur de l'étiquette",
 					modal_colorpicker4_text:			"Couleur de la police",
-					modal_ignoreurl_text:				"Ignorer l'URL",
 					modal_ignoretagcolor_text:			"Utiliser la couleur de rôle",
 					modal_validurl_text:				"URL valide",
 					modal_invalidurl_text:				"URL invalide"
@@ -1363,7 +1371,7 @@ class EditUsers {
 					modal_header_text:					"Impostazioni locale utente",
 					modal_username_text:				"Nome locale utente",
 					modal_usertag_text:					"Etichetta",
-					modal_userurl_text:					"Icona",
+					modal_useravatar_text:				"Icona",
 					modal_removeicon_text:				"Rimuova l'icona",
 					modal_tabheader1_text:				"Utente",
 					modal_tabheader2_text:				"Colore del nome",
@@ -1372,7 +1380,6 @@ class EditUsers {
 					modal_colorpicker2_text:			"Colore di sfondo",
 					modal_colorpicker3_text:			"Colore della etichetta",
 					modal_colorpicker4_text:			"Colore del carattere",
-					modal_ignoreurl_text:				"Ignora l'URL",
 					modal_ignoretagcolor_text:			"Usa il colore del ruolo",
 					modal_validurl_text:				"URL valido",
 					modal_invalidurl_text:				"URL non valido"
@@ -1385,7 +1392,7 @@ class EditUsers {
 					modal_header_text:					"Lokale gebruikerinstellingen",
 					modal_username_text:				"Lokale gebruikernaam",
 					modal_usertag_text:					"Etiket",
-					modal_userurl_text:					"Icoon",
+					modal_useravatar_text:				"Icoon",
 					modal_removeicon_text:				"Verwijder icoon",
 					modal_tabheader1_text:				"Gebruiker",
 					modal_tabheader2_text:				"Naamkleur",
@@ -1394,7 +1401,6 @@ class EditUsers {
 					modal_colorpicker2_text:			"Achtergrondkleur",
 					modal_colorpicker3_text:			"Etiketkleur",
 					modal_colorpicker4_text:			"Doopvontkleur",
-					modal_ignoreurl_text:				"URL negeren",
 					modal_ignoretagcolor_text:			"Gebruik rolkleur",
 					modal_validurl_text:				"Geldige URL",
 					modal_invalidurl_text:				"Ongeldige URL"
@@ -1407,7 +1413,7 @@ class EditUsers {
 					modal_header_text:					"Lokal brukerinnstillinger",
 					modal_username_text:				"Lokalt gebruikernavn",
 					modal_usertag_text:					"Stikkord",
-					modal_userurl_text:					"Ikon",
+					modal_useravatar_text:				"Ikon",
 					modal_removeicon_text:				"Fjern ikon",
 					modal_tabheader1_text:				"Bruker",
 					modal_tabheader2_text:				"Navnfarge",
@@ -1416,7 +1422,6 @@ class EditUsers {
 					modal_colorpicker2_text:			"Bakgrunnfarge",
 					modal_colorpicker3_text:			"Stikkordfarge",
 					modal_colorpicker4_text:			"Skriftfarge",
-					modal_ignoreurl_text:				"Ignorer URL",
 					modal_ignoretagcolor_text:			"Bruk rollefarge",
 					modal_validurl_text:				"Gyldig URL",
 					modal_invalidurl_text:				"Ugyldig URL"
@@ -1429,7 +1434,7 @@ class EditUsers {
 					modal_header_text:					"Lokalne ustawienia użytkownika",
 					modal_username_text:				"Lokalna nazwa użytkownika",
 					modal_usertag_text:					"Etykieta",
-					modal_userurl_text:					"Ikona",
+					modal_useravatar_text:				"Ikona",
 					modal_removeicon_text:				"Usuń ikonę",
 					modal_tabheader1_text:				"Użytkownik",
 					modal_tabheader2_text:				"Kolor nazwy",
@@ -1438,7 +1443,6 @@ class EditUsers {
 					modal_colorpicker2_text:			"Kolor tła",
 					modal_colorpicker3_text:			"Kolor etykiety",
 					modal_colorpicker4_text:			"Kolor czcionki",
-					modal_ignoreurl_text:				"Ignoruj URL",
 					modal_ignoretagcolor_text:			"Użyj kolor roli",
 					modal_validurl_text:				"Prawidłowe URL",
 					modal_invalidurl_text:				"Nieprawidłowe URL"
@@ -1451,7 +1455,7 @@ class EditUsers {
 					modal_header_text:					"Configurações local do utilizador",
 					modal_username_text:				"Nome local do utilizador",
 					modal_usertag_text:					"Etiqueta",
-					modal_userurl_text:					"Icone",
+					modal_useravatar_text:				"Icone",
 					modal_removeicon_text:				"Remover ícone",
 					modal_tabheader1_text:				"Utilizador",
 					modal_tabheader2_text:				"Cor do nome",
@@ -1460,7 +1464,6 @@ class EditUsers {
 					modal_colorpicker2_text:			"Cor do fundo",
 					modal_colorpicker3_text:			"Cor da etiqueta",
 					modal_colorpicker4_text:			"Cor da fonte",
-					modal_ignoreurl_text:				"Ignorar URL",
 					modal_ignoretagcolor_text:			"Use a cor do papel",
 					modal_validurl_text:				"URL válido",
 					modal_invalidurl_text:				"URL inválida"
@@ -1473,7 +1476,7 @@ class EditUsers {
 					modal_header_text:					"Paikallinen käyttäjä asetukset",
 					modal_username_text:				"Paikallinen käyttäjätunnus",
 					modal_usertag_text:					"Merkki",
-					modal_userurl_text:					"Ikonin",
+					modal_useravatar_text:				"Ikonin",
 					modal_removeicon_text:				"Poista kuvake",
 					modal_tabheader1_text:				"Käyttäjä",
 					modal_tabheader2_text:				"Nimiväri",
@@ -1482,7 +1485,6 @@ class EditUsers {
 					modal_colorpicker2_text:			"Taustaväri",
 					modal_colorpicker3_text:			"Merkkiväri",
 					modal_colorpicker4_text:			"Fontinväri",
-					modal_ignoreurl_text:				"Ohita URL",
 					modal_ignoretagcolor_text:			"Käytä rooliväriä",
 					modal_validurl_text:				"Voimassa URL",
 					modal_invalidurl_text:				"Virheellinen URL"
@@ -1495,7 +1497,7 @@ class EditUsers {
 					modal_header_text:					"Lokal användareinställningar",
 					modal_username_text:				"Lokalt användarenamn",
 					modal_usertag_text:					"Märka",
-					modal_userurl_text:					"Ikon",
+					modal_useravatar_text:				"Ikon",
 					modal_removeicon_text:				"Ta bort ikonen",
 					modal_tabheader1_text:				"Användare",
 					modal_tabheader2_text:				"Namnfärg",
@@ -1504,7 +1506,6 @@ class EditUsers {
 					modal_colorpicker2_text:			"Bakgrundfärg",
 					modal_colorpicker3_text:			"Märkafärg",
 					modal_colorpicker4_text:			"Fontfärg",
-					modal_ignoreurl_text:				"Ignorera URL",
 					modal_ignoretagcolor_text:			"Använd rollfärg",
 					modal_validurl_text:				"Giltig URL",
 					modal_invalidurl_text:				"Ogiltig URL"
@@ -1517,7 +1518,7 @@ class EditUsers {
 					modal_header_text:					"Yerel Kullanıcı Ayarları",
 					modal_username_text:				"Yerel Kullanıcı Isim",
 					modal_usertag_text:					"Etiket",
-					modal_userurl_text:					"Simge",
+					modal_useravatar_text:				"Simge",
 					modal_removeicon_text:				"Simge kaldır",
 					modal_tabheader1_text:				"Kullanıcı",
 					modal_tabheader2_text:				"Simge rengi",
@@ -1526,7 +1527,6 @@ class EditUsers {
 					modal_colorpicker2_text:			"Arka fon rengi",
 					modal_colorpicker3_text:			"Etiket rengi",
 					modal_colorpicker4_text:			"Yazı rengi",
-					modal_ignoreurl_text:				"URL yoksay",
 					modal_ignoretagcolor_text:			"Rol rengini kullan",
 					modal_validurl_text:				"Geçerli URL",
 					modal_invalidurl_text:				"Geçersiz URL"
@@ -1539,7 +1539,7 @@ class EditUsers {
 					modal_header_text:					"Místní nastavení uživatel",
 					modal_username_text:				"Místní název uživatel",
 					modal_usertag_text:					"Štítek",
-					modal_userurl_text:					"Ikony",
+					modal_useravatar_text:				"Ikony",
 					modal_removeicon_text:				"Odstranit ikonu",
 					modal_tabheader1_text:				"Uživatel",
 					modal_tabheader2_text:				"Barva název",
@@ -1548,7 +1548,6 @@ class EditUsers {
 					modal_colorpicker2_text:			"Barva pozadí",
 					modal_colorpicker3_text:			"Barva štítek",
 					modal_colorpicker4_text:			"Barva fontu",
-					modal_ignoreurl_text:				"Ignorovat URL",
 					modal_ignoretagcolor_text:			"Použijte barva role",
 					modal_validurl_text:				"Platná URL",
 					modal_invalidurl_text:				"Neplatná URL"
@@ -1561,7 +1560,7 @@ class EditUsers {
 					modal_header_text:					"Настройки за локални потребител",
 					modal_username_text:				"Локално име на потребител",
 					modal_usertag_text:					"Cвободен край",
-					modal_userurl_text:					"Икона",
+					modal_useravatar_text:				"Икона",
 					modal_removeicon_text:				"Премахване на иконата",
 					modal_tabheader1_text:				"Потребител",
 					modal_tabheader2_text:				"Цвят на име",
@@ -1570,7 +1569,6 @@ class EditUsers {
 					modal_colorpicker2_text:			"Цвят на заден план",
 					modal_colorpicker3_text:			"Цвят на свободен край",
 					modal_colorpicker4_text:			"Цвят на шрифта",
-					modal_ignoreurl_text:				"Игнориране на URL",
 					modal_ignoretagcolor_text:			"Използвайте цвят на ролите",
 					modal_validurl_text:				"Валиден URL",
 					modal_invalidurl_text:				"Невалиден URL"
@@ -1583,7 +1581,7 @@ class EditUsers {
 					modal_header_text:					"Настройки локального пользователь",
 					modal_username_text:				"Имя локального пользователь",
 					modal_usertag_text:					"Tег",
-					modal_userurl_text:					"Значок",
+					modal_useravatar_text:				"Значок",
 					modal_removeicon_text:				"Удалить значок",
 					modal_tabheader1_text:				"Пользователь",
 					modal_tabheader2_text:				"Цвет имя",
@@ -1592,7 +1590,6 @@ class EditUsers {
 					modal_colorpicker2_text:			"Цвет задний план",
 					modal_colorpicker3_text:			"Цвет тег",
 					modal_colorpicker4_text:			"Цвет шрифта",
-					modal_ignoreurl_text:				"Игнорировать URL",
 					modal_ignoretagcolor_text:			"Использовать цвет ролей",
 					modal_validurl_text:				"Действительный URL",
 					modal_invalidurl_text:				"Неверная URL"
@@ -1605,7 +1602,7 @@ class EditUsers {
 					modal_header_text:					"Налаштування локального користувач",
 					modal_username_text:				"Локальне ім'я користувач",
 					modal_usertag_text:					"Tег",
-					modal_userurl_text:					"Іконка",
+					modal_useravatar_text:				"Іконка",
 					modal_removeicon_text:				"Видалити піктограму",
 					modal_tabheader1_text:				"Користувач",
 					modal_tabheader2_text:				"Колір ім'я",
@@ -1614,7 +1611,6 @@ class EditUsers {
 					modal_colorpicker2_text:			"Колір фон",
 					modal_colorpicker3_text:			"Колір тег",
 					modal_colorpicker4_text:			"Колір шрифту",
-					modal_ignoreurl_text:				"Ігнорувати URL",
 					modal_ignoretagcolor_text:			"Використовуйте рольовий колір",
 					modal_validurl_text:				"Дійсна URL",
 					modal_invalidurl_text:				"Недійсна URL"
@@ -1627,7 +1623,7 @@ class EditUsers {
 					modal_header_text:					"ローカルユーザーー設定",
 					modal_username_text:				"ローカルユーザーー名",
 					modal_usertag_text:					"タグ",
-					modal_userurl_text:					"アイコン",
+					modal_useravatar_text:				"アイコン",
 					modal_removeicon_text:				"アイコンを削除",
 					modal_tabheader1_text:				"ユーザー",
 					modal_tabheader2_text:				"名の色",
@@ -1636,7 +1632,6 @@ class EditUsers {
 					modal_colorpicker2_text:			"バックグラウンドの色",
 					modal_colorpicker3_text:			"タグの色",
 					modal_colorpicker4_text:			"フォントの色",
-					modal_ignoreurl_text:				"URL を無視する",
 					modal_ignoretagcolor_text:			"ロールカラーを使用する",
 					modal_validurl_text:				"有効な URL",
 					modal_invalidurl_text:				"無効な URL"
@@ -1649,7 +1644,7 @@ class EditUsers {
 					modal_header_text:					"本地用戶設置",
 					modal_username_text:				"用戶名稱",
 					modal_usertag_text:					"標籤",
-					modal_userurl_text:					"圖標",
+					modal_useravatar_text:				"圖標",
 					modal_removeicon_text:				"刪除圖標",
 					modal_tabheader1_text:				"用戶",
 					modal_tabheader2_text:				"名稱顏色",
@@ -1658,7 +1653,6 @@ class EditUsers {
 					modal_colorpicker2_text:			"背景顏色",
 					modal_colorpicker3_text:			"標籤顏色",
 					modal_colorpicker4_text:			"字體顏色",
-					modal_ignoreurl_text:				"忽略 URL",
 					modal_ignoretagcolor_text:			"使用角色",
 					modal_validurl_text:				"有效的 URL",
 					modal_invalidurl_text:				"無效的 URL"
@@ -1671,7 +1665,7 @@ class EditUsers {
 					modal_header_text:					"로컬 사용자 설정",
 					modal_username_text:				"로컬 사용자 이름",
 					modal_usertag_text:					"꼬리표",
-					modal_userurl_text:					"상",
+					modal_useravatar_text:				"상",
 					modal_removeicon_text:				"상 삭제",
 					modal_tabheader1_text:				"사용자",
 					modal_tabheader2_text:				"이름 색깔",
@@ -1680,7 +1674,6 @@ class EditUsers {
 					modal_colorpicker2_text:			"배경 색깔",
 					modal_colorpicker3_text:			"꼬리표 색깔",
 					modal_colorpicker4_text:			"글꼴 색깔",
-					modal_ignoreurl_text:				"URL 무시",
 					modal_ignoretagcolor_text:			"역할 색상 사용",
 					modal_validurl_text:				"유효한 URL",
 					modal_invalidurl_text:				"잘못된 URL"
@@ -1693,7 +1686,7 @@ class EditUsers {
 					modal_header_text:					"Local Usersettings",
 					modal_username_text:				"Local Username",
 					modal_usertag_text:					"Tag",
-					modal_userurl_text:					"Icon",
+					modal_useravatar_text:				"Icon",
 					modal_removeicon_text:				"Remove Icon",
 					modal_tabheader1_text:				"User",
 					modal_tabheader2_text:				"Namecolor",
@@ -1702,7 +1695,6 @@ class EditUsers {
 					modal_colorpicker2_text:			"Backgroundcolor",
 					modal_colorpicker3_text:			"Tagcolor",
 					modal_colorpicker4_text:			"Fontcolor",
-					modal_ignoreurl_text:				"Ignore URL",
 					modal_ignoretagcolor_text:			"Use Rolecolor",
 					modal_validurl_text:				"Valid URL",
 					modal_invalidurl_text:				"Invalid URL"

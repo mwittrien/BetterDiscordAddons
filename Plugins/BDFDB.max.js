@@ -5743,7 +5743,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
         }
 		render() {
 			if (typeof this.props.type != 'string' || !['BUTTON', 'SWITCH', 'TEXTINPUT'].includes(this.props.type.toUpperCase())) return null;
-			this.props.type = this.props.type.charAt(0).toUpperCase() + this.props.type.slice(1).toLowerCase();
 			let childcomponent = LibraryComponents[this.props.type];
 			if (!childcomponent) return null;
 			if (this.props.mini && childcomponent.Sizes) this.props.size = childcomponent.Sizes.MINI || childcomponent.Sizes.MIN;
@@ -5812,7 +5811,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			}
         }
         render() {return BDFDB.React.createElement(LibraryComponents.SettingsItem, Object.assign({keys:[]}, this.props, {
-			type: 'SWITCH',
+			type: 'Switch',
 			onChange: this.saveSettings.bind(this)
 		}));}
     } : undefined;
