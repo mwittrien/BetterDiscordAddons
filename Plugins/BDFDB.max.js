@@ -3349,14 +3349,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		return selectMenu;
 	};
 
-	var modals = [];
 	BDFDB.openModal = function (plugin, config) {
 		if (!BDFDB.isObject(plugin) || !BDFDB.isObject(config)) return;
-		var modal, modalobserver, id, headerchildren = [], contentchildren = [], footerchildren = [], modalprops, cancels = [], closeModal = _ => {
-			if (id) BDFDB.removeFromArray(modals, id);
-			if (typeof config.onClose == 'function') config.onClose(modal);
+		var modal, headerchildren = [], contentchildren = [], footerchildren = [], modalprops, cancels = [], closeModal = _ => {
 			if (BDFDB.isObject(modalprops) && typeof modalprops.onClose == 'function') modalprops.onClose();
-			if (typeof modalobserver.disconnect == 'function') modalobserver.disconnect();
 		};
 		if (typeof config.text == 'string') {
 			contentchildren.push(LibraryModules.React.createElement(LibraryComponents.TextElement, {
@@ -3416,13 +3412,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				footerchildren.push(LibraryModules.React.createElement(LibraryComponents.Button, {
 					type: 'button',
 					look: look || (color ? LibraryComponents.Button.Looks.FILLED : LibraryComponents.Button.Looks.LINK),
-					color: color ? color : LibraryComponents.Button.Colors.PRIMARY,
+					color: color || LibraryComponents.Button.Colors.PRIMARY,
 					onClick: _ => {
-						click(modal);
-						if (button.close) {
-							for (let cancel of cancels) if (cancel != click) cancel(modal);
-							closeModal();
-						}
+						if (button.close) closeModal();
+						if (!(button.close && button.cancel)) click(modal);
 					},
 					children: contents
 				}));
@@ -3432,70 +3425,70 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			if (typeof config.onClose != 'function') config.onClose = _ => {};
 			if (typeof config.onOpen != 'function') config.onOpen = _ => {};
 			
-			id = BDFDB.generateID(modals);
-			modalobserver = new MutationObserver(changes => {changes.forEach(change => {change.addedNodes.forEach(node => {
-				if (node.tagName && (node = node.querySelector(`.BDFDB-modal-${id}.BDFDB-modal-open`)) != null) {
-					modal = node;
-					if (typeof config.onOpen == 'function') config.onOpen(modal);
-				}
-			})})});
-			modalobserver.observe(document.querySelector(BDFDB.dotCN.itemlayercontainer), {subtree:true, childList:true});
-			
+			let name = plugin.name || (typeof plugin.getName == "function" ? plugin.getName() : null);
+			name = typeof name == 'string' ? name : null;
+			let size = typeof config.size == 'string' && LibraryComponents.ModalComponents.ModalSize[config.size.toUpperCase()];
+			let oldTransitionState = 0;
 			LibraryModules.ModalUtils.openModal(props => {
 				modalprops = props;
-				let name = plugin.name || (typeof plugin.getName == "function" ? plugin.getName() : null);
-				name = typeof name == 'string' ? name : null;
-				let size = typeof config.size == 'string' && LibraryComponents.ModalComponents.ModalSize[config.size.toUpperCase()];
-				return LibraryModules.React.createElement(function (e) {
-					return LibraryModules.React.createElement(LibraryComponents.ModalComponents.ModalRoot, {
-						className: [`BDFDB-modal`, `BDFDB-modal-${id}`, name ? `${name}-modal` : null, props.transitionState == 2 ? `BDFDB-modal-open` : null, config.selector ? config.selector : null].filter(n => n).join(' '),
-						size: size || LibraryComponents.ModalComponents.ModalSize.SMALL,
-						transitionState: e.transitionState,
-						children: [
-							LibraryModules.React.createElement(LibraryComponents.ModalComponents.ModalHeader, {
-								className: headerchildren.length ? BDFDB.disCN.modalheaderhassibling : null,
-								separator: config.headerseparator || false,
-								children: [
-									LibraryModules.React.createElement(LibraryComponents.Flex.Child, {
-										grow: 1,
-										shrink: 1,
-										children: [
-											LibraryModules.React.createElement(LibraryComponents.FormComponents.FormTitle, {
-												tag: LibraryComponents.FormComponents.FormTitle.Tags.H4,
-												children: typeof config.header == 'string' ? config.header : ""
-											}),
-											LibraryModules.React.createElement(LibraryComponents.TextElement, {
-												size: LibraryComponents.TextElement.Sizes.SMALL,
-												color: LibraryComponents.TextElement.Colors.PRIMARY,
-												children: typeof config.subheader == 'string' ? config.subheader : (name || "")
-											})
-										]
-									}),
-									LibraryModules.React.createElement(LibraryComponents.ModalComponents.ModalCloseButton, {
-										onClick: _ => {
-											for (let cancel of cancels) cancel(modal);
-											closeModal();
-										}
-									})
-								]
-							}),
-							headerchildren.length ? LibraryModules.React.createElement(LibraryComponents.Flex, {
-								children: headerchildren
-							}) : null,
-							LibraryModules.React.createElement(LibraryComponents.ModalComponents.ModalContent, {
-								children: contentchildren
-							}),
-							footerchildren.length ? LibraryModules.React.createElement(LibraryComponents.ModalComponents.ModalFooter, {
-								children: footerchildren
-							}) : null
-						]
-					});
+				return LibraryModules.React.createElement(class BDFDBModal extends LibraryModules.React.Component {
+					render () {
+						return LibraryModules.React.createElement(LibraryComponents.ModalComponents.ModalRoot, {
+							className: [`BDFDB-modal`, name ? `${name}-modal` : null, config.selector ? config.selector : null].filter(n => n).join(' '),
+							size: size || LibraryComponents.ModalComponents.ModalSize.SMALL,
+							transitionState: props.transitionState,
+							children: [
+								LibraryModules.React.createElement(LibraryComponents.ModalComponents.ModalHeader, {
+									className: headerchildren.length ? BDFDB.disCN.modalheaderhassibling : null,
+									separator: config.headerseparator || false,
+									children: [
+										LibraryModules.React.createElement(LibraryComponents.Flex.Child, {
+											grow: 1,
+											shrink: 1,
+											children: [
+												LibraryModules.React.createElement(LibraryComponents.FormComponents.FormTitle, {
+													tag: LibraryComponents.FormComponents.FormTitle.Tags.H4,
+													children: typeof config.header == 'string' ? config.header : ""
+												}),
+												LibraryModules.React.createElement(LibraryComponents.TextElement, {
+													size: LibraryComponents.TextElement.Sizes.SMALL,
+													color: LibraryComponents.TextElement.Colors.PRIMARY,
+													children: typeof config.subheader == 'string' ? config.subheader : (name || "")
+												})
+											]
+										}),
+										LibraryModules.React.createElement(LibraryComponents.ModalComponents.ModalCloseButton, {
+											onClick: closeModal
+										})
+									]
+								}),
+								headerchildren.length ? LibraryModules.React.createElement(LibraryComponents.Flex, {
+									children: headerchildren
+								}) : null,
+								LibraryModules.React.createElement(LibraryComponents.ModalComponents.ModalContent, {
+									children: contentchildren
+								}),
+								footerchildren.length ? LibraryModules.React.createElement(LibraryComponents.ModalComponents.ModalFooter, {
+									children: footerchildren
+								}) : null
+							]
+						});
+					}
+					componentDidMount () {
+						modal = BDFDB.React.findDOMNodeSafe(this);
+						modal = modal && modal.parentElement ? modal.parentElement.querySelector('.BDFDB-modal') : null;
+						if (modal && props.transitionState == 2 && props.transitionState > oldTransitionState) config.onOpen(modal, this);
+						oldTransitionState = props.transitionState;
+					}
+					componentWillUnmount () {
+						if (modal && props.transitionState == 4) {
+							for (let cancel of cancels) cancel(modal);
+							config.onClose(modal, this);
+						}
+					}
 				}, props);
 			}, {
-				onCloseRequest: _ => {
-					for (let cancel of cancels) cancel(modal);
-					closeModal();
-				}
+				onCloseRequest: closeModal
 			});
 		}
 	};
