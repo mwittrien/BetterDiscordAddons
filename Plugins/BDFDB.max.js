@@ -5745,7 +5745,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			if (typeof this.props.type != 'string' || !['BUTTON', 'SWITCH', 'TEXTINPUT'].includes(this.props.type.toUpperCase())) return null;
 			this.props.type = this.props.type.charAt(0).toUpperCase() + this.props.type.slice(1).toLowerCase();
 			let childcomponent = LibraryComponents[this.props.type];
-			if (!childcomponent) return;
+			if (!childcomponent) return null;
 			if (this.props.mini && childcomponent.Sizes) this.props.size = childcomponent.Sizes.MINI || childcomponent.Sizes.MIN;
 			let childprops = Object.assign({}, this.props, {onChange: this.handleChange.bind(this)});
 			childprops.className = this.props.childClassName;
