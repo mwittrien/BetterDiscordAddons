@@ -1501,16 +1501,24 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				var filteredmodules = [];
 				for (let type in plugin.patchModules) {
 					var methodnames = Array.isArray(plugin.patchModules[type]) ? plugin.patchModules[type] : Array.of(plugin.patchModules[type]);
-					if (methodnames.includes('componentDidUpdate') || methodnames.includes('componentDidMount') || methodnames.includes('render')) filteredmodules.push(type);
+					if (methodnames.includes('componentDidUpdate') || methodnames.includes('componentDidUpdate') || methodnames.includes('render')) filteredmodules.push(type);
 				}
 				filteredmodules = selectedtype ? filteredmodules.filter(type => type == selectedtype) : filteredmodules;
-				if (filteredmodules.length > 0) {
+				if (filteredmodules.length) {
 					try {
 						const appins = BDFDB.getOwnerInstance({node:app, name:filteredmodules, all:true, noCopies:true, group:true, depth:99999999, time:99999999});
-						for (let type in appins) for (let i in appins[type]) BDFDB.WebModules.initiateProcess(plugin, appins[type][i], null, type, ['componentDidMount', 'componentDidUpdate', 'render']);
+						for (let type in appins) for (let i in appins[type]) {
+							var methodnames = Array.isArray(plugin.patchModules[type]) ? plugin.patchModules[type] : Array.of(plugin.patchModules[type]);
+							if (methodnames.includes('componentDidMount')) BDFDB.WebModules.initiateProcess(plugin, appins[type][i], null, type, ['componentDidMount']);
+							if (methodnames.includes('componentDidUpdate') || methodnames.includes('render')) appins[type][i].forceUpdate();
+						}
 						if (bdsettings) {
 							const bdsettingsins = BDFDB.getOwnerInstance({node:bdsettings, name:filteredmodules, all:true, noCopies:true, group:true, depth:99999999, time:99999999});
-							for (let type in bdsettingsins) for (let i in bdsettingsins[type]) BDFDB.WebModules.initiateProcess(plugin, bdsettingsins[type][i], null, type, ['componentDidMount', 'componentDidUpdate', 'render']);
+							for (let type in bdsettingsins) for (let i in bdsettingsins[type]) {
+								var methodnames = Array.isArray(plugin.patchModules[type]) ? plugin.patchModules[type] : Array.of(plugin.patchModules[type]);
+								if (methodnames.includes('componentDidMount')) BDFDB.WebModules.initiateProcess(plugin, bdsettingsins[type][i], null, type, ['componentDidMount']);
+								if (methodnames.includes('componentDidUpdate') || methodnames.includes('render')) bdsettingsins[type][i].forceUpdate();
+							}
 						}
 					}
 					catch (err) {console.error(`%c[${plugin.name}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not force update components! ' + err);}
@@ -2242,7 +2250,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			let id = Node.prototype.isPrototypeOf(cha) ? (BDFDB.getChannelID(cha) || BDFDB.getDmID(cha)) : cha && typeof cha == 'object' ? cha.id : cha;
 			if (id) unreadchannels.push(id);
 		}
-		if (unreadchannels.length > 0) LibraryModules.AckUtils.bulkAck(unreadchannels);
+		if (unreadchannels.length) LibraryModules.AckUtils.bulkAck(unreadchannels);
 	};
 
 	BDFDB.markGuildAsRead = function (servers) {
@@ -2253,7 +2261,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			let channels = id ? LibraryModules.GuildChannelStore.getChannels(id) : null;
 			if (channels) for (let type in channels) if (Array.isArray(channels[type])) for (let channelobj of channels[type]) unreadchannels.push(channelobj.channel.id);
 		}
-		if (unreadchannels.length > 0) LibraryModules.AckUtils.bulkAck(unreadchannels);
+		if (unreadchannels.length) LibraryModules.AckUtils.bulkAck(unreadchannels);
 	};
 
 	BDFDB.saveAllData = function (data, plugin, key) {
@@ -2950,7 +2958,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			addInitEventListener(ele, 'keyup', e => {
 				let icons = ele.parentElement.querySelectorAll(BDFDB.dotCN.searchbaricon);
 				BDFDB.toggleClass(icons[0], BDFDB.disCN.searchbarvisible, ele.value.length == 0);
-				BDFDB.toggleClass(icons[1], BDFDB.disCN.searchbarvisible, ele.value.length > 0);
+				BDFDB.toggleClass(icons[1], BDFDB.disCN.searchbarvisible, ele.value.length);
 			});
 		});
 		container.querySelectorAll(BDFDB.dotCNS.searchbar + BDFDB.dotCN.searchbarclear).forEach(ele => {
@@ -5707,7 +5715,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 							BDFDB.React.createElement(this.ColorSwatch, {
 								color: this.state.customColor,
 								isSingle: !this.state.colors.length,
-								isCustom: this.state.colors.length > 0,
+								isCustom: this.state.colors.length,
 								isSelected: this.state.customSelected,
 								isDisabled: this.state.disabled,
 								style: {
@@ -5744,6 +5752,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
     } : undefined;
 	LibraryComponents.Flex = BDFDB.WebModules.findByProperties('Wrap', 'Direction', 'Child');
 	LibraryComponents.FormComponents = BDFDB.WebModules.findByProperties('FormSection', 'FormText');
+	LibraryComponents.IconBadge = BDFDB.WebModules.findByName('IconBadge');
 	LibraryComponents.ModalComponents = BDFDB.WebModules.findByProperties('ModalContent', 'ModalFooter');
 	LibraryComponents.ModalTabContent = reactInitialized ? class ModalTabContent extends LibraryModules.React.Component {
         render() {
@@ -5760,6 +5769,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			}));
 		}
     } : undefined;
+	LibraryComponents.NumberBadge = BDFDB.WebModules.findByName('NumberBadge');
 	LibraryComponents.SvgIcon = BDFDB.WebModules.findByProperties('Gradients', 'Names');
 	LibraryComponents.SettingsPanel = reactInitialized ? class SettingsPanel extends LibraryModules.React.Component {
 		render() {
@@ -7196,7 +7206,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			var req = getWebModuleReq(); window.t = [];
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
-				if (m && typeof m == "object" && !Array.isArray(m) && Object.keys(m).length > 0) {
+				if (m && typeof m == "object" && !Array.isArray(m) && Object.keys(m).length) {
 					var string = true, stringlib = false;
 					for (let j in m) {
 						if (typeof m[j] != "string") string = false;
@@ -7204,7 +7214,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					}
 					if (string && stringlib) window.t.push(m);
 				}
-				if (m && typeof m == "object" && m.default && typeof m.default == "object" && !Array.isArray(m.default) && Object.keys(m.default).length > 0) {
+				if (m && typeof m == "object" && m.default && typeof m.default == "object" && !Array.isArray(m.default) && Object.keys(m.default).length) {
 					var string = true, stringlib = false;
 					for (let j in m.default) {
 						if (typeof m.default[j] != "string") string = false;
