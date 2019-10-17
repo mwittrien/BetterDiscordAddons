@@ -111,22 +111,9 @@ class EditUsers {
 			label: this.defaults.settings[key].description,
 			value: settings[key]
 		}));
-		settingsitems.push(BDFDB.React.createElement(BDFDB.LibraryComponents.Flex, {
-			direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
-			grow: 1,
-			children: [
-				BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
-					className: BDFDB.disCN.marginbottom8,
-					tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H1,
-					children: "Change Users in:"
-				}),
-				BDFDB.React.createElement(BDFDB.LibraryComponents.Flex, {
-					className: "BDFDB-settings-inner-list",
-					direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
-					grow: 1,
-					children: inneritems
-				})
-			]
+		settingsitems.push(BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+			title: "Change Users in:"
+			children: inneritems
 		}));
 		settingsitems.push(BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsItem, {
 			type: "BUTTON",

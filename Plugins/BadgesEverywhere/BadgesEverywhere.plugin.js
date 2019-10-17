@@ -79,7 +79,6 @@ class BadgesEverywhere {
 
 			${BDFDB.dotCNS.member + BDFDB.dotCN.memberpremiumicon}:not(.BE-badge-CurrentGuildBoost-inner) {display: none;}`;
 
-
 		this.requestedusers = {};
 		this.loadedusers = {};
 
@@ -106,7 +105,7 @@ class BadgesEverywhere {
 				"GUILD_BOOST":				{value:true, 	id:"NitroGuildBoost",		name:"Nitro Guild Boost", 			selector:"profileGuildSubscriberlvl",			size:17,	types:[1,2,3,4]},
 			},
 			indicators: {
-				"CURRENT_GUILD_BOOST":			{value:true, 	name:"Current Nitro Guild Boost", 			markup:`<div class="BE-badge BE-badge-CurrentGuildBoost"><svg aria-label="Nitro boosting since May 31, 2019" name="PremiumGuildSubscriberBadge" class="BE-badge-CurrentGuildBoost-inner ${BDFDB.disCNS.memberpremiumicon + BDFDB.disCN.membericon}" aria-hidden="false" width="24" height="24" viewBox="0 0 8 12" style="margin: 0;"><path d="M4 0L0 4V8L4 12L8 8V4L4 0ZM7 7.59L4 10.59L1 7.59V4.41L4 1.41L7 4.41V7.59Z" fill="currentColor"></path><path d="M2 4.83V7.17L4 9.17L6 7.17V4.83L4 2.83L2 4.83Z" fill="currentColor"></path></svg></div>`},
+				"CURRENT_GUILD_BOOST":		{value:true, 	id:"CurrentGuildBoost",		name:"Current Nitro Guild Boost", 	inner:`<svg name="PremiumGuildSubscriberBadge" class="BE-badge-CurrentGuildBoost-inner ${BDFDB.disCNS.memberpremiumicon + BDFDB.disCN.membericon}" aria-hidden="false" width="24" height="24" viewBox="0 0 8 12" style="margin: 0;"><path d="M4 0L0 4V8L4 12L8 8V4L4 0ZM7 7.59L4 10.59L1 7.59V4.41L4 1.41L7 4.41V7.59Z" fill="currentColor"></path><path d="M2 4.83V7.17L4 9.17L6 7.17V4.83L4 2.83L2 4.83Z" fill="currentColor"></path></svg>`},
 			}
 		};
 
@@ -129,33 +128,43 @@ class BadgesEverywhere {
 		var settings = BDFDB.getAllData(this, "settings");
 		var badges = BDFDB.getAllData(this, "badges");
 		var indicators = BDFDB.getAllData(this, "indicators");
-		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
-		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
-		}
-		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Display Badges:</h3></div><div class="BDFDB-settings-inner-list">`;
-		for (let flag in badges) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.badges[flag].name}</h3><span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionplaying}" style="all: unset !important;">`;
-			if (Array.isArray(this.defaults.badges[flag].types)) for (let type of this.defaults.badges[flag].types) settingshtml += `<div class="BE-badge BE-badge-${this.defaults.badges[flag].id} ${this.BadgeClasses[this.defaults.badges[flag].selector + type]} BE-size-${this.defaults.badges[flag].size}"></div>`;
-			else settingshtml += `<div class="BE-badge BE-badge-${this.defaults.badges[flag].id} ${this.BadgeClasses[this.defaults.badges[flag].selector]} BE-size-${this.defaults.badges[flag].size}"></div>`;
-			settingshtml += `</span><span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;">`
-			if (Array.isArray(this.defaults.badges[flag].types)) for (let type of this.defaults.badges[flag].types) settingshtml += `<div class="BE-badge BE-badge-${this.defaults.badges[flag].id} ${this.BadgeClasses[this.defaults.badges[flag].selector + type]} BE-size-${this.defaults.badges[flag].size}"></div>`;
-			else settingshtml += `<div class="BE-badge BE-badge-${this.defaults.badges[flag].id} ${this.BadgeClasses[this.defaults.badges[flag].selector]} BE-size-${this.defaults.badges[flag].size}"></div>`;
-			settingshtml += `</span><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="badges ${flag}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${badges[flag] ? " checked" : ""}></div></div>`;
-		}
-		for (let flag in indicators) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.indicators[flag].name}</h3><span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionplaying}" style="all: unset !important;">${this.defaults.indicators[flag].markup}</span><span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;">${this.defaults.indicators[flag].markup}</span><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="indicators ${flag}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${indicators[flag] ? " checked" : ""}></div></div>`;
-		}
-
-		settingshtml += `</div></div></div>`;
-
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
-
-		BDFDB.addClass(settingspanel.querySelectorAll(".BE-badge"), "BE-badge-settings");
-
-		BDFDB.initElements(settingspanel, this);
-
-		return settingspanel;
+		var settingsitems = [], inneritems = [];
+		
+		for (let key in settings) settingsitems.push(BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
+			className: BDFDB.disCN.marginbottom8,
+			plugin: this,
+			keys: ["settings", key],
+			label: this.defaults.settings[key].description,
+			value: settings[key]
+		}));
+		for (let flag in badges) inneritems.push(BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
+			className: BDFDB.disCN.marginbottom8,
+			plugin: this,
+			keys: ["badges", flag],
+			label: this.defaults.badges[flag].name,
+			value: badges[flag],
+			labelchildren: [
+				BDFDB.React.elementToReact(BDFDB.htmlToElement(`<span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionplaying}" style="all: unset !important;">${Array.isArray(this.defaults.badges[flag].types) ? this.defaults.badges[flag].types.map(rank => this.createBadge("settings", flag, rank)).join("") : this.createBadge("settings", flag)}</span>`)),
+				BDFDB.React.elementToReact(BDFDB.htmlToElement(`<span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;">${Array.isArray(this.defaults.badges[flag].types) ? this.defaults.badges[flag].types.map(rank => this.createBadge("settings", flag, rank)).join("") : this.createBadge("settings", flag)}</span>`))
+			]
+		}));
+		for (let flag in indicators) inneritems.push(BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
+			className: BDFDB.disCN.marginbottom8,
+			plugin: this,
+			keys: ["indicators", flag],
+			label: this.defaults.indicators[flag].name,
+			value: indicators[flag],
+			labelchildren: [
+				BDFDB.React.elementToReact(BDFDB.htmlToElement(`<span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionplaying}" style="all: unset !important;">${this.createBadge("settings", flag)}</span>`)),
+				BDFDB.React.elementToReact(BDFDB.htmlToElement(`<span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;">${this.createBadge("settings", flag)}</span>`))
+			]
+		}));
+		settingsitems.push(BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+			title: "Display Badges:",
+			children: inneritems
+		}));
+		
+		return BDFDB.createSettingsPanel(this, settingsitems);
 	}
 
 	//legacy
@@ -239,6 +248,13 @@ class BadgesEverywhere {
 			BDFDB.WebModules.forceAllUpdates(this);
 		}
 	}
+	
+	createBadge (type, flag, rank = "") {
+		let data = this.defaults.badges[flag] || this.defaults.indicators[flag];
+		if (!data) return "";
+		let className = [`BE-badge`, `BE-badge-${type}`, data.id ? `BE-badge-${data.id}` : null, data.selector ? this.BadgeClasses[data.selector + rank] : null, data.size ? `BE-size-${data.size}` : null].filter(n => n).join(" ");
+		return `<div class="${className}">${data.inner || ""}</div>`;
+	}
 
 	addBadges (info, wrapper, type) {
 		if (!info || info.bot || !wrapper) return;
@@ -271,7 +287,7 @@ class BadgesEverywhere {
 		let badgewrapper = BDFDB.htmlToElement(`<span class="BE-badges BE-badges-${type} ${!settings.useColoredVersion || (header && !BDFDB.containsClass(header, BDFDB.disCN.userpopoutheadernormal)) ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important; display: flex !important; flex-direction: row !important;"></span>`);
 		for (let flag in this.defaults.badges) {
 			if ((this.loadedusers[info.id].flags | flag) == this.loadedusers[info.id].flags && badges[flag]) {
-				let badge = BDFDB.htmlToElement(`<div class="BE-badge BE-badge-${this.defaults.badges[flag].id} BE-badge-${type} ${this.BadgeClasses[this.defaults.badges[flag].selector + (flag == this.boostflag ? BDFDB.LibraryModules.GuildBoostUtils.getUserLevel(this.loadedusers[info.id].premium_guild_since) : "")]} BE-size-${this.defaults.badges[flag].size}"></div>`);
+				let badge = BDFDB.htmlToElement(this.createBadge(type, flag, flag == this.boostflag ? BDFDB.LibraryModules.GuildBoostUtils.getUserLevel(this.loadedusers[info.id].premium_guild_since) : ""));
 				badgewrapper.appendChild(badge);
 				badge.addEventListener("mouseenter", () => {
 					let text = this.defaults.badges[flag].name;
@@ -283,8 +299,7 @@ class BadgesEverywhere {
 		}
 		let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), info.id);
 		if (indicators.CURRENT_GUILD_BOOST && member && member.premiumSince) {
-			let badge = BDFDB.htmlToElement(this.defaults.indicators.CURRENT_GUILD_BOOST.markup);
-			BDFDB.addClass(badge, `BE-badge-${type}`);
+			let badge = BDFDB.htmlToElement(this.createBadge(type, "CURRENT_GUILD_BOOST"));
 			badgewrapper.appendChild(badge);
 			badge.addEventListener("mouseenter", () => {BDFDB.createTooltip(settings.showNitroDate ? BDFDB.LanguageStringsFormat("PREMIUM_GUILD_SUBSCRIPTION_TOOLTIP", new Date(member.premiumSince)) : "Boosting current server", badge, {type:"top", style:"white-space: nowrap; max-width: unset"});});
 		}
