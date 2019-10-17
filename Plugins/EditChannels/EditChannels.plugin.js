@@ -11,7 +11,7 @@ class EditChannels {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["Transparent colors","Added compatibility for (semi-)transparent colors"]]
+			"improved":[["Switching to React","Using React to create settings and modals, faster and more less likely to break"]]
 		};
 
 		this.labels = {};
