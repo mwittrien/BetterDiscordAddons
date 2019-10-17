@@ -15,21 +15,12 @@ class BetterFriendCount {
 		};
 
 		this.patchModules = {
-			"TabBar":"componentDidMount",
+			"TabBar":"render",
 			"FriendRow":["componentWillMount","componentWillUnmount"]
 		};
 	}
 
 	initConstructor () {
-		this.css = `
-			${BDFDB.dotCNS.friends + BDFDB.dotCNS.settingstabbar + BDFDB.dotCN.settingstabbarbadge}:not(.betterfriendcount-badge) {
-				display: none !important;
-			}
-			${BDFDB.dotCNS.friends + BDFDB.dotCNS.settingstabbar + BDFDB.dotCN.settingstabbarbadge}.betterfriendcount-badge {
-				margin-left: 5px !important;
-			}
-		`;
-
 		this.relationshipTypes = {};
 		for (let type in BDFDB.DiscordConstants.RelationshipTypes) this.relationshipTypes[BDFDB.DiscordConstants.RelationshipTypes[type]] = type;
 	}
@@ -74,7 +65,7 @@ class BetterFriendCount {
 			if (this.started) return;
 			BDFDB.loadMessage(this);
 
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.WebModules.forceAllUpdates(this, 'TabBar');
 		}
 		else {
 			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
@@ -92,40 +83,52 @@ class BetterFriendCount {
 	// begin of own functions
 
 	processTabBar (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.children) for (let child of instance.props.children) if (child && (child.key || (child.props && child.props.id)) == "ADD_FRIEND") this.addCountNumbers(wrapper);
-	}
-
-	processFriendRow (instance, wrapper, returnvalue) {
-		this.addCountNumbers();
-	}
-
-	addCountNumbers (wrapper = document.querySelector(BDFDB.dotCNS.friends + BDFDB.dotCN.settingstabbar)) {
-		if (!wrapper) return;
-		let tabitems = wrapper.querySelectorAll(BDFDB.dotCN.settingsitem + BDFDB.dotCN.settingsitemthemed);
-		if (!tabitems || tabitems.length < 4) return;
-		BDFDB.removeEles(".betterfriendcount-badge");
-
-		let relationships = BDFDB.LibraryModules.FriendUtils.getRelationships(), relationshipCount = {};
-		for (let type in this.relationshipTypes) relationshipCount[this.relationshipTypes[type]] = 0;
-		for (let id in relationships) relationshipCount[this.relationshipTypes[relationships[id]]]++;
-		for (let item of tabitems) switch (BDFDB.getReactValue(item, "return.memoizedProps.id") || BDFDB.getReactValue(item, "return.return.memoizedProps.id")) {
-			case "ALL":
-				item.appendChild(this.createBadge(relationshipCount.FRIEND, "friendcount"));
-				break;
-			case "ONLINE":
-				item.appendChild(this.createBadge(BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount(), "onlinefriendcount"));
-				break;
-			case "PENDING":
-				item.appendChild(this.createBadge(relationshipCount.PENDING_INCOMING, "requestincount"));
-				item.appendChild(this.createBadge(relationshipCount.PENDING_OUTGOING, "requestoutcount"));
-				break;
-			case "BLOCKED":
-				item.appendChild(this.createBadge(relationshipCount.BLOCKED, "blockedcount"));
-				break;
+		if (returnvalue && returnvalue.props.children) for (let checkchild of returnvalue.props.children) if (checkchild && checkchild.props.id == "ADD_FRIEND") {
+			let relationships = BDFDB.LibraryModules.FriendUtils.getRelationships(), relationshipCount = {};
+			for (let type in this.relationshipTypes) relationshipCount[this.relationshipTypes[type]] = 0;
+			for (let id in relationships) relationshipCount[this.relationshipTypes[relationships[id]]]++;
+			for (let child of returnvalue.props.children) if (child && child.props.id != "ADD_FRIEND") {
+				let newchildren = [Array.isArray(child.props.children) ? child.props.children[0] : child.props.children];
+				switch (child.props.id) {
+					case "ALL":
+						newchildren.push(BDFDB.React.createElement(BDFDB.LibraryComponents.NumberBadge, {
+							className: BDFDB.disCN.settingstabbarbadge,
+							count: relationshipCount.FRIEND
+						}));
+						break;
+					case "ONLINE":
+						newchildren.push(BDFDB.React.createElement(BDFDB.LibraryComponents.NumberBadge, {
+							className: BDFDB.disCN.settingstabbarbadge,
+							count: BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount()
+						}));
+						break;
+					case "PENDING":
+						newchildren.push(BDFDB.React.createElement(BDFDB.LibraryComponents.NumberBadge, {
+							className: BDFDB.disCN.settingstabbarbadge,
+							count: relationshipCount.PENDING_INCOMING
+						}));
+						newchildren.push(BDFDB.React.createElement(BDFDB.LibraryComponents.NumberBadge, {
+							className: BDFDB.disCN.settingstabbarbadge,
+							count: relationshipCount.PENDING_OUTGOING
+						}));
+						break;
+					case "BLOCKED":
+						newchildren.push(BDFDB.React.createElement(BDFDB.LibraryComponents.NumberBadge, {
+							className: BDFDB.disCN.settingstabbarbadge,
+							count: relationshipCount.BLOCKED
+						}));
+						break;
+				}
+				child.props.children = newchildren;
+			}
 		}
 	}
 
-	createBadge (amount, type) {
-		return BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.settingstabbarbadge + BDFDB.disCN.guildbadgenumberbadge} betterfriendcount-badge ${type}" style="background-color: rgb(240, 71, 71); width: ${amount > 99 ? 30 : (amount > 9 ? 22 : 16)}px; padding-right: ${amount > 99 ? 0 : (amount > 9 ? 0 : 1)}px;">${amount}</div>`)
+	processFriendRow (instance, wrapper, returnvalue) {
+		clearTimeout(this.rerenderTimeout);
+		this.rerenderTimeout = setTimeout(() => {
+			delete this.rerenderTimeout;
+			BDFDB.WebModules.forceAllUpdates(this, 'TabBar');
+		}, 1000);
 	}
 }
