@@ -3,7 +3,7 @@
 class EditChannels {
 	getName () {return "EditChannels";}
 
-	getVersion () {return "4.0.4";}
+	getVersion () {return "4.0.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -96,7 +96,7 @@ class EditChannels {
 			children: BDFDB.LanguageStrings.RESET
 		}));
 		
-		return BDFDB.createSettingsPanel(plugin, settingsitems);
+		return BDFDB.createSettingsPanel(this, settingsitems);
 	}
 
 	//legacy
