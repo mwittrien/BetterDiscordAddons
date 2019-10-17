@@ -1723,6 +1723,29 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	for (let type of NoFluxContextMenus) BDFDBpatchContextMenuModuleLib(BDFDB.WebModules.findByName(type), false);
 	for (let type of NoFluxPopouts) BDFDBpatchPopoutModuleLib(BDFDB.WebModules.findByName(type), false);
 	for (let type of FluxContextMenus) BDFDBpatchContextMenuModuleLib(BDFDB.WebModules.findByName('FluxContainer(' + type + ')'), true);
+	
+	BDFDB.createSettingsPanel = function (plugin, children) {
+		if (!BDFDB.isObject(plugin) || !children || (!BDFDB.React.isValidElement(children) && !Array.isArray(children)) || (Array.isArray(children) && !children.length)) return;
+		var settingspanel = BDFDB.htmlToElement(`<div class="${plugin.name}-settings BDFDB-settings"></div>`);
+		BDFDB.React.render(BDFDB.React.createElement(BDFDB.LibraryComponents.Flex, {
+			direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+			grow: 1,
+			children: [
+				BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+					className: BDFDB.disCNS.marginbottom20 + "BDFDB-settings-title",
+					tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H2,
+					children: plugin.name
+				}),
+				BDFDB.React.createElement(BDFDB.LibraryComponents.Flex, {
+					className: "BDFDB-settings-inner",
+					direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+					grow: 1,
+					children: settingsitems
+				})
+			]
+		}), settingspanel);
+		return settingspanel;
+	};
 
 	BDFDB.addSettingsButtonListener = function (plugin) {
 		if (BDFDB.isBDv2() && typeof plugin.getSettingsPanel === 'function') {

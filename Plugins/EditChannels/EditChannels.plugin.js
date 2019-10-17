@@ -57,7 +57,6 @@ class EditChannels {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		var settings = BDFDB.getAllData(this, "settings");
 		var settingsitems = [], inneritems = [];
-		var settingspanel = BDFDB.htmlToElement(`<div class="${this.name}-settings BDFDB-settings"></div>`);
 		
 		for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
 			className: BDFDB.disCN.marginbottom8,
@@ -97,25 +96,8 @@ class EditChannels {
 			},
 			children: BDFDB.LanguageStrings.RESET
 		}));
-		BDFDB.React.render(BDFDB.React.createElement(BDFDB.LibraryComponents.Flex, {
-			direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
-			grow: 1,
-			children: [
-				BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
-					className: BDFDB.disCNS.marginbottom20 + "BDFDB-settings-title",
-					tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H2,
-					children: this.name
-				}),
-				BDFDB.React.createElement(BDFDB.LibraryComponents.Flex, {
-					className: "BDFDB-settings-inner",
-					direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
-					grow: 1,
-					children: settingsitems
-				})
-			]
-		}), settingspanel);
 		
-		return settingspanel;
+		return BDFDB.createSettingsPanel(plugin, settingsitems);
 	}
 
 	//legacy
