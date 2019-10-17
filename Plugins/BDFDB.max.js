@@ -1348,12 +1348,21 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		};
 		BDFDB.React.elementToReact = function (node) {
 			if (BDFDB.React.isValidElement(node)) return node;
-			else if (!Node.prototype.isPrototypeOf(node)) return BDFDB.React.createElement('DIV', {});
+			else if (!Node.prototype.isPrototypeOf(node)) return null;
 			else if (node.nodeType == Node.TEXT_NODE) return node.nodeValue;
-			let attributes = {};
+			let attributes = {}, importantstyleprops = {};
 			for (let attr of node.attributes) attributes[attr.name] = attr.value;
 			if (node.attributes.style) attributes.style = BDFDB.filterObject(node.style, n => node.style[n] && isNaN(parseInt(n)), true);
 			attributes.children = [];
+			if (node.style && node.style.cssText) for (let propstr of node.style.cssText.split(";")) if (propstr.endsWith("!important")) {
+				let importantprop = propstr.split(":")[0];
+				let camelprop = importantprop.replace(/-([a-z]?)/g, (m, g) => g.toUpperCase());
+				if (attributes.style[camelprop] != null) importantstyleprops[importantprop] = attributes.style[camelprop];
+			}
+			if (Object.keys(importantstyleprops).length) attributes.ref = instance => {
+				let ele = BDFDB.React.findDOMNode(instance);
+				if (ele) for (let importantprop in importantstyleprops) ele.style.setProperty(importantprop, importantstyleprops[importantprop], 'important');
+			}
 			for (let child of node.childNodes) attributes.children.push(BDFDB.React.elementToReact(child));
 			return BDFDB.React.createElement(node.tagName, attributes);
 		};
@@ -1740,7 +1749,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					className: "BDFDB-settings-inner",
 					direction: LibraryComponents.Flex.Direction.VERTICAL,
 					grow: 1,
-					children: settingsitems
+					children: children
 				})
 			]
 		}), settingspanel);
@@ -3450,6 +3459,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				}));
 			}
 		}
+		contentchildren = contentchildren.filter(n => n && BDFDB.React.isValidElement(n));
+		headerchildren = headerchildren.filter(n => n && BDFDB.React.isValidElement(n));
+		footerchildren = footerchildren.filter(n => n && BDFDB.React.isValidElement(n));
 		if (contentchildren.length) {
 			if (typeof config.onClose != 'function') config.onClose = _ => {};
 			if (typeof config.onOpen != 'function') config.onOpen = _ => {};
@@ -5781,6 +5793,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			delete childprops.dividerbottom;
 			delete childprops.dividertop;
 			delete childprops.label;
+			delete childprops.labelchildren;
 			delete childprops.mini;
 			delete childprops.note;
 			delete childprops.type;
@@ -5796,12 +5809,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 						align: LibraryComponents.Flex.Align.CENTER,
 						children: [
 							BDFDB.React.createElement(LibraryComponents.Flex.Child, {
-								wrap: true,
 								children: BDFDB.React.createElement('label', {
 									className: this.props.mini ? BDFDB.disCN.titlemini : BDFDB.disCN.titledefault,
 									children: this.props.label
 								})
 							}),
+							(Array.isArray(this.props.labelchildren) ? this.props.labelchildren : Array.of(this.props.labelchildren)).filter(n => BDFDB.React.isValidElement(n)),
 							BDFDB.React.createElement(LibraryComponents.Flex.Child, {
 								grow: this.props.basis ? 1 : 0,
 								shrink: 0,
