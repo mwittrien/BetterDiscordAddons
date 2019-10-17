@@ -1736,22 +1736,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.createSettingsPanel = function (plugin, children) {
 		if (!BDFDB.isObject(plugin) || !children || (!BDFDB.React.isValidElement(children) && !Array.isArray(children)) || (Array.isArray(children) && !children.length)) return;
 		var settingspanel = BDFDB.htmlToElement(`<div class="${plugin.name}-settings BDFDB-settings"></div>`);
-		BDFDB.React.render(BDFDB.React.createElement(LibraryComponents.Flex, {
-			direction: LibraryComponents.Flex.Direction.VERTICAL,
-			grow: 1,
-			children: [
-				BDFDB.React.createElement(LibraryComponents.FormComponents.FormTitle, {
-					className: BDFDB.disCNS.marginbottom20 + "BDFDB-settings-title",
-					tag: LibraryComponents.FormComponents.FormTitle.Tags.H2,
-					children: plugin.name
-				}),
-				BDFDB.React.createElement(LibraryComponents.Flex, {
-					className: "BDFDB-settings-inner",
-					direction: LibraryComponents.Flex.Direction.VERTICAL,
-					grow: 1,
-					children: children
-				})
-			]
+		BDFDB.React.render(BDFDB.React.createElement(LibraryComponents.SettingsPanel, {
+			title: plugin.name,
+			children
 		}), settingspanel);
 		return settingspanel;
 	};
@@ -5774,6 +5761,45 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
     } : undefined;
 	LibraryComponents.SvgIcon = BDFDB.WebModules.findByProperties('Gradients', 'Names');
+	LibraryComponents.SettingsPanel = reactInitialized ? class SettingsPanel extends LibraryModules.React.Component {
+		render() {
+			return this.props.children ? BDFDB.React.createElement(LibraryComponents.Flex, {
+				direction: LibraryComponents.Flex.Direction.VERTICAL,
+				grow: 1,
+				children: [
+					typeof this.props.title == 'string' ? BDFDB.React.createElement(LibraryComponents.FormComponents.FormTitle, {
+						className: BDFDB.disCNS.marginbottom20 + "BDFDB-settings-title",
+						tag: LibraryComponents.FormComponents.FormTitle.Tags.H2,
+						children: this.props.title
+					}) : null,
+					BDFDB.React.createElement(LibraryComponents.Flex, {
+						className: "BDFDB-settings-inner",
+						direction: LibraryComponents.Flex.Direction.VERTICAL,
+						children: this.props.children
+					})
+				]
+			}) : null;
+		}
+	}: undefined;
+	LibraryComponents.SettingsPanelInner = reactInitialized ? class SettingsPanelInner extends LibraryModules.React.Component {
+		render() {
+			return this.props.children ? BDFDB.React.createElement(BDFDB.LibraryComponents.Flex, {
+				direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+				children: [
+					typeof this.props.title == 'string' ? BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+						className: BDFDB.disCN.marginbottom8,
+						tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H1,
+						children: "Display Badges:"
+					}) : null,
+					BDFDB.React.createElement(BDFDB.LibraryComponents.Flex, {
+						className: "BDFDB-settings-inner-list",
+						direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+						children: this.props.children
+					})
+				]
+			}) : null;
+		}
+	}: undefined;
 	LibraryComponents.SettingsItem = reactInitialized ? class SettingsItem extends LibraryModules.React.Component {
         handleChange(e) {
 			if (this.props.type == 'Switch') {
