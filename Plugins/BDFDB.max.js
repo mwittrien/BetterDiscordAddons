@@ -1603,7 +1603,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			type = type[0].toUpperCase() + type.slice(1);
 			if (typeof plugin['process' + type] == 'function') {
 				var wrapper = BDFDB.React.findDOMNode(instance);
-				if (wrapper) plugin['process' + type](instance, wrapper, returnvalue, methodnames);
+				if (wrapper || methodnames.includes('render')) plugin['process' + type](instance, wrapper || document.createElement('div'), returnvalue, methodnames);
 				else setImmediate(() => {
 					wrapper = BDFDB.React.findDOMNode(instance);
 					if (wrapper) plugin['process' + type](instance, wrapper, returnvalue, methodnames);
