@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.6.3";}
+	getVersion () {return "3.6.4";}
 
 	getAuthor () {return "DevilBro";}
 
