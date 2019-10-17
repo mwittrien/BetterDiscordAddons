@@ -130,7 +130,7 @@ class EditUsers {
 			]
 		}));
 		settingsitems.push(BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsItem, {
-			type: "Button",
+			type: "BUTTON",
 			className: BDFDB.disCN.marginbottom8,
 			color: BDFDB.LibraryComponents.Button.Colors.RED,
 			label: "Reset all Users",

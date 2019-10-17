@@ -5754,6 +5754,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			if (this.props.mini && childcomponent.Sizes) this.props.size = childcomponent.Sizes.MINI || childcomponent.Sizes.MIN;
 			let childprops = Object.assign({}, this.props, {onChange: this.handleChange.bind(this)});
 			childprops.className = this.props.childClassName;
+			delete childprops.basis;
 			delete childprops.dividerbottom;
 			delete childprops.dividertop;
 			delete childprops.label;
@@ -5779,8 +5780,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 								})
 							}),
 							BDFDB.React.createElement(LibraryComponents.Flex.Child, {
-								grow: 0,
+								grow: this.props.basis ? 1 : 0,
 								shrink: 0,
+								basis: this.props.basis || 'auto',
+								wrap: true,
 								children: BDFDB.React.createElement(childcomponent, childprops)
 							})
 						]
