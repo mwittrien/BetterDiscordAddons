@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.6.2";}
+	getVersion () {return "3.6.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditUsers {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Profile Pictures","Fixed places where profile pictures weren't changed properly"]]
+			"improved":[["Switching to React","Using React to create settings and modals, faster and more less likely to break"]]
 		};
 
 		this.labels = {};
@@ -99,7 +99,7 @@ class EditUsers {
 		};
 	}
 
-	getSettingsPanel () {		
+	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		var settings = BDFDB.getAllData(this, "settings");
 		var settingsitems = [], inneritems = [];
@@ -136,14 +136,13 @@ class EditUsers {
 			onClick: _ => {
 				BDFDB.openConfirmModal(this, "Are you sure you want to reset all users?", () => {
 					BDFDB.removeAllData(this, "users");
-					this.changeAppTitle();
-					BDFDB.WebModules.forceAllUpdates(this);
+					this.forceUpdateAll();
 				});
 			},
 			children: BDFDB.LanguageStrings.RESET
 		}));
 		
-		return BDFDB.createSettingsPanel(plugin, settingsitems);
+		return BDFDB.createSettingsPanel(this, settingsitems);
 	}
 
 	//legacy
@@ -188,9 +187,8 @@ class EditUsers {
 
 			var observer = new MutationObserver(() => {this.changeAppTitle();});
 			BDFDB.addObserver(this, document.head.querySelector("title"), {name:"appTitleObserver",instance:observer}, {childList:true});
-			this.changeAppTitle();
-
-			BDFDB.WebModules.forceAllUpdates(this);
+			
+			this.forceUpdateAll();
 		}
 		else {
 			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
@@ -202,10 +200,7 @@ class EditUsers {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			let data = BDFDB.loadAllData(this, "users");
 			BDFDB.removeAllData(this, "users");
-			try {
-				this.changeAppTitle();
-				BDFDB.WebModules.forceAllUpdates(this);
-			} catch (err) {}
+			try {this.forceUpdateAll();} catch (err) {}
 			BDFDB.saveAllData(data, this, "users");
 
 			BDFDB.removeEles(".autocompleteEditUsers", ".autocompleteEditUsersRow");
@@ -244,8 +239,7 @@ class EditUsers {
 									action: e => {
 										BDFDB.closeContextMenu(menu);
 										BDFDB.removeData(instance.props.user.id, this, "users");
-										this.changeAppTitle();
-										BDFDB.WebModules.forceAllUpdates(this);
+										this.forceUpdateAll();
 									}
 								})
 							]
@@ -256,6 +250,11 @@ class EditUsers {
 			if (index > -1) children.splice(index, 0, itemgroup);
 			else children.push(itemgroup);
 		}
+	}
+	
+	forceUpdateAll () {
+		this.changeAppTitle();
+		BDFDB.WebModules.forceAllUpdates(this);
 	}
 
 	showUserSettings (info) {
@@ -292,7 +291,7 @@ class EditUsers {
 						}),
 						BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_useravatar_text,
-							className: BDFDB.disCN.marginbottom20 + " input-useravatar",
+							className: BDFDB.disCN.marginbottom8 + " input-useravatar",
 							children: [
 								BDFDB.React.createElement(BDFDB.LibraryComponents.TextInput, {
 									inputClassName: !data.removeIcon && data.url ? BDFDB.disCN.inputsuccess : null,
@@ -303,27 +302,7 @@ class EditUsers {
 										this.createNoticeTooltip(e.target);
 									},
 									onChange: (value, instance) => {
-										let input = BDFDB.React.findDOMNodeSafe(instance).firstElementChild;
-										clearTimeout(instance.checkTimeout);
-										if (value == null || !value.trim()) {
-											if (input) BDFDB.removeEles(input.tooltip);
-											instance.props.inputClassName = null;
-											instance.forceUpdate();
-										}
-										else instance.checkTimeout = setTimeout(() => {
-											BDFDB.LibraryRequires.request(value.trim(), (error, response, result) => {
-												if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
-													if (input) BDFDB.removeEles(input.tooltip);
-													instance.props.inputClassName = BDFDB.disCN.inputsuccess;
-												}
-												else {
-													this.createNoticeTooltip(input, true);
-													instance.props.inputClassName = BDFDB.disCN.inputerror;
-												}
-												delete instance.checkTimeout;
-												instance.forceUpdate();
-											});
-										}, 1000);
+										this.checkUrl(value, instance);
 									}
 								})
 							]
@@ -341,7 +320,7 @@ class EditUsers {
 									avatarinputins.forceUpdate();
 								}
 							}
-						}),
+						})
 					]
 				}),
 				BDFDB.React.createElement(BDFDB.LibraryComponents.ModalTabContent, {
@@ -416,7 +395,6 @@ class EditUsers {
 				click: modal => {
 					let olddata = Object.assign({}, data);
 					
-					let channelnameinput = modal.querySelector(".input-channelname " + BDFDB.dotCN.input);
 					let usernameinput = modal.querySelector(".input-username " + BDFDB.dotCN.input);
 					let usertaginput = modal.querySelector(".input-usertag " + BDFDB.dotCN.input);
 					let useravatarinput = modal.querySelector(".input-useravatar " + BDFDB.dotCN.input);
@@ -425,9 +403,9 @@ class EditUsers {
 					
 					data.name = usernameinput.value.trim() || null;
 					data.tag = usertaginput.value.trim() || null;
+					data.url = (!data.removeIcon && BDFDB.containsClass(useravatarinput, BDFDB.disCN.inputsuccess) ? useravatarinput.value.trim() : null) || null;
 					data.removeIcon = removeiconinput.checked;
 					data.ignoreTagColor = ignoretagcolorinput.checked;
-					data.url = (!data.removeIcon && BDFDB.containsClass(useravatarinput, BDFDB.disCN.inputsuccess) ? useravatarinput.value.trim() : null) || null;
 
 					data.color1 = BDFDB.getSwatchColor(modal, 1);
 					data.color2 = BDFDB.getSwatchColor(modal, 2);
@@ -437,10 +415,7 @@ class EditUsers {
 					let changed = false;
 					if (Object.keys(data).every(key => data[key] == null || data[key] == false) && (changed = true)) BDFDB.removeData(info.id, this, "users");
 					else if (!BDFDB.equals(olddata, data) && (changed = true)) BDFDB.saveData(info.id, data, this, "users");
-					if (changed) {
-						this.changeAppTitle();
-						BDFDB.WebModules.forceAllUpdates(this);
-					}
+					if (changed) this.forceUpdateAll();
 				}
 			}]
 		});
@@ -755,9 +730,32 @@ class EditUsers {
 	processStandardSidebarView (instance, wrapper, returnvalue) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
-			this.changeAppTitle();
-			BDFDB.WebModules.forceAllUpdates(this);
+			this.forceUpdateAll();
 		}
+	}
+	
+	checkUrl (url, instance) {
+		let input = BDFDB.React.findDOMNode(instance).firstElementChild;
+		clearTimeout(instance.checkTimeout);
+		if (url == null || !url.trim()) {
+			if (input) BDFDB.removeEles(input.tooltip);
+			instance.props.inputClassName = null;
+			instance.forceUpdate();
+		}
+		else instance.checkTimeout = setTimeout(() => {
+			BDFDB.LibraryRequires.request(url.trim(), (error, response, result) => {
+				if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
+					if (input) BDFDB.removeEles(input.tooltip);
+					instance.props.inputClassName = BDFDB.disCN.inputsuccess;
+				}
+				else {
+					this.createNoticeTooltip(input, true);
+					instance.props.inputClassName = BDFDB.disCN.inputerror;
+				}
+				delete instance.checkTimeout;
+				instance.forceUpdate();
+			});
+		}, 1000);
 	}
 
 	createNoticeTooltip (input, isinvalid = false) {

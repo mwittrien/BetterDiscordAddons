@@ -3,7 +3,7 @@
 class EditChannels {
 	getName () {return "EditChannels";}
 
-	getVersion () {return "4.0.3";}
+	getVersion () {return "4.0.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -90,8 +90,7 @@ class EditChannels {
 			onClick: _ => {
 				BDFDB.openConfirmModal(this, "Are you sure you want to reset all channels?", () => {
 					BDFDB.removeAllData(this, "channels");
-					this.changeAppTitle();
-					BDFDB.WebModules.forceAllUpdates(this);
+					this.forceUpdateAll();
 				});
 			},
 			children: BDFDB.LanguageStrings.RESET
@@ -142,9 +141,8 @@ class EditChannels {
 
 			var observer = new MutationObserver(() => {this.changeAppTitle();});
 			BDFDB.addObserver(this, document.head.querySelector("title"), {name:"appTitleObserver",instance:observer}, {childList:true});
-			this.changeAppTitle();
-
-			BDFDB.WebModules.forceAllUpdates(this);
+			
+			this.forceUpdateAll();
 		}
 		else {
 			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
@@ -155,7 +153,7 @@ class EditChannels {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			let data = BDFDB.loadAllData(this, "channels");
 			BDFDB.removeAllData(this, "channels");
-			try {BDFDB.WebModules.forceAllUpdates(this);} catch (err) {}
+			try {this.forceUpdateAll();} catch (err) {}
 			BDFDB.saveAllData(data, this, "channels");
 
 			BDFDB.removeEles(".autocompleteEditChannels", ".autocompleteEditChannelsRow");
@@ -194,8 +192,7 @@ class EditChannels {
 									action: e => {
 										BDFDB.closeContextMenu(menu);
 										BDFDB.removeData(instance.props.channel.id, this, "channels");
-										this.changeAppTitle();
-										BDFDB.WebModules.forceAllUpdates(this);
+										this.forceUpdateAll();
 									}
 								})
 							]
@@ -207,9 +204,14 @@ class EditChannels {
 			else children.push(itemgroup);
 		}
 	}
+	
+	forceUpdateAll () {
+		this.changeAppTitle();
+		BDFDB.WebModules.forceAllUpdates(this);
+	}
 
 	showChannelSettings (info) {
-		var {name,color,inheritColor} = BDFDB.loadData(info.id, this, "channels") || {};
+		var data = BDFDB.loadData(info.id, this, "channels") || {};
 		
 		BDFDB.openModal(this, {
 			size: "MEDIUM",
@@ -221,7 +223,7 @@ class EditChannels {
 					className: BDFDB.disCN.marginbottom20 + " input-channelname",
 					children: [
 						BDFDB.React.createElement(BDFDB.LibraryComponents.TextInput, {
-							value: name,
+							value: data.name,
 							placeholder: info.name,
 							autoFocus: true
 						}),
@@ -235,7 +237,7 @@ class EditChannels {
 					className: BDFDB.disCN.marginbottom20,
 					children: [
 						BDFDB.React.createElement(BDFDB.LibraryComponents.ColorSwatches, {
-							color: color,
+							color: data.color,
 							number: 1
 						})
 					]
@@ -244,7 +246,7 @@ class EditChannels {
 					type: "Switch",
 					className: BDFDB.disCN.marginbottom20 + " input-inheritcolor",
 					label: this.labels.modal_inheritcolor_text,
-					value: info.type == 4 && inheritColor,
+					value: info.type == 4 && data.inheritColor,
 					disabled: info.type != 4
 				})
 			],
@@ -256,20 +258,20 @@ class EditChannels {
 					let channelnameinput = modal.querySelector(".input-channelname " + BDFDB.dotCN.input);
 					let inheritcolorinput = modal.querySelector(".input-inheritcolor " + BDFDB.dotCN.switchinner);
 					
-					name = channelnameinput.value.trim() || null;
+					data.name = channelnameinput.value.trim() || null;
 
-					color = BDFDB.getSwatchColor(modal, 1);
-					if (color != null && !BDFDB.isObject(color)) {
-						if (color[0] < 30 && color[1] < 30 && color[2] < 30) color = BDFDB.colorCHANGE(color, 30);
-						else if (color[0] > 225 && color[1] > 225 && color[2] > 225) color = BDFDB.colorCHANGE(color, -30);
+					data.color = BDFDB.getSwatchColor(modal, 1);
+					if (data.color != null && !BDFDB.isObject(data.color)) {
+						if (data.color[0] < 30 && data.color[1] < 30 && data.color[2] < 30) data.color = BDFDB.colorCHANGE(data.color, 30);
+						else if (data.color[0] > 225 && data.color[1] > 225 && data.color[2] > 225) data.color = BDFDB.colorCHANGE(data.color, -30);
 					}
 
-					inheritColor = inheritcolorinput.checked;
-
-					if (name == null && color == null) BDFDB.removeData(info.id, this, "channels");
-					else BDFDB.saveData(info.id, {name,color,inheritColor}, this, "channels");
-					this.changeAppTitle();
-					BDFDB.WebModules.forceAllUpdates(this);
+					data.inheritColor = inheritcolorinput.checked;
+					
+					let changed = false;
+					if (Object.keys(data).every(key => data[key] == null || data[key] == false) && (changed = true)) BDFDB.removeData(info.id, this, "channels");
+					else if (!BDFDB.equals(olddata, data) && (changed = true)) BDFDB.saveData(info.id, data, this, "channels");
+					if (changed) this.forceUpdateAll();
 				}
 			}]
 		});
@@ -422,8 +424,7 @@ class EditChannels {
 	processStandardSidebarView (instance, wrapper, returnvalue) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
-			this.changeAppTitle();
-			BDFDB.WebModules.forceAllUpdates(this);
+			this.forceUpdateAll();
 		}
 	}
 
