@@ -1341,6 +1341,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	LibraryModules.ReactDOM = BDFDB.WebModules.findByProperties('render', 'findDOMNode');
 	if (LibraryModules.React && LibraryModules.ReactDOM) {
 		BDFDB.React = Object.assign({}, LibraryModules.React, LibraryModules.ReactDOM);
+		BDFDB.React.createElement = function (...arguments) {
+			try {return LibraryModules.React.createElement(...arguments) || null;}
+			catch (err) {console.error(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not create react element! ' + err);}
+			return null;
+		};
 		BDFDB.React.elementToReact = function (node) {
 			if (BDFDB.React.isValidElement(node)) return node;
 			else if (!Node.prototype.isPrototypeOf(node)) return BDFDB.React.createElement('DIV', {});
@@ -1352,10 +1357,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			for (let child of node.childNodes) attributes.children.push(BDFDB.React.elementToReact(child));
 			return BDFDB.React.createElement(node.tagName, attributes);
 		};
-		BDFDB.React.createElement = function (...arguments) {
-			try {return LibraryModules.React.createElement(...arguments) || null;}
-			catch (err) {console.error(`%c[BDFDB]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not create react element! ' + err);}
-			return null;
+		BDFDB.React.findDOMNode = function (instance) {
+			if (Node.prototype.isPrototypeOf(instance)) return instance;
+			if (!instance || !instance.updater || typeof instance.updater.isMounted !== 'function' || !instance.updater.isMounted(instance)) return null;
+			var node = LibraryModules.ReactDOM.findDOMNode(instance) || BDFDB.getReactValue(instance, 'child.stateNode');
+			return Node.prototype.isPrototypeOf(node) ? node : null;
 		};
 	};
 
