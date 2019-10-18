@@ -7006,7 +7006,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.WebModules.forceAllUpdates(BDFDB);
 	
-	addContextListeners(BDFDB);
+	InternalBDFDB.addContextListeners(BDFDB);
 	
 	BDFDB.ObserverUtils.connect(BDFDB, document.querySelector(BDFDB.dotCN.itemlayercontainer), {name:"layerObserverBDFDB", instance:
 		new MutationObserver(changes => {changes.forEach(change => {change.addedNodes.forEach(node => {
