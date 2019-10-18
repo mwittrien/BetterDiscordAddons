@@ -1267,6 +1267,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			var node = LibraryModules.ReactDOM.findDOMNode(instance) || BDFDB.getReactValue(instance, "child.stateNode");
 			return Node.prototype.isPrototypeOf(node) ? node : null;
 		};
+		BDFDB.React.forceUpdate = function (instance) {
+			if (instance && instance.updater && typeof instance.updater.isMounted == "function" && instance.updater.isMounted(instance)) instance.forceUpdate();
+		};
 	};
 
 	var myDataUser = LibraryModules.CurrentUserStore && typeof LibraryModules.CurrentUserStore.getCurrentUser == "function" ? LibraryModules.CurrentUserStore.getCurrentUser() : null;

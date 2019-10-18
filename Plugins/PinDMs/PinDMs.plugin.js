@@ -3,7 +3,7 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.4.8";}
+	getVersion () {return "1.4.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class PinDMs {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Error","Fixed console log error about mounting"]]
+			"fixed":[["Home/Library/Store","Fixed Pinned DMs not being added while switching to one of the pages"]]
 		};
 
 		this.patchModules = {
@@ -398,6 +398,7 @@ class PinDMs {
 					let insertpoint = this.getInsertPoint(dms);
 					for (let pos in sortedDMs) this.addPinnedDM(sortedDMs[pos], dms, insertpoint);
 				}
+				this.forceUpdateScroller(instance.getScrollerNode());
 			}
 			if (this.oldScrollerPos != null) instance.getScrollerNode().scrollTop = this.oldScrollerPos;
 		}
@@ -488,10 +489,10 @@ class PinDMs {
 	forceUpdateScroller (scroller) {
 		if (this.updatingScroller) return;
 		var stateNode = BDFDB.getReactValue(scroller, "return.return.return.stateNode");
-		if (stateNode && stateNode.updater) {
+		if (stateNode) {
 			this.updatingScroller = true;
-			stateNode.updater.enqueueForceUpdate(stateNode);
-			setTimeout(() => {stateNode.updater.enqueueForceUpdate(stateNode);},500);
+			BDFDB.React.forceUpdate(stateNode);
+			setTimeout(() => {BDFDB.React.forceUpdate(stateNode);},500);
 			setTimeout(() => {delete this.updatingScroller;},1000);
 		}
 	}
