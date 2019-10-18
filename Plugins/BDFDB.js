@@ -46,10 +46,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		plugin.started = true;
 
 		for (let name in BDFDB.myPlugins) if (!BDFDB.myPlugins[name].started && typeof BDFDB.myPlugins[name].initialize == "function") {
-			if (typeof plugin.initConstructor === "function") {
-				try {BDFDB.myPlugins[name].initialize();}
-				catch (err) {console.error(`%c[${plugin.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
-			}
+			try {BDFDB.myPlugins[name].initialize();}
+			catch (err) {console.error(`%c[${plugin.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
 		}
 	};
 	BDFDB.PluginUtils.clear = function (plugin) {
