@@ -111,11 +111,11 @@ body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdocs." i]::befor
 	width: 100% !important;
 	z-index: 2 !important;
 }
-body #app-mount .theme-dark .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" i]::after,
-body #app-mount .theme-dark .embed-IeVjo6 .embedLink-1G1K1D[href*="www.discordsource." i]::before,
-body #app-mount .theme-dark .embed-IeVjo6 .embedLink-1G1K1D[href*="://discordsource." i]::before,
-body #app-mount .theme-dark .embed-IeVjo6 .embedLink-1G1K1D[href*="www.betterdocs." i]::before,
-body #app-mount .theme-dark .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdocs." i]::before {
+.theme-dark body #app-mount .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" i]::after,
+.theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.discordsource." i]::before,
+.theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://discordsource." i]::before,
+.theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.betterdocs." i]::before,
+.theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdocs." i]::before {
 	color: var(--warningbdbcolordark) !important;
 	background-color: var(--warningbdbbackgrounddark) !important;
 	background-image: var(--warningbdbembedlogodark) !important;
