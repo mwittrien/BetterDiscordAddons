@@ -3,7 +3,7 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.4.7";}
+	getVersion () {return "1.4.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class PinDMs {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Canary","Fixed bugs for the canary changes ... AGAIN"]]
+			"fixed":[["Error","Fixed console log error about mounting"]]
 		};
 
 		this.patchModules = {
@@ -398,11 +398,8 @@ class PinDMs {
 					let insertpoint = this.getInsertPoint(dms);
 					for (let pos in sortedDMs) this.addPinnedDM(sortedDMs[pos], dms, insertpoint);
 				}
-				this.forceUpdateScroller(instance.getScrollerNode());
 			}
-			if (this.oldScrollerPos != null) {
-				instance.getScrollerNode().scrollTop = this.oldScrollerPos;
-			}
+			if (this.oldScrollerPos != null) instance.getScrollerNode().scrollTop = this.oldScrollerPos;
 		}
 	}
 
