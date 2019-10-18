@@ -718,7 +718,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.ObjectUtils.filter = function (obj, filter, bykey = false) {
 		if (!BDFDB.ObjectUtils.is(obj)) return {};
 		if (typeof filter != "function") return obj;
-		return Object.keys(obj).filter(key => filter(bykey ? key : obj[key])).reduce((newobj, key) => (redobj[key] = obj[key], newobj), {});
+		return Object.keys(obj).filter(key => filter(bykey ? key : obj[key])).reduce((newobj, key) => (newobj[key] = obj[key], newobj), {});
 	};
 	BDFDB.ObjectUtils.push = function (obj, value) {
 		if (BDFDB.ObjectUtils.is(obj)) obj[Object.keys(obj).length] = value;
@@ -1393,7 +1393,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				var filteredmodules = [];
 				for (let type in plugin.patchModules) {
 					var methodnames = Array.isArray(plugin.patchModules[type]) ? plugin.patchModules[type] : Array.of(plugin.patchModules[type]);
-					if (methodnames.includes("componentDidUpdate") || methodnames.includes("componentDidUpdate") || methodnames.includes("render")) filteredmodules.push(type);
+					if (methodnames.includes("componentDidMount") || methodnames.includes("componentDidUpdate") || methodnames.includes("render")) filteredmodules.push(type);
 				}
 				filteredmodules = selectedtype ? filteredmodules.filter(type => type == selectedtype) : filteredmodules;
 				if (filteredmodules.length) {
