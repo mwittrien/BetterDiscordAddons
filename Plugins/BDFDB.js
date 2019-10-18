@@ -4133,6 +4133,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	DiscordClassModules.AccountDetailsButtons = BDFDB.WebModules.findByProperties("button", "enabled", "disabled");
 	DiscordClassModules.ActivityFeed = BDFDB.WebModules.findByProperties("activityFeed");
 	DiscordClassModules.Anchor = BDFDB.WebModules.findByProperties("anchor", "anchorUnderlineOnHover");
+	DiscordClassModules.AnimationContainer = BDFDB.WebModules.findByProperties("animatorLeft", "didRender");
 	DiscordClassModules.AppBase = BDFDB.WebModules.findByProperties("container", "base");
 	DiscordClassModules.AppInner = BDFDB.WebModules.findByProperties("app", "layers");
 	DiscordClassModules.AppMount = BDFDB.WebModules.findByProperties("appMount");
@@ -4350,6 +4351,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		alignstretch: ["Flex", "alignStretch"],
 		anchor: ["Anchor", "anchor"],
 		anchorunderlineonhover: ["Anchor", "anchorUnderlineOnHover"],
+		animationcontainerbottom: ["AnimationContainer", "animatorBottom"],
+		animationcontainerleft: ["AnimationContainer", "animatorLeft"],
+		animationcontainerright: ["AnimationContainer", "animatorRight"],
+		animationcontainertop: ["AnimationContainer", "animatorTop"],
+		animationcontainerrender: ["AnimationContainer", "didRender"],
+		animationcontainerscale: ["AnimationContainer", "scale"],
+		animationcontainertranslate: ["AnimationContainer", "translate"],
 		app: ["AppOuter", "app"],
 		appcontainer: ["AppBase", "container"],
 		appmount: ["AppMount", "appMount"],
