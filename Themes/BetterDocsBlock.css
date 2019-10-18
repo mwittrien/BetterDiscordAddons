@@ -70,11 +70,12 @@ body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.discordsource." i],
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://discordsource." i],
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.betterdocs." i],
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdocs." i] {
+	background: none !important;
 	max-width: 100vw !important;
 	min-width: 100vw !important;
 	width: 100vw !important;
 }
-body #app-mount .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" i]::after,
+body #app-mount .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" i]::before,
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.discordsource." i]::before,
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://discordsource." i]::before,
 body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.betterdocs." i]::before,
@@ -111,7 +112,7 @@ body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdocs." i]::befor
 	width: 100% !important;
 	z-index: 2 !important;
 }
-.theme-dark body #app-mount .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" i]::after,
+.theme-dark body #app-mount .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" i]::before,
 .theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.discordsource." i]::before,
 .theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://discordsource." i]::before,
 .theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.betterdocs." i]::before,
@@ -157,7 +158,7 @@ body #app-mount .markup-2BOw-j .anchor-3Z-8Bb[href*="discordapp.com/invite/D4cAk
 	pointer-events: none !important;
 }
 
-body #app-mount .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" i]::after {
+body #app-mount .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" i]::before {
 	content: "BetterDocs/DiscordSource is not an official source of themes and plugins and should not be trusted. The creator posts content without permission and it may have harmful plugins. Do not use BetterDocs/DiscordSource." !important;
 	background-position: left !important;
 	background-size: auto 100% !important;
