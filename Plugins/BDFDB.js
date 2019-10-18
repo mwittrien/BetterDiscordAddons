@@ -66,7 +66,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		BDFDB.WebModules.unpatchall(plugin);
 
 		BDFDB.removeOnSwitchListener(plugin);
-		BDFDB.removeSettingsButtonListener(plugin);
 		BDFDB.ListenerUtils.remove(plugin);
 		for (let modal of document.querySelectorAll(`.${plugin.name}-modal, .${plugin.name.toLowerCase()}-modal, .${plugin.name}-settingsmodal, .${plugin.name.toLowerCase()}-settingsmodal`)) {
 			let closebutton = modal.querySelector(BDFDB.dotCN.modalclose);
@@ -605,7 +604,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			BDFDB.toggleEles(tooltip);
 			setTimeout(() => {BDFDB.toggleEles(tooltip);}, options.delay);
 		}
-		return tooltip;
+		return itemlayer;
 	};
 	BDFDB.TooltipUtils.update = function (tooltip) {
 		if (!Node.prototype.isPrototypeOf(tooltip)) return;
@@ -7183,7 +7182,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.showToast = BDFDB.NotificationUtils.toast;
 	BDFDB.showDesktopNotification = BDFDB.NotificationUtils.desktop;
 	BDFDB.createNotificationsBar = BDFDB.NotificationUtils.notice;
-	BDFDB.createTooltip = (string, ele, config) => {BDFDB.TooltipUtils.create(ele, string, config);};
+	BDFDB.createTooltip = (string, ele, config) => {return BDFDB.TooltipUtils.create(ele, string, config);};
 	BDFDB.updateTooltipPosition = BDFDB.TooltipUtils.update;
 	BDFDB.isObject = BDFDB.ObjectUtils.is;
 	BDFDB.sortObject = BDFDB.ObjectUtils.sort;
