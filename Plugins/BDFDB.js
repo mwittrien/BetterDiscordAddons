@@ -1,6 +1,6 @@
 if (window.BDFDB && BDFDB.ListenerUtils && typeof BDFDB.ListenerUtils.remove == "function") BDFDB.ListenerUtils.remove(BDFDB);
-if (window.BDFDB && BDFDB.WebModules && typeof BDFDB.WebModules.unpatchall == "function") BDFDB.WebModules.unpatchall(BDFDB);
 if (window.BDFDB && BDFDB.ObserverUtils && typeof BDFDB.ObserverUtils.disconnect == "function") BDFDB.ObserverUtils.disconnect(BDFDB);
+if (window.BDFDB && BDFDB.WebModules && typeof BDFDB.WebModules.unpatchall == "function") BDFDB.WebModules.unpatchall(BDFDB);
 var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api: BDFDB && BDFDB.BDv2Api ? BDFDB.BDv2Api : undefined, creationTime: performance.now(), cachedData: {}, pressedKeys: [], mousePosition: {pageX: 0, pageY: 0}, name: "$BDFDB"};
 (() => {
 	var id = Math.round(Math.random() * 10000000000000000), InternalBDFDB = {};
@@ -31,8 +31,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 		if (typeof plugin.css === "string") BDFDB.appendLocalStyle(plugin.name, plugin.css);
 
-		BDFDB.WebModules.patchModules(plugin);
 
+		BDFDB.WebModules.patchModules(plugin);
+		InternalBDFDB.addOnSwitchListener(plugin);
 		InternalBDFDB.addContextListeners(plugin);
 
 		BDFDB.PluginUtils.translate(plugin);
@@ -63,16 +64,15 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 		if (typeof plugin.css === "string") BDFDB.removeLocalStyle(plugin.name);
 
-		BDFDB.WebModules.unpatchall(plugin);
-
-		BDFDB.removeOnSwitchListener(plugin);
 		BDFDB.ListenerUtils.remove(plugin);
+		BDFDB.ObserverUtils.disconnect(plugin);
+		BDFDB.WebModules.unpatchall(plugin);
+		InternalBDFDB.removeOnSwitchListener(plugin);
+		
 		for (let modal of document.querySelectorAll(`.${plugin.name}-modal, .${plugin.name.toLowerCase()}-modal, .${plugin.name}-settingsmodal, .${plugin.name.toLowerCase()}-settingsmodal`)) {
 			let closebutton = modal.querySelector(BDFDB.dotCN.modalclose);
 			if (closebutton) closebutton.click();
 		}
-
-		BDFDB.ObserverUtils.disconnect(plugin);
 
 		delete window.PluginUpdates.plugins[url];
 		if (BDFDB.ObjectUtils.isEmpty(window.PluginUpdates.plugins)) BDFDB.removeEles("#bd-settingspane-container .bd-updatebtn" + BDFDB.dotCN._repofolderbutton);
@@ -239,6 +239,29 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		delete plugin.startTimeout;
 		clearTimeout(plugin.libLoadTimeout);
 		delete plugin.libLoadTimeout;
+	};
+	InternalBDFDB.addOnSwitchListener = function (plugin) {
+		if (BDFDB.ObjectUtils.is(plugin) && typeof plugin.onSwitch === "function") {
+			InternalBDFDB.removeOnSwitchListener(plugin);
+			var spacer = document.querySelector(`${BDFDB.dotCN.guildswrapper} ~ * > ${BDFDB.dotCN.chatspacer}`);
+			if (spacer) {
+				var nochannelobserver = new MutationObserver(changes => {changes.forEach(change => {
+					if (change.target && BDFDB.containsClass(change.target, BDFDB.disCN.nochannel)) plugin.onSwitch();
+				});});
+				var nochannel = spacer.querySelector(BDFDB.dotCNC.chat + BDFDB.dotCN.nochannel);
+				if (nochannel) nochannelobserver.observe(nochannel, {attributes:true});
+				plugin.onSwitchFix = new MutationObserver(changes => {changes.forEach(change => {if (change.addedNodes) {change.addedNodes.forEach(node => {
+					if (BDFDB.containsClass(node, BDFDB.disCN.chat, BDFDB.disCN.nochannel, false)) nochannelobserver.observe(node, {attributes:true});
+				});}});});
+				plugin.onSwitchFix.observe(spacer, {childList:true});
+			}
+		}
+	};
+	InternalBDFDB.removeOnSwitchListener = function (plugin) {
+		if (BDFDB.ObjectUtils.is(plugin) && typeof plugin.onSwitch === "function" && BDFDB.ObjectUtils.is(plugin.onSwitchFix)) {
+			plugin.onSwitchFix.disconnect();
+			delete plugin.onSwitchFix;
+		}
 	};
 	
 	BDFDB.ObserverUtils = {};
@@ -1479,31 +1502,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					if (wrapper) plugin["process" + type](instance, wrapper, returnvalue, methodnames);
 				});
 			}
-		}
-	};
-
-	BDFDB.addOnSwitchListener = function (plugin) {
-		if (typeof plugin.onSwitch === "function") {
-			BDFDB.removeOnSwitchListener(plugin);
-			var spacer = document.querySelector(`${BDFDB.dotCN.guildswrapper} ~ * > ${BDFDB.dotCN.chatspacer}`);
-			if (spacer) {
-				var nochannelobserver = new MutationObserver(changes => {changes.forEach(change => {
-					if (change.target && BDFDB.containsClass(change.target, BDFDB.disCN.nochannel)) plugin.onSwitch();
-				});});
-				var nochannel = spacer.querySelector(BDFDB.dotCNC.chat + BDFDB.dotCN.nochannel);
-				if (nochannel) nochannelobserver.observe(nochannel, {attributes:true});
-				plugin.onSwitchFix = new MutationObserver(changes => {changes.forEach(change => {if (change.addedNodes) {change.addedNodes.forEach(node => {
-					if (BDFDB.containsClass(node, BDFDB.disCN.chat, BDFDB.disCN.nochannel, false)) nochannelobserver.observe(node, {attributes:true});
-				});}});});
-				plugin.onSwitchFix.observe(spacer, {childList:true});
-			}
-		}
-	};
-
-	BDFDB.removeOnSwitchListener = function (plugin) {
-		if (typeof plugin.onSwitch === "function" && BDFDB.ObjectUtils.is(plugin.onSwitchFix)) {
-			plugin.onSwitchFix.disconnect();
-			delete plugin.onSwitchFix;
 		}
 	};
 
