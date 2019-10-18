@@ -137,6 +137,7 @@
 		14.	PLUGIN/THEMEREPO
 	19.	THEMESUPPORT
 		1.	THEMEDEVBADGE
+		2.	BETTERDOCSBLOCK
 	20.	UPDATENOTICE
 	21.	WATERMARK
 */
@@ -5895,6 +5896,36 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 }
 #app-mount .userPopout-3XzG_A .avatarWrapper-3H_478[user_by_BDFDB="278543574059057154"]:not(.statusHovered):hover .wrapper-3t9DeA:after {
 	border-top-color: rgb(var(--vaccentcolor)) !important;
+}
+
+/* ~~~~		19.2.	BETTERDOCSBLOCK					~~~~ */
+
+html.theme-dark body #app-mount .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" i]::before,
+html.theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.discordsource." i]::before,
+html.theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://discordsource." i]::before,
+html.theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.betterdocs." i]::before,
+html.theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdocs." i]::before {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.4)) !important;
+	border-top-color: transparent !important;
+	border-right-color: transparent !important;
+	border-bottom-color: transparent !important;
+	color: rgb(var(--fontwhite2)) !important;
+	z-index: 4 !important;
+}
+html.theme-dark body #app-mount .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" i]::after,
+html.theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.discordsource." i]::after,
+html.theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://discordsource." i]::after,
+html.theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.betterdocs." i]::after,
+html.theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdocs." i]::after {
+	content: "" !important;
+	background: var(--vbackground) center/var(--vbackgroundsize) !important;
+	background-attachment: fixed !important;
+	border-radius: 5px !important;
+    position: absolute !important;
+	top: 0 !important;
+	right: 0 !important;
+	bottom: 0 !important;
+	left: 0 !important;
 }
 
 

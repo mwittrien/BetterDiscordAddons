@@ -163,9 +163,12 @@ body #app-mount .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" 
 	background-position: left !important;
 	background-size: auto 100% !important;
 	font-size: 15px !important;
-	height: 100px !important;
 	padding-left: 110px !important;
 	padding-right: 10px !important;
+}
+body #app-mount .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" i]::before,
+body #app-mount .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" i]::after {
+	height: 100px !important;
 	margin-top: -35px !important;
 	margin-left: -10px !important;
 	width: 450px !important;
