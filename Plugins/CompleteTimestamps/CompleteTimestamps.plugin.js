@@ -130,7 +130,7 @@ class CompleteTimestamps {
 					let info = this.getMessageData(message, messagegroup);
 					if (!info || !info.timestamp || !info.timestamp._i) return;
 					let choice = BDFDB.getData("creationDateLang", this, "choices");
-					BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, info.timestamp._i), message, {type:"left",selector:"completetimestamp-tooltip"});
+					BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, info.timestamp._i), message, {type:"left", selector:"completetimestamp-tooltip"});
 				}
 			});
 			BDFDB.addEventListener(this, document, "mouseenter", BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageedited, e => {
@@ -139,7 +139,7 @@ class CompleteTimestamps {
 					let time = marker.getAttribute("datetime");
 					if (!time) return;
 					let choice = BDFDB.getData("creationDateLang", this, "choices");
-					BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, time), marker, {type:"top",selector:"completetimestampedit-tooltip",css:`body ${BDFDB.dotCN.tooltip}:not(.completetimestampedit-tooltip) {display: none !important;}`});
+					BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, time), marker, {type:"top", selector:"completetimestampedit-tooltip"});
 				}
 			});
 

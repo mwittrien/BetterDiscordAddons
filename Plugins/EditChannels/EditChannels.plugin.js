@@ -545,7 +545,7 @@ class EditChannels {
 			mention.EditChannelsHovered = true;
 			colorHover();
 			let categorydata = this.getChannelData(categoryinfo.id, null, mention);
-			if (categorydata.name) BDFDB.createTooltip(categorydata.name, mention, {type:"top",selector:"EditChannels-tooltip",css:`body ${BDFDB.dotCN.tooltip}:not(.EditChannels-tooltip) {display: none !important;}`});
+			if (categorydata.name) BDFDB.createTooltip(categorydata.name, mention, {type:"top", selector:"EditChannels-tooltip"});
 		};
 		mention.mouseoutListenerEditChannels = () => {
 			delete mention.EditChannelsHovered;

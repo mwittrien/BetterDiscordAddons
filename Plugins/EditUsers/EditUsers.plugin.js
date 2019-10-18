@@ -899,7 +899,7 @@ class EditUsers {
 		wrapper.removeEventListener("mouseenter", wrapper.tooltipListenerEditUsers);
 		if (data.name) {
 			wrapper.tooltipListenerEditUsers = () => {
-				BDFDB.createTooltip(data.name, wrapper, {type,selector:"EditUsers-tooltip",css:`body ${BDFDB.dotCN.tooltip}:not(.EditUsers-tooltip) {display: none !important;}`});
+				BDFDB.createTooltip(data.name, wrapper, {type, selector:"EditUsers-tooltip"});
 			};
 			wrapper.addEventListener("mouseenter", wrapper.tooltipListenerEditUsers);
 		}

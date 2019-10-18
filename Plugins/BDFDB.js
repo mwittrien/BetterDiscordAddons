@@ -148,7 +148,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				var updateentry = BDFDB.htmlToElement(`<span id="${pluginname}-notice">${pluginname}</span>`);
 				updateentry.addEventListener("click", () => {BDFDB.PluginUtils.downloadUpdate(pluginname, url);});
 				updatenoticelist.appendChild(updateentry);
-				if (!document.querySelector(".update-clickme-tooltip")) BDFDB.TooltipUtils.create(updatenoticelist, "Click us!", {type:"bottom", selector:"update-clickme-tooltip", delay:500});
+				if (!document.querySelector(".update-clickme-tooltip")) BDFDB.TooltipUtils.create(updatenoticelist, "Click us!", {type:"bottom", selector:"update-clickme-tooltip", multi:true, delay:500});
 			}
 		}
 	};
@@ -225,7 +225,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		if (logs) BDFDB.openModal(plugin, {header:BDFDB.LanguageStrings.CHANGE_LOG, children:BDFDB.React.elementToReact(BDFDB.htmlToElement(changeLogHTML)), selector:"BDFDB-changelogmodal"});
 	};
 	BDFDB.PluginUtils.createSettingsPanel = function (plugin, children) {
-		if (!BDFDB.ObjectUtils.is(plugin) || !children || (!BDFDB.React.isValidElement(children) && !Array.isArray(children)) || (Array.isArray(children) && !children.length)) return;
+		if (!BDFDB.ObjectUtils.is(plugin) || !children || (!BDFDB.React.isValidElement(children) && !BDFDB.ArrayUtils.is(children)) || (BDFDB.ArrayUtils.is(children) && !children.length)) return;
 		var settingspanel = BDFDB.htmlToElement(`<div class="${plugin.name}-settings BDFDB-settings"></div>`);
 		BDFDB.React.render(BDFDB.React.createElement(LibraryComponents.SettingsPanel, {
 			title: plugin.name,
@@ -268,7 +268,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.ObserverUtils.connect = function (plugin, eleOrSelec, observer, config = {childList: true}) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !eleOrSelec || !observer) return;
 		if (BDFDB.ObjectUtils.isEmpty(plugin.observers)) plugin.observers = {};
-		if (!Array.isArray(plugin.observers[observer.name])) plugin.observers[observer.name] = [];
+		if (!BDFDB.ArrayUtils.is(plugin.observers[observer.name])) plugin.observers[observer.name] = [];
 		if (!observer.multi) for (let subinstance of plugin.observers[observer.name]) subinstance.disconnect();
 		if (observer.instance) plugin.observers[observer.name].push(observer.instance);
 		var instance = plugin.observers[observer.name][plugin.observers[observer.name].length - 1];
@@ -284,7 +284,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				for (let observer in plugin.observers) for (let instance of plugin.observers[observer]) instance.disconnect();
 				delete plugin.observers;
 			}
-			else if (!Array.isArray(plugin.observers[observername])) {
+			else if (!BDFDB.ArrayUtils.is(plugin.observers[observername])) {
 				for (let instance of plugin.observers[observername]) instance.disconnect();
 				delete plugin.observers[observername];
 			}
@@ -306,7 +306,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			var origeventname = eventname;
 			eventname = eventname == "mouseenter" || eventname == "mouseleave" ? "mouseover" : eventname;
 			var namespace = (action.join(".") || "") + plugin.name;
-			if (!Array.isArray(plugin.listeners)) plugin.listeners = [];
+			if (!BDFDB.ArrayUtils.is(plugin.listeners)) plugin.listeners = [];
 			var eventcallback = null;
 			if (selector) {
 				if (origeventname == "mouseenter" || origeventname == "mouseleave") {
@@ -342,7 +342,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 	};
 	BDFDB.ListenerUtils.remove = function (plugin, ele, actions = "", selector) {
-		if (!BDFDB.ObjectUtils.is(plugin) || !Array.isArray(plugin.listeners)) return;
+		if (!BDFDB.ObjectUtils.is(plugin) || !BDFDB.ArrayUtils.is(plugin.listeners)) return;
 		if (Node.prototype.isPrototypeOf(ele) || ele === window) {
 			for (var action of actions.split(" ")) {
 				action = action.split(".");
@@ -398,7 +398,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 	};
 	
-	var NotificationBars, DesktopNotificationQueue = {queue:[], running:false};
+	var NotificationBars = [], DesktopNotificationQueue = {queue:[], running:false};
 	BDFDB.NotificationUtils = {};
 	BDFDB.NotificationUtils.toast = function (text, options = {}) {
 		var toasts = document.querySelector(".toasts, .bd-toasts");
@@ -575,7 +575,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			itemlayercontainernative.parentElement.insertBefore(itemlayercontainer, itemlayercontainernative.nextSibling);
 		}
 		var id = BDFDB.generateID(Tooltips);
-		var itemlayer = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.itemlayer} BDFDB-itemlayer itemlayer-${id}"><div class="${BDFDB.disCN.tooltip}"></div></div>`);
+		var itemlayer = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.itemlayer} BDFDB-itemlayer"><div class="${BDFDB.disCN.tooltip} BDFDB-tooltip-${id}"></div></div>`);
 		itemlayercontainer.appendChild(itemlayer);
 		
 		var tooltip = itemlayer.firstElementChild;
@@ -596,7 +596,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		tooltip.position = options.position.toLowerCase();
 		tooltip.anker = anker;
 		
-		if (options.css) BDFDB.appendLocalStyle("BDFDBcustomItemLayer" + id, options.css, itemlayercontainer);
+		if (options.multi) tooltip.style.setProperty("display", "block", "important");
+		else BDFDB.appendLocalStyle("BDFDBhideOtherTooltips" + id, `#app-mount ${BDFDB.dotCN.tooltip}:not(.BDFDB-tooltip-${id}) {display: none !important;}`, itemlayercontainer);
+		if (options.css) BDFDB.appendLocalStyle("BDFDBcustomTooltips" + id, options.css, itemlayercontainer);
 					
 		var mouseleave = () => {
 			BDFDB.removeEles(itemlayer);
@@ -613,7 +615,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					BDFDB.ArrayUtils.remove(Tooltips, id);
 					observer.disconnect();
 					BDFDB.removeEles(itemlayer);
-					BDFDB.removeLocalStyle("BDFDBcustomItemLayer" + id, itemlayercontainer);
+					BDFDB.removeLocalStyle("BDFDBhideOtherTooltips" + id, itemlayercontainer);
+					BDFDB.removeLocalStyle("BDFDBcustomTooltips" + id, itemlayercontainer);
 					if (!itemlayercontainer.firstElementChild) BDFDB.removeEles(itemlayercontainer);
 					anker.removeEventListener("mouseleave", mouseleave);
 				}
@@ -624,8 +627,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		BDFDB.TooltipUtils.update(tooltip);
 		
 		if (options.delay) {
-			BDFDB.toggleEles(tooltip);
-			setTimeout(() => {BDFDB.toggleEles(tooltip);}, options.delay);
+			BDFDB.toggleEles(itemlayer);
+			setTimeout(() => {BDFDB.toggleEles(itemlayer);}, options.delay);
 		}
 		return itemlayer;
 	};
@@ -964,10 +967,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.getOwnerInstance = function (config) {
 		if (config === undefined) return null;
-		if (!config.node && !config.instance || !config.name && (!config.props || !Array.isArray(config.props))) return null;
+		if (!config.node && !config.instance || !config.name && (!config.props || !BDFDB.ArrayUtils.is(config.props))) return null;
 		var instance = config.instance || BDFDB.getReactInstance(config.node);
 		if (!instance) return null;
-		config.name = config.name && !Array.isArray(config.name) ? Array.of(config.name) : config.name;
+		config.name = config.name && !BDFDB.ArrayUtils.is(config.name) ? Array.of(config.name) : config.name;
 		var depth = -1;
 		var maxdepth = config.depth === undefined ? 15 : config.depth;
 		var up = config.up === undefined ? false : config.up;
@@ -1113,7 +1116,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.WebModules.cachedData = {prop:{},name:{},string:{},proto:{}};
 	BDFDB.WebModules.findByProperties = function (properties) {
-		properties = Array.isArray(properties) ? properties : Array.from(arguments);
+		properties = BDFDB.ArrayUtils.is(properties) ? properties : Array.from(arguments);
 		var cachestring = JSON.stringify(properties);
 		if (BDFDB.WebModules.cachedData.prop[cachestring]) return BDFDB.WebModules.cachedData.prop[cachestring];
 		else {
@@ -1140,7 +1143,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.WebModules.findByString = function (strings) {
-		strings = Array.isArray(strings) ? strings : Array.from(arguments);
+		strings = BDFDB.ArrayUtils.is(strings) ? strings : Array.from(arguments);
 		var cachestring = JSON.stringify(strings);
 		if (BDFDB.WebModules.cachedData.string[cachestring]) return BDFDB.WebModules.cachedData.string[cachestring];
 		else {
@@ -1154,7 +1157,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.WebModules.findByPrototypes = function (protoprops) {
-		protoprops = Array.isArray(protoprops) ? protoprops : Array.from(arguments);
+		protoprops = BDFDB.ArrayUtils.is(protoprops) ? protoprops : Array.from(arguments);
 		var cachestring = JSON.stringify(protoprops);
 		if (BDFDB.WebModules.cachedData.proto[cachestring]) return BDFDB.WebModules.cachedData.proto[cachestring];
 		else {
@@ -1315,7 +1318,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			catch (err) {console.error("Error occurred in " + errorstring, err);}
 		};
 		if (!module.BDFDBpatch) module.BDFDBpatch = {};
-		modulefunctions = Array.isArray(modulefunctions) ? modulefunctions : Array.of(modulefunctions);
+		modulefunctions = BDFDB.ArrayUtils.is(modulefunctions) ? modulefunctions : Array.of(modulefunctions);
 		for (let modulefunction of modulefunctions) {
 			if (!module[modulefunction]) module[modulefunction] = _ => {};
 			const originalfunction = module[modulefunction];
@@ -1353,7 +1356,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 		const cancel = () => {BDFDB.WebModules.unpatch(module, modulefunctions, plugin);};
 		if (plugin && typeof plugin == "object") {
-			if (!Array.isArray(plugin.patchCancels)) plugin.patchCancels = [];
+			if (!BDFDB.ArrayUtils.is(plugin.patchCancels)) plugin.patchCancels = [];
 			plugin.patchCancels.push(cancel);
 		}
 		return cancel;
@@ -1362,7 +1365,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.WebModules.unpatch = function (module, modulefunctions, plugin) {
 		if (!module || !module.BDFDBpatch) return;
 		const pluginname = !plugin ? null : (typeof plugin === "string" ? plugin : plugin.name).toLowerCase();
-		modulefunctions = Array.isArray(modulefunctions) ? modulefunctions : Array.of(modulefunctions);
+		modulefunctions = BDFDB.ArrayUtils.is(modulefunctions) ? modulefunctions : Array.of(modulefunctions);
 		for (let modulefunction of modulefunctions) {
 			if (module[modulefunction] && module.BDFDBpatch[modulefunction]) {
 				for (let type of webModulesPatchtypes) {
@@ -1381,7 +1384,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.WebModules.unpatchall = function (plugin) {
-		if (BDFDB.ObjectUtils.is(plugin) && Array.isArray(plugin.patchCancels)) for (let cancel of plugin.patchCancels) cancel();
+		if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ArrayUtils.is(plugin.patchCancels)) for (let cancel of plugin.patchCancels) cancel();
 	};
 
 	BDFDB.WebModules.forceAllUpdates = function (plugin, selectedtype) {
@@ -1392,7 +1395,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			if (app) {
 				var filteredmodules = [];
 				for (let type in plugin.patchModules) {
-					var methodnames = Array.isArray(plugin.patchModules[type]) ? plugin.patchModules[type] : Array.of(plugin.patchModules[type]);
+					var methodnames = BDFDB.ArrayUtils.is(plugin.patchModules[type]) ? plugin.patchModules[type] : Array.of(plugin.patchModules[type]);
 					if (methodnames.includes("componentDidMount") || methodnames.includes("componentDidUpdate") || methodnames.includes("render")) filteredmodules.push(type);
 				}
 				filteredmodules = selectedtype ? filteredmodules.filter(type => type == selectedtype) : filteredmodules;
@@ -1400,14 +1403,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					try {
 						const appins = BDFDB.getOwnerInstance({node:app, name:filteredmodules, all:true, noCopies:true, group:true, depth:99999999, time:99999999});
 						for (let type in appins) for (let i in appins[type]) {
-							var methodnames = Array.isArray(plugin.patchModules[type]) ? plugin.patchModules[type] : Array.of(plugin.patchModules[type]);
+							var methodnames = BDFDB.ArrayUtils.is(plugin.patchModules[type]) ? plugin.patchModules[type] : Array.of(plugin.patchModules[type]);
 							if (methodnames.includes("componentDidMount")) BDFDB.WebModules.initiateProcess(plugin, appins[type][i], null, type, ["componentDidMount"]);
 							if (methodnames.includes("componentDidUpdate") || methodnames.includes("render")) appins[type][i].forceUpdate();
 						}
 						if (bdsettings) {
 							const bdsettingsins = BDFDB.getOwnerInstance({node:bdsettings, name:filteredmodules, all:true, noCopies:true, group:true, depth:99999999, time:99999999});
 							for (let type in bdsettingsins) for (let i in bdsettingsins[type]) {
-								var methodnames = Array.isArray(plugin.patchModules[type]) ? plugin.patchModules[type] : Array.of(plugin.patchModules[type]);
+								var methodnames = BDFDB.ArrayUtils.is(plugin.patchModules[type]) ? plugin.patchModules[type] : Array.of(plugin.patchModules[type]);
 								if (methodnames.includes("componentDidMount")) BDFDB.WebModules.initiateProcess(plugin, bdsettingsins[type][i], null, type, ["componentDidMount"]);
 								if (methodnames.includes("componentDidUpdate") || methodnames.includes("render")) bdsettingsins[type][i].forceUpdate();
 							}
@@ -1616,7 +1619,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			else {
 				var string = typeof stringobj == "object" ? stringobj.format(Object.assign({}, LanguageStringsVars)) : stringobj;
 				if (typeof string == "string") return string;
-				else if (Array.isArray(string)) {
+				else if (BDFDB.ArrayUtils.is(string)) {
 					var newstring = "";
 					for (let ele of string) {
 						if (typeof ele == "string") newstring += BDFDB.encodeToHTML(ele);
@@ -1643,7 +1646,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					for (let key in LanguageStringsVars) valueobject[key] = value;
 					var string = stringobj.format(valueobject);
 					if (typeof string == "string") return string;
-					else if (Array.isArray(string)) {
+					else if (BDFDB.ArrayUtils.is(string)) {
 						var newstring = "";
 						for (let ele of string) {
 							if (typeof ele == "string") newstring += BDFDB.encodeToHTML(ele);
@@ -1770,7 +1773,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.readUnreadServerList = function (servers) {
 		var found = [];
-		for (let eleOrInfoOrId of servers === undefined || !Array.isArray(servers) ? BDFDB.readServerList() : servers) {
+		for (let eleOrInfoOrId of servers === undefined || !BDFDB.ArrayUtils.is(servers) ? BDFDB.readServerList() : servers) {
 			if (!eleOrInfoOrId) return null;
 			let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getServerID(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
 			id = typeof id == "number" ? id.toFixed() : id;
@@ -1781,7 +1784,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.readMutedServerList = function (servers) {
 		var found = [];
-		for (let eleOrInfoOrId of servers === undefined || !Array.isArray(servers) ? BDFDB.readServerList() : servers) {
+		for (let eleOrInfoOrId of servers === undefined || !BDFDB.ArrayUtils.is(servers) ? BDFDB.readServerList() : servers) {
 			if (!eleOrInfoOrId) return null;
 			let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getServerID(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
 			id = typeof id == "number" ? id.toFixed() : id;
@@ -2057,7 +2060,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.markChannelAsRead = function (channels) {
 		if (!channels) return;
 		var unreadchannels = [];
-		for (let cha of channels = Array.isArray(channels) ? channels : (typeof channels == "string" || typeof channels == "number" ? Array.of(channels) : Array.from(channels))) {
+		for (let cha of channels = BDFDB.ArrayUtils.is(channels) ? channels : (typeof channels == "string" || typeof channels == "number" ? Array.of(channels) : Array.from(channels))) {
 			let id = Node.prototype.isPrototypeOf(cha) ? (BDFDB.getChannelID(cha) || BDFDB.getDmID(cha)) : cha && typeof cha == "object" ? cha.id : cha;
 			if (id) unreadchannels.push(id);
 		}
@@ -2067,10 +2070,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	BDFDB.markGuildAsRead = function (servers) {
 		if (!servers) return;
 		var unreadchannels = [];
-		for (let server of Array.isArray(servers) ? servers : (typeof servers == "string" || typeof servers == "number" ? Array.of(servers) : Array.from(servers))) {
+		for (let server of BDFDB.ArrayUtils.is(servers) ? servers : (typeof servers == "string" || typeof servers == "number" ? Array.of(servers) : Array.from(servers))) {
 			let id = Node.prototype.isPrototypeOf(server) ? BDFDB.getServerID(server) : server && typeof server == "object" ? server.id : server;
 			let channels = id ? LibraryModules.GuildChannelStore.getChannels(id) : null;
-			if (channels) for (let type in channels) if (Array.isArray(channels[type])) for (let channelobj of channels[type]) unreadchannels.push(channelobj.channel.id);
+			if (channels) for (let type in channels) if (BDFDB.ArrayUtils.is(channels[type])) for (let channelobj of channels[type]) unreadchannels.push(channelobj.channel.id);
 		}
 		if (unreadchannels.length) LibraryModules.AckUtils.bulkAck(unreadchannels);
 	};
@@ -2547,7 +2550,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			force = undefined;
 		}
 		if (!eles.length) return;
-		for (let ele of eles) for (let e of Array.isArray(ele) ? ele : Array.of(ele)) {
+		for (let ele of eles) for (let e of BDFDB.ArrayUtils.is(ele) ? ele : Array.of(ele)) {
 			if (!e) {}
 			else if (Node.prototype.isPrototypeOf(e)) toggle(e);
 			else if (NodeList.prototype.isPrototypeOf(e)) for (let n of e) toggle(n);
@@ -2562,7 +2565,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.removeEles = function (...eles) {
-		for (let ele of eles) for (let e of Array.isArray(ele) ? ele : Array.of(ele)) {
+		for (let ele of eles) for (let e of BDFDB.ArrayUtils.is(ele) ? ele : Array.of(ele)) {
 			if (!e) {}
 			else if (Node.prototype.isPrototypeOf(e)) e.remove();
 			else if (NodeList.prototype.isPrototypeOf(e)) {
@@ -2578,27 +2581,27 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.addClass = function (eles, ...classes) {
 		if (!eles || !classes) return;
-		for (let ele of Array.isArray(eles) ? eles : Array.of(eles)) {
+		for (let ele of BDFDB.ArrayUtils.is(eles) ? eles : Array.of(eles)) {
 			if (!ele) {}
 			else if (Node.prototype.isPrototypeOf(ele)) add(ele);
 			else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) add(e);
 			else if (typeof ele == "string") for (let e of ele.split(",")) if (e && (e = e.trim())) for (let n of document.querySelectorAll(e)) add(n);
 		}
 		function add(node) {
-			if (node && node.classList) for (let cla of classes) for (let cl of Array.isArray(cla) ? cla : Array.of(cla)) if (typeof cl == "string") for (let c of cl.split(" ")) if (c) node.classList.add(c);
+			if (node && node.classList) for (let cla of classes) for (let cl of BDFDB.ArrayUtils.is(cla) ? cla : Array.of(cla)) if (typeof cl == "string") for (let c of cl.split(" ")) if (c) node.classList.add(c);
 		}
 	};
 
 	BDFDB.removeClass = function (eles, ...classes) {
 		if (!eles || !classes) return;
-		for (let ele of Array.isArray(eles) ? eles : Array.of(eles)) {
+		for (let ele of BDFDB.ArrayUtils.is(eles) ? eles : Array.of(eles)) {
 			if (!ele) {}
 			else if (Node.prototype.isPrototypeOf(ele)) remove(ele);
 			else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) remove(e);
 			else if (typeof ele == "string") for (let e of ele.split(",")) if (e && (e = e.trim())) for (let n of document.querySelectorAll(e)) remove(n);
 		}
 		function remove(node) {
-			if (node && node.classList) for (let cla of classes) for (let cl of Array.isArray(cla) ? cla : Array.of(cla)) if (typeof cl == "string") for (let c of cl.split(" ")) if (c) node.classList.remove(c);
+			if (node && node.classList) for (let cla of classes) for (let cl of BDFDB.ArrayUtils.is(cla) ? cla : Array.of(cla)) if (typeof cl == "string") for (let c of cl.split(" ")) if (c) node.classList.remove(c);
 		}
 	};
 
@@ -2610,14 +2613,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			force = undefined;
 		}
 		if (!classes.length) return;
-		for (let ele of Array.isArray(eles) ? eles : Array.of(eles)) {
+		for (let ele of BDFDB.ArrayUtils.is(eles) ? eles : Array.of(eles)) {
 			if (!ele) {}
 			else if (Node.prototype.isPrototypeOf(ele)) toggle(ele);
 			else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) toggle(e);
 			else if (typeof ele == "string") for (let e of ele.split(",")) if (e && (e = e.trim())) for (let n of document.querySelectorAll(e)) toggle(n);
 		}
 		function toggle(node) {
-			if (node && node.classList) for (let cla of classes) for (let cl of Array.isArray(cla) ? cla : Array.of(cla)) if (typeof cl == "string") for (let c of cl.split(" ")) if (c) node.classList.toggle(c, force);
+			if (node && node.classList) for (let cla of classes) for (let cl of BDFDB.ArrayUtils.is(cla) ? cla : Array.of(cla)) if (typeof cl == "string") for (let c of cl.split(" ")) if (c) node.classList.toggle(c, force);
 		}
 	};
 
@@ -2630,7 +2633,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 		if (!classes.length) return;
 		var contained = undefined;
-		for (let ele of Array.isArray(eles) ? eles : Array.of(eles)) {
+		for (let ele of BDFDB.ArrayUtils.is(eles) ? eles : Array.of(eles)) {
 			if (!ele) {}
 			else if (Node.prototype.isPrototypeOf(ele)) contains(ele);
 			else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) contains(e);
@@ -2648,7 +2651,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 
 	BDFDB.replaceClass = function (eles, oldclass, newclass) {
 		if (!eles || typeof oldclass != "string" || typeof newclass != "string") return;
-		for (let ele of Array.isArray(eles) ? eles : Array.of(eles)) {
+		for (let ele of BDFDB.ArrayUtils.is(eles) ? eles : Array.of(eles)) {
 			if (!ele) {}
 			else if (Node.prototype.isPrototypeOf(ele)) replace(ele);
 			else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) replace(e);
@@ -2660,7 +2663,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 
 	BDFDB.removeClasses = function (...classes) {
-		for (let cla of classes) for (let c of Array.isArray(cla) ? cla : Array.of(cla)) {
+		for (let cla of classes) for (let c of BDFDB.ArrayUtils.is(cla) ? cla : Array.of(cla)) {
 			if (!c) {}
 			else if (typeof c == "string") for (let a of c.split(",")) if (a && (a = a.replace(/\.|\s/g, ""))) BDFDB.removeClass(document.querySelectorAll("." + a), a);
 		}
@@ -3206,7 +3209,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 		}
 		if (config.children) {
 			let selectedtab, tabs = [];
-			for (let child of (Array.isArray(config.children) ? config.children : Array.of(config.children))) if (LibraryModules.React.isValidElement(child)) {
+			for (let child of (BDFDB.ArrayUtils.is(config.children) ? config.children : Array.of(config.children))) if (LibraryModules.React.isValidElement(child)) {
 				if (child.type == LibraryComponents.ModalTabContent) {
 					if (!tabs.length) child.props.open = true;
 					else delete child.props.open;
@@ -3244,7 +3247,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				style: {marginBottom: 10}
 			}));
 		}
-		if (Array.isArray(config.buttons)) for (let button of config.buttons) {
+		if (BDFDB.ArrayUtils.is(config.buttons)) for (let button of config.buttons) {
 			let contents = typeof button.contents == "string"  ? button.contents : null;
 			if (contents) {
 				let color = typeof button.color == "string" && LibraryComponents.Button.Colors[button.color.toUpperCase()];
@@ -3364,16 +3367,16 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 	
 	BDFDB.getContextMenuGroupAndIndex = function (startchildren, names) {
-		names = Array.isArray(names) ? names : (typeof names == "string" ? [names] : Array.from(names));
-		var startIsArray = Array.isArray(startchildren);
+		names = BDFDB.ArrayUtils.is(names) ? names : (typeof names == "string" ? [names] : Array.from(names));
+		var startIsArray = BDFDB.ArrayUtils.is(startchildren);
 		var parent = startchildren;
 		return search(startchildren);
 		function search (children) {
-			while (children && !Array.isArray(children) && children.props && children.props.children) {
+			while (children && !BDFDB.ArrayUtils.is(children) && children.props && children.props.children) {
 				parent = children;
 				children = children.props.children;
 			}
-			if (children && !Array.isArray(children)) {
+			if (children && !BDFDB.ArrayUtils.is(children)) {
 				if (parent && parent.props) {
 					var child = children;
 					parent.props.children = [];
@@ -3882,9 +3885,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 	};
 	
 	BDFDB.generateID = function (array) {
-		array = Array.isArray(array) ? array : null;
+		array = BDFDB.ArrayUtils.is(array) ? array : [];
 		let id = Math.floor(Math.random() * 10000000000000000);
-		if (array && array.includes(id)) return BDFDB.generateID(array);
+		if (array.includes(id)) return BDFDB.generateID(array);
 		else {
 			array.push(id);
 			return id;
@@ -5475,7 +5478,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", item + " not found in DiscordClasses");
 			return classname;
 		} 
-		else if (!Array.isArray(DiscordClasses[item]) || DiscordClasses[item].length != 2) {
+		else if (!BDFDB.ArrayUtils.is(DiscordClasses[item]) || DiscordClasses[item].length != 2) {
 			console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", item + " is not an Array of Length 2 in DiscordClasses");
 			return classname;
 		}
@@ -5556,7 +5559,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			super(props);
 			
 			props.selectedColor = BDFDB.ObjectUtils.is(props.color) ? props.color : BDFDB.colorCONVERT(props.color, "RGBA");
-			props.colors = (Array.isArray(props.colors) ? props.colors : [null, 5433630, 3066993, 1752220, 3447003, 3429595, 8789737, 10181046, 15277667, 15286558, 15158332, 15105570, 15844367, 13094093, 7372936, 6513507, 16777215, 3910932, 2067276, 1146986, 2123412, 2111892, 7148717, 7419530, 11342935, 11345940, 10038562, 11027200, 12745742, 9936031, 6121581, 2894892]).map(c => BDFDB.colorCONVERT(c, "RGBA"));
+			props.colors = (BDFDB.ArrayUtils.is(props.colors) ? props.colors : [null, 5433630, 3066993, 1752220, 3447003, 3429595, 8789737, 10181046, 15277667, 15286558, 15158332, 15105570, 15844367, 13094093, 7372936, 6513507, 16777215, 3910932, 2067276, 1146986, 2123412, 2111892, 7148717, 7419530, 11342935, 11345940, 10038562, 11027200, 12745742, 9936031, 6121581, 2894892]).map(c => BDFDB.colorCONVERT(c, "RGBA"));
 			props.colorRows = props.colors.length ? [props.colors.slice(0, parseInt(props.colors.length/2)), props.colors.slice(parseInt(props.colors.length/2))] : [];
 			props.customColor = props.selectedColor != null ? (props.colors.indexOf(props.selectedColor) > -1 ? null : props.selectedColor) : null;
 			props.customSelected = !!props.customColor;
@@ -5775,7 +5778,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 									children: this.props.label
 								})
 							}),
-							(Array.isArray(this.props.labelchildren) ? this.props.labelchildren : Array.of(this.props.labelchildren)).filter(n => BDFDB.React.isValidElement(n)),
+							(BDFDB.ArrayUtils.is(this.props.labelchildren) ? this.props.labelchildren : Array.of(this.props.labelchildren)).filter(n => BDFDB.React.isValidElement(n)),
 							BDFDB.React.createElement(LibraryComponents.Flex.Child, {
 								grow: this.props.basis ? 1 : 0,
 								shrink: 0,
@@ -6913,13 +6916,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 				var updatebutton = BDFDB.htmlToElement(`<button class="bd-updatebtn ${BDFDB.disCN._repofolderbutton}">Check for Updates</button>`);
 				updatebutton.addEventListener("click", () => {BDFDB.PluginUtils.checkAllUpdates();});
 				updatebutton.addEventListener("mouseenter", () => {
-					BDFDB.TooltipUtils.create(updatebutton, "Only checks for updates of plugins, which support the updatecheck. Rightclick for a list of supported plugins.", {type: "top", selector: "update-button-tooltip", style: "max-width: 420px"});
+					BDFDB.TooltipUtils.create(updatebutton, "Only checks for updates of plugins, which support the updatecheck. Rightclick for a list of supported plugins.", {type: "top", selector: "update-button-tooltip", style: "max-width: 420px", multi:true});
 				});
 				updatebutton.addEventListener("contextmenu", () => {
 					if (window.PluginUpdates && window.PluginUpdates.plugins && !document.querySelector(".update-list-tooltip")) {
 						var pluginnames = [];
 						for (let url in window.PluginUpdates.plugins) pluginnames.push(window.PluginUpdates.plugins[url].name);
-						BDFDB.TooltipUtils.create(updatebutton, pluginnames.sort().join(", "), {type: "bottom", selector: "update-list-tooltip", style: "max-width: 420px"});
+						BDFDB.TooltipUtils.create(updatebutton, pluginnames.sort().join(", "), {type: "bottom", selector: "update-list-tooltip", style: "max-width: 420px", multi:true});
 					}
 				});
 				BDFDB.removeEles("#bd-settingspane-container .bd-updatebtn" + BDFDB.dotCN._repofolderbutton);
@@ -7052,7 +7055,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			return req.c[index];
 		};
 		BDFDB.WebModules.DevFuncs.findPropAny = function (strings) {
-			strings = Array.isArray(strings) ? strings : Array.from(arguments);
+			strings = BDFDB.ArrayUtils.is(strings) ? strings : Array.from(arguments);
 			var req = getWebModuleReq(); window.t = {"$filter":(prop => strings.every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
@@ -7063,7 +7066,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			console.log(window.t);
 		};
 		BDFDB.WebModules.DevFuncs.findPropFunc = function (strings) {
-			strings = Array.isArray(strings) ? strings : Array.from(arguments);
+			strings = BDFDB.ArrayUtils.is(strings) ? strings : Array.from(arguments);
 			var req = getWebModuleReq(); window.t = {"$filter":(prop => strings.every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
@@ -7074,7 +7077,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			console.log(window.t);
 		};
 		BDFDB.WebModules.DevFuncs.findPropStringLib = function (strings) {
-			strings = Array.isArray(strings) ? strings : Array.from(arguments);
+			strings = BDFDB.ArrayUtils.is(strings) ? strings : Array.from(arguments);
 			var req = getWebModuleReq(); window.t = {"$filter":(prop => strings.every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
@@ -7085,7 +7088,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			console.log(window.t);
 		};
 		BDFDB.WebModules.DevFuncs.findNameAny = function (strings) {
-			strings = Array.isArray(strings) ? strings : Array.from(arguments);
+			strings = BDFDB.ArrayUtils.is(strings) ? strings : Array.from(arguments);
 			var req = getWebModuleReq(); window.t = {"$filter":(modu => strings.some(string => typeof modu.displayName == "string" && modu.displayName.toLowerCase().indexOf(string.toLowerCase()) > -1 || modu.name == "string" && modu.name.toLowerCase().indexOf(string.toLowerCase()) > -1))};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
@@ -7096,7 +7099,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			console.log(window.t);
 		};
 		BDFDB.WebModules.DevFuncs.findCodeAny = function (strings) {
-			strings = Array.isArray(strings) ? strings : Array.from(arguments);
+			strings = BDFDB.ArrayUtils.is(strings) ? strings : Array.from(arguments);
 			var req = getWebModuleReq(); window.t = {"$filter":(prop => strings.every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
@@ -7129,7 +7132,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			var req = getWebModuleReq(); window.t = [];
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
-				if (m && typeof m == "object" && !Array.isArray(m) && Object.keys(m).length) {
+				if (m && typeof m == "object" && !BDFDB.ArrayUtils.is(m) && Object.keys(m).length) {
 					var string = true, stringlib = false;
 					for (let j in m) {
 						if (typeof m[j] != "string") string = false;
@@ -7137,7 +7140,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 					}
 					if (string && stringlib) window.t.push(m);
 				}
-				if (m && typeof m == "object" && m.default && typeof m.default == "object" && !Array.isArray(m.default) && Object.keys(m.default).length) {
+				if (m && typeof m == "object" && m.default && typeof m.default == "object" && !BDFDB.ArrayUtils.is(m.default) && Object.keys(m.default).length) {
 					var string = true, stringlib = false;
 					for (let j in m.default) {
 						if (typeof m.default[j] != "string") string = false;
@@ -7150,7 +7153,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins ? BDFDB.myPlugins : {}, BDv2Api
 			console.log(window.t);
 		};
 		BDFDB.WebModules.DevFuncs.listen = function (strings) {
-			strings = Array.isArray(strings) ? strings : Array.from(arguments);
+			strings = BDFDB.ArrayUtils.is(strings) ? strings : Array.from(arguments);
 			BDFDB.WebModules.DevFuncs.listenstop();
 			BDFDB.WebModules.DevFuncs.listen.p = BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties(strings), strings[0], "WebpackSearch", {after: e => {
 				console.log(e);
