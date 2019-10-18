@@ -1206,9 +1206,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	LibraryModules.LoginUtils = BDFDB.WebModules.findByProperties("login", "logout");
 	LibraryModules.MemberStore = BDFDB.WebModules.findByProperties("getMember", "getMembers");
 	LibraryModules.MentionUtils = BDFDB.WebModules.findByProperties("getMentionCount", "getMentionCounts");
-	LibraryModules.MessageStore = BDFDB.WebModules.findByProperties("getMessage", "getMessages");
 	LibraryModules.MessageCreationUtils = BDFDB.WebModules.findByProperties("parse", "isMentioned");
 	LibraryModules.MessagePinUtils = BDFDB.WebModules.findByProperties("pinMessage", "unpinMessage");
+	LibraryModules.MessageStore = BDFDB.WebModules.findByProperties("getMessage", "getMessages");
 	LibraryModules.MessageUtils = BDFDB.WebModules.findByProperties("receiveMessage", "editMessage");
 	LibraryModules.ModalUtils = BDFDB.WebModules.findByProperties("openModal", "registerModalDispatch");
 	LibraryModules.MutedUtils = BDFDB.WebModules.findByProperties("isGuildOrCategoryOrChannelMuted");
@@ -4171,11 +4171,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	DiscordClassModules.ContextMenuCheckbox = BDFDB.WebModules.findByProperties("checkboxInner", "checkboxElement");
 	DiscordClassModules.CtaVerification = BDFDB.WebModules.findByProperties("attendeeCTA", "verificationNotice");
 	DiscordClassModules.Cursor = BDFDB.WebModules.findByProperties("cursorDefault", "userSelectNone");
+	DiscordClassModules.CustomStatus = BDFDB.WebModules.findByProperties("customStatusContentIcon", "customStatus");
 	DiscordClassModules.DmAddPopout = BDFDB.WebModules.findByProperties("popout", "searchBarComponent");
 	DiscordClassModules.DmAddPopoutItems = BDFDB.WebModules.findByProperties("friendSelected", "friendWrapper");
 	DiscordClassModules.DownloadLink = BDFDB.WebModules.findByProperties("downloadLink", "size12");
 	DiscordClassModules.Embed = BDFDB.WebModules.findByProperties("embed", "embedAuthorIcon");
 	DiscordClassModules.EmbedActions = BDFDB.WebModules.findByProperties("iconPlay", "iconWrapperActive");
+	DiscordClassModules.EmojiButton = BDFDB.WebModules.findByProperties("emojiButton", "sprite");
 	DiscordClassModules.EmojiPicker = BDFDB.WebModules.findByProperties("emojiPicker", "categories");
 	DiscordClassModules.File = BDFDB.WebModules.findByProperties("downloadButton", "fileNameLink");
 	DiscordClassModules.Flex = BDFDB.WebModules.findByProperties("alignBaseline", "alignCenter");
@@ -4198,6 +4200,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	DiscordClassModules.GuildHeader = BDFDB.WebModules.findByProperties("header", "name", "bannerImage");
 	DiscordClassModules.GuildHeaderButton = BDFDB.WebModules.findByProperties("button", "open");
 	DiscordClassModules.GuildIcon = BDFDB.WebModules.findByProperties("acronym", "selected", "wrapper");
+	DiscordClassModules.GuildInvite = BDFDB.WebModules.findByProperties("wrapper", "guildIconJoined");
 	DiscordClassModules.GuildSettingsBanned = BDFDB.WebModules.findByProperties("bannedUser", "bannedUserAvatar");
 	DiscordClassModules.GuildSettingsInvite = BDFDB.WebModules.findByProperties("countdownColumn", "inviteSettingsInviteRow");
 	DiscordClassModules.GuildSettingsMember = BDFDB.WebModules.findByProperties("member", "membersFilterPopout");
@@ -4231,8 +4234,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	DiscordClassModules.MessageElements = BDFDB.WebModules.findByProperties("messageGroupBlockedBtn", "dividerRed");
 	DiscordClassModules.MessageFile = BDFDB.WebModules.findByProperties("cancelButton", "filenameLinkWrapper");
 	DiscordClassModules.MessageMarkup = BDFDB.WebModules.findByProperties("markup");
+	DiscordClassModules.MessageOperations = BDFDB.WebModules.find(module => typeof module["operations"] == "string" && Object.keys(module).length == 1);
 	DiscordClassModules.MessageSystem = BDFDB.WebModules.findByProperties("container", "actionAnchor");
 	DiscordClassModules.MessagesPopout = BDFDB.WebModules.findByProperties("messageGroupWrapperOffsetCorrection", "messagesPopout");
+	DiscordClassModules.MessagesWelcome = BDFDB.WebModules.findByProperties("welcomeMessage", "h1");
 	DiscordClassModules.MessagesWrap = BDFDB.WebModules.findByProperties("messagesWrapper", "messageGroupBlocked");
 	DiscordClassModules.Modal = BDFDB.WebModules.findByProperties("modal", "sizeLarge");
 	DiscordClassModules.ModalDivider = BDFDB.WebModules.find(module => typeof module["divider"] == "string" && Object.keys(module).length == 1);
@@ -4251,12 +4256,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	DiscordClassModules.PrivateChannelList = BDFDB.WebModules.findByProperties("privateChannels", "searchBar");
 	DiscordClassModules.Popout = BDFDB.WebModules.findByProperties("popout", "arrowAlignmentTop");
 	DiscordClassModules.PopoutActivity = BDFDB.WebModules.findByProperties("ellipsis", "activityActivityFeed");
+	DiscordClassModules.QuickMessage = BDFDB.WebModules.findByProperties("quickMessage", "isBlocked");
 	DiscordClassModules.QuickSelect = BDFDB.WebModules.findByProperties("quickSelectArrow", "selected");
 	DiscordClassModules.QuickSwitch = BDFDB.WebModules.findByProperties("resultFocused", "guildIconContainer");
 	DiscordClassModules.QuickSwitchWrap = BDFDB.WebModules.findByProperties("container", "miscContainer");
 	DiscordClassModules.Reactions = BDFDB.WebModules.findByProperties("reactionBtn", "reaction");
 	DiscordClassModules.RecentMentions = BDFDB.WebModules.findByProperties("recentMentionsFilterPopout", "mentionFilter");
 	DiscordClassModules.Role = BDFDB.WebModules.findByProperties("roleCircle", "roleName");
+	DiscordClassModules.Scrollbar = BDFDB.WebModules.findByProperties("scrollbar", "scrollbarGhost");
 	DiscordClassModules.Scroller = BDFDB.WebModules.findByProperties("firefoxFixScrollFlex", "scroller");
 	DiscordClassModules.SearchBar = BDFDB.WebModules.findByProperties("container", "clear");
 	DiscordClassModules.SearchPopout = BDFDB.WebModules.findByProperties("datePicker", "searchResultChannelIconBackground");
@@ -4276,7 +4283,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	DiscordClassModules.TextColor2 = BDFDB.WebModules.findByProperties("base", "muted", "wrapper");
 	DiscordClassModules.TextSize = BDFDB.WebModules.findByProperties("size10", "size14", "size20");
 	DiscordClassModules.TextStyle = BDFDB.WebModules.findByProperties("large", "primary", "selectable");
-	DiscordClassModules.TextWeight = BDFDB.WebModules.findByProperties("weightBold", "weightSemiBold");
+	DiscordClassModules.Tip = BDFDB.WebModules.findByProperties("pro", "inline");
 	DiscordClassModules.Title = BDFDB.WebModules.findByProperties("title", "size18");
 	DiscordClassModules.TitleBar = BDFDB.WebModules.findByProperties("titleBar", "wordmark");
 	DiscordClassModules.Tooltip = BDFDB.WebModules.findByProperties("tooltip", "tooltipTop");
@@ -4541,7 +4548,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		channelwrapper: ["Channel", "wrapper"],
 		chat: ["ChatWindow", "chat"],
 		chatbase: ["AppBase", "base"],
-		chatcontent: ["ChatWindow", "content"],
+		chatcontent: ["ChatWindow", "chatContent"],
+		chatform: ["ChatWindow", "form"],
+		chatinner: ["ChatWindow", "content"],
 		chatspacer: ["AppBase", "content"],
 		checkbox: ["Checkbox", "checkbox"],
 		checkboxchecked: ["Checkbox", "checked"],
@@ -4601,6 +4610,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		cooldownwrapper: ["Typing", "cooldownWrapper"],
 		cursordefault: ["Cursor", "cursorDefault"],
 		cursorpointer: ["Cursor", "cursorPointer"],
+		customstatus: ["CustomStatus", "customStatus"],
+		customstatuscontenticon: ["CustomStatus", "customStatusContentIcon"],
 		defaultcolor: ["Text", "defaultColor"],
 		description: ["FormText", "description"],
 		directioncolumn: ["Flex", "directionColumn"],
@@ -4674,6 +4685,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		embedvideoimagecomponent: ["Embed", "embedVideoImageComponent"],
 		embedvideoimagecomponentinner: ["Embed", "embedVideoImageComponentInner"],
 		embedwrapper: ["MessageAccessory", "embedWrapper"],
+		emojibutton: ["EmojiButton", "emojiButton"],
+		emojibuttonhovered: ["EmojiButton", "emojiButtonHovered"],
+		emojibuttonnormal: ["EmojiButton", "emojiButtonNorma"],
+		emojibuttonsprite: ["EmojiButton", "sprite"],
 		emojipicker: ["EmojiPicker", "emojiPicker"],
 		emojipickeractivity: ["EmojiPicker", "activity"],
 		emojipickerbutton: ["Reactions", "reactionBtn"],
@@ -4716,7 +4731,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		filenamelink: ["File", "fileNameLink"],
 		filenamelinkwrapper: ["File", "filenameLinkWrapper"],
 		filenamewrapper: ["File", "filenameWrapper"],
-		firefoxfixscrollflex: ["Scroller", "firefoxFixScrollFlex"],
+		firefoxfixscrollflex: ["NotFound", "_"],
 		flex: ["FlexChild", "flex"],
 		flex2: ["Flex", "flex"],
 		flexcenter: ["Flex", "flexCenter"],
@@ -4760,6 +4775,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		golivegamename: ["GoLiveDetails", "gameName"],
 		golivegamewrapper: ["GoLiveDetails", "gameWrapper"],
 		golivepanel: ["GoLiveDetails", "panel"],
+		green: ["TextStyle", "statusGreen"],
+		grey: ["TextStyle", "statusGrey"],
 		guildbadgebase: ["Badge", "base"],
 		guildbadgeicon: ["Badge", "icon"],
 		guildbadgeiconbadge: ["Badge", "iconBadge"],
@@ -4913,10 +4930,41 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		inputmini: ["Input", "inputMini"],
 		inputsuccess: ["Input", "success"],
 		inputwrapper: ["Input", "inputWrapper"],
+		invite: ["GuildInvite", "wrapper"],
+		invitebutton: ["GuildInvite", "button"],
+		invitebuttoncontent: ["GuildInvite", "buttonContent"],
+		invitebuttonicon: ["GuildInvite", "buttonIcon"],
+		invitebuttoninner: ["GuildInvite", "buttonInner"],
+		invitebuttonsize: ["GuildInvite", "buttonSize"],
+		invitechannelname: ["GuildInvite", "channelName"],
+		invitecontent: ["GuildInvite", "content"],
+		invitecursordefault: ["GuildInvite", "cursorDefault"],
+		inviteguilddetail: ["GuildInvite", "guildDetail"],
+		inviteguildicon: ["GuildInvite", "guildIcon"],
+		inviteguildiconexpired: ["GuildInvite", "guildIconExpired"],
+		inviteguildiconimage: ["GuildInvite", "guildIconImage"],
+		inviteguildiconimagejoined: ["GuildInvite", "guildIconImageJoined"],
+		inviteguildiconjoined: ["GuildInvite", "guildIconJoined"],
+		inviteguildinfo: ["GuildInvite", "guildInfo"],
+		inviteguildname: ["GuildInvite", "guildName"],
+		inviteguildnameexpired: ["GuildInvite", "guildNameExpired"],
+		inviteguildnamejoined: ["GuildInvite", "guildNameJoined"],
+		inviteheader: ["GuildInvite", "header"],
+		invitehighbackgroundopacity: ["GuildInvite", "highBackgroundOpacity"],
+		inviteiconsizeoverride: ["GuildInvite", "iconSizeOverride"],
+		invitelowbackgroundopacity: ["GuildInvite", "lowBackgroundOpacity"],
+		invitemediumbackgroundopacity: ["GuildInvite", "mediumBackgroundOpacity"],
 		invitemodal: ["InviteModal", "modal"],
 		invitemodalinviterow: ["InviteModal", "inviteRow"],
 		invitemodalinviterowname: ["InviteModal", "inviteRowName"],
 		invitemodalwrapper: ["InviteModal", "wrapper"],
+		inviteonlinecount: ["GuildInvite", "onlineCount"],
+		inviteresolving: ["GuildInvite", "resolving"],
+		inviteresolvingbackground: ["GuildInvite", "resolvingBackground"],
+		invitestatus: ["GuildInvite", "status"],
+		invitestatusoffline: ["GuildInvite", "statusOffline"],
+		invitestatusonline: ["GuildInvite", "statusOnline"],
+		inviteuserselectnone: ["GuildInvite", "userSelectNone"],
 		justifycenter: ["Flex", "justifyCenter"],
 		justifyend: ["Flex", "justifyEnd"],
 		justifystart: ["Flex", "justifyStart"],
@@ -4953,6 +5001,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		medium: ["TextStyle", "medium"],
 		member: ["Member", "member"],
 		membericon: ["Member", "icon"],
+		memberoffline: ["Member", "offline"],
 		memberownericon: ["Member", "ownerIcon"],
 		memberpremiumicon: ["Member", "premiumIcon"],
 		members: ["MembersWrap", "members"],
@@ -4967,18 +5016,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		messageaccessorycompact: ["MessageAccessory", "containerCompact"],
 		messageaccessorycozy: ["MessageAccessory", "containerCozy"],
 		messageavatar: ["Message", "avatar"],
-		messagebody: ["MessageBody", "container"],
-		messagebodycompact: ["MessageBody", "containerCompact"],
-		messagebodycozy: ["MessageBody", "containerCozy"],
-		messagebuttoncontainer: ["Message", "buttonContainer"],
-		messagebuttoncontainerouter: ["MessageBody", "buttonContainer"],
-		messagecompact: ["Message", "messageCompact"],
-		messagecontent: ["Message", "content"],
-		messagecontentcompact: ["Message", "contentCompact"],
-		messagecontentcozy: ["Message", "contentCozy"],
-		messagedivider: ["Message", "divider"],
-		messagedividerenabled: ["Message", "dividerEnabled"],
-		messageedited: ["MessageBody", "edited"],
 		messagebarbase: ["MessageElements", "barBase"],
 		messagebarbuttonalt: ["MessageElements", "barButtonAlt"],
 		messagebarbuttonbase: ["MessageElements", "barButtonBase"],
@@ -4991,6 +5028,21 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		messagebarspan: ["MessageElements", "span"],
 		messagebarspinner: ["MessageElements", "spinner"],
 		messagebarspinneritem: ["MessageElements", "spinnerItem"],
+		messagebody: ["MessageBody", "container"],
+		messagebodycompact: ["MessageBody", "containerCompact"],
+		messagebodycozy: ["MessageBody", "containerCozy"],
+		messagebodyismentioned: ["MessageBody", "isMentioned"],
+		messagebodyismentionedcompact: ["MessageBody", "isMentionedCompact"],
+		messagebodyismentionedcozy: ["MessageBody", "isMentionedCozy"],
+		messagebuttoncontainer: ["Message", "buttonContainer"],
+		messagebuttoncontainerouter: ["MessageBody", "buttonContainer"],
+		messagecompact: ["Message", "messageCompact"],
+		messagecontent: ["Message", "content"],
+		messagecontentcompact: ["Message", "contentCompact"],
+		messagecontentcozy: ["Message", "contentCozy"],
+		messagedivider: ["Message", "divider"],
+		messagedividerenabled: ["Message", "dividerEnabled"],
+		messageedited: ["MessageBody", "edited"],
 		messagegroup: ["Message", "container"],
 		messagegroupblocked: ["MessageElements", "messageGroupBlocked"],
 		messagegroupblockedbtn: ["MessageElements", "messageGroupBlockedBtn"],
@@ -5005,7 +5057,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		messagelocalbotmessage: ["Message", "localBotMessage"],
 		messagemarkup: ["MessageMarkup", "markup"],
 		messagemarkupiscompact: ["MessageBody", "isCompact"],
+		messageoperations: ["MessageOperations", "operations"],
 		messages: ["MessagesWrap", "messages"],
+		messagesdivider: ["MessagesWrap", "divider"],
 		messagespopout: ["MessagesPopout", "messagesPopout"],
 		messagespopoutaccessories: ["MessagesPopout", "accessories"],
 		messagespopoutactionbuttons: ["MessagesPopout", "actionButtons"],
@@ -5039,15 +5093,20 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		messagespopouttitle: ["MessagesPopout", "title"],
 		messagespopoutvisible: ["MessagesPopout", "visible"],
 		messagespopoutwrap: ["MessagesPopout", "messagesPopoutWrap"],
+		messagesscrollerwrapper: ["MessagesWrap", "scrollerWrap"],
+		messageswelcomemessage: ["MessagesWelcome", "welcomeMessage"],
+		messageswelcomemessageheader: ["MessagesWelcome", "h1"],
 		messageswrapper: ["MessagesWrap", "messagesWrapper"],
 		messagesystem: ["MessageSystem", "container"],
 		messagesystemcontent: ["MessageSystem", "content"],
+		messagesystemicon: ["MessageSystem", "icon"],
 		messagetimedivider: ["MessageElements", "divider"],
 		messagetimedividerred: ["MessageElements", "dividerRed"],
 		messagetimedividercontent: ["MessageElements", "dividerContent"],
 		messagetimestampcompact: ["Message", "timestampCompact"],
 		messagetimestampcompactismentioned: ["Message", "timestampCompactIsMentioned"],
 		messagetimestampcozy: ["Message", "timestampCozy"],
+		messagetimestampsystem: ["MessageSystem", "timestamp"],
 		messageuploadcancel: ["MessageFile", "cancelButton"],
 		messageusername: ["Message", "username"],
 		modal: ["ModalWrap", "modal"],
@@ -5074,6 +5133,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		modedisabled: ["FormText", "modeDisabled"],
 		modeselectable: ["FormText", "modeSelectable"],
 		namecontainer: ["NameContainer", "container"],
+		namecontaineravatar: ["NameContainer", "avatar"],
 		namecontainerclickable: ["NameContainer", "clickable"],
 		namecontainercontent: ["NameContainer", "content"],
 		namecontainerlayout: ["NameContainer", "layout"],
@@ -5081,6 +5141,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		namecontainernamecontainer: ["NotFound", "nameContainerNameContainer"],
 		namecontainernamewrapper: ["NameContainer", "nameAndDecorators"],
 		namecontainerselected: ["NameContainer", "selected"],
+		namecontainersubtext: ["NameContainer", "subText"],
 		nametag: ["NameTag", "nameTag"],
 		nochannel: ["ChatWindow", "noChannel"],
 		notice: ["Notice", "notice"],
@@ -5136,6 +5197,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		popouttopleft: ["Popout", "popoutTopLeft"],
 		popouttopright: ["Popout", "popoutTopRight"],
 		primary: ["TextStyle", "primary"],
+		quickmessage: ["QuickMessage", "quickMessage"],
+		quickmessagepopout: ["UserPopout", "quickMessage"],
 		quickselect: ["QuickSelect", "quickSelect"],
 		quickselectarrow: ["QuickSelect", "quickSelectArrow"],
 		quickselectclick: ["QuickSelect", "quickSelectClick"],
@@ -5162,11 +5225,18 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		recentmentionsmentionfilterlabel: ["RecentMentions", "label"],
 		recentmentionsmentionfiltervalue: ["RecentMentions", "value"],
 		recentmentionspopout: ["RecentMentions", "recentMentionsPopout"],
+		red: ["TextStyle", "statusRed"],
 		reset: ["CardStatus", "reset"],
+		scrollbar: ["Scrollbar", "scrollbar"],
+		scrollbardefault: ["Scrollbar", "scrollbarDefault"],
+		scrollbarghost: ["Scrollbar", "scrollbarGhost"],
+		scrollbarghosthairline: ["Scrollbar", "scrollbarGhostHairline"],
 		scroller: ["Scroller", "scroller"],
 		scrollerfade: ["Scroller", "scrollerFade"],
+		scrollerfirefoxfixscrollflex: ["Scroller", "firefoxFixScrollFlex"],
 		scrollersystempad: ["Scroller", "systemPad"],
 		scrollerthemed: ["Scroller", "scrollerThemed"],
+		scrollerthemedwithtrack: ["Scroller", "themedWithTrack"],
 		scrollerthemeghost: ["Scroller", "themeGhost"],
 		scrollerthemeghosthairline: ["Scroller", "themeGhostHairline"],
 		scrollerthemeghosthairlinechannels: ["Scroller", "themeGhostHairlineChannels"],
@@ -5326,6 +5396,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		textareabutton: ["ChannelTextAreaButton", "button"],
 		textareabuttonactive: ["ChannelTextAreaButton", "active"],
 		textareabuttonwrapper: ["ChannelTextAreaButton", "buttonWrapper"],
+		textareadisabled: ["ChannelTextArea", "textAreaDisabled"],
+		textareaedit: ["ChannelTextArea", "edit"],
+		textareaenabled: ["ChannelTextArea", "textAreaEnabled"],
+		textareaenablednoattach: ["ChannelTextArea", "textAreaEnabledNoAttach"],
 		textareaicon: ["ChannelTextAreaButton", "icon"],
 		textareainner: ["ChannelTextArea", "inner"],
 		textareainnerautocomplete: ["ChannelTextArea", "innerAutocomplete"],
@@ -5345,6 +5419,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		themeghosthairline: ["Scroller", "themeGhostHairline"],
 		themelight: ["NotFound", "themeLight"],
 		themeundefined: ["NotFound", "themeUndefined"],
+		tip: ["Tip", "tip"],
+		tipblock: ["Tip", "block"],
+		tippro: ["Tip", "pro"],
+		tipinline: ["Tip", "inline"],
 		title: ["SettingsItems", "title"],
 		titlebar: ["TitleBar", "titleBar"],
 		titledefault: ["SettingsItems", "titleDefault"],
@@ -5376,8 +5454,16 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		unreadbartext: ["UnreadBar", "text"],
 		unreadbarunread: ["UnreadBar", "unread"],
 		userpopout: ["UserPopout", "userPopout"],
+		userpopoutavatarhint: ["UserPopout", "avatarHint"],
+		userpopoutavatarhintinner: ["UserPopout", "avatarHintInner"],
 		userpopoutavatarwrapper: ["UserPopout", "avatarWrapper"],
+		userpopoutavatarwrappernormal: ["UserPopout", "avatarWrapperNormal"],
+		userpopoutbody: ["UserPopout", "body"],
+		userpopoutbodyinner: ["UserPopout", "bodyInner"],
+		userpopoutbodytitle: ["UserPopout", "bodyTitle"],
 		userpopoutcustomstatus: ["UserPopout", "customStatus"],
+		userpopoutendbodysection: ["UserPopout", "endBodySection"],
+		userpopoutfooter: ["UserPopout", "footer"],
 		userpopoutheader: ["UserPopout", "header"],
 		userpopoutheaderbottagwithnickname: ["UserPopout", "headerBotTagWithNickname"],
 		userpopoutheadernamewrapper: ["UserPopout", "headerNameWrapper"],
@@ -5392,10 +5478,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		userpopoutheadertagusernamenonickname: ["UserPopout", "headerTagUsernameNoNickname"],
 		userpopoutheadertagwithnickname: ["UserPopout", "headerTagWithNickname"],
 		userpopoutheadertext: ["UserPopout", "headerText"],
+		userpopoutheadertop: ["UserPopout", "headerTop"],
+		userpopoutprotip: ["UserPopout", "protip"],
 		userpopoutrole: ["Role", "role"],
 		userpopoutrolecircle: ["Role", "roleCircle"],
 		userpopoutrolelist: ["UserPopout", "rolesList"],
 		userpopoutrolename: ["Role", "roleName"],
+		userpopoutroles: ["Role", "root"],
 		userprofile: ["UserProfile", "root"],
 		userprofilebody: ["UserProfile", "body"],
 		userprofilebottag: ["UserProfile", "botTag"],
@@ -5463,13 +5552,16 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		voiceuser: ["VoiceChannel", "voiceUser"],
 		voiceuserlarge: ["VoiceChannel", "userLarge"],
 		voiceusersmall: ["VoiceChannel", "userSmall"],
-		weightbold: ["TextWeight", "weightBold"],
-		weightlight: ["TextWeight", "weightLight"],
-		weightmedium: ["TextWeight", "weightMedium"],
-		weightnormal: ["TextWeight", "weightNormal"],
-		weightsemibold: ["TextWeight", "weightSemiBold"],
+		weightbold: ["TextStyle", "weightBold"],
+		weightlight: ["TextStyle", "weightLight"],
+		weightmedium: ["TextStyle", "weightMedium"],
+		weightnormal: ["TextStyle", "weightNormal"],
+		weightsemibold: ["TextStyle", "weightSemiBold"],
+		white: ["TextStyle", "white"],
+		whitney: ["TextStyle", "whitney"],
 		wrap: ["Flex", "wrap"],
-		wrapreverse: ["Flex", "wrapReverse"]
+		wrapreverse: ["Flex", "wrapReverse"],
+		yellow: ["TextStyle", "statusYellow"]
 	};
 	BDFDB.DiscordClasses = Object.assign({}, DiscordClasses);
 
