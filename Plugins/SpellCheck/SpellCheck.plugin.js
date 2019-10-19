@@ -187,7 +187,7 @@ class SpellCheck {
 				const itemgroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 					className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 					children: BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
-						label: BDFDB.LanguageStrings.SPELLCHECK,
+						label: BDFDB.LanguageUtils.LanguageStrings.SPELLCHECK,
 						className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-spellcheck-contextMenuSubItem`,
 						render: [
 							BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {

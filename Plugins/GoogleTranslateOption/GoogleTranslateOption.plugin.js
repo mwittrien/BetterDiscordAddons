@@ -271,7 +271,7 @@ class GoogleTranslateOption {
 			let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
 			if (!messagediv || pos == -1) return;
 			let translated = BDFDB.containsClass(messagediv, "GTO-translated-message");
-			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, [BDFDB.LanguageStrings.PIN, BDFDB.LanguageStrings.UNPIN]);
+			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, [BDFDB.LanguageUtils.LanguageStrings.PIN, BDFDB.LanguageUtils.LanguageStrings.UNPIN]);
 			const translateUntranslateItem = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: this.labels[translated ? "popout_untranslateoption_text" : "popout_translateoption_text"],
 				className: `${BDFDB.disCN.optionpopoutitem} BDFDB-popoutMenuItem ${this.name}-popoutMenuItem ${this.name}-${translated ? "untranslate" : "translate"}-popoutMenuItem`,

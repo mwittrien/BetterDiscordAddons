@@ -32,7 +32,7 @@ class UserNotes {
 						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
 							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
 								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
-									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">${BDFDB.LanguageStrings.USERS + " " + BDFDB.LanguageStrings.NOTE}</h4>
+									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">${BDFDB.LanguageUtils.LanguageStrings.USERS + " " + BDFDB.LanguageUtils.LanguageStrings.NOTE}</h4>
 									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
 								</div>
 								<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
@@ -130,7 +130,7 @@ class UserNotes {
 				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 				children: [
 					BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
-						label: BDFDB.LanguageStrings.USERS + " " + BDFDB.LanguageStrings.NOTE,
+						label: BDFDB.LanguageUtils.LanguageStrings.USERS + " " + BDFDB.LanguageUtils.LanguageStrings.NOTE,
 						className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-usernote-contextMenuItem`,
 						action: e => {
 							BDFDB.closeContextMenu(menu);

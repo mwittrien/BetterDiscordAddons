@@ -105,7 +105,7 @@ class ImageZoom {
 					clearInterval(waitForImg);
 					img.setAttribute("draggable", "false");
 					inner.firstElementChild.appendChild(BDFDB.htmlToElement(`<span class="${BDFDB.disCN.downloadlink} imagezoom-separator" style="margin: 0px 5px;"> | </div>`));
-					let settingslink = BDFDB.htmlToElement(`<span class="${BDFDB.disCN.downloadlink} imagezoom-settings">Zoom ${BDFDB.LanguageStrings.SETTINGS}</div>`);
+					let settingslink = BDFDB.htmlToElement(`<span class="${BDFDB.disCN.downloadlink} imagezoom-settings">Zoom ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}</div>`);
 					inner.firstElementChild.appendChild(settingslink);
 					let openContext = e => {
 						let settings = BDFDB.getAllData(this, "settings");

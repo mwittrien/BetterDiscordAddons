@@ -161,7 +161,7 @@ class DisplayServersAsChannels {
 		var guildfoldericonwrapper = info.div.querySelector(BDFDB.dotCNC.guildfoldericonwrapperexpanded + BDFDB.dotCN.guildfoldericonwrapperclosed);
 		if (guildfoldericonwrapper) {
 			BDFDB.removeEles(guildfoldericonwrapper.parentElement.querySelectorAll(".DSAC-name"));
-			guildfoldericonwrapper.parentElement.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">${BDFDB.encodeToHTML(info.folderName || BDFDB.LanguageStrings.GUILD_FOLDER_NAME)}</div>`), guildfoldericonwrapper);
+			guildfoldericonwrapper.parentElement.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">${BDFDB.encodeToHTML(info.folderName || BDFDB.LanguageUtils.LanguageStrings.GUILD_FOLDER_NAME)}</div>`), guildfoldericonwrapper);
 		}
 		this.changeSVG(info.div);
 	}
@@ -184,7 +184,7 @@ class DisplayServersAsChannels {
 		var homebutton = div.querySelector(BDFDB.dotCN.guildiconchildwrapper);
 		if (homebutton) {
 			BDFDB.removeEles(homebutton.querySelectorAll(".DSAC-name"));
-			homebutton.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">${BDFDB.encodeToHTML(BDFDB.LanguageStrings.HOME)}</div>`), homebutton.firstElementChild);
+			homebutton.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">${BDFDB.encodeToHTML(BDFDB.LanguageUtils.LanguageStrings.HOME)}</div>`), homebutton.firstElementChild);
 		}
 		this.changeSVG(div);
 	}

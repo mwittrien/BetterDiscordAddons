@@ -126,7 +126,7 @@ class EditUsers {
 					this.forceUpdateAll();
 				});
 			},
-			children: BDFDB.LanguageStrings.RESET
+			children: BDFDB.LanguageUtils.LanguageStrings.RESET
 		}));
 		
 		return BDFDB.createSettingsPanel(this, settingsitems);
@@ -362,7 +362,7 @@ class EditUsers {
 				})
 			],
 			buttons: [{
-				contents: BDFDB.LanguageStrings.SAVE,
+				contents: BDFDB.LanguageUtils.LanguageStrings.SAVE,
 				color: "BRAND",
 				close: true,
 				click: modal => {
@@ -403,7 +403,7 @@ class EditUsers {
 				let user = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
 				if (user) {
 					let data = this.getUserData(user.id, wrapper);
-					textarea.setAttribute("placeholder", BDFDB.LanguageStrings.TEXTAREA_PLACEHOLDER.replace("{{channel}}", "@" + (data.name || user.username)));
+					textarea.setAttribute("placeholder", BDFDB.LanguageUtils.LanguageStrings.TEXTAREA_PLACEHOLDER.replace("{{channel}}", "@" + (data.name || user.username)));
 				}
 			}
 			BDFDB.removeEventListener(this, textarea);
@@ -1147,7 +1147,7 @@ class EditUsers {
 			if (userarray.length) {
 				let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCNS.autocomplete + BDFDB.dotCN.autocompleteinner), amount = 15;
 				if (!autocompletemenu) {
-					autocompletemenu = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.autocomplete + BDFDB.disCN.autocomplete2} autocompleteEditUsers"><div class="${BDFDB.disCN.autocompleteinner}"><div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteEditUsersRow"><div class="${BDFDB.disCN.autocompleteselector} autocompleteEditUsersSelector"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">${BDFDB.LanguageStrings.MEMBERS_MATCHING.replace("{{prefix}}", BDFDB.encodeToHTML(lastword))}</strong></div></div></div></div></div>`);
+					autocompletemenu = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.autocomplete + BDFDB.disCN.autocomplete2} autocompleteEditUsers"><div class="${BDFDB.disCN.autocompleteinner}"><div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteEditUsersRow"><div class="${BDFDB.disCN.autocompleteselector} autocompleteEditUsersSelector"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">${BDFDB.LanguageUtils.LanguageStrings.MEMBERS_MATCHING.replace("{{prefix}}", BDFDB.encodeToHTML(lastword))}</strong></div></div></div></div></div>`);
 					textarea.parentElement.appendChild(autocompletemenu);
 					autocompletemenu = autocompletemenu.firstElementChild;
 				}
@@ -1167,7 +1167,7 @@ class EditUsers {
 					let status = BDFDB.getUserStatus(data.user.id);
 					let isgradient = data.color1 && BDFDB.isObject(data.color1);
 					let username = isgradient ? `<div class="${BDFDB.disCN.marginleft8}" changed-by-editusers="true" style="flex: 1 1 auto;"><span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color1)} !important;">${BDFDB.encodeToHTML(data.name || data.member.nick || data.user.username)}</span></div>` : `<div class="${BDFDB.disCN.marginleft8}" changed-by-editusers="true" style="flex: 1 1 auto;${data.color1 ? (' color: ' + BDFDB.colorCONVERT(data.color1, 'RGB') + ' !important;') : ''}">${BDFDB.encodeToHTML(data.name || data.member.nick || data.user.username)}</div>`;
-					let autocompleterow = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteEditUsersRow"><div userid="${data.user.id}" class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable} autocompleteEditUsersSelector"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.avatarwrapper}" role="img" aria-label="${data.user.username}, ${BDFDB.LanguageStrings["STATUS_" + status.toUpperCase()]}" aria-hidden="false" style="width: 24px; height: 24px;"><svg width="30" height="24" viewBox="0 0 30 24" class="${BDFDB.disCN.avatarmask}" aria-hidden="true"><foreignObject x="0" y="0" width="24" height="24" mask="url(#svg-mask-avatar-status-round-24)"><img src="${data.url || BDFDB.getUserAvatar(data.user.id)}" alt=" " class="${BDFDB.disCN.avatar}" aria-hidden="true"></foreignObject><rect width="8" height="8" x="16" y="16" fill="${BDFDB.getUserStatusColor(status)}" mask="url(#svg-mask-status-${status})" class="${BDFDB.disCN.avatarpointerevents}"></rect></svg></div>${username}<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletedescription}" style="flex: 0 1 auto;"><div class="${BDFDB.disCN.autocompletedescriptionusername}">${BDFDB.encodeToHTML(data.user.username)}</div><div class="${BDFDB.disCN.autocompletedescriptiondiscriminator}">#${data.user.discriminator}</div></div></div></div></div>`);
+					let autocompleterow = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteEditUsersRow"><div userid="${data.user.id}" class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable} autocompleteEditUsersSelector"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.avatarwrapper}" role="img" aria-label="${data.user.username}, ${BDFDB.LanguageUtils.LanguageStrings["STATUS_" + status.toUpperCase()]}" aria-hidden="false" style="width: 24px; height: 24px;"><svg width="30" height="24" viewBox="0 0 30 24" class="${BDFDB.disCN.avatarmask}" aria-hidden="true"><foreignObject x="0" y="0" width="24" height="24" mask="url(#svg-mask-avatar-status-round-24)"><img src="${data.url || BDFDB.getUserAvatar(data.user.id)}" alt=" " class="${BDFDB.disCN.avatar}" aria-hidden="true"></foreignObject><rect width="8" height="8" x="16" y="16" fill="${BDFDB.getUserStatusColor(status)}" mask="url(#svg-mask-status-${status})" class="${BDFDB.disCN.avatarpointerevents}"></rect></svg></div>${username}<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletedescription}" style="flex: 0 1 auto;"><div class="${BDFDB.disCN.autocompletedescriptionusername}">${BDFDB.encodeToHTML(data.user.username)}</div><div class="${BDFDB.disCN.autocompletedescriptiondiscriminator}">#${data.user.discriminator}</div></div></div></div></div>`);
 					autocompleterow.querySelector(BDFDB.dotCN.autocompleteselectable).addEventListener("click", () => {this.swapWordWithMention(textarea);});
 					autocompletemenu.appendChild(autocompleterow);
 				}

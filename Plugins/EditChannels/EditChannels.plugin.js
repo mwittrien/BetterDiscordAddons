@@ -80,7 +80,7 @@ class EditChannels {
 					this.forceUpdateAll();
 				});
 			},
-			children: BDFDB.LanguageStrings.RESET
+			children: BDFDB.LanguageUtils.LanguageStrings.RESET
 		}));
 		
 		return BDFDB.createSettingsPanel(this, settingsitems);
@@ -224,7 +224,7 @@ class EditChannels {
 				})
 			],
 			buttons: [{
-				contents: BDFDB.LanguageStrings.SAVE,
+				contents: BDFDB.LanguageUtils.LanguageStrings.SAVE,
 				color: "BRAND",
 				close: true,
 				click: modal => {
@@ -257,7 +257,7 @@ class EditChannels {
 			if (!textarea) return;
 			if (channel.type == 0 && instance.props.type == "normal" && !instance.props.disabled) {
 				let data = this.getChannelData(channel.id, wrapper);
-				wrapper.querySelector("textarea").setAttribute("placeholder", BDFDB.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", "#" + (data.name || channel.name)));
+				wrapper.querySelector("textarea").setAttribute("placeholder", BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", "#" + (data.name || channel.name)));
 			}
 			BDFDB.removeEventListener(this, textarea);
 			if (BDFDB.getData("changeInAutoComplete", this, "settings")) {
@@ -619,7 +619,7 @@ class EditChannels {
 				let settings = BDFDB.getAllData(this, "settings");
 				let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCNS.autocomplete + BDFDB.dotCN.autocompleteinner), amount = 15;
 				if (!autocompletemenu) {
-					autocompletemenu = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.autocomplete + BDFDB.disCN.autocomplete2} autocompleteEditChannels"><div class="${BDFDB.disCN.autocompleteinner}"><div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteEditChannelsRow"><div class="${BDFDB.disCN.autocompleteselector} autocompleteEditChannelsSelector"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">${BDFDB.LanguageStrings.TEXT_CHANNELS_MATCHING.replace("{{prefix}}", BDFDB.encodeToHTML(lastword))}</strong></div></div></div></div></div>`);
+					autocompletemenu = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.autocomplete + BDFDB.disCN.autocomplete2} autocompleteEditChannels"><div class="${BDFDB.disCN.autocompleteinner}"><div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteEditChannelsRow"><div class="${BDFDB.disCN.autocompleteselector} autocompleteEditChannelsSelector"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">${BDFDB.LanguageUtils.LanguageStrings.TEXT_CHANNELS_MATCHING.replace("{{prefix}}", BDFDB.encodeToHTML(lastword))}</strong></div></div></div></div></div>`);
 					textarea.parentElement.appendChild(autocompletemenu);
 					autocompletemenu = autocompletemenu.firstElementChild;
 				}

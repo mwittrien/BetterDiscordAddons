@@ -22,7 +22,7 @@ class GoogleSearchReplace {
 
 		this.defaults = {
 			engines: {
-				_all: 				{value:true, 	name:BDFDB.getLibraryStrings().btn_all_text, 	url:null},
+				_all: 				{value:true, 	name:BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url:null},
 				Ask: 				{value:true, 	name:"Ask", 				url:"https://ask.com/web?q=" + this.textUrlReplaceString},
 				Bing: 				{value:true, 	name:"Bing", 				url:"https://www.bing.com/search?q=" + this.textUrlReplaceString},
 				DogPile:			{value:true, 	name:"DogPile", 			url:"http://www.dogpile.com/search/web?q=" + this.textUrlReplaceString},

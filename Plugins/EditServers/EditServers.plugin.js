@@ -63,7 +63,7 @@ class EditServers {
 					this.forceUpdateAll();
 				});
 			},
-			children: BDFDB.LanguageStrings.RESET
+			children: BDFDB.LanguageUtils.LanguageStrings.RESET
 		}));
 		
 		return BDFDB.createSettingsPanel(this, settingsitems);
@@ -374,7 +374,7 @@ class EditServers {
 				})
 			],
 			buttons: [{
-				contents: BDFDB.LanguageStrings.SAVE,
+				contents: BDFDB.LanguageUtils.LanguageStrings.SAVE,
 				color: "BRAND",
 				close: true,
 				click: modal => {

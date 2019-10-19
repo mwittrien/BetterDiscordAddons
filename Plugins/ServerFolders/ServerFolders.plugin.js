@@ -222,7 +222,7 @@ class ServerFolders {
 			// REMOVE 08.10.2019
 			let foldersdata = BDFDB.sortObject(BDFDB.loadAllData(this, "folders"), "position");
 			let folders = Object.keys(foldersdata).filter(n => n.indexOf("folder") == 0);
-			if (folders.length) BDFDB.openConfirmModal(this, `Old ServerFolders data detected!\nFound ${folders.length} old custom folders in the ServerFolders.config.json.\nPress the '${BDFDB.LanguageStrings.OKAY}' button to automatically create a native folder for each old folder and to automatically put the servers in them.`, "Convert?", () => {
+			if (folders.length) BDFDB.openConfirmModal(this, `Old ServerFolders data detected!\nFound ${folders.length} old custom folders in the ServerFolders.config.json.\nPress the '${BDFDB.LanguageUtils.LanguageStrings.OKAY}' button to automatically create a native folder for each old folder and to automatically put the servers in them.`, "Convert?", () => {
 				let oldGuildFolders = Object.assign({}, BDFDB.LibraryModules.FolderStore.guildFolders);
 				let guildsInFolders = [];
 				let guildFolders = [];
@@ -700,7 +700,7 @@ class ServerFolders {
 		});
 		BDFDB.addChildEventListener(wrapper, "mouseenter", ".ui-icon-picker-icon", e => {
 			setIcon(e.currentTarget, true);
-			if (e.currentTarget.getAttribute("value") == -1) BDFDB.createTooltip(BDFDB.LanguageStrings.DEFAULT, e.currentTarget, {type:"top"});
+			if (e.currentTarget.getAttribute("value") == -1) BDFDB.createTooltip(BDFDB.LanguageUtils.LanguageStrings.DEFAULT, e.currentTarget, {type:"top"});
 		});
 		BDFDB.addChildEventListener(wrapper, "mouseleave", ".ui-icon-picker-icon", e => {
 			setIcon(e.currentTarget, false);

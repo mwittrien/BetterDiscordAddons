@@ -148,7 +148,7 @@ class CharCounter {
 
 	processChangeNickname (instance, wrapper, returnvalue) {
 		let reset = wrapper.querySelector(BDFDB.dotCN.reset);
-		if (reset && BDFDB.getInnerText(reset.firstElementChild) == BDFDB.LanguageStrings.RESET_NICKNAME) this.appendCounter(wrapper.querySelector(BDFDB.dotCN.inputdefault), "nickname", false);
+		if (reset && BDFDB.getInnerText(reset.firstElementChild) == BDFDB.LanguageUtils.LanguageStrings.RESET_NICKNAME) this.appendCounter(wrapper.querySelector(BDFDB.dotCN.inputdefault), "nickname", false);
 	}
 
 	appendCounter (input, type, parsing) {

@@ -110,7 +110,7 @@ class BadgesEverywhere {
 		};
 
 		for (let flagname in BDFDB.DiscordConstants.UserFlags) if (this.defaults.badges[flagname]) {
-			if (BDFDB.LanguageStringsCheck[this.defaults.badges[flagname].name]) this.defaults.badges[flagname].name = BDFDB.LanguageStrings[this.defaults.badges[flagname].name];
+			if (BDFDB.LanguageUtils.LanguageStringsCheck[this.defaults.badges[flagname].name]) this.defaults.badges[flagname].name = BDFDB.LanguageUtils.LanguageStrings[this.defaults.badges[flagname].name];
 			this.defaults.badges[BDFDB.DiscordConstants.UserFlags[flagname]] = this.defaults.badges[flagname];
 			delete this.defaults.badges[flagname];
 		}
@@ -277,8 +277,8 @@ class BadgesEverywhere {
 				badgewrapper.appendChild(badge);
 				badge.addEventListener("mouseenter", () => {
 					let text = this.defaults.badges[flag].name;
-					if (flag == this.nitroflag && settings.showNitroDate) text = BDFDB.LanguageStringsFormat("PREMIUM_BADGE_TOOLTIP", new Date(this.loadedusers[info.id].premium_since));
-					else if (flag == this.boostflag && settings.showNitroDate) text = BDFDB.LanguageStringsFormat("PREMIUM_GUILD_SUBSCRIPTION_TOOLTIP", new Date(this.loadedusers[info.id].premium_guild_since));
+					if (flag == this.nitroflag && settings.showNitroDate) text = BDFDB.LanguageUtils.LanguageStringsFormat("PREMIUM_BADGE_TOOLTIP", new Date(this.loadedusers[info.id].premium_since));
+					else if (flag == this.boostflag && settings.showNitroDate) text = BDFDB.LanguageUtils.LanguageStringsFormat("PREMIUM_GUILD_SUBSCRIPTION_TOOLTIP", new Date(this.loadedusers[info.id].premium_guild_since));
 					BDFDB.createTooltip(text, badge, {type:"top", style:"white-space: nowrap; max-width: unset"});
 				});
 			}
@@ -287,7 +287,7 @@ class BadgesEverywhere {
 		if (indicators.CURRENT_GUILD_BOOST && member && member.premiumSince) {
 			let badge = BDFDB.htmlToElement(this.createBadge(type, "CURRENT_GUILD_BOOST"));
 			badgewrapper.appendChild(badge);
-			badge.addEventListener("mouseenter", () => {BDFDB.createTooltip(settings.showNitroDate ? BDFDB.LanguageStringsFormat("PREMIUM_GUILD_SUBSCRIPTION_TOOLTIP", new Date(member.premiumSince)) : "Boosting current server", badge, {type:"top", style:"white-space: nowrap; max-width: unset"});});
+			badge.addEventListener("mouseenter", () => {BDFDB.createTooltip(settings.showNitroDate ? BDFDB.LanguageUtils.LanguageStringsFormat("PREMIUM_GUILD_SUBSCRIPTION_TOOLTIP", new Date(member.premiumSince)) : "Boosting current server", badge, {type:"top", style:"white-space: nowrap; max-width: unset"});});
 		}
 		if (badgewrapper.firstChild) {
 			if (header) {

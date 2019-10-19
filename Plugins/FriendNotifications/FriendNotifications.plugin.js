@@ -492,7 +492,7 @@ class FriendNotifications {
 				let status = this.getStatusWithMobileAndActivity(id, users[id]);
 				if (user && this.userStatusStore[id] != status.statusname && users[id][status.statusname]) {
 					let EUdata = BDFDB.loadData(user.id, "EditUsers", "users") || {};
-					let libstring = (this.defaults.notificationstrings[status.statusname].libstring ? BDFDB.LanguageStrings[this.defaults.notificationstrings[status.statusname].libstring] : (this.defaults.notificationstrings[status.statusname].statusname || "")).toLowerCase();
+					let libstring = (this.defaults.notificationstrings[status.statusname].libstring ? BDFDB.LanguageUtils.LanguageStrings[this.defaults.notificationstrings[status.statusname].libstring] : (this.defaults.notificationstrings[status.statusname].statusname || "")).toLowerCase();
 					let string = notificationstrings[status.statusname] || "$user changed status to $status";
 					let toaststring = BDFDB.encodeToHTML(string).replace(/'{0,1}\$user'{0,1}/g, `<strong>${BDFDB.encodeToHTML(EUdata.name || user.username)}</strong>`).replace(/'{0,1}\$status'{0,1}/g, `<strong>${libstring}</strong>`);
 					if (status.isactivity) toaststring = toaststring.replace(/'{0,1}\$song'{0,1}|'{0,1}\$game'{0,1}/g, `<strong>${status.name || status.details}</strong>`).replace(/'{0,1}\$artist'{0,1}/g, `<strong>${status.state}</strong>`);

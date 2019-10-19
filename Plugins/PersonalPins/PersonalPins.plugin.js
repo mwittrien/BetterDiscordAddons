@@ -202,8 +202,8 @@ class PersonalPins {
 		this.notesPopoutMarkup = 				this.notesPopoutMarkup.replace("REPLACE_popout_sort_text", this.labels.popout_sort_text);
 		this.notesPopoutMarkup = 				this.notesPopoutMarkup.replace("REPLACE_popout_messagesort_text", this.labels.popout_messagesort_text);
 
-		this.messageMarkup = 					this.messageMarkup.replace("REPLACE_popout_jump_text", BDFDB.LanguageStrings.JUMP);
-		this.messageMarkup = 					this.messageMarkup.replace("REPLACE_popout_copy_text", BDFDB.LanguageStrings.COPY);
+		this.messageMarkup = 					this.messageMarkup.replace("REPLACE_popout_jump_text", BDFDB.LanguageUtils.LanguageStrings.JUMP);
+		this.messageMarkup = 					this.messageMarkup.replace("REPLACE_popout_copy_text", BDFDB.LanguageUtils.LanguageStrings.COPY);
 
 		this.sortPopoutMarkup = 				this.sortPopoutMarkup.replace("REPLACE_popout_messagesort_text", this.labels.popout_messagesort_text);
 		this.sortPopoutMarkup = 				this.sortPopoutMarkup.replace("REPLACE_popout_datesort_text", this.labels.popout_datesort_text);
@@ -250,7 +250,7 @@ class PersonalPins {
 			let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
 			if (!messagediv || pos == -1) return;
 			let note = this.getNoteData(instance.props.message, instance.props.target, instance.props.channel);
-			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, [BDFDB.LanguageStrings.PIN, BDFDB.LanguageStrings.UNPIN]);
+			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, [BDFDB.LanguageUtils.LanguageStrings.PIN, BDFDB.LanguageUtils.LanguageStrings.UNPIN]);
 			const pinUnpinItem = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: this.labels[note ? "context_unpinoption_text" : "popout_pinoption_text"],
 				className: `${BDFDB.disCN.optionpopoutitem} BDFDB-popoutMenuItem ${this.name}-popoutMenuItem ${this.name}-${note ? "unpin" : "pin"}-popoutMenuItem`,
