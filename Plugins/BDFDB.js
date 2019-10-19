@@ -597,7 +597,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		tooltip.anker = anker;
 		
 		if (options.hide) BDFDB.appendLocalStyle("BDFDBhideOtherTooltips" + id, `#app-mount ${BDFDB.dotCN.tooltip}:not(.BDFDB-tooltip-${id}) {display: none !important;}`, itemlayercontainer);
-		else tooltip.style.setProperty("display", "block", "important");
 					
 		var mouseleave = _ => {
 			BDFDB.removeEles(itemlayer);
