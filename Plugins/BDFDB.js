@@ -148,7 +148,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 				var updateentry = BDFDB.htmlToElement(`<span id="${pluginname}-notice">${pluginname}</span>`);
 				updateentry.addEventListener("click", _ => {BDFDB.PluginUtils.downloadUpdate(pluginname, url);});
 				updatenoticelist.appendChild(updateentry);
-				if (!document.querySelector(".update-clickme-tooltip")) BDFDB.TooltipUtils.create(updatenoticelist, "Click us!", {type:"bottom", selector:"update-clickme-tooltip", multi:true, delay:500});
+				if (!document.querySelector(".update-clickme-tooltip")) BDFDB.TooltipUtils.create(updatenoticelist, "Click us!", {type:"bottom", selector:"update-clickme-tooltip", delay:500});
 			}
 		}
 	};
@@ -596,9 +596,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		tooltip.position = options.position.toLowerCase();
 		tooltip.anker = anker;
 		
-		if (options.multi) tooltip.style.setProperty("display", "block", "important");
-		else BDFDB.appendLocalStyle("BDFDBhideOtherTooltips" + id, `#app-mount ${BDFDB.dotCN.tooltip}:not(.BDFDB-tooltip-${id}) {display: none !important;}`, itemlayercontainer);
-		if (options.css) BDFDB.appendLocalStyle("BDFDBcustomTooltips" + id, options.css, itemlayercontainer);
+		if (options.hide) BDFDB.appendLocalStyle("BDFDBhideOtherTooltips" + id, `#app-mount ${BDFDB.dotCN.tooltip}:not(.BDFDB-tooltip-${id}) {display: none !important;}`, itemlayercontainer);
+		else tooltip.style.setProperty("display", "block", "important");
 					
 		var mouseleave = _ => {
 			BDFDB.removeEles(itemlayer);
@@ -4548,7 +4547,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		filenamelink: ["File", "fileNameLink"],
 		filenamelinkwrapper: ["File", "filenameLinkWrapper"],
 		filenamewrapper: ["File", "filenameWrapper"],
-		firefoxfixscrollflex: ["NotFound", "_"],
 		flex: ["FlexChild", "flex"],
 		flex2: ["Flex", "flex"],
 		flexcenter: ["Flex", "flexCenter"],
@@ -6980,13 +6978,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 				var updatebutton = BDFDB.htmlToElement(`<button class="bd-updatebtn ${BDFDB.disCN._repofolderbutton}">Check for Updates</button>`);
 				updatebutton.addEventListener("click", _ => {BDFDB.PluginUtils.checkAllUpdates();});
 				updatebutton.addEventListener("mouseenter", _ => {
-					BDFDB.TooltipUtils.create(updatebutton, "Only checks for updates of plugins, which support the updatecheck. Rightclick for a list of supported plugins.", {type: "top", selector: "update-button-tooltip", style: "max-width: 420px", multi:true});
+					BDFDB.TooltipUtils.create(updatebutton, "Only checks for updates of plugins, which support the updatecheck. Rightclick for a list of supported plugins.", {type: "top", selector: "update-button-tooltip", style: "max-width: 420px"});
 				});
 				updatebutton.addEventListener("contextmenu", _ => {
 					if (window.PluginUpdates && window.PluginUpdates.plugins && !document.querySelector(".update-list-tooltip")) {
 						var pluginnames = [];
 						for (let url in window.PluginUpdates.plugins) pluginnames.push(window.PluginUpdates.plugins[url].name);
-						BDFDB.TooltipUtils.create(updatebutton, pluginnames.sort().join(", "), {type: "bottom", selector: "update-list-tooltip", style: "max-width: 420px", multi:true});
+						BDFDB.TooltipUtils.create(updatebutton, pluginnames.sort().join(", "), {type: "bottom", selector: "update-list-tooltip", style: "max-width: 420px"});
 					}
 				});
 				BDFDB.removeEles("#bd-settingspane-container .bd-updatebtn" + BDFDB.dotCN._repofolderbutton);

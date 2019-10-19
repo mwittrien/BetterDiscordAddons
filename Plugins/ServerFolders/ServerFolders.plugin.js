@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.5.7";}
+	getVersion () {return "6.5.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,8 +11,7 @@ class ServerFolders {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["Native Folder Support","Yes, it's here finally. ServerFolders now uses native Folders to emulate the old ServerFolders behaviour. This means you can now finally organize your Servers in Folders the old way without loosing the support on your phone. Everything should be working as it's used to. Below is a list of stuff that is <strong style='color: yellow;'>NEW</strong>"],["Folder Creation","Instead of creating a Folder with the targeted Server, a menu now opens that let's you select which Servers you want to add to the Folder before you create it"]],
-			"fixed":[["Fixed?","Added back the option to create a Folder via the contextmenu, the amount of people which won't know how to create native Folders is worrying"],["Theme Issues","Fixed some theme issues with themes like ClearVision"],["Settings","Some fixes with the closing behaviour settings"]]
+			"fixed":[["Tooltips","Fixed issue where native tooltip wasn't hidden"]]
 		};
 		
 		this.labels = {};
@@ -123,7 +122,7 @@ class ServerFolders {
 
 		this.folderContentMarkup = 
 			`<div class="${BDFDB.disCNS.guildswrapper + BDFDB.disCN.guilds} foldercontent foldercontentclosed">
-				<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.guildsscrollerwrap + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.scrollerthemeghosthairline}">
+				<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.firefoxfixscrollflex + BDFDB.disCNS.guildsscrollerwrap + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.scrollerthemeghosthairline}">
 					<div class="${BDFDB.disCNS.guildsscroller + BDFDB.disCN.scroller}"></div>
 				</div>
 			</div>`;
@@ -800,7 +799,7 @@ class ServerFolders {
 					var fontColor = data.color4 ? (!isgradient4 ? BDFDB.colorCONVERT(data.color4, "RGBA") : BDFDB.colorGRADIENT(data.color4)) : "";
 					var folderName = folder.folderName || BDFDB.getReactValue(wrapper, "return.stateNode.props.defaultFolderName");
 					folderinner.ServerFoldersTooltipListener = () => {
-						BDFDB.createTooltip(isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(folderName)}</span>` : folderName, folderinner, {type:"right", selector:"ServerFolders-tooltip", style:`${isgradient4 ? '' : `color: ${fontColor} !important; `}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.colorCONVERT(data.color3[0], "RGBA") : bgColor} !important;`, html:isgradient3});
+						BDFDB.createTooltip(isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(folderName)}</span>` : folderName, folderinner, {type:"right", selector:"ServerFolders-tooltip", style:`${isgradient4 ? '' : `color: ${fontColor} !important; `}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.colorCONVERT(data.color3[0], "RGBA") : bgColor} !important;`, html:isgradient3, hide:true});
 					};
 					folderinner.addEventListener("mouseenter", folderinner.ServerFoldersTooltipListener);
 				}
@@ -960,7 +959,7 @@ class ServerFolders {
 				let isgradient4 = color4 && BDFDB.isObject(color4);
 				let bgColor = color3 ? (!isgradient3 ? BDFDB.colorCONVERT(color3, "RGBA") : BDFDB.colorGRADIENT(color3)) : "";
 				let fontColor = color4 ? (!isgradient4 ? BDFDB.colorCONVERT(color4, "RGBA") : BDFDB.colorGRADIENT(color4)) : "";
-				BDFDB.createTooltip(isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(guild.name)}</span>` : guild.name, guildcopyinner, {type:"right", selector:"guild-folder-tooltip", style:`${isgradient4 ? '' : 'color: ' + fontColor + ' !important; '}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.colorCONVERT(color3[0], "RGBA") : bgColor} !important;`, html:isgradient3});
+				BDFDB.createTooltip(isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(guild.name)}</span>` : guild.name, guildcopyinner, {type:"right", selector:"guild-folder-tooltip", style:`${isgradient4 ? '' : 'color: ' + fontColor + ' !important; '}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.colorCONVERT(color3[0], "RGBA") : bgColor} !important;`, html:isgradient3, hide:true});
 			}
 			if (guildicon && guildicon.src && guild.icon && guild.icon.startsWith("a_") && guild.features.has("ANIMATED_ICON") && guildicon.src.includes("discordapp.com/icons/")) {
 				guildicon.src = guildicon.src.replace(".webp", ".gif");

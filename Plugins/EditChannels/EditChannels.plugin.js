@@ -3,7 +3,7 @@
 class EditChannels {
 	getName () {return "EditChannels";}
 
-	getVersion () {return "4.0.5";}
+	getVersion () {return "4.0.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditChannels {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["Switching to React","Using React to create settings and modals, faster and more less likely to break"]]
+			"fixed":[["Tooltips","Fixed issue where native tooltip wasn't hidden"]]
 		};
 
 		this.labels = {};
@@ -531,7 +531,7 @@ class EditChannels {
 			mention.EditChannelsHovered = true;
 			colorHover();
 			let categorydata = this.getChannelData(categoryinfo.id, null, mention);
-			if (categorydata.name) BDFDB.createTooltip(categorydata.name, mention, {type:"top", selector:"EditChannels-tooltip"});
+			if (categorydata.name) BDFDB.createTooltip(categorydata.name, mention, {type:"top", selector:"EditChannels-tooltip", hide:true});
 		};
 		mention.mouseoutListenerEditChannels = () => {
 			delete mention.EditChannelsHovered;

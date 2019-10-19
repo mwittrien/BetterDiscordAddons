@@ -3,7 +3,7 @@
 class EditServers {
 	getName () {return "EditServers";}
 
-	getVersion () {return "2.1.0";}
+	getVersion () {return "2.1.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditServers {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["ServeFolders","Editing a server now properly updates them in a server folder too"]]
+			"fixed":[["Tooltips","Fixed issue where native tooltip wasn't hidden"]]
 		};
 
 		this.labels = {};
@@ -456,7 +456,7 @@ class EditServers {
 			}
 			if (data.name && BDFDB.containsClass(guildname, BDFDB.disCN.guildheadername) && BDFDB.getData("addOriginalTooltip", this, "settings")) {
 				guildname.mouseenterListenerEditChannels = () => {
-					BDFDB.createTooltip(info.name, guildname.parentElement, {type:"right",selector:"EditServers-tooltip"});
+					BDFDB.createTooltip(info.name, guildname.parentElement, {type:"right", selector:"EditServers-tooltip", hide:true});
 				};
 				guildname.addEventListener("mouseenter", guildname.mouseenterListenerEditChannels);
 			}

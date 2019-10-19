@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.6.4";}
+	getVersion () {return "3.6.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditUsers {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["Switching to React","Using React to create settings and modals, faster and more less likely to break"]]
+			"fixed":[["Tooltips","Fixed issue where native tooltip wasn't hidden"]]
 		};
 
 		this.labels = {};
@@ -885,7 +885,7 @@ class EditUsers {
 		wrapper.removeEventListener("mouseenter", wrapper.tooltipListenerEditUsers);
 		if (data.name) {
 			wrapper.tooltipListenerEditUsers = () => {
-				BDFDB.createTooltip(data.name, wrapper, {type, selector:"EditUsers-tooltip"});
+				BDFDB.createTooltip(data.name, wrapper, {type, selector:"EditUsers-tooltip", hide:true});
 			};
 			wrapper.addEventListener("mouseenter", wrapper.tooltipListenerEditUsers);
 		}
