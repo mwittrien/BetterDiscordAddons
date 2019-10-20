@@ -52,13 +52,13 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 	align-content: flex-start !important;
 }
 .wrapper-1Rf91z .listItem-2P_4kh {
-	margin: 4px 13px 4px -2px !important;
+	margin: 4px 13px 4px 0 !important;
 }
 .wrapper-1Rf91z #server-search {
 	margin: 4px calc(1px * (((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2)) !important;
 }
 .wrapper-1Rf91z .listItem-2P_4kh:first-child .listItemWrapper-3X98Pc {
-	margin: 0 calc(1px * (((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2)) 4px calc(1px * ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) + 2)) !important;
+	margin: 0 calc(1px * (((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2)) 4px calc(1px * ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2))) !important;
 }
 .wrapper-1Rf91z .listItem-2P_4kh:first-child .pill-1m5BUr ~ .listItemWrapper-3X98Pc {
 	margin: 0 calc(1px * ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))) 0 calc(1px * (((0 * var(--valigndms)) + ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))))) !important;
@@ -102,14 +102,14 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 	transform: scaleY(calc(var(--vguildsize)/50)) !important;
 }
 .wrapper-1Rf91z .pill-2uzAFe {
-	left: calc(1px * ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) - 7)) !important;
+	left: calc(1px * ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) - 9)) !important;
 }
 .wrapper-1Rf91z .pill-1m5BUr {
 	left: calc(1px * ((var(--valigndms) + ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))) - 8)) !important;
 }
 .wrapper-1Rf91z .pill-31IEus,
 .wrapper-1Rf91z .pill-3YxEhL {
-	left: -7px !important;
+	left: -9px !important;
 }
 .wrapper-1Rf91z .guildSeparator-3s64Iy {
 	width: calc(1px * ((var(--vguildsize) + 10) * var(--vcolumns) - 10)) !important;
@@ -155,7 +155,7 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 }
 
 .wrapper-1Rf91z .wrapper-21YSNc {
-	margin: 4px 13px 4px -2px !important;
+	margin: 4px 13px 4px 0 !important;
 	width: calc(1px * var(--vguildsize)) !important;
 }
 .wrapper-1Rf91z .wrapper-21YSNc > .listItem-2P_4kh {
