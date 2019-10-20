@@ -291,6 +291,7 @@ body:before {
 	color: rgb(var(--fontwhite1));
 }
 
+.guildIconUnavailable-5PMHDN,								/* guilderror			miniicon							*/
 .guildsError-b7zR5H {										/* guilderror			innerwrap							*/
 	background-color: rgba(240, 71, 71, 0.3);
 	color: rgb(var(--fontwhite1));
