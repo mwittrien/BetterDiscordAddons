@@ -38,7 +38,7 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 	margin-right: 0 !important;
 }
 .wrapper-1Rf91z .scrollerWrap-1IAIlv {
-	width: calc(1px * ((var(--vguildsize) + 10) * var(--vcolumns) + 35)) !important;
+	width: calc(1px * ((var(--vguildsize) + 10) * var(--vcolumns) + 35 - 10)) !important;
 }
 .wrapper-1Rf91z,
 .wrapper-1Rf91z .scrollerWrap-1IAIlv {
@@ -97,9 +97,11 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 	transform: translate(calc(-1.5px * ((50 - var(--vguildsize))/10)), calc(1.5px * ((50 - var(--vguildsize))/10))) scale(calc(var(--vguildsize)/50)) !important;
 }
 .wrapper-1Rf91z .wrapper-sa6paO {
+	overflow: visible !important;
 	top: -5px !important;
 	height: calc(1px * (var(--vguildsize) + 10)) !important;
-	transform: scaleY(calc(var(--vguildsize)/50)) !important;
+	transform: scale(calc(var(--vguildsize)/50)) !important;
+	transform-origin: 0 50% !important;
 }
 .wrapper-1Rf91z .pill-2uzAFe {
 	left: calc(1px * ((((var(--vguildsize) + 10) * (var(--vcolumns) - 1))/2) - 9)) !important;
@@ -113,7 +115,7 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 }
 .wrapper-1Rf91z .guildSeparator-3s64Iy {
 	width: calc(1px * ((var(--vguildsize) + 10) * var(--vcolumns) - 10)) !important;
-	margin: 5px 0 !important;
+	margin: calc(1px * (var(--vguildsize)/10)) 0 !important;
 	display: block !important;
 }
 .wrapper-1Rf91z .guildsError-b7zR5H {
@@ -148,10 +150,17 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 }
 .wrapper-1Rf91z #sort-button > div,
 .wrapper-1Rf91z #bd-pub-li #bd-pub-button,
+.wrapper-1Rf91z .RANbutton-frame .RANbutton-inner,
 .wrapper-1Rf91z .RANbutton-frame .RANbutton {
+    white-space: pre !important;
 	font-size: calc(1px * ((var(--vguildsize)/8) + 5)) !important;
 	line-height: calc(1px * ((var(--vguildsize)/5) + 10)) !important;
-	width: calc(1px * var(--vguildsize)) !important;
+}
+.wrapper-1Rf91z #sort-button > div,
+.wrapper-1Rf91z #bd-pub-li #bd-pub-button,
+.wrapper-1Rf91z .RANbutton-frame .RANbutton-inner,
+.wrapper-1Rf91z .RANbutton-frame .RANbutton {
+	width: 100% !important;
 }
 
 .wrapper-1Rf91z .wrapper-21YSNc {
