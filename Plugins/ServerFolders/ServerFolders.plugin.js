@@ -122,7 +122,7 @@ class ServerFolders {
 
 		this.folderContentMarkup = 
 			`<div class="${BDFDB.disCNS.guildswrapper + BDFDB.disCN.guilds} foldercontent foldercontentclosed">
-				<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.firefoxfixscrollflex + BDFDB.disCNS.guildsscrollerwrap + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.scrollerthemeghosthairline}">
+				<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.guildsscrollerwrap + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.scrollerthemeghosthairline}">
 					<div class="${BDFDB.disCNS.guildsscroller + BDFDB.disCN.scroller}"></div>
 				</div>
 			</div>`;
