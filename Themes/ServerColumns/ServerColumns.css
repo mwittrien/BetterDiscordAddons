@@ -1,5 +1,5 @@
 :root {
-	--vcolumns: var(--columns, 3);
+	--vcolumns: var(--columns, 2);
 	--vguildsize: var(--guildsize, 50);
 	--valigndms: var(--aligndms, 1);
 }
