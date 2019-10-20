@@ -7250,7 +7250,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	BDFDB.getOwnerInstance = (config) => {return BDFDB.ReactUtils.getOwner(config.node || config.instance, config);};
 	BDFDB.getReactValue = BDFDB.ReactUtils.getValue;
 	
-	BDFDB.WebModules = BDFDB.ModuleUtils;
+	BDFDB.WebModules = Object.assign({}, BDFDB.ModuleUtils);
 	BDFDB.WebModules.patch = (module, modulefunctions, plugin, patchfunctions) => {return BDFDB.ModuleUtils.patch(plugin, module, modulefunctions, patchfunctions)};
 	BDFDB.WebModules.unpatchall = BDFDB.ModuleUtils.unpatch;
 	
@@ -7278,7 +7278,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	BDFDB.getTheme = BDFDB.BdUtils.getTheme;
 	BDFDB.isRestartNoMoreEnabled = BDFDB.BdUtils.isAutoLoadEnabled;
 	
-	BDFDB.React = BDFDB.ReactUtils;
+	BDFDB.React = Object.assign({}, BDFDB.ReactUtils);
 	
 	BDFDB.languages = BDFDB.LanguageUtils.languages;
 	BDFDB.getDiscordLanguage = BDFDB.LanguageUtils.getLanguage;
