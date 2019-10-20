@@ -97,7 +97,6 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 	transform: translate(calc(-1.5px * ((50 - var(--vguildsize))/10)), calc(1.5px * ((50 - var(--vguildsize))/10))) scale(calc(var(--vguildsize)/50)) !important;
 }
 .wrapper-1Rf91z .wrapper-sa6paO {
-	overflow: visible !important;
 	top: -5px !important;
 	height: calc(1px * (var(--vguildsize) + 10)) !important;
 	transform: scale(calc(var(--vguildsize)/50)) !important;
