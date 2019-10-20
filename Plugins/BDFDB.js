@@ -1,6 +1,6 @@
 if (window.BDFDB && BDFDB.ListenerUtils && typeof BDFDB.ListenerUtils.remove == "function") BDFDB.ListenerUtils.remove(BDFDB);
 if (window.BDFDB && BDFDB.ObserverUtils && typeof BDFDB.ObserverUtils.disconnect == "function") BDFDB.ObserverUtils.disconnect(BDFDB);
-if (window.BDFDB && BDFDB.WebModules && typeof BDFDB.WebModules.unpatchall == "function") BDFDB.WebModules.unpatchall(BDFDB);
+if (window.BDFDB && BDFDB.ModuleUtils && typeof BDFDB.ModuleUtils.unpatch == "function") BDFDB.ModuleUtils.unpatch(BDFDB);
 var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.BDv2Api || undefined, creationTime: performance.now(), cachedData: {}, pressedKeys: [], mousePosition: {pageX: 0, pageY: 0}, name: "$BDFDB"};
 (_ => {
 	var id = Math.round(Math.random() * 10000000000000000), InternalBDFDB = {};
@@ -32,7 +32,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		if (typeof plugin.css === "string") BDFDB.appendLocalStyle(plugin.name, plugin.css);
 
 
-		BDFDB.WebModules.patchModules(plugin);
+		BDFDB.ModuleUtils.patchModules(plugin);
 		InternalBDFDB.addOnSwitchListener(plugin);
 		InternalBDFDB.addContextListeners(plugin);
 
@@ -66,7 +66,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 
 		BDFDB.ListenerUtils.remove(plugin);
 		BDFDB.ObserverUtils.disconnect(plugin);
-		BDFDB.WebModules.unpatchall(plugin);
+		BDFDB.ModuleUtils.unpatch(plugin);
 		InternalBDFDB.removeOnSwitchListener(plugin);
 		
 		for (let modal of document.querySelectorAll(`.${plugin.name}-modal, .${plugin.name.toLowerCase()}-modal, .${plugin.name}-settingsmodal, .${plugin.name.toLowerCase()}-settingsmodal`)) {
@@ -222,12 +222,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			}
 		}
 		changeLogHTML += `</div>`
-		if (logs) BDFDB.openModal(plugin, {header:BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG, children:BDFDB.React.elementToReact(BDFDB.htmlToElement(changeLogHTML)), selector:"BDFDB-changelogmodal"});
+		if (logs) BDFDB.openModal(plugin, {header:BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG, children:BDFDB.ReactUtils.elementToReact(BDFDB.htmlToElement(changeLogHTML)), selector:"BDFDB-changelogmodal"});
 	};
 	BDFDB.PluginUtils.createSettingsPanel = function (plugin, children) {
-		if (!BDFDB.ObjectUtils.is(plugin) || !children || (!BDFDB.React.isValidElement(children) && !BDFDB.ArrayUtils.is(children)) || (BDFDB.ArrayUtils.is(children) && !children.length)) return;
+		if (!BDFDB.ObjectUtils.is(plugin) || !children || (!BDFDB.ReactUtils.isValidElement(children) && !BDFDB.ArrayUtils.is(children)) || (BDFDB.ArrayUtils.is(children) && !children.length)) return;
 		var settingspanel = BDFDB.htmlToElement(`<div class="${plugin.name}-settings BDFDB-settings"></div>`);
-		BDFDB.React.render(BDFDB.React.createElement(LibraryComponents.SettingsPanel, {
+		BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(LibraryComponents.SettingsPanel, {
 			title: plugin.name,
 			children
 		}), settingspanel);
@@ -808,167 +808,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		return text ? text : original;
 	};
 
-	
-
-	BDFDB.getReactInstance = function (node) {
-		if (!BDFDB.ObjectUtils.is(node)) return null;
-		return node[Object.keys(node).find(key => key.startsWith("__reactInternalInstance"))];
-	};
-
-	BDFDB.getReactValue = function (nodeOrInstance, valuepath) {
-		if (!nodeOrInstance || !valuepath) return null;
-		let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.getReactInstance(nodeOrInstance) : nodeOrInstance;
-		if (!BDFDB.ObjectUtils.is(instance)) return null;
-		let found = instance, values = valuepath.split(".").filter(n => n);
-		for (let i = 0; i < values.length; i++) {
-			if (!found) return null;
-			found = found[values[i]];
-		}
-		return found;
-	};
-
-	BDFDB.setReactValue = function (nodeOrInstance, valuepath, value) {
-		if (!nodeOrInstance || !valuepath || !value) return false;
-		let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.getReactInstance(nodeOrInstance) : nodeOrInstance;
-		if (!BDFDB.ObjectUtils.is(instance)) return false;
-		let found = instance, values = valuepath.split(".").filter(n => n);
-		for (let i = 0; i < values.length; i++) {
-			found = found[values[i]];
-			if (found === undefined && i < values.length-1) return false;
-		}
-		found = value;
-		return true;
-	};
-
-	BDFDB.getOwnerInstance = function (config) {
-		if (config === undefined) return null;
-		if (!config.node && !config.instance || !config.name && (!config.props || !BDFDB.ArrayUtils.is(config.props))) return null;
-		var instance = config.instance || BDFDB.getReactInstance(config.node);
-		if (!instance) return null;
-		config.name = config.name && !BDFDB.ArrayUtils.is(config.name) ? Array.of(config.name) : config.name;
-		var depth = -1;
-		var maxdepth = config.depth === undefined ? 15 : config.depth;
-		var up = config.up === undefined ? false : config.up;
-		var start = performance.now();
-		var maxtime = config.time === undefined ? 150 : config.time;
-		var whitelist = up ? {return:true, sibling:true, _reactInternalFiber:true} : {child:true, sibling:true, _reactInternalFiber:true};
-		var foundinstances = {};
-		var singleinstance = getInstance(instance);
-		if (config.all) {
-			for (let type in foundinstances) {
-				if (config.group) for (let instance in foundinstances[type]) delete foundinstances[type][instance].BDFDBreactSearch;
-				else delete foundinstances[type].BDFDBreactSearch;
-			}
-			return foundinstances;
-		}
-		else return singleinstance;
-
-		function getInstance (instance) {
-			depth++;
-			if (!instance || Node.prototype.isPrototypeOf(instance) || BDFDB.getReactInstance(instance) || depth > maxdepth || performance.now() - start > maxtime) return null;
-			else {
-				var keys = Object.getOwnPropertyNames(instance);
-				var result = null;
-				for (let i = 0; result == null && i < keys.length; i++) {
-					var key = keys[i];
-					var value = instance[key];
-					var statenode = instance.stateNode ? instance.stateNode : (instance.return ? instance.return.stateNode : null);
-					if (statenode && !Node.prototype.isPrototypeOf(statenode) && (instance.type && config.name && config.name.some(name => instance.type.displayName === name.split(" _ _ ")[0] || instance.type.name === name.split(" _ _ ")[0]) || config.props && config.props.every(prop => statenode[prop] !== undefined) || config.defaultProps && config.defaultProps.every(prop => statenode[prop] !== undefined))) {
-						if (config.all === undefined || !config.all) result = statenode;
-						else if (config.all) {
-							if (config.noCopies === undefined || !config.noCopies || config.noCopies && !statenode.BDFDBreactSearch) {
-								statenode.BDFDBreactSearch = true;
-								if (config.group) {
-									if (config.name && instance.type && (instance.type.displayName || instance.type.name)) {
-										var group = "Default";
-										for (let name of config.name) if (instance.type.displayName === name.split(" _ _ ")[0] || instance.type.name === name.split(" _ _ ")[0]) {
-											group = name;
-											break;
-										}
-										if (typeof foundinstances[group] == "undefined") foundinstances[group] = {};
-										BDFDB.ObjectUtils.push(foundinstances[group], statenode);
-									}
-								}
-								else BDFDB.ObjectUtils.push(foundinstances, statenode);
-							}
-						}
-					}
-					if (result == null && (typeof value === "object" || typeof value === "function") && whitelist[key]) result = getInstance(value);
-				}
-			}
-			depth--;
-			return result;
-		}
-	};
-
-	BDFDB.getKeyInformation = function (config) {
-		if (config === undefined) return null;
-		if (!config.node && !config.instance || !config.key) return null;
-		var instance = config.instance || BDFDB.getReactInstance(config.node);
-		if (!instance) return null;
-		var depth = -1;
-		var maxdepth = config.depth === undefined ? 15 : config.depth;
-		var start = performance.now();
-		var maxtime = config.time === undefined ? 150 : config.time;
-		var whitelist = {
-			props: true,
-			state: true,
-			stateNode: true,
-			refs: true,
-			updater: true,
-			prototype: true,
-			type: true,
-			children: config.up ? false : true,
-			type: true,
-			memoizedProps: true,
-			memoizedState: true,
-			child: config.up ? false : true,
-			return: config.up ? true : false,
-			sibling: config.up ? false : true,
-			firstEffect: true
-		};
-		var blacklist = {
-			contextSection: true
-		};
-		if (typeof config.whitelist === "object") Object.assign(whitelist, config.whiteList);
-		if (typeof config.blacklist === "object") Object.assign(blacklist, config.blacklist);
-		var foundkeys = [];
-		var singlekey = getKey(instance);
-		if (config.all) return foundkeys;
-		else return singlekey;
-		function getKey(instance) {
-			depth++;
-			if (!instance || Node.prototype.isPrototypeOf(instance) || BDFDB.getReactInstance(instance) || depth > maxdepth || performance.now() - start > maxtime) result = null;
-			else {
-				var keys = Object.getOwnPropertyNames(instance);
-				var result = null;
-				for (let i = 0; result == null && i < keys.length; i++) {
-					var key = keys[i];
-					if (key && !blacklist[key]) {
-						var value = instance[key];
-						if (config.key === key && (config.value === undefined || config.value === value)) {
-							if (config.all === undefined || !config.all) result = value;
-							else if (config.all) {
-								if (config.noCopies === undefined || !config.noCopies) foundkeys.push(value);
-								else if (config.noCopies) {
-									var copy = false;
-									for (let foundkey of foundkeys) if (BDFDB.equals(value, foundkey)) {
-										copy = true;
-										break;
-									}
-									if (!copy) foundkeys.push(value);
-								}
-							}
-						}
-						else if ((typeof value === "object" || typeof value === "function") && (whitelist[key] || key[0] == "." || !isNaN(key[0]))) result = getKey(value);
-					}
-				}
-			}
-			depth--;
-			return result;
-		}
-	};
-
 	var getWebModuleReq = _ => {
 		if (!getWebModuleReq.req) {
 			const id = "BDFDB-WebModules";
@@ -979,8 +818,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		}
 		return getWebModuleReq.req;
 	};
-	BDFDB.WebModules = {};
-	BDFDB.WebModules.find = function (filter) {
+	BDFDB.ModuleUtils = {};
+	BDFDB.ModuleUtils.find = function (filter) {
 		var req = getWebModuleReq();
 		for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 			var m = req.c[i].exports;
@@ -989,63 +828,63 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		}
 	};
 
-	BDFDB.WebModules.cachedData = {prop:{},name:{},string:{},proto:{}};
-	BDFDB.WebModules.findByProperties = function (properties) {
+	BDFDB.ModuleUtils.cachedData = {prop:{},name:{},string:{},proto:{}};
+	BDFDB.ModuleUtils.findByProperties = function (properties) {
 		properties = BDFDB.ArrayUtils.is(properties) ? properties : Array.from(arguments);
 		var cachestring = JSON.stringify(properties);
-		if (BDFDB.WebModules.cachedData.prop[cachestring]) return BDFDB.WebModules.cachedData.prop[cachestring];
+		if (BDFDB.ModuleUtils.cachedData.prop[cachestring]) return BDFDB.ModuleUtils.cachedData.prop[cachestring];
 		else {
-			var m = BDFDB.WebModules.find(m => properties.every(prop => m[prop] !== undefined));
+			var m = BDFDB.ModuleUtils.find(m => properties.every(prop => m[prop] !== undefined));
 			if (m) {
-				BDFDB.WebModules.cachedData.prop[cachestring] = m;
+				BDFDB.ModuleUtils.cachedData.prop[cachestring] = m;
 				return m;
 			}
 			else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", cachestring + " [properties] not found in WebModules");
 		}
 	};
 
-	BDFDB.WebModules.findByName = function (name) {
+	BDFDB.ModuleUtils.findByName = function (name) {
 		var cachestring = JSON.stringify(name);
-		if (BDFDB.WebModules.cachedData.name[cachestring]) return BDFDB.WebModules.cachedData.name[cachestring];
+		if (BDFDB.ModuleUtils.cachedData.name[cachestring]) return BDFDB.ModuleUtils.cachedData.name[cachestring];
 		else {
-			var m = BDFDB.WebModules.find(m => m.displayName === name);
+			var m = BDFDB.ModuleUtils.find(m => m.displayName === name);
 			if (m) {
-				BDFDB.WebModules.cachedData.name[cachestring] = m;
+				BDFDB.ModuleUtils.cachedData.name[cachestring] = m;
 				return m;
 			}
 			else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", cachestring + " [name] not found in WebModules");
 		}
 	};
 
-	BDFDB.WebModules.findByString = function (strings) {
+	BDFDB.ModuleUtils.findByString = function (strings) {
 		strings = BDFDB.ArrayUtils.is(strings) ? strings : Array.from(arguments);
 		var cachestring = JSON.stringify(strings);
-		if (BDFDB.WebModules.cachedData.string[cachestring]) return BDFDB.WebModules.cachedData.string[cachestring];
+		if (BDFDB.ModuleUtils.cachedData.string[cachestring]) return BDFDB.ModuleUtils.cachedData.string[cachestring];
 		else {
-			var m = BDFDB.WebModules.find(m => strings.every(string => typeof m == "function" && m.toString().indexOf(string) > -1));
+			var m = BDFDB.ModuleUtils.find(m => strings.every(string => typeof m == "function" && m.toString().indexOf(string) > -1));
 			if (m) {
-				BDFDB.WebModules.cachedData.string[cachestring] = m;
+				BDFDB.ModuleUtils.cachedData.string[cachestring] = m;
 				return m;
 			}
 			else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", cachestring + " [string] not found in WebModules");
 		}
 	};
 
-	BDFDB.WebModules.findByPrototypes = function (protoprops) {
+	BDFDB.ModuleUtils.findByPrototypes = function (protoprops) {
 		protoprops = BDFDB.ArrayUtils.is(protoprops) ? protoprops : Array.from(arguments);
 		var cachestring = JSON.stringify(protoprops);
-		if (BDFDB.WebModules.cachedData.proto[cachestring]) return BDFDB.WebModules.cachedData.proto[cachestring];
+		if (BDFDB.ModuleUtils.cachedData.proto[cachestring]) return BDFDB.ModuleUtils.cachedData.proto[cachestring];
 		else {
-			var m = BDFDB.WebModules.find(m => m.prototype && protoprops.every(prop => m.prototype[prop] !== undefined));
+			var m = BDFDB.ModuleUtils.find(m => m.prototype && protoprops.every(prop => m.prototype[prop] !== undefined));
 			if (m) {
-				BDFDB.WebModules.cachedData.proto[cachestring] = m;
+				BDFDB.ModuleUtils.cachedData.proto[cachestring] = m;
 				return m;
 			}
 			else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", cachestring + " [prototypes] not found in WebModules");
 		}
 	};
 
-	BDFDB.DiscordConstants = BDFDB.WebModules.findByProperties("Permissions", "ActivityTypes");
+	BDFDB.DiscordConstants = BDFDB.ModuleUtils.findByProperties("Permissions", "ActivityTypes");
 	
 	var LibraryRequires = {};
 	for (let name of ["child_process", "electron", "fs", "path", "process", "request"]) {
@@ -1054,70 +893,70 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	BDFDB.LibraryRequires = Object.assign({}, LibraryRequires);
 	
 	var LibraryModules = {};
-	LibraryModules.AckUtils = BDFDB.WebModules.findByProperties("localAck", "bulkAck");
-	LibraryModules.APIUtils = BDFDB.WebModules.findByProperties("getAPIBaseURL");
-	LibraryModules.AnimationUtils = BDFDB.WebModules.findByProperties("spring", "decay");
-	LibraryModules.BadgeUtils = BDFDB.WebModules.findByProperties("getBadgeCountString", "getBadgeWidthForValue");
-	LibraryModules.ChannelStore = BDFDB.WebModules.findByProperties("getChannel", "getChannels");
-	LibraryModules.ColorUtils = BDFDB.WebModules.findByProperties("hex2int", "hex2rgb");
-	LibraryModules.ContextMenuUtils = BDFDB.WebModules.findByProperties("closeContextMenu", "openContextMenu");
-	LibraryModules.CurrentUserStore = BDFDB.WebModules.findByProperties("getCurrentUser");
-	LibraryModules.DirectMessageUtils = BDFDB.WebModules.findByProperties("addRecipient", "openPrivateChannel");
-	LibraryModules.FriendUtils = BDFDB.WebModules.findByProperties("getFriendIDs", "getRelationships");
-	LibraryModules.FolderStore = BDFDB.WebModules.findByProperties("getGuildFolderById", "getFlattenedGuilds");
-	LibraryModules.FolderUtils = BDFDB.WebModules.findByProperties("isFolderExpanded", "getExpandedFolders");
-	LibraryModules.GuildBoostUtils = BDFDB.WebModules.findByProperties("getTierName", "getUserLevel");
-	LibraryModules.GuildChannelStore = BDFDB.WebModules.findByProperties("getChannels", "getDefaultChannel");
-	LibraryModules.GuildEmojiStore = BDFDB.WebModules.findByProperties("getGuildEmoji", "getDisambiguatedEmojiContext");
-	LibraryModules.GuildSettingsUtils = BDFDB.WebModules.findByProperties("updateChannelOverrideSettings", "updateNotificationSettings");
-	LibraryModules.GuildStore = BDFDB.WebModules.findByProperties("getGuild", "getGuilds");
-	LibraryModules.GuildUtils = BDFDB.WebModules.findByProperties("transitionToGuildSync");
-	LibraryModules.HistoryUtils = BDFDB.WebModules.findByProperties("transitionTo", "replaceWith", "getHistory");;
-	LibraryModules.IconUtils = BDFDB.WebModules.findByProperties("getGuildIconURL", "getGuildBannerURL");
-	LibraryModules.InviteUtils = BDFDB.WebModules.findByProperties("acceptInvite", "createInvite");
-	LibraryModules.LanguageStore = BDFDB.WebModules.findByProperties("getLanguages", "Messages");
-	LibraryModules.LastChannelStore = BDFDB.WebModules.findByProperties("getLastSelectedChannelId");
-	LibraryModules.LastGuildStore = BDFDB.WebModules.findByProperties("getLastSelectedGuildId");
-	LibraryModules.LoginUtils = BDFDB.WebModules.findByProperties("login", "logout");
-	LibraryModules.MemberStore = BDFDB.WebModules.findByProperties("getMember", "getMembers");
-	LibraryModules.MentionUtils = BDFDB.WebModules.findByProperties("getMentionCount", "getMentionCounts");
-	LibraryModules.MessageCreationUtils = BDFDB.WebModules.findByProperties("parse", "isMentioned");
-	LibraryModules.MessagePinUtils = BDFDB.WebModules.findByProperties("pinMessage", "unpinMessage");
-	LibraryModules.MessageStore = BDFDB.WebModules.findByProperties("getMessage", "getMessages");
-	LibraryModules.MessageUtils = BDFDB.WebModules.findByProperties("receiveMessage", "editMessage");
-	LibraryModules.ModalUtils = BDFDB.WebModules.findByProperties("openModal", "registerModalDispatch");
-	LibraryModules.MutedUtils = BDFDB.WebModules.findByProperties("isGuildOrCategoryOrChannelMuted");
-	LibraryModules.NotificationSettingsUtils = BDFDB.WebModules.findByProperties("setDesktopType", "setTTSType");
-	LibraryModules.NotificationSettingsStore = BDFDB.WebModules.findByProperties("getDesktopType", "getTTSType");
-	LibraryModules.PermissionUtils = BDFDB.WebModules.findByProperties("getChannelPermissions", "canUser");
-	LibraryModules.PermissionRoleUtils = BDFDB.WebModules.findByProperties("getHighestRole", "can");
-	LibraryModules.ReactionUtils = BDFDB.WebModules.findByProperties("addReaction", "removeReaction");
-	LibraryModules.SearchPageUtils = BDFDB.WebModules.findByProperties("searchNextPage", "searchPreviousPage");
-	LibraryModules.SelectChannelUtils = BDFDB.WebModules.findByProperties("selectChannel", "selectPrivateChannel");
-	LibraryModules.SettingsUtils = BDFDB.WebModules.findByProperties("updateRemoteSettings", "updateLocalSettings");
-	LibraryModules.SoundUtils = BDFDB.WebModules.findByProperties("playSound", "createSound");
-	LibraryModules.SpellCheckUtils = BDFDB.WebModules.findByProperties("learnWord", "toggleSpellcheck");
-	LibraryModules.StatusMetaUtils = BDFDB.WebModules.findByProperties("getApplicationActivity", "getStatus");
-	LibraryModules.StreamingUtils = BDFDB.WebModules.findByProperties("isStreaming");
-	LibraryModules.UnreadGuildUtils = BDFDB.WebModules.findByProperties("hasUnread", "getUnreadGuilds");
-	LibraryModules.UnreadChannelUtils = BDFDB.WebModules.findByProperties("getUnreadCount", "getOldestUnreadMessageId");
-	LibraryModules.UploadUtils = BDFDB.WebModules.findByProperties("upload", "instantBatchUpload");
-	LibraryModules.UserStore = BDFDB.WebModules.findByProperties("getUser", "getUsers");
-	LibraryModules.VoiceUtils = BDFDB.WebModules.findByProperties("getAllVoiceStates", "getVoiceStatesForChannel");
-	LibraryModules.ZoomUtils = BDFDB.WebModules.findByProperties("setZoom", "setFontSize");
+	LibraryModules.AckUtils = BDFDB.ModuleUtils.findByProperties("localAck", "bulkAck");
+	LibraryModules.APIUtils = BDFDB.ModuleUtils.findByProperties("getAPIBaseURL");
+	LibraryModules.AnimationUtils = BDFDB.ModuleUtils.findByProperties("spring", "decay");
+	LibraryModules.BadgeUtils = BDFDB.ModuleUtils.findByProperties("getBadgeCountString", "getBadgeWidthForValue");
+	LibraryModules.ChannelStore = BDFDB.ModuleUtils.findByProperties("getChannel", "getChannels");
+	LibraryModules.ColorUtils = BDFDB.ModuleUtils.findByProperties("hex2int", "hex2rgb");
+	LibraryModules.ContextMenuUtils = BDFDB.ModuleUtils.findByProperties("closeContextMenu", "openContextMenu");
+	LibraryModules.CurrentUserStore = BDFDB.ModuleUtils.findByProperties("getCurrentUser");
+	LibraryModules.DirectMessageUtils = BDFDB.ModuleUtils.findByProperties("addRecipient", "openPrivateChannel");
+	LibraryModules.FriendUtils = BDFDB.ModuleUtils.findByProperties("getFriendIDs", "getRelationships");
+	LibraryModules.FolderStore = BDFDB.ModuleUtils.findByProperties("getGuildFolderById", "getFlattenedGuilds");
+	LibraryModules.FolderUtils = BDFDB.ModuleUtils.findByProperties("isFolderExpanded", "getExpandedFolders");
+	LibraryModules.GuildBoostUtils = BDFDB.ModuleUtils.findByProperties("getTierName", "getUserLevel");
+	LibraryModules.GuildChannelStore = BDFDB.ModuleUtils.findByProperties("getChannels", "getDefaultChannel");
+	LibraryModules.GuildEmojiStore = BDFDB.ModuleUtils.findByProperties("getGuildEmoji", "getDisambiguatedEmojiContext");
+	LibraryModules.GuildSettingsUtils = BDFDB.ModuleUtils.findByProperties("updateChannelOverrideSettings", "updateNotificationSettings");
+	LibraryModules.GuildStore = BDFDB.ModuleUtils.findByProperties("getGuild", "getGuilds");
+	LibraryModules.GuildUtils = BDFDB.ModuleUtils.findByProperties("transitionToGuildSync");
+	LibraryModules.HistoryUtils = BDFDB.ModuleUtils.findByProperties("transitionTo", "replaceWith", "getHistory");;
+	LibraryModules.IconUtils = BDFDB.ModuleUtils.findByProperties("getGuildIconURL", "getGuildBannerURL");
+	LibraryModules.InviteUtils = BDFDB.ModuleUtils.findByProperties("acceptInvite", "createInvite");
+	LibraryModules.LanguageStore = BDFDB.ModuleUtils.findByProperties("getLanguages", "Messages");
+	LibraryModules.LastChannelStore = BDFDB.ModuleUtils.findByProperties("getLastSelectedChannelId");
+	LibraryModules.LastGuildStore = BDFDB.ModuleUtils.findByProperties("getLastSelectedGuildId");
+	LibraryModules.LoginUtils = BDFDB.ModuleUtils.findByProperties("login", "logout");
+	LibraryModules.MemberStore = BDFDB.ModuleUtils.findByProperties("getMember", "getMembers");
+	LibraryModules.MentionUtils = BDFDB.ModuleUtils.findByProperties("getMentionCount", "getMentionCounts");
+	LibraryModules.MessageCreationUtils = BDFDB.ModuleUtils.findByProperties("parse", "isMentioned");
+	LibraryModules.MessagePinUtils = BDFDB.ModuleUtils.findByProperties("pinMessage", "unpinMessage");
+	LibraryModules.MessageStore = BDFDB.ModuleUtils.findByProperties("getMessage", "getMessages");
+	LibraryModules.MessageUtils = BDFDB.ModuleUtils.findByProperties("receiveMessage", "editMessage");
+	LibraryModules.ModalUtils = BDFDB.ModuleUtils.findByProperties("openModal", "registerModalDispatch");
+	LibraryModules.MutedUtils = BDFDB.ModuleUtils.findByProperties("isGuildOrCategoryOrChannelMuted");
+	LibraryModules.NotificationSettingsUtils = BDFDB.ModuleUtils.findByProperties("setDesktopType", "setTTSType");
+	LibraryModules.NotificationSettingsStore = BDFDB.ModuleUtils.findByProperties("getDesktopType", "getTTSType");
+	LibraryModules.PermissionUtils = BDFDB.ModuleUtils.findByProperties("getChannelPermissions", "canUser");
+	LibraryModules.PermissionRoleUtils = BDFDB.ModuleUtils.findByProperties("getHighestRole", "can");
+	LibraryModules.ReactionUtils = BDFDB.ModuleUtils.findByProperties("addReaction", "removeReaction");
+	LibraryModules.SearchPageUtils = BDFDB.ModuleUtils.findByProperties("searchNextPage", "searchPreviousPage");
+	LibraryModules.SelectChannelUtils = BDFDB.ModuleUtils.findByProperties("selectChannel", "selectPrivateChannel");
+	LibraryModules.SettingsUtils = BDFDB.ModuleUtils.findByProperties("updateRemoteSettings", "updateLocalSettings");
+	LibraryModules.SoundUtils = BDFDB.ModuleUtils.findByProperties("playSound", "createSound");
+	LibraryModules.SpellCheckUtils = BDFDB.ModuleUtils.findByProperties("learnWord", "toggleSpellcheck");
+	LibraryModules.StatusMetaUtils = BDFDB.ModuleUtils.findByProperties("getApplicationActivity", "getStatus");
+	LibraryModules.StreamingUtils = BDFDB.ModuleUtils.findByProperties("isStreaming");
+	LibraryModules.UnreadGuildUtils = BDFDB.ModuleUtils.findByProperties("hasUnread", "getUnreadGuilds");
+	LibraryModules.UnreadChannelUtils = BDFDB.ModuleUtils.findByProperties("getUnreadCount", "getOldestUnreadMessageId");
+	LibraryModules.UploadUtils = BDFDB.ModuleUtils.findByProperties("upload", "instantBatchUpload");
+	LibraryModules.UserStore = BDFDB.ModuleUtils.findByProperties("getUser", "getUsers");
+	LibraryModules.VoiceUtils = BDFDB.ModuleUtils.findByProperties("getAllVoiceStates", "getVoiceStatesForChannel");
+	LibraryModules.ZoomUtils = BDFDB.ModuleUtils.findByProperties("setZoom", "setFontSize");
 	BDFDB.LibraryModules = Object.assign({}, LibraryModules);
 
-	LibraryModules.React = BDFDB.WebModules.findByProperties("createElement", "cloneElement");
-	LibraryModules.ReactDOM = BDFDB.WebModules.findByProperties("render", "findDOMNode");
+	LibraryModules.React = BDFDB.ModuleUtils.findByProperties("createElement", "cloneElement");
+	LibraryModules.ReactDOM = BDFDB.ModuleUtils.findByProperties("render", "findDOMNode");
 	if (LibraryModules.React && LibraryModules.ReactDOM) {
-		BDFDB.React = Object.assign({}, LibraryModules.React, LibraryModules.ReactDOM);
-		BDFDB.React.createElement = function (...arguments) {
+		BDFDB.ReactUtils = Object.assign({}, LibraryModules.React, LibraryModules.ReactDOM);
+		BDFDB.ReactUtils.createElement = function (...arguments) {
 			try {return LibraryModules.React.createElement(...arguments) || null;}
 			catch (err) {console.error(`%c[BDFDB]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not create react element! " + err);}
 			return null;
 		};
-		BDFDB.React.elementToReact = function (node) {
-			if (BDFDB.React.isValidElement(node)) return node;
+		BDFDB.ReactUtils.elementToReact = function (node) {
+			if (BDFDB.ReactUtils.isValidElement(node)) return node;
 			else if (!Node.prototype.isPrototypeOf(node)) return null;
 			else if (node.nodeType == Node.TEXT_NODE) return node.nodeValue;
 			let attributes = {}, importantstyleprops = {};
@@ -1130,20 +969,162 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 				if (attributes.style[camelprop] != null) importantstyleprops[importantprop] = attributes.style[camelprop];
 			}
 			if (Object.keys(importantstyleprops).length) attributes.ref = instance => {
-				let ele = BDFDB.React.findDOMNode(instance);
+				let ele = BDFDB.ReactUtils.findDOMNode(instance);
 				if (ele) for (let importantprop in importantstyleprops) ele.style.setProperty(importantprop, importantstyleprops[importantprop], "important");
 			}
-			for (let child of node.childNodes) attributes.children.push(BDFDB.React.elementToReact(child));
-			return BDFDB.React.createElement(node.tagName, attributes);
+			for (let child of node.childNodes) attributes.children.push(BDFDB.ReactUtils.elementToReact(child));
+			return BDFDB.ReactUtils.createElement(node.tagName, attributes);
 		};
-		BDFDB.React.findDOMNode = function (instance) {
+		BDFDB.ReactUtils.findDOMNode = function (instance) {
 			if (Node.prototype.isPrototypeOf(instance)) return instance;
 			if (!instance || !instance.updater || typeof instance.updater.isMounted !== "function" || !instance.updater.isMounted(instance)) return null;
-			var node = LibraryModules.ReactDOM.findDOMNode(instance) || BDFDB.getReactValue(instance, "child.stateNode");
+			var node = LibraryModules.ReactDOM.findDOMNode(instance) || BDFDB.ReactUtils.getValue(instance, "child.stateNode");
 			return Node.prototype.isPrototypeOf(node) ? node : null;
 		};
-		BDFDB.React.forceUpdate = function (instance) {
+		BDFDB.ReactUtils.findValue = function (config) {
+			if (config === undefined) return null;
+			if (!config.node && !config.instance || !config.key) return null;
+			var instance = config.instance || BDFDB.ReactUtils.getInstance(config.node);
+			if (!instance) return null;
+			var depth = -1;
+			var maxdepth = config.depth === undefined ? 15 : config.depth;
+			var start = performance.now();
+			var maxtime = config.time === undefined ? 150 : config.time;
+			var whitelist = {
+				props: true,
+				state: true,
+				stateNode: true,
+				refs: true,
+				updater: true,
+				prototype: true,
+				type: true,
+				children: config.up ? false : true,
+				type: true,
+				memoizedProps: true,
+				memoizedState: true,
+				child: config.up ? false : true,
+				return: config.up ? true : false,
+				sibling: config.up ? false : true,
+				firstEffect: true
+			};
+			var blacklist = {
+				contextSection: true
+			};
+			if (typeof config.whitelist === "object") Object.assign(whitelist, config.whiteList);
+			if (typeof config.blacklist === "object") Object.assign(blacklist, config.blacklist);
+			var foundkeys = [];
+			var singlekey = getKey(instance);
+			if (config.all) return foundkeys;
+			else return singlekey;
+			function getKey(instance) {
+				depth++;
+				if (!instance || Node.prototype.isPrototypeOf(instance) || BDFDB.ReactUtils.getInstance(instance) || depth > maxdepth || performance.now() - start > maxtime) result = null;
+				else {
+					var keys = Object.getOwnPropertyNames(instance);
+					var result = null;
+					for (let i = 0; result == null && i < keys.length; i++) {
+						var key = keys[i];
+						if (key && !blacklist[key]) {
+							var value = instance[key];
+							if (config.key === key && (config.value === undefined || config.value === value)) {
+								if (config.all === undefined || !config.all) result = value;
+								else if (config.all) {
+									if (config.noCopies === undefined || !config.noCopies) foundkeys.push(value);
+									else if (config.noCopies) {
+										var copy = false;
+										for (let foundkey of foundkeys) if (BDFDB.equals(value, foundkey)) {
+											copy = true;
+											break;
+										}
+										if (!copy) foundkeys.push(value);
+									}
+								}
+							}
+							else if ((typeof value === "object" || typeof value === "function") && (whitelist[key] || key[0] == "." || !isNaN(key[0]))) result = getKey(value);
+						}
+					}
+				}
+				depth--;
+				return result;
+			}
+		};
+		BDFDB.ReactUtils.forceUpdate = function (instance) {
 			if (instance && instance.updater && typeof instance.updater.isMounted == "function" && instance.updater.isMounted(instance)) instance.forceUpdate();
+		};
+		BDFDB.ReactUtils.getInstance = function (node) {
+			if (!BDFDB.ObjectUtils.is(node)) return null;
+			return node[Object.keys(node).find(key => key.startsWith("__reactInternalInstance"))];
+		};
+		BDFDB.ReactUtils.getOwner = function (nodeOrInstance, config) {
+			if (!nodeOrInstance || !BDFDB.ObjectUtils.is(config) || !config.name && !config.props) return null;
+			var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
+			if (!BDFDB.ObjectUtils.is(instance)) return null;
+			config.name = config.name && !BDFDB.ArrayUtils.is(config.name) ? Array.of(config.name) : config.name;
+			config.props = config.props && !BDFDB.ArrayUtils.is(config.props) ? Array.of(config.props) : config.props;
+			var depth = -1;
+			var maxdepth = config.depth === undefined ? 15 : config.depth;
+			var up = config.up === undefined ? false : config.up;
+			var start = performance.now();
+			var maxtime = config.time === undefined ? 150 : config.time;
+			var whitelist = up ? {return:true, sibling:true, _reactInternalFiber:true} : {child:true, sibling:true, _reactInternalFiber:true};
+			var foundinstances = {};
+			var singleinstance = getInstance(instance);
+			if (config.all) {
+				for (let type in foundinstances) {
+					if (config.group) for (let instance in foundinstances[type]) delete foundinstances[type][instance].BDFDBreactSearch;
+					else delete foundinstances[type].BDFDBreactSearch;
+				}
+				return foundinstances;
+			}
+			else return singleinstance;
+
+			function getInstance (instance) {
+				depth++;
+				if (!instance || Node.prototype.isPrototypeOf(instance) || BDFDB.ReactUtils.getInstance(instance) || depth > maxdepth || performance.now() - start > maxtime) return null;
+				else {
+					var keys = Object.getOwnPropertyNames(instance);
+					var result = null;
+					for (let i = 0; result == null && i < keys.length; i++) {
+						var key = keys[i];
+						var value = instance[key];
+						var statenode = instance.stateNode ? instance.stateNode : (instance.return ? instance.return.stateNode : null);
+						if (statenode && !Node.prototype.isPrototypeOf(statenode) && (instance.type && config.name && config.name.some(name => instance.type.displayName === name.split(" _ _ ")[0] || instance.type.name === name.split(" _ _ ")[0]) || config.props && config.props.every(prop => statenode[prop] !== undefined) || config.defaultProps && config.defaultProps.every(prop => statenode[prop] !== undefined))) {
+							if (config.all === undefined || !config.all) result = statenode;
+							else if (config.all) {
+								if (config.noCopies === undefined || !config.noCopies || config.noCopies && !statenode.BDFDBreactSearch) {
+									statenode.BDFDBreactSearch = true;
+									if (config.group) {
+										if (config.name && instance.type && (instance.type.displayName || instance.type.name)) {
+											var group = "Default";
+											for (let name of config.name) if (instance.type.displayName === name.split(" _ _ ")[0] || instance.type.name === name.split(" _ _ ")[0]) {
+												group = name;
+												break;
+											}
+											if (typeof foundinstances[group] == "undefined") foundinstances[group] = {};
+											BDFDB.ObjectUtils.push(foundinstances[group], statenode);
+										}
+									}
+									else BDFDB.ObjectUtils.push(foundinstances, statenode);
+								}
+							}
+						}
+						if (result == null && (typeof value === "object" || typeof value === "function") && whitelist[key]) result = getInstance(value);
+					}
+				}
+				depth--;
+				return result;
+			}
+		};
+		BDFDB.ReactUtils.getValue = function (nodeOrInstance, valuepath) {
+			if (!nodeOrInstance || !valuepath) return null;
+			var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
+			if (!BDFDB.ObjectUtils.is(instance)) return null;
+			var found = instance, values = valuepath.split(".").filter(n => n);
+			for (value of values) {
+				if (!found) return null;
+				found = found[value];
+			}
+			return found;
 		};
 	};
 
@@ -1188,8 +1169,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		V2C_PluginCard: "_repoheader",
 		V2C_ThemeCard: "_repoheader"
 	};
-	BDFDB.WebModules.patch = function (module, modulefunctions, plugin, patchfunctions) {
-		if (!module || !modulefunctions || !plugin || !Object.keys(patchfunctions).some(type => webModulesPatchtypes.includes(type))) return null;
+	BDFDB.ModuleUtils.patch = function (plugin, module, modulefunctions, patchfunctions) {
+		if (!plugin || !module || !modulefunctions || !Object.keys(patchfunctions).some(type => webModulesPatchtypes.includes(type))) return null;
 		const pluginname = (typeof plugin === "string" ? plugin : plugin.name).toLowerCase();
 		const surpressErrors = (callback, errorstring) => (...args) => {
 			try {return callback(...args);}
@@ -1232,7 +1213,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			}
 			for (let type of webModulesPatchtypes) if (typeof patchfunctions[type] == "function") module.BDFDBpatch[modulefunction][type][pluginname] = patchfunctions[type];
 		}
-		const cancel = _ => {BDFDB.WebModules.unpatch(module, modulefunctions, plugin);};
+		const cancel = _ => {BDFDB.ModuleUtils.unpatch(plugin, module, modulefunctions);};
 		if (plugin && typeof plugin == "object") {
 			if (!BDFDB.ArrayUtils.is(plugin.patchCancels)) plugin.patchCancels = [];
 			plugin.patchCancels.push(cancel);
@@ -1240,32 +1221,36 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		return cancel;
 	};
 
-	BDFDB.WebModules.unpatch = function (module, modulefunctions, plugin) {
-		if (!module || !module.BDFDBpatch) return;
-		const pluginname = !plugin ? null : (typeof plugin === "string" ? plugin : plugin.name).toLowerCase();
-		modulefunctions = BDFDB.ArrayUtils.is(modulefunctions) ? modulefunctions : Array.of(modulefunctions);
-		for (let modulefunction of modulefunctions) {
-			if (module[modulefunction] && module.BDFDBpatch[modulefunction]) {
-				for (let type of webModulesPatchtypes) {
-					if (pluginname) delete module.BDFDBpatch[modulefunction][type][pluginname];
-					else delete module.BDFDBpatch[modulefunction][type];
-				}
-				var empty = true;
-				for (let type of webModulesPatchtypes) if (!BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction][type])) empty = false;
-				if (empty) {
-					module[modulefunction] = module.BDFDBpatch[modulefunction].originalMethod;
-					delete module.BDFDBpatch[modulefunction];
-					if (BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch)) delete module.BDFDBpatch;
-				}
+	BDFDB.ModuleUtils.unpatch = function (plugin, module, modulefunctions) {
+		if (!module && !modulefunctions) {
+			if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ArrayUtils.is(plugin.patchCancels)) for (let cancel of plugin.patchCancels) cancel();
+		}
+		else {
+			if (!BDFDB.ObjectUtils.is(module) || !module.BDFDBpatch) return;
+			const pluginname = !plugin ? null : (typeof plugin === "string" ? plugin : plugin.name).toLowerCase();
+			if (modulefunctions) {
+				for (let modulefunction of BDFDB.ArrayUtils.is(modulefunctions) ? modulefunctions : Array.of(modulefunctions)) if (module[modulefunction] && module.BDFDBpatch[modulefunction]) unpatch(modulefunction, pluginname);
+			}
+			else {
+				for (let patchedfunction of module.BDFDBpatch) unpatch(patchedfunction, pluginname);
+			}
+		}
+		function unpatch (func, pluginname) {
+			for (let type of webModulesPatchtypes) {
+				if (pluginname) delete module.BDFDBpatch[func][type][pluginname];
+				else delete module.BDFDBpatch[func][type];
+			}
+			var empty = true;
+			for (let type of webModulesPatchtypes) if (!BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[func][type])) empty = false;
+			if (empty) {
+				module[func] = module.BDFDBpatch[func].originalMethod;
+				delete module.BDFDBpatch[func];
+				if (BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch)) delete module.BDFDBpatch;
 			}
 		}
 	};
 
-	BDFDB.WebModules.unpatchall = function (plugin) {
-		if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ArrayUtils.is(plugin.patchCancels)) for (let cancel of plugin.patchCancels) cancel();
-	};
-
-	BDFDB.WebModules.forceAllUpdates = function (plugin, selectedtype) {
+	BDFDB.ModuleUtils.forceAllUpdates = function (plugin, selectedtype) {
 		selectedtype = selectedtype && webModulesPatchmap[selectedtype] ? webModulesPatchmap[selectedtype] + " _ _ " + selectedtype : selectedtype;
 		if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ObjectUtils.is(plugin.patchModules) && (!selectedtype || plugin.patchModules[selectedtype])) {
 			const app = document.querySelector(BDFDB.dotCN.app);
@@ -1279,10 +1264,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 				filteredmodules = selectedtype ? filteredmodules.filter(type => type == selectedtype) : filteredmodules;
 				if (filteredmodules.length) {
 					try {
-						const appins = BDFDB.getOwnerInstance({node:app, name:filteredmodules, all:true, noCopies:true, group:true, depth:99999999, time:99999999});
+						const appins = BDFDB.ReactUtils.getOwner(app, {name:filteredmodules, all:true, noCopies:true, group:true, depth:99999999, time:99999999});
 						for (let type in appins) for (let i in appins[type]) InternalBDFDB.forceInitiateProcess(plugin, appins[type][i], type);
 						if (bdsettings) {
-							const bdsettingsins = BDFDB.getOwnerInstance({node:bdsettings, name:filteredmodules, all:true, noCopies:true, group:true, depth:99999999, time:99999999});
+							const bdsettingsins = BDFDB.ReactUtils.getOwner(bdsettings, {name:filteredmodules, all:true, noCopies:true, group:true, depth:99999999, time:99999999});
 							for (let type in bdsettingsins) for (let i in bdsettingsins[type]) InternalBDFDB.forceInitiateProcess(plugin, bdsettingsins[type][i], type);
 						}
 					}
@@ -1294,12 +1279,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	InternalBDFDB.forceInitiateProcess = function (plugin, instance, type) {
 		if (!plugin || !instance || !type) return;
 		var methodnames = BDFDB.ArrayUtils.is(plugin.patchModules[type]) ? plugin.patchModules[type] : Array.of(plugin.patchModules[type]);
-		if (methodnames.includes("componentDidMount")) BDFDB.WebModules.initiateProcess(plugin, instance, null, type, ["componentDidMount"]);
+		if (methodnames.includes("componentDidMount")) BDFDB.ModuleUtils.initiateProcess(plugin, instance, null, type, ["componentDidMount"]);
 		if (methodnames.includes("render")) instance.forceUpdate();
-		else if (methodnames.includes("componentDidUpdate")) BDFDB.WebModules.initiateProcess(plugin, instance, null, type, ["componentDidUpdate"]);
+		else if (methodnames.includes("componentDidUpdate")) BDFDB.ModuleUtils.initiateProcess(plugin, instance, null, type, ["componentDidUpdate"]);
 	};
 
-	BDFDB.WebModules.patchModules = function (plugin) {
+	BDFDB.ModuleUtils.patchModules = function (plugin) {
 		if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ObjectUtils.is(plugin.patchModules)) {
 			for (let type in plugin.patchModules) {
 				var mapped = webModulesPatchmap[type];
@@ -1309,18 +1294,18 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 					plugin.patchModules[patchtype] = plugin.patchModules[type];
 					delete plugin.patchModules[type];
 				}
-				if (!classname) patchInstance(BDFDB.WebModules.findByName(patchtype.split(" _ _ ")[0]), patchtype);
+				if (!classname) patchInstance(BDFDB.ModuleUtils.findByName(patchtype.split(" _ _ ")[0]), patchtype);
 				else if (DiscordClasses[classname]) checkForInstance(classname, patchtype);
 			}
 			function patchInstance(instance, type) {
 				if (instance) {
 					var name = type.split(" _ _ ")[0];
 					instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
-					instance = instance.displayName == name ? instance : BDFDB.getOwnerInstance({instance, name, up:true});
+					instance = instance.displayName == name ? instance : BDFDB.ReactUtils.getOwner(instance, {name, up:true});
 					if (instance) {
 						instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
-						BDFDB.WebModules.patch(instance.prototype, plugin.patchModules[type], plugin, {after: e => {
-							if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) BDFDB.WebModules.initiateProcess(plugin, e.thisObject, e.returnValue, type, [e.originalMethodName]);
+						BDFDB.ModuleUtils.patch(plugin, instance.prototype, plugin.patchModules[type], {after: e => {
+							if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) BDFDB.ModuleUtils.initiateProcess(plugin, e.thisObject, e.returnValue, type, [e.originalMethodName]);
 						}});
 					}
 				}
@@ -1329,14 +1314,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 				const app = document.querySelector(BDFDB.dotCN.app), bdsettings = document.querySelector("#bd-settingspane-container " + BDFDB.dotCN.scrollerwrap);
 				var instancefound = false;
 				if (app) {
-					var appins = BDFDB.getOwnerInstance({node:app, name:type, depth:99999999, time:99999999});
+					var appins = BDFDB.ReactUtils.getOwner(app, {name:type, depth:99999999, time:99999999});
 					if (appins) {
 						instancefound = true;
 						patchInstance(appins, type);
 					}
 				}
 				if (!instancefound && bdsettings) {
-					var bdsettingsins = BDFDB.getOwnerInstance({node:bdsettings, name:type, depth:99999999, time:99999999});
+					var bdsettingsins = BDFDB.ReactUtils.getOwner(bdsettings, {name:type, depth:99999999, time:99999999});
 					if (bdsettingsins) {
 						instancefound = true;
 						patchInstance(bdsettingsins, type);
@@ -1347,12 +1332,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 						if (found || !n || !n.tagName) return;
 						var ele = null;
 						if ((ele = BDFDB.containsClass(n, BDFDB.disCN[classname]) ? n : n.querySelector(BDFDB.dotCN[classname])) != null) {
-							var ins = BDFDB.getReactInstance(ele);
+							var ins = BDFDB.ReactUtils.getInstance(ele);
 							if (isCorrectInstance(ins, type)) {
 								found = true;
 								instanceobserver.disconnect();
 								patchInstance(ins, type);
-								BDFDB.WebModules.forceAllUpdates(plugin, type);
+								BDFDB.ModuleUtils.forceAllUpdates(plugin, type);
 							}
 						}
 					});});});
@@ -1363,22 +1348,22 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			function isCorrectInstance(instance, type) {
 				if (!instance) return false;
 				instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
-				instance = instance.displayName == type ? instance : BDFDB.getOwnerInstance({instance:instance, name:type, up:true});
+				instance = instance.displayName == type ? instance : BDFDB.ReactUtils.getOwner(instance, {name:type, up:true});
 				return instance && (type != "V2C_PluginCard" && type != "V2C_ThemeCard" || type == "V2C_PluginCard" && BDFDB.checkWhichRepoPage() == "plugins" || type == "V2C_ThemeCard" && BDFDB.checkWhichRepoPage() == "themes");
 			}
 		}
 	};
 
-	BDFDB.WebModules.initiateProcess = function (plugin, instance, returnvalue, type, methodnames) {
+	BDFDB.ModuleUtils.initiateProcess = function (plugin, instance, returnvalue, type, methodnames) {
 		if (BDFDB.ObjectUtils.is(plugin) && instance) {
 			if (plugin.name == "$BDFDB") plugin = BDFDBprocessFunctions;
 			type = (type.split(" _ _ ")[1] || type).replace(/[^A-z0-9]|_/g, "");
 			type = type[0].toUpperCase() + type.slice(1);
 			if (typeof plugin["process" + type] == "function") {
-				var wrapper = BDFDB.React.findDOMNode(instance);
+				var wrapper = BDFDB.ReactUtils.findDOMNode(instance);
 				if (wrapper || methodnames.includes("render")) plugin["process" + type](instance, wrapper || document.createElement("div"), returnvalue, methodnames);
 				else setImmediate(_ => {
-					wrapper = BDFDB.React.findDOMNode(instance);
+					wrapper = BDFDB.ReactUtils.findDOMNode(instance);
 					if (wrapper) plugin["process" + type](instance, wrapper, returnvalue, methodnames);
 				});
 			}
@@ -1393,24 +1378,24 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	
 	InternalBDFDB.addContextListeners = (plugin) => {
 		if (!BDFDB.ObjectUtils.is(plugin)) return;
-		for (let type of NoFluxContextMenus) if (typeof plugin[`on${type}`] === "function") InternalBDFDB.patchContextMenuPlugin(plugin, type, BDFDB.WebModules.findByName(type));
-		for (let type of NoFluxPopouts) if (typeof plugin[`on${type}`] === "function") InternalBDFDB.patchPopoutPlugin(plugin, type, BDFDB.WebModules.findByName(type));
+		for (let type of NoFluxContextMenus) if (typeof plugin[`on${type}`] === "function") InternalBDFDB.patchContextMenuPlugin(plugin, type, BDFDB.ModuleUtils.findByName(type));
+		for (let type of NoFluxPopouts) if (typeof plugin[`on${type}`] === "function") InternalBDFDB.patchPopoutPlugin(plugin, type, BDFDB.ModuleUtils.findByName(type));
 		for (let type of FluxContextMenus) if (typeof plugin[`on${type}`] === "function") {
 			if (PatchMenuQueries[type].module) InternalBDFDB.patchContextMenuPlugin(plugin, type, PatchMenuQueries[type].module);
 			else PatchMenuQueries[type].query.push(plugin);
 		}
 	};
 	InternalBDFDB.patchContextMenuPlugin = (plugin, type, module) => {
-		if (module && module.prototype) BDFDB.WebModules.patch(module.prototype, "render", plugin, {after: e => {
-			let instance = e.thisObject, menu = BDFDB.React.findDOMNode(e.thisObject), returnvalue = e.returnValue;
+		if (module && module.prototype) BDFDB.ModuleUtils.patch(plugin, module.prototype, "render", {after: e => {
+			let instance = e.thisObject, menu = BDFDB.ReactUtils.findDOMNode(e.thisObject), returnvalue = e.returnValue;
 			if (instance && menu && returnvalue && typeof plugin[`on${type}`] === "function") {
 				plugin[`on${type}`](instance, menu, returnvalue);
 			}
 		}});
 	};
 	InternalBDFDB.patchPopoutPlugin = (plugin, type, module) => {
-		if (module && module.prototype) BDFDB.WebModules.patch(module.prototype, "render", plugin, {after: e => {
-			let instance = e.thisObject, popout = BDFDB.React.findDOMNode(e.thisObject), returnvalue = e.returnValue;
+		if (module && module.prototype) BDFDB.ModuleUtils.patch(plugin, module.prototype, "render", {after: e => {
+			let instance = e.thisObject, popout = BDFDB.ReactUtils.findDOMNode(e.thisObject), returnvalue = e.returnValue;
 			if (instance && popout && returnvalue && typeof plugin[`on${type}`] === "function") {
 				plugin[`on${type}`](instance, popout, returnvalue);
 				if (!instance.BDFDBforceUpdateTimeout && typeof instance.forceUpdate == "function") instance.forceUpdate();
@@ -1419,30 +1404,30 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	};
 	InternalBDFDB.patchContextMenuLib = (module, repatch) => {
 		if (module && module.prototype) {
-			BDFDB.WebModules.patch(module.prototype, "componentDidMount", BDFDB, {after: e => {
+			BDFDB.ModuleUtils.patch(BDFDB, module.prototype, "componentDidMount", {after: e => {
 				if (!e.thisObject.BDFDBforceRenderTimeout && typeof e.thisObject.render == "function") e.thisObject.render();
 			}});
-			BDFDB.WebModules.patch(module.prototype, "componentDidUpdate", BDFDB, {after: e => {
-				var menu = BDFDB.React.findDOMNode(e.thisObject);
+			BDFDB.ModuleUtils.patch(BDFDB, module.prototype, "componentDidUpdate", {after: e => {
+				var menu = BDFDB.ReactUtils.findDOMNode(e.thisObject);
 				if (menu) {
-					const updater = BDFDB.getReactValue(e, "thisObject._reactInternalFiber.stateNode.props.onHeightUpdate");
+					const updater = BDFDB.ReactUtils.getValue(e, "thisObject._reactInternalFiber.stateNode.props.onHeightUpdate");
 					const mrects = BDFDB.getRects(menu), arects = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount));
 					if (updater && (mrects.top + mrects.height > arects.height)) updater();
 				}
 			}});
-			BDFDB.WebModules.patch(module.prototype, "render", BDFDB, {after: e => {
+			BDFDB.ModuleUtils.patch(BDFDB, module.prototype, "render", {after: e => {
 				if (e.thisObject.props.BDFDBcontextMenu && e.thisObject.props.children && e.returnValue && e.returnValue.props) {
 					e.returnValue.props.children = e.thisObject.props.children;
 					delete e.thisObject.props.value;
 					delete e.thisObject.props.children;
 					delete e.thisObject.props.BDFDBcontextMenu;
 				}
-				if (BDFDB.React.findDOMNode(e.thisObject)) {
+				if (BDFDB.ReactUtils.findDOMNode(e.thisObject)) {
 					e.thisObject.BDFDBforceRenderTimeout = true;
 					setTimeout(_ => {delete e.thisObject.BDFDBforceRenderTimeout;}, 1000);
 				}
 				if (repatch) {
-					let newmodule = BDFDB.getReactValue(e, "thisObject._reactInternalFiber.child.type");
+					let newmodule = BDFDB.ReactUtils.getValue(e, "thisObject._reactInternalFiber.child.type");
 					if (newmodule && newmodule.displayName && PatchMenuQueries[newmodule.displayName] && !PatchMenuQueries[newmodule.displayName].module) {
 						PatchMenuQueries[newmodule.displayName].module = newmodule;
 						InternalBDFDB.patchContextMenuLib(newmodule, false);
@@ -1456,26 +1441,26 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	};
 	InternalBDFDB.patchPopoutLib = (module, repatch) => {
 		if (module && module.prototype) {
-			BDFDB.WebModules.patch(module.prototype, "componentDidMount", BDFDB, {after: e => {
+			BDFDB.ModuleUtils.patch(BDFDB, module.prototype, "componentDidMount", {after: e => {
 				if (!e.thisObject.BDFDBforceRenderTimeout && !e.thisObject.BDFDBforceUpdateTimeout && typeof e.thisObject.render == "function") e.thisObject.render();
 			}});
-			BDFDB.WebModules.patch(module.prototype, "componentDidUpdate", BDFDB, {after: e => {
-				const updater = BDFDB.getReactValue(e, "thisObject._reactInternalFiber.return.return.return.stateNode.updateOffsets");
+			BDFDB.ModuleUtils.patch(BDFDB, module.prototype, "componentDidUpdate", {after: e => {
+				const updater = BDFDB.ReactUtils.getValue(e, "thisObject._reactInternalFiber.return.return.return.stateNode.updateOffsets");
 				if (updater) updater();
 				e.thisObject.BDFDBforceUpdateTimeout = true;
 				setTimeout(_ => {delete e.thisObject.BDFDBforceUpdateTimeout;}, 1000);
 			}});
-			BDFDB.WebModules.patch(module.prototype, "render", BDFDB, {after: e => {
-				if (BDFDB.React.findDOMNode(e.thisObject)) {
+			BDFDB.ModuleUtils.patch(BDFDB, module.prototype, "render", {after: e => {
+				if (BDFDB.ReactUtils.findDOMNode(e.thisObject)) {
 					e.thisObject.BDFDBforceRenderTimeout = true;
 					setTimeout(_ => {delete e.thisObject.BDFDBforceRenderTimeout;}, 1000);
 				}
 				if (e.thisObject.props.message && !e.thisObject.props.target) {
 					const messageswrap = document.querySelector(BDFDB.dotCN.messages);
 					if (messageswrap) {
-						var messages = BDFDB.getOwnerInstance({node:messageswrap, name:"Message", all:true, noCopies:true, depth:99999999, time:99999999});
+						var messages = BDFDB.ReactUtils.getOwner(messageswrap, {name:"Message", all:true, noCopies:true, depth:99999999, time:99999999});
 						for (let i in messages) if (e.thisObject.props.message.id == messages[i].props.message.id) {
-							target = BDFDB.React.findDOMNode(messages[i]);
+							target = BDFDB.ReactUtils.findDOMNode(messages[i]);
 							if (target) e.thisObject.props.target = target
 							break;
 						}
@@ -1484,9 +1469,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			}});
 		}
 	};
-	for (let type of NoFluxContextMenus) InternalBDFDB.patchContextMenuLib(BDFDB.WebModules.findByName(type), false);
-	for (let type of NoFluxPopouts) InternalBDFDB.patchPopoutLib(BDFDB.WebModules.findByName(type), false);
-	for (let type of FluxContextMenus) InternalBDFDB.patchContextMenuLib(BDFDB.WebModules.findByName(`FluxContainer(${type})`), true);
+	for (let type of NoFluxContextMenus) InternalBDFDB.patchContextMenuLib(BDFDB.ModuleUtils.findByName(type), false);
+	for (let type of NoFluxPopouts) InternalBDFDB.patchPopoutLib(BDFDB.ModuleUtils.findByName(type), false);
+	for (let type of FluxContextMenus) InternalBDFDB.patchContextMenuLib(BDFDB.ModuleUtils.findByName(`FluxContainer(${type})`), true);
 
 	BDFDB.equals = function (mainA, mainB, sorted) {
 		var i = -1;
@@ -1584,8 +1569,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	};
 
 	BDFDB.readServerList = function () {
-		var found = [], ins = BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.guilds), name: ["Guild","GuildIcon"], all:true, noCopies:true, depth:99999999, time:99999999});
-		for (let info in ins) if (ins[info].props && ins[info].props.guild) found.push(Object.assign(new ins[info].props.guild.constructor(ins[info].props.guild), {div:ins[info].handleContextMenu ? BDFDB.React.findDOMNode(ins[info]) : BDFDB.createServerDivCopy(ins[info].props.guild), instance:ins[info]}));
+		var found = [], ins = BDFDB.ReactUtils.getOwner(document.querySelector(BDFDB.dotCN.guilds), {name:["Guild","GuildIcon"], all:true, noCopies:true, depth:99999999, time:99999999});
+		for (let info in ins) if (ins[info].props && ins[info].props.guild) found.push(Object.assign(new ins[info].props.guild.constructor(ins[info].props.guild), {div:ins[info].handleContextMenu ? BDFDB.ReactUtils.findDOMNode(ins[info]) : BDFDB.createServerDivCopy(ins[info].props.guild), instance:ins[info]}));
 		return found;
 	};
 
@@ -1618,7 +1603,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	};
 
 	BDFDB.getServerID = function (div) {
-		if (!Node.prototype.isPrototypeOf(div) || !BDFDB.getReactInstance(div)) return;
+		if (!Node.prototype.isPrototypeOf(div) || !BDFDB.ReactUtils.getInstance(div)) return;
 		let guilddiv = BDFDB.getParentEle(BDFDB.dotCN.guildouter, div);
 		if (!guilddiv) return;
 		var iconwrap = guilddiv.querySelector(BDFDB.dotCN.guildiconwrapper);
@@ -1739,7 +1724,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getServerID(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
 		let guild = LibraryModules.GuildStore.getGuild(id);
 		if (guild) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-			return BDFDB.React.createElement(BDFDB.WebModules.findByName("GuildContextMenu"), Object.assign({}, e, {
+			return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("GuildContextMenu"), Object.assign({}, e, {
 				type: BDFDB.DiscordConstants.ContextMenuTypes.GUILD_ICON_BAR,
 				guild: guild,
 				badge: LibraryModules.MentionUtils.getMentionCount(guild.id),
@@ -1750,18 +1735,18 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	};
 
 	BDFDB.readFolderList = function () {
-		var found = [], ins = BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.guildswrapper), name:"GuildFolder", all:true, noCopies:true, depth:99999999, time:99999999});
+		var found = [], ins = BDFDB.ReactUtils.getOwner(document.querySelector(BDFDB.dotCN.guildswrapper), {name:"GuildFolder", all:true, noCopies:true, depth:99999999, time:99999999});
 		for (let info in ins) if (ins[info].props && ins[info].props.folderId) {
-			found.push(Object.assign({}, ins[info].props, {div:BDFDB.React.findDOMNode(ins[info]), instance:ins[info]}));
+			found.push(Object.assign({}, ins[info].props, {div:BDFDB.ReactUtils.findDOMNode(ins[info]), instance:ins[info]}));
 		}
 		return found;
 	};
 
 	BDFDB.getFolderID = function (div) {
-		if (!Node.prototype.isPrototypeOf(div) || !BDFDB.getReactInstance(div)) return;
+		if (!Node.prototype.isPrototypeOf(div) || !BDFDB.ReactUtils.getInstance(div)) return;
 		div = BDFDB.getParentEle(BDFDB.dotCN.guildfolderwrapper, div);
 		if (!div) return;
-		return BDFDB.getReactValue(div, "return.stateNode.props.folderId");
+		return BDFDB.ReactUtils.getValue(div, "return.stateNode.props.folderId");
 	};
 
 	BDFDB.getFolderDiv = function (eleOrInfoOrId) {
@@ -1779,9 +1764,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	};
 
 	BDFDB.readChannelList = function () {
-		var found = [], ins = BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.channels), name: ["ChannelCategoryItem", "ChannelItem", "PrivateChannel"], all:true, noCopies:true, depth:99999999, time:99999999});
+		var found = [], ins = BDFDB.ReactUtils.getOwner(document.querySelector(BDFDB.dotCN.channels), {name: ["ChannelCategoryItem", "ChannelItem", "PrivateChannel"], all:true, noCopies:true, depth:99999999, time:99999999});
 		for (let info in ins) if (ins[info].props && !ins[info].props.ispin && ins[info].props.channel && ins[info]._reactInternalFiber.return) {
-			var div = BDFDB.React.findDOMNode(ins[info]);
+			var div = BDFDB.ReactUtils.findDOMNode(ins[info]);
 			div = div && BDFDB.containsClass(div.parentElement, BDFDB.disCN.categorycontainerdefault, BDFDB.disCN.channelcontainerdefault, false) ? div.parentElement : div;
 			found.push(Object.assign(new ins[info].props.channel.constructor(ins[info].props.channel), {div, instance:ins[info]}));
 		}
@@ -1795,10 +1780,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	};
 
 	BDFDB.getChannelID = function (div) {
-		if (!Node.prototype.isPrototypeOf(div) || !BDFDB.getReactInstance(div)) return;
+		if (!Node.prototype.isPrototypeOf(div) || !BDFDB.ReactUtils.getInstance(div)) return;
 		div = BDFDB.getParentEle(BDFDB.dotCNC.categorycontainerdefault + BDFDB.dotCNC.channelcontainerdefault + BDFDB.dotCN.dmchannel, div);
 		if (!div) return;
-		var info = BDFDB.getKeyInformation({node:div, key:"channel"});
+		var info = BDFDB.ReactUtils.findValue(div, {key:"channel"});
 		return info ? info.id.toString() : null;
 	};
 
@@ -1826,7 +1811,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 				break;
 			}
 			if (type) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-				return BDFDB.React.createElement(BDFDB.WebModules.findByName("ChannelContextMenu"), Object.assign({}, e, {
+				return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("ChannelContextMenu"), Object.assign({}, e, {
 					type,
 					channel,
 					guild: LibraryModules.GuildStore.getGuild(channel.guild_id),
@@ -1837,13 +1822,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	};
 
 	BDFDB.readDmList = function () {
-		var found = [], ins = BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.guilds), name:"DirectMessage", all:true, noCopies:true, depth:99999999, time:99999999});
-		for (let info in ins) if (ins[info].props && ins[info].props.channel && ins[info]._reactInternalFiber.child) found.push(Object.assign(new ins[info].props.channel.constructor(ins[info].props.channel), {div:BDFDB.React.findDOMNode(ins[info]), instance:ins[info]}));
+		var found = [], ins = BDFDB.ReactUtils.getOwner(document.querySelector(BDFDB.dotCN.guilds), {name:"DirectMessage", all:true, noCopies:true, depth:99999999, time:99999999});
+		for (let info in ins) if (ins[info].props && ins[info].props.channel && ins[info]._reactInternalFiber.child) found.push(Object.assign(new ins[info].props.channel.constructor(ins[info].props.channel), {div:BDFDB.ReactUtils.findDOMNode(ins[info]), instance:ins[info]}));
 		return found;
 	};
 
 	BDFDB.getDmID = function (div) {
-		if (!Node.prototype.isPrototypeOf(div) || !BDFDB.getReactInstance(div)) return;
+		if (!Node.prototype.isPrototypeOf(div) || !BDFDB.ReactUtils.getInstance(div)) return;
 		let dmdiv = BDFDB.getParentEle(BDFDB.dotCN.guildouter, div);
 		if (!dmdiv) return;
 		var iconwrap = dmdiv.querySelector(BDFDB.dotCN.guildiconwrapper);
@@ -2889,7 +2874,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 
 	BDFDB.appendModal = function (modalwrapper) {
 		if (!Node.prototype.isPrototypeOf(modalwrapper)) return;
-		if (!BDFDB.appendModal.modals || !document.contains(BDFDB.appendModal.modals)) BDFDB.appendModal.modals = BDFDB.React.findDOMNode(BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.app), name:"Modals", depth:99999999, time:99999999}));
+		if (!BDFDB.appendModal.modals || !document.contains(BDFDB.appendModal.modals)) BDFDB.appendModal.modals = BDFDB.ReactUtils.findDOMNode(BDFDB.ReactUtils.getOwner(document.querySelector(BDFDB.dotCN.app), {name:"Modals", depth:99999999, time:99999999}));
 		if (!BDFDB.appendModal.modals) return;
 
 		var modal = BDFDB.containsClass(modalwrapper, BDFDB.disCN.modal) ? modalwrapper : modalwrapper.querySelector(BDFDB.dotCN.modal);
@@ -3019,7 +3004,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			if (BDFDB.ObjectUtils.is(modalprops) && typeof modalprops.onClose == "function") modalprops.onClose();
 		};
 		if (typeof config.text == "string") {
-			contentchildren.push(BDFDB.React.createElement(LibraryComponents.TextElement, {
+			contentchildren.push(BDFDB.ReactUtils.createElement(LibraryComponents.TextElement, {
 				color: LibraryComponents.TextElement.Colors.PRIMARY,
 				children: [config.text]
 			}));
@@ -3030,7 +3015,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 				if (child.type == LibraryComponents.ModalTabContent) {
 					if (!tabs.length) child.props.open = true;
 					else delete child.props.open;
-					tabs.push(BDFDB.React.createElement(LibraryComponents.TabBar.Item, {
+					tabs.push(BDFDB.ReactUtils.createElement(LibraryComponents.TabBar.Item, {
 						className: BDFDB.disCN.tabbaritem,
 						itemType: LibraryComponents.TabBar.Types.TOP,
 						id: child.props.tab,
@@ -3040,9 +3025,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 				}
 				contentchildren.push(child);
 			}
-			if (tabs.length) headerchildren.push(BDFDB.React.createElement(LibraryComponents.Flex, {
+			if (tabs.length) headerchildren.push(BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				className: BDFDB.disCN.tabbarcontainer,
-				children: BDFDB.React.createElement(LibraryComponents.TabBar, {
+				children: BDFDB.ReactUtils.createElement(LibraryComponents.TabBar, {
 					className: BDFDB.disCN.tabbar,
 					type: LibraryComponents.TabBar.Types.TOP,
 					selectedItem: tabs[0].props.id,
@@ -3050,9 +3035,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 					onItemSelect: (value, instance) => {
 						instance.props.selectedItem = value;
 						instance.forceUpdate();
-						let modal = BDFDB.getParentEle(".BDFDB-modal", BDFDB.React.findDOMNode(instance));
+						let modal = BDFDB.getParentEle(".BDFDB-modal", BDFDB.ReactUtils.findDOMNode(instance));
 						if (modal) for (let tabcontent of modal.querySelectorAll(BDFDB.dotCN.modaltabcontent)) {
-							let tabcontentinstance = BDFDB.getReactValue(tabcontent, "return.return.stateNode");
+							let tabcontentinstance = BDFDB.ReactUtils.getValue(tabcontent, "return.return.stateNode");
 							if (tabcontentinstance) {
 								if (tabcontentinstance.props.tab == value) tabcontentinstance.props.open = true;
 								else delete tabcontentinstance.props.open;
@@ -3073,7 +3058,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 				
 				if (button.cancel) cancels.push(click);
 				
-				footerchildren.push(BDFDB.React.createElement(LibraryComponents.Button, {
+				footerchildren.push(BDFDB.ReactUtils.createElement(LibraryComponents.Button, {
 					type: "button",
 					look: look || (color ? LibraryComponents.Button.Looks.FILLED : LibraryComponents.Button.Looks.LINK),
 					color: color || LibraryComponents.Button.Colors.PRIMARY,
@@ -3085,9 +3070,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 				}));
 			}
 		}
-		contentchildren = contentchildren.filter(n => n && BDFDB.React.isValidElement(n));
-		headerchildren = headerchildren.filter(n => n && BDFDB.React.isValidElement(n));
-		footerchildren = footerchildren.filter(n => n && BDFDB.React.isValidElement(n));
+		contentchildren = contentchildren.filter(n => n && BDFDB.ReactUtils.isValidElement(n));
+		headerchildren = headerchildren.filter(n => n && BDFDB.ReactUtils.isValidElement(n));
+		footerchildren = footerchildren.filter(n => n && BDFDB.ReactUtils.isValidElement(n));
 		if (contentchildren.length) {
 			if (typeof config.onClose != "function") config.onClose = _ => {};
 			if (typeof config.onOpen != "function") config.onOpen = _ => {};
@@ -3098,51 +3083,51 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			let oldTransitionState = 0;
 			LibraryModules.ModalUtils.openModal(props => {
 				modalprops = props;
-				return BDFDB.React.createElement(class BDFDBModal extends LibraryModules.React.Component {
+				return BDFDB.ReactUtils.createElement(class BDFDBModal extends LibraryModules.React.Component {
 					render () {
-						return BDFDB.React.createElement(LibraryComponents.ModalComponents.ModalRoot, {
+						return BDFDB.ReactUtils.createElement(LibraryComponents.ModalComponents.ModalRoot, {
 							className: [`BDFDB-modal`, name ? `${name}-modal` : null, config.selector ? config.selector : null].filter(n => n).join(" "),
 							size: size || LibraryComponents.ModalComponents.ModalSize.SMALL,
 							transitionState: props.transitionState,
 							children: [
-								BDFDB.React.createElement(LibraryComponents.ModalComponents.ModalHeader, {
+								BDFDB.ReactUtils.createElement(LibraryComponents.ModalComponents.ModalHeader, {
 									className: headerchildren.length ? BDFDB.disCN.modalheaderhassibling : null,
 									separator: config.headerseparator || false,
 									children: [
-										BDFDB.React.createElement(LibraryComponents.Flex.Child, {
+										BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
 											grow: 1,
 											shrink: 1,
 											children: [
-												BDFDB.React.createElement(LibraryComponents.FormComponents.FormTitle, {
+												BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormTitle, {
 													tag: LibraryComponents.FormComponents.FormTitle.Tags.H4,
 													children: typeof config.header == "string" ? config.header : ""
 												}),
-												BDFDB.React.createElement(LibraryComponents.TextElement, {
+												BDFDB.ReactUtils.createElement(LibraryComponents.TextElement, {
 													size: LibraryComponents.TextElement.Sizes.SMALL,
 													color: LibraryComponents.TextElement.Colors.PRIMARY,
 													children: typeof config.subheader == "string" ? config.subheader : (name || "")
 												})
 											]
 										}),
-										BDFDB.React.createElement(LibraryComponents.ModalComponents.ModalCloseButton, {
+										BDFDB.ReactUtils.createElement(LibraryComponents.ModalComponents.ModalCloseButton, {
 											onClick: closeModal
 										})
 									]
 								}),
-								headerchildren.length ? BDFDB.React.createElement(LibraryComponents.Flex, {
+								headerchildren.length ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 									children: headerchildren
 								}) : null,
-								BDFDB.React.createElement(LibraryComponents.ModalComponents.ModalContent, {
+								BDFDB.ReactUtils.createElement(LibraryComponents.ModalComponents.ModalContent, {
 									children: contentchildren
 								}),
-								footerchildren.length ? BDFDB.React.createElement(LibraryComponents.ModalComponents.ModalFooter, {
+								footerchildren.length ? BDFDB.ReactUtils.createElement(LibraryComponents.ModalComponents.ModalFooter, {
 									children: footerchildren
 								}) : null
 							]
 						});
 					}
 					componentDidMount () {
-						modal = BDFDB.React.findDOMNode(this);
+						modal = BDFDB.ReactUtils.findDOMNode(this);
 						modal = modal && modal.parentElement ? modal.parentElement.querySelector(".BDFDB-modal") : null;
 						if (modal && props.transitionState == 2 && props.transitionState > oldTransitionState) config.onOpen(modal, this);
 						oldTransitionState = props.transitionState;
@@ -3228,7 +3213,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	
 	BDFDB.openContextMenu = function (plugin, e, children) {
 		LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-			return BDFDB.React.createElement(LibraryComponents.ContextMenu, Object.assign({}, e, {
+			return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenu, Object.assign({}, e, {
 				BDFDBcontextMenu: true,
 				type: BDFDB.DiscordConstants.ContextMenuTypes.NATIVE_TEXT,
 				value: "",
@@ -3240,7 +3225,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 
 	BDFDB.closeContextMenu = function (nodeOrInstance) {
 		if (!BDFDB.ObjectUtils.is(nodeOrInstance)) return;
-		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.getOwnerInstance({node:nodeOrInstance, name:"ContextMenu", up:true}) : BDFDB.getOwnerInstance({instance:nodeOrInstance, name:"ContextMenu", up:true});
+		var instance = BDFDB.ReactUtils.getOwner(nodeOrInstance, {name:"ContextMenu", up:true});
 		if (BDFDB.ObjectUtils.is(instance) && instance.props && typeof instance.props.closeContextMenu == "function") instance.props.closeContextMenu();
 	};
 
@@ -3249,7 +3234,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		var popouts = document.querySelector(BDFDB.dotCN.popouts);
 		if (!popouts) return;
 		button = BDFDB.containsClass(button, BDFDB.disCN.optionpopoutbutton) ? button : button.querySelector(BDFDB.dotCN.optionpopoutbutton);
-		var containerins = BDFDB.getReactInstance(BDFDB.getParentEle(BDFDB.dotCN.messagebuttoncontainer, button));
+		var containerins = BDFDB.ReactUtils.getInstance(BDFDB.getParentEle(BDFDB.dotCN.messagebuttoncontainer, button));
 		containerins = containerins && containerins.child ? containerins.child : null;
 		containerins = containerins && containerins.stateNode && typeof containerins.stateNode.renderReactionPopout == "function" ? containerins.sibling : containerins;
 		if (containerins && containerins.stateNode && typeof containerins.stateNode.renderOptionPopout == "function") {
@@ -3262,7 +3247,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 				BDFDB.removeClass(button, "popout-open");
 				popout.remove();
 			};
-			BDFDB.React.render(popoutinstance, popout);
+			BDFDB.ReactUtils.render(popoutinstance, popout);
 			var buttonrects = BDFDB.getRects(button);
 			popout.style.setProperty("left", buttonrects.left + buttonrects.width / 2 + "px");
 			popout.style.setProperty("top", buttonrects.top + buttonrects.height / 2 + "px");
@@ -3380,8 +3365,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 
 		var swatches = container.querySelector(`${BDFDB.dotCN.colorpickerswatches}[swatchnr="${number}"]`);
 		if (!swatches) return null;
-		var ins = BDFDB.getReactInstance(swatches);
-		if (ins) return BDFDB.getReactValue(ins, "return.return.stateNode.state.selectedColor");
+		var ins = BDFDB.ReactUtils.getInstance(swatches);
+		if (ins) return BDFDB.ReactUtils.getValue(ins, "return.return.stateNode.state.selectedColor");
 		else { // REMOVE ONCE REWRITTEN
 			var swatch = swatches.querySelector(`${BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchselected}`);
 			return swatch ? swatch.gradient || BDFDB.colorCONVERT(swatch.style.getPropertyValue("background-color"), "RGBCOMP") : null;
@@ -3764,7 +3749,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		return parseInt(document.firstElementChild.style.fontSize.replace("%", ""));
 	};
 	BDFDB.DiscordUtils.shake = function () {
-		BDFDB.getReactInstance(document.querySelector(BDFDB.dotCN.appold)).return.stateNode.shake();
+		BDFDB.ReactUtils.getInstance(document.querySelector(BDFDB.dotCN.appold)).return.stateNode.shake();
 	};
 
 	BDFDB.BdUtils = {};
@@ -3936,174 +3921,174 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		voiceDraggable: "draggable-1KoBzC"
 	};
 
-	DiscordClassModules.AccountDetails = BDFDB.WebModules.findByProperties("usernameContainer", "container");
-	DiscordClassModules.AccountDetailsButtons = BDFDB.WebModules.findByProperties("button", "enabled", "disabled");
-	DiscordClassModules.ActivityFeed = BDFDB.WebModules.findByProperties("activityFeed");
-	DiscordClassModules.Anchor = BDFDB.WebModules.findByProperties("anchor", "anchorUnderlineOnHover");
-	DiscordClassModules.AnimationContainer = BDFDB.WebModules.findByProperties("animatorLeft", "didRender");
-	DiscordClassModules.AppBase = BDFDB.WebModules.findByProperties("container", "base");
-	DiscordClassModules.AppInner = BDFDB.WebModules.findByProperties("app", "layers");
-	DiscordClassModules.AppMount = BDFDB.WebModules.findByProperties("appMount");
-	DiscordClassModules.ApplicationStore = BDFDB.WebModules.findByProperties("applicationStore", "navigation");
-	DiscordClassModules.AppOuter = BDFDB.WebModules.find(module => typeof module["app"] == "string" && Object.keys(module).length == 1);
-	DiscordClassModules.AuditLog = BDFDB.WebModules.findByProperties("auditLog");
-	DiscordClassModules.AuthBox = BDFDB.WebModules.findByProperties("authBox");
-	DiscordClassModules.Autocomplete = BDFDB.WebModules.findByProperties("autocomplete", "autocompleteRow");
-	DiscordClassModules.Avatar = BDFDB.WebModules.findByProperties("avatar", "mask", "wrapper");
-	DiscordClassModules.AvatarIcon = BDFDB.WebModules.findByProperties("iconActiveLarge", "iconActiveMedium");
-	DiscordClassModules.Backdrop = BDFDB.WebModules.findByProperties("backdrop");
-	DiscordClassModules.Badge = BDFDB.WebModules.findByProperties("numberBadge", "textBadge", "iconBadge");
-	DiscordClassModules.BotTag = BDFDB.WebModules.findByProperties("botTag", "botTagInvert");
-	DiscordClassModules.Button = BDFDB.WebModules.findByProperties("colorBlack", "button");
-	DiscordClassModules.Call = BDFDB.WebModules.findByProperties("callAvatarWrapper", "video");
-	DiscordClassModules.CallCurrent = BDFDB.WebModules.findByProperties("wrapper", "fullScreen");
-	DiscordClassModules.CallDetails = BDFDB.WebModules.findByProperties("container", "hotspot");
-	DiscordClassModules.CallIncoming = BDFDB.WebModules.findByProperties("incomingCall", "container");
-	DiscordClassModules.CallIncomingInner = BDFDB.WebModules.findByProperties("incomingCallInner", "members");
-	DiscordClassModules.Card = BDFDB.WebModules.findByProperties("card", "cardBrand");
-	DiscordClassModules.CardStatus = BDFDB.WebModules.findByProperties("reset", "error", "card");
-	DiscordClassModules.CardStore = BDFDB.WebModules.findByProperties("card", "interactive", "url");
-	DiscordClassModules.Category = BDFDB.WebModules.findByProperties("wrapper", "children", "muted");
-	DiscordClassModules.CategoryContainer = BDFDB.WebModules.findByProperties("addButtonIcon", "containerDefault");
-	DiscordClassModules.ChangeLog = BDFDB.WebModules.findByProperties("added", "fixed", "improved", "progress");
-	DiscordClassModules.Channel = BDFDB.WebModules.findByProperties("wrapper", "content", "modeSelected");
-	DiscordClassModules.ChannelContainer = BDFDB.WebModules.findByProperties("actionIcon", "containerDefault");
-	DiscordClassModules.ChannelLimit = BDFDB.WebModules.findByProperties("users", "total", "wrapper");
-	DiscordClassModules.ChannelTextArea = BDFDB.WebModules.findByProperties("textArea", "attachButtonDivider");
-	DiscordClassModules.ChannelTextAreaButton = BDFDB.WebModules.findByProperties("buttonWrapper", "active");
-	DiscordClassModules.ChatWindow = BDFDB.WebModules.findByProperties("chat", "channelTextArea");
-	DiscordClassModules.Checkbox = BDFDB.WebModules.findByProperties("checkboxWrapper", "round");
-	DiscordClassModules.ColorPicker = BDFDB.WebModules.findByProperties("colorPickerCustom", "customColorPickerInput");
-	DiscordClassModules.ColorPickerInner = BDFDB.WebModules.findByProperties("saturation", "hue", "wrapper");
-	DiscordClassModules.ContextMenu = BDFDB.WebModules.findByProperties("contextMenu", "itemGroup");
-	DiscordClassModules.ContextMenuCheckbox = BDFDB.WebModules.findByProperties("checkboxInner", "checkboxElement");
-	DiscordClassModules.CtaVerification = BDFDB.WebModules.findByProperties("attendeeCTA", "verificationNotice");
-	DiscordClassModules.Cursor = BDFDB.WebModules.findByProperties("cursorDefault", "userSelectNone");
-	DiscordClassModules.CustomStatus = BDFDB.WebModules.findByProperties("customStatusContentIcon", "customStatus");
-	DiscordClassModules.DmAddPopout = BDFDB.WebModules.findByProperties("popout", "searchBarComponent");
-	DiscordClassModules.DmAddPopoutItems = BDFDB.WebModules.findByProperties("friendSelected", "friendWrapper");
-	DiscordClassModules.DownloadLink = BDFDB.WebModules.findByProperties("downloadLink", "size12");
-	DiscordClassModules.Embed = BDFDB.WebModules.findByProperties("embed", "embedAuthorIcon");
-	DiscordClassModules.EmbedActions = BDFDB.WebModules.findByProperties("iconPlay", "iconWrapperActive");
-	DiscordClassModules.EmojiButton = BDFDB.WebModules.findByProperties("emojiButton", "sprite");
-	DiscordClassModules.EmojiPicker = BDFDB.WebModules.findByProperties("emojiPicker", "categories");
-	DiscordClassModules.File = BDFDB.WebModules.findByProperties("downloadButton", "fileNameLink");
-	DiscordClassModules.Flex = BDFDB.WebModules.findByProperties("alignBaseline", "alignCenter");
-	DiscordClassModules.FlexChild = BDFDB.WebModules.findByProperties("flexChild", "flex");
-	DiscordClassModules.FlowerStar = BDFDB.WebModules.findByProperties("flowerStarContainer", "flowerStar");
-	DiscordClassModules.FormText = BDFDB.WebModules.findByProperties("description", "modeDefault");
-	DiscordClassModules.Friends = BDFDB.WebModules.findByProperties("friendsColumn", "friendsRow");
-	DiscordClassModules.Game = BDFDB.WebModules.findByProperties("game", "gameName");
-	DiscordClassModules.GameIcon = BDFDB.WebModules.findByProperties("gameIcon", "small", "xsmall");
-	DiscordClassModules.GameLibrary = BDFDB.WebModules.findByProperties("gameLibrary", "scroller");
-	DiscordClassModules.GifFavoriteButton = BDFDB.WebModules.findByProperties("gifFavoriteButton", "showPulse");
-	DiscordClassModules.GiftInventory = BDFDB.WebModules.findByProperties("root", "body", "scroller");
-	DiscordClassModules.GoLiveDetails = BDFDB.WebModules.findByProperties("panel", "gameWrapper");
-	DiscordClassModules.Guild = BDFDB.WebModules.findByProperties("wrapper", "lowerBadge", "svg");
-	DiscordClassModules.GuildChannels = BDFDB.WebModules.findByProperties("positionedContainer", "unreadBar");
-	DiscordClassModules.GuildDiscovery = BDFDB.WebModules.findByProperties("pageWrapper", "guildCard");
-	DiscordClassModules.GuildDm = BDFDB.WebModules.find(module => typeof module["pill"] == "string" && Object.keys(module).length == 1);
-	DiscordClassModules.GuildEdges = BDFDB.WebModules.findByProperties("wrapper", "edge", "autoPointerEvents")
-	DiscordClassModules.GuildFolder = BDFDB.WebModules.findByProperties("folder", "expandedGuilds")
-	DiscordClassModules.GuildHeader = BDFDB.WebModules.findByProperties("header", "name", "bannerImage");
-	DiscordClassModules.GuildHeaderButton = BDFDB.WebModules.findByProperties("button", "open");
-	DiscordClassModules.GuildIcon = BDFDB.WebModules.findByProperties("acronym", "selected", "wrapper");
-	DiscordClassModules.GuildInvite = BDFDB.WebModules.findByProperties("wrapper", "guildIconJoined");
-	DiscordClassModules.GuildSettingsBanned = BDFDB.WebModules.findByProperties("bannedUser", "bannedUserAvatar");
-	DiscordClassModules.GuildSettingsInvite = BDFDB.WebModules.findByProperties("countdownColumn", "inviteSettingsInviteRow");
-	DiscordClassModules.GuildSettingsMember = BDFDB.WebModules.findByProperties("member", "membersFilterPopout");
-	DiscordClassModules.GuildServer = BDFDB.WebModules.findByProperties("blobContainer", "pill");
-	DiscordClassModules.GuildsItems = BDFDB.WebModules.findByProperties("guildSeparator", "guildsError");
-	DiscordClassModules.GuildsWrapper = BDFDB.WebModules.findByProperties("scrollerWrap", "unreadMentionsBar", "wrapper");
-	DiscordClassModules.HeaderBar = BDFDB.WebModules.findByProperties("container", "children", "toolbar");
-	DiscordClassModules.HeaderBarExtras = BDFDB.WebModules.findByProperties("headerBarLoggedOut", "search");
-	DiscordClassModules.HeaderBarSearch = BDFDB.WebModules.findByProperties("search", "searchBar", "open");
-	DiscordClassModules.HeaderBarTopic = BDFDB.WebModules.findByProperties("topic", "expandable", "content");
-	DiscordClassModules.HomeIcon = BDFDB.WebModules.findByProperties("homeIcon");
-	DiscordClassModules.HotKeyRecorder = BDFDB.WebModules.findByProperties("editIcon", "recording");
-	DiscordClassModules.HoverCard = BDFDB.WebModules.findByProperties("card", "active");
-	DiscordClassModules.IconDirection = BDFDB.WebModules.findByProperties("directionDown", "directionUp");
-	DiscordClassModules.ImageWrapper = BDFDB.WebModules.findByProperties("clickable", "imageWrapperBackground");
-	DiscordClassModules.InviteModal = BDFDB.WebModules.findByProperties("inviteRow", "modal");
-	DiscordClassModules.Item = BDFDB.WebModules.findByProperties("item", "side", "header");
-	DiscordClassModules.ItemLayerContainer = BDFDB.WebModules.findByProperties("layer", "layerContainer");
-	DiscordClassModules.Input = BDFDB.WebModules.findByProperties("inputMini", "inputDefault");
-	DiscordClassModules.LayerModal = BDFDB.WebModules.findByProperties("root", "small", "medium");
-	DiscordClassModules.Layers = BDFDB.WebModules.findByProperties("layer", "layers");
-	DiscordClassModules.LiveTag = BDFDB.WebModules.findByProperties("liveRed", "live");
-	DiscordClassModules.LFG = BDFDB.WebModules.findByProperties("lfg", "topSectionHeader");
-	DiscordClassModules.Margins = BDFDB.WebModules.findByProperties("marginBottom4", "marginCenterHorz");
-	DiscordClassModules.Member = BDFDB.WebModules.findByProperties("member", "ownerIcon");
-	DiscordClassModules.MembersWrap = BDFDB.WebModules.findByProperties("membersWrap", "membersGroup");
-	DiscordClassModules.Mention = BDFDB.WebModules.findByProperties("wrapperHover", "wrapperNoHover");
-	DiscordClassModules.Message = BDFDB.WebModules.findByProperties("containerCozy", "content");
-	DiscordClassModules.MessageAccessory = BDFDB.WebModules.findByProperties("embedWrapper", "gifFavoriteButton");
-	DiscordClassModules.MessageBody = BDFDB.WebModules.findByProperties("buttonContainer", "isMentioned");
-	DiscordClassModules.MessageElements = BDFDB.WebModules.findByProperties("messageGroupBlockedBtn", "dividerRed");
-	DiscordClassModules.MessageFile = BDFDB.WebModules.findByProperties("cancelButton", "filenameLinkWrapper");
-	DiscordClassModules.MessageMarkup = BDFDB.WebModules.findByProperties("markup");
-	DiscordClassModules.MessageOperations = BDFDB.WebModules.find(module => typeof module["operations"] == "string" && Object.keys(module).length == 1);
-	DiscordClassModules.MessageSystem = BDFDB.WebModules.findByProperties("container", "actionAnchor");
-	DiscordClassModules.MessagesPopout = BDFDB.WebModules.findByProperties("messageGroupWrapperOffsetCorrection", "messagesPopout");
-	DiscordClassModules.MessagesWelcome = BDFDB.WebModules.findByProperties("welcomeMessage", "h1");
-	DiscordClassModules.MessagesWrap = BDFDB.WebModules.findByProperties("messagesWrapper", "messageGroupBlocked");
-	DiscordClassModules.Modal = BDFDB.WebModules.findByProperties("modal", "sizeLarge");
-	DiscordClassModules.ModalDivider = BDFDB.WebModules.find(module => typeof module["divider"] == "string" && Object.keys(module).length == 1);
-	DiscordClassModules.ModalItems = BDFDB.WebModules.findByProperties("guildName", "checkboxContainer");
-	DiscordClassModules.ModalMiniContent = BDFDB.WebModules.find(module => typeof module["modal"] == "string" && typeof module["content"] == "string" && typeof module["size"] == "string" && Object.keys(module).length == 3);
-	DiscordClassModules.ModalWrap = BDFDB.WebModules.find(module => typeof module["modal"] == "string" && typeof module["inner"] == "string" && Object.keys(module).length == 2);
-	DiscordClassModules.NameContainer = DiscordClassModules.ContextMenu.subMenuContext ? BDFDB.WebModules.findByProperties("nameAndDecorators", "name") : {};
-	DiscordClassModules.NameTag = BDFDB.WebModules.findByProperties("bot", "nameTag");
-	DiscordClassModules.Note = BDFDB.WebModules.find(module => typeof module["note"] == "string" && Object.keys(module).length == 1);
-	DiscordClassModules.Notice = BDFDB.WebModules.findByProperties("notice", "noticeFacebook");
-	DiscordClassModules.OptionPopout = BDFDB.WebModules.findByProperties("container", "button", "item");
-	DiscordClassModules.PictureInPicture = BDFDB.WebModules.findByProperties("pictureInPicture", "pictureInPictureWindow");
-	DiscordClassModules.PillWrapper = BDFDB.WebModules.find(module => typeof module["item"] == "string" && typeof module["wrapper"] == "string" && Object.keys(module).length == 2);
-	DiscordClassModules.PrivateChannel = BDFDB.WebModules.findByProperties("channel", "closeButton");
-	DiscordClassModules.PrivateChannelActivity = BDFDB.WebModules.findByProperties("activity", "text");
-	DiscordClassModules.PrivateChannelList = BDFDB.WebModules.findByProperties("privateChannels", "searchBar");
-	DiscordClassModules.Popout = BDFDB.WebModules.findByProperties("popout", "arrowAlignmentTop");
-	DiscordClassModules.PopoutActivity = BDFDB.WebModules.findByProperties("ellipsis", "activityActivityFeed");
-	DiscordClassModules.QuickMessage = BDFDB.WebModules.findByProperties("quickMessage", "isBlocked");
-	DiscordClassModules.QuickSelect = BDFDB.WebModules.findByProperties("quickSelectArrow", "selected");
-	DiscordClassModules.QuickSwitch = BDFDB.WebModules.findByProperties("resultFocused", "guildIconContainer");
-	DiscordClassModules.QuickSwitchWrap = BDFDB.WebModules.findByProperties("container", "miscContainer");
-	DiscordClassModules.Reactions = BDFDB.WebModules.findByProperties("reactionBtn", "reaction");
-	DiscordClassModules.RecentMentions = BDFDB.WebModules.findByProperties("recentMentionsFilterPopout", "mentionFilter");
-	DiscordClassModules.Role = BDFDB.WebModules.findByProperties("roleCircle", "roleName");
-	DiscordClassModules.Scrollbar = BDFDB.WebModules.findByProperties("scrollbar", "scrollbarGhost");
-	DiscordClassModules.Scroller = BDFDB.WebModules.findByProperties("firefoxFixScrollFlex", "scroller");
-	DiscordClassModules.SearchBar = BDFDB.WebModules.findByProperties("container", "clear");
-	DiscordClassModules.SearchPopout = BDFDB.WebModules.findByProperties("datePicker", "searchResultChannelIconBackground");
-	DiscordClassModules.SearchPopoutWrap = BDFDB.WebModules.findByProperties("container", "queryContainer");
-	DiscordClassModules.SearchResults = BDFDB.WebModules.findByProperties("resultsWrapper", "searchResults");
-	DiscordClassModules.Select = BDFDB.WebModules.findByProperties("select", "error", "errorMessage");
-	DiscordClassModules.SettingsCloseButton = BDFDB.WebModules.findByProperties("closeButton", "keybind");
-	DiscordClassModules.SettingsItems = BDFDB.WebModules.findByProperties("dividerMini", "note");
-	DiscordClassModules.SettingsTable = BDFDB.WebModules.findByProperties("headerOption", "headerSize");
-	DiscordClassModules.SettingsWindow = BDFDB.WebModules.findByProperties("contentRegion", "standardSidebarView");
-	DiscordClassModules.Slider = BDFDB.WebModules.findByProperties("slider", "grabber");
-	DiscordClassModules.Spoiler = BDFDB.WebModules.findByProperties("spoilerContainer", "hidden");
-	DiscordClassModules.Switch = BDFDB.WebModules.findByProperties("switchDisabled", "valueChecked");
-	DiscordClassModules.Table = BDFDB.WebModules.findByProperties("stickyHeader", "emptyStateText");
-	DiscordClassModules.Text = BDFDB.WebModules.findByProperties("defaultColor", "defaultMarginh1");
-	DiscordClassModules.TextColor = BDFDB.WebModules.findByProperties("colorStandard", "colorMuted", "colorError");
-	DiscordClassModules.TextColor2 = BDFDB.WebModules.findByProperties("base", "muted", "wrapper");
-	DiscordClassModules.TextSize = BDFDB.WebModules.findByProperties("size10", "size14", "size20");
-	DiscordClassModules.TextStyle = BDFDB.WebModules.findByProperties("large", "primary", "selectable");
-	DiscordClassModules.Tip = BDFDB.WebModules.findByProperties("pro", "inline");
-	DiscordClassModules.Title = BDFDB.WebModules.findByProperties("title", "size18");
-	DiscordClassModules.TitleBar = BDFDB.WebModules.findByProperties("titleBar", "wordmark");
-	DiscordClassModules.Tooltip = BDFDB.WebModules.findByProperties("tooltip", "tooltipTop");
-	DiscordClassModules.Typing = BDFDB.WebModules.findByProperties("cooldownWrapper", "typing");
-	DiscordClassModules.UnreadBar = BDFDB.WebModules.findByProperties("active", "bar", "unread");
-	DiscordClassModules.UserPopout = BDFDB.WebModules.findByProperties("userPopout", "headerPlaying");
-	DiscordClassModules.UserProfile = BDFDB.WebModules.findByProperties("topSectionNormal", "tabBarContainer");
-	DiscordClassModules.Video = BDFDB.WebModules.findByProperties("video", "fullScreen");
-	DiscordClassModules.VoiceChannel = BDFDB.WebModules.findByProperties("avatarSpeaking", "voiceUser");
-	DiscordClassModules.VoiceChannelList = BDFDB.WebModules.findByProperties("list", "collapsed");
-	DiscordClassModules.VoiceDetails = BDFDB.WebModules.findByProperties("container", "customStatusContainer");
-	DiscordClassModules.VoiceDetailsPing = BDFDB.WebModules.findByProperties("rtcConnectionQualityBad", "rtcConnectionQualityFine");
+	DiscordClassModules.AccountDetails = BDFDB.ModuleUtils.findByProperties("usernameContainer", "container");
+	DiscordClassModules.AccountDetailsButtons = BDFDB.ModuleUtils.findByProperties("button", "enabled", "disabled");
+	DiscordClassModules.ActivityFeed = BDFDB.ModuleUtils.findByProperties("activityFeed");
+	DiscordClassModules.Anchor = BDFDB.ModuleUtils.findByProperties("anchor", "anchorUnderlineOnHover");
+	DiscordClassModules.AnimationContainer = BDFDB.ModuleUtils.findByProperties("animatorLeft", "didRender");
+	DiscordClassModules.AppBase = BDFDB.ModuleUtils.findByProperties("container", "base");
+	DiscordClassModules.AppInner = BDFDB.ModuleUtils.findByProperties("app", "layers");
+	DiscordClassModules.AppMount = BDFDB.ModuleUtils.findByProperties("appMount");
+	DiscordClassModules.ApplicationStore = BDFDB.ModuleUtils.findByProperties("applicationStore", "navigation");
+	DiscordClassModules.AppOuter = BDFDB.ModuleUtils.find(module => typeof module["app"] == "string" && Object.keys(module).length == 1);
+	DiscordClassModules.AuditLog = BDFDB.ModuleUtils.findByProperties("auditLog");
+	DiscordClassModules.AuthBox = BDFDB.ModuleUtils.findByProperties("authBox");
+	DiscordClassModules.Autocomplete = BDFDB.ModuleUtils.findByProperties("autocomplete", "autocompleteRow");
+	DiscordClassModules.Avatar = BDFDB.ModuleUtils.findByProperties("avatar", "mask", "wrapper");
+	DiscordClassModules.AvatarIcon = BDFDB.ModuleUtils.findByProperties("iconActiveLarge", "iconActiveMedium");
+	DiscordClassModules.Backdrop = BDFDB.ModuleUtils.findByProperties("backdrop");
+	DiscordClassModules.Badge = BDFDB.ModuleUtils.findByProperties("numberBadge", "textBadge", "iconBadge");
+	DiscordClassModules.BotTag = BDFDB.ModuleUtils.findByProperties("botTag", "botTagInvert");
+	DiscordClassModules.Button = BDFDB.ModuleUtils.findByProperties("colorBlack", "button");
+	DiscordClassModules.Call = BDFDB.ModuleUtils.findByProperties("callAvatarWrapper", "video");
+	DiscordClassModules.CallCurrent = BDFDB.ModuleUtils.findByProperties("wrapper", "fullScreen");
+	DiscordClassModules.CallDetails = BDFDB.ModuleUtils.findByProperties("container", "hotspot");
+	DiscordClassModules.CallIncoming = BDFDB.ModuleUtils.findByProperties("incomingCall", "container");
+	DiscordClassModules.CallIncomingInner = BDFDB.ModuleUtils.findByProperties("incomingCallInner", "members");
+	DiscordClassModules.Card = BDFDB.ModuleUtils.findByProperties("card", "cardBrand");
+	DiscordClassModules.CardStatus = BDFDB.ModuleUtils.findByProperties("reset", "error", "card");
+	DiscordClassModules.CardStore = BDFDB.ModuleUtils.findByProperties("card", "interactive", "url");
+	DiscordClassModules.Category = BDFDB.ModuleUtils.findByProperties("wrapper", "children", "muted");
+	DiscordClassModules.CategoryContainer = BDFDB.ModuleUtils.findByProperties("addButtonIcon", "containerDefault");
+	DiscordClassModules.ChangeLog = BDFDB.ModuleUtils.findByProperties("added", "fixed", "improved", "progress");
+	DiscordClassModules.Channel = BDFDB.ModuleUtils.findByProperties("wrapper", "content", "modeSelected");
+	DiscordClassModules.ChannelContainer = BDFDB.ModuleUtils.findByProperties("actionIcon", "containerDefault");
+	DiscordClassModules.ChannelLimit = BDFDB.ModuleUtils.findByProperties("users", "total", "wrapper");
+	DiscordClassModules.ChannelTextArea = BDFDB.ModuleUtils.findByProperties("textArea", "attachButtonDivider");
+	DiscordClassModules.ChannelTextAreaButton = BDFDB.ModuleUtils.findByProperties("buttonWrapper", "active");
+	DiscordClassModules.ChatWindow = BDFDB.ModuleUtils.findByProperties("chat", "channelTextArea");
+	DiscordClassModules.Checkbox = BDFDB.ModuleUtils.findByProperties("checkboxWrapper", "round");
+	DiscordClassModules.ColorPicker = BDFDB.ModuleUtils.findByProperties("colorPickerCustom", "customColorPickerInput");
+	DiscordClassModules.ColorPickerInner = BDFDB.ModuleUtils.findByProperties("saturation", "hue", "wrapper");
+	DiscordClassModules.ContextMenu = BDFDB.ModuleUtils.findByProperties("contextMenu", "itemGroup");
+	DiscordClassModules.ContextMenuCheckbox = BDFDB.ModuleUtils.findByProperties("checkboxInner", "checkboxElement");
+	DiscordClassModules.CtaVerification = BDFDB.ModuleUtils.findByProperties("attendeeCTA", "verificationNotice");
+	DiscordClassModules.Cursor = BDFDB.ModuleUtils.findByProperties("cursorDefault", "userSelectNone");
+	DiscordClassModules.CustomStatus = BDFDB.ModuleUtils.findByProperties("customStatusContentIcon", "customStatus");
+	DiscordClassModules.DmAddPopout = BDFDB.ModuleUtils.findByProperties("popout", "searchBarComponent");
+	DiscordClassModules.DmAddPopoutItems = BDFDB.ModuleUtils.findByProperties("friendSelected", "friendWrapper");
+	DiscordClassModules.DownloadLink = BDFDB.ModuleUtils.findByProperties("downloadLink", "size12");
+	DiscordClassModules.Embed = BDFDB.ModuleUtils.findByProperties("embed", "embedAuthorIcon");
+	DiscordClassModules.EmbedActions = BDFDB.ModuleUtils.findByProperties("iconPlay", "iconWrapperActive");
+	DiscordClassModules.EmojiButton = BDFDB.ModuleUtils.findByProperties("emojiButton", "sprite");
+	DiscordClassModules.EmojiPicker = BDFDB.ModuleUtils.findByProperties("emojiPicker", "categories");
+	DiscordClassModules.File = BDFDB.ModuleUtils.findByProperties("downloadButton", "fileNameLink");
+	DiscordClassModules.Flex = BDFDB.ModuleUtils.findByProperties("alignBaseline", "alignCenter");
+	DiscordClassModules.FlexChild = BDFDB.ModuleUtils.findByProperties("flexChild", "flex");
+	DiscordClassModules.FlowerStar = BDFDB.ModuleUtils.findByProperties("flowerStarContainer", "flowerStar");
+	DiscordClassModules.FormText = BDFDB.ModuleUtils.findByProperties("description", "modeDefault");
+	DiscordClassModules.Friends = BDFDB.ModuleUtils.findByProperties("friendsColumn", "friendsRow");
+	DiscordClassModules.Game = BDFDB.ModuleUtils.findByProperties("game", "gameName");
+	DiscordClassModules.GameIcon = BDFDB.ModuleUtils.findByProperties("gameIcon", "small", "xsmall");
+	DiscordClassModules.GameLibrary = BDFDB.ModuleUtils.findByProperties("gameLibrary", "scroller");
+	DiscordClassModules.GifFavoriteButton = BDFDB.ModuleUtils.findByProperties("gifFavoriteButton", "showPulse");
+	DiscordClassModules.GiftInventory = BDFDB.ModuleUtils.findByProperties("root", "body", "scroller");
+	DiscordClassModules.GoLiveDetails = BDFDB.ModuleUtils.findByProperties("panel", "gameWrapper");
+	DiscordClassModules.Guild = BDFDB.ModuleUtils.findByProperties("wrapper", "lowerBadge", "svg");
+	DiscordClassModules.GuildChannels = BDFDB.ModuleUtils.findByProperties("positionedContainer", "unreadBar");
+	DiscordClassModules.GuildDiscovery = BDFDB.ModuleUtils.findByProperties("pageWrapper", "guildCard");
+	DiscordClassModules.GuildDm = BDFDB.ModuleUtils.find(module => typeof module["pill"] == "string" && Object.keys(module).length == 1);
+	DiscordClassModules.GuildEdges = BDFDB.ModuleUtils.findByProperties("wrapper", "edge", "autoPointerEvents")
+	DiscordClassModules.GuildFolder = BDFDB.ModuleUtils.findByProperties("folder", "expandedGuilds")
+	DiscordClassModules.GuildHeader = BDFDB.ModuleUtils.findByProperties("header", "name", "bannerImage");
+	DiscordClassModules.GuildHeaderButton = BDFDB.ModuleUtils.findByProperties("button", "open");
+	DiscordClassModules.GuildIcon = BDFDB.ModuleUtils.findByProperties("acronym", "selected", "wrapper");
+	DiscordClassModules.GuildInvite = BDFDB.ModuleUtils.findByProperties("wrapper", "guildIconJoined");
+	DiscordClassModules.GuildSettingsBanned = BDFDB.ModuleUtils.findByProperties("bannedUser", "bannedUserAvatar");
+	DiscordClassModules.GuildSettingsInvite = BDFDB.ModuleUtils.findByProperties("countdownColumn", "inviteSettingsInviteRow");
+	DiscordClassModules.GuildSettingsMember = BDFDB.ModuleUtils.findByProperties("member", "membersFilterPopout");
+	DiscordClassModules.GuildServer = BDFDB.ModuleUtils.findByProperties("blobContainer", "pill");
+	DiscordClassModules.GuildsItems = BDFDB.ModuleUtils.findByProperties("guildSeparator", "guildsError");
+	DiscordClassModules.GuildsWrapper = BDFDB.ModuleUtils.findByProperties("scrollerWrap", "unreadMentionsBar", "wrapper");
+	DiscordClassModules.HeaderBar = BDFDB.ModuleUtils.findByProperties("container", "children", "toolbar");
+	DiscordClassModules.HeaderBarExtras = BDFDB.ModuleUtils.findByProperties("headerBarLoggedOut", "search");
+	DiscordClassModules.HeaderBarSearch = BDFDB.ModuleUtils.findByProperties("search", "searchBar", "open");
+	DiscordClassModules.HeaderBarTopic = BDFDB.ModuleUtils.findByProperties("topic", "expandable", "content");
+	DiscordClassModules.HomeIcon = BDFDB.ModuleUtils.findByProperties("homeIcon");
+	DiscordClassModules.HotKeyRecorder = BDFDB.ModuleUtils.findByProperties("editIcon", "recording");
+	DiscordClassModules.HoverCard = BDFDB.ModuleUtils.findByProperties("card", "active");
+	DiscordClassModules.IconDirection = BDFDB.ModuleUtils.findByProperties("directionDown", "directionUp");
+	DiscordClassModules.ImageWrapper = BDFDB.ModuleUtils.findByProperties("clickable", "imageWrapperBackground");
+	DiscordClassModules.InviteModal = BDFDB.ModuleUtils.findByProperties("inviteRow", "modal");
+	DiscordClassModules.Item = BDFDB.ModuleUtils.findByProperties("item", "side", "header");
+	DiscordClassModules.ItemLayerContainer = BDFDB.ModuleUtils.findByProperties("layer", "layerContainer");
+	DiscordClassModules.Input = BDFDB.ModuleUtils.findByProperties("inputMini", "inputDefault");
+	DiscordClassModules.LayerModal = BDFDB.ModuleUtils.findByProperties("root", "small", "medium");
+	DiscordClassModules.Layers = BDFDB.ModuleUtils.findByProperties("layer", "layers");
+	DiscordClassModules.LiveTag = BDFDB.ModuleUtils.findByProperties("liveRed", "live");
+	DiscordClassModules.LFG = BDFDB.ModuleUtils.findByProperties("lfg", "topSectionHeader");
+	DiscordClassModules.Margins = BDFDB.ModuleUtils.findByProperties("marginBottom4", "marginCenterHorz");
+	DiscordClassModules.Member = BDFDB.ModuleUtils.findByProperties("member", "ownerIcon");
+	DiscordClassModules.MembersWrap = BDFDB.ModuleUtils.findByProperties("membersWrap", "membersGroup");
+	DiscordClassModules.Mention = BDFDB.ModuleUtils.findByProperties("wrapperHover", "wrapperNoHover");
+	DiscordClassModules.Message = BDFDB.ModuleUtils.findByProperties("containerCozy", "content");
+	DiscordClassModules.MessageAccessory = BDFDB.ModuleUtils.findByProperties("embedWrapper", "gifFavoriteButton");
+	DiscordClassModules.MessageBody = BDFDB.ModuleUtils.findByProperties("buttonContainer", "isMentioned");
+	DiscordClassModules.MessageElements = BDFDB.ModuleUtils.findByProperties("messageGroupBlockedBtn", "dividerRed");
+	DiscordClassModules.MessageFile = BDFDB.ModuleUtils.findByProperties("cancelButton", "filenameLinkWrapper");
+	DiscordClassModules.MessageMarkup = BDFDB.ModuleUtils.findByProperties("markup");
+	DiscordClassModules.MessageOperations = BDFDB.ModuleUtils.find(module => typeof module["operations"] == "string" && Object.keys(module).length == 1);
+	DiscordClassModules.MessageSystem = BDFDB.ModuleUtils.findByProperties("container", "actionAnchor");
+	DiscordClassModules.MessagesPopout = BDFDB.ModuleUtils.findByProperties("messageGroupWrapperOffsetCorrection", "messagesPopout");
+	DiscordClassModules.MessagesWelcome = BDFDB.ModuleUtils.findByProperties("welcomeMessage", "h1");
+	DiscordClassModules.MessagesWrap = BDFDB.ModuleUtils.findByProperties("messagesWrapper", "messageGroupBlocked");
+	DiscordClassModules.Modal = BDFDB.ModuleUtils.findByProperties("modal", "sizeLarge");
+	DiscordClassModules.ModalDivider = BDFDB.ModuleUtils.find(module => typeof module["divider"] == "string" && Object.keys(module).length == 1);
+	DiscordClassModules.ModalItems = BDFDB.ModuleUtils.findByProperties("guildName", "checkboxContainer");
+	DiscordClassModules.ModalMiniContent = BDFDB.ModuleUtils.find(module => typeof module["modal"] == "string" && typeof module["content"] == "string" && typeof module["size"] == "string" && Object.keys(module).length == 3);
+	DiscordClassModules.ModalWrap = BDFDB.ModuleUtils.find(module => typeof module["modal"] == "string" && typeof module["inner"] == "string" && Object.keys(module).length == 2);
+	DiscordClassModules.NameContainer = DiscordClassModules.ContextMenu.subMenuContext ? BDFDB.ModuleUtils.findByProperties("nameAndDecorators", "name") : {};
+	DiscordClassModules.NameTag = BDFDB.ModuleUtils.findByProperties("bot", "nameTag");
+	DiscordClassModules.Note = BDFDB.ModuleUtils.find(module => typeof module["note"] == "string" && Object.keys(module).length == 1);
+	DiscordClassModules.Notice = BDFDB.ModuleUtils.findByProperties("notice", "noticeFacebook");
+	DiscordClassModules.OptionPopout = BDFDB.ModuleUtils.findByProperties("container", "button", "item");
+	DiscordClassModules.PictureInPicture = BDFDB.ModuleUtils.findByProperties("pictureInPicture", "pictureInPictureWindow");
+	DiscordClassModules.PillWrapper = BDFDB.ModuleUtils.find(module => typeof module["item"] == "string" && typeof module["wrapper"] == "string" && Object.keys(module).length == 2);
+	DiscordClassModules.PrivateChannel = BDFDB.ModuleUtils.findByProperties("channel", "closeButton");
+	DiscordClassModules.PrivateChannelActivity = BDFDB.ModuleUtils.findByProperties("activity", "text");
+	DiscordClassModules.PrivateChannelList = BDFDB.ModuleUtils.findByProperties("privateChannels", "searchBar");
+	DiscordClassModules.Popout = BDFDB.ModuleUtils.findByProperties("popout", "arrowAlignmentTop");
+	DiscordClassModules.PopoutActivity = BDFDB.ModuleUtils.findByProperties("ellipsis", "activityActivityFeed");
+	DiscordClassModules.QuickMessage = BDFDB.ModuleUtils.findByProperties("quickMessage", "isBlocked");
+	DiscordClassModules.QuickSelect = BDFDB.ModuleUtils.findByProperties("quickSelectArrow", "selected");
+	DiscordClassModules.QuickSwitch = BDFDB.ModuleUtils.findByProperties("resultFocused", "guildIconContainer");
+	DiscordClassModules.QuickSwitchWrap = BDFDB.ModuleUtils.findByProperties("container", "miscContainer");
+	DiscordClassModules.Reactions = BDFDB.ModuleUtils.findByProperties("reactionBtn", "reaction");
+	DiscordClassModules.RecentMentions = BDFDB.ModuleUtils.findByProperties("recentMentionsFilterPopout", "mentionFilter");
+	DiscordClassModules.Role = BDFDB.ModuleUtils.findByProperties("roleCircle", "roleName");
+	DiscordClassModules.Scrollbar = BDFDB.ModuleUtils.findByProperties("scrollbar", "scrollbarGhost");
+	DiscordClassModules.Scroller = BDFDB.ModuleUtils.findByProperties("firefoxFixScrollFlex", "scroller");
+	DiscordClassModules.SearchBar = BDFDB.ModuleUtils.findByProperties("container", "clear");
+	DiscordClassModules.SearchPopout = BDFDB.ModuleUtils.findByProperties("datePicker", "searchResultChannelIconBackground");
+	DiscordClassModules.SearchPopoutWrap = BDFDB.ModuleUtils.findByProperties("container", "queryContainer");
+	DiscordClassModules.SearchResults = BDFDB.ModuleUtils.findByProperties("resultsWrapper", "searchResults");
+	DiscordClassModules.Select = BDFDB.ModuleUtils.findByProperties("select", "error", "errorMessage");
+	DiscordClassModules.SettingsCloseButton = BDFDB.ModuleUtils.findByProperties("closeButton", "keybind");
+	DiscordClassModules.SettingsItems = BDFDB.ModuleUtils.findByProperties("dividerMini", "note");
+	DiscordClassModules.SettingsTable = BDFDB.ModuleUtils.findByProperties("headerOption", "headerSize");
+	DiscordClassModules.SettingsWindow = BDFDB.ModuleUtils.findByProperties("contentRegion", "standardSidebarView");
+	DiscordClassModules.Slider = BDFDB.ModuleUtils.findByProperties("slider", "grabber");
+	DiscordClassModules.Spoiler = BDFDB.ModuleUtils.findByProperties("spoilerContainer", "hidden");
+	DiscordClassModules.Switch = BDFDB.ModuleUtils.findByProperties("switchDisabled", "valueChecked");
+	DiscordClassModules.Table = BDFDB.ModuleUtils.findByProperties("stickyHeader", "emptyStateText");
+	DiscordClassModules.Text = BDFDB.ModuleUtils.findByProperties("defaultColor", "defaultMarginh1");
+	DiscordClassModules.TextColor = BDFDB.ModuleUtils.findByProperties("colorStandard", "colorMuted", "colorError");
+	DiscordClassModules.TextColor2 = BDFDB.ModuleUtils.findByProperties("base", "muted", "wrapper");
+	DiscordClassModules.TextSize = BDFDB.ModuleUtils.findByProperties("size10", "size14", "size20");
+	DiscordClassModules.TextStyle = BDFDB.ModuleUtils.findByProperties("large", "primary", "selectable");
+	DiscordClassModules.Tip = BDFDB.ModuleUtils.findByProperties("pro", "inline");
+	DiscordClassModules.Title = BDFDB.ModuleUtils.findByProperties("title", "size18");
+	DiscordClassModules.TitleBar = BDFDB.ModuleUtils.findByProperties("titleBar", "wordmark");
+	DiscordClassModules.Tooltip = BDFDB.ModuleUtils.findByProperties("tooltip", "tooltipTop");
+	DiscordClassModules.Typing = BDFDB.ModuleUtils.findByProperties("cooldownWrapper", "typing");
+	DiscordClassModules.UnreadBar = BDFDB.ModuleUtils.findByProperties("active", "bar", "unread");
+	DiscordClassModules.UserPopout = BDFDB.ModuleUtils.findByProperties("userPopout", "headerPlaying");
+	DiscordClassModules.UserProfile = BDFDB.ModuleUtils.findByProperties("topSectionNormal", "tabBarContainer");
+	DiscordClassModules.Video = BDFDB.ModuleUtils.findByProperties("video", "fullScreen");
+	DiscordClassModules.VoiceChannel = BDFDB.ModuleUtils.findByProperties("avatarSpeaking", "voiceUser");
+	DiscordClassModules.VoiceChannelList = BDFDB.ModuleUtils.findByProperties("list", "collapsed");
+	DiscordClassModules.VoiceDetails = BDFDB.ModuleUtils.findByProperties("container", "customStatusContainer");
+	DiscordClassModules.VoiceDetailsPing = BDFDB.ModuleUtils.findByProperties("rtcConnectionQualityBad", "rtcConnectionQualityFine");
 	BDFDB.DiscordClassModules = Object.assign({}, DiscordClassModules);
 
 	var DiscordClasses = {
@@ -5457,11 +5442,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	});
 	
 	var NativeSubComponents = {}, LibraryComponents = {}, reactInitialized = LibraryModules.React && LibraryModules.React.Component;
-	NativeSubComponents.ContextMenuToggleItem = BDFDB.WebModules.findByName("ToggleMenuItem");
-	NativeSubComponents.TabBar = BDFDB.WebModules.findByName("TabBar");
-	NativeSubComponents.TextInput = BDFDB.WebModules.findByName("TextInput");
+	NativeSubComponents.ContextMenuToggleItem = BDFDB.ModuleUtils.findByName("ToggleMenuItem");
+	NativeSubComponents.TabBar = BDFDB.ModuleUtils.findByName("TabBar");
+	NativeSubComponents.TextInput = BDFDB.ModuleUtils.findByName("TextInput");
 	
-	LibraryComponents.Button = BDFDB.WebModules.findByProperties("Colors", "Hovers", "Looks");
+	LibraryComponents.Button = BDFDB.ModuleUtils.findByProperties("Colors", "Hovers", "Looks");
 	LibraryComponents.ColorSwatches = reactInitialized ? class ColorSwatches extends LibraryModules.React.Component {
 		constructor(props) {
 			super(props);
@@ -5478,7 +5463,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			this.ColorSwatch = class ColorSwatch extends LibraryModules.React.Component {
 				render() {
 					let usewhite = !BDFDB.colorISBRIGHT(this.props.color);
-					return BDFDB.React.createElement("button", {
+					return BDFDB.ReactUtils.createElement("button", {
 						type: "button",
 						className: [BDFDB.disCN.colorpickerswatch, this.props.isDisabled ? BDFDB.disCN.colorpickerswatchdisabled : null, this.props.isSelected ? BDFDB.disCN.colorpickerswatchselected : null, this.props.isCustom ? BDFDB.disCN.colorpickerswatchcustom : null, this.props.isSingle ? BDFDB.disCN.colorpickerswatchsingle : null, this.props.color == null ? BDFDB.disCN.colorpickerswatchnocolor : null].filter(n => n).join(" "),
 						disabled: this.props.isDisabled,
@@ -5492,19 +5477,19 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 								});
 							}
 							if (this.props.isCustom || this.props.isSingle) {
-								let swatch = BDFDB.React.findDOMNode(this);
+								let swatch = BDFDB.ReactUtils.findDOMNode(this);
 								if (swatch) BDFDB.openColorPicker(swatches, swatch, this.props.color, swatches.state.pickerConfig);
 							};
 						},
 						onMouseEnter: _ => {
-							let swatch = this.props.isCustom || this.props.isSingle || this.props.color == null ? BDFDB.React.findDOMNode(this) : null;
+							let swatch = this.props.isCustom || this.props.isSingle || this.props.color == null ? BDFDB.ReactUtils.findDOMNode(this) : null;
 							if (swatch) BDFDB.TooltipUtils.create(swatch, this.props.isCustom || this.props.isSingle ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_COLOR : BDFDB.LanguageUtils.LanguageStrings.DEFAULT, {type: "bottom"});
 						},
 						style: Object.assign({}, this.props.style, {
 							background: BDFDB.ObjectUtils.is(this.props.color) ? BDFDB.colorGRADIENT(this.props.color) : BDFDB.colorCONVERT(this.props.color, "RGBA")
 						}),
 						children: [
-							this.props.isCustom || this.props.isSingle ? BDFDB.React.createElement(LibraryComponents.SvgIcon, {
+							this.props.isCustom || this.props.isSingle ? BDFDB.ReactUtils.createElement(LibraryComponents.SvgIcon, {
 								className: BDFDB.disCN.colorpickerswatchdropper,
 								foreground: BDFDB.disCN.colorpickerswatchdropperfg,
 								name: LibraryComponents.SvgIcon.Names.DROPPER,
@@ -5512,7 +5497,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 								height: this.props.isCustom ? 14 : 10,
 								color: usewhite ? BDFDB.DiscordConstants.Colors.WHITE : BDFDB.DiscordConstants.Colors.BLACK
 							}) : null,
-							this.props.isSelected && !this.props.isSingle ? BDFDB.React.createElement(LibraryComponents.SvgIcon, {
+							this.props.isSelected && !this.props.isSingle ? BDFDB.ReactUtils.createElement(LibraryComponents.SvgIcon, {
 								name: LibraryComponents.SvgIcon.Names.CHECKMARK,
 								width: this.props.isCustom ? 32 : 16,
 								height: this.props.isCustom ? 24 : 16,
@@ -5524,11 +5509,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			}
 		}
 		renderRow(colors) {
-			return BDFDB.React.createElement(LibraryComponents.Flex, {
+			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				className: BDFDB.disCN.colorpickerrow,
 				wrap: LibraryComponents.Flex.Wrap.WRAP,
 				children: colors.map(color => {
-					return BDFDB.React.createElement(this.ColorSwatch, {
+					return BDFDB.ReactUtils.createElement(this.ColorSwatch, {
 						color: color,
 						isCustom: false,
 						isSelected: !this.state.customSelected && color === this.state.selectedColor,
@@ -5538,17 +5523,17 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			});
 		}
 		render() {
-			return BDFDB.React.createElement(LibraryComponents.Flex, {
+			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				className: [BDFDB.disCN.colorpickerswatches, this.state.disabled ? BDFDB.disCN.colorpickerswatchesdisabled : null].filter(n => n).join(" "),
 				swatchnr: this.props.number != null ? this.props.number : 0,
 				children: [
-					BDFDB.React.createElement(LibraryComponents.Flex.Child, {
+					BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
 						className: BDFDB.disCN.marginreset,
 						shrink: 0,
 						grow: 0,
 						wrap: true,
 						children: [
-							BDFDB.React.createElement(this.ColorSwatch, {
+							BDFDB.ReactUtils.createElement(this.ColorSwatch, {
 								color: this.state.customColor,
 								isSingle: !this.state.colors.length,
 								isCustom: this.state.colors.length,
@@ -5560,7 +5545,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 							})
 						]
 					}),
-					this.state.colors.length ? BDFDB.React.createElement(LibraryComponents.Flex, {
+					this.state.colors.length ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 						direction: LibraryComponents.Flex.Direction.VERTICAL,
 						className: BDFDB.disCN.flexmarginreset,
 						grow: 1,
@@ -5573,28 +5558,28 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			})
 		}
 	} : undefined;
-	LibraryComponents.ContextMenu = BDFDB.WebModules.findByName("NativeContextMenu");
-	LibraryComponents.ContextMenuItem = BDFDB.WebModules.findByString(`default.label}`, `default.hint}`, `role:"menuitem"`);
-	LibraryComponents.ContextMenuItemGroup = BDFDB.WebModules.findByString(`"div",{className`, `default.itemGroup}`);
-	LibraryComponents.ContextMenuSliderItem = BDFDB.WebModules.findByName("SliderMenuItem");
-	LibraryComponents.ContextMenuSubItem = BDFDB.WebModules.findByName("FluxContainer(SubMenuItem)");
+	LibraryComponents.ContextMenu = BDFDB.ModuleUtils.findByName("NativeContextMenu");
+	LibraryComponents.ContextMenuItem = BDFDB.ModuleUtils.findByString(`default.label}`, `default.hint}`, `role:"menuitem"`);
+	LibraryComponents.ContextMenuItemGroup = BDFDB.ModuleUtils.findByString(`"div",{className`, `default.itemGroup}`);
+	LibraryComponents.ContextMenuSliderItem = BDFDB.ModuleUtils.findByName("SliderMenuItem");
+	LibraryComponents.ContextMenuSubItem = BDFDB.ModuleUtils.findByName("FluxContainer(SubMenuItem)");
 	LibraryComponents.ContextMenuToggleItem = reactInitialized ? class ContextMenuToggleItem extends LibraryModules.React.Component {
         handleToggle() {
             this.props.active = !this.props.active;
             if (typeof this.props.action == "function") this.props.action(this.props.active);
             this.forceUpdate();
         }
-        render() {return BDFDB.React.createElement(NativeSubComponents.ContextMenuToggleItem, Object.assign({}, this.props, {action: this.handleToggle.bind(this)}));}
+        render() {return BDFDB.ReactUtils.createElement(NativeSubComponents.ContextMenuToggleItem, Object.assign({}, this.props, {action: this.handleToggle.bind(this)}));}
     } : undefined;
-	LibraryComponents.Flex = BDFDB.WebModules.findByProperties("Wrap", "Direction", "Child");
-	LibraryComponents.FormComponents = BDFDB.WebModules.findByProperties("FormSection", "FormText");
-	LibraryComponents.IconBadge = BDFDB.WebModules.findByName("IconBadge");
-	LibraryComponents.ModalComponents = BDFDB.WebModules.findByProperties("ModalContent", "ModalFooter");
+	LibraryComponents.Flex = BDFDB.ModuleUtils.findByProperties("Wrap", "Direction", "Child");
+	LibraryComponents.FormComponents = BDFDB.ModuleUtils.findByProperties("FormSection", "FormText");
+	LibraryComponents.IconBadge = BDFDB.ModuleUtils.findByName("IconBadge");
+	LibraryComponents.ModalComponents = BDFDB.ModuleUtils.findByProperties("ModalContent", "ModalFooter");
 	LibraryComponents.ModalTabContent = reactInitialized ? class ModalTabContent extends LibraryModules.React.Component {
         render() {
 			let props = Object.assign({}, this.props);
 			delete props.open;
-			return BDFDB.React.createElement(LibraryComponents.Flex, Object.assign({tab:"unnamed"}, props, {
+			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, Object.assign({tab:"unnamed"}, props, {
 				className: [BDFDB.disCN.modaltabcontent, this.props.open ? BDFDB.disCN.modaltabcontentopen : null, props.className].filter(n => n).join(" "),
 				direction: LibraryComponents.Flex.Direction.VERTICAL,
 				align: LibraryComponents.Flex.Align.STRETCH,
@@ -5605,20 +5590,20 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			}));
 		}
     } : undefined;
-	LibraryComponents.NumberBadge = BDFDB.WebModules.findByName("NumberBadge");
-	LibraryComponents.SvgIcon = BDFDB.WebModules.findByProperties("Gradients", "Names");
+	LibraryComponents.NumberBadge = BDFDB.ModuleUtils.findByName("NumberBadge");
+	LibraryComponents.SvgIcon = BDFDB.ModuleUtils.findByProperties("Gradients", "Names");
 	LibraryComponents.SettingsPanel = reactInitialized ? class SettingsPanel extends LibraryModules.React.Component {
 		render() {
-			return this.props.children ? BDFDB.React.createElement(LibraryComponents.Flex, {
+			return this.props.children ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				direction: LibraryComponents.Flex.Direction.VERTICAL,
 				grow: 1,
 				children: [
-					typeof this.props.title == "string" ? BDFDB.React.createElement(LibraryComponents.FormComponents.FormTitle, {
+					typeof this.props.title == "string" ? BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormTitle, {
 						className: BDFDB.disCNS.marginbottom20 + "BDFDB-settings-title",
 						tag: LibraryComponents.FormComponents.FormTitle.Tags.H2,
 						children: this.props.title
 					}) : null,
-					BDFDB.React.createElement(LibraryComponents.Flex, {
+					BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 						className: "BDFDB-settings-inner",
 						direction: LibraryComponents.Flex.Direction.VERTICAL,
 						children: this.props.children
@@ -5629,15 +5614,15 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	}: undefined;
 	LibraryComponents.SettingsPanelInner = reactInitialized ? class SettingsPanelInner extends LibraryModules.React.Component {
 		render() {
-			return this.props.children ? BDFDB.React.createElement(BDFDB.LibraryComponents.Flex, {
+			return this.props.children ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 				direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
 				children: [
-					typeof this.props.title == "string" ? BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+					typeof this.props.title == "string" ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 						className: BDFDB.disCN.marginbottom8,
 						tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H1,
 						children: "Display Badges:"
 					}) : null,
-					BDFDB.React.createElement(BDFDB.LibraryComponents.Flex, {
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 						className: "BDFDB-settings-inner-list",
 						direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
 						children: this.props.children
@@ -5669,42 +5654,42 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			delete childprops.mini;
 			delete childprops.note;
 			delete childprops.type;
-			return BDFDB.React.createElement(LibraryComponents.Flex, {
+			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				className: [this.props.className, this.props.disabled ? BDFDB.disCN.disabled : null].filter(n => n).join(" "),
 				direction: LibraryComponents.Flex.Direction.VERTICAL,
 				align: LibraryComponents.Flex.Align.STRETCH,
 				children: [
-					this.props.dividertop ? BDFDB.React.createElement(LibraryComponents.FormComponents.FormDivider, {
+					this.props.dividertop ? BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormDivider, {
 						className: this.props.mini ? BDFDB.disCN.marginbottom8 : BDFDB.disCN.marginbottom20
 					}) : null,
-					BDFDB.React.createElement(LibraryComponents.Flex, {
+					BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 						align: LibraryComponents.Flex.Align.CENTER,
 						children: [
-							BDFDB.React.createElement(LibraryComponents.Flex.Child, {
-								children: BDFDB.React.createElement("label", {
+							BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
+								children: BDFDB.ReactUtils.createElement("label", {
 									className: this.props.mini ? BDFDB.disCN.titlemini : BDFDB.disCN.titledefault,
 									children: this.props.label
 								})
 							}),
-							(BDFDB.ArrayUtils.is(this.props.labelchildren) ? this.props.labelchildren : Array.of(this.props.labelchildren)).filter(n => BDFDB.React.isValidElement(n)),
-							BDFDB.React.createElement(LibraryComponents.Flex.Child, {
+							(BDFDB.ArrayUtils.is(this.props.labelchildren) ? this.props.labelchildren : Array.of(this.props.labelchildren)).filter(n => BDFDB.ReactUtils.isValidElement(n)),
+							BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
 								grow: this.props.basis ? 1 : 0,
 								shrink: 0,
 								basis: this.props.basis || "auto",
 								wrap: true,
-								children: BDFDB.React.createElement(childcomponent, childprops)
+								children: BDFDB.ReactUtils.createElement(childcomponent, childprops)
 							})
 						]
 					}),
-					typeof this.props.note == "string" ? BDFDB.React.createElement(LibraryComponents.Flex.Child, {
+					typeof this.props.note == "string" ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
 						className: BDFDB.disCN.note,
-						children: BDFDB.React.createElement(LibraryComponents.FormComponents.FormText, {
+						children: BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormText, {
 							disabled: this.props.disabled,
 							type: LibraryComponents.FormComponents.FormText.Types.DESCRIPTION,
 							children: this.props.note
 						})
 					}) : null,
-					this.props.dividerbottom ? BDFDB.React.createElement(LibraryComponents.FormComponents.FormDivider, {
+					this.props.dividerbottom ? BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormDivider, {
 						className: this.props.mini ? BDFDB.disCN.margintop8 : BDFDB.disCN.margintop20
 					}) : null
 				]
@@ -5727,27 +5712,27 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 				this.props.plugin.SettingsUpdated = true;
 			}
         }
-        render() {return BDFDB.React.createElement(LibraryComponents.SettingsItem, Object.assign({keys:[]}, this.props, {
+        render() {return BDFDB.ReactUtils.createElement(LibraryComponents.SettingsItem, Object.assign({keys:[]}, this.props, {
 			type: "Switch",
 			onChange: this.saveSettings.bind(this)
 		}));}
     } : undefined;
-	LibraryComponents.Switch = BDFDB.WebModules.findByName("Switch");
+	LibraryComponents.Switch = BDFDB.ModuleUtils.findByName("Switch");
 	LibraryComponents.TabBar = reactInitialized ? class TabBar extends LibraryModules.React.Component {
         handleItemSelect(e) {
             if (typeof this.props.onItemSelect == "function") this.props.onItemSelect(e, this);
         }
-        render() {return BDFDB.React.createElement(NativeSubComponents.TabBar, Object.assign({}, this.props, {onItemSelect: this.handleItemSelect.bind(this)}));}
+        render() {return BDFDB.ReactUtils.createElement(NativeSubComponents.TabBar, Object.assign({}, this.props, {onItemSelect: this.handleItemSelect.bind(this)}));}
     } : undefined;
 	if (LibraryComponents.TabBar) for (let key in NativeSubComponents.TabBar) if (key != "displayName" && key != "name") LibraryComponents.TabBar[key] = NativeSubComponents.TabBar[key];
-	LibraryComponents.TextElement = BDFDB.WebModules.findByName("Text");
+	LibraryComponents.TextElement = BDFDB.ModuleUtils.findByName("Text");
 	LibraryComponents.TextInput = reactInitialized ? class TextInput extends LibraryModules.React.Component {
         handleChange(e) {
 			this.props.value = e;
 			this.forceUpdate();
             if (typeof this.props.onChange == "function") this.props.onChange(e, this);
         }
-        render() {return BDFDB.React.createElement(NativeSubComponents.TextInput, Object.assign({}, this.props, {onChange: this.handleChange.bind(this)}));}
+        render() {return BDFDB.ReactUtils.createElement(NativeSubComponents.TextInput, Object.assign({}, this.props, {onChange: this.handleChange.bind(this)}));}
     } : undefined;
 	if (LibraryComponents.TextInput) for (let key in NativeSubComponents.TextInput) if (key != "displayName" && key != "name") LibraryComponents.TextInput[key] = NativeSubComponents.TextInput[key];
 	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
@@ -6959,13 +6944,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		Message: ["componentDidMount","componentDidUpdate","render"]
 	};
 
-	BDFDB.WebModules.patch(LibraryModules.GuildStore, "getGuild", BDFDB, {after: e => {
+	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.GuildStore, "getGuild", {after: e => {
 		if (e.returnValue && e.methodArguments[0] == "410787888507256842" && !e.returnValue.banner) {
 			e.returnValue.banner = "data:image/png;base64,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W7fu537u5xYtWjQ9Pd3tdp/VUxEPTsLqdruVSmVqaurgJKzJycnp6enp6empqamD/xwbG9u6dWtPT8/Y2Nj+/fsPHDhw4MCBvXv3HjhwIMuy4eHhOT0kzzzzzDe84Q2XXnrpypUri//dbt26dWhoyA8SAOY6BRYA80R7bGd7bGeBCyxm1H/ceyjmsZvHpP3vu1yFJEm+vwFWVksrPUmyIOtdFpaelMSYhCR2252p4c7Ens7Yzu7U/uaBzc2990zvuDUmMcm7sduOSRJCJWSVws7PCiF0u90777xz06ZNX/7yl9/whje84Q1v6O/vn7kjDg4O/tCvxMcsko0xhhA6nc7ExMTU1NTExMTY2NjExESe5/v379+5c+fu3bu3bt360EMPNZvNRx55JE3T4q9JXLFixVvf+taf+ImfOO644+bKe+O+++5rtVp+RgAw5+/2ivmoFAA4/GtauuyF/33hGW+UBIcgJo9ZhBi+/7DCENIkhBjz2J7OO9N5a6w9um161x2TO+9ojzzSbY51J3bnnWaa1UNWSUL6w8VZEf5iMR5czddoNNavX/+2t73tFa94xbJlywr1TeZ53ul0frDqcHp6evPmzTfeeOPevXs3bdq0c+fOiYmJ4eHhPM8PLlEsgtWrV1966aU/8zM/s3bt2izL5spA37Zt2y//8i/fcsst3vMAzPmbfQUWAPPGglN/atlFvxVST/rjGd0dJckPiq0kJiGENIQsbw5P73twavut0/vua+3f0BzaHNtTIasmSZqkaQhp0f4aBxf6tdvtCy644E1vetOll166bNmywj4mL8/zg9OvYoy7du168MEH77vvvna7fccdd2zatGl6enrv3r3dbvcHf2zWNBqN00477cUvfvFrX/vaY489dg5VVwddd911v/qrv7p7925vbADm/C2aAguAeaO2+IRVL/tobdEJomAGbprSNKuFak/eHGsNb2kNbZ7edcfE1htaBzbmnWbsNkOShqz6/Q2zCmRiYiLGeP755//Mz/zMq171qqLNxnoSMcY9e/bs27dvcnLy/vvvv/feezdv3rxly5bx8fGpqamDs7dm7ugLFy487bTTfvqnf/olL3nJ4sVzcm1yjPEv/uIv/viP/9jbF4D5cC+mwAJgPln143/Uf8JLC7iwi3khJjEJWRayRsiqeWe62xzpjGwf33z1xJbvdMZ2tUa3J3k3hJCkWUirSZol8chv6pSmaafTGRsby7Ls/PPP/y//5b9ccsklc+4OsNvtNpvNgztqbdy48aabbtq2bdsdd9yxb9++vXv3PosH6unpWbFixYUXXvjKV176nOecOzAwMHfH6+jo6K/92q9deeWV3roAzAMKLADmlQWnvnbZRb8VKrWk8LtBM5fFJCZJloW0FkKapFnenmruuXt807fbw5un9tzTHn4ktqdjkqS13pDVkhiP+L7vIYSDu011u92LL774DW94w+te97of3YV9brnrrrs2bdp0991333bbbXv37t2+ffv09PTTW2NYr9ePPvro5z3veeecc875559/4oknzoNheu+9977jHe/YuHGjdywA84ACC4B5JetZctxPfyHrXxo7TWkw82KSJElIk5CmWU9a6+lM7G0deGhq5+0Tm/9tatc9nYm9eXs8q/WHal8ROqwkSfI8HxkZybLsTW960y//8i+fc845c/0cdDqdRx55ZGpq6vrrr7/hhhu2bNmyc+fOoaGhQ/naarV63HHHPec5z7noogtPOunk0047bT6Nzv/zf/7P7/zO73S7XW9UAOYBBRYA86tOiPGoSz/ev+4/xU77iPcFlHAAhqye1vpizLsTe5tDmye3XDe1/XvTu+9pj24Ntf600jh4A3ZkB2eaps1mc2JiYv369a9//et/6qd+6tRTT50H6U9PT4+Pj2/fvv2WW27ZuXPnTTfddN99942Njf3on+zv7z/llFNOP/30008//eyzzz7uuON6enrm2VgcHR39rd/6rX/5l3/xtgRgflBgATC/+oPO9ILTX7/qP304xjzm5h1wREZhTNIsrfYmaZp0u92p/dO7757cftPo/f/a3P9gWqknIQtpLQlHuMbK83x8fDxJktNOO+3d7373ZZddNm/OQLfbTdP0vvvu27hx49VXX33fffc9/PDDK1asWLVq1bnnnnv00UevXLnyhBNOWLlyZbU6bx9aes8997z+9a8fHh72jgRgflBgATC/qoNOs7Zk3dGv/l/VhcfETksgHMHBmCTh4FbuIYTYabVGt03vunP0wa9Obb+p2xpLut202nPEH1nYbrdbrVZfX9+ll176u7/7uyecMN8e4jk8PDw6OtpsNnt7e3t6ehYuXJim6fwffDH+7d/+7fve9z7vQwDmjWxOP1oFAH5YSLuT+6qDR/WsPj/J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1q37+Mc//tKXvrRsyW/evPn973//1VdffXD3egDg2aLAAgCYT2JaX9Cd3L/vux8/cOv/TpKQNgafyZbth9VehRCGhobWr1//8Y9//Md+7MfKFv23vvWtv/qrv/rud79rFALAs06BBUA5hVnbxxpmU1YfnN53/95rPzZ2/78kWS2t9SVx9qYCjYyMrF+//s///M/LtnJwdHT0//7f//u5z31u48aNBiEAzAQFFgAlFC0hZP6N6pBWQ6Uxvunbe6//2NSOW0O1L1Rqs9lejY+Pr1279uMf/3jZ2qtOp/PHf/zHX/jCF0ZHRw1EAJghCiwASiiYgcX8EtNab2y3DnzvU/tv+mRneiSt9iYhm832anJy8oQTTviTP/mTl7zkJSXKPcY777zz05/+9Je+9CVbtgPAjFJgAQDMXTEJWVrva+3ftO+7fzn2wL/GmKeV+ixXtNPT08cff/zHPvaxUu3a3m63v/KVr/z5n//5xo0bY1SIA8DMUmABAMxRIVTqSZqNP/iNvdf98dTue9JaX0hn++7u4NyrP/3TPy1Pe5Xn+Z49ez7/+c9/8pOfnJycNBABYBYosAAA5pwY0mrIap2JvUO3f+7AbZ/pTh7IGoOzubNbCCHP87GxsbVr1/7Zn/1Zefa9mp6evummm/78z//8pptusmwQAGaNAgsAYA6JSRLSal8SwvSOm/dc9xdjG67IGguyngWzuatbCCHGODw8fOKJJ5aqvdq2bdvf/d3ffeELX9i1a5exCACzSYEFQDkrAE8hZE4O3ZBWs8aC9viu0Xv++cBt/7u5f2Olb+mjg3q2HJx7tW/fvlNOOeXP//zPS7JycHR09K677vrkJz95ww03TE1NGYsAMMsUWACUkKcQMufEJMa01hey2thD3zxw299NPHRlzDtZY9Esj+QQQqvVGh4ePu+88z760Y++6EUvmvfRt9vtbdu2ffKTn7zxxhs3btxoLALAEaHAAqCUXYAZWMwtaTWrDXTHdx644/89cOtnOuO700pPWuud/faq2WzGGH/+53/+3e9+94knnjjvg5+env7c5z73xS9+8YEHHpienjYSAeBIUWABUEJmYDGHRmtIK715d3r47n88cOtnmnvujt1OVh9IQjbLYzhN08nJyb6+vne/+90///M/PzAwML+Dn56evvXWWz/96U9ff/31IyMjRiIAHFkKLACAYgqhUg8hTO28dd+Nn5zYdFUSQhLStNabJMnsN7AjIyOrVq36zd/8zbe+9a2Vyny+hxwZGdm1a9dnP/vZK664Yv/+/e1221gEgCNOgQVAOVlCSIGFNKRZkmatvRuG7/3C2IOXt0e2h2pPCOkR+XY6nU673X7hC1/427/92y960YvSNJ2fPxRi7HQ6d9xxxz//8z9fe+21W7Zs6XQ6BiMAFIQCC4CSNgSWEFLIgZmFrJrEbnt0x8g9Xxi771+aw5uTtJrW+md/xB582uD09HQI4Wd/9md/53d+Z9WqVfM1+MnJyTvvvPPyyy//5je/uWPHDrOuAKBoFFgAlJMZWBRqPMaQVUOlkSTd1tAjYxu/PnTH/9sZ3hKTJK31f3/Ezrbp6elWq3XMMcf81//6X3/pl36pVqvNy+wnJyfvvvvur3zlK1ddddWmTZsMRgAoJgUWAOVkBhbFEGPIammtL8ZOe2jL2MYrhu/6x+ndd6eVRqj0hnDEBur4+HiM8ZJLLnnPe97z3Oc+d/4F3263W63W1Vdffc0111xzzTWqKwAoOAUWACWtDczA4ogPwpBW0/pAbE9P77l7YvN3Ru/94tSuO2PMs57F3x+lR6a9GhkZOeqoo375l3/5Z37mZ5YtWzbPcp+cnBwaGrrqqqtuueWW66+/ftu2bcYiABSfAgsAYDbFJKQhrWS1gW5zZHzTVRMPXz3+0DdbBzbnncmsvjDJqknMj8h3FkLodrtDQ0Pnn3/++9///pe97GXzLPqhoaENGzZ885vfvO222+6///6RkRHbtAPAXKHAAqCcLCFk1j260VVPDDGf3D9y1z+Obf5Wc8+97bEdSZ6HrJr1Lk1iPCLtVZqmnU5nYmKiXq+/5S1veec733nyySfPp+z37Nlz/fXXf+lLX3rggQf27t07OTlpPALA3KLAAgCYaTFktVDti82R6Z23jj989djGbzT3PxTbEyGrhKweqlmShCQesVJ1fHw8SZK1a9f+6q/+6hvf+MaBgYF5EHqz2Txw4MDtt9/+3e9+9zvf+c7+/fv3799vLALAHKXAAqCkhYI9sJgNIYRQSauN1vju6Y3/Nv7Q10c3Xhk7zSRJkpCmtd7HjMMj017FGCcmJlatWvXWt771zW9+8+rVq9M0ndOR53m+adOmrVu33nnnnZdffvnevXuHhoZarZbBCABzmgILgJL2CpYQMlNDK4QQQpKEGJIkxtbQ5tENV0w+cl1z912d5lha7QtpJQlHviTK87zdbscYX/KSl3zgAx84++yz52511el08jw/uE7whhtueOCBB7Zu3To6OnrwL2hQAsA8oMACAHiGYpKEkFaSkIU0xJh3p0Y7k3um99w9vuHKqV13dif3xryTVhpZ/cgvzQshdDqddrtdrVbPPvvsX/7lX375y1/e398/F3Nvt9v79u2bmpq65ZZbbr311quvvnr//v1jY2NGJADMPwosAICnJcYkSUJWDZV6SEKM3e70cHP/xube+ya23Ti19cbOxJ4krYYQQloLWeOIT/oLIeR5PjEx0el0li1b9vM///O/8iu/snTp0rmSd57neZ6HEMbGxrZt27Z79+4NGzZ8/etfHxoaevDBB41HAJjfFFgAAIfl4HyralrrSdJa3p7oTu5vHtg8ueOW6R03Te+5t3VgU5KEtN6f1vqSJHx/veqRbK9CCEmSjI2NtVqt5cuX//iP//hrXvOaV77ylcXPut1uT05OdjqdycnJTZs23XPPPdPT0w8//PCGDRv27t27Y8cOwxEASkKBBQDwJA4WTyEJIUlCyKpppRHSandqqLn3gebww9N77p3a9r3W/g3t8d15azyt9WWNhUmaPuaRgke4uooxNpvNkZGRFStWXHrppZdddtnFF1/caDQKm3in0zlw4MDevXsnJyc3b958++2379q1a3R0dMeOHQe3Y5+amjIuAaBsFFgAAI8VH22c0jSELAlZkmYhJElIY0y6o9vH99w3vefOzsiO6X33tfZvzLvTsdNKQkgrPZX+5Uk8+ApHfuPwg9XV1NTU9PT0ggUL3va2t73+9a9/wQteUMzqqtVq7dix49577x0bG9u0adOWLVs2btw4OTm5a9euH2w2b2gCQJkpsAAop5gkQQr8+3iISZIkIU2TtBayakirMe/E9lTsTHSb463hh5u7757YcVNnbGd3Yl97fGcSkySkIYQQKmmjJwkhiUlSmJIlTdOJiYlWq7VgwYLLLrvszW9+8/nnn9/b23ukvp88zw8+KLDT6SRJ0u12x8bGDhw48Mgjj9xzzz179+7dvn37/v379+zZ0263h4aGjEgA4IcosAAop3DEd9SmICMhpFmSVkNWC1kltic6kwe6k/s643taI4+09j/UPLChNbQ5tqfyznTemUxiEtJKWmkkSUhC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";
 		}
 	}});
 
-	BDFDB.WebModules.patch(LibraryModules.IconUtils, "getGuildBannerURL", BDFDB, {instead: e => {
+	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.IconUtils, "getGuildBannerURL", {instead: e => {
 		return e.methodArguments[0].id == "410787888507256842" ? e.methodArguments[0].banner : e.callOriginalMethod();
 	}});
 
@@ -7065,9 +7050,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		BDFDBprocessFunctions._processAvatar(instance.props.message.author, wrapper.querySelector(BDFDB.dotCN.avatarwrapper));
 	};
 
-	BDFDB.WebModules.patchModules(BDFDB);
+	BDFDB.ModuleUtils.patchModules(BDFDB);
 
-	BDFDB.WebModules.forceAllUpdates(BDFDB);
+	BDFDB.ModuleUtils.forceAllUpdates(BDFDB);
 	
 	InternalBDFDB.addContextListeners(BDFDB);
 	
@@ -7110,12 +7095,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		for (let component in NativeSubComponents) if (!NativeSubComponents[component]) console.warn(`%c[BDFDB]%c`, "color: #3a71c1; font-weight: 700;", "", component + " not initialized in NativeSubComponents");
 		for (let component in LibraryComponents) if (!LibraryComponents[component]) console.warn(`%c[BDFDB]%c`, "color: #3a71c1; font-weight: 700;", "", component + " not initialized in LibraryComponents");
 
-		BDFDB.WebModules.DevFuncs = {};
-		BDFDB.WebModules.DevFuncs.findByIndex = function (index) {
+		BDFDB.ModuleUtils.DevFuncs = {};
+		BDFDB.ModuleUtils.DevFuncs.findByIndex = function (index) {
 			var req = getWebModuleReq();
 			return req.c[index];
 		};
-		BDFDB.WebModules.DevFuncs.findPropAny = function (strings) {
+		BDFDB.ModuleUtils.DevFuncs.findPropAny = function (strings) {
 			strings = BDFDB.ArrayUtils.is(strings) ? strings : Array.from(arguments);
 			var req = getWebModuleReq(); window.t = {"$filter":(prop => strings.every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
@@ -7126,7 +7111,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			console.clear();
 			console.log(window.t);
 		};
-		BDFDB.WebModules.DevFuncs.findPropFunc = function (strings) {
+		BDFDB.ModuleUtils.DevFuncs.findPropFunc = function (strings) {
 			strings = BDFDB.ArrayUtils.is(strings) ? strings : Array.from(arguments);
 			var req = getWebModuleReq(); window.t = {"$filter":(prop => strings.every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
@@ -7137,7 +7122,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			console.clear();
 			console.log(window.t);
 		};
-		BDFDB.WebModules.DevFuncs.findPropStringLib = function (strings) {
+		BDFDB.ModuleUtils.DevFuncs.findPropStringLib = function (strings) {
 			strings = BDFDB.ArrayUtils.is(strings) ? strings : Array.from(arguments);
 			var req = getWebModuleReq(); window.t = {"$filter":(prop => strings.every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
@@ -7148,7 +7133,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			console.clear();
 			console.log(window.t);
 		};
-		BDFDB.WebModules.DevFuncs.findNameAny = function (strings) {
+		BDFDB.ModuleUtils.DevFuncs.findNameAny = function (strings) {
 			strings = BDFDB.ArrayUtils.is(strings) ? strings : Array.from(arguments);
 			var req = getWebModuleReq(); window.t = {"$filter":(modu => strings.some(string => typeof modu.displayName == "string" && modu.displayName.toLowerCase().indexOf(string.toLowerCase()) > -1 || modu.name == "string" && modu.name.toLowerCase().indexOf(string.toLowerCase()) > -1))};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
@@ -7159,7 +7144,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			console.clear();
 			console.log(window.t);
 		};
-		BDFDB.WebModules.DevFuncs.findCodeAny = function (strings) {
+		BDFDB.ModuleUtils.DevFuncs.findCodeAny = function (strings) {
 			strings = BDFDB.ArrayUtils.is(strings) ? strings : Array.from(arguments);
 			var req = getWebModuleReq(); window.t = {"$filter":(prop => strings.every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
@@ -7180,7 +7165,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			console.clear();
 			console.log(window.t);
 		};
-		BDFDB.WebModules.DevFuncs.getAllModules = function () {
+		BDFDB.ModuleUtils.DevFuncs.getAllModules = function () {
 			var req = getWebModuleReq(); window.t = {};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
@@ -7189,7 +7174,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			console.clear();
 			console.log(window.t);
 		};
-		BDFDB.WebModules.DevFuncs.getAllStringLibs = function () {
+		BDFDB.ModuleUtils.DevFuncs.getAllStringLibs = function () {
 			var req = getWebModuleReq(); window.t = [];
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
@@ -7213,17 +7198,17 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			console.clear();
 			console.log(window.t);
 		};
-		BDFDB.WebModules.DevFuncs.listen = function (strings) {
+		BDFDB.ModuleUtils.DevFuncs.listen = function (strings) {
 			strings = BDFDB.ArrayUtils.is(strings) ? strings : Array.from(arguments);
-			BDFDB.WebModules.DevFuncs.listenstop();
-			BDFDB.WebModules.DevFuncs.listen.p = BDFDB.WebModules.patch(BDFDB.WebModules.findByProperties(strings), strings[0], "WebpackSearch", {after: e => {
+			BDFDB.ModuleUtils.DevFuncs.listenstop();
+			BDFDB.ModuleUtils.DevFuncs.listen.p = BDFDB.ModuleUtils.patch("WebpackSearch", BDFDB.ModuleUtils.findByProperties(strings), strings[0], {after: e => {
 				console.log(e);
 			}});
 		};
-		BDFDB.WebModules.DevFuncs.listenstop = function () {
-			if (BDFDB.WebModules.DevFuncs.listen.p == "function") BDFDB.WebModules.DevFuncs.listen.p();
+		BDFDB.ModuleUtils.DevFuncs.listenstop = function () {
+			if (BDFDB.ModuleUtils.DevFuncs.listen.p == "function") BDFDB.ModuleUtils.DevFuncs.listen.p();
 		};
-		BDFDB.WebModules.DevFuncs.req = getWebModuleReq();
+		BDFDB.ModuleUtils.DevFuncs.req = getWebModuleReq();
 	}
 	for (let component in NativeSubComponents) if (!NativeSubComponents[component]) NativeSubComponents[component] = "div";
 	for (let component in LibraryComponents) if (!LibraryComponents[component]) {
@@ -7260,6 +7245,15 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	BDFDB.deepAssign = BDFDB.ObjectUtils.deepAssign;
 	BDFDB.isObjectEmpty = BDFDB.ObjectUtils.isEmpty;
 	
+	BDFDB.getKeyInformation = (config) => {return BDFDB.ReactUtils.findValue(config.node || config.instance, config);};
+	BDFDB.getReactInstance = BDFDB.ReactUtils.getInstance;
+	BDFDB.getOwnerInstance = (config) => {return BDFDB.ReactUtils.getOwner(config.node || config.instance, config);};
+	BDFDB.getReactValue = BDFDB.ReactUtils.getValue;
+	
+	BDFDB.WebModules = BDFDB.ModuleUtils;
+	BDFDB.WebModules.patch = (module, modulefunctions, plugin, patchfunctions) => {return BDFDB.ModuleUtils.patch(plugin, module, modulefunctions, patchfunctions)};
+	BDFDB.WebModules.unpatchall = BDFDB.ModuleUtils.unpatch;
+	
 	BDFDB.sortArrayByKey = BDFDB.ArrayUtils.keySort;
 	BDFDB.numSortArray = BDFDB.ArrayUtils.numSort;
 	BDFDB.removeFromArray = BDFDB.ArrayUtils.remove;
@@ -7283,6 +7277,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	BDFDB.isThemeEnabled = BDFDB.BdUtils.isThemeEnabled;
 	BDFDB.getTheme = BDFDB.BdUtils.getTheme;
 	BDFDB.isRestartNoMoreEnabled = BDFDB.BdUtils.isAutoLoadEnabled;
+	
+	BDFDB.React = BDFDB.ReactUtils;
 	
 	BDFDB.languages = BDFDB.LanguageUtils.languages;
 	BDFDB.getDiscordLanguage = BDFDB.LanguageUtils.getLanguage;
