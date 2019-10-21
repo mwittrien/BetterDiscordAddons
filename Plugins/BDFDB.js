@@ -1054,7 +1054,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 				depth++;
 				var result = null;
 				if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxdepth && performance.now() - start < maxtime) {
-					if (instance.stateNode && !Node.prototype.isPrototypeOf(instance.stateNode) && (instance.type && config.name && config.name.some(name => (instance.type.displayName || instance.type.name) === name.split(" _ _ ")[0]) || config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => BDFDB.equals(config.props[prop[0]], checkvalue)) : BDFDB.equals(config.props[prop[0]], prop[1])) : config.props[prop] !== undefined))) {
+					let props = instance.stateNode ? instance.stateNode.props : instance.props;
+					if (instance.stateNode && !Node.prototype.isPrototypeOf(instance.stateNode) && (instance.type && config.name && config.name.some(name => (instance.type.displayName || instance.type.name) === name.split(" _ _ ")[0]) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => BDFDB.equals(props[prop[0]], checkvalue)) : BDFDB.equals(props[prop[0]], prop[1])) : props[prop] !== undefined))) {
 						if (config.all === undefined || !config.all) result = instance.stateNode;
 						else if (config.all) {
 							if (config.noCopies === undefined || !config.noCopies || config.noCopies && !instance.stateNode.BDFDBreactSearch) {
@@ -3236,7 +3237,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 
 	BDFDB.closeContextMenu = function (nodeOrInstance) {
 		if (!BDFDB.ObjectUtils.is(nodeOrInstance)) return;
-		var instance = BDFDB.ReactUtils.findOwner(nodeOrInstance, {name:"ContextMenu", up:true});
+		var instance = BDFDB.ReactUtils.findOwner(nodeOrInstance, {props:"closeContextMenu", up:true});
 		if (BDFDB.ObjectUtils.is(instance) && instance.props && typeof instance.props.closeContextMenu == "function") instance.props.closeContextMenu();
 	};
 
