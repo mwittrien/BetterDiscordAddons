@@ -5699,7 +5699,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
         saveSettings(value) {
             let keys = this.props.keys.filter(n => n);
 			let option = keys.shift();
-			if (this.props.plugin && option) {
+			if (BDFDB.ObjectUtils.is(this.props.plugin) && option) {
 				var data = BDFDB.loadAllData(this.props.plugin, option);
 				var newdata = "";
 				for (let key of keys) newdata += `{"${key}":`;
@@ -5710,11 +5710,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 				BDFDB.saveAllData(data, this.props.plugin, option);
 				this.props.plugin.SettingsUpdated = true;
 			}
+			if (typeof this.props.onChange == "function") this.props.onChange(value, this);
         }
-        render() {return BDFDB.ReactUtils.createElement(LibraryComponents.SettingsItem, Object.assign({keys:[]}, this.props, {
-			type: "Switch",
-			onChange: this.saveSettings.bind(this)
-		}));}
+        render() {
+			return BDFDB.ReactUtils.createElement(LibraryComponents.SettingsItem, Object.assign({keys:[]}, this.props, {
+				type: "Switch",
+				onChange: this.saveSettings.bind(this)
+			}));
+		}
     } : undefined;
 	LibraryComponents.Switch = BDFDB.ModuleUtils.findByName("Switch");
 	LibraryComponents.TabBar = reactInitialized ? class TabBar extends LibraryModules.React.Component {
