@@ -3322,9 +3322,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	BDFDB.setColorSwatches = function (container, currentcolor) {
 		if (!Node.prototype.isPrototypeOf(container)) return;
 
-		var swatches = container.querySelector(`${BDFDB.dotCN.colorpickerswatches}:not([swatchnr])`);
+		var swatches = container.querySelector(`${BDFDB.dotCN.colorpickerswatches}:not([number])`);
 		if (!swatches) return;
-		swatches.setAttribute("swatchnr", parseInt(container.querySelectorAll(`${BDFDB.dotCN.colorpickerswatches}[swatchnr]`).length + 1));
+		swatches.setAttribute("number", parseInt(container.querySelectorAll(`${BDFDB.dotCN.colorpickerswatches}[number]`).length + 1));
 
 		var colorlist = [null, "rgba(82,233,30,1)", "rgba(46,204,113,1)", "rgba(26,188,156,1)", "rgba(52,152,219,1)", "rgba(52,84,219,1)", "rgba(134,30,233,1)", "rgba(155,89,182,1)", "rgba(233,30,99,1)", "rgba(233,65,30,1)", "rgba(231,76,60,1)", "rgba(230,126,34,1)", "rgba(241,196,15,1)", "rgba(199,204,205,1)", "rgba(112,128,136,1)", "rgba(99,99,99,1)", "rgba(255,255,255,1)", "rgba(59,173,20,1)", "rgba(31,139,76,1)", "rgba(17,128,106,1)", "rgba(32,102,148,1)", "rgba(32,57,148,1)", "rgba(109,20,173,1)", "rgba(113,54,138,1)", "rgba(173,20,87,1)", "rgba(173,32,20,1)", "rgba(153,45,34,1)", "rgba(168,67,0,1)", "rgba(194,124,14,1)", "rgba(151,156,159,1)", "rgba(93,104,109,1)", "rgba(44,44,44,1)"];
 		var colorrows = [colorlist.slice(0, parseInt(colorlist.length/2)), colorlist.slice(parseInt(colorlist.length/2))];
@@ -3358,10 +3358,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	BDFDB.getSwatchColor = function (container, number) {
 		if (!Node.prototype.isPrototypeOf(container)) return;
 
-		var swatches = container.querySelector(`${BDFDB.dotCN.colorpickerswatches}[swatchnr="${number}"]`);
+		var swatches = container.querySelector(`${BDFDB.dotCN.colorpickerswatches}[number="${number}"]`);
 		if (!swatches) return null;
 		var ins = BDFDB.ReactUtils.getInstance(swatches);
-		if (ins) return BDFDB.ReactUtils.getValue(ins, "return.return.stateNode.state.selectedColor");
+		if (ins) return BDFDB.ReactUtils.findValue(ins, "selectedColor");
 		else { // REMOVE ONCE REWRITTEN
 			var swatch = swatches.querySelector(`${BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchselected}`);
 			return swatch ? swatch.gradient || BDFDB.colorCONVERT(swatch.style.getPropertyValue("background-color"), "RGBCOMP") : null;
@@ -5520,7 +5520,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		render() {
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				className: [BDFDB.disCN.colorpickerswatches, this.state.disabled ? BDFDB.disCN.colorpickerswatchesdisabled : null].filter(n => n).join(" "),
-				swatchnr: this.props.number != null ? this.props.number : 0,
+				number: this.props.number != null ? this.props.number : 0,
 				children: [
 					BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
 						className: BDFDB.disCN.marginreset,
