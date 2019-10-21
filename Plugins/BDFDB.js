@@ -981,11 +981,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			var node = LibraryModules.ReactDOM.findDOMNode(instance) || BDFDB.ReactUtils.getValue(instance, "child.stateNode");
 			return Node.prototype.isPrototypeOf(node) ? node : null;
 		};
-		BDFDB.ReactUtils.findValue = function (config) {
-			if (config === undefined) return null;
-			if (!config.node && !config.instance || !config.key) return null;
-			var instance = config.instance || BDFDB.ReactUtils.getInstance(config.node);
-			if (!instance) return null;
+		BDFDB.ReactUtils.findValue = function (nodeOrInstance, searchkey, config = {}) {
+			if (!nodeOrInstance || typeof searchkey != "string") return null;
+			var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
+			if (!BDFDB.ObjectUtils.is(instance)) return null;
 			var depth = -1;
 			var maxdepth = config.depth === undefined ? 15 : config.depth;
 			var start = performance.now();
@@ -1026,7 +1025,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 						var key = keys[i];
 						if (key && !blacklist[key]) {
 							var value = instance[key];
-							if (config.key === key && (config.value === undefined || config.value === value)) {
+							if (searchkey === key && (config.value === undefined || config.value === value)) {
 								if (config.all === undefined || !config.all) result = value;
 								else if (config.all) {
 									if (config.noCopies === undefined || !config.noCopies) foundkeys.push(value);
@@ -1783,7 +1782,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		if (!Node.prototype.isPrototypeOf(div) || !BDFDB.ReactUtils.getInstance(div)) return;
 		div = BDFDB.getParentEle(BDFDB.dotCNC.categorycontainerdefault + BDFDB.dotCNC.channelcontainerdefault + BDFDB.dotCN.dmchannel, div);
 		if (!div) return;
-		var info = BDFDB.ReactUtils.findValue(div, {key:"channel"});
+		var info = BDFDB.ReactUtils.findValue(div, "channel");
 		return info ? info.id.toString() : null;
 	};
 
@@ -7245,7 +7244,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	BDFDB.deepAssign = BDFDB.ObjectUtils.deepAssign;
 	BDFDB.isObjectEmpty = BDFDB.ObjectUtils.isEmpty;
 	
-	BDFDB.getKeyInformation = (config) => {return BDFDB.ReactUtils.findValue(config.node || config.instance, config);};
+	BDFDB.getKeyInformation = (config) => {return BDFDB.ReactUtils.findValue(config.node || config.instance, config.key, config);};
 	BDFDB.getReactInstance = BDFDB.ReactUtils.getInstance;
 	BDFDB.getOwnerInstance = (config) => {return BDFDB.ReactUtils.getOwner(config.node || config.instance, config);};
 	BDFDB.getReactValue = BDFDB.ReactUtils.getValue;
