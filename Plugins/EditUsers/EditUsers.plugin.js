@@ -268,6 +268,7 @@ class EditUsers {
 							children: [
 								BDFDB.React.createElement(BDFDB.LibraryComponents.TextInput, {
 									inputClassName: !data.removeIcon && data.url ? BDFDB.disCN.inputsuccess : null,
+									inputId: "USERAVATAR",
 									value: data.url,
 									placeholder: BDFDB.getUserAvatar(info.id),
 									disabled: data.removeIcon,
@@ -286,7 +287,7 @@ class EditUsers {
 							label: this.labels.modal_removeicon_text,
 							value: data.removeIcon,
 							onChange: (value, instance) => {
-								let avatarinputins = BDFDB.getReactValue(instance, "_reactInternalFiber.return.child.sibling.sibling.child.child.sibling.child.stateNode");
+								let avatarinputins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","USERAVATAR"]]});
 								if (avatarinputins) {
 									avatarinputins.props.inputClassName = null;
 									avatarinputins.props.disabled = value;
@@ -352,8 +353,8 @@ class EditUsers {
 							label: this.labels.modal_ignoretagcolor_text,
 							value: data.ignoreTagColor,
 							onChange: (value, instance) => {
-								let colorpicker3ins = BDFDB.getReactValue(instance, "_reactInternalFiber.return.child.child.child.sibling.child.stateNode");
-								let colorpicker4ins = BDFDB.getReactValue(instance, "_reactInternalFiber.return.child.sibling.child.child.sibling.child.stateNode");
+								let colorpicker3ins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["number",3]]});
+								let colorpicker4ins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["number",4]]});
 								if (colorpicker3ins) colorpicker3ins.setState({disabled: value});
 								if (colorpicker4ins) colorpicker4ins.setState({disabled: value});
 							}

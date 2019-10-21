@@ -261,6 +261,7 @@ class EditServers {
 							children: [
 								BDFDB.React.createElement(BDFDB.LibraryComponents.TextInput, {
 									inputClassName: !data.removeIcon && data.url ? BDFDB.disCN.inputsuccess : null,
+									inputId: "GUILDICON",
 									value: data.url,
 									placeholder: BDFDB.getGuildIcon(info.id),
 									disabled: data.removeIcon,
@@ -279,7 +280,7 @@ class EditServers {
 							label: this.labels.modal_removeicon_text,
 							value: data.removeIcon,
 							onChange: (value, instance) => {
-								let iconinputins = BDFDB.getReactValue(instance, "_reactInternalFiber.return.child.sibling.sibling.child.child.sibling.child.stateNode");
+								let iconinputins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","GUILDICON"]]});
 								if (iconinputins) {
 									iconinputins.props.inputClassName = null;
 									iconinputins.props.disabled = value;
@@ -293,6 +294,7 @@ class EditServers {
 							children: [
 								BDFDB.React.createElement(BDFDB.LibraryComponents.TextInput, {
 									inputClassName: !data.removeBanner && data.banner ? BDFDB.disCN.inputsuccess : null,
+									inputId: "GUILDBANNER",
 									value: data.banner,
 									placeholder: BDFDB.getGuildBanner(info.id),
 									disabled: data.removeBanner || info.id == "410787888507256842",
@@ -312,7 +314,7 @@ class EditServers {
 							value: data.removeBanner,
 							disabled: info.id == "410787888507256842",
 							onChange: (value, instance) => {
-								let bannerinputins = BDFDB.getReactValue(instance, "_reactInternalFiber.return.child.sibling.sibling.child.child.sibling.child.stateNode");
+								let bannerinputins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","GUILDBANNER"]]});
 								if (bannerinputins) {
 									bannerinputins.props.inputClassName = null;
 									bannerinputins.props.disabled = value;

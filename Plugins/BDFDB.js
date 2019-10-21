@@ -1027,7 +1027,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 							}
 						}
 					}
-					if (result == null) for (let key of Object.getOwnPropertyNames(instance)) if (key && whitelist[key] && (typeof instance[key] === "object" || typeof instance[key] === "function")) result = getOwner(instance[key]);
+					if (result == null) {
+						let keys = Object.getOwnPropertyNames(instance);
+						for (let i = 0; result == null && i < keys.length; i++) {
+							let key = keys[i];
+							if (key && whitelist[key] && (typeof instance[key] === "object" || typeof instance[key] === "function")) result = getOwner(instance[key]);
+						}
+					}
 				}
 				depth--;
 				return result;
@@ -1070,23 +1076,29 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			function getKey(instance) {
 				depth++;
 				var result = null;
-				if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxdepth && performance.now() - start < maxtime) for (let key of Object.getOwnPropertyNames(instance)) if (key && !blacklist[key]) {
-					var value = instance[key];
-					if (searchkey === key && (config.value === undefined || BDFDB.equals(config.value, value))) {
-						if (config.all === undefined || !config.all) result = value;
-						else if (config.all) {
-							if (config.noCopies === undefined || !config.noCopies) foundkeys.push(value);
-							else if (config.noCopies) {
-								var copy = false;
-								for (let foundkey of foundkeys) if (BDFDB.equals(value, foundkey)) {
-									copy = true;
-									break;
+				if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxdepth && performance.now() - start < maxtime) {
+					let keys = Object.getOwnPropertyNames(instance);
+					for (let i = 0; result == null && i < keys.length; i++) {
+						let key = keys[i];
+						if (key && !blacklist[key]) {
+							var value = instance[key];
+							if (searchkey === key && (config.value === undefined || BDFDB.equals(config.value, value))) {
+								if (config.all === undefined || !config.all) result = value;
+								else if (config.all) {
+									if (config.noCopies === undefined || !config.noCopies) foundkeys.push(value);
+									else if (config.noCopies) {
+										var copy = false;
+										for (let foundkey of foundkeys) if (BDFDB.equals(value, foundkey)) {
+											copy = true;
+											break;
+										}
+										if (!copy) foundkeys.push(value);
+									}
 								}
-								if (!copy) foundkeys.push(value);
 							}
+							else if ((typeof value === "object" || typeof value === "function") && (whitelist[key] || key[0] == "." || !isNaN(key[0]))) result = getKey(value);
 						}
 					}
-					else if ((typeof value === "object" || typeof value === "function") && (whitelist[key] || key[0] == "." || !isNaN(key[0]))) result = getKey(value);
 				}
 				depth--;
 				return result;
