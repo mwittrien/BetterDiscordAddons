@@ -1006,8 +1006,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			function getOwner (instance) {
 				depth++;
 				var result = null;
-				if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxdepth && performance.now() - start < maxtime) for (let key of Object.getOwnPropertyNames(instance)) if (key) {
-					var value = instance[key];
+				if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxdepth && performance.now() - start < maxtime) {
 					if (instance.stateNode && !Node.prototype.isPrototypeOf(instance.stateNode) && (instance.type && config.name && config.name.some(name => instance.type.displayName === name.split(" _ _ ")[0] || instance.type.name === name.split(" _ _ ")[0]) || config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? BDFDB.equals(instance.stateNode.props[prop[0]], prop[1]) : instance.stateNode.props[prop] !== undefined))) {
 						if (config.all === undefined || !config.all) result = instance.stateNode;
 						else if (config.all) {
@@ -1028,7 +1027,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 							}
 						}
 					}
-					else if ((typeof value === "object" || typeof value === "function") && whitelist[key]) result = getOwner(value);
+					if (result == null) for (let key of Object.getOwnPropertyNames(instance)) if (key && whitelist[key] && (typeof instance[key] === "object" || typeof instance[key] === "function")) result = getOwner(instance[key]);
 				}
 				depth--;
 				return result;
