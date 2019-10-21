@@ -53,7 +53,7 @@ class EditServers {
 			children: inneritems
 		}));
 		settingsitems.push(BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsItem, {
-			type: "BUTTON",
+			type: "Button",
 			className: BDFDB.disCN.marginbottom8,
 			color: BDFDB.LibraryComponents.Button.Colors.RED,
 			label: "Reset all Servers",

@@ -74,27 +74,27 @@ class EditUsers {
 
 		this.defaults = {
 			settings: {
-				changeInChatTextarea:	{value:true, 	description:"Chat Textarea"},
-				changeInChatWindow:		{value:true, 	description:"Messages"},
-				changeInMentions:		{value:true, 	description:"Mentions"},
-				changeInVoiceChat:		{value:true, 	description:"Voice Channels"},
-				changeInMemberList:		{value:true, 	description:"Member List"},
-				changeInRecentDms:		{value:true, 	description:"Direct Message Notifications"},
-				changeInDmsList:		{value:true, 	description:"Direct Message List"},
-				changeInDmHeader:		{value:true, 	description:"Direct Message Header"},
-				changeInDmCalls:		{value:true, 	description:"Calls/ScreenShares"},
-				changeInTyping:			{value:true, 	description:"Typing List"},
-				changeInFriendList:		{value:true, 	description:"Friend List"},
-				changeInInviteList:		{value:true, 	description:"Invite List"},
-				changeInActivity:		{value:true, 	description:"Activity Page"},
-				changeInUserPopout:		{value:true, 	description:"User Popouts"},
-				changeInUserProfil:		{value:true, 	description:"User Profile Modal"},
-				changeInAutoComplete:	{value:true, 	description:"Autocomplete Menu"},
-				changeInAuditLog:		{value:true, 	description:"Audit Log"},
-				changeInMemberLog:		{value:true, 	description:"Member Log"},
-				changeInSearchPopout:	{value:true, 	description:"Search Popout"},
-				changeInUserAccount:	{value:true, 	description:"Your Account Information"},
-				changeInAppTitle:		{value:true, 	description:"Discord App Title (DMs)"}
+				changeInChatTextarea:	{value:true, 	inner:true,		description:"Chat Textarea"},
+				changeInChatWindow:		{value:true, 	inner:true,		description:"Messages"},
+				changeInMentions:		{value:true, 	inner:true,		description:"Mentions"},
+				changeInVoiceChat:		{value:true, 	inner:true,		description:"Voice Channels"},
+				changeInMemberList:		{value:true, 	inner:true,		description:"Member List"},
+				changeInRecentDms:		{value:true, 	inner:true,		description:"Direct Message Notifications"},
+				changeInDmsList:		{value:true, 	inner:true,		description:"Direct Message List"},
+				changeInDmHeader:		{value:true, 	inner:true,		description:"Direct Message Header"},
+				changeInDmCalls:		{value:true, 	inner:true,		description:"Calls/ScreenShares"},
+				changeInTyping:			{value:true, 	inner:true,		description:"Typing List"},
+				changeInFriendList:		{value:true, 	inner:true,		description:"Friend List"},
+				changeInInviteList:		{value:true, 	inner:true,		description:"Invite List"},
+				changeInActivity:		{value:true, 	inner:true,		description:"Activity Page"},
+				changeInUserPopout:		{value:true, 	inner:true,		description:"User Popouts"},
+				changeInUserProfil:		{value:true, 	inner:true,		description:"User Profile Modal"},
+				changeInAutoComplete:	{value:true, 	inner:true,		description:"Autocomplete Menu"},
+				changeInAuditLog:		{value:true, 	inner:true,		description:"Audit Log"},
+				changeInMemberLog:		{value:true, 	inner:true,		description:"Member Log"},
+				changeInSearchPopout:	{value:true, 	inner:true,		description:"Search Popout"},
+				changeInUserAccount:	{value:true, 	inner:true,		description:"Your Account Information"},
+				changeInAppTitle:		{value:true, 	inner:true,		description:"Discord App Title (DMs)"}
 			}
 		};
 	}
@@ -116,7 +116,7 @@ class EditUsers {
 			children: inneritems
 		}));
 		settingsitems.push(BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsItem, {
-			type: "BUTTON",
+			type: "Button",
 			className: BDFDB.disCN.marginbottom8,
 			color: BDFDB.LibraryComponents.Button.Colors.RED,
 			label: "Reset all Users",
@@ -290,7 +290,7 @@ class EditUsers {
 								if (avatarinputins) {
 									avatarinputins.props.inputClassName = null;
 									avatarinputins.props.disabled = value;
-									avatarinputins.forceUpdate();
+									BDFDB.ReactUtils.forceUpdate(avatarinputins);
 								}
 							}
 						})

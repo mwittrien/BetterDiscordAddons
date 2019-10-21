@@ -3,7 +3,7 @@
 class ReadAllNotificationsButton {
 	getName () {return "ReadAllNotificationsButton";}
 
-	getVersion () {return "1.5.0";}
+	getVersion () {return "1.5.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ReadAllNotificationsButton {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"added":[["Pinged servers","Added the contextmenu item to only clear unread notifications on pinged servers"]]
 		};
 
 		this.patchModules = {
@@ -59,28 +59,30 @@ class ReadAllNotificationsButton {
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		var settings = BDFDB.getAllData(this, "settings");
-		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
-		for (let key in settings) {
-			if (!this.defaults.settings[key].inner) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
-		}
-		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">When left clicking the button mark following elements as unread:</h3></div><div class="BDFDB-settings-inner-list">`;
-		for (let key in settings) {
-			if (this.defaults.settings[key].inner) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
-		}
-		settingshtml += `</div>`;
-		settingshtml += `</div></div>`;
-
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
-
-		BDFDB.initElements(settingspanel, this);
-
-		let mutedinput = settingspanel.querySelector(".settings-switch[value='settings includeMuted']").parentElement.parentElement;
-		BDFDB.toggleEles(mutedinput, settings.includeGuilds);
-		BDFDB.addEventListener(this, settingspanel, "click", ".settings-switch[value='settings includeGuilds']", e => {
-			BDFDB.toggleEles(mutedinput, e.currentTarget.checked);
-		});
-
-		return settingspanel;
+		var settingsitems = [], inneritems = [];
+		
+		for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
+			className: BDFDB.disCN.marginbottom8,
+			plugin: this,
+			keys: ["settings", key],
+			label: this.defaults.settings[key].description,
+			value: settings[key],
+			disabled: key == "includeMuted" && !settings.includeGuilds,
+			onChange: (value, instance) => {
+				if (key != "includeGuilds") return;
+				let mutedSwitchIns = BDFDB.ReactUtils.findOwner(instance, {props:[["keys",["settings", "includeMuted"]]]});
+				if (mutedSwitchIns) {
+					mutedSwitchIns.props.disabled = !value;
+					BDFDB.ReactUtils.forceUpdate(mutedSwitchIns);
+				}
+			}
+		}));
+		settingsitems.push(BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+			title: "When left clicking the 'read all' button mark following Elements as read:",
+			children: inneritems
+		}));
+		
+		return BDFDB.createSettingsPanel(this, settingsitems);
 	}
 
 	//legacy
@@ -149,6 +151,14 @@ class ReadAllNotificationsButton {
 								action: e => {
 									BDFDB.closeContextMenu(BDFDB.getParentEle(BDFDB.dotCN.contextmenu, e.target));
 									BDFDB.markGuildAsRead(BDFDB.readUnreadServerList());
+								}
+							}),
+							BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								label: this.labels.context_pingedguilds_text,
+								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-pingedguilds-contextMenuItem`,
+								action: e => {
+									BDFDB.closeContextMenu(BDFDB.getParentEle(BDFDB.dotCN.contextmenu, e.target));
+									BDFDB.markGuildAsRead(BDFDB.readPingedServerList());
 								}
 							}),
 							BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
@@ -228,7 +238,8 @@ class ReadAllNotificationsButton {
 		switch (BDFDB.getDiscordLanguage().id) {
 			case "hr":		//croatian
 				return {
-					context_unreadguilds_text:	"Nepročitani poslužitelji",
+					context_unreadguilds_text:	"Nepročitani poslužitelje",
+					context_pingedguilds_text:	"Zvižduci poslužitelje",
 					context_mutedguilds_text:	"Prigušeni poslužitelje",
 					context_guilds_text:		"Sve poslužitelje",
 					context_dms_text:			"Prikvacene izravne"
@@ -236,6 +247,7 @@ class ReadAllNotificationsButton {
 			case "da":		//danish
 				return {
 					context_unreadguilds_text:	"Ulæste servere",
+					context_pingedguilds_text:	"Pinget servere",
 					context_mutedguilds_text:	"Dæmpede servere",
 					context_guilds_text:		"Alle servere",
 					context_dms_text:			"Private beskeder"
@@ -243,6 +255,7 @@ class ReadAllNotificationsButton {
 			case "de":		//german
 				return {
 					context_unreadguilds_text:	"Ungelesene Server",
+					context_pingedguilds_text:	"Gepingte Server",
 					context_mutedguilds_text:	"Stummgeschaltene Server",
 					context_guilds_text:		"Alle Server",
 					context_dms_text:			"Direktnachrichten"
@@ -250,6 +263,7 @@ class ReadAllNotificationsButton {
 			case "es":		//spanish
 				return {
 					context_unreadguilds_text:	"Servidores no leídos",
+					context_pingedguilds_text:	"Servidores mencionados",
 					context_mutedguilds_text:	"Servidores silenciados",
 					context_guilds_text:		"Todos los servidores",
 					context_dms_text:			"Mensajes directos"
@@ -257,6 +271,7 @@ class ReadAllNotificationsButton {
 			case "fr":		//french
 				return {
 					context_unreadguilds_text:	"Serveurs non lus",
+					context_pingedguilds_text:	"Serveurs mentionnés",
 					context_mutedguilds_text:	"Serveurs en sourdine",
 					context_guilds_text:		"Tous les serveurs",
 					context_dms_text:			"Messages privés"
@@ -264,6 +279,7 @@ class ReadAllNotificationsButton {
 			case "it":		//italian
 				return {
 					context_unreadguilds_text:	"Server non letti",
+					context_pingedguilds_text:	"Server pingato",
 					context_mutedguilds_text:	"Server mutate",
 					context_guilds_text:		"Tutti i server",
 					context_dms_text:			"Messaggi diretti"
@@ -271,6 +287,7 @@ class ReadAllNotificationsButton {
 			case "nl":		//dutch
 				return {
 					context_unreadguilds_text:	"Ongelezen servers",
+					context_pingedguilds_text:	"Gepingde servers",
 					context_mutedguilds_text:	"Gedempte servers",
 					context_guilds_text:		"Alle servers",
 					context_dms_text:			"Prive berichten"
@@ -278,6 +295,7 @@ class ReadAllNotificationsButton {
 			case "no":		//norwegian
 				return {
 					context_unreadguilds_text:	"Uleste servere",
+					context_pingedguilds_text:	"Pinget servere",
 					context_mutedguilds_text:	"Dempet servere",
 					context_guilds_text:		"Alle servere",
 					context_dms_text:			"Direktemeldinger"
@@ -285,6 +303,7 @@ class ReadAllNotificationsButton {
 			case "pl":		//polish
 				return {
 					context_unreadguilds_text:	"Nieprzeczytane serwery",
+					context_pingedguilds_text:	"Pingowany serwery",
 					context_mutedguilds_text:	"Wyciszone serwery",
 					context_guilds_text:		"Wszystkie serwery",
 					context_dms_text:			"Prywatne wiadomości"
@@ -292,6 +311,7 @@ class ReadAllNotificationsButton {
 			case "pt-BR":	//portuguese (brazil)
 				return {
 					context_unreadguilds_text:	"Servidores não lidos",
+					context_pingedguilds_text:	"Servidores com ping",
 					context_mutedguilds_text:	"Servidores silenciosos",
 					context_guilds_text:		"Todos os servidores",
 					context_dms_text:			"Mensagens diretas"
@@ -299,6 +319,7 @@ class ReadAllNotificationsButton {
 			case "fi":		//finnish
 				return {
 					context_unreadguilds_text:	"Lukemattomia palvelimet",
+					context_pingedguilds_text:	"Tapitut palvelimet",
 					context_mutedguilds_text:	"Mykistetyt palvelimet",
 					context_guilds_text:		"Kaikki palvelimet",
 					context_dms_text:			"Yksityisviestit"
@@ -306,6 +327,7 @@ class ReadAllNotificationsButton {
 			case "sv":		//swedish
 				return {
 					context_unreadguilds_text:	"Olästa servrar",
+					context_pingedguilds_text:	"Pingade servrar",
 					context_mutedguilds_text:	"Dämpade servrar",
 					context_guilds_text:		"Alla servrar",
 					context_dms_text:			"Direktmeddelanden"
@@ -313,6 +335,7 @@ class ReadAllNotificationsButton {
 			case "tr":		//turkish
 				return {
 					context_unreadguilds_text:	"Okunmamış sunucular",
+					context_pingedguilds_text:	"Ping sunucular",
 					context_mutedguilds_text:	"Sessiz sunucular",
 					context_guilds_text:		"Tüm sunucular",
 					context_dms_text:			"Özel mesajlar"
@@ -320,6 +343,7 @@ class ReadAllNotificationsButton {
 			case "cs":		//czech
 				return {
 					context_unreadguilds_text:	"Nepřečtené servery",
+					context_pingedguilds_text:	"Pinged servery",
 					context_mutedguilds_text:	"Tlumené servery",
 					context_guilds_text:		"Všechny servery",
 					context_dms_text:			"Přímé zpráva"
@@ -327,6 +351,7 @@ class ReadAllNotificationsButton {
 			case "bg":		//bulgarian
 				return {
 					context_unreadguilds_text:	"Непрочетени сървъри",
+					context_pingedguilds_text:	"Споменатите сървъри",
 					context_mutedguilds_text:	"Приглушени сървъри",
 					context_guilds_text:		"Всички сървъри",
 					context_dms_text:			"Директно съобщение"
@@ -334,13 +359,15 @@ class ReadAllNotificationsButton {
 			case "ru":		//russian
 				return {
 					context_unreadguilds_text:	"Непрочитанные серверы",
+					context_pingedguilds_text:	"Проверенные серверы",
 					context_mutedguilds_text:	"Отключенные серверы",
 					context_guilds_text:		"Все серверы",
 					context_dms_text:			"Прямые сообщения"
 				};
 			case "uk":		//ukrainian
 				return {
-					context_unreadguilds_text:	"Непрочитаних серверів",
+					context_unreadguilds_text:	"Непрочитаних сервери",
+					context_pingedguilds_text:	"Згадані сервери",
 					context_mutedguilds_text:	"Приглушені сервери",
 					context_guilds_text:		"Всі сервери",
 					context_dms_text:			"Прямі Повідомлення"
@@ -348,6 +375,7 @@ class ReadAllNotificationsButton {
 			case "ja":		//japanese
 				return {
 					context_unreadguilds_text:	"未読サーバー",
+					context_pingedguilds_text:	"",
 					context_mutedguilds_text:	"ミュートサーバー",
 					context_guilds_text:		"すべてのサーバー",
 					context_dms_text:			"ダイレクトメッセージ"
@@ -355,6 +383,7 @@ class ReadAllNotificationsButton {
 			case "zh-TW":	//chinese (traditional)
 				return {
 					context_unreadguilds_text:	"未讀服務器",
+					context_pingedguilds_text:	"言及されたサーバー",
 					context_mutedguilds_text:	"靜音服務器",
 					context_guilds_text:		"所有服務器",
 					context_dms_text:			"直接消息",
@@ -362,6 +391,7 @@ class ReadAllNotificationsButton {
 			case "ko":		//korean
 				return {
 					context_unreadguilds_text:	"읽지 않은 서버",
+					context_pingedguilds_text:	"언급 된 서버",
 					context_mutedguilds_text:	"음소거 된 서버",
 					context_guilds_text:		"모든 서버",
 					context_dms_text:			"직접 메시지"
@@ -369,6 +399,7 @@ class ReadAllNotificationsButton {
 			default:		//default: english
 				return {
 					context_unreadguilds_text:	"Unread Servers",
+					context_pingedguilds_text:	"Pinged Servers",
 					context_mutedguilds_text:	"Muted Servers",
 					context_guilds_text:		"All Servers",
 					context_dms_text:			"Direct Messages"
