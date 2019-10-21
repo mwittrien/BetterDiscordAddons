@@ -981,6 +981,53 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			var node = LibraryModules.ReactDOM.findDOMNode(instance) || BDFDB.ReactUtils.getValue(instance, "child.stateNode");
 			return Node.prototype.isPrototypeOf(node) ? node : null;
 		};
+		BDFDB.ReactUtils.findChildren = function (nodeOrInstance, config) {
+			if (!nodeOrInstance || !BDFDB.ObjectUtils.is(config) || !config.name && !config.props) return null;
+			var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
+			if (!BDFDB.ObjectUtils.is(instance)) return null;
+			config.name = config.name && !BDFDB.ArrayUtils.is(config.name) ? Array.of(config.name) : config.name;
+			config.props = config.props && !BDFDB.ArrayUtils.is(config.props) ? Array.of(config.props) : config.props;
+			var startchildren = instance;
+			var startIsArray = BDFDB.ArrayUtils.is(startchildren);
+			var parent = startchildren;
+			return getChildren(startchildren);
+			function getChildren (children) {
+				while (children && !BDFDB.ArrayUtils.is(children) && children.props && children.props.children) {
+					parent = children;
+					children = children.props.children;
+				}
+				if (children && !BDFDB.ArrayUtils.is(children)) {
+					if (parent && parent.props) {
+						var child = children;
+						parent.props.children = [];
+						parent.props.children.push(child);
+						return [parent.props.children, check(child) ? 0 : -1];
+					}
+					else return [startchildren, -1];
+				}
+				else {
+					if (!startIsArray) {
+						startchildren = children;
+						startIsArray = true;
+					}
+					var result = [startchildren, -1];
+					for (let i in children) if (children[i]) {
+						if (check(children[i])) result = [children, i];
+						else if (children[i].props) {
+							parent = children[i];
+							result = getChildren(children[i].props.children);
+						}
+						if (result[1] > -1) break;
+					}
+					return result;
+				}
+			}
+			function check (instance) {
+				if (!instance) return false;
+				let props = instance.stateNode ? instance.stateNode.props : instance.props;
+				return instance.type && config.name && config.name.some(name => ((instance.type.displayName || instance.type.name) === name)) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => BDFDB.equals(props[prop[0]], checkvalue)) : BDFDB.equals(props[prop[0]], prop[1])) : props[prop] !== undefined);
+			}
+		};
 		BDFDB.ReactUtils.findOwner = function (nodeOrInstance, config) {
 			if (!nodeOrInstance || !BDFDB.ObjectUtils.is(config) || !config.name && !config.props) return null;
 			var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
@@ -1007,7 +1054,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 				depth++;
 				var result = null;
 				if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxdepth && performance.now() - start < maxtime) {
-					if (instance.stateNode && !Node.prototype.isPrototypeOf(instance.stateNode) && (instance.type && config.name && config.name.some(name => instance.type.displayName === name.split(" _ _ ")[0] || instance.type.name === name.split(" _ _ ")[0]) || config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? BDFDB.equals(instance.stateNode.props[prop[0]], prop[1]) : instance.stateNode.props[prop] !== undefined))) {
+					if (instance.stateNode && !Node.prototype.isPrototypeOf(instance.stateNode) && (instance.type && config.name && config.name.some(name => (instance.type.displayName || instance.type.name) === name.split(" _ _ ")[0]) || config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => BDFDB.equals(config.props[prop[0]], checkvalue)) : BDFDB.equals(config.props[prop[0]], prop[1])) : config.props[prop] !== undefined))) {
 						if (config.all === undefined || !config.all) result = instance.stateNode;
 						else if (config.all) {
 							if (config.noCopies === undefined || !config.noCopies || config.noCopies && !instance.stateNode.BDFDBreactSearch) {
@@ -3175,49 +3222,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		BDFDB.initElements(menu);
 	};
 	
-	BDFDB.getContextMenuGroupAndIndex = function (startchildren, names) {
-		names = BDFDB.ArrayUtils.is(names) ? names : (typeof names == "string" ? [names] : Array.from(names));
-		var startIsArray = BDFDB.ArrayUtils.is(startchildren);
-		var parent = startchildren;
-		return search(startchildren);
-		function search (children) {
-			while (children && !BDFDB.ArrayUtils.is(children) && children.props && children.props.children) {
-				parent = children;
-				children = children.props.children;
-			}
-			if (children && !BDFDB.ArrayUtils.is(children)) {
-				if (parent && parent.props) {
-					var child = children;
-					parent.props.children = [];
-					parent.props.children.push(child);
-					return [parent.props.children, check(child) ? 0 : -1];
-				}
-				else return [startchildren, -1];
-			}
-			else {
-				if (!startIsArray) {
-					startchildren = children;
-					startIsArray = true;
-				}
-				var result = [startchildren, -1];
-				for (let i in children) if (children[i]) {
-					if (check(children[i])) result = [children, i];
-					else if (children[i].props) {
-						parent = children[i];
-						result = search(children[i].props.children);
-					}
-					if (result[1] > -1) break;
-				}
-				return result;
-			}
-		}
-		function check (child) {
-			var displayname = child.type ? child.type.displayName || child.type.name || "" : "";
-			var label = child.props ? child.props.label || "" : "";
-			return names.some(name => displayname == name || label == name);
-		}
-	};
-	
 	BDFDB.openContextMenu = function (plugin, e, children) {
 		LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
 			return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenu, Object.assign({}, e, {
@@ -3372,8 +3376,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 
 		var swatches = container.querySelector(`${BDFDB.dotCN.colorpickerswatches}[number="${number}"]`);
 		if (!swatches) return null;
-		var ins = BDFDB.ReactUtils.getInstance(swatches);
-		if (ins) return BDFDB.ReactUtils.findValue(ins, "selectedColor");
+		var ins = BDFDB.ReactUtils.getInstance( container.querySelector(`${BDFDB.dotCN.colorpickerswatches}[number="${number}"]`));
+		if (ins) return BDFDB.ReactUtils.findValue(ins, "selectedColor", {up:true});
 		else { // REMOVE ONCE REWRITTEN
 			var swatch = swatches.querySelector(`${BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchselected}`);
 			return swatch ? swatch.gradient || BDFDB.colorCONVERT(swatch.style.getPropertyValue("background-color"), "RGBCOMP") : null;
@@ -5453,6 +5457,15 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	NativeSubComponents.TabBar = BDFDB.ModuleUtils.findByName("TabBar");
 	NativeSubComponents.TextInput = BDFDB.ModuleUtils.findByName("TextInput");
 	
+	LibraryComponents.BotTag = reactInitialized ? class BDFDB_BotTag extends LibraryModules.React.Component {
+		render() {
+			return BDFDB.ReactUtils.createElement("span", Object.assign({
+				className: [this.props.invertColor ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular, this.props.className].filter(n => n).join(" "),
+				style: Object.assign({}, this.props.style),
+				children: this.props.tag || BDFDB.LanguageUtils.LanguageStrings.BOT_TAG_BOT
+			}));
+		}
+	} : undefined;
 	LibraryComponents.Button = BDFDB.ModuleUtils.findByProperties("Colors", "Hovers", "Looks");
 	LibraryComponents.ColorSwatches = reactInitialized ? class BDFDB_ColorSwatches extends LibraryModules.React.Component {
 		constructor(props) {
@@ -7266,6 +7279,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	BDFDB.getReactInstance = BDFDB.ReactUtils.getInstance;
 	BDFDB.getOwnerInstance = (config) => {return BDFDB.ReactUtils.findOwner(config.node || config.instance, config);};
 	BDFDB.ReactUtils.getOwner = BDFDB.ReactUtils.findOwner;
+	BDFDB.getContextMenuGroupAndIndex = (startchildren, names) => {return BDFDB.ReactUtils.findChildren(startchildren, {name:names, props:[["label",names]]});};
 	BDFDB.getReactValue = BDFDB.ReactUtils.getValue;
 	
 	BDFDB.WebModules = Object.assign({}, BDFDB.ModuleUtils);

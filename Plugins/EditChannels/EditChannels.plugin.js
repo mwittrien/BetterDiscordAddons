@@ -3,7 +3,7 @@
 class EditChannels {
 	getName () {return "EditChannels";}
 
-	getVersion () {return "4.0.6";}
+	getVersion () {return "4.0.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditChannels {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Tooltips","Fixed issue where native tooltip wasn't hidden"]]
+			"fixed":[["Settings","Fixed issue where settings could not be saved"]]
 		};
 
 		this.labels = {};
@@ -228,12 +228,15 @@ class EditChannels {
 				color: "BRAND",
 				close: true,
 				click: modal => {
+					let olddata = Object.assign({}, data);
+					
 					let channelnameinput = modal.querySelector(".input-channelname " + BDFDB.dotCN.input);
 					let inheritcolorinput = modal.querySelector(".input-inheritcolor " + BDFDB.dotCN.switchinner);
 					
 					data.name = channelnameinput.value.trim() || null;
 
 					data.color = BDFDB.getSwatchColor(modal, 1);
+					console.log(data.color);
 					if (data.color != null && !BDFDB.isObject(data.color)) {
 						if (data.color[0] < 30 && data.color[1] < 30 && data.color[2] < 30) data.color = BDFDB.colorCHANGE(data.color, 30);
 						else if (data.color[0] > 225 && data.color[1] > 225 && data.color[2] > 225) data.color = BDFDB.colorCHANGE(data.color, -30);
