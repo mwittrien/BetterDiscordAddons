@@ -5619,7 +5619,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 					typeof this.props.title == "string" ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
 						className: BDFDB.disCN.marginbottom8,
 						tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H1,
-						children: "Display Badges:"
+						children: this.props.title
 					}) : null,
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 						className: "BDFDB-settings-inner-list",
