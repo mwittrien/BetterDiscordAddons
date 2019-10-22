@@ -5540,15 +5540,15 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 					}),
 					BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.contextmenuhint,
-						style: {
+						style: this.props.hint ? {
 							width: 42,
 							maxWidth: 42,
 							marginLeft: 8
-						},
-						children: BDFDB.ReactUtils.createElement(LibraryComponents.TextScroller, {
+						} : {},
+						children: this.props.hint ? BDFDB.ReactUtils.createElement(LibraryComponents.TextScroller, {
 							speed: 2,
-							children: this.props.children
-						})
+							children: this.props.hint
+						}) : null
 					}),
 					this.props.children
 				]
