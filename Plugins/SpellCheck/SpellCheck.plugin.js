@@ -116,7 +116,7 @@ class SpellCheck {
 
 			this.languages = Object.assign({}, BDFDB.LanguageUtils.languages);
 			this.languages = BDFDB.ObjectUtils.filter(this.languages, (lang) => {return lang.dic == true ? lang : null});
-			this.setDictionary(BDFDB.DataUtils.get(this, "choices"), "dictionaryLanguage");
+			this.setDictionary(BDFDB.DataUtils.get(this, "choices", "dictionaryLanguage"));
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}

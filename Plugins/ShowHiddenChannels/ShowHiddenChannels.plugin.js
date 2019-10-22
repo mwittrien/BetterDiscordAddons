@@ -400,7 +400,7 @@ class ShowHiddenChannels {
 		}
 		if (htmlString) {
 			var width = window.outerWidth/2;
-			var tooltip = BDFDB.TooltipUtils.create(e.currentTarget, htmlString, {type:"right", selector:"showhiddenchannels-tooltip", html:true, style:`max-width: ${width < 200 ? 400 : width}px !important;`, delay:BDFDB.DataUtils.get(this, "amounts")}, "hoverDelay");
+			var tooltip = BDFDB.TooltipUtils.create(e.currentTarget, htmlString, {type:"right", selector:"showhiddenchannels-tooltip", html:true, style:`max-width: ${width < 200 ? 400 : width}px !important;`, delay:BDFDB.DataUtils.get(this, "amounts", "hoverDelay")});
 			var style = getComputedStyle(e.currentTarget);
 			tooltip.style.setProperty("top", BDFDB.getRects(tooltip).top - style.paddingBottom.replace("px","")/2 + style.paddingTop.replace("px","")/2 + "px");
 		}
