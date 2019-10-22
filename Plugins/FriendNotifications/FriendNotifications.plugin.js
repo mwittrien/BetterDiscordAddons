@@ -405,7 +405,7 @@ class FriendNotifications {
 	}
 
 	createDefaultConfig () {
-		return Object.assign({desktop: false, disabled: BDFDB.DataUtils.get(this, "settings")}, BDFDB.ObjectUtils.map(this.defaults.notificationstrings, "init"), "disableForNew");
+		return Object.assign({desktop: false, disabled: BDFDB.DataUtils.get(this, "settings", "disableForNew")}, BDFDB.ObjectUtils.map(this.defaults.notificationstrings, "init"));
 	}
 
 	saveNotificationString (input) {
@@ -501,7 +501,7 @@ class FriendNotifications {
 					if (!(settings.muteOnDND && BDFDB.UserUtils.getStatus() == "dnd")) {
 						let openChannel = () => {
 							if (settings.openOnClick) {
-								let DMid = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(user.id);
+								let DMid = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(user.id)
 								if (DMid) BDFDB.LibraryModules.SelectChannelUtils.selectPrivateChannel(DMid);
 								else BDFDB.LibraryModules.DirectMessageUtils.openPrivateChannel(BDFDB.UserUtils.me.id, user.id);
 								BDFDB.LibraryRequires.electron.remote.getCurrentWindow().maximize();
@@ -543,7 +543,7 @@ class FriendNotifications {
 			entry.querySelector(".log-time").innerText = `[${log.time.toLocaleTimeString()}]`;
 			entry.querySelector(".log-avatar").style.setProperty("background-image", `url(${log.avatar})`);
 			entry.querySelector(".log-description").innerHTML = log.string;
-			container.appendChild(entry);
+			container.appendChild(entry)
 		}
 		BDFDB.appendModal(timeLogModal);
 	}
