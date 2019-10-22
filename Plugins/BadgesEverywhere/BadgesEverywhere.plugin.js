@@ -204,6 +204,8 @@ class BadgesEverywhere {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			BDFDB.removeEles(".BE-badges");
 			BDFDB.unloadMessage(this);
 		}

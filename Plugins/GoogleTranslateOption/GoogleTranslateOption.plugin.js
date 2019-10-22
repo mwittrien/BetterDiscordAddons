@@ -200,6 +200,8 @@ class GoogleTranslateOption {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			document.querySelectorAll(BDFDB.dotCN.messagegroup + " .GTO-translated-message").forEach(message => {
 				this.resetMessage(message);
 			});

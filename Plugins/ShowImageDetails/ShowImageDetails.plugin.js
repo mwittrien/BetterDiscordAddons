@@ -98,6 +98,8 @@ class ShowImageDetails {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			document.querySelectorAll(".image-details-added").forEach(image => {this.resetImage(image);});
 
 			BDFDB.unloadMessage(this);

@@ -133,6 +133,8 @@ class ServerHider {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			BDFDB.readServerList().forEach(info => {
 				if (info.div.ServerHiderChangeObserver && typeof info.div.ServerHiderChangeObserver.disconnect == "function") info.div.ServerHiderChangeObserver.disconnect();
 				if (!info.div.getAttribute("folder")) BDFDB.toggleEles(info.div, true);

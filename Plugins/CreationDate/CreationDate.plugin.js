@@ -137,6 +137,8 @@ class CreationDate {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			BDFDB.removeEles(".creationDate");
 			BDFDB.unloadMessage(this);
 		}

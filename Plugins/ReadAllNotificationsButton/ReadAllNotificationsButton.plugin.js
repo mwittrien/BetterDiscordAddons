@@ -120,6 +120,8 @@ class ReadAllNotificationsButton {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			BDFDB.removeEles(".RANbutton-frame", ".RAMbutton");
 			BDFDB.removeClasses("RAN-added", "RAM-added");
 			BDFDB.unloadMessage(this);

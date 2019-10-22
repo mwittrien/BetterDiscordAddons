@@ -98,6 +98,8 @@ class RemoveNicknames {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			this.reseting = true;
 
 			BDFDB.WebModules.forceAllUpdates(this);

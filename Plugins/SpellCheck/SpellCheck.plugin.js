@@ -127,6 +127,8 @@ class SpellCheck {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			BDFDB.removeEles(".spellcheck-overlay");
 			BDFDB.removeClasses("spellcheck-added");
 

@@ -186,6 +186,8 @@ class PersonalPins {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			BDFDB.removeEles(".popout-personalpins-notes", ".personalpins-sort-popout", ".notes-button");
 			BDFDB.unloadMessage(this);
 		}

@@ -107,6 +107,8 @@ class OwnerTag {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			BDFDB.removeEles(".owner-tag, .owner-tag-crown");
 
 			BDFDB.removeLocalStyle(this.name + "HideCrown");

@@ -381,6 +381,8 @@ class ThemeRepo {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			clearInterval(this.updateInterval);
 			clearTimeout(this.loading.timeout);
 

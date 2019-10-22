@@ -56,6 +56,8 @@ class ThemeSettings {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			BDFDB.removeEles(".themes-settings-button",".themes-settings-footer");
 			BDFDB.unloadMessage(this);
 		}

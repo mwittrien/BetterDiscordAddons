@@ -265,6 +265,8 @@ class ServerFolders {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			BDFDB.removeEles(this.foldercontent, BDFDB.dotCN.guildswrapper + ".foldercontent");
 			
 			let modal = document.querySelector(`.${this.name}-modal`);

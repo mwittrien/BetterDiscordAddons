@@ -77,6 +77,8 @@ class ImageZoom {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			for (let img of document.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img")) if (img.ImageZoomMouseDownListener) {
 				img.removeEventListener("mousedown", img.ImageZoomMouseDownListener);
 				delete img.ImageZoomMouseDownListener;

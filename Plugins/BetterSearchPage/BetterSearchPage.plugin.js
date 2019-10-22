@@ -117,6 +117,8 @@ class BetterSearchPage {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			BDFDB.removeEles(".BSP-pagination",".BSP-pagination-button",".BSP-pagination-jumpinput");
 			BDFDB.unloadMessage(this);
 		}

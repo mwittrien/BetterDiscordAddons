@@ -60,6 +60,8 @@ class BetterFriendCount {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			BDFDB.removeEles(".betterfriendcount-badge");
 			BDFDB.unloadMessage(this);
 		}

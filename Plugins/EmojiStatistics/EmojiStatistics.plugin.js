@@ -191,6 +191,8 @@ class EmojiStatistics {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			BDFDB.removeEles(".emoji-tooltip",".emojistatistics-button");
 			BDFDB.unloadMessage(this);
 		}

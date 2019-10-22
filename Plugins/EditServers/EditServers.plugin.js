@@ -114,6 +114,8 @@ class EditServers {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			let data = BDFDB.loadAllData(this, "servers");
 			BDFDB.removeAllData(this, "servers");
 			try {this.forceUpdateAll();} catch (err) {}

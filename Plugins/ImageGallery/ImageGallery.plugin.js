@@ -74,6 +74,8 @@ class ImageGallery {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			this.closemodal = true;
 
 			BDFDB.WebModules.forceAllUpdates(this, "ImageModal");

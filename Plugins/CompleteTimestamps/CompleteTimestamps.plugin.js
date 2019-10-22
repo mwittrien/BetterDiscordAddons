@@ -139,6 +139,8 @@ class CompleteTimestamps {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			BDFDB.removeEles(".complete-timestamp-divider");
 			BDFDB.removeClasses("complete-timestamp");
 

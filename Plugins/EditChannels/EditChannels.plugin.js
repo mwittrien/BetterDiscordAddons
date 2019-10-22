@@ -124,6 +124,8 @@ class EditChannels {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			let data = BDFDB.loadAllData(this, "channels");
 			BDFDB.removeAllData(this, "channels");
 			try {this.forceUpdateAll();} catch (err) {}

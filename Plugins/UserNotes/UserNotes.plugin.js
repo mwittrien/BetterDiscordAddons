@@ -116,6 +116,8 @@ class UserNotes {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			BDFDB.unloadMessage(this);
 		}
 	}

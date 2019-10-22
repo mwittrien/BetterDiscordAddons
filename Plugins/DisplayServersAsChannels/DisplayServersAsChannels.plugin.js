@@ -102,6 +102,8 @@ class DisplayServersAsChannels {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			BDFDB.removeClasses("DSAC-styled");
 			BDFDB.removeEles(".DSAC-verification-badge, .DSAC-name, .DSAC-icon");
 

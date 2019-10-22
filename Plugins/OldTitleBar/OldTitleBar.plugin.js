@@ -172,6 +172,8 @@ class OldTitleBar {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			BDFDB.removeEles(".headerbarOTB", ".settingsTitlebarOTB");
 
 			BDFDB.removeClasses("hidden-by-OTB", "settingsTitlebarOTB-added");

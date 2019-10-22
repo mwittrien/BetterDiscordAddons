@@ -54,6 +54,8 @@ class BetterNsfwTag {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			BDFDB.removeEles(".NSFW-tag");
 			BDFDB.unloadMessage(this);
 		}

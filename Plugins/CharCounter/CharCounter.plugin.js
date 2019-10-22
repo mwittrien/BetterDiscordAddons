@@ -121,6 +121,8 @@ class CharCounter {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			BDFDB.removeEles(".charcounter");
 			BDFDB.removeClasses("charcounter-added");
 			BDFDB.unloadMessage(this);

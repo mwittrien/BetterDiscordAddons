@@ -168,6 +168,8 @@ class PinDMs {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			let dmsscrollerinstance = BDFDB.getReactInstance(document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller));
 			if (dmsscrollerinstance) {
 				let dms = dmsscrollerinstance.return.return.return.memoizedProps.children;

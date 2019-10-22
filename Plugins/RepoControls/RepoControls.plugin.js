@@ -185,6 +185,8 @@ class RepoControls {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			BDFDB.removeEles(".repo-controls","#bd-settingspane-container .trashIcon");
 			BDFDB.removeClasses("repocontrols-added");
 

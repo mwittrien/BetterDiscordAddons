@@ -68,6 +68,8 @@ class TimedLightDarkMode {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			clearInterval(this.checkInterval);
 
 			BDFDB.removeEles(".TLDM-settingsbox");

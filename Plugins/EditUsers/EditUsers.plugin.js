@@ -171,6 +171,8 @@ class EditUsers {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			let data = BDFDB.loadAllData(this, "users");
 			BDFDB.removeAllData(this, "users");
 			try {this.forceUpdateAll();} catch (err) {}

@@ -329,6 +329,8 @@ class FriendNotifications {
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+			this.stopping = true;
+
 			clearInterval(this.checkInterval);
 			BDFDB.unloadMessage(this);
 		}
