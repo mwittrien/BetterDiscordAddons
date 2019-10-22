@@ -66,7 +66,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 
 		BDFDB.ListenerUtils.remove(plugin);
 		BDFDB.ObserverUtils.disconnect(plugin);
-		BDFDB.ModuleUtils.unpatch(plugin);
 		InternalBDFDB.removeOnSwitchListener(plugin);
 		
 		for (let modal of document.querySelectorAll(`.${plugin.name}-modal, .${plugin.name.toLowerCase()}-modal, .${plugin.name}-settingsmodal, .${plugin.name.toLowerCase()}-settingsmodal`)) {
@@ -77,8 +76,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		delete window.PluginUpdates.plugins[url];
 		if (BDFDB.ObjectUtils.isEmpty(window.PluginUpdates.plugins)) BDFDB.removeEles("#bd-settingspane-container .bd-updatebtn" + BDFDB.dotCN._repofolderbutton);
 
-		delete plugin.started;
-		delete plugin.stopping;
+		setImmediate(() => {
+			BDFDB.ModuleUtils.unpatch(plugin);
+			delete plugin.started;
+			delete plugin.stopping;
+		});
 	};
 	BDFDB.PluginUtils.translate = function (plugin) {
 		if (typeof plugin.setLabelsByLanguage === "function" || typeof plugin.changeLanguageStrings === "function") {
