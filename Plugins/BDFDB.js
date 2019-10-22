@@ -1059,7 +1059,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 
 			function getOwner (instance) {
 				depth++;
-				var result = null;
+				var result = undefined;
 				if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxdepth && performance.now() - start < maxtime) {
 					let props = instance.stateNode ? instance.stateNode.props : instance.props;
 					if (instance.stateNode && !Node.prototype.isPrototypeOf(instance.stateNode) && (instance.type && config.name && config.name.some(name => (instance.type.displayName || instance.type.name) === name.split(" _ _ ")[0]) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => BDFDB.equals(props[prop[0]], checkvalue)) : BDFDB.equals(props[prop[0]], prop[1])) : props[prop] !== undefined))) {
@@ -1082,9 +1082,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 							}
 						}
 					}
-					if (result == null) {
+					if (result === undefined) {
 						let keys = Object.getOwnPropertyNames(instance);
-						for (let i = 0; result == null && i < keys.length; i++) {
+						for (let i = 0; result === undefined && i < keys.length; i++) {
 							let key = keys[i];
 							if (key && whitelist[key] && (typeof instance[key] === "object" || typeof instance[key] === "function")) result = getOwner(instance[key]);
 						}
@@ -1122,18 +1122,18 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			var blacklist = {
 				contextSection: true
 			};
-			if (typeof config.whitelist === "object") Object.assign(whitelist, config.whiteList);
-			if (typeof config.blacklist === "object") Object.assign(blacklist, config.blacklist);
+			if (BDFDB.ObjectUtils.is(config.whitelist)) Object.assign(whitelist, config.whiteList);
+			if (BDFDB.ObjectUtils.is(config.blacklist)) Object.assign(blacklist, config.blacklist);
 			var foundkeys = [];
 			var singlekey = getKey(instance);
 			if (config.all) return foundkeys;
 			else return singlekey;
 			function getKey(instance) {
 				depth++;
-				var result = null;
+				var result = undefined;
 				if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxdepth && performance.now() - start < maxtime) {
 					let keys = Object.getOwnPropertyNames(instance);
-					for (let i = 0; result == null && i < keys.length; i++) {
+					for (let i = 0; result === undefined && i < keys.length; i++) {
 						let key = keys[i];
 						if (key && !blacklist[key]) {
 							var value = instance[key];
@@ -3322,8 +3322,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 
 		var swatches = container.querySelector(`${BDFDB.dotCN.colorpickerswatches}[number="${number}"]`);
 		if (!swatches) return null;
-		var ins = BDFDB.ReactUtils.getInstance( container.querySelector(`${BDFDB.dotCN.colorpickerswatches}[number="${number}"]`));
-		if (ins) return BDFDB.ReactUtils.findValue(ins, "selectedColor", {up:true});
+		var ins = BDFDB.ReactUtils.getInstance(container.querySelector(`${BDFDB.dotCN.colorpickerswatches}[number="${number}"]`));
+		if (ins) return BDFDB.ReactUtils.findValue(ins, "selectedColor", {up:true, blacklist:{"props":true}});
 		else { // REMOVE ONCE REWRITTEN
 			var swatch = swatches.querySelector(`${BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchselected}`);
 			return swatch ? swatch.gradient || BDFDB.colorCONVERT(swatch.style.getPropertyValue("background-color"), "RGBCOMP") : null;
