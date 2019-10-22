@@ -1274,7 +1274,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 
 	BDFDB.ModuleUtils.unpatch = function (plugin, module, modulefunctions) {
 		if (!module && !modulefunctions) {
-			if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ArrayUtils.is(plugin.patchCancels)) for (let cancel of plugin.patchCancels) cancel();
+			if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ArrayUtils.is(plugin.patchCancels)) {
+				for (let cancel of plugin.patchCancels) cancel();
+				plugin.patchCancels = [];
+			}
 		}
 		else {
 			if (!BDFDB.ObjectUtils.is(module) || !module.BDFDBpatch) return;
