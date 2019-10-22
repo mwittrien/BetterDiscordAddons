@@ -402,7 +402,7 @@ class MessageUtilities {
 		if (!this.isEventFired(name)) {
 			this.fireEvent(name);
 			if (key == 27 && BDFDB.getData("clearOnEscape", this, "settings")) {
-				let instance = BDFDB.getOwnerInstance({"node":BDFDB.getParentEle(BDFDB.dotCNS.chat + "form", e.currentTarget), "name":"ChannelTextAreaForm", "up":true});
+				let instance = BDFDB.ReactUtils.findOwner(BDFDB.getParentEle(BDFDB.dotCNS.chat + "form", e.currentTarget), {name:"ChannelTextAreaForm", up:true});
 				if (instance) instance.setState({textValue:""});
 			}
 			this.cancelEvent(name);
@@ -426,7 +426,7 @@ class MessageUtilities {
 		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.messagegroup + "> [aria-disabled]", target) || BDFDB.getParentEle(BDFDB.dotCN.messagegroup + "> * > [aria-disabled]", target) || BDFDB.getParentEle(BDFDB.dotCN.messagesystem, target);
 		let pos = messagediv ? Array.from(messagediv.parentElement.childNodes).filter(n => n.nodeType != Node.TEXT_NODE).indexOf(messagediv) : -1;
 		let instance = BDFDB.ReactUtils.getInstance(messagediv);
-		let message = instance ? BDFDB.getKeyInformation({instance, key:"message", up:true}) : null;
+		let message = instance ? BDFDB.ReactUtils.findValue(, instance, "message", {up:true}) : null;
 		return {messagediv, pos, message};
 	}
 

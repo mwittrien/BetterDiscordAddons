@@ -30,7 +30,7 @@ class ShowHiddenChannels {
 						<svg class="${BDFDB.disCN.categoryicon}" width="24" height="24" viewBox="0 0 24 24">
 							<path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M16.59 8.59004L12 13.17L7.41 8.59004L6 10L12 16L18 10L16.59 8.59004Z"></path>
 						</svg>
-						<div class="${BDFDB.disCNS.categoryname + BDFDB.disCN.namecontainernamecontainer}">hidden</div>
+						<header class="${BDFDB.disCNS.categoryname + BDFDB.disCN.namecontainernamecontainer}">hidden</header>
 						<div class="${BDFDB.disCN.categorychildren}"></div>
 					</div>
 				</div>
@@ -257,7 +257,7 @@ class ShowHiddenChannels {
 			BDFDB.ListenerUtils.remove(this, channellist, "mouseenter", BDFDB.dotCNC.channelcontainerdefault + BDFDB.dotCN.categorycontainerdefault);
 			if (settings.showForNormal) BDFDB.ListenerUtils.add(this, channellist, "mouseenter", BDFDB.dotCNC.channelcontainerdefault + BDFDB.dotCN.categorycontainerdefault, e => {
 				if (!BDFDB.containsClass(e.currentTarget, "hidden-channel")) {
-					var channel = BDFDB.getKeyInformation({"node":e.currentTarget,"key":"channel"});
+					var channel = BDFDB.ReactUtils.findValue(e.currentTarget, "channel");
 					if (channel) this.showAccessRoles(guild, channel, e, true);
 				}
 			});

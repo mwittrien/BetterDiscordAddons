@@ -310,7 +310,7 @@ class ServerFolders {
 				data.muteFolder = muted;
 				BDFDB.saveData(folderid, data, this, "folders");
 			}
-			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, "GuildFolderMarkReadItem");
+			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:"GuildFolderMarkReadItem"});
 			const autoreaditem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuToggleItem, {
 				label: this.labels.foldercontext_autoreadfolder_text,
 				className: `BDFDB-contextMenuToggleItem ${this.name}-contextMenuToggleItem ${this.name}-autoread-contextMenuToggleItem`,
@@ -363,7 +363,7 @@ class ServerFolders {
 					this.addGuildToFolder(folders[i].folderId, guildid);
 				}
 			}));
-			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
+			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 			const addType = !addtofolderitems.length ? "contextMenuItem" : "contextMenuSubItem";
 			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,

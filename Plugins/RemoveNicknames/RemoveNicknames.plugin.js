@@ -136,7 +136,7 @@ class RemoveNicknames {
 		if (!wrapper || !instance.props || !instance.props.className) return;
 		if (instance.props.tag == "a" && instance.props.className.indexOf(BDFDB.disCN.anchorunderlineonhover) > -1) {
 			if (BDFDB.containsClass(wrapper.parentElement, BDFDB.disCN.messagesystemcontent) && wrapper.parentElement.querySelector("a") == wrapper) {
-				let message = BDFDB.getKeyInformation({node:wrapper.parentElement, key:"message", up:true});
+				let message = BDFDB.ReactUtils.findValue(wrapper.parentElement, "message", {up:true});
 				if (message) {
 					BDFDB.setInnerText(wrapper, this.getNewName(message.author, wrapper));
 					if (message.mentions.length == 1) {

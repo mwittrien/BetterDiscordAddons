@@ -194,7 +194,7 @@ class DisplayServersAsChannels {
 		var guildbuttoninner = div.querySelector(BDFDB.dotCN.guildbuttoninner);
 		if (guildbuttoninner) {
 			BDFDB.removeEles(guildbuttoninner.querySelectorAll(".DSAC-name"));
-			guildbuttoninner.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">${BDFDB.encodeToHTML(BDFDB.getKeyInformation({node:div, key:"text", up:true}) || "")}</div>`), guildbuttoninner.firstElementChild);
+			guildbuttoninner.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">${BDFDB.encodeToHTML(BDFDB.ReactUtils.findValue(div, "text", {up:true}) || "")}</div>`), guildbuttoninner.firstElementChild);
 		}
 		this.changeSVG(div);
 	}

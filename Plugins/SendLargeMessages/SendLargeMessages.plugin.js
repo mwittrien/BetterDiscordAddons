@@ -247,7 +247,7 @@ class SendLargeMessages {
 	sendMessage (text) {
 		let textarea = document.querySelector(BDFDB.dotCNS.textareawrapchat + "textarea");
 		if (textarea) {
-			let instance = BDFDB.getOwnerInstance({"node":BDFDB.getParentEle(BDFDB.dotCNS.chat + "form", textarea), "name":"ChannelTextAreaForm", "up":true});
+			let instance = BDFDB.ReactUtils.findOwner(BDFDB.getParentEle(BDFDB.dotCNS.chat + "form", textarea), {name:"ChannelTextAreaForm", up:true});
 			if (instance) {
 				instance.setState({textValue:text});
 				BDFDB.triggerSend(textarea);
@@ -256,7 +256,7 @@ class SendLargeMessages {
 	}
 
 	setLabelsByLanguage () {
-		switch (BDFDB.getDiscordLanguage().id) {
+		switch (BDFDB.LanguageUtils.getLanguage().id) {
 			case "hr":		//croatian
 				return {
 					toast_allsent_text:					"Sve veliku poslane.",

@@ -187,7 +187,7 @@ class EditUsers {
 	
 	onUserContextMenu (instance, menu, returnvalue) {
 		if (instance.props && instance.props.user && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
-			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
+			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 				children: [
@@ -650,7 +650,7 @@ class EditUsers {
 		if (!wrapper || !instance.props || !instance.props.className) return;
 		if (instance.props.tag == "a" && instance.props.className.indexOf(BDFDB.disCN.anchorunderlineonhover) > -1) {
 			if (BDFDB.containsClass(wrapper.parentElement, BDFDB.disCN.messagesystemcontent) && wrapper.parentElement.querySelector("a") == wrapper) {
-				let message = BDFDB.getKeyInformation({node:wrapper.parentElement, key:"message", up:true});
+				let message = BDFDB.ReactUtils.findValue(wrapper.parentElement, "message", {up:true});
 				if (message) {
 					this.changeName(message.author, wrapper);
 					if (message.mentions.length == 1) this.changeName(BDFDB.LibraryModules.UserStore.getUser(message.mentions[0]), wrapper.parentElement.querySelectorAll("a")[1]);

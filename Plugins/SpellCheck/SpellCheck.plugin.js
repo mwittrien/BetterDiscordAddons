@@ -141,9 +141,9 @@ class SpellCheck {
 
 	onNativeContextMenu (instance, menu, returnvalue) {
 		if (instance.props && instance.props.target && instance.props.target.tagName == "TEXTAREA" && !menu.querySelector(`${this.name}-contextMenuItem`)) {
-			let [SCparent, SCindex] = BDFDB.getContextMenuGroupAndIndex(returnvalue, ["NativeSpellcheckGroup", "FluxContainer(NativeSpellcheckGroup)"]);
+			let [SCparent, SCindex] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["NativeSpellcheckGroup", "FluxContainer(NativeSpellcheckGroup)"]});
 			if (SCindex > -1) {
-				if (BDFDB.getKeyInformation({instance:instance._reactInternalFiber, key:"spellcheckEnabled"}) == true) {
+				if (BDFDB.ReactUtils.findValue(instance._reactInternalFiber, "spellcheckEnabled") == true) {
 					clearTimeout(this.disableSpellcheckTimeout);
 					this.disableSpellcheckTimeout = setTimeout(() => {
 						BDFDB.LibraryModules.SpellCheckUtils.toggleSpellcheck();
@@ -168,7 +168,7 @@ class SpellCheck {
 				}
 			}
 			if (word && this.isWordNotInDictionary(word)) {
-				let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
+				let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 				let items = [];
 				let similarWords = this.getSimilarWords(word.toLowerCase().trim());
 				for (let suggestion of similarWords.sort()) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
@@ -410,7 +410,7 @@ class SpellCheck {
 	}
 
 	setLabelsByLanguage () {
-		switch (BDFDB.getDiscordLanguage().id) {
+		switch (BDFDB.LanguageUtils.getLanguage().id) {
 			case "hr":		//croatian
 				return {
 					context_spellcheck_text:				"Dodaj u rječnik",
