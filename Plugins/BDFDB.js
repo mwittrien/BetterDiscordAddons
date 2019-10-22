@@ -201,10 +201,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	};
 	BDFDB.PluginUtils.checkChangeLog = function (plugin) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !plugin.changelog) return;
-		var changelog = BDFDB.loadAllData(plugin, "changelog");
+		var changelog = BDFDB.DataUtils.load(plugin, "changelog");
 		if (!changelog.currentversion || BDFDB.checkVersions(plugin.version, changelog.currentversion)) {
 			changelog.currentversion = plugin.version;
-			BDFDB.saveAllData(changelog, plugin, "changelog");
+			BDFDB.DataUtils.save(changelog, plugin, "changelog");
 			BDFDB.PluginUtils.openChangeLog(plugin);
 		}
 	};
@@ -1179,14 +1179,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		};
 	};
 
-	var myDataUser = LibraryModules.CurrentUserStore && typeof LibraryModules.CurrentUserStore.getCurrentUser == "function" ? LibraryModules.CurrentUserStore.getCurrentUser() : null;
-	BDFDB.myData = new Proxy(myDataUser || {}, {
-		get: function (list, item) {
-			if (!myDataUser) myDataUser = LibraryModules.CurrentUserStore.getCurrentUser();
-			return myDataUser ? myDataUser[item] : null;
-		}
-	});
-
 	var webModulesPatchtypes = ["before", "instead", "after"];
 	var webModulesPatchmap = {
 		Account: "FluxContainer(Account)",
@@ -1271,7 +1263,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 		return cancel;
 	};
-
 	BDFDB.ModuleUtils.unpatch = function (plugin, module, modulefunctions) {
 		if (!module && !modulefunctions) {
 			if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ArrayUtils.is(plugin.patchCancels)) {
@@ -1303,7 +1294,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			}
 		}
 	};
-
 	BDFDB.ModuleUtils.forceAllUpdates = function (plugin, selectedtype) {
 		selectedtype = selectedtype && webModulesPatchmap[selectedtype] ? webModulesPatchmap[selectedtype] + " _ _ " + selectedtype : selectedtype;
 		if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ObjectUtils.is(plugin.patchModules) && (!selectedtype || plugin.patchModules[selectedtype])) {
@@ -1333,9 +1323,24 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	InternalBDFDB.forceInitiateProcess = function (plugin, instance, type) {
 		if (!plugin || !instance || !type) return;
 		var methodnames = BDFDB.ArrayUtils.is(plugin.patchModules[type]) ? plugin.patchModules[type] : Array.of(plugin.patchModules[type]);
-		if (methodnames.includes("componentDidMount")) BDFDB.ModuleUtils.initiateProcess(plugin, instance, null, type, ["componentDidMount"]);
+		if (methodnames.includes("componentDidMount")) InternalBDFDB.initiateProcess(plugin, instance, null, type, ["componentDidMount"]);
 		if (methodnames.includes("render")) instance.forceUpdate();
-		else if (methodnames.includes("componentDidUpdate")) BDFDB.ModuleUtils.initiateProcess(plugin, instance, null, type, ["componentDidUpdate"]);
+		else if (methodnames.includes("componentDidUpdate")) InternalBDFDB.initiateProcess(plugin, instance, null, type, ["componentDidUpdate"]);
+	};
+	InternalBDFDB.initiateProcess = function (plugin, instance, returnvalue, type, methodnames) {
+		if (BDFDB.ObjectUtils.is(plugin) && instance) {
+			if (plugin.name == "$BDFDB") plugin = BDFDBprocessFunctions;
+			type = (type.split(" _ _ ")[1] || type).replace(/[^A-z0-9]|_/g, "");
+			type = type[0].toUpperCase() + type.slice(1);
+			if (typeof plugin["process" + type] == "function") {
+				var wrapper = BDFDB.ReactUtils.findDOMNode(instance);
+				if (wrapper || methodnames.includes("render")) plugin["process" + type](instance, wrapper || document.createElement("div"), returnvalue, methodnames);
+				else setImmediate(_ => {
+					wrapper = BDFDB.ReactUtils.findDOMNode(instance);
+					if (wrapper) plugin["process" + type](instance, wrapper, returnvalue, methodnames);
+				});
+			}
+		}
 	};
 	InternalBDFDB.patchPlugin = function (plugin) {
 		if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ObjectUtils.is(plugin.patchModules)) {
@@ -1359,7 +1364,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 					if (instance) {
 						instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 						BDFDB.ModuleUtils.patch(plugin, instance.prototype, plugin.patchModules[type], {after: e => {
-							if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) BDFDB.ModuleUtils.initiateProcess(plugin, e.thisObject, e.returnValue, type, [e.originalMethodName]);
+							if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) InternalBDFDB.initiateProcess(plugin, e.thisObject, e.returnValue, type, [e.originalMethodName]);
 						}});
 					}
 				}
@@ -1404,22 +1409,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 				instance = instance.displayName == name || instance.name == name ? instance : BDFDB.ReactUtils.findOwner(instance, {name, up:true});
 				return instance && (name != "V2C_PluginCard" && name != "V2C_ThemeCard" || name == "V2C_PluginCard" && BDFDB.checkWhichRepoPage() == "plugins" || name == "V2C_ThemeCard" && BDFDB.checkWhichRepoPage() == "themes");
-			}
-		}
-	};
-
-	BDFDB.ModuleUtils.initiateProcess = function (plugin, instance, returnvalue, type, methodnames) {
-		if (BDFDB.ObjectUtils.is(plugin) && instance) {
-			if (plugin.name == "$BDFDB") plugin = BDFDBprocessFunctions;
-			type = (type.split(" _ _ ")[1] || type).replace(/[^A-z0-9]|_/g, "");
-			type = type[0].toUpperCase() + type.slice(1);
-			if (typeof plugin["process" + type] == "function") {
-				var wrapper = BDFDB.ReactUtils.findDOMNode(instance);
-				if (wrapper || methodnames.includes("render")) plugin["process" + type](instance, wrapper || document.createElement("div"), returnvalue, methodnames);
-				else setImmediate(_ => {
-					wrapper = BDFDB.ReactUtils.findDOMNode(instance);
-					if (wrapper) plugin["process" + type](instance, wrapper, returnvalue, methodnames);
-				});
 			}
 		}
 	};
@@ -1562,44 +1551,44 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 	};
 
-	BDFDB.getGuildIcon = function (id) {
-		var guild = LibraryModules.GuildStore.getGuild(typeof id == "number" ? id.toFixed() : id);
-		if (!guild || !guild.icon) return null;
-		return LibraryModules.IconUtils.getGuildIconURL(guild).split("?")[0];
+	BDFDB.getParsedLength = function (string, channelid = LibraryModules.LastChannelStore.getChannelId()) {
+		if (!string) return 0;
+		var channel = LibraryModules.ChannelStore.getChannel(channelid);
+		var length = (string.indexOf("/") == 0 || string.indexOf("s/") == 0 || string.indexOf("+:") == 0) ? string.length : LibraryModules.MessageCreationUtils.parse(channel, string).content.length;
+		return length > string.length ? length : string.length;
 	};
 
-	BDFDB.getGuildBanner = function (id) {
-		var guild = LibraryModules.GuildStore.getGuild(typeof id == "number" ? id.toFixed() : id);
-		if (!guild || !guild.banner) return null;
-		return LibraryModules.IconUtils.getGuildBannerURL(guild).split("?")[0];
-	};
-
-	BDFDB.getUserStatus = function (id = BDFDB.myData.id) {
+	BDFDB.UserUtils = {};
+	var myDataUser = LibraryModules.CurrentUserStore ? LibraryModules.CurrentUserStore.getCurrentUser() : null;
+	BDFDB.UserUtils.me = new Proxy(myDataUser || {}, {
+		get: function (list, item) {
+			if (!myDataUser) myDataUser = LibraryModules.CurrentUserStore.getCurrentUser();
+			return myDataUser ? myDataUser[item] : null;
+		}
+	});
+	BDFDB.UserUtils.getStatus = function (id = BDFDB.UserUtils.me.id) {
 		id = typeof id == "number" ? id.toFixed() : id;
 		return LibraryModules.StreamingUtils.isStreaming(LibraryModules.StatusMetaUtils.getApplicationActivity(id)) ? "streaming" : LibraryModules.StatusMetaUtils.getStatus(id);
 	};
-
-	BDFDB.getUserStatusColor = function (status) {
+	BDFDB.UserUtils.getStatusColor = function (status) {
 		status = typeof status == "string" ? status.toLowerCase() : null;
 		switch (status) {
-			case "online": return "#43b581";
-			case "mobile": return "#43b581";
-			case "idle": return "#faa61a";
-			case "dnd": return "#f04747";
-			case "playing": return "#7289da";
-			case "listening": return "#1db954";
-			case "streaming": return "#593695";
-			default: return "#747f8d";
+			case "online": return BDFDB.DiscordConstants.Colors.STATUS_GREEN;
+			case "mobile": return BDFDB.DiscordConstants.Colors.STATUS_GREEN;
+			case "idle": return BDFDB.DiscordConstants.Colors.STATUS_YELLOW;
+			case "dnd": return BDFDB.DiscordConstants.Colors.STATUS_RED;
+			case "playing": return BDFDB.DiscordConstants.Colors.BRAND;
+			case "listening": return BDFDB.DiscordConstants.Colors.SPOTIFY;
+			case "streaming": return BDFDB.DiscordConstants.Colors.TWITCH;
+			default: return BDFDB.DiscordConstants.Colors.STATUS_GREY;
 		}
 	};
-
-	BDFDB.getUserAvatar = function (id = BDFDB.myData.id) {
+	BDFDB.UserUtils.getAvatar = function (id = BDFDB.UserUtils.me.id) {
 		var user = LibraryModules.UserStore.getUser(typeof id == "number" ? id.toFixed() : id);
 		if (!user) return "https://discordapp.com/assets/322c936a8c8be1b803cd94861bdfa868.png";
 		else return ((user.avatar ? "" : "https://discordapp.com") + LibraryModules.IconUtils.getUserAvatarURL(user)).split("?")[0];
 	};
-
-	BDFDB.isUserAllowedTo = function (permission, id = BDFDB.myData.id, channelid = LibraryModules.LastChannelStore.getChannelId()) {
+	BDFDB.UserUtils.can = function (permission, id = BDFDB.UserUtils.me.id, channelid = LibraryModules.LastChannelStore.getChannelId()) {
 		if (!BDFDB.DiscordConstants.Permissions[permission]) console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", permission + " not found in Permissions");
 		else {
 			var channel = LibraryModules.ChannelStore.getChannel(channelid);
@@ -1608,66 +1597,18 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		return false;
 	};
 
-	BDFDB.getChannelIcon = function (id) {
-		var channel = LibraryModules.ChannelStore.getChannel(id = typeof id == "number" ? id.toFixed() : id);
-		if (!channel) return null;
-		if (!channel.icon) return channel.type == 1 ? BDFDB.getUserAvatar(channel.recipients[0]) : (channel.type == 3 ? "https://discordapp.com/assets/f046e2247d730629309457e902d5c5b3.svg" : null);
-		return LibraryModules.IconUtils.getChannelIconURL(channel).split("?")[0];
+	BDFDB.GuildUtils = {};
+	BDFDB.GuildUtils.getIcon = function (id) {
+		var guild = LibraryModules.GuildStore.getGuild(typeof id == "number" ? id.toFixed() : id);
+		if (!guild || !guild.icon) return null;
+		return LibraryModules.IconUtils.getGuildIconURL(guild).split("?")[0];
 	};
-
-	BDFDB.getParsedLength = function (string, channelid = LibraryModules.LastChannelStore.getChannelId()) {
-		if (!string) return 0;
-		var channel = LibraryModules.ChannelStore.getChannel(channelid);
-		var length = (string.indexOf("/") == 0 || string.indexOf("s/") == 0 || string.indexOf("+:") == 0) ? string.length : LibraryModules.MessageCreationUtils.parse(channel, string).content.length;
-		return length > string.length ? length : string.length;
+	BDFDB.GuildUtils.getBanner = function (id) {
+		var guild = LibraryModules.GuildStore.getGuild(typeof id == "number" ? id.toFixed() : id);
+		if (!guild || !guild.banner) return null;
+		return LibraryModules.IconUtils.getGuildBannerURL(guild).split("?")[0];
 	};
-
-	BDFDB.readServerList = function () {
-		var found = [], ins = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.guilds), {name:["Guild","GuildIcon"], all:true, noCopies:true, depth:99999999, time:99999999});
-		for (let info in ins) if (ins[info].props && ins[info].props.guild) found.push(Object.assign(new ins[info].props.guild.constructor(ins[info].props.guild), {div:ins[info].handleContextMenu ? BDFDB.ReactUtils.findDOMNode(ins[info]) : BDFDB.createServerDivCopy(ins[info].props.guild), instance:ins[info]}));
-		return found;
-	};
-
-	BDFDB.readUnreadServerList = function (servers) {
-		var found = [];
-		for (let eleOrInfoOrId of servers === undefined || !BDFDB.ArrayUtils.is(servers) ? BDFDB.readServerList() : servers) {
-			if (!eleOrInfoOrId) return null;
-			let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getServerID(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
-			id = typeof id == "number" ? id.toFixed() : id;
-			if (id && (LibraryModules.UnreadGuildUtils.hasUnread(id) || LibraryModules.MentionUtils.getMentionCount(id) > 0)) found.push(eleOrInfoOrId);
-		}
-		return found;
-	};
-
-	BDFDB.readPingedServerList = function (servers) {
-		var found = [];
-		for (let eleOrInfoOrId of servers === undefined || !BDFDB.ArrayUtils.is(servers) ? BDFDB.readServerList() : servers) {
-			if (!eleOrInfoOrId) return null;
-			let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getServerID(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
-			id = typeof id == "number" ? id.toFixed() : id;
-			if (id && LibraryModules.MentionUtils.getMentionCount(id) > 0) found.push(eleOrInfoOrId);
-		}
-		return found;
-	};
-
-	BDFDB.readMutedServerList = function (servers) {
-		var found = [];
-		for (let eleOrInfoOrId of servers === undefined || !BDFDB.ArrayUtils.is(servers) ? BDFDB.readServerList() : servers) {
-			if (!eleOrInfoOrId) return null;
-			let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getServerID(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
-			id = typeof id == "number" ? id.toFixed() : id;
-			if (id && LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(id)) found.push(eleOrInfoOrId);
-		}
-		return found;
-	};
-
-	BDFDB.getSelectedServer = function () {
-		var info = LibraryModules.GuildStore.getGuild(LibraryModules.LastGuildStore.getGuildId());
-		if (info) return BDFDB.getServerData(info.id) || Object.assign(new info.constructor(info), {div:null, instance:null});
-		else return null;
-	};
-
-	BDFDB.getServerID = function (div) {
+	BDFDB.GuildUtils.getId = function (div) {
 		if (!Node.prototype.isPrototypeOf(div) || !BDFDB.ReactUtils.getInstance(div)) return;
 		let guilddiv = BDFDB.getParentEle(BDFDB.dotCN.guildouter, div);
 		if (!guilddiv) return;
@@ -1675,32 +1616,69 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		var id = iconwrap && iconwrap.href ? iconwrap.href.split("/").slice(-2)[0] : null;
 		return id && !isNaN(parseInt(id)) ? id.toString() : null;
 	};
-
-	BDFDB.getServerDiv = function (eleOrInfoOrId) {
+	BDFDB.GuildUtils.getDiv = function (eleOrInfoOrId) {
 		if (!eleOrInfoOrId) return null;
 		if (Node.prototype.isPrototypeOf(eleOrInfoOrId)) return BDFDB.getParentEle(BDFDB.dotCN.guildouter, eleOrInfoOrId);
 		else {
 			let id = typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
-			if (id) return BDFDB.getParentEle(BDFDB.dotCN.guildouter, document.querySelector(`${BDFDB.dotCNS.guilds + BDFDB.dotCN.guildiconwrapper}[href*="/channels/${id}"]`)) || BDFDB.createServerDivCopy(id, {pill: true, hover: true, click: true, menu: true});
+			if (id) return BDFDB.getParentEle(BDFDB.dotCN.guildouter, document.querySelector(`${BDFDB.dotCNS.guilds + BDFDB.dotCN.guildiconwrapper}[href*="/channels/${id}"]`)) || BDFDB.GuildUtils.createCopy(id, {pill: true, hover: true, click: true, menu: true});
 		}
 		return null;
 	};
-
-	BDFDB.getServerData = function (eleOrInfoOrId) {
+	BDFDB.GuildUtils.getData = function (eleOrInfoOrId) {
 		if (!eleOrInfoOrId) return null;
-		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getServerID(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
+		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
 		id = typeof id == "number" ? id.toFixed() : id;
-		for (let info of BDFDB.readServerList()) if (info && info.id == id) return info;
+		for (let info of BDFDB.GuildUtils.getAll()) if (info && info.id == id) return info;
 		return null;
 	};
-
-	BDFDB.createServerDivCopy = function (infoOrId, functionality = {pill:false, hover:false, click:false, menu:false, size:null}) {
+	BDFDB.GuildUtils.getAll = function () {
+		var found = [], ins = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.guilds), {name:["Guild","GuildIcon"], all:true, noCopies:true, depth:99999999, time:99999999});
+		for (let info in ins) if (ins[info].props && ins[info].props.guild) found.push(Object.assign(new ins[info].props.guild.constructor(ins[info].props.guild), {div:ins[info].handleContextMenu ? BDFDB.ReactUtils.findDOMNode(ins[info]) : BDFDB.GuildUtils.createCopy(ins[info].props.guild), instance:ins[info]}));
+		return found;
+	};
+	BDFDB.GuildUtils.getUnread = function (servers) {
+		var found = [];
+		for (let eleOrInfoOrId of servers === undefined || !BDFDB.ArrayUtils.is(servers) ? BDFDB.GuildUtils.getAll() : servers) {
+			if (!eleOrInfoOrId) return null;
+			let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
+			id = typeof id == "number" ? id.toFixed() : id;
+			if (id && (LibraryModules.UnreadGuildUtils.hasUnread(id) || LibraryModules.MentionUtils.getMentionCount(id) > 0)) found.push(eleOrInfoOrId);
+		}
+		return found;
+	};
+	BDFDB.GuildUtils.getPinged = function (servers) {
+		var found = [];
+		for (let eleOrInfoOrId of servers === undefined || !BDFDB.ArrayUtils.is(servers) ? BDFDB.GuildUtils.getAll() : servers) {
+			if (!eleOrInfoOrId) return null;
+			let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
+			id = typeof id == "number" ? id.toFixed() : id;
+			if (id && LibraryModules.MentionUtils.getMentionCount(id) > 0) found.push(eleOrInfoOrId);
+		}
+		return found;
+	};
+	BDFDB.GuildUtils.getMuted = function (servers) {
+		var found = [];
+		for (let eleOrInfoOrId of servers === undefined || !BDFDB.ArrayUtils.is(servers) ? BDFDB.GuildUtils.getAll() : servers) {
+			if (!eleOrInfoOrId) return null;
+			let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
+			id = typeof id == "number" ? id.toFixed() : id;
+			if (id && LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(id)) found.push(eleOrInfoOrId);
+		}
+		return found;
+	};
+	BDFDB.GuildUtils.getSelected = function () {
+		var info = LibraryModules.GuildStore.getGuild(LibraryModules.LastGuildStore.getGuildId());
+		if (info) return BDFDB.GuildUtils.getData(info.id) || Object.assign(new info.constructor(info), {div:null, instance:null});
+		else return null;
+	};
+	BDFDB.GuildUtils.createCopy = function (infoOrId, functionality = {pill:false, hover:false, click:false, menu:false, size:null}) {
 		let id = typeof infoOrId == "object" ? infoOrId.id : infoOrId;
 		let guild = id ? LibraryModules.GuildStore.getGuild(id) : null;
 		if (guild) {
 			let selected = LibraryModules.LastGuildStore.getGuildId() == guild.id;
 			let unread = LibraryModules.UnreadGuildUtils.hasUnread(guild.id);
-			let div = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.guildouter + BDFDB.disCN._bdguild}"><div class="${BDFDB.disCNS.guildpill + BDFDB.disCN.guildpillwrapper}"><span class="${BDFDB.disCN.guildpillitem}" style="opacity: 0; height: 8px; transform: translate3d(0px, 0px, 0px);"></span></div><div class="${BDFDB.disCN.guildcontainer}" draggable="false" style="border-radius: 50%; overflow: hidden;"><div class="${BDFDB.disCN.guildinner}"><svg width="48" height="48" viewBox="0 0 48 48" class="${BDFDB.disCN.guildsvg}"><mask id="" fill="black" x="0" y="0" width="48" height="48"><path d="M48 24C48 37.2548 37.2548 48 24 48C10.7452 48 0 37.2548 0 24C0 10.7452 10.7452 0 24 0C37.2548 0 48 10.7452 48 24Z" fill="white"></path><rect x="28" y="-4" width="24" height="24" rx="12" ry="12" transform="translate(20 -20)" fill="black"></rect><rect x="28" y="28" width="24" height="24" rx="12" ry="12" transform="translate(20 20)" fill="black"></rect></mask><foreignObject mask="" x="0" y="0" width="48" height="48"><a class="${BDFDB.disCN.guildiconwrapper} ${selected ? (" " + BDFDB.disCN.guildiconselected) : ""}" aria-label="${guild.name}"${functionality.click ? ` href="channels/${guild.id}/${LibraryModules.LastChannelStore.getChannelId(guild.id)}"` : ``} draggable="false">${guild.icon ? `<img class="${BDFDB.disCN.guildicon}" src="${BDFDB.getGuildIcon(guild.id)}?size=128" alt="" width="48" height="48" draggable="false" aria-hidden="true"></img>` : `<div class="${BDFDB.disCNS.guildiconchildwrapper + BDFDB.disCN.guildiconacronym}" aria-hidden="true" style="font-size: ${guild.acronym.length > 5 ? 10 : (guild.acronym.length > 4 ? 12 : (guild.acronym.length > 3 ? 14 : (guild.acronym.length > 1 ? 16 : 18)))}px;">${guild.acronym}</div>`}</a></foreignObject></svg></div></div><div class="${BDFDB.disCN.guildedgewrapper}" aria-hidden="true"><span class="${BDFDB.disCN.guildedge}"></span><span class="${BDFDB.disCN.guildedgemiddle}"></span><span class="${BDFDB.disCN.guildedge}"></span></div></div>`);
+			let div = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.guildouter + BDFDB.disCN._bdguild}"><div class="${BDFDB.disCNS.guildpill + BDFDB.disCN.guildpillwrapper}"><span class="${BDFDB.disCN.guildpillitem}" style="opacity: 0; height: 8px; transform: translate3d(0px, 0px, 0px);"></span></div><div class="${BDFDB.disCN.guildcontainer}" draggable="false" style="border-radius: 50%; overflow: hidden;"><div class="${BDFDB.disCN.guildinner}"><svg width="48" height="48" viewBox="0 0 48 48" class="${BDFDB.disCN.guildsvg}"><mask id="" fill="black" x="0" y="0" width="48" height="48"><path d="M48 24C48 37.2548 37.2548 48 24 48C10.7452 48 0 37.2548 0 24C0 10.7452 10.7452 0 24 0C37.2548 0 48 10.7452 48 24Z" fill="white"></path><rect x="28" y="-4" width="24" height="24" rx="12" ry="12" transform="translate(20 -20)" fill="black"></rect><rect x="28" y="28" width="24" height="24" rx="12" ry="12" transform="translate(20 20)" fill="black"></rect></mask><foreignObject mask="" x="0" y="0" width="48" height="48"><a class="${BDFDB.disCN.guildiconwrapper} ${selected ? (" " + BDFDB.disCN.guildiconselected) : ""}" aria-label="${guild.name}"${functionality.click ? ` href="channels/${guild.id}/${LibraryModules.LastChannelStore.getChannelId(guild.id)}"` : ``} draggable="false">${guild.icon ? `<img class="${BDFDB.disCN.guildicon}" src="${BDFDB.GuildUtils.getIcon(guild.id)}?size=128" alt="" width="48" height="48" draggable="false" aria-hidden="true"></img>` : `<div class="${BDFDB.disCNS.guildiconchildwrapper + BDFDB.disCN.guildiconacronym}" aria-hidden="true" style="font-size: ${guild.acronym.length > 5 ? 10 : (guild.acronym.length > 4 ? 12 : (guild.acronym.length > 3 ? 14 : (guild.acronym.length > 1 ? 16 : 18)))}px;">${guild.acronym}</div>`}</a></foreignObject></svg></div></div><div class="${BDFDB.disCN.guildedgewrapper}" aria-hidden="true"><span class="${BDFDB.disCN.guildedge}"></span><span class="${BDFDB.disCN.guildedgemiddle}"></span><span class="${BDFDB.disCN.guildedge}"></span></div></div>`);
 			let divinner = div.querySelector(BDFDB.dotCN.guildcontainer);
 			let divpillitem = div.querySelector(BDFDB.dotCN.guildpillitem);
 			
@@ -1770,7 +1748,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			});
 			
 			if (functionality.menu) divinner.addEventListener("contextmenu", e => {
-				BDFDB.openGuildContextMenu(guild.id, e);
+				BDFDB.GuildUtils.openMenu(guild.id, e);
 				if (typeof functionality.menu == "function") functionality.menu();
 			});
 			
@@ -1784,9 +1762,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 		else return null;
 	};
-
-	BDFDB.openGuildContextMenu = function (eleOrInfoOrId, e = BDFDB.mousePosition) {
-		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getServerID(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
+	BDFDB.GuildUtils.openMenu = function (eleOrInfoOrId, e = BDFDB.mousePosition) {
+		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
 		let guild = LibraryModules.GuildStore.getGuild(id);
 		if (guild) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
 			return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("GuildContextMenu"), Object.assign({}, e, {
@@ -1798,8 +1775,37 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			}));
 		});
 	};
+	BDFDB.GuildUtils.markAsRead = function (guilds) {
+		if (!guilds) return;
+		var unreadchannels = [];
+		for (let guild of BDFDB.ArrayUtils.is(guilds) ? guilds : (typeof guilds == "string" || typeof guilds == "number" ? Array.of(guilds) : Array.from(guilds))) {
+			let id = Node.prototype.isPrototypeOf(guild) ? BDFDB.GuildUtils.getId(guild) : guild && typeof guild == "object" ? guild.id : guild;
+			let channels = id ? LibraryModules.GuildChannelStore.getChannels(id) : null;
+			if (channels) for (let type in channels) if (BDFDB.ArrayUtils.is(channels[type])) for (let channelobj of channels[type]) unreadchannels.push(channelobj.channel.id);
+		}
+		if (unreadchannels.length) LibraryModules.AckUtils.bulkAck(unreadchannels);
+	};
 
-	BDFDB.readFolderList = function () {
+	BDFDB.FolderUtils = {};
+	BDFDB.FolderUtils.getId = function (div) {
+		if (!Node.prototype.isPrototypeOf(div) || !BDFDB.ReactUtils.getInstance(div)) return;
+		div = BDFDB.getParentEle(BDFDB.dotCN.guildfolderwrapper, div);
+		if (!div) return;
+		return BDFDB.ReactUtils.findValue(div, "folderId", {up:true});
+	};
+	BDFDB.FolderUtils.getDiv = function (eleOrInfoOrId) {
+		if (!eleOrInfoOrId) return null;
+		let info = BDFDB.getFolderData(eleOrInfoOrId);
+		return info ? info.div : null;
+	};
+	BDFDB.FolderUtils.getData = function (eleOrInfoOrId) {
+		if (!eleOrInfoOrId) return null;
+		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.FolderUtils.getId(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
+		id = typeof id == "number" ? id.toFixed() : id;
+		for (let info of BDFDB.FolderUtils.getAll()) if (info && info.folderId == id) return info;
+		return null;
+	};
+	BDFDB.FolderUtils.getAll = function () {
 		var found = [], ins = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.guildswrapper), {name:"GuildFolder", all:true, noCopies:true, depth:99999999, time:99999999});
 		for (let info in ins) if (ins[info].props && ins[info].props.folderId) {
 			found.push(Object.assign({}, ins[info].props, {div:BDFDB.ReactUtils.findDOMNode(ins[info]), instance:ins[info]}));
@@ -1807,28 +1813,33 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		return found;
 	};
 
-	BDFDB.getFolderID = function (div) {
-		if (!Node.prototype.isPrototypeOf(div) || !BDFDB.ReactUtils.getInstance(div)) return;
-		div = BDFDB.getParentEle(BDFDB.dotCN.guildfolderwrapper, div);
-		if (!div) return;
-		return BDFDB.ReactUtils.getValue(div, "return.stateNode.props.folderId");
+	BDFDB.ChannelUtils = {};
+	BDFDB.ChannelUtils.getIcon = function (id) {
+		var channel = LibraryModules.ChannelStore.getChannel(id = typeof id == "number" ? id.toFixed() : id);
+		if (!channel) return null;
+		if (!channel.icon) return channel.type == 1 ? BDFDB.UserUtils.getAvatar(channel.recipients[0]) : (channel.type == 3 ? "https://discordapp.com/assets/f046e2247d730629309457e902d5c5b3.svg" : null);
+		return LibraryModules.IconUtils.getChannelIconURL(channel).split("?")[0];
 	};
-
-	BDFDB.getFolderDiv = function (eleOrInfoOrId) {
+	BDFDB.ChannelUtils.getId = function (div) {
+		if (!Node.prototype.isPrototypeOf(div) || !BDFDB.ReactUtils.getInstance(div)) return;
+		div = BDFDB.getParentEle(BDFDB.dotCNC.categorycontainerdefault + BDFDB.dotCNC.channelcontainerdefault + BDFDB.dotCN.dmchannel, div);
+		if (!div) return;
+		var info = BDFDB.ReactUtils.findValue(div, "channel");
+		return info ? info.id.toString() : null;
+	};
+	BDFDB.ChannelUtils.getDiv = function (eleOrInfoOrId) {
 		if (!eleOrInfoOrId) return null;
-		let info = BDFDB.getFolderData(eleOrInfoOrId);
+		let info = BDFDB.ChannelUtils.getData(eleOrInfoOrId);
 		return info ? info.div : null;
 	};
-
-	BDFDB.getFolderData = function (eleOrInfoOrId) {
+	BDFDB.ChannelUtils.getData = function (eleOrInfoOrId) {
 		if (!eleOrInfoOrId) return null;
-		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getChannelID(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
+		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.ChannelUtils.getId(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
 		id = typeof id == "number" ? id.toFixed() : id;
-		for (let info of BDFDB.readFolderList()) if (info && info.folderId == id) return info;
+		for (let info of BDFDB.ChannelUtils.getAll()) if (info && info.id == id) return info;
 		return null;
 	};
-
-	BDFDB.readChannelList = function () {
+	BDFDB.ChannelUtils.getAll = function () {
 		var found = [], ins = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.channels), {name: ["ChannelCategoryItem", "ChannelItem", "PrivateChannel"], all:true, noCopies:true, depth:99999999, time:99999999});
 		for (let info in ins) if (ins[info].props && !ins[info].props.ispin && ins[info].props.channel && ins[info]._reactInternalFiber.return) {
 			var div = BDFDB.ReactUtils.findDOMNode(ins[info]);
@@ -1837,37 +1848,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 		return found;
 	};
-
-	BDFDB.getSelectedChannel = function () {
+	BDFDB.ChannelUtils.getSelected = function () {
 		var info = LibraryModules.ChannelStore.getChannel(LibraryModules.LastChannelStore.getChannelId());
-		if (info) return BDFDB.getChannelData(info.id) || Object.assign(new info.constructor(info), {div:null, instance:null});
+		if (info) return BDFDB.ChannelUtils.getData(info.id) || Object.assign(new info.constructor(info), {div:null, instance:null});
 		else return null;
 	};
-
-	BDFDB.getChannelID = function (div) {
-		if (!Node.prototype.isPrototypeOf(div) || !BDFDB.ReactUtils.getInstance(div)) return;
-		div = BDFDB.getParentEle(BDFDB.dotCNC.categorycontainerdefault + BDFDB.dotCNC.channelcontainerdefault + BDFDB.dotCN.dmchannel, div);
-		if (!div) return;
-		var info = BDFDB.ReactUtils.findValue(div, "channel");
-		return info ? info.id.toString() : null;
-	};
-
-	BDFDB.getChannelDiv = function (eleOrInfoOrId) {
-		if (!eleOrInfoOrId) return null;
-		let info = BDFDB.getChannelData(eleOrInfoOrId);
-		return info ? info.div : null;
-	};
-
-	BDFDB.getChannelData = function (eleOrInfoOrId) {
-		if (!eleOrInfoOrId) return null;
-		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getChannelID(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
-		id = typeof id == "number" ? id.toFixed() : id;
-		for (let info of BDFDB.readChannelList()) if (info && info.id == id) return info;
-		return null;
-	};
-
-	BDFDB.openChannelContextMenu = function (eleOrInfoOrId, e = BDFDB.mousePosition) {
-		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getChannelID(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
+	BDFDB.ChannelUtils.openMenu = function (eleOrInfoOrId, e = BDFDB.mousePosition) {
+		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.ChannelUtils.getId(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
 		let channel = LibraryModules.ChannelStore.getChannel(id);
 		if (channel) {
 			let type = null;
@@ -1885,14 +1872,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			});
 		}
 	};
-
-	BDFDB.readDmList = function () {
-		var found = [], ins = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.guilds), {name:"DirectMessage", all:true, noCopies:true, depth:99999999, time:99999999});
-		for (let info in ins) if (ins[info].props && ins[info].props.channel && ins[info]._reactInternalFiber.child) found.push(Object.assign(new ins[info].props.channel.constructor(ins[info].props.channel), {div:BDFDB.ReactUtils.findDOMNode(ins[info]), instance:ins[info]}));
-		return found;
-	};
-
-	BDFDB.getDmID = function (div) {
+	
+	BDFDB.DmUtils = {};
+	BDFDB.DmUtils.getId = function (div) {
 		if (!Node.prototype.isPrototypeOf(div) || !BDFDB.ReactUtils.getInstance(div)) return;
 		let dmdiv = BDFDB.getParentEle(BDFDB.dotCN.guildouter, div);
 		if (!dmdiv) return;
@@ -1900,8 +1882,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		var id = iconwrap && iconwrap.href ? iconwrap.href.split("/").slice(-1)[0] : null;
 		return id && !isNaN(parseInt(id)) ? id.toString() : null;
 	};
-
-	BDFDB.getDmDiv = function (eleOrInfoOrId) {
+	BDFDB.DmUtils.getDiv = function (eleOrInfoOrId) {
 		if (!eleOrInfoOrId) return null;
 		if (Node.prototype.isPrototypeOf(eleOrInfoOrId)) {
 			var div = BDFDB.getParentEle(BDFDB.dotCN.guildouter, eleOrInfoOrId);
@@ -1916,37 +1897,30 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 		return null;
 	};
-
-	BDFDB.getDmData = function (eleOrInfoOrId) {
+	BDFDB.DmUtils.getData = function (eleOrInfoOrId) {
 		if (!eleOrInfoOrId) return null;
 		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getDmID(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
 		id = typeof id == "number" ? id.toFixed() : id;
-		for (let info of BDFDB.readDmList()) if (info && info.id == id) return info;
+		for (let info of BDFDB.DmUtils.getAll()) if (info && info.id == id) return info;
 		return null;
 	};
-
-	BDFDB.markChannelAsRead = function (channels) {
+	BDFDB.DmUtils.getAll = function () {
+		var found = [], ins = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.guilds), {name:"DirectMessage", all:true, noCopies:true, depth:99999999, time:99999999});
+		for (let info in ins) if (ins[info].props && ins[info].props.channel && ins[info]._reactInternalFiber.child) found.push(Object.assign(new ins[info].props.channel.constructor(ins[info].props.channel), {div:BDFDB.ReactUtils.findDOMNode(ins[info]), instance:ins[info]}));
+		return found;
+	};
+	BDFDB.DmUtils.markAsRead = BDFDB.ChannelUtils.markAsRead = function (channels) {
 		if (!channels) return;
 		var unreadchannels = [];
 		for (let cha of channels = BDFDB.ArrayUtils.is(channels) ? channels : (typeof channels == "string" || typeof channels == "number" ? Array.of(channels) : Array.from(channels))) {
-			let id = Node.prototype.isPrototypeOf(cha) ? (BDFDB.getChannelID(cha) || BDFDB.getDmID(cha)) : cha && typeof cha == "object" ? cha.id : cha;
+			let id = Node.prototype.isPrototypeOf(cha) ? (BDFDB.ChannelUtils.getId(cha) || BDFDB.getDmID(cha)) : cha && typeof cha == "object" ? cha.id : cha;
 			if (id) unreadchannels.push(id);
 		}
 		if (unreadchannels.length) LibraryModules.AckUtils.bulkAck(unreadchannels);
 	};
 
-	BDFDB.markGuildAsRead = function (servers) {
-		if (!servers) return;
-		var unreadchannels = [];
-		for (let server of BDFDB.ArrayUtils.is(servers) ? servers : (typeof servers == "string" || typeof servers == "number" ? Array.of(servers) : Array.from(servers))) {
-			let id = Node.prototype.isPrototypeOf(server) ? BDFDB.getServerID(server) : server && typeof server == "object" ? server.id : server;
-			let channels = id ? LibraryModules.GuildChannelStore.getChannels(id) : null;
-			if (channels) for (let type in channels) if (BDFDB.ArrayUtils.is(channels[type])) for (let channelobj of channels[type]) unreadchannels.push(channelobj.channel.id);
-		}
-		if (unreadchannels.length) LibraryModules.AckUtils.bulkAck(unreadchannels);
-	};
-
-	BDFDB.saveAllData = function (data, plugin, key) {
+	BDFDB.DataUtils = {};
+	BDFDB.DataUtils.save = function (data, plugin, key, id) {
 		var configpath, pluginname;
 		if (!BDFDB.BdUtils.isBDv2()) {
 			pluginname = typeof plugin === "string" ? plugin : plugin.name;
@@ -1958,9 +1932,16 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			if (!contentpath) return;
 			configpath = LibraryRequires.path.join(contentpath, "settings.json");
 		}
+		
 		var exists = LibraryRequires.fs.existsSync(configpath);
-		var config = !exists ? {} : typeof BDFDB.cachedData[pluginname] !== "undefined" ? BDFDB.cachedData[pluginname] : BDFDB.readConfig(configpath);
-		config[key] = BDFDB.ObjectUtils.is(data) ? BDFDB.ObjectUtils.sort(data) : data;
+		var config = !exists ? {} : typeof BDFDB.cachedData[pluginname] !== "undefined" ? BDFDB.cachedData[pluginname] : InternalBDFDB.readConfig(configpath);
+		
+		if (id === undefined) config[key] = BDFDB.ObjectUtils.is(data) ? BDFDB.ObjectUtils.sort(data) : data;
+		else {
+			if (!BDFDB.ObjectUtils.is(config[key])) config[key] = {};
+			config[key][id] = BDFDB.ObjectUtils.is(data) ? BDFDB.ObjectUtils.sort(data) : data;
+		}
+		
 		if (BDFDB.ObjectUtils.isEmpty(config[key])) delete config[key];
 		if (BDFDB.ObjectUtils.isEmpty(config)) {
 			delete BDFDB.cachedData[pluginname];
@@ -1973,7 +1954,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 	};
 
-	BDFDB.loadAllData = function (plugin, key) {
+	BDFDB.DataUtils.load = function (plugin, key, id) {
 		var configpath, pluginname;
 		if (!BDFDB.BdUtils.isBDv2()) {
 			pluginname = typeof plugin === "string" ? plugin : plugin.name;
@@ -1985,16 +1966,19 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			if (!contentpath) return {};
 			configpath = LibraryRequires.path.join(contentpath, "settings.json");
 		}
+		
 		if (!LibraryRequires.fs.existsSync(configpath)) {
 			delete BDFDB.cachedData[pluginname];
 			return {};
 		}
-		var config = typeof BDFDB.cachedData[pluginname] !== "undefined" && typeof BDFDB.cachedData[pluginname][key] !== "undefined" ? BDFDB.cachedData[pluginname] : BDFDB.readConfig(configpath);
+		var config = typeof BDFDB.cachedData[pluginname] !== "undefined" && typeof BDFDB.cachedData[pluginname][key] !== "undefined" ? BDFDB.cachedData[pluginname] : InternalBDFDB.readConfig(configpath);
 		BDFDB.cachedData[pluginname] = BDFDB.ObjectUtils.deepAssign({}, config);
-		return BDFDB.ObjectUtils.deepAssign({}, config && typeof config[key] !== "undefined" ? config[key] : {});
+		
+		let keydata = BDFDB.ObjectUtils.deepAssign({}, config && typeof config[key] !== "undefined" ? config[key] : {});
+		if (id === undefined) return keydata;
+		else return keydata[id] === undefined ? null : keydata[id];
 	};
-
-	BDFDB.removeAllData = function (plugin, key) {
+	BDFDB.DataUtils.remove = function (plugin, key, id) {
 		var configpath, pluginname;
 		if (!BDFDB.BdUtils.isBDv2()) {
 			pluginname = typeof plugin === "string" ? plugin : plugin.name;
@@ -2006,23 +1990,29 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			if (!contentpath) return;
 			configpath = LibraryRequires.path.join(contentpath, "settings.json");
 		}
+		
 		var exists = LibraryRequires.fs.existsSync(configpath);
-		var config = !exists ? {} : typeof BDFDB.cachedData[pluginname] !== "undefined" ? BDFDB.cachedData[pluginname] : BDFDB.readConfig(configpath);
-		delete config[key];
+		var config = !exists ? {} : typeof BDFDB.cachedData[pluginname] !== "undefined" ? BDFDB.cachedData[pluginname] : InternalBDFDB.readConfig(configpath);
+		
+		if (id === undefined) delete config[key];
+		else if (BDFDB.ObjectUtils.is(config[key])) delete config[key][id];
+		else console.error(`%c[${pluginname}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not remove data! [key: " + key + " | id: " + id + "]");
+		
+		if (BDFDB.ObjectUtils.isEmpty(config[key])) delete config[key];
 		if (BDFDB.ObjectUtils.isEmpty(config)) {
 			delete BDFDB.cachedData[pluginname];
 			if (exists) LibraryRequires.fs.unlinkSync(configpath);
 		}
 		else {
+			config = BDFDB.ObjectUtils.sort(config);
 			BDFDB.cachedData[pluginname] = config;
 			LibraryRequires.fs.writeFileSync(configpath, JSON.stringify(config, null, "	"));
 		}
 	};
-
-	BDFDB.getAllData = function (plugin, key) {
-		plugin = typeof plugin == "string" && BDFDB.ObjectUtils.is(window.BdApi) ? window.BdApi.getPlugin(plugin) : plugin;
+	BDFDB.DataUtils.get = function (plugin, key, id) {
+		plugin = typeof plugin == "string" ? BDFDB.BdUtils.getPlugin(plugin) : plugin;
 		if (!BDFDB.ObjectUtils.is(plugin) || !plugin.defaults || !plugin.defaults[key]) return {};
-		var oldconfig = BDFDB.loadAllData(plugin, key), newconfig = {}, update = false;
+		var oldconfig = BDFDB.DataUtils.load(plugin, key), newconfig = {}, update = false;
 		for (let k in plugin.defaults[key]) {
 			if (oldconfig[k] == null) {
 				newconfig[k] = BDFDB.ObjectUtils.is(plugin.defaults[key][k].value) ? BDFDB.ObjectUtils.deepAssign({}, plugin.defaults[key][k].value) : plugin.defaults[key][k].value;
@@ -2030,37 +2020,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			}
 			else newconfig[k] = oldconfig[k];
 		}
-		if (update) BDFDB.saveAllData(newconfig, plugin, key);
-		return newconfig;
+		if (update) BDFDB.DataUtils.save(newconfig, plugin, key);
+		
+		if (id === undefined) return newconfig;
+		else return newconfig[id] === undefined ? null : newconfig[id];
 	};
-
-	BDFDB.readConfig = function (path) {
+	InternalBDFDB.readConfig = function (path) {
 		try {return JSON.parse(LibraryRequires.fs.readFileSync(path));}
 		catch (err) {return {};}
-	};
-
-	BDFDB.saveData = function (id, data, plugin, key) {
-		var config = BDFDB.loadAllData(plugin, key);
-		config[id] = BDFDB.ObjectUtils.is(data) ? BDFDB.ObjectUtils.sort(data) : data;
-		BDFDB.saveAllData(config, plugin, key);
-	};
-
-	BDFDB.loadData = function (id, plugin, key) {
-		var config = BDFDB.loadAllData(plugin, key);
-		var data = config[id];
-		return data === undefined ? null : data;
-	};
-
-	BDFDB.removeData = function (id, plugin, key) {
-		var config = BDFDB.loadAllData(plugin, key);
-		delete config[id];
-		BDFDB.saveAllData(config, plugin, key);
-	};
-
-	BDFDB.getData = function (id, plugin, key) {
-		var config = BDFDB.getAllData(plugin, key);
-		var data = config[id];
-		return data === undefined ? null : data;
 	};
 
 	BDFDB.appendWebScript = function (path, container) {
@@ -2703,7 +2670,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 					var min = parseInt(ele.getAttribute("min"));
 					var max = parseInt(ele.getAttribute("max"));
 					if (option && !isNaN(newv) && (isNaN(min) || !isNaN(min) && newv >= min) && (isNaN(max) || !isNaN(max) && newv <= max)) {
-						BDFDB.saveData(option, newv, plugin, "amounts");
+						BDFDB.DataUtils.save(newv, plugin, "amounts", option);
 						plugin.SettingsUpdated = true;
 					}
 				}
@@ -2868,14 +2835,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				let keys = switchitem.getAttribute("value").trim().split(" ").filter(n => n);
 				let option = keys.shift();
 				if (option) {
-					var data = BDFDB.loadAllData(plugin, option);
+					var data = BDFDB.DataUtils.load(plugin, option);
 					var newdata = "";
 					for (let key of keys) newdata += `{"${key}":`;
 					newdata += checked + "}".repeat(keys.length);
 					newdata = JSON.parse(newdata);
 					if (BDFDB.ObjectUtils.is(newdata)) BDFDB.ObjectUtils.deepAssign(data, newdata);
 					else data = newdata;
-					BDFDB.saveAllData(data, plugin, option);
+					BDFDB.DataUtils.save(data, plugin, option);
 					plugin.SettingsUpdated = true;
 				}
 			}
@@ -3217,20 +3184,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			{contents: BDFDB.LanguageUtils.LanguageStrings.OKAY, close:true, color:"RED", click:callback},
 			{contents: BDFDB.LanguageUtils.LanguageStrings.CANCEL, close:true}
 		]});
-	};
-
-	BDFDB.updateContextPosition = function (menu, e = BDFDB.mousePosition) {
-		if (!Node.prototype.isPrototypeOf(menu)) return;
-		var itemlayer = BDFDB.getParentEle(BDFDB.dotCN.itemlayer, menu) || menu;
-		var arects = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount));
-		var irects = BDFDB.getRects(itemlayer);
-		var newpos = {
-			pageX: e.pageX - irects.width,
-			pageY: e.pageY - irects.height
-		};
-		itemlayer.style.setProperty("left", (e.pageX + irects.width > arects.width ? (newpos.pageX < 0 ? 11 : newpos.pageX) : e.pageX) + "px");
-		itemlayer.style.setProperty("top", (e.pageY + irects.height > arects.height ? (newpos.pageY < 0 ? 11 : newpos.pageY) : e.pageY) + "px");
-		BDFDB.initElements(menu);
 	};
 	
 	BDFDB.openContextMenu = function (plugin, e, children) {
@@ -5738,14 +5691,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
             let keys = this.props.keys.filter(n => n);
 			let option = keys.shift();
 			if (BDFDB.ObjectUtils.is(this.props.plugin) && option) {
-				var data = BDFDB.loadAllData(this.props.plugin, option);
+				var data = BDFDB.DataUtils.load(this.props.plugin, option);
 				var newdata = "";
 				for (let key of keys) newdata += `{"${key}":`;
 				newdata += value + "}".repeat(keys.length);
 				newdata = JSON.parse(newdata);
 				if (BDFDB.ObjectUtils.is(newdata)) BDFDB.ObjectUtils.deepAssign(data, newdata);
 				else data = newdata;
-				BDFDB.saveAllData(data, this.props.plugin, option);
+				BDFDB.DataUtils.save(data, this.props.plugin, option);
 				this.props.plugin.SettingsUpdated = true;
 			}
 			if (typeof this.props.onChange == "function") this.props.onChange(value, this);
@@ -5775,6 +5728,18 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
         render() {return BDFDB.ReactUtils.createElement(NativeSubComponents.TextInput, Object.assign({}, this.props, {onChange: this.handleChange.bind(this)}));}
     } : undefined;
 	if (LibraryComponents.TextInput) for (let key in NativeSubComponents.TextInput) if (key != "displayName" && key != "name") LibraryComponents.TextInput[key] = NativeSubComponents.TextInput[key];
+	LibraryComponents.TextScroller = reactInitialized ? class BDFDB_TextScroller extends LibraryModules.React.Component {
+        render() {return BDFDB.ReactUtils.createElement("div", {
+			className: "BDFDB-textscrollwrapper",
+			onMouseEnter: e => {
+				console.log(e.currentTarget);
+			},
+			children: BDFDB.ReactUtils.createElement("div", {
+				className: "BDFDB-textscroll",
+				children: this.props.children
+			})
+		});}
+    } : undefined;
 	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
 	
 	var LanguageStringsVars = {}, LanguageStrings = LibraryModules.LanguageStore && LibraryModules.LanguageStore._proxyContext ? Object.assign({}, LibraryModules.LanguageStore._proxyContext.defaultMessages) : {};
@@ -7027,10 +6992,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				description.style.setProperty("display", "block", "important");
 				author.innerHTML = `<a class="${BDFDB.disCNS.anchor + BDFDB.disCN.anchorunderlineonhover}">DevilBro</a>${author.innerText.split("DevilBro").slice(1).join("DevilBro")}`;
 				author.addEventListener("click", _ => {
-					if (BDFDB.myData.id == "278543574059057154") return;
+					if (BDFDB.UserUtils.me.id == "278543574059057154") return;
 					let DMid = LibraryModules.ChannelStore.getDMFromUserId("278543574059057154")
 					if (DMid) LibraryModules.SelectChannelUtils.selectPrivateChannel(DMid);
-					else LibraryModules.DirectMessageUtils.openPrivateChannel(BDFDB.myData.id, "278543574059057154");
+					else LibraryModules.DirectMessageUtils.openPrivateChannel(BDFDB.UserUtils.me.id, "278543574059057154");
 					let close = document.querySelector(BDFDB.dotCNS.settingsclosebuttoncontainer + BDFDB.dotCN.settingsclosebutton);
 					if (close) close.click();
 				});
@@ -7059,7 +7024,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 						else LibraryModules.InviteUtils.acceptInvite("Jx3TjNS").then(_ => {switchguild();});
 					});
 					links.appendChild(supportlink);
-					if (BDFDB.myData.id != "98003542823944192" && BDFDB.myData.id != "116242787980017679" && BDFDB.myData.id != "81388395867156480") {
+					if (BDFDB.UserUtils.me.id != "98003542823944192" && BDFDB.UserUtils.me.id != "116242787980017679" && BDFDB.UserUtils.me.id != "81388395867156480") {
 						links.appendChild(document.createTextNode(" | "));
 						links.appendChild(BDFDB.htmlToElement(`<a class="${BDFDB.disCNS._repolink + BDFDB.disCN._repolink}-donations" href="https://www.paypal.me/MircoWittrien" target="_blank">Donations</a>`));
 					}
@@ -7128,7 +7093,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 	}, 10000);
 
-	if (BDFDB.myData.id == "278543574059057154") {
+	if (BDFDB.UserUtils.me.id == "278543574059057154") {
 		for (let module in DiscordClassModules) if (!DiscordClassModules[module]) console.warn(`%c[BDFDB]%c`, "color: #3a71c1; font-weight: 700;", "", module + " not initialized in DiscordClassModules");
 		for (let require in LibraryRequires) if (!LibraryRequires[require]) console.warn(`%c[BDFDB]%c`, "color: #3a71c1; font-weight: 700;", "", require + " not initialized in LibraryRequires");
 		for (let module in LibraryModules) if (!LibraryModules[module]) console.warn(`%c[BDFDB]%c`, "color: #3a71c1; font-weight: 700;", "", module + " not initialized in LibraryModules");
@@ -7285,6 +7250,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	BDFDB.deepAssign = BDFDB.ObjectUtils.deepAssign;
 	BDFDB.isObjectEmpty = BDFDB.ObjectUtils.isEmpty;
 	
+	BDFDB.sortArrayByKey = BDFDB.ArrayUtils.keySort;
+	BDFDB.numSortArray = BDFDB.ArrayUtils.numSort;
+	BDFDB.removeFromArray = BDFDB.ArrayUtils.remove;
+	BDFDB.getAllIndexes = BDFDB.ArrayUtils.getAllIndexes;
+	BDFDB.removeCopiesFromArray = BDFDB.ArrayUtils.removeCopies;
+	
 	BDFDB.React = Object.assign({}, BDFDB.ReactUtils);
 	BDFDB.getKeyInformation = (config) => {return BDFDB.ReactUtils.findValue(config.node || config.instance, config.key, config);};
 	BDFDB.getReactInstance = BDFDB.ReactUtils.getInstance;
@@ -7296,12 +7267,56 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	BDFDB.WebModules = Object.assign({}, BDFDB.ModuleUtils);
 	BDFDB.WebModules.patch = (module, modulefunctions, plugin, patchfunctions) => {return BDFDB.ModuleUtils.patch(plugin, module, modulefunctions, patchfunctions)};
 	BDFDB.WebModules.unpatchall = BDFDB.ModuleUtils.unpatch;
+	BDFDB.ModuleUtils.initiateProcess = InternalBDFDB.initiateProcess;
+	BDFDB.WebModules.initiateProcess = InternalBDFDB.initiateProcess;
 	
-	BDFDB.sortArrayByKey = BDFDB.ArrayUtils.keySort;
-	BDFDB.numSortArray = BDFDB.ArrayUtils.numSort;
-	BDFDB.removeFromArray = BDFDB.ArrayUtils.remove;
-	BDFDB.getAllIndexes = BDFDB.ArrayUtils.getAllIndexes;
-	BDFDB.removeCopiesFromArray = BDFDB.ArrayUtils.removeCopies;
+	BDFDB.myData = BDFDB.UserUtils.me;
+	BDFDB.getUserStatus = BDFDB.UserUtils.getStatus;
+	BDFDB.getUserStatusColor = BDFDB.UserUtils.getStatusColor;
+	BDFDB.getUserAvatar = BDFDB.UserUtils.getAvatar;
+	BDFDB.isUserAllowedTo = BDFDB.UserUtils.can;
+	
+	BDFDB.getGuildIcon = BDFDB.GuildUtils.getIcon;
+	BDFDB.getGuildBanner = BDFDB.GuildUtils.getBanner;
+	BDFDB.getServerID = BDFDB.GuildUtils.getId;
+	BDFDB.getServerDiv = BDFDB.GuildUtils.getDiv;
+	BDFDB.getServerData = BDFDB.GuildUtils.getData;
+	BDFDB.readServerList = BDFDB.GuildUtils.getAll;
+	BDFDB.readUnreadServerList = BDFDB.GuildUtils.getUnread;
+	BDFDB.readPingedServerList = BDFDB.GuildUtils.getPinged;
+	BDFDB.readMutedServerList = BDFDB.GuildUtils.getMuted;
+	BDFDB.getSelectedServer = BDFDB.GuildUtils.getSelected;
+	BDFDB.createServerDivCopy = BDFDB.GuildUtils.createCopy;
+	BDFDB.openGuildContextMenu = BDFDB.GuildUtils.openMenu;
+	BDFDB.markGuildAsRead = BDFDB.GuildUtils.markAsRead;
+	
+	BDFDB.getFolderID = BDFDB.FolderUtils.getId;
+	BDFDB.getFolderDiv = BDFDB.FolderUtils.getDiv;
+	BDFDB.getFolderData = BDFDB.FolderUtils.getData;
+	BDFDB.readFolderList = BDFDB.FolderUtils.getAll;
+	
+	BDFDB.getChannelIcon = BDFDB.ChannelUtils.getIcon;
+	BDFDB.getChannelID = BDFDB.ChannelUtils.getId;
+	BDFDB.getChannelDiv = BDFDB.ChannelUtils.getDiv;
+	BDFDB.getChannelData = BDFDB.ChannelUtils.getData;
+	BDFDB.readChannelList = BDFDB.ChannelUtils.getAll;
+	BDFDB.getSelectedChannel = BDFDB.ChannelUtils.getSelected;
+	BDFDB.openChannelContextMenu = BDFDB.ChannelUtils.openMenu;
+	BDFDB.markChannelAsRead = BDFDB.ChannelUtils.markAsRead;
+	
+	BDFDB.getDmID = BDFDB.DmUtils.getId;
+	BDFDB.getDmDiv = BDFDB.DmUtils.getDiv;
+	BDFDB.getDmData = BDFDB.DmUtils.getData;
+	BDFDB.readDmList = BDFDB.DmUtils.getAll;
+	
+	BDFDB.saveAllData = (data, plugin, key) => {BDFDB.DataUtils.save(data, plugin, key)};
+	BDFDB.saveData = (id, data, plugin, key) => {BDFDB.DataUtils.save(data, plugin, key, id)};
+	BDFDB.loadAllData = (plugin, key) => {return BDFDB.DataUtils.load(plugin, key)};
+	BDFDB.loadData = (id, plugin, key) => {return BDFDB.DataUtils.load(plugin, key, id)};
+	BDFDB.removeAllData = (plugin, key) => {BDFDB.DataUtils.remove(plugin, key)};
+	BDFDB.removeData = (id, plugin, key) => {BDFDB.DataUtils.remove(plugin, key, id)};
+	BDFDB.getAllData = (plugin, key) => {return BDFDB.DataUtils.get(plugin, key)};
+	BDFDB.getData = (id, plugin, key) => {return BDFDB.DataUtils.get(plugin, key, id)};
 	
 	BDFDB.getDiscordFolder = BDFDB.DiscordUtils.getFolder;
 	BDFDB.getDiscordBuilt = BDFDB.DiscordUtils.getBuilt;
