@@ -1,7 +1,7 @@
 if (window.BDFDB && BDFDB.ListenerUtils && typeof BDFDB.ListenerUtils.remove == "function") BDFDB.ListenerUtils.remove(BDFDB);
 if (window.BDFDB && BDFDB.ObserverUtils && typeof BDFDB.ObserverUtils.disconnect == "function") BDFDB.ObserverUtils.disconnect(BDFDB);
 if (window.BDFDB && BDFDB.ModuleUtils && typeof BDFDB.ModuleUtils.unpatch == "function") BDFDB.ModuleUtils.unpatch(BDFDB);
-var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.BDv2Api || undefined, creationTime: performance.now(), cachedData: {}, pressedKeys: [], mousePosition: {pageX: 0, pageY: 0}, name: "$BDFDB"};
+var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB.cleanUps || {}, BDv2Api: BDFDB && BDFDB.BDv2Api || undefined, creationTime: performance.now(), cachedData: {}, pressedKeys: [], mousePosition: {pageX: 0, pageY: 0}, name: "$BDFDB"};
 (_ => {
 	var id = Math.round(Math.random() * 10000000000000000), InternalBDFDB = {};
 	BDFDB.id = id;
@@ -79,7 +79,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		if (BDFDB.ObjectUtils.isEmpty(window.PluginUpdates.plugins)) BDFDB.removeEles("#bd-settingspane-container .bd-updatebtn" + BDFDB.dotCN._repofolderbutton);
 
 		delete plugin.started;
-		setImmediate(() => {
+		BDFDB.cleanUps[plugin.name] = setImmediate(() => {
 			BDFDB.ModuleUtils.unpatch(plugin);
 			delete plugin.stopping;
 		});
@@ -244,6 +244,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		delete plugin.startTimeout;
 		clearTimeout(plugin.libLoadTimeout);
 		delete plugin.libLoadTimeout;
+		clearImmediate(BDFDB.cleanUps[plugin.name]);
+		delete BDFDB.cleanUps[plugin.name];
 	};
 	InternalBDFDB.addOnSwitchListener = function (plugin) {
 		if (BDFDB.ObjectUtils.is(plugin) && typeof plugin.onSwitch === "function") {
@@ -1458,7 +1460,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 			}});
 			BDFDB.ModuleUtils.patch(BDFDB, module.prototype, "render", {after: e => {
 				if (e.thisObject.props.BDFDBcontextMenu && e.thisObject.props.children && e.returnValue && e.returnValue.props) {
-					console.log(e);
 					e.returnValue.props.children = e.thisObject.props.children;
 					delete e.thisObject.props.value;
 					delete e.thisObject.props.children;
