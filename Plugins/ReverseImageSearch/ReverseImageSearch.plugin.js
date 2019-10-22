@@ -107,14 +107,14 @@ class ReverseImageSearch {
 	onGuildContextMenu (instance, menu, returnvalue) {
 		if (instance.props && instance.props.guild && instance.props.target) {
 			let guildicon = BDFDB.containsClass(instance.props.target, BDFDB.disCN.avataricon) ? instance.props.target : instance.props.target.querySelector(BDFDB.dotCN.guildicon);
-			if (guildicon && BDFDB.DataUtils.get(this, "settings")) this.appendItem(menu, returnvalue, guildicon.tagName == "IMG" ? guildicon.getAttribute("src") :  guildicon.style.getPropertyValue("background-image"), "addGuildIconEntry");
+			if (guildicon && BDFDB.DataUtils.get(this, "settings", "addGuildIconEntry")) this.appendItem(menu, returnvalue, guildicon.tagName == "IMG" ? guildicon.getAttribute("src") :  guildicon.style.getPropertyValue("background-image"));
 		}
 	}
 
 	onUserContextMenu (instance, menu, returnvalue) {
 		if (instance.props && instance.props.user && instance.props.target) {
 			let avatar = BDFDB.containsClass(instance.props.target, BDFDB.disCN.avataricon) ? instance.props.target : instance.props.target.querySelector(BDFDB.dotCN.avatar);
-			if (avatar && BDFDB.DataUtils.get(this, "settings")) this.appendItem(menu, returnvalue, avatar.tagName == "IMG" ? avatar.getAttribute("src") :  avatar.style.getPropertyValue("background-image"), "addUserAvatarEntry");
+			if (avatar && BDFDB.DataUtils.get(this, "settings", "addUserAvatarEntry")) this.appendItem(menu, returnvalue, avatar.tagName == "IMG" ? avatar.getAttribute("src") :  avatar.style.getPropertyValue("background-image"));
 		}
 	}
 
@@ -181,7 +181,7 @@ class ReverseImageSearch {
 	}
 
 	setLabelsByLanguage () {
-		switch (BDFDB.getDiscordLanguage().id) {
+		switch (BDFDB.LanguageUtils.getLanguage().id) {
 			case "hr":		//croatian
 				return {
 					submenu_disabled_text:				"Svi su onemogućeni"

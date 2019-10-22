@@ -107,7 +107,7 @@ class ChatFilter {
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		var replaces = BDFDB.DataUtils.get(this, "replaces");
-		var settings = BDFDB.DataUtils.get(this, "settings");
+		let settings = BDFDB.DataUtils.get(this, "settings");
 		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		for (let key in settings) {
 			if (!this.defaults.settings[key].inner) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
@@ -282,14 +282,14 @@ class ChatFilter {
 
 	onNativeContextMenu (instance, menu, returnvalue) {
 		if (instance.props && instance.props.value && instance.props.value.trim() && !menu.querySelector(`${this.name}-contextMenuItem`)) {
-			if ((instance.props.type == "NATIVE_TEXT" || instance.props.type == "CHANNEL_TEXT_AREA") && BDFDB.DataUtils.get(this, "settings")) this.appendItem(menu, returnvalue, instance.props.value.trim(), "addContextMenu");
+			if ((instance.props.type == "NATIVE_TEXT" || instance.props.type == "CHANNEL_TEXT_AREA") && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.appendItem(menu, returnvalue, instance.props.value.trim());
 		}
 	}
 
 	onMessageContextMenu (instance, menu, returnvalue) {
 		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(`${this.name}-contextMenuItem`)) {
 			let text = document.getSelection().toString().trim();
-			if (text && BDFDB.DataUtils.get(this, "settings")) this.appendItem(menu, returnvalue, text, "addContextMenu");
+			if (text && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.appendItem(menu, returnvalue, text);
 		}
 	}
 
@@ -344,7 +344,7 @@ class ChatFilter {
 					}
 				});
 
-				var settings = BDFDB.DataUtils.get(this, "settings");
+				let settings = BDFDB.DataUtils.get(this, "settings");
 				var replaces = BDFDB.DataUtils.get(this, "replaces");
 				var blocked = false;
 				for (let bWord in this.words.blocked) {

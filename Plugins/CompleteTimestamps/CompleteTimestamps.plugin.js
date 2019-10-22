@@ -187,14 +187,14 @@ class CompleteTimestamps {
 	}
 
 	processMessageGroup (instance, wrapper, returnvalue) {
-		if (BDFDB.DataUtils.get(this, "settings")) for (let stamp of wrapper.querySelectorAll("time[datetime]")) this.changeTimestamp(stamp, "showInChat");
+		if (BDFDB.DataUtils.get(this, "settings", "showInChat")) for (let stamp of wrapper.querySelectorAll("time[datetime]")) this.changeTimestamp(stamp);
 	}
 
 	processEmbed (instance, wrapper, returnvalue) {
 		let embed = BDFDB.ReactUtils.getValue(instance, "props.embed");
 		let footer = wrapper.querySelector(BDFDB.dotCN.embedfootertext);
 		if (footer && embed && embed.timestamp && BDFDB.DataUtils.get(this, "settings", "showInEmbed")) {
-			footer.lastChild.textContent = this.getTimestamp(this.languages[BDFDB.DataUtils.get(this, "choices")].id, embed.timestamp._i, "creationDateLang");
+			footer.lastChild.textContent = this.getTimestamp(this.languages[BDFDB.DataUtils.get(this, "choices", "creationDateLang")].id, embed.timestamp._i);
 		}
 	}
 

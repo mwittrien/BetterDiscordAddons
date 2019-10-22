@@ -841,7 +841,7 @@ class ServerFolders {
 
 	addSeparator (folderid) {
 		if (!this.foldercontentguilds) return;
-		if (!this.foldercontent.querySelector(`.folderseparatorouter[folderid="${folderid}"]`) && BDFDB.DataUtils.get(this, "settings")) this.foldercontentguilds.insertBefore(BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.guildouter + BDFDB.disCN._bdguildseparator} folderseparatorouter" folderid="${folderid}"><div class="${BDFDB.disCN.guildseparator} folderseparator"></div></div>`), this.foldercontentguilds.querySelectorAll(`[folderid="${folderid}"]`)[0], "addSeparators");
+		if (!this.foldercontent.querySelector(`.folderseparatorouter[folderid="${folderid}"]`) && BDFDB.DataUtils.get(this, "settings", "addSeparators")) this.foldercontentguilds.insertBefore(BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.guildouter + BDFDB.disCN._bdguildseparator} folderseparatorouter" folderid="${folderid}"><div class="${BDFDB.disCN.guildseparator} folderseparator"></div></div>`), this.foldercontentguilds.querySelectorAll(`[folderid="${folderid}"]`)[0]);
 		if (BDFDB.containsClass(this.foldercontentguilds.firstElementChild, "folderseparatorouter")) BDFDB.removeEles(this.foldercontentguilds.firstElementChild);
 	}
 

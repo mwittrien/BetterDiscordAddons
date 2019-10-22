@@ -56,7 +56,7 @@ class SpellCheck {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var settings = BDFDB.DataUtils.get(this, "settings");
+		let settings = BDFDB.DataUtils.get(this, "settings");
 		var choices = BDFDB.DataUtils.get(this, "choices");
 		var amounts = BDFDB.DataUtils.get(this, "amounts");
 		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;

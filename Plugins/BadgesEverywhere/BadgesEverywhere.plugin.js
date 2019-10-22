@@ -125,7 +125,7 @@ class BadgesEverywhere {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var settings = BDFDB.DataUtils.get(this, "settings");
+		let settings = BDFDB.DataUtils.get(this, "settings");
 		var badges = BDFDB.DataUtils.get(this, "badges");
 		var indicators = BDFDB.DataUtils.get(this, "indicators");
 		var settingsitems = [], inneritems = [];
@@ -213,19 +213,19 @@ class BadgesEverywhere {
 	// begin of own functions
 
 	processMemberListItem (instance, wrapper, returnvalue) {
-		if (instance.props && BDFDB.DataUtils.get(this, "settings")) this.addBadges(instance.props.user, wrapper.querySelector(BDFDB.dotCN.namecontainernamewrapper), "list", "showInMemberList");
+		if (instance.props && BDFDB.DataUtils.get(this, "settings", "showInMemberList")) this.addBadges(instance.props.user, wrapper.querySelector(BDFDB.dotCN.namecontainernamewrapper), "list");
 	}
 
 	processMessageUsername (instance, wrapper, returnvalue) {
 		let message = BDFDB.ReactUtils.getValue(instance, "props.message");
 		if (message) {
 			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
-			if (username && BDFDB.DataUtils.get(this, "settings")) this.addBadges(message.author, wrapper, "chat", "showInChat");
+			if (username && BDFDB.DataUtils.get(this, "settings", "showInChat")) this.addBadges(message.author, wrapper, "chat");
 		}
 	}
 
 	processUserPopout (instance, wrapper, returnvalue) {
-		if (instance.props && BDFDB.DataUtils.get(this, "settings")) this.addBadges(instance.props.user, wrapper.querySelector(BDFDB.dotCN.userpopoutheadertext), "popout", "showInPopout");
+		if (instance.props && BDFDB.DataUtils.get(this, "settings", "showInPopout")) this.addBadges(instance.props.user, wrapper.querySelector(BDFDB.dotCN.userpopoutheadertext), "popout");
 	}
 
 	processStandardSidebarView (instance, wrapper, returnvalue) {
@@ -258,8 +258,10 @@ class BadgesEverywhere {
 		}
 		else if (!this.loadedusers[info.id]) {
 			this.requestedusers[info.id].push([wrapper,type]);
-		});
-		else this.addToWrapper(info, wrapper, type);
+		}
+		else {
+			this.addToWrapper(info, wrapper, type);
+		}
 	}
 
 	addToWrapper (info, wrapper, type) {

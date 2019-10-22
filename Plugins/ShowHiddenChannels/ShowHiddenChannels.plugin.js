@@ -105,7 +105,7 @@ class ShowHiddenChannels {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var settings = BDFDB.DataUtils.get(this, "settings");
+		let settings = BDFDB.DataUtils.get(this, "settings");
 		var amounts = BDFDB.DataUtils.get(this, "amounts");
 		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		for (let key in settings) {
@@ -223,7 +223,7 @@ class ShowHiddenChannels {
 			}
 		}
 
-		var settings = BDFDB.DataUtils.get(this, "settings");
+		let settings = BDFDB.DataUtils.get(this, "settings");
 		var count = 0;
 		for (let type in BDFDB.DiscordConstants.ChannelTypes) {
 			if (this.settingsMap[type] && !settings[this.settingsMap[type]]) hiddenChannels[BDFDB.DiscordConstants.ChannelTypes[type]] = [];
@@ -309,7 +309,7 @@ class ShowHiddenChannels {
 
 	showAccessRoles (guild, channel, e, allowed) {
 		if ((e.type != "mouseenter" && e.type != "mouseover") || !guild || !channel) return;
-		var settings = BDFDB.DataUtils.get(this, "settings");
+		let settings = BDFDB.DataUtils.get(this, "settings");
 		var myMember = BDFDB.LibraryModules.MemberStore.getMember(guild.id, BDFDB.UserUtils.me.id);
 		var allowedRoles = [], allowedUsers = [], overwrittenRoles = [], deniedRoles = [], deniedUsers = [];
 		var everyoneDenied = false;

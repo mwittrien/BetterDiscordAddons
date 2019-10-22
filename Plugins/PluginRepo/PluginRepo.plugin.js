@@ -586,7 +586,7 @@ class PluginRepo {
 
 	loadPlugins () {
 		BDFDB.removeEles("iframe.discordSandbox",".pluginrepo-loadingicon");
-		var settings = BDFDB.DataUtils.load(this, "settings");
+		let settings = BDFDB.DataUtils.load(this, "settings");
 		var getPluginInfo, createFrame, runInFrame;
 		var frame, framerunning = false, framequeue = [], outdated = 0, newentries = 0, i = 0;
 		var tags = ["getName", "getVersion", "getAuthor", "getDescription"];

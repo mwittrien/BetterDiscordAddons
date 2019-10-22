@@ -45,7 +45,7 @@ class OwnerTag {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var settings = BDFDB.DataUtils.get(this, "settings");
+		let settings = BDFDB.DataUtils.get(this, "settings");
 		var inputs = BDFDB.DataUtils.get(this, "inputs");
 		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		for (let key in inputs) {
@@ -128,15 +128,15 @@ class OwnerTag {
 	}
 
 	processMemberListItem (instance, wrapper, returnvalue) {
-		if (instance.props && BDFDB.DataUtils.get(this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.namecontainernamewrapper), "list", BDFDB.disCN.bottagmember, null, "addInMemberList");
+		if (instance.props && BDFDB.DataUtils.get(this, "settings", "addInMemberList")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.namecontainernamewrapper), "list", BDFDB.disCN.bottagmember, null);
 	}
 
 	processUserPopout (instance, wrapper, returnvalue) {
-		if (instance.props && BDFDB.DataUtils.get(this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.nametag), "popout", BDFDB.disCN.bottagnametag, wrapper, "addInUserPopout");
+		if (instance.props && BDFDB.DataUtils.get(this, "settings", "addInUserPopout")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.nametag), "popout", BDFDB.disCN.bottagnametag, wrapper);
 	}
 
 	processUserProfile (instance, wrapper, returnvalue) {
-		if (instance.props && BDFDB.DataUtils.get(this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.nametag), "profile", BDFDB.disCNS.bottagnametag + BDFDB.disCN.userprofilebottag, wrapper, "addInUserProfil");
+		if (instance.props && BDFDB.DataUtils.get(this, "settings", "addInUserProfil")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.nametag), "profile", BDFDB.disCNS.bottagnametag + BDFDB.disCN.userprofilebottag, wrapper);
 	}
 
 	processMessageUsername (instance, wrapper, returnvalue, methodnames) {
@@ -191,7 +191,7 @@ class OwnerTag {
 	}
 
 	addHideCSS () {
-		var settings = BDFDB.DataUtils.get(this, "settings");
+		let settings = BDFDB.DataUtils.get(this, "settings");
 		if (settings.hideNativeCrown || settings.useCrown) BDFDB.appendLocalStyle(this.name + "HideCrown", `${BDFDB.dotCNS.member + BDFDB.dotCN.memberownericon}:not(.owner-tag-crown) {display: none;}`);
 		else BDFDB.removeLocalStyle(this.name + "HideCrown");
 	}

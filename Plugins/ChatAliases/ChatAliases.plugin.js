@@ -95,7 +95,7 @@ class ChatAliases {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var settings = BDFDB.DataUtils.get(this, "settings");
+		let settings = BDFDB.DataUtils.get(this, "settings");
 		var amounts = BDFDB.DataUtils.get(this, "amounts");
 		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		for (let key in settings) {
@@ -290,17 +290,17 @@ class ChatAliases {
 
 	onNativeContextMenu (instance, menu, returnvalue) {
 		if (instance.props && instance.props.value && instance.props.value.trim() && !menu.querySelector(`${this.name}-contextMenuItem`)) {
-			if ((instance.props.type == "NATIVE_TEXT" || instance.props.type == "CHANNEL_TEXT_AREA") && BDFDB.DataUtils.get(this, "settings")) this.appendItem(menu, returnvalue, instance.props.value.trim(), "addContextMenu");
+			if ((instance.props.type == "NATIVE_TEXT" || instance.props.type == "CHANNEL_TEXT_AREA") && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.appendItem(menu, returnvalue, instance.props.value.trim());
 		}
 	}
 
 	onMessageContextMenu (instance, menu, returnvalue) {
 		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(`${this.name}-contextMenuItem`)) {
 			let text = document.getSelection().toString().trim();
-			if (text && BDFDB.DataUtils.get(this, "settings")) this.appendItem(menu, returnvalue, text, "addContextMenu");
+			if (text && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.appendItem(menu, returnvalue, text);
 		}
 	}
-
+ 
 	appendItem (menu, returnvalue, text) {
 		let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 		const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
@@ -331,7 +331,7 @@ class ChatAliases {
 		if (instance.props && instance.props.channel && instance.props.type) {
 			var textarea = wrapper.querySelector("textarea");
 			if (!textarea) return;
-			var settings = BDFDB.DataUtils.get(this, "settings");
+			let settings = BDFDB.DataUtils.get(this, "settings");
 			BDFDB.ListenerUtils.add(this, textarea, "input", () => {
 				if (this.format) {
 					this.format = false;

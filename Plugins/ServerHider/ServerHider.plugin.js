@@ -246,7 +246,7 @@ class ServerHider {
 	}
 
 	unreadServer (id) {
-		if (BDFDB.DataUtils.get(this, "settings") && !this.isInFolder(id)) BDFDB.GuildUtils.markAsRead(id, "clearNotifications");
+		if (BDFDB.DataUtils.get(this, "settings", "clearNotifications") && !this.isInFolder(id)) BDFDB.GuildUtils.markAsRead(id);
 	}
 
 	isInFolder (id) {
@@ -257,7 +257,7 @@ class ServerHider {
 	}
 
 	setLabelsByLanguage () {
-		switch (BDFDB.getDiscordLanguage().id) {
+		switch (BDFDB.LanguageUtils.getLanguage().id) {
 			case "hr":		//croatian
 				return {
 					modal_header_text:				"Upravljanje popisom poslužitelja",

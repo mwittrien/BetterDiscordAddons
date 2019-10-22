@@ -342,7 +342,7 @@ class GoogleTranslateOption {
 							textarea.selectionEnd = text.length;
 							document.execCommand("insertText", false, "");
 							this.translateText(text, "message", (translation, input, output) => {
-								translation = !translation ? text : (BDFDB.DataUtils.get(this, "settings") ? text + "\n\n" + translation : translation, "sendOriginalMessage");
+								translation = !translation ? text : (BDFDB.DataUtils.get(this, "settings", "sendOriginalMessage") ? text + "\n\n" + translation : translation);
 								textarea.focus();
 								document.execCommand("insertText", false, translation + " ");
 								BDFDB.triggerSend(textarea);
@@ -605,7 +605,7 @@ class GoogleTranslateOption {
 		container.appendChild(translatepopout);
 		let buttonrects = BDFDB.getRects(button);
 		translatepopout.style.setProperty("left", buttonrects.left + buttonrects.width + "px");
-		translatepopout.style.setProperty("top", buttonrects.top - buttonrects.height/2 + "px")
+		translatepopout.style.setProperty("top", buttonrects.top - buttonrects.height/2 + "px");
 
 		BDFDB.ListenerUtils.addToChildren(translatepopout, "click", BDFDB.dotCN.selectcontrol, e => {
 			let type = BDFDB.getParentEle(BDFDB.dotCN.select, e.currentTarget).getAttribute("type");

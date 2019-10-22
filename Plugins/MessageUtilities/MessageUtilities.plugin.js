@@ -313,7 +313,7 @@ class MessageUtilities {
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 			if ((channel && BDFDB.UserUtils.can("MANAGE_MESSAGES")) || message.author.id == BDFDB.UserUtils.me.id && message.type != 1 && message.type != 2 && message.type != 3) {
 				BDFDB.LibraryModules.MessageUtils.deleteMessage(message.channel_id, message.id, message.state != "SENT");
-				if (BDFDB.DataUtils.get(this, "toasts")) BDFDB.NotificationUtils.toast("Message has been deleted.", {type:"success"}, action);
+				if (BDFDB.DataUtils.get(this, "toasts", action)) BDFDB.NotificationUtils.toast("Message has been deleted.", {type:"success"});
 			}
 		}
 	}
@@ -321,7 +321,7 @@ class MessageUtilities {
 	doEdit ({messagediv, pos, message}, action) {
 		if (message.author.id == BDFDB.UserUtils.me.id && !messagediv.querySelector("textarea")) {
 			BDFDB.LibraryModules.MessageUtils.startEditMessage(message.channel_id, message.id, message.content);
-			if (BDFDB.DataUtils.get(this, "toasts")) BDFDB.NotificationUtils.toast("Started editing.", {type:"success"}, action);
+			if (BDFDB.DataUtils.get(this, "toasts", action)) BDFDB.NotificationUtils.toast("Started editing.", {type:"success"});
 		}
 	}
 
@@ -329,7 +329,7 @@ class MessageUtilities {
 		let reactButton = messagediv.querySelector(BDFDB.dotCN.emojipickerbutton);
 		if (reactButton) {
 			reactButton.click();
-			if (BDFDB.DataUtils.get(this, "toasts")) BDFDB.NotificationUtils.toast("Reaction popout has been opened.", {type:"success"}, action);
+			if (BDFDB.DataUtils.get(this, "toasts", action)) BDFDB.NotificationUtils.toast("Reaction popout has been opened.", {type:"success"});
 		}
 	}
 
@@ -339,11 +339,11 @@ class MessageUtilities {
 			if (channel && (channel.type == 1 || channel.type == 3 || BDFDB.UserUtils.can("MANAGE_MESSAGES")) && message.type == 0) {
 				if (message.pinned) {
 					BDFDB.LibraryModules.MessagePinUtils.unpinMessage(channel, message.id);
-					if (BDFDB.DataUtils.get(this, "toasts")) BDFDB.NotificationUtils.toast("Message has been unpinned.", {type:"error"}, action);
+					if (BDFDB.DataUtils.get(this, "toasts", action)) BDFDB.NotificationUtils.toast("Message has been unpinned.", {type:"error"});
 				}
 				else {
 					BDFDB.LibraryModules.MessagePinUtils.pinMessage(channel, message.id);
-					if (BDFDB.DataUtils.get(this, "toasts")) BDFDB.NotificationUtils.toast("Message has been pinned.", {type:"success"}, action);
+					if (BDFDB.DataUtils.get(this, "toasts", action)) BDFDB.NotificationUtils.toast("Message has been pinned.", {type:"success"});
 				}
 			}
 		}
@@ -352,7 +352,7 @@ class MessageUtilities {
 	doCopyRaw ({messagediv, pos, message}, action) {
 		if (message.content) {
 			BDFDB.LibraryRequires.electron.clipboard.write({text:message.content});
-			if (BDFDB.DataUtils.get(this, "toasts")) BDFDB.NotificationUtils.toast("Raw message content has been copied.", {type:"success"}, action);
+			if (BDFDB.DataUtils.get(this, "toasts", action)) BDFDB.NotificationUtils.toast("Raw message content has been copied.", {type:"success"});
 		}
 	}
 
@@ -360,7 +360,7 @@ class MessageUtilities {
 		let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 		if (channel) {
 			BDFDB.LibraryRequires.electron.clipboard.write({text:`https://discordapp.com/channels/${channel.guild_id}/${channel.id}/${message.id}`});
-			if (BDFDB.DataUtils.get(this, "toasts")) BDFDB.NotificationUtils.toast("Messagelink has been copied.", {type:"success"}, action);
+			if (BDFDB.DataUtils.get(this, "toasts", action)) BDFDB.NotificationUtils.toast("Messagelink has been copied.", {type:"success"});
 		}
 	}
 

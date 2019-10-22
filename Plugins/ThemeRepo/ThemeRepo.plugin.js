@@ -881,7 +881,7 @@ class ThemeRepo {
 
 	loadThemes () {
 		BDFDB.removeEles(".themerepo-loadingicon");
-		var settings = BDFDB.DataUtils.load(this, "settings");
+		let settings = BDFDB.DataUtils.load(this, "settings");
 		var getThemeInfo, outdated = 0, newentries = 0, i = 0, NFLDreplace = null;
 		var tags = ["name","description","author","version"];
 		var newentriesdata = BDFDB.DataUtils.load(this, "newentriesdata"), ownlist = BDFDB.DataUtils.load(this, "ownlist", "ownlist") || [];
