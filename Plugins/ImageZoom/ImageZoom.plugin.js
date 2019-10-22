@@ -116,7 +116,7 @@ class ImageZoom {
 							type,
 							defaultValue: BDFDB.mapRange([this.defaults.settings[type].min, this.defaults.settings[type].max], [0, 100], settings[type]),
 							onValueChange: value => {
-								BDFDB.saveData(type, Math.round(BDFDB.mapRange([0, 100], [this.defaults.settings[type].min, this.defaults.settings[type].max], value)), this, "settings");
+								BDFDB.DataUtils.save(Math.round(BDFDB.mapRange([0, 100], [this.defaults.settings[type].min, this.defaults.settings[type].max], value)), this, "settings", type);
 							},
 							onValueRender: value => {
 								setImmediate(() => {for (let slider of document.querySelectorAll(BDFDB.dotCN.contextmenuitemslider)) if (BDFDB.ReactUtils.getValue(slider, "return.memoizedProps.type") == type) {

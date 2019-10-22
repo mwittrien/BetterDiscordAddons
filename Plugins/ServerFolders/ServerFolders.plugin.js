@@ -290,7 +290,7 @@ class ServerFolders {
 	}
 
 	onSwitch () {
-		if (typeof BDFDB === "object" && BDFDB.getData("forceOpenFolder", this, "settings")) {
+		if (typeof BDFDB === "object" && BDFDB.DataUtils.get(this, "settings", "forceOpenFolder")) {
 			let folder = this.getFolderOfGuildId(BDFDB.LibraryModules.LastGuildStore.getGuildId());
 			if (folder && !BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folder.folderId)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folder.folderId);
 		}
@@ -308,7 +308,7 @@ class ServerFolders {
 			let muted = data.muteFolder && folder.guildIds.every(guildid => BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildid));
 			if (data.muteFolder != muted) {
 				data.muteFolder = muted;
-				BDFDB.saveData(folderid, data, this, "folders");
+				BDFDB.DataUtils.save(data, this, "folders", folderid);
 			}
 			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:"GuildFolderMarkReadItem"});
 			const autoreaditem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuToggleItem, {
@@ -317,7 +317,7 @@ class ServerFolders {
 				active: data.autoRead,
 				action: state => {
 					data.autoRead = state;
-					BDFDB.saveData(folderid, data, this, "folders");
+					BDFDB.DataUtils.save(data, this, "folders", folderid);
 				}
 			});
 			if (index > -1) children.splice(index + 1, 0, autoreaditem);
@@ -330,7 +330,7 @@ class ServerFolders {
 					active: muted,
 					action: state => {
 						data.muteFolder = state;
-						BDFDB.saveData(folderid, data, this, "folders");
+						BDFDB.DataUtils.save(data, this, "folders", folderid);
 						for (let guildid of folder.guildIds) if (BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildid) != state) BDFDB.LibraryModules.GuildSettingsUtils.updateNotificationSettings(guildid, {muted:state, suppress_everyone:state});
 					}
 				})
@@ -442,7 +442,7 @@ class ServerFolders {
 			}
 			if (state.expanded) setImmediate(() => {
 				for (let guildid of instance.props.guildIds) this.updateGuildInFolderContent(state.folderId, guildid);
-				if (this.clickedFolder == state.folderId && BDFDB.getData("closeOtherFolders", this, "settings")) for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (openFolderId != state.folderId) {
+				if (this.clickedFolder == state.folderId && BDFDB.DataUtils.get(this, "settings")) for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders(, "closeOtherFolders")) if (openFolderId != state.folderId) {
 					BDFDB.removeEles(this.foldercontent.querySelectorAll(`${BDFDB.dotCN.guildouter}[folderid="${openFolderId}"]`));
 					BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
 				}
@@ -550,7 +550,7 @@ class ServerFolders {
 						let isCustom = BDFDB.containsClass(selectedIcon, "custom");
 						data.icons.openicon = folderIcons[data.iconID] ? (!isCustom ? this.createBase64SVG(folderIcons[data.iconID].openicon, data.color1, data.color2) : folderIcons[data.iconID].openicon) : null;
 						data.icons.closedicon = folderIcons[data.iconID] ? (!isCustom ? this.createBase64SVG(folderIcons[data.iconID].closedicon, data.color1, data.color2) : folderIcons[data.iconID].closedicon) : null;
-						BDFDB.saveData(folderid, data, this, "folders");
+						BDFDB.DataUtils.save(data, this, "folders", folderid);
 						instance.handleColorChange(data.color1 ? parseInt(BDFDB.colorCONVERT(data.color1 && BDFDB.ObjectUtils.is(data.color1) ? data.color1[Object.keys(data.color1)[0]] : data.color1, "HEX").slice(1), 16) : null);
 						this.changeFolder(folderid);
 					}
@@ -637,7 +637,7 @@ class ServerFolders {
 		let iconpreviewswitching = modal.querySelector(".ui-icon-picker-icon.preview.switching");
 		if (!BDFDB.containsClass(iconpreviewopen, "nopic") && !BDFDB.containsClass(iconpreviewclosed, "nopic") && !BDFDB.containsClass(iconpreviewswitching, "nopic")) {
 			let customID = this.generateID("customicon");
-			BDFDB.saveData(customID, {"openicon":iconpreviewopen.url,"closedicon":iconpreviewclosed.url,customID}, this, "customicons");
+			BDFDB.DataUtils.save({"openicon":iconpreviewopen.url,"closedicon":iconpreviewclosed.url,customID}, this, "customicons", customID);
 			modal.querySelectorAll("input[type='text'][option]").forEach((input) => {input.value = "";});
 
 			let iconpreviewopeninner = iconpreviewopen.querySelector(".ui-picker-inner");
@@ -691,7 +691,7 @@ class ServerFolders {
 		});
 		BDFDB.ListenerUtils.addToChildren(wrapper, "click", BDFDB.dotCN.hovercardbutton, e => {
 			if (BDFDB.containsClass(e.currentTarget.parentElement, "selected")) return;
-			BDFDB.removeData(e.currentTarget.getAttribute("value"), this, "customicons");
+			BDFDB.DataUtils.remove(this, "customicons", e.currentTarget.getAttribute("value"));
 			e.currentTarget.parentElement.remove();
 			BDFDB.NotificationUtils.toast(`Custom Icon was deleted.`, {type:"success"});
 		});
@@ -742,7 +742,7 @@ class ServerFolders {
 	
 	getFolderConfig (folderid) {
 		let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(folderid) || {};
-		let config = BDFDB.loadData(folderid, this, "folders") || {
+		let config = BDFDB.DataUtils.load(this, "folders", folderid) || {
 			iconID: 			"-1",
 			icons: 				{openicon: null, closedicon: null},
 			muteFolder: 		false,
@@ -778,7 +778,7 @@ class ServerFolders {
 				BDFDB.removeEles(folderinner.querySelectorAll(`${BDFDB.dotCN.guildupperbadge}.count`));
 				foldericon.parentElement.parentElement.style.removeProperty("-webkit-mask");
 				
-				if (BDFDB.getData("showCountBadge", this, "settings")) {
+				if (BDFDB.DataUtils.get(this, "settings", "showCountBadge")) {
 					folderinner.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.guildupperbadge} count" style="opacity: 1; transform: translate(0px, 0px);"><div class="${BDFDB.disCN.guildbadgenumberbadge}" style="background-color: rgb(114, 137, 218); width: ${folder.guildIds.length > 99 ? 28 : (folder.guildIds.length > 9 ? 22 : 16)}px; padding-right: ${folder.guildIds.length > 99 ? 0 : (folder.guildIds.length > 9 ? 0 : 1)}px;">${folder.guildIds.length}</div></div>`));
 					let width = folder.guildIds.length > 99 ? 36 : (folder.guildIds.length > 9 ? 30 : 24);
 					foldericon.parentElement.parentElement.style.setProperty("-webkit-mask", `url(data:image/svg+xml;base64,${btoa(`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" fill="black" x="0" y="0" width="48" height="48"><path d="M ${width-7} 0 C ${width-5} 2 ${width-4} 5 ${width-4} 8 C ${width-4} ${width/1.8+3} 15 20 8 20 C 5 20 2 19 0 17 L 0 50 L 50 50 L 50 0 L 17 0 z"></path></svg>`)}) center/cover no-repeat`);
@@ -841,7 +841,7 @@ class ServerFolders {
 
 	addSeparator (folderid) {
 		if (!this.foldercontentguilds) return;
-		if (!this.foldercontent.querySelector(`.folderseparatorouter[folderid="${folderid}"]`) && BDFDB.getData("addSeparators", this, "settings")) this.foldercontentguilds.insertBefore(BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.guildouter + BDFDB.disCN._bdguildseparator} folderseparatorouter" folderid="${folderid}"><div class="${BDFDB.disCN.guildseparator} folderseparator"></div></div>`), this.foldercontentguilds.querySelectorAll(`[folderid="${folderid}"]`)[0]);
+		if (!this.foldercontent.querySelector(`.folderseparatorouter[folderid="${folderid}"]`) && BDFDB.DataUtils.get(this, "settings")) this.foldercontentguilds.insertBefore(BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.guildouter + BDFDB.disCN._bdguildseparator} folderseparatorouter" folderid="${folderid}"><div class="${BDFDB.disCN.guildseparator} folderseparator"></div></div>`), this.foldercontentguilds.querySelectorAll(`[folderid="${folderid}"]`)[0], "addSeparators");
 		if (BDFDB.containsClass(this.foldercontentguilds.firstElementChild, "folderseparatorouter")) BDFDB.removeEles(this.foldercontentguilds.firstElementChild);
 	}
 
@@ -950,7 +950,7 @@ class ServerFolders {
 			let ESdata = EditServers ? EditServers.getGuildData(guildid, guildcopyinner) : null;
 			if (ESdata && (ESdata.name || ESdata.color3 || ESdata.color4)) EditServers.changeTooltip(guild, guildcopyinner, "right");
 			else {
-				let folderData = BDFDB.loadData(folderid, this, "folders") || {};
+				let folderData = BDFDB.DataUtils.load(this, "folders", folderid) || {};
 				let color3 = folderData.copyTooltipColor ? folderData.color3 : null;
 				let color4 = folderData.copyTooltipColor ? folderData.color4 : null;
 				let isgradient3 = color3 && BDFDB.ObjectUtils.is(color3);
@@ -1115,7 +1115,7 @@ class ServerFolders {
 	}
 	
 	removeFolder (folderid) {
-		BDFDB.removeData(folderid, this, "folders");
+		BDFDB.DataUtils.remove(this, "folders", folderid);
 		BDFDB.removeEles(this.foldercontentguilds.querySelector(`${BDFDB.dotCN.guildouter}[folderid="${folderid}"]`));
 		let oldGuildFolders = Object.assign({}, BDFDB.LibraryModules.FolderStore.guildFolders);
 		let guildFolders = [], guildPositions = [];

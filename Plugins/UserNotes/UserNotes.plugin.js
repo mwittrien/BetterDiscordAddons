@@ -145,7 +145,7 @@ class UserNotes {
 	}
 
 	openNotesModal (info) {
-		let note = BDFDB.loadData(info.id, this, "notes") || "";
+		let note = BDFDB.DataUtils.load(this, "notes", info.id) || "";
 
 		let userNotesModal = BDFDB.htmlToElement(this.userNotesModalMarkup);
 		let noteinput = userNotesModal.querySelector("#modal-inputtext");
@@ -155,7 +155,7 @@ class UserNotes {
 		BDFDB.appendModal(userNotesModal);
 		BDFDB.ListenerUtils.addToChildren(userNotesModal, "click", ".btn-save", (e) => {
 			e.preventDefault();
-			BDFDB.saveData(info.id, noteinput.value, this, "notes");
+			BDFDB.DataUtils.save(noteinput.value, this, "notes", info.id);
 		});
 		noteinput.focus();
 	}

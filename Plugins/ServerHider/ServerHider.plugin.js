@@ -194,7 +194,7 @@ class ServerHider {
 
 	processGuild (instance, wrapper, returnvalue, methodnames) {
 		if (instance.props && instance.props.guild) {
-			let hiddenservers = BDFDB.loadData("hiddenservers", this, "hiddenservers") || [];
+			let hiddenservers = BDFDB.DataUtils.load(this, "hiddenservers", "hiddenservers") || [];
 			if (methodnames.includes("componentDidMount")) this.toggleServer(instance.props.guild, wrapper, !hiddenservers.includes(instance.props.guild.id));
 			if (methodnames.includes("componentDidUpdate") && hiddenservers.includes(instance.props.guild.id) && instance.props.unread) this.unreadServer(instance.props.guild.id);
 		}
@@ -236,17 +236,17 @@ class ServerHider {
 		let guilddiv = BDFDB.getParentEle(BDFDB.dotCN.guildouter, target);
 		if (!guilddiv || guilddiv.getAttribute("folder")) return;
 		BDFDB.toggleEles(guilddiv, visible);
-		let hiddenservers = BDFDB.loadData("hiddenservers", this, "hiddenservers") || [];
+		let hiddenservers = BDFDB.DataUtils.load(this, "hiddenservers", "hiddenservers") || [];
 		BDFDB.ArrayUtils.remove(hiddenservers, info.id);
 		if (!visible) {
 			if (BDFDB.ReactUtils.getValue(guilddiv, "return.stateNode.props").unread) this.unreadServer(info.id);
 			hiddenservers.push(info.id);
 		}
-		BDFDB.saveData("hiddenservers", hiddenservers, this, "hiddenservers");
+		BDFDB.DataUtils.save(hiddenservers, this, "hiddenservers", "hiddenservers");
 	}
 
 	unreadServer (id) {
-		if (BDFDB.getData("clearNotifications", this, "settings") && !this.isInFolder(id)) BDFDB.GuildUtils.markAsRead(id);
+		if (BDFDB.DataUtils.get(this, "settings") && !this.isInFolder(id)) BDFDB.GuildUtils.markAsRead(id, "clearNotifications");
 	}
 
 	isInFolder (id) {

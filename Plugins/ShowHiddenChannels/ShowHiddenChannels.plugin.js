@@ -241,12 +241,12 @@ class ShowHiddenChannels {
 
 				var visibile = !BDFDB.containsClass(wrapper, BDFDB.disCN.categorycollapsed);
 				BDFDB.toggleEles(category.querySelectorAll(BDFDB.dotCN.channelcontainerdefault), visibile);
-				BDFDB.saveData(guild.id, visibile, this, "categorystatus");
+				BDFDB.DataUtils.save(visibile, this, "categorystatus", guild.id);
 			});
 
 			for (let type in BDFDB.DiscordConstants.ChannelTypes) for (let hiddenChannel of hiddenChannels[BDFDB.DiscordConstants.ChannelTypes[type]]) this.createChannel(guild, category, hiddenChannel, type);
 
-			var isvisibile = BDFDB.loadData(guild.id, this, "categorystatus") === true;
+			var isvisibile = BDFDB.DataUtils.load(this, "categorystatus", guild.id) === true;
 			BDFDB.toggleClass(wrapper, BDFDB.disCN.categorycollapsed, !isvisibile);
 			BDFDB.toggleEles(category.querySelectorAll(BDFDB.dotCN.channelcontainerdefault), isvisibile);
 
@@ -400,7 +400,7 @@ class ShowHiddenChannels {
 		}
 		if (htmlString) {
 			var width = window.outerWidth/2;
-			var tooltip = BDFDB.TooltipUtils.create(e.currentTarget, htmlString, {type:"right", selector:"showhiddenchannels-tooltip", html:true, style:`max-width: ${width < 200 ? 400 : width}px !important;`, delay:BDFDB.getData("hoverDelay", this, "amounts")});
+			var tooltip = BDFDB.TooltipUtils.create(e.currentTarget, htmlString, {type:"right", selector:"showhiddenchannels-tooltip", html:true, style:`max-width: ${width < 200 ? 400 : width}px !important;`, delay:BDFDB.DataUtils.get(this, "amounts")}, "hoverDelay");
 			var style = getComputedStyle(e.currentTarget);
 			tooltip.style.setProperty("top", BDFDB.getRects(tooltip).top - style.paddingBottom.replace("px","")/2 + style.paddingTop.replace("px","")/2 + "px");
 		}

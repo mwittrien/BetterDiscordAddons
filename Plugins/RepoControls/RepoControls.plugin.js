@@ -260,7 +260,7 @@ class RepoControls {
 					else BDFDB.NotificationUtils.toast(`Successfully deleted ${type} "${name}".`, {type:"success"});
 				});
 			};
-			if (!BDFDB.getData("confirmDelete", this, "settings")) deleteFile();
+			if (!BDFDB.DataUtils.get(this, "settings")) deleteFile(, "confirmDelete");
 			else BDFDB.openConfirmModal(this, `Are you sure you want to delete the ${type} "${name}"?`, () => {
 				deleteFile();
 			});
@@ -307,13 +307,13 @@ class RepoControls {
 		});
 		BDFDB.ListenerUtils.addToChildren(repocontrols, "click", ".sort-filter", e => {
 			BDFDB.createSortPopout(e.currentTarget, this.sortPopoutMarkup, () => {
-				BDFDB.saveData("sort", sortfilter.getAttribute("option"), this, "sortings");
+				BDFDB.DataUtils.save(sortfilter.getAttribute("option"), this, "sortings", "sort");
 				this.sortEntries(container, repocontrols);
 			});
 		});
 		BDFDB.ListenerUtils.addToChildren(repocontrols, "click", ".order-filter", e => {
 			BDFDB.createSortPopout(e.currentTarget, this.orderPopoutMarkup, () => {
-				BDFDB.saveData("order", orderfilter.getAttribute("option"), this, "sortings");
+				BDFDB.DataUtils.save(orderfilter.getAttribute("option"), this, "sortings", "order");
 				this.sortEntries(container, repocontrols);
 			});
 		});

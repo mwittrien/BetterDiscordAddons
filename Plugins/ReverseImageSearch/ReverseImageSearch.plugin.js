@@ -107,14 +107,14 @@ class ReverseImageSearch {
 	onGuildContextMenu (instance, menu, returnvalue) {
 		if (instance.props && instance.props.guild && instance.props.target) {
 			let guildicon = BDFDB.containsClass(instance.props.target, BDFDB.disCN.avataricon) ? instance.props.target : instance.props.target.querySelector(BDFDB.dotCN.guildicon);
-			if (guildicon && BDFDB.getData("addGuildIconEntry", this, "settings")) this.appendItem(menu, returnvalue, guildicon.tagName == "IMG" ? guildicon.getAttribute("src") :  guildicon.style.getPropertyValue("background-image"));
+			if (guildicon && BDFDB.DataUtils.get(this, "settings")) this.appendItem(menu, returnvalue, guildicon.tagName == "IMG" ? guildicon.getAttribute("src") :  guildicon.style.getPropertyValue("background-image"), "addGuildIconEntry");
 		}
 	}
 
 	onUserContextMenu (instance, menu, returnvalue) {
 		if (instance.props && instance.props.user && instance.props.target) {
 			let avatar = BDFDB.containsClass(instance.props.target, BDFDB.disCN.avataricon) ? instance.props.target : instance.props.target.querySelector(BDFDB.dotCN.avatar);
-			if (avatar && BDFDB.getData("addUserAvatarEntry", this, "settings")) this.appendItem(menu, returnvalue, avatar.tagName == "IMG" ? avatar.getAttribute("src") :  avatar.style.getPropertyValue("background-image"));
+			if (avatar && BDFDB.DataUtils.get(this, "settings")) this.appendItem(menu, returnvalue, avatar.tagName == "IMG" ? avatar.getAttribute("src") :  avatar.style.getPropertyValue("background-image"), "addUserAvatarEntry");
 		}
 	}
 
@@ -132,7 +132,7 @@ class ReverseImageSearch {
 			if (instance.props.target.tagName == "A" && instance.props.message.embeds && instance.props.message.embeds[0] && instance.props.message.embeds[0].type == "image") {
 				this.appendItem(menu, returnvalue, instance.props.target.href);
 			}
-			if (instance.props.target.tagName == "IMG" && BDFDB.containsClass(instance.props.target, "emoji", "emote", false) && BDFDB.getData("addEmojiEntry", this, "settings")) {
+			if (instance.props.target.tagName == "IMG" && BDFDB.containsClass(instance.props.target, "emoji", "emote", false) && BDFDB.DataUtils.get(this, "settings", "addEmojiEntry")) {
 				this.appendItem(menu, returnvalue, instance.props.target.src);
 			}
 		}

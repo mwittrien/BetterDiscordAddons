@@ -123,9 +123,9 @@ class ShowImageDetails {
 			if (BDFDB.containsClass(image.parentElement.parentElement, BDFDB.disCN.spoilercontainer, BDFDB.disCN.spoilertext, false)) image = image.parentElement.parentElement;
 			BDFDB.addClass(image, "image-details-added");
 			image.removeEventListener("mouseenter", image.mouseenterShowImageDetails);
-			if (BDFDB.getData("showOnHover", this, "settings")) {
+			if (BDFDB.DataUtils.get(this, "settings", "showOnHover")) {
 				image.mouseenterShowImageDetails = () => {
-					BDFDB.TooltipUtils.create(image, `<div class="image-details-tooltip-name">${attachment.filename}</div><div class="image-details-tooltip-size">${BDFDB.formatBytes(attachment.size)}</div><div class="image-details-tooltip-dimensions">${attachment.width}x${attachment.height}px</div>`, {type:"right", html:true, selector:"image-details-tooltip", delay:BDFDB.getData("hoverDelay", this, "amounts")});
+					BDFDB.TooltipUtils.create(image, `<div class="image-details-tooltip-name">${attachment.filename}</div><div class="image-details-tooltip-size">${BDFDB.formatBytes(attachment.size)}</div><div class="image-details-tooltip-dimensions">${attachment.width}x${attachment.height}px</div>`, {type:"right", html:true, selector:"image-details-tooltip", delay:BDFDB.DataUtils.get(this, "amounts")}, "hoverDelay");
 				};
 				image.addEventListener("mouseenter", image.mouseenterShowImageDetails);
 			}

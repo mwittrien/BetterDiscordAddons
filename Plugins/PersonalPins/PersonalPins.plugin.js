@@ -425,7 +425,7 @@ class PersonalPins {
 		let timestamp = message.querySelector(BDFDB.dotCN.messagetimestampcozy);
 		timestamp.innerText = date.toLocaleString(BDFDB.getDiscordLanguage().id);
 		timestamp.setAttribute("datetime", date);
-		if (BDFDB.BdUtils.isPluginEnabled("CompleteTimestamps") && BDFDB.loadData("showInChat", "CompleteTimestamps", "settings")) {
+		if (BDFDB.BdUtils.isPluginEnabled("CompleteTimestamps") && BDFDB.DataUtils.load("CompleteTimestamps", "settings"), "showInChat") {
 			BDFDB.BdUtils.getPlugin("CompleteTimestamps").changeTimestamp(timestamp);
 		}
 		message.querySelector(BDFDB.dotCN.messagemarkup).innerHTML = noteData.markup.replace(`<span class="edited">`,`<span class="${BDFDB.disCN.messageedited}">`);

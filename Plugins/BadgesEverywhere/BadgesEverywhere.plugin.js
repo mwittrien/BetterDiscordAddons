@@ -213,19 +213,19 @@ class BadgesEverywhere {
 	// begin of own functions
 
 	processMemberListItem (instance, wrapper, returnvalue) {
-		if (instance.props && BDFDB.getData("showInMemberList", this, "settings")) this.addBadges(instance.props.user, wrapper.querySelector(BDFDB.dotCN.namecontainernamewrapper), "list");
+		if (instance.props && BDFDB.DataUtils.get(this, "settings")) this.addBadges(instance.props.user, wrapper.querySelector(BDFDB.dotCN.namecontainernamewrapper), "list", "showInMemberList");
 	}
 
 	processMessageUsername (instance, wrapper, returnvalue) {
 		let message = BDFDB.ReactUtils.getValue(instance, "props.message");
 		if (message) {
 			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
-			if (username && BDFDB.getData("showInChat", this, "settings")) this.addBadges(message.author, wrapper, "chat");
+			if (username && BDFDB.DataUtils.get(this, "settings")) this.addBadges(message.author, wrapper, "chat", "showInChat");
 		}
 	}
 
 	processUserPopout (instance, wrapper, returnvalue) {
-		if (instance.props && BDFDB.getData("showInPopout", this, "settings")) this.addBadges(instance.props.user, wrapper.querySelector(BDFDB.dotCN.userpopoutheadertext), "popout");
+		if (instance.props && BDFDB.DataUtils.get(this, "settings")) this.addBadges(instance.props.user, wrapper.querySelector(BDFDB.dotCN.userpopoutheadertext), "popout", "showInPopout");
 	}
 
 	processStandardSidebarView (instance, wrapper, returnvalue) {

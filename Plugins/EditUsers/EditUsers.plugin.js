@@ -208,10 +208,10 @@ class EditUsers {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_resetsettings_text,
 									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-resetsettings-ContextMenuItem`,
-									disabled: !BDFDB.loadData(instance.props.user.id, this, "users"),
+									disabled: !BDFDB.DataUtils.load(this, "users", instance.props.user.id),
 									action: e => {
 										BDFDB.closeContextMenu(menu);
-										BDFDB.removeData(instance.props.user.id, this, "users");
+										BDFDB.DataUtils.remove(this, "users", instance.props.user.id);
 										this.forceUpdateAll();
 									}
 								})
@@ -231,7 +231,7 @@ class EditUsers {
 	}
 
 	showUserSettings (info) {
-		let data = BDFDB.loadData(info.id, this, "users") || {};
+		let data = BDFDB.DataUtils.load(this, "users", info.id) || {};
 		let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), info.id) || {};
 		
 		BDFDB.openModal(this, {
@@ -387,8 +387,8 @@ class EditUsers {
 					data.color4 = BDFDB.getSwatchColor(modal, 4);
 
 					let changed = false;
-					if (Object.keys(data).every(key => data[key] == null || data[key] == false) && (changed = true)) BDFDB.removeData(info.id, this, "users");
-					else if (!BDFDB.equals(olddata, data) && (changed = true)) BDFDB.saveData(info.id, data, this, "users");
+					if (Object.keys(data).every(key => data[key] == null || data[key] == false) && (changed = true)) BDFDB.DataUtils.remove(this, "users", info.id);
+					else if (!BDFDB.equals(olddata, data) && (changed = true)) BDFDB.DataUtils.save(data, this, "users", info.id);
 					if (changed) this.forceUpdateAll();
 				}
 			}]
@@ -408,7 +408,7 @@ class EditUsers {
 				}
 			}
 			BDFDB.ListenerUtils.remove(this, textarea);
-			if (BDFDB.getData("changeInAutoComplete", this, "settings")) {
+			if (BDFDB.DataUtils.get(this, "settings", "changeInAutoComplete")) {
 				BDFDB.ListenerUtils.add(this, textarea, "keydown", e => {
 					let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCN.autocomplete);
 					if (autocompletemenu && (e.which == 9 || e.which == 13)) {
@@ -1083,7 +1083,7 @@ class EditUsers {
 	}
 
 	getUserData (id, wrapper) {
-		let data = BDFDB.loadData(id, this, "users");
+		let data = BDFDB.DataUtils.load(this, "users", id);
 		if (!data) {
 			delete wrapper.EditUsersCachedDataState;
 			return {};

@@ -182,7 +182,7 @@ class RemoveNicknames {
 		if (!info) return null;
 		let settings = BDFDB.DataUtils.get(this, "settings");
 		let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), info.id) || {};
-		let EditUsersData = (BDFDB.BdUtils.isPluginEnabled("EditUsers") ? BDFDB.loadData(info.id, "EditUsers", "users") : null) || {};
+		let EditUsersData = (BDFDB.BdUtils.isPluginEnabled("EditUsers") ? BDFDB.DataUtils.load("EditUsers", "users") : null, info.id) || {};
 		if (this.reseting || !member.nick || info.id == BDFDB.UserUtils.me.id && !settings.replaceOwn || info.bot && !settings.replaceBots || this.ignoreElement(wrapper)) return EditUsersData.name || member.nick || info.username;
 		var username = EditUsersData.name || info.username;
 		return settings.addNickname ? (settings.swapPositions ? (member.nick + " (" + username + ")") : (username + " (" + member.nick + ")")) : username;

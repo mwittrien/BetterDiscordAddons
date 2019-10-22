@@ -300,7 +300,7 @@ class GoogleTranslateOption {
 	getLanguageChoice (direction, place) {
 		this.setLanguages();
 		var type = typeof place === "undefined" ? direction : direction.toLowerCase() + place.charAt(0).toUpperCase() + place.slice(1).toLowerCase();
-		var choice = BDFDB.getData(type, this, "choices");
+		var choice = BDFDB.DataUtils.get(this, "choices", type);
 		choice = this.languages[choice] ? choice : Object.keys(this.languages)[0];
 		choice = type.indexOf("output") > -1 && choice == "auto" ? "en" : choice;
 		return choice;
@@ -316,7 +316,7 @@ class GoogleTranslateOption {
 	}
 
 	processChannelTextArea (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.type && instance.props.type == "normal" && !instance.props.disabled && !wrapper.querySelector(".translate-button") && BDFDB.getData("addTranslateButton", this, "settings")) {
+		if (instance.props && instance.props.type && instance.props.type == "normal" && !instance.props.disabled && !wrapper.querySelector(".translate-button") && BDFDB.DataUtils.get(this, "settings", "addTranslateButton")) {
 			let textarea = wrapper.querySelector("textarea");
 			if (textarea) {
 				var buttoncontainer = wrapper.querySelector(BDFDB.dotCN.textareapickerbuttons);
@@ -342,7 +342,7 @@ class GoogleTranslateOption {
 							textarea.selectionEnd = text.length;
 							document.execCommand("insertText", false, "");
 							this.translateText(text, "message", (translation, input, output) => {
-								translation = !translation ? text : (BDFDB.getData("sendOriginalMessage", this, "settings") ? text + "\n\n" + translation : translation);
+								translation = !translation ? text : (BDFDB.DataUtils.get(this, "settings") ? text + "\n\n" + translation : translation, "sendOriginalMessage");
 								textarea.focus();
 								document.execCommand("insertText", false, translation + " ");
 								BDFDB.triggerSend(textarea);
@@ -614,9 +614,9 @@ class GoogleTranslateOption {
 			BDFDB.ListenerUtils.addToChildren(menu, "click", BDFDB.dotCN.giffavoritebutton, e => {
 				let choice = e.currentTarget.parentElement.getAttribute("value");
 				if (choice) {
-					let favorize = !BDFDB.loadData(choice, this, "favorites");
-					if (favorize) BDFDB.saveData(choice, true, this, "favorites");
-					else BDFDB.removeData(choice, this, "favorites");
+					let favorize = !BDFDB.DataUtils.load(this, "favorites", choice);
+					if (favorize) BDFDB.DataUtils.save(true, this, "favorites", choice);
+					else BDFDB.DataUtils.remove(this, "favorites", choice);
 					this.setLanguages();
 				}
 			});
@@ -632,8 +632,8 @@ class GoogleTranslateOption {
 			inputselect.querySelector(BDFDB.dotCN.title).innerText = this.languages[input].name;
 			outputselect.setAttribute("value", output);
 			outputselect.querySelector(BDFDB.dotCN.title).innerText = this.languages[output].name;
-			BDFDB.saveData("input" + place, input, this, "choices");
-			BDFDB.saveData("output" + place, output, this, "choices");
+			BDFDB.DataUtils.save(input, this, "choices", "input" + place);
+			BDFDB.DataUtils.save(output, this, "choices", "output" + place);
 		});
 
 		translatepopout.querySelectorAll(BDFDB.dotCN.select).forEach(selectWrap => {
@@ -664,7 +664,7 @@ class GoogleTranslateOption {
 	saveSelectChoice (selectWrap, type, choice) {
 		if (type && choice) {
 			selectWrap.querySelector(BDFDB.dotCN.title).innerText = this.languages[choice].name;
-			BDFDB.saveData(type, choice, this, "choices");
+			BDFDB.DataUtils.save(choice, this, "choices", type);
 		}
 	}
 

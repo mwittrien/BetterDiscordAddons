@@ -99,7 +99,7 @@ class EditServers {
 				let guild = BDFDB.LibraryModules.GuildStore.getGuild(e.methodArguments[0].id);
 				if (guild) {
 					if (e.methodArguments[0].id == "410787888507256842") return guild.banner;
-					let data = BDFDB.loadData(guild.id, this, "servers");
+					let data = BDFDB.DataUtils.load(this, "servers", guild.id);
 					if (data && data.banner && !data.removeBanner) return data.banner;
 				}
 				return e.callOriginalMethod();
@@ -152,10 +152,10 @@ class EditServers {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_resetsettings_text,
 									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-resetsettings-ContextMenuItem`,
-									disabled: !BDFDB.loadData(instance.props.guild.id, this, "servers"),
+									disabled: !BDFDB.DataUtils.load(this, "servers", instance.props.guild.id),
 									action: e => {
 										BDFDB.closeContextMenu(menu);
-										BDFDB.removeData(instance.props.guild.id, this, "servers");
+										BDFDB.DataUtils.remove(this, "servers", instance.props.guild.id);
 										this.forceUpdateAll(instance.props.guild.id);
 									}
 								})
@@ -224,7 +224,7 @@ class EditServers {
 	}
 
 	showServerSettings (info) {
-		var data = BDFDB.loadData(info.id, this, "servers") || {};
+		var data = BDFDB.DataUtils.load(this, "servers", info.id) || {};
 		
 		BDFDB.openModal(this, {
 			size: "MEDIUM",
@@ -402,8 +402,8 @@ class EditServers {
 					data.color4 = BDFDB.getSwatchColor(modal, 4);
 
 					let changed = false;
-					if (Object.keys(data).every(key => data[key] == null || data[key] == false) && (changed = true)) BDFDB.removeData(info.id, this, "servers");
-					else if (!BDFDB.equals(olddata, data) && (changed = true)) BDFDB.saveData(info.id, data, this, "servers");
+					if (Object.keys(data).every(key => data[key] == null || data[key] == false) && (changed = true)) BDFDB.DataUtils.remove(this, "servers", info.id);
+					else if (!BDFDB.equals(olddata, data) && (changed = true)) BDFDB.DataUtils.save(data, this, "servers", info.id);
 					if (changed) this.forceUpdateAll(info.id);
 				}
 			}]
@@ -456,7 +456,7 @@ class EditServers {
 				guildname.style.setProperty("color", BDFDB.colorCONVERT(data.color2, "RGBA"), "important");
 				BDFDB.setInnerText(guildname, data.name || info.name);
 			}
-			if (data.name && BDFDB.containsClass(guildname, BDFDB.disCN.guildheadername) && BDFDB.getData("addOriginalTooltip", this, "settings")) {
+			if (data.name && BDFDB.containsClass(guildname, BDFDB.disCN.guildheadername) && BDFDB.DataUtils.get(this, "settings", "addOriginalTooltip")) {
 				guildname.mouseenterListenerEditChannels = () => {
 					BDFDB.TooltipUtils.create(guildname.parentElement, info.name, {type:"right", selector:"EditServers-tooltip", hide:true});
 				};
@@ -548,7 +548,7 @@ class EditServers {
 		if (data.name || data.color3 || data.color4) {
 			let ServerFolders = BDFDB.BdUtils.getPlugin("ServerFolders", true);
 			let folder = ServerFolders ? ServerFolders.getFolderOfGuildId(info.id) : null;
-			let folderData = folder ? BDFDB.loadData(folder.folderId, "ServerFolders", "folders") : null;
+			let folderData = folder ? BDFDB.DataUtils.load("ServerFolders", "folders", folder.folderId) : null;
 			let color3 = data.color3 || (folderData && folderData.copyTooltipColor ? folderData.color3 : null);
 			let color4 = data.color4 || (folderData && folderData.copyTooltipColor ? folderData.color4 : null);
 			var isgradient3 = color3 && BDFDB.ObjectUtils.is(color3);
@@ -590,7 +590,7 @@ class EditServers {
 	}
 
 	getGuildData (id, wrapper) {
-		let data = BDFDB.loadData(id, this, "servers");
+		let data = BDFDB.DataUtils.load(this, "servers", id);
 		this.setBanner(id, data);
 		if (!data) return {};
 		let allenabled = true, settings = BDFDB.DataUtils.get(this, "settings");

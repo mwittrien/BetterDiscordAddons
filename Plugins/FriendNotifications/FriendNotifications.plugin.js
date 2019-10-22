@@ -230,9 +230,9 @@ class FriendNotifications {
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".mute-checkbox", e => {
 			let config = e.currentTarget.getAttribute("config");
 			if (config) {
-				let notificationsound = BDFDB.getData(config, this, "notificationsounds");
+				let notificationsound = BDFDB.DataUtils.get(this, "notificationsounds", config);
 				notificationsound.mute = e.currentTarget.checked;
-				BDFDB.saveData(config, notificationsound, this, "notificationsounds");
+				BDFDB.DataUtils.save(notificationsound, this, "notificationsounds", config);
 			}
 		});
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".settings-avatar", e => {
@@ -262,7 +262,7 @@ class FriendNotifications {
 			let id = e.currentTarget.getAttribute("user-id");
 			let group = e.currentTarget.getAttribute("group");
 			if (id && group) {
-				BDFDB.removeData(id, this, group);
+				BDFDB.DataUtils.remove(this, group, id);
 				BDFDB.removeEles(BDFDB.getParentEle(BDFDB.dotCN.hovercard, e.currentTarget));
 				this.SettingsUpdated = true;
 			}
@@ -272,12 +272,12 @@ class FriendNotifications {
 			let id = idinput.value;
 			idinput.value = "";
 			if (friendIDs.includes(id)) BDFDB.NotificationUtils.toast("User is already a friend of yours. Please use the 'Friends' area to configure him/her.", {type:"error"});
-			else if (BDFDB.loadData(id, this, "nonfriends")) BDFDB.NotificationUtils.toast("User is already being observed as a 'Non-Friend'.", {type:"error"});
+			else if (BDFDB.DataUtils.load(this, "nonfriends")) BDFDB.NotificationUtils.toast("User is already being observed as a 'Non-Friend'.", {type:"error"}, id);
 			else {
 				let user = BDFDB.LibraryModules.UserStore.getUser(id);
 				if (user) {
 					let data = this.createDefaultConfig();
-					BDFDB.saveData(user.id, data, this, "nonfriends");
+					BDFDB.DataUtils.save(data, this, "nonfriends", user.id);
 					let hovercard = BDFDB.htmlToElement(this.createHoverCard(user, data, "nonfriends"));
 					settingspanel.querySelector(".nonfriend-list").appendChild(hovercard);
 					BDFDB.initElements(hovercard);
@@ -338,7 +338,7 @@ class FriendNotifications {
 	// begin of own functions
 
 	createHoverCard (user, data, group) {
-		let EUdata = BDFDB.loadData(user.id, "EditUsers", "users") || {};
+		let EUdata = BDFDB.DataUtils.load("EditUsers", "users", user.id) || {};
 		var hovercardhtml = `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="settings-avatar${data.desktop ? " desktop" : ""}${data.disabled ? " disabled" : ""}" group="${group}" user-id="${user.id}" style="flex: 0 0 auto; background-image: url(${EUdata.removeIcon ? "" : (EUdata.url ? EUdata.url : BDFDB.UserUtils.getAvatar(user.id))});"></div><div class="BDFDB-textscrollwrapper" style="flex: 1 1 auto;"><div class="BDFDB-textscroll">${BDFDB.encodeToHTML(EUdata.name || user.username)}</div></div>`;
 		for (let config in this.defaults.notificationstrings) {
 			hovercardhtml += `<div class="${BDFDB.disCNS.checkboxcontainer + BDFDB.disCN.marginreset} BDFDB-tablecheckbox" table-id="${group}" style="flex: 0 0 auto;"><label class="${BDFDB.disCN.checkboxwrapper}"><input user-id="${user.id}" group="${group}" config="${config}" type="checkbox" class="${BDFDB.disCN.checkboxinputdefault}"${data[config] ? " checked" : ""}><div class="${BDFDB.disCNS.checkbox + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex2 + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.checkboxround}"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
@@ -350,12 +350,12 @@ class FriendNotifications {
 		let id = avatar.getAttribute("user-id");
 		let group = avatar.getAttribute("group");
 		if (id && group) {
-			let data = BDFDB.loadData(id, this, group) || this.createDefaultConfig();
+			let data = BDFDB.DataUtils.load(this, group) || this.createDefaultConfig(, id);
 			data.desktop = desktopon;
 			data.disabled = disableon;
 			BDFDB.toggleClass(avatar, "desktop", desktopon);
 			BDFDB.toggleClass(avatar, "disabled", disableon);
-			BDFDB.saveData(id, data, this, group);
+			BDFDB.DataUtils.save(data, this, group, id);
 			this.SettingsUpdated = true;
 		}
 	}
@@ -382,9 +382,9 @@ class FriendNotifications {
 		let config = checkbox.getAttribute("config");
 		let group = checkbox.getAttribute("group");
 		if (id && config && group) {
-			let data = BDFDB.loadData(id, this, group) || this.createDefaultConfig();
+			let data = BDFDB.DataUtils.load(this, group) || this.createDefaultConfig(, id);
 			data[config] = checkbox.checked;
-			BDFDB.saveData(id, data, this, group);
+			BDFDB.DataUtils.save(data, this, group, id);
 			this.SettingsUpdated = true;
 		}
 	}
@@ -405,13 +405,13 @@ class FriendNotifications {
 	}
 
 	createDefaultConfig () {
-		return Object.assign({desktop: false, disabled: BDFDB.getData("disableForNew", this, "settings")}, BDFDB.ObjectUtils.map(this.defaults.notificationstrings, "init"));
+		return Object.assign({desktop: false, disabled: BDFDB.DataUtils.get(this, "settings")}, BDFDB.ObjectUtils.map(this.defaults.notificationstrings, "init"), "disableForNew");
 	}
 
 	saveNotificationString (input) {
 		let config = input.getAttribute("config");
 		if (config) {
-			BDFDB.saveData(config, input.value, this, "notificationstrings");
+			BDFDB.DataUtils.save(input.value, this, "notificationstrings", config);
 			this.SettingsUpdated = true;
 		}
 	}
@@ -421,10 +421,10 @@ class FriendNotifications {
 		if (config) {
 			let successSavedAudio = (parsedurl, parseddata) => {
 				if (parsedurl && parseddata) BDFDB.NotificationUtils.toast(`Sound was saved successfully.`, {type:"success"});
-				let notificationsound = BDFDB.getData(config, this, "notificationsounds");
+				let notificationsound = BDFDB.DataUtils.get(this, "notificationsounds", config);
 				notificationsound.url = parsedurl;
 				notificationsound.song = parseddata;
-				BDFDB.saveData(config, notificationsound, this, "notificationsounds");
+				BDFDB.DataUtils.save(notificationsound, this, "notificationsounds", config);
 				this.SettingsUpdated = true;
 			};
 
@@ -491,7 +491,7 @@ class FriendNotifications {
 				let user = BDFDB.LibraryModules.UserStore.getUser(id);
 				let status = this.getStatusWithMobileAndActivity(id, users[id]);
 				if (user && this.userStatusStore[id] != status.statusname && users[id][status.statusname]) {
-					let EUdata = BDFDB.loadData(user.id, "EditUsers", "users") || {};
+					let EUdata = BDFDB.DataUtils.load("EditUsers", "users", user.id) || {};
 					let libstring = (this.defaults.notificationstrings[status.statusname].libstring ? BDFDB.LanguageUtils.LanguageStrings[this.defaults.notificationstrings[status.statusname].libstring] : (this.defaults.notificationstrings[status.statusname].statusname || "")).toLowerCase();
 					let string = notificationstrings[status.statusname] || "$user changed status to $status";
 					let toaststring = BDFDB.encodeToHTML(string).replace(/'{0,1}\$user'{0,1}/g, `<strong>${BDFDB.encodeToHTML(EUdata.name || user.username)}</strong>`).replace(/'{0,1}\$status'{0,1}/g, `<strong>${libstring}</strong>`);

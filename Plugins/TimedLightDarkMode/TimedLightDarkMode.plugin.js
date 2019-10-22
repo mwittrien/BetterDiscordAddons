@@ -100,7 +100,7 @@ class TimedLightDarkMode {
 
 	startInterval () {
 		clearInterval(this.checkInterval);
-		if (BDFDB.getData("running", this, "settings")) {
+		if (BDFDB.DataUtils.get(this, "settings", "running")) {
 			var values = BDFDB.DataUtils.get(this, "values");
 			var inverted = values.timer1 > values.timer2;
 			var timer1LOW = this.getTime(values.timer1), timer2LOW = this.getTime(values.timer2);
@@ -163,7 +163,7 @@ class TimedLightDarkMode {
 			document.removeEventListener("mousemove", mousemove);
 			BDFDB.removeEles(bubble);
 			BDFDB.removeLocalStyle("disableTextSelection");
-			BDFDB.saveData(type, value, this, "values");
+			BDFDB.DataUtils.save(value, this, "values", type);
 			this.startInterval();
 		};
 		var mousemove = e => {

@@ -456,7 +456,7 @@ class NotificationSounds {
 
 	loadChoices () {
 		for (var type in this.types) {
-			var choice = BDFDB.loadData(type, this, "choices") || {}, songFound = false;
+			var choice = BDFDB.DataUtils.load(this, "choices", type) || {}, songFound = false;
 			for (var category in this.audios) if (choice.category == category) for (var song in this.audios[category]) if (choice.song == song) {
 				songFound = true;
 				break;
@@ -470,7 +470,7 @@ class NotificationSounds {
 
 	saveChoice (type, play) {
 		if (!this.choices[type]) return;
-		BDFDB.saveData(type, this.choices[type], this, "choices");
+		BDFDB.DataUtils.save(this.choices[type], this, "choices", type);
 		if (play) {
 			this.SettingsUpdated = true;
 			this.playAudio(type, this.settingsaudio);

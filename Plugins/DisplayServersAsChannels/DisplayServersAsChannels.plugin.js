@@ -215,7 +215,7 @@ class DisplayServersAsChannels {
 	}
 
 	addCSS () {
-		var listwidth = BDFDB.getData("serverListWidth", this, "amounts");
+		var listwidth = BDFDB.DataUtils.get(this, "amounts", "serverListWidth");
 		BDFDB.appendLocalStyle("DSACStyle" + this.name, `
 			.DSAC-styled ${BDFDB.dotCN.guildswrapper},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildsscrollerwrap},

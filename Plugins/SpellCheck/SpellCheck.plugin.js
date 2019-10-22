@@ -69,7 +69,7 @@ class SpellCheck {
 		for (let key in amounts) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%;">${this.defaults.amounts[key].description}</h3><div class="${BDFDB.disCN.inputwrapper} inputNumberWrapper ${BDFDB.disCNS.vertical}" style="flex: 1 1 auto;"><span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span><input type="number"${(!isNaN(this.defaults.amounts[key].min) && this.defaults.amounts[key].min !== null ? ' min="' + this.defaults.amounts[key].min + '"' : '') + (!isNaN(this.defaults.amounts[key].max) && this.defaults.amounts[key].max !== null ? ' max="' + this.defaults.amounts[key].max + '"' : '')} option="${key}" value="${amounts[key]}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.titlesize16} amount-input"></div></div>`;
 		}
-		var ownDictionary = BDFDB.loadData(choices.dictionaryLanguage, this, "owndics") || [];
+		var ownDictionary = BDFDB.DataUtils.load(this, "owndics", choices.dictionaryLanguage) || [];
 		settingshtml += `<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Your own Dictionary:</h3><div class="BDFDB-settings-inner-list word-list ${BDFDB.disCN.marginbottom8}">`;
 		for (let word of ownDictionary) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.margintop4 + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis} entryword">${word}</div></div><div class="${BDFDB.disCN.hovercardbutton} remove-word"></div></div>`;
@@ -116,7 +116,7 @@ class SpellCheck {
 
 			this.languages = Object.assign({}, BDFDB.LanguageUtils.languages);
 			this.languages = BDFDB.ObjectUtils.filter(this.languages, (lang) => {return lang.dic == true ? lang : null});
-			this.setDictionary(BDFDB.getData("dictionaryLanguage", this, "choices"));
+			this.setDictionary(BDFDB.DataUtils.get(this, "choices"), "dictionaryLanguage");
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
@@ -272,11 +272,11 @@ class SpellCheck {
 		word = word.split(" ")[0].split("\n")[0].split("\r")[0].split("\t")[0];
 		if (word) {
 			var wordlow = word.toLowerCase();
-			var lang = BDFDB.getData("dictionaryLanguage", this, "choices");
-			var ownDictionary = BDFDB.loadData(lang, this, "owndics") || [];
+			var lang = BDFDB.DataUtils.get(this, "choices", "dictionaryLanguage");
+			var ownDictionary = BDFDB.DataUtils.load(this, "owndics", lang) || [];
 			if (!ownDictionary.includes(wordlow)) {
 				ownDictionary.push(wordlow);
-				BDFDB.saveData(lang, ownDictionary, this, "owndics");
+				BDFDB.DataUtils.save(ownDictionary, this, "owndics", lang);
 				BDFDB.NotificationUtils.toast(this.labels.toast_wordadd_text ? this.labels.toast_wordadd_text.replace("${word}", word).replace("${dicname}", this.languages[lang].name) : "", {type:"success"});
 				this.dictionary = this.langDictionary.concat(ownDictionary);
 			}
@@ -287,10 +287,10 @@ class SpellCheck {
 		var entry = e.currentTarget.parentElement;
 		var word = entry.querySelector(".entryword").textContent;
 		entry.remove();
-		var lang = BDFDB.getData("dictionaryLanguage", this, "choices");
-		var ownDictionary = BDFDB.loadData(lang, this, "owndics") || [];
+		var lang = BDFDB.DataUtils.get(this, "choices", "dictionaryLanguage");
+		var ownDictionary = BDFDB.DataUtils.load(this, "owndics", lang) || [];
 		BDFDB.ArrayUtils.remove(ownDictionary, word);
-		BDFDB.saveData(lang, ownDictionary, this, "owndics");
+		BDFDB.DataUtils.save(ownDictionary, this, "owndics", lang);
 		this.dictionary = this.langDictionary.concat(ownDictionary);
 	}
 
@@ -298,11 +298,11 @@ class SpellCheck {
 		if (type && choice) {			
 			selectWrap.querySelector(BDFDB.dotCN.title).innerText = this.languages[choice].name;
 			this.setDictionary(choice);
-			BDFDB.saveData(type, choice, this, "choices");
+			BDFDB.DataUtils.save(choice, this, "choices", type);
 
 			var settingspanel = BDFDB.getParentEle(".BDFDB-settings", selectWrap), listcontainer = settingspanel ? settingspanel.querySelector(".word-list") : null;
 			if (listcontainer) {
-				var ownDictionary = BDFDB.loadData(choice, this, "owndics") || [];
+				var ownDictionary = BDFDB.DataUtils.load(this, "owndics", choice) || [];
 				var containerhtml = ``;
 				for (let word of ownDictionary) {
 					containerhtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.margintop4 + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis} entryword">${word}</div></div><div class="${BDFDB.disCN.hovercardbutton} remove-word"></div></div>`;
@@ -317,7 +317,7 @@ class SpellCheck {
 	}
 
 	setDictionary (lang) {
-		this.dictionary = BDFDB.loadData(lang, this, "owndics") || [];
+		this.dictionary = BDFDB.DataUtils.load(this, "owndics", lang) || [];
 		this.killLanguageToast();
 		this.languageToast = BDFDB.NotificationUtils.toast("Grabbing dictionary (" + this.languages[lang].name + "). Please wait", {timeout:0});
 		this.languageToast.interval = setInterval(() => {
@@ -364,7 +364,7 @@ class SpellCheck {
 
 
 	getSimilarWords (word) {
-		var maxAmount = BDFDB.getData("maxSimilarAmount", this, "amounts"), similarWords = [];
+		var maxAmount = BDFDB.DataUtils.get(this, "amounts", "maxSimilarAmount"), similarWords = [];
 		if (maxAmount > 0) {
 			var sameLetterDic = this.dictionary.filter(string => string.indexOf(word.toLowerCase().charAt(0)) == 0 ? string : null);
 			var similarities = {};

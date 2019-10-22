@@ -250,7 +250,7 @@ class PluginRepo {
 		}
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Add Plugin:</h3><input type="text" placeholder="Insert Raw Github Link of Plugin (https://raw.githubusercontent.com/...)" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.titlesize16}" id="input-pluginurl" style="flex: 1 1 auto;"><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-add btn-addplugin" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div>`;
 		settingshtml += `<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Your additional Plugin List:</h3><div class="BDFDB-settings-inner-list plugin-list ${BDFDB.disCN.marginbottom8}">`;
-		var ownlist = BDFDB.loadData("ownlist", this, "ownlist") || [];
+		var ownlist = BDFDB.DataUtils.load(this, "ownlist", "ownlist") || [];
 		for (let url of ownlist) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.margintop4 + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis} entryurl">${url}</div></div><div class="${BDFDB.disCN.hovercardbutton} remove-plugin"></div></div>`;
 		}
@@ -370,10 +370,10 @@ class PluginRepo {
 		if (pluginUrlInput && pluginList) {
 			var url = pluginUrlInput.value;
 			pluginUrlInput.value = null;
-			var ownlist = BDFDB.loadData("ownlist", this, "ownlist") || [];
+			var ownlist = BDFDB.DataUtils.load(this, "ownlist", "ownlist") || [];
 			if (!ownlist.includes(url)) {
 				ownlist.push(url);
-				BDFDB.saveData("ownlist", ownlist, this, "ownlist");
+				BDFDB.DataUtils.save(ownlist, this, "ownlist", "ownlist");
 				let entry = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.margintop4 + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis} entryurl">${url}</div></div><div class="${BDFDB.disCN.hovercardbutton} remove-plugin"></div></div>`);
 				BDFDB.ListenerUtils.addToChildren(entry, "click", ".remove-plugin", e => {this.removePluginFromOwnList(e);});
 				pluginList.appendChild(entry);
@@ -385,14 +385,14 @@ class PluginRepo {
 		var entry = e.currentTarget.parentElement;
 		var url = entry.querySelector(".entryurl").textContent;
 		entry.remove();
-		var ownlist = BDFDB.loadData("ownlist", this, "ownlist") || [];
+		var ownlist = BDFDB.DataUtils.load(this, "ownlist", "ownlist") || [];
 		BDFDB.ArrayUtils.remove(ownlist, url);
-		BDFDB.saveData("ownlist", ownlist, this, "ownlist");
+		BDFDB.DataUtils.save(ownlist, this, "ownlist", "ownlist");
 	}
 
 	removeAllFromOwnList (settingspanel) {
 		BDFDB.openConfirmModal(this, "Are you sure you want to remove all added Plugins from your own list?", () => {
-			BDFDB.saveData("ownlist", [], this, "ownlist");
+			BDFDB.DataUtils.save([], this, "ownlist", "ownlist");
 			BDFDB.removeEles(settingspanel.querySelector(BDFDB.dotCN.hovercard));
 		});
 	}
@@ -411,7 +411,7 @@ class PluginRepo {
 		pluginRepoModal.querySelector("#input-hideoutdated").checked = hiddenSettings.outdated && !options.showOnlyOutdated;
 		pluginRepoModal.querySelector("#input-hidedownloadable").checked = hiddenSettings.downloadable || options.showOnlyOutdated;
 		if (!BDFDB.BdUtils.isAutoLoadEnabled()) pluginRepoModal.querySelector("#RNMoption").remove();
-		else pluginRepoModal.querySelector("#input-rnmstart").checked = BDFDB.loadData("RNMstart", this, "RNMstart");
+		else pluginRepoModal.querySelector("#input-rnmstart").checked = BDFDB.DataUtils.load(this, "RNMstart", "RNMstart");
 
 		if (options.forcedSort && this.sortings.sort[options.forcedSort]) {
 			var sortinput = pluginRepoModal.querySelector(".sort-filter " + BDFDB.dotCN.quickselectvalue);
@@ -434,10 +434,10 @@ class PluginRepo {
 		});
 		BDFDB.ListenerUtils.addToChildren(pluginRepoModal, "change", ".hide-checkbox", e => {
 			pluginRepoModal.updateHidden = true;
-			BDFDB.saveData(e.currentTarget.value, e.currentTarget.checked, this, "hidden");
+			BDFDB.DataUtils.save(e.currentTarget.checked, this, "hidden", e.currentTarget.value);
 		});
 		BDFDB.ListenerUtils.addToChildren(pluginRepoModal, "change", "#input-rnmstart", e => {
-			BDFDB.saveData("RNMstart", e.currentTarget.checked, this, "RNMstart");
+			BDFDB.DataUtils.save(e.currentTarget.checked, this, "RNMstart", "RNMstart");
 		});
 		BDFDB.ListenerUtils.addToChildren(pluginRepoModal, "click", ".sort-filter", e => {
 			BDFDB.createSortPopout(e.currentTarget, this.sortPopoutMarkup, () => {this.sortEntries(pluginRepoModal);});
@@ -498,8 +498,8 @@ class PluginRepo {
 		favbutton.addEventListener("click", e => {
 			let favorize = data.fav == 1;
 			data.fav = favorize ? 0 : 1;
-			if (favorize) BDFDB.saveData(data.url, true, this, "favorites");
-			else BDFDB.removeData(data.url, this, "favorites");
+			if (favorize) BDFDB.DataUtils.save(true, this, "favorites", data.url);
+			else BDFDB.DataUtils.remove(this, "favorites", data.url);
 			pluginRepoModal.entries[data.url] = data;
 		});
 		let gitbutton = entry.querySelector(".gitIcon");
@@ -591,12 +591,12 @@ class PluginRepo {
 		var frame, framerunning = false, framequeue = [], outdated = 0, newentries = 0, i = 0;
 		var tags = ["getName", "getVersion", "getAuthor", "getDescription"];
 		var seps = ["\"", "\'", "\`"];
-		var newentriesdata = BDFDB.DataUtils.load(this, "newentriesdata"), ownlist = BDFDB.loadData("ownlist", this, "ownlist") || [];
+		var newentriesdata = BDFDB.DataUtils.load(this, "newentriesdata"), ownlist = BDFDB.DataUtils.load(this, "ownlist", "ownlist") || [];
 		this.cachedPlugins = (newentriesdata.urlbase64 ? atob(newentriesdata.urlbase64).split("\n") : []).concat(ownlist);
 		BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/PluginRepo/res/PluginList.txt", (error, response, result) => {
 			if (!error && result) {
 				result = result.replace(/[\r\t]/g, "");
-				BDFDB.saveData("urlbase64", btoa(result), this, "newentriesdata");
+				BDFDB.DataUtils.save(btoa(result), this, "newentriesdata", "urlbase64");
 				this.loadedPlugins = {};
 				this.grabbedPlugins = result.split("\n").filter(n => n);
 				this.foundPlugins = this.grabbedPlugins.concat(ownlist);

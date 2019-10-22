@@ -231,7 +231,7 @@ class EmojiStatistics {
 			if (settings.enableEmojiHovering) {
 				BDFDB.ListenerUtils.add(this, wrapper, "mouseenter", BDFDB.dotCN.emojipickeremojiitem, e => {
 					let data = this.emojiToServerList[e.target.style.getPropertyValue("background-image").replace('url("',"").replace('")',"")];
-					if (data) BDFDB.TooltipUtils.create(e.target, `${BDFDB.encodeToHTML(data.emoji)}\n${BDFDB.encodeToHTML(data.server)}`, {type:"right",selector:"emoji-tooltip",delay:BDFDB.getData("hoverDelay", this, "amounts")});
+					if (data) BDFDB.TooltipUtils.create(e.target, `${BDFDB.encodeToHTML(data.emoji)}\n${BDFDB.encodeToHTML(data.server)}`, {type:"right",selector:"emoji-tooltip",delay:BDFDB.DataUtils.get(this, "amounts")}, "hoverDelay");
 				});
 			}
 		}

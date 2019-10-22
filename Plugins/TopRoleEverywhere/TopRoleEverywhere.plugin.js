@@ -109,7 +109,7 @@ class TopRoleEverywhere {
 	// begin of own functions
 
 	processMemberListItem (instance, wrapper, returnvalue) {
-		if (instance.props && BDFDB.getData("showInMemberList", this, "settings")) {
+		if (instance.props && BDFDB.DataUtils.get(this, "settings", "showInMemberList")) {
 			this.addRoleTag(instance.props.user, wrapper.querySelector(BDFDB.dotCN.namecontainername), "list", BDFDB.disCN.bottagmember);
 		}
 	}
@@ -118,7 +118,7 @@ class TopRoleEverywhere {
 		let message = BDFDB.ReactUtils.getValue(instance, "props.message");
 		if (message) {
 			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
-			if (username && BDFDB.getData("showInChat", this, "settings")) {
+			if (username && BDFDB.DataUtils.get(this, "settings", "showInChat")) {
 				let messagegroup = BDFDB.getParentEle(BDFDB.dotCN.messagegroup, wrapper);
 				this.addRoleTag(message.author, username, "chat", BDFDB.containsClass(messagegroup, BDFDB.disCN.messagegroupcozy) ? BDFDB.disCN.bottagmessagecozy : BDFDB.disCN.bottagmessagecompact);
 			}

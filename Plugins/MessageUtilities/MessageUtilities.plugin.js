@@ -200,9 +200,9 @@ class MessageUtilities {
 		if (type && choice) {
 			selectWrap.querySelector(BDFDB.dotCN.title).innerText = this.clickMap[choice];
 			type = type.split(" ");
-			let binding = BDFDB.getData(type[0], this, "bindings");
+			let binding = BDFDB.DataUtils.get(this, "bindings", type[0]);
 			binding[type[1]] = parseInt(choice);
-			BDFDB.saveData(type[0], binding, this, "bindings");
+			BDFDB.DataUtils.save(binding, this, "bindings", type[0]);
 		}
 	}
 
@@ -232,9 +232,9 @@ class MessageUtilities {
 		var stopRecording = e => {
 			document.removeEventListener("mousedown", stopRecording);
 			document.removeEventListener("keydown", saveRecording);
-			let binding = BDFDB.getData(action, this, "bindings");
+			let binding = BDFDB.DataUtils.get(this, "bindings", action);
 			binding[option] = parseInt(recorderWrap.getAttribute("value"));
-			BDFDB.saveData(action, binding, this, "bindings");
+			BDFDB.DataUtils.save(binding, this, "bindings", action);
 			setTimeout(() => {
 				BDFDB.removeClass(recorderWrap, BDFDB.disCN.hotkeyrecording);
 				BDFDB.addClass(recorderWrap, BDFDB.disCN.hotkeyhasvalue);
@@ -254,9 +254,9 @@ class MessageUtilities {
 		let option = recorderWrap.getAttribute("option");
 		recorderWrap.setAttribute("value", 0);
 		recorderInput.setAttribute("value", this.keyboardMap[0]);
-		let binding = BDFDB.getData(action, this, "bindings");
+		let binding = BDFDB.DataUtils.get(this, "bindings", action);
 		binding[option] = parseInt(recorderWrap.getAttribute("value"));
-		BDFDB.saveData(action, binding, this, "bindings");
+		BDFDB.DataUtils.save(binding, this, "bindings", action);
 	}
 
 	onClick (e, click, name) {
@@ -313,7 +313,7 @@ class MessageUtilities {
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 			if ((channel && BDFDB.UserUtils.can("MANAGE_MESSAGES")) || message.author.id == BDFDB.UserUtils.me.id && message.type != 1 && message.type != 2 && message.type != 3) {
 				BDFDB.LibraryModules.MessageUtils.deleteMessage(message.channel_id, message.id, message.state != "SENT");
-				if (BDFDB.getData(action, this, "toasts")) BDFDB.NotificationUtils.toast("Message has been deleted.", {type:"success"});
+				if (BDFDB.DataUtils.get(this, "toasts")) BDFDB.NotificationUtils.toast("Message has been deleted.", {type:"success"}, action);
 			}
 		}
 	}
@@ -321,7 +321,7 @@ class MessageUtilities {
 	doEdit ({messagediv, pos, message}, action) {
 		if (message.author.id == BDFDB.UserUtils.me.id && !messagediv.querySelector("textarea")) {
 			BDFDB.LibraryModules.MessageUtils.startEditMessage(message.channel_id, message.id, message.content);
-			if (BDFDB.getData(action, this, "toasts")) BDFDB.NotificationUtils.toast("Started editing.", {type:"success"});
+			if (BDFDB.DataUtils.get(this, "toasts")) BDFDB.NotificationUtils.toast("Started editing.", {type:"success"}, action);
 		}
 	}
 
@@ -329,7 +329,7 @@ class MessageUtilities {
 		let reactButton = messagediv.querySelector(BDFDB.dotCN.emojipickerbutton);
 		if (reactButton) {
 			reactButton.click();
-			if (BDFDB.getData(action, this, "toasts")) BDFDB.NotificationUtils.toast("Reaction popout has been opened.", {type:"success"});
+			if (BDFDB.DataUtils.get(this, "toasts")) BDFDB.NotificationUtils.toast("Reaction popout has been opened.", {type:"success"}, action);
 		}
 	}
 
@@ -339,11 +339,11 @@ class MessageUtilities {
 			if (channel && (channel.type == 1 || channel.type == 3 || BDFDB.UserUtils.can("MANAGE_MESSAGES")) && message.type == 0) {
 				if (message.pinned) {
 					BDFDB.LibraryModules.MessagePinUtils.unpinMessage(channel, message.id);
-					if (BDFDB.getData(action, this, "toasts")) BDFDB.NotificationUtils.toast("Message has been unpinned.", {type:"error"});
+					if (BDFDB.DataUtils.get(this, "toasts")) BDFDB.NotificationUtils.toast("Message has been unpinned.", {type:"error"}, action);
 				}
 				else {
 					BDFDB.LibraryModules.MessagePinUtils.pinMessage(channel, message.id);
-					if (BDFDB.getData(action, this, "toasts")) BDFDB.NotificationUtils.toast("Message has been pinned.", {type:"success"});
+					if (BDFDB.DataUtils.get(this, "toasts")) BDFDB.NotificationUtils.toast("Message has been pinned.", {type:"success"}, action);
 				}
 			}
 		}
@@ -352,7 +352,7 @@ class MessageUtilities {
 	doCopyRaw ({messagediv, pos, message}, action) {
 		if (message.content) {
 			BDFDB.LibraryRequires.electron.clipboard.write({text:message.content});
-			if (BDFDB.getData(action, this, "toasts")) BDFDB.NotificationUtils.toast("Raw message content has been copied.", {type:"success"});
+			if (BDFDB.DataUtils.get(this, "toasts")) BDFDB.NotificationUtils.toast("Raw message content has been copied.", {type:"success"}, action);
 		}
 	}
 
@@ -360,7 +360,7 @@ class MessageUtilities {
 		let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 		if (channel) {
 			BDFDB.LibraryRequires.electron.clipboard.write({text:`https://discordapp.com/channels/${channel.guild_id}/${channel.id}/${message.id}`});
-			if (BDFDB.getData(action, this, "toasts")) BDFDB.NotificationUtils.toast("Messagelink has been copied.", {type:"success"});
+			if (BDFDB.DataUtils.get(this, "toasts")) BDFDB.NotificationUtils.toast("Messagelink has been copied.", {type:"success"}, action);
 		}
 	}
 
@@ -401,7 +401,7 @@ class MessageUtilities {
 	onKeyDown (e, key, name) {
 		if (!this.isEventFired(name)) {
 			this.fireEvent(name);
-			if (key == 27 && BDFDB.getData("clearOnEscape", this, "settings")) {
+			if (key == 27 && BDFDB.DataUtils.get(this, "settings", "clearOnEscape")) {
 				let instance = BDFDB.ReactUtils.findOwner(BDFDB.getParentEle(BDFDB.dotCNS.chat + "form", e.currentTarget), {name:"ChannelTextAreaForm", up:true});
 				if (instance) instance.setState({textValue:""});
 			}
@@ -413,7 +413,7 @@ class MessageUtilities {
 		if (!action) return null;
 		let str = "", settings = BDFDB.DataUtils.get(this, "settings");
 		if (settings.addHints && settings[action]) {
-			let binding = BDFDB.getData(action, this, "bindings");
+			let binding = BDFDB.DataUtils.get(this, "bindings", action);
 			if (binding) for (let type in binding) {
 				let typename = type == "click" ? this.clickMap[binding[type]] : this.keyboardMap[binding[type]];
 				if (typename && typename != "NONE") str += typename + "+";

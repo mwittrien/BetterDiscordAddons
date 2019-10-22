@@ -128,20 +128,20 @@ class OwnerTag {
 	}
 
 	processMemberListItem (instance, wrapper, returnvalue) {
-		if (instance.props && BDFDB.getData("addInMemberList", this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.namecontainernamewrapper), "list", BDFDB.disCN.bottagmember, null);
+		if (instance.props && BDFDB.DataUtils.get(this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.namecontainernamewrapper), "list", BDFDB.disCN.bottagmember, null, "addInMemberList");
 	}
 
 	processUserPopout (instance, wrapper, returnvalue) {
-		if (instance.props && BDFDB.getData("addInUserPopout", this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.nametag), "popout", BDFDB.disCN.bottagnametag, wrapper);
+		if (instance.props && BDFDB.DataUtils.get(this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.nametag), "popout", BDFDB.disCN.bottagnametag, wrapper, "addInUserPopout");
 	}
 
 	processUserProfile (instance, wrapper, returnvalue) {
-		if (instance.props && BDFDB.getData("addInUserProfil", this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.nametag), "profile", BDFDB.disCNS.bottagnametag + BDFDB.disCN.userprofilebottag, wrapper);
+		if (instance.props && BDFDB.DataUtils.get(this, "settings")) this.addOwnerTag(instance.props.user, null, wrapper.querySelector(BDFDB.dotCN.nametag), "profile", BDFDB.disCNS.bottagnametag + BDFDB.disCN.userprofilebottag, wrapper, "addInUserProfil");
 	}
 
 	processMessageUsername (instance, wrapper, returnvalue, methodnames) {
 		let message = BDFDB.ReactUtils.getValue(instance, "props.message");
-		if (message && BDFDB.getData("addInChatWindow", this, "settings")) {
+		if (message && BDFDB.DataUtils.get(this, "settings", "addInChatWindow")) {
 			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
 			if (username) {
 				let messagegroup = BDFDB.getParentEle(BDFDB.dotCN.messagegroup, wrapper);
@@ -170,7 +170,7 @@ class OwnerTag {
 		if (!(isowner || (settings.addForAdmins && BDFDB.UserUtils.can("ADMINISTRATOR", info.id)))) return;
 		let member = settings.useRoleColor ? (BDFDB.LibraryModules.MemberStore.getMember(channel.guild_id, info.id) || {}) : {};
 		if (!settings.useCrown) {
-			let tag = BDFDB.htmlToElement(`<span class="owner-tag ${isowner ? "owner-tag-owner" : "owner-tag-admin"} owner-${type}-tag ${(settings.useRoleColor ? "owner-tag-rolecolor " : "") + BDFDB.disCN.bottag + (selector ? (" " + selector) : "")}" style="order: 10 !important;">${BDFDB.getData(isowner ? "ownTagName" : "ownAdminTagName", this, "inputs")}</span>`);
+			let tag = BDFDB.htmlToElement(`<span class="owner-tag ${isowner ? "owner-tag-owner" : "owner-tag-admin"} owner-${type}-tag ${(settings.useRoleColor ? "owner-tag-rolecolor " : "") + BDFDB.disCN.bottag + (selector ? (" " + selector) : "")}" style="order: 10 !important;">${BDFDB.DataUtils.get(this, "inputs", isowner ? "ownTagName" : "ownAdminTagName")}</span>`);
 			let invert = container && container.firstElementChild && !(BDFDB.containsClass(container.firstElementChild, BDFDB.disCN.userpopoutheadernormal) || BDFDB.containsClass(container.firstElementChild, BDFDB.disCN.userprofiletopsectionnormal));
 			BDFDB.addClass(tag, invert ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular);
 			let EditUsersData = BDFDB.BdUtils.isPluginEnabled("EditUsers") ? BDFDB.BdUtils.getPlugin("EditUsers").getUserData(info.id, wrapper) : {};

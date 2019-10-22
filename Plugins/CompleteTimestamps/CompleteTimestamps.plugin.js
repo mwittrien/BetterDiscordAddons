@@ -60,7 +60,7 @@ class CompleteTimestamps {
 		for (let key in formats) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCN.flexchild}" style="flex: 0 0 30%;">${this.defaults.formats[key].description}</h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" option="${key}" value="${formats[key]}" placeholder="${this.defaults.formats[key].value}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.titlesize16}"></div></div>`;
 		}
-		let infoHidden = BDFDB.loadData("hideInfo", this, "hideInfo");
+		let infoHidden = BDFDB.DataUtils.load(this, "hideInfo", "hideInfo");
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.cursorpointer} toggle-info" style="flex: 1 1 auto;"><svg class="toggle-infoarrow${infoHidden ? (" " + BDFDB.disCN.directionright) : ""}" width="12" height="12" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 10L12 15 17 10"></path></svg><div class="toggle-infotext" style="flex: 1 1 auto;">Information</div></div>`;
 		settingshtml += `<div class="BDFDB-settings-inner-list info-container" ${infoHidden ? "style='display:none;'" : ""}>`;
 		settingshtml += `<div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$hour will be replaced with the current hour</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$minute will be replaced with the current minutes</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$second will be replaced with the current seconds</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$msecond will be replaced with the current milliseconds</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$timemode will change $hour to a 12h format and will be replaced with AM/PM</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$year will be replaced with the current year</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$month will be replaced with the current month</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$day will be replaced with the current day</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$monthnameL will be replaced with the monthname in long format based on the Discord Language</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$monthnameS will be replaced with the monthname in short format based on the Discord Language</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$weekdayL will be replaced with the weekday in long format based on the Discord Language</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$weekdayS will be replaced with the weekday in short format based on the Discord Language</div>`;
@@ -109,22 +109,22 @@ class CompleteTimestamps {
 			this.languages = Object.assign({"own":{name:"Own",id:"own",integrated:false,dic:false}}, BDFDB.LanguageUtils.languages);
 
 			BDFDB.ListenerUtils.add(this, document, "mouseenter", BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messagecontent, e => {
-				if (BDFDB.getData("showOnHover", this, "settings")) {
+				if (BDFDB.DataUtils.get(this, "settings", "showOnHover")) {
 					let message = e.currentTarget;
 					let messagegroup = BDFDB.getParentEle(BDFDB.dotCN.messagegroup, message);
 					if (!messagegroup || !messagegroup.tagName) return;
 					let info = this.getMessageData(message, messagegroup);
 					if (!info || !info.timestamp || !info.timestamp._i) return;
-					let choice = BDFDB.getData("creationDateLang", this, "choices");
+					let choice = BDFDB.DataUtils.get(this, "choices", "creationDateLang");
 					BDFDB.TooltipUtils.create(message, this.getTimestamp(this.languages[choice].id, info.timestamp._i), {type:"left", selector:"completetimestamp-tooltip"});
 				}
 			});
 			BDFDB.ListenerUtils.add(this, document, "mouseenter", BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageedited, e => {
-				if (BDFDB.getData("changeForEdit", this, "settings")) {
+				if (BDFDB.DataUtils.get(this, "settings", "changeForEdit")) {
 					let marker = e.currentTarget;
 					let time = marker.getAttribute("datetime");
 					if (!time) return;
-					let choice = BDFDB.getData("creationDateLang", this, "choices");
+					let choice = BDFDB.DataUtils.get(this, "choices", "creationDateLang");
 					BDFDB.TooltipUtils.create(marker, this.getTimestamp(this.languages[choice].id, time), {type:"top", selector:"completetimestampedit-tooltip"});
 				}
 			});
@@ -171,14 +171,14 @@ class CompleteTimestamps {
 	toggleInfo (ele) {
 		BDFDB.toggleClass(ele.querySelector("svg"), BDFDB.disCN.directionright);
 		BDFDB.toggleEles(ele.nextElementSibling);
-		BDFDB.saveData("hideInfo", BDFDB.isEleHidden(ele.nextElementSibling), this, "hideInfo");
+		BDFDB.DataUtils.save(BDFDB.isEleHidden(ele.nextElementSibling), this, "hideInfo", "hideInfo");
 	}
 
 	saveSelectChoice (selectWrap, type, choice) {
 		if (type && choice) {
 			selectWrap.querySelector(".languageName").innerText = this.languages[choice].name;
 			selectWrap.querySelector(".languageTimestamp").innerText = this.getTimestamp(this.languages[choice].id);
-			BDFDB.saveData(type, choice, this, "choices");
+			BDFDB.DataUtils.save(choice, this, "choices", type);
 		}
 	}
 
@@ -187,14 +187,14 @@ class CompleteTimestamps {
 	}
 
 	processMessageGroup (instance, wrapper, returnvalue) {
-		if (BDFDB.getData("showInChat", this, "settings")) for (let stamp of wrapper.querySelectorAll("time[datetime]")) this.changeTimestamp(stamp);
+		if (BDFDB.DataUtils.get(this, "settings")) for (let stamp of wrapper.querySelectorAll("time[datetime]")) this.changeTimestamp(stamp, "showInChat");
 	}
 
 	processEmbed (instance, wrapper, returnvalue) {
 		let embed = BDFDB.ReactUtils.getValue(instance, "props.embed");
 		let footer = wrapper.querySelector(BDFDB.dotCN.embedfootertext);
-		if (footer && embed && embed.timestamp && BDFDB.getData("showInEmbed", this, "settings")) {
-			footer.lastChild.textContent = this.getTimestamp(this.languages[BDFDB.getData("creationDateLang", this, "choices")].id, embed.timestamp._i);
+		if (footer && embed && embed.timestamp && BDFDB.DataUtils.get(this, "settings", "showInEmbed")) {
+			footer.lastChild.textContent = this.getTimestamp(this.languages[BDFDB.DataUtils.get(this, "choices")].id, embed.timestamp._i, "creationDateLang");
 		}
 	}
 
@@ -212,7 +212,7 @@ class CompleteTimestamps {
 			this.setMaxWidth();
 			BDFDB.addClass(stamp, "complete-timestamp");
 			stamp.parentElement.insertBefore(BDFDB.htmlToElement(`<span class="complete-timestamp-divider arabic-fix" style="display: inline !important; height: 0 !important; width: 0 !important; font-size: 0 !important; user-select: none !important;">ARABIC FIX</span>`), stamp);
-			BDFDB.setInnerText(stamp, this.getTimestamp(this.languages[BDFDB.getData("creationDateLang", this, "choices")].id, time));
+			BDFDB.setInnerText(stamp, this.getTimestamp(this.languages[BDFDB.DataUtils.get(this, "choices")].id, time), "creationDateLang");
 		}
 	}
 
@@ -239,7 +239,7 @@ class CompleteTimestamps {
 			if (timestring && settings.forceZeros) timestring = this.addLeadingZeros(timestring);
 		}
 		else {
-			let ownformat = BDFDB.getData("ownFormat", this, "formats");
+			let ownformat = BDFDB.DataUtils.get(this, "formats", "ownFormat");
 			languageid = BDFDB.getDiscordLanguage().id;
 			let hour = timeobj.getHours(), minute = timeobj.getMinutes(), second = timeobj.getSeconds(), msecond = timeobj.getMilliseconds(), day = timeobj.getDate(), month = timeobj.getMonth()+1, timemode = "";
 			if (ownformat.indexOf("$timemode") > -1) {
@@ -283,7 +283,7 @@ class CompleteTimestamps {
 			this.currentMode = BDFDB.DiscordUtils.getMode();
 			let timestamp = document.querySelector(BDFDB.dotCN.messagetimestampcompact);
 			if (timestamp) {
-				let choice = BDFDB.getData("creationDateLang", this, "choices");
+				let choice = BDFDB.DataUtils.get(this, "choices", "creationDateLang");
 				let testtimestamp = BDFDB.htmlToElement(`<time class="${timestamp.className}" style="width: auto !important;">${this.getTimestamp(this.languages[choice].id, new Date(253402124399995))}</time>`);
 				document.body.appendChild(testtimestamp);
 				let width = BDFDB.getRects(testtimestamp).width + 5;

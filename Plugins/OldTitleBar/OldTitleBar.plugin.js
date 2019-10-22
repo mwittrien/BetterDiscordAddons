@@ -158,7 +158,7 @@ class OldTitleBar {
 
 			this.window = BDFDB.LibraryRequires.electron.remote.getCurrentWindow();
 
-			this.patchMainScreen(BDFDB.getData("displayNative", this, "settings"));
+			this.patchMainScreen(BDFDB.DataUtils.get(this, "settings"), "displayNative");
 
 			BDFDB.addClass([document.body,document.querySelector(BDFDB.dotCN.titlebar)], "hidden-by-OTB");
 
@@ -209,7 +209,7 @@ class OldTitleBar {
 	addTitleBar () {
 		BDFDB.removeEles(".headerbarOTB");
 		var settings = BDFDB.DataUtils.get(this, "settings");
-		if (BDFDB.getData("addOldBar", this, "settings")) {
+		if (BDFDB.DataUtils.get(this, "settings", "addOldBar")) {
 			var headerbar = BDFDB.htmlToElement(`<span class="headerbarOTB ${BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}"></span>`);
 			this.createButtons(headerbar);
 			let headerbaricon = document.querySelector(BDFDB.dotCN.channelheaderchildren);
@@ -220,7 +220,7 @@ class OldTitleBar {
 
 	addSettingsTitleBar (settingspane) {
 		BDFDB.removeEles(".settingsTitlebarOTB");
-		if (BDFDB.getData("addToSettings", this, "settings")) {
+		if (BDFDB.DataUtils.get(this, "settings", "addToSettings")) {
 			BDFDB.addClass(document.body, "settingsTitlebarOTB-added");
 			var settingsbar = BDFDB.htmlToElement(`<div class="settingsTitlebarOTB ${BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifyend + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}"></div>`);
 			this.createButtons(settingsbar);
@@ -230,7 +230,7 @@ class OldTitleBar {
 	}
 
 	createButtons (bar) {
-		if (BDFDB.getData("reloadButton", this, "settings")) {
+		if (BDFDB.DataUtils.get(this, "settings", "reloadButton")) {
 			bar.appendChild(BDFDB.htmlToElement(this.dividerMarkup));
 			var reloadbutton = BDFDB.htmlToElement(this.reloadButtonMarkup);
 			bar.appendChild(reloadbutton);

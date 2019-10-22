@@ -134,7 +134,7 @@ class ChatFilter {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Remove all added words.</h3><button rtype="${rtype}" action="removeall" type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} remove-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 			settingshtml += `<div class="${BDFDB.disCNS.divider + BDFDB.disCNS.dividerdefault + BDFDB.disCN.marginbottom40}"></div>`;
 		}
-		var infoHidden = BDFDB.loadData("hideInfo", this, "hideInfo");
+		var infoHidden = BDFDB.DataUtils.load(this, "hideInfo", "hideInfo");
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.cursorpointer} toggle-info" style="flex: 1 1 auto;"><svg class="toggle-infoarrow${infoHidden ? (" " + BDFDB.disCN.directionright) : ""}" width="12" height="12" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 10L12 15 17 10"></path></svg><div class="toggle-infotext" style="flex: 1 1 auto;">Information</div></div>`;
 		settingshtml += `<div class="BDFDB-settings-inner-list info-container" ${infoHidden ? "style='display:none;'" : ""}><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Case: Will block/censor words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Not Case: Will block/censor words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Exact: Will block/censor words that are exactly the selected word. apple => apple, not applepie or pineapple</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Not Exact: Will block/censor all words containing the selected word. apple => apple, applepie and pineapple</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Empty: Ignores the default and set replace word and removes the word/message instead.</div></div>`;
 		settingshtml += `</div>`;
@@ -259,8 +259,8 @@ class ChatFilter {
 		var rtype = input.getAttribute("rtype");
 		var wordvalue = input.value;
 		if (rtype) {
-			var replaces = BDFDB.getData(rtype, this, "replaces");
-			BDFDB.saveData(rtype, wordvalue.trim(), this, "replaces");
+			var replaces = BDFDB.DataUtils.get(this, "replaces", rtype);
+			BDFDB.DataUtils.save(wordvalue.trim(), this, "replaces", rtype);
 		}
 	}
 
@@ -277,19 +277,19 @@ class ChatFilter {
 	toggleInfo (ele) {
 		BDFDB.toggleClass(ele.querySelector("svg"), BDFDB.disCN.directionright);
 		BDFDB.toggleEles(ele.nextElementSibling);
-		BDFDB.saveData("hideInfo", BDFDB.isEleHidden(ele.nextElementSibling), this, "hideInfo");
+		BDFDB.DataUtils.save(BDFDB.isEleHidden(ele.nextElementSibling), this, "hideInfo", "hideInfo");
 	}
 
 	onNativeContextMenu (instance, menu, returnvalue) {
 		if (instance.props && instance.props.value && instance.props.value.trim() && !menu.querySelector(`${this.name}-contextMenuItem`)) {
-			if ((instance.props.type == "NATIVE_TEXT" || instance.props.type == "CHANNEL_TEXT_AREA") && BDFDB.getData("addContextMenu", this, "settings")) this.appendItem(menu, returnvalue, instance.props.value.trim());
+			if ((instance.props.type == "NATIVE_TEXT" || instance.props.type == "CHANNEL_TEXT_AREA") && BDFDB.DataUtils.get(this, "settings")) this.appendItem(menu, returnvalue, instance.props.value.trim(), "addContextMenu");
 		}
 	}
 
 	onMessageContextMenu (instance, menu, returnvalue) {
 		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(`${this.name}-contextMenuItem`)) {
 			let text = document.getSelection().toString().trim();
-			if (text && BDFDB.getData("addContextMenu", this, "settings")) this.appendItem(menu, returnvalue, text);
+			if (text && BDFDB.DataUtils.get(this, "settings")) this.appendItem(menu, returnvalue, text, "addContextMenu");
 		}
 	}
 

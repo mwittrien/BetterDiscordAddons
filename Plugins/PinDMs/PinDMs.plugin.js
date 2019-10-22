@@ -260,7 +260,7 @@ class PinDMs {
 				else {
 					BDFDB.removeEles(document.querySelector(`.pinned-dm[channelid="${id}"]`));
 					this.unhideNativeDM(id);
-					BDFDB.removeData(id, this, "pinnedRecents");
+					BDFDB.DataUtils.remove(this, "pinnedRecents", id);
 					this.updatePinnedPositions("pinnedRecents");
 				}
 			}
@@ -434,7 +434,7 @@ class PinDMs {
 			BDFDB.removeClass(div, "pinned");
 			div.removeAttribute("channelid");
 		}
-		BDFDB.removeData(id, this, "pinnedDMs");
+		BDFDB.DataUtils.remove(this, "pinnedDMs", id);
 		this.updatePinnedPositions("pinnedDMs");
 		let dmsscrollerinstance = BDFDB.ReactUtils.getInstance(document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller));
 		if (dmsscrollerinstance) {
@@ -535,7 +535,7 @@ class PinDMs {
 									BDFDB.closeContextMenu(BDFDB.getParentEle(BDFDB.dotCN.contextmenu, e.target));
 									BDFDB.removeEles(dmdiv);
 									this.unhideNativeDM(id);
-									BDFDB.removeData(id, this, "pinnedRecents");
+									BDFDB.DataUtils.remove(this, "pinnedRecents", id);
 									this.updatePinnedPositions("pinnedRecents");
 								}
 							})
@@ -622,7 +622,7 @@ class PinDMs {
 		let pinneddmdiv = document.querySelector(`.pinned-dm[channelid="${id}"]`);
 		if (Node.prototype.isPrototypeOf(pinneddmdiv)) {
 			let count = BDFDB.LibraryModules.UnreadChannelUtils.getUnreadCount(id);
-			let showpin = BDFDB.getData("showPinIcon", this, "settings");
+			let showpin = BDFDB.DataUtils.get(this, "settings", "showPinIcon");
 
 			let dmdiv = BDFDB.DmUtils.getDiv(id);
 			let pinneddmiconwrapper = pinneddmdiv.querySelector(BDFDB.dotCN.guildiconwrapper);

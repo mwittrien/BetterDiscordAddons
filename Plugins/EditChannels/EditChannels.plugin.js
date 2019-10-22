@@ -161,10 +161,10 @@ class EditChannels {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_resetsettings_text,
 									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-resetsettings-ContextMenuItem`,
-									disabled: !BDFDB.loadData(instance.props.channel.id, this, "channels"),
+									disabled: !BDFDB.DataUtils.load(this, "channels", instance.props.channel.id),
 									action: e => {
 										BDFDB.closeContextMenu(menu);
-										BDFDB.removeData(instance.props.channel.id, this, "channels");
+										BDFDB.DataUtils.remove(this, "channels", instance.props.channel.id);
 										this.forceUpdateAll();
 									}
 								})
@@ -184,7 +184,7 @@ class EditChannels {
 	}
 
 	showChannelSettings (info) {
-		var data = BDFDB.loadData(info.id, this, "channels") || {};
+		var data = BDFDB.DataUtils.load(this, "channels", info.id) || {};
 		
 		BDFDB.openModal(this, {
 			size: "MEDIUM",
@@ -245,8 +245,8 @@ class EditChannels {
 					data.inheritColor = inheritcolorinput.checked;
 					
 					let changed = false;
-					if (Object.keys(data).every(key => data[key] == null || data[key] == false) && (changed = true)) BDFDB.removeData(info.id, this, "channels");
-					else if (!BDFDB.equals(olddata, data) && (changed = true)) BDFDB.saveData(info.id, data, this, "channels");
+					if (Object.keys(data).every(key => data[key] == null || data[key] == false) && (changed = true)) BDFDB.DataUtils.remove(this, "channels", info.id);
+					else if (!BDFDB.equals(olddata, data) && (changed = true)) BDFDB.DataUtils.save(data, this, "channels", info.id);
 					if (changed) this.forceUpdateAll();
 				}
 			}]
@@ -263,7 +263,7 @@ class EditChannels {
 				wrapper.querySelector("textarea").setAttribute("placeholder", BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", "#" + (data.name || channel.name)));
 			}
 			BDFDB.ListenerUtils.remove(this, textarea);
-			if (BDFDB.getData("changeInAutoComplete", this, "settings")) {
+			if (BDFDB.DataUtils.get(this, "settings", "changeInAutoComplete")) {
 				BDFDB.ListenerUtils.add(this, textarea, "keydown", e => {
 					let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCN.autocomplete);
 					if (autocompletemenu && (e.which == 9 || e.which == 13)) {
@@ -578,8 +578,8 @@ class EditChannels {
 	}
 
 	getChannelData (id, categoryid, wrapper) {
-		let data = BDFDB.loadData(id, this, "channels");
-		let categorydata = categoryid ? BDFDB.loadData(categoryid, this, "channels") : null;
+		let data = BDFDB.DataUtils.load(this, "channels", id);
+		let categorydata = categoryid ? BDFDB.DataUtils.load(this, "channels", categoryid) : null;
 		if (!data && (!categorydata || (categorydata && !categorydata.color && !categorydata.inheritColor))) return {};
 		if (!data) data = {};
 		data.color = data.color ? data.color : (categorydata && categorydata.color && categorydata.inheritColor ? categorydata.color : null);
