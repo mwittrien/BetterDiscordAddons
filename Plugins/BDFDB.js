@@ -1,7 +1,7 @@
 if (window.BDFDB && BDFDB.ListenerUtils && typeof BDFDB.ListenerUtils.remove == "function") BDFDB.ListenerUtils.remove(BDFDB);
 if (window.BDFDB && BDFDB.ObserverUtils && typeof BDFDB.ObserverUtils.disconnect == "function") BDFDB.ObserverUtils.disconnect(BDFDB);
 if (window.BDFDB && BDFDB.ModuleUtils && typeof BDFDB.ModuleUtils.unpatch == "function") BDFDB.ModuleUtils.unpatch(BDFDB);
-var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.BDv2Api || undefined, creationTime: performance.now(), cachedData: {}, pressedKeys: [], mousePosition: {pageX: 0, pageY: 0}, name: "$BDFDB"};
+var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB.cleanUps || {}, BDv2Api: BDFDB && BDFDB.BDv2Api || undefined, creationTime: performance.now(), cachedData: {}, pressedKeys: [], mousePosition: {pageX: 0, pageY: 0}, name: "$BDFDB"};
 (_ => {
 	var id = Math.round(Math.random() * 10000000000000000), InternalBDFDB = {};
 	BDFDB.id = id;
@@ -12,11 +12,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 	
 	BDFDB.PluginUtils = {};
 	BDFDB.PluginUtils.init = function (plugin) {
-		InternalBDFDB.clearStartTimeout(plugin);
 		plugin.name = plugin.name || (typeof plugin.getName == "function" ? plugin.getName() : null);
 		plugin.version = plugin.version || (typeof plugin.getVersion == "function" ? plugin.getVersion() : null);
 		plugin.author = plugin.author || (typeof plugin.getAuthor == "function" ? plugin.getAuthor() : null);
 		plugin.description = plugin.description || (typeof plugin.getDescription == "function" ? plugin.getDescription() : null);
+		
+		InternalBDFDB.clearStartTimeout(plugin);
 
 		var loadmessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
 		console.log(`%c[${plugin.name}]%c`, "color: #3a71c1; font-weight: 700;", "", loadmessage);
@@ -32,7 +33,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		if (typeof plugin.css === "string") BDFDB.appendLocalStyle(plugin.name, plugin.css);
 
 
-		BDFDB.ModuleUtils.patchModules(plugin);
+		InternalBDFDB.patchPlugin(plugin);
 		InternalBDFDB.addOnSwitchListener(plugin);
 		InternalBDFDB.addContextListeners(plugin);
 
@@ -45,6 +46,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		if (typeof window.PluginUpdates.interval === "undefined") window.PluginUpdates.interval = setInterval(_ => {BDFDB.PluginUtils.checkAllUpdates();}, 1000*60*60*2);
 
 		plugin.started = true;
+		delete plugin.stopping;
 
 		for (let name in BDFDB.myPlugins) if (!BDFDB.myPlugins[name].started && typeof BDFDB.myPlugins[name].initialize == "function") {
 			try {BDFDB.myPlugins[name].initialize();}
@@ -76,9 +78,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		delete window.PluginUpdates.plugins[url];
 		if (BDFDB.ObjectUtils.isEmpty(window.PluginUpdates.plugins)) BDFDB.removeEles("#bd-settingspane-container .bd-updatebtn" + BDFDB.dotCN._repofolderbutton);
 
-		setImmediate(() => {
+		delete plugin.started;
+		BDFDB.cleanUps[plugin.name] = setImmediate(() => {
 			BDFDB.ModuleUtils.unpatch(plugin);
-			delete plugin.started;
 			delete plugin.stopping;
 		});
 	};
@@ -242,6 +244,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		delete plugin.startTimeout;
 		clearTimeout(plugin.libLoadTimeout);
 		delete plugin.libLoadTimeout;
+		clearImmediate(BDFDB.cleanUps[plugin.name]);
+		delete BDFDB.cleanUps[plugin.name];
 	};
 	InternalBDFDB.addOnSwitchListener = function (plugin) {
 		if (BDFDB.ObjectUtils.is(plugin) && typeof plugin.onSwitch === "function") {
@@ -1330,9 +1334,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		if (methodnames.includes("render")) instance.forceUpdate();
 		else if (methodnames.includes("componentDidUpdate")) BDFDB.ModuleUtils.initiateProcess(plugin, instance, null, type, ["componentDidUpdate"]);
 	};
-
-	BDFDB.ModuleUtils.patchModules = function (plugin) {
+	InternalBDFDB.patchPlugin = function (plugin) {
 		if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ObjectUtils.is(plugin.patchModules)) {
+			BDFDB.ModuleUtils.unpatch(plugin);
 			for (let type in plugin.patchModules) {
 				var mapped = webModulesPatchmap[type];
 				var classname = webModulesNotFindableModules[type.split(" _ _ ")[1] || type];
@@ -7083,7 +7087,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.
 		BDFDBprocessFunctions._processAvatar(instance.props.message.author, wrapper.querySelector(BDFDB.dotCN.avatarwrapper));
 	};
 
-	BDFDB.ModuleUtils.patchModules(BDFDB);
+	InternalBDFDB.patchPlugin(BDFDB);
 
 	BDFDB.ModuleUtils.forceAllUpdates(BDFDB);
 	
