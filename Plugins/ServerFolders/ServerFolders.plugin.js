@@ -172,7 +172,7 @@ class ServerFolders {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		let settings = BDFDB.getAllData(this, "settings");
+		let settings = BDFDB.DataUtils.get(this, "settings");
 		let settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		for (let key in settings) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
@@ -186,7 +186,7 @@ class ServerFolders {
 		
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".removecustom-button", () => {
 			BDFDB.openConfirmModal(this, "Are you sure you want to remove all custom icons?", () => {
-				BDFDB.removeAllData(this, "customicons");
+				BDFDB.DataUtils.remove(this, "customicons");
 			});
 		});
 		return settingspanel;
@@ -219,7 +219,7 @@ class ServerFolders {
 			BDFDB.PluginUtils.init(this);
 			
 			// REMOVE 08.10.2019
-			let foldersdata = BDFDB.ObjectUtils.sort(BDFDB.loadAllData(this, "folders"), "position");
+			let foldersdata = BDFDB.ObjectUtils.sort(BDFDB.DataUtils.load(this, "folders"), "position");
 			let folders = Object.keys(foldersdata).filter(n => n.indexOf("folder") == 0);
 			if (folders.length) BDFDB.openConfirmModal(this, `Old ServerFolders data detected!\nFound ${folders.length} old custom folders in the ServerFolders.config.json.\nPress the '${BDFDB.LanguageUtils.LanguageStrings.OKAY}' button to automatically create a native folder for each old folder and to automatically put the servers in them.`, "Convert?", () => {
 				let oldGuildFolders = Object.assign({}, BDFDB.LibraryModules.FolderStore.guildFolders);
@@ -252,8 +252,8 @@ class ServerFolders {
 				for (let i in oldGuildFolders) if (oldGuildFolders[i].folderId || !guildsInFolders.includes(oldGuildFolders[i].guildIds[0])) guildFolders.push(Object.assign({}, oldGuildFolders[i]));
 				for (let i in guildFolders) for (let guildid of guildFolders[i].guildIds) guildPositions.push(guildid);
 				BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({guildPositions, guildFolders});
-				BDFDB.removeAllData(this, "folders");
-				BDFDB.saveAllData(newfoldersdata, this, "folders");
+				BDFDB.DataUtils.remove(this, "folders");
+				BDFDB.DataUtils.save(newfoldersdata, this, "folders");
 			});
 			
 			BDFDB.ModuleUtils.forceAllUpdates(this);
@@ -466,7 +466,7 @@ class ServerFolders {
 				BDFDB.ListenerUtils.add(this, wrapper, "click", () => {setImmediate(() => {
 					let folder = this.getFolderOfGuildId(instance.props.guild.id);
 					let folderid = folder ? folder.folderId : null;
-					let settings = BDFDB.getAllData(this, "settings");
+					let settings = BDFDB.DataUtils.get(this, "settings");
 					if (settings.closeAllFolders) for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (!folderid || openFolderId != folderid || !settings.forceOpenFolder) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
 					else if (folderid && settings.closeTheFolder && !settings.forceOpenFolder && BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folderid)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folderid);
 					
@@ -571,7 +571,7 @@ class ServerFolders {
 	loadAllIcons () {
 		let icons = {};
 		this.folderIcons.forEach((array,i) => {icons[i] = {"openicon":array.openicon,"closedicon":array.closedicon,"customID":null};});
-		Object.assign(icons, BDFDB.loadAllData(this, "customicons"));
+		Object.assign(icons, BDFDB.DataUtils.load(this, "customicons"));
 		return icons;
 	}
 
@@ -663,7 +663,7 @@ class ServerFolders {
 			return BDFDB.LibraryModules.FolderStore.guildFolders.every(n => !n.folderId || n.folderId != id) ? id : this.generateID(prefix);
 		}
 		else {
-			let data = BDFDB.loadAllData(this, prefix + "s");
+			let data = BDFDB.DataUtils.load(this, prefix + "s");
 			let id = prefix + "_" + Math.round(Math.random()*10000000000000000);
 			return data[id] ? this.generateID(prefix) : id;
 		}
@@ -982,7 +982,7 @@ class ServerFolders {
 			if (BDFDB.pressedKeys.includes(46)) this.removeGuildFromFolder(folderid, guildid);
 			else {
 				BDFDB.LibraryModules.GuildUtils.transitionToGuildSync(guild.id);
-				let settings = BDFDB.getAllData(this, "settings");
+				let settings = BDFDB.DataUtils.get(this, "settings");
 				if (settings.closeAllFolders) for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (openFolderId != folderid || !settings.forceOpenFolder) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
 				else if (settings.closeTheFolder && !settings.forceOpenFolder && BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folderid)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folderid);
 			}

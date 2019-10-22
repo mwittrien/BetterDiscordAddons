@@ -148,8 +148,8 @@ class NotificationSounds {
 		BDFDB.ListenerUtils.add(this, settingspanel, "keyup", ".songInput", e => {if (e.which == 13) this.saveAudio(settingspanel);});
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".reset-button", () => {
 			BDFDB.openConfirmModal(this, "Are you sure you want to delete all added songs?", () => {
-				BDFDB.removeAllData(this, "choices");
-				BDFDB.removeAllData(this, "audios");
+				BDFDB.DataUtils.remove(this, "choices");
+				BDFDB.DataUtils.remove(this, "audios");
 				this.loadAudios();
 				this.loadChoices();
 				settingspanel.querySelectorAll(BDFDB.dotCN.select).forEach(wrap => {
@@ -401,9 +401,9 @@ class NotificationSounds {
 	}
 
 	loadAudios () {
-		this.audios = BDFDB.loadAllData(this, "audios");
+		this.audios = BDFDB.DataUtils.load(this, "audios");
 		if (BDFDB.ObjectUtils.isEmpty(this.audios)) this.audios = this.defaults;
-		BDFDB.saveAllData(this.audios, this, "audios");
+		BDFDB.DataUtils.save(this.audios, this, "audios");
 	}
 
 	saveAudio (settingspanel) {
@@ -445,7 +445,7 @@ class NotificationSounds {
 				BDFDB.NotificationUtils.toast(`Song ${song} was added to category ${category}.`, {type:"success"});
 				if (!this.audios[category]) this.audios[category] = {};
 				this.audios[category][song] = url;
-				BDFDB.saveAllData(this.audios, this, "audios");
+				BDFDB.DataUtils.save(this.audios, this, "audios");
 				inputs.forEach((input) => {
 					input.value = "";
 				});
@@ -480,7 +480,7 @@ class NotificationSounds {
 	playAudio (type, audio) {
 		if (!audio) {
 			if (this.dontPlayAudio(type)) return;
-			audio = new Audio()
+			audio = new Audio();
 		}
 		else audio.pause();
 		audio.src = this.choices[type].src;

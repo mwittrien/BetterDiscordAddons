@@ -133,7 +133,7 @@ class RepoControls {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		let settings = BDFDB.getAllData(this, "settings");
+		let settings = BDFDB.DataUtils.get(this, "settings");
 		let settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		for (let key in settings) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
@@ -212,7 +212,7 @@ class RepoControls {
 
 	processV2CPluginCard (instance, wrapper, returnvalue, methodnames) {
 		if (wrapper.querySelector(BDFDB.dotCN._reponame)) {
-			let settings = BDFDB.getAllData(this, "settings");
+			let settings = BDFDB.DataUtils.get(this, "settings");
 			if (instance.props && settings.addDeleteButton) this.addDeleteButton("plugin", wrapper);
 			if (instance.props && settings.addEditButton) this.addEditButton("plugin", wrapper);
 			if (methodnames.includes("componentDidUpdate")) this.changeTextToHTML(wrapper, "");
@@ -221,7 +221,7 @@ class RepoControls {
 
 	processV2CThemeCard (instance, wrapper, returnvalue, methodnames) {
 		if (wrapper.querySelector(BDFDB.dotCN._reponame)) {
-			let settings = BDFDB.getAllData(this, "settings");
+			let settings = BDFDB.DataUtils.get(this, "settings");
 			if (instance.props && settings.addDeleteButton) this.addDeleteButton("theme", wrapper);
 			if (instance.props && settings.addEditButton) this.addEditButton("theme", wrapper);
 			if (methodnames.includes("componentDidUpdate")) this.changeTextToHTML(wrapper, "");
@@ -278,7 +278,7 @@ class RepoControls {
 		container.style.setProperty("display", "flex", "important");
 		container.style.setProperty("flex-direction", "column", "important");
 
-		let sortings = BDFDB.getAllData(this, "sortings");
+		let sortings = BDFDB.DataUtils.get(this, "sortings");
 
 		let repocontrols = BDFDB.htmlToElement(this.repoControlsMarkup);
 		repocontrols.insertBefore(BDFDB.createSearchBar("small"), repocontrols.firstElementChild);
@@ -352,7 +352,7 @@ class RepoControls {
 		if (typeof container.entries != "object") return;
 		let searchstring = repocontrols.querySelector(BDFDB.dotCN.searchbarinput).value.replace(/[<|>]/g, "").toUpperCase();
 
-		let sortings = BDFDB.getAllData(this, "sortings");
+		let sortings = BDFDB.DataUtils.get(this, "sortings");
 		let entries = BDFDB.ObjectUtils.filter(container.entries, entry => {return entry.search.indexOf(searchstring) > -1 ? entry : null;});
 		entries = BDFDB.ObjectUtils.sort(entries, sortings.sort);
 		if (sortings.order == "desc") entries = BDFDB.ObjectUtils.reverse(entries);
@@ -371,7 +371,7 @@ class RepoControls {
 				}
 			}
 			else li.style.removeProperty("order");
-			BDFDB.toggleEles(li, pos > -1)
+			BDFDB.toggleEles(li, pos > -1);
 		}
 	}
 

@@ -101,7 +101,7 @@ class EditUsers {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var settings = BDFDB.getAllData(this, "settings");
+		var settings = BDFDB.DataUtils.get(this, "settings");
 		var settingsitems = [], inneritems = [];
 		
 		for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
@@ -122,7 +122,7 @@ class EditUsers {
 			label: "Reset all Users",
 			onClick: _ => {
 				BDFDB.openConfirmModal(this, "Are you sure you want to reset all users?", () => {
-					BDFDB.removeAllData(this, "users");
+					BDFDB.DataUtils.remove(this, "users");
 					this.forceUpdateAll();
 				});
 			},
@@ -171,10 +171,10 @@ class EditUsers {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			let data = BDFDB.loadAllData(this, "users");
-			BDFDB.removeAllData(this, "users");
+			let data = BDFDB.DataUtils.load(this, "users");
+			BDFDB.DataUtils.remove(this, "users");
 			try {this.forceUpdateAll();} catch (err) {}
-			BDFDB.saveAllData(data, this, "users");
+			BDFDB.DataUtils.save(data, this, "users");
 
 			BDFDB.removeEles(".autocompleteEditUsers", ".autocompleteEditUsersRow");
 
@@ -1092,7 +1092,7 @@ class EditUsers {
 			return data;
 		}
 
-		let allenabled = true, settings = BDFDB.getAllData(this, "settings");
+		let allenabled = true, settings = BDFDB.DataUtils.get(this, "settings");
 		for (let i in settings) if (!settings[i]) {
 			allenabled = false;
 			break;
@@ -1134,7 +1134,7 @@ class EditUsers {
 		let words = textarea.value.split(/\s/);
 		let lastword = words[words.length-1].trim();
 		if (lastword && lastword.length > 1 && lastword[0] == "@") {
-			let users = BDFDB.loadAllData(this, "users");
+			let users = BDFDB.DataUtils.load(this, "users");
 			if (!users) return;
 			let userarray = [];
 			for (let id in users) if (users[id].name) {

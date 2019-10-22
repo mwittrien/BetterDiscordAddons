@@ -106,8 +106,8 @@ class ChatFilter {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var replaces = BDFDB.getAllData(this, "replaces");
-		var settings = BDFDB.getAllData(this, "settings");
+		var replaces = BDFDB.DataUtils.get(this, "replaces");
+		var settings = BDFDB.DataUtils.get(this, "settings");
 		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		for (let key in settings) {
 			if (!this.defaults.settings[key].inner) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
@@ -178,7 +178,7 @@ class ChatFilter {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
 
-			this.words = BDFDB.loadAllData(this, "words");
+			this.words = BDFDB.DataUtils.load(this, "words");
 			for (let rtype in this.defaults.replaces) if (!BDFDB.ObjectUtils.is(this.words[rtype])) this.words[rtype] = {};
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
@@ -201,7 +201,7 @@ class ChatFilter {
 
 	updateContainer (settingspanel, ele) {
 		var wordvalue = null, replacevalue = null, action = ele.getAttribute("action"), rtype = ele.getAttribute("rtype"), update = () => {
-			BDFDB.saveAllData(this.words, this, "words");
+			BDFDB.DataUtils.save(this.words, this, "words");
 
 			var containerhtml = ``;
 			for (let word in this.words[rtype]) {
@@ -242,7 +242,7 @@ class ChatFilter {
 		}
 	}
 
-	saveWord (wordvalue, replacevalue, rtype, configs = BDFDB.getAllData(this, "configs")) {
+	saveWord (wordvalue, replacevalue, rtype, configs = BDFDB.DataUtils.get(this, "configs")) {
 		if (!wordvalue || !replacevalue) return;
 		wordvalue = wordvalue.trim();
 		replacevalue = replacevalue.trim();
@@ -270,7 +270,7 @@ class ChatFilter {
 		var rtype = ele.getAttribute("rtype");
 		if (wordvalue && this.words[rtype][wordvalue] && config) {
 			this.words[rtype][wordvalue][config] = ele.checked;
-			BDFDB.saveAllData(this.words, this, "words");
+			BDFDB.DataUtils.save(this.words, this, "words");
 		}
 	}
 
@@ -344,8 +344,8 @@ class ChatFilter {
 					}
 				});
 
-				var settings = BDFDB.getAllData(this, "settings");
-				var replaces = BDFDB.getAllData(this, "replaces");
+				var settings = BDFDB.DataUtils.get(this, "settings");
+				var replaces = BDFDB.DataUtils.get(this, "replaces");
 				var blocked = false;
 				for (let bWord in this.words.blocked) {
 					var blockedReplace = this.words.blocked[bWord].empty ? "" : (this.words.blocked[bWord].replace || replaces.blocked);
@@ -504,7 +504,7 @@ class ChatFilter {
 			}
 			let rtype = chatfilterAddModal.querySelector("#input-choiceblockcensor").checked ? "censored" : "blocked";
 			this.saveWord(wordvalueinput.value.trim(), replacevalueinput.value.trim(), rtype, configs);
-			BDFDB.saveAllData(this.words, this, "words");
+			BDFDB.DataUtils.save(this.words, this, "words");
 			document.querySelectorAll(`${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored, ${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored`).forEach(message => {this.resetMessage(message);});
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		});

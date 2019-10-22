@@ -45,8 +45,8 @@ class OwnerTag {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var settings = BDFDB.getAllData(this, "settings");
-		var inputs = BDFDB.getAllData(this, "inputs");
+		var settings = BDFDB.DataUtils.get(this, "settings");
+		var inputs = BDFDB.DataUtils.get(this, "inputs");
 		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		for (let key in inputs) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%;">${this.defaults.inputs[key].description}</h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" option="${key}" value="${inputs[key]}" placeholder="${this.defaults.inputs[key].value}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.titlesize16}"></div></div>`;
@@ -123,7 +123,7 @@ class OwnerTag {
 		for (let input of settingspanel.querySelectorAll(BDFDB.dotCN.input)) {
 			inputs[input.getAttribute("option")] = input.value;
 		}
-		BDFDB.saveAllData(inputs, this, "inputs");
+		BDFDB.DataUtils.save(inputs, this, "inputs");
 		this.SettingsUpdated = true;
 	}
 
@@ -165,7 +165,7 @@ class OwnerTag {
 		let channel = BDFDB.LibraryModules.ChannelStore.getChannel(channelid || BDFDB.LibraryModules.LastChannelStore.getChannelId());
 		if (!channel) return;
 		let guild = BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id);
-		let settings = BDFDB.getAllData(this, "settings");
+		let settings = BDFDB.DataUtils.get(this, "settings");
 		let isowner = channel.ownerId == info.id || guild && guild.ownerId == info.id;
 		if (!(isowner || (settings.addForAdmins && BDFDB.UserUtils.can("ADMINISTRATOR", info.id)))) return;
 		let member = settings.useRoleColor ? (BDFDB.LibraryModules.MemberStore.getMember(channel.guild_id, info.id) || {}) : {};
@@ -191,7 +191,7 @@ class OwnerTag {
 	}
 
 	addHideCSS () {
-		var settings = BDFDB.getAllData(this, "settings");
+		var settings = BDFDB.DataUtils.get(this, "settings");
 		if (settings.hideNativeCrown || settings.useCrown) BDFDB.appendLocalStyle(this.name + "HideCrown", `${BDFDB.dotCNS.member + BDFDB.dotCN.memberownericon}:not(.owner-tag-crown) {display: none;}`);
 		else BDFDB.removeLocalStyle(this.name + "HideCrown");
 	}

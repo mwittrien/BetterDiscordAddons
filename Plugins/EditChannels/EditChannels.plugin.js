@@ -55,7 +55,7 @@ class EditChannels {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var settings = BDFDB.getAllData(this, "settings");
+		var settings = BDFDB.DataUtils.get(this, "settings");
 		var settingsitems = [], inneritems = [];
 		
 		for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
@@ -76,7 +76,7 @@ class EditChannels {
 			label: "Reset all Channels",
 			onClick: _ => {
 				BDFDB.openConfirmModal(this, "Are you sure you want to reset all channels?", () => {
-					BDFDB.removeAllData(this, "channels");
+					BDFDB.DataUtils.remove(this, "channels");
 					this.forceUpdateAll();
 				});
 			},
@@ -124,10 +124,10 @@ class EditChannels {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			let data = BDFDB.loadAllData(this, "channels");
-			BDFDB.removeAllData(this, "channels");
+			let data = BDFDB.DataUtils.load(this, "channels");
+			BDFDB.DataUtils.remove(this, "channels");
 			try {this.forceUpdateAll();} catch (err) {}
-			BDFDB.saveAllData(data, this, "channels");
+			BDFDB.DataUtils.save(data, this, "channels");
 
 			BDFDB.removeEles(".autocompleteEditChannels", ".autocompleteEditChannelsRow");
 
@@ -431,7 +431,7 @@ class EditChannels {
 				}
 				let iconparent = BDFDB.containsClass(channelname, BDFDB.disCN.quickswitchresultmatch) ? channelname.parentElement.parentElement : channelname.parentElement;
 				if (!BDFDB.containsClass(channelname, BDFDB.disCN.autocompletedescription)) {
-					let settings = BDFDB.getAllData(this, "settings");
+					let settings = BDFDB.DataUtils.get(this, "settings");
 					iconparent.querySelectorAll('svg [stroke]:not([stroke="none"]').forEach(icon => {
 						let iconcolor = color && BDFDB.getParentEle(BDFDB.dotCN.channelheadertitle, icon) ? BDFDB.colorSETALPHA(isgradient ? color[0] : color, 0.6) : (isgradient ? color[0] : color);
 						if (!icon.getAttribute("oldstroke")) icon.setAttribute("oldstroke", icon.getAttribute("stroke"));
@@ -583,7 +583,7 @@ class EditChannels {
 		if (!data && (!categorydata || (categorydata && !categorydata.color && !categorydata.inheritColor))) return {};
 		if (!data) data = {};
 		data.color = data.color ? data.color : (categorydata && categorydata.color && categorydata.inheritColor ? categorydata.color : null);
-		let allenabled = true, settings = BDFDB.getAllData(this, "settings");
+		let allenabled = true, settings = BDFDB.DataUtils.get(this, "settings");
 		for (let i in settings) if (!settings[i]) {
 			allenabled = false;
 			break;
@@ -608,7 +608,7 @@ class EditChannels {
 		let words = textarea.value.split(/\s/);
 		let lastword = words[words.length-1].trim();
 		if (lastword && lastword.length > 1 && lastword[0] == "#") {
-			let channels = BDFDB.loadAllData(this, "channels");
+			let channels = BDFDB.DataUtils.load(this, "channels");
 			if (!channels) return;
 			let channelarray = [];
 			for (let id in channels) if (channels[id].name) {
@@ -619,7 +619,7 @@ class EditChannels {
 			}
 			channelarray = BDFDB.ArrayUtils.keySort(channelarray.filter(n => n.lowercasename.indexOf(lastword.toLowerCase().slice(1)) != -1 || (n.lowercasecatname && n.lowercasecatname.indexOf(lastword.toLowerCase().slice(1)) != -1)), "lowercasename");
 			if (channelarray.length) {
-				let settings = BDFDB.getAllData(this, "settings");
+				let settings = BDFDB.DataUtils.get(this, "settings");
 				let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCNS.autocomplete + BDFDB.dotCN.autocompleteinner), amount = 15;
 				if (!autocompletemenu) {
 					autocompletemenu = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.autocomplete + BDFDB.disCN.autocomplete2} autocompleteEditChannels"><div class="${BDFDB.disCN.autocompleteinner}"><div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteEditChannelsRow"><div class="${BDFDB.disCN.autocompleteselector} autocompleteEditChannelsSelector"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">${BDFDB.LanguageUtils.LanguageStrings.TEXT_CHANNELS_MATCHING.replace("{{prefix}}", BDFDB.encodeToHTML(lastword))}</strong></div></div></div></div></div>`);

@@ -56,9 +56,9 @@ class MessageUtilities {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		let settings = BDFDB.getAllData(this, "settings"); 
-		let toasts = BDFDB.getAllData(this, "toasts"); 
-		let bindings = BDFDB.getAllData(this, "bindings");
+		let settings = BDFDB.DataUtils.get(this, "settings"); 
+		let toasts = BDFDB.DataUtils.get(this, "toasts"); 
+		let bindings = BDFDB.DataUtils.get(this, "bindings");
 		let settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		for (let key in settings) {
 			if (this.defaults.settings[key].description) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
@@ -81,8 +81,8 @@ class MessageUtilities {
 
 		BDFDB.initElements(settingspanel, this);
 
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", BDFDB.dotCN.hotkeycontainer, e => {this.startRecording(settingspanel, e);})
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".reset-recorder", e => {this.resetRecorder(settingspanel, e);})
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", BDFDB.dotCN.hotkeycontainer, e => {this.startRecording(settingspanel, e);});
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".reset-recorder", e => {this.resetRecorder(settingspanel, e);});
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".reset-button", () => {this.resetAll(settingspanel);});
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {
 			BDFDB.openDropdownMenu(e, this.saveSelectChoice.bind(this), this.createSelectChoice.bind(this), this.clickMap);
@@ -180,8 +180,8 @@ class MessageUtilities {
 
 	resetAll (settingspanel) {
 		BDFDB.openConfirmModal(this, "Are you sure you want to delete all key bindings?", () => {
-			BDFDB.removeAllData(this, "bindings");
-			let bindings = BDFDB.getAllData(this, "bindings");
+			BDFDB.DataUtils.remove(this, "bindings");
+			let bindings = BDFDB.DataUtils.get(this, "bindings");
 			settingspanel.querySelectorAll(BDFDB.dotCN.select).forEach(wrap => {
 				let type = wrap.getAttribute("type").split(" ");
 				wrap.setAttribute("value", bindings[type[0]][type[1]]);
@@ -262,8 +262,8 @@ class MessageUtilities {
 	onClick (e, click, name) {
 		if (!this.isEventFired(name)) {
 			this.fireEvent(name);
-			let settings = BDFDB.getAllData(this, "settings");
-			let bindings = BDFDB.ObjectUtils.filter(BDFDB.getAllData(this, "bindings"), action => {return settings[action]}, true);
+			let settings = BDFDB.DataUtils.get(this, "settings");
+			let bindings = BDFDB.ObjectUtils.filter(BDFDB.DataUtils.get(this, "bindings"), action => {return settings[action]}, true);
 			let priorityaction = null;
 			for (let action in bindings) {
 				let binding = bindings[action];
@@ -411,7 +411,7 @@ class MessageUtilities {
 
 	getActiveShortcutString (action) {
 		if (!action) return null;
-		let str = "", settings = BDFDB.getAllData(this, "settings");
+		let str = "", settings = BDFDB.DataUtils.get(this, "settings");
 		if (settings.addHints && settings[action]) {
 			let binding = BDFDB.getData(action, this, "bindings");
 			if (binding) for (let type in binding) {
@@ -426,7 +426,7 @@ class MessageUtilities {
 		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.messagegroup + "> [aria-disabled]", target) || BDFDB.getParentEle(BDFDB.dotCN.messagegroup + "> * > [aria-disabled]", target) || BDFDB.getParentEle(BDFDB.dotCN.messagesystem, target);
 		let pos = messagediv ? Array.from(messagediv.parentElement.childNodes).filter(n => n.nodeType != Node.TEXT_NODE).indexOf(messagediv) : -1;
 		let instance = BDFDB.ReactUtils.getInstance(messagediv);
-		let message = instance ? BDFDB.ReactUtils.findValue(, instance, "message", {up:true}) : null;
+		let message = instance ? BDFDB.ReactUtils.findValue(instance, "message", {up:true}) : null;
 		return {messagediv, pos, message};
 	}
 

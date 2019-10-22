@@ -125,9 +125,9 @@ class BadgesEverywhere {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var settings = BDFDB.getAllData(this, "settings");
-		var badges = BDFDB.getAllData(this, "badges");
-		var indicators = BDFDB.getAllData(this, "indicators");
+		var settings = BDFDB.DataUtils.get(this, "settings");
+		var badges = BDFDB.DataUtils.get(this, "badges");
+		var indicators = BDFDB.DataUtils.get(this, "indicators");
 		var settingsitems = [], inneritems = [];
 		
 		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
@@ -264,9 +264,9 @@ class BadgesEverywhere {
 
 	addToWrapper (info, wrapper, type) {
 		BDFDB.removeEles(wrapper.querySelectorAll(".BE-badges"));
-		let badges = BDFDB.getAllData(this, "badges");
-		let indicators = BDFDB.getAllData(this, "indicators");
-		let settings = BDFDB.getAllData(this, "settings");
+		let badges = BDFDB.DataUtils.get(this, "badges");
+		let indicators = BDFDB.DataUtils.get(this, "indicators");
+		let settings = BDFDB.DataUtils.get(this, "settings");
 		let header = BDFDB.getParentEle(BDFDB.dotCN.userpopoutheader, wrapper);
 		let badgewrapper = BDFDB.htmlToElement(`<span class="BE-badges BE-badges-${type} ${!settings.useColoredVersion || (header && !BDFDB.containsClass(header, BDFDB.disCN.userpopoutheadernormal)) ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important; display: flex !important; flex-direction: row !important;"></span>`);
 		for (let flag in this.defaults.badges) {

@@ -95,8 +95,8 @@ class ChatAliases {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var settings = BDFDB.getAllData(this, "settings");
-		var amounts = BDFDB.getAllData(this, "amounts");
+		var settings = BDFDB.DataUtils.get(this, "settings");
+		var amounts = BDFDB.DataUtils.get(this, "amounts");
 		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		for (let key in settings) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
@@ -162,7 +162,7 @@ class ChatAliases {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
 
-			this.aliases = BDFDB.loadAllData(this, "words");
+			this.aliases = BDFDB.DataUtils.load(this, "words");
 
 			BDFDB.ListenerUtils.add(document, "click", e => {
 				if (!e.target.tagName === "TEXTAREA") BDFDB.removeEles(".autocompleteAliases", ".autocompleteAliasesRow");
@@ -189,7 +189,7 @@ class ChatAliases {
 		var wordvalue = null, replacevalue = null, action = ele.getAttribute("action");
 
 		var update = () => {
-			BDFDB.saveAllData(this.aliases, this, "words");
+			BDFDB.DataUtils.save(this.aliases, this, "words");
 
 			var containerhtml = ``;
 			for (let word in this.aliases) {
@@ -228,7 +228,7 @@ class ChatAliases {
 		}
 	}
 
-	saveWord (wordvalue, replacevalue, fileselection, configs = BDFDB.getAllData(this, "configs")) {
+	saveWord (wordvalue, replacevalue, fileselection, configs = BDFDB.DataUtils.get(this, "configs")) {
 		if (!wordvalue || !replacevalue || !fileselection) return;
 		var filedata = null;
 		if (fileselection.files && fileselection.files[0] && BDFDB.LibraryRequires.fs.existsSync(replacevalue)) {
@@ -268,7 +268,7 @@ class ChatAliases {
 				this.aliases[newwordvalue] = this.aliases[oldwordvalue];
 				this.aliases[newwordvalue].replace = newreplacevalue;
 				if (newwordvalue != oldwordvalue) delete this.aliases[oldwordvalue];
-				BDFDB.saveAllData(this.aliases, this, "words");
+				BDFDB.DataUtils.save(this.aliases, this, "words");
 			}
 		},500);
 	}
@@ -278,7 +278,7 @@ class ChatAliases {
 		var config = ele.getAttribute("config");
 		if (wordvalue && this.aliases[wordvalue] && config) {
 			this.aliases[wordvalue][config] = ele.checked;
-			BDFDB.saveAllData(this.aliases, this, "words");
+			BDFDB.DataUtils.save(this.aliases, this, "words");
 		}
 	}
 
@@ -331,7 +331,7 @@ class ChatAliases {
 		if (instance.props && instance.props.channel && instance.props.type) {
 			var textarea = wrapper.querySelector("textarea");
 			if (!textarea) return;
-			var settings = BDFDB.getAllData(this, "settings");
+			var settings = BDFDB.DataUtils.get(this, "settings");
 			BDFDB.ListenerUtils.add(this, textarea, "input", () => {
 				if (this.format) {
 					this.format = false;
@@ -573,7 +573,7 @@ class ChatAliases {
 				if (configinput) configs[key] = configinput.checked;
 			}
 			this.saveWord(wordvalueinput.value.trim(), replacevalueinput.value.trim(), chataliasesAddModal.querySelector("#input-file"), configs);
-			BDFDB.saveAllData(this.aliases, this, "words");
+			BDFDB.DataUtils.save(this.aliases, this, "words");
 		});
 		wordvalueinput.focus();
 

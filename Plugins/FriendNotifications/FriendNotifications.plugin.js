@@ -151,14 +151,14 @@ class FriendNotifications {
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 
-		let settings = BDFDB.getAllData(this, "settings");
-		let notificationstrings = BDFDB.getAllData(this, "notificationstrings");
-		let notificationsounds = BDFDB.getAllData(this, "notificationsounds");
-		let amounts = BDFDB.getAllData(this, "amounts");
+		let settings = BDFDB.DataUtils.get(this, "settings");
+		let notificationstrings = BDFDB.DataUtils.get(this, "notificationstrings");
+		let notificationsounds = BDFDB.DataUtils.get(this, "notificationsounds");
+		let amounts = BDFDB.DataUtils.get(this, "amounts");
 
 		let friendIDs = BDFDB.LibraryModules.FriendUtils.getFriendIDs();
-		let friends = BDFDB.loadAllData(this, "friends");
-		let nonfriends = BDFDB.loadAllData(this, "nonfriends");
+		let friends = BDFDB.DataUtils.load(this, "friends");
+		let nonfriends = BDFDB.DataUtils.load(this, "nonfriends");
 
 		let settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		settingshtml += `<div class="${BDFDB.disCNS.h2 + BDFDB.disCNS.cursorpointer + BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4} BDFDB-containertext"><span class="BDFDB-containerarrow closed"></span>General Settings</div><div class="BDFDB-collapsecontainer">`;
@@ -218,8 +218,8 @@ class FriendNotifications {
 		settingshtml += `</div>`;
 		settingshtml += `</div></div>`;
 
-		BDFDB.saveAllData(friends, this, "friends");
-		BDFDB.saveAllData(nonfriends, this, "nonfriends");
+		BDFDB.DataUtils.save(friends, this, "friends");
+		BDFDB.DataUtils.save(nonfriends, this, "nonfriends");
 
 		let settingspanel = BDFDB.htmlToElement(settingshtml);
 
@@ -364,7 +364,7 @@ class FriendNotifications {
 		let config = tableheader.getAttribute("config");
 		let group = tableheader.getAttribute("group");
 		if (config && group) {
-			let data = BDFDB.loadAllData(this, group);
+			let data = BDFDB.DataUtils.load(this, group);
 			if (config == "desktop") {
 				enable = !enable;
 				for (let id in data) data[id].disabled = false;
@@ -372,7 +372,7 @@ class FriendNotifications {
 			}
 			for (let id in data) data[id][config] = enable;
 			for (let avatar of settingspanel.querySelectorAll(`.settings-avatar[group="${group}"]`)) BDFDB.toggleClass(avatar, config, enable);
-			BDFDB.saveAllData(data, this, group);
+			BDFDB.DataUtils.save(data, this, group);
 			this.SettingsUpdated = true;
 		}
 	}
@@ -393,9 +393,9 @@ class FriendNotifications {
 		let config = tableheader.getAttribute("config");
 		let group = tableheader.getAttribute("group");
 		if (config && group) {
-			let data = BDFDB.loadAllData(this, group);
+			let data = BDFDB.DataUtils.load(this, group);
 			for (let id in data) data[id][config] = enable;
-			BDFDB.saveAllData(data, this, group);
+			BDFDB.DataUtils.save(data, this, group);
 			for (let checkbox of settingspanel.querySelectorAll(`${BDFDB.dotCN.checkboxinput}[config="${config}"][group="${group}"]`)) {
 				checkbox.checked = enable;
 				if (typeof checkbox.BDFDBupdateElement == "function") checkbox.BDFDBupdateElement();
@@ -478,11 +478,11 @@ class FriendNotifications {
 
 	startInterval () {
 		clearInterval(this.checkInterval);
-		let settings = BDFDB.getAllData(this, "settings");
-		let amounts = BDFDB.getAllData(this, "amounts");
-		let notificationstrings = BDFDB.getAllData(this, "notificationstrings");
-		let notificationsounds = BDFDB.getAllData(this, "notificationsounds");
-		let users = Object.assign({}, BDFDB.loadAllData(this, "nonfriends"), BDFDB.loadAllData(this, "friends"));
+		let settings = BDFDB.DataUtils.get(this, "settings");
+		let amounts = BDFDB.DataUtils.get(this, "amounts");
+		let notificationstrings = BDFDB.DataUtils.get(this, "notificationstrings");
+		let notificationsounds = BDFDB.DataUtils.get(this, "notificationsounds");
+		let users = Object.assign({}, BDFDB.DataUtils.load(this, "nonfriends"), BDFDB.DataUtils.load(this, "friends"));
 		for (let id in users) this.userStatusStore[id] = this.getStatusWithMobileAndActivity(id, users[id]).statusname;
 		let toasttime = (amounts.toastTime > amounts.checkInterval ? amounts.checkInterval : amounts.toastTime) * 1000;
 		let desktoptime = (amounts.desktopTime > amounts.checkInterval ? amounts.checkInterval : amounts.desktopTime) * 1000;
@@ -501,7 +501,7 @@ class FriendNotifications {
 					if (!(settings.muteOnDND && BDFDB.UserUtils.getStatus() == "dnd")) {
 						let openChannel = () => {
 							if (settings.openOnClick) {
-								let DMid = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(user.id)
+								let DMid = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(user.id);
 								if (DMid) BDFDB.LibraryModules.SelectChannelUtils.selectPrivateChannel(DMid);
 								else BDFDB.LibraryModules.DirectMessageUtils.openPrivateChannel(BDFDB.UserUtils.me.id, user.id);
 								BDFDB.LibraryRequires.electron.remote.getCurrentWindow().maximize();
@@ -543,7 +543,7 @@ class FriendNotifications {
 			entry.querySelector(".log-time").innerText = `[${log.time.toLocaleTimeString()}]`;
 			entry.querySelector(".log-avatar").style.setProperty("background-image", `url(${log.avatar})`);
 			entry.querySelector(".log-description").innerHTML = log.string;
-			container.appendChild(entry)
+			container.appendChild(entry);
 		}
 		BDFDB.appendModal(timeLogModal);
 	}

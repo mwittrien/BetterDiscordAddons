@@ -138,8 +138,8 @@ class GoogleTranslateOption {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var choices = 	BDFDB.getAllData(this, "choices");
-		var settings = 	BDFDB.getAllData(this, "settings");
+		var choices = 	BDFDB.DataUtils.get(this, "choices");
+		var settings = 	BDFDB.DataUtils.get(this, "settings");
 		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		for (let key in choices) {
 			let choice = this.getLanguageChoice(key);
@@ -292,7 +292,7 @@ class GoogleTranslateOption {
 			{"braille":	{name:"Braille 6-dot",	id:"braille",	integrated:false,	dic:false}},
 			{"morse":	{name:"Morse",			id:"morse",		integrated:false,	dic:false}}
 		);
-		let favorites = BDFDB.loadAllData(this, "favorites")
+		let favorites = BDFDB.DataUtils.load(this, "favorites");
 		for (let id in this.languages) this.languages[id].fav = favorites[id] != undefined ? 0 : 1;
 		this.languages = BDFDB.ObjectUtils.sort(this.languages, "fav");
 	}
@@ -392,7 +392,7 @@ class GoogleTranslateOption {
 		if (!messagediv.querySelector(BDFDB.dotCN.messageedited + ".GTO-translated")) {
 			var markup = messagediv.querySelector(BDFDB.dotCN.messagemarkup);
 			var accessory = messagediv.querySelector(BDFDB.dotCN.messageaccessory);
-			var embeddescriptions = messagediv.querySelectorAll(BDFDB.dotCN.embeddescription)
+			var embeddescriptions = messagediv.querySelectorAll(BDFDB.dotCN.embeddescription);
 			var fakemarkup = markup.cloneNode(true);
 			BDFDB.removeEles(fakemarkup.querySelectorAll(BDFDB.dotCNC.messageheadercompact + BDFDB.dotCN.messageedited));
 			let string = fakemarkup.innerHTML;
@@ -614,7 +614,7 @@ class GoogleTranslateOption {
 			BDFDB.ListenerUtils.addToChildren(menu, "click", BDFDB.dotCN.giffavoritebutton, e => {
 				let choice = e.currentTarget.parentElement.getAttribute("value");
 				if (choice) {
-					let favorize = !BDFDB.loadData(choice, this, "favorites")
+					let favorize = !BDFDB.loadData(choice, this, "favorites");
 					if (favorize) BDFDB.saveData(choice, true, this, "favorites");
 					else BDFDB.removeData(choice, this, "favorites");
 					this.setLanguages();

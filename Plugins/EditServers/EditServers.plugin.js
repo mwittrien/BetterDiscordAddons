@@ -38,7 +38,7 @@ class EditServers {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var settings = BDFDB.getAllData(this, "settings");
+		var settings = BDFDB.DataUtils.get(this, "settings");
 		var settingsitems = [], inneritems = [];
 		
 		for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
@@ -59,7 +59,7 @@ class EditServers {
 			label: "Reset all Servers",
 			onClick: _ => {
 				BDFDB.openConfirmModal(this, "Are you sure you want to reset all servers?", () => {
-					BDFDB.removeAllData(this, "servers");
+					BDFDB.DataUtils.remove(this, "servers");
 					this.forceUpdateAll();
 				});
 			},
@@ -114,10 +114,10 @@ class EditServers {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			let data = BDFDB.loadAllData(this, "servers");
-			BDFDB.removeAllData(this, "servers");
+			let data = BDFDB.DataUtils.load(this, "servers");
+			BDFDB.DataUtils.remove(this, "servers");
 			try {this.forceUpdateAll();} catch (err) {}
-			BDFDB.saveAllData(data, this, "servers");
+			BDFDB.DataUtils.save(data, this, "servers");
 
 			for (let guildobj of BDFDB.GuildUtils.getAll()) if (guildobj.instance) {
 				delete guildobj.instance.props.guild.EditServersCachedBanner;
@@ -593,7 +593,7 @@ class EditServers {
 		let data = BDFDB.loadData(id, this, "servers");
 		this.setBanner(id, data);
 		if (!data) return {};
-		let allenabled = true, settings = BDFDB.getAllData(this, "settings");
+		let allenabled = true, settings = BDFDB.DataUtils.get(this, "settings");
 		for (let i in settings) if (!settings[i]) {
 			allenabled = false;
 			break;
@@ -619,7 +619,7 @@ class EditServers {
 	updateGuildSidebar() {
 		if (document.querySelector(BDFDB.dotCN.guildheader)) {
 			var ins = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name: ["GuildSidebar", "GuildHeader"], all: true, noCopies: true, depth: 99999999, time: 99999999});
-			if (ins) for (let i in ins) ins[i].updater.enqueueForceUpdate(ins[i])
+			if (ins) for (let i in ins) ins[i].updater.enqueueForceUpdate(ins[i]);
 		}
 	}
 

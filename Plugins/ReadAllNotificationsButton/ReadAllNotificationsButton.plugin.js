@@ -58,7 +58,7 @@ class ReadAllNotificationsButton {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var settings = BDFDB.getAllData(this, "settings");
+		var settings = BDFDB.DataUtils.get(this, "settings");
 		var settingsitems = [], inneritems = [];
 		
 		for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
@@ -137,7 +137,7 @@ class ReadAllNotificationsButton {
 				let ranbutton = BDFDB.htmlToElement(this.RANbuttonMarkup);
 				insertnode.parentElement.insertBefore(ranbutton, insertnode);
 				ranbutton.addEventListener("click", () => {
-					let settings = BDFDB.getAllData(this, "settings");
+					let settings = BDFDB.DataUtils.get(this, "settings");
 					if (settings.includeGuilds) BDFDB.GuildUtils.markAsRead(settings.includeMuted ? BDFDB.GuildUtils.getAll() : BDFDB.GuildUtils.getUnread());
 					if (settings.includeDMs) BDFDB.DmUtils.markAsRead(BDFDB.DmUtils.getAll());
 				});

@@ -243,7 +243,7 @@ class PluginRepo {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var settings = 	BDFDB.getAllData(this, "settings");
+		var settings = 	BDFDB.DataUtils.get(this, "settings");
 		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		for (let key in settings) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
@@ -266,7 +266,7 @@ class PluginRepo {
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".btn-addplugin", () => {this.addPluginToOwnList(settingspanel);});
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", "#input-pluginurl", e => {if (e.which == 13) this.addPluginToOwnList(settingspanel);});
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".remove-plugin", e => {this.removePluginFromOwnList(e);});
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".remove-all", () => {this.removeAllFromOwnList(settingspanel);})
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".remove-all", () => {this.removeAllFromOwnList(settingspanel);});
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".refresh-button", () => {
 			this.loading = {is:false, timeout:null, amount:0};
 			this.loadPlugins();
@@ -354,7 +354,7 @@ class PluginRepo {
 			if (folderbutton) {
 				var repoButton = BDFDB.htmlToElement(`<button class="${BDFDB.disCN._repofolderbutton} bd-pluginrepobutton">PluginRepo</button>`);
 				repoButton.addEventListener("click", () => {
-					this.openPluginRepoModal()
+					this.openPluginRepoModal();
 				});
 				repoButton.addEventListener("mouseenter", () => {
 					BDFDB.TooltipUtils.create(repoButton, "Open Plugin Repo", {type:"top",selector:"pluginrepo-button-tooltip"});
@@ -406,7 +406,7 @@ class PluginRepo {
 		var pluginRepoModal = BDFDB.htmlToElement(this.pluginRepoModalMarkup);
 		var tabbar = pluginRepoModal.querySelector(BDFDB.dotCN.tabbar);
 		tabbar.parentElement.insertBefore(BDFDB.createSearchBar("small"), tabbar.nextElementSibling);
-		var hiddenSettings = BDFDB.loadAllData(this, "hidden");
+		var hiddenSettings = BDFDB.DataUtils.load(this, "hidden");
 		pluginRepoModal.querySelector("#input-hideupdated").checked = hiddenSettings.updated || options.showOnlyOutdated;
 		pluginRepoModal.querySelector("#input-hideoutdated").checked = hiddenSettings.outdated && !options.showOnlyOutdated;
 		pluginRepoModal.querySelector("#input-hidedownloadable").checked = hiddenSettings.downloadable || options.showOnlyOutdated;
@@ -452,7 +452,7 @@ class PluginRepo {
 			}
 		});
 
-		let favorites = BDFDB.loadAllData(this, "favorites");
+		let favorites = BDFDB.DataUtils.load(this, "favorites");
 		let container = pluginRepoModal.querySelector(".plugins");
 		pluginRepoModal.entries = {};
 		for (let url in this.loadedPlugins) {
@@ -586,12 +586,12 @@ class PluginRepo {
 
 	loadPlugins () {
 		BDFDB.removeEles("iframe.discordSandbox",".pluginrepo-loadingicon");
-		var settings = BDFDB.loadAllData(this, "settings");
+		var settings = BDFDB.DataUtils.load(this, "settings");
 		var getPluginInfo, createFrame, runInFrame;
 		var frame, framerunning = false, framequeue = [], outdated = 0, newentries = 0, i = 0;
 		var tags = ["getName", "getVersion", "getAuthor", "getDescription"];
 		var seps = ["\"", "\'", "\`"];
-		var newentriesdata = BDFDB.loadAllData(this, "newentriesdata"), ownlist = BDFDB.loadData("ownlist", this, "ownlist") || [];
+		var newentriesdata = BDFDB.DataUtils.load(this, "newentriesdata"), ownlist = BDFDB.loadData("ownlist", this, "ownlist") || [];
 		this.cachedPlugins = (newentriesdata.urlbase64 ? atob(newentriesdata.urlbase64).split("\n") : []).concat(ownlist);
 		BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/PluginRepo/res/PluginList.txt", (error, response, result) => {
 			if (!error && result) {

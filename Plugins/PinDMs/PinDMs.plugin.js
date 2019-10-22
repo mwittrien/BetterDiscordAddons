@@ -110,7 +110,7 @@ class PinDMs {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var settings = BDFDB.getAllData(this, "settings");
+		var settings = BDFDB.DataUtils.get(this, "settings");
 		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
 		for (let key in settings) {
 			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
@@ -124,8 +124,8 @@ class PinDMs {
 
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".reset-button", () => {
 			BDFDB.openConfirmModal(this, "Are you sure you want to unpin all pinned DMs?", () => {
-				BDFDB.removeAllData(this, "pinnedDMs");
-				BDFDB.removeAllData(this, "pinnedRecents");
+				BDFDB.DataUtils.remove(this, "pinnedDMs");
+				BDFDB.DataUtils.remove(this, "pinnedRecents");
 			});
 		});
 		return settingspanel;
@@ -223,8 +223,8 @@ class PinDMs {
 	}
 
 	appendItem (menu, id, children, index) {
-		let pinnedInChannel = BDFDB.loadAllData(this, "pinnedDMs")[id] != undefined;
-		let pinnedInGuild = BDFDB.loadAllData(this, "pinnedRecents")[id] != undefined;
+		let pinnedInChannel = BDFDB.DataUtils.load(this, "pinnedDMs")[id] != undefined;
+		let pinnedInGuild = BDFDB.DataUtils.load(this, "pinnedRecents")[id] != undefined;
 		let items = [];
 		items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 			label: this.labels[pinnedInChannel ? "context_unpinchannel_text" : "context_pinchannel_text"],
@@ -342,7 +342,7 @@ class PinDMs {
 			if (methodnames.includes("componentDidMount")) {
 				wrapper.removeEventListener("contextmenu", wrapper.PinDMsContextMenuListener);
 				wrapper.PinDMsContextMenuListener = e => {
-					if (BDFDB.loadAllData(this, "pinnedRecents")[instance.props.channel.id] == undefined) {
+					if (BDFDB.DataUtils.load(this, "pinnedRecents")[instance.props.channel.id] == undefined) {
 						const itemGroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 							className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 							children: [
@@ -362,7 +362,7 @@ class PinDMs {
 				};
 				wrapper.addEventListener("contextmenu", wrapper.PinDMsContextMenuListener);
 			}
-			let pinnedRecents = BDFDB.loadAllData(this, "pinnedRecents");
+			let pinnedRecents = BDFDB.DataUtils.load(this, "pinnedRecents");
 			if (pinnedRecents[instance.props.channel.id] != undefined) {
 				if (methodnames.includes("componentDidMount")) {
 					if (!document.querySelector(`.pinned-dm[channelid="${instance.props.channel.id}"]`)) this.addPinnedRecent(instance.props.channel.id);
@@ -458,7 +458,7 @@ class PinDMs {
 	}
 
 	sortAndUpdate (type) {
-		let pinnedDMs = BDFDB.loadAllData(this, type);
+		let pinnedDMs = BDFDB.DataUtils.load(this, type);
 		delete pinnedDMs[""];
 		delete pinnedDMs["null"];
 		let sortedDMs = [], existingDMs = [], sortDM = (id, pos) => {
@@ -516,7 +516,7 @@ class PinDMs {
 				});
 				avatar.parentElement.addEventListener("click", e => {
 					if (user) {
-						let DMid = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(user.id)
+						let DMid = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(user.id);
 						if (DMid) BDFDB.LibraryModules.SelectChannelUtils.selectPrivateChannel(DMid);
 						else BDFDB.LibraryModules.DirectMessageUtils.openPrivateChannel(BDFDB.UserUtils.me.id, user.id);
 					}
@@ -610,11 +610,11 @@ class PinDMs {
 
 	updatePinnedPositions (type) {
 		setImmediate(() => {
-			let newPinned = {}, oldPinned = BDFDB.loadAllData(this, type);
+			let newPinned = {}, oldPinned = BDFDB.DataUtils.load(this, type);
 			let pins = Array.from(document.querySelectorAll(type == "pinnedRecents" ? `.pinned-dm` : `${BDFDB.dotCNS.dmchannels + BDFDB.dotCN.dmchannel}.pinned`)).map(div => {return div.getAttribute("channelid");}).reverse();
 			for (let i in pins) if (pins[i]) newPinned[pins[i]] = parseInt(i);
 			for (let id in oldPinned) if (newPinned[id] == undefined) newPinned[id] = Object.keys(newPinned).length;
-			BDFDB.saveAllData(newPinned, this, type);
+			BDFDB.DataUtils.save(newPinned, this, type);
 		});
 	}
 

@@ -144,7 +144,7 @@ class PersonalPins {
 
 		settingspanel.querySelector(".reset-button").addEventListener("click", () => {
 			BDFDB.openConfirmModal(this, "Are you sure you want to delete all pinned notes?", () => {
-				BDFDB.removeAllData(this, "pins");
+				BDFDB.DataUtils.remove(this, "pins");
 			});
 		});
 		return settingspanel;
@@ -351,7 +351,7 @@ class PersonalPins {
 		let channel = BDFDB.ChannelUtils.getSelected();
 		if (channel) {
 			let guild_id = channel.guild_id ? channel.guild_id : "@me";
-			let pins = BDFDB.loadAllData(this, "pins");
+			let pins = BDFDB.DataUtils.load(this, "pins");
 			if (!BDFDB.ObjectUtils.isEmpty(pins)) {
 				let container = notespopout.querySelector(BDFDB.dotCN.messagespopout);
 				let placeholder = notespopout.querySelector(BDFDB.dotCN.messagespopoutemptyplaceholder);
@@ -502,7 +502,7 @@ class PersonalPins {
 		if (!message || !target) return;
 		let {messagediv, pos} = this.getMessageAndPos(target);
 		if (!messagediv || pos == -1) return;
-		let pins = BDFDB.loadAllData(this, "pins");
+		let pins = BDFDB.DataUtils.load(this, "pins");
 		let guild = BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id) || {};
 		let guild_id = guild.id ? guild.id : "@me";
 		channel = channel ? channel : BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
@@ -535,18 +535,18 @@ class PersonalPins {
 				"markup": this.getMarkup(messagediv).innerHTML,
 				"accessory": messagediv.querySelector(BDFDB.dotCN.messageaccessory).innerHTML
 			});
-			BDFDB.saveAllData(pins, this, "pins");
+			BDFDB.DataUtils.save(pins, this, "pins");
 			BDFDB.NotificationUtils.toast(this.labels.toast_noteadd_text, {type:"success"});
 		}
 		else this.removeNoteData(pins[guild_id][channel.id][message.id + "_" + pos]);
 	}
 
 	updateNoteData (note, markup, accessory) {
-		let pins = BDFDB.loadAllData(this, "pins");
+		let pins = BDFDB.DataUtils.load(this, "pins");
 		pins[note.guild_id][note.channel_id][note.id + "_" + note.pos].markup = markup;
 		pins[note.guild_id][note.channel_id][note.id + "_" + note.pos].accessory = accessory;
 		pins[note.guild_id][note.channel_id][note.id + "_" + note.pos] = BDFDB.ObjectUtils.sort(pins[note.guild_id][note.channel_id][note.id + "_" + note.pos]);
-		BDFDB.saveAllData(pins, this, "pins");
+		BDFDB.DataUtils.save(pins, this, "pins");
 		BDFDB.NotificationUtils.toast(this.labels.toast_noteupdate_text, {type:"info"});
 	}
 
@@ -561,19 +561,19 @@ class PersonalPins {
 		let {messagediv, pos} = this.getMessageAndPos(target);
 		if (!messagediv || pos == -1) return;
 		channel = channel ? channel : BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
-		let pins = BDFDB.loadAllData(this, "pins");
+		let pins = BDFDB.DataUtils.load(this, "pins");
 		let guildid = channel.guild_id ? channel.guild_id : "@me";
 		return pins[guildid] && pins[guildid][channel.id] && pins[guildid][channel.id][message.id + "_" + pos] ? pins[guildid][channel.id][message.id + "_" + pos] : null;
 	}
 
 	removeNoteData (noteData) {
-		let pins = BDFDB.loadAllData(this, "pins");
+		let pins = BDFDB.DataUtils.load(this, "pins");
 		delete pins[noteData.guild_id][noteData.channel_id][noteData.id + "_" + noteData.pos];
 		if (BDFDB.ObjectUtils.isEmpty(pins[noteData.guild_id][noteData.channel_id])) {
 			delete pins[noteData.guild_id][noteData.channel_id];
 			if (BDFDB.ObjectUtils.isEmpty(pins[noteData.guild_id])) delete pins[noteData.guild_id];
 		}
-		BDFDB.saveAllData(pins, this, "pins");
+		BDFDB.DataUtils.save(pins, this, "pins");
 		BDFDB.NotificationUtils.toast(this.labels.toast_noteremove_text, {type:"danger"});
 	}
 	

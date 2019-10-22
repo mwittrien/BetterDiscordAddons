@@ -108,7 +108,7 @@ class ImageZoom {
 					let settingslink = BDFDB.htmlToElement(`<span class="${BDFDB.disCN.downloadlink} imagezoom-settings">Zoom ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}</div>`);
 					inner.firstElementChild.appendChild(settingslink);
 					let openContext = e => {
-						let settings = BDFDB.getAllData(this, "settings");
+						let settings = BDFDB.DataUtils.get(this, "settings");
 						let items = [];
 						for (let type in settings) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSliderItem, {
 							label: this.defaults.settings[type].name + ": " + settings[type] + this.defaults.settings[type].unit,
@@ -142,7 +142,7 @@ class ImageZoom {
 						BDFDB.appendLocalStyle("ImageZoomCrossHair", "* {cursor: crosshair !important;}");
 
 						let imgrects = BDFDB.getRects(img);
-						let settings = BDFDB.getAllData(this, "settings");
+						let settings = BDFDB.DataUtils.get(this, "settings");
 
 						let lense = BDFDB.htmlToElement(`<div class="imagezoom-lense" style="clip-path: circle(${(settings.lensesize/2) + 2}px at center) !important; border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${settings.lensesize}px !important; height: ${settings.lensesize}px !important; position: fixed !important;"><div class="imagezoom-lense-inner" style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; clip-path: circle(${settings.lensesize/2}px at center) !important;"><${img.tagName} class="imagezoom-pane" src="${img.src}" style="width: ${imgrects.width * settings.zoomlevel}px; height: ${imgrects.height * settings.zoomlevel}px; position: fixed !important;"${img.tagName == "VIDEO" ? " loop autoplay" : ""}></${img.tagName}></div></div>`);
 						let pane = lense.querySelector(".imagezoom-pane");
