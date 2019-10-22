@@ -2692,12 +2692,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				if (!BDFDB.containsClass(ele, BDFDB.disCN.settingsitemselected)) setTabitem(ele, 0);
 			});
 		});
-		container.querySelectorAll(".BDFDB-contextMenuItem " + BDFDB.dotCN.contextmenulabel).forEach(ele => {
-			BDFDB.addClass(ele, "BDFDB-textscrollwrapper");
-			ele.setAttribute("speed", 3);
-			ele.innerHTML = `<div class="BDFDB-textscroll">${BDFDB.encodeToHTML(ele.innerText)}</div>`;
-		});
-		container.querySelectorAll(".BDFDB-contextMenuItemHint, .BDFDB-contextMenuItem " + BDFDB.dotCN.contextmenuhint).forEach(ele => {
+		container.querySelectorAll(".BDFDB-contextMenuItemHint").forEach(ele => {
 			if (ele.innerText) {
 				ele.innerHTML = `<div class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">${BDFDB.encodeToHTML(ele.innerText)}</div></div>`;
 				ele.style.setProperty("top", getComputedStyle(ele.parentElement).paddingTop, "important");
@@ -5431,6 +5426,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 	} : undefined;
 	LibraryComponents.Button = BDFDB.ModuleUtils.findByProperties("Colors", "Hovers", "Looks");
+	LibraryComponents.Clickable = BDFDB.ModuleUtils.findByName("Clickable");
 	LibraryComponents.ColorSwatches = reactInitialized ? class BDFDB_ColorSwatches extends LibraryModules.React.Component {
 		constructor(props) {
 			super(props);
@@ -5543,7 +5539,42 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 	} : undefined;
 	LibraryComponents.ContextMenu = BDFDB.ModuleUtils.findByName("NativeContextMenu");
-	LibraryComponents.ContextMenuItem = BDFDB.ModuleUtils.findByString(`default.label}`, `default.hint}`, `role:"menuitem"`);
+	LibraryComponents.ContextMenuItem = reactInitialized ? class BDFDB_ContextMenuItem extends LibraryModules.React.Component {
+		render() {
+			return BDFDB.ReactUtils.createElement(LibraryComponents.Clickable, {
+				className: [BDFDB.disCN.contextmenuitem, !this.props.disabled ? BDFDB.disCN.contextmenuitemclickable : null, this.props.danger ? BDFDB.disCN.contextmenuitemdanger : null, this.props.disabled ? BDFDB.disCN.contextmenuitemdisabled : null, this.props.brand ? BDFDB.disCN.contextmenuitembrand : null, this.props.className].filter(n => n).join(" "),
+				style: Object.assign({}, this.props.style),
+				role: "menuitem",
+				onClick: this.props.disabled || typeof this.props.action != "function" ? null : this.props.action,
+				children: [
+					BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.contextmenulabel,
+						children: this.props.label
+					}),
+					BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.contextmenuhint,
+						style: {
+							width: 42,
+							maxWidth: 42,
+							marginLeft: 8
+						},
+						ref: instance => {
+							let ele = BDFDB.ReactUtils.findDOMNode(instance);
+							if (ele) {
+								ele.style.setProperty("top", getComputedStyle(ele.parentElement).paddingTop);
+								ele.style.setProperty("right", getComputedStyle(ele.parentElement).paddingRight);
+							}
+						},
+						children: BDFDB.ReactUtils.createElement(LibraryComponents.TextScroller, {
+							speed: 3,
+							children: this.props.hint
+						})
+					}),
+					this.props.children
+				]
+			});
+		}
+	} : undefined;
 	LibraryComponents.ContextMenuItemGroup = BDFDB.ModuleUtils.findByString(`"div",{className`, `default.itemGroup}`);
 	LibraryComponents.ContextMenuSliderItem = BDFDB.ModuleUtils.findByName("SliderMenuItem");
 	LibraryComponents.ContextMenuSubItem = BDFDB.ModuleUtils.findByName("FluxContainer(SubMenuItem)");
@@ -5731,11 +5762,53 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	LibraryComponents.TextScroller = reactInitialized ? class BDFDB_TextScroller extends LibraryModules.React.Component {
         render() {return BDFDB.ReactUtils.createElement("div", {
 			className: "BDFDB-textscrollwrapper",
+			style: {
+				position: "relative",
+				display: "block",
+				overflow: "hidden"
+			},
+			ref: instance => {
+				let ele = BDFDB.ReactUtils.findDOMNode(instance);
+				if (ele) {
+					var inner = ele.firstElementChild;
+					var Animation = new LibraryModules.AnimationUtils.Value(0);
+					Animation
+						.interpolate({inputRange:[0, 1], outputRange:[0, (BDFDB.getRects(inner).width - BDFDB.getRects(ele).width) * -1]})
+						.addListener(v => {inner.style.setProperty("left", v.value + "px", "important");});
+					this.scroll = p => {
+						var w = p + parseFloat(inner.style.getPropertyValue("left")) / (BDFDB.getRects(inner).width - BDFDB.getRects(ele).width);
+						w = isNaN(w) || !isFinite(w) ? p : w;
+						w *= BDFDB.getRects(inner).width / (BDFDB.getRects(ele).width * 2);
+						LibraryModules.AnimationUtils.parallel([LibraryModules.AnimationUtils.timing(Animation, {toValue:p, duration:Math.sqrt(w**2) * 4000 / (parseInt(this.props.speed) || 1)})]).start();
+					}
+				}
+			},
 			onMouseEnter: e => {
-				console.log(e.currentTarget);
+				var ele = e.currentTarget;
+				var inner = ele.firstElementChild;
+				if (BDFDB.getRects(ele).width < BDFDB.getRects(inner).width) {
+					BDFDB.addClass(ele, "scrolling");
+					inner.style.setProperty("display", "block", "important");
+					this.scroll(1);
+				}
+			},
+			onMouseLeave: e => {
+				var ele = e.currentTarget;
+				var inner = ele.firstElementChild;
+				if (BDFDB.containsClass(ele, "scrolling")) {
+					BDFDB.removeClass(ele, "scrolling");
+					inner.style.setProperty("display", "inline", "important");
+					this.scroll(0);
+				}
 			},
 			children: BDFDB.ReactUtils.createElement("div", {
 				className: "BDFDB-textscroll",
+				style: {
+					left: "0",
+					position: "relative",
+					display: "inline",
+					whiteSpace: "nowrap"
+				},
 				children: this.props.children
 			})
 		});}
