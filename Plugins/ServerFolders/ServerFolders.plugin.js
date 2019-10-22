@@ -442,7 +442,7 @@ class ServerFolders {
 			}
 			if (state.expanded) setImmediate(() => {
 				for (let guildid of instance.props.guildIds) this.updateGuildInFolderContent(state.folderId, guildid);
-				if (this.clickedFolder == state.folderId && BDFDB.DataUtils.get(this, "settings")) for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders(, "closeOtherFolders")) if (openFolderId != state.folderId) {
+				if (this.clickedFolder == state.folderId && BDFDB.DataUtils.get(this, "settings", "closeOtherFolders")) for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (openFolderId != state.folderId) {
 					BDFDB.removeEles(this.foldercontent.querySelectorAll(`${BDFDB.dotCN.guildouter}[folderid="${openFolderId}"]`));
 					BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
 				}

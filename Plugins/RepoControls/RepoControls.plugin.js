@@ -260,7 +260,7 @@ class RepoControls {
 					else BDFDB.NotificationUtils.toast(`Successfully deleted ${type} "${name}".`, {type:"success"});
 				});
 			};
-			if (!BDFDB.DataUtils.get(this, "settings")) deleteFile(, "confirmDelete");
+			if (!BDFDB.DataUtils.get(this, "settings", "confirmDelete")) deleteFile();
 			else BDFDB.openConfirmModal(this, `Are you sure you want to delete the ${type} "${name}"?`, () => {
 				deleteFile();
 			});

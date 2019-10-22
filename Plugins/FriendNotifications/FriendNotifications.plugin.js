@@ -350,7 +350,7 @@ class FriendNotifications {
 		let id = avatar.getAttribute("user-id");
 		let group = avatar.getAttribute("group");
 		if (id && group) {
-			let data = BDFDB.DataUtils.load(this, group) || this.createDefaultConfig(, id);
+			let data = BDFDB.DataUtils.load(this, group, id) || this.createDefaultConfig();
 			data.desktop = desktopon;
 			data.disabled = disableon;
 			BDFDB.toggleClass(avatar, "desktop", desktopon);
@@ -382,7 +382,7 @@ class FriendNotifications {
 		let config = checkbox.getAttribute("config");
 		let group = checkbox.getAttribute("group");
 		if (id && config && group) {
-			let data = BDFDB.DataUtils.load(this, group) || this.createDefaultConfig(, id);
+			let data = BDFDB.DataUtils.load(this, group, id) || this.createDefaultConfig();
 			data[config] = checkbox.checked;
 			BDFDB.DataUtils.save(data, this, group, id);
 			this.SettingsUpdated = true;
