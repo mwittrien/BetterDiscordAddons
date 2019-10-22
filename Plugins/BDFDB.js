@@ -5802,7 +5802,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				}
 			},
 			children: BDFDB.ReactUtils.createElement("div", {
-				className: "BDFDB-textscroll",
 				style: {
 					left: "0",
 					position: "relative",
