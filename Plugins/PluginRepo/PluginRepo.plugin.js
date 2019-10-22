@@ -263,11 +263,11 @@ class PluginRepo {
 
 		BDFDB.initElements(settingspanel, this);
 
-		BDFDB.addEventListener(this, settingspanel, "click", ".btn-addplugin", () => {this.addPluginToOwnList(settingspanel);});
-		BDFDB.addEventListener(this, settingspanel, "click", "#input-pluginurl", e => {if (e.which == 13) this.addPluginToOwnList(settingspanel);});
-		BDFDB.addEventListener(this, settingspanel, "click", ".remove-plugin", e => {this.removePluginFromOwnList(e);});
-		BDFDB.addEventListener(this, settingspanel, "click", ".remove-all", () => {this.removeAllFromOwnList(settingspanel);})
-		BDFDB.addEventListener(this, settingspanel, "click", ".refresh-button", () => {
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".btn-addplugin", () => {this.addPluginToOwnList(settingspanel);});
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", "#input-pluginurl", e => {if (e.which == 13) this.addPluginToOwnList(settingspanel);});
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".remove-plugin", e => {this.removePluginFromOwnList(e);});
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".remove-all", () => {this.removeAllFromOwnList(settingspanel);})
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".refresh-button", () => {
 			this.loading = {is:false, timeout:null, amount:0};
 			this.loadPlugins();
 		});
@@ -299,17 +299,15 @@ class PluginRepo {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
 			this.loadPlugins();
 
 			this.updateInterval = setInterval(() => {this.checkForNewPlugins();},1000*60*30);
 
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 
@@ -328,7 +326,7 @@ class PluginRepo {
 				frame.remove();
 			}
 
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -337,7 +335,7 @@ class PluginRepo {
 
 	onUserSettingsCogContextMenu (instance, menu, returnvalue) {
 		setImmediate(() => {for (let child of returnvalue.props.children) if (child && child.props && child.props.label == "BandagedBD" && Array.isArray(child.props.render)) {
-			const repoItem = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+			const repoItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: "Plugin Repo",
 				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-repo-contextMenuItem`,
 				action: e => {
@@ -359,7 +357,7 @@ class PluginRepo {
 					this.openPluginRepoModal()
 				});
 				repoButton.addEventListener("mouseenter", () => {
-					BDFDB.createTooltip("Open Plugin Repo", repoButton, {type:"top",selector:"pluginrepo-button-tooltip"});
+					BDFDB.TooltipUtils.create(repoButton, "Open Plugin Repo", {type:"top",selector:"pluginrepo-button-tooltip"});
 				});
 				folderbutton.parentElement.insertBefore(repoButton, folderbutton.nextSibling);
 			}
@@ -377,7 +375,7 @@ class PluginRepo {
 				ownlist.push(url);
 				BDFDB.saveData("ownlist", ownlist, this, "ownlist");
 				let entry = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.margintop4 + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis} entryurl">${url}</div></div><div class="${BDFDB.disCN.hovercardbutton} remove-plugin"></div></div>`);
-				BDFDB.addChildEventListener(entry, "click", ".remove-plugin", e => {this.removePluginFromOwnList(e);});
+				BDFDB.ListenerUtils.addToChildren(entry, "click", ".remove-plugin", e => {this.removePluginFromOwnList(e);});
 				pluginList.appendChild(entry);
 			}
 		}
@@ -388,7 +386,7 @@ class PluginRepo {
 		var url = entry.querySelector(".entryurl").textContent;
 		entry.remove();
 		var ownlist = BDFDB.loadData("ownlist", this, "ownlist") || [];
-		BDFDB.removeFromArray(ownlist, url);
+		BDFDB.ArrayUtils.remove(ownlist, url);
 		BDFDB.saveData("ownlist", ownlist, this, "ownlist");
 	}
 
@@ -401,7 +399,7 @@ class PluginRepo {
 
 	openPluginRepoModal (options = {}) {
 		if (this.loading.is) {
-			BDFDB.showToast(`Plugins are still being fetched. Try again in some seconds.`, {type:"danger"});
+			BDFDB.NotificationUtils.toast(`Plugins are still being fetched. Try again in some seconds.`, {type:"danger"});
 			return;
 		}
 
@@ -412,7 +410,7 @@ class PluginRepo {
 		pluginRepoModal.querySelector("#input-hideupdated").checked = hiddenSettings.updated || options.showOnlyOutdated;
 		pluginRepoModal.querySelector("#input-hideoutdated").checked = hiddenSettings.outdated && !options.showOnlyOutdated;
 		pluginRepoModal.querySelector("#input-hidedownloadable").checked = hiddenSettings.downloadable || options.showOnlyOutdated;
-		if (!BDFDB.isRestartNoMoreEnabled()) pluginRepoModal.querySelector("#RNMoption").remove();
+		if (!BDFDB.BdUtils.isAutoLoadEnabled()) pluginRepoModal.querySelector("#RNMoption").remove();
 		else pluginRepoModal.querySelector("#input-rnmstart").checked = BDFDB.loadData("RNMstart", this, "RNMstart");
 
 		if (options.forcedSort && this.sortings.sort[options.forcedSort]) {
@@ -426,28 +424,28 @@ class PluginRepo {
 			orderinput.setAttribute('option', options.forcedOrder);
 		}
 
-		BDFDB.addChildEventListener(pluginRepoModal, "keyup", BDFDB.dotCN.searchbarinput, () => {
+		BDFDB.ListenerUtils.addToChildren(pluginRepoModal, "keyup", BDFDB.dotCN.searchbarinput, () => {
 			clearTimeout(pluginRepoModal.searchTimeout);
 			pluginRepoModal.searchTimeout = setTimeout(() => {this.sortEntries(pluginRepoModal);},1000);
 		});
-		BDFDB.addChildEventListener(pluginRepoModal, "click", BDFDB.dotCN.searchbarclear, () => {
+		BDFDB.ListenerUtils.addToChildren(pluginRepoModal, "click", BDFDB.dotCN.searchbarclear, () => {
 			clearTimeout(pluginRepoModal.searchTimeout);
 			pluginRepoModal.searchTimeout = setTimeout(() => {this.sortEntries(pluginRepoModal);},1000);
 		});
-		BDFDB.addChildEventListener(pluginRepoModal, "change", ".hide-checkbox", e => {
+		BDFDB.ListenerUtils.addToChildren(pluginRepoModal, "change", ".hide-checkbox", e => {
 			pluginRepoModal.updateHidden = true;
 			BDFDB.saveData(e.currentTarget.value, e.currentTarget.checked, this, "hidden");
 		});
-		BDFDB.addChildEventListener(pluginRepoModal, "change", "#input-rnmstart", e => {
+		BDFDB.ListenerUtils.addToChildren(pluginRepoModal, "change", "#input-rnmstart", e => {
 			BDFDB.saveData("RNMstart", e.currentTarget.checked, this, "RNMstart");
 		});
-		BDFDB.addChildEventListener(pluginRepoModal, "click", ".sort-filter", e => {
+		BDFDB.ListenerUtils.addToChildren(pluginRepoModal, "click", ".sort-filter", e => {
 			BDFDB.createSortPopout(e.currentTarget, this.sortPopoutMarkup, () => {this.sortEntries(pluginRepoModal);});
 		});
-		BDFDB.addChildEventListener(pluginRepoModal, "click", ".order-filter", e => {
+		BDFDB.ListenerUtils.addToChildren(pluginRepoModal, "click", ".order-filter", e => {
 			BDFDB.createSortPopout(e.currentTarget, this.orderPopoutMarkup, () => {this.sortEntries(pluginRepoModal);});
 		});
-		BDFDB.addChildEventListener(pluginRepoModal, "click", BDFDB.dotCN.tabbaritem + "[tab=plugins]", e => {
+		BDFDB.ListenerUtils.addToChildren(pluginRepoModal, "click", BDFDB.dotCN.tabbaritem + "[tab=plugins]", e => {
 			if (!BDFDB.containsClass(e.currentTarget, BDFDB.disCN.settingsitemselected) && pluginRepoModal.updateHidden) {
 				delete pluginRepoModal.updateHidden;
 				this.sortEntries(pluginRepoModal);
@@ -459,7 +457,7 @@ class PluginRepo {
 		pluginRepoModal.entries = {};
 		for (let url in this.loadedPlugins) {
 			let plugin = this.loadedPlugins[url];
-			let instPlugin = BDFDB.getPlugin(plugin.getName);
+			let instPlugin = BDFDB.BdUtils.getPlugin(plugin.getName);
 			if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase()) plugin.getState = this.getString(instPlugin.getVersion()) != plugin.getVersion ? 1 : 0;
 			else plugin.getState = 2;
 			let data = {
@@ -518,18 +516,18 @@ class PluginRepo {
 			if (giturl) window.open(giturl, "_blank");
 		});
 		gitbutton.addEventListener("mouseenter", e => {
-			BDFDB.createTooltip("Go to Git", gitbutton, {type:"top",selector:"pluginrepo-giticon-tooltip"});
+			BDFDB.TooltipUtils.create(gitbutton, "Go to Git", {type:"top",selector:"pluginrepo-giticon-tooltip"});
 		});
 		let trashbutton = entry.querySelector(".trashIcon");
 		trashbutton.addEventListener("click", e => {
 			if (BDFDB.containsClass(entry, "outdated", "updated", false)) {
 				setEntryState(2);
 				this.deletePluginFile(data);
-				if (!BDFDB.isRestartNoMoreEnabled()) this.stopPlugin(data);
+				if (!BDFDB.BdUtils.isAutoLoadEnabled()) this.stopPlugin(data);
 			}
 		});
 		trashbutton.addEventListener("mouseenter", e => {
-			BDFDB.createTooltip("Delete Pluginfile", trashbutton, {type:"top",selector:"pluginrepo-trashicon-tooltip"});
+			BDFDB.TooltipUtils.create(trashbutton, "Delete Pluginfile", {type:"top",selector:"pluginrepo-trashicon-tooltip"});
 		});
 		entry.querySelector(".btn-download").addEventListener("click", e => {
 			setEntryState(0);
@@ -560,14 +558,14 @@ class PluginRepo {
 		let searchstring = pluginRepoModal.querySelector(BDFDB.dotCN.searchbarinput).value.replace(/[<|>]/g, "").toUpperCase();
 
 		let entries = pluginRepoModal.entries;
-		if (pluginRepoModal.querySelector("#input-hideupdated").checked) 		entries = BDFDB.filterObject(entries, entry => {return entry.state < 1 ? null : entry;});
-		if (pluginRepoModal.querySelector("#input-hideoutdated").checked) 		entries = BDFDB.filterObject(entries, entry => {return entry.state == 1 ? null : entry;});
-		if (pluginRepoModal.querySelector("#input-hidedownloadable").checked) 	entries = BDFDB.filterObject(entries, entry => {return entry.state > 1 ? null : entry;});
-		entries = BDFDB.filterObject(entries, entry => {return entry.search.indexOf(searchstring) > -1 ? entry : null;});
+		if (pluginRepoModal.querySelector("#input-hideupdated").checked) 		entries = BDFDB.ObjectUtils.filter(entries, entry => {return entry.state < 1 ? null : entry;});
+		if (pluginRepoModal.querySelector("#input-hideoutdated").checked) 		entries = BDFDB.ObjectUtils.filter(entries, entry => {return entry.state == 1 ? null : entry;});
+		if (pluginRepoModal.querySelector("#input-hidedownloadable").checked) 	entries = BDFDB.ObjectUtils.filter(entries, entry => {return entry.state > 1 ? null : entry;});
+		entries = BDFDB.ObjectUtils.filter(entries, entry => {return entry.search.indexOf(searchstring) > -1 ? entry : null;});
 
 		let sortfilter = pluginRepoModal.querySelector(".sort-filter " + BDFDB.dotCN.quickselectvalue).getAttribute("option");
-		entries = BDFDB.sortObject(entries, sortfilter == "new" && !pluginRepoModal.querySelector(".newentries-tag") ? "name" : sortfilter);
-		if (pluginRepoModal.querySelector(".order-filter " + BDFDB.dotCN.quickselectvalue).getAttribute("option") == "desc") entries = BDFDB.reverseObject(entries);
+		entries = BDFDB.ObjectUtils.sort(entries, sortfilter == "new" && !pluginRepoModal.querySelector(".newentries-tag") ? "name" : sortfilter);
+		if (pluginRepoModal.querySelector(".order-filter " + BDFDB.dotCN.quickselectvalue).getAttribute("option") == "desc") entries = BDFDB.ObjectUtils.reverse(entries);
 
 		let entrypositions = Object.keys(entries);
 
@@ -616,7 +614,9 @@ class PluginRepo {
 				}
 				var loadingicon = BDFDB.htmlToElement(this.pluginRepoIconMarkup);
 				BDFDB.addClass(loadingicon, "pluginrepo-loadingicon");
-				loadingicon.addEventListener("mouseenter", () => {BDFDB.createTooltip(this.getLoadingTooltipText(),loadingicon,{type:"left",delay:500,style:"max-width:unset;",selector:"pluginrepo-loading-tooltip"});})
+				loadingicon.addEventListener("mouseenter", () => {
+					BDFDB.TooltipUtils.create(loadingicon, this.getLoadingTooltipText(), {type:"left", delay:500, style:"max-width:unset;", selector:"pluginrepo-loading-tooltip"});
+				});
 				loadingiconwrapper.appendChild(loadingicon);
 
 				createFrame().then(() => {
@@ -636,11 +636,11 @@ class PluginRepo {
 								clearTimeout(this.loading.timeout);
 								this.loading = {is:false, timeout:null, amount:this.loading.amount};
 								console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Finished fetching Plugins.");
-								if (document.querySelector(".bd-pluginrepobutton")) BDFDB.showToast(`Finished fetching Plugins.`, {type:"success"});
+								if (document.querySelector(".bd-pluginrepobutton")) BDFDB.NotificationUtils.toast(`Finished fetching Plugins.`, {type:"success"});
 								if ((settings.notifyOutdated || settings.notifyOutdated == undefined) && outdated > 0) {
 									var oldbarbutton = document.querySelector(".pluginrepo-outdate-notice " + BDFDB.dotCN.noticedismiss);
 									if (oldbarbutton) oldbarbutton.click();
-									var bar = BDFDB.createNotificationsBar(`${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check:`,{type:"danger",btn:"PluginRepo",selector:"pluginrepo-notice pluginrepo-outdate-notice", customicon:this.pluginRepoIconMarkup.replace(/#7289da/gi,"#FFF").replace(/#7f8186/gi,"#B9BBBE")});
+									var bar = BDFDB.NotificationUtils.notice(`${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check:`,{type:"danger",btn:"PluginRepo",selector:"pluginrepo-notice pluginrepo-outdate-notice", customicon:this.pluginRepoIconMarkup.replace(/#7289da/gi,"#FFF").replace(/#7f8186/gi,"#B9BBBE")});
 									bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
 										this.openPluginRepoModal({showOnlyOutdated:true});
 										bar.querySelector(BDFDB.dotCN.noticedismiss).click();
@@ -649,19 +649,19 @@ class PluginRepo {
 								if ((settings.notifyNewentries || settings.notifyNewentries == undefined) && newentries > 0) {
 									var oldbarbutton = document.querySelector(".pluginrepo-newentries-notice " + BDFDB.dotCN.noticedismiss);
 									if (oldbarbutton) oldbarbutton.click();
-									var bar = BDFDB.createNotificationsBar(`There ${newentries == 1 ? "is" : "are"} ${newentries} new Plugin${newentries == 1 ? "" : "s"} in the Repo. Check:`,{type:"success",btn:"PluginRepo",selector:"pluginrepo-notice pluginrepo-newentries-notice", customicon:this.pluginRepoIconMarkup.replace(/#7289da/gi,"#FFF").replace(/#7f8186/gi,"#B9BBBE")});
+									var bar = BDFDB.NotificationUtils.notice(`There ${newentries == 1 ? "is" : "are"} ${newentries} new Plugin${newentries == 1 ? "" : "s"} in the Repo. Check:`,{type:"success",btn:"PluginRepo",selector:"pluginrepo-notice pluginrepo-newentries-notice", customicon:this.pluginRepoIconMarkup.replace(/#7289da/gi,"#FFF").replace(/#7f8186/gi,"#B9BBBE")});
 									bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
 										this.openPluginRepoModal({forcedSort:"new",forcedOrder:"asc"});
 										bar.querySelector(BDFDB.dotCN.noticedismiss).click();
 									});
 								}
-								if (BDFDB.myData.id == "278543574059057154") {
+								if (BDFDB.UserUtils.me.id == "278543574059057154") {
 									let wrongUrls = [];
 									for (let url of this.foundPlugins) if (url && !this.loadedPlugins[url] && !wrongUrls.includes(url)) wrongUrls.push(url);
 									if (wrongUrls.length > 0) {
-										var bar = BDFDB.createNotificationsBar(`PluginRepo: ${wrongUrls.length} Plugin${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List",selector:"pluginrepo-notice pluginrepo-fail-notice", customicon:this.pluginRepoIconMarkup.replace(/#7289da/gi,"#FFF").replace(/#7f8186/gi,"#B9BBBE")});
+										var bar = BDFDB.NotificationUtils.notice(`PluginRepo: ${wrongUrls.length} Plugin${wrongUrls.length > 1 ? "s" : ""} could not be loaded.`, {type:"danger",btn:"List",selector:"pluginrepo-notice pluginrepo-fail-notice", customicon:this.pluginRepoIconMarkup.replace(/#7289da/gi,"#FFF").replace(/#7f8186/gi,"#B9BBBE")});
 										bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", e => {
-											var toast = BDFDB.showToast(wrongUrls.join("\n"),{type:"error"});
+											var toast = BDFDB.NotificationUtils.toast(wrongUrls.join("\n"),{type:"error"});
 											toast.style.overflow = "hidden";
 											console.log(wrongUrls.length == 1 ? wrongUrls[0] : wrongUrls);
 										});
@@ -683,7 +683,7 @@ class PluginRepo {
 			let url = this.foundPlugins[i];
 			BDFDB.LibraryRequires.request(url, (error, response, body) => {
 				if (!response) {
-					if (url && BDFDB.getAllIndexes(this.foundPlugins, url).length < 2) this.foundPlugins.push(url);
+					if (url && BDFDB.ArrayUtils.getAllIndexes(this.foundPlugins, url).length < 2) this.foundPlugins.push(url);
 				}
 				else if (body && body.indexOf("404: Not Found") != 0 && response.statusCode == 200) {
 					let plugin = {};
@@ -728,7 +728,7 @@ class PluginRepo {
 					if (valid) {
 						plugin.url = url;
 						this.loadedPlugins[url] = plugin;
-						let instPlugin = BDFDB.getPlugin(plugin.getName);
+						let instPlugin = BDFDB.BdUtils.getPlugin(plugin.getName);
 						if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion && PluginUpdates && PluginUpdates.plugins && !PluginUpdates.plugins[url]) outdated++;
 						if (!this.cachedPlugins.includes(url)) newentries++;
 					}
@@ -741,7 +741,7 @@ class PluginRepo {
 				var loadingtooltip = document.querySelector(".pluginrepo-loading-tooltip");
 				if (loadingtooltip) {
 					BDFDB.setInnerText(loadingtooltip, this.getLoadingTooltipText());
-					BDFDB.updateTooltipPosition(loadingtooltip);
+					BDFDB.TooltipUtils.update(loadingtooltip);
 				}
 				getPluginInfo(callback);
 			});
@@ -783,10 +783,10 @@ class PluginRepo {
 			if (name.length > 1) {
 				name = name[1].split('"')[0];
 				var processResult = plugin => {
-					if (BDFDB.isObject(plugin)) {
+					if (BDFDB.ObjectUtils.is(plugin)) {
 						plugin.url = url;
 						this.loadedPlugins[url] = plugin;
-						let instPlugin = BDFDB.getPlugin(plugin.getName);
+						let instPlugin = BDFDB.BdUtils.getPlugin(plugin.getName);
 						if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion) outdated++;
 						if (!this.cachedPlugins.includes(url)) newentries++;
 					}
@@ -849,20 +849,20 @@ class PluginRepo {
 
 	downloadPlugin (data) {
 		BDFDB.LibraryRequires.request(data.url, (error, response, body) => {
-			if (error) BDFDB.showToast(`Unable to download Plugin "${plugin.getName}".`, {type:"danger"});
+			if (error) BDFDB.NotificationUtils.toast(`Unable to download Plugin "${plugin.getName}".`, {type:"danger"});
 			else this.createPluginFile(data.url.split("/").pop(), body);
 		});
 	}
 
 	createPluginFile (filename, content) {
-		BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.getPluginsFolder(), filename), content, (error) => {
-			if (error) BDFDB.showToast(`Unable to save Plugin "${filename}".`, {type:"danger"});
-			else BDFDB.showToast(`Successfully saved Plugin "${filename}".`, {type:"success"});
+		BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BdUtils.getPluginsFolder(), filename), content, (error) => {
+			if (error) BDFDB.NotificationUtils.toast(`Unable to save Plugin "${filename}".`, {type:"danger"});
+			else BDFDB.NotificationUtils.toast(`Successfully saved Plugin "${filename}".`, {type:"success"});
 		});
 	}
 
 	startPlugin (data) {
-		if (BDFDB.isPluginEnabled(data.name) == false) {
+		if (BDFDB.BdUtils.isPluginEnabled(data.name) == false) {
 			window.pluginModule.startPlugin(data.name);
 			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Started Plugin " + data.name + ".");
 		}
@@ -870,14 +870,14 @@ class PluginRepo {
 
 	deletePluginFile (data) {
 		let filename = data.url.split("/").pop();
-		BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.getPluginsFolder(), filename), (error) => {
-			if (error) BDFDB.showToast(`Unable to delete Plugin "${filename}".`, {type:"danger"});
-			else BDFDB.showToast(`Successfully deleted Plugin "${filename}".`);
+		BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.BdUtils.getPluginsFolder(), filename), (error) => {
+			if (error) BDFDB.NotificationUtils.toast(`Unable to delete Plugin "${filename}".`, {type:"danger"});
+			else BDFDB.NotificationUtils.toast(`Successfully deleted Plugin "${filename}".`);
 		});
 	}
 
 	stopPlugin (data) {
-		if (BDFDB.isPluginEnabled(data.name) == true) {
+		if (BDFDB.BdUtils.isPluginEnabled(data.name) == true) {
 			window.pluginModule.stopPlugin(data.name);
 			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Stopped Plugin " + data.name + ".");
 		}

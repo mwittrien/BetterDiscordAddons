@@ -55,15 +55,13 @@ class TimedLightDarkMode {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 
 			this.startInterval();
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 	stop () {
@@ -74,7 +72,7 @@ class TimedLightDarkMode {
 
 			BDFDB.removeEles(".TLDM-settingsbox");
 
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -91,9 +89,9 @@ class TimedLightDarkMode {
 
 			BDFDB.initElements(settingsbox, this);
 			this.updateSlider(slider, values);
-			BDFDB.addChildEventListener(settingsbox, "mousedown", BDFDB.dotCN.slidergrabber + ".timer-grabber", e => {this.dragSlider(e.currentTarget);});
-			BDFDB.addChildEventListener(settingsbox, "mouseenter", BDFDB.dotCN.slidergrabber + ".date-grabber", e => {this.showCurrentTime(e.currentTarget);});
-			BDFDB.addChildEventListener(settingsbox, "click", ".settings-switch", e => {
+			BDFDB.ListenerUtils.addToChildren(settingsbox, "mousedown", BDFDB.dotCN.slidergrabber + ".timer-grabber", e => {this.dragSlider(e.currentTarget);});
+			BDFDB.ListenerUtils.addToChildren(settingsbox, "mouseenter", BDFDB.dotCN.slidergrabber + ".date-grabber", e => {this.showCurrentTime(e.currentTarget);});
+			BDFDB.ListenerUtils.addToChildren(settingsbox, "click", ".settings-switch", e => {
 				this.startInterval();
 				BDFDB.toggleClass(slider, BDFDB.disCN.sliderdisabled, !e.currentTarget.checked);
 			});
@@ -124,7 +122,7 @@ class TimedLightDarkMode {
 	}
 
 	changeTheme (dark) {
-		var theme = BDFDB.getDiscordTheme();
+		var theme = BDFDB.DiscordUtils.getTheme();
 		if (dark && theme == BDFDB.disCN.themelight) BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({theme:"dark"});
 		else if (!dark && theme == BDFDB.disCN.themedark) BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({theme:"light"});
 	}

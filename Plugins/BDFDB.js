@@ -1,7 +1,7 @@
 if (window.BDFDB && BDFDB.ListenerUtils && typeof BDFDB.ListenerUtils.remove == "function") BDFDB.ListenerUtils.remove(BDFDB);
 if (window.BDFDB && BDFDB.ObserverUtils && typeof BDFDB.ObserverUtils.disconnect == "function") BDFDB.ObserverUtils.disconnect(BDFDB);
 if (window.BDFDB && BDFDB.ModuleUtils && typeof BDFDB.ModuleUtils.unpatch == "function") BDFDB.ModuleUtils.unpatch(BDFDB);
-var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB.cleanUps || {}, BDv2Api: BDFDB && BDFDB.BDv2Api || undefined, creationTime: performance.now(), cachedData: {}, pressedKeys: [], mousePosition: {pageX: 0, pageY: 0}, name: "$BDFDB"};
+var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, BDv2Api: BDFDB && BDFDB.BDv2Api || undefined, creationTime: performance.now(), cachedData: {}, pressedKeys: [], mousePosition: {pageX: 0, pageY: 0}, name: "$BDFDB"};
 (_ => {
 	var id = Math.round(Math.random() * 10000000000000000), InternalBDFDB = {};
 	BDFDB.id = id;
@@ -79,7 +79,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		if (BDFDB.ObjectUtils.isEmpty(window.PluginUpdates.plugins)) BDFDB.removeEles("#bd-settingspane-container .bd-updatebtn" + BDFDB.dotCN._repofolderbutton);
 
 		delete plugin.started;
-		BDFDB.cleanUps[plugin.name] = setImmediate(() => {
+		setImmediate(() => {
 			BDFDB.ModuleUtils.unpatch(plugin);
 			delete plugin.stopping;
 		});
@@ -244,8 +244,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		delete plugin.startTimeout;
 		clearTimeout(plugin.libLoadTimeout);
 		delete plugin.libLoadTimeout;
-		clearImmediate(BDFDB.cleanUps[plugin.name]);
-		delete BDFDB.cleanUps[plugin.name];
 	};
 	InternalBDFDB.addOnSwitchListener = function (plugin) {
 		if (BDFDB.ObjectUtils.is(plugin) && typeof plugin.onSwitch === "function") {
@@ -1460,6 +1458,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			}});
 			BDFDB.ModuleUtils.patch(BDFDB, module.prototype, "render", {after: e => {
 				if (e.thisObject.props.BDFDBcontextMenu && e.thisObject.props.children && e.returnValue && e.returnValue.props) {
+					console.log(e);
 					e.returnValue.props.children = e.thisObject.props.children;
 					delete e.thisObject.props.value;
 					delete e.thisObject.props.children;
@@ -1512,9 +1511,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			}});
 		}
 	};
-	for (let type of NoFluxContextMenus) InternalBDFDB.patchContextMenuLib(BDFDB.ModuleUtils.findByName(type), false);
-	for (let type of NoFluxPopouts) InternalBDFDB.patchPopoutLib(BDFDB.ModuleUtils.findByName(type), false);
-	for (let type of FluxContextMenus) InternalBDFDB.patchContextMenuLib(BDFDB.ModuleUtils.findByName(`FluxContainer(${type})`), true);
 
 	BDFDB.equals = function (mainA, mainB, sorted) {
 		var i = -1;
@@ -1795,7 +1791,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	};
 	BDFDB.FolderUtils.getDiv = function (eleOrInfoOrId) {
 		if (!eleOrInfoOrId) return null;
-		let info = BDFDB.getFolderData(eleOrInfoOrId);
+		let info = BDFDB.FolderUtils.getData(eleOrInfoOrId);
 		return info ? info.div : null;
 	};
 	BDFDB.FolderUtils.getData = function (eleOrInfoOrId) {
@@ -1814,12 +1810,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	};
 
 	BDFDB.ChannelUtils = {};
-	BDFDB.ChannelUtils.getIcon = function (id) {
-		var channel = LibraryModules.ChannelStore.getChannel(id = typeof id == "number" ? id.toFixed() : id);
-		if (!channel) return null;
-		if (!channel.icon) return channel.type == 1 ? BDFDB.UserUtils.getAvatar(channel.recipients[0]) : (channel.type == 3 ? "https://discordapp.com/assets/f046e2247d730629309457e902d5c5b3.svg" : null);
-		return LibraryModules.IconUtils.getChannelIconURL(channel).split("?")[0];
-	};
 	BDFDB.ChannelUtils.getId = function (div) {
 		if (!Node.prototype.isPrototypeOf(div) || !BDFDB.ReactUtils.getInstance(div)) return;
 		div = BDFDB.getParentEle(BDFDB.dotCNC.categorycontainerdefault + BDFDB.dotCNC.channelcontainerdefault + BDFDB.dotCN.dmchannel, div);
@@ -1874,6 +1864,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	};
 	
 	BDFDB.DmUtils = {};
+	BDFDB.DmUtils.getIcon = function (id) {
+		var channel = LibraryModules.ChannelStore.getChannel(id = typeof id == "number" ? id.toFixed() : id);
+		if (!channel) return null;
+		if (!channel.icon) return channel.type == 1 ? BDFDB.UserUtils.getAvatar(channel.recipients[0]) : (channel.type == 3 ? "https://discordapp.com/assets/f046e2247d730629309457e902d5c5b3.svg" : null);
+		return LibraryModules.IconUtils.getChannelIconURL(channel).split("?")[0];
+	};
 	BDFDB.DmUtils.getId = function (div) {
 		if (!Node.prototype.isPrototypeOf(div) || !BDFDB.ReactUtils.getInstance(div)) return;
 		let dmdiv = BDFDB.getParentEle(BDFDB.dotCN.guildouter, div);
@@ -7111,6 +7107,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	};
 
 	InternalBDFDB.patchPlugin(BDFDB);
+	
+	for (let type of NoFluxContextMenus) InternalBDFDB.patchContextMenuLib(BDFDB.ModuleUtils.findByName(type), false);
+	for (let type of NoFluxPopouts) InternalBDFDB.patchPopoutLib(BDFDB.ModuleUtils.findByName(type), false);
+	for (let type of FluxContextMenus) InternalBDFDB.patchContextMenuLib(BDFDB.ModuleUtils.findByName(`FluxContainer(${type})`), true);
 
 	BDFDB.ModuleUtils.forceAllUpdates(BDFDB);
 	
@@ -7294,9 +7294,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	BDFDB.sortObject = BDFDB.ObjectUtils.sort;
 	BDFDB.reverseObject = BDFDB.ObjectUtils.reverse;
 	BDFDB.filterObject = BDFDB.ObjectUtils.filter;
-	BDFDB.pushToObject = BDFDB.ObjectUtils.push;
 	BDFDB.mapObject = BDFDB.ObjectUtils.map;
-	BDFDB.deepAssign = BDFDB.ObjectUtils.deepAssign;
 	BDFDB.isObjectEmpty = BDFDB.ObjectUtils.isEmpty;
 	
 	BDFDB.sortArrayByKey = BDFDB.ArrayUtils.keySort;
@@ -7315,7 +7313,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	
 	BDFDB.WebModules = Object.assign({}, BDFDB.ModuleUtils);
 	BDFDB.WebModules.patch = (module, modulefunctions, plugin, patchfunctions) => {return BDFDB.ModuleUtils.patch(plugin, module, modulefunctions, patchfunctions)};
-	BDFDB.WebModules.unpatchall = BDFDB.ModuleUtils.unpatch;
 	BDFDB.ModuleUtils.initiateProcess = InternalBDFDB.initiateProcess;
 	BDFDB.WebModules.initiateProcess = InternalBDFDB.initiateProcess;
 	
@@ -7327,7 +7324,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	
 	BDFDB.getGuildIcon = BDFDB.GuildUtils.getIcon;
 	BDFDB.getGuildBanner = BDFDB.GuildUtils.getBanner;
-	BDFDB.getServerID = BDFDB.GuildUtils.getId;
 	BDFDB.getServerDiv = BDFDB.GuildUtils.getDiv;
 	BDFDB.getServerData = BDFDB.GuildUtils.getData;
 	BDFDB.readServerList = BDFDB.GuildUtils.getAll;
@@ -7341,21 +7337,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	
 	BDFDB.getFolderID = BDFDB.FolderUtils.getId;
 	BDFDB.getFolderDiv = BDFDB.FolderUtils.getDiv;
-	BDFDB.getFolderData = BDFDB.FolderUtils.getData;
-	BDFDB.readFolderList = BDFDB.FolderUtils.getAll;
 	
-	BDFDB.getChannelIcon = BDFDB.ChannelUtils.getIcon;
-	BDFDB.getChannelID = BDFDB.ChannelUtils.getId;
 	BDFDB.getChannelDiv = BDFDB.ChannelUtils.getDiv;
-	BDFDB.getChannelData = BDFDB.ChannelUtils.getData;
-	BDFDB.readChannelList = BDFDB.ChannelUtils.getAll;
 	BDFDB.getSelectedChannel = BDFDB.ChannelUtils.getSelected;
 	BDFDB.openChannelContextMenu = BDFDB.ChannelUtils.openMenu;
 	BDFDB.markChannelAsRead = BDFDB.ChannelUtils.markAsRead;
 	
-	BDFDB.getDmID = BDFDB.DmUtils.getId;
 	BDFDB.getDmDiv = BDFDB.DmUtils.getDiv;
-	BDFDB.getDmData = BDFDB.DmUtils.getData;
+	BDFDB.getChannelIcon = BDFDB.DmUtils.getIcon;
 	BDFDB.readDmList = BDFDB.DmUtils.getAll;
 	
 	BDFDB.saveAllData = (data, plugin, key) => {BDFDB.DataUtils.save(data, plugin, key)};
@@ -7367,9 +7356,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	BDFDB.getAllData = (plugin, key) => {return BDFDB.DataUtils.get(plugin, key)};
 	BDFDB.getData = (id, plugin, key) => {return BDFDB.DataUtils.get(plugin, key, id)};
 	
-	BDFDB.getDiscordFolder = BDFDB.DiscordUtils.getFolder;
-	BDFDB.getDiscordBuilt = BDFDB.DiscordUtils.getBuilt;
-	BDFDB.getDiscordVersion = BDFDB.DiscordUtils.getVersion;
 	BDFDB.getDiscordTheme = BDFDB.DiscordUtils.getTheme;
 	BDFDB.getDiscordMode = BDFDB.DiscordUtils.getMode;
 	BDFDB.getDiscordZoomFactor = BDFDB.DiscordUtils.getZoomFactor;
@@ -7377,8 +7363,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	
 	BDFDB.getPluginsFolder = BDFDB.BdUtils.getPluginsFolder;
 	BDFDB.getThemesFolder = BDFDB.BdUtils.getThemesFolder;
-	BDFDB.checkWhichRepoPage = BDFDB.BdUtils.checkRepoPage;
-	BDFDB.isBDv2 = BDFDB.BdUtils.isBDv2;
 	BDFDB.isPluginEnabled = BDFDB.BdUtils.isPluginEnabled;
 	BDFDB.getPlugin = BDFDB.BdUtils.getPlugin;
 	BDFDB.isThemeEnabled = BDFDB.BdUtils.isThemeEnabled;

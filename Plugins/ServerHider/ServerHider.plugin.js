@@ -89,10 +89,10 @@ class ServerHider {
 
 		BDFDB.initElements(settingspanel, this);
 
-		BDFDB.addEventListener(this, settingspanel, "click", ".reset-button", () => {
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".reset-button", () => {
 			BDFDB.openConfirmModal(this, "Are you sure you want to reset all servers?", () => {
 				BDFDB.removeAllData(this, "servers");
-				BDFDB.readServerList().forEach(info => {if (!info.div.getAttribute("folder")) BDFDB.toggleEles(info.div, false);});
+				BDFDB.GuildUtils.getAll().forEach(info => {if (!info.div.getAttribute("folder")) BDFDB.toggleEles(info.div, false);});
 			});
 		});
 		return settingspanel;
@@ -122,26 +122,24 @@ class ServerHider {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.readServerList().forEach(info => {
+			BDFDB.GuildUtils.getAll().forEach(info => {
 				if (info.div.ServerHiderChangeObserver && typeof info.div.ServerHiderChangeObserver.disconnect == "function") info.div.ServerHiderChangeObserver.disconnect();
 				if (!info.div.getAttribute("folder")) BDFDB.toggleEles(info.div, true);
 				delete info.div.ServerHiderChanged;
 			});
 
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -158,16 +156,16 @@ class ServerHider {
 		if (document.querySelector(".BDFDB-modal")) return;
 		if (instance.props && instance.props.target && instance.props.type.indexOf("GUILD_ICON_") == 0 && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
 			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
-			const itemgroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 				children: [
-					BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
 						label: this.labels.context_serverhider_text,
 						className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem`,
-						render: [BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+						render: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 							className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 							children: [
-								BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_openhidemenu_text,
 									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-hidemenu-ContextMenuItem`,
 									action: e => {
@@ -175,7 +173,7 @@ class ServerHider {
 										this.showServerModal();
 									}
 								}),
-								BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_hideserver_text,
 									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-hideserver-ContextMenuItem`,
 									disabled: !(instance.props.guild && !instance.props.target.getAttribute("folder")),
@@ -207,7 +205,7 @@ class ServerHider {
 		let container = serverHiderModal.querySelector(".entries");
 		if (!container) return;
 
-		BDFDB.addChildEventListener(serverHiderModal, "click", ".btn-all", () => {
+		BDFDB.ListenerUtils.addToChildren(serverHiderModal, "click", ".btn-all", () => {
 			let firstcheckbox = serverHiderModal.querySelector(".serverhiderCheckbox");
 			firstcheckbox.click();
 			serverHiderModal.querySelectorAll(".serverhiderCheckbox").forEach(checkbox => {
@@ -215,14 +213,14 @@ class ServerHider {
 			});
 		});
 
-		for (let info of BDFDB.readServerList()) {
+		for (let info of BDFDB.GuildUtils.getAll()) {
 			if (!info.div.getAttribute("folder")) {
 				if (container.firstElementChild) container.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.divider}"></div>`));
 				let entry = BDFDB.htmlToElement(this.serverEntryMarkup);
 				container.appendChild(entry);
 				let name = entry.querySelector(".serverhiderName");
 				name.innerText = info.name || "";
-				name.parentElement.insertBefore(BDFDB.createServerDivCopy(info, {click: () => {BDFDB.removeEles(serverHiderModal);}, menu: true, size: 48}), name);
+				name.parentElement.insertBefore(BDFDB.GuildUtils.createCopy(info, {click: () => {BDFDB.removeEles(serverHiderModal);}, menu: true, size: 48}), name);
 				let hidecheckbox = entry.querySelector(".serverhiderCheckbox");
 				hidecheckbox.checked = !BDFDB.isEleHidden(info.div);
 				hidecheckbox.addEventListener("click", e => {
@@ -239,20 +237,20 @@ class ServerHider {
 		if (!guilddiv || guilddiv.getAttribute("folder")) return;
 		BDFDB.toggleEles(guilddiv, visible);
 		let hiddenservers = BDFDB.loadData("hiddenservers", this, "hiddenservers") || [];
-		BDFDB.removeFromArray(hiddenservers, info.id);
+		BDFDB.ArrayUtils.remove(hiddenservers, info.id);
 		if (!visible) {
-			if (BDFDB.getReactValue(guilddiv, "return.stateNode.props").unread) this.unreadServer(info.id);
+			if (BDFDB.ReactUtils.getValue(guilddiv, "return.stateNode.props").unread) this.unreadServer(info.id);
 			hiddenservers.push(info.id);
 		}
 		BDFDB.saveData("hiddenservers", hiddenservers, this, "hiddenservers");
 	}
 
 	unreadServer (id) {
-		if (BDFDB.getData("clearNotifications", this, "settings") && !this.isInFolder(id)) BDFDB.markGuildAsRead(id);
+		if (BDFDB.getData("clearNotifications", this, "settings") && !this.isInFolder(id)) BDFDB.GuildUtils.markAsRead(id);
 	}
 
 	isInFolder (id) {
-		if (!BDFDB.isPluginEnabled("ServerFolders")) return false;
+		if (!BDFDB.BdUtils.isPluginEnabled("ServerFolders")) return false;
 		let folders = BDFDB.loadAllData("ServerFolders", "folders");
 		for (let folderid in folders) if ((folders[folderid].servers || []).includes(id)) return true;
 		return false;

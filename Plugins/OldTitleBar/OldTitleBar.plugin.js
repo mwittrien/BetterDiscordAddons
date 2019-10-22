@@ -108,13 +108,13 @@ class OldTitleBar {
 
 		BDFDB.initElements(settingspanel, this);
 
-		BDFDB.addEventListener(this, settingspanel, "click", ".nativetitlebar-switch", e => {
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".nativetitlebar-switch", e => {
 			if (this.patchMainScreen(e.currentTarget.checked)) {
 				this.patched = !this.patched;
 				let notifybar = document.querySelector("#OldTitleBarNotifyBar");
 				if (notifybar) notifybar.querySelector(BDFDB.dotCN.noticedismiss).click();
 				if (this.patched) {
-					notifybar = BDFDB.createNotificationsBar("Changed nativebar settings, relaunch to see changes:", {type:"danger",btn:"Relaunch",id:"OldTitleBarNotifyBar"});
+					notifybar = BDFDB.NotificationUtils.notice("Changed nativebar settings, relaunch to see changes:", {type:"danger",btn:"Relaunch",id:"OldTitleBarNotifyBar"});
 					notifybar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", () => {
 						BDFDB.LibraryRequires.electron.remote.app.relaunch();
 						BDFDB.LibraryRequires.electron.remote.app.quit();
@@ -150,9 +150,9 @@ class OldTitleBar {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
-			BDFDB.addEventListener(this, window, "resize", e => {
+			BDFDB.ListenerUtils.add(this, window, "resize", e => {
 				this.changeMaximizeButtons();
 			});
 
@@ -162,11 +162,9 @@ class OldTitleBar {
 
 			BDFDB.addClass([document.body,document.querySelector(BDFDB.dotCN.titlebar)], "hidden-by-OTB");
 
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 
@@ -178,7 +176,7 @@ class OldTitleBar {
 
 			BDFDB.removeClasses("hidden-by-OTB", "settingsTitlebarOTB-added");
 
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -239,7 +237,7 @@ class OldTitleBar {
 			var reloadbuttonicon = reloadbutton.querySelector(BDFDB.dotCN.channelheadericon);
 			reloadbuttonicon.addEventListener("click", () => {this.window.reload();});
 			reloadbuttonicon.addEventListener("mouseenter", e => {
-				BDFDB.createTooltip("Reload", reloadbuttonicon, {type:"bottom",selector:"reload-button-tooltip"});
+				BDFDB.TooltipUtils.create(reloadbuttonicon, "Reload", {type:"bottom",selector:"reload-button-tooltip"});
 			});
 		}
 		bar.appendChild(BDFDB.htmlToElement(this.dividerMarkup));

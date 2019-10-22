@@ -184,7 +184,7 @@ class ServerFolders {
 
 		BDFDB.initElements(settingspanel, this);
 		
-		BDFDB.addEventListener(this, settingspanel, "click", ".removecustom-button", () => {
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".removecustom-button", () => {
 			BDFDB.openConfirmModal(this, "Are you sure you want to remove all custom icons?", () => {
 				BDFDB.removeAllData(this, "customicons");
 			});
@@ -216,10 +216,10 @@ class ServerFolders {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 			
 			// REMOVE 08.10.2019
-			let foldersdata = BDFDB.sortObject(BDFDB.loadAllData(this, "folders"), "position");
+			let foldersdata = BDFDB.ObjectUtils.sort(BDFDB.loadAllData(this, "folders"), "position");
 			let folders = Object.keys(foldersdata).filter(n => n.indexOf("folder") == 0);
 			if (folders.length) BDFDB.openConfirmModal(this, `Old ServerFolders data detected!\nFound ${folders.length} old custom folders in the ServerFolders.config.json.\nPress the '${BDFDB.LanguageUtils.LanguageStrings.OKAY}' button to automatically create a native folder for each old folder and to automatically put the servers in them.`, "Convert?", () => {
 				let oldGuildFolders = Object.assign({}, BDFDB.LibraryModules.FolderStore.guildFolders);
@@ -256,11 +256,9 @@ class ServerFolders {
 				BDFDB.saveAllData(newfoldersdata, this, "folders");
 			});
 			
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 	stop () {
@@ -287,7 +285,7 @@ class ServerFolders {
 				foldericon.parentElement.parentElement.style.removeProperty("-webkit-mask");
 			}
 			
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -313,7 +311,7 @@ class ServerFolders {
 				BDFDB.saveData(folderid, data, this, "folders");
 			}
 			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, "GuildFolderMarkReadItem");
-			const autoreaditem = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuToggleItem, {
+			const autoreaditem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuToggleItem, {
 				label: this.labels.foldercontext_autoreadfolder_text,
 				className: `BDFDB-contextMenuToggleItem ${this.name}-contextMenuToggleItem ${this.name}-autoread-contextMenuToggleItem`,
 				active: data.autoRead,
@@ -324,9 +322,9 @@ class ServerFolders {
 			});
 			if (index > -1) children.splice(index + 1, 0, autoreaditem);
 			else children.push(autoreaditem);
-			const muteGroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+			const muteGroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
-				children: BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuToggleItem, {
+				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuToggleItem, {
 					label: this.labels.foldercontext_mutefolder_text,
 					className: `BDFDB-contextMenuToggleItem ${this.name}-contextMenuToggleItem ${this.name}-mutefolder-contextMenuToggleItem`,
 					active: muted,
@@ -338,9 +336,9 @@ class ServerFolders {
 				})
 			});
 			returnvalue.props.children.splice(returnvalue.props.children.length - 1, 0, muteGroup);
-			const deleteGroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+			const deleteGroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
-				children: BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 					label: this.labels.foldercontext_removefolder_text,
 					className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-removefolder-contextMenuItem`,
 					danger: true,
@@ -357,7 +355,7 @@ class ServerFolders {
 			let folders = this.getFolders();
 			let folder = this.getFolderOfGuildId(guildid);
 			let addtofolderitems = [], openguilds = BDFDB.LibraryModules.FolderStore.getSortedGuilds().filter(n => !n.folderId).map(n => n.guilds[0]);
-			for (let i = 0; i < folders.length; i++) addtofolderitems.push(BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+			for (let i = 0; i < folders.length; i++) addtofolderitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: folders[i].folderName || (this.labels.modal_tabheader1_text + " #" + parseInt(i+1)),
 				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-addtofolder-contextMenuItem`,
 				action: e => {
@@ -367,14 +365,14 @@ class ServerFolders {
 			}));
 			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
 			const addType = !addtofolderitems.length ? "contextMenuItem" : "contextMenuSubItem";
-			const itemgroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 				children: [
-					BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
 						label: this.labels.servercontext_serverfolders_text,
 						className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-guild-contextMenuSubItem`,
 						render: folder ? [
-							BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 								label: this.labels.serversubmenu_removefromfolder_text,
 								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-removefromfolder-contextMenuItem`,
 								danger: true,
@@ -384,7 +382,7 @@ class ServerFolders {
 								}
 							})
 						] : [
-							BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 								label: this.labels.serversubmenu_createfolder_text,
 								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-createfolder-contextMenuItem`,
 								disabled: !openguilds.length,
@@ -393,7 +391,7 @@ class ServerFolders {
 									this.openFolderCreationMenu(openguilds, guildid);
 								}
 							}),
-							BDFDB.React.createElement(BDFDB.LibraryComponents[addType.charAt(0).toUpperCase() + addType.slice(1)], {
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents[addType.charAt(0).toUpperCase() + addType.slice(1)], {
 								label: this.labels.serversubmenu_addtofolder_text,
 								className: `BDFDB-${addType} ${this.name}-${addType} ${this.name}-addtofolder-${addType}`,
 								disabled: !addtofolderitems.length,
@@ -439,7 +437,7 @@ class ServerFolders {
 			if (data.autoRead && (state.unread || state.badge > 0)) {
 				clearTimeout(this.folderReads[state.folderId]);
 				this.folderReads[state.folderId] = setTimeout(() => {
-					BDFDB.markGuildAsRead(instance.props.guildIds);
+					BDFDB.GuildUtils.markAsRead(instance.props.guildIds);
 				}, 10000);
 			}
 			if (state.expanded) setImmediate(() => {
@@ -465,7 +463,7 @@ class ServerFolders {
 		if (!this.foldercontentguilds) return;
 		if (instance.props && instance.props.guild) {
 			if (methodnames.includes("componentDidMount")) {
-				BDFDB.addEventListener(this, wrapper, "click", () => {setImmediate(() => {
+				BDFDB.ListenerUtils.add(this, wrapper, "click", () => {setImmediate(() => {
 					let folder = this.getFolderOfGuildId(instance.props.guild.id);
 					let folderid = folder ? folder.folderId : null;
 					let settings = BDFDB.getAllData(this, "settings");
@@ -524,17 +522,17 @@ class ServerFolders {
 				BDFDB.setColorSwatches(root, data.color3);
 				BDFDB.setColorSwatches(root, data.color4);
 
-				BDFDB.addChildEventListener(root, "change", "input[type='file'][option]", e => {
+				BDFDB.ListenerUtils.addToChildren(root, "change", "input[type='file'][option]", e => {
 					let input = e.currentTarget, file = input.files[0];
 					if (file) setImmediate(() => {this.fetchCustomIcon(root, input.getAttribute("option"))});
 				});
-				BDFDB.addChildEventListener(root, "keyup", "input[type='text'][option]", e => {
+				BDFDB.ListenerUtils.addToChildren(root, "keyup", "input[type='text'][option]", e => {
 					if (e.which == 13) this.fetchCustomIcon(root, e.currentTarget.getAttribute("option"));
 				});
-				BDFDB.addChildEventListener(root, "click", ".btn-addcustom", () => {
+				BDFDB.ListenerUtils.addToChildren(root, "click", ".btn-addcustom", () => {
 					this.saveCustomIcon(root);
 				});
-				BDFDB.addChildEventListener(root, "click", BDFDB.dotCNS.modalfooter + BDFDB.dotCN.button, e => {
+				BDFDB.ListenerUtils.addToChildren(root, "click", BDFDB.dotCNS.modalfooter + BDFDB.dotCN.button, e => {
 					var olddata = Object.assign({}, data);
 					var selectedIcon = root.querySelector(".ui-icon-picker-icon.selected");
 					data.iconID = selectedIcon.getAttribute("value");
@@ -553,7 +551,7 @@ class ServerFolders {
 						data.icons.openicon = folderIcons[data.iconID] ? (!isCustom ? this.createBase64SVG(folderIcons[data.iconID].openicon, data.color1, data.color2) : folderIcons[data.iconID].openicon) : null;
 						data.icons.closedicon = folderIcons[data.iconID] ? (!isCustom ? this.createBase64SVG(folderIcons[data.iconID].closedicon, data.color1, data.color2) : folderIcons[data.iconID].closedicon) : null;
 						BDFDB.saveData(folderid, data, this, "folders");
-						instance.handleColorChange(data.color1 ? parseInt(BDFDB.colorCONVERT(data.color1 && BDFDB.isObject(data.color1) ? data.color1[Object.keys(data.color1)[0]] : data.color1, "HEX").slice(1), 16) : null);
+						instance.handleColorChange(data.color1 ? parseInt(BDFDB.colorCONVERT(data.color1 && BDFDB.ObjectUtils.is(data.color1) ? data.color1[Object.keys(data.color1)[0]] : data.color1, "HEX").slice(1), 16) : null);
 						this.changeFolder(folderid);
 					}
 				});
@@ -566,7 +564,7 @@ class ServerFolders {
 		if (this.SettingsUpdated && this.foldercontent) {
 			delete this.SettingsUpdated;
 			this.folderStates = {};
-			BDFDB.WebModules.forceAllUpdates(this, "GuildFolder");
+			BDFDB.ModuleUtils.forceAllUpdates(this, "GuildFolder");
 		}
 	}
 
@@ -589,7 +587,7 @@ class ServerFolders {
 						return;
 					}
 				}
-				BDFDB.showToast("Use a valid direct link to an image source. They usually end on something like .png, .jpg or .gif.", {type:"danger"});
+				BDFDB.NotificationUtils.toast("Use a valid direct link to an image source. They usually end on something like .png, .jpg or .gif.", {type:"danger"});
 			});
 		}
 		else {
@@ -602,7 +600,7 @@ class ServerFolders {
 				});
 			}
 			else {
-				BDFDB.showToast("Could not fetch file. Please make sure the file exists.", {type:"danger"});
+				BDFDB.NotificationUtils.toast("Could not fetch file. Please make sure the file exists.", {type:"danger"});
 			}
 		}
 
@@ -653,12 +651,10 @@ class ServerFolders {
 			BDFDB.addClass(iconpreviewswitching, "nopic");
 			iconpreviewswitchinginner.style.removeProperty("background-image");
 			clearInterval(iconpreviewswitching.switchInterval);
-			BDFDB.showToast(`Custom Icon was added to selection.`, {type:"success"});
+			BDFDB.NotificationUtils.toast(`Custom Icon was added to selection.`, {type:"success"});
 			this.setIcons(modal, modal.querySelector(".ui-icon-picker-icon.selected").getAttribute("value"));
 		}
-		else {
-			BDFDB.showToast(`Add an image for the open and the closed icon.`, {type:"danger"});
-		}
+		else BDFDB.NotificationUtils.toast(`Add an image for the open and the closed icon.`, {type:"danger"});
 	}
 
 	generateID (prefix) {
@@ -688,22 +684,22 @@ class ServerFolders {
 
 		setIcon(wrapper.querySelector(`.ui-icon-picker-icon[value="${folderIcons[selection] ? selection : -1}"]`), false, true);
 
-		BDFDB.addChildEventListener(wrapper, "click", ".ui-icon-picker-icon", e => {
+		BDFDB.ListenerUtils.addToChildren(wrapper, "click", ".ui-icon-picker-icon", e => {
 			if (BDFDB.containsClass(e.target, BDFDB.disCN.hovercardbutton)) return;
 			setIcon(wrapper.querySelector(".ui-icon-picker-icon.selected"), false, false);
 			setIcon(e.currentTarget, true, true);
 		});
-		BDFDB.addChildEventListener(wrapper, "click", BDFDB.dotCN.hovercardbutton, e => {
+		BDFDB.ListenerUtils.addToChildren(wrapper, "click", BDFDB.dotCN.hovercardbutton, e => {
 			if (BDFDB.containsClass(e.currentTarget.parentElement, "selected")) return;
 			BDFDB.removeData(e.currentTarget.getAttribute("value"), this, "customicons");
 			e.currentTarget.parentElement.remove();
-			BDFDB.showToast(`Custom Icon was deleted.`, {type:"success"});
+			BDFDB.NotificationUtils.toast(`Custom Icon was deleted.`, {type:"success"});
 		});
-		BDFDB.addChildEventListener(wrapper, "mouseenter", ".ui-icon-picker-icon", e => {
+		BDFDB.ListenerUtils.addToChildren(wrapper, "mouseenter", ".ui-icon-picker-icon", e => {
 			setIcon(e.currentTarget, true);
-			if (e.currentTarget.getAttribute("value") == -1) BDFDB.createTooltip(BDFDB.LanguageUtils.LanguageStrings.DEFAULT, e.currentTarget, {type:"top"});
+			if (e.currentTarget.getAttribute("value") == -1) BDFDB.TooltipUtils.create(e.currentTarget, BDFDB.LanguageUtils.LanguageStrings.DEFAULT, {type:"top"});
 		});
-		BDFDB.addChildEventListener(wrapper, "mouseleave", ".ui-icon-picker-icon", e => {
+		BDFDB.ListenerUtils.addToChildren(wrapper, "mouseleave", ".ui-icon-picker-icon", e => {
 			setIcon(e.currentTarget, false);
 		});
 
@@ -771,7 +767,7 @@ class ServerFolders {
 	}
 	
 	changeFolder (folderid, wrapper) {
-		wrapper = wrapper || BDFDB.getFolderDiv(folderid);
+		wrapper = wrapper || BDFDB.FolderUtils.getDiv(folderid);
 		if (wrapper) {
 			let folderinner = wrapper.querySelector(`${BDFDB.dotCN.guildfolderexpandendbackground} ~ ${BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildinner}`);
 			let foldericon = wrapper.querySelector(BDFDB.dotCN.guildfolder);
@@ -785,7 +781,7 @@ class ServerFolders {
 				if (BDFDB.getData("showCountBadge", this, "settings")) {
 					folderinner.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.guildupperbadge} count" style="opacity: 1; transform: translate(0px, 0px);"><div class="${BDFDB.disCN.guildbadgenumberbadge}" style="background-color: rgb(114, 137, 218); width: ${folder.guildIds.length > 99 ? 28 : (folder.guildIds.length > 9 ? 22 : 16)}px; padding-right: ${folder.guildIds.length > 99 ? 0 : (folder.guildIds.length > 9 ? 0 : 1)}px;">${folder.guildIds.length}</div></div>`));
 					let width = folder.guildIds.length > 99 ? 36 : (folder.guildIds.length > 9 ? 30 : 24);
-					foldericon.parentElement.parentElement.style.setProperty("-webkit-mask", `url(data:image/svg+xml;base64,${btoa(`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" fill="black" x="0" y="0" width="48" height="48"><path d="M ${width-7} 0 C ${width-5} 2 ${width-4} 5 ${width-4} 8 C ${width-4} ${width/1.8+3} 15 20 8 20 C 5 20 2 19 0 17 L 0 50 L 50 50 L 50 0 L 17 0 z"></path></svg>`)})`);
+					foldericon.parentElement.parentElement.style.setProperty("-webkit-mask", `url(data:image/svg+xml;base64,${btoa(`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" fill="black" x="0" y="0" width="48" height="48"><path d="M ${width-7} 0 C ${width-5} 2 ${width-4} 5 ${width-4} 8 C ${width-4} ${width/1.8+3} 15 20 8 20 C 5 20 2 19 0 17 L 0 50 L 50 50 L 50 0 L 17 0 z"></path></svg>`)}) center/cover no-repeat`);
 				}
 				let icontype = BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folderid) ? "openicon" : "closedicon";
 				let icon = icontype != "closedicon" || data.useCloseIcon ? data.icons[icontype] : null;
@@ -795,13 +791,13 @@ class ServerFolders {
 				folderinner.removeEventListener("mouseenter", folderinner.ServerFoldersTooltipListener);
 				folderinner.removeEventListener("mousedown", folderinner.ServerFoldersClickListener);
 				if (data.color3 || data.color4) {
-					var isgradient3 = data.color3 && BDFDB.isObject(data.color3);
-					var isgradient4 = data.color4 && BDFDB.isObject(data.color4);
+					var isgradient3 = data.color3 && BDFDB.ObjectUtils.is(data.color3);
+					var isgradient4 = data.color4 && BDFDB.ObjectUtils.is(data.color4);
 					var bgColor = data.color3 ? (!isgradient3 ? BDFDB.colorCONVERT(data.color3, "RGBA") : BDFDB.colorGRADIENT(data.color3)) : "";
 					var fontColor = data.color4 ? (!isgradient4 ? BDFDB.colorCONVERT(data.color4, "RGBA") : BDFDB.colorGRADIENT(data.color4)) : "";
-					var folderName = folder.folderName || BDFDB.getReactValue(wrapper, "return.stateNode.props.defaultFolderName");
+					var folderName = folder.folderName || BDFDB.ReactUtils.getValue(wrapper, "return.stateNode.props.defaultFolderName");
 					folderinner.ServerFoldersTooltipListener = () => {
-						BDFDB.createTooltip(isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(folderName)}</span>` : folderName, folderinner, {type:"right", selector:"ServerFolders-tooltip", style:`${isgradient4 ? '' : `color: ${fontColor} !important; `}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.colorCONVERT(data.color3[0], "RGBA") : bgColor} !important;`, html:isgradient3, hide:true});
+						BDFDB.TooltipUtils.create(folderinner, isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(folderName)}</span>` : folderName, {type:"right", selector:"ServerFolders-tooltip", style:`${isgradient4 ? '' : `color: ${fontColor} !important; `}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.colorCONVERT(data.color3[0], "RGBA") : bgColor} !important;`, html:isgradient3, hide:true});
 					};
 					folderinner.addEventListener("mouseenter", folderinner.ServerFoldersTooltipListener);
 				}
@@ -851,8 +847,8 @@ class ServerFolders {
 
 	createBase64SVG (paths, color1 = "#000000", color2 = "#FFFFFF") {
 		if (paths.indexOf("<path ") != 0) return paths;
-		let isgradient1 = color1 && BDFDB.isObject(color1);
-		let isgradient2 = color1 && BDFDB.isObject(color2);
+		let isgradient1 = color1 && BDFDB.ObjectUtils.is(color1);
+		let isgradient2 = color1 && BDFDB.ObjectUtils.is(color2);
 		let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" viewBox="-60 -50 1100 1100">`;
 		if (isgradient1) {
 			svg += `<linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">`;
@@ -872,8 +868,8 @@ class ServerFolders {
 	createCopyOfServer (folderid, guildid) {
 		if (!folderid || !guildid) return;
 		let guild = BDFDB.LibraryModules.GuildStore.getGuild(guildid);
-		let guilddiv = BDFDB.getServerDiv(guildid);
-		let props = BDFDB.getReactValue(guilddiv, "return.stateNode.props");
+		let guilddiv = BDFDB.GuildUtils.getDiv(guildid);
+		let props = BDFDB.ReactUtils.getValue(guilddiv, "return.stateNode.props");
 		if (!guild || !guilddiv || !props) return;
 		
 		let guildcopy = guilddiv.cloneNode(true);
@@ -950,18 +946,18 @@ class ServerFolders {
 		};
 		
 		guildcopyinner.addEventListener("mouseenter", () => {
-			let EditServers = BDFDB.getPlugin("EditServers");
+			let EditServers = BDFDB.BdUtils.getPlugin("EditServers");
 			let ESdata = EditServers ? EditServers.getGuildData(guildid, guildcopyinner) : null;
 			if (ESdata && (ESdata.name || ESdata.color3 || ESdata.color4)) EditServers.changeTooltip(guild, guildcopyinner, "right");
 			else {
 				let folderData = BDFDB.loadData(folderid, this, "folders") || {};
 				let color3 = folderData.copyTooltipColor ? folderData.color3 : null;
 				let color4 = folderData.copyTooltipColor ? folderData.color4 : null;
-				let isgradient3 = color3 && BDFDB.isObject(color3);
-				let isgradient4 = color4 && BDFDB.isObject(color4);
+				let isgradient3 = color3 && BDFDB.ObjectUtils.is(color3);
+				let isgradient4 = color4 && BDFDB.ObjectUtils.is(color4);
 				let bgColor = color3 ? (!isgradient3 ? BDFDB.colorCONVERT(color3, "RGBA") : BDFDB.colorGRADIENT(color3)) : "";
 				let fontColor = color4 ? (!isgradient4 ? BDFDB.colorCONVERT(color4, "RGBA") : BDFDB.colorGRADIENT(color4)) : "";
-				BDFDB.createTooltip(isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(guild.name)}</span>` : guild.name, guildcopyinner, {type:"right", selector:"guild-folder-tooltip", style:`${isgradient4 ? '' : 'color: ' + fontColor + ' !important; '}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.colorCONVERT(color3[0], "RGBA") : bgColor} !important;`, html:isgradient3, hide:true});
+				BDFDB.TooltipUtils.create(guildcopyinner, isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(guild.name)}</span>` : guild.name, {type:"right", selector:"guild-folder-tooltip", style:`${isgradient4 ? '' : 'color: ' + fontColor + ' !important; '}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.colorCONVERT(color3[0], "RGBA") : bgColor} !important;`, html:isgradient3, hide:true});
 			}
 			if (guildicon && guildicon.src && guild.icon && guild.icon.startsWith("a_") && guild.features.has("ANIMATED_ICON") && guildicon.src.includes("discordapp.com/icons/")) {
 				guildicon.src = guildicon.src.replace(".webp", ".gif");
@@ -973,7 +969,7 @@ class ServerFolders {
 			}
 		});
 		guildcopyinner.addEventListener("mouseleave", () => {
-			if (guildicon && guildicon.src && guild.icon && guild.icon.startsWith("a_") && guild.features.has("ANIMATED_ICON") && guildicon.src.includes("discordapp.com/icons/") && !BDFDB.getReactValue(BDFDB.getPlugin("AutoPlayGifs", true), "settings.guildList")) {
+			if (guildicon && guildicon.src && guild.icon && guild.icon.startsWith("a_") && guild.features.has("ANIMATED_ICON") && guildicon.src.includes("discordapp.com/icons/") && !BDFDB.ReactUtils.getValue(BDFDB.BdUtils.getPlugin("AutoPlayGifs", true), "settings.guildList")) {
 				guildicon.src = guildicon.src.replace(".gif", ".webp");
 			}
 			if (BDFDB.LibraryModules.LastGuildStore.getGuildId() != guildid) {
@@ -982,7 +978,7 @@ class ServerFolders {
 			}
 		});
 		guildcopy.addEventListener("click", e => {
-			BDFDB.stopEvent(e);
+			BDFDB.ListenerUtils.stopEvent(e);
 			if (BDFDB.pressedKeys.includes(46)) this.removeGuildFromFolder(folderid, guildid);
 			else {
 				BDFDB.LibraryModules.GuildUtils.transitionToGuildSync(guild.id);
@@ -992,7 +988,7 @@ class ServerFolders {
 			}
 		});
 		guildcopy.addEventListener("contextmenu", e => {
-			BDFDB.openGuildContextMenu(guilddiv, e);
+			BDFDB.GuildUtils.openMenu(guilddiv, e);
 		});
 		guildcopy.addEventListener("mousedown", e => {
 			let x = e.pageX, y = e.pageY;
@@ -1020,7 +1016,7 @@ class ServerFolders {
 						BDFDB.removeEles(placeholder, dragpreview);
 						BDFDB.toggleEles(guildcopy, true);
 						let dropfolderdiv = BDFDB.getParentEle(BDFDB.dotCN.guildfolderwrapper, e3.target);
-						let newfolderid = dropfolderdiv ? BDFDB.getFolderID(dropfolderdiv) : null;
+						let newfolderid = dropfolderdiv ? BDFDB.FolderUtils.getId(dropfolderdiv) : null;
 						if (newfolderid) {
 							if (newfolderid != folderid) {
 								BDFDB.removeEles(guildcopy);
@@ -1076,7 +1072,7 @@ class ServerFolders {
 		let targetedguildsids = {};
 			
 		let container = modal.querySelector(".entries");
-		BDFDB.addChildEventListener(modal, "click", ".btn-done", () => {
+		BDFDB.ListenerUtils.addToChildren(modal, "click", ".btn-done", () => {
 			let ids = [];
 			for (let id in targetedguildsids) if (targetedguildsids[id]) ids.push(id);
 			this.createFolder(ids);
@@ -1084,7 +1080,7 @@ class ServerFolders {
 
 		for (let guild of guilds) {
 			if (container.firstElementChild) container.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.divider}"></div>`));
-			let entry = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4} entry" style="flex: 1 1 auto;">${BDFDB.createServerDivCopy(guild.id, {size: 48}).outerHTML}<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCNS.flexchild + BDFDB.disCN.overflowellipsis}" style="flex: 1 1 auto; white-space: nowrap;">${BDFDB.encodeToHTML(guild.name)}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"></div></div>`);
+			let entry = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4} entry" style="flex: 1 1 auto;">${BDFDB.GuildUtils.createCopy(guild.id, {size: 48}).outerHTML}<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCNS.flexchild + BDFDB.disCN.overflowellipsis}" style="flex: 1 1 auto; white-space: nowrap;">${BDFDB.encodeToHTML(guild.name)}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"></div></div>`);
 			container.appendChild(entry);
 			let switchinput = entry.querySelector(BDFDB.dotCN.switchinner);
 			switchinput.checked = guild.id == initguildid;
@@ -1141,7 +1137,7 @@ class ServerFolders {
 			if (oldGuildFolders[i].folderId) {
 				let newFolder = Object.assign({}, oldGuildFolders[i]);
 				if (oldGuildFolders[i].folderId == folderid) newFolder.guildIds.push(guildid);
-				else BDFDB.removeFromArray(newFolder.guildIds, guildid);
+				else BDFDB.ArrayUtils.remove(newFolder.guildIds, guildid);
 				guildFolders.push(newFolder);
 			}
 			else if (oldGuildFolders[i].guildIds[0] != guildid) guildFolders.push(oldGuildFolders[i]);
@@ -1159,7 +1155,7 @@ class ServerFolders {
 		for (let i in oldGuildFolders) {
 			if (oldGuildFolders[i].folderId == folderid) {
 				let newFolder = Object.assign({}, oldGuildFolders[i]);
-				BDFDB.removeFromArray(newFolder.guildIds, guildid);
+				BDFDB.ArrayUtils.remove(newFolder.guildIds, guildid);
 				guildFolders.push(newFolder);
 				guildFolders.push({guildIds:[guildid]});
 			}
@@ -1190,7 +1186,7 @@ class ServerFolders {
 	}
 
 	setLabelsByLanguage () {
-		switch (BDFDB.getDiscordLanguage().id) {
+		switch (BDFDB.LanguageUtils.getLanguage().id) {
 			case "hr":		//croatian
 				return {
 					servercontext_serverfolders_text:		"Poslužitelj mapu",

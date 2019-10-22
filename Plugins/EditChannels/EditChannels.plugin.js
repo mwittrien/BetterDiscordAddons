@@ -58,18 +58,18 @@ class EditChannels {
 		var settings = BDFDB.getAllData(this, "settings");
 		var settingsitems = [], inneritems = [];
 		
-		for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
+		for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
 			className: BDFDB.disCN.marginbottom8,
 			plugin: this,
 			keys: ["settings", key],
 			label: this.defaults.settings[key].description,
 			value: settings[key]
 		}));
-		settingsitems.push(BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 			title: "Change Channels in:",
 			children: inneritems
 		}));
-		settingsitems.push(BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsItem, {
+		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 			type: "Button",
 			className: BDFDB.disCN.marginbottom8,
 			color: BDFDB.LibraryComponents.Button.Colors.RED,
@@ -83,7 +83,7 @@ class EditChannels {
 			children: BDFDB.LanguageUtils.LanguageStrings.RESET
 		}));
 		
-		return BDFDB.createSettingsPanel(this, settingsitems);
+		return BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 	}
 
 	//legacy
@@ -110,16 +110,14 @@ class EditChannels {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
 			var observer = new MutationObserver(() => {this.changeAppTitle();});
-			BDFDB.addObserver(this, document.head.querySelector("title"), {name:"appTitleObserver",instance:observer}, {childList:true});
+			BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name:"appTitleObserver",instance:observer}, {childList:true});
 			
 			this.forceUpdateAll();
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 	stop () {
@@ -133,7 +131,7 @@ class EditChannels {
 
 			BDFDB.removeEles(".autocompleteEditChannels", ".autocompleteEditChannelsRow");
 
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -143,16 +141,16 @@ class EditChannels {
 	onChannelContextMenu (instance, menu, returnvalue) {
 		if (instance.props && instance.props.channel && !BDFDB.getParentEle(".container-hidden", instance.props.target) && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
 			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
-			const itemgroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 				children: [
-					BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
 						label: this.labels.context_localchannelsettings_text,
 						className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-channelsettings-contextMenuSubItem`,
-						render: [BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+						render: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 							className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 							children: [
-								BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_channelsettings_text,
 									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-channelsettings-ContextMenuItem`,
 									action: e => {
@@ -160,7 +158,7 @@ class EditChannels {
 										this.showChannelSettings(instance.props.channel);
 									}
 								}),
-								BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_resetsettings_text,
 									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-resetsettings-ContextMenuItem`,
 									disabled: !BDFDB.loadData(instance.props.channel.id, this, "channels"),
@@ -182,7 +180,7 @@ class EditChannels {
 	
 	forceUpdateAll () {
 		this.changeAppTitle();
-		BDFDB.WebModules.forceAllUpdates(this);
+		BDFDB.ModuleUtils.forceAllUpdates(this);
 	}
 
 	showChannelSettings (info) {
@@ -193,31 +191,31 @@ class EditChannels {
 			header: this.labels.modal_header_text,
 			subheader: info.name,
 			children: [
-				BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 					title: this.labels.modal_channelname_text,
 					className: BDFDB.disCN.marginbottom20 + " input-channelname",
 					children: [
-						BDFDB.React.createElement(BDFDB.LibraryComponents.TextInput, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 							value: data.name,
 							placeholder: info.name,
 							autoFocus: true
 						}),
-						BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 							className: BDFDB.disCN.dividerdefault
 						})
 					]
 				}),
-				BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 					title: this.labels.modal_colorpicker1_text,
 					className: BDFDB.disCN.marginbottom20,
 					children: [
-						BDFDB.React.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 							color: data.color,
 							number: 1
 						})
 					]
 				}),
-				BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsItem, {
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 					type: "Switch",
 					className: BDFDB.disCN.marginbottom20 + " input-inheritcolor",
 					label: this.labels.modal_inheritcolor_text,
@@ -239,7 +237,7 @@ class EditChannels {
 
 					data.color = BDFDB.getSwatchColor(modal, 1);
 					console.log(data.color);
-					if (data.color != null && !BDFDB.isObject(data.color)) {
+					if (data.color != null && !BDFDB.ObjectUtils.is(data.color)) {
 						if (data.color[0] < 30 && data.color[1] < 30 && data.color[2] < 30) data.color = BDFDB.colorCHANGE(data.color, 30);
 						else if (data.color[0] > 225 && data.color[1] > 225 && data.color[2] > 225) data.color = BDFDB.colorCHANGE(data.color, -30);
 					}
@@ -256,7 +254,7 @@ class EditChannels {
 	}
 
 	processChannelTextArea (instance, wrapper, returnvalue) {
-		let channel = BDFDB.getReactValue(instance, "props.channel");
+		let channel = BDFDB.ReactUtils.getValue(instance, "props.channel");
 		if (channel) {
 			var textarea = wrapper.querySelector("textarea");
 			if (!textarea) return;
@@ -264,13 +262,13 @@ class EditChannels {
 				let data = this.getChannelData(channel.id, wrapper);
 				wrapper.querySelector("textarea").setAttribute("placeholder", BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", "#" + (data.name || channel.name)));
 			}
-			BDFDB.removeEventListener(this, textarea);
+			BDFDB.ListenerUtils.remove(this, textarea);
 			if (BDFDB.getData("changeInAutoComplete", this, "settings")) {
-				BDFDB.addEventListener(this, textarea, "keydown", e => {
+				BDFDB.ListenerUtils.add(this, textarea, "keydown", e => {
 					let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCN.autocomplete);
 					if (autocompletemenu && (e.which == 9 || e.which == 13)) {
 						if (BDFDB.containsClass(autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement, "autocompleteEditChannelsRow")) {
-							BDFDB.stopEvent(e);
+							BDFDB.ListenerUtils.stopEvent(e);
 							this.swapWordWithMention(textarea);
 						}
 					}
@@ -278,7 +276,7 @@ class EditChannels {
 						let autocompleteitems = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable + ":not(.autocompleteEditChannelsSelector)");
 						let selected = autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected);
 						if (BDFDB.containsClass(selected, "autocompleteEditChannelsSelector") || autocompleteitems[e.which == 38 ? 0 : (autocompleteitems.length-1)] == selected) {
-							BDFDB.stopEvent(e);
+							BDFDB.ListenerUtils.stopEvent(e);
 							let next = this.getNextSelection(autocompletemenu, null, e.which == 38 ? false : true);
 							BDFDB.removeClass(selected, BDFDB.disCN.autocompleteselected);
 							BDFDB.addClass(selected, BDFDB.disCN.autocompleteselector);
@@ -296,7 +294,7 @@ class EditChannels {
 
 					if (!e.ctrlKey && e.which != 38 && e.which != 40 && !(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) BDFDB.removeEles(".autocompleteEditChannels", ".autocompleteEditChannelsRow");
 				});
-				BDFDB.addEventListener(this, textarea, "click", e => {
+				BDFDB.ListenerUtils.add(this, textarea, "click", e => {
 					if (textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) setImmediate(() => {this.addAutoCompleteMenu(textarea, channel);});
 				});
 			}
@@ -304,7 +302,7 @@ class EditChannels {
 	}
 
 	processAuditLog (instance, wrapper, returnvalue) {
-		let channel = BDFDB.getReactValue(instance, "props.log.options.channel");
+		let channel = BDFDB.ReactUtils.getValue(instance, "props.log.options.channel");
 		if (channel) {
 			let hooks = wrapper.querySelectorAll(`${BDFDB.dotCN.flexchild} > span${BDFDB.notCN.auditloguserhook}`);
 			if (hooks.length > 0) this.changeChannel2(channel, hooks[0].firstChild);
@@ -312,7 +310,7 @@ class EditChannels {
 	}
 
 	processInviteCard (instance, wrapper, returnvalue) {
-		let invite = BDFDB.getReactValue(instance, "props.invite");
+		let invite = BDFDB.ReactUtils.getValue(instance, "props.invite");
 		if (invite && invite.inviter && invite.channel) {
 			let channelname = wrapper.querySelector(BDFDB.dotCN.guildsettingsinvitechannelname);
 			if (channelname) this.changeChannel2(invite.channel, channelname);
@@ -336,7 +334,7 @@ class EditChannels {
 	}
 
 	processHeaderBar (instance, wrapper, returnvalue) {
-		let channel_id = BDFDB.getReactValue(instance, "props.channelId") || BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.channelId");
+		let channel_id = BDFDB.ReactUtils.getValue(instance, "props.channelId") || BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.memoizedProps.channelId");
 		if (channel_id) {
 			let channelname = wrapper.querySelector(BDFDB.dotCN.channelheaderheaderbartitle);
 			if (channelname) {
@@ -346,7 +344,7 @@ class EditChannels {
 					else {
 						if (channel.type == 1) channel = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]) || channel;
 						if (channelname.EditChannelsChangeObserver && typeof channelname.EditChannelsChangeObserver.disconnect == "function") channelname.EditChannelsChangeObserver.disconnect();
-						if (BDFDB.isPluginEnabled("EditUsers")) BDFDB.getPlugin("EditUsers").changeName(channel, channelname);
+						if (BDFDB.BdUtils.isPluginEnabled("EditUsers")) BDFDB.BdUtils.getPlugin("EditUsers").changeName(channel, channelname);
 						else {
 							channelname.style.removeProperty("color");
 							channelname.style.removeProperty("background");
@@ -361,10 +359,10 @@ class EditChannels {
 	processClickable (instance, wrapper, returnvalue) {
 		if (!instance.props || !instance.props.className) return;
 		else if (instance.props.tag == "span" && instance.props.className.indexOf(BDFDB.disCN.mentionwrapper) > -1 && instance.props.className.indexOf(BDFDB.disCN.mention) == -1) {
-			let children = BDFDB.getReactValue(instance, "_reactInternalFiber.memoizedProps.children");
+			let children = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.memoizedProps.children");
 			if (children && typeof children[0] == "string") {
 				let channelname = children[0].slice(1);
-				let categoryname = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.type.displayName") == "Tooltip" ? BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.memoizedProps.text") : null
+				let categoryname = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.return.type.displayName") == "Tooltip" ? BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.return.memoizedProps.text") : null
 				let channelid = BDFDB.LibraryModules.LastGuildStore.getGuildId();
 				let channels = channelid ? (BDFDB.LibraryModules.GuildChannelStore.getChannels(channelid)[0] || BDFDB.LibraryModules.GuildChannelStore.getChannels(channelid).SELECTABLE) : null;
 				if (Array.isArray(channels)) for (let channel of channels) {
@@ -379,22 +377,22 @@ class EditChannels {
 			}
 		}
 		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.quickswitchresult) > -1) {
-			let channel = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.memoizedProps.channel");
+			let channel = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.return.memoizedProps.channel");
 			if (channel) {
 				this.changeChannel(channel, wrapper.querySelector(BDFDB.dotCN.quickswitchresultmatch));
 				if (channel.parent_id) this.changeChannel(BDFDB.LibraryModules.ChannelStore.getChannel(channel.parent_id), wrapper.querySelector(BDFDB.dotCN.quickswitchresultnote));
 			}
 		}
 		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.autocompleterow) > -1) {
-			let channel = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.channel");
+			let channel = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.memoizedProps.channel");
 			if (channel) {
 				this.changeChannel(channel, wrapper.querySelector(BDFDB.dotCN.marginleft4));
-				let category = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.category");
+				let category = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.memoizedProps.category");
 				if (category) this.changeChannel(category, wrapper.querySelector(BDFDB.dotCN.autocompletedescription));
 			}
 		}
 		else if (instance.props.tag == "span" && instance.props.className.indexOf(BDFDB.disCN.messagespopoutchannelname) > -1) {
-			let channel = BDFDB.getReactValue(instance, "_reactInternalFiber.return.sibling.child.child.memoizedProps.channel");
+			let channel = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.sibling.child.child.memoizedProps.channel");
 			if (channel) this.changeChannel2(channel, wrapper);
 		}
 	}
@@ -421,7 +419,7 @@ class EditChannels {
 			if (channelname.EditChannelsChangeObserver && typeof channelname.EditChannelsChangeObserver.disconnect == "function") channelname.EditChannelsChangeObserver.disconnect();
 			let data = this.getChannelData(info.id, info.parent_id, channelname);
 			if (data.name || data.color || channelname.parentElement.getAttribute("changed-by-editchannels")) {
-				let isgradient = data.color && BDFDB.isObject(data.color);
+				let isgradient = data.color && BDFDB.ObjectUtils.is(data.color);
 				let color = this.chooseColor(channelname, data.color);
 				if (isgradient) {
 					channelname.style.setProperty("color", BDFDB.colorCONVERT(data.color[Object.keys(data.color)[0]], "RGBA"), "important");
@@ -491,7 +489,7 @@ class EditChannels {
 		if (channelname.EditChannelsChangeObserver && typeof channelname.EditChannelsChangeObserver.disconnect == "function") channelname.EditChannelsChangeObserver.disconnect();
 		let data = this.getChannelData(info.id, info.parent_id, channelname);
 		if (data.name || data.color || channelname.getAttribute("changed-by-editchannels")) {
-			if (BDFDB.isObject(data.color)) {
+			if (BDFDB.ObjectUtils.is(data.color)) {
 				channelname.style.setProperty("color", BDFDB.colorCONVERT(data.color[Object.keys(data.color)[0]], "RGBA"), "important");
 				BDFDB.setInnerText(channelname, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(this.chooseColor(channelname, data.color))} !important;">${BDFDB.encodeToHTML("#" + (data.name || info.name))}</span>`));
 			}
@@ -525,7 +523,7 @@ class EditChannels {
 		let data = this.getChannelData(info.id, info.parent_id, mention);
 		let name = "#" + (data.name || info.name);
 
-		let isgradient = data.color && BDFDB.isObject(data.color);
+		let isgradient = data.color && BDFDB.ObjectUtils.is(data.color);
 		let color = isgradient ? BDFDB.colorGRADIENT(data.color) : BDFDB.colorCONVERT(data.color, "RGBA");
 		let color0_1 = isgradient ? BDFDB.colorGRADIENT(BDFDB.colorSETALPHA(data.color, 0.1, "RGBA")) : BDFDB.colorSETALPHA(data.color, 0.1, "RGBA");
 		let color0_7 = isgradient ? BDFDB.colorGRADIENT(BDFDB.colorSETALPHA(data.color, 0.7, "RGBA")) : BDFDB.colorSETALPHA(data.color, 0.7, "RGBA");
@@ -536,7 +534,7 @@ class EditChannels {
 			mention.EditChannelsHovered = true;
 			colorHover();
 			let categorydata = this.getChannelData(categoryinfo.id, null, mention);
-			if (categorydata.name) BDFDB.createTooltip(categorydata.name, mention, {type:"top", selector:"EditChannels-tooltip", hide:true});
+			if (categorydata.name) BDFDB.TooltipUtils.create(mention, categorydata.name, {type:"top", selector:"EditChannels-tooltip", hide:true});
 		};
 		mention.mouseoutListenerEditChannels = () => {
 			delete mention.EditChannelsHovered;
@@ -574,7 +572,7 @@ class EditChannels {
 			let classname = channelname.className ? channelname.className.toLowerCase() : "";
 			if (classname.indexOf("muted") > -1 || classname.indexOf("locked") > -1) color = BDFDB.colorCHANGE(color, -0.5);
 			else if (hovered || classname.indexOf("selected") > -1 || classname.indexOf("hovered") > -1 || classname.indexOf("unread") > -1 || classname.indexOf("connected") > -1) color = BDFDB.colorCHANGE(color, 0.5);
-			return BDFDB.isObject(color) ? color : BDFDB.colorCONVERT(color, "RGBA");
+			return BDFDB.ObjectUtils.is(color) ? color : BDFDB.colorCONVERT(color, "RGBA");
 		}
 		return null;
 	}
@@ -619,7 +617,7 @@ class EditChannels {
 				let catdata = (category ? channels[category.id] : null) || {};
 				if (channel && channel.type == 0) channelarray.push(Object.assign({lowercasename:channels[id].name.toLowerCase(),lowercasecatname:(catdata && catdata.name ? catdata.name.toLowerCase() : null),channel,category,catdata},channels[id]));
 			}
-			channelarray = BDFDB.sortArrayByKey(channelarray.filter(n => n.lowercasename.indexOf(lastword.toLowerCase().slice(1)) != -1 || (n.lowercasecatname && n.lowercasecatname.indexOf(lastword.toLowerCase().slice(1)) != -1)), "lowercasename");
+			channelarray = BDFDB.ArrayUtils.keySort(channelarray.filter(n => n.lowercasename.indexOf(lastword.toLowerCase().slice(1)) != -1 || (n.lowercasecatname && n.lowercasecatname.indexOf(lastword.toLowerCase().slice(1)) != -1)), "lowercasename");
 			if (channelarray.length) {
 				let settings = BDFDB.getAllData(this, "settings");
 				let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCNS.autocomplete + BDFDB.dotCN.autocompleteinner), amount = 15;
@@ -632,7 +630,7 @@ class EditChannels {
 					amount -= autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable).length;
 				}
 
-				BDFDB.addEventListener(this, autocompletemenu, "mouseenter", BDFDB.dotCN.autocompleteselectable, e => {
+				BDFDB.ListenerUtils.add(this, autocompletemenu, "mouseenter", BDFDB.dotCN.autocompleteselectable, e => {
 					var selected = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselected);
 					BDFDB.removeClass(selected, BDFDB.disCN.autocompleteselected);
 					BDFDB.addClass(selected, BDFDB.disCN.autocompleteselector);

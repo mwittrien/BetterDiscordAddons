@@ -74,7 +74,7 @@ class UserNotes {
 
 		BDFDB.initElements(settingspanel, this);
 
-		BDFDB.addEventListener(this, settingspanel, "click", ".remove-button", () => {
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".remove-button", () => {
 			BDFDB.openConfirmModal(this, "Are you sure you want to remove all usernotes?", () => {
 				BDFDB.removeAllData(this, "notes");
 			});
@@ -106,11 +106,9 @@ class UserNotes {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 
@@ -118,7 +116,7 @@ class UserNotes {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -128,10 +126,10 @@ class UserNotes {
 	onUserContextMenu (instance, menu, returnvalue) {
 		if (instance.props && instance.props.user && !menu.querySelector(`${this.name}-contextMenuItem`)) {
 			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
-			const itemgroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 				children: [
-					BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 						label: BDFDB.LanguageUtils.LanguageStrings.USERS + " " + BDFDB.LanguageUtils.LanguageStrings.NOTE,
 						className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-usernote-contextMenuItem`,
 						action: e => {
@@ -155,7 +153,7 @@ class UserNotes {
 		noteinput.value = note;
 		noteinput.setAttribute("placeholder", note);
 		BDFDB.appendModal(userNotesModal);
-		BDFDB.addChildEventListener(userNotesModal, "click", ".btn-save", (e) => {
+		BDFDB.ListenerUtils.addToChildren(userNotesModal, "click", ".btn-save", (e) => {
 			e.preventDefault();
 			BDFDB.saveData(info.id, noteinput.value, this, "notes")
 		});

@@ -81,8 +81,8 @@ class SpellCheck {
 
 		BDFDB.initElements(settingspanel, this);
 
-		BDFDB.addEventListener(this, settingspanel, "click", ".remove-word", e => {this.removeFromOwnDictionarye;});
-		BDFDB.addEventListener(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".remove-word", e => {this.removeFromOwnDictionarye;});
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {
 			BDFDB.openDropdownMenu(e, this.saveSelectChoice.bind(this), this.createSelectChoice.bind(this), this.languages);
 		});
 		return settingspanel;
@@ -112,17 +112,15 @@ class SpellCheck {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
-			this.languages = Object.assign({}, BDFDB.languages);
-			this.languages = BDFDB.filterObject(this.languages, (lang) => {return lang.dic == true ? lang : null});
+			this.languages = Object.assign({}, BDFDB.LanguageUtils.languages);
+			this.languages = BDFDB.ObjectUtils.filter(this.languages, (lang) => {return lang.dic == true ? lang : null});
 			this.setDictionary(BDFDB.getData("dictionaryLanguage", this, "choices"));
 
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 	stop () {
@@ -134,7 +132,7 @@ class SpellCheck {
 
 			this.killLanguageToast();
 
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -173,7 +171,7 @@ class SpellCheck {
 				let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
 				let items = [];
 				let similarWords = this.getSimilarWords(word.toLowerCase().trim());
-				for (let suggestion of similarWords.sort()) items.push(BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+				for (let suggestion of similarWords.sort()) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 					label: suggestion,
 					className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-suggestion-contextMenuItem`,
 					action: e => {
@@ -181,18 +179,18 @@ class SpellCheck {
 						this.replaceWord(textarea, word, suggestion);
 					}
 				}));
-				if (!items.length) items.push(BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+				if (!items.length) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 					label: this.labels.similarwordssubmenu_none_text,
 					className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-none-contextMenuItem`,
 					disabled: true
 				}));
-				const itemgroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+				const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 					className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
-					children: BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
 						label: BDFDB.LanguageUtils.LanguageStrings.SPELLCHECK,
 						className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-spellcheck-contextMenuSubItem`,
 						render: [
-							BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 								label: this.labels.context_spellcheck_text,
 								hint: word,
 								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-addword-contextMenuItem`,
@@ -201,7 +199,7 @@ class SpellCheck {
 									this.addToOwnDictionary(word);
 								}
 							}),
-							BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
 								label: this.labels.context_similarwords_text,
 								className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-suggestions-contextMenuSubItem`,
 								render: items
@@ -245,12 +243,12 @@ class SpellCheck {
 			BDFDB.addClass(wrapper, "spellcheck-added");
 
 			updateSpellcheck();
-			BDFDB.addEventListener(this, textarea, "keyup", e => {
+			BDFDB.ListenerUtils.add(this, textarea, "keyup", e => {
 				clearTimeout(textarea.spellchecktimeout);
 				if (textarea.value) textarea.spellchecktimeout = setTimeout(() => {updateSpellcheck();},100);
 				else updateSpellcheck();
 			});
-			BDFDB.addEventListener(this, textarea, "scroll", e => {
+			BDFDB.ListenerUtils.add(this, textarea, "scroll", e => {
 				spellcheck.scrollTop = textarea.scrollTop;
 			});
 		}
@@ -279,7 +277,7 @@ class SpellCheck {
 			if (!ownDictionary.includes(wordlow)) {
 				ownDictionary.push(wordlow);
 				BDFDB.saveData(lang, ownDictionary, this, "owndics");
-				BDFDB.showToast(this.labels.toast_wordadd_text ? this.labels.toast_wordadd_text.replace("${word}", word).replace("${dicname}", this.languages[lang].name) : "", {type:"success"});
+				BDFDB.NotificationUtils.toast(this.labels.toast_wordadd_text ? this.labels.toast_wordadd_text.replace("${word}", word).replace("${dicname}", this.languages[lang].name) : "", {type:"success"});
 				this.dictionary = this.langDictionary.concat(ownDictionary);
 			}
 		}
@@ -291,7 +289,7 @@ class SpellCheck {
 		entry.remove();
 		var lang = BDFDB.getData("dictionaryLanguage", this, "choices");
 		var ownDictionary = BDFDB.loadData(lang, this, "owndics") || [];
-		BDFDB.removeFromArray(ownDictionary, word);
+		BDFDB.ArrayUtils.remove(ownDictionary, word);
 		BDFDB.saveData(lang, ownDictionary, this, "owndics");
 		this.dictionary = this.langDictionary.concat(ownDictionary);
 	}
@@ -321,7 +319,7 @@ class SpellCheck {
 	setDictionary (lang) {
 		this.dictionary = BDFDB.loadData(lang, this, "owndics") || [];
 		this.killLanguageToast();
-		this.languageToast = BDFDB.showToast("Grabbing dictionary (" + this.languages[lang].name + "). Please wait", {timeout:0});
+		this.languageToast = BDFDB.NotificationUtils.toast("Grabbing dictionary (" + this.languages[lang].name + "). Please wait", {timeout:0});
 		this.languageToast.interval = setInterval(() => {
 			this.languageToast.textContent = this.languageToast.textContent.indexOf(".....") > -1 ? "Grabbing dictionary (" + this.languages[lang].name + "). Please wait" : this.languageToast.textContent + ".";
 		},500);
@@ -329,14 +327,14 @@ class SpellCheck {
 		BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/dic/" + lang + ".dic", (error, response, result) => {
 			if (error || (response && result.toLowerCase().indexOf("<!doctype html>") > -1)) {
 				this.killLanguageToast();
-				BDFDB.showToast("Failed to grab dictionary (" + this.languages[lang].name + ").", {type: "error"});
+				BDFDB.NotificationUtils.toast("Failed to grab dictionary (" + this.languages[lang].name + ").", {type: "error"});
 			}
 			else if (response && this.languageToast.lang == lang) {
 				this.langDictionary = result.split("\n");
 				this.dictionary = this.langDictionary.concat(this.dictionary);
 				this.dictionary = this.dictionary.map(word => word.toLowerCase());
 				this.killLanguageToast();
-				BDFDB.showToast("Successfully grabbed dictionary (" + this.languages[lang].name + ").", {type: "success"});
+				BDFDB.NotificationUtils.toast("Successfully grabbed dictionary (" + this.languages[lang].name + ").", {type: "success"});
 			}
 		});
 	}

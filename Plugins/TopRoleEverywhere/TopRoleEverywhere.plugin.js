@@ -89,13 +89,11 @@ class TopRoleEverywhere {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 	stop () {
@@ -103,7 +101,7 @@ class TopRoleEverywhere {
 			this.stopping = true;
 
 			BDFDB.removeEles(".TRE-tag");
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -117,7 +115,7 @@ class TopRoleEverywhere {
 	}
 
 	processMessageUsername (instance, wrapper, returnvalue) {
-		let message = BDFDB.getReactValue(instance, "props.message");
+		let message = BDFDB.ReactUtils.getValue(instance, "props.message");
 		if (message) {
 			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
 			if (username && BDFDB.getData("showInChat", this, "settings")) {
@@ -131,7 +129,7 @@ class TopRoleEverywhere {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			BDFDB.removeEles(".TRE-tag");
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 	}
 

@@ -47,7 +47,7 @@ class MoveablePopups {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
 			var observer = null;
 
@@ -64,7 +64,7 @@ class MoveablePopups {
 					}
 				);
 			});
-			BDFDB.addObserver(this, BDFDB.dotCN.popouts, {name:"popoutObserver",instance:observer}, {childList: true});
+			BDFDB.ObserverUtils.connect(this, BDFDB.dotCN.popouts, {name:"popoutObserver",instance:observer}, {childList: true});
 
 			observer = new MutationObserver((changes, _) => {
 				changes.forEach(
@@ -82,11 +82,9 @@ class MoveablePopups {
 					}
 				);
 			});
-			BDFDB.addObserver(this, BDFDB.React.findDOMNode(BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.app), name:"Modals"})), {name:"modalObserver",instance:observer}, {childList: true});
+			BDFDB.ObserverUtils.connect(this, BDFDB.ReactUtils.findDOMNode(BDFDB.getOwnerInstance({node:document.querySelector(BDFDB.dotCN.app), name:"Modals"})), {name:"modalObserver",instance:observer}, {childList: true});
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 
@@ -94,7 +92,7 @@ class MoveablePopups {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -104,7 +102,7 @@ class MoveablePopups {
 	makeMoveable (div) {
 		div.removeEventListener("click", div.clickMovablePopups);
 		div.removeEventListener("mousedown", div.mousedownMovablePopups);
-		div.clickMovablePopups = e => {if (this.dragging) BDFDB.stopEvent(e);};
+		div.clickMovablePopups = e => {if (this.dragging) BDFDB.ListenerUtils.stopEvent(e);};
 		div.mousedownMovablePopups = e => {
 			if (!e.ctrlKey) return;
 			div.style.setProperty("position", "fixed", "important");

@@ -109,13 +109,11 @@ class CharCounter {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 
@@ -125,7 +123,7 @@ class CharCounter {
 
 			BDFDB.removeEles(".charcounter");
 			BDFDB.removeClasses("charcounter-added");
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -168,25 +166,25 @@ class CharCounter {
 
 		BDFDB.addClass(input.parentElement.parentElement, "charcounter-added");
 		if (type == "nickname") input.setAttribute("maxlength", 32);
-		BDFDB.addEventListener(this, input, "keydown click change", e => {
+		BDFDB.ListenerUtils.add(this, input, "keydown click change", e => {
 			clearTimeout(input.charcountertimeout);
 			input.charcountertimeout = setTimeout(() => {updateCounter();},100);
 		});
-		BDFDB.addEventListener(this, input, "mousedown", e => {
-			BDFDB.addEventListener(this, document, "mouseup", () => {
-				BDFDB.removeEventListener(this, document);
-				if (input.selectionEnd - input.selectionStart) setImmediate(() => {BDFDB.addEventListener(this, document, "click", () => {
-					var contexttype = BDFDB.getReactValue(document.querySelector(BDFDB.dotCN.contextmenu), "return.stateNode.props.type");
+		BDFDB.ListenerUtils.add(this, input, "mousedown", e => {
+			BDFDB.ListenerUtils.add(this, document, "mouseup", () => {
+				BDFDB.ListenerUtils.remove(this, document);
+				if (input.selectionEnd - input.selectionStart) setImmediate(() => {BDFDB.ListenerUtils.add(this, document, "click", () => {
+					var contexttype = BDFDB.ReactUtils.getValue(document.querySelector(BDFDB.dotCN.contextmenu), "return.stateNode.props.type");
 					if (!contexttype || !contexttype.startsWith("CHANNEL_TEXT_AREA")) {
 						input.selectionStart = 0;
 						input.selectionEnd = 0;
 						updateCounter();
 					}
 					else setTimeout(() => {updateCounter();},100);
-					BDFDB.removeEventListener(this, document);
+					BDFDB.ListenerUtils.remove(this, document);
 				});});
 			});
-			BDFDB.addEventListener(this, document, "mousemove", () => {setTimeout(() => {updateCounter();},10);});
+			BDFDB.ListenerUtils.add(this, document, "mousemove", () => {setTimeout(() => {updateCounter();},10);});
 		});
 
 		updateCounter();

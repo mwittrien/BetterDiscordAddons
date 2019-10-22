@@ -43,15 +43,13 @@ class ThemeSettings {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 			
-			this.dir = BDFDB.getThemesFolder();
+			this.dir = BDFDB.BdUtils.getThemesFolder();
 
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 	stop () {
@@ -59,7 +57,7 @@ class ThemeSettings {
 			this.stopping = true;
 
 			BDFDB.removeEles(".themes-settings-button",".themes-settings-footer");
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -167,7 +165,7 @@ class ThemeSettings {
 
 		BDFDB.initElements(settingspanel, this);
 
-		BDFDB.addEventListener(this, settingspanel, "click", ".update-button", () => {
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".update-button", () => {
 			let path = BDFDB.LibraryRequires.path.join(this.dir, theme.filename);
 			let css = BDFDB.LibraryRequires.fs.readFileSync(path).toString();
 			if (css) {
@@ -183,11 +181,11 @@ class ThemeSettings {
 				}
 				if (amount > 0) {
 					BDFDB.LibraryRequires.fs.writeFileSync(path, css);
-					BDFDB.showToast(`Updated ${amount} variable${amount == 1 ? "" : "s"} in ${theme.filename}`, {type:"success"});
+					BDFDB.NotificationUtils.toast(`Updated ${amount} variable${amount == 1 ? "" : "s"} in ${theme.filename}`, {type:"success"});
 				}
-				else BDFDB.showToast(`There are no changed variables to be updated in ${theme.filename}`, {type:"warning"});
+				else BDFDB.NotificationUtils.toast(`There are no changed variables to be updated in ${theme.filename}`, {type:"warning"});
 			}
-			else BDFDB.showToast(`Could not find themefile: ${theme.filename}`, {type:"error"});
+			else BDFDB.NotificationUtils.toast(`Could not find themefile: ${theme.filename}`, {type:"error"});
 		});
 
 		wrapper.appendChild(settingspanel);

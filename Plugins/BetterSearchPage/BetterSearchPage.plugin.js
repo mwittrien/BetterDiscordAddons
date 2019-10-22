@@ -106,13 +106,11 @@ class BetterSearchPage {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 	stop () {
@@ -120,7 +118,7 @@ class BetterSearchPage {
 			this.stopping = true;
 
 			BDFDB.removeEles(".BSP-pagination",".BSP-pagination-button",".BSP-pagination-jumpinput");
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -135,7 +133,7 @@ class BetterSearchPage {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			BDFDB.removeEles(".BSP-pagination",".BSP-pagination-button",".BSP-pagination-jumpinput");
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 	}
 
@@ -151,7 +149,7 @@ class BetterSearchPage {
 		currentpage = currentpage < maxpage ? currentpage : maxpage;
 		maxpage = temppage < maxpage ? maxpage : temppage;
 		if (maxpage > 201) {
-			if (currentpage == 201) BDFDB.showToast("Discord doesn't allow you to go further than page 201.",{type:"error"});
+			if (currentpage == 201) BDFDB.NotificationUtils.toast("Discord doesn't allow you to go further than page 201.",{type:"error"});
 			maxpage = 201;
 		}
 		if (currentpage == maxpage && maxpage == 201) BDFDB.addClass(pagination.querySelector(BDFDB.dotCN.searchresultspaginationnext), BDFDB.disCN.searchresultspaginationdisabled);
@@ -176,7 +174,7 @@ class BetterSearchPage {
 			let value = input.value;
 			if (value < 1 || value > maxpage) {
 				input.value = currentpage;
-				if (maxpage == 201 && value > maxpage) BDFDB.showToast("Discord doesn't allow you to go further than page 201.",{type:"error"});
+				if (maxpage == 201 && value > maxpage) BDFDB.NotificationUtils.toast("Discord doesn't allow you to go further than page 201.",{type:"error"});
 			}
 			else if (value < currentpage) {
 				for (; currentpage - value > 0; value++) {
@@ -189,31 +187,31 @@ class BetterSearchPage {
 				}
 			}
 		};
-		BDFDB.addEventListener(this, searchResultsWrapper, "click", BDFDB.dotCN.searchresultspaginationdisabled, e => {
-			BDFDB.stopEvent(e);
+		BDFDB.ListenerUtils.add(this, searchResultsWrapper, "click", BDFDB.dotCN.searchresultspaginationdisabled, e => {
+			BDFDB.ListenerUtils.stopEvent(e);
 		});
-		BDFDB.addEventListener(this, searchResultsWrapper, "click", `.BSP-pagination ${BDFDB.dotCN.searchresultspaginationprevious + BDFDB.notCN.searchresultspaginationdisabled}`, () => {
+		BDFDB.ListenerUtils.add(this, searchResultsWrapper, "click", `.BSP-pagination ${BDFDB.dotCN.searchresultspaginationprevious + BDFDB.notCN.searchresultspaginationdisabled}`, () => {
 			BDFDB.LibraryModules.SearchPageUtils.searchPreviousPage(searchId);
 		});
-		BDFDB.addEventListener(this, searchResultsWrapper, "click", `.BSP-pagination ${BDFDB.dotCN.searchresultspaginationnext + BDFDB.notCN.searchresultspaginationdisabled}`, () => {
+		BDFDB.ListenerUtils.add(this, searchResultsWrapper, "click", `.BSP-pagination ${BDFDB.dotCN.searchresultspaginationnext + BDFDB.notCN.searchresultspaginationdisabled}`, () => {
 			BDFDB.LibraryModules.SearchPageUtils.searchNextPage(searchId);
 		});
-		BDFDB.addEventListener(this, searchResultsWrapper, "click", `.BSP-pagination-first${BDFDB.notCN.searchresultspaginationdisabled}`, () => {
+		BDFDB.ListenerUtils.add(this, searchResultsWrapper, "click", `.BSP-pagination-first${BDFDB.notCN.searchresultspaginationdisabled}`, () => {
 			for (let i = 0; currentpage - 1 - i > 0; i++) BDFDB.LibraryModules.SearchPageUtils.searchPreviousPage(searchId);
 		});
-		BDFDB.addEventListener(this, searchResultsWrapper, "click", `.BSP-pagination-last${BDFDB.notCN.searchresultspaginationdisabled}`, () => {
+		BDFDB.ListenerUtils.add(this, searchResultsWrapper, "click", `.BSP-pagination-last${BDFDB.notCN.searchresultspaginationdisabled}`, () => {
 			for (let i = 0; maxpage - currentpage - i > 0; i++) BDFDB.LibraryModules.SearchPageUtils.searchNextPage(searchId);
 		});
-		BDFDB.addEventListener(this, searchResultsWrapper, "click", `.BSP-pagination-jump${BDFDB.notCN.searchresultspaginationdisabled}`, e => {
+		BDFDB.ListenerUtils.add(this, searchResultsWrapper, "click", `.BSP-pagination-jump${BDFDB.notCN.searchresultspaginationdisabled}`, e => {
 			doJump(e.currentTarget.parentElement.querySelector(`.BSP-pagination-jumpinput ${BDFDB.dotCN.inputmini}`));
 		});
-		BDFDB.addEventListener(this, searchResultsWrapper, "keydown", `.BSP-pagination-jumpinput ${BDFDB.dotCN.inputmini}`, e => {
+		BDFDB.ListenerUtils.add(this, searchResultsWrapper, "keydown", `.BSP-pagination-jumpinput ${BDFDB.dotCN.inputmini}`, e => {
 			let label = e.currentTarget.getAttribute("aria-label");
-			if (label) BDFDB.createTooltip(label, e.currentTarget, {type:"top"});
+			if (label) BDFDB.TooltipUtils.create(e.currentTarget, label, {type:"top"});
 		});
-		BDFDB.addEventListener(this, searchResultsWrapper, "mouseenter", `.pagination-button${BDFDB.notCN.searchresultspaginationdisabled}`, e => {
+		BDFDB.ListenerUtils.add(this, searchResultsWrapper, "mouseenter", `.pagination-button${BDFDB.notCN.searchresultspaginationdisabled}`, e => {
 			let label = e.currentTarget.getAttribute("aria-label");
-			if (label) BDFDB.createTooltip(label, e.currentTarget, {type:"top"});
+			if (label) BDFDB.TooltipUtils.create(e.currentTarget, label, {type:"top"});
 		});
 	}
 }

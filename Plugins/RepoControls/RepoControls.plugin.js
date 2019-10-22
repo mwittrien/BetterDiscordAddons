@@ -171,15 +171,13 @@ class RepoControls {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 			
-			this.dirs = {theme: BDFDB.getThemesFolder(), plugin: BDFDB.getPluginsFolder()};
+			this.dirs = {theme: BDFDB.BdUtils.getThemesFolder(), plugin: BDFDB.BdUtils.getPluginsFolder()};
 
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 
@@ -201,7 +199,7 @@ class RepoControls {
 				}
 			}
 
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -239,10 +237,10 @@ class RepoControls {
 		if (!path) return;
 		let button = BDFDB.htmlToElement(this.editButtonMarkup);
 		button.addEventListener("click", () => {
-			if (!BDFDB.LibraryRequires.electron.shell.openItem(path)) BDFDB.showToast(`Unable to open ${type} "${name}".`, {type:"danger"});;
+			if (!BDFDB.LibraryRequires.electron.shell.openItem(path)) BDFDB.NotificationUtils.toast(`Unable to open ${type} "${name}".`, {type:"danger"});;
 		});
 		button.addEventListener("mouseenter", e => {
-			BDFDB.createTooltip(`Edit ${type[0].toUpperCase() + type.slice(1)}`, e.currentTarget, {type:"top",selector:"repocontrols-editicon-tooltip"});
+			BDFDB.TooltipUtils.create(e.currentTarget, `Edit ${type[0].toUpperCase() + type.slice(1)}`, {type:"top",selector:"repocontrols-editicon-tooltip"});
 		});
 		controls.insertBefore(button, controls.firstElementChild);
 	}
@@ -258,8 +256,8 @@ class RepoControls {
 		button.addEventListener("click", () => {
 			let deleteFile = () => {
 				BDFDB.LibraryRequires.fs.unlink(path, (error) => {
-					if (error) BDFDB.showToast(`Unable to delete ${type} "${name}".`, {type:"danger"});
-					else BDFDB.showToast(`Successfully deleted ${type} "${name}".`, {type:"success"});
+					if (error) BDFDB.NotificationUtils.toast(`Unable to delete ${type} "${name}".`, {type:"danger"});
+					else BDFDB.NotificationUtils.toast(`Successfully deleted ${type} "${name}".`, {type:"success"});
 				});
 			};
 			if (!BDFDB.getData("confirmDelete", this, "settings")) deleteFile();
@@ -268,7 +266,7 @@ class RepoControls {
 			});
 		});
 		button.addEventListener("mouseenter", e => {
-			BDFDB.createTooltip(`Delete ${type[0].toUpperCase() + type.slice(1)}`, e.currentTarget, {type:"top",selector:"repocontrols-trashicon-tooltip"});
+			BDFDB.TooltipUtils.create(e.currentTarget, `Delete ${type[0].toUpperCase() + type.slice(1)}`, {type:"top",selector:"repocontrols-trashicon-tooltip"});
 		});
 		controls.insertBefore(button, controls.firstElementChild);
 	}
@@ -294,26 +292,26 @@ class RepoControls {
 		orderfilter.setAttribute("option", sortings.order);
 		orderfilter.innerText = this.sortings.order[sortings.order];
 
-		BDFDB.addChildEventListener(repocontrols, "keyup", BDFDB.dotCN.searchbarinput, () => {
+		BDFDB.ListenerUtils.addToChildren(repocontrols, "keyup", BDFDB.dotCN.searchbarinput, () => {
 			clearTimeout(repocontrols.searchTimeout);
 			repocontrols.searchTimeout = setTimeout(() => {this.sortEntries(container, repocontrols);},1000);
 		});
-		BDFDB.addChildEventListener(repocontrols, "click", BDFDB.dotCN.searchbarclear + BDFDB.dotCN.searchbarvisible, () => {
+		BDFDB.ListenerUtils.addToChildren(repocontrols, "click", BDFDB.dotCN.searchbarclear + BDFDB.dotCN.searchbarvisible, () => {
 			this.sortEntries(container, repocontrols);
 		});
-		BDFDB.addChildEventListener(repocontrols, "click", ".btn-enableall", e => {
+		BDFDB.ListenerUtils.addToChildren(repocontrols, "click", ".btn-enableall", e => {
 			this.toggleAll(type, container, true);
 		});
-		BDFDB.addChildEventListener(repocontrols, "click", ".btn-disableall", e => {
+		BDFDB.ListenerUtils.addToChildren(repocontrols, "click", ".btn-disableall", e => {
 			this.toggleAll(type, container, false);
 		});
-		BDFDB.addChildEventListener(repocontrols, "click", ".sort-filter", e => {
+		BDFDB.ListenerUtils.addToChildren(repocontrols, "click", ".sort-filter", e => {
 			BDFDB.createSortPopout(e.currentTarget, this.sortPopoutMarkup, () => {
 				BDFDB.saveData("sort", sortfilter.getAttribute("option"), this, "sortings");
 				this.sortEntries(container, repocontrols);
 			});
 		});
-		BDFDB.addChildEventListener(repocontrols, "click", ".order-filter", e => {
+		BDFDB.ListenerUtils.addToChildren(repocontrols, "click", ".order-filter", e => {
 			BDFDB.createSortPopout(e.currentTarget, this.orderPopoutMarkup, () => {
 				BDFDB.saveData("order", orderfilter.getAttribute("option"), this, "sortings");
 				this.sortEntries(container, repocontrols);
@@ -355,9 +353,9 @@ class RepoControls {
 		let searchstring = repocontrols.querySelector(BDFDB.dotCN.searchbarinput).value.replace(/[<|>]/g, "").toUpperCase();
 
 		let sortings = BDFDB.getAllData(this, "sortings");
-		let entries = BDFDB.filterObject(container.entries, entry => {return entry.search.indexOf(searchstring) > -1 ? entry : null;});
-		entries = BDFDB.sortObject(entries, sortings.sort);
-		if (sortings.order == "desc") entries = BDFDB.reverseObject(entries);
+		let entries = BDFDB.ObjectUtils.filter(container.entries, entry => {return entry.search.indexOf(searchstring) > -1 ? entry : null;});
+		entries = BDFDB.ObjectUtils.sort(entries, sortings.sort);
+		if (sortings.order == "desc") entries = BDFDB.ObjectUtils.reverse(entries);
 		let entrypositions = Object.keys(entries);
 		for (let li of container.children) {
 			let name = li.getAttribute("data-name");

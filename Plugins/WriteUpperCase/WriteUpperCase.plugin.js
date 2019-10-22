@@ -42,20 +42,18 @@ class WriteUpperCase {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -66,7 +64,7 @@ class WriteUpperCase {
 		if (instance.props && instance.props.type) {
 			var textarea = wrapper.querySelector("textarea");
 			if (!textarea) return;
-			BDFDB.addEventListener(this, textarea, "keyup", () => {
+			BDFDB.ListenerUtils.add(this, textarea, "keyup", () => {
 				clearTimeout(textarea.WriteUpperCaseTimeout);
 				textarea.WriteUpperCaseTimeout = setTimeout(() => {
 					let string = textarea.value;

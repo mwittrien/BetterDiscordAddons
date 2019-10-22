@@ -80,24 +80,22 @@ class DisplayServersAsChannels {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
 			BDFDB.addClass(document.body, "DSAC-styled");
 
 			this.addCSS();
 
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 
-			BDFDB.addEventListener(this, document, "mouseenter", BDFDB.dotCN.guildouter, e => {
+			BDFDB.ListenerUtils.add(this, document, "mouseenter", BDFDB.dotCN.guildouter, e => {
 				if (e.currentTarget.querySelector(BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill + "+ *")) BDFDB.appendLocalStyle("HideAllToolTips" + this.name, `${BDFDB.dotCN.tooltip} {display: none !important;}`);
 			});
-			BDFDB.addEventListener(this, document, "mouseleave", BDFDB.dotCN.guildouter, e => {
+			BDFDB.ListenerUtils.add(this, document, "mouseleave", BDFDB.dotCN.guildouter, e => {
 				if (e.currentTarget.querySelector(BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill + "+ *") && !document.querySelector(BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill + "+ *:hover")) BDFDB.removeLocalStyle("HideAllToolTips" + this.name);
 			});
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 	stop () {
@@ -116,7 +114,7 @@ class DisplayServersAsChannels {
 				changedSVG.removeAttribute("DSAC-oldViewBox");
 			}
 
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -126,7 +124,7 @@ class DisplayServersAsChannels {
 	processGuilds (instance, wrapper, returnvalue) {
 		var observer = new MutationObserver((changes, _) => {changes.forEach((change, i) => {if (change.addedNodes) {change.addedNodes.forEach((node) => {
 			if (node && BDFDB.containsClass(node, BDFDB.disCN.guildouter) && !node.querySelector(BDFDB.dotCN.guildserror)) {
-				this.changeServer(BDFDB.getServerData(node));
+				this.changeServer(BDFDB.GuildUtils.getData(node));
 			}
 			if (node && node.tagName && (node = node.querySelector(BDFDB.dotCN.guildbuttoncontainer)) != null) {
 				this.changeButton(node);
@@ -135,9 +133,9 @@ class DisplayServersAsChannels {
 				this.changeError(node);
 			}
 		});}});});
-		BDFDB.addObserver(this, BDFDB.dotCN.guilds, {name:"serverListObserver",instance:observer}, {childList: true, subtree:true, attributes:true, attributeFilter: ["class", "draggable"], attributeOldValue: true});
+		BDFDB.ObserverUtils.connect(this, BDFDB.dotCN.guilds, {name:"serverListObserver",instance:observer}, {childList: true, subtree:true, attributes:true, attributeFilter: ["class", "draggable"], attributeOldValue: true});
 
-		BDFDB.readServerList().forEach(info => {this.changeServer(info);});
+		BDFDB.GuildUtils.getAll().forEach(info => {this.changeServer(info);});
 		document.querySelectorAll(BDFDB.dotCN.homebuttonpill + " + *").forEach(homebuttoncontainer => {this.changeHome(homebuttoncontainer);});
 		document.querySelectorAll(BDFDB.dotCN.guildbuttonpill + " + *").forEach(guildbuttoncontainer => {this.changeButton(guildbuttoncontainer);});
 		document.querySelectorAll(BDFDB.dotCN.guildserror).forEach(guildserror => {this.changeError(guildserror);});

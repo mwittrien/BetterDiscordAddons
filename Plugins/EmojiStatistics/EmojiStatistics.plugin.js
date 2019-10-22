@@ -180,13 +180,11 @@ class EmojiStatistics {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 	stop () {
@@ -194,7 +192,7 @@ class EmojiStatistics {
 			this.stopping = true;
 
 			BDFDB.removeEles(".emoji-tooltip",".emojistatistics-button");
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -222,18 +220,18 @@ class EmojiStatistics {
 				let emojiStatisticsButton = BDFDB.htmlToElement(`<div class="emojistatistics-button"></div>`);
 				emojipickerdiversityselector.parentElement.insertBefore(emojiStatisticsButton, emojipickerdiversityselector);
 				emojiStatisticsButton.addEventListener("click", () => {
-					let close = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.return.return.stateNode.close");
+					let close = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.return.return.return.stateNode.close");
 					if (close) close();
 					this.showEmojiInformationModal();
 				});
 				emojiStatisticsButton.addEventListener("mouseenter", e => {
-					BDFDB.createTooltip("Emoji Statistics", emojiStatisticsButton, {type:"top",selector:"emojistatistics-tooltip"});
+					BDFDB.TooltipUtils.create(emojiStatisticsButton, "Emoji Statistics", {type:"top",selector:"emojistatistics-tooltip"});
 				});
 			}
 			if (settings.enableEmojiHovering) {
-				BDFDB.addEventListener(this, wrapper, "mouseenter", BDFDB.dotCN.emojipickeremojiitem, e => {
+				BDFDB.ListenerUtils.add(this, wrapper, "mouseenter", BDFDB.dotCN.emojipickeremojiitem, e => {
 					let data = this.emojiToServerList[e.target.style.getPropertyValue("background-image").replace('url("',"").replace('")',"")];
-					if (data) BDFDB.createTooltip(`${BDFDB.encodeToHTML(data.emoji)}\n${BDFDB.encodeToHTML(data.server)}`, e.target, {type:"right",selector:"emoji-tooltip",delay:BDFDB.getData("hoverDelay", this, "amounts")});
+					if (data) BDFDB.TooltipUtils.create(e.target, `${BDFDB.encodeToHTML(data.emoji)}\n${BDFDB.encodeToHTML(data.server)}`, {type:"right",selector:"emoji-tooltip",delay:BDFDB.getData("hoverDelay", this, "amounts")});
 				});
 			}
 		}
@@ -242,7 +240,7 @@ class EmojiStatistics {
 	loadEmojiList () {
 		this.emojiReplicaList = {};
 		this.emojiToServerList = {};
-		for (let serverObj of BDFDB.readServerList()) {
+		for (let serverObj of BDFDB.GuildUtils.getAll()) {
 			for (let emoji of BDFDB.LibraryModules.GuildEmojiStore.getGuildEmoji(serverObj.id)) {
 				this.emojiToServerList[emoji.url] = {emoji:emoji.allNamesString, server:serverObj.name};
 				if (emoji.managed) this.emojiReplicaList[emoji.name] = this.emojiReplicaList[emoji.name] != undefined;
@@ -261,7 +259,7 @@ class EmojiStatistics {
 		var titleEntry = BDFDB.htmlToElement(this.emojiserverTitlesMarkup);
 		titlescontainer.appendChild(titleEntry);
 		var entries = [], index = 0, totalGlobal = 0, totalLocal = 0, totalCopies = 0;
-		BDFDB.addChildEventListener(titleEntry, "click", ".sorttitle-label ", e => {
+		BDFDB.ListenerUtils.addToChildren(titleEntry, "click", ".sorttitle-label ", e => {
 			var oldTitle = e.currentTarget.innerText;
 
 			this.resetTitles(titleEntry, totalGlobal, totalLocal, totalCopies);
@@ -272,13 +270,13 @@ class EmojiStatistics {
 				e.currentTarget.innerText = oldTitle.indexOf("▼") < 0 ? e.currentTarget.innerText + "▼" : e.currentTarget.innerText + "▲";
 			}
 
-			BDFDB.sortArrayByKey(entries, sortKey);
+			BDFDB.ArrayUtils.keySort(entries, sortKey);
 			if (reverse) entries.reverse();
 
 			this.updateAllEntries(entriescontainer, entries);
 		});
 
-		for (let info of BDFDB.readServerList()) {
+		for (let info of BDFDB.GuildUtils.getAll()) {
 			let amountGlobal = 0, amountLocal = 0, amountCopies = 0;
 			for (let emoji of BDFDB.LibraryModules.GuildEmojiStore.getGuildEmoji(info.id)) {
 				if (emoji.managed) {
@@ -290,7 +288,7 @@ class EmojiStatistics {
 				}
 			}
 			var emojiEntry = BDFDB.htmlToElement(this.emojiserverEntryMarkup);
-			emojiEntry.querySelector(".emojiserver-icon").appendChild(BDFDB.createServerDivCopy(info, {click: () => {BDFDB.removeEles(emojiInformationModal);}, menu: true, size: 48}));
+			emojiEntry.querySelector(".emojiserver-icon").appendChild(BDFDB.GuildUtils.createCopy(info, {click: () => {BDFDB.removeEles(emojiInformationModal);}, menu: true, size: 48}));
 			emojiEntry.querySelector(".emojiname-label").innerText = info.name || "";
 			emojiEntry.querySelector(".emojitotal-label").innerText = amountGlobal + amountLocal;
 			emojiEntry.querySelector(".emojiglobal-label").innerText = amountGlobal;

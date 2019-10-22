@@ -39,18 +39,16 @@ class SteamProfileLink {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
-			BDFDB.addEventListener(this, document, "click", "a[href^='https://steamcommunity.'], a[href^='https://store.steampowered.'], a[href*='a.akamaihd.net/'][href*='steam']", e => {this.openInSteam(e, e.currentTarget.href);});
+			BDFDB.ListenerUtils.add(this, document, "click", "a[href^='https://steamcommunity.'], a[href^='https://store.steampowered.'], a[href*='a.akamaihd.net/'][href*='steam']", e => {this.openInSteam(e, e.currentTarget.href);});
 
-			BDFDB.addEventListener(this, document, "click", BDFDB.dotCN.cardstore + BDFDB.dotCN.cardstoreinteractive, e => {
-				let news = BDFDB.getReactValue(e.currentTarget, "return.return.memoizedProps.news");
+			BDFDB.ListenerUtils.add(this, document, "click", BDFDB.dotCN.cardstore + BDFDB.dotCN.cardstoreinteractive, e => {
+				let news = BDFDB.ReactUtils.getValue(e.currentTarget, "return.return.memoizedProps.news");
 				if (news && news.url && news.url.includes("steam")) this.openInSteam(e, news.url);
 			});
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 
@@ -60,12 +58,12 @@ class SteamProfileLink {
 
 			BDFDB.removeEles(".urlCheckFrame");
 
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
 	openInSteam (e, url) {
-		BDFDB.stopEvent(e);
+		BDFDB.ListenerUtils.stopEvent(e);
 		BDFDB.LibraryRequires.request(url, (error, response, body) => {
 			if (BDFDB.LibraryRequires.electron.shell.openExternal("steam://openurl/" + response.request.href));
 			else window.open(response.request.href, "_blank");

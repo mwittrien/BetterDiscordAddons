@@ -41,18 +41,18 @@ class EditServers {
 		var settings = BDFDB.getAllData(this, "settings");
 		var settingsitems = [], inneritems = [];
 		
-		for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
+		for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
 			className: BDFDB.disCN.marginbottom8,
 			plugin: this,
 			keys: ["settings", key],
 			label: this.defaults.settings[key].description,
 			value: settings[key]
 		}));
-		settingsitems.push(BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 			title: "Change Servers in:",
 			children: inneritems
 		}));
-		settingsitems.push(BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsItem, {
+		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 			type: "Button",
 			className: BDFDB.disCN.marginbottom8,
 			color: BDFDB.LibraryComponents.Button.Colors.RED,
@@ -66,7 +66,7 @@ class EditServers {
 			children: BDFDB.LanguageUtils.LanguageStrings.RESET
 		}));
 		
-		return BDFDB.createSettingsPanel(this, settingsitems);
+		return BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 	}
 
 	//legacy
@@ -93,9 +93,9 @@ class EditServers {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
-			BDFDB.WebModules.patch(BDFDB.LibraryModules.IconUtils, 'getGuildBannerURL', this, {instead:e => {
+			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.IconUtils, 'getGuildBannerURL', {instead:e => {
 				let guild = BDFDB.LibraryModules.GuildStore.getGuild(e.methodArguments[0].id);
 				if (guild) {
 					if (e.methodArguments[0].id == "410787888507256842") return guild.banner;
@@ -107,9 +107,7 @@ class EditServers {
 			
 			this.forceUpdateAll();
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 	stop () {
@@ -121,11 +119,11 @@ class EditServers {
 			try {this.forceUpdateAll();} catch (err) {}
 			BDFDB.saveAllData(data, this, "servers");
 
-			for (let guildobj of BDFDB.readServerList()) if (guildobj.instance) {
+			for (let guildobj of BDFDB.GuildUtils.getAll()) if (guildobj.instance) {
 				delete guildobj.instance.props.guild.EditServersCachedBanner;
 			}
 
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -134,16 +132,16 @@ class EditServers {
 	onGuildContextMenu (instance, menu, returnvalue) {
 		if (instance.props && instance.props.guild && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
 			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
-			const itemgroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 				children: [
-					BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
 						label: this.labels.context_localserversettings_text,
 						className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-serversettings-contextMenuSubItem`,
-						render: [BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+						render: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 							className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 							children: [
-								BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_serversettings_text,
 									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-serversettings-ContextMenuItem`,
 									action: e => {
@@ -151,7 +149,7 @@ class EditServers {
 										this.showServerSettings(instance.props.guild);
 									}
 								}),
-								BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_resetsettings_text,
 									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-resetsettings-ContextMenuItem`,
 									disabled: !BDFDB.loadData(instance.props.guild.id, this, "servers"),
@@ -198,16 +196,16 @@ class EditServers {
 	processClickable (instance, wrapper, returnvalue) {
 		if (!wrapper || !instance.props || !instance.props.className) return;
 		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.userprofilelistrow) > -1) {
-			let guild = BDFDB.getReactValue(instance, "_reactInternalFiber.return.memoizedProps.guild");
-			if (guild && BDFDB.getReactValue(instance, "_reactInternalFiber.return.type.displayName") == "GuildRow") {
+			let guild = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.memoizedProps.guild");
+			if (guild && BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.type.displayName") == "GuildRow") {
 				this.changeGuildName(guild, wrapper.querySelector(BDFDB.dotCN.userprofilelistname));
 			}
 		}
 		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.quickswitchresult) > -1) {
-			let guild = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.memoizedProps.guild");
+			let guild = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.return.memoizedProps.guild");
 			if (guild) this.changeGuildName(guild, wrapper.querySelector(BDFDB.dotCN.quickswitchresultmatch));
 			else {
-				let channel = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.memoizedProps.channel");
+				let channel = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.return.memoizedProps.channel");
 				if (channel && channel.guild_id) this.changeGuildName(BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id), wrapper.querySelector(BDFDB.dotCN.quickswitchresultmisccontainer));
 			}
 		}
@@ -215,9 +213,9 @@ class EditServers {
 	
 	forceUpdateAll (guildid) {
 		this.updateGuildSidebar();
-		BDFDB.WebModules.forceAllUpdates(this);
+		BDFDB.ModuleUtils.forceAllUpdates(this);
 		if (guildid) {
-			let ServerFolders = BDFDB.getPlugin("ServerFolders", true);
+			let ServerFolders = BDFDB.BdUtils.getPlugin("ServerFolders", true);
 			if (ServerFolders) {
 				let folder = ServerFolders.getFolderOfGuildId(guildid);
 				if (folder) ServerFolders.updateGuildInFolderContent(folder.folderId, guildid);
@@ -233,39 +231,39 @@ class EditServers {
 			header: this.labels.modal_header_text,
 			subheader: info.name,
 			children: [
-				BDFDB.React.createElement(BDFDB.LibraryComponents.ModalTabContent, {
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalTabContent, {
 					tab: this.labels.modal_tabheader1_text,
 					children: [
-						BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_guildname_text,
 							className: BDFDB.disCN.marginbottom20 + " input-guildname",
 							children: [
-								BDFDB.React.createElement(BDFDB.LibraryComponents.TextInput, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 									value: data.name,
 									placeholder: info.name,
 									autoFocus: true
 								})
 							]
 						}),
-						BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_guildacronym_text,
 							className: BDFDB.disCN.marginbottom20 + " input-guildacronym",
 							children: [
-								BDFDB.React.createElement(BDFDB.LibraryComponents.TextInput, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 									value: data.shortName,
 									placeholder: info.acronym
 								})
 							]
 						}),
-						BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_guildicon_text,
 							className: BDFDB.disCN.marginbottom8 + " input-guildicon",
 							children: [
-								BDFDB.React.createElement(BDFDB.LibraryComponents.TextInput, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 									inputClassName: !data.removeIcon && data.url ? BDFDB.disCN.inputsuccess : null,
 									inputId: "GUILDICON",
 									value: data.url,
-									placeholder: BDFDB.getGuildIcon(info.id),
+									placeholder: BDFDB.GuildUtils.getIcon(info.id),
 									disabled: data.removeIcon,
 									onFocus: e => {
 										this.createNoticeTooltip(e.target);
@@ -276,7 +274,7 @@ class EditServers {
 								})
 							]
 						}),
-						BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsItem, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "Switch",
 							className: BDFDB.disCN.marginbottom20 + " input-removeicon",
 							label: this.labels.modal_removeicon_text,
@@ -290,15 +288,15 @@ class EditServers {
 								}
 							}
 						}),
-						BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_guildbanner_text,
 							className: BDFDB.disCN.marginbottom8 + " input-guildbanner",
 							children: [
-								BDFDB.React.createElement(BDFDB.LibraryComponents.TextInput, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 									inputClassName: !data.removeBanner && data.banner ? BDFDB.disCN.inputsuccess : null,
 									inputId: "GUILDBANNER",
 									value: data.banner,
-									placeholder: BDFDB.getGuildBanner(info.id),
+									placeholder: BDFDB.GuildUtils.getBanner(info.id),
 									disabled: data.removeBanner || info.id == "410787888507256842",
 									onFocus: e => {
 										this.createNoticeTooltip(e.target);
@@ -309,7 +307,7 @@ class EditServers {
 								})
 							]
 						}),
-						BDFDB.React.createElement(BDFDB.LibraryComponents.SettingsItem, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "Switch",
 							className: BDFDB.disCN.marginbottom20 + " input-removebanner",
 							label: this.labels.modal_removebanner_text,
@@ -326,24 +324,24 @@ class EditServers {
 						})
 					]
 				}),
-				BDFDB.React.createElement(BDFDB.LibraryComponents.ModalTabContent, {
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalTabContent, {
 					tab: this.labels.modal_tabheader2_text,
 					children: [
-						BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_colorpicker1_text,
 							className: BDFDB.disCN.marginbottom20,
 							children: [
-								BDFDB.React.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 									color: data.color1,
 									number: 1
 								})
 							]
 						}),
-						BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_colorpicker2_text,
 							className: BDFDB.disCN.marginbottom20,
 							children: [
-								BDFDB.React.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 									color: data.color2,
 									number: 2
 								})
@@ -351,24 +349,24 @@ class EditServers {
 						})
 					]
 				}),
-				BDFDB.React.createElement(BDFDB.LibraryComponents.ModalTabContent, {
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalTabContent, {
 					tab: this.labels.modal_tabheader3_text,
 					children: [
-						BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_colorpicker3_text,
 							className: BDFDB.disCN.marginbottom20,
 							children: [
-								BDFDB.React.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 									color: data.color3,
 									number: 3
 								})
 							]
 						}),
-						BDFDB.React.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_colorpicker4_text,
 							className: BDFDB.disCN.marginbottom20,
 							children: [
-								BDFDB.React.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
 									color: data.color4,
 									number: 4
 								})
@@ -413,7 +411,7 @@ class EditServers {
 	}
 	
 	checkUrl (url, instance) {
-		let input = BDFDB.React.findDOMNode(instance).firstElementChild;
+		let input = BDFDB.ReactUtils.findDOMNode(instance).firstElementChild;
 		clearTimeout(instance.checkTimeout);
 		if (url == null || !url.trim()) {
 			if (input) BDFDB.removeEles(input.tooltip);
@@ -441,7 +439,7 @@ class EditServers {
 		BDFDB.removeEles(input.tooltip);
 		var invalid = isinvalid || BDFDB.containsClass(input, BDFDB.disCN.inputerror);
 		var valid = invalid ? false : BDFDB.containsClass(input, BDFDB.disCN.inputsuccess);
-		if (invalid || valid) input.tooltip = BDFDB.createTooltip(invalid ? this.labels.modal_invalidurl_text : this.labels.modal_validurl_text, input, {type:"right", selector:"notice-tooltip", color: invalid ? "red" : "green"});
+		if (invalid || valid) input.tooltip = BDFDB.TooltipUtils.create(input, invalid ? this.labels.modal_invalidurl_text : this.labels.modal_validurl_text, {type:"right", selector:"notice-tooltip", color: invalid ? "red" : "green"});
 	}
 
 	changeGuildName (info, guildname) {
@@ -450,7 +448,7 @@ class EditServers {
 		guildname.removeEventListener("mouseenter", guildname.mouseenterListenerEditChannels);
 		let data = this.getGuildData(info.id, guildname);
 		if (data.name || data.color2 || guildname.getAttribute("changed-by-editservers")) {
-			if (BDFDB.isObject(data.color2)) {
+			if (BDFDB.ObjectUtils.is(data.color2)) {
 				guildname.style.setProperty("color", BDFDB.colorCONVERT(data.color2[Object.keys(data.color2)[0]], "RGBA"), "important");
 				BDFDB.setInnerText(guildname, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color2)} !important;">${BDFDB.encodeToHTML(data.name || info.name)}</span>`));
 			}
@@ -460,7 +458,7 @@ class EditServers {
 			}
 			if (data.name && BDFDB.containsClass(guildname, BDFDB.disCN.guildheadername) && BDFDB.getData("addOriginalTooltip", this, "settings")) {
 				guildname.mouseenterListenerEditChannels = () => {
-					BDFDB.createTooltip(info.name, guildname.parentElement, {type:"right", selector:"EditServers-tooltip", hide:true});
+					BDFDB.TooltipUtils.create(guildname.parentElement, info.name, {type:"right", selector:"EditServers-tooltip", hide:true});
 				};
 				guildname.addEventListener("mouseenter", guildname.mouseenterListenerEditChannels);
 			}
@@ -481,7 +479,7 @@ class EditServers {
 		if (icon.EditServersChangeObserver && typeof icon.EditServersChangeObserver.disconnect == "function") icon.EditServersChangeObserver.disconnect();
 		let data = this.getGuildData(info.id, icon);
 		if (data.url || data.name || data.shortName || data.removeIcon || icon.getAttribute("changed-by-editservers")) {
-			let url = data.url || BDFDB.getGuildIcon(info.id);
+			let url = data.url || BDFDB.GuildUtils.getIcon(info.id);
 			let name = data.name || info.name || "";
 			let shortname = data.url ? "" : (data.shortName || (info.icon && !data.removeIcon ? "" : info.acronym));
 			if (BDFDB.containsClass(icon.parentElement, BDFDB.disCN.guildiconwrapper)) icon.parentElement.setAttribute("aria-label", name);
@@ -493,11 +491,11 @@ class EditServers {
 				if (removeicon) {
 					let fakeicon = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.guildiconchildwrapper + BDFDB.disCN.guildiconacronym} fake-guildacronym" aria-label="Server Acronym"></div>`);
 					if (data.color1) {
-						if (BDFDB.isObject(data.color1)) fakeicon.style.setProperty("background-image", BDFDB.colorGRADIENT(data.color1));
+						if (BDFDB.ObjectUtils.is(data.color1)) fakeicon.style.setProperty("background-image", BDFDB.colorGRADIENT(data.color1));
 						else fakeicon.style.setProperty("background-color", BDFDB.colorCONVERT(data.color1, "RGBA"));
 					}
-					if (data.color2) fakeicon.style.setProperty("color", BDFDB.colorCONVERT(BDFDB.isObject(data.color2) ? data.color2[Object.keys(data.color2)[0]] : data.color2, "RGBA"));
-					BDFDB.setInnerText(fakeicon, BDFDB.isObject(data.color2) ? BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color2)} !important;">${BDFDB.encodeToHTML(shortname)}</span>`) : shortname);
+					if (data.color2) fakeicon.style.setProperty("color", BDFDB.colorCONVERT(BDFDB.ObjectUtils.is(data.color2) ? data.color2[Object.keys(data.color2)[0]] : data.color2, "RGBA"));
+					BDFDB.setInnerText(fakeicon, BDFDB.ObjectUtils.is(data.color2) ? BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color2)} !important;">${BDFDB.encodeToHTML(shortname)}</span>`) : shortname);
 					icon.parentElement.appendChild(fakeicon);
 					fakeicon.style.setProperty("font-size", this.getFontSize(fakeicon));
 				}
@@ -509,18 +507,18 @@ class EditServers {
 				}
 				else {
 					if (data.color1) {
-						if (BDFDB.isObject(data.color1)) icon.style.setProperty("background-image", BDFDB.colorGRADIENT(data.color1));
+						if (BDFDB.ObjectUtils.is(data.color1)) icon.style.setProperty("background-image", BDFDB.colorGRADIENT(data.color1));
 						else icon.style.setProperty("background-color", BDFDB.colorCONVERT(data.color1, "RGBA"));
 					}
 					else {
 						icon.style.removeProperty("background-image");
 						icon.style.removeProperty("background-color");
 					}
-					if (data.color2) icon.style.setProperty("color", BDFDB.colorCONVERT(BDFDB.isObject(data.color2) ? data.color2[Object.keys(data.color2)[0]] : data.color2, "RGBA"));
-					BDFDB.setInnerText(icon, BDFDB.isObject(data.color2) ? BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color2)} !important;">${BDFDB.encodeToHTML(shortname)}</span>`) : shortname);
+					if (data.color2) icon.style.setProperty("color", BDFDB.colorCONVERT(BDFDB.ObjectUtils.is(data.color2) ? data.color2[Object.keys(data.color2)[0]] : data.color2, "RGBA"));
+					BDFDB.setInnerText(icon, BDFDB.ObjectUtils.is(data.color2) ? BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color2)} !important;">${BDFDB.encodeToHTML(shortname)}</span>`) : shortname);
 				}
 				icon.style.setProperty("font-size", this.getFontSize(icon));
-				BDFDB.toggleClass(icon, this.getNoIconClasses(icon), !icon.style.getPropertyValue("background-image") || BDFDB.isObject(data.color1));
+				BDFDB.toggleClass(icon, this.getNoIconClasses(icon), !icon.style.getPropertyValue("background-image") || BDFDB.ObjectUtils.is(data.color1));
 				if (data.url && !data.removeIcon) {
 					icon.style.setProperty("background-position", "center");
 					icon.style.setProperty("background-size", "cover");
@@ -548,17 +546,17 @@ class EditServers {
 		let data = this.getGuildData(info.id, wrapper);
 		wrapper.removeEventListener("mouseenter", wrapper.tooltipListenerEditServers);
 		if (data.name || data.color3 || data.color4) {
-			let ServerFolders = BDFDB.getPlugin("ServerFolders", true);
+			let ServerFolders = BDFDB.BdUtils.getPlugin("ServerFolders", true);
 			let folder = ServerFolders ? ServerFolders.getFolderOfGuildId(info.id) : null;
 			let folderData = folder ? BDFDB.loadData(folder.folderId, "ServerFolders", "folders") : null;
 			let color3 = data.color3 || (folderData && folderData.copyTooltipColor ? folderData.color3 : null);
 			let color4 = data.color4 || (folderData && folderData.copyTooltipColor ? folderData.color4 : null);
-			var isgradient3 = color3 && BDFDB.isObject(color3);
-			var isgradient4 = color4 && BDFDB.isObject(color4);
+			var isgradient3 = color3 && BDFDB.ObjectUtils.is(color3);
+			var isgradient4 = color4 && BDFDB.ObjectUtils.is(color4);
 			var bgColor = color3 ? (!isgradient3 ? BDFDB.colorCONVERT(color3, "RGBA") : BDFDB.colorGRADIENT(color3)) : "";
 			var fontColor = color4 ? (!isgradient4 ? BDFDB.colorCONVERT(color4, "RGBA") : BDFDB.colorGRADIENT(color4)) : "";
 			wrapper.tooltipListenerEditServers = () => {
-				BDFDB.createTooltip(isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(data.name || info.name)}</span>` : (data.name || info.name), wrapper, {type, selector:"EditServers-tooltip", style:`${isgradient4 ? '' : 'color: ' + fontColor + ' !important; '}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.colorCONVERT(color3[0], "RGBA") : bgColor} !important;`, html:isgradient3});
+				BDFDB.TooltipUtils.create(wrapper, isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(data.name || info.name)}</span>` : (data.name || info.name), {type, selector:"EditServers-tooltip", style:`${isgradient4 ? '' : 'color: ' + fontColor + ' !important; '}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.colorCONVERT(color3[0], "RGBA") : bgColor} !important;`, html:isgradient3});
 			};
 			wrapper.addEventListener("mouseenter", wrapper.tooltipListenerEditServers);
 			if (document.querySelector(BDFDB.dotCN.guildcontainer + ":hover") == wrapper) wrapper.tooltipListenerEditServers();

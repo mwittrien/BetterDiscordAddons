@@ -53,62 +53,30 @@ class StalkerNotifications {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
-
+			BDFDB.PluginUtils.init(this);
+			
 			BDFDB.openConfirmModal(this, "StalkerNotifications has been discontinued and was merged with FriendNotifications. To download FriendNotifications click the 'OK' button bellow. This will delete StalkerNotifications and download FriendNotifications.", "Update Notification", () => {
 				require("request")("https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/FriendNotifications/FriendNotifications.plugin.js", (error, response, body) => {
-					if (error) BDFDB.showToast(`Unable to download FriendNotifications.plugin.js.`, {type:"error"});
+					if (error) BDFDB.NotificationUtils.toast(`Unable to download FriendNotifications.plugin.js.`, {type:"error"});
 					else {
-						require("fs").writeFile(require("path").join(BDFDB.getPluginsFolder(), "FriendNotifications.plugin.js"), body, (error) => {
+						require("fs").writeFile(require("path").join(BDFDB.BdUtils.getPluginsFolder(), "FriendNotifications.plugin.js"), body, (error) => {
 							if (!error) {
-								BDFDB.showToast(`Successfully downloaded FriendNotifications.plugin.js.`, {type:"success"});
-								require("fs").unlinkSync(require("path").join(BDFDB.getPluginsFolder(), "StalkerNotifications.plugin.js"));
+								BDFDB.NotificationUtils.toast(`Successfully downloaded FriendNotifications.plugin.js.`, {type:"success"});
+								require("fs").unlinkSync(require("path").join(BDFDB.BdUtils.getPluginsFolder(), "StalkerNotifications.plugin.js"));
 							}
 						});
 					}
 				});
 			});
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.unloadMessage(this);
-		}
-	}
-
-
-	// begin of own functions
-}
-			BDFDB.openConfirmModal(this, "StalkerNotifications has been discontinued and was merged with FriendNotifications. To download FriendNotifications click the 'OK' button bellow. This will delete StalkerNotifications and download FriendNotifications.", "Update Notification", () => {
-				require("request")("https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/FriendNotifications/FriendNotifications.plugin.js", (error, response, body) => {
-					if (error) BDFDB.showToast(`Unable to download FriendNotifications.plugin.js.`, {type:"error"});
-					else {
-						require("fs").writeFile(require("path").join(BDFDB.getPluginsFolder(), "FriendNotifications.plugin.js"), body, (error) => {
-							if (!error) {
-								BDFDB.showToast(`Successfully downloaded FriendNotifications.plugin.js.`, {type:"success"});
-								require("fs").unlinkSync(require("path").join(BDFDB.getPluginsFolder(), "StalkerNotifications.plugin.js"));
-							}
-						});
-					}
-				});
-			});
-		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
-	}
-
-	stop () {
-		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-			this.stopping = true;
-
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 

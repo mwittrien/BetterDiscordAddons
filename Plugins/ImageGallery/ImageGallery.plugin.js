@@ -63,13 +63,11 @@ class ImageGallery {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 	stop () {
@@ -78,14 +76,14 @@ class ImageGallery {
 
 			this.closemodal = true;
 
-			BDFDB.WebModules.forceAllUpdates(this, "ImageModal");
+			BDFDB.ModuleUtils.forceAllUpdates(this, "ImageModal");
 
 			delete this.closemodal;
 
 			document.removeEventListener("keydown", document.keydownImageGalleryListener);
 			document.removeEventListener("keyup", document.keyupImageGalleryListener);
 
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 

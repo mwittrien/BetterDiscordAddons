@@ -66,13 +66,11 @@ class ImageZoom {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 	stop () {
@@ -87,7 +85,7 @@ class ImageZoom {
 
 			BDFDB.removeEles(".imagezoom-contextmenu", ".imagezoom-separator", ".imagezoom-settings", ".imagezoom-lense", ".imagezoom-backdrop");
 
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -112,7 +110,7 @@ class ImageZoom {
 					let openContext = e => {
 						let settings = BDFDB.getAllData(this, "settings");
 						let items = [];
-						for (let type in settings) items.push(BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuSliderItem, {
+						for (let type in settings) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSliderItem, {
 							label: this.defaults.settings[type].name + ": " + settings[type] + this.defaults.settings[type].unit,
 							className: `BDFDB-contextMenuSliderItem ${this.name}-contextMenuSliderItem ${this.name}-${type}-contextMenuSliderItem`,
 							type,
@@ -121,7 +119,7 @@ class ImageZoom {
 								BDFDB.saveData(type, Math.round(BDFDB.mapRange([0, 100], [this.defaults.settings[type].min, this.defaults.settings[type].max], value)), this, "settings");
 							},
 							onValueRender: value => {
-								setImmediate(() => {for (let slider of document.querySelectorAll(BDFDB.dotCN.contextmenuitemslider)) if (BDFDB.getReactValue(slider, "return.memoizedProps.type") == type) {
+								setImmediate(() => {for (let slider of document.querySelectorAll(BDFDB.dotCN.contextmenuitemslider)) if (BDFDB.ReactUtils.getValue(slider, "return.memoizedProps.type") == type) {
 									value = Math.round(BDFDB.mapRange([0, 100], [this.defaults.settings[type].min, this.defaults.settings[type].max], value));
 									let label = slider.querySelector(BDFDB.dotCN.contextmenulabel);
 									if (label) label.innerText = this.defaults.settings[type].name + ": " + value + this.defaults.settings[type].unit;
@@ -131,7 +129,7 @@ class ImageZoom {
 								}});
 							}
 						}));
-						const itemGroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+						const itemGroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 							className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 							children: items
 						});
@@ -140,7 +138,7 @@ class ImageZoom {
 					settingslink.addEventListener("click", openContext);
 					settingslink.addEventListener("contextmenu", openContext);
 					img.ImageZoomMouseDownListener = e => {
-						BDFDB.stopEvent(e);
+						BDFDB.ListenerUtils.stopEvent(e);
 						BDFDB.appendLocalStyle("ImageZoomCrossHair", "* {cursor: crosshair !important;}");
 
 						let imgrects = BDFDB.getRects(img);

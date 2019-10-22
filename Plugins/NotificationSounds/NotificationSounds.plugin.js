@@ -144,9 +144,9 @@ class NotificationSounds {
 
 		BDFDB.initElements(settingspanel, this);
 
-		BDFDB.addEventListener(this, settingspanel, "click", ".btn-addsong", e => {this.saveAudio(settingspanel);});
-		BDFDB.addEventListener(this, settingspanel, "keyup", ".songInput", e => {if (e.which == 13) this.saveAudio(settingspanel);});
-		BDFDB.addEventListener(this, settingspanel, "click", ".reset-button", () => {
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".btn-addsong", e => {this.saveAudio(settingspanel);});
+		BDFDB.ListenerUtils.add(this, settingspanel, "keyup", ".songInput", e => {if (e.which == 13) this.saveAudio(settingspanel);});
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".reset-button", () => {
 			BDFDB.openConfirmModal(this, "Are you sure you want to delete all added songs?", () => {
 				BDFDB.removeAllData(this, "choices");
 				BDFDB.removeAllData(this, "audios");
@@ -167,21 +167,21 @@ class NotificationSounds {
 				});
 			});
 		});
-		BDFDB.addEventListener(this, settingspanel, "click", ".mutednd-checkbox", e => {
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".mutednd-checkbox", e => {
 			var type = e.currentTarget.parentElement.getAttribute("type");
 			this.choices[type].mute = e.currentTarget.checked;
 			this.saveChoice(type, false);
 		});
-		BDFDB.addEventListener(this, settingspanel, "click", ".mutefocus-checkbox", e => {
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".mutefocus-checkbox", e => {
 			var type = e.currentTarget.parentElement.getAttribute("type");
 			this.choices[type].focus = e.currentTarget.checked;
 			this.saveChoice(type, false);
 		});
-		BDFDB.addEventListener(this, settingspanel, "click", "#input-unimplemented", e => {
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", "#input-unimplemented", e => {
 			BDFDB.toggleEles(settingspanel.querySelectorAll(".unimplemented"), e.currentTarget.checked);
 		});
-		BDFDB.addEventListener(this, settingspanel, "mousedown", BDFDB.dotCN.slidergrabber, e => {this.dragSlider(settingspanel,e);});
-		BDFDB.addEventListener(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {
+		BDFDB.ListenerUtils.add(this, settingspanel, "mousedown", BDFDB.dotCN.slidergrabber, e => {this.dragSlider(settingspanel,e);});
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {
 			let type = BDFDB.getParentEle(BDFDB.dotCN.select, e.currentTarget).getAttribute("type").split(" ");
 			let songSelect = settingspanel.querySelector(`${BDFDB.dotCN.select}[type="${type[0]} song"]`);
 			let categorySelect = settingspanel.querySelector(`${BDFDB.dotCN.select}[type="${type[0]} category"]`);
@@ -216,18 +216,18 @@ class NotificationSounds {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
-			BDFDB.WebModules.patch(BDFDB.LibraryModules.MessageUtils, "receiveMessage", this, {before: e => {
+			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.MessageUtils, "receiveMessage", {before: e => {
 				let message = e.methodArguments[1];
 				let guildid = message.guild_id ? message.guild_id : null;
-				if (!BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildid, message.channel_id) && message.author.id != BDFDB.myData.id) {
+				if (!BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildid, message.channel_id) && message.author.id != BDFDB.UserUtils.me.id) {
 					if (!guildid && !(this.choices.dm.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) {
 						this.fireEvent("dm");
 						this.playAudio("dm");
 					}
 					else if (message.mentions && !(this.choices.mentioned.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) {
-						for (let mention of message.mentions) if (mention.id == BDFDB.myData.id) {
+						for (let mention of message.mentions) if (mention.id == BDFDB.UserUtils.me.id) {
 							this.fireEvent("mentioned");
 							this.playAudio("mentioned");
 							break;
@@ -236,7 +236,7 @@ class NotificationSounds {
 				}
 			}});
 
-			BDFDB.WebModules.patch(BDFDB.LibraryModules.SoundUtils, "playSound", this, {instead: e => {
+			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "playSound", {instead: e => {
 				let type = e.methodArguments[0];
 				if (this.choices[type]) setImmediate(() => {
 					if (type == "message1") {
@@ -248,7 +248,7 @@ class NotificationSounds {
 				});
 				else e.callOriginalMethod();
 			}});
-			BDFDB.WebModules.patch(BDFDB.LibraryModules.SoundUtils, "createSound", this, {after: e => {
+			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "createSound", {after: e => {
 				let type = e.methodArguments[0];
 				let audio = new Audio();
 				audio.src = this.choices[type].src;
@@ -269,11 +269,9 @@ class NotificationSounds {
 			this.loadAudios();
 			this.loadChoices();
 
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 
@@ -281,7 +279,7 @@ class NotificationSounds {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 			this.settingsaudio.pause();
 		}
 	}
@@ -309,7 +307,7 @@ class NotificationSounds {
 		var selectMenu = this.createDropdownMenu(type, option, category, song);
 		selectWrap.appendChild(selectMenu);
 
-		BDFDB.addChildEventListener(selectMenu, "mousedown", BDFDB.dotCN.selectoption, e2 => {
+		BDFDB.ListenerUtils.addToChildren(selectMenu, "mousedown", BDFDB.dotCN.selectoption, e2 => {
 			var selection = e2.currentTarget.textContent;
 			selectWrap.setAttribute("value", selection);
 			selectWrap.querySelector(BDFDB.dotCN.title).innerText = selection;
@@ -404,7 +402,7 @@ class NotificationSounds {
 
 	loadAudios () {
 		this.audios = BDFDB.loadAllData(this, "audios");
-		if (BDFDB.isObjectEmpty(this.audios)) this.audios = this.defaults;
+		if (BDFDB.ObjectUtils.isEmpty(this.audios)) this.audios = this.defaults;
 		BDFDB.saveAllData(this.audios, this, "audios");
 	}
 
@@ -428,13 +426,13 @@ class NotificationSounds {
 							return;
 						}
 					}
-					BDFDB.showToast("Use a valid direct link to a video or audio source. They usually end on something like .mp3, .mp4 or .wav.", {type:"danger"});
+					BDFDB.NotificationUtils.toast("Use a valid direct link to a video or audio source. They usually end on something like .mp3, .mp4 or .wav.", {type:"danger"});
 				});
 			}
 			else {
 				BDFDB.LibraryRequires.fs.readFile(url, (error, response) => {
 					if (error) {
-						BDFDB.showToast("Could not fetch file. Please make sure the file exists.", {type:"danger"});
+						BDFDB.NotificationUtils.toast("Could not fetch file. Please make sure the file exists.", {type:"danger"});
 					}
 					else {
 						url = `data:audio/mpeg;base64,${response.toString("base64")}`;
@@ -444,7 +442,7 @@ class NotificationSounds {
 			}
 
 			successSavedAudio = () => {
-				BDFDB.showToast(`Song ${song} was added to category ${category}.`, {type:"success"});
+				BDFDB.NotificationUtils.toast(`Song ${song} was added to category ${category}.`, {type:"success"});
 				if (!this.audios[category]) this.audios[category] = {};
 				this.audios[category][song] = url;
 				BDFDB.saveAllData(this.audios, this, "audios");
@@ -453,9 +451,7 @@ class NotificationSounds {
 				});
 			};
 		}
-		else {
-			BDFDB.showToast("Fill out all fields to add a new song.", {type:"danger"});
-		}
+		else BDFDB.NotificationUtils.toast("Fill out all fields to add a new song.", {type:"danger"});
 	}
 
 	loadChoices () {
@@ -493,7 +489,7 @@ class NotificationSounds {
 	}
 
 	dontPlayAudio (type) {
-		let status = BDFDB.getUserStatus();
+		let status = BDFDB.UserUtils.getStatus();
 		return this.choices[type].mute && (status == "dnd" || status == "streaming");
 	}
 
@@ -512,10 +508,10 @@ class NotificationSounds {
 			audio.play();
 		};
 		let stop = () => {audio.pause();}
-		BDFDB.WebModules.patch(instance, "startRinging", this, {instead: play});
-		BDFDB.WebModules.patch(instance, "stopRinging", this, {instead: stop});
-		BDFDB.WebModules.patch(instance._reactInternalFiber.type.prototype, "startRinging", this, {instead: play});
-		BDFDB.WebModules.patch(instance._reactInternalFiber.type.prototype, "stopRinging", this, {instead: stop});
+		BDFDB.ModuleUtils.patch(this, instance, "startRinging", {instead: play});
+		BDFDB.ModuleUtils.patch(this, instance, "stopRinging", {instead: stop});
+		BDFDB.ModuleUtils.patch(this, instance._reactInternalFiber.type.prototype, "startRinging", {instead: play});
+		BDFDB.ModuleUtils.patch(this, instance._reactInternalFiber.type.prototype, "stopRinging", {instead: stop});
 	}
 
 	processStandardSidebarView (instance, wrapper, returnvalue) {

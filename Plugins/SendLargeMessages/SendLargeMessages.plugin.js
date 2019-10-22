@@ -105,13 +105,11 @@ class SendLargeMessages {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 
@@ -119,7 +117,7 @@ class SendLargeMessages {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -142,14 +140,14 @@ class SendLargeMessages {
 					this.showSendModal(modaltext);
 				}
 			};
-			BDFDB.addEventListener(this, textarea, "keyup", e => {
+			BDFDB.ListenerUtils.add(this, textarea, "keyup", e => {
 				clearTimeout(textarea.sendlargemessagestimeout);
 				textarea.sendlargemessagestimeout = setTimeout(() => {
 					modaltext = textarea.value;
 					checkTextarea();
 				},100);
 			});
-			BDFDB.addEventListener(this, textarea, "paste", e => {
+			BDFDB.ListenerUtils.add(this, textarea, "paste", e => {
 				modaltext = textarea.value.slice(0, textarea.selectionStart) + BDFDB.LibraryRequires.electron.clipboard.readText() + textarea.value.slice(textarea.selectionEnd);
 				setImmediate(() => {checkTextarea(textarea);});
 			});
@@ -171,12 +169,12 @@ class SendLargeMessages {
 
 		BDFDB.appendModal(sendMessageModal);
 
-		BDFDB.addChildEventListener(sendMessageModal, "click", ".btn-send", e => {
+		BDFDB.ListenerUtils.addToChildren(sendMessageModal, "click", ".btn-send", e => {
 			let messages = this.formatText(textinput.value || "");
 			messages.forEach((message,i) => {
 				setTimeout(() => {
 					this.sendMessage(message);
-					if (i >= messages.length-1) BDFDB.showToast(this.labels.toast_allsent_text, {type:"success"});
+					if (i >= messages.length-1) BDFDB.NotificationUtils.toast(this.labels.toast_allsent_text, {type:"success"});
 				},this.messageDelay * i);
 			});
 		});

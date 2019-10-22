@@ -174,13 +174,11 @@ class PersonalPins {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 
@@ -189,7 +187,7 @@ class PersonalPins {
 			this.stopping = true;
 
 			BDFDB.removeEles(".popout-personalpins-notes", ".personalpins-sort-popout", ".notes-button");
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -217,9 +215,9 @@ class PersonalPins {
 			if (!messagediv || pos == -1) return;
 			let note = this.getNoteData(instance.props.message, instance.props.target, instance.props.channel);
 			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, "MessagePinItem");
-			const pinUnpinItem = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+			const pinUnpinItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: this.labels[note ? "context_unpinoption_text" : "context_pinoption_text"],
-				hint: BDFDB.isPluginEnabled("MessageUtilities") ? BDFDB.getPlugin("MessageUtilities").getActiveShortcutString("__Note_Message") : null,
+				hint: BDFDB.BdUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BdUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Note_Message") : null,
 				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-${note ? "unpin" : "pin"}-contextMenuItem`,
 				action: e => {
 					BDFDB.closeContextMenu(menu);
@@ -232,7 +230,7 @@ class PersonalPins {
 				let newmarkup = this.getMarkup(messagediv).innerHTML;
 				let newaccessory = messagediv.querySelector(BDFDB.dotCN.messageaccessory).innerHTML;
 				if (note.markup != newmarkup || note.accessory != newaccessory) {
-					const updateItem = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+					const updateItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 						label: this.labels.context_updateoption_text,
 						className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-update-contextMenuItem`,
 						action: e => {
@@ -253,7 +251,7 @@ class PersonalPins {
 			if (!messagediv || pos == -1) return;
 			let note = this.getNoteData(instance.props.message, instance.props.target, instance.props.channel);
 			let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, [BDFDB.LanguageUtils.LanguageStrings.PIN, BDFDB.LanguageUtils.LanguageStrings.UNPIN]);
-			const pinUnpinItem = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+			const pinUnpinItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: this.labels[note ? "context_unpinoption_text" : "popout_pinoption_text"],
 				className: `${BDFDB.disCN.optionpopoutitem} BDFDB-popoutMenuItem ${this.name}-popoutMenuItem ${this.name}-${note ? "unpin" : "pin"}-popoutMenuItem`,
 				action: e => {
@@ -266,7 +264,7 @@ class PersonalPins {
 				let newmarkup = this.getMarkup(messagediv).innerHTML;
 				let newaccessory = messagediv.querySelector(BDFDB.dotCN.messageaccessory).innerHTML;
 				if (note.markup != newmarkup || note.accessory != newaccessory) {
-					const updateItem = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+					const updateItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 						label: this.labels.context_updateoption_text,
 						className: `${BDFDB.disCN.optionpopoutitem} BDFDB-popoutMenuItem ${this.name}-popoutMenuItem ${this.name}-update-popoutMenuItem`,
 						action: e => {
@@ -295,12 +293,12 @@ class PersonalPins {
 			this.openNotesPopout(icon.parentElement);
 		});
 		icon.addEventListener("mouseenter", () => {
-			BDFDB.createTooltip(this.labels.popout_note_text, icon, {type:"bottom",selector:"note-button-tooltip"});
+			BDFDB.TooltipUtils.create(icon, this.labels.popout_note_text, {type:"bottom",selector:"note-button-tooltip"});
 		});
 	}
 
 	processMessage (instance, wrapper, returnvalue) {
-		if (instance.props && typeof instance.props.renderButtons == "function" && !wrapper.querySelector(BDFDB.dotCN.optionpopoutbutton) && BDFDB.getReactValue(instance, "props.message.author.id") != 1) {
+		if (instance.props && typeof instance.props.renderButtons == "function" && !wrapper.querySelector(BDFDB.dotCN.optionpopoutbutton) && BDFDB.ReactUtils.getValue(instance, "props.message.author.id") != 1) {
 			let buttonwrap = wrapper.querySelector(BDFDB.dotCN.messagebuttoncontainer);
 			if (buttonwrap) {
 				let optionPopoutButton = BDFDB.htmlToElement(`<div tabindex="0" class="${BDFDB.disCN.optionpopoutbutton}" aria-label="More Options" role="button"><svg name="OverflowMenu" class="${BDFDB.disCN.optionpopoutbuttonicon}" aria-hidden="false" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0z"></path><path fill="currentColor" d="M12 16c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2zm0-6c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2zm0-6c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2z"></path></g></svg></div>`);
@@ -350,15 +348,15 @@ class PersonalPins {
 
 	addNotes (notespopout) {
 		BDFDB.removeEles(notespopout.querySelectorAll(BDFDB.dotCNC.messagegroupwrapper + BDFDB.dotCN.messagespopoutchannelseparator));
-		let channel = BDFDB.getSelectedChannel();
+		let channel = BDFDB.ChannelUtils.getSelected();
 		if (channel) {
 			let guild_id = channel.guild_id ? channel.guild_id : "@me";
 			let pins = BDFDB.loadAllData(this, "pins");
-			if (!BDFDB.isObjectEmpty(pins)) {
+			if (!BDFDB.ObjectUtils.isEmpty(pins)) {
 				let container = notespopout.querySelector(BDFDB.dotCN.messagespopout);
 				let placeholder = notespopout.querySelector(BDFDB.dotCN.messagespopoutemptyplaceholder);
 				if (!container || !placeholder) return;
-				placeholder.querySelector(BDFDB.dotCN.messagespopoutimage).style.setProperty("background-image", `url(${BDFDB.getDiscordTheme() == BDFDB.disCN.themelight ? "/assets/03c7541028afafafd1a9f6a81cb7f149.svg" : "/assets/6793e022dc1b065b21f12d6df02f91bd.svg"})`);
+				placeholder.querySelector(BDFDB.dotCN.messagespopoutimage).style.setProperty("background-image", `url(${BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight ? "/assets/03c7541028afafafd1a9f6a81cb7f149.svg" : "/assets/6793e022dc1b065b21f12d6df02f91bd.svg"})`);
 				let notes = {};
 				switch (notespopout.querySelector(BDFDB.dotCN.tabbarheaderitem + BDFDB.dotCN.settingsitemselected).getAttribute("tab")) {
 					case "channel":
@@ -373,7 +371,7 @@ class PersonalPins {
 				}
 				let noteArray = [];
 				for (let id in notes) {noteArray.push(notes[id]);}
-				BDFDB.sortArrayByKey(noteArray, notespopout.querySelector(BDFDB.dotCN.recentmentionsmentionfiltervalue).getAttribute("option"));
+				BDFDB.ArrayUtils.keySort(noteArray, notespopout.querySelector(BDFDB.dotCN.recentmentionsmentionfiltervalue).getAttribute("option"));
 				for (let noteData of noteArray) this.appendNote(notespopout, container, noteData, placeholder);
 				let searchstring = notespopout.querySelector(BDFDB.dotCN.searchbarinput).value.replace(/[<|>]/g, "");
 				if (searchstring) for (let note of notespopout.querySelectorAll(BDFDB.dotCN.messagegroupwrapper)) {
@@ -401,25 +399,25 @@ class PersonalPins {
 		container.insertBefore(messagedivider, container.firstChild);
 		let channelname = messagedivider.querySelector(BDFDB.dotCN.messagespopoutchannelname);
 		channelname.innerText = (noteData.guild_id == "@me" ? " @" : " #") + (channel.name || noteData.channel_name);
-		if (noteData.guild_id != "@me" && BDFDB.isPluginEnabled("EditChannels")) {
-			BDFDB.getPlugin("EditChannels").changeChannel2({id:noteData.channel_id,name:noteData.channel_name}, channelname);
+		if (noteData.guild_id != "@me" && BDFDB.BdUtils.isPluginEnabled("EditChannels")) {
+			BDFDB.BdUtils.getPlugin("EditChannels").changeChannel2({id:noteData.channel_id,name:noteData.channel_name}, channelname);
 		}
-		else if (noteData.guild_id == "@me" && BDFDB.isPluginEnabled("EditUsers")) {
+		else if (noteData.guild_id == "@me" && BDFDB.BdUtils.isPluginEnabled("EditUsers")) {
 			let dmuser_id = channel && channel.type == 1 ? channel.recipients[0] : noteData.dmuser_id;
 			if (dmuser_id) {
-				BDFDB.getPlugin("EditUsers").changeName2({id:dmuser_id,username:noteData.channel_name}, channelname);
+				BDFDB.BdUtils.getPlugin("EditUsers").changeName2({id:dmuser_id,username:noteData.channel_name}, channelname);
 				if (channelname.innerText.indexOf("@") != 0) channelname.innerText = "@" + channelname.innerText;
 			}
 		}
 		let guildname = messagedivider.querySelector(BDFDB.dotCN.messagespopoutguildname);
 		guildname.innerText = server.name || noteData.guild_name;
 		let avatar = message.querySelector(BDFDB.dotCN.avatar);
-		avatar.setAttribute("src", `${user.id ? BDFDB.getUserAvatar(user.id) : noteData.avatar}`);
+		avatar.setAttribute("src", `${user.id ? BDFDB.UserUtils.getAvatar(user.id) : noteData.avatar}`);
 		let username = message.querySelector(BDFDB.dotCN.messageusername);
 		username.innerText = user.username || noteData.author_name;
 		username.style.setProperty("color", member.colorString || noteData.color);
-		if (BDFDB.isPluginEnabled("EditUsers")) {
-			let EditUsers = BDFDB.getPlugin("EditUsers");
+		if (BDFDB.BdUtils.isPluginEnabled("EditUsers")) {
+			let EditUsers = BDFDB.BdUtils.getPlugin("EditUsers");
 			EditUsers.changeName({id:noteData.author_id,username:noteData.author_name}, username, noteData.guild_id);
 			if (user.id) EditUsers.changeAvatar({id:noteData.author_id,username:noteData.author_name}, avatar);
 			EditUsers.addTag({id:noteData.author_id,username:noteData.author_name}, username.parentElement, " " + BDFDB.disCN.bottagnametag);
@@ -427,13 +425,13 @@ class PersonalPins {
 		let timestamp = message.querySelector(BDFDB.dotCN.messagetimestampcozy);
 		timestamp.innerText = date.toLocaleString(BDFDB.getDiscordLanguage().id);
 		timestamp.setAttribute("datetime", date);
-		if (BDFDB.isPluginEnabled("CompleteTimestamps") && BDFDB.loadData("showInChat", "CompleteTimestamps", "settings")) {
-			BDFDB.getPlugin("CompleteTimestamps").changeTimestamp(timestamp);
+		if (BDFDB.BdUtils.isPluginEnabled("CompleteTimestamps") && BDFDB.loadData("showInChat", "CompleteTimestamps", "settings")) {
+			BDFDB.BdUtils.getPlugin("CompleteTimestamps").changeTimestamp(timestamp);
 		}
 		message.querySelector(BDFDB.dotCN.messagemarkup).innerHTML = noteData.markup.replace(`<span class="edited">`,`<span class="${BDFDB.disCN.messageedited}">`);
 		message.querySelector(BDFDB.dotCN.messageaccessory).innerHTML = noteData.accessory;
 		if (noteData.accessory) {
-			BDFDB.addChildEventListener(message, "click", BDFDB.dotCN.iconplay, e => {this.startYoutubeVideo(e.currentTarget);});
+			BDFDB.ListenerUtils.addToChildren(message, "click", BDFDB.dotCN.iconplay, e => {this.startYoutubeVideo(e.currentTarget);});
 			let ytvideo = message.querySelector(BDFDB.dotCN.embed + " iframe[src*='https://www.youtube.com']");
 			if (ytvideo) {
 				let ytlink = ytvideo.parentElement.parentElement.querySelector(BDFDB.dotCN.embedtitle).href;
@@ -448,7 +446,7 @@ class PersonalPins {
 			}
 		}
 		messagedivider.querySelector(BDFDB.dotCN.messagespopoutchannelname).addEventListener("click", e => {
-			if (!BDFDB.isObjectEmpty(channel)) {
+			if (!BDFDB.ObjectUtils.isEmpty(channel)) {
 				notespopout.remove();
 				BDFDB.LibraryModules.SelectChannelUtils.selectChannel(server.id, channel.id);
 			}
@@ -519,7 +517,7 @@ class PersonalPins {
 					channelname = channelname + BDFDB.LibraryModules.UserStore.getUser(dmuser_id).username;
 				}
 			}
-			pins[guild_id][channel.id][message.id + "_" + pos] = BDFDB.sortObject({
+			pins[guild_id][channel.id][message.id + "_" + pos] = BDFDB.ObjectUtils.sort({
 				"guild_id": guild_id,
 				"guild_name": guild.name ? guild.name : "Direct Messages",
 				"channel_id": channel.id,
@@ -532,13 +530,13 @@ class PersonalPins {
 				"color": message.colorString,
 				"author_id": message.author.id,
 				"author_name": message.author.username,
-				"avatar": BDFDB.getUserAvatar(message.author.id),
+				"avatar": BDFDB.UserUtils.getAvatar(message.author.id),
 				"content": message.content,
 				"markup": this.getMarkup(messagediv).innerHTML,
 				"accessory": messagediv.querySelector(BDFDB.dotCN.messageaccessory).innerHTML
 			});
 			BDFDB.saveAllData(pins, this, "pins");
-			BDFDB.showToast(this.labels.toast_noteadd_text, {type:"success"});
+			BDFDB.NotificationUtils.toast(this.labels.toast_noteadd_text, {type:"success"});
 		}
 		else this.removeNoteData(pins[guild_id][channel.id][message.id + "_" + pos]);
 	}
@@ -547,9 +545,9 @@ class PersonalPins {
 		let pins = BDFDB.loadAllData(this, "pins");
 		pins[note.guild_id][note.channel_id][note.id + "_" + note.pos].markup = markup;
 		pins[note.guild_id][note.channel_id][note.id + "_" + note.pos].accessory = accessory;
-		pins[note.guild_id][note.channel_id][note.id + "_" + note.pos] = BDFDB.sortObject(pins[note.guild_id][note.channel_id][note.id + "_" + note.pos]);
+		pins[note.guild_id][note.channel_id][note.id + "_" + note.pos] = BDFDB.ObjectUtils.sort(pins[note.guild_id][note.channel_id][note.id + "_" + note.pos]);
 		BDFDB.saveAllData(pins, this, "pins");
-		BDFDB.showToast(this.labels.toast_noteupdate_text, {type:"info"});
+		BDFDB.NotificationUtils.toast(this.labels.toast_noteupdate_text, {type:"info"});
 	}
 
 	getMarkup (messagediv) {
@@ -571,12 +569,12 @@ class PersonalPins {
 	removeNoteData (noteData) {
 		let pins = BDFDB.loadAllData(this, "pins");
 		delete pins[noteData.guild_id][noteData.channel_id][noteData.id + "_" + noteData.pos];
-		if (BDFDB.isObjectEmpty(pins[noteData.guild_id][noteData.channel_id])) {
+		if (BDFDB.ObjectUtils.isEmpty(pins[noteData.guild_id][noteData.channel_id])) {
 			delete pins[noteData.guild_id][noteData.channel_id];
-			if (BDFDB.isObjectEmpty(pins[noteData.guild_id])) delete pins[noteData.guild_id];
+			if (BDFDB.ObjectUtils.isEmpty(pins[noteData.guild_id])) delete pins[noteData.guild_id];
 		}
 		BDFDB.saveAllData(pins, this, "pins");
-		BDFDB.showToast(this.labels.toast_noteremove_text, {type:"danger"});
+		BDFDB.NotificationUtils.toast(this.labels.toast_noteremove_text, {type:"danger"});
 	}
 	
 	getMessageAndPos (target) {

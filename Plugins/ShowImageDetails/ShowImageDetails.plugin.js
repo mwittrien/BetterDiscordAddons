@@ -87,13 +87,11 @@ class ShowImageDetails {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 	stop () {
@@ -102,7 +100,7 @@ class ShowImageDetails {
 
 			document.querySelectorAll(".image-details-added").forEach(image => {this.resetImage(image);});
 
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -120,14 +118,14 @@ class ShowImageDetails {
 	}
 
 	processLazyImageZoomable (instance, image, returnvalue) {
-		let attachment = BDFDB.getReactValue(instance, "_reactInternalFiber.return.return.memoizedProps.attachment");
+		let attachment = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.return.memoizedProps.attachment");
 		if (attachment && !attachment.filename.endsWith(".bdemote.png") && !attachment.filename.endsWith(".bdemote.gif")) {
 			if (BDFDB.containsClass(image.parentElement.parentElement, BDFDB.disCN.spoilercontainer, BDFDB.disCN.spoilertext, false)) image = image.parentElement.parentElement;
 			BDFDB.addClass(image, "image-details-added");
 			image.removeEventListener("mouseenter", image.mouseenterShowImageDetails);
 			if (BDFDB.getData("showOnHover", this, "settings")) {
 				image.mouseenterShowImageDetails = () => {
-					BDFDB.createTooltip(`<div class="image-details-tooltip-name">${attachment.filename}</div><div class="image-details-tooltip-size">${BDFDB.formatBytes(attachment.size)}</div><div class="image-details-tooltip-dimensions">${attachment.width}x${attachment.height}px</div>`, image, {type:"right", html:true, selector:"image-details-tooltip", delay:BDFDB.getData("hoverDelay", this, "amounts")});
+					BDFDB.TooltipUtils.create(image, `<div class="image-details-tooltip-name">${attachment.filename}</div><div class="image-details-tooltip-size">${BDFDB.formatBytes(attachment.size)}</div><div class="image-details-tooltip-dimensions">${attachment.width}x${attachment.height}px</div>`, {type:"right", html:true, selector:"image-details-tooltip", delay:BDFDB.getData("hoverDelay", this, "amounts")});
 				};
 				image.addEventListener("mouseenter", image.mouseenterShowImageDetails);
 			}
@@ -145,7 +143,7 @@ class ShowImageDetails {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			document.querySelectorAll(".image-details-added").forEach(image => {this.resetImage(image);});
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 	}
 }

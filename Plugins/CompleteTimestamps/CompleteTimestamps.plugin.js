@@ -70,10 +70,10 @@ class CompleteTimestamps {
 
 		BDFDB.initElements(settingspanel, this);
 
-		BDFDB.addEventListener(this, settingspanel, "click", ".settings-switch", () => {setImmediate(() => {this.updateSettingsPanel(settingspanel);})});
-		BDFDB.addEventListener(this, settingspanel, "keyup", BDFDB.dotCN.input, () => {this.saveInputs(settingspanel);});
-		BDFDB.addEventListener(this, settingspanel, "click", ".toggle-info", e => {this.toggleInfo(e.currentTarget);});
-		BDFDB.addEventListener(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".settings-switch", () => {setImmediate(() => {this.updateSettingsPanel(settingspanel);})});
+		BDFDB.ListenerUtils.add(this, settingspanel, "keyup", BDFDB.dotCN.input, () => {this.saveInputs(settingspanel);});
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".toggle-info", e => {this.toggleInfo(e.currentTarget);});
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {
 			BDFDB.openDropdownMenu(e, this.saveSelectChoice.bind(this), this.createSelectChoice.bind(this), this.languages);
 		});
 		return settingspanel;
@@ -104,11 +104,11 @@ class CompleteTimestamps {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
-			this.languages = Object.assign({"own":{name:"Own",id:"own",integrated:false,dic:false}}, BDFDB.languages);
+			this.languages = Object.assign({"own":{name:"Own",id:"own",integrated:false,dic:false}}, BDFDB.LanguageUtils.languages);
 
-			BDFDB.addEventListener(this, document, "mouseenter", BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messagecontent, e => {
+			BDFDB.ListenerUtils.add(this, document, "mouseenter", BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messagecontent, e => {
 				if (BDFDB.getData("showOnHover", this, "settings")) {
 					let message = e.currentTarget;
 					let messagegroup = BDFDB.getParentEle(BDFDB.dotCN.messagegroup, message);
@@ -116,24 +116,22 @@ class CompleteTimestamps {
 					let info = this.getMessageData(message, messagegroup);
 					if (!info || !info.timestamp || !info.timestamp._i) return;
 					let choice = BDFDB.getData("creationDateLang", this, "choices");
-					BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, info.timestamp._i), message, {type:"left", selector:"completetimestamp-tooltip"});
+					BDFDB.TooltipUtils.create(message, this.getTimestamp(this.languages[choice].id, info.timestamp._i), {type:"left", selector:"completetimestamp-tooltip"});
 				}
 			});
-			BDFDB.addEventListener(this, document, "mouseenter", BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageedited, e => {
+			BDFDB.ListenerUtils.add(this, document, "mouseenter", BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageedited, e => {
 				if (BDFDB.getData("changeForEdit", this, "settings")) {
 					let marker = e.currentTarget;
 					let time = marker.getAttribute("datetime");
 					if (!time) return;
 					let choice = BDFDB.getData("creationDateLang", this, "choices");
-					BDFDB.createTooltip(this.getTimestamp(this.languages[choice].id, time), marker, {type:"top", selector:"completetimestampedit-tooltip"});
+					BDFDB.TooltipUtils.create(marker, this.getTimestamp(this.languages[choice].id, time), {type:"top", selector:"completetimestampedit-tooltip"});
 				}
 			});
 
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 
@@ -146,7 +144,7 @@ class CompleteTimestamps {
 
 			BDFDB.removeLocalStyle(this.name + "CompactCorrection");
 
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -193,7 +191,7 @@ class CompleteTimestamps {
 	}
 
 	processEmbed (instance, wrapper, returnvalue) {
-		let embed = BDFDB.getReactValue(instance, "props.embed");
+		let embed = BDFDB.ReactUtils.getValue(instance, "props.embed");
 		let footer = wrapper.querySelector(BDFDB.dotCN.embedfootertext);
 		if (footer && embed && embed.timestamp && BDFDB.getData("showInEmbed", this, "settings")) {
 			footer.lastChild.textContent = this.getTimestamp(this.languages[BDFDB.getData("creationDateLang", this, "choices")].id, embed.timestamp._i);
@@ -203,7 +201,7 @@ class CompleteTimestamps {
 	processStandardSidebarView (instance, wrapper, returnvalue) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 	}
 
@@ -220,7 +218,7 @@ class CompleteTimestamps {
 
 	getMessageData (div, messagegroup) {
 		let pos = Array.from(messagegroup.querySelectorAll("." + div.className.replace(/ /g, "."))).indexOf(div);
-		let instance = BDFDB.getReactInstance(messagegroup);
+		let instance = BDFDB.ReactUtils.getInstance(messagegroup);
 		if (!instance) return;
 		let info = instance.return.stateNode.props.messages;
 		return info && pos > -1 ? info[pos] : null;
@@ -281,8 +279,8 @@ class CompleteTimestamps {
 	}
 
 	setMaxWidth () {
-		if (this.currentMode != BDFDB.getDiscordMode()) {
-			this.currentMode = BDFDB.getDiscordMode();
+		if (this.currentMode != BDFDB.DiscordUtils.getMode()) {
+			this.currentMode = BDFDB.DiscordUtils.getMode();
 			let timestamp = document.querySelector(BDFDB.dotCN.messagetimestampcompact);
 			if (timestamp) {
 				let choice = BDFDB.getData("creationDateLang", this, "choices");

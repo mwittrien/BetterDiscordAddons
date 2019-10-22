@@ -143,11 +143,11 @@ class ChatFilter {
 
 		BDFDB.initElements(settingspanel, this);
 
-		BDFDB.addEventListener(this, settingspanel, "keypress", ".wordInputs", e => {if (e.which == 13) this.updateContainer(settingspanel, e.currentTarget);});
-		BDFDB.addEventListener(this, settingspanel, "keyup", ".defaultInputs", e => {this.saveReplace(e.currentTarget);});
-		BDFDB.addEventListener(this, settingspanel, "click", ".btn-addword, .remove-word, .remove-all", e => {this.updateContainer(settingspanel, e.currentTarget);});
-		BDFDB.addEventListener(this, settingspanel, "click", BDFDB.dotCN.checkboxinput, e => {this.updateConfig(e.currentTarget);});
-		BDFDB.addEventListener(this, settingspanel, "click", ".toggle-info", e => {this.toggleInfo(e.currentTarget);});
+		BDFDB.ListenerUtils.add(this, settingspanel, "keypress", ".wordInputs", e => {if (e.which == 13) this.updateContainer(settingspanel, e.currentTarget);});
+		BDFDB.ListenerUtils.add(this, settingspanel, "keyup", ".defaultInputs", e => {this.saveReplace(e.currentTarget);});
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".btn-addword, .remove-word, .remove-all", e => {this.updateContainer(settingspanel, e.currentTarget);});
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", BDFDB.dotCN.checkboxinput, e => {this.updateConfig(e.currentTarget);});
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".toggle-info", e => {this.toggleInfo(e.currentTarget);});
 
 		return settingspanel;
 	}
@@ -176,16 +176,14 @@ class ChatFilter {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
-			BDFDB.loadMessage(this);
+			BDFDB.PluginUtils.init(this);
 
 			this.words = BDFDB.loadAllData(this, "words");
-			for (let rtype in this.defaults.replaces) if (!BDFDB.isObject(this.words[rtype])) this.words[rtype] = {};
+			for (let rtype in this.defaults.replaces) if (!BDFDB.ObjectUtils.is(this.words[rtype])) this.words[rtype] = {};
 
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else {
-			console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
-		}
+		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
 
 	stop () {
@@ -194,7 +192,7 @@ class ChatFilter {
 
 			document.querySelectorAll(`${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored, ${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored`).forEach(message => {this.resetMessage(message);});
 
-			BDFDB.unloadMessage(this);
+			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
@@ -297,10 +295,10 @@ class ChatFilter {
 
 	appendItem (menu, returnvalue, text) {
 		let [children, index] = BDFDB.getContextMenuGroupAndIndex(returnvalue, ["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]);
-		const itemgroup = BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+		const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 			className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 			children: [
-				BDFDB.React.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 					label: "Add to ChatFilter",
 					className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-addalias-contextMenuItem`,
 					action: e => {
@@ -322,7 +320,7 @@ class ChatFilter {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			document.querySelectorAll(`${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored, ${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored`).forEach(message => {this.resetMessage(message);});
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 	}
 
@@ -484,7 +482,7 @@ class ChatFilter {
 				addbutton.disabled = true;
 				BDFDB.addClass(wordvalueinput, "invalid");
 				addbutton.style.setProperty("pointer-events", "none", "important");
-				BDFDB.createTooltip("Choose a Wordvalue", {type: "right", color: "red", selector: "chatfilter-disabled-tooltip"});
+				BDFDB.TooltipUtils.create(wordvalueinput, "Choose a Wordvalue", {type: "right", color: "red", selector: "chatfilter-disabled-tooltip"});
 			}
 			else {
 				addbutton.disabled = false;
@@ -494,7 +492,7 @@ class ChatFilter {
 			}
 		});
 
-		BDFDB.addChildEventListener(chatfilterAddModal, "click", BDFDB.dotCNC.backdrop + BDFDB.dotCNC.modalclose + ".btn-add", () => {
+		BDFDB.ListenerUtils.addToChildren(chatfilterAddModal, "click", BDFDB.dotCNC.backdrop + BDFDB.dotCNC.modalclose + ".btn-add", () => {
 			BDFDB.removeEles(".chatfilter-disabled-tooltip");
 		});
 
@@ -508,7 +506,7 @@ class ChatFilter {
 			this.saveWord(wordvalueinput.value.trim(), replacevalueinput.value.trim(), rtype, configs);
 			BDFDB.saveAllData(this.words, this, "words");
 			document.querySelectorAll(`${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored, ${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored`).forEach(message => {this.resetMessage(message);});
-			BDFDB.WebModules.forceAllUpdates(this);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		});
 		wordvalueinput.focus();
 	}
