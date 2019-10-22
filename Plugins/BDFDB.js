@@ -2692,16 +2692,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				if (!BDFDB.containsClass(ele, BDFDB.disCN.settingsitemselected)) setTabitem(ele, 0);
 			});
 		});
-		container.querySelectorAll(".BDFDB-contextMenuItemHint").forEach(ele => {
-			if (ele.innerText) {
-				ele.innerHTML = `<div class="BDFDB-textscrollwrapper" speed=3><div class="BDFDB-textscroll">${BDFDB.encodeToHTML(ele.innerText)}</div></div>`;
-				ele.style.setProperty("top", getComputedStyle(ele.parentElement).paddingTop, "important");
-				ele.style.setProperty("right", getComputedStyle(ele.parentElement).paddingRight, "important");
-				ele.style.setProperty("width", "42px", "important");
-				ele.style.setProperty("max-width", "42px", "important");
-				ele.style.setProperty("margin-left", "8px", "important");
-			}
-		});
 		container.querySelectorAll(".BDFDB-textscrollwrapper").forEach(ele => {
 			var inner = ele.querySelector(".BDFDB-textscroll");
 			if (inner) {
@@ -5558,16 +5548,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 							maxWidth: 42,
 							marginLeft: 8
 						},
-						ref: instance => {
-							let ele = BDFDB.ReactUtils.findDOMNode(instance);
-							if (ele) {
-								ele.style.setProperty("top", getComputedStyle(ele.parentElement).paddingTop);
-								ele.style.setProperty("right", getComputedStyle(ele.parentElement).paddingRight);
-							}
-						},
 						children: BDFDB.ReactUtils.createElement(LibraryComponents.TextScroller, {
-							speed: 3,
-							children: this.props.hint
+							speed: 2,
+							children: this.props.children
 						})
 					}),
 					this.props.children
@@ -5761,7 +5744,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	if (LibraryComponents.TextInput) for (let key in NativeSubComponents.TextInput) if (key != "displayName" && key != "name") LibraryComponents.TextInput[key] = NativeSubComponents.TextInput[key];
 	LibraryComponents.TextScroller = reactInitialized ? class BDFDB_TextScroller extends LibraryModules.React.Component {
         render() {return BDFDB.ReactUtils.createElement("div", {
-			className: "BDFDB-textscrollwrapper",
+			className: "BDFDB-textscroller",
 			style: {
 				position: "relative",
 				display: "block",
@@ -5787,7 +5770,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				var ele = e.currentTarget;
 				var inner = ele.firstElementChild;
 				if (BDFDB.getRects(ele).width < BDFDB.getRects(inner).width) {
-					BDFDB.addClass(ele, "scrolling");
+					this.scrolling = true;
 					inner.style.setProperty("display", "block", "important");
 					this.scroll(1);
 				}
@@ -5795,8 +5778,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			onMouseLeave: e => {
 				var ele = e.currentTarget;
 				var inner = ele.firstElementChild;
-				if (BDFDB.containsClass(ele, "scrolling")) {
-					BDFDB.removeClass(ele, "scrolling");
+				if (this.scrolling) {
+					delete this.scrolling;
 					inner.style.setProperty("display", "inline", "important");
 					this.scroll(0);
 				}
@@ -7132,12 +7115,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	BDFDB.ModuleUtils.forceAllUpdates(BDFDB);
 	
 	InternalBDFDB.addContextListeners(BDFDB);
-	
-	BDFDB.ObserverUtils.connect(BDFDB, document.querySelector(BDFDB.dotCN.itemlayercontainer), {name:"layerObserverBDFDB", instance:
-		new MutationObserver(changes => {changes.forEach(change => {change.addedNodes.forEach(node => {
-			if (node.tagName && (BDFDB.containsClass(node, BDFDB.disCN.contextmenu) || (node = node.querySelector(BDFDB.dotCN.contextmenu)) != null)) BDFDB.initElements(node);
-		})})})
-	}, {childList: true});
 
 	BDFDB.loaded = true;
 	InternalBDFDB.reloadLib = _ => {
