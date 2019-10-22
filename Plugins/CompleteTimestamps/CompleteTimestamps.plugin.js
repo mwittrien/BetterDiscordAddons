@@ -212,7 +212,7 @@ class CompleteTimestamps {
 			this.setMaxWidth();
 			BDFDB.addClass(stamp, "complete-timestamp");
 			stamp.parentElement.insertBefore(BDFDB.htmlToElement(`<span class="complete-timestamp-divider arabic-fix" style="display: inline !important; height: 0 !important; width: 0 !important; font-size: 0 !important; user-select: none !important;">ARABIC FIX</span>`), stamp);
-			BDFDB.setInnerText(stamp, this.getTimestamp(this.languages[BDFDB.DataUtils.get(this, "choices")].id, time), "creationDateLang");
+			BDFDB.setInnerText(stamp, this.getTimestamp(this.languages[BDFDB.DataUtils.get(this, "choices", "creationDateLang")].id, time));
 		}
 	}
 
