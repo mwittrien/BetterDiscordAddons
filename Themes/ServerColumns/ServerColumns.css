@@ -99,15 +99,15 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 }
 .wrapper-1Rf91z .wrapper-sa6paO {
 	top: calc(-5px * var(--vguildsize)/50) !important;
-	height: calc(1px * (var(--vguildsize) + 12 * var(--vguildsize)/50)) !important;
+	height: calc(1px * (var(--vguildsize) + 10 * var(--vguildsize)/50)) !important;
 	transform: scale(calc(var(--vguildsize)/50)) !important;
 	transform-origin: 0 50% !important;
 }
 .wrapper-1Rf91z .pill-2uzAFe {
-	left: calc(1px * ((((var(--vguildsize) + 12 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2) - 9)) !important;
+	left: calc(1px * ((((var(--vguildsize) + 10 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2) - 9)) !important;
 }
 .wrapper-1Rf91z .pill-1m5BUr {
-	left: calc(1px * ((var(--valigndms) + ((((var(--vguildsize) + 12 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))) - 8)) !important;
+	left: calc(1px * ((var(--valigndms) + ((((var(--vguildsize) + 10 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))) - 8)) !important;
 }
 .wrapper-1Rf91z .pill-31IEus,
 .wrapper-1Rf91z .pill-3YxEhL {
