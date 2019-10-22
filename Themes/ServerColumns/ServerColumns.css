@@ -1,7 +1,7 @@
 :root {
-	--vcolumns: var(--columns, 2);
+	--vcolumns: var(--columns, 3);
 	--vguildsize: var(--guildsize, 50);
-	--vguildgap: var(--guildgap, 4);
+	--vguildgap: var(--guildgap, 3);
 	--valigndms: var(--aligndms, 1);
 }
 .container-2lgZY8 {
@@ -22,24 +22,24 @@
 .wrapper-1Rf91z.foldercontent.foldercontentopen,
 .wrapper-1Rf91z .unreadMentionsIndicatorTop-gA6RCh,
 .wrapper-1Rf91z .unreadMentionsIndicatorBottom-BXS58x {
-	width: calc(1px * ((var(--vguildsize) + 10 * var(--vguildsize)/50) * var(--vcolumns) + 35 - 25)) !important;
+	width: calc(1px * ((var(--vguildsize) + 12 * var(--vguildsize)/50) * var(--vcolumns) + 35 - 25)) !important;
 }
 .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
-	padding-right: calc(1px * ((var(--vguildsize) + 10 * var(--vguildsize)/50) * var(--vcolumns) - 50)) !important;
+	padding-right: calc(1px * ((var(--vguildsize) + 12 * var(--vguildsize)/50) * var(--vcolumns) - 50)) !important;
 }
 body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP,
 body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
-	width: calc(2px * ((var(--vguildsize) + 10 * var(--vguildsize)/50) * var(--vcolumns) + 35 - 25)) !important;
+	width: calc(2px * ((var(--vguildsize) + 12 * var(--vguildsize)/50) * var(--vcolumns) + 35 - 25)) !important;
 }
 body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
-	padding-right: calc(1px * ((var(--vguildsize) + 10 * var(--vguildsize)/50) * var(--vcolumns) * 2 - 40)) !important;
+	padding-right: calc(1px * ((var(--vguildsize) + 12 * var(--vguildsize)/50) * var(--vcolumns) * 2 - 40)) !important;
 }
 .titleBar-AC4pGV.typeMacOS-3EmCyP.typeMacOSWithFrame-3R_i5S .macButtons-2MuSAC {
 	margin-top: 0 !important;
 	margin-right: 0 !important;
 }
 .wrapper-1Rf91z .scrollerWrap-1IAIlv {
-	width: calc(1px * ((var(--vguildsize) + 10 * var(--vguildsize)/50) * var(--vcolumns) + 35)) !important;
+	width: calc(1px * ((var(--vguildsize) + 12 * var(--vguildsize)/50) * var(--vcolumns) + 35)) !important;
 }
 .wrapper-1Rf91z,
 .wrapper-1Rf91z .scrollerWrap-1IAIlv {
@@ -53,16 +53,16 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 	align-content: flex-start !important;
 }
 .wrapper-1Rf91z .listItem-2P_4kh {
-	margin: calc(1px * var(--vguildgap)) calc(1px * (10 * var(--vguildsize)/50)) calc(1px * var(--vguildgap)) 0 !important;
+	margin: calc(1px * var(--vguildgap)) calc(1px * (12 * var(--vguildsize)/50)) calc(1px * var(--vguildgap)) 0 !important;
 }
 .wrapper-1Rf91z #server-search {
-	margin: calc(1px * var(--vguildgap)) calc(1px * (((var(--vguildsize) + 10 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2)) !important;
+	margin: calc(1px * var(--vguildgap)) calc(1px * (((var(--vguildsize) + 12 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2)) !important;
 }
 .wrapper-1Rf91z .listItem-2P_4kh:first-child .listItemWrapper-3X98Pc {
-	margin: 0 calc(1px * (((var(--vguildsize) + 10 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2)) calc(1px * var(--vguildgap)) calc(1px * ((((var(--vguildsize) + 10 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2))) !important;
+	margin: 0 calc(1px * (((var(--vguildsize) + 12 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2)) calc(1px * var(--vguildgap)) calc(1px * ((((var(--vguildsize) + 12 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2))) !important;
 }
 .wrapper-1Rf91z .listItem-2P_4kh:first-child .pill-1m5BUr ~ .listItemWrapper-3X98Pc {
-	margin: 0 calc(1px * ((((var(--vguildsize) + 10 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))) 0 calc(1px * (((0 * var(--valigndms)) + ((((var(--vguildsize) + 10 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))))) !important;
+	margin: 0 calc(1px * ((((var(--vguildsize) + 12 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))) 0 calc(1px * (((0 * var(--valigndms)) + ((((var(--vguildsize) + 12 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))))) !important;
 }
 .wrapper-1Rf91z .blobContainer-239gwq,
 .wrapper-1Rf91z .circleButtonMask-2VNJsN,
@@ -99,22 +99,22 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 }
 .wrapper-1Rf91z .wrapper-sa6paO {
 	top: calc(-5px * var(--vguildsize)/50) !important;
-	height: calc(1px * (var(--vguildsize) + 10 * var(--vguildsize)/50)) !important;
+	height: calc(1px * (var(--vguildsize) + 12 * var(--vguildsize)/50)) !important;
 	transform: scale(calc(var(--vguildsize)/50)) !important;
 	transform-origin: 0 50% !important;
 }
 .wrapper-1Rf91z .pill-2uzAFe {
-	left: calc(1px * ((((var(--vguildsize) + 10 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2) - 9)) !important;
+	left: calc(1px * ((((var(--vguildsize) + 12 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2) - 9)) !important;
 }
 .wrapper-1Rf91z .pill-1m5BUr {
-	left: calc(1px * ((var(--valigndms) + ((((var(--vguildsize) + 10 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))) - 8)) !important;
+	left: calc(1px * ((var(--valigndms) + ((((var(--vguildsize) + 12 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2) * (1 - var(--valigndms)))) - 8)) !important;
 }
 .wrapper-1Rf91z .pill-31IEus,
 .wrapper-1Rf91z .pill-3YxEhL {
 	left: calc(-10px * var(--vguildsize)/50) !important;
 }
 .wrapper-1Rf91z .guildSeparator-3s64Iy {
-	width: calc(1px * ((var(--vguildsize) + 10 * var(--vguildsize)/50) * var(--vcolumns) - (10 * var(--vguildsize)/50))) !important;
+	width: calc(1px * ((var(--vguildsize) + 12 * var(--vguildsize)/50) * var(--vcolumns) - (12 * var(--vguildsize)/50))) !important;
 	margin: calc(1px * (var(--vguildsize)/10)) 0 !important;
 	display: block !important;
 }
@@ -139,14 +139,14 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 .wrapper-1Rf91z #bd-pub-li,
 .wrapper-1Rf91z #sort-button,
 .wrapper-1Rf91z .RANbutton-frame {
-	width: calc(1px * ((var(--vguildsize)*4/5) + 10 * var(--vguildsize)/50)) !important;
+	width: calc(1px * ((var(--vguildsize)*4/5) + 12 * var(--vguildsize)/50)) !important;
 }
 .wrapper-1Rf91z .friendsOnline-2JkivW,
 .wrapper-1Rf91z #bd-pub-li,
 .wrapper-1Rf91z #sort-button,
 .wrapper-1Rf91z .RANbutton-frame {
 	text-align: center !important;
-	margin: calc(1px * var(--vguildgap)) calc(1px * (((var(--vguildsize) + 10 * var(--vguildsize)/50) * (var(--vcolumns) - 1) - ((var(--vguildsize)*4/5) + 10 * var(--vguildsize)/50) + var(--vguildsize))/2)) calc(1px * var(--vguildgap)) calc(1px * (((var(--vguildsize) + 10 * var(--vguildsize)/50) * (var(--vcolumns) - 1) - ((var(--vguildsize)*4/5) + 10 * var(--vguildsize)/50) + var(--vguildsize))/2)) !important;
+	margin: calc(1px * var(--vguildgap)) calc(1px * (((var(--vguildsize) + 12 * var(--vguildsize)/50) * (var(--vcolumns) - 1) - ((var(--vguildsize)*4/5) + 12 * var(--vguildsize)/50) + var(--vguildsize))/2)) calc(1px * var(--vguildgap)) calc(1px * (((var(--vguildsize) + 12 * var(--vguildsize)/50) * (var(--vcolumns) - 1) - ((var(--vguildsize)*4/5) + 12 * var(--vguildsize)/50) + var(--vguildsize))/2)) !important;
 }
 .wrapper-1Rf91z #sort-button > div,
 .wrapper-1Rf91z #bd-pub-li #bd-pub-button,
@@ -164,7 +164,7 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 }
 
 .wrapper-1Rf91z .wrapper-21YSNc {
-	margin: calc(1px * var(--vguildgap)) calc(1px * (10 * var(--vguildsize)/50)) calc(1px * var(--vguildgap)) 0 !important;
+	margin: calc(1px * var(--vguildgap)) calc(1px * (12 * var(--vguildsize)/50)) calc(1px * var(--vguildgap)) 0 !important;
 	width: calc(1px * var(--vguildsize)) !important;
 }
 .wrapper-1Rf91z .wrapper-21YSNc > .listItem-2P_4kh {

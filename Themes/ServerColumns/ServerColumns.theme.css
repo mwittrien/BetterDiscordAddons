@@ -6,7 +6,7 @@
 	--columns:			3;							/* default:	3					(amount of servercolumns)																		*/
 	
 	--guildsize:		50;							/* default:	50					(serversize in pixel)																			*/
-	--guildgap:			4;							/* default:	4					(top/bottom gap between servers in pixel)														*/
+	--guildgap:			3;							/* default:	3					(top/bottom gap between servers in pixel)														*/
 	
 	--aligndms:			0;							/* default:	0					(should DMs be aligned in columns: 0 = no, 1 = yes)												*/
 }
