@@ -747,6 +747,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		for (let key in obj) if (BDFDB.ObjectUtils.is(obj[key])) newobj[key] = obj[key][keyname];
 		return newobj;
 	};
+	BDFDB.ObjectUtils.toArray = function (obj) {
+		if (!BDFDB.ObjectUtils.is(obj)) return [];
+		return Object.entries(obj).map(n => n[1]);
+	};
 	BDFDB.ObjectUtils.deepAssign = function (obj, ...objs) {
 		if (!objs.length) return obj;
 		var nextobj = objs.shift();
