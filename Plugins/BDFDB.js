@@ -5389,6 +5389,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 	} : undefined;
 	LibraryComponents.Button = BDFDB.ModuleUtils.findByProperties("Colors", "Hovers", "Looks");
+	LibraryComponents.ChannelTextAreaButton = BDFDB.ModuleUtils.findByName("ChannelTextAreaButton");
 	LibraryComponents.Clickable = BDFDB.ModuleUtils.findByName("Clickable");
 	LibraryComponents.ColorSwatches = reactInitialized ? class BDFDB_ColorSwatches extends LibraryModules.React.Component {
 		constructor(props) {
