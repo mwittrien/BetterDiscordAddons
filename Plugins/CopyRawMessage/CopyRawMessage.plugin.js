@@ -67,6 +67,7 @@ class CopyRawMessage {
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 						label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
+						hint: BDFDB.BdUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BdUtils.getPlugin("MessageUtilities").getActiveShortcutString("Copy_Raw") : null,
 						className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-copyraw-contextMenuItem`,
 						action: e => {
 							BDFDB.closeContextMenu(menu);
