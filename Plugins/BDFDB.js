@@ -1999,7 +1999,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		
 		if (id === undefined) delete config[key];
 		else if (BDFDB.ObjectUtils.is(config[key])) delete config[key][id];
-		else console.error(`%c[${pluginname}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not remove data! [key: " + key + " | id: " + id + "]");
 		
 		if (BDFDB.ObjectUtils.isEmpty(config[key])) delete config[key];
 		if (BDFDB.ObjectUtils.isEmpty(config)) {
@@ -3767,6 +3766,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		colorPickerSwatchesDisabled: "disabled",
 		colorPickerSwatchSingle: "single-swatch",
 		colorPickerSwatchSelected: "selected",
+		favButtonContainer: "favButtonContainer",
 		overflowEllipsis: "overflowellipsis",
 		popoutContainer: "popoutContainer",
 		modalHeaderHasSibling: "headerHasSibling",
@@ -4462,6 +4462,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		emojipickersymbols: ["EmojiPicker", "symbols"],
 		emojipickertravel: ["EmojiPicker", "travel"],
 		emojipickervisible: ["EmojiPicker", "visible"],
+		favbuttoncontainer: ["BDFDB", "favButtonContainer"],
 		fileattachment: ["File", "attachment"],
 		fileattachmentinner: ["File", "attachmentInner"],
 		filecancelbutton: ["File", "cancelButton"],
@@ -5385,6 +5386,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	
 	var NativeSubComponents = {}, LibraryComponents = {}, reactInitialized = LibraryModules.React && LibraryModules.React.Component;
 	NativeSubComponents.ContextMenuToggleItem = BDFDB.ModuleUtils.findByName("ToggleMenuItem");
+	NativeSubComponents.FavButton = BDFDB.ModuleUtils.findByName("GIFFavButton");
 	NativeSubComponents.PopoutContainer = BDFDB.ModuleUtils.findByName("Popout");
 	NativeSubComponents.Select = BDFDB.ModuleUtils.findByName("SelectTempWrapper");
 	NativeSubComponents.TabBar = BDFDB.ModuleUtils.findByName("TabBar");
@@ -5548,15 +5550,27 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	LibraryComponents.ContextMenuSubItem = BDFDB.ModuleUtils.findByName("FluxContainer(SubMenuItem)");
 	LibraryComponents.ContextMenuToggleItem = reactInitialized ? class BDFDB_ContextMenuToggleItem extends LibraryModules.React.Component {
         handleToggle() {
+            if (typeof this.props.action == "function") this.props.action(!this.props.active);
             this.props.active = !this.props.active;
             BDFDB.ReactUtils.forceUpdate(this);
-            if (typeof this.props.action == "function") this.props.action(this.props.active);
         }
         render() {
 			return BDFDB.ReactUtils.createElement(NativeSubComponents.ContextMenuToggleItem, Object.assign({}, this.props, {action: this.handleToggle.bind(this)}));
 		}
     } : undefined;
-	LibraryComponents.FavButton = BDFDB.ModuleUtils.findByName("GIFFavButton");
+	LibraryComponents.FavButton = reactInitialized ? class BDFDB_FavButton extends LibraryModules.React.Component {
+        handleClick() {
+            if (typeof this.props.onClick == "function") this.props.onClick(!isFavorite, this);
+			this.props.isFavorite = !this.props.isFavorite;
+			BDFDB.ReactUtils.forceUpdate(this);
+        }
+        render() {
+			return BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.disCN.favbuttoncontainer,
+				children: BDFDB.ReactUtils.createElement(NativeSubComponents.FavButton, Object.assign({}, this.props, {onClick: this.handleClick.bind(this)}))
+			});
+		}
+    } : undefined;
 	LibraryComponents.Flex = BDFDB.ModuleUtils.findByProperties("Wrap", "Direction", "Child");
 	LibraryComponents.FormComponents = BDFDB.ModuleUtils.findByProperties("FormSection", "FormText");
 	LibraryComponents.IconBadge = BDFDB.ModuleUtils.findByName("IconBadge");
@@ -5583,14 +5597,19 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			let position = pos && DiscordClasses["popout" + pos] ? BDFDB.disCN["popout" + pos] : BDFDB.disCN.popouttop;
 			let arrow = !this.props.arrow ? BDFDB.disCN.popoutnoarrow : (pos && pos.indexOf("top") > -1 && pos != "top" ? BDFDB.disCN.popoutarrowalignmenttop : BDFDB.disCN.popoutarrowalignmentmiddle);
 			return BDFDB.ReactUtils.createElement("div", {
-				className: [BDFDB.disCN.popout, BDFDB.disCN.popoutthemedpopout, position, this.props.invert && pos && pos != "bottom" ? BDFDB.disCN.popoutinvert : null, arrow, !this.props.shadow ? BDFDB.disCN.popoutnoshadow : null, this.props.className].filter(n => n).join(" "),
+				className: [BDFDB.disCN.popout, position, this.props.invert && pos && pos != "bottom" ? BDFDB.disCN.popoutinvert : null, arrow, !this.props.shadow ? BDFDB.disCN.popoutnoshadow : null, this.props.className].filter(n => n).join(" "),
 				id: this.props.id,
 				style: Object.assign({}, this.props.style, {
-					position: this.props.isChild ? "relative" : "absolute",
-					padding: parseInt(this.props.padding) ? `0 ${parseInt(this.props.padding)}px` : null,
-					width: parseInt(this.props.width) || null
+					position: this.props.isChild ? "relative" : "absolute"
 				}),
-				children: this.props.children
+				children: BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.disCN.popoutthemedpopout,
+					style: {
+						padding: parseInt(this.props.padding) ? `0 ${parseInt(this.props.padding)}px` : null,
+						width: parseInt(this.props.width) || null
+					},
+					children: this.props.children
+				})
 			});
 		}
 	} : undefined;
@@ -5606,7 +5625,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				height: this.props.height,
 				width: this.props.width,
 				style: this.props.style,
-				children: typeof this.props.renderPopout == "function" ? this.props.renderPopout(e) : null
+				children: typeof this.props.renderPopout == "function" ? this.props.renderPopout(this) : null
 			});
         }
         render() {
@@ -5619,7 +5638,16 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				className: BDFDB.disCN.popoutcontainer,
 				onClick: e => {
 					let basePopoutIns = BDFDB.ReactUtils.findOwner(e._targetInst, {name:"BasePopout", up:true});
-					if (basePopoutIns && (!basePopoutIns.domElementRef.current || basePopoutIns.domElementRef.current.contains(e.target))) basePopoutIns.handleClick();
+					if (basePopoutIns && (!basePopoutIns.domElementRef.current || basePopoutIns.domElementRef.current.contains(e.target))) {
+						basePopoutIns.handleClick();
+						if (!basePopoutIns.nativeClose) {
+							basePopoutIns.nativeClose = basePopoutIns.close;
+							basePopoutIns.close = (...arguments) => {
+								basePopoutIns.nativeClose(...arguments);
+								if (typeof this.props.onClose == "function") this.props.onClose(this);
+							}
+						}
+					}
 					else BDFDB.ListenerUtils.stopEvent(e);
 				},
 				children: BDFDB.ReactUtils.createElement(NativeSubComponents.PopoutContainer, Object.assign({}, this.props, {renderPopout: this.handleRender.bind(this)}))
@@ -5627,10 +5655,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
     } : undefined;
 	LibraryComponents.Select = reactInitialized ? class BDFDB_Select extends LibraryModules.React.Component {
-        handleChange(e) {
+        handleChange(value) {
+            if (typeof this.props.onChange == "function") this.props.onChange(value, this);
 			this.props.value = value;
 			BDFDB.ReactUtils.forceUpdate(this);
-            if (typeof this.props.onChange == "function") this.props.onChange(e, this);
         }
         render() {
 			return BDFDB.ReactUtils.createElement(NativeSubComponents.Select, Object.assign({}, this.props, {onChange: this.handleChange.bind(this)}));
@@ -5683,11 +5711,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	}: undefined;
 	LibraryComponents.SettingsItem = reactInitialized ? class BDFDB_SettingsItem extends LibraryModules.React.Component {
         handleChange(e) {
+			if (typeof this.props.onChange == "function") this.props.onChange(!this.props.value, this);
 			if (this.props.type == "Switch") {
 				this.props.value = !this.props.value;
 				BDFDB.ReactUtils.forceUpdate(this);
 			}
-			if (typeof this.props.onChange == "function") this.props.onChange(this.props.value, this);
         }
 		render() {
 			if (typeof this.props.type != "string" || !["BUTTON", "SWITCH", "TEXTINPUT"].includes(this.props.type.toUpperCase())) return null;
@@ -5748,6 +5776,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	} : undefined;
 	LibraryComponents.SettingsSwitch = reactInitialized ? class BDFDB_SettingsSwitch extends LibraryModules.React.Component {
         saveSettings(value) {
+			if (typeof this.props.onChange == "function") this.props.onChange(value, this);
             let keys = this.props.keys.filter(n => n);
 			let option = keys.shift();
 			if (BDFDB.ObjectUtils.is(this.props.plugin) && option) {
@@ -5761,7 +5790,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				BDFDB.DataUtils.save(data, this.props.plugin, option);
 				this.props.plugin.SettingsUpdated = true;
 			}
-			if (typeof this.props.onChange == "function") this.props.onChange(value, this);
         }
         render() {
 			return BDFDB.ReactUtils.createElement(LibraryComponents.SettingsItem, Object.assign({keys:[]}, this.props, {
@@ -5773,8 +5801,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	LibraryComponents.SvgIcon = BDFDB.ModuleUtils.findByProperties("Gradients", "Names");
 	LibraryComponents.Switch = BDFDB.ModuleUtils.findByName("Switch");
 	LibraryComponents.TabBar = reactInitialized ? class BDFDB_TabBar extends LibraryModules.React.Component {
-        handleItemSelect(e) {
-            if (typeof this.props.onItemSelect == "function") this.props.onItemSelect(e, this);
+        handleItemSelect(item) {
+            if (typeof this.props.onItemSelect == "function") this.props.onItemSelect(item, this);
         }
         render() {
 			return BDFDB.ReactUtils.createElement(NativeSubComponents.TabBar, Object.assign({}, this.props, {onItemSelect: this.handleItemSelect.bind(this)}));
@@ -5783,9 +5811,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	LibraryComponents.TextElement = BDFDB.ModuleUtils.findByName("Text");
 	LibraryComponents.TextInput = reactInitialized ? class BDFDB_TextInput extends LibraryModules.React.Component {
         handleChange(e) {
-			this.props.value = e;
+            if (typeof this.props.onChange == "function") this.props.onChange(value, this);
+			this.props.value = value;
 			BDFDB.ReactUtils.forceUpdate(this);
-            if (typeof this.props.onChange == "function") this.props.onChange(e, this);
         }
         render() {
 			return BDFDB.ReactUtils.createElement(NativeSubComponents.TextInput, Object.assign({}, this.props, {onChange: this.handleChange.bind(this)}));
@@ -6226,7 +6254,16 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 
 		${BDFDB.dotCN.popoutcontainer} {
-			display: flex;
+			display: flex !important;
+		}
+
+		${BDFDB.dotCN.favbuttoncontainer} {
+			display: flex !important;
+			position: relative !important;
+		}
+		
+		${BDFDB.dotCN.selectwrap} > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"] {
+			z-index: 3;
 		}
 
 		${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageheadercozy} {
