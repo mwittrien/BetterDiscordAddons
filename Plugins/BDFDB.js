@@ -5574,10 +5574,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				let children = this.props.children;
 				this.props.children = _ => {return children;};
 			}
-			return BDFDB.ReactUtils.createElement(NativeSubComponents.PopoutContainer, Object.assign({}, this.props, {onChange: this.handleChange.bind(this)}));
+			return BDFDB.ReactUtils.createElement(NativeSubComponents.PopoutContainer, this.props);
 		}
     } : undefined;
-	InternalBDFDB.copyNativeComponent("PopoutContainer");
 	LibraryComponents.SettingsPanel = reactInitialized ? class BDFDB_SettingsPanel extends LibraryModules.React.Component {
 		render() {
 			return this.props.children ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
