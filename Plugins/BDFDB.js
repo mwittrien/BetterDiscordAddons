@@ -1408,7 +1408,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				if (!instance) return false;
 				instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 				instance = instance.displayName == name || instance.name == name ? instance : BDFDB.ReactUtils.findOwner(instance, {name, up:true});
-				return instance && (name != "V2C_PluginCard" && name != "V2C_ThemeCard" || name == "V2C_PluginCard" && BDFDB.checkWhichRepoPage() == "plugins" || name == "V2C_ThemeCard" && BDFDB.checkWhichRepoPage() == "themes");
+				return instance && (name != "V2C_PluginCard" && name != "V2C_ThemeCard" || name == "V2C_PluginCard" && BDFDB.BDUtils.checkRepoPage() == "plugins" || name == "V2C_ThemeCard" && BDFDB.BDUtils.checkRepoPage() == "themes");
 			}
 		}
 	};
