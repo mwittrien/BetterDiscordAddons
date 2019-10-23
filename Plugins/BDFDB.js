@@ -5555,6 +5555,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			return BDFDB.ReactUtils.createElement(NativeSubComponents.ContextMenuToggleItem, Object.assign({}, this.props, {action: this.handleToggle.bind(this)}));
 		}
     } : undefined;
+	LibraryComponents.FavButton = BDFDB.ModuleUtils.findByName("GIFFavButton");
 	LibraryComponents.Flex = BDFDB.ModuleUtils.findByProperties("Wrap", "Direction", "Child");
 	LibraryComponents.FormComponents = BDFDB.ModuleUtils.findByProperties("FormSection", "FormText");
 	LibraryComponents.IconBadge = BDFDB.ModuleUtils.findByName("IconBadge");
@@ -5594,6 +5595,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	} : undefined;
 	LibraryComponents.PopoutContainer = reactInitialized ? class BDFDB_PopoutContainer extends LibraryModules.React.Component {
         handleRender(e) {
+			console.log(e);
             return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Popout, {
 				className: this.props.popoutClassName,
 				isChild: true,
@@ -5617,7 +5619,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				className: BDFDB.disCN.popoutcontainer,
 				onClick: e => {
 					let basePopoutIns = BDFDB.ReactUtils.findOwner(e._targetInst, {name:"BasePopout", up:true});
-					if (basePopoutIns) basePopoutIns.handleClick();
+					if (basePopoutIns && (!basePopoutIns.domElementRef.current || basePopoutIns.domElementRef.current.contains(e.target))) basePopoutIns.handleClick();
+					else BDFDB.ListenerUtils.stopEvent(e);
 				},
 				children: BDFDB.ReactUtils.createElement(NativeSubComponents.PopoutContainer, Object.assign({}, this.props, {renderPopout: this.handleRender.bind(this)}))
 			});
