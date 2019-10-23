@@ -1329,7 +1329,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		if (!plugin || !instance || !type) return;
 		var methodnames = BDFDB.ArrayUtils.is(plugin.patchModules[type]) ? plugin.patchModules[type] : Array.of(plugin.patchModules[type]);
 		if (methodnames.includes("componentDidMount")) InternalBDFDB.initiateProcess(plugin, instance, null, type, ["componentDidMount"]);
-		if (methodnames.includes("render")) instance.forceUpdate();
+		if (methodnames.includes("render")) BDFDB.ReactUtils.forceUpdate(instance);
 		else if (methodnames.includes("componentDidUpdate")) InternalBDFDB.initiateProcess(plugin, instance, null, type, ["componentDidUpdate"]);
 	};
 	InternalBDFDB.initiateProcess = function (plugin, instance, returnvalue, type, methodnames) {
@@ -1446,7 +1446,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			let instance = e.thisObject, popout = BDFDB.ReactUtils.findDOMNode(e.thisObject), returnvalue = e.returnValue;
 			if (instance && popout && returnvalue && typeof plugin[`on${type}`] === "function") {
 				plugin[`on${type}`](instance, popout, returnvalue);
-				if (!instance.BDFDBforceUpdateTimeout && typeof instance.forceUpdate == "function") instance.forceUpdate();
+				if (!instance.BDFDBforceUpdateTimeout && typeof instance.forceUpdate == "function") BDFDB.ReactUtils.forceUpdate(instance);
 			}
 		}});
 	};
@@ -3285,14 +3285,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 					children: tabs,
 					onItemSelect: (value, instance) => {
 						instance.props.selectedItem = value;
-						instance.forceUpdate();
+						BDFDB.ReactUtils.forceUpdate(instance);
 						let modal = BDFDB.DOMUtils.getParent(".BDFDB-modal", BDFDB.ReactUtils.findDOMNode(instance));
 						if (modal) for (let tabcontent of modal.querySelectorAll(BDFDB.dotCN.modaltabcontent)) {
 							let tabcontentinstance = BDFDB.ReactUtils.getValue(tabcontent, "return.return.stateNode");
 							if (tabcontentinstance) {
 								if (tabcontentinstance.props.tab == value) tabcontentinstance.props.open = true;
 								else delete tabcontentinstance.props.open;
-								tabcontentinstance.forceUpdate();
+								BDFDB.ReactUtils.forceUpdate(tabcontentinstance);
 							}
 						}
 					}
@@ -5386,6 +5386,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	var NativeSubComponents = {}, LibraryComponents = {}, reactInitialized = LibraryModules.React && LibraryModules.React.Component;
 	NativeSubComponents.ContextMenuToggleItem = BDFDB.ModuleUtils.findByName("ToggleMenuItem");
 	NativeSubComponents.PopoutContainer = BDFDB.ModuleUtils.findByName("Popout");
+	NativeSubComponents.Select = BDFDB.ModuleUtils.findByName("SelectTempWrapper");
 	NativeSubComponents.TabBar = BDFDB.ModuleUtils.findByName("TabBar");
 	NativeSubComponents.TextInput = BDFDB.ModuleUtils.findByName("TextInput");
 	
@@ -5548,8 +5549,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	LibraryComponents.ContextMenuToggleItem = reactInitialized ? class BDFDB_ContextMenuToggleItem extends LibraryModules.React.Component {
         handleToggle() {
             this.props.active = !this.props.active;
+            BDFDB.ReactUtils.forceUpdate(this);
             if (typeof this.props.action == "function") this.props.action(this.props.active);
-            this.forceUpdate();
         }
         render() {
 			return BDFDB.ReactUtils.createElement(NativeSubComponents.ContextMenuToggleItem, Object.assign({}, this.props, {action: this.handleToggle.bind(this)}));
@@ -5625,8 +5626,16 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			});
 		}
     } : undefined;
-	LibraryComponents.Select = BDFDB.ModuleUtils.findByName("SelectTempWrapper");
-	LibraryComponents.SelectOption = BDFDB.ModuleUtils.findByName("IconSelectOption");
+	LibraryComponents.Select = reactInitialized ? class BDFDB_Select extends LibraryModules.React.Component {
+        handleChange(e) {
+			this.props.value = value;
+			BDFDB.ReactUtils.forceUpdate(this);
+            if (typeof this.props.onChange == "function") this.props.onChange(e, this);
+        }
+        render() {
+			return BDFDB.ReactUtils.createElement(NativeSubComponents.Select, Object.assign({}, this.props, {onChange: this.handleChange.bind(this)}));
+		}
+    } : undefined;
 	LibraryComponents.SettingsPanel = reactInitialized ? class BDFDB_SettingsPanel extends LibraryModules.React.Component {
 		render() {
 			return this.props.children ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
@@ -5676,7 +5685,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
         handleChange(e) {
 			if (this.props.type == "Switch") {
 				this.props.value = !this.props.value;
-				this.forceUpdate();
+				BDFDB.ReactUtils.forceUpdate(this);
 			}
 			if (typeof this.props.onChange == "function") this.props.onChange(this.props.value, this);
         }
@@ -5775,7 +5784,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	LibraryComponents.TextInput = reactInitialized ? class BDFDB_TextInput extends LibraryModules.React.Component {
         handleChange(e) {
 			this.props.value = e;
-			this.forceUpdate();
+			BDFDB.ReactUtils.forceUpdate(this);
             if (typeof this.props.onChange == "function") this.props.onChange(e, this);
         }
         render() {

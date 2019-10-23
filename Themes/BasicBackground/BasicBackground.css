@@ -3083,7 +3083,7 @@ body:before {
 /* ~~~~		15.		POPOUTS							~~~~ */
 
 #app-mount .popout-2iWAc-:not(.noShadow-3pu20z) {
-	box-shadow: 0 0 1px rgba(var(--vtransparencycolor), 0.82), 0 1px 4px rgba(var(--vtransparencycolor), 0.1);
+	box-shadow: 0 0 1px rgba(var(--vtransparencycolor), 0.2), 0 1px 4px rgba(var(--vtransparencycolor), 0.1);
 }
 .popout-2iWAc-[style*="translateY(-100%)"] {
 	transform: unset !important;
