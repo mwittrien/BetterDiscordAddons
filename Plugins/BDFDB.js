@@ -740,11 +740,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			return value;
 		}
 	};
-	BDFDB.ObjectUtils.map = function (obj, keyname) {
+	BDFDB.ObjectUtils.map = function (obj, mapfunc) {
 		if (!BDFDB.ObjectUtils.is(obj)) return {};
-		if (typeof keyname != "string") return obj;
+		if (typeof mapfunc != "string" && typeof mapfunc != "function") return obj;
 		var newobj = {};
-		for (let key in obj) if (BDFDB.ObjectUtils.is(obj[key])) newobj[key] = obj[key][keyname];
+		for (let key in obj) if (BDFDB.ObjectUtils.is(obj[key])) newobj[key] = typeof mapfunc == "string" ? obj[key][mapfunc] : mapfunc(obj[key]);
 		return newobj;
 	};
 	BDFDB.ObjectUtils.toArray = function (obj) {
@@ -5584,7 +5584,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				className: [BDFDB.disCN.popout, BDFDB.disCN.popoutthemedpopout, position, this.props.invert && pos && pos != "bottom" ? BDFDB.disCN.popoutinvert : null, arrow, !this.props.shadow ? BDFDB.disCN.popoutnoshadow : null, this.props.className].filter(n => n).join(" "),
 				id: this.props.id,
 				style: Object.assign({}, this.props.style, {
-					position: this.props.isChild ? "relative" : "absolute"
+					position: this.props.isChild ? "relative" : "absolute",
+					padding: parseInt(this.props.padding) ? `0 ${parseInt(this.props.padding)}px` : null,
+					width: parseInt(this.props.width) || null
 				}),
 				children: this.props.children
 			});
@@ -5598,6 +5600,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				position: e.position,
 				arrow: this.props.arrow,
 				shadow: this.props.shadow,
+				padding: this.props.padding,
+				height: this.props.height,
+				width: this.props.width,
+				style: this.props.style,
 				children: typeof this.props.renderPopout == "function" ? this.props.renderPopout(e) : null
 			});
         }
@@ -5618,6 +5624,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
     } : undefined;
 	LibraryComponents.Select = BDFDB.ModuleUtils.findByName("SelectTempWrapper");
+	LibraryComponents.SelectOption = BDFDB.ModuleUtils.findByName("IconSelectOption");
 	LibraryComponents.SettingsPanel = reactInitialized ? class BDFDB_SettingsPanel extends LibraryModules.React.Component {
 		render() {
 			return this.props.children ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
