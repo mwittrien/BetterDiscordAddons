@@ -1239,15 +1239,15 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 					};
 					if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded && module.BDFDBpatch[modulefunction]) {
 						if (!BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].before)) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[modulefunction].before)) {
-							surpressErrors(module.BDFDBpatch[modulefunction].before[id], "`before` callback of " + module[modulefunction].displayName)(data);
+							surpressErrors(module.BDFDBpatch[modulefunction].before[id], `"before" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`)(data);
 						}
 						if (BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].instead)) data.callOriginalMethod();
 						else for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[modulefunction].instead)) {
-							const tempreturn = surpressErrors(module.BDFDBpatch[modulefunction].instead[id], "`instead` callback of " + module[modulefunction].displayName)(data);
+							const tempreturn = surpressErrors(module.BDFDBpatch[modulefunction].instead[id], `"instead" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`)(data);
 							if (tempreturn !== undefined) data.returnValue = tempreturn;
 						}
 						if (!BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].after)) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[modulefunction].after)) {
-							const tempreturn = surpressErrors(module.BDFDBpatch[modulefunction].after[id], "`after` callback of " + module[modulefunction].displayName)(data);
+							const tempreturn = surpressErrors(module.BDFDBpatch[modulefunction].after[id], `"after" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`)(data);
 							if (tempreturn !== undefined) data.returnValue = tempreturn;
 						}
 					}
@@ -5613,6 +5613,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			});
 		}
     } : undefined;
+	LibraryComponents.Select = BDFDB.ModuleUtils.findByName("SelectTempWrapper");
 	LibraryComponents.SettingsPanel = reactInitialized ? class BDFDB_SettingsPanel extends LibraryModules.React.Component {
 		render() {
 			return this.props.children ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
