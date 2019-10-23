@@ -140,7 +140,7 @@ class RepoControls {
 		}
 		settingshtml += `</div></div>`;
 
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
+		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
 
@@ -173,7 +173,7 @@ class RepoControls {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
 			
-			this.dirs = {theme: BDFDB.BdUtils.getThemesFolder(), plugin: BDFDB.BdUtils.getPluginsFolder()};
+			this.dirs = {theme: BDFDB.BDUtils.getThemesFolder(), plugin: BDFDB.BDUtils.getPluginsFolder()};
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
@@ -185,8 +185,8 @@ class RepoControls {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.removeEles(".repo-controls","#bd-settingspane-container .trashIcon");
-			BDFDB.removeClasses("repocontrols-added");
+			BDFDB.DOMUtils.remove(".repo-controls","#bd-settingspane-container .trashIcon");
+			BDFDB.DOMUtils.removeClassFromDOM("repocontrols-added");
 
 			for (let list of document.querySelectorAll(BDFDB.dotCNS._repolist)) {
 				list.style.removeProperty("display");
@@ -235,7 +235,7 @@ class RepoControls {
 		if (!name || !controls) return;
 		let path = global[`bd${type}s`] && global[`bd${type}s`][name] ? BDFDB.LibraryRequires.path.join(this.dirs[type], global[`bd${type}s`][name].filename) : null;
 		if (!path) return;
-		let button = BDFDB.htmlToElement(this.editButtonMarkup);
+		let button = BDFDB.DOMUtils.create(this.editButtonMarkup);
 		button.addEventListener("click", () => {
 			if (!BDFDB.LibraryRequires.electron.shell.openItem(path)) BDFDB.NotificationUtils.toast(`Unable to open ${type} "${name}".`, {type:"danger"});;
 		});
@@ -252,7 +252,7 @@ class RepoControls {
 		if (!name || !controls) return;
 		let path = global[`bd${type}s`] && global[`bd${type}s`][name] ? BDFDB.LibraryRequires.path.join(this.dirs[type], global[`bd${type}s`][name].filename) : null;
 		if (!path) return;
-		let button = BDFDB.htmlToElement(this.deleteButtonMarkup);
+		let button = BDFDB.DOMUtils.create(this.deleteButtonMarkup);
 		button.addEventListener("click", () => {
 			let deleteFile = () => {
 				BDFDB.LibraryRequires.fs.unlink(path, (error) => {
@@ -273,14 +273,14 @@ class RepoControls {
 
 	addControls (type, container) {
 		if (!type || !container) return;
-		BDFDB.removeEles(".repo-controls");
+		BDFDB.DOMUtils.remove(".repo-controls");
 
 		container.style.setProperty("display", "flex", "important");
 		container.style.setProperty("flex-direction", "column", "important");
 
 		let sortings = BDFDB.DataUtils.get(this, "sortings");
 
-		let repocontrols = BDFDB.htmlToElement(this.repoControlsMarkup);
+		let repocontrols = BDFDB.DOMUtils.create(this.repoControlsMarkup);
 		repocontrols.insertBefore(BDFDB.createSearchBar("small"), repocontrols.firstElementChild);
 		BDFDB.initElements(repocontrols, this);
 		container.parentElement.insertBefore(repocontrols, container);
@@ -318,7 +318,7 @@ class RepoControls {
 			});
 		});
 
-		BDFDB.addClass(container, "repocontrols-added");
+		BDFDB.DOMUtils.addClass(container, "repocontrols-added");
 
 		container.entries = {};
 		for (let li of container.children) {
@@ -371,7 +371,7 @@ class RepoControls {
 				}
 			}
 			else li.style.removeProperty("order");
-			BDFDB.toggleEles(li, pos > -1);
+			BDFDB.DOMUtils.toggle(li, pos > -1);
 		}
 	}
 
@@ -379,7 +379,7 @@ class RepoControls {
 		if (!wrapper || !wrapper.tagName) return;
 		for (let ele of wrapper.querySelectorAll(BDFDB.dotCNC._reponame + BDFDB.dotCNC._repoauthor + BDFDB.dotCN._repodescription)) {
 			var string = ele.firstElementChild ? ele.innerHTML : ele.innerText;
-			if (BDFDB.containsClass(ele, BDFDB.disCN._repodescription)) {
+			if (BDFDB.DOMUtils.containsClass(ele, BDFDB.disCN._repodescription)) {
 				ele.style.display = "block";
 				if (searchstring && searchstring.length > 2) ele.innerHTML = BDFDB.highlightText(string, searchstring);
 				else ele.innerHTML = string;
@@ -397,8 +397,8 @@ class RepoControls {
 						let switchinner = switchwrap.querySelector(BDFDB.dotCN._repocheckboxinner);
 						let switchinput = switchwrap.querySelector(BDFDB.dotCN._repocheckbox);
 						if (switchinner && switchinput) {
-							if (BDFDB.containsClass(switchinner, BDFDB.disCN._repocheckboxchecked) && !enable) switchinput.click();
-							else if (!BDFDB.containsClass(switchinner, BDFDB.disCN._repocheckboxchecked) && enable) switchinput.click();
+							if (BDFDB.DOMUtils.containsClass(switchinner, BDFDB.disCN._repocheckboxchecked) && !enable) switchinput.click();
+							else if (!BDFDB.DOMUtils.containsClass(switchinner, BDFDB.disCN._repocheckboxchecked) && enable) switchinput.click();
 						}
 					}
 				}

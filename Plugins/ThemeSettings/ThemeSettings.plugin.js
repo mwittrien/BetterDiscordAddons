@@ -45,7 +45,7 @@ class ThemeSettings {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
 			
-			this.dir = BDFDB.BdUtils.getThemesFolder();
+			this.dir = BDFDB.BDUtils.getThemesFolder();
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
@@ -56,7 +56,7 @@ class ThemeSettings {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.removeEles(".themes-settings-button",".themes-settings-footer");
+			BDFDB.DOMUtils.remove(".themes-settings-button",".themes-settings-footer");
 			BDFDB.PluginUtils.clear(this);
 		}
 	}
@@ -79,18 +79,18 @@ class ThemeSettings {
 				button.innerText = "Settings";
 				footer.appendChild(button);
 				button.addEventListener("click", () => {
-					BDFDB.addClass(wrapper, BDFDB.disCN._reposettingsopen);
-					BDFDB.removeClass(wrapper, BDFDB.disCN._reposettingsclosed);
+					BDFDB.DOMUtils.addClass(wrapper, BDFDB.disCN._reposettingsopen);
+					BDFDB.DOMUtils.removeClass(wrapper, BDFDB.disCN._reposettingsclosed);
 					let children = [];
 					while (wrapper.childElementCount) {
 						children.push(wrapper.firstChild);
 						wrapper.firstChild.remove();
 					}
-					let closebutton = BDFDB.htmlToElement(`<div style="float: right; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" style="width: 18px; height: 18px;"><g class="background" fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="#dcddde" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div>`);
+					let closebutton = BDFDB.DOMUtils.create(`<div style="float: right; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" style="width: 18px; height: 18px;"><g class="background" fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="#dcddde" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div>`);
 					wrapper.appendChild(closebutton);
 					closebutton.addEventListener("click", () => {
-						BDFDB.removeClass(wrapper, BDFDB.disCN._reposettingsopen);
-						BDFDB.addClass(wrapper, BDFDB.disCN._reposettingsclosed);
+						BDFDB.DOMUtils.removeClass(wrapper, BDFDB.disCN._reposettingsopen);
+						BDFDB.DOMUtils.addClass(wrapper, BDFDB.disCN._reposettingsclosed);
 						while (wrapper.childElementCount) wrapper.firstChild.remove();
 						while (children.length) wrapper.appendChild(children.shift());
 					})
@@ -115,12 +115,12 @@ class ThemeSettings {
 
 	createThemeSettings (wrapper, theme, vars) {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var settingshtml = `<div class="theme-settings" id="theme-settings-${theme.name}"><div class="${theme.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${BDFDB.encodeToHTML(theme.name)}</div><div class="BDFDB-settings-inner"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Update all variables</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorgreen + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} update-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Update</div></button></div></div></div>`;
+		var settingshtml = `<div class="theme-settings" id="theme-settings-${theme.name}"><div class="${theme.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${BDFDB.StringUtils.htmlEscape(theme.name)}</div><div class="BDFDB-settings-inner"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Update all variables</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorgreen + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} update-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Update</div></button></div></div></div>`;
 
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
+		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
 		var settingspanelinner = settingspanel.querySelector(".BDFDB-settings-inner");
 
-		var maxwidth = BDFDB.getRects(wrapper).width - 80;
+		var maxwidth = BDFDB.DOMUtils.getRects(wrapper).width - 80;
 
 		for (let varstr of vars) {
 			varstr = varstr.split(":");
@@ -130,7 +130,7 @@ class ThemeSettings {
 			if (varvalue) {
 				let vardescription = varstr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
 				vardescription = vardescription && vardescription.indexOf("*") == 0 ? vardescription.slice(1) : vardescription;
-				let varcontainer = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20} varcontainer" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCN.flexchild} BDFDB-textscrollwrapper" style="flex: 0 0 30%;"><div class="BDFDB-textscroll">${varname[0].toUpperCase() + varname.slice(1)}</div></h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" option="${varname}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.titlesize16} varinput"></div><button type="button" class="${BDFDB.disCN.colorpickerswatch} single-swatch" style="background-color: black;"></button><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} file-navigator" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div><input type="file" accept="image/*" style="display:none!important;"></button></div>${vardescription ? `<div class="${BDFDB.disCNS.description + BDFDB.disCNS.note + BDFDB.disCN.primary} BDFDB-textscrollwrapper" style="flex: 1 1 auto; max-width: ${maxwidth}px !important;"><div class="BDFDB-textscroll">${BDFDB.encodeToHTML(vardescription)}</div></div>` : ""}${vars[vars.length-1] == varstr ? '' : `<div class="${BDFDB.disCNS.divider + BDFDB.disCN.dividerdefault}"></div>`}</div>`);
+				let varcontainer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20} varcontainer" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCN.flexchild} BDFDB-textscrollwrapper" style="flex: 0 0 30%;"><div class="BDFDB-textscroll">${varname[0].toUpperCase() + varname.slice(1)}</div></h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" option="${varname}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.titlesize16} varinput"></div><button type="button" class="${BDFDB.disCN.colorpickerswatch} single-swatch" style="background-color: black;"></button><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} file-navigator" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div><input type="file" accept="image/*" style="display:none!important;"></button></div>${vardescription ? `<div class="${BDFDB.disCNS.description + BDFDB.disCNS.note + BDFDB.disCN.primary} BDFDB-textscrollwrapper" style="flex: 1 1 auto; max-width: ${maxwidth}px !important;"><div class="BDFDB-textscroll">${BDFDB.StringUtils.htmlEscape(vardescription)}</div></div>` : ""}${vars[vars.length-1] == varstr ? '' : `<div class="${BDFDB.disCNS.divider + BDFDB.disCN.dividerdefault}"></div>`}</div>`);
 				let varinput = varcontainer.querySelector(BDFDB.dotCN.input);
 				varinput.value = varvalue;
 				varinput.setAttribute("placeholder", varvalue);
@@ -146,10 +146,10 @@ class ThemeSettings {
 					let color = iscomp ? BDFDB.ColorUtils.convert(varvalue.split(","), "RGB") : varvalue;
 					swatch.style.setProperty("background-color", color, "important");
 					swatch.addEventListener("click", e => {
-						BDFDB.openColorPicker(varcontainer, e.currentTarget, color, {gradient:false, comp:iscomp, alpha:iscolor});
+						BDFDB.ColorUtils.openPicker(varcontainer, e.currentTarget, color, {gradient:false, comp:iscomp, alpha:iscolor});
 					});
 				}
-				else BDFDB.removeEles(swatch);
+				else BDFDB.DOMUtils.remove(swatch);
 				if (isurlfile || isfile) {
 					navigator.addEventListener("change", e => {
 						let file = navigator.querySelector("input").files[0];
@@ -157,7 +157,7 @@ class ThemeSettings {
 						else varinput.value = varvalue;
 					});
 				}
-				else BDFDB.removeEles(navigator);
+				else BDFDB.DOMUtils.remove(navigator);
 				
 				settingspanelinner.appendChild(varcontainer);
 			}
@@ -175,7 +175,7 @@ class ThemeSettings {
 					let newvalue = input.value;
 					if (newvalue && newvalue.trim() && newvalue != oldvalue) {
 						let varname = input.getAttribute("option");
-						css = css.replace(new RegExp(`--${BDFDB.regEscape(varname)}(\\s*):(\\s*)${BDFDB.regEscape(oldvalue)}`,"g"),`--${varname}$1:$2${newvalue}`);
+						css = css.replace(new RegExp(`--${BDFDB.StringUtils.regEscape(varname)}(\\s*):(\\s*)${BDFDB.StringUtils.regEscape(oldvalue)}`,"g"),`--${varname}$1:$2${newvalue}`);
 						amount++;
 					}
 				}

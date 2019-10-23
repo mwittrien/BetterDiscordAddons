@@ -155,7 +155,7 @@ class SendLargeMessages {
 	}
 
 	showSendModal (text) {
-		let sendMessageModal = BDFDB.htmlToElement(this.sendMessageModalMarkup);
+		let sendMessageModal = BDFDB.DOMUtils.create(this.sendMessageModalMarkup);
 		let textinput = sendMessageModal.querySelector("#modal-inputtext");
 		let warning = sendMessageModal.querySelector("#warning-message");
 		let counter = sendMessageModal.querySelector("#character-counter");
@@ -247,7 +247,7 @@ class SendLargeMessages {
 	sendMessage (text) {
 		let textarea = document.querySelector(BDFDB.dotCNS.textareawrapchat + "textarea");
 		if (textarea) {
-			let instance = BDFDB.ReactUtils.findOwner(BDFDB.getParentEle(BDFDB.dotCNS.chat + "form", textarea), {name:"ChannelTextAreaForm", up:true});
+			let instance = BDFDB.ReactUtils.findOwner(BDFDB.DOMUtils.getParent(BDFDB.dotCNS.chat + "form", textarea), {name:"ChannelTextAreaForm", up:true});
 			if (instance) {
 				instance.setState({textValue:text});
 				BDFDB.triggerSend(textarea);

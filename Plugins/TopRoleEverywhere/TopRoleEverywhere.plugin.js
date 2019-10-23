@@ -58,7 +58,7 @@ class TopRoleEverywhere {
 		}
 		settingshtml += `</div></div>`;
 
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
+		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
 
@@ -100,7 +100,7 @@ class TopRoleEverywhere {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.removeEles(".TRE-tag");
+			BDFDB.DOMUtils.remove(".TRE-tag");
 			BDFDB.PluginUtils.clear(this);
 		}
 	}
@@ -119,8 +119,8 @@ class TopRoleEverywhere {
 		if (message) {
 			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
 			if (username && BDFDB.DataUtils.get(this, "settings", "showInChat")) {
-				let messagegroup = BDFDB.getParentEle(BDFDB.dotCN.messagegroup, wrapper);
-				this.addRoleTag(message.author, username, "chat", BDFDB.containsClass(messagegroup, BDFDB.disCN.messagegroupcozy) ? BDFDB.disCN.bottagmessagecozy : BDFDB.disCN.bottagmessagecompact);
+				let messagegroup = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagegroup, wrapper);
+				this.addRoleTag(message.author, username, "chat", BDFDB.DOMUtils.containsClass(messagegroup, BDFDB.disCN.messagegroupcozy) ? BDFDB.disCN.bottagmessagecozy : BDFDB.disCN.bottagmessagecompact);
 			}
 		}
 	}
@@ -128,14 +128,14 @@ class TopRoleEverywhere {
 	processStandardSidebarView (instance, wrapper, returnvalue) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
-			BDFDB.removeEles(".TRE-tag");
+			BDFDB.DOMUtils.remove(".TRE-tag");
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 	}
 
 	addRoleTag (info, username, type, selector) {
 		if (!info || !username) return;
-		BDFDB.removeEles(username.parentElement.querySelectorAll(".TRE-tag"));
+		BDFDB.DOMUtils.remove(username.parentElement.querySelectorAll(".TRE-tag"));
 		let guild = BDFDB.LibraryModules.GuildStore.getGuild(BDFDB.LibraryModules.LastGuildStore.getGuildId());
 		let settings = BDFDB.DataUtils.get(this, "settings");
 		if (!guild || info.bot && settings.disableForBots) return;
@@ -144,8 +144,8 @@ class TopRoleEverywhere {
 			let roleColor = role && role.colorString ? BDFDB.ColorUtils.convert(role.colorString, "RGBCOMP") : [255,255,255];
 			let roleName = role ? role.name : "";
 			let oldwidth;
-			if (type == "list") oldwidth = BDFDB.getRects(username).width;
-			let tag = BDFDB.htmlToElement(`<span class="TRE-tag ${BDFDB.disCN.bottagregular + (selector ? (" " + selector) : "")}"><span class="role-inner"></span></span>`);
+			if (type == "list") oldwidth = BDFDB.DOMUtils.getRects(username).width;
+			let tag = BDFDB.DOMUtils.create(`<span class="TRE-tag ${BDFDB.disCN.bottagregular + (selector ? (" " + selector) : "")}"><span class="role-inner"></span></span>`);
 			username.parentElement.insertBefore(tag, username.parentElement.querySelector("svg[name=MobileDevice]"));
 
 			let borderColor = "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.5)";
@@ -171,7 +171,7 @@ class TopRoleEverywhere {
 				}
 			}
 			else if (settings.showOwnerRole && info.id == guild.ownerId) roleText = "Owner";
-			BDFDB.addClass(tag, type + "-tag");
+			BDFDB.DOMUtils.addClass(tag, type + "-tag");
 			if (!settings.useOtherStyle) tag.style.setProperty("border", "1px solid " + borderColor, "important");
 			tag.style.setProperty("background", bgColor, "important");
 			tag.style.setProperty("order", 11, "important");
@@ -181,12 +181,12 @@ class TopRoleEverywhere {
 			inner.style.setProperty("-webkit-background-clip", "text", "important");
 			inner.textContent = roleText;
 
-			if (oldwidth && oldwidth < 100 && BDFDB.getRects(username).width < 100) {
-				tag.style.setProperty("max-width", (BDFDB.getRects(BDFDB.getParentEle(BDFDB.dotCN.namecontainerlayout, username)).width - oldwidth - 15) + "px");
+			if (oldwidth && oldwidth < 100 && BDFDB.DOMUtils.getRects(username).width < 100) {
+				tag.style.setProperty("max-width", (BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(BDFDB.dotCN.namecontainerlayout, username)).width - oldwidth - 15) + "px");
 			}
 		}
 		if (type == "chat" && settings.addUserID) {
-			let idtag = BDFDB.htmlToElement(this.tagMarkup);
+			let idtag = BDFDB.DOMUtils.create(this.tagMarkup);
 			username.parentElement.insertBefore(idtag, username.parentElement.querySelector("svg[name=MobileDevice]"));
 			let idColor = settings.darkIdTag ? [33,33,33] : [222,222,222];
 			let idBorderColor = "rgba(" + idColor[0] + ", " + idColor[1] + ", " + idColor[2] + ", 0.5)";
@@ -198,7 +198,7 @@ class TopRoleEverywhere {
 				idBgColor = "rgb(" + idColor[0] + ", " + idColor[1] + ", " + idColor[2] + ")";
 				idTextColor = settings.darkIdTag ? "white" : "black";
 			}
-			BDFDB.addClass(idtag, "id-tag");
+			BDFDB.DOMUtils.addClass(idtag, "id-tag");
 			idtag.style.setProperty("border", "1px solid " + idBorderColor, "important");
 			idtag.style.setProperty("background", idBgColor, "important");
 			idtag.style.setProperty("order", 12, "important");

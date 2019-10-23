@@ -56,7 +56,7 @@ class MoveablePopups {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && BDFDB.containsClass(node, BDFDB.disCN.popout)) {
+								if (node && BDFDB.DOMUtils.containsClass(node, BDFDB.disCN.popout)) {
 									this.makeMoveable(node);
 								}
 							});
@@ -71,7 +71,7 @@ class MoveablePopups {
 					(change, i) => {
 						if (change.addedNodes) {
 							change.addedNodes.forEach((node) => {
-								if (node && BDFDB.containsClass(node, BDFDB.disCN.modal) && !node.querySelector(BDFDB.dotCN.downloadlink)) {
+								if (node && BDFDB.DOMUtils.containsClass(node, BDFDB.disCN.modal) && !node.querySelector(BDFDB.dotCN.downloadlink)) {
 									this.makeMoveable(node.querySelector(BDFDB.dotCN.modalinner));
 								}
 								else if (node.tagName && node.querySelector(BDFDB.dotCN.modal) && !node.querySelector(BDFDB.dotCN.downloadlink)) {
@@ -107,14 +107,14 @@ class MoveablePopups {
 			if (!e.ctrlKey) return;
 			div.style.setProperty("position", "fixed", "important");
 			this.dragging = true;
-			var rects = BDFDB.getRects(div);
+			var rects = BDFDB.DOMUtils.getRects(div);
 			var transform = getComputedStyle(div,null).getPropertyValue("transform").replace(/[^0-9,-]/g,"").split(",");
 			var left = rects.left - (transform.length > 4 ? parseFloat(transform[4]) : 0);
 			var top = rects.top - (transform.length > 4 ? parseFloat(transform[5]) : 0);
 			var oldX = e.pageX;
 			var oldY = e.pageY;
 			var mouseup = e2 => {
-				BDFDB.removeLocalStyle("disableTextSelection");
+				BDFDB.DOMUtils.removeLocalStyle("disableTextSelection");
 				document.removeEventListener("mouseup", mouseup);
 				document.removeEventListener("mousemove", mousemove);
 				setTimeout(() => {this.dragging = false},1);

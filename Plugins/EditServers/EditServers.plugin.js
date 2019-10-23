@@ -180,10 +180,10 @@ class EditServers {
 
 	processGuildIconWrapper (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.guild) {
-			let icon = wrapper.classList && BDFDB.containsClass(wrapper, BDFDB.disCN.avataricon) ? wrapper : wrapper.querySelector(BDFDB.dotCN.avataricon);
+			let icon = wrapper.classList && BDFDB.DOMUtils.containsClass(wrapper, BDFDB.disCN.avataricon) ? wrapper : wrapper.querySelector(BDFDB.dotCN.avataricon);
 			if (!icon) return;
 			this.changeGuildIcon(instance.props.guild, icon);
-			if (BDFDB.getParentEle(BDFDB.dotCN.friendscolumn, icon)) this.changeTooltip(instance.props.guild, icon.parentElement, "top");
+			if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.friendscolumn, icon)) this.changeTooltip(instance.props.guild, icon.parentElement, "top");
 		}
 	}
 
@@ -215,7 +215,7 @@ class EditServers {
 		this.updateGuildSidebar();
 		BDFDB.ModuleUtils.forceAllUpdates(this);
 		if (guildid) {
-			let ServerFolders = BDFDB.BdUtils.getPlugin("ServerFolders", true);
+			let ServerFolders = BDFDB.BDUtils.getPlugin("ServerFolders", true);
 			if (ServerFolders) {
 				let folder = ServerFolders.getFolderOfGuildId(guildid);
 				if (folder) ServerFolders.updateGuildInFolderContent(folder.folderId, guildid);
@@ -391,15 +391,15 @@ class EditServers {
 					
 					data.name = guildnameinput.value.trim() || null;
 					data.shortName = guildacronyminput.value.trim() || null;
-					data.url = (!data.removeIcon && BDFDB.containsClass(guildiconinput, BDFDB.disCN.inputsuccess) ? guildiconinput.value.trim() : null) || null;
+					data.url = (!data.removeIcon && BDFDB.DOMUtils.containsClass(guildiconinput, BDFDB.disCN.inputsuccess) ? guildiconinput.value.trim() : null) || null;
 					data.removeIcon = removeiconinput.checked;
-					data.banner = (!data.removeBanner && BDFDB.containsClass(guildbannerinput, BDFDB.disCN.inputsuccess) ? guildbannerinput.value.trim() : null) || null;
+					data.banner = (!data.removeBanner && BDFDB.DOMUtils.containsClass(guildbannerinput, BDFDB.disCN.inputsuccess) ? guildbannerinput.value.trim() : null) || null;
 					data.removeBanner = removebannerinput.checked && info.id != "410787888507256842";
 
-					data.color1 = BDFDB.getSwatchColor(modal, 1);
-					data.color2 = BDFDB.getSwatchColor(modal, 2);
-					data.color3 = BDFDB.getSwatchColor(modal, 3);
-					data.color4 = BDFDB.getSwatchColor(modal, 4);
+					data.color1 = BDFDB.ColorUtils.getSwatchColor(modal, 1);
+					data.color2 = BDFDB.ColorUtils.getSwatchColor(modal, 2);
+					data.color3 = BDFDB.ColorUtils.getSwatchColor(modal, 3);
+					data.color4 = BDFDB.ColorUtils.getSwatchColor(modal, 4);
 
 					let changed = false;
 					if (Object.keys(data).every(key => data[key] == null || data[key] == false) && (changed = true)) BDFDB.DataUtils.remove(this, "servers", info.id);
@@ -414,14 +414,14 @@ class EditServers {
 		let input = BDFDB.ReactUtils.findDOMNode(instance).firstElementChild;
 		clearTimeout(instance.checkTimeout);
 		if (url == null || !url.trim()) {
-			if (input) BDFDB.removeEles(input.tooltip);
+			if (input) BDFDB.DOMUtils.remove(input.tooltip);
 			instance.props.inputClassName = null;
 			instance.forceUpdate();
 		}
 		else instance.checkTimeout = setTimeout(() => {
 			BDFDB.LibraryRequires.request(url.trim(), (error, response, result) => {
 				if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
-					if (input) BDFDB.removeEles(input.tooltip);
+					if (input) BDFDB.DOMUtils.remove(input.tooltip);
 					instance.props.inputClassName = BDFDB.disCN.inputsuccess;
 				}
 				else {
@@ -436,9 +436,9 @@ class EditServers {
 
 	createNoticeTooltip (input, isinvalid = false) {
 		if (!input) return;
-		BDFDB.removeEles(input.tooltip);
-		var invalid = isinvalid || BDFDB.containsClass(input, BDFDB.disCN.inputerror);
-		var valid = invalid ? false : BDFDB.containsClass(input, BDFDB.disCN.inputsuccess);
+		BDFDB.DOMUtils.remove(input.tooltip);
+		var invalid = isinvalid || BDFDB.DOMUtils.containsClass(input, BDFDB.disCN.inputerror);
+		var valid = invalid ? false : BDFDB.DOMUtils.containsClass(input, BDFDB.disCN.inputsuccess);
 		if (invalid || valid) input.tooltip = BDFDB.TooltipUtils.create(input, invalid ? this.labels.modal_invalidurl_text : this.labels.modal_validurl_text, {type:"right", selector:"notice-tooltip", color: invalid ? "red" : "green"});
 	}
 
@@ -450,13 +450,13 @@ class EditServers {
 		if (data.name || data.color2 || guildname.getAttribute("changed-by-editservers")) {
 			if (BDFDB.ObjectUtils.is(data.color2)) {
 				guildname.style.setProperty("color", BDFDB.ColorUtils.convert(data.color2[Object.keys(data.color2)[0]], "RGBA"), "important");
-				BDFDB.setInnerText(guildname, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color2)} !important;">${BDFDB.encodeToHTML(data.name || info.name)}</span>`));
+				BDFDB.DOMUtils.setText(guildname, BDFDB.DOMUtils.create(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color2)} !important;">${BDFDB.StringUtils.htmlEscape(data.name || info.name)}</span>`));
 			}
 			else {
 				guildname.style.setProperty("color", BDFDB.ColorUtils.convert(data.color2, "RGBA"), "important");
-				BDFDB.setInnerText(guildname, data.name || info.name);
+				BDFDB.DOMUtils.setText(guildname, data.name || info.name);
 			}
-			if (data.name && BDFDB.containsClass(guildname, BDFDB.disCN.guildheadername) && BDFDB.DataUtils.get(this, "settings", "addOriginalTooltip")) {
+			if (data.name && BDFDB.DOMUtils.containsClass(guildname, BDFDB.disCN.guildheadername) && BDFDB.DataUtils.get(this, "settings", "addOriginalTooltip")) {
 				guildname.mouseenterListenerEditChannels = () => {
 					BDFDB.TooltipUtils.create(guildname.parentElement, info.name, {type:"right", selector:"EditServers-tooltip", hide:true});
 				};
@@ -482,27 +482,27 @@ class EditServers {
 			let url = data.url || BDFDB.GuildUtils.getIcon(info.id);
 			let name = data.name || info.name || "";
 			let shortname = data.url ? "" : (data.shortName || (info.icon && !data.removeIcon ? "" : info.acronym));
-			if (BDFDB.containsClass(icon.parentElement, BDFDB.disCN.guildiconwrapper)) icon.parentElement.setAttribute("aria-label", name);
+			if (BDFDB.DOMUtils.containsClass(icon.parentElement, BDFDB.disCN.guildiconwrapper)) icon.parentElement.setAttribute("aria-label", name);
 			if (icon.tagName == "IMG") {
 				icon.setAttribute("src", data.removeIcon ? null : url);
-				let removeicon = data.removeIcon && BDFDB.containsClass(icon, BDFDB.disCN.guildicon);
-				BDFDB.toggleEles(icon, !removeicon);
-				BDFDB.removeEles(icon.parentElement.querySelector(".fake-guildacronym"));
+				let removeicon = data.removeIcon && BDFDB.DOMUtils.containsClass(icon, BDFDB.disCN.guildicon);
+				BDFDB.DOMUtils.toggle(icon, !removeicon);
+				BDFDB.DOMUtils.remove(icon.parentElement.querySelector(".fake-guildacronym"));
 				if (removeicon) {
-					let fakeicon = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.guildiconchildwrapper + BDFDB.disCN.guildiconacronym} fake-guildacronym" aria-label="Server Acronym"></div>`);
+					let fakeicon = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.guildiconchildwrapper + BDFDB.disCN.guildiconacronym} fake-guildacronym" aria-label="Server Acronym"></div>`);
 					if (data.color1) {
 						if (BDFDB.ObjectUtils.is(data.color1)) fakeicon.style.setProperty("background-image", BDFDB.ColorUtils.createGradient(data.color1));
 						else fakeicon.style.setProperty("background-color", BDFDB.ColorUtils.convert(data.color1, "RGBA"));
 					}
 					if (data.color2) fakeicon.style.setProperty("color", BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color2) ? data.color2[Object.keys(data.color2)[0]] : data.color2, "RGBA"));
-					BDFDB.setInnerText(fakeicon, BDFDB.ObjectUtils.is(data.color2) ? BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color2)} !important;">${BDFDB.encodeToHTML(shortname)}</span>`) : shortname);
+					BDFDB.DOMUtils.setText(fakeicon, BDFDB.ObjectUtils.is(data.color2) ? BDFDB.DOMUtils.create(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color2)} !important;">${BDFDB.StringUtils.htmlEscape(shortname)}</span>`) : shortname);
 					icon.parentElement.appendChild(fakeicon);
 					fakeicon.style.setProperty("font-size", this.getFontSize(fakeicon));
 				}
 			}
 			else {
 				if (!data.removeIcon && !shortname && url) {
-					BDFDB.setInnerText(icon, "");
+					BDFDB.DOMUtils.setText(icon, "");
 					icon.style.setProperty("background-image", `url(${url})`);
 				}
 				else {
@@ -515,10 +515,10 @@ class EditServers {
 						icon.style.removeProperty("background-color");
 					}
 					if (data.color2) icon.style.setProperty("color", BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color2) ? data.color2[Object.keys(data.color2)[0]] : data.color2, "RGBA"));
-					BDFDB.setInnerText(icon, BDFDB.ObjectUtils.is(data.color2) ? BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color2)} !important;">${BDFDB.encodeToHTML(shortname)}</span>`) : shortname);
+					BDFDB.DOMUtils.setText(icon, BDFDB.ObjectUtils.is(data.color2) ? BDFDB.DOMUtils.create(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color2)} !important;">${BDFDB.StringUtils.htmlEscape(shortname)}</span>`) : shortname);
 				}
 				icon.style.setProperty("font-size", this.getFontSize(icon));
-				BDFDB.toggleClass(icon, this.getNoIconClasses(icon), !icon.style.getPropertyValue("background-image") || BDFDB.ObjectUtils.is(data.color1));
+				BDFDB.DOMUtils.toggleClass(icon, this.getNoIconClasses(icon), !icon.style.getPropertyValue("background-image") || BDFDB.ObjectUtils.is(data.color1));
 				if (data.url && !data.removeIcon) {
 					icon.style.setProperty("background-position", "center");
 					icon.style.setProperty("background-size", "cover");
@@ -546,7 +546,7 @@ class EditServers {
 		let data = this.getGuildData(info.id, wrapper);
 		wrapper.removeEventListener("mouseenter", wrapper.tooltipListenerEditServers);
 		if (data.name || data.color3 || data.color4) {
-			let ServerFolders = BDFDB.BdUtils.getPlugin("ServerFolders", true);
+			let ServerFolders = BDFDB.BDUtils.getPlugin("ServerFolders", true);
 			let folder = ServerFolders ? ServerFolders.getFolderOfGuildId(info.id) : null;
 			let folderData = folder ? BDFDB.DataUtils.load("ServerFolders", "folders", folder.folderId) : null;
 			let color3 = data.color3 || (folderData && folderData.copyTooltipColor ? folderData.color3 : null);
@@ -556,7 +556,7 @@ class EditServers {
 			var bgColor = color3 ? (!isgradient3 ? BDFDB.ColorUtils.convert(color3, "RGBA") : BDFDB.ColorUtils.createGradient(color3)) : "";
 			var fontColor = color4 ? (!isgradient4 ? BDFDB.ColorUtils.convert(color4, "RGBA") : BDFDB.ColorUtils.createGradient(color4)) : "";
 			wrapper.tooltipListenerEditServers = () => {
-				BDFDB.TooltipUtils.create(wrapper, isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(data.name || info.name)}</span>` : (data.name || info.name), {type, selector:"EditServers-tooltip", style:`${isgradient4 ? '' : 'color: ' + fontColor + ' !important; '}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.ColorUtils.convert(color3[0], "RGBA") : bgColor} !important;`, html:isgradient3});
+				BDFDB.TooltipUtils.create(wrapper, isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.StringUtils.htmlEscape(data.name || info.name)}</span>` : (data.name || info.name), {type, selector:"EditServers-tooltip", style:`${isgradient4 ? '' : 'color: ' + fontColor + ' !important; '}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.ColorUtils.convert(color3[0], "RGBA") : bgColor} !important;`, html:isgradient3});
 			};
 			wrapper.addEventListener("mouseenter", wrapper.tooltipListenerEditServers);
 			if (document.querySelector(BDFDB.dotCN.guildcontainer + ":hover") == wrapper) wrapper.tooltipListenerEditServers();
@@ -565,7 +565,7 @@ class EditServers {
 
 	getFontSize (icon) {
 		if (icon.style.getPropertyValue("background-image") && icon.style.getPropertyValue("background-image").indexOf("linear-gradient(") == -1) return null;
-		else if (BDFDB.containsClass(icon, BDFDB.disCN.guildicon) || BDFDB.containsClass(icon, BDFDB.disCN.guildiconacronym)) {
+		else if (BDFDB.DOMUtils.containsClass(icon, BDFDB.disCN.guildicon) || BDFDB.DOMUtils.containsClass(icon, BDFDB.disCN.guildiconacronym)) {
 			var shortname = icon.firstElementChild ? icon.firstElementChild.innerText : icon.innerText;
 			if (shortname) {
 				if (shortname.length > 5) return "10px";
@@ -575,17 +575,17 @@ class EditServers {
 				else if (shortname.length == 1) return "18px";
 			}
 		}
-		else if (BDFDB.containsClass(icon, BDFDB.disCN.avatariconsizexlarge)) return "12px";
-		else if (BDFDB.containsClass(icon, BDFDB.disCN.avatariconsizelarge)) return "10px";
-		else if (BDFDB.containsClass(icon, BDFDB.disCN.avatariconsizemedium)) return "8px";
-		else if (BDFDB.containsClass(icon, BDFDB.disCN.avatariconsizesmall)) return "4.8px";
-		else if (BDFDB.containsClass(icon, BDFDB.disCN.avatariconsizemini)) return "4px";
+		else if (BDFDB.DOMUtils.containsClass(icon, BDFDB.disCN.avatariconsizexlarge)) return "12px";
+		else if (BDFDB.DOMUtils.containsClass(icon, BDFDB.disCN.avatariconsizelarge)) return "10px";
+		else if (BDFDB.DOMUtils.containsClass(icon, BDFDB.disCN.avatariconsizemedium)) return "8px";
+		else if (BDFDB.DOMUtils.containsClass(icon, BDFDB.disCN.avatariconsizesmall)) return "4.8px";
+		else if (BDFDB.DOMUtils.containsClass(icon, BDFDB.disCN.avatariconsizemini)) return "4px";
 		return "10px";
 	}
 
 	getNoIconClasses (icon) {
 		let noiconclasses = [BDFDB.disCN.avatarnoicon];
-		if (BDFDB.containsClass(icon, BDFDB.disCN.userprofilelistavatar)) noiconclasses.push(BDFDB.disCN.userprofilelistguildavatarwithouticon);
+		if (BDFDB.DOMUtils.containsClass(icon, BDFDB.disCN.userprofilelistavatar)) noiconclasses.push(BDFDB.disCN.userprofilelistguildavatarwithouticon);
 		return noiconclasses;
 	}
 
@@ -600,10 +600,10 @@ class EditServers {
 		}
 		if (allenabled) return data;
 		let key = null;
-		if (BDFDB.getParentEle(BDFDB.dotCN.guilds, wrapper)) key = "changeInGuildList";
-		else if (BDFDB.getParentEle(BDFDB.dotCN.userprofile, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.friends, wrapper)) key = "changeInMutualGuilds";
-		else if (BDFDB.getParentEle(BDFDB.dotCN.guildheader, wrapper)) key = "changeInGuildHeader";
-		else if (BDFDB.getParentEle(BDFDB.dotCN.searchpopout, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.quickswitcher, wrapper)) key = "changeInSearchPopout";
+		if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.guilds, wrapper)) key = "changeInGuildList";
+		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.userprofile, wrapper) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.friends, wrapper)) key = "changeInMutualGuilds";
+		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildheader, wrapper)) key = "changeInGuildHeader";
+		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.searchpopout, wrapper) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.quickswitcher, wrapper)) key = "changeInSearchPopout";
 
 		return !key || settings[key] ? data : {};
 	}

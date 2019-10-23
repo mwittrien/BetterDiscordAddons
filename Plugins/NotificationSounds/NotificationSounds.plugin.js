@@ -140,7 +140,7 @@ class NotificationSounds {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Remove all added songs.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
 
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
+		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
 
@@ -178,11 +178,11 @@ class NotificationSounds {
 			this.saveChoice(type, false);
 		});
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", "#input-unimplemented", e => {
-			BDFDB.toggleEles(settingspanel.querySelectorAll(".unimplemented"), e.currentTarget.checked);
+			BDFDB.DOMUtils.toggle(settingspanel.querySelectorAll(".unimplemented"), e.currentTarget.checked);
 		});
 		BDFDB.ListenerUtils.add(this, settingspanel, "mousedown", BDFDB.dotCN.slidergrabber, e => {this.dragSlider(settingspanel,e);});
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {
-			let type = BDFDB.getParentEle(BDFDB.dotCN.select, e.currentTarget).getAttribute("type").split(" ");
+			let type = BDFDB.DOMUtils.getParent(BDFDB.dotCN.select, e.currentTarget).getAttribute("type").split(" ");
 			let songSelect = settingspanel.querySelector(`${BDFDB.dotCN.select}[type="${type[0]} song"]`);
 			let categorySelect = settingspanel.querySelector(`${BDFDB.dotCN.select}[type="${type[0]} category"]`);
 			let menuaudios = type[1] == "song" ? this.audios[categorySelect.getAttribute("value")] : this.audios;
@@ -290,11 +290,11 @@ class NotificationSounds {
 	openDropdownMenu (settingspanel, e) {
 		let selectControl = e.currentTarget;
 		let selectWrap = selectControl.parentElement;
-		let plugincard = BDFDB.getParentEle("li", selectWrap);
+		let plugincard = BDFDB.DOMUtils.getParent("li", selectWrap);
 
-		if (!plugincard || BDFDB.containsClass(selectWrap, BDFDB.disCN.selectisopen)) return;
+		if (!plugincard || BDFDB.DOMUtils.containsClass(selectWrap, BDFDB.disCN.selectisopen)) return;
 
-		BDFDB.addClass(selectWrap, BDFDB.disCN.selectisopen);
+		BDFDB.DOMUtils.addClass(selectWrap, BDFDB.disCN.selectisopen);
 
 		var type = selectWrap.getAttribute("type");
 		var option = selectWrap.getAttribute("option");
@@ -325,7 +325,7 @@ class NotificationSounds {
 			if (e2.target.parentElement != selectMenu) {
 				document.removeEventListener("mousedown", removeMenu);
 				selectMenu.remove();
-				setTimeout(() => {BDFDB.removeClass(selectWrap, BDFDB.disCN.selectisopen);},100);
+				setTimeout(() => {BDFDB.DOMUtils.removeClass(selectWrap, BDFDB.disCN.selectisopen);},100);
 			}
 		};
 		document.addEventListener("mousedown", removeMenu);
@@ -339,7 +339,7 @@ class NotificationSounds {
 			menuhtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.selectoption + isSelected}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.primary + BDFDB.disCN.weightnormal}">${ele}</div></div>`
 		}
 		menuhtml += `</div></div>`;
-		return BDFDB.htmlToElement(menuhtml);
+		return BDFDB.DOMUtils.create(menuhtml);
 	}
 
 	saveSelectChoice (selectWrap, type, choice) {
@@ -349,7 +349,7 @@ class NotificationSounds {
 			this.choices[type[0]][type[1]] = choice;
 			if (type[1] == "category") {
 				this.choices[type[0]].song = Object.keys(this.audios[choice])[0];
-				var settingspanel = BDFDB.getParentEle(".BDFDB-settings", selectWrap), songSelect = settingspanel ? settingspanel.querySelector(`${BDFDB.dotCN.select}[type="${type[0]} song"]`) : null;
+				var settingspanel = BDFDB.DOMUtils.getParent(".BDFDB-settings", selectWrap), songSelect = settingspanel ? settingspanel.querySelector(`${BDFDB.dotCN.select}[type="${type[0]} song"]`) : null;
 				if (songSelect) songSelect.outerHTML = BDFDB.createSelectMenu(this.createSelectChoice(this.choices[type[0]].song), this.choices[type[0]].song, type[0] + " song");
 
 			}
@@ -371,26 +371,26 @@ class NotificationSounds {
 		var bar = slider.querySelector(BDFDB.dotCN.sliderbarfill);
 		var type = slider.getAttribute("type");
 
-		BDFDB.appendLocalStyle("disableTextSelection", `*{user-select: none !important;}`);
+		BDFDB.DOMUtils.appendLocalStyle("disableTextSelection", `*{user-select: none !important;}`);
 
 		var volume = 0;
 		var sY = 0;
-		var sHalfW = BDFDB.getRects(grabber).width/2;
-		var sMinX = BDFDB.getRects(track).left;
-		var sMaxX = sMinX + BDFDB.getRects(track).width;
-		var bubble = BDFDB.htmlToElement(`<span class="${BDFDB.disCN.sliderbubble}">${Math.floor(this.choices[type].volume)}%</span>`);
+		var sHalfW = BDFDB.DOMUtils.getRects(grabber).width/2;
+		var sMinX = BDFDB.DOMUtils.getRects(track).left;
+		var sMaxX = sMinX + BDFDB.DOMUtils.getRects(track).width;
+		var bubble = BDFDB.DOMUtils.create(`<span class="${BDFDB.disCN.sliderbubble}">${Math.floor(this.choices[type].volume)}%</span>`);
 		grabber.appendChild(bubble);
 		var mouseup = () => {
 			document.removeEventListener("mouseup", mouseup);
 			document.removeEventListener("mousemove", mousemove);
-			BDFDB.removeEles(bubble);
-			BDFDB.removeLocalStyle("disableTextSelection");
+			BDFDB.DOMUtils.remove(bubble);
+			BDFDB.DOMUtils.removeLocalStyle("disableTextSelection");
 			this.choices[type].volume = volume;
 			this.saveChoice(type, true);
 		};
 		var mousemove = e2 => {
 			sY = e2.clientX > sMaxX ? sMaxX - sHalfW : (e2.clientX < sMinX ? sMinX - sHalfW : e2.clientX - sHalfW);
-			volume = BDFDB.mapRange([sMinX - sHalfW, sMaxX - sHalfW], [0, 100], sY);
+			volume = BDFDB.NumberUtils.mapRange([sMinX - sHalfW, sMaxX - sHalfW], [0, 100], sY);
 			grabber.style.setProperty("left", volume + "%");
 			bar.style.setProperty("width", volume + "%");
 			input.value = volume;

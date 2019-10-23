@@ -85,14 +85,14 @@ class ServerHider {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all Servers.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
 
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
+		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
 
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".reset-button", () => {
 			BDFDB.openConfirmModal(this, "Are you sure you want to reset all servers?", () => {
 				BDFDB.DataUtils.remove(this, "servers");
-				BDFDB.GuildUtils.getAll().forEach(info => {if (!info.div.getAttribute("folder")) BDFDB.toggleEles(info.div, false);});
+				BDFDB.GuildUtils.getAll().forEach(info => {if (!info.div.getAttribute("folder")) BDFDB.DOMUtils.hide(info.div);});
 			});
 		});
 		return settingspanel;
@@ -135,7 +135,7 @@ class ServerHider {
 
 			BDFDB.GuildUtils.getAll().forEach(info => {
 				if (info.div.ServerHiderChangeObserver && typeof info.div.ServerHiderChangeObserver.disconnect == "function") info.div.ServerHiderChangeObserver.disconnect();
-				if (!info.div.getAttribute("folder")) BDFDB.toggleEles(info.div, true);
+				if (!info.div.getAttribute("folder")) BDFDB.DOMUtils.show(info.div);
 				delete info.div.ServerHiderChanged;
 			});
 
@@ -201,7 +201,7 @@ class ServerHider {
 	}
 
 	showServerModal () {
-		let serverHiderModal = BDFDB.htmlToElement(this.serverHiderModalMarkup);
+		let serverHiderModal = BDFDB.DOMUtils.create(this.serverHiderModalMarkup);
 		let container = serverHiderModal.querySelector(".entries");
 		if (!container) return;
 
@@ -215,14 +215,14 @@ class ServerHider {
 
 		for (let info of BDFDB.GuildUtils.getAll()) {
 			if (!info.div.getAttribute("folder")) {
-				if (container.firstElementChild) container.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.divider}"></div>`));
-				let entry = BDFDB.htmlToElement(this.serverEntryMarkup);
+				if (container.firstElementChild) container.appendChild(BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.divider}"></div>`));
+				let entry = BDFDB.DOMUtils.create(this.serverEntryMarkup);
 				container.appendChild(entry);
 				let name = entry.querySelector(".serverhiderName");
 				name.innerText = info.name || "";
-				name.parentElement.insertBefore(BDFDB.GuildUtils.createCopy(info, {click: () => {BDFDB.removeEles(serverHiderModal);}, menu: true, size: 48}), name);
+				name.parentElement.insertBefore(BDFDB.GuildUtils.createCopy(info, {click: () => {BDFDB.DOMUtils.remove(serverHiderModal);}, menu: true, size: 48}), name);
 				let hidecheckbox = entry.querySelector(".serverhiderCheckbox");
-				hidecheckbox.checked = !BDFDB.isEleHidden(info.div);
+				hidecheckbox.checked = !BDFDB.DOMUtils.isHidden(info.div);
 				hidecheckbox.addEventListener("click", e => {
 					this.toggleServer(info, info.div, e.currentTarget.checked);
 				});
@@ -233,9 +233,9 @@ class ServerHider {
 
 	toggleServer (info, target, visible) {
 		if (!info || !target) return;
-		let guilddiv = BDFDB.getParentEle(BDFDB.dotCN.guildouter, target);
+		let guilddiv = BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildouter, target);
 		if (!guilddiv || guilddiv.getAttribute("folder")) return;
-		BDFDB.toggleEles(guilddiv, visible);
+		BDFDB.DOMUtils.toggle(guilddiv, visible);
 		let hiddenservers = BDFDB.DataUtils.load(this, "hiddenservers", "hiddenservers") || [];
 		BDFDB.ArrayUtils.remove(hiddenservers, info.id);
 		if (!visible) {
@@ -250,7 +250,7 @@ class ServerHider {
 	}
 
 	isInFolder (id) {
-		if (!BDFDB.BdUtils.isPluginEnabled("ServerFolders")) return false;
+		if (!BDFDB.BDUtils.isPluginEnabled("ServerFolders")) return false;
 		let folders = BDFDB.DataUtils.load("ServerFolders", "folders");
 		for (let folderid in folders) if ((folders[folderid].servers || []).includes(id)) return true;
 		return false;

@@ -49,7 +49,7 @@ class DisplayServersAsChannels {
 		settingshtml += `</div>`;
 		settingshtml += `</div></div>`;
 
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
+		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
 
@@ -82,17 +82,17 @@ class DisplayServersAsChannels {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
 
-			BDFDB.addClass(document.body, "DSAC-styled");
+			BDFDB.DOMUtils.addClass(document.body, "DSAC-styled");
 
 			this.addCSS();
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 
 			BDFDB.ListenerUtils.add(this, document, "mouseenter", BDFDB.dotCN.guildouter, e => {
-				if (e.currentTarget.querySelector(BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill + "+ *")) BDFDB.appendLocalStyle("HideAllToolTips" + this.name, `${BDFDB.dotCN.tooltip} {display: none !important;}`);
+				if (e.currentTarget.querySelector(BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill + "+ *")) BDFDB.DOMUtils.appendLocalStyle("HideAllToolTips" + this.name, `${BDFDB.dotCN.tooltip} {display: none !important;}`);
 			});
 			BDFDB.ListenerUtils.add(this, document, "mouseleave", BDFDB.dotCN.guildouter, e => {
-				if (e.currentTarget.querySelector(BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill + "+ *") && !document.querySelector(BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill + "+ *:hover")) BDFDB.removeLocalStyle("HideAllToolTips" + this.name);
+				if (e.currentTarget.querySelector(BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill + "+ *") && !document.querySelector(BDFDB.dotCN.guildpillwrapper + BDFDB.notCN.dmpill + "+ *:hover")) BDFDB.DOMUtils.removeLocalStyle("HideAllToolTips" + this.name);
 			});
 		}
 		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
@@ -102,12 +102,12 @@ class DisplayServersAsChannels {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.removeClasses("DSAC-styled");
-			BDFDB.removeEles(".DSAC-verification-badge, .DSAC-name, .DSAC-icon");
+			BDFDB.DOMUtils.removeClassFromDOM("DSAC-styled");
+			BDFDB.DOMUtils.remove(".DSAC-verification-badge, .DSAC-name, .DSAC-icon");
 
-			BDFDB.removeLocalStyle("HideAllToolTips" + this.name);
+			BDFDB.DOMUtils.removeLocalStyle("HideAllToolTips" + this.name);
 
-			BDFDB.removeLocalStyle("DSACStyle" + this.name);
+			BDFDB.DOMUtils.removeLocalStyle("DSACStyle" + this.name);
 
 			for (let changedSVG of document.querySelectorAll(BDFDB.dotCN.guildsvg + "[DSAC-oldViewBox")) {
 				changedSVG.setAttribute("viewBox", changedSVG.getAttribute("DSAC-oldViewBox"));
@@ -123,7 +123,7 @@ class DisplayServersAsChannels {
 
 	processGuilds (instance, wrapper, returnvalue) {
 		var observer = new MutationObserver((changes, _) => {changes.forEach((change, i) => {if (change.addedNodes) {change.addedNodes.forEach((node) => {
-			if (node && BDFDB.containsClass(node, BDFDB.disCN.guildouter) && !node.querySelector(BDFDB.dotCN.guildserror)) {
+			if (node && BDFDB.DOMUtils.containsClass(node, BDFDB.disCN.guildouter) && !node.querySelector(BDFDB.dotCN.guildserror)) {
 				this.changeServer(BDFDB.GuildUtils.getData(node));
 			}
 			if (node && node.tagName && (node = node.querySelector(BDFDB.dotCN.guildbuttoncontainer)) != null) {
@@ -160,8 +160,8 @@ class DisplayServersAsChannels {
 		if (!info || !info.div) return;
 		var guildfoldericonwrapper = info.div.querySelector(BDFDB.dotCNC.guildfoldericonwrapperexpanded + BDFDB.dotCN.guildfoldericonwrapperclosed);
 		if (guildfoldericonwrapper) {
-			BDFDB.removeEles(guildfoldericonwrapper.parentElement.querySelectorAll(".DSAC-name"));
-			guildfoldericonwrapper.parentElement.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">${BDFDB.encodeToHTML(info.folderName || BDFDB.LanguageUtils.LanguageStrings.GUILD_FOLDER_NAME)}</div>`), guildfoldericonwrapper);
+			BDFDB.DOMUtils.remove(guildfoldericonwrapper.parentElement.querySelectorAll(".DSAC-name"));
+			guildfoldericonwrapper.parentElement.insertBefore(BDFDB.DOMUtils.create(`<div class="DSAC-name">${BDFDB.StringUtils.htmlEscape(info.folderName || BDFDB.LanguageUtils.LanguageStrings.GUILD_FOLDER_NAME)}</div>`), guildfoldericonwrapper);
 		}
 		this.changeSVG(info.div);
 	}
@@ -170,11 +170,11 @@ class DisplayServersAsChannels {
 		if (!info || !info.div) return;
 		var guildsvg = info.div.querySelector(BDFDB.dotCN.guildsvg);
 		if (guildsvg) {
-			BDFDB.removeEles(guildsvg.parentElement.querySelectorAll(".DSAC-verification-badge, .DSAC-name"));
+			BDFDB.DOMUtils.remove(guildsvg.parentElement.querySelectorAll(".DSAC-verification-badge, .DSAC-name"));
 			if (info.features && info.features.has("VERIFIED")) {
-				guildsvg.parentElement.insertBefore(BDFDB.htmlToElement(this.verificationBadgeMarkup), guildsvg);
+				guildsvg.parentElement.insertBefore(BDFDB.DOMUtils.create(this.verificationBadgeMarkup), guildsvg);
 			}
-			guildsvg.parentElement.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">${BDFDB.encodeToHTML(info.name || "")}</div>`), guildsvg);
+			guildsvg.parentElement.insertBefore(BDFDB.DOMUtils.create(`<div class="DSAC-name">${BDFDB.StringUtils.htmlEscape(info.name || "")}</div>`), guildsvg);
 		}
 		this.changeSVG(info.div);
 	}
@@ -183,8 +183,8 @@ class DisplayServersAsChannels {
 		if (!div) return;
 		var homebutton = div.querySelector(BDFDB.dotCN.guildiconchildwrapper);
 		if (homebutton) {
-			BDFDB.removeEles(homebutton.querySelectorAll(".DSAC-name"));
-			homebutton.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">${BDFDB.encodeToHTML(BDFDB.LanguageUtils.LanguageStrings.HOME)}</div>`), homebutton.firstElementChild);
+			BDFDB.DOMUtils.remove(homebutton.querySelectorAll(".DSAC-name"));
+			homebutton.insertBefore(BDFDB.DOMUtils.create(`<div class="DSAC-name">${BDFDB.StringUtils.htmlEscape(BDFDB.LanguageUtils.LanguageStrings.HOME)}</div>`), homebutton.firstElementChild);
 		}
 		this.changeSVG(div);
 	}
@@ -193,8 +193,8 @@ class DisplayServersAsChannels {
 		if (!div) return;
 		var guildbuttoninner = div.querySelector(BDFDB.dotCN.guildbuttoninner);
 		if (guildbuttoninner) {
-			BDFDB.removeEles(guildbuttoninner.querySelectorAll(".DSAC-name"));
-			guildbuttoninner.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">${BDFDB.encodeToHTML(BDFDB.ReactUtils.findValue(div, "text", {up:true}) || "")}</div>`), guildbuttoninner.firstElementChild);
+			BDFDB.DOMUtils.remove(guildbuttoninner.querySelectorAll(".DSAC-name"));
+			guildbuttoninner.insertBefore(BDFDB.DOMUtils.create(`<div class="DSAC-name">${BDFDB.StringUtils.htmlEscape(BDFDB.ReactUtils.findValue(div, "text", {up:true}) || "")}</div>`), guildbuttoninner.firstElementChild);
 		}
 		this.changeSVG(div);
 	}
@@ -209,14 +209,14 @@ class DisplayServersAsChannels {
 
 	changeError (div) {
 		if (!div) return;
-		BDFDB.removeEles(div.querySelectorAll(".DSAC-name, .DSAC-icon"));
-		div.insertBefore(BDFDB.htmlToElement(`<div class="DSAC-name">Server Outage</div>`), div.firstChild);
-		div.appendChild(BDFDB.htmlToElement(`<div class="DSAC-icon">!</div>`));
+		BDFDB.DOMUtils.remove(div.querySelectorAll(".DSAC-name, .DSAC-icon"));
+		div.insertBefore(BDFDB.DOMUtils.create(`<div class="DSAC-name">Server Outage</div>`), div.firstChild);
+		div.appendChild(BDFDB.DOMUtils.create(`<div class="DSAC-icon">!</div>`));
 	}
 
 	addCSS () {
 		var listwidth = BDFDB.DataUtils.get(this, "amounts", "serverListWidth");
-		BDFDB.appendLocalStyle("DSACStyle" + this.name, `
+		BDFDB.DOMUtils.appendLocalStyle("DSACStyle" + this.name, `
 			.DSAC-styled ${BDFDB.dotCN.guildswrapper},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildsscrollerwrap},
 			.DSAC-styled ${BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guilds},

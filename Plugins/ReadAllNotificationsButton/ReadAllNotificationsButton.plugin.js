@@ -120,8 +120,8 @@ class ReadAllNotificationsButton {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.removeEles(".RANbutton-frame", ".RAMbutton");
-			BDFDB.removeClasses("RAN-added", "RAM-added");
+			BDFDB.DOMUtils.remove(".RANbutton-frame", ".RAMbutton");
+			BDFDB.DOMUtils.removeClassFromDOM("RAN-added", "RAM-added");
 			BDFDB.PluginUtils.clear(this);
 		}
 	}
@@ -131,15 +131,15 @@ class ReadAllNotificationsButton {
 
 	processGuilds (instance, wrapper, returnvalue, methodnames) {
 		if (methodnames.includes("componentDidMount") || (methodnames.includes("componentDidUpdate") && document.querySelector(".bd-guild ~ .RANbutton-frame"))) {
-			BDFDB.removeEles(".RANbutton-frame");
+			BDFDB.DOMUtils.remove(".RANbutton-frame");
 			let insertnode = this.getInsertNode();
 			if (insertnode) {
-				let ranbutton = BDFDB.htmlToElement(this.RANbuttonMarkup);
+				let ranbutton = BDFDB.DOMUtils.create(this.RANbuttonMarkup);
 				insertnode.parentElement.insertBefore(ranbutton, insertnode);
 				ranbutton.addEventListener("click", () => {
 					let settings = BDFDB.DataUtils.get(this, "settings");
 					if (settings.includeGuilds) BDFDB.GuildUtils.markAsRead(settings.includeMuted ? BDFDB.GuildUtils.getAll() : BDFDB.GuildUtils.getUnread());
-					if (settings.includeDMs) BDFDB.DmUtils.markAsRead(BDFDB.DmUtils.getAll());
+					if (settings.includeDMs) BDFDB.DMUtils.markAsRead(BDFDB.DMUtils.getAll());
 				});
 				ranbutton.addEventListener("contextmenu", e => {
 					const itemGroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
@@ -149,7 +149,7 @@ class ReadAllNotificationsButton {
 								label: this.labels.context_unreadguilds_text,
 								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-unreadguilds-contextMenuItem`,
 								action: e => {
-									BDFDB.closeContextMenu(BDFDB.getParentEle(BDFDB.dotCN.contextmenu, e.target));
+									BDFDB.closeContextMenu(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, e.target));
 									BDFDB.GuildUtils.markAsRead(BDFDB.GuildUtils.getUnread());
 								}
 							}),
@@ -157,7 +157,7 @@ class ReadAllNotificationsButton {
 								label: this.labels.context_pingedguilds_text,
 								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-pingedguilds-contextMenuItem`,
 								action: e => {
-									BDFDB.closeContextMenu(BDFDB.getParentEle(BDFDB.dotCN.contextmenu, e.target));
+									BDFDB.closeContextMenu(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, e.target));
 									BDFDB.GuildUtils.markAsRead(BDFDB.GuildUtils.getPinged());
 								}
 							}),
@@ -165,7 +165,7 @@ class ReadAllNotificationsButton {
 								label: this.labels.context_mutedguilds_text,
 								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-mutedguilds-contextMenuItem`,
 								action: e => {
-									BDFDB.closeContextMenu(BDFDB.getParentEle(BDFDB.dotCN.contextmenu, e.target));
+									BDFDB.closeContextMenu(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, e.target));
 									BDFDB.GuildUtils.markAsRead(BDFDB.GuildUtils.getMuted());
 								}
 							}),
@@ -173,7 +173,7 @@ class ReadAllNotificationsButton {
 								label: this.labels.context_guilds_text,
 								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-guilds-contextMenuItem`,
 								action: e => {
-									BDFDB.closeContextMenu(BDFDB.getParentEle(BDFDB.dotCN.contextmenu, e.target));
+									BDFDB.closeContextMenu(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, e.target));
 									this.addPinnedRecent(instance.props.channel.id);
 									BDFDB.GuildUtils.markAsRead(BDFDB.GuildUtils.getAll());
 								}
@@ -182,15 +182,15 @@ class ReadAllNotificationsButton {
 								label: this.labels.context_dms_text,
 								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-dms-contextMenuItem`,
 								action: e => {
-									BDFDB.closeContextMenu(BDFDB.getParentEle(BDFDB.dotCN.contextmenu, e.target));
-									BDFDB.DmUtils.markAsRead(BDFDB.DmUtils.getAll());
+									BDFDB.closeContextMenu(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, e.target));
+									BDFDB.DMUtils.markAsRead(BDFDB.DMUtils.getAll());
 								}
 							})
 						]
 					});
 					BDFDB.openContextMenu(this, e, itemGroup);
 				});
-				BDFDB.addClass(wrapper, "RAN-added");
+				BDFDB.DOMUtils.addClass(wrapper, "RAN-added");
 			}
 		}
 	}
@@ -202,14 +202,14 @@ class ReadAllNotificationsButton {
 	}
 
 	processRecentMentions (instance, wrapper, returnvalue) {
-		BDFDB.removeEles(".RAMbutton");
+		BDFDB.DOMUtils.remove(".RAMbutton");
 		if (instance.props && instance.props.popoutName == "RECENT_MENTIONS_POPOUT" && BDFDB.DataUtils.get(this, "settings", "addClearButton")) {
 			let recentmentionstitle = wrapper.querySelector(BDFDB.dotCN.messagespopouttitle);
 			if (recentmentionstitle) {
-				let ranbutton = BDFDB.htmlToElement(this.RAMbuttonMarkup);
+				let ranbutton = BDFDB.DOMUtils.create(this.RAMbuttonMarkup);
 				recentmentionstitle.appendChild(ranbutton);
 				ranbutton.addEventListener("click", () => {this.clearMentions(instance, wrapper);});
-				BDFDB.addClass(wrapper, "RAM-added");
+				BDFDB.DOMUtils.addClass(wrapper, "RAM-added");
 			}
 		}
 	}
@@ -224,7 +224,7 @@ class ReadAllNotificationsButton {
 	}
 
 	getInsertNode () {
-		let homebutton = BDFDB.getParentEle(BDFDB.dotCN.guildouter, document.querySelector(BDFDB.dotCN.homebuttonicon));
+		let homebutton = BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildouter, document.querySelector(BDFDB.dotCN.homebuttonicon));
 		if (!homebutton) return null;
 		let nextsibling = homebutton.nextElementSibling, insertnode = null;
 		while (nextsibling && insertnode == null) {

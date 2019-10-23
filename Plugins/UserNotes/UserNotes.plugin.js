@@ -70,7 +70,7 @@ class UserNotes {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Remove all User Notes.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} remove-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Remove</div></button></div>`;
 		settingshtml += `</div></div>`;
 
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
+		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
 
@@ -147,7 +147,7 @@ class UserNotes {
 	openNotesModal (info) {
 		let note = BDFDB.DataUtils.load(this, "notes", info.id) || "";
 
-		let userNotesModal = BDFDB.htmlToElement(this.userNotesModalMarkup);
+		let userNotesModal = BDFDB.DOMUtils.create(this.userNotesModalMarkup);
 		let noteinput = userNotesModal.querySelector("#modal-inputtext");
 		userNotesModal.querySelector(BDFDB.dotCN.modalguildname).innerText = info.username || "";
 		noteinput.value = note;

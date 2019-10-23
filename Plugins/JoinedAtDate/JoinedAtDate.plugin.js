@@ -87,7 +87,7 @@ class JoinedAtDate {
 		settingshtml += `<div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$hour will be replaced with the current hour</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$minute will be replaced with the current minutes</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$second will be replaced with the current seconds</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$msecond will be replaced with the current milliseconds</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$timemode will change $hour to a 12h format and will be replaced with AM/PM</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$year will be replaced with the current year</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$month will be replaced with the current month</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$day will be replaced with the current day</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$monthnameL will be replaced with the monthname in long format based on the Discord Language</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$monthnameS will be replaced with the monthname in short format based on the Discord Language</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$weekdayL will be replaced with the weekday in long format based on the Discord Language</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$weekdayS will be replaced with the weekday in short format based on the Discord Language</div>`;
 		settingshtml += `</div></div>`;
 
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
+		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
 
@@ -138,7 +138,7 @@ class JoinedAtDate {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.removeEles(".joinedAtDate");
+			BDFDB.DOMUtils.remove(".joinedAtDate");
 			BDFDB.PluginUtils.clear(this);
 		}
 	}
@@ -163,9 +163,9 @@ class JoinedAtDate {
 	}
 
 	toggleInfo (ele) {
-		BDFDB.toggleClass(ele.querySelector("svg"), BDFDB.disCN.directionright);
-		BDFDB.toggleEles(ele.nextElementSibling);
-		BDFDB.DataUtils.save(BDFDB.isEleHidden(ele.nextElementSibling), this, "hideInfo", "hideInfo");
+		BDFDB.DOMUtils.toggleClass(ele.querySelector("svg"), BDFDB.disCN.directionright);
+		BDFDB.DOMUtils.toggle(ele.nextElementSibling);
+		BDFDB.DataUtils.save(BDFDB.DOMUtils.isHidden(ele.nextElementSibling), this, "hideInfo", "hideInfo");
 	}
 
 	saveSelectChoice (selectWrap, type, choice) {
@@ -199,18 +199,18 @@ class JoinedAtDate {
 			if (!this.loadedusers[guildid]) this.loadedusers[guildid] = {};
 			let addTimestamp = (timestamp) => {
 				if (document.contains(container)) {
-					BDFDB.removeEles(container.querySelectorAll(".joinedAtDate"));
+					BDFDB.DOMUtils.remove(container.querySelectorAll(".joinedAtDate"));
 					if (BDFDB.ObjectUtils.is(container.JoinedAtDateObserver)) container.JoinedAtDateObserver.disconnect();
 					let choice = BDFDB.DataUtils.get(this, "choices", "joinedAtDateLang");
 					let nametag = container.querySelector(BDFDB.dotCN.nametag);
-					container.insertBefore(BDFDB.htmlToElement(`<div class="joinedAtDate BDFDB-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.getRects(BDFDB.getParentEle(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container)).width - 20}px !important; order: 7 !important;"><div class="BDFDB-textscroll">${this.labels.joinedat_text.replace("{{time}}", this.getTimestamp(this.languages[choice].id, timestamp))}</div></div>`), nametag ? nametag.nextSibling : null);
+					container.insertBefore(BDFDB.DOMUtils.create(`<div class="joinedAtDate BDFDB-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container)).width - 20}px !important; order: 7 !important;"><div class="BDFDB-textscroll">${this.labels.joinedat_text.replace("{{time}}", this.getTimestamp(this.languages[choice].id, timestamp))}</div></div>`), nametag ? nametag.nextSibling : null);
 					BDFDB.initElements(container, this);
 					if (popout && popout.style.transform.indexOf("translateY(-1") == -1) {
-						let arect = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount)), prect = BDFDB.getRects(popout);
+						let arect = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount)), prect = BDFDB.DOMUtils.getRects(popout);
 						popout.style.setProperty("top", (prect.y + prect.height > arect.height ? (arect.height - prect.height) : prect.y) + "px");
 					}
 					container.JoinedAtDateObserver = new MutationObserver((changes, _) => {changes.forEach((change, i) => {change.addedNodes.forEach((node) => {
-						if (node && BDFDB.containsClass(node, BDFDB.disCN.nametag)) addTimestamp(timestamp);
+						if (node && BDFDB.DOMUtils.containsClass(node, BDFDB.disCN.nametag)) addTimestamp(timestamp);
 					});});});
 					container.JoinedAtDateObserver.observe(container, {childList: true, subtree:true});
 				}

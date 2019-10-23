@@ -138,7 +138,7 @@ class PersonalPins {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Delete all Notes.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
 
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
+		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
 
@@ -186,7 +186,7 @@ class PersonalPins {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.removeEles(".popout-personalpins-notes", ".personalpins-sort-popout", ".notes-button");
+			BDFDB.DOMUtils.remove(".popout-personalpins-notes", ".personalpins-sort-popout", ".notes-button");
 			BDFDB.PluginUtils.clear(this);
 		}
 	}
@@ -217,7 +217,7 @@ class PersonalPins {
 			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:"MessagePinItem"});
 			const pinUnpinItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: this.labels[note ? "context_unpinoption_text" : "context_pinoption_text"],
-				hint: BDFDB.BdUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BdUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Note_Message") : null,
+				hint: BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Note_Message") : null,
 				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-${note ? "unpin" : "pin"}-contextMenuItem`,
 				action: e => {
 					BDFDB.closeContextMenu(menu);
@@ -286,7 +286,7 @@ class PersonalPins {
 		if (wrapper.querySelector(".notes-button")) return;
 		let search = wrapper.querySelector(BDFDB.dotCN.channelheadersearch);
 		if (!search) return;
-		let notesbutton = BDFDB.htmlToElement(this.notesButtonMarkup);
+		let notesbutton = BDFDB.DOMUtils.create(this.notesButtonMarkup);
 		search.parentElement.insertBefore(notesbutton, search);
 		let icon = notesbutton.querySelector(BDFDB.dotCN.channelheadericon);
 		icon.addEventListener("click", () => {
@@ -301,7 +301,7 @@ class PersonalPins {
 		if (instance.props && typeof instance.props.renderButtons == "function" && !wrapper.querySelector(BDFDB.dotCN.optionpopoutbutton) && BDFDB.ReactUtils.getValue(instance, "props.message.author.id") != 1) {
 			let buttonwrap = wrapper.querySelector(BDFDB.dotCN.messagebuttoncontainer);
 			if (buttonwrap) {
-				let optionPopoutButton = BDFDB.htmlToElement(`<div tabindex="0" class="${BDFDB.disCN.optionpopoutbutton}" aria-label="More Options" role="button"><svg name="OverflowMenu" class="${BDFDB.disCN.optionpopoutbuttonicon}" aria-hidden="false" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0z"></path><path fill="currentColor" d="M12 16c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2zm0-6c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2zm0-6c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2z"></path></g></svg></div>`);
+				let optionPopoutButton = BDFDB.DOMUtils.create(`<div tabindex="0" class="${BDFDB.disCN.optionpopoutbutton}" aria-label="More Options" role="button"><svg name="OverflowMenu" class="${BDFDB.disCN.optionpopoutbuttonicon}" aria-hidden="false" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0z"></path><path fill="currentColor" d="M12 16c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2zm0-6c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2zm0-6c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2z"></path></g></svg></div>`);
 				optionPopoutButton.addEventListener("click", () => {BDFDB.createMessageOptionPopout(optionPopoutButton);});
 				buttonwrap.appendChild(optionPopoutButton);
 			}
@@ -310,13 +310,13 @@ class PersonalPins {
 
 	openNotesPopout (button) {
 		let container = document.querySelector(BDFDB.dotCN.popouts);
-		if (!container || BDFDB.containsClass(button, BDFDB.disCN.channelheadericonselected)) return;
-		BDFDB.addClass(button, BDFDB.disCN.channelheadericonselected);
-		let notespopout = BDFDB.htmlToElement(this.notesPopoutMarkup);
+		if (!container || BDFDB.DOMUtils.containsClass(button, BDFDB.disCN.channelheadericonselected)) return;
+		BDFDB.DOMUtils.addClass(button, BDFDB.disCN.channelheadericonselected);
+		let notespopout = BDFDB.DOMUtils.create(this.notesPopoutMarkup);
 		notespopout.querySelector(BDFDB.dotCN.popoutheader).firstElementChild.appendChild(BDFDB.createSearchBar("small"));
 		container.appendChild(notespopout);
 		BDFDB.initElements(notespopout, this);
-		let buttonrects = BDFDB.getRects(button);
+		let buttonrects = BDFDB.DOMUtils.getRects(button);
 		notespopout.style.setProperty("left", buttonrects.left + buttonrects.width/2 + "px");
 		notespopout.style.setProperty("top", buttonrects.top + buttonrects.height + "px")
 		notespopout.querySelectorAll(BDFDB.dotCN.tabbarheaderitem).forEach(tab => {tab.addEventListener("click", () => {
@@ -335,10 +335,10 @@ class PersonalPins {
 		});
 
 		var removePopout = e => {
-			if (!notespopout.contains(e.target) && !BDFDB.getParentEle(".personalpins-sort-popout", e.target)) {
+			if (!notespopout.contains(e.target) && !BDFDB.DOMUtils.getParent(".personalpins-sort-popout", e.target)) {
 				document.removeEventListener("mousedown", removePopout);
 				notespopout.remove();
-				setTimeout(() => {BDFDB.removeClass(button, BDFDB.disCN.channelheadericonselected);},300);
+				setTimeout(() => {BDFDB.DOMUtils.removeClass(button, BDFDB.disCN.channelheadericonselected);},300);
 			}
 		};
 		document.addEventListener("mousedown", removePopout);
@@ -347,7 +347,7 @@ class PersonalPins {
 	}
 
 	addNotes (notespopout) {
-		BDFDB.removeEles(notespopout.querySelectorAll(BDFDB.dotCNC.messagegroupwrapper + BDFDB.dotCN.messagespopoutchannelseparator));
+		BDFDB.DOMUtils.remove(notespopout.querySelectorAll(BDFDB.dotCNC.messagegroupwrapper + BDFDB.dotCN.messagespopoutchannelseparator));
 		let channel = BDFDB.ChannelUtils.getSelected();
 		if (channel) {
 			let guild_id = channel.guild_id ? channel.guild_id : "@me";
@@ -381,7 +381,7 @@ class PersonalPins {
 						note.remove();
 					}
 				}
-				BDFDB.toggleEles(placeholder, container.firstElementChild == placeholder);
+				BDFDB.DOMUtils.toggle(placeholder, container.firstElementChild == placeholder);
 			}
 		}
 	}
@@ -393,19 +393,19 @@ class PersonalPins {
 		let user = BDFDB.LibraryModules.UserStore.getUser(noteData.author_id) || {};
 		let member = BDFDB.LibraryModules.MemberStore.getMember(noteData.guild_id, noteData.author_id) || {};
 		let date = new Date(noteData.timestamp);
-		let message = BDFDB.htmlToElement(this.messageMarkup);
-		let messagedivider = BDFDB.htmlToElement(this.messageDividerMarkup);
+		let message = BDFDB.DOMUtils.create(this.messageMarkup);
+		let messagedivider = BDFDB.DOMUtils.create(this.messageDividerMarkup);
 		container.insertBefore(message, container.firstChild);
 		container.insertBefore(messagedivider, container.firstChild);
 		let channelname = messagedivider.querySelector(BDFDB.dotCN.messagespopoutchannelname);
 		channelname.innerText = (noteData.guild_id == "@me" ? " @" : " #") + (channel.name || noteData.channel_name);
-		if (noteData.guild_id != "@me" && BDFDB.BdUtils.isPluginEnabled("EditChannels")) {
-			BDFDB.BdUtils.getPlugin("EditChannels").changeChannel2({id:noteData.channel_id,name:noteData.channel_name}, channelname);
+		if (noteData.guild_id != "@me" && BDFDB.BDUtils.isPluginEnabled("EditChannels")) {
+			BDFDB.BDUtils.getPlugin("EditChannels").changeChannel2({id:noteData.channel_id,name:noteData.channel_name}, channelname);
 		}
-		else if (noteData.guild_id == "@me" && BDFDB.BdUtils.isPluginEnabled("EditUsers")) {
+		else if (noteData.guild_id == "@me" && BDFDB.BDUtils.isPluginEnabled("EditUsers")) {
 			let dmuser_id = channel && channel.type == 1 ? channel.recipients[0] : noteData.dmuser_id;
 			if (dmuser_id) {
-				BDFDB.BdUtils.getPlugin("EditUsers").changeName2({id:dmuser_id,username:noteData.channel_name}, channelname);
+				BDFDB.BDUtils.getPlugin("EditUsers").changeName2({id:dmuser_id,username:noteData.channel_name}, channelname);
 				if (channelname.innerText.indexOf("@") != 0) channelname.innerText = "@" + channelname.innerText;
 			}
 		}
@@ -416,8 +416,8 @@ class PersonalPins {
 		let username = message.querySelector(BDFDB.dotCN.messageusername);
 		username.innerText = user.username || noteData.author_name;
 		username.style.setProperty("color", member.colorString || noteData.color);
-		if (BDFDB.BdUtils.isPluginEnabled("EditUsers")) {
-			let EditUsers = BDFDB.BdUtils.getPlugin("EditUsers");
+		if (BDFDB.BDUtils.isPluginEnabled("EditUsers")) {
+			let EditUsers = BDFDB.BDUtils.getPlugin("EditUsers");
 			EditUsers.changeName({id:noteData.author_id,username:noteData.author_name}, username, noteData.guild_id);
 			if (user.id) EditUsers.changeAvatar({id:noteData.author_id,username:noteData.author_name}, avatar);
 			EditUsers.addTag({id:noteData.author_id,username:noteData.author_name}, username.parentElement, " " + BDFDB.disCN.bottagnametag);
@@ -425,8 +425,8 @@ class PersonalPins {
 		let timestamp = message.querySelector(BDFDB.dotCN.messagetimestampcozy);
 		timestamp.innerText = date.toLocaleString(BDFDB.getDiscordLanguage().id);
 		timestamp.setAttribute("datetime", date);
-		if (BDFDB.BdUtils.isPluginEnabled("CompleteTimestamps") && BDFDB.DataUtils.load("CompleteTimestamps", "settings"), "showInChat") {
-			BDFDB.BdUtils.getPlugin("CompleteTimestamps").changeTimestamp(timestamp);
+		if (BDFDB.BDUtils.isPluginEnabled("CompleteTimestamps") && BDFDB.DataUtils.load("CompleteTimestamps", "settings"), "showInChat") {
+			BDFDB.BDUtils.getPlugin("CompleteTimestamps").changeTimestamp(timestamp);
 		}
 		message.querySelector(BDFDB.dotCN.messagemarkup).innerHTML = noteData.markup.replace(`<span class="edited">`,`<span class="${BDFDB.disCN.messageedited}">`);
 		message.querySelector(BDFDB.dotCN.messageaccessory).innerHTML = noteData.accessory;
@@ -453,9 +453,9 @@ class PersonalPins {
 			else BDFDB.shake();
 		});
 		message.querySelector(BDFDB.dotCN.messagespopoutclosebutton).addEventListener("click", e => {
-			BDFDB.removeEles(messagedivider, message);
+			BDFDB.DOMUtils.remove(messagedivider, message);
 			this.removeNoteData(noteData);
-			BDFDB.toggleEles(placeholder, container.firstElementChild == placeholder);
+			BDFDB.DOMUtils.toggle(placeholder, container.firstElementChild == placeholder);
 		});
 		message.querySelector(BDFDB.dotCN.messagespopoutjumpbutton + ".jump").addEventListener("click", e => {
 			BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(noteData.guild_id, noteData.channel_id, noteData.id));
@@ -486,14 +486,14 @@ class PersonalPins {
 	}
 
 	startYoutubeVideo (button) {
-		let embedwrapper = BDFDB.getParentEle(BDFDB.dotCN.embedvideo, button);
+		let embedwrapper = BDFDB.DOMUtils.getParent(BDFDB.dotCN.embedvideo, button);
 		let ytlink = embedwrapper.parentElement.querySelector(BDFDB.dotCN.embedtitle).href;
 		BDFDB.LibraryRequires.request(ytlink, (error, response, result) => {
 			if (result && response.headers && typeof response.headers.server == "string" && response.headers.server.toUpperCase() == "YOUTUBE FRONTEND PROXY") {
 				while (embedwrapper.firstChild) embedwrapper.firstChild.remove();
 				let width = 400;
 				let height = Math.round(width*(result.split('<meta itemprop="height" content="')[1].split('"')[0]/result.split('<meta itemprop="width" content="')[1].split('"')[0]));
-				embedwrapper.appendChild(BDFDB.htmlToElement(`<iframe src="${result.split('<link itemprop="embedURL" href="')[1].split('"')[0]}?start=0&amp;autoplay=1&amp;auto_play=1" width="${width}" height="${height}" frameborder="0" allowfullscreen=""></iframe>`));
+				embedwrapper.appendChild(BDFDB.DOMUtils.create(`<iframe src="${result.split('<link itemprop="embedURL" href="')[1].split('"')[0]}?start=0&amp;autoplay=1&amp;auto_play=1" width="${width}" height="${height}" frameborder="0" allowfullscreen=""></iframe>`));
 			}
 		});
 	}
@@ -578,7 +578,7 @@ class PersonalPins {
 	}
 	
 	getMessageAndPos (target) {
-		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.messagegroup + "> [aria-disabled]", target);
+		let messagediv = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagegroup + "> [aria-disabled]", target);
 		let pos = messagediv ? Array.from(messagediv.parentElement.childNodes).filter(n => n.nodeType != Node.TEXT_NODE).indexOf(messagediv) : -1;
 		return {messagediv, pos};
 	}

@@ -70,7 +70,7 @@ class TimedLightDarkMode {
 
 			clearInterval(this.checkInterval);
 
-			BDFDB.removeEles(".TLDM-settingsbox");
+			BDFDB.DOMUtils.remove(".TLDM-settingsbox");
 
 			BDFDB.PluginUtils.clear(this);
 		}
@@ -83,7 +83,7 @@ class TimedLightDarkMode {
 		if (instance.props && Array.isArray(instance.props.options) && instance.props.options[0] && instance.props.options[0].value == "light" && instance.props.options[1] && instance.props.options[1].value == "dark" && wrapper.parentElement.firstElementChild.innerText && wrapper.parentElement.firstElementChild.innerText.toUpperCase() == BDFDB.LanguageUtils.LanguageStrings.THEME.toUpperCase()) {
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			var values = BDFDB.DataUtils.get(this, "values");
-			var settingsbox = BDFDB.htmlToElement(`<div class="${BDFDB.disCN.margintop8} TLDM-settingsbox"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><h5 class="${BDFDB.disCN.h5}">${BDFDB.LanguageUtils.LanguageStrings.THEME} Timer</h5><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings running" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings.running ? " checked" : ""}></div></div><div class="${BDFDB.disCNS.slider + BDFDB.disCN.margintop20}${!settings.running ? (" " + BDFDB.disCN.sliderdisabled): ""}"><input type="number" key="timer1" class="${BDFDB.disCN.sliderinput}" value="${values.timer1}" readonly=""><input type="number" key="timer2" class="${BDFDB.disCN.sliderinput}" value="${values.timer2}" readonly=""><div class="${BDFDB.disCN.slidertrack}"><div class="${BDFDB.disCN.slidermark}" style="left: 0%;"><div class="${BDFDB.disCN.slidermarkvalue}">00:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 12.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">03:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 25%;"><div class="${BDFDB.disCN.slidermarkvalue}">06:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 37.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">09:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 50%;"><div class="${BDFDB.disCN.slidermarkvalue}">12:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 62.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">15:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 75%;"><div class="${BDFDB.disCN.slidermarkvalue}">18:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 87.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">21:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 100%;"><div class="${BDFDB.disCN.slidermarkvalue}">24:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div></div><div class="${BDFDB.disCN.sliderbar}"><div class="${BDFDB.disCN.sliderbarfill}"></div></div><div class="${BDFDB.disCN.slidertrack}"><div class="${BDFDB.disCN.slidergrabber} timer-grabber" key="timer1" style="left: ${values.timer1}%;"></div><div class="${BDFDB.disCN.slidergrabber} timer-grabber" key="timer2" style="left: ${values.timer2}%;"></div><div class="${BDFDB.disCN.slidergrabber} date-grabber" key="current" style="left: ${this.getPercent(new Date())}%; cursor: help !important; height: 12px; margin-top: -7px;"></div></div></div></div>`);
+			var settingsbox = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.margintop8} TLDM-settingsbox"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><h5 class="${BDFDB.disCN.h5}">${BDFDB.LanguageUtils.LanguageStrings.THEME} Timer</h5><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings running" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings.running ? " checked" : ""}></div></div><div class="${BDFDB.disCNS.slider + BDFDB.disCN.margintop20}${!settings.running ? (" " + BDFDB.disCN.sliderdisabled): ""}"><input type="number" key="timer1" class="${BDFDB.disCN.sliderinput}" value="${values.timer1}" readonly=""><input type="number" key="timer2" class="${BDFDB.disCN.sliderinput}" value="${values.timer2}" readonly=""><div class="${BDFDB.disCN.slidertrack}"><div class="${BDFDB.disCN.slidermark}" style="left: 0%;"><div class="${BDFDB.disCN.slidermarkvalue}">00:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 12.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">03:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 25%;"><div class="${BDFDB.disCN.slidermarkvalue}">06:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 37.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">09:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 50%;"><div class="${BDFDB.disCN.slidermarkvalue}">12:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 62.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">15:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 75%;"><div class="${BDFDB.disCN.slidermarkvalue}">18:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 87.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">21:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 100%;"><div class="${BDFDB.disCN.slidermarkvalue}">24:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div></div><div class="${BDFDB.disCN.sliderbar}"><div class="${BDFDB.disCN.sliderbarfill}"></div></div><div class="${BDFDB.disCN.slidertrack}"><div class="${BDFDB.disCN.slidergrabber} timer-grabber" key="timer1" style="left: ${values.timer1}%;"></div><div class="${BDFDB.disCN.slidergrabber} timer-grabber" key="timer2" style="left: ${values.timer2}%;"></div><div class="${BDFDB.disCN.slidergrabber} date-grabber" key="current" style="left: ${this.getPercent(new Date())}%; cursor: help !important; height: 12px; margin-top: -7px;"></div></div></div></div>`);
 			wrapper.parentElement.appendChild(settingsbox);
 			var slider = settingsbox.querySelector(BDFDB.dotCN.slider);
 
@@ -93,7 +93,7 @@ class TimedLightDarkMode {
 			BDFDB.ListenerUtils.addToChildren(settingsbox, "mouseenter", BDFDB.dotCN.slidergrabber + ".date-grabber", e => {this.showCurrentTime(e.currentTarget);});
 			BDFDB.ListenerUtils.addToChildren(settingsbox, "click", ".settings-switch", e => {
 				this.startInterval();
-				BDFDB.toggleClass(slider, BDFDB.disCN.sliderdisabled, !e.currentTarget.checked);
+				BDFDB.DOMUtils.toggleClass(slider, BDFDB.disCN.sliderdisabled, !e.currentTarget.checked);
 			});
 		}
 	}
@@ -131,11 +131,11 @@ class TimedLightDarkMode {
 		var currenttime = new Date();
 		var currenthours = currenttime.getHours();
 		var currentminutes = currenttime.getMinutes();
-		var bubble = BDFDB.htmlToElement(`<span class="${BDFDB.disCN.sliderbubble}">${(currenthours > 9 ? currenthours : ("0" + currenthours)) + ":" + (currentminutes > 9 ? currentminutes : ("0" + currentminutes))}</span>`);
+		var bubble = BDFDB.DOMUtils.create(`<span class="${BDFDB.disCN.sliderbubble}">${(currenthours > 9 ? currenthours : ("0" + currenthours)) + ":" + (currentminutes > 9 ? currentminutes : ("0" + currentminutes))}</span>`);
 		grabber.appendChild(bubble);
 		grabber.style.setProperty("left", `${this.getPercent(currenttime)}%`);
 		var mouseleave = () => {
-			BDFDB.removeEles(bubble);
+			BDFDB.DOMUtils.remove(bubble);
 			grabber.removeEventListener("mouseleave", mouseleave);
 		};
 		grabber.addEventListener("mouseleave", mouseleave);
@@ -143,32 +143,32 @@ class TimedLightDarkMode {
 
 	dragSlider (grabber) {
 		var track = grabber.parentNode;
-		if (BDFDB.containsClass(track.parentNode, BDFDB.disCN.sliderdisabled)) return;
+		if (BDFDB.DOMUtils.containsClass(track.parentNode, BDFDB.disCN.sliderdisabled)) return;
 		var type = grabber.getAttribute("key");
 		var input = track.parentNode.querySelector(`${BDFDB.dotCN.sliderinput}[key="${type}"]`);
 		var values = BDFDB.DataUtils.get(this, "values");
 
-		BDFDB.appendLocalStyle("disableTextSelection", `*{user-select: none !important;}`);
+		BDFDB.DOMUtils.appendLocalStyle("disableTextSelection", `*{user-select: none !important;}`);
 
 		var value = values[type];
 		var othervalue = type == "timer1" ? values.timer2 : values.timer1;
 		var sY = 0;
-		var sHalfW = BDFDB.getRects(grabber).width/2;
-		var sMinX = BDFDB.getRects(track).left;
-		var sMaxX = sMinX + BDFDB.getRects(track).width;
-		var bubble = BDFDB.htmlToElement(`<span class="${BDFDB.disCN.sliderbubble}">${this.getTime(value, true)}</span>`);
+		var sHalfW = BDFDB.DOMUtils.getRects(grabber).width/2;
+		var sMinX = BDFDB.DOMUtils.getRects(track).left;
+		var sMaxX = sMinX + BDFDB.DOMUtils.getRects(track).width;
+		var bubble = BDFDB.DOMUtils.create(`<span class="${BDFDB.disCN.sliderbubble}">${this.getTime(value, true)}</span>`);
 		grabber.appendChild(bubble);
 		var mouseup = () => {
 			document.removeEventListener("mouseup", mouseup);
 			document.removeEventListener("mousemove", mousemove);
-			BDFDB.removeEles(bubble);
-			BDFDB.removeLocalStyle("disableTextSelection");
+			BDFDB.DOMUtils.remove(bubble);
+			BDFDB.DOMUtils.removeLocalStyle("disableTextSelection");
 			BDFDB.DataUtils.save(value, this, "values", type);
 			this.startInterval();
 		};
 		var mousemove = e => {
 			sY = e.clientX > sMaxX ? sMaxX - sHalfW : (e.clientX < sMinX ? sMinX - sHalfW : e.clientX - sHalfW);
-			value = BDFDB.mapRange([sMinX - sHalfW, sMaxX - sHalfW], [0, 100], sY);
+			value = BDFDB.NumberUtils.mapRange([sMinX - sHalfW, sMaxX - sHalfW], [0, 100], sY);
 			input.value = value;
 			grabber.style.setProperty("left", value + "%");
 			bubble.innerText = this.getTime(value, true);
@@ -190,7 +190,7 @@ class TimedLightDarkMode {
 	}
 
 	getTime (percent, stringify) {
-		var time = BDFDB.mapRange([0, 100], [0, 1440], percent)/60;
+		var time = BDFDB.NumberUtils.mapRange([0, 100], [0, 1440], percent)/60;
 		var hours = Math.floor(time);
 		var minutes = Math.floor((time - hours) * 60);
 		return stringify ? (hours > 9 ? hours : ("0" + hours)) + ":" + (minutes > 9 ? minutes : ("0" + minutes)) : [hours,minutes];
@@ -200,7 +200,7 @@ class TimedLightDarkMode {
 		if (!time) return 0;
 		var hours = Array.isArray(time) ? time[0] : (typeof time == "object" && typeof time.getHours == "function" ? time.getHours() : 0);
 		var minutes = Array.isArray(time) ? time[1] : (typeof time == "object" && typeof time.getMinutes == "function" ? time.getMinutes() : 0);
-		return BDFDB.mapRange([0, 1440], [0, 100], (hours * 60) + minutes);
+		return BDFDB.NumberUtils.mapRange([0, 1440], [0, 100], (hours * 60) + minutes);
 	}
 
 	getHighTime (timer) {

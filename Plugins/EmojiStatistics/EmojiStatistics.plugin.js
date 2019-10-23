@@ -149,7 +149,7 @@ class EmojiStatistics {
 		}
 		settingshtml += `</div></div>`;
 
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
+		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
 
@@ -191,7 +191,7 @@ class EmojiStatistics {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.removeEles(".emoji-tooltip",".emojistatistics-button");
+			BDFDB.DOMUtils.remove(".emoji-tooltip",".emojistatistics-button");
 			BDFDB.PluginUtils.clear(this);
 		}
 	}
@@ -217,7 +217,7 @@ class EmojiStatistics {
 			this.loadEmojiList();
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			if (settings.enableEmojiStatisticsButton) {
-				let emojiStatisticsButton = BDFDB.htmlToElement(`<div class="emojistatistics-button"></div>`);
+				let emojiStatisticsButton = BDFDB.DOMUtils.create(`<div class="emojistatistics-button"></div>`);
 				emojipickerdiversityselector.parentElement.insertBefore(emojiStatisticsButton, emojipickerdiversityselector);
 				emojiStatisticsButton.addEventListener("click", () => {
 					let close = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.return.return.return.stateNode.close");
@@ -231,7 +231,7 @@ class EmojiStatistics {
 			if (settings.enableEmojiHovering) {
 				BDFDB.ListenerUtils.add(this, wrapper, "mouseenter", BDFDB.dotCN.emojipickeremojiitem, e => {
 					let data = this.emojiToServerList[e.target.style.getPropertyValue("background-image").replace('url("',"").replace('")',"")];
-					if (data) BDFDB.TooltipUtils.create(e.target, `${BDFDB.encodeToHTML(data.emoji)}\n${BDFDB.encodeToHTML(data.server)}`, {type:"right",selector:"emoji-tooltip",delay:BDFDB.DataUtils.get(this, "amounts")}, "hoverDelay");
+					if (data) BDFDB.TooltipUtils.create(e.target, `${BDFDB.StringUtils.htmlEscape(data.emoji)}\n${BDFDB.StringUtils.htmlEscape(data.server)}`, {type:"right",selector:"emoji-tooltip",delay:BDFDB.DataUtils.get(this, "amounts")}, "hoverDelay");
 				});
 			}
 		}
@@ -249,14 +249,14 @@ class EmojiStatistics {
 	}
 
 	showEmojiInformationModal () {
-		var emojiInformationModal = BDFDB.htmlToElement(this.emojiInformationModalMarkup);
+		var emojiInformationModal = BDFDB.DOMUtils.create(this.emojiInformationModalMarkup);
 
 		let titlescontainer = emojiInformationModal.querySelector(".titles");
 		let entriescontainer = emojiInformationModal.querySelector(".entries");
 
 		if (!titlescontainer || !entriescontainer) return;
 
-		var titleEntry = BDFDB.htmlToElement(this.emojiserverTitlesMarkup);
+		var titleEntry = BDFDB.DOMUtils.create(this.emojiserverTitlesMarkup);
 		titlescontainer.appendChild(titleEntry);
 		var entries = [], index = 0, totalGlobal = 0, totalLocal = 0, totalCopies = 0;
 		BDFDB.ListenerUtils.addToChildren(titleEntry, "click", ".sorttitle-label ", e => {
@@ -287,8 +287,8 @@ class EmojiStatistics {
 					amountLocal++;
 				}
 			}
-			var emojiEntry = BDFDB.htmlToElement(this.emojiserverEntryMarkup);
-			emojiEntry.querySelector(".emojiserver-icon").appendChild(BDFDB.GuildUtils.createCopy(info, {click: () => {BDFDB.removeEles(emojiInformationModal);}, menu: true, size: 48}));
+			var emojiEntry = BDFDB.DOMUtils.create(this.emojiserverEntryMarkup);
+			emojiEntry.querySelector(".emojiserver-icon").appendChild(BDFDB.GuildUtils.createCopy(info, {click: () => {BDFDB.DOMUtils.remove(emojiInformationModal);}, menu: true, size: 48}));
 			emojiEntry.querySelector(".emojiname-label").innerText = info.name || "";
 			emojiEntry.querySelector(".emojitotal-label").innerText = amountGlobal + amountLocal;
 			emojiEntry.querySelector(".emojiglobal-label").innerText = amountGlobal;
@@ -316,9 +316,9 @@ class EmojiStatistics {
 	}
 
 	updateAllEntries (entriescontainer, entries) {
-		BDFDB.removeEles(entriescontainer.childNodes);
+		BDFDB.DOMUtils.remove(entriescontainer.childNodes);
 		for (let entry of entries) {
-			if (entriescontainer.childElementCount) entriescontainer.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCN.divider}"></div>`));
+			if (entriescontainer.childElementCount) entriescontainer.appendChild(BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.divider}"></div>`));
 			entriescontainer.appendChild(entry.div);
 		}
 	}

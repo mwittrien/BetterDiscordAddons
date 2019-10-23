@@ -77,7 +77,7 @@ class SpellCheck {
 		settingshtml += `</div>`;
 		settingshtml += `</div></div>`;
 
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
+		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
 
@@ -127,8 +127,8 @@ class SpellCheck {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.removeEles(".spellcheck-overlay");
-			BDFDB.removeClasses("spellcheck-added");
+			BDFDB.DOMUtils.remove(".spellcheck-overlay");
+			BDFDB.DOMUtils.removeClassFromDOM("spellcheck-added");
 
 			this.killLanguageToast();
 
@@ -161,7 +161,7 @@ class SpellCheck {
 				}
 			}
 			if (true || !word && textarea.value) for (let error of textarea.parentElement.querySelectorAll(".spelling-error")) {
-				let rects = BDFDB.getRects(error);
+				let rects = BDFDB.DOMUtils.getRects(error);
 				if (BDFDB.mousePosition.pageX > rects.x && BDFDB.mousePosition.pageX < (rects.x + rects.width) && BDFDB.mousePosition.pageY > rects.y && BDFDB.mousePosition.pageY < (rects.y + rects.height)) {
 					word = error.innerText;
 					break;
@@ -226,21 +226,21 @@ class SpellCheck {
 				spellcheck.style.setProperty("mask", "none", "important");
 				spellcheck.style.setProperty("pointer-events", "none", "important");
 				spellcheck.style.setProperty("position", "absolute", "important");
-				spellcheck.style.setProperty("left", BDFDB.getRects(textarea).left - BDFDB.getRects(wrapper).left + "px", "important");
-				spellcheck.style.setProperty("width", BDFDB.getRects(textarea).width - style.paddingLeft - style.paddingRight + "px", "important");
+				spellcheck.style.setProperty("left", BDFDB.DOMUtils.getRects(textarea).left - BDFDB.DOMUtils.getRects(wrapper).left + "px", "important");
+				spellcheck.style.setProperty("width", BDFDB.DOMUtils.getRects(textarea).width - style.paddingLeft - style.paddingRight + "px", "important");
 				spellcheck.style.setProperty("height", style.height, "important");
 
 				spellcheck.innerHTML = this.spellCheckText(textarea.value);
 				spellcheck.scrollTop = textarea.scrollTop;
 			}
 
-			var spellcheck = BDFDB.htmlToElement(this.spellCheckLayerMarkup);
-			BDFDB.addClass(spellcheck, textarea.className);
+			var spellcheck = BDFDB.DOMUtils.create(this.spellCheckLayerMarkup);
+			BDFDB.DOMUtils.addClass(spellcheck, textarea.className);
 
 			textarea.setAttribute("spellcheck", false);
 
 			textarea.parentElement.appendChild(spellcheck);
-			BDFDB.addClass(wrapper, "spellcheck-added");
+			BDFDB.DOMUtils.addClass(wrapper, "spellcheck-added");
 
 			updateSpellcheck();
 			BDFDB.ListenerUtils.add(this, textarea, "keyup", e => {
@@ -300,7 +300,7 @@ class SpellCheck {
 			this.setDictionary(choice);
 			BDFDB.DataUtils.save(choice, this, "choices", type);
 
-			var settingspanel = BDFDB.getParentEle(".BDFDB-settings", selectWrap), listcontainer = settingspanel ? settingspanel.querySelector(".word-list") : null;
+			var settingspanel = BDFDB.DOMUtils.getParent(".BDFDB-settings", selectWrap), listcontainer = settingspanel ? settingspanel.querySelector(".word-list") : null;
 			if (listcontainer) {
 				var ownDictionary = BDFDB.DataUtils.load(this, "owndics", choice) || [];
 				var containerhtml = ``;
@@ -351,7 +351,7 @@ class SpellCheck {
 		string.replace(/\n/g, "\n ").split(" ").forEach(word => {
 			let hasnewline = word.endsWith("\n");
 			word = word.replace(/\n/g, "");
-			htmlString.push(`<label class="${this.isWordNotInDictionary(word) ? "spelling-error" : "nospelling-error"}" style="color: transparent !important; text-shadow: none !important;">${BDFDB.encodeToHTML(word)}</label>${hasnewline ? "\n" : ""}`);
+			htmlString.push(`<label class="${this.isWordNotInDictionary(word) ? "spelling-error" : "nospelling-error"}" style="color: transparent !important; text-shadow: none !important;">${BDFDB.StringUtils.htmlEscape(word)}</label>${hasnewline ? "\n" : ""}`);
 		});
 		return htmlString.join(" ").replace(/\n /g, "\n");
 	}

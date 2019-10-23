@@ -144,8 +144,8 @@ class BadgesEverywhere {
 			label: this.defaults.badges[flag].name,
 			value: badges[flag],
 			labelchildren: [
-				BDFDB.ReactUtils.elementToReact(BDFDB.htmlToElement(`<span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionplaying}" style="all: unset !important;">${Array.isArray(this.defaults.badges[flag].types) ? this.defaults.badges[flag].types.map(rank => this.createBadge("settings", flag, rank)).join("") : this.createBadge("settings", flag)}</span>`)),
-				BDFDB.ReactUtils.elementToReact(BDFDB.htmlToElement(`<span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;">${Array.isArray(this.defaults.badges[flag].types) ? this.defaults.badges[flag].types.map(rank => this.createBadge("settings", flag, rank)).join("") : this.createBadge("settings", flag)}</span>`))
+				BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(`<span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionplaying}" style="all: unset !important;">${Array.isArray(this.defaults.badges[flag].types) ? this.defaults.badges[flag].types.map(rank => this.createBadge("settings", flag, rank)).join("") : this.createBadge("settings", flag)}</span>`)),
+				BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(`<span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;">${Array.isArray(this.defaults.badges[flag].types) ? this.defaults.badges[flag].types.map(rank => this.createBadge("settings", flag, rank)).join("") : this.createBadge("settings", flag)}</span>`))
 			]
 		}));
 		for (let flag in indicators) inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
@@ -155,8 +155,8 @@ class BadgesEverywhere {
 			label: this.defaults.indicators[flag].name,
 			value: indicators[flag],
 			labelchildren: [
-				BDFDB.ReactUtils.elementToReact(BDFDB.htmlToElement(`<span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionplaying}" style="all: unset !important;">${this.createBadge("settings", flag)}</span>`)),
-				BDFDB.ReactUtils.elementToReact(BDFDB.htmlToElement(`<span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;">${this.createBadge("settings", flag)}</span>`))
+				BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(`<span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionplaying}" style="all: unset !important;">${this.createBadge("settings", flag)}</span>`)),
+				BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(`<span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;">${this.createBadge("settings", flag)}</span>`))
 			]
 		}));
 		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
@@ -204,7 +204,7 @@ class BadgesEverywhere {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.removeEles(".BE-badges");
+			BDFDB.DOMUtils.remove(".BE-badges");
 			BDFDB.PluginUtils.clear(this);
 		}
 	}
@@ -265,15 +265,15 @@ class BadgesEverywhere {
 	}
 
 	addToWrapper (info, wrapper, type) {
-		BDFDB.removeEles(wrapper.querySelectorAll(".BE-badges"));
+		BDFDB.DOMUtils.remove(wrapper.querySelectorAll(".BE-badges"));
 		let badges = BDFDB.DataUtils.get(this, "badges");
 		let indicators = BDFDB.DataUtils.get(this, "indicators");
 		let settings = BDFDB.DataUtils.get(this, "settings");
-		let header = BDFDB.getParentEle(BDFDB.dotCN.userpopoutheader, wrapper);
-		let badgewrapper = BDFDB.htmlToElement(`<span class="BE-badges BE-badges-${type} ${!settings.useColoredVersion || (header && !BDFDB.containsClass(header, BDFDB.disCN.userpopoutheadernormal)) ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important; display: flex !important; flex-direction: row !important;"></span>`);
+		let header = BDFDB.DOMUtils.getParent(BDFDB.dotCN.userpopoutheader, wrapper);
+		let badgewrapper = BDFDB.DOMUtils.create(`<span class="BE-badges BE-badges-${type} ${!settings.useColoredVersion || (header && !BDFDB.DOMUtils.containsClass(header, BDFDB.disCN.userpopoutheadernormal)) ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important; display: flex !important; flex-direction: row !important;"></span>`);
 		for (let flag in this.defaults.badges) {
 			if ((this.loadedusers[info.id].flags | flag) == this.loadedusers[info.id].flags && badges[flag]) {
-				let badge = BDFDB.htmlToElement(this.createBadge(type, flag, flag == this.boostflag ? BDFDB.LibraryModules.GuildBoostUtils.getUserLevel(this.loadedusers[info.id].premium_guild_since) : ""));
+				let badge = BDFDB.DOMUtils.create(this.createBadge(type, flag, flag == this.boostflag ? BDFDB.LibraryModules.GuildBoostUtils.getUserLevel(this.loadedusers[info.id].premium_guild_since) : ""));
 				badgewrapper.appendChild(badge);
 				badge.addEventListener("mouseenter", () => {
 					let text = this.defaults.badges[flag].name;
@@ -285,7 +285,7 @@ class BadgesEverywhere {
 		}
 		let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), info.id);
 		if (indicators.CURRENT_GUILD_BOOST && member && member.premiumSince) {
-			let badge = BDFDB.htmlToElement(this.createBadge(type, "CURRENT_GUILD_BOOST"));
+			let badge = BDFDB.DOMUtils.create(this.createBadge(type, "CURRENT_GUILD_BOOST"));
 			badgewrapper.appendChild(badge);
 			badge.addEventListener("mouseenter", () => {
 				BDFDB.TooltipUtils.create(badge, settings.showNitroDate ? BDFDB.LanguageUtils.LanguageStringsFormat("PREMIUM_GUILD_SUBSCRIPTION_TOOLTIP", new Date(member.premiumSince)) : "Boosting current server", {type:"top", style:"white-space: nowrap; max-width: unset"});
@@ -296,7 +296,7 @@ class BadgesEverywhere {
 				header.firstElementChild.appendChild(badgewrapper);
 				let popout = header.parentElement.parentElement;
 				if (popout.style.transform.indexOf("translateY(-1") == -1) {
-					let arect = BDFDB.getRects(document.querySelector(BDFDB.dotCN.appmount)), prect = BDFDB.getRects(popout);
+					let arect = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount)), prect = BDFDB.DOMUtils.getRects(popout);
 					popout.style.setProperty("top", (prect.y + prect.height > arect.height ? (arect.height - prect.height) : prect.y) + "px");
 				}
 			}

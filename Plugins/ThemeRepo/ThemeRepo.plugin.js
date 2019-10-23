@@ -325,7 +325,7 @@ class ThemeRepo {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Remove all added Themes from your own list.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} remove-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
 
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
+		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
 
@@ -384,7 +384,7 @@ class ThemeRepo {
 			clearInterval(this.updateInterval);
 			clearTimeout(this.loading.timeout);
 
-			BDFDB.removeEles("iframe.discordPreview",".themerepo-notice",".bd-themerepobutton",".themerepo-loadingicon",BDFDB.dotCN.app + " > .repo-loadingwrapper:empty");
+			BDFDB.DOMUtils.remove("iframe.discordPreview",".themerepo-notice",".bd-themerepobutton",".themerepo-loadingicon",BDFDB.dotCN.app + " > .repo-loadingwrapper:empty");
 
 			BDFDB.PluginUtils.clear(this);
 		}
@@ -412,7 +412,7 @@ class ThemeRepo {
 		if (!document.querySelector(".bd-themerepobutton") && window.PluginUpdates && window.PluginUpdates.plugins && instance._reactInternalFiber.key && instance._reactInternalFiber.key.split("-")[0] == "theme") {
 			var folderbutton = document.querySelector(BDFDB.dotCN._repofolderbutton);
 			if (folderbutton) {
-				var repoButton = BDFDB.htmlToElement(`<button class="${BDFDB.disCN._repofolderbutton} bd-themerepobutton">ThemeRepo</button>`);
+				var repoButton = BDFDB.DOMUtils.create(`<button class="${BDFDB.disCN._repofolderbutton} bd-themerepobutton">ThemeRepo</button>`);
 				repoButton.addEventListener("click", () => {
 					this.openThemeRepoModal();
 				});
@@ -434,7 +434,7 @@ class ThemeRepo {
 			if (!ownlist.includes(url)) {
 				ownlist.push(url);
 				BDFDB.DataUtils.save(ownlist, this, "ownlist", "ownlist");
-				let entry = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.margintop4 + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis} entryurl">${url}</div></div><div class="${BDFDB.disCN.hovercardbutton} remove-theme"></div></div>`);
+				let entry = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.margintop4 + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis} entryurl">${url}</div></div><div class="${BDFDB.disCN.hovercardbutton} remove-theme"></div></div>`);
 				BDFDB.ListenerUtils.addToChildren(entry, "click", ".remove-theme", e => {this.removeThemeFromOwnList(e);});
 				themeList.appendChild(entry);
 			}
@@ -453,7 +453,7 @@ class ThemeRepo {
 	removeAllFromOwnList (settingspanel) {
 		BDFDB.openConfirmModal(this, "Are you sure you want to remove all added Themes from your own list?", () => {
 			BDFDB.DataUtils.save([], this, "ownlist", "ownlist");
-			BDFDB.removeEles(settingspanel.querySelector(BDFDB.dotCN.hovercard));
+			BDFDB.DOMUtils.remove(settingspanel.querySelector(BDFDB.dotCN.hovercard));
 		});
 	}
 
@@ -470,7 +470,7 @@ class ThemeRepo {
 					toggle = false;
 					break;
 				}
-				if (toggle) BDFDB.toggleEles(themeRepoModal);
+				if (toggle) BDFDB.DOMUtils.toggle(themeRepoModal);
 			}
 			else if (e.which == 27) frame.remove();
 		};
@@ -504,19 +504,19 @@ class ThemeRepo {
 
 		var createSelectChoice = index => {
 			let theme = this.loadedThemes[this.generatorThemes[index-1]] || {name: "-----", author: "-----"};
-			return `<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer}" style="flex: 1 1 auto;"><strong>${BDFDB.encodeToHTML(theme.name)}</strong> by ${BDFDB.encodeToHTML(theme.author)}</div>`;
+			return `<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer}" style="flex: 1 1 auto;"><strong>${BDFDB.StringUtils.htmlEscape(theme.name)}</strong> by ${BDFDB.StringUtils.htmlEscape(theme.author)}</div>`;
 		};
 
 		var saveSelectChoice = (selectWrap, type, index) => {
 			let theme = this.loadedThemes[this.generatorThemes[index-1]] || {name: "-----", author: "-----"};
-			selectWrap.querySelector(BDFDB.dotCN.title).innerHTML = `<strong>${BDFDB.encodeToHTML(theme.name)}</strong> by ${BDFDB.encodeToHTML(theme.author)}`;
+			selectWrap.querySelector(BDFDB.dotCN.title).innerHTML = `<strong>${BDFDB.StringUtils.htmlEscape(theme.name)}</strong> by ${BDFDB.StringUtils.htmlEscape(theme.author)}`;
 			themeRepoModal.querySelectorAll(".previewCheckbox").forEach(checkbox => {
 				checkbox.checked = false;
-				BDFDB.removeClass(checkbox.parentElement, BDFDB.disCN.switchvaluechecked);
-				BDFDB.addClass(checkbox.parentElement, BDFDB.disCN.switchvalueunchecked);
+				BDFDB.DOMUtils.removeClass(checkbox.parentElement, BDFDB.disCN.switchvaluechecked);
+				BDFDB.DOMUtils.addClass(checkbox.parentElement, BDFDB.disCN.switchvalueunchecked);
 			});
 			let container = themeRepoModal.querySelector(".variables");
-			BDFDB.removeEles(themeRepoModal.querySelectorAll(".varcontainer"));
+			BDFDB.DOMUtils.remove(themeRepoModal.querySelectorAll(".varcontainer"));
 			if (container && theme.fullcss) {
 				frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"NewTheme",checked:true,css:theme.fullcss},"*");
 				this.createGeneratorVars(frame, container, theme);
@@ -526,8 +526,8 @@ class ThemeRepo {
 		document.addEventListener("keyup", keyPressed);
 		window.addEventListener("message", messageReceived);
 
-		var frame = BDFDB.htmlToElement(this.frameMarkup);
-		var themeRepoModal = BDFDB.htmlToElement(this.themeRepoModalMarkup);
+		var frame = BDFDB.DOMUtils.create(this.frameMarkup);
+		var themeRepoModal = BDFDB.DOMUtils.create(this.themeRepoModalMarkup);
 		var tabbar = themeRepoModal.querySelector(BDFDB.dotCN.tabbar);
 		tabbar.parentElement.insertBefore(BDFDB.createSearchBar("small"), tabbar.nextElementSibling);
 		var hiddenSettings = BDFDB.DataUtils.load(this, "hidden");
@@ -542,7 +542,7 @@ class ThemeRepo {
 		themeRepoModal.querySelector("#input-hideupdated").checked = hiddenSettings.updated || options.showOnlyOutdated;
 		themeRepoModal.querySelector("#input-hideoutdated").checked = hiddenSettings.outdated && !options.showOnlyOutdated;
 		themeRepoModal.querySelector("#input-hidedownloadable").checked = hiddenSettings.downloadable || options.showOnlyOutdated;
-		if (!BDFDB.BdUtils.isAutoLoadEnabled()) themeRepoModal.querySelector("#RNMoption").remove();
+		if (!BDFDB.BDUtils.isAutoLoadEnabled()) themeRepoModal.querySelector("#RNMoption").remove();
 		else themeRepoModal.querySelector("#input-rnmstart").checked = BDFDB.DataUtils.load(this, "RNMstart", "RNMstart");
 
 		if (options.forcedSort && this.sortings.sort[options.forcedSort]) {
@@ -587,7 +587,7 @@ class ThemeRepo {
 					let newvalue = input.value;
 					if (newvalue && newvalue.trim() && newvalue != oldvalue) {
 						let varname = input.getAttribute("option");
-						css = css.replace(new RegExp(`--${BDFDB.regEscape(varname)}(\\s*):(\\s*)${BDFDB.regEscape(oldvalue)}`,"g"),`--${varname}$1:$2${newvalue}`);
+						css = css.replace(new RegExp(`--${BDFDB.StringUtils.regEscape(varname)}(\\s*):(\\s*)${BDFDB.StringUtils.regEscape(oldvalue)}`,"g"),`--${varname}$1:$2${newvalue}`);
 					}
 				}
 				this.createThemeFile(data.name + ".theme.css", css);
@@ -635,7 +635,7 @@ class ThemeRepo {
 			BDFDB.createSortPopout(e.currentTarget, this.orderPopoutMarkup, () => {this.sortEntries(themeRepoModal);});
 		});
 		BDFDB.ListenerUtils.addToChildren(themeRepoModal, "click", BDFDB.dotCN.tabbaritem + "[tab=themes]", e => {
-			if (!BDFDB.containsClass(e.currentTarget, BDFDB.disCN.settingsitemselected)) {
+			if (!BDFDB.DOMUtils.containsClass(e.currentTarget, BDFDB.disCN.settingsitemselected)) {
 				if (themeRepoModal.updateHidden) {
 					delete themeRepoModal.updateHidden;
 					this.sortEntries(themeRepoModal);
@@ -648,7 +648,7 @@ class ThemeRepo {
 		themeRepoModal.entries = {};
 		for (let url in this.loadedThemes) {
 			let theme = this.loadedThemes[url];
-			let instTheme = BDFDB.BdUtils.getTheme(theme.name);
+			let instTheme = BDFDB.BDUtils.getTheme(theme.name);
 			if (instTheme && instTheme.author.toUpperCase() == theme.author.toUpperCase()) theme.state = instTheme.version != theme.version ? 1 : 0;
 			else theme.state = 2;
 			let data = {
@@ -702,7 +702,7 @@ class ThemeRepo {
 		vars = vars.split("}")[0];
 		vars = vars.slice(2).split(/;--|\*\/--/);
 		
-		var maxwidth = BDFDB.getRects(container).width - 80;
+		var maxwidth = BDFDB.DOMUtils.getRects(container).width - 80;
 		for (let varstr of vars) {
 			varstr = varstr.split(":");
 			let varname = varstr.shift().trim();
@@ -711,7 +711,7 @@ class ThemeRepo {
 			if (varvalue) {
 				let vardescription = varstr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
 				vardescription = vardescription && vardescription.indexOf("*") == 0 ? vardescription.slice(1) : vardescription;
-				let varcontainer = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20} varcontainer" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCN.flexchild} BDFDB-textscrollwrapper" style="flex: 0 0 30%;"><div class="BDFDB-textscroll">${varname[0].toUpperCase() + varname.slice(1)}</div></h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" option="${varname}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.titlesize16} varinput"></div><button type="button" class="${BDFDB.disCN.colorpickerswatch} single-swatch" style="background-color: black;"></button><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} file-navigator" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div><input type="file" accept="image/*" style="display:none!important;"></button></div>${vardescription ? `<div class="${BDFDB.disCNS.description + BDFDB.disCNS.note + BDFDB.disCN.primary} BDFDB-textscrollwrapper" style="flex: 1 1 auto; max-width: ${maxwidth}px !important;"><div class="BDFDB-textscroll">${BDFDB.encodeToHTML(vardescription)}</div></div>` : ""}${vars[vars.length-1] == varstr ? '' : `<div class="${BDFDB.disCNS.divider + BDFDB.disCN.dividerdefault}"></div>`}</div>`);
+				let varcontainer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directioncolumn + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20} varcontainer" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCN.flexchild} BDFDB-textscrollwrapper" style="flex: 0 0 30%;"><div class="BDFDB-textscroll">${varname[0].toUpperCase() + varname.slice(1)}</div></h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" option="${varname}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.titlesize16} varinput"></div><button type="button" class="${BDFDB.disCN.colorpickerswatch} single-swatch" style="background-color: black;"></button><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} file-navigator" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div><input type="file" accept="image/*" style="display:none!important;"></button></div>${vardescription ? `<div class="${BDFDB.disCNS.description + BDFDB.disCNS.note + BDFDB.disCN.primary} BDFDB-textscrollwrapper" style="flex: 1 1 auto; max-width: ${maxwidth}px !important;"><div class="BDFDB-textscroll">${BDFDB.StringUtils.htmlEscape(vardescription)}</div></div>` : ""}${vars[vars.length-1] == varstr ? '' : `<div class="${BDFDB.disCNS.divider + BDFDB.disCN.dividerdefault}"></div>`}</div>`);
 				let varinput = varcontainer.querySelector(BDFDB.dotCN.input);
 				varinput.value = varvalue;
 				varinput.setAttribute("placeholder", varvalue);
@@ -727,10 +727,10 @@ class ThemeRepo {
 					let color = iscomp ? BDFDB.ColorUtils.convert(varvalue.split(","), "RGB") : varvalue;
 					swatch.style.setProperty("background-color", color, "important");
 					swatch.addEventListener("click", e => {
-						BDFDB.openColorPicker(varcontainer, e.currentTarget, color, {gradient:false, comp:iscomp, alpha:iscolor, callback:updatePreview});
+						BDFDB.ColorUtils.openPicker(varcontainer, e.currentTarget, color, {gradient:false, comp:iscomp, alpha:iscolor, callback:updatePreview});
 					});
 				}
-				else BDFDB.removeEles(swatch);
+				else BDFDB.DOMUtils.remove(swatch);
 				if (isurlfile || isfile) {
 					navigator.addEventListener("change", e => {
 						let file = navigator.querySelector("input").files[0];
@@ -739,7 +739,7 @@ class ThemeRepo {
 						updatePreview();
 					});
 				}
-				else BDFDB.removeEles(navigator);
+				else BDFDB.DOMUtils.remove(navigator);
 				
 				container.appendChild(varcontainer);
 			}
@@ -753,7 +753,7 @@ class ThemeRepo {
 					let newvalue = input.value;
 					if (newvalue && newvalue.trim() && newvalue != oldvalue) {
 						let varname = input.getAttribute("option");
-						css = css.replace(new RegExp(`--${BDFDB.regEscape(varname)}(\\s*):(\\s*)${BDFDB.regEscape(oldvalue)}`,"g"),`--${varname}$1:$2${newvalue}`);
+						css = css.replace(new RegExp(`--${BDFDB.StringUtils.regEscape(varname)}(\\s*):(\\s*)${BDFDB.StringUtils.regEscape(oldvalue)}`,"g"),`--${varname}$1:$2${newvalue}`);
 					}
 				}
 				frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"NewTheme",checked:true,css},"*");
@@ -765,7 +765,7 @@ class ThemeRepo {
 
 	addEntry (frame, themeRepoModal, container, data) {
 		if (!frame || !themeRepoModal || !container || !data) return;
-		let entry = BDFDB.htmlToElement(this.themeEntryMarkup);
+		let entry = BDFDB.DOMUtils.create(this.themeEntryMarkup);
 		setEntryState(data.state);
 		entry.setAttribute("data-name", data.name);
 		entry.setAttribute("data-version", data.version);
@@ -774,9 +774,9 @@ class ThemeRepo {
 		entry.querySelector(BDFDB.dotCN._repoversion).innerHTML = data.version;
 		entry.querySelector(BDFDB.dotCN._repoauthor).innerHTML = data.author;
 		entry.querySelector(BDFDB.dotCN._repodescription).innerHTML = data.description;
-		if (data.new == 0) entry.querySelector(BDFDB.dotCN._repoheadertitle).appendChild(BDFDB.htmlToElement(`<span class="newentries-tag ${BDFDB.disCNS.bottag + BDFDB.disCNS.bottagregular + BDFDB.disCN.bottagnametag}" style="background-color: rgb(250, 166, 26) !important; color: white !important; padding: 1px 3px; font-size: 10px; top: -2px;">NEW</span>`));
+		if (data.new == 0) entry.querySelector(BDFDB.dotCN._repoheadertitle).appendChild(BDFDB.DOMUtils.create(`<span class="newentries-tag ${BDFDB.disCNS.bottag + BDFDB.disCNS.bottagregular + BDFDB.disCN.bottagnametag}" style="background-color: rgb(250, 166, 26) !important; color: white !important; padding: 1px 3px; font-size: 10px; top: -2px;">NEW</span>`));
 		let favbutton = entry.querySelector(BDFDB.dotCN.giffavoritebutton);
-		BDFDB.toggleClass(favbutton, BDFDB.disCN.giffavoriteselected, data.fav == 0);
+		BDFDB.DOMUtils.toggleClass(favbutton, BDFDB.disCN.giffavoriteselected, data.fav == 0);
 		favbutton.addEventListener("click", e => {
 			let favorize = data.fav == 1;
 			data.fav = favorize ? 0 : 1;
@@ -802,10 +802,10 @@ class ThemeRepo {
 		});
 		let trashbutton = entry.querySelector(".trashIcon");
 		trashbutton.addEventListener("click", e => {
-			if (BDFDB.containsClass(entry, "outdated", "updated", false)) {
+			if (BDFDB.DOMUtils.containsClass(entry, "outdated", "updated", false)) {
 				setEntryState(2);
 				this.deleteThemeFile(data);
-				if (!BDFDB.BdUtils.isAutoLoadEnabled()) this.removeTheme(data);
+				if (!BDFDB.BDUtils.isAutoLoadEnabled()) this.removeTheme(data);
 			}
 		});
 		trashbutton.addEventListener("mouseenter", e => {
@@ -819,12 +819,12 @@ class ThemeRepo {
 		entry.querySelector(".previewCheckbox").addEventListener("click", e => {
 			themeRepoModal.querySelector(".generator-select " + BDFDB.dotCN.select).setAttribute('value', "-----");
 			themeRepoModal.querySelector(".generator-select " + BDFDB.dotCN.title).innerHTML = `<strong>-----</strong> by -----`;
-			BDFDB.removeEles(themeRepoModal.querySelectorAll(".varcontainer"));
+			BDFDB.DOMUtils.remove(themeRepoModal.querySelectorAll(".varcontainer"));
 			if (e.currentTarget.checked) themeRepoModal.querySelectorAll(".previewCheckbox").forEach(checkbox => {
 				if (e.currentTarget != checkbox) {
 					checkbox.checked = false;
-					BDFDB.removeClass(checkbox.parentElement, BDFDB.disCN.switchvaluechecked);
-					BDFDB.addClass(checkbox.parentElement, BDFDB.disCN.switchvalueunchecked);
+					BDFDB.DOMUtils.removeClass(checkbox.parentElement, BDFDB.disCN.switchvaluechecked);
+					BDFDB.DOMUtils.addClass(checkbox.parentElement, BDFDB.disCN.switchvalueunchecked);
 				}
 			});
 			frame.contentWindow.postMessage({origin:"ThemeRepo",reason:"NewTheme",checked:e.currentTarget.checked,css:data.css},"*");
@@ -834,9 +834,9 @@ class ThemeRepo {
 
 		function setEntryState (state) {
 			data.state = state;
-			BDFDB.toggleClass(entry, "downloadable", state > 1);
-			BDFDB.toggleClass(entry, "outdated", state == 1);
-			BDFDB.toggleClass(entry, "updated", state < 1);
+			BDFDB.DOMUtils.toggleClass(entry, "downloadable", state > 1);
+			BDFDB.DOMUtils.toggleClass(entry, "outdated", state == 1);
+			BDFDB.DOMUtils.toggleClass(entry, "updated", state < 1);
 			let downloadbutton = entry.querySelector(".btn-download");
 			downloadbutton.innerText = state < 1 ? "Updated" : (state > 1 ? "Download" : "Outdated");
 			downloadbutton.style.setProperty("background-color", "rgb(" + (state < 1 ? "67,181,129" : (state > 1 ? "114,137,218" : "241,71,71")) + ")", state > 1 ? "" : "important");
@@ -875,12 +875,12 @@ class ThemeRepo {
 				li.style.setProperty("order", pos, "important");
 			}
 			else li.style.removeProperty("order");
-			BDFDB.toggleEles(li, pos > -1);
+			BDFDB.DOMUtils.toggle(li, pos > -1);
 		}
 	}
 
 	loadThemes () {
-		BDFDB.removeEles(".themerepo-loadingicon");
+		BDFDB.DOMUtils.remove(".themerepo-loadingicon");
 		let settings = BDFDB.DataUtils.load(this, "settings");
 		var getThemeInfo, outdated = 0, newentries = 0, i = 0, NFLDreplace = null;
 		var tags = ["name","description","author","version"];
@@ -908,11 +908,11 @@ class ThemeRepo {
 					},1200000), amount:this.loading.amount+1};
 					var loadingiconwrapper = document.querySelector(BDFDB.dotCN.app + "> .repo-loadingwrapper");
 					if (!loadingiconwrapper) {
-						loadingiconwrapper = BDFDB.htmlToElement(`<div class="repo-loadingwrapper"></div>`);
+						loadingiconwrapper = BDFDB.DOMUtils.create(`<div class="repo-loadingwrapper"></div>`);
 						document.querySelector(BDFDB.dotCN.app).appendChild(loadingiconwrapper);
 					}
-					var loadingicon = BDFDB.htmlToElement(this.themeRepoIconMarkup);
-					BDFDB.addClass(loadingicon, "themerepo-loadingicon");
+					var loadingicon = BDFDB.DOMUtils.create(this.themeRepoIconMarkup);
+					BDFDB.DOMUtils.addClass(loadingicon, "themerepo-loadingicon");
 					loadingicon.addEventListener("mouseenter", () => {
 						BDFDB.TooltipUtils.create(loadingicon, this.getLoadingTooltipText(), {type:"left", delay:500, style:"max-width:unset;", selector:"themerepo-loading-tooltip"});
 					});
@@ -923,8 +923,8 @@ class ThemeRepo {
 							clearTimeout(this.loading.timeout);
 							return;
 						}
-						BDFDB.removeEles(loadingicon, ".themerepo-loadingicon");
-						if (!loadingiconwrapper.firstChild) BDFDB.removeEles(loadingiconwrapper);
+						BDFDB.DOMUtils.remove(loadingicon, ".themerepo-loadingicon");
+						if (!loadingiconwrapper.firstChild) BDFDB.DOMUtils.remove(loadingiconwrapper);
 						clearTimeout(this.loading.timeout);
 						this.loading = {is:false, timeout:null, amount:this.loading.amount};
 						console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Finished fetching Themes.");
@@ -1009,7 +1009,7 @@ class ThemeRepo {
 							theme.url = url;
 							theme.requesturl = requesturl;
 							this.loadedThemes[url] = theme;
-							var instTheme = BDFDB.BdUtils.getTheme(theme.name);
+							var instTheme = BDFDB.BDUtils.getTheme(theme.name);
 							if (instTheme && instTheme.author.toUpperCase() == theme.author.toUpperCase() && instTheme.version != theme.version) outdated++;
 							if (!this.cachedThemes.includes(url)) newentries++;
 						}
@@ -1018,7 +1018,7 @@ class ThemeRepo {
 				i++;
 				var loadingtooltip = document.querySelector(".themerepo-loading-tooltip");
 				if (loadingtooltip) {
-					BDFDB.setInnerText(loadingtooltip, this.getLoadingTooltipText());
+					BDFDB.DOMUtils.setText(loadingtooltip, this.getLoadingTooltipText());
 					BDFDB.TooltipUtils.update(loadingtooltip);
 				}
 				getThemeInfo(callback);
@@ -1047,16 +1047,16 @@ class ThemeRepo {
 	}
 
 	createThemeFile (filename, content) {
-		BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BdUtils.getThemesFolder(), filename), content, (error) => {
+		BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getThemesFolder(), filename), content, (error) => {
 			if (error) BDFDB.NotificationUtils.toast(`Unable to save Theme "${filename}".`, {type:"danger"});
 			else BDFDB.NotificationUtils.toast(`Successfully saved Theme "${filename}".`, {type:"success"});
 		});
 	}
 
 	applyTheme (data) {
-		if (BDFDB.BdUtils.isThemeEnabled(data.name) == false) {
-			BDFDB.removeEles(`style#${data.name}`);
-			document.head.appendChild(BDFDB.htmlToElement(`<style id=${data.name}>${data.css}</style>`));
+		if (BDFDB.BDUtils.isThemeEnabled(data.name) == false) {
+			BDFDB.DOMUtils.remove(`style#${data.name}`);
+			document.head.appendChild(BDFDB.DOMUtils.create(`<style id=${data.name}>${data.css}</style>`));
 			window.themeModule.enableTheme(data.name);
 			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Applied Theme " + data.name + ".");
 		}
@@ -1064,15 +1064,15 @@ class ThemeRepo {
 
 	deleteThemeFile (data) {
 		let filename = data.requesturl.split("/").pop();
-		BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.BdUtils.getThemesFolder(), filename), (error) => {
+		BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getThemesFolder(), filename), (error) => {
 			if (error) BDFDB.NotificationUtils.toast(`Unable to delete Theme "${filename}".`, {type:"danger"});
 			else BDFDB.NotificationUtils.toast(`Successfully deleted Theme "${filename}".`);
 		});
 	}
 
 	removeTheme (data) {
-		if (BDFDB.BdUtils.isThemeEnabled(data.name) == true) {
-			BDFDB.removeEles(`style#${data.name}`);
+		if (BDFDB.BDUtils.isThemeEnabled(data.name) == true) {
+			BDFDB.DOMUtils.remove(`style#${data.name}`);
 			window.themeModule.disableTheme(data.name);
 			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Removed Theme " + data.name + ".");
 		}

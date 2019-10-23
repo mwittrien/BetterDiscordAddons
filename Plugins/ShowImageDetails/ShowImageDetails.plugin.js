@@ -56,7 +56,7 @@ class ShowImageDetails {
 		}
 		settingshtml += `</div></div>`;
 
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
+		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
 
@@ -108,10 +108,10 @@ class ShowImageDetails {
 	// begin of own functions
 
 	resetImage (image) {
-		BDFDB.removeClass(image, "image-details-added");
+		BDFDB.DOMUtils.removeClass(image, "image-details-added");
 		image.removeEventListener("mouseenter", image.mouseenterShowImageDetails);
 		let wrapper = image.parentElement;
-		if (BDFDB.containsClass(wrapper, "image-details-wrapper")) {
+		if (BDFDB.DOMUtils.containsClass(wrapper, "image-details-wrapper")) {
 			wrapper.parentElement.insertBefore(image, wrapper);
 			wrapper.remove();
 		}
@@ -120,8 +120,8 @@ class ShowImageDetails {
 	processLazyImageZoomable (instance, image, returnvalue) {
 		let attachment = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.return.memoizedProps.attachment");
 		if (attachment && !attachment.filename.endsWith(".bdemote.png") && !attachment.filename.endsWith(".bdemote.gif")) {
-			if (BDFDB.containsClass(image.parentElement.parentElement, BDFDB.disCN.spoilercontainer, BDFDB.disCN.spoilertext, false)) image = image.parentElement.parentElement;
-			BDFDB.addClass(image, "image-details-added");
+			if (BDFDB.DOMUtils.containsClass(image.parentElement.parentElement, BDFDB.disCN.spoilercontainer, BDFDB.disCN.spoilertext, false)) image = image.parentElement.parentElement;
+			BDFDB.DOMUtils.addClass(image, "image-details-added");
 			image.removeEventListener("mouseenter", image.mouseenterShowImageDetails);
 			if (BDFDB.DataUtils.get(this, "settings", "showOnHover")) {
 				image.mouseenterShowImageDetails = () => {
@@ -130,11 +130,11 @@ class ShowImageDetails {
 				image.addEventListener("mouseenter", image.mouseenterShowImageDetails);
 			}
 			else {
-				let imagedetailswrapper = BDFDB.htmlToElement(`<div class="image-details-wrapper"><div class="image-details"><a class="${BDFDB.disCNS.anchor + BDFDB.disCN.anchorunderlineonhover} image-details-link" title="${attachment.url}" href="${attachment.url}" target="_blank" rel="noreferrer noopener">${attachment.filename}</a><label class="image-details-size ${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">${BDFDB.formatBytes(attachment.size)}</label><label class="image-details-dimensions ${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">${attachment.width}x${attachment.height}px</label></div></div>`);
+				let imagedetailswrapper = BDFDB.DOMUtils.create(`<div class="image-details-wrapper"><div class="image-details"><a class="${BDFDB.disCNS.anchor + BDFDB.disCN.anchorunderlineonhover} image-details-link" title="${attachment.url}" href="${attachment.url}" target="_blank" rel="noreferrer noopener">${attachment.filename}</a><label class="image-details-size ${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">${BDFDB.formatBytes(attachment.size)}</label><label class="image-details-dimensions ${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">${attachment.width}x${attachment.height}px</label></div></div>`);
 				image.parentElement.insertBefore(imagedetailswrapper, image);
 				imagedetailswrapper.appendChild(image);
-				let scroller = BDFDB.getParentEle(BDFDB.dotCN.messages, image);
-				if (scroller) scroller.scrollTop += BDFDB.getRects(imagedetailswrapper).height - BDFDB.getRects(image).height;
+				let scroller = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messages, image);
+				if (scroller) scroller.scrollTop += BDFDB.DOMUtils.getRects(imagedetailswrapper).height - BDFDB.DOMUtils.getRects(image).height;
 			}
 		}
 	}

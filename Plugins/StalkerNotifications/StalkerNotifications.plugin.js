@@ -59,10 +59,10 @@ class StalkerNotifications {
 				require("request")("https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/FriendNotifications/FriendNotifications.plugin.js", (error, response, body) => {
 					if (error) BDFDB.NotificationUtils.toast(`Unable to download FriendNotifications.plugin.js.`, {type:"error"});
 					else {
-						require("fs").writeFile(require("path").join(BDFDB.BdUtils.getPluginsFolder(), "FriendNotifications.plugin.js"), body, (error) => {
+						require("fs").writeFile(require("path").join(BDFDB.BDUtils.getPluginsFolder(), "FriendNotifications.plugin.js"), body, (error) => {
 							if (!error) {
 								BDFDB.NotificationUtils.toast(`Successfully downloaded FriendNotifications.plugin.js.`, {type:"success"});
-								require("fs").unlinkSync(require("path").join(BDFDB.BdUtils.getPluginsFolder(), "StalkerNotifications.plugin.js"));
+								require("fs").unlinkSync(require("path").join(BDFDB.BDUtils.getPluginsFolder(), "StalkerNotifications.plugin.js"));
 							}
 						});
 					}

@@ -121,8 +121,8 @@ class CharCounter {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.removeEles(".charcounter");
-			BDFDB.removeClasses("charcounter-added");
+			BDFDB.DOMUtils.remove(".charcounter");
+			BDFDB.DOMUtils.removeClassFromDOM("charcounter-added");
 			BDFDB.PluginUtils.clear(this);
 		}
 	}
@@ -135,7 +135,7 @@ class CharCounter {
 	}
 
 	processNote (instance, wrapper, returnvalue) {
-		this.appendCounter(wrapper.firstElementChild, BDFDB.containsClass(wrapper, BDFDB.disCN.usernotepopout) ? "popout" : (BDFDB.containsClass(wrapper, BDFDB.disCN.usernoteprofile) ? "profile" : null), false);
+		this.appendCounter(wrapper.firstElementChild, BDFDB.DOMUtils.containsClass(wrapper, BDFDB.disCN.usernotepopout) ? "popout" : (BDFDB.DOMUtils.containsClass(wrapper, BDFDB.disCN.usernoteprofile) ? "profile" : null), false);
 	}
 
 	processUserPopout (instance, wrapper, returnvalue) {
@@ -148,13 +148,13 @@ class CharCounter {
 
 	processChangeNickname (instance, wrapper, returnvalue) {
 		let reset = wrapper.querySelector(BDFDB.dotCN.reset);
-		if (reset && BDFDB.getInnerText(reset.firstElementChild) == BDFDB.LanguageUtils.LanguageStrings.RESET_NICKNAME) this.appendCounter(wrapper.querySelector(BDFDB.dotCN.inputdefault), "nickname", false);
+		if (reset && BDFDB.DOMUtils.getText(reset.firstElementChild) == BDFDB.LanguageUtils.LanguageStrings.RESET_NICKNAME) this.appendCounter(wrapper.querySelector(BDFDB.dotCN.inputdefault), "nickname", false);
 	}
 
 	appendCounter (input, type, parsing) {
 		if (!input || !type) return;
-		BDFDB.removeEles(input.parentElement.querySelectorAll("#charcounter"));
-		var counter = BDFDB.htmlToElement(`<div id="charcounter" class="charcounter ${type}"></div>`);
+		BDFDB.DOMUtils.remove(input.parentElement.querySelectorAll("#charcounter"));
+		var counter = BDFDB.DOMUtils.create(`<div id="charcounter" class="charcounter ${type}"></div>`);
 		input.parentElement.appendChild(counter);
 
 		var updateCounter = () => {
@@ -164,7 +164,7 @@ class CharCounter {
 			counter.innerText = inputlength + "/" + (this.maxLenghts[type] || 2000) + (!seleclength ? "" : " (" + seleclength + ")");
 		};
 
-		BDFDB.addClass(input.parentElement.parentElement, "charcounter-added");
+		BDFDB.DOMUtils.addClass(input.parentElement.parentElement, "charcounter-added");
 		if (type == "nickname") input.setAttribute("maxlength", 32);
 		BDFDB.ListenerUtils.add(this, input, "keydown click change", e => {
 			clearTimeout(input.charcountertimeout);

@@ -64,7 +64,7 @@ class MessageUtilities {
 			if (this.defaults.settings[key].description) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
 		}
 		for (let action in bindings) {
-			if (!this.defaults.bindings[action].plugin || BDFDB.BdUtils.isPluginEnabled(this.defaults.bindings[action].plugin)) {
+			if (!this.defaults.bindings[action].plugin || BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings[action].plugin)) {
 				settingshtml += `<div class="${BDFDB.disCNS.divider + BDFDB.disCN.marginbottom4}"></div>`;
 				settingshtml += `<div class="${action}-key-settings"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.bindings[action].name}:</h3>${toasts[action] != undefined ? `<h5 class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 0 0 auto;">Toast:</h5><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="toasts ${action}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${toasts[action] ? " checked" : ""}></div>` : ''}<h5 class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 0 0 auto;">Enabled:</h5><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${action}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[action] ? " checked" : ""}></div></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">`;
 				settingshtml += `<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 20%;"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin + BDFDB.disCN.marginbottom4}">Click:</h5>${BDFDB.createSelectMenu(this.createSelectChoice(bindings[action].click), bindings[action].click, action + " click")}</div>`;
@@ -77,7 +77,7 @@ class MessageUtilities {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all key bindings.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
 
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
+		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
 
@@ -146,7 +146,7 @@ class MessageUtilities {
 			let changed = false;
 			for (let itemlabel of menu.querySelectorAll(BDFDB.dotCN.contextmenulabel)) {
 				let hint = itemlabel.parentElement.querySelector(BDFDB.dotCN.contextmenuhint);
-				if (hint && !BDFDB.containsClass(hint, "BDFDB-contextMenuItemHint")) {
+				if (hint && !BDFDB.DOMUtils.containsClass(hint, "BDFDB-contextMenuItemHint")) {
 					let action = null;
 					switch (itemlabel.innerText) {
 						case BDFDB.LanguageUtils.LanguageStrings.COPY_MESSAGE_LINK:
@@ -212,15 +212,15 @@ class MessageUtilities {
 
 	startRecording (settingspanel, e) {
 		let recorderWrap = e.currentTarget;
-		if (BDFDB.containsClass(recorderWrap, BDFDB.disCN.hotkeyrecording)) return;
+		if (BDFDB.DOMUtils.containsClass(recorderWrap, BDFDB.disCN.hotkeyrecording)) return;
 
 		let recorderInput = recorderWrap.querySelector("input");
 		let recorderText = recorderWrap.querySelector(BDFDB.dotCN.hotkeytext);
 		let action = recorderWrap.getAttribute("type");
 		let option = recorderWrap.getAttribute("option");
 
-		BDFDB.addClass(recorderWrap, BDFDB.disCN.hotkeyrecording);
-		BDFDB.removeClass(recorderWrap, BDFDB.disCN.hotkeyhasvalue);
+		BDFDB.DOMUtils.addClass(recorderWrap, BDFDB.disCN.hotkeyrecording);
+		BDFDB.DOMUtils.removeClass(recorderWrap, BDFDB.disCN.hotkeyhasvalue);
 		recorderText.innerText = BDFDB.LanguageUtils.LanguageStrings.SHORTCUT_RECORDER_BUTTON_RECORDING;
 
 
@@ -236,8 +236,8 @@ class MessageUtilities {
 			binding[option] = parseInt(recorderWrap.getAttribute("value"));
 			BDFDB.DataUtils.save(binding, this, "bindings", action);
 			setTimeout(() => {
-				BDFDB.removeClass(recorderWrap, BDFDB.disCN.hotkeyrecording);
-				BDFDB.addClass(recorderWrap, BDFDB.disCN.hotkeyhasvalue);
+				BDFDB.DOMUtils.removeClass(recorderWrap, BDFDB.disCN.hotkeyrecording);
+				BDFDB.DOMUtils.addClass(recorderWrap, BDFDB.disCN.hotkeyhasvalue);
 				recorderText.innerText = BDFDB.LanguageUtils.LanguageStrings.SHORTCUT_RECORDER_BUTTON_EDIT;
 			},100);
 		};
@@ -365,36 +365,36 @@ class MessageUtilities {
 	}
 
 	doNote ({messagediv, pos, message}, action) {
-		if (BDFDB.BdUtils.isPluginEnabled(this.defaults.bindings.__Note_Message.plugin)) {
+		if (BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings.__Note_Message.plugin)) {
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
-			if (channel) BDFDB.BdUtils.getPlugin(this.defaults.bindings.__Note_Message.plugin).addMessageToNotes(message, messagediv, channel);
+			if (channel) BDFDB.BDUtils.getPlugin(this.defaults.bindings.__Note_Message.plugin).addMessageToNotes(message, messagediv, channel);
 		}
 	}
 
 	doTranslate ({messagediv, pos, message}, action) {
-		if (BDFDB.BdUtils.isPluginEnabled(this.defaults.bindings.__Translate_Message.plugin)) {
+		if (BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings.__Translate_Message.plugin)) {
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
-			if (channel) BDFDB.BdUtils.getPlugin(this.defaults.bindings.__Translate_Message.plugin).translateMessage(message, messagediv, channel);
+			if (channel) BDFDB.BDUtils.getPlugin(this.defaults.bindings.__Translate_Message.plugin).translateMessage(message, messagediv, channel);
 		}
 	}
 
 	doQuote ({messagediv, pos, message}, action) {
-		if (BDFDB.BdUtils.isPluginEnabled(this.defaults.bindings.__Quote_Message.plugin)) {
+		if (BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings.__Quote_Message.plugin)) {
 			let quoteButton = messagediv.querySelector(".btn-quote");
 			if (quoteButton) quoteButton.click();
 		}
 	}
 
 	doCitate ({messagediv, pos, message}, action) {
-		if (BDFDB.BdUtils.isPluginEnabled(this.defaults.bindings.__Citate_Message.plugin)) {
+		if (BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings.__Citate_Message.plugin)) {
 			let citarButton = messagediv.parentElement.querySelector(".citar-btn");
 			if (citarButton) citarButton.click();
 		}
 	}
 
 	doReveal ({messagediv, pos, message}, action) {
-		if (BDFDB.BdUtils.isPluginEnabled(this.defaults.bindings.__Reveal_Spoilers.plugin)) {
-			BDFDB.BdUtils.getPlugin(this.defaults.bindings.__Reveal_Spoilers.plugin).revealAllSpoilers(messagediv);
+		if (BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings.__Reveal_Spoilers.plugin)) {
+			BDFDB.BDUtils.getPlugin(this.defaults.bindings.__Reveal_Spoilers.plugin).revealAllSpoilers(messagediv);
 		}
 	}
 
@@ -402,7 +402,7 @@ class MessageUtilities {
 		if (!this.isEventFired(name)) {
 			this.fireEvent(name);
 			if (key == 27 && BDFDB.DataUtils.get(this, "settings", "clearOnEscape")) {
-				let instance = BDFDB.ReactUtils.findOwner(BDFDB.getParentEle(BDFDB.dotCNS.chat + "form", e.currentTarget), {name:"ChannelTextAreaForm", up:true});
+				let instance = BDFDB.ReactUtils.findOwner(BDFDB.DOMUtils.getParent(BDFDB.dotCNS.chat + "form", e.currentTarget), {name:"ChannelTextAreaForm", up:true});
 				if (instance) instance.setState({textValue:""});
 			}
 			this.cancelEvent(name);
@@ -423,7 +423,7 @@ class MessageUtilities {
 	}
 
 	getMessageData (target) {
-		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.messagegroup + "> [aria-disabled]", target) || BDFDB.getParentEle(BDFDB.dotCN.messagegroup + "> * > [aria-disabled]", target) || BDFDB.getParentEle(BDFDB.dotCN.messagesystem, target);
+		let messagediv = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagegroup + "> [aria-disabled]", target) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagegroup + "> * > [aria-disabled]", target) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagesystem, target);
 		let pos = messagediv ? Array.from(messagediv.parentElement.childNodes).filter(n => n.nodeType != Node.TEXT_NODE).indexOf(messagediv) : -1;
 		let instance = BDFDB.ReactUtils.getInstance(messagediv);
 		let message = instance ? BDFDB.ReactUtils.findValue(instance, "message", {up:true}) : null;

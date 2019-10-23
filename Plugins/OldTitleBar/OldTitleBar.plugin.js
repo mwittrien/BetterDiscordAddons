@@ -104,7 +104,7 @@ class OldTitleBar {
 		}
 		settingshtml += `</div></div>`;
 
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
+		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
 
@@ -160,7 +160,7 @@ class OldTitleBar {
 
 			this.patchMainScreen(BDFDB.DataUtils.get(this, "settings", "displayNative"));
 
-			BDFDB.addClass([document.body,document.querySelector(BDFDB.dotCN.titlebar)], "hidden-by-OTB");
+			BDFDB.DOMUtils.addClass([document.body,document.querySelector(BDFDB.dotCN.titlebar)], "hidden-by-OTB");
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
@@ -172,9 +172,9 @@ class OldTitleBar {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.removeEles(".headerbarOTB", ".settingsTitlebarOTB");
+			BDFDB.DOMUtils.remove(".headerbarOTB", ".settingsTitlebarOTB");
 
-			BDFDB.removeClasses("hidden-by-OTB", "settingsTitlebarOTB-added");
+			BDFDB.DOMUtils.removeClassFromDOM("hidden-by-OTB", "settingsTitlebarOTB-added");
 
 			BDFDB.PluginUtils.clear(this);
 		}
@@ -200,17 +200,17 @@ class OldTitleBar {
 			this.addSettingsTitleBar(wrapper);
 		}
 		else if (methodnames.includes("componentWillUnmount")) {
-			BDFDB.removeEles(".settingsTitlebarOTB");
-			BDFDB.removeClass(document.body, "settingsTitlebarOTB-added");
+			BDFDB.DOMUtils.remove(".settingsTitlebarOTB");
+			BDFDB.DOMUtils.removeClass(document.body, "settingsTitlebarOTB-added");
 			this.addTitleBar();
 		}
 	}
 
 	addTitleBar () {
-		BDFDB.removeEles(".headerbarOTB");
+		BDFDB.DOMUtils.remove(".headerbarOTB");
 		let settings = BDFDB.DataUtils.get(this, "settings");
 		if (BDFDB.DataUtils.get(this, "settings", "addOldBar")) {
-			var headerbar = BDFDB.htmlToElement(`<span class="headerbarOTB ${BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}"></span>`);
+			var headerbar = BDFDB.DOMUtils.create(`<span class="headerbarOTB ${BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}"></span>`);
 			this.createButtons(headerbar);
 			let headerbaricon = document.querySelector(BDFDB.dotCN.channelheaderchildren);
 			if (headerbaricon) headerbaricon.parentElement.appendChild(headerbar);
@@ -219,10 +219,10 @@ class OldTitleBar {
 	}
 
 	addSettingsTitleBar (settingspane) {
-		BDFDB.removeEles(".settingsTitlebarOTB");
+		BDFDB.DOMUtils.remove(".settingsTitlebarOTB");
 		if (BDFDB.DataUtils.get(this, "settings", "addToSettings")) {
-			BDFDB.addClass(document.body, "settingsTitlebarOTB-added");
-			var settingsbar = BDFDB.htmlToElement(`<div class="settingsTitlebarOTB ${BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifyend + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}"></div>`);
+			BDFDB.DOMUtils.addClass(document.body, "settingsTitlebarOTB-added");
+			var settingsbar = BDFDB.DOMUtils.create(`<div class="settingsTitlebarOTB ${BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifyend + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}"></div>`);
 			this.createButtons(settingsbar);
 			settingspane.parentElement.appendChild(settingsbar);
 			this.changeMaximizeButtons();
@@ -231,8 +231,8 @@ class OldTitleBar {
 
 	createButtons (bar) {
 		if (BDFDB.DataUtils.get(this, "settings", "reloadButton")) {
-			bar.appendChild(BDFDB.htmlToElement(this.dividerMarkup));
-			var reloadbutton = BDFDB.htmlToElement(this.reloadButtonMarkup);
+			bar.appendChild(BDFDB.DOMUtils.create(this.dividerMarkup));
+			var reloadbutton = BDFDB.DOMUtils.create(this.reloadButtonMarkup);
 			bar.appendChild(reloadbutton);
 			var reloadbuttonicon = reloadbutton.querySelector(BDFDB.dotCN.channelheadericon);
 			reloadbuttonicon.addEventListener("click", () => {this.window.reload();});
@@ -240,20 +240,20 @@ class OldTitleBar {
 				BDFDB.TooltipUtils.create(reloadbuttonicon, "Reload", {type:"bottom",selector:"reload-button-tooltip"});
 			});
 		}
-		bar.appendChild(BDFDB.htmlToElement(this.dividerMarkup));
-		var minbutton = BDFDB.htmlToElement(this.minButtonMarkup);
+		bar.appendChild(BDFDB.DOMUtils.create(this.dividerMarkup));
+		var minbutton = BDFDB.DOMUtils.create(this.minButtonMarkup);
 		bar.appendChild(minbutton);
 		minbutton.querySelector(BDFDB.dotCN.channelheadericon).addEventListener("click", () => {this.window.minimize();});
-		var maxbutton = BDFDB.htmlToElement(this.maxButtonMarkup);
+		var maxbutton = BDFDB.DOMUtils.create(this.maxButtonMarkup);
 		bar.appendChild(maxbutton);
 		maxbutton.querySelector(BDFDB.dotCN.channelheadericon).addEventListener("click", () => {
 			if (this.isMaximized()) this.window.unmaximize();
 			else this.window.maximize();
 		});
-		var closebutton = BDFDB.htmlToElement(this.closeButtonMarkup);
+		var closebutton = BDFDB.DOMUtils.create(this.closeButtonMarkup);
 		bar.appendChild(closebutton);
 		closebutton.querySelector(BDFDB.dotCN.channelheadericon).addEventListener("click", () => {this.window.close();});
-		if (BDFDB.containsClass(bar, "settingsTitlebarOTB")) BDFDB.removeEles(bar.querySelector(".dividerOTB"));
+		if (BDFDB.DOMUtils.containsClass(bar, "settingsTitlebarOTB")) BDFDB.DOMUtils.remove(bar.querySelector(".dividerOTB"));
 	}
 
 	changeMaximizeButtons () {

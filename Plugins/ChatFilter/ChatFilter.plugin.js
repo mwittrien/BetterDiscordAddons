@@ -124,7 +124,7 @@ class ChatFilter {
 			}
 			settingshtml += `</div></div><div class="BDFDB-settings-inner-list ${rtype}-list">`;
 			for (let word in this.words[rtype]) {
-				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis}" style="flex: 1 1 auto;">${BDFDB.encodeToHTML(word)} (${BDFDB.encodeToHTML(this.words[rtype][word].replace)})</div>`
+				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis}" style="flex: 1 1 auto;">${BDFDB.StringUtils.htmlEscape(word)} (${BDFDB.StringUtils.htmlEscape(this.words[rtype][word].replace)})</div>`
 				for (let config in this.defaults.configs) {
 					settingshtml += `<div class="${BDFDB.disCNS.checkboxcontainer + BDFDB.disCN.marginreset}" style="flex: 0 0 auto;"><label class="${BDFDB.disCN.checkboxwrapper}"><input word="${word}" rtype="${rtype}" config="${config}" type="checkbox" class="${BDFDB.disCN.checkboxinputdefault}"${this.words[rtype][word][config] ? " checked" : ""}><div class="${BDFDB.disCNS.checkbox + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex2 + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.checkboxround}"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
 				}
@@ -139,7 +139,7 @@ class ChatFilter {
 		settingshtml += `<div class="BDFDB-settings-inner-list info-container" ${infoHidden ? "style='display:none;'" : ""}><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Case: Will block/censor words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Not Case: Will block/censor words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Exact: Will block/censor words that are exactly the selected word. apple => apple, not applepie or pineapple</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Not Exact: Will block/censor all words containing the selected word. apple => apple, applepie and pineapple</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Empty: Ignores the default and set replace word and removes the word/message instead.</div></div>`;
 		settingshtml += `</div>`;
 
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
+		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
 
@@ -205,7 +205,7 @@ class ChatFilter {
 
 			var containerhtml = ``;
 			for (let word in this.words[rtype]) {
-				containerhtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis}" style="flex: 1 1 auto;">${BDFDB.encodeToHTML(word)} (${BDFDB.encodeToHTML(this.words[rtype][word].replace)})</div>`
+				containerhtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis}" style="flex: 1 1 auto;">${BDFDB.StringUtils.htmlEscape(word)} (${BDFDB.StringUtils.htmlEscape(this.words[rtype][word].replace)})</div>`
 				for (let config in this.defaults.configs) {
 					containerhtml += `<div class="${BDFDB.disCNS.checkboxcontainer + BDFDB.disCN.marginreset}" style="flex: 0 0 auto;"><label class="${BDFDB.disCN.checkboxwrapper}"><input word="${word}" rtype="${rtype}" config="${config}" type="checkbox" class="${BDFDB.disCN.checkboxinputdefault}"${this.words[rtype][word][config] ? " checked" : ""}><div class="${BDFDB.disCNS.checkbox + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex2 + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.checkboxround}"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
 				}
@@ -275,9 +275,9 @@ class ChatFilter {
 	}
 
 	toggleInfo (ele) {
-		BDFDB.toggleClass(ele.querySelector("svg"), BDFDB.disCN.directionright);
-		BDFDB.toggleEles(ele.nextElementSibling);
-		BDFDB.DataUtils.save(BDFDB.isEleHidden(ele.nextElementSibling), this, "hideInfo", "hideInfo");
+		BDFDB.DOMUtils.toggleClass(ele.querySelector("svg"), BDFDB.disCN.directionright);
+		BDFDB.DOMUtils.toggle(ele.nextElementSibling);
+		BDFDB.DataUtils.save(BDFDB.DOMUtils.isHidden(ele.nextElementSibling), this, "hideInfo", "hideInfo");
 	}
 
 	onNativeContextMenu (instance, menu, returnvalue) {
@@ -325,7 +325,7 @@ class ChatFilter {
 	}
 
 	hideMessage (message) {
-		if (message.tagName && !BDFDB.containsClass(message, "blocked", "censored", false)) {
+		if (message.tagName && !BDFDB.DOMUtils.containsClass(message, "blocked", "censored", false)) {
 			var orightml = message.innerHTML;
 			var newhtml = "";
 
@@ -367,10 +367,10 @@ class ChatFilter {
 					if (blocked) break;
 				}
 				if (blocked) {
-					if (settings.hideMessage.blocked) BDFDB.toggleEles(message, false);
-					newhtml = BDFDB.encodeToHTML(blockedReplace);
+					if (settings.hideMessage.blocked) BDFDB.DOMUtils.hide(message);
+					newhtml = BDFDB.StringUtils.htmlEscape(blockedReplace);
 					message.innerHTML = newhtml;
-					BDFDB.addClass(message, "blocked");
+					BDFDB.DOMUtils.addClass(message, "blocked");
 					message.ChatFilterOriginalHTML = orightml;
 					message.ChatFilterNewHTML = newhtml;
 
@@ -384,7 +384,7 @@ class ChatFilter {
 						strings.forEach((string,i) => {
 							if (this.testForEmoji(string, reg)) {
 								censored = true;
-								strings[i] = BDFDB.encodeToHTML(censoredReplace);
+								strings[i] = BDFDB.StringUtils.htmlEscape(censoredReplace);
 								if (strings[i+1] && strings[i+1].indexOf("<input") == 0) {
 									strings[i+1] = "";
 									if (strings[i-1] && strings[i-1].indexOf("<span") == 0) strings[i-1] = "";
@@ -396,7 +396,7 @@ class ChatFilter {
 								url = url ? url.split('"')[0] : null;
 								if (reg.test(url)) {
 									censored = true;
-									strings = [BDFDB.encodeToHTML(censoredReplace)];
+									strings = [BDFDB.StringUtils.htmlEscape(censoredReplace)];
 								}
 							}
 							else if (string.indexOf("<") != 0) {
@@ -405,7 +405,7 @@ class ChatFilter {
 									let wordWithoutSpecial = word.replace(/[\?\¿\!\¡\.\"]/g, "");
 									if (word && reg.test(word) || wordWithoutSpecial && reg.test(wordWithoutSpecial)) {
 										censored = true;
-										newstring.push(BDFDB.encodeToHTML(censoredReplace));
+										newstring.push(BDFDB.StringUtils.htmlEscape(censoredReplace));
 									}
 									else {
 										newstring.push(word);
@@ -418,7 +418,7 @@ class ChatFilter {
 					if (censored) {
 						newhtml = strings.join("");
 						message.innerHTML = newhtml;
-						BDFDB.addClass(message, "censored");
+						BDFDB.DOMUtils.addClass(message, "censored");
 						message.ChatFilterOriginalHTML = orightml;
 						message.ChatFilterNewHTML = newhtml;
 
@@ -430,7 +430,7 @@ class ChatFilter {
 	}
 
 	createReg (word, config) {
-		return new RegExp(BDFDB.encodeToHTML(config.exact ? "^" + BDFDB.regEscape(word) + "$" : BDFDB.regEscape(word)), config.case ? "" : "i");
+		return new RegExp(BDFDB.StringUtils.htmlEscape(config.exact ? "^" + BDFDB.StringUtils.regEscape(word) + "$" : BDFDB.StringUtils.regEscape(word)), config.case ? "" : "i");
 	}
 
 	testForEmoji (string, reg) {
@@ -443,8 +443,8 @@ class ChatFilter {
 
 	resetMessage (message) {
 		message.innerHTML = message.ChatFilterOriginalHTML;
-		BDFDB.removeClass(message, "blocked", "censored", "revealed");
-		BDFDB.toggleEles(message, true);
+		BDFDB.DOMUtils.removeClass(message, "blocked", "censored", "revealed");
+		BDFDB.DOMUtils.show(message);
 		delete message.ChatFilterOriginalHTML;
 		delete message.ChatFilterNewHTML;
 		message.removeEventListener("click", message.clickChatFilterListener);
@@ -454,12 +454,12 @@ class ChatFilter {
 		message.removeEventListener("click", message.clickChatFilterListener);
 		if (addListener) {
 			message.clickChatFilterListener = () => {
-				if (BDFDB.containsClass(message, "revealed")) {
-					BDFDB.removeClass(message, "revealed");
+				if (BDFDB.DOMUtils.containsClass(message, "revealed")) {
+					BDFDB.DOMUtils.removeClass(message, "revealed");
 					message.innerHTML = message.ChatFilterNewHTML;
 				}
 				else {
-					BDFDB.addClass(message, "revealed");
+					BDFDB.DOMUtils.addClass(message, "revealed");
 					message.innerHTML = message.ChatFilterOriginalHTML;
 				}
 			};
@@ -468,7 +468,7 @@ class ChatFilter {
 	}
 
 	openAddModal (wordvalue) {
-		let chatfilterAddModal = BDFDB.htmlToElement(this.chatfilterAddModalMarkup);
+		let chatfilterAddModal = BDFDB.DOMUtils.create(this.chatfilterAddModalMarkup);
 		let wordvalueinput = chatfilterAddModal.querySelector("#input-wordvalue");
 		let replacevalueinput = chatfilterAddModal.querySelector("#input-replacevalue");
 		let addbutton = chatfilterAddModal.querySelector(".btn-add");
@@ -480,20 +480,20 @@ class ChatFilter {
 		wordvalueinput.addEventListener("input", () => {
 			if (!wordvalueinput.value.trim()) {
 				addbutton.disabled = true;
-				BDFDB.addClass(wordvalueinput, "invalid");
+				BDFDB.DOMUtils.addClass(wordvalueinput, "invalid");
 				addbutton.style.setProperty("pointer-events", "none", "important");
 				BDFDB.TooltipUtils.create(wordvalueinput, "Choose a Wordvalue", {type: "right", color: "red", selector: "chatfilter-disabled-tooltip"});
 			}
 			else {
 				addbutton.disabled = false;
-				BDFDB.removeClass(wordvalueinput, "invalid");
+				BDFDB.DOMUtils.removeClass(wordvalueinput, "invalid");
 				addbutton.style.removeProperty("pointer-events");
-				BDFDB.removeEles(".chatfilter-disabled-tooltip");
+				BDFDB.DOMUtils.remove(".chatfilter-disabled-tooltip");
 			}
 		});
 
 		BDFDB.ListenerUtils.addToChildren(chatfilterAddModal, "click", BDFDB.dotCNC.backdrop + BDFDB.dotCNC.modalclose + ".btn-add", () => {
-			BDFDB.removeEles(".chatfilter-disabled-tooltip");
+			BDFDB.DOMUtils.remove(".chatfilter-disabled-tooltip");
 		});
 
 		addbutton.addEventListener("click", e => {

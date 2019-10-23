@@ -62,7 +62,7 @@ class RevealAllSpoilersOption {
 
 	onMessageContextMenu (instance, menu, returnvalue) {
 		if (instance.props && instance.props.message && instance.props.target && !menu.querySelector(`${this.name}-contextMenuItem`)) {
-			let messagediv = BDFDB.getParentEle(BDFDB.dotCN.messagegroup + "> [aria-disabled]", instance.props.target);
+			let messagediv = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagegroup + "> [aria-disabled]", instance.props.target);
 			if (!messagediv || !messagediv.querySelector(BDFDB.dotCN.spoilerhidden)) return;
 			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
@@ -70,7 +70,7 @@ class RevealAllSpoilersOption {
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 						label: "Reveal all Spoilers",
-						hint: BDFDB.BdUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BdUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Reveal_Spoilers") : null,
+						hint: BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Reveal_Spoilers") : null,
 						className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-reveal-contextMenuItem`,
 						action: e => {
 							BDFDB.closeContextMenu(menu);
@@ -85,7 +85,7 @@ class RevealAllSpoilersOption {
 	}
 
 	revealAllSpoilers (target) {
-		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.messagegroup + "> [aria-disabled]", target);
+		let messagediv = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagegroup + "> [aria-disabled]", target);
 		if (!messagediv) return;
 		for (let spoiler of messagediv.querySelectorAll(BDFDB.dotCN.spoilerhidden)) spoiler.click();
 	}

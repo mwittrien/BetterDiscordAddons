@@ -121,7 +121,7 @@ class ShowHiddenChannels {
 		settingshtml += `</div>`;
 		settingshtml += `</div></div>`;
 
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
+		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
 
@@ -163,7 +163,7 @@ class ShowHiddenChannels {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.removeEles(".container-hidden");
+			BDFDB.DOMUtils.remove(".container-hidden");
 			BDFDB.PluginUtils.clear(this);
 		}
 	}
@@ -194,7 +194,7 @@ class ShowHiddenChannels {
 	}
 
 	appendHiddenContainer (guild) {
-		BDFDB.removeEles(".container-hidden");
+		BDFDB.DOMUtils.remove(".container-hidden");
 		if (!guild) return;
 		this.currentGuild = guild.id;
 		var allChannels = BDFDB.LibraryModules.ChannelStore.getChannels();
@@ -233,22 +233,22 @@ class ShowHiddenChannels {
 		hiddenChannels.count = count;
 
 		if (count > 0) {
-			var category = BDFDB.htmlToElement(this.categoryMarkup);
+			var category = BDFDB.DOMUtils.create(this.categoryMarkup);
 			var wrapper = category.querySelector(BDFDB.dotCN.categorywrapper);
 			category.setAttribute("guild", guild.id);
 			wrapper.addEventListener("click", () => {
-				BDFDB.toggleClass(wrapper, BDFDB.disCN.categorycollapsed);
+				BDFDB.DOMUtils.toggleClass(wrapper, BDFDB.disCN.categorycollapsed);
 
-				var visibile = !BDFDB.containsClass(wrapper, BDFDB.disCN.categorycollapsed);
-				BDFDB.toggleEles(category.querySelectorAll(BDFDB.dotCN.channelcontainerdefault), visibile);
+				var visibile = !BDFDB.DOMUtils.containsClass(wrapper, BDFDB.disCN.categorycollapsed);
+				BDFDB.DOMUtils.toggle(category.querySelectorAll(BDFDB.dotCN.channelcontainerdefault), visibile);
 				BDFDB.DataUtils.save(visibile, this, "categorystatus", guild.id);
 			});
 
 			for (let type in BDFDB.DiscordConstants.ChannelTypes) for (let hiddenChannel of hiddenChannels[BDFDB.DiscordConstants.ChannelTypes[type]]) this.createChannel(guild, category, hiddenChannel, type);
 
 			var isvisibile = BDFDB.DataUtils.load(this, "categorystatus", guild.id) === true;
-			BDFDB.toggleClass(wrapper, BDFDB.disCN.categorycollapsed, !isvisibile);
-			BDFDB.toggleEles(category.querySelectorAll(BDFDB.dotCN.channelcontainerdefault), isvisibile);
+			BDFDB.DOMUtils.toggleClass(wrapper, BDFDB.disCN.categorycollapsed, !isvisibile);
+			BDFDB.DOMUtils.toggle(category.querySelectorAll(BDFDB.dotCN.channelcontainerdefault), isvisibile);
 
 			this.reappendHiddenContainer(guild, category);
 		}
@@ -256,7 +256,7 @@ class ShowHiddenChannels {
 		if (channellist) {
 			BDFDB.ListenerUtils.remove(this, channellist, "mouseenter", BDFDB.dotCNC.channelcontainerdefault + BDFDB.dotCN.categorycontainerdefault);
 			if (settings.showForNormal) BDFDB.ListenerUtils.add(this, channellist, "mouseenter", BDFDB.dotCNC.channelcontainerdefault + BDFDB.dotCN.categorycontainerdefault, e => {
-				if (!BDFDB.containsClass(e.currentTarget, "hidden-channel")) {
+				if (!BDFDB.DOMUtils.containsClass(e.currentTarget, "hidden-channel")) {
 					var channel = BDFDB.ReactUtils.findValue(e.currentTarget, "channel");
 					if (channel) this.showAccessRoles(guild, channel, e, true);
 				}
@@ -265,7 +265,7 @@ class ShowHiddenChannels {
 	}
 
 	createChannel (guild, category, info, type) {
-		let channel = BDFDB.htmlToElement(this.channelMarkup);
+		let channel = BDFDB.DOMUtils.create(this.channelMarkup);
 		channel.querySelector(BDFDB.dotCN.channelname).innerText = info.name;
 		channel.querySelector(BDFDB.dotCNS.channelicon + "mask").setAttribute("id", `showHiddenChannelsMask${info.id}`);
 		let iconinner = channel.querySelector(BDFDB.dotCNS.channelicon + ".hidden-icon-inner");
@@ -276,7 +276,7 @@ class ShowHiddenChannels {
 			this.showAccessRoles(guild, info, e, false);
 		});
 		channel.addEventListener("click", () => {
-			BDFDB.NotificationUtils.toast(`You can not ${this.channelMessage[type] ? this.channelMessage[type] : this.channelMessage.DEFAULT}&nbsp;&nbsp;<strong>${BDFDB.encodeToHTML(info.name)}</strong>.`, {type:"error", html:true});
+			BDFDB.NotificationUtils.toast(`You can not ${this.channelMessage[type] ? this.channelMessage[type] : this.channelMessage.DEFAULT}&nbsp;&nbsp;<strong>${BDFDB.StringUtils.htmlEscape(info.name)}</strong>.`, {type:"error", html:true});
 		});
 		channel.addEventListener("contextmenu", e => {
 			this.createHiddenObjContextMenu(guild, info, type, e);
@@ -342,10 +342,10 @@ class ShowHiddenChannels {
 		}
 		var htmlString = ``;
 		if (settings.showChannelCategory && !allowed && channel.parent_id) {
-			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Category:</div><div class="${BDFDB.disCNS.flex2 + BDFDB.disCN.wrap}"><div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-category" style="border-color: rgba(255, 255, 255, 0.6); height: unset !important; padding-top: 5px; padding-bottom: 5px; max-width: ${window.outerWidth/3}px; text-transform: uppercase;">${BDFDB.encodeToHTML(BDFDB.LibraryModules.ChannelStore.getChannel(channel.parent_id).name)}</div></div>`;
+			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Category:</div><div class="${BDFDB.disCNS.flex2 + BDFDB.disCN.wrap}"><div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-category" style="border-color: rgba(255, 255, 255, 0.6); height: unset !important; padding-top: 5px; padding-bottom: 5px; max-width: ${window.outerWidth/3}px; text-transform: uppercase;">${BDFDB.StringUtils.htmlEscape(BDFDB.LibraryModules.ChannelStore.getChannel(channel.parent_id).name)}</div></div>`;
 		}
 		if (settings.showTopic && !allowed && channel.topic && channel.topic.replace(/[\t\n\r\s]/g, "")) {
-			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Topic:</div><div class="${BDFDB.disCNS.flex2 + BDFDB.disCN.wrap}"><div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-topic" style="border-color: rgba(255, 255, 255, 0.6); height: unset !important; padding-top: 5px; padding-bottom: 5px; max-width: ${window.outerWidth/3}px">${BDFDB.encodeToHTML(channel.topic)}</div></div>`;
+			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Topic:</div><div class="${BDFDB.disCNS.flex2 + BDFDB.disCN.wrap}"><div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-topic" style="border-color: rgba(255, 255, 255, 0.6); height: unset !important; padding-top: 5px; padding-bottom: 5px; max-width: ${window.outerWidth/3}px">${BDFDB.StringUtils.htmlEscape(channel.topic)}</div></div>`;
 		}
 		if (settings.showVoiceUsers && channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE && (!allowed || e.currentTarget.querySelector(BDFDB.dotCN.channelmodelocked))) {
 			let voicestates = BDFDB.LibraryModules.VoiceUtils.getVoiceStatesForChannel(channel);
@@ -356,7 +356,7 @@ class ShowHiddenChannels {
 					let member = BDFDB.LibraryModules.MemberStore.getMember(guild.id, voicestate.userId);
 					if (user && member) {
 						let color = member.colorString ? BDFDB.ColorUtils.convert(member.colorString, "RGBCOMP") : [255,255,255];
-						htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-voiceuser" style="padding-left: 0; border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCN.avatarwrapper}" role="img" aria-label="${user.username}" aria-hidden="false" style="width: 22px; height: 18px; z-index: 1003;"><svg width="18" height="18" viewBox="0 0 18 18" class="${BDFDB.disCN.avatarmask}" aria-hidden="true"><foreignObject x="0" y="0" width="18" height="18" mask="url(#svg-mask-avatar-default)"><img src="${BDFDB.UserUtils.getAvatar(user.id)}" alt=" " class="${BDFDB.disCN.avatar}" aria-hidden="true"></foreignObject></svg></div><div class="${BDFDB.disCN.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}">${BDFDB.encodeToHTML(member.nick || user.username)}</div></div>`;
+						htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-voiceuser" style="padding-left: 0; border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCN.avatarwrapper}" role="img" aria-label="${user.username}" aria-hidden="false" style="width: 22px; height: 18px; z-index: 1003;"><svg width="18" height="18" viewBox="0 0 18 18" class="${BDFDB.disCN.avatarmask}" aria-hidden="true"><foreignObject x="0" y="0" width="18" height="18" mask="url(#svg-mask-avatar-default)"><img src="${BDFDB.UserUtils.getAvatar(user.id)}" alt=" " class="${BDFDB.disCN.avatar}" aria-hidden="true"></foreignObject></svg></div><div class="${BDFDB.disCN.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}">${BDFDB.StringUtils.htmlEscape(member.nick || user.username)}</div></div>`;
 					}
 				}
 				htmlString += `</div>`;
@@ -366,11 +366,11 @@ class ShowHiddenChannels {
 			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Allowed Roles:</div><div class="${BDFDB.disCNS.flex2 + BDFDB.disCN.wrap}">`;
 			for (let role of allowedRoles) {
 				let color = role.colorString ? BDFDB.ColorUtils.convert(role.colorString, "RGBCOMP") : [255,255,255];
-				htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-allowedrole" style="border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCN.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}">${BDFDB.encodeToHTML(role.name)}</div></div>`;
+				htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-allowedrole" style="border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCN.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}">${BDFDB.StringUtils.htmlEscape(role.name)}</div></div>`;
 			}
 			for (let role of overwrittenRoles) {
 				let color = role.colorString ? BDFDB.ColorUtils.convert(role.colorString, "RGBCOMP") : [255,255,255];
-				htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-overwrittenrole" style="border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCN.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}" style="text-decoration: line-through !important;">${BDFDB.encodeToHTML(role.name)}</div></div>`;
+				htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-overwrittenrole" style="border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCN.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}" style="text-decoration: line-through !important;">${BDFDB.StringUtils.htmlEscape(role.name)}</div></div>`;
 			}
 			htmlString += `</div>`;
 		}
@@ -378,7 +378,7 @@ class ShowHiddenChannels {
 			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Allowed Users:</div><div class="${BDFDB.disCNS.flex2 + BDFDB.disCN.wrap}">`;
 			for (let user of allowedUsers) {
 				let color = user.colorString ? BDFDB.ColorUtils.convert(user.colorString, "RGBCOMP") : [255,255,255];
-				htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-alloweduser" style="padding-left: 0; border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCN.avatarwrapper}" role="img" aria-label="${user.username}" aria-hidden="false" style="width: 22px; height: 18px; z-index: 1003;"><svg width="18" height="18" viewBox="0 0 18 18" class="${BDFDB.disCN.avatarmask}" aria-hidden="true"><foreignObject x="0" y="0" width="18" height="18" mask="url(#svg-mask-avatar-default)"><img src="${BDFDB.UserUtils.getAvatar(user.id)}" alt=" " class="${BDFDB.disCN.avatar}" aria-hidden="true"></foreignObject></svg></div><div class="${BDFDB.disCN.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}">${BDFDB.encodeToHTML(user.nick || user.name)}</div></div>`;
+				htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-alloweduser" style="padding-left: 0; border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCN.avatarwrapper}" role="img" aria-label="${user.username}" aria-hidden="false" style="width: 22px; height: 18px; z-index: 1003;"><svg width="18" height="18" viewBox="0 0 18 18" class="${BDFDB.disCN.avatarmask}" aria-hidden="true"><foreignObject x="0" y="0" width="18" height="18" mask="url(#svg-mask-avatar-default)"><img src="${BDFDB.UserUtils.getAvatar(user.id)}" alt=" " class="${BDFDB.disCN.avatar}" aria-hidden="true"></foreignObject></svg></div><div class="${BDFDB.disCN.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}">${BDFDB.StringUtils.htmlEscape(user.nick || user.name)}</div></div>`;
 			}
 			htmlString += `</div>`;
 		}
@@ -386,7 +386,7 @@ class ShowHiddenChannels {
 			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Denied Roles:</div><div class="${BDFDB.disCNS.flex2 + BDFDB.disCN.wrap}">`;
 			for (let role of deniedRoles) {
 				let color = role.colorString ? BDFDB.ColorUtils.convert(role.colorString, "RGBCOMP") : [255,255,255];
-				htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-deniedrole" style="border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCN.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}">${BDFDB.encodeToHTML(role.name)}</div></div>`;
+				htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-deniedrole" style="border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCN.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}">${BDFDB.StringUtils.htmlEscape(role.name)}</div></div>`;
 			}
 			htmlString += `</div>`;
 		}
@@ -394,7 +394,7 @@ class ShowHiddenChannels {
 			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Denied Users:</div><div class="${BDFDB.disCNS.flex2 + BDFDB.disCN.wrap}">`;
 			for (let user of deniedUsers) {
 				let color = user.colorString ? BDFDB.ColorUtils.convert(user.colorString, "RGBCOMP") : [255,255,255];
-				htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-denieduser" style="padding-left: 0; border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCN.avatarwrapper}" role="img" aria-label="${user.username}" aria-hidden="false" style="width: 22px; height: 18px; z-index: 1003;"><svg width="18" height="18" viewBox="0 0 18 18" class="${BDFDB.disCN.avatarmask}" aria-hidden="true"><foreignObject x="0" y="0" width="18" height="18" mask="url(#svg-mask-avatar-default)"><img src="${BDFDB.UserUtils.getAvatar(user.id)}" alt=" " class="${BDFDB.disCN.avatar}" aria-hidden="true"></foreignObject></svg></div><div class="${BDFDB.disCN.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}">${BDFDB.encodeToHTML(user.nick || user.name)}</div></div>`;
+				htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-denieduser" style="padding-left: 0; border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCN.avatarwrapper}" role="img" aria-label="${user.username}" aria-hidden="false" style="width: 22px; height: 18px; z-index: 1003;"><svg width="18" height="18" viewBox="0 0 18 18" class="${BDFDB.disCN.avatarmask}" aria-hidden="true"><foreignObject x="0" y="0" width="18" height="18" mask="url(#svg-mask-avatar-default)"><img src="${BDFDB.UserUtils.getAvatar(user.id)}" alt=" " class="${BDFDB.disCN.avatar}" aria-hidden="true"></foreignObject></svg></div><div class="${BDFDB.disCN.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}">${BDFDB.StringUtils.htmlEscape(user.nick || user.name)}</div></div>`;
 			}
 			htmlString += `</div>`;
 		}
@@ -402,7 +402,7 @@ class ShowHiddenChannels {
 			var width = window.outerWidth/2;
 			var tooltip = BDFDB.TooltipUtils.create(e.currentTarget, htmlString, {type:"right", selector:"showhiddenchannels-tooltip", html:true, style:`max-width: ${width < 200 ? 400 : width}px !important;`, delay:BDFDB.DataUtils.get(this, "amounts", "hoverDelay")});
 			var style = getComputedStyle(e.currentTarget);
-			tooltip.style.setProperty("top", BDFDB.getRects(tooltip).top - style.paddingBottom.replace("px","")/2 + style.paddingTop.replace("px","")/2 + "px");
+			tooltip.style.setProperty("top", BDFDB.DOMUtils.getRects(tooltip).top - style.paddingBottom.replace("px","")/2 + style.paddingTop.replace("px","")/2 + "px");
 		}
 	}
 }

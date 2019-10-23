@@ -129,7 +129,7 @@ class EditChannels {
 			try {this.forceUpdateAll();} catch (err) {}
 			BDFDB.DataUtils.save(data, this, "channels");
 
-			BDFDB.removeEles(".autocompleteEditChannels", ".autocompleteEditChannelsRow");
+			BDFDB.DOMUtils.remove(".autocompleteEditChannels", ".autocompleteEditChannelsRow");
 
 			BDFDB.PluginUtils.clear(this);
 		}
@@ -139,7 +139,7 @@ class EditChannels {
 	// begin of own functions
 
 	onChannelContextMenu (instance, menu, returnvalue) {
-		if (instance.props && instance.props.channel && !BDFDB.getParentEle(".container-hidden", instance.props.target) && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
+		if (instance.props && instance.props.channel && !BDFDB.DOMUtils.getParent(".container-hidden", instance.props.target) && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
@@ -235,7 +235,7 @@ class EditChannels {
 					
 					data.name = channelnameinput.value.trim() || null;
 
-					data.color = BDFDB.getSwatchColor(modal, 1);
+					data.color = BDFDB.ColorUtils.getSwatchColor(modal, 1);
 					console.log(data.color);
 					if (data.color != null && !BDFDB.ObjectUtils.is(data.color)) {
 						if (data.color[0] < 30 && data.color[1] < 30 && data.color[2] < 30) data.color = BDFDB.ColorUtils.change(data.color, 30);
@@ -267,7 +267,7 @@ class EditChannels {
 				BDFDB.ListenerUtils.add(this, textarea, "keydown", e => {
 					let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCN.autocomplete);
 					if (autocompletemenu && (e.which == 9 || e.which == 13)) {
-						if (BDFDB.containsClass(autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement, "autocompleteEditChannelsRow")) {
+						if (BDFDB.DOMUtils.containsClass(autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement, "autocompleteEditChannelsRow")) {
 							BDFDB.ListenerUtils.stopEvent(e);
 							this.swapWordWithMention(textarea);
 						}
@@ -275,12 +275,12 @@ class EditChannels {
 					else if (autocompletemenu && (e.which == 38 || e.which == 40)) {
 						let autocompleteitems = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable + ":not(.autocompleteEditChannelsSelector)");
 						let selected = autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected);
-						if (BDFDB.containsClass(selected, "autocompleteEditChannelsSelector") || autocompleteitems[e.which == 38 ? 0 : (autocompleteitems.length-1)] == selected) {
+						if (BDFDB.DOMUtils.containsClass(selected, "autocompleteEditChannelsSelector") || autocompleteitems[e.which == 38 ? 0 : (autocompleteitems.length-1)] == selected) {
 							BDFDB.ListenerUtils.stopEvent(e);
 							let next = this.getNextSelection(autocompletemenu, null, e.which == 38 ? false : true);
-							BDFDB.removeClass(selected, BDFDB.disCN.autocompleteselected);
-							BDFDB.addClass(selected, BDFDB.disCN.autocompleteselector);
-							BDFDB.addClass(next, BDFDB.disCN.autocompleteselected);
+							BDFDB.DOMUtils.removeClass(selected, BDFDB.disCN.autocompleteselected);
+							BDFDB.DOMUtils.addClass(selected, BDFDB.disCN.autocompleteselector);
+							BDFDB.DOMUtils.addClass(next, BDFDB.disCN.autocompleteselected);
 						}
 					}
 					else if (textarea.value && !e.shiftKey && e.which == 13 && !autocompletemenu && textarea.value.indexOf("s/") != 0) {
@@ -292,7 +292,7 @@ class EditChannels {
 						textarea.EditChannelsAutocompleteTimeout = setTimeout(() => {this.addAutoCompleteMenu(textarea, channel);},100);
 					}
 
-					if (!e.ctrlKey && e.which != 38 && e.which != 40 && !(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) BDFDB.removeEles(".autocompleteEditChannels", ".autocompleteEditChannelsRow");
+					if (!e.ctrlKey && e.which != 38 && e.which != 40 && !(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) BDFDB.DOMUtils.remove(".autocompleteEditChannels", ".autocompleteEditChannelsRow");
 				});
 				BDFDB.ListenerUtils.add(this, textarea, "click", e => {
 					if (textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) setImmediate(() => {this.addAutoCompleteMenu(textarea, channel);});
@@ -344,11 +344,11 @@ class EditChannels {
 					else {
 						if (channel.type == 1) channel = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]) || channel;
 						if (channelname.EditChannelsChangeObserver && typeof channelname.EditChannelsChangeObserver.disconnect == "function") channelname.EditChannelsChangeObserver.disconnect();
-						if (BDFDB.BdUtils.isPluginEnabled("EditUsers")) BDFDB.BdUtils.getPlugin("EditUsers").changeName(channel, channelname);
+						if (BDFDB.BDUtils.isPluginEnabled("EditUsers")) BDFDB.BDUtils.getPlugin("EditUsers").changeName(channel, channelname);
 						else {
 							channelname.style.removeProperty("color");
 							channelname.style.removeProperty("background");
-							BDFDB.setInnerText(channelname, channel.name || channel.username);
+							BDFDB.DOMUtils.setText(channelname, channel.name || channel.username);
 						}
 					}
 				}
@@ -409,7 +409,7 @@ class EditChannels {
 		let title = document.head.querySelector("title");
 		if (title && channel && channel.type != 1) {
 			let data = this.getChannelData(channel.id, channel.parent_id, title);
-			BDFDB.setInnerText(title, "@" + (data.name || channel.name));
+			BDFDB.DOMUtils.setText(title, "@" + (data.name || channel.name));
 		}
 	}
 
@@ -423,23 +423,23 @@ class EditChannels {
 				let color = this.chooseColor(channelname, data.color);
 				if (isgradient) {
 					channelname.style.setProperty("color", BDFDB.ColorUtils.convert(data.color[Object.keys(data.color)[0]], "RGBA"), "important");
-					BDFDB.setInnerText(channelname, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(color)} !important;">${BDFDB.encodeToHTML(data.name || info.name)}</span>`));
+					BDFDB.DOMUtils.setText(channelname, BDFDB.DOMUtils.create(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(color)} !important;">${BDFDB.StringUtils.htmlEscape(data.name || info.name)}</span>`));
 				}
 				else {
 					channelname.style.setProperty("color", color, "important");
-					BDFDB.setInnerText(channelname, data.name || info.name);
+					BDFDB.DOMUtils.setText(channelname, data.name || info.name);
 				}
-				let iconparent = BDFDB.containsClass(channelname, BDFDB.disCN.quickswitchresultmatch) ? channelname.parentElement.parentElement : channelname.parentElement;
-				if (!BDFDB.containsClass(channelname, BDFDB.disCN.autocompletedescription)) {
+				let iconparent = BDFDB.DOMUtils.containsClass(channelname, BDFDB.disCN.quickswitchresultmatch) ? channelname.parentElement.parentElement : channelname.parentElement;
+				if (!BDFDB.DOMUtils.containsClass(channelname, BDFDB.disCN.autocompletedescription)) {
 					let settings = BDFDB.DataUtils.get(this, "settings");
 					iconparent.querySelectorAll('svg [stroke]:not([stroke="none"]').forEach(icon => {
-						let iconcolor = color && BDFDB.getParentEle(BDFDB.dotCN.channelheadertitle, icon) ? BDFDB.ColorUtils.setAlpha(isgradient ? color[0] : color, 0.6) : (isgradient ? color[0] : color);
+						let iconcolor = color && BDFDB.DOMUtils.getParent(BDFDB.dotCN.channelheadertitle, icon) ? BDFDB.ColorUtils.setAlpha(isgradient ? color[0] : color, 0.6) : (isgradient ? color[0] : color);
 						if (!icon.getAttribute("oldstroke")) icon.setAttribute("oldstroke", icon.getAttribute("stroke"));
 						icon.setAttribute("stroke", iconcolor && settings.changeChannelIcon ? iconcolor : icon.getAttribute("oldstroke"), "important");
 						icon.style.setProperty("stroke", iconcolor && settings.changeChannelIcon ? iconcolor : icon.getAttribute("oldstroke"), "important");
 					});
 					iconparent.querySelectorAll('svg [fill]:not([fill="none"]').forEach(icon => {
-						let iconcolor = color && BDFDB.getParentEle(BDFDB.dotCN.channelheadertitle, icon) ? BDFDB.ColorUtils.setAlpha(isgradient ? color[0] : color, 0.6) : (isgradient ? color[0] : color);
+						let iconcolor = color && BDFDB.DOMUtils.getParent(BDFDB.dotCN.channelheadertitle, icon) ? BDFDB.ColorUtils.setAlpha(isgradient ? color[0] : color, 0.6) : (isgradient ? color[0] : color);
 						if (!icon.getAttribute("oldfill")) icon.setAttribute("oldfill", icon.getAttribute("fill"));
 						icon.setAttribute("fill", iconcolor && settings.changeChannelIcon ? iconcolor : icon.getAttribute("oldfill"), "important");
 						icon.style.setProperty("fill", iconcolor && settings.changeChannelIcon ? iconcolor : icon.getAttribute("oldfill"), "important");
@@ -452,7 +452,7 @@ class EditChannels {
 					channelname.EditChannelsChangeObserver = new MutationObserver((changes, _) => {
 						changes.forEach(
 							(change, i) => {
-								if (change.type == "childList" && change.addedNodes.length && change.target.tagName && (change.target.tagName == "SVG" || change.target.querySelector("svg")) || change.type == "attributes" && change.attributeName == "class" && change.target.className.length && change.target.className.indexOf("name") > -1 || change.type == "attributes" && change.attributeName == "style" && BDFDB.containsClass(change.target, BDFDB.disCN.channelheaderheaderbartitle)) {
+								if (change.type == "childList" && change.addedNodes.length && change.target.tagName && (change.target.tagName == "SVG" || change.target.querySelector("svg")) || change.type == "attributes" && change.attributeName == "class" && change.target.className.length && change.target.className.indexOf("name") > -1 || change.type == "attributes" && change.attributeName == "style" && BDFDB.DOMUtils.containsClass(change.target, BDFDB.disCN.channelheaderheaderbartitle)) {
 									channelname.EditChannelsChangeObserver.disconnect();
 									this.changeChannel(info, channelname);
 								}
@@ -466,7 +466,7 @@ class EditChannels {
 		}
 		change();
 		if (hoverlistener) {
-			let wrapper = info.type == 4 ? BDFDB.getParentEle(BDFDB.dotCN.categorywrapper, channelname) : BDFDB.getParentEle(BDFDB.dotCN.channelwrapper, channelname);
+			let wrapper = info.type == 4 ? BDFDB.DOMUtils.getParent(BDFDB.dotCN.categorywrapper, channelname) : BDFDB.DOMUtils.getParent(BDFDB.dotCN.channelwrapper, channelname);
 			if (wrapper) {
 				wrapper.removeEventListener("mouseover", wrapper.mouseoverListenerEditChannels);
 				wrapper.removeEventListener("mouseout", wrapper.mouseoutListenerEditChannels);
@@ -491,11 +491,11 @@ class EditChannels {
 		if (data.name || data.color || channelname.getAttribute("changed-by-editchannels")) {
 			if (BDFDB.ObjectUtils.is(data.color)) {
 				channelname.style.setProperty("color", BDFDB.ColorUtils.convert(data.color[Object.keys(data.color)[0]], "RGBA"), "important");
-				BDFDB.setInnerText(channelname, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(this.chooseColor(channelname, data.color))} !important;">${BDFDB.encodeToHTML("#" + (data.name || info.name))}</span>`));
+				BDFDB.DOMUtils.setText(channelname, BDFDB.DOMUtils.create(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(this.chooseColor(channelname, data.color))} !important;">${BDFDB.StringUtils.htmlEscape("#" + (data.name || info.name))}</span>`));
 			}
 			else {
 				channelname.style.setProperty("color", this.chooseColor(channelname, data.color), "important");
-				BDFDB.setInnerText(channelname, "#" + (data.name || info.name));
+				BDFDB.DOMUtils.setText(channelname, "#" + (data.name || info.name));
 			}
 			if (data.name || data.color) {
 				channelname.setAttribute("changed-by-editchannels", true);
@@ -551,24 +551,24 @@ class EditChannels {
 			mention.style.setProperty("background", color0_1, "important");
 			if (isgradient) {
 				mention.style.setProperty("color", BDFDB.ColorUtils.convert(data.color[Object.keys(data.color)[0]], "RGBA"), "important");
-				BDFDB.setInnerText(mention, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${color} !important;">${BDFDB.encodeToHTML(name)}</span>`));
+				BDFDB.DOMUtils.setText(mention, BDFDB.DOMUtils.create(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${color} !important;">${BDFDB.StringUtils.htmlEscape(name)}</span>`));
 			}
 			else {
 				mention.style.setProperty("color", color, "important");
-				BDFDB.setInnerText(mention, name);
+				BDFDB.DOMUtils.setText(mention, name);
 			}
 		}
 		function colorHover() {
 			mention.style.setProperty("background", color0_7, "important");
 			mention.style.setProperty("color", data.color ? "#FFFFFF" : null, "important");
-			BDFDB.setInnerText(mention, name);
+			BDFDB.DOMUtils.setText(mention, name);
 		}
 	}
 
 	chooseColor (channelname, color) {
 		if (color && channelname) {
 			let hovered = channelname.EditChannelsHovered;
-			channelname = BDFDB.containsClass(channelname, BDFDB.disCN.channelname) ? channelname.parentElement.parentElement : channelname;
+			channelname = BDFDB.DOMUtils.containsClass(channelname, BDFDB.disCN.channelname) ? channelname.parentElement.parentElement : channelname;
 			let classname = channelname.className ? channelname.className.toLowerCase() : "";
 			if (classname.indexOf("muted") > -1 || classname.indexOf("locked") > -1) color = BDFDB.ColorUtils.change(color, -0.5);
 			else if (hovered || classname.indexOf("selected") > -1 || classname.indexOf("hovered") > -1 || classname.indexOf("unread") > -1 || classname.indexOf("connected") > -1) color = BDFDB.ColorUtils.change(color, 0.5);
@@ -590,15 +590,15 @@ class EditChannels {
 		}
 		if (allenabled) return data;
 		let key = null;
-		if (BDFDB.getParentEle(BDFDB.dotCN.textareawrapchat, wrapper)) key = "changeInChatTextarea";
-		else if (BDFDB.containsClass(wrapper, BDFDB.disCN.mentionwrapper)) key = "changeInMentions";
-		else if (BDFDB.getParentEle(BDFDB.dotCN.guildchannels, wrapper)) key = "changeInChannelList";
-		else if (BDFDB.getParentEle(BDFDB.dotCN.channelheaderheaderbar, wrapper)) key = "changeInChannelHeader";
-		else if (BDFDB.getParentEle(BDFDB.dotCN.recentmentionspopout, wrapper)) key = "changeInRecentMentions";
-		else if (BDFDB.getParentEle(BDFDB.dotCN.autocomplete, wrapper)) key = "changeInAutoComplete";
-		else if (BDFDB.getParentEle(BDFDB.dotCN.auditlog, wrapper)) key = "changeInAuditLog";
-		else if (BDFDB.getParentEle(BDFDB.dotCN.guildsettingsinvitecard, wrapper)) key = "changeInInviteLog";
-		else if (BDFDB.getParentEle(BDFDB.dotCN.searchpopout, wrapper) || BDFDB.getParentEle(BDFDB.dotCN.quickswitcher, wrapper)) key = "changeInSearchPopout";
+		if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.textareawrapchat, wrapper)) key = "changeInChatTextarea";
+		else if (BDFDB.DOMUtils.containsClass(wrapper, BDFDB.disCN.mentionwrapper)) key = "changeInMentions";
+		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildchannels, wrapper)) key = "changeInChannelList";
+		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.channelheaderheaderbar, wrapper)) key = "changeInChannelHeader";
+		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.recentmentionspopout, wrapper)) key = "changeInRecentMentions";
+		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.autocomplete, wrapper)) key = "changeInAutoComplete";
+		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.auditlog, wrapper)) key = "changeInAuditLog";
+		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildsettingsinvitecard, wrapper)) key = "changeInInviteLog";
+		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.searchpopout, wrapper) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.quickswitcher, wrapper)) key = "changeInSearchPopout";
 
 		return !key || settings[key] ? data : {};
 	}
@@ -622,7 +622,7 @@ class EditChannels {
 				let settings = BDFDB.DataUtils.get(this, "settings");
 				let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCNS.autocomplete + BDFDB.dotCN.autocompleteinner), amount = 15;
 				if (!autocompletemenu) {
-					autocompletemenu = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.autocomplete + BDFDB.disCN.autocomplete2} autocompleteEditChannels"><div class="${BDFDB.disCN.autocompleteinner}"><div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteEditChannelsRow"><div class="${BDFDB.disCN.autocompleteselector} autocompleteEditChannelsSelector"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">${BDFDB.LanguageUtils.LanguageStrings.TEXT_CHANNELS_MATCHING.replace("{{prefix}}", BDFDB.encodeToHTML(lastword))}</strong></div></div></div></div></div>`);
+					autocompletemenu = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.autocomplete + BDFDB.disCN.autocomplete2} autocompleteEditChannels"><div class="${BDFDB.disCN.autocompleteinner}"><div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteEditChannelsRow"><div class="${BDFDB.disCN.autocompleteselector} autocompleteEditChannelsSelector"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">${BDFDB.LanguageUtils.LanguageStrings.TEXT_CHANNELS_MATCHING.replace("{{prefix}}", BDFDB.StringUtils.htmlEscape(lastword))}</strong></div></div></div></div></div>`);
 					textarea.parentElement.appendChild(autocompletemenu);
 					autocompletemenu = autocompletemenu.firstElementChild;
 				}
@@ -632,21 +632,21 @@ class EditChannels {
 
 				BDFDB.ListenerUtils.add(this, autocompletemenu, "mouseenter", BDFDB.dotCN.autocompleteselectable, e => {
 					var selected = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselected);
-					BDFDB.removeClass(selected, BDFDB.disCN.autocompleteselected);
-					BDFDB.addClass(selected, BDFDB.disCN.autocompleteselector);
-					BDFDB.addClass(e.currentTarget, BDFDB.disCN.autocompleteselected);
+					BDFDB.DOMUtils.removeClass(selected, BDFDB.disCN.autocompleteselected);
+					BDFDB.DOMUtils.addClass(selected, BDFDB.disCN.autocompleteselector);
+					BDFDB.DOMUtils.addClass(e.currentTarget, BDFDB.disCN.autocompleteselected);
 				});
 
 				for (let data of channelarray) {
 					if (amount-- < 1) break;
 					let color = BDFDB.ColorUtils.convert(data.color, "RGBA");
 					let catcolor = BDFDB.ColorUtils.convert(data.catdata.color, "RGBA");
-					let autocompleterow = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteEditChannelsRow"><div channelid="${data.channel.id}" class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable} autocompleteEditChannelsSelector"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="${BDFDB.disCN.autocompleteicon}"><path class="${BDFDB.disCN.autocompleteiconforeground}" d="M2.27333333,12 L2.74666667,9.33333333 L0.08,9.33333333 L0.313333333,8 L2.98,8 L3.68666667,4 L1.02,4 L1.25333333,2.66666667 L3.92,2.66666667 L4.39333333,0 L5.72666667,0 L5.25333333,2.66666667 L9.25333333,2.66666667 L9.72666667,0 L11.06,0 L10.5866667,2.66666667 L13.2533333,2.66666667 L13.02,4 L10.3533333,4 L9.64666667,8 L12.3133333,8 L12.08,9.33333333 L9.41333333,9.33333333 L8.94,12 L7.60666667,12 L8.08,9.33333333 L4.08,9.33333333 L3.60666667,12 L2.27333333,12 L2.27333333,12 Z M5.02,4 L4.31333333,8 L8.31333333,8 L9.02,4 L5.02,4 L5.02,4 Z" transform="translate(1.333 2)" ${settings.changeChannelIcon && color ? ('fill="' + color + '" oldfill="currentColor" style="fill: ' + color + ' !important;"') : 'fill="currentColor"'}></path></svg><div class="${BDFDB.disCN.marginleft4}" changed-by-editchannels="true" style="flex: 1 1 auto;${color ? (' color: ' + color + ' !important;') : ''}">${BDFDB.encodeToHTML(data.name || data.channel.name)}</div>${data.category ? '<div class="${BDFDB.disCN.autocompletedescription}"' + (catcolor ? (' style="color: ' + catcolor + ' !important;"') : '') + '>' + BDFDB.encodeToHTML(data.catdata.name || data.category.name) + '</div>' : ''}</div></div></div>`);
+					let autocompleterow = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteEditChannelsRow"><div channelid="${data.channel.id}" class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable} autocompleteEditChannelsSelector"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="${BDFDB.disCN.autocompleteicon}"><path class="${BDFDB.disCN.autocompleteiconforeground}" d="M2.27333333,12 L2.74666667,9.33333333 L0.08,9.33333333 L0.313333333,8 L2.98,8 L3.68666667,4 L1.02,4 L1.25333333,2.66666667 L3.92,2.66666667 L4.39333333,0 L5.72666667,0 L5.25333333,2.66666667 L9.25333333,2.66666667 L9.72666667,0 L11.06,0 L10.5866667,2.66666667 L13.2533333,2.66666667 L13.02,4 L10.3533333,4 L9.64666667,8 L12.3133333,8 L12.08,9.33333333 L9.41333333,9.33333333 L8.94,12 L7.60666667,12 L8.08,9.33333333 L4.08,9.33333333 L3.60666667,12 L2.27333333,12 L2.27333333,12 Z M5.02,4 L4.31333333,8 L8.31333333,8 L9.02,4 L5.02,4 L5.02,4 Z" transform="translate(1.333 2)" ${settings.changeChannelIcon && color ? ('fill="' + color + '" oldfill="currentColor" style="fill: ' + color + ' !important;"') : 'fill="currentColor"'}></path></svg><div class="${BDFDB.disCN.marginleft4}" changed-by-editchannels="true" style="flex: 1 1 auto;${color ? (' color: ' + color + ' !important;') : ''}">${BDFDB.StringUtils.htmlEscape(data.name || data.channel.name)}</div>${data.category ? '<div class="${BDFDB.disCN.autocompletedescription}"' + (catcolor ? (' style="color: ' + catcolor + ' !important;"') : '') + '>' + BDFDB.StringUtils.htmlEscape(data.catdata.name || data.category.name) + '</div>' : ''}</div></div></div>`);
 					autocompleterow.querySelector(BDFDB.dotCN.autocompleteselectable).addEventListener("click", () => {this.swapWordWithMention(textarea);});
 					autocompletemenu.appendChild(autocompleterow);
 				}
 				if (!autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected)) {
-					BDFDB.addClass(autocompletemenu.querySelector(".autocompleteEditChannelsRow " + BDFDB.dotCN.autocompleteselectable), BDFDB.disCN.autocompleteselected);
+					BDFDB.DOMUtils.addClass(autocompletemenu.querySelector(".autocompleteEditChannelsRow " + BDFDB.dotCN.autocompleteselectable), BDFDB.disCN.autocompleteselected);
 				}
 			}
 		}
@@ -671,7 +671,7 @@ class EditChannels {
 		let words = textarea.value.split(/\s/);
 		let lastword = words[words.length-1].trim();
 		if (channelid && lastword) {
-			BDFDB.removeEles(".autocompleteEditChannels", ".autocompleteEditChannelsRow");
+			BDFDB.DOMUtils.remove(".autocompleteEditChannels", ".autocompleteEditChannelsRow");
 			textarea.focus();
 			textarea.selectionStart = textarea.value.length - lastword.length;
 			textarea.selectionEnd = textarea.value.length;

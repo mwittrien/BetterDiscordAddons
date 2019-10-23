@@ -259,7 +259,7 @@ class PluginRepo {
 		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Remove all added Plugins from your own list.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} remove-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
 		settingshtml += `</div></div>`;
 
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
+		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
 
@@ -318,7 +318,7 @@ class PluginRepo {
 			clearInterval(this.updateInterval);
 			clearTimeout(this.loading.timeout);
 
-			BDFDB.removeEles(".pluginrepo-notice",".bd-pluginrepobutton",".pluginrepo-loadingicon",BDFDB.dotCN.app + " > .repo-loadingwrapper:empty");
+			BDFDB.DOMUtils.remove(".pluginrepo-notice",".bd-pluginrepobutton",".pluginrepo-loadingicon",BDFDB.dotCN.app + " > .repo-loadingwrapper:empty");
 
 			var frame = document.querySelector("iframe.discordSandbox");
 			if (frame) {
@@ -352,7 +352,7 @@ class PluginRepo {
 		if (!document.querySelector(".bd-pluginrepobutton") && window.PluginUpdates && window.PluginUpdates.plugins && instance._reactInternalFiber.key && instance._reactInternalFiber.key.split("-")[0] == "plugin") {
 			var folderbutton = document.querySelector(BDFDB.dotCN._repofolderbutton);
 			if (folderbutton) {
-				var repoButton = BDFDB.htmlToElement(`<button class="${BDFDB.disCN._repofolderbutton} bd-pluginrepobutton">PluginRepo</button>`);
+				var repoButton = BDFDB.DOMUtils.create(`<button class="${BDFDB.disCN._repofolderbutton} bd-pluginrepobutton">PluginRepo</button>`);
 				repoButton.addEventListener("click", () => {
 					this.openPluginRepoModal();
 				});
@@ -374,7 +374,7 @@ class PluginRepo {
 			if (!ownlist.includes(url)) {
 				ownlist.push(url);
 				BDFDB.DataUtils.save(ownlist, this, "ownlist", "ownlist");
-				let entry = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.margintop4 + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis} entryurl">${url}</div></div><div class="${BDFDB.disCN.hovercardbutton} remove-plugin"></div></div>`);
+				let entry = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.margintop4 + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis} entryurl">${url}</div></div><div class="${BDFDB.disCN.hovercardbutton} remove-plugin"></div></div>`);
 				BDFDB.ListenerUtils.addToChildren(entry, "click", ".remove-plugin", e => {this.removePluginFromOwnList(e);});
 				pluginList.appendChild(entry);
 			}
@@ -393,7 +393,7 @@ class PluginRepo {
 	removeAllFromOwnList (settingspanel) {
 		BDFDB.openConfirmModal(this, "Are you sure you want to remove all added Plugins from your own list?", () => {
 			BDFDB.DataUtils.save([], this, "ownlist", "ownlist");
-			BDFDB.removeEles(settingspanel.querySelector(BDFDB.dotCN.hovercard));
+			BDFDB.DOMUtils.remove(settingspanel.querySelector(BDFDB.dotCN.hovercard));
 		});
 	}
 
@@ -403,14 +403,14 @@ class PluginRepo {
 			return;
 		}
 
-		var pluginRepoModal = BDFDB.htmlToElement(this.pluginRepoModalMarkup);
+		var pluginRepoModal = BDFDB.DOMUtils.create(this.pluginRepoModalMarkup);
 		var tabbar = pluginRepoModal.querySelector(BDFDB.dotCN.tabbar);
 		tabbar.parentElement.insertBefore(BDFDB.createSearchBar("small"), tabbar.nextElementSibling);
 		var hiddenSettings = BDFDB.DataUtils.load(this, "hidden");
 		pluginRepoModal.querySelector("#input-hideupdated").checked = hiddenSettings.updated || options.showOnlyOutdated;
 		pluginRepoModal.querySelector("#input-hideoutdated").checked = hiddenSettings.outdated && !options.showOnlyOutdated;
 		pluginRepoModal.querySelector("#input-hidedownloadable").checked = hiddenSettings.downloadable || options.showOnlyOutdated;
-		if (!BDFDB.BdUtils.isAutoLoadEnabled()) pluginRepoModal.querySelector("#RNMoption").remove();
+		if (!BDFDB.BDUtils.isAutoLoadEnabled()) pluginRepoModal.querySelector("#RNMoption").remove();
 		else pluginRepoModal.querySelector("#input-rnmstart").checked = BDFDB.DataUtils.load(this, "RNMstart", "RNMstart");
 
 		if (options.forcedSort && this.sortings.sort[options.forcedSort]) {
@@ -446,7 +446,7 @@ class PluginRepo {
 			BDFDB.createSortPopout(e.currentTarget, this.orderPopoutMarkup, () => {this.sortEntries(pluginRepoModal);});
 		});
 		BDFDB.ListenerUtils.addToChildren(pluginRepoModal, "click", BDFDB.dotCN.tabbaritem + "[tab=plugins]", e => {
-			if (!BDFDB.containsClass(e.currentTarget, BDFDB.disCN.settingsitemselected) && pluginRepoModal.updateHidden) {
+			if (!BDFDB.DOMUtils.containsClass(e.currentTarget, BDFDB.disCN.settingsitemselected) && pluginRepoModal.updateHidden) {
 				delete pluginRepoModal.updateHidden;
 				this.sortEntries(pluginRepoModal);
 			}
@@ -457,7 +457,7 @@ class PluginRepo {
 		pluginRepoModal.entries = {};
 		for (let url in this.loadedPlugins) {
 			let plugin = this.loadedPlugins[url];
-			let instPlugin = BDFDB.BdUtils.getPlugin(plugin.getName);
+			let instPlugin = BDFDB.BDUtils.getPlugin(plugin.getName);
 			if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase()) plugin.getState = this.getString(instPlugin.getVersion()) != plugin.getVersion ? 1 : 0;
 			else plugin.getState = 2;
 			let data = {
@@ -483,7 +483,7 @@ class PluginRepo {
 
 	addEntry (pluginRepoModal, container, data) {
 		if (!pluginRepoModal || !container || !data) return;
-		let entry = BDFDB.htmlToElement(this.pluginEntryMarkup);
+		let entry = BDFDB.DOMUtils.create(this.pluginEntryMarkup);
 		setEntryState(data.state);
 		entry.setAttribute("data-name", data.name);
 		entry.setAttribute("data-version", data.version);
@@ -492,9 +492,9 @@ class PluginRepo {
 		entry.querySelector(BDFDB.dotCN._repoversion).innerHTML = data.version;
 		entry.querySelector(BDFDB.dotCN._repoauthor).innerHTML = data.author;
 		entry.querySelector(BDFDB.dotCN._repodescription).innerHTML = data.description;
-		if (data.new == 0) entry.querySelector(BDFDB.dotCN._repoheadertitle).appendChild(BDFDB.htmlToElement(`<span class="newentries-tag ${BDFDB.disCNS.bottag + BDFDB.disCNS.bottagregular + BDFDB.disCN.bottagnametag}" style="background-color: rgb(250, 166, 26) !important; color: white !important; padding: 1px 3px; font-size: 10px; top: -2px;">NEW</span>`));
+		if (data.new == 0) entry.querySelector(BDFDB.dotCN._repoheadertitle).appendChild(BDFDB.DOMUtils.create(`<span class="newentries-tag ${BDFDB.disCNS.bottag + BDFDB.disCNS.bottagregular + BDFDB.disCN.bottagnametag}" style="background-color: rgb(250, 166, 26) !important; color: white !important; padding: 1px 3px; font-size: 10px; top: -2px;">NEW</span>`));
 		let favbutton = entry.querySelector(BDFDB.dotCN.giffavoritebutton);
-		BDFDB.toggleClass(favbutton, BDFDB.disCN.giffavoriteselected, data.fav == 0);
+		BDFDB.DOMUtils.toggleClass(favbutton, BDFDB.disCN.giffavoriteselected, data.fav == 0);
 		favbutton.addEventListener("click", e => {
 			let favorize = data.fav == 1;
 			data.fav = favorize ? 0 : 1;
@@ -520,10 +520,10 @@ class PluginRepo {
 		});
 		let trashbutton = entry.querySelector(".trashIcon");
 		trashbutton.addEventListener("click", e => {
-			if (BDFDB.containsClass(entry, "outdated", "updated", false)) {
+			if (BDFDB.DOMUtils.containsClass(entry, "outdated", "updated", false)) {
 				setEntryState(2);
 				this.deletePluginFile(data);
-				if (!BDFDB.BdUtils.isAutoLoadEnabled()) this.stopPlugin(data);
+				if (!BDFDB.BDUtils.isAutoLoadEnabled()) this.stopPlugin(data);
 			}
 		});
 		trashbutton.addEventListener("mouseenter", e => {
@@ -539,9 +539,9 @@ class PluginRepo {
 
 		function setEntryState (state) {
 			data.state = state;
-			BDFDB.toggleClass(entry, "downloadable", state > 1);
-			BDFDB.toggleClass(entry, "outdated", state == 1);
-			BDFDB.toggleClass(entry, "updated", state < 1);
+			BDFDB.DOMUtils.toggleClass(entry, "downloadable", state > 1);
+			BDFDB.DOMUtils.toggleClass(entry, "outdated", state == 1);
+			BDFDB.DOMUtils.toggleClass(entry, "updated", state < 1);
 			let downloadbutton = entry.querySelector(".btn-download");
 			downloadbutton.innerText = state < 1 ? "Updated" : (state > 1 ? "Download" : "Outdated");
 			downloadbutton.style.setProperty("background-color", "rgb(" + (state < 1 ? "67,181,129" : (state > 1 ? "114,137,218" : "241,71,71")) + ")", state > 1 ? "" : "important");
@@ -580,12 +580,12 @@ class PluginRepo {
 				li.style.setProperty("order", pos, "important");
 			}
 			else li.style.removeProperty("order");
-			BDFDB.toggleEles(li, pos > -1);
+			BDFDB.DOMUtils.toggle(li, pos > -1);
 		}
 	}
 
 	loadPlugins () {
-		BDFDB.removeEles("iframe.discordSandbox",".pluginrepo-loadingicon");
+		BDFDB.DOMUtils.remove("iframe.discordSandbox",".pluginrepo-loadingicon");
 		let settings = BDFDB.DataUtils.load(this, "settings");
 		var getPluginInfo, createFrame, runInFrame;
 		var frame, framerunning = false, framequeue = [], outdated = 0, newentries = 0, i = 0;
@@ -609,11 +609,11 @@ class PluginRepo {
 				},1200000), amount:this.loading.amount+1};
 				var loadingiconwrapper = document.querySelector(BDFDB.dotCN.app + "> .repo-loadingwrapper");
 				if (!loadingiconwrapper) {
-					loadingiconwrapper = BDFDB.htmlToElement(`<div class="repo-loadingwrapper"></div>`);
+					loadingiconwrapper = BDFDB.DOMUtils.create(`<div class="repo-loadingwrapper"></div>`);
 					document.querySelector(BDFDB.dotCN.app).appendChild(loadingiconwrapper);
 				}
-				var loadingicon = BDFDB.htmlToElement(this.pluginRepoIconMarkup);
-				BDFDB.addClass(loadingicon, "pluginrepo-loadingicon");
+				var loadingicon = BDFDB.DOMUtils.create(this.pluginRepoIconMarkup);
+				BDFDB.DOMUtils.addClass(loadingicon, "pluginrepo-loadingicon");
 				loadingicon.addEventListener("mouseenter", () => {
 					BDFDB.TooltipUtils.create(loadingicon, this.getLoadingTooltipText(), {type:"left", delay:500, style:"max-width:unset;", selector:"pluginrepo-loading-tooltip"});
 				});
@@ -623,16 +623,16 @@ class PluginRepo {
 					getPluginInfo(() => {
 						if (!this.started) {
 							clearTimeout(this.loading.timeout);
-							BDFDB.removeEles(frame);
+							BDFDB.DOMUtils.remove(frame);
 							if (frame && frame.messageReceived) window.removeEventListener("message", frame.messageReceived);
 							return;
 						}
 						var finishCounter = 0, finishInterval = setInterval(() => { 
 							if ((framequeue.length == 0 && !framerunning) || finishCounter > 300 || !this.loading.is) {
 								clearInterval(finishInterval);
-								BDFDB.removeEles(frame, loadingicon, ".pluginrepo-loadingicon");
+								BDFDB.DOMUtils.remove(frame, loadingicon, ".pluginrepo-loadingicon");
 								if (frame && frame.messageReceived) window.removeEventListener("message", frame.messageReceived);
-								if (!loadingiconwrapper.firstChild) BDFDB.removeEles(loadingiconwrapper);
+								if (!loadingiconwrapper.firstChild) BDFDB.DOMUtils.remove(loadingiconwrapper);
 								clearTimeout(this.loading.timeout);
 								this.loading = {is:false, timeout:null, amount:this.loading.amount};
 								console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Finished fetching Plugins.");
@@ -728,7 +728,7 @@ class PluginRepo {
 					if (valid) {
 						plugin.url = url;
 						this.loadedPlugins[url] = plugin;
-						let instPlugin = BDFDB.BdUtils.getPlugin(plugin.getName);
+						let instPlugin = BDFDB.BDUtils.getPlugin(plugin.getName);
 						if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion && PluginUpdates && PluginUpdates.plugins && !PluginUpdates.plugins[url]) outdated++;
 						if (!this.cachedPlugins.includes(url)) newentries++;
 					}
@@ -740,7 +740,7 @@ class PluginRepo {
 				i++;
 				var loadingtooltip = document.querySelector(".pluginrepo-loading-tooltip");
 				if (loadingtooltip) {
-					BDFDB.setInnerText(loadingtooltip, this.getLoadingTooltipText());
+					BDFDB.DOMUtils.setText(loadingtooltip, this.getLoadingTooltipText());
 					BDFDB.TooltipUtils.update(loadingtooltip);
 				}
 				getPluginInfo(callback);
@@ -750,7 +750,7 @@ class PluginRepo {
 		createFrame = () => {
 			var markup = this.frameMarkup;
 			return new Promise(function(callback) {
-				frame = BDFDB.htmlToElement(markup);
+				frame = BDFDB.DOMUtils.create(markup);
 				frame.startTimeout = setTimeout(() => {
 					callback();
 				},600000);
@@ -786,7 +786,7 @@ class PluginRepo {
 					if (BDFDB.ObjectUtils.is(plugin)) {
 						plugin.url = url;
 						this.loadedPlugins[url] = plugin;
-						let instPlugin = BDFDB.BdUtils.getPlugin(plugin.getName);
+						let instPlugin = BDFDB.BDUtils.getPlugin(plugin.getName);
 						if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion) outdated++;
 						if (!this.cachedPlugins.includes(url)) newentries++;
 					}
@@ -855,14 +855,14 @@ class PluginRepo {
 	}
 
 	createPluginFile (filename, content) {
-		BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BdUtils.getPluginsFolder(), filename), content, (error) => {
+		BDFDB.LibraryRequires.fs.writeFile(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), filename), content, (error) => {
 			if (error) BDFDB.NotificationUtils.toast(`Unable to save Plugin "${filename}".`, {type:"danger"});
 			else BDFDB.NotificationUtils.toast(`Successfully saved Plugin "${filename}".`, {type:"success"});
 		});
 	}
 
 	startPlugin (data) {
-		if (BDFDB.BdUtils.isPluginEnabled(data.name) == false) {
+		if (BDFDB.BDUtils.isPluginEnabled(data.name) == false) {
 			window.pluginModule.startPlugin(data.name);
 			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Started Plugin " + data.name + ".");
 		}
@@ -870,14 +870,14 @@ class PluginRepo {
 
 	deletePluginFile (data) {
 		let filename = data.url.split("/").pop();
-		BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.BdUtils.getPluginsFolder(), filename), (error) => {
+		BDFDB.LibraryRequires.fs.unlink(BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), filename), (error) => {
 			if (error) BDFDB.NotificationUtils.toast(`Unable to delete Plugin "${filename}".`, {type:"danger"});
 			else BDFDB.NotificationUtils.toast(`Successfully deleted Plugin "${filename}".`);
 		});
 	}
 
 	stopPlugin (data) {
-		if (BDFDB.BdUtils.isPluginEnabled(data.name) == true) {
+		if (BDFDB.BDUtils.isPluginEnabled(data.name) == true) {
 			window.pluginModule.stopPlugin(data.name);
 			console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Stopped Plugin " + data.name + ".");
 		}

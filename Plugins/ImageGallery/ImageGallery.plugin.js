@@ -93,7 +93,7 @@ class ImageGallery {
 	processImageModal (instance, wrapper, returnvalue, methodnames) {
 		if (this.closemodal && instance.props && instance.props.onClose) instance.props.onClose();
 		else if (methodnames.includes("componentDidMount")) {
-			let modal = BDFDB.getParentEle(BDFDB.dotCN.modal, wrapper);
+			let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, wrapper);
 			if (!modal) return;
 			let start = performance.now();
 			let waitForImg = setInterval(() => {
@@ -102,7 +102,7 @@ class ImageGallery {
 					clearInterval(waitForImg);
 					let message = this.getMessageGroupOfImage(img);
 					if (message) {
-						BDFDB.addClass(modal, "image-gallery");
+						BDFDB.DOMUtils.addClass(modal, "image-gallery");
 						this.addImages(modal, message.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img"), img);
 					}
 				}
@@ -135,7 +135,7 @@ class ImageGallery {
 	}
 
 	addImages (modal, imgs, img) {
-		BDFDB.removeEles(modal.querySelectorAll(`${BDFDB.dotCN.imagewrapper}.prev, ${BDFDB.dotCN.imagewrapper}.next`));
+		BDFDB.DOMUtils.remove(modal.querySelectorAll(`${BDFDB.dotCN.imagewrapper}.prev, ${BDFDB.dotCN.imagewrapper}.next`));
 
 		let inner = modal.querySelector(BDFDB.dotCN.modalinner);
 
@@ -155,7 +155,7 @@ class ImageGallery {
 		modal.querySelector(BDFDB.dotCN.downloadlink).setAttribute("href", imagesrc);
 
 		var imagewrapper = modal.querySelector(BDFDB.dotCN.imagewrapper);
-		BDFDB.addClass(imagewrapper, "current");
+		BDFDB.DOMUtils.addClass(imagewrapper, "current");
 		var imagewrapperimage = imagewrapper.querySelector("img");
 		imagewrapperimage.setAttribute("src", imagesrc);
 
@@ -173,8 +173,8 @@ class ImageGallery {
 	}
 
 	createImage (modal, imgs, img, type) {
-		var imagewrapper = BDFDB.htmlToElement(this.imageMarkup);
-		BDFDB.addClass(imagewrapper, type);
+		var imagewrapper = BDFDB.DOMUtils.create(this.imageMarkup);
+		BDFDB.DOMUtils.addClass(imagewrapper, type);
 		imagewrapper.addEventListener("click", () => {this.addImages(modal, imgs, img);});
 		var imagewrapperimage = imagewrapper.querySelector("img");
 		imagewrapperimage.setAttribute("src", this.getSrcOfImage(img));
@@ -183,7 +183,7 @@ class ImageGallery {
 	}
 
 	resizeImage (container, src, img) {
-		BDFDB.toggleEles(img, false);
+		BDFDB.DOMUtils.hide(img);
 		var temp = new Image();
 		temp.src = src.src.split("?width=")[0];
 		temp.onload = function () {
@@ -196,14 +196,14 @@ class ImageGallery {
 			newHeight = temp.height > newHeight ? newHeight : temp.height;
 
 			var wrapper = img.parentElement;
-			if (!BDFDB.containsClass(wrapper, "current")) wrapper.style.setProperty("top",  (container.clientHeight - newHeight) / 2 + "px");
+			if (!BDFDB.DOMUtils.containsClass(wrapper, "current")) wrapper.style.setProperty("top",  (container.clientHeight - newHeight) / 2 + "px");
 			wrapper.style.setProperty("width", newWidth + "px");
 			wrapper.style.setProperty("height", newHeight + "px");
 
 			img.style.setProperty("width", newWidth + "px");
 			img.style.setProperty("height", newHeight + "px");
 
-			BDFDB.toggleEles(img, true);
+			BDFDB.DOMUtils.show(img);
 		};
 	}
 

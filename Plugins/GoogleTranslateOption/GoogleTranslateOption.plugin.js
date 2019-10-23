@@ -150,12 +150,12 @@ class GoogleTranslateOption {
 		}
 		settingshtml += `</div></div>`;
 
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
+		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
 
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {
-			let type = BDFDB.getParentEle(BDFDB.dotCN.select, e.currentTarget).getAttribute("type");
+			let type = BDFDB.DOMUtils.getParent(BDFDB.dotCN.select, e.currentTarget).getAttribute("type");
 			let menulanguages = this.defaults.choices[type].direction == "Output" ? BDFDB.ObjectUtils.filter(this.languages, lang => {return lang.id != "auto";}) : this.languages;
 			BDFDB.openDropdownMenu(e, this.saveSelectChoice.bind(this), this.createSelectChoice.bind(this), menulanguages);
 		});
@@ -204,7 +204,7 @@ class GoogleTranslateOption {
 				this.resetMessage(message);
 			});
 
-			BDFDB.removeEles(".translate-button", ".popout-googletranslate");
+			BDFDB.DOMUtils.remove(".translate-button", ".popout-googletranslate");
 
 			BDFDB.PluginUtils.clear(this);
 		}
@@ -217,11 +217,11 @@ class GoogleTranslateOption {
 		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(`${this.name}-contextMenuItem`)) {
 			let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
 			if (!messagediv || pos == -1) return;
-			let translated = BDFDB.containsClass(messagediv, "GTO-translated-message");
+			let translated = BDFDB.DOMUtils.containsClass(messagediv, "GTO-translated-message");
 			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:"MessagePinItem"});
 			const translateUntranslateItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: translated ? this.labels.context_messageuntranslateoption_text : this.labels.context_messagetranslateoption_text,
-				hint: BDFDB.BdUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BdUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Translate_Message") : null,
+				hint: BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Translate_Message") : null,
 				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-${translated ? "untranslate" : "translate"}-contextMenuItem`,
 				action: e => {
 					BDFDB.closeContextMenu(menu);
@@ -232,14 +232,14 @@ class GoogleTranslateOption {
 			else children.push(translateUntranslateItem);
 			let text = document.getSelection().toString();
 			if (text) {
-				let GSRstring = BDFDB.ReactUtils.getValue(BDFDB.BdUtils.getPlugin("GoogleSearchReplace", true), "labels.context_googlesearchreplace_text");
+				let GSRstring = BDFDB.ReactUtils.getValue(BDFDB.BDUtils.getPlugin("GoogleSearchReplace", true), "labels.context_googlesearchreplace_text");
 				let [children2, index2] = BDFDB.ReactUtils.findChildren(returnvalue, {name:"SearchWithGoogle", props: GSRstring ? [["label", GSRstring]] : null});
 				var foundtranslation, foundinput, foundoutput;
 				const searchTranslationItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 					label: this.labels.context_googletranslateoption_text,
 					className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-searchtranslation-contextMenuItem`,
 					action: e => {
-						var item = BDFDB.getParentEle(BDFDB.dotCN.contextmenuitem, e.target);
+						var item = BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenuitem, e.target);
 						if (item) {
 							var createTooltip = () => {
 								BDFDB.TooltipUtils.create(item, `From ${foundinput.name}:\n${text}\n\nTo ${foundoutput.name}:\n${foundtranslation}`, {type:"right", selector:"googletranslate-tooltip"});
@@ -270,7 +270,7 @@ class GoogleTranslateOption {
 		if (instance.props.message && instance.props.channel && instance.props.target && !popout.querySelector(`${this.name}-popoutMenuItem`)) {
 			let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
 			if (!messagediv || pos == -1) return;
-			let translated = BDFDB.containsClass(messagediv, "GTO-translated-message");
+			let translated = BDFDB.DOMUtils.containsClass(messagediv, "GTO-translated-message");
 			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {props:[["label", [BDFDB.LanguageUtils.LanguageStrings.PIN, BDFDB.LanguageUtils.LanguageStrings.UNPIN]]]});
 			const translateUntranslateItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: this.labels[translated ? "popout_untranslateoption_text" : "popout_translateoption_text"],
@@ -310,7 +310,7 @@ class GoogleTranslateOption {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			this.setLanguages();
-			BDFDB.removeEles(".translate-button");
+			BDFDB.DOMUtils.remove(".translate-button");
 			BDFDB.ModuleUtils.forceAllUpdates(this, "ChannelTextArea");
 		}
 	}
@@ -321,17 +321,17 @@ class GoogleTranslateOption {
 			if (textarea) {
 				var buttoncontainer = wrapper.querySelector(BDFDB.dotCN.textareapickerbuttons);
 				if (!buttoncontainer) return;
-				var translateButton = BDFDB.htmlToElement(this.translateButtonMarkup);
+				var translateButton = BDFDB.DOMUtils.create(this.translateButtonMarkup);
 				translateButton.addEventListener("click", () => {
 					this.openTranslatePopout(translateButton);
 				});
 				translateButton.addEventListener("contextmenu", () => {
 					this.translating = !this.translating;
-					BDFDB.toggleClass(document.querySelectorAll(BDFDB.dotCNS.textareawrapchat + ".translate-button"), "translating-active", this.translating);
+					BDFDB.DOMUtils.toggleClass(document.querySelectorAll(BDFDB.dotCNS.textareawrapchat + ".translate-button"), "translating-active", this.translating);
 				});
 				buttoncontainer.insertBefore(translateButton, buttoncontainer.firstElementChild);
-				BDFDB.addClass(translateButton, instance.props.type);
-				BDFDB.toggleClass(translateButton, "translating-active", this.translating);
+				BDFDB.DOMUtils.addClass(translateButton, instance.props.type);
+				BDFDB.DOMUtils.toggleClass(translateButton, "translating-active", this.translating);
 				BDFDB.ListenerUtils.add(this, textarea, "input", () => {
 					if (this.doTranslate) {
 						this.doTranslate = false;
@@ -364,7 +364,7 @@ class GoogleTranslateOption {
 		if (instance.props && typeof instance.props.renderButtons == "function" && !wrapper.querySelector(BDFDB.dotCN.optionpopoutbutton) && BDFDB.ReactUtils.getValue(instance, "props.message.author.id") != 1) {
 			let buttonwrap = wrapper.querySelector(BDFDB.dotCN.messagebuttoncontainer);
 			if (buttonwrap) {
-				let optionPopoutButton = BDFDB.htmlToElement(`<div tabindex="0" class="${BDFDB.disCN.optionpopoutbutton}" aria-label="More Options" role="button"><svg name="OverflowMenu" class="${BDFDB.disCN.optionpopoutbuttonicon}" aria-hidden="false" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0z"></path><path fill="currentColor" d="M12 16c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2zm0-6c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2zm0-6c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2z"></path></g></svg></div>`);
+				let optionPopoutButton = BDFDB.DOMUtils.create(`<div tabindex="0" class="${BDFDB.disCN.optionpopoutbutton}" aria-label="More Options" role="button"><svg name="OverflowMenu" class="${BDFDB.disCN.optionpopoutbuttonicon}" aria-hidden="false" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0z"></path><path fill="currentColor" d="M12 16c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2zm0-6c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2zm0-6c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2z"></path></g></svg></div>`);
 				optionPopoutButton.addEventListener("click", () => {BDFDB.createMessageOptionPopout(optionPopoutButton);});
 				buttonwrap.appendChild(optionPopoutButton);
 			}
@@ -373,13 +373,13 @@ class GoogleTranslateOption {
 
 	processMessageContent (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.message && instance.props.channel) {
-			let messagediv = BDFDB.getParentEle(".GTO-translated-message", wrapper);
-			if (messagediv && !wrapper.querySelector(".GTO-translation")) BDFDB.removeClass(messagediv, "GTO-translated-message");
+			let messagediv = BDFDB.DOMUtils.getParent(".GTO-translated-message", wrapper);
+			if (messagediv && !wrapper.querySelector(".GTO-translation")) BDFDB.DOMUtils.removeClass(messagediv, "GTO-translated-message");
 		}
 	}
 
 	getMessageAndPos (target) {
-		let messagediv = BDFDB.getParentEle(BDFDB.dotCN.messagegroup + "> [aria-disabled]", target) || BDFDB.getParentEle(BDFDB.dotCN.messagegroup + "> * > [aria-disabled]", target);
+		let messagediv = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagegroup + "> [aria-disabled]", target) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagegroup + "> * > [aria-disabled]", target);
 		let pos = messagediv ? Array.from(messagediv.parentElement.childNodes).filter(n => n.nodeType != Node.TEXT_NODE).indexOf(messagediv) : -1;
 		return {messagediv, pos};
 	}
@@ -394,7 +394,7 @@ class GoogleTranslateOption {
 			var accessory = messagediv.querySelector(BDFDB.dotCN.messageaccessory);
 			var embeddescriptions = messagediv.querySelectorAll(BDFDB.dotCN.embeddescription);
 			var fakemarkup = markup.cloneNode(true);
-			BDFDB.removeEles(fakemarkup.querySelectorAll(BDFDB.dotCNC.messageheadercompact + BDFDB.dotCN.messageedited));
+			BDFDB.DOMUtils.remove(fakemarkup.querySelectorAll(BDFDB.dotCNC.messageheadercompact + BDFDB.dotCN.messageedited));
 			let string = fakemarkup.innerHTML;
 			if (embeddescriptions.length) for (let embeddescription of embeddescriptions) {
 				string += "\n__________________ __________________ __________________\n";
@@ -402,12 +402,12 @@ class GoogleTranslateOption {
 			}
 			this.translateText(string, "context", (translation, input, output) => {
 				if (translation) {
-					BDFDB.addClass(messagediv, "GTO-translated-message");
+					BDFDB.DOMUtils.addClass(messagediv, "GTO-translated-message");
 					let translations = translation.split("\n__________________ __________________ __________________\n");
 					let compactheader = markup.querySelector(BDFDB.dotCN.messageheadercompact);
-					markup.insertBefore(BDFDB.htmlToElement(`<label class="GTO-translation">${translations.shift().replace(/\n/g, "BDFDB_GTO_PLACEHOLDER").replace(/\s/g, " ").replace(/BDFDB_GTO_PLACEHOLDER/g, "\n").replace(/> *(\n*) *</g, ">$1<").replace(/> +/g, "> ").replace(/ +</g, " <").replace(/> *([^ ]*) *<\//g, ">$1</").trim()}<time class="${BDFDB.disCN.messageedited} GTO-translated">(${this.labels.translated_watermark_text})</time></label>`), compactheader ? compactheader.nextSibling : markup.firstChild);
+					markup.insertBefore(BDFDB.DOMUtils.create(`<label class="GTO-translation">${translations.shift().replace(/\n/g, "BDFDB_GTO_PLACEHOLDER").replace(/\s/g, " ").replace(/BDFDB_GTO_PLACEHOLDER/g, "\n").replace(/> *(\n*) *</g, ">$1<").replace(/> +/g, "> ").replace(/ +</g, " <").replace(/> *([^ ]*) *<\//g, ">$1</").trim()}<time class="${BDFDB.disCN.messageedited} GTO-translated">(${this.labels.translated_watermark_text})</time></label>`), compactheader ? compactheader.nextSibling : markup.firstChild);
 					if (embeddescriptions.length) for (let embeddescription of embeddescriptions) {
-						embeddescription.insertBefore(BDFDB.htmlToElement(`<label class="GTO-translation">${translations.shift().trim()}<time class="${BDFDB.disCN.messageedited} GTO-translated">(${this.labels.translated_watermark_text})</time></label>`), embeddescription.firstChild);
+						embeddescription.insertBefore(BDFDB.DOMUtils.create(`<label class="GTO-translation">${translations.shift().trim()}<time class="${BDFDB.disCN.messageedited} GTO-translated">(${this.labels.translated_watermark_text})</time></label>`), embeddescription.firstChild);
 					}
 					BDFDB.ListenerUtils.addToChildren(messagediv, "mouseenter", BDFDB.dotCN.messageedited + ".GTO-translated", e => {
 						BDFDB.TooltipUtils.create(e.currentTarget, `<div>From: ${input.name}</div><div>To: ${output.name}</div>`, {html:true, type:"top", selector:"translation-tooltip"});
@@ -419,8 +419,8 @@ class GoogleTranslateOption {
 	}
 
 	resetMessage (messagediv) {
-		BDFDB.removeEles(messagediv.querySelectorAll(".GTO-translation"));
-		BDFDB.removeClass(messagediv, "GTO-translated-message");
+		BDFDB.DOMUtils.remove(messagediv.querySelectorAll(".GTO-translation"));
+		BDFDB.DOMUtils.removeClass(messagediv, "GTO-translated-message");
 	}
 
 	translateText (text, type, callback) {
@@ -599,16 +599,16 @@ class GoogleTranslateOption {
 
 	openTranslatePopout (button) {
 		let container = document.querySelector(BDFDB.dotCN.popouts);
-		if (!container || BDFDB.containsClass(button, BDFDB.disCN.textareabuttonactive)) return;
-		BDFDB.addClass(button, BDFDB.disCN.textareabuttonactive);
-		let translatepopout = BDFDB.htmlToElement(this.translatePopoutMarkup);
+		if (!container || BDFDB.DOMUtils.containsClass(button, BDFDB.disCN.textareabuttonactive)) return;
+		BDFDB.DOMUtils.addClass(button, BDFDB.disCN.textareabuttonactive);
+		let translatepopout = BDFDB.DOMUtils.create(this.translatePopoutMarkup);
 		container.appendChild(translatepopout);
-		let buttonrects = BDFDB.getRects(button);
+		let buttonrects = BDFDB.DOMUtils.getRects(button);
 		translatepopout.style.setProperty("left", buttonrects.left + buttonrects.width + "px");
 		translatepopout.style.setProperty("top", buttonrects.top - buttonrects.height/2 + "px");
 
 		BDFDB.ListenerUtils.addToChildren(translatepopout, "click", BDFDB.dotCN.selectcontrol, e => {
-			let type = BDFDB.getParentEle(BDFDB.dotCN.select, e.currentTarget).getAttribute("type");
+			let type = BDFDB.DOMUtils.getParent(BDFDB.dotCN.select, e.currentTarget).getAttribute("type");
 			let menulanguages = this.defaults.choices[type].direction == "Output" ? BDFDB.ObjectUtils.filter(this.languages, lang => {return lang.id != "auto";}) : this.languages;
 			let menu = BDFDB.openDropdownMenu(e, this.saveSelectChoice.bind(this), this.createSelectChoice.bind(this), menulanguages, true);
 			BDFDB.ListenerUtils.addToChildren(menu, "click", BDFDB.dotCN.giffavoritebutton, e => {
@@ -645,7 +645,7 @@ class GoogleTranslateOption {
 		var translatecheckbox = translatepopout.querySelector("#translating-checkbox");
 		translatecheckbox.checked = this.translating;
 		translatecheckbox.addEventListener("click", () => {
-			BDFDB.toggleClass(button, "translating-active", translatecheckbox.checked);
+			BDFDB.DOMUtils.toggleClass(button, "translating-active", translatecheckbox.checked);
 			this.translating = translatecheckbox.checked;
 		});
 
@@ -653,7 +653,7 @@ class GoogleTranslateOption {
 			if (!translatepopout.contains(e.target)) {
 				document.removeEventListener("mousedown", removePopout);
 				translatepopout.remove();
-				setTimeout(() => {BDFDB.removeClass(button, BDFDB.disCN.textareabuttonactive);},300);
+				setTimeout(() => {BDFDB.DOMUtils.removeClass(button, BDFDB.disCN.textareabuttonactive);},300);
 			}
 		};
 		document.addEventListener("mousedown", removePopout);

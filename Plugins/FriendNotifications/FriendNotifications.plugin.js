@@ -221,7 +221,7 @@ class FriendNotifications {
 		BDFDB.DataUtils.save(friends, this, "friends");
 		BDFDB.DataUtils.save(nonfriends, this, "nonfriends");
 
-		let settingspanel = BDFDB.htmlToElement(settingshtml);
+		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
 
 		BDFDB.initElements(settingspanel, this);
 
@@ -236,11 +236,11 @@ class FriendNotifications {
 			}
 		});
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".settings-avatar", e => {
-			this.changeNotificationType(e.currentTarget, false, !BDFDB.containsClass(e.currentTarget, "disabled", "desktop", false));
+			this.changeNotificationType(e.currentTarget, false, !BDFDB.DOMUtils.containsClass(e.currentTarget, "disabled", "desktop", false));
 		});
 		BDFDB.ListenerUtils.add(this, settingspanel, "contextmenu", ".settings-avatar", e => {
 			if (!("Notification" in window)) return;
-			this.changeNotificationType(e.currentTarget, true, !(BDFDB.containsClass(e.currentTarget, "disabled") || !BDFDB.containsClass(e.currentTarget, "desktop")));
+			this.changeNotificationType(e.currentTarget, true, !(BDFDB.DOMUtils.containsClass(e.currentTarget, "disabled") || !BDFDB.DOMUtils.containsClass(e.currentTarget, "desktop")));
 		});
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".btn-batch", e => {
 			this.changeAllNotificationTypes(settingspanel, e.currentTarget, true);
@@ -249,7 +249,7 @@ class FriendNotifications {
 			this.changeAllNotificationTypes(settingspanel, e.currentTarget, false);
 		});
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", BDFDB.dotCN.checkboxinput, e => {
-			if (BDFDB.containsClass(e.target, "remove-user")) return;
+			if (BDFDB.DOMUtils.containsClass(e.target, "remove-user")) return;
 			this.changeNotificationConfig(e.currentTarget);
 		});
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".BDFDB-tableheadercolumn", e => {
@@ -263,7 +263,7 @@ class FriendNotifications {
 			let group = e.currentTarget.getAttribute("group");
 			if (id && group) {
 				BDFDB.DataUtils.remove(this, group, id);
-				BDFDB.removeEles(BDFDB.getParentEle(BDFDB.dotCN.hovercard, e.currentTarget));
+				BDFDB.DOMUtils.remove(BDFDB.DOMUtils.getParent(BDFDB.dotCN.hovercard, e.currentTarget));
 				this.SettingsUpdated = true;
 			}
 		});
@@ -278,7 +278,7 @@ class FriendNotifications {
 				if (user) {
 					let data = this.createDefaultConfig();
 					BDFDB.DataUtils.save(data, this, "nonfriends", user.id);
-					let hovercard = BDFDB.htmlToElement(this.createHoverCard(user, data, "nonfriends"));
+					let hovercard = BDFDB.DOMUtils.create(this.createHoverCard(user, data, "nonfriends"));
 					settingspanel.querySelector(".nonfriend-list").appendChild(hovercard);
 					BDFDB.initElements(hovercard);
 					this.SettingsUpdated = true;
@@ -339,7 +339,7 @@ class FriendNotifications {
 
 	createHoverCard (user, data, group) {
 		let EUdata = BDFDB.DataUtils.load("EditUsers", "users", user.id) || {};
-		var hovercardhtml = `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="settings-avatar${data.desktop ? " desktop" : ""}${data.disabled ? " disabled" : ""}" group="${group}" user-id="${user.id}" style="flex: 0 0 auto; background-image: url(${EUdata.removeIcon ? "" : (EUdata.url ? EUdata.url : BDFDB.UserUtils.getAvatar(user.id))});"></div><div class="BDFDB-textscrollwrapper" style="flex: 1 1 auto;"><div class="BDFDB-textscroll">${BDFDB.encodeToHTML(EUdata.name || user.username)}</div></div>`;
+		var hovercardhtml = `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="settings-avatar${data.desktop ? " desktop" : ""}${data.disabled ? " disabled" : ""}" group="${group}" user-id="${user.id}" style="flex: 0 0 auto; background-image: url(${EUdata.removeIcon ? "" : (EUdata.url ? EUdata.url : BDFDB.UserUtils.getAvatar(user.id))});"></div><div class="BDFDB-textscrollwrapper" style="flex: 1 1 auto;"><div class="BDFDB-textscroll">${BDFDB.StringUtils.htmlEscape(EUdata.name || user.username)}</div></div>`;
 		for (let config in this.defaults.notificationstrings) {
 			hovercardhtml += `<div class="${BDFDB.disCNS.checkboxcontainer + BDFDB.disCN.marginreset} BDFDB-tablecheckbox" table-id="${group}" style="flex: 0 0 auto;"><label class="${BDFDB.disCN.checkboxwrapper}"><input user-id="${user.id}" group="${group}" config="${config}" type="checkbox" class="${BDFDB.disCN.checkboxinputdefault}"${data[config] ? " checked" : ""}><div class="${BDFDB.disCNS.checkbox + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex2 + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.checkboxround}"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
 		}
@@ -353,8 +353,8 @@ class FriendNotifications {
 			let data = BDFDB.DataUtils.load(this, group, id) || this.createDefaultConfig();
 			data.desktop = desktopon;
 			data.disabled = disableon;
-			BDFDB.toggleClass(avatar, "desktop", desktopon);
-			BDFDB.toggleClass(avatar, "disabled", disableon);
+			BDFDB.DOMUtils.toggleClass(avatar, "desktop", desktopon);
+			BDFDB.DOMUtils.toggleClass(avatar, "disabled", disableon);
 			BDFDB.DataUtils.save(data, this, group, id);
 			this.SettingsUpdated = true;
 		}
@@ -368,10 +368,10 @@ class FriendNotifications {
 			if (config == "desktop") {
 				enable = !enable;
 				for (let id in data) data[id].disabled = false;
-				for (let avatar of settingspanel.querySelectorAll(`.settings-avatar[group="${group}"]`)) BDFDB.removeClass(avatar, "disabled");
+				for (let avatar of settingspanel.querySelectorAll(`.settings-avatar[group="${group}"]`)) BDFDB.DOMUtils.removeClass(avatar, "disabled");
 			}
 			for (let id in data) data[id][config] = enable;
-			for (let avatar of settingspanel.querySelectorAll(`.settings-avatar[group="${group}"]`)) BDFDB.toggleClass(avatar, config, enable);
+			for (let avatar of settingspanel.querySelectorAll(`.settings-avatar[group="${group}"]`)) BDFDB.DOMUtils.toggleClass(avatar, config, enable);
 			BDFDB.DataUtils.save(data, this, group);
 			this.SettingsUpdated = true;
 		}
@@ -494,7 +494,7 @@ class FriendNotifications {
 					let EUdata = BDFDB.DataUtils.load("EditUsers", "users", user.id) || {};
 					let libstring = (this.defaults.notificationstrings[status.statusname].libstring ? BDFDB.LanguageUtils.LanguageStrings[this.defaults.notificationstrings[status.statusname].libstring] : (this.defaults.notificationstrings[status.statusname].statusname || "")).toLowerCase();
 					let string = notificationstrings[status.statusname] || "$user changed status to $status";
-					let toaststring = BDFDB.encodeToHTML(string).replace(/'{0,1}\$user'{0,1}/g, `<strong>${BDFDB.encodeToHTML(EUdata.name || user.username)}</strong>`).replace(/'{0,1}\$status'{0,1}/g, `<strong>${libstring}</strong>`);
+					let toaststring = BDFDB.StringUtils.htmlEscape(string).replace(/'{0,1}\$user'{0,1}/g, `<strong>${BDFDB.StringUtils.htmlEscape(EUdata.name || user.username)}</strong>`).replace(/'{0,1}\$status'{0,1}/g, `<strong>${libstring}</strong>`);
 					if (status.isactivity) toaststring = toaststring.replace(/'{0,1}\$song'{0,1}|'{0,1}\$game'{0,1}/g, `<strong>${status.name || status.details}</strong>`).replace(/'{0,1}\$artist'{0,1}/g, `<strong>${status.state}</strong>`);
 					let avatar = EUdata.removeIcon ? "" : (EUdata.url ? EUdata.url : BDFDB.UserUtils.getAvatar(user.id));
 					this.timeLog.push({string:toaststring, avatar, time: new Date()});
@@ -533,13 +533,13 @@ class FriendNotifications {
 	}
 
 	showTimeLog () {
-		let timeLogModal = BDFDB.htmlToElement(this.timeLogModalMarkup);
+		let timeLogModal = BDFDB.DOMUtils.create(this.timeLogModalMarkup);
 		let container = timeLogModal.querySelector(".entries");
 		if (!container) return;
 		let logs = this.timeLog.slice(0).reverse();
 		for (let log of logs) {
-			if (container.childElementCount) container.appendChild(BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.divider + BDFDB.disCN.marginbottom4}"></div>`));
-			let entry = BDFDB.htmlToElement(this.logEntryMarkup);
+			if (container.childElementCount) container.appendChild(BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.divider + BDFDB.disCN.marginbottom4}"></div>`));
+			let entry = BDFDB.DOMUtils.create(this.logEntryMarkup);
 			entry.querySelector(".log-time").innerText = `[${log.time.toLocaleTimeString()}]`;
 			entry.querySelector(".log-avatar").style.setProperty("background-image", `url(${log.avatar})`);
 			entry.querySelector(".log-description").innerHTML = log.string;
