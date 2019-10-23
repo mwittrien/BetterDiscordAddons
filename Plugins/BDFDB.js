@@ -3764,6 +3764,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		colorPickerSwatchSingle: "single-swatch",
 		colorPickerSwatchSelected: "selected",
 		overflowEllipsis: "overflowellipsis",
+		popoutContainer: "popoutContainer",
 		modalHeaderHasSibling: "headerHasSibling",
 		modalTabContent: "tab-content",
 		modalTabContentOpen: "open"
@@ -4916,6 +4917,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		popoutbottom: ["Popout", "popoutBottom"],
 		popoutbottomleft: ["Popout", "popoutBottomLeft"],
 		popoutbottomright: ["Popout", "popoutBottomRight"],
+		popoutcontainer: ["BDFDB", "popoutContainer"],
 		popoutfooter: ["Popout", "footer"],
 		popoutheader: ["Popout", "header"],
 		popoutinvert: ["Popout", "popoutInvert"],
@@ -5589,7 +5591,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				let children = this.props.children;
 				this.props.children = _ => {return children;};
 			}
-			return BDFDB.ReactUtils.createElement(NativeSubComponents.PopoutContainer, this.props);
+			return BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.disCN.popoutcontainer,
+				onClick: e => {
+					let basePopoutIns = BDFDB.ReactUtils.findOwner(e._targetInst, {name:"BasePopout", up:true});
+					if (basePopoutIns) basePopoutIns.handleClick();
+				},
+				children: BDFDB.ReactUtils.createElement(NativeSubComponents.PopoutContainer, this.props)
+			});
 		}
     } : undefined;
 	LibraryComponents.SettingsPanel = reactInitialized ? class BDFDB_SettingsPanel extends LibraryModules.React.Component {
@@ -6179,6 +6188,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		${BDFDB.dotCN.overflowellipsis} {
 			overflow: hidden;
 			text-overflow: ellipsis;
+		}
+
+		${BDFDB.dotCN.popoutcontainer} {
+			display: flex;
 		}
 
 		${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageheadercozy} {
