@@ -5786,7 +5786,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			});
 		}
     } : undefined;
-	for (let type of NativeSubComponents) if (LibraryComponents[type]) for (let key in NativeSubComponents[type]) if (key != "displayName" && key != "name") LibraryComponents[type][key] = NativeSubComponents[type][key];
+	for (let type in NativeSubComponents) if (LibraryComponents[type]) for (let key in NativeSubComponents[type]) if (key != "displayName" && key != "name") LibraryComponents[type][key] = NativeSubComponents[type][key];
 	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
 	
 	var LanguageStringsVars = {}, LanguageStrings = LibraryModules.LanguageStore && LibraryModules.LanguageStore._proxyContext ? Object.assign({}, LibraryModules.LanguageStore._proxyContext.defaultMessages) : {};
