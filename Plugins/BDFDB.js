@@ -957,9 +957,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	LibraryModules.ReactDOM = BDFDB.ModuleUtils.findByProperties("render", "findDOMNode");
 	if (LibraryModules.React && LibraryModules.ReactDOM) {
 		BDFDB.ReactUtils = Object.assign({}, LibraryModules.React, LibraryModules.ReactDOM);
-		BDFDB.ReactUtils.createElement = function (...arguments) {
-			arguments[0] = arguments[0] || "div";
-			try {return LibraryModules.React.createElement(...arguments) || null;}
+		BDFDB.ReactUtils.createElement = function (component, props) {
+			try {return LibraryModules.React.createElement(component || "div", props || {}) || null;}
 			catch (err) {console.error(`%c[BDFDB]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not create react element! " + err);}
 			return null;
 		};
