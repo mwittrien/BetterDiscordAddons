@@ -5562,6 +5562,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
     } : undefined;
 	LibraryComponents.NumberBadge = BDFDB.ModuleUtils.findByName("NumberBadge");
+	LibraryComponents.Popout = BDFDB.ModuleUtils.findByName("Popout");
 	LibraryComponents.SvgIcon = BDFDB.ModuleUtils.findByProperties("Gradients", "Names");
 	LibraryComponents.SettingsPanel = reactInitialized ? class BDFDB_SettingsPanel extends LibraryModules.React.Component {
 		render() {
@@ -7232,7 +7233,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			}});
 		};
 		BDFDB.ModuleUtils.DevFuncs.listenstop = function () {
-			if (BDFDB.ModuleUtils.DevFuncs.listen.p == "function") BDFDB.ModuleUtils.DevFuncs.listen.p();
+			if (typeof BDFDB.ModuleUtils.DevFuncs.listen.p == "function") BDFDB.ModuleUtils.DevFuncs.listen.p();
 		};
 		BDFDB.ModuleUtils.DevFuncs.req = getWebModuleReq();
 	}
