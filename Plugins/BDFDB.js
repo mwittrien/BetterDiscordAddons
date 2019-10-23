@@ -1181,7 +1181,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 
 	var webModulesPatchtypes = ["before", "instead", "after"];
 	var webModulesPatchmap = {
-		Account: "FluxContainer(Account)",
 		BannedCard: "BannedUser",
 		InvitationCard: "InviteRow",
 		InviteCard: "InviteRow",
@@ -1192,6 +1191,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		WebhookCard: "Webhook"
 	};
 	var webModulesNotFindableModules = {
+		Account: "accountinfo",
 		AuthWrapper: "loginscreen",
 		BannedCard: "guildsettingsbannedcard",
 		ChannelMember: "member",
@@ -7363,6 +7363,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	BDFDB.regEscape = BDFDB.StringUtils.regEscape;
 	BDFDB.insertNRST = BDFDB.StringUtils.insertNRST;
 	
+	BDFDB.formatBytes = BDFDB.NumberUtils.formatBytes;
 	BDFDB.mapRange = BDFDB.NumberUtils.mapRange;
 	
 	BDFDB.getDiscordTheme = BDFDB.DiscordUtils.getTheme;
