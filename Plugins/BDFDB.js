@@ -5389,6 +5389,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	NativeSubComponents.FavButton = BDFDB.ModuleUtils.findByName("GIFFavButton");
 	NativeSubComponents.PopoutContainer = BDFDB.ModuleUtils.findByName("Popout");
 	NativeSubComponents.Select = BDFDB.ModuleUtils.findByName("SelectTempWrapper");
+	NativeSubComponents.Switch = BDFDB.ModuleUtils.findByName("Switch");
 	NativeSubComponents.TabBar = BDFDB.ModuleUtils.findByName("TabBar");
 	NativeSubComponents.TextInput = BDFDB.ModuleUtils.findByName("TextInput");
 	
@@ -5560,7 +5561,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
     } : undefined;
 	LibraryComponents.FavButton = reactInitialized ? class BDFDB_FavButton extends LibraryModules.React.Component {
         handleClick() {
-            if (typeof this.props.onClick == "function") this.props.onClick(!isFavorite, this);
+            if (typeof this.props.onClick == "function") this.props.onClick(!this.props.isFavorite, this);
 			this.props.isFavorite = !this.props.isFavorite;
 			BDFDB.ReactUtils.forceUpdate(this);
         }
@@ -5636,9 +5637,17 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			}
 			return BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.disCN.popoutcontainer,
+				onContextMenu: e => {
+					let basePopoutIns = BDFDB.ReactUtils.findOwner(e._targetInst, {name:"BasePopout", up:true});
+					if (basePopoutIns && (!basePopoutIns.domElementRef.current || basePopoutIns.domElementRef.current.contains(e.target))) {
+						if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
+						if (basePopoutIns.domElementRef.current) basePopoutIns.close();
+					}
+				},
 				onClick: e => {
 					let basePopoutIns = BDFDB.ReactUtils.findOwner(e._targetInst, {name:"BasePopout", up:true});
 					if (basePopoutIns && (!basePopoutIns.domElementRef.current || basePopoutIns.domElementRef.current.contains(e.target))) {
+						if (typeof this.props.onClick == "function") this.props.onClick(e, this);
 						basePopoutIns.handleClick();
 						if (!basePopoutIns.nativeClose) {
 							basePopoutIns.nativeClose = basePopoutIns.close;
@@ -5710,12 +5719,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 	}: undefined;
 	LibraryComponents.SettingsItem = reactInitialized ? class BDFDB_SettingsItem extends LibraryModules.React.Component {
-        handleChange(e) {
-			if (typeof this.props.onChange == "function") this.props.onChange(!this.props.value, this);
-			if (this.props.type == "Switch") {
-				this.props.value = !this.props.value;
-				BDFDB.ReactUtils.forceUpdate(this);
-			}
+        handleChange(value) {
+			if (typeof this.props.onChange == "function") this.props.onChange(value, this);
         }
 		render() {
 			if (typeof this.props.type != "string" || !["BUTTON", "SWITCH", "TEXTINPUT"].includes(this.props.type.toUpperCase())) return null;
@@ -5799,7 +5804,16 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
     } : undefined;
 	LibraryComponents.SvgIcon = BDFDB.ModuleUtils.findByProperties("Gradients", "Names");
-	LibraryComponents.Switch = BDFDB.ModuleUtils.findByName("Switch");
+	LibraryComponents.Switch = reactInitialized ? class BDFDB_Switch extends LibraryModules.React.Component {
+        handleChange() {
+            if (typeof this.props.onChange == "function") this.props.onChange(!this.props.value, this);
+			this.props.value = !this.props.value;
+			BDFDB.ReactUtils.forceUpdate(this);
+        }
+        render() {
+			return BDFDB.ReactUtils.createElement(NativeSubComponents.Switch, Object.assign({}, this.props, {onChange: this.handleChange.bind(this)}));
+		}
+	} : undefined;
 	LibraryComponents.TabBar = reactInitialized ? class BDFDB_TabBar extends LibraryModules.React.Component {
         handleItemSelect(item) {
             if (typeof this.props.onItemSelect == "function") this.props.onItemSelect(item, this);
@@ -5810,7 +5824,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
     } : undefined;
 	LibraryComponents.TextElement = BDFDB.ModuleUtils.findByName("Text");
 	LibraryComponents.TextInput = reactInitialized ? class BDFDB_TextInput extends LibraryModules.React.Component {
-        handleChange(e) {
+        handleChange(value) {
             if (typeof this.props.onChange == "function") this.props.onChange(value, this);
 			this.props.value = value;
 			BDFDB.ReactUtils.forceUpdate(this);

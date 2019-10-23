@@ -375,7 +375,7 @@ class PinDMs {
 
 	processLazyScroller (instance, wrapper, returnvalue) {
 		let privateChannelIds = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.memoizedProps.privateChannelIds");
-		if (privateChannelIds) {
+		if (privateChannelIds && instance.updater.isMounted(instance)) {
 			if (this.forceAdding || !instance.props.PinDMsPatched) {
 				instance.props.PinDMsPatched = true;
 				let dms = instance.props.children;
