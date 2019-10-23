@@ -5711,6 +5711,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			}));
 		}
     } : undefined;
+	LibraryComponents.SvgIcon = BDFDB.ModuleUtils.findByProperties("Gradients", "Names");
 	LibraryComponents.Switch = BDFDB.ModuleUtils.findByName("Switch");
 	LibraryComponents.TabBar = reactInitialized ? class BDFDB_TabBar extends LibraryModules.React.Component {
         handleItemSelect(e) {
