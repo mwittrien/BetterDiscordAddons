@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.6.5";}
+	getVersion () {return "3.6.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditUsers {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Tooltips","Fixed issue where native tooltip wasn't hidden"]]
+			"fixed":[["Account","Fixed the coloring in the account details container"]]
 		};
 
 		this.labels = {};
@@ -490,7 +490,7 @@ class EditUsers {
 	}
 
 	processAccount (instance, wrapper, returnvalue) {
-		let user = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.child.stateNode.props.currentUser");
+		let user = instance.props.currentUser;
 		if (user) {
 			this.changeName(user, wrapper.querySelector(BDFDB.dotCN.accountinfodetails).firstElementChild);
 			this.changeAvatar(user, this.getAvatarDiv(wrapper));
