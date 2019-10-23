@@ -1,7 +1,7 @@
 if (window.BDFDB && BDFDB.ListenerUtils && typeof BDFDB.ListenerUtils.remove == "function") BDFDB.ListenerUtils.remove(BDFDB);
 if (window.BDFDB && BDFDB.ObserverUtils && typeof BDFDB.ObserverUtils.disconnect == "function") BDFDB.ObserverUtils.disconnect(BDFDB);
 if (window.BDFDB && BDFDB.ModuleUtils && typeof BDFDB.ModuleUtils.unpatch == "function") BDFDB.ModuleUtils.unpatch(BDFDB);
-var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB.cleanUps || {}, BDv2Api: BDFDB && BDFDB.BDv2Api || undefined, creationTime: performance.now(), cachedData: {}, pressedKeys: [], mousePosition: {pageX: 0, pageY: 0}, name: "$BDFDB"};
+var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB.cleanUps || {}, BDv2Api: BDFDB && BDFDB.BDv2Api || undefined, creationTime: performance.now(), pressedKeys: [], mousePosition: {pageX: 0, pageY: 0}, name: "$BDFDB"};
 (_ => {
 	var id = Math.round(Math.random() * 10000000000000000), InternalBDFDB = {};
 	BDFDB.id = id;
@@ -826,6 +826,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		return getWebModuleReq.req;
 	};
 	BDFDB.ModuleUtils = {};
+	BDFDB.ModuleUtils.cached = {};
 	BDFDB.ModuleUtils.find = function (filter) {
 		var req = getWebModuleReq();
 		for (let i in req.c) if (req.c.hasOwnProperty(i)) {
@@ -834,57 +835,56 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			if (m && m.__esModule) for (let j in m) if (m[j] && (typeof m[j] == "object" || typeof m[j] == "function") && filter(m[j])) return m[j];
 		}
 	};
-
-	BDFDB.ModuleUtils.cachedData = {prop:{},name:{},string:{},proto:{}};
 	BDFDB.ModuleUtils.findByProperties = function (properties) {
 		properties = BDFDB.ArrayUtils.is(properties) ? properties : Array.from(arguments);
 		var cachestring = JSON.stringify(properties);
-		if (BDFDB.ModuleUtils.cachedData.prop[cachestring]) return BDFDB.ModuleUtils.cachedData.prop[cachestring];
+		if (!BDFDB.ObjectUtils.is(BDFDB.ModuleUtils.cached.prop)) BDFDB.ModuleUtils.cached.prop = {};
+		if (BDFDB.ModuleUtils.cached.prop[cachestring]) return BDFDB.ModuleUtils.cached.prop[cachestring];
 		else {
 			var m = BDFDB.ModuleUtils.find(m => properties.every(prop => m[prop] !== undefined));
 			if (m) {
-				BDFDB.ModuleUtils.cachedData.prop[cachestring] = m;
+				BDFDB.ModuleUtils.cached.prop[cachestring] = m;
 				return m;
 			}
 			else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", cachestring + " [properties] not found in WebModules");
 		}
 	};
-
 	BDFDB.ModuleUtils.findByName = function (name) {
 		var cachestring = JSON.stringify(name);
-		if (BDFDB.ModuleUtils.cachedData.name[cachestring]) return BDFDB.ModuleUtils.cachedData.name[cachestring];
+		if (!BDFDB.ObjectUtils.is(BDFDB.ModuleUtils.cached.name)) BDFDB.ModuleUtils.cached.name = {};
+		if (BDFDB.ModuleUtils.cached.name[cachestring]) return BDFDB.ModuleUtils.cached.name[cachestring];
 		else {
 			var m = BDFDB.ModuleUtils.find(m => m.displayName === name);
 			if (m) {
-				BDFDB.ModuleUtils.cachedData.name[cachestring] = m;
+				BDFDB.ModuleUtils.cached.name[cachestring] = m;
 				return m;
 			}
 			else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", cachestring + " [name] not found in WebModules");
 		}
 	};
-
 	BDFDB.ModuleUtils.findByString = function (strings) {
 		strings = BDFDB.ArrayUtils.is(strings) ? strings : Array.from(arguments);
 		var cachestring = JSON.stringify(strings);
-		if (BDFDB.ModuleUtils.cachedData.string[cachestring]) return BDFDB.ModuleUtils.cachedData.string[cachestring];
+		if (!BDFDB.ObjectUtils.is(BDFDB.ModuleUtils.cached.string)) BDFDB.ModuleUtils.cached.string = {};
+		if (BDFDB.ModuleUtils.cached.string[cachestring]) return BDFDB.ModuleUtils.cached.string[cachestring];
 		else {
 			var m = BDFDB.ModuleUtils.find(m => strings.every(string => typeof m == "function" && m.toString().indexOf(string) > -1));
 			if (m) {
-				BDFDB.ModuleUtils.cachedData.string[cachestring] = m;
+				BDFDB.ModuleUtils.cached.string[cachestring] = m;
 				return m;
 			}
 			else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", cachestring + " [string] not found in WebModules");
 		}
 	};
-
 	BDFDB.ModuleUtils.findByPrototypes = function (protoprops) {
 		protoprops = BDFDB.ArrayUtils.is(protoprops) ? protoprops : Array.from(arguments);
 		var cachestring = JSON.stringify(protoprops);
-		if (BDFDB.ModuleUtils.cachedData.proto[cachestring]) return BDFDB.ModuleUtils.cachedData.proto[cachestring];
+		if (!BDFDB.ObjectUtils.is(BDFDB.ModuleUtils.cached.proto)) BDFDB.ModuleUtils.cached.proto = {};
+		if (BDFDB.ModuleUtils.cached.proto[cachestring]) return BDFDB.ModuleUtils.cached.proto[cachestring];
 		else {
 			var m = BDFDB.ModuleUtils.find(m => m.prototype && protoprops.every(prop => m.prototype[prop] !== undefined));
 			if (m) {
-				BDFDB.ModuleUtils.cachedData.proto[cachestring] = m;
+				BDFDB.ModuleUtils.cached.proto[cachestring] = m;
 				return m;
 			}
 			else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", cachestring + " [prototypes] not found in WebModules");
@@ -1917,6 +1917,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	};
 
 	BDFDB.DataUtils = {};
+	BDFDB.DataUtils.cached = {};
 	BDFDB.DataUtils.save = function (data, plugin, key, id) {
 		var configpath, pluginname;
 		if (!BDFDB.BDUtils.isBDv2()) {
@@ -1931,7 +1932,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 		
 		var exists = LibraryRequires.fs.existsSync(configpath);
-		var config = !exists ? {} : typeof BDFDB.cachedData[pluginname] !== "undefined" ? BDFDB.cachedData[pluginname] : InternalBDFDB.readConfig(configpath);
+		var config = !exists ? {} : typeof BDFDB.DataUtils.cached[pluginname] !== "undefined" ? BDFDB.DataUtils.cached[pluginname] : InternalBDFDB.readConfig(configpath);
 		
 		if (id === undefined) config[key] = BDFDB.ObjectUtils.is(data) ? BDFDB.ObjectUtils.sort(data) : data;
 		else {
@@ -1941,12 +1942,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		
 		if (BDFDB.ObjectUtils.isEmpty(config[key])) delete config[key];
 		if (BDFDB.ObjectUtils.isEmpty(config)) {
-			delete BDFDB.cachedData[pluginname];
+			delete BDFDB.DataUtils.cached[pluginname];
 			if (exists) LibraryRequires.fs.unlinkSync(configpath);
 		}
 		else {
 			config = BDFDB.ObjectUtils.sort(config);
-			BDFDB.cachedData[pluginname] = BDFDB.ObjectUtils.deepAssign({}, config);
+			BDFDB.DataUtils.cached[pluginname] = BDFDB.ObjectUtils.deepAssign({}, config);
 			LibraryRequires.fs.writeFileSync(configpath, JSON.stringify(config, null, "	"));
 		}
 	};
@@ -1965,11 +1966,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 		
 		if (!LibraryRequires.fs.existsSync(configpath)) {
-			delete BDFDB.cachedData[pluginname];
+			delete BDFDB.DataUtils.cached[pluginname];
 			return {};
 		}
-		var config = typeof BDFDB.cachedData[pluginname] !== "undefined" && typeof BDFDB.cachedData[pluginname][key] !== "undefined" ? BDFDB.cachedData[pluginname] : InternalBDFDB.readConfig(configpath);
-		BDFDB.cachedData[pluginname] = BDFDB.ObjectUtils.deepAssign({}, config);
+		var config = typeof BDFDB.DataUtils.cached[pluginname] !== "undefined" && typeof BDFDB.DataUtils.cached[pluginname][key] !== "undefined" ? BDFDB.DataUtils.cached[pluginname] : InternalBDFDB.readConfig(configpath);
+		BDFDB.DataUtils.cached[pluginname] = BDFDB.ObjectUtils.deepAssign({}, config);
 		
 		let keydata = BDFDB.ObjectUtils.deepAssign({}, config && typeof config[key] !== "undefined" ? config[key] : {});
 		if (id === undefined) return keydata;
@@ -1989,7 +1990,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 		
 		var exists = LibraryRequires.fs.existsSync(configpath);
-		var config = !exists ? {} : typeof BDFDB.cachedData[pluginname] !== "undefined" ? BDFDB.cachedData[pluginname] : InternalBDFDB.readConfig(configpath);
+		var config = !exists ? {} : typeof BDFDB.DataUtils.cached[pluginname] !== "undefined" ? BDFDB.DataUtils.cached[pluginname] : InternalBDFDB.readConfig(configpath);
 		
 		if (id === undefined) delete config[key];
 		else if (BDFDB.ObjectUtils.is(config[key])) delete config[key][id];
@@ -1997,12 +1998,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		
 		if (BDFDB.ObjectUtils.isEmpty(config[key])) delete config[key];
 		if (BDFDB.ObjectUtils.isEmpty(config)) {
-			delete BDFDB.cachedData[pluginname];
+			delete BDFDB.DataUtils.cached[pluginname];
 			if (exists) LibraryRequires.fs.unlinkSync(configpath);
 		}
 		else {
 			config = BDFDB.ObjectUtils.sort(config);
-			BDFDB.cachedData[pluginname] = config;
+			BDFDB.DataUtils.cached[pluginname] = config;
 			LibraryRequires.fs.writeFileSync(configpath, JSON.stringify(config, null, "	"));
 		}
 	};
