@@ -744,7 +744,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		if (!BDFDB.ObjectUtils.is(obj)) return {};
 		if (typeof mapfunc != "string" && typeof mapfunc != "function") return obj;
 		var newobj = {};
-		for (let key in obj) if (BDFDB.ObjectUtils.is(obj[key])) newobj[key] = typeof mapfunc == "string" ? obj[key][mapfunc] : mapfunc(obj[key]);
+		for (let key in obj) if (BDFDB.ObjectUtils.is(obj[key])) newobj[key] = typeof mapfunc == "string" ? obj[key][mapfunc] : mapfunc(obj[key], key);
 		return newobj;
 	};
 	BDFDB.ObjectUtils.toArray = function (obj) {
@@ -5595,7 +5595,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	} : undefined;
 	LibraryComponents.PopoutContainer = reactInitialized ? class BDFDB_PopoutContainer extends LibraryModules.React.Component {
         handleRender(e) {
-			console.log(e);
             return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Popout, {
 				className: this.props.popoutClassName,
 				isChild: true,
