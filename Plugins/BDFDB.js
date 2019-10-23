@@ -958,6 +958,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	if (LibraryModules.React && LibraryModules.ReactDOM) {
 		BDFDB.ReactUtils = Object.assign({}, LibraryModules.React, LibraryModules.ReactDOM);
 		BDFDB.ReactUtils.createElement = function (...arguments) {
+			arguments[0] = arguments[0] || "div";
 			try {return LibraryModules.React.createElement(...arguments) || null;}
 			catch (err) {console.error(`%c[BDFDB]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not create react element! " + err);}
 			return null;
@@ -2247,7 +2248,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			return swatch ? swatch.gradient || BDFDB.ColorUtils.convert(swatch.style.getPropertyValue("background-color"), "RGBCOMP") : null;
 		}
 	};
-	BDFDB.ColorUtils.openColorPicker = function (container, target, color, options = {gradient: true, comp: false, alpha: true, callback: _ => {}}) {
+	BDFDB.ColorUtils.openPicker = function (container, target, color, options = {gradient: true, comp: false, alpha: true, callback: _ => {}}) {
 		if (!container || !target) return;
 		
 		if (options.comp) {
@@ -2595,10 +2596,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 	};
 	BDFDB.DOMUtils.show = function (...eles) {
-		BDFDB.DOMUtils.toggle(eles, true);
+		BDFDB.DOMUtils.toggle(...eles, true);
 	};
 	BDFDB.DOMUtils.hide = function (...eles) {
-		BDFDB.DOMUtils.toggle(eles, false);
+		BDFDB.DOMUtils.toggle(...eles, false);
 	};
 	BDFDB.DOMUtils.toggle = function (...eles) {
 		if (!eles) return;
