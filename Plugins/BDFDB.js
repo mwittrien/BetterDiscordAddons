@@ -4911,6 +4911,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		pictureinpicturewindow: ["PictureInPicture", "pictureInPictureWindow"],
 		popout: ["Popout", "popout"],
 		popoutarrowalignmenttop: ["Popout", "arrowAlignmentTop"],
+		popoutarrowalignmentmiddle: ["Popout", "arrowAlignmentMiddle"],
 		popoutbody: ["Popout", "body"],
 		popoutbottom: ["Popout", "popoutBottom"],
 		popoutbottomleft: ["Popout", "popoutBottomLeft"],
@@ -4921,6 +4922,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		popoutleft: ["Popout", "popoutLeft"],
 		popoutnoarrow: ["Popout", "noArrow"],
 		popoutnoshadow: ["Popout", "noShadow"],
+		popoutright: ["Popout", "popoutRight"],
 		popouts: ["Popout", "popouts"],
 		popoutsubtitle: ["Popout", "subtitle"],
 		popoutthemedpopout: ["Popout", "themedPopout"],
@@ -5567,6 +5569,19 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
     } : undefined;
 	LibraryComponents.NumberBadge = BDFDB.ModuleUtils.findByName("NumberBadge");
+	LibraryComponents.Popout = reactInitialized ? class BDFDB_Popout extends LibraryModules.React.Component {
+        render() {
+			let pos = typeof this.props.position == "string" ? this.props.position.toLowerCase() : null;
+			let position = pos && DiscordClasses["popout" + pos] ? BDFDB.disCN["popout" + pos] : BDFDB.disCN.popouttop;
+			let arrow = !this.props.arrow ? BDFDB.disCN.popoutnoarrow : (pos && pos.indexOf("top") > -1 && pos != "top" ? BDFDB.disCN.popoutarrowalignmenttop : BDFDB.disCN.popoutarrowalignmentmiddle);
+			return BDFDB.ReactUtils.createElement("div", {
+				className: [BDFDB.disCN.popout, position, this.props.invert && pos && pos != "bottom" ? BDFDB.disCN.popoutinvert : null, arrow, !this.props.shadow ? BDFDB.disCN.popoutnoshadow : null, this.props.className].filter(n => n).join(" "),
+				id: this.props.id,
+				style: this.props.style,
+				children: this.props.children
+			});
+		}
+	} : undefined;
 	LibraryComponents.PopoutContainer = reactInitialized ? class BDFDB_PopoutContainer extends LibraryModules.React.Component {
         render() {
 			if (!this.props.children) return null;
