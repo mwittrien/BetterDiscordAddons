@@ -449,11 +449,11 @@ class EditServers {
 		let data = this.getGuildData(info.id, guildname);
 		if (data.name || data.color2 || guildname.getAttribute("changed-by-editservers")) {
 			if (BDFDB.ObjectUtils.is(data.color2)) {
-				guildname.style.setProperty("color", BDFDB.colorCONVERT(data.color2[Object.keys(data.color2)[0]], "RGBA"), "important");
-				BDFDB.setInnerText(guildname, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color2)} !important;">${BDFDB.encodeToHTML(data.name || info.name)}</span>`));
+				guildname.style.setProperty("color", BDFDB.ColorUtils.convert(data.color2[Object.keys(data.color2)[0]], "RGBA"), "important");
+				BDFDB.setInnerText(guildname, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color2)} !important;">${BDFDB.encodeToHTML(data.name || info.name)}</span>`));
 			}
 			else {
-				guildname.style.setProperty("color", BDFDB.colorCONVERT(data.color2, "RGBA"), "important");
+				guildname.style.setProperty("color", BDFDB.ColorUtils.convert(data.color2, "RGBA"), "important");
 				BDFDB.setInnerText(guildname, data.name || info.name);
 			}
 			if (data.name && BDFDB.containsClass(guildname, BDFDB.disCN.guildheadername) && BDFDB.DataUtils.get(this, "settings", "addOriginalTooltip")) {
@@ -491,11 +491,11 @@ class EditServers {
 				if (removeicon) {
 					let fakeicon = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.guildiconchildwrapper + BDFDB.disCN.guildiconacronym} fake-guildacronym" aria-label="Server Acronym"></div>`);
 					if (data.color1) {
-						if (BDFDB.ObjectUtils.is(data.color1)) fakeicon.style.setProperty("background-image", BDFDB.colorGRADIENT(data.color1));
-						else fakeicon.style.setProperty("background-color", BDFDB.colorCONVERT(data.color1, "RGBA"));
+						if (BDFDB.ObjectUtils.is(data.color1)) fakeicon.style.setProperty("background-image", BDFDB.ColorUtils.createGradient(data.color1));
+						else fakeicon.style.setProperty("background-color", BDFDB.ColorUtils.convert(data.color1, "RGBA"));
 					}
-					if (data.color2) fakeicon.style.setProperty("color", BDFDB.colorCONVERT(BDFDB.ObjectUtils.is(data.color2) ? data.color2[Object.keys(data.color2)[0]] : data.color2, "RGBA"));
-					BDFDB.setInnerText(fakeicon, BDFDB.ObjectUtils.is(data.color2) ? BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color2)} !important;">${BDFDB.encodeToHTML(shortname)}</span>`) : shortname);
+					if (data.color2) fakeicon.style.setProperty("color", BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color2) ? data.color2[Object.keys(data.color2)[0]] : data.color2, "RGBA"));
+					BDFDB.setInnerText(fakeicon, BDFDB.ObjectUtils.is(data.color2) ? BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color2)} !important;">${BDFDB.encodeToHTML(shortname)}</span>`) : shortname);
 					icon.parentElement.appendChild(fakeicon);
 					fakeicon.style.setProperty("font-size", this.getFontSize(fakeicon));
 				}
@@ -507,15 +507,15 @@ class EditServers {
 				}
 				else {
 					if (data.color1) {
-						if (BDFDB.ObjectUtils.is(data.color1)) icon.style.setProperty("background-image", BDFDB.colorGRADIENT(data.color1));
-						else icon.style.setProperty("background-color", BDFDB.colorCONVERT(data.color1, "RGBA"));
+						if (BDFDB.ObjectUtils.is(data.color1)) icon.style.setProperty("background-image", BDFDB.ColorUtils.createGradient(data.color1));
+						else icon.style.setProperty("background-color", BDFDB.ColorUtils.convert(data.color1, "RGBA"));
 					}
 					else {
 						icon.style.removeProperty("background-image");
 						icon.style.removeProperty("background-color");
 					}
-					if (data.color2) icon.style.setProperty("color", BDFDB.colorCONVERT(BDFDB.ObjectUtils.is(data.color2) ? data.color2[Object.keys(data.color2)[0]] : data.color2, "RGBA"));
-					BDFDB.setInnerText(icon, BDFDB.ObjectUtils.is(data.color2) ? BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color2)} !important;">${BDFDB.encodeToHTML(shortname)}</span>`) : shortname);
+					if (data.color2) icon.style.setProperty("color", BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color2) ? data.color2[Object.keys(data.color2)[0]] : data.color2, "RGBA"));
+					BDFDB.setInnerText(icon, BDFDB.ObjectUtils.is(data.color2) ? BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color2)} !important;">${BDFDB.encodeToHTML(shortname)}</span>`) : shortname);
 				}
 				icon.style.setProperty("font-size", this.getFontSize(icon));
 				BDFDB.toggleClass(icon, this.getNoIconClasses(icon), !icon.style.getPropertyValue("background-image") || BDFDB.ObjectUtils.is(data.color1));
@@ -553,10 +553,10 @@ class EditServers {
 			let color4 = data.color4 || (folderData && folderData.copyTooltipColor ? folderData.color4 : null);
 			var isgradient3 = color3 && BDFDB.ObjectUtils.is(color3);
 			var isgradient4 = color4 && BDFDB.ObjectUtils.is(color4);
-			var bgColor = color3 ? (!isgradient3 ? BDFDB.colorCONVERT(color3, "RGBA") : BDFDB.colorGRADIENT(color3)) : "";
-			var fontColor = color4 ? (!isgradient4 ? BDFDB.colorCONVERT(color4, "RGBA") : BDFDB.colorGRADIENT(color4)) : "";
+			var bgColor = color3 ? (!isgradient3 ? BDFDB.ColorUtils.convert(color3, "RGBA") : BDFDB.ColorUtils.createGradient(color3)) : "";
+			var fontColor = color4 ? (!isgradient4 ? BDFDB.ColorUtils.convert(color4, "RGBA") : BDFDB.ColorUtils.createGradient(color4)) : "";
 			wrapper.tooltipListenerEditServers = () => {
-				BDFDB.TooltipUtils.create(wrapper, isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(data.name || info.name)}</span>` : (data.name || info.name), {type, selector:"EditServers-tooltip", style:`${isgradient4 ? '' : 'color: ' + fontColor + ' !important; '}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.colorCONVERT(color3[0], "RGBA") : bgColor} !important;`, html:isgradient3});
+				BDFDB.TooltipUtils.create(wrapper, isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(data.name || info.name)}</span>` : (data.name || info.name), {type, selector:"EditServers-tooltip", style:`${isgradient4 ? '' : 'color: ' + fontColor + ' !important; '}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.ColorUtils.convert(color3[0], "RGBA") : bgColor} !important;`, html:isgradient3});
 			};
 			wrapper.addEventListener("mouseenter", wrapper.tooltipListenerEditServers);
 			if (document.querySelector(BDFDB.dotCN.guildcontainer + ":hover") == wrapper) wrapper.tooltipListenerEditServers();

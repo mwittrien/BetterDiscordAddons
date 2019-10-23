@@ -174,9 +174,9 @@ class OwnerTag {
 			let invert = container && container.firstElementChild && !(BDFDB.containsClass(container.firstElementChild, BDFDB.disCN.userpopoutheadernormal) || BDFDB.containsClass(container.firstElementChild, BDFDB.disCN.userprofiletopsectionnormal));
 			BDFDB.addClass(tag, invert ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular);
 			let EditUsersData = BDFDB.BdUtils.isPluginEnabled("EditUsers") ? BDFDB.BdUtils.getPlugin("EditUsers").getUserData(info.id, wrapper) : {};
-			let tagcolor = BDFDB.colorCONVERT(EditUsersData.color1 || member.colorString, "RGBA");
-			let isbright = BDFDB.colorISBRIGHT(tagcolor);
-			tagcolor = isbright ? (settings.useBlackFont ? tagcolor : BDFDB.colorCHANGE(tagcolor, -0.3)) : tagcolor;
+			let tagcolor = BDFDB.ColorUtils.convert(EditUsersData.color1 || member.colorString, "RGBA");
+			let isbright = BDFDB.ColorUtils.isBright(tagcolor);
+			tagcolor = isbright ? (settings.useBlackFont ? tagcolor : BDFDB.ColorUtils.change(tagcolor, -0.3)) : tagcolor;
 			tag.style.setProperty(invert ? "color" : "background-color", tagcolor, "important");
 			if (isbright && settings.useBlackFont) tag.style.setProperty(invert ? "background-color" : "color", "black", "important");
 			wrapper.insertBefore(tag, wrapper.querySelector(".TRE-tag,svg[name=MobileDevice]"));

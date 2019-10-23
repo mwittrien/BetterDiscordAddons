@@ -138,12 +138,12 @@ class ThemeSettings {
 				let swatch = varcontainer.querySelector(".single-swatch");
 				let navigator = varcontainer.querySelector(".file-navigator");
 				
-				let iscolor = BDFDB.colorTYPE(varvalue);
+				let iscolor = BDFDB.ColorUtils.getType(varvalue);
 				let iscomp = !iscolor && /[0-9 ]+,[0-9 ]+,[0-9 ]+/g.test(varvalue);
 				let isurlfile = !iscolor && !iscolor && /url\(.+\)/gi.test(varvalue);
 				let isfile = !iscolor && !iscolor && !isurlfile && /(http(s)?):\/\/[(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(varvalue);
 				if (iscolor || iscomp) {
-					let color = iscomp ? BDFDB.colorCONVERT(varvalue.split(","), "RGB") : varvalue;
+					let color = iscomp ? BDFDB.ColorUtils.convert(varvalue.split(","), "RGB") : varvalue;
 					swatch.style.setProperty("background-color", color, "important");
 					swatch.addEventListener("click", e => {
 						BDFDB.openColorPicker(varcontainer, e.currentTarget, color, {gradient:false, comp:iscomp, alpha:iscolor});

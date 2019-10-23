@@ -141,7 +141,7 @@ class TopRoleEverywhere {
 		if (!guild || info.bot && settings.disableForBots) return;
 		let role = BDFDB.LibraryModules.PermissionRoleUtils.getHighestRole(guild, info.id);
 		if ((role && (role.colorString || settings.includeColorless)) || info.id == 278543574059057154) {
-			let roleColor = role && role.colorString ? BDFDB.colorCONVERT(role.colorString, "RGBCOMP") : [255,255,255];
+			let roleColor = role && role.colorString ? BDFDB.ColorUtils.convert(role.colorString, "RGBCOMP") : [255,255,255];
 			let roleName = role ? role.name : "";
 			let oldwidth;
 			if (type == "list") oldwidth = BDFDB.getRects(username).width;

@@ -230,7 +230,7 @@ class ServerFolders {
 				for (let folderid in foldersdata) {
 					let newid = this.generateID("folder");
 					let olddata = foldersdata[folderid];
-					let color1 = BDFDB.colorCONVERT(olddata.color1, "INT");
+					let color1 = BDFDB.ColorUtils.convert(olddata.color1, "INT");
 					guildFolders.push({
 						guildIds: olddata.servers,
 						folderId: newid,
@@ -551,7 +551,7 @@ class ServerFolders {
 						data.icons.openicon = folderIcons[data.iconID] ? (!isCustom ? this.createBase64SVG(folderIcons[data.iconID].openicon, data.color1, data.color2) : folderIcons[data.iconID].openicon) : null;
 						data.icons.closedicon = folderIcons[data.iconID] ? (!isCustom ? this.createBase64SVG(folderIcons[data.iconID].closedicon, data.color1, data.color2) : folderIcons[data.iconID].closedicon) : null;
 						BDFDB.DataUtils.save(data, this, "folders", folderid);
-						instance.handleColorChange(data.color1 ? parseInt(BDFDB.colorCONVERT(data.color1 && BDFDB.ObjectUtils.is(data.color1) ? data.color1[Object.keys(data.color1)[0]] : data.color1, "HEX").slice(1), 16) : null);
+						instance.handleColorChange(data.color1 ? parseInt(BDFDB.ColorUtils.convert(data.color1 && BDFDB.ObjectUtils.is(data.color1) ? data.color1[Object.keys(data.color1)[0]] : data.color1, "HEX").slice(1), 16) : null);
 						this.changeFolder(folderid);
 					}
 				});
@@ -754,7 +754,7 @@ class ServerFolders {
 			color3: 			null,
 			color4: 			null
 		};
-		if (!config.color1) config.color1 = BDFDB.colorCONVERT(folder.folderColor, "RGBCOMP") || ["0","0","0"];
+		if (!config.color1) config.color1 = BDFDB.ColorUtils.convert(folder.folderColor, "RGBCOMP") || ["0","0","0"];
 		return config;
 	}
 
@@ -793,11 +793,11 @@ class ServerFolders {
 				if (data.color3 || data.color4) {
 					var isgradient3 = data.color3 && BDFDB.ObjectUtils.is(data.color3);
 					var isgradient4 = data.color4 && BDFDB.ObjectUtils.is(data.color4);
-					var bgColor = data.color3 ? (!isgradient3 ? BDFDB.colorCONVERT(data.color3, "RGBA") : BDFDB.colorGRADIENT(data.color3)) : "";
-					var fontColor = data.color4 ? (!isgradient4 ? BDFDB.colorCONVERT(data.color4, "RGBA") : BDFDB.colorGRADIENT(data.color4)) : "";
+					var bgColor = data.color3 ? (!isgradient3 ? BDFDB.ColorUtils.convert(data.color3, "RGBA") : BDFDB.ColorUtils.createGradient(data.color3)) : "";
+					var fontColor = data.color4 ? (!isgradient4 ? BDFDB.ColorUtils.convert(data.color4, "RGBA") : BDFDB.ColorUtils.createGradient(data.color4)) : "";
 					var folderName = folder.folderName || BDFDB.ReactUtils.getValue(wrapper, "return.stateNode.props.defaultFolderName");
 					folderinner.ServerFoldersTooltipListener = () => {
-						BDFDB.TooltipUtils.create(folderinner, isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(folderName)}</span>` : folderName, {type:"right", selector:"ServerFolders-tooltip", style:`${isgradient4 ? '' : `color: ${fontColor} !important; `}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.colorCONVERT(data.color3[0], "RGBA") : bgColor} !important;`, html:isgradient3, hide:true});
+						BDFDB.TooltipUtils.create(folderinner, isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(folderName)}</span>` : folderName, {type:"right", selector:"ServerFolders-tooltip", style:`${isgradient4 ? '' : `color: ${fontColor} !important; `}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.ColorUtils.convert(data.color3[0], "RGBA") : bgColor} !important;`, html:isgradient3, hide:true});
 					};
 					folderinner.addEventListener("mouseenter", folderinner.ServerFoldersTooltipListener);
 				}
@@ -860,7 +860,7 @@ class ServerFolders {
 			for (let pos of Object.keys(color2).sort()) svg += `<stop offset="${pos * 100}%" style="stop-color: ${color2[pos]};"></stop>`;
 			svg += `</linearGradient>`;
 		}
-		svg += `${paths.replace("REPLACE_FILL1", isgradient1 ? "url(#grad1)" : BDFDB.colorCONVERT(color1, "RGBA")).replace("REPLACE_FILL2", isgradient2 ? "url(#grad2)" : BDFDB.colorCONVERT(color2, "RGBA"))}</svg>`;
+		svg += `${paths.replace("REPLACE_FILL1", isgradient1 ? "url(#grad1)" : BDFDB.ColorUtils.convert(color1, "RGBA")).replace("REPLACE_FILL2", isgradient2 ? "url(#grad2)" : BDFDB.ColorUtils.convert(color2, "RGBA"))}</svg>`;
 		return `data:image/svg+xml;base64,${btoa(svg)}`;
 	}
 
@@ -955,9 +955,9 @@ class ServerFolders {
 				let color4 = folderData.copyTooltipColor ? folderData.color4 : null;
 				let isgradient3 = color3 && BDFDB.ObjectUtils.is(color3);
 				let isgradient4 = color4 && BDFDB.ObjectUtils.is(color4);
-				let bgColor = color3 ? (!isgradient3 ? BDFDB.colorCONVERT(color3, "RGBA") : BDFDB.colorGRADIENT(color3)) : "";
-				let fontColor = color4 ? (!isgradient4 ? BDFDB.colorCONVERT(color4, "RGBA") : BDFDB.colorGRADIENT(color4)) : "";
-				BDFDB.TooltipUtils.create(guildcopyinner, isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(guild.name)}</span>` : guild.name, {type:"right", selector:"guild-folder-tooltip", style:`${isgradient4 ? '' : 'color: ' + fontColor + ' !important; '}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.colorCONVERT(color3[0], "RGBA") : bgColor} !important;`, html:isgradient3, hide:true});
+				let bgColor = color3 ? (!isgradient3 ? BDFDB.ColorUtils.convert(color3, "RGBA") : BDFDB.ColorUtils.createGradient(color3)) : "";
+				let fontColor = color4 ? (!isgradient4 ? BDFDB.ColorUtils.convert(color4, "RGBA") : BDFDB.ColorUtils.createGradient(color4)) : "";
+				BDFDB.TooltipUtils.create(guildcopyinner, isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.encodeToHTML(guild.name)}</span>` : guild.name, {type:"right", selector:"guild-folder-tooltip", style:`${isgradient4 ? '' : 'color: ' + fontColor + ' !important; '}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.ColorUtils.convert(color3[0], "RGBA") : bgColor} !important;`, html:isgradient3, hide:true});
 			}
 			if (guildicon && guildicon.src && guild.icon && guild.icon.startsWith("a_") && guild.features.has("ANIMATED_ICON") && guildicon.src.includes("discordapp.com/icons/")) {
 				guildicon.src = guildicon.src.replace(".webp", ".gif");

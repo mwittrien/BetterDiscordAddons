@@ -696,7 +696,7 @@ class EditUsers {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id) || {};
 				let member = BDFDB.LibraryModules.MemberStore.getMember(channel.guild_id, message.author.id) || {};
 				let data = this.getUserData(message.author.id, wrapper);
-				markup.style.setProperty("color", window.settingsCookie["bda-gs-7"] ? BDFDB.colorCONVERT(data.color1 && !BDFDB.ObjectUtils.is(data.color1) ? data.color1 : member.colorString, "RGBA") : null, "important");
+				markup.style.setProperty("color", window.settingsCookie["bda-gs-7"] ? BDFDB.ColorUtils.convert(data.color1 && !BDFDB.ObjectUtils.is(data.color1) ? data.color1 : member.colorString, "RGBA") : null, "important");
 			}
 		}
 	}
@@ -764,15 +764,15 @@ class EditUsers {
 			let usemembercolor = !BDFDB.containsClass(username.parentElement, BDFDB.disCN.userprofilelistname) && (BDFDB.containsClass(username, BDFDB.disCN.memberusername, BDFDB.disCN.messageusername, false) || isBRCenabled);
 
 			if (BDFDB.ObjectUtils.is(data.color1)) {
-				username.style.setProperty("color", BDFDB.colorCONVERT(data.color1[Object.keys(data.color1)[0]], "RGBA"), "important");
-				BDFDB.setInnerText(username, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color1)} !important;">${BDFDB.encodeToHTML(data.name || (usenick ? member.nick : info.username))}</span>`));
+				username.style.setProperty("color", BDFDB.ColorUtils.convert(data.color1[Object.keys(data.color1)[0]], "RGBA"), "important");
+				BDFDB.setInnerText(username, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color1)} !important;">${BDFDB.encodeToHTML(data.name || (usenick ? member.nick : info.username))}</span>`));
 			}
 			else {
-				username.style.setProperty("color", BDFDB.colorCONVERT(data.color1 || (usemembercolor ? member.colorString : null), "RGBA"), "important");
+				username.style.setProperty("color", BDFDB.ColorUtils.convert(data.color1 || (usemembercolor ? member.colorString : null), "RGBA"), "important");
 				BDFDB.setInnerText(username, data.name || (usenick ? member.nick : info.username));
 			}
 
-			username.style.setProperty("background", BDFDB.ObjectUtils.is(data.color2) ? BDFDB.colorGRADIENT(data.color2) : BDFDB.colorCONVERT(data.color2, "RGBA"), "important");
+			username.style.setProperty("background", BDFDB.ObjectUtils.is(data.color2) ? BDFDB.ColorUtils.createGradient(data.color2) : BDFDB.ColorUtils.convert(data.color2, "RGBA"), "important");
 
 			if (data.name || data.color1 || data.color2) {
 				username.setAttribute("changed-by-editusers", true);
@@ -794,11 +794,11 @@ class EditUsers {
 		this.changeBotTags(data, username, member);
 		if (data.name || data.color1 || username.getAttribute("changed-by-editusers")) {
 			if (BDFDB.ObjectUtils.is(data.color1)) {
-				username.style.setProperty("color", BDFDB.colorCONVERT(data.color1[Object.keys(data.color1)[0]], "RGBA"), "important");
-				BDFDB.setInnerText(username, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color1)} !important;">${BDFDB.encodeToHTML(data.name || member.nick || info.username)}</span>`));
+				username.style.setProperty("color", BDFDB.ColorUtils.convert(data.color1[Object.keys(data.color1)[0]], "RGBA"), "important");
+				BDFDB.setInnerText(username, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color1)} !important;">${BDFDB.encodeToHTML(data.name || member.nick || info.username)}</span>`));
 			}
 			else {
-				username.style.setProperty("color", BDFDB.colorCONVERT(data.color1 || (BDFDB.BdUtils.isPluginEnabled("BetterRoleColors") ? member.colorString : null), "RGBA"), "important");
+				username.style.setProperty("color", BDFDB.ColorUtils.convert(data.color1 || (BDFDB.BdUtils.isPluginEnabled("BetterRoleColors") ? member.colorString : null), "RGBA"), "important");
 				BDFDB.setInnerText(username, data.name || member.nick || info.username);
 			}
 			if (data.name || data.color1) {
@@ -819,15 +819,15 @@ class EditUsers {
 		let data = this.getUserData(info.id, username);
 		if (data.name || data.color1 || username.getAttribute("changed-by-editusers")) {
 			if (adddisc) {
-				BDFDB.setInnerText(username, BDFDB.htmlToElement(`<span ${data.color1 ? (BDFDB.ObjectUtils.is(data.color1) ? 'style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image:' + BDFDB.colorGRADIENT(data.color1) + ' !important;"' : 'style="color:' + data.color1 + ' !important;"'): ''}>${BDFDB.encodeToHTML(data.name || info.username)}</span><span${typeof adddisc == "string" ? ' class="' + adddisc + '"' : ''}>#${info.discriminator}</span>`));
+				BDFDB.setInnerText(username, BDFDB.htmlToElement(`<span ${data.color1 ? (BDFDB.ObjectUtils.is(data.color1) ? 'style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image:' + BDFDB.ColorUtils.createGradient(data.color1) + ' !important;"' : 'style="color:' + data.color1 + ' !important;"'): ''}>${BDFDB.encodeToHTML(data.name || info.username)}</span><span${typeof adddisc == "string" ? ' class="' + adddisc + '"' : ''}>#${info.discriminator}</span>`));
 			}
 			else {
 				if (BDFDB.ObjectUtils.is(data.color1)) {
-					username.style.setProperty("color", BDFDB.colorCONVERT(data.color1[Object.keys(data.color1)[0]], "RGBA"), "important");
-					BDFDB.setInnerText(username, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color1)} !important;">${BDFDB.encodeToHTML(data.name || info.username)}</span>`));
+					username.style.setProperty("color", BDFDB.ColorUtils.convert(data.color1[Object.keys(data.color1)[0]], "RGBA"), "important");
+					BDFDB.setInnerText(username, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color1)} !important;">${BDFDB.encodeToHTML(data.name || info.username)}</span>`));
 				}
 				else {
-					username.style.setProperty("color", BDFDB.colorCONVERT(data.color1, "RGBA"), "important");
+					username.style.setProperty("color", BDFDB.ColorUtils.convert(data.color1, "RGBA"), "important");
 					BDFDB.setInnerText(username, data.name || info.username);
 				}
 			}
@@ -846,8 +846,8 @@ class EditUsers {
 	changeBotTags (data, username, member) {
 		for (let tag of username.parentElement.parentElement.querySelectorAll(BDFDB.dotCN.bottag)) if (!BDFDB.containsClass(tag, "TRE-tag")) {
 			let isBRCbottagsEnabled = BDFDB.ReactUtils.getValue(BDFDB.BdUtils.getPlugin("BetterRoleColors", true), "settings.modules.botTags");
-			let tagcolor =  BDFDB.colorCONVERT(data.color1 || (isBRCbottagsEnabled || BDFDB.containsClass(tag, "owner-tag-rolecolor") ? member.colorString : null), "RGBA");
-			tagcolor = BDFDB.colorISBRIGHT(tagcolor) ? BDFDB.colorCHANGE(tagcolor, -0.3) : tagcolor;
+			let tagcolor =  BDFDB.ColorUtils.convert(data.color1 || (isBRCbottagsEnabled || BDFDB.containsClass(tag, "owner-tag-rolecolor") ? member.colorString : null), "RGBA");
+			tagcolor = BDFDB.ColorUtils.isBright(tagcolor) ? BDFDB.ColorUtils.change(tagcolor, -0.3) : tagcolor;
 			tag.style.setProperty(BDFDB.containsClass(tag, BDFDB.disCN.bottaginvert) ? "color" : "background-color", tagcolor, "important");
 		}
 	}
@@ -898,8 +898,8 @@ class EditUsers {
 		let data = this.getUserData(info.id, wrapper);
 		if (data.tag) {
 			let member = data.ignoreTagColor ? (BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), info.id) || {}) : {};
-			let color3 = BDFDB.ObjectUtils.is(data.color3) && !data.ignoreTagColor ? BDFDB.colorGRADIENT(data.color3) : BDFDB.colorCONVERT(!data.ignoreTagColor ? data.color3 : member.colorString, "RGBA");
-			let color4 = BDFDB.ObjectUtils.is(data.color4) && !data.ignoreTagColor ? BDFDB.colorGRADIENT(data.color4) : (!data.ignoreTagColor && data.color4 ? BDFDB.colorCONVERT(data.color4, "RGBA") : (color3 ? (BDFDB.colorISBRIGHT(color3) ? "black" : "white") : null));
+			let color3 = BDFDB.ObjectUtils.is(data.color3) && !data.ignoreTagColor ? BDFDB.ColorUtils.createGradient(data.color3) : BDFDB.ColorUtils.convert(!data.ignoreTagColor ? data.color3 : member.colorString, "RGBA");
+			let color4 = BDFDB.ObjectUtils.is(data.color4) && !data.ignoreTagColor ? BDFDB.ColorUtils.createGradient(data.color4) : (!data.ignoreTagColor && data.color4 ? BDFDB.ColorUtils.convert(data.color4, "RGBA") : (color3 ? (BDFDB.ColorUtils.isBright(color3) ? "black" : "white") : null));
 			let tag = document.createElement("span");
 			let invert = container && !color3 && !color4 && container.firstElementChild && !(BDFDB.containsClass(container.firstElementChild, BDFDB.disCN.userpopoutheadernormal) || BDFDB.containsClass(container.firstElementChild, BDFDB.disCN.userprofiletopsectionnormal));
 			tag.className = "EditUsers-tag " + (!invert ? BDFDB.disCN.bottagregular : BDFDB.disCN.bottaginvert) + (selector ? (" " + selector) : "");
@@ -949,24 +949,24 @@ class EditUsers {
 			function colorDefault() {
 				if (BDFDB.ObjectUtils.is(data.color1)) {
 					username.style.removeProperty("color");
-					BDFDB.setInnerText(username, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(BDFDB.colorCHANGE(data.color1, -0.5))} !important;">${BDFDB.encodeToHTML(data.name || info.username)}</span>`));
+					BDFDB.setInnerText(username, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(BDFDB.ColorUtils.change(data.color1, -0.5))} !important;">${BDFDB.encodeToHTML(data.name || info.username)}</span>`));
 				}
 				else {
-					username.style.setProperty("color", BDFDB.colorCHANGE(data.color1, -0.5, "RGBA"), "important");
+					username.style.setProperty("color", BDFDB.ColorUtils.change(data.color1, -0.5, "RGBA"), "important");
 					BDFDB.setInnerText(username, data.name || info.username);
 				}
-				username.style.setProperty("background", BDFDB.ObjectUtils.is(data.color2) ? BDFDB.colorGRADIENT(BDFDB.colorCHANGE(data.color2, -0.5)) : BDFDB.colorCHANGE(data.color2, -0.5, "RGBA"), "important");
+				username.style.setProperty("background", BDFDB.ObjectUtils.is(data.color2) ? BDFDB.ColorUtils.createGradient(BDFDB.ColorUtils.change(data.color2, -0.5)) : BDFDB.ColorUtils.change(data.color2, -0.5, "RGBA"), "important");
 			}
 			function colorHover() {
 				if (BDFDB.ObjectUtils.is(data.color1)) {
 					username.style.removeProperty("color");
-					BDFDB.setInnerText(username, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color1)} !important;">${BDFDB.encodeToHTML(data.name || info.username)}</span>`));
+					BDFDB.setInnerText(username, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color1)} !important;">${BDFDB.encodeToHTML(data.name || info.username)}</span>`));
 				}
 				else {
-					username.style.setProperty("color", BDFDB.colorCONVERT(data.color1, "RGBA"), "important");
+					username.style.setProperty("color", BDFDB.ColorUtils.convert(data.color1, "RGBA"), "important");
 					BDFDB.setInnerText(username, data.name || info.username);
 				}
-				username.style.setProperty("background", BDFDB.ObjectUtils.is(data.color2) ? BDFDB.colorGRADIENT(data.color2) : BDFDB.colorCONVERT(data.color2, "RGBA"), "important");
+				username.style.setProperty("background", BDFDB.ObjectUtils.is(data.color2) ? BDFDB.ColorUtils.createGradient(data.color2) : BDFDB.ColorUtils.convert(data.color2, "RGBA"), "important");
 			}
 		}
 	}
@@ -982,9 +982,9 @@ class EditUsers {
 
 		let isgradient = data.color1 && BDFDB.ObjectUtils.is(data.color1);
 		let datacolor = data.color1 || (BDFDB.BdUtils.isPluginEnabled("BetterRoleColors") ? member.colorString : null);
-		let color = isgradient ? BDFDB.colorGRADIENT(data.color1) : BDFDB.colorCONVERT(datacolor, "RGBA");
-		let color0_1 = isgradient ? BDFDB.colorGRADIENT(BDFDB.colorSETALPHA(data.color1, 0.1, "RGBA")) : BDFDB.colorSETALPHA(datacolor, 0.1, "RGBA");
-		let color0_7 = isgradient ? BDFDB.colorGRADIENT(BDFDB.colorSETALPHA(data.color1, 0.7, "RGBA")) : BDFDB.colorSETALPHA(datacolor, 0.7, "RGBA");
+		let color = isgradient ? BDFDB.ColorUtils.createGradient(data.color1) : BDFDB.ColorUtils.convert(datacolor, "RGBA");
+		let color0_1 = isgradient ? BDFDB.ColorUtils.createGradient(BDFDB.ColorUtils.setAlpha(data.color1, 0.1, "RGBA")) : BDFDB.ColorUtils.setAlpha(datacolor, 0.1, "RGBA");
+		let color0_7 = isgradient ? BDFDB.ColorUtils.createGradient(BDFDB.ColorUtils.setAlpha(data.color1, 0.7, "RGBA")) : BDFDB.ColorUtils.setAlpha(datacolor, 0.7, "RGBA");
 
 		if (mention.EditUsersHovered) colorHover();
 		else colorDefault();
@@ -1052,21 +1052,21 @@ class EditUsers {
 			function colorDefault() {
 				if (BDFDB.ObjectUtils.is(data.color1)) {
 					username.style.removeProperty("color");
-					BDFDB.setInnerText(username, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(!speaking ? BDFDB.colorCHANGE(data.color1, -50) : data.color1)} !important;">${BDFDB.encodeToHTML(data.name || member.nick || info.username)}</span>`));
+					BDFDB.setInnerText(username, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(!speaking ? BDFDB.ColorUtils.change(data.color1, -50) : data.color1)} !important;">${BDFDB.encodeToHTML(data.name || member.nick || info.username)}</span>`));
 				}
 				else {
 					var color1 = data.color1 || (BDFDB.BdUtils.isPluginEnabled("BetterRoleColors") ? member.colorString : "");
-					username.style.setProperty("color", !speaking ? BDFDB.colorCHANGE(color1, -50, "RGBA") : BDFDB.colorCONVERT(color1, "RGBA"), "important");
+					username.style.setProperty("color", !speaking ? BDFDB.ColorUtils.change(color1, -50, "RGBA") : BDFDB.ColorUtils.convert(color1, "RGBA"), "important");
 					BDFDB.setInnerText(username, data.name || member.nick || info.username);
 				}
 			}
 			function colorHover() {
 				if (BDFDB.ObjectUtils.is(data.color1)) {
 					username.style.removeProperty("color");
-					BDFDB.setInnerText(username, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color1)} !important;">${BDFDB.encodeToHTML(data.name || member.nick || info.username)}</span>`));
+					BDFDB.setInnerText(username, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color1)} !important;">${BDFDB.encodeToHTML(data.name || member.nick || info.username)}</span>`));
 				}
 				else {
-					username.style.setProperty("color", BDFDB.colorCONVERT(data.color1, "RGBA"), "important");
+					username.style.setProperty("color", BDFDB.ColorUtils.convert(data.color1, "RGBA"), "important");
 					BDFDB.setInnerText(username, data.name || member.nick || info.username);
 				}
 			}
@@ -1165,7 +1165,7 @@ class EditUsers {
 					if (amount-- < 1) break;
 					let status = BDFDB.UserUtils.getStatus(data.user.id);
 					let isgradient = data.color1 && BDFDB.ObjectUtils.is(data.color1);
-					let username = isgradient ? `<div class="${BDFDB.disCN.marginleft8}" changed-by-editusers="true" style="flex: 1 1 auto;"><span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(data.color1)} !important;">${BDFDB.encodeToHTML(data.name || data.member.nick || data.user.username)}</span></div>` : `<div class="${BDFDB.disCN.marginleft8}" changed-by-editusers="true" style="flex: 1 1 auto;${data.color1 ? (' color: ' + BDFDB.colorCONVERT(data.color1, 'RGB') + ' !important;') : ''}">${BDFDB.encodeToHTML(data.name || data.member.nick || data.user.username)}</div>`;
+					let username = isgradient ? `<div class="${BDFDB.disCN.marginleft8}" changed-by-editusers="true" style="flex: 1 1 auto;"><span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color1)} !important;">${BDFDB.encodeToHTML(data.name || data.member.nick || data.user.username)}</span></div>` : `<div class="${BDFDB.disCN.marginleft8}" changed-by-editusers="true" style="flex: 1 1 auto;${data.color1 ? (' color: ' + BDFDB.ColorUtils.convert(data.color1, 'RGB') + ' !important;') : ''}">${BDFDB.encodeToHTML(data.name || data.member.nick || data.user.username)}</div>`;
 					let autocompleterow = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteEditUsersRow"><div userid="${data.user.id}" class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable} autocompleteEditUsersSelector"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.avatarwrapper}" role="img" aria-label="${data.user.username}, ${BDFDB.LanguageUtils.LanguageStrings["STATUS_" + status.toUpperCase()]}" aria-hidden="false" style="width: 24px; height: 24px;"><svg width="30" height="24" viewBox="0 0 30 24" class="${BDFDB.disCN.avatarmask}" aria-hidden="true"><foreignObject x="0" y="0" width="24" height="24" mask="url(#svg-mask-avatar-status-round-24)"><img src="${data.url || BDFDB.UserUtils.getAvatar(data.user.id)}" alt=" " class="${BDFDB.disCN.avatar}" aria-hidden="true"></foreignObject><rect width="8" height="8" x="16" y="16" fill="${BDFDB.UserUtils.getStatusColor(status)}" mask="url(#svg-mask-status-${status})" class="${BDFDB.disCN.avatarpointerevents}"></rect></svg></div>${username}<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletedescription}" style="flex: 0 1 auto;"><div class="${BDFDB.disCN.autocompletedescriptionusername}">${BDFDB.encodeToHTML(data.user.username)}</div><div class="${BDFDB.disCN.autocompletedescriptiondiscriminator}">#${data.user.discriminator}</div></div></div></div></div>`);
 					autocompleterow.querySelector(BDFDB.dotCN.autocompleteselectable).addEventListener("click", () => {this.swapWordWithMention(textarea);});
 					autocompletemenu.appendChild(autocompleterow);

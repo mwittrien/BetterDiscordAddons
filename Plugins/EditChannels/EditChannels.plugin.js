@@ -238,8 +238,8 @@ class EditChannels {
 					data.color = BDFDB.getSwatchColor(modal, 1);
 					console.log(data.color);
 					if (data.color != null && !BDFDB.ObjectUtils.is(data.color)) {
-						if (data.color[0] < 30 && data.color[1] < 30 && data.color[2] < 30) data.color = BDFDB.colorCHANGE(data.color, 30);
-						else if (data.color[0] > 225 && data.color[1] > 225 && data.color[2] > 225) data.color = BDFDB.colorCHANGE(data.color, -30);
+						if (data.color[0] < 30 && data.color[1] < 30 && data.color[2] < 30) data.color = BDFDB.ColorUtils.change(data.color, 30);
+						else if (data.color[0] > 225 && data.color[1] > 225 && data.color[2] > 225) data.color = BDFDB.ColorUtils.change(data.color, -30);
 					}
 
 					data.inheritColor = inheritcolorinput.checked;
@@ -422,8 +422,8 @@ class EditChannels {
 				let isgradient = data.color && BDFDB.ObjectUtils.is(data.color);
 				let color = this.chooseColor(channelname, data.color);
 				if (isgradient) {
-					channelname.style.setProperty("color", BDFDB.colorCONVERT(data.color[Object.keys(data.color)[0]], "RGBA"), "important");
-					BDFDB.setInnerText(channelname, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(color)} !important;">${BDFDB.encodeToHTML(data.name || info.name)}</span>`));
+					channelname.style.setProperty("color", BDFDB.ColorUtils.convert(data.color[Object.keys(data.color)[0]], "RGBA"), "important");
+					BDFDB.setInnerText(channelname, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(color)} !important;">${BDFDB.encodeToHTML(data.name || info.name)}</span>`));
 				}
 				else {
 					channelname.style.setProperty("color", color, "important");
@@ -433,13 +433,13 @@ class EditChannels {
 				if (!BDFDB.containsClass(channelname, BDFDB.disCN.autocompletedescription)) {
 					let settings = BDFDB.DataUtils.get(this, "settings");
 					iconparent.querySelectorAll('svg [stroke]:not([stroke="none"]').forEach(icon => {
-						let iconcolor = color && BDFDB.getParentEle(BDFDB.dotCN.channelheadertitle, icon) ? BDFDB.colorSETALPHA(isgradient ? color[0] : color, 0.6) : (isgradient ? color[0] : color);
+						let iconcolor = color && BDFDB.getParentEle(BDFDB.dotCN.channelheadertitle, icon) ? BDFDB.ColorUtils.setAlpha(isgradient ? color[0] : color, 0.6) : (isgradient ? color[0] : color);
 						if (!icon.getAttribute("oldstroke")) icon.setAttribute("oldstroke", icon.getAttribute("stroke"));
 						icon.setAttribute("stroke", iconcolor && settings.changeChannelIcon ? iconcolor : icon.getAttribute("oldstroke"), "important");
 						icon.style.setProperty("stroke", iconcolor && settings.changeChannelIcon ? iconcolor : icon.getAttribute("oldstroke"), "important");
 					});
 					iconparent.querySelectorAll('svg [fill]:not([fill="none"]').forEach(icon => {
-						let iconcolor = color && BDFDB.getParentEle(BDFDB.dotCN.channelheadertitle, icon) ? BDFDB.colorSETALPHA(isgradient ? color[0] : color, 0.6) : (isgradient ? color[0] : color);
+						let iconcolor = color && BDFDB.getParentEle(BDFDB.dotCN.channelheadertitle, icon) ? BDFDB.ColorUtils.setAlpha(isgradient ? color[0] : color, 0.6) : (isgradient ? color[0] : color);
 						if (!icon.getAttribute("oldfill")) icon.setAttribute("oldfill", icon.getAttribute("fill"));
 						icon.setAttribute("fill", iconcolor && settings.changeChannelIcon ? iconcolor : icon.getAttribute("oldfill"), "important");
 						icon.style.setProperty("fill", iconcolor && settings.changeChannelIcon ? iconcolor : icon.getAttribute("oldfill"), "important");
@@ -490,8 +490,8 @@ class EditChannels {
 		let data = this.getChannelData(info.id, info.parent_id, channelname);
 		if (data.name || data.color || channelname.getAttribute("changed-by-editchannels")) {
 			if (BDFDB.ObjectUtils.is(data.color)) {
-				channelname.style.setProperty("color", BDFDB.colorCONVERT(data.color[Object.keys(data.color)[0]], "RGBA"), "important");
-				BDFDB.setInnerText(channelname, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.colorGRADIENT(this.chooseColor(channelname, data.color))} !important;">${BDFDB.encodeToHTML("#" + (data.name || info.name))}</span>`));
+				channelname.style.setProperty("color", BDFDB.ColorUtils.convert(data.color[Object.keys(data.color)[0]], "RGBA"), "important");
+				BDFDB.setInnerText(channelname, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(this.chooseColor(channelname, data.color))} !important;">${BDFDB.encodeToHTML("#" + (data.name || info.name))}</span>`));
 			}
 			else {
 				channelname.style.setProperty("color", this.chooseColor(channelname, data.color), "important");
@@ -524,9 +524,9 @@ class EditChannels {
 		let name = "#" + (data.name || info.name);
 
 		let isgradient = data.color && BDFDB.ObjectUtils.is(data.color);
-		let color = isgradient ? BDFDB.colorGRADIENT(data.color) : BDFDB.colorCONVERT(data.color, "RGBA");
-		let color0_1 = isgradient ? BDFDB.colorGRADIENT(BDFDB.colorSETALPHA(data.color, 0.1, "RGBA")) : BDFDB.colorSETALPHA(data.color, 0.1, "RGBA");
-		let color0_7 = isgradient ? BDFDB.colorGRADIENT(BDFDB.colorSETALPHA(data.color, 0.7, "RGBA")) : BDFDB.colorSETALPHA(data.color, 0.7, "RGBA");
+		let color = isgradient ? BDFDB.ColorUtils.createGradient(data.color) : BDFDB.ColorUtils.convert(data.color, "RGBA");
+		let color0_1 = isgradient ? BDFDB.ColorUtils.createGradient(BDFDB.ColorUtils.setAlpha(data.color, 0.1, "RGBA")) : BDFDB.ColorUtils.setAlpha(data.color, 0.1, "RGBA");
+		let color0_7 = isgradient ? BDFDB.ColorUtils.createGradient(BDFDB.ColorUtils.setAlpha(data.color, 0.7, "RGBA")) : BDFDB.ColorUtils.setAlpha(data.color, 0.7, "RGBA");
 
 		if (mention.EditChannelsHovered) colorHover();
 		else colorDefault();
@@ -550,7 +550,7 @@ class EditChannels {
 		function colorDefault() {
 			mention.style.setProperty("background", color0_1, "important");
 			if (isgradient) {
-				mention.style.setProperty("color", BDFDB.colorCONVERT(data.color[Object.keys(data.color)[0]], "RGBA"), "important");
+				mention.style.setProperty("color", BDFDB.ColorUtils.convert(data.color[Object.keys(data.color)[0]], "RGBA"), "important");
 				BDFDB.setInnerText(mention, BDFDB.htmlToElement(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${color} !important;">${BDFDB.encodeToHTML(name)}</span>`));
 			}
 			else {
@@ -570,9 +570,9 @@ class EditChannels {
 			let hovered = channelname.EditChannelsHovered;
 			channelname = BDFDB.containsClass(channelname, BDFDB.disCN.channelname) ? channelname.parentElement.parentElement : channelname;
 			let classname = channelname.className ? channelname.className.toLowerCase() : "";
-			if (classname.indexOf("muted") > -1 || classname.indexOf("locked") > -1) color = BDFDB.colorCHANGE(color, -0.5);
-			else if (hovered || classname.indexOf("selected") > -1 || classname.indexOf("hovered") > -1 || classname.indexOf("unread") > -1 || classname.indexOf("connected") > -1) color = BDFDB.colorCHANGE(color, 0.5);
-			return BDFDB.ObjectUtils.is(color) ? color : BDFDB.colorCONVERT(color, "RGBA");
+			if (classname.indexOf("muted") > -1 || classname.indexOf("locked") > -1) color = BDFDB.ColorUtils.change(color, -0.5);
+			else if (hovered || classname.indexOf("selected") > -1 || classname.indexOf("hovered") > -1 || classname.indexOf("unread") > -1 || classname.indexOf("connected") > -1) color = BDFDB.ColorUtils.change(color, 0.5);
+			return BDFDB.ObjectUtils.is(color) ? color : BDFDB.ColorUtils.convert(color, "RGBA");
 		}
 		return null;
 	}
@@ -639,8 +639,8 @@ class EditChannels {
 
 				for (let data of channelarray) {
 					if (amount-- < 1) break;
-					let color = BDFDB.colorCONVERT(data.color, "RGBA");
-					let catcolor = BDFDB.colorCONVERT(data.catdata.color, "RGBA");
+					let color = BDFDB.ColorUtils.convert(data.color, "RGBA");
+					let catcolor = BDFDB.ColorUtils.convert(data.catdata.color, "RGBA");
 					let autocompleterow = BDFDB.htmlToElement(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteEditChannelsRow"><div channelid="${data.channel.id}" class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable} autocompleteEditChannelsSelector"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" class="${BDFDB.disCN.autocompleteicon}"><path class="${BDFDB.disCN.autocompleteiconforeground}" d="M2.27333333,12 L2.74666667,9.33333333 L0.08,9.33333333 L0.313333333,8 L2.98,8 L3.68666667,4 L1.02,4 L1.25333333,2.66666667 L3.92,2.66666667 L4.39333333,0 L5.72666667,0 L5.25333333,2.66666667 L9.25333333,2.66666667 L9.72666667,0 L11.06,0 L10.5866667,2.66666667 L13.2533333,2.66666667 L13.02,4 L10.3533333,4 L9.64666667,8 L12.3133333,8 L12.08,9.33333333 L9.41333333,9.33333333 L8.94,12 L7.60666667,12 L8.08,9.33333333 L4.08,9.33333333 L3.60666667,12 L2.27333333,12 L2.27333333,12 Z M5.02,4 L4.31333333,8 L8.31333333,8 L9.02,4 L5.02,4 L5.02,4 Z" transform="translate(1.333 2)" ${settings.changeChannelIcon && color ? ('fill="' + color + '" oldfill="currentColor" style="fill: ' + color + ' !important;"') : 'fill="currentColor"'}></path></svg><div class="${BDFDB.disCN.marginleft4}" changed-by-editchannels="true" style="flex: 1 1 auto;${color ? (' color: ' + color + ' !important;') : ''}">${BDFDB.encodeToHTML(data.name || data.channel.name)}</div>${data.category ? '<div class="${BDFDB.disCN.autocompletedescription}"' + (catcolor ? (' style="color: ' + catcolor + ' !important;"') : '') + '>' + BDFDB.encodeToHTML(data.catdata.name || data.category.name) + '</div>' : ''}</div></div></div>`);
 					autocompleterow.querySelector(BDFDB.dotCN.autocompleteselectable).addEventListener("click", () => {this.swapWordWithMention(textarea);});
 					autocompletemenu.appendChild(autocompleterow);
