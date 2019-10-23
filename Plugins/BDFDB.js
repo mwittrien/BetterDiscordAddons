@@ -5577,14 +5577,26 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			let position = pos && DiscordClasses["popout" + pos] ? BDFDB.disCN["popout" + pos] : BDFDB.disCN.popouttop;
 			let arrow = !this.props.arrow ? BDFDB.disCN.popoutnoarrow : (pos && pos.indexOf("top") > -1 && pos != "top" ? BDFDB.disCN.popoutarrowalignmenttop : BDFDB.disCN.popoutarrowalignmentmiddle);
 			return BDFDB.ReactUtils.createElement("div", {
-				className: [BDFDB.disCN.popout, position, this.props.invert && pos && pos != "bottom" ? BDFDB.disCN.popoutinvert : null, arrow, !this.props.shadow ? BDFDB.disCN.popoutnoshadow : null, this.props.className].filter(n => n).join(" "),
+				className: [BDFDB.disCN.popout, BDFDB.disCN.popoutthemedpopout, position, this.props.invert && pos && pos != "bottom" ? BDFDB.disCN.popoutinvert : null, arrow, !this.props.shadow ? BDFDB.disCN.popoutnoshadow : null, this.props.className].filter(n => n).join(" "),
 				id: this.props.id,
-				style: this.props.style,
+				style: Object.assign({}, this.props.style, {
+					position: this.props.isChild ? "relative" : "absolute"
+				}),
 				children: this.props.children
 			});
 		}
 	} : undefined;
 	LibraryComponents.PopoutContainer = reactInitialized ? class BDFDB_PopoutContainer extends LibraryModules.React.Component {
+        handleRender(e) {
+            return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Popout, {
+				className: this.props.popoutClassName,
+				isChild: true,
+				position: e.position,
+				arrow: this.props.arrow,
+				shadow: this.props.shadow,
+				children: typeof this.props.renderPopout == "function" ? this.props.renderPopout(e) : null
+			});
+        }
         render() {
 			if (!this.props.children) return null;
 			if (typeof this.props.children != "function") {
@@ -5597,7 +5609,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 					let basePopoutIns = BDFDB.ReactUtils.findOwner(e._targetInst, {name:"BasePopout", up:true});
 					if (basePopoutIns) basePopoutIns.handleClick();
 				},
-				children: BDFDB.ReactUtils.createElement(NativeSubComponents.PopoutContainer, this.props)
+				children: BDFDB.ReactUtils.createElement(NativeSubComponents.PopoutContainer, Object.assign({}, this.props, {renderPopout: this.handleRender.bind(this)}))
 			});
 		}
     } : undefined;
