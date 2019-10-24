@@ -3761,7 +3761,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	var DiscordClassModules = {};
 	DiscordClassModules.BDFDB = {
 		BDFDBundefined: "BDFDB_undefined",
-		cardInner: "card-inner",
+		cardInner: "BDFDB-card-inner",
+		cardWrapper: "BDFDB-card",
 		colorPickerSwatches: "swatches",
 		colorPickerSwatchesDisabled: "disabled",
 		colorPickerSwatchSingle: "single-swatch",
@@ -4639,8 +4640,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		hotkeyshadowpulse: ["HotKeyRecorder", "shadowPulse"],
 		hotkeytext: ["HotKeyRecorder", "text"],
 		hovercard: ["HoverCard", "card"],
-		hovercardinner: ["BDFDB", "cardInner"],
 		hovercardbutton: ["NotFound", "hoverCardButton"],
+		hovercardinner: ["BDFDB", "cardInner"],
+		hovercardwrapper: ["BDFDB", "cardWrapper"],
 		icon: ["EmbedActions", "icon"],
 		iconactionswrapper: ["EmbedActions", "wrapper"],
 		iconexternal: ["EmbedActions", "iconExternal"],
@@ -5409,7 +5411,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	LibraryComponents.Card = reactInitialized ? class BDFDB_Card extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
-				className: [this.props.className, this.props.backdrop || this.props.backdrop === undefined ? BDFDB.disCN.hovercard : null].filter(n => n).join(" "),
+				className: [BDFDB.disCN.hovercardwrapper, this.props.backdrop || this.props.backdrop === undefined ? BDFDB.disCN.hovercard : null, this.props.className].filter(n => n).join(" "),
 				direction: this.props.direction,
 				justify: this.props.justify,
 				align: this.props.align,
@@ -5422,6 +5424,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 					!this.props.noRemove ? BDFDB.ReactUtils.createElement(LibraryComponents.CardRemoveButton, {
 						onClick: e => {
 							if (typeof this.props.onRemove == "function") this.props.onRemove(e, this);
+							BDFDB.ListenerUtils.stopEvent(e);
 						}
 					}) : null
 				].concat(this.props.children).filter(n => BDFDB.ReactUtils.isValidElement(n))
@@ -6396,6 +6399,22 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		${BDFDB.dotCN.selectwrap} > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"] {
 			z-index: 3;
 		}
+		
+		${BDFDB.dotCNS.hovercardwrapper + BDFDB.dotCN.hovercardbutton} {
+			position: absolute;
+			top: -3px;
+			right: -3px;
+			opacity: 0;
+		}
+		${BDFDB.dotCNS.hovercardwrapper + BDFDB.dotCN.hovercard + BDFDB.dotCN.hovercardbutton} {
+			right: -31px;
+			top: -12px;
+		}
+		${BDFDB.dotCN.hovercardwrapper}:hover ${BDFDB.dotCN.hovercardbutton} {
+			opacity: 1;
+		}
+		
+		/*OLD*/
 
 		${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageheadercozy} {
 			padding-top: 0;
@@ -6920,7 +6939,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			right: -31px;
 			top: -12px;
 			z-index: 200;
-		}		
+		}
 		.BDFDB-settings ${BDFDB.dotCN.hovercard}:hover ${BDFDB.dotCN.hovercardbutton} {
 			opacity: 1;
 		}		
