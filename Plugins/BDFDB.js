@@ -5400,7 +5400,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				className: [this.props.invertColor ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular, this.props.className].filter(n => n).join(" "),
 				style: this.props.style,
 				children: this.props.tag || BDFDB.LanguageUtils.LanguageStrings.BOT_TAG_BOT
-			}));
+			});
 		}
 	} : LibraryComponents.BotTag;
 	
@@ -5420,7 +5420,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 						onClick: e => {
 							if (typeof this.props.onRemove == "function") this.props.onRemove(e, instance);
 						}
-					});
+					})
 				].concat(this.props.children).filter(n => BDFDB.ReactUtils.isValidElement(n))
 			});
 		}
@@ -5985,7 +5985,16 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
     } : LibraryComponents.TextScroller;
 	
 	LibraryComponents.TooltipContainer = reactInitialized ? class BDFDB_TooltipContainer extends LibraryModules.React.Component {
+		constructor(props) {
+			super(props);
+			this.state = props;
+		}
 		render() {
+			if (!this.props.children) return null;
+			if (typeof this.props.children != "function") {
+				let children = this.props.children;
+				this.props.children = _ => {return children;};
+			}
 			return BDFDB.ReactUtils.createElement(NativeSubComponents.TooltipContainer, Object.assign({}, this.props));
 		}
 	} : LibraryComponents.TooltipContainer;
