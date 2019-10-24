@@ -5415,10 +5415,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				align: this.props.align,
 				wrap: this.props.wrap,
 				style: this.props.style,
+				onClick: e => {
+					if (typeof this.props.onClick == "function") this.props.onClick(e, this);
+				},
 				children: [
-					!this.noRemove ? BDFDB.ReactUtils.createElement(LibraryComponents.CardRemoveButton, {
+					!this.props.noRemove ? BDFDB.ReactUtils.createElement(LibraryComponents.CardRemoveButton, {
 						onClick: e => {
-							if (typeof this.props.onRemove == "function") this.props.onRemove(e, instance);
+							if (typeof this.props.onRemove == "function") this.props.onRemove(e, this);
 						}
 					}) : null
 				].concat(this.props.children).filter(n => BDFDB.ReactUtils.isValidElement(n))
