@@ -148,6 +148,7 @@
 body,														/* body														*/
 #app-mount .app-19_DXt,										/* app					container							*/
 #app-mount .app-2rEoOp,										/* app					inner								*/
+#app-mount .container-16j22k,								/* app					loadingscreen						*/
 #app-mount .bg-h5JY_x,										/* app					background							*/
 #app-mount .layer-3QrUeG,									/* layer				container							*/
 #app-mount .container-PNkimc,								/* channels				inner								*/
@@ -3027,6 +3028,18 @@ body:before {
 	color: rgb(var(--fontwhite3));
 	position: relative;
 	overflow: hidden;
+}
+#app-mount .quote-3aooyW {									/* login				loadingquote						*/
+	color: rgb(var(--fontwhite1));
+}
+#app-mount .contentBase-11jeVK {							/* login				loadingcontent						*/
+	color: rgb(var(--fontwhite3));
+}
+#app-mount .problems-3mgf6w {								/* login				loadingproblems						*/
+	color: rgb(var(--fontwhite1));
+}
+#app-mount .problemsText-1Yx-Kl {							/* login				loadingproblemtext					*/
+	color: rgb(var(--fontwhite3));
 }
 
 /* ----		14.9.	TERMACCEPTMODAL					---- */
