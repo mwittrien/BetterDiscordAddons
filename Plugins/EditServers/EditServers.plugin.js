@@ -231,7 +231,7 @@ class EditServers {
 			header: this.labels.modal_header_text,
 			subheader: info.name,
 			children: [
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalTabContent, {
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 					tab: this.labels.modal_tabheader1_text,
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
@@ -324,7 +324,7 @@ class EditServers {
 						})
 					]
 				}),
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalTabContent, {
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 					tab: this.labels.modal_tabheader2_text,
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
@@ -349,7 +349,7 @@ class EditServers {
 						})
 					]
 				}),
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalTabContent, {
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 					tab: this.labels.modal_tabheader3_text,
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
