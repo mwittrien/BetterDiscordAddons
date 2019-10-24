@@ -5417,13 +5417,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				align: this.props.align,
 				wrap: this.props.wrap,
 				style: this.props.style,
-				onClick: e => {
-					if (typeof this.props.onClick == "function") this.props.onClick(e, this);
-				},
+				onClick: e => {if (typeof this.props.onClick == "function") this.props.onClick(this, e);},
 				children: [
 					!this.props.noRemove ? BDFDB.ReactUtils.createElement(LibraryComponents.CardRemoveButton, {
 						onClick: e => {
-							if (typeof this.props.onRemove == "function") this.props.onRemove(e, this);
+							if (typeof this.props.onRemove == "function") this.props.onRemove(this, e);
 							BDFDB.ListenerUtils.stopEvent(e);
 						}
 					}) : null
@@ -5702,40 +5700,41 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				height: this.props.height,
 				width: this.props.width,
 				style: this.props.style,
-				children: typeof this.props.renderPopout == "function" ? this.props.renderPopout(this, e.closePopout) : null
+				children: typeof this.props.renderPopout == "function" ? this.props.renderPopout(this) : null
 			});
         }
-        render() {
+		render() {
 			if (!this.props.children) return null;
 			if (typeof this.props.children != "function") {
 				let children = this.props.children;
 				this.props.children = _ => {return children;};
 			}
-			return BDFDB.ReactUtils.createElement("div", {
+			return BDFDB.ReactUtils.createElement(LibraryComponents.Clickable, {
 				className: this.props.className,
 				onContextMenu: e => {
-					let basePopoutIns = BDFDB.ReactUtils.findOwner(e._targetInst, {name:"BasePopout", up:true});
-					if (basePopoutIns && (!basePopoutIns.domElementRef.current || basePopoutIns.domElementRef.current.contains(e.target))) {
-						if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
-						if (basePopoutIns.domElementRef.current) basePopoutIns.close();
-					}
+					if (!this.domElementRef.current || this.domElementRef.current.contains(e.target) && typeof this.props.onContextMenu == "function") this.props.onContextMenu(this, e);
 				},
 				onClick: e => {
-					let basePopoutIns = BDFDB.ReactUtils.findOwner(e._targetInst, {name:"BasePopout", up:true});
-					if (basePopoutIns && (!basePopoutIns.domElementRef.current || basePopoutIns.domElementRef.current.contains(e.target))) {
-						if (typeof this.props.onClick == "function") this.props.onClick(e, this);
-						basePopoutIns.handleClick();
-						if (!basePopoutIns.nativeClose) {
-							basePopoutIns.nativeClose = basePopoutIns.close;
-							basePopoutIns.close = (...args) => {
-								basePopoutIns.nativeClose(...args);
-								if (typeof this.props.onClose == "function") this.props.onClose(this);
-							}
-						}
+					if (!this.domElementRef.current || this.domElementRef.current.contains(e.target)) {
+						if (typeof this.props.onClick == "function") this.props.onClick(this, e);
+						if (typeof this.handleClick == "function") this.handleClick();
 					}
 					else BDFDB.ListenerUtils.stopEvent(e);
 				},
-				children: BDFDB.ReactUtils.createElement(NativeSubComponents.PopoutContainer, Object.assign({}, this.props, {renderPopout: this.handleRender.bind(this)}))
+				children: BDFDB.ReactUtils.createElement(NativeSubComponents.PopoutContainer, Object.assign({}, this.props, {
+					renderPopout: this.handleRender.bind(this),
+					ref: instance => {
+						if (!instance) return;
+						let basepopout = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.child.stateNode");
+						if (!basepopout || !basepopout.handleClick) return;
+						this.handleClick = basepopout.handleClick;
+						this.close = (...args) => {
+							basepopout.close(...args);
+							if (typeof this.props.onClose == "function") this.props.onClose(this);
+						}
+						this.domElementRef = basepopout.domElementRef;
+					}
+				}))
 			});
 		}
     } : LibraryComponents.PopoutContainer;
@@ -5993,7 +5992,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	LibraryComponents.TooltipContainer = reactInitialized ? class BDFDB_TooltipContainer extends LibraryModules.React.Component {
 		constructor(props) {
 			super(props);
-			this.state = props;
+			this.state = {shouldShowTooltip: true};
 		}
 		render() {
 			if (!this.props.children) return null;
@@ -6001,7 +6000,22 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				let children = this.props.children;
 				this.props.children = _ => {return children;};
 			}
-			return BDFDB.ReactUtils.createElement(NativeSubComponents.TooltipContainer, Object.assign({}, this.props));
+			return BDFDB.ReactUtils.createElement(LibraryComponents.Clickable, {
+				className: this.props.className,
+				onMouseEnter: e => {if (typeof this.handleMouseEnter == "function") this.handleMouseEnter();},
+				onMouseLeave: e => {if (typeof this.handleMouseLeave == "function") this.handleMouseLeave();},
+				onClick: e => {if (typeof this.handleClick == "function") this.handleClick();},
+				onContextMenu: e => {if (typeof this.handleContextMenu == "function") this.handleContextMenu();},
+				children: BDFDB.ReactUtils.createElement(NativeSubComponents.TooltipContainer, Object.assign({}, this.props, {
+					ref: instance => {
+						if (!instance) return;
+						this.handleMouseEnter = instance.handleMouseEnter;
+						this.handleMouseLeave = instance.handleMouseLeave;
+						this.handleClick = instance.handleClick;
+						this.handleContextMenu = instance.handleContextMenu;
+					}
+				}))
+			});
 		}
 	} : LibraryComponents.TooltipContainer;
 	
