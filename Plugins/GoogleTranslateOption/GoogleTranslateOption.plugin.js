@@ -286,7 +286,7 @@ class GoogleTranslateOption {
 							BDFDB.ReactUtils.forceUpdate(channelTextareaButtonIns);
 						}
 					},
-					renderPopout: instance => {
+					renderPopout: (instance, close) => {
 						let channelTextareaButtonIns = BDFDB.ReactUtils.findOwner(instance, {name:"ChannelTextAreaButton"});
 						if (channelTextareaButtonIns) {
 							channelTextareaButtonIns.props.isActive = true;

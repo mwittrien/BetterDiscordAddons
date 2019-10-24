@@ -5702,7 +5702,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				height: this.props.height,
 				width: this.props.width,
 				style: this.props.style,
-				children: typeof this.props.renderPopout == "function" ? this.props.renderPopout(this) : null
+				children: typeof this.props.renderPopout == "function" ? this.props.renderPopout(this, e.closePopout) : null
 			});
         }
         render() {
@@ -5731,7 +5731,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 								basePopoutIns.nativeClose(...args);
 								if (typeof this.props.onClose == "function") this.props.onClose(this);
 							}
-							this.closePopout = basePopoutIns.close;
 						}
 					}
 					else BDFDB.ListenerUtils.stopEvent(e);
