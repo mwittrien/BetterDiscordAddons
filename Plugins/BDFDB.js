@@ -5711,13 +5711,17 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			}
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Clickable, {
 				className: this.props.className,
-				onContextMenu: e => {
-					if (!this.domElementRef.current || this.domElementRef.current.contains(e.target) && typeof this.props.onContextMenu == "function") this.props.onContextMenu(this, e);
-				},
 				onClick: e => {
 					if (!this.domElementRef.current || this.domElementRef.current.contains(e.target)) {
 						if (typeof this.props.onClick == "function") this.props.onClick(this, e);
-						if (typeof this.handleClick == "function") this.handleClick();
+						if ((this.props.openOnClick || this.props.openOnClick === undefined) && typeof this.handleClick == "function") this.handleClick();
+					}
+					else BDFDB.ListenerUtils.stopEvent(e);
+				},
+				onContextMenu: e => {
+					if (!this.domElementRef.current || this.domElementRef.current.contains(e.target)) {
+						if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(this, e);
+						if (this.props.openOnContextMenu && typeof this.handleClick == "function") this.handleClick();
 					}
 					else BDFDB.ListenerUtils.stopEvent(e);
 				},
