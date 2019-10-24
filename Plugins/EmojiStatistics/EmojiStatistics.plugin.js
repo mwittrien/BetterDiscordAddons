@@ -324,7 +324,7 @@ class EmojiStatistics {
 	}
 
 	setLabelsByLanguage () {
-		switch (BDFDB.getDiscordLanguage().id) {
+		switch (BDFDB.LanguageUtils.getLanguage().id) {
 			case "hr":		//croatian
 				return {
 					modal_header_text:						"Statistike o emojima",

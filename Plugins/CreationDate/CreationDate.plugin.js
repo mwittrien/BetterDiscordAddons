@@ -230,7 +230,7 @@ class CreationDate {
 		}
 		else {
 			let ownformat = BDFDB.DataUtils.get(this, "formats", "ownFormat");
-			languageid = BDFDB.getDiscordLanguage().id;
+			languageid = BDFDB.LanguageUtils.getLanguage().id;
 			let hour = timeobj.getHours(), minute = timeobj.getMinutes(), second = timeobj.getSeconds(), msecond = timeobj.getMilliseconds(), day = timeobj.getDate(), month = timeobj.getMonth()+1, timemode = "";
 			if (ownformat.indexOf("$timemode") > -1) {
 				timemode = hour >= 12 ? "PM" : "AM";
@@ -269,7 +269,7 @@ class CreationDate {
 	}
 
 	setLabelsByLanguage () {
-		switch (BDFDB.getDiscordLanguage().id) {
+		switch (BDFDB.LanguageUtils.getLanguage().id) {
 			case "hr":		//croatian
 				return {
 					createdat_text:				"Izrađen {{time}}"

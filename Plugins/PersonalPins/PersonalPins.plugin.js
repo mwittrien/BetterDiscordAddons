@@ -423,7 +423,7 @@ class PersonalPins {
 			EditUsers.addTag({id:noteData.author_id,username:noteData.author_name}, username.parentElement, " " + BDFDB.disCN.bottagnametag);
 		}
 		let timestamp = message.querySelector(BDFDB.dotCN.messagetimestampcozy);
-		timestamp.innerText = date.toLocaleString(BDFDB.getDiscordLanguage().id);
+		timestamp.innerText = date.toLocaleString(BDFDB.LanguageUtils.getLanguage().id);
 		timestamp.setAttribute("datetime", date);
 		if (BDFDB.BDUtils.isPluginEnabled("CompleteTimestamps") && BDFDB.DataUtils.load("CompleteTimestamps", "settings"), "showInChat") {
 			BDFDB.BDUtils.getPlugin("CompleteTimestamps").changeTimestamp(timestamp);
@@ -584,7 +584,7 @@ class PersonalPins {
 	}
 
 	setLabelsByLanguage () {
-		switch (BDFDB.getDiscordLanguage().id) {
+		switch (BDFDB.LanguageUtils.getLanguage().id) {
 			case "hr":		//croatian
 				return {
 					popout_note_text:				"Bilješke",

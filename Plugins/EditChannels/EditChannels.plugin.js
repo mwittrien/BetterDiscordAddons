@@ -682,7 +682,7 @@ class EditChannels {
 	}
 
 	setLabelsByLanguage () {
-		switch (BDFDB.getDiscordLanguage().id) {
+		switch (BDFDB.LanguageUtils.getLanguage().id) {
 			case "hr":		//croatian
 				return {
 					context_localchannelsettings_text:		"Postavke lokalnih kanala",

@@ -142,7 +142,7 @@ class GoogleSearchReplace {
 	}
 
 	setLabelsByLanguage () {
-		switch (BDFDB.getDiscordLanguage().id) {
+		switch (BDFDB.LanguageUtils.getLanguage().id) {
 			case "hr":		//croatian
 				return {
 					context_googlesearchreplace_text:	"Pretražujte s ...",
