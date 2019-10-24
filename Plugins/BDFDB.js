@@ -5416,11 +5416,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				wrap: this.props.wrap,
 				style: this.props.style,
 				children: [
-					BDFDB.ReactUtils.createElement(LibraryComponents.CardRemoveButton, {
+					!this.noRemove ? BDFDB.ReactUtils.createElement(LibraryComponents.CardRemoveButton, {
 						onClick: e => {
 							if (typeof this.props.onRemove == "function") this.props.onRemove(e, instance);
 						}
-					})
+					}) : null
 				].concat(this.props.children).filter(n => BDFDB.ReactUtils.isValidElement(n))
 			});
 		}
