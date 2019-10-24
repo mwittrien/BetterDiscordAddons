@@ -5409,7 +5409,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	LibraryComponents.Card = reactInitialized ? class BDFDB_Card extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
-				className: [this.props.className, BDFDB.disCN.hovercard].filter(n => n).join(" "),
+				className: [this.props.className, this.props.backdrop || this.props.backdrop === undefined ? BDFDB.disCN.hovercard : null].filter(n => n).join(" "),
 				direction: this.props.direction,
 				justify: this.props.justify,
 				align: this.props.align,
