@@ -5427,7 +5427,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 							BDFDB.ListenerUtils.stopEvent(e);
 						}
 					}) : null
-				].concat(this.props.children).filter(n => BDFDB.ReactUtils.isValidElement(n))
+				].concat(this.props.children)
 			});
 		}
 	} : LibraryComponents.Card;
@@ -5637,10 +5637,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 									children: this.props.title
 								})
 							}) : null,
-							(BDFDB.ArrayUtils.is(this.props.titlechildren) ? this.props.titlechildren : Array.of(this.props.titlechildren)).filter(n => BDFDB.ReactUtils.isValidElement(n))
+							(BDFDB.ArrayUtils.is(this.props.titlechildren) ? this.props.titlechildren : Array.of(this.props.titlechildren))
 						]
 					}),
-				].concat(this.props.children).filter(n => BDFDB.ReactUtils.isValidElement(n))
+				].concat(this.props.children)
 			});
 		}
 	} : LibraryComponents.FormComponents.FormItem;
@@ -5834,7 +5834,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 									label: this.props.label
 								})
 							}),
-							(BDFDB.ArrayUtils.is(this.props.labelchildren) ? this.props.labelchildren : Array.of(this.props.labelchildren)).filter(n => BDFDB.ReactUtils.isValidElement(n)),
+							(BDFDB.ArrayUtils.is(this.props.labelchildren) ? this.props.labelchildren : Array.of(this.props.labelchildren)),
 							BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
 								grow: this.props.basis ? 1 : 0,
 								shrink: 0,
