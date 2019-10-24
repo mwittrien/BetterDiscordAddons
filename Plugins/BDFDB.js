@@ -5749,9 +5749,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 						align: LibraryComponents.Flex.Align.CENTER,
 						children: [
 							BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
-								children: BDFDB.ReactUtils.createElement("label", {
-									className: this.props.mini ? BDFDB.disCN.titlemini : BDFDB.disCN.titledefault,
-									children: this.props.label
+								children: BDFDB.ReactUtils.createElement(LibraryComponents.SettingsLabel, {
+									mini: this.props.mini,
+									label: this.props.label
 								})
 							}),
 							(BDFDB.ArrayUtils.is(this.props.labelchildren) ? this.props.labelchildren : Array.of(this.props.labelchildren)).filter(n => BDFDB.ReactUtils.isValidElement(n)),
@@ -5778,6 +5778,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				]
 			});
 		}
+	} : undefined;
+	LibraryComponents.SettingsLabel = reactInitialized ? class BDFDB_SettingsLabel extends LibraryModules.React.Component {
+		render() {
+			return BDFDB.ReactUtils.createElement("label", {
+				className: [this.props.mini ? BDFDB.disCN.titlemini : BDFDB.disCN.titledefault, BDFDB.disCN.cursordefault].filter(n => n).join(" "),
+				children: this.props.label
+			});
+		}	
 	} : undefined;
 	LibraryComponents.SettingsSwitch = reactInitialized ? class BDFDB_SettingsSwitch extends LibraryModules.React.Component {
         saveSettings(value) {
@@ -5809,6 +5817,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
             if (typeof this.props.onChange == "function") this.props.onChange(!this.props.value, this);
 			this.props.value = !this.props.value;
 			BDFDB.ReactUtils.forceUpdate(this);
+			if (!this.patched) {
+				this.patched = true;
+				let switchele = BDFDB.ReactUtils.findDOMNode(this);
+				if (switchele && BDFDB.DOMUtils.getParent(BDFDB.dotCNS.itemlayer + BDFDB.dotCN.popout, switchele)) switchele.addEventListener("click", this.handleChange.bind(this));
+			}
         }
         render() {
 			return BDFDB.ReactUtils.createElement(NativeSubComponents.Switch, Object.assign({}, this.props, {onChange: this.handleChange.bind(this)}));
@@ -6270,10 +6283,16 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		${BDFDB.dotCN.popoutcontainer} {
 			display: flex !important;
 		}
-
 		${BDFDB.dotCN.favbuttoncontainer} {
 			display: flex !important;
 			position: relative !important;
+		}
+
+		${BDFDB.dotCN.cursordefault} {
+			cursor: default !important;
+		}
+		${BDFDB.dotCN.cursorpointer} {
+			cursor: pointer !important;
 		}
 		
 		${BDFDB.dotCN.selectwrap} > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"] {
@@ -6483,10 +6502,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			min-width: 210px !important;
 			position: relative !important;
 			width: auto !important;
-		}
-		.BDFDB-modal ${BDFDB.dotCN.title + BDFDB.notCN.cursorpointer},
-		.BDFDB-settings ${BDFDB.dotCN.title + BDFDB.notCN.cursorpointer} {
-			cursor: default !important;
 		}
 		.BDFDB-modal .BDFDB-settings-inner .BDFDB-containertext,
 		.BDFDB-settings .BDFDB-settings-inner .BDFDB-containertext {
