@@ -14,8 +14,6 @@ class EditServers {
 			"fixed":[["Tooltips","Fixed issue where native tooltip wasn't hidden"]]
 		};
 
-		this.labels = {};
-
 		this.patchModules = {
 			"Guild":"componentDidMount",
 			"GuildIconWrapper":"componentDidMount",

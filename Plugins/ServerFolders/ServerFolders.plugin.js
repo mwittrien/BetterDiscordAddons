@@ -14,8 +14,6 @@ class ServerFolders {
 			"fixed":[["Tooltips","Fixed issue where native tooltip wasn't hidden"]]
 		};
 		
-		this.labels = {};
-		
 		this.patchModules = {
 			"Guilds":["componentDidMount","componentDidUpdate","componentWillUnmount"],
 			"GuildFolder":["componentDidMount","componentDidUpdate"],

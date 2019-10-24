@@ -14,8 +14,6 @@ class EditUsers {
 			"fixed":[["Account","Fixed the coloring in the account details container"]]
 		};
 
-		this.labels = {};
-
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
 			"MemberListItem":["componentDidMount","componentDidUpdate"],

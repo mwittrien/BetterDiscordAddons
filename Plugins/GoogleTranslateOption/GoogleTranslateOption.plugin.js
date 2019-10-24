@@ -14,8 +14,6 @@ class GoogleTranslateOption {
 			"improved":[["Embeds","Translating a message now also translates the embed descriptions (usually the maintext of embeds)"]]
 		};
 
-		this.labels = {};
-
 		this.patchModules = {
 			"ChannelTextArea":["componentDidMount","render"],
 			"Message":"componentDidMount",

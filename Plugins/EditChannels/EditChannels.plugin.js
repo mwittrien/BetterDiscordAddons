@@ -14,8 +14,6 @@ class EditChannels {
 			"fixed":[["Settings","Fixed issue where settings could not be saved"]]
 		};
 
-		this.labels = {};
-
 		this.patchModules = {
 			"ChannelTextArea":"componentDidMount",
 			"AuditLog":"componentDidMount",

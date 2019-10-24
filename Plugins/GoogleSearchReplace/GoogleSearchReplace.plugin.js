@@ -13,8 +13,6 @@ class GoogleSearchReplace {
 		this.changelog = {
 			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
-		
-		this.labels = {};
 	}
 
 	initConstructor () {

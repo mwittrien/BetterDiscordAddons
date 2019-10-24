@@ -14,8 +14,6 @@ class JoinedAtDate {
 			"fixed":[["Milliseconds","Milliseconds are now properlly formatted when leading zeros is enabled (9 => 009, 12 => 012)"]]
 		};
 
-		this.labels = {};
-
 		this.patchModules = {
 			"UserPopout":"componentDidMount",
 			"UserProfile":"componentDidMount"

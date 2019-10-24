@@ -85,6 +85,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		});
 	};
 	BDFDB.PluginUtils.translate = function (plugin) {
+		plugin.labels = {};
 		if (typeof plugin.setLabelsByLanguage === "function" || typeof plugin.changeLanguageStrings === "function") {
 			if (document.querySelector("html").lang) translate();
 			else {
@@ -99,8 +100,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				var language = BDFDB.LanguageUtils.getLanguage();
 				if (typeof plugin.setLabelsByLanguage === "function") plugin.labels = plugin.setLabelsByLanguage(language.id);
 				if (typeof plugin.changeLanguageStrings === "function") plugin.changeLanguageStrings();
-				var translatemessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_translated", language.ownlang);
-				console.log(`%c[${plugin.name}]%c`, "color: #3a71c1; font-weight: 700;", "", translatemessage);
+				console.log(`%c[${plugin.name}]%c`, "color: #3a71c1; font-weight: 700;", "", BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_translated", language.ownlang));
 			}
 		}
 	};
@@ -5392,6 +5392,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	NativeSubComponents.Switch = BDFDB.ModuleUtils.findByName("Switch");
 	NativeSubComponents.TabBar = BDFDB.ModuleUtils.findByName("TabBar");
 	NativeSubComponents.TextInput = BDFDB.ModuleUtils.findByName("TextInput");
+	NativeSubComponents.TooltipContainer = BDFDB.ModuleUtils.findByName("Tooltip");
 	
 	
 	LibraryComponents.BotTag = reactInitialized ? class BDFDB_BotTag extends LibraryModules.React.Component {
@@ -5961,6 +5962,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			});
 		}
     } : LibraryComponents.TextScroller;
+	
+	LibraryComponents.TooltipContainer = reactInitialized ? class BDFDB_TooltipContainer extends LibraryModules.React.Component {
+		render() {
+			return BDFDB.ReactUtils.createElement(NativeSubComponents.TooltipContainer, Object.assign({}, this.props));
+		}
+	} : LibraryComponents.TooltipContainer;
 	
 	for (let type in NativeSubComponents) if (LibraryComponents[type]) for (let key in NativeSubComponents[type]) if (key != "displayName" && key != "name") LibraryComponents[type][key] = NativeSubComponents[type][key];
 	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
