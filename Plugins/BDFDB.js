@@ -5731,6 +5731,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 								basePopoutIns.nativeClose(...args);
 								if (typeof this.props.onClose == "function") this.props.onClose(this);
 							}
+							this.closePopout = basePopoutIns.close;
 						}
 					}
 					else BDFDB.ListenerUtils.stopEvent(e);
