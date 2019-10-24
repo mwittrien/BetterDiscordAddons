@@ -5396,15 +5396,37 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	
 	LibraryComponents.BotTag = reactInitialized ? class BDFDB_BotTag extends LibraryModules.React.Component {
 		render() {
-			return BDFDB.ReactUtils.createElement("span", Object.assign({
+			return BDFDB.ReactUtils.createElement("span", {
 				className: [this.props.invertColor ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular, this.props.className].filter(n => n).join(" "),
-				style: Object.assign({}, this.props.style),
+				style: this.props.style,
 				children: this.props.tag || BDFDB.LanguageUtils.LanguageStrings.BOT_TAG_BOT
 			}));
 		}
 	} : LibraryComponents.BotTag;
 	
 	LibraryComponents.Button = BDFDB.ModuleUtils.findByProperties("Colors", "Hovers", "Looks");
+	
+	LibraryComponents.Card = reactInitialized ? class BDFDB_Card extends LibraryModules.React.Component {
+		render() {
+			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+				className: [this.props.className, BDFDB.disCN.hovercard].filter(n => n).join(" "),
+				direction: this.props.direction,
+				justify: this.props.justify,
+				align: this.props.align,
+				wrap: this.props.wrap,
+				style: this.props.style,
+				children: [
+					BDFDB.ReactUtils.createElement(LibraryComponents.CardRemoveButton, {
+						onClick: e => {
+							if (typeof this.props.onRemove == "function") this.props.onRemove(e, instance);
+						}
+					});
+				].concat(this.props.children).filter(n => BDFDB.ReactUtils.isValidElement(n))
+			});
+		}
+	} : LibraryComponents.Card;
+	
+	LibraryComponents.CardRemoveButton = BDFDB.ModuleUtils.findByName("RemoveButton");
 	
 	LibraryComponents.ChannelTextAreaButton = BDFDB.ModuleUtils.findByName("ChannelTextAreaButton");
 	
@@ -5528,7 +5550,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		render() {
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Clickable, {
 				className: [BDFDB.disCN.contextmenuitem, !this.props.disabled ? BDFDB.disCN.contextmenuitemclickable : null, this.props.danger ? BDFDB.disCN.contextmenuitemdanger : null, this.props.disabled ? BDFDB.disCN.contextmenuitemdisabled : null, this.props.brand ? BDFDB.disCN.contextmenuitembrand : null, this.props.className].filter(n => n).join(" "),
-				style: Object.assign({}, this.props.style),
+				style: this.props.style,
 				role: "menuitem",
 				onClick: this.props.disabled || typeof this.props.action != "function" ? null : this.props.action,
 				children: [
