@@ -3768,7 +3768,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		colorPickerSwatchSelected: "selected",
 		favButtonContainer: "favButtonContainer",
 		overflowEllipsis: "overflowellipsis",
-		popoutContainer: "popoutContainer",
 		modalHeaderHasSibling: "headerHasSibling",
 		modalTabContent: "tab-content",
 		modalTabContentOpen: "open"
@@ -4922,7 +4921,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		popoutbottom: ["Popout", "popoutBottom"],
 		popoutbottomleft: ["Popout", "popoutBottomLeft"],
 		popoutbottomright: ["Popout", "popoutBottomRight"],
-		popoutcontainer: ["BDFDB", "popoutContainer"],
 		popoutfooter: ["Popout", "footer"],
 		popoutheader: ["Popout", "header"],
 		popoutinvert: ["Popout", "popoutInvert"],
@@ -5149,6 +5147,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		textareainnerenablednoattach: ["ChannelTextArea", "innerEnabledNoAttach"],
 		textareainnernoautocomplete: ["ChannelTextArea", "innerNoAutocomplete"],
 		textareapickerbutton: ["ChannelTextArea", "button"],
+		textareapickerbuttoncontainer: ["ChannelTextArea", "buttonContainer"],
 		textareapickerbuttons: ["ChannelTextArea", "buttons"],
 		textareauploadinput: ["ChannelTextArea", "uploadInput"],
 		textareawrapall: ["ChannelTextArea", "channelTextArea"],
@@ -5685,7 +5684,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				this.props.children = _ => {return children;};
 			}
 			return BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.disCN.popoutcontainer,
+				className: this.props.className,
 				onContextMenu: e => {
 					let basePopoutIns = BDFDB.ReactUtils.findOwner(e._targetInst, {name:"BasePopout", up:true});
 					if (basePopoutIns && (!basePopoutIns.domElementRef.current || basePopoutIns.domElementRef.current.contains(e.target))) {
@@ -6348,9 +6347,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			text-overflow: ellipsis;
 		}
 
-		${BDFDB.dotCN.popoutcontainer} {
-			display: flex !important;
-		}
 		${BDFDB.dotCN.favbuttoncontainer} {
 			display: flex !important;
 			position: relative !important;
