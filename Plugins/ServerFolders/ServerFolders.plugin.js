@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.5.8";}
+	getVersion () {return "6.5.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -816,27 +816,26 @@ class ServerFolders {
 	updateGuildInFolderContent (folderid, guildid) {
 		if (!this.foldercontentguilds || !folderid || !guildid) return;
 		let guild = BDFDB.LibraryModules.GuildStore.getGuild(guildid);
+		let oldCopy = this.foldercontentguilds.querySelector(`.copy[guildid="${guildid}"]`);
 		if (guild) {
-			let oldCopy = this.foldercontentguilds.querySelector(`.copy[guildid="${guildid}"]`);
 			let newCopy = this.createCopyOfServer(folderid, guildid);
-			if (!newCopy) return;
-			else if (oldCopy) {
-				this.foldercontentguilds.insertBefore(newCopy, oldCopy);
-				BDFDB.DOMUtils.remove(oldCopy);
-			}
-			else {
-				let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(folderid);
-				let position = folder.guildIds.indexOf(guildid);
-				let siblingId = position > -1 ? folder.guildIds[folder.guildIds.indexOf(guildid) + 1] : null; 
-				let insertNode = siblingId ? this.foldercontentguilds.querySelector(`[guildid="${siblingId}"][folderid="${folderid}"]`) : null;
-				if (!insertNode) {
-					let sameFolderEles = this.foldercontentguilds.querySelectorAll(`[folderid="${folderid}"]`);
-					insertNode = sameFolderEles.length > 0 ? sameFolderEles[sameFolderEles.length - 1].nextSibling : null;
+			if (newCopy) {
+				if (oldCopy) this.foldercontentguilds.insertBefore(newCopy, oldCopy);
+				else {
+					let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(folderid);
+					let position = folder.guildIds.indexOf(guildid);
+					let siblingId = position > -1 ? folder.guildIds[folder.guildIds.indexOf(guildid) + 1] : null; 
+					let insertNode = siblingId ? this.foldercontentguilds.querySelector(`[guildid="${siblingId}"][folderid="${folderid}"]`) : null;
+					if (!insertNode) {
+						let sameFolderEles = this.foldercontentguilds.querySelectorAll(`[folderid="${folderid}"]`);
+						insertNode = sameFolderEles.length > 0 ? sameFolderEles[sameFolderEles.length - 1].nextSibling : null;
+					}
+					this.foldercontentguilds.insertBefore(newCopy, insertNode);
 				}
-				this.foldercontentguilds.insertBefore(newCopy, insertNode);
+				if (BDFDB.DOMUtils.containsClass(this.foldercontentguilds.firstElementChild, "folderseparatorouter")) BDFDB.DOMUtils.remove(this.foldercontentguilds.firstElementChild);
 			}
-			if (BDFDB.DOMUtils.containsClass(this.foldercontentguilds.firstElementChild, "folderseparatorouter")) BDFDB.DOMUtils.remove(this.foldercontentguilds.firstElementChild);
 		}
+		BDFDB.DOMUtils.remove(oldCopy);
 	}
 
 	addSeparator (folderid) {
@@ -946,6 +945,7 @@ class ServerFolders {
 		};
 		
 		guildcopyinner.addEventListener("mouseenter", () => {
+			if (!BDFDB.LibraryModules.GuildStore.getGuild(guildid)) return BDFDB.DOMUtils.remove(guildcopy);
 			let EditServers = BDFDB.BDUtils.getPlugin("EditServers");
 			let ESdata = EditServers ? EditServers.getGuildData(guildid, guildcopyinner) : null;
 			if (ESdata && (ESdata.name || ESdata.color3 || ESdata.color4)) EditServers.changeTooltip(guild, guildcopyinner, "right");
