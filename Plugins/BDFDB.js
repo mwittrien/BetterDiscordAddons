@@ -5704,6 +5704,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			delete childprops.style;
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				className: [BDFDB.disCN.inputnumberwrapper, this.props.size == LibraryComponents.TextInput.Sizes.MINI ? BDFDB.disCN.inputnumberwrappermini : null].filter(n => n).join(" "),
+				justify: LibraryComponents.Flex.Justify.END,
 				grow: this.props.basis ? 1 : 0,
 				shrink: 0,
 				basis: this.props.basis || "auto",
@@ -5760,7 +5761,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				padding: this.props.padding,
 				height: this.props.height,
 				width: this.props.width,
-				style: this.props.style,
+				style: this.props.popoutStyle,
 				children: typeof this.props.renderPopout == "function" ? this.props.renderPopout(this) : null
 			});
         }
@@ -5771,6 +5772,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			}
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Clickable, {
 				className: this.props.className,
+				style: this.props.style,
 				onClick: e => {
 					if (!this.domElementRef.current || this.domElementRef.current.contains(e.target)) {
 						if (typeof this.props.onClick == "function") this.props.onClick(this, e);
