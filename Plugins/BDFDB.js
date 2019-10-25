@@ -3761,15 +3761,22 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	var DiscordClassModules = {};
 	DiscordClassModules.BDFDB = {
 		BDFDBundefined: "BDFDB_undefined",
-		cardInner: "BDFDB-card-inner",
+		cardInner: "BDFDB-cardInner",
 		cardWrapper: "BDFDB-card",
 		colorPickerSwatches: "swatches",
 		colorPickerSwatchesDisabled: "disabled",
 		colorPickerSwatchSingle: "single-swatch",
 		colorPickerSwatchSelected: "selected",
-		favButtonContainer: "favButtonContainer",
+		favButtonContainer: "BDFDB-favButtonContainer",
+		inputNumberButton: "BDFDB-numberInputButton",
+		inputNumberButtonDown: "inputNumberButtonDown",
+		inputNumberButtonUp: "BDFDB-numberInputButtonUp",
+		inputNumberButtons: "BDFDB-numberInputButtons",
+		inputNumberButtonsPressed: "BDFDB-numberInputButtonsPressed",
+		inputNumberWrapper: "BDFDB-numberInputWrapper",
+		inputNumberWrapperMini: "BDFDB-numberInputWrapperMini",
 		overflowEllipsis: "overflowellipsis",
-		modalHeaderHasSibling: "headerHasSibling",
+		modalHeaderHasSibling: "BDFDB-modal-headerHasSibling",
 		modalTabContent: "tab-content",
 		modalTabContentOpen: "open"
 	};
@@ -4670,6 +4677,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		inputmini: ["Input", "inputMini"],
 		inputsuccess: ["Input", "success"],
 		inputwrapper: ["Input", "inputWrapper"],
+		inputnumberbutton: ["BDFDB", "inputNumberButton"],
+		inputnumberbuttondown: ["BDFDB", "inputNumberButtonDown"],
+		inputnumberbuttonup: ["BDFDB", "inputNumberButtonUp"],
+		inputnumberbuttons: ["BDFDB", "inputNumberButtons"],
+		inputnumberbuttonspressed: ["BDFDB", "inputNumberButtonsPressed"],
+		inputnumberwrapper: ["BDFDB", "inputNumberWrapper"],
+		inputnumberwrappermini: ["BDFDB", "inputNumberWrapperMini"],
 		invite: ["GuildInvite", "wrapper"],
 		invitebutton: ["GuildInvite", "button"],
 		invitebuttoncontent: ["GuildInvite", "buttonContent"],
@@ -5386,6 +5400,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	});
 	
 	var NativeSubComponents = {}, LibraryComponents = {}, reactInitialized = LibraryModules.React && LibraryModules.React.Component;
+	NativeSubComponents.Button = BDFDB.ModuleUtils.findByProperties("Colors", "Hovers", "Looks");
 	NativeSubComponents.ContextMenuToggleItem = BDFDB.ModuleUtils.findByName("ToggleMenuItem");
 	NativeSubComponents.FavButton = BDFDB.ModuleUtils.findByName("GIFFavButton");
 	NativeSubComponents.PopoutContainer = BDFDB.ModuleUtils.findByName("Popout");
@@ -5406,7 +5421,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 	} : LibraryComponents.BotTag;
 	
-	LibraryComponents.Button = BDFDB.ModuleUtils.findByProperties("Colors", "Hovers", "Looks");
+	LibraryComponents.Button = reactInitialized ? class BDFDB_BotTag extends LibraryModules.React.Component {
+        handleClick() {
+            if (typeof this.props.onClick == "function") this.props.onClick(e, this);
+        }
+        render() {
+			return BDFDB.ReactUtils.createElement(NativeSubComponents.Button, Object.assign({}, this.props, {onClick: this.handleClick.bind(this)}));
+		}
+	} : LibraryComponents.Button;
 	
 	LibraryComponents.Card = reactInitialized ? class BDFDB_Card extends LibraryModules.React.Component {
 		render() {
@@ -5649,13 +5671,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	
 	LibraryComponents.ModalComponents.ModalTabContent = reactInitialized ? class BDFDB_ModalTabContent extends LibraryModules.React.Component {
         render() {
-			let props = Object.assign({}, this.props);
-			delete props.open;
-			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, Object.assign({tab:"unnamed"}, props, {
-				className: [BDFDB.disCN.modaltabcontent, this.props.open ? BDFDB.disCN.modaltabcontentopen : null, props.className].filter(n => n).join(" "),
+			let childprops = Object.assign({}, this.props);
+			delete childprops.open;
+			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, Object.assign({tab:"unnamed"}, childprops, {
+				className: [BDFDB.disCN.modaltabcontent, this.props.open ? BDFDB.disCN.modaltabcontentopen : null, this.props.className].filter(n => n).join(" "),
 				direction: LibraryComponents.Flex.Direction.VERTICAL,
 				align: LibraryComponents.Flex.Align.STRETCH,
-				style: Object.assign({}, props.style, {
+				style: Object.assign({}, childprops.style, {
 					display: this.props.open ? null : "none",
 					marginTop: 10
 				})
@@ -5664,6 +5686,45 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
     } : LibraryComponents.ModalComponents.ModalTabContent;
 	
 	LibraryComponents.NumberBadge = BDFDB.ModuleUtils.findByName("NumberBadge");
+	
+	LibraryComponents.NumberInput = reactInitialized ? class BDFDB_NumberInput extends LibraryModules.React.Component {
+        handleChange(value) {
+            if (typeof this.props.onChange == "function") this.props.onChange(value, this);
+        }
+        handleKeyDown(e) {
+            if (typeof this.props.onKeyDown == "function") this.props.onKeyDown(e, this);
+        }
+        render() {
+			let childprops = Object.assign({}, this.props, {
+				type:"number",
+				onChange: this.handleChange.bind(this),
+				onKeyDown: this.handleKeyDown.bind(this)
+			});
+			delete childprops.basis;
+			delete childprops.style;
+			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+				className: [BDFDB.disCN.inputnumberwrapper, this.props.size == LibraryComponents.TextInput.Sizes.MINI ? BDFDB.disCN.inputnumberwrappermini : null].filter(n => n).join(" "),
+				grow: this.props.basis ? 1 : 0,
+				shrink: 0,
+				basis: this.props.basis || "auto",
+				style: Object.assign({}, this.props.style, {position: "relative"}),
+				children: [
+					BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.inputnumberbuttons,
+						children: [
+							BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCNS.inputnumberbutton + BDFDB.disCN.inputnumberbuttonup
+							}),
+							BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCNS.inputnumberbutton + BDFDB.disCN.inputnumberbuttondown
+							})
+						]
+					}),
+					BDFDB.ReactUtils.createElement(LibraryComponents.TextInput, childprops)
+				]
+			});
+		}
+    } : LibraryComponents.NumberInput;
 	
 	LibraryComponents.Popout = reactInitialized ? class BDFDB_Popout extends LibraryModules.React.Component {
         render() {
@@ -5931,8 +5992,15 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			this.props.value = value;
 			BDFDB.ReactUtils.forceUpdate(this);
         }
+        handleKeyDown(e) {
+            if (typeof this.props.onKeyDown == "function") this.props.onKeyDown(e, this);
+        }
         render() {
-			return BDFDB.ReactUtils.createElement(NativeSubComponents.TextInput, Object.assign({}, this.props, {onChange: this.handleChange.bind(this)}));
+			this.props = this.props || "text";
+			return BDFDB.ReactUtils.createElement(NativeSubComponents.TextInput, Object.assign({}, this.props, {
+				onChange: this.handleChange.bind(this),
+				onKeyDown: this.handleKeyDown.bind(this)
+			}));
 		}
     } : LibraryComponents.TextInput;
 	
@@ -6435,6 +6503,60 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		${BDFDB.dotCN.hovercardwrapper}:hover ${BDFDB.dotCN.hovercardbutton} {
 			opacity: 1;
 		}
+		
+		${BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.inputnumberbuttons}:hover + ${BDFDB.dotCNS.inputwrapper + BDFDB.dotCN.input}:not(:focus) {
+			border-color: black;
+		}
+		${BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.inputnumberbuttons + BDFDB.dotCNS.inputnumberbuttonspressed} + ${BDFDB.dotCNS.inputwrapper + BDFDB.dotCN.input} {
+			border-color: #7289da;
+		}
+		${BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.input} {
+			padding-right: 25px;
+		}
+		${BDFDB.dotCN.inputnumberwrapper + BDFDB.dotCNS.inputnumberwrappermini + BDFDB.dotCN.input} {
+			padding-left: 6px;
+			padding-right: 17px;
+		}
+		${BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.input}::-webkit-inner-spin-button, 
+		${BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.input}::-webkit-outer-spin-button{
+			-webkit-appearance: none !important;
+		}
+		${BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.inputnumberbuttons} {
+			position: absolute;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: space-around;
+			height: 110%;
+			right: 8px;
+			top: -5%;
+		}
+		${BDFDB.dotCN.inputnumberwrapper + BDFDB.dotCNS.inputnumberwrappermini + BDFDB.dotCN.inputnumberbuttons} {
+			right: 4px;
+		}
+		${BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.inputnumberbutton} {
+			cursor: pointer;
+			border: transparent solid 5px;
+			border-top-width: 2.5px;
+			display: inline-block;
+		}
+		${BDFDB.dotCNS.themelight + BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.inputnumberbutton} {
+			border-bottom-color: #dcddde;
+		}
+		${BDFDB.dotCNS.themelight + BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.inputnumberbutton}:hover {
+			border-bottom-color: #4f545c;
+		}
+		${BDFDB.dotCNS.themedark + BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.inputnumberbutton} {
+			border-bottom-color: #72767d;
+		}
+		${BDFDB.dotCNS.themedark + BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.inputnumberbutton}:hover {
+			border-bottom-color: #f6f6f7;
+		}
+		${BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.inputnumberbutton + BDFDB.dotCN.inputnumberbuttondown} {
+			transform: rotate(180deg);
+		}
+		
+		
 		
 		/*OLD*/
 
