@@ -6026,7 +6026,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	for (let type in NativeSubComponents) if (LibraryComponents[type]) for (let key in NativeSubComponents[type]) if (key != "displayName" && key != "name") LibraryComponents[type][key] = NativeSubComponents[type][key];
 	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
 	
-	var LanguageStringsVars = {}, LanguageStrings = LibraryModules.LanguageStore && LibraryModules.LanguageStore._proxyContext ? Object.assign({}, LibraryModules.LanguageStore._proxyContext.defaultMessages) : {};
+	var LanguageStrings = LibraryModules.LanguageStore && LibraryModules.LanguageStore._proxyContext ? Object.assign({}, LibraryModules.LanguageStore._proxyContext.defaultMessages) : {};
 	BDFDB.LanguageUtils = {};
 	BDFDB.LanguageUtils.languages = {
 		"$discord": 	{name:"Discord (English (US))",		id:"en-US",		ownlang:"English (US)",					integrated:false,		dic:false},
@@ -6304,17 +6304,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			var stringobj = LibraryModules.LanguageStore.Messages[item];
 			if (!stringobj) console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", item + " not found in BDFDB.LanguageUtils.LanguageStrings");
 			else {
-				var string = typeof stringobj == "object" ? stringobj.format(Object.assign({}, LanguageStringsVars)) : stringobj;
-				if (typeof string == "string") return string;
-				else if (BDFDB.ArrayUtils.is(string)) {
-					var newstring = "";
-					for (let ele of string) {
-						if (typeof ele == "string") newstring += BDFDB.StringUtils.htmlEscape(ele);
-						else if (BDFDB.ObjectUtils.is(ele) && ele.props) newstring += `<${ele.type}>${BDFDB.StringUtils.htmlEscape(ele.props.children[0].toString())}</${ele.type}>`
-					}
-					return newstring;
-				}
-				else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", item + " could not be parsed from BDFDB.LanguageUtils.LanguageStrings");
+				if (stringobj && typeof stringobj == "object" && typeof stringobj.format == "function") return BDFDB.LanguageUtils.LanguageStringsFormat(item);
+				else return stringobj;
 			}
 			return "";
 		}
@@ -6324,29 +6315,38 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			return !!LibraryModules.LanguageStore.Messages[item];
 		}
 	});
-	BDFDB.LanguageUtils.LanguageStringsFormat = function (item, value) {
-		if (item && value) {
+	BDFDB.LanguageUtils.LanguageStringsFormat = function (item, ...values) {
+		if (item) {
 			var stringobj = LibraryModules.LanguageStore.Messages[item];
 			if (stringobj && typeof stringobj == "object" && typeof stringobj.format == "function") {
-				try {
-					var valueobject = {};
-					for (let key in LanguageStringsVars) valueobject[key] = value;
-					var string = stringobj.format(valueobject);
-					if (typeof string == "string") return string;
-					else if (BDFDB.ArrayUtils.is(string)) {
-						var newstring = "";
-						for (let ele of string) {
+				let i = 0, returnvalue, formatvars = {};
+				while (!returnvalue && i < 10) {
+					i++;
+					try {returnvalue = stringobj.format(formatvars);}
+					catch (err) {
+						returnvalue = null;
+						formatvars[err.toString().split("for: ")[1]] = values.shift() || "undefined";
+					}
+				}
+				if (returnvalue) {
+					if (BDFDB.ArrayUtils.is(returnvalue)) {
+						let newstring = "";
+						for (let ele of returnvalue) {
 							if (typeof ele == "string") newstring += BDFDB.StringUtils.htmlEscape(ele);
 							else if (BDFDB.ObjectUtils.is(ele) && ele.props) newstring += `<${ele.type}>${BDFDB.StringUtils.htmlEscape(ele.props.children[0].toString())}</${ele.type}>`
 						}
 						return newstring;
 					}
+					return returnvalue;
 				}
-				catch (err) {console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", item + " failed to format string in BDFDB.LanguageUtils.LanguageStrings");}
+				else {
+					console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", item + " failed to format string in BDFDB.LanguageUtils.LanguageStrings");
+					return "";
+				}
 			}
-			else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", item + " is not a formatable string in BDFDB.LanguageUtils.LanguageStrings");
+			else return BDFDB.LanguageUtils.LanguageStrings[item];
 		}
-		else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", item + " enter a valid key and value to format the string in BDFDB.LanguageUtils.LanguageStrings");
+		else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", item + " enter a valid key to format the string in BDFDB.LanguageUtils.LanguageStrings");
 		return "";
 	};
 	BDFDB.LanguageUtils.LibraryStrings = new Proxy(InternalBDFDB.LibraryStrings.default, {
@@ -6386,13 +6386,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			BDFDB.LanguageUtils.languages.$discord.ownlang = language.ownlang;
 		}
 	}, 100);
-	if (LibraryModules.LanguageStore) for (let string in LanguageStrings) {
-		try {BDFDB.LanguageUtils.LanguageStrings[string];}
-		catch (err) {
-			let strvar = err.toString().split("for: ")[1];
-			if (strvar && typeof strvar == "string" && !LanguageStringsVars[strvar]) LanguageStringsVars[strvar] = `{{${strvar.toLowerCase()}}}`;
-		}
-	};
 
 	BDFDB.DOMUtils.appendLocalStyle("BDFDB", `
 		@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BetterDocsBlock.css);

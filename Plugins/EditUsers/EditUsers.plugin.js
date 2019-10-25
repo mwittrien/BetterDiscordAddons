@@ -402,7 +402,7 @@ class EditUsers {
 				let user = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
 				if (user) {
 					let data = this.getUserData(user.id, wrapper);
-					textarea.setAttribute("placeholder", BDFDB.LanguageUtils.LanguageStrings.TEXTAREA_PLACEHOLDER.replace("{{channel}}", "@" + (data.name || user.username)));
+					textarea.setAttribute("placeholder", BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `@${data.name || user.username}`));
 				}
 			}
 			BDFDB.ListenerUtils.remove(this, textarea);

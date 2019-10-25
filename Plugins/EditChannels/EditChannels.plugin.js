@@ -258,7 +258,7 @@ class EditChannels {
 			if (!textarea) return;
 			if (channel.type == 0 && instance.props.type == "normal" && !instance.props.disabled) {
 				let data = this.getChannelData(channel.id, wrapper);
-				wrapper.querySelector("textarea").setAttribute("placeholder", BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", "#" + (data.name || channel.name)));
+				textarea.setAttribute("placeholder", BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `#${data.name || channel.name}`));
 			}
 			BDFDB.ListenerUtils.remove(this, textarea);
 			if (BDFDB.DataUtils.get(this, "settings", "changeInAutoComplete")) {
