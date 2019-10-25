@@ -29,13 +29,13 @@
 	--vbackgroundsize:				var(--backgroundsize,				var(--dbackgroundsize));
 	--vbackgroundblur:				var(--backgroundblur,				var(--dblur));
 	
-	--vpopout:						var(--popout,						var(--dbackground));
-	--vpopoutsize:					var(--popoutsize,					var(--dbackgroundsize));
-	--vpopoutblur:					var(--popoutblur,					var(--dblur));
+	--vpopout:						var(--popout,						var(--vbackground));
+	--vpopoutsize:					var(--popoutsize,					var(--vbackgroundsize));
+	--vpopoutblur:					var(--popoutblur,					var(--vbackgroundblur));
 	
 	--vbackdrop:					var(--backdrop,						var(--dbackdrop));
-	--vbackdropsize:				var(--backdropsize,					var(--dbackgroundsize));
-	--vbackdropblur:				var(--backdropblur,					var(--dblur));
+	--vbackdropsize:				var(--backdropsize,					var(--vbackgroundsize));
+	--vbackdropblur:				var(--backdropblur,					var(--vbackgroundblur));
 
 	--fontwhite1: 					255,255,255;
 	--fontwhite2: 					210,210,210;
