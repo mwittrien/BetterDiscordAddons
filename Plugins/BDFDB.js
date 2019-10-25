@@ -6004,9 +6004,22 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			}
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Clickable, {
 				className: this.props.className,
-				onMouseEnter: e => {if (typeof this.handleMouseEnter == "function") this.handleMouseEnter();},
-				onMouseLeave: e => {if (typeof this.handleMouseLeave == "function") this.handleMouseLeave();},
-				onClick: e => {if (typeof this.handleClick == "function") this.handleClick();},
+				onMouseEnter: e => {
+					if (typeof this.handleMouseEnter == "function") this.handleMouseEnter();
+					if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(this, e);
+				},
+				onMouseLeave: e => {
+					if (typeof this.handleMouseLeave == "function") this.handleMouseLeave();
+					if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(this, e);
+				},
+				onClick: e => {
+					if (typeof this.handleClick == "function") this.handleClick();
+					if (typeof this.props.onClick == "function") this.props.onClick(this, e);
+				},
+				onContextMenu: e => {
+					if (typeof this.handleContextMenu == "function") this.handleContextMenu();
+					if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(this, e);
+				},
 				onContextMenu: e => {if (typeof this.handleContextMenu == "function") this.handleContextMenu();},
 				children: BDFDB.ReactUtils.createElement(NativeSubComponents.TooltipContainer, Object.assign({}, this.props, {
 					ref: instance => {
