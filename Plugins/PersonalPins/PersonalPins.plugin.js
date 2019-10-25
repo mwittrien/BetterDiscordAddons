@@ -5,13 +5,13 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.8.2";} 
+	getVersion () {return "1.8.3";} 
 
 	getAuthor () {return "DevilBro";}
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"fixed":[["Popout","Fixed bug where the popout would not properly open"]]
 		};
 
 		this.patchModules = {
@@ -316,7 +316,7 @@ class PersonalPins {
 		BDFDB.initElements(notespopout, this);
 		let buttonrects = BDFDB.DOMUtils.getRects(button);
 		notespopout.style.setProperty("left", buttonrects.left + buttonrects.width/2 + "px");
-		notespopout.style.setProperty("top", buttonrects.top + buttonrects.height + "px")
+		notespopout.style.setProperty("top", buttonrects.top + buttonrects.height + "px");
 		notespopout.querySelectorAll(BDFDB.dotCN.tabbarheaderitem).forEach(tab => {tab.addEventListener("click", () => {
 			this.addNotes(notespopout);
 		});});
@@ -423,7 +423,7 @@ class PersonalPins {
 		let timestamp = message.querySelector(BDFDB.dotCN.messagetimestampcozy);
 		timestamp.innerText = date.toLocaleString(BDFDB.LanguageUtils.getLanguage().id);
 		timestamp.setAttribute("datetime", date);
-		if (BDFDB.BDUtils.isPluginEnabled("CompleteTimestamps") && BDFDB.DataUtils.load("CompleteTimestamps", "settings"), "showInChat") {
+		if (BDFDB.BDUtils.isPluginEnabled("CompleteTimestamps") && BDFDB.DataUtils.load("CompleteTimestamps", "settings", "showInChat")) {
 			BDFDB.BDUtils.getPlugin("CompleteTimestamps").changeTimestamp(timestamp);
 		}
 		message.querySelector(BDFDB.dotCN.messagemarkup).innerHTML = noteData.markup.replace(`<span class="edited">`,`<span class="${BDFDB.disCN.messageedited}">`);
