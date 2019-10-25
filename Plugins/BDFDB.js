@@ -5704,10 +5704,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			});
         }
 		render() {
-			if (!this.props.children) return null;
 			if (typeof this.props.children != "function") {
 				let children = this.props.children;
-				this.props.children = _ => {return children;};
+				this.props.children = _ => {return children || BDFDB.ReactUtils.createElement("div", {style: {height: "100%", width: "100%"}});};
 			}
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Clickable, {
 				className: this.props.className,
@@ -5999,10 +5998,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			this.state = {shouldShowTooltip: true};
 		}
 		render() {
-			if (!this.props.children) return null;
 			if (typeof this.props.children != "function") {
 				let children = this.props.children;
-				this.props.children = _ => {return children;};
+				this.props.children = _ => {return children || BDFDB.ReactUtils.createElement("div", {style: {height: "100%", width: "100%"}});};
 			}
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Clickable, {
 				className: this.props.className,
