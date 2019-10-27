@@ -702,6 +702,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	BDFDB.ObjectUtils.is = function (obj) {
 		return obj && Object.prototype.isPrototypeOf(obj) && !Array.prototype.isPrototypeOf(obj);
 	};
+	BDFDB.ObjectUtils.delete = function (obj, ...keys) {
+		if (BDFDB.ObjectUtils.is(obj)) for (let key of keys.flat()) delete obj[key];
+	};
 	BDFDB.ObjectUtils.sort = function (obj, sort, except) {
 		if (!BDFDB.ObjectUtils.is(obj)) return {};
 		var newobj = {};
@@ -962,6 +965,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	if (LibraryModules.React && LibraryModules.ReactDOM) {
 		BDFDB.ReactUtils = Object.assign({}, LibraryModules.React, LibraryModules.ReactDOM);
 		BDFDB.ReactUtils.createElement = function (component, props) {
+			if (component && component.defaultProps) for (let key in component.defaultProps) if (!props[key]) props[key] = component.defaultProps[key];
 			try {return LibraryModules.React.createElement(component || "div", props || {}) || null;}
 			catch (err) {console.error(`%c[BDFDB]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not create react element! " + err);}
 			return null;
@@ -2592,11 +2596,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			if (node && node.tagName && node.className) node.className = node.className.replace(new RegExp(oldclass, "g"), newclass).trim();
 		}
 	};
+	BDFDB.DOMUtils.formatClassName = function (...classes) {
+		return classes.flat().filter(n => n).join(" ");
+	};
 	BDFDB.DOMUtils.removeClassFromDOM = function (...classes) {
-		for (let cla of classes) for (let c of BDFDB.ArrayUtils.is(cla) ? cla : Array.of(cla)) {
-			if (!c) {}
-			else if (typeof c == "string") for (let a of c.split(",")) if (a && (a = a.replace(/\.|\s/g, ""))) BDFDB.DOMUtils.removeClass(document.querySelectorAll("." + a), a);
-		}
+		for (let c of classes.flat()) if (typeof c == "string") for (let a of c.split(",")) if (a && (a = a.replace(/\.|\s/g, ""))) BDFDB.DOMUtils.removeClass(document.querySelectorAll("." + a), a);
 	};
 	BDFDB.DOMUtils.show = function (...eles) {
 		BDFDB.DOMUtils.toggle(...eles, true);
@@ -2612,11 +2616,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			force = undefined;
 		}
 		if (!eles.length) return;
-		for (let ele of eles) for (let e of BDFDB.ArrayUtils.is(ele) ? ele : Array.of(ele)) {
-			if (!e) {}
-			else if (Node.prototype.isPrototypeOf(e)) toggle(e);
-			else if (NodeList.prototype.isPrototypeOf(e)) for (let n of e) toggle(n);
-			else if (typeof e == "string") for (let c of e.split(",")) if (c && (c = c.trim())) for (let n of document.querySelectorAll(c)) toggle(n);
+		for (let ele of eles.flat()) {
+			if (Node.prototype.isPrototypeOf(ele)) toggle(ele);
+			else if (NodeList.prototype.isPrototypeOf(ele)) for (let node of ele) toggle(node);
+			else if (typeof ele == "string") for (let c of ele.split(",")) if (c && (c = c.trim())) for (let node of document.querySelectorAll(c)) toggle(node);
 		}
 		function toggle(node) {
 			if (!node || !Node.prototype.isPrototypeOf(node)) return;
@@ -2629,16 +2632,15 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		if (Node.prototype.isPrototypeOf(node) && node.nodeType != Node.TEXT_NODE) return getComputedStyle(node, null).getPropertyValue("display") == "none";
 	};
 	BDFDB.DOMUtils.remove = function (...eles) {
-		for (let ele of eles) for (let e of BDFDB.ArrayUtils.is(ele) ? ele : Array.of(ele)) {
-			if (!e) {}
-			else if (Node.prototype.isPrototypeOf(e)) e.remove();
-			else if (NodeList.prototype.isPrototypeOf(e)) {
-				e = Array.from(e);
-				while (e.length) e.shift().remove();
+		for (let ele of eles.flat()) {
+			if (Node.prototype.isPrototypeOf(ele)) ele.remove();
+			else if (NodeList.prototype.isPrototypeOf(ele)) {
+				let nodes = Array.from(ele);
+				while (nodes.length) nodes.shift().remove();
 			}
-			else if (typeof e == "string") for (let c of e.split(",")) if (c && (c = c.trim())) {
-				let n = Array.from(document.querySelectorAll(c));
-				while (n.length) n.shift().remove();
+			else if (typeof ele == "string") for (let c of ele.split(",")) if (c && (c = c.trim())) {
+				let nodes = Array.from(document.querySelectorAll(c));
+				while (nodes.length) nodes.shift().remove();
 			}
 		}
 	};
@@ -3336,7 +3338,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				return BDFDB.ReactUtils.createElement(class BDFDBModal extends LibraryModules.React.Component {
 					render () {
 						return BDFDB.ReactUtils.createElement(LibraryComponents.ModalComponents.ModalRoot, {
-							className: [`BDFDB-modal`, name ? `${name}-modal` : null, config.selector ? config.selector : null].filter(n => n).join(" "),
+							className: BDFDB.DOMUtils.formatClassName(`BDFDB-modal`, name ? `${name}-modal` : null, config.selector ? config.selector : null),
 							size: size || LibraryComponents.ModalComponents.ModalSize.SMALL,
 							transitionState: props.transitionState,
 							children: [
@@ -4678,8 +4680,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		inputdisabled: ["Input", "disabled"],
 		inputeditable: ["Input", "editable"],
 		inputerror: ["Input", "error"],
+		inputerrormessage: ["Input", "errorMessage"],
 		inputfocused: ["Input", "focused"],
 		inputmini: ["Input", "inputMini"],
+		inputprefix: ["Input", "inputPrefix"],
 		inputsuccess: ["Input", "success"],
 		inputwrapper: ["Input", "inputWrapper"],
 		inputnumberbutton: ["BDFDB", "inputNumberButton"],
@@ -5419,7 +5423,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	LibraryComponents.BotTag = reactInitialized ? class BDFDB_BotTag extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement("span", {
-				className: [this.props.invertColor ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular, this.props.className].filter(n => n).join(" "),
+				className: BDFDB.DOMUtils.formatClassName(this.props.invertColor ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular, this.props.className),
 				style: this.props.style,
 				children: this.props.tag || BDFDB.LanguageUtils.LanguageStrings.BOT_TAG_BOT
 			});
@@ -5438,7 +5442,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	LibraryComponents.Card = reactInitialized ? class BDFDB_Card extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
-				className: [BDFDB.disCN.hovercardwrapper, this.props.backdrop || this.props.backdrop === undefined ? BDFDB.disCN.hovercard : null, this.props.className].filter(n => n).join(" "),
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.hovercardwrapper, this.props.backdrop || this.props.backdrop === undefined ? BDFDB.disCN.hovercard : null, this.props.className),
 				direction: this.props.direction,
 				justify: this.props.justify,
 				align: this.props.align,
@@ -5481,7 +5485,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 					let usewhite = !BDFDB.ColorUtils.isBright(this.props.color);
 					return BDFDB.ReactUtils.createElement("button", {
 						type: "button",
-						className: [BDFDB.disCN.colorpickerswatch, this.props.isDisabled ? BDFDB.disCN.colorpickerswatchdisabled : null, this.props.isSelected ? BDFDB.disCN.colorpickerswatchselected : null, this.props.isCustom ? BDFDB.disCN.colorpickerswatchcustom : null, this.props.isSingle ? BDFDB.disCN.colorpickerswatchsingle : null, this.props.color == null ? BDFDB.disCN.colorpickerswatchnocolor : null].filter(n => n).join(" "),
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.colorpickerswatch, this.props.isDisabled ? BDFDB.disCN.colorpickerswatchdisabled : null, this.props.isSelected ? BDFDB.disCN.colorpickerswatchselected : null, this.props.isCustom ? BDFDB.disCN.colorpickerswatchcustom : null, this.props.isSingle ? BDFDB.disCN.colorpickerswatchsingle : null, this.props.color == null ? BDFDB.disCN.colorpickerswatchnocolor : null),
 						disabled: this.props.isDisabled,
 						onClick: _ => {
 							if (!this.props.isSelected) {
@@ -5540,7 +5544,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 		render() {
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
-				className: [BDFDB.disCN.colorpickerswatches, this.state.disabled ? BDFDB.disCN.colorpickerswatchesdisabled : null].filter(n => n).join(" "),
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.colorpickerswatches, this.state.disabled ? BDFDB.disCN.colorpickerswatchesdisabled : null),
 				number: this.props.number != null ? this.props.number : 0,
 				children: [
 					BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
@@ -5580,7 +5584,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	LibraryComponents.ContextMenuItem = reactInitialized ? class BDFDB_ContextMenuItem extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Clickable, {
-				className: [BDFDB.disCN.contextmenuitem, !this.props.disabled ? BDFDB.disCN.contextmenuitemclickable : null, this.props.danger ? BDFDB.disCN.contextmenuitemdanger : null, this.props.disabled ? BDFDB.disCN.contextmenuitemdisabled : null, this.props.brand ? BDFDB.disCN.contextmenuitembrand : null, this.props.className].filter(n => n).join(" "),
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.contextmenuitem, !this.props.disabled ? BDFDB.disCN.contextmenuitemclickable : null, this.props.danger ? BDFDB.disCN.contextmenuitemdanger : null, this.props.disabled ? BDFDB.disCN.contextmenuitemdisabled : null, this.props.brand ? BDFDB.disCN.contextmenuitembrand : null, this.props.className),
 				style: this.props.style,
 				role: "menuitem",
 				onClick: this.props.disabled || typeof this.props.action != "function" ? null : this.props.action,
@@ -5677,9 +5681,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	LibraryComponents.ModalComponents.ModalTabContent = reactInitialized ? class BDFDB_ModalTabContent extends LibraryModules.React.Component {
         render() {
 			let childprops = Object.assign({}, this.props);
-			delete childprops.open;
+			BDFDB.ObjectUtils.delete(childprops, "open");
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, Object.assign({tab:"unnamed"}, childprops, {
-				className: [BDFDB.disCN.modaltabcontent, this.props.open ? BDFDB.disCN.modaltabcontentopen : null, this.props.className].filter(n => n).join(" "),
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.modaltabcontent, this.props.open ? BDFDB.disCN.modaltabcontentopen : null, this.props.className),
 				direction: LibraryComponents.Flex.Direction.VERTICAL,
 				align: LibraryComponents.Flex.Align.STRETCH,
 				style: Object.assign({}, childprops.style, {
@@ -5692,53 +5696,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	
 	LibraryComponents.NumberBadge = BDFDB.ModuleUtils.findByName("NumberBadge");
 	
-	LibraryComponents.NumberInput = reactInitialized ? class BDFDB_NumberInput extends LibraryModules.React.Component {
-        handleChange(value) {
-            if (typeof this.props.onChange == "function") this.props.onChange(value, this);
-        }
-        handleKeyDown(e) {
-            if (typeof this.props.onKeyDown == "function") this.props.onKeyDown(e, this);
-        }
-        render() {
-			let childprops = Object.assign({}, this.props, {
-				type:"number",
-				onChange: this.handleChange.bind(this),
-				onKeyDown: this.handleKeyDown.bind(this)
-			});
-			delete childprops.basis;
-			delete childprops.style;
-			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
-				className: [BDFDB.disCN.inputnumberwrapper, this.props.size == LibraryComponents.TextInput.Sizes.MINI ? BDFDB.disCN.inputnumberwrappermini : null].filter(n => n).join(" "),
-				justify: LibraryComponents.Flex.Justify.END,
-				grow: this.props.basis ? 1 : 0,
-				shrink: 0,
-				basis: this.props.basis || "auto",
-				style: Object.assign({}, this.props.style, {position: "relative"}),
-				children: [
-					BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.inputnumberbuttons,
-						children: [
-							BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCNS.inputnumberbutton + BDFDB.disCN.inputnumberbuttonup
-							}),
-							BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCNS.inputnumberbutton + BDFDB.disCN.inputnumberbuttondown
-							})
-						]
-					}),
-					BDFDB.ReactUtils.createElement(LibraryComponents.TextInput, childprops)
-				]
-			});
-		}
-    } : LibraryComponents.NumberInput;
-	
 	LibraryComponents.Popout = reactInitialized ? class BDFDB_Popout extends LibraryModules.React.Component {
         render() {
 			let pos = typeof this.props.position == "string" ? this.props.position.toLowerCase() : null;
 			let position = pos && DiscordClasses["popout" + pos] ? BDFDB.disCN["popout" + pos] : BDFDB.disCN.popouttop;
 			let arrow = !this.props.arrow ? BDFDB.disCN.popoutnoarrow : (pos && pos.indexOf("top") > -1 && pos != "top" ? BDFDB.disCN.popoutarrowalignmenttop : BDFDB.disCN.popoutarrowalignmentmiddle);
 			return BDFDB.ReactUtils.createElement("div", {
-				className: [BDFDB.disCN.popout, position, this.props.invert && pos && pos != "bottom" ? BDFDB.disCN.popoutinvert : null, arrow, !this.props.shadow ? BDFDB.disCN.popoutnoshadow : null, this.props.className].filter(n => n).join(" "),
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.popout, position, this.props.invert && pos && pos != "bottom" ? BDFDB.disCN.popoutinvert : null, arrow, !this.props.shadow ? BDFDB.disCN.popoutnoshadow : null, this.props.className),
 				id: this.props.id,
 				style: Object.assign({}, this.props.style, {
 					position: this.props.isChild ? "relative" : "absolute"
@@ -5757,7 +5721,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	
 	LibraryComponents.PopoutContainer = reactInitialized ? class BDFDB_PopoutContainer extends LibraryModules.React.Component {
         handleRender(e) {
-            return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Popout, {
+            return BDFDB.ReactUtils.createElement(LibraryComponents.Popout, {
 				className: this.props.popoutClassName,
 				isChild: true,
 				position: e.position,
@@ -5879,16 +5843,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			if (this.props.mini && childcomponent.Sizes) this.props.size = childcomponent.Sizes.MINI || childcomponent.Sizes.MIN;
 			let childprops = Object.assign({}, this.props, {onChange: this.handleChange.bind(this)});
 			childprops.className = this.props.childClassName;
-			delete childprops.basis;
-			delete childprops.dividerbottom;
-			delete childprops.dividertop;
-			delete childprops.label;
-			delete childprops.labelchildren;
-			delete childprops.mini;
-			delete childprops.note;
-			delete childprops.type;
+			BDFDB.ObjectUtils.delete(childprops, "basis", "dividerbottom", "dividertop", "label", "labelchildren", "mini", "note", "type");
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
-				className: [this.props.className, this.props.disabled ? BDFDB.disCN.disabled : null].filter(n => n).join(" "),
+				className: BDFDB.DOMUtils.formatClassName(this.props.className, this.props.disabled ? BDFDB.disCN.disabled : null),
 				direction: LibraryComponents.Flex.Direction.VERTICAL,
 				align: LibraryComponents.Flex.Align.STRETCH,
 				children: [
@@ -5933,7 +5890,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	LibraryComponents.SettingsLabel = reactInitialized ? class BDFDB_SettingsLabel extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement("label", {
-				className: [this.props.mini ? BDFDB.disCN.titlemini : BDFDB.disCN.titledefault, BDFDB.disCN.cursordefault].filter(n => n).join(" "),
+				className: BDFDB.DOMUtils.formatClassName(this.props.mini ? BDFDB.disCN.titlemini : BDFDB.disCN.titledefault, BDFDB.disCN.cursordefault),
 				children: this.props.label
 			});
 		}	
@@ -5994,20 +5951,65 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	LibraryComponents.TextElement = BDFDB.ModuleUtils.findByName("Text");
 	
 	LibraryComponents.TextInput = reactInitialized ? class BDFDB_TextInput extends LibraryModules.React.Component {
+        handleKeyDown(e) {
+            if (typeof this.props.onKeyDown == "function") this.props.onKeyDown(e, this);
+        }
         handleChange(value) {
             if (typeof this.props.onChange == "function") this.props.onChange(value, this);
 			this.props.value = value;
 			BDFDB.ReactUtils.forceUpdate(this);
         }
-        handleKeyDown(e) {
-            if (typeof this.props.onKeyDown == "function") this.props.onKeyDown(e, this);
+        handleBlur(e) {
+            if (typeof this.props.onBlur == "function") this.props.onBlur(e, this);
+        }
+        handleFocus(e) {
+            if (typeof this.props.onFocus == "function") this.props.onFocus(e, this);
+        }
+        handleMouseEnter(e) {
+            if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);
+        }
+        handleMouseLeave(e) {
+            if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);
         }
         render() {
-			this.props = this.props || "text";
-			return BDFDB.ReactUtils.createElement(NativeSubComponents.TextInput, Object.assign({}, this.props, {
+			let childprops = Object.assign({
+				className: BDFDB.DOMUtils.formatClassName(this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["input" + this.props.size.toLowerCase()] || BDFDB.disCN.inputdefault, this.props.inputClassName, this.props.error ? BDFDB.disCN.inputerror : null, this.props.disabled ? BDFDB.disCN.inputdisabled : null, this.props.editable ? BDFDB.disCN.inputeditable : null),
+				disabled: this.props.disabled
+			}, this.props, {
+				onKeyDown: this.handleKeyDown.bind(this),
 				onChange: this.handleChange.bind(this),
-				onKeyDown: this.handleKeyDown.bind(this)
-			}));
+				onBlur: this.handleBlur.bind(this),
+				onFocus: this.handleFocus.bind(this),
+				onMouseEnter: this.handleMouseEnter.bind(this),
+				onMouseLeave: this.handleMouseLeave.bind(this),
+				ref: this.props.inputRef
+			});
+			BDFDB.ObjectUtils.delete(childprops, "error", "className", "inputClassName", "inputPrefix", "disabled", "size", "editable", "inputRef", "style");
+			BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.inputwrapper, this.props.type == "number" ? BDFDB.disCN.inputnumberwrapper : null, this.props.type == "number" && this.props.size == LibraryComponents.TextInput.Sizes.MINI? BDFDB.disCN.inputnumberwrappermini : null, this.props.className),
+				style: this.props.style,
+				children: [
+					this.props.type == "number" ? BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.inputnumberbuttons,
+						children: [
+							BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCNS.inputnumberbutton + BDFDB.disCN.inputnumberbuttonup
+							}),
+							BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCNS.inputnumberbutton + BDFDB.disCN.inputnumberbuttondown
+							})
+						]
+					}) : null,
+					this.props.inputPrefix ? BDFDB.ReactUtils.createElement("span", {
+						className: BDFDB.disCN.inputprefix
+					}) : null,
+					BDFDB.ReactUtils.createElement("input", childprops),
+					this.props.error ? BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.inputerrormessage,
+						children: this.props.error
+					}) : null
+				]
+			});
 		}
     } : LibraryComponents.TextInput;
 	
@@ -6511,10 +6513,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			opacity: 1;
 		}
 		
-		${BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.inputnumberbuttons}:hover + ${BDFDB.dotCNS.inputwrapper + BDFDB.dotCN.input}:not(:focus) {
+		${BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.inputnumberbuttons}:hover + ${BDFDB.dotCN.input}:not(:focus) {
 			border-color: black;
 		}
-		${BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.inputnumberbuttons + BDFDB.dotCNS.inputnumberbuttonspressed} + ${BDFDB.dotCNS.inputwrapper + BDFDB.dotCN.input} {
+		${BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.inputnumberbuttons + BDFDB.dotCNS.inputnumberbuttonspressed} + ${BDFDB.dotCN.input} {
 			border-color: #7289da;
 		}
 		${BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.input} {
