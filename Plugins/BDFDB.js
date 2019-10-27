@@ -965,7 +965,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	if (LibraryModules.React && LibraryModules.ReactDOM) {
 		BDFDB.ReactUtils = Object.assign({}, LibraryModules.React, LibraryModules.ReactDOM);
 		BDFDB.ReactUtils.createElement = function (component, props) {
-			if (component && component.defaultProps) for (let key in component.defaultProps) if (!props[key]) props[key] = component.defaultProps[key];
+			if (component && component.defaultProps) for (let key in component.defaultProps) if (props[key] == null) props[key] = component.defaultProps[key];
 			try {return LibraryModules.React.createElement(component || "div", props || {}) || null;}
 			catch (err) {console.error(`%c[BDFDB]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not create react element! " + err);}
 			return null;
@@ -5841,9 +5841,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			let childcomponent = LibraryComponents[this.props.type];
 			if (!childcomponent) return null;
 			if (this.props.mini && childcomponent.Sizes) this.props.size = childcomponent.Sizes.MINI || childcomponent.Sizes.MIN;
-			let childprops = Object.assign({}, this.props, {onChange: this.handleChange.bind(this)});
-			childprops.className = this.props.childClassName;
-			BDFDB.ObjectUtils.delete(childprops, "basis", "dividerbottom", "dividertop", "label", "labelchildren", "mini", "note", "type");
+			let childprops = Object.assign({}, this.props, {
+				className: this.props.childClassName,
+				onChange: this.handleChange.bind(this)
+			});
+			BDFDB.ObjectUtils.delete(childprops, "basis", "dividerbottom", "dividertop", "label", "labelchildren", "mini", "note", "type", "childClassName");
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				className: BDFDB.DOMUtils.formatClassName(this.props.className, this.props.disabled ? BDFDB.disCN.disabled : null),
 				direction: LibraryComponents.Flex.Direction.VERTICAL,
@@ -5865,7 +5867,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 							BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
 								grow: this.props.basis ? 1 : 0,
 								shrink: 0,
-								basis: this.props.basis || "auto",
+								basis: this.props.basis,
 								wrap: true,
 								children: BDFDB.ReactUtils.createElement(childcomponent, childprops)
 							})
@@ -5954,9 +5956,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
         handleKeyDown(e) {
             if (typeof this.props.onKeyDown == "function") this.props.onKeyDown(e, this);
         }
-        handleChange(value) {
-            if (typeof this.props.onChange == "function") this.props.onChange(value, this);
-			this.props.value = value;
+        handleChange(e) {
+            if (typeof this.props.onChange == "function") this.props.onChange(e.currentTarget.value, this);
+			this.props.value = e.currentTarget.value;
 			BDFDB.ReactUtils.forceUpdate(this);
         }
         handleBlur(e) {
@@ -5972,10 +5974,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
             if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);
         }
         render() {
-			let childprops = Object.assign({
-				className: BDFDB.DOMUtils.formatClassName(this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["input" + this.props.size.toLowerCase()] || BDFDB.disCN.inputdefault, this.props.inputClassName, this.props.error ? BDFDB.disCN.inputerror : null, this.props.disabled ? BDFDB.disCN.inputdisabled : null, this.props.editable ? BDFDB.disCN.inputeditable : null),
-				disabled: this.props.disabled
-			}, this.props, {
+			let childprops = Object.assign({}, this.props, {
+				className: BDFDB.DOMUtils.formatClassName(this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["input" + this.props.size.toLowerCase()] || BDFDB.disCN.inputdefault, this.props.inputClassName, this.props.error ? BDFDB.disCN.inputerror : null, !this.props.error && this.props.success ? BDFDB.disCN.inputsuccess : null, this.props.disabled ? BDFDB.disCN.inputdisabled : null, this.props.editable ? BDFDB.disCN.inputeditable : null),
+				disabled: this.props.disabled,
 				onKeyDown: this.handleKeyDown.bind(this),
 				onChange: this.handleChange.bind(this),
 				onBlur: this.handleBlur.bind(this),
@@ -5984,7 +5985,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				onMouseLeave: this.handleMouseLeave.bind(this),
 				ref: this.props.inputRef
 			});
-			BDFDB.ObjectUtils.delete(childprops, "error", "className", "inputClassName", "inputPrefix", "disabled", "size", "editable", "inputRef", "style");
+			BDFDB.ObjectUtils.delete(childprops, "error", "success", "inputClassName", "inputPrefix", "size", "editable", "inputRef", "style");
 			return BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.inputwrapper, this.props.type == "number" ? BDFDB.disCN.inputnumberwrapper : null, this.props.type == "number" && this.props.size == LibraryComponents.TextInput.Sizes.MINI? BDFDB.disCN.inputnumberwrappermini : null, this.props.className),
 				style: this.props.style,
