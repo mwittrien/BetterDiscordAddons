@@ -5985,7 +5985,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				ref: this.props.inputRef
 			});
 			BDFDB.ObjectUtils.delete(childprops, "error", "className", "inputClassName", "inputPrefix", "disabled", "size", "editable", "inputRef", "style");
-			BDFDB.ReactUtils.createElement("div", {
+			return BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.inputwrapper, this.props.type == "number" ? BDFDB.disCN.inputnumberwrapper : null, this.props.type == "number" && this.props.size == LibraryComponents.TextInput.Sizes.MINI? BDFDB.disCN.inputnumberwrappermini : null, this.props.className),
 				style: this.props.style,
 				children: [
