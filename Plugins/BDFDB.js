@@ -3671,7 +3671,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 	};
 	BDFDB.DiscordUtils.getTheme = function () {
-		return document.querySelectorAll(BDFDB.dotCN.themelight).length >= document.querySelectorAll(BDFDB.dotCN.themedark).length ? BDFDB.disCN.themelight : BDFDB.disCN.themedark;
+		return BDFDB.DOMUtils.containsClass(document.documentElement, BDFDB.disCN.themelight) ? BDFDB.disCN.themelight : BDFDB.disCN.themedark;
 	};
 	BDFDB.DiscordUtils.getMode = function () {
 		return document.querySelectorAll(BDFDB.dotCN.messagegroupcompact).length >= document.querySelectorAll(BDFDB.dotCN.messagegroupcozy).length ? "compact" : "cozy";

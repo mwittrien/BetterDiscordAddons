@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.5.9";}
+	getVersion () {return "6.6.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ServerFolders {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Tooltips","Fixed issue where native tooltip wasn't hidden"]]
+			"fixed":[["Dark Sidebar","Now properly colored with dark sidebar"]]
 		};
 		
 		this.patchModules = {
@@ -414,6 +414,7 @@ class ServerFolders {
 			let process = () => {
 				if (!wrapper.parentElement.querySelector(BDFDB.dotCN.guildswrapper + ".foldercontent")) {
 					this.foldercontent = BDFDB.DOMUtils.create(this.folderContentMarkup);
+					this.updateFolderContentColor(wrapper);
 					wrapper.parentElement.insertBefore(this.foldercontent, wrapper.nextElementSibling);
 					this.foldercontentguilds = this.foldercontent.querySelector(BDFDB.dotCN.guildsscroller);
 					this.toggleFolderContent();
@@ -559,11 +560,17 @@ class ServerFolders {
 	}
 
 	processStandardSidebarView (instance, wrapper, returnvalue) {
-		if (this.SettingsUpdated && this.foldercontent) {
-			delete this.SettingsUpdated;
+		if (!this.foldercontent) return;
+		if (this.SettingsUpdated && this.foldercontent) {this.SettingsUpdated;
 			this.folderStates = {};
 			BDFDB.ModuleUtils.forceAllUpdates(this, "GuildFolder");
 		}
+		this.updateFolderContentColor();
+	}
+	
+	updateFolderContentColor (nativecontent = document.querySelector(BDFDB.dotCN.guildswrapper)) {
+		if (!nativecontent || !this.foldercontent) return;
+		BDFDB.toggleClass(this.foldercontent, BDFDB.disCN.themedark, BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight && BDFDB.containsClass(nativecontent, BDFDB.disCN.themedark));
 	}
 
 	loadAllIcons () {
