@@ -5975,7 +5975,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
         }
         render() {
 			let childprops = Object.assign({}, this.props, {
-				className: BDFDB.DOMUtils.formatClassName(this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["input" + this.props.size.toLowerCase()] || BDFDB.disCN.inputdefault, this.props.inputClassName, this.props.error ? BDFDB.disCN.inputerror : null, !this.props.error && this.props.success ? BDFDB.disCN.inputsuccess : null, this.props.disabled ? BDFDB.disCN.inputdisabled : null, this.props.editable ? BDFDB.disCN.inputeditable : null),
+				className: BDFDB.DOMUtils.formatClassName(this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["input" + this.props.size.toLowerCase()] || BDFDB.disCN.inputdefault, this.props.inputClassName, this.props.error ? BDFDB.disCN.inputerror : (this.props.success ? BDFDB.disCN.inputsuccess : null), this.props.disabled ? BDFDB.disCN.inputdisabled : null, this.props.editable ? BDFDB.disCN.inputeditable : null),
 				disabled: this.props.disabled,
 				onKeyDown: this.handleKeyDown.bind(this),
 				onChange: this.handleChange.bind(this),
