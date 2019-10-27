@@ -5975,7 +5975,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
         }
         render() {
 			let childprops = Object.assign({}, this.props, {
-				className: BDFDB.DOMUtils.formatClassName(this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["input" + this.props.size.toLowerCase()] || BDFDB.disCN.inputdefault, this.props.inputClassName, this.props.error ? BDFDB.disCN.inputerror : (this.props.success ? BDFDB.disCN.inputsuccess : null), this.props.disabled ? BDFDB.disCN.inputdisabled : null, this.props.editable ? BDFDB.disCN.inputeditable : null),
+				className: BDFDB.DOMUtils.formatClassName(this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["input" + this.props.size.toLowerCase()] || BDFDB.disCN.inputdefault, this.props.inputClassName, this.props.error || this.props.errorMessage ? BDFDB.disCN.inputerror : (this.props.success ? BDFDB.disCN.inputsuccess : null), this.props.disabled ? BDFDB.disCN.inputdisabled : null, this.props.editable ? BDFDB.disCN.inputeditable : null),
 				disabled: this.props.disabled,
 				onKeyDown: this.handleKeyDown.bind(this),
 				onChange: this.handleChange.bind(this),
@@ -5985,7 +5985,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				onMouseLeave: this.handleMouseLeave.bind(this),
 				ref: this.props.inputRef
 			});
-			BDFDB.ObjectUtils.delete(childprops, "error", "success", "inputClassName", "inputPrefix", "size", "editable", "inputRef", "style");
+			BDFDB.ObjectUtils.delete(childprops, "errorMessage", "error", "success", "inputClassName", "inputPrefix", "size", "editable", "inputRef", "style");
 			return BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.inputwrapper, this.props.type == "number" ? BDFDB.disCN.inputnumberwrapper : null, this.props.type == "number" && this.props.size == LibraryComponents.TextInput.Sizes.MINI? BDFDB.disCN.inputnumberwrappermini : null, this.props.className),
 				style: this.props.style,
@@ -6005,9 +6005,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 						className: BDFDB.disCN.inputprefix
 					}) : null,
 					BDFDB.ReactUtils.createElement("input", childprops),
-					this.props.error ? BDFDB.ReactUtils.createElement("div", {
+					this.props.errorMessage ? BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.inputerrormessage,
-						children: this.props.error
+						children: this.props.errorMessage
 					}) : null
 				]
 			});
