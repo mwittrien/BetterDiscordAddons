@@ -21,7 +21,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 
 		var loadmessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
 		console.log(`%c[${plugin.name}]%c`, "color: #3a71c1; font-weight: 700;", "", loadmessage);
-		if (!(window.settingsCookie["fork-ps-2"] && window.settingsCookie["fork-ps-2"] === true)) BDFDB.NotificationUtils.toast(plugin.name + " " + loadmessage, {nopointer: true, selector: "plugin-started-toast"});
+		if (!BDFDB.BDUtils.getSettings("fork-ps-2")) BDFDB.NotificationUtils.toast(plugin.name + " " + loadmessage, {nopointer: true, selector: "plugin-started-toast"});
 
 		var url = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 		BDFDB.PluginUtils.checkUpdate(plugin.name, url);
@@ -60,7 +60,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 
 		var unloadmessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", "v" + plugin.version);
 		console.log(`%c[${plugin.name}]%c`, "color: #3a71c1; font-weight: 700;", "", unloadmessage);
-		if (!(window.settingsCookie["fork-ps-2"] && window.settingsCookie["fork-ps-2"] === true)) BDFDB.NotificationUtils.toast(plugin.name + " " + unloadmessage, {nopointer: true, selector: "plugin-stopped-toast"});
+		if (!BDFDB.BDUtils.getSettings("fork-ps-2")) BDFDB.NotificationUtils.toast(plugin.name + " " + unloadmessage, {nopointer: true, selector: "plugin-stopped-toast"});
 
 		var url = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 
@@ -3744,8 +3744,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		if (window.bdthemes && (!hasToBeEnabled || BDFDB.BDUtils.isThemeEnabled(themename))) return window.bdthemes[themename];
 		return null;
 	};
+	BDFDB.BDUtils.getSettings = function (key) {
+		if (!window.settingsCookie) return null;
+		if (!key) return window.settingsCookie;
+		return window.settingsCookie[key];
+	};
 	BDFDB.BDUtils.isAutoLoadEnabled = function () {
-		return window.settingsCookie["fork-ps-5"] && window.settingsCookie["fork-ps-5"] === true || BDFDB.BDUtils.isPluginEnabled("Restart-No-More") || BDFDB.BDUtils.isPluginEnabled("Restart No More");
+		return BDFDB.BDUtils.getSettings("fork-ps-5") === true || BDFDB.BDUtils.isPluginEnabled("Restart-No-More") || BDFDB.BDUtils.isPluginEnabled("Restart No More");
 	};
 	(BDFDB.BDUtils.setPluginCache = function () {
 		if (!BDFDB.BDUtils.isBDv2()) return;
@@ -5421,8 +5426,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 	} : LibraryComponents.BotTag;
 	
-	LibraryComponents.Button = reactInitialized ? class BDFDB_BotTag extends LibraryModules.React.Component {
-        handleClick() {
+	LibraryComponents.Button = reactInitialized ? class BDFDB_Button extends LibraryModules.React.Component {
+        handleClick(e) {
             if (typeof this.props.onClick == "function") this.props.onClick(e, this);
         }
         render() {
