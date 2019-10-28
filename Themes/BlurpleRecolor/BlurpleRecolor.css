@@ -678,7 +678,7 @@
 .regionSelect-3lf4eE:hover .regionSelectInner-24f4Ce, 
 .regionSelect-3lf4eE:hover button,
 .input-cIJ7To:not(.success-2-F980):not(.error-2O5WFJ):not(.disabled-2BKQFm):focus,
-.buttons-our3p-.pressed-COy1RJ + .input-cIJ7To,
+.buttons-our3p-.pressed-COy1RJ + .input-cIJ7To:not(.success-2-F980):not(.error-2O5WFJ):not(.disabled-2BKQFm),
 .containerUserOver-1U5YnL:after,
 .checkbox-3kaeSU .checkboxInner-3yjcPe .checkboxElement-1qV33p:checked + span,
 .checkbox-3kaeSU .checkboxInner-3yjcPe.alt-6FvZrq .checkboxElement-1qV33p:checked + span:after,

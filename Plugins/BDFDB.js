@@ -5959,12 +5959,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
             if (typeof this.props.onKeyDown == "function") this.props.onKeyDown(e, this);
         }
         handleChange(e) {
-            if (typeof this.props.onChange == "function") this.props.onChange(e.currentTarget.value, this);
-			this.props.value = e.currentTarget.value;
+			e = BDFDB.ObjectUtils.is(e) ? e.currentTarget.value : e;
+            if (typeof this.props.onChange == "function") this.props.onChange(e, this);
+			this.props.value = e;
 			BDFDB.ReactUtils.forceUpdate(this);
         }
         handleInput(e) {
-            if (typeof this.props.onInput == "function") this.props.onInput(e.currentTarget.value, this);
+			e = BDFDB.ObjectUtils.is(e) ? e.currentTarget.value : e;
+            if (typeof this.props.onInput == "function") this.props.onInput(e, this);
         }
         handleBlur(e) {
             if (typeof this.props.onBlur == "function") this.props.onBlur(e, this);
@@ -5977,6 +5979,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
         }
         handleMouseLeave(e) {
             if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);
+        }
+        handleNumberButton(ins, value) {
+			clearTimeout(ins.pressedTimeout);
+			ins.pressedTimeout = setTimeout(_ => {this.setState({pressed: false});}, 1000);
+			this.setState({pressed: true});
+			this.handleChange.bind(this)(value);
+			this.handleInput.bind(this)(value);
         }
         render() {
 			let childprops = Object.assign({}, this.props, {
@@ -6000,47 +6009,24 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 						className: BDFDB.disCN.inputprefix
 					}) : null,
 					this.props.type == "number" ? BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.inputnumberbuttons,
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.inputnumberbuttons, this.state && this.state.pressed ? BDFDB.disCN.inputnumberbuttonspressed : null),
 						children: [
 							BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCN.inputnumberbuttonup,
 								onClick: e => {
-									console.log(e);
-									/* var input = ele.parentElement.parentElement.querySelector("input");
-									var min = parseInt(input.getAttribute("min"));
-									var max = parseInt(input.getAttribute("max"));
-									var newv = parseInt(input.value) + 1;
-									if (isNaN(max) || !isNaN(max) && newv <= max) {
-										BDFDB.DOMUtils.addClass(ele.parentElement, "pressed");
-										clearTimeout(ele.parentElement.pressedTimeout);
-										input.value = isNaN(min) || !isNaN(min) && newv >= min ? newv : min;
-										input.dispatchEvent(new Event("change"));
-										input.dispatchEvent(new Event("input"));
-										input.dispatchEvent(new Event("keydown"));
-										input.dispatchEvent(new Event("keyup"));
-										input.dispatchEvent(new Event("keypressed"));
-										ele.parentElement.pressedTimeout = setTimeout(_ => {BDFDB.DOMUtils.removeClass(ele.parentElement, "pressed");}, 3000);
-									} */
+									var min = parseInt(this.props.min);
+									var max = parseInt(this.props.max);
+									var newv = parseInt(this.props.value) + 1 || min || 0;
+									if (isNaN(max) || !isNaN(max) && newv <= max) this.handleNumberButton.bind(this)(e._targetInst, isNaN(min) || !isNaN(min) && newv >= min ? newv : min);
 								}
 							}),
 							BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCN.inputnumberbuttondown,
 								onClick: e => {
-									/* var input = ele.parentElement.parentElement.querySelector("input");
-									var min = parseInt(input.getAttribute("min"));
-									var max = parseInt(input.getAttribute("max"));
-									var newv = parseInt(input.value) - 1;
-									if (isNaN(min) || !isNaN(min) && newv >= min) {
-										BDFDB.DOMUtils.addClass(ele.parentElement, "pressed");
-										clearTimeout(ele.parentElement.pressedTimeout);
-										input.value = isNaN(max) || !isNaN(max) && newv <= max ? newv : max;
-										input.dispatchEvent(new Event("change"));
-										input.dispatchEvent(new Event("input"));
-										input.dispatchEvent(new Event("keydown"));
-										input.dispatchEvent(new Event("keyup"));
-										input.dispatchEvent(new Event("keypressed"));
-										ele.parentElement.pressedTimeout = setTimeout(_ => {BDFDB.DOMUtils.removeClass(ele.parentElement, "pressed");}, 3000);
-									} */
+									var min = parseInt(this.props.min);
+									var max = parseInt(this.props.max);
+									var newv = parseInt(this.props.value) - 1 || min || 0;
+									if (isNaN(min) || !isNaN(min) && newv >= min) this.handleNumberButton.bind(this)(e._targetInst, isNaN(max) || !isNaN(max) && newv <= max ? newv : max);
 								}
 							})
 						]
@@ -6558,10 +6544,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		${BDFDB.dotCN.inputnumberwrapper} {
 			position: relative;
 		}
-		${BDFDB.dotCN.inputnumberbuttons}:hover + ${BDFDB.dotCN.input}:not(:focus) {
-			border-color: rgb(4, 4, 5);
+		${BDFDB.dotCN.inputnumberbuttons + BDFDB.notCN.inputnumberbuttonspressed}:hover + ${BDFDB.dotCN.input + BDFDB.notCN.inputerror + BDFDB.notCN.inputsuccess + BDFDB.notCN.inputdisabled}:not(:focus) {
+			border-color: #040405;
 		}
-		${BDFDB.dotCN.inputnumberbuttons + BDFDB.dotCNS.inputnumberbuttonspressed} + ${BDFDB.dotCN.input} {
+		${BDFDB.dotCN.inputnumberbuttons + BDFDB.dotCNS.inputnumberbuttonspressed} + ${BDFDB.dotCN.input + BDFDB.notCN.inputerror + BDFDB.notCN.inputsuccess + BDFDB.notCN.inputdisabled} {
 			border-color: #7289da;
 		}
 		${BDFDB.dotCNS.inputnumberwrapperdefault + BDFDB.dotCN.input} {
@@ -6582,7 +6568,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			align-items: center;
 			justify-content: space-around;
 			height: 110%;
-			top: -5%;
+			top: -2%;
 		}
 		${BDFDB.dotCNS.inputnumberwrapperdefault + BDFDB.dotCN.inputnumberbuttons} {
 			right: 8px;
