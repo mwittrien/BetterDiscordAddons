@@ -5712,7 +5712,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				children: BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCN.popoutthemedpopout,
 					style: {
-						padding: parseInt(this.props.padding) : null,
+						padding: parseInt(this.props.padding) || null,
 						width: parseInt(this.props.width) || null
 					},
 					children: this.props.children
