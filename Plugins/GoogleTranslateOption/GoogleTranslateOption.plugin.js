@@ -325,7 +325,7 @@ class GoogleTranslateOption {
 				}
 				let popoutelements = [];
 				popoutelements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-					className: BDFDB.disCNS.margintop8 + BDFDB.disCN.marginbottom8,
+					className: BDFDB.disCN.marginbottom8,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
 						label: `Words starting with "!" will be ignored`
 					})
@@ -336,7 +336,7 @@ class GoogleTranslateOption {
 				popoutelements = popoutelements.concat(this.createSelects(true));
 				popoutelements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 					type: "Switch",
-					className: BDFDB.disCN.marginbottom20,
+					className: BDFDB.disCN.marginbottom8,
 					label: "Translate:",
 					value: this.translating,
 					onChange: value => {
