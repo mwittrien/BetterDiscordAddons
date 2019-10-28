@@ -7,11 +7,17 @@
 }
 
 #app-mount .input-cIJ7To:not(.success-2-F980):not(.error-2O5WFJ):not(.disabled-2BKQFm) {
-	border-color: rgba(0,0,0,.3);
 	color: #f6f6f7;
 }
+#app-mount .input-cIJ7To:not(.success-2-F980):not(.error-2O5WFJ):not(.disabled-2BKQFm):not(:focus) {
+	border-color: rgba(0,0,0,.3);
+}
+#app-mount .buttons-our3p-:hover + .input-cIJ7To:not(.success-2-F980):not(.error-2O5WFJ):not(.disabled-2BKQFm):not(:focus),
 #app-mount .input-cIJ7To:not(.success-2-F980):not(.error-2O5WFJ):not(.disabled-2BKQFm):hover {
 	border-color: #040405;
+}
+#app-mount .buttons-our3p-.pressed-COy1RJ + .input-cIJ7To:not(.success-2-F980):not(.error-2O5WFJ):not(.disabled-2BKQFm) {
+	border-color: rgb(var(--vaccentcolor));
 }
 #app-mount .modal-DRZfgq,
 #app-mount .regionSelectModal-12e-57,

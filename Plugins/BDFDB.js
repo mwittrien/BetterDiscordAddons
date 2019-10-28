@@ -3768,22 +3768,23 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	var DiscordClassModules = {};
 	DiscordClassModules.BDFDB = {
 		BDFDBundefined: "BDFDB_undefined",
-		cardInner: "BDFDB-cardInner",
-		cardWrapper: "BDFDB-card",
+		cardInner: "inner-OP_8zd",
+		cardWrapper: "card-rT4Wbb",
 		colorPickerSwatches: "swatches",
 		colorPickerSwatchesDisabled: "disabled",
 		colorPickerSwatchSingle: "single-swatch",
 		colorPickerSwatchSelected: "selected",
-		favButtonContainer: "BDFDB-favButtonContainer",
-		inputNumberButton: "BDFDB-numberInputButton",
-		inputNumberButtonDown: "inputNumberButtonDown",
-		inputNumberButtonUp: "BDFDB-numberInputButtonUp",
-		inputNumberButtons: "BDFDB-numberInputButtons",
-		inputNumberButtonsPressed: "BDFDB-numberInputButtonsPressed",
-		inputNumberWrapper: "BDFDB-numberInputWrapper",
-		inputNumberWrapperMini: "BDFDB-numberInputWrapperMini",
-		overflowEllipsis: "overflowellipsis",
-		modalHeaderHasSibling: "BDFDB-modal-headerHasSibling",
+		favButtonContainer: "favbutton-8Fzu45",
+		inputNumberButton: "button-J9muv5",
+		inputNumberButtonDown: "down-cOY7Qp button-J9muv5",
+		inputNumberButtonUp: "up-mUs_72 button-J9muv5",
+		inputNumberButtons: "buttons-our3p-",
+		inputNumberButtonsPressed: "pressed-COy1RJ",
+		inputNumberWrapper: "numberInputWrapper-j4svZS",
+		inputNumberWrapperDefault: "numberInputWrapperDefault-gRxcuK numberInputWrapper-j4svZS",
+		inputNumberWrapperMini: "numberInputWrapperMini-wtUU31 numberInputWrapper-j4svZS",
+		overflowEllipsis: "ellipsis-qlo9sA",
+		modalHeaderHasSibling: "hasSiblings-fRyjyl",
 		modalTabContent: "tab-content",
 		modalTabContentOpen: "open"
 	};
@@ -4692,6 +4693,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		inputnumberbuttons: ["BDFDB", "inputNumberButtons"],
 		inputnumberbuttonspressed: ["BDFDB", "inputNumberButtonsPressed"],
 		inputnumberwrapper: ["BDFDB", "inputNumberWrapper"],
+		inputnumberwrapperdefault: ["BDFDB", "inputNumberWrapperDefault"],
 		inputnumberwrappermini: ["BDFDB", "inputNumberWrapperMini"],
 		invite: ["GuildInvite", "wrapper"],
 		invitebutton: ["GuildInvite", "button"],
@@ -5961,6 +5963,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			this.props.value = e.currentTarget.value;
 			BDFDB.ReactUtils.forceUpdate(this);
         }
+        handleInput(e) {
+            if (typeof this.props.onInput == "function") this.props.onInput(e.currentTarget.value, this);
+        }
         handleBlur(e) {
             if (typeof this.props.onBlur == "function") this.props.onBlur(e, this);
         }
@@ -5979,6 +5984,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				disabled: this.props.disabled,
 				onKeyDown: this.handleKeyDown.bind(this),
 				onChange: this.handleChange.bind(this),
+				onInput: this.handleInput.bind(this),
 				onBlur: this.handleBlur.bind(this),
 				onFocus: this.handleFocus.bind(this),
 				onMouseEnter: this.handleMouseEnter.bind(this),
@@ -5987,22 +5993,57 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			});
 			BDFDB.ObjectUtils.delete(childprops, "errorMessage", "error", "success", "inputClassName", "inputPrefix", "size", "editable", "inputRef", "style");
 			return BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.inputwrapper, this.props.type == "number" ? BDFDB.disCN.inputnumberwrapper : null, this.props.type == "number" && this.props.size == LibraryComponents.TextInput.Sizes.MINI? BDFDB.disCN.inputnumberwrappermini : null, this.props.className),
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.inputwrapper, this.props.type == "number" ? (this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["inputnumberwrapper" + this.props.size.toLowerCase()] || BDFDB.disCN.inputnumberwrapperdefault) : null, this.props.className),
 				style: this.props.style,
 				children: [
+					this.props.inputPrefix ? BDFDB.ReactUtils.createElement("span", {
+						className: BDFDB.disCN.inputprefix
+					}) : null,
 					this.props.type == "number" ? BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.inputnumberbuttons,
 						children: [
 							BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCNS.inputnumberbutton + BDFDB.disCN.inputnumberbuttonup
+								className: BDFDB.disCN.inputnumberbuttonup,
+								onClick: e => {
+									console.log(e);
+									/* var input = ele.parentElement.parentElement.querySelector("input");
+									var min = parseInt(input.getAttribute("min"));
+									var max = parseInt(input.getAttribute("max"));
+									var newv = parseInt(input.value) + 1;
+									if (isNaN(max) || !isNaN(max) && newv <= max) {
+										BDFDB.DOMUtils.addClass(ele.parentElement, "pressed");
+										clearTimeout(ele.parentElement.pressedTimeout);
+										input.value = isNaN(min) || !isNaN(min) && newv >= min ? newv : min;
+										input.dispatchEvent(new Event("change"));
+										input.dispatchEvent(new Event("input"));
+										input.dispatchEvent(new Event("keydown"));
+										input.dispatchEvent(new Event("keyup"));
+										input.dispatchEvent(new Event("keypressed"));
+										ele.parentElement.pressedTimeout = setTimeout(_ => {BDFDB.DOMUtils.removeClass(ele.parentElement, "pressed");}, 3000);
+									} */
+								}
 							}),
 							BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCNS.inputnumberbutton + BDFDB.disCN.inputnumberbuttondown
+								className: BDFDB.disCN.inputnumberbuttondown,
+								onClick: e => {
+									/* var input = ele.parentElement.parentElement.querySelector("input");
+									var min = parseInt(input.getAttribute("min"));
+									var max = parseInt(input.getAttribute("max"));
+									var newv = parseInt(input.value) - 1;
+									if (isNaN(min) || !isNaN(min) && newv >= min) {
+										BDFDB.DOMUtils.addClass(ele.parentElement, "pressed");
+										clearTimeout(ele.parentElement.pressedTimeout);
+										input.value = isNaN(max) || !isNaN(max) && newv <= max ? newv : max;
+										input.dispatchEvent(new Event("change"));
+										input.dispatchEvent(new Event("input"));
+										input.dispatchEvent(new Event("keydown"));
+										input.dispatchEvent(new Event("keyup"));
+										input.dispatchEvent(new Event("keypressed"));
+										ele.parentElement.pressedTimeout = setTimeout(_ => {BDFDB.DOMUtils.removeClass(ele.parentElement, "pressed");}, 3000);
+									} */
+								}
 							})
 						]
-					}) : null,
-					this.props.inputPrefix ? BDFDB.ReactUtils.createElement("span", {
-						className: BDFDB.disCN.inputprefix
 					}) : null,
 					BDFDB.ReactUtils.createElement("input", childprops),
 					this.props.errorMessage ? BDFDB.ReactUtils.createElement("div", {
@@ -6485,8 +6526,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 
 		${BDFDB.dotCN.favbuttoncontainer} {
-			display: flex !important;
-			position: relative !important;
+			display: flex;
+			position: relative;
 		}
 
 		${BDFDB.dotCN.cursordefault} {
@@ -6514,16 +6555,19 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			opacity: 1;
 		}
 		
-		${BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.inputnumberbuttons}:hover + ${BDFDB.dotCN.input}:not(:focus) {
-			border-color: black;
+		${BDFDB.dotCN.inputnumberwrapper} {
+			position: relative;
 		}
-		${BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.inputnumberbuttons + BDFDB.dotCNS.inputnumberbuttonspressed} + ${BDFDB.dotCN.input} {
+		${BDFDB.dotCN.inputnumberbuttons}:hover + ${BDFDB.dotCN.input}:not(:focus) {
+			border-color: rgb(4, 4, 5);
+		}
+		${BDFDB.dotCN.inputnumberbuttons + BDFDB.dotCNS.inputnumberbuttonspressed} + ${BDFDB.dotCN.input} {
 			border-color: #7289da;
 		}
-		${BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.input} {
+		${BDFDB.dotCNS.inputnumberwrapperdefault + BDFDB.dotCN.input} {
 			padding-right: 25px;
 		}
-		${BDFDB.dotCN.inputnumberwrapper + BDFDB.dotCNS.inputnumberwrappermini + BDFDB.dotCN.input} {
+		${BDFDB.dotCNS.inputnumberwrappermini + BDFDB.dotCN.input} {
 			padding-left: 6px;
 			padding-right: 17px;
 		}
@@ -6531,38 +6575,40 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		${BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.input}::-webkit-outer-spin-button{
 			-webkit-appearance: none !important;
 		}
-		${BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.inputnumberbuttons} {
+		${BDFDB.dotCN.inputnumberbuttons} {
 			position: absolute;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
 			justify-content: space-around;
 			height: 110%;
-			right: 8px;
 			top: -5%;
 		}
-		${BDFDB.dotCN.inputnumberwrapper + BDFDB.dotCNS.inputnumberwrappermini + BDFDB.dotCN.inputnumberbuttons} {
+		${BDFDB.dotCNS.inputnumberwrapperdefault + BDFDB.dotCN.inputnumberbuttons} {
+			right: 8px;
+		}
+		${BDFDB.dotCNS.inputnumberwrappermini + BDFDB.dotCN.inputnumberbuttons} {
 			right: 4px;
 		}
-		${BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.inputnumberbutton} {
+		${BDFDB.dotCN.inputnumberbutton} {
 			cursor: pointer;
 			border: transparent solid 5px;
 			border-top-width: 2.5px;
 			display: inline-block;
 		}
-		${BDFDB.dotCNS.themelight + BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.inputnumberbutton} {
+		${BDFDB.dotCNS.themelight + BDFDB.dotCN.inputnumberbutton} {
 			border-bottom-color: #dcddde;
 		}
-		${BDFDB.dotCNS.themelight + BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.inputnumberbutton}:hover {
+		${BDFDB.dotCNS.themelight + BDFDB.dotCN.inputnumberbutton}:hover {
 			border-bottom-color: #4f545c;
 		}
-		${BDFDB.dotCNS.themedark + BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.inputnumberbutton} {
+		${BDFDB.dotCNS.themedark + BDFDB.dotCN.inputnumberbutton} {
 			border-bottom-color: #72767d;
 		}
-		${BDFDB.dotCNS.themedark + BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.inputnumberbutton}:hover {
+		${BDFDB.dotCNS.themedark + BDFDB.dotCN.inputnumberbutton}:hover {
 			border-bottom-color: #f6f6f7;
 		}
-		${BDFDB.dotCNS.inputnumberwrapper + BDFDB.dotCN.inputnumberbutton + BDFDB.dotCN.inputnumberbuttondown} {
+		${BDFDB.dotCN.inputnumberbuttondown} {
 			transform: rotate(180deg);
 		}
 		
@@ -7549,6 +7595,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		for (let component in LibraryComponents) if (!LibraryComponents[component]) console.warn(`%c[BDFDB]%c`, "color: #3a71c1; font-weight: 700;", "", component + " not initialized in LibraryComponents");
 
 		BDFDB.ModuleUtils.DevFuncs = {};
+		BDFDB.ModuleUtils.DevFuncs.generateClassId = function (index) {
+			let chars = "0123456789ABCDEFGHIJKMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_".split("");
+			let id = "";
+			while (id.length < 6) id += chars[Math.floor(Math.random() * chars.length)];
+			return id;
+		};
 		BDFDB.ModuleUtils.DevFuncs.findByIndex = function (index) {
 			var req = getWebModuleReq();
 			return req.c[index];
