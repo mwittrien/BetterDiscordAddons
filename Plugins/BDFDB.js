@@ -3779,7 +3779,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		inputNumberButtonDown: "down-cOY7Qp button-J9muv5",
 		inputNumberButtonUp: "up-mUs_72 button-J9muv5",
 		inputNumberButtons: "buttons-our3p-",
-		inputNumberButtonsPressed: "pressed-COy1RJ",
 		inputNumberWrapper: "numberInputWrapper-j4svZS",
 		inputNumberWrapperDefault: "numberInputWrapperDefault-gRxcuK numberInputWrapper-j4svZS",
 		inputNumberWrapperMini: "numberInputWrapperMini-wtUU31 numberInputWrapper-j4svZS",
@@ -4691,7 +4690,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		inputnumberbuttondown: ["BDFDB", "inputNumberButtonDown"],
 		inputnumberbuttonup: ["BDFDB", "inputNumberButtonUp"],
 		inputnumberbuttons: ["BDFDB", "inputNumberButtons"],
-		inputnumberbuttonspressed: ["BDFDB", "inputNumberButtonsPressed"],
 		inputnumberwrapper: ["BDFDB", "inputNumberWrapper"],
 		inputnumberwrapperdefault: ["BDFDB", "inputNumberWrapperDefault"],
 		inputnumberwrappermini: ["BDFDB", "inputNumberWrapperMini"],
@@ -5982,14 +5980,17 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
         }
         handleNumberButton(ins, value) {
 			clearTimeout(ins.pressedTimeout);
-			ins.pressedTimeout = setTimeout(_ => {this.setState({pressed: false});}, 1000);
-			this.setState({pressed: true});
+			ins.pressedTimeout = setTimeout(_ => {
+				delete this.props.focused;
+				BDFDB.ReactUtils.forceUpdate(this);
+			}, 1000);
+			this.props.focused = true;
 			this.handleChange.bind(this)(value);
 			this.handleInput.bind(this)(value);
         }
         render() {
 			let childprops = Object.assign({}, this.props, {
-				className: BDFDB.DOMUtils.formatClassName(this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["input" + this.props.size.toLowerCase()] || BDFDB.disCN.inputdefault, this.props.inputClassName, this.props.error || this.props.errorMessage ? BDFDB.disCN.inputerror : (this.props.success ? BDFDB.disCN.inputsuccess : null), this.props.disabled ? BDFDB.disCN.inputdisabled : null, this.props.editable ? BDFDB.disCN.inputeditable : null),
+				className: BDFDB.DOMUtils.formatClassName(this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["input" + this.props.size.toLowerCase()] || BDFDB.disCN.inputdefault, this.props.inputClassName, this.props.focused ? BDFDB.disCN.inputfocused : null, this.props.error || this.props.errorMessage ? BDFDB.disCN.inputerror : (this.props.success ? BDFDB.disCN.inputsuccess : null), this.props.disabled ? BDFDB.disCN.inputdisabled : null, this.props.editable ? BDFDB.disCN.inputeditable : null),
 				disabled: this.props.disabled,
 				onKeyDown: this.handleKeyDown.bind(this),
 				onChange: this.handleChange.bind(this),
@@ -6009,7 +6010,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 						className: BDFDB.disCN.inputprefix
 					}) : null,
 					this.props.type == "number" ? BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.inputnumberbuttons, this.state && this.state.pressed ? BDFDB.disCN.inputnumberbuttonspressed : null),
+						className: BDFDB.disCN.inputnumberbuttons,
 						children: [
 							BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCN.inputnumberbuttonup,
@@ -6544,11 +6545,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		${BDFDB.dotCN.inputnumberwrapper} {
 			position: relative;
 		}
-		${BDFDB.dotCN.inputnumberbuttons + BDFDB.notCN.inputnumberbuttonspressed}:hover + ${BDFDB.dotCN.input + BDFDB.notCN.inputerror + BDFDB.notCN.inputsuccess + BDFDB.notCN.inputdisabled}:not(:focus) {
+		${BDFDB.dotCN.inputnumberbuttons}:hover + ${BDFDB.dotCN.input + BDFDB.notCN.inputfocused + BDFDB.notCN.inputerror + BDFDB.notCN.inputsuccess + BDFDB.notCN.inputdisabled}:not(:focus) {
 			border-color: #040405;
-		}
-		${BDFDB.dotCN.inputnumberbuttons + BDFDB.dotCNS.inputnumberbuttonspressed} + ${BDFDB.dotCN.input + BDFDB.notCN.inputerror + BDFDB.notCN.inputsuccess + BDFDB.notCN.inputdisabled} {
-			border-color: #7289da;
 		}
 		${BDFDB.dotCNS.inputnumberwrapperdefault + BDFDB.dotCN.input} {
 			padding-right: 25px;
