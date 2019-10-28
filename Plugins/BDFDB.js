@@ -5999,7 +5999,17 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				onFocus: this.handleFocus.bind(this),
 				onMouseEnter: this.handleMouseEnter.bind(this),
 				onMouseLeave: this.handleMouseLeave.bind(this),
-				ref: this.props.inputRef
+				ref: input => {
+					if (!input) return;
+					if (!input.patched) {
+						input.addEventListener("keydown", e => {
+							this.handleKeyDown.bind(this)(e);
+							e.stopImmediatePropagation();
+						});
+						input.patched = true;
+					}
+					if (typeof this.props.inputRef == "function") this.props.inputRef(input);
+				}
 			});
 			BDFDB.ObjectUtils.delete(childprops, "errorMessage", "focused", "error", "success", "inputClassName", "inputPrefix", "size", "editable", "inputRef", "style");
 			return BDFDB.ReactUtils.createElement("div", {
