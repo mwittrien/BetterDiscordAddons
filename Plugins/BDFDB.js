@@ -6001,7 +6001,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				onMouseLeave: this.handleMouseLeave.bind(this),
 				ref: this.props.inputRef
 			});
-			BDFDB.ObjectUtils.delete(childprops, "errorMessage", "error", "success", "inputClassName", "inputPrefix", "size", "editable", "inputRef", "style");
+			BDFDB.ObjectUtils.delete(childprops, "errorMessage", "focused", "error", "success", "inputClassName", "inputPrefix", "size", "editable", "inputRef", "style");
 			return BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.inputwrapper, this.props.type == "number" ? (this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["inputnumberwrapper" + this.props.size.toLowerCase()] || BDFDB.disCN.inputnumberwrapperdefault) : null, this.props.className),
 				style: this.props.style,
