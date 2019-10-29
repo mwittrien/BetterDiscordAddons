@@ -68,12 +68,12 @@ class BetterFriendCount {
 
 	// begin of own functions
 
-	processTabBar (instance, wrapper, returnvalue) {
-		if (returnvalue && returnvalue.props.children) for (let checkchild of returnvalue.props.children) if (checkchild && checkchild.props.id == "ADD_FRIEND") {
+	processTabBar (e) {
+		if (e.returnvalue.props.children) for (let checkchild of e.returnvalue.props.children) if (checkchild && checkchild.props.id == "ADD_FRIEND") {
 			let relationships = BDFDB.LibraryModules.FriendUtils.getRelationships(), relationshipCount = {};
 			for (let type in this.relationshipTypes) relationshipCount[this.relationshipTypes[type]] = 0;
 			for (let id in relationships) relationshipCount[this.relationshipTypes[relationships[id]]]++;
-			for (let child of returnvalue.props.children) if (child && child.props.id != "ADD_FRIEND") {
+			for (let child of e.returnvalue.props.children) if (child && child.props.id != "ADD_FRIEND") {
 				let newchildren = [Array.isArray(child.props.children) ? child.props.children[0] : child.props.children];
 				switch (child.props.id) {
 					case "ALL":
@@ -110,7 +110,7 @@ class BetterFriendCount {
 		}
 	}
 
-	processFriendRow (instance, wrapper, returnvalue) {
+	processFriendRow () {
 		clearTimeout(this.rerenderTimeout);
 		this.rerenderTimeout = setTimeout(() => {
 			delete this.rerenderTimeout;

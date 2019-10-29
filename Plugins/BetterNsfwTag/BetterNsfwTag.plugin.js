@@ -15,7 +15,7 @@ class BetterNsfwTag {
 		};
 		
 		this.patchModules = {
-			"ChannelItem":"componentDidMount"
+			"ChannelItem":"render"
 		};
 	}
 
@@ -43,6 +43,7 @@ class BetterNsfwTag {
 	initialize () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
+			
 			BDFDB.PluginUtils.init(this);
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
@@ -54,7 +55,8 @@ class BetterNsfwTag {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.DOMUtils.remove(".NSFW-tag");
+			BDFDB.ModuleUtils.forceAllUpdates(this);
+			
 			BDFDB.PluginUtils.clear(this);
 		}
 	}
@@ -62,10 +64,18 @@ class BetterNsfwTag {
 
 	// begin of own functions
 
-	processChannelItem (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.channel && instance.props.channel.nsfw) {
-			let channelname = wrapper.querySelector(BDFDB.dotCN.channelname);
-			if (channelname) channelname.parentElement.insertBefore(BDFDB.DOMUtils.create(`<span class="NSFW-tag ${BDFDB.disCNS.bottag + BDFDB.disCNS.bottagregular + BDFDB.disCN.bottagnametag}" style="background-color: rgb(241, 71, 71); top: 0px; min-width: 28px;">NSFW</span>`), channelname.nextElementSibling);
+	processChannelItem (e) {
+		if (e.instance.props && e.instance.props.channel && e.instance.props.channel.nsfw) {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.channelchildren]]});
+			let firstChildClassName = index > -1 && BDFDB.ReactUtils.getValue(children[index], "props.children.0.props.className");
+			if (firstChildClassName && firstChildClassName.indexOf("NSFW-tag") > -1) children[index].props.children.shift();
+			if (!this.stopping && index > -1 && children[index].props && children[index].props.children) {
+				children[index].props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BotTag, {
+					className: "NSFW-tag",
+					tag: "NSFW",
+					style: {backgroundColor: "#F04747"}
+				}));
+			}
 		}
 	}
 }

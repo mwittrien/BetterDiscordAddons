@@ -126,17 +126,17 @@ class BetterSearchPage {
 
 	// begin of own functions
 
-	processSearchResults (instance, wrapper, returnvalue) {
-		if (!this.stopping && instance.props && instance.props.search) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:"Pagination"});
+	processSearchResults (e) {
+		if (!this.stopping && e.instance.props && e.instance.props.search) {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"Pagination"});
 			if (index > -1) {
 				let settings = BDFDB.DataUtils.get(this, "settings");
-				let currentpage = parseInt(Math.floor(instance.props.search.offset / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE)) + 1;
-				let maxpage = instance.props.search.totalResults > 5000 ? parseInt(Math.ceil(5000 / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE)) : parseInt(Math.ceil(instance.props.search.totalResults / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE));
+				let currentpage = parseInt(Math.floor(e.instance.props.search.offset / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE)) + 1;
+				let maxpage = e.instance.props.search.totalResults > 5000 ? parseInt(Math.ceil(5000 / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE)) : parseInt(Math.ceil(e.instance.props.search.totalResults / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE));
 				let doJump = page => {
 					page = page < 1 ? 1 : (page > maxpage ? maxpage : page);
-					if (page < currentpage) BDFDB.LibraryModules.SearchPageUtils.searchPreviousPage(instance.props.searchId, (currentpage - page) * BDFDB.DiscordConstants.SEARCH_PAGE_SIZE);
-					else if (page > currentpage) BDFDB.LibraryModules.SearchPageUtils.searchNextPage(instance.props.searchId, (page - currentpage) * BDFDB.DiscordConstants.SEARCH_PAGE_SIZE);
+					if (page < currentpage) BDFDB.LibraryModules.SearchPageUtils.searchPreviousPage(e.instance.props.searchId, (currentpage - page) * BDFDB.DiscordConstants.SEARCH_PAGE_SIZE);
+					else if (page > currentpage) BDFDB.LibraryModules.SearchPageUtils.searchNextPage(e.instance.props.searchId, (page - currentpage) * BDFDB.DiscordConstants.SEARCH_PAGE_SIZE);
 				};
 				let pagination = BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCN.searchresultspagination, 
@@ -195,7 +195,7 @@ class BetterSearchPage {
 		}
 	}
 
-	processStandardSidebarView (instance, wrapper, returnvalue) {
+	processStandardSidebarView () {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			BDFDB.ModuleUtils.forceAllUpdates(this);

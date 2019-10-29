@@ -7445,9 +7445,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		V2C_List: "componentDidMount",
 		V2C_PluginCard: ["componentDidMount","componentDidUpdate"],
 		V2C_ThemeCard: ["componentDidMount","componentDidUpdate"],
-		UserPopout: ["componentDidMount"],
-		UserProfile: ["componentDidMount"],
-		Message: ["componentDidMount","componentDidUpdate","render"]
+		UserPopout: "componentDidMount",
+		UserProfile: "componentDidMount",
+		Message: ["componentDidMount","componentDidUpdate"]
 	};
 
 	var BDFDBprocessFunctions = {};
