@@ -3601,7 +3601,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	BDFDB.StringUtils.getParsedLength = function (string, channelid = LibraryModules.LastChannelStore.getChannelId()) {
 		if (!string) return 0;
 		var channel = LibraryModules.ChannelStore.getChannel(channelid);
-		var length = (string.indexOf("/") == 0 || string.indexOf("s/") == 0 || string.indexOf("+:") == 0) ? string.length : LibraryModules.MessageCreationUtils.parse(channel, string).content.length;
+		var length = (!channel || string.indexOf("/") == 0 || string.indexOf("s/") == 0 || string.indexOf("+:") == 0) ? string.length : LibraryModules.MessageCreationUtils.parse(channel, string).content.length;
 		return length > string.length ? length : string.length;
 	};
 	
@@ -5516,49 +5516,52 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		updateCounter() {
 			if (!this.refElement) return;
 			clearTimeout(this.updateTimeout);
-			this.updateTimeout = setTimeout(() => {
-				this.props.children = this.getCounterString();
-				BDFDB.ReactUtils.forceUpdate(this);
-			}, 100);
+			this.updateTimeout = setTimeout(this.forceUpdateCounter.bind(this), 100);
+		}
+		forceUpdateCounter() {
+			if (!this.refElement) return;
+			this.props.children = this.getCounterString();
+			BDFDB.ReactUtils.forceUpdate(this);
 		}
 		handleSelection() {
 			if (!this.refElement) return;
 			let mousemove = () => {
-				setTimeout(this.updateCounter, 10);
+				setTimeout(this.forceUpdateCounter.bind(this), 10);
 			};
 			let mouseup = () => {
-				document.removeEventListener(mousemove);
-				document.removeEventListener(mouseup);
+				document.removeEventListener("mousemove", mousemove);
+				document.removeEventListener("mouseup", mouseup);
 				if (this.refElement.selectionEnd - this.refElement.selectionStart) setImmediate(() => {
-					document.addEventListener(click);
+					document.addEventListener("click", click);
 				});
 			};
 			let click = () => {
 				var contexttype = BDFDB.ReactUtils.getValue(document.querySelector(BDFDB.dotCN.contextmenu), "return.stateNode.props.type");
-				if (!contexttype || !contexttype.startsWith("CHANNEL_TEXT_AREA")) this.updateCounter();
-				else setTimeout(this.updateCounter, 100);
-				document.removeEventListener(mousemove);
-				document.removeEventListener(mouseup);
-				document.removeEventListener(click);
+				if (!contexttype || !contexttype.startsWith("CHANNEL_TEXT_AREA")) this.forceUpdateCounter();
+				setTimeout(this.forceUpdateCounter.bind(this), 100);
+				document.removeEventListener("mousemove", mousemove);
+				document.removeEventListener("mouseup", mouseup);
+				document.removeEventListener("click", click);
 			};
-			document.addEventListener(mousemove);
-			document.addEventListener(mouseup);
+			document.addEventListener("mousemove", mousemove);
+			document.addEventListener("mouseup", mouseup);
 		}
 		componentDidMount() {
-			if (!this.props.refClass) console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", "refClass can not be undefined for BDFDB_CharCounter");
-			else {
+			if (this.props.refClass) {
 				let node = BDFDB.ReactUtils.findDOMNode(this);
 				if (node) {
 					this.refElement = node.parentElement.querySelector(this.props.refClass);
 					if (this.refElement) {
-						BDFDB.ListenerUtils.multiRemove(this.refElement, "keydown click change", this.updateCounter);
-						this.refElement.removeEventListener("mousedown", this.handleSelection);
-						BDFDB.ListenerUtils.multiAdd(this.refElement, "keydown click change", this.updateCounter);
-						this.refElement.addEventListener("mousedown", this.handleSelection);
+						BDFDB.ListenerUtils.multiRemove(this.refElement, "keydown click change", this.updateCounter.bind(this));
+						this.refElement.removeEventListener("mousedown", this.handleSelection.bind(this));
+						BDFDB.ListenerUtils.multiAdd(this.refElement, "keydown click change", this.updateCounter.bind(this));
+						this.refElement.addEventListener("mousedown", this.handleSelection.bind(this));
 						this.updateCounter();
 					}
+					else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", "could not find referenceElement for BDFDB_CharCounter");
 				}
 			}
+			else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", "refClass can not be undefined for BDFDB_CharCounter");
 		}
 		render() {
 			let props = Object.assign({}, this.props, {

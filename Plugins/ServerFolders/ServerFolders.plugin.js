@@ -754,7 +754,6 @@ class ServerFolders {
 		let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(folderid) || {};
 		let data = BDFDB.DataUtils.load(this, "folders", folderid) || {
 			iconID: 			"-1",
-			icons: 				{openicon: null, closedicon: null},
 			muteFolder: 		false,
 			autoRead: 			false,
 			copyTooltipColor: 	false,
