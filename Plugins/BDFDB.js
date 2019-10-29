@@ -5491,11 +5491,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	LibraryComponents.CharCounter = reactInitialized ? class BDFDB_CharCounter extends LibraryModules.React.Component {
 		updateCounter(e) {
 			clearTimeout(this.updateTimeout);
-			this.updateTimeout(() => {
+			this.updateTimeout = setTimeout(() => {
 				delete this.updateTimeout;
-				let string = e.string || "";
-				let start = e.start || 0;
-				let end = e.end || 0;
+				let string = e.string || "", start = e.start || 0, end = e.end || 0;
 				let length = this.props.parsing ? BDFDB.StringUtils.getParsedLength(string) : string.length;
 				let select = end - start == 0 ? 0 : (this.props.parsing ? BDFDB.StringUtils.getParsedLength(string.slice(start, end)) : (end - start));
 				select = !select ? 0 : (select > length ? length - (length - end - start) : select);
