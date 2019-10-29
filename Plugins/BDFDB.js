@@ -5514,11 +5514,35 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			return `${length}${!this.props.max ? "" : "/" + this.props.max}${!select ? "" : " (" + select + ")"}`;
 		}
 		updateCounter() {
+			if (!this.refElement) return;
 			clearTimeout(this.updateTimeout);
 			this.updateTimeout = setTimeout(() => {
 				this.props.children = this.getCounterString();
 				BDFDB.ReactUtils.forceUpdate(this);
 			}, 100);
+		}
+		handleSelection() {
+			if (!this.refElement) return;
+			let mousemove = () => {
+				setTimeout(this.updateCounter, 10);
+			};
+			let mouseup = () => {
+				document.removeEventListener(mousemove);
+				document.removeEventListener(mouseup);
+				if (this.refElement.selectionEnd - this.refElement.selectionStart) setImmediate(() => {
+					document.addEventListener(click);
+				});
+			};
+			let click = () => {
+				var contexttype = BDFDB.ReactUtils.getValue(document.querySelector(BDFDB.dotCN.contextmenu), "return.stateNode.props.type");
+				if (!contexttype || !contexttype.startsWith("CHANNEL_TEXT_AREA")) this.updateCounter();
+				else setTimeout(this.updateCounter, 100);
+				document.removeEventListener(mousemove);
+				document.removeEventListener(mouseup);
+				document.removeEventListener(click);
+			};
+			document.addEventListener(mousemove);
+			document.addEventListener(mouseup);
 		}
 		componentDidMount() {
 			if (!this.props.refClass) console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", "refClass can not be undefined for BDFDB_CharCounter");
@@ -5527,41 +5551,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				if (node) {
 					this.refElement = node.parentElement.querySelector(this.props.refClass.startsWith(".") ? this.props.refClass : "." + this.props.refClass);
 					if (this.refElement) {
-						this.refElement.removeEventListener("keydown", this.updateCounter);
-						this.refElement.removeEventListener("click", this.updateCounter);
-						this.refElement.removeEventListener("change", this.updateCounter);
-						this.refElement.addEventListener("keydown", this.updateCounter);
-						this.refElement.addEventListener("click", this.updateCounter);
-						this.refElement.addEventListener("change", this.updateCounter);
-						BDFDB.ListenerUtils.add(this, input, "keydown click change", );
-						BDFDB.ListenerUtils.add(this, input, "mousedown", e => {
-							let mousemove = () => {
-								setTimeout(updateCounter, 10);
-							};
-							let mouseup = () => {
-								document.removeEventListener(mousemove);
-								document.removeEventListener(mouseup);
-								if (this.props.end - input.selectionStart) setImmediate(() => {
-									document.addEventListener(click);
-								});
-							};
-							let click = () => {
-								var contexttype = BDFDB.ReactUtils.getValue(document.querySelector(BDFDB.dotCN.contextmenu), "return.stateNode.props.type");
-								if (!contexttype || !contexttype.startsWith("CHANNEL_TEXT_AREA")) {
-									input.selectionStart = 0;
-									this.props.end = 0;
-									updateCounter();
-								}
-								else setTimeout(updateCounter, 100);
-								document.removeEventListener(mousemove);
-								document.removeEventListener(mouseup);
-								document.removeEventListener(click);
-							};
-							document.addEventListener(mousemove);
-							document.addEventListener(mouseup);
-						});
-
-						updateCounter();
+						BDFDB.ListenerUtils.multiRemove(this.refElement, "keydown click change", this.updateCounter);
+						this.refElement.remove("mousedown", this.handleSelection);
+						BDFDB.ListenerUtils.multiAdd(this.refElement, "keydown click change", this.updateCounter);
+						this.refElement.add("mousedown", this.handleSelection);
 						this.updateCounter();
 					}
 				}
