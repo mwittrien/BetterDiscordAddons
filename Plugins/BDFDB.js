@@ -3273,7 +3273,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		if (typeof config.text == "string") {
 			contentchildren.push(BDFDB.ReactUtils.createElement(LibraryComponents.TextElement, {
 				color: LibraryComponents.TextElement.Colors.PRIMARY,
-				children: [config.text]
+				children: config.text
 			}));
 		}
 		if (config.children) {
@@ -3791,6 +3791,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		BDFDBundefined: "BDFDB_undefined",
 		cardInner: "inner-OP_8zd",
 		cardWrapper: "card-rT4Wbb",
+		charCounter: "counter-uAzbKp",
 		colorPickerSwatches: "swatches",
 		colorPickerSwatchesDisabled: "disabled",
 		colorPickerSwatchSingle: "single-swatch",
@@ -4320,6 +4321,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		channeluserlimittotal: ["ChannelLimit", "total"],
 		channeluserlimitusers: ["ChannelLimit", "users"],
 		channelwrapper: ["Channel", "wrapper"],
+		charcounter: ["BDFDB", "charCounter"],
 		chat: ["ChatWindow", "chat"],
 		chatbase: ["AppBase", "base"],
 		chatcontent: ["ChatWindow", "chatContent"],
@@ -5485,6 +5487,31 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	LibraryComponents.CardRemoveButton = BDFDB.ModuleUtils.findByName("RemoveButton");
 	
 	LibraryComponents.ChannelTextAreaButton = BDFDB.ModuleUtils.findByName("ChannelTextAreaButton");
+	
+	LibraryComponents.CharCounter = reactInitialized ? class BDFDB_CharCounter extends LibraryModules.React.Component {
+		updateCounter() {
+			let string = this.props.string || "";
+			let length = this.props.parsing ? BDFDB.StringUtils.getParsedLength(string) : string.length;
+			let select = this.props.end - this.props.start == 0 ? 0 : (this.props.parsing ? BDFDB.StringUtils.getParsedLength(string.slice(this.props.start, this.props.end)) : (this.props.end - this.props.start));
+			select = !select ? 0 : (select > length ? length - (length - this.props.end - this.props.start) : select);
+			this.props.children = `${length}${!this.props.max ? "" : "/" + this.props.max}${!select ? "" : " (" + select + ")"}`;
+			BDFDB.ReactUtils.forceUpdate(this);
+		}
+		componentDidMount() {
+			if (!this.props.children) this.updateCounter();
+		}
+		componentDidUpdate() {
+			if (!this.props.children) this.updateCounter();
+		}
+		render() {
+			let props = Object.assign({}, this.props, {
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.charcounter, this.props.className),
+				color: LibraryComponents.TextElement.Colors.PRIMARY
+			});
+			BDFDB.ObjectUtils.delete(props, "parsing", "start", "end", "string", "max");
+			return BDFDB.ReactUtils.createElement(LibraryComponents.TextElement, props);
+		}
+	}: LibraryComponents.CharCounter;
 	
 	LibraryComponents.Clickable = BDFDB.ModuleUtils.findByName("Clickable");
 	
