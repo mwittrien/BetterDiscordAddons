@@ -158,8 +158,8 @@ class CharCounter {
 		input.parentElement.appendChild(counter);
 
 		var updateCounter = () => {
-			var inputlength = parsing ? BDFDB.getParsedLength(input.value) : input.value.length;
-			var seleclength = input.selectionEnd - input.selectionStart == 0 ? 0 : (parsing ? BDFDB.getParsedLength(input.value.slice(input.selectionStart, input.selectionEnd)) : (input.selectionEnd - input.selectionStart));
+			var inputlength = parsing ? BDFDB.StringUtils.getParsedLength(input.value) : input.value.length;
+			var seleclength = input.selectionEnd - input.selectionStart == 0 ? 0 : (parsing ? BDFDB.StringUtils.getParsedLength(input.value.slice(input.selectionStart, input.selectionEnd)) : (input.selectionEnd - input.selectionStart));
 			seleclength = !seleclength ? 0 : (seleclength > inputlength ? inputlength - (inputlength - input.selectionEnd - input.selectionStart) : seleclength);
 			counter.innerText = inputlength + "/" + (this.maxLenghts[type] || 2000) + (!seleclength ? "" : " (" + seleclength + ")");
 		};

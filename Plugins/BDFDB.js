@@ -1579,13 +1579,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 	};
 
-	BDFDB.getParsedLength = function (string, channelid = LibraryModules.LastChannelStore.getChannelId()) {
-		if (!string) return 0;
-		var channel = LibraryModules.ChannelStore.getChannel(channelid);
-		var length = (string.indexOf("/") == 0 || string.indexOf("s/") == 0 || string.indexOf("+:") == 0) ? string.length : LibraryModules.MessageCreationUtils.parse(channel, string).content.length;
-		return length > string.length ? length : string.length;
-	};
-
 	BDFDB.UserUtils = {};
 	var myDataUser = LibraryModules.CurrentUserStore ? LibraryModules.CurrentUserStore.getCurrentUser() : null;
 	BDFDB.UserUtils.me = new Proxy(myDataUser || {}, {
@@ -3588,6 +3581,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	};
 	BDFDB.StringUtils.insertNRST = function (string) {
 		return string.replace(/\\r/g, "\r").replace(/\\n/g, "\n").replace(/\\t/g, "\t").replace(/\\s/g, " ");
+	};
+	BDFDB.StringUtils.getParsedLength = function (string, channelid = LibraryModules.LastChannelStore.getChannelId()) {
+		if (!string) return 0;
+		var channel = LibraryModules.ChannelStore.getChannel(channelid);
+		var length = (string.indexOf("/") == 0 || string.indexOf("s/") == 0 || string.indexOf("+:") == 0) ? string.length : LibraryModules.MessageCreationUtils.parse(channel, string).content.length;
+		return length > string.length ? length : string.length;
 	};
 	
 	BDFDB.NumberUtils = {};
@@ -7854,6 +7853,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	BDFDB.encodeToHTML = BDFDB.StringUtils.htmlEscape;
 	BDFDB.regEscape = BDFDB.StringUtils.regEscape;
 	BDFDB.insertNRST = BDFDB.StringUtils.insertNRST;
+	BDFDB.getParsedLength = BDFDB.StringUtils.getParsedLength;
 	
 	BDFDB.formatBytes = BDFDB.NumberUtils.formatBytes;
 	BDFDB.mapRange = BDFDB.NumberUtils.mapRange;

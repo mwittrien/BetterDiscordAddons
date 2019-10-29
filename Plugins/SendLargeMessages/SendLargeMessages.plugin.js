@@ -131,7 +131,7 @@ class SendLargeMessages {
 			var textarea = wrapper.querySelector("textarea");
 			if (!textarea) return;
 			let modaltext, checkTextarea = () => {
-				if (BDFDB.getParsedLength(textarea.value) > 1950) {
+				if (BDFDB.StringUtils.getParsedLength(textarea.value) > 1950) {
 					textarea.selectionStart = 0;
 					textarea.selectionEnd = textarea.value.length;
 					document.execCommand("insertText", false, "");
@@ -159,7 +159,7 @@ class SendLargeMessages {
 		let counter = sendMessageModal.querySelector("#character-counter");
 
 		let updateCounter = () => {
-			let parsedlength = BDFDB.getParsedLength(textinput.value);
+			let parsedlength = BDFDB.StringUtils.getParsedLength(textinput.value);
 			let messageAmount = Math.ceil(parsedlength/1900);
 			warning.innerText = messageAmount > 15 ? this.labels.modal_messages_warning : "";
 			counter.innerText = parsedlength + " (" + (textinput.selectionEnd - textinput.selectionStart) + ") => " + this.labels.modal_messages_translation + ": " + messageAmount;
@@ -203,7 +203,7 @@ class SendLargeMessages {
 			let count1 = 0;
 			let shortwords = [];
 			longword.split("").forEach((char) => {
-				if (shortwords[count1] && BDFDB.getParsedLength(shortwords[count1]) >= 1800) count1++;
+				if (shortwords[count1] && BDFDB.StringUtils.getParsedLength(shortwords[count1]) >= 1800) count1++;
 				shortwords[count1] = shortwords[count1] ? shortwords[count1] + char : char;
 			});
 			text = text.replace(longword, shortwords.join(" "));
@@ -211,7 +211,7 @@ class SendLargeMessages {
 		let messages = [];
 		let count2 = 0;
 		text.split(" ").forEach((word) => {
-			if (messages[count2] && BDFDB.getParsedLength(messages[count2] + "" + word) > 1900) count2++;
+			if (messages[count2] && BDFDB.StringUtils.getParsedLength(messages[count2] + "" + word) > 1900) count2++;
 			messages[count2] = messages[count2] ? messages[count2] + " " + word : word;
 		});
 
