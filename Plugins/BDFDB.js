@@ -3012,7 +3012,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		container.querySelectorAll(".btn-ok " + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageUtils.LanguageStrings.OKAY;});
 		container.querySelectorAll(".btn-save " + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageUtils.LanguageStrings.SAVE;});
 		container.querySelectorAll(".btn-send " + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageUtils.LanguageStrings.SEND;});
-		container.querySelectorAll(".file-navigator " + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageUtils.LanguageStrings.file_navigator_text;});
+		container.querySelectorAll(".file-navigator " + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageUtils.LibraryStrings.file_navigator_text;});
 
 		if (islighttheme) {
 			BDFDB.DOMUtils.replaceClass(container.querySelectorAll(BDFDB.dotCN.selectcontroldark), BDFDB.disCN.selectcontroldark, BDFDB.disCN.selectcontrollight);
@@ -5549,7 +5549,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			else {
 				let node = BDFDB.ReactUtils.findDOMNode(this);
 				if (node) {
-					this.refElement = node.parentElement.querySelector(this.props.refClass.startsWith(".") ? this.props.refClass : "." + this.props.refClass);
+					this.refElement = node.parentElement.querySelector(this.props.refClass);
 					if (this.refElement) {
 						BDFDB.ListenerUtils.multiRemove(this.refElement, "keydown click change", this.updateCounter);
 						this.refElement.removeEventListener("mousedown", this.handleSelection);

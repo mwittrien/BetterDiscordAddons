@@ -141,19 +141,19 @@ class ServerFolders {
 
 		this.folderIcons = [
 			{openicon:`<path d="M 200,390 H 955 L 795,770 H 200 Z" fill="REPLACE_FILL2"/><path d="M 176.6,811 C 163.9,811 155.1,802.6 155,784.7 V 212.9 C 157.9,190.5 169,179.8 195.9,176 h 246 c 20.3,3.2 34.5,18.7 41,28.6 C 494.9,228.3 492.9,240.4 494,266 l 313.6,1.3 c 17.6,0.4 23.3,3.7 23.3,3.7 8.6,4.2 14.8,10.7 19,19.5 C 856.3,319.5 854,360 854,360 h 108.9 c 4.4,2.4 13.7,1.2 11.8,23.5 L 815.8,789.4 c -2.1,5.2 -12.5,13.6 -18.7,16.1 -6.8,2.7 -18.5,5.5 -23.9,5.5 z M 767,759 897,430 H 360 L 230,759 Z" fill="REPLACE_FILL1"/>`,
-			closedicon:`<path d="M 175,320 V 790 H 820 V 320 Z" fill="REPLACE_FILL2"/><path d="m 183,811 c -12.2,-0.6 -17.9,-4.8 -21.5,-8.2 C 159.5,801 154.8,792.6 155,779.7 V 215.6 c 3.3,-14.1 9.3,-21.4 15.1,-26.4 7.4,-6.3 16,-11.6 36.7,-13.2 h 237.3 c 23.3,6 32.2,18.7 38.7,28.6 7.6,11.7 9.4,18.6 10.3,41.4 L 494,266 h 313.4 c 16.9,0.1 23.5,5.1 23.5,5.1 8.6,4.2 14.5,10.9 19,19.5 0,0 3.7,7.5 3.1,19.8 V 777.2 c -1.1,9 -4.1,13.7 -4.1,13.7 -4.2,8.6 -10.7,14.8 -19.5,19 L 823.3,811 Z m 602.8,-55 c 2.8,-1.7 6.9,-4.5 8.9,-7.4 2.4,-3.6 5,-10.8 5.4,-24.7 V 362 c -0.2,-10.9 -4.2,-16.3 -4.2,-16.3 -2,-3 -5.9,-6.8 -8.7,-8.6 0,0 -5.8,-3 -12.7,-3.2 h -548.1 c -7.8,0 -13.9,3.6 -13.9,3.6 -3,2 -7.3,6.7 -8.4,17.3 v 386.4 c 2.8,10.4 7.5,16 13.6,17.7 h 544.9 c 11,-0.2 18.4,-1.9 23.3,-3 z" fill="REPLACE_FILL1"/>`},
-			{openicon:`<path d="m 167,200 h 200 l 50,50 H 829.8 L 830,330 H 970 L 825,779 H 167 Z" fill="REPLACE_FILL2"/><path d="m 184,799 c -10.5,0 -22.3,-5.3 -27,-10 -4.7,-4.7 -9,-15.1 -9,-34 V 212 c 0,-13.3 5,-22 11,-28 4.4,-4.4 15.4,-10 30,-10 h 170.3 l 53.3,53 H 820 c 13.1,0 18.2,4.2 25,10 6.4,5.5 7,14.4 7,31 v 52 h 122.3 c 11.6,0 17.1,3.3 17.1,3.3 2.9,2.9 3.3,4.4 3.3,14.2 0,8.4 -0.9,13.5 -3.8,22.4 L 849,799 Z M 933,360 H 335 l -130,398.1 603.2,1.3 z M 289.7,334.6 c 3,-8.2 8,-14.8 17,-14.8 0,0 506.6,0.2 506.3,0.2 0,-39.8 -12.2,-53 -53,-53 L 403.3,266.7 350,213 H 240 c -37.6,0 -53,10.1 -53,53 v 382.7 z" fill="REPLACE_FILL1"/>`,
+			closedicon:`<path d="M 175,320 V 790 H 820 V 320 Z" fill="REPLACE_FILL2"/><path d="M 183,811 c -12.2,-0.6 -17.9,-4.8 -21.5,-8.2 C 159.5,801 154.8,792.6 155,779.7 V 215.6 c 3.3,-14.1 9.3,-21.4 15.1,-26.4 7.4,-6.3 16,-11.6 36.7,-13.2 h 237.3 c 23.3,6 32.2,18.7 38.7,28.6 7.6,11.7 9.4,18.6 10.3,41.4 L 494,266 h 313.4 c 16.9,0.1 23.5,5.1 23.5,5.1 8.6,4.2 14.5,10.9 19,19.5 0,0 3.7,7.5 3.1,19.8 V 777.2 c -1.1,9 -4.1,13.7 -4.1,13.7 -4.2,8.6 -10.7,14.8 -19.5,19 L 823.3,811 Z m 602.8,-55 c 2.8,-1.7 6.9,-4.5 8.9,-7.4 2.4,-3.6 5,-10.8 5.4,-24.7 V 362 c -0.2,-10.9 -4.2,-16.3 -4.2,-16.3 -2,-3 -5.9,-6.8 -8.7,-8.6 0,0 -5.8,-3 -12.7,-3.2 h -548.1 c -7.8,0 -13.9,3.6 -13.9,3.6 -3,2 -7.3,6.7 -8.4,17.3 v 386.4 c 2.8,10.4 7.5,16 13.6,17.7 h 544.9 c 11,-0.2 18.4,-1.9 23.3,-3 z" fill="REPLACE_FILL1"/>`},
+			{openicon:`<path d="M 167,200 h 200 l 50,50 H 829.8 L 830,330 H 970 L 825,779 H 167 Z" fill="REPLACE_FILL2"/><path d="M 184,799 c -10.5,0 -22.3,-5.3 -27,-10 -4.7,-4.7 -9,-15.1 -9,-34 V 212 c 0,-13.3 5,-22 11,-28 4.4,-4.4 15.4,-10 30,-10 h 170.3 l 53.3,53 H 820 c 13.1,0 18.2,4.2 25,10 6.4,5.5 7,14.4 7,31 v 52 h 122.3 c 11.6,0 17.1,3.3 17.1,3.3 2.9,2.9 3.3,4.4 3.3,14.2 0,8.4 -0.9,13.5 -3.8,22.4 L 849,799 Z M 933,360 H 335 l -130,398.1 603.2,1.3 z M 289.7,334.6 c 3,-8.2 8,-14.8 17,-14.8 0,0 506.6,0.2 506.3,0.2 0,-39.8 -12.2,-53 -53,-53 L 403.3,266.7 350,213 H 240 c -37.6,0 -53,10.1 -53,53 v 382.7 z" fill="REPLACE_FILL1"/>`,
 			closedicon:`<path d="M 173,190 V 771 H 825 V 250 H 420 l -70,-60 z" fill="REPLACE_FILL2"/><path d="M 184.2,799 C 170.3,799 164.3,795.8 157.4,788.9 151.7,783.3 148,774.6 148,754.9 V 211.2 c 0.7,-18.6 6,-21.7 11.9,-27.6 6.8,-6.8 15.5,-9.4 29.3,-9.6 h 170.1 l 53.3,53 h 407.7 c 14.1,0 18.6,2.8 25.3,9.4 6.4,6.4 7.1,13.4 7.1,30.8 v 246.1 247.4 c 0.2,11.8 -1.9,22.1 -7.4,27.6 C 839.7,793.9 831,799 819.4,799 Z M 813,707 V 415 c 0,-36.9 -13.9,-53 -53,-53 H 240 c -38.1,0 -53,11.7 -53,53 v 292 c 0,38.8 11.5,53 53,53 h 520 c 37.8,0 53,-12.1 53,-53 z M 760,267 c 0,0 -228.6,-0.3 -356.7,-0.3 L 350,213 H 240 c -41.6,2.7 -52.2,14.3 -53,53 v 54 h 626 c -0.6,-37.5 -12,-53 -53,-53 z" fill="REPLACE_FILL1"/>`},
 			{openicon:`<path d="M 307,330 H 970 L 825,779 H 167 Z" fill="REPLACE_FILL2"/><path d="M 189 174 C 174.4 174 163.4 179.6 159 184 C 153 190 148 198.7 148 212 L 148 755 C 148 773.9 152.3 784.3 157 789 C 161.7 793.7 173.5 799 184 799 L 849 799 L 990.8 359.8 C 993.8 350.9 994.7 345.9 994.7 337.4 C 994.7 327.6 994.3 326.2 991.4 323.3 C 991.4 323.3 985.9 320 974.3 320 L 852 320 L 852 268 C 852 251.4 851.4 242.5 845 237 C 838.2 231.2 833.1 227 820 227 L 412.6 227 L 359.3 174 L 189 174 z M 335 360 L 933 360 L 808.2 759.3 L 205 758.1 L 335 360 z" fill="REPLACE_FILL1"/>`,
 			closedicon:`<path d="M 173,345 V 771 H 825 V 345 Z" fill="REPLACE_FILL2"/><path d="M 189.2 174 C 175.4 174.2 166.7 176.8 159.9 183.6 C 154 189.5 148.7 192.7 148 211.2 L 148 754.9 C 148 774.6 151.7 783.3 157.4 788.9 C 164.3 795.8 170.3 799 184.2 799 L 819.4 799 C 831 799 839.7 793.9 845.2 788.4 C 850.8 782.8 852.9 772.5 852.7 760.8 L 852.7 513.3 L 852.7 267.2 C 852.7 249.8 852 242.8 845.6 236.4 C 838.9 229.7 834.4 227 820.3 227 L 412.6 227 L 359.3 174 L 189.2 174 z M 240 362 L 760 362 C 799.1 362 813 378.1 813 415 L 813 707 C 813 747.9 797.8 760 760 760 L 240 760 C 198.5 760 187 745.8 187 707 L 187 415 C 187 373.7 201.9 362 240 362 z" fill="REPLACE_FILL1"/>`},
-			{openicon:`<path d="m 167,200 h 200 l 50,50 H 829.8 L 830,330 H 314 L 167,779 Z" fill="REPLACE_FILL2"/><path d="M 189 174 C 174.4 174 163.4 179.6 159 184 C 153 190 148 198.7 148 212 L 148 755 C 148 773.9 152.3 784.3 157 789 C 161.7 793.7 173.5 799 184 799 L 849 799 L 990.8 359.8 C 993.8 350.9 994.7 345.9 994.7 337.4 C 994.7 327.6 994.3 326.2 991.4 323.3 C 991.4 323.3 985.9 320 974.3 320 L 852 320 L 852 268 C 852 251.4 851.4 242.5 845 237 C 838.2 231.2 833.1 227 820 227 L 412.6 227 L 359.3 174 L 189 174 z M 240 213 L 350 213 L 403.3 266.7 L 760 267 C 800.8 267 813 280.2 813 320 C 813.3 320 306.7 319.8 306.7 319.8 C 297.7 319.8 292.7 326.4 289.7 334.6 L 187 648.7 L 187 266 C 187 223.1 202.4 213 240 213 z" fill="REPLACE_FILL1"/>`,
+			{openicon:`<path d="M 167,200 h 200 l 50,50 H 829.8 L 830,330 H 314 L 167,779 Z" fill="REPLACE_FILL2"/><path d="M 189 174 C 174.4 174 163.4 179.6 159 184 C 153 190 148 198.7 148 212 L 148 755 C 148 773.9 152.3 784.3 157 789 C 161.7 793.7 173.5 799 184 799 L 849 799 L 990.8 359.8 C 993.8 350.9 994.7 345.9 994.7 337.4 C 994.7 327.6 994.3 326.2 991.4 323.3 C 991.4 323.3 985.9 320 974.3 320 L 852 320 L 852 268 C 852 251.4 851.4 242.5 845 237 C 838.2 231.2 833.1 227 820 227 L 412.6 227 L 359.3 174 L 189 174 z M 240 213 L 350 213 L 403.3 266.7 L 760 267 C 800.8 267 813 280.2 813 320 C 813.3 320 306.7 319.8 306.7 319.8 C 297.7 319.8 292.7 326.4 289.7 334.6 L 187 648.7 L 187 266 C 187 223.1 202.4 213 240 213 z" fill="REPLACE_FILL1"/>`,
 			closedicon:`<path d="M 173,190 V 350 H 825 V 250 H 420 l -70,-60 z" fill="REPLACE_FILL2"/><path d="M 189.2 174 C 175.4 174.2 166.7 176.8 159.9 183.6 C 154 189.5 148.7 192.7 148 211.2 L 148 754.9 C 148 774.6 151.7 783.3 157.4 788.9 C 164.3 795.8 170.3 799 184.2 799 L 819.4 799 C 831 799 839.7 793.9 845.2 788.4 C 850.8 782.8 852.9 772.5 852.7 760.8 L 852.7 513.3 L 852.7 267.2 C 852.7 249.8 852 242.8 845.6 236.4 C 838.9 229.7 834.4 227 820.3 227 L 412.6 227 L 359.3 174 L 189.2 174 z M 240 213 L 350 213 L 403.3 266.7 C 531.4 266.7 760 267 760 267 C 801 267 812.4 282.5 813 320 L 187 320 L 187 266 C 187.8 227.3 198.4 215.7 240 213 z" fill="REPLACE_FILL1"/>`},
-			{openicon:`<path d="M 132,305 H 880 V 750 H 132 Z" fill="REPLACE_FILL2"/><path d="m 135,188 c -5.6,0 -13.9,2.9 -19.8,8.9 C 109.4,203 107,206.8 107,216 c 0,189.7 0,379.3 0,569 0,11.1 1.7,14.8 7,20.2 C 120.5,811.6 125.4,813 135,813 h 717 c 16.7,0 16.7,-1.6 18.6,-6.6 L 981.3,423.4 c 0,-5.8 -1,-6.2 -2.8,-8.1 -1.9,-1.9 -4.3,-2 -11.9,-2 l -691.9,2.1 c -16.4,0 -21.3,11.5 -23.4,17.2 l -80.9,263 -0.2,0 C 159.1,714.4 147,704.3 147,677.2 V 334 h 733 v -26 c 0,-7.7 -1.6,-14.7 -7.6,-19.8 C 866.3,283.1 860.4,280 852,280 H 440 l -20,-82 c -1.2,-2.5 -3.1,-6.8 -5.8,-7.7 0,0 -3,-2.3 -10.2,-2.3 z" fill="REPLACE_FILL1"/>`,
-			closedicon:`<path d="M 132,305 H 880 V 750 H 132 Z" fill="REPLACE_FILL2"/><path d="m 135,813 c -10.3,0 -14.5,-1.4 -21,-7.8 C 108.7,799.8 107,796.1 107,785 c 0,-189.7 0,-379.3 0,-569 0,-9.2 2.4,-13 8.2,-19.1 C 121.1,190.9 129.4,188 135,188 h 269 c 7.2,0 10.2,2.3 10.2,2.3 2.7,0.9 4.6,5.2 5.8,7.7 l 20,82 h 412 c 8.4,0 14.3,3.1 20.4,8.2 C 878.4,293.3 880,300.3 880,308 v 26 H 147 v 343.2 c 0,27.1 18.1,25.2 21.7,5.4 l 32.7,-277.7 c 0.7,-2.8 2.7,-7.5 5.8,-10.6 C 210.4,391.1 214.5,388 222.7,388 H 852 c 7.9,0 15.9,2.9 20.5,7.5 C 878.3,401.3 880,408.6 880,416 v 369 c 0,6.9 -1.8,14.7 -7.4,19.3 C 866.2,809.6 858.9,813 852,813 Z" fill="REPLACE_FILL1"/>`},
-			{openicon:`<path d="m 186.3,187 c -20,0 -35.7,7.4 -47.4,19.3 -11.7,11.9 -17.6,25 -17.6,45.7 v 80 l -0.3,416 c 0,10.9 4.6,32.6 16.7,45.1 C 149.8,805.6 168,813 186.3,813 365.7,749.3 880.3,734.5 880.3,734.5 c 0,0 0,-255.4 0,-402.5 0,-16.9 -4.7,-35 -17.2,-47.4 -12.5,-12.4 -30.1,-17.6 -47.8,-17.6 h -310 l -79,-80 z" fill="REPLACE_FILL1"/><path d="m 175.1,810.3 79.1,-393 c 8.3,-23.6 21.8,-42.9 53.1,-43 H 920.6 c 17.7,0 35.9,19.5 33.7,29.3 l -73.7,365.7 c -9,24.8 -11.1,41.3 -51.8,44 H 185.6 c -3.6,0 -6.4,-0.1 -11.1,-0.9 z" fill="REPLACE_FILL2"/>`,
-			closedicon:`<path d="m 121,252 c 0,-20.7 5.9,-33.8 17.6,-45.7 C 150.3,194.4 166,187 186,187 h 240 l 79,80 -384,113 z" fill="REPLACE_FILL1"/><path d="m 186,813 c -18.4,0 -36.5,-7.4 -48.6,-19.9 C 125.3,780.6 120.7,758.9 120.7,748 L 121,332 c 0,-16.9 7.2,-31.7 18.6,-43.5 C 151,276.7 170.1,267 186,267 h 629 c 17.6,0 35.2,5.3 47.8,17.6 C 875.3,297 880,315.1 880,332 v 416 c 0,14.8 -3.4,36.6 -17,47.9 C 849.5,807.2 830.9,813 815,813 Z" fill="REPLACE_FILL2"/>`},
-			{openicon:`<path d="m 160,253 h 614 c 14.8,0 29.7,8.6 36.9,15.8 C 819.4,277.3 826,289.4 826,305 v 95 H 160 Z" fill="REPLACE_FILL2"/><path d="m 199,200 c -26.2,0 -33.9,6.5 -41.5,15.6 C 149.8,224.8 147,231.8 147,252 V 386.7 387 c -20.9,0.5 -56.5,-3.5 -70.3,6.9 -2.5,1.9 -5.4,3.2 -8.3,9.8 -6.8,25.6 -0.3,54.8 1.1,70.3 9.1,59.2 69.1,294.7 74.9,310 3.7,9.8 4.6,13.6 10,15 h 689.6 c 6.3,-1.4 11.6,-15 11.6,-15 L 931.8,474 c 2.7,-20 8.3,-54 -0.2,-70.3 -2,-3.5 -6.5,-8.1 -9.3,-9.8 C 902.5,385.1 881.9,387 853,387 852.6,369.4 855,346.8 846.6,333 842.4,326.2 830.5,321.3 826,321.3 V 387 L 173.2,386.7 173,387 v -82 c 0,-14.6 2.8,-25.9 12.4,-35.5 C 195.9,259 207.7,253 225,253 h 201 l -54,-53 z" fill="REPLACE_FILL1"/>`,
-			closedicon:`<path d="M 160,400 V 253 h 440 v 147 z" fill="REPLACE_FILL2"/><path d="m 186,799 c -24.2,0 -34,-8 -39.7,-13.6 C 140.8,779.9 134,769.1 134,747 V 372 c 0,-21.5 13,-32 13,-32 V 252 c 0,-20.2 2.8,-27.2 10.5,-36.4 C 165.1,206.5 172.8,200 199,200 h 173 l 54,53 H 225 c -17.3,0 -29.1,6 -39.6,16.5 C 175.8,279.1 173,290.4 173,305 l -0.4,19 c 0,0 9.6,-4 20.9,-4 H 494 L 614,200 h 186 c 17.7,0 26.6,7.1 36,14.2 C 846.5,222 852,233.6 852,252 v 495 c 0,16.1 -7.5,30.2 -14.1,36.7 C 831.4,790.2 815.9,799 800,799 Z" fill="REPLACE_FILL1"/>`}
+			{openicon:`<path d="M 132,305 H 880 V 750 H 132 Z" fill="REPLACE_FILL2"/><path d="M 135,188 c -5.6,0 -13.9,2.9 -19.8,8.9 C 109.4,203 107,206.8 107,216 c 0,189.7 0,379.3 0,569 0,11.1 1.7,14.8 7,20.2 C 120.5,811.6 125.4,813 135,813 h 717 c 16.7,0 16.7,-1.6 18.6,-6.6 L 981.3,423.4 c 0,-5.8 -1,-6.2 -2.8,-8.1 -1.9,-1.9 -4.3,-2 -11.9,-2 l -691.9,2.1 c -16.4,0 -21.3,11.5 -23.4,17.2 l -80.9,263 -0.2,0 C 159.1,714.4 147,704.3 147,677.2 V 334 h 733 v -26 c 0,-7.7 -1.6,-14.7 -7.6,-19.8 C 866.3,283.1 860.4,280 852,280 H 440 l -20,-82 c -1.2,-2.5 -3.1,-6.8 -5.8,-7.7 0,0 -3,-2.3 -10.2,-2.3 z" fill="REPLACE_FILL1"/>`,
+			closedicon:`<path d="M 132,305 H 880 V 750 H 132 Z" fill="REPLACE_FILL2"/><path d="M 135,813 c -10.3,0 -14.5,-1.4 -21,-7.8 C 108.7,799.8 107,796.1 107,785 c 0,-189.7 0,-379.3 0,-569 0,-9.2 2.4,-13 8.2,-19.1 C 121.1,190.9 129.4,188 135,188 h 269 c 7.2,0 10.2,2.3 10.2,2.3 2.7,0.9 4.6,5.2 5.8,7.7 l 20,82 h 412 c 8.4,0 14.3,3.1 20.4,8.2 C 878.4,293.3 880,300.3 880,308 v 26 H 147 v 343.2 c 0,27.1 18.1,25.2 21.7,5.4 l 32.7,-277.7 c 0.7,-2.8 2.7,-7.5 5.8,-10.6 C 210.4,391.1 214.5,388 222.7,388 H 852 c 7.9,0 15.9,2.9 20.5,7.5 C 878.3,401.3 880,408.6 880,416 v 369 c 0,6.9 -1.8,14.7 -7.4,19.3 C 866.2,809.6 858.9,813 852,813 Z" fill="REPLACE_FILL1"/>`},
+			{openicon:`<path d="M 186.3,187 c -20,0 -35.7,7.4 -47.4,19.3 -11.7,11.9 -17.6,25 -17.6,45.7 v 80 l -0.3,416 c 0,10.9 4.6,32.6 16.7,45.1 C 149.8,805.6 168,813 186.3,813 365.7,749.3 880.3,734.5 880.3,734.5 c 0,0 0,-255.4 0,-402.5 0,-16.9 -4.7,-35 -17.2,-47.4 -12.5,-12.4 -30.1,-17.6 -47.8,-17.6 h -310 l -79,-80 z" fill="REPLACE_FILL1"/><path d="m 175.1,810.3 79.1,-393 c 8.3,-23.6 21.8,-42.9 53.1,-43 H 920.6 c 17.7,0 35.9,19.5 33.7,29.3 l -73.7,365.7 c -9,24.8 -11.1,41.3 -51.8,44 H 185.6 c -3.6,0 -6.4,-0.1 -11.1,-0.9 z" fill="REPLACE_FILL2"/>`,
+			closedicon:`<path d="M 121,252 c 0,-20.7 5.9,-33.8 17.6,-45.7 C 150.3,194.4 166,187 186,187 h 240 l 79,80 -384,113 z" fill="REPLACE_FILL1"/><path d="M 186,813 c -18.4,0 -36.5,-7.4 -48.6,-19.9 C 125.3,780.6 120.7,758.9 120.7,748 L 121,332 c 0,-16.9 7.2,-31.7 18.6,-43.5 C 151,276.7 170.1,267 186,267 h 629 c 17.6,0 35.2,5.3 47.8,17.6 C 875.3,297 880,315.1 880,332 v 416 c 0,14.8 -3.4,36.6 -17,47.9 C 849.5,807.2 830.9,813 815,813 Z" fill="REPLACE_FILL2"/>`},
+			{openicon:`<path d="M 160,253 h 614 c 14.8,0 29.7,8.6 36.9,15.8 C 819.4,277.3 826,289.4 826,305 v 95 H 160 Z" fill="REPLACE_FILL2"/><path d="M 199,200 c -26.2,0 -33.9,6.5 -41.5,15.6 C 149.8,224.8 147,231.8 147,252 V 386.7 387 c -20.9,0.5 -56.5,-3.5 -70.3,6.9 -2.5,1.9 -5.4,3.2 -8.3,9.8 -6.8,25.6 -0.3,54.8 1.1,70.3 9.1,59.2 69.1,294.7 74.9,310 3.7,9.8 4.6,13.6 10,15 h 689.6 c 6.3,-1.4 11.6,-15 11.6,-15 L 931.8,474 c 2.7,-20 8.3,-54 -0.2,-70.3 -2,-3.5 -6.5,-8.1 -9.3,-9.8 C 902.5,385.1 881.9,387 853,387 852.6,369.4 855,346.8 846.6,333 842.4,326.2 830.5,321.3 826,321.3 V 387 L 173.2,386.7 173,387 v -82 c 0,-14.6 2.8,-25.9 12.4,-35.5 C 195.9,259 207.7,253 225,253 h 201 l -54,-53 z" fill="REPLACE_FILL1"/>`,
+			closedicon:`<path d="M 160,400 V 253 h 440 v 147 z" fill="REPLACE_FILL2"/><path d="M 186,799 c -24.2,0 -34,-8 -39.7,-13.6 C 140.8,779.9 134,769.1 134,747 V 372 c 0,-21.5 13,-32 13,-32 V 252 c 0,-20.2 2.8,-27.2 10.5,-36.4 C 165.1,206.5 172.8,200 199,200 h 173 l 54,53 H 225 c -17.3,0 -29.1,6 -39.6,16.5 C 175.8,279.1 173,290.4 173,305 l -0.4,19 c 0,0 9.6,-4 20.9,-4 H 494 L 614,200 h 186 c 17.7,0 26.6,7.1 36,14.2 C 846.5,222 852,233.6 852,252 v 495 c 0,16.1 -7.5,30.2 -14.1,36.7 C 831.4,790.2 815.9,799 800,799 Z" fill="REPLACE_FILL1"/>`}
 		];
 
 		this.defaults = {
@@ -218,8 +218,18 @@ class ServerFolders {
 			
 			// REMOVE 08.10.2019
 			let foldersdata = BDFDB.ObjectUtils.sort(BDFDB.DataUtils.load(this, "folders"), "position");
-			let folders = Object.keys(foldersdata).filter(n => n.indexOf("folder") == 0);
-			if (folders.length) BDFDB.openConfirmModal(this, `Old ServerFolders data detected!\nFound ${folders.length} old custom folders in the ServerFolders.config.json.\nPress the '${BDFDB.LanguageUtils.LanguageStrings.OKAY}' button to automatically create a native folder for each old folder and to automatically put the servers in them.`, "Convert?", () => {
+			let newfolders = Object.keys(foldersdata).filter(n => n.indexOf("folder") == -1);
+			let cleaned = false;
+			if (newfolders.length) for (let id of newfolders) if (foldersdata[id].icons) {
+				cleaned = true;
+				delete foldersdata[id].icons;
+			}
+			if (cleaned) {
+				BDFDB.DataUtils.save(foldersdata, this, "folders");
+				foldersdata = BDFDB.ObjectUtils.sort(BDFDB.DataUtils.load(this, "folders"), "position");
+			}
+			let oldfolders = Object.keys(foldersdata).filter(n => n.indexOf("folder") == 0);
+			if (oldfolders.length) BDFDB.openConfirmModal(this, `Old ServerFolders data detected!\nFound ${oldfolders.length} old custom folders in the ServerFolders.config.json.\nPress the '${BDFDB.LanguageUtils.LanguageStrings.OKAY}' button to automatically create a native folder for each old folder and to automatically put the servers in them.`, "Convert?", () => {
 				let oldGuildFolders = Object.assign({}, BDFDB.LibraryModules.FolderStore.guildFolders);
 				let guildsInFolders = [];
 				let guildFolders = [];
@@ -250,7 +260,6 @@ class ServerFolders {
 				for (let i in oldGuildFolders) if (oldGuildFolders[i].folderId || !guildsInFolders.includes(oldGuildFolders[i].guildIds[0])) guildFolders.push(Object.assign({}, oldGuildFolders[i]));
 				for (let i in guildFolders) for (let guildid of guildFolders[i].guildIds) guildPositions.push(guildid);
 				BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({guildPositions, guildFolders});
-				BDFDB.DataUtils.remove(this, "folders");
 				BDFDB.DataUtils.save(newfoldersdata, this, "folders");
 			});
 			
@@ -545,12 +554,8 @@ class ServerFolders {
 					data.color4 = BDFDB.ColorUtils.getSwatchColor(root, 4);
 
 					if (!BDFDB.equals(olddata, data)) {
-						let folderIcons = this.loadAllIcons();
-						let isCustom = BDFDB.DOMUtils.containsClass(selectedIcon, "custom");
-						data.icons.openicon = folderIcons[data.iconID] ? (!isCustom ? this.createBase64SVG(folderIcons[data.iconID].openicon, data.color1, data.color2) : folderIcons[data.iconID].openicon) : null;
-						data.icons.closedicon = folderIcons[data.iconID] ? (!isCustom ? this.createBase64SVG(folderIcons[data.iconID].closedicon, data.color1, data.color2) : folderIcons[data.iconID].closedicon) : null;
 						BDFDB.DataUtils.save(data, this, "folders", folderid);
-						instance.handleColorChange(data.color1 ? parseInt(BDFDB.ColorUtils.convert(data.color1 && BDFDB.ObjectUtils.is(data.color1) ? data.color1[Object.keys(data.color1)[0]] : data.color1, "HEX").slice(1), 16) : null);
+						instance.handleColorChange(data.color1 ? BDFDB.ColorUtils.convert(data.color1 && BDFDB.ObjectUtils.is(data.color1) ? data.color1[Object.keys(data.color1)[0]] : data.color1, "INT") : null);
 						this.changeFolder(folderid);
 					}
 				});
@@ -747,7 +752,7 @@ class ServerFolders {
 	
 	getFolderConfig (folderid) {
 		let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(folderid) || {};
-		let config = BDFDB.DataUtils.load(this, "folders", folderid) || {
+		let data = BDFDB.DataUtils.load(this, "folders", folderid) || {
 			iconID: 			"-1",
 			icons: 				{openicon: null, closedicon: null},
 			muteFolder: 		false,
@@ -759,8 +764,12 @@ class ServerFolders {
 			color3: 			null,
 			color4: 			null
 		};
-		if (!config.color1) config.color1 = BDFDB.ColorUtils.convert(folder.folderColor, "RGBCOMP") || ["0","0","0"];
-		return config;
+		if (!data.color1) data.color1 = BDFDB.ColorUtils.convert(folder.folderColor, "RGBCOMP") || ["0","0","0"];
+		else if (folder.folderColor && !BDFDB.ColorUtils.compare(folder.folderColor, BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[Object.keys(data.color1)[0]] : data.color1, "INT"))) {
+			data.color1 = BDFDB.ColorUtils.convert(folder.folderColor, "RGBCOMP");
+			BDFDB.DataUtils.save(data, this, "folders", folderid);
+		}
+		return data;
 	}
 
 	toggleFolderContent (forceOpenClose) {
@@ -789,7 +798,8 @@ class ServerFolders {
 					foldericon.parentElement.parentElement.style.setProperty("-webkit-mask", `url(data:image/svg+xml;base64,${btoa(`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" fill="black" x="0" y="0" width="48" height="48"><path d="M ${width-7} 0 C ${width-5} 2 ${width-4} 5 ${width-4} 8 C ${width-4} ${width/1.8+3} 15 20 8 20 C 5 20 2 19 0 17 L 0 50 L 50 50 L 50 0 L 17 0 z"></path></svg>`)}) center/cover no-repeat`);
 				}
 				let icontype = BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folderid) ? "openicon" : "closedicon";
-				let icon = icontype != "closedicon" || data.useCloseIcon ? data.icons[icontype] : null;
+				let folderIcons = this.loadAllIcons();
+				let icon = folderIcons[data.iconID] ? (!folderIcons[data.iconID].customID ? this.createBase64SVG(folderIcons[data.iconID][icontype], data.color1, data.color2) : folderIcons[data.iconID][icontype]) : null;
 				if (icon) foldericon.style.setProperty("background-image", `url(${icon})`, "important");
 				else foldericon.style.removeProperty("background-image");
 				
