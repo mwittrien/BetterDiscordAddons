@@ -370,9 +370,17 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			plugin.listeners = [];
 		}
 	};
+	BDFDB.ListenerUtils.multiAdd = function (node, actions, callback) {
+		if (!Node.prototype.isPrototypeOf(node) || !actions || typeof callback != "function") return;
+		for (var action of actions.trim().split(" ").filter(n => n)) node.addEventListener(action, callback, true);
+	};
+	BDFDB.ListenerUtils.multiRemove = function (node, actions, callback) {
+		if (!Node.prototype.isPrototypeOf(node) || !actions || typeof callback != "function") return;
+		for (var action of actions.trim().split(" ").filter(n => n)) node.removeEventListener(action, callback, true);
+	};
 	BDFDB.ListenerUtils.addToChildren = function (node, actions, selector, callback) {
 		if (!Node.prototype.isPrototypeOf(node) || !actions || !selector || !selector.trim() || typeof callback != "function") return;
-		for (var action of actions.trim().split(" ")) if (action) {
+		for (var action of actions.trim().split(" ").filter(n => n)) {
 			var eventcallback = callback;
 			if (action == "mouseenter" || action == "mouseleave") eventcallback = e => {if (e.target.matches(selector)) callback(e);};
 			node.querySelectorAll(selector.trim()).forEach(child => {child.addEventListener(action, eventcallback, true);});
@@ -5498,7 +5506,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	
 	LibraryComponents.CharCounter = reactInitialized ? class BDFDB_CharCounter extends LibraryModules.React.Component {
 		getCounterString() {
-			let input = this.props.input || {};
+			let input = this.refElement || {};
 			let string = input.value || "", start = input.selectionStart || 0, end = input.selectionEnd || 0;
 			let length = this.props.parsing ? BDFDB.StringUtils.getParsedLength(string) : string.length;
 			let select = end - start == 0 ? 0 : (this.props.parsing ? BDFDB.StringUtils.getParsedLength(string.slice(start, end)) : (end - start));
@@ -5506,10 +5514,58 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			return `${length}${!this.props.max ? "" : "/" + this.props.max}${!select ? "" : " (" + select + ")"}`;
 		}
 		updateCounter() {
+			clearTimeout(this.updateTimeout);
 			this.updateTimeout = setTimeout(() => {
-				clearTimeout(this.updateTimeout);
+				this.props.children = this.getCounterString();
 				BDFDB.ReactUtils.forceUpdate(this);
 			}, 100);
+		}
+		componentDidMount() {
+			if (!this.props.refClass) console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", "refClass can not be undefined for BDFDB_CharCounter");
+			else {
+				let node = BDFDB.ReactUtils.findDOMNode(this);
+				if (node) {
+					this.refElement = node.parentElement.querySelector(this.props.refClass.startsWith(".") ? this.props.refClass : "." + this.props.refClass);
+					if (this.refElement) {
+						this.refElement.removeEventListener("keydown", this.updateCounter);
+						this.refElement.removeEventListener("click", this.updateCounter);
+						this.refElement.removeEventListener("change", this.updateCounter);
+						this.refElement.addEventListener("keydown", this.updateCounter);
+						this.refElement.addEventListener("click", this.updateCounter);
+						this.refElement.addEventListener("change", this.updateCounter);
+						BDFDB.ListenerUtils.add(this, input, "keydown click change", );
+						BDFDB.ListenerUtils.add(this, input, "mousedown", e => {
+							let mousemove = () => {
+								setTimeout(updateCounter, 10);
+							};
+							let mouseup = () => {
+								document.removeEventListener(mousemove);
+								document.removeEventListener(mouseup);
+								if (this.props.end - input.selectionStart) setImmediate(() => {
+									document.addEventListener(click);
+								});
+							};
+							let click = () => {
+								var contexttype = BDFDB.ReactUtils.getValue(document.querySelector(BDFDB.dotCN.contextmenu), "return.stateNode.props.type");
+								if (!contexttype || !contexttype.startsWith("CHANNEL_TEXT_AREA")) {
+									input.selectionStart = 0;
+									this.props.end = 0;
+									updateCounter();
+								}
+								else setTimeout(updateCounter, 100);
+								document.removeEventListener(mousemove);
+								document.removeEventListener(mouseup);
+								document.removeEventListener(click);
+							};
+							document.addEventListener(mousemove);
+							document.addEventListener(mouseup);
+						});
+
+						updateCounter();
+						this.updateCounter();
+					}
+				}
+			}
 		}
 		render() {
 			let props = Object.assign({}, this.props, {
@@ -5517,7 +5573,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				color: LibraryComponents.TextElement.Colors.PRIMARY,
 				children: this.getCounterString()
 			});
-			BDFDB.ObjectUtils.delete(props, "parsing", "max", "input");
+			BDFDB.ObjectUtils.delete(props, "parsing", "max", "refClass");
 			return BDFDB.ReactUtils.createElement(LibraryComponents.TextElement, props);
 		}
 	}: LibraryComponents.CharCounter;
