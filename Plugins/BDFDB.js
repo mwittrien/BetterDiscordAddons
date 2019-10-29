@@ -1331,23 +1331,45 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	};
 	InternalBDFDB.forceInitiateProcess = function (plugin, instance, type) {
 		if (!plugin || !instance || !type) return;
-		var methodnames = BDFDB.ArrayUtils.is(plugin.patchModules[type]) ? plugin.patchModules[type] : Array.of(plugin.patchModules[type]);
-		if (methodnames.includes("componentDidMount")) InternalBDFDB.initiateProcess(plugin, instance, null, type, ["componentDidMount"]);
+		let methodnames = BDFDB.ArrayUtils.is(plugin.patchModules[type]) ? plugin.patchModules[type] : Array.of(plugin.patchModules[type]);
+		if (methodnames.includes("componentDidMount")) InternalBDFDB.initiateProcess(plugin, type, {instance, methodname:"componentDidMount"});
 		if (methodnames.includes("render")) BDFDB.ReactUtils.forceUpdate(instance);
-		else if (methodnames.includes("componentDidUpdate")) InternalBDFDB.initiateProcess(plugin, instance, null, type, ["componentDidUpdate"]);
+		else if (methodnames.includes("componentDidUpdate")) InternalBDFDB.initiateProcess(plugin, type, {instance, methodname:"componentDidUpdate"});
 	};
-	InternalBDFDB.initiateProcess = function (plugin, instance, returnvalue, type, methodnames) {
-		if (BDFDB.ObjectUtils.is(plugin) && instance) {
+	InternalBDFDB.initiateProcess = function (plugin, type, e) {
+		if (BDFDB.ObjectUtils.is(plugin) && e.instance) {
 			if (plugin.name == "$BDFDB") plugin = BDFDBprocessFunctions;
 			type = (type.split(" _ _ ")[1] || type).replace(/[^A-z0-9]|_/g, "");
-			type = type[0].toUpperCase() + type.slice(1);
+			type = type.charAt(0).toUpperCase() + type.slice(1);
 			if (typeof plugin["process" + type] == "function") {
-				var wrapper = BDFDB.ReactUtils.findDOMNode(instance);
-				if (wrapper || methodnames.includes("render")) plugin["process" + type](instance, wrapper || document.createElement("div"), returnvalue, methodnames);
-				else setImmediate(_ => {
-					wrapper = BDFDB.ReactUtils.findDOMNode(instance);
-					if (wrapper) plugin["process" + type](instance, wrapper, returnvalue, methodnames);
-				});
+				// REMOVE
+				let isOldType = plugin["process" + type].toString().split("\n")[0].replace(/ /g, "").split(",")[2] == "returnvalue";
+				if (isOldType) {
+					if (e.methodname == "render") {
+						if (e.returnvalue) plugin["process" + type](e.instance, null, e.returnvalue, [e.methodname]);
+					}
+					else {
+						let wrapper = BDFDB.ReactUtils.findDOMNode(e.instance);
+						if (wrapper) plugin["process" + type](e.instance, wrapper, e.returnvalue, [e.methodname]);
+						else setImmediate(_ => {
+							wrapper = BDFDB.ReactUtils.findDOMNode(e.instance);
+							if (wrapper) plugin["process" + type](e.instance, wrapper, e.returnvalue, [e.methodname]);
+						});
+					}
+				}
+				else {
+					if (e.methodname == "render") {
+						if (e.returnvalue) plugin["process" + type](e);
+					}
+					else {
+						e.node = BDFDB.ReactUtils.findDOMNode(e.instance);
+						if (e.node) plugin["process" + type](e);
+						else setImmediate(_ => {
+							e.node = BDFDB.ReactUtils.findDOMNode(e.instance);
+							if (e.node) plugin["process" + type](e);
+						});
+					}
+				}
 			}
 		}
 	};
@@ -1373,7 +1395,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 					if (instance) {
 						instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 						BDFDB.ModuleUtils.patch(plugin, instance.prototype, plugin.patchModules[type], {after: e => {
-							if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) InternalBDFDB.initiateProcess(plugin, e.thisObject, e.returnValue, type, [e.originalMethodName]);
+							if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) InternalBDFDB.initiateProcess(plugin, type, {instance:e.thisObject, returnvalue:e.returnValue, methodname:e.originalMethodName});
 						}});
 					}
 				}
@@ -5734,6 +5756,16 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				children: typeof this.props.renderPopout == "function" ? this.props.renderPopout(this) : null
 			});
         }
+		componentDidMount() {
+			let basepopout = BDFDB.ReactUtils.findOwner(this, {name:"BasePopout"});
+			if (!basepopout || !basepopout.handleClick) return;
+			this.handleClick = basepopout.handleClick;
+			this.close = (...args) => {
+				basepopout.close(...args);
+				if (typeof this.props.onClose == "function") this.props.onClose(this);
+			}
+			this.domElementRef = basepopout.domElementRef;
+		}
 		render() {
 			if (typeof this.props.children != "function") {
 				let children = this.props.children;
@@ -5747,28 +5779,17 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 						if (typeof this.props.onClick == "function") this.props.onClick(this, e);
 						if ((this.props.openOnClick || this.props.openOnClick === undefined) && typeof this.handleClick == "function") this.handleClick();
 					}
-					else BDFDB.ListenerUtils.stopEvent(e);
+					else e.stopPropagation();
 				},
 				onContextMenu: e => {
 					if (!this.domElementRef.current || this.domElementRef.current.contains(e.target)) {
 						if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(this, e);
 						if (this.props.openOnContextMenu && typeof this.handleClick == "function") this.handleClick();
 					}
-					else BDFDB.ListenerUtils.stopEvent(e);
+					else e.stopPropagation();
 				},
 				children: BDFDB.ReactUtils.createElement(NativeSubComponents.PopoutContainer, Object.assign({}, this.props, {
-					renderPopout: this.handleRender.bind(this),
-					ref: instance => {
-						if (!instance) return;
-						let basepopout = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.child.stateNode");
-						if (!basepopout || !basepopout.handleClick) return;
-						this.handleClick = basepopout.handleClick;
-						this.close = (...args) => {
-							basepopout.close(...args);
-							if (typeof this.props.onClose == "function") this.props.onClose(this);
-						}
-						this.domElementRef = basepopout.domElementRef;
-					}
+					renderPopout: this.handleRender.bind(this)
 				}))
 			});
 		}
@@ -5930,11 +5951,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
             if (typeof this.props.onChange == "function") this.props.onChange(!this.props.value, this);
 			this.props.value = !this.props.value;
 			BDFDB.ReactUtils.forceUpdate(this);
-			if (!this.patched) {
-				this.patched = true;
-				let switchele = BDFDB.ReactUtils.findDOMNode(this);
-				if (switchele && BDFDB.DOMUtils.getParent(BDFDB.dotCNS.itemlayer + BDFDB.dotCN.popout, switchele)) switchele.addEventListener("click", this.handleChange.bind(this));
-			}
         }
         render() {
 			return BDFDB.ReactUtils.createElement(NativeSubComponents.Switch, Object.assign({}, this.props, {onChange: this.handleChange.bind(this)}));
@@ -5988,6 +6004,18 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			this.handleChange.bind(this)(value);
 			this.handleInput.bind(this)(value);
         }
+		componentDidMount() {
+			let input = BDFDB.ReactUtils.findDOMNode(this);
+			if (!input) return;
+			input = input.querySelector("input") || input;
+			if (input && !input.patched) {
+				input.addEventListener("keydown", e => {
+					this.handleKeyDown.bind(this)(e);
+					e.stopImmediatePropagation();
+				});
+				input.patched = true;
+			}
+		}
         render() {
 			let childprops = Object.assign({}, this.props, {
 				className: BDFDB.DOMUtils.formatClassName(this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["input" + this.props.size.toLowerCase()] || BDFDB.disCN.inputdefault, this.props.inputClassName, this.props.focused ? BDFDB.disCN.inputfocused : null, this.props.error || this.props.errorMessage ? BDFDB.disCN.inputerror : (this.props.success ? BDFDB.disCN.inputsuccess : null), this.props.disabled ? BDFDB.disCN.inputdisabled : null, this.props.editable ? BDFDB.disCN.inputeditable : null),
@@ -5999,17 +6027,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				onFocus: this.handleFocus.bind(this),
 				onMouseEnter: this.handleMouseEnter.bind(this),
 				onMouseLeave: this.handleMouseLeave.bind(this),
-				ref: input => {
-					if (!input) return;
-					if (!input.patched) {
-						input.addEventListener("keydown", e => {
-							this.handleKeyDown.bind(this)(e);
-							e.stopImmediatePropagation();
-						});
-						input.patched = true;
-					}
-					if (typeof this.props.inputRef == "function") this.props.inputRef(input);
-				}
+				ref: this.props.inputRef
 			});
 			BDFDB.ObjectUtils.delete(childprops, "errorMessage", "focused", "error", "success", "inputClassName", "inputPrefix", "size", "editable", "inputRef", "style");
 			return BDFDB.ReactUtils.createElement("div", {
@@ -7433,8 +7451,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	};
 
 	var BDFDBprocessFunctions = {};
-	BDFDBprocessFunctions.processV2CList = function (instance, wrapper, returnvalue) {
-		if (window.PluginUpdates && window.PluginUpdates.plugins && instance._reactInternalFiber.key && instance._reactInternalFiber.key.split("-")[0] == "plugin") {
+	BDFDBprocessFunctions.processV2CList = function (e) {
+		if (window.PluginUpdates && window.PluginUpdates.plugins && e.instance._reactInternalFiber.key && e.instance._reactInternalFiber.key.split("-")[0] == "plugin") {
 			var folderbutton = document.querySelector(BDFDB.dotCN._repofolderbutton);
 			if (folderbutton) {
 				var updatebutton = BDFDB.DOMUtils.create(`<button class="bd-updatebtn ${BDFDB.disCN._repofolderbutton}">Check for Updates</button>`);
@@ -7458,9 +7476,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 	};
 
-	BDFDBprocessFunctions._processCard = function (instance, wrapper, data) {
+	BDFDBprocessFunctions._processCard = function (e, data) {
 		var author, description = null;
-		if (BDFDB.DOMUtils.containsClass(wrapper, BDFDB.disCN._reposettingsclosed) && (author = wrapper.querySelector(BDFDB.dotCN._repoauthor)) != null && (description = wrapper.querySelector(BDFDB.dotCN._repodescription)) != null && (!BDFDB.ObjectUtils.is(data) || typeof data.getRawUrl != "function")) {
+		if (BDFDB.DOMUtils.containsClass(e.node, BDFDB.disCN._reposettingsclosed) && (author = e.node.querySelector(BDFDB.dotCN._repoauthor)) != null && (description = e.node.querySelector(BDFDB.dotCN._repodescription)) != null && (!BDFDB.ObjectUtils.is(data) || typeof data.getRawUrl != "function")) {
 			if (!author.firstElementChild && !description.firstElementChild && (author.innerText == "DevilBro" || author.innerText.indexOf("DevilBro,") == 0)) {
 				description.style.setProperty("display", "block", "important");
 				author.innerHTML = `<a class="${BDFDB.disCNS.anchor + BDFDB.disCN.anchorunderlineonhover}">DevilBro</a>${author.innerText.split("DevilBro").slice(1).join("DevilBro")}`;
@@ -7472,7 +7490,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 					let close = document.querySelector(BDFDB.dotCNS.settingsclosebuttoncontainer + BDFDB.dotCN.settingsclosebutton);
 					if (close) close.click();
 				});
-				let version = wrapper.querySelector(BDFDB.dotCN._repoversion);
+				let version = e.node.querySelector(BDFDB.dotCN._repoversion);
 				if (version && data.changelog) {
 					BDFDB.DOMUtils.remove(version.querySelectorAll(".BDFDB-versionchangelog"));
 					let changelogicon = BDFDB.DOMUtils.create(`<span class="BDFDB-versionchangelog" style="white-space: pre !important;">     </span>`);
@@ -7482,7 +7500,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 						BDFDB.TooltipUtils.create(changelogicon, BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG, {type:"top", selector:"changelogicon-tooltip"});
 					});
 				}
-				let links = wrapper.querySelector(BDFDB.dotCN._repolinks);
+				let links = e.node.querySelector(BDFDB.dotCN._repolinks);
 				if (links) {
 					if (links.firstElementChild) links.appendChild(document.createTextNode(" | "));
 					let supportlink = BDFDB.DOMUtils.create(`<a class="${BDFDB.disCNS._repolink + BDFDB.disCN._repolink}-support" target="_blank">Support Server</a>`);
@@ -7505,8 +7523,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			}
 		}
 	};
-	BDFDBprocessFunctions.processV2CPluginCard = function (instance, wrapper, returnvalue) {BDFDBprocessFunctions._processCard(instance, wrapper, instance.props.plugin);};
-	BDFDBprocessFunctions.processV2CThemeCard = function (instance, wrapper, returnvalue) {BDFDBprocessFunctions._processCard(instance, wrapper, instance.props.theme);};
+	BDFDBprocessFunctions.processV2CPluginCard = function (e) {BDFDBprocessFunctions._processCard(e, e.instance.props.plugin);};
+	BDFDBprocessFunctions.processV2CThemeCard = function (e) {BDFDBprocessFunctions._processCard(e, e.instance.props.theme);};
 
 	BDFDBprocessFunctions._processAvatar = function (user, avatar) {
 		if (avatar && user) {
@@ -7518,14 +7536,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			}
 		}
 	};
-	BDFDBprocessFunctions.processUserPopout = function (instance, wrapper, returnvalue) {
-		BDFDBprocessFunctions._processAvatar(instance.props.user, wrapper.querySelector(BDFDB.dotCN.userpopoutavatarwrapper));
+	BDFDBprocessFunctions.processUserPopout = function (e) {
+		BDFDBprocessFunctions._processAvatar(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.userpopoutavatarwrapper));
 	};
-	BDFDBprocessFunctions.processUserProfile = function (instance, wrapper, returnvalue) {
-		BDFDBprocessFunctions._processAvatar(instance.props.user, wrapper.querySelector(BDFDB.dotCN.avatarwrapper));
+	BDFDBprocessFunctions.processUserProfile = function (e) {
+		BDFDBprocessFunctions._processAvatar(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper));
 	};
-	BDFDBprocessFunctions.processMessage = function (instance, wrapper, returnvalue) {
-		BDFDBprocessFunctions._processAvatar(instance.props.message.author, wrapper.querySelector(BDFDB.dotCN.avatarwrapper));
+	BDFDBprocessFunctions.processMessage = function (e) {
+		BDFDBprocessFunctions._processAvatar(e.instance.props.message.author, e.node.querySelector(BDFDB.dotCN.avatarwrapper));
 	};
 
 	InternalBDFDB.patchPlugin(BDFDB);
