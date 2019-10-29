@@ -5489,14 +5489,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	LibraryComponents.ChannelTextAreaButton = BDFDB.ModuleUtils.findByName("ChannelTextAreaButton");
 	
 	LibraryComponents.CharCounter = reactInitialized ? class BDFDB_CharCounter extends LibraryModules.React.Component {
-		updateCounter(e) {
+		updateCounter(e = {string:"", start:0, end:0}) {
 			clearTimeout(this.updateTimeout);
 			this.updateTimeout = setTimeout(() => {
 				delete this.updateTimeout;
-				let string = e.string || "", start = e.start || 0, end = e.end || 0;
-				let length = this.props.parsing ? BDFDB.StringUtils.getParsedLength(string) : string.length;
-				let select = end - start == 0 ? 0 : (this.props.parsing ? BDFDB.StringUtils.getParsedLength(string.slice(start, end)) : (end - start));
-				select = !select ? 0 : (select > length ? length - (length - end - start) : select);
+				let length = this.props.parsing ? BDFDB.StringUtils.getParsedLength(e.string) : e.string.length;
+				let select = e.end - e.start == 0 ? 0 : (this.props.parsing ? BDFDB.StringUtils.getParsedLength(e.string.slice(e.start, e.end)) : (e.end - e.start));
+				select = !select ? 0 : (select > length ? length - (length - e.end - e.start) : select);
 				this.props.children = `${length}${!this.props.max ? "" : "/" + this.props.max}${!select ? "" : " (" + select + ")"}`;
 				BDFDB.ReactUtils.forceUpdate(this);
 			}, 100);
@@ -5512,7 +5511,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.charcounter, this.props.className),
 				color: LibraryComponents.TextElement.Colors.PRIMARY
 			});
-			BDFDB.ObjectUtils.delete(props, "parsing", "start", "end", "string", "max");
+			BDFDB.ObjectUtils.delete(props, "parsing", "max");
 			return BDFDB.ReactUtils.createElement(LibraryComponents.TextElement, props);
 		}
 	}: LibraryComponents.CharCounter;
