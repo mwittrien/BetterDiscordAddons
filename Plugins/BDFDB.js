@@ -5552,9 +5552,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 					this.refElement = node.parentElement.querySelector(this.props.refClass.startsWith(".") ? this.props.refClass : "." + this.props.refClass);
 					if (this.refElement) {
 						BDFDB.ListenerUtils.multiRemove(this.refElement, "keydown click change", this.updateCounter);
-						this.refElement.remove("mousedown", this.handleSelection);
+						this.refElement.removeEventListener("mousedown", this.handleSelection);
 						BDFDB.ListenerUtils.multiAdd(this.refElement, "keydown click change", this.updateCounter);
-						this.refElement.add("mousedown", this.handleSelection);
+						this.refElement.addEventListener("mousedown", this.handleSelection);
 						this.updateCounter();
 					}
 				}
