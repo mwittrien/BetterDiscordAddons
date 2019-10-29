@@ -5489,13 +5489,19 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	LibraryComponents.ChannelTextAreaButton = BDFDB.ModuleUtils.findByName("ChannelTextAreaButton");
 	
 	LibraryComponents.CharCounter = reactInitialized ? class BDFDB_CharCounter extends LibraryModules.React.Component {
-		updateCounter() {
-			let string = this.props.string || "";
-			let length = this.props.parsing ? BDFDB.StringUtils.getParsedLength(string) : string.length;
-			let select = this.props.end - this.props.start == 0 ? 0 : (this.props.parsing ? BDFDB.StringUtils.getParsedLength(string.slice(this.props.start, this.props.end)) : (this.props.end - this.props.start));
-			select = !select ? 0 : (select > length ? length - (length - this.props.end - this.props.start) : select);
-			this.props.children = `${length}${!this.props.max ? "" : "/" + this.props.max}${!select ? "" : " (" + select + ")"}`;
-			BDFDB.ReactUtils.forceUpdate(this);
+		updateCounter(e) {
+			clearTimeout(this.updateTimeout);
+			this.updateTimeout(() => {
+				delete this.updateTimeout;
+				let string = e.string || "";
+				let start = e.start || 0;
+				let end = e.end || 0;
+				let length = this.props.parsing ? BDFDB.StringUtils.getParsedLength(string) : string.length;
+				let select = end - start == 0 ? 0 : (this.props.parsing ? BDFDB.StringUtils.getParsedLength(string.slice(start, end)) : (end - start));
+				select = !select ? 0 : (select > length ? length - (length - end - start) : select);
+				this.props.children = `${length}${!this.props.max ? "" : "/" + this.props.max}${!select ? "" : " (" + select + ")"}`;
+				BDFDB.ReactUtils.forceUpdate(this);
+			}, 100);
 		}
 		componentDidMount() {
 			if (!this.props.children) this.updateCounter();
