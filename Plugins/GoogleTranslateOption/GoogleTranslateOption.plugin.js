@@ -11,7 +11,7 @@ class GoogleTranslateOption {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["Base64","Added (Text To Base64) and (Base64 To Text)"]]
+			"aded":[["Base64","Added (Text To Base64) and (Base64 To Text)"]]
 		};
 
 		this.patchModules = {
