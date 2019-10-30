@@ -605,7 +605,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		var tooltip = itemlayer.firstElementChild;
 		if (options.id) tooltip.id = options.id.split(" ").join("");
 		if (options.selector) BDFDB.DOMUtils.addClass(tooltip, options.selector);
-		if (options.style || options.tooltipStyle) tooltip.style = options.style || options.tooltipStyle;
+		if (options.style) tooltip.style = options.style;
 		if (options.html === true) tooltip.innerHTML = text;
 		else tooltip.innerText = text;
 		if (!options.type || BDFDB.disCN["tooltip" + options.type.toLowerCase()]) options.type = "top";

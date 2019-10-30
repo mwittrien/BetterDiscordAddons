@@ -3,31 +3,26 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";} 
 
-	getVersion () {return "1.4.6";}
+	getVersion () {return "1.4.7";}
 
 	getAuthor () {return "DevilBro";}
 
-	getDescription () {return "Displays Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout. Thanks for Zerebos' help.";}
+	getDescription () {return "Displays Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout.";}
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Padding in Memberlist","Fixed the padding in the memberlist"]]
+			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
 		this.patchModules = {
-			"MemberListItem":"componentDidMount",
-			"MessageUsername":"componentDidMount",
-			"UserPopout":"componentDidMount",
-			"StandardSidebarView":"componentWillUnmount"
+			"MemberListItem":"render",
+			"MessageUsername":"render",
+			"UserPopout":"render"
 		};
 	}
 
 	initConstructor () {
 		this.css = `
-			${BDFDB.dotCN.userpopoutcustomstatus}:not(:last-child) {
-				margin-top: 4px;
-				margin-bottom: 4px;
-			}
 			.BE-badge {
 				position: relative;
 				background-size: contain;
@@ -36,42 +31,46 @@ class BadgesEverywhere {
 				display: inline-flex;
 				align-items: center;
 				justify-content: center;
-				margin: 0 2px !important;
+				margin: 0 2px;
+			}
+			.BE-badge.BE-badge-popout {
+				margin-top: 6px;
 			}
 			.BE-badge.BE-badge-popout:not(.BE-badge-CurrentGuildBoost) {
-				top: 3px !important;
+				top: 3px;
 			}
 			.BE-badge.BE-badge-popout.BE-badge-CurrentGuildBoost {
-				top: 1px !important;
+				top: 1px;
 			}
-			.BE-badge.BE-badge-list.BE-badge-CurrentGuildBoost {
-				top: -1px !important;
+			.BE-badge.BE-badge-list:not(.BE-badge-CurrentGuildBoost) {
+				top: 1px;
 			}
 			.BE-badge.BE-badge-chat:not(.BE-badge-CurrentGuildBoost) {
-				top: 2px !important;
+				top: 2px;
 			}
 			.BE-badge.BE-badge-chat.BE-badge-CurrentGuildBoost {
-				top: 1px !important;
-			}
-			.BE-badge:not(.BE-badge-settings):first-of-type {
-				margin-left: 5px !important;
-			}
-			.BE-badge:not(.BE-badge-settings):last-of-type {
-				margin-right: 0 !important;
+				top: 1px;
 			}
 			${BDFDB.dotCN.userprofiletopsectionplaying} .BE-badge.BE-badge-CurrentGuildBoost svg {
 				color: white !important;
 			}
-			.BE-badge.BE-badge-chat, .BE-badge.BE-badge-list {height:14px !important;}
-			.BE-badge.BE-badge-chat.BE-size-17, .BE-badge.BE-badge-list.BE-size-17 {width:14px !important; min-width:14px !important;}
-			.BE-badge.BE-badge-chat.BE-size-21, .BE-badge.BE-badge-list.BE-size-21 {width:18px !important; min-width:18px !important;}
-			.BE-badge.BE-badge-chat.BE-size-22, .BE-badge.BE-badge-list.BE-size-22 {width:18px !important; min-width:18px !important;}
-			.BE-badge.BE-badge-chat.BE-size-24, .BE-badge.BE-badge-list.BE-size-24 {width:19px !important; min-width:19px !important;}
-			.BE-badge:not(.BE-badge-chat):not(.BE-badge-list) {height:17px !important;}
-			.BE-badge:not(.BE-badge-chat):not(.BE-badge-list).BE-size-17 {width:17px !important; min-width:17px !important;}
-			.BE-badge:not(.BE-badge-chat):not(.BE-badge-list).BE-size-21 {width:21px !important; min-width:21px !important;}
-			.BE-badge:not(.BE-badge-chat):not(.BE-badge-list).BE-size-22 {width:22px !important; min-width:22px !important;}
-			.BE-badge:not(.BE-badge-chat):not(.BE-badge-list).BE-size-24 {width:24px !important; min-width:24px !important;}
+			.BE-badge {height:17px !important;}
+			.BE-badge.BE-size-17 {width:17px !important; min-width:17px !important;}
+			.BE-badge.BE-size-21 {width:21px !important; min-width:21px !important;}
+			.BE-badge.BE-size-22 {width:22px !important; min-width:22px !important;}
+			.BE-badge.BE-size-24 {width:24px !important; min-width:24px !important;}
+			.BE-badge.BE-badge-mini {height:14px !important;}
+			.BE-badge.BE-badge-mini.BE-size-17 {width:14px !important; min-width:14px !important;}
+			.BE-badge.BE-badge-mini.BE-size-21 {width:18px !important; min-width:18px !important;}
+			.BE-badge.BE-badge-mini.BE-size-22 {width:18px !important; min-width:18px !important;}
+			.BE-badge.BE-badge-mini.BE-size-24 {width:19px !important; min-width:19px !important;}
+			
+			.BE-badge.BE-badge-mini:first-of-type {
+				margin-left: 5px;
+			}
+			.BE-badge.BE-badge-mini:last-of-type {
+				margin-right: 0;
+			}
 
 			.BE-badge.BE-badge-CurrentGuildBoost {height:14px !important; width:14px !important; min-width:14px !important;}
 
@@ -143,10 +142,7 @@ class BadgesEverywhere {
 			keys: ["badges", flag],
 			label: this.defaults.badges[flag].name,
 			value: badges[flag],
-			labelchildren: [
-				BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(`<span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionplaying}" style="all: unset !important;">${Array.isArray(this.defaults.badges[flag].types) ? this.defaults.badges[flag].types.map(rank => this.createBadge("settings", flag, rank)).join("") : this.createBadge("settings", flag)}</span>`)),
-				BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(`<span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;">${Array.isArray(this.defaults.badges[flag].types) ? this.defaults.badges[flag].types.map(rank => this.createBadge("settings", flag, rank)).join("") : this.createBadge("settings", flag)}</span>`))
-			]
+			labelchildren: this.createSettingsBadges(flag)
 		}));
 		for (let flag in indicators) inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
 			className: BDFDB.disCN.marginbottom8,
@@ -154,10 +150,7 @@ class BadgesEverywhere {
 			keys: ["indicators", flag],
 			label: this.defaults.indicators[flag].name,
 			value: indicators[flag],
-			labelchildren: [
-				BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(`<span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionplaying}" style="all: unset !important;">${this.createBadge("settings", flag)}</span>`)),
-				BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(`<span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;">${this.createBadge("settings", flag)}</span>`))
-			]
+			labelchildren: this.createSettingsBadges(flag)
 		}));
 		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 			title: "Display Badges:",
@@ -203,8 +196,7 @@ class BadgesEverywhere {
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
-
-			BDFDB.DOMUtils.remove(".BE-badges");
+			
 			BDFDB.PluginUtils.clear(this);
 		}
 	}
@@ -212,97 +204,105 @@ class BadgesEverywhere {
 
 	// begin of own functions
 
-	processMemberListItem (e) {
-		if (e.instance.props && BDFDB.DataUtils.get(this, "settings", "showInMemberList")) this.addBadges(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.namecontainernamewrapper), "list");
-	}
-
-	processMessageUsername (e) {
-		let message = BDFDB.ReactUtils.getValue(e.instance, "props.message");
-		if (message) {
-			let username = e.node.querySelector(BDFDB.dotCN.messageusername);
-			if (username && BDFDB.DataUtils.get(this, "settings", "showInChat")) this.addBadges(message.author, e.node, "chat");
-		}
-	}
-
-	processUserPopout (e) {
-		if (e.instance.props && BDFDB.DataUtils.get(this, "settings", "showInPopout")) this.addBadges(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.userpopoutheadertext), "popout");
-	}
-
-	processStandardSidebarView () {
+	onSettingsClosed () {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 	}
-	
-	createBadge (type, flag, rank = "") {
-		let data = this.defaults.badges[flag] || this.defaults.indicators[flag];
-		if (!data) return "";
-		let className = [`BE-badge`, `BE-badge-${type}`, data.id ? `BE-badge-${data.id}` : null, data.selector ? this.BadgeClasses[data.selector + rank] : null, data.size ? `BE-size-${data.size}` : null].filter(n => n).join(" ");
-		return `<div class="${className}">${data.inner || ""}</div>`;
+
+	processMemberListItem (e) {
+		if (!BDFDB.DataUtils.get(this, "settings", "showInMemberList")) return;
+		if (e.instance.props.user) this.injectBadges(e.instance, BDFDB.ReactUtils.getValue(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, "list");
 	}
 
-	addBadges (info, wrapper, type) {
-		if (!info || info.bot || !wrapper) return;
-		if (!this.requestedusers[info.id]) {
-			this.requestedusers[info.id] = [[wrapper,type]];
+	processMessageUsername (e) {
+		if (!BDFDB.DataUtils.get(this, "settings", "showInChat")) return;
+		let user = BDFDB.ReactUtils.getValue(e.instance, "props.message.author");
+		if (user) this.injectBadges(e.instance, BDFDB.ReactUtils.getValue(e.returnvalue, "props.children.props.children"), user, "chat");
+	}
+
+	processUserPopout (e) {
+		if (!BDFDB.DataUtils.get(this, "settings", "showInPopout")) return;
+		if (e.instance.props.user) {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "CustomStatus"});
+			if (index > -1) this.injectBadges(e.instance, children, e.instance.props.user, "popout", e.instance.props.activity && e.instance.props.activity.type != BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS);
+		}
+	}
+
+	injectBadges (instance, children, info, type, colored) {
+		if (!BDFDB.ArrayUtils.is(children) || !info || info.bot || this.stopping) return;
+		if (!BDFDB.ArrayUtils.is(this.requestedusers[info.id])) {
+			this.requestedusers[info.id] = [instance];
 			BDFDB.LibraryModules.APIUtils.get(BDFDB.DiscordConstants.Endpoints.USER_PROFILE(info.id)).then(result => {
-				let usercopy = Object.assign({},result.body.user);
+				let usercopy = Object.assign({}, result.body.user);
 				if (result.body.premium_since) usercopy.flags += this.nitroflag;
 				usercopy.premium_since = result.body.premium_since;
 				if (result.body.premium_guild_since) usercopy.flags += this.boostflag;
 				usercopy.premium_guild_since = result.body.premium_guild_since;
 				this.loadedusers[info.id] = usercopy;
-				for (let queredobj of this.requestedusers[info.id]) this.addToWrapper(info, queredobj[0], queredobj[1]);
+				for (let queredinstance of this.requestedusers[info.id]) BDFDB.ReactUtils.forceUpdate(queredinstance);
 			});
 		}
-		else if (!this.loadedusers[info.id]) {
-			this.requestedusers[info.id].push([wrapper,type]);
-		}
-		else {
-			this.addToWrapper(info, wrapper, type);
-		}
+		else if (!this.loadedusers[info.id]) this.requestedusers[info.id].push(instance);
+		else children.push(this.createBadges(info, type, colored));
 	}
 
-	addToWrapper (info, wrapper, type) {
-		BDFDB.DOMUtils.remove(wrapper.querySelectorAll(".BE-badges"));
+	createBadges (info, type, uncolored) {
 		let badges = BDFDB.DataUtils.get(this, "badges");
 		let indicators = BDFDB.DataUtils.get(this, "indicators");
 		let settings = BDFDB.DataUtils.get(this, "settings");
-		let header = BDFDB.DOMUtils.getParent(BDFDB.dotCN.userpopoutheader, wrapper);
-		let badgewrapper = BDFDB.DOMUtils.create(`<span class="BE-badges BE-badges-${type} ${!settings.useColoredVersion || (header && !BDFDB.DOMUtils.containsClass(header, BDFDB.disCN.userpopoutheadernormal)) ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important; display: flex !important; flex-direction: row !important;"></span>`);
-		for (let flag in this.defaults.badges) {
-			if ((this.loadedusers[info.id].flags | flag) == this.loadedusers[info.id].flags && badges[flag]) {
-				let badge = BDFDB.DOMUtils.create(this.createBadge(type, flag, flag == this.boostflag ? BDFDB.LibraryModules.GuildBoostUtils.getUserLevel(this.loadedusers[info.id].premium_guild_since) : ""));
-				badgewrapper.appendChild(badge);
-				badge.addEventListener("mouseenter", () => {
-					let text = this.defaults.badges[flag].name;
-					if (flag == this.nitroflag && settings.showNitroDate) text = BDFDB.LanguageUtils.LanguageStringsFormat("PREMIUM_BADGE_TOOLTIP", new Date(this.loadedusers[info.id].premium_since));
-					else if (flag == this.boostflag && settings.showNitroDate) text = BDFDB.LanguageUtils.LanguageStringsFormat("PREMIUM_GUILD_SUBSCRIPTION_TOOLTIP", new Date(this.loadedusers[info.id].premium_guild_since));
-					BDFDB.TooltipUtils.create(badge, text, {type:"top", style:"white-space: nowrap; max-width: unset"});
-				});
-			}
+		if (uncolored == undefined) uncolored = !settings.useColoredVersion;
+		let badgewrapper = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(`<span class="BE-badges BE-badges-${type} ${uncolored ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;"></span>`));
+		badgewrapper.props.children = [];
+		for (let flag in badges) if ((this.loadedusers[info.id].flags | flag) == this.loadedusers[info.id].flags && badges[flag]) {
+			badgewrapper.props.children.push(this.createBadge(settings.showNitroDate ? this.getTimeString(info.id, flag) : null, type, flag, flag == this.boostflag ? BDFDB.LibraryModules.GuildBoostUtils.getUserLevel(this.loadedusers[info.id].premium_guild_since) : null));
 		}
 		let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), info.id);
 		if (indicators.CURRENT_GUILD_BOOST && member && member.premiumSince) {
-			let badge = BDFDB.DOMUtils.create(this.createBadge(type, "CURRENT_GUILD_BOOST"));
-			badgewrapper.appendChild(badge);
-			badge.addEventListener("mouseenter", () => {
-				BDFDB.TooltipUtils.create(badge, settings.showNitroDate ? BDFDB.LanguageUtils.LanguageStringsFormat("PREMIUM_GUILD_SUBSCRIPTION_TOOLTIP", new Date(member.premiumSince)) : "Boosting current server", {type:"top", style:"white-space: nowrap; max-width: unset"});
-			});
+			badgewrapper.props.children.push(this.createBadge(settings.showNitroDate ? this.getTimeString(info.id, "CURRENT_GUILD_BOOST") : null, type, "CURRENT_GUILD_BOOST"));
 		}
-		if (badgewrapper.firstChild) {
-			if (header) {
-				header.firstElementChild.appendChild(badgewrapper);
-				let popout = header.parentElement.parentElement;
-				if (popout.style.transform.indexOf("translateY(-1") == -1) {
-					let arect = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount)), prect = BDFDB.DOMUtils.getRects(popout);
-					popout.style.setProperty("top", (prect.y + prect.height > arect.height ? (arect.height - prect.height) : prect.y) + "px");
-				}
-			}
-			else {
-				wrapper.insertBefore(badgewrapper, wrapper.querySelector(".owner-tag,.TRE-tag,svg[name=MobileDevice]"));
+		return badgewrapper.props.children.length ? badgewrapper : null;
+	}
+	
+	createBadge (timestring, type, flag, rank) {
+		let data = this.defaults.badges[flag] || this.defaults.indicators[flag];
+		if (!data) return null;
+		return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+			className: BDFDB.DOMUtils.formatClassName(`BE-badge`, `BE-badge-${type}`, ["list", "chat"].includes(type) ? `BE-badge-mini` : null, data.id ? `BE-badge-${data.id}` : null, data.selector ? this.BadgeClasses[data.selector + (rank || "")] : null, data.size ? `BE-size-${data.size}` : null),
+			text: timestring || data.name,
+			tooltipConfig: {
+				style: "white-space: nowrap; max-width: unset;"
+			},
+			children: data.inner ? BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(data.inner)) : null
+		})
+	}
+	
+	getTimeString (id, flag) {
+		let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), id);
+		if (flag == this.nitroflag) return BDFDB.LanguageUtils.LanguageStringsFormat("PREMIUM_BADGE_TOOLTIP", new Date(this.loadedusers[id].premium_since));
+		else if (flag == this.boostflag) return BDFDB.LanguageUtils.LanguageStringsFormat("PREMIUM_GUILD_SUBSCRIPTION_TOOLTIP", new Date(this.loadedusers[id].premium_guild_since));
+		else if (member && flag == "CURRENT_GUILD_BOOST") return BDFDB.LanguageUtils.LanguageStringsFormat("PREMIUM_GUILD_SUBSCRIPTION_TOOLTIP", new Date(member.premiumSince));
+		return null;
+	}
+	
+	createSettingsBadges (flag) {
+		let data = this.defaults.badges[flag] || this.defaults.indicators[flag];
+		if (!data) return null;
+		let colorbadgewrapper = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(`<span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;"></span>`));
+		let uncolorbadgewrapper = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(`<span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionplaying}" style="all: unset !important;"></span>`));
+		if (Array.isArray(data.types)) {
+			for (let rank of data.types) {
+				let badge = this.createBadge(null, "settings", flag, rank);
+				colorbadgewrapper.props.children.push(badge);
+				uncolorbadgewrapper.props.children.push(badge);
 			}
 		}
+		else {
+			let badge = this.createBadge(null, "settings", flag);
+			colorbadgewrapper.props.children.push(badge);
+			uncolorbadgewrapper.props.children.push(badge);
+		}
+		return [colorbadgewrapper, uncolorbadgewrapper];
 	}
 }
