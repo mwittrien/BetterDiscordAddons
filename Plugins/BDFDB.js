@@ -605,19 +605,17 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		var tooltip = itemlayer.firstElementChild;
 		if (options.id) tooltip.id = options.id.split(" ").join("");
 		if (options.selector) BDFDB.DOMUtils.addClass(tooltip, options.selector);
-		if (options.style) tooltip.style = options.style;
+		if (options.style || options.tooltipStyle) tooltip.style = options.style || options.tooltipStyle;
 		if (options.html === true) tooltip.innerHTML = text;
 		else tooltip.innerText = text;
-		if (options.type && BDFDB.disCN["tooltip" + options.type.toLowerCase()]) {
-			BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN["tooltip" + options.type.toLowerCase()]);
-			tooltip.appendChild(BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.tooltippointer}"></div>`));
-		}
+		if (!options.type || BDFDB.disCN["tooltip" + options.type.toLowerCase()]) options.type = "top";
+		BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN["tooltip" + options.type.toLowerCase()]);
+		tooltip.position = options.type.toLowerCase();
+		tooltip.appendChild(BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.tooltippointer}"></div>`));
+		
 		if (tooltip.style.getPropertyValue("border-color") && (tooltip.style.getPropertyValue("background-color") || tooltip.style.getPropertyValue("background-image"))) BDFDB.DOMUtils.addClass(tooltip, "tooltip-customcolor");
 		else if (options.color && BDFDB.disCN["tooltip" + options.color.toLowerCase()]) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN["tooltip" + options.color.toLowerCase()]);
 		else BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltipblack);
-		if (!options.position || options.type) options.position = options.type;
-		if (!options.position || !["top","bottom","left","right"].includes(options.position.toLowerCase())) options.position = "right";
-		tooltip.position = options.position.toLowerCase();
 		tooltip.anker = anker;
 		
 		if (options.hide) BDFDB.DOMUtils.appendLocalStyle("BDFDBhideOtherTooltips" + id, `#app-mount ${BDFDB.dotCN.tooltip}:not(.BDFDB-tooltip-${id}) {display: none !important;}`, itemlayercontainer);
@@ -662,7 +660,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		if (!Node.prototype.isPrototypeOf(tooltip) || !Node.prototype.isPrototypeOf(tooltip.anker) || !tooltip.position) return;
 		
 		var pointer = tooltip.querySelector(BDFDB.dotCN.tooltippointer);
-		var left, top, trects = BDFDB.DOMUtils.getRects(tooltip.anker), irects = BDFDB.DOMUtils.getRects(itemlayer), arects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount)), positionoffsets = {height: pointer ? 10 : 0, width: pointer ? 10 : 0};
+		var left, top, trects = BDFDB.DOMUtils.getRects(tooltip.anker), irects = BDFDB.DOMUtils.getRects(itemlayer), arects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount)), positionoffsets = {height: 10, width: 10};
 		switch (tooltip.position) {
 			case "top":
 				top = trects.top - irects.height - positionoffsets.height + 2;
@@ -718,6 +716,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	BDFDB.ObjectUtils = {};
 	BDFDB.ObjectUtils.is = function (obj) {
 		return obj && Object.prototype.isPrototypeOf(obj) && !Array.prototype.isPrototypeOf(obj);
+	};
+	BDFDB.ObjectUtils.extract = function (obj, ...keys) {
+		let newobj = {};
+		if (BDFDB.ObjectUtils.is(obj)) for (let key of keys.flat()) if (obj[key]) newobj = obj[key];
+		return newobj;
 	};
 	BDFDB.ObjectUtils.delete = function (obj, ...keys) {
 		if (BDFDB.ObjectUtils.is(obj)) for (let key of keys.flat()) delete obj[key];
@@ -6256,48 +6259,28 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
     } : LibraryComponents.TextScroller;
 	
 	LibraryComponents.TooltipContainer = reactInitialized ? class BDFDB_TooltipContainer extends LibraryModules.React.Component {
-		constructor(props) {
-			super(props);
-			this.state = {shouldShowTooltip: true};
-		}
 		render() {
-			if (typeof this.props.children != "function") {
-				let children = this.props.children;
-				this.props.children = _ => {return children || BDFDB.ReactUtils.createElement("div", {style: {height: "100%", width: "100%"}});};
-			}
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Clickable, {
 				className: this.props.className,
 				onMouseEnter: e => {
-					if (typeof this.handleMouseEnter == "function") this.handleMouseEnter();
+					BDFDB.TooltipUtils.create(e.currentTarget, this.props.text, Object.assign({}, this.props.tooltipConfig));
 					if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(this, e);
 				},
 				onMouseLeave: e => {
-					if (typeof this.handleMouseLeave == "function") this.handleMouseLeave();
 					if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(this, e);
 				},
 				onClick: e => {
-					if (typeof this.handleClick == "function") this.handleClick();
 					if (typeof this.props.onClick == "function") this.props.onClick(this, e);
 				},
 				onContextMenu: e => {
-					if (typeof this.handleContextMenu == "function") this.handleContextMenu();
 					if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(this, e);
 				},
-				onContextMenu: e => {if (typeof this.handleContextMenu == "function") this.handleContextMenu();},
-				children: BDFDB.ReactUtils.createElement(NativeSubComponents.TooltipContainer, Object.assign({}, this.props, {
-					ref: instance => {
-						if (!instance) return;
-						this.handleMouseEnter = instance.handleMouseEnter;
-						this.handleMouseLeave = instance.handleMouseLeave;
-						this.handleClick = instance.handleClick;
-						this.handleContextMenu = instance.handleContextMenu;
-					}
-				}))
+				children: this.props.children
 			});
 		}
 	} : LibraryComponents.TooltipContainer;
 	
-	for (let type in NativeSubComponents) if (LibraryComponents[type]) for (let key in NativeSubComponents[type]) if (key != "displayName" && key != "name") LibraryComponents[type][key] = NativeSubComponents[type][key];
+	for (let type in NativeSubComponents) if (LibraryComponents[type]) for (let key in NativeSubComponents[type]) if (key != "displayName" && key != "name" && typeof NativeSubComponents[type][key] != "function") LibraryComponents[type][key] = NativeSubComponents[type][key];
 	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
 	
 	var LanguageStrings = LibraryModules.LanguageStore && LibraryModules.LanguageStore._proxyContext ? Object.assign({}, LibraryModules.LanguageStore._proxyContext.defaultMessages) : {};
