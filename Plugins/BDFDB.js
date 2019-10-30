@@ -5623,11 +5623,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		render() {
 			let props = Object.assign({}, this.props, {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.charcounter, this.props.className),
-				color: LibraryComponents.TextElement.Colors.PRIMARY,
 				children: this.getCounterString()
 			});
 			BDFDB.ObjectUtils.delete(props, "parsing", "max", "refClass");
-			return BDFDB.ReactUtils.createElement(LibraryComponents.TextElement, props);
+			return BDFDB.ReactUtils.createElement("div", props);
 		}
 	}: LibraryComponents.CharCounter;
 	
@@ -6692,6 +6691,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 		${BDFDB.dotCN.hovercardwrapper}:hover ${BDFDB.dotCN.hovercardbutton} {
 			opacity: 1;
+		}
+		
+		${BDFDB.dotCN.charcounter} {
+			color: var(--channels-default);
 		}
 		
 		${BDFDB.dotCN.inputnumberwrapper} {
