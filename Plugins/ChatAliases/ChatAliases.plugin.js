@@ -221,7 +221,7 @@ class ChatAliases {
 			}
 		}
 		else if (action == "removeall") {
-			BDFDB.openConfirmModal(this, "Are you sure you want to remove all added Words from your list?", () => {
+			BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all added Words from your list?", () => {
 				this.aliases = {};
 				update();
 			});

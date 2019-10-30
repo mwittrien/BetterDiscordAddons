@@ -75,7 +75,7 @@ class UserNotes {
 		BDFDB.initElements(settingspanel, this);
 
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".remove-button", () => {
-			BDFDB.openConfirmModal(this, "Are you sure you want to remove all usernotes?", () => {
+			BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all usernotes?", () => {
 				BDFDB.DataUtils.remove(this, "notes");
 			});
 		});

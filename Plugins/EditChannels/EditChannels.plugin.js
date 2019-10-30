@@ -73,7 +73,7 @@ class EditChannels {
 			color: BDFDB.LibraryComponents.Button.Colors.RED,
 			label: "Reset all Channels",
 			onClick: _ => {
-				BDFDB.openConfirmModal(this, "Are you sure you want to reset all channels?", () => {
+				BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset all channels?", () => {
 					BDFDB.DataUtils.remove(this, "channels");
 					this.forceUpdateAll();
 				});
@@ -184,7 +184,7 @@ class EditChannels {
 	showChannelSettings (info) {
 		var data = BDFDB.DataUtils.load(this, "channels", info.id) || {};
 		
-		BDFDB.openModal(this, {
+		BDFDB.ModalUtils.open(this, {
 			size: "MEDIUM",
 			header: this.labels.modal_header_text,
 			subheader: info.name,

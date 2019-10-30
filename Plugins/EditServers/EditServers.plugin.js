@@ -56,7 +56,7 @@ class EditServers {
 			color: BDFDB.LibraryComponents.Button.Colors.RED,
 			label: "Reset all Servers",
 			onClick: _ => {
-				BDFDB.openConfirmModal(this, "Are you sure you want to reset all servers?", () => {
+				BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset all servers?", () => {
 					BDFDB.DataUtils.remove(this, "servers");
 					this.forceUpdateAll();
 				});
@@ -224,7 +224,7 @@ class EditServers {
 	showServerSettings (info) {
 		var data = BDFDB.DataUtils.load(this, "servers", info.id) || {};
 		
-		BDFDB.openModal(this, {
+		BDFDB.ModalUtils.open(this, {
 			size: "MEDIUM",
 			header: this.labels.modal_header_text,
 			subheader: info.name,

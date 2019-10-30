@@ -228,7 +228,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			}
 		}
 		changeLogHTML += `</div>`
-		if (logs) BDFDB.openModal(plugin, {header:BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG, children:BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(changeLogHTML)), selector:"BDFDB-changelogmodal"});
+		if (logs) BDBDFDB.ModalUtils.open(plugin, {header:BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG, children:BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(changeLogHTML)), selector:"BDFDB-changelogmodal"});
 	};
 	BDFDB.PluginUtils.createSettingsPanel = function (plugin, children) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !children || (!BDFDB.ReactUtils.isValidElement(children) && !BDFDB.ArrayUtils.is(children)) || (BDFDB.ArrayUtils.is(children) && !children.length)) return;
@@ -3316,8 +3316,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		
 		return selectMenu;
 	};
-
-	BDFDB.openModal = function (plugin, config) {
+	
+	BDFDB.ModalUtils.open = {};
+	BDFDB.ModalUtils.open = function (plugin, config) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !BDFDB.ObjectUtils.is(config)) return;
 		var modal, headerchildren = [], contentchildren = [], footerchildren = [], modalprops, cancels = [], closeModal = _ => {
 			if (BDFDB.ObjectUtils.is(modalprops) && typeof modalprops.onClose == "function") modalprops.onClose();
@@ -3463,11 +3464,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			});
 		}
 	};
-	
-	BDFDB.openConfirmModal = function (plugin, text, callback) {
+	BDFDB.ModalUtils.confirm = function (plugin, text, callback) {
 		if (!BDFDB.ObjectUtils.is(plugin) || typeof text != "string") return;
 		callback = typeof callback == "function" ? callback : _ => {};
-		BDFDB.openModal(plugin, {text, header:"Are you sure?", selector:"BDFDB-confirmmodal", buttons:[
+		BDFDB.ModalUtils.open(plugin, {text, header:"Are you sure?", selector:"BDFDB-confirmmodal", buttons:[
 			{contents: BDFDB.LanguageUtils.LanguageStrings.OKAY, close:true, color:"RED", click:callback},
 			{contents: BDFDB.LanguageUtils.LanguageStrings.CANCEL, close:true}
 		]});
@@ -7975,6 +7975,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	BDFDB.getDiscordMode = BDFDB.DiscordUtils.getMode;
 	BDFDB.getDiscordZoomFactor = BDFDB.DiscordUtils.getZoomFactor;
 	BDFDB.getDiscordFontScale = BDFDB.DiscordUtils.getFontScale;
+	
+	BDFDB.openModal = BDFDB.ModalUtils.open;
+	BDFDB.openConfirmModal = BDFDB.ModalUtils.confirm;
 	
 	BDFDB.BdUtils = BDFDB.BDUtils;
 	BDFDB.getPluginsFolder = BDFDB.BDUtils.getPluginsFolder;

@@ -123,7 +123,7 @@ class PinDMs {
 		BDFDB.initElements(settingspanel, this);
 
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".reset-button", () => {
-			BDFDB.openConfirmModal(this, "Are you sure you want to unpin all pinned DMs?", () => {
+			BDFDB.ModalUtils.confirm(this, "Are you sure you want to unpin all pinned DMs?", () => {
 				BDFDB.DataUtils.remove(this, "pinnedDMs");
 				BDFDB.DataUtils.remove(this, "pinnedRecents");
 			});

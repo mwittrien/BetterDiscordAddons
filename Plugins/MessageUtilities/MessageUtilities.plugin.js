@@ -179,7 +179,7 @@ class MessageUtilities {
 	}
 
 	resetAll (settingspanel) {
-		BDFDB.openConfirmModal(this, "Are you sure you want to delete all key bindings?", () => {
+		BDFDB.ModalUtils.confirm(this, "Are you sure you want to delete all key bindings?", () => {
 			BDFDB.DataUtils.remove(this, "bindings");
 			let bindings = BDFDB.DataUtils.get(this, "bindings");
 			settingspanel.querySelectorAll(BDFDB.dotCN.select).forEach(wrap => {

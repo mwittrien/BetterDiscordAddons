@@ -147,7 +147,7 @@ class NotificationSounds {
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".btn-addsong", e => {this.saveAudio(settingspanel);});
 		BDFDB.ListenerUtils.add(this, settingspanel, "keyup", ".songInput", e => {if (e.which == 13) this.saveAudio(settingspanel);});
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".reset-button", () => {
-			BDFDB.openConfirmModal(this, "Are you sure you want to delete all added songs?", () => {
+			BDFDB.ModalUtils.confirm(this, "Are you sure you want to delete all added songs?", () => {
 				BDFDB.DataUtils.remove(this, "choices");
 				BDFDB.DataUtils.remove(this, "audios");
 				this.loadAudios();

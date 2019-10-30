@@ -88,7 +88,7 @@ class ServerHider {
 		BDFDB.initElements(settingspanel, this);
 
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".reset-button", () => {
-			BDFDB.openConfirmModal(this, "Are you sure you want to reset all servers?", () => {
+			BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset all servers?", () => {
 				BDFDB.DataUtils.remove(this, "servers");
 				BDFDB.GuildUtils.getAll().forEach(info => {if (!info.div.getAttribute("folder")) BDFDB.DOMUtils.hide(info.div);});
 			});

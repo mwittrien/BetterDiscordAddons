@@ -119,7 +119,7 @@ class EditUsers {
 			color: BDFDB.LibraryComponents.Button.Colors.RED,
 			label: "Reset all Users",
 			onClick: _ => {
-				BDFDB.openConfirmModal(this, "Are you sure you want to reset all users?", () => {
+				BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset all users?", () => {
 					BDFDB.DataUtils.remove(this, "users");
 					this.forceUpdateAll();
 				});
@@ -232,7 +232,7 @@ class EditUsers {
 		let data = BDFDB.DataUtils.load(this, "users", info.id) || {};
 		let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), info.id) || {};
 		
-		BDFDB.openModal(this, {
+		BDFDB.ModalUtils.open(this, {
 			size: "MEDIUM",
 			header: this.labels.modal_header_text,
 			subheader: member.nick || info.username,

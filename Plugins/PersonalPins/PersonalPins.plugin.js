@@ -141,7 +141,7 @@ class PersonalPins {
 		BDFDB.initElements(settingspanel, this);
 
 		settingspanel.querySelector(".reset-button").addEventListener("click", () => {
-			BDFDB.openConfirmModal(this, "Are you sure you want to delete all pinned notes?", () => {
+			BDFDB.ModalUtils.confirm(this, "Are you sure you want to delete all pinned notes?", () => {
 				BDFDB.DataUtils.remove(this, "pins");
 			});
 		});

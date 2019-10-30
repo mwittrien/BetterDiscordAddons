@@ -183,7 +183,7 @@ class ServerFolders {
 		BDFDB.initElements(settingspanel, this);
 		
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".removecustom-button", () => {
-			BDFDB.openConfirmModal(this, "Are you sure you want to remove all custom icons?", () => {
+			BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all custom icons?", () => {
 				BDFDB.DataUtils.remove(this, "customicons");
 			});
 		});
@@ -229,7 +229,7 @@ class ServerFolders {
 				foldersdata = BDFDB.ObjectUtils.sort(BDFDB.DataUtils.load(this, "folders"), "position");
 			}
 			let oldfolders = Object.keys(foldersdata).filter(n => n.indexOf("folder") == 0);
-			if (oldfolders.length) BDFDB.openConfirmModal(this, `Old ServerFolders data detected!\nFound ${oldfolders.length} old custom folders in the ServerFolders.config.json.\nPress the '${BDFDB.LanguageUtils.LanguageStrings.OKAY}' button to automatically create a native folder for each old folder and to automatically put the servers in them.`, "Convert?", () => {
+			if (oldfolders.length) BDFDB.ModalUtils.confirm(this, `Old ServerFolders data detected!\nFound ${oldfolders.length} old custom folders in the ServerFolders.config.json.\nPress the '${BDFDB.LanguageUtils.LanguageStrings.OKAY}' button to automatically create a native folder for each old folder and to automatically put the servers in them.`, "Convert?", () => {
 				let oldGuildFolders = Object.assign({}, BDFDB.LibraryModules.FolderStore.guildFolders);
 				let guildsInFolders = [];
 				let guildFolders = [];
@@ -351,7 +351,7 @@ class ServerFolders {
 					danger: true,
 					action: e => {
 						BDFDB.closeContextMenu(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, e.target));
-						BDFDB.openConfirmModal(this, `Are you sure you want to remove the folder${folder.folderName ? (" '" + folder.folderName + '"') : ""}?`, () => {this.removeFolder(folderid);});
+						BDFDB.ModalUtils.confirm(this, `Are you sure you want to remove the folder${folder.folderName ? (" '" + folder.folderName + '"') : ""}?`, () => {this.removeFolder(folderid);});
 					}
 				})
 			});

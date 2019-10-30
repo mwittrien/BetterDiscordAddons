@@ -451,7 +451,7 @@ class ThemeRepo {
 	}
 
 	removeAllFromOwnList (settingspanel) {
-		BDFDB.openConfirmModal(this, "Are you sure you want to remove all added Themes from your own list?", () => {
+		BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all added Themes from your own list?", () => {
 			BDFDB.DataUtils.save([], this, "ownlist", "ownlist");
 			BDFDB.DOMUtils.remove(settingspanel.querySelector(BDFDB.dotCN.hovercard));
 		});

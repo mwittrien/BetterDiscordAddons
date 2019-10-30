@@ -261,7 +261,7 @@ class RepoControls {
 				});
 			};
 			if (!BDFDB.DataUtils.get(this, "settings", "confirmDelete")) deleteFile();
-			else BDFDB.openConfirmModal(this, `Are you sure you want to delete the ${type} "${name}"?`, () => {
+			else BDFDB.ModalUtils.confirm(this, `Are you sure you want to delete the ${type} "${name}"?`, () => {
 				deleteFile();
 			});
 		});
@@ -389,7 +389,7 @@ class RepoControls {
 	}
 
 	toggleAll (type, container, enable) {
-		BDFDB.openConfirmModal(this, `Are you sure you want to ${enable ? "enable" : "disable"} all ${type[0].toUpperCase() + type.slice(1)}s?`, () => {
+		BDFDB.ModalUtils.confirm(this, `Are you sure you want to ${enable ? "enable" : "disable"} all ${type[0].toUpperCase() + type.slice(1)}s?`, () => {
 			for (let header of container.querySelectorAll(BDFDB.dotCN._repoheader)) {
 				if (header.querySelector(BDFDB.dotCN._reponame).textContent.toLowerCase().indexOf(this.name.toLowerCase()) != 0) {
 					let switchwrap = header.querySelector(BDFDB.dotCN._repocheckboxwrap);

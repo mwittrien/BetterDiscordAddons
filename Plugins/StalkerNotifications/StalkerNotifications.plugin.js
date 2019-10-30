@@ -55,7 +55,7 @@ class StalkerNotifications {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
 			
-			BDFDB.openConfirmModal(this, "StalkerNotifications has been discontinued and was merged with FriendNotifications. To download FriendNotifications click the 'OK' button bellow. This will delete StalkerNotifications and download FriendNotifications.", "Update Notification", () => {
+			BDFDB.ModalUtils.confirm(this, "StalkerNotifications has been discontinued and was merged with FriendNotifications. To download FriendNotifications click the 'OK' button bellow. This will delete StalkerNotifications and download FriendNotifications.", "Update Notification", () => {
 				require("request")("https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/FriendNotifications/FriendNotifications.plugin.js", (error, response, body) => {
 					if (error) BDFDB.NotificationUtils.toast(`Unable to download FriendNotifications.plugin.js.`, {type:"error"});
 					else {
