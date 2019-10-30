@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.7.6";} 
+	getVersion () {return "1.7.7";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class GoogleTranslateOption {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["Embeds","Translating a message now also translates the embed descriptions (usually the maintext of embeds)"]]
+			"improved":[["Base64","Added (Text To Base64) and (Base64 To Text)"]]
 		};
 
 		this.patchModules = {
@@ -428,6 +428,7 @@ class GoogleTranslateOption {
 			{"auto":	{name:"Auto",			id:"auto",		integrated:false,	dic:false}},
 			BDFDB.LanguageUtils.languages,
 			{"binary":	{name:"Binary",			id:"binary",	integrated:false,	dic:false}},
+			{"base64":	{name:"Base64",			id:"base64",	integrated:false,	dic:false}},
 			{"braille":	{name:"Braille 6-dot",	id:"braille",	integrated:false,	dic:false}},
 			{"morse":	{name:"Morse",			id:"morse",		integrated:false,	dic:false}}
 		);
@@ -518,13 +519,15 @@ class GoogleTranslateOption {
 				input.name = specialcase.name;
 				switch (specialcase.id) {
 					case "binary": newtext = this.binary2string(newtext); break;
+					case "base64": newtext = this.base642string(newtext); break;
 					case "braille": newtext = this.braille2string(newtext); break;
 					case "morse": newtext = this.morse2string(newtext); break;
 				}
 			}
-			if (output.id == "binary" || output.id == "braille" || output.id == "morse") {
+			if (output.id == "binary" || output.id == "base64" || output.id == "braille" || output.id == "morse") {
 				switch (output.id) {
 					case "binary": newtext = this.string2binary(newtext); break;
+					case "base64": newtext = this.string2base64(newtext); break;
 					case "braille": newtext = this.string2braille(newtext); break;
 					case "morse": newtext = this.string2morse(newtext); break;
 				}
@@ -557,10 +560,13 @@ class GoogleTranslateOption {
 	}
 
 	checkForSpecialCase (text, input) {
-		if (input.id == "binary" || input.id == "braille" || input.id == "morse") return input;
+		if (input.id == "binary" || input.id == "base64" || input.id == "braille" || input.id == "morse") return input;
 		else if (input.id == "auto") {
 			if (/^[0-1]*$/.test(text.replace(/\s/g, ""))) {
 				return {id: "binary", name: "Binary"};
+			}
+			else if (/^(?:^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$)*$/.test(text.replace(/\s/g, ""))) {
+				return {id: "base64", name: "Base64"};
 			}
 			else if (/^[⠁⠂⠃⠄⠅⠆⠇⠈⠉⠊⠋⠌⠍⠎⠏⠐⠑⠒⠓⠔⠕⠖⠗⠘⠙⠚⠛⠜⠝⠞⠟⠠⠡⠢⠣⠤⠥⠦⠧⠨⠩⠪⠫⠬⠭⠮⠯⠰⠱⠲⠳⠴⠵⠶⠷⠸⠹⠺⠻⠼⠽⠾⠿]*$/.test(text.replace(/\s/g, ""))) {
 				return {id: "braille", name: "Braille 6-dot"};
@@ -582,6 +588,11 @@ class GoogleTranslateOption {
 		var braille = "";
 		for (let character of string) braille += this.brailleConverter[character.toLowerCase()] ? this.brailleConverter[character.toLowerCase()] : character;
 		return braille;
+	}
+	
+	string2base64 (string) {
+		var base64 = btoa(string);
+		return base64;
 	}
 
 	string2morse (string) {
@@ -610,6 +621,12 @@ class GoogleTranslateOption {
 			}
 		}
 		else BDFDB.NotificationUtils.toast("Invalid binary format. Only use 0s and 1s.", {type:"error"});
+		return string;
+	}
+	
+	base642string (base64) {
+		var string = "";
+		string = atob(base64);
 		return string;
 	}
 
