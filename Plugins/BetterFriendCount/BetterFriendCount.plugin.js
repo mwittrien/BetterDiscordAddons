@@ -51,7 +51,7 @@ class BetterFriendCount {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
 
-			BDFDB.ModuleUtils.forceAllUpdates(this, 'TabBar');
+			BDFDB.ModuleUtils.forceAllUpdates(this, "TabBar");
 		}
 		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
 	}
@@ -114,7 +114,7 @@ class BetterFriendCount {
 		clearTimeout(this.rerenderTimeout);
 		this.rerenderTimeout = setTimeout(() => {
 			delete this.rerenderTimeout;
-			BDFDB.ModuleUtils.forceAllUpdates(this, 'TabBar');
+			BDFDB.ModuleUtils.forceAllUpdates(this, "TabBar");
 		}, 1000);
 	}
 }
