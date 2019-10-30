@@ -3317,7 +3317,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		return selectMenu;
 	};
 	
-	BDFDB.ModalUtils.open = {};
+	BDFDB.ModalUtils = {};
 	BDFDB.ModalUtils.open = function (plugin, config) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !BDFDB.ObjectUtils.is(config)) return;
 		var modal, headerchildren = [], contentchildren = [], footerchildren = [], modalprops, cancels = [], closeModal = _ => {
