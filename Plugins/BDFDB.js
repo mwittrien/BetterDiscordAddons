@@ -1040,11 +1040,19 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 					children = children.props.children;
 				}
 				if (children && !BDFDB.ArrayUtils.is(children)) {
-					if (parent && parent.props) {
+					if (parent) {
 						var child = children;
-						parent.props.children = [];
-						parent.props.children.push(child);
-						return [parent.props.children, check(child) ? 0 : -1];
+						if (check(child)) {
+							if (BDFDB.ArrayUtils.is(parent)) {
+								return [parent, parent.indexOf(child)];
+							}
+							else {
+								parent.props.children = [];
+								parent.props.children.push(child);
+								return [parent.props.children, 0];
+							}
+						}
+						else return [startchildren, -1];
 					}
 					else return [startchildren, -1];
 				}
@@ -1059,6 +1067,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 						else if (children[i].props) {
 							parent = children[i];
 							result = getChildren(children[i].props.children);
+						}
+						else if (BDFDB.ArrayUtils.is(children[i])) for (let subchild of children[i]) if (subchild) {
+							parent = children[i];
+							result = getChildren(subchild);
 						}
 						if (result[1] > -1) break;
 					}
