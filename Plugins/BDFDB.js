@@ -1476,24 +1476,47 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 	};
 	InternalBDFDB.patchContextMenuPlugin = (plugin, type, module) => {
-		if (module && module.prototype) BDFDB.ModuleUtils.patch(plugin, module.prototype, "render", {after: e => {
-			let instance = e.thisObject, menu = BDFDB.ReactUtils.findDOMNode(e.thisObject), returnvalue = e.returnValue;
-			if (instance && menu && returnvalue && typeof plugin[`on${type}`] === "function") {
-				plugin[`on${type}`](instance, menu, returnvalue);
+		if (module && module.prototype) {
+			// REMOVE
+			let isOldType = (plugin["on" + type].toString().split("\n")[0].replace(/ /g, "").split(",")[2] || "").indexOf("returnvalue") > -1;
+			if (isOldType) {
+				BDFDB.ModuleUtils.patch(plugin, module.prototype, "render", {after: e => {
+					let instance = e.thisObject, menu = BDFDB.ReactUtils.findDOMNode(e.thisObject), returnvalue = e.returnValue;
+					if (instance && menu && returnvalue && typeof plugin[`on${type}`] === "function") {
+						plugin[`on${type}`](instance, menu, returnvalue);
+					}
+				}});
 			}
-		}});
+			else {
+				BDFDB.ModuleUtils.patch(plugin, module.prototype, "render", {after: e => {
+					if (e.thisObject && e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});
+				}});
+			}
+		}
 	};
 	InternalBDFDB.patchPopoutPlugin = (plugin, type, module) => {
-		if (module && module.prototype) BDFDB.ModuleUtils.patch(plugin, module.prototype, "render", {after: e => {
-			let instance = e.thisObject, popout = BDFDB.ReactUtils.findDOMNode(e.thisObject), returnvalue = e.returnValue;
-			if (instance && popout && returnvalue && typeof plugin[`on${type}`] === "function") {
-				plugin[`on${type}`](instance, popout, returnvalue);
-				if (!instance.BDFDBforceUpdateTimeout && typeof instance.forceUpdate == "function") BDFDB.ReactUtils.forceUpdate(instance);
+		if (module && module.prototype) {
+			// REMOVE
+			let isOldType = (plugin["on" + type].toString().split("\n")[0].replace(/ /g, "").split(",")[2] || "").indexOf("returnvalue") > -1;
+			if (isOldType) {
+				BDFDB.ModuleUtils.patch(plugin, module.prototype, "render", {after: e => {
+					let instance = e.thisObject, menu = BDFDB.ReactUtils.findDOMNode(e.thisObject), returnvalue = e.returnValue;
+					if (instance && menu && returnvalue && typeof plugin[`on${type}`] === "function") {
+						plugin[`on${type}`](instance, menu, returnvalue);
+						if (!instance.BDFDBforceUpdateTimeout && typeof instance.forceUpdate == "function") BDFDB.ReactUtils.forceUpdate(instance);
+					}
+				}});
 			}
-		}});
+			else {
+				BDFDB.ModuleUtils.patch(plugin, module.prototype, "render", {after: e => {
+					if (e.thisObject && e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});
+				}});
+			}
+		}
 	};
 	InternalBDFDB.patchContextMenuLib = (module, repatch) => {
 		if (module && module.prototype) {
+			// REMOVE
 			BDFDB.ModuleUtils.patch(BDFDB, module.prototype, "componentDidMount", {after: e => {
 				if (!e.thisObject.BDFDBforceRenderTimeout && typeof e.thisObject.render == "function") e.thisObject.render();
 			}});
@@ -1531,6 +1554,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	};
 	InternalBDFDB.patchPopoutLib = (module, repatch) => {
 		if (module && module.prototype) {
+			// REMOVE
 			BDFDB.ModuleUtils.patch(BDFDB, module.prototype, "componentDidMount", {after: e => {
 				if (!e.thisObject.BDFDBforceRenderTimeout && !e.thisObject.BDFDBforceUpdateTimeout && typeof e.thisObject.render == "function") e.thisObject.render();
 			}});
