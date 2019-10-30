@@ -228,7 +228,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			}
 		}
 		changeLogHTML += `</div>`
-		if (logs) BDBDFDB.ModalUtils.open(plugin, {header:BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG, children:BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(changeLogHTML)), selector:"BDFDB-changelogmodal"});
+		if (logs) BDFDB.ModalUtils.open(plugin, {header:BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG, children:BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(changeLogHTML)), selector:"BDFDB-changelogmodal"});
 	};
 	BDFDB.PluginUtils.createSettingsPanel = function (plugin, children) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !children || (!BDFDB.ReactUtils.isValidElement(children) && !BDFDB.ArrayUtils.is(children)) || (BDFDB.ArrayUtils.is(children) && !children.length)) return;
