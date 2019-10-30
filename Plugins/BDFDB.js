@@ -1236,7 +1236,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		PopoutContainer: "Popout",
 		MemberCard: "Member",
 		MessageDeveloperModeGroup: "FluxContainer(MessageDeveloperModeGroup)",
-		Note: "FluxContainer(Note)",
 		WebhookCard: "Webhook"
 	};
 	var webModulesNotFindableModules = {
@@ -1254,6 +1253,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		PrivateChannelCall: "callcurrentcontainer",
 		MemberCard: "guildsettingsmembercard",
 		NameTag: "nametag",
+		Note: "usernote",
 		SearchResults: "searchresultswrap",
 		TypingUsers: "typing",
 		UserPopout: "userpopout",
