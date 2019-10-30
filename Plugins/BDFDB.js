@@ -608,7 +608,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		if (options.style) tooltip.style = options.style;
 		if (options.html === true) tooltip.innerHTML = text;
 		else tooltip.innerText = text;
-		if (!options.type || BDFDB.disCN["tooltip" + options.type.toLowerCase()]) options.type = "top";
+		if (!options.type || !BDFDB.disCN["tooltip" + options.type.toLowerCase()]) options.type = "top";
 		BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN["tooltip" + options.type.toLowerCase()]);
 		tooltip.position = options.type.toLowerCase();
 		tooltip.appendChild(BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.tooltippointer}"></div>`));
