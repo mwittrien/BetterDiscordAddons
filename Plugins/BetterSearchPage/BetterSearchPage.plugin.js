@@ -3,7 +3,7 @@
 class BetterSearchPage {
 	getName () {return "BetterSearchPage";}
 
-	getVersion () {return "1.0.8";}
+	getVersion () {return "1.0.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,12 +11,11 @@ class BetterSearchPage {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
 		this.patchModules = {
-			"SearchResults":"render",
-			"StandardSidebarView":"componentWillUnmount"
+			"SearchResults":"render"
 		};
 	}
 
@@ -126,6 +125,13 @@ class BetterSearchPage {
 
 	// begin of own functions
 
+	onSettingsClosed (e) {
+		if (this.SettingsUpdated) {
+			delete this.SettingsUpdated;
+			BDFDB.ModuleUtils.forceAllUpdates(this);
+		}
+	}
+
 	processSearchResults (e) {
 		if (!this.stopping && e.instance.props && e.instance.props.search) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"Pagination"});
@@ -192,13 +198,6 @@ class BetterSearchPage {
 				children.splice(index, 1, pagination);
 				if (settings.cloneToTheTop) children.unshift(pagination);
 			}
-		}
-	}
-
-	processStandardSidebarView () {
-		if (this.SettingsUpdated) {
-			delete this.SettingsUpdated;
-			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 	}
 }

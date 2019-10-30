@@ -34,6 +34,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 
 
 		InternalBDFDB.patchPlugin(plugin);
+		InternalBDFDB.addOnSettingsClosedListener(plugin);
 		InternalBDFDB.addOnSwitchListener(plugin);
 		InternalBDFDB.addContextListeners(plugin);
 
@@ -246,6 +247,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		delete plugin.libLoadTimeout;
 		clearImmediate(BDFDB.cleanUps[plugin.name]);
 		delete BDFDB.cleanUps[plugin.name];
+	};
+	InternalBDFDB.addOnSettingsClosedListener = function (plugin) {
+		if (BDFDB.ObjectUtils.is(plugin) && typeof plugin.onSettingsClosed === "function") {
+			let SettingsLayer = BDFDB.ModuleUtils.findByName("StandardSidebarView");
+			if (SettingsLayer) BDFDB.ModuleUtils.patch(plugin, SettingsLayer.prototype, "componentWillUnmount", {after: e => {
+				plugin.onSettingsClosed();
+			}});
+		}
 	};
 	InternalBDFDB.addOnSwitchListener = function (plugin) {
 		if (BDFDB.ObjectUtils.is(plugin) && typeof plugin.onSwitch === "function") {
@@ -3894,6 +3903,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		avatarStopAnimation: "stop-animation",
 		badgeWrapper: "wrapper-232cHJ",
 		channelPanelTitle: "title-eS5yk3",
+		emoji: "emoji",
 		guildChannels: "container-PNkimc",
 		highlight: "highlight",
 		hoverCardButton: "button-2CgfFz",
@@ -3945,7 +3955,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	DiscordClassModules.AppInner = BDFDB.ModuleUtils.findByProperties("app", "layers");
 	DiscordClassModules.AppMount = BDFDB.ModuleUtils.findByProperties("appMount");
 	DiscordClassModules.ApplicationStore = BDFDB.ModuleUtils.findByProperties("applicationStore", "navigation");
-	DiscordClassModules.AppOuter = BDFDB.ModuleUtils.find(module => typeof module["app"] == "string" && Object.keys(module).length == 1);
+	DiscordClassModules.AppOuter = BDFDB.ModuleUtils.find(m => typeof m.app == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.AuditLog = BDFDB.ModuleUtils.findByProperties("auditLog");
 	DiscordClassModules.AuthBox = BDFDB.ModuleUtils.findByProperties("authBox");
 	DiscordClassModules.Autocomplete = BDFDB.ModuleUtils.findByProperties("autocomplete", "autocompleteRow");
@@ -3980,11 +3990,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	DiscordClassModules.CtaVerification = BDFDB.ModuleUtils.findByProperties("attendeeCTA", "verificationNotice");
 	DiscordClassModules.Cursor = BDFDB.ModuleUtils.findByProperties("cursorDefault", "userSelectNone");
 	DiscordClassModules.CustomStatus = BDFDB.ModuleUtils.findByProperties("customStatusContentIcon", "customStatus");
+	DiscordClassModules.CustomStatusIcon = BDFDB.ModuleUtils.findByProperties("icon", "emoji");
 	DiscordClassModules.DmAddPopout = BDFDB.ModuleUtils.findByProperties("popout", "searchBarComponent");
 	DiscordClassModules.DmAddPopoutItems = BDFDB.ModuleUtils.findByProperties("friendSelected", "friendWrapper");
 	DiscordClassModules.DownloadLink = BDFDB.ModuleUtils.findByProperties("downloadLink", "size12");
 	DiscordClassModules.Embed = BDFDB.ModuleUtils.findByProperties("embed", "embedAuthorIcon");
 	DiscordClassModules.EmbedActions = BDFDB.ModuleUtils.findByProperties("iconPlay", "iconWrapperActive");
+	DiscordClassModules.Emoji = BDFDB.WebModules.find(m => typeof m.emoji == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.EmojiButton = BDFDB.ModuleUtils.findByProperties("emojiButton", "sprite");
 	DiscordClassModules.EmojiPicker = BDFDB.ModuleUtils.findByProperties("emojiPicker", "categories");
 	DiscordClassModules.File = BDFDB.ModuleUtils.findByProperties("downloadButton", "fileNameLink");
@@ -4002,7 +4014,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	DiscordClassModules.Guild = BDFDB.ModuleUtils.findByProperties("wrapper", "lowerBadge", "svg");
 	DiscordClassModules.GuildChannels = BDFDB.ModuleUtils.findByProperties("positionedContainer", "unreadBar");
 	DiscordClassModules.GuildDiscovery = BDFDB.ModuleUtils.findByProperties("pageWrapper", "guildCard");
-	DiscordClassModules.GuildDm = BDFDB.ModuleUtils.find(module => typeof module["pill"] == "string" && Object.keys(module).length == 1);
+	DiscordClassModules.GuildDm = BDFDB.ModuleUtils.find(m => typeof m.pill == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.GuildEdges = BDFDB.ModuleUtils.findByProperties("wrapper", "edge", "autoPointerEvents")
 	DiscordClassModules.GuildFolder = BDFDB.ModuleUtils.findByProperties("folder", "expandedGuilds")
 	DiscordClassModules.GuildHeader = BDFDB.ModuleUtils.findByProperties("header", "name", "bannerImage");
@@ -4042,25 +4054,24 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	DiscordClassModules.MessageElements = BDFDB.ModuleUtils.findByProperties("messageGroupBlockedBtn", "dividerRed");
 	DiscordClassModules.MessageFile = BDFDB.ModuleUtils.findByProperties("cancelButton", "filenameLinkWrapper");
 	DiscordClassModules.MessageMarkup = BDFDB.ModuleUtils.findByProperties("markup");
-	DiscordClassModules.MessageOperations = BDFDB.ModuleUtils.find(module => typeof module["operations"] == "string" && Object.keys(module).length == 1);
+	DiscordClassModules.MessageOperations = BDFDB.ModuleUtils.find(m => typeof m.operations == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.MessageSystem = BDFDB.ModuleUtils.findByProperties("container", "actionAnchor");
 	DiscordClassModules.MessagesPopout = BDFDB.ModuleUtils.findByProperties("messageGroupWrapperOffsetCorrection", "messagesPopout");
 	DiscordClassModules.MessagesWelcome = BDFDB.ModuleUtils.findByProperties("welcomeMessage", "h1");
 	DiscordClassModules.MessagesWrap = BDFDB.ModuleUtils.findByProperties("messagesWrapper", "messageGroupBlocked");
 	DiscordClassModules.Modal = BDFDB.ModuleUtils.findByProperties("modal", "sizeLarge");
-	DiscordClassModules.ModalDivider = BDFDB.ModuleUtils.find(module => typeof module["divider"] == "string" && Object.keys(module).length == 1);
+	DiscordClassModules.ModalDivider = BDFDB.ModuleUtils.find(m => typeof m.divider == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.ModalItems = BDFDB.ModuleUtils.findByProperties("guildName", "checkboxContainer");
-	DiscordClassModules.ModalMiniContent = BDFDB.ModuleUtils.find(module => typeof module["modal"] == "string" && typeof module["content"] == "string" && typeof module["size"] == "string" && Object.keys(module).length == 3);
-	DiscordClassModules.ModalWrap = BDFDB.ModuleUtils.find(module => typeof module["modal"] == "string" && typeof module["inner"] == "string" && Object.keys(module).length == 2);
+	DiscordClassModules.ModalMiniContent = BDFDB.ModuleUtils.find(m => typeof m.modal == "string" && typeof m.content == "string" && typeof m.size == "string" && Object.keys(m).length == 3);
+	DiscordClassModules.ModalWrap = BDFDB.ModuleUtils.find(m => typeof m.modal == "string" && typeof m.inner == "string" && Object.keys(m).length == 2);
 	DiscordClassModules.NameContainer = DiscordClassModules.ContextMenu.subMenuContext ? BDFDB.ModuleUtils.findByProperties("nameAndDecorators", "name") : {};
 	DiscordClassModules.NameTag = BDFDB.ModuleUtils.findByProperties("bot", "nameTag");
-	DiscordClassModules.Note = BDFDB.ModuleUtils.find(module => typeof module["note"] == "string" && Object.keys(module).length == 1);
+	DiscordClassModules.Note = BDFDB.ModuleUtils.find(m => typeof m.note == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.Notice = BDFDB.ModuleUtils.findByProperties("notice", "noticeFacebook");
 	DiscordClassModules.OptionPopout = BDFDB.ModuleUtils.findByProperties("container", "button", "item");
 	DiscordClassModules.PictureInPicture = BDFDB.ModuleUtils.findByProperties("pictureInPicture", "pictureInPictureWindow");
-	DiscordClassModules.PillWrapper = BDFDB.ModuleUtils.find(module => typeof module["item"] == "string" && typeof module["wrapper"] == "string" && Object.keys(module).length == 2);
+	DiscordClassModules.PillWrapper = BDFDB.ModuleUtils.find(m => typeof m.item == "string" && typeof m.wrapper == "string" && Object.keys(m).length == 2);
 	DiscordClassModules.PrivateChannel = BDFDB.ModuleUtils.findByProperties("channel", "closeButton");
-	DiscordClassModules.PrivateChannelActivity = BDFDB.ModuleUtils.findByProperties("activity", "text");
 	DiscordClassModules.PrivateChannelList = BDFDB.ModuleUtils.findByProperties("privateChannels", "searchBar");
 	DiscordClassModules.Popout = BDFDB.ModuleUtils.findByProperties("popout", "arrowAlignmentTop");
 	DiscordClassModules.PopoutActivity = BDFDB.ModuleUtils.findByProperties("ellipsis", "activityActivityFeed");
@@ -4428,6 +4439,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		cursorpointer: ["Cursor", "cursorPointer"],
 		customstatus: ["CustomStatus", "customStatus"],
 		customstatuscontenticon: ["CustomStatus", "customStatusContentIcon"],
+		customstatusemoji: ["CustomStatusIcon", "emoji"],
+		customstatusicon: ["CustomStatusIcon", "icon"],
 		defaultcolor: ["Text", "defaultColor"],
 		description: ["FormText", "description"],
 		directioncolumn: ["Flex", "directionColumn"],
@@ -4447,9 +4460,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		modaldividerdefault: ["SettingsItems", "dividerDefault"], // REMOVE
 		modaldividermini: ["SettingsItems", "dividerMini"], // REMOVE
 		dmchannel: ["PrivateChannel", "channel"],
-		dmchannelactivity: ["PrivateChannelActivity", "activity"],
-		dmchannelactivityicon: ["PrivateChannelActivity", "icon"],
-		dmchannelactivitytext: ["PrivateChannelActivity", "text"],
+		dmchannelactivity: ["PrivateChannel", "activity"],
+		dmchannelactivityemoji: ["PrivateChannel", "activityEmoji"],
+		dmchannelactivitytext: ["PrivateChannel", "activityText"],
 		dmchannelclose: ["PrivateChannel", "closeButton"],
 		dmchannelheader: ["PrivateChannelList", "header"],
 		dmchannels: ["PrivateChannelList", "privateChannels"],
@@ -4501,6 +4514,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		embedvideoimagecomponent: ["Embed", "embedVideoImageComponent"],
 		embedvideoimagecomponentinner: ["Embed", "embedVideoImageComponentInner"],
 		embedwrapper: ["MessageAccessory", "embedWrapper"],
+		emoji: ["Emoji", "emoji"],
+		emojiold: ["NotFound", "emoji"],
 		emojibutton: ["EmojiButton", "emojiButton"],
 		emojibuttonhovered: ["EmojiButton", "emojiButtonHovered"],
 		emojibuttonnormal: ["EmojiButton", "emojiButtonNormal"],
@@ -5291,6 +5306,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		userpopoutbodyinner: ["UserPopout", "bodyInner"],
 		userpopoutbodytitle: ["UserPopout", "bodyTitle"],
 		userpopoutcustomstatus: ["UserPopout", "customStatus"],
+		userpopoutcustomstatusemoji: ["UserPopout", "customStatusEmoji"],
+		userpopoutcustomstatussoloemoji: ["UserPopout", "customStatusSoloEmoji"],
+		userpopoutcustomstatustext: ["UserPopout", "customStatusText"],
 		userpopoutendbodysection: ["UserPopout", "endBodySection"],
 		userpopoutfooter: ["UserPopout", "footer"],
 		userpopoutheader: ["UserPopout", "header"],
