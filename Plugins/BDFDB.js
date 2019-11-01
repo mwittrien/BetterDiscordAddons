@@ -4941,9 +4941,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		messageheadercompact: ["Message", "headerCompact"],
 		messageheadercozy: ["Message", "headerCozy"],
 		messageheadercozymeta: ["Message", "headerCozyMeta"],
+		messagehighbackgroundopacity: ["Message", "highBackgroundOpacity"],
 		messagelocalbotmessage: ["Message", "localBotMessage"],
+		messagelowbackgroundopacity: ["Message", "lowBackgroundOpacity"],
 		messagemarkup: ["MessageMarkup", "markup"],
 		messagemarkupiscompact: ["MessageBody", "isCompact"],
+		messagemediumbackgroundopacity: ["Message", "mediumBackgroundOpacity"],
 		messageoperations: ["MessageOperations", "operations"],
 		messages: ["MessagesWrap", "messages"],
 		messagesdivider: ["MessagesWrap", "divider"],
@@ -4993,7 +4996,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		messagetimestampcompact: ["Message", "timestampCompact"],
 		messagetimestampcompactismentioned: ["Message", "timestampCompactIsMentioned"],
 		messagetimestampcozy: ["Message", "timestampCozy"],
+		messagetimestampseparator: ["Message", "separator"],
+		messagetimestampseparatorleft: ["Message", "separatorLeft"],
+		messagetimestampseparatorright: ["Message", "separatorRight"],
 		messagetimestampsystem: ["MessageSystem", "timestamp"],
+		messagetimestampvisibleonhover: ["Message", "timestampVisibleOnHover"],
 		messageuploadcancel: ["MessageFile", "cancelButton"],
 		messageusername: ["Message", "username"],
 		modal: ["ModalWrap", "modal"],
@@ -5879,6 +5886,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	} : LibraryComponents.FormComponents.FormItem;
 	
 	LibraryComponents.IconBadge = BDFDB.ModuleUtils.findByName("IconBadge");
+	
+	LibraryComponents.MessageComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Message", "MessageTimestamp") || {});
 	
 	LibraryComponents.ModalComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("ModalContent", "ModalFooter") || {});
 	
