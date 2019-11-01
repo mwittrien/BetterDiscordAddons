@@ -467,7 +467,7 @@ class FriendNotifications {
 	getStatusWithMobileAndActivity (id, config) {
 		let statusname = BDFDB.UserUtils.getStatus(id);
 		let status = {statusname, isactivity:false};
-		let activity = BDFDB.LibraryModules.StatusMetaUtils.getPrimaryActivity(id);
+		let activity = BDFDB.UserUtils.getActivitiy(id);
 		if (activity && this.activityTypes[activity.type]) {
 			let activityname = this.activityTypes[activity.type].toLowerCase();
 			if (this.defaults.notificationstrings[activityname] && config[activityname]) {

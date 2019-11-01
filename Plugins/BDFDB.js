@@ -1623,11 +1623,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	});
 	BDFDB.UserUtils.getStatus = function (id = BDFDB.UserUtils.me.id) {
 		id = typeof id == "number" ? id.toFixed() : id;
-		return BDFDB.UserUtils.isStreaming(id) ? "streaming" : LibraryModules.StatusMetaUtils.getStatus(id);
-	};
-	BDFDB.UserUtils.isStreaming = function (id = BDFDB.UserUtils.me.id) {
-		for (let activity of LibraryModules.StatusMetaUtils.getActivities(id)) if (activity.type == BDFDB.DiscordConstants.ActivityTypes.STREAMING) return true;
-		return false;
+		let activity = BDFDB.UserUtils.getActivitiy(id);
+		return activity && activity.type == BDFDB.DiscordConstants.ActivityTypes.STREAMING ? "streaming" : LibraryModules.StatusMetaUtils.getStatus(id);
 	};
 	BDFDB.UserUtils.getStatusColor = function (status) {
 		status = typeof status == "string" ? status.toLowerCase() : null;
@@ -1641,6 +1638,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			case "streaming": return BDFDB.DiscordConstants.Colors.TWITCH;
 			default: return BDFDB.DiscordConstants.Colors.STATUS_GREY;
 		}
+	};
+	BDFDB.UserUtils.getActivitiy = function (id = BDFDB.UserUtils.me.id) {
+		for (let activity of LibraryModules.StatusMetaUtils.getActivities(id)) if (activity.type != BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS) return activity;
+		return null;
 	};
 	BDFDB.UserUtils.getAvatar = function (id = BDFDB.UserUtils.me.id) {
 		var user = LibraryModules.UserStore.getUser(typeof id == "number" ? id.toFixed() : id);
