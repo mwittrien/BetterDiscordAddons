@@ -135,7 +135,7 @@ class GoogleTranslateOption {
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
+		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
 
 	stop () {
@@ -166,7 +166,7 @@ class GoogleTranslateOption {
 				hint: BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Translate_Message") : null,
 				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-${translated ? "untranslate" : "translate"}-contextMenuItem`,
 				action: e => {
-					BDFDB.closeContextMenu(menu);
+					BDFDB.ContextMenuUtils.close(menu);
 					this.translateMessage(instance.props.message, instance.props.target, instance.props.channel);
 				}
 			});
@@ -188,7 +188,7 @@ class GoogleTranslateOption {
 							};
 							if (foundtranslation && foundinput && foundoutput) {
 								if (document.querySelector(".googletranslate-tooltip")) {
-									BDFDB.closeContextMenu(menu);
+									BDFDB.ContextMenuUtils.close(menu);
 									window.open(this.getGoogleTranslatePageURL(foundinput.id, foundoutput.id, text), "_blank");
 								}
 								else createTooltip();

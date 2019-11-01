@@ -48,7 +48,7 @@ class SteamProfileLink {
 				if (news && news.url && news.url.includes("steam")) this.openInSteam(e, news.url);
 			});
 		}
-		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
+		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
 
 

@@ -105,7 +105,7 @@ class EditServers {
 			
 			this.forceUpdateAll();
 		}
-		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
+		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
 
 	stop () {
@@ -143,7 +143,7 @@ class EditServers {
 									label: this.labels.submenu_serversettings_text,
 									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-serversettings-ContextMenuItem`,
 									action: e => {
-										BDFDB.closeContextMenu(menu);
+										BDFDB.ContextMenuUtils.close(menu);
 										this.showServerSettings(instance.props.guild);
 									}
 								}),
@@ -152,7 +152,7 @@ class EditServers {
 									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-resetsettings-ContextMenuItem`,
 									disabled: !BDFDB.DataUtils.load(this, "servers", instance.props.guild.id),
 									action: e => {
-										BDFDB.closeContextMenu(menu);
+										BDFDB.ContextMenuUtils.close(menu);
 										BDFDB.DataUtils.remove(this, "servers", instance.props.guild.id);
 										this.forceUpdateAll(instance.props.guild.id);
 									}

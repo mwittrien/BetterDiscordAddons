@@ -90,7 +90,7 @@ class ReverseImageSearch {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
 		}
-		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
+		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
 
 	stop () {
@@ -152,7 +152,7 @@ class ReverseImageSearch {
 				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-engine-contextMenuItem`,
 				danger: key == "_all",
 				action: e => {
-					if (!e.shiftKey) BDFDB.closeContextMenu(menu);
+					if (!e.shiftKey) BDFDB.ContextMenuUtils.close(menu);
 					if (key == "_all") {
 						for (let key2 in engines) if (key2 != "_all" && engines[key2]) window.open(this.defaults.engines[key2].url.replace(this.imgUrlReplaceString, encodeURIComponent(url)), "_blank");
 					}

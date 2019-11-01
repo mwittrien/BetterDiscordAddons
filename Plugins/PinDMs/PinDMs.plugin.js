@@ -161,7 +161,7 @@ class PinDMs {
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 			delete this.forceAdding;
 		}
-		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
+		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
 
 	stop () {
@@ -231,7 +231,7 @@ class PinDMs {
 			className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-${pinnedInChannel ? "unpin" : "pin"}channel-contextMenuItem`,
 			danger: pinnedInChannel,
 			action: e => {
-				BDFDB.closeContextMenu(menu);
+				BDFDB.ContextMenuUtils.close(menu);
 				if (!pinnedInChannel) {
 					let dmsscrollerinstance = BDFDB.ReactUtils.getInstance(document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller));
 					if (dmsscrollerinstance) {
@@ -252,7 +252,7 @@ class PinDMs {
 			className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-${pinnedInGuild ? "unpin" : "pin"}guild-contextMenuItem`,
 			danger: pinnedInGuild,
 			action: e => {
-				BDFDB.closeContextMenu(menu);
+				BDFDB.ContextMenuUtils.close(menu);
 				if (!pinnedInGuild) {
 					this.addPinnedRecent(id);
 					this.updatePinnedPositions("pinnedRecents");
@@ -350,14 +350,14 @@ class PinDMs {
 									label: this.labels.context_pinguild_text,
 									className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-pinguild-contextMenuItem`,
 									action: e => {
-										BDFDB.closeContextMenu(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, e.target));
+										BDFDB.ContextMenuUtils.close(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, e.target));
 										this.addPinnedRecent(instance.props.channel.id);
 										this.updatePinnedPositions("pinnedRecents");
 									}
 								})
 							]
 						});
-						BDFDB.openContextMenu(this, e, itemGroup);
+						BDFDB.ContextMenuUtils.open(this, e, itemGroup);
 					}
 				};
 				wrapper.addEventListener("contextmenu", wrapper.PinDMsContextMenuListener);
@@ -532,7 +532,7 @@ class PinDMs {
 								danger: true,
 								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-unpinguild-contextMenuItem`,
 								action: e => {
-									BDFDB.closeContextMenu(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, e.target));
+									BDFDB.ContextMenuUtils.close(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, e.target));
 									BDFDB.DOMUtils.remove(dmdiv);
 									this.unhideNativeDM(id);
 									BDFDB.DataUtils.remove(this, "pinnedRecents", id);
@@ -541,7 +541,7 @@ class PinDMs {
 							})
 						]
 					});
-					BDFDB.openContextMenu(this, e, itemGroup);
+					BDFDB.ContextMenuUtils.open(this, e, itemGroup);
 				});
 				dmdiv.addEventListener("mousedown", e => {
 					let x = e.pageX, y = e.pageY;

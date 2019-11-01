@@ -70,7 +70,7 @@ class ImageZoom {
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
+		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
 
 	stop () {
@@ -133,7 +133,7 @@ class ImageZoom {
 							className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 							children: items
 						});
-						BDFDB.openContextMenu(this, e, itemGroup);
+						BDFDB.ContextMenuUtils.open(this, e, itemGroup);
 					};
 					settingslink.addEventListener("click", openContext);
 					settingslink.addEventListener("contextmenu", openContext);

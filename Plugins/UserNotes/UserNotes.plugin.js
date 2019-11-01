@@ -108,7 +108,7 @@ class UserNotes {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
 		}
-		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
+		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
 
 
@@ -133,7 +133,7 @@ class UserNotes {
 						label: BDFDB.LanguageUtils.LanguageStrings.USERS + " " + BDFDB.LanguageUtils.LanguageStrings.NOTE,
 						className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-usernote-contextMenuItem`,
 						action: e => {
-							BDFDB.closeContextMenu(menu);
+							BDFDB.ContextMenuUtils.close(menu);
 							this.openNotesModal(instance.props.user);
 						}
 					})

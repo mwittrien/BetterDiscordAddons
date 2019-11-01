@@ -46,7 +46,7 @@ class RevealAllSpoilersOption {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
 		}
-		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
+		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
 
 	stop () {
@@ -73,7 +73,7 @@ class RevealAllSpoilersOption {
 						hint: BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Reveal_Spoilers") : null,
 						className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-reveal-contextMenuItem`,
 						action: e => {
-							BDFDB.closeContextMenu(menu);
+							BDFDB.ContextMenuUtils.close(menu);
 							this.revealAllSpoilers(messagediv);
 						}
 					})

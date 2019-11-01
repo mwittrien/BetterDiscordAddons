@@ -84,7 +84,7 @@ class MoveablePopups {
 			});
 			BDFDB.ObserverUtils.connect(this, BDFDB.ReactUtils.findDOMNode(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"Modals"})), {name:"modalObserver", instance:observer}, {childList: true});
 		}
-		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
+		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
 
 

@@ -373,7 +373,7 @@ class ThemeRepo {
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
+		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
 
 
@@ -399,7 +399,7 @@ class ThemeRepo {
 				label: "Theme Repo",
 				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-repo-contextMenuItem`,
 				action: e => {
-					if (!this.loading.is) BDFDB.closeContextMenu(menu);
+					if (!this.loading.is) BDFDB.ContextMenuUtils.close(menu);
 					this.openThemeRepoModal();
 				}
 			});

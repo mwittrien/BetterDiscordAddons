@@ -265,7 +265,7 @@ class ServerFolders {
 			
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
+		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
 
 	stop () {
@@ -350,7 +350,7 @@ class ServerFolders {
 					className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-removefolder-contextMenuItem`,
 					danger: true,
 					action: e => {
-						BDFDB.closeContextMenu(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, e.target));
+						BDFDB.ContextMenuUtils.close(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, e.target));
 						BDFDB.ModalUtils.confirm(this, `Are you sure you want to remove the folder${folder.folderName ? (" '" + folder.folderName + '"') : ""}?`, () => {this.removeFolder(folderid);});
 					}
 				})
@@ -366,7 +366,7 @@ class ServerFolders {
 				label: folders[i].folderName || (this.labels.modal_tabheader1_text + " #" + parseInt(i+1)),
 				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-addtofolder-contextMenuItem`,
 				action: e => {
-					BDFDB.closeContextMenu(menu);
+					BDFDB.ContextMenuUtils.close(menu);
 					this.addGuildToFolder(folders[i].folderId, guildid);
 				}
 			}));
@@ -384,7 +384,7 @@ class ServerFolders {
 								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-removefromfolder-contextMenuItem`,
 								danger: true,
 								action: e => {
-									BDFDB.closeContextMenu(menu);
+									BDFDB.ContextMenuUtils.close(menu);
 									this.removeGuildFromFolder(folder.folderId, guildid);
 								}
 							})
@@ -394,7 +394,7 @@ class ServerFolders {
 								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-createfolder-contextMenuItem`,
 								disabled: !openguilds.length,
 								action: e => {
-									BDFDB.closeContextMenu(menu);
+									BDFDB.ContextMenuUtils.close(menu);
 									this.openFolderCreationMenu(openguilds, guildid);
 								}
 							}),

@@ -115,7 +115,7 @@ class EditChannels {
 			
 			this.forceUpdateAll();
 		}
-		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
+		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
 
 	stop () {
@@ -152,7 +152,7 @@ class EditChannels {
 									label: this.labels.submenu_channelsettings_text,
 									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-channelsettings-ContextMenuItem`,
 									action: e => {
-										BDFDB.closeContextMenu(menu);
+										BDFDB.ContextMenuUtils.close(menu);
 										this.showChannelSettings(instance.props.channel);
 									}
 								}),
@@ -161,7 +161,7 @@ class EditChannels {
 									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-resetsettings-ContextMenuItem`,
 									disabled: !BDFDB.DataUtils.load(this, "channels", instance.props.channel.id),
 									action: e => {
-										BDFDB.closeContextMenu(menu);
+										BDFDB.ContextMenuUtils.close(menu);
 										BDFDB.DataUtils.remove(this, "channels", instance.props.channel.id);
 										this.forceUpdateAll();
 									}

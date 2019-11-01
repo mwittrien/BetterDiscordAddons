@@ -120,7 +120,7 @@ class SpellCheck {
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
+		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
 
 	stop () {
@@ -175,7 +175,7 @@ class SpellCheck {
 					label: suggestion,
 					className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-suggestion-contextMenuItem`,
 					action: e => {
-						BDFDB.closeContextMenu(menu);
+						BDFDB.ContextMenuUtils.close(menu);
 						this.replaceWord(textarea, word, suggestion);
 					}
 				}));
@@ -195,7 +195,7 @@ class SpellCheck {
 								hint: word,
 								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-addword-contextMenuItem`,
 								action: e => {
-									BDFDB.closeContextMenu(menu);
+									BDFDB.ContextMenuUtils.close(menu);
 									this.addToOwnDictionary(word);
 								}
 							}),

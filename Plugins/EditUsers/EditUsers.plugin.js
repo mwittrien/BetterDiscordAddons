@@ -161,7 +161,7 @@ class EditUsers {
 			
 			this.forceUpdateAll();
 		}
-		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
+		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
 
 
@@ -199,7 +199,7 @@ class EditUsers {
 									label: this.labels.submenu_usersettings_text,
 									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-usersettings-ContextMenuItem`,
 									action: e => {
-										BDFDB.closeContextMenu(menu);
+										BDFDB.ContextMenuUtils.close(menu);
 										this.showUserSettings(instance.props.user);
 									}
 								}),
@@ -208,7 +208,7 @@ class EditUsers {
 									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-resetsettings-ContextMenuItem`,
 									disabled: !BDFDB.DataUtils.load(this, "users", instance.props.user.id),
 									action: e => {
-										BDFDB.closeContextMenu(menu);
+										BDFDB.ContextMenuUtils.close(menu);
 										BDFDB.DataUtils.remove(this, "users", instance.props.user.id);
 										this.forceUpdateAll();
 									}

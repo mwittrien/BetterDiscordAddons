@@ -124,7 +124,7 @@ class ServerHider {
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
+		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
 
 	stop () {
@@ -167,7 +167,7 @@ class ServerHider {
 									label: this.labels.submenu_openhidemenu_text,
 									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-hidemenu-ContextMenuItem`,
 									action: e => {
-										BDFDB.closeContextMenu(menu);
+										BDFDB.ContextMenuUtils.close(menu);
 										this.showServerModal();
 									}
 								}),
@@ -176,7 +176,7 @@ class ServerHider {
 									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-hideserver-ContextMenuItem`,
 									disabled: !(instance.props.guild && !instance.props.target.getAttribute("folder")),
 									action: e => {
-										BDFDB.closeContextMenu(menu);
+										BDFDB.ContextMenuUtils.close(menu);
 										this.toggleServer(instance.props.guild, instance.props.target, false);
 									}
 								})

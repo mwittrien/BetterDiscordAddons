@@ -176,7 +176,7 @@ class PersonalPins {
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
+		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
 
 
@@ -218,7 +218,7 @@ class PersonalPins {
 				hint: BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Note_Message") : null,
 				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-${note ? "unpin" : "pin"}-contextMenuItem`,
 				action: e => {
-					BDFDB.closeContextMenu(menu);
+					BDFDB.ContextMenuUtils.close(menu);
 					this.addMessageToNotes(instance.props.message, instance.props.target, instance.props.channel);
 				}
 			});
@@ -232,7 +232,7 @@ class PersonalPins {
 						label: this.labels.context_updateoption_text,
 						className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-update-contextMenuItem`,
 						action: e => {
-							BDFDB.closeContextMenu(menu);
+							BDFDB.ContextMenuUtils.close(menu);
 							this.updateNoteData(note, newmarkup, newaccessory);
 						}
 					});

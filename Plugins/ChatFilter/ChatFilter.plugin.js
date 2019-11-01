@@ -183,7 +183,7 @@ class ChatFilter {
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
-		else console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
+		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
 
 	stop () {
@@ -302,7 +302,7 @@ class ChatFilter {
 					label: "Add to ChatFilter",
 					className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-addalias-contextMenuItem`,
 					action: e => {
-						BDFDB.closeContextMenu(menu);
+						BDFDB.ContextMenuUtils.close(menu);
 						this.openAddModal(text);
 					}
 				})
