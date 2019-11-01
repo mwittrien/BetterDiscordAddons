@@ -26,7 +26,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		var url = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 		BDFDB.PluginUtils.checkUpdate(plugin.name, url);
 
-		if (typeof plugin.initConstructor === "function") BDFDB.TimeUtils.suppress(plugin.initConstructor.bind(plugin), "Could not initiate constructor!", plugin.name);
+		if (typeof plugin.initConstructor === "function") setImmediate(() => {BDFDB.TimeUtils.suppress(plugin.initConstructor, "Could not initiate constructor!", plugin.name)();});
 		if (typeof plugin.css === "string") BDFDB.DOMUtils.appendLocalStyle(plugin.name, plugin.css);
 
 
