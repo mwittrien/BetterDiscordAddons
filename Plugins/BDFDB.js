@@ -6081,7 +6081,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 							}),
 							(BDFDB.ArrayUtils.is(this.props.labelchildren) ? this.props.labelchildren : Array.of(this.props.labelchildren)),
 							BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
-								grow: this.props.basis ? 0 : 1,
+								grow: 0,
 								shrink: this.props.basis ? 0 : 1,
 								basis: this.props.basis,
 								wrap: true,
@@ -6120,11 +6120,15 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
             let keys = this.props.keys.filter(n => n);
 			let option = keys.shift();
 			if (BDFDB.ObjectUtils.is(this.props.plugin) && option) {
-				var data = BDFDB.DataUtils.load(this.props.plugin, option);
-				var newdata = "";
+				let data = BDFDB.DataUtils.load(this.props.plugin, option);
+				let newdata = "";
 				for (let key of keys) newdata += `{"${key}":`;
-				newdata += (value != null && value.value != null ? value.value : value) + "}".repeat(keys.length);
+				value = value != null && value.value != null ? value.value : value;
+				let marker = typeof value == "string" ? `"` : ``;
+				newdata += (marker + value + marker) + "}".repeat(keys.length);
+				console.log(newdata);
 				newdata = JSON.parse(newdata);
+				console.log(newdata);
 				if (BDFDB.ObjectUtils.is(newdata)) BDFDB.ObjectUtils.deepAssign(data, newdata);
 				else data = newdata;
 				BDFDB.DataUtils.save(data, this.props.plugin, option);
@@ -6142,8 +6146,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	LibraryComponents.SettingsSwitch = reactInitialized ? class BDFDB_SettingsSwitch extends LibraryModules.React.Component { // REMOVE
         render() {
 			return BDFDB.ReactUtils.createElement(LibraryComponents.SettingsSaveItem, Object.assign({keys:[]}, this.props, {
-				type: "Switch",
-				onChange: this.saveSettings.bind(this)
+				type: "Switch"
 			}));
 		}
     } : LibraryComponents.SettingsSwitch;
