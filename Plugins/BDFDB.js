@@ -826,7 +826,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	BDFDB.ModuleUtils = {};
 	BDFDB.ModuleUtils.cached = {};
 	BDFDB.ModuleUtils.find = function (filter) {
-		var req = getWebModuleReq();
+		var req = InternalBDFDB.getWebModuleReq();
 		for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 			var m = req.c[i].exports;
 			if (m && (typeof m == "object" || typeof m == "function") && filter(m)) return m;
@@ -7780,12 +7780,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			return id;
 		};
 		BDFDB.ModuleUtils.DevFuncs.findByIndex = function (index) {
-			var req = getWebModuleReq();
+			var req = InternalBDFDB.getWebModuleReq();
 			return req.c[index];
 		};
 		BDFDB.ModuleUtils.DevFuncs.findPropAny = function (strings) {
 			strings = BDFDB.ArrayUtils.is(strings) ? strings : Array.from(arguments);
-			var req = getWebModuleReq(); window.t = {"$filter":(prop => strings.every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
+			var req = InternalBDFDB.getWebModuleReq(); window.t = {"$filter":(prop => strings.every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
 				if (m && typeof m == "object") for (let j in m) if (window.t.$filter(j)) window.t[j + "_" + i] = m;
@@ -7796,7 +7796,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		};
 		BDFDB.ModuleUtils.DevFuncs.findPropFunc = function (strings) {
 			strings = BDFDB.ArrayUtils.is(strings) ? strings : Array.from(arguments);
-			var req = getWebModuleReq(); window.t = {"$filter":(prop => strings.every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
+			var req = InternalBDFDB.getWebModuleReq(); window.t = {"$filter":(prop => strings.every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
 				if (m && typeof m == "object") for (let j in m) if (window.t.$filter(j) && typeof m[j] != "string") window.t[j + "_" + i] = m;
@@ -7807,7 +7807,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		};
 		BDFDB.ModuleUtils.DevFuncs.findPropStringLib = function (strings) {
 			strings = BDFDB.ArrayUtils.is(strings) ? strings : Array.from(arguments);
-			var req = getWebModuleReq(); window.t = {"$filter":(prop => strings.every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
+			var req = InternalBDFDB.getWebModuleReq(); window.t = {"$filter":(prop => strings.every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
 				if (m && typeof m == "object") for (let j in m) if (window.t.$filter(j) && typeof m[j] == "string" && /^[A-z0-9]+\-[A-z0-9_-]{6}$/.test(m[j])) window.t[j + "_" + i] = m;
@@ -7818,7 +7818,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		};
 		BDFDB.ModuleUtils.DevFuncs.findNameAny = function (strings) {
 			strings = BDFDB.ArrayUtils.is(strings) ? strings : Array.from(arguments);
-			var req = getWebModuleReq(); window.t = {"$filter":(modu => strings.some(string => typeof modu.displayName == "string" && modu.displayName.toLowerCase().indexOf(string.toLowerCase()) > -1 || modu.name == "string" && modu.name.toLowerCase().indexOf(string.toLowerCase()) > -1))};
+			var req = InternalBDFDB.getWebModuleReq(); window.t = {"$filter":(modu => strings.some(string => typeof modu.displayName == "string" && modu.displayName.toLowerCase().indexOf(string.toLowerCase()) > -1 || modu.name == "string" && modu.name.toLowerCase().indexOf(string.toLowerCase()) > -1))};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
 				if (m && (typeof m == "object" || typeof m == "function") && window.t.$filter(m)) window.t[(m.displayName || m.name) + "_" + i] = m;
@@ -7829,7 +7829,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		};
 		BDFDB.ModuleUtils.DevFuncs.findCodeAny = function (strings) {
 			strings = BDFDB.ArrayUtils.is(strings) ? strings : Array.from(arguments);
-			var req = getWebModuleReq(); window.t = {"$filter":(prop => strings.every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
+			var req = InternalBDFDB.getWebModuleReq(); window.t = {"$filter":(prop => strings.every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
 				if (m && typeof m == "object") for (let j in m) {
@@ -7849,7 +7849,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			console.log(window.t);
 		};
 		BDFDB.ModuleUtils.DevFuncs.getAllModules = function () {
-			var req = getWebModuleReq(); window.t = {};
+			var req = InternalBDFDB.getWebModuleReq(); window.t = {};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
 				if (m && typeof m == "object") window.t[i] = m;
@@ -7858,7 +7858,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			console.log(window.t);
 		};
 		BDFDB.ModuleUtils.DevFuncs.getAllStringLibs = function () {
-			var req = getWebModuleReq(); window.t = [];
+			var req = InternalBDFDB.getWebModuleReq(); window.t = [];
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
 				if (m && typeof m == "object" && !BDFDB.ArrayUtils.is(m) && Object.keys(m).length) {
@@ -7891,7 +7891,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		BDFDB.ModuleUtils.DevFuncs.listenstop = function () {
 			if (typeof BDFDB.ModuleUtils.DevFuncs.listen.p == "function") BDFDB.ModuleUtils.DevFuncs.listen.p();
 		};
-		BDFDB.ModuleUtils.DevFuncs.req = getWebModuleReq();
+		BDFDB.ModuleUtils.DevFuncs.req = InternalBDFDB.getWebModuleReq();
 	}
 	for (let component in NativeSubComponents) if (!NativeSubComponents[component]) NativeSubComponents[component] = "div";
 	for (let component in LibraryComponents) if (!LibraryComponents[component]) {
