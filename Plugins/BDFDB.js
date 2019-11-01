@@ -1430,7 +1430,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			function check (instance) {
 				if (!instance) return false;
 				let props = instance.stateNode ? instance.stateNode.props : instance.props;
-				return instance.type && config.name && config.name.some(name => ((instance.type.displayName || instance.type.name) === name)) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => BDFDB.equals(props[prop[0]], checkvalue)) : BDFDB.equals(props[prop[0]], prop[1])) : props[prop] !== undefined);
+				return instance.type && config.name && config.name.some(name => ((instance.type.displayName || instance.type.name) === name)) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => propcheck(props, prop[0], checkvalue)) : propcheck(props, prop[0], prop[1])) : props[prop] !== undefined);
+			}
+			function propcheck (props, key, value) {
+				return key != null && props[key] != null && value != null && (key == "className" ? props[key].indexOf(value) > -1 : BDFDB.equals(props[key], value));
 			}
 		};
 		BDFDB.ReactUtils.findOwner = function (nodeOrInstance, config) {
