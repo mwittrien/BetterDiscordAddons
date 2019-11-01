@@ -5845,9 +5845,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	
 	LibraryComponents.FavButton = reactInitialized ? class BDFDB_FavButton extends LibraryModules.React.Component {
         handleClick() {
-            if (typeof this.props.onClick == "function") this.props.onClick(!this.props.isFavorite, this);
 			this.props.isFavorite = !this.props.isFavorite;
 			BDFDB.ReactUtils.forceUpdate(this);
+            if (typeof this.props.onClick == "function") this.props.onClick(this.props.isFavorite, this);
         }
         render() {
 			return BDFDB.ReactUtils.createElement("div", {
@@ -5971,15 +5971,15 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				style: this.props.style,
 				onClick: e => {
 					if (!this.domElementRef.current || this.domElementRef.current.contains(e.target)) {
-						if (typeof this.props.onClick == "function") this.props.onClick(e, this);
 						if ((this.props.openOnClick || this.props.openOnClick === undefined) && typeof this.handleClick == "function") this.handleClick();
+						if (typeof this.props.onClick == "function") this.props.onClick(e, this);
 					}
 					else e.stopPropagation();
 				},
 				onContextMenu: e => {
 					if (!this.domElementRef.current || this.domElementRef.current.contains(e.target)) {
-						if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
 						if (this.props.openOnContextMenu && typeof this.handleClick == "function") this.handleClick();
+						if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
 					}
 					else e.stopPropagation();
 				},
@@ -5992,9 +5992,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	
 	LibraryComponents.Select = reactInitialized ? class BDFDB_Select extends LibraryModules.React.Component {
         handleChange(value) {
-            if (typeof this.props.onChange == "function") this.props.onChange(value, this);
 			this.props.value = value;
 			BDFDB.ReactUtils.forceUpdate(this);
+            if (typeof this.props.onChange == "function") this.props.onChange(value, this);
         }
         render() {
 			return BDFDB.ReactUtils.createElement(NativeSubComponents.Select, Object.assign({}, this.props, {onChange: this.handleChange.bind(this)}));
@@ -6116,7 +6116,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	
 	LibraryComponents.SettingsSaveItem = reactInitialized ? class BDFDB_SettingsSaveItem extends LibraryModules.React.Component {
         saveSettings(value) {
-			if (typeof this.props.onChange == "function") this.props.onChange(value, this);
             let keys = this.props.keys.filter(n => n);
 			let option = keys.shift();
 			if (BDFDB.ObjectUtils.is(this.props.plugin) && option) {
@@ -6126,14 +6125,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				value = value != null && value.value != null ? value.value : value;
 				let marker = typeof value == "string" ? `"` : ``;
 				newdata += (marker + value + marker) + "}".repeat(keys.length);
-				console.log(newdata);
 				newdata = JSON.parse(newdata);
-				console.log(newdata);
 				if (BDFDB.ObjectUtils.is(newdata)) BDFDB.ObjectUtils.deepAssign(data, newdata);
 				else data = newdata;
 				BDFDB.DataUtils.save(data, this.props.plugin, option);
 				this.props.plugin.SettingsUpdated = true;
 			}
+			if (typeof this.props.onChange == "function") this.props.onChange(value, this);
         }
         render() {
 			if (typeof this.props.type != "string" || !["SELECT", "SWITCH", "TEXTINPUT"].includes(this.props.type.toUpperCase())) return null;
@@ -6155,9 +6153,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	
 	LibraryComponents.Switch = reactInitialized ? class BDFDB_Switch extends LibraryModules.React.Component {
         handleChange() {
-            if (typeof this.props.onChange == "function") this.props.onChange(!this.props.value, this);
 			this.props.value = !this.props.value;
 			BDFDB.ReactUtils.forceUpdate(this);
+            if (typeof this.props.onChange == "function") this.props.onChange(!this.props.value, this);
         }
         render() {
 			return BDFDB.ReactUtils.createElement(NativeSubComponents.Switch, Object.assign({}, this.props, {onChange: this.handleChange.bind(this)}));
@@ -6181,9 +6179,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
         }
         handleChange(e) {
 			e = BDFDB.ObjectUtils.is(e) ? e.currentTarget.value : e;
-            if (typeof this.props.onChange == "function") this.props.onChange(e, this);
 			this.props.value = e;
 			BDFDB.ReactUtils.forceUpdate(this);
+            if (typeof this.props.onChange == "function") this.props.onChange(e, this);
         }
         handleInput(e) {
             if (typeof this.props.onInput == "function") this.props.onInput(BDFDB.ObjectUtils.is(e) ? e.currentTarget.value : e, this);
