@@ -6319,7 +6319,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	
 	LibraryComponents.TooltipContainer = reactInitialized ? class BDFDB_TooltipContainer extends LibraryModules.React.Component {
 		render() {
-			return BDFDB.ReactUtils.createElement(this.props.tag || LibraryComponents.Clickable, {
+			let props = Object.assign({}, this.props, {
 				className: this.props.className,
 				onMouseEnter: e => {
 					BDFDB.TooltipUtils.create(e.currentTarget, this.props.text, Object.assign({}, this.props.tooltipConfig));
@@ -6336,6 +6336,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				},
 				children: this.props.children
 			});
+			BDFDB.ObjectUtils.delete(props, "text", "tag", "onMouseEnter", "onMouseLeave", "onClick", "onContextMenu", "tooltipConfig");
+			return BDFDB.ReactUtils.createElement(this.props.tag || LibraryComponents.Clickable, props);
 		}
 	} : LibraryComponents.TooltipContainer;
 	
