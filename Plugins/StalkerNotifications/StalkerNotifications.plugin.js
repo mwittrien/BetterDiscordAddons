@@ -31,7 +31,7 @@ class StalkerNotifications {
 			libraryScript.setAttribute("date", performance.now());
 			libraryScript.addEventListener("load", () => {this.initialize();});
 			document.head.appendChild(libraryScript);
-			this.libLoadTimeout = setTimeout(() => {
+			this.libLoadTimeout = BDFDB.TimeUtils.timeout(() => {
 				libraryScript.remove();
 				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js", (error, response, body) => {
 					if (body) {

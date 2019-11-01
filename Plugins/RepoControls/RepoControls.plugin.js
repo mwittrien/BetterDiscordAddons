@@ -296,8 +296,8 @@ class RepoControls {
 		orderfilter.innerText = this.sortings.order[sortings.order];
 
 		BDFDB.ListenerUtils.addToChildren(repocontrols, "keyup", BDFDB.dotCN.searchbarinput, () => {
-			clearTimeout(repocontrols.searchTimeout);
-			repocontrols.searchTimeout = setTimeout(() => {this.sortEntries(container, repocontrols);},1000);
+			BDFDB.TimeUtils.clear(repocontrols.searchTimeout);
+			repocontrols.searchTimeout = BDFDB.TimeUtils.timeout(() => {this.sortEntries(container, repocontrols);},1000);
 		});
 		BDFDB.ListenerUtils.addToChildren(repocontrols, "click", BDFDB.dotCN.searchbarclear + BDFDB.dotCN.searchbarvisible, () => {
 			this.sortEntries(container, repocontrols);

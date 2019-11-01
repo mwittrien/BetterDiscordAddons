@@ -413,13 +413,13 @@ class EditServers {
 	
 	checkUrl (url, instance) {
 		let input = BDFDB.ReactUtils.findDOMNode(instance).firstElementChild;
-		clearTimeout(instance.checkTimeout);
+		BDFDB.TimeUtils.clear(instance.checkTimeout);
 		if (url == null || !url.trim()) {
 			if (input) BDFDB.DOMUtils.remove(input.tooltip);
 			instance.props.inputClassName = null;
 			instance.forceUpdate();
 		}
-		else instance.checkTimeout = setTimeout(() => {
+		else instance.checkTimeout = BDFDB.TimeUtils.timeout(() => {
 			BDFDB.LibraryRequires.request(url.trim(), (error, response, result) => {
 				if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
 					if (input) BDFDB.DOMUtils.remove(input.tooltip);

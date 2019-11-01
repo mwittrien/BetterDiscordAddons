@@ -222,7 +222,7 @@ class ReadAllNotificationsButton {
 		for (let btn of wrapper.querySelectorAll(BDFDB.dotCN.messagespopoutclosebutton)) btn.click();
 		if (closebuttons.length) {
 			instance.loadMore();
-			setTimeout(() => {this.clearMentions(instance, wrapper);},3000);
+			BDFDB.TimeUtils.timeout(() => {this.clearMentions(instance, wrapper);},3000);
 		}
 	}
 

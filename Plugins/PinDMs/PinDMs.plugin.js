@@ -291,7 +291,7 @@ class PinDMs {
 				let dmsscroller = document.querySelector(BDFDB.dotCNS.dmchannels + BDFDB.dotCN.scroller);
 				if (dmsscroller) {
 					this.oldScrollerPos = dmsscroller.scrollTop;
-					setTimeout(() => {this.oldScrollerPos = null;},1000);
+					BDFDB.TimeUtils.timeout(() => {this.oldScrollerPos = null;},1000);
 				}
 			});
 			wrapper.querySelector(BDFDB.dotCN.dmchannelclose).addEventListener("click", e => {
@@ -481,8 +481,8 @@ class PinDMs {
 		if (stateNode) {
 			this.updatingScroller = true;
 			BDFDB.ReactUtils.forceUpdate(stateNode);
-			setTimeout(() => {BDFDB.ReactUtils.forceUpdate(stateNode);},500);
-			setTimeout(() => {delete this.updatingScroller;},1000);
+			BDFDB.TimeUtils.timeout(() => {BDFDB.ReactUtils.forceUpdate(stateNode);},500);
+			BDFDB.TimeUtils.timeout(() => {delete this.updatingScroller;},1000);
 		}
 	}
 
@@ -612,7 +612,7 @@ class PinDMs {
 	}
 
 	updatePinnedPositions (type) {
-		setImmediate(() => {
+		BDFDB.TimeUtils.timeout(() => {
 			let newPinned = {}, oldPinned = BDFDB.DataUtils.load(this, type);
 			let pins = Array.from(document.querySelectorAll(type == "pinnedRecents" ? `.pinned-dm` : `${BDFDB.dotCNS.dmchannels + BDFDB.dotCN.dmchannel}.pinned`)).map(div => {return div.getAttribute("channelid");}).reverse();
 			for (let i in pins) if (pins[i]) newPinned[pins[i]] = parseInt(i);

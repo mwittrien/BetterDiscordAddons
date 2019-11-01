@@ -434,14 +434,14 @@ class EditUsers {
 						textarea.dispatchEvent(new Event("input"));
 					}
 					else if (!e.ctrlKey && e.which != 16 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
-						clearTimeout(textarea.EditUsersAutocompleteTimeout);
-						textarea.EditUsersAutocompleteTimeout = setTimeout(() => {this.addAutoCompleteMenu(textarea, channel);},100);
+						BDFDB.TimeUtils.clear(textarea.EditUsersAutocompleteTimeout);
+						textarea.EditUsersAutocompleteTimeout = BDFDB.TimeUtils.timeout(() => {this.addAutoCompleteMenu(textarea, channel);},100);
 					}
 
 					if (!e.ctrlKey && e.which != 38 && e.which != 40 && !(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) BDFDB.DOMUtils.remove(".autocompleteEditUsers", ".autocompleteEditUsersRow");
 				});
 				BDFDB.ListenerUtils.add(this, textarea, "click", e => {
-					if (textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) setImmediate(() => {this.addAutoCompleteMenu(textarea, channel);});
+					if (textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) BDFDB.TimeUtils.timeout(() => {this.addAutoCompleteMenu(textarea, channel);});
 				});
 			}
 		}
@@ -711,13 +711,13 @@ class EditUsers {
 	
 	checkUrl (url, instance) {
 		let input = BDFDB.ReactUtils.findDOMNode(instance).firstElementChild;
-		clearTimeout(instance.checkTimeout);
+		BDFDB.TimeUtils.clear(instance.checkTimeout);
 		if (url == null || !url.trim()) {
 			if (input) BDFDB.DOMUtils.remove(input.tooltip);
 			instance.props.inputClassName = null;
 			instance.forceUpdate();
 		}
-		else instance.checkTimeout = setTimeout(() => {
+		else instance.checkTimeout = BDFDB.TimeUtils.timeout(() => {
 			BDFDB.LibraryRequires.request(url.trim(), (error, response, result) => {
 				if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
 					if (input) BDFDB.DOMUtils.remove(input.tooltip);

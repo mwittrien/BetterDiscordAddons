@@ -324,12 +324,12 @@ class PersonalPins {
 			this.addNotes(notespopout);
 		});});
 		notespopout.querySelector(BDFDB.dotCN.searchbarinput).addEventListener("keyup", () => {
-			clearTimeout(notespopout.searchTimeout);
-			notespopout.searchTimeout = setTimeout(() => {this.addNotes(notespopout);},1000);
+			BDFDB.TimeUtils.clear(notespopout.searchTimeout);
+			notespopout.searchTimeout = BDFDB.TimeUtils.timeout(() => {this.addNotes(notespopout);},1000);
 		});
 		notespopout.querySelector(BDFDB.dotCN.searchbarclear).addEventListener("click", e => {
-			clearTimeout(notespopout.searchTimeout);
-			notespopout.searchTimeout = setTimeout(() => {this.addNotes(notespopout);},1000);
+			BDFDB.TimeUtils.clear(notespopout.searchTimeout);
+			notespopout.searchTimeout = BDFDB.TimeUtils.timeout(() => {this.addNotes(notespopout);},1000);
 		});
 		notespopout.querySelector(BDFDB.dotCN.recentmentionsmentionfilter).addEventListener("click", e => {
 			BDFDB.createSortPopout(e.currentTarget, this.sortPopoutMarkup, () => {this.addNotes(notespopout);});
@@ -339,7 +339,7 @@ class PersonalPins {
 			if (!notespopout.contains(e.target) && !BDFDB.DOMUtils.getParent(".personalpins-sort-popout", e.target)) {
 				document.removeEventListener("mousedown", removePopout);
 				notespopout.remove();
-				setTimeout(() => {BDFDB.DOMUtils.removeClass(button, BDFDB.disCN.channelheadericonselected);},300);
+				BDFDB.TimeUtils.timeout(() => {BDFDB.DOMUtils.removeClass(button, BDFDB.disCN.channelheadericonselected);},300);
 			}
 		};
 		document.addEventListener("mousedown", removePopout);

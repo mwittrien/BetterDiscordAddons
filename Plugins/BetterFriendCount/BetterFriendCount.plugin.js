@@ -114,8 +114,8 @@ class BetterFriendCount {
 	}
 
 	processFriendRow () {
-		clearTimeout(this.rerenderTimeout);
-		this.rerenderTimeout = setTimeout(() => {
+		BDFDB.TimeUtils.clear(this.rerenderTimeout);
+		this.rerenderTimeout = BDFDB.TimeUtils.timeout(() => {
 			delete this.rerenderTimeout;
 			BDFDB.ModuleUtils.forceAllUpdates(this, "TabBar");
 		}, 1000);

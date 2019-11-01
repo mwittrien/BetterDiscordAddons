@@ -147,8 +147,8 @@ class SpellCheck {
 			let [SCparent, SCindex] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["NativeSpellcheckGroup", "FluxContainer(NativeSpellcheckGroup)"]});
 			if (SCindex > -1) {
 				if (BDFDB.ReactUtils.findValue(instance._reactInternalFiber, "spellcheckEnabled") == true) {
-					clearTimeout(this.disableSpellcheckTimeout);
-					this.disableSpellcheckTimeout = setTimeout(() => {
+					BDFDB.TimeUtils.clear(this.disableSpellcheckTimeout);
+					this.disableSpellcheckTimeout = BDFDB.TimeUtils.timeout(() => {
 						BDFDB.LibraryModules.SpellCheckUtils.toggleSpellcheck();
 						delete this.disableSpellcheckTimeout;
 					}, 1000);
@@ -247,8 +247,8 @@ class SpellCheck {
 
 			updateSpellcheck();
 			BDFDB.ListenerUtils.add(this, textarea, "keyup", e => {
-				clearTimeout(textarea.spellchecktimeout);
-				if (textarea.value) textarea.spellchecktimeout = setTimeout(() => {updateSpellcheck();},100);
+				BDFDB.TimeUtils.clear(textarea.spellchecktimeout);
+				if (textarea.value) textarea.spellchecktimeout = BDFDB.TimeUtils.timeout(() => {updateSpellcheck();},100);
 				else updateSpellcheck();
 			});
 			BDFDB.ListenerUtils.add(this, textarea, "scroll", e => {
@@ -323,7 +323,7 @@ class SpellCheck {
 		this.dictionary = BDFDB.DataUtils.load(this, "owndics", lang) || [];
 		this.killLanguageToast();
 		this.languageToast = BDFDB.NotificationUtils.toast("Grabbing dictionary (" + this.languages[lang].name + "). Please wait", {timeout:0});
-		this.languageToast.interval = setInterval(() => {
+		this.languageToast.interval = BDFDB.TimeUtils.interval(() => {
 			this.languageToast.textContent = this.languageToast.textContent.indexOf(".....") > -1 ? "Grabbing dictionary (" + this.languages[lang].name + "). Please wait" : this.languageToast.textContent + ".";
 		},500);
 		this.languageToast.lang = lang
@@ -344,7 +344,7 @@ class SpellCheck {
 
 	killLanguageToast () {
 		if (this.languageToast && typeof this.languageToast.close == "function") {
-			clearInterval(this.languageToast.interval);
+			BDFDB.TimeUtils.clear(this.languageToast.interval);
 			this.languageToast.close();
 		}
 	}

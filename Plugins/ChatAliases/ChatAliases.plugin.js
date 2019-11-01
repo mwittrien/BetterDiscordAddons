@@ -253,8 +253,8 @@ class ChatAliases {
 	}
 
 	updateWord (ele) {
-		clearTimeout(ele.updateTimeout);
-		ele.updateTimeout = setTimeout(() => {
+		BDFDB.TimeUtils.clear(ele.updateTimeout);
+		ele.updateTimeout = BDFDB.TimeUtils.timeout(() => {
 			var card = ele.parentElement.parentElement;
 			var oldwordvalue = ele.getAttribute("word");
 			if (oldwordvalue && this.aliases[oldwordvalue]) {
@@ -378,14 +378,14 @@ class ChatAliases {
 					textarea.dispatchEvent(new Event("input"));
 				}
 				else if (!e.ctrlKey && e.which != 16 && settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
-					clearTimeout(textarea.ChatAliasAutocompleteTimeout);
-					textarea.ChatAliasAutocompleteTimeout = setTimeout(() => {this.addAutoCompleteMenu(textarea);},100);
+					BDFDB.TimeUtils.clear(textarea.ChatAliasAutocompleteTimeout);
+					textarea.ChatAliasAutocompleteTimeout = BDFDB.TimeUtils.timeout(() => {this.addAutoCompleteMenu(textarea);},100);
 				}
 
 				if (!e.ctrlKey && e.which != 38 && e.which != 40 && !(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) BDFDB.DOMUtils.remove(".autocompleteAliases", ".autocompleteAliasesRow");
 			});
 			BDFDB.ListenerUtils.add(this, textarea, "click", e => {
-				if (settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) setImmediate(() => {this.addAutoCompleteMenu(textarea);});
+				if (settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) BDFDB.TimeUtils.timeout(() => {this.addAutoCompleteMenu(textarea);});
 			});
 		}
 	}
@@ -580,6 +580,6 @@ class ChatAliases {
 		});
 		wordvalueinput.focus();
 
-		setTimeout(checkInputs, 500);
+		BDFDB.TimeUtils.timeout(checkInputs, 500);
 	}
 }

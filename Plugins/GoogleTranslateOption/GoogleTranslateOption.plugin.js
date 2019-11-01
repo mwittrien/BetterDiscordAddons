@@ -498,7 +498,7 @@ class GoogleTranslateOption {
 		var finishTranslation = (translation, exceptions, input, output, toast) => {
 			if (translation) translation = this.addExceptions(translation, exceptions);
 			if (toast) {
-				clearInterval(toast.interval);
+				BDFDB.TimeUtils.clear(toast.interval);
 				toast.close();
 			}
 			callback(translation, input, output);
@@ -513,7 +513,7 @@ class GoogleTranslateOption {
 		var translation = "";
 		if (translate) {
 			toast = BDFDB.NotificationUtils.toast("Translating. Please wait", {timeout:0});
-			toast.interval = setInterval(() => {
+			toast.interval = BDFDB.TimeUtils.interval(() => {
 				toast.textContent = toast.textContent.indexOf(".....") > -1 ? "Translating. Please wait" : toast.textContent + ".";
 			},500);
 			var specialcase = this.checkForSpecialCase(newtext, input);

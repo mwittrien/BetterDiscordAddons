@@ -238,7 +238,7 @@ class MessageUtilities {
 			let binding = BDFDB.DataUtils.get(this, "bindings", action);
 			binding[option] = parseInt(recorderWrap.getAttribute("value"));
 			BDFDB.DataUtils.save(binding, this, "bindings", action);
-			setTimeout(() => {
+			BDFDB.TimeUtils.timeout(() => {
 				BDFDB.DOMUtils.removeClass(recorderWrap, BDFDB.disCN.hotkeyrecording);
 				BDFDB.DOMUtils.addClass(recorderWrap, BDFDB.disCN.hotkeyhasvalue);
 				recorderText.innerText = BDFDB.LanguageUtils.LanguageStrings.SHORTCUT_RECORDER_BUTTON_EDIT;
@@ -277,11 +277,11 @@ class MessageUtilities {
 				let {messagediv, pos, message} = this.getMessageData(e.currentTarget);
 				if (messagediv && pos > -1 && message) {
 					BDFDB.ListenerUtils.stopEvent(e);
-					clearTimeout(this.clickTimeout);
+					BDFDB.TimeUtils.clear(this.clickTimeout);
 					if (!this.hasDoubleClickOverwrite(bindings, bindings[priorityaction])) {
 						this.defaults.bindings[priorityaction].func.bind(this)({messagediv, pos, message}, priorityaction);
 					}
-					else this.clickTimeout = setTimeout(() => {
+					else this.clickTimeout = BDFDB.TimeUtils.timeout(() => {
 						this.defaults.bindings[priorityaction].func.bind(this)({messagediv, pos, message}, priorityaction);
 					}, 500);
 				}
@@ -442,6 +442,6 @@ class MessageUtilities {
 	}
 
 	cancelEvent (name) {
-		setImmediate(() => {BDFDB.ArrayUtils.remove(this.firedEvents, name)});
+		BDFDB.TimeUtils.timeout(() => {BDFDB.ArrayUtils.remove(this.firedEvents, name)});
 	}
 }

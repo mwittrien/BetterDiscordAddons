@@ -241,7 +241,7 @@ class NotificationSounds {
 
 			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "playSound", {instead: e => {
 				let type = e.methodArguments[0];
-				if (this.choices[type]) setImmediate(() => {
+				if (this.choices[type]) BDFDB.TimeUtils.timeout(() => {
 					if (type == "message1") {
 						if (this.firedEvents["dm"]) this.firedEvents["dm"] = false;
 						else if (this.firedEvents["mentioned"]) this.firedEvents["mentioned"] = false;
@@ -328,7 +328,7 @@ class NotificationSounds {
 			if (e2.target.parentElement != selectMenu) {
 				document.removeEventListener("mousedown", removeMenu);
 				selectMenu.remove();
-				setTimeout(() => {BDFDB.DOMUtils.removeClass(selectWrap, BDFDB.disCN.selectisopen);},100);
+				BDFDB.TimeUtils.timeout(() => {BDFDB.DOMUtils.removeClass(selectWrap, BDFDB.disCN.selectisopen);},100);
 			}
 		};
 		document.addEventListener("mousedown", removeMenu);
@@ -498,7 +498,7 @@ class NotificationSounds {
 
 	fireEvent (type) {
 		this.firedEvents[type] = true;
-		setTimeout(() => {this.firedEvents[type] = false;},3000);
+		BDFDB.TimeUtils.timeout(() => {this.firedEvents[type] = false;},3000);
 	}
 
 	processIncomingCalls (instance, wrapper, returnvalue) {

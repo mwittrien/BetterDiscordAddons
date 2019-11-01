@@ -25,7 +25,7 @@ class MoveablePopups {
 			libraryScript.setAttribute("date", performance.now());
 			libraryScript.addEventListener("load", () => {this.initialize();});
 			document.head.appendChild(libraryScript);
-			this.libLoadTimeout = setTimeout(() => {
+			this.libLoadTimeout = BDFDB.TimeUtils.timeout(() => {
 				libraryScript.remove();
 				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js", (error, response, body) => {
 					if (body) {
@@ -120,7 +120,7 @@ class MoveablePopups {
 				BDFDB.DOMUtils.removeLocalStyle("disableTextSelection");
 				document.removeEventListener("mouseup", mouseup);
 				document.removeEventListener("mousemove", mousemove);
-				setTimeout(() => {this.dragging = false},1);
+				BDFDB.TimeUtils.timeout(() => {this.dragging = false},1);
 			};
 			var mousemove = e2 => {
 				left = left - (oldX - e2.pageX);

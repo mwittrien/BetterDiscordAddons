@@ -372,7 +372,7 @@ class ThemeRepo {
 
 			this.loadThemes();
 
-			this.updateInterval = setInterval(() => {this.checkForNewThemes();},1000*60*30);
+			this.updateInterval = BDFDB.TimeUtils.interval(() => {this.checkForNewThemes();},1000*60*30);
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
@@ -384,8 +384,8 @@ class ThemeRepo {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			clearInterval(this.updateInterval);
-			clearTimeout(this.loading.timeout);
+			BDFDB.TimeUtils.clear(this.updateInterval);
+			BDFDB.TimeUtils.clear(this.loading.timeout);
 
 			BDFDB.DOMUtils.remove("iframe.discordPreview",".themerepo-notice",".bd-themerepobutton",".themerepo-loadingicon",BDFDB.dotCN.app + " > .repo-loadingwrapper:empty");
 
@@ -397,7 +397,7 @@ class ThemeRepo {
 	// begin of own functions
 
 	onUserSettingsCogContextMenu (instance, menu, returnvalue) {
-		setImmediate(() => {for (let child of returnvalue.props.children) if (child && child.props && child.props.label == "BandagedBD" && Array.isArray(child.props.render)) {
+		BDFDB.TimeUtils.timeout(() => {for (let child of returnvalue.props.children) if (child && child.props && child.props.label == "BandagedBD" && Array.isArray(child.props.render)) {
 			const repoItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: "Theme Repo",
 				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-repo-contextMenuItem`,
@@ -613,16 +613,16 @@ class ThemeRepo {
 			if (!document.querySelector(BDFDB.dotCN.colorpicker)) {
 				themeRepoModal.childNodes[0].style.setProperty("opacity", "0.85");
 				themeRepoModal.childNodes[1].style.setProperty("opacity", "1");
-				setTimeout(() => {for (let child of themeRepoModal.childNodes) child.style.removeProperty("transition");}, 500);
+				BDFDB.TimeUtils.timeout(() => {for (let child of themeRepoModal.childNodes) child.style.removeProperty("transition");}, 500);
 			}
 		});
 		BDFDB.ListenerUtils.addToChildren(themeRepoModal, "keyup", BDFDB.dotCN.searchbarinput, () => {
-			clearTimeout(themeRepoModal.searchTimeout);
-			themeRepoModal.searchTimeout = setTimeout(() => {this.sortEntries(themeRepoModal);},1000);
+			BDFDB.TimeUtils.clear(themeRepoModal.searchTimeout);
+			themeRepoModal.searchTimeout = BDFDB.TimeUtils.timeout(() => {this.sortEntries(themeRepoModal);},1000);
 		});
 		BDFDB.ListenerUtils.addToChildren(themeRepoModal, "click", BDFDB.dotCN.searchbarclear, () => {
-			clearTimeout(themeRepoModal.searchTimeout);
-			themeRepoModal.searchTimeout = setTimeout(() => {this.sortEntries(themeRepoModal);},1000);
+			BDFDB.TimeUtils.clear(themeRepoModal.searchTimeout);
+			themeRepoModal.searchTimeout = BDFDB.TimeUtils.timeout(() => {this.sortEntries(themeRepoModal);},1000);
 		});
 		BDFDB.ListenerUtils.addToChildren(themeRepoModal, "change", ".hide-checkbox", e => {
 			themeRepoModal.updateHidden = true;
@@ -748,8 +748,8 @@ class ThemeRepo {
 			}
 		}
 		let inputs = container.querySelectorAll(".varinput"), updateTimeout, updatePreview = () => {
-			clearTimeout(updateTimeout);
-			updateTimeout = setTimeout(() => {
+			BDFDB.TimeUtils.clear(updateTimeout);
+			updateTimeout = BDFDB.TimeUtils.timeout(() => {
 				let css = data.fullcss;
 				for (let input of inputs) {
 					let oldvalue = input.getAttribute("placeholder");
@@ -817,7 +817,7 @@ class ThemeRepo {
 		entry.querySelector(".btn-download").addEventListener("click", e => {
 			setEntryState(0);
 			this.downloadTheme(data);
-			if (themeRepoModal.querySelector("#input-rnmstart").checked) setTimeout(() => {this.applyTheme(data);},3000);
+			if (themeRepoModal.querySelector("#input-rnmstart").checked) BDFDB.TimeUtils.timeout(() => {this.applyTheme(data);},3000);
 		});
 		entry.querySelector(".previewCheckbox").addEventListener("click", e => {
 			themeRepoModal.querySelector(".generator-select " + BDFDB.dotCN.select).setAttribute('value', "-----");
@@ -902,10 +902,10 @@ class ThemeRepo {
 					}
 					this.foundThemes = this.grabbedThemes.concat(ownlist);
 
-					this.loading = {is:true, timeout:setTimeout(() => {
-						clearTimeout(this.loading.timeout);
+					this.loading = {is:true, timeout:BDFDB.TimeUtils.timeout(() => {
+						BDFDB.TimeUtils.clear(this.loading.timeout);
 						if (this.started) {
-							if (this.loading.is && this.loading.amount < 4) setTimeout(() => {this.loadThemes();},10000);
+							if (this.loading.is && this.loading.amount < 4) BDFDB.TimeUtils.timeout(() => {this.loadThemes();},10000);
 							this.loading = {is: false, timeout:null, amount:this.loading.amount};
 						}
 					},1200000), amount:this.loading.amount+1};
@@ -923,12 +923,12 @@ class ThemeRepo {
 
 					getThemeInfo(() => {
 						if (!this.started) {
-							clearTimeout(this.loading.timeout);
+							BDFDB.TimeUtils.clear(this.loading.timeout);
 							return;
 						}
 						BDFDB.DOMUtils.remove(loadingicon, ".themerepo-loadingicon");
 						if (!loadingiconwrapper.firstChild) BDFDB.DOMUtils.remove(loadingiconwrapper);
-						clearTimeout(this.loading.timeout);
+						BDFDB.TimeUtils.clear(this.loading.timeout);
 						this.loading = {is:false, timeout:null, amount:this.loading.amount};
 						console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Finished fetching Themes.");
 						if (document.querySelector(".bd-themerepobutton")) BDFDB.NotificationUtils.toast(`Finished fetching Themes.`, {type:"success"});

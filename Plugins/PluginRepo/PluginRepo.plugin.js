@@ -306,7 +306,7 @@ class PluginRepo {
 
 			this.loadPlugins();
 
-			this.updateInterval = setInterval(() => {this.checkForNewPlugins();},1000*60*30);
+			this.updateInterval = BDFDB.TimeUtils.interval(() => {this.checkForNewPlugins();},1000*60*30);
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
@@ -318,8 +318,8 @@ class PluginRepo {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			clearInterval(this.updateInterval);
-			clearTimeout(this.loading.timeout);
+			BDFDB.TimeUtils.clear(this.updateInterval);
+			BDFDB.TimeUtils.clear(this.loading.timeout);
 
 			BDFDB.DOMUtils.remove(".pluginrepo-notice",".bd-pluginrepobutton",".pluginrepo-loadingicon",BDFDB.dotCN.app + " > .repo-loadingwrapper:empty");
 
@@ -337,7 +337,7 @@ class PluginRepo {
 	// begin of own functions
 
 	onUserSettingsCogContextMenu (instance, menu, returnvalue) {
-		setImmediate(() => {for (let child of returnvalue.props.children) if (child && child.props && child.props.label == "BandagedBD" && Array.isArray(child.props.render)) {
+		BDFDB.TimeUtils.timeout(() => {for (let child of returnvalue.props.children) if (child && child.props && child.props.label == "BandagedBD" && Array.isArray(child.props.render)) {
 			const repoItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: "Plugin Repo",
 				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-repo-contextMenuItem`,
@@ -428,12 +428,12 @@ class PluginRepo {
 		}
 
 		BDFDB.ListenerUtils.addToChildren(pluginRepoModal, "keyup", BDFDB.dotCN.searchbarinput, () => {
-			clearTimeout(pluginRepoModal.searchTimeout);
-			pluginRepoModal.searchTimeout = setTimeout(() => {this.sortEntries(pluginRepoModal);},1000);
+			BDFDB.TimeUtils.clear(pluginRepoModal.searchTimeout);
+			pluginRepoModal.searchTimeout = BDFDB.TimeUtils.timeout(() => {this.sortEntries(pluginRepoModal);},1000);
 		});
 		BDFDB.ListenerUtils.addToChildren(pluginRepoModal, "click", BDFDB.dotCN.searchbarclear, () => {
-			clearTimeout(pluginRepoModal.searchTimeout);
-			pluginRepoModal.searchTimeout = setTimeout(() => {this.sortEntries(pluginRepoModal);},1000);
+			BDFDB.TimeUtils.clear(pluginRepoModal.searchTimeout);
+			pluginRepoModal.searchTimeout = BDFDB.TimeUtils.timeout(() => {this.sortEntries(pluginRepoModal);},1000);
 		});
 		BDFDB.ListenerUtils.addToChildren(pluginRepoModal, "change", ".hide-checkbox", e => {
 			pluginRepoModal.updateHidden = true;
@@ -535,7 +535,7 @@ class PluginRepo {
 		entry.querySelector(".btn-download").addEventListener("click", e => {
 			setEntryState(0);
 			this.downloadPlugin(data);
-			if (pluginRepoModal.querySelector("#input-rnmstart").checked) setTimeout(() => {this.startPlugin(data);},3000);
+			if (pluginRepoModal.querySelector("#input-rnmstart").checked) BDFDB.TimeUtils.timeout(() => {this.startPlugin(data);},3000);
 		});
 
 		container.appendChild(entry);
@@ -603,10 +603,10 @@ class PluginRepo {
 				this.loadedPlugins = {};
 				this.grabbedPlugins = result.split("\n").filter(n => n);
 				this.foundPlugins = this.grabbedPlugins.concat(ownlist);
-				this.loading = {is:true, timeout:setTimeout(() => {
-					clearTimeout(this.loading.timeout);
+				this.loading = {is:true, timeout:BDFDB.TimeUtils.timeout(() => {
+					BDFDB.TimeUtils.clear(this.loading.timeout);
 					if (this.started) {
-						if (this.loading.is && this.loading.amount < 4) setTimeout(() => {this.loadPlugins();},10000);
+						if (this.loading.is && this.loading.amount < 4) BDFDB.TimeUtils.timeout(() => {this.loadPlugins();},10000);
 						this.loading = {is: false, timeout:null, amount:this.loading.amount};
 					}
 				},1200000), amount:this.loading.amount+1};
@@ -625,18 +625,18 @@ class PluginRepo {
 				createFrame().then(() => {
 					getPluginInfo(() => {
 						if (!this.started) {
-							clearTimeout(this.loading.timeout);
+							BDFDB.TimeUtils.clear(this.loading.timeout);
 							BDFDB.DOMUtils.remove(frame);
 							if (frame && frame.messageReceived) window.removeEventListener("message", frame.messageReceived);
 							return;
 						}
-						var finishCounter = 0, finishInterval = setInterval(() => { 
+						var finishCounter = 0, finishInterval = BDFDB.TimeUtils.interval(() => { 
 							if ((framequeue.length == 0 && !framerunning) || finishCounter > 300 || !this.loading.is) {
-								clearInterval(finishInterval);
+								BDFDB.TimeUtils.clear(finishInterval);
 								BDFDB.DOMUtils.remove(frame, loadingicon, ".pluginrepo-loadingicon");
 								if (frame && frame.messageReceived) window.removeEventListener("message", frame.messageReceived);
 								if (!loadingiconwrapper.firstChild) BDFDB.DOMUtils.remove(loadingiconwrapper);
-								clearTimeout(this.loading.timeout);
+								BDFDB.TimeUtils.clear(this.loading.timeout);
 								this.loading = {is:false, timeout:null, amount:this.loading.amount};
 								console.log(`%c[${this.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Finished fetching Plugins.");
 								if (document.querySelector(".bd-pluginrepobutton")) BDFDB.NotificationUtils.toast(`Finished fetching Plugins.`, {type:"success"});
@@ -754,7 +754,7 @@ class PluginRepo {
 			var markup = this.frameMarkup;
 			return new Promise(function(callback) {
 				frame = BDFDB.DOMUtils.create(markup);
-				frame.startTimeout = setTimeout(() => {
+				frame.startTimeout = BDFDB.TimeUtils.timeout(() => {
 					callback();
 				},600000);
 				frame.messageReceived = e => {

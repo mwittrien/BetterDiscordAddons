@@ -86,7 +86,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			else {
 				var translateinterval = BDFDB.TimeUtils.interval(_ => {
 					if (document.querySelector("html").lang) {
-						clearInterval(translateinterval);
+						BDFDB.TimeUtils.clear(translateinterval);
 						translate();
 					}
 				}, 100);
@@ -235,11 +235,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	};
 	InternalBDFDB.clearStartTimeout = function (plugin) {
 		if (!BDFDB.ObjectUtils.is(plugin)) return;
-		clearTimeout(plugin.startTimeout);
+		BDFDB.TimeUtils.clear(plugin.startTimeout, plugin.libLoadTimeout, BDFDB.cleanUps[plugin.name]);
 		delete plugin.startTimeout;
-		clearTimeout(plugin.libLoadTimeout);
 		delete plugin.libLoadTimeout;
-		clearImmediate(BDFDB.cleanUps[plugin.name]);
 		delete BDFDB.cleanUps[plugin.name];
 	};
 	InternalBDFDB.addOnSettingsClosedListener = function (plugin) {
@@ -477,7 +475,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			var audio = new Audio();
 			var timeout = BDFDB.TimeUtils.timeout(_ => {close();}, options.timeout ? options.timeout : 3000);
 			if (typeof options.click == "function") notification.onclick = _ => {
-				clearTimeout(timeout);
+				BDFDB.TimeUtils.clear(timeout);
 				close();
 				options.click();
 			};
@@ -2921,7 +2919,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				var newv = parseInt(input.value) + 1;
 				if (isNaN(max) || !isNaN(max) && newv <= max) {
 					BDFDB.DOMUtils.addClass(ele.parentElement, "pressed");
-					clearTimeout(ele.parentElement.pressedTimeout);
+					BDFDB.TimeUtils.clear(ele.parentElement.pressedTimeout);
 					input.value = isNaN(min) || !isNaN(min) && newv >= min ? newv : min;
 					input.dispatchEvent(new Event("change"));
 					input.dispatchEvent(new Event("input"));
@@ -2940,7 +2938,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				var newv = parseInt(input.value) - 1;
 				if (isNaN(min) || !isNaN(min) && newv >= min) {
 					BDFDB.DOMUtils.addClass(ele.parentElement, "pressed");
-					clearTimeout(ele.parentElement.pressedTimeout);
+					BDFDB.TimeUtils.clear(ele.parentElement.pressedTimeout);
 					input.value = isNaN(max) || !isNaN(max) && newv <= max ? newv : max;
 					input.dispatchEvent(new Event("change"));
 					input.dispatchEvent(new Event("input"));
@@ -3620,10 +3618,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		else if (typeof delay != "number" || delay < 1) return setImmediate(() => {BDFDB.TimeUtils.suppress(callback, "Immediate")();});
 		else return setTimeout(() => {BDFDB.TimeUtils.suppress(callback, "Timeout")();}, delay);
 	};
-	BDFDB.TimeUtils.clear = function (timeobject) {
-		clearInterval(timeobject);
-		clearTimeout(timeobject);
-		clearImmediate(timeobject);
+	BDFDB.TimeUtils.clear = function (...timeobjects) {
+		for (let t of timeobjects.flat()) {
+			if (typeof t == "number") {
+				clearInterval(t);
+				clearTimeout(t);
+			}
+			else if (typeof t == "object") clearImmediate(t);
+		}
 	};
 	BDFDB.TimeUtils.suppress = function (callback, string, name) {return function (...args) {
 		try {return callback(...args);}
@@ -5600,7 +5602,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 		updateCounter() {
 			if (!this.refElement) return;
-			clearTimeout(this.updateTimeout);
+			BDFDB.TimeUtils.clear(this.updateTimeout);
 			this.updateTimeout = BDFDB.TimeUtils.timeout(this.forceUpdateCounter.bind(this), 100);
 		}
 		forceUpdateCounter() {
@@ -6174,7 +6176,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
             if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);
         }
         handleNumberButton(ins, value) {
-			clearTimeout(ins.pressedTimeout);
+			BDFDB.TimeUtils.clear(ins.pressedTimeout);
 			ins.pressedTimeout = BDFDB.TimeUtils.timeout(_ => {
 				delete this.props.focused;
 				BDFDB.ReactUtils.forceUpdate(this);
@@ -6683,7 +6685,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	};
 	var initDiscordLanguageInterval = (_ => {
 		if (document.querySelector("html").lang) {
-			clearInterval(initDiscordLanguageInterval);
+			BDFDB.TimeUtils.clear(initDiscordLanguageInterval);
 			var language = BDFDB.LanguageUtils.getLanguage();
 			BDFDB.LanguageUtils.languages.$discord.name = `Discord (${language.name})`;
 			BDFDB.LanguageUtils.languages.$discord.id = language.id;
@@ -7588,13 +7590,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	var KeyDownTimeouts = {};
 	BDFDB.ListenerUtils.add(BDFDB, document, "keydown.BDFDBPressedKeys", e => {
 		if (!BDFDB.pressedKeys.includes(e.which)) {
-			clearTimeout(KeyDownTimeouts[e.which]);
+			BDFDB.TimeUtils.clear(KeyDownTimeouts[e.which]);
 			BDFDB.pressedKeys.push(e.which);
 			KeyDownTimeouts[e.which] = BDFDB.TimeUtils.timeout(_ => {BDFDB.ArrayUtils.remove(BDFDB.pressedKeys, e.which, true);},60000);
 		}
 	});
 	BDFDB.ListenerUtils.add(BDFDB, document, "keyup.BDFDBPressedKeys", e => {
-		clearTimeout(KeyDownTimeouts[e.which]);
+		BDFDB.TimeUtils.clear(KeyDownTimeouts[e.which]);
 		BDFDB.ArrayUtils.remove(BDFDB.pressedKeys, e.which, true);
 	});
 	BDFDB.ListenerUtils.add(BDFDB, document, "mousedown.BDFDBMousePosition", e => {
@@ -7750,14 +7752,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	var libKeys = Object.keys(BDFDB).length - 10, crashInterval = BDFDB.TimeUtils.interval(_ => {
 		if (!window.BDFDB || typeof BDFDB != "object" || Object.keys(BDFDB).length < libKeys || !BDFDB.id) {
 			console.warn(`%c[BDFDB]%c`, "color: #3a71c1; font-weight: 700;", "", "reloading library due to internal error.");
-			clearInterval(crashInterval);
+			BDFDB.TimeUtils.clear(crashInterval);
 			InternalBDFDB.reloadLib();
 		}
 		else if (BDFDB.id != id) {
-			clearInterval(crashInterval);
+			BDFDB.TimeUtils.clear(crashInterval);
 		}
 		else if (!BDFDB.creationTime || performance.now() - BDFDB.creationTime > 18000000) {
-			clearInterval(crashInterval);
+			BDFDB.TimeUtils.clear(crashInterval);
 			InternalBDFDB.reloadLib();
 		}
 	}, 10000);

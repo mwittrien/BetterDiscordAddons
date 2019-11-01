@@ -99,10 +99,10 @@ class ImageGallery {
 			let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, wrapper);
 			if (!modal) return;
 			let start = performance.now();
-			let waitForImg = setInterval(() => {
+			let waitForImg = BDFDB.TimeUtils.interval(() => {
 				let img = modal.querySelector(BDFDB.dotCNS.imagewrapper + "img");
 				if (img && img.src) {
-					clearInterval(waitForImg);
+					BDFDB.TimeUtils.clear(waitForImg);
 					let message = this.getMessageGroupOfImage(img);
 					if (message) {
 						BDFDB.DOMUtils.addClass(modal, "image-gallery");
@@ -110,7 +110,7 @@ class ImageGallery {
 					}
 				}
 				else if (performance.now() - start > 10000) {
-					clearInterval(waitForImg);
+					BDFDB.TimeUtils.clear(waitForImg);
 				}
 			}, 100);
 		}

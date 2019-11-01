@@ -142,15 +142,15 @@ class SendLargeMessages {
 				}
 			};
 			BDFDB.ListenerUtils.add(this, textarea, "keyup", e => {
-				clearTimeout(textarea.sendlargemessagestimeout);
-				textarea.sendlargemessagestimeout = setTimeout(() => {
+				BDFDB.TimeUtils.clear(textarea.sendlargemessagestimeout);
+				textarea.sendlargemessagestimeout = BDFDB.TimeUtils.timeout(() => {
 					modaltext = textarea.value;
 					checkTextarea();
 				},100);
 			});
 			BDFDB.ListenerUtils.add(this, textarea, "paste", e => {
 				modaltext = textarea.value.slice(0, textarea.selectionStart) + BDFDB.LibraryRequires.electron.clipboard.readText() + textarea.value.slice(textarea.selectionEnd);
-				setImmediate(() => {checkTextarea(textarea);});
+				BDFDB.TimeUtils.timeout(() => {checkTextarea(textarea);});
 			});
 		}
 	}
@@ -173,7 +173,7 @@ class SendLargeMessages {
 		BDFDB.ListenerUtils.addToChildren(sendMessageModal, "click", ".btn-send", e => {
 			let messages = this.formatText(textinput.value || "");
 			messages.forEach((message,i) => {
-				setTimeout(() => {
+				BDFDB.TimeUtils.timeout(() => {
 					this.sendMessage(message);
 					if (i >= messages.length-1) BDFDB.NotificationUtils.toast(this.labels.toast_allsent_text, {type:"success"});
 				},this.messageDelay * i);
@@ -181,7 +181,7 @@ class SendLargeMessages {
 		});
 
 		textinput.value = text || "";
-		textinput.addEventListener("keyup", () => {setTimeout(() => {updateCounter();},10);});
+		textinput.addEventListener("keyup", () => {BDFDB.TimeUtils.timeout(() => {updateCounter();},10);});
 		textinput.addEventListener("click", () => {updateCounter();});
 		textinput.addEventListener("mousedown", () => {
 			var mouseup = () => {
@@ -189,7 +189,7 @@ class SendLargeMessages {
 				document.removeEventListener("mousemove", mousemove);
 			};
 			var mousemove = () => {
-				setTimeout(() => {updateCounter();},10);
+				BDFDB.TimeUtils.timeout(() => {updateCounter();},10);
 			};
 			document.addEventListener("mouseup", mouseup);
 			document.addEventListener("mousemove", mousemove);

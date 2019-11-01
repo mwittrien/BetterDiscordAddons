@@ -72,7 +72,7 @@ class TimedLightDarkMode {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			clearInterval(this.checkInterval);
+			BDFDB.TimeUtils.clear(this.checkInterval);
 
 			BDFDB.DOMUtils.remove(".TLDM-settingsbox");
 
@@ -103,7 +103,7 @@ class TimedLightDarkMode {
 	}
 
 	startInterval () {
-		clearInterval(this.checkInterval);
+		BDFDB.TimeUtils.clear(this.checkInterval);
 		if (BDFDB.DataUtils.get(this, "settings", "running")) {
 			var values = BDFDB.DataUtils.get(this, "values");
 			var inverted = values.timer1 > values.timer2;
@@ -117,7 +117,7 @@ class TimedLightDarkMode {
 				else this.changeTheme(this.checkTime(timer2LOW, timer2HIGH, [currenthours, currentminutes]));
 			};
 			check();
-			this.checkInterval = setInterval(check, 60000);
+			this.checkInterval = BDFDB.TimeUtils.interval(check, 60000);
 		}
 	}
 

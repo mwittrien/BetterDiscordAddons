@@ -88,7 +88,7 @@ class CreationDate {
 
 		BDFDB.initElements(settingspanel, this);
 
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".settings-switch", () => {setImmediate(() => {this.updateSettingsPanel(settingspanel);})});
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".settings-switch", () => {BDFDB.TimeUtils.timeout(() => {this.updateSettingsPanel(settingspanel);})});
 		BDFDB.ListenerUtils.add(this, settingspanel, "keyup", BDFDB.dotCN.input, () => {this.saveInputs(settingspanel);});
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".toggle-info", e => {this.toggleInfo(e.currentTarget);});
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {

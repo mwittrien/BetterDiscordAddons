@@ -332,7 +332,7 @@ class FriendNotifications {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			clearInterval(this.checkInterval);
+			BDFDB.TimeUtils.clear(this.checkInterval);
 			BDFDB.PluginUtils.clear(this);
 		}
 	}
@@ -480,7 +480,7 @@ class FriendNotifications {
 	}
 
 	startInterval () {
-		clearInterval(this.checkInterval);
+		BDFDB.TimeUtils.clear(this.checkInterval);
 		let settings = BDFDB.DataUtils.get(this, "settings");
 		let amounts = BDFDB.DataUtils.get(this, "amounts");
 		let notificationstrings = BDFDB.DataUtils.get(this, "notificationstrings");
@@ -489,7 +489,7 @@ class FriendNotifications {
 		for (let id in users) this.userStatusStore[id] = this.getStatusWithMobileAndActivity(id, users[id]).statusname;
 		let toasttime = (amounts.toastTime > amounts.checkInterval ? amounts.checkInterval : amounts.toastTime) * 1000;
 		let desktoptime = (amounts.desktopTime > amounts.checkInterval ? amounts.checkInterval : amounts.desktopTime) * 1000;
-		this.checkInterval = setInterval(() => {
+		this.checkInterval = BDFDB.TimeUtils.interval(() => {
 			for (let id in users) if (!users[id].disabled) {
 				let user = BDFDB.LibraryModules.UserStore.getUser(id);
 				let status = this.getStatusWithMobileAndActivity(id, users[id]);

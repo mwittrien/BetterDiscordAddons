@@ -68,8 +68,8 @@ class WriteUpperCase {
 			var textarea = wrapper.querySelector("textarea");
 			if (!textarea) return;
 			BDFDB.ListenerUtils.add(this, textarea, "keyup", () => {
-				clearTimeout(textarea.WriteUpperCaseTimeout);
-				textarea.WriteUpperCaseTimeout = setTimeout(() => {
+				BDFDB.TimeUtils.clear(textarea.WriteUpperCaseTimeout);
+				textarea.WriteUpperCaseTimeout = BDFDB.TimeUtils.timeout(() => {
 					let string = textarea.value;
 					if (string.length > 0) {
 						let newstring = string;

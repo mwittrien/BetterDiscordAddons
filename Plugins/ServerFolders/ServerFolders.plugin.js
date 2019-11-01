@@ -433,7 +433,7 @@ class ServerFolders {
 				}
 			};
 			if (document.querySelector(BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter + ":not(.copy) " + BDFDB.dotCN.guildiconwrapper)) process();
-			else setTimeout(process, 5000);
+			else BDFDB.TimeUtils.timeout(process, 5000);
 		}
 	}
 
@@ -446,12 +446,12 @@ class ServerFolders {
 		}
 		if (!BDFDB.equals(state, this.folderStates[instance.props.folderId])) {
 			if (data.autoRead && (state.unread || state.badge > 0)) {
-				clearTimeout(this.folderReads[state.folderId]);
-				this.folderReads[state.folderId] = setTimeout(() => {
+				BDFDB.TimeUtils.clear(this.folderReads[state.folderId]);
+				this.folderReads[state.folderId] = BDFDB.TimeUtils.timeout(() => {
 					BDFDB.GuildUtils.markAsRead(instance.props.guildIds);
 				}, 10000);
 			}
-			if (state.expanded) setImmediate(() => {
+			if (state.expanded) BDFDB.TimeUtils.timeout(() => {
 				for (let guildid of instance.props.guildIds) this.updateGuildInFolderContent(state.folderId, guildid);
 				if (this.clickedFolder == state.folderId && BDFDB.DataUtils.get(this, "settings", "closeOtherFolders")) for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (openFolderId != state.folderId) {
 					BDFDB.DOMUtils.remove(this.foldercontent.querySelectorAll(`${BDFDB.dotCN.guildouter}[folderid="${openFolderId}"]`));
@@ -460,7 +460,7 @@ class ServerFolders {
 				this.addSeparator(state.folderId);
 				this.toggleFolderContent();
 			});
-			else setTimeout(() => {
+			else BDFDB.TimeUtils.timeout(() => {
 				BDFDB.DOMUtils.remove(this.foldercontent.querySelectorAll(`${BDFDB.dotCN.guildouter}[folderid="${state.folderId}"]`));
 				if (BDFDB.DOMUtils.containsClass(this.foldercontentguilds.firstElementChild, "folderseparatorouter")) BDFDB.DOMUtils.remove(this.foldercontentguilds.firstElementChild);
 				this.toggleFolderContent();
@@ -474,7 +474,7 @@ class ServerFolders {
 		if (!this.foldercontentguilds) return;
 		if (instance.props && instance.props.guild) {
 			if (methodnames.includes("componentDidMount")) {
-				BDFDB.ListenerUtils.add(this, wrapper, "click", () => {setImmediate(() => {
+				BDFDB.ListenerUtils.add(this, wrapper, "click", () => {BDFDB.TimeUtils.timeout(() => {
 					let folder = this.getFolderOfGuildId(instance.props.guild.id);
 					let folderid = folder ? folder.folderId : null;
 					let settings = BDFDB.DataUtils.get(this, "settings");
@@ -509,7 +509,7 @@ class ServerFolders {
 			BDFDB.DOMUtils.addClass(root, "BDFDB-modal", `${this.name}-modal`, BDFDB.disCN.layermodalmedium);
 			BDFDB.DOMUtils.removeClass(root, BDFDB.disCN.layermodalsmall);
 			if (header) {
-				clearInterval(this.settingsModalWait);
+				BDFDB.TimeUtils.clear(this.settingsModalWait);
 				header.parentElement.insertBefore(BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.marginbottom8 + BDFDB.disCN.tabbarcontainer}" style="flex: 0 0 auto; padding-right: 12px;"><div class="${BDFDB.disCNS.tabbar + BDFDB.disCN.tabbartop}"><div tab="folder" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbaritem}">${this.labels.modal_tabheader1_text}</div><div tab="icon" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbaritem}">${this.labels.modal_tabheader2_text}</div><div tab="tooltip" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbaritem}">${this.labels.modal_tabheader3_text}</div><div tab="custom" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbaritem}">${this.labels.modal_tabheader4_text}</div></div></div>`), header.nextElementSibling);
 			}
 			if (root && form) {
@@ -535,7 +535,7 @@ class ServerFolders {
 
 				BDFDB.ListenerUtils.addToChildren(root, "change", "input[type='file'][option]", e => {
 					let input = e.currentTarget, file = input.files[0];
-					if (file) setImmediate(() => {this.fetchCustomIcon(root, input.getAttribute("option"))});
+					if (file) BDFDB.TimeUtils.timeout(() => {this.fetchCustomIcon(root, input.getAttribute("option"))});
 				});
 				BDFDB.ListenerUtils.addToChildren(root, "keyup", "input[type='text'][option]", e => {
 					if (e.which == 13) this.fetchCustomIcon(root, e.currentTarget.getAttribute("option"));
@@ -636,7 +636,7 @@ class ServerFolders {
 				BDFDB.DOMUtils.removeClass(iconpreviewswitching, "nopic");
 				iconpreviewswitchinginner.style.setProperty("background-image", iconpreviewopenimage);
 				let switching = true;
-				iconpreviewswitching.switchInterval = setInterval(() => {
+				iconpreviewswitching.switchInterval = BDFDB.TimeUtils.interval(() => {
 					switching = !switching;
 					iconpreviewswitchinginner.style.setProperty("background-image", switching ? iconpreviewopenimage : iconpreviewclosedimage);
 				},1000);
@@ -663,7 +663,7 @@ class ServerFolders {
 			iconpreviewclosedinner.style.removeProperty("background-image");
 			BDFDB.DOMUtils.addClass(iconpreviewswitching, "nopic");
 			iconpreviewswitchinginner.style.removeProperty("background-image");
-			clearInterval(iconpreviewswitching.switchInterval);
+			BDFDB.TimeUtils.clear(iconpreviewswitching.switchInterval);
 			BDFDB.NotificationUtils.toast(`Custom Icon was added to selection.`, {type:"success"});
 			this.setIcons(modal, modal.querySelector(".ui-icon-picker-icon.selected").getAttribute("value"));
 		}
@@ -819,9 +819,9 @@ class ServerFolders {
 					folderinner.addEventListener("mouseenter", folderinner.ServerFoldersTooltipListener);
 				}
 				folderinner.ServerFoldersClickListener = () => {
-					clearTimeout(this.clickedFolderTimeout);
+					BDFDB.TimeUtils.clear(this.clickedFolderTimeout);
 					this.clickedFolder = folderid;
-					this.clickedFolderTimeout = setTimeout(() => {
+					this.clickedFolderTimeout = BDFDB.TimeUtils.timeout(() => {
 						delete this.clickedFolderTimeout;
 					}, 3000);
 				};

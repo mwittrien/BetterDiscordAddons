@@ -102,10 +102,10 @@ class ImageZoom {
 			let inner = modal.querySelector(BDFDB.dotCN.modalinner);
 			if (!inner) return;
 			let start = performance.now();
-			let waitForImg = setInterval(() => {
+			let waitForImg = BDFDB.TimeUtils.interval(() => {
 				let img = modal.querySelector(BDFDB.dotCNS.imagewrapper + "img," + BDFDB.dotCNS.imagewrapper + "video");
 				if (img && img.src && !BDFDB.DOMUtils.containsClass(img, BDFDB.disCN.imageplaceholder)) {
-					clearInterval(waitForImg);
+					BDFDB.TimeUtils.clear(waitForImg);
 					img.setAttribute("draggable", "false");
 					inner.firstElementChild.appendChild(BDFDB.DOMUtils.create(`<span class="${BDFDB.disCN.downloadlink} imagezoom-separator" style="margin: 0px 5px;"> | </div>`));
 					let settingslink = BDFDB.DOMUtils.create(`<span class="${BDFDB.disCN.downloadlink} imagezoom-settings">Zoom ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}</div>`);
@@ -122,7 +122,7 @@ class ImageZoom {
 								BDFDB.DataUtils.save(Math.round(BDFDB.NumberUtils.mapRange([0, 100], [this.defaults.settings[type].min, this.defaults.settings[type].max], value)), this, "settings", type);
 							},
 							onValueRender: value => {
-								setImmediate(() => {for (let slider of document.querySelectorAll(BDFDB.dotCN.contextmenuitemslider)) if (BDFDB.ReactUtils.getValue(slider, "return.memoizedProps.type") == type) {
+								BDFDB.TimeUtils.timeout(() => {for (let slider of document.querySelectorAll(BDFDB.dotCN.contextmenuitemslider)) if (BDFDB.ReactUtils.getValue(slider, "return.memoizedProps.type") == type) {
 									value = Math.round(BDFDB.NumberUtils.mapRange([0, 100], [this.defaults.settings[type].min, this.defaults.settings[type].max], value));
 									let label = slider.querySelector(BDFDB.dotCN.contextmenulabel);
 									if (label) label.innerText = this.defaults.settings[type].name + ": " + value + this.defaults.settings[type].unit;
@@ -182,7 +182,7 @@ class ImageZoom {
 					img.addEventListener("mousedown", img.ImageZoomMouseDownListener);
 				}
 				else if (performance.now() - start > 10000) {
-					clearInterval(waitForImg);
+					BDFDB.TimeUtils.clear(waitForImg);
 				}
 			}, 100);
 		}
