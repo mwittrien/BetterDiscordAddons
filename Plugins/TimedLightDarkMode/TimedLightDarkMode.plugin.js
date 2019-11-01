@@ -3,7 +3,7 @@
 class TimedLightDarkMode {
 	getName () {return "TimedLightDarkMode";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,8 @@ class TimedLightDarkMode {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"improved":[["'Improved'","Plugin no longer changes the theme in the remote settings, meaning it will not change the appearance settings for your other devices nor will it save settings after you reload, forbidden by BDs overstrict rules on automated API requests, since this is a time based plugin"]],
+			"fixed":[["Slider","Slider now properly gets added to the appearance settings again"]]
 		};
 
 		this.patchModules = {
@@ -83,7 +84,7 @@ class TimedLightDarkMode {
 	// begin of own functions
 
 	processRadioGroup (instance, wrapper, returnvalue) {
-		if (instance.props && Array.isArray(instance.props.options) && instance.props.options[0] && instance.props.options[0].value == "light" && instance.props.options[1] && instance.props.options[1].value == "dark" && wrapper.parentElement.firstElementChild.innerText && wrapper.parentElement.firstElementChild.innerText.toUpperCase() == BDFDB.LanguageUtils.LanguageStrings.THEME.toUpperCase()) {
+		if (instance.props && Array.isArray(instance.props.options) && instance.props.options[0] && (instance.props.options[0].value == "light" || instance.props.options[0].value == "dark") && instance.props.options[1] && (instance.props.options[1].value == "light" || instance.props.options[1].value == "dark") && wrapper.parentElement.firstElementChild.innerText && wrapper.parentElement.firstElementChild.innerText.toUpperCase() == BDFDB.LanguageUtils.LanguageStrings.THEME.toUpperCase()) {
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			var values = BDFDB.DataUtils.get(this, "values");
 			var settingsbox = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.margintop8} TLDM-settingsbox"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><h5 class="${BDFDB.disCN.h5}">${BDFDB.LanguageUtils.LanguageStrings.THEME} Timer</h5><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings running" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings.running ? " checked" : ""}></div></div><div class="${BDFDB.disCNS.slider + BDFDB.disCN.margintop20}${!settings.running ? (" " + BDFDB.disCN.sliderdisabled): ""}"><input type="number" key="timer1" class="${BDFDB.disCN.sliderinput}" value="${values.timer1}" readonly=""><input type="number" key="timer2" class="${BDFDB.disCN.sliderinput}" value="${values.timer2}" readonly=""><div class="${BDFDB.disCN.slidertrack}"><div class="${BDFDB.disCN.slidermark}" style="left: 0%;"><div class="${BDFDB.disCN.slidermarkvalue}">00:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 12.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">03:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 25%;"><div class="${BDFDB.disCN.slidermarkvalue}">06:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 37.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">09:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 50%;"><div class="${BDFDB.disCN.slidermarkvalue}">12:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 62.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">15:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 75%;"><div class="${BDFDB.disCN.slidermarkvalue}">18:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 87.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">21:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 100%;"><div class="${BDFDB.disCN.slidermarkvalue}">24:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div></div><div class="${BDFDB.disCN.sliderbar}"><div class="${BDFDB.disCN.sliderbarfill}"></div></div><div class="${BDFDB.disCN.slidertrack}"><div class="${BDFDB.disCN.slidergrabber} timer-grabber" key="timer1" style="left: ${values.timer1}%;"></div><div class="${BDFDB.disCN.slidergrabber} timer-grabber" key="timer2" style="left: ${values.timer2}%;"></div><div class="${BDFDB.disCN.slidergrabber} date-grabber" key="current" style="left: ${this.getPercent(new Date())}%; cursor: help !important; height: 12px; margin-top: -7px;"></div></div></div></div>`);
@@ -126,8 +127,8 @@ class TimedLightDarkMode {
 
 	changeTheme (dark) {
 		var theme = BDFDB.DiscordUtils.getTheme();
-		if (dark && theme == BDFDB.disCN.themelight) BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({theme:"dark"});
-		else if (!dark && theme == BDFDB.disCN.themedark) BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({theme:"light"});
+		if (dark && theme == BDFDB.disCN.themelight) BDFDB.LibraryModules.SettingsUtils.updateLocalSettings({theme:"dark"});
+		else if (!dark && theme == BDFDB.disCN.themedark) BDFDB.LibraryModules.SettingsUtils.updateLocalSettings({theme:"light"});
 	}
 
 	showCurrentTime (grabber) {
