@@ -6155,7 +6155,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
         handleChange() {
 			this.props.value = !this.props.value;
 			BDFDB.ReactUtils.forceUpdate(this);
-            if (typeof this.props.onChange == "function") this.props.onChange(!this.props.value, this);
+            if (typeof this.props.onChange == "function") this.props.onChange(this.props.value, this);
         }
         render() {
 			return BDFDB.ReactUtils.createElement(NativeSubComponents.Switch, Object.assign({}, this.props, {onChange: this.handleChange.bind(this)}));
