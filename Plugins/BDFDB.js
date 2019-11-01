@@ -427,7 +427,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			var form = channels ? channels.querySelector("form") : null;
 			var bottom = form ? BDFDB.DOMUtils.getRects(form).height : 80;
 			toasts = BDFDB.DOMUtils.create(`<div class="toasts bd-toasts" style="width:${width}px; left:${left}px; bottom:${bottom}px;"></div>`);
-			document.querySelector(BDFDB.dotCN.app).appendChild(toasts);
+			(document.querySelector(BDFDB.dotCN.app) || document.body).appendChild(toasts);
 		}
 		const {type = "", icon = true, timeout = 3000, html = false, selector = "", nopointer = false, color = ""} = options;
 		var toast = BDFDB.DOMUtils.create(`<div class="toast bd-toast">${html === true ? text : BDFDB.StringUtils.htmlEscape(text)}</div>`);
@@ -6319,7 +6319,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	
 	LibraryComponents.TooltipContainer = reactInitialized ? class BDFDB_TooltipContainer extends LibraryModules.React.Component {
 		render() {
-			return BDFDB.ReactUtils.createElement(LibraryComponents.Clickable, {
+			return BDFDB.ReactUtils.createElement(this.props.tag || LibraryComponents.Clickable, {
 				className: this.props.className,
 				onMouseEnter: e => {
 					BDFDB.TooltipUtils.create(e.currentTarget, this.props.text, Object.assign({}, this.props.tooltipConfig));
