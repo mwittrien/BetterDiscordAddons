@@ -6116,7 +6116,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}	
 	} : LibraryComponents.SettingsLabel;
 	
-	LibraryComponents.SettingsSwitch = reactInitialized ? class BDFDB_SettingsSwitch extends LibraryModules.React.Component {
+	LibraryComponents.SettingsSaveItem = reactInitialized ? class BDFDB_SettingsSaveItem extends LibraryModules.React.Component {
         saveSettings(value) {
 			if (typeof this.props.onChange == "function") this.props.onChange(value, this);
             let keys = this.props.keys.filter(n => n);
@@ -6125,7 +6125,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				var data = BDFDB.DataUtils.load(this.props.plugin, option);
 				var newdata = "";
 				for (let key of keys) newdata += `{"${key}":`;
-				newdata += value + "}".repeat(keys.length);
+				newdata += (value != null && value.value != null ? value.value : value) + "}".repeat(keys.length);
 				newdata = JSON.parse(newdata);
 				if (BDFDB.ObjectUtils.is(newdata)) BDFDB.ObjectUtils.deepAssign(data, newdata);
 				else data = newdata;
@@ -6134,7 +6134,16 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			}
         }
         render() {
+			if (typeof this.props.type != "string" || !["SELECT", "SWITCH", "TEXTINPUT"].includes(this.props.type.toUpperCase())) return null;
 			return BDFDB.ReactUtils.createElement(LibraryComponents.SettingsItem, Object.assign({keys:[]}, this.props, {
+				onChange: this.saveSettings.bind(this)
+			}));
+		}
+    } : LibraryComponents.SettingsSaveItem;
+	
+	LibraryComponents.SettingsSwitch = reactInitialized ? class BDFDB_SettingsSwitch extends LibraryModules.React.Component { // REMOVE
+        render() {
+			return BDFDB.ReactUtils.createElement(LibraryComponents.SettingsSaveItem, Object.assign({keys:[]}, this.props, {
 				type: "Switch",
 				onChange: this.saveSettings.bind(this)
 			}));

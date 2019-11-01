@@ -125,9 +125,9 @@ class BadgesEverywhere {
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let settings = BDFDB.DataUtils.get(this, "settings");
-		var badges = BDFDB.DataUtils.get(this, "badges");
-		var indicators = BDFDB.DataUtils.get(this, "indicators");
-		var settingsitems = [], inneritems = [];
+		let badges = BDFDB.DataUtils.get(this, "badges");
+		let indicators = BDFDB.DataUtils.get(this, "indicators");
+		let settingsitems = [], inneritems = [];
 		
 		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
 			className: BDFDB.disCN.marginbottom8,
