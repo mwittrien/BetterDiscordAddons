@@ -5582,11 +5582,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				align: this.props.align,
 				wrap: this.props.wrap,
 				style: this.props.style,
-				onClick: e => {if (typeof this.props.onClick == "function") this.props.onClick(this, e);},
+				onMouseEnter: e => {if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);},
+				onMouseLeave: e => {if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);},
+				onClick: e => {if (typeof this.props.onClick == "function") this.props.onClick(e, this);},
+				onContextMenu: e => {if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);},
 				children: [
 					!this.props.noRemove ? BDFDB.ReactUtils.createElement(LibraryComponents.CardRemoveButton, {
 						onClick: e => {
-							if (typeof this.props.onRemove == "function") this.props.onRemove(this, e);
+							if (typeof this.props.onRemove == "function") this.props.onRemove(e, this);
 							BDFDB.ListenerUtils.stopEvent(e);
 						}
 					}) : null
@@ -5967,14 +5970,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				style: this.props.style,
 				onClick: e => {
 					if (!this.domElementRef.current || this.domElementRef.current.contains(e.target)) {
-						if (typeof this.props.onClick == "function") this.props.onClick(this, e);
+						if (typeof this.props.onClick == "function") this.props.onClick(e, this);
 						if ((this.props.openOnClick || this.props.openOnClick === undefined) && typeof this.handleClick == "function") this.handleClick();
 					}
 					else e.stopPropagation();
 				},
 				onContextMenu: e => {
 					if (!this.domElementRef.current || this.domElementRef.current.contains(e.target)) {
-						if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(this, e);
+						if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
 						if (this.props.openOnContextMenu && typeof this.handleClick == "function") this.handleClick();
 					}
 					else e.stopPropagation();
@@ -6170,8 +6173,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			BDFDB.ReactUtils.forceUpdate(this);
         }
         handleInput(e) {
-			e = BDFDB.ObjectUtils.is(e) ? e.currentTarget.value : e;
-            if (typeof this.props.onInput == "function") this.props.onInput(e, this);
+            if (typeof this.props.onInput == "function") this.props.onInput(BDFDB.ObjectUtils.is(e) ? e.currentTarget.value : e, this);
         }
         handleBlur(e) {
             if (typeof this.props.onBlur == "function") this.props.onBlur(e, this);
@@ -6319,25 +6321,29 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	
 	LibraryComponents.TooltipContainer = reactInitialized ? class BDFDB_TooltipContainer extends LibraryModules.React.Component {
 		render() {
-			let props = Object.assign({}, this.props, {
-				className: this.props.className,
-				onMouseEnter: e => {
-					BDFDB.TooltipUtils.create(e.currentTarget, this.props.text, Object.assign({}, this.props.tooltipConfig));
-					if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(this, e);
-				},
-				onMouseLeave: e => {
-					if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(this, e);
-				},
-				onClick: e => {
-					if (typeof this.props.onClick == "function") this.props.onClick(this, e);
-				},
-				onContextMenu: e => {
-					if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(this, e);
-				},
-				children: this.props.children
+			let child = (BDFDB.ArrayUtils.is(this.props.children) ? this.props.children[0] : this.props.children) || BDFDB.ReactUtils.createElement("div", {});
+			child.props.className = BDFDB.DOMUtils.formatClassName(child.props.className, this.props.className);
+			let childMouseEnter = child.props.onMouseEnter, childMouseLeave = child.props.onMouseLeave, childClick = child.props.onClick, childContextMenu = child.props.onContextMenu;
+			child.props.onMouseEnter = (e, childthis) => {
+				BDFDB.TooltipUtils.create(e.currentTarget, this.props.text, Object.assign({}, this.props.tooltipConfig));
+				if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);
+				if (typeof childMouseEnter == "function") childMouseEnter(e, childthis);
+			};
+			child.props.onMouseLeave = (e, childthis) => {
+				if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);
+				if (typeof childMouseLeave == "function") child.props.onMouseLeave(e, childthis);
+			};
+			child.props.onClick = (e, childthis) => {
+				if (typeof this.props.onClick == "function") this.props.onClick(e, this);
+				if (typeof childClick == "function") childClick(e, childthis);
+			};
+			child.props.onContextMenu = (e, childthis) => {
+				if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
+				if (typeof childContextMenu == "function") childContextMenu(e, childthis);
+			};
+			return BDFDB.ReactUtils.createElement(LibraryModules.React.Fragment, {
+				children: child
 			});
-			BDFDB.ObjectUtils.delete(props, "text", "tag", "onMouseEnter", "onMouseLeave", "onClick", "onContextMenu", "tooltipConfig");
-			return BDFDB.ReactUtils.createElement(this.props.tag || LibraryComponents.Clickable, props);
 		}
 	} : LibraryComponents.TooltipContainer;
 	
