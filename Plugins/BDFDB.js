@@ -6083,8 +6083,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 							}),
 							(BDFDB.ArrayUtils.is(this.props.labelchildren) ? this.props.labelchildren : Array.of(this.props.labelchildren)),
 							BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
-								grow: this.props.basis ? 1 : 0,
-								shrink: 0,
+								grow: this.props.basis ? 0 : 1,
+								shrink: this.props.basis ? 0 : 1,
 								basis: this.props.basis,
 								wrap: true,
 								children: BDFDB.ReactUtils.createElement(childcomponent, childprops)
