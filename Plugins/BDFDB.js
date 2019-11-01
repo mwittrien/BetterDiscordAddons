@@ -1146,7 +1146,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 	};
 
-	var NoFluxContextMenus = ["ChannelContextMenu", "DeveloperContextMenu", "GuildContextMenu", "GuildRoleContextMenu", "LfgContextMenu", "MessageContextMenu", "NativeContextMenu", "ScreenshareContextMenu", "UserContextMenu", "UserSettingsCogContextMenu"];
+	var NoFluxContextMenus = ["ChannelContextMenu", "DeveloperContextMenu", "GuildContextMenu", "GuildRoleContextMenu", "MessageContextMenu", "NativeContextMenu", "ScreenshareContextMenu", "UserContextMenu", "UserSettingsCogContextMenu"];
 	var NoFluxPopouts = ["MessageOptionPopout"];
 	var FluxContextMenus = ["ApplicationContextMenu", "GroupDMContextMenu"];
 	var PatchMenuQueries = {};
@@ -4092,7 +4092,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	DiscordClassModules.LayerModal = BDFDB.ModuleUtils.findByProperties("root", "small", "medium");
 	DiscordClassModules.Layers = BDFDB.ModuleUtils.findByProperties("layer", "layers");
 	DiscordClassModules.LiveTag = BDFDB.ModuleUtils.findByProperties("liveRed", "live");
-	DiscordClassModules.LFG = BDFDB.ModuleUtils.findByProperties("lfg", "topSectionHeader");
 	DiscordClassModules.Margins = BDFDB.ModuleUtils.findByProperties("marginBottom4", "marginCenterHorz");
 	DiscordClassModules.Member = BDFDB.ModuleUtils.findByProperties("member", "ownerIcon");
 	DiscordClassModules.MembersWrap = BDFDB.ModuleUtils.findByProperties("membersWrap", "membersGroup");
@@ -4867,7 +4866,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		layerbase: ["Layers", "baseLayer"],
 		layers: ["Layers", "layers"],
 		layersbg: ["Layers", "bg"],
-		lfg: ["LFG", "lfg"],
 		livetag: ["LiveTag", "live"],
 		livetaggray: ["LiveTag", "liveGray"],
 		livetaglarge: ["LiveTag", "liveLarge"],
