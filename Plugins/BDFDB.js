@@ -6055,7 +6055,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			if (typeof this.props.onChange == "function") this.props.onChange(value, this);
         }
 		render() {
-			if (typeof this.props.type != "string" || !["BUTTON", "SWITCH", "TEXTINPUT"].includes(this.props.type.toUpperCase())) return null;
+			if (typeof this.props.type != "string" || !["BUTTON", "SELECT", "SWITCH", "TEXTINPUT"].includes(this.props.type.toUpperCase())) return null;
 			let childcomponent = LibraryComponents[this.props.type];
 			if (!childcomponent) return null;
 			if (this.props.mini && childcomponent.Sizes) this.props.size = childcomponent.Sizes.MINI || childcomponent.Sizes.MIN;
