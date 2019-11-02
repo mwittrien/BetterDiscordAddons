@@ -1440,7 +1440,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			if (!nodeOrInstance || !config.name && !config.props) return config.all ? (config.group ? {} : []) : null;
 			var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 			if (!BDFDB.ObjectUtils.is(instance)) return config.all ? (config.group ? {} : []) : null;
-			console.log(nodeOrInstance);
 			config.name = config.name && !BDFDB.ArrayUtils.is(config.name) ? Array.of(config.name) : config.name;
 			config.props = config.props && !BDFDB.ArrayUtils.is(config.props) ? Array.of(config.props) : config.props;
 			var depth = -1;
