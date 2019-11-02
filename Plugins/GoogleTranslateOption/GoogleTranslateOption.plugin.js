@@ -366,11 +366,11 @@ class GoogleTranslateOption {
 					size: BDFDB.LibraryComponents.Button.Sizes.NONE,
 					onClick: e => {
 						let place = this.defaults.choices[key].place;
-						let input = this.getLanguageChoice("output", place);
-						let output = this.getLanguageChoice("input", place);
-						output = output == "auto" ? "en" : output;
-						BDFDB.DataUtils.save(input, this, "choices", "input" + place);
-						BDFDB.DataUtils.save(output, this, "choices", "output" + place);
+						let input = this.getLanguageChoice("input", place);
+						let output = this.getLanguageChoice("output", place);
+						input = input == "auto" ? "en" : input;
+						BDFDB.DataUtils.save(output, this, "choices", "input" + place);
+						BDFDB.DataUtils.save(input, this, "choices", "output" + place);
 						for (let selectIns of BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(e._targetInst, {name:["BDFDB_Popout", "BDFDB_SettingsPanel"], up:true}), {name:"BDFDB_Select", all:true, noCopies:true})) if (selectIns && selectIns.props && selectIns.props.id && this.defaults.choices[selectIns.props.id].place == place) {
 							selectIns.props.value = this.defaults.choices[selectIns.props.id].direction == "input" ? output : input;
 							BDFDB.ReactUtils.forceUpdate(selectIns);
