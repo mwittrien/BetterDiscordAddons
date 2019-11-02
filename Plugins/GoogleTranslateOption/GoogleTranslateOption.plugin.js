@@ -94,9 +94,8 @@ class GoogleTranslateOption {
 		
 		settingsitems = settingsitems.concat(this.createSelects(false));
 		
-		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
 			className: BDFDB.disCN.marginbottom8,
-			type: "Switch",
 			plugin: this,
 			keys: ["settings", key],
 			label: this.defaults.settings[key].description,
@@ -372,16 +371,9 @@ class GoogleTranslateOption {
 						output = output == "auto" ? "en" : output;
 						BDFDB.DataUtils.save(input, this, "choices", "input" + place);
 						BDFDB.DataUtils.save(output, this, "choices", "output" + place);
-						let containerIns = BDFDB.ReactUtils.findOwner(e._targetInst, {name:["BDFDB_Popout", "BDFDB_SettingsPanel"], up:true});
-						if (containerIns) {
-							let allSelectIns = BDFDB.ReactUtils.findOwner(containerIns, {name:"BDFDB_Select", all:true, noCopies:true});
-							for (let i in allSelectIns) {
-								let selectIns = allSelectIns[i];
-								if (selectIns && selectIns.props && selectIns.props.id && this.defaults.choices[selectIns.props.id].place == place) {
-									selectIns.props.value = this.defaults.choices[selectIns.props.id].direction == "input" ? output : input;
-									BDFDB.ReactUtils.forceUpdate(selectIns);
-								}
-							}
+						for (let selectIns of BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(e._targetInst, {name:["BDFDB_Popout", "BDFDB_SettingsPanel"], up:true}), {name:"BDFDB_Select", all:true, noCopies:true})) if (selectIns && selectIns.props && selectIns.props.id && this.defaults.choices[selectIns.props.id].place == place) {
+							selectIns.props.value = this.defaults.choices[selectIns.props.id].direction == "input" ? output : input;
+							BDFDB.ReactUtils.forceUpdate(selectIns);
 						}
 						this.setLanguages();
 					},

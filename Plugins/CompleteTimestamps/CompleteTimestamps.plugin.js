@@ -60,8 +60,7 @@ class CompleteTimestamps {
 			label: this.defaults.settings[key].description,
 			value: settings[key],
 			onChange: (e, instance) => {
-				let selects = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_SettingsPanel", up:true}), {name:"BDFDB_Select", all:true, noCopies:true, });
-				for (let i in selects) BDFDB.ReactUtils.forceUpdate(selects[i]);
+				BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_SettingsPanel", up:true}), {name:"BDFDB_Select", all:true, noCopies:true}));
 			}
 		}));
 		
@@ -131,8 +130,7 @@ class CompleteTimestamps {
 			basis: "70%",
 			value: formats[key],
 			onChange: (e, instance) => {
-				let selects = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_SettingsPanel", up:true}), {name:"BDFDB_Select", all:true, noCopies:true, });
-				for (let i in selects) BDFDB.ReactUtils.forceUpdate(selects[i]);
+				BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_SettingsPanel", up:true}), {name:"BDFDB_Select", all:true, noCopies:true}));
 			}
 		}));
 		
