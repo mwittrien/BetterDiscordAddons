@@ -1165,7 +1165,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	InternalBDFDB.patchContextMenuPlugin = (plugin, type, module) => {
 		if (module && module.prototype) {
 			// REMOVE
-			let isOldType = plugin["process" + type].toString().split("\n")[0].replace(/ /g, "").split(",").length > 1;
+			let isOldType = plugin["on" + type].toString().split("\n")[0].replace(/ /g, "").split(",").length > 1;
 			if (isOldType) {
 				BDFDB.ModuleUtils.patch(plugin, module.prototype, "render", {after: e => {
 					let instance = e.thisObject, menu = BDFDB.ReactUtils.findDOMNode(e.thisObject), returnvalue = e.returnValue;
@@ -1182,7 +1182,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	InternalBDFDB.patchPopoutPlugin = (plugin, type, module) => {
 		if (module && module.prototype) {
 			// REMOVE
-			let isOldType = plugin["process" + type].toString().split("\n")[0].replace(/ /g, "").split(",").length > 1;
+			let isOldType = plugin["on" + type].toString().split("\n")[0].replace(/ /g, "").split(",").length > 1;
 			if (isOldType) {
 				BDFDB.ModuleUtils.patch(plugin, module.prototype, "render", {after: e => {
 					let instance = e.thisObject, menu = BDFDB.ReactUtils.findDOMNode(e.thisObject), returnvalue = e.returnValue;
