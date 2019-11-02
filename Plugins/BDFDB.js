@@ -226,7 +226,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	};
 	BDFDB.PluginUtils.createSettingsPanel = function (plugin, children) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !children || (!BDFDB.ReactUtils.isValidElement(children) && !BDFDB.ArrayUtils.is(children)) || (BDFDB.ArrayUtils.is(children) && !children.length)) return;
-		var settingspanel = BDFDB.DOMUtils.create(`<div class="${plugin.name}-settings BDFDB-settings"></div>`);
+		var settingspanel = BDFDB.DOMUtils.create(`<div class="${plugin.name}-settings ${BDFDB.disCN.settingspanel}"></div>`);
 		BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(LibraryComponents.SettingsPanel, {
 			title: plugin.name,
 			children
@@ -1443,7 +1443,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			config.name = config.name && !BDFDB.ArrayUtils.is(config.name) ? Array.of(config.name) : config.name;
 			config.props = config.props && !BDFDB.ArrayUtils.is(config.props) ? Array.of(config.props) : config.props;
 			var depth = -1;
-			var maxdepth = config.depth === undefined ? 15 : config.depth;
+			var maxdepth = config.depth === undefined ? 30 : config.depth;
 			var start = performance.now();
 			var maxtime = config.time === undefined ? 150 : config.time;
 			var whitelist = config.up ? {return:true, sibling:true, _reactInternalFiber:true} : {child:true, sibling:true, _reactInternalFiber:true};
@@ -1501,7 +1501,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			if (!BDFDB.ObjectUtils.is(instance)) return null;
 			instance = instance._reactInternalFiber || instance;
 			var depth = -1;
-			var maxdepth = config.depth === undefined ? 15 : config.depth;
+			var maxdepth = config.depth === undefined ? 30 : config.depth;
 			var start = performance.now();
 			var maxtime = config.time === undefined ? 150 : config.time;
 			var whitelist = {
@@ -3890,6 +3890,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		cardInner: "inner-OP_8zd",
 		cardWrapper: "card-rT4Wbb",
 		charCounter: "counter-uAzbKp",
+		collapseContainer: "container-fAVkOf",
+		collapseContainerArrow: "arrow-uglXxc",
+		collapseContainerCollapsed: "container-fAVkOf collapsed-2BUBZm",
+		collapseContainerHeader: "header-2s6x-5",
+		collapseContainerInner: "inner-TkGytd",
+		collapseContainerTitle: "title-ROsJi-",
 		colorPickerSwatches: "swatches",
 		colorPickerSwatchesDisabled: "disabled",
 		colorPickerSwatchSingle: "single-swatch",
@@ -3905,7 +3911,11 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		overflowEllipsis: "ellipsis-qlo9sA",
 		modalHeaderHasSibling: "hasSiblings-fRyjyl",
 		modalTabContent: "tab-content",
-		modalTabContentOpen: "open"
+		modalTabContentOpen: "open",
+		settingsPanel: "settingsPanel-w2ySNR",
+		settingsPanelInner: "settingsInner-zw1xAY",
+		settingsPanelList: "settingsList-eZjkXj",
+		settingsPanelTitle: "title-GTF_8J"
 	};
 	DiscordClassModules.BDrepo = {
 		bdGuild: "bd-guild",
@@ -4437,6 +4447,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		checkboxwrapper: ["Checkbox", "checkboxWrapper"],
 		checkboxwrapperdisabled: ["Checkbox", "checkboxWrapperDisabled"],
 		clickable: ["Message", "clickOverride"],
+		collapsecontainer: ["BDFDB", "collapseContainer"],
+		collapsecontainerarrow: ["BDFDB", "collapseContainerArrow"],
+		collapsecontainercollapsed: ["BDFDB", "collapseContainerCollapsed"],
+		collapsecontainerheader: ["BDFDB", "collapseContainerHeader"],
+		collapsecontainerinner: ["BDFDB", "collapseContainerInner"],
+		collapsecontainertitle: ["BDFDB", "collapseContainerTitle"],
 		colorbase: ["TextColor2", "base"],
 		colorerror: ["TextColor", "colorError"],
 		colormuted: ["TextColor", "colorMuted"],
@@ -5224,6 +5240,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		settingsitem: ["Item", "item"],
 		settingsitemselected: ["Item", "selected"],
 		settingsitemthemed: ["Item", "themed"],
+		settingspanel: ["BDFDB", "settingsPanel"],
+		settingspanelinner: ["BDFDB", "settingsPanelInner"],
+		settingspanellist: ["BDFDB", "settingsPanelList"],
+		settingspaneltitle: ["BDFDB", "settingsPanelTitle"],
 		settingsseparator: ["Item", "separator"],
 		settingstabbar: ["Friends", "tabBar"],
 		settingstabbarbadge: ["Friends", "badge"],
@@ -5678,10 +5698,49 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			BDFDB.ObjectUtils.delete(props, "parsing", "max", "refClass");
 			return BDFDB.ReactUtils.createElement("div", props);
 		}
-	}: LibraryComponents.CharCounter;
+	} : LibraryComponents.CharCounter;
 	
 	LibraryComponents.Clickable = BDFDB.ModuleUtils.findByName("Clickable");
 	
+	LibraryComponents.CollapseContainer = reactInitialized ? class BDFDB_CollapseContainer extends LibraryModules.React.Component {
+		render() {
+			return BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.DOMUtils.formatClassName(this.props.collapsed ? BDFDB.disCN.collapsecontainercollapsed : BDFDB.disCN.collapsecontainer, this.props.className),
+				id: this.props.id,
+				children: [
+					this.props.dividertop ? BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormDivider, {
+						className: this.props.mini ? BDFDB.disCN.marginbottom8 : BDFDB.disCN.marginbottom20
+					}) : null,
+					BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+						className: BDFDB.disCNS.collapsecontainerheader + BDFDB.disCN.cursorpointer,
+						align: LibraryComponents.Flex.Align.CENTER,
+						onClick: e => {
+							this.props.collapsed = !this.props.collapsed;
+							BDFDB.ReactUtils.forceUpdate(this);
+							if (typeof this.props.onClick == "function") this.props.onClick(this.props.collapsed, this);
+						},
+						children: [
+							BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN.collapsecontainerarrow
+							}),
+							BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormTitle, {
+								tag: LibraryComponents.FormComponents.FormTitle.Tags.H2,
+								className: BDFDB.disCNS.collapsecontainertitle + BDFDB.disCN.cursorpointer,
+								children: this.props.title
+							})
+						]
+					}),
+					!this.props.collapsed ? BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.collapsecontainerinner,
+						children: this.props.children
+					}) : null,
+					this.props.dividerbottom ? BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormDivider, {
+						className: this.props.mini ? BDFDB.disCN.margintop8 : BDFDB.disCN.margintop20
+					}) : null
+				]
+			});
+		}
+	} : LibraryComponents.CollapseContainer;
 	LibraryComponents.ColorSwatches = reactInitialized ? class BDFDB_ColorSwatches extends LibraryModules.React.Component {
 		constructor(props) {
 			super(props);
@@ -6008,12 +6067,12 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				grow: 1,
 				children: [
 					typeof this.props.title == "string" ? BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormTitle, {
-						className: BDFDB.disCNS.marginbottom20 + "BDFDB-settings-title",
+						className: BDFDB.disCNS.marginbottom20 + BDFDB.disCN.settingspaneltitle,
 						tag: LibraryComponents.FormComponents.FormTitle.Tags.H2,
 						children: this.props.title
 					}) : null,
 					BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
-						className: "BDFDB-settings-inner",
+						className: BDFDB.disCN.settingspanelinner,
 						direction: LibraryComponents.Flex.Direction.VERTICAL,
 						children: this.props.children
 					})
@@ -6036,7 +6095,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 						children: this.props.title
 					}) : null,
 					BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
-						className: "BDFDB-settings-inner-list",
+						className: BDFDB.settingspanellist,
 						direction: LibraryComponents.Flex.Direction.VERTICAL,
 						children: this.props.children
 					}),
@@ -6061,9 +6120,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				className: this.props.childClassName,
 				onChange: this.handleChange.bind(this)
 			});
-			BDFDB.ObjectUtils.delete(childprops, "basis", "dividerbottom", "dividertop", "label", "labelchildren", "mini", "note", "type", "childClassName");
+			BDFDB.ObjectUtils.delete(childprops, "id", "basis", "dividerbottom", "dividertop", "label", "labelchildren", "mini", "note", "type", "childClassName");
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				className: BDFDB.DOMUtils.formatClassName(this.props.className, this.props.disabled ? BDFDB.disCN.disabled : null),
+				id: this.props.id,
 				direction: LibraryComponents.Flex.Direction.VERTICAL,
 				align: LibraryComponents.Flex.Align.STRETCH,
 				children: [
@@ -6725,6 +6785,31 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	BDFDB.DOMUtils.appendLocalStyle("BDFDB", `
 		@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BetterDocsBlock.css);
 
+		${BDFDB.dotCN.settingspanelinner} {
+			padding-left: 15px;
+			padding-right: 5px;
+		}
+		${BDFDB.dotCN.settingspanellist} {
+			padding-left: 15px;
+		}
+		
+		${BDFDB.dotCN.collapsecontainerinner} {
+			padding-left: 15px;
+		}
+		${BDFDB.dotCNS.settingspanelinner + BDFDB.dotCN.collapsecontainerheader} {
+			margin-left: -16px;
+		}
+		${BDFDB.dotCN.collapsecontainerarrow} {
+			background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxOS4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iQ2FscXVlXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSItOTUwIDUzMiAxOCAxOCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAtOTUwIDUzMiAxOCAxODsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4NCgkuc3Qwe2ZpbGw6bm9uZTt9DQoJLnN0MXtmaWxsOm5vbmU7c3Ryb2tlOiNGRkZGRkY7c3Ryb2tlLXdpZHRoOjEuNTtzdHJva2UtbWl0ZXJsaW1pdDoxMDt9DQo8L3N0eWxlPg0KPHBhdGggY2xhc3M9InN0MCIgZD0iTS05MzIsNTMydjE4aC0xOHYtMThILTkzMnoiLz4NCjxwb2x5bGluZSBjbGFzcz0ic3QxIiBwb2ludHM9Ii05MzYuNiw1MzguOCAtOTQxLDU0My4yIC05NDUuNCw1MzguOCAiLz4NCjwvc3ZnPg0K) center/cover no-repeat;
+			height: 16px;
+			width: 16px;
+			transition: transform .3s ease;
+			transform: rotate(0);
+		}
+		${BDFDB.dotCNS.collapsecontainercollapsed + BDFDB.dotCN.collapsecontainerarrow} {
+			transform: rotate(-90deg);
+		}
+		
 		${BDFDB.dotCN.overflowellipsis} {
 			overflow: hidden;
 			text-overflow: ellipsis;
