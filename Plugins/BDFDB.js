@@ -1019,10 +1019,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				filteredmodules = selectedtype ? filteredmodules.filter(type => type == selectedtype) : filteredmodules;
 				if (filteredmodules.length) {
 					try {
-						const appins = BDFDB.ReactUtils.findOwner(app, {name:filteredmodules, all:true, noCopies:true, group:true, unlimted:true});
+						const appins = BDFDB.ReactUtils.findOwner(app, {name:filteredmodules, all:true, noCopies:true, group:true, unlimited:true});
 						for (let type in appins) for (let ins of appins[type]) InternalBDFDB.forceInitiateProcess(plugin, ins, type);
 						if (bdsettings) {
-							const bdsettingsins = BDFDB.ReactUtils.findOwner(bdsettings, {name:filteredmodules, all:true, noCopies:true, group:true, unlimted:true});
+							const bdsettingsins = BDFDB.ReactUtils.findOwner(bdsettings, {name:filteredmodules, all:true, noCopies:true, group:true, unlimited:true});
 							for (let type in bdsettingsins) for (let ins of bdsettingsins[type]) InternalBDFDB.forceInitiateProcess(plugin, ins, type);
 						}
 					}
@@ -1108,14 +1108,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				const app = document.querySelector(BDFDB.dotCN.app), bdsettings = document.querySelector("#bd-settingspane-container " + BDFDB.dotCN.scrollerwrap);
 				var instancefound = false;
 				if (app) {
-					var appins = BDFDB.ReactUtils.findOwner(app, {name:type, unlimted:true});
+					var appins = BDFDB.ReactUtils.findOwner(app, {name:type, unlimited:true});
 					if (appins) {
 						instancefound = true;
 						patchInstance(appins, type);
 					}
 				}
 				if (!instancefound && bdsettings) {
-					var bdsettingsins = BDFDB.ReactUtils.findOwner(bdsettings, {name:type, unlimted:true});
+					var bdsettingsins = BDFDB.ReactUtils.findOwner(bdsettings, {name:type, unlimited:true});
 					if (bdsettingsins) {
 						instancefound = true;
 						patchInstance(bdsettingsins, type);
@@ -1256,7 +1256,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				}
 				if (e.thisObject.props.message && !e.thisObject.props.target) {
 					const messageswrap = document.querySelector(BDFDB.dotCN.messages);
-					if (messageswrap) for (let message of BDFDB.ReactUtils.findOwner(messageswrap, {name:"Message", all:true, noCopies:true, unlimted:true})) {
+					if (messageswrap) for (let message of BDFDB.ReactUtils.findOwner(messageswrap, {name:"Message", all:true, noCopies:true, unlimited:true})) {
 						if (e.thisObject.props.message.id == message.props.message.id) {
 							target = BDFDB.ReactUtils.findDOMNode(message);
 							if (target) e.thisObject.props.target = target
@@ -1440,6 +1440,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			if (!nodeOrInstance || !config.name && !config.props) return config.all ? (config.group ? {} : []) : null;
 			var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 			if (!BDFDB.ObjectUtils.is(instance)) return config.all ? (config.group ? {} : []) : null;
+			console.log(nodeOrInstance);
 			config.name = config.name && !BDFDB.ArrayUtils.is(config.name) ? Array.of(config.name) : config.name;
 			config.props = config.props && !BDFDB.ArrayUtils.is(config.props) ? Array.of(config.props) : config.props;
 			var depth = -1;
@@ -1698,7 +1699,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	};
 	BDFDB.GuildUtils.getAll = function () {
 		var found = [];
-		for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.guilds), {name:["Guild","GuildIcon"], all:true, noCopies:true, unlimted:true})) {
+		for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.guilds), {name:["Guild","GuildIcon"], all:true, noCopies:true, unlimited:true})) {
 			if (ins.props && ins.props.guild) found.push(Object.assign(new ins.props.guild.constructor(ins.props.guild), {div:ins.handleContextMenu ? BDFDB.ReactUtils.findDOMNode(ins) : BDFDB.GuildUtils.createCopy(ins.props.guild), instance:ins}));
 		}
 		return found;
@@ -1873,7 +1874,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	};
 	BDFDB.FolderUtils.getAll = function () {
 		var found = [];
-		for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.guildswrapper), {name:"GuildFolder", all:true, noCopies:true, unlimted:true})) {
+		for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.guildswrapper), {name:"GuildFolder", all:true, noCopies:true, unlimited:true})) {
 			if (ins.props && ins.props.folderId) found.push(Object.assign({}, ins.props, {div:BDFDB.ReactUtils.findDOMNode(ins), instance:ins}));
 		}
 		return found;
@@ -1901,7 +1902,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	};
 	BDFDB.ChannelUtils.getAll = function () {
 		var found = [];
-		for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.channels), {name: ["ChannelCategoryItem", "ChannelItem", "PrivateChannel"], all:true, noCopies:true, unlimted:true})) if (ins.props && !ins.props.ispin && ins.props.channel && ins._reactInternalFiber.return) {
+		for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.channels), {name: ["ChannelCategoryItem", "ChannelItem", "PrivateChannel"], all:true, noCopies:true, unlimited:true})) if (ins.props && !ins.props.ispin && ins.props.channel && ins._reactInternalFiber.return) {
 			var div = BDFDB.ReactUtils.findDOMNode(ins);
 			div = div && BDFDB.DOMUtils.containsClass(div.parentElement, BDFDB.disCN.categorycontainerdefault, BDFDB.disCN.channelcontainerdefault, false) ? div.parentElement : div;
 			found.push(Object.assign(new ins.props.channel.constructor(ins.props.channel), {div, instance:ins}));
@@ -1972,7 +1973,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	};
 	BDFDB.DMUtils.getAll = function () {
 		var found = [];
-		for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.guilds), {name:"DirectMessage", all:true, noCopies:true, unlimted:true})) {
+		for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.guilds), {name:"DirectMessage", all:true, noCopies:true, unlimited:true})) {
 			if (ins.props && ins.props.channel) found.push(Object.assign(new ins.props.channel.constructor(ins.props.channel), {div:BDFDB.ReactUtils.findDOMNode(ins), instance:ins}));
 		}
 		return found;
@@ -3188,7 +3189,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	// REMOVE ONCE REWRITTEN
 	BDFDB.appendModal = function (modalwrapper) {
 		if (!Node.prototype.isPrototypeOf(modalwrapper)) return;
-		if (!BDFDB.appendModal.modals || !document.contains(BDFDB.appendModal.modals)) BDFDB.appendModal.modals = BDFDB.ReactUtils.findDOMNode(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"Modals", unlimted:true}));
+		if (!BDFDB.appendModal.modals || !document.contains(BDFDB.appendModal.modals)) BDFDB.appendModal.modals = BDFDB.ReactUtils.findDOMNode(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"Modals", unlimited:true}));
 		if (!BDFDB.appendModal.modals) return;
 
 		var modal = BDFDB.DOMUtils.containsClass(modalwrapper, BDFDB.disCN.modal) ? modalwrapper : modalwrapper.querySelector(BDFDB.dotCN.modal);
