@@ -930,7 +930,6 @@ var BDFDB = {
 		InviteCard: "InviteRow",
 		PopoutContainer: "Popout",
 		MemberCard: "Member",
-		MessageDeveloperModeGroup: "FluxContainer(MessageDeveloperModeGroup)",
 		WebhookCard: "Webhook"
 	};
 	var webModulesNotFindableModules = {
@@ -979,7 +978,7 @@ var BDFDB = {
 					};
 					if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded && module.BDFDBpatch[modulefunction]) {
 						if (!BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].before)) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[modulefunction].before)) {
-							BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].before[id], `"before" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`)(data);
+							BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].before[id], `"before" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, pluginname)(data);
 						}
 						if (BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].instead)) data.callOriginalMethod();
 						else for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[modulefunction].instead)) {
