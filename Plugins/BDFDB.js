@@ -5597,6 +5597,8 @@ var BDFDB = {
 	NativeSubComponents.TooltipContainer = BDFDB.ModuleUtils.findByName("Tooltip");
 	
 	
+	LibraryComponents.Anchor = BDFDB.ModuleUtils.findByName("Anchor");
+	
 	LibraryComponents.BotTag = reactInitialized ? class BDFDB_BotTag extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement("span", {
@@ -7754,8 +7756,8 @@ var BDFDB = {
 
 	BDFDB.patchModules = {
 		V2C_ContentColumn: "render",
-		V2C_PluginCard: ["componentDidMount","componentDidUpdate"],
-		V2C_ThemeCard: ["componentDidMount","componentDidUpdate"],
+		V2C_PluginCard: "render",
+		V2C_ThemeCard: "render",
 		UserPopout: "componentDidMount",
 		UserProfile: "componentDidMount",
 		Message: ["componentDidMount","componentDidUpdate"],
@@ -7789,47 +7791,64 @@ var BDFDB = {
 	};
 
 	BDFDBprocessFunctions._processCard = function (e, data) {
-		var author, description = null;
-		if (BDFDB.DOMUtils.containsClass(e.node, BDFDB.disCN._reposettingsclosed) && (author = e.node.querySelector(BDFDB.dotCN._repoauthor)) != null && (description = e.node.querySelector(BDFDB.dotCN._repodescription)) != null && (!BDFDB.ObjectUtils.is(data) || typeof data.getRawUrl != "function")) {
-			if (!author.firstElementChild && !description.firstElementChild && (author.innerText == "DevilBro" || author.innerText.indexOf("DevilBro,") == 0)) {
-				description.style.setProperty("display", "block", "important");
-				author.innerHTML = `<a class="${BDFDB.disCNS.anchor + BDFDB.disCN.anchorunderlineonhover}">DevilBro</a>${author.innerText.split("DevilBro").slice(1).join("DevilBro")}`;
-				author.addEventListener("click", _ => {
-					if (BDFDB.UserUtils.me.id == "278543574059057154") return;
-					let DMid = LibraryModules.ChannelStore.getDMFromUserId("278543574059057154")
-					if (DMid) LibraryModules.SelectChannelUtils.selectPrivateChannel(DMid);
-					else LibraryModules.DirectMessageUtils.openPrivateChannel(BDFDB.UserUtils.me.id, "278543574059057154");
-					let close = document.querySelector(BDFDB.dotCNS.settingsclosebuttoncontainer + BDFDB.dotCN.settingsclosebutton);
-					if (close) close.click();
-				});
-				let version = e.node.querySelector(BDFDB.dotCN._repoversion);
-				if (version && data.changelog) {
-					BDFDB.DOMUtils.remove(version.querySelectorAll(".BDFDB-versionchangelog"));
-					let changelogicon = BDFDB.DOMUtils.create(`<span class="BDFDB-versionchangelog" style="white-space: pre !important;">     </span>`);
-					version.appendChild(changelogicon);
-					changelogicon.addEventListener("click", _ => {BDFDB.PluginUtils.openChangeLog(data);});
-					changelogicon.addEventListener("mouseenter", _ => {
-						BDFDB.TooltipUtils.create(changelogicon, BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG, {type:"top", selector:"changelogicon-tooltip"});
-					});
-				}
-				let links = e.node.querySelector(BDFDB.dotCN._repolinks);
-				if (links) {
-					if (links.firstElementChild) links.appendChild(document.createTextNode(" | "));
-					let supportlink = BDFDB.DOMUtils.create(`<a class="${BDFDB.disCNS._repolink + BDFDB.disCN._repolink}-support" target="_blank">Support Server</a>`);
-					supportlink.addEventListener("click", e => {
-						BDFDB.ListenerUtils.stopEvent(e);
-						let switchguild = _ => {
-							LibraryModules.GuildUtils.transitionToGuildSync("410787888507256842");
+		if (e.instance.state && !e.instance.state.settings) {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN._repoauthor]]});
+			if (index > -1) {
+				let author = children[index].props.children;
+				if (author && (author == "DevilBro" || author.indexOf("DevilBro,") == 0)) {
+					children.splice(index, 1, BDFDB.ReactUtils.createElement(LibraryComponents.Anchor, {
+						className: BDFDB.disCN._repoauthor,
+						children: "DevilBro",
+						onClick: e => {
+							BDFDB.ListenerUtils.stopEvent(e);
+							if (BDFDB.UserUtils.me.id == "278543574059057154") return;
+							let DMid = LibraryModules.ChannelStore.getDMFromUserId("278543574059057154")
+							if (DMid) LibraryModules.SelectChannelUtils.selectPrivateChannel(DMid);
+							else LibraryModules.DirectMessageUtils.openPrivateChannel(BDFDB.UserUtils.me.id, "278543574059057154");
 							let close = document.querySelector(BDFDB.dotCNS.settingsclosebuttoncontainer + BDFDB.dotCN.settingsclosebutton);
 							if (close) close.click();
-						};
-						if (LibraryModules.GuildStore.getGuild("410787888507256842")) switchguild();
-						else LibraryModules.InviteUtils.acceptInvite("Jx3TjNS").then(_ => {switchguild();});
-					});
-					links.appendChild(supportlink);
-					if (BDFDB.UserUtils.me.id != "98003542823944192" && BDFDB.UserUtils.me.id != "116242787980017679" && BDFDB.UserUtils.me.id != "81388395867156480") {
-						links.appendChild(document.createTextNode(" | "));
-						links.appendChild(BDFDB.DOMUtils.create(`<a class="${BDFDB.disCNS._repolink + BDFDB.disCN._repolink}-donations" href="https://www.paypal.me/MircoWittrien" target="_blank">Donations</a>`));
+						}
+					}));
+					if (author != "DevilBro") children.splice(index + 1, author.split("DevilBro").slice(1).join("DevilBro"));
+					
+					if (data.changelog) {
+						[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN._repoversion]]});
+						if (index > -1) children[index].props.children = [children[index].props.children, BDFDB.ReactUtils.createElement(LibraryComponents.TooltipContainer, {
+							text: BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG,
+							children: BDFDB.ReactUtils.createElement("span", {
+								className: "BDFDB-versionchangelog",
+								children: "     ",
+								style: {whiteSpace: "pre"},
+								onClick: _ => {BDFDB.PluginUtils.openChangeLog(data);}
+							})
+						})];
+					}
+					
+					[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN._repolinks]]});
+					if (index > -1) {
+						if (!children[index].props.children.filter(n => n).length) children[index].props.children.push(" | ");
+						children[index].props.children.push(BDFDB.ReactUtils.createElement("a", {
+							className: `${BDFDB.disCNS._repolink + BDFDB.disCN._repolink}-support`,
+							target: "_blank",
+							children: "Support Server",
+							onClick: e => {
+								BDFDB.ListenerUtils.stopEvent(e);
+								let switchguild = _ => {
+									LibraryModules.GuildUtils.transitionToGuildSync("410787888507256842");
+									let close = document.querySelector(BDFDB.dotCNS.settingsclosebuttoncontainer + BDFDB.dotCN.settingsclosebutton);
+									if (close) close.click();
+								};
+								if (LibraryModules.GuildStore.getGuild("410787888507256842")) switchguild();
+								else LibraryModules.InviteUtils.acceptInvite("Jx3TjNS").then(_ => {switchguild();});
+							}
+						}));
+						children[index].props.children.push(" | ");
+						children[index].props.children.push(BDFDB.ReactUtils.createElement("a", {
+							className: `${BDFDB.disCNS._repolink + BDFDB.disCN._repolink}-donations`,
+							target: "_blank",
+							href: "https://www.paypal.me/MircoWittrien",
+							children: "Donations"
+						}));
 					}
 				}
 			}
@@ -7865,18 +7884,18 @@ var BDFDB = {
 				let [children, index] = BDFDB.ReactUtils.findChildren(renderedChildren, {name:"MessageOptionButton"});
 				if (index > -1) {
 					let props = children[index].props;
-					if (!(props.message.author.isLocalBot() || props.message.author.id === props.currentUserId || props.canDelete || props.canPin || BDFDB.LibraryModules.CopyLinkUtils.SUPPORTS_COPY && props.developerMode)) children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
+					if (!(props.message.author.isLocalBot() || props.message.author.id === props.currentUserId || props.canDelete || props.canPin || BDFDB.LibraryModules.CopyLinkUtils.SUPPORTS_COPY && props.developerMode)) children.push(BDFDB.ReactUtils.createElement(LibraryComponents.PopoutContainer, {
 						native: true,
-						position: BDFDB.LibraryComponents.PopoutContainer.Positions.BOTTOM,
-						align: BDFDB.LibraryComponents.PopoutContainer.Align.CENTER,
+						position: LibraryComponents.PopoutContainer.Positions.BOTTOM,
+						align: LibraryComponents.PopoutContainer.Align.CENTER,
 						renderPopout: event => {
-							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessageOptionPopout, Object.assign({}, props, {onClose: event.closePopout}));
+							return BDFDB.ReactUtils.createElement(LibraryComponents.MessageOptionPopout, Object.assign({}, props, {onClose: event.closePopout}));
 						},
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+						children: BDFDB.ReactUtils.createElement(LibraryComponents.Clickable, {
 							className: BDFDB.disCN.optionpopoutbutton,
 							"aria-label": BDFDB.LanguageUtils.LanguageStrings.MESSAGE_OPTIONS,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-								name: BDFDB.LibraryComponents.SvgIcon.Names.OVERFLOW_MENU,
+							children: BDFDB.ReactUtils.createElement(LibraryComponents.SvgIcon, {
+								name: LibraryComponents.SvgIcon.Names.OVERFLOW_MENU,
 								className: BDFDB.disCN.optionpopoutbuttonicon
 							})
 						})

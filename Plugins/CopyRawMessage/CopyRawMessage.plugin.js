@@ -3,7 +3,7 @@
 class CopyRawMessage {
 	getName () {return "CopyRawMessage";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,11 +11,11 @@ class CopyRawMessage {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
 		this.patchModules = {
-			"Message":"componentDidMount"
+			MessageContent: "render"
 		};
 	}
 
@@ -47,6 +47,8 @@ class CopyRawMessage {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
+			
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
@@ -62,9 +64,9 @@ class CopyRawMessage {
 
 	// begin of own functions
 
-	onMessageContextMenu (instance, menu, returnvalue) {
-		if (instance.props && instance.props.message && instance.props.message.content && instance.props.target && !menu.querySelector(`${this.name}-contextMenuItem`)) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
+	onMessageContextMenu (e) {
+		if (e.instance.props && e.instance.props.message && e.instance.props.message.content) {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 				children: [
@@ -72,9 +74,9 @@ class CopyRawMessage {
 						label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
 						hint: BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("Copy_Raw") : null,
 						className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-copyraw-contextMenuItem`,
-						action: e => {
-							BDFDB.ContextMenuUtils.close(menu);
-							BDFDB.LibraryRequires.electron.clipboard.write({text:instance.props.message.content});
+						action: _ => {
+							BDFDB.ContextMenuUtils.close(e.instance);
+							BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});
 						}
 					})
 				]
@@ -84,29 +86,18 @@ class CopyRawMessage {
 		}
 	}
 
-	onMessageOptionPopout (instance, popout, returnvalue) {
-		if (instance.props.message && instance.props.channel && instance._reactInternalFiber.memoizedProps.target && !popout.querySelector(".copyrawmessage-itembtn")) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {props:[["label", BDFDB.LanguageUtils.LanguageStrings.DELETE]]});
+	onMessageOptionPopout (e) {
+		if (e.instance.props && e.instance.props.message) {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["label", BDFDB.LanguageUtils.LanguageStrings.DELETE]]});
 			const copyItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
 				className: `${BDFDB.disCN.optionpopoutitem} BDFDB-popoutMenuItem ${this.name}-popoutMenuItem ${this.name}-copyraw-popoutMenuItem`,
-				action: e => {
-					BDFDB.LibraryRequires.electron.clipboard.write({text:instance.props.message.content});
-					instance.props.onClose();
+				action: _ => {
+					BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});
+					e.instance.props.onClose();
 				}
 			});
 			children.splice(index, 0, copyItem);
-		}
-	} 
-
-	processMessage (instance, wrapper, returnvalue) {
-		if (instance.props && typeof instance.props.renderButtons == "function" && !wrapper.querySelector(BDFDB.dotCN.optionpopoutbutton) && BDFDB.ReactUtils.getValue(instance, "props.message.author.id") != 1) {
-			let buttonwrap = wrapper.querySelector(BDFDB.dotCN.messagebuttoncontainer);
-			if (buttonwrap) {
-				let optionPopoutButton = BDFDB.DOMUtils.create(`<div tabindex="0" class="${BDFDB.disCN.optionpopoutbutton}" aria-label="More Options" role="button"><svg name="OverflowMenu" class="${BDFDB.disCN.optionpopoutbuttonicon}" aria-hidden="false" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0z"></path><path fill="currentColor" d="M12 16c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2zm0-6c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2zm0-6c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2z"></path></g></svg></div>`);
-				optionPopoutButton.addEventListener("click", () => {BDFDB.createMessageOptionPopout(optionPopoutButton);});
-				buttonwrap.appendChild(optionPopoutButton);
-			}
 		}
 	}
 }
