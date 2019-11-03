@@ -23,16 +23,19 @@ var BDFDB = {
 	BDFDB.id = id;
 
 	BDFDB.LogUtils = {};
-	BDFDB.LogUtils.log = function (string, name = "BDFDB") {
+	BDFDB.LogUtils.log = function (string, name) {
 		if (typeof string != "string") string = "";
+		if (typeof name != "string" || name == "$BDFDB") name = "BDFDB";
 		console.log(`%c[${name}]%c`, "color: #3a71c1; font-weight: 700;", "", string.trim());
 	};
-	BDFDB.LogUtils.warn = function (string, name = "BDFDB") {
+	BDFDB.LogUtils.warn = function (string, name) {
 		if (typeof string != "string") string = "";
+		if (typeof name != "string" || name == "$BDFDB") name = "BDFDB";
 		console.warn(`%c[${name}]%c`, "color: #3a71c1; font-weight: 700;", "", string.trim());
 	};
-	BDFDB.LogUtils.error = function (string, name = "BDFDB") {
+	BDFDB.LogUtils.error = function (string, name) {
 		if (typeof string != "string") string = "";
+		if (typeof name != "string" || name == "$BDFDB") name = "BDFDB";
 		console.error(`%c[${name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: " + string.trim());
 	};
 	
@@ -102,7 +105,6 @@ var BDFDB = {
 		}
 
 		delete window.PluginUpdates.plugins[url];
-		if (BDFDB.ObjectUtils.isEmpty(window.PluginUpdates.plugins)) BDFDB.DOMUtils.remove("#bd-settingspane-container .bd-updatebtn" + BDFDB.dotCN._repofolderbutton);
 
 		delete plugin.started;
 		BDFDB.InternalData.cleanUps[plugin.name] = BDFDB.TimeUtils.timeout(() => {
@@ -1407,9 +1409,9 @@ var BDFDB = {
 			return parent.props.children;
 		}
 		BDFDB.ReactUtils.findChildren = function (nodeOrInstance, config) {
-			if (!nodeOrInstance || !BDFDB.ObjectUtils.is(config) || !config.name && !config.key && !config.props) return null;
+			if (!nodeOrInstance || !BDFDB.ObjectUtils.is(config) || !config.name && !config.key && !config.props) return [null, -1];
 			var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
-			if (!BDFDB.ObjectUtils.is(instance)) return null;
+			if (!BDFDB.ObjectUtils.is(instance)) return [null, -1];
 			config.name = config.name && !BDFDB.ArrayUtils.is(config.name) ? Array.of(config.name) : config.name;
 			config.key = config.key && !BDFDB.ArrayUtils.is(config.key) ? Array.of(config.key) : config.key;
 			config.props = config.props && !BDFDB.ArrayUtils.is(config.props) ? Array.of(config.props) : config.props;
@@ -1418,54 +1420,47 @@ var BDFDB = {
 			var parent = startchildren;
 			return getChildren(startchildren);
 			function getChildren (children) {
-				while (children && !BDFDB.ArrayUtils.is(children) && children.props && children.props.children) {
-					parent = children;
-					children = children.props.children;
-				}
-				if (children && !BDFDB.ArrayUtils.is(children)) {
-					if (parent) {
-						var child = children;
-						if (check(child)) {
-							if (BDFDB.ArrayUtils.is(parent)) {
-								return [parent, parent.indexOf(child)];
-							}
-							else {
-								parent.props.children = [];
-								parent.props.children.push(child);
-								return [parent.props.children, 0];
-							}
-						}
-						else return [startchildren, -1];
+				var result = [startchildren, -1];
+				if (!children) return result;
+				if (!BDFDB.ArrayUtils.is(children)) {
+					if (check(children)) result = found(children);
+					else if (children.props && children.props.children) {
+						parent = children;
+						result = getChildren(children.props.children);
 					}
-					else return [startchildren, -1];
 				}
 				else {
-					if (!startIsArray) {
-						startchildren = children;
-						startIsArray = true;
-					}
-					var result = [startchildren, -1];
-					for (let i in children) if (children[i]) {
-						if (check(children[i])) result = [children, i];
-						else if (children[i].props) {
+					for (let i = 0; result[1] == -1 && i < children.length; i++) if (children[i]) {
+						if (BDFDB.ArrayUtils.is(children[i])) {
+							parent = children;
+							result = getChildren(children[i]);
+						}
+						else if (check(children[i])) {
+							parent = children;
+							result = found(children[i]);
+						}
+						else if (children[i].props && children[i].props.children) {
 							parent = children[i];
 							result = getChildren(children[i].props.children);
 						}
-						else if (BDFDB.ArrayUtils.is(children[i])) for (let subchild of children[i]) if (subchild) {
-							parent = children[i];
-							result = getChildren(subchild);
-						}
-						if (result[1] > -1) break;
 					}
-					return result;
+				}
+				return result;
+			}
+			function found (child) {
+				if (BDFDB.ArrayUtils.is(parent)) return [parent, parent.indexOf(child)];
+				else {
+					parent.props.children = [];
+					parent.props.children.push(child);
+					return [parent.props.children, 0];
 				}
 			}
 			function check (instance) {
 				if (!instance) return false;
 				let props = instance.stateNode ? instance.stateNode.props : instance.props;
-				return instance.type && config.name && config.name.some(name => ((instance.type.displayName || instance.type.name) === name)) || config.key && config.key.some(key => instance.key == key) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => propcheck(props, prop[0], checkvalue)) : propcheck(props, prop[0], prop[1])) : props[prop] !== undefined);
+				return instance.type && config.name && config.name.some(name => ((instance.type.displayName || instance.type.name) === name)) || config.key && config.key.some(key => instance.key == key) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => propCheck(props, prop[0], checkvalue)) : propCheck(props, prop[0], prop[1])) : props[prop] !== undefined);
 			}
-			function propcheck (props, key, value) {
+			function propCheck (props, key, value) {
 				return key != null && props[key] != null && value != null && (key == "className" ? props[key].indexOf(value) > -1 : BDFDB.equals(props[key], value));
 			}
 		};
@@ -6962,7 +6957,7 @@ var BDFDB = {
 			display: inline-block;
 			margin-left: 10px;
 		}
-		#bd-settingspane-container .bd-updatebtn ~ .bd-updatebtn {
+		#bd-settingspane-container .bd-updatebtn[style] {
 			display: none !important;
 		}
 		#bd-settingspane-container ${BDFDB.dotCN._repodescription} {
@@ -7758,7 +7753,7 @@ var BDFDB = {
 	});
 
 	BDFDB.patchModules = {
-		V2C_List: "componentDidMount",
+		V2C_ContentColumn: "render",
 		V2C_PluginCard: ["componentDidMount","componentDidUpdate"],
 		V2C_ThemeCard: ["componentDidMount","componentDidUpdate"],
 		UserPopout: "componentDidMount",
@@ -7768,28 +7763,28 @@ var BDFDB = {
 	};
 
 	var BDFDBprocessFunctions = {};
-	BDFDBprocessFunctions.processV2CList = function (e) {
-		if (window.PluginUpdates && window.PluginUpdates.plugins && e.instance._reactInternalFiber.key && e.instance._reactInternalFiber.key.split("-")[0] == "plugin") {
-			var folderbutton = document.querySelector(BDFDB.dotCN._repofolderbutton);
-			if (folderbutton) {
-				var updatebutton = BDFDB.DOMUtils.create(`<button class="bd-updatebtn ${BDFDB.disCN._repofolderbutton}">Check for Updates</button>`);
-				updatebutton.addEventListener("click", _ => {BDFDB.PluginUtils.checkAllUpdates();});
-				updatebutton.addEventListener("mouseenter", _ => {
-					BDFDB.TooltipUtils.create(updatebutton, "Only checks for updates of plugins, which support the updatecheck. Rightclick for a list of supported plugins.", {type: "top", selector: "update-button-tooltip", style: "max-width: 420px"});
-				});
-				updatebutton.addEventListener("contextmenu", _ => {
-					if (window.PluginUpdates && window.PluginUpdates.plugins && !document.querySelector(".update-list-tooltip")) {
-						var pluginnames = [];
-						for (let url in window.PluginUpdates.plugins) pluginnames.push(window.PluginUpdates.plugins[url].name);
-						BDFDB.TooltipUtils.create(updatebutton, pluginnames.sort().join(", "), {type: "bottom", selector: "update-list-tooltip", style: "max-width: 420px"});
-					}
-				});
-				BDFDB.DOMUtils.remove("#bd-settingspane-container .bd-updatebtn" + BDFDB.dotCN._repofolderbutton);
-				folderbutton.parentElement.insertBefore(updatebutton, folderbutton.nextSibling);
-				new MutationObserver(changes => {changes.forEach(change => {change.addedNodes.forEach(node => {
-					if (folderbutton.parentElement.querySelectorAll(".bd-updatebtn").length > 1 && BDFDB.DOMUtils.containsClass(node, "bd-updatebtn")) BDFDB.DOMUtils.remove(node);
-				});});}).observe(folderbutton.parentElement, {subtree:true, childList:true});
-			}
+	BDFDBprocessFunctions.processV2CContentColumn = function (e) {
+		if (window.PluginUpdates && window.PluginUpdates.plugins && e.instance.props && e.instance.props.title == "Plugins") {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {key: "folder-button"});
+			if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(LibraryComponents.TooltipContainer, {
+				text: "Only checks for updates of plugins, which support the updatecheck. Rightclick for a list of supported plugins. (Listed ≠ outdated)",
+				tooltipConfig: {
+					selector: "update-button-tooltip", 
+					style: "max-width: 420px"
+				},
+				children: BDFDB.ReactUtils.createElement("button", {
+					className: `${BDFDB.disCN._repofolderbutton} bd-updatebtn`,
+					onClick: _ => {BDFDB.PluginUtils.checkAllUpdates();},
+					onContextMenu: e => {
+						if (window.PluginUpdates && window.PluginUpdates.plugins && !document.querySelector(".update-list-tooltip")) {
+							var pluginnames = [];
+							for (let url in window.PluginUpdates.plugins) pluginnames.push(window.PluginUpdates.plugins[url].name);
+							BDFDB.TooltipUtils.create(e.currentTarget, pluginnames.sort().join(", "), {type: "bottom", selector: "update-list-tooltip", style: "max-width: 420px"});
+						}
+					},
+					children: "Check for Updates"
+				})
+			}));
 		}
 	};
 
