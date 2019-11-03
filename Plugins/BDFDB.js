@@ -1,14 +1,42 @@
 if (window.BDFDB && BDFDB.ListenerUtils && typeof BDFDB.ListenerUtils.remove == "function") BDFDB.ListenerUtils.remove(BDFDB);
 if (window.BDFDB && BDFDB.ObserverUtils && typeof BDFDB.ObserverUtils.disconnect == "function") BDFDB.ObserverUtils.disconnect(BDFDB);
 if (window.BDFDB && BDFDB.ModuleUtils && typeof BDFDB.ModuleUtils.unpatch == "function") BDFDB.ModuleUtils.unpatch(BDFDB);
-var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB.cleanUps || {}, BDv2Api: BDFDB && BDFDB.BDv2Api || undefined, creationTime: performance.now(), pressedKeys: [], mousePosition: {pageX: 0, pageY: 0}, name: "$BDFDB"};
+var BDFDB = {
+	myPlugins: BDFDB && BDFDB.myPlugins || {},
+	InternalData: BDFDB && BDFDB.InternalData || {
+		creationTime: performance.now(),
+		cleanUps: {},
+		patchedMessagePopouts: 0,
+		pressedKeys: [],
+		mousePosition: {
+			pageX: 0,
+			pageY: 0
+		}
+	},
+	BDv2Api: BDFDB && BDFDB.BDv2Api || undefined,
+	pressedKeys: [], //REMOVE
+	mousePosition: {pageX: 0, pageY: 0}, //REMOVE
+	name: "$BDFDB"
+};
 (_ => {
 	var id = Math.round(Math.random() * 10000000000000000), InternalBDFDB = {};
 	BDFDB.id = id;
-	console.log(`%c[BDFDB]%c`, "color: #3a71c1; font-weight: 700;", "", "loading library.");
-	BDFDB.isLibraryOutdated = function () {
-		return performance.now() - BDFDB.creationTime > 600000;
+
+	BDFDB.LogUtils = {};
+	BDFDB.LogUtils.log = function (string, name = "BDFDB") {
+		if (typeof string != "string") string = "";
+		console.log(`%c[${name}]%c`, "color: #3a71c1; font-weight: 700;", "", string.trim());
 	};
+	BDFDB.LogUtils.warn = function (string, name = "BDFDB") {
+		if (typeof string != "string") string = "";
+		console.warn(`%c[${name}]%c`, "color: #3a71c1; font-weight: 700;", "", string.trim());
+	};
+	BDFDB.LogUtils.error = function (string, name = "BDFDB") {
+		if (typeof string != "string") string = "";
+		console.error(`%c[${name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: " + string.trim());
+	};
+	
+	BDFDB.LogUtils.log("Loading library.");
 	
 	BDFDB.PluginUtils = {};
 	BDFDB.PluginUtils.init = function (plugin) {
@@ -20,7 +48,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		InternalBDFDB.clearStartTimeout(plugin);
 
 		var loadmessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
-		console.log(`%c[${plugin.name}]%c`, "color: #3a71c1; font-weight: 700;", "", loadmessage);
+		BDFDB.LogUtils.log(loadmessage, plugin.name);
 		if (!BDFDB.BDUtils.getSettings("fork-ps-2")) BDFDB.NotificationUtils.toast(plugin.name + " " + loadmessage, {nopointer: true, selector: "plugin-started-toast"});
 
 		var url = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
@@ -29,6 +57,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		if (typeof plugin.initConstructor === "function") BDFDB.TimeUtils.suppress(plugin.initConstructor.bind(plugin), "Could not initiate constructor!", plugin.name)();
 		if (typeof plugin.css === "string") BDFDB.DOMUtils.appendLocalStyle(plugin.name, plugin.css);
 
+		if (typeof plugin.onMessageOptionPopout == "function") BDFDB.InternalData.patchedMessagePopouts++;
 
 		InternalBDFDB.patchPlugin(plugin);
 		InternalBDFDB.addOnSettingsClosedListener(plugin);
@@ -54,12 +83,14 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		delete BDFDB.myPlugins[plugin.name];
 
 		var unloadmessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", "v" + plugin.version);
-		console.log(`%c[${plugin.name}]%c`, "color: #3a71c1; font-weight: 700;", "", unloadmessage);
+		BDFDB.LogUtils.log(unloadmessage, plugin.name);
 		if (!BDFDB.BDUtils.getSettings("fork-ps-2")) BDFDB.NotificationUtils.toast(plugin.name + " " + unloadmessage, {nopointer: true, selector: "plugin-stopped-toast"});
 
 		var url = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 
 		if (typeof plugin.css === "string") BDFDB.DOMUtils.removeLocalStyle(plugin.name);
+
+		if (typeof plugin.onMessageOptionPopout == "function") BDFDB.InternalData.patchedMessagePopouts--;
 
 		BDFDB.ListenerUtils.remove(plugin);
 		BDFDB.ObserverUtils.disconnect(plugin);
@@ -74,7 +105,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		if (BDFDB.ObjectUtils.isEmpty(window.PluginUpdates.plugins)) BDFDB.DOMUtils.remove("#bd-settingspane-container .bd-updatebtn" + BDFDB.dotCN._repofolderbutton);
 
 		delete plugin.started;
-		BDFDB.cleanUps[plugin.name] = BDFDB.TimeUtils.timeout(() => {
+		BDFDB.InternalData.cleanUps[plugin.name] = BDFDB.TimeUtils.timeout(() => {
 			BDFDB.ModuleUtils.unpatch(plugin);
 			delete plugin.stopping;
 		});
@@ -95,7 +126,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				var language = BDFDB.LanguageUtils.getLanguage();
 				if (typeof plugin.setLabelsByLanguage === "function") plugin.labels = plugin.setLabelsByLanguage(language.id);
 				if (typeof plugin.changeLanguageStrings === "function") plugin.changeLanguageStrings();
-				console.log(`%c[${plugin.name}]%c`, "color: #3a71c1; font-weight: 700;", "", BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_translated", language.ownlang));
+				BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_translated", language.ownlang), plugin.name);
 			}
 		}
 	};
@@ -177,8 +208,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	BDFDB.PluginUtils.downloadUpdate = function (pluginname, url) {
 		if (!pluginname || !url) return;
 		LibraryRequires.request(url, (error, response, result) => {
-			if (error) return console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", "Unable to get update for " + pluginname);
-			BDFDB.creationTime = 0;
+			if (error) return BDFDB.LogUtils.warn("Unable to get update for " + pluginname);
+			BDFDB.InternalData.creationTime = 0;
 			var newversion = result.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
 			newversion = newversion.toString().replace(/['"]/g, "");
 			LibraryRequires.fs.writeFileSync(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), url.split("/").slice(-1)[0]), result);
@@ -235,10 +266,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	};
 	InternalBDFDB.clearStartTimeout = function (plugin) {
 		if (!BDFDB.ObjectUtils.is(plugin)) return;
-		BDFDB.TimeUtils.clear(plugin.startTimeout, plugin.libLoadTimeout, BDFDB.cleanUps[plugin.name]);
+		BDFDB.TimeUtils.clear(plugin.startTimeout, plugin.libLoadTimeout, BDFDB.InternalData.cleanUps[plugin.name]);
 		delete plugin.startTimeout;
 		delete plugin.libLoadTimeout;
-		delete BDFDB.cleanUps[plugin.name];
+		delete BDFDB.InternalData.cleanUps[plugin.name];
 	};
 	InternalBDFDB.addOnSettingsClosedListener = function (plugin) {
 		if (BDFDB.ObjectUtils.is(plugin) && typeof plugin.onSettingsClosed === "function") {
@@ -839,7 +870,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				BDFDB.ModuleUtils.cached.prop[cachestring] = m;
 				return m;
 			}
-			else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", cachestring + " [properties] not found in WebModules");
+			else BDFDB.LogUtils.warn(cachestring + " [properties] not found in WebModules");
 		}
 	};
 	BDFDB.ModuleUtils.findByName = function (name) {
@@ -852,7 +883,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				BDFDB.ModuleUtils.cached.name[cachestring] = m;
 				return m;
 			}
-			else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", cachestring + " [name] not found in WebModules");
+			else BDFDB.LogUtils.warn(cachestring + " [name] not found in WebModules");
 		}
 	};
 	BDFDB.ModuleUtils.findByString = function (strings) {
@@ -866,7 +897,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				BDFDB.ModuleUtils.cached.string[cachestring] = m;
 				return m;
 			}
-			else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", cachestring + " [string] not found in WebModules");
+			else BDFDB.LogUtils.warn(cachestring + " [string] not found in WebModules");
 		}
 	};
 	BDFDB.ModuleUtils.findByPrototypes = function (protoprops) {
@@ -880,7 +911,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				BDFDB.ModuleUtils.cached.proto[cachestring] = m;
 				return m;
 			}
-			else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", cachestring + " [prototypes] not found in WebModules");
+			else BDFDB.LogUtils.warn(cachestring + " [prototypes] not found in WebModules");
 		}
 	};
 	InternalBDFDB.getWebModuleReq = function () {
@@ -1026,7 +1057,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 							for (let type in bdsettingsins) for (let ins of bdsettingsins[type]) InternalBDFDB.forceInitiateProcess(plugin, ins, type);
 						}
 					}
-					catch (err) {console.error(`%c[${plugin.name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not force update components! " + err);}
+					catch (err) {BDFDB.LogUtils.error("Could not force update components! " + err, plugin.name);}
 				}
 			}
 		}
@@ -1337,7 +1368,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		BDFDB.ReactUtils.createElement = function (component, props) {
 			if (component && component.defaultProps) for (let key in component.defaultProps) if (props[key] == null) props[key] = component.defaultProps[key];
 			try {return LibraryModules.React.createElement(component || "div", props || {}) || null;}
-			catch (err) {console.error(`%c[BDFDB]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not create react element! " + err);}
+			catch (err) {BDFDB.LogUtils.error("Fatal Error: Could not create react element! " + err);}
 			return null;
 		};
 		BDFDB.ReactUtils.elementToReact = function (node) {
@@ -1654,7 +1685,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		else return ((user.avatar ? "" : "https://discordapp.com") + LibraryModules.IconUtils.getUserAvatarURL(user)).split("?")[0];
 	};
 	BDFDB.UserUtils.can = function (permission, id = BDFDB.UserUtils.me.id, channelid = LibraryModules.LastChannelStore.getChannelId()) {
-		if (!BDFDB.DiscordConstants.Permissions[permission]) console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", permission + " not found in Permissions");
+		if (!BDFDB.DiscordConstants.Permissions[permission]) BDFDB.LogUtils.warn(permission + " not found in Permissions");
 		else {
 			var channel = LibraryModules.ChannelStore.getChannel(channelid);
 			if (channel) return LibraryModules.PermissionUtils.canUser(id, BDFDB.DiscordConstants.Permissions[permission], channel);
@@ -3645,20 +3676,6 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		}
 	}};
 
-	BDFDB.LogUtils = {};
-	BDFDB.LogUtils.log = function (string, name = "BDFDB") {
-		if (typeof string != "string") string = "";
-		console.log(`%c[${name}]%c`, "color: #3a71c1; font-weight: 700;", "", string.trim());
-	};
-	BDFDB.LogUtils.warn = function (string, name = "BDFDB") {
-		if (typeof string != "string") string = "";
-		console.warn(`%c[${name}]%c`, "color: #3a71c1; font-weight: 700;", "", string.trim());
-	};
-	BDFDB.LogUtils.error = function (string, name = "BDFDB") {
-		if (typeof string != "string") string = "";
-		console.error(`%c[${name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: " + string.trim());
-	};
-
 	BDFDB.StringUtils = {};
 	BDFDB.StringUtils.htmlEscape = function (string) {
 		var ele = document.createElement("div");
@@ -5496,19 +5513,19 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	InternalBDFDB.getDiscordClass = (item, selector) => {
 		var classname = DiscordClassModules.BDFDB.BDFDBundefined;
 		if (DiscordClasses[item] === undefined) {
-			console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", item + " not found in DiscordClasses");
+			BDFDB.LogUtils.warn(item + " not found in DiscordClasses");
 			return classname;
 		} 
 		else if (!BDFDB.ArrayUtils.is(DiscordClasses[item]) || DiscordClasses[item].length != 2) {
-			console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", item + " is not an Array of Length 2 in DiscordClasses");
+			BDFDB.LogUtils.warn(item + " is not an Array of Length 2 in DiscordClasses");
 			return classname;
 		}
 		else if (DiscordClassModules[DiscordClasses[item][0]] === undefined) {
-			console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", DiscordClasses[item][0] + " not found in DiscordClassModules");
+			BDFDB.LogUtils.warn(DiscordClasses[item][0] + " not found in DiscordClassModules");
 			return classname;
 		}
 		else if (DiscordClassModules[DiscordClasses[item][0]][DiscordClasses[item][1]] === undefined) {
-			console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", DiscordClasses[item][1] + " not found in " + DiscordClasses[item][0] + " in DiscordClassModules");
+			BDFDB.LogUtils.warn(DiscordClasses[item][1] + " not found in " + DiscordClasses[item][0] + " in DiscordClassModules");
 			return classname;
 		}
 		else {
@@ -5691,10 +5708,10 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 						BDFDB.ListenerUtils.multiAdd(this.refElement, "mousedown", this._handleSelection);
 						this.updateCounter();
 					}
-					else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", "could not find referenceElement for BDFDB_CharCounter");
+					else BDFDB.LogUtils.warn("could not find referenceElement for BDFDB_CharCounter");
 				}
 			}
-			else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", "refClass can not be undefined for BDFDB_CharCounter");
+			else BDFDB.LogUtils.warn("refClass can not be undefined for BDFDB_CharCounter");
 		}
 		render() {
 			let props = Object.assign({}, this.props, {
@@ -6706,7 +6723,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	BDFDB.LanguageUtils.LanguageStrings = new Proxy(LanguageStrings, {
 		get: function (list, item) {
 			var stringobj = LibraryModules.LanguageStore.Messages[item];
-			if (!stringobj) console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", item + " not found in BDFDB.LanguageUtils.LanguageStrings");
+			if (!stringobj) BDFDB.LogUtils.warn(item + " not found in BDFDB.LanguageUtils.LanguageStrings");
 			else {
 				if (stringobj && typeof stringobj == "object" && typeof stringobj.format == "function") return BDFDB.LanguageUtils.LanguageStringsFormat(item);
 				else return stringobj;
@@ -6744,13 +6761,13 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 					return returnvalue;
 				}
 				else {
-					console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", item + " failed to format string in BDFDB.LanguageUtils.LanguageStrings");
+					BDFDB.LogUtils.warn(item + " failed to format string in BDFDB.LanguageUtils.LanguageStrings");
 					return "";
 				}
 			}
 			else return BDFDB.LanguageUtils.LanguageStrings[item];
 		}
-		else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", item + " enter a valid key to format the string in BDFDB.LanguageUtils.LanguageStrings");
+		else BDFDB.LogUtils.warn(item + " enter a valid key to format the string in BDFDB.LanguageUtils.LanguageStrings");
 		return "";
 	};
 	BDFDB.LanguageUtils.LibraryStrings = new Proxy(InternalBDFDB.LibraryStrings.default, {
@@ -6758,7 +6775,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			let languageid = BDFDB.LanguageUtils.getLanguage().id;
 			if (InternalBDFDB.LibraryStrings[languageid] && InternalBDFDB.LibraryStrings[languageid][item]) return InternalBDFDB.LibraryStrings[languageid][item];
 			else if (InternalBDFDB.LibraryStrings.default[item]) return InternalBDFDB.LibraryStrings.default[item];
-			else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", item + " not found in BDFDB.LanguageUtils.LibraryStrings");
+			else BDFDB.LogUtils.warn(item + " not found in BDFDB.LanguageUtils.LibraryStrings");
 			return "";
 		}
 	});
@@ -6776,9 +6793,9 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 				for (let i = 0; i < values.length; i++) if (typeof values[i] == "string") string = string.replace(new RegExp(`{{var${i}}}`, "g"), values[i]);
 				return string;
 			}
-			else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", item + " not found in BDFDB.LanguageUtils.LibraryStrings");
+			else BDFDB.LogUtils.warn(item + " not found in BDFDB.LanguageUtils.LibraryStrings");
 		}
-		else console.warn(`%c[BDFDB]%c`, "color:#3a71c1; font-weight:700;", "", item + " enter a valid key and at least one value to format the string in BDFDB.LanguageUtils.LibraryStrings");
+		else BDFDB.LogUtils.warn(item + " enter a valid key and at least one value to format the string in BDFDB.LanguageUtils.LibraryStrings");
 		return "";
 	};
 	var initDiscordLanguageInterval = (_ => {
@@ -7712,21 +7729,28 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	});
 	var KeyDownTimeouts = {};
 	BDFDB.ListenerUtils.add(BDFDB, document, "keydown.BDFDBPressedKeys", e => {
-		if (!BDFDB.pressedKeys.includes(e.which)) {
+		if (!BDFDB.InternalData.pressedKeys.includes(e.which)) {
 			BDFDB.TimeUtils.clear(KeyDownTimeouts[e.which]);
-			BDFDB.pressedKeys.push(e.which);
-			KeyDownTimeouts[e.which] = BDFDB.TimeUtils.timeout(_ => {BDFDB.ArrayUtils.remove(BDFDB.pressedKeys, e.which, true);},60000);
+			BDFDB.InternalData.pressedKeys.push(e.which);
+			BDFDB.pressedKeys.push(e.which); // REMOVE
+			KeyDownTimeouts[e.which] = BDFDB.TimeUtils.timeout(_ => {
+				BDFDB.ArrayUtils.remove(BDFDB.InternalData.pressedKeys, e.which, true);
+				BDFDB.ArrayUtils.remove(BDFDB.pressedKeys, e.which, true);  // REMOVE
+			},60000);
 		}
 	});
 	BDFDB.ListenerUtils.add(BDFDB, document, "keyup.BDFDBPressedKeys", e => {
 		BDFDB.TimeUtils.clear(KeyDownTimeouts[e.which]);
-		BDFDB.ArrayUtils.remove(BDFDB.pressedKeys, e.which, true);
+		BDFDB.ArrayUtils.remove(BDFDB.InternalData.pressedKeys, e.which, true);
+		BDFDB.ArrayUtils.remove(BDFDB.pressedKeys, e.which, true); // REMOVE
 	});
 	BDFDB.ListenerUtils.add(BDFDB, document, "mousedown.BDFDBMousePosition", e => {
-		BDFDB.mousePosition = e;
+		BDFDB.InternalData.mousePosition = e;
+		BDFDB.mousePosition = e; // REMOVE
 	});
 	BDFDB.ListenerUtils.add(BDFDB, window, "focus.BDFDBPressedKeysReset", e => {
-		BDFDB.pressedKeys = [];
+		BDFDB.InternalData.pressedKeys = [];
+		BDFDB.pressedKeys = []; // REMOVE
 	});
 
 	BDFDB.patchModules = {
@@ -7735,7 +7759,8 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 		V2C_ThemeCard: ["componentDidMount","componentDidUpdate"],
 		UserPopout: "componentDidMount",
 		UserProfile: "componentDidMount",
-		Message: ["componentDidMount","componentDidUpdate"]
+		Message: ["componentDidMount","componentDidUpdate"],
+		MessageContent: "render"
 	};
 
 	var BDFDBprocessFunctions = {};
@@ -7833,6 +7858,35 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	BDFDBprocessFunctions.processMessage = function (e) {
 		BDFDBprocessFunctions._processAvatar(e.instance.props.message.author, e.node.querySelector(BDFDB.dotCN.avatarwrapper));
 	};
+	BDFDBprocessFunctions.processMessageContent = function (e) {
+		if (BDFDB.InternalData.patchedMessagePopouts && typeof e.returnvalue.props.children == "function" && BDFDB.ReactUtils.getValue(e.instance, "props.message.author.id") != 1) {
+			let renderChildren = e.returnvalue.props.children;
+			e.returnvalue.props.children = () => {
+				let renderedChildren = renderChildren(e.instance);
+				let [children, index] = BDFDB.ReactUtils.findChildren(renderedChildren, {name:"MessageOptionButton"});
+				if (index > -1) {
+					let props = children[index].props;
+					if (!(props.message.author.isLocalBot() || props.message.author.id === props.currentUserId || props.canDelete || props.canPin || BDFDB.LibraryModules.CopyLinkUtils.SUPPORTS_COPY && props.developerMode)) children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
+						native: true,
+						position: BDFDB.LibraryComponents.PopoutContainer.Positions.BOTTOM,
+						align: BDFDB.LibraryComponents.PopoutContainer.Align.CENTER,
+						renderPopout: event => {
+							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessageOptionPopout, Object.assign({}, props, {onClose: event.closePopout}));
+						},
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+							className: BDFDB.disCN.optionpopoutbutton,
+							"aria-label": BDFDB.LanguageUtils.LanguageStrings.MESSAGE_OPTIONS,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								name: BDFDB.LibraryComponents.SvgIcon.Names.OVERFLOW_MENU,
+								className: BDFDB.disCN.optionpopoutbuttonicon
+							})
+						})
+					}));
+				}
+				return renderedChildren;
+			};
+		}
+	};
 
 	InternalBDFDB.patchPlugin(BDFDB);
 
@@ -7874,25 +7928,25 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 	};
 	var libKeys = Object.keys(BDFDB).length - 10, crashInterval = BDFDB.TimeUtils.interval(_ => {
 		if (!window.BDFDB || typeof BDFDB != "object" || Object.keys(BDFDB).length < libKeys || !BDFDB.id) {
-			console.warn(`%c[BDFDB]%c`, "color: #3a71c1; font-weight: 700;", "", "reloading library due to internal error.");
+			BDFDB.LogUtils.warn("Reloading library due to internal error.");
 			BDFDB.TimeUtils.clear(crashInterval);
 			InternalBDFDB.reloadLib();
 		}
 		else if (BDFDB.id != id) {
 			BDFDB.TimeUtils.clear(crashInterval);
 		}
-		else if (!BDFDB.creationTime || performance.now() - BDFDB.creationTime > 18000000) {
+		else if (!BDFDB.InternalData.creationTime || performance.now() - BDFDB.InternalData.creationTime > 18000000) {
 			BDFDB.TimeUtils.clear(crashInterval);
 			InternalBDFDB.reloadLib();
 		}
 	}, 10000);
 
 	if (BDFDB.UserUtils.me.id == "278543574059057154") {
-		for (let module in DiscordClassModules) if (!DiscordClassModules[module]) console.warn(`%c[BDFDB]%c`, "color: #3a71c1; font-weight: 700;", "", module + " not initialized in DiscordClassModules");
-		for (let require in LibraryRequires) if (!LibraryRequires[require]) console.warn(`%c[BDFDB]%c`, "color: #3a71c1; font-weight: 700;", "", require + " not initialized in LibraryRequires");
-		for (let module in LibraryModules) if (!LibraryModules[module]) console.warn(`%c[BDFDB]%c`, "color: #3a71c1; font-weight: 700;", "", module + " not initialized in LibraryModules");
-		for (let component in NativeSubComponents) if (!NativeSubComponents[component]) console.warn(`%c[BDFDB]%c`, "color: #3a71c1; font-weight: 700;", "", component + " not initialized in NativeSubComponents");
-		for (let component in LibraryComponents) if (!LibraryComponents[component]) console.warn(`%c[BDFDB]%c`, "color: #3a71c1; font-weight: 700;", "", component + " not initialized in LibraryComponents");
+		for (let module in DiscordClassModules) if (!DiscordClassModules[module]) BDFDB.LogUtils.warn(module + " not initialized in DiscordClassModules");
+		for (let require in LibraryRequires) if (!LibraryRequires[require]) BDFDB.LogUtils.warn(require + " not initialized in LibraryRequires");
+		for (let module in LibraryModules) if (!LibraryModules[module]) BDFDB.LogUtils.warn(module + " not initialized in LibraryModules");
+		for (let component in NativeSubComponents) if (!NativeSubComponents[component]) BDFDB.LogUtils.warn(component + " not initialized in NativeSubComponents");
+		for (let component in LibraryComponents) if (!LibraryComponents[component]) BDFDB.LogUtils.warn(component + " not initialized in LibraryComponents");
 
 		BDFDB.ModuleUtils.DevFuncs = {};
 		BDFDB.ModuleUtils.DevFuncs.generateClassId = function (index) {
