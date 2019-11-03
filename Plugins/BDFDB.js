@@ -6360,7 +6360,7 @@ var BDFDB = {
 	LibraryComponents.TextScroller = reactInitialized ? class BDFDB_TextScroller extends LibraryModules.React.Component {
         render() {
 			return BDFDB.ReactUtils.createElement("div", {
-				className: "BDFDB-textscroller",
+				className: BDFDB.DOMUtils.formatClassName("BDFDB-textscroller", this.props.className),
 				style: {
 					position: "relative",
 					display: "block",
