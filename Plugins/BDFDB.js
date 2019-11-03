@@ -5,7 +5,6 @@ var BDFDB = {
 	myPlugins: BDFDB && BDFDB.myPlugins || {},
 	InternalData: BDFDB && BDFDB.InternalData || {
 		creationTime: performance.now(),
-		cleanUps: {},
 		patchedMessagePopouts: 0,
 		pressedKeys: [],
 		mousePosition: {
@@ -95,6 +94,7 @@ var BDFDB = {
 
 		if (typeof plugin.onMessageOptionPopout == "function") BDFDB.InternalData.patchedMessagePopouts--;
 
+		BDFDB.ModuleUtils.unpatch(plugin);
 		BDFDB.ListenerUtils.remove(plugin);
 		BDFDB.ObserverUtils.disconnect(plugin);
 		InternalBDFDB.removeOnSwitchListener(plugin);
@@ -107,10 +107,7 @@ var BDFDB = {
 		delete window.PluginUpdates.plugins[url];
 
 		delete plugin.started;
-		BDFDB.InternalData.cleanUps[plugin.name] = BDFDB.TimeUtils.timeout(() => {
-			BDFDB.ModuleUtils.unpatch(plugin);
-			delete plugin.stopping;
-		});
+		BDFDB.TimeUtils.timeout(() => {delete plugin.stopping;});
 	};
 	BDFDB.PluginUtils.translate = function (plugin) {
 		plugin.labels = {};
@@ -268,10 +265,9 @@ var BDFDB = {
 	};
 	InternalBDFDB.clearStartTimeout = function (plugin) {
 		if (!BDFDB.ObjectUtils.is(plugin)) return;
-		BDFDB.TimeUtils.clear(plugin.startTimeout, plugin.libLoadTimeout, BDFDB.InternalData.cleanUps[plugin.name]);
+		BDFDB.TimeUtils.clear(plugin.startTimeout, plugin.libLoadTimeout);
 		delete plugin.startTimeout;
 		delete plugin.libLoadTimeout;
-		delete BDFDB.InternalData.cleanUps[plugin.name];
 	};
 	InternalBDFDB.addOnSettingsClosedListener = function (plugin) {
 		if (BDFDB.ObjectUtils.is(plugin) && typeof plugin.onSettingsClosed === "function") {
