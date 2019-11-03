@@ -3,7 +3,7 @@
 class CreationDate {
 	getName () {return "CreationDate";}
 
-	getVersion () {return "1.3.1";}
+	getVersion () {return "1.3.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,22 +11,22 @@ class CreationDate {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Milliseconds","Milliseconds are now properlly formatted when leading zeros is enabled (9 => 009, 12 => 012)"]]
+			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
 		this.patchModules = {
-			"UserPopout":"componentDidMount",
-			"UserProfile":"componentDidMount"
+			UserPopout: "render",
+			AnalyticsContext: "render"
 		};
 	}
 
 	initConstructor () {
 		this.css = `
 			${BDFDB.dotCNS.userpopout + BDFDB.dotCN.nametag} {
-				margin-bottom: 4px;
+				margin-bottom: 8px;
 			}
-			${BDFDB.dotCN.userprofile} .creationDate {
-				margin-right: 20px;
+			.creationDate + ${BDFDB.dotCN.userpopoutcustomstatus} {
+				margin-top: 4px;
 			}
 			${BDFDB.dotCNS.themelight + BDFDB.dotCN.userpopoutheadernormal} .creationDate {
 				color: #b9bbbe;
@@ -68,33 +68,106 @@ class CreationDate {
 		let settings = BDFDB.DataUtils.get(this, "settings");
 		let choices = BDFDB.DataUtils.get(this, "choices");
 		let formats = BDFDB.DataUtils.get(this, "formats");
-		let settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
-		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
-		}
-		for (let key in choices) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCN.flexchild}" style="flex: 0 0 30%;">${this.defaults.choices[key].description}</h3>${BDFDB.createSelectMenu(this.createSelectChoice(choices[key]), choices[key], key)}</div>`;
-		}
-		for (let key in formats) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCN.flexchild}" style="flex: 0 0 30%;">${this.defaults.formats[key].description}</h3><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCN.directioncolumn}" style="flex: 1 1 auto;"><input type="text" option="${key}" value="${formats[key]}" placeholder="${this.defaults.formats[key].value}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.titlesize16}"></div></div>`;
-		}
-		let infoHidden = BDFDB.DataUtils.load(this, "hideInfo", "hideInfo");
-		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.cursorpointer} toggle-info" style="flex: 1 1 auto;"><svg class="toggle-infoarrow${infoHidden ? (" " + BDFDB.disCN.directionright) : ""}" width="12" height="12" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 10L12 15 17 10"></path></svg><div class="toggle-infotext" style="flex: 1 1 auto;">Information</div></div>`;
-		settingshtml += `<div class="BDFDB-settings-inner-list info-container" ${infoHidden ? "style='display:none;'" : ""}>`;
-		settingshtml += `<div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$hour will be replaced with the current hour</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$minute will be replaced with the current minutes</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$second will be replaced with the current seconds</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$msecond will be replaced with the current milliseconds</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$timemode will change $hour to a 12h format and will be replaced with AM/PM</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$year will be replaced with the current year</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$month will be replaced with the current month</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$day will be replaced with the current day</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$monthnameL will be replaced with the monthname in long format based on the Discord Language</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$monthnameS will be replaced with the monthname in short format based on the Discord Language</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$weekdayL will be replaced with the weekday in long format based on the Discord Language</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">$weekdayS will be replaced with the weekday in short format based on the Discord Language</div>`;
-		settingshtml += `</div></div>`;
-
-		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
-
-		BDFDB.initElements(settingspanel, this);
-
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".settings-switch", () => {BDFDB.TimeUtils.timeout(() => {this.updateSettingsPanel(settingspanel);})});
-		BDFDB.ListenerUtils.add(this, settingspanel, "keyup", BDFDB.dotCN.input, () => {this.saveInputs(settingspanel);});
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".toggle-info", e => {this.toggleInfo(e.currentTarget);});
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {
-			BDFDB.openDropdownMenu(e, this.saveSelectChoice.bind(this), this.createSelectChoice.bind(this), this.languages);
-		});
-		return settingspanel;
+		let settingsitems = [], inneritems = [];
+		
+		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			className: BDFDB.disCN.marginbottom8,
+			type: "Switch",
+			plugin: this,
+			keys: ["settings", key],
+			label: this.defaults.settings[key].description,
+			value: settings[key],
+			onChange: (e, instance) => {
+				BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_SettingsPanel", up:true}), {name:"BDFDB_Select", all:true, noCopies:true}));
+			}
+		}));
+		
+		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+			className: BDFDB.disCN.marginbottom8
+		}));
+		
+		for (let key in choices) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			className: BDFDB.disCN.marginbottom8,
+			type: "Select",
+			plugin: this,
+			keys: ["choices", key],
+			label: this.defaults.choices[key].description,
+			basis: "70%",
+			value: choices[key],
+			options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(this.languages, (lang, id) => {return {value:id, label:lang.name}})),
+			searchable: true,
+			optionRenderer: lang => {
+				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+					align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+					children: [
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+							grow: 0,
+							shrink: 0,
+							basis: "40%",
+							children: lang.label
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+							grow: 0,
+							shrink: 0,
+							basis: "60%",
+							children: this.getTimestamp(this.languages[lang.value].id)
+						})
+					]
+				});
+			},
+			valueRenderer: lang => {
+				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+					align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+					children: [
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+							grow: 0,
+							shrink: 0,
+							children: lang.label
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+							grow: 1,
+							shrink: 0,
+							basis: "70%",
+							children: this.getTimestamp(this.languages[lang.value].id)
+						})
+					]
+				});
+			}
+		}));
+		
+		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+			className: BDFDB.disCN.marginbottom8
+		}));
+		
+		for (let key in formats) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			className: BDFDB.disCN.marginbottom8,
+			type: "TextInput",
+			plugin: this,
+			keys: ["formats", key],
+			label: this.defaults.formats[key].description,
+			basis: "70%",
+			value: formats[key],
+			onChange: (e, instance) => {
+				BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_SettingsPanel", up:true}), {name:"BDFDB_Select", all:true, noCopies:true}));
+			}
+		}));
+		
+		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			title: "Placeholder Guide",
+			dividertop: true,
+			collapsed: BDFDB.DataUtils.load(this, "hideInfo", "hideInfo"),
+			children: ["$hour will be replaced with the current hour", "$minute will be replaced with the current minutes", "$second will be replaced with the current seconds", "$msecond will be replaced with the current milliseconds", "$timemode will change $hour to a 12h format and will be replaced with AM/PM", "$year will be replaced with the current year", "$month will be replaced with the current month", "$day will be replaced with the current day", "$monthnameL will be replaced with the monthname in long format based on the Discord Language", "$monthnameS will be replaced with the monthname in short format based on the Discord Language", "$weekdayL will be replaced with the weekday in long format based on the Discord Language", "$weekdayS will be replaced with the weekday in short format based on the Discord Language"].map(string => {
+				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
+					type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
+					children: string
+				});
+			}),
+			onClick: collapsed => {
+				BDFDB.DataUtils.save(collapsed, this, "hideInfo", "hideInfo");
+			}
+		}));
+		
+		return BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 	}
 
 	//legacy
@@ -138,7 +211,8 @@ class CreationDate {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.DOMUtils.remove(".creationDate");
+			BDFDB.ModuleUtils.forceAllUpdates(this);
+			
 			BDFDB.PluginUtils.clear(this);
 		}
 	}
@@ -146,73 +220,30 @@ class CreationDate {
 
 	// begin of own functions
 
-	saveInputs (settingspanel) {
-		let formats = {};
-		for (let input of settingspanel.querySelectorAll(BDFDB.dotCN.input)) {
-			formats[input.getAttribute("option")] = input.value;
-		}
-		BDFDB.DataUtils.save(formats, this, "formats");
-		this.updateSettingsPanel(settingspanel);
-	}
-
-	updateSettingsPanel (settingspanel) {
-		let choices = BDFDB.DataUtils.get(this, "choices");
-		for (let key in choices) {
-			settingspanel.querySelector(`${BDFDB.dotCN.select}[type='${key}'] .languageTimestamp`).innerText = this.getTimestamp(this.languages[choices[key]].id);
+	processUserPopout (e) {
+		if (!this.stopping && e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "addInUserPopout")) {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "CustomStatus"});
+			if (index > -1) this.injectDate(children, 2, e.instance.props.user);
 		}
 	}
 
-	toggleInfo (ele) {
-		BDFDB.DOMUtils.toggleClass(ele.querySelector("svg"), BDFDB.disCN.directionright);
-		BDFDB.DOMUtils.toggle(ele.nextElementSibling);
-		BDFDB.DataUtils.save(BDFDB.DOMUtils.isHidden(ele.nextElementSibling), this, "hideInfo", "hideInfo");
-	}
-
-	saveSelectChoice (selectWrap, type, choice) {
-		if (type && choice) {
-			selectWrap.querySelector(".languageName").innerText = this.languages[choice].name;
-			selectWrap.querySelector(".languageTimestamp").innerText = this.getTimestamp(this.languages[choice].id);
-			BDFDB.DataUtils.save(choice, this, "choices", type);
+	processAnalyticsContext (e) {
+		if (!this.stopping && typeof e.returnvalue.props.children == "function" && e.instance.props && e.instance.props.section == "Profile Modal" && BDFDB.DataUtils.get(this, "settings", "addInUserProfil")) {
+			let renderChildren = e.returnvalue.props.children;
+			e.returnvalue.props.children = () => {
+				let renderedChildren = renderChildren(e.instance);
+				let [children, index] = BDFDB.ReactUtils.findChildren(renderedChildren, {name: "DiscordTag"});
+				if (index > -1) this.injectDate(children, 1, children[index].props.user);
+				return renderedChildren;
+			};
 		}
 	}
-
-	createSelectChoice (choice) {
-		return `<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer} languageName" style="flex: 1 1 42%; padding: 0;">${this.languages[choice].name}</div><div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.primary + BDFDB.disCNS.weightlight + BDFDB.disCN.cursorpointer} languageTimestamp" style="flex: 1 1 58%; padding: 0;">${this.getTimestamp(this.languages[choice].id)}</div>`;
-	}
-
-	processUserPopout (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.user && BDFDB.DataUtils.get(this, "settings", "addInUserPopout")) {
-			this.addCreationDate(instance.props.user, wrapper.querySelector(BDFDB.dotCN.userpopoutheadertext), wrapper.parentElement);
-		}
-	}
-
-	processUserProfile (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.user && BDFDB.DataUtils.get(this, "settings", "addInUserProfil")) {
-			this.addCreationDate(instance.props.user, wrapper.querySelector(BDFDB.dotCN.userprofileheaderinfo), null);
-		}
-	}
-
-	addCreationDate (info, container, popout) {
-		if (!info || !container || container.querySelector(".creationDate")) return;
-		let addTimestamp = (timestamp) => {
-			if (document.contains(container)) {
-				BDFDB.DOMUtils.remove(container.querySelectorAll(".creationDate"));
-				if (BDFDB.ObjectUtils.is(container.CreationDateObserver)) container.CreationDateObserver.disconnect();
-				let choice = BDFDB.DataUtils.get(this, "choices", "creationDateLang");
-				let nametag = container.querySelector(BDFDB.dotCN.nametag);
-				container.insertBefore(BDFDB.DOMUtils.create(`<div class="creationDate BDFDB-textscrollwrapper ${BDFDB.disCN.textrow}" style="max-width: ${BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(popout ? BDFDB.dotCN.userpopoutheader : BDFDB.dotCN.userprofileheaderinfo, container)).width - 20}px !important; order: 8 !important;"><div class="BDFDB-textscroll">${this.labels.createdat_text.replace("{{time}}", this.getTimestamp(this.languages[choice].id, timestamp))}</div></div>`), nametag ? nametag.nextSibling : null);
-				BDFDB.initElements(container, this);
-				if (popout && popout.style.transform.indexOf("translateY(-1") == -1) {
-					let arect = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount)), prect = BDFDB.DOMUtils.getRects(popout);
-					popout.style.setProperty("top", (prect.y + prect.height > arect.height ? (arect.height - prect.height) : prect.y) + "px");
-				}
-				container.CreationDateObserver = new MutationObserver((changes, _) => {changes.forEach((change, i) => {change.addedNodes.forEach((node) => {
-					if (node && BDFDB.DOMUtils.containsClass(node, BDFDB.disCN.nametag)) addTimestamp(timestamp);
-				});});});
-				container.CreationDateObserver.observe(container, {childList: true, subtree:true});
-			}
-		};
-		addTimestamp(info.createdAt);
+	
+	injectDate (children, index, user) {
+		children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
+			className: "creationDate " + BDFDB.disCN.textrow,
+			children: this.labels.createdat_text.replace("{{time}}", this.getTimestamp(this.languages[BDFDB.DataUtils.get(this, "choices", "creationDateLang")].id, user.createdAt))
+		}));
 	}
 
 	getTimestamp (languageid, time) {
@@ -256,7 +287,7 @@ class CreationDate {
 	}
 
 	cutOffSeconds (timestring) {
-		return timestring.replace(/(.*):(.*):(.{2})(.*)/, "$1:$2$4");
+		return timestring.replace(/(.{1,2}:.{1,2}):.{1,2}(.*)/, "$1$2").replace(/(.{1,2}\..{1,2})\..{1,2}(.*)/, "$1$2").replace(/(.{1,2} h .{1,2} min) .{1,2} s(.*)/, "$1$2");
 	}
 
 	addLeadingZeros (timestring) {
