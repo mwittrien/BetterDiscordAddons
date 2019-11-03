@@ -13,10 +13,6 @@ class CopyRawMessage {
 		this.changelog = {
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
-
-		this.patchModules = {
-			MessageContent: "render"
-		};
 	}
 
 	//legacy
@@ -47,8 +43,6 @@ class CopyRawMessage {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
-			
-			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
