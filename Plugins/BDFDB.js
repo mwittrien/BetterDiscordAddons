@@ -954,6 +954,7 @@ var BDFDB = {
 		SearchResults: "searchresultswrap",
 		TypingUsers: "typing",
 		UserPopout: "userpopout",
+		V2C_ContentColumn: "contentcolumn",
 		V2C_List: "_repolist",
 		V2C_PluginCard: "_repoheader",
 		V2C_ThemeCard: "_repoheader"
@@ -4498,6 +4499,7 @@ var BDFDB = {
 		colorpickerswatchselected: ["BDFDB", "colorPickerSwatchSelected"],
 		colorpickerswatchsingle: ["BDFDB", "colorPickerSwatchSingle"],
 		colorstandard: ["TextColor", "colorStandard"],
+		contentcolumn: ["SettingsWindow", "contentColumn"],
 		contentregion: ["SettingsWindow", "contentRegion"],
 		contextmenu: ["ContextMenu", "contextMenu"],
 		contextmenucheckbox: ["ContextMenuCheckbox", "checkbox"],
