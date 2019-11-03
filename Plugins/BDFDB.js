@@ -5747,6 +5747,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 			});
 		}
 	} : LibraryComponents.CollapseContainer;
+	
 	LibraryComponents.ColorSwatches = reactInitialized ? class BDFDB_ColorSwatches extends LibraryModules.React.Component {
 		constructor(props) {
 			super(props);
@@ -6049,7 +6050,7 @@ var BDFDB = {myPlugins: BDFDB && BDFDB.myPlugins || {}, cleanUps: BDFDB && BDFDB
 					else e.stopPropagation();
 				},
 				children: BDFDB.ReactUtils.createElement(NativeSubComponents.PopoutContainer, Object.assign({}, this.props, {
-					renderPopout: this.handleRender.bind(this)
+					renderPopout: this.props.native && typeof this.props.renderPopout == "function" ? this.props.renderPopout : this.handleRender.bind(this)
 				}))
 			});
 		}
