@@ -4083,6 +4083,7 @@ var BDFDB = {
 	DiscordClassModules.Game = BDFDB.ModuleUtils.findByProperties("game", "gameName");
 	DiscordClassModules.GameIcon = BDFDB.ModuleUtils.findByProperties("gameIcon", "small", "xsmall");
 	DiscordClassModules.GameLibrary = BDFDB.ModuleUtils.findByProperties("gameLibrary", "scroller");
+	DiscordClassModules.GameLibraryTable = BDFDB.ModuleUtils.findByProperties("stickyHeader", "emptyStateText");
 	DiscordClassModules.GifFavoriteButton = BDFDB.ModuleUtils.findByProperties("gifFavoriteButton", "showPulse");
 	DiscordClassModules.GiftInventory = BDFDB.ModuleUtils.findByProperties("root", "body", "scroller");
 	DiscordClassModules.GoLiveDetails = BDFDB.ModuleUtils.findByProperties("panel", "gameWrapper");
@@ -4170,7 +4171,7 @@ var BDFDB = {
 	DiscordClassModules.Slider = BDFDB.ModuleUtils.findByProperties("slider", "grabber");
 	DiscordClassModules.Spoiler = BDFDB.ModuleUtils.findByProperties("spoilerContainer", "hidden");
 	DiscordClassModules.Switch = BDFDB.ModuleUtils.findByProperties("switchDisabled", "valueChecked");
-	DiscordClassModules.Table = BDFDB.ModuleUtils.findByProperties("stickyHeader", "emptyStateText");
+	DiscordClassModules.Table = BDFDB.ModuleUtils.findByProperties("stickyHeader", "sortIcon");
 	DiscordClassModules.Text = BDFDB.ModuleUtils.findByProperties("defaultColor", "defaultMarginh1");
 	DiscordClassModules.TextColor = BDFDB.ModuleUtils.findByProperties("colorStandard", "colorMuted", "colorError");
 	DiscordClassModules.TextColor2 = BDFDB.ModuleUtils.findByProperties("base", "muted", "wrapper");
@@ -4668,9 +4669,13 @@ var BDFDB = {
 		gameiconsmall: ["GameIcon", "small"],
 		gameiconxsmall: ["GameIcon", "xsmall"],
 		gamelibrary: ["GameLibrary", "gameLibrary"],
-		gamelibrarytable: ["Table", "table"],
-		gamelibrarytableheader: ["Table", "header"],
-		gamelibrarytablestickyheader: ["Table", "stickyHeader"],
+		gamelibrarytable: ["GameLibraryTable", "table"],
+		gamelibrarytableheader: ["GameLibraryTable", "header"],
+		gamelibrarytableheadercell: ["GameLibraryTable", "headerCell"],
+		gamelibrarytableheadercellsorted: ["GameLibraryTable", "headerCellSorted"],
+		gamelibrarytablerow: ["GameLibraryTable", "row"],
+		gamelibrarytablerowwrapper: ["GameLibraryTable", "rowWrapper"],
+		gamelibrarytablestickyheader: ["GameLibraryTable", "stickyHeader"],
 		gamename: ["Game", "gameName"],
 		gamenameinput: ["Game", "gameNameInput"],
 		giffavoritebutton: ["MessageAccessory", "gifFavoriteButton"],
@@ -5317,11 +5322,14 @@ var BDFDB = {
 		tabbarheadercontainer: ["RecentMentions", "headerTabBarWrapper"],
 		tabbarheaderitem: ["RecentMentions", "tabBarItem"],
 		tabbaritem: ["UserProfile", "tabBarItem"],
-		tabbartop: ["Item", "top"],
-		tableheader: ["SettingsTable", "header"],
-		tableheadername: ["SettingsTable", "headerName"],
-		tableheaderoption: ["SettingsTable", "headerOption"],
-		tableheadersize: ["SettingsTable", "headerSize"],
+		tableheadercell: ["Table", "headerCell"],
+		tableheadercellclickable: ["Table", "clickable"],
+		tableheadercellcontent: ["Table", "headerCellContent"],
+		tableheadercellsorted: ["Table", "headerCellSorted"],
+		tableheadersorticon: ["Table", "sortIcon"],
+		tablerow: ["Table", "row"],
+		tablespacerheader: ["Table", "spacerHeader"],
+		tablestickyheader: ["Table", "stickyHeader"],
 		textarea: ["ChannelTextArea", "textArea"],
 		textareaattachbutton: ["ChannelTextArea", "attachButton"],
 		textareaattachbuttondivider: ["ChannelTextArea", "attachButtonDivider"],
