@@ -6021,7 +6021,7 @@ var BDFDB = {
 			if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);
 		}
 		handleMouseDown(e) {
-			if (!this.props.unavailable && this.props.guild && this.props.selectedChannelId) LibraryModules.DirectMessageUtils.preload(this.props.guild.id, this.props.selectedChannelId);
+			if (!this.props.unavailable && this.props.move && this.props.guild && this.props.selectedChannelId) LibraryModules.DirectMessageUtils.preload(this.props.guild.id, this.props.selectedChannelId);
 			if (typeof this.props.onMouseDown == "function") this.props.onMouseDown(e, this);
 		}
 		handleContextMenu(e) {
@@ -6085,7 +6085,7 @@ var BDFDB = {
 		}
 	} : LibraryComponents.GuildComponents.Guild;
 	if (LibraryComponents.GuildComponents.Guild) {
-		LibraryComponents.GuildComponents.Guild.defaultProps = {unread: false, audio: false, video: false, badge: 0, draggable: false, sorting: false};
+		LibraryComponents.GuildComponents.Guild.defaultProps = {menu:true, move:false, unread: false, audio: false, video: false, badge: 0, draggable: false, sorting: false};
 	}
 	
 	LibraryComponents.GuildComponents.GuildDropTarget = BDFDB.ModuleUtils.findByName("GuildDropTarget");
