@@ -5322,6 +5322,7 @@ var BDFDB = {
 		tabbarheadercontainer: ["RecentMentions", "headerTabBarWrapper"],
 		tabbarheaderitem: ["RecentMentions", "tabBarItem"],
 		tabbaritem: ["UserProfile", "tabBarItem"],
+		tabbartop: ["Item", "top"],
 		tableheadercell: ["Table", "headerCell"],
 		tableheadercellclickable: ["Table", "clickable"],
 		tableheadercellcontent: ["Table", "headerCellContent"],
