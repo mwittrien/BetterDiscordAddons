@@ -6257,6 +6257,8 @@ var BDFDB = {
 		}
     } : LibraryComponents.TabBar;
 	
+	LibraryComponents.Table = BDFDB.ModuleUtils.findByName("Table");
+	
 	LibraryComponents.TextElement = BDFDB.ModuleUtils.findByName("Text");
 	
 	LibraryComponents.TextInput = reactInitialized ? class BDFDB_TextInput extends LibraryModules.React.Component {
