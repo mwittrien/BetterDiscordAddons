@@ -188,9 +188,10 @@ class EmojiStatistics {
 	loadEmojiList () {
 		this.emojiReplicaList = {};
 		this.emojiToServerList = {};
-		for (let serverObj of BDFDB.GuildUtils.getAll()) {
-			for (let emoji of BDFDB.LibraryModules.GuildEmojiStore.getGuildEmoji(serverObj.id)) {
-				this.emojiToServerList[emoji.url] = {emoji:emoji.allNamesString, server:serverObj.name};
+		let guilds = BDFDB.LibraryModules.GuildStore.getGuilds();
+		for (let id in guilds) {
+			for (let emoji of BDFDB.LibraryModules.GuildEmojiStore.getGuildEmoji(id)) {
+				this.emojiToServerList[emoji.url] = {emoji:emoji.allNamesString, server:guilds[id].name};
 				if (emoji.managed) this.emojiReplicaList[emoji.name] = this.emojiReplicaList[emoji.name] != undefined;
 			}
 		}
