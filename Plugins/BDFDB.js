@@ -3933,6 +3933,7 @@ var BDFDB = {
 		settingsPanelList: "settingsList-eZjkXj",
 		settingsPanelTitle: "title-GTF_8J",
 		table: "table-moqjM0",
+		tableBodyCell: "bodyCell-dQam9V",
 		tableHeader: "header-g67q9_",
 		tableHeaderCell: "headerCell-T6Fo3K",
 		tableHeaderCellSorted: "headerCellSorted-FMjMWK",
@@ -5330,6 +5331,7 @@ var BDFDB = {
 		tabbaritem: ["UserProfile", "tabBarItem"],
 		tabbartop: ["Item", "top"],
 		table: ["BDFDB", "table"],
+		tablebodycell: ["BDFDB", "tableBodyCell"],
 		tableheader: ["BDFDB", "tableHeader"],
 		tableheadercell: ["BDFDB", "tableHeaderCellSorted"],
 		tableheadercellsorted: ["BDFDB", "tableHeaderCell"],
@@ -6278,6 +6280,7 @@ var BDFDB = {
 				headerClassName: BDFDB.DOMUtils.formatClassName(this.props.stickyHeader ? BDFDB.disCN.tablestickyheader : BDFDB.disCN.tableheader, this.props.headerClassName),
 				headerCellClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tableheadercell, this.props.headerCellClassName),
 				sortedHeaderCellClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tableheadercellsorted, this.props.sortedHeaderCellClassName),
+				bodyCellClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tablebodycell, this.props.bodyCellClassName),
 				rowClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tablerow, this.props.rowClassName)
 			}));
 		}
@@ -6902,7 +6905,7 @@ var BDFDB = {
 			width: 100%;
 		}
 		${BDFDB.dotCN.tableheader} {
-			padding: 20px 34px 8px;
+			padding: 0px 12px 8px 0;
 			font-size: 12px;
 			font-weight: 600;
 			box-sizing: border-box;
