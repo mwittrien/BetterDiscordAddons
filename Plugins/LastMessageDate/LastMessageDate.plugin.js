@@ -230,7 +230,6 @@ class LastMessageDate {
 	// begin of own functions
 
 	processUserPopout (e) {
-		console.log(e);
 		if (!this.stopping && e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "addInUserPopout")) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "CustomStatus"});
 			if (index > -1) this.injectDate(e.instance, children, 2, e.instance.props.user);
