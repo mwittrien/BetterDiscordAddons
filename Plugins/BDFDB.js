@@ -6300,20 +6300,6 @@ var BDFDB = {
 		}
     } : LibraryComponents.Table;
 	
-	LibraryComponents.TableSortIcon = reactInitialized ? class BDFDB_TableSortIcon extends LibraryModules.React.Component {
-        render() {
-			let name;
-			switch (this.props.sortDirection) {
-				case LibraryComponents.Table.SortDirection.ASCENDING: name = LibraryComponents.SvgIcon.Names.ARROW_DROP_UP; break;
-				case LibraryComponents.Table.SortDirection.DESCENDING: name = LibraryComponents.SvgIcon.Names.ARROW_DROP_DOWN; break;
-			}
-			return !name ? null : BDFDB.ReactUtils.createElement(LibraryComponents.SvgIcon, {
-				name: name,
-				className: BDFDB.disCN.tableheadersorticon
-			});
-		}
-    } : LibraryComponents.TableSortIcon;
-	
 	LibraryComponents.TextElement = BDFDB.ModuleUtils.findByName("Text");
 	
 	LibraryComponents.TextInput = reactInitialized ? class BDFDB_TextInput extends LibraryModules.React.Component {
@@ -6942,6 +6928,7 @@ var BDFDB = {
 		}
 		${BDFDB.dotCN.tablestickyheader}:first-child {
 			position: absolute;
+			width: 100%;
 		}
 		${BDFDB.dotCNS.modalsubinner + BDFDB.dotCN.tablestickyheader}:first-child {
 			padding-left: 20px;
@@ -6949,7 +6936,6 @@ var BDFDB = {
 		${BDFDB.dotCN.tableheadercell} {
 			text-transform: uppercase;
 			color: var(--interactive-normal);
-			flex: 1 1 auto;
 		}
 		${BDFDB.dotCN.tableheadercell},
 		${BDFDB.dotCN.tablebodycell} {
