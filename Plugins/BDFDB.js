@@ -6140,9 +6140,10 @@ var BDFDB = {
 			if (this.props.mini && childcomponent.Sizes) this.props.size = childcomponent.Sizes.MINI || childcomponent.Sizes.MIN;
 			let childprops = Object.assign({}, this.props, {
 				className: this.props.childClassName,
+				type: this.props.childType,
 				onChange: this.handleChange.bind(this)
 			});
-			BDFDB.ObjectUtils.delete(childprops, "id", "basis", "dividerbottom", "dividertop", "label", "labelchildren", "mini", "note", "type", "childClassName");
+			BDFDB.ObjectUtils.delete(childprops, "id", "basis", "dividerbottom", "dividertop", "label", "labelchildren", "mini", "note", "type", "childClassName", "childType");
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				className: BDFDB.DOMUtils.formatClassName(this.props.className, this.props.disabled ? BDFDB.disCN.disabled : null),
 				id: this.props.id,
