@@ -3949,6 +3949,7 @@ var BDFDB = {
 		tableHeader: "header-g67q9_",
 		tableHeaderCell: "headerCell-T6Fo3K",
 		tableHeaderCellSorted: "headerCellSorted-FMjMWK",
+		tableHeaderSortIcon: "sortIcon-WZjMja",
 		tableRow: "row-_9Ehcp",
 		tableStickyHeader: "stickyHeader-JabwjW header-g67q9_"
 	};
@@ -5347,6 +5348,7 @@ var BDFDB = {
 		tableheader: ["BDFDB", "tableHeader"],
 		tableheadercell: ["BDFDB", "tableHeaderCellSorted"],
 		tableheadercellsorted: ["BDFDB", "tableHeaderCell"],
+		tableheadersorticon: ["BDFDB", "tableHeaderSortIcon"],
 		tablerow: ["BDFDB", "tableRow"],
 		tablestickyheader: ["BDFDB", "tableStickyHeader"],
 		textarea: ["ChannelTextArea", "textArea"],
@@ -6298,6 +6300,20 @@ var BDFDB = {
 		}
     } : LibraryComponents.Table;
 	
+	LibraryComponents.TableSortIcon = reactInitialized ? class BDFDB_TableSortIcon extends LibraryModules.React.Component {
+        render() {
+			let name;
+			switch (this.props.sortDirection) {
+				case LibraryComponents.Table.SortDirection.ASCENDING: name = LibraryComponents.SvgIcon.Names.ARROW_DROP_UP; break;
+				case LibraryComponents.Table.SortDirection.DESCENDING: name = LibraryComponents.SvgIcon.Names.ARROW_DROP_DOWN; break;
+			}
+			return !name ? null : BDFDB.ReactUtils.createElement(LibraryComponents.SvgIcon, {
+				name: name,
+				className: BDFDB.disCN.tableheadersorticon
+			});
+		}
+    } : LibraryComponents.TableSortIcon;
+	
 	LibraryComponents.TextElement = BDFDB.ModuleUtils.findByName("Text");
 	
 	LibraryComponents.TextInput = reactInitialized ? class BDFDB_TextInput extends LibraryModules.React.Component {
@@ -6949,6 +6965,11 @@ var BDFDB = {
 		${BDFDB.dotCN.tableheadercellsorted},
 		${BDFDB.dotCN.tableheadercellsorted}:hover {
 			color: var(--interactive-active);
+		}
+		${BDFDB.dotCN.tableheadersorticon} {
+			width: 18px;
+			height: 18px;
+			margin-left: 4px;
 		}
 		${BDFDB.dotCN.tablerow} {
 			position: relative;
