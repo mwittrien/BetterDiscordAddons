@@ -6901,7 +6901,6 @@ var BDFDB = {
 		}
 		
 		${BDFDB.dotCN.table} {
-			position: relative;
 			width: 100%;
 		}
 		${BDFDB.dotCN.tableheader} {
@@ -6912,18 +6911,25 @@ var BDFDB = {
 			background-color: var(--background-primary);
 			border-bottom: 1px solid var(--background-modifier-accent);
 		}
-		${BDFDB.dotCN.tablestickyheader} {
+		${BDFDB.dotCN.tablestickyheader}:first-child {
 			position: absolute;
+		}
+		${BDFDB.dotCNS.modalsubinner + BDFDB.dotCN.tablestickyheader}:first-child {
+			padding-left: 20px;
 		}
 		${BDFDB.dotCN.tableheadercell} {
 			text-transform: uppercase;
+			color: var(--interactive-normal);
+		}
+		${BDFDB.dotCN.tableheadercell},
+		${BDFDB.dotCN.tablebodycell} {
 			border-left: 1px solid var(--background-modifier-accent);
 			box-sizing: border-box;
-			color: var(--interactive-normal);
 			padding: 0 12px;
 			flex: 1 1 auto;
 		}
-		${BDFDB.dotCN.tableheadercell}:first-child {
+		${BDFDB.dotCN.tableheadercell}:first-child,
+		${BDFDB.dotCN.tablebodycell}:first-child {
 			border-left: none;
 			padding-left: 0;
 		}
@@ -6935,7 +6941,6 @@ var BDFDB = {
 			position: relative;
 			display: flex;
 			align-items: center;
-			margin: 0 8px;
 			color: var(--header-secondary);
 		}
 		
