@@ -1351,6 +1351,7 @@ var BDFDB = {
 	LibraryModules.SoundUtils = BDFDB.ModuleUtils.findByProperties("playSound", "createSound");
 	LibraryModules.SpellCheckUtils = BDFDB.ModuleUtils.findByProperties("learnWord", "toggleSpellcheck");
 	LibraryModules.StatusMetaUtils = BDFDB.ModuleUtils.findByProperties("getApplicationActivity", "getStatus");
+	LibraryModules.StreamUtils = BDFDB.ModuleUtils.findByProperties("getStreamForUser", "getActiveStream");
 	LibraryModules.UnreadGuildUtils = BDFDB.ModuleUtils.findByProperties("hasUnread", "getUnreadGuilds");
 	LibraryModules.UnreadChannelUtils = BDFDB.ModuleUtils.findByProperties("getUnreadCount", "getOldestUnreadMessageId");
 	LibraryModules.UploadUtils = BDFDB.ModuleUtils.findByProperties("upload", "instantBatchUpload");
@@ -6035,7 +6036,13 @@ var BDFDB = {
 			if (typeof this.props.setRef == "function") this.props.setRef(this.props.guild.id, e)
 		}
 		render() {
-			if (this.props.guild == null) return;
+			if (!this.props.guild) return;
+			this.props.selectedChannelId = LibraryModules.LastChannelStore.getChannelId(this.props.guild.id);
+			this.props.selected = this.props.state ? LibraryModules.LastGuildStore.getGuildId() == this.props.guild.id : false;
+			this.props.unread = this.props.state ? LibraryModules.UnreadGuildUtils.hasUnread(this.props.guild.id) : false;
+			this.props.badge = this.props.state ? LibraryModules.MentionUtils.getMentionCount(this.props.guild.id) : 0;
+			this.props.audio = this.props.state ? (LibraryModules.ChannelStore.getChannel(LibraryModules.LastChannelStore.getVoiceChannelId()) || {}).guild_id == this.props.guild.id : false;
+			this.props.video = this.props.state ? (LibraryModules.StreamUtils.getActiveStream() || {}).guildId == this.props.guild.id : false;
 			var isDraggedGuild = this.props.draggingGuildId === this.props.guild.id;
 			var Guild = isDraggedGuild ? BDFDB.ReactUtils.createElement("div", {
 				children: BDFDB.ReactUtils.createElement(LibraryComponents.GuildComponents.DragPlaceholder, {})
@@ -6071,12 +6078,12 @@ var BDFDB = {
 			if (this.props.draggable && typeof this.props.connectDragSource == "function") Guild = this.props.connectDragSource(Guild);
 			
 			var children = [
-				BDFDB.ReactUtils.createElement(LibraryComponents.GuildComponents.Pill, {
+				this.props.listItem || this.props.pill ? BDFDB.ReactUtils.createElement(LibraryComponents.GuildComponents.Pill, {
 					hovered: !isDraggedGuild && this.state.hovered,
 					selected: !isDraggedGuild && this.props.selected,
 					unread: !isDraggedGuild && this.props.unread,
 					className: BDFDB.disCN.guildpill
-				}),
+				}) : null,
 				BDFDB.ReactUtils.createElement(LibraryComponents.TooltipContainer, {
 					text: this.props.tooltip ? this.props.guild.name : null,
 					tooltipConfig: Object.assign({type: "right"}, this.props.tooltipConfig),
@@ -6091,7 +6098,7 @@ var BDFDB = {
 			});
 		}
 	} : LibraryComponents.GuildComponents.Guild;
-	InternalBDFDB.setDefaultProps(LibraryComponents.GuildComponents.Guild, {menu:true, tooltip:true, selected:false, unread:false, audio:false, video: false, badge:0, draggable:false, sorting:false});
+	InternalBDFDB.setDefaultProps(LibraryComponents.GuildComponents.Guild, {menu:true, tooltip:true, state:false, draggable:false, sorting:false});
 	
 	LibraryComponents.GuildComponents.GuildDropTarget = BDFDB.ModuleUtils.findByName("GuildDropTarget");
 	
