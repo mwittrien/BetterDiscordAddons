@@ -5628,8 +5628,6 @@ var BDFDB = {
 	
 	LibraryComponents.BadgeComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("IconBadge", "NumberBadge") || {});
 	
-	LibraryComponents.BlobMask = BDFDB.ModuleUtils.findByName("BlobMask");
-	
 	LibraryComponents.BotTag = reactInitialized ? class BDFDB_BotTag extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement("span", {
@@ -6006,38 +6004,41 @@ var BDFDB = {
 	
 	LibraryComponents.GuildComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Separator", "DragPlaceholder") || {});
 	
-	LibraryComponents.GuildComponents.GuildDropTarget = BDFDB.ModuleUtils.findByName("GuildDropTarget");
-	
-	LibraryComponents.GuildComponents.GuildPill = BDFDB.ModuleUtils.findByString("opacity:1,height:", "20:8", "default.item");
+	LibraryComponents.GuildComponents.BlobMask = BDFDB.ModuleUtils.findByName("BlobMask");
 	
 	LibraryComponents.GuildComponents.Guild = reactInitialized ? class BDFDB_Guild extends Library.React.Component {
-		handleMouseEnter (e) {
+		constructor(props) {
+			super(props);
+			
+			this.state = {hovered: false};
+		}
+		handleMouseEnter(e) {
 			if (!this.props.sorting) this.setState({hovered: true});
 			if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);
 		}
-		handleMouseLeave (e) {
+		handleMouseLeave(e) {
 			if (!this.props.sorting) this.setState({hovered: false});
 			if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);
 		}
-		handleMouseDown (e) {
+		handleMouseDown(e) {
 			if (!this.props.unavailable && this.props.guild && this.props.selectedChannelId) LibraryModules.DirectMessageUtils.preload(this.props.guild.id, this.props.selectedChannelId);
 			if (typeof this.props.onMouseDown == "function") this.props.onMouseDown(e, this);
 		}
-		handleContextMenu (e) {
+		handleContextMenu(e) {
 			if (this.props.menu) BDFDB.GuildUtils.openMenu(this.props.guild);
 			if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
 		}
-		setRef (e) {
+		setRef(e) {
 			if (typeof this.props.setRef == "function") this.props.setRef(this.props.guild.id, e)
 		}
-		render () {
+		render() {
 			if (this.props.guild == null) return;
 			var isDraggedGuild = this.props.draggingGuildId === this.props.guild.id;
 			var Guild = isDraggedGuild ? BDFDB.ReactUtils.createElement("div", {
 				children: BDFDB.ReactUtils.createElement(LibraryComponents.GuildComponents.DragPlaceholder, {})
 			}) : BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.disCN.guildcontainer,
-				children: BDFDB.ReactUtils.createElement(LibraryComponents.BlobMask, {
+				children: BDFDB.ReactUtils.createElement(LibraryComponents.GuildComponents.BlobMask, {
 					selected: this.state.isDropHovering || this.props.selected || this.state.hovered,
 					upperBadge: LibraryComponents.GuildComponents.renderIconBadge(this.props.audio, this.props.video),
 					lowerBadge: this.props.badge > 0 ? LibraryComponents.GuildComponents.renderMentionBadge(this.props.badge) : null,
@@ -6083,6 +6084,10 @@ var BDFDB = {
 			}), null != this.props.setRef ? this.setRef : null);
 		}
 	} : LibraryComponents.GuildComponents.Guild;
+	
+	LibraryComponents.GuildComponents.GuildDropTarget = BDFDB.ModuleUtils.findByName("GuildDropTarget");
+	
+	LibraryComponents.GuildComponents.Pill = BDFDB.ModuleUtils.findByString("opacity:1,height:", "20:8", "default.item");
 	
 	LibraryComponents.MessageComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Message", "MessageTimestamp") || {});
 	
