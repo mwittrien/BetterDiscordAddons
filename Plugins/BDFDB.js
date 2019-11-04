@@ -6405,11 +6405,11 @@ var BDFDB = {
         render() {
 			return BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.DOMUtils.formatClassName("BDFDB-textscroller", this.props.className),
-				style: {
+				style: Object.assign({}, this.props.style, {
 					position: "relative",
 					display: "block",
 					overflow: "hidden"
-				},
+				}),
 				ref: instance => {
 					let ele = BDFDB.ReactUtils.findDOMNode(instance);
 					if (ele) {
