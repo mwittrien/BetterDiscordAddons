@@ -6920,13 +6920,13 @@ var BDFDB = {
 		${BDFDB.dotCN.tableheadercell} {
 			text-transform: uppercase;
 			color: var(--interactive-normal);
+			flex: 1 1 auto;
 		}
 		${BDFDB.dotCN.tableheadercell},
 		${BDFDB.dotCN.tablebodycell} {
 			border-left: 1px solid var(--background-modifier-accent);
 			box-sizing: border-box;
 			padding: 0 12px;
-			flex: 1 1 auto;
 		}
 		${BDFDB.dotCN.tableheadercell}:first-child,
 		${BDFDB.dotCN.tablebodycell}:first-child {
