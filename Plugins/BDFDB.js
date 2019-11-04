@@ -6040,7 +6040,7 @@ var BDFDB = {
 				className: BDFDB.disCN.guildcontainer,
 				children: BDFDB.ReactUtils.createElement(LibraryComponents.GuildComponents.BlobMask, {
 					selected: this.state.isDropHovering || this.props.selected || this.state.hovered,
-					upperBadge: LibraryComponents.GuildComponents.renderIconBadge(this.props.audio, this.props.video),
+					upperBadge: this.props.unavailable ? LibraryComponents.GuildComponents.renderUnavailableBadge() : LibraryComponents.GuildComponents.renderIconBadge(this.props.audio, this.props.video),
 					lowerBadge: this.props.badge > 0 ? LibraryComponents.GuildComponents.renderMentionBadge(this.props.badge) : null,
 					lowerBadgeWidth: LibraryComponents.BadgeComponents.getBadgeWidthForValue(this.props.badge),
 					children: BDFDB.ReactUtils.createElement(LibraryComponents.NavItem, {
@@ -6084,6 +6084,9 @@ var BDFDB = {
 			}), null != this.props.setRef ? this.setRef : null);
 		}
 	} : LibraryComponents.GuildComponents.Guild;
+	if (LibraryComponents.GuildComponents.Guild) {
+		LibraryComponents.GuildComponents.Guild.defaultProps = {unread: false, audio: false, video: false, badge: 0, draggable: false, sorting: false};
+	}
 	
 	LibraryComponents.GuildComponents.GuildDropTarget = BDFDB.ModuleUtils.findByName("GuildDropTarget");
 	
