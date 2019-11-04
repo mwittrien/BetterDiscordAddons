@@ -6143,7 +6143,7 @@ var BDFDB = {
 				type: this.props.childType,
 				onChange: this.handleChange.bind(this)
 			});
-			BDFDB.ObjectUtils.delete(childprops, "id", "basis", "dividerbottom", "dividertop", "label", "labelchildren", "mini", "note", "type", "childClassName", "childType");
+			BDFDB.ObjectUtils.delete(childprops, "id", "basis", "dividerbottom", "dividertop", "label", "labelchildren", "mini", "note", "childClassName", "childType");
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				className: BDFDB.DOMUtils.formatClassName(this.props.className, this.props.disabled ? BDFDB.disCN.disabled : null),
 				id: this.props.id,
@@ -6199,6 +6199,7 @@ var BDFDB = {
 	
 	LibraryComponents.SettingsSaveItem = reactInitialized ? class BDFDB_SettingsSaveItem extends LibraryModules.React.Component {
         saveSettings(value) {
+			if (!BDFDB.ArrayUtils.is(this.props.keys) || !BDFDB.ObjectUtils.is(this.props.plugin)) return;
             let keys = this.props.keys.filter(n => n);
 			let option = keys.shift();
 			if (BDFDB.ObjectUtils.is(this.props.plugin) && option) {
@@ -6218,9 +6219,11 @@ var BDFDB = {
         }
         render() {
 			if (typeof this.props.type != "string" || !["SELECT", "SWITCH", "TEXTINPUT"].includes(this.props.type.toUpperCase())) return null;
-			return BDFDB.ReactUtils.createElement(LibraryComponents.SettingsItem, Object.assign({keys:[]}, this.props, {
+			let props = Object.assign({}, this.props, {
 				onChange: this.saveSettings.bind(this)
-			}));
+			});
+			BDFDB.ObjectUtils.delete(props, "keys", "plugin");
+			return BDFDB.ReactUtils.createElement(LibraryComponents.SettingsItem, props);
 		}
     } : LibraryComponents.SettingsSaveItem;
 	
