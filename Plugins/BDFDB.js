@@ -3933,6 +3933,7 @@ var BDFDB = {
 		colorPickerSwatchSingle: "single-swatch",
 		colorPickerSwatchSelected: "selected",
 		favButtonContainer: "favbutton-8Fzu45",
+		guild: "guild-r3yAE_",
 		inputNumberButton: "button-J9muv5",
 		inputNumberButtonDown: "down-cOY7Qp button-J9muv5",
 		inputNumberButtonUp: "up-mUs_72 button-J9muv5",
@@ -4718,6 +4719,7 @@ var BDFDB = {
 		golivepanel: ["GoLiveDetails", "panel"],
 		green: ["TextStyle", "statusGreen"],
 		grey: ["TextStyle", "statusGrey"],
+		guild: ["BDFDB", "guild"],
 		guildbadgebase: ["Badge", "base"],
 		guildbadgeicon: ["Badge", "icon"],
 		guildbadgeiconbadge: ["Badge", "iconBadge"],
@@ -6022,7 +6024,7 @@ var BDFDB = {
 			if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);
 		}
 		handleMouseDown(e) {
-			if (!this.props.unavailable && this.props.move && this.props.guild && this.props.selectedChannelId) LibraryModules.DirectMessageUtils.preload(this.props.guild.id, this.props.selectedChannelId);
+			if (!this.props.unavailable && this.props.guild && this.props.selectedChannelId) LibraryModules.DirectMessageUtils.preload(this.props.guild.id, this.props.selectedChannelId);
 			if (typeof this.props.onMouseDown == "function") this.props.onMouseDown(e, this);
 		}
 		handleContextMenu(e) {
@@ -6068,24 +6070,28 @@ var BDFDB = {
 				
 			if (this.props.draggable && typeof this.props.connectDragSource == "function") Guild = this.props.connectDragSource(Guild);
 			
-			return LibraryComponents.GuildComponents.renderListItem(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
-				children: [
-					BDFDB.ReactUtils.createElement(LibraryComponents.GuildComponents.Pill, {
-						hovered: !isDraggedGuild && this.state.hovered,
-						selected: !isDraggedGuild && this.props.selected,
-						unread: !isDraggedGuild && this.props.unread,
-						className: BDFDB.disCN.guildpill
-					}),
-					BDFDB.ReactUtils.createElement(LibraryComponents.TooltipContainer, {
-						text: this.props.tooltip ? this.props.guild.name : null,
-						tooltipConfig: this.props.tooltipConfig,
-						children: Guild
-					})
-				]
-			}), null != this.props.setRef ? this.setRef : null);
+			var children = [
+				BDFDB.ReactUtils.createElement(LibraryComponents.GuildComponents.Pill, {
+					hovered: !isDraggedGuild && this.state.hovered,
+					selected: !isDraggedGuild && this.props.selected,
+					unread: !isDraggedGuild && this.props.unread,
+					className: BDFDB.disCN.guildpill
+				}),
+				BDFDB.ReactUtils.createElement(LibraryComponents.TooltipContainer, {
+					text: this.props.tooltip ? this.props.guild.name : null,
+					tooltipConfig: Object.assign({type: "right"}, this.props.tooltipConfig),
+					children: Guild
+				})
+			];
+			return this.props.listItem ? LibraryComponents.GuildComponents.renderListItem(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
+				children: children
+			}), null != this.props.setRef ? this.setRef : null) : BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.disCN.guild,
+				children: children
+			});
 		}
 	} : LibraryComponents.GuildComponents.Guild;
-	InternalBDFDB.setDefaultProps(LibraryComponents.GuildComponents.Guild, {menu:true, move:false, tooltip:true, selected:false, unread:false, audio:false, video: false, badge:0, draggable:false, sorting:false});
+	InternalBDFDB.setDefaultProps(LibraryComponents.GuildComponents.Guild, {menu:true, tooltip:true, selected:false, unread:false, audio:false, video: false, badge:0, draggable:false, sorting:false});
 	
 	LibraryComponents.GuildComponents.GuildDropTarget = BDFDB.ModuleUtils.findByName("GuildDropTarget");
 	
