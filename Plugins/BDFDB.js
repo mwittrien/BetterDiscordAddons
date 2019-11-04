@@ -1722,9 +1722,21 @@ var BDFDB = {
 		return null;
 	};
 	BDFDB.GuildUtils.getAll = function () {
-		var found = [];
+		var found = [], objs = [];
 		for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.guilds), {name:["Guild","GuildIcon"], all:true, noCopies:true, unlimited:true})) {
-			if (ins.props && ins.props.guild) found.push(Object.assign(new ins.props.guild.constructor(ins.props.guild), {div:ins.handleContextMenu ? BDFDB.ReactUtils.findDOMNode(ins) : BDFDB.GuildUtils.createCopy(ins.props.guild), instance:ins}));
+			if (ins.props && ins.props.guild) objs.push(Object.assign(new ins.props.guild.constructor(ins.props.guild), {div:ins.handleContextMenu ? BDFDB.ReactUtils.findDOMNode(ins) : BDFDB.GuildUtils.createCopy(ins.props.guild), instance:ins}));
+		}
+		for (let id of BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds()) {
+			let foundobj = null;
+			for (let obj of objs) if (obj.id == id) {
+				foundobj = obj
+				break;
+			}
+			if (foundobj) found.push(foundobj);
+			else {
+				let guild = BDFDB.LibraryModules.GuildStore.getGuild(id);
+				found.push(Object.assign(new guild.constructor(guild), {div:BDFDB.GuildUtils.createCopy(guild), instance:null}))
+			}
 		}
 		return found;
 	};
@@ -6905,6 +6917,7 @@ var BDFDB = {
 		}
 		${BDFDB.dotCN.tableheader} {
 			padding: 0px 12px 8px 0;
+			margin-bottom: 5px;
 			font-size: 12px;
 			font-weight: 600;
 			box-sizing: border-box;
@@ -6940,8 +6953,12 @@ var BDFDB = {
 		${BDFDB.dotCN.tablerow} {
 			position: relative;
 			display: flex;
+			margin-bottom: 5px;
 			align-items: center;
 			color: var(--header-secondary);
+		}
+		${BDFDB.dotCN.tablebodycell} {
+			font-size: 15px;
 		}
 		
 		${BDFDB.dotCN.charcounter} {
