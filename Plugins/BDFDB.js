@@ -1866,6 +1866,7 @@ var BDFDB = {
 		else return null;
 	};
 	BDFDB.GuildUtils.openMenu = function (eleOrInfoOrId, e = BDFDB.mousePosition) {
+		if (!eleOrInfoOrId) return;
 		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
 		let guild = LibraryModules.GuildStore.getGuild(id);
 		if (guild) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
@@ -1951,6 +1952,7 @@ var BDFDB = {
 		else return null;
 	};
 	BDFDB.ChannelUtils.openMenu = function (eleOrInfoOrId, e = BDFDB.mousePosition) {
+		if (!eleOrInfoOrId) return;
 		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.ChannelUtils.getId(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
 		let channel = LibraryModules.ChannelStore.getChannel(id);
 		if (channel) {
@@ -6003,6 +6005,84 @@ var BDFDB = {
 	} : LibraryComponents.FormComponents.FormItem;
 	
 	LibraryComponents.GuildComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Separator", "DragPlaceholder") || {});
+	
+	LibraryComponents.GuildComponents.GuildDropTarget = BDFDB.ModuleUtils.findByName("GuildDropTarget");
+	
+	LibraryComponents.GuildComponents.GuildPill = BDFDB.ModuleUtils.findByString("opacity:1,height:", "20:8", "default.item");
+	
+	LibraryComponents.GuildComponents.Guild = reactInitialized ? class BDFDB_Guild extends Library.React.Component {
+		handleMouseEnter (e) {
+			if (!this.props.sorting) this.setState({hovered: true});
+			if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);
+		}
+		handleMouseLeave (e) {
+			if (!this.props.sorting) this.setState({hovered: false});
+			if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);
+		}
+		handleMouseDown (e) {
+			if (!this.props.unavailable && this.props.guild && this.props.selectedChannelId) LibraryModules.DirectMessageUtils.preload(this.props.guild.id, this.props.selectedChannelId);
+			if (typeof this.props.onMouseDown == "function") this.props.onMouseDown(e, this);
+		}
+		handleContextMenu (e) {
+			if (this.props.menu) BDFDB.GuildUtils.openMenu(this.props.guild);
+			if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
+		}
+		setRef (e) {
+			if (typeof this.props.setRef == "function") this.props.setRef(this.props.guild.id, e)
+		}
+		render () {
+			if (this.props.guild == null) return;
+			var isDraggedGuild = this.props.draggingGuildId === this.props.guild.id;
+			var Guild = isDraggedGuild ? BDFDB.ReactUtils.createElement("div", {
+				children: BDFDB.ReactUtils.createElement(LibraryComponents.GuildComponents.DragPlaceholder, {})
+			}) : BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.disCN.guildcontainer,
+				children: BDFDB.ReactUtils.createElement(LibraryComponents.BlobMask, {
+					selected: this.state.isDropHovering || this.props.selected || this.state.hovered,
+					upperBadge: LibraryComponents.GuildComponents.renderIconBadge(this.props.audio, this.props.video),
+					lowerBadge: this.props.badge > 0 ? LibraryComponents.GuildComponents.renderMentionBadge(this.props.badge) : null,
+					lowerBadgeWidth: LibraryComponents.BadgeComponents.getBadgeWidthForValue(this.props.badge),
+					children: BDFDB.ReactUtils.createElement(LibraryComponents.NavItem, {
+						to: {
+							pathname: BDFDB.DiscordConstants.Routes.CHANNEL(this.props.guild.id, this.props.selectedChannelId),
+							state: {
+								analyticsSource: {
+									page: BDFDB.DiscordConstants.AnalyticsPages.GUILD_CHANNEL,
+									section: BDFDB.DiscordConstants.AnalyticsSections.CHANNEL_LIST,
+									object: BDFDB.DiscordConstants.AnalyticsObjects.CHANNEL
+								}
+							}
+						},
+						name: this.props.guild.name,
+						onMouseEnter: this.handleMouseEnter.bind(this),
+						onMouseLeave: this.handleMouseLeave.bind(this),
+						onMouseDown: this.handleMouseDown.bind(this),
+						onContextMenu: this.handleContextMenu.bind(this),
+						icon: this.props.guild.getIconURL(this.state.hovered && this.props.animatable ? "gif" : "jpg"),
+						selected: this.props.selected || this.state.hovered
+					})
+				})
+			});
+				
+			if (this.props.draggable && typeof this.props.connectDragSource == "function") Guild = this.props.connectDragSource(Guild);
+			
+			return LibraryComponents.GuildComponents.renderListItem(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
+				children: [
+					BDFDB.ReactUtils.createElement(LibraryComponents.GuildComponents.Pill, {
+						hovered: !isDraggedGuild && this.state.hovered,
+						selected: !isDraggedGuild && this.props.selected,
+						unread: !isDraggedGuild && this.props.unread,
+						className: BDFDB.disCN.guildpill
+					}),
+					BDFDB.ReactUtils.createElement(LibraryComponents.TooltipContainer, {
+						text: this.props.guild.name,
+						tooltipConfig: this.props.tooltipConfig,
+						children: Guild
+					})
+				]
+			}), null != this.props.setRef ? this.setRef : null);
+		}
+	} : LibraryComponents.GuildComponents.Guild;
 	
 	LibraryComponents.MessageComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Message", "MessageTimestamp") || {});
 	
