@@ -3931,7 +3931,13 @@ var BDFDB = {
 		settingsPanel: "settingsPanel-w2ySNR",
 		settingsPanelInner: "settingsInner-zw1xAY",
 		settingsPanelList: "settingsList-eZjkXj",
-		settingsPanelTitle: "title-GTF_8J"
+		settingsPanelTitle: "title-GTF_8J",
+		table: "table-moqjM0",
+		tableHeader: "header-g67q9_",
+		tableHeaderCell: "headerCell-T6Fo3K",
+		tableHeaderCellSorted: "headerCellSorted-FMjMWK",
+		tableRow: "row-_9Ehcp",
+		tableStickyHeader: "stickyHeader-JabwjW header-g67q9_"
 	};
 	DiscordClassModules.BDrepo = {
 		bdGuild: "bd-guild",
@@ -5323,14 +5329,12 @@ var BDFDB = {
 		tabbarheaderitem: ["RecentMentions", "tabBarItem"],
 		tabbaritem: ["UserProfile", "tabBarItem"],
 		tabbartop: ["Item", "top"],
-		tableheadercell: ["Table", "headerCell"],
-		tableheadercellclickable: ["Table", "clickable"],
-		tableheadercellcontent: ["Table", "headerCellContent"],
-		tableheadercellsorted: ["Table", "headerCellSorted"],
-		tableheadersorticon: ["Table", "sortIcon"],
-		tablerow: ["Table", "row"],
-		tablespacerheader: ["Table", "spacerHeader"],
-		tablestickyheader: ["Table", "stickyHeader"],
+		table: ["BDFDB", "table"],
+		tableheader: ["BDFDB", "tableHeader"],
+		tableheadercell: ["BDFDB", "tableHeaderCellSorted"],
+		tableheadercellsorted: ["BDFDB", "tableHeaderCell"],
+		tablerow: ["BDFDB", "tableRow"],
+		tablestickyheader: ["BDFDB", "tableStickyHeader"],
 		textarea: ["ChannelTextArea", "textArea"],
 		textareaattachbutton: ["ChannelTextArea", "attachButton"],
 		textareaattachbuttondivider: ["ChannelTextArea", "attachButtonDivider"],
@@ -5597,6 +5601,7 @@ var BDFDB = {
 	NativeSubComponents.Select = BDFDB.ModuleUtils.findByName("SelectTempWrapper");
 	NativeSubComponents.Switch = BDFDB.ModuleUtils.findByName("Switch");
 	NativeSubComponents.TabBar = BDFDB.ModuleUtils.findByName("TabBar");
+	NativeSubComponents.Table = BDFDB.ModuleUtils.findByName("Table");
 	NativeSubComponents.TextInput = BDFDB.ModuleUtils.findByName("TextInput");
 	NativeSubComponents.TooltipContainer = BDFDB.ModuleUtils.findByName("Tooltip");
 	
@@ -6266,7 +6271,17 @@ var BDFDB = {
 		}
     } : LibraryComponents.TabBar;
 	
-	LibraryComponents.Table = BDFDB.ModuleUtils.findByName("Table");
+	LibraryComponents.Table = reactInitialized ? class BDFDB_Table extends LibraryModules.React.Component {
+        render() {
+			return BDFDB.ReactUtils.createElement(NativeSubComponents.Table, Object.assign({}, this.props, {
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.table, this.props.className),
+				headerClassName: BDFDB.DOMUtils.formatClassName(this.props.stickyHeader ? BDFDB.disCN.tablestickyheader : BDFDB.disCN.tableheader, this.props.headerClassName),
+				headerCellClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tableheadercell, this.props.headerCellClassName),
+				sortedHeaderCellClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tableheadercellsorted, this.props.sortedHeaderCellClassName),
+				rowClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tablerow, this.props.rowClassName)
+			}));
+		}
+    } : LibraryComponents.Table;
 	
 	LibraryComponents.TextElement = BDFDB.ModuleUtils.findByName("Text");
 	
@@ -6880,6 +6895,45 @@ var BDFDB = {
 		}
 		${BDFDB.dotCN.hovercardwrapper}:hover ${BDFDB.dotCN.hovercardbutton} {
 			opacity: 1;
+		}
+		
+		${BDFDB.dotCN.table} {
+			position: relative;
+			width: 100%;
+		}
+		${BDFDB.dotCN.tableheader} {
+			padding: 20px 34px 8px;
+			font-size: 12px;
+			font-weight: 600;
+			box-sizing: border-box;
+			background-color: var(--background-primary);
+			border-bottom: 1px solid var(--background-modifier-accent);
+		}
+		${BDFDB.dotCN.tablestickyheader} {
+			position: absolute;
+		}
+		${BDFDB.dotCN.tableheadercell} {
+			text-transform: uppercase;
+			border-left: 1px solid var(--background-modifier-accent);
+			box-sizing: border-box;
+			color: var(--interactive-normal);
+			padding: 0 12px;
+			flex: 1 1 auto;
+		}
+		${BDFDB.dotCN.tableheadercell}:first-child {
+			border-left: none;
+			padding-left: 0;
+		}
+		${BDFDB.dotCN.tableheadercellsorted},
+		${BDFDB.dotCN.tableheadercellsorted}:hover {
+			color: var(--interactive-active);
+		}
+		${BDFDB.dotCN.tablerow} {
+			position: relative;
+			display: flex;
+			align-items: center;
+			margin: 0 8px;
+			color: var(--header-secondary);
 		}
 		
 		${BDFDB.dotCN.charcounter} {
