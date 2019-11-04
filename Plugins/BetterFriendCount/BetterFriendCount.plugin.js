@@ -3,7 +3,7 @@
 class BetterFriendCount {
 	getName () {return "BetterFriendCount";}
 
-	getVersion () {return "1.1.9";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -15,8 +15,8 @@ class BetterFriendCount {
 		};
 
 		this.patchModules = {
-			"TabBar":"render",
-			"FriendRow":["componentWillMount","componentWillUnmount"]
+			TabBar: "render",
+			FriendRow: ["componentWillMount","componentWillUnmount"]
 		};
 	}
 
@@ -80,29 +80,29 @@ class BetterFriendCount {
 				let newchildren = [Array.isArray(child.props.children) ? child.props.children[0] : child.props.children];
 				switch (child.props.id) {
 					case "ALL":
-						newchildren.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.NumberBadge, {
+						newchildren.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.NumberBadge, {
 							className: BDFDB.disCN.settingstabbarbadge,
 							count: relationshipCount.FRIEND
 						}));
 						break;
 					case "ONLINE":
-						newchildren.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.NumberBadge, {
+						newchildren.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.NumberBadge, {
 							className: BDFDB.disCN.settingstabbarbadge,
 							count: BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount()
 						}));
 						break;
 					case "PENDING":
-						newchildren.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.NumberBadge, {
+						newchildren.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.NumberBadge, {
 							className: BDFDB.disCN.settingstabbarbadge,
 							count: relationshipCount.PENDING_INCOMING
 						}));
-						newchildren.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.NumberBadge, {
+						newchildren.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.NumberBadge, {
 							className: BDFDB.disCN.settingstabbarbadge,
 							count: relationshipCount.PENDING_OUTGOING
 						}));
 						break;
 					case "BLOCKED":
-						newchildren.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.NumberBadge, {
+						newchildren.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.NumberBadge, {
 							className: BDFDB.disCN.settingstabbarbadge,
 							count: relationshipCount.BLOCKED
 						}));

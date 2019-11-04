@@ -5624,6 +5624,10 @@ var BDFDB = {
 	
 	LibraryComponents.Anchor = BDFDB.ModuleUtils.findByName("Anchor");
 	
+	LibraryComponents.BadgeComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("IconBadge", "NumberBadge") || {});
+	
+	LibraryComponents.BlobMask = BDFDB.ModuleUtils.findByName("BlobMask");
+	
 	LibraryComponents.BotTag = reactInitialized ? class BDFDB_BotTag extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement("span", {
@@ -5998,7 +6002,7 @@ var BDFDB = {
 		}
 	} : LibraryComponents.FormComponents.FormItem;
 	
-	LibraryComponents.IconBadge = BDFDB.ModuleUtils.findByName("IconBadge");
+	LibraryComponents.GuildComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Separator", "DragPlaceholder") || {});
 	
 	LibraryComponents.MessageComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Message", "MessageTimestamp") || {});
 	
@@ -6022,7 +6026,7 @@ var BDFDB = {
 		}
     } : LibraryComponents.ModalComponents.ModalTabContent;
 	
-	LibraryComponents.NumberBadge = BDFDB.ModuleUtils.findByName("NumberBadge");
+	LibraryComponents.NavItem = BDFDB.ModuleUtils.findByName("NavItem");
 	
 	LibraryComponents.Popout = reactInitialized ? class BDFDB_Popout extends LibraryModules.React.Component {
         render() {
@@ -6295,7 +6299,15 @@ var BDFDB = {
 				headerCellClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tableheadercell, this.props.headerCellClassName),
 				sortedHeaderCellClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tableheadercellsorted, this.props.sortedHeaderCellClassName),
 				bodyCellClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tablebodycell, this.props.bodyCellClassName),
-				rowClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tablerow, this.props.rowClassName)
+				rowClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tablerow, this.props.rowClassName),
+				onSort: (sortKey, sortDirection) => {
+					this.props.sortDirection = this.props.sortKey != sortKey && sortDirection == LibraryComponents.Table.SortDirection.ASCENDING && this.props.columns.filter(n => n.key == sortKey)[0].reverse ? LibraryComponents.Table.SortDirection.DESCENDING : sortDirection;
+					this.props.sortKey = sortKey;
+					this.props.data = BDFDB.ArrayUtils.keySort(this.props.data, this.props.sortKey);
+					if (this.props.sortDirection == LibraryComponents.Table.SortDirection.DESCENDING) this.props.data.reverse();
+					BDFDB.ReactUtils.forceUpdate(this);
+					if (typeof this.props.onSort == "function") this.props.onSort(this.props.sortKey, this.props.sortDirection);
+				}
 			}));
 		}
     } : LibraryComponents.Table;
@@ -8348,4 +8360,5 @@ var BDFDB = {
 	};
 	
 	BDFDB.LibraryComponents.ModalTabContent = LibraryComponents.ModalComponents.ModalTabContent;
+	BDFDB.LibraryComponents.NumberBadge = LibraryComponents.BadgeComponents.NumberBadge;
 })();
