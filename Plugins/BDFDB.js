@@ -6007,7 +6007,7 @@ var BDFDB = {
 	
 	LibraryComponents.GuildComponents.BlobMask = BDFDB.ModuleUtils.findByName("BlobMask");
 	
-	LibraryComponents.GuildComponents.Guild = reactInitialized ? class BDFDB_Guild extends Library.React.Component {
+	LibraryComponents.GuildComponents.Guild = reactInitialized ? class BDFDB_Guild extends LibraryModules.React.Component {
 		constructor(props) {
 			super(props);
 			
@@ -6077,7 +6077,7 @@ var BDFDB = {
 						className: BDFDB.disCN.guildpill
 					}),
 					BDFDB.ReactUtils.createElement(LibraryComponents.TooltipContainer, {
-						text: this.props.guild.name,
+						text: this.props.tooltip ? this.props.guild.name : null,
 						tooltipConfig: this.props.tooltipConfig,
 						children: Guild
 					})
@@ -6085,7 +6085,7 @@ var BDFDB = {
 			}), null != this.props.setRef ? this.setRef : null);
 		}
 	} : LibraryComponents.GuildComponents.Guild;
-	InternalBDFDB.setDefaultProps(LibraryComponents.GuildComponents.Guild, {menu:true, move:false, selected:false, unread:false, audio:false, video: false, badge:0, draggable:false, sorting:false});
+	InternalBDFDB.setDefaultProps(LibraryComponents.GuildComponents.Guild, {menu:true, move:false, tooltip:true, selected:false, unread:false, audio:false, video: false, badge:0, draggable:false, sorting:false});
 	
 	LibraryComponents.GuildComponents.GuildDropTarget = BDFDB.ModuleUtils.findByName("GuildDropTarget");
 	
