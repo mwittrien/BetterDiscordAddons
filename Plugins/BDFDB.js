@@ -1543,7 +1543,7 @@ var BDFDB = {
 					let keys = Object.getOwnPropertyNames(instance);
 					for (let i = 0; result === undefined && i < keys.length; i++) {
 						let key = keys[i];
-						if (key && whitelist[key] && (typeof instance[key] === "object" || typeof instance[key] === "function")) result = getOwner(instance[key]);
+						if (key && whitelist[key] && (typeof instance[key] === "object" || typeof instance[key] === "function")) result = findProps(instance[key]);
 					}
 				}
 			}
