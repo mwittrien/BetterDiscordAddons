@@ -38,9 +38,10 @@ https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/The
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/HansAnonymousAdditions/HAA.theme.css
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/Patriotic/Patriotic.theme.css
 https://raw.githubusercontent.com/HighGuard/discord-popout-overhaul-theme/master/popoutOverhaul.theme.css
-https://raw.githubusercontent.com/ImBastion/BD-Themes/master/Theme/DarlingInTheFranxx001.theme.css
+https://raw.githubusercontent.com/ImBastion/BD-Themes/master/Theme/DARLINGintheFRANXX.theme.css
 https://raw.githubusercontent.com/ImBastion/BD-Themes/master/Theme/NieRDanceBase.theme.css
 https://raw.githubusercontent.com/ImBastion/BD-Themes/master/Theme/NoA2Base.theme.css
+https://raw.githubusercontent.com/ImBastion/BD-Themes/master/Theme/No2BBase.theme.css
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/themes/compactUserList.theme.css
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/themes/EzLight.theme.css
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/themes/horizontalServerlist.theme.css
