@@ -236,7 +236,7 @@ class BadgesEverywhere {
 	}
 
 	injectBadges (instance, children, info, type, colored) {
-		if (!BDFDB.ArrayUtils.is(children) || !info || info.bot || this.stopping) return;
+		if (!BDFDB.ArrayUtils.is(children) || !info || info.bot) return;
 		if (!BDFDB.ArrayUtils.is(this.requestedusers[info.id])) {
 			this.requestedusers[info.id] = [instance];
 			BDFDB.LibraryModules.APIUtils.get(BDFDB.DiscordConstants.Endpoints.USER_PROFILE(info.id)).then(result => {

@@ -262,7 +262,7 @@ class GoogleTranslateOption {
 		}
 		else if (methodnames.includes("render")) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {props:[["className", BDFDB.disCN.textareapickerbuttons]]});
-			if (!this.stopping && index > -1 && children[index].props && children[index].props.children) children[index].props.children.unshift(this.createTranslateButton());
+			if (index > -1 && children[index].props && children[index].props.children) children[index].props.children.unshift(this.createTranslateButton());
 		}
 	}
 

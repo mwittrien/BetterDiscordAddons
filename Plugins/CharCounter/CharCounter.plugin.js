@@ -125,24 +125,20 @@ class CharCounter {
 	// begin of own functions
 
 	processChannelTextArea (e) {
-		if (!this.stopping && e.instance.props && e.instance.props.type && this.maxLenghts[e.instance.props.type]) {
+		if (e.instance.props && e.instance.props.type && this.maxLenghts[e.instance.props.type]) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "TextAreaAutosize"});
 			if (index > -1) this.injectCounter(e.returnvalue, children, e.instance.props.type, BDFDB.dotCN.textarea, true);
 		}
 	}
 
 	processNote (e) {
-		if (!this.stopping) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "TextAreaAutosize"});
-			if (index > -1) this.injectCounter(e.returnvalue, children, e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.usernotepopout) > -1 ? "popout" : "profile", "textarea");
-		}
+		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "TextAreaAutosize"});
+		if (index > -1) this.injectCounter(e.returnvalue, children, e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.usernotepopout) > -1 ? "popout" : "profile", "textarea");
 	}
 
 	processChangeNickname (e) {
-		if (!this.stopping) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "TextInput"});
-			if (index > -1) this.injectCounter(e.returnvalue, children, "nickname", BDFDB.dotCN.input);
-		}
+		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "TextInput"});
+		if (index > -1) this.injectCounter(e.returnvalue, children, "nickname", BDFDB.dotCN.input);
 	}
 	
 	injectCounter (parent, children, type, refClass, parsing) {

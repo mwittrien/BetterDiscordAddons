@@ -1068,7 +1068,7 @@ var BDFDB = {
 		else if (methodnames.includes("componentDidUpdate")) InternalBDFDB.initiateProcess(plugin, type, {instance, methodname:"componentDidUpdate"});
 	};
 	InternalBDFDB.initiateProcess = function (plugin, type, e) {
-		if (BDFDB.ObjectUtils.is(plugin) && e.instance) {
+		if (BDFDB.ObjectUtils.is(plugin) && !plugin.stopping && e.instance) {
 			// REMOVE
 			let isLib = plugin.name == "$BDFDB";
 			if (plugin.name == "$BDFDB") plugin = BDFDBprocessFunctions;

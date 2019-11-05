@@ -72,7 +72,7 @@ class BetterNsfwTag {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.channelchildren]]});
 			let firstChildClassName = index > -1 && BDFDB.ReactUtils.getValue(children[index], "props.children.0.props.className");
 			if (firstChildClassName && firstChildClassName.indexOf("NSFW-tag") > -1) children[index].props.children.shift();
-			if (!this.stopping && index > -1 && children[index].props && children[index].props.children) {
+			if (index > -1 && children[index].props && children[index].props.children) {
 				children[index].props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BotTag, {
 					className: "NSFW-tag",
 					tag: "NSFW",

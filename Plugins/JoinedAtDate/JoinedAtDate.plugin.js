@@ -223,14 +223,14 @@ class JoinedAtDate {
 	// begin of own functions
 
 	processUserPopout (e) {
-		if (!this.stopping && e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "addInUserPopout")) {
+		if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "addInUserPopout")) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "CustomStatus"});
 			if (index > -1) this.injectDate(e.instance, children, 2, e.instance.props.user);
 		}
 	}
 
 	processAnalyticsContext (e) {
-		if (!this.stopping && typeof e.returnvalue.props.children == "function" && e.instance.props && e.instance.props.section == "Profile Modal" && BDFDB.DataUtils.get(this, "settings", "addInUserProfil")) {
+		if (typeof e.returnvalue.props.children == "function" && e.instance.props && e.instance.props.section == "Profile Modal" && BDFDB.DataUtils.get(this, "settings", "addInUserProfil")) {
 			let renderChildren = e.returnvalue.props.children;
 			e.returnvalue.props.children = () => {
 				let renderedChildren = renderChildren(e.instance);
@@ -242,7 +242,7 @@ class JoinedAtDate {
 	}
 
 	injectDate (instance, children, index, user) {
-		if (!BDFDB.ArrayUtils.is(children) || !user || user.discriminator == "0000" || this.stopping) return;
+		if (!BDFDB.ArrayUtils.is(children) || !user || user.discriminator == "0000") return;
 		let guildid = BDFDB.LibraryModules.LastGuildStore.getGuildId();
 		if (!guildid) return;
 		if (!this.loadedusers[guildid]) this.loadedusers[guildid] = {};

@@ -213,7 +213,7 @@ class CompleteTimestamps {
 	}
 
 	processMessage (e) {
-		if (!this.stopping && !e.instance.props.isCompact) {
+		if (!e.instance.props.isCompact) {
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			if (settings.showInChat) this.injectTimestamp(e.returnvalue, e.instance.props);
 			if (settings.showOnHover) {
@@ -233,7 +233,7 @@ class CompleteTimestamps {
 	}
 
 	processMessageContent (e) {
-		if (!this.stopping && typeof e.returnvalue.props.children == "function") {
+		if (typeof e.returnvalue.props.children == "function") {
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let renderChildren = e.returnvalue.props.children;
 			e.returnvalue.props.children = () => {
