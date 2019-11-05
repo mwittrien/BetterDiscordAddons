@@ -934,6 +934,7 @@ var BDFDB = {
 	};
 	var webModulesNotFindableModules = {
 		Account: "accountinfo",
+		App: "app",
 		AuthWrapper: "loginscreen",
 		BannedCard: "guildsettingsbannedcard",
 		ChannelMember: "member",
