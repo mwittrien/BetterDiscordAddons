@@ -25,17 +25,17 @@ var BDFDB = {
 	BDFDB.LogUtils.log = function (string, name) {
 		if (typeof string != "string") string = "";
 		if (typeof name != "string" || name == "$BDFDB") name = "BDFDB";
-		console.log(`%c[${name.toUpperCase()}]%c`, "color: #3a71c1; font-weight: 700;", "", string.trim());
+		console.log(`%c[${name}]%c`, "color: #3a71c1; font-weight: 700;", "", string.trim());
 	};
 	BDFDB.LogUtils.warn = function (string, name) {
 		if (typeof string != "string") string = "";
 		if (typeof name != "string" || name == "$BDFDB") name = "BDFDB";
-		console.warn(`%c[${name.toUpperCase()}]%c`, "color: #3a71c1; font-weight: 700;", "", string.trim());
+		console.warn(`%c[${name}]%c`, "color: #3a71c1; font-weight: 700;", "", string.trim());
 	};
 	BDFDB.LogUtils.error = function (string, name) {
 		if (typeof string != "string") string = "";
 		if (typeof name != "string" || name == "$BDFDB") name = "BDFDB";
-		console.error(`%c[${name.toUpperCase()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: " + string.trim());
+		console.error(`%c[${name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: " + string.trim());
 	};
 	
 	BDFDB.LogUtils.log("Loading library.");
@@ -959,7 +959,8 @@ var BDFDB = {
 	};
 	BDFDB.ModuleUtils.patch = function (plugin, module, modulefunctions, patchfunctions) {
 		if (!plugin || !module || !modulefunctions || !Object.keys(patchfunctions).some(type => webModulesPatchtypes.includes(type))) return null;
-		let pluginname = (typeof plugin === "string" ? plugin : plugin.name).toLowerCase();
+		let pluginname = typeof plugin === "string" ? plugin : plugin.name;
+		let pluginid = pluginname.toLowerCase();
 		if (!module.BDFDBpatch) module.BDFDBpatch = {};
 		modulefunctions = BDFDB.ArrayUtils.is(modulefunctions) ? modulefunctions : Array.of(modulefunctions);
 		for (let modulefunction of modulefunctions) {
@@ -995,7 +996,7 @@ var BDFDB = {
 					return data.returnValue;
 				};
 			}
-			for (let type of webModulesPatchtypes) if (typeof patchfunctions[type] == "function") module.BDFDBpatch[modulefunction][type][pluginname] = patchfunctions[type];
+			for (let type of webModulesPatchtypes) if (typeof patchfunctions[type] == "function") module.BDFDBpatch[modulefunction][type][pluginid] = patchfunctions[type];
 		}
 		let cancel = _ => {BDFDB.ModuleUtils.unpatch(plugin, module, modulefunctions);};
 		if (plugin && typeof plugin == "object") {
@@ -1414,11 +1415,11 @@ var BDFDB = {
 		config.name = config.name && !BDFDB.ArrayUtils.is(config.name) ? Array.of(config.name) : config.name;
 		config.key = config.key && !BDFDB.ArrayUtils.is(config.key) ? Array.of(config.key) : config.key;
 		config.props = config.props && !BDFDB.ArrayUtils.is(config.props) ? Array.of(config.props) : config.props;
-		var startchildren = instance;
-		var parent = startchildren;
-		return getChildren(startchildren);
+		var parent = firstarray = instance;
+		while (!BDFDB.ArrayUtils.is(firstarray) && firstarray.props && firstarray.props.children) firstarray = firstarray.props.children;
+		return getChildren(instance);
 		function getChildren (children) {
-			var result = [startchildren, -1];
+			var result = [firstarray, -1];
 			if (!children) return result;
 			if (!BDFDB.ArrayUtils.is(children)) {
 				if (check(children)) result = found(children);
