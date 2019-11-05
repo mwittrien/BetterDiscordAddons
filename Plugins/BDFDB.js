@@ -4,7 +4,6 @@ if (window.BDFDB && BDFDB.ModuleUtils && typeof BDFDB.ModuleUtils.unpatch == "fu
 var BDFDB = {
 	myPlugins: BDFDB && BDFDB.myPlugins || {},
 	InternalData: BDFDB && BDFDB.InternalData || {
-		creationTime: performance.now(),
 		patchedMessagePopouts: 0,
 		pressedKeys: [],
 		mousePosition: {
@@ -18,6 +17,7 @@ var BDFDB = {
 	name: "$BDFDB"
 };
 (_ => {
+	BDFDB.InternalData.creationTime = performance.now();
 	var id = Math.round(Math.random() * 10000000000000000), InternalBDFDB = {};
 	BDFDB.id = id;
 
