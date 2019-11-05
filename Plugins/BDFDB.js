@@ -1407,12 +1407,11 @@ var BDFDB = {
 	BDFDB.ReactUtils.findChildren = function (nodeOrInstance, config) {
 		if (!nodeOrInstance || !BDFDB.ObjectUtils.is(config) || !config.name && !config.key && !config.props) return [null, -1];
 		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
-		if (!BDFDB.ObjectUtils.is(instance)) return [null, -1];
+		if (!BDFDB.ObjectUtils.is(instance) && !BDFDB.ArrayUtils.is(instance)) return [null, -1];
 		config.name = config.name && !BDFDB.ArrayUtils.is(config.name) ? Array.of(config.name) : config.name;
 		config.key = config.key && !BDFDB.ArrayUtils.is(config.key) ? Array.of(config.key) : config.key;
 		config.props = config.props && !BDFDB.ArrayUtils.is(config.props) ? Array.of(config.props) : config.props;
 		var startchildren = instance;
-		var startIsArray = BDFDB.ArrayUtils.is(startchildren);
 		var parent = startchildren;
 		return getChildren(startchildren);
 		function getChildren (children) {
