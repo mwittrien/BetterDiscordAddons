@@ -65,8 +65,9 @@ class OwnerTag {
 		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 			className: BDFDB.disCN.marginbottom8
 		}));
-		for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
+		for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,
+			type: "Switch",
 			plugin: this,
 			keys: ["settings", key],
 			label: this.defaults.settings[key].description,

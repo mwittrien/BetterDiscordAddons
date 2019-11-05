@@ -622,7 +622,7 @@ class EditServers {
 	updateGuildSidebar() {
 		if (document.querySelector(BDFDB.dotCN.guildheader)) {
 			var ins = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name: ["GuildSidebar", "GuildHeader"], all: true, noCopies: true, depth: 99999999, time: 99999999});
-			if (ins) for (let i in ins) ins[i].updater.enqueueForceUpdate(ins[i]);
+			if (ins) for (let i in ins) ins[i].updater.enqueueForceUpdate(ins[i])
 		}
 	}
 

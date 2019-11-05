@@ -15,9 +15,9 @@ class BadgesEverywhere {
 		};
 
 		this.patchModules = {
-			"MemberListItem":"render",
-			"MessageUsername":"render",
-			"UserPopout":"render"
+			MemberListItem: "render",
+			MessageUsername: "render",
+			UserPopout: "render"
 		};
 	}
 
@@ -129,23 +129,26 @@ class BadgesEverywhere {
 		let indicators = BDFDB.DataUtils.get(this, "indicators");
 		let settingsitems = [], inneritems = [];
 		
-		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
+		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,
+			type: "Switch",
 			plugin: this,
 			keys: ["settings", key],
 			label: this.defaults.settings[key].description,
 			value: settings[key]
 		}));
-		for (let flag in badges) inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
+		for (let flag in badges) inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,
+			type: "Switch",
 			plugin: this,
 			keys: ["badges", flag],
 			label: this.defaults.badges[flag].name,
 			value: badges[flag],
 			labelchildren: this.createSettingsBadges(flag)
 		}));
-		for (let flag in indicators) inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSwitch, {
+		for (let flag in indicators) inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,
+			type: "Switch",
 			plugin: this,
 			keys: ["indicators", flag],
 			label: this.defaults.indicators[flag].name,
@@ -217,55 +220,56 @@ class BadgesEverywhere {
 	}
 
 	processMemberListItem (e) {
-		if (!BDFDB.DataUtils.get(this, "settings", "showInMemberList")) return;
-		if (e.instance.props.user) this.injectBadges(e.instance, BDFDB.ReactUtils.getValue(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, "list");
+		if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "showInMemberList")) {
+			this.injectBadges(e.instance, BDFDB.ReactUtils.getValue(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, "list");
+		}
 	}
 
 	processMessageUsername (e) {
-		if (!BDFDB.DataUtils.get(this, "settings", "showInChat")) return;
 		let user = BDFDB.ReactUtils.getValue(e.instance, "props.message.author");
-		if (user) this.injectBadges(e.instance, BDFDB.ReactUtils.getValue(e.returnvalue, "props.children.props.children"), user, "chat");
+		if (user && BDFDB.DataUtils.get(this, "settings", "showInChat")) {
+			this.injectBadges(e.instance, BDFDB.ReactUtils.getValue(e.returnvalue, "props.children.props.children"), user, "chat");
+		}
 	}
 
 	processUserPopout (e) {
-		if (!BDFDB.DataUtils.get(this, "settings", "showInPopout")) return;
-		if (e.instance.props.user) {
+		if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "showInPopout")) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "CustomStatus"});
 			if (index > -1) this.injectBadges(e.instance, children, e.instance.props.user, "popout", e.instance.props.activity && e.instance.props.activity.type != BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS);
 		}
 	}
 
-	injectBadges (instance, children, info, type, colored) {
-		if (!BDFDB.ArrayUtils.is(children) || !info || info.bot) return;
-		if (!BDFDB.ArrayUtils.is(this.requestedusers[info.id])) {
-			this.requestedusers[info.id] = [instance];
-			BDFDB.LibraryModules.APIUtils.get(BDFDB.DiscordConstants.Endpoints.USER_PROFILE(info.id)).then(result => {
+	injectBadges (instance, children, user, type, colored) {
+		if (!BDFDB.ArrayUtils.is(children) || !user || user.bot) return;
+		if (!BDFDB.ArrayUtils.is(this.requestedusers[user.id])) {
+			this.requestedusers[user.id] = [instance];
+			BDFDB.LibraryModules.APIUtils.get(BDFDB.DiscordConstants.Endpoints.USER_PROFILE(user.id)).then(result => {
 				let usercopy = Object.assign({}, result.body.user);
 				if (result.body.premium_since) usercopy.flags += this.nitroflag;
 				usercopy.premium_since = result.body.premium_since;
 				if (result.body.premium_guild_since) usercopy.flags += this.boostflag;
 				usercopy.premium_guild_since = result.body.premium_guild_since;
-				this.loadedusers[info.id] = usercopy;
-				for (let queredinstance of this.requestedusers[info.id]) BDFDB.ReactUtils.forceUpdate(queredinstance);
+				this.loadedusers[user.id] = usercopy;
+				for (let queredinstance of this.requestedusers[user.id]) BDFDB.ReactUtils.forceUpdate(queredinstance);
 			});
 		}
-		else if (!this.loadedusers[info.id]) this.requestedusers[info.id].push(instance);
-		else children.push(this.createBadges(info, type, colored));
+		else if (!this.loadedusers[user.id]) this.requestedusers[user.id].push(instance);
+		else children.push(this.createBadges(user, type, colored));
 	}
 
-	createBadges (info, type, uncolored) {
+	createBadges (user, type, uncolored) {
 		let badges = BDFDB.DataUtils.get(this, "badges");
 		let indicators = BDFDB.DataUtils.get(this, "indicators");
 		let settings = BDFDB.DataUtils.get(this, "settings");
 		if (uncolored == undefined) uncolored = !settings.useColoredVersion;
 		let badgewrapper = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(`<span class="BE-badges BE-badges-${type} ${uncolored ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;"></span>`));
 		badgewrapper.props.children = [];
-		for (let flag in badges) if ((this.loadedusers[info.id].flags | flag) == this.loadedusers[info.id].flags && badges[flag]) {
-			badgewrapper.props.children.push(this.createBadge(settings.showNitroDate ? this.getTimeString(info.id, flag) : null, type, flag, flag == this.boostflag ? BDFDB.LibraryModules.GuildBoostUtils.getUserLevel(this.loadedusers[info.id].premium_guild_since) : null));
+		for (let flag in badges) if ((this.loadedusers[user.id].flags | flag) == this.loadedusers[user.id].flags && badges[flag]) {
+			badgewrapper.props.children.push(this.createBadge(settings.showNitroDate ? this.getTimeString(user.id, flag) : null, type, flag, flag == this.boostflag ? BDFDB.LibraryModules.GuildBoostUtils.getUserLevel(this.loadedusers[user.id].premium_guild_since) : null));
 		}
-		let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), info.id);
+		let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), user.id);
 		if (indicators.CURRENT_GUILD_BOOST && member && member.premiumSince) {
-			badgewrapper.props.children.push(this.createBadge(settings.showNitroDate ? this.getTimeString(info.id, "CURRENT_GUILD_BOOST") : null, type, "CURRENT_GUILD_BOOST"));
+			badgewrapper.props.children.push(this.createBadge(settings.showNitroDate ? this.getTimeString(user.id, "CURRENT_GUILD_BOOST") : null, type, "CURRENT_GUILD_BOOST"));
 		}
 		return badgewrapper.props.children.length ? badgewrapper : null;
 	}
