@@ -1417,6 +1417,7 @@ var BDFDB = {
 		config.props = config.props && !BDFDB.ArrayUtils.is(config.props) ? Array.of(config.props) : config.props;
 		var parent = firstarray = instance;
 		while (!BDFDB.ArrayUtils.is(firstarray) && firstarray.props && firstarray.props.children) firstarray = firstarray.props.children;
+		if (!BDFDB.ArrayUtils.is(firstarray)) firstarray = [];
 		return getChildren(instance);
 		function getChildren (children) {
 			var result = [firstarray, -1];
