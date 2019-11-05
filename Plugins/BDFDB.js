@@ -959,19 +959,19 @@ var BDFDB = {
 	};
 	BDFDB.ModuleUtils.patch = function (plugin, module, modulefunctions, patchfunctions) {
 		if (!plugin || !module || !modulefunctions || !Object.keys(patchfunctions).some(type => webModulesPatchtypes.includes(type))) return null;
-		let pluginname = typeof plugin === "string" ? plugin : plugin.name;
-		let pluginid = pluginname.toLowerCase();
+		const pluginname = typeof plugin === "string" ? plugin : plugin.name;
+		const pluginid = pluginname.toLowerCase();
 		if (!module.BDFDBpatch) module.BDFDBpatch = {};
 		modulefunctions = BDFDB.ArrayUtils.is(modulefunctions) ? modulefunctions : Array.of(modulefunctions);
 		for (let modulefunction of modulefunctions) {
 			if (!module[modulefunction]) module[modulefunction] = _ => {};
-			let originalfunction = module[modulefunction];
+			const originalfunction = module[modulefunction];
 			if (!module.BDFDBpatch[modulefunction]) {
 				module.BDFDBpatch[modulefunction] = {};
 				for (let type of webModulesPatchtypes) module.BDFDBpatch[modulefunction][type] = {};
 				module.BDFDBpatch[modulefunction].originalMethod = originalfunction;
 				module[modulefunction] = function () {
-					let data = {
+					const data = {
 						thisObject: this,
 						methodArguments: arguments,
 						originalMethod: originalfunction,
@@ -982,7 +982,7 @@ var BDFDB = {
 						if (!BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].before)) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[modulefunction].before)) {
 							BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].before[id], `"before" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, pluginname)(data);
 						}
-						if (BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].instead)) data.callOriginalMethod();
+						if (BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].instead)) BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, pluginname)();
 						else for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[modulefunction].instead)) {
 							let tempreturn = BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].instead[id], `"instead" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, pluginname)(data);
 							if (tempreturn !== undefined) data.returnValue = tempreturn;
@@ -992,7 +992,7 @@ var BDFDB = {
 							if (tempreturn !== undefined) data.returnValue = tempreturn;
 						}
 					}
-					else data.callOriginalMethod();
+					else BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, pluginname)();
 					return data.returnValue;
 				};
 			}
