@@ -80,6 +80,7 @@ class ReadAllNotificationsButton {
 		}));
 		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 			title: "When left clicking the 'read all' button mark following Elements as read:",
+			first: settingsitems.length == 0,
 			children: inneritems
 		}));
 		

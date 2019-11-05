@@ -49,6 +49,7 @@ class EditServers {
 		}));
 		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 			title: "Change Servers in:",
+			first: settingsitems.length == 0,
 			children: inneritems
 		}));
 		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {

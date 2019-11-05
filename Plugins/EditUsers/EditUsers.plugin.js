@@ -112,6 +112,7 @@ class EditUsers {
 		}));
 		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 			title: "Change Users in:",
+			first: settingsitems.length == 0,
 			children: inneritems
 		}));
 		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {

@@ -66,6 +66,7 @@ class EditChannels {
 		}));
 		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 			title: "Change Channels in:",
+			first: settingsitems.length == 0,
 			children: inneritems
 		}));
 		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {

@@ -6222,11 +6222,14 @@ var BDFDB = {
 				grow: 1,
 				children: [
 					typeof this.props.title == "string" ? BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormTitle, {
-						className: BDFDB.disCNS.marginbottom20 + BDFDB.disCN.settingspaneltitle,
+						className: BDFDB.disCN.settingspaneltitle,
 						tag: LibraryComponents.FormComponents.FormTitle.Tags.H2,
 						children: this.props.title
 					}) : null,
-					BDFDB.ReactUtils.createElement("div", {
+					typeof this.props.title == "string" ? BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormDivider, {
+						className: BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom8
+					}) : null,
+					BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 						className: BDFDB.disCN.settingspanelinner,
 						direction: LibraryComponents.Flex.Direction.VERTICAL,
 						children: this.props.children
@@ -6241,22 +6244,22 @@ var BDFDB = {
 			return this.props.children ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				direction: LibraryComponents.Flex.Direction.VERTICAL,
 				children: [
-					BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormDivider, {
+					!this.props.first ? BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormDivider, {
 						className: BDFDB.disCN.marginbottom8
-					}),
+					}) : null,
 					typeof this.props.title == "string" ? BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormTitle, {
 						className: BDFDB.disCN.marginbottom4,
 						tag: LibraryComponents.FormComponents.FormTitle.Tags.H3,
 						children: this.props.title
 					}) : null,
 					BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
-						className: BDFDB.settingspanellist,
+						className: BDFDB.disCN.settingspanellist,
 						direction: LibraryComponents.Flex.Direction.VERTICAL,
 						children: this.props.children
 					}),
-					BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormDivider, {
+					!this.props.last ? BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormDivider, {
 						className: BDFDB.disCN.marginbottom20
-					})
+					}) : null
 				]
 			}) : null;
 		}
