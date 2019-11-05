@@ -8179,32 +8179,6 @@ var BDFDB = {
 	
 	InternalBDFDB.addContextListeners(BDFDB);
 
-	BDFDB.loaded = true;
-	InternalBDFDB.reloadLib = _ => {
-		var libraryScript = document.querySelector("head script#BDFDBLibraryScript");
-		if (libraryScript) libraryScript.remove();
-		libraryScript = document.createElement("script");
-		libraryScript.setAttribute("id", "BDFDBLibraryScript");
-		libraryScript.setAttribute("type", "text/javascript");
-		libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
-		libraryScript.setAttribute("date", performance.now());
-		document.head.appendChild(libraryScript);
-	};
-	var libKeys = Object.keys(BDFDB).length - 10, crashInterval = BDFDB.TimeUtils.interval(_ => {
-		if (!window.BDFDB || typeof BDFDB != "object" || Object.keys(BDFDB).length < libKeys || !BDFDB.id) {
-			BDFDB.LogUtils.warn("Reloading library due to internal error.");
-			BDFDB.TimeUtils.clear(crashInterval);
-			InternalBDFDB.reloadLib();
-		}
-		else if (BDFDB.id != id) {
-			BDFDB.TimeUtils.clear(crashInterval);
-		}
-		else if (!BDFDB.InternalData.creationTime || performance.now() - BDFDB.InternalData.creationTime > 18000000) {
-			BDFDB.TimeUtils.clear(crashInterval);
-			InternalBDFDB.reloadLib();
-		}
-	}, 10000);
-
 	if (BDFDB.UserUtils.me.id == "278543574059057154") {
 		for (let module in DiscordClassModules) if (!DiscordClassModules[module]) BDFDB.LogUtils.warn(module + " not initialized in DiscordClassModules");
 		for (let require in LibraryRequires) if (!LibraryRequires[require]) BDFDB.LogUtils.warn(require + " not initialized in LibraryRequires");
@@ -8499,4 +8473,30 @@ var BDFDB = {
 	
 	BDFDB.LibraryComponents.ModalTabContent = LibraryComponents.ModalComponents.ModalTabContent;
 	BDFDB.LibraryComponents.NumberBadge = LibraryComponents.BadgeComponents.NumberBadge;
+
+	BDFDB.loaded = true;
+	InternalBDFDB.reloadLib = _ => {
+		var libraryScript = document.querySelector("head script#BDFDBLibraryScript");
+		if (libraryScript) libraryScript.remove();
+		libraryScript = document.createElement("script");
+		libraryScript.setAttribute("id", "BDFDBLibraryScript");
+		libraryScript.setAttribute("type", "text/javascript");
+		libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
+		libraryScript.setAttribute("date", performance.now());
+		document.head.appendChild(libraryScript);
+	};
+	var libKeys = Object.keys(BDFDB).length - 10, crashInterval = BDFDB.TimeUtils.interval(_ => {
+		if (!window.BDFDB || typeof BDFDB != "object" || Object.keys(BDFDB).length < libKeys || !BDFDB.id) {
+			BDFDB.LogUtils.warn("Reloading library due to internal error.");
+			BDFDB.TimeUtils.clear(crashInterval);
+			InternalBDFDB.reloadLib();
+		}
+		else if (BDFDB.id != id) {
+			BDFDB.TimeUtils.clear(crashInterval);
+		}
+		else if (!BDFDB.InternalData.creationTime || performance.now() - BDFDB.InternalData.creationTime > 18000000) {
+			BDFDB.TimeUtils.clear(crashInterval);
+			InternalBDFDB.reloadLib();
+		}
+	}, 10000);
 })();
