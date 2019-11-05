@@ -1036,9 +1036,8 @@ var BDFDB = {
 			}
 		}
 	};
-	BDFDB.ModuleUtils.forceAllUpdates = function (plugin, selectedtype) {
-		selectedtype = selectedtype && webModulesPatchmap[selectedtype] ? webModulesPatchmap[selectedtype] + " _ _ " + selectedtype : selectedtype;
-		if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ObjectUtils.is(plugin.patchModules) && (!selectedtype || plugin.patchModules[selectedtype])) {
+	BDFDB.ModuleUtils.forceAllUpdates = function (plugin, selectedtypes) {
+		if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ObjectUtils.is(plugin.patchModules)) {
 			const app = document.querySelector(BDFDB.dotCN.app);
 			const bdsettings = document.querySelector("#bd-settingspane-container " + BDFDB.dotCN.scrollerwrap);
 			if (app) {
@@ -1047,7 +1046,11 @@ var BDFDB = {
 					var methodnames = BDFDB.ArrayUtils.is(plugin.patchModules[type]) ? plugin.patchModules[type] : Array.of(plugin.patchModules[type]);
 					if (methodnames.includes("componentDidMount") || methodnames.includes("componentDidUpdate") || methodnames.includes("render")) filteredmodules.push(type);
 				}
-				filteredmodules = selectedtype ? filteredmodules.filter(type => type == selectedtype) : filteredmodules;
+				selectedtypes = (BDFDB.ArrayUtils.is(selectedtypes) ? selectedtypes : Array.of(selectedtypes)).filter(n => n);
+				if (selectedtypes.length) {
+					selectedtypes = selectedtypes.map(type => type && webModulesPatchmap[type] ? webModulesPatchmap[type] + " _ _ " + type : type);
+					filteredmodules = filteredmodules.filter(type => selectedtypes.indexOf(type) > -1);
+				}
 				if (filteredmodules.length) {
 					try {
 						const appinsdown = BDFDB.ReactUtils.findOwner(app, {name:filteredmodules, all:true, noCopies:true, group:true, unlimited:true});

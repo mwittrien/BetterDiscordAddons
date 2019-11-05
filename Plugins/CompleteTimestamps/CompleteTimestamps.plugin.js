@@ -205,7 +205,7 @@ class CompleteTimestamps {
 
 	// begin of own functions
 
-	onSettingsClosed (instance, wrapper, returnvalue) {
+	onSettingsClosed () {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			BDFDB.ModuleUtils.forceAllUpdates(this);
