@@ -1554,7 +1554,7 @@ var BDFDB = {
 			return result;
 		}
 	};
-	BDFDB.ReactUtils.findValue = function (nodeOrInstance, searchkey, config) {
+	BDFDB.ReactUtils.findValue = function (nodeOrInstance, searchkey, config = {}) {
 		if (!BDFDB.ObjectUtils.is(config)) return null;
 		if (!nodeOrInstance || typeof searchkey != "string") return config.all ? [] : null;
 		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
