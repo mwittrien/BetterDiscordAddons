@@ -1049,8 +1049,10 @@ var BDFDB = {
 				filteredmodules = selectedtype ? filteredmodules.filter(type => type == selectedtype) : filteredmodules;
 				if (filteredmodules.length) {
 					try {
-						const appins = BDFDB.ReactUtils.findOwner(app, {name:filteredmodules, all:true, noCopies:true, group:true, unlimited:true});
-						for (let type in appins) for (let ins of appins[type]) InternalBDFDB.forceInitiateProcess(plugin, ins, type);
+						const appinsdown = BDFDB.ReactUtils.findOwner(app, {name:filteredmodules, all:true, noCopies:true, group:true, unlimited:true});
+						const appinsup = BDFDB.ReactUtils.findOwner(app, {name:filteredmodules, all:true, noCopies:true, group:true, unlimited:true, up:true});
+						for (let type in appinsdown) for (let ins of appinsdown[type]) InternalBDFDB.forceInitiateProcess(plugin, ins, type);
+						for (let type in appinsup) for (let ins of appinsup[type]) InternalBDFDB.forceInitiateProcess(plugin, ins, type);
 						if (bdsettings) {
 							const bdsettingsins = BDFDB.ReactUtils.findOwner(bdsettings, {name:filteredmodules, all:true, noCopies:true, group:true, unlimited:true});
 							for (let type in bdsettingsins) for (let ins of bdsettingsins[type]) InternalBDFDB.forceInitiateProcess(plugin, ins, type);
@@ -1138,7 +1140,7 @@ var BDFDB = {
 				const app = document.querySelector(BDFDB.dotCN.app), bdsettings = document.querySelector("#bd-settingspane-container " + BDFDB.dotCN.scrollerwrap);
 				var instancefound = false;
 				if (app) {
-					var appins = BDFDB.ReactUtils.findOwner(app, {name:type, unlimited:true});
+					var appins = BDFDB.ReactUtils.findOwner(app, {name:type, unlimited:true}) || BDFDB.ReactUtils.findOwner(app, {name:type, unlimited:true, up:true});
 					if (appins) {
 						instancefound = true;
 						patchInstance(appins, type);
