@@ -3,7 +3,7 @@
 class CharCounter {
 	getName () {return "CharCounter";}
 
-	getVersion () {return "1.3.7";}
+	getVersion () {return "1.3.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -15,9 +15,9 @@ class CharCounter {
 		};
 
 		this.patchModules = {
-			"ChannelTextArea":"render",
-			"Note":"render",
-			"ChangeNickname":"render"
+			ChannelTextArea: "render",
+			Note: "render",
+			ChangeNickname: "render"
 		};
 	}
 
@@ -137,50 +137,21 @@ class CharCounter {
 	}
 
 	processChangeNickname (e) {
-		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "TextInput"});
-		if (index > -1) this.injectCounter(e.returnvalue, children, "nickname", BDFDB.dotCN.input);
+		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "FormItem"});
+		if (index > -1) {
+			let [children2, index2] = BDFDB.ReactUtils.findChildren(children[index], {name: "TextInput"});
+			if (index2 > -1) this.injectCounter(children[index], children2, "nickname", BDFDB.dotCN.input);
+		}
 	}
 	
 	injectCounter (parent, children, type, refClass, parsing) {
 		if (!children) return;
-		parent.props.className += " charcounter-added";
+		parent.props.className = ((parent.props.className || "") + " charcounter-added").trim();
 		children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CharCounter, {
 			className: `charcounter ${type}`,
 			refClass: refClass,
 			parsing: parsing,
 			max: this.maxLenghts[type]
 		}));
-	}
-
-	appendCounter (input, type, parsing) {
-		if (!input || !type) return;
-		BDFDB.DOMUtils.remove(input.parentElement.querySelectorAll(".charcounter"));
-		var counter = BDFDB.DOMUtils.create(`<div id="charcounter" class="charcounter ${type}"></div>`);
-		input.parentElement.appendChild(counter);
-
-		BDFDB.DOMUtils.addClass(input.parentElement.parentElement, "charcounter-added");
-		if (type == "nickname") input.setAttribute("maxlength", 32);
-		BDFDB.ListenerUtils.add(this, input, "keydown click change", e => {
-			BDFDB.TimeUtils.clear(input.charcountertimeout);
-			input.charcountertimeout = BDFDB.TimeUtils.timeout(() => {updateCounter();},100);
-		});
-		BDFDB.ListenerUtils.add(this, input, "mousedown", e => {
-			BDFDB.ListenerUtils.add(this, document, "mouseup", () => {
-				BDFDB.ListenerUtils.remove(this, document);
-				if (this.props.end - input.selectionStart) BDFDB.TimeUtils.timeout(() => {BDFDB.ListenerUtils.add(this, document, "click", () => {
-					var contexttype = BDFDB.ReactUtils.getValue(document.querySelector(BDFDB.dotCN.contextmenu), "return.stateNode.props.type");
-					if (!contexttype || !contexttype.startsWith("CHANNEL_TEXT_AREA")) {
-						input.selectionStart = 0;
-						this.props.end = 0;
-						updateCounter();
-					}
-					else BDFDB.TimeUtils.timeout(() => {updateCounter();},100);
-					BDFDB.ListenerUtils.remove(this, document);
-				});});
-			});
-			BDFDB.ListenerUtils.add(this, document, "mousemove", () => {BDFDB.TimeUtils.timeout(() => {updateCounter();},10);});
-		});
-
-		updateCounter();
 	}
 }
