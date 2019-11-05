@@ -59,7 +59,7 @@ class ReadAllNotificationsButton {
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let settings = BDFDB.DataUtils.get(this, "settings");
-		var settingsitems = [], inneritems = [];
+		let settingsitems = [], inneritems = [];
 		
 		for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,

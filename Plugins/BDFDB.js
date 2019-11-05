@@ -4144,7 +4144,7 @@ var BDFDB = {
 	DiscordClassModules.Input = BDFDB.ModuleUtils.findByProperties("inputMini", "inputDefault");
 	DiscordClassModules.LayerModal = BDFDB.ModuleUtils.findByProperties("root", "small", "medium");
 	DiscordClassModules.Layers = BDFDB.ModuleUtils.findByProperties("layer", "layers");
-	DiscordClassModules.LiveTag = BDFDB.ModuleUtils.findByProperties("liveRed", "live");
+	DiscordClassModules.LiveTag = BDFDB.ModuleUtils.findByProperties("grey", "live");
 	DiscordClassModules.Margins = BDFDB.ModuleUtils.findByProperties("marginBottom4", "marginCenterHorz");
 	DiscordClassModules.Member = BDFDB.ModuleUtils.findByProperties("member", "ownerIcon");
 	DiscordClassModules.MembersWrap = BDFDB.ModuleUtils.findByProperties("membersWrap", "membersGroup");
@@ -4932,9 +4932,8 @@ var BDFDB = {
 		layers: ["Layers", "layers"],
 		layersbg: ["Layers", "bg"],
 		livetag: ["LiveTag", "live"],
-		livetaggray: ["LiveTag", "liveGray"],
+		livetaggrey: ["LiveTag", "grey"],
 		livetaglarge: ["LiveTag", "liveLarge"],
-		livetagred: ["LiveTag", "liveRed"],
 		livetagsmall: ["LiveTag", "liveSmall"],
 		loginscreen: ["NotFound", "loginScreen"],
 		marginbottom4: ["Margins", "marginBottom4"],
