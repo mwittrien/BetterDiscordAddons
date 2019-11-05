@@ -1520,6 +1520,37 @@ var BDFDB = {
 			return result;
 		}
 	};
+	BDFDB.ReactUtils.findProps = function (nodeOrInstance, config) {
+		if (!BDFDB.ObjectUtils.is(config)) return null;
+		if (!nodeOrInstance || !config.name && !config.key) return null;
+		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
+		if (!BDFDB.ObjectUtils.is(instance)) return null;
+		config.name = config.name && !BDFDB.ArrayUtils.is(config.name) ? Array.of(config.name) : config.name;
+		config.key = config.key && !BDFDB.ArrayUtils.is(config.key) ? Array.of(config.key) : config.key;
+		var depth = -1;
+		var start = performance.now();
+		var maxdepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
+		var maxtime = config.unlimited ? 999999999 : (config.time === undefined ? 150 : config.time);
+		var whitelist = config.up ? {return:true, sibling:true, _reactInternalFiber:true} : {child:true, sibling:true, _reactInternalFiber:true};
+		return findProps(instance);
+
+		function findProps (instance) {
+			depth++;
+			var result = undefined;
+			if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxdepth && performance.now() - start < maxtime) {
+				if (instance.memoizedProps && (instance.type && config.name && config.name.some(name => (instance.type.displayName || instance.type.name) === name.split(" _ _ ")[0]) || config.key && config.key.some(key => instance.key == key))) result = instance.memoizedProps;
+				if (result === undefined) {
+					let keys = Object.getOwnPropertyNames(instance);
+					for (let i = 0; result === undefined && i < keys.length; i++) {
+						let key = keys[i];
+						if (key && whitelist[key] && (typeof instance[key] === "object" || typeof instance[key] === "function")) result = getOwner(instance[key]);
+					}
+				}
+			}
+			depth--;
+			return result;
+		}
+	};
 	BDFDB.ReactUtils.findValue = function (nodeOrInstance, searchkey, config) {
 		if (!BDFDB.ObjectUtils.is(config)) return null;
 		if (!nodeOrInstance || typeof searchkey != "string") return config.all ? [] : null;
