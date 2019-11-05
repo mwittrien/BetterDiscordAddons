@@ -2734,7 +2734,7 @@ var BDFDB = {
 		}
 	};
 	BDFDB.DOMUtils.formatClassName = function (...classes) {
-		return classes.flat().filter(n => n).join(" ");
+		return BDFDB.ArrayUtils.removeCopies(classes.flat().filter(n => n).join(" ").split(" ")).join(" ");
 	};
 	BDFDB.DOMUtils.removeClassFromDOM = function (...classes) {
 		for (let c of classes.flat()) if (typeof c == "string") for (let a of c.split(",")) if (a && (a = a.replace(/\.|\s/g, ""))) BDFDB.DOMUtils.removeClass(document.querySelectorAll("." + a), a);
@@ -8154,7 +8154,10 @@ var BDFDB = {
 	if (LibraryComponents.SvgIcon) BDFDB.ModuleUtils.patch(BDFDB, LibraryComponents.SvgIcon.prototype, "render", {after: e => {
 		if (!e.thisObject.props.name) {
 			let iconSVG = e.thisObject.props.iconSVG || BDFDB.ReactUtils.findValue(e.thisObject, "iconSVG", {up:true});
-			if (iconSVG) e.returnValue = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(iconSVG));
+			if (iconSVG) {
+				e.returnValue = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(iconSVG));
+				e.returnValue.props.class = BDFDB.DOMUtils.formatClassName(e.returnValue.props.class, e.thisObject.props.className);
+			}
 		}
 	}});
 	
