@@ -3,7 +3,7 @@
 class JoinedAtDate {
 	getName () {return "JoinedAtDate";}
 
-	getVersion () {return "1.1.5";}
+	getVersion () {return "1.1.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -25,7 +25,7 @@ class JoinedAtDate {
 		this.requestedusers = {};
 
 		this.css = `
-			${BDFDB.dotCNS.userpopout + BDFDB.dotCN.nametag} {
+			${BDFDB.dotCNS.userpopout + BDFDB.dotCN.userpopoutheadertext} {
 				margin-bottom: 8px;
 			}
 			.joinedAtDate + ${BDFDB.dotCN.userpopoutcustomstatus} {

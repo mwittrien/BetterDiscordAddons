@@ -3,7 +3,7 @@
 class CreationDate {
 	getName () {return "CreationDate";}
 
-	getVersion () {return "1.3.2";}
+	getVersion () {return "1.3.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -22,7 +22,7 @@ class CreationDate {
 
 	initConstructor () {
 		this.css = `
-			${BDFDB.dotCNS.userpopout + BDFDB.dotCN.nametag} {
+			${BDFDB.dotCNS.userpopout + BDFDB.dotCN.userpopoutheadertext} {
 				margin-bottom: 8px;
 			}
 			.creationDate + ${BDFDB.dotCN.userpopoutcustomstatus} {

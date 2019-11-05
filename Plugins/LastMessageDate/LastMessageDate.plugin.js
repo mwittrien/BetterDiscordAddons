@@ -3,7 +3,7 @@
 class LastMessageDate {
 	getName () {return "LastMessageDate";}
 
-	getVersion () {return "1.0.9";}
+	getVersion () {return "1.1.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -25,7 +25,7 @@ class LastMessageDate {
 		this.requestedusers = {};
 
 		this.css = `
-			${BDFDB.dotCNS.userpopout + BDFDB.dotCN.nametag} {
+			${BDFDB.dotCNS.userpopout + BDFDB.dotCN.userpopoutheadertext} {
 				margin-bottom: 8px;
 			}
 			.lastMessageDate + ${BDFDB.dotCN.userpopoutcustomstatus} {
