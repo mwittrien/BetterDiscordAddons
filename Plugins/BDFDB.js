@@ -6226,7 +6226,7 @@ var BDFDB = {
 						tag: LibraryComponents.FormComponents.FormTitle.Tags.H2,
 						children: this.props.title
 					}) : null,
-					BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+					BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.settingspanelinner,
 						direction: LibraryComponents.Flex.Direction.VERTICAL,
 						children: this.props.children
