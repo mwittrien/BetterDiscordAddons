@@ -155,6 +155,7 @@ class BadgesEverywhere {
 		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 			title: "Display Badges:",
 			first: settingsitems.length == 0,
+			last: true,
 			children: inneritems
 		}));
 		
