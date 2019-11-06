@@ -3,7 +3,7 @@
 class OldTitleBar {
 	getName () {return "OldTitleBar";}
 
-	getVersion () {return "1.6.0";}
+	getVersion () {return "1.6.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -60,8 +60,8 @@ class OldTitleBar {
 				-webkit-app-region: drag !important;
 			}
 
-			${BDFDB.dotCN.channelheaderheaderbar} *,
-			${BDFDB.dotCN.contextmenu} * {
+			${BDFDB.dotCNS.stopanimations + BDFDB.dotCN.channelheaderheaderbar} {
+			${BDFDB.dotCN.channelheaderheaderbar} * {
 				-webkit-app-region: no-drag !important;
 			}`;
 
