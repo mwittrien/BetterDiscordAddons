@@ -6242,6 +6242,10 @@ var BDFDB = {
 		}
     } : LibraryComponents.PopoutContainer;
 	
+	LibraryComponents.QuickSelect = BDFDB.ModuleUtils.findByName("QuickSelect");
+	
+	LibraryComponents.SearchBar = BDFDB.ModuleUtils.findByName("SearchBar");
+	
 	LibraryComponents.Select = reactInitialized ? class BDFDB_Select extends LibraryModules.React.Component {
         handleChange(value) {
 			this.props.value = value;
