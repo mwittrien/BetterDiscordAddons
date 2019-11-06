@@ -8184,9 +8184,9 @@ var BDFDB = {
 					
 					[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN._repolinks]]});
 					if (index > -1) {
-						if (!children[index].props.children.filter(n => n).length) children[index].props.children.push(" | ");
+						if (children[index].props.children.filter(n => n).length) children[index].props.children.push(" | ");
 						children[index].props.children.push(BDFDB.ReactUtils.createElement("a", {
-							className: `${BDFDB.disCNS._repolink + BDFDB.disCN._repolink}-support`,
+							className: `${BDFDB.disCN._repolink}`,
 							target: "_blank",
 							children: "Support Server",
 							onClick: e => {
@@ -8202,7 +8202,7 @@ var BDFDB = {
 						}));
 						children[index].props.children.push(" | ");
 						children[index].props.children.push(BDFDB.ReactUtils.createElement("a", {
-							className: `${BDFDB.disCNS._repolink + BDFDB.disCN._repolink}-donations`,
+							className: `${BDFDB.disCN._repolink}`,
 							target: "_blank",
 							href: "https://www.paypal.me/MircoWittrien",
 							children: "Donations"
