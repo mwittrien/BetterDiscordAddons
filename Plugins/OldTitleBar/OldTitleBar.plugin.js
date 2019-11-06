@@ -60,7 +60,7 @@ class OldTitleBar {
 				-webkit-app-region: drag !important;
 			}
 
-			${BDFDB.dotCNS.stopanimations + BDFDB.dotCN.channelheaderheaderbar} {
+			${BDFDB.dotCNS.stopanimations + BDFDB.dotCN.channelheaderheaderbar},
 			${BDFDB.dotCN.channelheaderheaderbar} * {
 				-webkit-app-region: no-drag !important;
 			}`;
