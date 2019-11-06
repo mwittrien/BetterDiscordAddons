@@ -837,7 +837,7 @@ var BDFDB = {
 		return array;
 	};
 	BDFDB.ArrayUtils.getAllIndexes = function (array, value) {
-		if (!BDFDB.ArrayUtils.is(array)) return [];
+		if (!BDFDB.ArrayUtils.is(array) && typeof array != "string") return [];
 		var indexes = [], index = -1;
 		while ((index = array.indexOf(value, index + 1)) !== -1) indexes.push(index);
 		return indexes;
@@ -2801,7 +2801,7 @@ var BDFDB = {
 		let template = document.createElement("template");
 		try {template.innerHTML = html.replace(/(?<!pre)>[\t\r\n]+<(?!pre)/g, "><");}
 		catch (err) {template.innerHTML = html.replace(/>[\t\r\n]+<(?!pre)/g, "><");}
-		if (template.content.childElementCount == 1) return template.content.firstElementChild;
+		if (template.content.childNodes.length == 1) return template.content.firstElementChild;
 		else {
 			var wrapper = document.createElement("span");
 			var nodes = Array.from(template.content.childNodes);
