@@ -6650,8 +6650,8 @@ var BDFDB = {
 		handleClear() {
 			this.props.query = "";
 			BDFDB.ReactUtils.forceUpdate(this);
-			if (this.props.changeOnClear && typeof this.props.onChange == "function") this.props.onChange(query, this);
-			if (typeof this.props.onChange == "function") this.props.onClear(this);
+			if (this.props.changeOnClear && typeof this.props.onChange == "function") this.props.onChange("", this);
+			if (typeof this.props.onClear == "function") this.props.onClear(this);
 		}
 		render() {
 			let props = Object.assign({}, this.props, {
