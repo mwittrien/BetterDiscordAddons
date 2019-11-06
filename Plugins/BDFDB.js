@@ -4057,8 +4057,9 @@ var BDFDB = {
 		highlight: "highlight",
 		hoverCardButton: "button-2CgfFz",
 		loginScreen: "wrapper-3Q5DdO",
-		nameContainerNameContainer: "container-2ax-kl",
 		mention: "mention",
+		nameContainerNameContainer: "container-2ax-kl",
+		quickSelectPopoutOptionSelected: "selected",
 		select: "css-1kj8ui-container",
 		selectArrow: "css-19bqh2r",
 		selectArrowContainer: "css-bdfdb-indicatorContainer",
@@ -5215,6 +5216,7 @@ var BDFDB = {
 		quickselectlabel: ["QuickSelect", "quickSelectLabel"],
 		quickselectpopout: ["QuickSelect", "quickSelectPopout"],
 		quickselectpopoutoption: ["QuickSelect", "quickSelectPopoutOption"],
+		quickselectpopoutoptionselected: ["NotFound", "quickSelectPopoutOptionSelected"],
 		quickselectpopoutscroll: ["QuickSelect", "quickSelectPopoutScroll"],
 		quickselectpopoutwrapper: ["BDFDB", "quickSelectPopoutWrapper"],
 		quickselectscroller: ["QuickSelect", "quickSelectScroller"],
@@ -7185,6 +7187,10 @@ var BDFDB = {
 		${BDFDB.dotCN.quickselectpopout + BDFDB.dotCNS.quickselectpopoutwrapper + BDFDB.dotCN.quickselectpopoutoption}:hover {
 			color: var(--interactive-hover);
 			background-color: var(--background-modifier-hover);
+		}
+		${BDFDB.dotCN.quickselectpopout + BDFDB.dotCNS.quickselectpopoutwrapper + BDFDB.dotCN.quickselectpopoutoption + BDFDB.dotCN.quickselectpopoutoptionselected} {
+			color: var(--interactive-active);
+			background-color: var(--background-modifier-selected);
 		}
 		
 		${BDFDB.dotCN.charcounter} {
