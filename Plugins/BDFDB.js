@@ -5662,7 +5662,6 @@ var BDFDB = {
 	NativeSubComponents.FavButton = BDFDB.ModuleUtils.findByName("GIFFavButton");
 	NativeSubComponents.PopoutContainer = BDFDB.ModuleUtils.findByName("Popout");
 	NativeSubComponents.QuickSelect = BDFDB.ModuleUtils.findByName("QuickSelectWrapper");
-	NativeSubComponents.QuickSelectInner = BDFDB.ModuleUtils.findByName("QuickSelect");
 	NativeSubComponents.Select = BDFDB.ModuleUtils.findByName("SelectTempWrapper");
 	NativeSubComponents.Switch = BDFDB.ModuleUtils.findByName("Switch");
 	NativeSubComponents.TabBar = BDFDB.ModuleUtils.findByName("TabBar");
@@ -6258,6 +6257,9 @@ var BDFDB = {
 			let props = Object.assign({}, this.props, {
 				className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.quickselectwrapper),
 				popoutClassName: BDFDB.DOMUtils.formatClassName(this.props.popoutClassName, BDFDB.disCN.quickselectpopoutwrapper),
+				popoutProps: {
+					position: "bottom"
+				},
 				onChange: this.handleChange.bind(this)
 			});
 			if (!BDFDB.ObjectUtils.is(props.value)) props.value = {};
@@ -8074,7 +8076,7 @@ var BDFDB = {
 		if (window.PluginUpdates && window.PluginUpdates.plugins && e.instance.props && e.instance.props.title == "Plugins") {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {key: "folder-button"});
 			if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(LibraryComponents.TooltipContainer, {
-				text: "Only checks for updates of plugins, which support the updatecheck. Rightclick for a list of supported plugins. (Listed ≠ outdated)",
+				text: "Only checks for updates of plugins, which support the updatecheck. Rightclick for a list of supported plugins. (Listed ≠ Outdated)",
 				tooltipConfig: {
 					selector: "update-button-tooltip", 
 					style: "max-width: 420px"
