@@ -6279,7 +6279,7 @@ var BDFDB = {
 		}
 	} : LibraryComponents.QuickSelect;
 	
-	LibraryComponents.SearchBar = BDFDB.ModuleUtils.findByName("SearchBar");
+	LibraryComponents.SearchBar = BDFDB.ModuleUtils.find(m => m && m.displayName == "SearchBar" && m.defaultProps.placeholder == BDFDB.LanguageUtils.LanguageStrings.SEARCH);
 	
 	LibraryComponents.Select = reactInitialized ? class BDFDB_Select extends LibraryModules.React.Component {
 		handleChange(value) {
