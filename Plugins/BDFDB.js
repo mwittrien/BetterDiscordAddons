@@ -7039,12 +7039,17 @@ var BDFDB = {
 			let child = (BDFDB.ArrayUtils.is(this.props.children) ? this.props.children[0] : this.props.children) || BDFDB.ReactUtils.createElement("div", {});
 			child.props.className = BDFDB.DOMUtils.formatClassName(child.props.className, this.props.className);
 			let childMouseEnter = child.props.onMouseEnter, childMouseLeave = child.props.onMouseLeave, childClick = child.props.onClick, childContextMenu = child.props.onContextMenu;
+			let shown = false;
 			child.props.onMouseEnter = (e, childthis) => {
-				BDFDB.TooltipUtils.create(e.currentTarget, this.props.text, Object.assign({}, this.props.tooltipConfig));
-				if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);
-				if (typeof childMouseEnter == "function") childMouseEnter(e, childthis);
+				if (!shown) {
+					shown = true;
+					BDFDB.TooltipUtils.create(e.currentTarget, this.props.text, Object.assign({}, this.props.tooltipConfig));
+					if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);
+					if (typeof childMouseEnter == "function") childMouseEnter(e, childthis);
+				}
 			};
 			child.props.onMouseLeave = (e, childthis) => {
+				shown = false;
 				if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);
 				if (typeof childMouseLeave == "function") child.props.onMouseLeave(e, childthis);
 			};
