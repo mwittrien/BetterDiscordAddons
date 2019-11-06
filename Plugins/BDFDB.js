@@ -3454,7 +3454,6 @@ var BDFDB = {
 				if (button.cancel) cancels.push(click);
 				
 				footerchildren.push(BDFDB.ReactUtils.createElement(LibraryComponents.Button, {
-					type: "button",
 					look: look || (color ? LibraryComponents.Button.Looks.FILLED : LibraryComponents.Button.Looks.LINK),
 					color: color || LibraryComponents.Button.Colors.PRIMARY,
 					onClick: _ => {
@@ -6242,7 +6241,7 @@ var BDFDB = {
 		}
     } : LibraryComponents.PopoutContainer;
 	
-	LibraryComponents.QuickSelect = BDFDB.ModuleUtils.findByName("QuickSelect");
+	LibraryComponents.QuickSelect = BDFDB.ModuleUtils.findByName("QuickSelectWrapper");
 	
 	LibraryComponents.SearchBar = BDFDB.ModuleUtils.findByName("SearchBar");
 	
