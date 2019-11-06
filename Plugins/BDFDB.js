@@ -922,9 +922,10 @@ var BDFDB = {
 		}
 		return InternalBDFDB.getWebModuleReq.req;
 	};
-
-	var webModulesPatchtypes = ["before", "instead", "after"];
-	var webModulesPatchmap = {
+	
+	var WebModulesData = {};
+	WebModulesData.Patchtypes = ["before", "instead", "after"];
+	WebModulesData.Patchmap = {
 		BannedCard: "BannedUser",
 		InvitationCard: "InviteRow",
 		InviteCard: "InviteRow",
@@ -932,7 +933,7 @@ var BDFDB = {
 		MemberCard: "Member",
 		WebhookCard: "Webhook"
 	};
-	var webModulesNotFindableModules = {
+	WebModulesData.Patchfinder = {
 		Account: "accountinfo",
 		App: "app",
 		AuthWrapper: "loginscreen",
@@ -957,8 +958,14 @@ var BDFDB = {
 		V2C_PluginCard: "_repoheader",
 		V2C_ThemeCard: "_repoheader"
 	};
+	WebModulesData.GlobalModules = {};
+	try {WebModulesData.GlobalModules["V2C_ContentColumn"] = V2C_ContentColumn;} catch(err) {BDFDB.LogUtils.warn(`Could not find global Module "V2C_ContentColumn"`);}
+	try {WebModulesData.GlobalModules["V2C_List"] = V2C_List;} catch(err) {BDFDB.LogUtils.warn(`Could not find global Module "V2C_List"`);}
+	try {WebModulesData.GlobalModules["V2C_PluginCard"] = V2C_PluginCard;} catch(err) {BDFDB.LogUtils.warn(`Could not find global Module "V2C_PluginCard"`);}
+	try {WebModulesData.GlobalModules["V2C_ThemeCard"] = V2C_ThemeCard;} catch(err) {BDFDB.LogUtils.warn(`Could not find global Module "V2C_ThemeCard"`);}
+	
 	BDFDB.ModuleUtils.patch = function (plugin, module, modulefunctions, patchfunctions) {
-		if (!plugin || !module || !modulefunctions || !Object.keys(patchfunctions).some(type => webModulesPatchtypes.includes(type))) return null;
+		if (!plugin || !module || !modulefunctions || !Object.keys(patchfunctions).some(type => WebModulesData.Patchtypes.includes(type))) return null;
 		const pluginname = typeof plugin === "string" ? plugin : plugin.name;
 		const pluginid = pluginname.toLowerCase();
 		if (!module.BDFDBpatch) module.BDFDBpatch = {};
@@ -968,7 +975,7 @@ var BDFDB = {
 			const originalfunction = module[modulefunction];
 			if (!module.BDFDBpatch[modulefunction]) {
 				module.BDFDBpatch[modulefunction] = {};
-				for (let type of webModulesPatchtypes) module.BDFDBpatch[modulefunction][type] = {};
+				for (let type of WebModulesData.Patchtypes) module.BDFDBpatch[modulefunction][type] = {};
 				module.BDFDBpatch[modulefunction].originalMethod = originalfunction;
 				module[modulefunction] = function () {
 					const data = {
@@ -996,7 +1003,7 @@ var BDFDB = {
 					return data.returnValue;
 				};
 			}
-			for (let type of webModulesPatchtypes) if (typeof patchfunctions[type] == "function") module.BDFDBpatch[modulefunction][type][pluginid] = patchfunctions[type];
+			for (let type of WebModulesData.Patchtypes) if (typeof patchfunctions[type] == "function") module.BDFDBpatch[modulefunction][type][pluginid] = patchfunctions[type];
 		}
 		let cancel = _ => {BDFDB.ModuleUtils.unpatch(plugin, module, modulefunctions);};
 		if (plugin && typeof plugin == "object") {
@@ -1023,12 +1030,12 @@ var BDFDB = {
 			}
 		}
 		function unpatch (func, pluginname) {
-			for (let type of webModulesPatchtypes) {
+			for (let type of WebModulesData.Patchtypes) {
 				if (pluginname) delete module.BDFDBpatch[func][type][pluginname];
 				else delete module.BDFDBpatch[func][type];
 			}
 			var empty = true;
-			for (let type of webModulesPatchtypes) if (!BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[func][type])) empty = false;
+			for (let type of WebModulesData.Patchtypes) if (!BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[func][type])) empty = false;
 			if (empty) {
 				module[func] = module.BDFDBpatch[func].originalMethod;
 				delete module.BDFDBpatch[func];
@@ -1048,7 +1055,7 @@ var BDFDB = {
 				}
 				selectedtypes = (BDFDB.ArrayUtils.is(selectedtypes) ? selectedtypes : Array.of(selectedtypes)).filter(n => n);
 				if (selectedtypes.length) {
-					selectedtypes = selectedtypes.map(type => type && webModulesPatchmap[type] ? webModulesPatchmap[type] + " _ _ " + type : type);
+					selectedtypes = selectedtypes.map(type => type && WebModulesData.Patchmap[type] ? WebModulesData.Patchmap[type] + " _ _ " + type : type);
 					filteredmodules = filteredmodules.filter(type => selectedtypes.indexOf(type) > -1);
 				}
 				if (filteredmodules.length) {
@@ -1117,15 +1124,18 @@ var BDFDB = {
 		if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ObjectUtils.is(plugin.patchModules)) {
 			BDFDB.ModuleUtils.unpatch(plugin);
 			for (let type in plugin.patchModules) {
-				var mapped = webModulesPatchmap[type];
-				var classname = webModulesNotFindableModules[type.split(" _ _ ")[1] || type];
-				var patchtype = mapped ? mapped + " _ _ " + type : type;
-				if (mapped) {
-					plugin.patchModules[patchtype] = plugin.patchModules[type];
-					delete plugin.patchModules[type];
+				if (WebModulesData.GlobalModules[type] && typeof WebModulesData.GlobalModules[type] == "function") patchInstance(WebModulesData.GlobalModules[type], type);
+				else {
+					var mapped = WebModulesData.Patchmap[type];
+					var classname = WebModulesData.Patchfinder[type.split(" _ _ ")[1] || type];
+					var patchtype = mapped ? mapped + " _ _ " + type : type;
+					if (mapped) {
+						plugin.patchModules[patchtype] = plugin.patchModules[type];
+						delete plugin.patchModules[type];
+					}
+					if (!classname) patchInstance(BDFDB.ModuleUtils.findByName(patchtype.split(" _ _ ")[0]), patchtype);
+					else if (DiscordClasses[classname]) checkForInstance(classname, patchtype);
 				}
-				if (!classname) patchInstance(BDFDB.ModuleUtils.findByName(patchtype.split(" _ _ ")[0]), patchtype);
-				else if (DiscordClasses[classname]) checkForInstance(classname, patchtype);
 			}
 			function patchInstance(instance, type) {
 				if (instance) {
@@ -1179,7 +1189,7 @@ var BDFDB = {
 				if (!instance) return false;
 				instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 				instance = instance.displayName == name || instance.name == name ? instance : BDFDB.ReactUtils.findOwner(instance, {name, up:true});
-				return instance && (name != "V2C_PluginCard" && name != "V2C_ThemeCard" || name == "V2C_PluginCard" && BDFDB.BDUtils.checkRepoPage() == "plugins" || name == "V2C_ThemeCard" && BDFDB.BDUtils.checkRepoPage() == "themes");
+				return !!instance;
 			}
 		}
 	};
@@ -6257,9 +6267,7 @@ var BDFDB = {
 			let props = Object.assign({}, this.props, {
 				className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.quickselectwrapper),
 				popoutClassName: BDFDB.DOMUtils.formatClassName(this.props.popoutClassName, BDFDB.disCN.quickselectpopoutwrapper),
-				popoutProps: {
-					position: "bottom"
-				},
+				popoutProps: {position: "bottom"},
 				onChange: this.handleChange.bind(this)
 			});
 			if (!BDFDB.ObjectUtils.is(props.value)) props.value = {};
