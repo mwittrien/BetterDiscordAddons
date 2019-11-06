@@ -7,7 +7,7 @@ class RepoControls {
 
 	getAuthor () {return "DevilBro";}
 
-	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins. <span style='color: red';'>test</span>";}
+	getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
 
 	constructor () {
 		this.changelog = {
