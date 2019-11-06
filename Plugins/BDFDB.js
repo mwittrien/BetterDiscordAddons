@@ -6035,6 +6035,7 @@ var BDFDB = {
 	NativeSubComponents.FavButton = BDFDB.ModuleUtils.findByName("GIFFavButton");
 	NativeSubComponents.PopoutContainer = BDFDB.ModuleUtils.findByName("Popout");
 	NativeSubComponents.QuickSelect = BDFDB.ModuleUtils.findByName("QuickSelectWrapper");
+	NativeSubComponents.SearchBar = BDFDB.ModuleUtils.find(m => m && m.displayName == "SearchBar" && m.defaultProps.placeholder == BDFDB.LanguageUtils.LanguageStrings.SEARCH);
 	NativeSubComponents.Select = BDFDB.ModuleUtils.findByName("SelectTempWrapper");
 	NativeSubComponents.Switch = BDFDB.ModuleUtils.findByName("Switch");
 	NativeSubComponents.TabBar = BDFDB.ModuleUtils.findByName("TabBar");
@@ -6640,7 +6641,27 @@ var BDFDB = {
 		}
 	} : LibraryComponents.QuickSelect;
 	
-	LibraryComponents.SearchBar = BDFDB.ModuleUtils.find(m => m && m.displayName == "SearchBar" && m.defaultProps.placeholder == BDFDB.LanguageUtils.LanguageStrings.SEARCH);
+	LibraryComponents.SearchBar = reactInitialized ? class BDFDB_Select extends LibraryModules.React.Component {
+		handleChange(query) {
+			this.props.query = query;
+			BDFDB.ReactUtils.forceUpdate(this);
+			if (typeof this.props.onChange == "function") this.props.onChange(query, this);
+		}
+		handleClear() {
+			this.props.query = "";
+			BDFDB.ReactUtils.forceUpdate(this);
+			if (this.props.changeOnClear && typeof this.props.onChange == "function") this.props.onChange(query, this);
+			if (typeof this.props.onChange == "function") this.props.onClear(this);
+		}
+		render() {
+			let props = Object.assign({}, this.props, {
+				onChange: this.handleChange.bind(this),
+				onClear: this.handleClear.bind(this)
+			});
+			if (typeof props.query != "string") props.query = "";
+			return BDFDB.ReactUtils.createElement(NativeSubComponents.SearchBar, props);
+		}
+	} : LibraryComponents.SearchBar;
 	
 	LibraryComponents.Select = reactInitialized ? class BDFDB_Select extends LibraryModules.React.Component {
 		handleChange(value) {
