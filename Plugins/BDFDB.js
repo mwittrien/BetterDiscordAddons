@@ -5668,6 +5668,367 @@ var BDFDB = {
 		}
 	});
 	
+	var LanguageStrings = LibraryModules.LanguageStore && LibraryModules.LanguageStore._proxyContext ? Object.assign({}, LibraryModules.LanguageStore._proxyContext.defaultMessages) : {};
+	BDFDB.LanguageUtils = {};
+	BDFDB.LanguageUtils.languages = {
+		"$discord": 	{name:"Discord (English (US))",		id:"en-US",		ownlang:"English (US)",					integrated:false,		dic:false},
+		"af":			{name:"Afrikaans",					id:"af",		ownlang:"Afrikaans",					integrated:false,		dic:true},
+		"sq":			{name:"Albanian",					id:"sq",		ownlang:"Shqiptar",						integrated:false,		dic:false},
+		"am":			{name:"Amharic",					id:"am",		ownlang:"አማርኛ",						integrated:false,		dic:false},
+		"ar":			{name:"Arabic",						id:"ar",		ownlang:"اللغة العربية",				integrated:false,		dic:false},
+		"hy":			{name:"Armenian",					id:"hy",		ownlang:"Հայերեն",						integrated:false,		dic:false},
+		"az":			{name:"Azerbaijani",				id:"az",		ownlang:"آذربایجان دیلی",				integrated:false,		dic:false},
+		"eu":			{name:"Basque",						id:"eu",		ownlang:"Euskara",						integrated:false,		dic:false},
+		"be":			{name:"Belarusian",					id:"be",		ownlang:"Беларуская",					integrated:false,		dic:false},
+		"bn":			{name:"Bengali",					id:"bn",		ownlang:"বাংলা",							integrated:false,		dic:false},
+		"bs":			{name:"Bosnian",					id:"bs",		ownlang:"Босански",						integrated:false,		dic:false},
+		"bg":			{name:"Bulgarian",					id:"bg",		ownlang:"български",					integrated:true,		dic:false},
+		"my":			{name:"Burmese",					id:"my",		ownlang:"မြန်မာစာ",						integrated:false,		dic:false},
+		"ca":			{name:"Catalan",					id:"ca",		ownlang:"Català",						integrated:false,		dic:false},
+		"ceb":			{name:"Cebuano",					id:"ceb",		ownlang:"Bisaya",						integrated:false,		dic:false},
+		"ny":			{name:"Chewa",						id:"ny",		ownlang:"Nyanja",						integrated:false,		dic:false},
+		"zh-HK":		{name:"Chinese (Hong Kong)",		id:"zh-HK",		ownlang:"香港中文",						integrated:false,		dic:false},
+		"zh-CN":		{name:"Chinese (Simplified)",		id:"zh-CN",		ownlang:"简体中文",						integrated:false,		dic:false},
+		"zh-TW":		{name:"Chinese (Traditional)",		id:"zh-TW",		ownlang:"繁體中文",						integrated:true,		dic:false},
+		"co":			{name:"Corsican",					id:"co",		ownlang:"Corsu",						integrated:false,		dic:false},
+		"hr":			{name:"Croatian",					id:"hr",		ownlang:"Hrvatski",						integrated:true,		dic:false},
+		"cs":			{name:"Czech",						id:"cs",		ownlang:"Čeština",						integrated:true,		dic:false},
+		"da":			{name:"Danish",						id:"da",		ownlang:"Dansk",						integrated:true,		dic:true},
+		"nl":			{name:"Dutch",						id:"nl",		ownlang:"Nederlands",					integrated:true,		dic:true},
+		"en":			{name:"English",					id:"en",		ownlang:"English",						integrated:false,		dic:true},
+		"en-GB":		{name:"English (UK)",				id:"en-GB",		ownlang:"English (UK)",					integrated:true,		dic:true},
+		"en-US":		{name:"English (US)",				id:"en-US",		ownlang:"English (US)",					integrated:true,		dic:true},
+		"eo":			{name:"Esperanto",					id:"eo",		ownlang:"Esperanto",					integrated:false,		dic:false},
+		"et":			{name:"Estonian",					id:"et",		ownlang:"Eesti",						integrated:false,		dic:false},
+		"fil":			{name:"Filipino",					id:"fil",		ownlang:"Wikang Filipino",				integrated:false,		dic:false},
+		"fi":			{name:"Finnish",					id:"fi",		ownlang:"Suomi",						integrated:true,		dic:false},
+		"fr":			{name:"French",						id:"fr",		ownlang:"Français",						integrated:true,		dic:true},
+		"fr-CA":		{name:"French (Canadian)",			id:"fr-CA",		ownlang:"Français Canadien",			integrated:false,		dic:false},
+		"fy":			{name:"Frisian",					id:"fy",		ownlang:"Frysk",						integrated:false,		dic:false},
+		"gl":			{name:"Galician",					id:"gl",		ownlang:"Galego",						integrated:false,		dic:false},
+		"ka":			{name:"Georgian",					id:"ka",		ownlang:"ქართული",					integrated:false,		dic:false},
+		"de":			{name:"German",						id:"de",		ownlang:"Deutsch",						integrated:true,		dic:true},
+		"de-AT":		{name:"German (Austria)",			id:"de-AT",		ownlang:"Österreichisch Deutsch",		integrated:false,		dic:false},
+		"de-CH":		{name:"German (Switzerland)",		id:"de-CH",		ownlang:"Schweizerdeutsch",				integrated:false,		dic:false},
+		"el":			{name:"Greek",						id:"el",		ownlang:"Ελληνικά",						integrated:false,		dic:false},
+		"gu":			{name:"Gujarati",					id:"gu",		ownlang:"ગુજરાતી",						integrated:false,		dic:false},
+		"ht":			{name:"Haitian Creole",				id:"ht",		ownlang:"Kreyòl Ayisyen",				integrated:false,		dic:false},
+		"ha":			{name:"Hausa",						id:"ha",		ownlang:"حَوْسَ",							integrated:false,		dic:false},
+		"haw":			{name:"Hawaiian",					id:"haw",		ownlang:"ʻŌlelo Hawaiʻi",				integrated:false,		dic:false},
+		"iw":			{name:"Hebrew",						id:"iw",		ownlang:"עברית",						integrated:false,		dic:false},
+		"hi":			{name:"Hindi",						id:"hi",		ownlang:"हिन्दी",							integrated:false,		dic:false},
+		"hmn":			{name:"Hmong",						id:"hmn",		ownlang:"lol Hmongb",					integrated:false,		dic:false},
+		"hu":			{name:"Hungarain",					id:"hu",		ownlang:"Magyar",						integrated:false,		dic:false},
+		"is":			{name:"Icelandic",					id:"is",		ownlang:"Íslenska",						integrated:false,		dic:false},
+		"ig":			{name:"Igbo",						id:"ig",		ownlang:"Asụsụ Igbo",					integrated:false,		dic:false},
+		"id":			{name:"Indonesian",					id:"id",		ownlang:"Bahasa Indonesia",				integrated:false,		dic:false},
+		"ga":			{name:"Irish",						id:"ga",		ownlang:"Gaeilge",						integrated:false,		dic:false},
+		"it":			{name:"Italian",					id:"it",		ownlang:"Italiano",						integrated:true,		dic:true},
+		"ja":			{name:"Japanese",					id:"ja",		ownlang:"日本語",						integrated:true,		dic:false},
+		"jv":			{name:"Javanese",					id:"jv",		ownlang:"ꦧꦱꦗꦮ",						integrated:false,		dic:false},
+		"kn":			{name:"Kannada",					id:"kn",		ownlang:"ಕನ್ನಡ",							integrated:false,		dic:false},
+		"kk":			{name:"Kazakh",						id:"kk",		ownlang:"Қазақ Tілі",					integrated:false,		dic:false},
+		"km":			{name:"Khmer",						id:"km",		ownlang:"ភាសាខ្មែរ",						integrated:false,		dic:false},
+		"ko":			{name:"Korean",						id:"ko",		ownlang:"한국어",						integrated:true,		dic:false},
+		"ku":			{name:"Kurdish",					id:"ku",		ownlang:"کوردی",						integrated:false,		dic:false},
+		"ky":			{name:"Kyrgyz",						id:"ky",		ownlang:"кыргызча",						integrated:false,		dic:false},
+		"lo":			{name:"Lao",						id:"lo",		ownlang:"ພາສາລາວ",						integrated:false,		dic:false},
+		"la":			{name:"Latin",						id:"la",		ownlang:"Latina",						integrated:false,		dic:false},
+		"lv":			{name:"Latvian",					id:"lv",		ownlang:"Latviešu",						integrated:false,		dic:false},
+		"lt":			{name:"Lithuanian",					id:"lt",		ownlang:"Lietuvių",						integrated:false,		dic:false},
+		"lb":			{name:"Luxembourgish",				id:"lb",		ownlang:"Lëtzebuergesch",				integrated:false,		dic:false},
+		"mk":			{name:"Macedonian",					id:"mk",		ownlang:"Mакедонски",					integrated:false,		dic:false},
+		"mg":			{name:"Malagasy",					id:"mg",		ownlang:"Malagasy",						integrated:false,		dic:false},
+		"ms":			{name:"Malay",						id:"ms",		ownlang:"بهاس ملايو",					integrated:false,		dic:false},
+		"ml":			{name:"Malayalam",					id:"ml",		ownlang:"മലയാളം",						integrated:false,		dic:false},
+		"mt":			{name:"Maltese",					id:"mt",		ownlang:"Malti",						integrated:false,		dic:false},
+		"mi":			{name:"Maori",						id:"mi",		ownlang:"te Reo Māori",					integrated:false,		dic:false},
+		"mr":			{name:"Marathi",					id:"mr",		ownlang:"मराठी",							integrated:false,		dic:false},
+		"mn":			{name:"Mongolian",					id:"mn",		ownlang:"Монгол Хэл",					integrated:false,		dic:false},
+		"ne":			{name:"Nepali",						id:"ne",		ownlang:"नेपाली",							integrated:false,		dic:false},
+		"no":			{name:"Norwegian",					id:"no",		ownlang:"Norsk",						integrated:true,		dic:false},
+		"ps":			{name:"Pashto",						id:"ps",		ownlang:"پښتو",							integrated:false,		dic:false},
+		"fa":			{name:"Persian",					id:"fa",		ownlang:"فارسی",						integrated:false,		dic:false},
+		"pl":			{name:"Polish",						id:"pl",		ownlang:"Polski",						integrated:true,		dic:false},
+		"pt":			{name:"Portuguese",					id:"pt",		ownlang:"Português",					integrated:false,		dic:true},
+		"pt-BR":		{name:"Portuguese (Brazil)",		id:"pt-BR",		ownlang:"Português do Brasil",			integrated:true,		dic:true},
+		"pt-PT":		{name:"Portuguese (Portugal)",		id:"pt-PT",		ownlang:"Português do Portugal",		integrated:false,		dic:false},
+		"pa":			{name:"Punjabi",					id:"pa",		ownlang:"पंजाबी",							integrated:false,		dic:false},
+		"ro":			{name:"Romanian",					id:"ro",		ownlang:"Română",						integrated:false,		dic:false},
+		"ru":			{name:"Russian",					id:"ru",		ownlang:"Pусский",						integrated:true,		dic:true},
+		"sm":			{name:"Samoan",						id:"sm",		ownlang:"Gagana Sāmoa",					integrated:false,		dic:false},
+		"gd":			{name:"Scottish Gaelic",			id:"gd",		ownlang:"Gàidhlig",						integrated:false,		dic:false},
+		"sr":			{name:"Serbian",					id:"sr",		ownlang:"Српски",						integrated:false,		dic:false},
+		"st":			{name:"Sotho",						id:"st",		ownlang:"Sesotho",						integrated:false,		dic:false},
+		"sn":			{name:"Shona",						id:"sn",		ownlang:"Shona",						integrated:false,		dic:false},
+		"sd":			{name:"Sindhi",						id:"sd",		ownlang:"سنڌي",							integrated:false,		dic:false},
+		"si":			{name:"Sinhala",					id:"si",		ownlang:"සිංහල",						integrated:false,		dic:false},
+		"sk":			{name:"Slovak",						id:"sk",		ownlang:"Slovenčina",					integrated:false,		dic:false},
+		"sl":			{name:"Slovenian",					id:"sl",		ownlang:"Slovenščina",					integrated:false,		dic:false},
+		"es":			{name:"Spanish",					id:"es",		ownlang:"Español",						integrated:true,		dic:true},
+		"es-419":		{name:"Spanish (Latin America)",	id:"es-419",	ownlang:"Español latinoamericano",		integrated:false,		dic:false},
+		"sw":			{name:"Swahili",					id:"sw",		ownlang:"Kiswahili",					integrated:false,		dic:false},
+		"sv":			{name:"Swedish",					id:"sv",		ownlang:"Svenska",						integrated:true,		dic:true},
+		"tg":			{name:"Tajik",						id:"tg",		ownlang:"тоҷикӣ",						integrated:false,		dic:false},
+		"ta":			{name:"Tamil",						id:"ta",		ownlang:"தமிழ்",							integrated:false,		dic:false},
+		"te":			{name:"Telugu",						id:"te",		ownlang:"తెలుగు",						integrated:false,		dic:false},
+		"th":			{name:"Thai",						id:"th",		ownlang:"ภาษาไทย",						integrated:false,		dic:false},
+		"tr":			{name:"Turkish",					id:"tr",		ownlang:"Türkçe",						integrated:true,		dic:false},
+		"uk":			{name:"Ukrainian",					id:"uk",		ownlang:"Yкраїнський",					integrated:true,		dic:false},
+		"ur":			{name:"Urdu",						id:"ur",		ownlang:"اُردُو",							integrated:false,		dic:false},
+		"uz":			{name:"Uzbek",						id:"uz",		ownlang:"اوزبیک",						integrated:false,		dic:false},
+		"vi":			{name:"Vietnamese",					id:"vi",		ownlang:"Tiếng Việt Nam",				integrated:false,		dic:false},
+		"cy":			{name:"Welsh",						id:"cy",		ownlang:"Cymraeg",						integrated:false,		dic:false},
+		"xh":			{name:"Xhosa",						id:"xh",		ownlang:"Xhosa",						integrated:false,		dic:false},
+		"yi":			{name:"Yiddish",					id:"yi",		ownlang:"ייִדיש ייִדיש‬",					integrated:false,		dic:false},
+		"yo":			{name:"Yoruba",						id:"yo",		ownlang:"Èdè Yorùbá",					integrated:false,		dic:false},
+		"zu":			{name:"Zulu",						id:"zu",		ownlang:"Zulu",							integrated:false,		dic:false}
+	};
+	InternalBDFDB.LibraryStrings = {
+		"hr": {
+			toast_plugin_started: "{{var0}} je započeo.",
+			toast_plugin_stopped: "{{var0}} zaustavljen.",
+			toast_plugin_translated: "prijevod na {{var0}}.",
+			file_navigator_text: "Pregledajte datoteku",
+			btn_all_text: "Sve" //REMOVE
+		},
+		"da": {
+			toast_plugin_started: "{{var0}} er startet.",
+			toast_plugin_stopped: "{{var0}} er stoppet.",
+			toast_plugin_translated: "oversat til {{var0}}.",
+			file_navigator_text: "Gennemse fil",
+			btn_all_text: "Alle"
+		},
+		"de": {
+			toast_plugin_started: "{{var0}} wurde gestartet.",
+			toast_plugin_stopped: "{{var0}} wurde gestoppt.",
+			toast_plugin_translated: "auf {{var0}} übersetzt.",
+			file_navigator_text: "Datei durchsuchen",
+			btn_all_text: "Alle"
+		},
+		"es": {
+			toast_plugin_started: "{{var0}} se guilddiv iniciado.",
+			toast_plugin_stopped: "{{var0}} se guilddiv detenido.",
+			toast_plugin_translated: "traducido a {{var0}}.",
+			file_navigator_text: "Buscar archivo",
+			btn_all_text: "Todo"
+		},
+		"fr": {
+			toast_plugin_started: "{{var0}} a été démarré.",
+			toast_plugin_stopped: "{{var0}} a été arrêté.",
+			toast_plugin_translated: "traduit en {{var0}}.",
+			file_navigator_text: "Parcourir le fichier",
+			btn_all_text: "Tout"
+		},
+		"it": {
+			toast_plugin_started: "{{var0}} è stato avviato.",
+			toast_plugin_stopped: "{{var0}} è stato interrotto.",
+			toast_plugin_translated: "tradotto in {{var0}}.",
+			file_navigator_text: "Sfoglia file",
+			btn_all_text: "Tutto"
+		},
+		"nl": {
+			toast_plugin_started: "{{var0}} is gestart.",
+			toast_plugin_stopped: "{{var0}} is gestopt.",
+			toast_plugin_translated: "vertaald naar {{var0}}.",
+			file_navigator_text: "Bestand zoeken",
+			btn_all_text: "Alle"
+		},
+		"no": {
+			toast_plugin_started: "{{var0}} er startet.",
+			toast_plugin_stopped: "{{var0}} er stoppet.",
+			toast_plugin_translated: "oversatt til {{var0}}.",
+			file_navigator_text: "Bla gjennom fil",
+			btn_all_text: "Alle"
+		},
+		"pl": {
+			toast_plugin_started: "{{var0}} został uruchomiony.",
+			toast_plugin_stopped: "{{var0}} został zatrzymany.",
+			toast_plugin_translated: "przetłumaczono na {{var0}}.",
+			file_navigator_text: "Przeglądać plik",
+			btn_all_text: "Wszystkie"
+		},
+		"pt-BR": {
+			toast_plugin_started: "{{var0}} foi iniciado.",
+			toast_plugin_stopped: "{{var0}} foi interrompido.",
+			toast_plugin_translated: "traduzido para {{var0}}.",
+			file_navigator_text: "Procurar arquivo",
+			btn_all_text: "Todo"
+		},
+		"fi": {
+			toast_plugin_started: "{{var0}} on käynnistetty.",
+			toast_plugin_stopped: "{{var0}} on pysäytetty.",
+			toast_plugin_translated: "käännetty osoitteeseen {{var0}}.",
+			file_navigator_text: "Selaa tiedostoa",
+			btn_all_text: "Kaikki"
+		},
+		"sv": {
+			toast_plugin_started: "{{var0}} har startats.",
+			toast_plugin_stopped: "{{var0}} har blivit stoppad.",
+			toast_plugin_translated: "översatt till {{var0}}.",
+			file_navigator_text: "Bläddra i fil",
+			btn_all_text: "All"
+		},
+		"tr": {
+			toast_plugin_started: "{{var0}} başlatıldı.",
+			toast_plugin_stopped: "{{var0}} durduruldu.",
+			toast_plugin_translated: "{{var0}} olarak çevrildi.",
+			file_navigator_text: "Dosyaya gözat",
+			btn_all_text: "Her"
+		},
+		"cs": {
+			toast_plugin_started: "{{var0}} byl spuštěn.",
+			toast_plugin_stopped: "{{var0}} byl zastaven.",
+			toast_plugin_translated: "přeložen do {{var0}}.",
+			file_navigator_text: "Procházet soubor",
+			btn_all_text: "Vše"
+		},
+		"bg": {
+			toast_plugin_started: "{{var0}} е стартиран.",
+			toast_plugin_stopped: "{{var0}} е спрян.",
+			toast_plugin_translated: "преведена на {{var0}}.",
+			file_navigator_text: "Прегледайте файла",
+			btn_all_text: "Bсичко"
+		},
+		"ru": {
+			toast_plugin_started: "{{var0}} запущен.",
+			toast_plugin_stopped: "{{var0}} остановлен.",
+			toast_plugin_translated: "переведен на {{var0}}.",
+			file_navigator_text: "Просмотр файла",
+			btn_all_text: "Все"
+		},
+		"uk": {
+			toast_plugin_started: "{{var0}} було запущено.",
+			toast_plugin_stopped: "{{var0}} було зупинено.",
+			toast_plugin_translated: "перекладено {{var0}}.",
+			file_navigator_text: "Перегляньте файл",
+			btn_all_text: "Все"
+		},
+		"ja": {
+			toast_plugin_started: "{{var0}}が開始されました.",
+			toast_plugin_stopped: "{{var0}}が停止しました.",
+			toast_plugin_translated: "は{{var0}}に翻訳されました.",
+			file_navigator_text: "ファイルを参照",
+			btn_all_text: "すべて"
+		},
+		"zh-TW": {
+			toast_plugin_started: "{{var0}}已經啟動.",
+			toast_plugin_stopped: "{{var0}}已停止.",
+			toast_plugin_translated: "翻譯為{{var0}}.",
+			file_navigator_text: "瀏覽文件",
+			btn_all_text: "所有"
+		},
+		"ko": {
+			toast_plugin_started: "{{var0}} 시작되었습니다.",
+			toast_plugin_stopped: "{{var0}} 중지되었습니다.",
+			toast_plugin_translated: "{{var0}} 로 번역되었습니다.",
+			file_navigator_text: "파일 찾아보기",
+			btn_all_text: "모든"
+		},
+		"default": {
+			toast_plugin_started: "{{var0}} has been started.",
+			toast_plugin_stopped: "{{var0}} has been stopped.",
+			toast_plugin_translated: "translated to {{var0}}.",
+			file_navigator_text: "Browse File",
+			btn_all_text: "All"
+		}
+	};
+	BDFDB.LanguageUtils.getLanguage = function () {
+		var lang = document.querySelector("html").lang || "en-US";
+		var langids = lang.split("-");
+		var langid = langids[0];
+		var langid2 = langids[1] || "";
+		lang = langid2 && langid.toUpperCase() !== langid2.toUpperCase() ? langid + "-" + langid2 : langid;
+		return BDFDB.LanguageUtils.languages[lang] || BDFDB.LanguageUtils.languages[langid] || BDFDB.LanguageUtils.languages["en-US"];
+	};
+	BDFDB.LanguageUtils.LanguageStrings = new Proxy(LanguageStrings, {
+		get: function (list, item) {
+			var stringobj = LibraryModules.LanguageStore.Messages[item];
+			if (!stringobj) BDFDB.LogUtils.warn(item + " not found in BDFDB.LanguageUtils.LanguageStrings");
+			else {
+				if (stringobj && typeof stringobj == "object" && typeof stringobj.format == "function") return BDFDB.LanguageUtils.LanguageStringsFormat(item);
+				else return stringobj;
+			}
+			return "";
+		}
+	});
+	BDFDB.LanguageUtils.LanguageStringsCheck = new Proxy(LanguageStrings, {
+		get: function (list, item) {
+			return !!LibraryModules.LanguageStore.Messages[item];
+		}
+	});
+	BDFDB.LanguageUtils.LanguageStringsFormat = function (item, ...values) {
+		if (item) {
+			var stringobj = LibraryModules.LanguageStore.Messages[item];
+			if (stringobj && typeof stringobj == "object" && typeof stringobj.format == "function") {
+				let i = 0, returnvalue, formatvars = {};
+				while (!returnvalue && i < 10) {
+					i++;
+					try {returnvalue = stringobj.format(formatvars);}
+					catch (err) {
+						returnvalue = null;
+						formatvars[err.toString().split("for: ")[1]] = values.shift() || "undefined";
+					}
+				}
+				if (returnvalue) {
+					if (BDFDB.ArrayUtils.is(returnvalue)) {
+						let newstring = "";
+						for (let ele of returnvalue) {
+							if (typeof ele == "string") newstring += BDFDB.StringUtils.htmlEscape(ele);
+							else if (BDFDB.ObjectUtils.is(ele) && ele.props) newstring += `<${ele.type}>${BDFDB.StringUtils.htmlEscape(ele.props.children[0].toString())}</${ele.type}>`
+						}
+						return newstring;
+					}
+					return returnvalue;
+				}
+				else {
+					BDFDB.LogUtils.warn(item + " failed to format string in BDFDB.LanguageUtils.LanguageStrings");
+					return "";
+				}
+			}
+			else return BDFDB.LanguageUtils.LanguageStrings[item];
+		}
+		else BDFDB.LogUtils.warn(item + " enter a valid key to format the string in BDFDB.LanguageUtils.LanguageStrings");
+		return "";
+	};
+	BDFDB.LanguageUtils.LibraryStrings = new Proxy(InternalBDFDB.LibraryStrings.default, {
+		get: function (list, item) {
+			let languageid = BDFDB.LanguageUtils.getLanguage().id;
+			if (InternalBDFDB.LibraryStrings[languageid] && InternalBDFDB.LibraryStrings[languageid][item]) return InternalBDFDB.LibraryStrings[languageid][item];
+			else if (InternalBDFDB.LibraryStrings.default[item]) return InternalBDFDB.LibraryStrings.default[item];
+			else BDFDB.LogUtils.warn(item + " not found in BDFDB.LanguageUtils.LibraryStrings");
+			return "";
+		}
+	});
+	BDFDB.LanguageUtils.LibraryStringsCheck = new Proxy(LanguageStrings, {
+		get: function (list, item) {
+			return !!InternalBDFDB.LibraryStrings.default[item];
+		}
+	});
+	BDFDB.LanguageUtils.LibraryStringsFormat = function (item, ...values) {
+		if (item && values.length) {
+			let languageid = BDFDB.LanguageUtils.getLanguage().id, string = null;
+			if (InternalBDFDB.LibraryStrings[languageid] && InternalBDFDB.LibraryStrings[languageid][item]) string = InternalBDFDB.LibraryStrings[languageid][item];
+			else if (InternalBDFDB.LibraryStrings.default[item]) string = InternalBDFDB.LibraryStrings.default[item];
+			if (string) {
+				for (let i = 0; i < values.length; i++) if (typeof values[i] == "string") string = string.replace(new RegExp(`{{var${i}}}`, "g"), values[i]);
+				return string;
+			}
+			else BDFDB.LogUtils.warn(item + " not found in BDFDB.LanguageUtils.LibraryStrings");
+		}
+		else BDFDB.LogUtils.warn(item + " enter a valid key and at least one value to format the string in BDFDB.LanguageUtils.LibraryStrings");
+		return "";
+	};
+	var initDiscordLanguageInterval = (_ => {
+		if (document.querySelector("html").lang) {
+			BDFDB.TimeUtils.clear(initDiscordLanguageInterval);
+			var language = BDFDB.LanguageUtils.getLanguage();
+			BDFDB.LanguageUtils.languages.$discord.name = `Discord (${language.name})`;
+			BDFDB.LanguageUtils.languages.$discord.id = language.id;
+			BDFDB.LanguageUtils.languages.$discord.ownlang = language.ownlang;
+		}
+	}, 100);
+	
 	var NativeSubComponents = {}, LibraryComponents = {}, reactInitialized = LibraryModules.React && LibraryModules.React.Component;
 	NativeSubComponents.Button = BDFDB.ModuleUtils.findByProperties("Colors", "Hovers", "Looks");
 	NativeSubComponents.ContextMenuToggleItem = BDFDB.ModuleUtils.findByName("ToggleMenuItem");
@@ -6680,367 +7041,6 @@ var BDFDB = {
 	
 	for (let type in NativeSubComponents) if (LibraryComponents[type]) for (let key in NativeSubComponents[type]) if (key != "displayName" && key != "name" && (typeof NativeSubComponents[type][key] != "function" || key.charAt(0) == key.charAt(0).toUpperCase())) LibraryComponents[type][key] = NativeSubComponents[type][key];
 	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
-	
-	var LanguageStrings = LibraryModules.LanguageStore && LibraryModules.LanguageStore._proxyContext ? Object.assign({}, LibraryModules.LanguageStore._proxyContext.defaultMessages) : {};
-	BDFDB.LanguageUtils = {};
-	BDFDB.LanguageUtils.languages = {
-		"$discord": 	{name:"Discord (English (US))",		id:"en-US",		ownlang:"English (US)",					integrated:false,		dic:false},
-		"af":			{name:"Afrikaans",					id:"af",		ownlang:"Afrikaans",					integrated:false,		dic:true},
-		"sq":			{name:"Albanian",					id:"sq",		ownlang:"Shqiptar",						integrated:false,		dic:false},
-		"am":			{name:"Amharic",					id:"am",		ownlang:"አማርኛ",						integrated:false,		dic:false},
-		"ar":			{name:"Arabic",						id:"ar",		ownlang:"اللغة العربية",				integrated:false,		dic:false},
-		"hy":			{name:"Armenian",					id:"hy",		ownlang:"Հայերեն",						integrated:false,		dic:false},
-		"az":			{name:"Azerbaijani",				id:"az",		ownlang:"آذربایجان دیلی",				integrated:false,		dic:false},
-		"eu":			{name:"Basque",						id:"eu",		ownlang:"Euskara",						integrated:false,		dic:false},
-		"be":			{name:"Belarusian",					id:"be",		ownlang:"Беларуская",					integrated:false,		dic:false},
-		"bn":			{name:"Bengali",					id:"bn",		ownlang:"বাংলা",							integrated:false,		dic:false},
-		"bs":			{name:"Bosnian",					id:"bs",		ownlang:"Босански",						integrated:false,		dic:false},
-		"bg":			{name:"Bulgarian",					id:"bg",		ownlang:"български",					integrated:true,		dic:false},
-		"my":			{name:"Burmese",					id:"my",		ownlang:"မြန်မာစာ",						integrated:false,		dic:false},
-		"ca":			{name:"Catalan",					id:"ca",		ownlang:"Català",						integrated:false,		dic:false},
-		"ceb":			{name:"Cebuano",					id:"ceb",		ownlang:"Bisaya",						integrated:false,		dic:false},
-		"ny":			{name:"Chewa",						id:"ny",		ownlang:"Nyanja",						integrated:false,		dic:false},
-		"zh-HK":		{name:"Chinese (Hong Kong)",		id:"zh-HK",		ownlang:"香港中文",						integrated:false,		dic:false},
-		"zh-CN":		{name:"Chinese (Simplified)",		id:"zh-CN",		ownlang:"简体中文",						integrated:false,		dic:false},
-		"zh-TW":		{name:"Chinese (Traditional)",		id:"zh-TW",		ownlang:"繁體中文",						integrated:true,		dic:false},
-		"co":			{name:"Corsican",					id:"co",		ownlang:"Corsu",						integrated:false,		dic:false},
-		"hr":			{name:"Croatian",					id:"hr",		ownlang:"Hrvatski",						integrated:true,		dic:false},
-		"cs":			{name:"Czech",						id:"cs",		ownlang:"Čeština",						integrated:true,		dic:false},
-		"da":			{name:"Danish",						id:"da",		ownlang:"Dansk",						integrated:true,		dic:true},
-		"nl":			{name:"Dutch",						id:"nl",		ownlang:"Nederlands",					integrated:true,		dic:true},
-		"en":			{name:"English",					id:"en",		ownlang:"English",						integrated:false,		dic:true},
-		"en-GB":		{name:"English (UK)",				id:"en-GB",		ownlang:"English (UK)",					integrated:true,		dic:true},
-		"en-US":		{name:"English (US)",				id:"en-US",		ownlang:"English (US)",					integrated:true,		dic:true},
-		"eo":			{name:"Esperanto",					id:"eo",		ownlang:"Esperanto",					integrated:false,		dic:false},
-		"et":			{name:"Estonian",					id:"et",		ownlang:"Eesti",						integrated:false,		dic:false},
-		"fil":			{name:"Filipino",					id:"fil",		ownlang:"Wikang Filipino",				integrated:false,		dic:false},
-		"fi":			{name:"Finnish",					id:"fi",		ownlang:"Suomi",						integrated:true,		dic:false},
-		"fr":			{name:"French",						id:"fr",		ownlang:"Français",						integrated:true,		dic:true},
-		"fr-CA":		{name:"French (Canadian)",			id:"fr-CA",		ownlang:"Français Canadien",			integrated:false,		dic:false},
-		"fy":			{name:"Frisian",					id:"fy",		ownlang:"Frysk",						integrated:false,		dic:false},
-		"gl":			{name:"Galician",					id:"gl",		ownlang:"Galego",						integrated:false,		dic:false},
-		"ka":			{name:"Georgian",					id:"ka",		ownlang:"ქართული",					integrated:false,		dic:false},
-		"de":			{name:"German",						id:"de",		ownlang:"Deutsch",						integrated:true,		dic:true},
-		"de-AT":		{name:"German (Austria)",			id:"de-AT",		ownlang:"Österreichisch Deutsch",		integrated:false,		dic:false},
-		"de-CH":		{name:"German (Switzerland)",		id:"de-CH",		ownlang:"Schweizerdeutsch",				integrated:false,		dic:false},
-		"el":			{name:"Greek",						id:"el",		ownlang:"Ελληνικά",						integrated:false,		dic:false},
-		"gu":			{name:"Gujarati",					id:"gu",		ownlang:"ગુજરાતી",						integrated:false,		dic:false},
-		"ht":			{name:"Haitian Creole",				id:"ht",		ownlang:"Kreyòl Ayisyen",				integrated:false,		dic:false},
-		"ha":			{name:"Hausa",						id:"ha",		ownlang:"حَوْسَ",							integrated:false,		dic:false},
-		"haw":			{name:"Hawaiian",					id:"haw",		ownlang:"ʻŌlelo Hawaiʻi",				integrated:false,		dic:false},
-		"iw":			{name:"Hebrew",						id:"iw",		ownlang:"עברית",						integrated:false,		dic:false},
-		"hi":			{name:"Hindi",						id:"hi",		ownlang:"हिन्दी",							integrated:false,		dic:false},
-		"hmn":			{name:"Hmong",						id:"hmn",		ownlang:"lol Hmongb",					integrated:false,		dic:false},
-		"hu":			{name:"Hungarain",					id:"hu",		ownlang:"Magyar",						integrated:false,		dic:false},
-		"is":			{name:"Icelandic",					id:"is",		ownlang:"Íslenska",						integrated:false,		dic:false},
-		"ig":			{name:"Igbo",						id:"ig",		ownlang:"Asụsụ Igbo",					integrated:false,		dic:false},
-		"id":			{name:"Indonesian",					id:"id",		ownlang:"Bahasa Indonesia",				integrated:false,		dic:false},
-		"ga":			{name:"Irish",						id:"ga",		ownlang:"Gaeilge",						integrated:false,		dic:false},
-		"it":			{name:"Italian",					id:"it",		ownlang:"Italiano",						integrated:true,		dic:true},
-		"ja":			{name:"Japanese",					id:"ja",		ownlang:"日本語",						integrated:true,		dic:false},
-		"jv":			{name:"Javanese",					id:"jv",		ownlang:"ꦧꦱꦗꦮ",						integrated:false,		dic:false},
-		"kn":			{name:"Kannada",					id:"kn",		ownlang:"ಕನ್ನಡ",							integrated:false,		dic:false},
-		"kk":			{name:"Kazakh",						id:"kk",		ownlang:"Қазақ Tілі",					integrated:false,		dic:false},
-		"km":			{name:"Khmer",						id:"km",		ownlang:"ភាសាខ្មែរ",						integrated:false,		dic:false},
-		"ko":			{name:"Korean",						id:"ko",		ownlang:"한국어",						integrated:true,		dic:false},
-		"ku":			{name:"Kurdish",					id:"ku",		ownlang:"کوردی",						integrated:false,		dic:false},
-		"ky":			{name:"Kyrgyz",						id:"ky",		ownlang:"кыргызча",						integrated:false,		dic:false},
-		"lo":			{name:"Lao",						id:"lo",		ownlang:"ພາສາລາວ",						integrated:false,		dic:false},
-		"la":			{name:"Latin",						id:"la",		ownlang:"Latina",						integrated:false,		dic:false},
-		"lv":			{name:"Latvian",					id:"lv",		ownlang:"Latviešu",						integrated:false,		dic:false},
-		"lt":			{name:"Lithuanian",					id:"lt",		ownlang:"Lietuvių",						integrated:false,		dic:false},
-		"lb":			{name:"Luxembourgish",				id:"lb",		ownlang:"Lëtzebuergesch",				integrated:false,		dic:false},
-		"mk":			{name:"Macedonian",					id:"mk",		ownlang:"Mакедонски",					integrated:false,		dic:false},
-		"mg":			{name:"Malagasy",					id:"mg",		ownlang:"Malagasy",						integrated:false,		dic:false},
-		"ms":			{name:"Malay",						id:"ms",		ownlang:"بهاس ملايو",					integrated:false,		dic:false},
-		"ml":			{name:"Malayalam",					id:"ml",		ownlang:"മലയാളം",						integrated:false,		dic:false},
-		"mt":			{name:"Maltese",					id:"mt",		ownlang:"Malti",						integrated:false,		dic:false},
-		"mi":			{name:"Maori",						id:"mi",		ownlang:"te Reo Māori",					integrated:false,		dic:false},
-		"mr":			{name:"Marathi",					id:"mr",		ownlang:"मराठी",							integrated:false,		dic:false},
-		"mn":			{name:"Mongolian",					id:"mn",		ownlang:"Монгол Хэл",					integrated:false,		dic:false},
-		"ne":			{name:"Nepali",						id:"ne",		ownlang:"नेपाली",							integrated:false,		dic:false},
-		"no":			{name:"Norwegian",					id:"no",		ownlang:"Norsk",						integrated:true,		dic:false},
-		"ps":			{name:"Pashto",						id:"ps",		ownlang:"پښتو",							integrated:false,		dic:false},
-		"fa":			{name:"Persian",					id:"fa",		ownlang:"فارسی",						integrated:false,		dic:false},
-		"pl":			{name:"Polish",						id:"pl",		ownlang:"Polski",						integrated:true,		dic:false},
-		"pt":			{name:"Portuguese",					id:"pt",		ownlang:"Português",					integrated:false,		dic:true},
-		"pt-BR":		{name:"Portuguese (Brazil)",		id:"pt-BR",		ownlang:"Português do Brasil",			integrated:true,		dic:true},
-		"pt-PT":		{name:"Portuguese (Portugal)",		id:"pt-PT",		ownlang:"Português do Portugal",		integrated:false,		dic:false},
-		"pa":			{name:"Punjabi",					id:"pa",		ownlang:"पंजाबी",							integrated:false,		dic:false},
-		"ro":			{name:"Romanian",					id:"ro",		ownlang:"Română",						integrated:false,		dic:false},
-		"ru":			{name:"Russian",					id:"ru",		ownlang:"Pусский",						integrated:true,		dic:true},
-		"sm":			{name:"Samoan",						id:"sm",		ownlang:"Gagana Sāmoa",					integrated:false,		dic:false},
-		"gd":			{name:"Scottish Gaelic",			id:"gd",		ownlang:"Gàidhlig",						integrated:false,		dic:false},
-		"sr":			{name:"Serbian",					id:"sr",		ownlang:"Српски",						integrated:false,		dic:false},
-		"st":			{name:"Sotho",						id:"st",		ownlang:"Sesotho",						integrated:false,		dic:false},
-		"sn":			{name:"Shona",						id:"sn",		ownlang:"Shona",						integrated:false,		dic:false},
-		"sd":			{name:"Sindhi",						id:"sd",		ownlang:"سنڌي",							integrated:false,		dic:false},
-		"si":			{name:"Sinhala",					id:"si",		ownlang:"සිංහල",						integrated:false,		dic:false},
-		"sk":			{name:"Slovak",						id:"sk",		ownlang:"Slovenčina",					integrated:false,		dic:false},
-		"sl":			{name:"Slovenian",					id:"sl",		ownlang:"Slovenščina",					integrated:false,		dic:false},
-		"es":			{name:"Spanish",					id:"es",		ownlang:"Español",						integrated:true,		dic:true},
-		"es-419":		{name:"Spanish (Latin America)",	id:"es-419",	ownlang:"Español latinoamericano",		integrated:false,		dic:false},
-		"sw":			{name:"Swahili",					id:"sw",		ownlang:"Kiswahili",					integrated:false,		dic:false},
-		"sv":			{name:"Swedish",					id:"sv",		ownlang:"Svenska",						integrated:true,		dic:true},
-		"tg":			{name:"Tajik",						id:"tg",		ownlang:"тоҷикӣ",						integrated:false,		dic:false},
-		"ta":			{name:"Tamil",						id:"ta",		ownlang:"தமிழ்",							integrated:false,		dic:false},
-		"te":			{name:"Telugu",						id:"te",		ownlang:"తెలుగు",						integrated:false,		dic:false},
-		"th":			{name:"Thai",						id:"th",		ownlang:"ภาษาไทย",						integrated:false,		dic:false},
-		"tr":			{name:"Turkish",					id:"tr",		ownlang:"Türkçe",						integrated:true,		dic:false},
-		"uk":			{name:"Ukrainian",					id:"uk",		ownlang:"Yкраїнський",					integrated:true,		dic:false},
-		"ur":			{name:"Urdu",						id:"ur",		ownlang:"اُردُو",							integrated:false,		dic:false},
-		"uz":			{name:"Uzbek",						id:"uz",		ownlang:"اوزبیک",						integrated:false,		dic:false},
-		"vi":			{name:"Vietnamese",					id:"vi",		ownlang:"Tiếng Việt Nam",				integrated:false,		dic:false},
-		"cy":			{name:"Welsh",						id:"cy",		ownlang:"Cymraeg",						integrated:false,		dic:false},
-		"xh":			{name:"Xhosa",						id:"xh",		ownlang:"Xhosa",						integrated:false,		dic:false},
-		"yi":			{name:"Yiddish",					id:"yi",		ownlang:"ייִדיש ייִדיש‬",					integrated:false,		dic:false},
-		"yo":			{name:"Yoruba",						id:"yo",		ownlang:"Èdè Yorùbá",					integrated:false,		dic:false},
-		"zu":			{name:"Zulu",						id:"zu",		ownlang:"Zulu",							integrated:false,		dic:false}
-	};
-	InternalBDFDB.LibraryStrings = {
-		"hr": {
-			toast_plugin_started: "{{var0}} je započeo.",
-			toast_plugin_stopped: "{{var0}} zaustavljen.",
-			toast_plugin_translated: "prijevod na {{var0}}.",
-			file_navigator_text: "Pregledajte datoteku",
-			btn_all_text: "Sve" //REMOVE
-		},
-		"da": {
-			toast_plugin_started: "{{var0}} er startet.",
-			toast_plugin_stopped: "{{var0}} er stoppet.",
-			toast_plugin_translated: "oversat til {{var0}}.",
-			file_navigator_text: "Gennemse fil",
-			btn_all_text: "Alle"
-		},
-		"de": {
-			toast_plugin_started: "{{var0}} wurde gestartet.",
-			toast_plugin_stopped: "{{var0}} wurde gestoppt.",
-			toast_plugin_translated: "auf {{var0}} übersetzt.",
-			file_navigator_text: "Datei durchsuchen",
-			btn_all_text: "Alle"
-		},
-		"es": {
-			toast_plugin_started: "{{var0}} se guilddiv iniciado.",
-			toast_plugin_stopped: "{{var0}} se guilddiv detenido.",
-			toast_plugin_translated: "traducido a {{var0}}.",
-			file_navigator_text: "Buscar archivo",
-			btn_all_text: "Todo"
-		},
-		"fr": {
-			toast_plugin_started: "{{var0}} a été démarré.",
-			toast_plugin_stopped: "{{var0}} a été arrêté.",
-			toast_plugin_translated: "traduit en {{var0}}.",
-			file_navigator_text: "Parcourir le fichier",
-			btn_all_text: "Tout"
-		},
-		"it": {
-			toast_plugin_started: "{{var0}} è stato avviato.",
-			toast_plugin_stopped: "{{var0}} è stato interrotto.",
-			toast_plugin_translated: "tradotto in {{var0}}.",
-			file_navigator_text: "Sfoglia file",
-			btn_all_text: "Tutto"
-		},
-		"nl": {
-			toast_plugin_started: "{{var0}} is gestart.",
-			toast_plugin_stopped: "{{var0}} is gestopt.",
-			toast_plugin_translated: "vertaald naar {{var0}}.",
-			file_navigator_text: "Bestand zoeken",
-			btn_all_text: "Alle"
-		},
-		"no": {
-			toast_plugin_started: "{{var0}} er startet.",
-			toast_plugin_stopped: "{{var0}} er stoppet.",
-			toast_plugin_translated: "oversatt til {{var0}}.",
-			file_navigator_text: "Bla gjennom fil",
-			btn_all_text: "Alle"
-		},
-		"pl": {
-			toast_plugin_started: "{{var0}} został uruchomiony.",
-			toast_plugin_stopped: "{{var0}} został zatrzymany.",
-			toast_plugin_translated: "przetłumaczono na {{var0}}.",
-			file_navigator_text: "Przeglądać plik",
-			btn_all_text: "Wszystkie"
-		},
-		"pt-BR": {
-			toast_plugin_started: "{{var0}} foi iniciado.",
-			toast_plugin_stopped: "{{var0}} foi interrompido.",
-			toast_plugin_translated: "traduzido para {{var0}}.",
-			file_navigator_text: "Procurar arquivo",
-			btn_all_text: "Todo"
-		},
-		"fi": {
-			toast_plugin_started: "{{var0}} on käynnistetty.",
-			toast_plugin_stopped: "{{var0}} on pysäytetty.",
-			toast_plugin_translated: "käännetty osoitteeseen {{var0}}.",
-			file_navigator_text: "Selaa tiedostoa",
-			btn_all_text: "Kaikki"
-		},
-		"sv": {
-			toast_plugin_started: "{{var0}} har startats.",
-			toast_plugin_stopped: "{{var0}} har blivit stoppad.",
-			toast_plugin_translated: "översatt till {{var0}}.",
-			file_navigator_text: "Bläddra i fil",
-			btn_all_text: "All"
-		},
-		"tr": {
-			toast_plugin_started: "{{var0}} başlatıldı.",
-			toast_plugin_stopped: "{{var0}} durduruldu.",
-			toast_plugin_translated: "{{var0}} olarak çevrildi.",
-			file_navigator_text: "Dosyaya gözat",
-			btn_all_text: "Her"
-		},
-		"cs": {
-			toast_plugin_started: "{{var0}} byl spuštěn.",
-			toast_plugin_stopped: "{{var0}} byl zastaven.",
-			toast_plugin_translated: "přeložen do {{var0}}.",
-			file_navigator_text: "Procházet soubor",
-			btn_all_text: "Vše"
-		},
-		"bg": {
-			toast_plugin_started: "{{var0}} е стартиран.",
-			toast_plugin_stopped: "{{var0}} е спрян.",
-			toast_plugin_translated: "преведена на {{var0}}.",
-			file_navigator_text: "Прегледайте файла",
-			btn_all_text: "Bсичко"
-		},
-		"ru": {
-			toast_plugin_started: "{{var0}} запущен.",
-			toast_plugin_stopped: "{{var0}} остановлен.",
-			toast_plugin_translated: "переведен на {{var0}}.",
-			file_navigator_text: "Просмотр файла",
-			btn_all_text: "Все"
-		},
-		"uk": {
-			toast_plugin_started: "{{var0}} було запущено.",
-			toast_plugin_stopped: "{{var0}} було зупинено.",
-			toast_plugin_translated: "перекладено {{var0}}.",
-			file_navigator_text: "Перегляньте файл",
-			btn_all_text: "Все"
-		},
-		"ja": {
-			toast_plugin_started: "{{var0}}が開始されました.",
-			toast_plugin_stopped: "{{var0}}が停止しました.",
-			toast_plugin_translated: "は{{var0}}に翻訳されました.",
-			file_navigator_text: "ファイルを参照",
-			btn_all_text: "すべて"
-		},
-		"zh-TW": {
-			toast_plugin_started: "{{var0}}已經啟動.",
-			toast_plugin_stopped: "{{var0}}已停止.",
-			toast_plugin_translated: "翻譯為{{var0}}.",
-			file_navigator_text: "瀏覽文件",
-			btn_all_text: "所有"
-		},
-		"ko": {
-			toast_plugin_started: "{{var0}} 시작되었습니다.",
-			toast_plugin_stopped: "{{var0}} 중지되었습니다.",
-			toast_plugin_translated: "{{var0}} 로 번역되었습니다.",
-			file_navigator_text: "파일 찾아보기",
-			btn_all_text: "모든"
-		},
-		"default": {
-			toast_plugin_started: "{{var0}} has been started.",
-			toast_plugin_stopped: "{{var0}} has been stopped.",
-			toast_plugin_translated: "translated to {{var0}}.",
-			file_navigator_text: "Browse File",
-			btn_all_text: "All"
-		}
-	};
-	BDFDB.LanguageUtils.getLanguage = function () {
-		var lang = document.querySelector("html").lang || "en-US";
-		var langids = lang.split("-");
-		var langid = langids[0];
-		var langid2 = langids[1] || "";
-		lang = langid2 && langid.toUpperCase() !== langid2.toUpperCase() ? langid + "-" + langid2 : langid;
-		return BDFDB.LanguageUtils.languages[lang] || BDFDB.LanguageUtils.languages[langid] || BDFDB.LanguageUtils.languages["en-US"];
-	};
-	BDFDB.LanguageUtils.LanguageStrings = new Proxy(LanguageStrings, {
-		get: function (list, item) {
-			var stringobj = LibraryModules.LanguageStore.Messages[item];
-			if (!stringobj) BDFDB.LogUtils.warn(item + " not found in BDFDB.LanguageUtils.LanguageStrings");
-			else {
-				if (stringobj && typeof stringobj == "object" && typeof stringobj.format == "function") return BDFDB.LanguageUtils.LanguageStringsFormat(item);
-				else return stringobj;
-			}
-			return "";
-		}
-	});
-	BDFDB.LanguageUtils.LanguageStringsCheck = new Proxy(LanguageStrings, {
-		get: function (list, item) {
-			return !!LibraryModules.LanguageStore.Messages[item];
-		}
-	});
-	BDFDB.LanguageUtils.LanguageStringsFormat = function (item, ...values) {
-		if (item) {
-			var stringobj = LibraryModules.LanguageStore.Messages[item];
-			if (stringobj && typeof stringobj == "object" && typeof stringobj.format == "function") {
-				let i = 0, returnvalue, formatvars = {};
-				while (!returnvalue && i < 10) {
-					i++;
-					try {returnvalue = stringobj.format(formatvars);}
-					catch (err) {
-						returnvalue = null;
-						formatvars[err.toString().split("for: ")[1]] = values.shift() || "undefined";
-					}
-				}
-				if (returnvalue) {
-					if (BDFDB.ArrayUtils.is(returnvalue)) {
-						let newstring = "";
-						for (let ele of returnvalue) {
-							if (typeof ele == "string") newstring += BDFDB.StringUtils.htmlEscape(ele);
-							else if (BDFDB.ObjectUtils.is(ele) && ele.props) newstring += `<${ele.type}>${BDFDB.StringUtils.htmlEscape(ele.props.children[0].toString())}</${ele.type}>`
-						}
-						return newstring;
-					}
-					return returnvalue;
-				}
-				else {
-					BDFDB.LogUtils.warn(item + " failed to format string in BDFDB.LanguageUtils.LanguageStrings");
-					return "";
-				}
-			}
-			else return BDFDB.LanguageUtils.LanguageStrings[item];
-		}
-		else BDFDB.LogUtils.warn(item + " enter a valid key to format the string in BDFDB.LanguageUtils.LanguageStrings");
-		return "";
-	};
-	BDFDB.LanguageUtils.LibraryStrings = new Proxy(InternalBDFDB.LibraryStrings.default, {
-		get: function (list, item) {
-			let languageid = BDFDB.LanguageUtils.getLanguage().id;
-			if (InternalBDFDB.LibraryStrings[languageid] && InternalBDFDB.LibraryStrings[languageid][item]) return InternalBDFDB.LibraryStrings[languageid][item];
-			else if (InternalBDFDB.LibraryStrings.default[item]) return InternalBDFDB.LibraryStrings.default[item];
-			else BDFDB.LogUtils.warn(item + " not found in BDFDB.LanguageUtils.LibraryStrings");
-			return "";
-		}
-	});
-	BDFDB.LanguageUtils.LibraryStringsCheck = new Proxy(LanguageStrings, {
-		get: function (list, item) {
-			return !!InternalBDFDB.LibraryStrings.default[item];
-		}
-	});
-	BDFDB.LanguageUtils.LibraryStringsFormat = function (item, ...values) {
-		if (item && values.length) {
-			let languageid = BDFDB.LanguageUtils.getLanguage().id, string = null;
-			if (InternalBDFDB.LibraryStrings[languageid] && InternalBDFDB.LibraryStrings[languageid][item]) string = InternalBDFDB.LibraryStrings[languageid][item];
-			else if (InternalBDFDB.LibraryStrings.default[item]) string = InternalBDFDB.LibraryStrings.default[item];
-			if (string) {
-				for (let i = 0; i < values.length; i++) if (typeof values[i] == "string") string = string.replace(new RegExp(`{{var${i}}}`, "g"), values[i]);
-				return string;
-			}
-			else BDFDB.LogUtils.warn(item + " not found in BDFDB.LanguageUtils.LibraryStrings");
-		}
-		else BDFDB.LogUtils.warn(item + " enter a valid key and at least one value to format the string in BDFDB.LanguageUtils.LibraryStrings");
-		return "";
-	};
-	var initDiscordLanguageInterval = (_ => {
-		if (document.querySelector("html").lang) {
-			BDFDB.TimeUtils.clear(initDiscordLanguageInterval);
-			var language = BDFDB.LanguageUtils.getLanguage();
-			BDFDB.LanguageUtils.languages.$discord.name = `Discord (${language.name})`;
-			BDFDB.LanguageUtils.languages.$discord.id = language.id;
-			BDFDB.LanguageUtils.languages.$discord.ownlang = language.ownlang;
-		}
-	}, 100);
 
 	BDFDB.DOMUtils.appendLocalStyle("BDFDB", `
 		@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BetterDocsBlock.css);
