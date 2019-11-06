@@ -3999,6 +3999,7 @@ var BDFDB = {
 		settingsPanelInner: "settingsInner-zw1xAY",
 		settingsPanelList: "settingsList-eZjkXj",
 		settingsPanelTitle: "title-GTF_8J",
+		svgIcon: "icon-GhnIRB",
 		table: "table-moqjM0",
 		tableBodyCell: "bodyCell-dQam9V",
 		tableHeader: "header-g67q9_",
@@ -5381,6 +5382,7 @@ var BDFDB = {
 		status: ["Avatar", "status"],
 		stopanimations: ["NotFound", "stopAnimations"],
 		subtext: ["NotFound", "subtext"],
+		svgicon: ["BDFDB", "svgIcon"],
 		switch: ["Switch", "switch"],
 		switchdisabled: ["Switch", "switchDisabled"],
 		switchenabled: ["Switch", "switchEnabled"],
@@ -7272,6 +7274,15 @@ var BDFDB = {
 			transform: rotate(180deg);
 		}
 		
+		${BDFDB.dotCN.svgicon} {
+			color: var(--interactive-normal);
+		}
+		${BDFDB.dotCN.svgicon}:hover {
+			color: var(--interactive-hover);
+		}
+		${BDFDB.dotCN.svgicon}:active {
+			color: var(--interactive-active);
+		}
 		
 		
 		/*OLD*/
@@ -8255,7 +8266,7 @@ var BDFDB = {
 			let iconSVG = e.thisObject.props.iconSVG || BDFDB.ReactUtils.findValue(e.thisObject, "iconSVG", {up:true});
 			if (iconSVG) {
 				e.returnValue = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(iconSVG));
-				e.returnValue.props.class = BDFDB.DOMUtils.formatClassName(e.returnValue.props.class, e.thisObject.props.className);
+				e.returnValue.props.class = BDFDB.DOMUtils.formatClassName(BDFDB.disCN.svgicon, e.returnValue.props.class, e.thisObject.props.className);
 			}
 		}
 	}});
