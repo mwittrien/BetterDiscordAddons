@@ -1474,7 +1474,7 @@ var BDFDB = {
 			return instance.type && config.name && config.name.some(name => ((instance.type.displayName || instance.type.name) === name)) || config.key && config.key.some(key => instance.key == key) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => propCheck(props, prop[0], checkvalue)) : propCheck(props, prop[0], prop[1])) : props[prop] !== undefined);
 		}
 		function propCheck (props, key, value) {
-			return key != null && props[key] != null && value != null && (key == "className" ? props[key].indexOf(value) > -1 : BDFDB.equals(props[key], value));
+			return key != null && props[key] != null && value != null && (key == "className" ? (" " + props[key] + " ").indexOf(" " + value + " ") > -1 : BDFDB.equals(props[key], value));
 		}
 	};
 	BDFDB.ReactUtils.findOwner = function (nodeOrInstance, config) {
@@ -3764,7 +3764,7 @@ var BDFDB = {
 			text = text.substring(0, index) + prefix + text.substring(index, d2) + suffix + text.substring(d2);
 			offset++;
 		});
-		return text ? text : original;
+		return text || original;
 	};
 	
 	BDFDB.NumberUtils = {};
