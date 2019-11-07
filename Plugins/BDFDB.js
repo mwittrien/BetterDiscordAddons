@@ -966,8 +966,7 @@ var BDFDB = {
 	
 	BDFDB.ModuleUtils.patch = function (plugin, module, modulefunctions, patchfunctions) {
 		if (!plugin || !module || !modulefunctions || !Object.keys(patchfunctions).some(type => WebModulesData.Patchtypes.includes(type))) return null;
-		const pluginname = typeof plugin === "string" ? plugin : plugin.name;
-		const pluginid = pluginname.toLowerCase();
+		const pluginid = (typeof plugin === "string" ? plugin : plugin.name).toLowerCase();
 		if (!module.BDFDBpatch) module.BDFDBpatch = {};
 		modulefunctions = BDFDB.ArrayUtils.is(modulefunctions) ? modulefunctions : Array.of(modulefunctions);
 		for (let modulefunction of modulefunctions) {
@@ -987,19 +986,19 @@ var BDFDB = {
 					};
 					if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded && module.BDFDBpatch[modulefunction]) {
 						if (!BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].before)) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[modulefunction].before)) {
-							BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].before[id], `"before" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, pluginname)(data);
+							BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].before[id], `"before" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, id)(data);
 						}
-						if (BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].instead)) BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, pluginname)();
+						if (BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].instead)) BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`)();
 						else for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[modulefunction].instead)) {
-							let tempreturn = BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].instead[id], `"instead" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, pluginname)(data);
+							let tempreturn = BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].instead[id], `"instead" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, id)(data);
 							if (tempreturn !== undefined) data.returnValue = tempreturn;
 						}
 						if (!BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].after)) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[modulefunction].after)) {
-							let tempreturn = BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].after[id], `"after" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, pluginname)(data);
+							let tempreturn = BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].after[id], `"after" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, id)(data);
 							if (tempreturn !== undefined) data.returnValue = tempreturn;
 						}
 					}
-					else BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, pluginname)();
+					else BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`)();
 					return modulefunction == "render" && data.returnValue === undefined ? null : data.returnValue;
 				};
 			}
