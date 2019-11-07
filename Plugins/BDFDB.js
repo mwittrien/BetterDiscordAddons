@@ -8374,7 +8374,7 @@ var BDFDB = {
 
 	if (BDFDB.UserUtils.me.id == "278543574059057154") {
 		for (let module in DiscordClassModules) if (!DiscordClassModules[module]) BDFDB.LogUtils.warn(module + " not initialized in DiscordClassModules");
-		for (let obj in DiscordObjects) if (!DiscordObjects[module]) BDFDB.LogUtils.warn(module + " not initialized in DiscordObjects");
+		for (let obj in DiscordObjects) if (!DiscordObjects[obj]) BDFDB.LogUtils.warn(obj + " not initialized in DiscordObjects");
 		for (let require in LibraryRequires) if (!LibraryRequires[require]) BDFDB.LogUtils.warn(require + " not initialized in LibraryRequires");
 		for (let module in LibraryModules) if (!LibraryModules[module]) BDFDB.LogUtils.warn(module + " not initialized in LibraryModules");
 		for (let component in NativeSubComponents) if (!NativeSubComponents[component]) BDFDB.LogUtils.warn(component + " not initialized in NativeSubComponents");
