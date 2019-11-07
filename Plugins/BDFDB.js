@@ -6707,6 +6707,10 @@ var BDFDB = {
 		}
 	} : LibraryComponents.QuickSelect;
 	
+	LibraryComponents.ScrollerHorizontal = BDFDB.ModuleUtils.findByName("HorizontalScroller");
+	
+	LibraryComponents.ScrollerVertical = BDFDB.ModuleUtils.findByName("VerticalScroller");
+	
 	LibraryComponents.SearchBar = reactInitialized ? class BDFDB_Select extends LibraryModules.React.Component {
 		handleChange(query) {
 			this.props.query = query;
