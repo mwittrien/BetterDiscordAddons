@@ -1000,7 +1000,7 @@ var BDFDB = {
 						}
 					}
 					else BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, pluginname)();
-					return data.returnValue;
+					return modulefunction == "render" && data.returnValue === undefined ? null : data.returnValue;
 				};
 			}
 			for (let type of WebModulesData.Patchtypes) if (typeof patchfunctions[type] == "function") module.BDFDBpatch[modulefunction][type][pluginid] = patchfunctions[type];
