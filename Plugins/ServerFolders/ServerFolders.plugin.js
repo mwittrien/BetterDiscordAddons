@@ -323,7 +323,6 @@ class ServerFolders {
 			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:"GuildFolderMarkReadItem"});
 			const autoreaditem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuToggleItem, {
 				label: this.labels.foldercontext_autoreadfolder_text,
-				className: `BDFDB-contextMenuToggleItem ${this.name}-contextMenuToggleItem ${this.name}-autoread-contextMenuToggleItem`,
 				active: data.autoRead,
 				action: state => {
 					data.autoRead = state;
@@ -333,10 +332,8 @@ class ServerFolders {
 			if (index > -1) children.splice(index + 1, 0, autoreaditem);
 			else children.push(autoreaditem);
 			const muteGroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
-				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuToggleItem, {
 					label: this.labels.foldercontext_mutefolder_text,
-					className: `BDFDB-contextMenuToggleItem ${this.name}-contextMenuToggleItem ${this.name}-mutefolder-contextMenuToggleItem`,
 					active: muted,
 					action: state => {
 						data.muteFolder = state;
@@ -347,10 +344,8 @@ class ServerFolders {
 			});
 			returnvalue.props.children.splice(returnvalue.props.children.length - 1, 0, muteGroup);
 			const deleteGroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
-				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 					label: this.labels.foldercontext_removefolder_text,
-					className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-removefolder-contextMenuItem`,
 					danger: true,
 					action: e => {
 						BDFDB.ContextMenuUtils.close(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, e.target));
@@ -367,7 +362,6 @@ class ServerFolders {
 			let addtofolderitems = [], openguilds = BDFDB.LibraryModules.FolderStore.getSortedGuilds().filter(n => !n.folderId).map(n => n.guilds[0]);
 			for (let i = 0; i < folders.length; i++) addtofolderitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: folders[i].folderName || (this.labels.modal_tabheader1_text + " #" + parseInt(i+1)),
-				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-addtofolder-contextMenuItem`,
 				action: e => {
 					BDFDB.ContextMenuUtils.close(menu);
 					this.addGuildToFolder(folders[i].folderId, guildid);
@@ -376,15 +370,12 @@ class ServerFolders {
 			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 			const addType = !addtofolderitems.length ? "contextMenuItem" : "contextMenuSubItem";
 			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
-				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
 						label: this.labels.servercontext_serverfolders_text,
-						className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-guild-contextMenuSubItem`,
 						render: folder ? [
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 								label: this.labels.serversubmenu_removefromfolder_text,
-								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-removefromfolder-contextMenuItem`,
 								danger: true,
 								action: e => {
 									BDFDB.ContextMenuUtils.close(menu);
@@ -394,7 +385,6 @@ class ServerFolders {
 						] : [
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 								label: this.labels.serversubmenu_createfolder_text,
-								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-createfolder-contextMenuItem`,
 								disabled: !openguilds.length,
 								action: e => {
 									BDFDB.ContextMenuUtils.close(menu);

@@ -219,7 +219,6 @@ class PersonalPins {
 			const pinUnpinItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: this.labels[note ? "context_unpinoption_text" : "context_pinoption_text"],
 				hint: BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Note_Message") : null,
-				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-${note ? "unpin" : "pin"}-contextMenuItem`,
 				action: e => {
 					BDFDB.ContextMenuUtils.close(menu);
 					this.addMessageToNotes(instance.props.message, instance.props.target, instance.props.channel);
@@ -233,7 +232,6 @@ class PersonalPins {
 				if (note.markup != newmarkup || note.accessory != newaccessory) {
 					const updateItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 						label: this.labels.context_updateoption_text,
-						className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-update-contextMenuItem`,
 						action: e => {
 							BDFDB.ContextMenuUtils.close(menu);
 							this.updateNoteData(note, newmarkup, newaccessory);
@@ -252,28 +250,26 @@ class PersonalPins {
 			if (!messagediv || pos == -1) return;
 			let note = this.getNoteData(instance.props.message, instance.props.target, instance.props.channel);
 			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {props:[["label", [BDFDB.LanguageUtils.LanguageStrings.PIN, BDFDB.LanguageUtils.LanguageStrings.UNPIN]]]});
-			const pinUnpinItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+			children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: this.labels[note ? "context_unpinoption_text" : "popout_pinoption_text"],
-				className: `${BDFDB.disCN.optionpopoutitem} BDFDB-popoutMenuItem ${this.name}-popoutMenuItem ${this.name}-${note ? "unpin" : "pin"}-popoutMenuItem`,
+				className: BDFDB.disCN.optionpopoutitem,
 				action: e => {
 					this.addMessageToNotes(instance.props.message, instance.props.target, instance.props.channel);
 					instance.props.onClose();
 				}
-			});
-			children.splice(index + 1, 0, pinUnpinItem);
+			}));
 			if (note) {
 				let newmarkup = this.getMarkup(messagediv).innerHTML;
 				let newaccessory = messagediv.querySelector(BDFDB.dotCN.messageaccessory).innerHTML;
 				if (note.markup != newmarkup || note.accessory != newaccessory) {
-					const updateItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+					children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 						label: this.labels.context_updateoption_text,
-						className: `${BDFDB.disCN.optionpopoutitem} BDFDB-popoutMenuItem ${this.name}-popoutMenuItem ${this.name}-update-popoutMenuItem`,
+						className: BDFDB.disCN.optionpopoutitem,
 						action: e => {
 							this.updateNoteData(note, newmarkup, newaccessory);
 							instance.props.onClose();
 						}
-					});
-					children.splice(index + 1, 0, updateItem);
+					}));
 				}	
 			}
 		}

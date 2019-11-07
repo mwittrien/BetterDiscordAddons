@@ -115,8 +115,7 @@ class ImageZoom {
 						let items = [];
 						for (let type in settings) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSliderItem, {
 							label: this.defaults.settings[type].name + ": " + settings[type] + this.defaults.settings[type].unit,
-							className: `BDFDB-contextMenuSliderItem ${this.name}-contextMenuSliderItem ${this.name}-${type}-contextMenuSliderItem`,
-							type,
+							type: type,
 							defaultValue: BDFDB.NumberUtils.mapRange([this.defaults.settings[type].min, this.defaults.settings[type].max], [0, 100], settings[type]),
 							onValueChange: value => {
 								BDFDB.DataUtils.save(Math.round(BDFDB.NumberUtils.mapRange([0, 100], [this.defaults.settings[type].min, this.defaults.settings[type].max], value)), this, "settings", type);
@@ -132,11 +131,9 @@ class ImageZoom {
 								}});
 							}
 						}));
-						const itemGroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
-							className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
+						BDFDB.ContextMenuUtils.open(this, e, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 							children: items
-						});
-						BDFDB.ContextMenuUtils.open(this, e, itemGroup);
+						}));
 					};
 					settingslink.addEventListener("click", openContext);
 					settingslink.addEventListener("contextmenu", openContext);

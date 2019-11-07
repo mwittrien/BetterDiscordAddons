@@ -307,11 +307,9 @@ class ChatAliases {
 	appendItem (menu, returnvalue, text) {
 		let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 		const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
-			className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 			children: [
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 					label: "Add to ChatAliases",
-					className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-addalias-contextMenuItem`,
 					action: e => {
 						BDFDB.ContextMenuUtils.close(menu);
 						this.openAddModal(text);

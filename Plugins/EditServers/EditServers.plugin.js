@@ -136,17 +136,13 @@ class EditServers {
 		if (instance.props && instance.props.guild && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
-				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
 						label: this.labels.context_localserversettings_text,
-						className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-serversettings-contextMenuSubItem`,
 						render: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
-							className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_serversettings_text,
-									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-serversettings-ContextMenuItem`,
 									action: e => {
 										BDFDB.ContextMenuUtils.close(menu);
 										this.showServerSettings(instance.props.guild);
@@ -154,7 +150,6 @@ class EditServers {
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_resetsettings_text,
-									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-resetsettings-ContextMenuItem`,
 									disabled: !BDFDB.DataUtils.load(this, "servers", instance.props.guild.id),
 									action: e => {
 										BDFDB.ContextMenuUtils.close(menu);

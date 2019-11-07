@@ -231,7 +231,6 @@ class PinDMs {
 		let items = [];
 		items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 			label: this.labels[pinnedInChannel ? "context_unpinchannel_text" : "context_pinchannel_text"],
-			className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-${pinnedInChannel ? "unpin" : "pin"}channel-contextMenuItem`,
 			danger: pinnedInChannel,
 			action: e => {
 				BDFDB.ContextMenuUtils.close(menu);
@@ -252,7 +251,6 @@ class PinDMs {
 		}));
 		items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 			label: this.labels[pinnedInGuild ? "context_unpinguild_text" : "context_pinguild_text"],
-			className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-${pinnedInGuild ? "unpin" : "pin"}guild-contextMenuItem`,
 			danger: pinnedInGuild,
 			action: e => {
 				BDFDB.ContextMenuUtils.close(menu);
@@ -270,7 +268,6 @@ class PinDMs {
 		}));
 		const subitem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
 			label: this.labels.context_pindm_text,
-			className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-pindm-contextMenuSubItem`,
 			render: items
 		});
 		children.splice(index, 0, subitem);
@@ -347,11 +344,9 @@ class PinDMs {
 				wrapper.PinDMsContextMenuListener = e => {
 					if (BDFDB.DataUtils.load(this, "pinnedRecents")[instance.props.channel.id] == undefined) {
 						const itemGroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
-							className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.context_pinguild_text,
-									className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-pinguild-contextMenuItem`,
 									action: e => {
 										BDFDB.ContextMenuUtils.close(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, e.target));
 										this.addPinnedRecent(instance.props.channel.id);
@@ -528,12 +523,10 @@ class PinDMs {
 				});
 				avatar.parentElement.addEventListener("contextmenu", e => {
 					const itemGroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
-						className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 						children: [
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 								label: this.labels.context_unpinguild_text,
 								danger: true,
-								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-unpinguild-contextMenuItem`,
 								action: e => {
 									BDFDB.ContextMenuUtils.close(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, e.target));
 									BDFDB.DOMUtils.remove(dmdiv);

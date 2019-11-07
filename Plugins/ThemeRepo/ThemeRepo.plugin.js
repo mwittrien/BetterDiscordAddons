@@ -400,7 +400,6 @@ class ThemeRepo {
 		BDFDB.TimeUtils.timeout(() => {for (let child of returnvalue.props.children) if (child && child.props && child.props.label == "BandagedBD" && Array.isArray(child.props.render)) {
 			const repoItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: "Theme Repo",
-				className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-repo-contextMenuItem`,
 				action: e => {
 					if (!this.loading.is) BDFDB.ContextMenuUtils.close(menu);
 					this.openThemeRepoModal();

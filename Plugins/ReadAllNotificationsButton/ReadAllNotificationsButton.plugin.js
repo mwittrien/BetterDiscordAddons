@@ -149,11 +149,9 @@ class ReadAllNotificationsButton {
 				});
 				ranbutton.addEventListener("contextmenu", e => {
 					const itemGroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
-						className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 						children: [
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 								label: this.labels.context_unreadguilds_text,
-								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-unreadguilds-contextMenuItem`,
 								action: e => {
 									BDFDB.ContextMenuUtils.close(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, e.target));
 									BDFDB.GuildUtils.markAsRead(BDFDB.GuildUtils.getUnread());
@@ -161,7 +159,6 @@ class ReadAllNotificationsButton {
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 								label: this.labels.context_pingedguilds_text,
-								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-pingedguilds-contextMenuItem`,
 								action: e => {
 									BDFDB.ContextMenuUtils.close(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, e.target));
 									BDFDB.GuildUtils.markAsRead(BDFDB.GuildUtils.getPinged());
@@ -169,7 +166,6 @@ class ReadAllNotificationsButton {
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 								label: this.labels.context_mutedguilds_text,
-								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-mutedguilds-contextMenuItem`,
 								action: e => {
 									BDFDB.ContextMenuUtils.close(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, e.target));
 									BDFDB.GuildUtils.markAsRead(BDFDB.GuildUtils.getMuted());
@@ -177,7 +173,6 @@ class ReadAllNotificationsButton {
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 								label: this.labels.context_guilds_text,
-								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-guilds-contextMenuItem`,
 								action: e => {
 									BDFDB.ContextMenuUtils.close(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, e.target));
 									this.addPinnedRecent(instance.props.channel.id);
@@ -186,7 +181,6 @@ class ReadAllNotificationsButton {
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 								label: this.labels.context_dms_text,
-								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-dms-contextMenuItem`,
 								action: e => {
 									BDFDB.ContextMenuUtils.close(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, e.target));
 									BDFDB.DMUtils.markAsRead(BDFDB.DMUtils.getAll());

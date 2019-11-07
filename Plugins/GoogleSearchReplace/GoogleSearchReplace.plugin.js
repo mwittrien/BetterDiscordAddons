@@ -121,7 +121,6 @@ class GoogleSearchReplace {
 		let items = [];
 		for (let key in engines) if (engines[key]) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 			label: this.defaults.engines[key].name,
-			className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-engine-contextMenuItem`,
 			danger: key == "_all",
 			action: e => {
 				if (!e.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
@@ -133,13 +132,11 @@ class GoogleSearchReplace {
 		}));
 		if (!items.length) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 			label: this.labels.submenu_disabled_text,
-			className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-disabled-contextMenuItem`,
 			disabled: true
 		}));
 		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"SearchWithGoogle"});
 		const item = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
 			label: this.labels.context_googlesearchreplace_text,
-			className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-search-contextMenuSubItem`,
 			render: items
 		});
 		if (index > -1) children.splice(index, 1, item);

@@ -145,17 +145,13 @@ class EditChannels {
 		if (instance.props && instance.props.channel && !BDFDB.DOMUtils.getParent(".container-hidden", instance.props.target) && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
-				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
 						label: this.labels.context_localchannelsettings_text,
-						className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-channelsettings-contextMenuSubItem`,
 						render: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
-							className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_channelsettings_text,
-									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-channelsettings-ContextMenuItem`,
 									action: e => {
 										BDFDB.ContextMenuUtils.close(menu);
 										this.showChannelSettings(instance.props.channel);
@@ -163,7 +159,6 @@ class EditChannels {
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_resetsettings_text,
-									className: `BDFDB-ContextMenuItem ${this.name}-ContextMenuItem ${this.name}-resetsettings-ContextMenuItem`,
 									disabled: !BDFDB.DataUtils.load(this, "channels", instance.props.channel.id),
 									action: e => {
 										BDFDB.ContextMenuUtils.close(menu);

@@ -65,12 +65,10 @@ class RevealAllSpoilersOption {
 			if (!messagediv || !messagediv.querySelector(BDFDB.dotCN.spoilerhidden)) return;
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
-				className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 						label: "Reveal all Spoilers",
 						hint: BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Reveal_Spoilers") : null,
-						className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-reveal-contextMenuItem`,
 						action: e => {
 							BDFDB.ContextMenuUtils.close(e.instance);
 							this.revealAllSpoilers(messagediv);

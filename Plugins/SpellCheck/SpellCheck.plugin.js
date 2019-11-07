@@ -176,7 +176,6 @@ class SpellCheck {
 				let similarWords = this.getSimilarWords(word.toLowerCase().trim());
 				for (let suggestion of similarWords.sort()) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 					label: suggestion,
-					className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-suggestion-contextMenuItem`,
 					action: e => {
 						BDFDB.ContextMenuUtils.close(menu);
 						this.replaceWord(textarea, word, suggestion);
@@ -184,19 +183,15 @@ class SpellCheck {
 				}));
 				if (!items.length) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 					label: this.labels.similarwordssubmenu_none_text,
-					className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-none-contextMenuItem`,
 					disabled: true
 				}));
 				const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
-					className: `BDFDB-contextMenuItemGroup ${this.name}-contextMenuItemGroup`,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
 						label: BDFDB.LanguageUtils.LanguageStrings.SPELLCHECK,
-						className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-spellcheck-contextMenuSubItem`,
 						render: [
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 								label: this.labels.context_spellcheck_text,
 								hint: word,
-								className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-addword-contextMenuItem`,
 								action: e => {
 									BDFDB.ContextMenuUtils.close(menu);
 									this.addToOwnDictionary(word);
@@ -204,7 +199,6 @@ class SpellCheck {
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
 								label: this.labels.context_similarwords_text,
-								className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-suggestions-contextMenuSubItem`,
 								render: items
 							})
 						]
