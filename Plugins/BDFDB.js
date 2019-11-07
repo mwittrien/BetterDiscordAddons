@@ -8501,7 +8501,7 @@ var BDFDB = {
 		};
 		BDFDB.ModuleUtils.DevFuncs.req = InternalBDFDB.getWebModuleReq();
 	}
-	for (let obj in DiscordConstants) if (!DiscordObjects[obj]) {
+	for (let obj in DiscordObjects) if (!DiscordObjects[obj]) {
 		DiscordObjects[obj] = function () {};
 		BDFDB.DiscordObjects[obj] = function () {};
 	}
