@@ -118,7 +118,6 @@ class RepoControls {
 			this.stopping = true;
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
-			//BDFDB.DOMUtils.removeClassFromDOM("repocontrols-added");
 
 			BDFDB.PluginUtils.clear(this);
 		}

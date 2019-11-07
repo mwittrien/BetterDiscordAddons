@@ -3,7 +3,7 @@
 class GoogleSearchReplace {
 	getName () {return "GoogleSearchReplace";}
 
-	getVersion () {return "1.1.9";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class GoogleSearchReplace {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 	}
 
@@ -42,19 +42,24 @@ class GoogleSearchReplace {
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let engines = BDFDB.DataUtils.get(this, "engines");
-		let settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
-		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Search Engines:</h3></div><div class="BDFDB-settings-inner-list">`;
-		for (let key in engines) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.engines[key].name}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="engines ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${engines[key] ? " checked" : ""}></div></div>`;
-		}
-		settingshtml += `</div>`;
-		settingshtml += `</div></div>`;
-
-		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
-
-		BDFDB.initElements(settingspanel, this);
-
-		return settingspanel;
+		let settingsitems = [], inneritems = [];
+		
+		for (let key in engines) inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			className: BDFDB.disCN.marginbottom8,
+			type: "Switch",
+			plugin: this,
+			keys: ["engines", key],
+			label: this.defaults.engines[key].name,
+			value: engines[key]
+		}));
+		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+			title: "Search Engines:",
+			first: settingsitems.length == 0,
+			last: true,
+			children: inneritems
+		}));
+		
+		return BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 	}
 
 	//legacy
@@ -100,27 +105,26 @@ class GoogleSearchReplace {
 
 	// begin of own functions
 
-	onNativeContextMenu (instance, menu, returnvalue) {
-		if (instance.props && instance.props.type == "NATIVE_TEXT" && instance.props.value && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
-			this.appendItem(menu, returnvalue, instance.props.value);
-		}
+	onNativeContextMenu (e) {
+		if (e.instance.props && e.instance.props.type == "NATIVE_TEXT" && e.instance.props.value) this.injectItem(e, e.instance.props.value);
 	}
 
-	onMessageContextMenu (instance, menu, returnvalue) {
-		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
+	onMessageContextMenu (e) {
+		if (e.instance.props && e.instance.props.message && e.instance.props.channel && e.instance.props.target) {
 			let text = document.getSelection().toString();
-			if (text) this.appendItem(menu, returnvalue, text);
+			if (text) this.injectItem(e, text);
 		}
 	}
 
-	appendItem (menu, returnvalue, text) {
+	injectItem (e, text) {
 		let engines = BDFDB.DataUtils.get(this, "engines");
 		let items = [];
 		for (let key in engines) if (engines[key]) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 			label: this.defaults.engines[key].name,
 			className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-engine-contextMenuItem`,
+			danger: key == "_all",
 			action: e => {
-				if (!e.shiftKey) BDFDB.ContextMenuUtils.close(menu);
+				if (!e.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
 				if (key == "_all") {
 					for (let key2 in engines) if (key2 != "_all" && engines[key2]) window.open(this.defaults.engines[key2].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
 				}
@@ -132,7 +136,7 @@ class GoogleSearchReplace {
 			className: `BDFDB-contextMenuItem ${this.name}-contextMenuItem ${this.name}-disabled-contextMenuItem`,
 			disabled: true
 		}));
-		let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:"SearchWithGoogle"});
+		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"SearchWithGoogle"});
 		const item = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
 			label: this.labels.context_googlesearchreplace_text,
 			className: `BDFDB-contextMenuSubItem ${this.name}-contextMenuSubItem ${this.name}-search-contextMenuSubItem`,
