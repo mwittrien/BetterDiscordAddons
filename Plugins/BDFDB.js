@@ -6621,15 +6621,13 @@ var BDFDB = {
 			return BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.popoutwrapper, BDFDB.disCN.popout, position, this.props.invert && pos && pos != "bottom" && BDFDB.disCN.popoutinvert, arrow, !this.props.shadow && BDFDB.disCN.popoutnoshadow),
 				id: this.props.id,
+				onClick: e => {e.stopPropagation();},
 				style: Object.assign({}, this.props.style, {
 					position: this.props.isChild ? "relative" : "absolute"
 				}),
 				children: BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.popoutthemedpopout),
-					style: {
-						padding: parseInt(this.props.padding) || null,
-						width: parseInt(this.props.width) || null
-					},
+					style: BDFDB.ObjectUtils.extract(this.props, "padding", "height", "maxHeight", "minHeight", "width", "maxWidth", "minWidth"),
 					children: this.props.children
 				})
 			});
@@ -6638,21 +6636,15 @@ var BDFDB = {
 	
 	LibraryComponents.PopoutContainer = reactInitialized ? class BDFDB_PopoutContainer extends LibraryModules.React.Component {
 		handleRender(e) {
-			let onClose = typeof this.props.onClose == "function" ? this.props.onClose.bind(this) : _ => {};
-			return BDFDB.ReactUtils.createElement(LibraryComponents.Popout, {
-				containerInstance: this,
-				onClose: this.props.onClose,
+			return BDFDB.ReactUtils.createElement(LibraryComponents.Popout, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				className: this.props.popoutClassName,
+				containerInstance: this,
 				isChild: true,
 				position: e.position,
-				arrow: this.props.arrow,
-				shadow: this.props.shadow,
-				padding: this.props.padding,
-				height: this.props.height,
-				width: this.props.width,
 				style: this.props.popoutStyle,
+				onClose: typeof this.props.onClose == "function" ? this.props.onClose.bind(this) : _ => {},
 				children: typeof this.props.renderPopout == "function" ? this.props.renderPopout(this) : null
-			});
+			}), "popoutStyle", "popoutClassName"));
 		}
 		componentDidMount() {
 			let basepopout = BDFDB.ReactUtils.findOwner(this, {name:"BasePopout"});
@@ -6662,10 +6654,7 @@ var BDFDB = {
 			this.domElementRef = basepopout.domElementRef;
 		}
 		render() {
-			let child = (BDFDB.ArrayUtils.is(this.props.children) ? this.props.children[0] : this.props.children) || BDFDB.ReactUtils.createElement("div", {
-				height: "100%",
-				width: "100%"
-			});
+			let child = (BDFDB.ArrayUtils.is(this.props.children) ? this.props.children[0] : this.props.children) || BDFDB.ReactUtils.createElement("div", {style: {height: "100%", width: "100%"}});
 			child.props.className = BDFDB.DOMUtils.formatClassName(child.props.className, this.props.className);
 			let childClick = child.props.onClick, childContextMenu = child.props.onContextMenu;
 			child.props.onClick = (e, childthis) => {
@@ -6717,7 +6706,7 @@ var BDFDB = {
 	
 	LibraryComponents.ScrollerVertical = BDFDB.ModuleUtils.findByName("VerticalScroller");
 	
-	LibraryComponents.SearchBar = reactInitialized ? class BDFDB_Select extends LibraryModules.React.Component {
+	LibraryComponents.SearchBar = reactInitialized ? class BDFDB_SearchBar extends LibraryModules.React.Component {
 		handleChange(query) {
 			this.props.query = query;
 			BDFDB.ReactUtils.forceUpdate(this);
