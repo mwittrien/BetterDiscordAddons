@@ -3990,6 +3990,7 @@ var BDFDB = {
 		inputNumberWrapperDefault: "numberInputWrapperDefault-gRxcuK numberInputWrapper-j4svZS",
 		inputNumberWrapperMini: "numberInputWrapperMini-wtUU31 numberInputWrapper-j4svZS",
 		overflowEllipsis: "ellipsis-qlo9sA",
+		popoutWrapper: "popout-xwjvsX",
 		quickSelectWrapper: "quickSelectWrapper-UCfTKz",
 		quickSelectPopoutWrapper: "quickSelectPopout-u2dtIf",
 		modalHeaderHasSibling: "hasSiblings-fRyjyl",
@@ -5208,6 +5209,7 @@ var BDFDB = {
 		popouttop: ["Popout", "popoutTop"],
 		popouttopleft: ["Popout", "popoutTopLeft"],
 		popouttopright: ["Popout", "popoutTopRight"],
+		popoutwrapper: ["BDFDB", "popoutWrapper"],
 		primary: ["TextStyle", "primary"],
 		quickmessage: ["QuickMessage", "quickMessage"],
 		quickmessagepopout: ["UserPopout", "quickMessage"],
@@ -6615,7 +6617,7 @@ var BDFDB = {
 			let position = pos && DiscordClasses["popout" + pos] ? BDFDB.disCN["popout" + pos] : BDFDB.disCN.popouttop;
 			let arrow = !this.props.arrow ? BDFDB.disCN.popoutnoarrow : (pos && pos.indexOf("top") > -1 && pos != "top" ? BDFDB.disCN.popoutarrowalignmenttop : BDFDB.disCN.popoutarrowalignmentmiddle);
 			return BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.popout, position, this.props.invert && pos && pos != "bottom" && BDFDB.disCN.popoutinvert, arrow, !this.props.shadow && BDFDB.disCN.popoutnoshadow),
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.popoutwrapper, BDFDB.disCN.popout, position, this.props.invert && pos && pos != "bottom" && BDFDB.disCN.popoutinvert, arrow, !this.props.shadow && BDFDB.disCN.popoutnoshadow),
 				id: this.props.id,
 				style: Object.assign({}, this.props.style, {
 					position: this.props.isChild ? "relative" : "absolute"
@@ -6699,7 +6701,7 @@ var BDFDB = {
 			let props = Object.assign({}, this.props, {
 				className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.quickselectwrapper),
 				popoutClassName: BDFDB.DOMUtils.formatClassName(this.props.popoutClassName, BDFDB.disCN.quickselectpopoutwrapper),
-				popoutProps: {position: "bottom"},
+				popoutProps: {position: "bottom", zIndexBoost: 1000},
 				onChange: this.handleChange.bind(this)
 			});
 			if (!BDFDB.ObjectUtils.is(props.value)) props.value = {};
@@ -7364,10 +7366,8 @@ var BDFDB = {
 		${BDFDB.dotCN.svgicon}:active {
 			color: var(--interactive-active);
 		}
-		${BDFDB.dotCN.popouts} {
-			z-index: 1003;
-		}
-		${BDFDB.dotCNS.themedark + BDFDB.dotCN.popoutthemedpopout + BDFDB.notCN.messagespopoutwrap} {
+		
+		${BDFDB.dotCNS.themedark + BDFDB.dotCNS.popoutwrapper + BDFDB.dotCN.popoutthemedpopout} {
 			-webkit-box-shadow: 0 2px 10px 0 rgba(0,0,0,20%);
 			background-color: #2f3136;
 			border: 1px solid rgba(28,36,43,.6);

@@ -3188,6 +3188,10 @@ body:before {
 #app-mount .quickSelectPopoutOption-opKBx9:hover {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
+#app-mount .quickSelectPopoutOption-opKBx9.selected {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+	color: rgb(var(--fontwhite1));
+}
 #app-mount .container-2x5lvQ .header-2C89wJ {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
