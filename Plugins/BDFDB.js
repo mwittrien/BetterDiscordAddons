@@ -1316,6 +1316,13 @@ var BDFDB = {
 
 	BDFDB.DiscordConstants = BDFDB.ModuleUtils.findByProperties("Permissions", "ActivityTypes");
 	
+	var DiscordObjects = {};
+	DiscordObjects.Channel = BDFDB.ModuleUtils.findByPrototypes("initialize", "getTitleIcon", "getGuildId");
+	DiscordObjects.Guild = BDFDB.ModuleUtils.findByPrototypes("initialize", "getMaxEmojiSlots", "getRole");
+	DiscordObjects.Message = BDFDB.ModuleUtils.findByPrototypes("initialize", "getAuthorName", "getChannelId");
+	DiscordObjects.User = BDFDB.ModuleUtils.findByPrototypes("initialize", "isLocalBot", "isClaimed");
+	BDFDB.DiscordObjects = Object.assign({}, DiscordObjects);
+	
 	var LibraryRequires = {};
 	for (let name of ["child_process", "electron", "fs", "path", "process", "request"]) {
 		try {LibraryRequires[name] = require(name);} catch (err) {}
@@ -8367,6 +8374,7 @@ var BDFDB = {
 
 	if (BDFDB.UserUtils.me.id == "278543574059057154") {
 		for (let module in DiscordClassModules) if (!DiscordClassModules[module]) BDFDB.LogUtils.warn(module + " not initialized in DiscordClassModules");
+		for (let obj in DiscordObjects) if (!DiscordObjects[module]) BDFDB.LogUtils.warn(module + " not initialized in DiscordObjects");
 		for (let require in LibraryRequires) if (!LibraryRequires[require]) BDFDB.LogUtils.warn(require + " not initialized in LibraryRequires");
 		for (let module in LibraryModules) if (!LibraryModules[module]) BDFDB.LogUtils.warn(module + " not initialized in LibraryModules");
 		for (let component in NativeSubComponents) if (!NativeSubComponents[component]) BDFDB.LogUtils.warn(component + " not initialized in NativeSubComponents");
@@ -8492,6 +8500,10 @@ var BDFDB = {
 			if (typeof BDFDB.ModuleUtils.DevFuncs.listen.p == "function") BDFDB.ModuleUtils.DevFuncs.listen.p();
 		};
 		BDFDB.ModuleUtils.DevFuncs.req = InternalBDFDB.getWebModuleReq();
+	}
+	for (let obj in DiscordConstants) if (!DiscordObjects[obj]) {
+		DiscordObjects[obj] = function () {};
+		BDFDB.DiscordObjects[obj] = function () {};
 	}
 	for (let component in NativeSubComponents) if (!NativeSubComponents[component]) NativeSubComponents[component] = "div";
 	for (let component in LibraryComponents) if (!LibraryComponents[component]) {
