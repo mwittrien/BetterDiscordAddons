@@ -4,7 +4,6 @@ if (window.BDFDB && BDFDB.ModuleUtils && typeof BDFDB.ModuleUtils.unpatch == "fu
 var BDFDB = {
 	myPlugins: BDFDB && BDFDB.myPlugins || {},
 	InternalData: BDFDB && BDFDB.InternalData || {
-		patchedMessagePopouts: 0,
 		pressedKeys: [],
 		mousePosition: {
 			pageX: 0,
@@ -17,9 +16,9 @@ var BDFDB = {
 	name: "$BDFDB"
 };
 (_ => {
+	var loadid = Math.round(Math.random() * 10000000000000000), InternalBDFDB = {};
+	BDFDB.InternalData.loadid = loadid;
 	BDFDB.InternalData.creationTime = performance.now();
-	var id = Math.round(Math.random() * 10000000000000000), InternalBDFDB = {};
-	BDFDB.id = id;
 
 	BDFDB.LogUtils = {};
 	BDFDB.LogUtils.log = function (string, name) {
@@ -59,8 +58,6 @@ var BDFDB = {
 		if (typeof plugin.initConstructor === "function") BDFDB.TimeUtils.suppress(plugin.initConstructor.bind(plugin), "Could not initiate constructor!", plugin.name)();
 		if (typeof plugin.css === "string") BDFDB.DOMUtils.appendLocalStyle(plugin.name, plugin.css);
 
-		if (typeof plugin.onMessageOptionPopout == "function") BDFDB.InternalData.patchedMessagePopouts++;
-
 		InternalBDFDB.patchPlugin(plugin);
 		InternalBDFDB.addOnSettingsClosedListener(plugin);
 		InternalBDFDB.addOnSwitchListener(plugin);
@@ -91,8 +88,6 @@ var BDFDB = {
 		var url = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 
 		if (typeof plugin.css === "string") BDFDB.DOMUtils.removeLocalStyle(plugin.name);
-
-		if (typeof plugin.onMessageOptionPopout == "function") BDFDB.InternalData.patchedMessagePopouts--;
 
 		BDFDB.ModuleUtils.unpatch(plugin);
 		BDFDB.ListenerUtils.remove(plugin);
@@ -6524,8 +6519,6 @@ var BDFDB = {
 	
 	LibraryComponents.MessageComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Message", "MessageTimestamp"));
 	
-	LibraryComponents.MessageOptionPopout = BDFDB.ModuleUtils.findByName("MessageOptionPopout")
-	
 	LibraryComponents.ModalComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("ModalContent", "ModalFooter"));
 	
 	LibraryComponents.ModalComponents.ModalTabContent = reactInitialized ? class BDFDB_ModalTabContent extends LibraryModules.React.Component {
@@ -8118,8 +8111,7 @@ var BDFDB = {
 		V2C_ThemeCard: "render",
 		UserPopout: "componentDidMount",
 		UserProfile: "componentDidMount",
-		Message: ["componentDidMount","componentDidUpdate"],
-		MessageContent: "render"
+		Message: ["componentDidMount","componentDidUpdate"]
 	};
 
 	var BDFDBprocessFunctions = {};
@@ -8233,35 +8225,6 @@ var BDFDB = {
 	};
 	BDFDBprocessFunctions.processMessage = function (e) {
 		BDFDBprocessFunctions._processAvatar(e.instance.props.message.author, e.node.querySelector(BDFDB.dotCN.avatarwrapper));
-	};
-	BDFDBprocessFunctions.processMessageContent = function (e) {
-		if (BDFDB.InternalData.patchedMessagePopouts && typeof e.returnvalue.props.children == "function" && BDFDB.ReactUtils.getValue(e.instance, "props.message.author.id") != 1) {
-			let renderChildren = e.returnvalue.props.children;
-			e.returnvalue.props.children = () => {
-				let renderedChildren = renderChildren(e.instance);
-				let [children, index] = BDFDB.ReactUtils.findChildren(renderedChildren, {name:"MessageOptionButton"});
-				if (index > -1) {
-					let props = children[index].props;
-					if (!(props.message.author.isLocalBot() || props.message.author.id === props.currentUserId || props.canDelete || props.canPin || BDFDB.LibraryModules.CopyLinkUtils.SUPPORTS_COPY && props.developerMode)) children.push(BDFDB.ReactUtils.createElement(LibraryComponents.PopoutContainer, {
-						native: true,
-						position: LibraryComponents.PopoutContainer.Positions.BOTTOM,
-						align: LibraryComponents.PopoutContainer.Align.CENTER,
-						renderPopout: event => {
-							return BDFDB.ReactUtils.createElement(LibraryComponents.MessageOptionPopout, Object.assign({}, props, {onClose: event.closePopout}));
-						},
-						children: BDFDB.ReactUtils.createElement(LibraryComponents.Clickable, {
-							className: BDFDB.disCN.optionpopoutbutton,
-							"aria-label": BDFDB.LanguageUtils.LanguageStrings.MESSAGE_OPTIONS,
-							children: BDFDB.ReactUtils.createElement(LibraryComponents.SvgIcon, {
-								name: LibraryComponents.SvgIcon.Names.OVERFLOW_MENU,
-								className: BDFDB.disCN.optionpopoutbuttonicon
-							})
-						})
-					}));
-				}
-				return renderedChildren;
-			};
-		}
 	};
 
 	InternalBDFDB.patchPlugin(BDFDB);
@@ -8601,12 +8564,12 @@ var BDFDB = {
 		document.head.appendChild(libraryScript);
 	};
 	var libKeys = Object.keys(BDFDB).length - 10, crashInterval = BDFDB.TimeUtils.interval(_ => {
-		if (!window.BDFDB || typeof BDFDB != "object" || Object.keys(BDFDB).length < libKeys || !BDFDB.id) {
+		if (!window.BDFDB || typeof BDFDB != "object" || Object.keys(BDFDB).length < libKeys || !BDFDB.InternalData.loadid) {
 			BDFDB.LogUtils.warn("Reloading library due to internal error.");
 			BDFDB.TimeUtils.clear(crashInterval);
 			InternalBDFDB.reloadLib();
 		}
-		else if (BDFDB.id != id) {
+		else if (BDFDB.InternalData.loadid != loadid) {
 			BDFDB.TimeUtils.clear(crashInterval);
 		}
 		else if (!BDFDB.InternalData.creationTime || performance.now() - BDFDB.InternalData.creationTime > 18000000) {
