@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.7.6";} 
+	getVersion () {return "1.7.7";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class GoogleTranslateOption {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["Embeds","Translating a message now also translates the embed descriptions (usually the maintext of embeds)"]]
+			"improved":[["Right Click","Fixed issue where right click would not quick enable/disable translating"]]
 		};
 
 		this.patchModules = {
@@ -54,18 +54,11 @@ class GoogleTranslateOption {
 				color: #F04747 !important;
 			}
 			.reverse-button {
+				opacity: 0.5;
 				margin-right: 5px;
-				opacity: 0.2;
 				transition: all 200ms ease;
 			}
-			${BDFDB.dotCN.themedark} .reverse-button {
-				fill: #fff;
-			}
-			${BDFDB.dotCN.themelight} .reverse-button {
-				fill: #4f545c;
-			}
 			.reverse-button:hover {
-				cursor: pointer;
 				opacity: 1;
 			}
 			${BDFDB.dotCN.messagegroup} .GTO-translated-message ${BDFDB.dotCNS.messagebody + BDFDB.dotCN.messagemarkup},
@@ -267,17 +260,6 @@ class GoogleTranslateOption {
 		}
 	}
 
-	processMessage (instance, wrapper, returnvalue) {
-		if (instance.props && typeof instance.props.renderButtons == "function" && !wrapper.querySelector(BDFDB.dotCN.optionpopoutbutton) && BDFDB.ReactUtils.getValue(instance, "props.message.author.id") != 1) {
-			let buttonwrap = wrapper.querySelector(BDFDB.dotCN.messagebuttoncontainer);
-			if (buttonwrap) {
-				let optionPopoutButton = BDFDB.DOMUtils.create(`<div tabindex="0" class="${BDFDB.disCN.optionpopoutbutton}" aria-label="More Options" role="button"><svg name="OverflowMenu" class="${BDFDB.disCN.optionpopoutbuttonicon}" aria-hidden="false" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0z"></path><path fill="currentColor" d="M12 16c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2zm0-6c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2zm0-6c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2z"></path></g></svg></div>`);
-				optionPopoutButton.addEventListener("click", () => {BDFDB.createMessageOptionPopout(optionPopoutButton);});
-				buttonwrap.appendChild(optionPopoutButton);
-			}
-		}
-	}
-
 	processMessageContent (instance, wrapper, returnvalue) {
 		if (instance.props && instance.props.message && instance.props.channel) {
 			let messagediv = BDFDB.DOMUtils.getParent(".GTO-translated-message", wrapper);
@@ -295,10 +277,10 @@ class GoogleTranslateOption {
 	
 	createTranslateButton () {
 		return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
-			className: BDFDB.disCN.textareapickerbuttoncontainer,
 			children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ChannelTextAreaButton, {
-				className: ["translate-button", this.translating ? "translating-active" : null, BDFDB.disCN.textareapickerbutton].filter(n => n).join(" "),
-				iconSVG: `<svg x="0" y="0" class="${BDFDB.disCN.textareaicon}" aria-hidden="false" width="22" height="22" viewBox="0 0 22 22" fill="currentColor"><path d="M 19.794, 3.299 H 9.765 L 8.797, 0 h -6.598 C 0.99, 0, 0, 0.99, 0, 2.199 V 16.495 c 0, 1.21, 0.99, 2.199, 2.199, 2.199 H 9.897 l 1.1, 3.299 H 19.794 c 1.21, 0, 2.199 -0.99, 2.199 -2.199 V 5.498 C 21.993, 4.289, 21.003, 3.299, 19.794, 3.299 z M 5.68, 13.839 c -2.48, 0 -4.492 -2.018 -4.492 -4.492 s 2.018 -4.492, 4.492 -4.492 c 1.144, 0, 2.183, 0.407, 3.008, 1.171 l 0.071, 0.071 l -1.342, 1.298 l -0.066 -0.06 c -0.313 -0.297 -0.858 -0.643 -1.671 -0.643 c -1.441, 0 -2.612, 1.193 -2.612, 2.661 c 0, 1.468, 1.171, 2.661, 2.612, 2.661 c 1.507, 0, 2.161 -0.962, 2.337 -1.606 h -2.43 v -1.704 h 4.344 l 0.016, 0.077 c 0.044, 0.231, 0.06, 0.434, 0.06, 0.665 C 10.001, 12.036, 8.225, 13.839, 5.68, 13.839 z M 11.739, 9.979 h 4.393 c 0, 0 -0.374, 1.446 -1.715, 3.008 c -0.588 -0.676 -0.995 -1.336 -1.254 -1.864 h -1.089 L 11.739, 9.979 z M 13.625, 13.839 l -0.588, 0.583 l -0.72 -2.452 C 12.685, 12.63, 13.13, 13.262, 13.625, 13.839 z M 20.893, 19.794 c 0, 0.605 -0.495, 1.1 -1.1, 1.1 H 12.096 l 2.199 -2.199 l -0.896 -3.041 l 1.012 -1.012 l 2.953, 2.953 l 0.803 -0.803 l -2.975 -2.953 c 0.99 -1.138, 1.759 -2.474, 2.106 -3.854 h 1.397 V 8.841 H 14.697 v -1.144 h -1.144 v 1.144 H 11.398 l -1.309 -4.443 H 19.794 c 0.605, 0, 1.1, 0.495, 1.1, 1.1 V 19.794 z"/></svg>`
+				className: BDFDB.DOMUtils.formatClassName("translate-button", this.translating && "translating-active", BDFDB.disCN.textareapickerbutton),
+				iconClassName: BDFDB.disCN.textareaicon,
+				iconSVG: `<svg x="0" y="0" aria-hidden="false" width="22" height="22" viewBox="0 0 22 22" fill="currentColor"><path d="M 19.794, 3.299 H 9.765 L 8.797, 0 h -6.598 C 0.99, 0, 0, 0.99, 0, 2.199 V 16.495 c 0, 1.21, 0.99, 2.199, 2.199, 2.199 H 9.897 l 1.1, 3.299 H 19.794 c 1.21, 0, 2.199 -0.99, 2.199 -2.199 V 5.498 C 21.993, 4.289, 21.003, 3.299, 19.794, 3.299 z M 5.68, 13.839 c -2.48, 0 -4.492 -2.018 -4.492 -4.492 s 2.018 -4.492, 4.492 -4.492 c 1.144, 0, 2.183, 0.407, 3.008, 1.171 l 0.071, 0.071 l -1.342, 1.298 l -0.066 -0.06 c -0.313 -0.297 -0.858 -0.643 -1.671 -0.643 c -1.441, 0 -2.612, 1.193 -2.612, 2.661 c 0, 1.468, 1.171, 2.661, 2.612, 2.661 c 1.507, 0, 2.161 -0.962, 2.337 -1.606 h -2.43 v -1.704 h 4.344 l 0.016, 0.077 c 0.044, 0.231, 0.06, 0.434, 0.06, 0.665 C 10.001, 12.036, 8.225, 13.839, 5.68, 13.839 z M 11.739, 9.979 h 4.393 c 0, 0 -0.374, 1.446 -1.715, 3.008 c -0.588 -0.676 -0.995 -1.336 -1.254 -1.864 h -1.089 L 11.739, 9.979 z M 13.625, 13.839 l -0.588, 0.583 l -0.72 -2.452 C 12.685, 12.63, 13.13, 13.262, 13.625, 13.839 z M 20.893, 19.794 c 0, 0.605 -0.495, 1.1 -1.1, 1.1 H 12.096 l 2.199 -2.199 l -0.896 -3.041 l 1.012 -1.012 l 2.953, 2.953 l 0.803 -0.803 l -2.975 -2.953 c 0.99 -1.138, 1.759 -2.474, 2.106 -3.854 h 1.397 V 8.841 H 14.697 v -1.144 h -1.144 v 1.144 H 11.398 l -1.309 -4.443 H 19.794 c 0.605, 0, 1.1, 0.495, 1.1, 1.1 V 19.794 z"/></svg>`
 			}),
 			width: 400,
 			padding: 10,
@@ -306,23 +288,23 @@ class GoogleTranslateOption {
 			position: BDFDB.LibraryComponents.PopoutContainer.Positions.TOP,
 			align: BDFDB.LibraryComponents.PopoutContainer.Align.RIGHT,
 			onClose: instance => {
-				let channelTextareaButtonIns = BDFDB.ReactUtils.findOwner(instance, {name:"ChannelTextAreaButton"});
+				let channelTextareaButtonIns = BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_ChannelTextAreaButton"});
 				if (channelTextareaButtonIns) {
 					channelTextareaButtonIns.props.isActive = false;
 					BDFDB.ReactUtils.forceUpdate(channelTextareaButtonIns);
 				}
 			},
-			onContextMenu: instance => {
+			onContextMenu: (e, instance) => {
 				this.translating = !this.translating;
-				let channelTextareaButtonIns = BDFDB.ReactUtils.findOwner(instance, {name:"ChannelTextAreaButton"});
+				let channelTextareaButtonIns = BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_ChannelTextAreaButton"});
 				if (channelTextareaButtonIns) {
-					channelTextareaButtonIns.props.className = ["translate-button", this.translating ? "translating-active" : null, BDFDB.disCN.textareapickerbutton].filter(n => n).join(" ");
+					channelTextareaButtonIns.props.className = BDFDB.DOMUtils.formatClassName("translate-button", this.translating && "translating-active", BDFDB.disCN.textareapickerbutton);
 					BDFDB.ReactUtils.forceUpdate(channelTextareaButtonIns);
 					instance.close();
 				}
 			},
 			renderPopout: instance => {
-				let channelTextareaButtonIns = BDFDB.ReactUtils.findOwner(instance, {name:"ChannelTextAreaButton"});
+				let channelTextareaButtonIns = BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_ChannelTextAreaButton"});
 				if (channelTextareaButtonIns) {
 					channelTextareaButtonIns.props.isActive = true;
 					BDFDB.ReactUtils.forceUpdate(channelTextareaButtonIns);

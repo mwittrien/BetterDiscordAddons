@@ -735,7 +735,12 @@ var BDFDB = {
 	};
 	BDFDB.ObjectUtils.extract = function (obj, ...keys) {
 		let newobj = {};
-		if (BDFDB.ObjectUtils.is(obj)) for (let key of keys.flat()) if (obj[key]) newobj = obj[key];
+		if (BDFDB.ObjectUtils.is(obj)) for (let key of keys.flat()) if (obj[key]) newobj[key] = obj[key];
+		return newobj;
+	};
+	BDFDB.ObjectUtils.exclude = function (obj, ...keys) {
+		let newobj = Object.assign({}, obj);
+		BDFDB.ObjectUtils.delete(newobj, ...keys)
 		return newobj;
 	};
 	BDFDB.ObjectUtils.delete = function (obj, ...keys) {
@@ -2744,7 +2749,7 @@ var BDFDB = {
 		}
 	};
 	BDFDB.DOMUtils.formatClassName = function (...classes) {
-		return BDFDB.ArrayUtils.removeCopies(classes.flat().filter(n => n).join(" ").split(" ")).join(" ");
+		return BDFDB.ArrayUtils.removeCopies(classes.flat().filter(n => n).join(" ").split(" ")).join(" ").trim();
 	};
 	BDFDB.DOMUtils.removeClassFromDOM = function (...classes) {
 		for (let c of classes.flat()) if (typeof c == "string") for (let a of c.split(",")) if (a && (a = a.replace(/\.|\s/g, ""))) BDFDB.DOMUtils.removeClass(document.querySelectorAll("." + a), a);
@@ -3485,7 +3490,7 @@ var BDFDB = {
 				return BDFDB.ReactUtils.createElement(class BDFDBModal extends LibraryModules.React.Component {
 					render () {
 						return BDFDB.ReactUtils.createElement(LibraryComponents.ModalComponents.ModalRoot, {
-							className: BDFDB.DOMUtils.formatClassName(`BDFDB-modal`, name ? `${name}-modal` : null, config.selector ? config.selector : null),
+							className: BDFDB.DOMUtils.formatClassName(`BDFDB-modal`, name && `${name}-modal`, config.selector),
 							size: size || LibraryComponents.ModalComponents.ModalSize.SMALL,
 							transitionState: props.transitionState,
 							children: [
@@ -5415,12 +5420,14 @@ var BDFDB = {
 		textareaattachbuttonplus: ["ChannelTextArea", "attachButtonPlus"],
 		textareabutton: ["ChannelTextAreaButton", "button"],
 		textareabuttonactive: ["ChannelTextAreaButton", "active"],
+		textareabuttonpulse: ["ChannelTextAreaButton", "pulseButton"],
 		textareabuttonwrapper: ["ChannelTextAreaButton", "buttonWrapper"],
 		textareadisabled: ["ChannelTextArea", "textAreaDisabled"],
 		textareaedit: ["ChannelTextArea", "textAreaEdit"],
 		textareaenabled: ["ChannelTextArea", "textAreaEnabled"],
 		textareaenablednoattach: ["ChannelTextArea", "textAreaEnabledNoAttach"],
 		textareaicon: ["ChannelTextAreaButton", "icon"],
+		textareaiconpulse: ["ChannelTextAreaButton", "pulseIcon"],
 		textareainner: ["ChannelTextArea", "inner"],
 		textareainnerautocomplete: ["ChannelTextArea", "innerAutocomplete"],
 		textareainnerdisabled: ["ChannelTextArea", "innerDisabled"],
@@ -6056,18 +6063,57 @@ var BDFDB = {
 	} : LibraryComponents.BotTag;
 	
 	LibraryComponents.Button = reactInitialized ? class BDFDB_Button extends LibraryModules.React.Component {
-		handleClick(e) {
-			if (typeof this.props.onClick == "function") this.props.onClick(e, this);
-		}
+		handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}
+		handleContextMenu(e) {if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);}
+		handleMouseDown(e) {if (typeof this.props.onMouseDown == "function") this.props.onMouseDown(e, this);}
+		handleMouseUp(e) {if (typeof this.props.onMouseUp == "function") this.props.onMouseUp(e, this);}
+		handleMouseEnter(e) {if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);}
+		handleMouseLeave(e) {if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);}
 		render() {
-			return BDFDB.ReactUtils.createElement(NativeSubComponents.Button, Object.assign({}, this.props, {onClick: this.handleClick.bind(this)}));
+			let processingAndListening = (this.props.disabled || this.props.submitting) && (null != this.props.onMouseEnter || null != this.props.onMouseLeave);
+			let props = BDFDB.ObjectUtils.exclude(this.props, "look", "color", "hover", "size", "fullWidth", "grow", "disabled", "submitting", "type", "style", "wrapperClassName", "className", "innerClassName", "onClick", "onContextMenu", "onMouseDown", "onMouseUp", "onMouseEnter", "onMouseLeave", "children", "rel");
+			let button = BDFDB.ReactUtils.createElement("button", Object.assign({}, !this.props.disabled && !this.props.submitting && props, {
+				className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.button, this.props.look != null ? this.props.look : LibraryComponents.Button.Looks.FILLED, this.props.color != null ? this.props.color : LibraryComponents.Button.Colors.BRAND, this.props.hover, this.props.size != null ? this.props.size : LibraryComponents.Button.Sizes.MEDIUM, processingAndListening && this.props.wrapperClassName, this.props.fullWidth && BDFDB.disCN.buttonfullwidth, this.props.grow && BDFDB.disCN.buttongrow, this.props.hover && this.props.hover !== LibraryComponents.Button.Hovers.DEFAULT && BDFDB.disCN.buttonhashover, this.props.submitting && BDFDB.disCN.buttonsubmitting, this.props.disabled && BDFDB.disCN.buttondisabled),
+				onClick: (this.props.disabled || this.props.submitting) ? e => {return e.preventDefault();} : this.handleClick.bind(this),
+				onContextMenu: (this.props.disabled || this.props.submitting) ? e => {return e.preventDefault();} : this.handleContextMenu.bind(this),
+				onMouseUp: !this.props.disabled && this.handleMouseDown.bind(this),
+				onMouseDown: !this.props.disabled && this.handleMouseUp.bind(this),
+				onMouseEnter: this.handleMouseEnter.bind(this),
+				onMouseLeave: this.handleMouseLeave.bind(this),
+				type: this.props.type,
+				disabled: this.props.disabled,
+				style: this.props.style,
+				rel: this.props.rel,
+				children: [
+					this.props.submitting && !this.props.disabled ? BDFDB.ReactUtils.createElement(LibraryComponents.Spinner, {
+						type: LibraryComponents.Spinner.Type.PULSING_ELLIPSIS,
+						className: BDFDB.disCN.buttonspinner,
+						itemClassName: BDFDB.disCN.buttonspinneritem
+					}) : null,
+					BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.buttoncontents, this.props.innerClassName),
+						children: this.props.children
+					})
+				]
+			}));
+			return !processingAndListening ? button : BDFDB.ReactUtils.createElement("span", {
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.buttondisabledwrapper, this.props.wrapperClassName, this.props.size != null ? this.props.size : LibraryComponents.Button.Sizes.MEDIUM, this.props.fullWidth && BDFDB.disCN.buttonfullwidth, this.props.grow && BDFDB.disCN.buttongrow),
+				children: [
+					button,
+					BDFDB.ReactUtils.createElement("span", {
+						onMouseEnter: this.handleMouseEnter.bind(this),
+						onMouseLeave: this.handleMouseLeave.bind(this),
+						className: BDFDB.disCN.buttondisabledoverlay
+					})
+				]
+			});
 		}
 	} : LibraryComponents.Button;
 	
 	LibraryComponents.Card = reactInitialized ? class BDFDB_Card extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
-				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.hovercardwrapper, this.props.backdrop || this.props.backdrop === undefined ? BDFDB.disCN.hovercard : null, this.props.className),
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.hovercardwrapper, (this.props.backdrop || this.props.backdrop === undefined) && BDFDB.disCN.hovercard, this.props.className),
 				direction: this.props.direction,
 				justify: this.props.justify,
 				align: this.props.align,
@@ -6091,7 +6137,27 @@ var BDFDB = {
 	
 	LibraryComponents.CardRemoveButton = BDFDB.ModuleUtils.findByName("RemoveButton");
 	
-	LibraryComponents.ChannelTextAreaButton = BDFDB.ModuleUtils.findByName("ChannelTextAreaButton");
+	LibraryComponents.ChannelTextAreaButton = reactInitialized ? class BDFDB_ChannelTextAreaButton extends LibraryModules.React.Component {
+		render() {
+			return BDFDB.ReactUtils.createElement(LibraryComponents.Button, {
+				look: LibraryComponents.Button.Looks.BLANK,
+				size: LibraryComponents.Button.Sizes.NONE,
+				"aria-label": this.props.label,
+				tabIndex: this.props.tabIndex,
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.textareabuttonwrapper, this.props.isActive && BDFDB.disCN.textareabuttonactive),
+				innerClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.textareabutton, this.props.className, this.props.pulse && BDFDB.disCN.textareaattachbuttonplus),
+				onClick: this.props.onClick,
+				onContextMenu: this.props.onContextMenu,
+				onMouseEnter: this.props.onMouseEnter,
+				onMouseLeave: this.props.onMouseLeave,
+				children: BDFDB.ReactUtils.createElement(LibraryComponents.SvgIcon, {
+					name: this.props.iconName,
+					iconSVG: this.props.iconSVG,
+					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.textareaicon, this.props.iconClassName, this.props.pulse && BDFDB.disCN.textareaiconpulse)
+				})
+			});
+		}
+	} : LibraryComponents.ChannelTextAreaButton;
 	
 	LibraryComponents.CharCounter = reactInitialized ? class BDFDB_CharCounter extends LibraryModules.React.Component {
 		getCounterString() {
@@ -6230,7 +6296,7 @@ var BDFDB = {
 					let usewhite = !BDFDB.ColorUtils.isBright(this.props.color);
 					return BDFDB.ReactUtils.createElement("button", {
 						type: "button",
-						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.colorpickerswatch, this.props.isDisabled ? BDFDB.disCN.colorpickerswatchdisabled : null, this.props.isSelected ? BDFDB.disCN.colorpickerswatchselected : null, this.props.isCustom ? BDFDB.disCN.colorpickerswatchcustom : null, this.props.isSingle ? BDFDB.disCN.colorpickerswatchsingle : null, this.props.color == null ? BDFDB.disCN.colorpickerswatchnocolor : null),
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.colorpickerswatch, this.props.isDisabled && BDFDB.disCN.colorpickerswatchdisabled, this.props.isSelected && BDFDB.disCN.colorpickerswatchselected, this.props.isCustom && BDFDB.disCN.colorpickerswatchcustom, this.props.isSingle && BDFDB.disCN.colorpickerswatchsingle, this.props.color == null && BDFDB.disCN.colorpickerswatchnocolor),
 						disabled: this.props.isDisabled,
 						onClick: _ => {
 							if (!this.props.isSelected) {
@@ -6289,7 +6355,7 @@ var BDFDB = {
 		}
 		render() {
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
-				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.colorpickerswatches, this.state.disabled ? BDFDB.disCN.colorpickerswatchesdisabled : null),
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.colorpickerswatches, this.state.disabled && BDFDB.disCN.colorpickerswatchesdisabled),
 				number: this.props.number != null ? this.props.number : 0,
 				children: [
 					BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
@@ -6329,7 +6395,7 @@ var BDFDB = {
 	LibraryComponents.ContextMenuItem = reactInitialized ? class BDFDB_ContextMenuItem extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Clickable, {
-				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.contextmenuitem, !this.props.disabled ? BDFDB.disCN.contextmenuitemclickable : null, this.props.danger ? BDFDB.disCN.contextmenuitemdanger : null, this.props.disabled ? BDFDB.disCN.contextmenuitemdisabled : null, this.props.brand ? BDFDB.disCN.contextmenuitembrand : null, this.props.className),
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.contextmenuitem, !this.props.disabled && BDFDB.disCN.contextmenuitemclickable, this.props.danger && BDFDB.disCN.contextmenuitemdanger, this.props.disabled && BDFDB.disCN.contextmenuitemdisabled, this.props.brand && BDFDB.disCN.contextmenuitembrand, this.props.className),
 				style: this.props.style,
 				role: "menuitem",
 				onClick: this.props.disabled || typeof this.props.action != "function" ? null : this.props.action,
@@ -6426,7 +6492,6 @@ var BDFDB = {
 	LibraryComponents.GuildComponents.Guild = reactInitialized ? class BDFDB_Guild extends LibraryModules.React.Component {
 		constructor(props) {
 			super(props);
-			
 			this.state = {hovered: false};
 		}
 		handleMouseEnter(e) {
@@ -6526,7 +6591,7 @@ var BDFDB = {
 			let childprops = Object.assign({}, this.props);
 			BDFDB.ObjectUtils.delete(childprops, "open");
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, Object.assign({tab:"unnamed"}, childprops, {
-				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.modaltabcontent, this.props.open ? BDFDB.disCN.modaltabcontentopen : null, this.props.className),
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.modaltabcontent, this.props.open && BDFDB.disCN.modaltabcontentopen, this.props.className),
 				direction: LibraryComponents.Flex.Direction.VERTICAL,
 				align: LibraryComponents.Flex.Align.STRETCH,
 				style: Object.assign({}, childprops.style, {
@@ -6548,7 +6613,7 @@ var BDFDB = {
 			let position = pos && DiscordClasses["popout" + pos] ? BDFDB.disCN["popout" + pos] : BDFDB.disCN.popouttop;
 			let arrow = !this.props.arrow ? BDFDB.disCN.popoutnoarrow : (pos && pos.indexOf("top") > -1 && pos != "top" ? BDFDB.disCN.popoutarrowalignmenttop : BDFDB.disCN.popoutarrowalignmentmiddle);
 			return BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.popout, position, this.props.invert && pos && pos != "bottom" ? BDFDB.disCN.popoutinvert : null, arrow, !this.props.shadow ? BDFDB.disCN.popoutnoshadow : null, this.props.className),
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.popout, position, this.props.invert && pos && pos != "bottom" && BDFDB.disCN.popoutinvert, arrow, !this.props.shadow && BDFDB.disCN.popoutnoshadow, this.props.className),
 				id: this.props.id,
 				style: Object.assign({}, this.props.style, {
 					position: this.props.isChild ? "relative" : "absolute"
@@ -6591,28 +6656,31 @@ var BDFDB = {
 			this.domElementRef = basepopout.domElementRef;
 		}
 		render() {
-			if (typeof this.props.children != "function") {
-				let children = this.props.children;
-				this.props.children = _ => {return children || BDFDB.ReactUtils.createElement("div", {style: {height: "100%", width: "100%"}});};
-			}
-			return BDFDB.ReactUtils.createElement(LibraryComponents.Clickable, {
-				className: this.props.className,
-				style: this.props.style,
-				onClick: e => {
-					if (!this.domElementRef.current || this.domElementRef.current.contains(e.target)) {
-						if ((this.props.openOnClick || this.props.openOnClick === undefined) && typeof this.handleClick == "function") this.handleClick();
-						if (typeof this.props.onClick == "function") this.props.onClick(e, this);
-					}
-					else e.stopPropagation();
-				},
-				onContextMenu: e => {
-					if (!this.domElementRef.current || this.domElementRef.current.contains(e.target)) {
-						if (this.props.openOnContextMenu && typeof this.handleClick == "function") this.handleClick();
-						if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
-					}
-					else e.stopPropagation();
-				},
+			let child = (BDFDB.ArrayUtils.is(this.props.children) ? this.props.children[0] : this.props.children) || BDFDB.ReactUtils.createElement("div", {
+				height: "100%",
+				width: "100%"
+			});
+			child.props.className = BDFDB.DOMUtils.formatClassName(child.props.className, this.props.className);
+			let childClick = child.props.onClick, childContextMenu = child.props.onContextMenu;
+			child.props.onClick = (e, childthis) => {
+				if (!this.domElementRef.current || this.domElementRef.current.contains(e.target)) {
+					if ((this.props.openOnClick || this.props.openOnClick === undefined) && typeof this.handleClick == "function") this.handleClick();
+					if (typeof this.props.onClick == "function") this.props.onClick(e, this);
+					if (typeof childClick == "function") childClick(e, childthis);
+				}
+				else e.stopPropagation();
+			};
+			child.props.onContextMenu = (e, childthis) => {
+				if (!this.domElementRef.current || this.domElementRef.current.contains(e.target)) {
+					if (this.props.openOnContextMenu && typeof this.handleClick == "function") this.handleClick();
+					if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
+					if (typeof childContextMenu == "function") childContextMenu(e, childthis);
+				}
+				else e.stopPropagation();
+			};
+			return BDFDB.ReactUtils.createElement(LibraryModules.React.Fragment, {
 				children: BDFDB.ReactUtils.createElement(NativeSubComponents.PopoutContainer, Object.assign({}, this.props, {
+					children: _ => {return child;},
 					renderPopout: this.handleRender.bind(this)
 				}))
 			});
@@ -6738,7 +6806,7 @@ var BDFDB = {
 			});
 			BDFDB.ObjectUtils.delete(childprops, "id", "basis", "dividerbottom", "dividertop", "label", "labelchildren", "mini", "note", "childClassName", "childType");
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
-				className: BDFDB.DOMUtils.formatClassName(this.props.className, this.props.disabled ? BDFDB.disCN.disabled : null),
+				className: BDFDB.DOMUtils.formatClassName(this.props.className, this.props.disabled && BDFDB.disCN.disabled),
 				id: this.props.id,
 				direction: LibraryComponents.Flex.Direction.VERTICAL,
 				align: LibraryComponents.Flex.Align.STRETCH,
@@ -6827,6 +6895,8 @@ var BDFDB = {
 			}));
 		}
 	} : LibraryComponents.SettingsSwitch;
+	
+	LibraryComponents.Spinner = BDFDB.ModuleUtils.findByName("Spinner");
 	
 	LibraryComponents.SvgIcon = BDFDB.ModuleUtils.findByProperties("Gradients", "Names");
 	
@@ -6922,7 +6992,7 @@ var BDFDB = {
 		}
 		render() {
 			let childprops = Object.assign({}, this.props, {
-				className: BDFDB.DOMUtils.formatClassName(this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["input" + this.props.size.toLowerCase()] || BDFDB.disCN.inputdefault, this.props.inputClassName, this.props.focused ? BDFDB.disCN.inputfocused : null, this.props.error || this.props.errorMessage ? BDFDB.disCN.inputerror : (this.props.success ? BDFDB.disCN.inputsuccess : null), this.props.disabled ? BDFDB.disCN.inputdisabled : null, this.props.editable ? BDFDB.disCN.inputeditable : null),
+				className: BDFDB.DOMUtils.formatClassName(this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["input" + this.props.size.toLowerCase()] || BDFDB.disCN.inputdefault, this.props.inputClassName, this.props.focused && BDFDB.disCN.inputfocused, this.props.error || this.props.errorMessage ? BDFDB.disCN.inputerror : (this.props.success && BDFDB.disCN.inputsuccess), this.props.disabled && BDFDB.disCN.inputdisabled, this.props.editable && BDFDB.disCN.inputeditable),
 				disabled: this.props.disabled,
 				onKeyDown: this.handleKeyDown.bind(this),
 				onChange: this.handleChange.bind(this),
@@ -6935,7 +7005,7 @@ var BDFDB = {
 			});
 			BDFDB.ObjectUtils.delete(childprops, "errorMessage", "focused", "error", "success", "inputClassName", "inputPrefix", "size", "editable", "inputRef", "style");
 			return BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.inputwrapper, this.props.type == "number" ? (this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["inputnumberwrapper" + this.props.size.toLowerCase()] || BDFDB.disCN.inputnumberwrapperdefault) : null, this.props.className),
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.inputwrapper, this.props.type == "number" && (this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["inputnumberwrapper" + this.props.size.toLowerCase()] || BDFDB.disCN.inputnumberwrapperdefault), this.props.className),
 				style: this.props.style,
 				children: [
 					this.props.inputPrefix ? BDFDB.ReactUtils.createElement("span", {
