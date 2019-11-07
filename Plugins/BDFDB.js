@@ -6621,7 +6621,7 @@ var BDFDB = {
 					position: this.props.isChild ? "relative" : "absolute"
 				}),
 				children: BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.popoutthemedpopout, this.props.className),
+					className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.popoutthemedpopout),
 					style: {
 						padding: parseInt(this.props.padding) || null,
 						width: parseInt(this.props.width) || null
@@ -7141,6 +7141,14 @@ var BDFDB = {
 	BDFDB.DOMUtils.appendLocalStyle("BDFDB", `
 		@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BetterDocsBlock.css);
 
+		.BDFDB-versionchangelog {
+			display: inline-block;
+			background: currentColor;
+			-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 510 510"><path fill="currentColor" d="M267.75,12.75c-89.25,0-168.3,48.45-209.1,122.4L0,76.5v165.75h165.75 l-71.4-71.4c33.15-63.75,96.9-107.1,173.4-107.1C372.3,63.75,459,150.45,459,255s-86.7,191.25-191.25,191.25 c-84.15,0-153-53.55-181.05-127.5H33.15c28.05,102,122.4,178.5,234.6,178.5C402.9,497.25,510,387.6,510,255 C510,122.4,400.35,12.75,267.75,12.75z M229.5,140.25V270.3l119.85,71.4l20.4-33.15l-102-61.2v-107.1H229.5z"></path></svg>') center/contain no-repeat;
+			cursor: pointer;
+			margin: 0 4px 0 3px;
+		}
+		
 		${BDFDB.dotCN.settingspanelinner} {
 			padding-left: 15px;
 			padding-right: 5px;
@@ -7356,6 +7364,15 @@ var BDFDB = {
 		${BDFDB.dotCN.svgicon}:active {
 			color: var(--interactive-active);
 		}
+		${BDFDB.dotCN.popouts} {
+			z-index: 1003;
+		}
+		${BDFDB.dotCNS.themedark + BDFDB.dotCN.popoutthemedpopout + BDFDB.notCN.messagespopoutwrap} {
+			-webkit-box-shadow: 0 2px 10px 0 rgba(0,0,0,20%);
+			background-color: #2f3136;
+			border: 1px solid rgba(28,36,43,.6);
+			box-shadow: 0 2px 10px 0 rgba(0,0,0,.2);
+		}
 		
 		
 		/*OLD*/
@@ -7390,20 +7407,6 @@ var BDFDB = {
 		}
 		#bd-settingspane-container ${BDFDB.dotCN._repodescription} {
 			white-space: pre-line !important;
-		}
-		.BDFDB-versionchangelog {
-			display: inline-block;
-			background: currentColor;
-			-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 510 510"><path fill="currentColor" d="M267.75,12.75c-89.25,0-168.3,48.45-209.1,122.4L0,76.5v165.75h165.75 l-71.4-71.4c33.15-63.75,96.9-107.1,173.4-107.1C372.3,63.75,459,150.45,459,255s-86.7,191.25-191.25,191.25 c-84.15,0-153-53.55-181.05-127.5H33.15c28.05,102,122.4,178.5,234.6,178.5C402.9,497.25,510,387.6,510,255 C510,122.4,400.35,12.75,267.75,12.75z M229.5,140.25V270.3l119.85,71.4l20.4-33.15l-102-61.2v-107.1H229.5z"></path></svg>') center/contain no-repeat;
-			cursor: pointer;
-			margin: 0 4px 0 3px;
-		}
-		
-		${BDFDB.dotCNS.themedark + BDFDB.dotCN.popoutthemedpopout + BDFDB.notCN.messagespopoutwrap} {
-			-webkit-box-shadow: 0 2px 10px 0 rgba(0,0,0,20%);
-			background-color: #2f3136;
-			border: 1px solid rgba(28,36,43,.6);
-			box-shadow: 0 2px 10px 0 rgba(0,0,0,.2);
 		}
 		.BDFDB-notice {
 			transition: height 0.5s ease !important;
