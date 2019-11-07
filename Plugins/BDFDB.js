@@ -3432,7 +3432,7 @@ var BDFDB = {
 					type: LibraryComponents.TabBar.Types.TOP,
 					items: tabbaritems,
 					onItemSelect: (value, instance) => {
-						let modal = BDFDB.DOMUtils.getParent(".BDFDB-modal", BDFDB.ReactUtils.findDOMNode(instance));
+						let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCN.modalwrapper, BDFDB.ReactUtils.findDOMNode(instance));
 						if (modal) for (let tabcontent of modal.querySelectorAll(BDFDB.dotCN.modaltabcontent)) {
 							let tabcontentinstance = BDFDB.ReactUtils.getValue(tabcontent, "return.return.stateNode");
 							if (tabcontentinstance) {
@@ -3482,7 +3482,7 @@ var BDFDB = {
 				return BDFDB.ReactUtils.createElement(class BDFDBModal extends LibraryModules.React.Component {
 					render () {
 						return BDFDB.ReactUtils.createElement(LibraryComponents.ModalComponents.ModalRoot, {
-							className: BDFDB.DOMUtils.formatClassName(`BDFDB-modal`, name && `${name}-modal`, config.selector),
+							className: BDFDB.DOMUtils.formatClassName(name && `${name}-modal`, BDFDB.disCN.modalwrapper, config.selector),
 							size: size || LibraryComponents.ModalComponents.ModalSize.SMALL,
 							transitionState: props.transitionState,
 							children: [
@@ -3524,7 +3524,7 @@ var BDFDB = {
 					}
 					componentDidMount () {
 						modal = BDFDB.ReactUtils.findDOMNode(this);
-						modal = modal && modal.parentElement ? modal.parentElement.querySelector(".BDFDB-modal") : null;
+						modal = modal && modal.parentElement ? modal.parentElement.querySelector(BDFDB.dotCN.modalwrapper) : null;
 						if (modal && props.transitionState == 2 && props.transitionState > oldTransitionState) config.onOpen(modal, this);
 						oldTransitionState = props.transitionState;
 					}
@@ -3981,6 +3981,7 @@ var BDFDB = {
 		inputNumberWrapper: "numberInputWrapper-j4svZS",
 		inputNumberWrapperDefault: "numberInputWrapperDefault-gRxcuK numberInputWrapper-j4svZS",
 		inputNumberWrapperMini: "numberInputWrapperMini-wtUU31 numberInputWrapper-j4svZS",
+		modalWrapper: "modal-6GHvdM",
 		overflowEllipsis: "ellipsis-qlo9sA",
 		popoutWrapper: "popout-xwjvsX",
 		quickSelectWrapper: "quickSelectWrapper-UCfTKz",
@@ -5132,6 +5133,7 @@ var BDFDB = {
 		modalsubinner: ["Modal", "inner"],
 		modaltabcontent: ["BDFDB", "modalTabContent"],
 		modaltabcontentopen: ["BDFDB", "modalTabContentOpen"],
+		modalwrapper: ["BDFDB", "modalWrapper"],
 		modedefault: ["FormText", "modeDefault"],
 		modedisabled: ["FormText", "modeDisabled"],
 		modeselectable: ["FormText", "modeSelectable"],
@@ -7375,6 +7377,19 @@ var BDFDB = {
 			color: var(--interactive-active);
 		}
 		
+		${BDFDB.dotCNS.modalwrapper + BDFDB.dotCN.modalheader + BDFDB.dotCN.modalheaderhassibling} {
+			padding-bottom: 10px;
+		}
+		${BDFDB.dotCNS.modalwrapper + BDFDB.dotCN.tabbarcontainer} {
+			background: rgba(0, 0, 0, 0.1);
+			border: none !important;
+			box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.05);
+		}
+		${BDFDB.dotCNS.themedark + BDFDB.dotCNS.modalwrapper + BDFDB.dotCN.tabbarcontainer} {
+			background: rgba(0, 0, 0, 0.2);
+			box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
+		}
+		
 		${BDFDB.dotCNS.themedark + BDFDB.dotCNS.popoutwrapper + BDFDB.dotCN.popoutthemedpopout} {
 			-webkit-box-shadow: 0 2px 10px 0 rgba(0,0,0,20%);
 			background-color: #2f3136;
@@ -7398,6 +7413,19 @@ var BDFDB = {
 		${BDFDB.dotCNS.messagegroup + BDFDB.dotCNS.messageheadercompact + BDFDB.dotCN.bottag},
 		${BDFDB.dotCNS.messagegroup + BDFDB.dotCNS.messageheadercompact + BDFDB.dotCN.messageusername} {
 			text-indent: 0px;
+		}
+		
+		.BDFDB-modal ${BDFDB.dotCN.modalheader + BDFDB.dotCN.modalheaderhassibling} {
+			padding-bottom: 10px;
+		}
+		.BDFDB-modal ${BDFDB.dotCN.tabbarcontainer} {
+			background: rgba(0, 0, 0, 0.1);
+			border: none !important;
+			box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.05);
+		}
+		${BDFDB.dotCN.themedark} .BDFDB-modal ${BDFDB.dotCN.tabbarcontainer} {
+			background: rgba(0, 0, 0, 0.2);
+			box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
 		}
 
 		#bd-settingspane-container .ui-form-title {
@@ -8060,18 +8088,6 @@ var BDFDB = {
 			color: #555555;
 			cursor: no-drop;
 			background-color: rgba(0, 0, 0, 0.5);
-		}
-		.BDFDB-modal ${BDFDB.dotCN.modalheader + BDFDB.dotCN.modalheaderhassibling} {
-			padding-bottom: 10px;
-		}
-		.BDFDB-modal ${BDFDB.dotCN.tabbarcontainer} {
-			background: rgba(0, 0, 0, 0.1);
-			border: none !important;
-			box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.05);
-		}
-		${BDFDB.dotCN.themedark} .BDFDB-modal ${BDFDB.dotCN.tabbarcontainer} {
-			background: rgba(0, 0, 0, 0.2);
-			box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
 		}
 		/* REMOVE */
 		.BDFDB-modal ${BDFDB.dotCN.modaltabcontent + BDFDB.dotCN.modaltabcontentopen} {
