@@ -3415,31 +3415,23 @@ var BDFDB = {
 			}));
 		}
 		if (config.children) {
-			let selectedtab, tabs = [];
+			let selectedtab, tabbaritems = [];
 			for (let child of (BDFDB.ArrayUtils.is(config.children) ? config.children : Array.of(config.children))) if (LibraryModules.React.isValidElement(child)) {
 				if (child.type == LibraryComponents.ModalComponents.ModalTabContent) {
-					if (!tabs.length) child.props.open = true;
+					if (!tabbaritems.length) child.props.open = true;
 					else delete child.props.open;
-					tabs.push(BDFDB.ReactUtils.createElement(LibraryComponents.TabBar.Item, {
-						className: BDFDB.disCN.tabbaritem,
-						itemType: LibraryComponents.TabBar.Types.TOP,
-						id: child.props.tab,
-						children: child.props.tab,
-						"aria-label": child.props.tab
-					}));
+					tabbaritems.push({value:child.props.tab});
 				}
 				contentchildren.push(child);
 			}
-			if (tabs.length) headerchildren.push(BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+			if (tabbaritems.length) headerchildren.push(BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				className: BDFDB.disCN.tabbarcontainer,
 				children: BDFDB.ReactUtils.createElement(LibraryComponents.TabBar, {
 					className: BDFDB.disCN.tabbar,
+					itemClassName: BDFDB.disCN.tabbaritem,
 					type: LibraryComponents.TabBar.Types.TOP,
-					selectedItem: tabs[0].props.id,
-					children: tabs,
+					items: tabbaritems,
 					onItemSelect: (value, instance) => {
-						instance.props.selectedItem = value;
-						BDFDB.ReactUtils.forceUpdate(instance);
 						let modal = BDFDB.DOMUtils.getParent(".BDFDB-modal", BDFDB.ReactUtils.findDOMNode(instance));
 						if (modal) for (let tabcontent of modal.querySelectorAll(BDFDB.dotCN.modaltabcontent)) {
 							let tabcontentinstance = BDFDB.ReactUtils.getValue(tabcontent, "return.return.stateNode");
@@ -6704,8 +6696,8 @@ var BDFDB = {
 				popoutProps: {position: "bottom", zIndexBoost: 1000},
 				onChange: this.handleChange.bind(this)
 			});
-			if (!BDFDB.ObjectUtils.is(props.value)) props.value = {};
 			if (!BDFDB.ArrayUtils.is(props.options)) props.options = [{}];
+			if (!BDFDB.ObjectUtils.is(props.value)) props.value = props.options[0];
 			if (typeof props.renderOption != "function") props.renderOption = value => {return value.label;};
 			return BDFDB.ReactUtils.createElement(NativeSubComponents.QuickSelect, props);
 		}
@@ -6917,10 +6909,26 @@ var BDFDB = {
 	
 	LibraryComponents.TabBar = reactInitialized ? class BDFDB_TabBar extends LibraryModules.React.Component {
 		handleItemSelect(item) {
+			this.props.selectedItem = item;
+			BDFDB.ReactUtils.forceUpdate(this);
 			if (typeof this.props.onItemSelect == "function") this.props.onItemSelect(item, this);
 		}
 		render() {
-			return BDFDB.ReactUtils.createElement(NativeSubComponents.TabBar, Object.assign({}, this.props, {onItemSelect: this.handleItemSelect.bind(this)}));
+			let items = BDFDB.ArrayUtils.is(this.props.items) ? this.props.items : [{}];
+			let props = Object.assign({}, this.props, {
+				selectedItem: this.props.selectedItem || items[0].value,
+				onItemSelect: this.handleItemSelect.bind(this),
+				children: items.map(data => {
+					return BDFDB.ReactUtils.createElement(LibraryComponents.TabBar.Item, {
+						className: this.props.itemClassName,
+						itemType: this.props.type,
+						id: data.value,
+						children: data.label || data.value,
+						"aria-label": data.label || data.value
+					})
+				})
+			});
+			return BDFDB.ReactUtils.createElement(NativeSubComponents.TabBar, BDFDB.ObjectUtils.exclude(props, "itemClassName", "items"));
 		}
 	} : LibraryComponents.TabBar;
 	
