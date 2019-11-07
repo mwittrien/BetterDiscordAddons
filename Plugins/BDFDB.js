@@ -6540,6 +6540,9 @@ var BDFDB = {
 	LibraryComponents.NavItem = BDFDB.ModuleUtils.findByName("NavItem");
 	
 	LibraryComponents.Popout = reactInitialized ? class BDFDB_Popout extends LibraryModules.React.Component {
+		componentWillUnmount() {
+			if (typeof this.props.onClose == "function") this.props.onClose(this.props.containerInstance, this);
+		}
 		render() {
 			let pos = typeof this.props.position == "string" ? this.props.position.toLowerCase() : null;
 			let position = pos && DiscordClasses["popout" + pos] ? BDFDB.disCN["popout" + pos] : BDFDB.disCN.popouttop;
@@ -6564,7 +6567,10 @@ var BDFDB = {
 	
 	LibraryComponents.PopoutContainer = reactInitialized ? class BDFDB_PopoutContainer extends LibraryModules.React.Component {
 		handleRender(e) {
+			let onClose = typeof this.props.onClose == "function" ? this.props.onClose.bind(this) : _ => {};
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Popout, {
+				containerInstance: this,
+				onClose: this.props.onClose,
 				className: this.props.popoutClassName,
 				isChild: true,
 				position: e.position,
@@ -6581,10 +6587,7 @@ var BDFDB = {
 			let basepopout = BDFDB.ReactUtils.findOwner(this, {name:"BasePopout"});
 			if (!basepopout || !basepopout.handleClick) return;
 			this.handleClick = basepopout.handleClick;
-			this.close = (...args) => {
-				basepopout.close(...args);
-				if (typeof this.props.onClose == "function") this.props.onClose(this);
-			}
+			this.close = basepopout.close;
 			this.domElementRef = basepopout.domElementRef;
 		}
 		render() {
@@ -6610,7 +6613,7 @@ var BDFDB = {
 					else e.stopPropagation();
 				},
 				children: BDFDB.ReactUtils.createElement(NativeSubComponents.PopoutContainer, Object.assign({}, this.props, {
-					renderPopout: this.props.native && typeof this.props.renderPopout == "function" ? this.props.renderPopout : this.handleRender.bind(this)
+					renderPopout: this.handleRender.bind(this)
 				}))
 			});
 		}

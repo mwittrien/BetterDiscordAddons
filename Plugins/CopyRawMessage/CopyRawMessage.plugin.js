@@ -83,15 +83,14 @@ class CopyRawMessage {
 	onMessageOptionPopout (e) {
 		if (e.instance.props && e.instance.props.message) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["label", BDFDB.LanguageUtils.LanguageStrings.DELETE]]});
-			const copyItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+			children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
 				className: `${BDFDB.disCN.optionpopoutitem} BDFDB-popoutMenuItem ${this.name}-popoutMenuItem ${this.name}-copyraw-popoutMenuItem`,
 				action: _ => {
 					BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});
 					e.instance.props.onClose();
 				}
-			});
-			children.splice(index, 0, copyItem);
+			}));
 		}
 	}
 }
