@@ -6069,14 +6069,14 @@ var BDFDB = {
 			let processingAndListening = (this.props.disabled || this.props.submitting) && (null != this.props.onMouseEnter || null != this.props.onMouseLeave);
 			let props = BDFDB.ObjectUtils.exclude(this.props, "look", "color", "hover", "size", "fullWidth", "grow", "disabled", "submitting", "type", "style", "wrapperClassName", "className", "innerClassName", "onClick", "onContextMenu", "onMouseDown", "onMouseUp", "onMouseEnter", "onMouseLeave", "children", "rel");
 			let button = BDFDB.ReactUtils.createElement("button", Object.assign({}, !this.props.disabled && !this.props.submitting && props, {
-				className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.button, this.props.look != null ? this.props.look : LibraryComponents.Button.Looks.FILLED, this.props.color != null ? this.props.color : LibraryComponents.Button.Colors.BRAND, this.props.hover, this.props.size != null ? this.props.size : LibraryComponents.Button.Sizes.MEDIUM, processingAndListening && this.props.wrapperClassName, this.props.fullWidth && BDFDB.disCN.buttonfullwidth, this.props.grow && BDFDB.disCN.buttongrow, this.props.hover && this.props.hover !== LibraryComponents.Button.Hovers.DEFAULT && BDFDB.disCN.buttonhashover, this.props.submitting && BDFDB.disCN.buttonsubmitting, this.props.disabled && BDFDB.disCN.buttondisabled),
+				className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.button, this.props.look != null ? this.props.look : LibraryComponents.Button.Looks.FILLED, this.props.color != null ? this.props.color : LibraryComponents.Button.Colors.BRAND, this.props.hover, this.props.size != null ? this.props.size : LibraryComponents.Button.Sizes.MEDIUM, processingAndListening && this.props.wrapperClassName, this.props.fullWidth && BDFDB.disCN.buttonfullwidth, (this.props.grow === undefined || this.props.grow) && BDFDB.disCN.buttongrow, this.props.hover && this.props.hover !== LibraryComponents.Button.Hovers.DEFAULT && BDFDB.disCN.buttonhashover, this.props.submitting && BDFDB.disCN.buttonsubmitting, this.props.disabled && BDFDB.disCN.buttondisabled),
 				onClick: (this.props.disabled || this.props.submitting) ? e => {return e.preventDefault();} : this.handleClick.bind(this),
 				onContextMenu: (this.props.disabled || this.props.submitting) ? e => {return e.preventDefault();} : this.handleContextMenu.bind(this),
 				onMouseUp: !this.props.disabled && this.handleMouseDown.bind(this),
 				onMouseDown: !this.props.disabled && this.handleMouseUp.bind(this),
 				onMouseEnter: this.handleMouseEnter.bind(this),
 				onMouseLeave: this.handleMouseLeave.bind(this),
-				type: this.props.type,
+				type: this.props.type === "undefined" ? "button" : this.props.type,
 				disabled: this.props.disabled,
 				style: this.props.style,
 				rel: this.props.rel,
@@ -6093,7 +6093,7 @@ var BDFDB = {
 				]
 			}));
 			return !processingAndListening ? button : BDFDB.ReactUtils.createElement("span", {
-				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.buttondisabledwrapper, this.props.wrapperClassName, this.props.size != null ? this.props.size : LibraryComponents.Button.Sizes.MEDIUM, this.props.fullWidth && BDFDB.disCN.buttonfullwidth, this.props.grow && BDFDB.disCN.buttongrow),
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.buttondisabledwrapper, this.props.wrapperClassName, this.props.size != null ? this.props.size : LibraryComponents.Button.Sizes.MEDIUM, this.props.fullWidth && BDFDB.disCN.buttonfullwidth, (this.props.grow === undefined || this.props.grow) && BDFDB.disCN.buttongrow),
 				children: [
 					button,
 					BDFDB.ReactUtils.createElement("span", {
