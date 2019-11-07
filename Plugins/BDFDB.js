@@ -6580,6 +6580,8 @@ var BDFDB = {
 	
 	LibraryComponents.MessageComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Message", "MessageTimestamp"));
 	
+	LibraryComponents.MessageGroup = BDFDB.ModuleUtils.findByName("FluxContainer(ConnectedMessageGroup)");
+	
 	LibraryComponents.MessagesPopoutComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Header", "EmptyStateBottom"));
 	
 	LibraryComponents.ModalComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("ModalContent", "ModalFooter"));
