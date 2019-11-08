@@ -4145,7 +4145,7 @@ var BDFDB = {
 	DiscordClassModules.CustomStatusIcon = BDFDB.ModuleUtils.findByProperties("icon", "emoji");
 	DiscordClassModules.DmAddPopout = BDFDB.ModuleUtils.findByProperties("popout", "searchBarComponent");
 	DiscordClassModules.DmAddPopoutItems = BDFDB.ModuleUtils.findByProperties("friendSelected", "friendWrapper");
-	DiscordClassModules.DownloadLink = BDFDB.ModuleUtils.findByProperties("downloadLink", "size12");
+	DiscordClassModules.DownloadLink = BDFDB.ModuleUtils.findByProperties("downloadLink");
 	DiscordClassModules.Embed = BDFDB.ModuleUtils.findByProperties("embed", "embedAuthorIcon");
 	DiscordClassModules.EmbedActions = BDFDB.ModuleUtils.findByProperties("iconPlay", "iconWrapperActive");
 	DiscordClassModules.Emoji = BDFDB.ModuleUtils.find(m => typeof m.emoji == "string" && Object.keys(m).length == 1);
