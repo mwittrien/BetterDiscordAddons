@@ -6612,6 +6612,7 @@ var BDFDB = {
 	
 	LibraryComponents.Popout = reactInitialized ? class BDFDB_Popout extends LibraryModules.React.Component {
 		componentWillUnmount() {
+			delete this.props.containerInstance.popout;
 			if (typeof this.props.onClose == "function") this.props.onClose(this.props.containerInstance, this);
 		}
 		render() {
@@ -6636,7 +6637,7 @@ var BDFDB = {
 	
 	LibraryComponents.PopoutContainer = reactInitialized ? class BDFDB_PopoutContainer extends LibraryModules.React.Component {
 		handleRender(e) {
-			return BDFDB.ReactUtils.createElement(LibraryComponents.Popout, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+			return this.popout = BDFDB.ReactUtils.createElement(LibraryComponents.Popout, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				className: this.props.popoutClassName,
 				containerInstance: this,
 				isChild: true,
