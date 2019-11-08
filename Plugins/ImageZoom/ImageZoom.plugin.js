@@ -3,7 +3,7 @@
 class ImageZoom {
 	getName () {return "ImageZoom";}
 
-	getVersion () {return "1.0.4";}
+	getVersion () {return "1.0.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ImageZoom {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"fixed":[["Inside Image","Fixed the bug where the zoom settings appeared inside the image"]]
 		};
 
 		this.patchModules = {
@@ -22,6 +22,16 @@ class ImageZoom {
 
 	initConstructor () {
 		this.css = `
+			.image-modal {
+				display: grid;
+			}
+			.image-modal > ${BDFDB.dotCN.imagewrapper} {
+				grid-column: span 20;
+				grid-row: 1;
+			}
+			.image-modal > *:not(img) {
+				grid-row: 2;
+			}
 			.imagezoom-lense {
 				border: 2px solid rgb(114, 137, 218);
 			}
@@ -107,9 +117,10 @@ class ImageZoom {
 				if (img && img.src && !BDFDB.DOMUtils.containsClass(img, BDFDB.disCN.imageplaceholder)) {
 					BDFDB.TimeUtils.clear(waitForImg);
 					img.setAttribute("draggable", "false");
-					inner.firstElementChild.appendChild(BDFDB.DOMUtils.create(`<span class="${BDFDB.disCN.downloadlink} imagezoom-separator" style="margin: 0px 5px;"> | </div>`));
+					BDFDB.DOMUtils.addClass(inner, "image-modal");
+					inner.appendChild(BDFDB.DOMUtils.create(`<span class="${BDFDB.disCN.downloadlink} imagezoom-separator" style="margin: 0px 5px;"> | </div>`));
 					let settingslink = BDFDB.DOMUtils.create(`<span class="${BDFDB.disCN.downloadlink} imagezoom-settings">Zoom ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}</div>`);
-					inner.firstElementChild.appendChild(settingslink);
+					inner.appendChild(settingslink);
 					let openContext = e => {
 						let settings = BDFDB.DataUtils.get(this, "settings");
 						let items = [];
@@ -131,9 +142,10 @@ class ImageZoom {
 								}});
 							}
 						}));
-						BDFDB.ContextMenuUtils.open(this, e, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+						const itemGroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 							children: items
-						}));
+						});
+						BDFDB.ContextMenuUtils.open(this, e, itemGroup);
 					};
 					settingslink.addEventListener("click", openContext);
 					settingslink.addEventListener("contextmenu", openContext);
