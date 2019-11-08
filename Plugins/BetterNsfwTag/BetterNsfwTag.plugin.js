@@ -15,7 +15,7 @@ class BetterNsfwTag {
 		};
 		
 		this.patchModules = {
-			"ChannelItem":"render"
+			ChannelItem: "render"
 		};
 	}
 
@@ -70,13 +70,14 @@ class BetterNsfwTag {
 	processChannelItem (e) {
 		if (e.instance.props && e.instance.props.channel && e.instance.props.channel.nsfw) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.channelchildren]]});
-			let firstChildClassName = index > -1 && BDFDB.ReactUtils.getValue(children[index], "props.children.0.props.className");
-			if (firstChildClassName && firstChildClassName.indexOf("NSFW-tag") > -1) children[index].props.children.shift();
 			if (index > -1 && children[index].props && children[index].props.children) {
-				children[index].props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BotTag, {
-					className: "NSFW-tag",
-					tag: "NSFW",
-					style: {backgroundColor: "#F04747"}
+				let [oldTagParent, oldTagIndex] = BDFDB.ReactUtils.findChildren(children[index], {key: "NSFW-badge"});
+				if (oldTagIndex > -1) oldTagParent.splice(oldTagIndex, 1);
+				children[index].props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.TextBadge, {
+					className: "NSFW-badge",
+					key: "NSFW-badge",
+					style: {borderRadius: "3px"},
+					text: "NSFW"
 				}));
 			}
 		}
