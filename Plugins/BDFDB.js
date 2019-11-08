@@ -6703,16 +6703,16 @@ var BDFDB = {
 			if (typeof this.props.onChange == "function") this.props.onChange(value, this);
 		}
 		render() {
-			let props = Object.assign({}, this.props, {
+			let options = (BDFDB.ArrayUtils.is(this.props.options) ? this.props.options : [{}]).filter(n => n);
+			return BDFDB.ReactUtils.createElement(NativeSubComponents.QuickSelect, Object.assign({}, this.props, {
 				className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.quickselectwrapper),
 				popoutClassName: BDFDB.DOMUtils.formatClassName(this.props.popoutClassName, BDFDB.disCN.quickselectpopoutwrapper),
 				popoutProps: {position: "bottom", zIndexBoost: 1000},
+				value: BDFDB.ObjectUtils.is(this.props.value) ? this.props.value : (options[0] || {}),
+				options: options,
+				renderOption: typeof this.props.renderOption == "function" ? this.props.renderOption : value => {return value.label;},
 				onChange: this.handleChange.bind(this)
-			});
-			if (!BDFDB.ArrayUtils.is(props.options)) props.options = [{}];
-			if (!BDFDB.ObjectUtils.is(props.value)) props.value = props.options[0];
-			if (typeof props.renderOption != "function") props.renderOption = value => {return value.label;};
-			return BDFDB.ReactUtils.createElement(NativeSubComponents.QuickSelect, props);
+			}));
 		}
 	} : LibraryComponents.QuickSelect;
 	
@@ -6931,9 +6931,9 @@ var BDFDB = {
 			if (typeof this.props.onItemSelect == "function") this.props.onItemSelect(item, this);
 		}
 		render() {
-			let items = BDFDB.ArrayUtils.is(this.props.items) ? this.props.items : [{}];
-			let props = Object.assign({}, this.props, {
-				selectedItem: this.props.selectedItem || items[0].value,
+			let items = (BDFDB.ArrayUtils.is(this.props.items) ? this.props.items : [{}]).filter(n => n);
+			return BDFDB.ReactUtils.createElement(NativeSubComponents.TabBar, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+				selectedItem: (this.props.selectedItem || items[0] || {}).value,
 				onItemSelect: this.handleItemSelect.bind(this),
 				children: items.map(data => {
 					return BDFDB.ReactUtils.createElement(LibraryComponents.TabBar.Item, {
@@ -6944,8 +6944,7 @@ var BDFDB = {
 						"aria-label": data.label || data.value
 					})
 				})
-			});
-			return BDFDB.ReactUtils.createElement(NativeSubComponents.TabBar, BDFDB.ObjectUtils.exclude(props, "itemClassName", "items"));
+			}), "itemClassName", "items"));
 		}
 	} : LibraryComponents.TabBar;
 	
