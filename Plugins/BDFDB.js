@@ -4765,6 +4765,7 @@ var BDFDB = {
 		golivegameicon: ["GoLiveDetails", "gameIcon"],
 		golivegamename: ["GoLiveDetails", "gameName"],
 		golivegamewrapper: ["GoLiveDetails", "gameWrapper"],
+		goliveinfo: ["GoLiveDetails", "info"],
 		golivepanel: ["GoLiveDetails", "panel"],
 		green: ["TextStyle", "statusGreen"],
 		grey: ["TextStyle", "statusGrey"],
