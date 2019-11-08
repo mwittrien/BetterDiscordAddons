@@ -6933,7 +6933,7 @@ var BDFDB = {
 		render() {
 			let items = (BDFDB.ArrayUtils.is(this.props.items) ? this.props.items : [{}]).filter(n => n);
 			return BDFDB.ReactUtils.createElement(NativeSubComponents.TabBar, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-				selectedItem: (this.props.selectedItem || items[0] || {}).value,
+				selectedItem: this.props.selectedItem || (items[0] || {}).value,
 				onItemSelect: this.handleItemSelect.bind(this),
 				children: items.map(data => {
 					return BDFDB.ReactUtils.createElement(LibraryComponents.TabBar.Item, {
