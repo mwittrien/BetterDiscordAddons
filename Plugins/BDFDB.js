@@ -4655,6 +4655,7 @@ var BDFDB = {
 		embedlink: ["Embed", "embedLink"],
 		embedlowbackgroundopacity: ["Embed", "lowBackgroundOpacity"],
 		embedmargin: ["Embed", "embedMargin"],
+		embedmedia: ["Embed", "embedMedia"],
 		embedmediumbackgroundopacity: ["Embed", "mediumBackgroundOpacity"],
 		embedprovider: ["Embed", "embedProvider"],
 		embedspoilerattachment: ["Embed", "spoilerAttachment"],
