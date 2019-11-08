@@ -1319,6 +1319,7 @@ var BDFDB = {
 	DiscordObjects.Channel = BDFDB.ModuleUtils.findByPrototypes("initialize", "getTitleIcon", "getGuildId");
 	DiscordObjects.Guild = BDFDB.ModuleUtils.findByPrototypes("initialize", "getMaxEmojiSlots", "getRole");
 	DiscordObjects.Message = BDFDB.ModuleUtils.findByPrototypes("initialize", "getAuthorName", "getChannelId");
+	DiscordObjects.Timestamp = BDFDB.ModuleUtils.findByPrototypes("add", "dayOfYear", "hasAlignedHourOffset");
 	DiscordObjects.User = BDFDB.ModuleUtils.findByPrototypes("initialize", "isLocalBot", "isClaimed");
 	BDFDB.DiscordObjects = Object.assign({}, DiscordObjects);
 	
