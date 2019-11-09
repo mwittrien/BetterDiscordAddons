@@ -6706,7 +6706,7 @@ var BDFDB = {
 		handleChange(value) {
 			this.props.value = value;
 			BDFDB.ReactUtils.forceUpdate(this);
-			if (typeof this.props.onChange == "function") this.props.onChange(value, this);
+			if (typeof this.props.onChange == "function") this.props.onChange(value.value, this);
 		}
 		render() {
 			let options = (BDFDB.ArrayUtils.is(this.props.options) ? this.props.options : [{}]).filter(n => n);

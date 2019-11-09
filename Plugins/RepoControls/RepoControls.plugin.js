@@ -199,7 +199,7 @@ class RepoControls {
 						value: valuekey
 					}}),
 					onChange: value => {
-						BDFDB.DataUtils.save(value.value, this, "sortings", key);
+						BDFDB.DataUtils.save(value, this, "sortings", key);
 						this.sortEntries(instance, parent);
 					}
 				})
