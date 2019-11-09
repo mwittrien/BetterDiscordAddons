@@ -6756,7 +6756,7 @@ var BDFDB = {
 						let selected = option.value && option.value === selectedOption.value || option.key && option.key === selectedOption.key;
 						return typeof this.props.renderOption == "function" ? this.props.renderOption(option) : BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenuItem, {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.quickselectpopoutoption, selected && BDFDB.disCN.quickselectpopoutoptionselected),
-							onClick: selected ? null : _ => {
+							action: selected ? null : _ => {
 								instance.close();
 								this.handleChange.bind(this)(option)
 							},
