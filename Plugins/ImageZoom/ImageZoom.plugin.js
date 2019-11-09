@@ -3,7 +3,7 @@
 class ImageZoom {
 	getName () {return "ImageZoom";}
 
-	getVersion () {return "1.0.5";}
+	getVersion () {return "1.0.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -116,11 +116,12 @@ class ImageZoom {
 				let img = modal.querySelector(BDFDB.dotCNS.imagewrapper + "img," + BDFDB.dotCNS.imagewrapper + "video");
 				if (img && img.src && !BDFDB.DOMUtils.containsClass(img, BDFDB.disCN.imageplaceholder)) {
 					BDFDB.TimeUtils.clear(waitForImg);
+					let parent = inner.querySelector(BDFDB.dotCN.downloadlink).parentElement
 					img.setAttribute("draggable", "false");
 					BDFDB.DOMUtils.addClass(inner, "image-modal");
-					inner.appendChild(BDFDB.DOMUtils.create(`<span class="${BDFDB.disCN.downloadlink} imagezoom-separator" style="margin: 0px 5px;"> | </div>`));
+					parent.appendChild(BDFDB.DOMUtils.create(`<span class="${BDFDB.disCN.downloadlink} imagezoom-separator" style="margin: 0px 5px;"> | </div>`));
 					let settingslink = BDFDB.DOMUtils.create(`<span class="${BDFDB.disCN.downloadlink} imagezoom-settings">Zoom ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}</div>`);
-					inner.appendChild(settingslink);
+					parent.appendChild(settingslink);
 					let openContext = e => {
 						let settings = BDFDB.DataUtils.get(this, "settings");
 						let items = [];
