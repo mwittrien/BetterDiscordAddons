@@ -6748,7 +6748,7 @@ var BDFDB = {
 					})
 				}),
 				popoutClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.quickselectpopout, this.props.popoutClassName, BDFDB.disCN.quickselectpopoutwrapper, this.props.scroller && BDFDB.disCN.quickselectpopoutscroll),
-				animation: BDFDB.LibraryComponents.PopoutContainer.Animation.SCALE,
+				animation: BDFDB.LibraryComponents.PopoutContainer.Animation.TRANSLATE,
 				position: BDFDB.LibraryComponents.PopoutContainer.Positions.BOTTOM,
 				align: BDFDB.LibraryComponents.PopoutContainer.Align.RIGHT,
 				renderPopout: instance => {
