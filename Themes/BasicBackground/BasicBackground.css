@@ -1394,6 +1394,9 @@ body:before {
 .outer-2IVh5n .outer-2IVh5n {
 	background-color: transparent !important;
 }
+#app-mount .emptyCard-3CNsz2 {								/* activitycard			emptygamecard						*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
 .base-1x0h_U {												/* activitycard			title								*/
 	color: rgb(var(--fontwhite1));
 }

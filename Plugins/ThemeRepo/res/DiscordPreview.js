@@ -66,7 +66,7 @@ window.onmessage = function (e) {
 				var newhtml = oldhtml.shift();
 				for (let html of oldhtml) {
 					html = html.split('"');
-					newhtml += 'class="' + (e.data.checked ? html[0].replace(/([A-z0-9]+?)-([A-z0-9_-]{6})/g, "$1-$2 da-$1") : html[0].split(" ").filter(n => n.indexOf("da-") != 0).join(" ")) + '"' + html.slice(1).join('"');
+					newhtml += 'class="' + (e.data.checked ? html[0].split(" ").map(n => n.replace(/([A-z0-9]+?)-([A-z0-9_-]{6})/g, "$1-$2 da-$1")).join(" ") : html[0].split(" ").filter(n => n.indexOf("da-") != 0).join(" ")) + '"' + html.slice(1).join('"');
 				}
 				document.body.innerHTML = newhtml;
 				break;
