@@ -3,7 +3,7 @@
 class RepoControls {
 	getName () {return "RepoControls";}
 
-	getVersion () {return "1.3.2";}
+	getVersion () {return "1.3.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -187,6 +187,7 @@ class RepoControls {
 				}),
 			].concat(Object.keys(sortings).map(key => 
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
+					nativeComponent: true;
 					popoutClassName: BDFDB.disCN.contextmenu,
 					label: this.defaults.sortings[key].label,
 					value: {
