@@ -68,6 +68,7 @@ class PersonalPins {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
 			
+			// REMOVE
 			let pins = BDFDB.DataUtils.load(this, "pins"), notes = {}, olddata = 0, resolveddata = 0, loading = true, i = 0;
 			for (let guild_id in pins) {
 				notes[guild_id] = {};
