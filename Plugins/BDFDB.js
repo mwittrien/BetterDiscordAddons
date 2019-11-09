@@ -3750,9 +3750,9 @@ var BDFDB = {
 		var length = (!channel || string.indexOf("/") == 0 || string.indexOf("s/") == 0 || string.indexOf("+:") == 0) ? string.length : LibraryModules.MessageCreationUtils.parse(channel, string).content.length;
 		return length > string.length ? length : string.length;
 	};
-	BDFDB.StringUtils.highlight = function (text, searchstring) {
+	BDFDB.StringUtils.highlight = function (text, searchstring, prefix = `<span class="${BDFDB.disCN.highlight}">`, suffix = `</span>`) {
 		if (!searchstring || searchstring.length < 1) return text;
-		var offset = 0, original = text, prefix = `<span class="${BDFDB.disCN.highlight}">`, suffix = `</span>`;
+		var offset = 0, original = text;
 		BDFDB.ArrayUtils.getAllIndexes(text.toUpperCase(), searchstring.toUpperCase()).forEach(index => {
 			var d1 = offset * (prefix.length + suffix.length);
 			index = index + d1;
