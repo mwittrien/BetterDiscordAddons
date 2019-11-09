@@ -1957,6 +1957,9 @@ body:before {
 #app-mount .cardPlaceholder-1zrbbe {						/* guildcard			placeholder							*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
+#app-mount .loading-17PYl_ {								/* guildcard			loading								*/
+	background-color: rgba(var(--vtransparencycolor), 0.5);
+}
 #app-mount .guildName-1yURO5 {								/* guildcard			guildname							*/
 	color: rgb(var(--fontwhite1));
 }
