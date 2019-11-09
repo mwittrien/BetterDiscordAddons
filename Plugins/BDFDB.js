@@ -6645,7 +6645,7 @@ var BDFDB = {
 					position: this.props.isChild ? "relative" : "absolute"
 				}),
 				children: BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.DOMUtils.formatClassName(this.props.className, !(this.props.className && this.props.className.indexOf(BDFDB.disCN.quickselectpopoutwrapper) > -1) && BDFDB.disCN.popoutthemedpopout),
+					className: BDFDB.DOMUtils.formatClassName(this.props.className, (this.props.themed || this.props.themed === undefined) && BDFDB.disCN.popoutthemedpopout),
 					style: BDFDB.ObjectUtils.extract(this.props, "padding", "height", "maxHeight", "minHeight", "width", "maxWidth", "minWidth"),
 					children: this.props.children
 				})
@@ -6703,22 +6703,21 @@ var BDFDB = {
 	} : LibraryComponents.PopoutContainer;
 	
 	LibraryComponents.QuickSelect = reactInitialized ? class BDFDB_QuickSelect extends LibraryModules.React.Component {
-		handleChange(value) {
-			this.props.value = value;
+		handleChange(option) {
+			this.props.value = option;
 			BDFDB.ReactUtils.forceUpdate(this);
-			if (typeof this.props.onChange == "function") this.props.onChange(value.value, this);
+			if (typeof this.props.onChange == "function") this.props.onChange(option.value || option.key, this);
 		}
 		render() {
 			let options = (BDFDB.ArrayUtils.is(this.props.options) ? this.props.options : [{}]).filter(n => n);
 			let selectedOption = BDFDB.ObjectUtils.is(this.props.value) ? this.props.value : (options[0] || {});
-			let renderOption = typeof this.props.renderOption == "function" ? this.props.renderOption : value => {return value.label;};
 			return this.props.nativeComponent ? BDFDB.ReactUtils.createElement(NativeSubComponents.QuickSelect, Object.assign({}, this.props, {
 				className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.quickselectwrapper),
 				popoutClassName: BDFDB.DOMUtils.formatClassName(this.props.popoutClassName, BDFDB.disCN.quickselectpopoutwrapper),
 				popoutProps: {position: "bottom", zIndexBoost: 1000},
 				value: selectedOption,
 				options: options,
-				renderOption: renderOption,
+				renderOption: typeof this.props.renderOption == "function" ? this.props.renderOption : option => {return option.label;},
 				onChange: this.handleChange.bind(this)
 			})) : BDFDB.ReactUtils.createElement(LibraryComponents.PopoutContainer, Object.assign({}, this.props, {
 				children: BDFDB.ReactUtils.createElement("div", {
@@ -6747,20 +6746,21 @@ var BDFDB = {
 						]
 					})
 				}),
-				popoutClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.quickselectpopout, this.props.popoutClassName, BDFDB.disCN.quickselectpopoutwrapper, this.props.scroller && BDFDB.disCN.quickselectpopoutscroll),
+				popoutClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.quickselectpopout, this.props.popoutClassName, BDFDB.disCN.contextmenu, BDFDB.disCN.quickselectpopoutwrapper, this.props.scroller && BDFDB.disCN.quickselectpopoutscroll),
+				themed: false,
 				animation: BDFDB.LibraryComponents.PopoutContainer.Animation.TRANSLATE,
 				position: BDFDB.LibraryComponents.PopoutContainer.Positions.BOTTOM,
 				align: BDFDB.LibraryComponents.PopoutContainer.Align.RIGHT,
 				renderPopout: instance => {
 					let items = options.map(option => {
-						let selected = option.value === selectedOption.value;
-						return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+						let selected = option.value && option.value === selectedOption.value || option.key && option.key === selectedOption.key;
+						return typeof this.props.renderOption == "function" ? this.props.renderOption(option) : BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenuItem, {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.quickselectpopoutoption, selected && BDFDB.disCN.quickselectpopoutoptionselected),
 							onClick: selected ? null : _ => {
 								instance.close();
 								this.handleChange.bind(this)(option)
 							},
-							children: renderOption(option)
+							label: option.label
 						});
 					});
 					return this.props.scroller ? BDFDB.ReactUtils.createElement(LibraryComponents.ScrollerVertical, {
@@ -7345,7 +7345,8 @@ var BDFDB = {
 			font-size: 15px;
 		}
 		
-		${BDFDB.dotCN.quickselectpopout + BDFDB.dotCN.quickselectpopoutwrapper} {
+		${BDFDB.dotCNS.themelight + BDFDB.dotCN.quickselectpopoutwrapper},
+		${BDFDB.dotCNS.themedark + BDFDB.dotCN.quickselectpopoutwrapper} {
 			border-radius: 4px;
 			padding: 6px 8px;
 			cursor: default;
@@ -7353,7 +7354,7 @@ var BDFDB = {
 			box-sizing: border-box;
 			box-shadow: var(--elevation-high);
 		}
-		${BDFDB.dotCN.quickselectpopout + BDFDB.dotCNS.quickselectpopoutwrapper + BDFDB.dotCN.quickselectpopoutoption} {
+		${BDFDB.dotCNS.quickselectpopoutwrapper + BDFDB.dotCN.quickselectpopoutoption} {
 			white-space: nowrap;
 			text-overflow: ellipsis;
 			overflow: hidden;
@@ -7370,11 +7371,11 @@ var BDFDB = {
 			border-radius: 2px;
 			color: var(--interactive-normal);
 		}
-		${BDFDB.dotCN.quickselectpopout + BDFDB.dotCNS.quickselectpopoutwrapper + BDFDB.dotCN.quickselectpopoutoption}:hover {
+		${BDFDB.dotCNS.quickselectpopoutwrapper + BDFDB.dotCN.quickselectpopoutoption}:hover {
 			color: var(--interactive-hover);
 			background-color: var(--background-modifier-hover);
 		}
-		${BDFDB.dotCN.quickselectpopout + BDFDB.dotCNS.quickselectpopoutwrapper + BDFDB.dotCN.quickselectpopoutoption + BDFDB.dotCN.quickselectpopoutoptionselected} {
+		${BDFDB.dotCNS.quickselectpopoutwrapper + BDFDB.dotCN.quickselectpopoutoption + BDFDB.dotCN.quickselectpopoutoptionselected} {
 			color: var(--interactive-active);
 			background-color: var(--background-modifier-selected);
 		}

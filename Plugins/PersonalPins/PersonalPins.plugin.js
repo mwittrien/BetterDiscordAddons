@@ -253,7 +253,6 @@ class PersonalPins {
 								}
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
-								popoutClassName: BDFDB.disCN.contextmenu,
 								spacing: -25,
 								label: this.labels.popout_sort_text + ":",
 								value: buttoninstance.props.selectedSort,

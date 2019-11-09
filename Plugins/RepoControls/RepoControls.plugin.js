@@ -188,7 +188,6 @@ class RepoControls {
 			].concat(Object.keys(sortings).map(key => 
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
 					nativeComponent: true,
-					popoutClassName: BDFDB.disCN.contextmenu,
 					label: this.defaults.sortings[key].label,
 					value: {
 						label: this.defaults.sortings[key].values[sortings[key]],
