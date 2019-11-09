@@ -6731,7 +6731,7 @@ var BDFDB = {
 								children: this.props.label
 							}),
 							BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
-								align: LibraryComponents.Flex.CENTER,
+								align: LibraryComponents.Flex.Align.CENTER,
 								className: BDFDB.disCN.quickselectclick,
 								children: [
 									BDFDB.ReactUtils.createElement("div", {
