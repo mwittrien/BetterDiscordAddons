@@ -5,147 +5,38 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.8.3";} 
+	getVersion () {return "1.8.4";} 
 
 	getAuthor () {return "DevilBro";}
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Popout","Fixed bug where the popout would not properly open"]]
+			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
 		this.patchModules = {
-			"HeaderBar":["componentDidMount","componentDidUpdate"],
-			"HeaderBarContainer":["componentDidMount","componentDidUpdate"],
-			"Message":"componentDidMount"
+			HeaderBarContainer: "render"
 		};
-	}
-
-	initConstructor () {
-		this.notesButtonMarkup =
-			`<div class="${BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable} notes-button">
-				<svg class="${BDFDB.disCN.channelheadericon}" name="Note" width="24" height="24" viewBox="-1 -1 23 23">
-					<path fill="currentColor" d="M 4.618, 0 c -0.316, 0 -0.573, 0.256 -0.573, 0.573 v 1.145 c 0, 0.316, 0.256, 0.573, 0.573, 0.573 s 0.573 -0.256, 0.573 -0.573 V 0.573 C 5.191, 0.256, 4.935, 0, 4.618, 0 z"/>
-					<path fill="currentColor" d="M 8.053, 0 c -0.316, 0 -0.573, 0.256 -0.573, 0.573 v 1.145 c 0, 0.316, 0.256, 0.573, 0.573, 0.573 s 0.573 -0.256, 0.573 -0.573 V 0.573 C 8.626, 0.256, 8.37, 0, 8.053, 0 z"/>
-					<path fill="currentColor" d="M 11.489, 0 c -0.316, 0 -0.573, 0.256 -0.573, 0.573 v 1.145 c 0, 0.316, 0.256, 0.573, 0.573, 0.573 c 0.316, 0, 0.573 -0.256, 0.573 -0.573 V 0.573 C 12.061, 0.256, 11.805, 0, 11.489, 0 z "/>
-					<path fill="currentColor" d="M 14.924, 0 c -0.316, 0 -0.573, 0.256 -0.573, 0.573 v 1.145 c 0, 0.316, 0.256, 0.573, 0.573, 0.573 c 0.316, 0, 0.573 -0.256, 0.573 -0.573 V 0.573 C 15.496, 0.256, 15.24, 0, 14.924, 0 z"/>
-					<path fill="currentColor" d="M 16.641, 1.25 V 1.718 c 0, 0.947 -0.77, 1.718 -1.718, 1.718 c -0.947, 0 -1.718 -0.77 -1.718 -1.718 c 0, 0.947 -0.77, 1.718 -1.718, 1.718 c -0.947, 0 -1.718 -0.77 -1.718 -1.718 c 0, 0.947 -0.77, 1.718 -1.718, 1.718 c -0.947, 0 -1.718 -0.77 -1.718 -1.718 c 0, 0.947 -0.77, 1.718 -1.718, 1.718 c -0.947, 0 -1.718 -0.77 -1.718 -1.718 V 1.25 C 2.236, 1.488, 1.756, 2.117, 1.756, 2.863 v 14.962 c 0, 0.947, 0.77, 1.718, 1.718, 1.718 h 12.595 c 0.947, 0, 1.718 -0.77, 1.718 -1.718 V 2.863 C 17.786, 2.117, 17.306, 1.488, 16.641, 1.25 z M 14.924, 16.679 H 4.618 c -0.316, 0 -0.573 -0.256 -0.573 -0.573 c 0 -0.316, 0.256 -0.573, 0.573 -0.573 h 10.305 c 0.316, 0, 0.573, 0.256, 0.573, 0.573 C 15.496, 16.423, 15.24, 16.679, 14.924, 16.679 z M 14.924, 13.244 H 4.618 c -0.316, 0 -0.573 -0.256 -0.573 -0.573 c 0 -0.316, 0.256 -0.573, 0.573 -0.573 h 10.305 c 0.316, 0, 0.573, 0.256, 0.573, 0.573 C 15.496, 12.988, 15.24, 13.244, 14.924, 13.244 z M 14.924, 9.733 H 4.618 c -0.316, 0 -0.573 -0.256 -0.573 -0.573 s 0.256 -0.573, 0.573 -0.573 h 10.305 c 0.316, 0, 0.573, 0.256, 0.573, 0.573 S 15.24, 9.733, 14.924, 9.733 z M 14.924, 6.298 H 4.618 c -0.316, 0 -0.573 -0.256 -0.573 -0.573 s 0.256 -0.573, 0.573 -0.573 h 10.305 c 0.316, 0, 0.573, 0.256, 0.573, 0.573 S 15.24, 6.298, 14.924, 6.298 z"/>
-				</svg>
-			</div>`;
-
-		this.notesPopoutMarkup = 
-			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCNS.popoutnoarrow + BDFDB.disCN.popoutnoshadow} popout-personalpins-notes BDFDB-modal" style="z-index: 1000; visibility: visible; left: 544.844px; top: 35.9896px; transform: translateX(-100%) translateY(0%) translateZ(0px);">
-				<div class="${BDFDB.disCNS.messagespopoutwrap + BDFDB.disCNS.recentmentionspopout + BDFDB.disCN.popoutthemedpopout}" style="max-height: 740px; width: 500px;">
-					<div class="${BDFDB.disCNS.recentmentionsheader + BDFDB.disCNS.popoutheader + BDFDB.disCN.messagespopoutheader}" style="padding-bottom: 0;">
-						<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.margintop8}" style="flex: 0 0 auto;">
-							<div class="${BDFDB.disCNS.popouttitle + BDFDB.disCN.messagespopouttitle}">REPLACE_popout_note_text</div>
-						</div>
-						<div class="${BDFDB.disCN.tabbarheadercontainer}" style="flex: 0 0 auto;">
-							<div class="${BDFDB.disCNS.tabbarheader + BDFDB.disCN.tabbartop}">
-								<div tab="channel" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbarheaderitem}">REPLACE_popout_channel_text</div>
-								<div tab="server" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbarheaderitem}">REPLACE_popout_server_text</div>
-								<div tab="allservers" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbarheaderitem}">REPLACE_popout_allservers_text</div>
-							</div>
-							<div class="${BDFDB.disCN.recentmentionsmentionfilter}" style="padding-right: 15px;">
-								<div class="${BDFDB.disCN.recentmentionsmentionfilterlabel}">REPLACE_popout_sort_text:</div>
-								<div option="timestamp" class="${BDFDB.disCN.recentmentionsmentionfiltervalue}" style="text-transform: none;">REPLACE_popout_messagesort_text</div>
-							</div>
-						</div>
-					</div>
-					<div class="${BDFDB.disCN.scrollerwrap}">
-						<div class="${BDFDB.disCNS.messagespopout + BDFDB.disCN.scroller}">
-							<div class="${BDFDB.disCN.messagespopoutemptyplaceholder}">
-								<div class="${BDFDB.disCN.messagespopoutimage}"></div>
-								<div class="${BDFDB.disCN.messagespopoutbody}"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>`;
-
-		this.sortPopoutMarkup =
-			`<div class="${BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottomright + BDFDB.disCN.popoutnoshadow} personalpins-sort-popout" style="z-index: 1100; visibility: visible; transform: translateX(-100%) translateY(0%) translateZ(0px);">
-				<div>
-					<div class="${BDFDB.disCN.contextmenu} BDFDB-quickSelectPopout">
-						<div class="${BDFDB.disCN.contextmenuitemgroup}">
-							<div option="timestamp" class="${BDFDB.disCNS.contextmenuitem + BDFDB.disCN.contextmenuitemclickable}">REPLACE_popout_messagesort_text</div>
-							<div option="addedat" class="${BDFDB.disCNS.contextmenuitem + BDFDB.disCN.contextmenuitemclickable}">REPLACE_popout_datesort_text</div>
-						</div>
-					</div>
-				</div>
-			</div>`;
-
-		this.messageDividerMarkup = 
-			`<div class="${BDFDB.disCN.messagespopoutchannelseparator}">
-				<span tabindex="0" class="${BDFDB.disCN.messagespopoutchannelname}" role="button"></span>
-				<span class="${BDFDB.disCN.messagespopoutguildname}"></span>
-			</div>`;
-
-		this.messageMarkup = 
-			`<div class="${BDFDB.disCN.messagespopoutmessagegroupwrapper}">
-				<div class="${BDFDB.disCN.messagespopoutmessagegroupwrapperoffsetcorrection}">
-					<div class="${BDFDB.disCNS.messagespopoutcontainercozybounded + BDFDB.disCNS.messagegroup + BDFDB.disCN.messagegroupcozy}">
-						<div class="${BDFDB.disCN.messagespopoutmessagegroupcozy}" aria-disabled="true">
-							<div class="${BDFDB.disCN.messageheadercozy}">
-								<div class="${BDFDB.disCN.messageavatar}" aria-hidden="true">
-									<div class="${BDFDB.disCN.avatarwrapper}" role="img" aria-hidden="true" style="width: 40px; height: 40px;">
-										<svg width="49" height="40" viewBox="0 0 49 40" class="${BDFDB.disCN.avatarmask}" aria-hidden="true">
-											<foreignObject x="0" y="0" width="40" height="40" mask="url(#svg-mask-avatar-default)">
-												<img src="" alt=" " class="${BDFDB.disCN.avatar}" aria-hidden="true">
-											</foreignObject>
-										</svg>
-									</div>
-								</div>
-								<h2 class="${BDFDB.disCN.messageheadercozymeta}">
-									<span class="">
-										<strong tabindex="0" class="${BDFDB.disCN.messageusername}" role="button"></strong>
-									</span>
-									<time class="${BDFDB.disCN.messagetimestampcozy}"></time>
-								</h2>
-							</div>
-							<div class="${BDFDB.disCNS.messagecontentcozy + BDFDB.disCN.messagecontent}">
-								<div class="${BDFDB.disCNS.messagebodycozy + BDFDB.disCN.messagebody}">
-									<div class="${BDFDB.disCN.messagemarkup}"></div>
-								</div>
-								<div class="${BDFDB.disCNS.messagespopoutaccessories + BDFDB.disCNS.messageaccessorycozy + BDFDB.disCN.messageaccessory}"></div>
-							</div>
-						</div>
-						<div class="${BDFDB.disCNS.sinkinteractions + BDFDB.disCN.clickable}"></div>
-						<div class="${BDFDB.disCN.messagespopoutactionbuttons}">
-							<div tabindex="0" class="${BDFDB.disCN.messagespopoutjumpbutton} jump" role="button">
-								<div class="${BDFDB.disCN.messagespopouttext}">REPLACE_popout_jump_text</div>
-							</div>
-							<div tabindex="0" class="${BDFDB.disCN.messagespopoutjumpbutton} copy" aria-label="Jump" role="button">
-								<div class="${BDFDB.disCN.messagespopouttext}">REPLACE_popout_copy_text</div>
-							</div>
-							<button type="button" class="${BDFDB.disCNS.button + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonlookblank + BDFDB.disCN.buttongrow}">
-								<div class="${BDFDB.disCN.buttoncontents}">
-									<div class="${BDFDB.disCN.messagespopoutclosebutton}"></div>
-								</div>
-							</button>
-						</div>
-						<hr aria-hidden="true" class="${BDFDB.disCNS.messagedividerenabled + BDFDB.disCN.messagedivider}">
-					</div>
-				</div>
-			</div>`;
 	}
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		let settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
-		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Delete all Notes.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
-		settingshtml += `</div></div>`;
-
-		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
-
-		BDFDB.initElements(settingspanel, this);
-
-		settingspanel.querySelector(".reset-button").addEventListener("click", () => {
-			BDFDB.ModalUtils.confirm(this, "Are you sure you want to delete all pinned notes?", () => {
-				BDFDB.DataUtils.remove(this, "pins");
-			});
-		});
-		return settingspanel;
+		let settingsitems = [];
+		
+		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+			type: "Button",
+			className: BDFDB.disCN.marginbottom8,
+			color: BDFDB.LibraryComponents.Button.Colors.RED,
+			label: "Delete all Notes",
+			onClick: _ => {
+				BDFDB.ModalUtils.confirm(this, "Are you sure you want to delete all pinned notes?", () => {
+					BDFDB.DataUtils.remove(this, "notes");
+				});
+			},
+			children: BDFDB.LanguageUtils.LanguageStrings.DELETE
+		}));
+		
+		return BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 	}
 
 	//legacy
@@ -176,6 +67,37 @@ class PersonalPins {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
+			
+			let pins = BDFDB.DataUtils.load(this, "pins"), notes = {}, olddata = 0, resolveddata = 0, loading = true, i = 0;
+			for (let guild_id in pins) {
+				notes[guild_id] = {};
+				for (let channel_id in pins[guild_id]) {
+					notes[guild_id][channel_id] = {};
+					for (let message_idPOS in pins[guild_id][channel_id]) olddata++;
+				}
+			}
+			if (olddata > 0) BDFDB.ModalUtils.confirm(this, `${this.name} found ${olddata} instances of old saved notes. Press the "Okay" button to refetch the messages and update your old config. This will take around ${(olddata + 1) * 5} seconds.`, _ => {
+				BDFDB.TimeUtils.timeout(_ => {
+					BDFDB.DataUtils.remove(this, "pins");
+					BDFDB.DataUtils.save(notes, this, "notes");
+					loading = false;
+					BDFDB.ModalUtils.confirm(this, `${resolveddata} of ${olddata} pins could be transfered to the new format.${olddata - resolveddata > 0 ? " " + (olddata - resolveddata) + " could not be transfered because the message could no longer be found in discords data." : ""}`, _ => {});
+				}, (olddata + 1) * 5000);
+				for (let guild_id in pins) for (let channel_id in pins[guild_id]) for (let message_idPOS in pins[guild_id][channel_id]) {
+					BDFDB.TimeUtils.timeout(_ => {if (loading) BDFDB.LibraryModules.APIUtils.get(BDFDB.DiscordConstants.Endpoints.MESSAGES(pins[guild_id][channel_id][message_idPOS].channel_id) + "?limit=1&around=" + pins[guild_id][channel_id][message_idPOS].id).then(result => {if (result && result.body && result.body[0] && result.body[0].id == pins[guild_id][channel_id][message_idPOS].id) {
+						let note = {};
+						note.addedat = pins[guild_id][channel_id][message_idPOS].addedat;
+						note.channel = JSON.stringify(BDFDB.LibraryModules.ChannelStore.getChannel(channel_id));
+						note.id = pins[guild_id][channel_id][message_idPOS].id;
+						note.message = JSON.stringify(result.body[0]);
+						note.pos = pins[guild_id][channel_id][message_idPOS].pos;
+						note.timestamp = pins[guild_id][channel_id][message_idPOS].timestamp;
+						notes[guild_id][channel_id][message_idPOS] = note;
+						resolveddata++;
+					}})}, i * 5000);
+					i++;
+				}
+			});
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
@@ -187,7 +109,8 @@ class PersonalPins {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.DOMUtils.remove(".popout-personalpins-notes", ".personalpins-sort-popout", ".notes-button");
+			BDFDB.ModuleUtils.forceAllUpdates(this);
+			
 			BDFDB.PluginUtils.clear(this);
 		}
 	}
@@ -195,154 +118,340 @@ class PersonalPins {
 
 	// begin of own functions
 
-	changeLanguageStrings () {
-		this.notesPopoutMarkup = 				this.notesPopoutMarkup.replace("REPLACE_popout_note_text", this.labels.popout_note_text);
-		this.notesPopoutMarkup = 				this.notesPopoutMarkup.replace("REPLACE_popout_channel_text", this.labels.popout_channel_text);
-		this.notesPopoutMarkup = 				this.notesPopoutMarkup.replace("REPLACE_popout_server_text", this.labels.popout_server_text);
-		this.notesPopoutMarkup = 				this.notesPopoutMarkup.replace("REPLACE_popout_allservers_text", this.labels.popout_allservers_text);
-		this.notesPopoutMarkup = 				this.notesPopoutMarkup.replace("REPLACE_popout_sort_text", this.labels.popout_sort_text);
-		this.notesPopoutMarkup = 				this.notesPopoutMarkup.replace("REPLACE_popout_messagesort_text", this.labels.popout_messagesort_text);
-
-		this.messageMarkup = 					this.messageMarkup.replace("REPLACE_popout_jump_text", BDFDB.LanguageUtils.LanguageStrings.JUMP);
-		this.messageMarkup = 					this.messageMarkup.replace("REPLACE_popout_copy_text", BDFDB.LanguageUtils.LanguageStrings.COPY);
-
-		this.sortPopoutMarkup = 				this.sortPopoutMarkup.replace("REPLACE_popout_messagesort_text", this.labels.popout_messagesort_text);
-		this.sortPopoutMarkup = 				this.sortPopoutMarkup.replace("REPLACE_popout_datesort_text", this.labels.popout_datesort_text);
-	}
-
-	onMessageContextMenu (instance, menu, returnvalue) {
-		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(`${this.name}-contextMenuItem`)) {
-			let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
+	onMessageContextMenu (e) {
+		if (e.instance.props && e.instance.props.message && e.instance.props.channel && e.instance.props.target) {
+			let {messagediv, pos} = this.getMessageAndPos(e.instance.props.target);
 			if (!messagediv || pos == -1) return;
-			let note = this.getNoteData(instance.props.message, instance.props.target, instance.props.channel);
-			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:"MessagePinItem"});
+			let note = this.getNoteData(e.instance.props.message, e.instance.props.target, e.instance.props.channel);
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"MessagePinItem"});
 			const pinUnpinItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: this.labels[note ? "context_unpinoption_text" : "context_pinoption_text"],
 				hint: BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Note_Message") : null,
-				action: e => {
-					BDFDB.ContextMenuUtils.close(menu);
-					this.addMessageToNotes(instance.props.message, instance.props.target, instance.props.channel);
+				action: _ => {
+					BDFDB.ContextMenuUtils.close(e.instance);
+					this.addMessageToNotes(e.instance.props.message, e.instance.props.target, e.instance.props.channel);
 				}
 			});
 			if (index > -1) children.splice(index, 0, pinUnpinItem);
 			else children.push(pinUnpinItem);
-			if (note) {
-				let newmarkup = this.getMarkup(messagediv).innerHTML;
-				let newaccessory = messagediv.querySelector(BDFDB.dotCN.messageaccessory).innerHTML;
-				if (note.markup != newmarkup || note.accessory != newaccessory) {
-					const updateItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
-						label: this.labels.context_updateoption_text,
-						action: e => {
-							BDFDB.ContextMenuUtils.close(menu);
-							this.updateNoteData(note, newmarkup, newaccessory);
-						}
-					});
-					if (index > -1) children.splice(index, 0, updateItem);
-					else children.push(updateItem);
-				}	
+			if (this.isNoteOutdated(note, e.instance.props.message)) {
+				const updateItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+					label: this.labels.context_updateoption_text,
+					action: _ => {
+						BDFDB.ContextMenuUtils.close(e.instance);
+						this.updateNoteData(note, e.instance.props.message);
+					}
+				});
+				if (index > -1) children.splice(index, 0, updateItem);
+				else children.push(updateItem);	
 			}
 		}
 	}
 
-	onMessageOptionPopout (instance, popout, returnvalue) {
-		if (instance.props.message && instance.props.channel && instance.props.target && !popout.querySelector(`${this.name}-popoutMenuItem`)) {
-			let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
+	onMessageOptionPopout (e) {
+		if (e.instance.props.message && e.instance.props.channel && e.instance.props.target) {
+			let {messagediv, pos} = this.getMessageAndPos(e.instance.props.target);
 			if (!messagediv || pos == -1) return;
-			let note = this.getNoteData(instance.props.message, instance.props.target, instance.props.channel);
-			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {props:[["label", [BDFDB.LanguageUtils.LanguageStrings.PIN, BDFDB.LanguageUtils.LanguageStrings.UNPIN]]]});
+			let note = this.getNoteData(e.instance.props.message, e.instance.props.target, e.instance.props.channel);
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["label", [BDFDB.LanguageUtils.LanguageStrings.PIN, BDFDB.LanguageUtils.LanguageStrings.UNPIN]]]});
 			children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: this.labels[note ? "context_unpinoption_text" : "popout_pinoption_text"],
 				className: BDFDB.disCN.optionpopoutitem,
-				action: e => {
-					this.addMessageToNotes(instance.props.message, instance.props.target, instance.props.channel);
-					instance.props.onClose();
+				action: _ => {
+					this.addMessageToNotes(e.instance.props.message, e.instance.props.target, e.instance.props.channel);
+					e.instance.props.onClose();
 				}
 			}));
-			if (note) {
-				let newmarkup = this.getMarkup(messagediv).innerHTML;
-				let newaccessory = messagediv.querySelector(BDFDB.dotCN.messageaccessory).innerHTML;
-				if (note.markup != newmarkup || note.accessory != newaccessory) {
-					children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
-						label: this.labels.context_updateoption_text,
-						className: BDFDB.disCN.optionpopoutitem,
-						action: e => {
-							this.updateNoteData(note, newmarkup, newaccessory);
-							instance.props.onClose();
-						}
-					}));
-				}	
-			}
+			if (this.isNoteOutdated(note, e.instance.props.message)) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+				label: this.labels.context_updateoption_text,
+				className: BDFDB.disCN.optionpopoutitem,
+				action: _ => {
+					this.updateNoteData(note, e.instance.props.message);
+					e.instance.props.onClose();
+				}
+			}));
 		}
 	}
 
-	processHeaderBarContainer (instance, wrapper, returnvalue) {
-		this.processHeaderBar(instance, wrapper);
+	processHeaderBarContainer (e) {
+		let [children, index] = BDFDB.ReactUtils.findChildren(BDFDB.ReactUtils.getValue(e.returnvalue, "props.toolbar"), {name: "FluxContainer(Search)"});
+		if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
+			children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+				text: this.labels.popout_note_text,
+				tooltipConfig: {type: "bottom"},
+				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+					className: BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+						className: BDFDB.disCNS.channelheadericon,
+						iconSVG: `<svg name="Note" width="24" height="24" viewBox="-1 -1 23 23"><path fill="currentColor" d="M 4.618, 0 c -0.316, 0 -0.573, 0.256 -0.573, 0.573 v 1.145 c 0, 0.316, 0.256, 0.573, 0.573, 0.573 s 0.573 -0.256, 0.573 -0.573 V 0.573 C 5.191, 0.256, 4.935, 0, 4.618, 0 z"/><path fill="currentColor" d="M 8.053, 0 c -0.316, 0 -0.573, 0.256 -0.573, 0.573 v 1.145 c 0, 0.316, 0.256, 0.573, 0.573, 0.573 s 0.573 -0.256, 0.573 -0.573 V 0.573 C 8.626, 0.256, 8.37, 0, 8.053, 0 z"/><path fill="currentColor" d="M 11.489, 0 c -0.316, 0 -0.573, 0.256 -0.573, 0.573 v 1.145 c 0, 0.316, 0.256, 0.573, 0.573, 0.573 c 0.316, 0, 0.573 -0.256, 0.573 -0.573 V 0.573 C 12.061, 0.256, 11.805, 0, 11.489, 0 z "/><path fill="currentColor" d="M 14.924, 0 c -0.316, 0 -0.573, 0.256 -0.573, 0.573 v 1.145 c 0, 0.316, 0.256, 0.573, 0.573, 0.573 c 0.316, 0, 0.573 -0.256, 0.573 -0.573 V 0.573 C 15.496, 0.256, 15.24, 0, 14.924, 0 z"/><path fill="currentColor" d="M 16.641, 1.25 V 1.718 c 0, 0.947 -0.77, 1.718 -1.718, 1.718 c -0.947, 0 -1.718 -0.77 -1.718 -1.718 c 0, 0.947 -0.77, 1.718 -1.718, 1.718 c -0.947, 0 -1.718 -0.77 -1.718 -1.718 c 0, 0.947 -0.77, 1.718 -1.718, 1.718 c -0.947, 0 -1.718 -0.77 -1.718 -1.718 c 0, 0.947 -0.77, 1.718 -1.718, 1.718 c -0.947, 0 -1.718 -0.77 -1.718 -1.718 V 1.25 C 2.236, 1.488, 1.756, 2.117, 1.756, 2.863 v 14.962 c 0, 0.947, 0.77, 1.718, 1.718, 1.718 h 12.595 c 0.947, 0, 1.718 -0.77, 1.718 -1.718 V 2.863 C 17.786, 2.117, 17.306, 1.488, 16.641, 1.25 z M 14.924, 16.679 H 4.618 c -0.316, 0 -0.573 -0.256 -0.573 -0.573 c 0 -0.316, 0.256 -0.573, 0.573 -0.573 h 10.305 c 0.316, 0, 0.573, 0.256, 0.573, 0.573 C 15.496, 16.423, 15.24, 16.679, 14.924, 16.679 z M 14.924, 13.244 H 4.618 c -0.316, 0 -0.573 -0.256 -0.573 -0.573 c 0 -0.316, 0.256 -0.573, 0.573 -0.573 h 10.305 c 0.316, 0, 0.573, 0.256, 0.573, 0.573 C 15.496, 12.988, 15.24, 13.244, 14.924, 13.244 z M 14.924, 9.733 H 4.618 c -0.316, 0 -0.573 -0.256 -0.573 -0.573 s 0.256 -0.573, 0.573 -0.573 h 10.305 c 0.316, 0, 0.573, 0.256, 0.573, 0.573 S 15.24, 9.733, 14.924, 9.733 z M 14.924, 6.298 H 4.618 c -0.316, 0 -0.573 -0.256 -0.573 -0.573 s 0.256 -0.573, 0.573 -0.573 h 10.305 c 0.316, 0, 0.573, 0.256, 0.573, 0.573 S 15.24, 6.298, 14.924, 6.298 z"/></svg>`
+					})
+				})
+			}),
+			popoutClassName: BDFDB.disCN.messagespopoutwrap,
+			animation: BDFDB.LibraryComponents.PopoutContainer.Animation.SCALE,
+			position: BDFDB.LibraryComponents.PopoutContainer.Positions.BOTTOM,
+			align: BDFDB.LibraryComponents.PopoutContainer.Align.RIGHT,
+			width: 500,
+			maxHeight: "calc(100vh - 100px)",
+			onClose: instance => {
+				BDFDB.DOMUtils.removeClass(instance.domElementRef.current, BDFDB.disCN.channelheadericonselected);
+			},
+			renderPopout: instance => {
+				BDFDB.DOMUtils.addClass(instance.domElementRef.current, BDFDB.disCN.channelheadericonselected);
+				return this.createNotesPopout(instance);
+			}
+		}));
 	}
-
-	processHeaderBar (instance, wrapper, returnvalue) {
-		if (wrapper.querySelector(".notes-button")) return;
-		let search = wrapper.querySelector(BDFDB.dotCN.channelheadersearch);
-		if (!search) return;
-		let notesbutton = BDFDB.DOMUtils.create(this.notesButtonMarkup);
-		search.parentElement.insertBefore(notesbutton, search);
-		let icon = notesbutton.querySelector(BDFDB.dotCN.channelheadericon);
-		icon.addEventListener("click", () => {
-			this.openNotesPopout(icon.parentElement);
-		});
-		icon.addEventListener("mouseenter", () => {
-			BDFDB.TooltipUtils.create(icon, this.labels.popout_note_text, {type:"bottom",selector:"note-button-tooltip"});
-		});
+	
+	createNotesPopout (buttoninstance) {
+		let tabkeys = ["channel", "server", "all"], sortkeys = ["notetime", "messagetime"];
+		buttoninstance.props.selectedFilter = buttoninstance.props.selectedFilter || this.getValue(tabkeys[0], "filter");
+		buttoninstance.props.selectedSort = buttoninstance.props.selectedSort || this.getValue(sortkeys[0], "sort");
+		buttoninstance.props.searchKey = buttoninstance.props.searchKey || "";
+		return [
+			BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.disCNS.popoutheader + BDFDB.disCN.messagespopoutheader,
+				style: {
+					paddingBottom: 0
+				},
+				children: [
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+								className: BDFDB.disCNS.popouttitle + BDFDB.disCN.messagespopouttitle,
+								children: this.labels.popout_note_text
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
+								query: buttoninstance.props.searchKey,
+								onChange: value => {
+									BDFDB.TimeUtils.clear(this.searchTimeout);
+									this.searchTimeout = BDFDB.TimeUtils.timeout(_ => {
+										buttoninstance.props.searchKey = value;
+										BDFDB.ReactUtils.forceUpdate(buttoninstance.popout._owner.stateNode);
+									}, 1000);
+								},
+								onClear: _ => {
+									buttoninstance.props.searchKey = "";
+									BDFDB.ReactUtils.forceUpdate(buttoninstance.popout._owner.stateNode);
+								}
+							})
+						]
+					}),
+					BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.tabbarheadercontainer,
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar, {
+								className: BDFDB.disCN.tabbarheader,
+								itemClassName: BDFDB.disCN.tabbarheaderitem,
+								type: BDFDB.LibraryComponents.TabBar.Types.TOP,
+								selectedItem: buttoninstance.props.selectedFilter.value,
+								items: tabkeys.map(key => this.getValue(key, "filter")),
+								onItemSelect: key => {
+									buttoninstance.props.selectedFilter = this.getValue(key, "filter");
+									BDFDB.ReactUtils.forceUpdate(buttoninstance.popout._owner.stateNode);
+								}
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
+								popoutClassName: BDFDB.disCN.contextmenu,
+								spacing: -25,
+								label: this.labels.popout_sort_text + ":",
+								value: buttoninstance.props.selectedSort,
+								options: sortkeys.map(key => this.getValue(key, "sort")),
+								onChange: key => {
+									buttoninstance.props.selectedSort = this.getValue(key, "sort");
+									BDFDB.ReactUtils.forceUpdate(buttoninstance.popout._owner.stateNode);
+								}
+							})
+						]
+					})
+				]
+			}),
+			BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ScrollerVertical, {
+				className: BDFDB.disCN.messagespopout,
+				children: this.filterMessages(buttoninstance, buttoninstance.props.selectedFilter.value, buttoninstance.props.selectedSort.value, buttoninstance.props.searchKey.toUpperCase())
+			})
+		];
 	}
-
-	processMessage (instance, wrapper, returnvalue) {
-		if (instance.props && typeof instance.props.renderButtons == "function" && !wrapper.querySelector(BDFDB.dotCN.optionpopoutbutton) && BDFDB.ReactUtils.getValue(instance, "props.message.author.id") != 1) {
-			let buttonwrap = wrapper.querySelector(BDFDB.dotCN.messagebuttoncontainer);
-			if (buttonwrap) {
-				let optionPopoutButton = BDFDB.DOMUtils.create(`<div tabindex="0" class="${BDFDB.disCN.optionpopoutbutton}" aria-label="More Options" role="button"><svg name="OverflowMenu" class="${BDFDB.disCN.optionpopoutbuttonicon}" aria-hidden="false" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0z"></path><path fill="currentColor" d="M12 16c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2zm0-6c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2zm0-6c1.1045695 0 2 .8954305 2 2s-.8954305 2-2 2-2-.8954305-2-2 .8954305-2 2-2z"></path></g></svg></div>`);
-				optionPopoutButton.addEventListener("click", () => {BDFDB.createMessageOptionPopout(optionPopoutButton);});
-				buttonwrap.appendChild(optionPopoutButton);
+	
+	getValue (key, type) {
+		return {
+			label: this.labels[`popout_${type}_${key}_text`],
+			value: key
+		}
+	}
+	
+	filterMessages (buttoninstance, filter, sort, searchkey) {
+		let lighttheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
+		let messages = [], notes = BDFDB.DataUtils.load(this, "notes"), updatedata = false;
+		for (let guild_id in notes) for (let channel_id in notes[guild_id]) for (let message_idPOS in notes[guild_id][channel_id]) {
+			let message = JSON.parse(notes[guild_id][channel_id][message_idPOS].message);
+			message.author = new BDFDB.DiscordObjects.User(message.author);
+			message.timestamp = new BDFDB.DiscordObjects.Timestamp(message.timestamp);
+			message.editedTimestamp = message.editedTimestamp && new BDFDB.DiscordObjects.Timestamp(message.editedTimestamp);
+			for (let embed of message.embeds) embed.timestamp =  embed.timestamp && new BDFDB.DiscordObjects.Timestamp(embed.timestamp);
+			message = new BDFDB.DiscordObjects.Message(message);
+			let channel = notes[guild_id][channel_id][message_idPOS].channel && new BDFDB.DiscordObjects.Channel(JSON.parse(notes[guild_id][channel_id][message_idPOS].channel));
+			if (!channel) {
+				channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
+				if (channel) {
+					updatedata = true;
+					notes[guild_id][channel_id][message_idPOS].channel = JSON.stringify(channel);
+				}
+			}
+			messages.push({
+				note: notes[guild_id][channel_id][message_idPOS],
+				channel_id,
+				guild_id,
+				message,
+				channel,
+				messagetime: notes[guild_id][channel_id][message_idPOS].timestamp,
+				notetime: notes[guild_id][channel_id][message_idPOS].addedat
+			});
+		}
+		if (updatedata) BDFDB.DataUtils.save(notes, this, "notes");
+		let currentchannel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId()) || {};
+		switch (filter) {
+			case "channel":
+				messages = messages.filter(messagedata => messagedata.channel_id == currentchannel.id);
+				break;
+			case "server":
+				messages = messages.filter(messagedata => messagedata.guild_id == (currentchannel.guild_id || "@me"));
+				break;
+			case "allservers":
+				messages = messages;
+				break;
+		}
+		if (searchkey) {
+			let searchvalues = ["content", "author.username", "rawDescription", "author.name"];
+			messages = messages.filter(messagedata => searchvalues.some(key => this.containsSearchkey(messagedata.message, key, searchkey) || messagedata.message.embeds.some(embed => this.containsSearchkey(embed, key, searchkey))));
+		}
+		BDFDB.ArrayUtils.keySort(messages, sort);
+		messages.reverse();
+		return Object.keys(messages).length ? 
+			messages.map(messagedata => this.renderMessage(buttoninstance, messagedata.note, messagedata.message, messagedata.channel, filter)).flat().filter(n => n) :
+			BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessagesPopoutComponents.EmptyStateCenter, {
+				msg: BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER,
+				image: lighttheme ? "/assets/03c7541028afafafd1a9f6a81cb7f149.svg" : "/assets/6793e022dc1b065b21f12d6df02f91bd.svg"
+			});
+	}
+	
+	containsSearchkey (data, key, searchkey) {
+		let value = BDFDB.ReactUtils.getValue(data, key);
+		return value && value.toUpperCase().indexOf(searchkey) > -1
+	}
+	
+	renderMessage (buttoninstance, note, message, channel, filter) {
+		if (!message || !channel) return null;
+		let channelname = channel.name;
+		let guild = channel.guild_id && BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id);
+		let role = guild && BDFDB.LibraryModules.PermissionRoleUtils.getHighestRole(guild, message.author.id);
+		if (role) message.colorString = role.colorString;
+		if (filter != "channel" && !channelname && channel.recipients.length > 0) {
+			for (let dmuser_id of channel.recipients) {
+				channelname = channelname ? channelname + ", @" : channelname;
+				channelname = channelname + BDFDB.LibraryModules.UserStore.getUser(dmuser_id).username;
 			}
 		}
-	} 
-
-	openNotesPopout (button) {
-		let container = document.querySelector(BDFDB.dotCN.popouts);
-		if (!container || BDFDB.DOMUtils.containsClass(button, BDFDB.disCN.channelheadericonselected)) return;
-		BDFDB.DOMUtils.addClass(button, BDFDB.disCN.channelheadericonselected);
-		let notespopout = BDFDB.DOMUtils.create(this.notesPopoutMarkup);
-		notespopout.querySelector(BDFDB.dotCN.popoutheader).firstElementChild.appendChild(BDFDB.createSearchBar("small"));
-		container.appendChild(notespopout);
-		BDFDB.initElements(notespopout, this);
-		let buttonrects = BDFDB.DOMUtils.getRects(button);
-		notespopout.style.setProperty("left", buttonrects.left + buttonrects.width/2 + "px");
-		notespopout.style.setProperty("top", buttonrects.top + buttonrects.height + "px");
-		notespopout.querySelectorAll(BDFDB.dotCN.tabbarheaderitem).forEach(tab => {tab.addEventListener("click", () => {
-			this.addNotes(notespopout);
-		});});
-		notespopout.querySelector(BDFDB.dotCN.searchbarinput).addEventListener("keyup", () => {
-			BDFDB.TimeUtils.clear(notespopout.searchTimeout);
-			notespopout.searchTimeout = BDFDB.TimeUtils.timeout(() => {this.addNotes(notespopout);},1000);
-		});
-		notespopout.querySelector(BDFDB.dotCN.searchbarclear).addEventListener("click", e => {
-			BDFDB.TimeUtils.clear(notespopout.searchTimeout);
-			notespopout.searchTimeout = BDFDB.TimeUtils.timeout(() => {this.addNotes(notespopout);},1000);
-		});
-		notespopout.querySelector(BDFDB.dotCN.recentmentionsmentionfilter).addEventListener("click", e => {
-			BDFDB.createSortPopout(e.currentTarget, this.sortPopoutMarkup, () => {this.addNotes(notespopout);});
+		let separator = filter == "channel" ? null : BDFDB.ReactUtils.createElement("div", {
+			className: BDFDB.disCN.messagespopoutchannelseparator,
+			children: [
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+					tag: "span",
+					className: BDFDB.disCN.messagespopoutchannelname,
+					onClick: _ => {
+						BDFDB.LibraryModules.SelectChannelUtils.selectChannel(channel.guild_id, channel.id);
+					},
+					children: channelname ? ((channel.guild_id ? "#" : "@") + channelname) : "???"
+				}),
+				filter == "all" ? BDFDB.ReactUtils.createElement("span", {
+					className: BDFDB.disCN.messagespopoutguildname,
+					children: channel.guild_id ? (BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id) || {}).name || BDFDB.LanguageUtils.LanguageStrings.GUILD_UNAVAILABLE_HEADER : BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES
+				}) : null
+			]
 		});
 
-		var removePopout = e => {
-			if (!notespopout.contains(e.target) && !BDFDB.DOMUtils.getParent(".personalpins-sort-popout", e.target)) {
-				document.removeEventListener("mousedown", removePopout);
-				notespopout.remove();
-				BDFDB.TimeUtils.timeout(() => {BDFDB.DOMUtils.removeClass(button, BDFDB.disCN.channelheadericonselected);},300);
-			}
-		};
-		document.addEventListener("mousedown", removePopout);
-
-		this.addNotes(notespopout);
+		return [separator, BDFDB.ReactUtils.createElement("div", {
+			className: BDFDB.disCN.messagegroupwrapper,
+			key: message.id,
+			children: BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.disCN.messagegroupwrapperoffsetcorrection,
+				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessageGroup, {
+					cozyClassName: BDFDB.disCN.messagespopoutmessagegroupcozy,
+					messages: [message],
+					channel: channel,
+					inlineAttachmentMedia: true,
+					inlineEmbedMedia: true,
+					renderEmbeds: true,
+					renderEmbedsSmall: true,
+					compact: false,
+					developerMode: false,
+					hasDivider: false,
+					popoutPosition: BDFDB.LibraryComponents.PopoutContainer.Positions.LEFT,
+					groupOption: _ => {
+						return BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.messagespopoutactionbuttons,
+							children: [
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+									className: BDFDB.disCN.messagespopoutjumpbutton,
+									onClick: _ => {
+										BDFDB.LibraryModules.SelectChannelUtils.selectChannel(channel.guild_id, channel.id, message.id);
+									},
+									children: BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCN.messagespopouttext,
+										children: BDFDB.LanguageUtils.LanguageStrings.JUMP
+									})
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+									className: BDFDB.disCN.messagespopoutjumpbutton,
+									onClick: _ => {
+										if (message.content || message.attachments.length > 1) {
+											let text = message.content || "";
+											for (let attachment of message.attachments) if (attachment.url) text += ((text ? "\n" : "") + attachment.url);
+											BDFDB.LibraryRequires.electron.clipboard.write({text});
+										}
+										else if (message.attachments.length == 1 && message.attachments[0].url) {
+											BDFDB.LibraryRequires.request({url: message.attachments[0].url, encoding: null}, (error, response, buffer) => {
+												if (buffer) {
+													if (BDFDB.LibraryRequires.process.platform === "win32" || BDFDB.LibraryRequires.process.platform === "darwin") {
+														BDFDB.LibraryRequires.electron.clipboard.write({image: BDFDB.LibraryRequires.electron.nativeImage.createFromBuffer(buffer)});
+													}
+													else {
+														let file = BDFDB.LibraryRequires.path.join(BDFDB.LibraryRequires.process.env["HOME"], "personalpinstemp.png");
+														BDFDB.LibraryRequires.fs.writeFileSync(file, buffer, {encoding: null});
+														BDFDB.LibraryRequires.electron.clipboard.write({image: file});
+														BDFDB.LibraryRequires.fs.unlinkSync(file);
+													}
+												}
+											});
+										}
+									},
+									children: BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCN.messagespopouttext,
+										children: BDFDB.LanguageUtils.LanguageStrings.COPY
+									})
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+									look: BDFDB.LibraryComponents.Button.Looks.BLANK,
+									size: BDFDB.LibraryComponents.Button.Sizes.NONE,
+									onClick: (e, instance) => {
+										this.removeNoteData(note);
+										BDFDB.ReactUtils.forceUpdate(buttoninstance.popout._owner.stateNode);
+									},
+									children: BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCN.messagespopoutclosebutton
+									})
+								})
+							]
+						});
+					},
+					messageOption: false,
+					canEdit: false,
+					accessoriesClassName: BDFDB.disCN.messagespopoutaccessories
+				})
+			})
+		})];
 	}
-
+	
 	addNotes (notespopout) {
 		BDFDB.DOMUtils.remove(notespopout.querySelectorAll(BDFDB.dotCNC.messagegroupwrapper + BDFDB.dotCN.messagespopoutchannelseparator));
 		let channel = BDFDB.ChannelUtils.getSelected();
@@ -383,195 +492,69 @@ class PersonalPins {
 		}
 	}
 
-	appendNote (notespopout, container, noteData, placeholder) {
-		if (!container || !noteData) return;
-		let server = BDFDB.LibraryModules.GuildStore.getGuild(noteData.guild_id) || {};
-		let channel = BDFDB.LibraryModules.ChannelStore.getChannel(noteData.channel_id) || {};
-		let user = BDFDB.LibraryModules.UserStore.getUser(noteData.author_id) || {};
-		let member = BDFDB.LibraryModules.MemberStore.getMember(noteData.guild_id, noteData.author_id) || {};
-		let date = new Date(noteData.timestamp);
-		let message = BDFDB.DOMUtils.create(this.messageMarkup);
-		let messagedivider = BDFDB.DOMUtils.create(this.messageDividerMarkup);
-		container.insertBefore(message, container.firstChild);
-		container.insertBefore(messagedivider, container.firstChild);
-		let channelname = messagedivider.querySelector(BDFDB.dotCN.messagespopoutchannelname);
-		channelname.innerText = (noteData.guild_id == "@me" ? " @" : " #") + (channel.name || noteData.channel_name);
-		if (noteData.guild_id != "@me" && BDFDB.BDUtils.isPluginEnabled("EditChannels")) {
-			BDFDB.BDUtils.getPlugin("EditChannels").changeChannel2({id:noteData.channel_id,name:noteData.channel_name}, channelname);
-		}
-		else if (noteData.guild_id == "@me" && BDFDB.BDUtils.isPluginEnabled("EditUsers")) {
-			let dmuser_id = channel && channel.type == 1 ? channel.recipients[0] : noteData.dmuser_id;
-			if (dmuser_id) {
-				BDFDB.BDUtils.getPlugin("EditUsers").changeName2({id:dmuser_id,username:noteData.channel_name}, channelname);
-				if (channelname.innerText.indexOf("@") != 0) channelname.innerText = "@" + channelname.innerText;
-			}
-		}
-		let guildname = messagedivider.querySelector(BDFDB.dotCN.messagespopoutguildname);
-		guildname.innerText = server.name || noteData.guild_name;
-		let avatar = message.querySelector(BDFDB.dotCN.avatar);
-		avatar.setAttribute("src", `${user.id ? BDFDB.UserUtils.getAvatar(user.id) : noteData.avatar}`);
-		let username = message.querySelector(BDFDB.dotCN.messageusername);
-		username.innerText = user.username || noteData.author_name;
-		username.style.setProperty("color", member.colorString || noteData.color);
-		if (BDFDB.BDUtils.isPluginEnabled("EditUsers")) {
-			let EditUsers = BDFDB.BDUtils.getPlugin("EditUsers");
-			EditUsers.changeName({id:noteData.author_id,username:noteData.author_name}, username, noteData.guild_id);
-			if (user.id) EditUsers.changeAvatar({id:noteData.author_id,username:noteData.author_name}, avatar);
-			EditUsers.addTag({id:noteData.author_id,username:noteData.author_name}, username.parentElement, " " + BDFDB.disCN.bottagnametag);
-		}
-		let timestamp = message.querySelector(BDFDB.dotCN.messagetimestampcozy);
-		timestamp.innerText = date.toLocaleString(BDFDB.LanguageUtils.getLanguage().id);
-		timestamp.setAttribute("datetime", date);
-		if (BDFDB.BDUtils.isPluginEnabled("CompleteTimestamps") && BDFDB.DataUtils.load("CompleteTimestamps", "settings", "showInChat")) {
-			BDFDB.BDUtils.getPlugin("CompleteTimestamps").changeTimestamp(timestamp);
-		}
-		message.querySelector(BDFDB.dotCN.messagemarkup).innerHTML = noteData.markup.replace(`<span class="edited">`,`<span class="${BDFDB.disCN.messageedited}">`);
-		message.querySelector(BDFDB.dotCN.messageaccessory).innerHTML = noteData.accessory;
-		if (noteData.accessory) {
-			BDFDB.ListenerUtils.addToChildren(message, "click", BDFDB.dotCN.iconplay, e => {this.startYoutubeVideo(e.currentTarget);});
-			let ytvideo = message.querySelector(BDFDB.dotCN.embed + " iframe[src*='https://www.youtube.com']");
-			if (ytvideo) {
-				let ytlink = ytvideo.parentElement.parentElement.querySelector(BDFDB.dotCN.embedtitle).href;
-				let wrapper = ytvideo.parentElement;
-				ytvideo.remove();
-				BDFDB.LibraryRequires.request(ytlink, (error, response, result) => {
-					if (result) {
-						wrapper.innerHTML = `<div class="${BDFDB.disCNS.imagewrapper + BDFDB.disCNS.imageclickable + BDFDB.disCN.embedvideoimagecomponent}" style="width: 400px; height: 225px;"><img alt="" src="${result.split('<link itemprop="thumbnailUrl" href="')[1].split('"')[0]}" style="width: 400px; height: 225px;"></div><div class="${BDFDB.disCN.embedvideoactions}"><div class="${BDFDB.disCN.embedcentercontent}"><div class="${BDFDB.disCN.iconactionswrapper}"><div tabindex="0" class="${BDFDB.disCNS.iconwrapper + BDFDB.disCN.iconwrapperactive}" role="button"><svg name="Play" class="${BDFDB.disCNS.iconplay + BDFDB.disCN.icon}" width="16" height="16" viewBox="0 0 24 24"><polygon fill="currentColor" points="0 0 0 14 11 7" transform="translate(7 5)"></polygon></svg></div><a class="${BDFDB.disCNS.anchor + BDFDB.disCNS.anchorunderlineonhover + BDFDB.disCNS.iconwrapper + BDFDB.disCN.iconwrapperactive}" href="${ytlink}" rel="noreferrer noopener" target="_blank"><svg name="OpenExternal" class="${BDFDB.disCNS.iconexternalmargins + BDFDB.disCN.icon}" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" transform="translate(3.000000, 4.000000)" d="M16 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4v-2H2V4h14v10h-4v2h4c1.1 0 2-.9 2-2V2a2 2 0 0 0-2-2zM9 6l-4 4h3v6h2v-6h3L9 6z"></path></svg></a></div></div></div>`;
-						wrapper.querySelector(BDFDB.dotCN.iconplay).addEventListener("click", e => {this.startYoutubeVideo(e.currentTarget);});
-					}
-				});
-			}
-		}
-		messagedivider.querySelector(BDFDB.dotCN.messagespopoutchannelname).addEventListener("click", e => {
-			if (!BDFDB.ObjectUtils.isEmpty(channel)) {
-				notespopout.remove();
-				BDFDB.LibraryModules.SelectChannelUtils.selectChannel(server.id, channel.id);
-			}
-			else BDFDB.shake();
-		});
-		message.querySelector(BDFDB.dotCN.messagespopoutclosebutton).addEventListener("click", e => {
-			BDFDB.DOMUtils.remove(messagedivider, message);
-			this.removeNoteData(noteData);
-			BDFDB.DOMUtils.toggle(placeholder, container.firstElementChild == placeholder);
-		});
-		message.querySelector(BDFDB.dotCN.messagespopoutjumpbutton + ".jump").addEventListener("click", e => {
-			BDFDB.LibraryModules.HistoryUtils.transitionTo(BDFDB.DiscordConstants.Routes.CHANNEL(noteData.guild_id, noteData.channel_id, noteData.id));
-		});
-		message.querySelector(BDFDB.dotCN.messagespopoutjumpbutton + ".copy").addEventListener("click", e => {
-			if (noteData.content) {
-				let text = noteData.content;
-				for (let file of message.querySelectorAll(BDFDB.dotCN.filenamelink)) text += ("\n" + file.href);
-				BDFDB.LibraryRequires.electron.clipboard.write({text});
-			}
-			else {
-				let image = message.querySelector(BDFDB.dotCNS.imagewrapper + "img");
-				if (image) BDFDB.LibraryRequires.request({url: image.src, encoding: null}, (error, response, buffer) => {
-					if (buffer) {
-						if (BDFDB.LibraryRequires.process.platform === "win32" || BDFDB.LibraryRequires.process.platform === "darwin") {
-							BDFDB.LibraryRequires.electron.clipboard.write({image: BDFDB.LibraryRequires.electron.nativeImage.createFromBuffer(buffer)});
-						}
-						else {
-							let file = BDFDB.LibraryRequires.path.join(BDFDB.LibraryRequires.process.env["HOME"], "personalpinstemp.png");
-							BDFDB.LibraryRequires.fs.writeFileSync(file, buffer, {encoding: null});
-							BDFDB.LibraryRequires.electron.clipboard.write({image: file});
-							BDFDB.LibraryRequires.fs.unlinkSync(file);
-						}
-					}
-				});
-			}
-		});
-	}
-
-	startYoutubeVideo (button) {
-		let embedwrapper = BDFDB.DOMUtils.getParent(BDFDB.dotCN.embedvideo, button);
-		let ytlink = embedwrapper.parentElement.querySelector(BDFDB.dotCN.embedtitle).href;
-		BDFDB.LibraryRequires.request(ytlink, (error, response, result) => {
-			if (result && response.headers && typeof response.headers.server == "string" && response.headers.server.toUpperCase() == "YOUTUBE FRONTEND PROXY") {
-				while (embedwrapper.firstChild) embedwrapper.firstChild.remove();
-				let width = 400;
-				let height = Math.round(width*(result.split('<meta itemprop="height" content="')[1].split('"')[0]/result.split('<meta itemprop="width" content="')[1].split('"')[0]));
-				embedwrapper.appendChild(BDFDB.DOMUtils.create(`<iframe src="${result.split('<link itemprop="embedURL" href="')[1].split('"')[0]}?start=0&amp;autoplay=1&amp;auto_play=1" width="${width}" height="${height}" frameborder="0" allowfullscreen=""></iframe>`));
-			}
-		});
-	}
-
 	addMessageToNotes (message, target, channel) {
 		if (!message || !target) return;
 		let {messagediv, pos} = this.getMessageAndPos(target);
 		if (!messagediv || pos == -1) return;
-		let pins = BDFDB.DataUtils.load(this, "pins");
-		let guild = BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id) || {};
-		let guild_id = guild.id ? guild.id : "@me";
-		channel = channel ? channel : BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
-		pins[guild_id] = pins[guild_id] || {}
-		pins[guild_id][channel.id] = pins[guild_id][channel.id] || {}
-		if (!pins[guild_id][channel.id][message.id + "_" + pos]) {
-			for (let spoiler of messagediv.querySelectorAll(BDFDB.dotCN.spoilerhidden)) spoiler.click();
-			let channelname = channel.name;
-			if (!channelname && channel.recipients.length > 0) {
-				for (let dmuser_id of channel.recipients) {
-					channelname = channelname ? channelname + ", @" : channelname;
-					channelname = channelname + BDFDB.LibraryModules.UserStore.getUser(dmuser_id).username;
-				}
-			}
-			pins[guild_id][channel.id][message.id + "_" + pos] = BDFDB.ObjectUtils.sort({
-				"guild_id": guild_id,
-				"guild_name": guild.name ? guild.name : "Direct Messages",
-				"channel_id": channel.id,
-				"channel_name": channelname,
-				"dmuser_id": channel.type == 1 ? channel.recipients[0] : null,
-				"id": message.id,
-				"pos": pos,
-				"timestamp": message.timestamp._i.getTime(),
-				"addedat": new Date().getTime(),
-				"color": message.colorString,
-				"author_id": message.author.id,
-				"author_name": message.author.username,
-				"avatar": BDFDB.UserUtils.getAvatar(message.author.id),
-				"content": message.content,
-				"markup": this.getMarkup(messagediv).innerHTML,
-				"accessory": messagediv.querySelector(BDFDB.dotCN.messageaccessory).innerHTML
-			});
-			BDFDB.DataUtils.save(pins, this, "pins");
-			BDFDB.NotificationUtils.toast(this.labels.toast_noteadd_text, {type:"success"});
+		let notes = BDFDB.DataUtils.load(this, "notes");
+		channel = channel || BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
+		let guild_id = channel.guild_id || "@me";
+		notes[guild_id] = notes[guild_id] || {};
+		notes[guild_id][channel.id] = notes[guild_id][channel.id] || {}
+		if (!notes[guild_id][channel.id][message.id + "_" + pos]) {
+			notes[guild_id][channel.id][message.id + "_" + pos] = {
+				addedat: new Date().getTime(),
+				channel: JSON.stringify(channel),
+				id: message.id,
+				message: JSON.stringify(message),
+				pos: pos,
+				timestamp: message.timestamp._i.getTime()
+			};
+			BDFDB.DataUtils.save(notes, this, "notes");
+			BDFDB.NotificationUtils.toast(this.labels.toast_noteadd_text, {type: "success"});
 		}
-		else this.removeNoteData(pins[guild_id][channel.id][message.id + "_" + pos]);
+		else this.removeNoteData(notes[guild_id][channel.id][message.id + "_" + pos]);
 	}
-
-	updateNoteData (note, markup, accessory) {
-		let pins = BDFDB.DataUtils.load(this, "pins");
-		pins[note.guild_id][note.channel_id][note.id + "_" + note.pos].markup = markup;
-		pins[note.guild_id][note.channel_id][note.id + "_" + note.pos].accessory = accessory;
-		pins[note.guild_id][note.channel_id][note.id + "_" + note.pos] = BDFDB.ObjectUtils.sort(pins[note.guild_id][note.channel_id][note.id + "_" + note.pos]);
-		BDFDB.DataUtils.save(pins, this, "pins");
-		BDFDB.NotificationUtils.toast(this.labels.toast_noteupdate_text, {type:"info"});
-	}
-
-	getMarkup (messagediv) {
-		let markup = messagediv.querySelector(BDFDB.dotCN.messagemarkup).cloneNode(true);
-		markup.querySelectorAll(BDFDB.dotCN.messageheadercompact).forEach(h2 => {h2.remove();});
-		return markup;
+	
+	isNoteOutdated (note, message) {
+		let notemessage = note && JSON.parse(note.message), keys = ["content", "embeds", "attachment"];
+		return notemessage && !BDFDB.equals(BDFDB.ObjectUtils.extract(notemessage, keys), BDFDB.ObjectUtils.extract(message, keys));
 	}
 
 	getNoteData (message, target, channel) {
 		if (!message || !target) return;
 		let {messagediv, pos} = this.getMessageAndPos(target);
 		if (!messagediv || pos == -1) return;
-		channel = channel ? channel : BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
-		let pins = BDFDB.DataUtils.load(this, "pins");
-		let guildid = channel.guild_id ? channel.guild_id : "@me";
-		return pins[guildid] && pins[guildid][channel.id] && pins[guildid][channel.id][message.id + "_" + pos] ? pins[guildid][channel.id][message.id + "_" + pos] : null;
+		channel = channel || BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
+		let guild_id = channel.guild_id || "@me";
+		let notes = BDFDB.DataUtils.load(this, "notes");
+		return notes[guild_id] && notes[guild_id][channel.id] && notes[guild_id][channel.id][message.id + "_" + pos];
 	}
 
-	removeNoteData (noteData) {
-		let pins = BDFDB.DataUtils.load(this, "pins");
-		delete pins[noteData.guild_id][noteData.channel_id][noteData.id + "_" + noteData.pos];
-		if (BDFDB.ObjectUtils.isEmpty(pins[noteData.guild_id][noteData.channel_id])) {
-			delete pins[noteData.guild_id][noteData.channel_id];
-			if (BDFDB.ObjectUtils.isEmpty(pins[noteData.guild_id])) delete pins[noteData.guild_id];
+	updateNoteData (note, newmessage) {
+		let message = JSON.parse(note.message);
+		let channel = JSON.parse(note.channel);
+		if (!message || !channel) return;
+		let guild_id = channel.guild_id || "@me";
+		let notes = BDFDB.DataUtils.load(this, "notes");
+		notes[guild_id][channel.id][note.id + "_" + note.pos].message = JSON.stringify(newmessage);
+		BDFDB.DataUtils.save(notes, this, "notes");
+		BDFDB.NotificationUtils.toast(this.labels.toast_noteupdate_text, {type: "info"});
+	}
+
+	removeNoteData (note) {
+		let message = JSON.parse(note.message);
+		let channel = JSON.parse(note.channel);
+		if (!message || !channel) return;
+		let guild_id = channel.guild_id || "@me";
+		let notes = BDFDB.DataUtils.load(this, "notes");
+		delete notes[guild_id][channel.id][note.id + "_" + note.pos];
+		if (BDFDB.ObjectUtils.isEmpty(notes[guild_id][channel.id])) {
+			delete notes[guild_id][channel.id];
+			if (BDFDB.ObjectUtils.isEmpty(notes[guild_id])) delete notes[guild_id];
 		}
-		BDFDB.DataUtils.save(pins, this, "pins");
-		BDFDB.NotificationUtils.toast(this.labels.toast_noteremove_text, {type:"danger"});
+		BDFDB.DataUtils.save(notes, this, "notes");
+		BDFDB.NotificationUtils.toast(this.labels.toast_noteremove_text, {type: "danger"});
 	}
 	
 	getMessageAndPos (target) {
@@ -585,12 +568,12 @@ class PersonalPins {
 			case "hr":		//croatian
 				return {
 					popout_note_text:				"Bilješke",
-					popout_channel_text:			"Kanal",
-					popout_server_text:				"Poslužavnik",
-					popout_allservers_text:			"Svi poslužitelji",
+					popout_filter_channel_text:		"Kanal",
+					popout_filter_server_text:		"Poslužavnik",
+					popout_filter_all_text:			"Svi poslužitelji",
 					popout_sort_text:				"Poredaj po",
-					popout_messagesort_text:		"Vijesti-Datum",
-					popout_datesort_text:			"Bilješka-Datum",
+					popout_sort_messagetime_text:	"Vijesti-Datum",
+					popout_sort_notetime_text:		"Bilješka-Datum",
 					context_pinoption_text:			"Napominjemo poruku",
 					context_updateoption_text:		"Ažuriraj bilješku",
 					context_unpinoption_text:		"Uklonite bilješku",
@@ -602,12 +585,12 @@ class PersonalPins {
 			case "da":		//danish
 				return {
 					popout_note_text:				"Noter",
-					popout_channel_text:			"Kanal",
-					popout_server_text:				"Server",
-					popout_allservers_text:			"Alle servere",
+					popout_filter_channel_text:		"Kanal",
+					popout_filter_server_text:		"Server",
+					popout_filter_all_text:			"Alle servere",
 					popout_sort_text:				"Sorter efter",
-					popout_messagesort_text:		"Meddelelse-Dato",
-					popout_datesort_text:			"Note-Dato",
+					popout_sort_messagetime_text:	"Meddelelse-Dato",
+					popout_sort_notetime_text:		"Note-Dato",
 					context_pinoption_text:			"Noter besked",
 					context_updateoption_text:		"Opdater note",
 					context_unpinoption_text:		"Fjern note",
@@ -619,12 +602,12 @@ class PersonalPins {
 			case "de":		//german
 				return {
 					popout_note_text:				"Notizen",
-					popout_channel_text:			"Kanal",
-					popout_server_text:				"Server",
-					popout_allservers_text:			"Alle Server",
+					popout_filter_channel_text:		"Kanal",
+					popout_filter_server_text:		"Server",
+					popout_filter_all_text:			"Alle Server",
 					popout_sort_text:				"Sortieren nach",
-					popout_messagesort_text:		"Nachrichten-Datum",
-					popout_datesort_text:			"Notiz-Datum",
+					popout_sort_messagetime_text:	"Nachrichten-Datum",
+					popout_sort_notetime_text:		"Notiz-Datum",
 					context_pinoption_text:			"Nachricht notieren",
 					context_updateoption_text:		"Notiz aktualisieren",
 					context_unpinoption_text:		"Notiz entfernen",
@@ -636,12 +619,12 @@ class PersonalPins {
 			case "es":		//spanish
 				return {
 					popout_note_text:				"Notas",
-					popout_channel_text:			"Canal",
-					popout_server_text:				"Servidor",
-					popout_allservers_text:			"Todos los servidores",
+					popout_filter_channel_text:		"Canal",
+					popout_filter_server_text:		"Servidor",
+					popout_filter_all_text:			"Todos los servidores",
 					popout_sort_text:				"Ordenar por",
-					popout_messagesort_text:		"Mensaje-Fecha",
-					popout_datesort_text:			"Nota-Fecha",
+					popout_sort_messagetime_text:	"Mensaje-Fecha",
+					popout_sort_notetime_text:		"Nota-Fecha",
 					context_pinoption_text:			"Anotar mensaje",
 					context_updateoption_text:		"Actualiza la nota",
 					context_unpinoption_text:		"Eliminar la nota",
@@ -653,12 +636,12 @@ class PersonalPins {
 			case "fr":		//french
 				return {
 					popout_note_text:				"Notes",
-					popout_channel_text:			"Canal",
-					popout_server_text:				"Serveur",
-					popout_allservers_text:			"Tous les serveurs",
+					popout_filter_channel_text:		"Canal",
+					popout_filter_server_text:		"Serveur",
+					popout_filter_all_text:			"Tous les serveurs",
 					popout_sort_text:				"Trier par",
-					popout_messagesort_text:		"Message-Date",
-					popout_datesort_text:			"Note-Date",
+					popout_sort_messagetime_text:	"Message-Date",
+					popout_sort_notetime_text:		"Note-Date",
 					context_pinoption_text:			"Noter le message",
 					context_updateoption_text:		"Mettre à jour la note",
 					context_unpinoption_text:		"Enlevez la note",
@@ -670,12 +653,12 @@ class PersonalPins {
 			case "it":		//italian
 				return {
 					popout_note_text:				"Note",
-					popout_channel_text:			"Canale",
-					popout_server_text:				"Server",
-					popout_allservers_text:			"Tutti i server",
+					popout_filter_channel_text:		"Canale",
+					popout_filter_server_text:		"Server",
+					popout_filter_all_text:			"Tutti i server",
 					popout_sort_text:				"Ordina per",
-					popout_messagesort_text:		"Messaggio-Data",
-					popout_datesort_text:			"Nota-Data",
+					popout_sort_messagetime_text:	"Messaggio-Data",
+					popout_sort_notetime_text:		"Nota-Data",
 					context_pinoption_text:			"Annotare il messaggio",
 					context_updateoption_text:		"Aggiorna la nota",
 					context_unpinoption_text:		"Rimuovi la nota",
@@ -687,12 +670,12 @@ class PersonalPins {
 			case "nl":		//dutch
 				return {
 					popout_note_text:				"Notities",
-					popout_channel_text:			"Kanaal",
-					popout_server_text:				"Server",
-					popout_allservers_text:			"Alle servers",
+					popout_filter_channel_text:		"Kanaal",
+					popout_filter_server_text:		"Server",
+					popout_filter_all_text:			"Alle servers",
 					popout_sort_text:				"Sorteer op",
-					popout_messagesort_text:		"Bericht-Datum",
-					popout_datesort_text:			"Notitie-Datum",
+					popout_sort_messagetime_text:	"Bericht-Datum",
+					popout_sort_notetime_text:		"Notitie-Datum",
 					context_pinoption_text:			"Noteer bericht",
 					context_updateoption_text:		"Update de notitie",
 					context_unpinoption_text:		"Verwijder de notitie",
@@ -704,12 +687,12 @@ class PersonalPins {
 			case "no":		//norwegian
 				return {
 					popout_note_text:				"Notatene",
-					popout_channel_text:			"Kanal",
-					popout_server_text:				"Server",
-					popout_allservers_text:			"Alle servere",
+					popout_filter_channel_text:		"Kanal",
+					popout_filter_server_text:		"Server",
+					popout_filter_all_text:			"Alle servere",
 					popout_sort_text:				"Sorter etter",
-					popout_messagesort_text:		"Melding-Dato",
-					popout_datesort_text:			"Merknad-Dato",
+					popout_sort_messagetime_text:	"Melding-Dato",
+					popout_sort_notetime_text:		"Merknad-Dato",
 					context_pinoption_text:			"Notat ned meldingen",
 					context_updateoption_text:		"Oppdater notatet",
 					context_unpinoption_text:		"Fjern notatet",
@@ -721,12 +704,12 @@ class PersonalPins {
 			case "pl":		//polish
 				return {
 					popout_note_text:				"Notatki",
-					popout_channel_text:			"Kanał",
-					popout_server_text:				"Serwer",
-					popout_allservers_text:			"Wszystkie serwery",
+					popout_filter_channel_text:		"Kanał",
+					popout_filter_server_text:		"Serwer",
+					popout_filter_all_text:			"Wszystkie serwery",
 					popout_sort_text:				"Sortuj według",
-					popout_messagesort_text:		"Wiadomość-Data",
-					popout_datesort_text:			"Notatka-Data",
+					popout_sort_messagetime_text:	"Wiadomość-Data",
+					popout_sort_notetime_text:		"Notatka-Data",
 					context_pinoption_text:			"Notuj wiadomość",
 					context_updateoption_text:		"Zaktualizuj notatkę",
 					context_unpinoption_text:		"Usuń notatkę",
@@ -738,12 +721,12 @@ class PersonalPins {
 			case "pt-BR":	//portuguese (brazil)
 				return {
 					popout_note_text:				"Notas",
-					popout_channel_text:			"Canal",
-					popout_server_text:				"Servidor",
-					popout_allservers_text:			"Todos os servidores",
+					popout_filter_channel_text:		"Canal",
+					popout_filter_server_text:		"Servidor",
+					popout_filter_all_text:			"Todos os servidores",
 					popout_sort_text:				"Ordenar por",
-					popout_messagesort_text:		"Mensagem-Data",
-					popout_datesort_text:			"Nota-Data",
+					popout_sort_messagetime_text:	"Mensagem-Data",
+					popout_sort_notetime_text:		"Nota-Data",
 					context_pinoption_text:			"Anote a mensagem",
 					context_updateoption_text:		"Atualize a nota",
 					context_unpinoption_text:		"Remova a nota",
@@ -755,12 +738,12 @@ class PersonalPins {
 			case "fi":		//finnish
 				return {
 					popout_note_text:				"Muistiinpanot",
-					popout_channel_text:			"Kanava",
-					popout_server_text:				"Palvelin",
-					popout_allservers_text:			"Kaikki palvelimet",
+					popout_filter_channel_text:		"Kanava",
+					popout_filter_server_text:		"Palvelin",
+					popout_filter_all_text:			"Kaikki palvelimet",
 					popout_sort_text:				"Järjestä",
-					popout_messagesort_text:		"Viesti-Päivämäärä",
-					popout_datesort_text:			"Huomaa-Päivämäärä",
+					popout_sort_messagetime_text:	"Viesti-Päivämäärä",
+					popout_sort_notetime_text:		"Huomaa-Päivämäärä",
 					context_pinoption_text:			"Huomaa viesti",
 					context_updateoption_text:		"Päivitä muistiinpano",
 					context_unpinoption_text:		"Poista muistiinpano",
@@ -772,12 +755,12 @@ class PersonalPins {
 			case "sv":		//swedish
 				return {
 					popout_note_text:				"Anteckningarna",
-					popout_channel_text:			"Kanal",
-					popout_server_text:				"Server",
-					popout_allservers_text:			"Alla servrar",
+					popout_filter_channel_text:		"Kanal",
+					popout_filter_server_text:		"Server",
+					popout_filter_all_text:			"Alla servrar",
 					popout_sort_text:				"Sortera efter",
-					popout_messagesort_text:		"Meddelande-Datum",
-					popout_datesort_text:			"Anteckningen-Datum",
+					popout_sort_messagetime_text:	"Meddelande-Datum",
+					popout_sort_notetime_text:		"Anteckningen-Datum",
 					context_pinoption_text:			"Anteckna meddelande",
 					context_updateoption_text:		"Uppdatera noten",
 					context_unpinoption_text:		"Ta bort noten",
@@ -789,12 +772,12 @@ class PersonalPins {
 			case "tr":		//turkish
 				return {
 					popout_note_text:				"Notlar",
-					popout_channel_text:			"Kanal",
-					popout_server_text:				"Sunucu",
-					popout_allservers_text:			"Tüm Sunucular",
+					popout_filter_channel_text:		"Kanal",
+					popout_filter_server_text:		"Sunucu",
+					popout_filter_all_text:			"Tüm Sunucular",
 					popout_sort_text:				"Göre sırala",
-					popout_messagesort_text:		"Mesaj-Tarih",
-					popout_datesort_text:			"Not-Tarih",
+					popout_sort_messagetime_text:	"Mesaj-Tarih",
+					popout_sort_notetime_text:		"Not-Tarih",
 					context_pinoption_text:			"Mesajı not alın",
 					context_updateoption_text:		"Notu güncelle",
 					context_unpinoption_text:		"Notu kaldırmak",
@@ -806,12 +789,12 @@ class PersonalPins {
 			case "cs":		//czech
 				return {
 					popout_note_text:				"Poznámky",
-					popout_channel_text:			"Kanál",
-					popout_server_text:				"Server",
-					popout_allservers_text:			"Všechny servery",
+					popout_filter_channel_text:		"Kanál",
+					popout_filter_server_text:		"Server",
+					popout_filter_all_text:			"Všechny servery",
 					popout_sort_text:				"Seřazeno podle",
-					popout_messagesort_text:		"Zpráva-datum",
-					popout_datesort_text:			"Poznámka-datum",
+					popout_sort_messagetime_text:	"Zpráva-datum",
+					popout_sort_notetime_text:		"Poznámka-datum",
 					context_pinoption_text:			"Poznámka dolů zprávu",
 					context_updateoption_text:		"Aktualizujte poznámku",
 					context_unpinoption_text:		"Odstraňte poznámku",
@@ -823,12 +806,12 @@ class PersonalPins {
 			case "bg":		//bulgarian
 				return {
 					popout_note_text:				"бележките",
-					popout_channel_text:			"Канал",
-					popout_server_text:				"Сървър",
-					popout_allservers_text:			"Всички сървъри",
+					popout_filter_channel_text:		"Канал",
+					popout_filter_server_text:		"Сървър",
+					popout_filter_all_text:			"Всички сървъри",
 					popout_sort_text:				"Сортиране по",
-					popout_messagesort_text:		"Съобщение-Дата",
-					popout_datesort_text:			"Забележка-Дата",
+					popout_sort_messagetime_text:	"Съобщение-Дата",
+					popout_sort_notetime_text:		"Забележка-Дата",
 					context_pinoption_text:			"Oтбележете съобщението",
 					context_updateoption_text:		"Актуализирайте бележката",
 					context_unpinoption_text:		"Премахнете бележката",
@@ -840,12 +823,12 @@ class PersonalPins {
 			case "ru":		//russian
 				return {
 					popout_note_text:				"Заметки",
-					popout_channel_text:			"Канал",
-					popout_server_text:				"Cервер",
-					popout_allservers_text:			"Все серверы",
+					popout_filter_channel_text:		"Канал",
+					popout_filter_server_text:		"Cервер",
+					popout_filter_all_text:			"Все серверы",
 					popout_sort_text:				"Сортировать по",
-					popout_messagesort_text:		"Сообщение-дата",
-					popout_datesort_text:			"Заметки-Дата",
+					popout_sort_messagetime_text:	"Сообщение-дата",
+					popout_sort_notetime_text:		"Заметки-Дата",
 					context_pinoption_text:			"Записывать вниз",
 					context_updateoption_text:		"Обновить заметку",
 					context_unpinoption_text:		"Удалить заметку",
@@ -857,12 +840,12 @@ class PersonalPins {
 			case "uk":		//ukrainian
 				return {
 					popout_note_text:				"Замітки",
-					popout_channel_text:			"Канал",
-					popout_server_text:				"Сервер",
-					popout_allservers_text:			"Всі сервери",
+					popout_filter_channel_text:		"Канал",
+					popout_filter_server_text:		"Сервер",
+					popout_filter_all_text:			"Всі сервери",
 					popout_sort_text:				"Сортувати за",
-					popout_messagesort_text:		"Повідомлення-дата",
-					popout_datesort_text:			"Примітка-дата",
+					popout_sort_messagetime_text:	"Повідомлення-дата",
+					popout_sort_notetime_text:		"Примітка-дата",
 					context_pinoption_text:			"Зверніть увагу на повідомлення",
 					context_updateoption_text:		"Оновіть нотатку",
 					context_unpinoption_text:		"Видаліть нотатку",
@@ -874,12 +857,12 @@ class PersonalPins {
 			case "ja":		//japanese
 				return {
 					popout_note_text:				"ノート",
-					popout_channel_text:			"チャネル",
-					popout_server_text:				"サーバ",
-					popout_allservers_text:			"すべてのサーバー",
+					popout_filter_channel_text:		"チャネル",
+					popout_filter_server_text:		"サーバ",
+					popout_filter_all_text:			"すべてのサーバー",
 					popout_sort_text:				"並び替え",
-					popout_messagesort_text:		"メッセージ-日付",
-					popout_datesort_text:			"注-日付",
+					popout_sort_messagetime_text:	"メッセージ-日付",
+					popout_sort_notetime_text:		"注-日付",
 					context_pinoption_text:			"ノートダウンメッセージ",
 					context_updateoption_text:		"メモを更新する",
 					context_unpinoption_text:		"メモを削除",
@@ -891,12 +874,12 @@ class PersonalPins {
 			case "zh-TW":	//chinese (traditional)
 				return {
 					popout_note_text:				"筆記",
-					popout_channel_text:			"渠道",
-					popout_server_text:				"服務器",
-					popout_allservers_text:			"所有服務器",
+					popout_filter_channel_text:		"渠道",
+					popout_filter_server_text:		"服務器",
+					popout_filter_all_text:			"所有服務器",
 					popout_sort_text:				"排序方式",
-					popout_messagesort_text:		"消息-日期",
-					popout_datesort_text:			"注-日期",
+					popout_sort_messagetime_text:	"消息-日期",
+					popout_sort_notetime_text:		"注-日期",
 					context_pinoption_text:			"記下下來的消息",
 					context_updateoption_text:		"更新說明",
 					context_unpinoption_text:		"刪除備註",
@@ -908,12 +891,12 @@ class PersonalPins {
 			case "ko":		//korean
 				return {
 					popout_note_text:				"노트",
-					popout_channel_text:			"채널",
-					popout_server_text:				"섬기는 사람",
-					popout_allservers_text:			"모든 서버",
+					popout_filter_channel_text:		"채널",
+					popout_filter_server_text:		"섬기는 사람",
+					popout_filter_all_text:			"모든 서버",
 					popout_sort_text:				"정렬 기준",
-					popout_messagesort_text:		"메시지-날짜",
-					popout_datesort_text:			"주-날짜",
+					popout_sort_messagetime_text:	"메시지-날짜",
+					popout_sort_notetime_text:		"주-날짜",
 					context_pinoption_text:			"메모 다운 메시지",
 					context_updateoption_text:		"메모 업데이트",
 					context_unpinoption_text:		"메모 삭제",
@@ -925,12 +908,12 @@ class PersonalPins {
 			default:		//default: english
 				return {
 					popout_note_text:				"Notes",
-					popout_channel_text:			"Channel",
-					popout_server_text:				"Server",
-					popout_allservers_text:			"All Servers",
+					popout_filter_channel_text:		"Channel",
+					popout_filter_server_text:		"Server",
+					popout_filter_all_text:			"All Servers",
 					popout_sort_text:				"Sort by",
-					popout_messagesort_text:		"Message-Date",
-					popout_datesort_text:			"Note-Date",
+					popout_sort_messagetime_text:	"Message-Date",
+					popout_sort_notetime_text:		"Note-Date",
 					context_pinoption_text:			"Note Message",
 					context_updateoption_text:		"Update Note",
 					context_unpinoption_text:		"Remove Note",
