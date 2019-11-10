@@ -245,7 +245,7 @@ var BDFDB = {
 				changeLogHTML += `</ul>`
 			}
 		}
-		if (changeLogHTML) BDFDB.ModalUtils.open(plugin, {header:BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG, children:BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(changeLogHTML)), className:BDFDB.disCN.modalchangelogmodal, contentClassName:BDFDB.disCN.modalminicontent});
+		if (changeLogHTML) BDFDB.ModalUtils.open(plugin, {header:BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG, children:BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(changeLogHTML)), className:BDFDB.disCN.modalchangelogmodal, contentClassName:BDFDB.disCNS.changelogcontainer + BDFDB.disCN.modalminicontent});
 	};
 	BDFDB.PluginUtils.createSettingsPanel = function (plugin, children) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !children || (!BDFDB.ReactUtils.isValidElement(children) && !BDFDB.ArrayUtils.is(children)) || (BDFDB.ArrayUtils.is(children) && !children.length)) return;
@@ -3527,7 +3527,7 @@ var BDFDB = {
 									scroller: config.scroller,
 									children: contentchildren
 								}),
-								footerchildren.length ? BDFDB.ReactUtils.createElement(LibraryComponents.ModalComponents.ModalFooter,
+								footerchildren.length ? BDFDB.ReactUtils.createElement(LibraryComponents.ModalComponents.ModalFooter, {
 									className: config.footerClassName,
 									children: footerchildren
 								}) : null
@@ -3995,14 +3995,15 @@ var BDFDB = {
 		inputNumberWrapper: "numberInputWrapper-j4svZS",
 		inputNumberWrapperDefault: "numberInputWrapperDefault-gRxcuK numberInputWrapper-j4svZS",
 		inputNumberWrapperMini: "numberInputWrapperMini-wtUU31 numberInputWrapper-j4svZS",
-		modalWrapper: "modal-6GHvdM",
 		overflowEllipsis: "ellipsis-qlo9sA",
 		popoutWrapper: "popout-xwjvsX",
 		quickSelectWrapper: "quickSelectWrapper-UCfTKz",
 		quickSelectPopoutWrapper: "quickSelectPopout-u2dtIf",
 		modalHeaderHasSibling: "hasSiblings-fRyjyl",
+		modalInnerScrollerLess: "inner-YgPpF3",
 		modalTabContent: "tab-content",
 		modalTabContentOpen: "open",
+		modalWrapper: "modal-6GHvdM",
 		settingsPanel: "settingsPanel-w2ySNR",
 		settingsPanelInner: "settingsInner-zw1xAY",
 		settingsPanelList: "settingsList-eZjkXj",
@@ -4474,6 +4475,7 @@ var BDFDB = {
 		categoryname: ["Category", "name"],
 		categorywrapper: ["Category", "wrapper"],
 		changelogadded: ["ChangeLog", "added"],
+		changelogcontainer: ["ChangeLog", "container"],
 		changelogfixed: ["ChangeLog", "fixed"],
 		changelogimproved: ["ChangeLog", "improved"],
 		changelogprogress: ["ChangeLog", "added"],
@@ -5145,6 +5147,7 @@ var BDFDB = {
 		modalsizesmall: ["Modal", "sizeSmall"],
 		modalsub: ["Modal", "modal"],
 		modalsubinner: ["Modal", "inner"],
+		modalsubinnerscrollerless: ["BDFDB", "modalInnerScrollerLess"],
 		modaltabcontent: ["BDFDB", "modalTabContent"],
 		modaltabcontentopen: ["BDFDB", "modalTabContentOpen"],
 		modalwrapper: ["BDFDB", "modalWrapper"],
@@ -6624,14 +6627,14 @@ var BDFDB = {
 		render() {
 			return this.props.scroller || this.props.scroller === undefined ? BDFDB.ReactUtils.createElement(LibraryComponents.ScrollerVertical, {
 				outerClassName: BDFDB.disCN.modalcontent,
-				className: BDFDB.disCN.modalsubinner,
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.modalsubinner, this.props.className),
 				theme: LibraryComponents.ScrollerVertical.Themes.GHOST_HAIRLINE,
 				ref: this.props.scrollerRef,
 				children: this.props.children
 			}) : BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.disCN.modalcontent,
 				children: BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.disCN.modalsubinner,
+					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.modalsubinner, BDFDB.disCN.modalsubinnerscrollerless, this.props.className),
 					children: this.props.children
 				})
 			});
@@ -7497,6 +7500,10 @@ var BDFDB = {
 			color: var(--interactive-active);
 		}
 		
+		${BDFDB.dotCN.modalsubinnerscrollerless} {
+			padding-bottom: 10px;
+			overflow: visible;
+		}
 		${BDFDB.dotCNS.modalwrapper + BDFDB.dotCN.modalheader + BDFDB.dotCN.modalheaderhassibling} {
 			padding-bottom: 10px;
 		}

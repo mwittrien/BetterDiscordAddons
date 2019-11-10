@@ -3,7 +3,7 @@
 class UserNotes {
 	getName () {return "UserNotes";}
 
-	getVersion () {return "1.0.3";}
+	getVersion () {return "1.0.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,75 +11,35 @@ class UserNotes {
 	
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 	}
-
+	
 	initConstructor () {
 		this.css = `
 			.${this.name}-modal textarea {
-				rows: 0;
-				cols: 0;
-				height: 30vw;
-				resize: none;
+				height: 50vh;
 			}`;
-
-		this.userNotesModalMarkup =
-			`<span class="${this.name}-modal BDFDB-modal">
-				<div class="${BDFDB.disCN.backdrop}"></div>
-				<div class="${BDFDB.disCN.modal}">
-					<div class="${BDFDB.disCN.modalinner}">
-						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
-							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
-								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
-									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">${BDFDB.LanguageUtils.LanguageStrings.USERS + " " + BDFDB.LanguageUtils.LanguageStrings.NOTE}</h4>
-									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
-								</div>
-								<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
-									<div class="${BDFDB.disCN.buttoncontents}">
-										<svg name="Close" width="18" height="18" viewBox="0 0 12 12" style="flex: 0 1 auto;">
-											<g fill="none" fill-rule="evenodd">
-												<path d="M0 0h12v12H0"></path>
-												<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
-											</g>
-										</svg>
-									</div>
-								</button>
-							</div>
-							<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCNS.scrollerthemeghosthairline + BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCNS.flexchild + BDFDB.disCNS.modalsubinner + BDFDB.disCN.marginbottom20}" style="flex: 1 1 auto;">
-								<textarea class="${BDFDB.disCNS.scroller + BDFDB.disCNS.inputdefault + BDFDB.disCN.input}" id="modal-inputtext"></textarea>
-							</div>
-							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
-								<button type="button" class="btn-save ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
-									<div class="${BDFDB.disCN.buttoncontents}"></div>
-								</button>
-								<button type="button" class="btn-cancel ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlooklink + BDFDB.disCNS.buttoncolorwhite + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
-									<div class="${BDFDB.disCN.buttoncontents}"></div>
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</span>`;
 	}
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		let settings = BDFDB.DataUtils.get(this, "settings");
-		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
-		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Remove all User Notes.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} remove-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Remove</div></button></div>`;
-		settingshtml += `</div></div>`;
-
-		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
-
-		BDFDB.initElements(settingspanel, this);
-
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".remove-button", () => {
-			BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all usernotes?", () => {
-				BDFDB.DataUtils.remove(this, "notes");
-			});
-		});
-		return settingspanel;
+		let settingsitems = [];
+		
+		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+			type: "Button",
+			className: BDFDB.disCN.marginbottom8,
+			color: BDFDB.LibraryComponents.Button.Colors.RED,
+			label: "Delete all Usernotes",
+			onClick: _ => {
+				BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all usernotes?", () => {
+					BDFDB.DataUtils.remove(this, "notes");
+				});
+			},
+			children: BDFDB.LanguageUtils.LanguageStrings.DELETE
+		}));
+		
+		return BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 	}
 
 	//legacy
@@ -126,16 +86,16 @@ class UserNotes {
 
 	// begin of own functions
 
-	onUserContextMenu (instance, menu, returnvalue) {
-		if (instance.props && instance.props.user) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
+	onUserContextMenu (e) {
+		if (e.instance.props && e.instance.props.user) {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 						label: BDFDB.LanguageUtils.LanguageStrings.USERS + " " + BDFDB.LanguageUtils.LanguageStrings.NOTE,
-						action: e => {
-							BDFDB.ContextMenuUtils.close(menu);
-							this.openNotesModal(instance.props.user);
+						action: _ => {
+							BDFDB.ContextMenuUtils.close(e.instance);
+							this.openNotesModal(e.instance.props.user);
 						}
 					})
 				]
@@ -145,19 +105,31 @@ class UserNotes {
 		}
 	}
 
-	openNotesModal (info) {
-		let note = BDFDB.DataUtils.load(this, "notes", info.id) || "";
-
-		let userNotesModal = BDFDB.DOMUtils.create(this.userNotesModalMarkup);
-		let noteinput = userNotesModal.querySelector("#modal-inputtext");
-		userNotesModal.querySelector(BDFDB.dotCN.modalguildname).innerText = info.username || "";
-		noteinput.value = note;
-		noteinput.setAttribute("placeholder", note);
-		BDFDB.appendModal(userNotesModal);
-		BDFDB.ListenerUtils.addToChildren(userNotesModal, "click", ".btn-save", (e) => {
-			e.preventDefault();
-			BDFDB.DataUtils.save(noteinput.value, this, "notes", info.id);
+	openNotesModal (user) {
+		let note = BDFDB.DataUtils.load(this, "notes", user.id);
+		
+		BDFDB.ModalUtils.open(this, {
+			size: "LARGE",
+			header: BDFDB.LanguageUtils.LanguageStrings.USERS + " " + BDFDB.LanguageUtils.LanguageStrings.NOTE,
+			subheader: user.username,
+			scroller: false,
+			children: [
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextArea, {
+					value: note,
+					placeholder: note,
+					autoFocus: true
+				})
+			],
+			buttons: [{
+				contents: BDFDB.LanguageUtils.LanguageStrings.SAVE,
+				color: "BRAND",
+				close: true,
+				click: modal => {
+					note = modal.querySelector("textarea").value;
+					if (note) BDFDB.DataUtils.save(note, this, "notes", user.id);
+					else BDFDB.DataUtils.remove(this, "notes", user.id);
+				}
+			}]
 		});
-		noteinput.focus();
 	}
 }
