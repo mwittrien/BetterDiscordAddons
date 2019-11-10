@@ -6907,12 +6907,6 @@ var BDFDB = {
 			let childcomponent = LibraryComponents[this.props.type];
 			if (!childcomponent) return null;
 			if (this.props.mini && childcomponent.Sizes) this.props.size = childcomponent.Sizes.MINI || childcomponent.Sizes.MIN;
-			let childprops = Object.assign({}, this.props, {
-				className: this.props.childClassName,
-				type: this.props.childType,
-				onChange: this.handleChange.bind(this)
-			});
-			BDFDB.ObjectUtils.delete(childprops, "id", "basis", "dividerbottom", "dividertop", "label", "labelchildren", "mini", "note", "childClassName", "childType");
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				className: BDFDB.DOMUtils.formatClassName(this.props.className, this.props.disabled && BDFDB.disCN.disabled),
 				id: this.props.id,
@@ -6937,7 +6931,9 @@ var BDFDB = {
 								shrink: this.props.basis ? 0 : 1,
 								basis: this.props.basis,
 								wrap: true,
-								children: BDFDB.ReactUtils.createElement(childcomponent, childprops)
+								children: BDFDB.ReactUtils.createElement(childcomponent, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, this.props.childProps, {
+									onChange: this.handleChange.bind(this)
+								}), "id", "basis", "dividerbottom", "dividertop", "label", "labelchildren", "mini", "note", "childProps"))
 							})
 						]
 					}),
@@ -7138,7 +7134,7 @@ var BDFDB = {
 		render() {
 			let childprops = Object.assign({}, this.props, {
 				className: BDFDB.DOMUtils.formatClassName(this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["input" + this.props.size.toLowerCase()] || BDFDB.disCN.inputdefault, this.props.inputClassName, this.props.focused && BDFDB.disCN.inputfocused, this.props.error || this.props.errorMessage ? BDFDB.disCN.inputerror : (this.props.success && BDFDB.disCN.inputsuccess), this.props.disabled && BDFDB.disCN.inputdisabled, this.props.editable && BDFDB.disCN.inputeditable),
-				disabled: this.props.disabled,
+				type: this.props.type == "color" || this.props.type == "file" ? "text" : this.props.type,
 				onKeyDown: this.handleKeyDown.bind(this),
 				onChange: this.handleChange.bind(this),
 				onInput: this.handleInput.bind(this),
@@ -7180,11 +7176,15 @@ var BDFDB = {
 						]
 					}) : null,
 					BDFDB.ReactUtils.createElement("input", childprops),
+					this.props.type == "color" ? BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.inputerrormessage,
+						children: this.props.errorMessage
+					}) : null,
 					this.props.errorMessage ? BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.inputerrormessage,
 						children: this.props.errorMessage
-					}) : null
-				]
+					}) : null,
+				].filter(n => n)
 			});
 		}
 	} : LibraryComponents.TextInput;

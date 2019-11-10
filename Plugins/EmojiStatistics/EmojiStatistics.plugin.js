@@ -3,7 +3,7 @@
 class EmojiStatistics {
 	getName () {return "EmojiStatistics";}
 
-	getVersion () {return "2.8.7";}
+	getVersion () {return "2.8.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -83,7 +83,9 @@ class EmojiStatistics {
 		for (let key in amounts) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,
 			type: "TextInput",
-			childType: "number",
+			childProps: {
+				type: "number"
+			},
 			plugin: this,
 			keys: ["amounts", key],
 			label: this.defaults.amounts[key].description,
@@ -144,7 +146,6 @@ class EmojiStatistics {
 	// begin of own functions
 
 	processEmojiPicker (e) {
-		if (this.stopping) return;
 		this.loadEmojiList();
 		let settings = BDFDB.DataUtils.get(this, "settings");
 		if (settings.enableEmojiStatisticsButton) {
