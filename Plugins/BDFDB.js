@@ -6064,8 +6064,7 @@ var BDFDB = {
 	NativeSubComponents.Switch = BDFDB.ModuleUtils.findByName("Switch");
 	NativeSubComponents.TabBar = BDFDB.ModuleUtils.findByName("TabBar");
 	NativeSubComponents.Table = BDFDB.ModuleUtils.findByName("Table");
-	NativeSubComponents.TextArea = BDFDB.ModuleUtils.findByName("TextAreaAutosize");
-	NativeSubComponents.TextAreaAutosize = BDFDB.ModuleUtils.findByName("TextAreaAutosize");
+	NativeSubComponents.TextArea = BDFDB.ModuleUtils.findByName("TextArea");
 	NativeSubComponents.TextInput = BDFDB.ModuleUtils.findByName("TextInput");
 	NativeSubComponents.TooltipContainer = BDFDB.ModuleUtils.findByName("Tooltip");
 	
@@ -7028,16 +7027,10 @@ var BDFDB = {
 	} : LibraryComponents.Table;
 	
 	LibraryComponents.TextArea = reactInitialized ? class BDFDB_TextArea extends LibraryModules.React.Component {
-		handleKeyDown(e) {
-			if (typeof this.props.onKeyDown == "function") this.props.onKeyDown(e, this);
-		}
 		handleChange(e) {
 			this.props.value = e;
 			BDFDB.ReactUtils.forceUpdate(this);
 			if (typeof this.props.onChange == "function") this.props.onChange(e, this);
-		}
-		handleInput(e) {
-			if (typeof this.props.onInput == "function") this.props.onInput(e, this);
 		}
 		handleBlur(e) {
 			if (typeof this.props.onBlur == "function") this.props.onBlur(e, this);
@@ -7045,22 +7038,12 @@ var BDFDB = {
 		handleFocus(e) {
 			if (typeof this.props.onFocus == "function") this.props.onFocus(e, this);
 		}
-		handleMouseEnter(e) {
-			if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);
-		}
-		handleMouseLeave(e) {
-			if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);
-		}
 		render() {
-			return BDFDB.ReactUtils.createElement(this.props.autosize ? NativeSubComponents.TextAreaAutosize : NativeSubComponents.TextArea, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-				onKeyDown: this.handleKeyDown.bind(this),
+			return BDFDB.ReactUtils.createElement(NativeSubComponents.TextArea, Object.assign({}, this.props, {
 				onChange: this.handleChange.bind(this),
-				onInput: this.handleInput.bind(this),
 				onBlur: this.handleBlur.bind(this),
-				onFocus: this.handleFocus.bind(this),
-				onMouseEnter: this.handleMouseEnter.bind(this),
-				onMouseLeave: this.handleMouseLeave.bind(this)
-			}), "autosize"));
+				onFocus: this.handleFocus.bind(this)
+			}));
 		}
 	} : LibraryComponents.TextArea;
 	
