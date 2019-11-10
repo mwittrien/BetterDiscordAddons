@@ -6199,11 +6199,15 @@ var BDFDB = {
 			let length = this.props.parsing ? BDFDB.StringUtils.getParsedLength(string) : string.length;
 			let select = end - start == 0 ? 0 : (this.props.parsing ? BDFDB.StringUtils.getParsedLength(string.slice(start, end)) : (end - start));
 			select = !select ? 0 : (select > length ? length - (length - end - start) : select);
-			return [
+			let children = [
 				typeof this.props.renderPrefix == "function" && this.props.renderPrefix(length),
 				`${length}${!this.props.max ? "" : "/" + this.props.max}${!select ? "" : " (" + select + ")"}`,
 				typeof this.props.renderSuffix == "function" && this.props.renderSuffix(length)
 			].filter(n => n);
+			return children.length == 1 ? children : BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+				align: LibraryComponents.Flex.Align.CENTER,
+				children: children
+			});
 		}
 		updateCounter() {
 			if (!this.refElement) return;
