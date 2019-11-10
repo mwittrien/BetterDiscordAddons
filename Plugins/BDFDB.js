@@ -6199,7 +6199,11 @@ var BDFDB = {
 			let length = this.props.parsing ? BDFDB.StringUtils.getParsedLength(string) : string.length;
 			let select = end - start == 0 ? 0 : (this.props.parsing ? BDFDB.StringUtils.getParsedLength(string.slice(start, end)) : (end - start));
 			select = !select ? 0 : (select > length ? length - (length - end - start) : select);
-			return `${length}${!this.props.max ? "" : "/" + this.props.max}${!select ? "" : " (" + select + ")"}`;
+			return [
+				typeof this.props.renderPrefix == "function" && this.props.renderPrefix(length),
+				`${length}${!this.props.max ? "" : "/" + this.props.max}${!select ? "" : " (" + select + ")"}`,
+				typeof this.props.renderSuffix == "function" && this.props.renderSuffix(length)
+			].filter(n => n);
 		}
 		updateCounter() {
 			if (!this.refElement) return;
@@ -6259,13 +6263,11 @@ var BDFDB = {
 			}
 			else BDFDB.LogUtils.warn("refClass can not be undefined for BDFDB_CharCounter");
 		}
-		render() {
-			let props = Object.assign({}, this.props, {
+		render() {;
+			return BDFDB.ReactUtils.createElement("div", BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.charcounter, this.props.className),
 				children: this.getCounterString()
-			});
-			BDFDB.ObjectUtils.delete(props, "parsing", "max", "refClass");
-			return BDFDB.ReactUtils.createElement("div", props);
+			}), "parsing", "max", "refClass", "renderPrefix", "renderSuffix"));
 		}
 	} : LibraryComponents.CharCounter;
 	
