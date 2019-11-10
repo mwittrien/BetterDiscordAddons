@@ -6944,7 +6944,7 @@ var BDFDB = {
 						children: BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormText, {
 							disabled: this.props.disabled,
 							type: LibraryComponents.FormComponents.FormText.Types.DESCRIPTION,
-							children: this.props.note
+							children: this.props.textscroll ? BDFDB.ReactUtils.createElement(LibraryComponents.TextScroller, {speed: 2, children: this.props.note}) : this.props.note
 						})
 					}) : null,
 					this.props.dividerbottom ? BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormDivider, {
