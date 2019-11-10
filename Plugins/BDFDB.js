@@ -4016,7 +4016,8 @@ var BDFDB = {
 		tableHeaderCellSorted: "headerCellSorted-FMjMWK",
 		tableHeaderSortIcon: "sortIcon-WZjMja",
 		tableRow: "row-_9Ehcp",
-		tableStickyHeader: "stickyHeader-JabwjW header-g67q9_"
+		tableStickyHeader: "stickyHeader-JabwjW header-g67q9_",
+		textScroller: "textScroller-dc9_kz"
 	};
 	DiscordClassModules.BDrepo = {
 		bdGuild: "bd-guild",
@@ -5460,6 +5461,7 @@ var BDFDB = {
 		textareawrapenablednoattach: ["ChannelTextArea", "channelTextAreaEnabledNoAttach"],
 		textlink: ["Notice", "textLink"],
 		textrow: ["PopoutActivity", "textRow"],
+		textscroller: ["BDFDB", "textScroller"],
 		themedark: ["NotFound", "themeDark"],
 		themeghosthairline: ["Scroller", "themeGhostHairline"],
 		themelight: ["NotFound", "themeLight"],
@@ -7190,7 +7192,7 @@ var BDFDB = {
 	LibraryComponents.TextScroller = reactInitialized ? class BDFDB_TextScroller extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.DOMUtils.formatClassName("BDFDB-textscroller", this.props.className),
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.textscroller, this.props.className),
 				style: Object.assign({}, this.props.style, {
 					position: "relative",
 					display: "block",
