@@ -6944,7 +6944,7 @@ var BDFDB = {
 						children: BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormText, {
 							disabled: this.props.disabled,
 							type: LibraryComponents.FormComponents.FormText.Types.DESCRIPTION,
-							children: this.props.textscroll ? BDFDB.ReactUtils.createElement(LibraryComponents.TextScroller, {speed: 2, children: this.props.note}) : this.props.note
+							children: BDFDB.ReactUtils.createElement(LibraryComponents.TextScroller, {speed: 2, children: this.props.note})
 						})
 					}) : null,
 					this.props.dividerbottom ? BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormDivider, {
@@ -6957,8 +6957,9 @@ var BDFDB = {
 	
 	LibraryComponents.SettingsLabel = reactInitialized ? class BDFDB_SettingsLabel extends LibraryModules.React.Component {
 		render() {
-			return BDFDB.ReactUtils.createElement("label", {
+			return BDFDB.ReactUtils.createElement(LibraryComponents.TextScroller, {
 				className: BDFDB.DOMUtils.formatClassName(this.props.mini ? BDFDB.disCN.titlemini : BDFDB.disCN.titledefault, BDFDB.disCN.cursordefault),
+				speed: 2,
 				children: this.props.label
 			});
 		}	
