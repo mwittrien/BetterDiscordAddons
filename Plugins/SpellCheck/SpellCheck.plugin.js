@@ -143,7 +143,7 @@ class SpellCheck {
 	// begin of own functions
 
 	onNativeContextMenu (instance, menu, returnvalue) {
-		if (instance.props && instance.props.target && instance.props.target.tagName == "TEXTAREA" && !menu.querySelector(`${this.name}-contextMenuItem`)) {
+		if (instance.props && instance.props.target && instance.props.target.tagName == "TEXTAREA") {
 			let [SCparent, SCindex] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["NativeSpellcheckGroup", "FluxContainer(NativeSpellcheckGroup)"]});
 			if (SCindex > -1) {
 				if (BDFDB.ReactUtils.findValue(instance._reactInternalFiber, "spellcheckEnabled") == true) {

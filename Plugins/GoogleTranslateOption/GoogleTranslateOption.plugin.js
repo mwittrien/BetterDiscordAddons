@@ -153,7 +153,7 @@ class GoogleTranslateOption {
 	// begin of own functions
 
 	onMessageContextMenu (instance, menu, returnvalue) {
-		if (instance.props && instance.props.message && instance.props.channel && instance.props.target && !menu.querySelector(`${this.name}-contextMenuItem`)) {
+		if (instance.props && instance.props.message && instance.props.channel && instance.props.target) {
 			let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
 			if (!messagediv || pos == -1) return;
 			let translated = BDFDB.DOMUtils.containsClass(messagediv, "GTO-translated-message");

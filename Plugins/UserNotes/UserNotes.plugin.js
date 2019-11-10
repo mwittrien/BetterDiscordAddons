@@ -127,7 +127,7 @@ class UserNotes {
 	// begin of own functions
 
 	onUserContextMenu (instance, menu, returnvalue) {
-		if (instance.props && instance.props.user && !menu.querySelector(`${this.name}-contextMenuItem`)) {
+		if (instance.props && instance.props.user) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				children: [

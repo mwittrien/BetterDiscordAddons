@@ -3,7 +3,7 @@
 class WriteUpperCase {
 	getName () {return "WriteUpperCase";}
 
-	getVersion () {return "1.2.1";}
+	getVersion () {return "1.2.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,11 +11,11 @@ class WriteUpperCase {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 		
 		this.patchModules = {
-			"ChannelTextArea":"componentDidMount",
+			ChannelTextArea: "componentDidMount",
 		};
 	}
 
@@ -63,9 +63,9 @@ class WriteUpperCase {
 
 	// begin of own functions
 
-	processChannelTextArea (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.type) {
-			var textarea = wrapper.querySelector("textarea");
+	processChannelTextArea (e) {
+		if (e.instance.props && e.instance.props.type) {
+			var textarea = e.node.querySelector("textarea");
 			if (!textarea) return;
 			BDFDB.ListenerUtils.add(this, textarea, "keyup", () => {
 				BDFDB.TimeUtils.clear(textarea.WriteUpperCaseTimeout);
