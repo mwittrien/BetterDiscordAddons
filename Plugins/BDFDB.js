@@ -230,7 +230,7 @@ var BDFDB = {
 	};
 	BDFDB.PluginUtils.openChangeLog = function (plugin) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !plugin.changelog) return;
-		var changeLogHTML = `<div class="${BDFDB.disCN.modalminicontent}">`, logs = false, headers = {
+		var changeLogHTML = "", headers = {
 			added: "New Features",
 			fixed: "Bug Fixes",
 			improved: "Improvements",
@@ -240,14 +240,12 @@ var BDFDB = {
 			type = type.toLowerCase();
 			var classname = BDFDB.disCN["changelog" + type];
 			if (classname) {
-				logs = true;
 				changeLogHTML += `<h1 class="${classname + " " + BDFDB.disCN.margintop20}"${changeLogHTML.indexOf("<h1") == -1 ? `style="margin-top: 0px !important;"` : ""}>${headers[type]}</h1><ul>`;
 				for (let log of plugin.changelog[type]) changeLogHTML += `<li><strong>${log[0]}</strong>${log[1] ? (": " + log[1] + ".") : ""}</li>`;
 				changeLogHTML += `</ul>`
 			}
 		}
-		changeLogHTML += `</div>`
-		if (logs) BDFDB.ModalUtils.open(plugin, {header:BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG, children:BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(changeLogHTML)), selector:"BDFDB-changelogmodal"});
+		if (changeLogHTML) BDFDB.ModalUtils.open(plugin, {header:BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG, children:BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(changeLogHTML)), className:BDFDB.disCN.modalchangelogmodal, contentClassName:BDFDB.disCN.modalminicontent});
 	};
 	BDFDB.PluginUtils.createSettingsPanel = function (plugin, children) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !children || (!BDFDB.ReactUtils.isValidElement(children) && !BDFDB.ArrayUtils.is(children)) || (BDFDB.ArrayUtils.is(children) && !children.length)) return;
@@ -3490,16 +3488,16 @@ var BDFDB = {
 			let oldTransitionState = 0;
 			LibraryModules.ModalUtils.openModal(props => {
 				modalprops = props;
-				return BDFDB.ReactUtils.createElement(class BDFDBModal extends LibraryModules.React.Component {
+				return BDFDB.ReactUtils.createElement(class BDFDB_Modal extends LibraryModules.React.Component {
 					render () {
 						return BDFDB.ReactUtils.createElement(LibraryComponents.ModalComponents.ModalRoot, {
-							className: BDFDB.DOMUtils.formatClassName(name && `${name}-modal`, BDFDB.disCN.modalwrapper, config.selector),
+							className: BDFDB.DOMUtils.formatClassName(name && `${name}-modal`, BDFDB.disCN.modalwrapper, config.className),
 							size: size || LibraryComponents.ModalComponents.ModalSize.SMALL,
 							transitionState: props.transitionState,
 							children: [
 								BDFDB.ReactUtils.createElement(LibraryComponents.ModalComponents.ModalHeader, {
-									className: headerchildren.length ? BDFDB.disCN.modalheaderhassibling : null,
-									separator: config.headerseparator || false,
+									className: BDFDB.DOMUtils.formatClassName(config.headerClassName, headerchildren.length && BDFDB.disCN.modalheaderhassibling),
+									separator: config.headerSeparator || false,
 									children: [
 										BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
 											grow: 1,
@@ -3525,9 +3523,12 @@ var BDFDB = {
 									children: headerchildren
 								}) : null,
 								BDFDB.ReactUtils.createElement(LibraryComponents.ModalComponents.ModalContent, {
+									className: config.contentClassName,
+									scroller: config.scroller,
 									children: contentchildren
 								}),
-								footerchildren.length ? BDFDB.ReactUtils.createElement(LibraryComponents.ModalComponents.ModalFooter, {
+								footerchildren.length ? BDFDB.ReactUtils.createElement(LibraryComponents.ModalComponents.ModalFooter,
+									className: config.footerClassName,
 									children: footerchildren
 								}) : null
 							]
@@ -3554,7 +3555,7 @@ var BDFDB = {
 	BDFDB.ModalUtils.confirm = function (plugin, text, callback) {
 		if (!BDFDB.ObjectUtils.is(plugin) || typeof text != "string") return;
 		callback = typeof callback == "function" ? callback : _ => {};
-		BDFDB.ModalUtils.open(plugin, {text, header:"Are you sure?", selector:"BDFDB-confirmmodal", buttons:[
+		BDFDB.ModalUtils.open(plugin, {text, header:"Are you sure?", className:BDFDB.disCN.modalconfirmmodal, scroller:false, buttons:[
 			{contents: BDFDB.LanguageUtils.LanguageStrings.OKAY, close:true, color:"RED", click:callback},
 			{contents: BDFDB.LanguageUtils.LanguageStrings.CANCEL, close:true}
 		]});
@@ -3567,8 +3568,8 @@ var BDFDB = {
 				BDFDBcontextMenu: true,
 				type: BDFDB.DiscordConstants.ContextMenuTypes.NATIVE_TEXT,
 				value: "",
-				className: `${BDFDB.disCN.contextmenu} BDFDB-contextMenu ${plugin.name}-contextMenuItem`,
-				children
+				className: BDFDB.disCN.contextmenu,
+				children: children
 			}));
 		});
 	};
@@ -3973,6 +3974,7 @@ var BDFDB = {
 		cardInner: "inner-OP_8zd",
 		cardWrapper: "card-rT4Wbb",
 		charCounter: "counter-uAzbKp",
+		changeLogModal: "changeLogModal-ny_dHC",
 		collapseContainer: "container-fAVkOf",
 		collapseContainerArrow: "arrow-uglXxc",
 		collapseContainerCollapsed: "container-fAVkOf collapsed-2BUBZm",
@@ -3983,6 +3985,7 @@ var BDFDB = {
 		colorPickerSwatchesDisabled: "disabled",
 		colorPickerSwatchSingle: "single-swatch",
 		colorPickerSwatchSelected: "selected",
+		confirmModal: "confirmModal-t-WDWJ",
 		favButtonContainer: "favbutton-8Fzu45",
 		guild: "guild-r3yAE_",
 		inputNumberButton: "button-J9muv5",
@@ -5124,6 +5127,8 @@ var BDFDB = {
 		messageusername: ["Message", "username"],
 		modal: ["ModalWrap", "modal"],
 		modalclose: ["Modal", "close"],
+		modalchangelogmodal: ["BDFDB", "changeLogModal"],
+		modalconfirmmodal: ["BDFDB", "confirmModal"],
 		modalcontent: ["Modal", "content"],
 		modalfooter: ["Modal", "footer"],
 		modalguildname: ["ModalItems", "guildName"],
@@ -6614,6 +6619,24 @@ var BDFDB = {
 	LibraryComponents.MessagesPopoutComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Header", "EmptyStateBottom"));
 	
 	LibraryComponents.ModalComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("ModalContent", "ModalFooter"));
+	
+	LibraryComponents.ModalComponents.ModalContent = reactInitialized ? class BDFDB_ModalContent extends LibraryModules.React.Component {
+		render() {
+			return this.props.scroller || this.props.scroller === undefined ? BDFDB.ReactUtils.createElement(LibraryComponents.ScrollerVertical, {
+				outerClassName: BDFDB.disCN.modalcontent,
+				className: BDFDB.disCN.modalsubinner,
+				theme: LibraryComponents.ScrollerVertical.Themes.GHOST_HAIRLINE,
+				ref: this.props.scrollerRef,
+				children: this.props.children
+			}) : BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.disCN.modalcontent,
+				children: BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.disCN.modalsubinner,
+					children: this.props.children
+				})
+			});
+		}
+	} : LibraryComponents.ModalComponents.ModalContent;
 	
 	LibraryComponents.ModalComponents.ModalTabContent = reactInitialized ? class BDFDB_ModalTabContent extends LibraryModules.React.Component {
 		render() {
