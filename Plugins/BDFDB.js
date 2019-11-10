@@ -2407,22 +2407,18 @@ var BDFDB = {
 	};
 	BDFDB.ColorUtils.getSwatchColor = function (container, number) {
 		if (!Node.prototype.isPrototypeOf(container)) return;
-		var swatches = container.querySelector(`${BDFDB.dotCN.colorpickerswatches}[number="${number}"]`);
+		var swatches = container.querySelector(`${BDFDB.dotCN.colorpickerswatches}[number="${number}"], ${BDFDB.dotCN.colorpickerswatch}[number="${number}"]`);
 		if (!swatches) return null;
-		var ins = BDFDB.ReactUtils.getInstance(container.querySelector(`${BDFDB.dotCN.colorpickerswatches}[number="${number}"]`));
+		var ins = BDFDB.ReactUtils.getInstance(swatches);
 		if (ins) return BDFDB.ReactUtils.findValue(ins, "selectedColor", {up:true, blacklist:{"props":true}});
 		else { // REMOVE ONCE REWRITTEN
 			var swatch = swatches.querySelector(`${BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchselected}`);
 			return swatch ? swatch.gradient || BDFDB.ColorUtils.convert(swatch.style.getPropertyValue("background-color"), "RGBCOMP") : null;
 		}
 	};
-	BDFDB.ColorUtils.openPicker = function (container, target, color, options = {gradient: true, comp: false, alpha: true, callback: _ => {}}) {
+	BDFDB.ColorUtils.openPicker = function (container, target, color, options = {gradient: true, alpha: true, callback: _ => {}}) {
 		if (!container || !target) return;
 		
-		if (options.comp) {
-			options.gradient = false;
-			options.alpha = false;
-		}
 		if (typeof options.callback != "function") options.callback = _ => {};
 		
 		var hexformat = options.alpha ? "HEXA" : "HEX";
@@ -2643,24 +2639,24 @@ var BDFDB = {
 					gradientpane.querySelector(".gradient-cursor.selected").firstElementChild.style.setProperty("background-color", rgb);
 					updateGradient();
 				}
-				else container.setState({
-					selectedColor: rgb,
-					customColor: rgb
-				});
+				else {
+					container.setState({
+						selectedColor: rgb,
+						customColor: rgb
+					});
+					if (container.refInput) {
+						container.refInput.props.value = !rgb ? "" : (container.state.compMode ? BDFDB.ColorUtils.convert(rgb, "RGBCOMP").slice(0,3).join(",") : rgb);
+						BDFDB.ReactUtils.forceUpdate(container.refInput);
+					}
+				}
 			}
 			else if (isswatches) {
-				setSwatch(container.querySelector(BDFDB.dotCN.colorpickerswatch + ".selected"), null, false);
+				setSwatch(container.querySelector(BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchselected), null, false);
 				if (isgradient) {
 					gradientpane.querySelector(".gradient-cursor.selected").firstElementChild.style.setProperty("background-color", rgb);
 					updateGradient();
 				}
 				else setSwatch(container.querySelector(BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatch), rgb, true);
-			}
-			else {
-				let input = container.querySelector(BDFDB.dotCN.input);
-				if (input) input.value = options.comp ? BDFDB.ColorUtils.convert(hex, "RGBCOMP").join(",") : rgb;
-				let swatch = container.querySelector(BDFDB.dotCN.colorpickerswatchsingle);
-				if (swatch) swatch.style.setProperty("background-color", rgb, "important");
 			}
 			if (setinput) hexinput.value = hex;
 			options.callback(rgb);
@@ -3744,31 +3740,31 @@ var BDFDB = {
 		return ele.innerHTML;
 	};
 	BDFDB.StringUtils.regEscape = function (string) {
-		return string.replace(/([\-\/\\\^\$\*\+\?\.\(\)\|\[\]\{\}])/g, "\\$1");
+		return typeof string == "string" && string.replace(/([\-\/\\\^\$\*\+\?\.\(\)\|\[\]\{\}])/g, "\\$1");
 	};
 	BDFDB.StringUtils.insertNRST = function (string) {
-		return string.replace(/\\r/g, "\r").replace(/\\n/g, "\n").replace(/\\t/g, "\t").replace(/\\s/g, " ");
+		return typeof string == "string" && string.replace(/\\r/g, "\r").replace(/\\n/g, "\n").replace(/\\t/g, "\t").replace(/\\s/g, " ");
 	};
 	BDFDB.StringUtils.getParsedLength = function (string, channelid = LibraryModules.LastChannelStore.getChannelId()) {
-		if (!string) return 0;
+		if (typeof string != "string" || !string) return 0;
 		var channel = LibraryModules.ChannelStore.getChannel(channelid);
 		var length = (!channel || string.indexOf("/") == 0 || string.indexOf("s/") == 0 || string.indexOf("+:") == 0) ? string.length : LibraryModules.MessageCreationUtils.parse(channel, string).content.length;
 		return length > string.length ? length : string.length;
 	};
-	BDFDB.StringUtils.highlight = function (text, searchstring, prefix = `<span class="${BDFDB.disCN.highlight}">`, suffix = `</span>`) {
-		if (!searchstring || searchstring.length < 1) return text;
-		var offset = 0, original = text;
-		BDFDB.ArrayUtils.getAllIndexes(text.toUpperCase(), searchstring.toUpperCase()).forEach(index => {
+	BDFDB.StringUtils.highlight = function (string, searchstring, prefix = `<span class="${BDFDB.disCN.highlight}">`, suffix = `</span>`) {
+		if (typeof string != "string" || !searchstring || searchstring.length < 1) return string;
+		var offset = 0, original = string;
+		BDFDB.ArrayUtils.getAllIndexes(string.toUpperCase(), searchstring.toUpperCase()).forEach(index => {
 			var d1 = offset * (prefix.length + suffix.length);
 			index = index + d1;
 			var d2 = index + searchstring.length;
-			var d3 = [-1].concat(BDFDB.ArrayUtils.getAllIndexes(text.substring(0, index), "<"));
-			var d4 = [-1].concat(BDFDB.ArrayUtils.getAllIndexes(text.substring(0, index), ">"));
+			var d3 = [-1].concat(BDFDB.ArrayUtils.getAllIndexes(string.substring(0, index), "<"));
+			var d4 = [-1].concat(BDFDB.ArrayUtils.getAllIndexes(string.substring(0, index), ">"));
 			if (d3[d3.length - 1] > d4[d4.length - 1]) return;
-			text = text.substring(0, index) + prefix + text.substring(index, d2) + suffix + text.substring(d2);
+			string = string.substring(0, index) + prefix + string.substring(index, d2) + suffix + string.substring(d2);
 			offset++;
 		});
-		return text || original;
+		return string || original;
 	};
 	
 	BDFDB.NumberUtils = {};
@@ -3981,10 +3977,10 @@ var BDFDB = {
 		collapseContainerHeader: "header-2s6x-5",
 		collapseContainerInner: "inner-TkGytd",
 		collapseContainerTitle: "title-ROsJi-",
-		colorPickerSwatches: "swatches",
-		colorPickerSwatchesDisabled: "disabled",
-		colorPickerSwatchSingle: "single-swatch",
-		colorPickerSwatchSelected: "selected",
+		colorPickerSwatches: "swatches-QxZw_N",
+		colorPickerSwatchesDisabled: "disabled-2JgNxl",
+		colorPickerSwatchSingle: "single-Fbb1wB",
+		colorPickerSwatchSelected: "selected-f5IVXN",
 		confirmModal: "confirmModal-t-WDWJ",
 		favButtonContainer: "favbutton-8Fzu45",
 		guild: "guild-r3yAE_",
@@ -6206,7 +6202,7 @@ var BDFDB = {
 				`${length}${!this.props.max ? "" : "/" + this.props.max}${!select ? "" : " (" + select + ")"}`,
 				typeof this.props.renderSuffix == "function" && this.props.renderSuffix(length)
 			].filter(n => n);
-			return children.length == 1 ? children : BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+			return children.length == 1 ? children[0] : BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				align: LibraryComponents.Flex.Align.CENTER,
 				children: children
 			});
@@ -6328,16 +6324,17 @@ var BDFDB = {
 			props.colorRows = props.colors.length ? [props.colors.slice(0, parseInt(props.colors.length/2)), props.colors.slice(parseInt(props.colors.length/2))] : [];
 			props.customColor = props.selectedColor != null ? (props.colors.indexOf(props.selectedColor) > -1 ? null : props.selectedColor) : null;
 			props.customSelected = !!props.customColor;
-			props.pickerConfig = BDFDB.ObjectUtils.is(props.pickerConfig) ? props.pickerConfig : {gradient: true, comp: false, alpha: true, callback: _ => {}};
+			props.pickerConfig = BDFDB.ObjectUtils.is(props.pickerConfig) ? props.pickerConfig : {gradient: true, alpha: true, callback: _ => {}};
 			this.state = props;
 			
 			var swatches = this;
 			this.ColorSwatch = class ColorSwatch extends LibraryModules.React.Component {
 				render() {
 					let usewhite = !BDFDB.ColorUtils.isBright(this.props.color);
-					return BDFDB.ReactUtils.createElement("button", {
+					let swatch = BDFDB.ReactUtils.createElement("button", {
 						type: "button",
-						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.colorpickerswatch, this.props.isDisabled && BDFDB.disCN.colorpickerswatchdisabled, this.props.isSelected && BDFDB.disCN.colorpickerswatchselected, this.props.isCustom && BDFDB.disCN.colorpickerswatchcustom, this.props.isSingle && BDFDB.disCN.colorpickerswatchsingle, this.props.color == null && BDFDB.disCN.colorpickerswatchnocolor),
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.colorpickerswatch, this.props.isSingle && BDFDB.disCN.colorpickerswatchsingle, this.props.isDisabled && BDFDB.disCN.colorpickerswatchdisabled, this.props.isSelected && BDFDB.disCN.colorpickerswatchselected, this.props.isCustom && BDFDB.disCN.colorpickerswatchcustom, this.props.color == null && BDFDB.disCN.colorpickerswatchnocolor),
+						number: this.props.number,
 						disabled: this.props.isDisabled,
 						onClick: _ => {
 							if (!this.props.isSelected) {
@@ -6352,10 +6349,6 @@ var BDFDB = {
 								let swatch = BDFDB.ReactUtils.findDOMNode(this);
 								if (swatch) BDFDB.ColorUtils.openPicker(swatches, swatch, this.props.color, swatches.state.pickerConfig);
 							};
-						},
-						onMouseEnter: _ => {
-							let swatch = this.props.isCustom || this.props.isSingle || this.props.color == null ? BDFDB.ReactUtils.findDOMNode(this) : null;
-							if (swatch) BDFDB.TooltipUtils.create(swatch, this.props.isCustom || this.props.isSingle ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_COLOR : BDFDB.LanguageUtils.LanguageStrings.DEFAULT, {type: "bottom"});
 						},
 						style: Object.assign({}, this.props.style, {
 							background: BDFDB.ObjectUtils.is(this.props.color) ? BDFDB.ColorUtils.createGradient(this.props.color) : BDFDB.ColorUtils.convert(this.props.color, "RGBA")
@@ -6377,6 +6370,11 @@ var BDFDB = {
 							}) : null
 						]
 					});
+					return this.props.isCustom || this.props.isSingle || this.props.color == null ? BDFDB.ReactUtils.createElement(LibraryComponents.TooltipContainer, {
+						text: this.props.isCustom || this.props.isSingle ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_COLOR : BDFDB.LanguageUtils.LanguageStrings.DEFAULT,
+						tooltipConfig: {position: this.props.isSingle ? "top" : "bottom"},
+						children: swatch
+					}) : swatch;
 				}
 			}
 		}
@@ -6395,7 +6393,16 @@ var BDFDB = {
 			});
 		}
 		render() {
-			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+			let customSwatch = BDFDB.ReactUtils.createElement(this.ColorSwatch, {
+				number: !this.state.colors.length ? (this.props.number != null ? this.props.number : 0) : null,
+				color: this.state.customColor,
+				isSingle: !this.state.colors.length,
+				isCustom: this.state.colors.length,
+				isSelected: this.state.customSelected,
+				isDisabled: this.state.disabled,
+				style: {margin: 0}
+			});
+			return !this.state.colors.length ? customSwatch : BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.colorpickerswatches, this.state.disabled && BDFDB.disCN.colorpickerswatchesdisabled),
 				number: this.props.number != null ? this.props.number : 0,
 				children: [
@@ -6403,19 +6410,7 @@ var BDFDB = {
 						className: BDFDB.disCN.marginreset,
 						shrink: 0,
 						grow: 0,
-						wrap: true,
-						children: [
-							BDFDB.ReactUtils.createElement(this.ColorSwatch, {
-								color: this.state.customColor,
-								isSingle: !this.state.colors.length,
-								isCustom: this.state.colors.length,
-								isSelected: this.state.customSelected,
-								isDisabled: this.state.disabled,
-								style: {
-									margin: 0
-								}
-							})
-						]
+						children: customSwatch
 					}),
 					this.state.colors.length ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 						direction: LibraryComponents.Flex.Direction.VERTICAL,
@@ -6493,6 +6488,29 @@ var BDFDB = {
 			});
 		}
 	} : LibraryComponents.FavButton;
+	
+	LibraryComponents.FileButton = reactInitialized ? class BDFDB_FileButton extends LibraryModules.React.Component {
+		render() {
+			return BDFDB.ReactUtils.createElement(LibraryComponents.Button, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+				onClick: e => {e.currentTarget.querySelector("input").click();},
+				children: [
+					BDFDB.LanguageUtils.LibraryStrings.file_navigator_text,
+					BDFDB.ReactUtils.createElement("input", {
+						type: "file",
+						accept: this.props.filter && `${this.props.filter}/*`,
+						style: {display: "none"},
+						onChange: e => {
+							let file = e.currentTarget.files[0];
+							if (this.refInput && file && (!this.props.filter || file.type.indexOf(this.props.filter) == 0)) {
+								this.refInput.props.value = `${this.props.mode == "url" ? "url('" : ""}data:${file.type};base64,${BDFDB.LibraryRequires.fs.readFileSync(file.path).toString("base64")}${this.props.mode ? "')" : ""}`;
+								BDFDB.ReactUtils.forceUpdate(this.refInput);
+							}
+						}
+					})
+				]
+			}), "filter"));
+		}
+	} : LibraryComponents.FileButton;
 	
 	LibraryComponents.Flex = BDFDB.ModuleUtils.findByProperties("Wrap", "Direction", "Child");
 	
@@ -6907,6 +6925,9 @@ var BDFDB = {
 			let childcomponent = LibraryComponents[this.props.type];
 			if (!childcomponent) return null;
 			if (this.props.mini && childcomponent.Sizes) this.props.size = childcomponent.Sizes.MINI || childcomponent.Sizes.MIN;
+			let childprops = BDFDB.ObjectUtils.exclude(Object.assign(BDFDB.ObjectUtils.exclude(this.props, "className", "id", "type"), this.props.childProps, {
+				onChange: this.handleChange.bind(this)
+			}), "basis", "dividerbottom", "dividertop", "label", "labelchildren", "mini", "note", "childProps");
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				className: BDFDB.DOMUtils.formatClassName(this.props.className, this.props.disabled && BDFDB.disCN.disabled),
 				id: this.props.id,
@@ -6931,9 +6952,7 @@ var BDFDB = {
 								shrink: this.props.basis ? 0 : 1,
 								basis: this.props.basis,
 								wrap: true,
-								children: BDFDB.ReactUtils.createElement(childcomponent, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, this.props.childProps, {
-									onChange: this.handleChange.bind(this)
-								}), "id", "basis", "dividerbottom", "dividertop", "label", "labelchildren", "mini", "note", "childProps"))
+								children: BDFDB.ReactUtils.createElement(childcomponent, childprops)
 							})
 						]
 					}),
@@ -7067,12 +7086,8 @@ var BDFDB = {
 			BDFDB.ReactUtils.forceUpdate(this);
 			if (typeof this.props.onChange == "function") this.props.onChange(e, this);
 		}
-		handleBlur(e) {
-			if (typeof this.props.onBlur == "function") this.props.onBlur(e, this);
-		}
-		handleFocus(e) {
-			if (typeof this.props.onFocus == "function") this.props.onFocus(e, this);
-		}
+		handleBlur(e) {if (typeof this.props.onBlur == "function") this.props.onBlur(e, this);}
+		handleFocus(e) {if (typeof this.props.onFocus == "function") this.props.onFocus(e, this);}
 		render() {
 			return BDFDB.ReactUtils.createElement(NativeSubComponents.TextArea, Object.assign({}, this.props, {
 				onChange: this.handleChange.bind(this),
@@ -7085,30 +7100,18 @@ var BDFDB = {
 	LibraryComponents.TextElement = BDFDB.ModuleUtils.findByName("Text");
 	
 	LibraryComponents.TextInput = reactInitialized ? class BDFDB_TextInput extends LibraryModules.React.Component {
-		handleKeyDown(e) {
-			if (typeof this.props.onKeyDown == "function") this.props.onKeyDown(e, this);
-		}
 		handleChange(e) {
 			e = BDFDB.ObjectUtils.is(e) ? e.currentTarget.value : e;
 			this.props.value = e;
 			BDFDB.ReactUtils.forceUpdate(this);
 			if (typeof this.props.onChange == "function") this.props.onChange(e, this);
 		}
-		handleInput(e) {
-			if (typeof this.props.onInput == "function") this.props.onInput(BDFDB.ObjectUtils.is(e) ? e.currentTarget.value : e, this);
-		}
-		handleBlur(e) {
-			if (typeof this.props.onBlur == "function") this.props.onBlur(e, this);
-		}
-		handleFocus(e) {
-			if (typeof this.props.onFocus == "function") this.props.onFocus(e, this);
-		}
-		handleMouseEnter(e) {
-			if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);
-		}
-		handleMouseLeave(e) {
-			if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);
-		}
+		handleInput(e) {if (typeof this.props.onInput == "function") this.props.onInput(BDFDB.ObjectUtils.is(e) ? e.currentTarget.value : e, this);}
+		handleKeyDown(e) {if (typeof this.props.onKeyDown == "function") this.props.onKeyDown(e, this);}
+		handleBlur(e) {if (typeof this.props.onBlur == "function") this.props.onBlur(e, this);}
+		handleFocus(e) {if (typeof this.props.onFocus == "function") this.props.onFocus(e, this);}
+		handleMouseEnter(e) {if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);}
+		handleMouseLeave(e) {if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);}
 		handleNumberButton(ins, value) {
 			BDFDB.TimeUtils.clear(ins.pressedTimeout);
 			ins.pressedTimeout = BDFDB.TimeUtils.timeout(_ => {
@@ -7130,61 +7133,79 @@ var BDFDB = {
 				});
 				input.patched = true;
 			}
+			if (this.props.type == "color") {
+				let swatchinstance = BDFDB.ReactUtils.findOwner(this, {name: "BDFDB_ColorSwatches"});
+				if (swatchinstance) swatchinstance.refInput = this;
+			}
+			else if (this.props.type == "file") {
+				let navigatorinstance = BDFDB.ReactUtils.findOwner(this, {name: "BDFDB_FileButton"});
+				if (navigatorinstance) navigatorinstance.refInput = this;
+			}
 		}
 		render() {
-			let childprops = Object.assign({}, this.props, {
-				className: BDFDB.DOMUtils.formatClassName(this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["input" + this.props.size.toLowerCase()] || BDFDB.disCN.inputdefault, this.props.inputClassName, this.props.focused && BDFDB.disCN.inputfocused, this.props.error || this.props.errorMessage ? BDFDB.disCN.inputerror : (this.props.success && BDFDB.disCN.inputsuccess), this.props.disabled && BDFDB.disCN.inputdisabled, this.props.editable && BDFDB.disCN.inputeditable),
-				type: this.props.type == "color" || this.props.type == "file" ? "text" : this.props.type,
-				onKeyDown: this.handleKeyDown.bind(this),
-				onChange: this.handleChange.bind(this),
-				onInput: this.handleInput.bind(this),
-				onBlur: this.handleBlur.bind(this),
-				onFocus: this.handleFocus.bind(this),
-				onMouseEnter: this.handleMouseEnter.bind(this),
-				onMouseLeave: this.handleMouseLeave.bind(this),
-				ref: this.props.inputRef
-			});
-			BDFDB.ObjectUtils.delete(childprops, "errorMessage", "focused", "error", "success", "inputClassName", "inputPrefix", "size", "editable", "inputRef", "style");
-			return BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.inputwrapper, this.props.type == "number" && (this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["inputnumberwrapper" + this.props.size.toLowerCase()] || BDFDB.disCN.inputnumberwrapperdefault), this.props.className),
-				style: this.props.style,
-				children: [
-					this.props.inputPrefix ? BDFDB.ReactUtils.createElement("span", {
-						className: BDFDB.disCN.inputprefix
-					}) : null,
-					this.props.type == "number" ? BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.inputnumberbuttons,
-						children: [
-							BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN.inputnumberbuttonup,
-								onClick: e => {
-									var min = parseInt(this.props.min);
-									var max = parseInt(this.props.max);
-									var newv = parseInt(this.props.value) + 1 || min || 0;
-									if (isNaN(max) || !isNaN(max) && newv <= max) this.handleNumberButton.bind(this)(e._targetInst, isNaN(min) || !isNaN(min) && newv >= min ? newv : min);
-								}
-							}),
-							BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN.inputnumberbuttondown,
-								onClick: e => {
-									var min = parseInt(this.props.min);
-									var max = parseInt(this.props.max);
-									var newv = parseInt(this.props.value) - 1 || min || 0;
-									if (isNaN(min) || !isNaN(min) && newv >= min) this.handleNumberButton.bind(this)(e._targetInst, isNaN(max) || !isNaN(max) && newv <= max ? newv : max);
-								}
-							})
-						]
-					}) : null,
-					BDFDB.ReactUtils.createElement("input", childprops),
-					this.props.type == "color" ? BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.inputerrormessage,
-						children: this.props.errorMessage
-					}) : null,
-					this.props.errorMessage ? BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.inputerrormessage,
-						children: this.props.errorMessage
-					}) : null,
-				].filter(n => n)
+			let children = [
+				BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.inputwrapper, this.props.type == "number" && (this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["inputnumberwrapper" + this.props.size.toLowerCase()] || BDFDB.disCN.inputnumberwrapperdefault), this.props.className),
+					style: this.props.style,
+					children: [
+						this.props.inputPrefix ? BDFDB.ReactUtils.createElement("span", {
+							className: BDFDB.disCN.inputprefix
+						}) : null,
+						this.props.type == "number" ? BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.inputnumberbuttons,
+							children: [
+								BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.inputnumberbuttonup,
+									onClick: e => {
+										var min = parseInt(this.props.min);
+										var max = parseInt(this.props.max);
+										var newv = parseInt(this.props.value) + 1 || min || 0;
+										if (isNaN(max) || !isNaN(max) && newv <= max) this.handleNumberButton.bind(this)(e._targetInst, isNaN(min) || !isNaN(min) && newv >= min ? newv : min);
+									}
+								}),
+								BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.inputnumberbuttondown,
+									onClick: e => {
+										var min = parseInt(this.props.min);
+										var max = parseInt(this.props.max);
+										var newv = parseInt(this.props.value) - 1 || min || 0;
+										if (isNaN(min) || !isNaN(min) && newv >= min) this.handleNumberButton.bind(this)(e._targetInst, isNaN(max) || !isNaN(max) && newv <= max ? newv : max);
+									}
+								})
+							]
+						}) : null,
+						BDFDB.ReactUtils.createElement("input", BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+							className: BDFDB.DOMUtils.formatClassName(this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["input" + this.props.size.toLowerCase()] || BDFDB.disCN.inputdefault, this.props.inputClassName, this.props.focused && BDFDB.disCN.inputfocused, this.props.error || this.props.errorMessage ? BDFDB.disCN.inputerror : (this.props.success && BDFDB.disCN.inputsuccess), this.props.disabled && BDFDB.disCN.inputdisabled, this.props.editable && BDFDB.disCN.inputeditable),
+							type: this.props.type == "color" || this.props.type == "file" ? "text" : this.props.type,
+							onChange: this.handleChange.bind(this),
+							onInput: this.handleInput.bind(this),
+							onKeyDown: this.handleKeyDown.bind(this),
+							onBlur: this.handleBlur.bind(this),
+							onFocus: this.handleFocus.bind(this),
+							onMouseEnter: this.handleMouseEnter.bind(this),
+							onMouseLeave: this.handleMouseLeave.bind(this),
+							maxLength: this.props.type == "file" ? false : this.props.maxLength,
+							ref: this.props.inputRef
+						}), "errorMessage", "focused", "error", "success", "inputClassName", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "filter")),
+						this.props.errorMessage ? BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.inputerrormessage,
+							children: this.props.errorMessage
+						}) : null,
+					].filter(n => n)
+				}),
+				this.props.type == "color" ? BDFDB.ReactUtils.createElement(LibraryComponents.ColorSwatches, {
+					colors: [],
+					compMode: this.props.mode == "comp",
+					color: this.props.value && this.props.mode == "comp" ? BDFDB.ColorUtils.convert(this.props.value.split(","), "RGB") : this.props.value,
+					pickerConfig: {gradient:false, alpha:this.props.mode != "comp"}
+				}) : null,
+				this.props.type == "file" ? BDFDB.ReactUtils.createElement(LibraryComponents.FileButton, {
+					filter: this.props.filter
+				}) : null
+			].filter(n => n);
+			return children.length == 1 ? children[0] : BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+				align: LibraryComponents.Flex.Align.CENTER,
+				children: children.map((child, i) => i == 0 ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {children: child}) : child)
 			});
 		}
 	} : LibraryComponents.TextInput;
@@ -7497,6 +7518,15 @@ var BDFDB = {
 		}
 		${BDFDB.dotCN.inputnumberbuttondown} {
 			transform: rotate(180deg);
+		}
+		
+		${BDFDB.dotCN.colorpickerswatches + BDFDB.dotCN.colorpickerswatchesdisabled} {
+			cursor: no-drop;
+			filter: grayscale(70%) brightness(50%);
+		}
+		${BDFDB.dotCN.colorpickerswatchsingle} {
+			height: 30px;
+			width: 30px;
 		}
 		
 		${BDFDB.dotCN.svgicon} {

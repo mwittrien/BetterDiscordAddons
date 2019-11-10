@@ -9,7 +9,7 @@
 	--dgeneraltransparency:			0.15;
 	--dmessagetransparency:			0.5;
 	--dguildchanneltransparency:	0.15;
-	--dmemberlistransparency:		0.0;
+	--dmemberlisttransparency:		0.0;
 	--daccentcolor:					190,78,180;
 	
 	--dbackground:					url(https://mwittrien.github.io/BetterDiscordAddons/ThemesV2/BasicBackground/background.jpg);
@@ -21,7 +21,7 @@
 	--vtransparencyalpha:			var(--transparencyalpha,			var(--dtransparencyalpha));
 	--vmessagetransparency:			var(--messagetransparency,			var(--dmessagetransparency));
 	--vguildchanneltransparency:	var(--guildchanneltransparency,		var(--dguildchanneltransparency));
-	--vmemberlistransparency:		var(--memberlistransparency,		var(--dmemberlistransparency));
+	--vmemberlisttransparency:		var(--memberlisttransparency,		var(--dmemberlisttransparency));
 	--vaccentcolor:					var(--accentcolor,					var(--daccentcolor));
 	--vlinkcolor:					var(--vaccentcolor);
 	
@@ -188,7 +188,7 @@ body,														/* body														*/
 	background-color: rgba(var(--vtransparencycolor), var(--vguildchanneltransparency));
 }
 #app-mount .membersWrap-2h-GB4 {							/* members				container							*/
-	background-color: rgba(var(--vtransparencycolor), var(--vmemberlistransparency));
+	background-color: rgba(var(--vtransparencycolor), var(--vmemberlisttransparency));
 }
 
 .themeDark-3Ap_7i, .themeLight-2aS1dz {						/* errorscreen												*/
@@ -5587,7 +5587,7 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 	z-index: -1;
 }
 #MemberCount:after {
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + var(--vmemberlistransparency) * 0.85));
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + var(--vmemberlisttransparency) * 0.85));
 }
 #MemberCount:before {
 	background: var(--vbackground) center/var(--vbackgroundsize);
