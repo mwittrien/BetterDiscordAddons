@@ -1366,6 +1366,7 @@ var BDFDB = {
 	LibraryModules.MessageUtils = BDFDB.ModuleUtils.findByProperties("receiveMessage", "editMessage");
 	LibraryModules.ModalUtils = BDFDB.ModuleUtils.findByProperties("openModal", "registerModalDispatch");
 	LibraryModules.MutedUtils = BDFDB.ModuleUtils.findByProperties("isGuildOrCategoryOrChannelMuted");
+	LibraryModules.NoteStore = BDFDB.ModuleUtils.findByProperties("getNotes", "getNote");
 	LibraryModules.NotificationSettingsUtils = BDFDB.ModuleUtils.findByProperties("setDesktopType", "setTTSType");
 	LibraryModules.NotificationSettingsStore = BDFDB.ModuleUtils.findByProperties("getDesktopType", "getTTSType");
 	LibraryModules.PermissionUtils = BDFDB.ModuleUtils.findByProperties("getChannelPermissions", "canUser");
