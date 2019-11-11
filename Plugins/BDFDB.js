@@ -2240,7 +2240,7 @@ var BDFDB = {
 					return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 				case "HSLA":
 					var hslcomp = color.replace(/\s/g, "").slice(5, -1).split(",");
-					return BDFDB.ColorUtils.convert(`hsl(${hslcomp.join(",")})`, "RGBCOMP").concat(processA(hslcomp.pop()));
+					return BDFDB.ColorUtils.convert(`hsl(${hslcomp.slice(0, 3).join(",")})`, "RGBCOMP").concat(processA(hslcomp.pop()));
 				case "HEX":
 					var hex = /^#([a-f\d]{1})([a-f\d]{1})([a-f\d]{1})$|^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
 					return [parseInt(hex[1] + hex[1] || hex[4], 16).toString(), parseInt(hex[2] + hex[2] || hex[5], 16).toString(), parseInt(hex[3] + hex[3] || hex[6], 16).toString()];
