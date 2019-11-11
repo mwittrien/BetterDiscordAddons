@@ -1593,18 +1593,15 @@ var BDFDB = {
 			props: true,
 			state: true,
 			stateNode: true,
-			refs: true,
 			updater: true,
 			prototype: true,
 			type: true,
 			children: config.up ? false : true,
-			type: true,
 			memoizedProps: true,
 			memoizedState: true,
 			child: config.up ? false : true,
 			return: config.up ? true : false,
-			sibling: config.up ? false : true,
-			firstEffect: true
+			sibling: config.up ? false : true
 		};
 		var blacklist = {
 			contextSection: true

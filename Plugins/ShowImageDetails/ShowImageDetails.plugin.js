@@ -3,7 +3,7 @@
 class ShowImageDetails {
 	getName () {return "ShowImageDetails";}
 
-	getVersion () {return "1.1.6";}
+	getVersion () {return "1.1.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -135,57 +135,49 @@ class ShowImageDetails {
 
 	processLazyImage (e) {
 		if (typeof e.returnvalue.props.children == "function" && e.instance.props.original && e.instance.props.src.indexOf("https://media.discordapp.net/attachments") == 0) {
-			this.injectDetails(e);
-			if (!e.instance.props.size) BDFDB.LibraryRequires.request(e.instance.props.original, (error, response, result) => {
-				if (response) {
-					e.instance.props.size = response.headers["content-length"];
-					BDFDB.ReactUtils.forceUpdate(e.instance);
-				}
-			});
+			let attachment = BDFDB.ReactUtils.findValue(e.instance, "attachment", {up:true});
+			if (!attachment) return;
+			let settings = BDFDB.DataUtils.get(this, "settings");
+			let amounts = BDFDB.DataUtils.get(this, "amounts");
+			let renderChildren = e.returnvalue.props.children;
+			e.returnvalue.props.children = () => {
+				let renderedChildren = renderChildren(e.instance);
+				if (settings.showOnHover) return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+					text: `${attachment.filename}\n${BDFDB.NumberUtils.formatBytes(attachment.size)}\n${attachment.width}x${attachment.height}px`,
+					tooltipConfig: {
+						type: "right",
+						delay: amounts.hoverDelay
+					},
+					children: renderedChildren
+				});
+				else return [
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+						className: "image-details",
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
+									title: e.instance.props.original,
+									href: e.instance.props.original,
+									children: attachment.filename
+								})
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+									color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
+									children: BDFDB.NumberUtils.formatBytes(attachment.size)
+								})
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+									color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
+									children: `${attachment.width}x${attachment.height}px`
+								})
+							})
+						]
+					}),
+					renderedChildren
+				];
+			};
 		}
-	}
-	
-	injectDetails (e) {
-		let settings = BDFDB.DataUtils.get(this, "settings");
-		let amounts = BDFDB.DataUtils.get(this, "amounts");
-		let renderChildren = e.returnvalue.props.children;
-		e.returnvalue.props.children = () => {
-			let renderedChildren = renderChildren(e.instance);
-			if (settings.showOnHover) return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-				text: `${e.instance.props.original.split("/").slice(-1)}\n${BDFDB.NumberUtils.formatBytes(e.instance.props.size)}\n${e.instance.props.width}x${e.instance.props.height}px`,
-				tooltipConfig: {
-					type: "right",
-					delay: amounts.hoverDelay
-				},
-				children: renderedChildren
-			});
-			else return [
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-					className: "image-details",
-					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
-								title: e.instance.props.original,
-								href: e.instance.props.original,
-								children: e.instance.props.original.split("/").slice(-1)
-							})
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-								color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
-								children: BDFDB.NumberUtils.formatBytes(e.instance.props.size)
-							})
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-								color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
-								children: `${e.instance.props.width}x${e.instance.props.height}px`
-							})
-						})
-					]
-				}),
-				renderedChildren
-			];
-		};
 	}
 }
