@@ -3,7 +3,7 @@
 class GoogleSearchReplace {
 	getName () {return "GoogleSearchReplace";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "1.2.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -122,8 +122,8 @@ class GoogleSearchReplace {
 		for (let key in engines) if (engines[key]) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 			label: this.defaults.engines[key].name,
 			danger: key == "_all",
-			action: e => {
-				if (!e.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
+			action: event => {
+				if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
 				if (key == "_all") {
 					for (let key2 in engines) if (key2 != "_all" && engines[key2]) window.open(this.defaults.engines[key2].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
 				}
