@@ -142,7 +142,7 @@ class EditChannels {
 	// begin of own functions
 
 	onChannelContextMenu (instance, menu, returnvalue) {
-		if (instance.props && instance.props.channel && !BDFDB.DOMUtils.getParent(".container-hidden", instance.props.target) && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
+		if (instance.props.channel && !BDFDB.DOMUtils.getParent(".container-hidden", instance.props.target) && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				children: [
@@ -316,13 +316,13 @@ class EditChannels {
 	}
 
 	processChannelCategoryItem (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.channel) {
+		if (instance.props.channel) {
 			this.changeChannel(instance.props.channel, wrapper.querySelector(BDFDB.dotCN.categoryname), true);
 		}
 	}
 
 	processChannelItem (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.channel) {
+		if (instance.props.channel) {
 			this.changeChannel(instance.props.channel, wrapper.querySelector(BDFDB.dotCN.channelname), true);
 		}
 	}

@@ -311,7 +311,7 @@ class ServerFolders {
 
 	onGuildContextMenu (instance, menu, returnvalue) {
 		if (document.querySelector(".BDFDB-modal")) return;
-		if (instance.props && instance.props.target && instance.props.folderId && instance.props.type == "GUILD_ICON_FOLDER") {
+		if (instance.props.target && instance.props.folderId && instance.props.type == "GUILD_ICON_FOLDER") {
 			let folderid = instance.props.folderId;
 			let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(folderid);
 			let data = this.getFolderConfig(folderid);
@@ -355,7 +355,7 @@ class ServerFolders {
 			});
 			returnvalue.props.children.push(deleteGroup);
 		}
-		else if (instance.props && instance.props.target && instance.props.guild && instance.props.type == "GUILD_ICON_BAR") {
+		else if (instance.props.target && instance.props.guild && instance.props.type == "GUILD_ICON_BAR") {
 			let guildid = instance.props.guild.id;
 			let folders = this.getFolders();
 			let folder = this.getFolderOfGuildId(guildid);
@@ -462,7 +462,7 @@ class ServerFolders {
 
 	processGuild (instance, wrapper, returnvalue, methodnames) {
 		if (!this.foldercontentguilds) return;
-		if (instance.props && instance.props.guild) {
+		if (instance.props.guild) {
 			if (methodnames.includes("componentDidMount")) {
 				BDFDB.ListenerUtils.add(this, wrapper, "click", () => {BDFDB.TimeUtils.timeout(() => {
 					let folder = this.getFolderOfGuildId(instance.props.guild.id);
@@ -489,7 +489,7 @@ class ServerFolders {
 	}
 	
 	processGuildFolderSettingsModal (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.folderId) {
+		if (instance.props.folderId) {
 			let folderid = instance.props.folderId;
 			let data = this.getFolderConfig(folderid);
 			wrapper = wrapper.parentElement;

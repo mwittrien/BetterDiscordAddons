@@ -133,7 +133,7 @@ class EditServers {
 	// begin of own functions
 	
 	onGuildContextMenu (instance, menu, returnvalue) {
-		if (instance.props && instance.props.guild && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
+		if (instance.props.guild && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				children: [
@@ -168,7 +168,7 @@ class EditServers {
 	}
 
 	processGuild (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.guild) {
+		if (instance.props.guild) {
 			let icon = wrapper.querySelector(BDFDB.dotCN.guildicon + ":not(.fake-guildicon), " + BDFDB.dotCN.guildiconacronym + ":not(.fake-guildacronym)");
 			if (!icon) return;
 			this.changeGuildIcon(instance.props.guild, icon);
@@ -177,7 +177,7 @@ class EditServers {
 	}
 
 	processGuildIconWrapper (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.guild) {
+		if (instance.props.guild) {
 			let icon = wrapper.classList && BDFDB.DOMUtils.containsClass(wrapper, BDFDB.disCN.avataricon) ? wrapper : wrapper.querySelector(BDFDB.dotCN.avataricon);
 			if (!icon) return;
 			this.changeGuildIcon(instance.props.guild, icon);
@@ -186,7 +186,7 @@ class EditServers {
 	}
 
 	processGuildHeader (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.guild) {
+		if (instance.props.guild) {
 			this.changeGuildName(instance.props.guild, wrapper.querySelector(BDFDB.dotCN.guildheadername));
 		}
 	}

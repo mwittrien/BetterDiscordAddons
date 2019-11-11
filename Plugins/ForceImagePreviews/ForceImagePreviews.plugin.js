@@ -66,7 +66,7 @@ class ForceImagePreviews {
 	// begin of own functions
 
 	processMessage (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.message) {
+		if (instance.props.message) {
 			let accessory = wrapper.querySelector(BDFDB.dotCN.messageaccessory);
 			if (accessory) {
 				let links = [];

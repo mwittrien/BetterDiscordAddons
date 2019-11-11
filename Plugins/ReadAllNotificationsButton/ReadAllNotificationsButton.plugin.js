@@ -203,7 +203,7 @@ class ReadAllNotificationsButton {
 
 	processRecentMentions (instance, wrapper, returnvalue) {
 		BDFDB.DOMUtils.remove(".RAMbutton");
-		if (instance.props && instance.props.popoutName == "RECENT_MENTIONS_POPOUT" && BDFDB.DataUtils.get(this, "settings", "addClearButton")) {
+		if (instance.props.popoutName == "RECENT_MENTIONS_POPOUT" && BDFDB.DataUtils.get(this, "settings", "addClearButton")) {
 			let recentmentionstitle = wrapper.querySelector(BDFDB.dotCN.messagespopouttitle);
 			if (recentmentionstitle) {
 				let ranbutton = BDFDB.DOMUtils.create(this.RAMbuttonMarkup);

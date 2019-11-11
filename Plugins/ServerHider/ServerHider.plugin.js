@@ -155,7 +155,7 @@ class ServerHider {
 
 	onGuildContextMenu (instance, menu, returnvalue) {
 		if (document.querySelector(".BDFDB-modal")) return;
-		if (instance.props && instance.props.target && instance.props.type.indexOf("GUILD_ICON_") == 0 && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
+		if (instance.props.target && instance.props.type.indexOf("GUILD_ICON_") == 0 && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				children: [
@@ -189,7 +189,7 @@ class ServerHider {
 	}
 
 	processGuild (instance, wrapper, returnvalue, methodnames) {
-		if (instance.props && instance.props.guild) {
+		if (instance.props.guild) {
 			let hiddenservers = BDFDB.DataUtils.load(this, "hiddenservers", "hiddenservers") || [];
 			if (methodnames.includes("componentDidMount")) this.toggleServer(instance.props.guild, wrapper, !hiddenservers.includes(instance.props.guild.id));
 			if (methodnames.includes("componentDidUpdate") && hiddenservers.includes(instance.props.guild.id) && instance.props.unread) this.unreadServer(instance.props.guild.id);

@@ -175,18 +175,18 @@ class ShowHiddenChannels {
 	// begin of own functions
 
 	processChannels (instance, wrapper, returnvalue, methodnames) {
-		if (instance.props && instance.props.guild) {
+		if (instance.props.guild) {
 			if (methodnames.includes("componentDidMount")) this.appendHiddenContainer(instance.props.guild);
 			if (methodnames.includes("componentDidUpdate")) this.reappendHiddenContainer(instance.props.guild);
 		}
 	}
 
 	processChannelItem (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.channel) this.reappendHiddenContainer(BDFDB.LibraryModules.GuildStore.getGuild(instance.props.channel.guild_id));
+		if (instance.props.channel) this.reappendHiddenContainer(BDFDB.LibraryModules.GuildStore.getGuild(instance.props.channel.guild_id));
 	}
 
 	processChannelCategoryItem (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.channel) this.reappendHiddenContainer(BDFDB.LibraryModules.GuildStore.getGuild(instance.props.channel.guild_id));
+		if (instance.props.channel) this.reappendHiddenContainer(BDFDB.LibraryModules.GuildStore.getGuild(instance.props.channel.guild_id));
 	}
 
 	processStandardSidebarView (instance, wrapper, returnvalue) {

@@ -284,13 +284,13 @@ class ChatFilter {
 	}
 
 	onNativeContextMenu (instance, menu, returnvalue) {
-		if (instance.props && instance.props.value && instance.props.value.trim()) {
+		if (instance.props.value && instance.props.value.trim()) {
 			if ((instance.props.type == "NATIVE_TEXT" || instance.props.type == "CHANNEL_TEXT_AREA") && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.appendItem(menu, returnvalue, instance.props.value.trim());
 		}
 	}
 
 	onMessageContextMenu (instance, menu, returnvalue) {
-		if (instance.props && instance.props.message && instance.props.channel && instance.props.target) {
+		if (instance.props.message && instance.props.channel && instance.props.target) {
 			let text = document.getSelection().toString().trim();
 			if (text && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.appendItem(menu, returnvalue, text);
 		}

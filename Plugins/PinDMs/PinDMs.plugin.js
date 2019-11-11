@@ -208,7 +208,7 @@ class PinDMs {
 	// begin of own functions
 
 	onUserContextMenu (instance, menu, returnvalue) {
-		if (instance.props && instance.props.user && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
+		if (instance.props.user && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:"UserCloseChatItem"});
 			if (index > -1) {
 				let id = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(instance.props.user.id);
@@ -219,7 +219,7 @@ class PinDMs {
 	}
 
 	onGroupDMContextMenu (instance, menu, returnvalue) {
-		if (instance.props && instance.props.channelId && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
+		if (instance.props.channelId && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:"ChangeIcon"});
 			if (index > -1) this.appendItem(menu, instance.props.channelId, children, index);
 		}
@@ -278,7 +278,7 @@ class PinDMs {
 	}
 
 	processPrivateChannel (instance, wrapper, returnvalue) {
-		if (instance && instance.props && instance.props.ispin) {
+		if (instance.props.ispin) {
 			let id = BDFDB.ReactUtils.getValue(instance, "props.channel.id");
 			wrapper.setAttribute("channelid", id);
 			BDFDB.DOMUtils.addClass(wrapper, "pinned");
@@ -338,7 +338,7 @@ class PinDMs {
 	}
 
 	processDirectMessage (instance, wrapper, returnvalue, methodnames) {
-		if (instance.props && instance.props.channel) {
+		if (instance.props.channel) {
 			if (methodnames.includes("componentDidMount")) {
 				wrapper.removeEventListener("contextmenu", wrapper.PinDMsContextMenuListener);
 				wrapper.PinDMsContextMenuListener = e => {

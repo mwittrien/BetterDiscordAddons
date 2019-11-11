@@ -94,7 +94,7 @@ class ImageGallery {
 	// begin of own functions
 
 	processImageModal (instance, wrapper, returnvalue, methodnames) {
-		if (this.closemodal && instance.props && instance.props.onClose) instance.props.onClose();
+		if (this.closemodal && instance.props.onClose) instance.props.onClose();
 		else if (methodnames.includes("componentDidMount")) {
 			let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, wrapper);
 			if (!modal) return;

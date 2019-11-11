@@ -145,7 +145,7 @@ class MessageUtilities {
 	//begin of own functions
 	
 	processMessageContextMenu (instance, menu, returnvalue) {
-		if (instance.props && instance.props.message && instance.props.channel && instance.props.target) {
+		if (instance.props.message && instance.props.channel && instance.props.target) {
 			let changed = false;
 			for (let itemlabel of menu.querySelectorAll(BDFDB.dotCN.contextmenulabel)) {
 				let hint = itemlabel.parentElement.querySelector(BDFDB.dotCN.contextmenuhint);

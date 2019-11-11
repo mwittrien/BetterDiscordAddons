@@ -189,7 +189,7 @@ class EditUsers {
 	// begin of own functions
 	
 	onUserContextMenu (instance, menu, returnvalue) {
-		if (instance.props && instance.props.user && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
+		if (instance.props.user && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				children: [
@@ -520,7 +520,7 @@ class EditUsers {
 	}
 
 	processBannedCard (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.user && instance.props.guild) {
+		if (instance.props.user && instance.props.guild) {
 			let username = wrapper.querySelector(BDFDB.dotCN.guildsettingsbannedusername);
 			if (username) {
 				this.changeName3(instance.props.user, username);
@@ -541,7 +541,7 @@ class EditUsers {
 	}
 
 	processMemberCard (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.user && instance.props.guild) {
+		if (instance.props.user && instance.props.guild) {
 			let username = wrapper.querySelector(BDFDB.dotCN.guildsettingsmembername);
 			if (username) {
 				this.changeName2(instance.props.user, username, instance.props.guild.id);
@@ -551,7 +551,7 @@ class EditUsers {
 	}
 
 	processInvitationCard (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.user) {
+		if (instance.props.user) {
 			let username = wrapper.querySelector(BDFDB.dotCN.invitemodalinviterowname);
 			if (username) {
 				this.changeName3(instance.props.user, username);
@@ -582,7 +582,7 @@ class EditUsers {
 	}
 
 	processCallAvatar (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.id) {
+		if (instance.props.id) {
 			let user = BDFDB.LibraryModules.UserStore.getUser(instance.props.id);
 			if (!user) {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(instance.props.id);
@@ -600,18 +600,18 @@ class EditUsers {
 	}
 
 	processVideoTile (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.user) this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
+		if (instance.props.user) this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
 	}
 
 	processPictureInPictureVideo (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.backgroundKey) {
+		if (instance.props.backgroundKey) {
 			let user = BDFDB.LibraryModules.UserStore.getUser(instance.props.backgroundKey);
 			if (user) this.changeAvatar(user, this.getAvatarDiv(wrapper));
 		}
 	}
 
 	processPrivateChannel (instance, wrapper, returnvalue) {
-		if (instance.props && instance.props.user) {
+		if (instance.props.user) {
 			let username = wrapper.querySelector(BDFDB.dotCN.namecontainername);
 			this.changePrivateChannel(instance.props.user, username && username.firstElementChild ? username.firstElementChild : username);
 			this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
