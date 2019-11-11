@@ -6084,10 +6084,14 @@ var BDFDB = {
 	LibraryComponents.BadgeComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("IconBadge", "NumberBadge"));
 	
 	LibraryComponents.BotTag = reactInitialized ? class BDFDB_BotTag extends LibraryModules.React.Component {
+		handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}
+		handleContextMenu(e) {if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);}
 		render() {
 			return BDFDB.ReactUtils.createElement("span", {
 				className: BDFDB.DOMUtils.formatClassName(this.props.invertColor ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular, this.props.className),
 				style: this.props.style,
+				onClick: this.handleClick.bind(this),
+				onContextMenu: this.handleContextMenu.bind(this),
 				children: this.props.tag || BDFDB.LanguageUtils.LanguageStrings.BOT_TAG_BOT
 			});
 		}
@@ -6646,6 +6650,27 @@ var BDFDB = {
 	LibraryComponents.MessageGroup = BDFDB.ModuleUtils.findByName("FluxContainer(ConnectedMessageGroup)");
 	
 	LibraryComponents.MessagesPopoutComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Header", "EmptyStateBottom"));
+	
+	LibraryComponents.MemberRole = reactInitialized ? class BDFDB_MemberRole extends LibraryModules.React.Component {
+		render() {
+			let color = BDFDB.ColorUtils.convert(this.props.role.colorString || BDFDB.DiscordConstants.Colors.PRIMARY_DARK_300, "RGB");
+			return BDFDB.ReactUtils.createElement("li", {
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.userpopoutrole, this.props.className),
+				style: {borderColor: BDFDB.ColorUtils.setAlpha(color, 0.6)},
+				onContextMenu: this.handleContextMenu,
+				children: [
+					!this.props.noCircle ? BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.userpopoutrolecircle,
+						style: {backgroundColor: color}
+					}) : null,
+					BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.userpopoutrolename,
+						children: this.props.role.name
+					})
+				].filter(n => n)
+			});
+		}
+	} : LibraryComponents.MemberRole;
 	
 	LibraryComponents.ModalComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("ModalContent", "ModalFooter"));
 	
