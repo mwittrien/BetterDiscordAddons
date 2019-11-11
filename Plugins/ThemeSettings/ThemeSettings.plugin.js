@@ -182,7 +182,6 @@ class ThemeSettings {
 					childProps: {
 						type: childType,
 						mode: childMode,
-						filter: childType == "file" && "image",
 						filter: childType == "file" && "image"
 					},
 					label: varname[0].toUpperCase() + varname.slice(1),
