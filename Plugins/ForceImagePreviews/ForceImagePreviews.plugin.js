@@ -3,7 +3,7 @@
 class ForceImagePreviews {
 	getName () {return "ForceImagePreviews";}
 
-	getVersion () {return "1.1.3";}
+	getVersion () {return "1.1.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,11 +11,7 @@ class ForceImagePreviews {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
-		};
-
-		this.patchModules = {
-			"Message":"componentDidMount"
+			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 	}
 
@@ -47,8 +43,19 @@ class ForceImagePreviews {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
-
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			 
+			BDFDB.ModuleUtils.patch(this, BDFDB.ModuleUtils.findByName("MessageAccessories").prototype, "render", {before: e => {
+				if (e.thisObject.props.message.content) {
+					let message = new BDFDB.DiscordObjects.Message(e.thisObject.props.message);
+					for (let word of e.thisObject.props.message.content.split(/\n|\s|\r|\t|\0/g)) if (word.indexOf("https://") > -1 || word.indexOf("http://") > -1) {
+						word = word.indexOf("<") == 0 && word.indexOf(">") == word.length-1 ? word.slice(1,-1) : word;
+						if (!this.isEmbedded(message.embeds, word)) this.injectEmbed(e.thisObject, message.embeds, word);
+					}
+					e.thisObject.props.message = message;
+				}
+			}});
+			
+			BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"MessageAccessories", all:true, noCopies:true, unlimited:true}));
 		}
 		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
@@ -56,92 +63,77 @@ class ForceImagePreviews {
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
-
-			BDFDB.DOMUtils.remove(".FIP-embed");
+			
+			BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"MessageAccessories", all:true, noCopies:true, unlimited:true}));
+			
 			BDFDB.PluginUtils.clear(this);
 		}
 	}
 
 
 	// begin of own functions
-
-	processMessage (instance, wrapper, returnvalue) {
-		if (instance.props.message) {
-			let accessory = wrapper.querySelector(BDFDB.dotCN.messageaccessory);
-			if (accessory) {
-				let links = [];
-				for (let word of instance.props.message.content.split(/\n|\s|\r|\t|\0/g)) {
-					if (word.indexOf("https://") > -1 || word.indexOf("http://") > -1) {
-						if (word.indexOf("<") == 0 && word.indexOf(">") == word.length-1) links.push({src:word.slice(1,-1),embedded:false});
-						else if (!accessory.querySelector(`${BDFDB.dotCN.embedimage}[href="${this.parseSrc(word)}"]`) && !accessory.querySelector(`${BDFDB.dotCN.embedtitlelink}[href="${this.parseSrc(word)}"]`)) {
-							links.push({src:word,embedded:false});
-						}
-						else links.push({src:word,embedded:true});
-					}
-				}
-				if (links.length > 0) this.addItemToAccessory(null, links, accessory);
-			}
-		}
-	}
-
-	addItemToAccessory (previmage, links, accessory) {
-		let item = links.shift();
-		if (!item) return;
-		else if (item.embedded) this.addItemToAccessory(item, links, accessory);
-		else {
-			let itemsrc = this.parseSrc(item.src);
-			BDFDB.LibraryRequires.request(itemsrc, (error, response, result) => {
-				if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") > -1) {
-					let imagethrowaway = document.createElement("img");
-					imagethrowaway.src = itemsrc;
-					imagethrowaway.onload = () => {
-						let width = imagethrowaway.naturalWidth > 400 ? 400 : imagethrowaway.naturalWidth;
-						let height = Math.round(width*(imagethrowaway.naturalHeight/imagethrowaway.naturalWidth));
-						if (height > 300) {
-							width = Math.round(width*(300/height));
-							height = 300;
-						}
-						let checkedsrc = itemsrc.indexOf("imgur.com/") > -1 ? ("imgur.com/" + itemsrc.split("/")[3].split(".")[0]) : itemsrc;
-						if (!accessory.querySelector(`${BDFDB.dotCN.embedimage}[href*="${checkedsrc}"],${BDFDB.dotCN.embedgifv}[href*="${checkedsrc}"]`)) {
-							let embed = BDFDB.DOMUtils.create(`<div class="FIP-embed ${BDFDB.disCNS.embed + BDFDB.disCN.embedwrapper}"><a class="${BDFDB.disCNS.imagewrapper + BDFDB.disCNS.imagezoom + BDFDB.disCN.embedimage}" href="${itemsrc}" rel="noreferrer noopener" target="_blank" style="width: ${width}px; height: ${height}px;"><img src="${itemsrc}" style="width: ${width}px; height: ${height}px;"></a></div>`);
-							this.insertEmbed(embed, previmage, links, accessory);
-						}
-						this.addItemToAccessory(item, links, accessory);
-					};
-				}
-				else if (response && response.headers["server"] && response.headers["server"].toLowerCase().indexOf("youtube") > -1 && result.indexOf("yt-user-info") > -1) {
-					if (!accessory.querySelector(`${BDFDB.dotCN.embedtitlelink}[href="${itemsrc}"]`)) {
-						result = result.replace(/[\r|\n|\t]|[\s]{2,}/g, "");
-						let width = 400;
-						let height = Math.round(width*(result.split('<meta itemprop="height" content="')[1].split('"')[0]/result.split('<meta itemprop="width" content="')[1].split('"')[0]));
-						let embed = BDFDB.DOMUtils.create(`<div class="FIP-embed ${BDFDB.disCNS.embed + BDFDB.disCN.embedwrapper}" style="max-width: 426px;"><div class="${BDFDB.disCN.embedpill}" style="background-color: rgb(255, 0, 0);"></div><div class="${BDFDB.disCN.embedinner}"><div class="${BDFDB.disCNS.embedcontent + BDFDB.disCN.flex}"><div class="${BDFDB.disCN.embedcontentinner}"><div class=""><a class="${BDFDB.disCNS.anchor + BDFDB.disCNS.embedproviderlink + BDFDB.disCNS.embedlink + BDFDB.disCNS.embedprovider + BDFDB.disCNS.titlesize12 + BDFDB.disCN.weightnormal}" href="https://www.youtube.com/" rel="noreferrer noopener" target="_blank">YouTube</a></div><div class="${BDFDB.disCNS.embedauthor + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter + BDFDB.disCNS.embedmargin + BDFDB.disCN.margintop4}"><a class="${BDFDB.disCNS.anchor + BDFDB.disCNS.embedauthornamelink + BDFDB.disCNS.embedlink + BDFDB.disCNS.embedauthorname + BDFDB.disCNS.weightmedium + BDFDB.disCN.titlesize14}" href="https://www.youtube.com${result.split('<div class="yt-user-info"><a href="')[1].split('"')[0]}" rel="noreferrer noopener" target="_blank">${BDFDB.StringUtils.htmlEscape(result.split('<div class="yt-user-info"><a href="')[1].split('>')[1].split('<')[0])}</a></div><div class="${BDFDB.disCNS.embedmargin + BDFDB.disCN.margintop4}"><a class="${BDFDB.disCNS.anchor + BDFDB.disCNS.embedtitlelink + BDFDB.disCNS.embedlink + BDFDB.disCNS.embedtitle + BDFDB.disCNS.titlesize14 + BDFDB.disCN.weightmedium}" href="${itemsrc}" rel="noreferrer noopener" target="_blank">${BDFDB.StringUtils.htmlEscape(result.split('<meta property="og:title" content="')[1].split('"')[0])}</a></div></div></div><div class="${BDFDB.disCNS.embedvideo + BDFDB.disCNS.embedimage + BDFDB.disCNS.embedmarginlarge + BDFDB.disCN.margintop8}" style="width: ${width}px; height: ${height}px;"><div class="${BDFDB.disCNS.imagewrapper + BDFDB.disCNS.imageclickable + BDFDB.disCN.embedvideoimagecomponent}" style="width: ${width}px; height: ${height}px;"><img alt="" src="${result.split('<link itemprop="thumbnailUrl" href="')[1].split('"')[0]}" style="width: ${width}px; height: ${height}px;"></div><div class="${BDFDB.disCN.embedvideoactions}"><div class="${BDFDB.disCN.embedcentercontent}"><div class="${BDFDB.disCN.iconactionswrapper}"><div tabindex="0" class="${BDFDB.disCNS.iconwrapper + BDFDB.disCN.iconwrapperactive}" role="button"><svg name="Play" class="${BDFDB.disCNS.iconplay + BDFDB.disCN.icon}" width="16" height="16" viewBox="0 0 24 24"><polygon fill="currentColor" points="0 0 0 14 11 7" transform="translate(7 5)"></polygon></svg></div><a class="${BDFDB.disCNS.anchor + BDFDB.disCNS.anchorunderlineonhover + BDFDB.disCNS.iconwrapper + BDFDB.disCN.iconwrapperactive}" href="${itemsrc}" rel="noreferrer noopener" target="_blank"><svg name="OpenExternal" class="${BDFDB.disCNS.iconexternalmargins + BDFDB.disCN.icon}" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" transform="translate(3.000000, 4.000000)" d="M16 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4v-2H2V4h14v10h-4v2h4c1.1 0 2-.9 2-2V2a2 2 0 0 0-2-2zM9 6l-4 4h3v6h2v-6h3L9 6z"></path></svg></a></div></div></div></div></div></div></div>`);
-						BDFDB.ListenerUtils.addToChildren(embed, "click", BDFDB.dotCN.iconplay, () => {
-							let videowrapper = embed.querySelector(BDFDB.dotCN.embedvideo);
-							BDFDB.DOMUtils.remove(videowrapper.childNodes);
-							videowrapper.appendChild(BDFDB.DOMUtils.create(`<iframe src="${result.split('<link itemprop="embedURL" href="')[1].split('"')[0]}?start=0&amp;autoplay=1&amp;auto_play=1" width="${width}" height="${height}" frameborder="0" allowfullscreen=""></iframe>`));
+	
+	injectEmbed (instance, embeds, link) {
+		BDFDB.LibraryRequires.request(link, (error, response, result) => {
+			if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") > -1) {
+				let imagethrowaway = document.createElement("img");
+				imagethrowaway.src = link;
+				imagethrowaway.onload = () => {
+					if (!this.isEmbedded(embeds, link)) {
+						embeds.push({
+							image: {
+								url: link,
+								proxyURL: link,
+								height: imagethrowaway.naturalHeight,
+								width: imagethrowaway.naturalWidth
+							},
+							type: "image",
+							url: link
 						});
-						this.insertEmbed(embed, previmage, links, accessory);
+						BDFDB.ReactUtils.forceUpdate(instance);
 					}
-					this.addItemToAccessory(item, links, accessory);
+				};
+			}
+			else if (response && response.headers["server"] && response.headers["server"].toLowerCase().indexOf("youtube") > -1 && result.indexOf("yt-user-info") > -1) {
+				if (!this.isEmbedded(embeds, link)) {
+					result = result.replace(/[\r|\n|\t]|[\s]{2,}/g, "");
+					let width = result.split(new RegExp(BDFDB.StringUtils.regEscape('<meta itemprop="width" content="'), "i"))[1].split('"')[0];
+					let height = result.split(new RegExp(BDFDB.StringUtils.regEscape('<meta itemprop="height" content="'), "i"))[1].split('"')[0];
+					let thumbnail = result.split(new RegExp(BDFDB.StringUtils.regEscape('<link itemprop="thumbnailUrl" href="'), "i"))[1].split('"')[0];
+					embeds.push({
+						author: {
+							name: result.split(new RegExp(BDFDB.StringUtils.regEscape('<div class="yt-user-info"><a href="'), "i"))[1].split('>')[1].split('<')[0],
+							url: `https://www.youtube.com${result.split(new RegExp(BDFDB.StringUtils.regEscape('<div class="yt-user-info"><a href="'), "i"))[1].split('"')[0]}`
+						},
+						color: "#ff0000",
+						provider: {
+							name: "YouTube",
+							url: "https://www.youtube.com/"
+						},
+						rawDescription: result.split(new RegExp(BDFDB.StringUtils.regEscape('<meta property="og:description" content="'), "i"))[1].split('"')[0],
+						rawTitle: result.split(new RegExp(BDFDB.StringUtils.regEscape('<meta property="og:title" content="'), "i"))[1].split('"')[0],
+						thumbnail: {
+							url: thumbnail,
+							proxyURL: thumbnail,
+							width: width,
+							height: height
+						},
+						type: "video",
+						url: link,
+						video: {
+							url: result.split(new RegExp(BDFDB.StringUtils.regEscape('<link itemprop="embedUrl" href="'), "i"))[1].split('"')[0],
+							width: width,
+							height: height
+						}
+					});
+					BDFDB.ReactUtils.forceUpdate(instance);
 				}
-				else this.addItemToAccessory(item, links, accessory);
-			});
-		}
+			}
+		});
 	}
-
-	insertEmbed (embed, previmage, links, accessory) {
-		let prev = accessory.querySelector(`${BDFDB.dotCNS.embed + BDFDB.dotCN.embedimage}[href="${previmage ? this.parseSrc(previmage.src) : void 0}"]`);
-		let next = accessory.querySelector(`${BDFDB.dotCNS.embed + BDFDB.dotCN.embedimage}[href="${links[0] ? this.parseSrc(links[0].src) : void 0}"]`);
-		prev = prev ? prev : accessory.querySelector(`${BDFDB.dotCNS.embed + BDFDB.dotCN.embedtitlelink}[href="${previmage ? this.parseSrc(previmage.src) : void 0}"]`);
-		next = next ? next : accessory.querySelector(`${BDFDB.dotCNS.embed + BDFDB.dotCN.embedtitlelink}[href="${links[0] ? this.parseSrc(links[0].src) : void 0}"]`);
-		let isempty = accessory.childElementCount == 0;
-		if (BDFDB.DOMUtils.containsClass(embed.firstElementChild, BDFDB.disCN.embedimage)) embed.style.setProperty("pointer-events", "none", "important");
-		accessory.insertBefore(embed, prev ? prev.nextSibling : next);
-		let scroller = document.querySelector(BDFDB.dotCNS.chat + BDFDB.dotCN.messages);
-		if (scroller) scroller.scrollTop += (BDFDB.DOMUtils.getRects(embed).height + (isempty ? 15 : 0));
-	}
-
-	parseSrc (src) {
-		return src.replace(/"/g, "");
+	
+	isEmbedded (embeds, link) {
+		for (let embed of embeds) if (embed.url == link) return true;
+		return false;
 	}
 }
