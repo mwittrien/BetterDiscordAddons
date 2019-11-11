@@ -3,7 +3,7 @@
 class TopRoleEverywhere {
 	getName () {return "TopRoleEverywhere";}
 
-	getVersion () {return "2.9.0";}
+	getVersion () {return "2.9.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,13 +11,12 @@ class TopRoleEverywhere {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Padding in Memberlist","Fixed the padding in the memberlist"]]
+			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
 		this.patchModules = {
-			"MemberListItem":"componentDidMount",
-			"MessageUsername":"componentDidMount",
-			"StandardSidebarView":"componentWillUnmount"
+			MemberListItem: "render",
+			MessageUsername: "render"
 		};
 	}
 
@@ -27,24 +26,36 @@ class TopRoleEverywhere {
 				overflow: visible;
 			}
 			.TRE-tag {
-				white-space: nowrap;
-			}
-			.TRE-tag .role-inner {
-				display: block;
 				overflow: hidden;
 				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+			.TRE-tag.TRE-roletag {
+				margin: 0 0 0 0.3rem;
+			}
+			.TRE-tag.TRE-bottag {
+				margin-left: 0.3rem;
+			}
+			.TRE-tag.TRE-listtag {
+				max-width: 50%;
+			}
+			.TRE-roletag {
+				display: inline-flex;
+			}
+			.TRE-roletag ${BDFDB.dotCN.userpopoutrolecircle} {
+				flex: 0 0 auto;
 			}`;
 
 		this.defaults = {
 			settings: {
-				showInChat:			{value:true, 	description:"Show Tag in Chat Window."},
-				showInMemberList:	{value:true, 	description:"Show Tag in Member List."},
-				useOtherStyle:		{value:false, 	description:"Use other Tagstyle."},
-				includeColorless:	{value:false, 	description:"Include colorless roles."},
-				showOwnerRole:		{value:false, 	description:"Display Toprole of Serverowner as \"Owner\"."},
-				disableForBots:		{value:false, 	description:"Disable Toprole for Bots."},
-				addUserID:			{value:false, 	description:"Add the UserID as a Tag to the Chat Window."},
-				darkIdTag:			{value:false, 	description:"Use a dark version for the UserID-Tag."}
+				showInChat:			{value:true, 	inner:true, 	description:"Chat Window"},
+				showInMemberList:	{value:true, 	inner:true, 	description:"Member List"},
+				useOtherStyle:		{value:false, 	inner:false, 	description:"Use BotTag Style instead of the Role Style."},
+				includeColorless:	{value:false, 	inner:false, 	description:"Include colorless roles."},
+				showOwnerRole:		{value:false, 	inner:false, 	description:`Display Role Tag of Serverowner as "${BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER}".`},
+				disableForBots:		{value:false, 	inner:false, 	description:"Disable Role Tag for Bots."},
+				addUserID:			{value:false, 	inner:false, 	description:"Add the UserID as a Tag to the Chat Window."},
+				darkIdTag:			{value:false, 	inner:false, 	description:"Use a dark version for the UserID-Tag."}
 			}
 		};
 	}
@@ -52,17 +63,25 @@ class TopRoleEverywhere {
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let settings = BDFDB.DataUtils.get(this, "settings");
-		let settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
-		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
-		}
-		settingshtml += `</div></div>`;
-
-		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
-
-		BDFDB.initElements(settingspanel, this);
-
-		return settingspanel;
+		let settingsitems = [], inneritems = [];
+		
+		for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			className: BDFDB.disCN.marginbottom8,
+			type: "Switch",
+			plugin: this,
+			keys: ["settings", key],
+			label: this.defaults.settings[key].description,
+			value: settings[key]
+		}));
+		
+		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+			title: "Add Role Tags in:",
+			first: settingsitems.length == 0,
+			last: true,
+			children: inneritems
+		}));
+		
+		return BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 	}
 
 	//legacy
@@ -103,7 +122,8 @@ class TopRoleEverywhere {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.DOMUtils.remove(".TRE-tag");
+			BDFDB.ModuleUtils.forceAllUpdates(this);
+			
 			BDFDB.PluginUtils.clear(this);
 		}
 	}
@@ -111,105 +131,58 @@ class TopRoleEverywhere {
 
 	// begin of own functions
 
-	processMemberListItem (instance, wrapper, returnvalue) {
-		if (instance.props && BDFDB.DataUtils.get(this, "settings", "showInMemberList")) {
-			this.addRoleTag(instance.props.user, wrapper.querySelector(BDFDB.dotCN.namecontainername), "list", BDFDB.disCN.bottagmember);
-		}
-	}
-
-	processMessageUsername (instance, wrapper, returnvalue) {
-		let message = BDFDB.ReactUtils.getValue(instance, "props.message");
-		if (message) {
-			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
-			if (username && BDFDB.DataUtils.get(this, "settings", "showInChat")) {
-				let messagegroup = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagegroup, wrapper);
-				this.addRoleTag(message.author, username, "chat", BDFDB.DOMUtils.containsClass(messagegroup, BDFDB.disCN.messagegroupcozy) ? BDFDB.disCN.bottagmessagecozy : BDFDB.disCN.bottagmessagecompact);
-			}
-		}
-	}
-
-	processStandardSidebarView (instance, wrapper, returnvalue) {
+	onSettingsClosed () {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
-			BDFDB.DOMUtils.remove(".TRE-tag");
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 	}
 
-	addRoleTag (info, username, type, selector) {
-		if (!info || !username) return;
-		BDFDB.DOMUtils.remove(username.parentElement.querySelectorAll(".TRE-tag"));
+	processMemberListItem (e) {
+		if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "showInMemberList")) {
+			this.injectRoleTag(BDFDB.ReactUtils.getValue(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, "list", BDFDB.disCN.bottagmember);
+		}
+	}
+
+	processMessageUsername (e) {
+		let user = BDFDB.ReactUtils.getValue(e.instance, "props.message.author");
+		if (user && BDFDB.DataUtils.get(this, "settings", "showInChat")) {
+			this.injectRoleTag(BDFDB.ReactUtils.getValue(e.returnvalue, "props.children.props.children"), user, "chat", e.instance.props.isCompact ? BDFDB.disCN.bottagmessagecompact : BDFDB.disCN.bottagmessagecozy);
+		}
+	}
+
+	injectRoleTag (children, user, type, tagclass) {
+		if (!BDFDB.ArrayUtils.is(children) || !user) return;
 		let guild = BDFDB.LibraryModules.GuildStore.getGuild(BDFDB.LibraryModules.LastGuildStore.getGuildId());
 		let settings = BDFDB.DataUtils.get(this, "settings");
-		if (!guild || info.bot && settings.disableForBots) return;
-		let role = BDFDB.LibraryModules.PermissionRoleUtils.getHighestRole(guild, info.id);
-		if ((role && (role.colorString || settings.includeColorless)) || info.id == 278543574059057154) {
-			let roleColor = role && role.colorString ? BDFDB.ColorUtils.convert(role.colorString, "RGBCOMP") : [255,255,255];
-			let roleName = role ? role.name : "";
-			let oldwidth;
-			if (type == "list") oldwidth = BDFDB.DOMUtils.getRects(username).width;
-			let tag = BDFDB.DOMUtils.create(`<span class="TRE-tag ${BDFDB.disCN.bottagregular + (selector ? (" " + selector) : "")}"><span class="role-inner"></span></span>`);
-			username.parentElement.insertBefore(tag, username.parentElement.querySelector("svg[name=MobileDevice]"));
-
-			let borderColor = "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.5)";
-			let textColor = "rgb(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ")";
-			let bgColor = "rgba(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ", 0.1)";
-			let bgInner = "none";
-			let roleText = roleName;
-			if (settings.useOtherStyle) {
-				borderColor = "transparent";
-				bgColor = "rgb(" + roleColor[0] + ", " + roleColor[1] + ", " + roleColor[2] + ")";
-				textColor = roleColor[0] > 180 && roleColor[1] > 180 && roleColor[2] > 180 ? "black" : "white";
-			}
-			if (info.id == 278543574059057154) {
-				bgColor = "linear-gradient(to right, rgba(255,0,0,0.1), rgba(255,127,0,0.1) , rgba(255,255,0,0.1), rgba(127,255,0,0.1), rgba(0,255,0,0.1), rgba(0,255,127,0.1), rgba(0,255,255,0.1), rgba(0,127,255,0.1), rgba(0,0,255,0.1), rgba(127,0,255,0.1), rgba(255,0,255,0.1), rgba(255,0,127,0.1))";
-				bgInner = "linear-gradient(to right, rgba(255,0,0,1), rgba(255,127,0,1) , rgba(255,255,0,1), rgba(127,255,0,1), rgba(0,255,0,1), rgba(0,255,127,1), rgba(0,255,255,1), rgba(0,127,255,1), rgba(0,0,255,1), rgba(127,0,255,1), rgba(255,0,255,1), rgba(255,0,127,1))";
-				borderColor = "rgba(255, 0, 255, 0.5)";
-				textColor = "transparent";
-				roleText = "Plugin Creator";
-				if (settings.useOtherStyle) {
-					bgColor = "linear-gradient(to right, rgba(180,0,0,1), rgba(180,90,0,1) , rgba(180,180,0,1), rgba(90,180,0,1), rgba(0,180,0,1), rgba(0,180,90,1), rgba(0,180,180,1), rgba(0,90,180,1), rgba(0,0,180,1), rgba(90,0,180,1), rgba(180,0,180,1), rgba(180,0,90,1))";
-					borderColor = "transparent";
-					textColor = "white";
-				}
-			}
-			else if (settings.showOwnerRole && info.id == guild.ownerId) roleText = "Owner";
-			BDFDB.DOMUtils.addClass(tag, type + "-tag");
-			if (!settings.useOtherStyle) tag.style.setProperty("border", "1px solid " + borderColor, "important");
-			tag.style.setProperty("background", bgColor, "important");
-			tag.style.setProperty("order", 11, "important");
-			let inner = tag.querySelector(".role-inner");
-			inner.style.setProperty("color", textColor, "important");
-			inner.style.setProperty("background-image", bgInner, "important");
-			inner.style.setProperty("-webkit-background-clip", "text", "important");
-			inner.textContent = roleText;
-
-			if (oldwidth && oldwidth < 100 && BDFDB.DOMUtils.getRects(username).width < 100) {
-				tag.style.setProperty("max-width", (BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(BDFDB.dotCN.namecontainerlayout, username)).width - oldwidth - 15) + "px");
-			}
-		}
-		if (type == "chat" && settings.addUserID) {
-			let idtag = BDFDB.DOMUtils.create(this.tagMarkup);
-			username.parentElement.insertBefore(idtag, username.parentElement.querySelector("svg[name=MobileDevice]"));
-			let idColor = settings.darkIdTag ? [33,33,33] : [222,222,222];
-			let idBorderColor = "rgba(" + idColor[0] + ", " + idColor[1] + ", " + idColor[2] + ", 0.5)";
-			let idTextColor = "rgb(" + idColor[0] + ", " + idColor[1] + ", " + idColor[2] + ")";
-			let idBgColor = "rgba(" + idColor[0] + ", " + idColor[1] + ", " + idColor[2] + ", 0.1)";
-			let idBgInner = "none";
-			if (settings.useOtherStyle) {
-				idBorderColor = "transparent";
-				idBgColor = "rgb(" + idColor[0] + ", " + idColor[1] + ", " + idColor[2] + ")";
-				idTextColor = settings.darkIdTag ? "white" : "black";
-			}
-			BDFDB.DOMUtils.addClass(idtag, "id-tag");
-			idtag.style.setProperty("border", "1px solid " + idBorderColor, "important");
-			idtag.style.setProperty("background", idBgColor, "important");
-			idtag.style.setProperty("order", 12, "important");
-			let idinner = idtag.querySelector(".role-inner");
-			idinner.style.setProperty("color", idTextColor, "important");
-			idinner.style.setProperty("background-image", idBgInner, "important");
-			idinner.style.setProperty("-webkit-background-clip", "text", "important");
-			idinner.textContent = info.id;
-		}
+		if (!guild || user.bot && settings.disableForBots) return;
+		let role = BDFDB.LibraryModules.PermissionRoleUtils.getHighestRole(guild, user.id);
+		if (role && (role.colorString || settings.includeColorless)) children.push(this.createRoleTag(settings, Object.assign({}, role, {
+			name: settings.showOwnerRole && user.id == guild.ownerId ? BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER : role.name
+		}),type, tagclass));
+		if (type == "chat" && settings.addUserID) children.push(this.createRoleTag(settings, {
+			name: user.id
+		}, type, tagclass));
+	}
+	
+	createRoleTag (settings, role, type, tagclass) {
+		return settings.useOtherStyle ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BotTag, {
+			className: `${tagclass} TRE-tag TRE-bottag TRE-${type}tag`,
+			tag: role.name,
+			style: {backgroundColor: BDFDB.ColorUtils.convert(role.colorString || BDFDB.DiscordConstants.Colors.PRIMARY_DARK_500, "RGB")},
+			onContextMenu: role.id ? e => {this.openRoleContextMenu(e, role);} : null
+		}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MemberRole, {
+			className: `TRE-tag TRE-roletag TRE-${type}tag`,
+			role: role,
+			onContextMenu: role.id ? e => {this.openRoleContextMenu(e, role);} : null
+		});
+	}
+	
+	openRoleContextMenu (e, role) {
+		BDFDB.LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
+			return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("GuildRoleContextMenu"), Object.assign({}, e, {
+				roleId: role.id
+			}));
+		});
 	}
 }

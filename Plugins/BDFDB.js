@@ -6652,12 +6652,15 @@ var BDFDB = {
 	LibraryComponents.MessagesPopoutComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Header", "EmptyStateBottom"));
 	
 	LibraryComponents.MemberRole = reactInitialized ? class BDFDB_MemberRole extends LibraryModules.React.Component {
+		handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}
+		handleContextMenu(e) {if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);}
 		render() {
 			let color = BDFDB.ColorUtils.convert(this.props.role.colorString || BDFDB.DiscordConstants.Colors.PRIMARY_DARK_300, "RGB");
 			return BDFDB.ReactUtils.createElement("li", {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.userpopoutrole, this.props.className),
 				style: {borderColor: BDFDB.ColorUtils.setAlpha(color, 0.6)},
-				onContextMenu: this.handleContextMenu,
+				onClick: this.handleClick.bind(this),
+				onContextMenu: this.handleContextMenu.bind(this),
 				children: [
 					!this.props.noCircle ? BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.userpopoutrolecircle,
