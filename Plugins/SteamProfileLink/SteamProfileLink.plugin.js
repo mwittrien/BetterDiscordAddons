@@ -3,7 +3,7 @@
 class SteamProfileLink {
 	getName () {return "SteamProfileLink";}
 
-	getVersion () {return "1.0.6";}
+	getVersion () {return "1.0.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class SteamProfileLink {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["Activity + Store Links","Plugin now covers any links in the Discord Activity and Store"]]
+			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 	}
 
@@ -58,8 +58,6 @@ class SteamProfileLink {
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
-
-			BDFDB.DOMUtils.remove(".urlCheckFrame");
 
 			BDFDB.PluginUtils.clear(this);
 		}
