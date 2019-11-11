@@ -6377,7 +6377,7 @@ var BDFDB = {
 					});
 					return this.props.isCustom || this.props.isSingle || this.props.color == null ? BDFDB.ReactUtils.createElement(LibraryComponents.TooltipContainer, {
 						text: this.props.isCustom || this.props.isSingle ? BDFDB.LanguageUtils.LanguageStrings.CUSTOM_COLOR : BDFDB.LanguageUtils.LanguageStrings.DEFAULT,
-						tooltipConfig: {position: this.props.isSingle ? "top" : "bottom"},
+						tooltipConfig: {type: this.props.isSingle ? "top" : "bottom"},
 						children: swatch
 					}) : swatch;
 				}
@@ -6781,8 +6781,7 @@ var BDFDB = {
 			return BDFDB.ReactUtils.createElement(LibraryModules.React.Fragment, {
 				children: BDFDB.ReactUtils.createElement(NativeSubComponents.PopoutContainer, Object.assign({}, this.props, {
 					children: _ => {return child;},
-					renderPopout: this.handleRender.bind(this),
-					onRequestClose: (...args) => {console.log(...args);}
+					renderPopout: this.handleRender.bind(this)
 				}))
 			});
 		}

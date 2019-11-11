@@ -65,7 +65,7 @@ class EmojiStatistics {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let settings = BDFDB.DataUtils.get(this, "settings");
 		let amounts = BDFDB.DataUtils.get(this, "amounts");
-		let settingsitems = [], inneritems = [];
+		let settingsitems = [];
 		
 		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,
@@ -168,17 +168,17 @@ class EmojiStatistics {
 			}));
 		}
 		if (settings.enableEmojiHovering) {
-			let delay = BDFDB.DataUtils.get(this, "amounts", "hoverDelay");
+			let amounts = BDFDB.DataUtils.get(this, "amounts");
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"LazyScroller"});
 			if (index > -1) for (let row of children[index].props.children) if (row.props.className && row.props.className.indexOf(BDFDB.disCN.emojipickerrow) > -1) for (let i in row.props.children) {
 				let emoji = row.props.children[i];
 				let style = emoji.props.children ? emoji.props.children.props.style : emoji.props.style;
 				let data = style && style.backgroundImage && this.emojiToServerList[style.backgroundImage.replace(/url\(|\)|"|'/g,"")];
 				if (data) row.props.children[i] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-					text: `${BDFDB.StringUtils.htmlEscape(data.emoji)}\n${BDFDB.StringUtils.htmlEscape(data.server)}`,
+					text: `${data.emoji}\n${data.server}`,
 					tooltipConfig: {
 						type: "right",
-						delay: delay
+						delay: amounts.hoverDelay
 					},
 					children: emoji
 				});
