@@ -8396,7 +8396,7 @@ var BDFDB = {
 
 	var BDFDBprocessFunctions = {};
 	BDFDBprocessFunctions.processV2CContentColumn = function (e) {
-		if (window.PluginUpdates && window.PluginUpdates.plugins && e.instance.props && e.instance.props.title == "Plugins") {
+		if (window.PluginUpdates && window.PluginUpdates.plugins && e.instance.props.title == "Plugins") {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {key: "folder-button"});
 			if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(LibraryComponents.TooltipContainer, {
 				text: "Only checks for updates of plugins, which support the updatecheck. Rightclick for a list of supported plugins. (Listed ≠ Outdated)",

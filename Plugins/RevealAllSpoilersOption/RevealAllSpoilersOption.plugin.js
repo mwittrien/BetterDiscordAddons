@@ -60,7 +60,7 @@ class RevealAllSpoilersOption {
 	// begin of own functions
 
 	onMessageContextMenu (e) {
-		if (e.instance.props && e.instance.props.message && e.instance.props.target) {
+		if (e.instance.props.message && e.instance.props.target) {
 			let messagediv = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagegroup + "> [aria-disabled]," + BDFDB.dotCN.messagegroup + "> * > [aria-disabled]", e.instance.props.target);
 			if (!messagediv || !messagediv.querySelector(BDFDB.dotCN.spoilerhidden)) return;
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});

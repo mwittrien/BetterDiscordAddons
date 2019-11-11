@@ -106,11 +106,11 @@ class GoogleSearchReplace {
 	// begin of own functions
 
 	onNativeContextMenu (e) {
-		if (e.instance.props && e.instance.props.type == "NATIVE_TEXT" && e.instance.props.value) this.injectItem(e, e.instance.props.value);
+		if (e.instance.props.type == "NATIVE_TEXT" && e.instance.props.value) this.injectItem(e, e.instance.props.value);
 	}
 
 	onMessageContextMenu (e) {
-		if (e.instance.props && e.instance.props.message && e.instance.props.channel && e.instance.props.target) {
+		if (e.instance.props.message && e.instance.props.channel && e.instance.props.target) {
 			let text = document.getSelection().toString();
 			if (text) this.injectItem(e, text);
 		}

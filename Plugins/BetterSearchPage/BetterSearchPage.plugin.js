@@ -136,7 +136,7 @@ class BetterSearchPage {
 	}
 
 	processSearchResults (e) {
-		if (e.instance.props && e.instance.props.search) {
+		if (e.instance.props.search) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"Pagination"});
 			if (index > -1) {
 				let settings = BDFDB.DataUtils.get(this, "settings");

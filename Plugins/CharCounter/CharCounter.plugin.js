@@ -125,7 +125,7 @@ class CharCounter {
 	// begin of own functions
 
 	processChannelTextArea (e) {
-		if (e.instance.props && e.instance.props.type && this.maxLenghts[e.instance.props.type]) {
+		if (e.instance.props.type && this.maxLenghts[e.instance.props.type]) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "TextAreaAutosize"});
 			if (index > -1) this.injectCounter(e.returnvalue, children, e.instance.props.type, BDFDB.dotCN.textarea, true);
 		}

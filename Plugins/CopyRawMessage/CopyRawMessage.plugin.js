@@ -59,7 +59,7 @@ class CopyRawMessage {
 	// begin of own functions
 
 	onMessageContextMenu (e) {
-		if (e.instance.props && e.instance.props.message && e.instance.props.message.content) {
+		if (e.instance.props.message && e.instance.props.message.content) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				children: [
@@ -79,7 +79,7 @@ class CopyRawMessage {
 	}
 
 	onMessageOptionPopout (e) {
-		if (e.instance.props && e.instance.props.message) {
+		if (e.instance.props.message) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["label", BDFDB.LanguageUtils.LanguageStrings.DELETE]]});
 			children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",

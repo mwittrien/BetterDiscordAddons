@@ -64,7 +64,7 @@ class WriteUpperCase {
 	// begin of own functions
 
 	processChannelTextArea (e) {
-		if (e.instance.props && e.instance.props.type) {
+		if (e.instance.props.type) {
 			var textarea = e.node.querySelector("textarea");
 			if (!textarea) return;
 			BDFDB.ListenerUtils.add(this, textarea, "keyup", () => {

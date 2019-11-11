@@ -120,7 +120,7 @@ class PersonalPins {
 	// begin of own functions
 
 	onMessageContextMenu (e) {
-		if (e.instance.props && e.instance.props.message && e.instance.props.channel && e.instance.props.target) {
+		if (e.instance.props.message && e.instance.props.channel && e.instance.props.target) {
 			let {messagediv, pos} = this.getMessageAndPos(e.instance.props.target);
 			if (!messagediv || pos == -1) return;
 			let note = this.getNoteData(e.instance.props.message, e.instance.props.target, e.instance.props.channel);

@@ -68,7 +68,7 @@ class BetterNsfwTag {
 	// begin of own functions
 
 	processChannelItem (e) {
-		if (e.instance.props && e.instance.props.channel && e.instance.props.channel.nsfw) {
+		if (e.instance.props.channel && e.instance.props.channel.nsfw) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.channelchildren]]});
 			if (index > -1 && children[index].props && children[index].props.children) {
 				let [oldTagParent, oldTagIndex] = BDFDB.ReactUtils.findChildren(children[index], {key: "NSFW-badge"});

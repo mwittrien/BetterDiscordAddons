@@ -230,7 +230,7 @@ class JoinedAtDate {
 	}
 
 	processAnalyticsContext (e) {
-		if (typeof e.returnvalue.props.children == "function" && e.instance.props && e.instance.props.section == "Profile Modal" && BDFDB.DataUtils.get(this, "settings", "addInUserProfil")) {
+		if (typeof e.returnvalue.props.children == "function" && e.instance.props.section == "Profile Modal" && BDFDB.DataUtils.get(this, "settings", "addInUserProfil")) {
 			let renderChildren = e.returnvalue.props.children;
 			e.returnvalue.props.children = () => {
 				let renderedChildren = renderChildren(e.instance);

@@ -116,25 +116,25 @@ class ReverseImageSearch {
 	// begin of own functions
 
 	onGuildContextMenu (e) {
-		if (e.instance.props && e.instance.props.guild && e.instance.props.target) {
+		if (e.instance.props.guild && e.instance.props.target) {
 			let guildicon = BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.avataricon) ? e.instance.props.target : e.instance.props.target.querySelector(BDFDB.dotCN.guildicon);
 			if (guildicon && BDFDB.DataUtils.get(this, "settings", "addGuildIconEntry")) this.injectItem(e, guildicon.tagName == "IMG" ? guildicon.getAttribute("src") :  guildicon.style.getPropertyValue("background-image"));
 		}
 	}
 
 	onUserContextMenu (e) {
-		if (e.instance.props && e.instance.props.user && e.instance.props.target) {
+		if (e.instance.props.user && e.instance.props.target) {
 			let avatar = BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.avataricon) ? e.instance.props.target : e.instance.props.target.querySelector(BDFDB.dotCN.avatar);
 			if (avatar && BDFDB.DataUtils.get(this, "settings", "addUserAvatarEntry")) this.injectItem(e, avatar.tagName == "IMG" ? avatar.getAttribute("src") :  avatar.style.getPropertyValue("background-image"));
 		}
 	}
 
 	onNativeContextMenu (e) {
-		if (e.instance.props && e.instance.props.type == "NATIVE_IMAGE" && (e.instance.props.href || e.instance.props.src)) this.injectItem(e, e.instance.props.href || e.instance.props.src);
+		if (e.instance.props.type == "NATIVE_IMAGE" && (e.instance.props.href || e.instance.props.src)) this.injectItem(e, e.instance.props.href || e.instance.props.src);
 	}
 
 	onMessageContextMenu (e) {
-		if (e.instance.props && e.instance.props.message && e.instance.props.channel && e.instance.props.target) {
+		if (e.instance.props.message && e.instance.props.channel && e.instance.props.target) {
 			if (e.instance.props.attachment) this.injectItem(e, e.instance.props.attachment.url);
 			else if (e.instance.props.target.tagName == "A" && e.instance.props.message.embeds && e.instance.props.message.embeds[0] && e.instance.props.message.embeds[0].type == "image") this.injectItem(e, e.instance.props.target.href);
 			else if (e.instance.props.target.tagName == "IMG" && BDFDB.DOMUtils.containsClass(e.instance.props.target, "emoji", "emote", false) && BDFDB.DataUtils.get(this, "settings", "addEmojiEntry")) this.injectItem(e, e.instance.props.target.src);

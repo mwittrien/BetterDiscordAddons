@@ -69,7 +69,7 @@ class ThemeSettings {
 	// begin of own functions
 
 	processV2CThemeCard (e) {
-		if (e.instance.props && e.instance.props.theme && !e.instance.state.settings) {
+		if (e.instance.props.theme && !e.instance.state.settings) {
 			let vars = this.getThemeVars(e.instance.props.theme.css);
 			if (vars.length) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN._repofooter]]});
