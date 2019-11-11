@@ -7587,37 +7587,6 @@ var BDFDB = {
 			border: 1px solid rgba(28,36,43,.6);
 			box-shadow: 0 2px 10px 0 rgba(0,0,0,.2);
 		}
-		
-		
-		/*OLD*/
-
-		${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageheadercozy} {
-			padding-top: 0;
-		}
-		${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageheadercompact} > span.popout-open,
-		${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageheadercompact} > span[class=""],
-		${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageheadercozymeta} > span.popout-open,
-		${BDFDB.dotCNS.messagegroup + BDFDB.dotCN.messageheadercozymeta} > span[class=""] {
-			display: inline-flex;
-			align-items: baseline;
-		}
-		${BDFDB.dotCNS.messagegroup + BDFDB.dotCNS.messageheadercompact + BDFDB.dotCN.bottag},
-		${BDFDB.dotCNS.messagegroup + BDFDB.dotCNS.messageheadercompact + BDFDB.dotCN.messageusername} {
-			text-indent: 0px;
-		}
-		
-		.BDFDB-modal ${BDFDB.dotCN.modalheader + BDFDB.dotCN.modalheaderhassibling} {
-			padding-bottom: 10px;
-		}
-		.BDFDB-modal ${BDFDB.dotCN.tabbarcontainer} {
-			background: rgba(0, 0, 0, 0.1);
-			border: none !important;
-			box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.05);
-		}
-		${BDFDB.dotCN.themedark} .BDFDB-modal ${BDFDB.dotCN.tabbarcontainer} {
-			background: rgba(0, 0, 0, 0.2);
-			box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
-		}
 
 		#bd-settingspane-container .ui-form-title {
 			display: inline-block;
@@ -7632,9 +7601,23 @@ var BDFDB = {
 		#bd-settingspane-container .bd-updatebtn[style] {
 			display: none !important;
 		}
-		#bd-settingspane-container ${BDFDB.dotCN._repodescription} {
-			white-space: pre-line !important;
+		
+		
+		/*OLD*/
+		
+		.BDFDB-modal ${BDFDB.dotCN.modalheader + BDFDB.dotCN.modalheaderhassibling} {
+			padding-bottom: 10px;
 		}
+		.BDFDB-modal ${BDFDB.dotCN.tabbarcontainer} {
+			background: rgba(0, 0, 0, 0.1);
+			border: none !important;
+			box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.05);
+		}
+		${BDFDB.dotCN.themedark} .BDFDB-modal ${BDFDB.dotCN.tabbarcontainer} {
+			background: rgba(0, 0, 0, 0.2);
+			box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
+		}
+		
 		.BDFDB-notice {
 			transition: height 0.5s ease !important;
 			border-radius: 0 !important;
