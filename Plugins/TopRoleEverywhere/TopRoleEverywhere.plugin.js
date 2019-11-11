@@ -51,11 +51,11 @@ class TopRoleEverywhere {
 				showInChat:			{value:true, 	inner:true, 	description:"Chat Window"},
 				showInMemberList:	{value:true, 	inner:true, 	description:"Member List"},
 				useOtherStyle:		{value:false, 	inner:false, 	description:"Use BotTag Style instead of the Role Style."},
+				useBlackFont:		{value:false, 	inner:false,	description:"Instead of darkening the color for BotTag Style on bright colors use black font."},
 				includeColorless:	{value:false, 	inner:false, 	description:"Include colorless roles."},
 				showOwnerRole:		{value:false, 	inner:false, 	description:`Display Role Tag of Serverowner as "${BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER}".`},
 				disableForBots:		{value:false, 	inner:false, 	description:"Disable Role Tag for Bots."},
-				addUserID:			{value:false, 	inner:false, 	description:"Add the UserID as a Tag to the Chat Window."},
-				darkIdTag:			{value:false, 	inner:false, 	description:"Use a dark version for the UserID-Tag."}
+				addUserID:			{value:false, 	inner:false, 	description:"Add the UserID as a Tag to the Chat Window."}
 			}
 		};
 	}
@@ -166,12 +166,21 @@ class TopRoleEverywhere {
 	}
 	
 	createRoleTag (settings, role, type, tagclass) {
-		return settings.useOtherStyle ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BotTag, {
-			className: `${tagclass} TRE-tag TRE-bottag TRE-${type}tag`,
-			tag: role.name,
-			style: {backgroundColor: BDFDB.ColorUtils.convert(role.colorString || BDFDB.DiscordConstants.Colors.PRIMARY_DARK_500, "RGB")},
-			onContextMenu: role.id ? e => {this.openRoleContextMenu(e, role);} : null
-		}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MemberRole, {
+		let tagcolor = BDFDB.ColorUtils.convert(role.colorString || BDFDB.DiscordConstants.Colors.PRIMARY_DARK_500, "RGB")
+		let isbright = role.colorString && BDFDB.ColorUtils.isBright(tagcolor);
+		tagcolor = isbright ? (settings.useBlackFont ? tagcolor : BDFDB.ColorUtils.change(tagcolor, -0.3)) : tagcolor;
+		if (settings.useOtherStyle) {
+			return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BotTag, {
+				className: `${tagclass} TRE-tag TRE-bottag TRE-${type}tag`,
+				tag: role.name,
+				style: {
+					backgroundColor: tagcolor,
+					color: isbright && settings.useBlackFont ? "black" : null
+				},
+				onContextMenu: role.id ? e => {this.openRoleContextMenu(e, role);} : null
+			});
+		}
+		else return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MemberRole, {
 			className: `TRE-tag TRE-roletag TRE-${type}tag`,
 			role: role,
 			onContextMenu: role.id ? e => {this.openRoleContextMenu(e, role);} : null
