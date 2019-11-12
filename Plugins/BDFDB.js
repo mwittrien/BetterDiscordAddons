@@ -3988,6 +3988,7 @@ var BDFDB = {
 		inputNumberWrapper: "numberInputWrapper-j4svZS",
 		inputNumberWrapperDefault: "numberInputWrapperDefault-gRxcuK numberInputWrapper-j4svZS",
 		inputNumberWrapperMini: "numberInputWrapperMini-wtUU31 numberInputWrapper-j4svZS",
+		lineThrough: "lineThrough-MPlPsV",
 		overflowEllipsis: "ellipsis-qlo9sA",
 		popoutWrapper: "popout-xwjvsX",
 		quickSelectWrapper: "quickSelectWrapper-UCfTKz",
@@ -4010,7 +4011,8 @@ var BDFDB = {
 		tableHeaderSortIcon: "sortIcon-WZjMja",
 		tableRow: "row-_9Ehcp",
 		tableStickyHeader: "stickyHeader-JabwjW header-g67q9_",
-		textScroller: "textScroller-dc9_kz"
+		textScroller: "textScroller-dc9_kz",
+		underline: "underline-6nu217"
 	};
 	DiscordClassModules.BDrepo = {
 		bdGuild: "bd-guild",
@@ -4984,6 +4986,7 @@ var BDFDB = {
 		layerbase: ["Layers", "baseLayer"],
 		layers: ["Layers", "layers"],
 		layersbg: ["Layers", "bg"],
+		linethrough: ["BDFDB", "lineThrough"],
 		listavatar: ["UserProfile", "listAvatar"],
 		listdiscriminator: ["UserProfile", "listDiscriminator"],
 		listname: ["UserProfile", "listName"],
@@ -5507,6 +5510,7 @@ var BDFDB = {
 		tooltiptop: ["Tooltip", "tooltipTop"],
 		tooltipyellow: ["Tooltip", "tooltipYellow"],
 		typing: ["Typing", "typing"],
+		underline: ["BDFDB", "underline"],
 		unreadbar: ["UnreadBar", "bar"],
 		unreadbaractive: ["UnreadBar", "active"],
 		unreadbarcontainer: ["UnreadBar", "container"],
@@ -7396,6 +7400,14 @@ var BDFDB = {
 		${BDFDB.dotCN.overflowellipsis} {
 			overflow: hidden;
 			text-overflow: ellipsis;
+		}
+		
+		${BDFDB.dotCN.underline} {
+			text-decoration: underline;
+		}
+		
+		${BDFDB.dotCN.linethrough} {
+			text-decoration: line-through;
 		}
 
 		${BDFDB.dotCN.favbuttoncontainer} {
