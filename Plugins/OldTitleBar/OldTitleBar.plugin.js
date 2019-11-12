@@ -29,6 +29,7 @@ class OldTitleBar {
 			.OTB-enabled ${BDFDB.dotCN.splashbackground}:before {
 				display: none !important;
 			}
+			
 			.platform-osx.OTB-enabled ${BDFDB.dotCN.guildswrapper} {
 				margin-top: 0;
 			}
@@ -200,6 +201,7 @@ class OldTitleBar {
 	}
 
 	processAuthWrapper (e) {
+		BDFDB.DOMUtils.addClass(document.documentElement, "OTB-enabled");
 		if (!BDFDB.ArrayUtils.is(e.returnvalue.props.children)) e.returnvalue.props.children = [e.returnvalue.props.children];
 		this.injectSettingsToolbar(e.returnvalue.props.children, true);
 	}
