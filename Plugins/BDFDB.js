@@ -5559,8 +5559,6 @@ var BDFDB = {
 		userprofileheaderinfo: ["UserProfile", "headerInfo"],
 		userprofilelistavatar: ["UserProfile", "listAvatar"],
 		userprofilelistguildavatarwithouticon: ["UserProfile", "guildAvatarWithoutIcon"],
-		userprofilelistname: ["UserProfile", "listName"],
-		userprofilelistrow: ["UserProfile", "listRow"],
 		userprofilenametag: ["UserProfile", "nameTag"],
 		userprofiletopsectionnormal: ["UserProfile", "topSectionNormal"],
 		userprofiletopsectionplaying: ["UserProfile", "topSectionPlaying"],
@@ -6662,7 +6660,7 @@ var BDFDB = {
 						className: BDFDB.disCN.listrowcontent,
 						children: [
 							BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN.listname,
+								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.listname, this.props.labelClassName),
 								children: this.props.label
 							}),
 							typeof this.props.note == "string" ? BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormText, {
