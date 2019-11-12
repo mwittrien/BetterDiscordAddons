@@ -1318,11 +1318,11 @@ var BDFDB = {
 	BDFDB.DiscordConstants = BDFDB.ModuleUtils.findByProperties("Permissions", "ActivityTypes");
 	
 	var DiscordObjects = {};
-	DiscordObjects.Channel = BDFDB.ModuleUtils.findByPrototypes("initialize", "getTitleIcon", "getGuildId");
-	DiscordObjects.Guild = BDFDB.ModuleUtils.findByPrototypes("initialize", "getMaxEmojiSlots", "getRole");
-	DiscordObjects.Message = BDFDB.ModuleUtils.findByPrototypes("initialize", "getAuthorName", "getChannelId");
+	DiscordObjects.Channel = BDFDB.ModuleUtils.findByPrototypes("getRecipientId", "getTitleIcon", "getGuildId");
+	DiscordObjects.Guild = BDFDB.ModuleUtils.findByPrototypes("getIconURL", "getMaxEmojiSlots", "getRole");
+	DiscordObjects.Message = BDFDB.ModuleUtils.findByPrototypes("getReaction", "getAuthorName", "getChannelId");
 	DiscordObjects.Timestamp = BDFDB.ModuleUtils.findByPrototypes("add", "dayOfYear", "hasAlignedHourOffset");
-	DiscordObjects.User = BDFDB.ModuleUtils.findByPrototypes("initialize", "isLocalBot", "isClaimed");
+	DiscordObjects.User = BDFDB.ModuleUtils.findByPrototypes("hasFlag", "isLocalBot", "isClaimed");
 	BDFDB.DiscordObjects = Object.assign({}, DiscordObjects);
 	
 	var LibraryRequires = {};
