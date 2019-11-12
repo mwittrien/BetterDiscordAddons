@@ -4984,6 +4984,11 @@ var BDFDB = {
 		layerbase: ["Layers", "baseLayer"],
 		layers: ["Layers", "layers"],
 		layersbg: ["Layers", "bg"],
+		listavatar: ["UserProfile", "listAvatar"],
+		listavatar: ["UserProfile", "listName"],
+		listname: ["UserProfile", "listRow"],
+		listrowcontent: ["UserProfile", "listRowContent"],
+		listscroller: ["UserProfile", "listScroller"],
 		livetag: ["LiveTag", "live"],
 		livetaggrey: ["LiveTag", "grey"],
 		livetaglarge: ["LiveTag", "liveLarge"],
@@ -6639,6 +6644,8 @@ var BDFDB = {
 	InternalBDFDB.setDefaultProps(LibraryComponents.GuildComponents.Guild, {menu:true, tooltip:true, state:false, draggable:false, sorting:false});
 	
 	LibraryComponents.GuildComponents.GuildDropTarget = BDFDB.ModuleUtils.findByName("GuildDropTarget");
+	
+	LibraryComponents.GuildComponents.Icon = BDFDB.ModuleUtils.findByName("GuildIconWrapper");
 	
 	LibraryComponents.GuildComponents.Pill = BDFDB.ModuleUtils.findByString("opacity:1,height:", "20:8", "default.item");
 	
