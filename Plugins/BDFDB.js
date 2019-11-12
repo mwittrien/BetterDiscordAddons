@@ -3493,8 +3493,6 @@ var BDFDB = {
 									separator: config.headerSeparator || false,
 									children: [
 										BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
-											grow: 1,
-											shrink: 1,
 											children: [
 												BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormTitle, {
 													tag: LibraryComponents.FormComponents.FormTitle.Tags.H4,
@@ -3514,6 +3512,7 @@ var BDFDB = {
 								}),
 								headerchildren.length ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 									grow: 0,
+									shrink: 0,
 									children: headerchildren
 								}) : null,
 								BDFDB.ReactUtils.createElement(LibraryComponents.ModalComponents.ModalContent, {
@@ -7624,7 +7623,6 @@ var BDFDB = {
 			background: rgba(0, 0, 0, 0.1);
 			border: none;
 			box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.05);
-			margin-bottom: 10px;
 		}
 		${BDFDB.dotCNS.themedark + BDFDB.dotCNS.modalwrapper + BDFDB.dotCN.tabbarcontainer} {
 			background: rgba(0, 0, 0, 0.2);

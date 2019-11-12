@@ -3,7 +3,7 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.5.7";}
+	getVersion () {return "2.5.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,121 +11,74 @@ class ShowHiddenChannels {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"],["Sort", "You can now sort hidden channels in the native way, meaning they will be placed below their rightful category"],["Tooltip", "The tooltip was removed and was turned into a more friendly modal, which can be access via the right click menu on a channel"]]
 		};
 
 		this.patchModules = {
-			"Channels":["componentDidMount","componentDidUpdate"],
-			"ChannelItem":"componentDidMount",
-			"ChannelCategoryItem":"componentDidMount",
-			"StandardSidebarView":"componentWillUnmount"
+			Channels: "render",
+			ChannelItem: ["render", "componentDidMount"]
 		};
 	}
 
 	initConstructor () {
-		this.categoryMarkup = 
-			`<div class="container-hidden">
-				<div class="${BDFDB.disCN.categorycontainerdefault} hidden-category" draggable="false">
-					<div tabindex="0" class="${BDFDB.disCNS.categoryiconvisibility + BDFDB.disCNS.categorywrapper + BDFDB.disCNS.categorycollapsed + BDFDB.disCNS.categoryclickable}" role="button">
-						<svg class="${BDFDB.disCN.categoryicon}" width="24" height="24" viewBox="0 0 24 24">
-							<path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M16.59 8.59004L12 13.17L7.41 8.59004L6 10L12 16L18 10L16.59 8.59004Z"></path>
-						</svg>
-						<header class="${BDFDB.disCNS.categoryname + BDFDB.disCN.namecontainernamecontainer}">hidden</header>
-						<div class="${BDFDB.disCN.categorychildren}"></div>
-					</div>
-				</div>
-			</div>`;
-
-		this.channelMarkup = 
-			`<div class="${BDFDB.disCN.channelcontainerdefault} hidden-channel">
-				<div tabindex="0" class="${BDFDB.disCNS.channeliconvisibility + BDFDB.disCNS.channelwrapper + BDFDB.disCN.channelmodelocked}" role="button">
-					<div class="${BDFDB.disCN.channelcontent}">
-						<svg class="${BDFDB.disCN.channelicon} hidden-icon" width="24" height="24" viewBox="0 0 24 24">
-							<mask fill="black">
-								<path d="M0 0H24V24H0Z" fill="white"></path>
-								<path d="M24 0H13V12H24Z" fill="black"></path>
-							</mask>
-							<path class="hidden-icon-inner" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d=""></path>
-							<path fill="currentColor" d="M21.025 5V4C21.025 2.88 20.05 2 19 2C17.95 2 17 2.88 17 4V5C16.4477 5 16 5.44772 16 6V9C16 9.55228 16.4477 10 17 10H19H21C21.5523 10 22 9.55228 22 9V5.975C22 5.43652 21.5635 5 21.025 5ZM20 5H18V4C18 3.42857 18.4667 3 19 3C19.5333 3 20 3.42857 20 4V5Z"></path>
-						</svg>
-						<div class="${BDFDB.disCN.channelname}"></div>
-						<div class="${BDFDB.disCN.channelchildren}"></div>
-					</div>
-				</div>
-			</div>`;
-
-		this.channelMessage = {
-			GUILD_TEXT: `enter the hidden text channel`,
-			GUILD_VOICE: `enter the hidden voice channel`,
-			GUILD_NEWS: `enter the hidden news channel`,
-			GUILD_STORE: `enter the hidden store channel`,
-			GUILD_CATEGORY: `open the hidden category`,
-			DEFAULT: `open the channel`,
-		}
-
-		this.channelIcons = {
-			GUILD_TEXT: `M5.88657 21C5.57547 21 5.3399 20.7189 5.39427 20.4126L6.00001 17H2.59511C2.28449 17 2.04905 16.7198 2.10259 16.4138L2.27759 15.4138C2.31946 15.1746 2.52722 15 2.77011 15H6.35001L7.41001 9H4.00511C3.69449 9 3.45905 8.71977 3.51259 8.41381L3.68759 7.41381C3.72946 7.17456 3.93722 7 4.18011 7H7.76001L8.39677 3.41262C8.43914 3.17391 8.64664 3 8.88907 3H9.87344C10.1845 3 10.4201 3.28107 10.3657 3.58738L9.76001 7H15.76L16.3968 3.41262C16.4391 3.17391 16.6466 3 16.8891 3H17.8734C18.1845 3 18.4201 3.28107 18.3657 3.58738L17.76 7H21.1649C21.4755 7 21.711 7.28023 21.6574 7.58619L21.4824 8.58619C21.4406 8.82544 21.2328 9 20.9899 9H17.41L16.35 15H19.7549C20.0655 15 20.301 15.2802 20.2474 15.5862L20.0724 16.5862C20.0306 16.8254 19.8228 17 19.5799 17H16L15.3632 20.5874C15.3209 20.8261 15.1134 21 14.8709 21H13.8866C13.5755 21 13.3399 20.7189 13.3943 20.4126L14 17H8.00001L7.36325 20.5874C7.32088 20.8261 7.11337 21 6.87094 21H5.88657ZM9.41045 9L8.35045 15H14.3504L15.4104 9H9.41045Z`,
-			GUILD_VOICE: `M11.383 3.07904C11.009 2.92504 10.579 3.01004 10.293 3.29604L6 8.00204H3C2.45 8.00204 2 8.45304 2 9.00204V15.002C2 15.552 2.45 16.002 3 16.002H6L10.293 20.71C10.579 20.996 11.009 21.082 11.383 20.927C11.757 20.772 12 20.407 12 20.002V4.00204C12 3.59904 11.757 3.23204 11.383 3.07904ZM14 5.00195V7.00195C16.757 7.00195 19 9.24595 19 12.002C19 14.759 16.757 17.002 14 17.002V19.002C17.86 19.002 21 15.863 21 12.002C21 8.14295 17.86 5.00195 14 5.00195ZM14 9.00195C15.654 9.00195 17 10.349 17 12.002C17 13.657 15.654 15.002 14 15.002V13.002C14.551 13.002 15 12.553 15 12.002C15 11.451 14.551 11.002 14 11.002V9.00195Z`,
-			GUILD_NEWS: `M22 7H19V3C19 2.448 18.553 2 18 2H2C1.447 2 1 2.448 1 3V21C1 21.552 1.447 22 2 22H20C20.266 22 20.52 21.895 20.707 21.707L22.707 19.707C22.895 19.519 23 19.265 23 18.999V7.999C23 7.448 22.553 7 22 7ZM9 18.999H3V16.999H9V18.999ZM9 15.999H3V13.999H9V15.999ZM9 13H3V11H9V13ZM16 18.999H10V16.999H16V18.999ZM16 15.999H10V13.999H16V15.999ZM16 13H10V11H16V13ZM16 8H3V5H16V8ZM21 18.585L20.586 18.999H19V8.999H21V18.585Z`,
-			GUILD_STORE: `M21.707 13.293l-11-11C10.519 2.105 10.266 2 10 2H3c-.553 0-1 .447-1 1v7c0 .266.105.519.293.707l11 11c.195.195.451.293.707.293s.512-.098.707-.293l7-7c.391-.391.391-1.023 0-1.414zM7 9c-1.106 0-2-.896-2-2 0-1.106.894-2 2-2 1.104 0 2 .894 2 2 0 1.104-.896 2-2 2z`,
-			GUILD_CATEGORY: `M9.6 1.6 L9.6 6.4 L3.2 6.4 L3.2 1.6 L9.6 1.6 Z M16 16 L22.4 16 L22.4 20.8 L16 20.8 L16 16.533333328 L16 16 Z M14.4 12.8 L8 12.8 L8 17.6 L14.4 17.6 L14.4 20.8 L8 20.8 L4.8 20.8 L4.8 8 L8 8 L8 9.6 L14.4 9.6 L14.4 12.8 Z`,
-			DEFAULT: `M 11.44 0 c 4.07 0 8.07 1.87 8.07 6.35 c 0 4.13 -4.74 5.72 -5.75 7.21 c -0.76 1.11 -0.51 2.67 -2.61 2.67 c -1.37 0 -2.03 -1.11 -2.03 -2.13 c 0 -3.78 5.56 -4.64 5.56 -7.76 c 0 -1.72 -1.14 -2.73 -3.05 -2.73 c -4.07 0 -2.48 4.19 -5.56 4.19 c -1.11 0 -2.07 -0.67 -2.07 -1.94 C 4 2.76 7.56 0 11.44 0 z M 11.28 18.3 c 1.43 0 2.61 1.17 2.61 2.61 c 0 1.43 -1.18 2.61 -2.61 2.61 c -1.43 0 -2.61 -1.17 -2.61 -2.61 C 8.68 19.48 9.85 18.3 11.28 18.3 z`
-		};
+		this.changedInstances = {};
 
 		this.settingsMap = {
 			GUILD_TEXT: "showText",
 			GUILD_VOICE: "showVoice",
-			GUILD_NEWS: "showNews",
-			GUILD_STORE: "showStore",
-			GUILD_CATEGORY: "showCategory"
+			GUILD_ANNOUNCEMENT: "showAnnouncement",
+			GUILD_STORE: "showStore"
+		};
+
+		this.typeNameMap = {
+			GUILD_TEXT: "TEXT_CHANNEL",
+			GUILD_VOICE: "VOICE_CHANNEL",
+			GUILD_ANNOUNCEMENT: "NEWS_CHANNEL",
+			GUILD_STORE: "STORE_CHANNEL"
+		};
+
+		this.channelIcons = {
+			GUILD_TEXT: `M 5.88657 21 C 5.57547 21 5.3399 20.7189 5.39427 20.4126 L 6.00001 17 H 2.59511 C 2.28449 17 2.04905 16.7198 2.10259 16.4138 L 2.27759 15.4138 C 2.31946 15.1746 2.52722 15 2.77011 15 H 6.35001 L 7.41001 9 H 4.00511 C 3.69449 9 3.45905 8.71977 3.51259 8.41381 L 3.68759 7.41381 C 3.72946 7.17456 3.93722 7 4.18011 7 H 7.76001 L 8.39677 3.41262 C 8.43914 3.17391 8.64664 3 8.88907 3 H 9.87344 C 10.1845 3 10.4201 3.28107 10.3657 3.58738 L 9.76001 7 H 15.76 L 16.3968 3.41262 C 16.4391 3.17391 16.6466 3 16.8891 3 H 17.8734 C 18.1845 3 18.4201 3.28107 18.3657 3.58738 L 17.76 7 H 21.1649 C 21.4755 7 21.711 7.28023 21.6574 7.58619 L 21.4824 8.58619 C 21.4406 8.82544 21.2328 9 20.9899 9 H 17.41 L 16.35 15 H 19.7549 C 20.0655 15 20.301 15.2802 20.2474 15.5862 L 20.0724 16.5862 C 20.0306 16.8254 19.8228 17 19.5799 17 H 16 L 15.3632 20.5874 C 15.3209 20.8261 15.1134 21 14.8709 21 H 13.8866 C 13.5755 21 13.3399 20.7189 13.3943 20.4126 L 14 17 H 8.00001 L 7.36325 20.5874 C 7.32088 20.8261 7.11337 21 6.87094 21 H 5.88657Z M 9.41045 9 L 8.35045 15 H 14.3504 L 15.4104 9 H 9.41045 Z`,
+			GUILD_VOICE: `M 11.383 3.07904 C 11.009 2.92504 10.579 3.01004 10.293 3.29604 L 6 8.00204 H 3 C 2.45 8.00204 2 8.45304 2 9.00204 V 15.002 C 2 15.552 2.45 16.002 3 16.002 H 6 L 10.293 20.71 C 10.579 20.996 11.009 21.082 11.383 20.927 C 11.757 20.772 12 20.407 12 20.002 V 4.00204 C 12 3.59904 11.757 3.23204 11.383 3.07904Z M 14 5.00195 V 7.00195 C 16.757 7.00195 19 9.24595 19 12.002 C 19 14.759 16.757 17.002 14 17.002 V 19.002 C 17.86 19.002 21 15.863 21 12.002 C 21 8.14295 17.86 5.00195 14 5.00195Z M 14 9.00195 C 15.654 9.00195 17 10.349 17 12.002 C 17 13.657 15.654 15.002 14 15.002 V 13.002 C 14.551 13.002 15 12.553 15 12.002 C 15 11.451 14.551 11.002 14 11.002 V 9.00195 Z`,
+			GUILD_ANNOUNCEMENT: `M 22 7 H 19 V 3 C 19 2.448 18.553 2 18 2 H 2 C 1.447 2 1 2.448 1 3 V 21 C 1 21.552 1.447 22 2 22 H 20 C 20.266 22 20.52 21.895 20.707 21.707 L 22.707 19.707 C 22.895 19.519 23 19.265 23 18.999 V 7.999 C 23 7.448 22.553 7 22 7Z M 9 18.999 H 3 V 16.999 H 9 V 18.999Z M 9 15.999 H 3 V 13.999 H 9 V 15.999Z M 9 13 H 3 V 11 H 9 V 13Z M 16 18.999 H 10 V 16.999 H 16 V 18.999Z M 16 15.999 H 10 V 13.999 H 16 V 15.999Z M 16 13 H 10 V 11 H 16 V 13Z M 16 8 H 3 V 5 H 16 V 8Z M 21 18.585 L 20.586 18.999 H 19 V 8.999 H 21 V 18.585 Z`,
+			GUILD_STORE: `M 21.707 13.293l -11 -11 C 10.519 2.105 10.266 2 10 2 H 3c -0.553 0 -1 0.447 -1 1 v 7 c 0 0.266 0.105 0.519 0.293 0.707l11 11 c 0.195 0.195 0.451 0.293 0.707 0.293 s 0.512 -0.098 0.707 -0.293l7 -7 c 0.391 -0.391 0.391 -1.023 0 -1.414 z M 7 9c -1.106 0 -2 -0.896 -2 -2 0 -1.106 0.894 -2 2 -2 1.104 0 2 0.894 2 2 0 1.104 -0.896 2 -2 2 z`,
+			GUILD_CATEGORY: `M 9.6 1.6 L 9.6 6.4 L 3.2 6.4 L 3.2 1.6 L 9.6 1.6 Z M 16 16 L 22.4 16 L 22.4 20.8 L 16 20.8 L 16 16.533333328 L 16 16 Z M 14.4 12.8 L 8 12.8 L 8 17.6 L 14.4 17.6 L 14.4 20.8 L 8 20.8 L 4.8 20.8 L 4.8 8 L 8 8 L 8 9.6 L 14.4 9.6 L 14.4 12.8 Z`,
+			DEFAULT: `M 11.44 0 c 4.07 0 8.07 1.87 8.07 6.35 c 0 4.13 -4.74 5.72 -5.75 7.21 c -0.76 1.11 -0.51 2.67 -2.61 2.67 c -1.37 0 -2.03 -1.11 -2.03 -2.13 c 0 -3.78 5.56 -4.64 5.56 -7.76 c 0 -1.72 -1.14 -2.73 -3.05 -2.73 c -4.07 0 -2.48 4.19 -5.56 4.19 c -1.11 0 -2.07 -0.67 -2.07 -1.94 C 4 2.76 7.56 0 11.44 0 z M 11.28 18.3 c 1.43 0 2.61 1.17 2.61 2.61 c 0 1.43 -1.18 2.61 -2.61 2.61 c -1.43 0 -2.61 -1.17 -2.61 -2.61 C 8.68 19.48 9.85 18.3 11.28 18.3 z`
 		};
 
 		this.defaults = {
 			settings: {
-				showText:				{value:true, 	inner:false,	description:"Show hidden Textchannels:"},
-				showVoice:				{value:true, 	inner:false,	description:"Show hidden Voicechannels:"},
-				showNews:				{value:true, 	inner:false,	description:"Show hidden Newschannels:"},
-				showStore:				{value:true, 	inner:false,	description:"Show hidden Storechannels:"},
-				showCategory:			{value:false, 	inner:false,	description:"Show hidden Categories:"},
-				showForNormal:			{value:false,	inner:false,	description:"Also show Roles/Users for visible Channels on hover:"},
-				showAllowedRoles:		{value:true,	inner:true,		description:"Allowed Roles:"},
-				showOverWrittenRoles:	{value:true,	inner:true,		description:"Include overwritten Roles in allowed Roles:"},
-				showAllowedUsers:		{value:true,	inner:true,		description:"Specifically allowed Users:"},
-				showDeniedRoles:		{value:true,	inner:true,		description:"Denied Roles:"},
-				showDeniedUsers:		{value:true,	inner:true,		description:"Specifically denied Users:"},
-				showTopic:				{value:false, 	inner:true,		description:"The Topic of the Channel (only for hidden):"},
-				showChannelCategory:	{value:false, 	inner:true,		description:"The Category of the Channel (only for hidden):"},
-				showVoiceUsers:			{value:false, 	inner:true,		description:"All currently connected Users of a Voice Channel (only for hidden/locked):"}
+				sortNative:				{value:false, 	description:"Sort hidden Channels in the native Order"},
+				showText:				{value:true, 	description:"Show hidden Text Channels"},
+				showVoice:				{value:true, 	description:"Show hidden Voice Channels"},
+				showAnnouncement:		{value:true, 	description:"Show hidden Announcement Channels"},
+				showStore:				{value:true, 	description:"Show hidden Store Channels"},
+				showForNormal:			{value:false,	description:"Add Access-Overview ContextMenu Entry for non-hidden Channels"},
 			},
 			amounts: {
-				hoverDelay:				{value:0, 		min:0,	description:"Tooltip delay in millisec:"}
+				hoverDelay:				{value:0, 		min:0,			description:"Tooltip delay in millisec:"}
 			}
 		};
+
+		this.channelTypes = {};
+		for (let type in BDFDB.DiscordConstants.ChannelTypes) this.channelTypes[BDFDB.DiscordConstants.ChannelTypes[type]] = type;
 	}
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let settings = BDFDB.DataUtils.get(this, "settings");
-		var amounts = BDFDB.DataUtils.get(this, "amounts");
-		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
-		for (let key in settings) {
-			if (!this.defaults.settings[key].inner) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
-		}
-		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Display in the hover Tooltip:</h3></div><div class="BDFDB-settings-inner-list">`;
-		for (let key in settings) {
-			if (this.defaults.settings[key].inner) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
-		}
-		for (let key in amounts) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%;">${this.defaults.amounts[key].description}</h3><div class="${BDFDB.disCN.inputwrapper} inputNumberWrapper ${BDFDB.disCNS.vertical}" style="flex: 1 1 auto;"><span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span><input type="number"${(!isNaN(this.defaults.amounts[key].min) && this.defaults.amounts[key].min !== null ? ' min="' + this.defaults.amounts[key].min + '"' : '') + (!isNaN(this.defaults.amounts[key].max) && this.defaults.amounts[key].max !== null ? ' max="' + this.defaults.amounts[key].max + '"' : '')} option="${key}" value="${amounts[key]}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.titlesize16} amount-input"></div></div>`;
-		}
-		settingshtml += `</div>`;
-		settingshtml += `</div></div>`;
-
-		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
-
-		BDFDB.initElements(settingspanel, this);
-
-		return settingspanel;
+		let settingsitems = [], inneritems = [];
+		
+		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			className: BDFDB.disCN.marginbottom8,
+			type: "Switch",
+			plugin: this,
+			keys: ["settings", key],
+			label: this.defaults.settings[key].description,
+			value: settings[key]
+		}));
+		
+		return BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 	}
 
 	//legacy
@@ -156,8 +109,12 @@ class ShowHiddenChannels {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
+			
+			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.UnreadChannelUtils, "hasUnread", {after: e => {
+				return e.returnValue && !this.isChannelHidden(e.methodArguments[0]);
+			}});
 
-			BDFDB.ModuleUtils.forceAllUpdates(this, "Channels");
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
@@ -165,8 +122,9 @@ class ShowHiddenChannels {
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
-
-			BDFDB.DOMUtils.remove(".container-hidden");
+			
+			for (let guildid in this.changedInstances) this.resetInstance(guildid, true);
+			
 			BDFDB.PluginUtils.clear(this);
 		}
 	}
@@ -174,196 +132,329 @@ class ShowHiddenChannels {
 
 	// begin of own functions
 
-	processChannels (instance, wrapper, returnvalue, methodnames) {
-		if (instance.props.guild) {
-			if (methodnames.includes("componentDidMount")) this.appendHiddenContainer(instance.props.guild);
-			if (methodnames.includes("componentDidUpdate")) this.reappendHiddenContainer(instance.props.guild);
-		}
-	}
-
-	processChannelItem (instance, wrapper, returnvalue) {
-		if (instance.props.channel) this.reappendHiddenContainer(BDFDB.LibraryModules.GuildStore.getGuild(instance.props.channel.guild_id));
-	}
-
-	processChannelCategoryItem (instance, wrapper, returnvalue) {
-		if (instance.props.channel) this.reappendHiddenContainer(BDFDB.LibraryModules.GuildStore.getGuild(instance.props.channel.guild_id));
-	}
-
-	processStandardSidebarView (instance, wrapper, returnvalue) {
+	onSettingsClosed (instance, wrapper, returnvalue) {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
-			BDFDB.ModuleUtils.forceAllUpdates(this, "Channels");
+			
+			for (let guildid in this.changedInstances) this.resetInstance(guildid, false);
+
+			BDFDB.ModuleUtils.forceAllUpdates(this);
+		}
+	}
+	
+	onChannelContextMenu (e) {
+		if (e.instance.props.channel) {
+			if (e.instance.props.channel.id.endsWith("hidden") && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY) {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ChannelMuteItem"});
+				if (index > -1) children.splice(index, 1);
+			}
+			let isHidden = this.isChannelHidden(e.instance.props.channel.id);
+			if (isHidden || BDFDB.DataUtils.get(this, "settings", "showForNormal")) {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
+				const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+						label: BDFDB.LanguageUtils.LanguageStrings.CHANNEL + " " + BDFDB.LanguageUtils.LanguageStrings.ACCESSIBILITY,
+						action: _ => {
+							BDFDB.ContextMenuUtils.close(e.instance);
+							this.showAccessModal(e.instance.props.channel, !isHidden);
+						}
+					})
+				});
+				if (index > -1) children.splice(index, 0, itemgroup);
+				else children.push(itemgroup);
+			}
 		}
 	}
 
-	appendHiddenContainer (guild) {
-		BDFDB.DOMUtils.remove(".container-hidden");
-		if (!guild) return;
-		this.currentGuild = guild.id;
-		var allChannels = BDFDB.LibraryModules.ChannelStore.getChannels();
-		var shownChannels = BDFDB.LibraryModules.GuildChannelStore.getChannels(guild.id);
-		var hiddenChannels = {};
+	processChannels (e) {
+		if (!e.instance.props.guild) return;
+		if (this.changedInstances[e.instance.props.guild.id]) {
+			if (performance.now() - this.changedInstances[e.instance.props.guild.id].time > 600000) {
+				this.resetInstance(e.instance.props.guild.id, false);
+				this.injectChannels(e.instance);
+			}
+		}
+		else this.injectChannels(e.instance);
+	}
 
-		for (let type in BDFDB.DiscordConstants.ChannelTypes) hiddenChannels[BDFDB.DiscordConstants.ChannelTypes[type]] = [];
-
-		for (let channel_id in allChannels) {
-			var channel = allChannels[channel_id];
-			if (channel.guild_id == guild.id) {
-				var isHidden = true;
+	processChannelItem (e) {
+		if (e.instance.props.channel && this.isChannelHidden(e.instance.props.channel.id)) {
+			if (e.returnvalue) {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "Icon"});
+				if (index > -1) {
+					delete children[index].props.name;
+					children[index].props.nativeClass = true;
+					children[index].props.iconSVG = `<svg class="${BDFDB.disCN.channelicon}" width="24" height="24" viewBox="0 0 24 24"><mask id="${this.name + e.instance.props.channel.id}" fill="black"><path d="M 0 0 H 24 V 24 H 0 Z" fill="white"></path><path d="M24 0 H 13 V 12 H 24 Z" fill="black"></path></mask><path mask="url(#${this.name + e.instance.props.channel.id})" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="${this.channelIcons[this.channelTypes[e.instance.props.channel.type]] || this.channelIcons.DEFAULT}"></path><path fill="currentColor" d="M 21.025 5 V 4 C 21.025 2.88 20.05 2 19 2 C 17.95 2 17 2.88 17 4 V 5 C 16.4477 5 16 5.44772 16 6 V 9 C 16 9.55228 16.4477 10 17 10 H 19 H 21 C 21.5523 10 22 9.55228 22 9 V 5.975C22 5.43652 21.5635 5 21.025 5 Z M 20 5 H 18 V 4 C 18 3.42857 18.4667 3 19 3 C 19.5333 3 20 3.42857 20 4 V 5 Z"></path></svg>`;
+				}
+				[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.channelchildren]]});
+				if (index > -1 && children[index].props && children[index].props.children) {
+					children[index].props.children = [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						text: BDFDB.LanguageUtils.LanguageStrings.CHANNEL_LOCKED_SHORT,
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.channelactionicon,
+								name: BDFDB.LibraryComponents.SvgIcon.Names.LOCK_CLOSED
+							})
+						})
+					})];
+				}
+			}
+			if (e.node) {
+				BDFDB.DOMUtils.addClass(e.node, BDFDB.disCN.channelmodelocked);
+				e.node.addEventListener("click", BDFDB.ListenerUtils.stopEvent);
+				e.node.addEventListener("mousedown", BDFDB.ListenerUtils.stopEvent);
+				e.node.addEventListener("mouseup", BDFDB.ListenerUtils.stopEvent);
+			}
+		}
+	}
+	
+	injectChannels (instance) {
+		let [hiddenChannels, amount] = this.getHiddenChannels(instance.props.guild);
+		if (amount) {
+			let settings = BDFDB.DataUtils.get(this, "settings"), index = -1;
+			for (let catId in instance.props.categories) for (let channelObj of instance.props.categories[catId]) if (channelObj.index > index) index = channelObj.index;
+			let categoryType = BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY;
+			if (!settings.sortNative) {
+				let hiddenCategory = new BDFDB.DiscordObjects.Channel({
+					guild_id: instance.props.guild.id,
+					id: instance.props.guild.id + "_hidden",
+					name: "hidden",
+					type: categoryType
+				});
+				instance.props.categories._categories.push({
+					channel: hiddenCategory,
+					index: ++index
+				});
+				instance.props.channels[categoryType].push({
+					comparator: ++(instance.props.channels[categoryType][instance.props.channels[categoryType].length - 1] || {comparator: 0}).comparator,
+					channel: hiddenCategory
+				});
+				instance.props.categories[hiddenCategory.id] = [];
+			}
+				
+			for (let type in hiddenChannels) if (!settings.sortNative || type != categoryType) {
+				let channeltype = type == 0 && instance.props.channels.SELECTABLE ? "SELECTABLE" : type;
+				let channels = instance.props.channels[channeltype];
+				let comparator = (channels && channels[channels.length - 1] || {comparator: 0}).comparator;
+				for (let channel of hiddenChannels[type]) {
+					let hiddenChannel = new BDFDB.DiscordObjects.Channel(Object.assign({}, channel, {
+						parent_id: settings.sortNative ? channel.parent_id : instance.props.guild.id + "_hidden"
+					}));
+					let parent_id = hiddenChannel.parent_id || "null";
+					instance.props.categories[parent_id].push({
+						channel: hiddenChannel,
+						index: ++(instance.props.categories[parent_id][instance.props.categories[parent_id].length - 1] || {index: 0}).index
+					});
+					instance.props.channels[channeltype].push({
+						comparator: ++comparator,
+						channel: hiddenChannel
+					});
+				}
+			}
+			
+			this.changedInstances[instance.props.guild.id] = {instance: instance, time: performance.now()};
+		}
+	}
+	
+	resetInstance (guildid, update) {
+		let instance = this.changedInstances[guildid].instance;
+		if (instance) {
+			delete instance.props.categories[guildid + "_hidden"];
+			let removedCategories = [], categoryType = BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY;
+			for (let categoryObj of instance.props.categories._categories) if (categoryObj.channel.id.endsWith("hidden")) removedCategories.push(categoryObj);
+			for (let categoryObj of removedCategories) BDFDB.ArrayUtils.remove(instance.props.categories._categories, categoryObj);
+			for (let id in instance.props.categories) if (BDFDB.ArrayUtils.is(instance.props.categories[id])) {
+				let removedCategories = [];
+				for (let categoryObj of instance.props.categories[id]) if (categoryObj.channel.id.endsWith("hidden")) removedCategories.push(categoryObj);
+				for (let categoryObj of removedCategories) BDFDB.ArrayUtils.remove(instance.props.categories[id], categoryObj);
+			}
+			for (let type in instance.props.channels) if (BDFDB.ArrayUtils.is(instance.props.channels[type])) {
+				let removedChannels = [];
+				for (let channelObj of instance.props.channels[type]) if (this.isChannelHidden(channelObj.channel.id) && (channelObj.channel.type != categoryType || channelObj.channel.id.endsWith("hidden"))) removedChannels.push(channelObj);
+				for (let channelObj of removedChannels) BDFDB.ArrayUtils.remove(instance.props.channels[type], channelObj);
+			}
+			delete this.changedInstances[guildid].instance;
+			if (update) BDFDB.ReactUtils.forceUpdate(instance);
+		}
+	}
+	
+	isChannelHidden (channelid) {
+		return !BDFDB.UserUtils.can("VIEW_CHANNEL", BDFDB.UserUtils.me.id, channelid);
+	}
+	
+	getHiddenChannels (guild) {
+		if (!guild) return [{}, 0];
+		let settings = BDFDB.DataUtils.get(this, "settings");
+		let all = BDFDB.LibraryModules.ChannelStore.getChannels(), shown = BDFDB.LibraryModules.GuildChannelStore.getChannels(guild.id), hidden = {}, amount = 0;
+		for (let type in BDFDB.DiscordConstants.ChannelTypes) hidden[BDFDB.DiscordConstants.ChannelTypes[type]] = [];
+		for (let channel_id in all) {
+			let channel = all[channel_id];
+			if (channel.guild_id == guild.id && (settings[this.settingsMap[this.channelTypes[channel.type]]] || settings[this.settingsMap[this.channelTypes[channel.type]]] === undefined)) {
+				let isHidden = true;
 				if (channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY) {
 					for (let type in BDFDB.DiscordConstants.ChannelTypes) {
-						let shownChannelsOfType = BDFDB.DiscordConstants.ChannelTypes[type] == 0 && shownChannels.SELECTABLE ? shownChannels.SELECTABLE : shownChannels[BDFDB.DiscordConstants.ChannelTypes[type]];
-						if (shownChannelsOfType) for (let shownChannel of shownChannelsOfType) {
-							if (!channel.id || shownChannel.channel.parent_id == channel.id) {
+						let channelObjs = BDFDB.DiscordConstants.ChannelTypes[type] == 0 && shown.SELECTABLE || shown[BDFDB.DiscordConstants.ChannelTypes[type]];
+						if (channelObjs) for (let channelObj of channelObjs) {
+							if (!channel.id || channelObj.channel.parent_id == channel.id) {
 								isHidden = false;
 								break;
 							}
 						}
 					}
 				}
-				if (BDFDB.UserUtils.can("VIEW_CHANNEL", BDFDB.UserUtils.me.id, channel.id)) isHidden = false;
-				if (isHidden) hiddenChannels[channel.type].push(channel);
+				if (!this.isChannelHidden(channel.id)) isHidden = false;
+				if (isHidden) {
+					amount++;
+					hidden[channel.type].push(channel);
+				}
 			}
 		}
-
-		let settings = BDFDB.DataUtils.get(this, "settings");
-		var count = 0;
-		for (let type in BDFDB.DiscordConstants.ChannelTypes) {
-			if (this.settingsMap[type] && !settings[this.settingsMap[type]]) hiddenChannels[BDFDB.DiscordConstants.ChannelTypes[type]] = [];
-			BDFDB.ArrayUtils.keySort(hiddenChannels[BDFDB.DiscordConstants.ChannelTypes[type]], "name");
-			count += hiddenChannels[BDFDB.DiscordConstants.ChannelTypes[type]].length;
-		}
-		hiddenChannels.count = count;
-
-		if (count > 0) {
-			var category = BDFDB.DOMUtils.create(this.categoryMarkup);
-			var wrapper = category.querySelector(BDFDB.dotCN.categorywrapper);
-			category.setAttribute("guild", guild.id);
-			wrapper.addEventListener("click", () => {
-				BDFDB.DOMUtils.toggleClass(wrapper, BDFDB.disCN.categorycollapsed);
-
-				var visibile = !BDFDB.DOMUtils.containsClass(wrapper, BDFDB.disCN.categorycollapsed);
-				BDFDB.DOMUtils.toggle(category.querySelectorAll(BDFDB.dotCN.channelcontainerdefault), visibile);
-				BDFDB.DataUtils.save(visibile, this, "categorystatus", guild.id);
-			});
-
-			for (let type in BDFDB.DiscordConstants.ChannelTypes) for (let hiddenChannel of hiddenChannels[BDFDB.DiscordConstants.ChannelTypes[type]]) this.createChannel(guild, category, hiddenChannel, type);
-
-			var isvisibile = BDFDB.DataUtils.load(this, "categorystatus", guild.id) === true;
-			BDFDB.DOMUtils.toggleClass(wrapper, BDFDB.disCN.categorycollapsed, !isvisibile);
-			BDFDB.DOMUtils.toggle(category.querySelectorAll(BDFDB.dotCN.channelcontainerdefault), isvisibile);
-
-			this.reappendHiddenContainer(guild, category);
-		}
-		let channellist = document.querySelector(BDFDB.dotCNS.channels + BDFDB.dotCN.scroller);
-		if (channellist) {
-			BDFDB.ListenerUtils.remove(this, channellist, "mouseenter", BDFDB.dotCNC.channelcontainerdefault + BDFDB.dotCN.categorycontainerdefault);
-			if (settings.showForNormal) BDFDB.ListenerUtils.add(this, channellist, "mouseenter", BDFDB.dotCNC.channelcontainerdefault + BDFDB.dotCN.categorycontainerdefault, e => {
-				if (!BDFDB.DOMUtils.containsClass(e.currentTarget, "hidden-channel")) {
-					var channel = BDFDB.ReactUtils.findValue(e.currentTarget, "channel");
-					if (channel) this.showAccessRoles(guild, channel, e, true);
+		return [hidden, amount];
+	}
+	
+	showAccessModal (channel, allowed) {
+		let guild = BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id);
+		if (guild) {
+			let category = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.ChannelStore.getChannel(channel.id).parent_id);
+			let lighttheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
+			let myMember = BDFDB.LibraryModules.MemberStore.getMember(guild.id, BDFDB.UserUtils.me.id);
+			let allowedRoles = [], allowedUsers = [], deniedRoles = [], deniedUsers = [], everyoneDenied = false;
+			for (let id in channel.permissionOverwrites) {
+				if (channel.permissionOverwrites[id].type == "role" && (guild.roles[id] && guild.roles[id].name != "@everyone") && ((channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow || (channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].allow)) {
+					allowedRoles.push(Object.assign({overwritten: myMember.roles.includes(id) && !allowed}, guild.roles[id]));
 				}
+				else if (channel.permissionOverwrites[id].type == "member" && ((channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow || (channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].allow)) {
+					let user = BDFDB.LibraryModules.UserStore.getUser(id);
+					let member = BDFDB.LibraryModules.MemberStore.getMember(guild.id,id);
+					if (user && member) allowedUsers.push(Object.assign({}, user, member));
+				}
+				if (channel.permissionOverwrites[id].type == "role" && ((channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny || (channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].deny)) {
+					deniedRoles.push(guild.roles[id]);
+					if (guild.roles[id] && guild.roles[id].name == "@everyone") everyoneDenied = true;
+				}
+				else if (channel.permissionOverwrites[id].type == "member" && ((channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny || (channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].deny)) {
+					let user = BDFDB.LibraryModules.UserStore.getUser(id);
+					let member = BDFDB.LibraryModules.MemberStore.getMember(guild.id, id);
+					if (user && member) deniedUsers.push(Object.assign({}, user, member));
+				}
+			}
+			if (allowed && !everyoneDenied) allowedRoles.push({name: "@everyone"});
+			let allowedElements = [], deniedElements = [];
+			for (let role of allowedRoles) allowedElements.push(this.createRoleRow(role));
+			for (let user of allowedUsers) allowedElements.push(this.createUserRow(user));
+			for (let user of allowedUsers) allowedElements.push(this.createUserRow(user));
+			for (let user of allowedUsers) allowedElements.push(this.createUserRow(user));
+			for (let user of allowedUsers) allowedElements.push(this.createUserRow(user));
+			for (let role of deniedRoles) deniedElements.push(this.createRoleRow(role));
+			for (let user of deniedUsers) deniedElements.push(this.createUserRow(user));
+			
+			BDFDB.ModalUtils.open(this, {
+				size: "MEDIUM",
+				header: BDFDB.LanguageUtils.LanguageStrings.CHANNEL + " " + BDFDB.LanguageUtils.LanguageStrings.ACCESSIBILITY,
+				subheader: "#" + channel.name,
+				contentClassName: BDFDB.disCN.listscroller,
+				children: [
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+						className: BDFDB.disCN.modalsubinner,
+						tab: BDFDB.LanguageUtils.LanguageStrings.OVERLAY_SETTINGS_GENERAL_TAB,
+						children: [{
+							title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_CHANNEL_NAME,
+							text: channel.name
+						}, {
+							title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_CHANNEL_TOPIC,
+							text: channel.topic || BDFDB.LanguageUtils.LanguageStrings.CHANNEL_TOPIC_EMPTY
+						}, {
+							title: BDFDB.LanguageUtils.LanguageStrings.CHANNEL_TYPE,
+							text: BDFDB.LanguageUtils.LanguageStrings[this.typeNameMap[this.channelTypes[channel.type]]]
+						}, {
+							title: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_NAME,
+							text: category && category.name || BDFDB.LanguageUtils.LanguageStrings.NO_CATEGORY
+						}].map(formlabel => 
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								title: formlabel.title,
+								className: BDFDB.disCN.marginbottom20,
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
+									children: formlabel.text
+								})
+							})
+						)
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+						tab: this.labels.modal_allowed_text,
+						children: allowedElements.length ? allowedElements :
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessagesPopoutComponents.EmptyStateBottom, {
+								msg: BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER,
+								image: lighttheme ? "/assets/9b0d90147f7fab54f00dd193fe7f85cd.svg" : "/assets/308e587f3a68412f137f7317206e92c2.svg"
+							})
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+						tab: this.labels.modal_denied_text,
+						children: deniedElements.length ? deniedElements :
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessagesPopoutComponents.EmptyStateBottom, {
+								msg: BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER,
+								image: lighttheme ? "/assets/9b0d90147f7fab54f00dd193fe7f85cd.svg" : "/assets/308e587f3a68412f137f7317206e92c2.svg"
+							})
+					})
+				]
 			});
 		}
 	}
-
-	createChannel (guild, category, info, type) {
-		let channel = BDFDB.DOMUtils.create(this.channelMarkup);
-		channel.querySelector(BDFDB.dotCN.channelname).innerText = info.name;
-		channel.querySelector(BDFDB.dotCNS.channelicon + "mask").setAttribute("id", `showHiddenChannelsMask${info.id}`);
-		let iconinner = channel.querySelector(BDFDB.dotCNS.channelicon + ".hidden-icon-inner");
-		iconinner.setAttribute("d", this.channelIcons[type] ? this.channelIcons[type] : this.channelIcons.DEFAULT);
-		iconinner.setAttribute("mask", `url(#showHiddenChannelsMask${info.id})`);
-		this.setReactInstanceOfChannel(info, channel);
-		BDFDB.ListenerUtils.addToChildren(channel, "mouseenter mouseleave", BDFDB.dotCN.channelwrapper, e => {
-			this.showAccessRoles(guild, info, e, false);
+	
+	createRoleRow (role) {
+		return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListRow, {
+			prefix: BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.disCNS.avataricon + BDFDB.disCNS.listavatar + BDFDB.disCNS.avatariconsizemedium + BDFDB.disCN.avatariconinactive,
+				style: {
+					boxSizing: "border-box",
+					padding: 10
+				},
+				children: BDFDB.ReactUtils.createElement("div", {
+					style: {
+						borderRadius: "50%",
+						height: "100%",
+						width: "100%",
+						backgroundColor: BDFDB.ColorUtils.convert(role.colorString || BDFDB.DiscordConstants.Colors.PRIMARY_DARK_300, "RGB")
+					}
+				})
+			}),
+			labelClassName: role.overwritten && BDFDB.disCN.linethrough,
+			label: BDFDB.ReactUtils.createElement("span", {
+				children: role.name,
+				style: {color: role.colorString}
+			})
 		});
-		channel.addEventListener("click", () => {
-			BDFDB.NotificationUtils.toast(`You can not ${this.channelMessage[type] ? this.channelMessage[type] : this.channelMessage.DEFAULT}&nbsp;&nbsp;<strong>${BDFDB.StringUtils.htmlEscape(info.name)}</strong>.`, {type:"error", html:true});
+	}
+	
+	createUserRow (user) {
+		return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListRow, {
+			prefix: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatar, {
+				className: BDFDB.disCN.listavatar,
+				src: BDFDB.UserUtils.getAvatar(user.id),
+				status: BDFDB.UserUtils.getStatus(user.id),
+				size: BDFDB.LibraryComponents.Avatar.Sizes.SIZE_40
+			}),
+			label: [
+				BDFDB.ReactUtils.createElement("span", {
+					className: BDFDB.disCN.username,
+					children: user.username,
+					style: {color: user.colorString}
+				}),
+				BDFDB.ReactUtils.createElement("span", {
+					className: BDFDB.disCN.listdiscriminator,
+					children: `#${user.discriminator}`
+				})
+			]
 		});
-		channel.addEventListener("contextmenu", e => {
-			this.createHiddenObjContextMenu(guild, info, type, e);
-		});
-		category.appendChild(channel);
-	}
-
-	reappendHiddenContainer (guild, category = document.querySelector(BDFDB.dotCNS.channels + BDFDB.dotCNS.scroller + ".container-hidden")) {
-		if (!guild) return;
-		if (guild.id != this.currentGuild) this.appendHiddenContainer(guild);
-		else if (category) {
-			var scroller = document.querySelector(BDFDB.dotCNS.channels + BDFDB.dotCN.scroller);
-			if (!scroller || scroller.lastChild.previousSibling == category) return;
-			category.remove();
-			let count = parseInt(scroller.lastChild.previousSibling.className.split("-")[1])+1;
-			scroller.insertBefore(category, scroller.lastChild);
-		}
-	}
-
-	setReactInstanceOfChannel (guild, div) {
-		var reactInstance = BDFDB.ReactUtils.createElement(div);
-		reactInstance.memoizedProps = {channel:guild};
-		div.__reactInternalInstance = reactInstance;
-	}
-
-	createHiddenObjContextMenu (guild, channel, type, e) {
-		BDFDB.ListenerUtils.stopEvent(e);
-		BDFDB.ChannelUtils.openMenu(channel, e);
 	}
 
 	showAccessRoles (guild, channel, e, allowed) {
 		if ((e.type != "mouseenter" && e.type != "mouseover") || !guild || !channel) return;
-		let settings = BDFDB.DataUtils.get(this, "settings");
-		var myMember = BDFDB.LibraryModules.MemberStore.getMember(guild.id, BDFDB.UserUtils.me.id);
-		var allowedRoles = [], allowedUsers = [], overwrittenRoles = [], deniedRoles = [], deniedUsers = [];
-		var everyoneDenied = false;
-		for (let id in channel.permissionOverwrites) {
-			if (settings.showAllowedRoles && channel.permissionOverwrites[id].type == "role" && (guild.roles[id] && guild.roles[id].name != "@everyone") && ((channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow || (channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].allow)) {
-				if (myMember.roles.includes(id) && !allowed) {
-					if (settings.showOverWrittenRoles) overwrittenRoles.push(guild.roles[id]);
-				}
-				else {
-					allowedRoles.push(guild.roles[id]);
-				}
-			}
-			else if (settings.showAllowedUsers && channel.permissionOverwrites[id].type == "member" && ((channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow || (channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].allow)) {
-				let user = BDFDB.LibraryModules.UserStore.getUser(id);
-				let member = BDFDB.LibraryModules.MemberStore.getMember(guild.id,id);
-				if (user && member) allowedUsers.push(Object.assign({name:user.username,id:user.id},member));
-			}
-			if (settings.showDeniedRoles && channel.permissionOverwrites[id].type == "role" && ((channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny || (channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].deny)) {
-				deniedRoles.push(guild.roles[id]);
-				if (guild.roles[id] && guild.roles[id].name == "@everyone") everyoneDenied = true;
-			}
-			else if (settings.showDeniedUsers && channel.permissionOverwrites[id].type == "member" && ((channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny || (channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].deny)) {
-				let user = BDFDB.LibraryModules.UserStore.getUser(id);
-				let member = BDFDB.LibraryModules.MemberStore.getMember(guild.id, id);
-				if (user && member) deniedUsers.push(Object.assign({name:user.username,id:user.id},member));
-			}
-		}
-		if (settings.showAllowedRoles && allowed && !everyoneDenied) {
-			allowedRoles.push({"name":"@everyone"});
-		}
 		var htmlString = ``;
 		if (settings.showChannelCategory && !allowed && channel.parent_id) {
 			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Category:</div><div class="${BDFDB.disCNS.flex2 + BDFDB.disCN.wrap}"><div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-category" style="border-color: rgba(255, 255, 255, 0.6); height: unset !important; padding-top: 5px; padding-bottom: 5px; max-width: ${window.outerWidth/3}px; text-transform: uppercase;">${BDFDB.StringUtils.htmlEscape(BDFDB.LibraryModules.ChannelStore.getChannel(channel.parent_id).name)}</div></div>`;
 		}
 		if (settings.showTopic && !allowed && channel.topic && channel.topic.replace(/[\t\n\r\s]/g, "")) {
 			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Topic:</div><div class="${BDFDB.disCNS.flex2 + BDFDB.disCN.wrap}"><div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-topic" style="border-color: rgba(255, 255, 255, 0.6); height: unset !important; padding-top: 5px; padding-bottom: 5px; max-width: ${window.outerWidth/3}px">${BDFDB.StringUtils.htmlEscape(channel.topic)}</div></div>`;
-		}
-		if (settings.showVoiceUsers && channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE && (!allowed || e.currentTarget.querySelector(BDFDB.dotCN.channelmodelocked))) {
-			let voicestates = BDFDB.LibraryModules.VoiceUtils.getVoiceStatesForChannel(channel);
-			if (voicestates.length > 0) {
-				htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Connected Voice Users:</div><div class="${BDFDB.disCNS.flex2 + BDFDB.disCN.wrap}">`;
-				for (let voicestate of voicestates) {
-					let user = BDFDB.LibraryModules.UserStore.getUser(voicestate.userId);
-					let member = BDFDB.LibraryModules.MemberStore.getMember(guild.id, voicestate.userId);
-					if (user && member) {
-						let color = member.colorString ? BDFDB.ColorUtils.convert(member.colorString, "RGBCOMP") : [255,255,255];
-						htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-voiceuser" style="padding-left: 0; border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCN.avatarwrapper}" role="img" aria-label="${user.username}" aria-hidden="false" style="width: 22px; height: 18px; z-index: 1003;"><svg width="18" height="18" viewBox="0 0 18 18" class="${BDFDB.disCN.avatarmask}" aria-hidden="true"><foreignObject x="0" y="0" width="18" height="18" mask="url(#svg-mask-avatar-default)"><img src="${BDFDB.UserUtils.getAvatar(user.id)}" alt=" " class="${BDFDB.disCN.avatar}" aria-hidden="true"></foreignObject></svg></div><div class="${BDFDB.disCN.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}">${BDFDB.StringUtils.htmlEscape(member.nick || user.username)}</div></div>`;
-					}
-				}
-				htmlString += `</div>`;
-			}
 		}
 		if (allowedRoles.length > 0 || overwrittenRoles.length > 0) {
 			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Allowed Roles:</div><div class="${BDFDB.disCNS.flex2 + BDFDB.disCN.wrap}">`;
@@ -406,6 +497,116 @@ class ShowHiddenChannels {
 			var tooltip = BDFDB.TooltipUtils.create(e.currentTarget, htmlString, {type:"right", selector:"showhiddenchannels-tooltip", html:true, style:`max-width: ${width < 200 ? 400 : width}px !important;`, delay:BDFDB.DataUtils.get(this, "amounts", "hoverDelay")});
 			var style = getComputedStyle(e.currentTarget);
 			tooltip.style.setProperty("top", BDFDB.DOMUtils.getRects(tooltip).top - style.paddingBottom.replace("px","")/2 + style.paddingTop.replace("px","")/2 + "px");
+		}
+	}
+
+	setLabelsByLanguage () {
+		switch (BDFDB.LanguageUtils.getLanguage().id) {
+			case "hr":		//croatian
+				return {
+					modal_allowed_text:				"Dopušteno",
+					modal_denied_text:				"Odbijen"
+				};
+			case "da":		//danish
+				return {
+					modal_allowed_text:				"Odbijen",
+					modal_denied_text:				"Nægtet"
+				};
+			case "de":		//german
+				return {
+					modal_allowed_text:				"Erlaubt",
+					modal_denied_text:				"Verweigert"
+				};
+			case "es":		//spanish
+				return {
+					modal_allowed_text:				"Permitido",
+					modal_denied_text:				"Negado"
+				};
+			case "fr":		//french
+				return {
+					modal_allowed_text:				"Permis",
+					modal_denied_text:				"Nié"
+				};
+			case "it":		//italian
+				return {
+					modal_allowed_text:				"Permesso",
+					modal_denied_text:				"Negato"
+				};
+			case "nl":		//dutch
+				return {
+					modal_allowed_text:				"Toegestaan",
+					modal_denied_text:				"Ontkend"
+				};
+			case "no":		//norwegian
+				return {
+					modal_allowed_text:				"Tillatt",
+					modal_denied_text:				"Benektet"
+				};
+			case "pl":		//polish
+				return {
+					modal_allowed_text:				"Dozwolony",
+					modal_denied_text:				"Odmówiono"
+				};
+			case "pt-BR":	//portuguese (brazil)
+				return {
+					modal_allowed_text:				"Permitido",
+					modal_denied_text:				"Negado"
+				};
+			case "fi":		//finnish
+				return {
+					modal_allowed_text:				"Sallittu",
+					modal_denied_text:				"Evätty"
+				};
+			case "sv":		//swedish
+				return {
+					modal_allowed_text:				"Tillåten",
+					modal_denied_text:				"Nekas"
+				};
+			case "tr":		//turkish
+				return {
+					modal_allowed_text:				"Izin",
+					modal_denied_text:				"Inkar"
+				};
+			case "cs":		//czech
+				return {
+					modal_allowed_text:				"Povoleno",
+					modal_denied_text:				"Odepřeno"
+				};
+			case "bg":		//bulgarian
+				return {
+					modal_allowed_text:				"Позволен",
+					modal_denied_text:				"Отказан"
+				};
+			case "ru":		//russian
+				return {
+					modal_allowed_text:				"Разрешается",
+					modal_denied_text:				"Отказано"
+				};
+			case "uk":		//ukrainian
+				return {
+					modal_allowed_text:				"Дозволено",
+					modal_denied_text:				"Заперечували"
+				};
+			case "ja":		//japanese
+				return {
+					modal_allowed_text:				"許可された",
+					modal_denied_text:				"拒否されました"
+				};
+			case "zh-TW":	//chinese (traditional)
+				return {
+					modal_allowed_text:				"允許的",
+					modal_denied_text:				"被拒絕"
+				};
+			case "ko":		//korean
+				return {
+					modal_allowed_text:				"허용됨",
+					modal_denied_text:				"거부"
+				};
+			default:		//default: english
+				return {
+					modal_allowed_text:				"Permitted",
+					modal_denied_text:				"Denied"
+				};
 		}
 	}
 }
