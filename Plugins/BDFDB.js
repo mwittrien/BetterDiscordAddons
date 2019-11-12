@@ -6083,6 +6083,8 @@ var BDFDB = {
 	
 	LibraryComponents.Anchor = BDFDB.ModuleUtils.findByName("Anchor");
 	
+	LibraryComponents.Avatar = (BDFDB.ModuleUtils.findByProperties("AnimatedAvatar") || {}).default;
+	
 	LibraryComponents.BadgeComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("IconBadge", "NumberBadge"));
 	
 	LibraryComponents.BotTag = reactInitialized ? class BDFDB_BotTag extends LibraryModules.React.Component {
