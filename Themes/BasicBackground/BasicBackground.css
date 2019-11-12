@@ -884,6 +884,7 @@ body:before {
 
 .markup-2BOw-j code {										/* messageelement		code								*/
 	background-color: transparent;
+	border-color: transparent;
 }
 .markup-2BOw-j pre {										/* messageelement		pre									*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);
@@ -940,12 +941,9 @@ body:before {
 
 /* ====		6.2.2.	EMBEDS							==== */
 
-#app-mount .embedInner-1-fpTo {								/* embed				inner								*/
+#app-mount .embedFull-2tM8-- {								/* embed				wrapper								*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
-	border-color: rgba(var(--vtransparencycolor), 0.1);
-}
-#app-mount .embedPill-1Zntps {								/* embed				pill								*/
-	background-color: rgb(var(--fontwhite4));
+	border-left-color: rgb(var(--fontwhite4));
 }
 #app-mount .embedAuthorName-3mnTWj,							/* embed				author								*/
 #app-mount .embedFieldName-NFrena,							/* embed				fieldname							*/
@@ -966,9 +964,6 @@ body:before {
 #app-mount .attachment-33OFj0 {								/* attachment			container							*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 	border-color: rgba(var(--vtransparencycolor), 0.1);
-}
-#app-mount .metadata-3WGS0M {								/* attachment			metadata							*/
-	color: rgb(var(--fontwhite4));
 }
 #app-mount .metadata-3WGS0M {								/* attachment			metadata							*/
 	color: rgb(var(--fontwhite4));
