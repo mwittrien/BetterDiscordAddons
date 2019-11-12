@@ -3,7 +3,7 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.5.8";}
+	getVersion () {return "2.5.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -358,26 +358,30 @@ class ShowHiddenChannels {
 						className: BDFDB.disCN.modalsubinner,
 						tab: BDFDB.LanguageUtils.LanguageStrings.OVERLAY_SETTINGS_GENERAL_TAB,
 						children: [{
-							title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_CHANNEL_NAME,
-							text: channel.name
-						}, {
-							title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_CHANNEL_TOPIC,
-							text: channel.topic || BDFDB.LanguageUtils.LanguageStrings.CHANNEL_TOPIC_EMPTY
-						}, {
-							title: BDFDB.LanguageUtils.LanguageStrings.CHANNEL_TYPE,
-							text: BDFDB.LanguageUtils.LanguageStrings[this.typeNameMap[this.channelTypes[channel.type]]]
-						}, {
-							title: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_NAME,
-							text: category && category.name || BDFDB.LanguageUtils.LanguageStrings.NO_CATEGORY
-						}].map(formlabel => 
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-								title: formlabel.title,
-								className: BDFDB.disCN.marginbottom20,
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
-									children: formlabel.text
+								title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_CHANNEL_NAME,
+								text: channel.name
+							}, {
+								title: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_CHANNEL_TOPIC,
+								text: channel.topic || BDFDB.LanguageUtils.LanguageStrings.CHANNEL_TOPIC_EMPTY
+							}, {
+								title: BDFDB.LanguageUtils.LanguageStrings.CHANNEL_TYPE,
+								text: BDFDB.LanguageUtils.LanguageStrings[this.typeNameMap[this.channelTypes[channel.type]]]
+							}, {
+								title: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_NAME,
+								text: category && category.name || BDFDB.LanguageUtils.LanguageStrings.NO_CATEGORY
+							}].map((formlabel, i) => [,
+								i == 0 ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+									className: BDFDB.disCN.marginbottom20
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+									title: `${formlabel.title}:`,
+									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.marginbottom20, i == 0 && BDFDB.disCN.margintop8),
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
+										className: BDFDB.disCN.marginleft8,
+										children: formlabel.text
+									})
 								})
-							})
-						)
+							]).flat().filter(n => n)
 					}),
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 						tab: this.labels.modal_allowed_text,
