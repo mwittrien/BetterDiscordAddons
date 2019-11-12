@@ -451,46 +451,6 @@ class PersonalPins {
 			})
 		})];
 	}
-	
-	addNotes (notespopout) {
-		BDFDB.DOMUtils.remove(notespopout.querySelectorAll(BDFDB.dotCNC.messagegroupwrapper + BDFDB.dotCN.messagespopoutchannelseparator));
-		let channel = BDFDB.ChannelUtils.getSelected();
-		if (channel) {
-			let guild_id = channel.guild_id ? channel.guild_id : "@me";
-			let pins = BDFDB.DataUtils.load(this, "pins");
-			if (!BDFDB.ObjectUtils.isEmpty(pins)) {
-				let container = notespopout.querySelector(BDFDB.dotCN.messagespopout);
-				let placeholder = notespopout.querySelector(BDFDB.dotCN.messagespopoutemptyplaceholder);
-				if (!container || !placeholder) return;
-				placeholder.querySelector(BDFDB.dotCN.messagespopoutimage).style.setProperty("background-image", `url(${BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight ? "/assets/03c7541028afafafd1a9f6a81cb7f149.svg" : "/assets/6793e022dc1b065b21f12d6df02f91bd.svg"})`);
-				let notes = {};
-				switch (notespopout.querySelector(BDFDB.dotCN.tabbarheaderitem + BDFDB.dotCN.settingsitemselected).getAttribute("tab")) {
-					case "channel":
-						notes = pins[guild_id] && pins[guild_id][channel.id] ? pins[guild_id][channel.id] : {};
-						break;
-					case "server":
-						if (pins[guild_id]) for (let channel in pins[guild_id]) notes = Object.assign(notes, pins[guild_id][channel]);
-						break;
-					case "allservers":
-						for (let server in pins) if (pins[server]) for (let channel in pins[server]) notes = Object.assign(notes, pins[server][channel]);
-						break;
-				}
-				let noteArray = [];
-				for (let id in notes) {noteArray.push(notes[id]);}
-				BDFDB.ArrayUtils.keySort(noteArray, notespopout.querySelector(BDFDB.dotCN.recentmentionsmentionfiltervalue).getAttribute("option"));
-				for (let noteData of noteArray) this.appendNote(notespopout, container, noteData, placeholder);
-				let searchstring = notespopout.querySelector(BDFDB.dotCN.searchbarinput).value.replace(/[<|>]/g, "");
-				if (searchstring) for (let note of notespopout.querySelectorAll(BDFDB.dotCN.messagegroupwrapper)) {
-					note.innerHTML = BDFDB.highlightText(note.innerHTML, searchstring);
-					if (!note.querySelector(BDFDB.dotCN.highlight)) {
-						note.previousSibling.remove();
-						note.remove();
-					}
-				}
-				BDFDB.DOMUtils.toggle(placeholder, container.firstElementChild == placeholder);
-			}
-		}
-	}
 
 	addMessageToNotes (message, target, channel) {
 		if (!message || !target) return;

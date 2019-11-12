@@ -3444,8 +3444,7 @@ var BDFDB = {
 							}
 						}
 					}
-				}),
-				style: {marginBottom: 10}
+				})
 			}));
 		}
 		if (BDFDB.ArrayUtils.is(config.buttons)) for (let button of config.buttons) {
@@ -3513,6 +3512,7 @@ var BDFDB = {
 									]
 								}),
 								headerchildren.length ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+									grow: 0,
 									children: headerchildren
 								}) : null,
 								BDFDB.ReactUtils.createElement(LibraryComponents.ModalComponents.ModalContent, {
@@ -6710,8 +6710,7 @@ var BDFDB = {
 				direction: LibraryComponents.Flex.Direction.VERTICAL,
 				align: LibraryComponents.Flex.Align.STRETCH,
 				style: Object.assign({}, childprops.style, {
-					display: this.props.open ? null : "none",
-					marginTop: 10
+					display: this.props.open ? null : "none"
 				})
 			}));
 		}
@@ -7576,13 +7575,17 @@ var BDFDB = {
 			padding-bottom: 10px;
 			overflow: visible;
 		}
+		${BDFDB.dotCN.modaltabcontent} {
+			margin-top: 10px;
+		}
 		${BDFDB.dotCNS.modalwrapper + BDFDB.dotCN.modalheader + BDFDB.dotCN.modalheaderhassibling} {
 			padding-bottom: 10px;
 		}
 		${BDFDB.dotCNS.modalwrapper + BDFDB.dotCN.tabbarcontainer} {
 			background: rgba(0, 0, 0, 0.1);
-			border: none !important;
+			border: none;
 			box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.05);
+			margin-bottom: 10px;
 		}
 		${BDFDB.dotCNS.themedark + BDFDB.dotCNS.modalwrapper + BDFDB.dotCN.tabbarcontainer} {
 			background: rgba(0, 0, 0, 0.2);
