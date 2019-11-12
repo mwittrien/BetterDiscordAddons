@@ -832,6 +832,7 @@ var BDFDB = {
 		if (!array.includes(value)) return array;
 		if (!all) array.splice(array.indexOf(value), 1);
 		else while (array.indexOf(value) > -1) array.splice(array.indexOf(value), 1);
+		return array;
 	};
 	BDFDB.ArrayUtils.getAllIndexes = function (array, value) {
 		if (!BDFDB.ArrayUtils.is(array) && typeof array != "string") return [];
@@ -6654,7 +6655,7 @@ var BDFDB = {
 	
 	LibraryComponents.GuildComponents.Pill = BDFDB.ModuleUtils.findByString("opacity:1,height:", "20:8", "default.item");
 	
-	LibraryComponents.ListRow = reactInitialized && class BDFDB_MemberRole extends LibraryModules.React.Component {
+	LibraryComponents.ListRow = reactInitialized && class BDFDB_ListRow extends LibraryModules.React.Component {
 		render () {
 			return BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.listrow, this.props.className),
@@ -7612,6 +7613,9 @@ var BDFDB = {
 		}
 		${BDFDB.dotCN.modaltabcontent} {
 			margin-top: 10px;
+		}
+		${BDFDB.dotCNS.listscroller + BDFDB.dotCN.modaltabcontent} {
+			margin-top: 0;
 		}
 		${BDFDB.dotCNS.modalwrapper + BDFDB.dotCN.modalheader + BDFDB.dotCN.modalheaderhassibling} {
 			padding-bottom: 10px;
