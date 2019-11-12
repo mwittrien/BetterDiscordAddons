@@ -832,7 +832,6 @@ var BDFDB = {
 		if (!array.includes(value)) return array;
 		if (!all) array.splice(array.indexOf(value), 1);
 		else while (array.indexOf(value) > -1) array.splice(array.indexOf(value), 1);
-		return array;
 	};
 	BDFDB.ArrayUtils.getAllIndexes = function (array, value) {
 		if (!BDFDB.ArrayUtils.is(array) && typeof array != "string") return [];
@@ -8510,7 +8509,7 @@ var BDFDB = {
 			let iconSVG = e.thisObject.props.iconSVG || BDFDB.ReactUtils.findValue(e.thisObject, "iconSVG", {up:true});
 			if (iconSVG) {
 				e.returnValue = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(iconSVG));
-				e.returnValue.props.class = BDFDB.DOMUtils.formatClassName(BDFDB.disCN.svgicon, e.returnValue.props.class, e.thisObject.props.className);
+				e.returnValue.props.class = BDFDB.DOMUtils.formatClassName(!e.thisObject.props.nativeClass && BDFDB.disCN.svgicon, e.returnValue.props.class, e.thisObject.props.className);
 			}
 		}
 	}});

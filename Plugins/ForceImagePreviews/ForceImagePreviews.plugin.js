@@ -64,8 +64,6 @@ class ForceImagePreviews {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 			
-			BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"MessageAccessories", all:true, noCopies:true, unlimited:true}));
-			
 			BDFDB.PluginUtils.clear(this);
 		}
 	}
