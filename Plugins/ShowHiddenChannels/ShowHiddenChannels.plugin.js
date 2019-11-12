@@ -169,13 +169,52 @@ class ShowHiddenChannels {
 
 	processChannels (e) {
 		if (!e.instance.props.guild) return;
-		if (this.changedInstances[e.instance.props.guild.id]) {
-			if (performance.now() - this.changedInstances[e.instance.props.guild.id].time > 600000) {
-				this.resetInstance(e.instance.props.guild.id, false);
-				this.injectChannels(e.instance);
+		if (this.changedInstances[e.instance.props.guild.id]) this.resetInstance(e.instance.props.guild.id, false);
+		let [hiddenChannels, amount] = this.getHiddenChannels(e.instance.props.guild);
+		if (amount) {
+			let settings = BDFDB.DataUtils.get(this, "settings"), index = -1;
+			for (let catId in e.instance.props.categories) for (let channelObj of e.instance.props.categories[catId]) if (channelObj.index > index) index = channelObj.index;
+			let categoryType = BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY;
+			if (!settings.sortNative) {
+				let hiddenCategory = new BDFDB.DiscordObjects.Channel({
+					guild_id: e.instance.props.guild.id,
+					id: e.instance.props.guild.id + "_hidden",
+					name: "hidden",
+					type: categoryType
+				});
+				e.instance.props.categories._categories.push({
+					channel: hiddenCategory,
+					index: ++index
+				});
+				e.instance.props.channels[categoryType].push({
+					comparator: ++(e.instance.props.channels[categoryType][e.instance.props.channels[categoryType].length - 1] || {comparator: 0}).comparator,
+					channel: hiddenCategory
+				});
+				e.instance.props.categories[hiddenCategory.id] = [];
 			}
+				
+			for (let type in hiddenChannels) if (!settings.sortNative || type != categoryType) {
+				let channeltype = type == 0 && e.instance.props.channels.SELECTABLE ? "SELECTABLE" : type;
+				let channels = e.instance.props.channels[channeltype];
+				let comparator = (channels && channels[channels.length - 1] || {comparator: 0}).comparator;
+				for (let channel of hiddenChannels[type]) {
+					let hiddenChannel = new BDFDB.DiscordObjects.Channel(Object.assign({}, channel, {
+						parent_id: settings.sortNative ? channel.parent_id : e.instance.props.guild.id + "_hidden"
+					}));
+					let parent_id = hiddenChannel.parent_id || "null";
+					e.instance.props.categories[parent_id].push({
+						channel: hiddenChannel,
+						index: ++(e.instance.props.categories[parent_id][e.instance.props.categories[parent_id].length - 1] || {index: 0}).index
+					});
+					e.instance.props.channels[channeltype].push({
+						comparator: ++comparator,
+						channel: hiddenChannel
+					});
+				}
+			}
+			
+			this.changedInstances[e.instance.props.guild.id] = e.instance;
 		}
-		else this.injectChannels(e.instance);
 	}
 
 	processChannelItem (e) {
@@ -209,56 +248,8 @@ class ShowHiddenChannels {
 		}
 	}
 	
-	injectChannels (instance) {
-		let [hiddenChannels, amount] = this.getHiddenChannels(instance.props.guild);
-		if (amount) {
-			let settings = BDFDB.DataUtils.get(this, "settings"), index = -1;
-			for (let catId in instance.props.categories) for (let channelObj of instance.props.categories[catId]) if (channelObj.index > index) index = channelObj.index;
-			let categoryType = BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY;
-			if (!settings.sortNative) {
-				let hiddenCategory = new BDFDB.DiscordObjects.Channel({
-					guild_id: instance.props.guild.id,
-					id: instance.props.guild.id + "_hidden",
-					name: "hidden",
-					type: categoryType
-				});
-				instance.props.categories._categories.push({
-					channel: hiddenCategory,
-					index: ++index
-				});
-				instance.props.channels[categoryType].push({
-					comparator: ++(instance.props.channels[categoryType][instance.props.channels[categoryType].length - 1] || {comparator: 0}).comparator,
-					channel: hiddenCategory
-				});
-				instance.props.categories[hiddenCategory.id] = [];
-			}
-				
-			for (let type in hiddenChannels) if (!settings.sortNative || type != categoryType) {
-				let channeltype = type == 0 && instance.props.channels.SELECTABLE ? "SELECTABLE" : type;
-				let channels = instance.props.channels[channeltype];
-				let comparator = (channels && channels[channels.length - 1] || {comparator: 0}).comparator;
-				for (let channel of hiddenChannels[type]) {
-					let hiddenChannel = new BDFDB.DiscordObjects.Channel(Object.assign({}, channel, {
-						parent_id: settings.sortNative ? channel.parent_id : instance.props.guild.id + "_hidden"
-					}));
-					let parent_id = hiddenChannel.parent_id || "null";
-					instance.props.categories[parent_id].push({
-						channel: hiddenChannel,
-						index: ++(instance.props.categories[parent_id][instance.props.categories[parent_id].length - 1] || {index: 0}).index
-					});
-					instance.props.channels[channeltype].push({
-						comparator: ++comparator,
-						channel: hiddenChannel
-					});
-				}
-			}
-			
-			this.changedInstances[instance.props.guild.id] = {instance: instance, time: performance.now()};
-		}
-	}
-	
 	resetInstance (guildid, update) {
-		let instance = this.changedInstances[guildid].instance;
+		let instance = this.changedInstances[guildid];
 		if (instance) {
 			delete instance.props.categories[guildid + "_hidden"];
 			let removedCategories = [], categoryType = BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY;
