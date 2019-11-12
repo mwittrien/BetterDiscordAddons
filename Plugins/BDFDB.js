@@ -6654,7 +6654,7 @@ var BDFDB = {
 	LibraryComponents.ListRow = reactInitialized && class BDFDB_MemberRole extends LibraryModules.React.Component {
 		render () {
 			return BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.disCN.listrow,
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.listrow, this.props.className),
 				children: [
 					this.props.prefix,
 					BDFDB.ReactUtils.createElement("div", {
@@ -6664,7 +6664,10 @@ var BDFDB = {
 								className: BDFDB.disCN.listname,
 								children: this.props.label
 							}),
-							this.props.note
+							typeof this.props.note == "string" ? BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormText, {
+								type: LibraryComponents.FormComponents.FormText.Types.DESCRIPTION,
+								children: this.props.note
+							}) : null
 						].filter(n => n)
 					})
 				].filter(n => n)
