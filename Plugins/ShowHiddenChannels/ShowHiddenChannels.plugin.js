@@ -3,7 +3,7 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.5.9";}
+	getVersion () {return "2.6.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,6 +11,7 @@ class ShowHiddenChannels {
 
 	constructor () {
 		this.changelog = {
+			"fixed":[["User Duplicates","Removed the user duplicates, which I used for testing, BIG OOF"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"],["Sort", "You can now sort hidden channels in the native way, meaning they will be placed below their rightful category"],["Tooltip", "The tooltip was removed and was turned into a more friendly modal, which can be access via the right click menu on a channel"]]
 		};
 
@@ -341,9 +342,6 @@ class ShowHiddenChannels {
 			if (allowed && !everyoneDenied) allowedRoles.push({name: "@everyone"});
 			let allowedElements = [], deniedElements = [];
 			for (let role of allowedRoles) allowedElements.push(this.createRoleRow(role));
-			for (let user of allowedUsers) allowedElements.push(this.createUserRow(user));
-			for (let user of allowedUsers) allowedElements.push(this.createUserRow(user));
-			for (let user of allowedUsers) allowedElements.push(this.createUserRow(user));
 			for (let user of allowedUsers) allowedElements.push(this.createUserRow(user));
 			for (let role of deniedRoles) deniedElements.push(this.createRoleRow(role));
 			for (let user of deniedUsers) deniedElements.push(this.createUserRow(user));
