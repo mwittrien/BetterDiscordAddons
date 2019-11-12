@@ -201,7 +201,6 @@ class OldTitleBar {
 	}
 
 	processAuthWrapper (e) {
-		BDFDB.DOMUtils.addClass(document.documentElement, "OTB-enabled");
 		if (!BDFDB.ArrayUtils.is(e.returnvalue.props.children)) e.returnvalue.props.children = [e.returnvalue.props.children];
 		this.injectSettingsToolbar(e.returnvalue.props.children, true);
 	}
@@ -218,6 +217,7 @@ class OldTitleBar {
 	}
 	
 	injectButtons (children, addFirstDivider) {
+		BDFDB.DOMUtils.addClass(document.documentElement, "OTB-enabled");
 		if (addFirstDivider) children.push(BDFDB.ReactUtils.createElement("div", {className: BDFDB.disCN.channelheaderdivider}))
 		if (BDFDB.DataUtils.get(this, "settings", "reloadButton")) {
 			children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
