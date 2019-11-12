@@ -604,7 +604,7 @@ var BDFDB = {
 	var Tooltips = [];
 	BDFDB.TooltipUtils = {};
 	BDFDB.TooltipUtils.create = function (anker, text, options = {}) {
-		var itemlayercontainernative = document.querySelector(BDFDB.dotCN.itemlayercontainer);
+		var itemlayercontainernative = document.querySelector(BDFDB.dotCN.appmount +  " > * > " + BDFDB.dotCN.itemlayercontainer);
 		if (!itemlayercontainernative || typeof text != "string" || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
 		var itemlayercontainer = document.querySelector(".BDFDB-itemlayercontainer");
 		if (!itemlayercontainer) {
