@@ -1774,7 +1774,7 @@ var BDFDB = {
 	};
 	BDFDB.GuildUtils.getData = function (eleOrInfoOrId) {
 		if (!eleOrInfoOrId) return null;
-		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
+		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 		id = typeof id == "number" ? id.toFixed() : id;
 		for (let info of BDFDB.GuildUtils.getAll()) if (info && info.id == id) return info;
 		return null;
@@ -1802,7 +1802,7 @@ var BDFDB = {
 		var found = [];
 		for (let eleOrInfoOrId of servers === undefined || !BDFDB.ArrayUtils.is(servers) ? BDFDB.GuildUtils.getAll() : servers) {
 			if (!eleOrInfoOrId) return null;
-			let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
+			let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 			id = typeof id == "number" ? id.toFixed() : id;
 			if (id && (LibraryModules.UnreadGuildUtils.hasUnread(id) || LibraryModules.MentionUtils.getMentionCount(id) > 0)) found.push(eleOrInfoOrId);
 		}
@@ -1812,7 +1812,7 @@ var BDFDB = {
 		var found = [];
 		for (let eleOrInfoOrId of servers === undefined || !BDFDB.ArrayUtils.is(servers) ? BDFDB.GuildUtils.getAll() : servers) {
 			if (!eleOrInfoOrId) return null;
-			let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
+			let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 			id = typeof id == "number" ? id.toFixed() : id;
 			if (id && LibraryModules.MentionUtils.getMentionCount(id) > 0) found.push(eleOrInfoOrId);
 		}
@@ -1822,7 +1822,7 @@ var BDFDB = {
 		var found = [];
 		for (let eleOrInfoOrId of servers === undefined || !BDFDB.ArrayUtils.is(servers) ? BDFDB.GuildUtils.getAll() : servers) {
 			if (!eleOrInfoOrId) return null;
-			let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
+			let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 			id = typeof id == "number" ? id.toFixed() : id;
 			if (id && LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(id)) found.push(eleOrInfoOrId);
 		}
@@ -1925,7 +1925,7 @@ var BDFDB = {
 	};
 	BDFDB.GuildUtils.openMenu = function (eleOrInfoOrId, e = BDFDB.mousePosition) {
 		if (!eleOrInfoOrId) return;
-		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
+		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 		let guild = LibraryModules.GuildStore.getGuild(id);
 		if (guild) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
 			return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("GuildContextMenu"), Object.assign({}, e, {
@@ -1941,8 +1941,8 @@ var BDFDB = {
 		if (!guilds) return;
 		var unreadchannels = [];
 		for (let guild of BDFDB.ArrayUtils.is(guilds) ? guilds : (typeof guilds == "string" || typeof guilds == "number" ? Array.of(guilds) : Array.from(guilds))) {
-			let id = Node.prototype.isPrototypeOf(guild) ? BDFDB.GuildUtils.getId(guild) : guild && typeof guild == "object" ? guild.id : guild;
-			let channels = id ? LibraryModules.GuildChannelStore.getChannels(id) : null;
+			let id = Node.prototype.isPrototypeOf(guild) ? BDFDB.GuildUtils.getId(guild) : (guild && typeof guild == "object" ? guild.id : guild);
+			let channels = id && LibraryModules.GuildChannelStore.getChannels(id);
 			if (channels) for (let type in channels) if (BDFDB.ArrayUtils.is(channels[type])) for (let channelobj of channels[type]) unreadchannels.push(channelobj.channel.id);
 		}
 		if (unreadchannels.length) LibraryModules.AckUtils.bulkAck(unreadchannels);
@@ -1962,7 +1962,7 @@ var BDFDB = {
 	};
 	BDFDB.FolderUtils.getData = function (eleOrInfoOrId) {
 		if (!eleOrInfoOrId) return null;
-		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.FolderUtils.getId(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
+		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.FolderUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 		id = typeof id == "number" ? id.toFixed() : id;
 		for (let info of BDFDB.FolderUtils.getAll()) if (info && info.folderId == id) return info;
 		return null;
@@ -1990,7 +1990,7 @@ var BDFDB = {
 	};
 	BDFDB.ChannelUtils.getData = function (eleOrInfoOrId) {
 		if (!eleOrInfoOrId) return null;
-		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.ChannelUtils.getId(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
+		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.ChannelUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 		id = typeof id == "number" ? id.toFixed() : id;
 		for (let info of BDFDB.ChannelUtils.getAll()) if (info && info.id == id) return info;
 		return null;
@@ -2011,7 +2011,7 @@ var BDFDB = {
 	};
 	BDFDB.ChannelUtils.openMenu = function (eleOrInfoOrId, e = BDFDB.mousePosition) {
 		if (!eleOrInfoOrId) return;
-		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.ChannelUtils.getId(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
+		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.ChannelUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 		let channel = LibraryModules.ChannelStore.getChannel(id);
 		if (channel) {
 			let type = null;
@@ -2028,6 +2028,15 @@ var BDFDB = {
 				}));
 			});
 		}
+	};
+	BDFDB.ChannelUtils.markAsRead = function (channels) {
+		if (!channels) return;
+		var unreadchannels = [];
+		for (let channel of channels = BDFDB.ArrayUtils.is(channels) ? channels : (typeof channels == "string" || typeof channels == "number" ? Array.of(channels) : Array.from(channels))) {
+			let id = Node.prototype.isPrototypeOf(channel) ? BDFDB.ChannelUtils.getId(channel) : (channel && typeof channel == "object" ? channel.id : channel);
+			if (id) unreadchannels.push(id);
+		}
+		if (unreadchannels.length) LibraryModules.AckUtils.bulkAck(unreadchannels);
 	};
 	
 	BDFDB.DMUtils = {};
@@ -2062,7 +2071,7 @@ var BDFDB = {
 	};
 	BDFDB.DMUtils.getData = function (eleOrInfoOrId) {
 		if (!eleOrInfoOrId) return null;
-		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.getDmID(eleOrInfoOrId) : typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
+		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.BDFDB.DMUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 		id = typeof id == "number" ? id.toFixed() : id;
 		for (let info of BDFDB.DMUtils.getAll()) if (info && info.id == id) return info;
 		return null;
@@ -2074,14 +2083,14 @@ var BDFDB = {
 		}
 		return found;
 	};
-	BDFDB.DMUtils.markAsRead = BDFDB.ChannelUtils.markAsRead = function (channels) {
-		if (!channels) return;
+	BDFDB.DMUtils.markAsRead = function (dms) {
+		if (!dms) return;
 		var unreadchannels = [];
-		for (let cha of channels = BDFDB.ArrayUtils.is(channels) ? channels : (typeof channels == "string" || typeof channels == "number" ? Array.of(channels) : Array.from(channels))) {
-			let id = Node.prototype.isPrototypeOf(cha) ? (BDFDB.ChannelUtils.getId(cha) || BDFDB.getDmID(cha)) : cha && typeof cha == "object" ? cha.id : cha;
+		for (let dm of dms = BDFDB.ArrayUtils.is(dms) ? dms : (typeof dms == "string" || typeof dms == "number" ? Array.of(dms) : Array.from(dms))) {
+			let id = Node.prototype.isPrototypeOf(dm) ? BDFDB.BDFDB.DMUtils.getId(dm) : (dm && typeof dm == "object" ? dm.id : dm);
 			if (id) unreadchannels.push(id);
 		}
-		if (unreadchannels.length) LibraryModules.AckUtils.bulkAck(unreadchannels);
+		for (let i in unreadchannels) BDFDB.TimeUtils.timeout(_ => {LibraryModules.AckUtils.ack(unreadchannels[i]);}, i * 1000);
 	};
 
 	BDFDB.DataUtils = {};
