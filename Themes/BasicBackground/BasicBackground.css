@@ -3627,6 +3627,9 @@ body:before {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 	color: rgb(var(--fontwhite1));
 }
+.emojiPicker-3m1S-j .header-1nkwgG {
+	background-color: rgb(var(--vtransparencycolor), 0.3);
+}
 #app-mount .emojiPicker-3m1S-j .category-2U57w6,			/* picker				category							*/
 #app-mount .emojiPicker-3m1S-j .stickyHeader-1SS0JU {		/* picker				stickycategory						*/
 	background: transparent;
@@ -3660,14 +3663,17 @@ body:before {
 	background-color: rgb(var(--vaccentcolor));
 	border-radius: 5px;
 }
-#app-mount .emojiPicker-3m1S-j .categories-1feg4n {
+.infoBar-U6oBFk {
+	background-color: rgb(var(--vtransparencycolor), 0.3);
+}
+.emojiPicker-3m1S-j .categories-1feg4n {
+	background-color: rgb(var(--vtransparencycolor), 0.3);
 	justify-content: space-evenly;
 }
-#app-mount .emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq {
+.emojiPicker-3m1S-j .categories-1feg4n .item-16cXuq {
 	transition: none;
 }
-#app-mount .sadImage-2ph8SI {
-	background-image: url(https://discordapp.com/assets/e25713e4eba8c1e069ceac8f90262f62.svg);
+.sadImage-2ph8SI {
 	opacity: 0.6;
 }
 #app-mount .wrapper-1GJGVj {
@@ -4141,31 +4147,6 @@ body:before {
 }
 #app-mount .defaultColor-1_ajX0 {
 	color: rgb(var(--fontwhite1));
-}
-#app-mount .colorStandard-2KCXvj {
-	color: rgb(var(--fontwhite2));
-}
-#app-mount .colorPrimary-3hws2f {
-	color: rgb(var(--fontwhite3));
-}
-#app-mount .colorMuted-HdFt4q {
-	color: rgb(var(--fontwhite4));
-}
-.primary-jw0I4K {
-	color: rgb(var(--fontwhite2));
-}
-#app-mount .subText-2Zhkkh {
-	color: rgb(var(--fontwhite4));
-}
-.h5-18_1nd {
-	color: rgb(var(--fontwhite3));
-}
-.subTitle-3TUjmF {
-	color: rgb(var(--fontwhite3));
-}
-.description-3_Ncsb,
-.labelDescriptor-1PqHgD {
-	color: rgb(var(--fontwhite3));
 }
 
 /* ----		16.2.	BUTTONS							---- */
