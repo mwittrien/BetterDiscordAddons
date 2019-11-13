@@ -139,7 +139,7 @@ class ShowHiddenChannels {
 			
 			for (let guildid in this.changedInstances) this.resetInstance(guildid, false);
 
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.TimeUtils.timeout(_ => {BDFDB.ModuleUtils.forceAllUpdates(this)}, 3000);
 		}
 	}
 	
