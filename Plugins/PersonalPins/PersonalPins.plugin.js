@@ -5,12 +5,13 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.8.4";} 
+	getVersion () {return "1.8.6";} 
 
 	getAuthor () {return "DevilBro";}
 
 	constructor () {
 		this.changelog = {
+			"fixed":[["Embed Crash","Fixed i ssue where opening the pins could crash Discord because of old embed data"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
@@ -288,7 +289,10 @@ class PersonalPins {
 			message.author = new BDFDB.DiscordObjects.User(message.author);
 			message.timestamp = new BDFDB.DiscordObjects.Timestamp(message.timestamp);
 			message.editedTimestamp = message.editedTimestamp && new BDFDB.DiscordObjects.Timestamp(message.editedTimestamp);
-			for (let embed of message.embeds) embed.timestamp =  embed.timestamp && new BDFDB.DiscordObjects.Timestamp(embed.timestamp);
+			for (let embed of message.embeds) {
+				embed.color = typeof embed.color != "string" ? null : embed.color;
+				embed.timestamp = embed.timestamp && new BDFDB.DiscordObjects.Timestamp(embed.timestamp);
+			}
 			message = new BDFDB.DiscordObjects.Message(message);
 			let channel = notes[guild_id][channel_id][message_idPOS].channel && new BDFDB.DiscordObjects.Channel(JSON.parse(notes[guild_id][channel_id][message_idPOS].channel));
 			if (!channel) {
