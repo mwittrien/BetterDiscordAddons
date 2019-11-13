@@ -7351,7 +7351,7 @@ var BDFDB = {
 			child.props.onMouseLeave = (e, childthis) => {
 				shown = false;
 				if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);
-				if (typeof childMouseLeave == "function") child.props.onMouseLeave(e, childthis);
+				if (typeof childMouseLeave == "function") childMouseLeave(e, childthis);
 			};
 			child.props.onClick = (e, childthis) => {
 				if (typeof this.props.onClick == "function") this.props.onClick(e, this);
