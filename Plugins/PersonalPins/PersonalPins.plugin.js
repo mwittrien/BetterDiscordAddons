@@ -11,7 +11,7 @@ class PersonalPins {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Embed Crash","Fixed i ssue where opening the pins could crash Discord because of old embed data"]],
+			"fixed":[["Embed Crash","Fixed issue where opening the pins could crash Discord because of old embed data"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
