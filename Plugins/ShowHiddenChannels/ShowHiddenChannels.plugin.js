@@ -3,7 +3,7 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.6.0";}
+	getVersion () {return "2.6.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ShowHiddenChannels {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["User Duplicates","Removed the user duplicates, which I used for testing, BIG OOF"]],
+			"fixed":[["Channel Duplicates","Should be impossible now for channels to get duplicated"],["User Duplicates","Removed the user duplicates, which I used for testing, BIG OOF"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"],["Sort", "You can now sort hidden channels in the native way, meaning they will be placed below their rightful category"],["Tooltip", "The tooltip was removed and was turned into a more friendly modal, which can be access via the right click menu on a channel"]]
 		};
 
@@ -169,7 +169,6 @@ class ShowHiddenChannels {
 
 	processChannels (e) {
 		if (!e.instance.props.guild) return;
-		if (this.changedInstances[e.instance.props.guild.id]) this.resetInstance(e.instance.props.guild.id, false);
 		let [hiddenChannels, amount] = this.getHiddenChannels(e.instance.props.guild);
 		if (amount) {
 			let settings = BDFDB.DataUtils.get(this, "settings"), index = -1;
@@ -182,34 +181,42 @@ class ShowHiddenChannels {
 					name: "hidden",
 					type: categoryType
 				});
-				e.instance.props.categories._categories.push({
-					channel: hiddenCategory,
-					index: ++index
-				});
-				e.instance.props.channels[categoryType].push({
-					comparator: ++(e.instance.props.channels[categoryType][e.instance.props.channels[categoryType].length - 1] || {comparator: 0}).comparator,
-					channel: hiddenCategory
-				});
-				e.instance.props.categories[hiddenCategory.id] = [];
+				if (!BDFDB.ArrayUtils.is(e.instance.props.categories[hiddenCategory.id])) e.instance.props.categories[hiddenCategory.id] = [];
+				if (!e.instance.props.categories._categories.some(categoryObj => categoryObj.channel && categoryObj.channel.id == hiddenCategory.id)) {
+					e.instance.props.categories._categories.push({
+						channel: hiddenCategory,
+						index: ++index
+					});
+				}
+				if (!e.instance.props.channels[categoryType].some(categoryObj => categoryObj.channel && categoryObj.channel.id == hiddenCategory.id)) {
+					e.instance.props.channels[categoryType].push({
+						comparator: ++(e.instance.props.channels[categoryType][e.instance.props.channels[categoryType].length - 1] || {comparator: 0}).comparator,
+						channel: hiddenCategory
+					});
+				}
 			}
 				
-			for (let type in hiddenChannels) if (!settings.sortNative || type != categoryType) {
+			for (let type in hiddenChannels) {
 				let channeltype = type == 0 && e.instance.props.channels.SELECTABLE ? "SELECTABLE" : type;
-				let channels = e.instance.props.channels[channeltype];
-				let comparator = (channels && channels[channels.length - 1] || {comparator: 0}).comparator;
+				if (!BDFDB.ArrayUtils.is(e.instance.props.channels[channeltype])) e.instance.props.channels[channeltype] = [];
+				let comparator = (e.instance.props.channels[channeltype][e.instance.props.channels[channeltype].length - 1] || {comparator: 0}).comparator;
 				for (let channel of hiddenChannels[type]) {
 					let hiddenChannel = new BDFDB.DiscordObjects.Channel(Object.assign({}, channel, {
 						parent_id: settings.sortNative ? channel.parent_id : e.instance.props.guild.id + "_hidden"
 					}));
 					let parent_id = hiddenChannel.parent_id || "null";
-					e.instance.props.categories[parent_id].push({
-						channel: hiddenChannel,
-						index: ++(e.instance.props.categories[parent_id][e.instance.props.categories[parent_id].length - 1] || {index: 0}).index
-					});
-					e.instance.props.channels[channeltype].push({
-						comparator: ++comparator,
-						channel: hiddenChannel
-					});
+					if (!e.instance.props.categories[parent_id].some(channelObj => channelObj.channel && channelObj.channel.id == hiddenChannel.id)) {
+						e.instance.props.categories[parent_id].push({
+							channel: hiddenChannel,
+							index: ++(e.instance.props.categories[parent_id][e.instance.props.categories[parent_id].length - 1] || {index: 0}).index
+						});
+					}
+					if (!e.instance.props.channels[channeltype].some(channelObj => channelObj.channel && channelObj.channel.id == hiddenChannel.id)) {
+						e.instance.props.channels[channeltype].push({
+							comparator: ++comparator,
+							channel: hiddenChannel
+						});
+					}
 				}
 			}
 			
@@ -277,28 +284,13 @@ class ShowHiddenChannels {
 	getHiddenChannels (guild) {
 		if (!guild) return [{}, 0];
 		let settings = BDFDB.DataUtils.get(this, "settings");
-		let all = BDFDB.LibraryModules.ChannelStore.getChannels(), shown = BDFDB.LibraryModules.GuildChannelStore.getChannels(guild.id), hidden = {}, amount = 0;
+		let all = BDFDB.LibraryModules.ChannelStore.getChannels(), hidden = {}, amount = 0;
 		for (let type in BDFDB.DiscordConstants.ChannelTypes) hidden[BDFDB.DiscordConstants.ChannelTypes[type]] = [];
 		for (let channel_id in all) {
 			let channel = all[channel_id];
-			if (channel.guild_id == guild.id && (settings[this.settingsMap[this.channelTypes[channel.type]]] || settings[this.settingsMap[this.channelTypes[channel.type]]] === undefined)) {
-				let isHidden = true;
-				if (channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY) {
-					for (let type in BDFDB.DiscordConstants.ChannelTypes) {
-						let channelObjs = BDFDB.DiscordConstants.ChannelTypes[type] == 0 && shown.SELECTABLE || shown[BDFDB.DiscordConstants.ChannelTypes[type]];
-						if (channelObjs) for (let channelObj of channelObjs) {
-							if (!channel.id || channelObj.channel.parent_id == channel.id) {
-								isHidden = false;
-								break;
-							}
-						}
-					}
-				}
-				if (!this.isChannelHidden(channel.id)) isHidden = false;
-				if (isHidden) {
-					amount++;
-					hidden[channel.type].push(channel);
-				}
+			if (channel.guild_id == guild.id && (settings[this.settingsMap[this.channelTypes[channel.type]]] || settings[this.settingsMap[this.channelTypes[channel.type]]] === undefined) && this.isChannelHidden(channel.id)) {
+				amount++;
+				hidden[channel.type].push(channel);
 			}
 		}
 		return [hidden, amount];
@@ -438,59 +430,6 @@ class ShowHiddenChannels {
 				})
 			]
 		});
-	}
-
-	showAccessRoles (guild, channel, e, allowed) {
-		if ((e.type != "mouseenter" && e.type != "mouseover") || !guild || !channel) return;
-		var htmlString = ``;
-		if (settings.showChannelCategory && !allowed && channel.parent_id) {
-			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Category:</div><div class="${BDFDB.disCNS.flex2 + BDFDB.disCN.wrap}"><div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-category" style="border-color: rgba(255, 255, 255, 0.6); height: unset !important; padding-top: 5px; padding-bottom: 5px; max-width: ${window.outerWidth/3}px; text-transform: uppercase;">${BDFDB.StringUtils.htmlEscape(BDFDB.LibraryModules.ChannelStore.getChannel(channel.parent_id).name)}</div></div>`;
-		}
-		if (settings.showTopic && !allowed && channel.topic && channel.topic.replace(/[\t\n\r\s]/g, "")) {
-			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Topic:</div><div class="${BDFDB.disCNS.flex2 + BDFDB.disCN.wrap}"><div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-topic" style="border-color: rgba(255, 255, 255, 0.6); height: unset !important; padding-top: 5px; padding-bottom: 5px; max-width: ${window.outerWidth/3}px">${BDFDB.StringUtils.htmlEscape(channel.topic)}</div></div>`;
-		}
-		if (allowedRoles.length > 0 || overwrittenRoles.length > 0) {
-			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Allowed Roles:</div><div class="${BDFDB.disCNS.flex2 + BDFDB.disCN.wrap}">`;
-			for (let role of allowedRoles) {
-				let color = role.colorString ? BDFDB.ColorUtils.convert(role.colorString, "RGBCOMP") : [255,255,255];
-				htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-allowedrole" style="border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCN.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}">${BDFDB.StringUtils.htmlEscape(role.name)}</div></div>`;
-			}
-			for (let role of overwrittenRoles) {
-				let color = role.colorString ? BDFDB.ColorUtils.convert(role.colorString, "RGBCOMP") : [255,255,255];
-				htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-overwrittenrole" style="border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCN.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}" style="text-decoration: line-through !important;">${BDFDB.StringUtils.htmlEscape(role.name)}</div></div>`;
-			}
-			htmlString += `</div>`;
-		}
-		if (allowedUsers.length > 0) {
-			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Allowed Users:</div><div class="${BDFDB.disCNS.flex2 + BDFDB.disCN.wrap}">`;
-			for (let user of allowedUsers) {
-				let color = user.colorString ? BDFDB.ColorUtils.convert(user.colorString, "RGBCOMP") : [255,255,255];
-				htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-alloweduser" style="padding-left: 0; border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCN.avatarwrapper}" role="img" aria-label="${user.username}" aria-hidden="false" style="width: 22px; height: 18px; z-index: 1003;"><svg width="18" height="18" viewBox="0 0 18 18" class="${BDFDB.disCN.avatarmask}" aria-hidden="true"><foreignObject x="0" y="0" width="18" height="18" mask="url(#svg-mask-avatar-default)"><img src="${BDFDB.UserUtils.getAvatar(user.id)}" alt=" " class="${BDFDB.disCN.avatar}" aria-hidden="true"></foreignObject></svg></div><div class="${BDFDB.disCN.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}">${BDFDB.StringUtils.htmlEscape(user.nick || user.name)}</div></div>`;
-			}
-			htmlString += `</div>`;
-		}
-		if (deniedRoles.length > 0) {
-			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Denied Roles:</div><div class="${BDFDB.disCNS.flex2 + BDFDB.disCN.wrap}">`;
-			for (let role of deniedRoles) {
-				let color = role.colorString ? BDFDB.ColorUtils.convert(role.colorString, "RGBCOMP") : [255,255,255];
-				htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-deniedrole" style="border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCN.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}">${BDFDB.StringUtils.htmlEscape(role.name)}</div></div>`;
-			}
-			htmlString += `</div>`;
-		}
-		if (deniedUsers.length > 0) {
-			htmlString += `<div class="${BDFDB.disCN.marginbottom4}">Denied Users:</div><div class="${BDFDB.disCNS.flex2 + BDFDB.disCN.wrap}">`;
-			for (let user of deniedUsers) {
-				let color = user.colorString ? BDFDB.ColorUtils.convert(user.colorString, "RGBCOMP") : [255,255,255];
-				htmlString += `<div class="${BDFDB.disCNS.userpopoutrole + BDFDB.disCNS.flex2 + BDFDB.disCNS.aligncenter} SHC-denieduser" style="padding-left: 0; border-color: rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.6);"><div class="${BDFDB.disCN.avatarwrapper}" role="img" aria-label="${user.username}" aria-hidden="false" style="width: 22px; height: 18px; z-index: 1003;"><svg width="18" height="18" viewBox="0 0 18 18" class="${BDFDB.disCN.avatarmask}" aria-hidden="true"><foreignObject x="0" y="0" width="18" height="18" mask="url(#svg-mask-avatar-default)"><img src="${BDFDB.UserUtils.getAvatar(user.id)}" alt=" " class="${BDFDB.disCN.avatar}" aria-hidden="true"></foreignObject></svg></div><div class="${BDFDB.disCN.userpopoutrolecircle}" style="background-color: rgb(${color[0]}, ${color[1]}, ${color[2]});"></div><div class="${BDFDB.disCNS.userpopoutrolename}">${BDFDB.StringUtils.htmlEscape(user.nick || user.name)}</div></div>`;
-			}
-			htmlString += `</div>`;
-		}
-		if (htmlString) {
-			var width = window.outerWidth/2;
-			var tooltip = BDFDB.TooltipUtils.create(e.currentTarget, htmlString, {type:"right", selector:"showhiddenchannels-tooltip", html:true, style:`max-width: ${width < 200 ? 400 : width}px !important;`, delay:BDFDB.DataUtils.get(this, "amounts", "hoverDelay")});
-			var style = getComputedStyle(e.currentTarget);
-			tooltip.style.setProperty("top", BDFDB.DOMUtils.getRects(tooltip).top - style.paddingBottom.replace("px","")/2 + style.paddingTop.replace("px","")/2 + "px");
-		}
 	}
 
 	setLabelsByLanguage () {
