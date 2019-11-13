@@ -3,7 +3,7 @@
 class CharCounter {
 	getName () {return "CharCounter";}
 
-	getVersion () {return "1.3.8";}
+	getVersion () {return "1.3.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,6 +11,7 @@ class CharCounter {
 
 	constructor () {
 		this.changelog = {
+			"fixed":[["Textarea","Fied issue where counter would not get attached to chat textarea"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
@@ -126,13 +127,13 @@ class CharCounter {
 
 	processChannelTextArea (e) {
 		if (e.instance.props.type && this.maxLenghts[e.instance.props.type]) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "TextAreaAutosize"});
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: ["TextAreaAutosize", "TextArea", "PlainTextArea"]});
 			if (index > -1) this.injectCounter(e.returnvalue, children, e.instance.props.type, BDFDB.dotCN.textarea, true);
 		}
 	}
 
 	processNote (e) {
-		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "TextAreaAutosize"});
+		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: ["TextAreaAutosize", "TextArea", "PlainTextArea"]});
 		if (index > -1) this.injectCounter(e.returnvalue, children, e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.usernotepopout) > -1 ? "popout" : "profile", "textarea");
 	}
 
