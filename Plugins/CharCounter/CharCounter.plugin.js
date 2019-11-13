@@ -11,7 +11,7 @@ class CharCounter {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Textarea","Fied issue where counter would not get attached to chat textarea"]],
+			"fixed":[["Textarea","Fixed issue where counter would not get attached to chat textarea"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
