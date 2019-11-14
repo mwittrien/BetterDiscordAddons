@@ -3593,10 +3593,7 @@ body:before {
 #app-mount .emojiPicker-3m1S-j,
 #app-mount #bda-qem-twitch-container,
 #app-mount #bda-qem-favourite-container {
-	height: 328px;
-}
-#app-mount .emojiPicker-3m1S-j .scrollerWrap-PyxcLY {
-	height: 224px;
+	height: 384px;
 }
 #app-mount #bda-qem {
 	height: 30px;
