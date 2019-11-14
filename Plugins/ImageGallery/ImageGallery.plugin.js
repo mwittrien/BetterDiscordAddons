@@ -3,7 +3,7 @@
 class ImageGallery {
 	getName () {return "ImageGallery";}
 
-	getVersion () {return "1.5.9";}
+	getVersion () {return "1.6.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,12 +11,12 @@ class ImageGallery {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
 		this.patchedModules = {
 			after: {
-				ImageModal: ["componentDidMount","componentWillUnmount"]
+				ImageModal: ["render", "componentDidMount"]
 			}
 		};
 	}
@@ -24,15 +24,13 @@ class ImageGallery {
 	initConstructor () {
 		this.eventFired = false;
 
-		this.imageMarkup = `<div class="${BDFDB.disCN.imagewrapper}" style="width: 100px; height: 100px;"><img src="" style="width: 100px; height: 100px; display: inline;"></div>`;
-
 		this.css = ` 
-			.image-gallery ${BDFDB.dotCN.imagewrapper}.prev,
+			.image-gallery ${BDFDB.dotCN.imagewrapper}.previous,
 			.image-gallery ${BDFDB.dotCN.imagewrapper}.next {
 				position: absolute;
 			} 
 
-			.image-gallery ${BDFDB.dotCN.imagewrapper}.prev {
+			.image-gallery ${BDFDB.dotCN.imagewrapper}.previous {
 				right: 90%;
 			} 
 
@@ -79,14 +77,7 @@ class ImageGallery {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			this.closemodal = true;
-
-			BDFDB.ModuleUtils.forceAllUpdates(this, "ImageModal");
-
-			delete this.closemodal;
-
-			document.removeEventListener("keydown", document.keydownImageGalleryListener);
-			document.removeEventListener("keyup", document.keyupImageGalleryListener);
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 
 			BDFDB.PluginUtils.clear(this);
 		}
@@ -95,128 +86,97 @@ class ImageGallery {
 
 	// begin of own functions
 
-	processImageModal (instance, wrapper, returnvalue, methodnames) {
-		if (this.closemodal && instance.props.onClose) instance.props.onClose();
-		else if (methodnames.includes("componentDidMount")) {
-			let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, wrapper);
-			if (!modal) return;
-			let start = performance.now();
-			let waitForImg = BDFDB.TimeUtils.interval(() => {
-				let img = modal.querySelector(BDFDB.dotCNS.imagewrapper + "img");
-				if (img && img.src) {
-					BDFDB.TimeUtils.clear(waitForImg);
-					let message = this.getMessageGroupOfImage(img);
-					if (message) {
-						BDFDB.DOMUtils.addClass(modal, "image-gallery");
-						this.addImages(modal, message.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img"), img);
+	processImageModal (e) {
+		let message = this.getMessageGroupOfImage(e.instance.props.src);
+		if (message) {
+			if (e.returnvalue) {
+				let images = message.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img");
+				var next, previous;
+				for (let i = 0; i < images.length; i++) if (this.getSrcOfImage(e.instance.props.src) == this.getSrcOfImage(images[i])) {
+					next = 	this.getSrcOfImage(images[i+1]);
+					previous = 	this.getSrcOfImage(images[i-1]);
+					break;
+				}
+				if (next) {
+					if (e.instance.nextRef) e.returnvalue.props.children.splice(1, 0, e.instance.nextRef);
+					else this.loadImage(e.instance, this.getSrcOfImage(next), "next");
+				}
+				if (previous) {
+					if (e.instance.previousRef) e.returnvalue.props.children.push(e.instance.previousRef);
+					else this.loadImage(e.instance, this.getSrcOfImage(previous), "previous");
+				}
+			}
+			if (e.node) {
+				BDFDB.DOMUtils.addClass(BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, e.node), "image-gallery");
+				this.cleanUpListeners();
+				document.keydownImageGalleryListener = event => {
+					console.log(event);
+					if (!document.contains(e.node)) this.cleanUpListeners();
+					else if (!this.eventFired) {
+						this.eventFired = true;
+						if (event.keyCode == 37) this.switchImages(e.instance, "previous");
+						else if (event.keyCode == 39) this.switchImages(e.instance, "next");
 					}
-				}
-				else if (performance.now() - start > 10000) {
-					BDFDB.TimeUtils.clear(waitForImg);
-				}
-			}, 100);
-		}
-		else if (methodnames.includes("componentWillUnmount")) {
-			document.removeEventListener("keydown", document.keydownImageGalleryListener);
-			document.removeEventListener("keyup", document.keyupImageGalleryListener);
+				};
+				document.keyupImageGalleryListener = _ => {
+					this.eventFired = false;
+					if (!document.contains(e.node)) this.cleanUpListeners();
+				};
+				document.addEventListener("keydown", document.keydownImageGalleryListener);
+				document.addEventListener("keyup", document.keyupImageGalleryListener);
+			}
 		}
 	}
 
-	getMessageGroupOfImage (thisimg) {
-		if (thisimg && thisimg.src) {
-			for (let group of document.querySelectorAll(BDFDB.dotCN.messagegroup)) {
-				for (let img of group.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img")) {
-					if (img.src && this.getSrcOfImage(img) == this.getSrcOfImage(thisimg)) {
-						return group;
-					}
-				}
-			}
-		}
+	getMessageGroupOfImage (src) {
+		if (src) for (let group of document.querySelectorAll(BDFDB.dotCN.messagegroup)) for (let img of group.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img")) if (img.src && this.getSrcOfImage(img) == this.getSrcOfImage(src)) return group;
 		return null;
 	}
 
 	getSrcOfImage (img) {
-		return (img.src || (img.querySelector("canvas") ? img.querySelector("canvas").src : "")).split("?width=")[0];
+		if (!img) return null;
+		return (typeof img == "string" ? img : (img.src || (img.querySelector("canvas") ? img.querySelector("canvas").src : ""))).split("?width=")[0];
 	}
-
-	addImages (modal, imgs, img) {
-		BDFDB.DOMUtils.remove(modal.querySelectorAll(`${BDFDB.dotCN.imagewrapper}.prev, ${BDFDB.dotCN.imagewrapper}.next`));
-
-		let inner = modal.querySelector(BDFDB.dotCN.modalinner);
-
-		if (!inner) return;
-
-		var prevImg, nextImg, index;
-		for (index = 0; index < imgs.length; index++) {
-			if (this.getSrcOfImage(img) == this.getSrcOfImage(imgs[index])) {
-				prevImg = 	imgs[index-1];
-				img = 		imgs[index];
-				nextImg = 	imgs[index+1];
-				break;
-			}
-		}
-
-		var imagesrc = this.getSrcOfImage(img);
-		modal.querySelector(BDFDB.dotCN.downloadlink).setAttribute("href", imagesrc);
-
-		var imagewrapper = modal.querySelector(BDFDB.dotCN.imagewrapper);
-		BDFDB.DOMUtils.addClass(imagewrapper, "current");
-		var imagewrapperimage = imagewrapper.querySelector("img");
-		imagewrapperimage.setAttribute("src", imagesrc);
-
-		this.resizeImage(modal, img, imagewrapperimage);
-
-		if (prevImg) inner.appendChild(this.createImage(modal, imgs, prevImg, "prev"));
-		if (nextImg) inner.appendChild(this.createImage(modal, imgs, nextImg, "next"));
-
-		document.removeEventListener("keydown", document.keydownImageGalleryListener);
-		document.removeEventListener("keyup", document.keyupImageGalleryListener);
-		document.keydownImageGalleryListener = e => {this.keyPressed({modal, imgs, prevImg, nextImg}, e);};
-		document.keyupImageGalleryListener = e => {this.eventFired = false;};
-		document.addEventListener("keydown", document.keydownImageGalleryListener);
-		document.addEventListener("keyup", document.keyupImageGalleryListener);
-	}
-
-	createImage (modal, imgs, img, type) {
-		var imagewrapper = BDFDB.DOMUtils.create(this.imageMarkup);
-		BDFDB.DOMUtils.addClass(imagewrapper, type);
-		imagewrapper.addEventListener("click", () => {this.addImages(modal, imgs, img);});
-		var imagewrapperimage = imagewrapper.querySelector("img");
-		imagewrapperimage.setAttribute("src", this.getSrcOfImage(img));
-		this.resizeImage(modal, img, imagewrapperimage);
-		return imagewrapper;
-	}
-
-	resizeImage (container, src, img) {
-		BDFDB.DOMUtils.hide(img);
-		var temp = new Image();
-		temp.src = src.src.split("?width=")[0];
-		temp.onload = function () {
-			var resizeX = (container.clientWidth/src.clientWidth) * 0.71;
-			var resizeY = (container.clientHeight/src.clientHeight) * 0.57;
+	
+	loadImage (instance, src, type) {
+		let imagethrowaway = document.createElement("img");
+		imagethrowaway.src = src;
+		imagethrowaway.onload = _ => {
+			var arects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
+			var resizeY = (arects.height/imagethrowaway.naturalHeight) * 0.65, resizeX = (arects.width/imagethrowaway.naturalWidth) * 0.8;
 			var resize = resizeX < resizeY ? resizeX : resizeY;
-			var newWidth = src.clientWidth * resize;
-			var newHeight = src.clientHeight * resize;
-			newWidth = temp.width > newWidth ? newWidth : temp.width;
-			newHeight = temp.height > newHeight ? newHeight : temp.height;
-
-			var wrapper = img.parentElement;
-			if (!BDFDB.DOMUtils.containsClass(wrapper, "current")) wrapper.style.setProperty("top",  (container.clientHeight - newHeight) / 2 + "px");
-			wrapper.style.setProperty("width", newWidth + "px");
-			wrapper.style.setProperty("height", newHeight + "px");
-
-			img.style.setProperty("width", newWidth + "px");
-			img.style.setProperty("height", newHeight + "px");
-
-			BDFDB.DOMUtils.show(img);
+			var newHeight = imagethrowaway.naturalHeight * resize;
+			var newWidth = imagethrowaway.naturalWidth * resize;
+			instance[type + "Ref"] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.LazyImage, {
+				className: type,
+				src: src,
+				height: imagethrowaway.naturalHeight,
+				width: imagethrowaway.naturalWidth,
+				maxHeight: newHeight,
+				maxWidth: newWidth,
+				onClick: _ => {this.switchImages(instance, type);}
+			});
+			BDFDB.ReactUtils.forceUpdate(instance);
 		};
 	}
-
-	keyPressed ({modal, imgs, prevImg, nextImg}, e) {
-		if (!this.eventFired) {
-			this.eventFired = true;
-			if (e.keyCode == 37 && prevImg) this.addImages(modal, imgs, prevImg);
-			else if (e.keyCode == 39 && nextImg) this.addImages(modal, imgs, nextImg);
-		}
+	
+	switchImages (instance, type) {
+		let imageRef = instance[type + "Ref"];
+		if (!imageRef) return;
+		delete instance.previousRef;
+		delete instance.nextRef;
+		instance.props.original = imageRef.props.src;
+		instance.props.placeholder = imageRef.props.src;
+		instance.props.src = imageRef.props.src;
+		instance.props.height = imageRef.props.height;
+		instance.props.width = imageRef.props.width;
+		BDFDB.ReactUtils.forceUpdate(instance);
+	}
+	
+	cleanUpListeners () {
+		document.removeEventListener("keydown", document.keydownImageGalleryListener);
+		document.removeEventListener("keyup", document.keyupImageGalleryListener);
+		delete document.keydownImageGalleryListener;
+		delete document.keyupImageGalleryListener;
 	}
 }
