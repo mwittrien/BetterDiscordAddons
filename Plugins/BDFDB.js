@@ -46,6 +46,12 @@ var BDFDB = {
 		plugin.author = plugin.author || (typeof plugin.getAuthor == "function" ? plugin.getAuthor() : null);
 		plugin.description = plugin.description || (typeof plugin.getDescription == "function" ? plugin.getDescription() : null);
 		
+		if (plugin.patchModules) {
+			plugin.patchedModules = {after: plugin.patchModules};
+			delete plugin.patchModules;
+		}
+		plugin.patchedModules = BDFDB.ObjectUtils.filter(plugin.patchedModules, type => WebModulesData.Patchtypes.includes(type), true);
+		
 		InternalBDFDB.clearStartTimeout(plugin);
 
 		var loadmessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
@@ -733,7 +739,7 @@ var BDFDB = {
 	};
 	BDFDB.ObjectUtils.extract = function (obj, ...keys) {
 		let newobj = {};
-		if (BDFDB.ObjectUtils.is(obj)) for (let key of keys.flat()) if (obj[key]) newobj[key] = obj[key];
+		if (BDFDB.ObjectUtils.is(obj)) for (let key of keys.flat().filter(n => n)) if (obj[key]) newobj[key] = obj[key];
 		return newobj;
 	};
 	BDFDB.ObjectUtils.exclude = function (obj, ...keys) {
@@ -742,7 +748,7 @@ var BDFDB = {
 		return newobj;
 	};
 	BDFDB.ObjectUtils.delete = function (obj, ...keys) {
-		if (BDFDB.ObjectUtils.is(obj)) for (let key of keys.flat()) delete obj[key];
+		if (BDFDB.ObjectUtils.is(obj)) for (let key of keys.flat().filter(n => n)) delete obj[key];
 	};
 	BDFDB.ObjectUtils.sort = function (obj, sort, except) {
 		if (!BDFDB.ObjectUtils.is(obj)) return {};
@@ -963,11 +969,13 @@ var BDFDB = {
 	try {WebModulesData.GlobalModules["V2C_ThemeCard"] = V2C_ThemeCard;} catch(err) {BDFDB.LogUtils.warn(`Could not find global Module "V2C_ThemeCard"`);}
 	
 	BDFDB.ModuleUtils.patch = function (plugin, module, modulefunctions, patchfunctions) {
-		if (!plugin || !module || !modulefunctions || !Object.keys(patchfunctions).some(type => WebModulesData.Patchtypes.includes(type))) return null;
+		if (!plugin || !module || !modulefunctions || !BDFDB.ObjectUtils.is(patchfunctions)) return null;
+		patchfunctions = BDFDB.ObjectUtils.filter(patchfunctions, type => WebModulesData.Patchtypes.includes(type), true);
+		if (BDFDB.ObjectUtils.isEmpty(patchfunctions)) return;
 		const pluginname = typeof plugin === "string" ? plugin : plugin.name;
 		const pluginid = pluginname.toLowerCase();
 		if (!module.BDFDBpatch) module.BDFDBpatch = {};
-		modulefunctions = BDFDB.ArrayUtils.is(modulefunctions) ? modulefunctions : Array.of(modulefunctions);
+		modulefunctions = [modulefunctions].flat().filter(n => n);
 		for (let modulefunction of modulefunctions) {
 			if (!module[modulefunction]) module[modulefunction] = _ => {};
 			const originalfunction = module[modulefunction];
@@ -1001,7 +1009,7 @@ var BDFDB = {
 					return modulefunction == "render" && data.returnValue === undefined ? null : data.returnValue;
 				};
 			}
-			for (let type of WebModulesData.Patchtypes) if (typeof patchfunctions[type] == "function") {
+			for (let type in patchfunctions) if (typeof patchfunctions[type] == "function") {
 				module.BDFDBpatch[modulefunction][type][pluginid] = patchfunctions[type];
 				module.BDFDBpatch[modulefunction][type][pluginid].pluginname = pluginname;
 			}
@@ -1024,11 +1032,9 @@ var BDFDB = {
 			if (!BDFDB.ObjectUtils.is(module) || !module.BDFDBpatch) return;
 			const pluginname = !plugin ? null : (typeof plugin === "string" ? plugin : plugin.name).toLowerCase();
 			if (modulefunctions) {
-				for (let modulefunction of BDFDB.ArrayUtils.is(modulefunctions) ? modulefunctions : Array.of(modulefunctions)) if (module[modulefunction] && module.BDFDBpatch[modulefunction]) unpatch(modulefunction, pluginname);
+				for (let modulefunction of [modulefunctions].flat().filter(n => n)) if (module[modulefunction] && module.BDFDBpatch[modulefunction]) unpatch(modulefunction, pluginname);
 			}
-			else {
-				for (let patchedfunction of module.BDFDBpatch) unpatch(patchedfunction, pluginname);
-			}
+			else for (let patchedfunction of module.BDFDBpatch) unpatch(patchedfunction, pluginname);
 		}
 		function unpatch (func, pluginname) {
 			for (let type of WebModulesData.Patchtypes) {
@@ -1045,29 +1051,35 @@ var BDFDB = {
 		}
 	};
 	BDFDB.ModuleUtils.forceAllUpdates = function (plugin, selectedtypes) {
-		if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ObjectUtils.is(plugin.patchModules)) {
+		if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ObjectUtils.is(plugin.patchedModules)) {
 			const app = document.querySelector(BDFDB.dotCN.app);
 			const bdsettings = document.querySelector("#bd-settingspane-container " + BDFDB.dotCN.scrollerwrap);
 			if (app) {
-				var filteredmodules = [];
-				for (let type in plugin.patchModules) {
-					var methodnames = BDFDB.ArrayUtils.is(plugin.patchModules[type]) ? plugin.patchModules[type] : Array.of(plugin.patchModules[type]);
-					if (methodnames.includes("componentDidMount") || methodnames.includes("componentDidUpdate") || methodnames.includes("render")) filteredmodules.push(type);
+				let filteredmodules = [], patchtypes = {};
+				for (let patchtype in plugin.patchedModules) for (let type in plugin.patchedModules[patchtype]) {
+					let methodnames = [plugin.patchedModules[patchtype][type]].flat().filter(n => n);
+					if (methodnames.includes("componentDidMount") || methodnames.includes("componentDidUpdate") || methodnames.includes("render")) {
+						filteredmodules.push(type);
+						let unmappedtype = type.split(" _ _ ")[0];
+						if (!patchtypes[unmappedtype]) patchtypes[unmappedtype] = [];
+						patchtypes[unmappedtype].push(patchtype);
+					}
 				}
-				selectedtypes = (BDFDB.ArrayUtils.is(selectedtypes) ? selectedtypes : Array.of(selectedtypes)).filter(n => n);
+				selectedtypes = [selectedtypes].flat().filter(n => n);
 				if (selectedtypes.length) {
 					selectedtypes = selectedtypes.map(type => type && WebModulesData.Patchmap[type] ? WebModulesData.Patchmap[type] + " _ _ " + type : type);
 					filteredmodules = filteredmodules.filter(type => selectedtypes.indexOf(type) > -1);
 				}
+				filteredmodules = BDFDB.ArrayUtils.removeCopies(filteredmodules);
 				if (filteredmodules.length) {
 					try {
 						const appinsdown = BDFDB.ReactUtils.findOwner(app, {name:filteredmodules, all:true, noCopies:true, group:true, unlimited:true});
 						const appinsup = BDFDB.ReactUtils.findOwner(app, {name:filteredmodules, all:true, noCopies:true, group:true, unlimited:true, up:true});
-						for (let type in appinsdown) for (let ins of appinsdown[type]) InternalBDFDB.forceInitiateProcess(plugin, ins, type);
-						for (let type in appinsup) for (let ins of appinsup[type]) InternalBDFDB.forceInitiateProcess(plugin, ins, type);
+						for (let type in appinsdown) for (let ins of appinsdown[type]) InternalBDFDB.forceInitiateProcess(plugin, ins, type, patchtypes[type]);
+						for (let type in appinsup) for (let ins of appinsup[type]) InternalBDFDB.forceInitiateProcess(plugin, ins, type, patchtypes[type]);
 						if (bdsettings) {
 							const bdsettingsins = BDFDB.ReactUtils.findOwner(bdsettings, {name:filteredmodules, all:true, noCopies:true, group:true, unlimited:true});
-							for (let type in bdsettingsins) for (let ins of bdsettingsins[type]) InternalBDFDB.forceInitiateProcess(plugin, ins, type);
+							for (let type in bdsettingsins) for (let ins of bdsettingsins[type]) InternalBDFDB.forceInitiateProcess(plugin, ins, type, patchtypes[type]);
 						}
 					}
 					catch (err) {BDFDB.LogUtils.error("Could not force update components! " + err, plugin.name);}
@@ -1075,12 +1087,14 @@ var BDFDB = {
 			}
 		}
 	};
-	InternalBDFDB.forceInitiateProcess = function (plugin, instance, type) {
+	InternalBDFDB.forceInitiateProcess = function (plugin, instance, type, patchtypes) {
 		if (!plugin || !instance || !type) return;
-		let methodnames = BDFDB.ArrayUtils.is(plugin.patchModules[type]) ? plugin.patchModules[type] : Array.of(plugin.patchModules[type]);
-		if (methodnames.includes("componentDidMount")) InternalBDFDB.initiateProcess(plugin, type, {instance, methodname:"componentDidMount"});
+		let methodnames = [];
+		for (let patchtype in plugin.patchedModules) if (plugin.patchedModules[patchtype][type]) methodnames.push(plugin.patchedModules[patchtype][type]);
+		methodnames = BDFDB.ArrayUtils.removeCopies(methodnames).flat().filter(n => n);
+		if (methodnames.includes("componentDidMount")) InternalBDFDB.initiateProcess(plugin, type, {instance, methodname:"componentDidMount", patchtypes});
 		if (methodnames.includes("render")) BDFDB.ReactUtils.forceUpdate(instance);
-		else if (methodnames.includes("componentDidUpdate")) InternalBDFDB.initiateProcess(plugin, type, {instance, methodname:"componentDidUpdate"});
+		else if (methodnames.includes("componentDidUpdate")) InternalBDFDB.initiateProcess(plugin, type, {instance, methodname:"componentDidUpdate", patchtypes});
 	};
 	InternalBDFDB.initiateProcess = function (plugin, type, e) {
 		if (BDFDB.ObjectUtils.is(plugin) && !plugin.stopping && e.instance) {
@@ -1107,7 +1121,7 @@ var BDFDB = {
 				}
 				else {
 					if (e.methodname == "render") {
-						if (e.returnvalue) plugin["process" + type](e);
+						if (e.returnvalue || e.patchtypes.includes("before")) plugin["process" + type](e);
 					}
 					else {
 						e.node = BDFDB.ReactUtils.findDOMNode(e.instance);
@@ -1122,76 +1136,77 @@ var BDFDB = {
 		}
 	};
 	InternalBDFDB.patchPlugin = function (plugin) {
-		if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ObjectUtils.is(plugin.patchModules)) {
-			BDFDB.ModuleUtils.unpatch(plugin);
-			for (let type in plugin.patchModules) {
-				if (WebModulesData.GlobalModules[type] && typeof WebModulesData.GlobalModules[type] == "function") patchInstance(WebModulesData.GlobalModules[type], type);
-				else {
-					var mapped = WebModulesData.Patchmap[type];
-					var classname = WebModulesData.Patchfinder[type.split(" _ _ ")[1] || type];
-					var patchtype = mapped ? mapped + " _ _ " + type : type;
-					if (mapped) {
-						plugin.patchModules[patchtype] = plugin.patchModules[type];
-						delete plugin.patchModules[type];
-					}
-					if (!classname) patchInstance(BDFDB.ModuleUtils.findByName(patchtype.split(" _ _ ")[0]), patchtype);
-					else if (DiscordClasses[classname]) checkForInstance(classname, patchtype);
+		if (!BDFDB.ObjectUtils.is(plugin) || !BDFDB.ObjectUtils.is(plugin.patchedModules)) return;
+		BDFDB.ModuleUtils.unpatch(plugin);
+		for (let patchtype in plugin.patchedModules) for (let type in plugin.patchedModules[patchtype]) {
+			if (WebModulesData.GlobalModules[type] && typeof WebModulesData.GlobalModules[type] == "function") patchInstance(WebModulesData.GlobalModules[type], type, patchtype);
+			else {
+				var mapped = WebModulesData.Patchmap[type];
+				var classname = WebModulesData.Patchfinder[type.split(" _ _ ")[1] || type];
+				var mappedtype = mapped ? mapped + " _ _ " + type : type;
+				if (mapped) {
+					plugin.patchedModules[patchtype][mappedtype] = plugin.patchedModules[patchtype][type];
+					delete plugin.patchedModules[patchtype][type];
 				}
+				if (!classname) patchInstance(BDFDB.ModuleUtils.findByName(mappedtype.split(" _ _ ")[0]), mappedtype, patchtype);
+				else if (DiscordClasses[classname]) checkForInstance(classname, mappedtype, patchtype);
 			}
-			function patchInstance(instance, type) {
-				if (instance) {
-					var name = type.split(" _ _ ")[0];
-					instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
-					instance = instance.displayName == name || instance.name == name ? instance : BDFDB.ReactUtils.findOwner(instance, {name, up:true});
-					if (instance) {
-						instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
-						BDFDB.ModuleUtils.patch(plugin, instance.prototype, plugin.patchModules[type], {after: e => {
-							if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) InternalBDFDB.initiateProcess(plugin, type, {instance:e.thisObject, returnvalue:e.returnValue, methodname:e.originalMethodName});
-						}});
-					}
-				}
-			}
-			function checkForInstance(classname, type) {
-				const app = document.querySelector(BDFDB.dotCN.app), bdsettings = document.querySelector("#bd-settingspane-container " + BDFDB.dotCN.scrollerwrap);
-				var instancefound = false;
-				if (app) {
-					var appins = BDFDB.ReactUtils.findOwner(app, {name:type, unlimited:true}) || BDFDB.ReactUtils.findOwner(app, {name:type, unlimited:true, up:true});
-					if (appins) {
-						instancefound = true;
-						patchInstance(appins, type);
-					}
-				}
-				if (!instancefound && bdsettings) {
-					var bdsettingsins = BDFDB.ReactUtils.findOwner(bdsettings, {name:type, unlimited:true});
-					if (bdsettingsins) {
-						instancefound = true;
-						patchInstance(bdsettingsins, type);
-					}
-				}
-				if (!instancefound) {
-					var found = false, instanceobserver = new MutationObserver(cs => {cs.forEach(c => {c.addedNodes.forEach(n => {
-						if (found || !n || !n.tagName) return;
-						var ele = null;
-						if ((ele = BDFDB.DOMUtils.containsClass(n, BDFDB.disCN[classname]) ? n : n.querySelector(BDFDB.dotCN[classname])) != null) {
-							var ins = BDFDB.ReactUtils.getInstance(ele);
-							if (isCorrectInstance(ins, type)) {
-								found = true;
-								instanceobserver.disconnect();
-								patchInstance(ins, type);
-								BDFDB.ModuleUtils.forceAllUpdates(plugin, type);
-							}
-						}
-					});});});
-					BDFDB.ObserverUtils.connect(plugin, BDFDB.dotCN.appmount, {name:"checkForInstanceObserver", instance:instanceobserver, multi:true
-					}, {childList:true, subtree:true});
-				}
-			}
-			function isCorrectInstance(instance, name) {
-				if (!instance) return false;
+		}
+		function patchInstance(instance, type, patchtype) {
+			if (instance) {
+				var name = type.split(" _ _ ")[0];
 				instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 				instance = instance.displayName == name || instance.name == name ? instance : BDFDB.ReactUtils.findOwner(instance, {name, up:true});
-				return !!instance;
+				if (instance) {
+					instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
+					let patchfunctions = {};
+					patchfunctions[patchtype] = e => {
+						if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) InternalBDFDB.initiateProcess(plugin, type, {instance:e.thisObject, returnvalue:e.returnValue, methodname:e.originalMethodName, patchtypes:[patchtype]});
+					}
+					BDFDB.ModuleUtils.patch(plugin, instance.prototype, plugin.patchedModules[patchtype][type], patchfunctions);
+				}
 			}
+		}
+		function checkForInstance(classname, type, patchtype) {
+			const app = document.querySelector(BDFDB.dotCN.app), bdsettings = document.querySelector("#bd-settingspane-container " + BDFDB.dotCN.scrollerwrap);
+			var instancefound = false;
+			if (app) {
+				var appins = BDFDB.ReactUtils.findOwner(app, {name:type, unlimited:true}) || BDFDB.ReactUtils.findOwner(app, {name:type, unlimited:true, up:true});
+				if (appins) {
+					instancefound = true;
+					patchInstance(appins, type, patchtype);
+				}
+			}
+			if (!instancefound && bdsettings) {
+				var bdsettingsins = BDFDB.ReactUtils.findOwner(bdsettings, {name:type, unlimited:true});
+				if (bdsettingsins) {
+					instancefound = true;
+					patchInstance(bdsettingsins, type, patchtype);
+				}
+			}
+			if (!instancefound) {
+				var found = false, instanceobserver = new MutationObserver(cs => {cs.forEach(c => {c.addedNodes.forEach(n => {
+					if (found || !n || !n.tagName) return;
+					var ele = null;
+					if ((ele = BDFDB.DOMUtils.containsClass(n, BDFDB.disCN[classname]) ? n : n.querySelector(BDFDB.dotCN[classname])) != null) {
+						var ins = BDFDB.ReactUtils.getInstance(ele);
+						if (isCorrectInstance(ins, type)) {
+							found = true;
+							instanceobserver.disconnect();
+							patchInstance(ins, type, patchtype);
+							BDFDB.ModuleUtils.forceAllUpdates(plugin, type);
+						}
+					}
+				});});});
+				BDFDB.ObserverUtils.connect(plugin, BDFDB.dotCN.appmount, {name:"checkForInstanceObserver", instance:instanceobserver, multi:true
+				}, {childList:true, subtree:true});
+			}
+		}
+		function isCorrectInstance(instance, name) {
+			if (!instance) return false;
+			instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
+			instance = instance.displayName == name || instance.name == name ? instance : BDFDB.ReactUtils.findOwner(instance, {name, up:true});
+			return !!instance;
 		}
 	};
 
@@ -1437,9 +1452,9 @@ var BDFDB = {
 		if (!nodeOrInstance || !BDFDB.ObjectUtils.is(config) || !config.name && !config.key && !config.props) return [null, -1];
 		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 		if (!BDFDB.ObjectUtils.is(instance) && !BDFDB.ArrayUtils.is(instance)) return [null, -1];
-		config.name = config.name && !BDFDB.ArrayUtils.is(config.name) ? Array.of(config.name) : config.name;
-		config.key = config.key && !BDFDB.ArrayUtils.is(config.key) ? Array.of(config.key) : config.key;
-		config.props = config.props && !BDFDB.ArrayUtils.is(config.props) ? Array.of(config.props) : config.props;
+		config.name = config.name && [config.name].flat().filter(n => n);
+		config.key = config.name && [config.key].flat().filter(n => n);
+		config.props = config.props && [config.props].flat().filter(n => n);
 		var parent = firstarray = instance;
 		while (!BDFDB.ArrayUtils.is(firstarray) && firstarray.props && firstarray.props.children) firstarray = firstarray.props.children;
 		if (!BDFDB.ArrayUtils.is(firstarray)) {
@@ -1500,9 +1515,9 @@ var BDFDB = {
 		if (!nodeOrInstance || !config.name && !config.key && !config.props) return config.all ? (config.group ? {} : []) : null;
 		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 		if (!BDFDB.ObjectUtils.is(instance)) return config.all ? (config.group ? {} : []) : null;
-		config.name = config.name && !BDFDB.ArrayUtils.is(config.name) ? Array.of(config.name) : config.name;
-		config.key = config.key && !BDFDB.ArrayUtils.is(config.key) ? Array.of(config.key) : config.key;
-		config.props = config.props && !BDFDB.ArrayUtils.is(config.props) ? Array.of(config.props) : config.props;
+		config.name = config.name && [config.name].flat().filter(n => n);
+		config.key = config.name && [config.key].flat().filter(n => n);
+		config.props = config.props && [config.props].flat().filter(n => n);
 		var depth = -1;
 		var start = performance.now();
 		var maxdepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
@@ -1561,8 +1576,8 @@ var BDFDB = {
 		if (!nodeOrInstance || !config.name && !config.key) return null;
 		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 		if (!BDFDB.ObjectUtils.is(instance)) return null;
-		config.name = config.name && !BDFDB.ArrayUtils.is(config.name) ? Array.of(config.name) : config.name;
-		config.key = config.key && !BDFDB.ArrayUtils.is(config.key) ? Array.of(config.key) : config.key;
+		config.name = config.name && [config.name].flat().filter(n => n);
+		config.key = config.name && [config.key].flat().filter(n => n);
 		var depth = -1;
 		var start = performance.now();
 		var maxdepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
@@ -1652,7 +1667,7 @@ var BDFDB = {
 		}
 	};
 	BDFDB.ReactUtils.forceUpdate = function (...instances) {
-		for (let ins of instances.flat()) if (ins && ins.updater && typeof ins.updater.isMounted == "function" && ins.updater.isMounted(ins)) ins.forceUpdate();
+		for (let ins of instances.flat().filter(n => n)) if (ins.updater && typeof ins.updater.isMounted == "function" && ins.updater.isMounted(ins)) ins.forceUpdate();
 	};
 	BDFDB.ReactUtils.getInstance = function (node) {
 		if (!BDFDB.ObjectUtils.is(node)) return null;
@@ -2692,26 +2707,24 @@ var BDFDB = {
 	BDFDB.DOMUtils = {};
 	BDFDB.DOMUtils.addClass = function (eles, ...classes) {
 		if (!eles || !classes) return;
-		for (let ele of BDFDB.ArrayUtils.is(eles) ? eles : Array.of(eles)) {
-			if (!ele) {}
-			else if (Node.prototype.isPrototypeOf(ele)) add(ele);
+		for (let ele of [eles].flat().filter(n => n)) {
+			if (Node.prototype.isPrototypeOf(ele)) add(ele);
 			else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) add(e);
 			else if (typeof ele == "string") for (let e of ele.split(",")) if (e && (e = e.trim())) for (let n of document.querySelectorAll(e)) add(n);
 		}
 		function add(node) {
-			if (node && node.classList) for (let cla of classes) for (let cl of BDFDB.ArrayUtils.is(cla) ? cla : Array.of(cla)) if (typeof cl == "string") for (let c of cl.split(" ")) if (c) node.classList.add(c);
+			if (node && node.classList) for (let cla of classes) for (let cl of [cla].flat().filter(n => n)) if (typeof cl == "string") for (let c of cl.split(" ")) if (c) node.classList.add(c);
 		}
 	};
 	BDFDB.DOMUtils.removeClass = function (eles, ...classes) {
 		if (!eles || !classes) return;
-		for (let ele of BDFDB.ArrayUtils.is(eles) ? eles : Array.of(eles)) {
-			if (!ele) {}
-			else if (Node.prototype.isPrototypeOf(ele)) remove(ele);
+		for (let ele of [eles].flat().filter(n => n)) {
+			if (Node.prototype.isPrototypeOf(ele)) remove(ele);
 			else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) remove(e);
 			else if (typeof ele == "string") for (let e of ele.split(",")) if (e && (e = e.trim())) for (let n of document.querySelectorAll(e)) remove(n);
 		}
 		function remove(node) {
-			if (node && node.classList) for (let cla of classes) for (let cl of BDFDB.ArrayUtils.is(cla) ? cla : Array.of(cla)) if (typeof cl == "string") for (let c of cl.split(" ")) if (c) node.classList.remove(c);
+			if (node && node.classList) for (let cla of classes) for (let cl of [cla].flat().filter(n => n)) if (typeof cl == "string") for (let c of cl.split(" ")) if (c) node.classList.remove(c);
 		}
 	};
 	BDFDB.DOMUtils.toggleClass = function (eles, ...classes) {
@@ -2722,14 +2735,14 @@ var BDFDB = {
 			force = undefined;
 		}
 		if (!classes.length) return;
-		for (let ele of BDFDB.ArrayUtils.is(eles) ? eles : Array.of(eles)) {
+		for (let ele of [eles].flat().filter(n => n)) {
 			if (!ele) {}
 			else if (Node.prototype.isPrototypeOf(ele)) toggle(ele);
 			else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) toggle(e);
 			else if (typeof ele == "string") for (let e of ele.split(",")) if (e && (e = e.trim())) for (let n of document.querySelectorAll(e)) toggle(n);
 		}
 		function toggle(node) {
-			if (node && node.classList) for (let cla of classes) for (let cl of BDFDB.ArrayUtils.is(cla) ? cla : Array.of(cla)) if (typeof cl == "string") for (let c of cl.split(" ")) if (c) node.classList.toggle(c, force);
+			if (node && node.classList) for (let cla of classes) for (let cl of [cla].flat().filter(n => n)) if (typeof cl == "string") for (let c of cl.split(" ")) if (c) node.classList.toggle(c, force);
 		}
 	};
 	BDFDB.DOMUtils.containsClass = function (eles, ...classes) {
@@ -2758,9 +2771,8 @@ var BDFDB = {
 	};
 	BDFDB.DOMUtils.replaceClass = function (eles, oldclass, newclass) {
 		if (!eles || typeof oldclass != "string" || typeof newclass != "string") return;
-		for (let ele of BDFDB.ArrayUtils.is(eles) ? eles : Array.of(eles)) {
-			if (!ele) {}
-			else if (Node.prototype.isPrototypeOf(ele)) replace(ele);
+		for (let ele of [eles].flat().filter(n => n)) {
+			if (Node.prototype.isPrototypeOf(ele)) replace(ele);
 			else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) replace(e);
 			else if (typeof ele == "string") for (let e of ele.split(",")) if (e && (e = e.trim())) for (let n of document.querySelectorAll(e)) replace(n);
 		}
@@ -2772,7 +2784,7 @@ var BDFDB = {
 		return BDFDB.ArrayUtils.removeCopies(classes.flat().filter(n => n).join(" ").split(" ")).join(" ").trim();
 	};
 	BDFDB.DOMUtils.removeClassFromDOM = function (...classes) {
-		for (let c of classes.flat()) if (typeof c == "string") for (let a of c.split(",")) if (a && (a = a.replace(/\.|\s/g, ""))) BDFDB.DOMUtils.removeClass(document.querySelectorAll("." + a), a);
+		for (let c of classes.flat().filter(n => n)) if (typeof c == "string") for (let a of c.split(",")) if (a && (a = a.replace(/\.|\s/g, ""))) BDFDB.DOMUtils.removeClass(document.querySelectorAll("." + a), a);
 	};
 	BDFDB.DOMUtils.show = function (...eles) {
 		BDFDB.DOMUtils.toggle(...eles, true);
@@ -2788,7 +2800,7 @@ var BDFDB = {
 			force = undefined;
 		}
 		if (!eles.length) return;
-		for (let ele of eles.flat()) {
+		for (let ele of eles.flat().filter(n => n)) {
 			if (Node.prototype.isPrototypeOf(ele)) toggle(ele);
 			else if (NodeList.prototype.isPrototypeOf(ele)) for (let node of ele) toggle(node);
 			else if (typeof ele == "string") for (let c of ele.split(",")) if (c && (c = c.trim())) for (let node of document.querySelectorAll(c)) toggle(node);
@@ -2804,7 +2816,7 @@ var BDFDB = {
 		if (Node.prototype.isPrototypeOf(node) && node.nodeType != Node.TEXT_NODE) return getComputedStyle(node, null).getPropertyValue("display") == "none";
 	};
 	BDFDB.DOMUtils.remove = function (...eles) {
-		for (let ele of eles.flat()) {
+		for (let ele of eles.flat().filter(n => n)) {
 			if (Node.prototype.isPrototypeOf(ele)) ele.remove();
 			else if (NodeList.prototype.isPrototypeOf(ele)) {
 				let nodes = Array.from(ele);
@@ -3436,7 +3448,7 @@ var BDFDB = {
 		}
 		if (config.children) {
 			let selectedtab, tabbaritems = [];
-			for (let child of (BDFDB.ArrayUtils.is(config.children) ? config.children : Array.of(config.children))) if (LibraryModules.React.isValidElement(child)) {
+			for (let child of [config.children].flat().filter(n => n)) if (LibraryModules.React.isValidElement(child)) {
 				if (child.type == LibraryComponents.ModalComponents.ModalTabContent) {
 					if (!tabbaritems.length) child.props.open = true;
 					else delete child.props.open;
@@ -3731,7 +3743,7 @@ var BDFDB = {
 		else return setTimeout(() => {BDFDB.TimeUtils.suppress(callback, "Timeout")();}, delay);
 	};
 	BDFDB.TimeUtils.clear = function (...timeobjects) {
-		for (let t of timeobjects.flat()) {
+		for (let t of timeobjects.flat().filter(n => n)) {
 			if (typeof t == "number") {
 				clearInterval(t);
 				clearTimeout(t);
@@ -6563,9 +6575,8 @@ var BDFDB = {
 									className: this.props.titleClassName,
 									children: this.props.title
 								})
-							}) : null,
-							(BDFDB.ArrayUtils.is(this.props.titlechildren) ? this.props.titlechildren : Array.of(this.props.titlechildren))
-						]
+							}) : null
+						].concat([this.props.titlechildren].flat()).filter(n => n)
 					}),
 				].concat(this.props.children)
 			});
@@ -7022,7 +7033,7 @@ var BDFDB = {
 									label: this.props.label
 								})
 							}),
-							(BDFDB.ArrayUtils.is(this.props.labelchildren) ? this.props.labelchildren : Array.of(this.props.labelchildren)),
+							[this.props.labelchildren].flat().filter(n => n),
 							BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
 								grow: 0,
 								shrink: this.props.basis ? 0 : 1,
@@ -8446,13 +8457,15 @@ var BDFDB = {
 		BDFDB.pressedKeys = []; // REMOVE
 	});
 
-	BDFDB.patchModules = {
-		V2C_ContentColumn: "render",
-		V2C_PluginCard: "render",
-		V2C_ThemeCard: "render",
-		UserPopout: "componentDidMount",
-		UserProfile: "componentDidMount",
-		Message: ["componentDidMount","componentDidUpdate"]
+	BDFDB.modules = {
+		after: {
+			V2C_ContentColumn: "render",
+			V2C_PluginCard: "render",
+			V2C_ThemeCard: "render",
+			UserPopout: "componentDidMount",
+			UserProfile: "componentDidMount",
+			Message: ["componentDidMount","componentDidUpdate"]
+		}
 	};
 
 	var BDFDBprocessFunctions = {};

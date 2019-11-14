@@ -3,7 +3,7 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.6.2";}
+	getVersion () {return "2.6.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,13 +11,17 @@ class ShowHiddenChannels {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Search Crash","Fixed issue where Discord would crash if you use the channel 'in' filter in the search popout when a server has hidden text channels"],["Collapse State","Plugin now properly remembers the hidden category collapse state even after a reload"]],
+			"fixed":[["Flashing","Channel list no longer flashes and twitches when connectiong to a voice channel/collapsing a category/scrolling"],["Search Crash","Fixed issue where Discord would crash if you use the channel 'in' filter in the search popout when a server has hidden text channels"],["Collapse State","Plugin now properly remembers the hidden category collapse state even after a reload"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"],["Sort", "You can now sort hidden channels in the native way, meaning they will be placed below their rightful category"],["Tooltip", "The tooltip was removed and was turned into a more friendly modal, which can be access via the right click menu on a channel"]]
 		};
 
-		this.patchModules = {
-			Channels: "render",
-			ChannelItem: ["render", "componentDidMount"]
+		this.patchedModules = {
+			before: {
+				Channels: "render"
+			},
+			after: {
+				ChannelItem: ["render", "componentDidMount"]
+			}
 		};
 	}
 
