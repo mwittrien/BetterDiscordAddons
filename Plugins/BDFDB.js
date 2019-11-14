@@ -6711,6 +6711,8 @@ var BDFDB = {
 	
 	LibraryComponents.GuildComponents.Pill = BDFDB.ModuleUtils.findByString("opacity:1,height:", "20:8", "default.item");
 	
+	LibraryComponents.LazyImage = BDFDB.ModuleUtils.findByName("LazyImage");
+	
 	LibraryComponents.ListRow = reactInitialized && class BDFDB_ListRow extends LibraryModules.React.Component {
 		render () {
 			return BDFDB.ReactUtils.createElement("div", {
