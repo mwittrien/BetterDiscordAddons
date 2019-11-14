@@ -3,7 +3,7 @@
 class OldTitleBar {
 	getName () {return "OldTitleBar";}
 
-	getVersion () {return "1.6.1";}
+	getVersion () {return "1.6.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -247,12 +247,12 @@ class OldTitleBar {
 		children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 			className: BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
 			onClick: _ => {
-				if (this.isMaximized()) this.window.unmaximize();
+				if (this.window.isMaximized()) this.window.unmaximize();
 				else this.window.maximize();
 			},
 			children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 				className: BDFDB.disCNS.channelheadericon + "OTB-maxButton",
-				iconSVG: this.isMaximized() ? `<svg width="26" height="26"><path stroke-width="2" stroke="currentColor" fill="none" d="M6 9 l10 0 l0 10 l-10 0 l0 -10 m3 -3 l10 0 l0 10"/></svg>` : `<svg width="26" height="26"><path stroke-width="2" stroke="currentColor" fill="none" d="M6 6 l13 0 l0 13 l-13 0 l0 -13"/></svg>`
+				iconSVG: this.window.isMaximized() ? `<svg width="26" height="26"><path stroke-width="2" stroke="currentColor" fill="none" d="M6 9 l10 0 l0 10 l-10 0 l0 -10 m3 -3 l10 0 l0 10"/></svg>` : `<svg width="26" height="26"><path stroke-width="2" stroke="currentColor" fill="none" d="M6 6 l13 0 l0 13 l-13 0 l0 -13"/></svg>`
 			})
 		}));
 		children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
@@ -263,10 +263,6 @@ class OldTitleBar {
 				iconSVG: `<svg width="26" height="26"><path stroke-width="2" stroke="currentColor" fill="none" d="M6 6 l13 13 m0 -13 l-13 13"/></svg>`
 			})
 		}));
-	}
-
-	isMaximized () {
-		return window.screen.availWidth == window.outerWidth && window.screen.availHeight == window.outerHeight && window.screenX == 0 && window.screenY == 0;
 	}
 
 	patchMainScreen (enable) {
