@@ -1442,7 +1442,13 @@ var BDFDB = {
 		config.props = config.props && !BDFDB.ArrayUtils.is(config.props) ? Array.of(config.props) : config.props;
 		var parent = firstarray = instance;
 		while (!BDFDB.ArrayUtils.is(firstarray) && firstarray.props && firstarray.props.children) firstarray = firstarray.props.children;
-		if (!BDFDB.ArrayUtils.is(firstarray)) firstarray = [];
+		if (!BDFDB.ArrayUtils.is(firstarray)) {
+			if (parent && parent.props) {
+				parent.props.children = [parent.props.children];
+				firstarray = parent.props.children;
+			}
+			else firstarray = [];
+		}
 		return getChildren(instance);
 		function getChildren (children) {
 			var result = [firstarray, -1];
@@ -2187,7 +2193,7 @@ var BDFDB = {
 	};
 	BDFDB.DataUtils.get = function (plugin, key, id) {
 		plugin = typeof plugin == "string" ? BDFDB.BDUtils.getPlugin(plugin) : plugin;
-		if (!BDFDB.ObjectUtils.is(plugin) || !plugin.defaults || !plugin.defaults[key]) return {};
+		if (!BDFDB.ObjectUtils.is(plugin) || !plugin.defaults || !plugin.defaults[key]) return id === undefined ? {} : null;
 		var oldconfig = BDFDB.DataUtils.load(plugin, key), newconfig = {}, update = false;
 		for (let k in plugin.defaults[key]) {
 			if (oldconfig[k] == null) {

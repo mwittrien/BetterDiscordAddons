@@ -3,7 +3,7 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.6.1";}
+	getVersion () {return "2.6.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ShowHiddenChannels {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Channel Duplicates","Should be impossible now for channels to get duplicated"],["User Duplicates","Removed the user duplicates, which I used for testing, BIG OOF"]],
+			"fixed":[["Search Crash","Fixed issue where Discord would crash if you use the channel 'in' filter in the search popout when a server has hidden text channels"],["Collapse State","Plugin now properly remembers the hidden category collapse state even after a reload"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"],["Sort", "You can now sort hidden channels in the native way, meaning they will be placed below their rightful category"],["Tooltip", "The tooltip was removed and was turned into a more friendly modal, which can be access via the right click menu on a channel"]]
 		};
 
@@ -113,6 +113,35 @@ class ShowHiddenChannels {
 			
 			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.UnreadChannelUtils, "hasUnread", {after: e => {
 				return e.returnValue && !this.isChannelHidden(e.methodArguments[0]);
+			}});
+			
+			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.CategoryCollapseStore, "isCollapsed", {after: e => {
+				if (e.methodArguments[0] && e.methodArguments[0].endsWith("hidden")) return (BDFDB.DataUtils.load(this, "categorydata", "collapsed") || []).includes(e.methodArguments[0]);
+			}});
+			
+			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.CategoryCollapseUtils, "categoryCollapse", {before: e => {
+				if (e.methodArguments[0] && e.methodArguments[0].endsWith("hidden")) {
+					let collapsed = BDFDB.DataUtils.load(this, "categorydata", "collapsed") || [];
+					if (!collapsed.includes(e.methodArguments[0])) {
+						collapsed.push(e.methodArguments[0]);
+						BDFDB.DataUtils.save(collapsed, this, "categorydata", "collapsed");
+					}
+				}
+			}});
+			
+			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.CategoryCollapseUtils, "categoryExpand", {before: e => {
+				if (e.methodArguments[0] && e.methodArguments[0].endsWith("hidden")) {
+					let collapsed = BDFDB.DataUtils.load(this, "categorydata", "collapsed") || [];
+					if (collapsed.includes(e.methodArguments[0])) {
+						BDFDB.ArrayUtils.remove(collapsed, e.methodArguments[0], true);
+						BDFDB.DataUtils.save(collapsed, this, "categorydata", "collapsed");
+					}
+				}
+			}});
+			
+			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.GuildChannelStore, "getTextChannelNameDisambiguations", {after: e => {
+				let all = BDFDB.LibraryModules.ChannelStore.getChannels();
+				for (let channel_id in all) if (all[channel_id].guild_id == e.methodArguments[0] && !e.returnValue[channel_id] && (all[channel_id].type != BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY && all[channel_id].type != BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE)) e.returnValue[channel_id] = {id: channel_id, name: all[channel_id].name};
 			}});
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
@@ -263,9 +292,9 @@ class ShowHiddenChannels {
 			for (let categoryObj of instance.props.categories._categories) if (categoryObj.channel.id.endsWith("hidden")) removedCategories.push(categoryObj);
 			for (let categoryObj of removedCategories) BDFDB.ArrayUtils.remove(instance.props.categories._categories, categoryObj);
 			for (let id in instance.props.categories) if (BDFDB.ArrayUtils.is(instance.props.categories[id])) {
-				let removedCategories = [];
-				for (let categoryObj of instance.props.categories[id]) if (categoryObj.channel.id.endsWith("hidden")) removedCategories.push(categoryObj);
-				for (let categoryObj of removedCategories) BDFDB.ArrayUtils.remove(instance.props.categories[id], categoryObj);
+				let removedChannels = [];
+				for (let channelObj of instance.props.categories[id]) if (this.isChannelHidden(channelObj.channel.id) && (channelObj.channel.type != categoryType || channelObj.channel.id.endsWith("hidden"))) removedChannels.push(channelObj);
+				for (let channelObj of removedChannels) BDFDB.ArrayUtils.remove(instance.props.categories[id], channelObj);
 			}
 			for (let type in instance.props.channels) if (BDFDB.ArrayUtils.is(instance.props.channels[type])) {
 				let removedChannels = [];
