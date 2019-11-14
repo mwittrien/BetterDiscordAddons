@@ -6099,6 +6099,7 @@ var BDFDB = {
 	
 	var NativeSubComponents = {}, LibraryComponents = {}, reactInitialized = LibraryModules.React && LibraryModules.React.Component;
 	NativeSubComponents.Button = BDFDB.ModuleUtils.findByProperties("Colors", "Hovers", "Looks");
+	NativeSubComponents.ContextMenuSliderItem = BDFDB.ModuleUtils.findByName("SliderMenuItem");
 	NativeSubComponents.ContextMenuToggleItem = BDFDB.ModuleUtils.findByName("ToggleMenuItem");
 	NativeSubComponents.FavButton = BDFDB.ModuleUtils.findByName("GIFFavButton");
 	NativeSubComponents.PopoutContainer = BDFDB.ModuleUtils.findByName("Popout");
@@ -6500,15 +6501,43 @@ var BDFDB = {
 	
 	LibraryComponents.ContextMenuItemGroup = BDFDB.ModuleUtils.findByString(`"div",{className`, `default.itemGroup}`);
 	
-	LibraryComponents.ContextMenuSliderItem = BDFDB.ModuleUtils.findByName("SliderMenuItem");
+	LibraryComponents.ContextMenuSliderItem = reactInitialized && class BDFDB_ContextMenuSliderItem extends LibraryModules.React.Component {
+		handleValueChange(value) {
+			let newvalue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value) : value;
+			if (typeof this.props.digits == "number") newvalue = Math.round(newvalue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
+			this.props.defaultValue = newvalue;
+			BDFDB.ReactUtils.forceUpdate(this);
+			if (typeof this.props.onValueChange == "function") this.props.onValueChange(newvalue, this);
+		}
+		handleValueRender(value) {
+			let newvalue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value) : value;
+			if (typeof this.props.digits == "number") newvalue = Math.round(newvalue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
+			if (typeof this.props.renderLabel == "function") this.props.label = this.props.renderLabel(newvalue);
+			if (typeof this.props.onValueRender == "function") {
+				let tempreturn = this.props.onValueRender(newvalue, this);
+				if (tempreturn != undefined) newvalue = tempreturn;
+			}
+			return newvalue;
+		}
+		render() {
+			let defaultValue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange(this.props.edges, [0, 100], this.props.defaultValue) : this.props.defaultValue;
+			if (typeof this.props.digits == "number") defaultValue = Math.round(defaultValue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
+			return BDFDB.ReactUtils.createElement(NativeSubComponents.ContextMenuSliderItem, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+				defaultValue: defaultValue,
+				label: typeof this.props.renderLabel == "function" ? this.props.renderLabel(this.props.defaultValue) : this.props.label,
+				onValueChange: this.handleValueChange.bind(this),
+				onValueRender: this.handleValueRender.bind(this)
+			}), "digits", "edges", "renderLabel"));
+		}
+	};
 	
 	LibraryComponents.ContextMenuSubItem = BDFDB.ModuleUtils.findByName("FluxContainer(SubMenuItem)");
 	
 	LibraryComponents.ContextMenuToggleItem = reactInitialized && class BDFDB_ContextMenuToggleItem extends LibraryModules.React.Component {
 		handleToggle() {
-			if (typeof this.props.action == "function") this.props.action(!this.props.active);
 			this.props.active = !this.props.active;
 			BDFDB.ReactUtils.forceUpdate(this);
+			if (typeof this.props.action == "function") this.props.action(this.props.active);
 		}
 		render() {
 			return BDFDB.ReactUtils.createElement(NativeSubComponents.ContextMenuToggleItem, Object.assign({}, this.props, {action: this.handleToggle.bind(this)}));
