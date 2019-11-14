@@ -110,7 +110,6 @@ class ImageGallery {
 				BDFDB.DOMUtils.addClass(BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, e.node), "image-gallery");
 				this.cleanUpListeners();
 				document.keydownImageGalleryListener = event => {
-					console.log(event);
 					if (!document.contains(e.node)) this.cleanUpListeners();
 					else if (!this.eventFired) {
 						this.eventFired = true;
