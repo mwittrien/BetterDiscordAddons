@@ -14,8 +14,10 @@ class ThemeSettings {
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 		
-		this.patchModules = {
-			V2C_ThemeCard: "render"
+		this.patchedModules = {
+			after: {
+				V2C_ThemeCard: "render"
+			}
 		};
 	}
 

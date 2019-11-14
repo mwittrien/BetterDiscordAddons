@@ -14,11 +14,13 @@ class OldTitleBar {
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
-		this.patchModules = {
-			App: "render",
-			HeaderBarContainer: "render",
-			StandardSidebarView: "render",
-			AuthWrapper: "render"
+		this.patchedModules = {
+			after: {
+				App: "render",
+				HeaderBarContainer: "render",
+				StandardSidebarView: "render",
+				AuthWrapper: "render"
+			}
 		};
 	}
 

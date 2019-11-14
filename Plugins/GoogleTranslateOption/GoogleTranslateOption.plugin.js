@@ -14,11 +14,13 @@ class GoogleTranslateOption {
 			"improved":[["Right Click","Fixed issue where right click would not quick enable/disable translating"]]
 		};
 
-		this.patchModules = {
-			"ChannelTextArea":["componentDidMount","render"],
-			"Message":"componentDidMount",
-			"MessageContent":"componentDidMount",
-			"StandardSidebarView":"componentWillUnmount"
+		this.patchedModules = {
+			after: {
+				ChannelTextArea: ["componentDidMount","render"],
+				Message: "componentDidMount",
+				MessageContent: "componentDidMount",
+				StandardSidebarView: "componentWillUnmount"
+			}
 		};
 	}
 

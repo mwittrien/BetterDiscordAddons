@@ -14,8 +14,10 @@ class SendLargeMessages {
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
-		this.patchModules = {
-			ChannelTextArea: "componentDidMount"
+		this.patchedModules = {
+			after: {
+				ChannelTextArea: "componentDidMount"
+			}
 		};
 	}
 

@@ -14,9 +14,11 @@ class NotificationSounds {
 			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
-		this.patchModules = {
-			"IncomingCalls":"componentDidMount",
-			"StandardSidebarView":"componentWillUnmount"
+		this.patchedModules = {
+			after: {
+				"IncomingCalls":"componentDidMount",
+				"StandardSidebarView":"componentWillUnmount"
+			}
 		};
 	}
 

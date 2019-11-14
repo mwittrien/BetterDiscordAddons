@@ -14,9 +14,11 @@ class LastMessageDate {
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
-		this.patchModules = {
-			UserPopout: "render",
-			AnalyticsContext: "render"
+		this.patchedModules = {
+			after: {
+				UserPopout: "render",
+				AnalyticsContext: "render"
+			}
 		};
 	}
 

@@ -15,8 +15,10 @@ class FriendNotifications {
 			"fixed":[["Double notifications","It now should be impossible for the plugin to trigger double notifications, if this problem still occurs to you, then something is wrong on your end (double plugin file or two different versions at the same time)"],["Listening/Playing/Streaming","Fixed notifications not showing for those types"]]
 		};
 		
-		this.patchModules = {
-			"StandardSidebarView":"componentWillUnmount"
+		this.patchedModules = {
+			after: {
+				"StandardSidebarView":"componentWillUnmount"
+			}
 		};
 	}
 

@@ -14,12 +14,14 @@ class PinDMs {
 			"fixed":[["Home/Library/Store","Fixed Pinned DMs not being added while switching to one of the pages"]]
 		};
 
-		this.patchModules = {
-			"Guilds":"componentDidMount",
-			"PrivateChannel":"componentDidMount",
-			"DirectMessage":["componentDidMount","componentDidUpdate","componentWillUnmount"],
-			"LazyScroller":"render",
-			"StandardSidebarView":"componentWillUnmount"
+		this.patchedModules = {
+			after: {
+				"Guilds":"componentDidMount",
+				"PrivateChannel":"componentDidMount",
+				"DirectMessage":["componentDidMount","componentDidUpdate","componentWillUnmount"],
+				"LazyScroller":"render",
+				"StandardSidebarView":"componentWillUnmount"
+			}
 		};
 	}
 

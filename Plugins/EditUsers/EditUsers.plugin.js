@@ -14,31 +14,33 @@ class EditUsers {
 			"fixed":[["Account","Fixed the coloring in the account details container"]]
 		};
 
-		this.patchModules = {
-			"ChannelTextArea":"componentDidMount",
-			"MemberListItem":["componentDidMount","componentDidUpdate"],
-			"UserPopout":["componentDidMount","componentDidUpdate"],
-			"UserProfile":["componentDidMount","componentDidUpdate"],
-			"FriendRow":"componentDidMount",
-			"VoiceUser":["componentDidMount","componentDidUpdate"],
-			"Account":["componentDidMount","componentDidUpdate"],
-			"AuditLog":"componentDidMount",
-			"BannedCard":"render",
-			"InviteCard":"render",
-			"MemberCard":"render",
-			"InvitationCard":"componentDidMount",
-			"TypingUsers":"componentDidUpdate",
-			"MessageUsername":["componentDidMount","componentDidUpdate"],
-			"DirectMessage":"componentDidMount",
-			"CallAvatar":"componentDidMount",
-			"VideoTile":"componentDidMount",
-			"PictureInPictureVideo":"componentDidMount",
-			"PrivateChannel":["componentDidMount","componentDidUpdate"],
-			"HeaderBar":["componentDidMount","componentDidUpdate"],
-			"HeaderBarContainer":["componentDidMount","componentDidUpdate"],
-			"Clickable":"componentDidMount",
-			"MessageContent":["componentDidMount","componentDidUpdate"],
-			"StandardSidebarView":"componentWillUnmount"
+		this.patchedModules = {
+			after: {
+				"ChannelTextArea":"componentDidMount",
+				"MemberListItem":["componentDidMount","componentDidUpdate"],
+				"UserPopout":["componentDidMount","componentDidUpdate"],
+				"UserProfile":["componentDidMount","componentDidUpdate"],
+				"FriendRow":"componentDidMount",
+				"VoiceUser":["componentDidMount","componentDidUpdate"],
+				"Account":["componentDidMount","componentDidUpdate"],
+				"AuditLog":"componentDidMount",
+				"BannedCard":"render",
+				"InviteCard":"render",
+				"MemberCard":"render",
+				"InvitationCard":"componentDidMount",
+				"TypingUsers":"componentDidUpdate",
+				"MessageUsername":["componentDidMount","componentDidUpdate"],
+				"DirectMessage":"componentDidMount",
+				"CallAvatar":"componentDidMount",
+				"VideoTile":"componentDidMount",
+				"PictureInPictureVideo":"componentDidMount",
+				"PrivateChannel":["componentDidMount","componentDidUpdate"],
+				"HeaderBar":["componentDidMount","componentDidUpdate"],
+				"HeaderBarContainer":["componentDidMount","componentDidUpdate"],
+				"Clickable":"componentDidMount",
+				"MessageContent":["componentDidMount","componentDidUpdate"],
+				"StandardSidebarView":"componentWillUnmount"
+			}
 		};
 	}
 

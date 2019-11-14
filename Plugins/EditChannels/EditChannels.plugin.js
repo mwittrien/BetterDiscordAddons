@@ -14,16 +14,18 @@ class EditChannels {
 			"fixed":[["Settings","Fixed issue where settings could not be saved"]]
 		};
 
-		this.patchModules = {
-			"ChannelTextArea":"componentDidMount",
-			"AuditLog":"componentDidMount",
-			"InviteCard":"render",
-			"ChannelCategoryItem":["componentDidMount","componentDidUpdate"],
-			"ChannelItem":["componentDidMount","componentDidUpdate"],
-			"HeaderBar":["componentDidMount","componentDidUpdate"],
-			"HeaderBarContainer":["componentDidMount","componentDidUpdate"],
-			"Clickable":"componentDidMount",
-			"StandardSidebarView":"componentWillUnmount"
+		this.patchedModules = {
+			after: {
+				"ChannelTextArea":"componentDidMount",
+				"AuditLog":"componentDidMount",
+				"InviteCard":"render",
+				"ChannelCategoryItem":["componentDidMount","componentDidUpdate"],
+				"ChannelItem":["componentDidMount","componentDidUpdate"],
+				"HeaderBar":["componentDidMount","componentDidUpdate"],
+				"HeaderBarContainer":["componentDidMount","componentDidUpdate"],
+				"Clickable":"componentDidMount",
+				"StandardSidebarView":"componentWillUnmount"
+			}
 		};
 	}
 

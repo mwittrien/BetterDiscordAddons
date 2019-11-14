@@ -14,8 +14,10 @@ class BetterNsfwTag {
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 		
-		this.patchModules = {
-			ChannelItem: "render"
+		this.patchedModules = {
+			after: {
+				ChannelItem: "render"
+			}
 		};
 	}
 

@@ -14,12 +14,14 @@ class RemoveNicknames {
 			"added":[["Ignore Elements","Added an option list that let's you costumize in which places nicknames are being removed"]]
 		};
 
-		this.patchModules = {
-			"MemberListItem":"componentDidMount",
-			"MessageUsername":"componentDidMount",
-			"TypingUsers":"componentDidUpdate",
-			"Clickable":"componentDidMount",
-			"StandardSidebarView":"componentWillUnmount"
+		this.patchedModules = {
+			after: {
+				"MemberListItem":"componentDidMount",
+				"MessageUsername":"componentDidMount",
+				"TypingUsers":"componentDidUpdate",
+				"Clickable":"componentDidMount",
+				"StandardSidebarView":"componentWillUnmount"
+			}
 		};
 	}
 

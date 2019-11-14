@@ -14,9 +14,11 @@ class BetterFriendCount {
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
-		this.patchModules = {
-			TabBar: "render",
-			FriendRow: ["componentWillMount","componentWillUnmount"]
+		this.patchedModules = {
+			after: {
+				TabBar: "render",
+				FriendRow: ["componentWillMount","componentWillUnmount"]
+			}
 		};
 	}
 

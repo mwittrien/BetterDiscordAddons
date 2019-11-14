@@ -14,8 +14,10 @@ class ServerHider {
 			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
-		this.patchModules = {
-			"Guild":["componentDidMount","componentDidUpdate"]
+		this.patchedModules = {
+			after: {
+				"Guild":["componentDidMount","componentDidUpdate"]
+			}
 		};
 	}
 

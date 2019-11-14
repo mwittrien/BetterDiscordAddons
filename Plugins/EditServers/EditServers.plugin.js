@@ -14,11 +14,13 @@ class EditServers {
 			"fixed":[["Tooltips","Fixed issue where native tooltip wasn't hidden"]]
 		};
 
-		this.patchModules = {
-			"Guild":"componentDidMount",
-			"GuildIconWrapper":"componentDidMount",
-			"GuildHeader":["componentDidMount","componentDidUpdate"],
-			"Clickable":"componentDidMount"
+		this.patchedModules = {
+			after: {
+				"Guild":"componentDidMount",
+				"GuildIconWrapper":"componentDidMount",
+				"GuildHeader":["componentDidMount","componentDidUpdate"],
+				"Clickable":"componentDidMount"
+			}
 		};
 	}
 

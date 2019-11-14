@@ -14,9 +14,10 @@ class ImageZoom {
 			"fixed":[["Inside Image","Fixed the bug where the zoom settings appeared inside the image"]]
 		};
 
-		this.patchModules = {
-			"ImageModal":["componentDidMount","componentWillUnmount"],
-			"Icon":["componentDidMount","componentWillUnmount"],
+		this.patchedModules = {
+			after: {
+				ImageModal: ["componentDidMount","componentWillUnmount"]
+			}
 		};
 	}
 

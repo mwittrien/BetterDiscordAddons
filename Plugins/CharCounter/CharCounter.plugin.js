@@ -15,10 +15,12 @@ class CharCounter {
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
-		this.patchModules = {
-			ChannelTextArea: "render",
-			Note: "render",
-			ChangeNickname: "render"
+		this.patchedModules = {
+			after: {
+				ChannelTextArea: "render",
+				Note: "render",
+				ChangeNickname: "render"
+			}
 		};
 	}
 

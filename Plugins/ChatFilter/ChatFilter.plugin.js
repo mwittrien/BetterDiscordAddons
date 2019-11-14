@@ -14,9 +14,11 @@ class ChatFilter {
 			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
 		};
 
-		this.patchModules = {
-			"Message":["componentDidMount","componentDidUpdate"],
-			"StandardSidebarView":"componentWillUnmount"
+		this.patchedModules = {
+			after: {
+				"Message":["componentDidMount","componentDidUpdate"],
+				"StandardSidebarView":"componentWillUnmount"
+			}
 		};
 	}
 

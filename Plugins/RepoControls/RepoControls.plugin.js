@@ -14,11 +14,13 @@ class RepoControls {
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
-		this.patchModules = {
-			V2C_List: "render",
-			V2C_PluginCard: "render",
-			V2C_ThemeCard: "render",
-			V2C_ContentColumn: "render"
+		this.patchedModules = {
+			after: {
+				V2C_List: "render",
+				V2C_PluginCard: "render",
+				V2C_ThemeCard: "render",
+				V2C_ContentColumn: "render"
+			}
 		};
 	}
 

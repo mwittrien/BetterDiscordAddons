@@ -14,8 +14,10 @@ class ThemeRepo {
 			"improved":[["ThemeFixer","Fixed and improved"]]
 		};
 
-		this.patchModules = {
-			"V2C_List":"componentDidMount"
+		this.patchedModules = {
+			after: {
+				"V2C_List":"componentDidMount"
+			}
 		};
 	}
 

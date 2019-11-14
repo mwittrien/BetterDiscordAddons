@@ -14,8 +14,10 @@ class SpellCheck {
 			"fixed":[["Edit Textarea","Contextmenu now properly works in all textareas, like the edit message box"]]
 		};
 
-		this.patchModules = {
-			"ChannelTextArea":"componentDidMount"
+		this.patchedModules = {
+			after: {
+				"ChannelTextArea":"componentDidMount"
+			}
 		};
 	}
 

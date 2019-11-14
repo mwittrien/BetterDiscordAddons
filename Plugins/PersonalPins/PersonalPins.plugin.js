@@ -15,8 +15,10 @@ class PersonalPins {
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
-		this.patchModules = {
-			HeaderBarContainer: "render"
+		this.patchedModules = {
+			after: {
+				HeaderBarContainer: "render"
+			}
 		};
 	}
 

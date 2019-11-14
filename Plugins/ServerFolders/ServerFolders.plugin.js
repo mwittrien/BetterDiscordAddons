@@ -14,12 +14,14 @@ class ServerFolders {
 			"fixed":[["Dark Sidebar","Now properly colored with dark sidebar"]]
 		};
 		
-		this.patchModules = {
-			"Guilds":["componentDidMount","componentDidUpdate","componentWillUnmount"],
-			"GuildFolder":["componentDidMount","componentDidUpdate"],
-			"Guild":["componentDidMount","componentDidUpdate"],
-			"GuildFolderSettingsModal":"componentDidMount",
-			"StandardSidebarView":"componentWillUnmount"
+		this.patchedModules = {
+			after: {
+				"Guilds":["componentDidMount","componentDidUpdate","componentWillUnmount"],
+				"GuildFolder":["componentDidMount","componentDidUpdate"],
+				"Guild":["componentDidMount","componentDidUpdate"],
+				"GuildFolderSettingsModal":"componentDidMount",
+				"StandardSidebarView":"componentWillUnmount"
+			}
 		};
 	}
 

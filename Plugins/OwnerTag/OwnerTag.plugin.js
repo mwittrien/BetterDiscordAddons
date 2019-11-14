@@ -14,11 +14,13 @@ class OwnerTag {
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
-		this.patchModules = {
-			MemberListItem: "render",
-			MessageUsername: "render",
-			UserPopout: "componentDidMount",
-			UserProfile: "componentDidMount"
+		this.patchedModules = {
+			after: {
+				MemberListItem: "render",
+				MessageUsername: "render",
+				UserPopout: "componentDidMount",
+				UserProfile: "componentDidMount"
+			}
 		};
 	}
 

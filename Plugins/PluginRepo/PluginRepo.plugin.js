@@ -14,8 +14,10 @@ class PluginRepo {
 			"improved":[["Preview","Now also uses Modules to grab classnames"]]
 		};
 
-		this.patchModules = {
-			"V2C_List":"componentDidMount"
+		this.patchedModules = {
+			after: {
+				"V2C_List":"componentDidMount"
+			}
 		};
 	}
 

@@ -15,10 +15,12 @@ class CompleteTimestamps {
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
-		this.patchModules = {
-			Message: "render",
-			MessageContent: "render",
-			Embed: "render"
+		this.patchedModules = {
+			after: {
+				Message: "render",
+				MessageContent: "render",
+				Embed: "render"
+			}
 		};
 	}
 

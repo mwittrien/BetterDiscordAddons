@@ -10,8 +10,10 @@ class MessageUtilities {
 	getDescription () {return "Offers a number of useful message options. Remap the keybindings in the settings.";}
 
 	constructor () {
-		this.patchModules = {
-			"MessageContextMenu":["componentDidMount","componentDidUpdate"]
+		this.patchedModules = {
+			after: {
+				"MessageContextMenu":["componentDidMount","componentDidUpdate"]
+			}
 		};
 	}
 

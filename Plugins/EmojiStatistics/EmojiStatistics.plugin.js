@@ -14,8 +14,10 @@ class EmojiStatistics {
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
-		this.patchModules = {
-			EmojiPicker: "render" 
+		this.patchedModules = {
+			after: {
+				EmojiPicker: "render" 
+			}
 		};
 	}
 

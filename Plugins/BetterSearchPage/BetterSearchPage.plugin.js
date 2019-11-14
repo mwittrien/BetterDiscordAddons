@@ -14,8 +14,10 @@ class BetterSearchPage {
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
-		this.patchModules = {
-			"SearchResults":"render"
+		this.patchedModules = {
+			after: {
+				SearchResults: "render"
+			}
 		};
 	}
 

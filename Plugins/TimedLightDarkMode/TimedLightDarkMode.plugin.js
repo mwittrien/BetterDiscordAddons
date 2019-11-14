@@ -14,8 +14,10 @@ class TimedLightDarkMode {
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
-		this.patchModules = {
-			RadioGroup: "componentDidMount"
+		this.patchedModules = {
+			after: {
+				RadioGroup: "componentDidMount"
+			}
 		};
 	}
 

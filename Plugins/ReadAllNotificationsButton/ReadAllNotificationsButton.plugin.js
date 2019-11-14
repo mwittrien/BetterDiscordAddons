@@ -14,9 +14,11 @@ class ReadAllNotificationsButton {
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
-		this.patchModules = {
-			Guilds: "render",
-			RecentMentions: "render"
+		this.patchedModules = {
+			after: {
+				Guilds: "render",
+				RecentMentions: "render"
+			}
 		};
 	}
 

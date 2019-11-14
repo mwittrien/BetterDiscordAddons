@@ -14,11 +14,13 @@ class DisplayServersAsChannels {
 			"fixed":[["Server Unclickable","Severs can now be clicked again to switch servers ... oof"],["Folder Styling","Fixed some styling issues with native folders created by the new ServerFolders update"]]
 		};
 
-		this.patchModules = {
-			"Guilds":"componentDidMount",
-			"Guild":["componentDidMount","componentDidUpdate"],
-			"GuildFolder":["componentDidMount","componentDidUpdate"],
-			"StandardSidebarView":"componentWillUnmount"
+		this.patchedModules = {
+			after: {
+				"Guilds":"componentDidMount",
+				"Guild":["componentDidMount","componentDidUpdate"],
+				"GuildFolder":["componentDidMount","componentDidUpdate"],
+				"StandardSidebarView":"componentWillUnmount"
+			}
 		};
 	}
 
