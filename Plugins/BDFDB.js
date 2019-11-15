@@ -1453,7 +1453,7 @@ var BDFDB = {
 		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 		if (!BDFDB.ObjectUtils.is(instance) && !BDFDB.ArrayUtils.is(instance)) return [null, -1];
 		config.name = config.name && [config.name].flat().filter(n => n);
-		config.key = config.name && [config.key].flat().filter(n => n);
+		config.key = config.key && [config.key].flat().filter(n => n);
 		config.props = config.props && [config.props].flat().filter(n => n);
 		var parent = firstarray = instance;
 		while (!BDFDB.ArrayUtils.is(firstarray) && firstarray.props && firstarray.props.children) firstarray = firstarray.props.children;
@@ -1516,7 +1516,7 @@ var BDFDB = {
 		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 		if (!BDFDB.ObjectUtils.is(instance)) return config.all ? (config.group ? {} : []) : null;
 		config.name = config.name && [config.name].flat().filter(n => n);
-		config.key = config.name && [config.key].flat().filter(n => n);
+		config.key = config.key && [config.key].flat().filter(n => n);
 		config.props = config.props && [config.props].flat().filter(n => n);
 		var depth = -1;
 		var start = performance.now();
@@ -1577,7 +1577,7 @@ var BDFDB = {
 		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 		if (!BDFDB.ObjectUtils.is(instance)) return null;
 		config.name = config.name && [config.name].flat().filter(n => n);
-		config.key = config.name && [config.key].flat().filter(n => n);
+		config.key = config.key && [config.key].flat().filter(n => n);
 		var depth = -1;
 		var start = performance.now();
 		var maxdepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
