@@ -4028,6 +4028,7 @@ var BDFDB = {
 		modalTabContent: "tab-content",
 		modalTabContentOpen: "open",
 		modalWrapper: "modal-6GHvdM",
+		selectWrapper: "selectWrapper-ToUmZ9",
 		settingsPanel: "settingsPanel-w2ySNR",
 		settingsPanelInner: "settingsInner-zw1xAY",
 		settingsPanelList: "settingsList-eZjkXj",
@@ -5382,6 +5383,7 @@ var BDFDB = {
 		selectsinglelight: ["NotFound", "selectSingleLight"],
 		selectvalue: ["NotFound", "selectValue"],
 		selectwrap: ["Select", "select"],
+		selectwrapper: ["BDFDB", "selectWrapper"],
 		settingsclosebutton: ["SettingsCloseButton", "closeButton"],
 		settingsclosebuttoncontainer: ["SettingsCloseButton", "container"],
 		settingsheader: ["Item", "header"],
@@ -6985,7 +6987,10 @@ var BDFDB = {
 			if (typeof this.props.onChange == "function") this.props.onChange(value, this);
 		}
 		render() {
-			return BDFDB.ReactUtils.createElement(NativeSubComponents.Select, Object.assign({}, this.props, {onChange: this.handleChange.bind(this)}));
+			return BDFDB.ReactUtils.createElement(NativeSubComponents.Select, Object.assign({}, this.props, {
+				className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.selectwrapper),
+				onChange: this.handleChange.bind(this)
+			}));
 		}
 	};
 	
@@ -7483,7 +7488,11 @@ var BDFDB = {
 			cursor: pointer !important;
 		}
 		
-		${BDFDB.dotCN.selectwrap} > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"] {
+		${BDFDB.dotCN.selectwrapper} {
+			flex: 1 1 auto;
+		}
+		
+		${BDFDB.dotCN.selectwrapper} > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"] {
 			z-index: 3;
 		}
 		
