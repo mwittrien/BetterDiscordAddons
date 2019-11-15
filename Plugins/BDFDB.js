@@ -1372,6 +1372,7 @@ var BDFDB = {
 	LibraryModules.HistoryUtils = BDFDB.ModuleUtils.findByProperties("transitionTo", "replaceWith", "getHistory");;
 	LibraryModules.IconUtils = BDFDB.ModuleUtils.findByProperties("getGuildIconURL", "getGuildBannerURL");
 	LibraryModules.InviteUtils = BDFDB.ModuleUtils.findByProperties("acceptInvite", "createInvite");
+	LibraryModules.KeyCodeUtils = BDFDB.ModuleUtils.findByProperties("toCombo", "keyToCode");
 	LibraryModules.LanguageStore = BDFDB.ModuleUtils.findByProperties("getLanguages", "Messages");
 	LibraryModules.LastChannelStore = BDFDB.ModuleUtils.findByProperties("getLastSelectedChannelId");
 	LibraryModules.LastGuildStore = BDFDB.ModuleUtils.findByProperties("getLastSelectedGuildId");
@@ -6105,6 +6106,7 @@ var BDFDB = {
 	NativeSubComponents.ContextMenuSliderItem = BDFDB.ModuleUtils.findByName("SliderMenuItem");
 	NativeSubComponents.ContextMenuToggleItem = BDFDB.ModuleUtils.findByName("ToggleMenuItem");
 	NativeSubComponents.FavButton = BDFDB.ModuleUtils.findByName("GIFFavButton");
+	NativeSubComponents.KeybindRecorder = BDFDB.ModuleUtils.findByName("KeybindRecorder");
 	NativeSubComponents.PopoutContainer = BDFDB.ModuleUtils.findByName("Popout");
 	NativeSubComponents.QuickSelect = BDFDB.ModuleUtils.findByName("QuickSelectWrapper");
 	NativeSubComponents.SearchBar = BDFDB.ModuleUtils.find(m => m && m.displayName == "SearchBar" && m.defaultProps.placeholder == BDFDB.LanguageUtils.LanguageStrings.SEARCH);
@@ -6714,7 +6716,17 @@ var BDFDB = {
 	
 	LibraryComponents.GuildComponents.Pill = BDFDB.ModuleUtils.findByString("opacity:1,height:", "20:8", "default.item");
 	
-	LibraryComponents.KeybindRecorder = BDFDB.ModuleUtils.findByName("KeybindRecorder");
+	LibraryComponents.KeybindRecorder = reactInitialized && class BDFDB_KeybindRecorder extends LibraryModules.React.Component {
+		handleChange(arrays) {
+			if (typeof this.props.onChange == "function") this.props.onChange(arrays.map(array => array[1]), this);
+		}
+		render() {
+			return BDFDB.ReactUtils.createElement(NativeSubComponents.KeybindRecorder, Object.assign({}, this.props, {
+				defaultValue: [this.props.defaultValue].flat().filter(n => n).map(keycode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, keycode, BDFDB.DiscordConstants.KeyboardEnvs.BROWSER]),
+				onChange: this.handleChange.bind(this)
+			}));
+		}
+	};
 	
 	LibraryComponents.LazyImage = BDFDB.ModuleUtils.findByName("LazyImage");
 	
