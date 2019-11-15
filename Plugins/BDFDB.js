@@ -6778,10 +6778,14 @@ var BDFDB = {
 				theme: LibraryComponents.ScrollerVertical.Themes.GHOST_HAIRLINE,
 				ref: this.props.scrollerRef,
 				children: this.props.children
-			}) : BDFDB.ReactUtils.createElement("div", {
+			}) : BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				className: BDFDB.disCN.modalcontent,
-				children: BDFDB.ReactUtils.createElement("div", {
+				direction: LibraryComponents.Flex.Direction.VERTICAL,
+				align: LibraryComponents.Flex.Align.STRETCH,
+				children: BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.modalsubinner, BDFDB.disCN.modalsubinnerscrollerless, this.props.className),
+					direction: LibraryComponents.Flex.Direction.VERTICAL,
+					align: LibraryComponents.Flex.Align.STRETCH,
 					children: this.props.children
 				})
 			});
