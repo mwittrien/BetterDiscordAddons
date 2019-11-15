@@ -3595,6 +3595,9 @@ body:before {
 #app-mount #bda-qem-favourite-container {
 	height: 424px;
 }
+#app-mount .emojiPicker-3m1S-j .scrollerWrap-2lJEkd {
+	height: unset;
+}
 #app-mount #bda-qem {
 	height: 30px;
 }
