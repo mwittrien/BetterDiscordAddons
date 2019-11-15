@@ -7048,14 +7048,13 @@ var BDFDB = {
 			let childcomponent = LibraryComponents[this.props.type];
 			if (!childcomponent) return null;
 			if (this.props.mini && childcomponent.Sizes) this.props.size = childcomponent.Sizes.MINI || childcomponent.Sizes.MIN;
-			let childprops = BDFDB.ObjectUtils.exclude(Object.assign(BDFDB.ObjectUtils.exclude(this.props, "className", "id", "type"), this.props.childProps, {
-				onChange: this.handleChange.bind(this)
-			}), "basis", "dividerbottom", "dividertop", "label", "labelchildren", "mini", "note", "childProps");
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				className: BDFDB.DOMUtils.formatClassName(this.props.className, this.props.disabled && BDFDB.disCN.disabled),
 				id: this.props.id,
 				direction: LibraryComponents.Flex.Direction.VERTICAL,
 				align: LibraryComponents.Flex.Align.STRETCH,
+				grow: this.props.grow,
+				stretch: this.props.stretch,
 				children: [
 					this.props.dividertop ? BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormDivider, {
 						className: this.props.mini ? BDFDB.disCN.marginbottom8 : BDFDB.disCN.marginbottom20
@@ -7075,7 +7074,7 @@ var BDFDB = {
 								shrink: this.props.basis ? 0 : 1,
 								basis: this.props.basis,
 								wrap: true,
-								children: BDFDB.ReactUtils.createElement(childcomponent, childprops)
+								children: BDFDB.ReactUtils.createElement(childcomponent, BDFDB.ObjectUtils.exclude(Object.assign(BDFDB.ObjectUtils.exclude(this.props, "className", "id", "type"), this.props.childProps, {onChange: this.handleChange.bind(this)}), "grow", "stretch", "basis", "dividerbottom", "dividertop", "label", "labelchildren", "mini", "note", "childProps"))
 							})
 						].flat().filter(n => n)
 					}),
@@ -7127,11 +7126,9 @@ var BDFDB = {
 		}
 		render() {
 			if (typeof this.props.type != "string" || !["SELECT", "SWITCH", "TEXTINPUT"].includes(this.props.type.toUpperCase())) return null;
-			let props = Object.assign({}, this.props, {
+			return BDFDB.ReactUtils.createElement(LibraryComponents.SettingsItem, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				onChange: this.saveSettings.bind(this)
-			});
-			BDFDB.ObjectUtils.delete(props, "keys", "plugin");
-			return BDFDB.ReactUtils.createElement(LibraryComponents.SettingsItem, props);
+			}), "keys", "plugin"));
 		}
 	};
 	
