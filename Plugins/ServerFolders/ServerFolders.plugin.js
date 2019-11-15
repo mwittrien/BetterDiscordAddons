@@ -988,7 +988,7 @@ class ServerFolders {
 		});
 		guildcopy.addEventListener("click", e => {
 			BDFDB.ListenerUtils.stopEvent(e);
-			if (BDFDB.pressedKeys.includes(46)) this.removeGuildFromFolder(folderid, guildid);
+			if (BDFDB.InternalData.pressedKeys.includes(46)) this.removeGuildFromFolder(folderid, guildid);
 			else {
 				BDFDB.LibraryModules.GuildUtils.transitionToGuildSync(guild.id);
 				let settings = BDFDB.DataUtils.get(this, "settings");

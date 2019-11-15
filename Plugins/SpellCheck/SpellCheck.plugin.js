@@ -167,7 +167,7 @@ class SpellCheck {
 			}
 			if (true || !word && textarea.value) for (let error of textarea.parentElement.querySelectorAll(".spelling-error")) {
 				let rects = BDFDB.DOMUtils.getRects(error);
-				if (BDFDB.mousePosition.pageX > rects.x && BDFDB.mousePosition.pageX < (rects.x + rects.width) && BDFDB.mousePosition.pageY > rects.y && BDFDB.mousePosition.pageY < (rects.y + rects.height)) {
+				if (BDFDB.InternalData.mousePosition.pageX > rects.x && BDFDB.InternalData.mousePosition.pageX < (rects.x + rects.width) && BDFDB.InternalData.mousePosition.pageY > rects.y && BDFDB.InternalData.mousePosition.pageY < (rects.y + rects.height)) {
 					word = error.innerText;
 					break;
 				}

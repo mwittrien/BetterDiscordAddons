@@ -257,6 +257,7 @@ var BDFDB = {
 		if (!BDFDB.ObjectUtils.is(plugin) || !children || (!BDFDB.ReactUtils.isValidElement(children) && !BDFDB.ArrayUtils.is(children)) || (BDFDB.ArrayUtils.is(children) && !children.length)) return;
 		var settingspanel = BDFDB.DOMUtils.create(`<div class="${plugin.name}-settings ${BDFDB.disCN.settingspanel}"></div>`);
 		BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(LibraryComponents.SettingsPanel, {
+			key: `${plugin.name}-settingspanel`,
 			title: plugin.name,
 			children
 		}), settingspanel);
