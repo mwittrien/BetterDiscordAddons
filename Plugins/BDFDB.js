@@ -7063,13 +7063,13 @@ var BDFDB = {
 					BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 						align: LibraryComponents.Flex.Align.CENTER,
 						children: [
-							BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
+							this.props.label ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
 								children: BDFDB.ReactUtils.createElement(LibraryComponents.SettingsLabel, {
 									mini: this.props.mini,
 									label: this.props.label
 								})
-							}),
-							[this.props.labelchildren].flat().filter(n => n),
+							}) : null,
+							this.props.labelchildren,
 							BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
 								grow: 0,
 								shrink: this.props.basis ? 0 : 1,
@@ -7077,7 +7077,7 @@ var BDFDB = {
 								wrap: true,
 								children: BDFDB.ReactUtils.createElement(childcomponent, childprops)
 							})
-						]
+						].flat().filter(n => n)
 					}),
 					typeof this.props.note == "string" ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
 						className: BDFDB.disCN.note,
