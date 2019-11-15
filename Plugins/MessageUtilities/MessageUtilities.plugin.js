@@ -141,43 +141,6 @@ class MessageUtilities {
 		return BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 	}
 
-	getSettingsPanel2 () {
-		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		let settings = BDFDB.DataUtils.get(this, "settings"); 
-		let toasts = BDFDB.DataUtils.get(this, "toasts"); 
-		let bindings = BDFDB.DataUtils.get(this, "bindings");
-		let settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
-		for (let key in settings) {
-			if (this.defaults.settings[key].description) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
-		}
-		for (let action in bindings) {
-			if (!this.defaults.bindings[action].plugin || BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings[action].plugin)) {
-				settingshtml += `<div class="${BDFDB.disCNS.divider + BDFDB.disCN.marginbottom4}"></div>`;
-				settingshtml += `<div class="${action}-key-settings"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.bindings[action].name}:</h3>${toasts[action] != undefined ? `<h5 class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 0 0 auto;">Toast:</h5><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="toasts ${action}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${toasts[action] ? " checked" : ""}></div>` : ''}<h5 class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin}" style="flex: 0 0 auto;">Enabled:</h5><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${action}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[action] ? " checked" : ""}></div></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">`;
-				settingshtml += `<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 20%;"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin + BDFDB.disCN.marginbottom4}">Click:</h5>${BDFDB.createSelectMenu(this.createSelectChoice(bindings[action].click), bindings[action].click, action + " click")}</div>`;
-				for (let key of this.keys) {
-					settingshtml += `<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 40%;"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCNS.title + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCNS.weightsemibold + BDFDB.disCNS.h5defaultmargin + BDFDB.disCN.marginbottom4}">${key}:<label class="reset-recorder" style="float: right; padding-right: 5px; cursor: pointer;">✖</label></h5><div type="${action}" option="${key}" value="${bindings[action][key]}" class="${BDFDB.disCNS.hotkeycontainer + BDFDB.disCNS.hotkeycontainer2 + BDFDB.disCN.hotkeyhasvalue}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.hotkeylayout + BDFDB.disCN.hotkeylayout2}" style="flex: 1 1 auto;"><input type="text" placeholder="${this.keyboardMap[bindings[action][key]]}" readonly="" value="${this.keyboardMap[bindings[action][key]]}" class="${BDFDB.disCNS.hotkeyinput + BDFDB.disCNS.hotkeyinput2 + BDFDB.disCN.hotkeybase}" style="flex: 1 1 auto;"></input><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCN.nowrap}" style="flex: 0 1 auto; margin: 0px;"><button type="button" class="${BDFDB.disCNS.hotkeybutton + BDFDB.disCNS.hotkeybutton2 + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookghost + BDFDB.disCNS.buttoncolorgrey + BDFDB.disCNS.buttonsizemin + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"><span class="${BDFDB.disCN.hotkeytext}">${BDFDB.LanguageUtils.LanguageStrings.SHORTCUT_RECORDER_BUTTON_EDIT}</span><span class="${BDFDB.disCN.hotkeyediticon}"/></div></button></div></div></div></div>`;
-				}
-				settingshtml += `</div></div>`;
-			}
-		}
-		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all key bindings.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
-		settingshtml += `</div></div>`;
-
-		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
-
-		BDFDB.initElements(settingspanel, this);
-
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", BDFDB.dotCN.hotkeycontainer, e => {this.startRecording(settingspanel, e);});
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".reset-recorder", e => {this.resetRecorder(settingspanel, e);});
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".reset-button", () => {this.resetAll(settingspanel);});
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {
-			BDFDB.openDropdownMenu(e, this.saveSelectChoice.bind(this), this.createSelectChoice.bind(this), this.clickMap);
-		});
-
-		return settingspanel;
-	}
-
 	//legacy
 	load () {}
 
@@ -271,55 +234,6 @@ class MessageUtilities {
 				}
 			}
 		}
-	}
-
-	startRecording (settingspanel, e) {
-		let recorderWrap = e.currentTarget;
-		if (BDFDB.DOMUtils.containsClass(recorderWrap, BDFDB.disCN.hotkeyrecording)) return;
-
-		let recorderInput = recorderWrap.querySelector("input");
-		let recorderText = recorderWrap.querySelector(BDFDB.dotCN.hotkeytext);
-		let action = recorderWrap.getAttribute("type");
-		let option = recorderWrap.getAttribute("option");
-
-		BDFDB.DOMUtils.addClass(recorderWrap, BDFDB.disCN.hotkeyrecording);
-		BDFDB.DOMUtils.removeClass(recorderWrap, BDFDB.disCN.hotkeyhasvalue);
-		recorderText.innerText = BDFDB.LanguageUtils.LanguageStrings.SHORTCUT_RECORDER_BUTTON_RECORDING;
-
-
-		var saveRecording = e => {
-			recorderWrap.setAttribute("value", e.which);
-			recorderInput.setAttribute("value", this.keyboardMap[e.which]);
-		};
-
-		var stopRecording = e => {
-			document.removeEventListener("mousedown", stopRecording);
-			document.removeEventListener("keydown", saveRecording);
-			let binding = BDFDB.DataUtils.get(this, "bindings", action);
-			binding[option] = parseInt(recorderWrap.getAttribute("value"));
-			BDFDB.DataUtils.save(binding, this, "bindings", action);
-			BDFDB.TimeUtils.timeout(() => {
-				BDFDB.DOMUtils.removeClass(recorderWrap, BDFDB.disCN.hotkeyrecording);
-				BDFDB.DOMUtils.addClass(recorderWrap, BDFDB.disCN.hotkeyhasvalue);
-				recorderText.innerText = BDFDB.LanguageUtils.LanguageStrings.SHORTCUT_RECORDER_BUTTON_EDIT;
-			},100);
-		};
-
-		document.addEventListener("mousedown", stopRecording);
-		document.addEventListener("keydown", saveRecording);
-	}
-
-	resetRecorder (settingspanel, e) {
-		let resetButton = e.currentTarget;
-		let recorderWrap = e.currentTarget.parentElement.parentElement.querySelector(BDFDB.dotCN.hotkeycontainer);
-		let recorderInput = recorderWrap.querySelector("input");
-		let action = recorderWrap.getAttribute("type");
-		let option = recorderWrap.getAttribute("option");
-		recorderWrap.setAttribute("value", 0);
-		recorderInput.setAttribute("value", this.keyboardMap[0]);
-		let binding = BDFDB.DataUtils.get(this, "bindings", action);
-		binding[option] = parseInt(recorderWrap.getAttribute("value"));
-		BDFDB.DataUtils.save(binding, this, "bindings", action);
 	}
 
 	onClick (e, click, name) {
