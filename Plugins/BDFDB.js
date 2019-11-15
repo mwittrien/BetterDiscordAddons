@@ -8488,7 +8488,7 @@ var BDFDB = {
 		BDFDB.pressedKeys = []; // REMOVE
 	});
 
-	BDFDB.modules = {
+	BDFDB.patchedModules = {
 		after: {
 			V2C_ContentColumn: "render",
 			V2C_PluginCard: "render",
