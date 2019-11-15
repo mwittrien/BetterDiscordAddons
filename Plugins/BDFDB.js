@@ -1373,7 +1373,10 @@ var BDFDB = {
 	LibraryModules.IconUtils = BDFDB.ModuleUtils.findByProperties("getGuildIconURL", "getGuildBannerURL");
 	LibraryModules.InviteUtils = BDFDB.ModuleUtils.findByProperties("acceptInvite", "createInvite");
 	LibraryModules.KeyCodeUtils = Object.assign({}, BDFDB.ModuleUtils.findByProperties("toCombo", "keyToCode"));
-	LibraryModules.KeyCodeUtils.getString = keyarray => {return LibraryModules.KeyCodeUtils.toString([keyarray].flat().filter(n => n).map(keycode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, keycode, BDFDB.DiscordConstants.KeyboardEnvs.BROWSER]), true)};
+	LibraryModules.KeyCodeUtils.getString = keyarray => {
+		return LibraryModules.KeyCodeUtils.toString([keyarray].flat().filter(n => n).map(keycode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, keycode, LibraryModules.KeyCodeUtils.getEnv()]), true)
+	};
+	LibraryModules.KeyEvents = BDFDB.ModuleUtils.findByProperties("aliases", "code", "codes");
 	LibraryModules.LanguageStore = BDFDB.ModuleUtils.findByProperties("getLanguages", "Messages");
 	LibraryModules.LastChannelStore = BDFDB.ModuleUtils.findByProperties("getLastSelectedChannelId");
 	LibraryModules.LastGuildStore = BDFDB.ModuleUtils.findByProperties("getLastSelectedGuildId");
@@ -1389,6 +1392,7 @@ var BDFDB = {
 	LibraryModules.NoteStore = BDFDB.ModuleUtils.findByProperties("getNotes", "getNote");
 	LibraryModules.NotificationSettingsUtils = BDFDB.ModuleUtils.findByProperties("setDesktopType", "setTTSType");
 	LibraryModules.NotificationSettingsStore = BDFDB.ModuleUtils.findByProperties("getDesktopType", "getTTSType");
+	LibraryModules.PlatformUtils = BDFDB.ModuleUtils.findByProperties("isWindows", "isLinux");
 	LibraryModules.PermissionUtils = BDFDB.ModuleUtils.findByProperties("getChannelPermissions", "canUser");
 	LibraryModules.PermissionRoleUtils = BDFDB.ModuleUtils.findByProperties("getHighestRole", "can");
 	LibraryModules.ReactionUtils = BDFDB.ModuleUtils.findByProperties("addReaction", "removeReaction");
@@ -4013,6 +4017,8 @@ var BDFDB = {
 		confirmModal: "confirmModal-t-WDWJ",
 		favButtonContainer: "favbutton-8Fzu45",
 		guild: "guild-r3yAE_",
+		hotkeyResetButton: "resetButton-hI9Ax7",
+		hotkeyWrapper: "recorder-can0vx",
 		inputNumberButton: "button-J9muv5",
 		inputNumberButtonDown: "down-cOY7Qp button-J9muv5",
 		inputNumberButtonUp: "up-mUs_72 button-J9muv5",
@@ -4030,7 +4036,7 @@ var BDFDB = {
 		modalTabContent: "tab-content",
 		modalTabContentOpen: "open",
 		modalWrapper: "modal-6GHvdM",
-		selectWrapper: "selectWrapper-ToUmZ9",
+		selectWrapper: "selectWrapper-yPjeij",
 		settingsPanel: "settingsPanel-w2ySNR",
 		settingsPanelInner: "settingsInner-zw1xAY",
 		settingsPanelList: "settingsList-eZjkXj",
@@ -4930,8 +4936,10 @@ var BDFDB = {
 		hotkeylayout: ["HotKeyRecorder", "layout"],
 		hotkeylayout2: ["HotKeyRecorder", "layout"],
 		hotkeyrecording: ["HotKeyRecorder", "recording"],
+		hotkeyresetbutton: ["BDFDB", "hotkeyResetButton"],
 		hotkeyshadowpulse: ["HotKeyRecorder", "shadowPulse"],
 		hotkeytext: ["HotKeyRecorder", "text"],
+		hotkeywrapper: ["BDFDB", "hotkeyWrapper"],
 		hovercard: ["HoverCard", "card"],
 		hovercardbutton: ["NotFound", "hoverCardButton"],
 		hovercardinner: ["BDFDB", "cardInner"],
@@ -6719,13 +6727,34 @@ var BDFDB = {
 	
 	LibraryComponents.KeybindRecorder = reactInitialized && class BDFDB_KeybindRecorder extends LibraryModules.React.Component {
 		handleChange(arrays) {
-			if (typeof this.props.onChange == "function") this.props.onChange(arrays.map(array => array[1]), this);
+			if (typeof this.props.onChange == "function") this.props.onChange(arrays.map(platformkey => LibraryModules.KeyEvents.codes[BDFDB.LibraryModules.KeyCodeUtils.codeToKey(platformkey)] || platformkey[1]), this);
+		}
+		handleReset() {
+			this.props.defaultValue = [];
+			let recorder = BDFDB.ReactUtils.findOwner(this, {name: "KeybindRecorder"});
+			if (recorder) recorder.setState({codes: []});
+			if (typeof this.props.onChange == "function") this.props.onChange([], this);
+			if (typeof this.props.onReset == "function") this.props.onReset(this);
 		}
 		render() {
-			return BDFDB.ReactUtils.createElement(NativeSubComponents.KeybindRecorder, Object.assign({}, this.props, {
-				defaultValue: [this.props.defaultValue].flat().filter(n => n).map(keycode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, keycode, BDFDB.DiscordConstants.KeyboardEnvs.BROWSER]),
-				onChange: this.handleChange.bind(this)
-			}));
+			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+				className: BDFDB.disCN.hotkeywrapper,
+				direction: LibraryComponents.Flex.Direction.HORIZONTAL,
+				align: LibraryComponents.Flex.Align.CENTER,
+				children: [
+					BDFDB.ReactUtils.createElement(NativeSubComponents.KeybindRecorder, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+						defaultValue: [this.props.defaultValue].flat().filter(n => n).map(keycode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, keycode, BDFDB.DiscordConstants.KeyboardEnvs.BROWSER]),
+						onChange: this.handleChange.bind(this)
+					}), "reset", "onReset")),
+					this.props.reset || this.props.onReset ? BDFDB.ReactUtils.createElement(LibraryComponents.Clickable, {
+						className: BDFDB.disCN.hotkeyresetbutton,
+						onClick: this.handleReset.bind(this),
+						children: BDFDB.ReactUtils.createElement(LibraryComponents.SvgIcon, {
+							iconSVG: `<svg height="20" width="20" viewBox="0 0 20 20"><path fill="currentColor" d="M 14.348 14.849 c -0.469 0.469 -1.229 0.469 -1.697 0 l -2.651 -3.030 -2.651 3.029 c -0.469 0.469 -1.229 0.469 -1.697 0 -0.469 -0.469 -0.469 -1.229 0 -1.697l2.758 -3.15 -2.759 -3.152 c -0.469 -0.469 -0.469 -1.228 0 -1.697 s 1.228 -0.469 1.697 0 l 2.652 3.031 2.651 -3.031 c 0.469 -0.469 1.228 -0.469 1.697 0 s 0.469 1.229 0 1.697l -2.758 3.152 2.758 3.15 c 0.469 0.469 0.469 1.229 0 1.698 z"></path></svg>`,
+						})
+					}) : null
+				].filter(n => n)
+			});
 		}
 	};
 	
@@ -7002,10 +7031,14 @@ var BDFDB = {
 			if (typeof this.props.onChange == "function") this.props.onChange(value, this);
 		}
 		render() {
-			return BDFDB.ReactUtils.createElement(NativeSubComponents.Select, Object.assign({}, this.props, {
-				className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.selectwrapper),
-				onChange: this.handleChange.bind(this)
-			}));
+			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+				className: BDFDB.disCN.selectwrapper,
+				direction: LibraryComponents.Flex.Direction.HORIZONTAL,
+				align: LibraryComponents.Flex.Align.CENTER,
+				children: BDFDB.ReactUtils.createElement(NativeSubComponents.Select, Object.assign({}, this.props, {
+					onChange: this.handleChange.bind(this)
+				}))
+			});
 		}
 	};
 	
@@ -7503,12 +7536,22 @@ var BDFDB = {
 			cursor: pointer !important;
 		}
 		
-		${BDFDB.dotCN.selectwrapper} {
+		${BDFDB.dotCNS.selectwrapper + BDFDB.dotCN.selectwrap} {
 			flex: 1 1 auto;
 		}
-		
-		${BDFDB.dotCN.selectwrapper} > [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"] {
+		${BDFDB.dotCN.selectwrapper} [class*="css-"][class*="-container"] > [class*="css-"][class*="-menu"] {
 			z-index: 3;
+		}
+		
+		${BDFDB.dotCNS.hotkeywrapper + BDFDB.dotCN.hotkeycontainer} {
+			flex: 1 1 auto;
+		}
+		${BDFDB.dotCN.hotkeyresetbutton} {
+			cursor: pointer;
+			margin-left: 5px;
+		}
+		${BDFDB.dotCNS.hotkeyresetbutton + BDFDB.dotCN.svgicon}:hover {
+			color: ${BDFDB.DiscordConstants.Colors.STATUS_RED};
 		}
 		
 		${BDFDB.dotCNS.hovercardwrapper + BDFDB.dotCN.hovercardbutton} {
