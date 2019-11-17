@@ -239,8 +239,8 @@ class CompleteTimestamps {
 		if (typeof e.returnvalue.props.children == "function") {
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let renderChildren = e.returnvalue.props.children;
-			e.returnvalue.props.children = () => {
-				let renderedChildren = renderChildren(e.instance);
+			e.returnvalue.props.children = (...args) => {
+				let renderedChildren = renderChildren(...args);
 				if (e.instance.props.isCompact && settings.showInChat) this.injectTimestamp(renderedChildren, e.instance.props);
 				if (settings.changeForEdit) this.injectEditStamp(renderedChildren, e.instance.props);
 				return renderedChildren;

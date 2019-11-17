@@ -3,7 +3,7 @@
 class OwnerTag {
 	getName () {return "OwnerTag";}
 
-	getVersion () {return "1.1.9";}
+	getVersion () {return "1.2.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -152,8 +152,8 @@ class OwnerTag {
 		let usertype = this.getUserType(user);
 		if (usertype && user && typeof e.returnvalue.props.children == "function" && BDFDB.DataUtils.get(this, "settings", "addInChatWindow")) {
 			let renderChildren = e.returnvalue.props.children;
-			e.returnvalue.props.children = () => {
-				let renderedChildren = renderChildren(e.instance);
+			e.returnvalue.props.children = (...args) => {
+				let renderedChildren = renderChildren(...args);
 				this.injectOwnerTag(renderedChildren.props.children, user, usertype, 2, e.instance.props.isCompact ? BDFDB.disCN.bottagmessagecompact : BDFDB.disCN.bottagmessagecozy);
 				return renderedChildren;
 			};

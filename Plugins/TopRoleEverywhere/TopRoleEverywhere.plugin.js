@@ -3,7 +3,7 @@
 class TopRoleEverywhere {
 	getName () {return "TopRoleEverywhere";}
 
-	getVersion () {return "2.9.1";}
+	getVersion () {return "2.9.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -151,8 +151,8 @@ class TopRoleEverywhere {
 		let user = BDFDB.ReactUtils.getValue(e.instance, "props.message.author");
 		if (user && typeof e.returnvalue.props.children == "function" && BDFDB.DataUtils.get(this, "settings", "showInChat")) {
 			let renderChildren = e.returnvalue.props.children;
-			e.returnvalue.props.children = () => {
-				let renderedChildren = renderChildren(e.instance);
+			e.returnvalue.props.children = (...args) => {
+				let renderedChildren = renderChildren(...args);
 				this.injectRoleTag(renderedChildren.props.children, user, "chat", e.instance.props.isCompact ? BDFDB.disCN.bottagmessagecompact : BDFDB.disCN.bottagmessagecozy);
 				return renderedChildren;
 			};

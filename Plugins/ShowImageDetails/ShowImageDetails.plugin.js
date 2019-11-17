@@ -142,8 +142,8 @@ class ShowImageDetails {
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let amounts = BDFDB.DataUtils.get(this, "amounts");
 			let renderChildren = e.returnvalue.props.children;
-			e.returnvalue.props.children = () => {
-				let renderedChildren = renderChildren(e.instance);
+			e.returnvalue.props.children = (...args) => {
+				let renderedChildren = renderChildren(...args);
 				if (settings.showOnHover) return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: `${attachment.filename}\n${BDFDB.NumberUtils.formatBytes(attachment.size)}\n${attachment.width}x${attachment.height}px`,
 					tooltipConfig: {

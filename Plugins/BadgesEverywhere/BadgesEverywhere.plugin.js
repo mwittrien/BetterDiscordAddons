@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";} 
 
-	getVersion () {return "1.4.7";}
+	getVersion () {return "1.4.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -232,8 +232,8 @@ class BadgesEverywhere {
 		let user = BDFDB.ReactUtils.getValue(e.instance, "props.message.author");
 		if (user && typeof e.returnvalue.props.children == "function" && BDFDB.DataUtils.get(this, "settings", "showInChat")) {
 			let renderChildren = e.returnvalue.props.children;
-			e.returnvalue.props.children = () => {
-				let renderedChildren = renderChildren(e.instance);
+			e.returnvalue.props.children = (...args) => {
+				let renderedChildren = renderChildren(...args);
 				this.injectBadges(e.instance, renderedChildren.props.children, user, "chat");
 				return renderedChildren;
 			};

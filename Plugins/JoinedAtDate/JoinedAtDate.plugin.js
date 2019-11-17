@@ -234,8 +234,8 @@ class JoinedAtDate {
 	processAnalyticsContext (e) {
 		if (typeof e.returnvalue.props.children == "function" && e.instance.props.section == "Profile Modal" && BDFDB.DataUtils.get(this, "settings", "addInUserProfil")) {
 			let renderChildren = e.returnvalue.props.children;
-			e.returnvalue.props.children = () => {
-				let renderedChildren = renderChildren(e.instance);
+			e.returnvalue.props.children = (...args) => {
+				let renderedChildren = renderChildren(...args);
 				let [children, index] = BDFDB.ReactUtils.findChildren(renderedChildren, {name: "DiscordTag"});
 				if (index > -1) this.injectDate(e.instance, children, 1, children[index].props.user);
 				return renderedChildren;
