@@ -154,7 +154,7 @@ class OwnerTag {
 			let renderChildren = e.returnvalue.props.children;
 			e.returnvalue.props.children = () => {
 				let renderedChildren = renderChildren(e.instance);
-				this.injectOwnerTag(renderedChildren.props.children), user, usertype, 2, e.instance.props.isCompact ? BDFDB.disCN.bottagmessagecompact : BDFDB.disCN.bottagmessagecozy);
+				this.injectOwnerTag(renderedChildren.props.children, user, usertype, 2, e.instance.props.isCompact ? BDFDB.disCN.bottagmessagecompact : BDFDB.disCN.bottagmessagecozy);
 				return renderedChildren;
 			};
 		}
