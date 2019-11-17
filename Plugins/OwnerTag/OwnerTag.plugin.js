@@ -3,7 +3,7 @@
 class OwnerTag {
 	getName () {return "OwnerTag";}
 
-	getVersion () {return "1.1.9";}
+	getVersion () {return "1.2.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,6 +11,7 @@ class OwnerTag {
 
 	constructor () {
 		this.changelog = {
+			"fixed":[["Chat","Elements now properly get added to the chat again"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
@@ -149,8 +150,13 @@ class OwnerTag {
 	processMessageUsername (e) {
 		let user = BDFDB.ReactUtils.getValue(e.instance, "props.message.author");
 		let usertype = this.getUserType(user);
-		if (usertype && BDFDB.DataUtils.get(this, "settings", "addInChatWindow")) {
-			this.injectOwnerTag(BDFDB.ReactUtils.getValue(e.returnvalue, "props.children.props.children"), user, usertype, 2, e.instance.props.isCompact ? BDFDB.disCN.bottagmessagecompact : BDFDB.disCN.bottagmessagecozy);
+		if (usertype && user && typeof e.returnvalue.props.children == "function" && BDFDB.DataUtils.get(this, "settings", "addInChatWindow")) {
+			let renderChildren = e.returnvalue.props.children;
+			e.returnvalue.props.children = () => {
+				let renderedChildren = renderChildren(e.instance);
+				this.injectOwnerTag(BDFDB.ReactUtils.getValue(e.returnvalue, renderedChildren.props.children), user, usertype, 2, e.instance.props.isCompact ? BDFDB.disCN.bottagmessagecompact : BDFDB.disCN.bottagmessagecozy);
+				return renderedChildren;
+			};
 		}
 	}
 

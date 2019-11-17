@@ -3,7 +3,7 @@
 class TopRoleEverywhere {
 	getName () {return "TopRoleEverywhere";}
 
-	getVersion () {return "2.9.1";}
+	getVersion () {return "2.9.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,6 +11,7 @@ class TopRoleEverywhere {
 
 	constructor () {
 		this.changelog = {
+			"fixed":[["Chat","Elements now properly get added to the chat again"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
@@ -148,8 +149,13 @@ class TopRoleEverywhere {
 
 	processMessageUsername (e) {
 		let user = BDFDB.ReactUtils.getValue(e.instance, "props.message.author");
-		if (user && BDFDB.DataUtils.get(this, "settings", "showInChat")) {
-			this.injectRoleTag(BDFDB.ReactUtils.getValue(e.returnvalue, "props.children.props.children"), user, "chat", e.instance.props.isCompact ? BDFDB.disCN.bottagmessagecompact : BDFDB.disCN.bottagmessagecozy);
+		if (user && typeof e.returnvalue.props.children == "function" && BDFDB.DataUtils.get(this, "settings", "showInChat")) {
+			let renderChildren = e.returnvalue.props.children;
+			e.returnvalue.props.children = () => {
+				let renderedChildren = renderChildren(e.instance);
+				this.injectRoleTag(BDFDB.ReactUtils.getValue(e.returnvalue, renderedChildren.props.children, user, "chat", e.instance.props.isCompact ? BDFDB.disCN.bottagmessagecompact : BDFDB.disCN.bottagmessagecozy);
+				return renderedChildren;
+			};
 		}
 	}
 
