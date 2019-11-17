@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";} 
 
-	getVersion () {return "1.4.8";}
+	getVersion () {return "1.4.7";}
 
 	getAuthor () {return "DevilBro";}
 

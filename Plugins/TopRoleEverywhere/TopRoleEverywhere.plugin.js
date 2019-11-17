@@ -3,7 +3,7 @@
 class TopRoleEverywhere {
 	getName () {return "TopRoleEverywhere";}
 
-	getVersion () {return "2.9.2";}
+	getVersion () {return "2.9.1";}
 
 	getAuthor () {return "DevilBro";}
 

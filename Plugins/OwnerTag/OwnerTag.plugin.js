@@ -3,7 +3,7 @@
 class OwnerTag {
 	getName () {return "OwnerTag";}
 
-	getVersion () {return "1.2.0";}
+	getVersion () {return "1.1.9";}
 
 	getAuthor () {return "DevilBro";}
 
