@@ -153,7 +153,7 @@ class TopRoleEverywhere {
 			let renderChildren = e.returnvalue.props.children;
 			e.returnvalue.props.children = () => {
 				let renderedChildren = renderChildren(e.instance);
-				this.injectRoleTag(BDFDB.ReactUtils.getValue(e.returnvalue, renderedChildren.props.children, user, "chat", e.instance.props.isCompact ? BDFDB.disCN.bottagmessagecompact : BDFDB.disCN.bottagmessagecozy);
+				this.injectRoleTag(renderedChildren.props.children, user, "chat", e.instance.props.isCompact ? BDFDB.disCN.bottagmessagecompact : BDFDB.disCN.bottagmessagecozy);
 				return renderedChildren;
 			};
 		}
