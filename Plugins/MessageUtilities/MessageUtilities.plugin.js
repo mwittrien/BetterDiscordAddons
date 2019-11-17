@@ -3,7 +3,7 @@
 class MessageUtilities {
 	getName () {return "MessageUtilities";}
 
-	getVersion () {return "1.6.0";}
+	getVersion () {return "1.6.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -391,7 +391,7 @@ class MessageUtilities {
 		if (settings.addHints && settings[action]) {
 			let binding = BDFDB.DataUtils.get(this, "bindings", action);
 			if (binding) {
-				str += this.clickMap(binding.click);
+				str += this.clickMap[binding.click];
 				if (binding.keycombo.length) str += " + " + BDFDB.LibraryModules.KeyCodeUtils.getString(binding.keycombo);
 			}
 		}
