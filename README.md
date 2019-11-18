@@ -1,7 +1,9 @@
-# BetterDiscordAddons [![Paypal][paypal-badge]][paypal-link]
+# BetterDiscordAddons [![Paypal][paypal-badge]][paypal-link][![Patreon][patreon-badge]][patreon-link]
 
 [paypal-badge]: https://img.shields.io/badge/Paypal-Donate!-%2300457C.svg?logo=paypal&style=flat
 [paypal-link]: https://paypal.me/MircoWittrien
+[patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%2300457C.svg?logo=patreon&style=flat
+[patreon-link]: https://patreon.com/MircoWittrien
 
 A series of plugins and themes for BetterDiscord. If you got any question hit me up on Discord DevilBro#4401
 
