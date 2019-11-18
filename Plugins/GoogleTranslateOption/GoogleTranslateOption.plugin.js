@@ -16,10 +16,10 @@ class GoogleTranslateOption {
 
 		this.patchedModules = {
 			after: {
-				ChannelTextArea: ["componentDidMount","render"],
-				Message: "componentDidMount",
-				MessageContent: "componentDidMount",
-				StandardSidebarView: "componentWillUnmount"
+				"ChannelTextArea":["componentDidMount","render"],
+				"Message":"componentDidMount",
+				"MessageContent":"componentDidMount",
+				"StandardSidebarView":"componentWillUnmount"
 			}
 		};
 	}
@@ -44,10 +44,10 @@ class GoogleTranslateOption {
 				sendOriginalMessage:	{value:false, 			description:"Send the original message together with the translation."}
 			},
 			choices: {
-				inputContext:			{value:"auto", 			direction:"input",		place:"Context", 		description:"Input Language in selected Messages:"},
-				outputContext:			{value:"$discord", 		direction:"output",		place:"Context", 		description:"Output Language in selected Messages:"},
-				inputMessage:			{value:"auto", 			direction:"input",		place:"Message", 		description:"Input Language in your Message:"},
-				outputMessage:			{value:"$discord", 		direction:"output",		place:"Message", 		description:"Output Language in your Message:"}
+				inputContext:			{value:"auto", 			direction:"input",		place:"Context", 		description:"Input Language in received Messages:"},
+				outputContext:			{value:"$discord", 		direction:"output",		place:"Context", 		description:"Output Language in received Messages:"},
+				inputMessage:			{value:"auto", 			direction:"input",		place:"Message", 		description:"Input Language in sent Messages:"},
+				outputMessage:			{value:"$discord", 		direction:"output",		place:"Message", 		description:"Output Language in sent Messages:"}
 			}
 		};
 
@@ -322,7 +322,7 @@ class GoogleTranslateOption {
 				popoutelements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 					type: "Switch",
 					className: BDFDB.disCN.marginbottom8,
-					label: "Translate:",
+					label: "Translate your Messages before sending",
 					value: this.translating,
 					onChange: value => {
 						this.translating = value;

@@ -920,7 +920,7 @@ var BDFDB = {
 	InternalBDFDB.getWebModuleReq = function () {
 		if (!InternalBDFDB.getWebModuleReq.req) {
 			const id = "BDFDB-WebModules";
-			const req = typeof(window.webpackJsonp) == "function" ? window.webpackJsonp([], {[id]: (module, exports, req) => exports.default = req}, [id]).default : window.webpackJsonp.push([[], {[id]: (module, exports, req) => module.exports = req}, [[id]]]);
+			const req = window.webpackJsonp.push([[], {[id]: (module, exports, req) => module.exports = req}, [[id]]]);
 			delete req.m[id];
 			delete req.c[id];
 			InternalBDFDB.getWebModuleReq.req = req;
@@ -8651,7 +8651,14 @@ var BDFDB = {
 							className: `${BDFDB.disCN._repolink}`,
 							target: "_blank",
 							href: "https://www.paypal.me/MircoWittrien",
-							children: "Donations"
+							children: "PayPal"
+						}));
+						children[index].props.children.push(" | ");
+						children[index].props.children.push(BDFDB.ReactUtils.createElement("a", {
+							className: `${BDFDB.disCN._repolink}`,
+							target: "_blank",
+							href: "https://www.patreon.com/MircoWittrien",
+							children: "Patreon"
 						}));
 					}
 				}
@@ -8727,8 +8734,7 @@ var BDFDB = {
 			return id;
 		};
 		BDFDB.ModuleUtils.DevFuncs.findByIndex = function (index) {
-			var req = InternalBDFDB.getWebModuleReq();
-			return req.c[index];
+			return InternalBDFDB.getWebModuleReq().c[index];
 		};
 		BDFDB.ModuleUtils.DevFuncs.findPropAny = function (strings) {
 			strings = BDFDB.ArrayUtils.is(strings) ? strings : Array.from(arguments);

@@ -1,7 +1,10 @@
-## Plugins [![Paypal][paypal-badge]][paypal-link]
+## Plugins [![Paypal][paypal-badge]][paypal-link] [![Patreon][patreon-badge]][patreon-link]
 
-[paypal-badge]: https://img.shields.io/badge/Paypal-Donate!-%2300457C.svg?logo=paypal&style=flat
+[paypal-badge]: https://img.shields.io/badge/Paypal-Donate!-%23003087.svg?logo=paypal&style=flat
 [paypal-link]: https://paypal.me/MircoWittrien
+
+[patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
+[patreon-link]: https://patreon.com/MircoWittrien
 
  - [BadgesEverywhere](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BadgesEverywhere) - Displays Badges (Nitro, Hypesquad, etc...) in the chat/memberlist/userpopout. Thanks for Zerebos' help.
  - [Better Friend Count](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterFriendCount) - Shows the amount of total and online friends and blocked users in the friends tab.
