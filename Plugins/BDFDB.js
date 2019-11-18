@@ -4010,7 +4010,7 @@ var BDFDB = {
 		collapseContainerHeader: "header-2s6x-5",
 		collapseContainerInner: "inner-TkGytd",
 		collapseContainerTitle: "title-ROsJi-",
-		colorPickerSwatches: "swatches-QxZw_N",
+		colorPickerSwatches: "swatches", //swatches-QxZw_N
 		colorPickerSwatchesDisabled: "disabled-2JgNxl",
 		colorPickerSwatchSingle: "single-Fbb1wB",
 		colorPickerSwatchSelected: "selected-f5IVXN",
@@ -6467,7 +6467,7 @@ var BDFDB = {
 						grow: 0,
 						children: customSwatch
 					}),
-					this.state.colors.length ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+					BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 						direction: LibraryComponents.Flex.Direction.VERTICAL,
 						className: BDFDB.disCN.flexmarginreset,
 						grow: 1,
@@ -6475,9 +6475,9 @@ var BDFDB = {
 							this.renderRow(this.state.colorRows[0]),
 							this.renderRow(this.state.colorRows[1])
 						]
-					}) : null
+					}) 
 				]
-			})
+			});
 		}
 	};
 	
