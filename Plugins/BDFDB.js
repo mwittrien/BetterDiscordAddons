@@ -1374,7 +1374,7 @@ var BDFDB = {
 	LibraryModules.InviteUtils = BDFDB.ModuleUtils.findByProperties("acceptInvite", "createInvite");
 	LibraryModules.KeyCodeUtils = Object.assign({}, BDFDB.ModuleUtils.findByProperties("toCombo", "keyToCode"));
 	LibraryModules.KeyCodeUtils.getString = keyarray => {
-		return LibraryModules.KeyCodeUtils.toString([keyarray].flat().filter(n => n).map(keycode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, keycode, LibraryModules.KeyCodeUtils.getEnv()]), true)
+		return LibraryModules.KeyCodeUtils.toString([keyarray].flat().filter(n => n).map(keycode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, keycode, BDFDB.DiscordConstants.KeyboardEnvs.BROWSER]), true);
 	};
 	LibraryModules.KeyEvents = BDFDB.ModuleUtils.findByProperties("aliases", "code", "codes");
 	LibraryModules.LanguageStore = BDFDB.ModuleUtils.findByProperties("getLanguages", "Messages");

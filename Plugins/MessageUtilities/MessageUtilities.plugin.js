@@ -11,6 +11,7 @@ class MessageUtilities {
 
 	constructor () {
 		this.changelog = {
+			"fixed":[["Editing","No longer triggers while clicking the edit textarea for messages"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 		
@@ -206,30 +207,34 @@ class MessageUtilities {
 			for (let itemlabel of e.node.querySelectorAll(BDFDB.dotCN.contextmenulabel)) {
 				let hint = itemlabel.parentElement.querySelector(BDFDB.dotCN.contextmenuhint);
 				if (hint) {
-					let action = null;
-					switch (itemlabel.innerText) {
-						case BDFDB.LanguageUtils.LanguageStrings.COPY_MESSAGE_LINK:
-							action = "Copy_Link";
-							break;
-						case BDFDB.LanguageUtils.LanguageStrings.EDIT_MESSAGE:
-							action = "Edit_Message";
-							break;
-						case BDFDB.LanguageUtils.LanguageStrings.PIN_MESSAGE:
-						case BDFDB.LanguageUtils.LanguageStrings.UNPIN_MESSAGE:
-							action = "Pin/Unpin_Message";
-							break;
-						case BDFDB.LanguageUtils.LanguageStrings.DELETE_MESSAGE:
-							action = "Delete_Message";
-							break;
+					let hintlabel;
+					if (itemlabel.innerText == BDFDB.LanguageUtils.LanguageStrings.MARK_UNREAD) {
+						if (BDFDB.DataUtils.get(this, "settings", "addHints")) hintlabel = `${this.clickMap[0]}+${BDFDB.LibraryModules.KeyCodeUtils.getString(18)}`;
 					}
-					if (action) {
-						let hintlabel = this.getActiveShortcutString(action);
-						if (hintlabel) {
-							hint.style.setProperty("width", "42px");
-							hint.style.setProperty("max-width", "42px");
-							hint.style.setProperty("margin-left", "8px");
-							BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {speed: 2, children: hintlabel}), hint);
+					else {
+						let action = null;
+						switch (itemlabel.innerText) {
+							case BDFDB.LanguageUtils.LanguageStrings.COPY_MESSAGE_LINK:
+								action = "Copy_Link";
+								break;
+							case BDFDB.LanguageUtils.LanguageStrings.EDIT_MESSAGE:
+								action = "Edit_Message";
+								break;
+							case BDFDB.LanguageUtils.LanguageStrings.PIN_MESSAGE:
+							case BDFDB.LanguageUtils.LanguageStrings.UNPIN_MESSAGE:
+								action = "Pin/Unpin_Message";
+								break;
+							case BDFDB.LanguageUtils.LanguageStrings.DELETE_MESSAGE:
+								action = "Delete_Message";
+								break;
 						}
+						if (action) hintlabel = this.getActiveShortcutString(action);
+					}
+					if (hintlabel) {
+						hint.style.setProperty("width", "42px");
+						hint.style.setProperty("max-width", "42px");
+						hint.style.setProperty("margin-left", "8px");
+						BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {speed: 2, children: hintlabel}), hint);
 					}
 				}
 			}
@@ -400,6 +405,7 @@ class MessageUtilities {
 
 	getMessageData (target) {
 		let messagediv = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagegroup + "> [aria-disabled]", target) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagegroup + "> * > [aria-disabled]", target) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagesystem, target);
+		if (messagediv && messagediv.querySelector(BDFDB.dotCN.textareaedit)) return {messagediv: null, pos: -1, message: null};
 		let pos = messagediv ? Array.from(messagediv.parentElement.childNodes).filter(n => n.nodeType != Node.TEXT_NODE).indexOf(messagediv) : -1;
 		let instance = BDFDB.ReactUtils.getInstance(messagediv);
 		let message = instance ? BDFDB.ReactUtils.findValue(instance, "message", {up:true}) : null;
