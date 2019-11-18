@@ -3,7 +3,7 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.6.4";}
+	getVersion () {return "2.6.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -251,8 +251,6 @@ class ShowHiddenChannels {
 					}
 				}
 			}
-			
-			e.instance.props.categories.null = [];
 			
 			this.changedInstances[e.instance.props.guild.id] = e.instance;
 		}
