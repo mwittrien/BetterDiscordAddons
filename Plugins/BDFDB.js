@@ -3691,7 +3691,7 @@ var BDFDB = {
 		}
 		else {
 			delete swatch.gradient;
-			BDFDB.DOMUtils.removeClass(swatch, "selected");
+			BDFDB.DOMUtils.removeClass(swatch, BDFDB.disCN.colorpickerswatchselected);
 			BDFDB.DOMUtils.remove(swatch.querySelectorAll(".swatch-checkmark"));
 			if (BDFDB.DOMUtils.containsClass(swatch, BDFDB.disCN.colorpickerswatchcustom)) {
 				BDFDB.DOMUtils.addClass(swatch, BDFDB.disCN.colorpickerswatchnocolor);
@@ -3722,7 +3722,7 @@ var BDFDB = {
 		}
 		else setSwatch(swatches.querySelector(BDFDB.dotCNS.colorpickerrow + BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchnocolor), null, true);
 		BDFDB.ListenerUtils.addToChildren(swatches, "click", BDFDB.dotCN.colorpickerswatch, e => {
-			if (BDFDB.DOMUtils.containsClass(swatches, "disabled") || BDFDB.DOMUtils.containsClass(e.currentTarget, BDFDB.disCN.colorpickerswatchdisabled)) return;
+			if (BDFDB.DOMUtils.containsClass(swatches, BDFDB.disCN.colorpickerswatchesdisabled) || BDFDB.DOMUtils.containsClass(e.currentTarget, BDFDB.disCN.colorpickerswatchdisabled)) return;
 			else if (BDFDB.DOMUtils.containsClass(e.currentTarget, BDFDB.disCN.colorpickerswatchcustom)) {
 				BDFDB.ColorUtils.openPicker(swatches, e.currentTarget, e.currentTarget.gradient || e.currentTarget.style.getPropertyValue("background-color"));
 			}
