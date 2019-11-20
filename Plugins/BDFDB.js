@@ -5205,6 +5205,7 @@ var BDFDB = {
 		modeselectable: ["FormText", "modeSelectable"],
 		namecontainer: ["NameContainer", "container"],
 		namecontaineravatar: ["NameContainer", "avatar"],
+		namecontainerchildren: ["NameContainer", "children"],
 		namecontainerclickable: ["NameContainer", "clickable"],
 		namecontainercontent: ["NameContainer", "content"],
 		namecontainerlayout: ["NameContainer", "layout"],
@@ -6867,8 +6868,6 @@ var BDFDB = {
 	};
 	
 	LibraryComponents.NavItem = BDFDB.ModuleUtils.findByName("NavItem");
-	
-	LibraryComponents.PrivateChannel = BDFDB.ModuleUtils.findByName("PrivateChannel");
 	
 	LibraryComponents.Popout = reactInitialized && class BDFDB_Popout extends LibraryModules.React.Component {
 		componentWillUnmount() {
