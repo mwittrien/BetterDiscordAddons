@@ -4289,6 +4289,7 @@ var BDFDB = {
 	DiscordClassModules.SearchResults = BDFDB.ModuleUtils.findByProperties("resultsWrapper", "searchResults");
 	DiscordClassModules.Select = BDFDB.ModuleUtils.findByProperties("select", "error", "errorMessage");
 	DiscordClassModules.SettingsCloseButton = BDFDB.ModuleUtils.findByProperties("closeButton", "keybind");
+	DiscordClassModules.SettingsItems = BDFDB.ModuleUtils.findByProperties("dividerMini", "note");
 	DiscordClassModules.SettingsTable = BDFDB.ModuleUtils.findByProperties("headerOption", "headerSize");
 	DiscordClassModules.SettingsWindow = BDFDB.ModuleUtils.findByProperties("contentRegion", "standardSidebarView");
 	DiscordClassModules.Slider = BDFDB.ModuleUtils.findByProperties("slider", "grabber");
