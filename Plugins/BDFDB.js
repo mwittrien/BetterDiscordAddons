@@ -962,7 +962,7 @@ var BDFDB = {
 		InviteCard: "guildsettingsinvitecard",
 		PopoutContainer: "popout",
 		PrivateChannelCall: "callcurrentcontainer",
-		PrivateChannelsList: "dmchannels",
+		PrivateChannelsList: "dmchannelsscroller",
 		MemberCard: "guildsettingsmembercard",
 		NameTag: "nametag",
 		Note: "usernote",
@@ -1197,10 +1197,11 @@ var BDFDB = {
 				}
 			}
 			if (!instancefound) {
-				var found = false, instanceobserver = new MutationObserver(cs => {cs.forEach(c => {c.addedNodes.forEach(n => {
+				let found = false, disclass = BDFDB.disCN[classname], dotclass = BDFDB.dotCN[classname];
+				let instanceobserver = new MutationObserver(cs => {cs.forEach(c => {c.addedNodes.forEach(n => {
 					if (found || !n || !n.tagName) return;
 					var ele = null;
-					if ((ele = BDFDB.DOMUtils.containsClass(n, BDFDB.disCN[classname]) ? n : n.querySelector(BDFDB.dotCN[classname])) != null) {
+					if ((ele = BDFDB.DOMUtils.containsClass(n, disclass) ? n : n.querySelector(dotclass)) != null) {
 						var ins = BDFDB.ReactUtils.getInstance(ele);
 						if (isCorrectInstance(ins, type)) {
 							found = true;
