@@ -6769,6 +6769,10 @@ var BDFDB = {
 	
 	LibraryComponents.LazyImage = BDFDB.ModuleUtils.findByName("LazyImage");
 	
+	LibraryComponents.ListHeader = BDFDB.ModuleUtils.findByName("ListSectionItem");
+	
+	LibraryComponents.ListItem = BDFDB.ModuleUtils.findByName("ListItem");
+	
 	LibraryComponents.ListRow = reactInitialized && class BDFDB_ListRow extends LibraryModules.React.Component {
 		render () {
 			return BDFDB.ReactUtils.createElement("div", {
