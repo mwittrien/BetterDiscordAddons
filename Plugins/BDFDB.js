@@ -6864,6 +6864,8 @@ var BDFDB = {
 	
 	LibraryComponents.NavItem = BDFDB.ModuleUtils.findByName("NavItem");
 	
+	LibraryComponents.PrivateChannel = BDFDB.ModuleUtils.findByName("PrivateChannel");
+	
 	LibraryComponents.Popout = reactInitialized && class BDFDB_Popout extends LibraryModules.React.Component {
 		componentWillUnmount() {
 			delete this.props.containerInstance.popout;
