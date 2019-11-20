@@ -952,6 +952,7 @@ var BDFDB = {
 		InviteCard: "guildsettingsinvitecard",
 		PopoutContainer: "popout",
 		PrivateChannelCall: "callcurrentcontainer",
+		PrivateChannelsList: "dmchannels",
 		MemberCard: "guildsettingsmembercard",
 		NameTag: "nametag",
 		Note: "usernote",
@@ -4270,6 +4271,7 @@ var BDFDB = {
 	DiscordClassModules.PillWrapper = BDFDB.ModuleUtils.find(m => typeof m.item == "string" && typeof m.wrapper == "string" && Object.keys(m).length == 2);
 	DiscordClassModules.PrivateChannel = BDFDB.ModuleUtils.findByProperties("channel", "closeButton");
 	DiscordClassModules.PrivateChannelList = BDFDB.ModuleUtils.findByProperties("privateChannels", "searchBar");
+	DiscordClassModules.PrivateChannelListScroller = BDFDB.ModuleUtils.findByProperties("scroller", "empty");
 	DiscordClassModules.Popout = BDFDB.ModuleUtils.findByProperties("popout", "arrowAlignmentTop");
 	DiscordClassModules.PopoutActivity = BDFDB.ModuleUtils.findByProperties("ellipsis", "activityActivityFeed");
 	DiscordClassModules.QuickMessage = BDFDB.ModuleUtils.findByProperties("quickMessage", "isBlocked");
@@ -4670,6 +4672,8 @@ var BDFDB = {
 		dmchannelclose: ["PrivateChannel", "closeButton"],
 		dmchannelheader: ["PrivateChannelList", "header"],
 		dmchannels: ["PrivateChannelList", "privateChannels"],
+		dmchannelsempty: ["PrivateChannelListScroller", "empty"],
+		dmchannelsscroller: ["PrivateChannelListScroller", "scroller"],
 		dmpill: ["GuildDm", "pill"],
 		downloadlink: ["DownloadLink", "downloadLink"],
 		ellipsis: ["PopoutActivity", "ellipsis"],
