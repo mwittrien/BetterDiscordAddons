@@ -63,6 +63,7 @@ var BDFDB = {
 
 		if (typeof plugin.initConstructor === "function") BDFDB.TimeUtils.suppress(plugin.initConstructor.bind(plugin), "Could not initiate constructor!", plugin.name)();
 		if (typeof plugin.css === "string") BDFDB.DOMUtils.appendLocalStyle(plugin.name, plugin.css);
+		if (BDFDB.ObjectUtils.is(plugin.classes)) InternalBDFDB.addPluginClasses(plugin);
 
 		InternalBDFDB.patchPlugin(plugin);
 		InternalBDFDB.addOnSettingsClosedListener(plugin);
@@ -94,6 +95,7 @@ var BDFDB = {
 		var url = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 
 		if (typeof plugin.css === "string") BDFDB.DOMUtils.removeLocalStyle(plugin.name);
+		if (BDFDB.ObjectUtils.is(plugin.classes)) InternalBDFDB.removePluginClasses(plugin);
 
 		BDFDB.ModuleUtils.unpatch(plugin);
 		BDFDB.ListenerUtils.remove(plugin);
@@ -262,6 +264,14 @@ var BDFDB = {
 			children
 		}), settingspanel);
 		return settingspanel;
+	};
+	InternalBDFDB.addPluginClasses = function (plugin) {
+		DiscordClassModules[`PLUGIN_${plugin.name}`] = plugin.classes;
+		for (let classname in plugin.classes) DiscordClasses[`$${(plugin.name + classname).toLowerCase()}`] = [`PLUGIN_${plugin.name}`, classname];
+	};
+	InternalBDFDB.removePluginClasses = function (plugin) {
+		delete DiscordClassModules[`PLUGIN_${plugin.name}`];
+		DiscordClasses = BDFDB.ObjectUtils.filter(DiscordClasses, classArray => classArray[0] != `PLUGIN_${plugin.name}`);
 	};
 	InternalBDFDB.clearStartTimeout = function (plugin) {
 		if (!BDFDB.ObjectUtils.is(plugin)) return;
