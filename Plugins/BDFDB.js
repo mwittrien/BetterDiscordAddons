@@ -4235,6 +4235,7 @@ var BDFDB = {
 	DiscordClassModules.ImageWrapper = BDFDB.ModuleUtils.findByProperties("clickable", "imageWrapperBackground");
 	DiscordClassModules.InviteModal = BDFDB.ModuleUtils.findByProperties("inviteRow", "modal");
 	DiscordClassModules.Item = BDFDB.ModuleUtils.findByProperties("item", "side", "header");
+	DiscordClassModules.ItemRole = BDFDB.ModuleUtils.findByProperties("role", "dragged");
 	DiscordClassModules.ItemLayerContainer = BDFDB.ModuleUtils.findByProperties("layer", "layerContainer");
 	DiscordClassModules.Input = BDFDB.ModuleUtils.findByProperties("inputMini", "inputDefault");
 	DiscordClassModules.LayerModal = BDFDB.ModuleUtils.findByProperties("root", "small", "medium");
@@ -4286,7 +4287,6 @@ var BDFDB = {
 	DiscordClassModules.SearchResults = BDFDB.ModuleUtils.findByProperties("resultsWrapper", "searchResults");
 	DiscordClassModules.Select = BDFDB.ModuleUtils.findByProperties("select", "error", "errorMessage");
 	DiscordClassModules.SettingsCloseButton = BDFDB.ModuleUtils.findByProperties("closeButton", "keybind");
-	DiscordClassModules.SettingsItems = BDFDB.ModuleUtils.findByProperties("dividerMini", "note");
 	DiscordClassModules.SettingsTable = BDFDB.ModuleUtils.findByProperties("headerOption", "headerSize");
 	DiscordClassModules.SettingsWindow = BDFDB.ModuleUtils.findByProperties("contentRegion", "standardSidebarView");
 	DiscordClassModules.Slider = BDFDB.ModuleUtils.findByProperties("slider", "grabber");
@@ -5398,6 +5398,10 @@ var BDFDB = {
 		settingsclosebuttoncontainer: ["SettingsCloseButton", "container"],
 		settingsheader: ["Item", "header"],
 		settingsitem: ["Item", "item"],
+		settingsitemdragged: ["ItemRole", "dragged"],
+		settingsitemdlock: ["ItemRole", "lock"],
+		settingsitemrole: ["ItemRole", "role"],
+		settingsitemroleinner: ["ItemRole", "roleInner"],
 		settingsitemselected: ["Item", "selected"],
 		settingsitemthemed: ["Item", "themed"],
 		settingspanel: ["BDFDB", "settingsPanel"],
