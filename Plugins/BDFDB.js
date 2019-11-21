@@ -4099,13 +4099,14 @@ var BDFDB = {
 		switchItem: "ui-switch-item",
 		switchWrapper: "ui-switch-wrapper"
 	};
-	DiscordClassModules.BDv2repo = {
-		bdButton: "bd-button",
-		bdCard: "bd-card",
-		bdHasTooltip: "bd-hasTooltip",
-		bdMaterialDesignIcon: "bd-materialDesignIcon",
-		bdTooltip: "bd-tooltip",
-		vTooltipOpen: "v-tooltip-open"
+	DiscordClassModules.PinDMs = {
+		dragPreview: "dragPreview-0lM4wD",
+		dmChannelPlaceholder: "placeholder-7bhR5s",
+		dmChannelPinned: "pinned-0lM4wD",
+		recentPinned: "pinned-jHvFrr",
+		pinnedChannelsHeaderContainer: "pinnedChannelsHeaderContainer-89Gjv4",
+		unpinButton: "unpinButton-z3-UVO",
+		unpinIcon: "unpinIcon-79ZnEr"
 	};
 	DiscordClassModules.NotFound = {
 		_: "",
@@ -4328,7 +4329,7 @@ var BDFDB = {
 	DiscordClassModules.VoiceDetails = BDFDB.ModuleUtils.findByProperties("container", "customStatusContainer");
 	DiscordClassModules.VoiceDetailsPing = BDFDB.ModuleUtils.findByProperties("rtcConnectionQualityBad", "rtcConnectionQualityFine");
 	BDFDB.DiscordClassModules = Object.assign({}, DiscordClassModules);
-
+	
 	var DiscordClasses = {
 		_bdguild: ["BDrepo", "bdGuild"],
 		_bdguildanimatable: ["BDrepo", "bdGuildAnimatable"],
@@ -4339,11 +4340,13 @@ var BDFDB = {
 		_bdguildvideo: ["BDrepo", "bdGuildVideo"],
 		_bdpillselected: ["BDrepo", "bdPillSelected"],
 		_bdpillunread: ["BDrepo", "bdPillUnread"],
-		_bdv2button: ["BDv2repo", "bdButton"],
-		_bdv2card: ["BDv2repo", "bdCard"],
-		_bdv2hastooltip: ["BDv2repo", "bdHasTooltip"],
-		_bdv2materialdesignicon: ["BDv2repo", "bdMaterialDesignIcon"],
-		_bdv2tooltipopen: ["BDv2repo", "vTooltipOpen"],
+		_pindmsdragpreview: ["PinDMs", "dragPreview"],
+		_pindmsdmchannelpinned: ["PinDMs", "dmChannelPinned"],
+		_pindmsdmchannelplaceholder: ["PinDMs", "dmChannelPlaceholder"],
+		_pindmspinnedchannelsheadercontainer: ["PinDMs", "pinnedChannelsHeaderContainer"],
+		_pindmsrecentpinned: ["PinDMs", "recentPinned"],
+		_pindmsunpinbutton: ["PinDMs", "unpinButton"],
+		_pindmsunpinicon: ["PinDMs", "unpinIcon"],
 		_repoauthor: ["BDrepo", "bdaAuthor"],
 		_repocheckbox: ["BDrepo", "switchCheckbox"],
 		_repocheckboxchecked: ["BDrepo", "switchChecked"],
