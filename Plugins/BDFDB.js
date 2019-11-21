@@ -1372,6 +1372,7 @@ var BDFDB = {
 	LibraryModules.ContextMenuUtils = BDFDB.ModuleUtils.findByProperties("closeContextMenu", "openContextMenu");
 	LibraryModules.CopyLinkUtils = BDFDB.ModuleUtils.findByProperties("SUPPORTS_COPY", "copy");
 	LibraryModules.CurrentUserStore = BDFDB.ModuleUtils.findByProperties("getCurrentUser");
+	LibraryModules.DirectMessageUnreadStore = BDFDB.ModuleUtils.findByProperties("getUnreadPrivateChannelIds");
 	LibraryModules.DirectMessageUtils = BDFDB.ModuleUtils.findByProperties("addRecipient", "openPrivateChannel");
 	LibraryModules.FriendUtils = BDFDB.ModuleUtils.findByProperties("getFriendIDs", "getRelationships");
 	LibraryModules.FolderStore = BDFDB.ModuleUtils.findByProperties("getGuildFolderById", "getFlattenedGuilds");
@@ -1395,7 +1396,6 @@ var BDFDB = {
 	LibraryModules.LastGuildStore = BDFDB.ModuleUtils.findByProperties("getLastSelectedGuildId");
 	LibraryModules.LoginUtils = BDFDB.ModuleUtils.findByProperties("login", "logout");
 	LibraryModules.MemberStore = BDFDB.ModuleUtils.findByProperties("getMember", "getMembers");
-	LibraryModules.MentionUtils = BDFDB.ModuleUtils.findByProperties("getMentionCount", "getMentionCounts");
 	LibraryModules.MessageCreationUtils = BDFDB.ModuleUtils.findByProperties("parse", "isMentioned");
 	LibraryModules.MessagePinUtils = BDFDB.ModuleUtils.findByProperties("pinMessage", "unpinMessage");
 	LibraryModules.MessageStore = BDFDB.ModuleUtils.findByProperties("getMessage", "getMessages");
@@ -1847,7 +1847,7 @@ var BDFDB = {
 			if (!eleOrInfoOrId) return null;
 			let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 			id = typeof id == "number" ? id.toFixed() : id;
-			if (id && (LibraryModules.UnreadGuildUtils.hasUnread(id) || LibraryModules.MentionUtils.getMentionCount(id) > 0)) found.push(eleOrInfoOrId);
+			if (id && (LibraryModules.UnreadGuildUtils.hasUnread(id) || LibraryModules.UnreadGuildUtils.getMentionCount(id) > 0)) found.push(eleOrInfoOrId);
 		}
 		return found;
 	};
@@ -1857,7 +1857,7 @@ var BDFDB = {
 			if (!eleOrInfoOrId) return null;
 			let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 			id = typeof id == "number" ? id.toFixed() : id;
-			if (id && LibraryModules.MentionUtils.getMentionCount(id) > 0) found.push(eleOrInfoOrId);
+			if (id && LibraryModules.UnreadGuildUtils.getMentionCount(id) > 0) found.push(eleOrInfoOrId);
 		}
 		return found;
 	};
@@ -1974,7 +1974,7 @@ var BDFDB = {
 			return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("GuildContextMenu"), Object.assign({}, e, {
 				type: BDFDB.DiscordConstants.ContextMenuTypes.GUILD_ICON_BAR,
 				guild: guild,
-				badge: LibraryModules.MentionUtils.getMentionCount(guild.id),
+				badge: LibraryModules.UnreadGuildUtils.getMentionCount(guild.id),
 				link: BDFDB.DiscordConstants.Routes.CHANNEL(guild.id, LibraryModules.LastChannelStore.getChannelId(guild.id)),
 				selected: guild.id == LibraryModules.LastGuildStore.getGuildId()
 			}));
@@ -6681,7 +6681,7 @@ var BDFDB = {
 			this.props.selectedChannelId = LibraryModules.LastChannelStore.getChannelId(this.props.guild.id);
 			this.props.selected = this.props.state ? LibraryModules.LastGuildStore.getGuildId() == this.props.guild.id : false;
 			this.props.unread = this.props.state ? LibraryModules.UnreadGuildUtils.hasUnread(this.props.guild.id) : false;
-			this.props.badge = this.props.state ? LibraryModules.MentionUtils.getMentionCount(this.props.guild.id) : 0;
+			this.props.badge = this.props.state ? LibraryModules.UnreadGuildUtils.getMentionCount(this.props.guild.id) : 0;
 			this.props.audio = this.props.state ? (LibraryModules.ChannelStore.getChannel(LibraryModules.LastChannelStore.getVoiceChannelId()) || {}).guild_id == this.props.guild.id : false;
 			this.props.video = this.props.state ? (LibraryModules.StreamUtils.getActiveStream() || {}).guildId == this.props.guild.id : false;
 			var isDraggedGuild = this.props.draggingGuildId === this.props.guild.id;
