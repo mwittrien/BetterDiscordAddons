@@ -968,6 +968,7 @@ var BDFDB = {
 		Note: "usernote",
 		SearchResults: "searchresultswrap",
 		TypingUsers: "typing",
+		UnreadDMs: "guildsscroller",
 		UserPopout: "userpopout",
 		V2C_ContentColumn: "contentcolumn",
 		V2C_List: "_repolist",
@@ -1168,7 +1169,7 @@ var BDFDB = {
 			if (instance) {
 				var name = type.split(" _ _ ")[0];
 				instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
-				instance = instance.displayName == name || instance.name == name ? instance : BDFDB.ReactUtils.findOwner(instance, {name, up:true});
+				instance = instance.displayName == name || instance.name == name ? instance : (BDFDB.ReactUtils.findOwner(instance, {name}) || BDFDB.ReactUtils.findOwner(instance, {name, up:true}));
 				if (instance) {
 					instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 					let patchfunctions = {};
@@ -1218,7 +1219,7 @@ var BDFDB = {
 		function isCorrectInstance(instance, name) {
 			if (!instance) return false;
 			instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
-			instance = instance.displayName == name || instance.name == name ? instance : BDFDB.ReactUtils.findOwner(instance, {name, up:true});
+			instance = instance.displayName == name || instance.name == name ? instance : (BDFDB.ReactUtils.findOwner(instance, {name}) || BDFDB.ReactUtils.findOwner(instance, {name, up:true}));
 			return !!instance;
 		}
 	};
