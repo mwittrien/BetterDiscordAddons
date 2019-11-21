@@ -4101,10 +4101,11 @@ var BDFDB = {
 	};
 	DiscordClassModules.PinDMs = {
 		dragPreview: "dragPreview-0lM4wD",
-		dmChannelPlaceholder: "placeholder-7bhR5s",
 		dmChannelPinned: "pinned-0lM4wD",
-		recentPinned: "pinned-jHvFrr",
+		dmChannelPlaceholder: "placeholder-7bhR5s",
 		pinnedChannelsHeaderContainer: "pinnedChannelsHeaderContainer-89Gjv4",
+		recentPinned: "pinned-jHvFrr",
+		recentPlaceholder: "placeholder-Uff-gH",
 		unpinButton: "unpinButton-z3-UVO",
 		unpinIcon: "unpinIcon-79ZnEr"
 	};
@@ -4345,6 +4346,7 @@ var BDFDB = {
 		_pindmsdmchannelplaceholder: ["PinDMs", "dmChannelPlaceholder"],
 		_pindmspinnedchannelsheadercontainer: ["PinDMs", "pinnedChannelsHeaderContainer"],
 		_pindmsrecentpinned: ["PinDMs", "recentPinned"],
+		_pindmsrecentplaceholder: ["PinDMs", "recentPlaceholder"],
 		_pindmsunpinbutton: ["PinDMs", "unpinButton"],
 		_pindmsunpinicon: ["PinDMs", "unpinIcon"],
 		_repoauthor: ["BDrepo", "bdaAuthor"],
