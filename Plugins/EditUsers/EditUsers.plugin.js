@@ -201,7 +201,7 @@ class EditUsers {
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_usersettings_text,
-									action: e => {
+									action: _ => {
 										BDFDB.ContextMenuUtils.close(menu);
 										this.showUserSettings(instance.props.user);
 									}
@@ -209,7 +209,7 @@ class EditUsers {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_resetsettings_text,
 									disabled: !BDFDB.DataUtils.load(this, "users", instance.props.user.id),
-									action: e => {
+									action: _ => {
 										BDFDB.ContextMenuUtils.close(menu);
 										BDFDB.DataUtils.remove(this, "users", instance.props.user.id);
 										this.forceUpdateAll();

@@ -349,8 +349,8 @@ class ServerFolders {
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 					label: this.labels.foldercontext_removefolder_text,
 					danger: true,
-					action: e => {
-						BDFDB.ContextMenuUtils.close(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, e.target));
+					action: _ => {
+						BDFDB.ContextMenuUtils.close(instance);
 						BDFDB.ModalUtils.confirm(this, `Are you sure you want to remove the folder${folder.folderName ? (" '" + folder.folderName + '"') : ""}?`, () => {this.removeFolder(folderid);});
 					}
 				})
@@ -364,7 +364,7 @@ class ServerFolders {
 			let addtofolderitems = [], openguilds = BDFDB.LibraryModules.FolderStore.getSortedGuilds().filter(n => !n.folderId).map(n => n.guilds[0]);
 			for (let i = 0; i < folders.length; i++) addtofolderitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: folders[i].folderName || (this.labels.modal_tabheader1_text + " #" + parseInt(i+1)),
-				action: e => {
+				action: _ => {
 					BDFDB.ContextMenuUtils.close(menu);
 					this.addGuildToFolder(folders[i].folderId, guildid);
 				}
@@ -379,7 +379,7 @@ class ServerFolders {
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 								label: this.labels.serversubmenu_removefromfolder_text,
 								danger: true,
-								action: e => {
+								action: _ => {
 									BDFDB.ContextMenuUtils.close(menu);
 									this.removeGuildFromFolder(folder.folderId, guildid);
 								}
@@ -388,7 +388,7 @@ class ServerFolders {
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 								label: this.labels.serversubmenu_createfolder_text,
 								disabled: !openguilds.length,
-								action: e => {
+								action: _ => {
 									BDFDB.ContextMenuUtils.close(menu);
 									this.openFolderCreationMenu(openguilds, guildid);
 								}

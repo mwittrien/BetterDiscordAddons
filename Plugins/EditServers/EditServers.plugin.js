@@ -145,7 +145,7 @@ class EditServers {
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_serversettings_text,
-									action: e => {
+									action: _ => {
 										BDFDB.ContextMenuUtils.close(menu);
 										this.showServerSettings(instance.props.guild);
 									}
@@ -153,7 +153,7 @@ class EditServers {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_resetsettings_text,
 									disabled: !BDFDB.DataUtils.load(this, "servers", instance.props.guild.id),
-									action: e => {
+									action: _ => {
 										BDFDB.ContextMenuUtils.close(menu);
 										BDFDB.DataUtils.remove(this, "servers", instance.props.guild.id);
 										this.forceUpdateAll(instance.props.guild.id);

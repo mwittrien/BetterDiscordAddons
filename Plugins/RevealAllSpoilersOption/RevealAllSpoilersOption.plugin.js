@@ -3,7 +3,7 @@
 class RevealAllSpoilersOption {
 	getName () {return "RevealAllSpoilersOption";}
 
-	getVersion () {return "1.0.2";}
+	getVersion () {return "1.0.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -69,7 +69,7 @@ class RevealAllSpoilersOption {
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 						label: "Reveal all Spoilers",
 						hint: BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Reveal_Spoilers") : null,
-						action: e => {
+						action: _ => {
 							BDFDB.ContextMenuUtils.close(e.instance);
 							this.revealAllSpoilers(messagediv);
 						}

@@ -312,7 +312,7 @@ class ChatAliases {
 			children: [
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 					label: "Add to ChatAliases",
-					action: e => {
+					action: _ => {
 						BDFDB.ContextMenuUtils.close(menu);
 						this.openAddModal(text);
 					}

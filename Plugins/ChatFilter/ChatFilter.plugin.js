@@ -304,7 +304,7 @@ class ChatFilter {
 			children: [
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 					label: "Add to ChatFilter",
-					action: e => {
+					action: _ => {
 						BDFDB.ContextMenuUtils.close(menu);
 						this.openAddModal(text);
 					}

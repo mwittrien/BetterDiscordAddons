@@ -163,7 +163,7 @@ class GoogleTranslateOption {
 			const translateUntranslateItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: translated ? this.labels.context_messageuntranslateoption_text : this.labels.context_messagetranslateoption_text,
 				hint: BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Translate_Message") : null,
-				action: e => {
+				action: _ => {
 					BDFDB.ContextMenuUtils.close(menu);
 					this.translateMessage(instance.props.message, instance.props.target, instance.props.channel);
 				}
@@ -177,8 +177,8 @@ class GoogleTranslateOption {
 				var foundtranslation, foundinput, foundoutput;
 				const searchTranslationItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 					label: this.labels.context_googletranslateoption_text,
-					action: e => {
-						var item = BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenuitem, e.target);
+					action: event => {
+						var item = BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenuitem, event.target);
 						if (item) {
 							var createTooltip = () => {
 								BDFDB.TooltipUtils.create(item, `From ${foundinput.name}:\n${text}\n\nTo ${foundoutput.name}:\n${foundtranslation}`, {type:"right", selector:"googletranslate-tooltip"});
@@ -214,7 +214,7 @@ class GoogleTranslateOption {
 			children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: this.labels[translated ? "popout_untranslateoption_text" : "popout_translateoption_text"],
 				className: BDFDB.disCN.optionpopoutitem,
-				action: e => {
+				action: _ => {
 					this.translateMessage(instance.props.message, instance.props.target, instance.props.channel);
 					instance.props.onClose();
 				}

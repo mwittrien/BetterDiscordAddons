@@ -167,7 +167,7 @@ class ServerHider {
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_openhidemenu_text,
-									action: e => {
+									action: _ => {
 										BDFDB.ContextMenuUtils.close(menu);
 										this.showServerModal();
 									}
@@ -175,7 +175,7 @@ class ServerHider {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_hideserver_text,
 									disabled: !(instance.props.guild && !instance.props.target.getAttribute("folder")),
-									action: e => {
+									action: _ => {
 										BDFDB.ContextMenuUtils.close(menu);
 										this.toggleServer(instance.props.guild, instance.props.target, false);
 									}

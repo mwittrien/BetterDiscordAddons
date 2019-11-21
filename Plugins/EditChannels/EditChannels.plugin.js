@@ -154,7 +154,7 @@ class EditChannels {
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_channelsettings_text,
-									action: e => {
+									action: _ => {
 										BDFDB.ContextMenuUtils.close(menu);
 										this.showChannelSettings(instance.props.channel);
 									}
@@ -162,7 +162,7 @@ class EditChannels {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_resetsettings_text,
 									disabled: !BDFDB.DataUtils.load(this, "channels", instance.props.channel.id),
-									action: e => {
+									action: _ => {
 										BDFDB.ContextMenuUtils.close(menu);
 										BDFDB.DataUtils.remove(this, "channels", instance.props.channel.id);
 										this.forceUpdateAll();

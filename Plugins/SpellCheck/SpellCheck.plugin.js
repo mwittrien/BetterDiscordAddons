@@ -178,7 +178,7 @@ class SpellCheck {
 				let similarWords = this.getSimilarWords(word.toLowerCase().trim());
 				for (let suggestion of similarWords.sort()) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 					label: suggestion,
-					action: e => {
+					action: _ => {
 						BDFDB.ContextMenuUtils.close(menu);
 						this.replaceWord(textarea, word, suggestion);
 					}
@@ -194,7 +194,7 @@ class SpellCheck {
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 								label: this.labels.context_spellcheck_text,
 								hint: word,
-								action: e => {
+								action: _ => {
 									BDFDB.ContextMenuUtils.close(menu);
 									this.addToOwnDictionary(word);
 								}
