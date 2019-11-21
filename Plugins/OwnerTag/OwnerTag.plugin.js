@@ -3,7 +3,7 @@
 class OwnerTag {
 	getName () {return "OwnerTag";}
 
-	getVersion () {return "1.2.2";}
+	getVersion () {return "1.2.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -19,8 +19,8 @@ class OwnerTag {
 			after: {
 				MemberListItem: "render",
 				MessageUsername: "render",
-				UserPopout: "componentDidMount",
-				UserProfile: "componentDidMount"
+				UserPopout: ["componentDidMount", "componentDidUpdate"],
+				UserProfile: ["componentDidMount", "componentDidUpdate"]
 			}
 		};
 	}
@@ -188,7 +188,8 @@ class OwnerTag {
 	}
 	
 	appendOwnerTag (parent, user, usertype, tagclass = "", inverted = false) {
-		let renderWrapper = document.createElement("span");
+		BDFDB.DOMUtils.remove(parent.querySelectorAll(".owner-tag"));
+		let renderWrapper = BDFDB.DOMUtils.create(`<span class="owner-tag"></span>`);
 		BDFDB.ReactUtils.render(this.createOwnerTag(user, usertype, tagclass, inverted), renderWrapper);
 		parent.appendChild(renderWrapper);
 	}
