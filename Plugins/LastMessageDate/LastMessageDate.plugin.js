@@ -3,7 +3,7 @@
 class LastMessageDate {
 	getName () {return "LastMessageDate";}
 
-	getVersion () {return "1.1.0";}
+	getVersion () {return "1.1.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,6 +11,7 @@ class LastMessageDate {
 
 	constructor () {
 		this.changelog = {
+			"fixed":[["BetterRoleColors","Fixed now working when BRC is enabled ......"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
@@ -243,7 +244,7 @@ class LastMessageDate {
 			let renderChildren = e.returnvalue.props.children;
 			e.returnvalue.props.children = (...args) => {
 				let renderedChildren = renderChildren(...args);
-				let [children, index] = BDFDB.ReactUtils.findChildren(renderedChildren, {name: "DiscordTag"});
+				let [children, index] = BDFDB.ReactUtils.findChildren(renderedChildren, {name: ["DiscordTag", "ColoredFluxTag"]});
 				if (index > -1) this.injectDate(e.instance, children, 1, children[index].props.user);
 				return renderedChildren;
 			};

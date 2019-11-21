@@ -3,7 +3,7 @@
 class OwnerTag {
 	getName () {return "OwnerTag";}
 
-	getVersion () {return "1.2.1";}
+	getVersion () {return "1.2.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class OwnerTag {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Chat","Elements now properly get added to the chat again"]],
+			"fixed":[["BetterRoleColors","Fixed now working when BRC is enabled ......"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
@@ -31,6 +31,7 @@ class OwnerTag {
 				color: #b3b3b3;
 			}
 		`;
+		
 		this.defaults = {
 			settings: {
 				addInChatWindow:		{value:true, 	inner:true,		description:"Messages"},
@@ -164,7 +165,7 @@ class OwnerTag {
 		let usertype = this.getUserType(e.instance.props.user);
 		if (usertype && BDFDB.DataUtils.get(this, "settings", "addInUserPopout")) {
 			let nameTag = e.node.querySelector(BDFDB.dotCN.nametag);
-			let tagProps = BDFDB.ReactUtils.findProps(nameTag, {name:"DiscordTag", up:true});
+			let tagProps = BDFDB.ReactUtils.findProps(nameTag, {name:["DiscordTag", "ColoredFluxTag"], up:true});
 			if (nameTag && tagProps) this.appendOwnerTag(nameTag, e.instance.props.user, usertype, ((tagProps.botClass || "") + " " + BDFDB.disCNS.bottagnametag).trim(), tagProps.invertBotTagColor);
 		}
 	}
@@ -173,7 +174,7 @@ class OwnerTag {
 		let usertype = this.getUserType(e.instance.props.user);
 		if (usertype && BDFDB.DataUtils.get(this, "settings", "addInUserProfil")) {
 			let nameTag = e.node.querySelector(BDFDB.dotCN.nametag);
-			let tagProps = BDFDB.ReactUtils.findProps(nameTag, {name:"DiscordTag", up:true});
+			let tagProps = BDFDB.ReactUtils.findProps(nameTag, {name:["DiscordTag", "ColoredFluxTag"], up:true});
 			if (nameTag && tagProps) this.appendOwnerTag(nameTag, e.instance.props.user, usertype, ((tagProps.botClass || "") + " " + BDFDB.disCNS.bottagnametag).trim(), tagProps.invertBotTagColor);
 		}
 	}

@@ -236,7 +236,6 @@ class EditChannels {
 					data.name = channelnameinput.value.trim() || null;
 
 					data.color = BDFDB.ColorUtils.getSwatchColor(modal, 1);
-					console.log(data.color);
 					if (data.color != null && !BDFDB.ObjectUtils.is(data.color)) {
 						if (data.color[0] < 30 && data.color[1] < 30 && data.color[2] < 30) data.color = BDFDB.ColorUtils.change(data.color, 30);
 						else if (data.color[0] > 225 && data.color[1] > 225 && data.color[2] > 225) data.color = BDFDB.ColorUtils.change(data.color, -30);
