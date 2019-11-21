@@ -1469,7 +1469,7 @@ var BDFDB = {
 		return parent.props.children;
 	}
 	BDFDB.ReactUtils.findChildren = function (nodeOrInstance, config) {
-		if (!nodeOrInstance || !BDFDB.ObjectUtils.is(config) || !config.name && !config.key && !config.props) return [null, -1];
+		if (!nodeOrInstance || !BDFDB.ObjectUtils.is(config) || !config.name && !config.key && !config.props && !config.filter) return [null, -1];
 		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 		if (!BDFDB.ObjectUtils.is(instance) && !BDFDB.ArrayUtils.is(instance)) return [null, -1];
 		config.name = config.name && [config.name].flat().filter(n => n);
