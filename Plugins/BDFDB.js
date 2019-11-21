@@ -630,7 +630,7 @@ var BDFDB = {
 			itemlayercontainernative.parentElement.insertBefore(itemlayercontainer, itemlayercontainernative.nextSibling);
 		}
 		var id = BDFDB.NumberUtils.generateId(Tooltips);
-		var itemlayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.itemlayer} BDFDB-itemlayer"><div class="${BDFDB.disCN.tooltip} BDFDB-tooltip-${id}"></div></div>`);
+		var itemlayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents} BDFDB-itemlayer"><div class="${BDFDB.disCN.tooltip} BDFDB-tooltip-${id}"></div></div>`);
 		itemlayercontainer.appendChild(itemlayer);
 		
 		var tooltip = itemlayer.firstElementChild;
@@ -4979,6 +4979,7 @@ var BDFDB = {
 		imagezoom: ["ImageWrapper", "imageZoom"],
 		itemlayer: ["ItemLayerContainer", "layer"],
 		itemlayercontainer: ["ItemLayerContainer", "layerContainer"],
+		itemlayerdisabledpointerevents: ["ItemLayerContainer", "disabledPointerEvents"],
 		input: ["Input", "input"],
 		inputdefault: ["Input", "inputDefault"],
 		inputdisabled: ["Input", "disabled"],
