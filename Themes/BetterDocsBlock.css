@@ -258,17 +258,3 @@ body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://betterdocs." i]::after
 	line-height: 30px;
 	color: #DDD;
 }
-
-.noticeSurvey-1XW9Ln {
-	background-color: #222;
-}
-.large-3lXhLH,
-.sizeLarge-2yOtf1, .size-JLvFeT {
-	max-height: 95vh;
-}
-@media only screen and (max-height: 900px) {
-	.medium-2RE1hE,
-	.sizeMedium-df47zS {
-		 max-height: 75vh;
-	}
-}

@@ -7815,6 +7815,19 @@ var BDFDB = {
 			display: none !important;
 		}
 		
+		${BDFDB.dotCN.noticesurvey} {
+			background-color: #222;
+		}
+		
+		${BDFDB.dotCNC.layermodallarge + BDFDB.dotCNC.modalsizelarge + BDFDB.dotCN.modalminisize} {
+			max-height: 95vh;
+		}
+		@media only screen and (max-height: 900px) {
+			${BDFDB.dotCNC.layermodalmedium + BDFDB.dotCN.modalsizemedium} {
+				max-height: 75vh;
+			}
+		}
+		
 		
 		/*OLD*/
 		
