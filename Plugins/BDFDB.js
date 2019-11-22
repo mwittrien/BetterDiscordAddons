@@ -3458,7 +3458,7 @@ var BDFDB = {
 	BDFDB.ModalUtils = {};
 	BDFDB.ModalUtils.open = function (plugin, config) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !BDFDB.ObjectUtils.is(config)) return;
-		var modal, headerchildren = [], contentchildren = [], footerchildren = [], modalprops, cancels = [], closeModal = _ => {
+		var modal, modalInstance, headerchildren = [], contentchildren = [], footerchildren = [], modalprops, cancels = [], closeModal = _ => {
 			if (BDFDB.ObjectUtils.is(modalprops) && typeof modalprops.onClose == "function") modalprops.onClose();
 		};
 		if (typeof config.text == "string") {
@@ -3485,8 +3485,7 @@ var BDFDB = {
 					type: LibraryComponents.TabBar.Types.TOP,
 					items: tabbaritems,
 					onItemSelect: (value, instance) => {
-						let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCN.modalwrapper, BDFDB.ReactUtils.findDOMNode(instance));
-						if (modal) for (let tabcontent of modal.querySelectorAll(BDFDB.dotCN.modaltabcontent)) {
+						for (let tabcontent of modal.querySelectorAll(BDFDB.dotCN.modaltabcontent)) {
 							let tabcontentinstance = BDFDB.ReactUtils.getValue(tabcontent, "return.return.stateNode");
 							if (tabcontentinstance) {
 								if (tabcontentinstance.props.tab == value) tabcontentinstance.props.open = true;
@@ -3512,7 +3511,7 @@ var BDFDB = {
 					color: color || LibraryComponents.Button.Colors.PRIMARY,
 					onClick: _ => {
 						if (button.close) closeModal();
-						if (!(button.close && button.cancel)) click(modal);
+						if (!(button.close && button.cancel)) click(modal, modalInstance);
 					},
 					children: contents
 				}));
@@ -3578,6 +3577,7 @@ var BDFDB = {
 						});
 					}
 					componentDidMount () {
+						modalInstance = this;
 						modal = BDFDB.ReactUtils.findDOMNode(this);
 						modal = modal && modal.parentElement ? modal.parentElement.querySelector(BDFDB.dotCN.modalwrapper) : null;
 						if (modal && props.transitionState == 2 && props.transitionState > oldTransitionState) config.onOpen(modal, this);
