@@ -21,27 +21,10 @@ class ServerHider {
 		};
 	}
 
-	initConstructor () {
-		this.defaults = {
-			settings: {
-				clearNotifications:	{value:false, 	description:"Automatically clear any kind of notification of all hidden servers."},
-			}
-		};
-	}
-
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		let settings = BDFDB.DataUtils.get(this, "settings");
 		let settingsitems = [];
 		
-		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-			className: BDFDB.disCN.marginbottom8,
-			type: "Switch",
-			plugin: this,
-			keys: ["settings", key],
-			label: this.defaults.settings[key].description,
-			value: settings[key]
-		}));
 		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 			type: "Button",
 			className: BDFDB.disCN.marginbottom8,
@@ -270,10 +253,6 @@ class ServerHider {
 		else array.push(id);
 		BDFDB.DataUtils.save(array, this, "hidden", type);
 		BDFDB.ModuleUtils.forceAllUpdates(this);
-	}
-
-	unreadServer (id) {
-		if (BDFDB.DataUtils.get(this, "settings", "clearNotifications") && !this.isInFolder(id)) BDFDB.GuildUtils.markAsRead(id);
 	}
 
 	setLabelsByLanguage () {
