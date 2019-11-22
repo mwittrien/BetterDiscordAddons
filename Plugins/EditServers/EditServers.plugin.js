@@ -195,7 +195,7 @@ class EditServers {
 
 	processClickable (instance, wrapper, returnvalue) {
 		if (!wrapper || !instance.props || !instance.props.className) return;
-		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.userprofilelistrow) > -1) {
+		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.listrow) > -1) {
 			let guild = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.memoizedProps.guild");
 			if (guild && BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.type.displayName") == "GuildRow") {
 				this.changeGuildName(guild, wrapper.querySelector(BDFDB.dotCN.userprofilelistname));
