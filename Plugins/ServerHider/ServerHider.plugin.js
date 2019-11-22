@@ -77,6 +77,16 @@ class ServerHider {
 				BDFDB.DataUtils.save(olddata, this, "hidden", "servers");
 				BDFDB.DataUtils.remove(this, "hiddenservers");
 			}
+			
+			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.FolderStore, "getGuildFolderById", {after: e => {
+				let hiddenGuildIds = BDFDB.DataUtils.load(this, "hidden", "servers") || [];
+				if (e.returnValue && hiddenGuildIds.length) {
+					let folder = Object.assign({}, e.returnValue);
+					folder.guildIds = [].concat(folder.guildIds).filter(n => !hiddenGuildIds.includes(n));
+					folder.hiddenGuildIds = [].concat(folder.guildIds).filter(n => hiddenGuildIds.includes(n));
+					return folder;
+				}
+			}});
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
@@ -142,7 +152,10 @@ class ServerHider {
 					if (hiddenFolderIds.includes(child.props.folderId))	children[i] = null;
 					else {
 						let guildIds = [].concat(child.props.guildIds.filter(guildId => !hiddenGuildIds.includes(guildId)));
-						if (guildIds.length) child.props.guildIds = guildIds;
+						if (guildIds.length) {
+							child.props.hiddenGuildIds = [].concat(child.props.guildIds.filter(guildId => hiddenGuildIds.includes(guildId)));
+							child.props.guildIds = guildIds;
+						}
 						else children[i] = null;
 					}
 				}
