@@ -6695,7 +6695,7 @@ var BDFDB = {
 			var Guild = isDraggedGuild ? BDFDB.ReactUtils.createElement("div", {
 				children: BDFDB.ReactUtils.createElement(LibraryComponents.GuildComponents.DragPlaceholder, {})
 			}) : BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.guildcontainer, this.props.className),
+				className: BDFDB.disCN.guildcontainer,
 				children: BDFDB.ReactUtils.createElement(LibraryComponents.GuildComponents.BlobMask, {
 					selected: this.state.isDropHovering || this.props.selected || this.state.hovered,
 					upperBadge: this.props.unavailable ? LibraryComponents.GuildComponents.renderUnavailableBadge() : LibraryComponents.GuildComponents.renderIconBadge(this.props.audio, this.props.video),
@@ -6741,7 +6741,7 @@ var BDFDB = {
 			return this.props.listItem ? LibraryComponents.GuildComponents.renderListItem(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 				children: children
 			}), null != this.props.setRef ? this.setRef : null) : BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.disCN.guild,
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.guild, this.props.className),
 				children: children
 			});
 		}
@@ -6801,9 +6801,11 @@ var BDFDB = {
 					this.props.prefix,
 					BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.listrowcontent,
+						style: {flex: "1 1 auto"},
 						children: [
 							BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.listname, this.props.labelClassName),
+								style: {flex: "1 1 auto"},
 								children: this.props.label
 							}),
 							typeof this.props.note == "string" ? BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormText, {
@@ -6811,7 +6813,8 @@ var BDFDB = {
 								children: this.props.note
 							}) : null
 						].filter(n => n)
-					})
+					}),
+					this.props.suffix
 				].filter(n => n)
 			});
 		}
@@ -7149,6 +7152,7 @@ var BDFDB = {
 						align: LibraryComponents.Flex.Align.CENTER,
 						children: [
 							this.props.label ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
+								wrap: true,
 								children: BDFDB.ReactUtils.createElement(LibraryComponents.SettingsLabel, {
 									mini: this.props.mini,
 									label: this.props.label
