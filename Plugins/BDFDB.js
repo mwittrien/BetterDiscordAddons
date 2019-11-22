@@ -248,7 +248,7 @@ var BDFDB = {
 			type = type.toLowerCase();
 			var classname = BDFDB.disCN["changelog" + type];
 			if (classname) {
-				changeLogHTML += `<h1 class="${classname + " " + BDFDB.disCN.margintop20}"${changeLogHTML.indexOf("<h1") == -1 ? `style="margin-top: 0px !important;"` : ""}>${headers[type]}</h1><ul>`;
+				changeLogHTML += `<h1 class="${classname} ${BDFDB.disCN.margintop20}"${changeLogHTML.indexOf("<h1") == -1 ? `style="margin-top: 0px !important;"` : ""}>${headers[type]}</h1><ul>`;
 				for (let log of plugin.changelog[type]) changeLogHTML += `<li><strong>${log[0]}</strong>${log[1] ? (": " + log[1] + ".") : ""}</li>`;
 				changeLogHTML += `</ul>`
 			}
@@ -4017,6 +4017,7 @@ var BDFDB = {
 		cardInner: "inner-OP_8zd",
 		cardWrapper: "card-rT4Wbb",
 		charCounter: "counter-uAzbKp",
+		changeLogIcon: "icon-vGGh7_",
 		changeLogModal: "changeLogModal-ny_dHC",
 		collapseContainer: "container-fAVkOf",
 		collapseContainerArrow: "arrow-uglXxc",
@@ -4533,6 +4534,7 @@ var BDFDB = {
 		changelogadded: ["ChangeLog", "added"],
 		changelogcontainer: ["ChangeLog", "container"],
 		changelogfixed: ["ChangeLog", "fixed"],
+		changelogicon: ["BDFDB", "changeLogIcon"],
 		changelogimproved: ["ChangeLog", "improved"],
 		changelogprogress: ["ChangeLog", "added"],
 		changelogtitle: ["ChangeLog", "title"],
@@ -7513,9 +7515,7 @@ var BDFDB = {
 	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
 
 	BDFDB.DOMUtils.appendLocalStyle("BDFDB", `
-		@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BetterDocsBlock.css);
-
-		.BDFDB-versionchangelog {
+		${BDFDB.dotCN.changelogicon} {
 			display: inline-block;
 			background: currentColor;
 			-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 510 510"><path fill="currentColor" d="M267.75,12.75c-89.25,0-168.3,48.45-209.1,122.4L0,76.5v165.75h165.75 l-71.4-71.4c33.15-63.75,96.9-107.1,173.4-107.1C372.3,63.75,459,150.45,459,255s-86.7,191.25-191.25,191.25 c-84.15,0-153-53.55-181.05-127.5H33.15c28.05,102,122.4,178.5,234.6,178.5C402.9,497.25,510,387.6,510,255 C510,122.4,400.35,12.75,267.75,12.75z M229.5,140.25V270.3l119.85,71.4l20.4-33.15l-102-61.2v-107.1H229.5z"></path></svg>') center/contain no-repeat;
@@ -8657,7 +8657,7 @@ var BDFDB = {
 						if (index > -1) children[index].props.children = [children[index].props.children, BDFDB.ReactUtils.createElement(LibraryComponents.TooltipContainer, {
 							text: BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG,
 							children: BDFDB.ReactUtils.createElement("span", {
-								className: "BDFDB-versionchangelog",
+								className: BDFDB.disCN.changelogicon,
 								children: "     ",
 								style: {whiteSpace: "pre"},
 								onClick: _ => {BDFDB.PluginUtils.openChangeLog(data);}
