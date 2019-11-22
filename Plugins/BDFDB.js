@@ -3518,9 +3518,9 @@ var BDFDB = {
 				}));
 			}
 		}
-		contentchildren = contentchildren.filter(n => n && BDFDB.ReactUtils.isValidElement(n));
-		headerchildren = headerchildren.filter(n => n && BDFDB.ReactUtils.isValidElement(n));
-		footerchildren = footerchildren.filter(n => n && BDFDB.ReactUtils.isValidElement(n));
+		contentchildren = contentchildren.filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
+		headerchildren = headerchildren.filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
+		footerchildren = footerchildren.filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
 		if (contentchildren.length) {
 			if (typeof config.onClose != "function") config.onClose = _ => {};
 			if (typeof config.onOpen != "function") config.onOpen = _ => {};
