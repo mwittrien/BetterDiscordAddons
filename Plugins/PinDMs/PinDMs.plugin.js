@@ -3,7 +3,7 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.5.0";}
+	getVersion () {return "1.5.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -455,7 +455,7 @@ class PinDMs {
 		for (let id in pinnedDMs) pinnedDMs[id] = pinnedDMs[id] + 1;
 		pinnedDMs[newid] = 0;
 		BDFDB.DataUtils.save(pinnedDMs, this, type);
-		BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:container, unlimited:true}));
+		BDFDB.ModuleUtils.forceAllUpdates(this, container);
 	}
 
 	removePin (id, type) {
@@ -463,7 +463,7 @@ class PinDMs {
 		let container = this.getContainer(type);
 		if (!container) return;
 		BDFDB.DataUtils.remove(this, type, id);
-		BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:container, unlimited:true}));
+		BDFDB.ModuleUtils.forceAllUpdates(this, container);
 	}
 	
 	isPinned (id, type) {
@@ -472,7 +472,7 @@ class PinDMs {
 	
 	getContainer (type) {
 		switch (type) {
-			case "pinnedDMs": return "FluxContainer(PrivateChannels)";
+			case "pinnedDMs": return "PrivateChannelsList";
 			case "pinnedRecents": return "UnreadDMs";
 			default: return null;
 		}
