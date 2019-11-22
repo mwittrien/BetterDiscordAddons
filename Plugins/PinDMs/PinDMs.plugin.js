@@ -365,7 +365,7 @@ class PinDMs {
 						})
 					})
 				})
-			].concat(e.returnvalue.props.children).flat();
+			].concat(e.returnvalue.props.children).flat(10);
 		}
 	}
 

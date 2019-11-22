@@ -334,7 +334,7 @@ class PersonalPins {
 		BDFDB.ArrayUtils.keySort(messages, sort);
 		messages.reverse();
 		return Object.keys(messages).length ? 
-			messages.map(messagedata => this.renderMessage(buttoninstance, messagedata.note, messagedata.message, messagedata.channel, filter)).flat().filter(n => n) :
+			messages.map(messagedata => this.renderMessage(buttoninstance, messagedata.note, messagedata.message, messagedata.channel, filter)).flat(10).filter(n => n) :
 			BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessagesPopoutComponents.EmptyStateCenter, {
 				msg: BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER,
 				image: lighttheme ? "/assets/03c7541028afafafd1a9f6a81cb7f149.svg" : "/assets/6793e022dc1b065b21f12d6df02f91bd.svg"

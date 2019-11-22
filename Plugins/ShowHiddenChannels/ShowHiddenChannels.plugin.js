@@ -394,7 +394,7 @@ class ShowHiddenChannels {
 										children: formlabel.text
 									})
 								})
-							]).flat().filter(n => n)
+							]).flat(10).filter(n => n)
 					}),
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 						tab: this.labels.modal_allowed_text,

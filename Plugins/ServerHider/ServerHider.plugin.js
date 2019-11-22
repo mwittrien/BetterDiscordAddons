@@ -3,7 +3,7 @@
 class ServerHider {
 	getName () {return "ServerHider";}
 
-	getVersion () {return "6.0.9";}
+	getVersion () {return "6.1.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,63 +11,17 @@ class ServerHider {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"],["Folder Support","You can now also hide folders with the plugin"]]
 		};
 
 		this.patchedModules = {
 			after: {
-				"Guild":["componentDidMount","componentDidUpdate"]
+				Guilds: "render"
 			}
 		};
 	}
 
 	initConstructor () {
-		this.serverHiderModalMarkup =
-			`<span class="${this.name}-modal BDFDB-modal">
-				<div class="${BDFDB.disCN.backdrop}"></div>
-				<div class="${BDFDB.disCN.modal}">
-					<div class="${BDFDB.disCN.modalinner}">
-						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
-							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
-								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
-									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">REPLACE_modal_header_text</h4>
-									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
-								</div>
-								<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
-									<div class="${BDFDB.disCN.buttoncontents}">
-										<svg name="Close" width="18" height="18" viewBox="0 0 12 12" style="flex: 0 1 auto;">
-											<g fill="none" fill-rule="evenodd">
-												<path d="M0 0h12v12H0"></path>
-												<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
-											</g>
-										</svg>
-									</div>
-								</button>
-							</div>
-							<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.scrollerthemeghosthairline}">
-								<div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner} entries"></div>
-							</div>
-							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
-								<button type="button" class="btn-ok ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
-									<div class="${BDFDB.disCN.buttoncontents}"></div>
-								</button>
-								<button type="button" class="btn-all ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlooklink + BDFDB.disCNS.buttoncolortransparent + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
-									<div class="${BDFDB.disCN.buttoncontents}"></div>
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</span>`;
-
-		this.serverEntryMarkup =
-			`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4} entry" style="flex: 1 1 auto;">
-				<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCNS.flexchild + BDFDB.disCNS.overflowellipsis} serverhiderName" style="flex: 1 1 auto; white-space: nowrap;"></h3>
-				<div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;">
-					<input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} serverhiderCheckbox">
-				</div>
-			</div>`;
-
 		this.defaults = {
 			settings: {
 				clearNotifications:	{value:false, 	description:"Automatically clear any kind of notification of all hidden servers."},
@@ -78,24 +32,31 @@ class ServerHider {
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let settings = BDFDB.DataUtils.get(this, "settings");
-		let settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
-		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
-		}
-		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Reset all Servers.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} reset-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
-		settingshtml += `</div></div>`;
-
-		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
-
-		BDFDB.initElements(settingspanel, this);
-
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".reset-button", () => {
-			BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset all servers?", () => {
-				BDFDB.DataUtils.remove(this, "servers");
-				BDFDB.GuildUtils.getAll().forEach(info => {if (!info.div.getAttribute("folder")) BDFDB.DOMUtils.hide(info.div);});
-			});
-		});
-		return settingspanel;
+		let settingsitems = [];
+		
+		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			className: BDFDB.disCN.marginbottom8,
+			type: "Switch",
+			plugin: this,
+			keys: ["settings", key],
+			label: this.defaults.settings[key].description,
+			value: settings[key]
+		}));
+		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+			type: "Button",
+			className: BDFDB.disCN.marginbottom8,
+			color: BDFDB.LibraryComponents.Button.Colors.RED,
+			label: "Unhide all Servers/Folders",
+			onClick: _ => {
+				BDFDB.ModalUtils.confirm(this, "Are you sure you want to unhide all servers and folders?", () => {
+					BDFDB.DataUtils.save([], this, "hidden");
+					BDFDB.ModuleUtils.forceAllUpdates(this);
+				});
+			},
+			children: BDFDB.LanguageUtils.LanguageStrings.RESET
+		}));
+		
+		return BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 	}
 
 	//legacy
@@ -126,6 +87,13 @@ class ServerHider {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
+			
+			// REMOVE 22.11.2019
+			let olddata = BDFDB.DataUtils.load(this, "hiddenservers", "hiddenservers");
+			if (olddata) {
+				BDFDB.DataUtils.save(olddata, this, "hidden", "servers");
+				BDFDB.DataUtils.remove(this, "hiddenservers");
+			}
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
@@ -136,11 +104,7 @@ class ServerHider {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.GuildUtils.getAll().forEach(info => {
-				if (info.div.ServerHiderChangeObserver && typeof info.div.ServerHiderChangeObserver.disconnect == "function") info.div.ServerHiderChangeObserver.disconnect();
-				if (!info.div.getAttribute("folder")) BDFDB.DOMUtils.show(info.div);
-				delete info.div.ServerHiderChanged;
-			});
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 
 			BDFDB.PluginUtils.clear(this);
 		}
@@ -149,16 +113,10 @@ class ServerHider {
 
 	// begin of own functions
 
-	changeLanguageStrings () {
-		this.serverHiderModalMarkup = 		this.serverHiderModalMarkup.replace("REPLACE_modal_header_text", this.labels.modal_header_text);
-
-		this.serverEntryMarkup = 			this.serverEntryMarkup.replace("REPLACE_btn_visible_text", this.labels.btn_visible_text);
-	}
-
-	onGuildContextMenu (instance, menu, returnvalue) {
-		if (document.querySelector(".BDFDB-modal")) return;
-		if (instance.props.target && instance.props.type.indexOf("GUILD_ICON_") == 0 && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
+	onGuildContextMenu (e) {
+		if (document.querySelector(BDFDB.dotCN.modalwrapper)) return;
+		if (e.instance.props.target && e.instance.props.type.startsWith("GUILD_ICON_")) {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
@@ -168,19 +126,19 @@ class ServerHider {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_openhidemenu_text,
 									action: _ => {
-										BDFDB.ContextMenuUtils.close(menu);
-										this.showServerModal();
+										BDFDB.ContextMenuUtils.close(e.instance);
+										this.showHideModal();
 									}
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
-									label: this.labels.submenu_hideserver_text,
-									disabled: !(instance.props.guild && !instance.props.target.getAttribute("folder")),
+								!e.instance.props.guild && !e.instance.props.folderId ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+									label: e.instance.props.guild ? this.labels.submenu_hideserver_text : this.labels.submenu_hidefolder_text,
 									action: _ => {
-										BDFDB.ContextMenuUtils.close(menu);
-										this.toggleServer(instance.props.guild, instance.props.target, false);
+										BDFDB.ContextMenuUtils.close(e.instance);
+										if (e.instance.props.guild) this.toggleItem(BDFDB.DataUtils.load(this, "hidden", "servers") || [], e.instance.props.guild.id, "servers");
+										else this.toggleItem(BDFDB.DataUtils.load(this, "hidden", "folders") || [], e.instance.props.folderId, "folders");
 									}
 								})
-							]
+							].filter(n => n)
 						})]
 					})
 				]
@@ -190,68 +148,132 @@ class ServerHider {
 		}
 	}
 
-	processGuild (instance, wrapper, returnvalue, methodnames) {
-		if (instance.props.guild) {
-			let hiddenservers = BDFDB.DataUtils.load(this, "hiddenservers", "hiddenservers") || [];
-			if (methodnames.includes("componentDidMount")) this.toggleServer(instance.props.guild, wrapper, !hiddenservers.includes(instance.props.guild.id));
-			if (methodnames.includes("componentDidUpdate") && hiddenservers.includes(instance.props.guild.id) && instance.props.unread) this.unreadServer(instance.props.guild.id);
-		}
-	}
-
-	showServerModal () {
-		let serverHiderModal = BDFDB.DOMUtils.create(this.serverHiderModalMarkup);
-		let container = serverHiderModal.querySelector(".entries");
-		if (!container) return;
-
-		BDFDB.ListenerUtils.addToChildren(serverHiderModal, "click", ".btn-all", () => {
-			let firstcheckbox = serverHiderModal.querySelector(".serverhiderCheckbox");
-			firstcheckbox.click();
-			serverHiderModal.querySelectorAll(".serverhiderCheckbox").forEach(checkbox => {
-				if (checkbox != firstcheckbox && checkbox.checked != firstcheckbox.checked) checkbox.click();
-			});
-		});
-
-		for (let info of BDFDB.GuildUtils.getAll()) {
-			if (!info.div.getAttribute("folder")) {
-				if (container.firstElementChild) container.appendChild(BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.divider}"></div>`));
-				let entry = BDFDB.DOMUtils.create(this.serverEntryMarkup);
-				container.appendChild(entry);
-				let name = entry.querySelector(".serverhiderName");
-				name.innerText = info.name || "";
-				name.parentElement.insertBefore(BDFDB.GuildUtils.createCopy(info, {click: () => {BDFDB.DOMUtils.remove(serverHiderModal);}, menu: true, size: 48}), name);
-				let hidecheckbox = entry.querySelector(".serverhiderCheckbox");
-				hidecheckbox.checked = !BDFDB.DOMUtils.isHidden(info.div);
-				hidecheckbox.addEventListener("click", e => {
-					this.toggleServer(info, info.div, e.currentTarget.checked);
-				});
+	processGuilds (e) {
+		let hiddenGuildIds = BDFDB.DataUtils.load(this, "hidden", "servers") || [];
+		let hiddenFolderIds = BDFDB.DataUtils.load(this, "hidden", "folders") || [];
+		if (hiddenGuildIds.length || hiddenFolderIds.length) {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["DragSource(ForwardRef(FluxContainer(GuildFolder)))", "DragSource(ForwardRef(FluxContainer(Guild)))"]});
+			if (index > -1) for (let i in children) {
+				let child = children[i];
+				if (child.props.folderId) {
+					if (hiddenFolderIds.includes(child.props.folderId))	children[i] = null;
+					else {
+						let guildIds = [].concat(child.props.guildIds.filter(guildId => !hiddenGuildIds.includes(guildId)));
+						if (guildIds.length) child.props.guildIds = guildIds;
+						else children[i] = null;
+					}
+				}
+				else if (child.props.guildId && hiddenGuildIds.includes(child.props.guildId)) children[i] = null;
 			}
 		}
-		BDFDB.appendModal(serverHiderModal);
 	}
 
-	toggleServer (info, target, visible) {
-		if (!info || !target) return;
-		let guilddiv = BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildouter, target);
-		if (!guilddiv || guilddiv.getAttribute("folder")) return;
-		BDFDB.DOMUtils.toggle(guilddiv, visible);
-		let hiddenservers = BDFDB.DataUtils.load(this, "hiddenservers", "hiddenservers") || [];
-		BDFDB.ArrayUtils.remove(hiddenservers, info.id);
-		if (!visible) {
-			if (BDFDB.ReactUtils.getValue(guilddiv, "return.stateNode.props").unread) this.unreadServer(info.id);
-			hiddenservers.push(info.id);
-		}
-		BDFDB.DataUtils.save(hiddenservers, this, "hiddenservers", "hiddenservers");
+	showHideModal () {
+		let hiddenGuildIds = BDFDB.DataUtils.load(this, "hidden", "servers") || [];
+		let hiddenFolderIds = BDFDB.DataUtils.load(this, "hidden", "folders") || [];
+		let guilds = BDFDB.LibraryModules.FolderStore.getFlattenedGuilds();
+		let folders = BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId);
+		let foldersAdded = [];
+		
+		BDFDB.ModalUtils.open(this, {
+			size: "MEDIUM",
+			header: this.labels.modal_header_text,
+			subheader: "",
+			contentClassName: BDFDB.disCN.listscroller,
+			children: guilds.map((guild, i) => {
+				let folder = folders.find(folder => folder.guildIds.includes(guild.id) && !foldersAdded.includes(folder.folderId));
+				if (folder) foldersAdded.push(folder.folderId);
+				return [
+					folder ? [
+						folders.indexOf(folder) == 0 ? null : [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+								className: BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+								className: BDFDB.disCNS.margintop8 + BDFDB.disCN.marginbottom4
+							})
+						],
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListRow, {
+							prefix: BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN.listavatar,
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.BlobMask, {
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Clickable, {
+										className: BDFDB.disCN.guildfolder,
+										children: BDFDB.ReactUtils.createElement("div", {
+											className: BDFDB.disCN.guildfoldericonwrapper,
+											children: BDFDB.ReactUtils.createElement("div", {
+												className: BDFDB.disCN.guildfoldericonwrapperexpanded,
+												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+													name: BDFDB.LibraryComponents.SvgIcon.Names.FOLDER,
+													style: {color: BDFDB.ColorUtils.convert(folder.folderColor, "RGB")}
+												})
+											})
+										})
+									})
+								})
+							}),
+							label: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
+								children: folder.folderName || `${BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER} #${folders.indexOf(folder) + 1}`
+							}),
+							suffix: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Switch, {
+								value: !hiddenFolderIds.includes(folder.folderId),
+								onChange: value => {this.toggleItem(hiddenFolderIds, folder.folderId, "folders", value);}
+							})
+						})
+					] : null,
+					i == 0 && !folder ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+						className: BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListRow, {
+						prefix: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Guild, {
+							className: BDFDB.disCN.listavatar,
+							guild: guild,
+							menu: false,
+							tooltip: false
+						}),
+						label: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
+							children: guild.name
+						}),
+						suffix: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Switch, {
+							value: !hiddenGuildIds.includes(guild.id),
+							onChange: value => {this.toggleItem(hiddenGuildIds, guild.id, "servers", value);}
+						})
+					})
+				];
+			}).flat(10).filter(n => n),
+			buttons: [{
+				contents: BDFDB.LanguageUtils.LanguageStrings.OKAY,
+				color: "BRAND",
+				close: true
+			}, {
+				contents: BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL,
+				color: "TRANSPARENT",
+				look: "LINK",
+				click: (modal, instance) => {
+					let enabled = hiddenGuildIds.includes(guilds[0].id);
+					hiddenGuildIds = [].concat(enabled ? [] : guilds.map(n => n.id));
+					BDFDB.DataUtils.save(hiddenGuildIds, this, "hidden", "servers");
+					hiddenFolderIds = [].concat(enabled ? [] : folders.map(n => n.folderId));
+					BDFDB.DataUtils.save(hiddenFolderIds, this, "hidden", "folders");
+					let switchInstances = BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_Switch", all:true, unlimited:true});
+					for (let switchIns of switchInstances) switchIns.props.value = enabled;
+					BDFDB.ReactUtils.forceUpdate(switchInstances);
+					BDFDB.ModuleUtils.forceAllUpdates(this);
+				}
+			}]
+		});
+	}
+	
+	toggleItem (array, id, type, force) {
+		if (!id) return;
+		if (force || (force === undefined && array.includes(id))) BDFDB.ArrayUtils.remove(array, id, true);
+		else array.push(id);
+		BDFDB.DataUtils.save(array, this, "hidden", type);
+		BDFDB.ModuleUtils.forceAllUpdates(this);
 	}
 
 	unreadServer (id) {
 		if (BDFDB.DataUtils.get(this, "settings", "clearNotifications") && !this.isInFolder(id)) BDFDB.GuildUtils.markAsRead(id);
-	}
-
-	isInFolder (id) {
-		if (!BDFDB.BDUtils.isPluginEnabled("ServerFolders")) return false;
-		let folders = BDFDB.DataUtils.load("ServerFolders", "folders");
-		for (let folderid in folders) if ((folders[folderid].servers || []).includes(id)) return true;
-		return false;
 	}
 
 	setLabelsByLanguage () {
@@ -261,20 +283,23 @@ class ServerHider {
 					modal_header_text:				"Upravljanje popisom poslužitelja",
 					context_serverhider_text:		"Vidljivost poslužitelj",
 					submenu_hideserver_text:		"Sakrij poslužitelj",
+					submenu_hidefolder_text:		"Sakrij mapu",
 					submenu_openhidemenu_text:		"Upravljanje popisom poslužitelja"
 				};
 			case "da":		//danish
 				return {
-					modal_header_text:				"Styring af Serverliste",
+					modal_header_text:				"Styring af serverliste",
 					context_serverhider_text:		"Server synlighed",
-					submenu_hideserver_text:		"Skjul Server",
-					submenu_openhidemenu_text:		"Styre Serverliste"
+					submenu_hideserver_text:		"Skjul server",
+					submenu_hidefolder_text:		"Skjul mappe",
+					submenu_openhidemenu_text:		"Styre serverliste"
 				};
 			case "de":		//german
 				return {
 					modal_header_text:				"Verwaltung der Serverliste",
 					context_serverhider_text:		"Serversichtbarkeit",
 					submenu_hideserver_text:		"Server verstecken",
+					submenu_hidefolder_text:		"Ordner verstecken",
 					submenu_openhidemenu_text:		"Serverliste verwalten"
 				};
 			case "es":		//spanish
@@ -282,6 +307,7 @@ class ServerHider {
 					modal_header_text:				"Administración de lista de servidores",
 					context_serverhider_text:		"Visibilidad del servidor",
 					submenu_hideserver_text:		"Ocultar servidor",
+					submenu_hidefolder_text:		"Ocultar carpeta",
 					submenu_openhidemenu_text:		"Administrar lista de servidores"
 				};
 			case "fr":		//french
@@ -289,6 +315,7 @@ class ServerHider {
 					modal_header_text:				"Gestion de la liste des serveurs",
 					context_serverhider_text:		"Visibilité du serveur",
 					submenu_hideserver_text:		"Cacher le serveur",
+					submenu_hidefolder_text:		"Cacher le dossier",
 					submenu_openhidemenu_text:		"Gérer la liste des serveurs"
 				};
 			case "it":		//italian
@@ -296,6 +323,7 @@ class ServerHider {
 					modal_header_text:				"Gestione dell'elenco dei server",
 					context_serverhider_text:		"Visibilità del server",
 					submenu_hideserver_text:		"Nascondi il server",
+					submenu_hidefolder_text:		"Nascondi la cartella",
 					submenu_openhidemenu_text:		"Gestione elenco dei server"
 				};
 			case "nl":		//dutch
@@ -303,6 +331,7 @@ class ServerHider {
 					modal_header_text:				"Beheer van de Serverlijst",
 					context_serverhider_text:		"Server zichtbaarheid",
 					submenu_hideserver_text:		"Verberg server",
+					submenu_hidefolder_text:		"Verberg map",
 					submenu_openhidemenu_text:		"Beheer serverlijst"
 				};
 			case "no":		//norwegian
@@ -310,6 +339,7 @@ class ServerHider {
 					modal_header_text:				"Administrasjon av serverlisten",
 					context_serverhider_text:		"Server synlighet",
 					submenu_hideserver_text:		"Skjul server",
+					submenu_hidefolder_text:		"Skjul mappe",
 					submenu_openhidemenu_text:		"Administrer serverliste"
 				};
 			case "pl":		//polish
@@ -317,6 +347,7 @@ class ServerHider {
 					modal_header_text:				"Zarządzanie listą serwerów",
 					context_serverhider_text:		"Widoczność serwera",
 					submenu_hideserver_text:		"Ukryj serwer",
+					submenu_hidefolder_text:		"Ukryj folder",
 					submenu_openhidemenu_text:		"Zarządzaj listą serwerów"
 				};
 			case "pt-BR":	//portuguese (brazil)
@@ -324,6 +355,7 @@ class ServerHider {
 					modal_header_text:				"Gerenciamento da lista de servidores",
 					context_serverhider_text:		"Visibilidade do servidor",
 					submenu_hideserver_text:		"Ocultar servidor",
+					submenu_hidefolder_text:		"Ocultar pasta",
 					submenu_openhidemenu_text:		"Gerenciar lista de servidores"
 				};
 			case "fi":		//finnish
@@ -331,6 +363,7 @@ class ServerHider {
 					modal_header_text:				"Palvelinluettelon hallinta",
 					context_serverhider_text:		"Palvelimen näkyvyys",
 					submenu_hideserver_text:		"Piilota palvelin",
+					submenu_hidefolder_text:		"Piilota kansio",
 					submenu_openhidemenu_text:		"Hallinnoi palvelinluetteloa"
 				};
 			case "sv":		//swedish
@@ -338,6 +371,7 @@ class ServerHider {
 					modal_header_text:				"Hantering av serverlistan",
 					context_serverhider_text:		"Server sikt",
 					submenu_hideserver_text:		"Dölj server",
+					submenu_hidefolder_text:		"Dölj mapp",
 					submenu_openhidemenu_text:		"Hantera serverlistan"
 				};
 			case "tr":		//turkish
@@ -345,6 +379,7 @@ class ServerHider {
 					modal_header_text:				"Sunucu Listesinin Yönetimi",
 					context_serverhider_text:		"Sunucu görünürlüğü",
 					submenu_hideserver_text:		"Sunucuyu Gizle",
+					submenu_hidefolder_text:		"Klasörü Gizle",
 					submenu_openhidemenu_text:		"Sunucu Listesini Yönet"
 				};
 			case "cs":		//czech
@@ -352,6 +387,7 @@ class ServerHider {
 					modal_header_text:				"Správa seznamu serverů",
 					context_serverhider_text:		"Viditelnost serveru",
 					submenu_hideserver_text:		"Skrýt server",
+					submenu_hidefolder_text:		"Skrýt složky",
 					submenu_openhidemenu_text:		"Správa seznamu serverů"
 				};
 			case "bg":		//bulgarian
@@ -359,6 +395,7 @@ class ServerHider {
 					modal_header_text:				"Управление на списъка със сървъри",
 					context_serverhider_text:		"Видимост на сървъра",
 					submenu_hideserver_text:		"Скриване на сървър",
+					submenu_hidefolder_text:		"Скриване на папка",
 					submenu_openhidemenu_text:		"Управление на списъка със сървъри"
 				};
 			case "ru":		//russian
@@ -366,6 +403,7 @@ class ServerHider {
 					modal_header_text:				"Управление списком серверов",
 					context_serverhider_text:		"Видимость сервера",
 					submenu_hideserver_text:		"Скрыть сервер",
+					submenu_hidefolder_text:		"Скрыть папки",
 					submenu_openhidemenu_text:		"Управление списком серверов"
 				};
 			case "uk":		//ukrainian
@@ -373,6 +411,7 @@ class ServerHider {
 					modal_header_text:				"Управління списком серверів",
 					context_serverhider_text:		"Видимість сервера",
 					submenu_hideserver_text:		"Сховати сервер",
+					submenu_hidefolder_text:		"Сховати папки",
 					submenu_openhidemenu_text:		"Управління списком серверів"
 				};
 			case "ja":		//japanese
@@ -380,6 +419,7 @@ class ServerHider {
 					modal_header_text:				"サーバリストの管理",
 					context_serverhider_text:		"サーバーの可視性",
 					submenu_hideserver_text:		"サーバーを隠す",
+					submenu_hidefolder_text:		"フォルダーを非表示",
 					submenu_openhidemenu_text:		"サーバーリストを管理する"
 				};
 			case "zh-TW":	//chinese (traditional)
@@ -387,6 +427,7 @@ class ServerHider {
 					modal_header_text:				"管理服务器列表",
 					context_serverhider_text:		"服務器可見性",
 					submenu_hideserver_text:		"隐藏服务器",
+					submenu_hidefolder_text:		"隱藏資料夾",
 					submenu_openhidemenu_text:		"管理服务器列表"
 				};
 			case "ko":		//korean
@@ -394,6 +435,7 @@ class ServerHider {
 					modal_header_text:				"서버 목록 관리",
 					context_serverhider_text:		"서버 가시성",
 					submenu_hideserver_text:		"서버 숨기기",
+					submenu_hidefolder_text:		"폴더 숨기기",
 					submenu_openhidemenu_text:		"서버 목록 관리"
 				};
 			default:		//default: english
@@ -401,6 +443,7 @@ class ServerHider {
 					modal_header_text:				"Managing Serverlist",
 					context_serverhider_text:		"Server Visibility",
 					submenu_hideserver_text:		"Hide Server",
+					submenu_hidefolder_text:		"Hide Folder",
 					submenu_openhidemenu_text:		"Manage Serverlist"
 				};
 		}

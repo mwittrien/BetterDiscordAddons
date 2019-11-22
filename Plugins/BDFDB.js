@@ -750,7 +750,7 @@ var BDFDB = {
 	};
 	BDFDB.ObjectUtils.extract = function (obj, ...keys) {
 		let newobj = {};
-		if (BDFDB.ObjectUtils.is(obj)) for (let key of keys.flat().filter(n => n)) if (obj[key]) newobj[key] = obj[key];
+		if (BDFDB.ObjectUtils.is(obj)) for (let key of keys.flat(10).filter(n => n)) if (obj[key]) newobj[key] = obj[key];
 		return newobj;
 	};
 	BDFDB.ObjectUtils.exclude = function (obj, ...keys) {
@@ -759,7 +759,7 @@ var BDFDB = {
 		return newobj;
 	};
 	BDFDB.ObjectUtils.delete = function (obj, ...keys) {
-		if (BDFDB.ObjectUtils.is(obj)) for (let key of keys.flat().filter(n => n)) delete obj[key];
+		if (BDFDB.ObjectUtils.is(obj)) for (let key of keys.flat(10).filter(n => n)) delete obj[key];
 	};
 	BDFDB.ObjectUtils.sort = function (obj, sort, except) {
 		if (!BDFDB.ObjectUtils.is(obj)) return {};
@@ -988,7 +988,7 @@ var BDFDB = {
 		const pluginname = typeof plugin === "string" ? plugin : plugin.name;
 		const pluginid = pluginname.toLowerCase();
 		if (!module.BDFDBpatch) module.BDFDBpatch = {};
-		modulefunctions = [modulefunctions].flat().filter(n => n);
+		modulefunctions = [modulefunctions].flat(10).filter(n => n);
 		for (let modulefunction of modulefunctions) {
 			if (!module[modulefunction]) module[modulefunction] = _ => {};
 			const originalfunction = module[modulefunction];
@@ -1045,7 +1045,7 @@ var BDFDB = {
 			if (!BDFDB.ObjectUtils.is(module) || !module.BDFDBpatch) return;
 			const pluginname = !plugin ? null : (typeof plugin === "string" ? plugin : plugin.name).toLowerCase();
 			if (modulefunctions) {
-				for (let modulefunction of [modulefunctions].flat().filter(n => n)) if (module[modulefunction] && module.BDFDBpatch[modulefunction]) unpatch(modulefunction, pluginname);
+				for (let modulefunction of [modulefunctions].flat(10).filter(n => n)) if (module[modulefunction] && module.BDFDBpatch[modulefunction]) unpatch(modulefunction, pluginname);
 			}
 			else for (let patchedfunction of module.BDFDBpatch) unpatch(patchedfunction, pluginname);
 		}
@@ -1070,7 +1070,7 @@ var BDFDB = {
 			if (app) {
 				let filteredmodules = [], patchtypes = {};
 				for (let patchtype in plugin.patchedModules) for (let type in plugin.patchedModules[patchtype]) {
-					let methodnames = [plugin.patchedModules[patchtype][type]].flat().filter(n => n);
+					let methodnames = [plugin.patchedModules[patchtype][type]].flat(10).filter(n => n);
 					if (methodnames.includes("componentDidMount") || methodnames.includes("componentDidUpdate") || methodnames.includes("render")) {
 						filteredmodules.push(type);
 						let unmappedtype = type.split(" _ _ ")[0];
@@ -1078,7 +1078,7 @@ var BDFDB = {
 						patchtypes[unmappedtype].push(patchtype);
 					}
 				}
-				selectedtypes = [selectedtypes].flat().filter(n => n);
+				selectedtypes = [selectedtypes].flat(10).filter(n => n);
 				if (selectedtypes.length) {
 					selectedtypes = selectedtypes.map(type => type && WebModulesData.Patchmap[type] ? WebModulesData.Patchmap[type] + " _ _ " + type : type);
 					filteredmodules = filteredmodules.filter(type => selectedtypes.indexOf(type) > -1);
@@ -1086,12 +1086,12 @@ var BDFDB = {
 				filteredmodules = BDFDB.ArrayUtils.removeCopies(filteredmodules);
 				if (filteredmodules.length) {
 					try {
-						const appinsdown = BDFDB.ReactUtils.findOwner(app, {name:filteredmodules, all:true, noCopies:true, group:true, unlimited:true});
-						const appinsup = BDFDB.ReactUtils.findOwner(app, {name:filteredmodules, all:true, noCopies:true, group:true, unlimited:true, up:true});
+						const appinsdown = BDFDB.ReactUtils.findOwner(app, {name:filteredmodules, all:true, group:true, unlimited:true});
+						const appinsup = BDFDB.ReactUtils.findOwner(app, {name:filteredmodules, all:true, group:true, unlimited:true, up:true});
 						for (let type in appinsdown) for (let ins of appinsdown[type]) InternalBDFDB.forceInitiateProcess(plugin, ins, type, patchtypes[type]);
 						for (let type in appinsup) for (let ins of appinsup[type]) InternalBDFDB.forceInitiateProcess(plugin, ins, type, patchtypes[type]);
 						if (bdsettings) {
-							const bdsettingsins = BDFDB.ReactUtils.findOwner(bdsettings, {name:filteredmodules, all:true, noCopies:true, group:true, unlimited:true});
+							const bdsettingsins = BDFDB.ReactUtils.findOwner(bdsettings, {name:filteredmodules, all:true, group:true, unlimited:true});
 							for (let type in bdsettingsins) for (let ins of bdsettingsins[type]) InternalBDFDB.forceInitiateProcess(plugin, ins, type, patchtypes[type]);
 						}
 					}
@@ -1104,7 +1104,7 @@ var BDFDB = {
 		if (!plugin || !instance || !type) return;
 		let methodnames = [];
 		for (let patchtype in plugin.patchedModules) if (plugin.patchedModules[patchtype][type]) methodnames.push(plugin.patchedModules[patchtype][type]);
-		methodnames = BDFDB.ArrayUtils.removeCopies(methodnames).flat().filter(n => n);
+		methodnames = BDFDB.ArrayUtils.removeCopies(methodnames).flat(10).filter(n => n);
 		if (methodnames.includes("componentDidMount")) InternalBDFDB.initiateProcess(plugin, type, {instance, methodname:"componentDidMount", patchtypes});
 		if (methodnames.includes("render")) BDFDB.ReactUtils.forceUpdate(instance);
 		else if (methodnames.includes("componentDidUpdate")) InternalBDFDB.initiateProcess(plugin, type, {instance, methodname:"componentDidUpdate", patchtypes});
@@ -1332,7 +1332,7 @@ var BDFDB = {
 				}
 				if (e.thisObject.props.message && !e.thisObject.props.target) {
 					const messageswrap = document.querySelector(BDFDB.dotCN.messages);
-					if (messageswrap) for (let message of BDFDB.ReactUtils.findOwner(messageswrap, {name:"Message", all:true, noCopies:true, unlimited:true})) {
+					if (messageswrap) for (let message of BDFDB.ReactUtils.findOwner(messageswrap, {name:"Message", all:true, unlimited:true})) {
 						if (e.thisObject.props.message.id == message.props.message.id) {
 							target = BDFDB.ReactUtils.findDOMNode(message);
 							if (target) e.thisObject.props.target = target
@@ -1388,7 +1388,7 @@ var BDFDB = {
 	LibraryModules.InviteUtils = BDFDB.ModuleUtils.findByProperties("acceptInvite", "createInvite");
 	LibraryModules.KeyCodeUtils = Object.assign({}, BDFDB.ModuleUtils.findByProperties("toCombo", "keyToCode"));
 	LibraryModules.KeyCodeUtils.getString = keyarray => {
-		return LibraryModules.KeyCodeUtils.toString([keyarray].flat().filter(n => n).map(keycode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, keycode, BDFDB.DiscordConstants.KeyboardEnvs.BROWSER]), true);
+		return LibraryModules.KeyCodeUtils.toString([keyarray].flat(10).filter(n => n).map(keycode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, keycode, BDFDB.DiscordConstants.KeyboardEnvs.BROWSER]), true);
 	};
 	LibraryModules.KeyEvents = BDFDB.ModuleUtils.findByProperties("aliases", "code", "codes");
 	LibraryModules.LanguageStore = BDFDB.ModuleUtils.findByProperties("getLanguages", "Messages");
@@ -1472,9 +1472,9 @@ var BDFDB = {
 		if (!nodeOrInstance || !BDFDB.ObjectUtils.is(config) || !config.name && !config.key && !config.props && !config.filter) return [null, -1];
 		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 		if (!BDFDB.ObjectUtils.is(instance) && !BDFDB.ArrayUtils.is(instance)) return [null, -1];
-		config.name = config.name && [config.name].flat().filter(n => n);
-		config.key = config.key && [config.key].flat().filter(n => n);
-		config.props = config.props && [config.props].flat().filter(n => n);
+		config.name = config.name && [config.name].flat(10).filter(n => n);
+		config.key = config.key && [config.key].flat(10).filter(n => n);
+		config.props = config.props && [config.props].flat(10).filter(n => n);
 		config.filter = typeof config.filter == "function" && config.filter;
 		var parent = firstarray = instance;
 		while (!BDFDB.ArrayUtils.is(firstarray) && firstarray.props && firstarray.props.children) firstarray = firstarray.props.children;
@@ -1536,9 +1536,9 @@ var BDFDB = {
 		if (!nodeOrInstance || !config.name && !config.key && !config.props) return config.all ? (config.group ? {} : []) : null;
 		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 		if (!BDFDB.ObjectUtils.is(instance)) return config.all ? (config.group ? {} : []) : null;
-		config.name = config.name && [config.name].flat().filter(n => n);
-		config.key = config.key && [config.key].flat().filter(n => n);
-		config.props = config.props && [config.props].flat().filter(n => n);
+		config.name = config.name && [config.name].flat(10).filter(n => n);
+		config.key = config.key && [config.key].flat(10).filter(n => n);
+		config.props = config.props && [config.props].flat(10).filter(n => n);
 		var depth = -1;
 		var start = performance.now();
 		var maxdepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
@@ -1563,7 +1563,7 @@ var BDFDB = {
 				if (instance.stateNode && !Node.prototype.isPrototypeOf(instance.stateNode) && (instance.type && config.name && config.name.some(name => (instance.type.displayName || instance.type.name) === name.split(" _ _ ")[0]) || config.key && config.key.some(key => instance.key == key) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => BDFDB.equals(props[prop[0]], checkvalue)) : BDFDB.equals(props[prop[0]], prop[1])) : props[prop] !== undefined))) {
 					if (config.all === undefined || !config.all) result = instance.stateNode;
 					else if (config.all) {
-						if (config.noCopies === undefined || !config.noCopies || config.noCopies && !instance.stateNode.BDFDBreactSearch) {
+						if (!instance.stateNode.BDFDBreactSearch) {
 							instance.stateNode.BDFDBreactSearch = true;
 							if (config.group) {
 								if (config.name && instance.type && (instance.type.displayName || instance.type.name)) {
@@ -1597,8 +1597,8 @@ var BDFDB = {
 		if (!nodeOrInstance || !config.name && !config.key) return null;
 		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 		if (!BDFDB.ObjectUtils.is(instance)) return null;
-		config.name = config.name && [config.name].flat().filter(n => n);
-		config.key = config.key && [config.key].flat().filter(n => n);
+		config.name = config.name && [config.name].flat(10).filter(n => n);
+		config.key = config.key && [config.key].flat(10).filter(n => n);
 		var depth = -1;
 		var start = performance.now();
 		var maxdepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
@@ -1688,7 +1688,7 @@ var BDFDB = {
 		}
 	};
 	BDFDB.ReactUtils.forceUpdate = function (...instances) {
-		for (let ins of instances.flat().filter(n => n)) if (ins.updater && typeof ins.updater.isMounted == "function" && ins.updater.isMounted(ins)) ins.forceUpdate();
+		for (let ins of instances.flat(10).filter(n => n)) if (ins.updater && typeof ins.updater.isMounted == "function" && ins.updater.isMounted(ins)) ins.forceUpdate();
 	};
 	BDFDB.ReactUtils.getInstance = function (node) {
 		if (!BDFDB.ObjectUtils.is(node)) return null;
@@ -1825,7 +1825,7 @@ var BDFDB = {
 	};
 	BDFDB.GuildUtils.getAll = function () {
 		var found = [], objs = [];
-		for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.guilds), {name:["Guild","GuildIcon"], all:true, noCopies:true, unlimited:true})) {
+		for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.guilds), {name:["Guild","GuildIcon"], all:true, unlimited:true})) {
 			if (ins.props && ins.props.guild) objs.push(Object.assign(new ins.props.guild.constructor(ins.props.guild), {div:ins.handleContextMenu ? BDFDB.ReactUtils.findDOMNode(ins) : BDFDB.GuildUtils.createCopy(ins.props.guild), instance:ins}));
 		}
 		for (let id of BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds()) {
@@ -2013,7 +2013,7 @@ var BDFDB = {
 	};
 	BDFDB.FolderUtils.getAll = function () {
 		var found = [];
-		for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.guildswrapper), {name:"GuildFolder", all:true, noCopies:true, unlimited:true})) {
+		for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.guildswrapper), {name:"GuildFolder", all:true, unlimited:true})) {
 			if (ins.props && ins.props.folderId) found.push(Object.assign({}, ins.props, {div:BDFDB.ReactUtils.findDOMNode(ins), instance:ins}));
 		}
 		return found;
@@ -2041,7 +2041,7 @@ var BDFDB = {
 	};
 	BDFDB.ChannelUtils.getAll = function () {
 		var found = [];
-		for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.channels), {name: ["ChannelCategoryItem", "ChannelItem", "PrivateChannel"], all:true, noCopies:true, unlimited:true})) if (ins.props && !ins.props.ispin && ins.props.channel && ins._reactInternalFiber.return) {
+		for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.channels), {name: ["ChannelCategoryItem", "ChannelItem", "PrivateChannel"], all:true, unlimited:true})) if (ins.props && !ins.props.ispin && ins.props.channel && ins._reactInternalFiber.return) {
 			var div = BDFDB.ReactUtils.findDOMNode(ins);
 			div = div && BDFDB.DOMUtils.containsClass(div.parentElement, BDFDB.disCN.categorycontainerdefault, BDFDB.disCN.channelcontainerdefault, false) ? div.parentElement : div;
 			found.push(Object.assign(new ins.props.channel.constructor(ins.props.channel), {div, instance:ins}));
@@ -2122,7 +2122,7 @@ var BDFDB = {
 	};
 	BDFDB.DMUtils.getAll = function () {
 		var found = [];
-		for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.guilds), {name:"DirectMessage", all:true, noCopies:true, unlimited:true})) {
+		for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.guilds), {name:"DirectMessage", all:true, unlimited:true})) {
 			if (ins.props && ins.props.channel) found.push(Object.assign(new ins.props.channel.constructor(ins.props.channel), {div:BDFDB.ReactUtils.findDOMNode(ins), instance:ins}));
 		}
 		return found;
@@ -2728,24 +2728,24 @@ var BDFDB = {
 	BDFDB.DOMUtils = {};
 	BDFDB.DOMUtils.addClass = function (eles, ...classes) {
 		if (!eles || !classes) return;
-		for (let ele of [eles].flat().filter(n => n)) {
+		for (let ele of [eles].flat(10).filter(n => n)) {
 			if (Node.prototype.isPrototypeOf(ele)) add(ele);
 			else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) add(e);
 			else if (typeof ele == "string") for (let e of ele.split(",")) if (e && (e = e.trim())) for (let n of document.querySelectorAll(e)) add(n);
 		}
 		function add(node) {
-			if (node && node.classList) for (let cla of classes) for (let cl of [cla].flat().filter(n => n)) if (typeof cl == "string") for (let c of cl.split(" ")) if (c) node.classList.add(c);
+			if (node && node.classList) for (let cla of classes) for (let cl of [cla].flat(10).filter(n => n)) if (typeof cl == "string") for (let c of cl.split(" ")) if (c) node.classList.add(c);
 		}
 	};
 	BDFDB.DOMUtils.removeClass = function (eles, ...classes) {
 		if (!eles || !classes) return;
-		for (let ele of [eles].flat().filter(n => n)) {
+		for (let ele of [eles].flat(10).filter(n => n)) {
 			if (Node.prototype.isPrototypeOf(ele)) remove(ele);
 			else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) remove(e);
 			else if (typeof ele == "string") for (let e of ele.split(",")) if (e && (e = e.trim())) for (let n of document.querySelectorAll(e)) remove(n);
 		}
 		function remove(node) {
-			if (node && node.classList) for (let cla of classes) for (let cl of [cla].flat().filter(n => n)) if (typeof cl == "string") for (let c of cl.split(" ")) if (c) node.classList.remove(c);
+			if (node && node.classList) for (let cla of classes) for (let cl of [cla].flat(10).filter(n => n)) if (typeof cl == "string") for (let c of cl.split(" ")) if (c) node.classList.remove(c);
 		}
 	};
 	BDFDB.DOMUtils.toggleClass = function (eles, ...classes) {
@@ -2756,14 +2756,14 @@ var BDFDB = {
 			force = undefined;
 		}
 		if (!classes.length) return;
-		for (let ele of [eles].flat().filter(n => n)) {
+		for (let ele of [eles].flat(10).filter(n => n)) {
 			if (!ele) {}
 			else if (Node.prototype.isPrototypeOf(ele)) toggle(ele);
 			else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) toggle(e);
 			else if (typeof ele == "string") for (let e of ele.split(",")) if (e && (e = e.trim())) for (let n of document.querySelectorAll(e)) toggle(n);
 		}
 		function toggle(node) {
-			if (node && node.classList) for (let cla of classes) for (let cl of [cla].flat().filter(n => n)) if (typeof cl == "string") for (let c of cl.split(" ")) if (c) node.classList.toggle(c, force);
+			if (node && node.classList) for (let cla of classes) for (let cl of [cla].flat(10).filter(n => n)) if (typeof cl == "string") for (let c of cl.split(" ")) if (c) node.classList.toggle(c, force);
 		}
 	};
 	BDFDB.DOMUtils.containsClass = function (eles, ...classes) {
@@ -2792,7 +2792,7 @@ var BDFDB = {
 	};
 	BDFDB.DOMUtils.replaceClass = function (eles, oldclass, newclass) {
 		if (!eles || typeof oldclass != "string" || typeof newclass != "string") return;
-		for (let ele of [eles].flat().filter(n => n)) {
+		for (let ele of [eles].flat(10).filter(n => n)) {
 			if (Node.prototype.isPrototypeOf(ele)) replace(ele);
 			else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) replace(e);
 			else if (typeof ele == "string") for (let e of ele.split(",")) if (e && (e = e.trim())) for (let n of document.querySelectorAll(e)) replace(n);
@@ -2802,10 +2802,10 @@ var BDFDB = {
 		}
 	};
 	BDFDB.DOMUtils.formatClassName = function (...classes) {
-		return BDFDB.ArrayUtils.removeCopies(classes.flat().filter(n => n).join(" ").split(" ")).join(" ").trim();
+		return BDFDB.ArrayUtils.removeCopies(classes.flat(10).filter(n => n).join(" ").split(" ")).join(" ").trim();
 	};
 	BDFDB.DOMUtils.removeClassFromDOM = function (...classes) {
-		for (let c of classes.flat().filter(n => n)) if (typeof c == "string") for (let a of c.split(",")) if (a && (a = a.replace(/\.|\s/g, ""))) BDFDB.DOMUtils.removeClass(document.querySelectorAll("." + a), a);
+		for (let c of classes.flat(10).filter(n => n)) if (typeof c == "string") for (let a of c.split(",")) if (a && (a = a.replace(/\.|\s/g, ""))) BDFDB.DOMUtils.removeClass(document.querySelectorAll("." + a), a);
 	};
 	BDFDB.DOMUtils.show = function (...eles) {
 		BDFDB.DOMUtils.toggle(...eles, true);
@@ -2821,7 +2821,7 @@ var BDFDB = {
 			force = undefined;
 		}
 		if (!eles.length) return;
-		for (let ele of eles.flat().filter(n => n)) {
+		for (let ele of eles.flat(10).filter(n => n)) {
 			if (Node.prototype.isPrototypeOf(ele)) toggle(ele);
 			else if (NodeList.prototype.isPrototypeOf(ele)) for (let node of ele) toggle(node);
 			else if (typeof ele == "string") for (let c of ele.split(",")) if (c && (c = c.trim())) for (let node of document.querySelectorAll(c)) toggle(node);
@@ -2837,7 +2837,7 @@ var BDFDB = {
 		if (Node.prototype.isPrototypeOf(node) && node.nodeType != Node.TEXT_NODE) return getComputedStyle(node, null).getPropertyValue("display") == "none";
 	};
 	BDFDB.DOMUtils.remove = function (...eles) {
-		for (let ele of eles.flat().filter(n => n)) {
+		for (let ele of eles.flat(10).filter(n => n)) {
 			if (Node.prototype.isPrototypeOf(ele)) ele.remove();
 			else if (NodeList.prototype.isPrototypeOf(ele)) {
 				let nodes = Array.from(ele);
@@ -3469,7 +3469,7 @@ var BDFDB = {
 		}
 		if (config.children) {
 			let selectedtab, tabbaritems = [];
-			for (let child of [config.children].flat().filter(n => n)) if (LibraryModules.React.isValidElement(child)) {
+			for (let child of [config.children].flat(10).filter(n => n)) if (LibraryModules.React.isValidElement(child)) {
 				if (child.type == LibraryComponents.ModalComponents.ModalTabContent) {
 					if (!tabbaritems.length) child.props.open = true;
 					else delete child.props.open;
@@ -3764,7 +3764,7 @@ var BDFDB = {
 		else return setTimeout(() => {BDFDB.TimeUtils.suppress(callback, "Timeout")();}, delay);
 	};
 	BDFDB.TimeUtils.clear = function (...timeobjects) {
-		for (let t of timeobjects.flat().filter(n => n)) {
+		for (let t of timeobjects.flat(10).filter(n => n)) {
 			if (typeof t == "number") {
 				clearInterval(t);
 				clearTimeout(t);
@@ -6648,7 +6648,7 @@ var BDFDB = {
 									children: this.props.title
 								})
 							}) : null
-						].concat([this.props.titlechildren].flat()).filter(n => n)
+						].concat([this.props.titlechildren].flat(10)).filter(n => n)
 					}),
 				].concat(this.props.children)
 			});
@@ -6772,7 +6772,7 @@ var BDFDB = {
 				align: LibraryComponents.Flex.Align.CENTER,
 				children: [
 					BDFDB.ReactUtils.createElement(NativeSubComponents.KeybindRecorder, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-						defaultValue: [this.props.defaultValue].flat().filter(n => n).map(keycode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, keycode, BDFDB.DiscordConstants.KeyboardEnvs.BROWSER]),
+						defaultValue: [this.props.defaultValue].flat(10).filter(n => n).map(keycode => [BDFDB.DiscordConstants.KeyboardDeviceTypes.KEYBOARD_KEY, keycode, BDFDB.DiscordConstants.KeyboardEnvs.BROWSER]),
 						onChange: this.handleChange.bind(this)
 					}), "reset", "onReset")),
 					this.props.reset || this.props.onReset ? BDFDB.ReactUtils.createElement(LibraryComponents.Clickable, {
@@ -7166,7 +7166,7 @@ var BDFDB = {
 								wrap: true,
 								children: BDFDB.ReactUtils.createElement(childcomponent, BDFDB.ObjectUtils.exclude(Object.assign(BDFDB.ObjectUtils.exclude(this.props, "className", "id", "type"), this.props.childProps, {onChange: this.handleChange.bind(this)}), "grow", "stretch", "basis", "dividerbottom", "dividertop", "label", "labelchildren", "mini", "note", "childProps"))
 							})
-						].flat().filter(n => n)
+						].flat(10).filter(n => n)
 					}),
 					typeof this.props.note == "string" ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
 						className: BDFDB.disCN.note,
