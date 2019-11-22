@@ -6695,7 +6695,7 @@ var BDFDB = {
 			var Guild = isDraggedGuild ? BDFDB.ReactUtils.createElement("div", {
 				children: BDFDB.ReactUtils.createElement(LibraryComponents.GuildComponents.DragPlaceholder, {})
 			}) : BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.disCN.guildcontainer,
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.guildcontainer, this.props.className),
 				children: BDFDB.ReactUtils.createElement(LibraryComponents.GuildComponents.BlobMask, {
 					selected: this.state.isDropHovering || this.props.selected || this.state.hovered,
 					upperBadge: this.props.unavailable ? LibraryComponents.GuildComponents.renderUnavailableBadge() : LibraryComponents.GuildComponents.renderIconBadge(this.props.audio, this.props.video),
