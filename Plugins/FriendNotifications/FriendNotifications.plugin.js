@@ -3,7 +3,7 @@
 class FriendNotifications {
 	getName () {return "FriendNotifications";}
 
-	getVersion () {return "1.3.3";}
+	getVersion () {return "1.3.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,8 +11,7 @@ class FriendNotifications {
 
 	constructor () {
 		this.changelog = {
-			"added":[["Toast/Desktop Time","The amount of seconds a toast or desktop notification is on screen can now be configured in the settings"]],
-			"fixed":[["Double notifications","It now should be impossible for the plugin to trigger double notifications, if this problem still occurs to you, then something is wrong on your end (double plugin file or two different versions at the same time)"],["Listening/Playing/Streaming","Fixed notifications not showing for those types"]]
+			"fixed":[["Non Friends","Fixed issue where you are unable to add non friends to the observer list"]]
 		};
 		
 		this.patchedModules = {
@@ -274,7 +273,7 @@ class FriendNotifications {
 			let id = idinput.value;
 			idinput.value = "";
 			if (friendIDs.includes(id)) BDFDB.NotificationUtils.toast("User is already a friend of yours. Please use the 'Friends' area to configure him/her.", {type:"error"});
-			else if (BDFDB.DataUtils.load(this, "nonfriends")) BDFDB.NotificationUtils.toast("User is already being observed as a 'Non-Friend'.", {type:"error"}, id);
+			else if (BDFDB.DataUtils.load(this, "nonfriends", id)) BDFDB.NotificationUtils.toast("User is already being observed as a 'Non-Friend'.", {type:"error"});
 			else {
 				let user = BDFDB.LibraryModules.UserStore.getUser(id);
 				if (user) {
