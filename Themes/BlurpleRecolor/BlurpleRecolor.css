@@ -298,13 +298,13 @@
 .message-15tBk4 strong:not([style]),
 .wrapper-3WhCwL[style=""],
 .wrapper-3WhCwL:not([style]) {
-	color: rgba(var(--vaccentcolor),1) !important;
-	background: rgba(var(--vaccentcolor),0.1) !important;
+	color: rgba(var(--vaccentcolor), 1) !important;
+	background: rgba(var(--vaccentcolor), 0.1) !important;
 }
 .wrapper-3WhCwL[style=""]:hover,
 .wrapper-3WhCwL:not([style]):hover {
 	color: rgb(255,255,255) !important;
-	background: rgba(var(--vaccentcolor),1) !important;
+	background: rgba(var(--vaccentcolor), 1) !important;
 }
 .wrapper-3WhCwL:hover {
 	text-decoration: underline !important;
@@ -399,7 +399,6 @@
 .theme-light .container-2mdxGH,
 .content-N9xlZF .button-1ZJXzu,
 .sampleLink-KPFu3I,
-.wrapper-3WhCwL,
 .badgeUpgrade-1DzdNZ,
 .foreground-2EIns2,
 .durationThumbnail-2_vk0i,
