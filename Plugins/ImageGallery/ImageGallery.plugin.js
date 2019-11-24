@@ -11,7 +11,7 @@ class ImageGallery {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Positioning & Overlapping","Preview images of previous and next image no longer overlap current image, this was caused by other plugins"]].
+			"fixed":[["Positioning & Overlapping","Preview images of previous and next image no longer overlap current image, this was caused by other plugins"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
