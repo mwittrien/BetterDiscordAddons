@@ -4100,8 +4100,13 @@ var BDFDB = {
 		switchItem: "ui-switch-item",
 		switchWrapper: "ui-switch-wrapper"
 	};
+	DiscordClassModules.ImageGallery = {
+		gallery: "gallery-JViwKR",
+		previous: "previous-xsNq6B",
+		next: "next-SHEZrz"
+	};
 	DiscordClassModules.PinDMs = {
-		dragPreview: "dragPreview-0lM4wD",
+		dragPreview: "dragPreview-nXiByA",
 		dmChannelPinned: "pinned-0lM4wD",
 		dmChannelPlaceholder: "placeholder-7bhR5s",
 		pinnedChannelsHeaderContainer: "pinnedChannelsHeaderContainer-89Gjv4",
@@ -4342,6 +4347,9 @@ var BDFDB = {
 		_bdguildvideo: ["BDrepo", "bdGuildVideo"],
 		_bdpillselected: ["BDrepo", "bdPillSelected"],
 		_bdpillunread: ["BDrepo", "bdPillUnread"],
+		_imagegallerygallery: ["ImageGallery", "gallery"],
+		_imagegalleryprevious: ["ImageGallery", "previous"],
+		_imagegallerynext: ["ImageGallery", "next"],
 		_pindmsdragpreview: ["PinDMs", "dragPreview"],
 		_pindmsdmchannelpinned: ["PinDMs", "dmChannelPinned"],
 		_pindmsdmchannelplaceholder: ["PinDMs", "dmChannelPlaceholder"],
