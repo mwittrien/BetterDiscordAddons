@@ -6776,7 +6776,7 @@ var BDFDB = {
 			if (typeof this.props.setRef == "function") this.props.setRef(this.props.guild.id, e)
 		}
 		render() {
-			if (!this.props.guild) return;
+			if (!this.props.guild) return null;
 			this.props.selectedChannelId = LibraryModules.LastChannelStore.getChannelId(this.props.guild.id);
 			this.props.selected = this.props.state ? LibraryModules.LastGuildStore.getGuildId() == this.props.guild.id : false;
 			this.props.unread = this.props.state ? LibraryModules.UnreadGuildUtils.hasUnread(this.props.guild.id) : false;
@@ -6839,8 +6839,6 @@ var BDFDB = {
 		}
 	};
 	InternalBDFDB.setDefaultProps(LibraryComponents.GuildComponents.Guild, {menu:true, tooltip:true, state:false, draggable:false, sorting:false});
-	
-	LibraryComponents.GuildComponents.GuildDropTarget = BDFDB.ModuleUtils.findByName("GuildDropTarget");
 	
 	LibraryComponents.GuildComponents.Icon = BDFDB.ModuleUtils.findByName("GuildIconWrapper");
 	
