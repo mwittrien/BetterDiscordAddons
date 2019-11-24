@@ -3,7 +3,7 @@
 class ImageGallery {
 	getName () {return "ImageGallery";}
 
-	getVersion () {return "1.6.0";}
+	getVersion () {return "1.6.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,6 +11,7 @@ class ImageGallery {
 
 	constructor () {
 		this.changelog = {
+			"fixed":[["Positioning & Overlapping","Preview images of previous and next image no longer overlap current image, this was caused by other plugins"]].
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
@@ -24,17 +25,16 @@ class ImageGallery {
 	initConstructor () {
 		this.eventFired = false;
 
-		this.css = ` 
-			.image-gallery ${BDFDB.dotCN.imagewrapper}.previous,
-			.image-gallery ${BDFDB.dotCN.imagewrapper}.next {
-				position: absolute;
-			} 
-
-			.image-gallery ${BDFDB.dotCN.imagewrapper}.previous {
+		this.css = `
+			${BDFDB.dotCNS._imagegallerygallery + BDFDB.dotCN.imagewrapper + BDFDB.dotCN._imagegalleryprevious},
+			${BDFDB.dotCNS._imagegallerygallery + BDFDB.dotCN.imagewrapper + BDFDB.dotCN._imagegallerynext} {
+				position: fixed;
+				z-index: -1;
+			}
+			${BDFDB.dotCNS._imagegallerygallery + BDFDB.dotCN.imagewrapper + BDFDB.dotCN._imagegalleryprevious} {
 				right: 90%;
 			} 
-
-			.image-gallery ${BDFDB.dotCN.imagewrapper}.next {
+			${BDFDB.dotCNS._imagegallerygallery + BDFDB.dotCN.imagewrapper + BDFDB.dotCN._imagegallerynext} {
 				left: 90%;
 			}`;
 	}
@@ -107,7 +107,7 @@ class ImageGallery {
 				}
 			}
 			if (e.node) {
-				BDFDB.DOMUtils.addClass(BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, e.node), "image-gallery");
+				BDFDB.DOMUtils.addClass(BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, e.node), BDFDB.disCN._imagegallerygallery);
 				this.cleanUpListeners();
 				document.keydownImageGalleryListener = event => {
 					if (!document.contains(e.node)) this.cleanUpListeners();
@@ -147,7 +147,7 @@ class ImageGallery {
 			var newHeight = imagethrowaway.naturalHeight * resize;
 			var newWidth = imagethrowaway.naturalWidth * resize;
 			instance[type + "Ref"] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.LazyImage, {
-				className: type,
+				className: BDFDB.disCN[`_imagegallery${type}`],
 				src: src,
 				height: imagethrowaway.naturalHeight,
 				width: imagethrowaway.naturalWidth,
