@@ -65,39 +65,14 @@
 #app-mount .uploadDropModal-2kTwbc {
 	width: 320px;
 }
-#app-mount .uploadDropModal-2kTwbc .bgScale-1otPtc,
-#app-mount .uploadModal-2ifh8j {
+#app-mount .uploadDropModal-2kTwbc .bgScale-1otPtc {
 	background-color: #36393F;
 }
-#app-mount .uploadModal-2ifh8j .footer-3mqk7D {
-	background-color: #2F3136;
-}
-#app-mount .uploadModal-2ifh8j .inner-zqa7da {
-	background-color: rgba(114,118,125,.3);
-}
-#app-mount .uploadDropModal-2kTwbc .inner-3nWsbo,
-#app-mount .uploadModal-2ifh8j .inner-3nWsbo {
+#app-mount .uploadDropModal-2kTwbc .inner-3nWsbo {
 	border-color: #CDCDCD;
 }
 #app-mount .uploadDropModal-2kTwbc .inner-3nWsbo .instructions-2Du9gG {
 	padding: 0 5px;
-}
-#app-mount .uploadModal-2ifh8j .inner-3nWsbo .file-34mY5K .icon-kyxXVr.image-2yrs5j {
-	background-color: #2F3136;
-	border-color: rgb(var(--vaccentcolor));
-}
-#app-mount .uploadModal-2ifh8j .checked-3_4uQ9 {
-	background-color: rgb(var(--vaccentcolor));
-}
-#app-mount .uploadModal-2ifh8j .checked-3_4uQ9 polyline {
-	stroke: #FFF !important;
-}
-#app-mount .uploadModal-2ifh8j .button-38aScr.lookInverted-2D7oAl.colorBrand-3pXr91 {
-	color: #FFF !important;
-	background-color: rgb(var(--vaccentcolor));
-}
-#app-mount .uploadModal-2ifh8j .button-38aScr.lookInverted-2D7oAl.colorBrand-3pXr91:hover {
-	background-image: linear-gradient(0deg,rgba(0,0,0,.1),rgba(0,0,0,.1));
 }
 
 #app-mount .autocomplete-1vrmpx {
