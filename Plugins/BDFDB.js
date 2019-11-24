@@ -622,7 +622,7 @@ var BDFDB = {
 	BDFDB.TooltipUtils = {};
 	BDFDB.TooltipUtils.create = function (anker, text, options = {}) {
 		var itemlayercontainernative = document.querySelector(BDFDB.dotCN.appmount +  " > * > " + BDFDB.dotCN.itemlayercontainer);
-		if (!itemlayercontainernative || typeof text != "string" || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
+		if (!itemlayercontainernative || (typeof text != "string" && !BDFDB.ObjectUtils.is(options.guild)) || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
 		var itemlayercontainer = document.querySelector(".BDFDB-itemlayercontainer");
 		if (!itemlayercontainer) {
 			itemlayercontainer = itemlayercontainernative.cloneNode();
@@ -635,10 +635,66 @@ var BDFDB = {
 		
 		var tooltip = itemlayer.firstElementChild;
 		if (options.id) tooltip.id = options.id.split(" ").join("");
+		if (options.guild) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltiplistitem);
 		if (options.selector) BDFDB.DOMUtils.addClass(tooltip, options.selector);
 		if (options.style) tooltip.style = options.style;
-		if (options.html === true) tooltip.innerHTML = text;
-		else tooltip.innerText = text;
+		if (BDFDB.ObjectUtils.is(options.guild)) {
+			var voiceStates = LibraryModules.VoiceUtils.getVoiceStates(options.guild.id);
+			var streamOwnerIds = LibraryModules.StreamUtils.getAllApplicationStreams().filter(app => app.guildId === options.guild.id).map(app => app.ownerId);
+			var streamOwners = streamOwnerIds.map(ownerId => LibraryModules.UserStore.getUser(ownerId));
+			var connectedUsers = Object.keys(LibraryModules.VoiceUtils.getVoiceStates(options.guild.id)).map(userId => !streamOwnerIds.includes(userId) && BDFDB.LibraryModules.UserStore.getUser(userId));
+
+			var voiceRow = !connectedUsers.length ? null : BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.disCN.tooltiprow,
+				children: [
+					BDFDB.ReactUtils.createElement(LibraryComponents.SvgIcon, {
+						name: LibraryComponents.SvgIcon.Names.SPEAKER,
+						className: BDFDB.disCN.tooltipactivityicon
+					}),
+					BDFDB.ReactUtils.createElement(LibraryComponents.UserSummaryItem, {
+						users: connectedUsers,
+						max: 6
+					})
+				]
+			});
+			var streamRow = !streamOwners.length ? null : BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.disCN.tooltiprow,
+				children: [
+					BDFDB.ReactUtils.createElement(LibraryComponents.SvgIcon, {
+						name: LibraryComponents.SvgIcon.Names.STREAM,
+						className: BDFDB.disCN.tooltipactivityicon
+					}),
+					BDFDB.ReactUtils.createElement(LibraryComponents.UserSummaryItem, {
+						users: streamOwners,
+						max: 6
+					})
+				]
+			});
+			BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
+				children: [
+					BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltiprow, BDFDB.disCN.tooltiprowguildname),
+						children: [
+							BDFDB.ReactUtils.createElement(LibraryComponents.GuildComponents.Badge, {
+								guild: options.guild,
+								size: LibraryModules.StringUtils.cssValueToNumber(DiscordClassModules.TooltipGuild.iconSize),
+								className: BDFDB.disCN.tooltiprowicon
+							}),
+							BDFDB.ReactUtils.createElement("span", {
+								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipguildnametext, null != voiceRow || null != streamRow && BDFDB.disCN.tooltipguildnametextlimitedsize),
+								children: options.guild.toString()
+							})
+						]
+					}),
+					voiceRow,
+					streamRow
+				]
+			}), tooltip);
+		}
+		else {
+			if (options.html === true) tooltip.innerHTML = text;
+			else tooltip.innerText = text;
+		}
 		if (!options.type || !BDFDB.disCN["tooltip" + options.type.toLowerCase()]) options.type = "top";
 		BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN["tooltip" + options.type.toLowerCase()]);
 		tooltip.position = options.type.toLowerCase();
@@ -1414,12 +1470,15 @@ var BDFDB = {
 	LibraryModules.SettingsUtils = BDFDB.ModuleUtils.findByProperties("updateRemoteSettings", "updateLocalSettings");
 	LibraryModules.SoundUtils = BDFDB.ModuleUtils.findByProperties("playSound", "createSound");
 	LibraryModules.SpellCheckUtils = BDFDB.ModuleUtils.findByProperties("learnWord", "toggleSpellcheck");
+	LibraryModules.StateStoreUtils = BDFDB.ModuleUtils.findByProperties("useStateFromStores", "useStateFromStoresArray");
 	LibraryModules.StatusMetaUtils = BDFDB.ModuleUtils.findByProperties("getApplicationActivity", "getStatus");
 	LibraryModules.StreamUtils = BDFDB.ModuleUtils.findByProperties("getStreamForUser", "getActiveStream");
+	LibraryModules.StringUtils = BDFDB.ModuleUtils.findByProperties("cssValueToNumber", "upperCaseFirstChar");
 	LibraryModules.UnreadGuildUtils = BDFDB.ModuleUtils.findByProperties("hasUnread", "getUnreadGuilds");
 	LibraryModules.UnreadChannelUtils = BDFDB.ModuleUtils.findByProperties("getUnreadCount", "getOldestUnreadMessageId");
 	LibraryModules.UploadUtils = BDFDB.ModuleUtils.findByProperties("upload", "instantBatchUpload");
 	LibraryModules.UserStore = BDFDB.ModuleUtils.findByProperties("getUser", "getUsers");
+	LibraryModules.Utilities = BDFDB.ModuleUtils.findByProperties("flatMap", "cloneDeep");
 	LibraryModules.VoiceUtils = BDFDB.ModuleUtils.findByProperties("getAllVoiceStates", "getVoiceStatesForChannel");
 	LibraryModules.ZoomUtils = BDFDB.ModuleUtils.findByProperties("setZoom", "setFontSize");
 	BDFDB.LibraryModules = Object.assign({}, LibraryModules);
@@ -4326,6 +4385,7 @@ var BDFDB = {
 	DiscordClassModules.Title = BDFDB.ModuleUtils.findByProperties("title", "size18");
 	DiscordClassModules.TitleBar = BDFDB.ModuleUtils.findByProperties("titleBar", "wordmark");
 	DiscordClassModules.Tooltip = BDFDB.ModuleUtils.findByProperties("tooltip", "tooltipTop");
+	DiscordClassModules.TooltipGuild = BDFDB.ModuleUtils.findByProperties("rowIcon", "rowGuildName");
 	DiscordClassModules.Typing = BDFDB.ModuleUtils.findByProperties("cooldownWrapper", "typing");
 	DiscordClassModules.UnreadBar = BDFDB.ModuleUtils.findByProperties("active", "bar", "unread");
 	DiscordClassModules.UserPopout = BDFDB.ModuleUtils.findByProperties("userPopout", "headerPlaying");
@@ -5579,15 +5639,22 @@ var BDFDB = {
 		size18: ["Title", "size18"], // REMOVE
 		titlesize18: ["Title", "size18"],
 		tooltip: ["Tooltip", "tooltip"],
+		tooltipactivityicon: ["TooltipGuild", "activityIcon"],
 		tooltipblack: ["Tooltip", "tooltipBlack"],
 		tooltipbottom: ["Tooltip", "tooltipBottom"],
 		tooltipbrand: ["Tooltip", "tooltipBrand"],
 		tooltipgreen: ["Tooltip", "tooltipGreen"],
 		tooltipgrey: ["Tooltip", "tooltipGrey"],
+		tooltipguildnametext: ["TooltipGuild", "guildNameText"],
+		tooltipguildnametextlimitedsize: ["TooltipGuild", "guildNameTextLimitedSize"],
 		tooltipleft: ["Tooltip", "tooltipLeft"],
+		tooltiplistitem: ["GuildsItems", "listItemTooltip"],
 		tooltippointer: ["Tooltip", "tooltipPointer"],
 		tooltipred: ["Tooltip", "tooltipRed"],
 		tooltipright: ["Tooltip", "tooltipRight"],
+		tooltiprow: ["TooltipGuild", "row"],
+		tooltiprowguildname: ["TooltipGuild", "rowGuildName"],
+		tooltiprowicon: ["TooltipGuild", "rowIcon"],
 		tooltiptop: ["Tooltip", "tooltipTop"],
 		tooltipyellow: ["Tooltip", "tooltipYellow"],
 		typing: ["Typing", "typing"],
@@ -6667,6 +6734,8 @@ var BDFDB = {
 	
 	LibraryComponents.GuildComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Separator", "DragPlaceholder"));
 	
+	LibraryComponents.GuildComponents.Badge = BDFDB.ModuleUtils.findByName("GuildBadge");
+	
 	LibraryComponents.GuildComponents.BlobMask = BDFDB.ModuleUtils.findByName("BlobMask");
 	
 	LibraryComponents.GuildComponents.Guild = reactInitialized && class BDFDB_Guild extends LibraryModules.React.Component {
@@ -6736,19 +6805,19 @@ var BDFDB = {
 			if (this.props.draggable && typeof this.props.connectDragSource == "function") Guild = this.props.connectDragSource(Guild);
 			
 			var children = [
-				this.props.listItem || this.props.pill ? BDFDB.ReactUtils.createElement(LibraryComponents.GuildComponents.Pill, {
+				this.props.list || this.props.pill ? BDFDB.ReactUtils.createElement(LibraryComponents.GuildComponents.Pill, {
 					hovered: !isDraggedGuild && this.state.hovered,
 					selected: !isDraggedGuild && this.props.selected,
 					unread: !isDraggedGuild && this.props.unread,
 					className: BDFDB.disCN.guildpill
 				}) : null,
-				BDFDB.ReactUtils.createElement(LibraryComponents.TooltipContainer, {
-					text: this.props.tooltip ? this.props.guild.name : null,
-					tooltipConfig: Object.assign({type: "right"}, this.props.tooltipConfig),
+				!this.props.tooltip ? Guild : BDFDB.ReactUtils.createElement(LibraryComponents.TooltipContainer, {
+					text: this.props.guild.name,
+					tooltipConfig: Object.assign({type: "right"}, this.props.tooltipConfig, {guild: this.props.list && this.props.guild}),
 					children: Guild
 				})
 			];
-			return this.props.listItem ? LibraryComponents.GuildComponents.renderListItem(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
+			return this.props.list ? LibraryComponents.GuildComponents.renderListItem(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 				children: children
 			}), null != this.props.setRef ? this.setRef : null) : BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.guild, this.props.className),
@@ -7485,7 +7554,6 @@ var BDFDB = {
 			});
 		}
 	};
-	
 	LibraryComponents.TooltipContainer = reactInitialized && class BDFDB_TooltipContainer extends LibraryModules.React.Component {
 		render() {
 			let child = (BDFDB.ArrayUtils.is(this.props.children) ? this.props.children[0] : this.props.children) || BDFDB.ReactUtils.createElement("div", {});
@@ -7518,6 +7586,8 @@ var BDFDB = {
 			});
 		}
 	};
+	
+	LibraryComponents.UserSummaryItem = BDFDB.ModuleUtils.findByName("UserSummaryItem");
 	
 	for (let type in NativeSubComponents) if (LibraryComponents[type]) for (let key in NativeSubComponents[type]) if (key != "displayName" && key != "name" && (typeof NativeSubComponents[type][key] != "function" || key.charAt(0) == key.charAt(0).toUpperCase())) LibraryComponents[type][key] = NativeSubComponents[type][key];
 	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
