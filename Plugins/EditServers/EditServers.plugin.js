@@ -3,7 +3,7 @@
 class EditServers {
 	getName () {return "EditServers";}
 
-	getVersion () {return "2.1.1";}
+	getVersion () {return "2.1.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -214,13 +214,6 @@ class EditServers {
 	forceUpdateAll (guildid) {
 		this.updateGuildSidebar();
 		BDFDB.ModuleUtils.forceAllUpdates(this);
-		if (guildid) {
-			let ServerFolders = BDFDB.BDUtils.getPlugin("ServerFolders", true);
-			if (ServerFolders) {
-				let folder = ServerFolders.getFolderOfGuildId(guildid);
-				if (folder) ServerFolders.updateGuildInFolderContent(folder.folderId, guildid);
-			}
-		}
 	}
 
 	showServerSettings (info) {
@@ -546,9 +539,8 @@ class EditServers {
 		let data = this.getGuildData(info.id, wrapper);
 		wrapper.removeEventListener("mouseenter", wrapper.tooltipListenerEditServers);
 		if (data.name || data.color3 || data.color4) {
-			let ServerFolders = BDFDB.BDUtils.getPlugin("ServerFolders", true);
-			let folder = ServerFolders ? ServerFolders.getFolderOfGuildId(info.id) : null;
-			let folderData = folder ? BDFDB.DataUtils.load("ServerFolders", "folders", folder.folderId) : null;
+			let folder = BDFDB.GuildUtils.getFolder(info.id);
+			let folderData = folder && BDFDB.BDUtils.getPlugin("ServerFolders", true) ? BDFDB.DataUtils.load("ServerFolders", "folders", folder.folderId) : null;
 			let color3 = data.color3 || (folderData && folderData.copyTooltipColor ? folderData.color3 : null);
 			let color4 = data.color4 || (folderData && folderData.copyTooltipColor ? folderData.color4 : null);
 			var isgradient3 = color3 && BDFDB.ObjectUtils.is(color3);

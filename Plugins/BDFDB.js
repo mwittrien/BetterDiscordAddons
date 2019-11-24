@@ -1855,6 +1855,9 @@ var BDFDB = {
 		if (!guild || !guild.banner) return null;
 		return LibraryModules.IconUtils.getGuildBannerURL(guild).split("?")[0];
 	};
+	BDFDB.GuildUtils.getFolder = function (id) {
+		return BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId && n.guildIds.includes(id));
+	};
 	BDFDB.GuildUtils.getId = function (div) {
 		if (!Node.prototype.isPrototypeOf(div) || !BDFDB.ReactUtils.getInstance(div)) return;
 		let guilddiv = BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildouter, div);
@@ -6829,7 +6832,7 @@ var BDFDB = {
 					tooltipConfig: Object.assign({type: "right"}, this.props.tooltipConfig, {guild: this.props.list && this.props.guild}),
 					children: Guild
 				})
-			];
+			].filter(n => n);
 			return this.props.list ? LibraryComponents.GuildComponents.renderListItem(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 				children: children
 			}), null != this.props.setRef ? this.setRef : null) : BDFDB.ReactUtils.createElement("div", {
@@ -6838,7 +6841,7 @@ var BDFDB = {
 			});
 		}
 	};
-	InternalBDFDB.setDefaultProps(LibraryComponents.GuildComponents.Guild, {menu:true, tooltip:true, state:false, draggable:false, sorting:false});
+	InternalBDFDB.setDefaultProps(LibraryComponents.GuildComponents.Guild, {menu:true, tooltip:true, list:false, state:false, draggable:false, sorting:false});
 	
 	LibraryComponents.GuildComponents.Icon = BDFDB.ModuleUtils.findByName("GuildIconWrapper");
 	
