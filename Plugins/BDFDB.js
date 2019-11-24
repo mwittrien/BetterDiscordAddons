@@ -4171,6 +4171,15 @@ var BDFDB = {
 		unpinButton: "unpinButton-z3-UVO",
 		unpinIcon: "unpinIcon-79ZnEr"
 	};
+	DiscordClassModules.ServerFolders = {
+		dragPreview: "dragPreview-nXiByA",
+		guildPlaceholder: "placeholder-7bhR5s",
+		folderContent: "content-Pph8t6",
+		folderContentClosed: "closed-j55_T-",
+		iconSwatch: "iconSwatch-_78Ghj",
+		iconSwatchInner: "iconInner-aOY-qk",
+		iconSwatchSelected: "selected-P5oePO"
+	};
 	DiscordClassModules.NotFound = {
 		_: "",
 		badgeWrapper: "wrapper-232cHJ",
@@ -4415,6 +4424,13 @@ var BDFDB = {
 		_pindmsrecentplaceholder: ["PinDMs", "recentPlaceholder"],
 		_pindmsunpinbutton: ["PinDMs", "unpinButton"],
 		_pindmsunpinicon: ["PinDMs", "unpinIcon"],
+		_serverfoldersdragpreview: ["ServerFolders", "dragPreview"],
+		_serverfoldersfoldercontent: ["ServerFolders", "folderContent"],
+		_serverfoldersfoldercontentclosed: ["ServerFolders", "folderContentClosed"],
+		_serverfoldersguildplaceholder: ["ServerFolders", "guildPlaceholder"],
+		_serverfoldersiconswatch: ["ServerFolders", "iconSwatch"],
+		_serverfoldersiconswatchinner: ["ServerFolders", "iconSwatchInner"],
+		_serverfoldersiconswatchselected: ["ServerFolders", "iconSwatchSelected"],
 		_repoauthor: ["BDrepo", "bdaAuthor"],
 		_repocheckbox: ["BDrepo", "switchCheckbox"],
 		_repocheckboxchecked: ["BDrepo", "switchChecked"],
