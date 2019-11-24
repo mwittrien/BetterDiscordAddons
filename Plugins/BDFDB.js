@@ -639,37 +639,9 @@ var BDFDB = {
 		if (options.selector) BDFDB.DOMUtils.addClass(tooltip, options.selector);
 		if (options.style) tooltip.style = options.style;
 		if (BDFDB.ObjectUtils.is(options.guild)) {
-			var voiceStates = LibraryModules.VoiceUtils.getVoiceStates(options.guild.id);
 			var streamOwnerIds = LibraryModules.StreamUtils.getAllApplicationStreams().filter(app => app.guildId === options.guild.id).map(app => app.ownerId);
 			var streamOwners = streamOwnerIds.map(ownerId => LibraryModules.UserStore.getUser(ownerId));
 			var connectedUsers = Object.keys(LibraryModules.VoiceUtils.getVoiceStates(options.guild.id)).map(userId => !streamOwnerIds.includes(userId) && BDFDB.LibraryModules.UserStore.getUser(userId));
-
-			var voiceRow = !connectedUsers.length ? null : BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.disCN.tooltiprow,
-				children: [
-					BDFDB.ReactUtils.createElement(LibraryComponents.SvgIcon, {
-						name: LibraryComponents.SvgIcon.Names.SPEAKER,
-						className: BDFDB.disCN.tooltipactivityicon
-					}),
-					BDFDB.ReactUtils.createElement(LibraryComponents.UserSummaryItem, {
-						users: connectedUsers,
-						max: 6
-					})
-				]
-			});
-			var streamRow = !streamOwners.length ? null : BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.disCN.tooltiprow,
-				children: [
-					BDFDB.ReactUtils.createElement(LibraryComponents.SvgIcon, {
-						name: LibraryComponents.SvgIcon.Names.STREAM,
-						className: BDFDB.disCN.tooltipactivityicon
-					}),
-					BDFDB.ReactUtils.createElement(LibraryComponents.UserSummaryItem, {
-						users: streamOwners,
-						max: 6
-					})
-				]
-			});
 			BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 				children: [
 					BDFDB.ReactUtils.createElement("div", {
@@ -681,14 +653,38 @@ var BDFDB = {
 								className: BDFDB.disCN.tooltiprowicon
 							}),
 							BDFDB.ReactUtils.createElement("span", {
-								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipguildnametext, null != voiceRow || null != streamRow && BDFDB.disCN.tooltipguildnametextlimitedsize),
+								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipguildnametext, (connectedUsers.length || streamOwners.length) && BDFDB.disCN.tooltipguildnametextlimitedsize),
 								children: options.guild.toString()
 							})
 						]
 					}),
-					voiceRow,
-					streamRow
-				]
+					connectedUsers.length ? BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.tooltiprow,
+						children: [
+							BDFDB.ReactUtils.createElement(LibraryComponents.SvgIcon, {
+								name: LibraryComponents.SvgIcon.Names.SPEAKER,
+								className: BDFDB.disCN.tooltipactivityicon
+							}),
+							BDFDB.ReactUtils.createElement(LibraryComponents.UserSummaryItem, {
+								users: connectedUsers,
+								max: 6
+							})
+						]
+					}) : null,
+					streamOwners.length ? BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.tooltiprow,
+						children: [
+							BDFDB.ReactUtils.createElement(LibraryComponents.SvgIcon, {
+								name: LibraryComponents.SvgIcon.Names.STREAM,
+								className: BDFDB.disCN.tooltipactivityicon
+							}),
+							BDFDB.ReactUtils.createElement(LibraryComponents.UserSummaryItem, {
+								users: streamOwners,
+								max: 6
+							})
+						]
+					}) : null
+				].filter(n => n)
 			}), tooltip);
 		}
 		else {
@@ -1007,6 +1003,7 @@ var BDFDB = {
 	WebModulesData.Patchfinder = {
 		Account: "accountinfo",
 		App: "app",
+		AppView: "appcontainer",
 		AuthWrapper: "loginscreen",
 		BannedCard: "guildsettingsbannedcard",
 		ChannelMember: "member",
