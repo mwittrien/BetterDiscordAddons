@@ -6796,6 +6796,9 @@ var BDFDB = {
 		setRef(e) {
 			if (typeof this.props.setRef == "function") this.props.setRef(this.props.guild.id, e)
 		}
+		componentDidMount() {
+			for (let child of BDFDB.ReactUtils.findDOMNode(this).querySelectorAll("a")) child.setAttribute("draggable", false);
+		}
 		render() {
 			if (!this.props.guild) return null;
 			this.props.selectedChannelId = LibraryModules.LastChannelStore.getChannelId(this.props.guild.id);
