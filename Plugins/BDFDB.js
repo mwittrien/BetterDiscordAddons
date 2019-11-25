@@ -1417,6 +1417,7 @@ var BDFDB = {
 	var LibraryModules = {};
 	LibraryModules.AckUtils = BDFDB.ModuleUtils.findByProperties("localAck", "bulkAck");
 	LibraryModules.APIUtils = BDFDB.ModuleUtils.findByProperties("getAPIBaseURL");
+	LibraryModules.Animations = BDFDB.ModuleUtils.findByProperties("Controller", "Spring");
 	LibraryModules.AnimationUtils = BDFDB.ModuleUtils.findByProperties("spring", "decay");
 	LibraryModules.BadgeUtils = BDFDB.ModuleUtils.findByProperties("getBadgeCountString", "getBadgeWidthForValue");
 	LibraryModules.CategoryCollapseStore = BDFDB.ModuleUtils.findByProperties("getCollapsedCategories", "isCollapsed");
