@@ -635,7 +635,7 @@ var BDFDB = {
 		
 		var tooltip = itemlayer.firstElementChild;
 		if (options.id) tooltip.id = options.id.split(" ").join("");
-		if (options.guild) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltiplistitem);
+		if (options.list || BDFDB.ObjectUtils.is(options.guild)) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltiplistitem);
 		if (options.selector) BDFDB.DOMUtils.addClass(tooltip, options.selector);
 		if (options.style) tooltip.style = options.style;
 		if (BDFDB.ObjectUtils.is(options.guild)) {
