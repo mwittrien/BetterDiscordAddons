@@ -2058,6 +2058,17 @@ var BDFDB = {
 		if (!div) return;
 		return BDFDB.ReactUtils.findValue(div, "folderId", {up:true});
 	};
+	BDFDB.FolderUtils.getDefaultName = function (folderId) {
+		let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(folderId);
+		if (!folder) return "";
+		let rest = 2 * BDFDB.DiscordConstants.MAX_GUILD_FOLDER_NAME_LENGTH;
+		let names = [], allNames = folder.guildIds.map(guildId => (BDFDB.LibraryModules.GuildStore.getGuild(guildId) || {}).name).filter(n => n);
+		for (let name of allNames) if (name.length < rest || names.length === 0) {
+			names.push(name);
+			rest -= name.length;
+		}
+		return names.join(", ") + (names.length < allNames.length ? ", ..." : "");
+	};
 	BDFDB.FolderUtils.getDiv = function (eleOrInfoOrId) {
 		if (!eleOrInfoOrId) return null;
 		let info = BDFDB.FolderUtils.getData(eleOrInfoOrId);
