@@ -6705,6 +6705,7 @@ var BDFDB = {
 							if (this.refInput && file && (!this.props.filter || file.type.indexOf(this.props.filter) == 0)) {
 								this.refInput.props.value = `${this.props.mode == "url" ? "url('" : ""}data:${file.type};base64,${BDFDB.LibraryRequires.fs.readFileSync(file.path).toString("base64")}${this.props.mode ? "')" : ""}`;
 								BDFDB.ReactUtils.forceUpdate(this.refInput);
+								this.refInput.handleChange(this.refInput.props.value);
 							}
 						}
 					})
