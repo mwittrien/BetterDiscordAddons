@@ -1417,7 +1417,6 @@ var BDFDB = {
 	var LibraryModules = {};
 	LibraryModules.AckUtils = BDFDB.ModuleUtils.findByProperties("localAck", "bulkAck");
 	LibraryModules.APIUtils = BDFDB.ModuleUtils.findByProperties("getAPIBaseURL");
-	LibraryModules.Animations = BDFDB.ModuleUtils.findByProperties("Controller", "Spring");
 	LibraryModules.AnimationUtils = BDFDB.ModuleUtils.findByProperties("spring", "decay");
 	LibraryModules.BadgeUtils = BDFDB.ModuleUtils.findByProperties("getBadgeCountString", "getBadgeWidthForValue");
 	LibraryModules.CategoryCollapseStore = BDFDB.ModuleUtils.findByProperties("getCollapsedCategories", "isCollapsed");
@@ -4113,6 +4112,8 @@ var BDFDB = {
 		confirmModal: "confirmModal-t-WDWJ",
 		favButtonContainer: "favbutton-8Fzu45",
 		guild: "guild-r3yAE_",
+		guildLowerLeftBadge: "lowerLeftBadge-zr4T_9",
+		guildUpperLeftBadge: "upperLeftBadge-e35IpL",
 		hotkeyResetButton: "resetButton-hI9Ax7",
 		hotkeyWrapper: "recorder-can0vx",
 		inputNumberButton: "button-J9muv5",
@@ -5007,6 +5008,7 @@ var BDFDB = {
 		guildinner: ["Guild", "wrapper"],
 		guildinnerwrapper: ["GuildsItems", "listItemWrapper"],
 		guildlowerbadge: ["Guild", "lowerBadge"],
+		guildlowerleftbadge: ["BDFDB", "guildLowerLeftBadge"],
 		guildouter: ["GuildsItems", "listItem"],
 		guildpill: ["GuildServer", "pill"],
 		guildpillitem: ["PillWrapper", "item"],
@@ -5033,6 +5035,7 @@ var BDFDB = {
 		guildswrapperunreadmentionsbarbottom: ["GuildsWrapper", "unreadMentionsIndicatorBottom"],
 		guildswrapperunreadmentionsbartop: ["GuildsWrapper", "unreadMentionsIndicatorTop"],
 		guildupperbadge: ["Guild", "upperBadge"],
+		guildupperleftbadge: ["BDFDB", "guildUpperLeftBadge"],
 		h1: ["Text", "h1"],
 		h1defaultmargin: ["Text", "defaultMarginh1"],
 		h2: ["Text", "h2"],
@@ -6276,9 +6279,26 @@ var BDFDB = {
 	
 	LibraryComponents.Anchor = BDFDB.ModuleUtils.findByName("Anchor");
 	
+	LibraryComponents.Animations = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Controller", "Spring"));
+	
 	LibraryComponents.Avatar = (BDFDB.ModuleUtils.findByProperties("AnimatedAvatar") || {}).default;
 	
 	LibraryComponents.BadgeComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("IconBadge", "NumberBadge"));
+	
+	LibraryComponents.BadgeComponents.AnimationContainer = reactInitialized && class BDFDB_BadgeContainer extends LibraryModules.React.Component {
+		componentDidMount() {BDFDB.ReactUtils.forceUpdate(this);}
+		componentWillAppear(e) {if (typeof e == "function") e();}
+		componentWillEnter(e) {if (typeof e == "function") e();}
+		componentWillLeave(e) {if (typeof e == "function") this.timeoutId = setTimeout(e, 300);}
+		componentWillUnmount() {clearTimeout(this.timeoutId)}
+		render() {
+			return BDFDB.ReactUtils.createElement(LibraryModules.animated.div, {
+				className: this.props.className,
+				style: this.props.animatedStyle,
+				children: this.props.children
+			});
+		}
+	};
 	
 	LibraryComponents.BotTag = reactInitialized && class BDFDB_BotTag extends LibraryModules.React.Component {
 		handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}
@@ -7888,6 +7908,18 @@ var BDFDB = {
 		${BDFDB.dotCN.colorpickerswatchsingle} {
 			height: 30px;
 			width: 30px;
+		}
+		
+		${BDFDB.dotCN.guildupperleftbadge} {
+			top: 0;
+		}
+		${BDFDB.dotCN.guildlowerleftbadge} {
+			bottom: 0;
+		}
+		${BDFDB.dotCNC.guildlowerleftbadge + BDFDB.dotCN.guildupperleftbadge} {
+			pointer-events: none;
+			position: absolute;
+			left: 0;
 		}
 		
 		${BDFDB.dotCN.svgicon} {
