@@ -6771,6 +6771,16 @@ var BDFDB = {
 			if (!this.props.unavailable && this.props.guild && this.props.selectedChannelId) LibraryModules.DirectMessageUtils.preload(this.props.guild.id, this.props.selectedChannelId);
 			if (typeof this.props.onMouseDown == "function") this.props.onMouseDown(e, this);
 		}
+		handleMouseDown(e) {
+			if (!this.props.unavailable && this.props.guild && this.props.selectedChannelId) LibraryModules.DirectMessageUtils.preload(this.props.guild.id, this.props.selectedChannelId);
+			if (typeof this.props.onMouseDown == "function") this.props.onMouseDown(e, this);
+		}
+		handleMouseUp(e) {
+			if (typeof this.props.onMouseUp == "function") this.props.onMouseUp(e, this);
+		}
+		handleClick(e) {
+			if (typeof this.props.onClick == "function") this.props.onClick(e, this);
+		}
 		handleContextMenu(e) {
 			if (this.props.menu) BDFDB.GuildUtils.openMenu(this.props.guild);
 			if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
@@ -6811,6 +6821,8 @@ var BDFDB = {
 						onMouseEnter: this.handleMouseEnter.bind(this),
 						onMouseLeave: this.handleMouseLeave.bind(this),
 						onMouseDown: this.handleMouseDown.bind(this),
+						onMouseUp: this.handleMouseUp.bind(this),
+						onClick: this.handleClick.bind(this),
 						onContextMenu: this.handleContextMenu.bind(this),
 						icon: this.props.guild.getIconURL(this.state.hovered && this.props.animatable ? "gif" : "jpg"),
 						selected: this.props.selected || this.state.hovered
