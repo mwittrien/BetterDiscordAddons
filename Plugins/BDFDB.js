@@ -6797,7 +6797,8 @@ var BDFDB = {
 			if (typeof this.props.setRef == "function") this.props.setRef(this.props.guild.id, e)
 		}
 		componentDidMount() {
-			for (let child of BDFDB.ReactUtils.findDOMNode(this).querySelectorAll("a")) child.setAttribute("draggable", false);
+			let node = BDFDB.ReactUtils.findDOMNode(this);
+			if (node) for (let child of node.querySelectorAll("a")) child.setAttribute("draggable", false);
 		}
 		render() {
 			if (!this.props.guild) return null;
