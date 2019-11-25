@@ -639,9 +639,10 @@ var BDFDB = {
 		if (options.selector) BDFDB.DOMUtils.addClass(tooltip, options.selector);
 		if (options.style) tooltip.style = options.style;
 		if (BDFDB.ObjectUtils.is(options.guild)) {
-			var streamOwnerIds = LibraryModules.StreamUtils.getAllApplicationStreams().filter(app => app.guildId === options.guild.id).map(app => app.ownerId);
-			var streamOwners = streamOwnerIds.map(ownerId => LibraryModules.UserStore.getUser(ownerId));
-			var connectedUsers = Object.keys(LibraryModules.VoiceUtils.getVoiceStates(options.guild.id)).map(userId => !streamOwnerIds.includes(userId) && BDFDB.LibraryModules.UserStore.getUser(userId));
+			let streamOwnerIds = LibraryModules.StreamUtils.getAllApplicationStreams().filter(app => app.guildId === options.guild.id).map(app => app.ownerId);
+			let streamOwners = streamOwnerIds.map(ownerId => LibraryModules.UserStore.getUser(ownerId));
+			let connectedUsers = Object.keys(LibraryModules.VoiceUtils.getVoiceStates(options.guild.id)).map(userId => !streamOwnerIds.includes(userId) && BDFDB.LibraryModules.UserStore.getUser(userId));
+			let tooltiptext = text || options.guild.toString();
 			BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 				children: [
 					BDFDB.ReactUtils.createElement("div", {
@@ -654,7 +655,7 @@ var BDFDB = {
 							}),
 							BDFDB.ReactUtils.createElement("span", {
 								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipguildnametext, (connectedUsers.length || streamOwners.length) && BDFDB.disCN.tooltipguildnametextlimitedsize),
-								children: options.guild.toString()
+								children: options.html ? BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(tooltiptext)) : tooltiptext
 							})
 						]
 					}),
