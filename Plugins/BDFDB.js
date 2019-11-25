@@ -1856,7 +1856,7 @@ var BDFDB = {
 		return LibraryModules.IconUtils.getGuildBannerURL(guild).split("?")[0];
 	};
 	BDFDB.GuildUtils.getFolder = function (id) {
-		return BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId && n.guildIds.includes(id));
+		return BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId).find(n => n.guildIds.includes(id));
 	};
 	BDFDB.GuildUtils.getId = function (div) {
 		if (!Node.prototype.isPrototypeOf(div) || !BDFDB.ReactUtils.getInstance(div)) return;
