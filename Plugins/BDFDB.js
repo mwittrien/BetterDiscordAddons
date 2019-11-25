@@ -4179,6 +4179,7 @@ var BDFDB = {
 		folderContentClosed: "closed-j55_T-",
 		iconSwatch: "iconSwatch-_78Ghj",
 		iconSwatchInner: "iconInner-aOY-qk",
+		iconSwatchPreview: "preview-Bbg_24",
 		iconSwatchSelected: "selected-P5oePO"
 	};
 	DiscordClassModules.NotFound = {
@@ -4431,6 +4432,7 @@ var BDFDB = {
 		_serverfoldersguildplaceholder: ["ServerFolders", "guildPlaceholder"],
 		_serverfoldersiconswatch: ["ServerFolders", "iconSwatch"],
 		_serverfoldersiconswatchinner: ["ServerFolders", "iconSwatchInner"],
+		_serverfoldersiconswatchpreview: ["ServerFolders", "iconSwatchPreview"],
 		_serverfoldersiconswatchselected: ["ServerFolders", "iconSwatchSelected"],
 		_repoauthor: ["BDrepo", "bdaAuthor"],
 		_repocheckbox: ["BDrepo", "switchCheckbox"],
