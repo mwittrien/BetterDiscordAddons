@@ -1583,7 +1583,7 @@ var BDFDB = {
 		function check (instance) {
 			if (!instance) return false;
 			let props = instance.stateNode ? instance.stateNode.props : instance.props;
-			return instance.type && config.name && config.name.some(name => ((instance.type.displayName || instance.type.name) === name)) || config.key && config.key.some(key => instance.key == key) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => propCheck(props, prop[0], checkvalue)) : propCheck(props, prop[0], prop[1])) : props[prop] !== undefined) || config.filter && config.filter(instance);
+			return instance.type && config.name && config.name.some(name => ((instance.type.displayName || instance.type.name || instance.type) === name)) || config.key && config.key.some(key => instance.key == key) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => propCheck(props, prop[0], checkvalue)) : propCheck(props, prop[0], prop[1])) : props[prop] !== undefined) || config.filter && config.filter(instance);
 		}
 		function propCheck (props, key, value) {
 			return key != null && props[key] != null && value != null && (key == "className" ? (" " + props[key] + " ").indexOf(" " + value + " ") > -1 : BDFDB.equals(props[key], value));
@@ -1618,13 +1618,13 @@ var BDFDB = {
 			var result = undefined;
 			if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxdepth && performance.now() - start < maxtime) {
 				let props = instance.stateNode ? instance.stateNode.props : instance.props;
-				if (instance.stateNode && !Node.prototype.isPrototypeOf(instance.stateNode) && (instance.type && config.name && config.name.some(name => (instance.type.displayName || instance.type.name) === name.split(" _ _ ")[0]) || config.key && config.key.some(key => instance.key == key) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => BDFDB.equals(props[prop[0]], checkvalue)) : BDFDB.equals(props[prop[0]], prop[1])) : props[prop] !== undefined))) {
+				if (instance.stateNode && !Node.prototype.isPrototypeOf(instance.stateNode) && (instance.type && config.name && config.name.some(name => (instance.type.displayName || instance.type.name || instance.type) === name.split(" _ _ ")[0]) || config.key && config.key.some(key => instance.key == key) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => BDFDB.equals(props[prop[0]], checkvalue)) : BDFDB.equals(props[prop[0]], prop[1])) : props[prop] !== undefined))) {
 					if (config.all === undefined || !config.all) result = instance.stateNode;
 					else if (config.all) {
 						if (!instance.stateNode.BDFDBreactSearch) {
 							instance.stateNode.BDFDBreactSearch = true;
 							if (config.group) {
-								if (config.name && instance.type && (instance.type.displayName || instance.type.name)) {
+								if (config.name && instance.type && (instance.type.displayName || instance.type.name || instance.type)) {
 									var group = "Default";
 									for (let name of config.name) if (instance.type.displayName === name.split(" _ _ ")[0] || instance.type.name === name.split(" _ _ ")[0]) {
 										group = name;
@@ -1668,7 +1668,7 @@ var BDFDB = {
 			depth++;
 			var result = undefined;
 			if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxdepth && performance.now() - start < maxtime) {
-				if (instance.memoizedProps && (instance.type && config.name && config.name.some(name => (instance.type.displayName || instance.type.name) === name.split(" _ _ ")[0]) || config.key && config.key.some(key => instance.key == key))) result = instance.memoizedProps;
+				if (instance.memoizedProps && (instance.type && config.name && config.name.some(name => (instance.type.displayName || instance.type.name || instance.type) === name.split(" _ _ ")[0]) || config.key && config.key.some(key => instance.key == key))) result = instance.memoizedProps;
 				if (result === undefined) {
 					let keys = Object.getOwnPropertyNames(instance);
 					for (let i = 0; result === undefined && i < keys.length; i++) {
