@@ -3544,14 +3544,12 @@ var BDFDB = {
 					type: LibraryComponents.TabBar.Types.TOP,
 					items: tabbaritems,
 					onItemSelect: (value, instance) => {
-						for (let tabcontent of modal.querySelectorAll(BDFDB.dotCN.modaltabcontent)) {
-							let tabcontentinstance = BDFDB.ReactUtils.getValue(tabcontent, "return.return.stateNode");
-							if (tabcontentinstance) {
-								if (tabcontentinstance.props.tab == value) tabcontentinstance.props.open = true;
-								else delete tabcontentinstance.props.open;
-								BDFDB.ReactUtils.forceUpdate(tabcontentinstance);
-							}
+						let tabContentInstances = BDFDB.ReactUtils.findOwner(modal, {name:"BDFDB_ModalTabContent", all:true, unlimited:true});
+						for (let ins of tabContentInstances) {
+							if (ins.props.tab == value) ins.props.open = true;
+							else delete ins.props.open;
 						}
+						BDFDB.ReactUtils.forceUpdate(tabContentInstances);
 					}
 				})
 			}));
@@ -6320,13 +6318,8 @@ var BDFDB = {
 	
 	LibraryComponents.Card = reactInitialized && class BDFDB_Card extends LibraryModules.React.Component {
 		render() {
-			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
-				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.hovercardwrapper, (this.props.backdrop || this.props.backdrop === undefined) && BDFDB.disCN.hovercard, this.props.className),
-				direction: this.props.direction,
-				justify: this.props.justify,
-				align: this.props.align,
-				wrap: this.props.wrap,
-				style: this.props.style,
+			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.hovercardwrapper, this.props.backdrop && BDFDB.disCN.hovercard, this.props.className),
 				onMouseEnter: e => {if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);},
 				onMouseLeave: e => {if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);},
 				onClick: e => {if (typeof this.props.onClick == "function") this.props.onClick(e, this);},
@@ -6338,10 +6331,11 @@ var BDFDB = {
 							BDFDB.ListenerUtils.stopEvent(e);
 						}
 					}) : null
-				].concat(this.props.children)
-			});
+				].concat(this.props.children).flat(10).filter(n => n)
+			}), "backdrop", "noRemove"));
 		}
 	};
+	InternalBDFDB.setDefaultProps(LibraryComponents.Card, {backdrop:true, noRemove:false});
 	
 	LibraryComponents.CardRemoveButton = BDFDB.ModuleUtils.findByName("RemoveButton");
 	
