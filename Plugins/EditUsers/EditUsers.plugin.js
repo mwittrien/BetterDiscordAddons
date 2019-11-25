@@ -747,7 +747,7 @@ class EditUsers {
 		if (data.name || data.color1 || data.color2 || username.getAttribute("changed-by-editusers")) {
 			let isBRCenabled = BDFDB.BDUtils.isPluginEnabled("BetterRoleColors");
 			let usenick = !BDFDB.DOMUtils.containsClass(username, BDFDB.disCN.userprofileusername) && !BDFDB.DOMUtils.containsClass(username.parentElement, BDFDB.disCN.listname, BDFDB.disCN.accountinfodetails, false) && member.nick;
-			let usemembercolor = !BDFDB.DOMUtils.containsClass(username.parentElement, BDFDB.disCN.userprofilelistname) && (BDFDB.DOMUtils.containsClass(username, BDFDB.disCN.memberusername, BDFDB.disCN.messageusername, false) || isBRCenabled);
+			let usemembercolor = !BDFDB.DOMUtils.containsClass(username.parentElement, BDFDB.disCN.listname) && (BDFDB.DOMUtils.containsClass(username, BDFDB.disCN.memberusername, BDFDB.disCN.messageusername, false) || isBRCenabled);
 
 			if (BDFDB.ObjectUtils.is(data.color1)) {
 				username.style.setProperty("color", BDFDB.ColorUtils.convert(data.color1[Object.keys(data.color1)[0]], "RGBA"), "important");
