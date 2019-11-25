@@ -245,41 +245,35 @@ class EditUsers {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_username_text,
 							className: BDFDB.disCN.marginbottom20 + " input-username",
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-									value: data.name,
-									placeholder: member.nick || info.username,
-									autoFocus: true
-								})
-							]
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+								value: data.name,
+								placeholder: member.nick || info.username,
+								autoFocus: true
+							})
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_usertag_text,
 							className: BDFDB.disCN.marginbottom20 + " input-usertag",
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-									value: data.tag
-								})
-							]
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+								value: data.tag
+							})
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_useravatar_text,
 							className: BDFDB.disCN.marginbottom8 + " input-useravatar",
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-									inputClassName: !data.removeIcon && data.url ? BDFDB.disCN.inputsuccess : null,
-									inputId: "USERAVATAR",
-									value: data.url,
-									placeholder: BDFDB.UserUtils.getAvatar(info.id),
-									disabled: data.removeIcon,
-									onFocus: e => {
-										this.createNoticeTooltip(e.target);
-									},
-									onChange: (value, instance) => {
-										this.checkUrl(value, instance);
-									}
-								})
-							]
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+								inputClassName: !data.removeIcon && data.url ? BDFDB.disCN.inputsuccess : null,
+								inputId: "USERAVATAR",
+								value: data.url,
+								placeholder: BDFDB.UserUtils.getAvatar(info.id),
+								disabled: data.removeIcon,
+								onFocus: e => {
+									this.createNoticeTooltip(e.target);
+								},
+								onChange: (value, instance) => {
+									this.checkUrl(value, instance);
+								}
+							})
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "Switch",
@@ -303,22 +297,18 @@ class EditUsers {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_colorpicker1_text,
 							className: BDFDB.disCN.marginbottom20,
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
-									color: data.color1,
-									number: 1
-								})
-							]
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+								color: data.color1,
+								number: 1
+							})
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_colorpicker2_text,
 							className: BDFDB.disCN.marginbottom20,
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
-									color: data.color2,
-									number: 2
-								})
-							]
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+								color: data.color2,
+								number: 2
+							})
 						})
 					]
 				}),
@@ -328,24 +318,20 @@ class EditUsers {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_colorpicker3_text,
 							className: BDFDB.disCN.marginbottom20,
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
-									color: data.color3,
-									number: 3,
-									disabled: data.ignoreTagColor
-								})
-							]
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+								color: data.color3,
+								number: 3,
+								disabled: data.ignoreTagColor
+							})
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_colorpicker4_text,
 							className: BDFDB.disCN.marginbottom20,
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
-									color: data.color4,
-									number: 4,
-									disabled: data.ignoreTagColor
-								})
-							]
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+								color: data.color4,
+								number: 4,
+								disabled: data.ignoreTagColor
+							})
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "Switch",
@@ -760,7 +746,7 @@ class EditUsers {
 		this.changeBotTags(data, username, member);
 		if (data.name || data.color1 || data.color2 || username.getAttribute("changed-by-editusers")) {
 			let isBRCenabled = BDFDB.BDUtils.isPluginEnabled("BetterRoleColors");
-			let usenick = !BDFDB.DOMUtils.containsClass(username, BDFDB.disCN.userprofileusername) && !BDFDB.DOMUtils.containsClass(username.parentElement, BDFDB.disCN.userprofilelistname, BDFDB.disCN.accountinfodetails, false) && member.nick;
+			let usenick = !BDFDB.DOMUtils.containsClass(username, BDFDB.disCN.userprofileusername) && !BDFDB.DOMUtils.containsClass(username.parentElement, BDFDB.disCN.listname, BDFDB.disCN.accountinfodetails, false) && member.nick;
 			let usemembercolor = !BDFDB.DOMUtils.containsClass(username.parentElement, BDFDB.disCN.userprofilelistname) && (BDFDB.DOMUtils.containsClass(username, BDFDB.disCN.memberusername, BDFDB.disCN.messageusername, false) || isBRCenabled);
 
 			if (BDFDB.ObjectUtils.is(data.color1)) {

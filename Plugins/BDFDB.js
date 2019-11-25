@@ -2309,96 +2309,103 @@ var BDFDB = {
 	
 	BDFDB.ColorUtils = {};
 	BDFDB.ColorUtils.convert = function (color, conv, type) {
-		if (color == null) return null;
-		conv = conv === undefined || !conv ? conv = "RGBCOMP" : conv.toUpperCase();
-		type = type === undefined || !type || !["RGB", "RGBA", "RGBCOMP", "HSL", "HSLA", "HSLCOMP", "HEX", "HEXA", "INT"].includes(type.toUpperCase()) ? BDFDB.ColorUtils.getType(color) : type.toUpperCase();
-		if (conv == "RGBCOMP") {
-			switch (type) {
-				case "RGBCOMP":
-					if (color.length == 3) return processRGB(color);
-					else if (color.length == 4) {
-						let a = processA(color.pop());
-						return processRGB(color).concat(a);
-					}
-					break;
-				case "RGB":
-					return processRGB(color.replace(/\s/g, "").slice(4, -1).split(","));
-				case "RGBA":
-					let comp = color.replace(/\s/g, "").slice(5, -1).split(",");
-					let a = processA(comp.pop());
-					return processRGB(comp).concat(a);
-				case "HSLCOMP":
-					if (color.length == 3) return BDFDB.ColorUtils.convert(`hsl(${processHSL(color).join(",")})`, "RGBCOMP");
-					else if (color.length == 4) {
-						let a = processA(color.pop());
-						return BDFDB.ColorUtils.convert(`hsl(${processHSL(color).join(",")})`, "RGBCOMP").concat(a);
-					}
-					break;
-				case "HSL":
-					var hslcomp = processHSL(color.replace(/\s/g, "").slice(4, -1).split(","));
-					var r, g, b, m, c, x, p, q;
-					var h = hslcomp[0] / 360, l = parseInt(hslcomp[1]) / 100, s = parseInt(hslcomp[2]) / 100; m = Math.floor(h * 6); c = h * 6 - m; x = s * (1 - l); p = s * (1 - c * l); q = s * (1 - (1 - c) * l);
-					switch (m % 6) {
-						case 0: r = s, g = q, b = x; break;
-						case 1: r = p, g = s, b = x; break;
-						case 2: r = x, g = s, b = q; break;
-						case 3: r = x, g = p, b = s; break;
-						case 4: r = q, g = x, b = s; break;
-						case 5: r = s, g = x, b = p; break;
-					}
-					return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-				case "HSLA":
-					var hslcomp = color.replace(/\s/g, "").slice(5, -1).split(",");
-					return BDFDB.ColorUtils.convert(`hsl(${hslcomp.slice(0, 3).join(",")})`, "RGBCOMP").concat(processA(hslcomp.pop()));
-				case "HEX":
-					var hex = /^#([a-f\d]{1})([a-f\d]{1})([a-f\d]{1})$|^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
-					return [parseInt(hex[1] + hex[1] || hex[4], 16).toString(), parseInt(hex[2] + hex[2] || hex[5], 16).toString(), parseInt(hex[3] + hex[3] || hex[6], 16).toString()];
-				case "HEXA":
-					var hex = /^#([a-f\d]{1})([a-f\d]{1})([a-f\d]{1})([a-f\d]{1})$|^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
-					return [parseInt(hex[1] + hex[1] || hex[5], 16).toString(), parseInt(hex[2] + hex[2] || hex[6], 16).toString(), parseInt(hex[3] + hex[3] || hex[7], 16).toString(), Math.floor(BDFDB.NumberUtils.mapRange([0, 255], [0, 100], parseInt(hex[4] + hex[4] || hex[8], 16).toString()))/100];
-				case "INT":
-					color = processINT(color);
-					return [(color >> 16 & 255).toString(), (color >> 8 & 255).toString(), (color & 255).toString()];
-				default:
-					return null;
-			}
+		if (BDFDB.ObjectUtils.is(color)) {
+			var newcolor = {};
+			for (let pos in color) newcolor[pos] = BDFDB.ColorUtils.convert(color[pos], conv, type);
+			return newcolor;
 		}
 		else {
-			var rgbcomp = type == "RGBCOMP" ? color : BDFDB.ColorUtils.convert(color, "RGBCOMP", type);
-			if (rgbcomp) switch (conv) {
-				case "RGB":
-					return `rgb(${processRGB(rgbcomp.slice(0, 3)).join(",")})`;
-				case "RGBA":
-					rgbcomp = rgbcomp.slice(0, 4);
-					var a = rgbcomp.length == 4 ? processA(rgbcomp.pop()) : 1;
-					return `rgba(${processRGB(rgbcomp).concat(a).join(",")})`;
-				case "HSLCOMP":
-					var a = rgbcomp.length == 4 ? processA(rgbcomp.pop()) : null;
-					var hslcomp = processHSL(BDFDB.ColorUtils.convert(rgbcomp, "HSL").replace(/\s/g, "").split(","));
-					return a != null ? hslcomp.concat(a) : hslcomp;
-				case "HSL":
-					var r = processC(rgbcomp[0]), g = processC(rgbcomp[1]), b = processC(rgbcomp[2]);
-					var max = Math.max(r, g, b), min = Math.min(r, g, b), dif = max - min, h, l = max === 0 ? 0 : dif / max, s = max / 255;
-					switch (max) {
-						case min: h = 0; break;
-						case r: h = g - b + dif * (g < b ? 6 : 0); h /= 6 * dif; break;
-						case g: h = b - r + dif * 2; h /= 6 * dif; break;
-						case b: h = r - g + dif * 4; h /= 6 * dif; break;
-					}
-					return `hsl(${processHSL([Math.round(h * 360), l * 100, s * 100]).join(",")})`;
-				case "HSLA":
-					var j0 = rgbcomp.length == 4 ? processA(rgbcomp.pop()) : 1;
-					return `hsla(${BDFDB.ColorUtils.convert(rgbcomp, "HSL").slice(4, -1).split(",").concat(j0).join(",")})`;
-				case "HEX":
-					return ("#" + (0x1000000 + (rgbcomp[2] | rgbcomp[1] << 8 | rgbcomp[0] << 16)).toString(16).slice(1)).toUpperCase();
-				case "HEXA":
-					return ("#" + (0x1000000 + (rgbcomp[2] | rgbcomp[1] << 8 | rgbcomp[0] << 16)).toString(16).slice(1) + (0x100 + Math.round(BDFDB.NumberUtils.mapRange([0, 100], [0, 255], processA(rgbcomp[3]) * 100))).toString(16).slice(1)).toUpperCase();
-				case "INT":
-					return processINT(rgbcomp[2] | rgbcomp[1] << 8 | rgbcomp[0] << 16);
-				default:
-					return null;
+			conv = conv === undefined || !conv ? conv = "RGBCOMP" : conv.toUpperCase();
+			type = type === undefined || !type || !["RGB", "RGBA", "RGBCOMP", "HSL", "HSLA", "HSLCOMP", "HEX", "HEXA", "INT"].includes(type.toUpperCase()) ? BDFDB.ColorUtils.getType(color) : type.toUpperCase();
+			if (conv == "RGBCOMP") {
+				switch (type) {
+					case "RGBCOMP":
+						if (color.length == 3) return processRGB(color);
+						else if (color.length == 4) {
+							let a = processA(color.pop());
+							return processRGB(color).concat(a);
+						}
+						break;
+					case "RGB":
+						return processRGB(color.replace(/\s/g, "").slice(4, -1).split(","));
+					case "RGBA":
+						let comp = color.replace(/\s/g, "").slice(5, -1).split(",");
+						let a = processA(comp.pop());
+						return processRGB(comp).concat(a);
+					case "HSLCOMP":
+						if (color.length == 3) return BDFDB.ColorUtils.convert(`hsl(${processHSL(color).join(",")})`, "RGBCOMP");
+						else if (color.length == 4) {
+							let a = processA(color.pop());
+							return BDFDB.ColorUtils.convert(`hsl(${processHSL(color).join(",")})`, "RGBCOMP").concat(a);
+						}
+						break;
+					case "HSL":
+						var hslcomp = processHSL(color.replace(/\s/g, "").slice(4, -1).split(","));
+						var r, g, b, m, c, x, p, q;
+						var h = hslcomp[0] / 360, l = parseInt(hslcomp[1]) / 100, s = parseInt(hslcomp[2]) / 100; m = Math.floor(h * 6); c = h * 6 - m; x = s * (1 - l); p = s * (1 - c * l); q = s * (1 - (1 - c) * l);
+						switch (m % 6) {
+							case 0: r = s, g = q, b = x; break;
+							case 1: r = p, g = s, b = x; break;
+							case 2: r = x, g = s, b = q; break;
+							case 3: r = x, g = p, b = s; break;
+							case 4: r = q, g = x, b = s; break;
+							case 5: r = s, g = x, b = p; break;
+						}
+						return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+					case "HSLA":
+						var hslcomp = color.replace(/\s/g, "").slice(5, -1).split(",");
+						return BDFDB.ColorUtils.convert(`hsl(${hslcomp.slice(0, 3).join(",")})`, "RGBCOMP").concat(processA(hslcomp.pop()));
+					case "HEX":
+						var hex = /^#([a-f\d]{1})([a-f\d]{1})([a-f\d]{1})$|^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
+						return [parseInt(hex[1] + hex[1] || hex[4], 16).toString(), parseInt(hex[2] + hex[2] || hex[5], 16).toString(), parseInt(hex[3] + hex[3] || hex[6], 16).toString()];
+					case "HEXA":
+						var hex = /^#([a-f\d]{1})([a-f\d]{1})([a-f\d]{1})([a-f\d]{1})$|^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
+						return [parseInt(hex[1] + hex[1] || hex[5], 16).toString(), parseInt(hex[2] + hex[2] || hex[6], 16).toString(), parseInt(hex[3] + hex[3] || hex[7], 16).toString(), Math.floor(BDFDB.NumberUtils.mapRange([0, 255], [0, 100], parseInt(hex[4] + hex[4] || hex[8], 16).toString()))/100];
+					case "INT":
+						color = processINT(color);
+						return [(color >> 16 & 255).toString(), (color >> 8 & 255).toString(), (color & 255).toString()];
+					default:
+						return null;
+				}
+			}
+			else {
+				var rgbcomp = type == "RGBCOMP" ? color : BDFDB.ColorUtils.convert(color, "RGBCOMP", type);
+				if (rgbcomp) switch (conv) {
+					case "RGB":
+						return `rgb(${processRGB(rgbcomp.slice(0, 3)).join(",")})`;
+					case "RGBA":
+						rgbcomp = rgbcomp.slice(0, 4);
+						var a = rgbcomp.length == 4 ? processA(rgbcomp.pop()) : 1;
+						return `rgba(${processRGB(rgbcomp).concat(a).join(",")})`;
+					case "HSLCOMP":
+						var a = rgbcomp.length == 4 ? processA(rgbcomp.pop()) : null;
+						var hslcomp = processHSL(BDFDB.ColorUtils.convert(rgbcomp, "HSL").replace(/\s/g, "").split(","));
+						return a != null ? hslcomp.concat(a) : hslcomp;
+					case "HSL":
+						var r = processC(rgbcomp[0]), g = processC(rgbcomp[1]), b = processC(rgbcomp[2]);
+						var max = Math.max(r, g, b), min = Math.min(r, g, b), dif = max - min, h, l = max === 0 ? 0 : dif / max, s = max / 255;
+						switch (max) {
+							case min: h = 0; break;
+							case r: h = g - b + dif * (g < b ? 6 : 0); h /= 6 * dif; break;
+							case g: h = b - r + dif * 2; h /= 6 * dif; break;
+							case b: h = r - g + dif * 4; h /= 6 * dif; break;
+						}
+						return `hsl(${processHSL([Math.round(h * 360), l * 100, s * 100]).join(",")})`;
+					case "HSLA":
+						var j0 = rgbcomp.length == 4 ? processA(rgbcomp.pop()) : 1;
+						return `hsla(${BDFDB.ColorUtils.convert(rgbcomp, "HSL").slice(4, -1).split(",").concat(j0).join(",")})`;
+					case "HEX":
+						return ("#" + (0x1000000 + (rgbcomp[2] | rgbcomp[1] << 8 | rgbcomp[0] << 16)).toString(16).slice(1)).toUpperCase();
+					case "HEXA":
+						return ("#" + (0x1000000 + (rgbcomp[2] | rgbcomp[1] << 8 | rgbcomp[0] << 16)).toString(16).slice(1) + (0x100 + Math.round(BDFDB.NumberUtils.mapRange([0, 100], [0, 255], processA(rgbcomp[3]) * 100))).toString(16).slice(1)).toUpperCase();
+					case "INT":
+						return processINT(rgbcomp[2] | rgbcomp[1] << 8 | rgbcomp[0] << 16);
+					default:
+						return null;
+				}
 			}
 		}
+		return null;
 		function processC(c) {if (c == null) {return 255;} else {c = parseInt(c.toString().replace(/[^0-9\-]/g, ""));return isNaN(c) || c > 255 ? 255 : c < 0 ? 0 : c;}};
 		function processRGB(comp) {return comp.map(c => {return processC(c);});};
 		function processA(a) {if (a == null) {return 1;} else {a = a.toString();a = (a.indexOf("%") > -1 ? 0.01 : 1) * parseFloat(a.replace(/[^0-9\.\-]/g, ""));return isNaN(a) || a > 1 ? 1 : a < 0 ? 0 : a;}};
@@ -2409,11 +2416,10 @@ var BDFDB = {
 	BDFDB.ColorUtils.setAlpha = function (color, a, conv) {
 		if (BDFDB.ObjectUtils.is(color)) {
 			var newcolor = {};
-			for (let pos in color) newcolor[pos] = setAlpha(color[pos], a, conv);
+			for (let pos in color) newcolor[pos] = BDFDB.ColorUtils.setAlpha(color[pos], a, conv);
 			return newcolor;
 		}
-		return setAlpha(color, a, conv);
-		function setAlpha (color) {
+		else {
 			var comp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
 			if (comp) {
 				a = a.toString();
@@ -2424,8 +2430,8 @@ var BDFDB = {
 				conv = conv == "RGB" || conv == "HSL" || conv == "HEX" ? conv + "A" : conv;
 				return BDFDB.ColorUtils.convert(comp, conv);
 			}
-			return null;
 		}
+		return null;
 	};
 	BDFDB.ColorUtils.getAlpha = function (color) {
 		var comp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
@@ -2444,34 +2450,36 @@ var BDFDB = {
 		if (color != null && typeof value == "number" && !isNaN(value)) {
 			if (BDFDB.ObjectUtils.is(color)) {
 				var newcolor = {};
-				for (let pos in color) newcolor[pos] = change(color[pos], value, conv);
+				for (let pos in color) newcolor[pos] = BDFDB.ColorUtils.change(color[pos], value, conv);
 				return newcolor;
 			}
-			else return change(color, value, conv);
+			else {
+				var comp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
+				if (comp) {
+					if (parseInt(value) !== value) {
+						value = value.toString();
+						value = (value.indexOf("%") > -1 ? 0.01 : 1) * parseFloat(value.replace(/[^0-9\.\-]/g, ""));
+						value = isNaN(value) ? 0 : value;
+						return BDFDB.ColorUtils.convert([Math.round(comp[0] * (1 + value)), Math.round(comp[1] * (1 + value)), Math.round(comp[2] * (1 + value))], conv || BDFDB.ColorUtils.getType(color));
+					}
+					else return BDFDB.ColorUtils.convert([Math.round(comp[0] + value), Math.round(comp[1] + value), Math.round(comp[2] + value)], conv || BDFDB.ColorUtils.getType(color));
+				}
+			}
 		}
 		return null;
-		function change (color) {
-			var comp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
-			if (comp) {
-				if (parseInt(value) !== value) {
-					value = value.toString();
-					value = (value.indexOf("%") > -1 ? 0.01 : 1) * parseFloat(value.replace(/[^0-9\.\-]/g, ""));
-					value = isNaN(value) ? 0 : value;
-					return BDFDB.ColorUtils.convert([Math.round(comp[0] * (1 + value)), Math.round(comp[1] * (1 + value)), Math.round(comp[2] * (1 + value))], conv || BDFDB.ColorUtils.getType(color));
-				}
-				else return BDFDB.ColorUtils.convert([Math.round(comp[0] + value), Math.round(comp[1] + value), Math.round(comp[2] + value)], conv || BDFDB.ColorUtils.getType(color));
-			}
-			return null;
-		};
 	};
 	BDFDB.ColorUtils.invert = function (color, conv) {
-		if (color != null) {
+		if (BDFDB.ObjectUtils.is(color)) {
+			var newcolor = {};
+			for (let pos in color) newcolor[pos] = BDFDB.ColorUtils.invert(color[pos], conv);
+			return newcolor;
+		}
+		else {
 			var comp = BDFDB.ColorUtils.convert(color, "RGBCOMP");
 			if (comp) return BDFDB.ColorUtils.convert([255 - comp[0], 255 - comp[1], 255 - comp[2]], conv || BDFDB.ColorUtils.getType(color));
 		}
 		return null;
 	};
-
 	BDFDB.ColorUtils.compare = function (color1, color2) {
 		if (color1 && color2) {
 			color1 = BDFDB.ColorUtils.convert(color1, "RGBA");
@@ -2512,7 +2520,10 @@ var BDFDB = {
 	BDFDB.ColorUtils.createGradient = function (colorobj, direction = "to right") {
 		var sortedgradient = {};
 		var gradientstring = "linear-gradient(" + direction;
-		for (let pos of Object.keys(colorobj).sort()) gradientstring += `, ${colorobj[pos]} ${pos*100}%`
+		for (let pos of Object.keys(colorobj).sort()) {
+			let color = BDFDB.ColorUtils.convert(colorobj[pos], "RGBA");
+			gradientstring += color ? `, ${color} ${pos*100}%` : ''
+		}
 		return gradientstring += ")";
 	};
 	BDFDB.ColorUtils.getSwatchColor = function (container, number) {
@@ -2520,10 +2531,10 @@ var BDFDB = {
 		var swatches = container.querySelector(`${BDFDB.dotCN.colorpickerswatches}[number="${number}"], ${BDFDB.dotCN.colorpickerswatch}[number="${number}"]`);
 		if (!swatches) return null;
 		var ins = BDFDB.ReactUtils.getInstance(swatches);
-		if (ins) return BDFDB.ReactUtils.findValue(ins, "selectedColor", {up:true, blacklist:{"props":true}});
+		if (ins) return BDFDB.ColorUtils.convert(BDFDB.ReactUtils.findValue(ins, "selectedColor", {up:true, blacklist:{"props":true}}));
 		else { // REMOVE ONCE REWRITTEN
 			var swatch = swatches.querySelector(`${BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchselected}`);
-			return swatch ? swatch.gradient || BDFDB.ColorUtils.convert(swatch.style.getPropertyValue("background-color"), "RGBCOMP") : null;
+			return swatch ? BDFDB.ColorUtils.convert(swatch.gradient || swatch.style.getPropertyValue("background-color"), "RGBCOMP") : null;
 		}
 	};
 	BDFDB.ColorUtils.openPicker = function (container, target, color, options = {gradient: true, alpha: true, callback: _ => {}}) {
