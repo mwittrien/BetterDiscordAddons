@@ -8976,6 +8976,7 @@ var BDFDB = {
 		});
 		BDFDB.ModuleUtils.patch(BDFDB, LibraryComponents.GuildComponents.BlobMask.prototype, "componentDidUpdate", {
 			after: e => {
+				console.log(e);
 				for (let type of newBadges) {
 					if (e.thisObject.props[type] != null && e.methodArguments[0][type] == null) {
 						e.thisObject.state[`${type}Mask`].update({
@@ -9000,7 +9001,7 @@ var BDFDB = {
 			});
 		};
 		LibraryComponents.GuildComponents.BlobMask.prototype.getLowerLeftBadgeStyles = function () {
-			var e = this.state.lowerBadgeMask.animated.spring;
+			var e = this.state.lowerLeftBadgeMask.animated.spring;
 			return {
 				opacity: e.to([0, .5, 1], [0, 0, 1]),
 				transform: e.to(function (e) {
@@ -9009,7 +9010,7 @@ var BDFDB = {
 			}
 		};
 		LibraryComponents.GuildComponents.BlobMask.prototype.getUpperLeftBadgeStyles = function () {
-			var e = this.state.upperBadgeMask.animated.spring;
+			var e = this.state.upperLeftBadgeMask.animated.spring;
 			return {
 				opacity: e.to([0, .5, 1], [0, 0, 1]),
 				transform: e.to(function (e) {
