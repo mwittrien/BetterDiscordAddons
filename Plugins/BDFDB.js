@@ -8917,7 +8917,8 @@ var BDFDB = {
 		let newBadges = ["lowerLeftBadge", "upperLeftBadge"];
 		BDFDB.ModuleUtils.patch(BDFDB, LibraryComponents.GuildComponents.BlobMask.prototype, "render", {
 			before: e => {
-				for (let type of newBadges) e.thisObject.state[`${type}Mask`] = new LibraryComponents.Animations.Controller({spring: 0})
+				e.thisObject.props = Object.assign({}, LibraryComponents.GuildComponents.BlobMask.defaultProps, e.thisObject.props);
+				for (let type of newBadges) e.thisObject.state[`${type}Mask`] = new LibraryComponents.Animations.Controller({spring: 0});
 			},
 			after: e => {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnValue, {name: "TransitionGroup"});
@@ -9016,7 +9017,9 @@ var BDFDB = {
 				})
 			}
 		};
-		InternalBDFDB.setDefaultProps(LibraryComponents.GuildComponents.BlobMask, {lowerLeftBadgeWidth:16, upperLeftBadgeWidth:16});
+		let extraDefaultProps = {};
+		for (let type of newBadges) extraDefaultProps[`${type}Width`] = 16;
+		InternalBDFDB.setDefaultProps(LibraryComponents.GuildComponents.BlobMask, extraDefaultProps);
 	}
 	
 	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.GuildStore, "getGuild", {after: e => {

@@ -14,6 +14,7 @@ https://raw.githubusercontent.com/codedotspectra/themes/master/chemical/chemical
 https://raw.githubusercontent.com/codedotspectra/themes/master/discorddark/discorddark.theme.css
 https://raw.githubusercontent.com/codedotspectra/themes/master/neutron/neutronX.theme.css
 https://raw.githubusercontent.com/codedotspectra/themes/master/nocturnal/nocturnal.theme.css
+https://raw.githubusercontent.com/codedotspectra/themes/master/xeno/xeno.theme.css
 https://raw.githubusercontent.com/CurimuChizu/CC-Themes/master/CC-Themes/Red.n.Black.theme.css
 https://raw.githubusercontent.com/CurimuChizu/CC-Themes/master/CC-Themes/ReZero.theme.css
 https://raw.githubusercontent.com/Dddsasul/TeamKappa-theme/master/ClearDiscord.theme.css
@@ -39,7 +40,7 @@ https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/The
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/Patriotic/Patriotic.theme.css
 https://raw.githubusercontent.com/HighGuard/discord-popout-overhaul-theme/master/popoutOverhaul.theme.css
 https://raw.githubusercontent.com/ImBastion/BD-Themes/master/Theme/DARLINGintheFRANXX.theme.css
-https://raw.githubusercontent.com/ImBastion/BD-Themes/master/Theme/NieRDanceBase.theme.css
+https://raw.githubusercontent.com/ImBastion/BD-Themes/master/Theme/NieRDance.theme.css
 https://raw.githubusercontent.com/ImBastion/BD-Themes/master/Theme/NoA2Base.theme.css
 https://raw.githubusercontent.com/ImBastion/BD-Themes/master/Theme/No2BBase.theme.css
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/themes/compactUserList.theme.css
