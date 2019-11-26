@@ -8938,9 +8938,9 @@ var BDFDB = {
 				[children, index] = BDFDB.ReactUtils.findChildren(e.returnValue, {name: "mask"});
 				if (index > -1) {
 					children[index].props.children.push(BDFDB.ReactUtils.createElement(LibraryComponents.Animations.animated.rect, {
-						x: 16 - ((e.thisObject.props.upperLeftBadgeWidth || 16) + 8) + 4,
+						x: 16 - (e.thisObject.props.upperLeftBadgeWidth + 8) + 4,
 						y: -4,
-						width: (e.thisObject.props.upperLeftBadgeWidth || 16) + 8,
+						width: e.thisObject.props.upperLeftBadgeWidth + 8,
 						height: 24,
 						rx: 12,
 						ry: 12,
@@ -8948,9 +8948,9 @@ var BDFDB = {
 						fill: "black"
 					}));
 					children[index].props.children.push(BDFDB.ReactUtils.createElement(LibraryComponents.Animations.animated.rect, {
-						x: 16 - ((e.thisObject.props.lowerLeftBadgeWidth || 16) + 8) + 4,
+						x: 16 - (e.thisObject.props.lowerLeftBadgeWidth + 8) + 4,
 						y: 28,
-						width: (e.thisObject.props.lowerLeftBadgeWidth || 16) + 8,
+						width: e.thisObject.props.lowerLeftBadgeWidth + 8,
 						height: 24,
 						rx: 12,
 						ry: 12,
@@ -9016,6 +9016,7 @@ var BDFDB = {
 				})
 			}
 		};
+		InternalBDFDB.setDefaultProps(LibraryComponents.GuildComponents.BlobMask, {lowerLeftBadgeWidth:16, upperLeftBadgeWidth:16});
 	}
 	
 	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.GuildStore, "getGuild", {after: e => {
