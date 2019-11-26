@@ -8976,7 +8976,6 @@ var BDFDB = {
 		});
 		BDFDB.ModuleUtils.patch(BDFDB, LibraryComponents.GuildComponents.BlobMask.prototype, "componentDidUpdate", {
 			after: e => {
-				console.log(e);
 				for (let type of newBadges) {
 					if (e.thisObject.props[type] != null && e.methodArguments[0][type] == null) {
 						e.thisObject.state[`${type}Mask`].update({
