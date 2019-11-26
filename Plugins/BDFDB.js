@@ -8901,15 +8901,122 @@ var BDFDB = {
 
 	InternalBDFDB.patchPlugin(BDFDB);
 
-	if (LibraryComponents.SvgIcon) BDFDB.ModuleUtils.patch(BDFDB, LibraryComponents.SvgIcon.prototype, "render", {after: e => {
-		if (!e.thisObject.props.name) {
-			let iconSVG = e.thisObject.props.iconSVG || BDFDB.ReactUtils.findValue(e.thisObject, "iconSVG", {up:true});
-			if (iconSVG) {
-				e.returnValue = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(iconSVG));
-				e.returnValue.props.class = BDFDB.DOMUtils.formatClassName(!e.thisObject.props.nativeClass && BDFDB.disCN.svgicon, e.returnValue.props.class, e.thisObject.props.className);
+	if (LibraryComponents.SvgIcon) BDFDB.ModuleUtils.patch(BDFDB, LibraryComponents.SvgIcon.prototype, "render", {
+		after: e => {
+			if (!e.thisObject.props.name) {
+				let iconSVG = e.thisObject.props.iconSVG || BDFDB.ReactUtils.findValue(e.thisObject, "iconSVG", {up:true});
+				if (iconSVG) {
+					e.returnValue = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(iconSVG));
+					e.returnValue.props.class = BDFDB.DOMUtils.formatClassName(!e.thisObject.props.nativeClass && BDFDB.disCN.svgicon, e.returnValue.props.class, e.thisObject.props.className);
+				}
 			}
 		}
-	}});
+	});
+
+	if (LibraryComponents.GuildComponents.BlobMask) {
+		let newBadges = ["lowerLeftBadge", "upperLeftBadge"];
+		BDFDB.ModuleUtils.patch(BDFDB, LibraryComponents.GuildComponents.BlobMask.prototype, "render", {
+			before: e => {
+				for (let type of newBadges) e.thisObject.state[`${type}Mask`] = new LibraryComponents.Animations.Controller({spring: 0})
+			},
+			after: e => {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnValue, {name: "TransitionGroup"});
+				if (index > -1) {
+					children[index].props.children.push(!e.thisObject.props.lowerLeftBadge ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.AnimationContainer, {
+						className: BDFDB.disCN.guildlowerleftbadge,
+						key: "lower-left-badge",
+						animatedStyle: e.thisObject.getLowerLeftBadgeStyles(),
+						children: e.thisObject.props.lowerLeftBadge
+					}));
+					children[index].props.children.push(!e.thisObject.props.upperLeftBadge ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.AnimationContainer, {
+						className: BDFDB.disCN.guildupperleftbadge,
+						key: "upper-left-badge",
+						animatedStyle: e.thisObject.getUpperLeftBadgeStyles(),
+						children: e.thisObject.props.upperLeftBadge
+					}));
+				}
+				[children, index] = BDFDB.ReactUtils.findChildren(e.returnValue, {name: "mask"});
+				if (index > -1) {
+					children[index].props.children.push(BDFDB.ReactUtils.createElement(LibraryComponents.Animations.animated.rect, {
+						x: 16 - ((e.thisObject.props.upperLeftBadgeWidth || 16) + 8) + 4,
+						y: -4,
+						width: (e.thisObject.props.upperLeftBadgeWidth || 16) + 8,
+						height: 24,
+						rx: 12,
+						ry: 12,
+						transform: e.thisObject.getLeftBadgePositionInterpolation(e.thisObject.state.upperLeftBadgeMask, -1),
+						fill: "black"
+					}));
+					children[index].props.children.push(BDFDB.ReactUtils.createElement(LibraryComponents.Animations.animated.rect, {
+						x: 16 - ((e.thisObject.props.lowerLeftBadgeWidth || 16) + 8) + 4,
+						y: 28,
+						width: (e.thisObject.props.lowerLeftBadgeWidth || 16) + 8,
+						height: 24,
+						rx: 12,
+						ry: 12,
+						transform: e.thisObject.getLeftBadgePositionInterpolation(e.thisObject.state.lowerLeftBadgeMask),
+						fill: "black"
+					}));
+				}
+			}
+		});
+		BDFDB.ModuleUtils.patch(BDFDB, LibraryComponents.GuildComponents.BlobMask.prototype, "componentDidMount", {
+			after: e => {
+				for (let type of newBadges) e.thisObject.state[`${type}Mask`].update({
+					spring: null != e.thisObject.props[type] ? 1 : 0,
+					immediate: !0
+				}).start();
+			}
+		});
+		BDFDB.ModuleUtils.patch(BDFDB, LibraryComponents.GuildComponents.BlobMask.prototype, "componentWillUnmount", {
+			after: e => {
+				for (let type of newBadges) if(e.thisObject.state[`${type}Mask`]) e.thisObject.state[`${type}Mask`].destroy();
+			}
+		});
+		BDFDB.ModuleUtils.patch(BDFDB, LibraryComponents.GuildComponents.BlobMask.prototype, "componentDidUpdate", {
+			after: e => {
+				for (let type of newBadges) {
+					if (e.thisObject.props[type] != null && e.methodArguments[0][type] == null) {
+						e.thisObject.state[`${type}Mask`].update({
+							spring: 1,
+							immediate: !document.hasFocus(),
+							config: {friction: 30, tension: 900, mass: 1}
+						}).start();
+					}
+					else if (e.thisObject.props[type] == null && e.methodArguments[0][type] != null) {
+						e.thisObject.state[`${type}Mask`].update({
+							spring: 0,
+							immediate: !document.hasFocus(),
+							config: {duration: 150, friction: 10, tension: 100, mass: 1}
+						}).start();
+					}
+				}
+			}
+		});
+		LibraryComponents.GuildComponents.BlobMask.prototype.getLeftBadgePositionInterpolation = function (e, t) {
+			return void 0 === t && (t = 1), e.animated.spring.to([0, 1], [20, 0]).to(function (e) {
+				return "translate(" + e * -1 + " " + e * t + ")"
+			});
+		};
+		LibraryComponents.GuildComponents.BlobMask.prototype.getLowerLeftBadgeStyles = function () {
+			var e = this.state.lowerBadgeMask.animated.spring;
+			return {
+				opacity: e.to([0, .5, 1], [0, 0, 1]),
+				transform: e.to(function (e) {
+					return "translate(" + -1 * (16 - 16 * e) + "px, " + (16 - 16 * e) + "px)"
+				})
+			}
+		};
+		LibraryComponents.GuildComponents.BlobMask.prototype.getUpperLeftBadgeStyles = function () {
+			var e = this.state.upperBadgeMask.animated.spring;
+			return {
+				opacity: e.to([0, .5, 1], [0, 0, 1]),
+				transform: e.to(function (e) {
+					return "translate(" + -1 * (16 - 16 * e) + "px, " + -1 * (16 - 16 * e) + "px)"
+				})
+			}
+		};
+	}
 	
 	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.GuildStore, "getGuild", {after: e => {
 		if (e.returnValue && e.methodArguments[0] == "410787888507256842" && !e.returnValue.banner) {
