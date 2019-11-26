@@ -6292,7 +6292,7 @@ var BDFDB = {
 		componentWillLeave(e) {if (typeof e == "function") this.timeoutId = setTimeout(e, 300);}
 		componentWillUnmount() {clearTimeout(this.timeoutId)}
 		render() {
-			return BDFDB.ReactUtils.createElement(LibraryModules.animated.div, {
+			return BDFDB.ReactUtils.createElement(LibraryComponents.Animations.animated.div, {
 				className: this.props.className,
 				style: this.props.animatedStyle,
 				children: this.props.children
