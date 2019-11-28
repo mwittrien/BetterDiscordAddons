@@ -2137,7 +2137,7 @@ var BDFDB = {
 			if (type) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
 				return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("ChannelContextMenu"), Object.assign({}, e, {
 					type,
-					channel,
+					channel: channel,
 					guild: LibraryModules.GuildStore.getGuild(channel.guild_id),
 					selected: channel.id == LibraryModules.LastChannelStore.getChannelId()
 				}));
@@ -2197,6 +2197,27 @@ var BDFDB = {
 			if (ins.props && ins.props.channel) found.push(Object.assign(new ins.props.channel.constructor(ins.props.channel), {div:BDFDB.ReactUtils.findDOMNode(ins), instance:ins}));
 		}
 		return found;
+	};
+	BDFDB.DMUtils.openMenu = function (eleOrInfoOrId, e = BDFDB.mousePosition) {
+		if (!eleOrInfoOrId) return;
+		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.ChannelUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
+		let channel = LibraryModules.ChannelStore.getChannel(id);
+		if (channel) {
+			if (channel.isMultiUserDM()) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
+				return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("FluxContainer(GroupDMContextMenu)"), Object.assign({}, e, {
+					channelId: channel.id,
+					selected: channel.id == LibraryModules.LastChannelStore.getChannelId()
+				}));
+			}, {noBlurEvent: true});
+			else LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
+				return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("UserContextMenu"), Object.assign({}, e, {
+					type: BDFDB.DiscordConstants.ContextMenuTypes.USER_PRIVATE_CHANNELS,
+					user: LibraryModules.UserStore.getUser(channel.recipients[0]),
+					channelId: channel.id,
+					selected: channel.id == LibraryModules.LastChannelStore.getChannelId()
+				}));
+			});
+		}
 	};
 	BDFDB.DMUtils.markAsRead = function (dms) {
 		if (!dms) return;
