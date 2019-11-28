@@ -3,7 +3,7 @@
 class TopRoleEverywhere {
 	getName () {return "TopRoleEverywhere";}
 
-	getVersion () {return "2.9.3";}
+	getVersion () {return "2.9.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,8 +11,7 @@ class TopRoleEverywhere {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Chat","Elements now properly get added to the chat again"]],
-			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+			"improved":[["Coloress", "If you disabled the plugin for colorless roles and the highest role of a user is a role without color, then the plugin will try to find the next highest role with a color"], ["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
 		this.patchedModules = {
@@ -165,6 +164,13 @@ class TopRoleEverywhere {
 		let settings = BDFDB.DataUtils.get(this, "settings");
 		if (!guild || user.bot && settings.disableForBots) return;
 		let role = BDFDB.LibraryModules.PermissionRoleUtils.getHighestRole(guild, user.id);
+		if (role && !role.colorString && !settings.includeColorless) {
+			let member = BDFDB.LibraryModules.MemberStore.getMember(guild.id, user.id);
+			if (member) for (let sortedRole of BDFDB.ArrayUtils.keySort(member.roles.map(roleId => guild.getRole(roleId)), "position").reverse()) if (sortedRole.colorString) {
+				role = sortedRole;
+				break;
+			}
+		}
 		if (role && (role.colorString || settings.includeColorless)) children.push(this.createRoleTag(settings, Object.assign({}, role, {
 			name: settings.showOwnerRole && user.id == guild.ownerId ? BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER : role.name
 		}),type, tagclass));

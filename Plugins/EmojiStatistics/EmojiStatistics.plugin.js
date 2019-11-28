@@ -3,7 +3,7 @@
 class EmojiStatistics {
 	getName () {return "EmojiStatistics";}
 
-	getVersion () {return "2.8.8";}
+	getVersion () {return "2.8.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EmojiStatistics {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+			"improved":[["Hover Tooltip","Removed due to discords native ability to display the name and server of an emoji in the new emojipicker"],["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
 		this.patchedModules = {
@@ -23,25 +23,25 @@ class EmojiStatistics {
 
 	initConstructor () {
 		this.css = `
-			.${this.name}-table .icon-cell {
+			.${this.name}-table ${BDFDB.dotCN._emojistatisticsiconcell} {
 				justify-content: center;
 				width: 48px;
 				padding: 0;
 			}
-			.${this.name}-table .name-cell {
+			.${this.name}-table ${BDFDB.dotCN._emojistatisticsnamecell} {
 				width: 300px;
 			}
-			.${this.name}-table .amount-cell {
+			.${this.name}-table ${BDFDB.dotCN._emojistatisticsamountcell} {
 				width: 120px;
 			}
 
-			.emojistatistics-button {
+			${BDFDB.dotCN._emojistatisticsstatisticsbutton} {
 				width: 28px;
 				height: 28px;
 				margin-right: 12px;
 				cursor: pointer;
 			}
-			.emojistatistics-button ${BDFDB.dotCN.emojipickeritem} {
+			.emojistatistics-button ${BDFDB.dotCNS._emojistatisticsstatisticsbutton + BDFDB.dotCN.emojipickeritem} {
 				padding: 4px;
 				flex-shrink: 0;
 				width: 22px;
@@ -54,11 +54,7 @@ class EmojiStatistics {
 
 		this.defaults = {
 			settings: {
-				enableEmojiHovering:			{value:true, 	description:"Show Information about Emojis on hover over an Emoji in the Emojipicker."},
 				enableEmojiStatisticsButton:	{value:true, 	description:"Add a Button in the Emojipicker to open the Statistics Overview."}
-			},
-			amounts: {
-				hoverDelay:						{value:1000, 	min:0,	description:"Tooltip delay in millisec:"}
 			}
 		};
 	}
@@ -66,7 +62,6 @@ class EmojiStatistics {
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let settings = BDFDB.DataUtils.get(this, "settings");
-		let amounts = BDFDB.DataUtils.get(this, "amounts");
 		let settingsitems = [];
 		
 		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
@@ -76,25 +71,6 @@ class EmojiStatistics {
 			keys: ["settings", key],
 			label: this.defaults.settings[key].description,
 			value: settings[key]
-		}));
-		
-		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-			className: BDFDB.disCN.marginbottom8
-		}));
-		
-		for (let key in amounts) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-			className: BDFDB.disCN.marginbottom8,
-			type: "TextInput",
-			childProps: {
-				type: "number"
-			},
-			plugin: this,
-			keys: ["amounts", key],
-			label: this.defaults.amounts[key].description,
-			basis: "50%",
-			min: this.defaults.amounts[key].min,
-			max: this.defaults.amounts[key].max,
-			value: amounts[key]
 		}));
 		
 		return BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
@@ -155,7 +131,7 @@ class EmojiStatistics {
 			if (index > -1) children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 				text: "Emoji Statistics",
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-					className: "emojistatistics-button",
+					className: BDFDB.disCN._emojistatisticsstatisticsbutton,
 					children: BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.emojipickeritem,
 						style: {
@@ -168,23 +144,6 @@ class EmojiStatistics {
 					e.instance.props.closePopout();
 				}
 			}));
-		}
-		if (settings.enableEmojiHovering) {
-			let amounts = BDFDB.DataUtils.get(this, "amounts");
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"LazyScroller"});
-			if (index > -1) for (let row of children[index].props.children) if (row.props.className && row.props.className.indexOf(BDFDB.disCN.emojipickerrow) > -1) for (let i in row.props.children) {
-				let emoji = row.props.children[i];
-				let style = emoji.props.children ? emoji.props.children.props.style : emoji.props.style;
-				let data = style && style.backgroundImage && this.emojiToServerList[style.backgroundImage.replace(/url\(|\)|"|'/g,"")];
-				if (data) row.props.children[i] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-					text: `${data.emoji}\n${data.server}`,
-					tooltipConfig: {
-						type: "right",
-						delay: amounts.hoverDelay
-					},
-					children: emoji
-				});
-			}
 		}
 	}
 

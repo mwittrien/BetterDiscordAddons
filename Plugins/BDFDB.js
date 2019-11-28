@@ -736,7 +736,6 @@ var BDFDB = {
 					BDFDB.DOMUtils.remove(itemlayer);
 					BDFDB.DOMUtils.removeLocalStyle("BDFDBhideOtherTooltips" + id, itemlayercontainer);
 					BDFDB.DOMUtils.removeLocalStyle("BDFDBcustomTooltips" + id, itemlayercontainer);
-					if (!itemlayercontainer.firstElementChild) BDFDB.DOMUtils.remove(itemlayercontainer);
 					anker.removeEventListener("mouseleave", mouseleave);
 				}
 			});
