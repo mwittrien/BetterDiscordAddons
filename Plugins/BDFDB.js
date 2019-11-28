@@ -634,15 +634,40 @@ var BDFDB = {
 		itemlayercontainer.appendChild(itemlayer);
 		
 		var tooltip = itemlayer.firstElementChild;
+		
 		if (options.id) tooltip.id = options.id.split(" ").join("");
+		
+		if (!options.type || !BDFDB.disCN["tooltip" + options.type.toLowerCase()]) options.type = "top";
+		BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN["tooltip" + options.type.toLowerCase()]);
+		tooltip.type = options.type.toLowerCase();
+		
+		let fontColorIsGradient = false, customBackgroundColor = false, style = "";
+		if (options.style) style += options.style;
+		if (options.fontColor) {
+			fontColorIsGradient = BDFDB.ObjectUtils.is(options.fontColor);
+			if (!fontColorIsGradient) style = (style ? (style + " ") : "") + `color: ${BDFDB.ColorUtils.convert(options.fontColor, "RGBA")} !important;`
+		}
+		if (options.backgroundColor) {
+			customBackgroundColor = true;
+			let backgroundColorIsGradient = BDFDB.ObjectUtils.is(options.backgroundColor);
+			let backgroundColor = !backgroundColorIsGradient ? BDFDB.ColorUtils.convert(options.backgroundColor, "RGBA") : BDFDB.ColorUtils.createGradient(options.backgroundColor);
+			style = (style ? (style + " ") : "") + `background: ${backgroundColor} !important; border-color: ${backgroundColorIsGradient ? BDFDB.ColorUtils.convert(options.backgroundColor[options.type == "left" ? 100 : 0], "RGBA") : backgroundColor} !important;`;
+		}
+		if (style) tooltip.style = style;
+		if (customBackgroundColor) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltipcustom);
+		else if (options.color && BDFDB.disCN["tooltip" + options.color.toLowerCase()]) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN["tooltip" + options.color.toLowerCase()]);
+		else BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltipblack);
+		
 		if (options.list || BDFDB.ObjectUtils.is(options.guild)) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltiplistitem);
+		
 		if (options.selector) BDFDB.DOMUtils.addClass(tooltip, options.selector);
-		if (options.style) tooltip.style = options.style;
+		
 		if (BDFDB.ObjectUtils.is(options.guild)) {
 			let streamOwnerIds = LibraryModules.StreamUtils.getAllApplicationStreams().filter(app => app.guildId === options.guild.id).map(app => app.ownerId);
 			let streamOwners = streamOwnerIds.map(ownerId => LibraryModules.UserStore.getUser(ownerId));
 			let connectedUsers = Object.keys(LibraryModules.VoiceUtils.getVoiceStates(options.guild.id)).map(userId => !streamOwnerIds.includes(userId) && BDFDB.LibraryModules.UserStore.getUser(userId));
 			let tooltiptext = text || options.guild.toString();
+			if (fontColorIsGradient) tooltiptext = `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(options.fontColor)} !important;">${BDFDB.StringUtils.htmlEscape(tooltiptext)}</span>`;
 			BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 				children: [
 					BDFDB.ReactUtils.createElement("div", {
@@ -655,7 +680,7 @@ var BDFDB = {
 							}),
 							BDFDB.ReactUtils.createElement("span", {
 								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipguildnametext, (connectedUsers.length || streamOwners.length) && BDFDB.disCN.tooltipguildnametextlimitedsize),
-								children: options.html ? BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(tooltiptext)) : tooltiptext
+								children: fontColorIsGradient || options.html ? BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(tooltiptext)) : tooltiptext
 							})
 						]
 					}),
@@ -689,17 +714,13 @@ var BDFDB = {
 			}), tooltip);
 		}
 		else {
-			if (options.html === true) tooltip.innerHTML = text;
+			if (fontColorIsGradient) tooltip.innerHTML = `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(options.fontColor)} !important;">${BDFDB.StringUtils.htmlEscape(text)}</span>`;
+			else if (options.html === true) tooltip.innerHTML = text;
 			else tooltip.innerText = text;
 		}
-		if (!options.type || !BDFDB.disCN["tooltip" + options.type.toLowerCase()]) options.type = "top";
-		BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN["tooltip" + options.type.toLowerCase()]);
-		tooltip.position = options.type.toLowerCase();
+		
 		tooltip.appendChild(BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.tooltippointer}"></div>`));
 		
-		if (tooltip.style.getPropertyValue("border-color") && (tooltip.style.getPropertyValue("background-color") || tooltip.style.getPropertyValue("background-image"))) BDFDB.DOMUtils.addClass(tooltip, "tooltip-customcolor");
-		else if (options.color && BDFDB.disCN["tooltip" + options.color.toLowerCase()]) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN["tooltip" + options.color.toLowerCase()]);
-		else BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltipblack);
 		tooltip.anker = anker;
 		
 		if (options.hide) BDFDB.DOMUtils.appendLocalStyle("BDFDBhideOtherTooltips" + id, `#app-mount ${BDFDB.dotCN.tooltip}:not(.BDFDB-tooltip-${id}) {display: none !important;}`, itemlayercontainer);
@@ -741,11 +762,11 @@ var BDFDB = {
 		let itemlayer = BDFDB.DOMUtils.getParent(BDFDB.dotCN.itemlayer, tooltip);
 		if (!Node.prototype.isPrototypeOf(itemlayer)) return;
 		tooltip = itemlayer.querySelector(BDFDB.dotCN.tooltip);
-		if (!Node.prototype.isPrototypeOf(tooltip) || !Node.prototype.isPrototypeOf(tooltip.anker) || !tooltip.position) return;
+		if (!Node.prototype.isPrototypeOf(tooltip) || !Node.prototype.isPrototypeOf(tooltip.anker) || !tooltip.type) return;
 		
 		var pointer = tooltip.querySelector(BDFDB.dotCN.tooltippointer);
 		var left, top, trects = BDFDB.DOMUtils.getRects(tooltip.anker), irects = BDFDB.DOMUtils.getRects(itemlayer), arects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount)), positionoffsets = {height: 10, width: 10};
-		switch (tooltip.position) {
+		switch (tooltip.type) {
 			case "top":
 				top = trects.top - irects.height - positionoffsets.height + 2;
 				left = trects.left + (trects.width - irects.width) / 2;
@@ -769,7 +790,7 @@ var BDFDB = {
 		
 		pointer.style.removeProperty("margin-left");
 		pointer.style.removeProperty("margin-top");
-		if (tooltip.position == "top" || tooltip.position == "bottom") {
+		if (tooltip.type == "top" || tooltip.type == "bottom") {
 			if (left < 0) {
 				itemlayer.style.setProperty("left", "5px");
 				pointer.style.setProperty("margin-left", `${left - 10}px`);
@@ -782,7 +803,7 @@ var BDFDB = {
 				}
 			}
 		}
-		else if (tooltip.position == "left" || tooltip.position == "right") {
+		else if (tooltip.type == "left" || tooltip.type == "right") {
 			if (top < 0) {
 				itemlayer.style.setProperty("top", "5px");
 				pointer.style.setProperty("margin-top", `${top - 10}px`);
@@ -4169,6 +4190,7 @@ var BDFDB = {
 		tableRow: "row-_9Ehcp",
 		tableStickyHeader: "stickyHeader-JabwjW header-g67q9_",
 		textScroller: "textScroller-dc9_kz",
+		tooltipCustom: "tooltipCustom-hH39_Z",
 		underline: "underline-6nu217"
 	};
 	DiscordClassModules.BDrepo = {
@@ -5707,6 +5729,7 @@ var BDFDB = {
 		tooltipblack: ["Tooltip", "tooltipBlack"],
 		tooltipbottom: ["Tooltip", "tooltipBottom"],
 		tooltipbrand: ["Tooltip", "tooltipBrand"],
+		tooltipcustom: ["BDFDB", "tooltipCustom"],
 		tooltipgreen: ["Tooltip", "tooltipGreen"],
 		tooltipgrey: ["Tooltip", "tooltipGrey"],
 		tooltipguildnametext: ["TooltipGuild", "guildNameText"],
@@ -6906,7 +6929,6 @@ var BDFDB = {
 					className: BDFDB.disCN.guildpill
 				}) : null,
 				!this.props.tooltip ? Guild : BDFDB.ReactUtils.createElement(LibraryComponents.TooltipContainer, {
-					text: this.props.guild.name,
 					tooltipConfig: Object.assign({type: "right"}, this.props.tooltipConfig, {guild: this.props.list && this.props.guild}),
 					children: Guild
 				})
@@ -8001,6 +8023,10 @@ var BDFDB = {
 			background-color: #222;
 		}
 		
+		${BDFDB.dotCN.tooltip + BDFDB.dotCNS.tooltipcustom + BDFDB.dotCN.tooltippointer} {
+			border-top-color: inherit !important;
+		}
+		
 		${BDFDB.dotCNC.layermodallarge + BDFDB.dotCNC.modalsizelarge + BDFDB.dotCN.modalminisize} {
 			max-height: 95vh;
 		}
@@ -8049,9 +8075,6 @@ var BDFDB = {
 		}
 		.BDFDB-itemlayercontainer, .BDFDB-itemlayer {
 			z-index: 3002;
-		}
-		${BDFDB.dotCN.tooltip}.tooltip-customcolor ${BDFDB.dotCN.tooltippointer} {
-			border-top-color: inherit !important;
 		}
 		.toasts {
 			position: fixed;
