@@ -6027,7 +6027,7 @@ var BDFDB = {
 		"no":			{name:"Norwegian",					id:"no",		ownlang:"Norsk",						integrated:true,		dic:false},
 		"ps":			{name:"Pashto",						id:"ps",		ownlang:"پښتو",							integrated:false,		dic:false},
 		"fa":			{name:"Persian",					id:"fa",		ownlang:"فارسی",						integrated:false,		dic:false},
-		"pl":			{name:"Polish",						id:"pl",		ownlang:"Polski",						integrated:true,		dic:false},
+		"pl":			{name:"Polish",						id:"pl",		ownlang:"Polski",						integrated:true,		dic:true},
 		"pt":			{name:"Portuguese",					id:"pt",		ownlang:"Português",					integrated:false,		dic:true},
 		"pt-BR":		{name:"Portuguese (Brazil)",		id:"pt-BR",		ownlang:"Português do Brasil",			integrated:true,		dic:true},
 		"pt-PT":		{name:"Portuguese (Portugal)",		id:"pt-PT",		ownlang:"Português do Portugal",		integrated:false,		dic:false},
