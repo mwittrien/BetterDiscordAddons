@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.6.0";}
+	getVersion () {return "6.6.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,16 +11,15 @@ class ServerFolders {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Dark Sidebar","Now properly colored with dark sidebar"]]
+			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 		
 		this.patchedModules = {
 			after: {
-				"Guilds":["componentDidMount","componentDidUpdate","componentWillUnmount"],
-				"GuildFolder":["componentDidMount","componentDidUpdate"],
-				"Guild":["componentDidMount","componentDidUpdate"],
-				"GuildFolderSettingsModal":"componentDidMount",
-				"StandardSidebarView":"componentWillUnmount"
+				AppView: "render",
+				GuildFolder: "render",
+				Guild: ["componentDidMount", "render"],
+				GuildFolderSettingsModal: ["componentDidMount", "render"]
 			}
 		};
 	}
@@ -31,15 +30,27 @@ class ServerFolders {
 		this.guildStates = {};
 
 		this.css = `
-			.${this.name}-modal .ui-icon-picker-icon {
+			.${this.name}-modal ${BDFDB.dotCN._serverfoldersiconswatch} {
 				position: relative;
 				margin: 3px 3px;
 				padding: 3px 3px;
 				width: 55px;
 				height: 55px;
 				border-radius: 12px;
+				cursor: pointer;
 			}
-			.${this.name}-modal .ui-icon-picker-icon .ui-picker-inner {
+			.${this.name}-modal ${BDFDB.dotCN._serverfoldersiconswatch + BDFDB.dotCN._serverfoldersiconswatchpreview} {
+				width: 95px;
+				height: 95px;
+				cursor: default;
+			}
+			.${this.name}-modal ${BDFDB.dotCN._serverfoldersiconswatch}:hover {
+				background-color: var(--background-modifier-hover);
+			}
+			.${this.name}-modal ${BDFDB.dotCN._serverfoldersiconswatch + BDFDB.dotCN._serverfoldersiconswatchselected} {
+				background-color: var(--background-modifier-selected);
+			}
+			.${this.name}-modal ${BDFDB.dotCNS._serverfoldersiconswatch + BDFDB.dotCN._serverfoldersiconswatchinner} {
 				width: 100%;
 				height: 100%;
 				border-radius: 12px;
@@ -47,16 +58,13 @@ class ServerFolders {
 				background-size: cover;
 				background-repeat: no-repeat;
 			}
-			.${this.name}-modal .ui-icon-picker-icon.selected ${BDFDB.dotCN.hovercardbutton} {
-				display: none !important;
+			.${this.name}-modal ${BDFDB.dotCN._serverfoldersiconswatch} svg${BDFDB.dotCN._serverfoldersiconswatchinner} {
+				transform: translateY(-2px) scale(0.8);
 			}
-			.${this.name}-modal .ui-icon-picker-icon ${BDFDB.dotCN.hovercardbutton} {
+			.${this.name}-modal ${BDFDB.dotCNS._serverfoldersiconswatch + BDFDB.dotCN.hovercardbutton} {
 				position: absolute;
 				top: -10px;
 				right: -10px;
-			}
-			.${this.name}-modal .ui-icon-picker-icon.preview.nopic .ui-picker-inner {
-				background: url('data:image/svg+xml; utf8, <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="400"><path d="M40.400 17.178 C 39.850 17.366,38.793 17.538,38.050 17.560 C 33.351 17.699,23.397 24.788,21.381 29.432 C 21.087 30.109,20.566 30.896,20.223 31.181 C 19.880 31.465,19.600 31.866,19.600 32.071 C 19.600 32.276,19.236 33.242,18.792 34.218 C 16.345 39.589,16.345 49.611,18.792 54.982 C 19.236 55.958,19.600 56.918,19.600 57.116 C 19.600 57.314,19.960 57.802,20.400 58.200 C 20.840 58.598,21.200 59.131,21.200 59.385 C 21.200 60.391,25.680 64.942,91.505 130.800 C 128.995 168.310,159.849 199.326,160.068 199.724 C 160.409 200.344,150.950 209.964,93.989 266.924 C 18.798 342.113,19.600 341.292,19.600 343.126 C 19.600 343.283,19.250 344.065,18.822 344.864 C 15.429 351.195,15.958 362.918,19.932 369.440 C 22.094 372.990,27.474 378.800,28.598 378.800 C 28.861 378.800,29.402 379.160,29.800 379.600 C 30.198 380.040,30.703 380.400,30.922 380.400 C 31.141 380.400,32.238 380.831,33.360 381.358 C 34.482 381.886,36.480 382.533,37.800 382.797 C 43.786 383.994,44.323 384.027,47.299 383.386 C 48.895 383.042,51.010 382.619,52.000 382.446 C 52.990 382.274,54.517 381.743,55.394 381.266 C 56.271 380.790,57.188 380.400,57.432 380.400 C 57.676 380.400,58.202 380.040,58.600 379.600 C 58.998 379.160,59.598 378.800,59.932 378.800 C 60.267 378.800,91.725 347.615,129.839 309.500 C 169.057 270.281,199.496 240.145,199.964 240.073 C 200.602 239.975,216.001 255.193,267.495 306.814 C 327.046 366.511,339.531 378.800,340.627 378.800 C 340.798 378.800,341.265 379.097,341.667 379.461 C 345.728 383.136,361.013 384.409,365.685 381.461 C 366.188 381.143,367.024 380.757,367.541 380.602 C 370.583 379.691,376.623 374.200,379.382 369.836 C 385.105 360.785,384.039 346.409,377.039 338.228 C 376.084 337.113,344.846 305.743,307.621 268.517 C 255.329 216.224,239.969 200.647,240.070 200.009 C 240.143 199.545,270.062 169.288,308.216 131.091 C 345.625 93.641,376.723 62.370,377.324 61.600 C 384.286 52.678,385.036 40.621,379.277 30.171 C 376.136 24.469,367.906 18.537,361.668 17.477 C 354.656 16.286,345.095 17.665,341.883 20.331 C 341.567 20.594,340.549 21.318,339.622 21.941 C 338.695 22.563,307.031 53.972,269.259 91.737 C 231.486 129.501,200.330 160.400,200.022 160.400 C 199.714 160.400,168.938 129.869,131.631 92.554 C 56.225 17.131,60.288 21.047,55.200 18.887 C 51.591 17.354,42.836 16.343,40.400 17.178z" fill="rgb(220,43,67)"></path></svg>') center/cover no-repeat;
 			}
 			${BDFDB.dotCN.guildfolder}[style*="background-image"] {
 				background-color: transparent !important;
@@ -74,37 +82,16 @@ class ServerFolders {
 				left: 0px;
 				right: unset;
 			}
-			${BDFDB.dotCN.guildouter}.serverfolders-dragpreview {
+			${BDFDB.dotCN._serverfoldersdragpreview} {
 				pointer-events: none !important;
 				position: absolute !important;
 				opacity: 0.5 !important;
 				z-index: 10000 !important;
 			}
-			${BDFDB.dotCN.guildouter}.serverfolders-dragpreview,
-			${BDFDB.dotCN.guildouter}.serverfolders-dragpreview ${BDFDB.dotCN.guildinner},
-			${BDFDB.dotCN.guildouter}.serverfolders-dragpreview ${BDFDB.dotCNS.guildinner + BDFDB.dotCN.guildiconwrapper},
-			${BDFDB.dotCN.guildouter}.serverfolders-dragpreview ${BDFDB.dotCNS.guildinner + BDFDB.dotCNS.guildiconwrapper + BDFDB.dotCN.guildicon} {
-				border-radius: 50% !important;
-				width: 48px !important;
-				height: 48px !important;
+			${BDFDB.dotCN.guildswrapper + BDFDB.dotCN._serverfoldersfoldercontent} {
+				transition: width 0.3s linear !important;
 			}
-			${BDFDB.dotCN.guildouter}.serverfolders-dragpreview ${BDFDB.dotCN.guildpillwrapper} {
-				display: none !important;
-			}
-			${BDFDB.dotCN.guildouter}.serverfolders-dragpreview ${BDFDB.dotCN.guildiconacronym} {
-				color: white !important;
-				background-color: #444 !important;
-				border-radius: 50% !important;
-				overflow: hidden !important;
-			}
-			${BDFDB.dotCN.guildswrapper}.foldercontent {
-				transition: width .3s linear !important;
-				left: 72px;
-			}
-			${BDFDB.dotCN.guildswrapper}.foldercontent .folderseparatorouter {
-				margin-top: 10px;
-			}
-			${BDFDB.dotCN.guildswrapper}.foldercontent.foldercontentclosed {
+			${BDFDB.dotCN.guildswrapper + BDFDB.dotCN._serverfoldersfoldercontent + BDFDB.dotCN._serverfoldersfoldercontentclosed} {
 				width: 0px !important;
 			}
 			${BDFDB.dotCN.appcontainer} {
@@ -119,13 +106,6 @@ class ServerFolders {
 				contain: unset !important;
 				width: 100% !important;
 			}`;
-
-		this.folderContentMarkup = 
-			`<div class="${BDFDB.disCNS.guildswrapper + BDFDB.disCN.guilds} foldercontent foldercontentclosed">
-				<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.guildsscrollerwrap + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.scrollerthemeghosthairline}">
-					<div class="${BDFDB.disCNS.guildsscroller + BDFDB.disCN.scroller}"></div>
-				</div>
-			</div>`;
 
 		this.dragPlaceholderMarkup =
 			`<div class="${BDFDB.disCNS.guildouter + BDFDB.disCN._bdguild} foldercopyplaceholder">
@@ -157,7 +137,254 @@ class ServerFolders {
 			{openicon:`<path d="M 160,253 h 614 c 14.8,0 29.7,8.6 36.9,15.8 C 819.4,277.3 826,289.4 826,305 v 95 H 160 Z" fill="REPLACE_FILL2"/><path d="M 199,200 c -26.2,0 -33.9,6.5 -41.5,15.6 C 149.8,224.8 147,231.8 147,252 V 386.7 387 c -20.9,0.5 -56.5,-3.5 -70.3,6.9 -2.5,1.9 -5.4,3.2 -8.3,9.8 -6.8,25.6 -0.3,54.8 1.1,70.3 9.1,59.2 69.1,294.7 74.9,310 3.7,9.8 4.6,13.6 10,15 h 689.6 c 6.3,-1.4 11.6,-15 11.6,-15 L 931.8,474 c 2.7,-20 8.3,-54 -0.2,-70.3 -2,-3.5 -6.5,-8.1 -9.3,-9.8 C 902.5,385.1 881.9,387 853,387 852.6,369.4 855,346.8 846.6,333 842.4,326.2 830.5,321.3 826,321.3 V 387 L 173.2,386.7 173,387 v -82 c 0,-14.6 2.8,-25.9 12.4,-35.5 C 195.9,259 207.7,253 225,253 h 201 l -54,-53 z" fill="REPLACE_FILL1"/>`,
 			closedicon:`<path d="M 160,400 V 253 h 440 v 147 z" fill="REPLACE_FILL2"/><path d="M 186,799 c -24.2,0 -34,-8 -39.7,-13.6 C 140.8,779.9 134,769.1 134,747 V 372 c 0,-21.5 13,-32 13,-32 V 252 c 0,-20.2 2.8,-27.2 10.5,-36.4 C 165.1,206.5 172.8,200 199,200 h 173 l 54,53 H 225 c -17.3,0 -29.1,6 -39.6,16.5 C 175.8,279.1 173,290.4 173,305 l -0.4,19 c 0,0 9.6,-4 20.9,-4 H 494 L 614,200 h 186 c 17.7,0 26.6,7.1 36,14.2 C 846.5,222 852,233.6 852,252 v 495 c 0,16.1 -7.5,30.2 -14.1,36.7 C 831.4,790.2 815.9,799 800,799 Z" fill="REPLACE_FILL1"/>`}
 		];
-
+		
+		let plugin = this, rerenderTimeout;
+		this.FolderGuildContentComponent = class FolderGuildsContent extends BDFDB.ReactUtils.Component {
+			componentDidMount() {
+				plugin.FolderGuildContent = this;
+			}
+			render() {
+				let closing = this.props.closing;
+				delete this.props.closing;
+				let folders = Array.from(BDFDB.LibraryModules.FolderUtils.getExpandedFolders());
+				this.props.folders = folders.length || closing ? folders : (this.props.folders || []);
+				BDFDB.TimeUtils.clear(rerenderTimeout);
+				if (!folders.length && this.props.folders.length && !closing) rerenderTimeout = BDFDB.TimeUtils.timeout(_ => {
+					this.props.closing = true;
+					BDFDB.ReactUtils.forceUpdate(this);
+				}, 300);
+				return BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.guildswrapper, BDFDB.disCN.guilds, this.props.themeOverride && BDFDB.disCN.themedark, BDFDB.disCN._serverfoldersfoldercontent, (!folders.length || closing) && BDFDB.disCN._serverfoldersfoldercontentclosed),
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ScrollerVertical, {
+						outerClassName: BDFDB.disCN.guildsscrollerwrap,
+						className: BDFDB.disCN.guildsscroller,
+						theme: BDFDB.LibraryComponents.ScrollerVertical.Themes.GHOST_HAIRLINE,
+						children: this.props.folders.map(folderId => {
+							let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(folderId);
+							return folder.guildIds.map(guildId => {
+								return [
+									this.draggedGuild == guildId ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Guild, {
+										guild: BDFDB.LibraryModules.GuildStore.getGuild(guildId),
+										state: true,
+										list: true,
+										onClick: event => {
+											if (BDFDB.InternalData.pressedKeys.includes(46)) {
+												BDFDB.ListenerUtils.stopEvent(event);
+												plugin.removeGuildFromFolder(folderId, guildId);
+											}
+											else {
+												let settings = BDFDB.DataUtils.get(plugin, "settings");
+												if (settings.closeAllFolders) {
+													for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) {
+														if (openFolderId != folderId || !settings.forceOpenFolder) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
+													}
+												}
+												else if (settings.closeTheFolder && !settings.forceOpenFolder && BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folderId)) {
+													BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folderId);
+												}
+												else BDFDB.ReactUtils.forceUpdate(this);
+											}
+										},
+										onMouseDown: (event, instance) => {
+											let node = BDFDB.ReactUtils.findDOMNode(instance).cloneNode(true);
+											let mousemove = event2 => {
+												if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
+													BDFDB.ListenerUtils.stopEvent(event);
+													this.draggedGuild = guildId;
+													BDFDB.ReactUtils.forceUpdate(this);
+													let dragpreview = plugin.createDragPreview(node, event2);
+													document.removeEventListener("mousemove", mousemove);
+													document.removeEventListener("mouseup", mouseup);
+													let dragging = event3 => {
+														plugin.updateDragPreview(dragpreview, event3);
+														let placeholder = BDFDB.DOMUtils.getParent(BDFDB.dotCN._serverfoldersguildplaceholder, event3.target);
+														let hoveredGuild = (BDFDB.ReactUtils.findValue(BDFDB.DOMUtils.getParent(BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildouter, placeholder ? placeholder.previousSibling : event3.target), "guild", {up: true}) || {}).id;
+														if (hoveredGuild) {
+															let hoveredGuildFolder = BDFDB.GuildUtils.getFolder(hoveredGuild);
+															if (!hoveredGuildFolder || hoveredGuildFolder.folderId != folder.folderId) hoveredGuild = null;
+														}
+														let update = hoveredGuild != this.hoveredGuild;
+														if (hoveredGuild) this.hoveredGuild = hoveredGuild;
+														else delete this.hoveredGuild; 
+														if (update) BDFDB.ReactUtils.forceUpdate(this);
+													};
+													let releasing = event3 => {
+														BDFDB.ListenerUtils.stopEvent(event3);
+														BDFDB.DOMUtils.remove(dragpreview);
+														if (this.hoveredGuild) {
+															let guildIds = [].concat(folder.guildIds);
+															BDFDB.ArrayUtils.remove(guildIds, this.draggedGuild, true);
+															guildIds.splice(guildIds.indexOf(this.hoveredGuild) + 1, 0, this.draggedGuild);
+															plugin.updateFolder(Object.assign({}, folder, {guildIds}));
+														}
+														delete this.draggedGuild;
+														delete this.hoveredGuild;
+														BDFDB.ReactUtils.forceUpdate(this);
+														document.removeEventListener("mousemove", dragging);
+														document.removeEventListener("mouseup", releasing);
+													};
+													document.addEventListener("mousemove", dragging);
+													document.addEventListener("mouseup", releasing);
+												}
+											};
+											let mouseup = _ => {
+												document.removeEventListener("mousemove", mousemove);
+												document.removeEventListener("mouseup", mouseup);
+											};
+											document.addEventListener("mousemove", mousemove);
+											document.addEventListener("mouseup", mouseup);
+										}
+									}),
+									this.hoveredGuild != guildId ? null : BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCNS.guildouter + BDFDB.disCN._serverfoldersguildplaceholder,
+										children: BDFDB.ReactUtils.createElement("div", {
+											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.DragPlaceholder, {})
+										})
+									})
+								]
+							});
+						}).reduce((r, a) => r.concat(a, BDFDB.DataUtils.get(plugin, "settings", "addSeparators") ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Separator, {}) : null), [0]).slice(1, -1).flat(10).filter(n => n)
+					})
+				});
+			}
+		};
+		
+		this.FolderIconPickerComponent = class FolderIconPicker extends BDFDB.ReactUtils.Component {
+			render() {
+				let folderIcons = plugin.loadAllIcons();
+				for (let id in folderIcons) if (!folderIcons[id].customID) {
+					folderIcons[id].openicon = plugin.createBase64SVG(folderIcons[id].openicon);
+					folderIcons[id].closedicon = plugin.createBase64SVG(folderIcons[id].closedicon);
+				}
+				folderIcons["-1"] = {};
+				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+					wrap: BDFDB.LibraryComponents.Flex.Wrap.WRAP,
+					children: Object.keys(folderIcons).sort().map(id => {
+						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Card, {
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._serverfoldersiconswatch, this.props.selectedIcon == id && BDFDB.disCN._serverfoldersiconswatchselected),
+							backdrop: false,
+							iconID: id,
+							grow: 0,
+							shrink: 0,
+							noRemove: !folderIcons[id].customID || this.props.selectedIcon == id,
+							onMouseEnter: _ => {
+								this.props.hoveredIcon = id;
+								BDFDB.ReactUtils.forceUpdate(this);
+							},
+							onMouseLeave: _ => {
+								delete this.props.hoveredIcon;
+								BDFDB.ReactUtils.forceUpdate(this);
+							},
+							onClick: _ => {
+								this.props.selectedIcon = id;
+								BDFDB.ReactUtils.forceUpdate(this);
+							},
+							onRemove: _ => {
+								BDFDB.DataUtils.remove(plugin, "customicons", id);
+								BDFDB.ReactUtils.forceUpdate(this);
+							},
+							children: folderIcons[id].closedicon ? BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN._serverfoldersiconswatchinner,
+								style: {background: `url(${this.props.hoveredIcon == id ? folderIcons[id].openicon : folderIcons[id].closedicon}) center/cover no-repeat`}
+							}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN._serverfoldersiconswatchinner,
+								name: BDFDB.LibraryComponents.SvgIcon.Names.FOLDER,
+								style: {color: "rbg(0, 0, 0)"}
+							})
+						});
+					})
+				})
+			}
+		};
+		
+		let redCross = `'data:image/svg+xml; base64, PHN2ZyB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIj48cGF0aCBkPSJNNDAuNDAwIDE3LjE3OCBDIDM5Ljg1MCAxNy4zNjYsMzguNzkzIDE3LjUzOCwzOC4wNTAgMTcuNTYwIEMgMzMuMzUxIDE3LjY5OSwyMy4zOTcgMjQuNzg4LDIxLjM4MSAyOS40MzIgQyAyMS4wODcgMzAuMTA5LDIwLjU2NiAzMC44OTYsMjAuMjIzIDMxLjE4MSBDIDE5Ljg4MCAzMS40NjUsMTkuNjAwIDMxLjg2NiwxOS42MDAgMzIuMDcxIEMgMTkuNjAwIDMyLjI3NiwxOS4yMzYgMzMuMjQyLDE4Ljc5MiAzNC4yMTggQyAxNi4zNDUgMzkuNTg5LDE2LjM0NSA0OS42MTEsMTguNzkyIDU0Ljk4MiBDIDE5LjIzNiA1NS45NTgsMTkuNjAwIDU2LjkxOCwxOS42MDAgNTcuMTE2IEMgMTkuNjAwIDU3LjMxNCwxOS45NjAgNTcuODAyLDIwLjQwMCA1OC4yMDAgQyAyMC44NDAgNTguNTk4LDIxLjIwMCA1OS4xMzEsMjEuMjAwIDU5LjM4NSBDIDIxLjIwMCA2MC4zOTEsMjUuNjgwIDY0Ljk0Miw5MS41MDUgMTMwLjgwMCBDIDEyOC45OTUgMTY4LjMxMCwxNTkuODQ5IDE5OS4zMjYsMTYwLjA2OCAxOTkuNzI0IEMgMTYwLjQwOSAyMDAuMzQ0LDE1MC45NTAgMjA5Ljk2NCw5My45ODkgMjY2LjkyNCBDIDE4Ljc5OCAzNDIuMTEzLDE5LjYwMCAzNDEuMjkyLDE5LjYwMCAzNDMuMTI2IEMgMTkuNjAwIDM0My4yODMsMTkuMjUwIDM0NC4wNjUsMTguODIyIDM0NC44NjQgQyAxNS40MjkgMzUxLjE5NSwxNS45NTggMzYyLjkxOCwxOS45MzIgMzY5LjQ0MCBDIDIyLjA5NCAzNzIuOTkwLDI3LjQ3NCAzNzguODAwLDI4LjU5OCAzNzguODAwIEMgMjguODYxIDM3OC44MDAsMjkuNDAyIDM3OS4xNjAsMjkuODAwIDM3OS42MDAgQyAzMC4xOTggMzgwLjA0MCwzMC43MDMgMzgwLjQwMCwzMC45MjIgMzgwLjQwMCBDIDMxLjE0MSAzODAuNDAwLDMyLjIzOCAzODAuODMxLDMzLjM2MCAzODEuMzU4IEMgMzQuNDgyIDM4MS44ODYsMzYuNDgwIDM4Mi41MzMsMzcuODAwIDM4Mi43OTcgQyA0My43ODYgMzgzLjk5NCw0NC4zMjMgMzg0LjAyNyw0Ny4yOTkgMzgzLjM4NiBDIDQ4Ljg5NSAzODMuMDQyLDUxLjAxMCAzODIuNjE5LDUyLjAwMCAzODIuNDQ2IEMgNTIuOTkwIDM4Mi4yNzQsNTQuNTE3IDM4MS43NDMsNTUuMzk0IDM4MS4yNjYgQyA1Ni4yNzEgMzgwLjc5MCw1Ny4xODggMzgwLjQwMCw1Ny40MzIgMzgwLjQwMCBDIDU3LjY3NiAzODAuNDAwLDU4LjIwMiAzODAuMDQwLDU4LjYwMCAzNzkuNjAwIEMgNTguOTk4IDM3OS4xNjAsNTkuNTk4IDM3OC44MDAsNTkuOTMyIDM3OC44MDAgQyA2MC4yNjcgMzc4LjgwMCw5MS43MjUgMzQ3LjYxNSwxMjkuODM5IDMwOS41MDAgQyAxNjkuMDU3IDI3MC4yODEsMTk5LjQ5NiAyNDAuMTQ1LDE5OS45NjQgMjQwLjA3MyBDIDIwMC42MDIgMjM5Ljk3NSwyMTYuMDAxIDI1NS4xOTMsMjY3LjQ5NSAzMDYuODE0IEMgMzI3LjA0NiAzNjYuNTExLDMzOS41MzEgMzc4LjgwMCwzNDAuNjI3IDM3OC44MDAgQyAzNDAuNzk4IDM3OC44MDAsMzQxLjI2NSAzNzkuMDk3LDM0MS42NjcgMzc5LjQ2MSBDIDM0NS43MjggMzgzLjEzNiwzNjEuMDEzIDM4NC40MDksMzY1LjY4NSAzODEuNDYxIEMgMzY2LjE4OCAzODEuMTQzLDM2Ny4wMjQgMzgwLjc1NywzNjcuNTQxIDM4MC42MDIgQyAzNzAuNTgzIDM3OS42OTEsMzc2LjYyMyAzNzQuMjAwLDM3OS4zODIgMzY5LjgzNiBDIDM4NS4xMDUgMzYwLjc4NSwzODQuMDM5IDM0Ni40MDksMzc3LjAzOSAzMzguMjI4IEMgMzc2LjA4NCAzMzcuMTEzLDM0NC44NDYgMzA1Ljc0MywzMDcuNjIxIDI2OC41MTcgQyAyNTUuMzI5IDIxNi4yMjQsMjM5Ljk2OSAyMDAuNjQ3LDI0MC4wNzAgMjAwLjAwOSBDIDI0MC4xNDMgMTk5LjU0NSwyNzAuMDYyIDE2OS4yODgsMzA4LjIxNiAxMzEuMDkxIEMgMzQ1LjYyNSA5My42NDEsMzc2LjcyMyA2Mi4zNzAsMzc3LjMyNCA2MS42MDAgQyAzODQuMjg2IDUyLjY3OCwzODUuMDM2IDQwLjYyMSwzNzkuMjc3IDMwLjE3MSBDIDM3Ni4xMzYgMjQuNDY5LDM2Ny45MDYgMTguNTM3LDM2MS42NjggMTcuNDc3IEMgMzU0LjY1NiAxNi4yODYsMzQ1LjA5NSAxNy42NjUsMzQxLjg4MyAyMC4zMzEgQyAzNDEuNTY3IDIwLjU5NCwzNDAuNTQ5IDIxLjMxOCwzMzkuNjIyIDIxLjk0MSBDIDMzOC42OTUgMjIuNTYzLDMwNy4wMzEgNTMuOTcyLDI2OS4yNTkgOTEuNzM3IEMgMjMxLjQ4NiAxMjkuNTAxLDIwMC4zMzAgMTYwLjQwMCwyMDAuMDIyIDE2MC40MDAgQyAxOTkuNzE0IDE2MC40MDAsMTY4LjkzOCAxMjkuODY5LDEzMS42MzEgOTIuNTU0IEMgNTYuMjI1IDE3LjEzMSw2MC4yODggMjEuMDQ3LDU1LjIwMCAxOC44ODcgQyA1MS41OTEgMTcuMzU0LDQyLjgzNiAxNi4zNDMsNDAuNDAwIDE3LjE3OHoiIGZpbGw9InJnYigyNDAsIDcxLCA3MSkiPjwvcGF0aD48L3N2Zz4='`;
+		this.FolderIconCustomPreviewComponent = class FolderIconCustomPreview extends BDFDB.ReactUtils.Component {
+			componentDidMount() {
+				this.previewInterval = BDFDB.TimeUtils.interval(_ => {
+					this.props.tick = !this.props.tick;
+					BDFDB.ReactUtils.forceUpdate(this);
+				}, 2000);
+			}
+			componentWillUnmount() {
+				BDFDB.TimeUtils.clear(this.previewInterval);
+			}
+			render() {
+				return [
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+						title: plugin.labels.modal_customopen_text,
+						className: BDFDB.disCN.marginbottom20,
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+							type: "file",
+							filter: "image",
+							value: this.props.open,
+							onChange: value => {
+								this.props.open = value;
+								BDFDB.ReactUtils.forceUpdate(this);
+							}
+						})
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+						title: plugin.labels.modal_customclosed_text,
+						className: BDFDB.disCN.marginbottom20,
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+							type: "file",
+							filter: "image",
+							value: this.props.closed,
+							onChange: value => {
+								this.props.closed = value;
+								BDFDB.ReactUtils.forceUpdate(this);
+							}
+						})
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+						title: plugin.labels.modal_custompreview_text,
+						className: BDFDB.disCN.marginbottom20,
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+							justify: BDFDB.LibraryComponents.Flex.Justify.BETWEEN,
+							align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+							children: [
+								BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCNS._serverfoldersiconswatch + BDFDB.disCN._serverfoldersiconswatchpreview,
+									children: BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCN._serverfoldersiconswatchinner,
+										style: {background: `url(${this.props.open || redCross}) center/cover no-repeat`}
+									})
+								}),
+								BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCNS._serverfoldersiconswatch + BDFDB.disCN._serverfoldersiconswatchpreview,
+									children: BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCN._serverfoldersiconswatchinner,
+										style: {background: `url(${this.props.closed || redCross}) center/cover no-repeat`}
+									})
+								}),
+								BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCNS._serverfoldersiconswatch + BDFDB.disCN._serverfoldersiconswatchpreview,
+									children: BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCN._serverfoldersiconswatchinner,
+										style: {background: `url(${(this.props.tick ? this.props.open : this.props.closed) || redCross}) center/cover no-repeat`}
+									})
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+									children: BDFDB.LanguageUtils.LanguageStrings.ADD,
+									onClick: (e, instance) => {
+										let inputIns = BDFDB.ReactUtils.findOwner(this, {name: "BDFDB_TextInput", all:true, unlimited:true});
+										if (inputIns.length == 2 && inputIns[0].props.value && inputIns[1].props.value) {
+											BDFDB.DataUtils.save({openicon: inputIns[0].props.value, closedicon: inputIns[1].props.value}, plugin, "customicons", plugin.generateID("customicon"));
+											this.props.open = null;
+											this.props.closed = null;
+											BDFDB.ModuleUtils.forceAllUpdates(this, "GuildFolderSettingsModal");
+											BDFDB.NotificationUtils.toast("Custom Icon was added to selection", {type:"success"});
+										}
+										else BDFDB.NotificationUtils.toast("Add an image for the open and the closed icon", {type:"danger"});
+									}
+								})
+							]
+						})
+					})
+				]
+			}
+		};
+		
 		this.defaults = {
 			settings: {
 				closeOtherFolders:	{value:false, 	description:"Close other Folders when opening a Folder."},
@@ -173,23 +400,42 @@ class ServerFolders {
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let settings = BDFDB.DataUtils.get(this, "settings");
-		let settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
-		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
-		}
-		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Remove all custom Icons.</h3><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} removecustom-button" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Remove</div></button></div>`;
-		settingshtml += `</div></div>`;
-
-		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
-
-		BDFDB.initElements(settingspanel, this);
+		let settingsitems = [];
 		
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".removecustom-button", () => {
-			BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all custom icons?", () => {
-				BDFDB.DataUtils.remove(this, "customicons");
-			});
-		});
-		return settingspanel;
+		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			className: BDFDB.disCN.marginbottom8,
+			type: "Switch",
+			plugin: this,
+			keys: ["settings", key],
+			label: this.defaults.settings[key].description,
+			value: settings[key]
+		}));
+		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+			type: "Button",
+			className: BDFDB.disCN.marginbottom8,
+			color: BDFDB.LibraryComponents.Button.Colors.RED,
+			label: "Reset all Folders",
+			onClick: _ => {
+				BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset all folders?", () => {
+					BDFDB.DataUtils.remove(this, "folders");
+				});
+			},
+			children: BDFDB.LanguageUtils.LanguageStrings.RESET
+		}));
+		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+			type: "Button",
+			className: BDFDB.disCN.marginbottom8,
+			color: BDFDB.LibraryComponents.Button.Colors.RED,
+			label: "Remove all custom Icons",
+			onClick: _ => {
+				BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all custom icons?", () => {
+					BDFDB.DataUtils.remove(this, "customicons");
+				});
+			},
+			children: BDFDB.LanguageUtils.LanguageStrings.REMOVE
+		}));
+		
+		return BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 	}
 
 	//legacy
@@ -221,52 +467,14 @@ class ServerFolders {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
 			
-			// REMOVE 08.10.2019
-			let foldersdata = BDFDB.ObjectUtils.sort(BDFDB.DataUtils.load(this, "folders"), "position");
-			let newfolders = Object.keys(foldersdata).filter(n => n.indexOf("folder") == -1);
-			let cleaned = false;
-			if (newfolders.length) for (let id of newfolders) if (foldersdata[id].icons) {
-				cleaned = true;
-				delete foldersdata[id].icons;
-			}
-			if (cleaned) {
-				BDFDB.DataUtils.save(foldersdata, this, "folders");
-				foldersdata = BDFDB.ObjectUtils.sort(BDFDB.DataUtils.load(this, "folders"), "position");
-			}
-			let oldfolders = Object.keys(foldersdata).filter(n => n.indexOf("folder") == 0);
-			if (oldfolders.length) BDFDB.ModalUtils.confirm(this, `Old ServerFolders data detected!\nFound ${oldfolders.length} old custom folders in the ServerFolders.config.json.\nPress the '${BDFDB.LanguageUtils.LanguageStrings.OKAY}' button to automatically create a native folder for each old folder and to automatically put the servers in them.`, "Convert?", () => {
-				let oldGuildFolders = Object.assign({}, BDFDB.LibraryModules.FolderStore.guildFolders);
-				let guildsInFolders = [];
-				let guildFolders = [];
-				let guildPositions = [];
-				let newfoldersdata = {};
-				for (let folderid in foldersdata) {
-					let newid = this.generateID("folder");
-					let olddata = foldersdata[folderid];
-					let color1 = BDFDB.ColorUtils.convert(olddata.color1, "INT");
-					guildFolders.push({
-						guildIds: olddata.servers,
-						folderId: newid,
-						folderName: olddata.folderName,
-						folderColor: color1 != null && color1 != undefined ? color1 : 7506394
-					});
-					guildsInFolders = guildsInFolders.concat(olddata.servers);
-					newfoldersdata[newid] = Object.assign({}, olddata);
-					delete newfoldersdata[newid].position;
-					delete newfoldersdata[newid].folderName;
-					delete newfoldersdata[newid].folderId;
-					delete newfoldersdata[newid].servers;
-					delete newfoldersdata[newid].isOpen;
-					newfoldersdata[newid].autoRead = newfoldersdata[newid].autounread;
-					delete newfoldersdata[newid].autounread;
-					newfoldersdata[newid].useCloseIcon = true;
-					newfoldersdata[newid].muteFolder = false;
+			let forceClosing = false;
+			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.GuildUtils, "toggleGuildFolderExpand", {after: e => {
+				if (BDFDB.DataUtils.get(this, "settings", "closeOtherFolders") && !forceClosing) {
+					forceClosing = true;
+					for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (openFolderId != e.methodArguments[0]) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
+					BDFDB.TimeUtils.timeout(_ => {forceClosing = false}, 1000);
 				}
-				for (let i in oldGuildFolders) if (oldGuildFolders[i].folderId || !guildsInFolders.includes(oldGuildFolders[i].guildIds[0])) guildFolders.push(Object.assign({}, oldGuildFolders[i]));
-				for (let i in guildFolders) for (let guildid of guildFolders[i].guildIds) guildPositions.push(guildid);
-				BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({guildPositions, guildFolders});
-				BDFDB.DataUtils.save(newfoldersdata, this, "folders");
-			});
+			}});
 			
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
@@ -276,26 +484,8 @@ class ServerFolders {
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
-
-			BDFDB.DOMUtils.remove(this.foldercontent, BDFDB.dotCN.guildswrapper + ".foldercontent");
 			
-			let modal = document.querySelector(`.${this.name}-modal`);
-			if (modal) {
-				BDFDB.DOMUtils.removeClass(modal, `${this.name}-modal`); 
-				let modalclose = modal.querySelector(BDFDB.dotCN.modalclose);
-				if (modalclose) modalclose.click();
-			}
-			
-			for (let folderinner of document.querySelectorAll(`${BDFDB.dotCNS.guildfolderwrapper + BDFDB.dotCN.guildfolderexpandendbackground} ~ ${BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildinner}`)) {
-				folderinner.removeEventListener("mouseenter", folderinner.ServerFoldersTooltipListener);
-				folderinner.removeEventListener("mousedown", folderinner.ServerFoldersClickListener);
-				BDFDB.DOMUtils.remove(folderinner.querySelectorAll(`${BDFDB.dotCN.guildupperbadge}.count`));
-			}
-			
-			for (let foldericon of document.querySelectorAll(BDFDB.dotCN.guildfolder)) {
-				foldericon.style.removeProperty("background-image");
-				foldericon.parentElement.parentElement.style.removeProperty("-webkit-mask");
-			}
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 			
 			BDFDB.PluginUtils.clear(this);
 		}
@@ -303,7 +493,7 @@ class ServerFolders {
 
 	onSwitch () {
 		if (typeof BDFDB === "object" && BDFDB.DataUtils.get(this, "settings", "forceOpenFolder")) {
-			let folder = this.getFolderOfGuildId(BDFDB.LibraryModules.LastGuildStore.getGuildId());
+			let folder = BDFDB.GuildUtils.getFolder(BDFDB.LibraryModules.LastGuildStore.getGuildId());
 			if (folder && !BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folder.folderId)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folder.folderId);
 		}
 	}
@@ -311,67 +501,64 @@ class ServerFolders {
 
 	// begin of own functions
 
-	onGuildContextMenu (instance, menu, returnvalue) {
-		if (document.querySelector(".BDFDB-modal")) return;
-		if (instance.props.target && instance.props.folderId && instance.props.type == "GUILD_ICON_FOLDER") {
-			let folderid = instance.props.folderId;
-			let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(folderid);
+	onSettingsClosed () {
+		if (this.SettingsUpdated) {
+			delete this.SettingsUpdated;
+			this.folderStates = {};
+			BDFDB.ModuleUtils.forceAllUpdates(this);
+		}
+	}
+
+	onGuildContextMenu (e) {
+		if (document.querySelector(BDFDB.dotCN.modalwrapper)) return;
+		if (e.instance.props.target && e.instance.props.folderId && e.instance.props.type == BDFDB.DiscordConstants.ContextMenuTypes.GUILD_ICON_FOLDER) {
+			let folderid = e.instance.props.folderId;
+			let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(e.instance.props.folderId);
 			let data = this.getFolderConfig(folderid);
 			let muted = data.muteFolder && folder.guildIds.every(guildid => BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildid));
 			if (data.muteFolder != muted) {
 				data.muteFolder = muted;
-				BDFDB.DataUtils.save(data, this, "folders", folderid);
+				BDFDB.DataUtils.save(data, this, "folders", e.instance.props.folderId);
 			}
-			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:"GuildFolderMarkReadItem"});
-			const autoreaditem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuToggleItem, {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"GuildFolderMarkReadItem"});
+			children.splice(index > -1 ? index + 1 : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuToggleItem, {
 				label: this.labels.foldercontext_autoreadfolder_text,
 				active: data.autoRead,
 				action: state => {
 					data.autoRead = state;
-					BDFDB.DataUtils.save(data, this, "folders", folderid);
+					BDFDB.DataUtils.save(data, this, "folders", e.instance.props.folderId);
 				}
-			});
-			if (index > -1) children.splice(index + 1, 0, autoreaditem);
-			else children.push(autoreaditem);
-			const muteGroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+			}));
+			e.returnvalue.props.children.splice(e.returnvalue.props.children.length - 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuToggleItem, {
 					label: this.labels.foldercontext_mutefolder_text,
 					active: muted,
 					action: state => {
 						data.muteFolder = state;
-						BDFDB.DataUtils.save(data, this, "folders", folderid);
+						BDFDB.DataUtils.save(data, this, "folders", e.instance.props.folderId);
 						for (let guildid of folder.guildIds) if (BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildid) != state) BDFDB.LibraryModules.GuildSettingsUtils.updateNotificationSettings(guildid, {muted:state, suppress_everyone:state});
 					}
 				})
-			});
-			returnvalue.props.children.splice(returnvalue.props.children.length - 1, 0, muteGroup);
-			const deleteGroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+			}));
+			e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 					label: this.labels.foldercontext_removefolder_text,
 					danger: true,
-					action: _ => {
-						BDFDB.ContextMenuUtils.close(instance);
-						BDFDB.ModalUtils.confirm(this, `Are you sure you want to remove the folder${folder.folderName ? (" '" + folder.folderName + '"') : ""}?`, () => {this.removeFolder(folderid);});
+					action: event => {
+						BDFDB.ContextMenuUtils.close(event.target);
+						BDFDB.ModalUtils.confirm(this, `Are you sure you want to remove the folder${folder.folderName ? ` '${folder.folderName}'` : ""}?`, _ => {
+							this.removeFolder(e.instance.props.folderId);
+						});
 					}
 				})
-			});
-			returnvalue.props.children.push(deleteGroup);
-		}
-		else if (instance.props.target && instance.props.guild && instance.props.type == "GUILD_ICON_BAR") {
-			let guildid = instance.props.guild.id;
-			let folders = this.getFolders();
-			let folder = this.getFolderOfGuildId(guildid);
-			let addtofolderitems = [], openguilds = BDFDB.LibraryModules.FolderStore.getSortedGuilds().filter(n => !n.folderId).map(n => n.guilds[0]);
-			for (let i = 0; i < folders.length; i++) addtofolderitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
-				label: folders[i].folderName || (this.labels.modal_tabheader1_text + " #" + parseInt(i+1)),
-				action: _ => {
-					BDFDB.ContextMenuUtils.close(menu);
-					this.addGuildToFolder(folders[i].folderId, guildid);
-				}
 			}));
-			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-			const addType = !addtofolderitems.length ? "contextMenuItem" : "contextMenuSubItem";
-			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+		}
+		else if (e.instance.props.target && e.instance.props.guild && e.instance.props.type == BDFDB.DiscordConstants.ContextMenuTypes.GUILD_ICON_BAR) {
+			let folders = BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId);
+			let folder = BDFDB.GuildUtils.getFolder(e.instance.props.guild.id);
+			let unfolderedGuilds = BDFDB.LibraryModules.FolderStore.getSortedGuilds().filter(n => !n.folderId).map(n => n.guilds[0]);
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
+			children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
 						label: this.labels.servercontext_serverfolders_text,
@@ -380,286 +567,291 @@ class ServerFolders {
 								label: this.labels.serversubmenu_removefromfolder_text,
 								danger: true,
 								action: _ => {
-									BDFDB.ContextMenuUtils.close(menu);
-									this.removeGuildFromFolder(folder.folderId, guildid);
+									BDFDB.ContextMenuUtils.close(e.instance);
+									this.removeGuildFromFolder(folder.folderId, e.instance.props.guild.id);
 								}
 							})
 						] : [
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 								label: this.labels.serversubmenu_createfolder_text,
-								disabled: !openguilds.length,
+								disabled: !unfolderedGuilds.length,
 								action: _ => {
-									BDFDB.ContextMenuUtils.close(menu);
-									this.openFolderCreationMenu(openguilds, guildid);
+									BDFDB.ContextMenuUtils.close(e.instance);
+									this.openFolderCreationMenu(unfolderedGuilds, e.instance.props.guild.id);
 								}
 							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents[addType.charAt(0).toUpperCase() + addType.slice(1)], {
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents[folders.length ? "ContextMenuSubItem" : "ContextMenuItem"], {
 								label: this.labels.serversubmenu_addtofolder_text,
-								className: `BDFDB-${addType} ${this.name}-${addType} ${this.name}-addtofolder-${addType}`,
-								disabled: !addtofolderitems.length,
-								render: addtofolderitems
+								disabled: !folders.length,
+								render: folders.map((folder, i) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+									label: folder.folderName || `${BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER} #${i + 1}`,
+									action: _ => {
+										BDFDB.ContextMenuUtils.close(e.instance);
+										this.addGuildToFolder(folder.folderId, e.instance.props.guild.id);
+									}
+								}))
 							})
 						]
 					})
 				]
-			});
-			if (index > -1) children.splice(index, 0, itemgroup);
-			else children.push(itemgroup);
+			}));
 		}
 	}
 
-	processGuilds (instance, wrapper, returnvalue, methodnames) {
-		if (methodnames.includes("componentWillUnmount")) {
-			BDFDB.DOMUtils.remove(this.foldercontent, BDFDB.dotCN.guildswrapper + ".foldercontent");
-			delete this.foldercontent;
-			delete this.foldercontentguilds;
-		}
-		if (methodnames.includes("componentDidMount")) {
-			let process = () => {
-				if (!wrapper.parentElement.querySelector(BDFDB.dotCN.guildswrapper + ".foldercontent")) {
-					this.foldercontent = BDFDB.DOMUtils.create(this.folderContentMarkup);
-					this.updateFolderContentColor(wrapper);
-					wrapper.parentElement.insertBefore(this.foldercontent, wrapper.nextElementSibling);
-					this.foldercontentguilds = this.foldercontent.querySelector(BDFDB.dotCN.guildsscroller);
-					this.toggleFolderContent();
-				}
-			};
-			if (document.querySelector(BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter + ":not(.copy) " + BDFDB.dotCN.guildiconwrapper)) process();
-			else BDFDB.TimeUtils.timeout(process, 5000);
-		}
+	processAppView (e) {
+		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "FluxContainer(Guilds)"});
+		if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(this.FolderGuildContentComponent, {
+			themeOverride: children[index].props.themeOverride
+		}));
 	}
-
-	processGuildFolder (instance, wrapper, returnvalue, methodnames) {
-		if (!this.foldercontentguilds) return;
-		let state = this.getState(instance);
-		let data = this.getFolderConfig(state.folderId);
-		if (methodnames.includes("componentDidMount")) {
-			if (data.muteFolder) for (let guildid of instance.props.guildIds) if (!BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildid)) BDFDB.LibraryModules.GuildSettingsUtils.updateNotificationSettings(guildid, {muted:true, suppress_everyone:true});
-		}
-		if (!BDFDB.equals(state, this.folderStates[instance.props.folderId])) {
+	
+	processGuildFolder (e) {
+		let state = this.getState(e.instance);
+		let data = this.getFolderConfig(e.instance.props.folderId);
+		if (data.muteFolder) for (let guildId of e.instance.props.guildIds) if (!BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildId)) BDFDB.LibraryModules.GuildSettingsUtils.updateNotificationSettings(guildId, {muted:true, suppress_everyone:true});
+		if (this.folderStates[e.instance.props.folderId] && !BDFDB.equals(state, this.folderStates[e.instance.props.folderId])) {
 			if (data.autoRead && (state.unread || state.badge > 0)) {
-				BDFDB.TimeUtils.clear(this.folderReads[state.folderId]);
-				this.folderReads[state.folderId] = BDFDB.TimeUtils.timeout(() => {
-					BDFDB.GuildUtils.markAsRead(instance.props.guildIds);
+				BDFDB.TimeUtils.clear(this.folderReads[e.instance.props.folderId]);
+				this.folderReads[e.instance.props.folderId] = BDFDB.TimeUtils.timeout(() => {
+					BDFDB.GuildUtils.markAsRead(e.instance.props.guildIds);
 				}, 10000);
 			}
-			if (state.expanded) BDFDB.TimeUtils.timeout(() => {
-				for (let guildid of instance.props.guildIds) this.updateGuildInFolderContent(state.folderId, guildid);
-				if (this.clickedFolder == state.folderId && BDFDB.DataUtils.get(this, "settings", "closeOtherFolders")) for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (openFolderId != state.folderId) {
-					BDFDB.DOMUtils.remove(this.foldercontent.querySelectorAll(`${BDFDB.dotCN.guildouter}[folderid="${openFolderId}"]`));
-					BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
-				}
-				this.addSeparator(state.folderId);
-				this.toggleFolderContent();
+			BDFDB.ReactUtils.forceUpdate(this.FolderGuildContent);
+		}
+		this.folderStates[e.instance.props.folderId] = state;
+		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ListItemTooltip"});
+		if (index > -1) {
+			let isgradient3 = data.color3 && BDFDB.ObjectUtils.is(data.color3);
+			let isgradient4 = data.color4 && BDFDB.ObjectUtils.is(data.color4);
+			let bgColor = data.color3 ? (!isgradient3 ? BDFDB.ColorUtils.convert(data.color3, "RGBA") : BDFDB.ColorUtils.createGradient(data.color3)) : "";
+			let fontColor = data.color4 ? (!isgradient4 ? BDFDB.ColorUtils.convert(data.color4, "RGBA") : BDFDB.ColorUtils.createGradient(data.color4)) : "";
+			let folderName = e.instance.props.folderName || BDFDB.FolderUtils.getDefaultName(e.instance.props.folderId);
+			children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+				text: isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.StringUtils.htmlEscape(folderName)}</span>` : folderName,
+				tooltipConfig: {
+					type: "right",
+					list: true,
+					html: isgradient4,
+					style: `${isgradient4 ? '' : `color: ${fontColor} !important; `}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.ColorUtils.convert(data.color3[0], "RGBA") : bgColor} !important;`
+				},
+				children: children[index].props.children
 			});
-			else BDFDB.TimeUtils.timeout(() => {
-				BDFDB.DOMUtils.remove(this.foldercontent.querySelectorAll(`${BDFDB.dotCN.guildouter}[folderid="${state.folderId}"]`));
-				if (BDFDB.DOMUtils.containsClass(this.foldercontentguilds.firstElementChild, "folderseparatorouter")) BDFDB.DOMUtils.remove(this.foldercontentguilds.firstElementChild);
-				this.toggleFolderContent();
-			}, BDFDB.LibraryModules.FolderUtils.getExpandedFolders().size > 0 ? 0 : 300);
-			this.changeFolder(state.folderId, wrapper);
 		}
-		this.folderStates[state.folderId] = state;
+		if (e.instance.props.expanded || data.useCloseIcon) {
+			let folderIcons = this.loadAllIcons(), icontype = e.instance.props.expanded ? "openicon" : "closedicon";
+			let icon = folderIcons[data.iconID] ? (!folderIcons[data.iconID].customID ? this.createBase64SVG(folderIcons[data.iconID][icontype], data.color1, data.color2) : folderIcons[data.iconID][icontype]) : null;
+			if (icon) {
+				[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "FolderIcon"});
+				if (index > -1) children[index] = BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.disCN.guildfoldericonwrapper,
+					style: {background: `url(${icon}) center/cover no-repeat`}
+				});
+			}
+		}
+		if (BDFDB.DataUtils.get(this, "settings", "showCountBadge")) {
+			[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"BlobMask"});
+			if (index > -1) {
+				children[index].props.upperLeftBadgeWidth = BDFDB.LibraryComponents.BadgeComponents.getBadgeWidthForValue(e.instance.props.guildIds.length);
+				children[index].props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.NumberBadge, {
+					count: e.instance.props.guildIds.length,
+					style: {backgroundColor: BDFDB.DiscordConstants.Colors.BRAND}
+				});
+			}
+		}
 	}
 
-	processGuild (instance, wrapper, returnvalue, methodnames) {
-		if (!this.foldercontentguilds) return;
-		if (instance.props.guild) {
-			if (methodnames.includes("componentDidMount")) {
-				BDFDB.ListenerUtils.add(this, wrapper, "click", () => {BDFDB.TimeUtils.timeout(() => {
-					let folder = this.getFolderOfGuildId(instance.props.guild.id);
-					let folderid = folder ? folder.folderId : null;
-					let settings = BDFDB.DataUtils.get(this, "settings");
-					if (settings.closeAllFolders) for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (!folderid || openFolderId != folderid || !settings.forceOpenFolder) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
-					else if (folderid && settings.closeTheFolder && !settings.forceOpenFolder && BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folderid)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folderid);
-					
-					if (settings.closeAllFolders) for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
-					else if (settings.closeTheFolder) {
-						let folder = this.getFolderOfGuildId(instance.props.guild.id);
-						if (folder && BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folder.folderId)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folder.folderId);
-					}
-				})});
+	processGuild (e) {
+		let folder = BDFDB.GuildUtils.getFolder(e.instance.props.guild.id);
+		if (folder) {
+			let state = this.getState(e.instance);
+			if (this.guildStates[e.instance.props.guild.id] && !BDFDB.equals(state, this.guildStates[e.instance.props.guild.id])) {
+				BDFDB.ReactUtils.forceUpdate(this.FolderGuildContent);
 			}
-			if (methodnames.includes("componentDidUpdate")) {
-				let folder = this.getFolderOfGuildId(instance.props.guild.id);
-				if (folder) {
-					let state = this.getState(instance);
-					if (!BDFDB.equals(state, this.guildStates[instance.props.guild.id])) this.updateGuildInFolderContent(folder.folderId, instance.props.guild.id);
-				}
-			}
+			this.guildStates[e.instance.props.guild.id] = state;
 		}
+		if (e.node) BDFDB.ListenerUtils.add(this, e.node, "click", () => {BDFDB.TimeUtils.timeout(() => {
+			let folder = BDFDB.GuildUtils.getFolder(e.instance.props.guild.id);
+			let settings = BDFDB.DataUtils.get(this, "settings");
+			if (settings.closeAllFolders) for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (!folder || openFolderId != folder.folderId || !settings.forceOpenFolder) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
+			else if (folder && settings.closeTheFolder && !settings.forceOpenFolder && BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folder.folderId)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folder.folderId);
+		})});
 	}
 	
-	processGuildFolderSettingsModal (instance, wrapper, returnvalue) {
-		if (instance.props.folderId) {
-			let folderid = instance.props.folderId;
-			let data = this.getFolderConfig(folderid);
-			wrapper = wrapper.parentElement;
-			let root = wrapper.querySelector(BDFDB.dotCN.layermodal);
-			let header = wrapper.querySelector(BDFDB.dotCN.modalheader);
-			let form = wrapper.querySelector(BDFDB.dotCN.modalsubinner + " form");
-			BDFDB.DOMUtils.addClass(root, "BDFDB-modal", `${this.name}-modal`, BDFDB.disCN.layermodalmedium);
+	processGuildFolderSettingsModal (e) {
+		if (e.node) {
+			let root = e.node.parentElement.querySelector(BDFDB.dotCN.layermodal);
+			BDFDB.DOMUtils.addClass(root, BDFDB.disCN.layermodalmedium, BDFDB.disCN.modalwrapper, `${this.name}-modal`);
 			BDFDB.DOMUtils.removeClass(root, BDFDB.disCN.layermodalsmall);
-			if (header) {
-				BDFDB.TimeUtils.clear(this.settingsModalWait);
-				header.parentElement.insertBefore(BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.marginbottom8 + BDFDB.disCN.tabbarcontainer}" style="flex: 0 0 auto; padding-right: 12px;"><div class="${BDFDB.disCNS.tabbar + BDFDB.disCN.tabbartop}"><div tab="folder" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbaritem}">${this.labels.modal_tabheader1_text}</div><div tab="icon" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbaritem}">${this.labels.modal_tabheader2_text}</div><div tab="tooltip" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbaritem}">${this.labels.modal_tabheader3_text}</div><div tab="custom" class="${BDFDB.disCNS.settingsitem + BDFDB.disCN.tabbaritem}">${this.labels.modal_tabheader4_text}</div></div></div>`), header.nextElementSibling);
+		}
+		if (e.returnvalue) {
+			let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(e.instance.props.folderId);
+			let data = this.getFolderConfig(e.instance.props.folderId);
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "Header"});
+			if (index > -1) {
+				children[index].props.className = BDFDB.DOMUtils.formatClassName(children[index].props.className, BDFDB.disCN.modalheaderhassibling),
+				children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+					grow: 0,
+					shrink: 0,
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+						className: BDFDB.disCN.tabbarcontainer,
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar, {
+							className: BDFDB.disCN.tabbar,
+							itemClassName: BDFDB.disCN.tabbaritem,
+							type: BDFDB.LibraryComponents.TabBar.Types.TOP,
+							items: [
+								{value: this.labels.modal_tabheader1_text},
+								{value: this.labels.modal_tabheader2_text},
+								{value: this.labels.modal_tabheader3_text},
+								{value: this.labels.modal_tabheader4_text}
+							],
+							onItemSelect: (value, instance) => {
+								let tabContentInstances = BDFDB.ReactUtils.findOwner(e.instance, {name:"BDFDB_ModalTabContent", all:true, unlimited:true});
+								for (let ins of tabContentInstances) {
+									if (ins.props.tab == value) ins.props.open = true;
+									else delete ins.props.open;
+								}
+								BDFDB.ReactUtils.forceUpdate(tabContentInstances);
+							}
+						})
+					})
+				}));
 			}
-			if (root && form) {
-				form.setAttribute("tab", "folder");
-				BDFDB.DOMUtils.addClass(form, "tab-content", BDFDB.disCN.marginbottom8);
-				for (let child of form.childNodes) if (form.firstElementChild != child) BDFDB.DOMUtils.hide(child);
-				form.appendChild(BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.marginbottom20}"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCN.h5defaultmargin}">${this.labels.modal_iconpicker_text}</h5><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap} icons" style="flex: 1 1 auto;"></div></div>`));
-				form.appendChild(BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="width: calc(100% - 10px);"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.labels.modal_usecloseicon_text}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}" id="input-usecloseicon"></div></div>`));
-				form.parentElement.appendChild(BDFDB.DOMUtils.create(`<div tab="icon" class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8} tab-content" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.marginbottom20}"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCN.h5defaultmargin}">${this.labels.modal_colorpicker1_text}</h5><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap} swatches" style="flex: 1 1 auto;"></div></div><div class="${BDFDB.disCN.marginbottom20}"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCN.h5defaultmargin}">${this.labels.modal_colorpicker2_text}</h5><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap} swatches" style="flex: 1 1 auto;"></div></div></div>`));
-				form.parentElement.appendChild(BDFDB.DOMUtils.create(`<div tab="tooltip" class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8} tab-content" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstart + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.marginbottom20}"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCN.h5defaultmargin}">${this.labels.modal_colorpicker3_text}</h5><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap} swatches" style="flex: 1 1 auto;"></div></div><div class="${BDFDB.disCN.marginbottom20}"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCN.h5defaultmargin}">${this.labels.modal_colorpicker4_text}</h5><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap} swatches" style="flex: 1 1 auto;"></div></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="width: calc(100% - 10px);"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.labels.modal_copytooltipcolor_text}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}" id="input-copytooltipcolor"></div></div></div>`));
-				form.parentElement.appendChild(BDFDB.DOMUtils.create(`<div tab="custom" class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8} tab-content" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.marginbottom20}"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCN.h5defaultmargin}">${this.labels.modal_customopen_text}</h5><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" option="open" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.titlesize16}" placeholder="Url or Filepath"></div><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} file-navigator" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div><input type="file" option="open" accept="image/*" style="display:none!important;"></button></div></div><div class="${BDFDB.disCN.marginbottom20}"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCN.h5defaultmargin}">${this.labels.modal_customclosed_text}</h5><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.inputwrapper + BDFDB.disCNS.vertical + BDFDB.disCNS.flex2 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><input type="text" option="closed" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.titlesize16}" placeholder="Url or Filepath"></div><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} file-navigator" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div><input type="file" option="closed" accept="image/*" style="display:none!important;"></button></div></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><h5 class="${BDFDB.disCNS.h5 + BDFDB.disCN.h5defaultmargin}">${this.labels.modal_custompreview_text}</h5></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifycenter + BDFDB.disCNS.aligncenter + BDFDB.disCN.nowrap}" style="flex: 1 1 auto;"><div class="ui-icon-picker-icon preview nopic open"><div class="ui-picker-inner"></div></div><div class="ui-icon-picker-icon preview nopic closed" style="margin-left: 25px; margin-right: 25px;"><div class="ui-picker-inner"></div></div><div class="ui-icon-picker-icon preview nopic switching"><div class="ui-picker-inner"></div></div></div><button type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-add btn-addcustom" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div></div>`));
-				
-				let usecloseiconinput = root.querySelector("#input-usecloseicon");
-				let copytooltipcolorinput = root.querySelector("#input-copytooltipcolor");
-				
-				usecloseiconinput.checked = data.useCloseIcon;
-				copytooltipcolorinput.checked = data.copyTooltipColor;
-				this.setIcons(form, data.iconID);
-				BDFDB.setColorSwatches(root, data.color1);
-				BDFDB.setColorSwatches(root, data.color2);
-				BDFDB.setColorSwatches(root, data.color3);
-				BDFDB.setColorSwatches(root, data.color4);
+			[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "Content"});
+			if (index > -1) children[index].props.children = [
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+					tab: this.labels.modal_tabheader1_text,
+					open: true,
+					children: [
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+							title: BDFDB.LanguageUtils.LanguageStrings.GUILD_FOLDER_NAME,
+							className: BDFDB.disCN.marginbottom20,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+								inputClassName: "input-foldername",
+								value: folder.folderName,
+								placeholder: folder.folderName || BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER,
+								autoFocus: true
+							})
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+							title: this.labels.modal_iconpicker_text,
+							className: BDFDB.disCN.marginbottom20,
+							children: BDFDB.ReactUtils.createElement(this.FolderIconPickerComponent, {
+								selectedIcon: data.iconID
+							})
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+							type: "Switch",
+							className: BDFDB.disCN.marginbottom20 + " input-usecloseicon",
+							label: this.labels.modal_usecloseicon_text,
+							value: data.useCloseIcon
+						})
+					]
+				}),
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+					tab: this.labels.modal_tabheader2_text,
+					children: [
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+							title: this.labels.modal_colorpicker1_text,
+							className: BDFDB.disCN.marginbottom20,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+								color: data.color1,
+								defaultFallback: !data.color1 && !data.swapColors,
+								number: 1
+							})
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+							title: this.labels.modal_colorpicker2_text,
+							className: BDFDB.disCN.marginbottom20,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+								color: data.color2,
+								defaultFallback: !data.color2 && data.swapColors,
+								number: 2
+							})
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+							type: "Switch",
+							className: BDFDB.disCN.marginbottom20 + " input-swapcolors",
+							label: this.labels.modal_swapcolor_text,
+							value: data.swapColors
+						})
+					]
+				}),
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+					tab: this.labels.modal_tabheader3_text,
+					children: [
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+							title: this.labels.modal_colorpicker3_text,
+							className: BDFDB.disCN.marginbottom20,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+								color: data.color3,
+								number: 3
+							})
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+							title: this.labels.modal_colorpicker4_text,
+							className: BDFDB.disCN.marginbottom20,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+								color: data.color4,
+								number: 4
+							})
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+							type: "Switch",
+							className: BDFDB.disCN.marginbottom20 + " input-copytooltipcolor",
+							label: this.labels.modal_copytooltipcolor_text,
+							value: data.copyTooltipColor
+						})
+					]
+				}),
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+					tab: this.labels.modal_tabheader4_text,
+					children: BDFDB.ReactUtils.createElement(this.FolderIconCustomPreviewComponent, {})
+				})
+			];
+			[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "Footer"});
+			if (index > -1) children[index].props.children = [
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+					children: BDFDB.LanguageUtils.LanguageStrings.SAVE,
+					onClick: event => {
+						let olddata = Object.assign({}, data);
+						
+						let root = BDFDB.ReactUtils.findDOMNode(e.instance).parentElement.querySelector(BDFDB.dotCN.layermodal);
+						
+						data.iconID = root.querySelector(BDFDB.dotCN._serverfoldersiconswatch + BDFDB.dotCN._serverfoldersiconswatchselected).getAttribute("iconID");
 
-				BDFDB.ListenerUtils.addToChildren(root, "change", "input[type='file'][option]", e => {
-					let input = e.currentTarget, file = input.files[0];
-					if (file) BDFDB.TimeUtils.timeout(() => {this.fetchCustomIcon(root, input.getAttribute("option"))});
-				});
-				BDFDB.ListenerUtils.addToChildren(root, "keyup", "input[type='text'][option]", e => {
-					if (e.which == 13) this.fetchCustomIcon(root, e.currentTarget.getAttribute("option"));
-				});
-				BDFDB.ListenerUtils.addToChildren(root, "click", ".btn-addcustom", () => {
-					this.saveCustomIcon(root);
-				});
-				BDFDB.ListenerUtils.addToChildren(root, "click", BDFDB.dotCNS.modalfooter + BDFDB.dotCN.button, e => {
-					var olddata = Object.assign({}, data);
-					var selectedIcon = root.querySelector(".ui-icon-picker-icon.selected");
-					data.iconID = selectedIcon.getAttribute("value");
-
-					data.useCloseIcon = usecloseiconinput.checked;
-					data.copyTooltipColor = copytooltipcolorinput.checked;
-					
-					data.color1 = BDFDB.ColorUtils.getSwatchColor(root, 1);
-					data.color2 = BDFDB.ColorUtils.getSwatchColor(root, 2);
-					data.color3 = BDFDB.ColorUtils.getSwatchColor(root, 3);
-					data.color4 = BDFDB.ColorUtils.getSwatchColor(root, 4);
-
-					if (!BDFDB.equals(olddata, data)) {
-						BDFDB.DataUtils.save(data, this, "folders", folderid);
-						instance.handleColorChange(data.color1 ? BDFDB.ColorUtils.convert(data.color1 && BDFDB.ObjectUtils.is(data.color1) ? data.color1[Object.keys(data.color1)[0]] : data.color1, "INT") : null);
-						this.changeFolder(folderid);
+						data.useCloseIcon = root.querySelector(".input-usecloseicon " + BDFDB.dotCN.switchinner).checked;
+						data.swapColors = root.querySelector(".input-swapcolors " + BDFDB.dotCN.switchinner).checked;
+						data.copyTooltipColor = root.querySelector(".input-copytooltipcolor " + BDFDB.dotCN.switchinner).checked;
+						
+						data.color1 = BDFDB.ColorUtils.getSwatchColor(root, 1);
+						data.color2 = BDFDB.ColorUtils.getSwatchColor(root, 2);
+						data.color3 = BDFDB.ColorUtils.getSwatchColor(root, 3);
+						data.color4 = BDFDB.ColorUtils.getSwatchColor(root, 4);
+						
+						let nativecolor = data.swapColors ? "color2" : "color1";
+						this.updateFolder({
+							folderId: e.instance.props.folderId,
+							folderName: root.querySelector(".input-foldername").value,
+							folderColor: data[nativecolor] ? BDFDB.ColorUtils.convert(data[nativecolor] && BDFDB.ObjectUtils.is(data[nativecolor]) ? data[nativecolor][Object.keys(data[nativecolor])[0]] : data[nativecolor], "INT") : null
+						});
+						if (!BDFDB.equals(olddata, data)) {
+							BDFDB.DataUtils.save(data, this, "folders", e.instance.props.folderId);
+							BDFDB.ModuleUtils.forceAllUpdates(this, "GuildFolder");
+							BDFDB.ReactUtils.forceUpdate(this.FolderGuildContent);
+						}
+						e.instance.close();
 					}
-				});
-			}
-			BDFDB.initElements(wrapper);
+				})
+			]
 		}
-	}
-
-	processStandardSidebarView (instance, wrapper, returnvalue) {
-		if (!this.foldercontent) return;
-		if (this.SettingsUpdated && this.foldercontent) {this.SettingsUpdated;
-			this.folderStates = {};
-			BDFDB.ModuleUtils.forceAllUpdates(this, "GuildFolder");
-		}
-		this.updateFolderContentColor();
-	}
-	
-	updateFolderContentColor (nativecontent = document.querySelector(BDFDB.dotCN.guildswrapper)) {
-		if (!nativecontent || !this.foldercontent) return;
-		BDFDB.toggleClass(this.foldercontent, BDFDB.disCN.themedark, BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight && BDFDB.containsClass(nativecontent, BDFDB.disCN.themedark));
 	}
 
 	loadAllIcons () {
 		let icons = {};
 		this.folderIcons.forEach((array,i) => {icons[i] = {"openicon":array.openicon,"closedicon":array.closedicon,"customID":null};});
-		Object.assign(icons, BDFDB.DataUtils.load(this, "customicons"));
+		let customicons = BDFDB.DataUtils.load(this, "customicons");
+		for (let id in customicons) icons[id] = Object.assign({customID: id}, customicons[id]);
 		return icons;
-	}
-
-	fetchCustomIcon (modal, type) {
-		let successFetchIcon;
-		let url = modal.querySelector("input[type='text'][option='" + type + "']").value;
-		if (url.indexOf("http") == 0) {
-			BDFDB.LibraryRequires.request(url, (error, response, result) => {
-				if (response) {
-					let type = response.headers["content-type"];
-					if (type && type.indexOf("image") > -1) {
-						successFetchIcon();
-						return;
-					}
-				}
-				BDFDB.NotificationUtils.toast("Use a valid direct link to an image source. They usually end on something like .png, .jpg or .gif.", {type:"danger"});
-			});
-		}
-		else {
-			if (BDFDB.LibraryRequires.fs.existsSync(url)) {
-				BDFDB.LibraryRequires.fs.readFile(url, (error, response) => {
-					if (!error) {
-						url = `data:image/png;base64,${response.toString("base64")}`;
-						successFetchIcon();
-					}
-				});
-			}
-			else {
-				BDFDB.NotificationUtils.toast("Could not fetch file. Please make sure the file exists.", {type:"danger"});
-			}
-		}
-
-		successFetchIcon = () => {
-			let iconpreview = modal.querySelector(".ui-icon-picker-icon.preview." + type);
-			let iconpreviewinner = iconpreview.querySelector(".ui-picker-inner");
-			BDFDB.DOMUtils.removeClass(iconpreview, "nopic");
-			iconpreview.url = url;
-			iconpreviewinner.style.setProperty("background-image", `url(${url})`);
-
-			let iconpreviewopen = modal.querySelector(".ui-icon-picker-icon.preview.open");
-			let iconpreviewclosed = modal.querySelector(".ui-icon-picker-icon.preview.closed");
-			if (!BDFDB.DOMUtils.containsClass(iconpreviewopen, "nopic") && !BDFDB.DOMUtils.containsClass(iconpreviewclosed, "nopic")) {
-				let iconpreviewswitching = modal.querySelector(".ui-icon-picker-icon.preview.switching");
-
-				let iconpreviewopenimage = iconpreviewopen.querySelector(".ui-picker-inner").style.getPropertyValue("background-image");
-				let iconpreviewclosedimage = iconpreviewclosed.querySelector(".ui-picker-inner").style.getPropertyValue("background-image");
-				let iconpreviewswitchinginner = iconpreviewswitching.querySelector(".ui-picker-inner");
-
-				BDFDB.DOMUtils.removeClass(iconpreviewswitching, "nopic");
-				iconpreviewswitchinginner.style.setProperty("background-image", iconpreviewopenimage);
-				let switching = true;
-				iconpreviewswitching.switchInterval = BDFDB.TimeUtils.interval(() => {
-					switching = !switching;
-					iconpreviewswitchinginner.style.setProperty("background-image", switching ? iconpreviewopenimage : iconpreviewclosedimage);
-				},1000);
-			}
-		};
-	}
-
-	saveCustomIcon (modal) {
-		let iconpreviewopen = modal.querySelector(".ui-icon-picker-icon.preview.open");
-		let iconpreviewclosed = modal.querySelector(".ui-icon-picker-icon.preview.closed");
-		let iconpreviewswitching = modal.querySelector(".ui-icon-picker-icon.preview.switching");
-		if (!BDFDB.DOMUtils.containsClass(iconpreviewopen, "nopic") && !BDFDB.DOMUtils.containsClass(iconpreviewclosed, "nopic") && !BDFDB.DOMUtils.containsClass(iconpreviewswitching, "nopic")) {
-			let customID = this.generateID("customicon");
-			BDFDB.DataUtils.save({"openicon":iconpreviewopen.url,"closedicon":iconpreviewclosed.url,customID}, this, "customicons", customID);
-			modal.querySelectorAll("input[type='text'][option]").forEach((input) => {input.value = "";});
-
-			let iconpreviewopeninner = iconpreviewopen.querySelector(".ui-picker-inner");
-			let iconpreviewclosedinner = iconpreviewclosed.querySelector(".ui-picker-inner");
-			let iconpreviewswitchinginner = iconpreviewswitching.querySelector(".ui-picker-inner");
-
-			BDFDB.DOMUtils.addClass(iconpreviewopen, "nopic");
-			iconpreviewopeninner.style.removeProperty("background-image");
-			BDFDB.DOMUtils.addClass(iconpreviewclosed, "nopic");
-			iconpreviewclosedinner.style.removeProperty("background-image");
-			BDFDB.DOMUtils.addClass(iconpreviewswitching, "nopic");
-			iconpreviewswitchinginner.style.removeProperty("background-image");
-			BDFDB.TimeUtils.clear(iconpreviewswitching.switchInterval);
-			BDFDB.NotificationUtils.toast(`Custom Icon was added to selection.`, {type:"success"});
-			this.setIcons(modal, modal.querySelector(".ui-icon-picker-icon.selected").getAttribute("value"));
-		}
-		else BDFDB.NotificationUtils.toast(`Add an image for the open and the closed icon.`, {type:"danger"});
 	}
 
 	generateID (prefix) {
@@ -674,57 +866,6 @@ class ServerFolders {
 		}
 	}
 
-	setIcons (modal, selection) {
-		let wrapper = modal.querySelector(".icons");
-		if (!wrapper) return;
-		BDFDB.DOMUtils.remove(wrapper.childNodes);
-
-		let folderIcons = this.loadAllIcons();
-		for (let id in folderIcons) if (!folderIcons[id].customID) {
-			folderIcons[id].openicon = this.createBase64SVG(folderIcons[id].openicon);
-			folderIcons[id].closedicon = this.createBase64SVG(folderIcons[id].closedicon);
-		}
-
-		wrapper.appendChild(BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.margintop4}" style="flex: 1 1 auto;"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifycenter + BDFDB.disCNS.alignstretch + BDFDB.disCN.wrap} ui-icon-picker-row" style="flex: 1 1 auto; display: flex; flex-wrap: wrap; overflow: visible !important;"><div class="ui-icon-picker-icon" value="-1"><div class="ui-picker-inner"><svg aria-hidden="false" width="50" height="50" viewBox="-2 -1 25 25" style="color: black;"><path fill="currentColor" d="M20 7H12L10.553 5.106C10.214 4.428 9.521 4 8.764 4H3C2.447 4 2 4.447 2 5V19C2 20.104 2.895 21 4 21H20C21.104 21 22 20.104 22 19V9C22 7.896 21.104 7 20 7Z"></path></svg></div></div>${Object.getOwnPropertyNames(folderIcons).map(id => `<div class="ui-icon-picker-icon${folderIcons[id].customID ? ' custom' : ''}" value="${id}"><div class="ui-picker-inner" style="background: url(${folderIcons[id].closedicon}) center/cover no-repeat;"></div>${folderIcons[id].customID ? '<div value="' + id + '" class="' + BDFDB.disCN.hovercardbutton + '"></div>' : ''}</div>`).join("")}</div></div>`));
-
-		setIcon(wrapper.querySelector(`.ui-icon-picker-icon[value="${folderIcons[selection] ? selection : -1}"]`), false, true);
-
-		BDFDB.ListenerUtils.addToChildren(wrapper, "click", ".ui-icon-picker-icon", e => {
-			if (BDFDB.DOMUtils.containsClass(e.target, BDFDB.disCN.hovercardbutton)) return;
-			setIcon(wrapper.querySelector(".ui-icon-picker-icon.selected"), false, false);
-			setIcon(e.currentTarget, true, true);
-		});
-		BDFDB.ListenerUtils.addToChildren(wrapper, "click", BDFDB.dotCN.hovercardbutton, e => {
-			if (BDFDB.DOMUtils.containsClass(e.currentTarget.parentElement, "selected")) return;
-			BDFDB.DataUtils.remove(this, "customicons", e.currentTarget.getAttribute("value"));
-			e.currentTarget.parentElement.remove();
-			BDFDB.NotificationUtils.toast(`Custom Icon was deleted.`, {type:"success"});
-		});
-		BDFDB.ListenerUtils.addToChildren(wrapper, "mouseenter", ".ui-icon-picker-icon", e => {
-			setIcon(e.currentTarget, true);
-			if (e.currentTarget.getAttribute("value") == -1) BDFDB.TooltipUtils.create(e.currentTarget, BDFDB.LanguageUtils.LanguageStrings.DEFAULT, {type:"top"});
-		});
-		BDFDB.ListenerUtils.addToChildren(wrapper, "mouseleave", ".ui-icon-picker-icon", e => {
-			setIcon(e.currentTarget, false);
-		});
-
-		function setIcon (icon, hover, enable) {
-			if (!icon) return;
-			let id = icon.getAttribute("value");
-			if (enable != undefined) BDFDB.DOMUtils.toggleClass(icon, "selected", enable);
-			if (hover) {
-				if (folderIcons[id]) icon.querySelector(".ui-picker-inner").style.setProperty("background-image", `url(${folderIcons[id].openicon})`);
-				if (BDFDB.DOMUtils.containsClass(icon, "selected")) icon.style.setProperty("background-color", "rgb(255,255,255,0.2)");
-				else icon.style.setProperty("background-color", "rgb(255,255,255,0.1)");
-			}
-			else {
-				if (folderIcons[id]) icon.querySelector(".ui-picker-inner").style.setProperty("background-image", `url(${folderIcons[id].closedicon})`);
-				if (BDFDB.DOMUtils.containsClass(icon, "selected")) icon.style.setProperty("background-color", "rgb(255,255,255,0.2)");
-				else icon.style.removeProperty("background-color");
-			}
-		}
-	}
-
 	getState (instance) {
 		let state = {};
 		for (let key in instance.props) {
@@ -734,123 +875,27 @@ class ServerFolders {
 		return state;
 	}
 	
-	getFolders () {
-		let found = [], folders = Object.assign({}, BDFDB.LibraryModules.FolderStore.guildFolders);
-		for (let pos in folders) if (folders[pos].folderId) found.push(Object.assign({}, folders[pos]));
-		return found;
-	}
-	
-	getFolderOfGuildId (guildid) {
-		if (!guildid) return null;
-		for (let folder of BDFDB.LibraryModules.FolderStore.guildFolders) if (folder.folderId && folder.guildIds.includes(guildid)) return folder;
-	}
-	
-	getFolderConfig (folderid) {
-		let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(folderid) || {};
-		let data = BDFDB.DataUtils.load(this, "folders", folderid) || {
+	getFolderConfig (folderId) {
+		let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(folderId) || {};
+		let data = BDFDB.DataUtils.load(this, "folders", folderId) || {
 			iconID: 			"-1",
 			muteFolder: 		false,
 			autoRead: 			false,
-			copyTooltipColor: 	false,
 			useCloseIcon: 		true,
+			swapColors: 		false,
+			copyTooltipColor: 	false,
 			color1: 			null,
 			color2: 			["255","255","255"],
 			color3: 			null,
 			color4: 			null
 		};
-		if (!data.color1) data.color1 = BDFDB.ColorUtils.convert(folder.folderColor, "RGBCOMP") || ["0","0","0"];
-		else if (folder.folderColor && !BDFDB.ColorUtils.compare(folder.folderColor, BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[Object.keys(data.color1)[0]] : data.color1, "INT"))) {
-			data.color1 = BDFDB.ColorUtils.convert(folder.folderColor, "RGBCOMP");
-			BDFDB.DataUtils.save(data, this, "folders", folderid);
+		let nativecolor = data.swapColors ? "color2" : "color1";
+		if (!data[nativecolor]) data[nativecolor] = BDFDB.ColorUtils.convert(folder.folderColor, "RGBCOMP");
+		else if (folder.folderColor && !BDFDB.ColorUtils.compare(folder.folderColor, BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data[nativecolor]) ? data[nativecolor][Object.keys(data[nativecolor])[0]] : data[nativecolor], "INT"))) {
+			data[nativecolor] = BDFDB.ColorUtils.convert(folder.folderColor, "RGBCOMP");
+			BDFDB.DataUtils.save(data, this, "folders", folderId);
 		}
 		return data;
-	}
-
-	toggleFolderContent (forceOpenClose) {
-		if (!this.foldercontentguilds) return;
-		forceOpenClose = forceOpenClose === undefined ? BDFDB.LibraryModules.FolderUtils.getExpandedFolders().size > 0 : forceOpenClose;
-		BDFDB.DOMUtils.toggleClass(this.foldercontent, "foldercontentopen", forceOpenClose);
-		BDFDB.DOMUtils.toggleClass(this.foldercontent, "foldercontentclosed", !forceOpenClose);
-		BDFDB.DOMUtils.toggleClass(document.body, "foldercontentopened", forceOpenClose);
-	}
-	
-	changeFolder (folderid, wrapper) {
-		wrapper = wrapper || BDFDB.FolderUtils.getDiv(folderid);
-		if (wrapper) {
-			let folderinner = wrapper.querySelector(`${BDFDB.dotCN.guildfolderexpandendbackground} ~ ${BDFDB.dotCNS.guildouter + BDFDB.dotCN.guildinner}`);
-			let foldericon = wrapper.querySelector(BDFDB.dotCN.guildfolder);
-			if (folderinner && foldericon) {
-				let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(folderid);
-				let data = this.getFolderConfig(folderid);
-				
-				BDFDB.DOMUtils.remove(folderinner.querySelectorAll(`${BDFDB.dotCN.guildupperbadge}.count`));
-				foldericon.parentElement.parentElement.style.removeProperty("-webkit-mask");
-				
-				if (BDFDB.DataUtils.get(this, "settings", "showCountBadge")) {
-					folderinner.appendChild(BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.guildupperbadge} count" style="opacity: 1; transform: translate(0px, 0px);"><div class="${BDFDB.disCN.guildbadgenumberbadge}" style="background-color: rgb(114, 137, 218); width: ${folder.guildIds.length > 99 ? 28 : (folder.guildIds.length > 9 ? 22 : 16)}px; padding-right: ${folder.guildIds.length > 99 ? 0 : (folder.guildIds.length > 9 ? 0 : 1)}px;">${folder.guildIds.length}</div></div>`));
-					let width = folder.guildIds.length > 99 ? 36 : (folder.guildIds.length > 9 ? 30 : 24);
-					foldericon.parentElement.parentElement.style.setProperty("-webkit-mask", `url(data:image/svg+xml;base64,${btoa(`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" fill="black" x="0" y="0" width="48" height="48"><path d="M ${width-7} 0 C ${width-5} 2 ${width-4} 5 ${width-4} 8 C ${width-4} ${width/1.8+3} 15 20 8 20 C 5 20 2 19 0 17 L 0 50 L 50 50 L 50 0 L 17 0 z"></path></svg>`)}) center/cover no-repeat`);
-				}
-				let icontype = BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folderid) ? "openicon" : "closedicon";
-				let folderIcons = this.loadAllIcons();
-				let icon = folderIcons[data.iconID] ? (!folderIcons[data.iconID].customID ? this.createBase64SVG(folderIcons[data.iconID][icontype], data.color1, data.color2) : folderIcons[data.iconID][icontype]) : null;
-				if (icon) foldericon.style.setProperty("background-image", `url(${icon})`, "important");
-				else foldericon.style.removeProperty("background-image");
-				
-				folderinner.removeEventListener("mouseenter", folderinner.ServerFoldersTooltipListener);
-				folderinner.removeEventListener("mousedown", folderinner.ServerFoldersClickListener);
-				if (data.color3 || data.color4) {
-					var isgradient3 = data.color3 && BDFDB.ObjectUtils.is(data.color3);
-					var isgradient4 = data.color4 && BDFDB.ObjectUtils.is(data.color4);
-					var bgColor = data.color3 ? (!isgradient3 ? BDFDB.ColorUtils.convert(data.color3, "RGBA") : BDFDB.ColorUtils.createGradient(data.color3)) : "";
-					var fontColor = data.color4 ? (!isgradient4 ? BDFDB.ColorUtils.convert(data.color4, "RGBA") : BDFDB.ColorUtils.createGradient(data.color4)) : "";
-					var folderName = folder.folderName || BDFDB.ReactUtils.getValue(wrapper, "return.stateNode.props.defaultFolderName");
-					folderinner.ServerFoldersTooltipListener = () => {
-						BDFDB.TooltipUtils.create(folderinner, isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.StringUtils.htmlEscape(folderName)}</span>` : folderName, {type:"right", selector:"ServerFolders-tooltip", style:`${isgradient4 ? '' : `color: ${fontColor} !important; `}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.ColorUtils.convert(data.color3[0], "RGBA") : bgColor} !important;`, html:isgradient3, hide:true});
-					};
-					folderinner.addEventListener("mouseenter", folderinner.ServerFoldersTooltipListener);
-				}
-				folderinner.ServerFoldersClickListener = () => {
-					BDFDB.TimeUtils.clear(this.clickedFolderTimeout);
-					this.clickedFolder = folderid;
-					this.clickedFolderTimeout = BDFDB.TimeUtils.timeout(() => {
-						delete this.clickedFolderTimeout;
-					}, 3000);
-				};
-				folderinner.addEventListener("mousedown", folderinner.ServerFoldersClickListener);
-			}
-		}
-	}
-
-	updateGuildInFolderContent (folderid, guildid) {
-		if (!this.foldercontentguilds || !folderid || !guildid) return;
-		let guild = BDFDB.LibraryModules.GuildStore.getGuild(guildid);
-		let oldCopy = this.foldercontentguilds.querySelector(`.copy[guildid="${guildid}"]`);
-		if (guild) {
-			let newCopy = this.createCopyOfServer(folderid, guildid);
-			if (newCopy) {
-				if (oldCopy) this.foldercontentguilds.insertBefore(newCopy, oldCopy);
-				else {
-					let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(folderid);
-					let position = folder.guildIds.indexOf(guildid);
-					let siblingId = position > -1 ? folder.guildIds[folder.guildIds.indexOf(guildid) + 1] : null; 
-					let insertNode = siblingId ? this.foldercontentguilds.querySelector(`[guildid="${siblingId}"][folderid="${folderid}"]`) : null;
-					if (!insertNode) {
-						let sameFolderEles = this.foldercontentguilds.querySelectorAll(`[folderid="${folderid}"]`);
-						insertNode = sameFolderEles.length > 0 ? sameFolderEles[sameFolderEles.length - 1].nextSibling : null;
-					}
-					this.foldercontentguilds.insertBefore(newCopy, insertNode);
-				}
-				if (BDFDB.DOMUtils.containsClass(this.foldercontentguilds.firstElementChild, "folderseparatorouter")) BDFDB.DOMUtils.remove(this.foldercontentguilds.firstElementChild);
-			}
-		}
-		BDFDB.DOMUtils.remove(oldCopy);
-	}
-
-	addSeparator (folderid) {
-		if (!this.foldercontentguilds) return;
-		if (!this.foldercontent.querySelector(`.folderseparatorouter[folderid="${folderid}"]`) && BDFDB.DataUtils.get(this, "settings", "addSeparators")) this.foldercontentguilds.insertBefore(BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.guildouter + BDFDB.disCN._bdguildseparator} folderseparatorouter" folderid="${folderid}"><div class="${BDFDB.disCN.guildseparator} folderseparator"></div></div>`), this.foldercontentguilds.querySelectorAll(`[folderid="${folderid}"]`)[0]);
-		if (BDFDB.DOMUtils.containsClass(this.foldercontentguilds.firstElementChild, "folderseparatorouter")) BDFDB.DOMUtils.remove(this.foldercontentguilds.firstElementChild);
 	}
 
 	createBase64SVG (paths, color1 = "#000000", color2 = "#FFFFFF") {
@@ -872,326 +917,141 @@ class ServerFolders {
 		return `data:image/svg+xml;base64,${btoa(svg)}`;
 	}
 
-
-	createCopyOfServer (folderid, guildid) {
-		if (!folderid || !guildid) return;
-		let guild = BDFDB.LibraryModules.GuildStore.getGuild(guildid);
-		let guilddiv = BDFDB.GuildUtils.getDiv(guildid);
-		let props = BDFDB.ReactUtils.getValue(guilddiv, "return.stateNode.props");
-		if (!guild || !guilddiv || !props) return;
+	openFolderCreationMenu (guilds, initguildid) {
+		let targetedGuildIds = [].concat(initguildid || []);
 		
-		let guildcopy = guilddiv.cloneNode(true);
-		let guildcopyinner = guildcopy.querySelector(BDFDB.dotCN.guildcontainer);
-		let guildiconwrapper = guildcopy.querySelector(BDFDB.dotCN.guildiconwrapper);
-		let guildicon = guildcopy.querySelector(BDFDB.dotCN.guildicon);
-		let guildpillitem = guildcopy.querySelector(BDFDB.dotCN.guildpillitem);
-		if (!guildpillitem) {
-			guildpillitem = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.guildpillwrapper + BDFDB.disCN.guildpill}"><span class="${BDFDB.disCN.guildpillitem}" style="opacity: 0; height: 8px; transform: translate3d(0px, 0px, 0px);"></span></div>`);
-			guildcopy.insertBefore(guildpillitem, guildcopy.firstElementChild);
-			guildpillitem = guildpillitem.firstElementChild;
-		}
-		
-		guildcopy.setAttribute("guildid", guildid);
-		guildcopy.setAttribute("folderid", folderid);
-		
-		guildiconwrapper.style.setProperty("border-radius", props.selected ? "30%" : "50%");
-		guildiconwrapper.style.setProperty("overflow", "hidden");
-		
-		guildpillitem.style.setProperty("opacity", props.selected ? 1 : (props.unread ? 0.7 : 0));
-		guildpillitem.style.setProperty("height", props.selected ? "40px" : "8px");
-		guildpillitem.style.setProperty("transform", "translate3d(0px, 0px, 0px)");
-		
-		guildcopy.querySelector("mask").setAttribute("id", "SERVERFOLDERSCOPY" + guildid);
-		guildcopy.querySelector("mask path").setAttribute("d", "M0 0 l50 0l0 50l-50 0l0 -50Z");
-		guildcopy.querySelector("foreignObject").setAttribute("mask", "url(#SERVERFOLDERSCOPY" + guildid + ")");
-		
-		BDFDB.DOMUtils.addClass(guildcopy, "copy");
-		BDFDB.DOMUtils.show(guildcopy);
-		
-		let pillvisible = guildpillitem && guildpillitem.style.getPropertyValue("opacity") != 0;
-
-		let borderRadius = new BDFDB.LibraryModules.AnimationUtils.Value(0);
-		borderRadius
-			.interpolate({
-				inputRange: [0, 1],
-				outputRange: [50, 30]
-			})
-			.addListener((value) => {
-				guildiconwrapper.style.setProperty("border-radius", `${value.value}%`);
-			});
-
-		let pillHeight = new BDFDB.LibraryModules.AnimationUtils.Value(0);
-		pillHeight
-			.interpolate({
-				inputRange: [0, 1],
-				outputRange: [8, 20]
-			})
-			.addListener((value) => {
-				if (guildpillitem) guildpillitem.style.setProperty("height", `${value.value}px`);
-			});
-
-		let pillOpacity = new BDFDB.LibraryModules.AnimationUtils.Value(0);
-		pillOpacity
-			.interpolate({
-				inputRange: [0, 1],
-				outputRange: [0, 0.7]
-			})
-			.addListener((value) => {
-				if (guildpillitem) guildpillitem.style.setProperty("opacity", `${value.value}`);
-			});
-
-		let animate = (v) => {
-			BDFDB.LibraryModules.AnimationUtils.parallel([
-				BDFDB.LibraryModules.AnimationUtils.timing(borderRadius, {toValue: v, duration: 200}),
-				BDFDB.LibraryModules.AnimationUtils.spring(pillHeight, {toValue: v, friction: 5})
-			]).start();
-		};
-
-		let animate2 = (v) => {
-			BDFDB.LibraryModules.AnimationUtils.parallel([
-				BDFDB.LibraryModules.AnimationUtils.timing(pillOpacity, {toValue: v, duration: 200}),
-			]).start();
-		};
-		
-		guildcopyinner.addEventListener("mouseenter", () => {
-			if (!BDFDB.LibraryModules.GuildStore.getGuild(guildid)) return BDFDB.DOMUtils.remove(guildcopy);
-			let EditServers = BDFDB.BDUtils.getPlugin("EditServers");
-			let ESdata = EditServers ? EditServers.getGuildData(guildid, guildcopyinner) : null;
-			if (ESdata && (ESdata.name || ESdata.color3 || ESdata.color4)) EditServers.changeTooltip(guild, guildcopyinner, "right");
-			else {
-				let folderData = BDFDB.DataUtils.load(this, "folders", folderid) || {};
-				let color3 = folderData.copyTooltipColor ? folderData.color3 : null;
-				let color4 = folderData.copyTooltipColor ? folderData.color4 : null;
-				let isgradient3 = color3 && BDFDB.ObjectUtils.is(color3);
-				let isgradient4 = color4 && BDFDB.ObjectUtils.is(color4);
-				let bgColor = color3 ? (!isgradient3 ? BDFDB.ColorUtils.convert(color3, "RGBA") : BDFDB.ColorUtils.createGradient(color3)) : "";
-				let fontColor = color4 ? (!isgradient4 ? BDFDB.ColorUtils.convert(color4, "RGBA") : BDFDB.ColorUtils.createGradient(color4)) : "";
-				BDFDB.TooltipUtils.create(guildcopyinner, isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.StringUtils.htmlEscape(guild.name)}</span>` : guild.name, {type:"right", selector:"guild-folder-tooltip", style:`${isgradient4 ? '' : 'color: ' + fontColor + ' !important; '}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.ColorUtils.convert(color3[0], "RGBA") : bgColor} !important;`, html:isgradient3, hide:true});
-			}
-			if (guildicon && guildicon.src && guild.icon && guild.icon.startsWith("a_") && guild.features.has("ANIMATED_ICON") && guildicon.src.includes("discordapp.com/icons/")) {
-				guildicon.src = guildicon.src.replace(".webp", ".gif");
-			}
-			pillvisible = guildpillitem && guildpillitem.style.getPropertyValue("opacity") != 0;
-			if (BDFDB.LibraryModules.LastGuildStore.getGuildId() != guildid) {
-				animate(1);
-				if (!pillvisible) animate2(1);
-			}
-		});
-		guildcopyinner.addEventListener("mouseleave", () => {
-			if (guildicon && guildicon.src && guild.icon && guild.icon.startsWith("a_") && guild.features.has("ANIMATED_ICON") && guildicon.src.includes("discordapp.com/icons/") && !BDFDB.ReactUtils.getValue(BDFDB.BDUtils.getPlugin("AutoPlayGifs", true), "settings.guildList")) {
-				guildicon.src = guildicon.src.replace(".gif", ".webp");
-			}
-			if (BDFDB.LibraryModules.LastGuildStore.getGuildId() != guildid) {
-				animate(0);
-				if (!pillvisible) animate2(0);
-			}
-		});
-		guildcopy.addEventListener("click", e => {
-			BDFDB.ListenerUtils.stopEvent(e);
-			if (BDFDB.InternalData.pressedKeys.includes(46)) this.removeGuildFromFolder(folderid, guildid);
-			else {
-				BDFDB.LibraryModules.GuildUtils.transitionToGuildSync(guild.id);
-				let settings = BDFDB.DataUtils.get(this, "settings");
-				if (settings.closeAllFolders) for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (openFolderId != folderid || !settings.forceOpenFolder) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
-				else if (settings.closeTheFolder && !settings.forceOpenFolder && BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folderid)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folderid);
-			}
-		});
-		guildcopy.addEventListener("contextmenu", e => {
-			BDFDB.GuildUtils.openMenu(guilddiv, e);
-		});
-		guildcopy.addEventListener("mousedown", e => {
-			let x = e.pageX, y = e.pageY;
-			let mousemove = e2 => {
-				if (Math.sqrt((x - e2.pageX)**2) > 20 || Math.sqrt((y - e2.pageY)**2) > 20) {
-					document.removeEventListener("mousemove", mousemove);
-					document.removeEventListener("mouseup", mouseup);
-					let hovcopy = null;
-					let placeholder = BDFDB.DOMUtils.create(this.dragPlaceholderMarkup);
-					let dragpreview = this.createDragPreview(guilddiv, e);
-
-					let dragging = e3 => {
-						BDFDB.DOMUtils.remove(placeholder);
-						BDFDB.DOMUtils.hide(guildcopy);
-						this.updateDragPreview(dragpreview, e3);
-						if (this.foldercontent.contains(e3.target)) {
-							hovcopy = BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildouter, e3.target);
-							if (hovcopy && hovcopy.getAttribute("folderid") == folderid) this.foldercontentguilds.insertBefore(placeholder, hovcopy.nextSibling);
-							else hovcopy = null;
-						}
-					};
-					let releasing = e3 => {
-						document.removeEventListener("mousemove", dragging);
-						document.removeEventListener("mouseup", releasing);
-						BDFDB.DOMUtils.remove(placeholder, dragpreview);
-						BDFDB.DOMUtils.show(guildcopy);
-						let dropfolderdiv = BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildfolderwrapper, e3.target);
-						let newfolderid = dropfolderdiv ? BDFDB.FolderUtils.getId(dropfolderdiv) : null;
-						if (newfolderid) {
-							if (newfolderid != folderid) {
-								BDFDB.DOMUtils.remove(guildcopy);
-								this.addGuildToFolder(newfolderid, guildid);
+		BDFDB.ModalUtils.open(this, {
+			size: "MEDIUM",
+			header: this.labels.serversubmenu_createfolder_text,
+			subheader: "",
+			contentClassName: BDFDB.disCN.listscroller,
+			children: guilds.map((guild, i) => {
+				return [
+					i == 0 ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+						className: BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListRow, {
+						prefix: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Guild, {
+							className: BDFDB.disCN.listavatar,
+							guild: guild,
+							menu: false,
+							tooltip: false
+						}),
+						label: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
+							children: guild.name
+						}),
+						suffix: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Switch, {
+							value: targetedGuildIds.includes(guild.id),
+							onChange: value => {
+								if (value) targetedGuildIds.push(guild.id);
+								else BDFDB.ArrayUtils.remove(targetedGuildIds, guild.id, true);
 							}
-						}
-						else if (hovcopy) {
-							this.foldercontentguilds.insertBefore(guildcopy, hovcopy.nextSibling);
-							this.updateGuildPositions(folderid);
-						}
-					};
-					document.addEventListener("mousemove", dragging);
-					document.addEventListener("mouseup", releasing);
+						})
+					})
+				];
+			}).flat(10).filter(n => n),
+			buttons: [{
+				contents: BDFDB.LanguageUtils.LanguageStrings.DONE,
+				color: "BRAND",
+				close: true,
+				click: (modal, instance) => {
+					this.createFolder(BDFDB.ArrayUtils.removeCopies(targetedGuildIds));
 				}
-			};
-			let mouseup = () => {
-				document.removeEventListener("mousemove", mousemove);
-				document.removeEventListener("mouseup", mouseup);
-			};
-			document.addEventListener("mousemove", mousemove);
-			document.addEventListener("mouseup", mouseup);
+			}]
 		});
-
-		guildcopy.querySelector("a").setAttribute("draggable", false);
-
-		return guildcopy;
 	}
 	
-	updateGuildPositions (folderid) {
-		let oldGuildFolders = Object.assign({}, BDFDB.LibraryModules.FolderStore.guildFolders);
-		let guildFolders = [], guildPositions = [];
-		for (let i in oldGuildFolders) {
-			if (oldGuildFolders[i].folderId) {
-				let newFolder = Object.assign({}, oldGuildFolders[i]);
-				if (oldGuildFolders[i].folderId == folderid) {
-					let sameFolderGuilds = this.foldercontentguilds.querySelectorAll(`[guildid][folderid="${folderid}"]`);
-					if (sameFolderGuilds.length > 0) {
-						newFolder.guildIds = [];
-						for (let guilddiv of sameFolderGuilds) newFolder.guildIds.push(guilddiv.getAttribute("guildid"));
-					}
-				}
-				guildFolders.push(newFolder);
-			}
-			else guildFolders.push(oldGuildFolders[i]);
+	updateFolder (folder) {
+		let oldGuildFolders = [].concat(BDFDB.LibraryModules.FolderStore.guildFolders), guildFolders = [], guildPositions = [];
+		for (let oldFolder of oldGuildFolders) {
+			if (oldFolder.folderId == folder.folderId) guildFolders.push(Object.assign({}, oldFolder, folder));
+			else guildFolders.push(oldFolder);
 		}
-		for (let i in guildFolders) for (let guildid of guildFolders[i].guildIds) guildPositions.push(guildid);
+		for (let folder of guildFolders) for (let fGuildId of folder.guildIds) guildPositions.push(fGuildId);
 		BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({guildPositions, guildFolders});
 	}
 	
-	openFolderCreationMenu (guilds, initguildid) {
-		let modal = BDFDB.DOMUtils.create(`<span class="${this.name}-modal BDFDB-modal"><div class="${BDFDB.disCN.backdrop}"></div><div class="${BDFDB.disCN.modal}"><div class="${BDFDB.disCN.modalinner}"><div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;"><h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">${this.labels.serversubmenu_createfolder_text}</h4><div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div></div><button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"><svg name="Close" width="18" height="18" viewBox="0 0 12 12" style="flex: 0 1 auto;"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div></button></div><div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.scrollerthemeghosthairline}"><div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner} entries"></div></div><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}"><button type="button" class="btn-done ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"></div></button><button type="button" class="btn-cancel ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlooklink + BDFDB.disCNS.buttoncolortransparent + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div></div></div></div></span>`);
-		
-		let targetedguildsids = {};
-			
-		let container = modal.querySelector(".entries");
-		BDFDB.ListenerUtils.addToChildren(modal, "click", ".btn-done", () => {
-			let ids = [];
-			for (let id in targetedguildsids) if (targetedguildsids[id]) ids.push(id);
-			this.createFolder(ids);
-		});
-
-		for (let guild of guilds) {
-			if (container.firstElementChild) container.appendChild(BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.divider}"></div>`));
-			let entry = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom4} entry" style="flex: 1 1 auto;">${BDFDB.GuildUtils.createCopy(guild.id, {size: 48}).outerHTML}<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCNS.flexchild + BDFDB.disCN.overflowellipsis}" style="flex: 1 1 auto; white-space: nowrap;">${BDFDB.StringUtils.htmlEscape(guild.name)}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"></div></div>`);
-			container.appendChild(entry);
-			let switchinput = entry.querySelector(BDFDB.dotCN.switchinner);
-			switchinput.checked = guild.id == initguildid;
-			targetedguildsids[guild.id] = guild.id == initguildid;
-			switchinput.addEventListener("click", e => {
-				targetedguildsids[guild.id] = !targetedguildsids[guild.id];
-			});
-		}
-		BDFDB.appendModal(modal);
-	}
-	
-	createFolder (guildids) {
-		if (!guildids) return;
-		guildids = Array.isArray(guildids) ? guildids : Array.from(guildids);
-		if (!guildids.length) return;
-		let oldGuildFolders = Object.assign({}, BDFDB.LibraryModules.FolderStore.guildFolders);
-		let guildFolders = [], guildPositions = [], added = false;
-		for (let i in oldGuildFolders) {
-			if (!oldGuildFolders[i].folderId && guildids.includes(oldGuildFolders[i].guildIds[0])) {
+	createFolder (guildIds) {
+		if (!guildIds) return;
+		guildIds = [guildIds].flat(10);
+		if (!guildIds.length) return;
+		let oldGuildFolders = [].concat(BDFDB.LibraryModules.FolderStore.guildFolders), guildFolders = [], guildPositions = [], added = false;
+		for (let oldFolder of oldGuildFolders) {
+			if (!oldFolder.folderId && guildIds.includes(oldFolder.guildIds[0])) {
 				if (!added) {
 					added = true;
 					guildFolders.push({
-						guildIds: guildids,
+						guildIds: guildIds,
 						folderId: this.generateID("folder")
 					});
 				}
 			}
-			else guildFolders.push(oldGuildFolders[i]);
+			else guildFolders.push(oldFolder);
 		}
-		for (let i in guildFolders) for (let guildid of guildFolders[i].guildIds) guildPositions.push(guildid);
+		for (let folder of guildFolders) for (let fGuildId of folder.guildIds) guildPositions.push(fGuildId);
 		BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({guildPositions, guildFolders});
 	}
 	
-	removeFolder (folderid) {
-		BDFDB.DataUtils.remove(this, "folders", folderid);
-		BDFDB.DOMUtils.remove(this.foldercontentguilds.querySelector(`${BDFDB.dotCN.guildouter}[folderid="${folderid}"]`));
-		let oldGuildFolders = Object.assign({}, BDFDB.LibraryModules.FolderStore.guildFolders);
-		let guildFolders = [], guildPositions = [];
-		for (let i in oldGuildFolders) {
-			if (oldGuildFolders[i].folderId == folderid) {
-				for (let guildid of oldGuildFolders[i].guildIds) guildFolders.push({guildIds:[guildid]});
+	removeFolder (folderId) {
+		let oldGuildFolders = [].concat(BDFDB.LibraryModules.FolderStore.guildFolders), guildFolders = [], guildPositions = [];
+		for (let oldFolder of oldGuildFolders) {
+			if (oldFolder.folderId == folderId) {
+				for (let guildId of oldFolder.guildIds) guildFolders.push({guildIds:[guildId]});
 			}
-			else guildFolders.push(oldGuildFolders[i]);
+			else guildFolders.push(oldFolder);
 		}
-		for (let i in guildFolders) for (let guildid of guildFolders[i].guildIds) guildPositions.push(guildid);
+		for (let folder of guildFolders) for (let fGuildId of folder.guildIds) guildPositions.push(fGuildId);
 		BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({guildPositions, guildFolders});
-		this.toggleFolderContent();
 	}
 	
-	addGuildToFolder (folderid, guildid) {
-		let oldGuildFolders = Object.assign({}, BDFDB.LibraryModules.FolderStore.guildFolders);
-		let guildFolders = [], guildPositions = [];
-		for (let i in oldGuildFolders) {
-			if (oldGuildFolders[i].folderId) {
-				let newFolder = Object.assign({}, oldGuildFolders[i]);
-				if (oldGuildFolders[i].folderId == folderid) newFolder.guildIds.push(guildid);
-				else BDFDB.ArrayUtils.remove(newFolder.guildIds, guildid);
+	addGuildToFolder (folderId, guildId) {
+		let oldGuildFolders = [].concat(BDFDB.LibraryModules.FolderStore.guildFolders), guildFolders = [], guildPositions = [];
+		for (let oldFolder of oldGuildFolders) {
+			if (oldFolder.folderId) {
+				let newFolder = Object.assign({}, oldFolder);
+				if (oldFolder.folderId == folderId) newFolder.guildIds.push(guildId);
+				else BDFDB.ArrayUtils.remove(newFolder.guildIds, guildId);
 				guildFolders.push(newFolder);
 			}
-			else if (oldGuildFolders[i].guildIds[0] != guildid) guildFolders.push(oldGuildFolders[i]);
+			else if (oldFolder.guildIds[0] != guildId) guildFolders.push(oldFolder);
 		}
-		for (let i in guildFolders) for (let guildid of guildFolders[i].guildIds) guildPositions.push(guildid);
+		for (let folder of guildFolders) for (let fGuildId of folder.guildIds) guildPositions.push(fGuildId);
 		BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({guildPositions, guildFolders});
 	}
 	
-	removeGuildFromFolder (folderid, guildid) {
-		BDFDB.DOMUtils.remove(this.foldercontentguilds.querySelector(`${BDFDB.dotCN.guildouter}[folderid="${folderid}"][guildid="${guildid}"]`));
-		let sameFolderEles = this.foldercontentguilds.querySelectorAll(`[folderid="${folderid}"]`);
-		if (sameFolderEles.length == 1 && BDFDB.DOMUtils.containsClass(sameFolderEles[0], "folderseparatorouter")) BDFDB.DOMUtils.remove(sameFolderEles[0]);
-		let oldGuildFolders = Object.assign({}, BDFDB.LibraryModules.FolderStore.guildFolders);
-		let guildFolders = [], guildPositions = [];
-		for (let i in oldGuildFolders) {
-			if (oldGuildFolders[i].folderId == folderid) {
-				let newFolder = Object.assign({}, oldGuildFolders[i]);
-				BDFDB.ArrayUtils.remove(newFolder.guildIds, guildid);
+	removeGuildFromFolder (folderId, guildId) {
+		let oldGuildFolders = [].concat(BDFDB.LibraryModules.FolderStore.guildFolders), guildFolders = [], guildPositions = [];
+		for (let oldFolder of oldGuildFolders) {
+			if (oldFolder.folderId == folderId) {
+				let newFolder = Object.assign({}, oldFolder);
+				BDFDB.ArrayUtils.remove(newFolder.guildIds, guildId);
 				guildFolders.push(newFolder);
-				guildFolders.push({guildIds:[guildid]});
+				guildFolders.push({guildIds:[guildId]});
 			}
-			else guildFolders.push(oldGuildFolders[i]);
+			else guildFolders.push(oldFolder);
 		}
-		for (let i in guildFolders) for (let guildid of guildFolders[i].guildIds) guildPositions.push(guildid);
+		for (let folder of guildFolders) for (let fGuildId of folder.guildIds) guildPositions.push(fGuildId);
 		BDFDB.LibraryModules.SettingsUtils.updateRemoteSettings({guildPositions, guildFolders});
-		this.toggleFolderContent();
 	}
 
-	createDragPreview (div, e) {
+	createDragPreview (div, event) {
 		if (!Node.prototype.isPrototypeOf(div)) return;
 		let dragpreview = div.cloneNode(true);
-		BDFDB.DOMUtils.addClass(dragpreview, "serverfolders-dragpreview");
+		BDFDB.DOMUtils.addClass(dragpreview, BDFDB.disCN._serverfoldersdragpreview);
+		BDFDB.DOMUtils.remove(dragpreview.querySelector(BDFDB.dotCNC.guildlowerbadge + BDFDB.dotCNC.guildupperbadge + BDFDB.dotCN.guildpillwrapper));
 		BDFDB.DOMUtils.hide(dragpreview);
 		dragpreview.style.setProperty("pointer-events", "none", "important");
-		dragpreview.style.setProperty("left", e.clientX - 25 + "px", "important");
-		dragpreview.style.setProperty("top", e.clientY - 25 + "px", "important");
+		dragpreview.style.setProperty("left", event.clientX - 25 + "px", "important");
+		dragpreview.style.setProperty("top", event.clientY - 25 + "px", "important");
 		document.querySelector(BDFDB.dotCN.appmount).appendChild(dragpreview);
 		return dragpreview;
 	}
 
-	updateDragPreview (dragpreview, e) {
+	updateDragPreview (dragpreview, event) {
 		if (!Node.prototype.isPrototypeOf(dragpreview)) return;
 		BDFDB.DOMUtils.show(dragpreview);
-		dragpreview.style.setProperty("left", e.clientX - 25 + "px", "important");
-		dragpreview.style.setProperty("top", e.clientY - 25 + "px", "important");
+		dragpreview.style.setProperty("left", event.clientX - 25 + "px", "important");
+		dragpreview.style.setProperty("top", event.clientY - 25 + "px", "important");
 	}
 
 	setLabelsByLanguage () {
@@ -1211,6 +1071,7 @@ class ServerFolders {
 					modal_tabheader4_text:					"Prilagođeni ikona",
 					modal_iconpicker_text:					"Odabir mape",
 					modal_usecloseicon_text:				"Koristite zatvorenu ikonu umjesto minisevera",
+					modal_swapcolor_text:					"Koristite drugu boju za izvorne mape",
 					modal_copytooltipcolor_text:			"Koristite iste boje za poslužitelj u mapi",
 					modal_colorpicker1_text:				"Boja primarne mape",
 					modal_colorpicker2_text:				"Boja sekundarne mape",
@@ -1235,6 +1096,7 @@ class ServerFolders {
 					modal_tabheader4_text:					"Brugerdefinerede ikoner",
 					modal_iconpicker_text:					"Mappevalg",
 					modal_usecloseicon_text:				"Brug et lukket ikon i stedet for miniserverne",
+					modal_swapcolor_text:					"BBrug den anden farve til de originale mapper",
 					modal_copytooltipcolor_text:			"Brug de samme farver til server på mappen",
 					modal_colorpicker1_text:				"Primær mappefarve",
 					modal_colorpicker2_text:				"Sekundær mappefarve",
@@ -1259,6 +1121,7 @@ class ServerFolders {
 					modal_tabheader4_text:					"Eigene Icons",
 					modal_iconpicker_text:					"Ordnerauswahl",
 					modal_usecloseicon_text:				"Verwende anstelle der Miniserver ein geschlossenes Symbol",
+					modal_swapcolor_text:					"Verwende die zweite Farbe für den ursprünglichen Ordner",
 					modal_copytooltipcolor_text:			"Verwende dieselbe Farbe für alle Server eines Ordners",
 					modal_colorpicker1_text:				"Primäre Ordnerfarbe",
 					modal_colorpicker2_text:				"Sekundäre Ordnerfarbe",
@@ -1283,6 +1146,7 @@ class ServerFolders {
 					modal_tabheader4_text:					"Iconos personalizados",
 					modal_iconpicker_text:					"Selección de carpeta",
 					modal_usecloseicon_text:				"Use un icono cerrado en lugar de los miniservidores",
+					modal_swapcolor_text:					"Use el segundo color para las carpetas originales",
 					modal_copytooltipcolor_text:			"Usa los mismos colores para el servidor de la carpeta",
 					modal_colorpicker1_text:				"Color primaria de carpeta",
 					modal_colorpicker2_text:				"Color secundario de la carpeta",
@@ -1307,6 +1171,7 @@ class ServerFolders {
 					modal_tabheader4_text:					"Icônes personnalisées",
 					modal_iconpicker_text:					"Choix du dossier",
 					modal_usecloseicon_text:				"Utilisez une icône fermée à la place des mini-serveurs",
+					modal_swapcolor_text:					"Utilisez la deuxième couleur pour les dossiers d'origine",
 					modal_copytooltipcolor_text:			"Utilisez les mêmes couleurs pour le serveur du dossier",
 					modal_colorpicker1_text:				"Couleur primaire du dossier",
 					modal_colorpicker2_text:				"Couleur secondaire du dossier",
@@ -1331,6 +1196,7 @@ class ServerFolders {
 					modal_tabheader4_text:					"Icone personalizzate",
 					modal_iconpicker_text:					"Selezione della cartella",
 					modal_usecloseicon_text:				"Utilizzare un'icona chiusa anziché i mini server",
+					modal_swapcolor_text:					"Usa il secondo colore per le cartelle originali",
 					modal_copytooltipcolor_text:			"Usa gli stessi colori per il server della cartella",
 					modal_colorpicker1_text:				"Colore primaria della cartella",
 					modal_colorpicker2_text:				"Colore secondaria della cartella",
@@ -1355,6 +1221,7 @@ class ServerFolders {
 					modal_tabheader4_text:					"Aangepaste keuze",
 					modal_iconpicker_text:					"Map keuze",
 					modal_usecloseicon_text:				"Gebruik een gesloten keuze in plaats van de miniservers",
+					modal_swapcolor_text:					"Gebruik de tweede kleur voor de originele mappen",
 					modal_copytooltipcolor_text:			"Gebruik dezelfde kleuren voor de server van de map",
 					modal_colorpicker1_text:				"Primaire mapkleur",
 					modal_colorpicker2_text:				"Tweede mapkleur",
@@ -1379,6 +1246,7 @@ class ServerFolders {
 					modal_tabheader4_text:					"Tilpassede ikoner",
 					modal_iconpicker_text:					"Mappevalg",
 					modal_usecloseicon_text:				"Bruk et lukket ikon i stedet for minitjenerne",
+					modal_swapcolor_text:					"Bruk den andre fargen for de originale mappene",
 					modal_copytooltipcolor_text:			"Bruk de samme fargene til serveren til mappen",
 					modal_colorpicker1_text:				"Primær mappefarge",
 					modal_colorpicker2_text:				"Sekundær mappefarge",
@@ -1403,6 +1271,7 @@ class ServerFolders {
 					modal_tabheader4_text:					"Niestandardowe ikony",
 					modal_iconpicker_text:					"Wybór folderu",
 					modal_usecloseicon_text:				"Użyj zamkniętej ikony zamiast mini serwerów",
+					modal_swapcolor_text:					"Użyj drugiego koloru dla oryginalnych folderów",
 					modal_copytooltipcolor_text:			"Użyj tych samych kolorów dla serwera folderu",
 					modal_colorpicker1_text:				"Podstawowy kolor folderu",
 					modal_colorpicker2_text:				"Drugorzędny kolor folderu",
@@ -1427,6 +1296,7 @@ class ServerFolders {
 					modal_tabheader4_text:					"Ícones personalizados",
 					modal_iconpicker_text:					"Escolha da pasta",
 					modal_usecloseicon_text:				"Use um ícone fechado em vez dos mini servidores",
+					modal_swapcolor_text:					"Use a segunda cor para as pastas originais",
 					modal_copytooltipcolor_text:			"Use as mesmas cores para o servidor da pasta",
 					modal_colorpicker1_text:				"Cor primária da pasta",
 					modal_colorpicker2_text:				"Cor secundária da pasta",
@@ -1451,6 +1321,7 @@ class ServerFolders {
 					modal_tabheader4_text:					"Mukautetut kuvakkeet",
 					modal_iconpicker_text:					"Kansion valinta",
 					modal_usecloseicon_text:				"Käytä suljettua kuvaketta minipalvelimien sijasta",
+					modal_swapcolor_text:					"Käytä toista väriä alkuperäisissä kansioissa",
 					modal_copytooltipcolor_text:			"Käytä samoja värejä kansion palvelimelle",
 					modal_colorpicker1_text:				"Ensisijainen kansionväri",
 					modal_colorpicker2_text:				"Toissijainen kansionväri",
@@ -1475,6 +1346,7 @@ class ServerFolders {
 					modal_tabheader4_text:					"Anpassade ikoner",
 					modal_iconpicker_text:					"Mappval",
 					modal_usecloseicon_text:				"Använd en stängd ikon istället för miniservrarna",
+					modal_swapcolor_text:					"Använd den andra färgen för originalmapparna",
 					modal_copytooltipcolor_text:			"Använd samma färger för mappen på mappen",
 					modal_colorpicker1_text:				"Primär mappfärg",
 					modal_colorpicker2_text:				"Sekundär mappfärg",
@@ -1499,6 +1371,7 @@ class ServerFolders {
 					modal_tabheader4_text:					"Özel simgeler",
 					modal_iconpicker_text:					"Klasör seçimi",
 					modal_usecloseicon_text:				"Mini sunucular yerine kapalı bir simge kullanın",
+					modal_swapcolor_text:					"Orijinal klasörler için ikinci rengi kullanın",
 					modal_copytooltipcolor_text:			"Klasörün sunucusu için aynı renkleri kullanın",
 					modal_colorpicker1_text:				"Birincil klasör rengi",
 					modal_colorpicker2_text:				"İkincil klasör rengi",
@@ -1523,6 +1396,7 @@ class ServerFolders {
 					modal_tabheader4_text:					"Vlastní ikony",
 					modal_iconpicker_text:					"Volba složky",
 					modal_usecloseicon_text:				"Místo mini serverů použijte uzavřenou ikonu",
+					modal_swapcolor_text:					"Použijte druhou barvu pro původní složky",
 					modal_copytooltipcolor_text:			"Použijte stejné barvy pro server složky",
 					modal_colorpicker1_text:				"Primární barva složky",
 					modal_colorpicker2_text:				"Sekundární barva složky",
@@ -1547,11 +1421,12 @@ class ServerFolders {
 					modal_tabheader4_text:					"Персонализирани икони",
 					modal_iconpicker_text:					"Избор на папки",
 					modal_usecloseicon_text:				"Използвайте затворена икона вместо мини сървърите",
+					modal_swapcolor_text:					"Използвайте втория цвят за оригиналните папки",
 					modal_copytooltipcolor_text:			"Използвайте същите цветове за сървъра на папката",
-					modal_colorpicker1_text:				"Цвят основнен на папка",
-					modal_colorpicker2_text:				"цвят вторичен на папка",
 					modal_colorpicker3_text:				"Цвят на подсказка",
 					modal_colorpicker4_text:				"Цвят на шрифта",
+					modal_colorpicker1_text:				"Цвят основнен на папка",
+					modal_colorpicker2_text:				"цвят вторичен на папка",
 					modal_customopen_text:					"Отворена икона",
 					modal_customclosed_text:				"Затворена икона",
 					modal_custompreview_text:				"Икона Преглед"
@@ -1571,6 +1446,7 @@ class ServerFolders {
 					modal_tabheader4_text:					"Пользовательские значки",
 					modal_iconpicker_text:					"Выбор папки",
 					modal_usecloseicon_text:				"Используйте закрытую иконку вместо мини-серверов",
+					modal_swapcolor_text:					"Используйте второй цвет для оригинальных папок",
 					modal_copytooltipcolor_text:			"Используйте те же цвета для сервера папки",
 					modal_colorpicker1_text:				"Цвет основной папки",
 					modal_colorpicker2_text:				"Цвет вторичной папки",
@@ -1595,6 +1471,7 @@ class ServerFolders {
 					modal_tabheader4_text:					"Користувальницькі іконки",
 					modal_iconpicker_text:					"Вибір папки",
 					modal_usecloseicon_text:				"Використовуйте закритий значок замість міні-серверів",
+					modal_swapcolor_text:					"Використовуйте другий колір для оригінальних папок",
 					modal_copytooltipcolor_text:			"Використовуйте ті ж кольори для сервера папки",
 					modal_colorpicker1_text:				"Колір основної папки",
 					modal_colorpicker2_text:				"Колір вторинного папки",
@@ -1619,6 +1496,7 @@ class ServerFolders {
 					modal_tabheader4_text:					"カスタムアイコン",
 					modal_iconpicker_text:					"フォルダの選択",
 					modal_usecloseicon_text:				"ミニサーバーの代わりに閉じたアイコンを使用する",
+					modal_swapcolor_text:					"Використовуйте другий колір для оригінальних папок",
 					modal_copytooltipcolor_text:			"フォルダのサーバーに同じ色を使う",
 					modal_colorpicker1_text:				"プライマリフォルダの色",
 					modal_colorpicker2_text:				"セカンダリフォルダの色",
@@ -1643,6 +1521,7 @@ class ServerFolders {
 					modal_tabheader4_text:					"自定義圖標",
 					modal_iconpicker_text:					"文件夾選擇",
 					modal_usecloseicon_text:				"使用關閉的圖標代替迷你服務器",
+					modal_swapcolor_text:					"將第二種顏色用於原始文件夾",
 					modal_copytooltipcolor_text:			"對文件夾的服務器使用相同的顏色",
 					modal_colorpicker1_text:				"主文件夾顏色",
 					modal_colorpicker2_text:				"輔助文件夾顏色",
@@ -1667,6 +1546,7 @@ class ServerFolders {
 					modal_tabheader4_text:					"사용자 정의 아이콘",
 					modal_iconpicker_text:					"폴더 선택",
 					modal_usecloseicon_text:				"미니 서버 대신 닫힌 아이콘을 사용하십시오",
+					modal_swapcolor_text:					"원본 폴더에 두 번째 색상 사용",
 					modal_copytooltipcolor_text:			"폴더의 서버에 대해 동일한 색상을 사용하십시오.",
 					modal_colorpicker1_text:				"기본 폴더 색",
 					modal_colorpicker2_text:				"보조 폴더 색",
@@ -1691,6 +1571,7 @@ class ServerFolders {
 					modal_tabheader4_text:					"Custom Icons",
 					modal_iconpicker_text:					"Folderchoice",
 					modal_usecloseicon_text:				"Use a closed Icon instead of the Mini-Servers",
+					modal_swapcolor_text:					"Use second Color for the native Folder",
 					modal_copytooltipcolor_text:			"Use same Colors for Servers of the Folder",
 					modal_colorpicker1_text:				"Primary Foldercolor",
 					modal_colorpicker2_text:				"Secondary Foldercolor",
