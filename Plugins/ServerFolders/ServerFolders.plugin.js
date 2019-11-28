@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.6.1";}
+	getVersion () {return "6.6.0";}
 
 	getAuthor () {return "DevilBro";}
 
