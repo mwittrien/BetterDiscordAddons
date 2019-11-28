@@ -538,7 +538,7 @@ var BDFDB = {
 		var layers = document.querySelector(BDFDB.dotCN.layers);
 		if (!layers) return;
 		var id = BDFDB.NumberUtils.generateId(NotificationBars);
-		var notice = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.notice} BDFDB-notice notice-${id}"><div class="${BDFDB.disCN.noticedismiss}" style="height:36px !important; position: absolute !important; top: 0 !important; right: 0 !important; left: unset !important;"></div><span class="notice-message"></span></div>`);
+		var notice = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.notice + BDFDB.disCN.noticewrapper}" notice-id="${id}"><div class="${BDFDB.disCN.noticedismiss}" style="height:36px !important; position: absolute !important; top: 0 !important; right: 0 !important; left: unset !important;"></div><span class="notice-message"></span></div>`);
 		layers.parentElement.insertBefore(notice, layers);
 		var noticemessage = notice.querySelector(".notice-message");
 		if (options.platform) for (let platform of options.platform.split(" ")) if (DiscordClasses["noticeicon" + platform]) {
@@ -588,7 +588,7 @@ var BDFDB = {
 				var fontcolor = comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? "#000" : "#FFF";
 				var backgroundcolor = BDFDB.ColorUtils.convert(comp, "HEX");
 				var filter = comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? "brightness(0%)" : "brightness(100%)";
-				BDFDB.DOMUtils.appendLocalStyle("BDFDBcustomnotificationbarColorCorrection" + id, `.BDFDB-notice.notice-${id}{background-color:${backgroundcolor} !important;}.BDFDB-notice.notice-${id} .notice-message {color:${fontcolor} !important;}.BDFDB-notice.notice-${id} ${BDFDB.dotCN.noticebutton} {color:${fontcolor} !important;border-color:${BDFDB.ColorUtils.setAlpha(fontcolor,0.25,"RGBA")} !important;}.BDFDB-notice.notice-${id} ${BDFDB.dotCN.noticebutton}:hover {color:${backgroundcolor} !important;background-color:${fontcolor} !important;}.BDFDB-notice.notice-${id} ${BDFDB.dotCN.noticedismiss} {filter:${filter} !important;}`);
+				BDFDB.DOMUtils.appendLocalStyle("BDFDBcustomnotificationbarColorCorrection" + id, `${BDFDB.dotCN.noticewrapper}[notice-id="${id}"]{background-color:${backgroundcolor} !important;}${BDFDB.dotCN.noticewrapper}[notice-id="${id}"] .notice-message {color:${fontcolor} !important;}${BDFDB.dotCN.noticewrapper}[notice-id="${id}"] ${BDFDB.dotCN.noticebutton} {color:${fontcolor} !important;border-color:${BDFDB.ColorUtils.setAlpha(fontcolor,0.25,"RGBA")} !important;}${BDFDB.dotCN.noticewrapper}[notice-id="${id}"] ${BDFDB.dotCN.noticebutton}:hover {color:${backgroundcolor} !important;background-color:${fontcolor} !important;}${BDFDB.dotCN.noticewrapper}[notice-id="${id}"] ${BDFDB.dotCN.noticedismiss} {filter:${filter} !important;}`);
 			}
 			else BDFDB.DOMUtils.addClass(notice, BDFDB.disCN.noticedefault);
 		}
@@ -624,7 +624,7 @@ var BDFDB = {
 		var itemlayercontainer = document.querySelector(BDFDB.dotCN.appmount +  " > * > " + BDFDB.dotCN.itemlayercontainer);
 		if (!itemlayercontainer || (typeof text != "string" && !BDFDB.ObjectUtils.is(options.guild)) || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
 		var id = BDFDB.NumberUtils.generateId(Tooltips);
-		var itemlayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip} BDFDB-tooltip-${id}"></div></div>`);
+		var itemlayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"></div></div>`);
 		itemlayercontainer.appendChild(itemlayer);
 		
 		var tooltip = itemlayer.firstElementChild;
@@ -717,7 +717,7 @@ var BDFDB = {
 		
 		tooltip.anker = anker;
 		
-		if (options.hide) BDFDB.DOMUtils.appendLocalStyle("BDFDBhideOtherTooltips" + id, `#app-mount ${BDFDB.dotCN.tooltip}:not(.BDFDB-tooltip-${id}) {display: none !important;}`, itemlayercontainer);
+		if (options.hide) BDFDB.DOMUtils.appendLocalStyle("BDFDBhideOtherTooltips" + id, `#app-mount ${BDFDB.dotCN.tooltip}:not([tooltip-id="${id}"]) {display: none !important;}`, itemlayercontainer);
 					
 		var mouseleave = _ => {
 			BDFDB.DOMUtils.remove(itemlayer);
@@ -735,7 +735,6 @@ var BDFDB = {
 					observer.disconnect();
 					BDFDB.DOMUtils.remove(itemlayer);
 					BDFDB.DOMUtils.removeLocalStyle("BDFDBhideOtherTooltips" + id, itemlayercontainer);
-					BDFDB.DOMUtils.removeLocalStyle("BDFDBcustomTooltips" + id, itemlayercontainer);
 					anker.removeEventListener("mouseleave", mouseleave);
 				}
 			});
@@ -4168,6 +4167,7 @@ var BDFDB = {
 		modalTabContent: "tab-content",
 		modalTabContentOpen: "open",
 		modalWrapper: "modal-6GHvdM",
+		noticeWrapper: "noticeWrapper-8z511t",
 		selectWrapper: "selectWrapper-yPjeij",
 		settingsPanel: "settingsPanel-w2ySNR",
 		settingsPanelInner: "settingsInner-zw1xAY",
@@ -5417,6 +5417,7 @@ var BDFDB = {
 		noticestreamer: ["Notice", "noticeStreamerMode"],
 		noticesuccess: ["Notice", "noticeSuccess"],
 		noticesurvey: ["Notice", "noticeSurvey"],
+		noticewrapper: ["BDFDB", "noticeWrapper"],
 		note: ["SettingsItems", "note"],
 		nowrap: ["Flex", "noWrap"],
 		optionpopout: ["OptionPopout", "container"],
@@ -8022,6 +8023,17 @@ var BDFDB = {
 			display: none !important;
 		}
 		
+		
+		${BDFDB.dotCN.noticewrapper} {
+			transition: height 0.5s ease !important;
+			border-radius: 0 !important;
+		}
+		${BDFDB.dotCNS.noticewrapper + BDFDB.dotCN.noticeplatformicon} {
+			margin-top: -7px;
+		}
+		${BDFDB.dotCNS.noticewrapper + BDFDB.dotCN.noticeplatformicon} svg {
+			max-height: 28px;
+		}
 		${BDFDB.dotCN.noticesurvey} {
 			background-color: #222;
 		}
@@ -8055,19 +8067,6 @@ var BDFDB = {
 			box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
 		}
 		
-		.BDFDB-notice {
-			transition: height 0.5s ease !important;
-			border-radius: 0 !important;
-		}
-		.BDFDB-notice ${BDFDB.dotCN.noticeplatformicon} {
-			margin-top: -7px;
-		}
-		.BDFDB-notice ${BDFDB.dotCN.noticeplatformicon} svg {
-			max-height: 28px;
-		}
-		.hidden-by-OTB .BDFDB-notice {
-			-webkit-app-region: drag !important;
-		}
 		#pluginNotice #outdatedPlugins span {
 			-webkit-app-region: no-drag;
 			color: #FFF;
