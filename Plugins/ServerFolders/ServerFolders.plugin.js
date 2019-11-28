@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.6.0";}
+	getVersion () {return "6.6.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -66,21 +66,9 @@ class ServerFolders {
 				top: -10px;
 				right: -10px;
 			}
-			${BDFDB.dotCN.guildfolder}[style*="background-image"] {
-				background-color: transparent !important;
-				background-position: center !important;
-				background-size: cover !important;
-				background-repeat: no-repeat !important;
-				transiton: unset !important;
-			}
-			${BDFDB.dotCN.guildfolder}[style*="background-image"] ${BDFDB.dotCN.guildfoldericonwrapper},
 			${BDFDB.dotCN.guildfolderexpandendbackground},
 			${BDFDB.dotCN.guildfolderexpandedguilds} {
 				display: none !important;
-			}
-			${BDFDB.dotCN.guildupperbadge}.count {
-				left: 0px;
-				right: unset;
 			}
 			${BDFDB.dotCN._serverfoldersdragpreview} {
 				pointer-events: none !important;
@@ -106,20 +94,6 @@ class ServerFolders {
 				contain: unset !important;
 				width: 100% !important;
 			}`;
-
-		this.dragPlaceholderMarkup =
-			`<div class="${BDFDB.disCNS.guildouter + BDFDB.disCN._bdguild} foldercopyplaceholder">
-				<div class="${BDFDB.disCNS.guildpillwrapper + BDFDB.disCN.guildpill}">
-					<span class="${BDFDB.disCN.guildpillitem}"></span>
-				</div>
-				<div tabindex="0" class="${BDFDB.disCNS.guildcontainer + BDFDB.disCN.guildinner}" role="button">
-					<svg width="48" height="48" viewBox="0 0 48 48" class="${BDFDB.disCN.guildplaceholdermask}">
-						<foreignObject mask="url(#svg-mask-squircle)" x="0" y="0" width="48" height="48">
-							<div class="${BDFDB.disCN.guildplaceholder}"></div>
-						</foreignObject>
-					</svg>
-				</div>
-			</div>`;
 
 		this.folderIcons = [
 			{openicon:`<path d="M 200,390 H 955 L 795,770 H 200 Z" fill="REPLACE_FILL2"/><path d="M 176.6,811 C 163.9,811 155.1,802.6 155,784.7 V 212.9 C 157.9,190.5 169,179.8 195.9,176 h 246 c 20.3,3.2 34.5,18.7 41,28.6 C 494.9,228.3 492.9,240.4 494,266 l 313.6,1.3 c 17.6,0.4 23.3,3.7 23.3,3.7 8.6,4.2 14.8,10.7 19,19.5 C 856.3,319.5 854,360 854,360 h 108.9 c 4.4,2.4 13.7,1.2 11.8,23.5 L 815.8,789.4 c -2.1,5.2 -12.5,13.6 -18.7,16.1 -6.8,2.7 -18.5,5.5 -23.9,5.5 z M 767,759 897,430 H 360 L 230,759 Z" fill="REPLACE_FILL1"/>`,
@@ -161,12 +135,17 @@ class ServerFolders {
 						theme: BDFDB.LibraryComponents.ScrollerVertical.Themes.GHOST_HAIRLINE,
 						children: this.props.folders.map(folderId => {
 							let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(folderId);
+							let data = plugin.getFolderConfig(folderId);
 							return folder.guildIds.map(guildId => {
 								return [
 									this.draggedGuild == guildId ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Guild, {
 										guild: BDFDB.LibraryModules.GuildStore.getGuild(guildId),
 										state: true,
 										list: true,
+										tooltipConfig: data.copyTooltipColor && {
+											backgroundColor: data.color3,
+											fontColor: data.color4
+										},
 										onClick: event => {
 											if (BDFDB.InternalData.pressedKeys.includes(46)) {
 												BDFDB.ListenerUtils.stopEvent(event);
@@ -620,23 +599,16 @@ class ServerFolders {
 		}
 		this.folderStates[e.instance.props.folderId] = state;
 		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ListItemTooltip"});
-		if (index > -1) {
-			let isgradient3 = data.color3 && BDFDB.ObjectUtils.is(data.color3);
-			let isgradient4 = data.color4 && BDFDB.ObjectUtils.is(data.color4);
-			let bgColor = data.color3 ? (!isgradient3 ? BDFDB.ColorUtils.convert(data.color3, "RGBA") : BDFDB.ColorUtils.createGradient(data.color3)) : "";
-			let fontColor = data.color4 ? (!isgradient4 ? BDFDB.ColorUtils.convert(data.color4, "RGBA") : BDFDB.ColorUtils.createGradient(data.color4)) : "";
-			let folderName = e.instance.props.folderName || BDFDB.FolderUtils.getDefaultName(e.instance.props.folderId);
-			children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-				text: isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.StringUtils.htmlEscape(folderName)}</span>` : folderName,
-				tooltipConfig: {
-					type: "right",
-					list: true,
-					html: isgradient4,
-					style: `${isgradient4 ? '' : `color: ${fontColor} !important; `}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.ColorUtils.convert(data.color3[0], "RGBA") : bgColor} !important;`
-				},
-				children: children[index].props.children
-			});
-		}
+		if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+			text: e.instance.props.folderName || BDFDB.FolderUtils.getDefaultName(e.instance.props.folderId),
+			tooltipConfig: {
+				type: "right",
+				list: true,
+				backgroundColor: data.color3,
+				fontColor: data.color4
+			},
+			children: children[index].props.children
+		});
 		if (e.instance.props.expanded || data.useCloseIcon) {
 			let folderIcons = this.loadAllIcons(), icontype = e.instance.props.expanded ? "openicon" : "closedicon";
 			let icon = folderIcons[data.iconID] ? (!folderIcons[data.iconID].customID ? this.createBase64SVG(folderIcons[data.iconID][icontype], data.color1, data.color2) : folderIcons[data.iconID][icontype]) : null;
