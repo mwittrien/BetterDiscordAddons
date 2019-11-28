@@ -2,14 +2,17 @@ if (window.BDFDB && BDFDB.ListenerUtils && typeof BDFDB.ListenerUtils.remove == 
 if (window.BDFDB && BDFDB.ObserverUtils && typeof BDFDB.ObserverUtils.disconnect == "function") BDFDB.ObserverUtils.disconnect(BDFDB);
 if (window.BDFDB && BDFDB.ModuleUtils && typeof BDFDB.ModuleUtils.unpatch == "function") BDFDB.ModuleUtils.unpatch(BDFDB);
 var BDFDB = {
-	myPlugins: BDFDB && BDFDB.myPlugins || {},
-	InternalData: BDFDB && BDFDB.InternalData || {
+	myPlugins: Object.assign({}, BDFDB && BDFDB.myPlugins),
+	InternalData: Object.assign({
 		pressedKeys: [],
 		mousePosition: {
 			pageX: 0,
 			pageY: 0
-		}
-	},
+		},
+		patchMenuQueries: {}
+	}, BDFDB && BDFDB.InternalData, {
+		creationTime: performance.now()
+	}),
 	BDv2Api: BDFDB && BDFDB.BDv2Api || undefined,
 	pressedKeys: [], //REMOVE
 	mousePosition: {pageX: 0, pageY: 0}, //REMOVE
@@ -18,7 +21,6 @@ var BDFDB = {
 (_ => {
 	var loadid = Math.round(Math.random() * 10000000000000000), InternalBDFDB = {};
 	BDFDB.InternalData.loadid = loadid;
-	BDFDB.InternalData.creationTime = performance.now();
 
 	BDFDB.LogUtils = {};
 	BDFDB.LogUtils.log = function (string, name) {
@@ -1294,15 +1296,14 @@ var BDFDB = {
 	var NoFluxContextMenus = ["ChannelContextMenu", "DeveloperContextMenu", "GuildContextMenu", "GuildRoleContextMenu", "MessageContextMenu", "NativeContextMenu", "ScreenshareContextMenu", "UserContextMenu", "UserSettingsCogContextMenu"];
 	var NoFluxPopouts = ["MessageOptionPopout"];
 	var FluxContextMenus = ["ApplicationContextMenu", "GroupDMContextMenu"];
-	var PatchMenuQueries = {};
-	for (let type of FluxContextMenus) PatchMenuQueries[type] = {query:[], module:null};
+	for (let type of FluxContextMenus) BDFDB.InternalData.patchMenuQueries[type] = {query:[], module:null};
 	InternalBDFDB.addContextListeners = (plugin) => {
 		if (!BDFDB.ObjectUtils.is(plugin)) return;
 		for (let type of NoFluxContextMenus) if (typeof plugin[`on${type}`] === "function") InternalBDFDB.patchContextMenuPlugin(plugin, type, BDFDB.ModuleUtils.findByName(type));
 		for (let type of NoFluxPopouts) if (typeof plugin[`on${type}`] === "function") InternalBDFDB.patchPopoutPlugin(plugin, type, BDFDB.ModuleUtils.findByName(type));
 		for (let type of FluxContextMenus) if (typeof plugin[`on${type}`] === "function") {
-			if (PatchMenuQueries[type].module) InternalBDFDB.patchContextMenuPlugin(plugin, type, PatchMenuQueries[type].module);
-			else PatchMenuQueries[type].query.push(plugin);
+			if (BDFDB.InternalData.patchMenuQueries[type].module) InternalBDFDB.patchContextMenuPlugin(plugin, type, BDFDB.InternalData.patchMenuQueries[type].module);
+			else BDFDB.InternalData.patchMenuQueries[type].query.push(plugin);
 		}
 	};
 	InternalBDFDB.patchContextMenuPlugin = (plugin, type, module) => {
@@ -1369,11 +1370,11 @@ var BDFDB = {
 				}
 				if (repatch) {
 					let newmodule = BDFDB.ReactUtils.getValue(e, "thisObject._reactInternalFiber.child.type");
-					if (newmodule && newmodule.displayName && PatchMenuQueries[newmodule.displayName] && !PatchMenuQueries[newmodule.displayName].module) {
-						PatchMenuQueries[newmodule.displayName].module = newmodule;
+					if (newmodule && newmodule.displayName && BDFDB.InternalData.patchMenuQueries[newmodule.displayName] && !BDFDB.InternalData.patchMenuQueries[newmodule.displayName].module) {
+						BDFDB.InternalData.patchMenuQueries[newmodule.displayName].module = newmodule;
 						InternalBDFDB.patchContextMenuLib(newmodule, false);
-						while (PatchMenuQueries[newmodule.displayName].query.length) {
-							InternalBDFDB.patchContextMenuPlugin(PatchMenuQueries[newmodule.displayName].query.pop(), newmodule.displayName, newmodule);
+						while (BDFDB.InternalData.patchMenuQueries[newmodule.displayName].query.length) {
+							InternalBDFDB.patchContextMenuPlugin(BDFDB.InternalData.patchMenuQueries[newmodule.displayName].query.pop(), newmodule.displayName, newmodule);
 						}
 					}
 				}
