@@ -3,7 +3,7 @@
 class CharCounter {
 	getName () {return "CharCounter";}
 
-	getVersion () {return "1.3.9";}
+	getVersion () {return "1.4.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class CharCounter {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Textarea","Fixed issue where counter would not get attached to chat textarea"]],
+			"fixed":[["New WYSIWYG Textarea","Fixed for the new WYSIWYG Textarea that is hidden by experiments"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
@@ -38,43 +38,43 @@ class CharCounter {
 			${BDFDB.dotCNS.typing + BDFDB.dotCN.cooldownwrapper} {
 				margin-right: 64px;
 			}
-			.charcounter-added {
+			${BDFDB.dotCN._charcountercounteradded} {
 				position: relative !important;
 			}
-			.charcounter {
+			${BDFDB.dotCN._charcountercounter} {
 				display: block;
 				position: absolute;
 				z-index: 1000;
 				pointer-events: none;
 				font-size: 15px;
 			}
-			.charcounter.normal {
+			${BDFDB.dotCN._charcountercounter}.normal {
 				right: 0;
 				bottom: -1.3em;
 			}
-			.charcounter.edit {
+			${BDFDB.dotCN._charcountercounter}.edit {
 				left: 0;
 				bottom: -1.3em;
 			}
-			.charcounter.form {
+			${BDFDB.dotCN._charcountercounter}.form {
 				right: 0;
 				bottom: -1.0em;
 			}
-			.charcounter.nickname {
+			${BDFDB.dotCN._charcountercounter}.nickname {
 				right: 0 !important;
 				top: 0 !important;
 			}
-			.charcounter.popout {
+			${BDFDB.dotCN._charcountercounter}.popout {
 				right: 3px !important;
 				bottom: -8px !important;
 				font-size: 10px !important;
 			}
-			.charcounter.profile {
+			${BDFDB.dotCN._charcountercounter}.profile {
 				right: 0 !important;
 				bottom: -10px !important;
 				font-size: 12px !important;
 			}
-			${BDFDB.dotCN.usernote} textarea:not(:focus) + .charcounter {
+			${BDFDB.dotCN.usernote} textarea:not(:focus) + ${BDFDB.dotCN._charcountercounter} {
 				display: none;
 			}`;
 	}
@@ -129,7 +129,7 @@ class CharCounter {
 
 	processChannelTextArea (e) {
 		if (e.instance.props.type && this.maxLenghts[e.instance.props.type]) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: ["TextAreaAutosize", "TextArea", "PlainTextArea"]});
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: ["TextAreaAutosize", "TextArea", "PlainTextArea", "SlateChannelTextArea"]});
 			if (index > -1) this.injectCounter(e.returnvalue, children, e.instance.props.type, BDFDB.dotCN.textarea, true);
 		}
 	}
@@ -149,9 +149,9 @@ class CharCounter {
 	
 	injectCounter (parent, children, type, refClass, parsing) {
 		if (!children) return;
-		parent.props.className = ((parent.props.className || "") + " charcounter-added").trim();
+		parent.props.className = ((parent.props.className || "") + " " + BDFDB.dotCN._charcountercounteradded).trim();
 		children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CharCounter, {
-			className: `charcounter ${type}`,
+			className: `${BDFDB.disCN._charcountercounter} ${type}`,
 			refClass: refClass,
 			parsing: parsing,
 			max: this.maxLenghts[type]
