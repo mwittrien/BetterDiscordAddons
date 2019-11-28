@@ -8918,7 +8918,7 @@ var BDFDB = {
 		BDFDB.ModuleUtils.patch(BDFDB, LibraryComponents.GuildComponents.BlobMask.prototype, "render", {
 			before: e => {
 				e.thisObject.props = Object.assign({}, LibraryComponents.GuildComponents.BlobMask.defaultProps, e.thisObject.props);
-				for (let type of newBadges) e.thisObject.state[`${type}Mask`] = new LibraryComponents.Animations.Controller({spring: 0});
+				for (let type of newBadges) if (!e.thisObject.state[`${type}Mask`]) e.thisObject.state[`${type}Mask`] = new LibraryComponents.Animations.Controller({spring: 0});
 			},
 			after: e => {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnValue, {name: "TransitionGroup"});
@@ -8964,39 +8964,37 @@ var BDFDB = {
 		BDFDB.ModuleUtils.patch(BDFDB, LibraryComponents.GuildComponents.BlobMask.prototype, "componentDidMount", {
 			after: e => {
 				for (let type of newBadges) e.thisObject.state[`${type}Mask`].update({
-					spring: null != e.thisObject.props[type] ? 1 : 0,
-					immediate: !0
+					spring: e.thisObject.props[type] != null ? 1 : 0,
+					immediate: true
 				}).start();
 			}
 		});
 		BDFDB.ModuleUtils.patch(BDFDB, LibraryComponents.GuildComponents.BlobMask.prototype, "componentWillUnmount", {
 			after: e => {
-				for (let type of newBadges) if(e.thisObject.state[`${type}Mask`]) e.thisObject.state[`${type}Mask`].destroy();
+				for (let type of newBadges) if (e.thisObject.state[`${type}Mask`]) e.thisObject.state[`${type}Mask`].destroy();
 			}
 		});
 		BDFDB.ModuleUtils.patch(BDFDB, LibraryComponents.GuildComponents.BlobMask.prototype, "componentDidUpdate", {
 			after: e => {
-				for (let type of newBadges) {
-					if (e.thisObject.props[type] != null && e.methodArguments[0][type] == null) {
-						e.thisObject.state[`${type}Mask`].update({
-							spring: 1,
-							immediate: !document.hasFocus(),
-							config: {friction: 30, tension: 900, mass: 1}
-						}).start();
-					}
-					else if (e.thisObject.props[type] == null && e.methodArguments[0][type] != null) {
-						e.thisObject.state[`${type}Mask`].update({
-							spring: 0,
-							immediate: !document.hasFocus(),
-							config: {duration: 150, friction: 10, tension: 100, mass: 1}
-						}).start();
-					}
+				for (let type of newBadges) if (e.thisObject.props[type] != null && e.methodArguments[0][type] == null) {
+					e.thisObject.state[`${type}Mask`].update({
+						spring: 1,
+						immediate: !document.hasFocus(),
+						config: {friction: 30, tension: 900, mass: 1}
+					}).start();
+				}
+				else if (e.thisObject.props[type] == null && e.methodArguments[0][type] != null) {
+					e.thisObject.state[`${type}Mask`].update({
+						spring: 0,
+						immediate: !document.hasFocus(),
+						config: {duration: 150, friction: 10, tension: 100, mass: 1}
+					}).start();
 				}
 			}
 		});
 		LibraryComponents.GuildComponents.BlobMask.prototype.getLeftBadgePositionInterpolation = function (e, t) {
 			return void 0 === t && (t = 1), e.animated.spring.to([0, 1], [20, 0]).to(function (e) {
-				return "translate(" + e * -1 + " " + e * t + ")"
+				return "translate(" + e * -1 + " " + e * t + ")";
 			});
 		};
 		LibraryComponents.GuildComponents.BlobMask.prototype.getLowerLeftBadgeStyles = function () {
@@ -9004,18 +9002,18 @@ var BDFDB = {
 			return {
 				opacity: e.to([0, .5, 1], [0, 0, 1]),
 				transform: e.to(function (e) {
-					return "translate(" + -1 * (16 - 16 * e) + "px, " + (16 - 16 * e) + "px)"
+					return "translate(" + -1 * (16 - 16 * e) + "px, " + (16 - 16 * e) + "px)";
 				})
-			}
+			};
 		};
 		LibraryComponents.GuildComponents.BlobMask.prototype.getUpperLeftBadgeStyles = function () {
 			var e = this.state.upperLeftBadgeMask.animated.spring;
 			return {
 				opacity: e.to([0, .5, 1], [0, 0, 1]),
 				transform: e.to(function (e) {
-					return "translate(" + -1 * (16 - 16 * e) + "px, " + -1 * (16 - 16 * e) + "px)"
+					return "translate(" + -1 * (16 - 16 * e) + "px, " + -1 * (16 - 16 * e) + "px)";
 				})
-			}
+			};
 		};
 		let extraDefaultProps = {};
 		for (let type of newBadges) extraDefaultProps[`${type}Width`] = 16;
