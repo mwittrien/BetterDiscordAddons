@@ -2136,7 +2136,7 @@ var BDFDB = {
 			}
 			if (type) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
 				return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("ChannelContextMenu"), Object.assign({}, e, {
-					type,
+					type: type,
 					channel: channel,
 					guild: LibraryModules.GuildStore.getGuild(channel.guild_id),
 					selected: channel.id == LibraryModules.LastChannelStore.getChannelId()

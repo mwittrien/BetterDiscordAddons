@@ -124,6 +124,19 @@ class ReadAllNotificationsButton {
 
 	// begin of own functions
 
+	onUserContextMenu (e) {
+		if (e.instance.props.channelId && e.instance.props.type == BDFDB.DiscordConstants.ContextMenuTypes.USER_PRIVATE_CHANNELS) {
+			e.returnvalue.props.children.props.children.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+				label: BDFDB.LanguageUtils.LanguageStrings.MARK_AS_READ,
+				disabled: !BDFDB.LibraryModules.DirectMessageUnreadStore.getUnreadPrivateChannelIds().includes(e.instance.props.channelId),
+				action: event => {
+					BDFDB.ContextMenuUtils.close(event.target);
+					BDFDB.DMUtils.markAsRead(e.instance.props.channelId);
+				}
+			}));
+		}
+	}
+	
 	processGuilds (e) {
 		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ConnectedUnreadDMs"});
 		if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement("div", {

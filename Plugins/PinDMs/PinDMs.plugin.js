@@ -374,22 +374,7 @@ class PinDMs {
 			if (e.node) {
 				BDFDB.DOMUtils.removeClass(e.node, BDFDB.disCN._pindmsrecentpinned);
 				e.node.removeEventListener("contextmenu", e.node.PinDMsContextMenuListener);
-				e.node.PinDMsContextMenuListener = event => {
-					let pinnedInGuild = this.isPinned(e.instance.props.channel.id, "pinnedRecents");
-					BDFDB.ContextMenuUtils.open(this, event, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
-						children: [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
-								label: this.labels[pinnedInGuild ? "context_unpinguild_text" : "context_pinguild_text"],
-								danger: pinnedInGuild,
-								action: event2 => {
-									BDFDB.ContextMenuUtils.close(event2.target);
-									if (!pinnedInGuild) this.addPin(e.instance.props.channel.id, "pinnedRecents");
-									else this.removePin(e.instance.props.channel.id, "pinnedRecents");
-								}
-							})
-						]
-					}));
-				};
+				e.node.PinDMsContextMenuListener = event => {BDFDB.DMUtils.openMenu(e.instance.props.channel.id, event);};
 				e.node.addEventListener("contextmenu", e.node.PinDMsContextMenuListener);
 				if (this.isPinned(e.instance.props.channel.id, "pinnedRecents")) {
 					BDFDB.DOMUtils.addClass(e.node, BDFDB.disCN._pindmsrecentpinned);
@@ -436,12 +421,12 @@ class PinDMs {
 					e.node.addEventListener("mousedown", e.node.PinDMsMouseDownListener);
 				}
 			}
-			if (e.returnvalue && this.isPinned(e.instance.props.channel.id, "pinnedRecents")) {
+			if (this.isPinned(e.instance.props.channel.id, "pinnedRecents") && BDFDB.DataUtils.get(this, "settings", "showPinIcon")) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"BlobMask"});
-				if (index > -1 && !children[index].props.upperBadge && BDFDB.DataUtils.get(this, "settings", "showPinIcon")) children[index].props.upperBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.IconBadge, {
+				if (index > -1) children[index].props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.IconBadge, {
 					className: BDFDB.disCN.guildbadgeiconbadge2,
 					name: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_PIN,
-					style: {backgroundColor: null}
+					style: {backgroundColor: null, transform: "scale(-1, 1)"}
 				});
 			}
 		}
