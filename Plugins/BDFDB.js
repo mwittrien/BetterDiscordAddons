@@ -81,7 +81,7 @@ var BDFDB = {
 		plugin.started = true;
 		delete plugin.stopping;
 
-		for (let name in BDFDB.myPlugins) if (!BDFDB.myPlugins[name].started && typeof BDFDB.myPlugins[name].initialize == "function") setImmediate(() => {BDFDB.TimeUtils.suppress(BDFDB.myPlugins[name].initialize.bind(BDFDB.myPlugins[name]), "Could not initiate plugin!", name)();});
+		for (let name in BDFDB.myPlugins) if (!BDFDB.myPlugins[name].started && typeof BDFDB.myPlugins[name].initialize == "function") setImmediate(_ => {BDFDB.TimeUtils.suppress(BDFDB.myPlugins[name].initialize.bind(BDFDB.myPlugins[name]), "Could not initiate plugin!", name)();});
 	};
 	BDFDB.PluginUtils.clear = function (plugin) {
 		InternalBDFDB.clearStartTimeout(plugin);
@@ -110,7 +110,7 @@ var BDFDB = {
 		delete window.PluginUpdates.plugins[url];
 
 		delete plugin.started;
-		BDFDB.TimeUtils.timeout(() => {delete plugin.stopping;});
+		BDFDB.TimeUtils.timeout(_ => {delete plugin.stopping;});
 	};
 	BDFDB.PluginUtils.translate = function (plugin) {
 		plugin.labels = {};
@@ -3870,12 +3870,12 @@ var BDFDB = {
 	BDFDB.TimeUtils = {};
 	BDFDB.TimeUtils.interval = function (callback, delay) {
 		if (typeof callback != "function" || typeof delay != "number" || delay < 1) return;
-		else return setInterval(() => {BDFDB.TimeUtils.suppress(callback, "Interval")();}, delay);
+		else return setInterval(_ => {BDFDB.TimeUtils.suppress(callback, "Interval")();}, delay);
 	};
 	BDFDB.TimeUtils.timeout = function (callback, delay) {
 		if (typeof callback != "function") return;
-		else if (typeof delay != "number" || delay < 1) return setImmediate(() => {BDFDB.TimeUtils.suppress(callback, "Immediate")();});
-		else return setTimeout(() => {BDFDB.TimeUtils.suppress(callback, "Timeout")();}, delay);
+		else if (typeof delay != "number" || delay < 1) return setImmediate(_ => {BDFDB.TimeUtils.suppress(callback, "Immediate")();});
+		else return setTimeout(_ => {BDFDB.TimeUtils.suppress(callback, "Timeout")();}, delay);
 	};
 	BDFDB.TimeUtils.clear = function (...timeobjects) {
 		for (let t of timeobjects.flat(10).filter(n => n)) {
@@ -4218,6 +4218,10 @@ var BDFDB = {
 		switchItem: "ui-switch-item",
 		switchWrapper: "ui-switch-wrapper"
 	};
+	DiscordClassModules.CharCounter = {
+		charCounter: "charCounter-7fw40k charcounter",
+		counterAdded: "counterAdded-zz9O4t"
+	};
 	DiscordClassModules.EmojiStatistics = {
 		statisticsButton: "statisticsButton-nW2KoM",
 		amountCell: "amountCell-g_W6Rx",
@@ -4331,6 +4335,7 @@ var BDFDB = {
 	DiscordClassModules.Channel = BDFDB.ModuleUtils.findByProperties("wrapper", "content", "modeSelected");
 	DiscordClassModules.ChannelContainer = BDFDB.ModuleUtils.findByProperties("actionIcon", "containerDefault");
 	DiscordClassModules.ChannelLimit = BDFDB.ModuleUtils.findByProperties("users", "total", "wrapper");
+	DiscordClassModules.ChannelSlateTextArea = BDFDB.ModuleUtils.findByProperties("slateContainer", "slateTextArea");
 	DiscordClassModules.ChannelTextArea = BDFDB.ModuleUtils.findByProperties("textArea", "attachButtonDivider");
 	DiscordClassModules.ChannelTextAreaButton = BDFDB.ModuleUtils.findByProperties("buttonWrapper", "active");
 	DiscordClassModules.ChatWindow = BDFDB.ModuleUtils.findByProperties("chat", "channelTextArea");
@@ -4482,6 +4487,8 @@ var BDFDB = {
 		_bdguildvideo: ["BDrepo", "bdGuildVideo"],
 		_bdpillselected: ["BDrepo", "bdPillSelected"],
 		_bdpillunread: ["BDrepo", "bdPillUnread"],
+		_charcountercounter: ["CharCounter", "charCounter"],
+		_charcountercounteradded: ["CharCounter", "counterAdded"],
 		_emojistatisticsstatisticsbutton: ["EmojiStatistics", "statisticsButton"],
 		_emojistatisticsamountcell: ["EmojiStatistics", "amountCell"],
 		_emojistatisticsiconcell: ["EmojiStatistics", "iconCell"],
@@ -5687,6 +5694,9 @@ var BDFDB = {
 		textareapickerbutton: ["ChannelTextArea", "button"],
 		textareapickerbuttoncontainer: ["ChannelTextArea", "buttonContainer"],
 		textareapickerbuttons: ["ChannelTextArea", "buttons"],
+		textareaslate: ["ChannelSlateTextArea", "slateTextArea"],
+		textareaslatecontainer: ["ChannelSlateTextArea", "slateContainer"],
+		textareaslateplaceholder: ["ChannelSlateTextArea", "placeholder"],
 		textareauploadinput: ["ChannelTextArea", "uploadInput"],
 		textareawrapall: ["ChannelTextArea", "channelTextArea"],
 		textareawrapchat: ["ChatWindow", "channelTextArea"],
@@ -6457,8 +6467,14 @@ var BDFDB = {
 	
 	LibraryComponents.CharCounter = reactInitialized && class BDFDB_CharCounter extends LibraryModules.React.Component {
 		getCounterString() {
-			let input = this.refElement || {};
-			let string = input.value || "", start = input.selectionStart || 0, end = input.selectionEnd || 0;
+			let input = this.refElement || {}, string = "";
+			if (BDFDB.DOMUtils.containsClass(this.refElement, BDFDB.disCN.textarea)) {
+				let instance = BDFDB.ReactUtils.findOwner(input, {name:"ChannelTextArea", up:true});
+				if (instance) string = instance.props.textValue;
+				else string = input.value || input.textContent || "";
+			}
+			else string = input.value || input.textContent || "";
+			let start = input.selectionStart || 0, end = input.selectionEnd || 0;
 			let length = this.props.parsing ? BDFDB.StringUtils.getParsedLength(string) : string.length;
 			let select = end - start == 0 ? 0 : (this.props.parsing ? BDFDB.StringUtils.getParsedLength(string.slice(start, end)) : (end - start));
 			select = !select ? 0 : (select > length ? length - (length - end - start) : select);
@@ -6484,17 +6500,17 @@ var BDFDB = {
 		}
 		handleSelection() {
 			if (!this.refElement) return;
-			let mousemove = () => {
+			let mousemove = _ => {
 				BDFDB.TimeUtils.timeout(this.forceUpdateCounter.bind(this), 10);
 			};
-			let mouseup = () => {
+			let mouseup = _ => {
 				document.removeEventListener("mousemove", mousemove);
 				document.removeEventListener("mouseup", mouseup);
-				if (this.refElement.selectionEnd - this.refElement.selectionStart) BDFDB.TimeUtils.timeout(() => {
+				if (this.refElement.selectionEnd - this.refElement.selectionStart) BDFDB.TimeUtils.timeout(_ => {
 					document.addEventListener("click", click);
 				});
 			};
-			let click = () => {
+			let click = _ => {
 				var contexttype = BDFDB.ReactUtils.getValue(document.querySelector(BDFDB.dotCN.contextmenu), "return.stateNode.props.type");
 				if (!contexttype || !contexttype.startsWith("CHANNEL_TEXT_AREA")) this.forceUpdateCounter();
 				BDFDB.TimeUtils.timeout(this.forceUpdateCounter.bind(this), 100);
@@ -6511,18 +6527,28 @@ var BDFDB = {
 				if (node) {
 					this.refElement = node.parentElement.querySelector(this.props.refClass);
 					if (this.refElement) {
-						if (!this._updateCounter) this._updateCounter = () => {
+						if (!this._updateCounter) this._updateCounter = _ => {
 							if (!document.contains(node)) BDFDB.ListenerUtils.multiRemove(this.refElement, "keydown click change", this._updateCounter);
 							else this.updateCounter();
 						};
-						if (!this._handleSelection) this._handleSelection = () => {
+						if (!this._handleSelection) this._handleSelection = _ => {
 							if (!document.contains(node)) BDFDB.ListenerUtils.multiRemove(this.refElement, "mousedown", this._handleSelection);
 							else this.handleSelection();
 						};
-						BDFDB.ListenerUtils.multiRemove(this.refElement, "keydown click change", this._updateCounter);
 						BDFDB.ListenerUtils.multiRemove(this.refElement, "mousedown", this._handleSelection);
-						BDFDB.ListenerUtils.multiAdd(this.refElement, "keydown click change", this._updateCounter);
 						BDFDB.ListenerUtils.multiAdd(this.refElement, "mousedown", this._handleSelection);
+						if (this.refElement.tagName == "input" || this.refElement.tagName == "textarea") {
+							BDFDB.ListenerUtils.multiRemove(this.refElement, "keydown click change", this._updateCounter);
+							BDFDB.ListenerUtils.multiAdd(this.refElement, "keydown click change", this._updateCounter);
+						}
+						else {
+							if (!this._mutationObserver) this._mutationObserver = new MutationObserver(changes => {
+								if (!document.contains(node)) this._mutationObserver.disconnect();
+								else this.updateCounter();
+							});
+							else this._mutationObserver.disconnect();
+							this._mutationObserver.observe(this.refElement, {childList: true, subtree: true});
+						}
 						this.updateCounter();
 					}
 					else BDFDB.LogUtils.warn("could not find referenceElement for BDFDB_CharCounter");
@@ -9374,7 +9400,7 @@ var BDFDB = {
 	BDFDB.LanguageStrings = BDFDB.LanguageUtils.LanguageStrings;
 	BDFDB.LanguageStringsCheck = BDFDB.LanguageUtils.LanguageStringsCheck;
 	BDFDB.LanguageStringsFormat = BDFDB.LanguageUtils.LanguageStringsFormat;
-	BDFDB.getLibraryStrings = () => {
+	BDFDB.getLibraryStrings = _ => {
 		let languageid = BDFDB.LanguageUtils.getLanguage().id;
 		if (InternalBDFDB.LibraryStrings[languageid]) return InternalBDFDB.LibraryStrings[languageid];
 		return InternalBDFDB.LibraryStrings.default;
