@@ -538,9 +538,9 @@ var BDFDB = {
 		var layers = document.querySelector(BDFDB.dotCN.layers);
 		if (!layers) return;
 		var id = BDFDB.NumberUtils.generateId(NotificationBars);
-		var notice = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.notice + BDFDB.disCN.noticewrapper}" notice-id="${id}"><div class="${BDFDB.disCN.noticedismiss}" style="height:36px !important; position: absolute !important; top: 0 !important; right: 0 !important; left: unset !important;"></div><span class="notice-message"></span></div>`);
+		var notice = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.notice + BDFDB.disCN.noticewrapper}" notice-id="${id}"><div class="${BDFDB.disCN.noticedismiss}" style="height: 36px !important; position: absolute !important; top: 0 !important; right: 0 !important; left: unset !important;"></div><span></span></div>`);
 		layers.parentElement.insertBefore(notice, layers);
-		var noticemessage = notice.querySelector(".notice-message");
+		var noticemessage = notice.querySelector("span");
 		if (options.platform) for (let platform of options.platform.split(" ")) if (DiscordClasses["noticeicon" + platform]) {
 			let icon = BDFDB.DOMUtils.create(`<i class="${BDFDB.disCN["noticeicon" + platform]}"></i>`);
 			BDFDB.DOMUtils.addClass(icon, BDFDB.disCN.noticeplatformicon);
