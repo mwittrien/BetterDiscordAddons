@@ -4246,8 +4246,8 @@ var BDFDB = {
 	DiscordClassModules.ServerFolders = {
 		dragPreview: "dragPreview-nXiByA",
 		guildPlaceholder: "placeholder-7bhR5s",
-		folderContent: "content-Pph8t6",
-		folderContentClosed: "closed-j55_T-",
+		folderContent: "content-Pph8t6 foldercontent",
+		folderContentClosed: "closed-j55_T- foldercontentclosed",
 		iconSwatch: "iconSwatch-_78Ghj",
 		iconSwatchInner: "iconInner-aOY-qk",
 		iconSwatchPreview: "preview-Bbg_24",
