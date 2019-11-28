@@ -3,7 +3,7 @@
 class ServerHider {
 	getName () {return "ServerHider";}
 
-	getVersion () {return "6.1.0";}
+	getVersion () {return "6.1.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -110,7 +110,7 @@ class ServerHider {
 		if (document.querySelector(BDFDB.dotCN.modalwrapper)) return;
 		if (e.instance.props.target && e.instance.props.type.startsWith("GUILD_ICON_")) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+			children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
 						label: this.labels.context_serverhider_text,
@@ -135,9 +135,7 @@ class ServerHider {
 						})]
 					})
 				]
-			});
-			if (index > -1) children.splice(index, 0, itemgroup);
-			else children.push(itemgroup);
+			}));
 		}
 	}
 
@@ -167,7 +165,7 @@ class ServerHider {
 	showHideModal () {
 		let hiddenGuildIds = BDFDB.DataUtils.load(this, "hidden", "servers") || [];
 		let hiddenFolderIds = BDFDB.DataUtils.load(this, "hidden", "folders") || [];
-		let guilds = BDFDB.LibraryModules.FolderStore.getFlattenedGuilds();
+		let guilds = BDFDB.LibraryModules.FolderStore.guildFolders.map(n => n.guildIds).flat(10).map(guildId => BDFDB.LibraryModules.GuildStore.getGuild(guildId)).filter(n => n);
 		let folders = BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId);
 		let foldersAdded = [];
 		
