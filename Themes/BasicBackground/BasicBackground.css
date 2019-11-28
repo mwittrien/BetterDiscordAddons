@@ -3635,7 +3635,8 @@ body:before {
 #app-mount #bda-qem,
 #app-mount #bda-qem-twitch-container,
 #app-mount #bda-qem-favourite-container {
-	width: 344px;
+	width: 384px;
+	box-sizing: border-box;
 }
 #app-mount #bda-qem {
 	overflow: hidden;

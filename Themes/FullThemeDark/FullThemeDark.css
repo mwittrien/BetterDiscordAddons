@@ -165,10 +165,12 @@
 #app-mount #bda-qem-favourite-container:only-child {
 	border-radius: 5px;
 }
+#app-mount .emojiPicker-3m1S-j,
 #app-mount #bda-qem,
 #app-mount #bda-qem-twitch-container,
 #app-mount #bda-qem-favourite-container {
-	width: 344px;
+	width: 384px;
+	box-sizing: border-box;
 }
 #app-mount .emojiPicker-3m1S-j,
 #bda-qem-twitch-container,

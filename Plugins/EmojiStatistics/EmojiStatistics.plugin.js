@@ -3,7 +3,7 @@
 class EmojiStatistics {
 	getName () {return "EmojiStatistics";}
 
-	getVersion () {return "2.8.9";}
+	getVersion () {return "2.9.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -41,7 +41,7 @@ class EmojiStatistics {
 				margin-right: 12px;
 				cursor: pointer;
 			}
-			.emojistatistics-button ${BDFDB.dotCNS._emojistatisticsstatisticsbutton + BDFDB.dotCN.emojipickeritem} {
+			${BDFDB.dotCNS._emojistatisticsstatisticsbutton + BDFDB.dotCN.emojipickeritem} {
 				padding: 4px;
 				flex-shrink: 0;
 				width: 22px;
