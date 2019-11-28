@@ -621,16 +621,10 @@ var BDFDB = {
 	var Tooltips = [];
 	BDFDB.TooltipUtils = {};
 	BDFDB.TooltipUtils.create = function (anker, text, options = {}) {
-		var itemlayercontainernative = document.querySelector(BDFDB.dotCN.appmount +  " > * > " + BDFDB.dotCN.itemlayercontainer);
-		if (!itemlayercontainernative || (typeof text != "string" && !BDFDB.ObjectUtils.is(options.guild)) || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
-		var itemlayercontainer = document.querySelector(".BDFDB-itemlayercontainer");
-		if (!itemlayercontainer) {
-			itemlayercontainer = itemlayercontainernative.cloneNode();
-			BDFDB.DOMUtils.addClass(itemlayercontainer, "BDFDB-itemlayercontainer");
-			itemlayercontainernative.parentElement.insertBefore(itemlayercontainer, itemlayercontainernative.nextSibling);
-		}
+		var itemlayercontainer = document.querySelector(BDFDB.dotCN.appmount +  " > * > " + BDFDB.dotCN.itemlayercontainer);
+		if (!itemlayercontainer || (typeof text != "string" && !BDFDB.ObjectUtils.is(options.guild)) || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
 		var id = BDFDB.NumberUtils.generateId(Tooltips);
-		var itemlayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents} BDFDB-itemlayer"><div class="${BDFDB.disCN.tooltip} BDFDB-tooltip-${id}"></div></div>`);
+		var itemlayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip} BDFDB-tooltip-${id}"></div></div>`);
 		itemlayercontainer.appendChild(itemlayer);
 		
 		var tooltip = itemlayer.firstElementChild;
@@ -4225,6 +4219,12 @@ var BDFDB = {
 		switchItem: "ui-switch-item",
 		switchWrapper: "ui-switch-wrapper"
 	};
+	DiscordClassModules.EmojiStatistics = {
+		statisticsButton: "statisticsButton-nW2KoM",
+		amountCell: "amountCell-g_W6Rx",
+		iconCell: "iconCell--wniOu",
+		nameCell: "nameCell-xyXENZ"
+	};
 	DiscordClassModules.ImageGallery = {
 		gallery: "gallery-JViwKR",
 		previous: "previous-xsNq6B",
@@ -4483,6 +4483,10 @@ var BDFDB = {
 		_bdguildvideo: ["BDrepo", "bdGuildVideo"],
 		_bdpillselected: ["BDrepo", "bdPillSelected"],
 		_bdpillunread: ["BDrepo", "bdPillUnread"],
+		_emojistatisticsstatisticsbutton: ["EmojiStatistics", "statisticsButton"],
+		_emojistatisticsamountcell: ["EmojiStatistics", "amountCell"],
+		_emojistatisticsiconcell: ["EmojiStatistics", "iconCell"],
+		_emojistatisticsnamecell: ["EmojiStatistics", "nameCell"],
 		_imagegallerygallery: ["ImageGallery", "gallery"],
 		_imagegalleryprevious: ["ImageGallery", "previous"],
 		_imagegallerynext: ["ImageGallery", "next"],
