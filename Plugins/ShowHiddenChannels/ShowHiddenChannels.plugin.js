@@ -3,7 +3,7 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.6.5";}
+	getVersion () {return "2.6.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ShowHiddenChannels {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Big gaps","Finally managed to sort out the bug that created huge gaps in the channel list"],["Flashing","Channel list no longer flashes and twitches when connectiong to a voice channel/collapsing a category/scrolling"],["Search Crash","Fixed issue where Discord would crash if you use the channel 'in' filter in the search popout when a server has hidden text channels"],["Collapse State","Plugin now properly remembers the hidden category collapse state even after a reload"]],
+			"fixed":[["Permission Changes","No longer allows or denies you to see a channel incorrectly after a permission update changed your access to a channel"],["Big gaps","Finally managed to sort out the bug that created huge gaps in the channel list"],["Flashing","Channel list no longer flashes and twitches when connectiong to a voice channel/collapsing a category/scrolling"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"],["Sort", "You can now sort hidden channels in the native way, meaning they will be placed below their rightful category"],["Tooltip", "The tooltip was removed and was turned into a more friendly modal, which can be access via the right click menu on a channel"]]
 		};
 
@@ -20,7 +20,7 @@ class ShowHiddenChannels {
 				Channels: "render"
 			},
 			after: {
-				ChannelItem: ["render", "componentDidMount"]
+				ChannelItem: ["render", "componentDidMount", "componentDidUpdate"]
 			}
 		};
 	}
@@ -184,7 +184,7 @@ class ShowHiddenChannels {
 			let isHidden = this.isChannelHidden(e.instance.props.channel.id);
 			if (isHidden || BDFDB.DataUtils.get(this, "settings", "showForNormal")) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-				const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 						label: BDFDB.LanguageUtils.LanguageStrings.CHANNEL + " " + BDFDB.LanguageUtils.LanguageStrings.ACCESSIBILITY,
 						action: _ => {
@@ -192,9 +192,7 @@ class ShowHiddenChannels {
 							this.showAccessModal(e.instance.props.channel, !isHidden);
 						}
 					})
-				});
-				if (index > -1) children.splice(index, 0, itemgroup);
-				else children.push(itemgroup);
+				}));
 			}
 		}
 	}
@@ -257,6 +255,12 @@ class ShowHiddenChannels {
 	}
 
 	processChannelItem (e) {
+		if (e.node) {
+			if (e.instance.props.className.indexOf(BDFDB.disCN.channelmodelocked) == -1) BDFDB.DOMUtils.removeClass(e.node, BDFDB.disCN.channelmodelocked);
+			e.node.removeEventListener("click", BDFDB.ListenerUtils.stopEvent);
+			e.node.removeEventListener("mousedown", BDFDB.ListenerUtils.stopEvent);
+			e.node.removeEventListener("mouseup", BDFDB.ListenerUtils.stopEvent);
+		}
 		if (e.instance.props.channel && this.isChannelHidden(e.instance.props.channel.id)) {
 			if (e.returnvalue) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "Icon"});
