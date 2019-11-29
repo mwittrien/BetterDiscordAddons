@@ -3,7 +3,7 @@
 class ReverseImageSearch {
 	getName () {return "ReverseImageSearch";}
 
-	getVersion () {return "3.4.8";}
+	getVersion () {return "3.4.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ReverseImageSearch {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+			"improved":[["Inbuilt Window","Option to use an inbuilt browser instead of the default OS browser"],["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 	}
 
@@ -20,9 +20,10 @@ class ReverseImageSearch {
 
 		this.defaults = {
 			settings: {
-				addUserAvatarEntry: 	{value:true, 	description:"User Avatars"},
-				addGuildIconEntry: 		{value:true, 	description:"Server Icons"},
-				addEmojiEntry: 			{value:true, 	description:"Custom Emojis/Emotes"}
+				useChromium: 			{value:false, 	inner:false,	description:"Use an inbuilt browser window instead of opening your default browser"},
+				addUserAvatarEntry: 	{value:true, 	inner:true,		description:"User Avatars"},
+				addGuildIconEntry: 		{value:true, 	inner:true,		description:"Server Icons"},
+				addEmojiEntry: 			{value:true, 	inner:true,		description:"Custom Emojis/Emotes"}
 			},
 			engines: {
 				_all: 		{value:true, 	name:BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url:null},
@@ -42,11 +43,11 @@ class ReverseImageSearch {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		let settings = BDFDB.DataUtils.get(this, "engines");
+		let settings = BDFDB.DataUtils.get(this, "settings");
 		let engines = BDFDB.DataUtils.get(this, "engines");
-		let settingsitems = [], inneritems = [];
+		let settingsitems = [], inneritems = [], engineitems = [];
 		
-		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+		for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,
 			type: "Switch",
 			plugin: this,
@@ -54,7 +55,7 @@ class ReverseImageSearch {
 			label: this.defaults.settings[key].description,
 			value: settings[key]
 		}));
-		for (let key in engines) inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+		for (let key in engines) engineitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,
 			type: "Switch",
 			plugin: this,
@@ -63,10 +64,16 @@ class ReverseImageSearch {
 			value: engines[key]
 		}));
 		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
-			title: "Search Engines:",
+			title: "Add extra ContextMenu Entry for:",
 			first: settingsitems.length == 0,
 			last: true,
 			children: inneritems
+		}));
+		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+			title: "Search Engines:",
+			first: settingsitems.length == 0,
+			last: true,
+			children: engineitems
 		}));
 		
 		return BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
@@ -130,7 +137,9 @@ class ReverseImageSearch {
 	}
 
 	onNativeContextMenu (e) {
-		if (e.instance.props.type == "NATIVE_IMAGE" && (e.instance.props.href || e.instance.props.src)) this.injectItem(e, e.instance.props.href || e.instance.props.src);
+		if (e.instance.props.type == BDFDB.DiscordConstants.ContextMenuTypes.NATIVE_IMAGE && (e.instance.props.href || e.instance.props.src)) {
+			this.injectItem(e, e.instance.props.href || e.instance.props.src);
+		}
 	}
 
 	onMessageContextMenu (e) {
@@ -154,11 +163,12 @@ class ReverseImageSearch {
 				label: this.defaults.engines[key].name,
 				danger: key == "_all",
 				action: event => {
+					let useChromium = BDFDB.DataUtils.get(this, "settings", "useChromium");
 					if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
 					if (key == "_all") {
-						for (let key2 in engines) if (key2 != "_all" && engines[key2]) window.open(this.defaults.engines[key2].url.replace(this.imgUrlReplaceString, encodeURIComponent(url)), "_blank");
+						for (let key2 in engines) if (key2 != "_all" && engines[key2]) BDFDB.DiscordUtils.openLink(this.defaults.engines[key2].url.replace(this.imgUrlReplaceString, encodeURIComponent(url)), useChromium);
 					}
-					else window.open(this.defaults.engines[key].url.replace(this.imgUrlReplaceString, encodeURIComponent(url)), "_blank");
+					else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(this.imgUrlReplaceString, encodeURIComponent(url)), useChromium);
 				}
 			}));
 			if (!items.length) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {

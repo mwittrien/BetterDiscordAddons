@@ -3,7 +3,7 @@
 class SteamProfileLink {
 	getName () {return "SteamProfileLink";}
 
-	getVersion () {return "1.0.7";}
+	getVersion () {return "1.0.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,8 +11,35 @@ class SteamProfileLink {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+			"improved":[["Inbuilt Window","Option to use an inbuilt browser instead of the default OS browser"],["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
+	}
+
+	initConstructor () {
+		this.defaults = {
+			settings: {
+				useChromium: 			{value:false,			description:"Use inbuilt browser instead of default if fails to open Steam"}
+			}
+		};
+	}
+
+	getSettingsPanel () {
+		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+		let settings = BDFDB.DataUtils.get(this, "settings");
+		let settingsitems = [];
+		
+		settingsitems = settingsitems.concat(this.createSelects(false));
+		
+		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			className: BDFDB.disCN.marginbottom8,
+			type: "Switch",
+			plugin: this,
+			keys: ["settings", key],
+			label: this.defaults.settings[key].description,
+			value: settings[key]
+		}));
+		
+		return BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 	}
 
 	//legacy
@@ -67,7 +94,7 @@ class SteamProfileLink {
 		BDFDB.ListenerUtils.stopEvent(e);
 		BDFDB.LibraryRequires.request(url, (error, response, body) => {
 			if (BDFDB.LibraryRequires.electron.shell.openExternal("steam://openurl/" + response.request.href));
-			else window.open(response.request.href, "_blank");
+			else BDFDB.DiscordUtils.openLink(response.request.href, BDFDB.DataUtils.get(this, "settings", "useChromium"));
 		});
 	}
 }

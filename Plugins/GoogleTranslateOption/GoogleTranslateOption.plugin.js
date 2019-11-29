@@ -16,10 +16,9 @@ class GoogleTranslateOption {
 
 		this.patchedModules = {
 			after: {
-				"ChannelTextArea":["componentDidMount","render"],
-				"Message":"componentDidMount",
-				"MessageContent":"componentDidMount",
-				"StandardSidebarView":"componentWillUnmount"
+				ChannelTextArea: ["componentDidMount","render"],
+				Message: "componentDidMount",
+				MessageContent: "componentDidMount"
 			}
 		};
 	}
@@ -40,8 +39,9 @@ class GoogleTranslateOption {
 
 		this.defaults = {
 			settings: {
-				addTranslateButton:		{value:true, 			description:"Adds an translate button to the chatbar."},
-				sendOriginalMessage:	{value:false, 			description:"Send the original message together with the translation."}
+				useChromium: 			{value:false,			description:"Use an inbuilt browser window instead of opening your default browser"},
+				addTranslateButton:		{value:true, 			description:"Adds an translate button to the chatbar"},
+				sendOriginalMessage:	{value:false, 			description:"Send the original message together with the translation"}
 			},
 			choices: {
 				inputContext:			{value:"auto", 			direction:"input",		place:"Context", 		description:"Input Language in received Messages:"},
@@ -153,19 +153,27 @@ class GoogleTranslateOption {
 
 
 	// begin of own functions
+	
+	onSettingsClosed (instance, wrapper, returnvalue) {
+		if (this.SettingsUpdated) {
+			delete this.SettingsUpdated;
+			this.setLanguages();
+			BDFDB.ModuleUtils.forceAllUpdates(this, "ChannelTextArea");
+		}
+	}
 
-	onMessageContextMenu (instance, menu, returnvalue) {
-		if (instance.props.message && instance.props.channel && instance.props.target) {
-			let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
+	onMessageContextMenu (e) {
+		if (e.instance.props.message && e.instance.props.channel && e.instance.props.target) {
+			let {messagediv, pos} = this.getMessageAndPos(e.instance.props.target);
 			if (!messagediv || pos == -1) return;
 			let translated = BDFDB.DOMUtils.containsClass(messagediv, "GTO-translated-message");
-			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:"MessagePinItem"});
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"MessagePinItem"});
 			const translateUntranslateItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: translated ? this.labels.context_messageuntranslateoption_text : this.labels.context_messagetranslateoption_text,
 				hint: BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Translate_Message") : null,
 				action: _ => {
-					BDFDB.ContextMenuUtils.close(menu);
-					this.translateMessage(instance.props.message, instance.props.target, instance.props.channel);
+					BDFDB.ContextMenuUtils.close(e.instance);
+					this.translateMessage(e.instance.props.message, e.instance.props.target, e.instance.props.channel);
 				}
 			});
 			if (index > -1) children.splice(index, 0, translateUntranslateItem);
@@ -173,7 +181,7 @@ class GoogleTranslateOption {
 			let text = document.getSelection().toString();
 			if (text) {
 				let GSRstring = BDFDB.ReactUtils.getValue(BDFDB.BDUtils.getPlugin("GoogleSearchReplace", true), "labels.context_googlesearchreplace_text");
-				let [children2, index2] = BDFDB.ReactUtils.findChildren(returnvalue, {name:"SearchWithGoogle", props: GSRstring ? [["label", GSRstring]] : null});
+				let [children2, index2] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"SearchWithGoogle", props: GSRstring ? [["label", GSRstring]] : null});
 				var foundtranslation, foundinput, foundoutput;
 				const searchTranslationItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 					label: this.labels.context_googletranslateoption_text,
@@ -186,7 +194,7 @@ class GoogleTranslateOption {
 							if (foundtranslation && foundinput && foundoutput) {
 								if (document.querySelector(".googletranslate-tooltip")) {
 									BDFDB.ContextMenuUtils.close(menu);
-									window.open(this.getGoogleTranslatePageURL(foundinput.id, foundoutput.id, text), "_blank");
+									BDFDB.DiscordUtils.openLink(this.getGoogleTranslatePageURL(foundinput.id, foundoutput.id, text), BDFDB.DataUtils.get(this, "settings", "useChromium"));
 								}
 								else createTooltip();
 							}
@@ -205,29 +213,29 @@ class GoogleTranslateOption {
 		}
 	}
 
-	onMessageOptionPopout (instance, popout, returnvalue) {
-		if (instance.props.message && instance.props.channel && instance.props.target && !popout.querySelector(`${this.name}-popoutMenuItem`)) {
-			let {messagediv, pos} = this.getMessageAndPos(instance.props.target);
+	onMessageOptionPopout (e) {
+		if (e.instance.props.message && e.instance.props.channel && e.instance.props.target) {
+			let {messagediv, pos} = this.getMessageAndPos(e.instance.props.target);
 			if (!messagediv || pos == -1) return;
 			let translated = BDFDB.DOMUtils.containsClass(messagediv, "GTO-translated-message");
-			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {props:[["label", [BDFDB.LanguageUtils.LanguageStrings.PIN, BDFDB.LanguageUtils.LanguageStrings.UNPIN]]]});
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["label", [BDFDB.LanguageUtils.LanguageStrings.PIN, BDFDB.LanguageUtils.LanguageStrings.UNPIN]]]});
 			children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 				label: this.labels[translated ? "popout_untranslateoption_text" : "popout_translateoption_text"],
 				className: BDFDB.disCN.optionpopoutitem,
 				action: _ => {
-					this.translateMessage(instance.props.message, instance.props.target, instance.props.channel);
-					instance.props.onClose();
+					this.translateMessage(e.instance.props.message, e.instance.props.target, e.instance.props.channel);
+					e.instance.props.onClose();
 				}
 			}));
 		}
 	}
 
-	processChannelTextArea (instance, wrapper, returnvalue, methodnames) {
-		if (instance.props.type != "normal" || instance.props.disabled) return;
-		if (methodnames.includes("componentDidMount") && wrapper) {
-			let textarea = wrapper.querySelector(BDFDB.dotCN.textarea);
+	processChannelTextArea (e) {
+		if (e.instance.props.type != "normal" || e.instance.props.disabled) return;
+		if (e.node) {
+			let textarea = e.node.querySelector(BDFDB.dotCN.textarea);
 			if (textarea) {
-				BDFDB.ListenerUtils.add(this, textarea, "input", () => {
+				BDFDB.ListenerUtils.add(this, textarea, "input", _ => {
 					if (this.doTranslate) {
 						this.doTranslate = false;
 						if (document.activeElement == textarea) {
@@ -245,32 +253,24 @@ class GoogleTranslateOption {
 						}
 					}
 				});
-				BDFDB.ListenerUtils.add(this, textarea, "keydown", e => {
-					if (textarea.value && this.translating && !e.shiftKey && e.which == 13 && !wrapper.querySelector(BDFDB.dotCN.autocomplete)) {
+				BDFDB.ListenerUtils.add(this, textarea, "keydown", event => {
+					if (textarea.value && this.translating && !event.shiftKey && event.which == 13 && !e.node.querySelector(BDFDB.dotCN.autocomplete)) {
 						this.doTranslate = true;
 						textarea.dispatchEvent(new Event("input"));
 					}
 				});
 			}
 		}
-		else if (methodnames.includes("render")) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {props:[["className", BDFDB.disCN.textareapickerbuttons]]});
+		if (e.returnvalue) {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.textareapickerbuttons]]});
 			if (index > -1 && children[index].props && children[index].props.children) children[index].props.children.unshift(this.createTranslateButton());
 		}
 	}
 
-	processMessageContent (instance, wrapper, returnvalue) {
-		if (instance.props.message && instance.props.channel) {
-			let messagediv = BDFDB.DOMUtils.getParent(".GTO-translated-message", wrapper);
-			if (messagediv && !wrapper.querySelector(".GTO-translation")) BDFDB.DOMUtils.removeClass(messagediv, "GTO-translated-message");
-		}
-	}
-	
-	processStandardSidebarView (instance, wrapper, returnvalue) {
-		if (this.SettingsUpdated) {
-			delete this.SettingsUpdated;
-			this.setLanguages();
-			BDFDB.ModuleUtils.forceAllUpdates(this, "ChannelTextArea");
+	processMessageContent (e) {
+		if (e.instance.props.message && e.instance.props.channel) {
+			let messagediv = BDFDB.DOMUtils.getParent(".GTO-translated-message", e.node);
+			if (messagediv && !e.node.querySelector(".GTO-translation")) BDFDB.DOMUtils.removeClass(messagediv, "GTO-translated-message");
 		}
 	}
 	

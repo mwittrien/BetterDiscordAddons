@@ -3,7 +3,7 @@
 class GoogleSearchReplace {
 	getName () {return "GoogleSearchReplace";}
 
-	getVersion () {return "1.2.1";}
+	getVersion () {return "1.2.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class GoogleSearchReplace {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+			"improved":[["Inbuilt Window","Option to use an inbuilt browser instead of the default OS browser"],["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 	}
 
@@ -19,6 +19,9 @@ class GoogleSearchReplace {
 		this.textUrlReplaceString = "DEVILBRO_BD_GOOGLESEARCHREPLACE_REPLACE_TEXTURL";
 
 		this.defaults = {
+			settings: {
+				useChromium: 		{value:false,	description:"Use an inbuilt browser window instead of opening your default browser"},
+			},
 			engines: {
 				_all: 				{value:true, 	name:BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url:null},
 				Ask: 				{value:true, 	name:"Ask", 				url:"https://ask.com/web?q=" + this.textUrlReplaceString},
@@ -41,10 +44,19 @@ class GoogleSearchReplace {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+		let settings = BDFDB.DataUtils.get(this, "settings");
 		let engines = BDFDB.DataUtils.get(this, "engines");
-		let settingsitems = [], inneritems = [];
+		let settingsitems = [], engineitems = [];
 		
-		for (let key in engines) inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			className: BDFDB.disCN.marginbottom8,
+			type: "Switch",
+			plugin: this,
+			keys: ["settings", key],
+			label: this.defaults.settings[key].description,
+			value: settings[key]
+		}));
+		for (let key in engines) engineitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,
 			type: "Switch",
 			plugin: this,
@@ -56,7 +68,7 @@ class GoogleSearchReplace {
 			title: "Search Engines:",
 			first: settingsitems.length == 0,
 			last: true,
-			children: inneritems
+			children: engineitems
 		}));
 		
 		return BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
@@ -106,7 +118,7 @@ class GoogleSearchReplace {
 	// begin of own functions
 
 	onNativeContextMenu (e) {
-		if (e.instance.props.type == "NATIVE_TEXT" && e.instance.props.value) this.injectItem(e, e.instance.props.value);
+		if (e.instance.props.type == BDFDB.DiscordConstants.ContextMenuTypes.NATIVE_TEXT && e.instance.props.value) this.injectItem(e, e.instance.props.value);
 	}
 
 	onMessageContextMenu (e) {
@@ -123,11 +135,12 @@ class GoogleSearchReplace {
 			label: this.defaults.engines[key].name,
 			danger: key == "_all",
 			action: event => {
+				let useChromium = BDFDB.DataUtils.get(this, "settings", "useChromium");
 				if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
 				if (key == "_all") {
-					for (let key2 in engines) if (key2 != "_all" && engines[key2]) window.open(this.defaults.engines[key2].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
+					for (let key2 in engines) if (key2 != "_all" && engines[key2]) BDFDB.DiscordUtils.openLink(this.defaults.engines[key2].url.replace(this.textUrlReplaceString, encodeURIComponent(url)), useChromium);
 				}
-				else window.open(this.defaults.engines[key].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), "_blank");
+				else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(this.textUrlReplaceString, encodeURIComponent(url)), useChromium);
 			}
 		}));
 		if (!items.length) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {

@@ -196,6 +196,7 @@ class PluginRepo {
 
 		this.defaults = {
 			settings: {
+				useChromium: 		{value:false,		description:"Use an inbuilt browser window instead of opening your default browser"},
 				notifyOutdated:		{value:true, 		description:"Notifies you when one of your Plugins is outdated."},
 				notifyNewentries:	{value:true, 		description:"Notifies you when there are new entries in the Repo."}
 			}
@@ -517,7 +518,7 @@ class PluginRepo {
 			else if (data.url.indexOf("https://gist.githubusercontent.com/") == 0) {
 				giturl = data.url.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
 			}
-			if (giturl) window.open(giturl, "_blank");
+			if (giturl) BDFDB.DiscordUtils.openLink(giturl, BDFDB.DataUtils.get(this, "settings", "useChromium"));
 		});
 		gitbutton.addEventListener("mouseenter", e => {
 			BDFDB.TooltipUtils.create(gitbutton, "Go to Git", {type:"top",selector:"pluginrepo-giticon-tooltip"});
