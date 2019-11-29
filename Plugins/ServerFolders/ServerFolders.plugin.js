@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.6.2";}
+	getVersion () {return "6.6.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -451,7 +451,7 @@ class ServerFolders {
 				if (BDFDB.DataUtils.get(this, "settings", "closeOtherFolders") && !forceClosing) {
 					forceClosing = true;
 					for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (openFolderId != e.methodArguments[0]) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
-					BDFDB.TimeUtils.timeout(_ => {forceClosing = false}, 1000);
+					forceClosing = false;
 				}
 			}});
 			
