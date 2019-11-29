@@ -3997,6 +3997,22 @@ var BDFDB = {
 	};
 
 	BDFDB.DiscordUtils = {};
+	BDFDB.DiscordUtils.openLink = function (url, inbuilt) {
+		if (inbuilt) window.open(url, "_blank");
+		else {
+			let browserWindow = new LibraryRequires.electron.remote.BrowserWindow({
+				frame: true,
+				resizeable: true,
+				show: true,
+				webPreferences: {
+					nodeIntegration: false,
+					nodeIntegrationInWorker: false
+				}
+			});
+			browserWindow.setMenu(null);
+			browserWindow.loadURL(url);
+		}
+	};
 	BDFDB.DiscordUtils.getFolder = function () {
 		var built = BDFDB.DiscordUtils.getBuilt();
 		built = "discord" + (built == "stable" ? "" : built);
@@ -4294,6 +4310,9 @@ var BDFDB = {
 		selectSingleDark: "css-1k00wn6-singleValue",
 		selectSingleLight: "css-6nrxdk-singleValue",
 		selectValue: "css-1hwfws3",
+		slateContainer: "slateContainer-3rqVBl",
+		slatePlaceholder: "placeholder-P6ptfj",
+		slateTextArea: "slateTextArea-1bp44y",
 		splashBackground: "splashBackground-1FRCko",
 		stopAnimations: "stop-animations",
 		subtext: "subtext-3CDbHg",
@@ -4336,7 +4355,6 @@ var BDFDB = {
 	DiscordClassModules.Channel = BDFDB.ModuleUtils.findByProperties("wrapper", "content", "modeSelected");
 	DiscordClassModules.ChannelContainer = BDFDB.ModuleUtils.findByProperties("actionIcon", "containerDefault");
 	DiscordClassModules.ChannelLimit = BDFDB.ModuleUtils.findByProperties("users", "total", "wrapper");
-	DiscordClassModules.ChannelSlateTextArea = BDFDB.ModuleUtils.findByProperties("slateContainer", "slateTextArea");
 	DiscordClassModules.ChannelTextArea = BDFDB.ModuleUtils.findByProperties("textArea", "attachButtonDivider");
 	DiscordClassModules.ChannelTextAreaButton = BDFDB.ModuleUtils.findByProperties("buttonWrapper", "active");
 	DiscordClassModules.ChatWindow = BDFDB.ModuleUtils.findByProperties("chat", "channelTextArea");
@@ -5695,9 +5713,9 @@ var BDFDB = {
 		textareapickerbutton: ["ChannelTextArea", "button"],
 		textareapickerbuttoncontainer: ["ChannelTextArea", "buttonContainer"],
 		textareapickerbuttons: ["ChannelTextArea", "buttons"],
-		textareaslate: ["ChannelSlateTextArea", "slateTextArea"],
-		textareaslatecontainer: ["ChannelSlateTextArea", "slateContainer"],
-		textareaslateplaceholder: ["ChannelSlateTextArea", "placeholder"],
+		textareaslate: ["NotFound", "slateTextArea"],
+		textareaslatecontainer: ["NotFound", "slateContainer"],
+		textareaslateplaceholder: ["NotFound", "slatePlaceholder"],
 		textareauploadinput: ["ChannelTextArea", "uploadInput"],
 		textareawrapall: ["ChannelTextArea", "channelTextArea"],
 		textareawrapchat: ["ChatWindow", "channelTextArea"],
