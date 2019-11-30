@@ -138,9 +138,9 @@ class GoogleSearchReplace {
 				let useChromium = BDFDB.DataUtils.get(this, "settings", "useChromium");
 				if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
 				if (key == "_all") {
-					for (let key2 in engines) if (key2 != "_all" && engines[key2]) BDFDB.DiscordUtils.openLink(this.defaults.engines[key2].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), useChromium);
+					for (let key2 in engines) if (key2 != "_all" && engines[key2]) BDFDB.DiscordUtils.openLink(this.defaults.engines[key2].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), useChromium, event.shiftKey);
 				}
-				else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), useChromium);
+				else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), useChromium, event.shiftKey);
 			}
 		}));
 		if (!items.length) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {

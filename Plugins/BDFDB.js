@@ -3997,13 +3997,14 @@ var BDFDB = {
 	};
 
 	BDFDB.DiscordUtils = {};
-	BDFDB.DiscordUtils.openLink = function (url, inbuilt) {
+	BDFDB.DiscordUtils.openLink = function (url, inbuilt, minimized) {
 		if (!inbuilt) window.open(url, "_blank");
 		else {
 			let browserWindow = new LibraryRequires.electron.remote.BrowserWindow({
 				frame: true,
 				resizeable: true,
 				show: true,
+				darkTheme: BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themedark,
 				webPreferences: {
 					nodeIntegration: false,
 					nodeIntegrationInWorker: false
@@ -4011,6 +4012,7 @@ var BDFDB = {
 			});
 			browserWindow.setMenu(null);
 			browserWindow.loadURL(url);
+			if (minimized) browserWindow.minimize(null);
 		}
 	};
 	BDFDB.DiscordUtils.getFolder = function () {
