@@ -1847,8 +1847,8 @@ var BDFDB = {
 	};
 	BDFDB.UserUtils.getAvatar = function (id = BDFDB.UserUtils.me.id) {
 		var user = LibraryModules.UserStore.getUser(typeof id == "number" ? id.toFixed() : id);
-		if (!user) return "https://discordapp.com/assets/322c936a8c8be1b803cd94861bdfa868.png";
-		else return ((user.avatar ? "" : "https://discordapp.com") + LibraryModules.IconUtils.getUserAvatarURL(user)).split("?")[0];
+		if (!user) return window.location.origin + "/assets/322c936a8c8be1b803cd94861bdfa868.png";
+		else return ((user.avatar ? "" : window.location.origin) + LibraryModules.IconUtils.getUserAvatarURL(user)).split("?")[0];
 	};
 	BDFDB.UserUtils.can = function (permission, id = BDFDB.UserUtils.me.id, channelid = LibraryModules.LastChannelStore.getChannelId()) {
 		if (!BDFDB.DiscordConstants.Permissions[permission]) BDFDB.LogUtils.warn(permission + " not found in Permissions");
@@ -2172,7 +2172,7 @@ var BDFDB = {
 	BDFDB.DMUtils.getIcon = function (id) {
 		var channel = LibraryModules.ChannelStore.getChannel(id = typeof id == "number" ? id.toFixed() : id);
 		if (!channel) return null;
-		if (!channel.icon) return channel.type == 1 ? BDFDB.UserUtils.getAvatar(channel.recipients[0]) : (channel.type == 3 ? "https://discordapp.com/assets/f046e2247d730629309457e902d5c5b3.svg" : null);
+		if (!channel.icon) return channel.type == 1 ? BDFDB.UserUtils.getAvatar(channel.recipients[0]) : (channel.type == 3 ? window.location.origin + LibraryModules.IconUtils.getChannelIconURL(channel).split("?")[0] : null);
 		return LibraryModules.IconUtils.getChannelIconURL(channel).split("?")[0];
 	};
 	BDFDB.DMUtils.getId = function (div) {
@@ -6936,6 +6936,7 @@ var BDFDB = {
 			this.props.badge = this.props.state ? LibraryModules.UnreadGuildUtils.getMentionCount(this.props.guild.id) : 0;
 			this.props.audio = this.props.state ? (LibraryModules.ChannelStore.getChannel(LibraryModules.LastChannelStore.getVoiceChannelId()) || {}).guild_id == this.props.guild.id : false;
 			this.props.video = this.props.state ? (LibraryModules.StreamUtils.getActiveStream() || {}).guildId == this.props.guild.id : false;
+			this.props.animatable = this.props.state ? this.props.guild.features && this.props.guild.features.has(BDFDB.DiscordConstants.GuildFeatures.ANIMATED_ICON) : false;
 			var isDraggedGuild = this.props.draggingGuildId === this.props.guild.id;
 			var Guild = isDraggedGuild ? BDFDB.ReactUtils.createElement("div", {
 				children: BDFDB.ReactUtils.createElement(LibraryComponents.GuildComponents.DragPlaceholder, {})
@@ -6992,7 +6993,7 @@ var BDFDB = {
 			});
 		}
 	};
-	InternalBDFDB.setDefaultProps(LibraryComponents.GuildComponents.Guild, {menu:true, tooltip:true, list:false, state:false, draggable:false, sorting:false, animatable:true});
+	InternalBDFDB.setDefaultProps(LibraryComponents.GuildComponents.Guild, {menu:true, tooltip:true, list:false, state:false, draggable:false, sorting:false});
 	
 	LibraryComponents.GuildComponents.Icon = BDFDB.ModuleUtils.findByName("GuildIconWrapper");
 	
