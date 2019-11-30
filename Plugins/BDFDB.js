@@ -3998,7 +3998,7 @@ var BDFDB = {
 
 	BDFDB.DiscordUtils = {};
 	BDFDB.DiscordUtils.openLink = function (url, inbuilt) {
-		if (inbuilt) window.open(url, "_blank");
+		if (!inbuilt) window.open(url, "_blank");
 		else {
 			let browserWindow = new LibraryRequires.electron.remote.BrowserWindow({
 				frame: true,
