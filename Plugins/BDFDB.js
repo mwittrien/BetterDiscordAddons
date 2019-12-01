@@ -1,24 +1,24 @@
-if (window.BDFDB && BDFDB.ListenerUtils && typeof BDFDB.ListenerUtils.remove == "function") BDFDB.ListenerUtils.remove(BDFDB);
-if (window.BDFDB && BDFDB.ObserverUtils && typeof BDFDB.ObserverUtils.disconnect == "function") BDFDB.ObserverUtils.disconnect(BDFDB);
-if (window.BDFDB && BDFDB.ModuleUtils && typeof BDFDB.ModuleUtils.unpatch == "function") BDFDB.ModuleUtils.unpatch(BDFDB);
-var BDFDB = {
-	myPlugins: Object.assign({}, BDFDB && BDFDB.myPlugins),
-	InternalData: Object.assign({
-		pressedKeys: [],
-		mousePosition: {
-			pageX: 0,
-			pageY: 0
-		},
-		patchMenuQueries: {}
-	}, BDFDB && BDFDB.InternalData, {
-		creationTime: performance.now()
-	}),
-	BDv2Api: BDFDB && BDFDB.BDv2Api || undefined,
-	pressedKeys: [], //REMOVE
-	mousePosition: {pageX: 0, pageY: 0}, //REMOVE
-	name: "$BDFDB"
-};
 (_ => {
+	if (window.BDFDB && window.BDFDB.ListenerUtils && typeof window.BDFDB.ListenerUtils.remove == "function") window.BDFDB.ListenerUtils.remove(window.BDFDB);
+	if (window.BDFDB && window.BDFDB.ObserverUtils && typeof window.BDFDB.ObserverUtils.disconnect == "function") window.BDFDB.ObserverUtils.disconnect(window.BDFDB);
+	if (window.BDFDB && window.BDFDB.ModuleUtils && typeof window.BDFDB.ModuleUtils.unpatch == "function") window.BDFDB.ModuleUtils.unpatch(window.BDFDB);
+	var BDFDB = {
+		myPlugins: Object.assign({}, window.BDFDB && window.BDFDB.myPlugins),
+		InternalData: Object.assign({
+			pressedKeys: [],
+			mousePosition: {
+				pageX: 0,
+				pageY: 0
+			},
+			patchMenuQueries: {}
+		}, window.BDFDB && window.BDFDB.InternalData, {
+			creationTime: performance.now()
+		}),
+		BDv2Api: window.BDFDB && window.BDFDB.BDv2Api || undefined,
+		pressedKeys: [], //REMOVE
+		mousePosition: {pageX: 0, pageY: 0}, //REMOVE
+		name: "$BDFDB"
+	};
 	var loadid = Math.round(Math.random() * 10000000000000000), InternalBDFDB = {};
 	BDFDB.InternalData.loadid = loadid;
 
@@ -6364,7 +6364,7 @@ var BDFDB = {
 	
 	LibraryComponents.BadgeComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("IconBadge", "NumberBadge"));
 	
-	LibraryComponents.BadgeComponents.AnimationContainer = reactInitialized && class BDFDB_BadgeContainer extends LibraryModules.React.Component {
+	LibraryComponents.BadgeComponents.AnimationContainer = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.BadgeComponents.AnimationContainer") || reactInitialized && class BDFDB_BadgeContainer extends LibraryModules.React.Component {
 		componentDidMount() {BDFDB.ReactUtils.forceUpdate(this);}
 		componentWillAppear(e) {if (typeof e == "function") e();}
 		componentWillEnter(e) {if (typeof e == "function") e();}
@@ -6379,7 +6379,7 @@ var BDFDB = {
 		}
 	};
 	
-	LibraryComponents.BotTag = reactInitialized && class BDFDB_BotTag extends LibraryModules.React.Component {
+	LibraryComponents.BotTag = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.BotTag") || reactInitialized && class BDFDB_BotTag extends LibraryModules.React.Component {
 		handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}
 		handleContextMenu(e) {if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);}
 		render() {
@@ -6393,7 +6393,7 @@ var BDFDB = {
 		}
 	};
 	
-	LibraryComponents.Button = reactInitialized && class BDFDB_Button extends LibraryModules.React.Component {
+	LibraryComponents.Button = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.Button") || reactInitialized && class BDFDB_Button extends LibraryModules.React.Component {
 		handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}
 		handleContextMenu(e) {if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);}
 		handleMouseDown(e) {if (typeof this.props.onMouseDown == "function") this.props.onMouseDown(e, this);}
@@ -6441,7 +6441,7 @@ var BDFDB = {
 		}
 	};
 	
-	LibraryComponents.Card = reactInitialized && class BDFDB_Card extends LibraryModules.React.Component {
+	LibraryComponents.Card = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.Card") || reactInitialized && class BDFDB_Card extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.hovercardwrapper, this.props.backdrop && BDFDB.disCN.hovercard, this.props.className),
@@ -6464,7 +6464,7 @@ var BDFDB = {
 	
 	LibraryComponents.CardRemoveButton = BDFDB.ModuleUtils.findByName("RemoveButton");
 	
-	LibraryComponents.ChannelTextAreaButton = reactInitialized && class BDFDB_ChannelTextAreaButton extends LibraryModules.React.Component {
+	LibraryComponents.ChannelTextAreaButton = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.ChannelTextAreaButton") || reactInitialized && class BDFDB_ChannelTextAreaButton extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Button, {
 				look: LibraryComponents.Button.Looks.BLANK,
@@ -6486,7 +6486,7 @@ var BDFDB = {
 		}
 	};
 	
-	LibraryComponents.CharCounter = reactInitialized && class BDFDB_CharCounter extends LibraryModules.React.Component {
+	LibraryComponents.CharCounter = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.CharCounter") || reactInitialized && class BDFDB_CharCounter extends LibraryModules.React.Component {
 		getCounterString() {
 			let input = this.refElement || {}, string = "";
 			if (BDFDB.DOMUtils.containsClass(this.refElement, BDFDB.disCN.textarea)) {
@@ -6587,7 +6587,7 @@ var BDFDB = {
 	
 	LibraryComponents.Clickable = BDFDB.ModuleUtils.findByName("Clickable");
 	
-	LibraryComponents.CollapseContainer = reactInitialized && class BDFDB_CollapseContainer extends LibraryModules.React.Component {
+	LibraryComponents.CollapseContainer = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.CollapseContainer") || reactInitialized && class BDFDB_CollapseContainer extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.DOMUtils.formatClassName(this.props.collapsed ? BDFDB.disCN.collapsecontainercollapsed : BDFDB.disCN.collapsecontainer, this.props.className),
@@ -6627,7 +6627,7 @@ var BDFDB = {
 		}
 	};
 	
-	LibraryComponents.ColorSwatches = reactInitialized && class BDFDB_ColorSwatches extends LibraryModules.React.Component {
+	LibraryComponents.ColorSwatches = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.ColorSwatches") || reactInitialized && class BDFDB_ColorSwatches extends LibraryModules.React.Component {
 		constructor(props) {
 			super(props);
 			
@@ -6740,7 +6740,7 @@ var BDFDB = {
 	
 	LibraryComponents.ContextMenu = BDFDB.ModuleUtils.findByName("NativeContextMenu");
 	
-	LibraryComponents.ContextMenuItem = reactInitialized && class BDFDB_ContextMenuItem extends LibraryModules.React.Component {
+	LibraryComponents.ContextMenuItem = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.ContextMenuItem") || reactInitialized && class BDFDB_ContextMenuItem extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Clickable, {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.contextmenuitem, !this.props.disabled && BDFDB.disCN.contextmenuitemclickable, this.props.danger && BDFDB.disCN.contextmenuitemdanger, this.props.disabled && BDFDB.disCN.contextmenuitemdisabled, this.props.brand && BDFDB.disCN.contextmenuitembrand, this.props.className),
@@ -6772,7 +6772,7 @@ var BDFDB = {
 	
 	LibraryComponents.ContextMenuItemGroup = BDFDB.ModuleUtils.findByString(`"div",{className`, `default.itemGroup}`);
 	
-	LibraryComponents.ContextMenuSliderItem = reactInitialized && class BDFDB_ContextMenuSliderItem extends LibraryModules.React.Component {
+	LibraryComponents.ContextMenuSliderItem = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.ContextMenuSliderItem") || reactInitialized && class BDFDB_ContextMenuSliderItem extends LibraryModules.React.Component {
 		handleValueChange(value) {
 			let newvalue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value) : value;
 			if (typeof this.props.digits == "number") newvalue = Math.round(newvalue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
@@ -6804,7 +6804,7 @@ var BDFDB = {
 	
 	LibraryComponents.ContextMenuSubItem = BDFDB.ModuleUtils.findByName("FluxContainer(SubMenuItem)");
 	
-	LibraryComponents.ContextMenuToggleItem = reactInitialized && class BDFDB_ContextMenuToggleItem extends LibraryModules.React.Component {
+	LibraryComponents.ContextMenuToggleItem = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.ContextMenuToggleItem") || reactInitialized && class BDFDB_ContextMenuToggleItem extends LibraryModules.React.Component {
 		handleToggle() {
 			this.props.active = !this.props.active;
 			BDFDB.ReactUtils.forceUpdate(this);
@@ -6815,7 +6815,7 @@ var BDFDB = {
 		}
 	};
 	
-	LibraryComponents.FavButton = reactInitialized && class BDFDB_FavButton extends LibraryModules.React.Component {
+	LibraryComponents.FavButton = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.FavButton") || reactInitialized && class BDFDB_FavButton extends LibraryModules.React.Component {
 		handleClick() {
 			this.props.isFavorite = !this.props.isFavorite;
 			BDFDB.ReactUtils.forceUpdate(this);
@@ -6829,7 +6829,7 @@ var BDFDB = {
 		}
 	};
 	
-	LibraryComponents.FileButton = reactInitialized && class BDFDB_FileButton extends LibraryModules.React.Component {
+	LibraryComponents.FileButton = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.FileButton") || reactInitialized && class BDFDB_FileButton extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Button, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				onClick: e => {e.currentTarget.querySelector("input").click();},
@@ -6857,7 +6857,7 @@ var BDFDB = {
 	
 	LibraryComponents.FormComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("FormSection", "FormText"));
 	
-	LibraryComponents.FormComponents.FormItem = reactInitialized && class BDFDB_FormItem extends LibraryModules.React.Component {
+	LibraryComponents.FormComponents.FormItem = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.FormComponents.FormItem") || reactInitialized && class BDFDB_FormItem extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement("div", {
 				className: this.props.className,
@@ -6890,7 +6890,7 @@ var BDFDB = {
 	
 	LibraryComponents.GuildComponents.BlobMask = BDFDB.ModuleUtils.findByName("BlobMask");
 	
-	LibraryComponents.GuildComponents.Guild = reactInitialized && class BDFDB_Guild extends LibraryModules.React.Component {
+	LibraryComponents.GuildComponents.Guild = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.GuildComponents.Guild") || reactInitialized && class BDFDB_Guild extends LibraryModules.React.Component {
 		constructor(props) {
 			super(props);
 			this.state = {hovered: false};
@@ -6999,7 +6999,7 @@ var BDFDB = {
 	
 	LibraryComponents.GuildComponents.Pill = BDFDB.ModuleUtils.findByString("opacity:1,height:", "20:8", "default.item");
 	
-	LibraryComponents.KeybindRecorder = reactInitialized && class BDFDB_KeybindRecorder extends LibraryModules.React.Component {
+	LibraryComponents.KeybindRecorder = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.KeybindRecorder") || reactInitialized && class BDFDB_KeybindRecorder extends LibraryModules.React.Component {
 		handleChange(arrays) {
 			if (typeof this.props.onChange == "function") this.props.onChange(arrays.map(platformkey => LibraryModules.KeyEvents.codes[BDFDB.LibraryModules.KeyCodeUtils.codeToKey(platformkey)] || platformkey[1]), this);
 		}
@@ -7038,7 +7038,7 @@ var BDFDB = {
 	
 	LibraryComponents.ListItem = BDFDB.ModuleUtils.findByName("ListItem");
 	
-	LibraryComponents.ListRow = reactInitialized && class BDFDB_ListRow extends LibraryModules.React.Component {
+	LibraryComponents.ListRow = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.ListRow") || reactInitialized && class BDFDB_ListRow extends LibraryModules.React.Component {
 		render () {
 			return BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.listrow, this.props.className),
@@ -7071,7 +7071,7 @@ var BDFDB = {
 	
 	LibraryComponents.MessagesPopoutComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Header", "EmptyStateBottom"));
 	
-	LibraryComponents.MemberRole = reactInitialized && class BDFDB_MemberRole extends LibraryModules.React.Component {
+	LibraryComponents.MemberRole = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.MemberRole") || reactInitialized && class BDFDB_MemberRole extends LibraryModules.React.Component {
 		handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}
 		handleContextMenu(e) {if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);}
 		render() {
@@ -7097,7 +7097,7 @@ var BDFDB = {
 	
 	LibraryComponents.ModalComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("ModalContent", "ModalFooter"));
 	
-	LibraryComponents.ModalComponents.ModalContent = reactInitialized && class BDFDB_ModalContent extends LibraryModules.React.Component {
+	LibraryComponents.ModalComponents.ModalContent = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.ModalComponents.ModalContent") || reactInitialized && class BDFDB_ModalContent extends LibraryModules.React.Component {
 		render() {
 			return this.props.scroller || this.props.scroller === undefined ? BDFDB.ReactUtils.createElement(LibraryComponents.ScrollerVertical, {
 				outerClassName: BDFDB.disCN.modalcontent,
@@ -7119,7 +7119,7 @@ var BDFDB = {
 		}
 	};
 	
-	LibraryComponents.ModalComponents.ModalTabContent = reactInitialized && class BDFDB_ModalTabContent extends LibraryModules.React.Component {
+	LibraryComponents.ModalComponents.ModalTabContent = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.ModalComponents.ModalTabContent") || reactInitialized && class BDFDB_ModalTabContent extends LibraryModules.React.Component {
 		render() {
 			let childprops = Object.assign({}, this.props);
 			BDFDB.ObjectUtils.delete(childprops, "open");
@@ -7136,7 +7136,7 @@ var BDFDB = {
 	
 	LibraryComponents.NavItem = BDFDB.ModuleUtils.findByName("NavItem");
 	
-	LibraryComponents.Popout = reactInitialized && class BDFDB_Popout extends LibraryModules.React.Component {
+	LibraryComponents.Popout = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.Popout") || reactInitialized && class BDFDB_Popout extends LibraryModules.React.Component {
 		componentWillUnmount() {
 			delete this.props.containerInstance.popout;
 			if (typeof this.props.onClose == "function") this.props.onClose(this.props.containerInstance, this);
@@ -7161,7 +7161,7 @@ var BDFDB = {
 		}
 	};
 	
-	LibraryComponents.PopoutContainer = reactInitialized && class BDFDB_PopoutContainer extends LibraryModules.React.Component {
+	LibraryComponents.PopoutContainer = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.PopoutContainer") || reactInitialized && class BDFDB_PopoutContainer extends LibraryModules.React.Component {
 		handleRender(e) {
 			return this.popout = BDFDB.ReactUtils.createElement(LibraryComponents.Popout, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				className: this.props.popoutClassName,
@@ -7209,7 +7209,7 @@ var BDFDB = {
 		}
 	};
 	
-	LibraryComponents.QuickSelect = reactInitialized && class BDFDB_QuickSelect extends LibraryModules.React.Component {
+	LibraryComponents.QuickSelect = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.QuickSelect") || reactInitialized && class BDFDB_QuickSelect extends LibraryModules.React.Component {
 		handleChange(option) {
 			this.props.value = option;
 			BDFDB.ReactUtils.forceUpdate(this);
@@ -7283,7 +7283,7 @@ var BDFDB = {
 	
 	LibraryComponents.ScrollerVertical = BDFDB.ModuleUtils.findByName("VerticalScroller");
 	
-	LibraryComponents.SearchBar = reactInitialized && class BDFDB_SearchBar extends LibraryModules.React.Component {
+	LibraryComponents.SearchBar = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.SearchBar") || reactInitialized && class BDFDB_SearchBar extends LibraryModules.React.Component {
 		handleChange(query) {
 			this.props.query = query;
 			BDFDB.ReactUtils.forceUpdate(this);
@@ -7305,7 +7305,7 @@ var BDFDB = {
 		}
 	};
 	
-	LibraryComponents.Select = reactInitialized && class BDFDB_Select extends LibraryModules.React.Component {
+	LibraryComponents.Select = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.Select") || reactInitialized && class BDFDB_Select extends LibraryModules.React.Component {
 		handleChange(value) {
 			this.props.value = value;
 			BDFDB.ReactUtils.forceUpdate(this);
@@ -7323,7 +7323,7 @@ var BDFDB = {
 		}
 	};
 	
-	LibraryComponents.SettingsPanel = reactInitialized && class BDFDB_SettingsPanel extends LibraryModules.React.Component {
+	LibraryComponents.SettingsPanel = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.SettingsPanel") || reactInitialized && class BDFDB_SettingsPanel extends LibraryModules.React.Component {
 		render() {
 			return this.props.children ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				direction: LibraryComponents.Flex.Direction.VERTICAL,
@@ -7347,7 +7347,7 @@ var BDFDB = {
 		}
 	};
 	
-	LibraryComponents.SettingsPanelInner = reactInitialized && class BDFDB_SettingsPanelInner extends LibraryModules.React.Component {
+	LibraryComponents.SettingsPanelInner = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.SettingsPanelInner") || reactInitialized && class BDFDB_SettingsPanelInner extends LibraryModules.React.Component {
 		render() {
 			return this.props.children ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				direction: LibraryComponents.Flex.Direction.VERTICAL,
@@ -7373,7 +7373,7 @@ var BDFDB = {
 		}
 	};
 	
-	LibraryComponents.SettingsItem = reactInitialized && class BDFDB_SettingsItem extends LibraryModules.React.Component {
+	LibraryComponents.SettingsItem = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.SettingsItem") || reactInitialized && class BDFDB_SettingsItem extends LibraryModules.React.Component {
 		handleChange(value) {
 			if (typeof this.props.onChange == "function") this.props.onChange(value, this);
 		}
@@ -7429,7 +7429,7 @@ var BDFDB = {
 		}
 	};
 	
-	LibraryComponents.SettingsLabel = reactInitialized && class BDFDB_SettingsLabel extends LibraryModules.React.Component {
+	LibraryComponents.SettingsLabel = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.SettingsLabel") || reactInitialized && class BDFDB_SettingsLabel extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement(LibraryComponents.TextScroller, {
 				className: BDFDB.DOMUtils.formatClassName(this.props.mini ? BDFDB.disCN.titlemini : BDFDB.disCN.titledefault, BDFDB.disCN.cursordefault),
@@ -7439,7 +7439,7 @@ var BDFDB = {
 		}	
 	};
 	
-	LibraryComponents.SettingsSaveItem = reactInitialized && class BDFDB_SettingsSaveItem extends LibraryModules.React.Component {
+	LibraryComponents.SettingsSaveItem = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.SettingsSaveItem") || reactInitialized && class BDFDB_SettingsSaveItem extends LibraryModules.React.Component {
 		saveSettings(value) {
 			if (!BDFDB.ArrayUtils.is(this.props.keys) || !BDFDB.ObjectUtils.is(this.props.plugin)) return;
 			let keys = this.props.keys.filter(n => n);
@@ -7467,7 +7467,7 @@ var BDFDB = {
 		}
 	};
 	
-	LibraryComponents.SettingsSwitch = reactInitialized && class BDFDB_SettingsSwitch extends LibraryModules.React.Component { // REMOVE
+	LibraryComponents.SettingsSwitch = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.SettingsSwitch") || reactInitialized && class BDFDB_SettingsSwitch extends LibraryModules.React.Component { // REMOVE
 		render() {
 			return BDFDB.ReactUtils.createElement(LibraryComponents.SettingsSaveItem, Object.assign({keys:[]}, this.props, {
 				type: "Switch"
@@ -7479,7 +7479,7 @@ var BDFDB = {
 	
 	LibraryComponents.SvgIcon = BDFDB.ModuleUtils.findByProperties("Gradients", "Names");
 	
-	LibraryComponents.Switch = reactInitialized && class BDFDB_Switch extends LibraryModules.React.Component {
+	LibraryComponents.Switch = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.Switch") || reactInitialized && class BDFDB_Switch extends LibraryModules.React.Component {
 		handleChange() {
 			this.props.value = !this.props.value;
 			BDFDB.ReactUtils.forceUpdate(this);
@@ -7490,7 +7490,7 @@ var BDFDB = {
 		}
 	};
 	
-	LibraryComponents.TabBar = reactInitialized && class BDFDB_TabBar extends LibraryModules.React.Component {
+	LibraryComponents.TabBar = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.TabBar") || reactInitialized && class BDFDB_TabBar extends LibraryModules.React.Component {
 		handleItemSelect(item) {
 			this.props.selectedItem = item;
 			BDFDB.ReactUtils.forceUpdate(this);
@@ -7514,7 +7514,7 @@ var BDFDB = {
 		}
 	};
 	
-	LibraryComponents.Table = reactInitialized && class BDFDB_Table extends LibraryModules.React.Component {
+	LibraryComponents.Table = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.Table") || reactInitialized && class BDFDB_Table extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement(NativeSubComponents.Table, Object.assign({}, this.props, {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.table, this.props.className),
@@ -7535,7 +7535,7 @@ var BDFDB = {
 		}
 	};
 	
-	LibraryComponents.TextArea = reactInitialized && class BDFDB_TextArea extends LibraryModules.React.Component {
+	LibraryComponents.TextArea = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.TextArea") || reactInitialized && class BDFDB_TextArea extends LibraryModules.React.Component {
 		handleChange(e) {
 			this.props.value = e;
 			BDFDB.ReactUtils.forceUpdate(this);
@@ -7554,7 +7554,7 @@ var BDFDB = {
 	
 	LibraryComponents.TextElement = BDFDB.ModuleUtils.findByName("Text");
 	
-	LibraryComponents.TextInput = reactInitialized && class BDFDB_TextInput extends LibraryModules.React.Component {
+	LibraryComponents.TextInput = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.TextInput") || reactInitialized && class BDFDB_TextInput extends LibraryModules.React.Component {
 		handleChange(e) {
 			e = BDFDB.ObjectUtils.is(e) ? e.currentTarget.value : e;
 			this.props.value = e;
@@ -7665,7 +7665,7 @@ var BDFDB = {
 		}
 	};
 	
-	LibraryComponents.TextScroller = reactInitialized && class BDFDB_TextScroller extends LibraryModules.React.Component {
+	LibraryComponents.TextScroller = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.TextScroller") || reactInitialized && class BDFDB_TextScroller extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.textscroller, this.props.className),
@@ -7720,7 +7720,7 @@ var BDFDB = {
 			});
 		}
 	};
-	LibraryComponents.TooltipContainer = reactInitialized && class BDFDB_TooltipContainer extends LibraryModules.React.Component {
+	LibraryComponents.TooltipContainer = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.TooltipContainer") || reactInitialized && class BDFDB_TooltipContainer extends LibraryModules.React.Component {
 		render() {
 			let child = (BDFDB.ArrayUtils.is(this.props.children) ? this.props.children[0] : this.props.children) || BDFDB.ReactUtils.createElement("div", {});
 			child.props.className = BDFDB.DOMUtils.formatClassName(child.props.className, this.props.className);
@@ -9432,6 +9432,7 @@ var BDFDB = {
 	BDFDB.LibraryComponents.NumberBadge = LibraryComponents.BadgeComponents.NumberBadge;
 
 	BDFDB.loaded = true;
+	window.BDFDB = BDFDB;
 	InternalBDFDB.reloadLib = _ => {
 		var libraryScript = document.querySelector("head script#BDFDBLibraryScript");
 		if (libraryScript) libraryScript.remove();
