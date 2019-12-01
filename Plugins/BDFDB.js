@@ -6816,6 +6816,8 @@
 		}
 	};
 	
+	LibraryComponents.Connectors = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Router", "Link"));
+	
 	LibraryComponents.ContextMenu = BDFDB.ModuleUtils.findByName("NativeContextMenu");
 	
 	LibraryComponents.ContextMenuItem = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.ContextMenuItem") || reactInitialized && class BDFDB_ContextMenuItem extends LibraryModules.React.Component {
