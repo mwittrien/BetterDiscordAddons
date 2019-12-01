@@ -3,23 +3,34 @@
 class EditServers {
 	getName () {return "EditServers";}
 
-	getVersion () {return "2.1.2";}
-
+	getVersion () {return "2.1.3";}
+	
 	getAuthor () {return "DevilBro";}
 
 	getDescription () {return "Allows you to change the icon, name and color of servers.";}
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Tooltips","Fixed issue where native tooltip wasn't hidden"]]
+			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
 		this.patchedModules = {
+			before: {
+				Guild: "render",
+				GuildIconWrapper: "render",
+				MutualGuilds: "render",
+				FriendRow: "render",
+				QuickSwitcher: "render",
+				QuickSwitchChannelResult: "render",
+				GuildSidebar: "render",
+				GuildHeader: "render"
+			},
 			after: {
-				"Guild":"componentDidMount",
-				"GuildIconWrapper":"componentDidMount",
-				"GuildHeader":["componentDidMount","componentDidUpdate"],
-				"Clickable":"componentDidMount"
+				Guild: "render",
+				BlobMask: "render",
+				GuildIconWrapper: "render",
+				GuildIcon: "render",
+				GuildHeader: "render"
 			}
 		};
 	}
@@ -30,8 +41,8 @@ class EditServers {
 				addOriginalTooltip:		{value:true, 	inner:false,	description:"Hovering over a changed Server Header shows the original Name as Tooltip"},
 				changeInGuildList:		{value:true, 	inner:true,		description:"Server List"},
 				changeInMutualGuilds:	{value:true, 	inner:true,		description:"Mutual Servers"},
-				changeInGuildHeader:	{value:true, 	inner:true,		description:"Server Header"},
-				changeInSearchPopout:	{value:true, 	inner:true,		description:"Search Popout"}
+				changeInQuickSwitcher:	{value:true, 	inner:true,		description:"Quick Switcher"},
+				changeInGuildHeader:	{value:true, 	inner:true,		description:"Server Header"}
 			}
 		};
 	}
@@ -60,9 +71,9 @@ class EditServers {
 			color: BDFDB.LibraryComponents.Button.Colors.RED,
 			label: "Reset all Servers",
 			onClick: _ => {
-				BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset all servers?", () => {
+				BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset all Servers?", () => {
 					BDFDB.DataUtils.remove(this, "servers");
-					this.forceUpdateAll();
+					BDFDB.ModuleUtils.forceAllUpdates(this);;
 				});
 			},
 			children: BDFDB.LanguageUtils.LanguageStrings.RESET
@@ -100,7 +111,7 @@ class EditServers {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
 
-			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.IconUtils, 'getGuildBannerURL', {instead:e => {
+			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.IconUtils, "getGuildBannerURL", {instead:e => {
 				let guild = BDFDB.LibraryModules.GuildStore.getGuild(e.methodArguments[0].id);
 				if (guild) {
 					if (e.methodArguments[0].id == "410787888507256842") return guild.banner;
@@ -109,8 +120,19 @@ class EditServers {
 				}
 				return e.callOriginalMethod();
 			}});
+
+			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryComponents.GuildComponents.Guild.prototype, "render", {
+				before: e => {this.processGuild({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});},
+				after: e => {this.processGuild({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});}
+			});
+
+			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryComponents.Connectors.Link.prototype, "render", {
+				after: e => {
+					if (e.thisObject.props.className && e.thisObject.props.className.indexOf(BDFDB.disCN.guildiconwrapper) > -1) this.processGuildAcronym({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});
+				}
+			});
 			
-			this.forceUpdateAll();
+			BDFDB.ModuleUtils.forceAllUpdates(this);;
 		}
 		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
@@ -121,7 +143,7 @@ class EditServers {
 
 			let data = BDFDB.DataUtils.load(this, "servers");
 			BDFDB.DataUtils.remove(this, "servers");
-			try {this.forceUpdateAll();} catch (err) {}
+			try {BDFDB.ModuleUtils.forceAllUpdates(this);;} catch (err) {}
 			BDFDB.DataUtils.save(data, this, "servers");
 
 			for (let guildobj of BDFDB.GuildUtils.getAll()) if (guildobj.instance) {
@@ -134,10 +156,10 @@ class EditServers {
 
 	// begin of own functions
 	
-	onGuildContextMenu (instance, menu, returnvalue) {
-		if (instance.props.guild && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+	onGuildContextMenu (e) {
+		if (e.instance.props.guild) {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
+			children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
 						label: this.labels.context_localserversettings_text,
@@ -146,121 +168,224 @@ class EditServers {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_serversettings_text,
 									action: _ => {
-										BDFDB.ContextMenuUtils.close(menu);
-										this.showServerSettings(instance.props.guild);
+										BDFDB.ContextMenuUtils.close(e.instance);
+										this.showServerSettings(e.instance.props.guild);
 									}
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
 									label: this.labels.submenu_resetsettings_text,
-									disabled: !BDFDB.DataUtils.load(this, "servers", instance.props.guild.id),
+									disabled: !BDFDB.DataUtils.load(this, "servers", e.instance.props.guild.id),
 									action: _ => {
-										BDFDB.ContextMenuUtils.close(menu);
-										BDFDB.DataUtils.remove(this, "servers", instance.props.guild.id);
-										this.forceUpdateAll(instance.props.guild.id);
+										BDFDB.ContextMenuUtils.close(e.instance);
+										BDFDB.DataUtils.remove(this, "servers", e.instance.props.guild.id);
+										BDFDB.ModuleUtils.forceAllUpdates(this);;
 									}
 								})
 							]
 						})]
 					})
 				]
-			});
-			if (index > -1) children.splice(index, 0, itemgroup);
-			else children.push(itemgroup);
+			}));
 		}
 	}
 
-	processGuild (instance, wrapper, returnvalue) {
-		if (instance.props.guild) {
-			let icon = wrapper.querySelector(BDFDB.dotCN.guildicon + ":not(.fake-guildicon), " + BDFDB.dotCN.guildiconacronym + ":not(.fake-guildacronym)");
-			if (!icon) return;
-			this.changeGuildIcon(instance.props.guild, icon);
-			this.changeTooltip(instance.props.guild, wrapper.querySelector(BDFDB.dotCN.guildcontainer), "right");
-		}
-	}
-
-	processGuildIconWrapper (instance, wrapper, returnvalue) {
-		if (instance.props.guild) {
-			let icon = wrapper.classList && BDFDB.DOMUtils.containsClass(wrapper, BDFDB.disCN.avataricon) ? wrapper : wrapper.querySelector(BDFDB.dotCN.avataricon);
-			if (!icon) return;
-			this.changeGuildIcon(instance.props.guild, icon);
-			if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.friendscolumn, icon)) this.changeTooltip(instance.props.guild, icon.parentElement, "top");
-		}
-	}
-
-	processGuildHeader (instance, wrapper, returnvalue) {
-		if (instance.props.guild) {
-			this.changeGuildName(instance.props.guild, wrapper.querySelector(BDFDB.dotCN.guildheadername));
-		}
-	}
-
-	processClickable (instance, wrapper, returnvalue) {
-		if (!wrapper || !instance.props || !instance.props.className) return;
-		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.listrow) > -1) {
-			let guild = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.memoizedProps.guild");
-			if (guild && BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.type.displayName") == "GuildRow") {
-				this.changeGuildName(guild, wrapper.querySelector(BDFDB.dotCN.userprofilelistname));
+	processGuild (e) {
+		if (e.instance.props.guild && BDFDB.DataUtils.get(this, "settings", "changeInGuildList")) {
+			e.instance.props.guild = this.getGuildData(e.instance.props.guild);
+			if (e.returnvalue) {
+				let data = BDFDB.DataUtils.load(this, "servers", e.instance.props.guild.id);
+				if (data) {
+					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: ["GuildTooltip", "BDFDB_TooltipContainer"]});
+					if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						tooltipConfig: {
+							type: "right",
+							guild: e.instance.props.guild,
+							list: true,
+							backgroundColor: data.color3,
+							fontColor: data.color4
+						},
+						children: children[index].props.children
+					});
+				}
 			}
 		}
-		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.quickswitchresult) > -1) {
-			let guild = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.return.memoizedProps.guild");
-			if (guild) this.changeGuildName(guild, wrapper.querySelector(BDFDB.dotCN.quickswitchresultmatch));
-			else {
-				let channel = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.return.memoizedProps.channel");
-				if (channel && channel.guild_id) this.changeGuildName(BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id), wrapper.querySelector(BDFDB.dotCN.quickswitchresultmisccontainer));
+	}
+
+	processBlobMask (e) {
+		if (BDFDB.DataUtils.get(this, "settings", "changeInGuildList")) {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "NavItem"});
+			if (index > -1) {
+				let data = BDFDB.DataUtils.load(this, "servers", (children[index].props.to.pathname.split("/channels/")[1] || "").split("/")[0]);
+				if (data && data.shortName) children[index].props.name = data.shortName.split("").join(" ");
+			}
+		}
+	}
+
+	processGuildAcronym (e) {
+		if (typeof e.returnvalue.props.children == "function" && BDFDB.DataUtils.get(this, "settings", "changeInGuildList")) {
+			let data = BDFDB.DataUtils.load(this, "servers", (e.instance.props.to.pathname.split("/channels/")[1] || "").split("/")[0]);
+			if (data) {
+				let renderChildren = e.returnvalue.props.children;
+				e.returnvalue.props.children = (...args) => {
+					let renderedChildren = renderChildren(...args);
+			 		let [children, index] = BDFDB.ReactUtils.findChildren(renderedChildren, {props:[["className", BDFDB.disCN.guildiconacronym]]});
+					if (index > -1) {
+						let fontGradient = BDFDB.ObjectUtils.is(data.color2);
+						children[index].props.style = Object.assign({}, children[index].props.style, {
+							background: BDFDB.ObjectUtils.is(data.color1) ? BDFDB.ColorUtils.createGradient(data.color1) : BDFDB.ColorUtils.convert(data.color1, "RGBA"),
+							color: !fontGradient && BDFDB.ColorUtils.convert(data.color2, "RGBA")
+						});
+						if (fontGradient) children[index].props.children = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
+							gradient: BDFDB.ColorUtils.createGradient(data.color2),
+							children: children[index].props.children
+						});
+					}
+					return renderedChildren;
+				};
 			}
 		}
 	}
 	
-	forceUpdateAll (guildid) {
-		this.updateGuildSidebar();
-		BDFDB.ModuleUtils.forceAllUpdates(this);
+	processGuildIconWrapper (e) {
+		if (e.instance.props.guild) {
+			let settings = BDFDB.DataUtils.get(this, "settings");
+			if (e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.guildfolderguildicon) > -1) e.instance.props.guild = this.getGuildData(e.instance.props.guild, settings.changeInGuildList);
+			else if (e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.listavatar) > -1) e.instance.props.guild = this.getGuildData(e.instance.props.guild, settings.changeInMutualGuilds);
+			else e.instance.props.guild = this.getGuildData(e.instance.props.guild);
+		}
+	}
+	
+	processGuildIcon (e) {
+		if (e.instance.props.guild && e.instance.props.style && (!e.instance.props.style.backgroundImage || e.instance.props.style.backgroundImage == "none")) {
+			let data = BDFDB.DataUtils.load(this, "servers", e.instance.props.guild.id);
+			if (data) {
+				let settings = BDFDB.DataUtils.get(this, "settings");
+				if (e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.guildfolderguildicon) > -1) this.changeGuildIcon(e, data, settings.changeInGuildList);
+				else if (e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.listavatar) > -1 || BDFDB.ReactUtils.findConstructor(e.instance, "MutualGuild", {up: true})) this.changeGuildIcon(e, data, settings.changeInMutualGuilds);
+				else this.changeGuildIcon(e, data);
+			}
+		}
 	}
 
-	showServerSettings (info) {
-		var data = BDFDB.DataUtils.load(this, "servers", info.id) || {};
+	processMutualGuilds (e) {
+		if (BDFDB.DataUtils.get(this, "settings", "changeInMutualGuilds")) for (let i in e.instance.props.mutualGuilds) e.instance.props.mutualGuilds[i].guild = this.getGuildData(e.instance.props.mutualGuilds[i].guild);
+	}
+
+	processFriendRow (e) {
+		if (BDFDB.DataUtils.get(this, "settings", "changeInMutualGuilds")) for (let i in e.instance.props.mutualGuilds) e.instance.props.mutualGuilds[i] = this.getGuildData(e.instance.props.mutualGuilds[i]);
+	}
+
+	processQuickSwitcher (e) {
+		if (BDFDB.DataUtils.get(this, "settings", "changeInQuickSwitcher")) for (let i in e.instance.props.results) if (e.instance.props.results[i].type == "GUILD") e.instance.props.results[i].record = this.getGuildData(e.instance.props.results[i].record);
+	}
+
+	processQuickSwitchChannelResult (e) {
+		if (e.instance.props.channel && e.instance.props.channel.guild_id && BDFDB.DataUtils.get(this, "settings", "changeInQuickSwitcher")) {
+			e.instance.props.children.props.children = this.getGuildData(BDFDB.LibraryModules.GuildStore.getGuild(e.instance.props.channel.guild_id)).name;
+		}
+	}
+	
+	processGuildSidebar (e) {
+		if (e.instance.props.guild) {
+			let data = BDFDB.DataUtils.load(this, "servers", e.instance.props.guild.id);
+			if (data && data.removeBanner) e.instance.props.guild = new BDFDB.DiscordObjects.Guild(Object.assign({}, e.instance.props.guild, {banner: null}));
+		}
+	}
+	
+	processGuildHeader (e) {
+		if (e.instance.props.guild) {
+			let settings = BDFDB.DataUtils.get(this, "settings");
+			if (settings.changeInGuildHeader) {
+				e.instance.props.guild = this.getGuildData(e.instance.props.guild);
+				let oldName = (BDFDB.LibraryModules.GuildStore.getGuild(e.instance.props.guild.id) || {}).name;
+				if (e.returnvalue && settings.addOriginalTooltip && oldName != e.instance.props.guild.name) {
+					e.returnvalue.props.children[0] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						text: oldName,
+						children: e.returnvalue.props.children[0],
+						tooltipConfig: {type: "right"}
+					});
+				}
+			}
+		}
+	}
+	
+	getGuildData (guild, change = true) {
+		let data = change && BDFDB.DataUtils.load(this, "servers", guild.id);
+		if (data) {
+			let newGuildObject = {}, nativeObject = new BDFDB.DiscordObjects.Guild(guild);
+			for (let key in nativeObject) newGuildObject[key] = nativeObject[key];
+			newGuildObject.name = data.name || nativeObject.name;
+			newGuildObject.acronym = data.shortName && data.shortName.replace(/\s/g, "") || BDFDB.LibraryModules.StringUtils.getAcronym(newGuildObject.name);
+			if (data.removeIcon) {
+				newGuildObject.icon = null;
+				newGuildObject.getIconURL = _ => {return null;};
+			}
+			else if (data.url) newGuildObject.getIconURL = _ => {return data.url;};
+			if (data.removeBanner) newGuildObject.banner = null;
+			return newGuildObject;
+		}
+		return new BDFDB.DiscordObjects.Guild(BDFDB.LibraryModules.GuildStore.getGuild(guild.id));
+	}
+	
+	changeGuildIcon (e, data, change = true) {
+		if (change) {
+			let fontGradient = BDFDB.ObjectUtils.is(data.color2);
+			e.returnvalue.props.style = Object.assign({}, e.returnvalue.props.style, {
+				background: BDFDB.ObjectUtils.is(data.color1) ? BDFDB.ColorUtils.createGradient(data.color1) : BDFDB.ColorUtils.convert(data.color1, "RGBA"),
+				color: !fontGradient && BDFDB.ColorUtils.convert(data.color2, "RGBA")
+			});
+			if (fontGradient) e.returnvalue.props.children[0] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
+				gradient: BDFDB.ColorUtils.createGradient(data.color2),
+				children: e.returnvalue.props.children[0]
+			});
+		}
+	}
+
+	showServerSettings (guild) {
+		let data = BDFDB.DataUtils.load(this, "servers", guild.id) || {};
 		
 		BDFDB.ModalUtils.open(this, {
 			size: "MEDIUM",
 			header: this.labels.modal_header_text,
-			subheader: info.name,
+			subheader: guild.name,
 			children: [
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 					tab: this.labels.modal_tabheader1_text,
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_guildname_text,
-							className: BDFDB.disCN.marginbottom20 + " input-guildname",
+							className: BDFDB.disCN.marginbottom20,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+									inputClassName: "input-guildname",
 									value: data.name,
-									placeholder: info.name,
+									placeholder: guild.name,
 									autoFocus: true
 								})
 							]
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_guildacronym_text,
-							className: BDFDB.disCN.marginbottom20 + " input-guildacronym",
+							className: BDFDB.disCN.marginbottom20,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+									inputClassName: "input-guildacronym",
 									value: data.shortName,
-									placeholder: info.acronym
+									placeholder: guild.acronym
 								})
 							]
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_guildicon_text,
-							className: BDFDB.disCN.marginbottom8 + " input-guildicon",
+							className: BDFDB.disCN.marginbottom8,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-									inputClassName: !data.removeIcon && data.url ? BDFDB.disCN.inputsuccess : null,
+									inputClassName: "input-guildicon",
 									inputId: "GUILDICON",
+									success: !data.removeIcon && data.url,
 									value: data.url,
-									placeholder: BDFDB.GuildUtils.getIcon(info.id),
+									placeholder: BDFDB.GuildUtils.getIcon(guild.id),
 									disabled: data.removeIcon,
-									onFocus: e => {
-										this.createNoticeTooltip(e.target);
-									},
 									onChange: (value, instance) => {
 										this.checkUrl(value, instance);
 									}
@@ -275,7 +400,8 @@ class EditServers {
 							onChange: (value, instance) => {
 								let iconinputins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","GUILDICON"]]});
 								if (iconinputins) {
-									iconinputins.props.inputClassName = null;
+									delete iconinputins.props.success;
+									delete iconinputins.props.errorMessage;
 									iconinputins.props.disabled = value;
 									iconinputins.forceUpdate();
 								}
@@ -283,17 +409,15 @@ class EditServers {
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_guildbanner_text,
-							className: BDFDB.disCN.marginbottom8 + " input-guildbanner",
+							className: BDFDB.disCN.marginbottom8,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-									inputClassName: !data.removeBanner && data.banner ? BDFDB.disCN.inputsuccess : null,
+									inputClassName: "input-guildbanner",
 									inputId: "GUILDBANNER",
+									success: !data.removeBanner && data.banner,
 									value: data.banner,
-									placeholder: BDFDB.GuildUtils.getBanner(info.id),
-									disabled: data.removeBanner || info.id == "410787888507256842",
-									onFocus: e => {
-										this.createNoticeTooltip(e.target);
-									},
+									placeholder: BDFDB.GuildUtils.getBanner(guild.id),
+									disabled: data.removeBanner || guild.id == "410787888507256842",
 									onChange: (value, instance) => {
 										this.checkUrl(value, instance);
 									}
@@ -305,11 +429,12 @@ class EditServers {
 							className: BDFDB.disCN.marginbottom20 + " input-removebanner",
 							label: this.labels.modal_removebanner_text,
 							value: data.removeBanner,
-							disabled: info.id == "410787888507256842",
+							disabled: guild.id == "410787888507256842",
 							onChange: (value, instance) => {
 								let bannerinputins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","GUILDBANNER"]]});
 								if (bannerinputins) {
-									bannerinputins.props.inputClassName = null;
+									delete bannerinputins.props.success;
+									delete bannerinputins.props.errorMessage;
 									bannerinputins.props.disabled = value;
 									bannerinputins.forceUpdate();
 								}
@@ -375,11 +500,11 @@ class EditServers {
 				click: modal => {
 					let olddata = Object.assign({}, data);
 					
-					let guildnameinput = modal.querySelector(".input-guildname " + BDFDB.dotCN.input);
-					let guildacronyminput = modal.querySelector(".input-guildacronym " + BDFDB.dotCN.input);
-					let guildiconinput = modal.querySelector(".input-guildicon " + BDFDB.dotCN.input);
+					let guildnameinput = modal.querySelector(".input-guildname");
+					let guildacronyminput = modal.querySelector(".input-guildacronym");
+					let guildiconinput = modal.querySelector(".input-guildicon");
 					let removeiconinput = modal.querySelector(".input-removeicon " + BDFDB.dotCN.switchinner);
-					let guildbannerinput = modal.querySelector(".input-guildbanner " + BDFDB.dotCN.input);
+					let guildbannerinput = modal.querySelector(".input-guildbanner");
 					let removebannerinput = modal.querySelector(".input-removebanner " + BDFDB.dotCN.switchinner);
 					
 					data.name = guildnameinput.value.trim() || null;
@@ -387,7 +512,7 @@ class EditServers {
 					data.url = (!data.removeIcon && BDFDB.DOMUtils.containsClass(guildiconinput, BDFDB.disCN.inputsuccess) ? guildiconinput.value.trim() : null) || null;
 					data.removeIcon = removeiconinput.checked;
 					data.banner = (!data.removeBanner && BDFDB.DOMUtils.containsClass(guildbannerinput, BDFDB.disCN.inputsuccess) ? guildbannerinput.value.trim() : null) || null;
-					data.removeBanner = removebannerinput.checked && info.id != "410787888507256842";
+					data.removeBanner = removebannerinput.checked && guild.id != "410787888507256842";
 
 					data.color1 = BDFDB.ColorUtils.getSwatchColor(modal, 1);
 					data.color2 = BDFDB.ColorUtils.getSwatchColor(modal, 2);
@@ -395,209 +520,35 @@ class EditServers {
 					data.color4 = BDFDB.ColorUtils.getSwatchColor(modal, 4);
 
 					let changed = false;
-					if (Object.keys(data).every(key => data[key] == null || data[key] == false) && (changed = true)) BDFDB.DataUtils.remove(this, "servers", info.id);
-					else if (!BDFDB.equals(olddata, data) && (changed = true)) BDFDB.DataUtils.save(data, this, "servers", info.id);
-					if (changed) this.forceUpdateAll(info.id);
+					if (Object.keys(data).every(key => !data[key]) && (changed = true)) BDFDB.DataUtils.remove(this, "servers", guild.id);
+					else if (!BDFDB.equals(olddata, data) && (changed = true)) BDFDB.DataUtils.save(data, this, "servers", guild.id);
+					if (changed) BDFDB.ModuleUtils.forceAllUpdates(this);;
 				}
 			}]
 		});
 	}
 	
 	checkUrl (url, instance) {
-		let input = BDFDB.ReactUtils.findDOMNode(instance).firstElementChild;
 		BDFDB.TimeUtils.clear(instance.checkTimeout);
 		if (url == null || !url.trim()) {
-			if (input) BDFDB.DOMUtils.remove(input.tooltip);
-			instance.props.inputClassName = null;
+			delete instance.props.success;
+			delete instance.props.errorMessage;
 			instance.forceUpdate();
 		}
 		else instance.checkTimeout = BDFDB.TimeUtils.timeout(() => {
 			BDFDB.LibraryRequires.request(url.trim(), (error, response, result) => {
 				if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
-					if (input) BDFDB.DOMUtils.remove(input.tooltip);
-					instance.props.inputClassName = BDFDB.disCN.inputsuccess;
+					instance.props.success = true;
+					delete instance.props.errorMessage;
 				}
 				else {
-					this.createNoticeTooltip(input, true);
-					instance.props.inputClassName = BDFDB.disCN.inputerror;
+					delete instance.props.success;
+					instance.props.errorMessage = this.labels.modal_invalidurl_text;
 				}
 				delete instance.checkTimeout;
 				instance.forceUpdate();
 			});
 		}, 1000);
-	}
-
-	createNoticeTooltip (input, isinvalid = false) {
-		if (!input) return;
-		BDFDB.DOMUtils.remove(input.tooltip);
-		var invalid = isinvalid || BDFDB.DOMUtils.containsClass(input, BDFDB.disCN.inputerror);
-		var valid = invalid ? false : BDFDB.DOMUtils.containsClass(input, BDFDB.disCN.inputsuccess);
-		if (invalid || valid) input.tooltip = BDFDB.TooltipUtils.create(input, invalid ? this.labels.modal_invalidurl_text : this.labels.modal_validurl_text, {type:"right", selector:"notice-tooltip", color: invalid ? "red" : "green"});
-	}
-
-	changeGuildName (info, guildname) {
-		if (!info || !guildname || !guildname.parentElement) return;
-		if (guildname.EditServersChangeObserver && typeof guildname.EditServersChangeObserver.disconnect == "function") guildname.EditServersChangeObserver.disconnect();
-		guildname.removeEventListener("mouseenter", guildname.mouseenterListenerEditChannels);
-		let data = this.getGuildData(info.id, guildname);
-		if (data.name || data.color2 || guildname.getAttribute("changed-by-editservers")) {
-			if (BDFDB.ObjectUtils.is(data.color2)) {
-				guildname.style.setProperty("color", BDFDB.ColorUtils.convert(data.color2[Object.keys(data.color2)[0]], "RGBA"), "important");
-				BDFDB.DOMUtils.setText(guildname, BDFDB.DOMUtils.create(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color2)} !important;">${BDFDB.StringUtils.htmlEscape(data.name || info.name)}</span>`));
-			}
-			else {
-				guildname.style.setProperty("color", BDFDB.ColorUtils.convert(data.color2, "RGBA"), "important");
-				BDFDB.DOMUtils.setText(guildname, data.name || info.name);
-			}
-			if (data.name && BDFDB.DOMUtils.containsClass(guildname, BDFDB.disCN.guildheadername) && BDFDB.DataUtils.get(this, "settings", "addOriginalTooltip")) {
-				guildname.mouseenterListenerEditChannels = () => {
-					BDFDB.TooltipUtils.create(guildname.parentElement, info.name, {type:"right", selector:"EditServers-tooltip", hide:true});
-				};
-				guildname.addEventListener("mouseenter", guildname.mouseenterListenerEditChannels);
-			}
-			if (data.name || data.color2) {
-				guildname.setAttribute("changed-by-editservers", true);
-				guildname.EditServersChangeObserver = new MutationObserver((changes, _) => {
-					guildname.EditServersChangeObserver.disconnect();
-					this.changeName(info, guildname);
-				});
-				guildname.EditServersChangeObserver.observe(guildname, {attributes:true});
-			}
-			else guildname.removeAttribute("changed-by-editservers");
-		}
-	}
-
-	changeGuildIcon (info, icon) {
-		if (!info || !icon || !icon.parentElement) return;
-		if (icon.EditServersChangeObserver && typeof icon.EditServersChangeObserver.disconnect == "function") icon.EditServersChangeObserver.disconnect();
-		let data = this.getGuildData(info.id, icon);
-		if (data.url || data.name || data.shortName || data.removeIcon || icon.getAttribute("changed-by-editservers")) {
-			let url = data.url || BDFDB.GuildUtils.getIcon(info.id);
-			let name = data.name || info.name || "";
-			let shortname = data.url ? "" : (data.shortName || (info.icon && !data.removeIcon ? "" : info.acronym));
-			if (BDFDB.DOMUtils.containsClass(icon.parentElement, BDFDB.disCN.guildiconwrapper)) icon.parentElement.setAttribute("aria-label", name);
-			if (icon.tagName == "IMG") {
-				icon.setAttribute("src", data.removeIcon ? null : url);
-				let removeicon = data.removeIcon && BDFDB.DOMUtils.containsClass(icon, BDFDB.disCN.guildicon);
-				BDFDB.DOMUtils.toggle(icon, !removeicon);
-				BDFDB.DOMUtils.remove(icon.parentElement.querySelector(".fake-guildacronym"));
-				if (removeicon) {
-					let fakeicon = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.guildiconchildwrapper + BDFDB.disCN.guildiconacronym} fake-guildacronym" aria-label="Server Acronym"></div>`);
-					if (data.color1) {
-						if (BDFDB.ObjectUtils.is(data.color1)) fakeicon.style.setProperty("background-image", BDFDB.ColorUtils.createGradient(data.color1));
-						else fakeicon.style.setProperty("background-color", BDFDB.ColorUtils.convert(data.color1, "RGBA"));
-					}
-					if (data.color2) fakeicon.style.setProperty("color", BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color2) ? data.color2[Object.keys(data.color2)[0]] : data.color2, "RGBA"));
-					BDFDB.DOMUtils.setText(fakeicon, BDFDB.ObjectUtils.is(data.color2) ? BDFDB.DOMUtils.create(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color2)} !important;">${BDFDB.StringUtils.htmlEscape(shortname)}</span>`) : shortname);
-					icon.parentElement.appendChild(fakeicon);
-					fakeicon.style.setProperty("font-size", this.getFontSize(fakeicon));
-				}
-			}
-			else {
-				if (!data.removeIcon && !shortname && url) {
-					BDFDB.DOMUtils.setText(icon, "");
-					icon.style.setProperty("background-image", `url(${url})`);
-				}
-				else {
-					if (data.color1) {
-						if (BDFDB.ObjectUtils.is(data.color1)) icon.style.setProperty("background-image", BDFDB.ColorUtils.createGradient(data.color1));
-						else icon.style.setProperty("background-color", BDFDB.ColorUtils.convert(data.color1, "RGBA"));
-					}
-					else {
-						icon.style.removeProperty("background-image");
-						icon.style.removeProperty("background-color");
-					}
-					if (data.color2) icon.style.setProperty("color", BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color2) ? data.color2[Object.keys(data.color2)[0]] : data.color2, "RGBA"));
-					BDFDB.DOMUtils.setText(icon, BDFDB.ObjectUtils.is(data.color2) ? BDFDB.DOMUtils.create(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color2)} !important;">${BDFDB.StringUtils.htmlEscape(shortname)}</span>`) : shortname);
-				}
-				icon.style.setProperty("font-size", this.getFontSize(icon));
-				BDFDB.DOMUtils.toggleClass(icon, this.getNoIconClasses(icon), !icon.style.getPropertyValue("background-image") || BDFDB.ObjectUtils.is(data.color1));
-				if (data.url && !data.removeIcon) {
-					icon.style.setProperty("background-position", "center");
-					icon.style.setProperty("background-size", "cover");
-				}
-			}
-			if (data.url || data.name || data.shortName || data.removeIcon) {
-				icon.setAttribute("changed-by-editservers", true);
-				icon.EditServersChangeObserver = new MutationObserver((changes, _) => {
-					changes.forEach(
-						(change, i) => {
-							if (!data.url && !data.removeIcon && change.type == "attributes" && change.attributeName == "src" && change.target.src.indexOf(".gif") > -1) return;
-							icon.EditServersChangeObserver.disconnect();
-							this.changeGuildIcon(info, icon);
-						}
-					);
-				});
-				icon.EditServersChangeObserver.observe(icon, {attributes:true});
-			}
-			else icon.removeAttribute("changed-by-editservers");
-		}
-	}
-
-	changeTooltip (info, wrapper, type) {
-		if (!info || !wrapper || !wrapper.parentElement) return;
-		let data = this.getGuildData(info.id, wrapper);
-		wrapper.removeEventListener("mouseenter", wrapper.tooltipListenerEditServers);
-		if (data.name || data.color3 || data.color4) {
-			let folder = BDFDB.GuildUtils.getFolder(info.id);
-			let folderData = folder && BDFDB.BDUtils.getPlugin("ServerFolders", true) ? BDFDB.DataUtils.load("ServerFolders", "folders", folder.folderId) : null;
-			let color3 = data.color3 || (folderData && folderData.copyTooltipColor ? folderData.color3 : null);
-			let color4 = data.color4 || (folderData && folderData.copyTooltipColor ? folderData.color4 : null);
-			var isgradient3 = color3 && BDFDB.ObjectUtils.is(color3);
-			var isgradient4 = color4 && BDFDB.ObjectUtils.is(color4);
-			var bgColor = color3 ? (!isgradient3 ? BDFDB.ColorUtils.convert(color3, "RGBA") : BDFDB.ColorUtils.createGradient(color3)) : "";
-			var fontColor = color4 ? (!isgradient4 ? BDFDB.ColorUtils.convert(color4, "RGBA") : BDFDB.ColorUtils.createGradient(color4)) : "";
-			wrapper.tooltipListenerEditServers = () => {
-				BDFDB.TooltipUtils.create(wrapper, isgradient4 ? `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontColor} !important;">${BDFDB.StringUtils.htmlEscape(data.name || info.name)}</span>` : (data.name || info.name), {type, selector:"EditServers-tooltip", style:`${isgradient4 ? '' : 'color: ' + fontColor + ' !important; '}background: ${bgColor} !important; border-color: ${isgradient3 ? BDFDB.ColorUtils.convert(color3[0], "RGBA") : bgColor} !important;`, html:isgradient3});
-			};
-			wrapper.addEventListener("mouseenter", wrapper.tooltipListenerEditServers);
-			if (document.querySelector(BDFDB.dotCN.guildcontainer + ":hover") == wrapper) wrapper.tooltipListenerEditServers();
-		}
-	}
-
-	getFontSize (icon) {
-		if (icon.style.getPropertyValue("background-image") && icon.style.getPropertyValue("background-image").indexOf("linear-gradient(") == -1) return null;
-		else if (BDFDB.DOMUtils.containsClass(icon, BDFDB.disCN.guildicon) || BDFDB.DOMUtils.containsClass(icon, BDFDB.disCN.guildiconacronym)) {
-			var shortname = icon.firstElementChild ? icon.firstElementChild.innerText : icon.innerText;
-			if (shortname) {
-				if (shortname.length > 5) return "10px";
-				else if (shortname.length > 4) return "12px";
-				else if (shortname.length > 3) return "14px";
-				else if (shortname.length > 1) return "16px";
-				else if (shortname.length == 1) return "18px";
-			}
-		}
-		else if (BDFDB.DOMUtils.containsClass(icon, BDFDB.disCN.avatariconsizexlarge)) return "12px";
-		else if (BDFDB.DOMUtils.containsClass(icon, BDFDB.disCN.avatariconsizelarge)) return "10px";
-		else if (BDFDB.DOMUtils.containsClass(icon, BDFDB.disCN.avatariconsizemedium)) return "8px";
-		else if (BDFDB.DOMUtils.containsClass(icon, BDFDB.disCN.avatariconsizesmall)) return "4.8px";
-		else if (BDFDB.DOMUtils.containsClass(icon, BDFDB.disCN.avatariconsizemini)) return "4px";
-		return "10px";
-	}
-
-	getNoIconClasses (icon) {
-		let noiconclasses = [BDFDB.disCN.avatarnoicon];
-		if (BDFDB.DOMUtils.containsClass(icon, BDFDB.disCN.userprofilelistavatar)) noiconclasses.push(BDFDB.disCN.userprofilelistguildavatarwithouticon);
-		return noiconclasses;
-	}
-
-	getGuildData (id, wrapper) {
-		let data = BDFDB.DataUtils.load(this, "servers", id);
-		this.setBanner(id, data);
-		if (!data) return {};
-		let allenabled = true, settings = BDFDB.DataUtils.get(this, "settings");
-		for (let i in settings) if (!settings[i]) {
-			allenabled = false;
-			break;
-		}
-		if (allenabled) return data;
-		let key = null;
-		if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.guilds, wrapper)) key = "changeInGuildList";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.userprofile, wrapper) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.friends, wrapper)) key = "changeInMutualGuilds";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildheader, wrapper)) key = "changeInGuildHeader";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.searchpopout, wrapper) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.quickswitcher, wrapper)) key = "changeInSearchPopout";
-
-		return !key || settings[key] ? data : {};
 	}
 
 	setBanner (id, data) {
@@ -606,13 +557,6 @@ class EditServers {
 		if (!guild) return;
 		if (guild.EditServersCachedBanner === undefined) guild.EditServersCachedBanner = guild.banner;
 		guild.banner = data.removeBanner ? null : (data.banner || guild.EditServersCachedBanner);
-	}
-
-	updateGuildSidebar() {
-		if (document.querySelector(BDFDB.dotCN.guildheader)) {
-			var ins = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name: ["GuildSidebar", "GuildHeader"], all: true, noCopies: true, depth: 99999999, time: 99999999});
-			if (ins) for (let i in ins) ins[i].updater.enqueueForceUpdate(ins[i])
-		}
 	}
 
 	setLabelsByLanguage () {
@@ -636,7 +580,6 @@ class EditServers {
 					modal_colorpicker2_text:			"Boja fonta",
 					modal_colorpicker3_text:			"Boja tooltip",
 					modal_colorpicker4_text:			"Boja fonta",
-					modal_validurl_text:				"Vrijedi URL",
 					modal_invalidurl_text:				"Nevažeći URL"
 				};
 			case "da":		//danish
@@ -658,7 +601,6 @@ class EditServers {
 					modal_colorpicker2_text:			"Skriftfarve",
 					modal_colorpicker3_text:			"Tooltipfarve",
 					modal_colorpicker4_text:			"Skriftfarve",
-					modal_validurl_text:				"Gyldig URL",
 					modal_invalidurl_text:				"Ugyldig URL"
 				};
 			case "de":		//german
@@ -680,7 +622,6 @@ class EditServers {
 					modal_colorpicker2_text:			"Schriftfarbe",
 					modal_colorpicker3_text:			"Tooltipfarbe",
 					modal_colorpicker4_text:			"Schriftfarbe",
-					modal_validurl_text:				"Gültige URL",
 					modal_invalidurl_text:				"Ungültige URL"
 				};
 			case "es":		//spanish
@@ -702,7 +643,6 @@ class EditServers {
 					modal_colorpicker2_text:			"Color de fuente",
 					modal_colorpicker3_text:			"Color de tooltip",
 					modal_colorpicker4_text:			"Color de fuente",
-					modal_validurl_text:				"URL válida",
 					modal_invalidurl_text:				"URL inválida"
 				};
 			case "fr":		//french
@@ -724,7 +664,6 @@ class EditServers {
 					modal_colorpicker2_text:			"Couleur de la police",
 					modal_colorpicker3_text:			"Couleur de tooltip",
 					modal_colorpicker4_text:			"Couleur de la police",
-					modal_validurl_text:				"URL valide",
 					modal_invalidurl_text:				"URL invalide"
 				};
 			case "it":		//italian
@@ -746,7 +685,6 @@ class EditServers {
 					modal_colorpicker2_text:			"Colore del carattere",
 					modal_colorpicker3_text:			"Colore della tooltip",
 					modal_colorpicker4_text:			"Colore del carattere",
-					modal_validurl_text:				"URL valido",
 					modal_invalidurl_text:				"URL non valido"
 				};
 			case "nl":		//dutch
@@ -768,7 +706,6 @@ class EditServers {
 					modal_colorpicker2_text:			"Doopvontkleur",
 					modal_colorpicker3_text:			"Tooltipkleur",
 					modal_colorpicker4_text:			"Doopvontkleur",
-					modal_validurl_text:				"Geldige URL",
 					modal_invalidurl_text:				"Ongeldige URL"
 				};
 			case "no":		//norwegian
@@ -790,7 +727,6 @@ class EditServers {
 					modal_colorpicker2_text:			"Skriftfarge",
 					modal_colorpicker3_text:			"Tooltipfarge",
 					modal_colorpicker4_text:			"Skriftfarge",
-					modal_validurl_text:				"Gyldig URL",
 					modal_invalidurl_text:				"Ugyldig URL"
 				};
 			case "pl":		//polish
@@ -812,7 +748,6 @@ class EditServers {
 					modal_colorpicker2_text:			"Kolor czcionki",
 					modal_colorpicker3_text:			"Kolor podpowiedzi",
 					modal_colorpicker4_text:			"Kolor czcionki",
-					modal_validurl_text:				"Prawidłowe URL",
 					modal_invalidurl_text:				"Nieprawidłowe URL"
 				};
 			case "pt-BR":	//portuguese (brazil)
@@ -834,7 +769,6 @@ class EditServers {
 					modal_colorpicker2_text:			"Cor da fonte",
 					modal_colorpicker3_text:			"Cor da tooltip",
 					modal_colorpicker4_text:			"Cor da fonte",
-					modal_validurl_text:				"URL válido",
 					modal_invalidurl_text:				"URL inválida"
 				};
 			case "fi":		//finnish
@@ -856,7 +790,6 @@ class EditServers {
 					modal_colorpicker2_text:			"Fontinväri",
 					modal_colorpicker3_text:			"Tooltipväri",
 					modal_colorpicker4_text:			"Fontinväri",
-					modal_validurl_text:				"Voimassa URL",
 					modal_invalidurl_text:				"Virheellinen URL"
 				};
 			case "sv":		//swedish
@@ -878,7 +811,6 @@ class EditServers {
 					modal_colorpicker2_text:			"Fontfärg",
 					modal_colorpicker3_text:			"Tooltipfärg",
 					modal_colorpicker4_text:			"Fontfärg",
-					modal_validurl_text:				"Giltig URL",
 					modal_invalidurl_text:				"Ogiltig URL"
 				};
 			case "tr":		//turkish
@@ -900,7 +832,6 @@ class EditServers {
 					modal_colorpicker2_text:			"Yazı rengi",
 					modal_colorpicker3_text:			"Tooltip rengi",
 					modal_colorpicker4_text:			"Yazı rengi",
-					modal_validurl_text:				"Geçerli URL",
 					modal_invalidurl_text:				"Geçersiz URL"
 				};
 			case "cs":		//czech
@@ -922,7 +853,6 @@ class EditServers {
 					modal_colorpicker2_text:			"Barva fontu",
 					modal_colorpicker3_text:			"Barva tooltip",
 					modal_colorpicker4_text:			"Barva fontu",
-					modal_validurl_text:				"Platná URL",
 					modal_invalidurl_text:				"Neplatná URL"
 				};
 			case "bg":		//bulgarian
@@ -944,7 +874,6 @@ class EditServers {
 					modal_colorpicker2_text:			"Цвят на шрифта",
 					modal_colorpicker3_text:			"Цвят на подсказка",
 					modal_colorpicker4_text:			"Цвят на шрифта",
-					modal_validurl_text:				"Валиден URL",
 					modal_invalidurl_text:				"Невалиден URL"
 				};
 			case "ru":		//russian
@@ -966,7 +895,6 @@ class EditServers {
 					modal_colorpicker2_text:			"Цвет шрифта",
 					modal_colorpicker3_text:			"Цвет подсказка",
 					modal_colorpicker4_text:			"Цвет шрифта",
-					modal_validurl_text:				"Действительный URL",
 					modal_invalidurl_text:				"Неверная URL"
 				};
 			case "uk":		//ukrainian
@@ -988,7 +916,6 @@ class EditServers {
 					modal_colorpicker2_text:			"Колір шрифту",
 					modal_colorpicker3_text:			"Колір підказка",
 					modal_colorpicker4_text:			"Колір шрифту",
-					modal_validurl_text:				"Дійсна URL",
 					modal_invalidurl_text:				"Недійсна URL"
 				};
 			case "ja":		//japanese
@@ -1010,7 +937,6 @@ class EditServers {
 					modal_colorpicker2_text:			"フォントの色",
 					modal_colorpicker3_text:			"ツールチップの色",
 					modal_colorpicker4_text:			"フォントの色",
-					modal_validurl_text:				"有効な URL",
 					modal_invalidurl_text:				"無効な URL"
 				};
 			case "zh-TW":	//chinese (traditional)
@@ -1032,7 +958,6 @@ class EditServers {
 					modal_colorpicker2_text:			"字體顏色",
 					modal_colorpicker3_text:			"工具提示顏色",
 					modal_colorpicker4_text:			"字體顏色",
-					modal_validurl_text:				"有效的 URL",
 					modal_invalidurl_text:				"無效的 URL"
 				};
 			case "ko":		//korean
@@ -1054,7 +979,6 @@ class EditServers {
 					modal_colorpicker2_text:			"글꼴 색깔",
 					modal_colorpicker3_text:			"툴팁 색깔",
 					modal_colorpicker4_text:			"글꼴 색깔",
-					modal_validurl_text:				"유효한 URL",
 					modal_invalidurl_text:				"잘못된 URL"
 				};
 			default:		//default: english
@@ -1076,7 +1000,6 @@ class EditServers {
 					modal_colorpicker2_text:			"Fontcolor",
 					modal_colorpicker3_text:			"Tooltipcolor",
 					modal_colorpicker4_text:			"Fontcolor",
-					modal_validurl_text:				"Valid URL",
 					modal_invalidurl_text:				"Invalid URL"
 				};
 		}

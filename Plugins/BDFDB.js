@@ -1035,6 +1035,7 @@
 		FriendRow: "friendsrow",
 		Guild: "guildouter",
 		GuildIcon: "avataricon",
+		GuildSidebar: "guildchannels",
 		InstantInviteModal: "invitemodalwrapper",
 		InvitationCard: "invitemodalinviterow",
 		InviteCard: "guildsettingsinvitecard",
