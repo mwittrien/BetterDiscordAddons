@@ -1014,6 +1014,8 @@
 		InviteCard: "InviteRow",
 		PopoutContainer: "Popout",
 		MemberCard: "Member",
+		MutualGuildRow: "GuildRow",
+		MutualFriendRow: "FriendRow",
 		WebhookCard: "Webhook"
 	};
 	WebModulesData.Patchfinder = {
@@ -1033,6 +1035,8 @@
 		PrivateChannelCall: "callcurrentcontainer",
 		PrivateChannelsList: "dmchannelsscroller",
 		MemberCard: "guildsettingsmembercard",
+		MutualGuildRow: "listrow",
+		MutualFriendRow: "listrow",
 		NameTag: "nametag",
 		Note: "usernote",
 		SearchResults: "searchresultswrap",
@@ -1238,7 +1242,7 @@
 			if (instance) {
 				var name = type.split(" _ _ ")[0];
 				instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
-				instance = instance.displayName == name || instance.name == name ? instance : (BDFDB.ReactUtils.findOwner(instance, {name}) || BDFDB.ReactUtils.findOwner(instance, {name, up:true}));
+				instance = instance.displayName == name || instance.name == name ? instance : (BDFDB.ReactUtils.findConstructor(instance, name) || BDFDB.ReactUtils.findConstructor(instance, name, {up:true}));
 				if (instance) {
 					instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 					let patchfunctions = {};
@@ -1253,18 +1257,12 @@
 			const app = document.querySelector(BDFDB.dotCN.app), bdsettings = document.querySelector("#bd-settingspane-container " + BDFDB.dotCN.scrollerwrap);
 			var instancefound = false;
 			if (app) {
-				var appins = BDFDB.ReactUtils.findOwner(app, {name:type, unlimited:true}) || BDFDB.ReactUtils.findOwner(app, {name:type, unlimited:true, up:true});
-				if (appins) {
-					instancefound = true;
-					patchInstance(appins, type, patchtype);
-				}
+				var appins = BDFDB.ReactUtils.findConstructor(app, type, {unlimited:true}) || BDFDB.ReactUtils.findConstructor(app, type, {unlimited:true, up:true});
+				if (appins && (instancefound = true)) patchInstance(appins, type, patchtype);
 			}
 			if (!instancefound && bdsettings) {
-				var bdsettingsins = BDFDB.ReactUtils.findOwner(bdsettings, {name:type, unlimited:true});
-				if (bdsettingsins) {
-					instancefound = true;
-					patchInstance(bdsettingsins, type, patchtype);
-				}
+				var bdsettingsins = BDFDB.ReactUtils.findConstructor(bdsettings, type, {unlimited:true});
+				if (bdsettingsins && (instancefound = true)) patchInstance(bdsettingsins, type, patchtype);
 			}
 			if (!instancefound) {
 				let found = false, disclass = BDFDB.disCN[classname], dotclass = BDFDB.dotCN[classname];
@@ -1288,7 +1286,7 @@
 		function isCorrectInstance(instance, name) {
 			if (!instance) return false;
 			instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
-			instance = instance.displayName == name || instance.name == name ? instance : (BDFDB.ReactUtils.findOwner(instance, {name}) || BDFDB.ReactUtils.findOwner(instance, {name, up:true}));
+			instance = instance.displayName == name || instance.name == name ? instance : (BDFDB.ReactUtils.findConstructor(instance, name) || BDFDB.ReactUtils.findConstructor(instance, name, {up:true}));
 			return !!instance;
 		}
 	};
@@ -1602,6 +1600,65 @@
 			return key != null && props[key] != null && value != null && (key == "className" ? (" " + props[key] + " ").indexOf(" " + value + " ") > -1 : BDFDB.equals(props[key], value));
 		}
 	};
+	BDFDB.ReactUtils.findConstructor = function (nodeOrInstance, types, config) {
+		if (!BDFDB.ObjectUtils.is(config)) return null;
+		if (!nodeOrInstance || !types) return config.all ? (config.group ? {} : []) : null;
+		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
+		if (!BDFDB.ObjectUtils.is(instance)) return config.all ? (config.group ? {} : []) : null;
+		types = types && [types].flat().filter(n => n);
+		if (!types.length) return config.all ? (config.group ? {} : []) : null;;
+		var depth = -1;
+		var start = performance.now();
+		var maxdepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
+		var maxtime = config.unlimited ? 999999999 : (config.time === undefined ? 150 : config.time);
+		var whitelist = config.up ? {return:true, sibling:true, _reactInternalFiber:true} : {child:true, sibling:true, _reactInternalFiber:true};
+		var foundconstructors = config.group ? {} : [];
+		var singleconstructor = getConstructor(instance);
+		if (config.all) {
+			for (let i in foundconstructors) {
+				if (config.group) for (let j in foundconstructors[i]) delete foundconstructors[i][j].BDFDBreactSearch;
+				else delete foundconstructors[i].BDFDBreactSearch;
+			}
+			return foundconstructors;
+		}
+		else return singleconstructor;
+
+		function getConstructor (instance) {
+			depth++;
+			var result = undefined;
+			if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxdepth && performance.now() - start < maxtime) {
+				if (instance.type && types.some(name => (instance.type.displayName || instance.type.name) === name.split(" _ _ ")[0])) {
+					if (config.all === undefined || !config.all) result = instance.type;
+					else if (config.all) {
+						if (!instance.type.BDFDBreactSearch) {
+							instance.type.BDFDBreactSearch = true;
+							if (config.group) {
+								if (instance.type && (instance.type.displayName || instance.type.name)) {
+									var group = "Default";
+									for (let name of types) if ((instance.type.displayName || instance.type.name).split(" _ _ ")[0]) {
+										group = name;
+										break;
+									}
+									if (typeof foundinstances[group] == "undefined") foundinstances[group] = [];
+									foundinstances[group].push(instance.type);
+								}
+							}
+							else foundinstances.push(instance.type);
+						}
+					}
+				}
+				if (result === undefined) {
+					let keys = Object.getOwnPropertyNames(instance);
+					for (let i = 0; result === undefined && i < keys.length; i++) {
+						let key = keys[i];
+						if (key && whitelist[key] && (typeof instance[key] === "object" || typeof instance[key] === "function")) result = getConstructor(instance[key]);
+					}
+				}
+			}
+			depth--;
+			return result;
+		}
+	};
 	BDFDB.ReactUtils.findOwner = function (nodeOrInstance, config) {
 		if (!BDFDB.ObjectUtils.is(config)) return null;
 		if (!nodeOrInstance || !config.name && !config.key && !config.props) return config.all ? (config.group ? {} : []) : null;
@@ -1639,7 +1696,7 @@
 							if (config.group) {
 								if (config.name && instance.type && (instance.type.displayName || instance.type.name || instance.type)) {
 									var group = "Default";
-									for (let name of config.name) if (instance.type.displayName === name.split(" _ _ ")[0] || instance.type.name === name.split(" _ _ ")[0]) {
+									for (let name of config.name) if ((instance.type.displayName || instance.type.name || instance.type).split(" _ _ ")[0]) {
 										group = name;
 										break;
 									}
@@ -6930,6 +6987,7 @@
 		}
 		render() {
 			if (!this.props.guild) return null;
+			this.props.guildId = this.props.guild.id;
 			this.props.selectedChannelId = LibraryModules.LastChannelStore.getChannelId(this.props.guild.id);
 			this.props.selected = this.props.state ? LibraryModules.LastGuildStore.getGuildId() == this.props.guild.id : false;
 			this.props.unread = this.props.state ? LibraryModules.UnreadGuildUtils.hasUnread(this.props.guild.id) : false;
