@@ -1012,14 +1012,15 @@
 		BannedCard: "BannedUser",
 		InvitationCard: "InviteRow",
 		InviteCard: "InviteRow",
+		MemberCard: "Member",
 		PopoutContainer: "Popout",
 		QuickSwitchChannelResult: "Channel",
 		QuickSwitchGuildResult: "Guild",
 		QuickSwitchResult: "Result",
-		MemberCard: "Member",
 		WebhookCard: "Webhook"
 	};
 	WebModulesData.Forceobserve = [
+		"GuildIcon",
 		"QuickSwitchChannelResult",
 		"QuickSwitchGuildResult"
 	];
@@ -1033,6 +1034,7 @@
 		EmojiPicker: "emojipicker",
 		FriendRow: "friendsrow",
 		Guild: "guildouter",
+		GuildIcon: "avataricon",
 		InstantInviteModal: "invitemodalwrapper",
 		InvitationCard: "invitemodalinviterow",
 		InviteCard: "guildsettingsinvitecard",
@@ -7634,6 +7636,23 @@
 	};
 	
 	LibraryComponents.TextElement = BDFDB.ModuleUtils.findByName("Text");
+	
+	LibraryComponents.TextGradientElement = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.TextGradientElement") || reactInitialized && class BDFDB_TextGradientElement extends LibraryModules.React.Component {
+		render() {
+			if (this.props.gradient && this.props.children) return BDFDB.ReactUtils.createElement("span", {
+				children: this.props.children,
+				ref: instance => {
+					let ele = BDFDB.ReactUtils.findDOMNode(instance);
+					if (ele) {
+						ele.style.setProperty("background-image", this.props.gradient, "important");
+						ele.style.setProperty("color", "transparent", "important");
+						ele.style.setProperty("-webkit-background-clip", "text", "important");
+					}
+				}
+			});
+			return this.props.children || null;
+		}
+	};
 	
 	LibraryComponents.TextInput = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.TextInput") || reactInitialized && class BDFDB_TextInput extends LibraryModules.React.Component {
 		handleChange(e) {
