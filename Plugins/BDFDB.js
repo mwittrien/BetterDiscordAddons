@@ -1019,10 +1019,10 @@
 		MemberCard: "Member",
 		WebhookCard: "Webhook"
 	};
-	WebModulesData.Forceobserve = {
-		QuickSwitchChannelResult: true,
-		QuickSwitchGuildResult: true,
-	};
+	WebModulesData.Forceobserve = [
+		"QuickSwitchChannelResult",
+		"QuickSwitchGuildResult"
+	];
 	WebModulesData.Patchfinder = {
 		Account: "accountinfo",
 		App: "app",
@@ -1243,7 +1243,7 @@
 					delete plugin.patchedModules[patchtype][type];
 				}
 				if (!classname) patchInstance(BDFDB.ModuleUtils.findByName(mappedtype.split(" _ _ ")[0]), mappedtype, patchtype);
-				else if (DiscordClasses[classname]) checkForInstance(classname, mappedtype, patchtype, WebModulesData.Forceobserve[type.split(" _ _ ")[1] || type]);
+				else if (DiscordClasses[classname]) checkForInstance(classname, mappedtype, patchtype, WebModulesData.Forceobserve.includes(type.split(" _ _ ")[1] || type));
 			}
 		}
 		function patchInstance(instance, type, patchtype) {
@@ -1276,21 +1276,32 @@
 			}
 			if (!instancefound) {
 				let found = false, disclass = BDFDB.disCN[classname], dotclass = BDFDB.dotCN[classname];
-				let instanceobserver = new MutationObserver(cs => {cs.forEach(c => {c.addedNodes.forEach(n => {
-					if (found || !n || !n.tagName) return;
-					var ele = null;
-					if ((ele = BDFDB.DOMUtils.containsClass(n, disclass) ? n : n.querySelector(dotclass)) != null) {
-						var ins = BDFDB.ReactUtils.getInstance(ele);
-						if (isCorrectInstance(ins, type)) {
-							found = true;
-							instanceobserver.disconnect();
-							patchInstance(ins, type, patchtype);
-							BDFDB.ModuleUtils.forceAllUpdates(plugin, type);
-						}
+				for (let ele of document.querySelectorAll(dotclass)) {
+					let ins = BDFDB.ReactUtils.getInstance(ele);
+					if (isCorrectInstance(ins, type)) {
+						found = true;
+						patchInstance(ins, type, patchtype);
+						BDFDB.ModuleUtils.forceAllUpdates(plugin, type);
+						break;
 					}
-				});});});
-				BDFDB.ObserverUtils.connect(plugin, BDFDB.dotCN.appmount, {name:"checkForInstanceObserver", instance:instanceobserver, multi:true
-				}, {childList:true, subtree:true});
+				}
+				if (!found) {
+					let instanceobserver = new MutationObserver(cs => {cs.forEach(c => {c.addedNodes.forEach(n => {
+						if (found || !n || !n.tagName) return;
+						let ele = null;
+						if ((ele = BDFDB.DOMUtils.containsClass(n, disclass) ? n : n.querySelector(dotclass)) != null) {
+							let ins = BDFDB.ReactUtils.getInstance(ele);
+							if (isCorrectInstance(ins, type)) {
+								found = true;
+								instanceobserver.disconnect();
+								patchInstance(ins, type, patchtype);
+								BDFDB.ModuleUtils.forceAllUpdates(plugin, type);
+							}
+						}
+					});});});
+					BDFDB.ObserverUtils.connect(plugin, BDFDB.dotCN.appmount, {name:"checkForInstanceObserver", instance:instanceobserver, multi:true
+					}, {childList:true, subtree:true});
+				}
 			}
 		}
 		function isCorrectInstance(instance, name) {
