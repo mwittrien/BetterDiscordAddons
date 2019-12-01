@@ -1013,8 +1013,15 @@
 		InvitationCard: "InviteRow",
 		InviteCard: "InviteRow",
 		PopoutContainer: "Popout",
+		QuickSwitchChannelResult: "Channel",
+		QuickSwitchGuildResult: "Guild",
+		QuickSwitchResult: "Result",
 		MemberCard: "Member",
 		WebhookCard: "Webhook"
+	};
+	WebModulesData.Forceobserve = {
+		QuickSwitchChannelResult: true,
+		QuickSwitchGuildResult: true,
 	};
 	WebModulesData.Patchfinder = {
 		Account: "accountinfo",
@@ -1032,6 +1039,9 @@
 		PopoutContainer: "popout",
 		PrivateChannelCall: "callcurrentcontainer",
 		PrivateChannelsList: "dmchannelsscroller",
+		QuickSwitchChannelResult: "quickswitchresult",
+		QuickSwitchGuildResult: "quickswitchresult",
+		QuickSwitchResult: "quickswitchresult",
 		MemberCard: "guildsettingsmembercard",
 		MutualGuilds: "userprofilebody",
 		MutualFriends: "userprofilebody",
@@ -1225,15 +1235,15 @@
 		for (let patchtype in plugin.patchedModules) for (let type in plugin.patchedModules[patchtype]) {
 			if (WebModulesData.GlobalModules[type] && typeof WebModulesData.GlobalModules[type] == "function") patchInstance(WebModulesData.GlobalModules[type], type, patchtype);
 			else {
-				var mapped = WebModulesData.Patchmap[type];
-				var classname = WebModulesData.Patchfinder[type.split(" _ _ ")[1] || type];
-				var mappedtype = mapped ? mapped + " _ _ " + type : type;
+				let mapped = WebModulesData.Patchmap[type];
+				let classname = WebModulesData.Patchfinder[type.split(" _ _ ")[1] || type];
+				let mappedtype = mapped ? mapped + " _ _ " + type : type;
 				if (mapped) {
 					plugin.patchedModules[patchtype][mappedtype] = plugin.patchedModules[patchtype][type];
 					delete plugin.patchedModules[patchtype][type];
 				}
 				if (!classname) patchInstance(BDFDB.ModuleUtils.findByName(mappedtype.split(" _ _ ")[0]), mappedtype, patchtype);
-				else if (DiscordClasses[classname]) checkForInstance(classname, mappedtype, patchtype);
+				else if (DiscordClasses[classname]) checkForInstance(classname, mappedtype, patchtype, WebModulesData.Forceobserve[type.split(" _ _ ")[1] || type]);
 			}
 		}
 		function patchInstance(instance, type, patchtype) {
@@ -1251,16 +1261,18 @@
 				}
 			}
 		}
-		function checkForInstance(classname, type, patchtype) {
+		function checkForInstance(classname, type, patchtype, forceobserve) {
 			const app = document.querySelector(BDFDB.dotCN.app), bdsettings = document.querySelector("#bd-settingspane-container " + BDFDB.dotCN.scrollerwrap);
-			var instancefound = false;
-			if (app) {
-				var appins = BDFDB.ReactUtils.findConstructor(app, type, {unlimited:true}) || BDFDB.ReactUtils.findConstructor(app, type, {unlimited:true, up:true});
-				if (appins && (instancefound = true)) patchInstance(appins, type, patchtype);
-			}
-			if (!instancefound && bdsettings) {
-				var bdsettingsins = BDFDB.ReactUtils.findConstructor(bdsettings, type, {unlimited:true});
-				if (bdsettingsins && (instancefound = true)) patchInstance(bdsettingsins, type, patchtype);
+			let instancefound = false;
+			if (!forceobserve) {
+				if (app) {
+					let appins = BDFDB.ReactUtils.findConstructor(app, type, {unlimited:true}) || BDFDB.ReactUtils.findConstructor(app, type, {unlimited:true, up:true});
+					if (appins && (instancefound = true)) patchInstance(appins, type, patchtype);
+				}
+				if (!instancefound && bdsettings) {
+					let bdsettingsins = BDFDB.ReactUtils.findConstructor(bdsettings, type, {unlimited:true});
+					if (bdsettingsins && (instancefound = true)) patchInstance(bdsettingsins, type, patchtype);
+				}
 			}
 			if (!instancefound) {
 				let found = false, disclass = BDFDB.disCN[classname], dotclass = BDFDB.dotCN[classname];
