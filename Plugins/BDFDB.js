@@ -1014,8 +1014,6 @@
 		InviteCard: "InviteRow",
 		PopoutContainer: "Popout",
 		MemberCard: "Member",
-		MutualGuildRow: "GuildRow",
-		MutualFriendRow: "FriendRow",
 		WebhookCard: "Webhook"
 	};
 	WebModulesData.Patchfinder = {
@@ -1035,8 +1033,8 @@
 		PrivateChannelCall: "callcurrentcontainer",
 		PrivateChannelsList: "dmchannelsscroller",
 		MemberCard: "guildsettingsmembercard",
-		MutualGuildRow: "listrow",
-		MutualFriendRow: "listrow",
+		MutualGuilds: "userprofilebody",
+		MutualFriends: "userprofilebody",
 		NameTag: "nametag",
 		Note: "usernote",
 		SearchResults: "searchresultswrap",
