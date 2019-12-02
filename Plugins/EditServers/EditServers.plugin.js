@@ -3,7 +3,7 @@
 class EditServers {
 	getName () {return "EditServers";}
 
-	getVersion () {return "2.1.4";}
+	getVersion () {return "2.1.5";}
 	
 	getAuthor () {return "DevilBro";}
 
@@ -317,7 +317,7 @@ class EditServers {
 	
 	getGuildData (guildId, change = true) {
 		let guild = BDFDB.LibraryModules.GuildStore.getGuild(guildId);
-		if (!guild) return {};
+		if (!guild) return new BDFDB.DiscordObjects.Guild({});
 		let data = change && BDFDB.DataUtils.load(this, "servers", guild.id);
 		if (data) {
 			let newGuildObject = {}, nativeObject = new BDFDB.DiscordObjects.Guild(guild);
