@@ -3,7 +3,7 @@
 class EditServers {
 	getName () {return "EditServers";}
 
-	getVersion () {return "2.1.3";}
+	getVersion () {return "2.1.4";}
 	
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class EditServers {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+			"improved":[["Serveracronyms","You can now choose to use the native serveracronym for servers without icons even if you set a local custom servername"],["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
 		this.patchedModules = {
@@ -169,7 +169,7 @@ class EditServers {
 									label: this.labels.submenu_serversettings_text,
 									action: _ => {
 										BDFDB.ContextMenuUtils.close(e.instance);
-										this.showServerSettings(e.instance.props.guild);
+										this.showServerSettings(e.instance.props.guild.id);
 									}
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
@@ -191,7 +191,7 @@ class EditServers {
 
 	processGuild (e) {
 		if (e.instance.props.guild && BDFDB.DataUtils.get(this, "settings", "changeInGuildList")) {
-			e.instance.props.guild = this.getGuildData(e.instance.props.guild);
+			e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
 			if (e.returnvalue) {
 				let data = BDFDB.DataUtils.load(this, "servers", e.instance.props.guild.id);
 				if (data && (data.color3 || data.color4)) {
@@ -214,9 +214,15 @@ class EditServers {
 	processBlobMask (e) {
 		if (BDFDB.DataUtils.get(this, "settings", "changeInGuildList")) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "NavItem"});
-			if (index > -1) {
-				let data = BDFDB.DataUtils.load(this, "servers", (children[index].props.to.pathname.split("/channels/")[1] || "").split("/")[0]);
-				if (data && data.shortName) children[index].props.name = data.shortName.split("").join(" ");
+			if (index > -1 && children[index].props.to && children[index].props.to.pathname) {
+				let guild = BDFDB.LibraryModules.GuildStore.getGuild((children[index].props.to.pathname.split("/channels/")[1] || "").split("/")[0]);
+				if (guild) {
+					let data = BDFDB.DataUtils.load(this, "servers", guild.id);
+					if (data) {
+						if (data.shortName) children[index].props.name = data.shortName.split("").join(" ");
+						else if (data.name && data.ignoreCustomName) children[index].props.name = guild.name;
+					}
+				}
 			}
 		}
 	}
@@ -249,9 +255,9 @@ class EditServers {
 	processGuildIconWrapper (e) {
 		if (e.instance.props.guild) {
 			let settings = BDFDB.DataUtils.get(this, "settings");
-			if (e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.guildfolderguildicon) > -1) e.instance.props.guild = this.getGuildData(e.instance.props.guild, settings.changeInGuildList);
-			else if (e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.listavatar) > -1) e.instance.props.guild = this.getGuildData(e.instance.props.guild, settings.changeInMutualGuilds);
-			else e.instance.props.guild = this.getGuildData(e.instance.props.guild);
+			if (e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.guildfolderguildicon) > -1) e.instance.props.guild = this.getGuildData(e.instance.props.guild.id, settings.changeInGuildList);
+			else if (e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.listavatar) > -1) e.instance.props.guild = this.getGuildData(e.instance.props.guild.id, settings.changeInMutualGuilds);
+			else e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
 		}
 	}
 	
@@ -268,20 +274,20 @@ class EditServers {
 	}
 
 	processMutualGuilds (e) {
-		if (BDFDB.DataUtils.get(this, "settings", "changeInMutualGuilds")) for (let i in e.instance.props.mutualGuilds) e.instance.props.mutualGuilds[i].guild = this.getGuildData(e.instance.props.mutualGuilds[i].guild);
+		if (BDFDB.DataUtils.get(this, "settings", "changeInMutualGuilds")) for (let i in e.instance.props.mutualGuilds) e.instance.props.mutualGuilds[i].guild = this.getGuildData(e.instance.props.mutualGuilds[i].guild.id);
 	}
 
 	processFriendRow (e) {
-		if (BDFDB.DataUtils.get(this, "settings", "changeInMutualGuilds")) for (let i in e.instance.props.mutualGuilds) e.instance.props.mutualGuilds[i] = this.getGuildData(e.instance.props.mutualGuilds[i]);
+		if (BDFDB.DataUtils.get(this, "settings", "changeInMutualGuilds")) for (let i in e.instance.props.mutualGuilds) e.instance.props.mutualGuilds[i] = this.getGuildData(e.instance.props.mutualGuilds[i].id);
 	}
 
 	processQuickSwitcher (e) {
-		if (BDFDB.DataUtils.get(this, "settings", "changeInQuickSwitcher")) for (let i in e.instance.props.results) if (e.instance.props.results[i].type == "GUILD") e.instance.props.results[i].record = this.getGuildData(e.instance.props.results[i].record);
+		if (BDFDB.DataUtils.get(this, "settings", "changeInQuickSwitcher")) for (let i in e.instance.props.results) if (e.instance.props.results[i].type == "GUILD") e.instance.props.results[i].record = this.getGuildData(e.instance.props.results[i].record.id);
 	}
 
 	processQuickSwitchChannelResult (e) {
 		if (e.instance.props.channel && e.instance.props.channel.guild_id && BDFDB.DataUtils.get(this, "settings", "changeInQuickSwitcher")) {
-			e.instance.props.children.props.children = this.getGuildData(BDFDB.LibraryModules.GuildStore.getGuild(e.instance.props.channel.guild_id)).name;
+			e.instance.props.children.props.children = this.getGuildData(e.instance.props.channel.guild_id).name;
 		}
 	}
 	
@@ -296,7 +302,7 @@ class EditServers {
 		if (e.instance.props.guild) {
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			if (settings.changeInGuildHeader) {
-				e.instance.props.guild = this.getGuildData(e.instance.props.guild);
+				e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
 				let oldName = (BDFDB.LibraryModules.GuildStore.getGuild(e.instance.props.guild.id) || {}).name;
 				if (e.returnvalue && settings.addOriginalTooltip && oldName != e.instance.props.guild.name) {
 					e.returnvalue.props.children[0] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
@@ -309,13 +315,15 @@ class EditServers {
 		}
 	}
 	
-	getGuildData (guild, change = true) {
+	getGuildData (guildId, change = true) {
+		let guild = BDFDB.LibraryModules.GuildStore.getGuild(guildId);
+		if (!guild) return {};
 		let data = change && BDFDB.DataUtils.load(this, "servers", guild.id);
 		if (data) {
 			let newGuildObject = {}, nativeObject = new BDFDB.DiscordObjects.Guild(guild);
 			for (let key in nativeObject) newGuildObject[key] = nativeObject[key];
 			newGuildObject.name = data.name || nativeObject.name;
-			newGuildObject.acronym = data.shortName && data.shortName.replace(/\s/g, "") || BDFDB.LibraryModules.StringUtils.getAcronym(newGuildObject.name);
+			newGuildObject.acronym = data.shortName && data.shortName.replace(/\s/g, "") || BDFDB.LibraryModules.StringUtils.getAcronym(!data.ignoreCustomName && data.name || nativeObject.name);
 			if (data.removeIcon) {
 				newGuildObject.icon = null;
 				newGuildObject.getIconURL = _ => {return null;};
@@ -324,7 +332,7 @@ class EditServers {
 			if (data.removeBanner) newGuildObject.banner = null;
 			return newGuildObject;
 		}
-		return new BDFDB.DiscordObjects.Guild(BDFDB.LibraryModules.GuildStore.getGuild(guild.id));
+		return new BDFDB.DiscordObjects.Guild(guild);
 	}
 	
 	changeGuildIcon (e, data, change = true) {
@@ -341,8 +349,12 @@ class EditServers {
 		}
 	}
 
-	showServerSettings (guild) {
+	showServerSettings (guildId) {
+		let guild = BDFDB.LibraryModules.GuildStore.getGuild(guildId);
+		if (!guild) return;
 		let data = BDFDB.DataUtils.load(this, "servers", guild.id) || {};
+		
+		let currentIgnoreCustomNameState = data.ignoreCustomName;
 		
 		BDFDB.ModalUtils.open(this, {
 			size: "MEDIUM",
@@ -354,30 +366,54 @@ class EditServers {
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_guildname_text,
-							className: BDFDB.disCN.marginbottom20,
+							className: BDFDB.disCN.marginbottom8,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 									inputClassName: "input-guildname",
 									value: data.name,
 									placeholder: guild.name,
-									autoFocus: true
+									autoFocus: true,
+									onChange: (value, instance) => {
+										if (!currentIgnoreCustomNameState) {
+											let acronyminputins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return.return, {props:[["inputId","GUILDACRONYM"]]});
+											if (acronyminputins) {
+												acronyminputins.props.placeholder = value && BDFDB.LibraryModules.StringUtils.getAcronym(value) || guild.acronym;
+												BDFDB.ReactUtils.forceUpdate(acronyminputins);
+											}
+										}
+									}
 								})
 							]
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_guildacronym_text,
-							className: BDFDB.disCN.marginbottom20,
+							className: BDFDB.disCN.marginbottom4,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 									inputClassName: "input-guildacronym",
+									inputId: "GUILDACRONYM",
 									value: data.shortName,
-									placeholder: guild.acronym
+									placeholder: !data.ignoreCustomName && data.name && BDFDB.LibraryModules.StringUtils.getAcronym(data.name) || guild.acronym
 								})
 							]
 						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+							type: "Switch",
+							className: BDFDB.disCN.marginbottom8 + " input-ignorecustomname",
+							label: this.labels.modal_ignorecustomname_text,
+							value: data.ignoreCustomName,
+							onChange: (value, instance) => {
+								currentIgnoreCustomNameState = value;
+								let acronyminputins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","GUILDACRONYM"]]});
+								if (acronyminputins) {
+									acronyminputins.props.placeholder = !value && data.name && BDFDB.LibraryModules.StringUtils.getAcronym(data.name) || guild.acronym;
+									BDFDB.ReactUtils.forceUpdate(acronyminputins);
+								}
+							}
+						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_guildicon_text,
-							className: BDFDB.disCN.marginbottom8,
+							className: BDFDB.disCN.marginbottom4,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 									inputClassName: "input-guildicon",
@@ -394,7 +430,7 @@ class EditServers {
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 							type: "Switch",
-							className: BDFDB.disCN.marginbottom20 + " input-removeicon",
+							className: BDFDB.disCN.marginbottom8 + " input-removeicon",
 							label: this.labels.modal_removeicon_text,
 							value: data.removeIcon,
 							onChange: (value, instance) => {
@@ -403,13 +439,13 @@ class EditServers {
 									delete iconinputins.props.success;
 									delete iconinputins.props.errorMessage;
 									iconinputins.props.disabled = value;
-									iconinputins.forceUpdate();
+									BDFDB.ReactUtils.forceUpdate(iconinputins);
 								}
 							}
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 							title: this.labels.modal_guildbanner_text,
-							className: BDFDB.disCN.marginbottom8,
+							className: BDFDB.disCN.marginbottom4,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 									inputClassName: "input-guildbanner",
@@ -436,7 +472,7 @@ class EditServers {
 									delete bannerinputins.props.success;
 									delete bannerinputins.props.errorMessage;
 									bannerinputins.props.disabled = value;
-									bannerinputins.forceUpdate();
+									BDFDB.ReactUtils.forceUpdate(bannerinputins);
 								}
 							}
 						})
@@ -502,6 +538,7 @@ class EditServers {
 					
 					let guildnameinput = modal.querySelector(".input-guildname");
 					let guildacronyminput = modal.querySelector(".input-guildacronym");
+					let ignorecustomnameinput = modal.querySelector(".input-ignorecustomname " + BDFDB.dotCN.switchinner);
 					let guildiconinput = modal.querySelector(".input-guildicon");
 					let removeiconinput = modal.querySelector(".input-removeicon " + BDFDB.dotCN.switchinner);
 					let guildbannerinput = modal.querySelector(".input-guildbanner");
@@ -509,6 +546,7 @@ class EditServers {
 					
 					data.name = guildnameinput.value.trim() || null;
 					data.shortName = guildacronyminput.value.trim() || null;
+					data.ignoreCustomName = ignorecustomnameinput.checked;
 					data.url = (!data.removeIcon && BDFDB.DOMUtils.containsClass(guildiconinput, BDFDB.disCN.inputsuccess) ? guildiconinput.value.trim() : null) || null;
 					data.removeIcon = removeiconinput.checked;
 					data.banner = (!data.removeBanner && BDFDB.DOMUtils.containsClass(guildbannerinput, BDFDB.disCN.inputsuccess) ? guildbannerinput.value.trim() : null) || null;
@@ -568,7 +606,8 @@ class EditServers {
 					submenu_resetsettings_text:			"Ponovno postavite poslužitelj",
 					modal_header_text:					"Lokalne postavke poslužitelja",
 					modal_guildname_text:				"Naziv lokalnog poslužitelja",
-					modal_guildacronym_text:			"Poslužitelj prečaca",
+					modal_guildacronym_text:			"Akronim lokalnog poslužitelja",
+					modal_ignorecustomname_text:		"Koristite izvorno ime poslužitelja za akronim poslužitelja",
 					modal_guildicon_text:				"Ikona",
 					modal_removeicon_text:				"Ukloni ikonu",
 					modal_guildbanner_text:				"Baner",
@@ -589,7 +628,8 @@ class EditServers {
 					submenu_resetsettings_text:			"Nulstil server",
 					modal_header_text:	 				"Lokal serverindstillinger",
 					modal_guildname_text:				"Lokalt servernavn",
-					modal_guildacronym_text:			"Initialer",
+					modal_guildacronym_text:			"Lokalt serverakronym",
+					modal_ignorecustomname_text:		"Brug det originale servernavn til serverens akronym",
 					modal_guildicon_text:				"Ikon",
 					modal_removeicon_text:				"Fjern ikon",
 					modal_guildbanner_text:				"Banner",
@@ -610,7 +650,8 @@ class EditServers {
 					submenu_resetsettings_text:			"Server zurücksetzen",
 					modal_header_text:					"Lokale Servereinstellungen",
 					modal_guildname_text:				"Lokaler Servername",
-					modal_guildacronym_text:			"Serverkürzel",
+					modal_guildacronym_text:			"Lokale Serverkürzel",
+					modal_ignorecustomname_text:		"Benutze den ursprünglichen Servernamen für das Serverkürzel",
 					modal_guildicon_text:				"Icon",
 					modal_removeicon_text:				"Icon entfernen",
 					modal_guildbanner_text:				"Banner",
@@ -631,7 +672,8 @@ class EditServers {
 					submenu_resetsettings_text:			"Restablecer servidor",
 					modal_header_text:					"Ajustes local de servidor",
 					modal_guildname_text:				"Nombre local del servidor",
-					modal_guildacronym_text:			"Iniciales",
+					modal_guildacronym_text:			"Acrónimo local del servidor",
+					modal_ignorecustomname_text:		"Use el nombre del servidor original para el acrónimo del servidor",
 					modal_guildicon_text:				"Icono",
 					modal_removeicon_text:				"Eliminar icono",
 					modal_guildbanner_text:				"Bandera",
@@ -652,7 +694,8 @@ class EditServers {
 					submenu_resetsettings_text:			"Réinitialiser le serveur",
 					modal_header_text:					"Paramètres locale du serveur",
 					modal_guildname_text:				"Nom local du serveur",
-					modal_guildacronym_text:			"Initiales",
+					modal_guildacronym_text:			"Acronyme local de serveur",
+					modal_ignorecustomname_text:		"Utilisez le nom de serveur d'origine pour l'acronyme de serveur",
 					modal_guildicon_text:				"Icône",
 					modal_removeicon_text:				"Supprimer l'icône",
 					modal_guildbanner_text:				"Bannière",
@@ -673,7 +716,8 @@ class EditServers {
 					submenu_resetsettings_text:			"Ripristina server",
 					modal_header_text:					"Impostazioni locale server",
 					modal_guildname_text:				"Nome locale server",
-					modal_guildacronym_text:			"Iniziali",
+					modal_guildacronym_text:			"Acronimo locale server",
+					modal_ignorecustomname_text:		"Utilizzare il nome del server originale per l'acronimo del server",
 					modal_guildicon_text:				"Icona",
 					modal_removeicon_text:				"Rimuova l'icona",
 					modal_guildbanner_text:				"Bandiera",
@@ -694,7 +738,8 @@ class EditServers {
 					submenu_resetsettings_text:			"Reset server",
 					modal_header_text:					"Lokale serverinstellingen",
 					modal_guildname_text:				"Lokale servernaam",
-					modal_guildacronym_text:			"Initialen",
+					modal_guildacronym_text:			"Lokale server acroniem",
+					modal_ignorecustomname_text:		"Gebruik de oorspronkelijke servernaam voor het serveracrononiem",
 					modal_guildicon_text:				"Icoon",
 					modal_removeicon_text:				"Verwijder icoon",
 					modal_guildbanner_text:				"Banier",
@@ -715,7 +760,8 @@ class EditServers {
 					submenu_resetsettings_text:			"Tilbakestill server",
 					modal_header_text:					"Lokal serverinnstillinger",
 					modal_guildname_text:				"Lokalt servernavn",
-					modal_guildacronym_text:			"Initialer",
+					modal_guildacronym_text:			"Lokalt serverforkortelse",
+					modal_ignorecustomname_text:		"Bruk det originale servernavnet til serverforkortelsen",
 					modal_guildicon_text:				"Ikon",
 					modal_removeicon_text:				"Fjern ikon",
 					modal_guildbanner_text:				"Banner",
@@ -736,7 +782,8 @@ class EditServers {
 					submenu_resetsettings_text:			"Resetuj ustawienia",
 					modal_header_text:					"Lokalne ustawienia serwera",
 					modal_guildname_text:				"Lokalna nazwa serwera",
-					modal_guildacronym_text:			"Krótka nazwa",
+					modal_guildacronym_text:			"Akronim lokalnego serwera",
+					modal_ignorecustomname_text:		"Użyj oryginalnej nazwy serwera dla akronimu serwera",
 					modal_guildicon_text:				"Ikona",
 					modal_removeicon_text:				"Usuń ikonę",
 					modal_guildbanner_text:				"Baner",
@@ -757,7 +804,8 @@ class EditServers {
 					submenu_resetsettings_text:			"Redefinir servidor",
 					modal_header_text:					"Configurações local do servidor",
 					modal_guildname_text:				"Nome local do servidor",
-					modal_guildacronym_text:			"Iniciais",
+					modal_guildacronym_text:			"Acrônimo local de servidor",
+					modal_ignorecustomname_text:		"Use o nome do servidor original para a sigla do servidor",
 					modal_guildicon_text:				"Icone",
 					modal_removeicon_text:				"Remover ícone",
 					modal_guildbanner_text:				"Bandeira",
@@ -778,7 +826,8 @@ class EditServers {
 					submenu_resetsettings_text:			"Nollaa palvelimen",
 					modal_header_text:					"Paikallinen palvelimen asetukset",
 					modal_guildname_text:				"Paikallinen palvelimenimi",
-					modal_guildacronym_text:			"Nimikirjaimet",
+					modal_guildacronym_text:			"Paikallisen palvelimen lyhenne",
+					modal_ignorecustomname_text:		"Käytä alkuperäistä palvelimen nimeä palvelimen lyhenteessä",
 					modal_guildicon_text:				"Ikonin",
 					modal_removeicon_text:				"Poista kuvake",
 					modal_guildbanner_text:				"Banneri",
@@ -799,7 +848,8 @@ class EditServers {
 					submenu_resetsettings_text:			"Återställ server",
 					modal_header_text:					"Lokal serverinställningar",
 					modal_guildname_text:				"Lokalt servernamn",
-					modal_guildacronym_text:			"Initialer",
+					modal_guildacronym_text:			"Lokal server förkortning",
+					modal_ignorecustomname_text:		"Använd det ursprungliga servernamnet för serverförkortningen",
 					modal_guildicon_text:				"Ikon",
 					modal_removeicon_text:				"Ta bort ikonen",
 					modal_guildbanner_text:				"Banderoll",
@@ -818,9 +868,10 @@ class EditServers {
 					context_localserversettings_text:	"Yerel Sunucu Ayarları",
 					submenu_serversettings_text:		"Ayarları Değiştir",
 					submenu_resetsettings_text:			"Sunucu Sıfırla",
-					modal_header_text:					"Yerel Sunucu Ayarları",
-					modal_guildname_text:				"Yerel Sunucu Adı",
-					modal_guildacronym_text:			"Baş harfleri",
+					modal_header_text:					"Yerel sunucu ayarları",
+					modal_guildname_text:				"Yerel sunucu adı",
+					modal_guildacronym_text:			"Yerel sunucu kısaltması",
+					modal_ignorecustomname_text:		"Sunucu kısaltması için orijinal sunucu adını kullanın",
 					modal_guildicon_text:				"Simge",
 					modal_removeicon_text:				"Simge kaldır",
 					modal_guildbanner_text:				"Afişi",
@@ -841,7 +892,8 @@ class EditServers {
 					submenu_resetsettings_text:			"Obnovit server",
 					modal_header_text:					"Místní nastavení serveru",
 					modal_guildname_text:				"Místní název serveru",
-					modal_guildacronym_text:			"Iniciály",
+					modal_guildacronym_text:			"Zkratka místního serveru",
+					modal_ignorecustomname_text:		"Pro zkratku serveru použijte původní název serveru",
 					modal_guildicon_text:				"Ikony",
 					modal_removeicon_text:				"Odstranit ikonu",
 					modal_guildbanner_text:				"Prapor",
@@ -862,7 +914,8 @@ class EditServers {
 					submenu_resetsettings_text:			"Възстановяване на cървър",
 					modal_header_text:					"Настройки за локални cървър",
 					modal_guildname_text:				"Локално име на cървър",
-					modal_guildacronym_text:			"Инициали",
+					modal_guildacronym_text:			"Акроним на локалния сървър",
+					modal_ignorecustomname_text:		"Използвайте оригиналното име на сървъра за съкращението на сървъра",
 					modal_guildicon_text:				"Икона",
 					modal_removeicon_text:				"Премахване на иконата",
 					modal_guildbanner_text:				"Знаме",
@@ -883,7 +936,8 @@ class EditServers {
 					submenu_resetsettings_text:			"Сбросить cервер",
 					modal_header_text:					"Настройки локального cервер",
 					modal_guildname_text:				"Имя локального cервер",
-					modal_guildacronym_text:			"Инициалы",
+					modal_guildacronym_text:			"Акроним локального сервера",
+					modal_ignorecustomname_text:		"Используйте оригинальное имя сервера для сокращения сервера",
 					modal_guildicon_text:				"Значок",
 					modal_removeicon_text:				"Удалить значок",
 					modal_guildbanner_text:				"Баннер",
@@ -904,7 +958,8 @@ class EditServers {
 					submenu_resetsettings_text:			"Скидання cервер",
 					modal_header_text:					"Налаштування локального cервер",
 					modal_guildname_text:				"Локальне ім'я cервер",
-					modal_guildacronym_text:			"Ініціали",
+					modal_guildacronym_text:			"Акронім локального сервера",
+					modal_ignorecustomname_text:		"Використовуйте оригінальне ім'я сервера для абревіатури сервера",
 					modal_guildicon_text:				"Іконка",
 					modal_removeicon_text:				"Видалити піктограму",
 					modal_guildbanner_text:				"Банер",
@@ -925,7 +980,8 @@ class EditServers {
 					submenu_resetsettings_text:			"サーバーをリセットする",
 					modal_header_text:					"ローカルサーバー設定",
 					modal_guildname_text:				"ローカルサーバー名",
-					modal_guildacronym_text:			"イニシャル",
+					modal_guildacronym_text:			"ローカルサーバーの頭字語",
+					modal_ignorecustomname_text:		"サーバーの頭字語に元のサーバー名を使用する",
 					modal_guildicon_text:				"アイコン",
 					modal_removeicon_text:				"アイコンを削除",
 					modal_guildbanner_text:				"バナー",
@@ -946,7 +1002,8 @@ class EditServers {
 					submenu_resetsettings_text:			"重置服務器",
 					modal_header_text:					"本地服務器設置",
 					modal_guildname_text:				"服務器名稱",
-					modal_guildacronym_text:			"聲母",
+					modal_guildacronym_text:			"本地服務器縮寫",
+					modal_ignorecustomname_text:		"使用原始服務器名稱作為服務器首字母縮寫",
 					modal_guildicon_text:				"圖標",
 					modal_removeicon_text:				"刪除圖標",
 					modal_guildbanner_text:				"旗幟",
@@ -967,7 +1024,8 @@ class EditServers {
 					submenu_resetsettings_text:			"서버 재설정",
 					modal_header_text:					"로컬 서버 설정",
 					modal_guildname_text:				"로컬 서버 이름",
-					modal_guildacronym_text:			"머리 글자",
+					modal_guildacronym_text:			"로컬 서버 약어",
+					modal_ignorecustomname_text:		"서버 약어에 원래 서버 이름을 사용하십시오",
 					modal_guildicon_text:				"상",
 					modal_removeicon_text:				"상 삭제",
 					modal_guildbanner_text:				"기치",
@@ -988,7 +1046,8 @@ class EditServers {
 					submenu_resetsettings_text:			"Reset Server",
 					modal_header_text:					"Local Serversettings",
 					modal_guildname_text:				"Local Servername",
-					modal_guildacronym_text:			"Initials",
+					modal_guildacronym_text:			"Local Serveracronym",
+					modal_ignorecustomname_text:		"Use the original Servername for the Serveracronym",
 					modal_guildicon_text:				"Icon",
 					modal_removeicon_text:				"Remove Icon",
 					modal_guildbanner_text:				"Banner",
