@@ -146,7 +146,7 @@ class EditChannels {
 	onChannelContextMenu (instance, menu, returnvalue) {
 		if (instance.props.channel && !BDFDB.DOMUtils.getParent(".container-hidden", instance.props.target) && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+			children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
 						label: this.labels.context_localchannelsettings_text,
@@ -172,9 +172,7 @@ class EditChannels {
 						})]
 					})
 				]
-			});
-			if (index > -1) children.splice(index, 0, itemgroup);
-			else children.push(itemgroup);
+			}));
 		}
 	}
 	
@@ -724,13 +722,13 @@ class EditChannels {
 				};
 			case "fr":		//french
 				return {
-					context_localchannelsettings_text:		"Paramètres locale du canal",
+					context_localchannelsettings_text:		"Paramètres locale du salon",
 					submenu_channelsettings_text:			"Modifier les paramètres",
-					submenu_resetsettings_text:				"Réinitialiser le canal",
-					modal_header_text:						"Paramètres locale du canal",
-					modal_channelname_text:					"Nom local du canal",
-					modal_colorpicker1_text:				"Couleur locale de la chaîne",
-					modal_inheritcolor_text:				"Hériter de la couleur sur les sous-canaux"
+					submenu_resetsettings_text:				"Réinitialiser le salon",
+					modal_header_text:						"Paramètres locale du salon",
+					modal_channelname_text:					"Nom local du salon",
+					modal_colorpicker1_text:				"Couleur locale du salon",
+					modal_inheritcolor_text:				"Hériter de la couleur sur les sous-salons"
 				};
 			case "it":		//italian
 				return {

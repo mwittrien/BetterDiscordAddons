@@ -549,8 +549,8 @@ class PinDMs {
 			case "fr":		//french
 				return {
 					context_pindm_text:				"Épingler MP",
-					context_pinchannel_text:		"Épingler à la liste des chaînes",
-					context_unpinchannel_text:		"Détacher de la liste des chaînes",
+					context_pinchannel_text:		"Épingler à la liste des salons",
+					context_unpinchannel_text:		"Détacher de la liste des salons",
 					context_pinguild_text:			"Épingler à la liste de serveurs",
 					context_unpinguild_text:		"Détacher de la liste de serveurs",
 					header_pinneddms_text:			"Messages Prives Épinglés"
