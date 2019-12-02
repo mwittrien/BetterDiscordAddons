@@ -194,7 +194,7 @@ class EditServers {
 			e.instance.props.guild = this.getGuildData(e.instance.props.guild);
 			if (e.returnvalue) {
 				let data = BDFDB.DataUtils.load(this, "servers", e.instance.props.guild.id);
-				if (data) {
+				if (data && (data.color3 || data.color4)) {
 					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: ["GuildTooltip", "BDFDB_TooltipContainer"]});
 					if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						tooltipConfig: {

@@ -6988,14 +6988,10 @@
 		}
 		handleMouseDown(e) {
 			if (!this.props.unavailable && this.props.guild && this.props.selectedChannelId) LibraryModules.DirectMessageUtils.preload(this.props.guild.id, this.props.selectedChannelId);
-			if (typeof this.props.onMouseDown == "function") this.props.onMouseDown(e, this);
-		}
-		handleMouseDown(e) {
-			if (!this.props.unavailable && this.props.guild && this.props.selectedChannelId) LibraryModules.DirectMessageUtils.preload(this.props.guild.id, this.props.selectedChannelId);
-			if (typeof this.props.onMouseDown == "function") this.props.onMouseDown(e, this);
+			if (e.button == 0 && typeof this.props.onMouseDown == "function") this.props.onMouseDown(e, this);
 		}
 		handleMouseUp(e) {
-			if (typeof this.props.onMouseUp == "function") this.props.onMouseUp(e, this);
+			if (e.button == 0 && typeof this.props.onMouseUp == "function") this.props.onMouseUp(e, this);
 		}
 		handleClick(e) {
 			if (typeof this.props.onClick == "function") this.props.onClick(e, this);
