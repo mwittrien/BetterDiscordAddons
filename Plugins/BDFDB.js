@@ -15,8 +15,6 @@
 			creationTime: performance.now()
 		}),
 		BDv2Api: window.BDFDB && window.BDFDB.BDv2Api || undefined,
-		pressedKeys: [], //REMOVE
-		mousePosition: {pageX: 0, pageY: 0}, //REMOVE
 		name: "$BDFDB"
 	};
 	var loadid = Math.round(Math.random() * 10000000000000000), InternalBDFDB = {};
@@ -2122,7 +2120,7 @@
 		}
 		else return null;
 	};
-	BDFDB.GuildUtils.openMenu = function (eleOrInfoOrId, e = BDFDB.mousePosition) {
+	BDFDB.GuildUtils.openMenu = function (eleOrInfoOrId, e = BDFDB.InternalData.mousePosition) {
 		if (!eleOrInfoOrId) return;
 		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 		let guild = LibraryModules.GuildStore.getGuild(id);
@@ -2219,7 +2217,7 @@
 		if (info) return BDFDB.ChannelUtils.getData(info.id) || Object.assign(new info.constructor(info), {div:null, instance:null});
 		else return null;
 	};
-	BDFDB.ChannelUtils.openMenu = function (eleOrInfoOrId, e = BDFDB.mousePosition) {
+	BDFDB.ChannelUtils.openMenu = function (eleOrInfoOrId, e = BDFDB.InternalData.mousePosition) {
 		if (!eleOrInfoOrId) return;
 		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.ChannelUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 		let channel = LibraryModules.ChannelStore.getChannel(id);
@@ -2293,7 +2291,7 @@
 		}
 		return found;
 	};
-	BDFDB.DMUtils.openMenu = function (eleOrInfoOrId, e = BDFDB.mousePosition) {
+	BDFDB.DMUtils.openMenu = function (eleOrInfoOrId, e = BDFDB.InternalData.mousePosition) {
 		if (!eleOrInfoOrId) return;
 		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.ChannelUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 		let channel = LibraryModules.ChannelStore.getChannel(id);
@@ -6997,7 +6995,7 @@
 			if (typeof this.props.onClick == "function") this.props.onClick(e, this);
 		}
 		handleContextMenu(e) {
-			if (this.props.menu) BDFDB.GuildUtils.openMenu(this.props.guild);
+			if (this.props.menu) BDFDB.GuildUtils.openMenu(this.props.guild, e);
 			if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
 		}
 		setRef(e) {
@@ -8938,25 +8936,20 @@
 		if (!BDFDB.InternalData.pressedKeys.includes(e.which)) {
 			BDFDB.TimeUtils.clear(KeyDownTimeouts[e.which]);
 			BDFDB.InternalData.pressedKeys.push(e.which);
-			BDFDB.pressedKeys.push(e.which);	// REMOVE
 			KeyDownTimeouts[e.which] = BDFDB.TimeUtils.timeout(_ => {
 				BDFDB.ArrayUtils.remove(BDFDB.InternalData.pressedKeys, e.which, true);
-				BDFDB.ArrayUtils.remove(BDFDB.pressedKeys, e.which, true);	// REMOVE
 			},60000);
 		}
 	});
 	BDFDB.ListenerUtils.add(BDFDB, document, "keyup.BDFDBPressedKeys", e => {
 		BDFDB.TimeUtils.clear(KeyDownTimeouts[e.which]);
 		BDFDB.ArrayUtils.remove(BDFDB.InternalData.pressedKeys, e.which, true);
-		BDFDB.ArrayUtils.remove(BDFDB.pressedKeys, e.which, true); // REMOVE
 	});
 	BDFDB.ListenerUtils.add(BDFDB, document, "mousedown.BDFDBMousePosition", e => {
 		BDFDB.InternalData.mousePosition = e;
-		BDFDB.mousePosition = e; // REMOVE
 	});
 	BDFDB.ListenerUtils.add(BDFDB, window, "focus.BDFDBPressedKeysReset", e => {
 		BDFDB.InternalData.pressedKeys = [];
-		BDFDB.pressedKeys = []; // REMOVE
 	});
 
 	BDFDB.patchedModules = {
