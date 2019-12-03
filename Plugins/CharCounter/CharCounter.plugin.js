@@ -3,7 +3,7 @@
 class CharCounter {
 	getName () {return "CharCounter";}
 
-	getVersion () {return "1.4.0";}
+	getVersion () {return "1.4.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -149,7 +149,7 @@ class CharCounter {
 	
 	injectCounter (parent, children, type, refClass, parsing) {
 		if (!children) return;
-		parent.props.className = ((parent.props.className || "") + " " + BDFDB.dotCN._charcountercounteradded).trim();
+		parent.props.className = ((parent.props.className || "") + " " + BDFDB.disCN._charcountercounteradded).trim();
 		children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CharCounter, {
 			className: `${BDFDB.disCN._charcountercounter} ${type}`,
 			refClass: refClass,

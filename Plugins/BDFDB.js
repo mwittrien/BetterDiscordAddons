@@ -1502,6 +1502,7 @@
 	LibraryModules.SettingsUtils = BDFDB.ModuleUtils.findByProperties("updateRemoteSettings", "updateLocalSettings");
 	LibraryModules.SoundUtils = BDFDB.ModuleUtils.findByProperties("playSound", "createSound");
 	LibraryModules.SpellCheckUtils = BDFDB.ModuleUtils.findByProperties("learnWord", "toggleSpellcheck");
+	LibraryModules.SlateUtils = BDFDB.ModuleUtils.findByProperties("serialize", "deserialize");
 	LibraryModules.StateStoreUtils = BDFDB.ModuleUtils.findByProperties("useStateFromStores", "useStateFromStoresArray");
 	LibraryModules.StatusMetaUtils = BDFDB.ModuleUtils.findByProperties("getApplicationActivity", "getStatus");
 	LibraryModules.StreamUtils = BDFDB.ModuleUtils.findByProperties("getStreamForUser", "getActiveStream");
@@ -6624,7 +6625,7 @@
 		componentDidMount() {
 			if (this.props.refClass) {
 				let node = BDFDB.ReactUtils.findDOMNode(this);
-				if (node) {
+				if (node && node.parentElement) {
 					this.refElement = node.parentElement.querySelector(this.props.refClass);
 					if (this.refElement) {
 						if (!this._updateCounter) this._updateCounter = _ => {

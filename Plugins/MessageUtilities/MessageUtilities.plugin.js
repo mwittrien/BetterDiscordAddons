@@ -3,7 +3,7 @@
 class MessageUtilities {
 	getName () {return "MessageUtilities";}
 
-	getVersion () {return "1.6.1";}
+	getVersion () {return "1.6.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class MessageUtilities {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Editing","No longer triggers while clicking the edit textarea for messages"]],
+			"fixed":[["New WYSIWYG Textarea","Fixed for the new WYSIWYG Textarea that is hidden by experiments"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 		
@@ -184,8 +184,8 @@ class MessageUtilities {
 			BDFDB.ListenerUtils.add(this, document, "dblclick", BDFDB.dotCN.messagegroup + "> [aria-disabled]," + BDFDB.dotCN.messagegroup + "> * > [aria-disabled]," + BDFDB.dotCN.messagesystem, e => {
 				this.onClick(e, 1, "onDblClick");
 			});
-			BDFDB.ListenerUtils.add(this, document, "keydown", BDFDB.dotCN.textareawrapchat, e => {
-				this.onKeyDown(e, e.which, "onKeyDown");
+			BDFDB.ListenerUtils.add(this, document, "keydown", e => {
+				if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.textareawrapchat, document.activeElement)) this.onKeyDown(document.activeElement, e.which, "onKeyDown");
 			});
 		}
 		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
@@ -379,12 +379,12 @@ class MessageUtilities {
 		}
 	}
 
-	onKeyDown (e, key, name) {
+	onKeyDown (target, key, name) {
 		if (!this.isEventFired(name)) {
 			this.fireEvent(name);
 			if (key == 27 && BDFDB.DataUtils.get(this, "settings", "clearOnEscape")) {
-				let instance = BDFDB.ReactUtils.findOwner(BDFDB.DOMUtils.getParent(BDFDB.dotCNS.chat + "form", e.currentTarget), {name:"ChannelTextAreaForm", up:true});
-				if (instance) instance.setState({textValue:""});
+				let instance = BDFDB.ReactUtils.findOwner(BDFDB.DOMUtils.getParent(BDFDB.dotCNS.chat + "form", target), {name:"ChannelTextAreaForm", up:true});
+				if (instance) instance.setState({textValue:"", richValue:BDFDB.LibraryModules.SlateUtils.deserialize("")});
 			}
 			this.cancelEvent(name);
 		}
