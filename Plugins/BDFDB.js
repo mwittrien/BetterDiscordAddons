@@ -1333,6 +1333,17 @@
 		}
 	};
 	InternalBDFDB.patchNonRenderContextMenuPlugin = (plugin, type, module) => {
+		if (module && module.exports) {
+			// REMOVE
+			let isOldType = plugin["on" + type].toString().split("\n")[0].replace(/ /g, "").split(",").length > 1;
+			if (isOldType) BDFDB.ModuleUtils.patch(plugin, module.exports, "default", {after: e => {
+				let instance = e.thisObject, returnvalue = e.returnValue;
+				if (e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({props:e.methodArguments[0]}, document, e.returnValue);
+			}});
+			else BDFDB.ModuleUtils.patch(plugin, module.exports, "default", {after: e => {
+				if (e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:{props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:"render"});
+			}});
+		}
 		BDFDB.ModuleUtils.patch(plugin, module.exports, "default", {after: e => {
 			if (e.thisObject && e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:{props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:"render"});
 		}});
@@ -1341,20 +1352,16 @@
 		if (module && module.prototype) {
 			// REMOVE
 			let isOldType = plugin["on" + type].toString().split("\n")[0].replace(/ /g, "").split(",").length > 1;
-			if (isOldType) {
-				BDFDB.ModuleUtils.patch(plugin, module.prototype, "render", {after: e => {
-					let instance = e.thisObject, menu = BDFDB.ReactUtils.findDOMNode(e.thisObject), returnvalue = e.returnValue;
-					if (instance && menu && returnvalue && typeof plugin[`on${type}`] === "function") {
-						plugin[`on${type}`](instance, menu, returnvalue);
-						if (!instance.BDFDBforceUpdateTimeout) BDFDB.ReactUtils.forceUpdate(instance);
-					}
-				}});
-			}
-			else {
-				BDFDB.ModuleUtils.patch(plugin, module.prototype, "render", {after: e => {
-					if (e.thisObject && e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});
-				}});
-			}
+			if (isOldType) BDFDB.ModuleUtils.patch(plugin, module.prototype, "render", {after: e => {
+				let instance = e.thisObject, menu = BDFDB.ReactUtils.findDOMNode(e.thisObject), returnvalue = e.returnValue;
+				if (instance && menu && returnvalue && typeof plugin[`on${type}`] === "function") {
+					plugin[`on${type}`](instance, menu, returnvalue);
+					if (!instance.BDFDBforceUpdateTimeout) BDFDB.ReactUtils.forceUpdate(instance);
+				}
+			}});
+			else BDFDB.ModuleUtils.patch(plugin, module.prototype, "render", {after: e => {
+				if (e.thisObject && e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});
+			}});
 		}
 	};
 	InternalBDFDB.patchContextMenuLib = (module, repatch) => {
@@ -2120,7 +2127,7 @@
 		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 		let guild = LibraryModules.GuildStore.getGuild(id);
 		if (guild) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-			return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenus.GuildContextMenu, Object.assign({}, e, {
+			return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenus._Modules.GuildContextMenu.exports.default, Object.assign({}, e, {
 				type: BDFDB.DiscordConstants.ContextMenuTypes.GUILD_ICON_BAR,
 				guild: guild,
 				badge: LibraryModules.UnreadGuildUtils.getMentionCount(guild.id),
@@ -2223,7 +2230,7 @@
 				break;
 			}
 			if (type) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-				return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenus.ChannelContextMenu, Object.assign({}, e, {
+				return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenus._Modules.ChannelContextMenu.exports.default, Object.assign({}, e, {
 					type: type,
 					channel: channel,
 					guild: LibraryModules.GuildStore.getGuild(channel.guild_id),
@@ -2298,7 +2305,7 @@
 				}));
 			}, {noBlurEvent: true});
 			else LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-				return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenus.UserContextMenu, Object.assign({}, e, {
+				return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenus._Modules.UserContextMenu.exports.default, Object.assign({}, e, {
 					type: BDFDB.DiscordConstants.ContextMenuTypes.USER_PRIVATE_CHANNELS,
 					user: LibraryModules.UserStore.getUser(channel.recipients[0]),
 					channelId: channel.id,
