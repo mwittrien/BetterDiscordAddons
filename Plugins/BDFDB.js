@@ -1334,7 +1334,6 @@
 	};
 	InternalBDFDB.patchNonRenderContextMenuPlugin = (plugin, type, module) => {
 		if (module && module.exports) {
-			// REMOVE
 			let isOldType = plugin["on" + type].toString().split("\n")[0].replace(/ /g, "").split(",").length > 1;
 			if (isOldType) BDFDB.ModuleUtils.patch(plugin, module.exports, "default", {after: e => {
 				if (e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({props:e.methodArguments[0]}, document, e.returnValue);
@@ -1958,15 +1957,6 @@
 		var id = iconwrap && iconwrap.href ? iconwrap.href.split("/").slice(-2)[0] : null;
 		return id && !isNaN(parseInt(id)) ? id.toString() : null;
 	};
-	BDFDB.GuildUtils.getDiv = function (eleOrInfoOrId) {
-		if (!eleOrInfoOrId) return null;
-		if (Node.prototype.isPrototypeOf(eleOrInfoOrId)) return BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildouter, eleOrInfoOrId);
-		else {
-			let id = typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId;
-			if (id) return BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildouter, document.querySelector(`${BDFDB.dotCNS.guilds + BDFDB.dotCN.guildiconwrapper}[href*="/channels/${id}"]`)) || BDFDB.GuildUtils.createCopy(id, {pill: true, hover: true, click: true, menu: true});
-		}
-		return null;
-	};
 	BDFDB.GuildUtils.getData = function (eleOrInfoOrId) {
 		if (!eleOrInfoOrId) return null;
 		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
@@ -1977,7 +1967,7 @@
 	BDFDB.GuildUtils.getAll = function () {
 		var found = [], objs = [];
 		for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.guilds), {name:["Guild","GuildIcon"], all:true, unlimited:true})) {
-			if (ins.props && ins.props.guild) objs.push(Object.assign(new ins.props.guild.constructor(ins.props.guild), {div:ins.handleContextMenu ? BDFDB.ReactUtils.findDOMNode(ins) : BDFDB.GuildUtils.createCopy(ins.props.guild), instance:ins}));
+			if (ins.props && ins.props.guild) objs.push(Object.assign(new ins.props.guild.constructor(ins.props.guild), {div:ins.handleContextMenu && BDFDB.ReactUtils.findDOMNode(ins), instance:ins}));
 		}
 		for (let id of BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds()) {
 			let foundobj = null;
@@ -1988,7 +1978,7 @@
 			if (foundobj) found.push(foundobj);
 			else {
 				let guild = BDFDB.LibraryModules.GuildStore.getGuild(id);
-				found.push(Object.assign(new guild.constructor(guild), {div:BDFDB.GuildUtils.createCopy(guild), instance:null}))
+				found.push(Object.assign(new guild.constructor(guild), {div:null, instance:null}))
 			}
 		}
 		return found;
@@ -2028,102 +2018,12 @@
 		if (info) return BDFDB.GuildUtils.getData(info.id) || Object.assign(new info.constructor(info), {div:null, instance:null});
 		else return null;
 	};
-	BDFDB.GuildUtils.createCopy = function (infoOrId, functionality = {pill:false, hover:false, click:false, menu:false, size:null}) {
-		let id = typeof infoOrId == "object" ? infoOrId.id : infoOrId;
-		let guild = id ? LibraryModules.GuildStore.getGuild(id) : null;
-		if (guild) {
-			let selected = LibraryModules.LastGuildStore.getGuildId() == guild.id;
-			let unread = LibraryModules.UnreadGuildUtils.hasUnread(guild.id);
-			let div = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.guildouter + BDFDB.disCN._bdguild}"><div class="${BDFDB.disCNS.guildpill + BDFDB.disCN.guildpillwrapper}"><span class="${BDFDB.disCN.guildpillitem}" style="opacity: 0; height: 8px; transform: translate3d(0px, 0px, 0px);"></span></div><div class="${BDFDB.disCN.guildcontainer}" draggable="false" style="border-radius: 50%; overflow: hidden;"><div class="${BDFDB.disCN.guildinner}"><svg width="48" height="48" viewBox="0 0 48 48" class="${BDFDB.disCN.guildsvg}"><mask id="" fill="black" x="0" y="0" width="48" height="48"><path d="M48 24C48 37.2548 37.2548 48 24 48C10.7452 48 0 37.2548 0 24C0 10.7452 10.7452 0 24 0C37.2548 0 48 10.7452 48 24Z" fill="white"></path><rect x="28" y="-4" width="24" height="24" rx="12" ry="12" transform="translate(20 -20)" fill="black"></rect><rect x="28" y="28" width="24" height="24" rx="12" ry="12" transform="translate(20 20)" fill="black"></rect></mask><foreignObject mask="" x="0" y="0" width="48" height="48"><a class="${BDFDB.disCN.guildiconwrapper} ${selected ? (" " + BDFDB.disCN.guildiconselected) : ""}" aria-label="${guild.name}"${functionality.click ? ` href="channels/${guild.id}/${LibraryModules.LastChannelStore.getChannelId(guild.id)}"` : ``} draggable="false">${guild.icon ? `<img class="${BDFDB.disCN.guildicon}" src="${BDFDB.GuildUtils.getIcon(guild.id)}?size=128" alt="" width="48" height="48" draggable="false" aria-hidden="true"></img>` : `<div class="${BDFDB.disCNS.guildiconchildwrapper + BDFDB.disCN.guildiconacronym}" aria-hidden="true" style="font-size: ${guild.acronym.length > 5 ? 10 : (guild.acronym.length > 4 ? 12 : (guild.acronym.length > 3 ? 14 : (guild.acronym.length > 1 ? 16 : 18)))}px;">${guild.acronym}</div>`}</a></foreignObject></svg></div></div><div class="${BDFDB.disCN.guildedgewrapper}" aria-hidden="true"><span class="${BDFDB.disCN.guildedge}"></span><span class="${BDFDB.disCN.guildedgemiddle}"></span><span class="${BDFDB.disCN.guildedge}"></span></div></div>`);
-			let divinner = div.querySelector(BDFDB.dotCN.guildcontainer);
-			let divpillitem = div.querySelector(BDFDB.dotCN.guildpillitem);
-			
-			BDFDB.DOMUtils.toggle(divpillitem.parentElement, functionality.pill);
-			if (functionality.pill) {
-				divpillitem.style.setProperty("opacity", selected ? 1 : (unread ? 0.7 : 0));
-				divpillitem.style.setProperty("height", selected ? "40px" : "8px");
-				divpillitem.style.setProperty("transform", "translate3d(0px, 0px, 0px)");
-
-				BDFDB.DOMUtils.toggleClass(div, BDFDB.disCN._bdguildselected, selected);
-				BDFDB.DOMUtils.toggleClass(div, BDFDB.disCN._bdguildunread, unread);
-				BDFDB.DOMUtils.toggleClass(divpillitem, BDFDB.disCN._bdguildunread, unread);
-			}
-			
-			if (functionality.hover) {
-				let diviconwrapper = div.querySelector(BDFDB.dotCN.guildiconwrapper);
-
-				let pillvisible = divpillitem.style.getPropertyValue("opacity") != 0;
-
-				let borderRadius = new LibraryModules.AnimationUtils.Value(0);
-				borderRadius
-					.interpolate({inputRange: [0, 1], outputRange: [50, 30]})
-					.addListener((value) => {divinner.style.setProperty("border-radius", `${value.value}%`);});
-
-				let pillHeight = new LibraryModules.AnimationUtils.Value(0);
-				pillHeight
-					.interpolate({inputRange: [0, 1], outputRange: [8, 20]})
-					.addListener((value) => {divpillitem.style.setProperty("height", `${value.value}px`);});
-
-				let pillOpacity = new LibraryModules.AnimationUtils.Value(0);
-				pillOpacity
-					.interpolate({inputRange: [0, 1], outputRange: [0, 0.7]})
-					.addListener((value) => {divpillitem.style.setProperty("opacity", `${value.value}`);});
-
-				let animate = (v) => {
-					LibraryModules.AnimationUtils.parallel([
-						LibraryModules.AnimationUtils.timing(borderRadius, {toValue: v, duration: 200}),
-						LibraryModules.AnimationUtils.spring(pillHeight, {toValue: v, friction: 5})
-					]).start();
-				};
-
-				let animate2 = (v) => {
-					LibraryModules.AnimationUtils.parallel([
-						LibraryModules.AnimationUtils.timing(pillOpacity, {toValue: v, duration: 200}),
-					]).start();
-				};
-
-				divinner.addEventListener("mouseenter", _ => {
-					pillvisible = divpillitem.style.getPropertyValue("opacity") != 0;
-					if (LibraryModules.LastGuildStore.getGuildId() != guild.id) {
-						animate(1);
-						if (!pillvisible) animate2(1);
-					}
-				})
-				divinner.addEventListener("mouseleave", _ => {
-					if (LibraryModules.LastGuildStore.getGuildId() != guild.id) {
-						animate(0);
-						if (!pillvisible) animate2(0);
-					}
-				});
-			}
-			
-			if (functionality.click) divinner.addEventListener("click", e => {
-				BDFDB.ListenerUtils.stopEvent(e);
-				LibraryModules.GuildUtils.transitionToGuildSync(guild.id);
-				if (typeof functionality.click == "function") functionality.click();
-			});
-			
-			if (functionality.menu) divinner.addEventListener("contextmenu", e => {
-				BDFDB.GuildUtils.openMenu(guild.id, e);
-				if (typeof functionality.menu == "function") functionality.menu();
-			});
-			
-			if (functionality.size) {
-				div.style.setProperty("margin", "0", "important");
-				div.style.setProperty("width", functionality.size + "px", "important");
-				div.style.setProperty("height", functionality.size + "px", "important");
-			}
-			
-			return div;
-		}
-		else return null;
-	};
 	BDFDB.GuildUtils.openMenu = function (eleOrInfoOrId, e = BDFDB.InternalData.mousePosition) {
 		if (!eleOrInfoOrId) return;
 		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 		let guild = LibraryModules.GuildStore.getGuild(id);
 		if (guild) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-			return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenus.GuildContextMenu, Object.assign({}, e, {
+			return BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.getValue(LibraryComponents, "ContextMenus._Modules.GuildContextMenu.exports.default"), Object.assign({}, e, {
 				type: BDFDB.DiscordConstants.ContextMenuTypes.GUILD_ICON_BAR,
 				guild: guild,
 				badge: LibraryModules.UnreadGuildUtils.getMentionCount(guild.id),
@@ -2226,7 +2126,7 @@
 				break;
 			}
 			if (type) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-				return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenus.ChannelContextMenu, Object.assign({}, e, {
+				return BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.getValue(LibraryComponents, "ContextMenus._Modules.ChannelContextMenu.exports.default"), Object.assign({}, e, {
 					type: type,
 					channel: channel,
 					guild: LibraryModules.GuildStore.getGuild(channel.guild_id),
@@ -2301,7 +2201,7 @@
 				}));
 			}, {noBlurEvent: true});
 			else LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-				return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenus.UserContextMenu, Object.assign({}, e, {
+				return BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.getValue(LibraryComponents, "ContextMenus._Modules.UserContextMenu.exports.default"), Object.assign({}, e, {
 					type: BDFDB.DiscordConstants.ContextMenuTypes.USER_PRIVATE_CHANNELS,
 					user: LibraryModules.UserStore.getUser(channel.recipients[0]),
 					channelId: channel.id,
@@ -9454,7 +9354,6 @@
 	BDFDB.readPingedServerList = BDFDB.GuildUtils.getPinged;
 	BDFDB.readMutedServerList = BDFDB.GuildUtils.getMuted;
 	BDFDB.getSelectedServer = BDFDB.GuildUtils.getSelected;
-	BDFDB.createServerDivCopy = BDFDB.GuildUtils.createCopy;
 	BDFDB.openGuildContextMenu = BDFDB.GuildUtils.openMenu;
 	BDFDB.markGuildAsRead = BDFDB.GuildUtils.markAsRead;
 	
