@@ -2123,7 +2123,7 @@
 		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 		let guild = LibraryModules.GuildStore.getGuild(id);
 		if (guild) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-			return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("GuildContextMenu"), Object.assign({}, e, {
+			return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenus.GuildContextMenu, Object.assign({}, e, {
 				type: BDFDB.DiscordConstants.ContextMenuTypes.GUILD_ICON_BAR,
 				guild: guild,
 				badge: LibraryModules.UnreadGuildUtils.getMentionCount(guild.id),
@@ -2226,7 +2226,7 @@
 				break;
 			}
 			if (type) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-				return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("ChannelContextMenu"), Object.assign({}, e, {
+				return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenus.ChannelContextMenu, Object.assign({}, e, {
 					type: type,
 					channel: channel,
 					guild: LibraryModules.GuildStore.getGuild(channel.guild_id),
@@ -2295,13 +2295,13 @@
 		let channel = LibraryModules.ChannelStore.getChannel(id);
 		if (channel) {
 			if (channel.isMultiUserDM()) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-				return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("FluxContainer(GroupDMContextMenu)"), Object.assign({}, e, {
+				return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenus.GroupDMContextMenu, Object.assign({}, e, {
 					channelId: channel.id,
 					selected: channel.id == LibraryModules.LastChannelStore.getChannelId()
 				}));
 			}, {noBlurEvent: true});
 			else LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-				return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("UserContextMenu"), Object.assign({}, e, {
+				return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenus.UserContextMenu, Object.assign({}, e, {
 					type: BDFDB.DiscordConstants.ContextMenuTypes.USER_PRIVATE_CHANNELS,
 					user: LibraryModules.UserStore.getUser(channel.recipients[0]),
 					channelId: channel.id,
