@@ -1337,16 +1337,12 @@
 			// REMOVE
 			let isOldType = plugin["on" + type].toString().split("\n")[0].replace(/ /g, "").split(",").length > 1;
 			if (isOldType) BDFDB.ModuleUtils.patch(plugin, module.exports, "default", {after: e => {
-				let instance = e.thisObject, returnvalue = e.returnValue;
 				if (e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({props:e.methodArguments[0]}, document, e.returnValue);
 			}});
 			else BDFDB.ModuleUtils.patch(plugin, module.exports, "default", {after: e => {
-				if (e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:{props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:"render"});
+				if (e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:{props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:"default"});
 			}});
 		}
-		BDFDB.ModuleUtils.patch(plugin, module.exports, "default", {after: e => {
-			if (e.thisObject && e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:{props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:"render"});
-		}});
 	};
 	InternalBDFDB.patchPopoutPlugin = (plugin, type, module) => {
 		if (module && module.prototype) {
