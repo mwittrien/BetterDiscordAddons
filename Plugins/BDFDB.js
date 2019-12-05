@@ -930,67 +930,57 @@
 	
 	BDFDB.ModuleUtils = {};
 	BDFDB.ModuleUtils.cached = {};
-	BDFDB.ModuleUtils.find = function (filter) {
+	BDFDB.ModuleUtils.find = function (filter, getExport) {
+		getExport = typeof getExport != "boolean" ? true : getExport;
 		var req = InternalBDFDB.getWebModuleReq();
 		for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 			var m = req.c[i].exports;
-			if (m && (typeof m == "object" || typeof m == "function") && filter(m)) return m;
-			if (m && m.__esModule) for (let j in m) if (m[j] && (typeof m[j] == "object" || typeof m[j] == "function") && filter(m[j])) return m[j];
+			if (m && (typeof m == "object" || typeof m == "function") && filter(m)) return getExport ? m : req.c[i];
+			if (m && m.__esModule) for (let j in m) if (m[j] && (typeof m[j] == "object" || typeof m[j] == "function") && filter(m[j])) return getExport ? m[j] : req.c[i];
 		}
 	};
-	BDFDB.ModuleUtils.findByProperties = function (properties) {
-		properties = BDFDB.ArrayUtils.is(properties) ? properties : Array.from(arguments);
-		var cachestring = JSON.stringify(properties);
-		if (!BDFDB.ObjectUtils.is(BDFDB.ModuleUtils.cached.prop)) BDFDB.ModuleUtils.cached.prop = {};
-		if (BDFDB.ModuleUtils.cached.prop[cachestring]) return BDFDB.ModuleUtils.cached.prop[cachestring];
-		else {
-			var m = BDFDB.ModuleUtils.find(m => properties.every(prop => m[prop] !== undefined));
-			if (m) {
-				BDFDB.ModuleUtils.cached.prop[cachestring] = m;
-				return m;
-			}
-			else BDFDB.LogUtils.warn(cachestring + " [properties] not found in WebModules");
+	BDFDB.ModuleUtils.findByProperties = function (...properties) {
+		properties = properties.flat(10);
+		let getExport = properties.pop();
+		if (typeof getExport != "boolean") {
+			properties.push(getExport);
+			getExport = true;
 		}
+		return InternalBDFDB.findModule("prop", JSON.stringify(properties), m => properties.every(prop => m[prop] !== undefined), getExport);
 	};
-	BDFDB.ModuleUtils.findByName = function (name) {
-		var cachestring = JSON.stringify(name);
-		if (!BDFDB.ObjectUtils.is(BDFDB.ModuleUtils.cached.name)) BDFDB.ModuleUtils.cached.name = {};
-		if (BDFDB.ModuleUtils.cached.name[cachestring]) return BDFDB.ModuleUtils.cached.name[cachestring];
-		else {
-			var m = BDFDB.ModuleUtils.find(m => m.displayName === name);
-			if (m) {
-				BDFDB.ModuleUtils.cached.name[cachestring] = m;
-				return m;
-			}
-			else BDFDB.LogUtils.warn(cachestring + " [name] not found in WebModules");
+	BDFDB.ModuleUtils.findByName = function (name, getExport) {
+		return InternalBDFDB.findModule("name", JSON.stringify(name), m => m.displayName === name, typeof getExport != "boolean" ? true : getExport);
+	};
+	BDFDB.ModuleUtils.findByString = function (...strings) {
+		strings = strings.flat(10);
+		let getExport = strings.pop();
+		if (typeof getExport != "boolean") {
+			strings.push(getExport);
+			getExport = true;
 		}
+		return InternalBDFDB.findModule("string", JSON.stringify(strings), m => strings.every(string => typeof m == "function" && (m.toString().indexOf(string) > -1 || m.originalsource && m.originalsource.toString().indexOf(string) > -1)), getExport);
 	};
-	BDFDB.ModuleUtils.findByString = function (strings) {
-		strings = BDFDB.ArrayUtils.is(strings) ? strings : Array.from(arguments);
-		var cachestring = JSON.stringify(strings);
-		if (!BDFDB.ObjectUtils.is(BDFDB.ModuleUtils.cached.string)) BDFDB.ModuleUtils.cached.string = {};
-		if (BDFDB.ModuleUtils.cached.string[cachestring]) return BDFDB.ModuleUtils.cached.string[cachestring];
-		else {
-			var m = BDFDB.ModuleUtils.find(m => strings.every(string => typeof m == "function" && m.toString().indexOf(string) > -1));
-			if (m) {
-				BDFDB.ModuleUtils.cached.string[cachestring] = m;
-				return m;
-			}
-			else BDFDB.LogUtils.warn(cachestring + " [string] not found in WebModules");
+	BDFDB.ModuleUtils.findByPrototypes = function (...protoprops) {
+		protoprops = protoprops.flat(10);
+		let getExport = protoprops.pop();
+		if (typeof getExport != "boolean") {
+			protoprops.push(getExport);
+			getExport = true;
 		}
+		return InternalBDFDB.findModule("proto", JSON.stringify(protoprops), m => m.prototype && protoprops.every(prop => m.prototype[prop] !== undefined), getExport);
 	};
-	BDFDB.ModuleUtils.findByPrototypes = function (protoprops) {
-		protoprops = BDFDB.ArrayUtils.is(protoprops) ? protoprops : Array.from(arguments);
-		var cachestring = JSON.stringify(protoprops);
-		if (!BDFDB.ObjectUtils.is(BDFDB.ModuleUtils.cached.proto)) BDFDB.ModuleUtils.cached.proto = {};
-		if (BDFDB.ModuleUtils.cached.proto[cachestring]) return BDFDB.ModuleUtils.cached.proto[cachestring];
+	InternalBDFDB.findModule = function (type, cachestring, filter, getExport) {
+		if (!BDFDB.ObjectUtils.is(BDFDB.ModuleUtils.cached[type])) BDFDB.ModuleUtils.cached[type] = {module:{}, export:{}};
+		if (getExport && BDFDB.ModuleUtils.cached[type].export[cachestring]) return BDFDB.ModuleUtils.cached[type].export[cachestring];
+		else if (!getExport && BDFDB.ModuleUtils.cached[type].module[cachestring]) return BDFDB.ModuleUtils.cached[type].module[cachestring];
 		else {
-			var m = BDFDB.ModuleUtils.find(m => m.prototype && protoprops.every(prop => m.prototype[prop] !== undefined));
+			var m = BDFDB.ModuleUtils.find(filter, getExport);
 			if (m) {
-				BDFDB.ModuleUtils.cached.proto[cachestring] = m;
+				if (getExport) BDFDB.ModuleUtils.cached[type].export[cachestring] = m;
+				else BDFDB.ModuleUtils.cached[type].module[cachestring] = m;
 				return m;
 			}
-			else BDFDB.LogUtils.warn(cachestring + " [prototypes] not found in WebModules");
+			else BDFDB.LogUtils.warn(`${cachestring} [${type}] not found in WebModules`);
 		}
 	};
 	InternalBDFDB.getWebModuleReq = function () {
@@ -1063,10 +1053,10 @@
 	try {WebModulesData.GlobalModules["V2C_PluginCard"] = V2C_PluginCard;} catch(err) {BDFDB.LogUtils.warn(`Could not find global Module "V2C_PluginCard"`);}
 	try {WebModulesData.GlobalModules["V2C_ThemeCard"] = V2C_ThemeCard;} catch(err) {BDFDB.LogUtils.warn(`Could not find global Module "V2C_ThemeCard"`);}
 	
-	BDFDB.ModuleUtils.patch = function (plugin, module, modulefunctions, patchfunctions) {
+	BDFDB.ModuleUtils.patch = function (plugin, module, modulefunctions, patchfunctions, injectOldSource) {
 		if (!plugin || !module || !modulefunctions || !BDFDB.ObjectUtils.is(patchfunctions)) return null;
 		patchfunctions = BDFDB.ObjectUtils.filter(patchfunctions, type => WebModulesData.Patchtypes.includes(type), true);
-		if (BDFDB.ObjectUtils.isEmpty(patchfunctions)) return;
+		if (BDFDB.ObjectUtils.isEmpty(patchfunctions)) return null;
 		const pluginname = typeof plugin === "string" ? plugin : plugin.name;
 		const pluginid = pluginname.toLowerCase();
 		if (!module.BDFDBpatch) module.BDFDBpatch = {};
@@ -1103,6 +1093,7 @@
 					else BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`)();
 					return modulefunction == "render" && data.returnValue === undefined ? null : data.returnValue;
 				};
+				module[modulefunction].originalsource = originalfunction;
 			}
 			for (let type in patchfunctions) if (typeof patchfunctions[type] == "function") {
 				module.BDFDBpatch[modulefunction][type][pluginid] = patchfunctions[type];
@@ -1322,6 +1313,7 @@
 			if (BDFDB.InternalData.patchMenuQueries[type].module) InternalBDFDB.patchContextMenuPlugin(plugin, type, BDFDB.InternalData.patchMenuQueries[type].module);
 			else BDFDB.InternalData.patchMenuQueries[type].query.push(plugin);
 		}
+		for (let type of LibraryComponents.ContextMenus._NonRenderMenus) if (typeof plugin[`on${type}`] === "function") InternalBDFDB.patchNonRenderContextMenuPlugin(plugin, type, LibraryComponents.ContextMenus._Modules[type]);
 	};
 	InternalBDFDB.patchContextMenuPlugin = (plugin, type, module) => {
 		if (module && module.prototype) {
@@ -1339,6 +1331,11 @@
 				}});
 			}
 		}
+	};
+	InternalBDFDB.patchNonRenderContextMenuPlugin = (plugin, type, module) => {
+		BDFDB.ModuleUtils.patch(plugin, module.exports, "default", {after: e => {
+			if (e.thisObject && e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:{props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:"render"});
+		}});
 	};
 	InternalBDFDB.patchPopoutPlugin = (plugin, type, module) => {
 		if (module && module.prototype) {
@@ -6895,19 +6892,35 @@
 	};
 	
 	LibraryComponents.ContextMenus = {};
-	LibraryComponents.ContextMenus._NormalMenus = ["ChannelContextMenu", "DeveloperContextMenu", "GuildContextMenu", "GuildRoleContextMenu", "MessageContextMenu", "NativeContextMenu", "ScreenshareContextMenu", "SlateContextMenu", "UserContextMenu", "UserSettingsCogContextMenu"];
+	LibraryComponents.ContextMenus._NormalMenus = ["DeveloperContextMenu", "GuildRoleContextMenu", "MessageContextMenu", "NativeContextMenu", "ScreenshareContextMenu", "UserSettingsCogContextMenu"];
 	LibraryComponents.ContextMenus._FluxMenus = ["ApplicationContextMenu", "GroupDMContextMenu"];
+	LibraryComponents.ContextMenus._NonRenderMenus = ["ChannelContextMenu", "GuildContextMenu", "UserContextMenu"];
+	
+	LibraryComponents.ContextMenus._Modules = {};
+	
 	LibraryComponents.ContextMenus.ApplicationContextMenu = BDFDB.ModuleUtils.findByName("FluxContainer(ApplicationContextMenu)");
+	
 	LibraryComponents.ContextMenus.ChannelContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.CHANNEL_LIST_TEXT);
+	LibraryComponents.ContextMenus._Modules.ChannelContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.CHANNEL_LIST_TEXT, false);
+	
 	LibraryComponents.ContextMenus.DeveloperContextMenu = BDFDB.ModuleUtils.findByName("DeveloperContextMenu");
+	
 	LibraryComponents.ContextMenus.GroupDMContextMenu = BDFDB.ModuleUtils.findByName("FluxContainer(GroupDMContextMenu)");
+	
 	LibraryComponents.ContextMenus.GuildContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.GUILD_CHANNEL_LIST);
+	LibraryComponents.ContextMenus._Modules.GuildContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.GUILD_CHANNEL_LIST, false);
+	
 	LibraryComponents.ContextMenus.GuildRoleContextMenu = BDFDB.ModuleUtils.findByName("GuildRoleContextMenu");
+	
 	LibraryComponents.ContextMenus.MessageContextMenu = BDFDB.ModuleUtils.findByName("MessageContextMenu");
+	
 	LibraryComponents.ContextMenus.NativeContextMenu = BDFDB.ModuleUtils.findByName("NativeContextMenu");
+	
 	LibraryComponents.ContextMenus.ScreenshareContextMenu = BDFDB.ModuleUtils.findByName("ScreenshareContextMenu");
-	LibraryComponents.ContextMenus.SlateContextMenu = BDFDB.ModuleUtils.findByName("SlateContextMenu");
+	
 	LibraryComponents.ContextMenus.UserContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.USER_CHANNEL_MEMBERS);
+	LibraryComponents.ContextMenus._Modules.UserContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.USER_CHANNEL_MEMBERS, false);
+	
 	LibraryComponents.ContextMenus.UserSettingsCogContextMenu = BDFDB.ModuleUtils.findByName("UserSettingsCogContextMenu");
 	
 	LibraryComponents.FavButton = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.FavButton") || reactInitialized && class BDFDB_FavButton extends LibraryModules.React.Component {
