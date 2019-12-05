@@ -176,22 +176,22 @@ class SpellCheck {
 				let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 				let items = [];
 				let similarWords = this.getSimilarWords(word.toLowerCase().trim());
-				for (let suggestion of similarWords.sort()) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+				for (let suggestion of similarWords.sort()) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 					label: suggestion,
 					action: _ => {
 						BDFDB.ContextMenuUtils.close(menu);
 						this.replaceWord(textarea, word, suggestion);
 					}
 				}));
-				if (!items.length) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+				if (!items.length) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 					label: this.labels.similarwordssubmenu_none_text,
 					disabled: true
 				}));
-				const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+				const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
 						label: BDFDB.LanguageUtils.LanguageStrings.SPELLCHECK,
 						render: [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 								label: this.labels.context_spellcheck_text,
 								hint: word,
 								action: _ => {
@@ -199,7 +199,7 @@ class SpellCheck {
 									this.addToOwnDictionary(word);
 								}
 							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
 								label: this.labels.context_similarwords_text,
 								render: items
 							})

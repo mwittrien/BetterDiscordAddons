@@ -500,7 +500,7 @@ class ServerFolders {
 				BDFDB.DataUtils.save(data, this, "folders", e.instance.props.folderId);
 			}
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"GuildFolderMarkReadItem"});
-			children.splice(index > -1 ? index + 1 : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuToggleItem, {
+			children.splice(index > -1 ? index + 1 : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Toggle, {
 				label: this.labels.foldercontext_autoreadfolder_text,
 				active: data.autoRead,
 				action: state => {
@@ -508,8 +508,8 @@ class ServerFolders {
 					BDFDB.DataUtils.save(data, this, "folders", e.instance.props.folderId);
 				}
 			}));
-			e.returnvalue.props.children.splice(e.returnvalue.props.children.length - 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
-				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuToggleItem, {
+			e.returnvalue.props.children.splice(e.returnvalue.props.children.length - 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Toggle, {
 					label: this.labels.foldercontext_mutefolder_text,
 					active: muted,
 					action: state => {
@@ -519,8 +519,8 @@ class ServerFolders {
 					}
 				})
 			}));
-			e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
-				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+			e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 					label: this.labels.foldercontext_removefolder_text,
 					danger: true,
 					action: event => {
@@ -537,12 +537,12 @@ class ServerFolders {
 			let folder = BDFDB.GuildUtils.getFolder(e.instance.props.guild.id);
 			let unfolderedGuilds = BDFDB.LibraryModules.FolderStore.getSortedGuilds().filter(n => !n.folderId).map(n => n.guilds[0]);
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-			children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+			children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
 				children: [
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
 						label: this.labels.servercontext_serverfolders_text,
 						render: folder ? [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 								label: this.labels.serversubmenu_removefromfolder_text,
 								danger: true,
 								action: _ => {
@@ -551,7 +551,7 @@ class ServerFolders {
 								}
 							})
 						] : [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 								label: this.labels.serversubmenu_createfolder_text,
 								disabled: !unfolderedGuilds.length,
 								action: _ => {
@@ -562,7 +562,7 @@ class ServerFolders {
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents[folders.length ? "ContextMenuSubItem" : "ContextMenuItem"], {
 								label: this.labels.serversubmenu_addtofolder_text,
 								disabled: !folders.length,
-								render: folders.map((folder, i) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								render: folders.map((folder, i) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 									label: folder.folderName || `${BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER} #${i + 1}`,
 									action: _ => {
 										BDFDB.ContextMenuUtils.close(e.instance);

@@ -110,20 +110,20 @@ class ServerHider {
 		if (document.querySelector(BDFDB.dotCN.modalwrapper)) return;
 		if (e.instance.props.target && e.instance.props.type.startsWith("GUILD_ICON_")) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-			children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+			children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
 				children: [
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
 						label: this.labels.context_serverhider_text,
-						render: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+						render: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 									label: this.labels.submenu_openhidemenu_text,
 									action: _ => {
 										BDFDB.ContextMenuUtils.close(e.instance);
 										this.showHideModal();
 									}
 								}),
-								!e.instance.props.guild && !e.instance.props.folderId ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								!e.instance.props.guild && !e.instance.props.folderId ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 									label: e.instance.props.guild ? this.labels.submenu_hideserver_text : this.labels.submenu_hidefolder_text,
 									action: _ => {
 										BDFDB.ContextMenuUtils.close(e.instance);

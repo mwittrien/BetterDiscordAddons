@@ -89,9 +89,9 @@ class UserNotes {
 	onUserContextMenu (e) {
 		if (e.instance.props.user) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
 				children: [
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 						label: BDFDB.LanguageUtils.LanguageStrings.USERS + " " + BDFDB.LanguageUtils.LanguageStrings.NOTE,
 						action: _ => {
 							BDFDB.ContextMenuUtils.close(e.instance);

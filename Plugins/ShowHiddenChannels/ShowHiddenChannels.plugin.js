@@ -184,8 +184,8 @@ class ShowHiddenChannels {
 			let isHidden = this.isChannelHidden(e.instance.props.channel.id);
 			if (isHidden || BDFDB.DataUtils.get(this, "settings", "showForNormal")) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 						label: BDFDB.LanguageUtils.LanguageStrings.CHANNEL + " " + BDFDB.LanguageUtils.LanguageStrings.ACCESSIBILITY,
 						action: _ => {
 							BDFDB.ContextMenuUtils.close(e.instance);

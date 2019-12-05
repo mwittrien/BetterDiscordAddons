@@ -180,10 +180,10 @@ class PinDMs {
 	injectItem (instance, id, children, index) {
 		let pinnedInChannel = this.isPinned(id, "pinnedDMs");
 		let pinnedInGuild = this.isPinned(id, "pinnedRecents");
-		children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+		children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
 			label: this.labels.context_pindm_text,
 			render: [
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 					label: this.labels[pinnedInChannel ? "context_unpinchannel_text" : "context_pinchannel_text"],
 					danger: pinnedInChannel,
 					action: _ => {
@@ -192,7 +192,7 @@ class PinDMs {
 						else this.removePin(id, "pinnedDMs");
 					}
 				}),
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 					label: this.labels[pinnedInGuild ? "context_unpinguild_text" : "context_pinguild_text"],
 					danger: pinnedInGuild,
 					action: _ => {

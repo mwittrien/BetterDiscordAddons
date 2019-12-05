@@ -61,9 +61,9 @@ class CopyRawMessage {
 	onMessageContextMenu (e) {
 		if (e.instance.props.message && e.instance.props.message.content) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
 				children: [
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 						label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
 						hint: BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("Copy_Raw") : null,
 						action: _ => {
@@ -81,7 +81,7 @@ class CopyRawMessage {
 	onMessageOptionPopout (e) {
 		if (e.instance.props.message) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["label", BDFDB.LanguageUtils.LanguageStrings.DELETE]]});
-			children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+			children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 				label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
 				className: BDFDB.disCN.optionpopoutitem,
 				action: _ => {

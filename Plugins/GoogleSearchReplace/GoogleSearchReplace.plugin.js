@@ -131,7 +131,7 @@ class GoogleSearchReplace {
 	injectItem (e, text) {
 		let engines = BDFDB.DataUtils.get(this, "engines");
 		let items = [];
-		for (let key in engines) if (engines[key]) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+		for (let key in engines) if (engines[key]) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 			label: this.defaults.engines[key].name,
 			danger: key == "_all",
 			action: event => {
@@ -143,12 +143,12 @@ class GoogleSearchReplace {
 				else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(this.textUrlReplaceString, encodeURIComponent(text)), useChromium, event.shiftKey);
 			}
 		}));
-		if (!items.length) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+		if (!items.length) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 			label: this.labels.submenu_disabled_text,
 			disabled: true
 		}));
 		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"SearchWithGoogle"});
-		const item = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+		const item = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
 			label: this.labels.context_googlesearchreplace_text,
 			render: items
 		});

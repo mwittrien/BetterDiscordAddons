@@ -128,7 +128,7 @@ class PersonalPins {
 			if (!messagediv || pos == -1) return;
 			let note = this.getNoteData(e.instance.props.message, e.instance.props.target, e.instance.props.channel);
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"MessagePinItem"});
-			const pinUnpinItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+			const pinUnpinItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 				label: this.labels[note ? "context_unpinoption_text" : "context_pinoption_text"],
 				hint: BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Note_Message") : null,
 				action: _ => {
@@ -139,7 +139,7 @@ class PersonalPins {
 			if (index > -1) children.splice(index, 0, pinUnpinItem);
 			else children.push(pinUnpinItem);
 			if (this.isNoteOutdated(note, e.instance.props.message)) {
-				const updateItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+				const updateItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 					label: this.labels.context_updateoption_text,
 					action: _ => {
 						BDFDB.ContextMenuUtils.close(e.instance);
@@ -158,7 +158,7 @@ class PersonalPins {
 			if (!messagediv || pos == -1) return;
 			let note = this.getNoteData(e.instance.props.message, e.instance.props.target, e.instance.props.channel);
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["label", [BDFDB.LanguageUtils.LanguageStrings.PIN, BDFDB.LanguageUtils.LanguageStrings.UNPIN]]]});
-			children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+			children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 				label: this.labels[note ? "context_unpinoption_text" : "popout_pinoption_text"],
 				className: BDFDB.disCN.optionpopoutitem,
 				action: _ => {
@@ -166,7 +166,7 @@ class PersonalPins {
 					e.instance.props.onClose();
 				}
 			}));
-			if (this.isNoteOutdated(note, e.instance.props.message)) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+			if (this.isNoteOutdated(note, e.instance.props.message)) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 				label: this.labels.context_updateoption_text,
 				className: BDFDB.disCN.optionpopoutitem,
 				action: _ => {

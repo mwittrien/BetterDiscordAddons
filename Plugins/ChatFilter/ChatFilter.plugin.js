@@ -300,9 +300,9 @@ class ChatFilter {
 
 	appendItem (menu, returnvalue, text) {
 		let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-		const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+		const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
 			children: [
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 					label: "Add to ChatFilter",
 					action: _ => {
 						BDFDB.ContextMenuUtils.close(menu);

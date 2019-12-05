@@ -107,7 +107,7 @@ class ImageZoom {
 			if (index > -1) {
 				let openContext = event => {
 					let settings = BDFDB.DataUtils.get(this, "settings"), items = [];
-					for (let type in settings) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSliderItem, {
+					for (let type in settings) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Slider, {
 						defaultValue: settings[type],
 						digits: this.defaults.settings[type].digits,
 						edges: this.defaults.settings[type].edges,
@@ -121,7 +121,7 @@ class ImageZoom {
 							BDFDB.DataUtils.save(value, this, "settings", type);
 						}
 					}));
-					BDFDB.ContextMenuUtils.open(this, event, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+					BDFDB.ContextMenuUtils.open(this, event, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
 						children: items
 					}));
 				};

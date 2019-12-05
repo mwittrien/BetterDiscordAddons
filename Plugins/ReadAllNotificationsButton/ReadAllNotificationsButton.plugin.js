@@ -126,7 +126,7 @@ class ReadAllNotificationsButton {
 
 	onUserContextMenu (e) {
 		if (e.instance.props.channelId && e.instance.props.type == BDFDB.DiscordConstants.ContextMenuTypes.USER_PRIVATE_CHANNELS) {
-			e.returnvalue.props.children.props.children.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+			e.returnvalue.props.children.props.children.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 				label: BDFDB.LanguageUtils.LanguageStrings.MARK_AS_READ,
 				disabled: !BDFDB.LibraryModules.DirectMessageUnreadStore.getUnreadPrivateChannelIds().includes(e.instance.props.channelId),
 				action: event => {
@@ -155,30 +155,30 @@ class ReadAllNotificationsButton {
 						if (settings.includeDMs) BDFDB.DMUtils.markAsRead(BDFDB.DMUtils.getAll());
 					},
 					onContextMenu: event => {
-						BDFDB.ContextMenuUtils.open(this, event, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+						BDFDB.ContextMenuUtils.open(this, event, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 									label: this.labels.context_unreadguilds_text,
 									action: event2 => {
 										BDFDB.ContextMenuUtils.close(event2._targetInst);
 										BDFDB.GuildUtils.markAsRead(BDFDB.GuildUtils.getUnread());
 									}
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 									label: this.labels.context_pingedguilds_text,
 									action: event2 => {
 										BDFDB.ContextMenuUtils.close(event2._targetInst);
 										BDFDB.GuildUtils.markAsRead(BDFDB.GuildUtils.getPinged());
 									}
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 									label: this.labels.context_mutedguilds_text,
 									action: event2 => {
 										BDFDB.ContextMenuUtils.close(event2._targetInst);
 										BDFDB.GuildUtils.markAsRead(BDFDB.GuildUtils.getMuted());
 									}
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 									label: this.labels.context_guilds_text,
 									action: event2 => {
 										BDFDB.ContextMenuUtils.close(event2._targetInst);
@@ -186,7 +186,7 @@ class ReadAllNotificationsButton {
 										BDFDB.GuildUtils.markAsRead(BDFDB.GuildUtils.getAll());
 									}
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 									label: this.labels.context_dms_text,
 									action: event2 => {
 										BDFDB.ContextMenuUtils.close(event2._targetInst);

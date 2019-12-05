@@ -193,20 +193,20 @@ class EditUsers {
 	onUserContextMenu (instance, menu, returnvalue) {
 		if (instance.props.user && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
 				children: [
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuSubItem, {
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
 						label: this.labels.context_localusersettings_text,
-						render: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItemGroup, {
+						render: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 									label: this.labels.submenu_usersettings_text,
 									action: _ => {
 										BDFDB.ContextMenuUtils.close(menu);
 										this.showUserSettings(instance.props.user);
 									}
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItem, {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 									label: this.labels.submenu_resetsettings_text,
 									disabled: !BDFDB.DataUtils.load(this, "users", instance.props.user.id),
 									action: _ => {

@@ -1313,15 +1313,12 @@
 		}
 	};
 
-	var NoFluxContextMenus = ["ChannelContextMenu", "DeveloperContextMenu", "GuildContextMenu", "GuildRoleContextMenu", "MessageContextMenu", "NativeContextMenu", "ScreenshareContextMenu", "UserContextMenu", "UserSettingsCogContextMenu"];
 	var NoFluxPopouts = ["MessageOptionPopout"];
-	var FluxContextMenus = ["ApplicationContextMenu", "GroupDMContextMenu"];
-	for (let type of FluxContextMenus) BDFDB.InternalData.patchMenuQueries[type] = {query:[], module:null};
 	InternalBDFDB.addContextListeners = (plugin) => {
 		if (!BDFDB.ObjectUtils.is(plugin)) return;
-		for (let type of NoFluxContextMenus) if (typeof plugin[`on${type}`] === "function") InternalBDFDB.patchContextMenuPlugin(plugin, type, BDFDB.ModuleUtils.findByName(type));
+		for (let type of LibraryComponents.ContextMenus._NormalMenus) if (typeof plugin[`on${type}`] === "function") InternalBDFDB.patchContextMenuPlugin(plugin, type, LibraryComponents.ContextMenus[type]);
 		for (let type of NoFluxPopouts) if (typeof plugin[`on${type}`] === "function") InternalBDFDB.patchPopoutPlugin(plugin, type, BDFDB.ModuleUtils.findByName(type));
-		for (let type of FluxContextMenus) if (typeof plugin[`on${type}`] === "function") {
+		for (let type of LibraryComponents.ContextMenus._FluxMenus) if (typeof plugin[`on${type}`] === "function") {
 			if (BDFDB.InternalData.patchMenuQueries[type].module) InternalBDFDB.patchContextMenuPlugin(plugin, type, BDFDB.InternalData.patchMenuQueries[type].module);
 			else BDFDB.InternalData.patchMenuQueries[type].query.push(plugin);
 		}
@@ -3802,7 +3799,7 @@
 	BDFDB.ContextMenuUtils = {};
 	BDFDB.ContextMenuUtils.open = function (plugin, e, children) {
 		LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-			return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenu, Object.assign({}, e, {
+			return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenus.NativeContextMenu, Object.assign({}, e, {
 				BDFDBcontextMenu: true,
 				type: BDFDB.DiscordConstants.ContextMenuTypes.NATIVE_TEXT,
 				value: "",
@@ -6820,9 +6817,9 @@
 	
 	LibraryComponents.Connectors = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Router", "Link"));
 	
-	LibraryComponents.ContextMenu = BDFDB.ModuleUtils.findByName("NativeContextMenu");
+	LibraryComponents.ContextMenuItems = {};
 	
-	LibraryComponents.ContextMenuItem = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.ContextMenuItem") || reactInitialized && class BDFDB_ContextMenuItem extends LibraryModules.React.Component {
+	LibraryComponents.ContextMenuItems.Item = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.ContextMenuItems.Item") || reactInitialized && class BDFDB_ContextMenuItem extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Clickable, {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.contextmenuitem, !this.props.disabled && BDFDB.disCN.contextmenuitemclickable, this.props.danger && BDFDB.disCN.contextmenuitemdanger, this.props.disabled && BDFDB.disCN.contextmenuitemdisabled, this.props.brand && BDFDB.disCN.contextmenuitembrand, this.props.className),
@@ -6852,9 +6849,9 @@
 		}
 	};
 	
-	LibraryComponents.ContextMenuItemGroup = BDFDB.ModuleUtils.findByString(`"div",{className`, `default.itemGroup}`);
+	LibraryComponents.ContextMenuItems.Group = BDFDB.ModuleUtils.findByString(`"div",{className`, `default.itemGroup}`);
 	
-	LibraryComponents.ContextMenuSliderItem = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.ContextMenuSliderItem") || reactInitialized && class BDFDB_ContextMenuSliderItem extends LibraryModules.React.Component {
+	LibraryComponents.ContextMenuItems.Slider = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.ContextMenuItems.Slider") || reactInitialized && class BDFDB_ContextMenuSliderItem extends LibraryModules.React.Component {
 		handleValueChange(value) {
 			let newvalue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value) : value;
 			if (typeof this.props.digits == "number") newvalue = Math.round(newvalue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
@@ -6884,9 +6881,9 @@
 		}
 	};
 	
-	LibraryComponents.ContextMenuSubItem = BDFDB.ModuleUtils.findByName("FluxContainer(SubMenuItem)");
+	LibraryComponents.ContextMenuItems.Sub = BDFDB.ModuleUtils.findByName("FluxContainer(SubMenuItem)");
 	
-	LibraryComponents.ContextMenuToggleItem = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.ContextMenuToggleItem") || reactInitialized && class BDFDB_ContextMenuToggleItem extends LibraryModules.React.Component {
+	LibraryComponents.ContextMenuItems.Toggle = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.ContextMenuItems.Toggle") || reactInitialized && class BDFDB_ContextMenuToggleItem extends LibraryModules.React.Component {
 		handleToggle() {
 			this.props.active = !this.props.active;
 			BDFDB.ReactUtils.forceUpdate(this);
@@ -6896,6 +6893,22 @@
 			return BDFDB.ReactUtils.createElement(NativeSubComponents.ContextMenuToggleItem, Object.assign({}, this.props, {action: this.handleToggle.bind(this)}));
 		}
 	};
+	
+	LibraryComponents.ContextMenus = {};
+	LibraryComponents.ContextMenus._NormalMenus = ["ChannelContextMenu", "DeveloperContextMenu", "GuildContextMenu", "GuildRoleContextMenu", "MessageContextMenu", "NativeContextMenu", "ScreenshareContextMenu", "SlateContextMenu", "UserContextMenu", "UserSettingsCogContextMenu"];
+	LibraryComponents.ContextMenus._FluxMenus = ["ApplicationContextMenu", "GroupDMContextMenu"];
+	LibraryComponents.ContextMenus.ApplicationContextMenu = BDFDB.ModuleUtils.findByName("FluxContainer(ApplicationContextMenu)");
+	LibraryComponents.ContextMenus.ChannelContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.CHANNEL_LIST_TEXT);
+	LibraryComponents.ContextMenus.DeveloperContextMenu = BDFDB.ModuleUtils.findByName("DeveloperContextMenu");
+	LibraryComponents.ContextMenus.GroupDMContextMenu = BDFDB.ModuleUtils.findByName("FluxContainer(GroupDMContextMenu)");
+	LibraryComponents.ContextMenus.GuildContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.GUILD_CHANNEL_LIST);
+	LibraryComponents.ContextMenus.GuildRoleContextMenu = BDFDB.ModuleUtils.findByName("GuildRoleContextMenu");
+	LibraryComponents.ContextMenus.MessageContextMenu = BDFDB.ModuleUtils.findByName("MessageContextMenu");
+	LibraryComponents.ContextMenus.NativeContextMenu = BDFDB.ModuleUtils.findByName("NativeContextMenu");
+	LibraryComponents.ContextMenus.ScreenshareContextMenu = BDFDB.ModuleUtils.findByName("ScreenshareContextMenu");
+	LibraryComponents.ContextMenus.SlateContextMenu = BDFDB.ModuleUtils.findByName("SlateContextMenu");
+	LibraryComponents.ContextMenus.UserContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.USER_CHANNEL_MEMBERS);
+	LibraryComponents.ContextMenus.UserSettingsCogContextMenu = BDFDB.ModuleUtils.findByName("UserSettingsCogContextMenu");
 	
 	LibraryComponents.FavButton = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.FavButton") || reactInitialized && class BDFDB_FavButton extends LibraryModules.React.Component {
 		handleClick() {
@@ -9215,9 +9228,12 @@
 		return e.methodArguments[0].id == "410787888507256842" ? e.methodArguments[0].banner : e.callOriginalMethod();
 	}});
 	
-	for (let type of NoFluxContextMenus) InternalBDFDB.patchContextMenuLib(BDFDB.ModuleUtils.findByName(type), false);
+	for (let type of LibraryComponents.ContextMenus._NormalMenus) InternalBDFDB.patchContextMenuLib(LibraryComponents.ContextMenus[type], false);
 	for (let type of NoFluxPopouts) InternalBDFDB.patchPopoutLib(BDFDB.ModuleUtils.findByName(type), false);
-	for (let type of FluxContextMenus) InternalBDFDB.patchContextMenuLib(BDFDB.ModuleUtils.findByName(`FluxContainer(${type})`), true);
+	for (let type of LibraryComponents.ContextMenus._FluxMenus) {
+		BDFDB.InternalData.patchMenuQueries[type] = {query:[], module:null};
+		InternalBDFDB.patchContextMenuLib(LibraryComponents.ContextMenus[type], true);
+	}
 
 	BDFDB.ModuleUtils.forceAllUpdates(BDFDB);
 	
@@ -9521,6 +9537,12 @@
 	
 	BDFDB.LibraryComponents.ModalTabContent = LibraryComponents.ModalComponents.ModalTabContent;
 	BDFDB.LibraryComponents.NumberBadge = LibraryComponents.BadgeComponents.NumberBadge;
+	
+	BDFDB.LibraryComponents.ContextMenuItem = LibraryComponents.ContextMenuItems.Item;
+	BDFDB.LibraryComponents.ContextMenuItemGroup = LibraryComponents.ContextMenuItems.Group;
+	BDFDB.LibraryComponents.ContextMenuSliderItem = LibraryComponents.ContextMenuItems.Slider;
+	BDFDB.LibraryComponents.ContextMenuSubItem = LibraryComponents.ContextMenuItems.Sub;
+	BDFDB.LibraryComponents.ContextMenuToggleItem = LibraryComponents.ContextMenuItems.Toggle;
 
 	BDFDB.loaded = true;
 	window.BDFDB = BDFDB;
