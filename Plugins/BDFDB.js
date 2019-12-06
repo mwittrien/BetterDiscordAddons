@@ -2820,6 +2820,10 @@
 	};
 
 	BDFDB.DOMUtils = {};
+	BDFDB.DOMUtils.getSelection = function () {
+		let selection = document.getSelection();
+		return selection && selection.anchorNode ? selection.getRangeAt(0).toString() : "";
+	};
 	BDFDB.DOMUtils.addClass = function (eles, ...classes) {
 		if (!eles || !classes) return;
 		for (let ele of [eles].flat(10).filter(n => n)) {
@@ -6482,10 +6486,10 @@
 				else string = input.value || input.textContent || "";
 			}
 			else string = input.value || input.textContent || "";
-			let start = input.selectionStart || 0, end = input.selectionEnd || 0;
+			let start = input.selectionStart || 0, end = input.selectionEnd || 0, selectlength = end - start, selection = BDFDB.DOMUtils.getSelection();
 			let length = this.props.parsing ? BDFDB.StringUtils.getParsedLength(string) : string.length;
-			let select = end - start == 0 ? 0 : (this.props.parsing ? BDFDB.StringUtils.getParsedLength(string.slice(start, end)) : (end - start));
-			select = !select ? 0 : (select > length ? length - (length - end - start) : select);
+			let select = !selectlength && !selection ? 0 : (this.props.parsing ? BDFDB.StringUtils.getParsedLength(selection || string.slice(start, end)) : selectlength || selection.length);
+			select = !select ? 0 : (select > length ? (end || start ? length - (length - end - start) : length) : select);
 			let children = [
 				typeof this.props.renderPrefix == "function" && this.props.renderPrefix(length),
 				`${length}${!this.props.max ? "" : "/" + this.props.max}${!select ? "" : " (" + select + ")"}`,
