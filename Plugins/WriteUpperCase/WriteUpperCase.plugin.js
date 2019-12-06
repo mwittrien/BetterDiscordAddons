@@ -3,7 +3,7 @@
 class WriteUpperCase {
 	getName () {return "WriteUpperCase";}
 
-	getVersion () {return "1.2.2";}
+	getVersion () {return "1.2.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,12 +11,13 @@ class WriteUpperCase {
 
 	constructor () {
 		this.changelog = {
+			"fixed":[["New WYSIWYG Textarea","Fixed for the new WYSIWYG Textarea that is hidden by experiments"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 		
 		this.patchedModules = {
-			after: {
-				ChannelTextArea: "componentDidMount"
+			before: {
+				ChannelTextArea: "render"
 			}
 		};
 	}
@@ -66,30 +67,18 @@ class WriteUpperCase {
 	// begin of own functions
 
 	processChannelTextArea (e) {
-		if (e.instance.props.type) {
-			var textarea = e.node.querySelector("textarea");
-			if (!textarea) return;
-			BDFDB.ListenerUtils.add(this, textarea, "keyup", () => {
-				BDFDB.TimeUtils.clear(textarea.WriteUpperCaseTimeout);
-				textarea.WriteUpperCaseTimeout = BDFDB.TimeUtils.timeout(() => {
-					let string = textarea.value;
-					if (string.length > 0) {
-						let newstring = string;
-						let first = string.charAt(0);
-						let position = textarea.selectionStart;
-						if (first === first.toUpperCase() && (string.toLowerCase().indexOf("http") == 0 || string.toLowerCase().indexOf("s/") == 0)) newstring = string.charAt(0).toLowerCase() + string.slice(1);
-						else if (first === first.toLowerCase() && first !== first.toUpperCase() && string.toLowerCase().indexOf("http") != 0 && string.toLowerCase().indexOf("s/") != 0) newstring = string.charAt(0).toUpperCase() + string.slice(1);
-						if (string != newstring) {
-							textarea.focus();
-							textarea.selectionStart = 0;
-							textarea.selectionEnd = textarea.value.length;
-							document.execCommand("insertText", false, newstring);
-							textarea.selectionStart = position;
-							textarea.selectionEnd = position;
-						}
-					}
-				},1);
-			});
+		if (e.instance.props.type && e.instance.props.textValue && e.instance.state.focused) {
+			let string = e.instance.props.textValue;
+			if (string.length > 0) {
+				let newstring = string;
+				let first = string.charAt(0);
+				if (first === first.toUpperCase() && (string.toLowerCase().indexOf("http") == 0 || string.toLowerCase().indexOf("s/") == 0)) newstring = string.charAt(0).toLowerCase() + string.slice(1);
+				else if (first === first.toLowerCase() && first !== first.toUpperCase() && string.toLowerCase().indexOf("http") != 0 && string.toLowerCase().indexOf("s/") != 0) newstring = string.charAt(0).toUpperCase() + string.slice(1);
+				if (string != newstring) {
+					e.instance.props.textValue = newstring;
+					if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.StringUtils.copyRichValue(newstring, e.instance.props.richValue);
+				}
+			}
 		}
 	}
 }

@@ -24,17 +24,17 @@
 	BDFDB.LogUtils.log = function (string, name) {
 		if (typeof string != "string") string = "";
 		if (typeof name != "string" || name == "$BDFDB") name = "BDFDB";
-		console.log(`%c[${name}]%c`, "color: #3a71c1; font-weight: 700;", "", string.trim());
+		console.log(`%c[${name}]`, "color: #3a71c1; font-weight: 700;", string.trim());
 	};
 	BDFDB.LogUtils.warn = function (string, name) {
 		if (typeof string != "string") string = "";
 		if (typeof name != "string" || name == "$BDFDB") name = "BDFDB";
-		console.warn(`%c[${name}]%c`, "color: #3a71c1; font-weight: 700;", "", string.trim());
+		console.warn(`%c[${name}]`, "color: #3a71c1; font-weight: 700;", string.trim());
 	};
 	BDFDB.LogUtils.error = function (string, name) {
 		if (typeof string != "string") string = "";
 		if (typeof name != "string" || name == "$BDFDB") name = "BDFDB";
-		console.error(`%c[${name}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: " + string.trim());
+		console.error(`%c[${name}]`, "color: #3a71c1; font-weight: 700;", "Fatal Error: " + string.trim());
 	};
 	
 	BDFDB.LogUtils.log("Loading library.");
@@ -3889,6 +3889,16 @@
 		var channel = LibraryModules.ChannelStore.getChannel(channelid);
 		var length = (!channel || string.indexOf("/") == 0 || string.indexOf("s/") == 0 || string.indexOf("+:") == 0) ? string.length : LibraryModules.MessageCreationUtils.parse(channel, string).content.length;
 		return length > string.length ? length : string.length;
+	};
+	BDFDB.StringUtils.copyRichValue = function (string, richValue) {
+		let newRichValue = LibraryModules.SlateUtils.deserialize(string);
+		if (richValue && richValue._map && richValue._map._root && BDFDB.ArrayUtils.is(richValue._map._root.entries)) {
+			for (let i in richValue._map._root.entries) if (richValue._map._root.entries[i][0] == "selection") {
+				newRichValue._map._root.entries[i] = richValue._map._root.entries[i];
+				break;
+			}
+		}
+		return newRichValue;
 	};
 	BDFDB.StringUtils.highlight = function (string, searchstring, prefix = `<span class="${BDFDB.disCN.highlight}">`, suffix = `</span>`) {
 		if (typeof string != "string" || !searchstring || searchstring.length < 1) return string;
