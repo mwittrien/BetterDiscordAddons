@@ -1053,8 +1053,13 @@
 	try {WebModulesData.GlobalModules["V2C_PluginCard"] = V2C_PluginCard;} catch(err) {BDFDB.LogUtils.warn(`Could not find global Module "V2C_PluginCard"`);}
 	try {WebModulesData.GlobalModules["V2C_ThemeCard"] = V2C_ThemeCard;} catch(err) {BDFDB.LogUtils.warn(`Could not find global Module "V2C_ThemeCard"`);}
 	
-	BDFDB.ModuleUtils.patch = function (plugin, module, modulefunctions, patchfunctions, injectOldSource) {
-		if (!plugin || !module || !modulefunctions || !BDFDB.ObjectUtils.is(patchfunctions)) return null;
+	BDFDB.ModuleUtils.isPatched = function (plugin, module, modulefunctions) {
+		if (!plugin || !BDFDB.ObjectUtils.is(module) || !module.BDFDBpatch || !modulefunctions) return false;
+		const pluginid = (typeof plugin === "string" ? plugin : plugin.name).toLowerCase();
+		return pluginid && [modulefunctions].flat(10).filter(n => n).some(funcname => module.BDFDBpatch[funcname] && Object.keys(module.BDFDBpatch[funcname]).some(patchfunc => Object.keys(module.BDFDBpatch[funcname][patchfunc]).includes(pluginid)));
+	};
+	BDFDB.ModuleUtils.patch = function (plugin, module, modulefunctions, patchfunctions) {
+		if (!plugin || !BDFDB.ObjectUtils.is(module) || !modulefunctions || !BDFDB.ObjectUtils.is(patchfunctions)) return null;
 		patchfunctions = BDFDB.ObjectUtils.filter(patchfunctions, type => WebModulesData.Patchtypes.includes(type), true);
 		if (BDFDB.ObjectUtils.isEmpty(patchfunctions)) return null;
 		const pluginname = typeof plugin === "string" ? plugin : plugin.name;
