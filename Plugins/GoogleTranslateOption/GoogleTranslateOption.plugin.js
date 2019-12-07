@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.7.7";} 
+	getVersion () {return "1.7.8";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,12 +11,12 @@ class GoogleTranslateOption {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["Right Click","Fixed issue where right click would not quick enable/disable translating"]]
+			"fixed":[["Google API","Google ultimately removed their free Google Translate Endpoint, killing any chances of using a free translation API that doesn't have a requests per month limit. I switched to emulating the translate webpage in an invisible browserwindow, sadly this is far slower than the old method, but at least it still works"],["New Chatbar still broken","<span style='color: rgb(241, 71, 71);'>the plugin still fails to translate outgoing messages if your client is using the new WYSIWYG chatinput, this bug will be fixed at a later date</span>"]]
 		};
 
 		this.patchedModules = {
 			after: {
-				ChannelTextArea: ["componentDidMount","render"],
+				ChannelTextArea: ["render", "componentDidMount"],
 				Message: "componentDidMount",
 				MessageContent: "componentDidMount"
 			}
@@ -193,7 +193,7 @@ class GoogleTranslateOption {
 							};
 							if (foundtranslation && foundinput && foundoutput) {
 								if (document.querySelector(".googletranslate-tooltip")) {
-									BDFDB.ContextMenuUtils.close(menu);
+									BDFDB.ContextMenuUtils.close(e.instance);
 									BDFDB.DiscordUtils.openLink(this.getGoogleTranslatePageURL(foundinput.id, foundoutput.id, text), BDFDB.DataUtils.get(this, "settings", "useChromium"));
 								}
 								else createTooltip();
@@ -368,7 +368,7 @@ class GoogleTranslateOption {
 					menuPlacement: inPopout ? BDFDB.LibraryComponents.Select.MenuPlacements.TOP : BDFDB.LibraryComponents.Select.MenuPlacements.BOTTOM,
 					value: this.getLanguageChoice(key),
 					id: key,
-					options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(isOutput ? BDFDB.ObjectUtils.filter(this.languages, lang => lang.id != "auto") : this.languages, (lang, id) => {return {value:id, label:lang.name}})),
+					options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(isOutput ? BDFDB.ObjectUtils.filter(this.languages, lang => lang.id != "auto") : this.languages, (lang, id) => {return {value:id, label:this.getLanguageName(lang)}})),
 					searchable: true,
 					optionRenderer: lang => {
 						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
@@ -455,7 +455,7 @@ class GoogleTranslateOption {
 						embeddescription.insertBefore(BDFDB.DOMUtils.create(`<label class="GTO-translation">${translations.shift().trim()}<time class="${BDFDB.disCN.messageedited} GTO-translated">(${this.labels.translated_watermark_text})</time></label>`), embeddescription.firstChild);
 					}
 					BDFDB.ListenerUtils.addToChildren(messagediv, "mouseenter", BDFDB.dotCN.messageedited + ".GTO-translated", e => {
-						BDFDB.TooltipUtils.create(e.currentTarget, `<div>From: ${input.name}</div><div>To: ${output.name}</div>`, {html:true, type:"top", selector:"translation-tooltip"});
+						BDFDB.TooltipUtils.create(e.currentTarget, `<div>From: ${this.getLanguageName(input)}</div><div>To: ${this.getLanguageName(output)}</div>`, {html:true, type:"top", selector:"translation-tooltip", style: "max-width: 400px"});
 					});
 				}
 			});
@@ -477,10 +477,6 @@ class GoogleTranslateOption {
 				toast.close();
 			}
 			callback(translation, input, output);
-		};
-		var translationError = (exceptions, input, output, toast, test) => {
-			BDFDB.NotificationUtils.toast("Could not translate message, you most likely got rate limited by Google for today due to too frequent usage of their Translate-API.", {type:"error",timeout:15000});
-			finishTranslation(null, exceptions, input, output, toast);
 		};
 		var [newtext, exceptions, translate] = this.removeExceptions(text.trim(), type);
 		var input = Object.assign({}, this.languages[this.getLanguageChoice("input", type)]);
@@ -509,22 +505,18 @@ class GoogleTranslateOption {
 				finishTranslation(newtext, exceptions, input, output, toast);
 			}
 			else {
-				BDFDB.LibraryRequires.request(this.getGoogleTranslateApiURL(input.id, output.id, newtext), (error, response, result) => {
-					if (!error && result) {
-						try {
-							result = JSON.parse(result);
-							if (result) {
-								result[0].forEach((array) => {translation += array[0];});
-								if (!specialcase && this.languages[result[2]]) input.name = this.languages[result[2]].name;
-							}
-							else translation = text;
-							finishTranslation(translation, exceptions, input, output, toast);
-						}
-						catch (err) {
-							translationError(exceptions, input, output, toast, "a");
-						}
+				let googleTranslateWindow = BDFDB.WindowUtils.open(this, this.getGoogleTranslatePageURL(input.id, output.id, newtext));
+				googleTranslateWindow.webContents.on("did-finish-load", _ => {
+					googleTranslateWindow.webContents.executeJavaScript(`require("electron").ipcRenderer.sendTo(${BDFDB.LibraryRequires.electron.remote.getCurrentWindow().webContents.id}, "GTO-translation", [(document.querySelector(".translation span") || {}).innerHTML, [(new RegExp("{code:'([^']*)',name:'" + [(new RegExp((window.source_language_detected || "").replace("%1$s", "([A-z]{2,})"), "g")).exec(document.body.innerHTML)].flat()[1] +"'}", "g")).exec(document.body.innerHTML)].flat()[1]]);`);
+				});
+				BDFDB.WindowUtils.addListener(this, "GTO-translation", (event, data) => {
+					googleTranslateWindow.close();
+					BDFDB.WindowUtils.removeListener(this, "GTO-translation");
+					if (!specialcase && data[1] && this.languages[data[1]]) {
+						input.name = this.languages[data[1]].name;
+						input.ownlang = this.languages[data[1]].ownlang;
 					}
-					else translationError(exceptions, input, output, toast, "b");
+					finishTranslation(data[0], exceptions, input, output, toast);
 				});
 			}
 		}
@@ -642,14 +634,14 @@ class GoogleTranslateOption {
 		return [newString.join(" "), exceptions, newString.length-count != 0];
 	}
 
-	getGoogleTranslateApiURL (input, output, text) {
-		input = BDFDB.LanguageUtils.languages[input] ? input : "auto";
-		return "https://translate.googleapis.com/translate_a/single?client=gtx&sl=" + input + "&tl=" + output + "&dt=t&ie=UTF-8&oe=UTF-8&q=" + encodeURIComponent(text);
-	}
-
 	getGoogleTranslatePageURL (input, output, text) {
 		input = BDFDB.LanguageUtils.languages[input] ? input : "auto";
 		return "https://translate.google.com/#" + input + "/" + output + "/" + encodeURIComponent(text);
+	}
+	
+	getLanguageName (language) {
+		if (language.name.startsWith("Discord")) return language.name.slice(0, -1) + (language.ownlang && this.languages[language.id].name != language.ownlang ? ` / ${language.ownlang}` : "") + ")";
+		else return language.name + (language.ownlang && language.name != language.ownlang ? ` / ${language.ownlang}` : "");
 	}
 
 	setLabelsByLanguage () {
