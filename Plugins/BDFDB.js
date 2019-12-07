@@ -4084,6 +4084,7 @@
 		browserWindow.setMenu(null);
 		browserWindow.loadURL(url);
 		plugin.browserWindows.push(browserWindow);
+		return browserWindow;
 	};
 	BDFDB.WindowUtils.close = function (browserWindow) {
 		if (BDFDB.ObjectUtils.is(browserWindow) && !browserWindow.isDestroyed() && browserWindow.closeable) browserWindow.close();
