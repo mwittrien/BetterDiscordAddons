@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.7.9";} 
+	getVersion () {return "1.8.0";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -402,13 +402,13 @@ class GoogleTranslateOption {
 	}
 
 	setLanguages () {
-		this.languages = Object.assign({},
-			{"auto":	{name:"Auto",			id:"auto",		integrated:false,	dic:false}},
+		this.languages = BDFDB.ObjectUtils.filter(Object.assign({},
+			{"auto":	{name:"Auto",			id:"auto",		google:true,	integrated:false,	dic:false}},
 			BDFDB.LanguageUtils.languages,
-			{"binary":	{name:"Binary",			id:"binary",	integrated:false,	dic:false}},
-			{"braille":	{name:"Braille 6-dot",	id:"braille",	integrated:false,	dic:false}},
-			{"morse":	{name:"Morse",			id:"morse",		integrated:false,	dic:false}}
-		);
+			{"binary":	{name:"Binary",			id:"binary",	google:true,	integrated:false,	dic:false}},
+			{"braille":	{name:"Braille 6-dot",	id:"braille",	google:true,	integrated:false,	dic:false}},
+			{"morse":	{name:"Morse",			id:"morse",		google:true,	integrated:false,	dic:false}}
+		), lang => lang.google);
 		let favorites = BDFDB.DataUtils.load(this, "favorites");
 		for (let id in this.languages) this.languages[id].fav = favorites[id] != undefined ? 0 : 1;
 		this.languages = BDFDB.ObjectUtils.sort(this.languages, "fav");
@@ -507,10 +507,12 @@ class GoogleTranslateOption {
 			else {
 				let googleTranslateWindow = BDFDB.WindowUtils.open(this, this.getGoogleTranslatePageURL(input.id, output.id, newtext));
 				googleTranslateWindow.webContents.on("did-finish-load", _ => {
-					googleTranslateWindow.webContents.executeJavaScript(`require("electron").ipcRenderer.sendTo(${BDFDB.LibraryRequires.electron.remote.getCurrentWindow().webContents.id}, "GTO-translation", [(document.querySelector(".translation") || {}).innerText, [(new RegExp("{code:'([^']*)',name:'" + [(new RegExp((window.source_language_detected || "").replace("%1$s", "([A-z]{2,})"), "g")).exec(document.body.innerHTML)].flat()[1] +"'}", "g")).exec(document.body.innerHTML)].flat()[1]]);`);
+					googleTranslateWindow.webContents.executeJavaScript(`
+						require("electron").ipcRenderer.sendTo(${BDFDB.LibraryRequires.electron.remote.getCurrentWindow().webContents.id}, "GTO-translation", [(document.querySelector(".translation") || {}).innerText, [(new RegExp("{code:'([^']*)',name:'" + [(new RegExp((window.source_language_detected || "").replace("%1$s", "([A-z]{2,})"), "g")).exec(document.body.innerHTML)].flat()[1] +"'}", "g")).exec(document.body.innerHTML)].flat()[1]]);
+					`);
 				});
 				BDFDB.WindowUtils.addListener(this, "GTO-translation", (event, data) => {
-					googleTranslateWindow.close();
+					BDFDB.WindowUtils.close(googleTranslateWindow);
 					BDFDB.WindowUtils.removeListener(this, "GTO-translation");
 					if (!specialcase && data[1] && this.languages[data[1]]) {
 						input.name = this.languages[data[1]].name;
