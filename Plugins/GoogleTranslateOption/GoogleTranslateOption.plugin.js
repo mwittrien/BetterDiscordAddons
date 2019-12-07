@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.7.8";} 
+	getVersion () {return "1.7.9";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -507,7 +507,7 @@ class GoogleTranslateOption {
 			else {
 				let googleTranslateWindow = BDFDB.WindowUtils.open(this, this.getGoogleTranslatePageURL(input.id, output.id, newtext));
 				googleTranslateWindow.webContents.on("did-finish-load", _ => {
-					googleTranslateWindow.webContents.executeJavaScript(`require("electron").ipcRenderer.sendTo(${BDFDB.LibraryRequires.electron.remote.getCurrentWindow().webContents.id}, "GTO-translation", [(document.querySelector(".translation span") || {}).innerHTML, [(new RegExp("{code:'([^']*)',name:'" + [(new RegExp((window.source_language_detected || "").replace("%1$s", "([A-z]{2,})"), "g")).exec(document.body.innerHTML)].flat()[1] +"'}", "g")).exec(document.body.innerHTML)].flat()[1]]);`);
+					googleTranslateWindow.webContents.executeJavaScript(`require("electron").ipcRenderer.sendTo(${BDFDB.LibraryRequires.electron.remote.getCurrentWindow().webContents.id}, "GTO-translation", [(document.querySelector(".translation") || {}).innerText, [(new RegExp("{code:'([^']*)',name:'" + [(new RegExp((window.source_language_detected || "").replace("%1$s", "([A-z]{2,})"), "g")).exec(document.body.innerHTML)].flat()[1] +"'}", "g")).exec(document.body.innerHTML)].flat()[1]]);`);
 				});
 				BDFDB.WindowUtils.addListener(this, "GTO-translation", (event, data) => {
 					googleTranslateWindow.close();
