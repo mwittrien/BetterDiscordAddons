@@ -4093,7 +4093,7 @@
 	};
 	BDFDB.WindowUtils.addListener = function (plugin, actions, callback) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !actions || typeof callback != "function") return;
-		BDFDB.WindowUtils.removeListener(plugin, ele, actions, selector);
+		BDFDB.WindowUtils.removeListener(plugin, actions);
 		for (let action of actions.split(" ")) {
 			action = action.split(".");
 			let eventname = action.shift().toLowerCase();
