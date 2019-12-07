@@ -2,6 +2,8 @@
 	if (window.BDFDB && window.BDFDB.ListenerUtils && typeof window.BDFDB.ListenerUtils.remove == "function") window.BDFDB.ListenerUtils.remove(window.BDFDB);
 	if (window.BDFDB && window.BDFDB.ObserverUtils && typeof window.BDFDB.ObserverUtils.disconnect == "function") window.BDFDB.ObserverUtils.disconnect(window.BDFDB);
 	if (window.BDFDB && window.BDFDB.ModuleUtils && typeof window.BDFDB.ModuleUtils.unpatch == "function") window.BDFDB.ModuleUtils.unpatch(window.BDFDB);
+	if (window.BDFDB && window.BDFDB.WindowUtils && typeof window.BDFDB.WindowUtils.closeAll == "function") window.BDFDB.WindowUtils.closeAll(window.BDFDB);
+	if (window.BDFDB && window.BDFDB.WindowUtils && typeof window.BDFDB.WindowUtils.removeListener == "function") window.BDFDB.WindowUtils.removeListener(window.BDFDB);
 	var BDFDB = {
 		myPlugins: Object.assign({}, window.BDFDB && window.BDFDB.myPlugins),
 		InternalData: Object.assign({
@@ -100,6 +102,8 @@
 		BDFDB.ModuleUtils.unpatch(plugin);
 		BDFDB.ListenerUtils.remove(plugin);
 		BDFDB.ObserverUtils.disconnect(plugin);
+		BDFDB.WindowUtils.closeAll(plugin);
+		BDFDB.WindowUtils.removeListener(plugin);
 		InternalBDFDB.removeOnSwitchListener(plugin);
 		
 		for (let modal of document.querySelectorAll(`.${plugin.name}-modal, .${plugin.name.toLowerCase()}-modal, .${plugin.name}-settingsmodal, .${plugin.name.toLowerCase()}-settingsmodal`)) {
@@ -1106,7 +1110,7 @@
 			}
 		}
 		let cancel = _ => {BDFDB.ModuleUtils.unpatch(plugin, module, modulefunctions);};
-		if (plugin && typeof plugin == "object") {
+		if (BDFDB.ObjectUtils.is(plugin)) {
 			if (!BDFDB.ArrayUtils.is(plugin.patchCancels)) plugin.patchCancels = [];
 			plugin.patchCancels.push(cancel);
 		}
@@ -4064,6 +4068,64 @@
 	};
 	BDFDB.DiscordUtils.shake = function () {
 		BDFDB.ReactUtils.getInstance(document.querySelector(BDFDB.dotCN.appold)).return.stateNode.shake();
+	};
+
+	BDFDB.WindowUtils = {};
+	BDFDB.WindowUtils.open = function (plugin, url, options) {
+		if (!BDFDB.ObjectUtils.is(plugin) || !url) return;
+		if (!BDFDB.ArrayUtils.is(plugin.browserWindows)) plugin.browserWindows = [];
+		let browserWindow = new LibraryRequires.electron.remote.BrowserWindow(Object.assign({
+			show: false,
+			webPreferences: {
+				nodeIntegration: true,
+				nodeIntegrationInWorker: true
+			}
+		}, options));
+		browserWindow.setMenu(null);
+		browserWindow.loadURL(url);
+		plugin.browserWindows.push(browserWindow);
+	};
+	BDFDB.WindowUtils.close = function (browserWindow) {
+		if (BDFDB.ObjectUtils.is(browserWindow) && browserWindow.closeable && typeof browserWindow.close == "function") browserWindow.close();
+	};
+	BDFDB.WindowUtils.closeAll = function (plugin) {
+		if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ArrayUtils.is(plugin.browserWindows)) for (let browserWindow of plugin.browserWindows) BDFDB.WindowUtils.close(browserWindow);
+	};
+	BDFDB.WindowUtils.addListener = function (plugin, actions, callback) {
+		if (!BDFDB.ObjectUtils.is(plugin) || !actions || typeof callback != "function") return;
+		BDFDB.WindowUtils.removeListener(plugin, ele, actions, selector);
+		for (let action of actions.split(" ")) {
+			action = action.split(".");
+			let eventname = action.shift().toLowerCase();
+			if (!eventname) return;
+			let namespace = (action.join(".") || "") + plugin.name;
+			if (!BDFDB.ArrayUtils.is(plugin.ipcListeners)) plugin.ipcListeners = [];
+
+			plugin.ipcListeners.push({eventname, namespace, callback});
+			LibraryRequires.electron.ipcRenderer.on(eventname, callback);
+		}
+	};
+	BDFDB.WindowUtils.removeListener = function (plugin, actions = "") {
+		if (!BDFDB.ObjectUtils.is(plugin) || !BDFDB.ArrayUtils.is(plugin.ipcListeners)) return;
+		if (actions) {
+			for (let action of actions.split(" ")) {
+				action = action.split(".");
+				let eventname = action.shift().toLowerCase();
+				let namespace = (action.join(".") || "") + plugin.name;
+				for (let listener of plugin.ipcListeners) {
+					let removedlisteners = [];
+					if (listener.eventname == eventname && listener.namespace == namespace) {
+						LibraryRequires.electron.ipcRenderer.off(listener.eventname, listener.callback);
+						removedlisteners.push(listener);
+					}
+					if (removedlisteners.length) plugin.ipcListeners = plugin.ipcListeners.filter(listener => {return removedlisteners.indexOf(listener) < 0;});
+				}
+			}
+		}
+		else {
+			for (let listener of plugin.ipcListeners) LibraryRequires.electron.ipcRenderer.off(listener.eventname, listener.callback);
+			plugin.ipcListeners = [];
+		}
 	};
 
 	BDFDB.BDUtils = {};
