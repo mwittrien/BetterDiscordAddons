@@ -4086,17 +4086,20 @@
 		plugin.browserWindows.push(browserWindow);
 	};
 	BDFDB.WindowUtils.close = function (browserWindow) {
-		if (BDFDB.ObjectUtils.is(browserWindow) && browserWindow.closeable && typeof browserWindow.close == "function") browserWindow.close();
+		if (BDFDB.ObjectUtils.is(browserWindow) && !browserWindow.isDestroyed() && browserWindow.closeable) browserWindow.close();
 	};
 	BDFDB.WindowUtils.closeAll = function (plugin) {
-		if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ArrayUtils.is(plugin.browserWindows)) for (let browserWindow of plugin.browserWindows) BDFDB.WindowUtils.close(browserWindow);
+		if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ArrayUtils.is(plugin.browserWindows)) {
+			for (let browserWindow of plugin.browserWindows) BDFDB.WindowUtils.close(browserWindow);
+			plugin.browserWindows = [];
+		}
 	};
 	BDFDB.WindowUtils.addListener = function (plugin, actions, callback) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !actions || typeof callback != "function") return;
 		BDFDB.WindowUtils.removeListener(plugin, actions);
 		for (let action of actions.split(" ")) {
 			action = action.split(".");
-			let eventname = action.shift().toLowerCase();
+			let eventname = action.shift();
 			if (!eventname) return;
 			let namespace = (action.join(".") || "") + plugin.name;
 			if (!BDFDB.ArrayUtils.is(plugin.ipcListeners)) plugin.ipcListeners = [];
@@ -4110,7 +4113,7 @@
 		if (actions) {
 			for (let action of actions.split(" ")) {
 				action = action.split(".");
-				let eventname = action.shift().toLowerCase();
+				let eventname = action.shift();
 				let namespace = (action.join(".") || "") + plugin.name;
 				for (let listener of plugin.ipcListeners) {
 					let removedlisteners = [];
