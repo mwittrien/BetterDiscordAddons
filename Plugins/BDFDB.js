@@ -6390,7 +6390,7 @@
 		else BDFDB.LogUtils.warn(item + " enter a valid key and at least one value to format the string in BDFDB.LanguageUtils.LibraryStrings");
 		return "";
 	};
-	var initDiscordLanguageInterval = (_ => {
+	var initDiscordLanguageInterval = BDFDB.TimeUtils.interval(_ => {
 		if (document.querySelector("html").lang) {
 			BDFDB.TimeUtils.clear(initDiscordLanguageInterval);
 			var language = BDFDB.LanguageUtils.getLanguage();
