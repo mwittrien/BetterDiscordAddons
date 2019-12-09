@@ -291,7 +291,7 @@ class GoogleTranslateOption {
 				this.translating = !this.translating;
 				let channelTextareaButtonIns = BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_ChannelTextAreaButton"});
 				if (channelTextareaButtonIns) {
-					channelTextareaButtonIns.props.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN.BDFDB.dotCN._googletranslateoptiontranslatebutton, this.translating && BDFDB.disCN.BDFDB.dotCN._googletranslateoptiontranslating, BDFDB.disCN.textareapickerbutton);
+					channelTextareaButtonIns.props.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._googletranslateoptiontranslatebutton, this.translating && BDFDB.disCN._googletranslateoptiontranslating, BDFDB.disCN.textareapickerbutton);
 					BDFDB.ReactUtils.forceUpdate(channelTextareaButtonIns);
 					instance.close();
 				}
@@ -321,7 +321,7 @@ class GoogleTranslateOption {
 					onChange: value => {
 						this.translating = value;
 						if (channelTextareaButtonIns) {
-							channelTextareaButtonIns.props.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN.BDFDB.dotCN._googletranslateoptiontranslatebutton, this.translating && BDFDB.disCN.BDFDB.dotCN._googletranslateoptiontranslating, BDFDB.disCN.textareapickerbutton);
+							channelTextareaButtonIns.props.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._googletranslateoptiontranslatebutton, this.translating && BDFDB.disCN._googletranslateoptiontranslating, BDFDB.disCN.textareapickerbutton);
 							BDFDB.ReactUtils.forceUpdate(channelTextareaButtonIns);
 						}
 					}
