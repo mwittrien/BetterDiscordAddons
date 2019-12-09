@@ -1060,7 +1060,7 @@
 	BDFDB.ModuleUtils.isPatched = function (plugin, module, modulefunction) {
 		if (!plugin || !BDFDB.ObjectUtils.is(module) || !module.BDFDBpatch || !modulefunction) return false;
 		const pluginid = (typeof plugin === "string" ? plugin : plugin.name).toLowerCase();
-		return pluginid && module[modulefunction] && module[modulefunction].toString().indexOf("BDFDBpatch") > -1 && module.BDFDBpatch[modulefunction] && Object.keys(module.BDFDBpatch[modulefunction]).some(patchfunc => Object.keys(module.BDFDBpatch[modulefunction][patchfunc]).includes(pluginid));
+		return pluginid && module[modulefunction] && module[modulefunction].isBDFDBpatched && module.BDFDBpatch[modulefunction] && Object.keys(module.BDFDBpatch[modulefunction]).some(patchfunc => Object.keys(module.BDFDBpatch[modulefunction][patchfunc]).includes(pluginid));
 	};
 	BDFDB.ModuleUtils.patch = function (plugin, module, modulefunctions, patchfunctions) {
 		if (!plugin || !BDFDB.ObjectUtils.is(module) || !modulefunctions || !BDFDB.ObjectUtils.is(patchfunctions)) return null;
@@ -1072,7 +1072,7 @@
 		modulefunctions = [modulefunctions].flat(10).filter(n => n);
 		for (let modulefunction of modulefunctions) {
 			if (!module[modulefunction]) module[modulefunction] = _ => {};
-			if (module[modulefunction].toString().indexOf("BDFDBpatch") == -1) {
+			if (!module[modulefunction].isBDFDBpatched) {
 				const originalfunction = module[modulefunction];
 				if (!module.BDFDBpatch[modulefunction]) {
 					module.BDFDBpatch[modulefunction] = {};
@@ -1105,6 +1105,7 @@
 					return modulefunction == "render" && data.returnValue === undefined ? null : data.returnValue;
 				};
 				module[modulefunction].originalsource = originalfunction;
+				module[modulefunction].isBDFDBpatched = true;
 			}
 			for (let type in patchfunctions) if (typeof patchfunctions[type] == "function") {
 				module.BDFDBpatch[modulefunction][type][pluginid] = patchfunctions[type];
