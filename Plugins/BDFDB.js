@@ -1072,13 +1072,13 @@
 		modulefunctions = [modulefunctions].flat(10).filter(n => n);
 		for (let modulefunction of modulefunctions) {
 			if (!module[modulefunction]) module[modulefunction] = _ => {};
+			const originalfunction = module[modulefunction];
+			if (!module.BDFDBpatch[modulefunction]) {
+				module.BDFDBpatch[modulefunction] = {};
+				for (let type of WebModulesData.Patchtypes) module.BDFDBpatch[modulefunction][type] = {};
+				module.BDFDBpatch[modulefunction].originalMethod = originalfunction;
+			}
 			if (!module[modulefunction].isBDFDBpatched) {
-				const originalfunction = module[modulefunction];
-				if (!module.BDFDBpatch[modulefunction]) {
-					module.BDFDBpatch[modulefunction] = {};
-					for (let type of WebModulesData.Patchtypes) module.BDFDBpatch[modulefunction][type] = {};
-					module.BDFDBpatch[modulefunction].originalMethod = originalfunction;
-				}
 				module[modulefunction] = function () {
 					const data = {
 						thisObject: this,
