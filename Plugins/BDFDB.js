@@ -1060,7 +1060,7 @@
 	BDFDB.ModuleUtils.isPatched = function (plugin, module, modulefunction) {
 		if (!plugin || !BDFDB.ObjectUtils.is(module) || !module.BDFDBpatch || !modulefunction) return false;
 		const pluginid = (typeof plugin === "string" ? plugin : plugin.name).toLowerCase();
-		return pluginid && module[modulefunction] && module[modulefunction].toString().indexOf("BDFDBpatch") > -1 && module.BDFDBpatch[modulefunction] && Object.keys(module.BDFDBpatch[modulefunction]).some(patchfunc => Object.keys(module.BDFDBpatch[funcname][patchfunc]).includes(pluginid));
+		return pluginid && module[modulefunction] && module[modulefunction].toString().indexOf("BDFDBpatch") > -1 && module.BDFDBpatch[modulefunction] && Object.keys(module.BDFDBpatch[modulefunction]).some(patchfunc => Object.keys(module.BDFDBpatch[modulefunction][patchfunc]).includes(pluginid));
 	};
 	BDFDB.ModuleUtils.patch = function (plugin, module, modulefunctions, patchfunctions) {
 		if (!plugin || !BDFDB.ObjectUtils.is(module) || !modulefunctions || !BDFDB.ObjectUtils.is(patchfunctions)) return null;
