@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.8.1";} 
+	getVersion () {return "1.8.2";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -237,7 +237,7 @@ class GoogleTranslateOption {
 				if (this.translating) {
 					BDFDB.ReactUtils.forceUpdate(e.instance);
 					this.translateText(e2.methodArguments[0], "message", (translation, input, output) => {
-						translation = !translation ? text : (BDFDB.DataUtils.get(this, "settings", "sendOriginalMessage") ? text + "\n\n" + translation : translation);
+						translation = !translation ? e2.methodArguments[0] : (BDFDB.DataUtils.get(this, "settings", "sendOriginalMessage") ? e2.methodArguments[0] + "\n\n" + translation : translation);
 						e2.originalMethod(translation);
 					});
 				}
@@ -405,6 +405,7 @@ class GoogleTranslateOption {
 					searchable: true,
 					onChange: engine => {
 						BDFDB.DataUtils.save(engine.value, this, "engines", key);
+						this.setLanguages();
 					}
 				})
 			}));
@@ -536,6 +537,17 @@ class GoogleTranslateOption {
 				data.input.ownlang = this.languages[messagedata[1]].ownlang;
 			}
 			callback(messagedata[0]);
+		});
+	}
+	
+	iTranslateTranslate (data, callback) {
+		console.log(data)
+		BDFDB.LibraryRequires.request("https://www.itranslate.com/themes/itranslate2016/assets/webapp/js/main.js", (error, response, result) => {
+			console.log(error, response, result);
+			if (!error && result) {
+				callback("");
+			}
+			else callback("");
 		});
 	}
 
