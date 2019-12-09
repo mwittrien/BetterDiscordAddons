@@ -1057,10 +1057,10 @@
 	try {WebModulesData.GlobalModules["V2C_PluginCard"] = V2C_PluginCard;} catch(err) {BDFDB.LogUtils.warn(`Could not find global Module "V2C_PluginCard"`);}
 	try {WebModulesData.GlobalModules["V2C_ThemeCard"] = V2C_ThemeCard;} catch(err) {BDFDB.LogUtils.warn(`Could not find global Module "V2C_ThemeCard"`);}
 	
-	BDFDB.ModuleUtils.isPatched = function (plugin, module, modulefunctions) {
-		if (!plugin || !BDFDB.ObjectUtils.is(module) || !module.BDFDBpatch || !modulefunctions) return false;
+	BDFDB.ModuleUtils.isPatched = function (plugin, module, modulefunction) {
+		if (!plugin || !BDFDB.ObjectUtils.is(module) || !module.BDFDBpatch || !modulefunction) return false;
 		const pluginid = (typeof plugin === "string" ? plugin : plugin.name).toLowerCase();
-		return pluginid && [modulefunctions].flat(10).filter(n => n).some(funcname => module.BDFDBpatch[funcname] && Object.keys(module.BDFDBpatch[funcname]).some(patchfunc => Object.keys(module.BDFDBpatch[funcname][patchfunc]).includes(pluginid)));
+		return pluginid && module[modulefunction] && module[modulefunction].toString().indexOf("BDFDBpatch") > -1 && module.BDFDBpatch[modulefunction] && Object.keys(module.BDFDBpatch[modulefunction]).some(patchfunc => Object.keys(module.BDFDBpatch[funcname][patchfunc]).includes(pluginid));
 	};
 	BDFDB.ModuleUtils.patch = function (plugin, module, modulefunctions, patchfunctions) {
 		if (!plugin || !BDFDB.ObjectUtils.is(module) || !modulefunctions || !BDFDB.ObjectUtils.is(patchfunctions)) return null;
@@ -6089,7 +6089,7 @@
 		"iw":			{name:"Hebrew",						id:"iw",		ownlang:"עברית",						google:true,		integrated:false,		dic:false},
 		"hi":			{name:"Hindi",						id:"hi",		ownlang:"हिन्दी",							google:true,		integrated:false,		dic:false},
 		"hmn":			{name:"Hmong",						id:"hmn",		ownlang:"lol Hmongb",					google:true,		integrated:false,		dic:false},
-		"hu":			{name:"Hungarain",					id:"hu",		ownlang:"Magyar",						google:true,		integrated:false,		dic:false},
+		"hu":			{name:"Hungarian",					id:"hu",		ownlang:"Magyar",						google:true,		integrated:false,		dic:false},
 		"is":			{name:"Icelandic",					id:"is",		ownlang:"Íslenska",						google:true,		integrated:false,		dic:false},
 		"ig":			{name:"Igbo",						id:"ig",		ownlang:"Asụsụ Igbo",					google:true,		integrated:false,		dic:false},
 		"id":			{name:"Indonesian",					id:"id",		ownlang:"Bahasa Indonesia",				google:true,		integrated:false,		dic:false},
@@ -6307,12 +6307,13 @@
 		}
 	};
 	BDFDB.LanguageUtils.getLanguage = function () {
-		var lang = document.querySelector("html").lang || "en-US";
+		var lang = document.querySelector("html").lang || "en";
+		if (lang == "en-GB" || lang == "en-US") lang = "en";
 		var langids = lang.split("-");
 		var langid = langids[0];
 		var langid2 = langids[1] || "";
 		lang = langid2 && langid.toUpperCase() !== langid2.toUpperCase() ? langid + "-" + langid2 : langid;
-		return BDFDB.LanguageUtils.languages[lang] || BDFDB.LanguageUtils.languages[langid] || BDFDB.LanguageUtils.languages["en-US"];
+		return BDFDB.LanguageUtils.languages[lang] || BDFDB.LanguageUtils.languages[langid] || BDFDB.LanguageUtils.languages["en"];
 	};
 	BDFDB.LanguageUtils.LanguageStrings = new Proxy(LanguageStrings, {
 		get: function (list, item) {
