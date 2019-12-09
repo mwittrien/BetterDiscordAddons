@@ -55,7 +55,7 @@ class ForceImagePreviews {
 				}
 			}});
 			
-			BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"MessageAccessories", all:true, noCopies:true, unlimited:true}));
+			BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"MessageAccessories", all:true, unlimited:true}));
 		}
 		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
