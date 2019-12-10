@@ -1019,7 +1019,6 @@
 	WebModulesData.Patchfinder = {
 		Account: "accountinfo",
 		App: "app",
-		AppSkeleton: "app",
 		AppView: "appcontainer",
 		AuthWrapper: "loginscreen",
 		BannedCard: "guildsettingsbannedcard",
@@ -1029,6 +1028,7 @@
 		Guild: "guildouter",
 		GuildIcon: "avataricon",
 		GuildSidebar: "guildchannels",
+		I18nLoaderWrapper: "app",
 		InstantInviteModal: "invitemodalwrapper",
 		InvitationCard: "invitemodalinviterow",
 		InviteCard: "guildsettingsinvitecard",
@@ -1088,8 +1088,8 @@
 						originalMethodName: modulefunction,
 						callOriginalMethod: _ => data.returnValue = data.originalMethod.apply(data.thisObject, data.methodArguments)
 					};
-					if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded && module.BDFDBpatch[modulefunction] && !module.BDFDBpatch[modulefunction].triggered) {
-						module.BDFDBpatch[modulefunction].triggered = true;
+					if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded && module.BDFDBpatch[modulefunction] && !data.thisObject.BDFDBtriggered) {
+						data.thisObject.BDFDBtriggered = true;
 						if (!BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].before)) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[modulefunction].before)) {
 							BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].before[id], `"before" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, module.BDFDBpatch[modulefunction].before[id].pluginname)(data);
 						}
@@ -1102,7 +1102,7 @@
 							let tempreturn = BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].after[id], `"after" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, module.BDFDBpatch[modulefunction].after[id].pluginname)(data);
 							if (tempreturn !== undefined) data.returnValue = tempreturn;
 						}
-						BDFDB.TimeUtils.timeout(_ => {delete module.BDFDBpatch[modulefunction].triggered;});
+						BDFDB.TimeUtils.timeout(_ => {delete data.thisObject.BDFDBtriggered;});
 					}
 					else BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`)();
 					return modulefunction == "render" && data.returnValue === undefined ? null : data.returnValue;
