@@ -3,7 +3,7 @@
 class OldTitleBar {
 	getName () {return "OldTitleBar";}
 
-	getVersion () {return "1.6.2";}
+	getVersion () {return "1.6.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -17,6 +17,7 @@ class OldTitleBar {
 		this.patchedModules = {
 			after: {
 				App: "render",
+				AppSkeleton: "render",
 				HeaderBarContainer: "render",
 				StandardSidebarView: "render",
 				AuthWrapper: "render"
@@ -28,6 +29,7 @@ class OldTitleBar {
 		this.patched = false;
 
 		this.css = `
+			.OTB-enabled ${BDFDB.dotCN.titlebar},
 			.OTB-enabled ${BDFDB.dotCN.splashbackground}:before {
 				display: none !important;
 			}
@@ -159,6 +161,8 @@ class OldTitleBar {
 			this.stopping = true;
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
+			
+			BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"App"}));
 
 			BDFDB.DOMUtils.removeClassFromDOM("OTB-enabled");
 
@@ -177,8 +181,16 @@ class OldTitleBar {
 	}
 
 	processApp (e) {
-		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["type",["WINDOWS", "MACOS"]]]});
+		let [children, index] = BDFDB.ReactUtils.findChildren(e.instance, {props:[["type",["WINDOWS", "MACOS"]]]});
 		if (index > -1) children[index] = null;
+	}
+
+	processAppSkeleton (e) {
+		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["type",["WINDOWS", "MACOS"]]]});
+		if (index > -1) {
+			children[index] = null;
+			BDFDB.ReactUtils.forceUpdate(e.instance);
+		}
 	}
 
 	processHeaderBarContainer (e) {
