@@ -148,7 +148,7 @@ class OldTitleBar {
 
 			this.patchMainScreen(BDFDB.DataUtils.get(this, "settings", "displayNative"));
 
-			BDFDB.DOMUtils.addClass(document.documentElement, "OTB-enabled");
+			BDFDB.DOMUtils.addClass(document.body, "OTB-enabled");
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
@@ -231,7 +231,6 @@ class OldTitleBar {
 	}
 	
 	injectButtons (children, addFirstDivider) {
-		BDFDB.DOMUtils.addClass(document.documentElement, "OTB-enabled");
 		if (addFirstDivider) children.push(BDFDB.ReactUtils.createElement("div", {className: BDFDB.disCN.channelheaderdivider}))
 		if (BDFDB.DataUtils.get(this, "settings", "reloadButton")) {
 			children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
