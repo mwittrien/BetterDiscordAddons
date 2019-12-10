@@ -3,7 +3,7 @@
 class CharCounter {
 	getName () {return "CharCounter";}
 
-	getVersion () {return "1.4.2";}
+	getVersion () {return "1.4.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -129,6 +129,7 @@ class CharCounter {
 
 	processChannelTextArea (e) {
 		if (e.instance.props.type && this.maxLenghts[e.instance.props.type]) {
+			if (!BDFDB.ArrayUtils.is(e.returnvalue.props.children)) e.returnvalue.props.children = [e.returnvalue.props.children];
 			this.injectCounter(e.returnvalue, e.returnvalue.props.children, e.instance.props.type, BDFDB.dotCN.textarea, true);
 		}
 	}
