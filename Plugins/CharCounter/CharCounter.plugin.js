@@ -130,7 +130,6 @@ class CharCounter {
 	processChannelTextArea (e) {
 		if (e.instance.props.type && this.maxLenghts[e.instance.props.type]) {
 			this.injectCounter(e.returnvalue, e.returnvalue.props.children, e.instance.props.type, BDFDB.dotCN.textarea, true);
-			console.log(e.returnvalue);
 		}
 	}
 
