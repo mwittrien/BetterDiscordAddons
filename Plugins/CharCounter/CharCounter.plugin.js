@@ -3,7 +3,7 @@
 class CharCounter {
 	getName () {return "CharCounter";}
 
-	getVersion () {return "1.4.1";}
+	getVersion () {return "1.4.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -129,8 +129,8 @@ class CharCounter {
 
 	processChannelTextArea (e) {
 		if (e.instance.props.type && this.maxLenghts[e.instance.props.type]) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: ["TextAreaAutosize", "TextArea", "PlainTextArea", "SlateChannelTextArea"]});
-			if (index > -1) this.injectCounter(e.returnvalue, children, e.instance.props.type, BDFDB.dotCN.textarea, true);
+			this.injectCounter(e.returnvalue, e.returnvalue.props.children, e.instance.props.type, BDFDB.dotCN.textarea, true);
+			console.log(e.returnvalue);
 		}
 	}
 
