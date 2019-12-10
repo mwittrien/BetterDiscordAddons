@@ -6102,7 +6102,7 @@
 		"ha":			{name:"Hausa",						id:"ha",		ownlang:"حَوْسَ",							integrated:false,		dic:false},
 		"haw":			{name:"Hawaiian",					id:"haw",		ownlang:"ʻŌlelo Hawaiʻi",				integrated:false,		dic:false},
 		"he":			{name:"Hebrew",						id:"he",		ownlang:"עברית",						integrated:false,		dic:false},
-		"iw":			{name:"Hebrew (Isreal)",			id:"iw",		ownlang:"עברית",						integrated:false,		dic:false},
+		"iw":			{name:"Hebrew (Israel)",			id:"iw",		ownlang:"עברית",						integrated:false,		dic:false},
 		"hi":			{name:"Hindi",						id:"hi",		ownlang:"हिन्दी",							integrated:false,		dic:false},
 		"hmn":			{name:"Hmong",						id:"hmn",		ownlang:"lol Hmongb",					integrated:false,		dic:false},
 		"hu":			{name:"Hungarian",					id:"hu",		ownlang:"Magyar",						integrated:false,		dic:false},
