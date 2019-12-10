@@ -4429,7 +4429,7 @@
 	DiscordClassModules.Channel = BDFDB.ModuleUtils.findByProperties("wrapper", "content", "modeSelected");
 	DiscordClassModules.ChannelContainer = BDFDB.ModuleUtils.findByProperties("actionIcon", "containerDefault");
 	DiscordClassModules.ChannelLimit = BDFDB.ModuleUtils.findByProperties("users", "total", "wrapper");
-	DiscordClassModules.ChannelTextArea = BDFDB.ModuleUtils.findByProperties("textArea", "attachButtonDivider");
+	DiscordClassModules.ChannelTextArea = BDFDB.ModuleUtils.findByProperties("textArea", "attachButton");
 	DiscordClassModules.ChannelTextAreaButton = BDFDB.ModuleUtils.findByProperties("buttonWrapper", "active");
 	DiscordClassModules.ChatWindow = BDFDB.ModuleUtils.findByProperties("chat", "channelTextArea");
 	DiscordClassModules.Checkbox = BDFDB.ModuleUtils.findByProperties("checkboxWrapper", "round");
