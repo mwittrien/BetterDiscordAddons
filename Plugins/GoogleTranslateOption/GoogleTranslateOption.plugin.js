@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.8.2";} 
+	getVersion () {return "1.8.3";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class GoogleTranslateOption {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["Messages stay translated", "Messages will stay translated even if you switch channels"],["New Engines","New Engines will soon be added to the plugin, since google has become really slow"]],
+			"improved":[["Messages stay translated", "Messages will stay translated even if you switch channels"],["iTranslate & Yandex","Added iTranslate and Yandex engine, these engines got a montly rate limit, so if they don't work switch back to Google"]],
 			"fixed":[["Google API","Google ultimately removed their free Google Translate Endpoint, killing any chances of using a free translation API that doesn't have a requests per month limit. I switched to emulating the translate webpage in an invisible browserwindow, sadly this is far slower than the old method, but at least it still works"],["New Chatbar","Translating outgoing messages works again"]]
 		};
 
@@ -60,7 +60,9 @@ class GoogleTranslateOption {
 		};
 		
 		this.translationEngines = {
-			google: 					{name:"Google",			func:this.googleTranslate,			languages: ["af","sq","am","ar","hy","az","eu","be","bn","bs","bg","my","ca","ceb","ny","zh-CN","co","hr","cs","da","nl","en","eo","et","fi","fr","fy","gl","ka","de","el","gu","ht","ha","haw","iw","hi","hmn","hu","is","ig","id","ga","it","ja","jw","kn","kk","km","ko","ku","ky","lo","la","lv","lt","lb","mk","mg","ms","ml","mt","mi","mr","mn","ne","no","ps","fa","pl","pt","pa","ro","ru","sm","gd","sr","st","sn","sd","si","sk","sl","so","es","sw","sv","tg","ta","te","th","tr","uk","ur","uz","vi","cy","xh","yi","yo","zu"]}
+			google: 					{name:"Google",			func:this.googleTranslate,			languages: ["af","sq","am","ar","hy","az","eu","be","bn","bs","bg","my","ca","ceb","ny","zh-CN","co","hr","cs","da","nl","en","eo","et","fi","fr","fy","gl","ka","de","el","gu","ht","ha","haw","iw","hi","hmn","hu","is","ig","id","ga","it","ja","jw","kn","kk","km","ko","ku","ky","lo","la","lv","lt","lb","mk","mg","ms","ml","mt","mi","mr","mn","ne","no","ps","fa","pl","pt","pa","ro","ru","sm","gd","sr","st","sn","sd","si","sk","sl","so","es","sw","sv","tg","ta","te","th","tr","uk","ur","uz","vi","cy","xh","yi","yo","zu"]},
+			itranslate: 				{name:"iTranslate",		func:this.iTranslateTranslate,		languages: ["af","sq","ar","hy","az","eu","be","bn","bs","bg","ca","ceb","ny","zh-CN","zh-TW","hr","cs","da","nl","en","eo","et","fil","fi","fr","gl","ka","de","el","gu","ht","he","ha","hi","hmn","hu","is","ig","id","ga","it","ja","jw","kn","kk","km","ko","lo","la","lv","lt","mk","mg","ms","ml","mt","mi","mr","mn","my","ne","no","fa","pl","pt-BR","pt-PT","pa","ro","ru","sr","st","si","sk","sl","so","es","su","sw","sv","tg","ta","te","th","tr","uk","ur","uz","vi","we","yi","yo","zu"]},
+			yandex: 					{name:"Yandex",			func:this.yandexTranslate,			languages: ["af","sq","am","ar","hy","az","ba","eu","be","bn","bs","bg","my","ca","ceb","zh","hr","cs","da","nl","en","eo","et","fi","fr","gl","ka","de","el","gu","ht","he","hi","hu","is","id","ga","it","ja","jv","kn","kk","km","ko","ky","lo","la","lv","lt","lb","mk","mg","ms","ml","mt","mi","mr","mhr","mn","ne","no","pap","fa","pl","pt","pa","ro","ru","gd","sr","si","sk","sl","es","su","sw","sv","tl","tg","ta","tt","te","th","tr","udm","uk","ur","uz","vi","cy","xh","yi"]}
 		};
 
 		this.css = `
@@ -491,10 +493,15 @@ class GoogleTranslateOption {
 		var input = Object.assign({}, this.languages[this.getLanguageChoice("input", type)]);
 		var output = Object.assign({}, this.languages[this.getLanguageChoice("output", type)]);
 		if (translate) {
+			let timer = 0;
 			toast = BDFDB.NotificationUtils.toast("Translating. Please wait", {timeout:0});
-			toast.interval = BDFDB.TimeUtils.interval(() => {
-				toast.textContent = toast.textContent.indexOf(".....") > -1 ? "Translating. Please wait" : toast.textContent + ".";
-			},500);
+			toast.interval = BDFDB.TimeUtils.interval(_ => {
+				if (timer++ > 40) {
+					finishTranslation("");
+					BDFDB.NotificationUtils.toast("Failed to translate text. Try another Translate Engine.", {type:"error"});
+				}
+				else toast.textContent = toast.textContent.indexOf(".....") > -1 ? "Translating. Please wait" : toast.textContent + ".";
+			}, 500);
 			let specialcase = this.checkForSpecialCase(newtext, input);
 			if (specialcase) {
 				input.name = specialcase.name;
@@ -516,7 +523,7 @@ class GoogleTranslateOption {
 				let translator = BDFDB.DataUtils.get(this, "engines", "translator");
 				if (this.translationEngines[translator] && typeof this.translationEngines[translator].func == "function") {
 					this.isTranslating = true;
-					this.translationEngines[translator].func.apply(this, [{input, output, text:newtext, specialcase}, finishTranslation]);
+					this.translationEngines[translator].func.apply(this, [{input, output, text:newtext, specialcase, engine:this.translationEngines[translator]}, finishTranslation]);
 				}
 				else finishTranslation("");
 			}
@@ -541,11 +548,65 @@ class GoogleTranslateOption {
 	}
 	
 	iTranslateTranslate (data, callback) {
-		console.log(data)
-		BDFDB.LibraryRequires.request("https://www.itranslate.com/themes/itranslate2016/assets/webapp/js/main.js", (error, response, result) => {
-			console.log(error, response, result);
+		let translate = _ => {
+			let xml = new XMLHttpRequest();
+			xml.open("POST", "https://api.itranslate.com/translate/v1");
+			xml.send(JSON.stringify({
+				key: data.engine.APIkey,
+				source: {
+					dialect: data.input.id,
+					text: data.text
+				},
+				target: {
+					dialect: data.output.id
+				}
+			}));
+			xml.onreadystatechange = _ => {
+				if (xml.status == 200) {
+					if (xml.readyState == 4) {
+						try {
+							let response = JSON.parse(xml.responseText);
+							if (!data.specialcase && response.source && response.source.detected && this.languages[response.source.detected]) {
+								data.input.name = this.languages[response.source.detected].name;
+								data.input.ownlang = this.languages[response.source.detected].ownlang;
+							}
+							callback(response.target.text);
+						}
+						catch (err) {callback("");}
+					}
+				}
+				else callback("");
+			}
+		};
+		if (data.engine.APIkey) translate();
+		else BDFDB.LibraryRequires.request("https://www.itranslate.com/themes/itranslate2016/assets/webapp/js/main.js", {gzip: true}, (error, response, result) => {
 			if (!error && result) {
-				callback("");
+				let APIkey = /var API_KEY = "(.+)"/.exec(result);
+				if (APIkey) {
+					data.engine.APIkey = APIkey[1];
+					translate();
+				}
+				else callback("");
+			}
+			else callback("");
+		});
+	}
+	
+	yandexTranslate (data, callback) {
+		BDFDB.LibraryRequires.request(`https://translate.yandex.net/api/v1.5/tr/translate?key=trnsl.1.1.20191206T223907Z.52bd512eca953a5b.1ec123ce4dcab3ae859f312d27cdc8609ab280de&text=${encodeURIComponent(data.text)}&lang=${data.specialcase || data.input.id == "auto" ? data.output.id : (data.input.id + "-" + data.output.id)}&options=1`, (error, response, result) => {
+			if (!error && result) {
+				result = BDFDB.DOMUtils.create(result);
+				let translation = result.querySelector("text");
+				let detected = result.querySelector("detected");
+				if (translation && detected) {
+					let detectedlang = detected.getAttribute("lang");
+					if (!data.specialcase && detectedlang && this.languages[detectedlang]) {
+						data.input.name = this.languages[detectedlang].name;
+						data.input.ownlang = this.languages[detectedlang].ownlang;
+					}
+					callback(translation.innerText);
+				}
+				else callback("");
 			}
 			else callback("");
 		});
