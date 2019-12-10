@@ -1019,6 +1019,7 @@
 	WebModulesData.Patchfinder = {
 		Account: "accountinfo",
 		App: "app",
+		AppSkeleton: "app",
 		AppView: "appcontainer",
 		AuthWrapper: "loginscreen",
 		BannedCard: "guildsettingsbannedcard",
