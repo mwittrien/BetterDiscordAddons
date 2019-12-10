@@ -143,9 +143,9 @@ class EditChannels {
 
 	// begin of own functions
 
-	onChannelContextMenu (instance, menu, returnvalue) {
-		if (instance.props.channel && !BDFDB.DOMUtils.getParent(".container-hidden", instance.props.target) && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
+	onChannelContextMenu (e) {
+		if (e.instance.props.channel && !BDFDB.DOMUtils.getParent(".container-hidden", e.instance.props.target)) {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 			children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
@@ -155,16 +155,16 @@ class EditChannels {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 									label: this.labels.submenu_channelsettings_text,
 									action: _ => {
-										BDFDB.ContextMenuUtils.close(menu);
-										this.showChannelSettings(instance.props.channel);
+										BDFDB.ContextMenuUtils.close(e.instance);
+										this.showChannelSettings(e.instance.props.channel);
 									}
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 									label: this.labels.submenu_resetsettings_text,
-									disabled: !BDFDB.DataUtils.load(this, "channels", instance.props.channel.id),
+									disabled: !BDFDB.DataUtils.load(this, "channels", e.instance.props.channel.id),
 									action: _ => {
-										BDFDB.ContextMenuUtils.close(menu);
-										BDFDB.DataUtils.remove(this, "channels", instance.props.channel.id);
+										BDFDB.ContextMenuUtils.close(e.instance);
+										BDFDB.DataUtils.remove(this, "channels", e.instance.props.channel.id);
 										this.forceUpdateAll();
 									}
 								})

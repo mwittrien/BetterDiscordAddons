@@ -285,46 +285,44 @@ class ChatFilter {
 		BDFDB.DataUtils.save(BDFDB.DOMUtils.isHidden(ele.nextElementSibling), this, "hideInfo", "hideInfo");
 	}
 
-	onNativeContextMenu (instance, menu, returnvalue) {
-		if (instance.props.value && instance.props.value.trim()) {
-			if ((instance.props.type == "NATIVE_TEXT" || instance.props.type == "CHANNEL_TEXT_AREA") && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.appendItem(menu, returnvalue, instance.props.value.trim());
-		}
-	}
-
-	onMessageContextMenu (instance, menu, returnvalue) {
-		if (instance.props.message && instance.props.channel && instance.props.target) {
-			let text = document.getSelection().toString().trim();
-			if (text && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.appendItem(menu, returnvalue, text);
-		}
-	}
-
-	appendItem (menu, returnvalue, text) {
-		let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-		const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-			children: [
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-					label: "Add to ChatFilter",
-					action: _ => {
-						BDFDB.ContextMenuUtils.close(menu);
-						this.openAddModal(text);
-					}
-				})
-			]
-		});
-		if (index > -1) children.splice(index, 0, itemgroup);
-		else children.push(itemgroup);
-	}
-
-	processMessage (instance, wrapper, returnvalue) {
-		wrapper.querySelectorAll(`${BDFDB.dotCNC.messagemarkup + BDFDB.dotCN.messageaccessory}`).forEach(message => {this.hideMessage(message);});
-	}
-
-	processStandardSidebarView (instance, wrapper, returnvalue) {
+	onSettingsClosed () {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			document.querySelectorAll(`${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored, ${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored`).forEach(message => {this.resetMessage(message);});
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
+	}
+
+	onNativeContextMenu (e) {
+		if (e.instance.props.value && e.instance.props.value.trim()) {
+			if ((e.instance.props.type == "NATIVE_TEXT" || e.instance.props.type == "CHANNEL_TEXT_AREA") && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.appendItem(e, e.instance.props.value.trim());
+		}
+	}
+
+	onMessageContextMenu (e) {
+		if (e.instance.props.message && e.instance.props.channel && e.instance.props.target) {
+			let text = document.getSelection().toString().trim();
+			if (text && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.appendItem(e, text);
+		}
+	}
+
+	appendItem (e, text) {
+		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
+		children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+			children: [
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+					label: "Add to ChatFilter",
+					action: _ => {
+						BDFDB.ContextMenuUtils.close(e.instance);
+						this.openAddModal(text);
+					}
+				})
+			]
+		}));
+	}
+
+	processMessage (e) {
+		e.node.querySelectorAll(`${BDFDB.dotCNC.messagemarkup + BDFDB.dotCN.messageaccessory}`).forEach(message => {this.hideMessage(message);});
 	}
 
 	hideMessage (message) {

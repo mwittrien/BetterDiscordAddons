@@ -190,10 +190,10 @@ class EditUsers {
 
 	// begin of own functions
 	
-	onUserContextMenu (instance, menu, returnvalue) {
-		if (instance.props.user && !menu.querySelector(`${this.name}-contextMenuSubItem`)) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+	onUserContextMenu (e) {
+		if (e.instance.props.user) {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
+			children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
 						label: this.labels.context_localusersettings_text,
@@ -202,16 +202,16 @@ class EditUsers {
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 									label: this.labels.submenu_usersettings_text,
 									action: _ => {
-										BDFDB.ContextMenuUtils.close(menu);
-										this.showUserSettings(instance.props.user);
+										BDFDB.ContextMenuUtils.close(e.instance);
+										this.showUserSettings(e.instance.props.user);
 									}
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 									label: this.labels.submenu_resetsettings_text,
-									disabled: !BDFDB.DataUtils.load(this, "users", instance.props.user.id),
+									disabled: !BDFDB.DataUtils.load(this, "users", e.instance.props.user.id),
 									action: _ => {
-										BDFDB.ContextMenuUtils.close(menu);
-										BDFDB.DataUtils.remove(this, "users", instance.props.user.id);
+										BDFDB.ContextMenuUtils.close(e.instance);
+										BDFDB.DataUtils.remove(this, "users", e.instance.props.user.id);
 										this.forceUpdateAll();
 									}
 								})
@@ -219,9 +219,7 @@ class EditUsers {
 						})]
 					})
 				]
-			});
-			if (index > -1) children.splice(index, 0, itemgroup);
-			else children.push(itemgroup);
+			}));
 		}
 	}
 	

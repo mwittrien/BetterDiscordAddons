@@ -16,8 +16,7 @@ class ChatAliases {
 
 		this.patchedModules = {
 			after: {
-				"ChannelTextArea":"componentDidMount",
-				"StandardSidebarView":"componentWillUnmount"
+				ChannelTextArea: "componentDidMount"
 			}
 		};
 	}
@@ -293,46 +292,44 @@ class ChatAliases {
 		BDFDB.DataUtils.save(BDFDB.DOMUtils.isHidden(ele.nextElementSibling), this, "hideInfo", "hideInfo");
 	}
 
-	onNativeContextMenu (instance, menu, returnvalue) {
-		if (instance.props.value && instance.props.value.trim()) {
-			if ((instance.props.type == "NATIVE_TEXT" || instance.props.type == "CHANNEL_TEXT_AREA") && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.appendItem(menu, returnvalue, instance.props.value.trim());
-		}
-	}
-
-	onMessageContextMenu (instance, menu, returnvalue) {
-		if (instance.props.message && instance.props.channel && instance.props.target) {
-			let text = document.getSelection().toString().trim();
-			if (text && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.appendItem(menu, returnvalue, text);
-		}
-	}
- 
-	appendItem (menu, returnvalue, text) {
-		let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-		const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-			children: [
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-					label: "Add to ChatAliases",
-					action: _ => {
-						BDFDB.ContextMenuUtils.close(menu);
-						this.openAddModal(text);
-					}
-				})
-			]
-		});
-		if (index > -1) children.splice(index, 0, itemgroup);
-		else children.push(itemgroup);
-	}
-
-	processStandardSidebarView (instance, wrapper, returnvalue) {
+	onSettingsClosed () {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 	}
 
-	processChannelTextArea (instance, wrapper, returnvalue) {
-		if (instance.props.channel && instance.props.type) {
-			var textarea = wrapper.querySelector("textarea");
+	onNativeContextMenu (e) {
+		if (e.instance.props.value && e.instance.props.value.trim()) {
+			if ((e.instance.props.type == "NATIVE_TEXT" || e.instance.props.type == "CHANNEL_TEXT_AREA") && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.appendItem(e, e.instance.props.value.trim());
+		}
+	}
+
+	onMessageContextMenu (e) {
+		if (e.instance.props.message && e.instance.props.channel && e.instance.props.target) {
+			let text = document.getSelection().toString().trim();
+			if (text && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.appendItem(e, text);
+		}
+	}
+ 
+	appendItem (e, text) {
+		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
+		children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+			children: [
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+					label: "Add to ChatAliases",
+					action: _ => {
+						BDFDB.ContextMenuUtils.close(e.instance);
+						this.openAddModal(text);
+					}
+				})
+			]
+		}));
+	}
+
+	processChannelTextArea (e) {
+		if (e.instance.props.channel && e.instance.props.type) {
+			var textarea = e.node.querySelector("textarea");
 			if (!textarea) return;
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			BDFDB.ListenerUtils.add(this, textarea, "input", () => {
@@ -347,44 +344,44 @@ class ChatAliases {
 							if (messageInput.text != null) {
 								document.execCommand("insertText", false, messageInput.text ? messageInput.text + " " : "");
 							}
-							if (messageInput.files.length > 0 && (instance.props.channel.type == 1 || BDFDB.UserUtils.can("ATTACH_FILES"))) {
-								BDFDB.LibraryModules.UploadUtils.instantBatchUpload(instance.props.channel.id, messageInput.files);
+							if (messageInput.files.length > 0 && (e.instance.props.channel.type == 1 || BDFDB.UserUtils.can("ATTACH_FILES"))) {
+								BDFDB.LibraryModules.UploadUtils.instantBatchUpload(e.instance.props.channel.id, messageInput.files);
 							}
 						}
 					}
 				}
 			});
-			BDFDB.ListenerUtils.add(this, textarea, "keydown", e => {
+			BDFDB.ListenerUtils.add(this, textarea, "keydown", event => {
 				let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCN.autocomplete);
-				if (autocompletemenu && (e.which == 9 || e.which == 13)) {
+				if (autocompletemenu && (event.which == 9 || event.which == 13)) {
 					if (BDFDB.DOMUtils.containsClass(autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement, "autocompleteAliasesRow")) {
-						BDFDB.ListenerUtils.stopEvent(e);
+						BDFDB.ListenerUtils.stopEvent(event);
 						this.swapWordWithAlias(textarea);
 					}
 				}
-				else if (autocompletemenu && (e.which == 38 || e.which == 40)) {
+				else if (autocompletemenu && (event.which == 38 || event.which == 40)) {
 					let autocompleteitems = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable + ":not(.autocompleteAliasesSelector)");
 					let selected = autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected);
-					if (BDFDB.DOMUtils.containsClass(selected, "autocompleteAliasesSelector") || autocompleteitems[e.which == 38 ? 0 : (autocompleteitems.length-1)] == selected) {
-						BDFDB.ListenerUtils.stopEvent(e);
-						let next = this.getNextSelection(autocompletemenu, null, e.which == 38 ? false : true);
+					if (BDFDB.DOMUtils.containsClass(selected, "autocompleteAliasesSelector") || autocompleteitems[event.which == 38 ? 0 : (autocompleteitems.length-1)] == selected) {
+						BDFDB.ListenerUtils.stopEvent(event);
+						let next = this.getNextSelection(autocompletemenu, null, event.which == 38 ? false : true);
 						BDFDB.DOMUtils.removeClass(selected, BDFDB.disCN.autocompleteselected);
 						BDFDB.DOMUtils.addClass(selected, BDFDB.disCN.autocompleteselector);
 						BDFDB.DOMUtils.addClass(next, BDFDB.disCN.autocompleteselected);
 					}
 				}
-				else if (textarea.value && !e.shiftKey && e.which == 13 && !autocompletemenu && textarea.value.indexOf("s/") != 0) {
+				else if (textarea.value && !event.shiftKey && event.which == 13 && !autocompletemenu && textarea.value.indexOf("s/") != 0) {
 					this.format = true;
 					textarea.dispatchEvent(new Event("input"));
 				}
-				else if (!e.ctrlKey && e.which != 16 && settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
+				else if (!event.ctrlKey && event.which != 16 && settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
 					BDFDB.TimeUtils.clear(textarea.ChatAliasAutocompleteTimeout);
 					textarea.ChatAliasAutocompleteTimeout = BDFDB.TimeUtils.timeout(() => {this.addAutoCompleteMenu(textarea);},100);
 				}
 
-				if (!e.ctrlKey && e.which != 38 && e.which != 40 && !(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) BDFDB.DOMUtils.remove(".autocompleteAliases", ".autocompleteAliasesRow");
+				if (!event.ctrlKey && event.which != 38 && event.which != 40 && !(event.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) BDFDB.DOMUtils.remove(".autocompleteAliases", ".autocompleteAliasesRow");
 			});
-			BDFDB.ListenerUtils.add(this, textarea, "click", e => {
+			BDFDB.ListenerUtils.add(this, textarea, "click", _ => {
 				if (settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) BDFDB.TimeUtils.timeout(() => {this.addAutoCompleteMenu(textarea);});
 			});
 		}
@@ -430,17 +427,17 @@ class ChatAliases {
 				}
 				let autocompleterowheader = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCN.autocompleteselector} autocompleteAliasesSelector"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">Aliases: <strong class="lastword">${BDFDB.StringUtils.htmlEscape(lastword)}</strong></div></div></div>`);
 				autocompletemenu.appendChild(autocompleterowheader);
-				BDFDB.ListenerUtils.add(this, autocompletemenu, "mouseenter", BDFDB.dotCN.autocompleteselectable, e => {
+				BDFDB.ListenerUtils.add(this, autocompletemenu, "mouseenter", BDFDB.dotCN.autocompleteselectable, event => {
 					var selected = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselected);
 					BDFDB.DOMUtils.removeClass(selected, BDFDB.disCN.autocompleteselected);
 					BDFDB.DOMUtils.addClass(selected, BDFDB.disCN.autocompleteselector);
-					BDFDB.DOMUtils.addClass(e.currentTarget, BDFDB.disCN.autocompleteselected);
+					BDFDB.DOMUtils.addClass(event.currentTarget, BDFDB.disCN.autocompleteselected);
 				});
 
 				for (let word in matchedaliases) {
 					if (amount-- < 1) break;
 					let autocompleterow = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable} autocompleteAliasesSelector"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.flexchild} aliasword" style="flex: 1 1 auto;">${BDFDB.StringUtils.htmlEscape(word)}</div><div class="${BDFDB.disCNS.autocompletedescription + BDFDB.disCN.flexchild}">${BDFDB.StringUtils.htmlEscape(matchedaliases[word].replace)}</div></div></div></div>`);
-					autocompleterow.querySelector(BDFDB.dotCN.autocompleteselectable).addEventListener("click", () => {this.swapWordWithAlias(textarea);});
+					autocompleterow.querySelector(BDFDB.dotCN.autocompleteselectable).addEventListener("click", _ => {this.swapWordWithAlias(textarea);});
 					autocompletemenu.appendChild(autocompleterow);
 				}
 				if (!autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected)) {

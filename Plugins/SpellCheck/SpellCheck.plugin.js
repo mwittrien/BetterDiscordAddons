@@ -144,11 +144,11 @@ class SpellCheck {
 
 	// begin of own functions
 
-	onNativeContextMenu (instance, menu, returnvalue) {
-		if (instance.props.target && instance.props.target.tagName == "TEXTAREA") {
-			let [SCparent, SCindex] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["NativeSpellcheckGroup", "FluxContainer(NativeSpellcheckGroup)"]});
+	onNativeContextMenu (e) {
+		if (e.instance.props.target && e.instance.props.target.tagName == "TEXTAREA") {
+			let [SCparent, SCindex] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["NativeSpellcheckGroup", "FluxContainer(NativeSpellcheckGroup)"]});
 			if (SCindex > -1) {
-				if (BDFDB.ReactUtils.findValue(instance._reactInternalFiber, "spellcheckEnabled") == true) {
+				if (BDFDB.ReactUtils.findValue(e.instance._reactInternalFiber, "spellcheckEnabled") == true) {
 					BDFDB.TimeUtils.clear(this.disableSpellcheckTimeout);
 					this.disableSpellcheckTimeout = BDFDB.TimeUtils.timeout(() => {
 						BDFDB.LibraryModules.SpellCheckUtils.toggleSpellcheck();
@@ -157,7 +157,7 @@ class SpellCheck {
 				}
 				SCparent.splice(SCindex, 1);
 			}
-			let textarea = instance.props.target, word = null, length = 0;
+			let textarea = e.instance.props.target, word = null, length = 0;
 			if (textarea.value && (textarea.selectionStart || textarea.selectionEnd)) for (let splitword of textarea.value.split(/\s/g)) {
 				length += splitword.length + 1;
 				if (length > textarea.selectionStart) {
@@ -173,7 +173,7 @@ class SpellCheck {
 				}
 			}
 			if (word && this.isWordNotInDictionary(word)) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 				let items = [];
 				let similarWords = this.getSimilarWords(word.toLowerCase().trim());
 				for (let suggestion of similarWords.sort()) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
@@ -187,7 +187,7 @@ class SpellCheck {
 					label: this.labels.similarwordssubmenu_none_text,
 					disabled: true
 				}));
-				const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
 						label: BDFDB.LanguageUtils.LanguageStrings.SPELLCHECK,
 						render: [
@@ -195,7 +195,7 @@ class SpellCheck {
 								label: this.labels.context_spellcheck_text,
 								hint: word,
 								action: _ => {
-									BDFDB.ContextMenuUtils.close(menu);
+									BDFDB.ContextMenuUtils.close(e.instance);
 									this.addToOwnDictionary(word);
 								}
 							}),
@@ -205,9 +205,7 @@ class SpellCheck {
 							})
 						]
 					})
-				});
-				if (index > -1) children.splice(index, 0, itemgroup);
-				else children.push(itemgroup);
+				}));
 			}
 		}
 	}

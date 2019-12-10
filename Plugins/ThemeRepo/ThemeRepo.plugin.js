@@ -399,16 +399,15 @@ class ThemeRepo {
 
 	// begin of own functions
 
-	onUserSettingsCogContextMenu (instance, menu, returnvalue) {
-		BDFDB.TimeUtils.timeout(() => {for (let child of returnvalue.props.children) if (child && child.props && child.props.label == "BandagedBD" && Array.isArray(child.props.render)) {
-			const repoItem = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+	onUserSettingsCogContextMenu (e) {
+		BDFDB.TimeUtils.timeout(_ => {for (let child of e.returnvalue.props.children) if (child && child.props && child.props.label == "BandagedBD" && Array.isArray(child.props.render)) {
+			child.props.render.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 				label: "Theme Repo",
 				action: _ => {
-					if (!this.loading.is) BDFDB.ContextMenuUtils.close(menu);
+					if (!this.loading.is) BDFDB.ContextMenuUtils.close(e.instance);
 					this.openThemeRepoModal();
 				}
-			});
-			child.props.render.push(repoItem);
+			}));
 			break;
 		}});
 	}
