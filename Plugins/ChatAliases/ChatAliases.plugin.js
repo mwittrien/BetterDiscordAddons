@@ -3,7 +3,7 @@
 class ChatAliases {
 	getName () {return "ChatAliases";}
 
-	getVersion () {return "2.0.1";}
+	getVersion () {return "2.0.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,12 +11,12 @@ class ChatAliases {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"fixed":[["Little Fix","Sendings works again, but some stuff is still broken"]]
 		};
 
 		this.patchedModules = {
 			after: {
-				ChannelTextArea: "componentDidMount"
+				ChannelTextArea: ["render", "componentDidMount"]
 			}
 		};
 	}
@@ -329,61 +329,62 @@ class ChatAliases {
 
 	processChannelTextArea (e) {
 		if (e.instance.props.channel && e.instance.props.type) {
-			var textarea = e.node.querySelector("textarea");
-			if (!textarea) return;
-			let settings = BDFDB.DataUtils.get(this, "settings");
-			BDFDB.ListenerUtils.add(this, textarea, "input", () => {
-				if (this.format) {
-					this.format = false;
-					textarea.focus();
-					textarea.selectionStart = 0;
-					textarea.selectionEnd = textarea.value.length;
-					if (document.activeElement == textarea) {
-						var messageInput = this.formatText(textarea.value);
-						if (messageInput) {
-							if (messageInput.text != null) {
-								document.execCommand("insertText", false, messageInput.text ? messageInput.text + " " : "");
-							}
-							if (messageInput.files.length > 0 && (e.instance.props.channel.type == 1 || BDFDB.UserUtils.can("ATTACH_FILES"))) {
-								BDFDB.LibraryModules.UploadUtils.instantBatchUpload(e.instance.props.channel.id, messageInput.files);
+			if (e.returnvalue) {
+				if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "handleSubmit")) BDFDB.ModuleUtils.patch(this, e.instance, "handleSubmit", {before: e2 => {
+					let messageData = this.formatText(e2.methodArguments[0]);
+					if (messageData) {
+						if (messageData.text != null) {
+							e2.methodArguments[0] = messageData.text;
+							if (!messageData.text) {
+								e.instance.props.textValue = "";
+								if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.StringUtils.copyRichValue("", e.instance.props.richValue);
+								BDFDB.ReactUtils.forceUpdate(e.instance);
 							}
 						}
+						if (messageData.files.length > 0 && (e.instance.props.channel.type == 1 || BDFDB.UserUtils.can("ATTACH_FILES"))) {
+							BDFDB.LibraryModules.UploadUtils.instantBatchUpload(e.instance.props.channel.id, messageData.files);
+						}
 					}
-				}
-			});
-			BDFDB.ListenerUtils.add(this, textarea, "keydown", event => {
-				let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCN.autocomplete);
-				if (autocompletemenu && (event.which == 9 || event.which == 13)) {
-					if (BDFDB.DOMUtils.containsClass(autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement, "autocompleteAliasesRow")) {
-						BDFDB.ListenerUtils.stopEvent(event);
-						this.swapWordWithAlias(textarea);
+				}}, true);
+			}
+			if (e.node) {
+				let textarea = e.node.querySelector("textarea");
+				if (!textarea) return;
+				let settings = BDFDB.DataUtils.get(this, "settings");
+				BDFDB.ListenerUtils.add(this, textarea, "keydown", event => {
+					let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCN.autocomplete);
+					if (autocompletemenu && (event.which == 9 || event.which == 13)) {
+						if (BDFDB.DOMUtils.containsClass(autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement, "autocompleteAliasesRow")) {
+							BDFDB.ListenerUtils.stopEvent(event);
+							this.swapWordWithAlias(textarea);
+						}
 					}
-				}
-				else if (autocompletemenu && (event.which == 38 || event.which == 40)) {
-					let autocompleteitems = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable + ":not(.autocompleteAliasesSelector)");
-					let selected = autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected);
-					if (BDFDB.DOMUtils.containsClass(selected, "autocompleteAliasesSelector") || autocompleteitems[event.which == 38 ? 0 : (autocompleteitems.length-1)] == selected) {
-						BDFDB.ListenerUtils.stopEvent(event);
-						let next = this.getNextSelection(autocompletemenu, null, event.which == 38 ? false : true);
-						BDFDB.DOMUtils.removeClass(selected, BDFDB.disCN.autocompleteselected);
-						BDFDB.DOMUtils.addClass(selected, BDFDB.disCN.autocompleteselector);
-						BDFDB.DOMUtils.addClass(next, BDFDB.disCN.autocompleteselected);
+					else if (autocompletemenu && (event.which == 38 || event.which == 40)) {
+						let autocompleteitems = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable + ":not(.autocompleteAliasesSelector)");
+						let selected = autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected);
+						if (BDFDB.DOMUtils.containsClass(selected, "autocompleteAliasesSelector") || autocompleteitems[event.which == 38 ? 0 : (autocompleteitems.length-1)] == selected) {
+							BDFDB.ListenerUtils.stopEvent(event);
+							let next = this.getNextSelection(autocompletemenu, null, event.which == 38 ? false : true);
+							BDFDB.DOMUtils.removeClass(selected, BDFDB.disCN.autocompleteselected);
+							BDFDB.DOMUtils.addClass(selected, BDFDB.disCN.autocompleteselector);
+							BDFDB.DOMUtils.addClass(next, BDFDB.disCN.autocompleteselected);
+						}
 					}
-				}
-				else if (textarea.value && !event.shiftKey && event.which == 13 && !autocompletemenu && textarea.value.indexOf("s/") != 0) {
-					this.format = true;
-					textarea.dispatchEvent(new Event("input"));
-				}
-				else if (!event.ctrlKey && event.which != 16 && settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
-					BDFDB.TimeUtils.clear(textarea.ChatAliasAutocompleteTimeout);
-					textarea.ChatAliasAutocompleteTimeout = BDFDB.TimeUtils.timeout(() => {this.addAutoCompleteMenu(textarea);},100);
-				}
+					else if (textarea.value && !event.shiftKey && event.which == 13 && !autocompletemenu && textarea.value.indexOf("s/") != 0) {
+						this.format = true;
+						textarea.dispatchEvent(new Event("input"));
+					}
+					else if (!event.ctrlKey && event.which != 16 && settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
+						BDFDB.TimeUtils.clear(textarea.ChatAliasAutocompleteTimeout);
+						textarea.ChatAliasAutocompleteTimeout = BDFDB.TimeUtils.timeout(() => {this.addAutoCompleteMenu(textarea);},100);
+					}
 
-				if (!event.ctrlKey && event.which != 38 && event.which != 40 && !(event.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) BDFDB.DOMUtils.remove(".autocompleteAliases", ".autocompleteAliasesRow");
-			});
-			BDFDB.ListenerUtils.add(this, textarea, "click", _ => {
-				if (settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) BDFDB.TimeUtils.timeout(() => {this.addAutoCompleteMenu(textarea);});
-			});
+					if (!event.ctrlKey && event.which != 38 && event.which != 40 && !(event.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) BDFDB.DOMUtils.remove(".autocompleteAliases", ".autocompleteAliasesRow");
+				});
+				BDFDB.ListenerUtils.add(this, textarea, "click", _ => {
+					if (settings.addAutoComplete && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) BDFDB.TimeUtils.timeout(() => {this.addAutoCompleteMenu(textarea);});
+				});
+			}
 		}
 	}
 

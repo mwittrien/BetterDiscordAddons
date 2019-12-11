@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.8.3";} 
+	getVersion () {return "1.8.4";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -244,7 +244,7 @@ class GoogleTranslateOption {
 					});
 				}
 				else e2.callOriginalMethod();
-			}});
+			}}, true);
 		}
 	}
 
