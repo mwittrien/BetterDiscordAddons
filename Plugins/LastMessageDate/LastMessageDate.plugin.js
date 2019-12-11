@@ -3,7 +3,7 @@
 class LastMessageDate {
 	getName () {return "LastMessageDate";}
 
-	getVersion () {return "1.1.1";}
+	getVersion () {return "1.1.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -262,17 +262,25 @@ class LastMessageDate {
 		if (!BDFDB.ArrayUtils.is(this.requestedusers[guildid][user.id])) {
 			this.requestedusers[guildid][user.id] = [instance];
 			BDFDB.LibraryModules.APIUtils.get((isguild ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(guildid) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(guildid)) + "?author_id=" + user.id).then(result => {
-				if (result.body.messages && Array.isArray(result.body.messages[0])) {
-					for (let message of result.body.messages[0]) if (message.hit && message.author.id == user.id) this.loadedusers[guildid][user.id] = new Date(message.timestamp);
+				if (typeof result.body.retry_after != "number") {
+					if (result.body.messages && Array.isArray(result.body.messages[0])) {
+						for (let message of result.body.messages[0]) if (message.hit && message.author.id == user.id) {
+							this.loadedusers[guildid][user.id] = new Date(message.timestamp);
+						}
+					}
+					else this.loadedusers[guildid][user.id] = null;
+					for (let queredinstance of this.requestedusers[guildid][user.id]) BDFDB.ReactUtils.forceUpdate(queredinstance);
 				}
-				else this.loadedusers[guildid][user.id] = "never";
-				for (let queredinstance of this.requestedusers[guildid][user.id]) BDFDB.ReactUtils.forceUpdate(queredinstance);
+				else {
+					delete this.requestedusers[guildid][user.id];
+					BDFDB.TimeUtils.timeout(_ => {this.injectDate(instance, children, index, user);}, result.body.retry_after + 500);
+				}
 			});
 		}
-		else if (!this.loadedusers[guildid][user.id]) this.requestedusers[guildid][user.id].push(instance);
+		else if (this.loadedusers[guildid][user.id] === undefined) this.requestedusers[guildid][user.id].push(instance);
 		else children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
 			className: "lastMessageDate " + BDFDB.disCN.textrow,
-			children: this.labels.lastmessage_text.replace("{{time}}", this.getTimestamp(this.languages[BDFDB.DataUtils.get(this, "choices", "lastMessageDateLang")].id, this.loadedusers[guildid][user.id]))
+			children: this.labels.lastmessage_text.replace("{{time}}", this.loadedusers[guildid][user.id] ? this.getTimestamp(this.languages[BDFDB.DataUtils.get(this, "choices", "lastMessageDateLang")].id, this.loadedusers[guildid][user.id]) : "---")
 		}));
 	}
 	
