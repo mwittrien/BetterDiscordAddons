@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.8.4";} 
+	getVersion () {return "1.8.5";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ class GoogleTranslateOption {
 	constructor () {
 		this.changelog = {
 			"improved":[["Messages stay translated", "Messages will stay translated even if you switch channels"],["iTranslate & Yandex","Added iTranslate and Yandex engine, these engines got a montly rate limit, so if they don't work switch back to Google"]],
-			"fixed":[["Google API","Google ultimately removed their free Google Translate Endpoint, killing any chances of using a free translation API that doesn't have a requests per month limit. I switched to emulating the translate webpage in an invisible browserwindow, sadly this is far slower than the old method, but at least it still works"],["New Chatbar","Translating outgoing messages works again"]]
+			"fixed":[["Mentions etc.","The new Translation Engines had some issues with inserting stuff like mentions after a text was translated, this was fixed"]]
 		};
 
 		this.patchedModules = {
@@ -685,7 +685,12 @@ class GoogleTranslateOption {
 	}
 
 	addExceptions (string, exceptions) {
-		for (let i in exceptions) string = string.replace("a" + i + "_______", exceptions[i].indexOf("!") == 0 ? exceptions[i].slice(1) : exceptions[i]);
+		for (let count in exceptions) {
+			let exception = exceptions[count].indexOf("!") == 0 ? exceptions[count].slice(1) : exceptions[count];
+			let newstring = string.replace(new RegExp(`\[/////[ ]*${count}\]`), exception);
+			if (newstring == string) string = newstring + " " + exception;
+			else string = newstring;
+		}
 		return string;
 	}
 
@@ -700,7 +705,7 @@ class GoogleTranslateOption {
 			});
 			for (let j in text) {
 				if (text[j].indexOf("<") == 0) {
-					newString.push("a" + count + "_______");
+					newString.push(`[/////${count}]`);
 					exceptions[count] = text[j];
 					count++;
 				}
@@ -710,7 +715,7 @@ class GoogleTranslateOption {
 		else {
 			string.split(" ").forEach(word => {
 				if (word.indexOf("<@!") == 0 || word.indexOf(":") == 0 || word.indexOf("@") == 0 || word.indexOf("#") == 0 || (word.indexOf("!") == 0 && word.length > 1)) {
-					newString.push("a" + count + "_______");
+					newString.push(`[/////${count}]`);
 					exceptions[count] = word;
 					count++;
 				}
