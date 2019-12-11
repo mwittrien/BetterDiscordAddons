@@ -11,7 +11,6 @@ class LastMessageDate {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["BetterRoleColors","Fixed now working when BRC is enabled ......"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
