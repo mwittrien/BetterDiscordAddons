@@ -1064,7 +1064,7 @@
 		const pluginid = (typeof plugin === "string" ? plugin : plugin.name).toLowerCase();
 		return pluginid && module[modulefunction] && module[modulefunction].isBDFDBpatched && module.BDFDBpatch[modulefunction] && Object.keys(module.BDFDBpatch[modulefunction]).some(patchfunc => Object.keys(module.BDFDBpatch[modulefunction][patchfunc]).includes(pluginid));
 	};
-	BDFDB.ModuleUtils.patch = function (plugin, module, modulefunctions, patchfunctions) {
+	BDFDB.ModuleUtils.patch = function (plugin, module, modulefunctions, patchfunctions, forceRepatch = false) {
 		if (!plugin || !BDFDB.ObjectUtils.is(module) || !modulefunctions || !BDFDB.ObjectUtils.is(patchfunctions)) return null;
 		patchfunctions = BDFDB.ObjectUtils.filter(patchfunctions, type => WebModulesData.Patchtypes.includes(type), true);
 		if (BDFDB.ObjectUtils.isEmpty(patchfunctions)) return null;
@@ -1073,13 +1073,13 @@
 		if (!module.BDFDBpatch) module.BDFDBpatch = {};
 		modulefunctions = [modulefunctions].flat(10).filter(n => n);
 		for (let modulefunction of modulefunctions) {
-			if (!module[modulefunction]) module[modulefunction] = _ => {};
-			if (!module.BDFDBpatch[modulefunction]) {
-				module.BDFDBpatch[modulefunction] = {};
-				for (let type of WebModulesData.Patchtypes) module.BDFDBpatch[modulefunction][type] = {};
-			}
-			if (!module[modulefunction].isBDFDBpatched) {
+			if (!module.BDFDBpatch[modulefunction] || forceRepatch && !module[modulefunction].isBDFDBpatched) {
+				if (!module.BDFDBpatch[modulefunction]) {
+					module.BDFDBpatch[modulefunction] = {};
+					for (let type of WebModulesData.Patchtypes) module.BDFDBpatch[modulefunction][type] = {};
+				}
 				const originalfunction = module[modulefunction];
+				if (!module[modulefunction]) module[modulefunction] = _ => {};
 				module.BDFDBpatch[modulefunction].originalMethod = originalfunction;
 				module[modulefunction] = function () {
 					const data = {
@@ -1089,7 +1089,7 @@
 						originalMethodName: modulefunction,
 						callOriginalMethod: _ => data.returnValue = data.originalMethod.apply(data.thisObject, data.methodArguments)
 					};
-					if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded && module.BDFDBpatch[modulefunction] && !data.thisObject.BDFDBtriggered) {
+					if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded && module.BDFDBpatch[modulefunction]) {
 						data.thisObject.BDFDBtriggered = true;
 						if (!BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].before)) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[modulefunction].before)) {
 							BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].before[id], `"before" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, module.BDFDBpatch[modulefunction].before[id].pluginname)(data);
@@ -1103,7 +1103,6 @@
 							let tempreturn = BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].after[id], `"after" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, module.BDFDBpatch[modulefunction].after[id].pluginname)(data);
 							if (tempreturn !== undefined) data.returnValue = tempreturn;
 						}
-						BDFDB.TimeUtils.timeout(_ => {delete data.thisObject.BDFDBtriggered;});
 					}
 					else BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`)();
 					return modulefunction == "render" && data.returnValue === undefined ? null : data.returnValue;
