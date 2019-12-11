@@ -1078,8 +1078,8 @@
 					module.BDFDBpatch[modulefunction] = {};
 					for (let type of WebModulesData.Patchtypes) module.BDFDBpatch[modulefunction][type] = {};
 				}
-				const originalfunction = module[modulefunction];
 				if (!module[modulefunction]) module[modulefunction] = _ => {};
+				const originalfunction = module[modulefunction];
 				module.BDFDBpatch[modulefunction].originalMethod = originalfunction;
 				module[modulefunction] = function () {
 					const data = {
