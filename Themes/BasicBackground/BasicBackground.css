@@ -3027,6 +3027,34 @@ body:before {
 
 /* ----		14.7.	INVITEMODAL						---- */
 
+#app-mount .contentWrapper-3WC1ID {								/* modal				guildinvitemodal				*/
+	background-color: transparent;
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
+	position: relative;
+	overflow: hidden;
+}
+.contentWrapper-3WC1ID:after,
+.contentWrapper-3WC1ID:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.contentWrapper-3WC1ID:after {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+}
+.contentWrapper-3WC1ID:before {
+	background: var(--vpopout) center/var(--vpopoutsize);
+	filter: blur(var(--vpopoutblur));
+	background-attachment: fixed;
+}
+
 #app-mount .friendSelected-1sa4bG,								/* modal				groupdmrow						*/
 #app-mount .inviteRow-2L02ae:hover {							/* modal				guildrow						*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
@@ -3041,6 +3069,7 @@ body:before {
 }
 #app-mount .checkBoxLabel-4PWfpk,
 #app-mount .footerText-2a7NxZ,
+#app-mount .subTitle-3TUjmF,
 #app-mount .subtitle-2P4u9v,
 #app-mount .subText-bCySlS {
 	color: rgb(var(--fontwhite3));
@@ -3048,6 +3077,9 @@ body:before {
 .tag-2gHSR7 {
 	background-color: rgb(var(--vaccentcolor));
 	color: rgb(var(--fontwhite1));
+}
+.pill-1dHPfk {
+	background-color: rgba(var(--vtransparencycolor), 0.5);
 }
 
 /* ----		14.8.	LOGINSCREEN						---- */
