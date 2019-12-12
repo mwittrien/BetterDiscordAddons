@@ -3,7 +3,7 @@
 class OldTitleBar {
 	getName () {return "OldTitleBar";}
 
-	getVersion () {return "1.6.3";}
+	getVersion () {return "1.6.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -186,11 +186,7 @@ class OldTitleBar {
 	}
 
 	processAppSkeleton (e) {
-		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["type",["WINDOWS", "MACOS"]]]});
-		if (index > -1) {
-			children[index] = null;
-			BDFDB.ReactUtils.forceUpdate(e.instance);
-		}
+		this.processApp(e);
 	}
 
 	processHeaderBarContainer (e) {
