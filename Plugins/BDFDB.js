@@ -1090,7 +1090,6 @@
 						callOriginalMethod: _ => data.returnValue = data.originalMethod.apply(data.thisObject, data.methodArguments)
 					};
 					if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded && module.BDFDBpatch[modulefunction]) {
-						data.thisObject.BDFDBtriggered = true;
 						if (!BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].before)) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[modulefunction].before)) {
 							BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].before[id], `"before" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, module.BDFDBpatch[modulefunction].before[id].pluginname)(data);
 						}
@@ -1851,7 +1850,8 @@
 		}
 	};
 	BDFDB.ReactUtils.forceUpdate = function (...instances) {
-		for (let ins of instances.flat(10).filter(n => n)) if (ins.updater && typeof ins.updater.isMounted == "function" && ins.updater.isMounted(ins)) ins.forceUpdate();
+		// REMOVE AppSkeleton CHECK
+		for (let ins of instances.flat(10).filter(n => n)) if (ins.updater && typeof ins.updater.isMounted == "function" && ins.updater.isMounted(ins) && BDFDB.ReactUtils.getValue(ins, "_reactInternalFiber.type.displayName") != "AppSkeleton") ins.forceUpdate();
 	};
 	BDFDB.ReactUtils.getInstance = function (node) {
 		if (!BDFDB.ObjectUtils.is(node)) return null;
