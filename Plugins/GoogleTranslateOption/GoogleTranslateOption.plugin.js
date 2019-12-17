@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.8.5";} 
+	getVersion () {return "1.8.6";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ class GoogleTranslateOption {
 	constructor () {
 		this.changelog = {
 			"improved":[["Messages stay translated", "Messages will stay translated even if you switch channels"],["iTranslate & Yandex","Added iTranslate and Yandex engine, these engines got a montly rate limit, so if they don't work switch back to Google"]],
-			"fixed":[["Mentions etc.","The new Translation Engines had some issues with inserting stuff like mentions after a text was translated, this was fixed"]]
+			"fixed":[["iTranslate","Fixed iTranslate translation"]]
 		};
 
 		this.patchedModules = {
@@ -549,34 +549,38 @@ class GoogleTranslateOption {
 	
 	iTranslateTranslate (data, callback) {
 		let translate = _ => {
-			let xml = new XMLHttpRequest();
-			xml.open("POST", "https://api.itranslate.com/translate/v1");
-			xml.send(JSON.stringify({
-				key: data.engine.APIkey,
-				source: {
-					dialect: data.input.id,
-					text: data.text
+			BDFDB.LibraryRequires.request({
+				method: "POST",
+				url: "https://web-api.itranslateapp.com/v3/texts/translate",
+				headers: {
+					"API-KEY": "d2aefeac9dc661bc98eebd6cc12f0b82"
 				},
-				target: {
-					dialect: data.output.id
-				}
-			}));
-			xml.onreadystatechange = _ => {
-				if (xml.status == 200) {
-					if (xml.readyState == 4) {
-						try {
-							let response = JSON.parse(xml.responseText);
-							if (!data.specialcase && response.source && response.source.detected && this.languages[response.source.detected]) {
-								data.input.name = this.languages[response.source.detected].name;
-								data.input.ownlang = this.languages[response.source.detected].ownlang;
-							}
-							callback(response.target.text);
-						}
-						catch (err) {callback("");}
+				body: JSON.stringify({
+					source: {
+						dialect: data.input.id,
+						text: data.text
+					},
+					target: {
+						dialect: data.output.id
 					}
+				})
+			}, (error, response, result) => {
+				if (!error && response && response.statusCode == 200) {
+					try {
+						let response = JSON.parse(result);
+						if (!data.specialcase && response.source && response.source.detected && this.languages[response.source.detected]) {
+							data.input.name = this.languages[response.source.detected].name;
+							data.input.ownlang = this.languages[response.source.detected].ownlang;
+						}
+						callback(response.target.text);
+					}
+					catch (err) {callback("");}
 				}
-				else callback("");
-			}
+				else {
+					BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down or API-key outdated. Try another Translate Engine.", {type:"error"});
+					callback("");
+				}
+			});
 		};
 		if (data.engine.APIkey) translate();
 		else BDFDB.LibraryRequires.request("https://www.itranslate.com/themes/itranslate2016/assets/webapp/js/main.js", {gzip: true}, (error, response, result) => {
@@ -594,7 +598,7 @@ class GoogleTranslateOption {
 	
 	yandexTranslate (data, callback) {
 		BDFDB.LibraryRequires.request(`https://translate.yandex.net/api/v1.5/tr/translate?key=trnsl.1.1.20191206T223907Z.52bd512eca953a5b.1ec123ce4dcab3ae859f312d27cdc8609ab280de&text=${encodeURIComponent(data.text)}&lang=${data.specialcase || data.input.id == "auto" ? data.output.id : (data.input.id + "-" + data.output.id)}&options=1`, (error, response, result) => {
-			if (!error && result) {
+			if (!error && result && response.statusCode == 200) {
 				result = BDFDB.DOMUtils.create(result);
 				let translation = result.querySelector("text");
 				let detected = result.querySelector("detected");
@@ -608,7 +612,10 @@ class GoogleTranslateOption {
 				}
 				else callback("");
 			}
-			else callback("");
+			else {
+				BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down or API-key outdated. Try another Translate Engine.", {type:"error"});
+				callback("");
+			}
 		});
 	}
 
