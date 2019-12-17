@@ -1082,7 +1082,7 @@
 				const originalfunction = module[modulefunction];
 				module.BDFDBpatch[modulefunction].originalMethod = originalfunction;
 				module[modulefunction] = function () {
-					let called = false, stopCall = false;
+					let callInstead = false, stopCall = false;
 					const data = {
 						thisObject: this,
 						methodArguments: arguments,
@@ -1108,7 +1108,7 @@
 						}
 					}
 					else BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`)();
-					called = false, stopCall = false;
+					callInstead = false, stopCall = false;
 					return modulefunction == "render" && data.returnValue === undefined ? null : data.returnValue;
 				};
 				module[modulefunction].originalsource = originalfunction;
