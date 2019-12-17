@@ -4434,6 +4434,7 @@
 	DiscordClassModules.ChannelLimit = BDFDB.ModuleUtils.findByProperties("users", "total", "wrapper");
 	DiscordClassModules.ChannelTextArea = BDFDB.ModuleUtils.findByProperties("textArea", "attachButton");
 	DiscordClassModules.ChannelTextAreaButton = BDFDB.ModuleUtils.findByProperties("buttonWrapper", "active");
+	DiscordClassModules.ChannelTextAreaCharCounter = BDFDB.ModuleUtils.findByProperties("characterCount", "error");
 	DiscordClassModules.ChatWindow = BDFDB.ModuleUtils.findByProperties("chat", "channelTextArea");
 	DiscordClassModules.Checkbox = BDFDB.ModuleUtils.findByProperties("checkboxWrapper", "round");
 	DiscordClassModules.ColorPicker = BDFDB.ModuleUtils.findByProperties("colorPickerCustom", "customColorPickerInput");
@@ -5780,6 +5781,8 @@
 		textareabuttonactive: ["ChannelTextAreaButton", "active"],
 		textareabuttonpulse: ["ChannelTextAreaButton", "pulseButton"],
 		textareabuttonwrapper: ["ChannelTextAreaButton", "buttonWrapper"],
+		textareacharcounter: ["ChannelTextAreaCharCounter", "characterCount"],
+		textareacharcountererror: ["ChannelTextAreaCharCounter", "error"],
 		textareadisabled: ["ChannelTextArea", "textAreaDisabled"],
 		textareaedit: ["ChannelTextArea", "textAreaEdit"],
 		textareaenabled: ["ChannelTextArea", "textAreaEnabled"],

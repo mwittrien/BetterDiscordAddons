@@ -1028,13 +1028,6 @@ body:before {
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
 
-.inner-zqa7da {												/* textarea				inner								*/
-	background-color: rgba(var(--vtransparencycolor), 0.3);
-}
-.scrollableContainer-38zsVD .inner-zqa7da {
-	background-color: transparent;
-}
-
 .attachButtonPlus-rUdX-B {									/* textarea				attachbuttoninner					*/
 	fill: rgb(var(--fontwhite3));
 }
