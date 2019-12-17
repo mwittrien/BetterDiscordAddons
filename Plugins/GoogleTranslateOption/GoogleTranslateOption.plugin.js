@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.8.6";} 
+	getVersion () {return "1.8.7";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -238,12 +238,13 @@ class GoogleTranslateOption {
 			if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "handleSubmit")) BDFDB.ModuleUtils.patch(this, e.instance, "handleSubmit", {instead: e2 => {
 				if (this.translating) {
 					BDFDB.ReactUtils.forceUpdate(e.instance);
+					e2.stopOriginalMethodCall();
 					this.translateText(e2.methodArguments[0], "message", (translation, input, output) => {
 						translation = !translation ? e2.methodArguments[0] : (BDFDB.DataUtils.get(this, "settings", "sendOriginalMessage") ? e2.methodArguments[0] + "\n\n" + translation : translation);
 						e2.originalMethod(translation);
 					});
 				}
-				else e2.callOriginalMethod();
+				else e2.callOriginalMethodAfterwards();
 			}}, true);
 		}
 	}

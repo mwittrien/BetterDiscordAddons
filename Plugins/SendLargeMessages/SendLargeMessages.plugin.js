@@ -3,7 +3,7 @@
 class SendLargeMessages {
 	getName () {return "SendLargeMessages";}
 
-	getVersion () {return "1.5.5";}
+	getVersion () {return "1.5.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,12 +11,16 @@ class SendLargeMessages {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+			"fixed":[["New WYSIWYG Textarea","Fixed for the new WYSIWYG Textarea that is hidden by experiments"]],
+			"improved":[["Sending Messages","The plugin no longer needs the modal to send multiple messages, you can just write larger messages in the channel textarea and it will automatically split it up before sending it"]]
 		};
 
 		this.patchedModules = {
+			before: {
+				ChannelTextArea: "render"
+			},
 			after: {
-				ChannelTextArea: "componentDidMount"
+				ChannelTextArea: "render"
 			}
 		};
 	}
@@ -79,97 +83,43 @@ class SendLargeMessages {
 	// begin of own functions
 
 	processChannelTextArea (e) {
-		if (e.instance.props && e.instance.props.type && e.instance.props.type == "normal") {
-			var textarea = e.node.querySelector("textarea");
-			if (!textarea) return;
-			let modaltext, checkTextarea = () => {
-				if (BDFDB.StringUtils.getParsedLength(textarea.value) > 1950) {
-					textarea.selectionStart = 0;
-					textarea.selectionEnd = textarea.value.length;
-					document.execCommand("insertText", false, "");
-					this.openMessageModal(modaltext, e.instance.props.channel);
-				}
-			};
-			BDFDB.ListenerUtils.add(this, textarea, "keyup", e => {
-				BDFDB.TimeUtils.clear(textarea.sendlargemessagestimeout);
-				textarea.sendlargemessagestimeout = BDFDB.TimeUtils.timeout(() => {
-					modaltext = textarea.value;
-					checkTextarea();
-				},100);
-			});
-			BDFDB.ListenerUtils.add(this, textarea, "paste", e => {
-				modaltext = textarea.value.slice(0, textarea.selectionStart) + BDFDB.LibraryRequires.electron.clipboard.readText() + textarea.value.slice(textarea.selectionEnd);
-				BDFDB.TimeUtils.timeout(() => {checkTextarea(textarea);});
-			});
+		if (e.instance.props && e.instance.props.type && e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL) {
+			e.instance.props.shouldUploadLongMessages = false;
+			if (e.returnvalue) {
+				if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "handleSubmit")) BDFDB.ModuleUtils.patch(this, e.instance, "handleSubmit", {instead: e2 => {
+					let parsedLength = BDFDB.StringUtils.getParsedLength(e.instance.props.textValue);
+					if (parsedLength > 2000) {
+						e2.stopOriginalMethodCall();
+						let messages = this.formatText(e.instance.props.textValue, Math.sqrt(Math.pow(parsedLength - e.instance.props.textValue.length, 2)) > Math.max(parsedLength, e.instance.props.textValue.length) / 20);
+						messages.filter(n => n).forEach((message, i) => {
+							BDFDB.TimeUtils.timeout(_ => {
+								e2.originalMethod(message);
+								if (i >= messages.length-1) BDFDB.NotificationUtils.toast(this.labels.toast_allsent_text, {type:"success"});
+							}, this.messageDelay * i);
+						});
+					}
+					else e2.callOriginalMethodAfterwards();
+				}}, true);
+			}
 		}
 	}
 
-	openMessageModal (text, channel) {		
-		BDFDB.ModalUtils.open(this, {
-			size: "LARGE",
-			header: this.labels.modal_header_text,
-			subheader: BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `#${channel.name}`),
-			scroller: false,
-			children: [
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextArea, {
-					className: "textmessage-textarea",
-					value: text,
-					placeholder: text,
-					autoFocus: true
-				}),
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CharCounter, {
-					className: BDFDB.disCN.marginbottom8,
-					parsing: true,
-					refClass: ".textmessage-textarea",
-					renderPrefix: length => {
-						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-								className: BDFDB.disCN.weightbold,
-								color: BDFDB.LibraryComponents.TextElement.Colors.RED,
-								children: Math.ceil(length/1900) > 7 ? this.labels.modal_messages_warning : null
-							})
-						});
-					},
-					renderSuffix: length => {
-						return ` 🠚 ${BDFDB.LanguageUtils.LanguageStrings.MESSAGES}: ${Math.ceil(length/1900)}`;
-					}
-				})
-			],
-			buttons: [{
-				contents: BDFDB.LanguageUtils.LanguageStrings.SEND,
-				color: "BRAND",
-				close: true,
-				click: modal => {
-					let textinput = (modal.querySelector(".textmessage-textarea").value || "").trim();
-					let messages = this.formatText(textinput);
-					messages.forEach((message,i) => {
-						BDFDB.TimeUtils.timeout(() => {
-							this.sendMessage(message);
-							if (i >= messages.length-1) BDFDB.NotificationUtils.toast(this.labels.toast_allsent_text, {type:"success"});
-						}, this.messageDelay * i);
-					});
-				}
-			}]
-		});
-	}
-
-	formatText (text) {
+	formatText (text, parse) {
 		text = text.replace(/\t/g, "	");
 		let longwords = text.match(/[\S]{1800,}/gm);
-		for (let i in longwords) {
-			let longword = longwords[i];
+		if (longwords) for (let longword of longwords) {
 			let count1 = 0;
 			let shortwords = [];
-			longword.split("").forEach((char) => {
-				if (shortwords[count1] && BDFDB.StringUtils.getParsedLength(shortwords[count1]) >= 1800) count1++;
-				shortwords[count1] = shortwords[count1] ? shortwords[count1] + char : char;
+			longword.split("").forEach(c => {
+				if (shortwords[count1] && shortwords[count1].length >= 1800) count1++;
+				shortwords[count1] = shortwords[count1] ? shortwords[count1] + c : c;
 			});
 			text = text.replace(longword, shortwords.join(" "));
 		}
 		let messages = [];
 		let count2 = 0;
 		text.split(" ").forEach((word) => {
-			if (messages[count2] && BDFDB.StringUtils.getParsedLength(messages[count2] + "" + word) > 1900) count2++;
+			if (messages[count2] && (parse ? BDFDB.StringUtils.getParsedLength(messages[count2] + "" + word) : (messages[count2] + "" + word).length) > 1900) count2++;
 			messages[count2] = messages[count2] ? messages[count2] + " " + word : word;
 		});
 
@@ -198,22 +148,6 @@ class SendLargeMessages {
 		}
 
 		return messages;
-	}
-
-	sendMessage (text) {
-		let textarea = document.querySelector(BDFDB.dotCNS.textareawrapchat + "textarea");
-		if (textarea) {
-			let instance = BDFDB.ReactUtils.findOwner(BDFDB.DOMUtils.getParent(BDFDB.dotCNS.chat + "form", textarea), {name:"ChannelTextAreaForm", up:true});
-			if (instance) {
-				instance.setState({textValue:text});
-				BDFDB.TimeUtils.timeout(_ => {
-					var e = new KeyboardEvent("keypress", {key:"Enter", code:"Enter", which:13, keyCode:13, bubbles:true });
-					Object.defineProperty(e, "keyCode", {value:13});
-					Object.defineProperty(e, "which", {value:13});
-					textarea.dispatchEvent(e);
-				});
-			}
-		}
 	}
 
 	setLabelsByLanguage () {
