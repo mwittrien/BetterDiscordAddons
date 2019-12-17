@@ -3,7 +3,7 @@
 class FriendNotifications {
 	getName () {return "FriendNotifications";}
 
-	getVersion () {return "1.3.4";}
+	getVersion () {return "1.3.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,13 +11,7 @@ class FriendNotifications {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Non Friends","Fixed issue where you are unable to add non friends to the observer list"]]
-		};
-		
-		this.patchedModules = {
-			after: {
-				"StandardSidebarView":"componentWillUnmount"
-			}
+			"fixed":[["Non Friends","Fixed issue where previously configured friends that are no longer in your friend list could not be configured via non-friend list"]]
 		};
 	}
 
@@ -184,6 +178,14 @@ class FriendNotifications {
 				}
 				else friends[id] = this.createDefaultConfig();
 				settingshtml += this.createHoverCard(user, friends[id], "friends");
+			}
+		}
+		for (let id in friends) if (!friendIDs.includes(id)) {
+			let user = BDFDB.LibraryModules.UserStore.getUser(id);
+			if (user) {
+				nonfriends[id] = Object.assign({}, friends[id]);
+				delete friends[id];
+				settingshtml += this.createHoverCard(user, friends[id] || (friends[id] = this.createDefaultConfig()), "friends");
 			}
 		}
 		settingshtml += `</div>`;
@@ -458,7 +460,7 @@ class FriendNotifications {
 		}
 	}
 
-	processStandardSidebarView (instance, wrapper, returnvalue) {
+	onSettingsClosed () {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			this.startInterval();
