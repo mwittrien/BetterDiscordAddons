@@ -7758,52 +7758,20 @@
 			}
 		}
 		render() {
-			let children = [
-				BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.inputwrapper, this.props.type == "number" && (this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["inputnumberwrapper" + this.props.size.toLowerCase()] || BDFDB.disCN.inputnumberwrapperdefault), this.props.className),
-					style: this.props.style,
-					children: [
-						this.props.inputPrefix ? BDFDB.ReactUtils.createElement("span", {
-							className: BDFDB.disCN.inputprefix
-						}) : null,
-						this.props.type == "number" ? BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN.inputnumberbuttons,
-							children: [
-								BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCN.inputnumberbuttonup,
-									onClick: e => {
-										var min = parseInt(this.props.min);
-										var max = parseInt(this.props.max);
-										var newv = parseInt(this.props.value) + 1 || min || 0;
-										if (isNaN(max) || !isNaN(max) && newv <= max) this.handleNumberButton.bind(this)(e._targetInst, isNaN(min) || !isNaN(min) && newv >= min ? newv : min);
-									}
-								}),
-								BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCN.inputnumberbuttondown,
-									onClick: e => {
-										var min = parseInt(this.props.min);
-										var max = parseInt(this.props.max);
-										var newv = parseInt(this.props.value) - 1 || min || 0;
-										if (isNaN(min) || !isNaN(min) && newv >= min) this.handleNumberButton.bind(this)(e._targetInst, isNaN(max) || !isNaN(max) && newv <= max ? newv : max);
-									}
-								})
-							]
-						}) : null,
-						BDFDB.ReactUtils.createElement("input", BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-							className: BDFDB.DOMUtils.formatClassName(this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["input" + this.props.size.toLowerCase()] || BDFDB.disCN.inputdefault, this.props.inputClassName, this.props.focused && BDFDB.disCN.inputfocused, this.props.error || this.props.errorMessage ? BDFDB.disCN.inputerror : (this.props.success && BDFDB.disCN.inputsuccess), this.props.disabled && BDFDB.disCN.inputdisabled, this.props.editable && BDFDB.disCN.inputeditable),
-							type: this.props.type == "color" || this.props.type == "file" ? "text" : this.props.type,
-							onChange: this.handleChange.bind(this),
-							onInput: this.handleInput.bind(this),
-							onKeyDown: this.handleKeyDown.bind(this),
-							onBlur: this.handleBlur.bind(this),
-							onFocus: this.handleFocus.bind(this),
-							onMouseEnter: this.handleMouseEnter.bind(this),
-							onMouseLeave: this.handleMouseLeave.bind(this),
-							maxLength: this.props.type == "file" ? false : this.props.maxLength,
-							ref: this.props.inputRef
-						}), "errorMessage", "focused", "error", "success", "inputClassName", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "filter"))
-					].filter(n => n)
-				}),
+			let inputchildren = [
+				BDFDB.ReactUtils.createElement("input", BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+					className: BDFDB.DOMUtils.formatClassName(this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["input" + this.props.size.toLowerCase()] || BDFDB.disCN.inputdefault, this.props.inputClassName, this.props.focused && BDFDB.disCN.inputfocused, this.props.error || this.props.errorMessage ? BDFDB.disCN.inputerror : (this.props.success && BDFDB.disCN.inputsuccess), this.props.disabled && BDFDB.disCN.inputdisabled, this.props.editable && BDFDB.disCN.inputeditable),
+					type: this.props.type == "color" || this.props.type == "file" ? "text" : this.props.type,
+					onChange: this.handleChange.bind(this),
+					onInput: this.handleInput.bind(this),
+					onKeyDown: this.handleKeyDown.bind(this),
+					onBlur: this.handleBlur.bind(this),
+					onFocus: this.handleFocus.bind(this),
+					onMouseEnter: this.handleMouseEnter.bind(this),
+					onMouseLeave: this.handleMouseLeave.bind(this),
+					maxLength: this.props.type == "file" ? false : this.props.maxLength,
+					ref: this.props.inputRef
+				}), "errorMessage", "focused", "error", "success", "inputClassName", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "filter")),
 				this.props.type == "color" ? BDFDB.ReactUtils.createElement(LibraryComponents.ColorSwatches, {
 					colors: [],
 					compMode: this.props.mode == "comp",
@@ -7814,20 +7782,47 @@
 					filter: this.props.filter
 				}) : null
 			].filter(n => n);
-			let inputwrapper = children.length == 1 ? children[0] : BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
-				align: LibraryComponents.Flex.Align.CENTER,
-				children: children.map((child, i) => i == 0 ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {children: child}) : child)
-			});
-			return this.props.errorMessage ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
-				direction: LibraryComponents.Flex.Direction.VERTICAL,
+			
+			return BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.inputwrapper, this.props.type == "number" && (this.props.size && LibraryComponents.TextInput.Sizes[this.props.size.toUpperCase()] && BDFDB.disCN["inputnumberwrapper" + this.props.size.toLowerCase()] || BDFDB.disCN.inputnumberwrapperdefault), this.props.className),
+				style: this.props.style,
 				children: [
-					inputwrapper, 
-					BDFDB.ReactUtils.createElement("div", {
+					this.props.inputPrefix ? BDFDB.ReactUtils.createElement("span", {
+						className: BDFDB.disCN.inputprefix
+					}) : null,
+					this.props.type == "number" ? BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.inputnumberbuttons,
+						children: [
+							BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN.inputnumberbuttonup,
+								onClick: e => {
+									var min = parseInt(this.props.min);
+									var max = parseInt(this.props.max);
+									var newv = parseInt(this.props.value) + 1 || min || 0;
+									if (isNaN(max) || !isNaN(max) && newv <= max) this.handleNumberButton.bind(this)(e._targetInst, isNaN(min) || !isNaN(min) && newv >= min ? newv : min);
+								}
+							}),
+							BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN.inputnumberbuttondown,
+								onClick: e => {
+									var min = parseInt(this.props.min);
+									var max = parseInt(this.props.max);
+									var newv = parseInt(this.props.value) - 1 || min || 0;
+									if (isNaN(min) || !isNaN(min) && newv >= min) this.handleNumberButton.bind(this)(e._targetInst, isNaN(max) || !isNaN(max) && newv <= max ? newv : max);
+								}
+							})
+						]
+					}) : null,
+					inputchildren.length == 1 ? inputchildren[0] : BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+						align: LibraryComponents.Flex.Align.CENTER,
+						children: inputchildren.map((child, i) => i != 0 ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {shrink: 0, children: child}) : child)
+					}),
+					this.props.errorMessage ? BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.inputerrormessage,
 						children: this.props.errorMessage
-					})
-				]
-			}) : inputwrapper;
+					}) : null
+				].filter(n => n)
+			});
 		}
 	};
 	
