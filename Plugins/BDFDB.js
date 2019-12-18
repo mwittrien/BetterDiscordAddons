@@ -7611,22 +7611,27 @@
 			if (list && !this.props.maxWidth) {
 				let headers = Array.from(list.querySelectorAll(BDFDB.dotCN.settingstableheader));
 				headers.shift();
-				let toobig = false, maxWidth = 0, minwidth = this.props.checkboxWidth + 12;
-				if (!maxWidth) {
-					for (let header of headers) {
-						let width = BDFDB.DOMUtils.getRects(header).width;
-						maxWidth = width > maxWidth ? width : maxWidth;
-					}
-					maxWidth += 4;
-				}
-				if (headers.length * maxWidth > 300) {
-					toobig = true;
-					maxWidth = parseInt(290 / headers.length);
-				}
-				else if (maxWidth < minwidth) maxWidth = minwidth;
-				this.props.maxWidth = maxWidth;
-				BDFDB.ReactUtils.forceUpdate(this);
+				if (BDFDB.DOMUtils.getRects(headers[0]).width == 0) BDFDB.TimeUtils.timeout(_ => {this.resizeList(headers);});
+				else this.resizeList(headers);
 			}
+		}
+		resizeList(headers) {
+			let toobig = false, maxWidth = 0;
+			if (!maxWidth) {
+				for (let header of headers) {
+					header.style = "";
+					let width = BDFDB.DOMUtils.getRects(header).width;
+					maxWidth = width > maxWidth ? width : maxWidth;
+				}
+				maxWidth += 4;
+			}
+			if (headers.length * maxWidth > 300) {
+				toobig = true;
+				maxWidth = parseInt(290 / headers.length);
+			}
+			else if (maxWidth < 36) maxWidth = 36;
+			this.props.maxWidth = maxWidth;
+			BDFDB.ReactUtils.forceUpdate(this);
 		}
 		render() {
 			this.props.settings = BDFDB.ArrayUtils.is(this.props.settings) ? this.props.settings : [];
