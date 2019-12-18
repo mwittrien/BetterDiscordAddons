@@ -5351,6 +5351,7 @@
 		margintop60: ["Margins", "marginTop60"],
 		medium: ["TextStyle", "medium"],
 		member: ["Member", "member"],
+		memberactivity: ["Member", "activity"],
 		membericon: ["Member", "icon"],
 		memberoffline: ["Member", "offline"],
 		memberownericon: ["Member", "ownerIcon"],

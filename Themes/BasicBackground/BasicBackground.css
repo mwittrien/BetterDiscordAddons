@@ -10,6 +10,9 @@
 	--dmemberlisttransparency:		0.0;
 	--daccentcolor:					190,78,180;
 	
+	--dtextshadowcolor:				0,0,0;
+	--dtextshadowsize:				0;
+	
 	--dbackground:					url(https://mwittrien.github.io/BetterDiscordAddons/ThemesV2/BasicBackground/background.jpg);
 	--dbackgroundsize:				cover;
 	--dblur:						0px;
@@ -22,6 +25,9 @@
 	--vmemberlisttransparency:		var(--memberlisttransparency,		var(--dmemberlisttransparency));
 	--vaccentcolor:					var(--accentcolor,					var(--daccentcolor));
 	--vlinkcolor:					var(--vaccentcolor);
+	
+	--vtextshadowcolor:				var(--textshadowcolor,				var(--dtextshadowcolor));
+	--vtextshadowsize:				var(--textshadowsize,				var(--dtextshadowsize));
 	
 	--vbackground:					var(--background,					var(--dbackground));
 	--vbackgroundsize:				var(--backgroundsize,				var(--dbackgroundsize));
@@ -1199,7 +1205,7 @@ body:before {
 .member-3-YXUe .name-uJV0GL {
 	color: rgb(var(--fontwhite2));
 }
-.member-3-YXUe .activity-3mKQ-i {
+.member-3-YXUe .activity-2Gy-9S {
 	color: rgb(var(--fontwhite3));
 }
 .member-3-YXUe:hover .linkButtonIcon-Mlm5d6,
@@ -1210,8 +1216,8 @@ body:before {
 .member-3-YXUe.selected-aXhQR6 .name-uJV0GL {
 	color: rgb(var(--fontwhite1));
 }
-.member-3-YXUe:hover .activity-3mKQ-i,
-.member-3-YXUe.selected-aXhQR6 .activity-3mKQ-i {
+.member-3-YXUe:hover .activity-2Gy-9S,
+.member-3-YXUe.selected-aXhQR6 .activity-2Gy-9S {
 	color: rgb(var(--fontwhite2));
 }
 .member-3-YXUe.selected-aXhQR6 .premiumIcon-2IFPOX {
