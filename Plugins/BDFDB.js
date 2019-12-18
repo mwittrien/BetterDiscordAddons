@@ -7648,6 +7648,8 @@
 					}),
 					(BDFDB.ArrayUtils.is(this.props.data) ? this.props.data : [{}]).filter(n => n).map(data => BDFDB.ReactUtils.createElement(LibraryComponents.Card, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.cardprimaryoutline, BDFDB.disCN.settingstablecard, this.props.cardClassName),
+						id: data.id,
+						key: data.key,
 						backdrop: false,
 						children: [
 							BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
