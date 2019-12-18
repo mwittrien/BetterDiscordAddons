@@ -46,7 +46,7 @@ class GoogleSearchReplace {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let settings = BDFDB.DataUtils.get(this, "settings");
 		let engines = BDFDB.DataUtils.get(this, "engines");
-		let settingsitems = [], engineitems = [];
+		let settingspanel, settingsitems = [], engineitems = [];
 		
 		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,
@@ -71,7 +71,7 @@ class GoogleSearchReplace {
 			children: engineitems
 		}));
 		
-		return BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 	}
 
 	//legacy

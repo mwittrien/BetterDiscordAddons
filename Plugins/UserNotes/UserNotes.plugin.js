@@ -24,7 +24,7 @@ class UserNotes {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		let settingsitems = [];
+		let settingspanel, settingsitems = [];
 		
 		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 			type: "Button",
@@ -39,7 +39,7 @@ class UserNotes {
 			children: BDFDB.LanguageUtils.LanguageStrings.DELETE
 		}));
 		
-		return BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 	}
 
 	//legacy

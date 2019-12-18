@@ -26,7 +26,7 @@ class SteamProfileLink {
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let settings = BDFDB.DataUtils.get(this, "settings");
-		let settingsitems = [];
+		let settingspanel, settingsitems = [];
 		
 		settingsitems = settingsitems.concat(this.createSelects(false));
 		
@@ -39,7 +39,7 @@ class SteamProfileLink {
 			value: settings[key]
 		}));
 		
-		return BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 	}
 
 	//legacy

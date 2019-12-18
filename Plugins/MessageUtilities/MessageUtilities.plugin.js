@@ -61,7 +61,7 @@ class MessageUtilities {
 		let settings = BDFDB.DataUtils.get(this, "settings");
 		let bindings = BDFDB.DataUtils.get(this, "bindings");
 		let toasts = BDFDB.DataUtils.get(this, "toasts");
-		let settingsitems = [];
+		let settingspanel, settingsitems = [];
 		
 		for (let key in settings) if (this.defaults.settings[key].description) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,
@@ -139,7 +139,7 @@ class MessageUtilities {
 			children: BDFDB.LanguageUtils.LanguageStrings.RESET
 		}));
 		
-		return BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 	}
 
 	//legacy

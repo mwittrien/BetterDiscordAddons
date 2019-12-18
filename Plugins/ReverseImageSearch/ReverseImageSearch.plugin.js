@@ -45,7 +45,7 @@ class ReverseImageSearch {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let settings = BDFDB.DataUtils.get(this, "settings");
 		let engines = BDFDB.DataUtils.get(this, "engines");
-		let settingsitems = [], inneritems = [], engineitems = [];
+		let settingspanel, settingsitems = [], inneritems = [], engineitems = [];
 		
 		for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,
@@ -76,7 +76,7 @@ class ReverseImageSearch {
 			children: engineitems
 		}));
 		
-		return BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 	}
 
 	//legacy

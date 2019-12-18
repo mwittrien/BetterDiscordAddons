@@ -130,7 +130,7 @@ class BadgesEverywhere {
 		let settings = BDFDB.DataUtils.get(this, "settings");
 		let badges = BDFDB.DataUtils.get(this, "badges");
 		let indicators = BDFDB.DataUtils.get(this, "indicators");
-		let settingsitems = [], inneritems = [];
+		let settingspanel, settingsitems = [], inneritems = [];
 		
 		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,
@@ -165,7 +165,7 @@ class BadgesEverywhere {
 			children: inneritems
 		}));
 		
-		return BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 	}
 
 	//legacy
