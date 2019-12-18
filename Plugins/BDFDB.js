@@ -6701,6 +6701,9 @@
 	
 	LibraryComponents.CollapseContainer = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.CollapseContainer") || reactInitialized && class BDFDB_CollapseContainer extends LibraryModules.React.Component {
 		render() {
+			if (!BDFDB.ObjectUtils.is(this.props.collapseStates)) this.props.collapseStates = {};
+			this.props.collapsed = this.props.collapsed && (this.props.collapseStates[this.props.title] || this.props.collapseStates[this.props.title] == undefined);
+			this.props.collapseStates[this.props.title] = this.props.collapsed;
 			return BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.DOMUtils.formatClassName(this.props.collapsed && BDFDB.disCN.collapsecontainercollapsed, this.props.mini ? BDFDB.disCN.collapsecontainermini : BDFDB.disCN.collapsecontainer, this.props.className),
 				id: this.props.id,
@@ -6713,6 +6716,7 @@
 						align: LibraryComponents.Flex.Align.CENTER,
 						onClick: e => {
 							this.props.collapsed = !this.props.collapsed;
+							this.props.collapseStates[this.props.title] = this.props.collapsed;
 							if (typeof this.props.onClick == "function") this.props.onClick(this.props.collapsed, this);
 							BDFDB.ReactUtils.forceUpdate(this);
 						},
