@@ -6711,8 +6711,8 @@
 						align: LibraryComponents.Flex.Align.CENTER,
 						onClick: e => {
 							this.props.collapsed = !this.props.collapsed;
-							BDFDB.ReactUtils.forceUpdate(this);
 							if (typeof this.props.onClick == "function") this.props.onClick(this.props.collapsed, this);
+							BDFDB.ReactUtils.forceUpdate(this);
 						},
 						children: [
 							BDFDB.ReactUtils.createElement("div", {
@@ -6889,8 +6889,8 @@
 			let newvalue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value) : value;
 			if (typeof this.props.digits == "number") newvalue = Math.round(newvalue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
 			this.props.defaultValue = newvalue;
-			BDFDB.ReactUtils.forceUpdate(this);
 			if (typeof this.props.onValueChange == "function") this.props.onValueChange(newvalue, this);
+			BDFDB.ReactUtils.forceUpdate(this);
 		}
 		handleValueRender(value) {
 			let newvalue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value) : value;
@@ -6919,8 +6919,8 @@
 	LibraryComponents.ContextMenuItems.Toggle = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.ContextMenuItems.Toggle") || reactInitialized && class BDFDB_ContextMenuToggleItem extends LibraryModules.React.Component {
 		handleToggle() {
 			this.props.active = !this.props.active;
-			BDFDB.ReactUtils.forceUpdate(this);
 			if (typeof this.props.action == "function") this.props.action(this.props.active);
+			BDFDB.ReactUtils.forceUpdate(this);
 		}
 		render() {
 			return BDFDB.ReactUtils.createElement(NativeSubComponents.ContextMenuToggleItem, Object.assign({}, this.props, {action: this.handleToggle.bind(this)}));
@@ -6962,8 +6962,8 @@
 	LibraryComponents.FavButton = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.FavButton") || reactInitialized && class BDFDB_FavButton extends LibraryModules.React.Component {
 		handleClick() {
 			this.props.isFavorite = !this.props.isFavorite;
-			BDFDB.ReactUtils.forceUpdate(this);
 			if (typeof this.props.onClick == "function") this.props.onClick(this.props.isFavorite, this);
+			BDFDB.ReactUtils.forceUpdate(this);
 		}
 		render() {
 			return BDFDB.ReactUtils.createElement("div", {
@@ -7355,8 +7355,8 @@
 	LibraryComponents.QuickSelect = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.QuickSelect") || reactInitialized && class BDFDB_QuickSelect extends LibraryModules.React.Component {
 		handleChange(option) {
 			this.props.value = option;
-			BDFDB.ReactUtils.forceUpdate(this);
 			if (typeof this.props.onChange == "function") this.props.onChange(option.value || option.key, this);
+			BDFDB.ReactUtils.forceUpdate(this);
 		}
 		render() {
 			let options = (BDFDB.ArrayUtils.is(this.props.options) ? this.props.options : [{}]).filter(n => n);
@@ -7429,14 +7429,14 @@
 	LibraryComponents.SearchBar = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.SearchBar") || reactInitialized && class BDFDB_SearchBar extends LibraryModules.React.Component {
 		handleChange(query) {
 			this.props.query = query;
-			BDFDB.ReactUtils.forceUpdate(this);
 			if (typeof this.props.onChange == "function") this.props.onChange(query, this);
+			BDFDB.ReactUtils.forceUpdate(this);
 		}
 		handleClear() {
 			this.props.query = "";
-			BDFDB.ReactUtils.forceUpdate(this);
 			if (this.props.changeOnClear && typeof this.props.onChange == "function") this.props.onChange("", this);
 			if (typeof this.props.onClear == "function") this.props.onClear(this);
+			BDFDB.ReactUtils.forceUpdate(this);
 		}
 		render() {
 			let props = Object.assign({}, this.props, {
@@ -7451,8 +7451,8 @@
 	LibraryComponents.Select = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.Select") || reactInitialized && class BDFDB_Select extends LibraryModules.React.Component {
 		handleChange(value) {
 			this.props.value = value;
-			BDFDB.ReactUtils.forceUpdate(this);
 			if (typeof this.props.onChange == "function") this.props.onChange(value, this);
+			BDFDB.ReactUtils.forceUpdate(this);
 		}
 		render() {
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
@@ -7625,8 +7625,8 @@
 	LibraryComponents.Switch = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.Switch") || reactInitialized && class BDFDB_Switch extends LibraryModules.React.Component {
 		handleChange() {
 			this.props.value = !this.props.value;
-			BDFDB.ReactUtils.forceUpdate(this);
 			if (typeof this.props.onChange == "function") this.props.onChange(this.props.value, this);
+			BDFDB.ReactUtils.forceUpdate(this);
 		}
 		render() {
 			return BDFDB.ReactUtils.createElement(NativeSubComponents.Switch, Object.assign({}, this.props, {onChange: this.handleChange.bind(this)}));
@@ -7636,8 +7636,8 @@
 	LibraryComponents.TabBar = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.TabBar") || reactInitialized && class BDFDB_TabBar extends LibraryModules.React.Component {
 		handleItemSelect(item) {
 			this.props.selectedItem = item;
-			BDFDB.ReactUtils.forceUpdate(this);
 			if (typeof this.props.onItemSelect == "function") this.props.onItemSelect(item, this);
+			BDFDB.ReactUtils.forceUpdate(this);
 		}
 		render() {
 			let items = (BDFDB.ArrayUtils.is(this.props.items) ? this.props.items : [{}]).filter(n => n);
@@ -7671,8 +7671,8 @@
 					this.props.sortKey = sortKey;
 					this.props.data = BDFDB.ArrayUtils.keySort(this.props.data, this.props.sortKey);
 					if (this.props.sortDirection == LibraryComponents.Table.SortDirection.DESCENDING) this.props.data.reverse();
-					BDFDB.ReactUtils.forceUpdate(this);
 					if (typeof this.props.onSort == "function") this.props.onSort(this.props.sortKey, this.props.sortDirection);
+					BDFDB.ReactUtils.forceUpdate(this);
 				}
 			}));
 		}
@@ -7681,8 +7681,8 @@
 	LibraryComponents.TextArea = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.TextArea") || reactInitialized && class BDFDB_TextArea extends LibraryModules.React.Component {
 		handleChange(e) {
 			this.props.value = e;
-			BDFDB.ReactUtils.forceUpdate(this);
 			if (typeof this.props.onChange == "function") this.props.onChange(e, this);
+			BDFDB.ReactUtils.forceUpdate(this);
 		}
 		handleBlur(e) {if (typeof this.props.onBlur == "function") this.props.onBlur(e, this);}
 		handleFocus(e) {if (typeof this.props.onFocus == "function") this.props.onFocus(e, this);}
@@ -7718,8 +7718,8 @@
 		handleChange(e) {
 			e = BDFDB.ObjectUtils.is(e) ? e.currentTarget.value : e;
 			this.props.value = e;
-			BDFDB.ReactUtils.forceUpdate(this);
 			if (typeof this.props.onChange == "function") this.props.onChange(e, this);
+			BDFDB.ReactUtils.forceUpdate(this);
 		}
 		handleInput(e) {if (typeof this.props.onInput == "function") this.props.onInput(BDFDB.ObjectUtils.is(e) ? e.currentTarget.value : e, this);}
 		handleKeyDown(e) {if (typeof this.props.onKeyDown == "function") this.props.onKeyDown(e, this);}
