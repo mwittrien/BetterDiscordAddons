@@ -4267,6 +4267,8 @@
 		settingsPanelInner: "settingsInner-zw1xAY",
 		settingsPanelList: "settingsList-eZjkXj",
 		settingsPanelTitle: "title-GTF_8J",
+		settingsTableCard: "settingsTableCard-628t52",
+		settingsTableList: "settingsTableList-f6sW2y",
 		svgIcon: "icon-GhnIRB",
 		table: "table-moqjM0",
 		tableBodyCell: "bodyCell-dQam9V",
@@ -5719,6 +5721,8 @@
 		settingstableheadername: ["SettingsTable", "headerName"],
 		settingstableheaderoption: ["SettingsTable", "headerOption"],
 		settingstableheadersize: ["SettingsTable", "headerSize"],
+		settingstablecard: ["BDFDB", "settingsTableCard"],
+		settingstablelist: ["BDFDB", "settingsTableList"],
 		sidebarregion: ["SettingsWindow", "sidebarRegion"],
 		sinkinteractions: ["Message", "disableInteraction"],
 		size10: ["TextSize", "size10"],
@@ -6452,6 +6456,7 @@
 	
 	var NativeSubComponents = {}, LibraryComponents = {}, reactInitialized = LibraryModules.React && LibraryModules.React.Component;
 	NativeSubComponents.Button = BDFDB.ModuleUtils.findByProperties("Colors", "Hovers", "Looks");
+	NativeSubComponents.Checkbox = BDFDB.ModuleUtils.findByName("Checkbox");
 	NativeSubComponents.ContextMenuSliderItem = BDFDB.ModuleUtils.findByName("SliderMenuItem");
 	NativeSubComponents.ContextMenuToggleItem = BDFDB.ModuleUtils.findByName("ToggleMenuItem");
 	NativeSubComponents.FavButton = BDFDB.ModuleUtils.findByName("GIFFavButton");
@@ -6694,6 +6699,17 @@
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.charcounter, this.props.className),
 				children: this.getCounterString()
 			}), "parsing", "max", "refClass", "renderPrefix", "renderSuffix"));
+		}
+	};
+	
+	LibraryComponents.Checkbox = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.Checkbox") || reactInitialized && class BDFDB_Checkbox extends LibraryModules.React.Component {
+		handleChange() {
+			this.props.value = !this.props.value;
+			if (typeof this.props.onChange == "function") this.props.onChange(this.props.value, this);
+			BDFDB.ReactUtils.forceUpdate(this);
+		}
+		render() {
+			return BDFDB.ReactUtils.createElement(NativeSubComponents.Checkbox, Object.assign({}, this.props, {onChange: this.handleChange.bind(this)}));
 		}
 	};
 	
@@ -7374,7 +7390,7 @@
 				popoutProps: {position: "bottom", zIndexBoost: 1000},
 				value: selectedOption,
 				options: options,
-				renderOption: typeof this.props.renderOption == "function" ? this.props.renderOption : option => {return option.label;},
+				renderOption: typeof this.props.renderOption == "function" ? this.props.renderOption : option => option.label,
 				onChange: this.handleChange.bind(this)
 			})) : BDFDB.ReactUtils.createElement(LibraryComponents.PopoutContainer, Object.assign({}, this.props, {
 				children: BDFDB.ReactUtils.createElement("div", {
@@ -7587,6 +7603,80 @@
 				children: this.props.label
 			});
 		}	
+	};
+	
+	LibraryComponents.SettingsList = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.SettingsList") || reactInitialized && class BDFDB_SettingsList extends LibraryModules.React.Component {
+		componentDidMount() {
+			let list = BDFDB.ReactUtils.findDOMNode(this);
+			if (list && !this.props.maxWidth) {
+				let headers = Array.from(list.querySelectorAll(BDFDB.dotCN.settingstableheader));
+				headers.shift();
+				let toobig = false, maxWidth = 0, minwidth = this.props.checkboxWidth + 12;
+				if (!maxWidth) {
+					for (let header of headers) {
+						let width = BDFDB.DOMUtils.getRects(header).width;
+						maxWidth = width > maxWidth ? width : maxWidth;
+					}
+					maxWidth += 4;
+				}
+				if (headers.length * maxWidth > 300) {
+					toobig = true;
+					maxWidth = parseInt(290 / headers.length);
+				}
+				else if (maxWidth < minwidth) maxWidth = minwidth;
+				this.props.maxWidth = maxWidth;
+				BDFDB.ReactUtils.forceUpdate(this);
+			}
+		}
+		render() {
+			this.props.settings = BDFDB.ArrayUtils.is(this.props.settings) ? this.props.settings : [];
+			this.props.renderLabel = typeof this.props.renderLabel == "function" ? this.props.renderLabel : data => data.label;
+			return BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.settingstablelist, this.props.className),
+				children: [
+					BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+						align: LibraryComponents.Flex.Align.STRETCH,
+						children: [].concat(this.props.title || "", this.props.settings).map((setting, i) => BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.DOMUtils.formatClassName(i == 0 ? BDFDB.disCN.settingstableheadername : BDFDB.disCN.settingstableheaderoption, BDFDB.disCN.settingstableheader, BDFDB.disCN.settingstableheadersize, BDFDB.disCN.primary, BDFDB.disCN.weightbold),
+							children: setting,
+							style: i != 0 && this.props.maxWidth ? {
+								maxWidth: this.props.maxWidth,
+								width: this.props.maxWidth,
+								flex: `0 0 ${this.props.maxWidth}px`
+							} : {}
+						}))
+					}),
+					(BDFDB.ArrayUtils.is(this.props.data) ? this.props.data : [{}]).filter(n => n).map(data => BDFDB.ReactUtils.createElement(LibraryComponents.Card, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.cardprimaryoutline, BDFDB.disCN.settingstablecard, this.props.cardClassName),
+						backdrop: false,
+						children: [
+							BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+								children: this.props.renderLabel(data)
+							}),
+							BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+								justify: LibraryComponents.Flex.Justify.AROUND,
+								align: LibraryComponents.Flex.Align.CENTER,
+								grow: 0,
+								shrink: 0,
+								basis: this.props.maxWidth && this.props.maxWidth * this.props.settings.length || "auto",
+								children: this.props.settings.map(setting => BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
+									className: BDFDB.disCN.checkboxcontainer,
+									grow: 0,
+									shrink: 0,
+									wrap: true,
+									children: BDFDB.ReactUtils.createElement(LibraryComponents.Checkbox, {
+										shape: LibraryComponents.Checkbox.Shapes.ROUND,
+										type: LibraryComponents.Checkbox.Types.INVERTED,
+										value: data[setting],
+										onChange: this.props.onCheckboxChange
+									})
+								})).flat(10).filter(n => n)
+							})
+						]
+					}), "title", "data", "settings", "renderLabel", "cardClassName", "onCheckboxChange", "maxWidth")))
+				]
+			});
+		}
 	};
 	
 	LibraryComponents.SettingsSaveItem = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.SettingsSaveItem") || reactInitialized && class BDFDB_SettingsSaveItem extends LibraryModules.React.Component {
@@ -8012,8 +8102,8 @@
 		
 		${BDFDB.dotCNS.hovercardwrapper + BDFDB.dotCN.hovercardbutton} {
 			position: absolute;
-			top: -3px;
-			right: -3px;
+			top: -6px;
+			right: -6px;
 			opacity: 0;
 		}
 		${BDFDB.dotCNS.hovercardwrapper + BDFDB.dotCN.hovercard + BDFDB.dotCN.hovercardbutton} {
@@ -8076,6 +8166,15 @@
 		}
 		${BDFDB.dotCN.tablebodycell} {
 			font-size: 15px;
+		}
+		
+		${BDFDB.dotCNS.settingstablelist + BDFDB.dotCN.checkboxcontainer}:before {
+			display: none;
+		}
+		
+		${BDFDB.dotCN.settingstablecard} {
+			height: 60px;
+			margin-bottom: 10px;
 		}
 		
 		${BDFDB.dotCNS.themelight + BDFDB.dotCN.quickselectpopoutwrapper},
@@ -8245,7 +8344,6 @@
 		#bd-settingspane-container .bd-updatebtn[style] {
 			display: none !important;
 		}
-		
 		
 		${BDFDB.dotCN.noticewrapper} {
 			transition: height 0.5s ease !important;
