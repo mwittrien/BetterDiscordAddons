@@ -4228,9 +4228,10 @@
 		changeLogModal: "changeLogModal-ny_dHC",
 		collapseContainer: "container-fAVkOf",
 		collapseContainerArrow: "arrow-uglXxc",
-		collapseContainerCollapsed: "container-fAVkOf collapsed-2BUBZm",
+		collapseContainerCollapsed: "collapsed-2BUBZm",
 		collapseContainerHeader: "header-2s6x-5",
 		collapseContainerInner: "inner-TkGytd",
+		collapseContainerMini: "container-fAVkOf containerMini-_k6Rts",
 		collapseContainerTitle: "title-ROsJi-",
 		colorPickerSwatches: "swatches", //swatches-QxZw_N
 		colorPickerSwatchesDisabled: "disabled-2JgNxl",
@@ -4884,6 +4885,7 @@
 		collapsecontainercollapsed: ["BDFDB", "collapseContainerCollapsed"],
 		collapsecontainerheader: ["BDFDB", "collapseContainerHeader"],
 		collapsecontainerinner: ["BDFDB", "collapseContainerInner"],
+		collapsecontainermini: ["BDFDB", "collapseContainerMini"],
 		collapsecontainertitle: ["BDFDB", "collapseContainerTitle"],
 		colorbase: ["TextColor2", "base"],
 		colorerror: ["TextColor", "colorError"],
@@ -6700,7 +6702,7 @@
 	LibraryComponents.CollapseContainer = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.CollapseContainer") || reactInitialized && class BDFDB_CollapseContainer extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.DOMUtils.formatClassName(this.props.collapsed ? BDFDB.disCN.collapsecontainercollapsed : BDFDB.disCN.collapsecontainer, this.props.className),
+				className: BDFDB.DOMUtils.formatClassName(this.props.collapsed && BDFDB.disCN.collapsecontainercollapsed, this.props.mini ? BDFDB.disCN.collapsecontainermini : BDFDB.disCN.collapsecontainer, this.props.className),
 				id: this.props.id,
 				children: [
 					this.props.dividertop ? BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormDivider, {
@@ -6736,6 +6738,7 @@
 			});
 		}
 	};
+	InternalBDFDB.setDefaultProps(LibraryComponents.CollapseContainer, {collapsed:true, mini:true});
 	
 	LibraryComponents.ColorSwatches = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.ColorSwatches") || reactInitialized && class BDFDB_ColorSwatches extends LibraryModules.React.Component {
 		constructor(props) {
@@ -7937,6 +7940,12 @@
 			padding-left: 15px;
 		}
 		
+		${BDFDB.dotCN.collapsecontainer} {
+			margin-bottom: 20px;
+		}
+		${BDFDB.dotCN.collapsecontainermini} {
+			margin-bottom: 8px;
+		}
 		${BDFDB.dotCN.collapsecontainerinner} {
 			padding-left: 15px;
 		}
