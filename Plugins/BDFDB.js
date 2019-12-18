@@ -7653,11 +7653,11 @@
 					}),
 					(BDFDB.ArrayUtils.is(this.props.data) ? this.props.data : [{}]).filter(n => n).map(data => BDFDB.ReactUtils.createElement(LibraryComponents.Card, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.cardprimaryoutline, BDFDB.disCN.settingstablecard, this.props.cardClassName),
-						id: data.id,
-						key: data.key,
+						cardId: data.key,
 						backdrop: false,
 						children: [
 							BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+								align: LibraryComponents.Flex.Align.CENTER,
 								children: this.props.renderLabel(data)
 							}),
 							BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
@@ -7672,6 +7672,8 @@
 									shrink: 0,
 									wrap: true,
 									children: BDFDB.ReactUtils.createElement(LibraryComponents.Checkbox, {
+										cardId: data.key,
+										settingId: setting,
 										shape: LibraryComponents.Checkbox.Shapes.ROUND,
 										type: LibraryComponents.Checkbox.Types.INVERTED,
 										value: data[setting],
