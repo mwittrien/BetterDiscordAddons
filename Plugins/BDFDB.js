@@ -7801,11 +7801,7 @@
 							onMouseLeave: this.handleMouseLeave.bind(this),
 							maxLength: this.props.type == "file" ? false : this.props.maxLength,
 							ref: this.props.inputRef
-						}), "errorMessage", "focused", "error", "success", "inputClassName", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "filter")),
-						this.props.errorMessage ? BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN.inputerrormessage,
-							children: this.props.errorMessage
-						}) : null,
+						}), "errorMessage", "focused", "error", "success", "inputClassName", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "filter"))
 					].filter(n => n)
 				}),
 				this.props.type == "color" ? BDFDB.ReactUtils.createElement(LibraryComponents.ColorSwatches, {
@@ -7818,10 +7814,20 @@
 					filter: this.props.filter
 				}) : null
 			].filter(n => n);
-			return children.length == 1 ? children[0] : BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+			let inputwrapper = children.length == 1 ? children[0] : BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				align: LibraryComponents.Flex.Align.CENTER,
 				children: children.map((child, i) => i == 0 ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {children: child}) : child)
 			});
+			return this.props.errorMessage ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+				direction: LibraryComponents.Flex.Direction.VERTICAL,
+				children: [
+					inputwrapper, 
+					BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.inputerrormessage,
+						children: this.props.errorMessage
+					})
+				]
+			}) : inputwrapper;
 		}
 	};
 	
