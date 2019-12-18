@@ -3623,8 +3623,7 @@
 				
 				if (button.cancel) cancels.push(click);
 				
-				footerchildren.push(BDFDB.ReactUtils.createElement(LibraryComponents.Button, {
-					key: button.key,
+				footerchildren.push(BDFDB.ReactUtils.createElement(LibraryComponents.Button, BDFDB.ObjectUtils.exclude(Object.assign({}, button, {
 					look: look || (color ? LibraryComponents.Button.Looks.FILLED : LibraryComponents.Button.Looks.LINK),
 					color: color || LibraryComponents.Button.Colors.PRIMARY,
 					onClick: _ => {
@@ -3632,7 +3631,7 @@
 						if (!(button.close && button.cancel)) click(modal, modalInstance);
 					},
 					children: contents
-				}));
+				}), "click", "close", "cancel", "contents")));
 			}
 		}
 		contentchildren = contentchildren.filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
