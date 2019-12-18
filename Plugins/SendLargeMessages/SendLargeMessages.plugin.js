@@ -3,7 +3,7 @@
 class SendLargeMessages {
 	getName () {return "SendLargeMessages";}
 
-	getVersion () {return "1.5.6";}
+	getVersion () {return "1.5.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class SendLargeMessages {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["New WYSIWYG Textarea","Fixed for the new WYSIWYG Textarea that is hidden by experiments"]],
+			"fixed":[["Switching","Plugin acting weird after switching channels"],["New WYSIWYG Textarea","Fixed for the new WYSIWYG Textarea that is hidden by experiments"]],
 			"improved":[["Sending Messages","The plugin no longer needs the modal to send multiple messages, you can just write larger messages in the channel textarea and it will automatically split it up before sending it"]]
 		};
 
@@ -87,10 +87,10 @@ class SendLargeMessages {
 			e.instance.props.shouldUploadLongMessages = false;
 			if (e.returnvalue) {
 				if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "handleSubmit")) BDFDB.ModuleUtils.patch(this, e.instance, "handleSubmit", {instead: e2 => {
-					let parsedLength = BDFDB.StringUtils.getParsedLength(e.instance.props.textValue);
+					let parsedLength = BDFDB.StringUtils.getParsedLength(e2.methodArguments[0]);
 					if (parsedLength > 2000) {
 						e2.stopOriginalMethodCall();
-						let messages = this.formatText(e.instance.props.textValue, Math.sqrt(Math.pow(parsedLength - e.instance.props.textValue.length, 2)) > Math.max(parsedLength, e.instance.props.textValue.length) / 20);
+						let messages = this.formatText(e2.methodArguments[0], Math.sqrt(Math.pow(parsedLength - e2.methodArguments[0].length, 2)) > Math.max(parsedLength, e2.methodArguments[0].length) / 20);
 						messages.filter(n => n).forEach((message, i) => {
 							BDFDB.TimeUtils.timeout(_ => {
 								e2.originalMethod(message);
