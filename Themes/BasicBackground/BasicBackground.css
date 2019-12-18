@@ -281,6 +281,15 @@ body:before {
 	color: rgb(var(--fontwhite1));
 	font-weight: 500;
 }
+.wrapper-1BJsBx:hover svg,
+.wrapper-1BJsBx.selected-bZ3Lue svg {
+	filter: drop-shadow(1px 1px var(--vtextshadow));
+}
+.wrapper-1BJsBx:hover .childWrapper-anI2G9,
+.wrapper-1BJsBx.selected-bZ3Lue .childWrapper-anI2G9,
+#bd-pub-button:hover {
+	text-shadow: 1px 1px var(--vtextshadow);
+}
 .noIcon-1a_FrS {											/* acronym				minicontainer						*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 	color: rgb(var(--fontwhite1));
@@ -462,11 +471,11 @@ body:before {
 .modeSelected-1zApJ_ .content-3at_AU,
 .modeSelected-1zApJ_:hover .content-3at_AU {
 	background-color: rgb(var(--vaccentcolor));
-	text-shadow: 1px 1px var(--textshadow);
+	text-shadow: 1px 1px var(--vtextshadow);
 }
 .modeSelected-1zApJ_ .content-3at_AU svg,
 .modeSelected-1zApJ_:hover .content-3at_AU svg {
-	filter: drop-shadow(1px 1px var(--textshadow));
+	filter: drop-shadow(1px 1px var(--vtextshadow));
 }
 .icon-1_QxNX {												/* channel				icon								*/
 	color: rgb(var(--fontwhite3));
@@ -577,7 +586,7 @@ body:before {
 	text-shadow: 1px 1px var(--vtextshadow);
 }
 .selected-aXhQR6.channel-2QD9_O .layout-2DM8Md svg {
-	filter: drop-shadow(1px 1px var(--textshadow));
+	filter: drop-shadow(1px 1px var(--vtextshadow));
 }
 .channel-2QD9_O .linkButtonIcon-Mlm5d6 {
 	color: rgb(var(--fontwhite2));
@@ -1211,7 +1220,7 @@ body:before {
 	text-shadow: 1px 1px var(--vtextshadow);
 }
 .selected-aXhQR6.member-3-YXUe .layout-2DM8Md svg {
-	filter: drop-shadow(1px 1px var(--textshadow));
+	filter: drop-shadow(1px 1px var(--vtextshadow));
 }
 .member-3-YXUe .name-uJV0GL {
 	color: rgb(var(--fontwhite2));
@@ -4243,6 +4252,24 @@ body:before {
 
 /* ----		16.2.	BUTTONS							---- */
 
+.searchSuggestion-2K8OBX:hover,
+.form-236Xmo .btnPrimary-346kfV,
+.button-22FETM,
+.questionMark-CWEQZn,
+.btn-1PnLxm.btnPrimary-1jluZW,
+.btn-15Au6M.btnPrimary-ggBniE,
+.bd-modal-wrapper .footer button,
+.bd-pfbtn,
+.bda-settings-button,
+.btn-primary,
+.colorBrand-3pXr91:not([style*="background-color"]):not(.lookFilled-1Gx00P),
+.platform-iik236.active-iLSdWQ .downloadButton-1bWXpg,
+.action-1lSjCi.create-3jownz .actionButton-2PeQbJ,
+.ui-button.brand.filled,
+.lookFilled-1Gx00P.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover,
+.lookFilled-1Gx00P.colorBrand-3pXr91:not([style*="background-color"]) {
+	text-shadow: 1px 1px var(--vtextshadow);
+}
 .lookFilled-1Gx00P:not(.colorWhite-rEQuAQ) .spinnerItem-3GlVyU {
 	background-color: rgb(var(--fontwhite1)) !important;
 }
@@ -5158,6 +5185,25 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	-webkit-mask: url(https://discordapp.com/assets/9328a2df4b542ac8725b57010a52f73b.svg) center/contain no-repeat;
 	background: rgb(var(--fontwhite1));
 }
+.noticeBrand-3nQBC_ {
+	text-shadow: 1px 1px var(--vtextshadow);
+}
+.noticeBrand-3nQBC_ .button-1MICoQ {
+	box-shadow: 1px 1px var(--vtextshadow);
+	text-shadow: 1px 1px var(--vtextshadow);
+}
+#app-mount .noticeBrand-3nQBC_ .icon-KgjVwm:empty:after,
+#app-mount .noticeBrand-3nQBC_ .platformIcon-2NdO9F:empty:after,
+#app-mount .noticeBrand-3nQBC_ .premiumLogo-30dge3:after,
+#app-mount .noticeBrand-3nQBC_ .dismiss-SCAH9H:after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	background: var(--vtextshadow);
+}
 
 /* ----		16.9.	TOOLTIPS						---- */
 
@@ -5199,8 +5245,20 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	left: 0;
 	background: rgb(var(--fontwhite1)) !important;
 }
+.toast.toast-brand.icon:after,
+.bd-toast.toast-brand.icon:after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	background: var(--vtextshadow);
+}
 .toast.toast-brand.icon:before,
-.bd-toast.toast-brand.icon:before {
+.bd-toast.toast-brand.icon:before,
+.toast.toast-brand.icon:after,
+.bd-toast.toast-brand.icon:after {
 	-webkit-mask: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHhtbDpzcGFjZT0icHJlc2VydmUiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iNTEycHgiIGhlaWdodD0iNTEycHgiIHZpZXdCb3g9IjI3IDI3IDExNSAxMTUiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDkwIDkwOyI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMTEuMywxMjQuMWMwLDAtMy40LTQuMS02LjMtNy43YzEyLjYtMy41LDE3LjQtMTEuMywxNy40LTExLjMgYy00LDIuNi03LjcsNC40LTExLjEsNS42Yy00LjgsMi05LjUsMy4zLTE0LDQuMWMtOS4yLDEuNy0xNy42LDEuMy0yNC45LTAuMWMtNS41LTEtMTAuMi0yLjUtMTQuMS00LjFjLTIuMi0wLjgtNC42LTEuOS03LjEtMy4zIGMtMC4zLTAuMi0wLjYtMC4zLTAuOS0wLjVjLTAuMS0wLjEtMC4zLTAuMi0wLjQtMC4yYy0xLjctMS0yLjYtMS42LTIuNi0xLjZzNC42LDcuNiwxNi44LDExLjJjLTIuOSwzLjYtNi40LDcuOS02LjQsNy45IGMtMjEuMi0wLjYtMjkuMy0xNC41LTI5LjMtMTQuNWMwLTMwLjYsMTMuOC01NS40LDEzLjgtNTUuNGMxMy44LTEwLjMsMjYuOS0xMCwyNi45LTEwbDEsMS4xQzUyLjgsNTAuMyw0NSw1Ny45LDQ1LDU3LjkgczIuMS0xLjIsNS43LTIuN2MxMC4zLTQuNSwxOC40LTUuNywyMS44LTZjMC41LTAuMSwxLjEtMC4yLDEuNi0wLjJjNS45LTAuNywxMi41LTAuOSwxOS40LTAuMmM5LjEsMSwxOC45LDMuNywyOC45LDkuMSBjMCwwLTcuNS03LjItMjMuOS0xMi4xbDEuMy0xLjVjMCwwLDEzLjEtMC4zLDI2LjksMTBjMCwwLDEzLjgsMjQuOCwxMy44LDU1LjRDMTQwLjYsMTA5LjYsMTMyLjUsMTIzLjUsMTExLjMsMTI0LjF6IE0xMDEuNyw3OS43Yy01LjQsMC05LjgsNC43LTkuOCwxMC41YzAsNS44LDQuNCwxMC41LDkuOCwxMC41YzUuNCwwLDkuOC00LjcsOS44LTEwLjUgQzExMS41LDg0LjQsMTA3LjEsNzkuNywxMDEuNyw3OS43eiBNNjYuNyw3OS43Yy01LjQsMC05LjgsNC43LTkuOCwxMC41YzAsNS44LDQuNCwxMC41LDkuOCwxMC41YzUuNCwwLDkuOC00LjcsOS44LTEwLjUgQzc2LjUsODQuNCw3Mi4xLDc5LjcsNjYuNyw3OS43eiIvPjwvc3ZnPg==) 6px 50%/20px 20px no-repeat;
 }
 .toast.toast-danger.icon:before,
@@ -5630,11 +5688,11 @@ body #ace_settingsmenu input[type="checkbox"]:checked:after {
 
 /* ----		18.2.	SERVERFOLDERS					---- */
 
-body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP,
-body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
+body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP,
+body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 	width: 144px;
 }
-body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
+body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 	padding-right: 82px;
 }
 .base-PmTxvP[style*="background-color: rgb(114, 137, 218)"] {

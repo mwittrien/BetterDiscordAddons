@@ -466,6 +466,8 @@ class ServerFolders {
 			
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 			
+			BDFDB.DOMUtils.removeClassFromDOM(BDFDB.disCN._serverfoldersfoldercontentisopen);
+			
 			BDFDB.PluginUtils.clear(this);
 		}
 	}
@@ -585,6 +587,9 @@ class ServerFolders {
 	}
 	
 	processGuildFolder (e) {
+		let expandedFolders = BDFDB.LibraryModules.FolderUtils.getExpandedFolders();
+		if (expandedFolders.size) BDFDB.DOMUtils.addClass(document.body, BDFDB.disCN._serverfoldersfoldercontentisopen);
+		else BDFDB.DOMUtils.removeClassFromDOM(BDFDB.disCN._serverfoldersfoldercontentisopen);
 		let state = this.getState(e.instance);
 		let data = this.getFolderConfig(e.instance.props.folderId);
 		if (data.muteFolder) for (let guildId of e.instance.props.guildIds) if (!BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildId)) BDFDB.LibraryModules.GuildSettingsUtils.updateNotificationSettings(guildId, {muted:true, suppress_everyone:true});
