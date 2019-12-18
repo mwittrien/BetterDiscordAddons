@@ -3624,6 +3624,7 @@
 				if (button.cancel) cancels.push(click);
 				
 				footerchildren.push(BDFDB.ReactUtils.createElement(LibraryComponents.Button, {
+					key: button.key,
 					look: look || (color ? LibraryComponents.Button.Looks.FILLED : LibraryComponents.Button.Looks.LINK),
 					color: color || LibraryComponents.Button.Colors.PRIMARY,
 					onClick: _ => {
