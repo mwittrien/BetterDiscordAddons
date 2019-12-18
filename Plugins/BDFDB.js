@@ -6514,7 +6514,7 @@
 			let processingAndListening = (this.props.disabled || this.props.submitting) && (null != this.props.onMouseEnter || null != this.props.onMouseLeave);
 			let props = BDFDB.ObjectUtils.exclude(this.props, "look", "color", "hover", "size", "fullWidth", "grow", "disabled", "submitting", "type", "style", "wrapperClassName", "className", "innerClassName", "onClick", "onContextMenu", "onMouseDown", "onMouseUp", "onMouseEnter", "onMouseLeave", "children", "rel");
 			let button = BDFDB.ReactUtils.createElement("button", Object.assign({}, !this.props.disabled && !this.props.submitting && props, {
-				className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.button, this.props.look != null ? this.props.look : LibraryComponents.Button.Looks.FILLED, this.props.color != null ? this.props.color : LibraryComponents.Button.Colors.BRAND, this.props.hover, this.props.size != null ? this.props.size : LibraryComponents.Button.Sizes.MEDIUM, processingAndListening && this.props.wrapperClassName, this.props.fullWidth && BDFDB.disCN.buttonfullwidth, (this.props.grow === undefined || this.props.grow) && BDFDB.disCN.buttongrow, this.props.hover && this.props.hover !== LibraryComponents.Button.Hovers.DEFAULT && BDFDB.disCN.buttonhashover, this.props.submitting && BDFDB.disCN.buttonsubmitting, this.props.disabled && BDFDB.disCN.buttondisabled),
+				className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.button, this.props.look != null ? this.props.look : LibraryComponents.Button.Looks.FILLED, this.props.color != null ? this.props.color : LibraryComponents.Button.Colors.BRAND, this.props.hover, this.props.size != null ? this.props.size : LibraryComponents.Button.Sizes.MEDIUM, processingAndListening && this.props.wrapperClassName, this.props.fullWidth && BDFDB.disCN.buttonfullwidth, (this.props.grow === undefined || this.props.grow) && BDFDB.disCN.buttongrow, this.props.hover && this.props.hover !== LibraryComponents.Button.Hovers.DEFAULT && BDFDB.disCN.buttonhashover, this.props.submitting && BDFDB.disCN.buttonsubmitting),
 				onClick: (this.props.disabled || this.props.submitting) ? e => {return e.preventDefault();} : this.handleClick.bind(this),
 				onContextMenu: (this.props.disabled || this.props.submitting) ? e => {return e.preventDefault();} : this.handleContextMenu.bind(this),
 				onMouseUp: !this.props.disabled && this.handleMouseDown.bind(this),
@@ -6986,7 +6986,7 @@
 						onChange: e => {
 							let file = e.currentTarget.files[0];
 							if (this.refInput && file && (!this.props.filter || file.type.indexOf(this.props.filter) == 0)) {
-								this.refInput.props.value = `${this.props.mode == "url" ? "url('" : ""}data:${file.type};base64,${BDFDB.LibraryRequires.fs.readFileSync(file.path).toString("base64")}${this.props.mode ? "')" : ""}`;
+								this.refInput.props.value = `${this.props.mode == "url" ? "url('" : ""}${this.props.useFilepath ? file.path : `data:${file.type};base64,${BDFDB.LibraryRequires.fs.readFileSync(file.path).toString("base64")}`}${this.props.mode ? "')" : ""}`;
 								BDFDB.ReactUtils.forceUpdate(this.refInput);
 								this.refInput.handleChange(this.refInput.props.value);
 							}
@@ -7771,7 +7771,7 @@
 					onMouseLeave: this.handleMouseLeave.bind(this),
 					maxLength: this.props.type == "file" ? false : this.props.maxLength,
 					ref: this.props.inputRef
-				}), "errorMessage", "focused", "error", "success", "inputClassName", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "filter")),
+				}), "errorMessage", "focused", "error", "success", "inputClassName", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "filter", "useFilepath")),
 				this.props.type == "color" ? BDFDB.ReactUtils.createElement(LibraryComponents.ColorSwatches, {
 					colors: [],
 					compMode: this.props.mode == "comp",
@@ -7779,7 +7779,8 @@
 					pickerConfig: {gradient:false, alpha:this.props.mode != "comp"}
 				}) : null,
 				this.props.type == "file" ? BDFDB.ReactUtils.createElement(LibraryComponents.FileButton, {
-					filter: this.props.filter
+					filter: this.props.filter,
+					useFilepath: this.props.useFilepath,
 				}) : null
 			].filter(n => n);
 			
@@ -7796,18 +7797,18 @@
 							BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCN.inputnumberbuttonup,
 								onClick: e => {
-									var min = parseInt(this.props.min);
-									var max = parseInt(this.props.max);
-									var newv = parseInt(this.props.value) + 1 || min || 0;
+									let min = parseInt(this.props.min);
+									let max = parseInt(this.props.max);
+									let newv = parseInt(this.props.value) + 1 || min || 0;
 									if (isNaN(max) || !isNaN(max) && newv <= max) this.handleNumberButton.bind(this)(e._targetInst, isNaN(min) || !isNaN(min) && newv >= min ? newv : min);
 								}
 							}),
 							BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCN.inputnumberbuttondown,
 								onClick: e => {
-									var min = parseInt(this.props.min);
-									var max = parseInt(this.props.max);
-									var newv = parseInt(this.props.value) - 1 || min || 0;
+									let min = parseInt(this.props.min);
+									let max = parseInt(this.props.max);
+									let newv = parseInt(this.props.value) - 1 || min || 0;
 									if (isNaN(min) || !isNaN(min) && newv >= min) this.handleNumberButton.bind(this)(e._targetInst, isNaN(max) || !isNaN(max) && newv <= max ? newv : max);
 								}
 							})
