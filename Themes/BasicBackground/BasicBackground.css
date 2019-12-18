@@ -10,8 +10,7 @@
 	--dmemberlisttransparency:		0.0;
 	--daccentcolor:					190,78,180;
 	
-	--dtextshadowcolor:				0,0,0;
-	--dtextshadowsize:				0;
+	--dtextshadow:					0,0,0;
 	
 	--dbackground:					url(https://mwittrien.github.io/BetterDiscordAddons/ThemesV2/BasicBackground/background.jpg);
 	--dbackgroundsize:				cover;
@@ -26,8 +25,7 @@
 	--vaccentcolor:					var(--accentcolor,					var(--daccentcolor));
 	--vlinkcolor:					var(--vaccentcolor);
 	
-	--vtextshadowcolor:				var(--textshadowcolor,				var(--dtextshadowcolor));
-	--vtextshadowsize:				var(--textshadowsize,				var(--dtextshadowsize));
+	--vtextshadow:					var(--textshadow,					var(--dtextshadow));
 	
 	--vbackground:					var(--background,					var(--dbackground));
 	--vbackgroundsize:				var(--backgroundsize,				var(--dbackgroundsize));
