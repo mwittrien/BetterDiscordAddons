@@ -462,6 +462,11 @@ body:before {
 .modeSelected-1zApJ_ .content-3at_AU,
 .modeSelected-1zApJ_:hover .content-3at_AU {
 	background-color: rgb(var(--vaccentcolor));
+	text-shadow: 1px 1px var(--textshadow);
+}
+.modeSelected-1zApJ_ .content-3at_AU svg,
+.modeSelected-1zApJ_:hover .content-3at_AU svg {
+	filter: drop-shadow(1px 1px var(--textshadow));
 }
 .icon-1_QxNX {												/* channel				icon								*/
 	color: rgb(var(--fontwhite3));
@@ -567,8 +572,12 @@ body:before {
 .channel-2QD9_O:hover .layout-2DM8Md {						/* dmchannel/page		inner							*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
-.channel-2QD9_O.selected-aXhQR6 .layout-2DM8Md {
+.selected-aXhQR6.channel-2QD9_O .layout-2DM8Md {
 	background-color: rgb(var(--vaccentcolor));
+	text-shadow: 1px 1px var(--vtextshadow);
+}
+.selected-aXhQR6.channel-2QD9_O .layout-2DM8Md svg {
+	filter: drop-shadow(1px 1px var(--textshadow));
 }
 .channel-2QD9_O .linkButtonIcon-Mlm5d6 {
 	color: rgb(var(--fontwhite2));
@@ -1197,8 +1206,12 @@ body:before {
 .member-3-YXUe:hover .layout-2DM8Md {						/* member				inner								*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
-.member-3-YXUe.selected-aXhQR6 .layout-2DM8Md {
+.selected-aXhQR6.member-3-YXUe .layout-2DM8Md {
 	background-color: rgb(var(--vaccentcolor));
+	text-shadow: 1px 1px var(--vtextshadow);
+}
+.selected-aXhQR6.member-3-YXUe .layout-2DM8Md svg {
+	filter: drop-shadow(1px 1px var(--textshadow));
 }
 .member-3-YXUe .name-uJV0GL {
 	color: rgb(var(--fontwhite2));
@@ -2633,6 +2646,12 @@ body:before {
 #app-mount .topSectionNormal-2-vo2m {						/* modal				headernormal						*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
+.topSectionPlaying-1J5E4n {									/* modal				headerplaying						*/
+	text-shadow: 1px 1px var(--vtextshadow);
+}
+.headerFill-adLl4x {										/* modal				activity							*/
+	background-color: rgba(var(--vtransparencycolor), 0.1);
+}
 .body-3ND3kc {												/* modal				body								*/
 	background-color: transparent;
 }
@@ -3455,8 +3474,14 @@ body:before {
 #app-mount .headerNormal-T_seeN {							/* popout				headernormal						*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
-.headerStreaming-2FjmGz {
+.headerPlaying-j0WQBV {										/* popout				headerplaying						*/
+	text-shadow: 1px 1px var(--vtextshadow);
+}
+.headerStreaming-2FjmGz {									/* popout				headerstreaming						*/
 	background: #593695;
+}
+.activity-11LB_k {											/* popout				activity							*/
+	background-color: rgba(var(--vtransparencycolor), 0.1);
 }
 #app-mount .body-3iLsc4,									/* popout				body								*/
 #app-mount .bodyInner-245q0L,								/* popout				bodyinner							*/
@@ -4871,6 +4896,9 @@ body:before {
 .botTagRegular-2HEhHi {										/* bottag				regular								*/
 	color: rgb(var(--fontwhite1));
 }
+.botTagRegular-2HEhHi:not([style]) {						/* bottag				regular								*/
+	text-shadow: 1px 1px var(--vtextshadow);
+}
 .botTagInvert-18-95s {										/* bottag				inverted							*/
 	background-color: rgb(var(--fontwhite1));
 }
@@ -5142,6 +5170,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 }
 #app-mount .tooltipBlack-PPG47z {
 	background-color: rgb(var(--vaccentcolor));
+	text-shadow: 1px 1px var(--vtextshadow);
 }
 #app-mount .tooltipBlack-PPG47z .tooltipPointer-3ZfirK {
 	border-top-color: rgb(var(--vaccentcolor));
@@ -5154,6 +5183,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	background-color: rgb(var(--vaccentcolor));
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	color: rgb(var(--fontwhite1));
+	text-shadow: 1px 1px var(--vtextshadow);
 }
 .toast.icon,
 .bd-toast.icon {
@@ -5606,6 +5636,9 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 }
 body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 	padding-right: 82px;
+}
+.base-PmTxvP[style*="background-color: rgb(114, 137, 218)"] {
+	text-shadow: 1px 1px var(--vtextshadow);
 }
 
 /* ----		18.3.	MEMBERCOUNT						---- */
