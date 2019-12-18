@@ -10,7 +10,7 @@
 	--dmemberlisttransparency:		0.0;
 	--daccentcolor:					190,78,180;
 	
-	--dtextshadow:					0,0,0;
+	--dtextshadow:					transparent;
 	
 	--dbackground:					url(https://mwittrien.github.io/BetterDiscordAddons/ThemesV2/BasicBackground/background.jpg);
 	--dbackgroundsize:				cover;
