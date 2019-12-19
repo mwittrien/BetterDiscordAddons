@@ -6477,6 +6477,8 @@
 	
 	LibraryComponents.Animations = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Controller", "Spring"));
 	
+	LibraryComponents.AutocompleteComponents = Object.assign({}, BDFDB.ModuleUtils.findByName("Autocomplete"));
+	
 	LibraryComponents.Avatar = (BDFDB.ModuleUtils.findByProperties("AnimatedAvatar") || {}).default;
 	
 	LibraryComponents.BadgeComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("IconBadge", "NumberBadge"));
