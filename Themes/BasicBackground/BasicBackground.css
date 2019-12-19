@@ -408,6 +408,10 @@ body:before {
 .searchBar-6Kv8R2 {											/* header				searchbar							*/
 	box-shadow: 0 1px 0 rgba(var(--vtransparencycolor), 0.2), 0 1.5px 0 rgba(var(--vtransparencycolor), 0.05), 0 2px 0 rgba(var(--vtransparencycolor), 0.05);
 }
+.searchBar-6Kv8R2 .searchBarComponent-32dTOx {				/* header				searchbarinner						*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+	color: rgb(var(--fontwhite3));
+}
 .header-2o-2hj,
 .bannerVisible-14J9lQ .header-2o-2hj {
 	color: rgb(var(--fontwhite1));
@@ -566,6 +570,7 @@ body:before {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 
+
 /* ----		5.3.	DMCHANNELS						---- */
 
 .channel-2QD9_O {											/* dmchannel/page		container						*/
@@ -594,7 +599,7 @@ body:before {
 .channel-2QD9_O .name-uJV0GL {
 	color: rgb(var(--fontwhite2));
 }
-.channel-2QD9_O .activity-3mKQ-i {
+.channel-2QD9_O .subtext-1RtU34 {
 	color: rgb(var(--fontwhite3));
 }
 .channel-2QD9_O:hover .linkButtonIcon-Mlm5d6,
@@ -605,14 +610,15 @@ body:before {
 .channel-2QD9_O.selected-aXhQR6 .name-uJV0GL {
 	color: rgb(var(--fontwhite1));
 }
-.channel-2QD9_O:hover .activity-3mKQ-i,
-.channel-2QD9_O.selected-aXhQR6 .activity-3mKQ-i {
+.channel-2QD9_O:hover .subtext-1RtU34,
+.channel-2QD9_O.selected-aXhQR6 .subtext-1RtU34 {
 	color: rgb(var(--fontwhite2));
 }
 
 .header-zu8eWb {
 	color: rgb(var(--fontwhite2));
 }
+
 .empty-388osJ {												/* loadingplaceholders										*/
 	fill: rgb(var(--vaccentcolor));
 }
