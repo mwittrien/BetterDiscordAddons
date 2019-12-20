@@ -3737,6 +3737,7 @@
 		if (!BDFDB.ObjectUtils.is(nodeOrInstance)) return;
 		var instance = BDFDB.ReactUtils.findOwner(nodeOrInstance, {props:"closeContextMenu", up:true});
 		if (BDFDB.ObjectUtils.is(instance) && instance.props && typeof instance.props.closeContextMenu == "function") instance.props.closeContextMenu();
+		else BDFDB.LibraryModules.ContextMenuUtils.closeContextMenu();
 	};
 
 	BDFDB.createMessageOptionPopout = function (button) {
