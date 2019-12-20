@@ -3,7 +3,7 @@
 class PluginRepo {
 	getName () {return "PluginRepo";} 
 
-	getVersion () {return "1.8.7";}
+	getVersion () {return "1.8.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class PluginRepo {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["Preview","Now also uses Modules to grab classnames"]]
+			"improved":[["Promise Error","Fixed issue where PluginRepo wouldnt load when an installed plugin has no getAuthor"]]
 		};
 
 		this.patchedModules = {
@@ -462,7 +462,7 @@ class PluginRepo {
 		for (let url in this.loadedPlugins) {
 			let plugin = this.loadedPlugins[url];
 			let instPlugin = BDFDB.BDUtils.getPlugin(plugin.getName);
-			if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase()) plugin.getState = this.getString(instPlugin.getVersion()) != plugin.getVersion ? 1 : 0;
+			if (instPlugin && typeof instPlugin.getAuthor == "function" && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase()) plugin.getState = this.getString(instPlugin.getVersion()) != plugin.getVersion ? 1 : 0;
 			else plugin.getState = 2;
 			let data = {
 				url: plugin.url,
@@ -733,7 +733,7 @@ class PluginRepo {
 						plugin.url = url;
 						this.loadedPlugins[url] = plugin;
 						let instPlugin = BDFDB.BDUtils.getPlugin(plugin.getName);
-						if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion && PluginUpdates && PluginUpdates.plugins && !PluginUpdates.plugins[url]) outdated++;
+						if (instPlugin && typeof instPlugin.getAuthor == "function" && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion && PluginUpdates && PluginUpdates.plugins && !PluginUpdates.plugins[url]) outdated++;
 						if (!this.cachedPlugins.includes(url)) newentries++;
 					}
 					else if (frame && frame.contentWindow) {
@@ -791,7 +791,7 @@ class PluginRepo {
 						plugin.url = url;
 						this.loadedPlugins[url] = plugin;
 						let instPlugin = BDFDB.BDUtils.getPlugin(plugin.getName);
-						if (instPlugin && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion) outdated++;
+						if (instPlugin && typeof instPlugin.getAuthor == "function" && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion) outdated++;
 						if (!this.cachedPlugins.includes(url)) newentries++;
 					}
 					framerunning = false;
