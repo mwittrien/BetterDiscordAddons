@@ -1074,7 +1074,7 @@
 		if (!module.BDFDBpatch) module.BDFDBpatch = {};
 		modulefunctions = [modulefunctions].flat(10).filter(n => n);
 		for (let modulefunction of modulefunctions) {
-			if (!module.BDFDBpatch[modulefunction] || forceRepatch && !module[modulefunction].isBDFDBpatched) {
+			if (!module.BDFDBpatch[modulefunction] || forceRepatch && (!module[modulefunction] || !module[modulefunction].isBDFDBpatched)) {
 				if (!module.BDFDBpatch[modulefunction]) {
 					module.BDFDBpatch[modulefunction] = {};
 					for (let type of WebModulesData.Patchtypes) module.BDFDBpatch[modulefunction][type] = {};
@@ -1520,6 +1520,7 @@
 	LibraryModules.SoundUtils = BDFDB.ModuleUtils.findByProperties("playSound", "createSound");
 	LibraryModules.SpellCheckUtils = BDFDB.ModuleUtils.findByProperties("learnWord", "toggleSpellcheck");
 	LibraryModules.SlateUtils = BDFDB.ModuleUtils.findByProperties("serialize", "deserialize");
+	LibraryModules.SlateSelectionUtils = BDFDB.ModuleUtils.findByProperties("serialize", "serializeSelection");
 	LibraryModules.StateStoreUtils = BDFDB.ModuleUtils.findByProperties("useStateFromStores", "useStateFromStoresArray");
 	LibraryModules.StatusMetaUtils = BDFDB.ModuleUtils.findByProperties("getApplicationActivity", "getStatus");
 	LibraryModules.StreamUtils = BDFDB.ModuleUtils.findByProperties("getStreamForUser", "getActiveStream");
@@ -3926,6 +3927,56 @@
 			}
 		}
 		return newRichValue;
+	};
+	BDFDB.StringUtils.hasOpenPlainTextCodeBlock = function (richValue) {
+		let codeMatches = BDBFDB.LibraryModules.SlateSelectionUtils.serializeSelection(richValue.document, {
+			start: {
+				key: richValue.document.getFirstText().key,
+				offset:0
+			},
+			end: richValue.selection.start
+		}, "raw").match(/```/g);
+		return codeMatches && codeMatches.length && codeMatches.length % 2 != 0;
+	};
+	BDFDB.StringUtils.getCurrentWord = function (richValue) {
+		if (!richValue || !richValue.selection.isCollapsed || BDFDB.StringUtils.hasOpenPlainTextCodeBlock(richvalue) || richValue.document.text.trim().length == 0) return {word: null, isAtStart: false};
+		if (richValue.document.text.startsWith("/giphy ") || richValue.document.text.startsWith("/tenor ")) {
+			let node = richValue.document.getNode(richValue.selection.start.key);
+			if (node) return {
+				word: node.text.substring(0, richValue.selection.start.offset),
+				isAtStart: true
+			}
+		}
+		let node = richValue.document.getNode(richValue.selection.start.key);
+		if (node == null) return {
+			word: null,
+			isAtStart: false
+		};
+		let word = "",
+		s = !1,
+		d = richValue.selection.start.offset,
+		c = richValue.document.getClosestBlock(l.key);
+		for ((0, i.default)(null != c, "selected line should not be null at this point"); ; ) {
+			if (--d < 0) {
+				if (null == (l = c.getPreviousNode(l.key))) {
+					s = !0;
+					break
+				}
+				if ("text" !== l.object)
+					break;
+				d = l.text.length - 1
+			}
+			if ("text" !== l.object)
+				break;
+			var f = l.text[d];
+			if (M.test(f))
+				break;
+			u = f + u
+		}
+		return {
+			word: "" === u ? null : u,
+			isAtStart: s && "line" === c.type && r.nodes.get(0) === c
+		}
 	};
 	BDFDB.StringUtils.highlight = function (string, searchstring, prefix = `<span class="${BDFDB.disCN.highlight}">`, suffix = `</span>`) {
 		if (typeof string != "string" || !searchstring || searchstring.length < 1) return string;
