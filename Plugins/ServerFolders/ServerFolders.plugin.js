@@ -136,7 +136,7 @@ class ServerFolders {
 						children: this.props.folders.map(folderId => {
 							let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(folderId);
 							let data = plugin.getFolderConfig(folderId);
-							return folder.guildIds.map(guildId => {
+							return folder ? folder.guildIds.map(guildId => {
 								return [
 									this.draggedGuild == guildId ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Guild, {
 										guild: BDFDB.LibraryModules.GuildStore.getGuild(guildId),
@@ -221,8 +221,8 @@ class ServerFolders {
 										})
 									})
 								]
-							});
-						}).reduce((r, a) => r.concat(a, BDFDB.DataUtils.get(plugin, "settings", "addSeparators") ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Separator, {}) : null), [0]).slice(1, -1).flat(10).filter(n => n)
+							}) : null;
+						}).filter(n => n).reduce((r, a) => r.concat(a, BDFDB.DataUtils.get(plugin, "settings", "addSeparators") ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Separator, {}) : null), [0]).slice(1, -1).flat(10).filter(n => n)
 					})
 				});
 			}
