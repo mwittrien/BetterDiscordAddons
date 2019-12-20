@@ -1078,7 +1078,7 @@ body:before {
 #app-mount .textArea-12jD-V {								/* textarea				textarea							*/
 	color: rgb(var(--fontwhite1));
 }
-#app-mount .textArea-2Spzkt,
+#app-mount .textArea-2Spzkt::placeholder,
 #app-mount .textArea-12jD-V::placeholder {
 	color: rgb(var(--fontwhite4));
 }

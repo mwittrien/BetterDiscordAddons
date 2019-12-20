@@ -3,7 +3,7 @@
 class MessageUtilities {
 	getName () {return "MessageUtilities";}
 
-	getVersion () {return "1.6.3";}
+	getVersion () {return "1.6.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -405,7 +405,7 @@ class MessageUtilities {
 
 	getMessageData (target) {
 		let messagediv = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagegroup + "> [aria-disabled]", target) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagegroup + "> * > [aria-disabled]", target) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagesystem, target);
-		if (messagediv && messagediv.querySelector(BDFDB.dotCN.textareaedit)) return {messagediv: null, pos: -1, message: null};
+		if (messagediv && messagediv.querySelector(BDFDB.dotCN.textarea)) return {messagediv: null, pos: -1, message: null};
 		let pos = messagediv ? Array.from(messagediv.parentElement.childNodes).filter(n => n.nodeType != Node.TEXT_NODE).indexOf(messagediv) : -1;
 		let instance = BDFDB.ReactUtils.getInstance(messagediv);
 		let message = instance ? BDFDB.ReactUtils.findValue(instance, "message", {up:true}) : null;
@@ -421,6 +421,6 @@ class MessageUtilities {
 	}
 
 	cancelEvent (name) {
-		BDFDB.TimeUtils.timeout(_ => {BDFDB.ArrayUtils.remove(this.firedEvents, name)});
+		BDFDB.TimeUtils.timeout(_ => {BDFDB.ArrayUtils.remove(this.firedEvents, name, true)});
 	}
 }
