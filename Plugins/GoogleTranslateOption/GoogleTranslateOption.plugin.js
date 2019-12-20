@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.8.7";} 
+	getVersion () {return "1.8.8";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ class GoogleTranslateOption {
 	constructor () {
 		this.changelog = {
 			"improved":[["Messages stay translated", "Messages will stay translated even if you switch channels"],["iTranslate & Yandex","Added iTranslate and Yandex engine, these engines got a montly rate limit, so if they don't work switch back to Google"]],
-			"fixed":[["iTranslate","Fixed iTranslate translation"]]
+			"fixed":[["Engine Crash","Fixed issue where a engine switch could crash discord when you opened the output dropdown afterwards"]]
 		};
 
 		this.patchedModules = {
@@ -368,7 +368,7 @@ class GoogleTranslateOption {
 					options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(isOutput ? BDFDB.ObjectUtils.filter(this.languages, lang => lang.id != "auto") : this.languages, (lang, id) => {return {value:id, label:this.getLanguageName(lang)}})),
 					searchable: true,
 					optionRenderer: lang => {
-						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+						return this.languages[lang.value] ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 							align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
@@ -384,7 +384,7 @@ class GoogleTranslateOption {
 									}
 								}) : null
 							]
-						});
+						}) : null;
 					},
 					onChange: lang => {
 						BDFDB.DataUtils.save(lang.value, this, "choices", key);
@@ -406,9 +406,14 @@ class GoogleTranslateOption {
 					id: key,
 					options: Object.keys(this.translationEngines).map(engineKey => {return {value:engineKey, label:this.translationEngines[engineKey].name}}),
 					searchable: true,
-					onChange: engine => {
+					onChange: (engine, instance) => {
 						BDFDB.DataUtils.save(engine.value, this, "engines", key);
 						this.setLanguages();
+						let popoutInstance = BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_PopoutContainer", up:true});
+						if (popoutInstance) {
+							popoutInstance.close();
+							popoutInstance.handleClick();
+						}
 					}
 				})
 			}));
