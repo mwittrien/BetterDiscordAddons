@@ -1052,33 +1052,26 @@ body:before {
 	border-top-color: rgba(var(--fontwhite1), 0.1);
 }
 
-.scrollableContainer-38zsVD,								/* textarea				container							*/
 .scrollableContainer-2NUZem {								/* textarea				container							*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
 
-.attachButtonPlus-rUdX-B,									/* textarea				attachbuttoninner					*/
 .attachButtonPlus-jWVFah {									/* textarea				attachbuttoninner					*/
 	fill: rgb(var(--fontwhite3));
 }
-.attachButton-1UjEWA:hover .attachButtonPlus-rUdX-B,
 .attachButton-2WznTc:hover .attachButtonPlus-jWVFah {
 	fill: rgb(var(--fontwhite2));
 }
-.attachButton-1UjEWA:active .attachButtonPlus-rUdX-B,
 .attachButton-2WznTc:active .attachButtonPlus-jWVFah {
 	fill: rgb(var(--fontwhite1));
 }
-.attachWrapper-1_D-pj,										/* textarea				attachdivider						*/
 .attachWrapper-2TRKBi {										/* textarea				attachdivider						*/
 	border-color: rgb(var(--fontwhite3));
 }
 
-#app-mount .textArea-2Spzkt,								/* textarea				textarea							*/
 #app-mount .textArea-12jD-V {								/* textarea				textarea							*/
 	color: rgb(var(--fontwhite1));
 }
-#app-mount .textArea-2Spzkt::placeholder,
 #app-mount .textArea-12jD-V::placeholder {
 	color: rgb(var(--fontwhite4));
 }

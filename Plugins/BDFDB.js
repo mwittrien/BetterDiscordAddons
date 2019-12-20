@@ -1002,6 +1002,7 @@
 	WebModulesData.Patchtypes = ["before", "instead", "after"];
 	WebModulesData.Patchmap = {
 		BannedCard: "BannedUser",
+		ChannelTextArea: "ChannelEditorContainer",
 		InvitationCard: "InviteRow",
 		InviteCard: "InviteRow",
 		MemberCard: "Member",
