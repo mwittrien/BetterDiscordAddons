@@ -4442,7 +4442,8 @@
 	DiscordClassModules.Channel = BDFDB.ModuleUtils.findByProperties("wrapper", "content", "modeSelected");
 	DiscordClassModules.ChannelContainer = BDFDB.ModuleUtils.findByProperties("actionIcon", "containerDefault");
 	DiscordClassModules.ChannelLimit = BDFDB.ModuleUtils.findByProperties("users", "total", "wrapper");
-	DiscordClassModules.ChannelTextArea = BDFDB.ModuleUtils.findByProperties("textArea", "attachButton");
+	DiscordClassModules.ChannelTextArea = BDFDB.ModuleUtils.findByProperties("textArea", "buttons");
+	DiscordClassModules.ChannelTextAreaAttachButton = BDFDB.ModuleUtils.findByProperties("attachButton", "attachWrapper");
 	DiscordClassModules.ChannelTextAreaButton = BDFDB.ModuleUtils.findByProperties("buttonWrapper", "active");
 	DiscordClassModules.ChannelTextAreaCharCounter = BDFDB.ModuleUtils.findByProperties("characterCount", "error");
 	DiscordClassModules.ChatWindow = BDFDB.ModuleUtils.findByProperties("chat", "channelTextArea");
@@ -5788,10 +5789,10 @@
 		tablerow: ["BDFDB", "tableRow"],
 		tablestickyheader: ["BDFDB", "tableStickyHeader"],
 		textarea: ["ChannelTextArea", "textArea"],
-		textareaattachbutton: ["ChannelTextArea", "attachButton"],
-		textareaattachbuttoninner: ["ChannelTextArea", "attachButtonInner"],
-		textareaattachbuttonplus: ["ChannelTextArea", "attachButtonPlus"],
-		textareaattachwrapper: ["ChannelTextArea", "attachWrapper"],
+		textareaattachbutton: ["ChannelTextAreaAttachButton", "attachButton"],
+		textareaattachbuttoninner: ["ChannelTextAreaAttachButton", "attachButtonInner"],
+		textareaattachbuttonplus: ["ChannelTextAreaAttachButton", "attachButtonPlus"],
+		textareaattachwrapper: ["ChannelTextAreaAttachButton", "attachWrapper"],
 		textareabutton: ["ChannelTextAreaButton", "button"],
 		textareabuttonactive: ["ChannelTextAreaButton", "active"],
 		textareabuttonpulse: ["ChannelTextAreaButton", "pulseButton"],
@@ -5799,18 +5800,12 @@
 		textareacharcounter: ["ChannelTextAreaCharCounter", "characterCount"],
 		textareacharcountererror: ["ChannelTextAreaCharCounter", "error"],
 		textareadisabled: ["ChannelTextArea", "textAreaDisabled"],
-		textareaedit: ["ChannelTextArea", "textAreaEdit"],
-		textareaenabled: ["ChannelTextArea", "textAreaEnabled"],
-		textareaenablednoattach: ["ChannelTextArea", "textAreaEnabledNoAttach"],
-		textareaform: ["ChannelTextArea", "textAreaForm"],
 		textareahighbackgroundopacity: ["ChannelTextArea", "highBackgroundOpacity"],
 		textareahasautocomplete: ["ChannelTextArea", "hasAutocomplete"],
 		textareaicon: ["ChannelTextAreaButton", "icon"],
 		textareaiconpulse: ["ChannelTextAreaButton", "pulseIcon"],
 		textareainner: ["ChannelTextArea", "inner"],
 		textareainnerdisabled: ["ChannelTextArea", "innerDisabled"],
-		textareainnerenabled: ["ChannelTextArea", "innerEnabled"],
-		textareainnerenablednoattach: ["ChannelTextArea", "innerEnabledNoAttach"],
 		textarealowbackgroundopacity: ["ChannelTextArea", "lowBackgroundOpacity"],
 		textareamediumbackgroundopacity: ["ChannelTextArea", "mediumBackgroundOpacity"],
 		textareapickerbutton: ["ChannelTextArea", "button"],
@@ -5820,13 +5815,11 @@
 		textareaslate: ["NotFound", "slateTextArea"],
 		textareaslatecontainer: ["NotFound", "slateContainer"],
 		textareaslateplaceholder: ["NotFound", "slatePlaceholder"],
-		textareauploadinput: ["ChannelTextArea", "uploadInput"],
+		textareauploadinput: ["ChannelTextAreaAttachButton", "uploadInput"],
 		textareawebkit: ["ChannelTextArea", "webkit"],
 		textareawrapall: ["ChannelTextArea", "channelTextArea"],
 		textareawrapchat: ["ChatWindow", "channelTextArea"],
 		textareawrapdisabled: ["ChannelTextArea", "channelTextAreaDisabled"],
-		textareawrapenabled: ["ChannelTextArea", "channelTextAreaEnabled"],
-		textareawrapenablednoattach: ["ChannelTextArea", "channelTextAreaEnabledNoAttach"],
 		textlink: ["Notice", "textLink"],
 		textrow: ["PopoutActivity", "textRow"],
 		textscroller: ["BDFDB", "textScroller"],
