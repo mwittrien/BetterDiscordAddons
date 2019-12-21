@@ -1098,7 +1098,7 @@
 						callOriginalMethodAfterwards: _ => {callInstead = true;},
 						stopOriginalMethodCall: _ => {stopCall = true;}
 					};
-					if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded && module.BDFDBpatch[modulefunction]) {
+					if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded && module.BDFDBpatch && module.BDFDBpatch[modulefunction]) {
 						if (!BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].before)) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[modulefunction].before)) {
 							BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].before[id], `"before" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, module.BDFDBpatch[modulefunction].before[id].pluginname)(data);
 						}
@@ -6652,7 +6652,7 @@
 		getCounterString() {
 			let input = this.refElement || {}, string = "";
 			if (BDFDB.DOMUtils.containsClass(this.refElement, BDFDB.disCN.textarea)) {
-				let instance = BDFDB.ReactUtils.findOwner(input, {name:"ChannelTextAreaForm", up:true});
+				let instance = BDFDB.ReactUtils.findOwner(input, {name:"ChannelEditorContainer", up:true});
 				if (instance) string = instance.props.textValue;
 				else string = input.value || input.textContent || "";
 			}
