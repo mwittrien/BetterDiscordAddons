@@ -1005,6 +1005,7 @@
 	WebModulesData.Patchmap = {
 		BannedCard: "BannedUser",
 		ChannelTextArea: "ChannelEditorContainer",
+		ChannelWindow: "Channel",
 		InvitationCard: "InviteRow",
 		InviteCard: "InviteRow",
 		MemberCard: "Member",
@@ -1030,6 +1031,8 @@
 		AuthWrapper: "loginscreen",
 		BannedCard: "guildsettingsbannedcard",
 		ChannelMember: "member",
+		ChannelTextAreaForm: "chatform",
+		ChannelWindow: "chatcontent",
 		EmojiPicker: "emojipicker",
 		FriendRow: "friendsrow",
 		Guild: "guildouter",
