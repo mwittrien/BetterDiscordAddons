@@ -4500,6 +4500,7 @@
 	DiscordClassModules.ChannelTextAreaAttachButton = BDFDB.ModuleUtils.findByProperties("attachButton", "attachWrapper");
 	DiscordClassModules.ChannelTextAreaButton = BDFDB.ModuleUtils.findByProperties("buttonWrapper", "active");
 	DiscordClassModules.ChannelTextAreaCharCounter = BDFDB.ModuleUtils.findByProperties("characterCount", "error");
+	DiscordClassModules.ChannelTextAreaSlate = BDFDB.ModuleUtils.findByProperties("slateContainer", "placeholder");
 	DiscordClassModules.ChatWindow = BDFDB.ModuleUtils.findByProperties("chat", "channelTextArea");
 	DiscordClassModules.Checkbox = BDFDB.ModuleUtils.findByProperties("checkboxWrapper", "round");
 	DiscordClassModules.ColorPicker = BDFDB.ModuleUtils.findByProperties("colorPickerCustom", "customColorPickerInput");
@@ -5867,6 +5868,9 @@
 		textareapickerbuttoncontainer: ["ChannelTextArea", "buttonContainer"],
 		textareapickerbuttons: ["ChannelTextArea", "buttons"],
 		textareascrollablecontainer: ["ChannelTextArea", "scrollableContainer"],
+		textareaslate: ["ChannelTextAreaSlate", "slateTextArea"],
+		textareaslatecontainer: ["ChannelTextAreaSlate", "slateContainer"],
+		textareaslateplaceholder: ["ChannelTextAreaSlate", "placeholder"],
 		textareauploadinput: ["ChannelTextAreaAttachButton", "uploadInput"],
 		textareawebkit: ["ChannelTextArea", "webkit"],
 		textareawrapall: ["ChannelTextArea", "channelTextArea"],
