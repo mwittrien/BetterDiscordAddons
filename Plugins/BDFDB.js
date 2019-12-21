@@ -953,7 +953,9 @@
 		return InternalBDFDB.findModule("prop", JSON.stringify(properties), m => properties.every(prop => m[prop] !== undefined), getExport);
 	};
 	BDFDB.ModuleUtils.findByName = function (name, getExport) {
-		return InternalBDFDB.findModule("name", JSON.stringify(name), m => m.displayName === name, typeof getExport != "boolean" ? true : getExport);
+		let module = InternalBDFDB.findModule("name", JSON.stringify(name), m => m.displayName === name || m.render && m.render.displayName === name, typeof getExport != "boolean" ? true : getExport);
+		if (module && module.render && module.render.displayName == name) module.displayName = name;
+		return module;
 	};
 	BDFDB.ModuleUtils.findByString = function (...strings) {
 		strings = strings.flat(10);
@@ -1016,6 +1018,9 @@
 		"GuildIcon",
 		"QuickSwitchChannelResult",
 		"QuickSwitchGuildResult"
+	];
+	WebModulesData.Nonprototype = [
+		"ChannelTextAreaContainer"
 	];
 	WebModulesData.Patchfinder = {
 		Account: "accountinfo",
@@ -1269,7 +1274,7 @@
 					patchfunctions[patchtype] = e => {
 						if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) InternalBDFDB.initiateProcess(plugin, type, {instance:e.thisObject, returnvalue:e.returnValue, methodname:e.originalMethodName, patchtypes:[patchtype]});
 					}
-					BDFDB.ModuleUtils.patch(plugin, instance.prototype, plugin.patchedModules[patchtype][type], patchfunctions);
+					BDFDB.ModuleUtils.patch(plugin, WebModulesData.Nonprototype.includes(name) ? instance : instance.prototype, plugin.patchedModules[patchtype][type], patchfunctions);
 				}
 			}
 		}
@@ -1635,7 +1640,7 @@
 		function check (instance) {
 			if (!instance) return false;
 			let props = instance.stateNode ? instance.stateNode.props : instance.props;
-			return instance.type && config.name && config.name.some(name => ((instance.type.displayName || instance.type.name || instance.type) === name)) || config.key && config.key.some(key => instance.key == key) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => propCheck(props, prop[0], checkvalue)) : propCheck(props, prop[0], prop[1])) : props[prop] !== undefined) || config.filter && config.filter(instance);
+			return instance.type && config.name && config.name.some(name => ((instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name || instance.type) === name)) || config.key && config.key.some(key => instance.key == key) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => propCheck(props, prop[0], checkvalue)) : propCheck(props, prop[0], prop[1])) : props[prop] !== undefined) || config.filter && config.filter(instance);
 		}
 		function propCheck (props, key, value) {
 			return key != null && props[key] != null && value != null && (key == "className" ? (" " + props[key] + " ").indexOf(" " + value + " ") > -1 : BDFDB.equals(props[key], value));
@@ -1668,15 +1673,15 @@
 			depth++;
 			var result = undefined;
 			if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxdepth && performance.now() - start < maxtime) {
-				if (instance.type && types.some(name => (instance.type.displayName || instance.type.name) === name.split(" _ _ ")[0])) {
+				if (instance.type && types.some(name => (instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name) === name.split(" _ _ ")[0])) {
 					if (config.all === undefined || !config.all) result = instance.type;
 					else if (config.all) {
 						if (!instance.type.BDFDBreactSearch) {
 							instance.type.BDFDBreactSearch = true;
 							if (config.group) {
-								if (instance.type && (instance.type.displayName || instance.type.name)) {
+								if (instance.type && (instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name)) {
 									var group = "Default";
-									for (let name of types) if ((instance.type.displayName || instance.type.name).split(" _ _ ")[0]) {
+									for (let name of types) if ((instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name).split(" _ _ ")[0]) {
 										group = name;
 										break;
 									}
@@ -1729,15 +1734,15 @@
 			var result = undefined;
 			if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxdepth && performance.now() - start < maxtime) {
 				let props = instance.stateNode ? instance.stateNode.props : instance.props;
-				if (instance.stateNode && !Node.prototype.isPrototypeOf(instance.stateNode) && (instance.type && config.name && config.name.some(name => (instance.type.displayName || instance.type.name || instance.type) === name.split(" _ _ ")[0]) || config.key && config.key.some(key => instance.key == key) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => BDFDB.equals(props[prop[0]], checkvalue)) : BDFDB.equals(props[prop[0]], prop[1])) : props[prop] !== undefined))) {
+				if (instance.stateNode && !Node.prototype.isPrototypeOf(instance.stateNode) && (instance.type && config.name && config.name.some(name => (instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name || instance.type) === name.split(" _ _ ")[0]) || config.key && config.key.some(key => instance.key == key) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => BDFDB.equals(props[prop[0]], checkvalue)) : BDFDB.equals(props[prop[0]], prop[1])) : props[prop] !== undefined))) {
 					if (config.all === undefined || !config.all) result = instance.stateNode;
 					else if (config.all) {
 						if (!instance.stateNode.BDFDBreactSearch) {
 							instance.stateNode.BDFDBreactSearch = true;
 							if (config.group) {
-								if (config.name && instance.type && (instance.type.displayName || instance.type.name || instance.type)) {
+								if (config.name && instance.type && (instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name || instance.type)) {
 									var group = "Default";
-									for (let name of config.name) if ((instance.type.displayName || instance.type.name || instance.type).split(" _ _ ")[0]) {
+									for (let name of config.name) if ((instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name || instance.type).split(" _ _ ")[0]) {
 										group = name;
 										break;
 									}
@@ -1779,7 +1784,7 @@
 			depth++;
 			var result = undefined;
 			if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxdepth && performance.now() - start < maxtime) {
-				if (instance.memoizedProps && (instance.type && config.name && config.name.some(name => (instance.type.displayName || instance.type.name || instance.type) === name.split(" _ _ ")[0]) || config.key && config.key.some(key => instance.key == key))) result = instance.memoizedProps;
+				if (instance.memoizedProps && (instance.type && config.name && config.name.some(name => (instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name || instance.type) === name.split(" _ _ ")[0]) || config.key && config.key.some(key => instance.key == key))) result = instance.memoizedProps;
 				if (result === undefined) {
 					let keys = Object.getOwnPropertyNames(instance);
 					for (let i = 0; result === undefined && i < keys.length; i++) {
@@ -4445,9 +4450,6 @@
 		selectSingleDark: "css-1k00wn6-singleValue",
 		selectSingleLight: "css-6nrxdk-singleValue",
 		selectValue: "css-1hwfws3",
-		slateContainer: "slateContainer-3rqVBl",
-		slatePlaceholder: "placeholder-P6ptfj",
-		slateTextArea: "slateTextArea-1bp44y",
 		splashBackground: "splashBackground-1FRCko",
 		stopAnimations: "stop-animations",
 		subtext: "subtext-3CDbHg",
@@ -5860,9 +5862,6 @@
 		textareapickerbuttoncontainer: ["ChannelTextArea", "buttonContainer"],
 		textareapickerbuttons: ["ChannelTextArea", "buttons"],
 		textareascrollablecontainer: ["ChannelTextArea", "scrollableContainer"],
-		textareaslate: ["NotFound", "slateTextArea"],
-		textareaslatecontainer: ["NotFound", "slateContainer"],
-		textareaslateplaceholder: ["NotFound", "slatePlaceholder"],
 		textareauploadinput: ["ChannelTextAreaAttachButton", "uploadInput"],
 		textareawebkit: ["ChannelTextArea", "webkit"],
 		textareawrapall: ["ChannelTextArea", "channelTextArea"],

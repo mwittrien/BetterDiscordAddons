@@ -268,10 +268,11 @@ class ChatAliases {
 	}
 
 	processChannelAutoComplete (e) {
+		let minLength = BDFDB.DataUtils.get(this, "amounts", "minAliasLength");
 		e.instance.state.autocompleteOptions.ALIASES = {
 			matches: (firstChar, rest, isFirstWord) => {
 				let currentLastWord = BDFDB.StringUtils.getCurrentWord(e.instance.props.editorRef.current.props.richValue).word || "";
-				for (let word in this.aliases) {
+				if (currentLastWord.length >= minLength) for (let word in this.aliases) {
 					let aliasdata = this.aliases[word];
 					if (!aliasdata.regex && aliasdata.autoc) {
 						if (aliasdata.exact) {
@@ -335,9 +336,9 @@ class ChatAliases {
 		if (e.instance.state.autocompleteType == "COMMAND" && BDFDB.ArrayUtils.is(e.instance.state.autocompletes.commands)) {
 			for (let i in e.instance.state.autocompletes.commands) if (e.instance.state.autocompletes.commands[i].alias) e.instance.state.autocompletes.commands[i] = null;
 			e.instance.state.autocompletes.commands = e.instance.state.autocompletes.commands.filter(n => n);
-			let currentLastWord = BDFDB.StringUtils.getCurrentWord(e.instance.props.editorRef.current.props.richValue).word;
+			let currentLastWord = BDFDB.StringUtils.getCurrentWord(e.instance.props.editorRef.current.props.richValue).word || "";
 			let commandAliases = BDFDB.ObjectUtils.filter(this.aliases, key => key.startsWith("/"), true);
-			if (currentLastWord) for (let word in commandAliases) {
+			if (currentLastWord.length >= minLength) for (let word in commandAliases) {
 				if (e.instance.state.autocompletes.commands.length >= BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS) break;
 				let aliasdata = commandAliases[word];
 				let command = {command: word.slice(1), description: aliasdata.replace, alias:true};
