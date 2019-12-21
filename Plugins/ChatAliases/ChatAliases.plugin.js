@@ -3,7 +3,7 @@
 class ChatAliases {
 	getName () {return "ChatAliases";}
 
-	getVersion () {return "2.0.4";}
+	getVersion () {return "2.0.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -18,7 +18,9 @@ class ChatAliases {
 		this.patchedModules = {
 			before: {
 				ChannelAutoComplete: "render",
-				ChannelTextArea: "render"
+				ChannelTextAreaForm: "render",
+				MessageEditor: "render",
+				Upload: "render"
 			}
 		};
 	}
@@ -356,24 +358,38 @@ class ChatAliases {
 		}
 	}
 	
-	processChannelTextArea (e) {
-		if (e.instance.props.channel && e.instance.props.type) {
-			if (!BDFDB.ModuleUtils.isPatched(this, e.instance.props, "onSubmit")) BDFDB.ModuleUtils.patch(this, e.instance.props, "onSubmit", {before: e2 => {
-				let messageData = this.formatText(e2.methodArguments[0]);
-				if (messageData) {
-					if (messageData.text != null) {
-						e2.methodArguments[0] = messageData.text;
-						if (!messageData.text) {
-							e.instance.props.textValue = "";
-							if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.StringUtils.copyRichValue("", e.instance.props.richValue);
-							BDFDB.ReactUtils.forceUpdate(e.instance);
-						}
-					}
-					if (messageData.files.length > 0 && (e.instance.props.channel.type == 1 || BDFDB.UserUtils.can("ATTACH_FILES"))) {
-						BDFDB.LibraryModules.UploadUtils.instantBatchUpload(e.instance.props.channel.id, messageData.files);
-					}
+	processChannelTextAreaForm (e) {
+		if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "handleSendMessage")) BDFDB.ModuleUtils.patch(this, e.instance, "handleSendMessage", {before: e2 => {
+			this.handleSubmit(e, e2, 0);
+		}}, true);
+	}
+	
+	processMessageEditor (e) {
+		if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "onSubmit")) BDFDB.ModuleUtils.patch(this, e.instance, "onSubmit", {before: e2 => {
+			this.handleSubmit(e, e2, 0);
+		}}, true);
+	}
+	
+	processUpload (e) {
+		if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "submitUpload")) BDFDB.ModuleUtils.patch(this, e.instance, "submitUpload", {before: e2 => {
+			this.handleSubmit(e, e2, 1);
+		}}, true);
+	}
+	
+	handleSubmit (e, e2, textIndex) {
+		let messageData = this.formatText(e2.methodArguments[textIndex]);
+		if (messageData) {
+			if (messageData.text != null) {
+				e2.methodArguments[textIndex] = messageData.text;
+				if (!messageData.text) {
+					e.instance.props.textValue = "";
+					if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.StringUtils.copyRichValue("", e.instance.props.richValue);
+					BDFDB.ReactUtils.forceUpdate(e.instance);
 				}
-			}}, true);
+			}
+			if (messageData.files.length > 0 && (e.instance.props.channel.type == 1 || BDFDB.UserUtils.can("ATTACH_FILES"))) {
+				BDFDB.LibraryModules.UploadUtils.instantBatchUpload(e.instance.props.channel.id, messageData.files);
+			}
 		}
 	}
 
