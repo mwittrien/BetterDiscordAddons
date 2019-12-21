@@ -1056,6 +1056,7 @@
 		SearchResults: "searchresultswrap",
 		TypingUsers: "typing",
 		UnreadDMs: "guildsscroller",
+		Upload: "uploadmodal",
 		UserPopout: "userpopout",
 		V2C_ContentColumn: "contentcolumn",
 		V2C_List: "_repolist",
@@ -4629,6 +4630,7 @@
 	DiscordClassModules.TooltipGuild = BDFDB.ModuleUtils.findByProperties("rowIcon", "rowGuildName");
 	DiscordClassModules.Typing = BDFDB.ModuleUtils.findByProperties("cooldownWrapper", "typing");
 	DiscordClassModules.UnreadBar = BDFDB.ModuleUtils.findByProperties("active", "bar", "unread");
+	DiscordClassModules.UploadModal = BDFDB.ModuleUtils.findByProperties("uploadModal", "bgScale");
 	DiscordClassModules.UserPopout = BDFDB.ModuleUtils.findByProperties("userPopout", "headerPlaying");
 	DiscordClassModules.UserProfile = BDFDB.ModuleUtils.findByProperties("topSectionNormal", "tabBarContainer");
 	DiscordClassModules.Video = BDFDB.ModuleUtils.findByProperties("video", "fullScreen");
@@ -5935,6 +5937,7 @@
 		unreadbarmention: ["UnreadBar", "mention"],
 		unreadbartext: ["UnreadBar", "text"],
 		unreadbarunread: ["UnreadBar", "unread"],
+		uploadmodal: ["UploadModal", "uploadModal"],
 		userpopout: ["UserPopout", "userPopout"],
 		userpopoutavatarhint: ["UserPopout", "avatarHint"],
 		userpopoutavatarhintinner: ["UserPopout", "avatarHintInner"],

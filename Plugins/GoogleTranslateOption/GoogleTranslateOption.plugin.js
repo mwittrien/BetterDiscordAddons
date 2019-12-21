@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.8.9";} 
+	getVersion () {return "1.9.0";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -17,7 +17,8 @@ class GoogleTranslateOption {
 
 		this.patchedModules = {
 			before: {
-				ChannelTextArea: "render"
+				ChannelTextAreaForm: "render",
+				ChannelEditorContainer: "render"
 			},
 			after: {
 				ChannelTextAreaContainer: "render",
@@ -144,7 +145,7 @@ class GoogleTranslateOption {
 			if (instances.Message) for (let ins of instances.Message) ins.props.message = new BDFDB.DiscordObjects.Message(ins.props.message);
 			BDFDB.ReactUtils.forceUpdate(instances.Message, instances.Embeds);
 			
-			BDFDB.ModuleUtils.forceAllUpdates(this, ["ChannelTextArea", "ChannelTextAreaContainer"]);
+			BDFDB.ModuleUtils.forceAllUpdates(this, ["ChannelTextAreaForm", "ChannelTextAreaContainer"]);
 
 			BDFDB.PluginUtils.clear(this);
 		}
@@ -157,7 +158,7 @@ class GoogleTranslateOption {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			this.setLanguages();
-			BDFDB.ModuleUtils.forceAllUpdates(this, ["ChannelTextArea", "ChannelTextAreaContainer"]);
+			BDFDB.ModuleUtils.forceAllUpdates(this, ["ChannelTextAreaForm", "ChannelTextAreaContainer"]);
 		}
 	}
 
@@ -228,26 +229,34 @@ class GoogleTranslateOption {
 			}));
 		}
 	}
-
-	processChannelTextAreaContainer (e) {
-		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.textareapickerbuttons]]});
-		if (index > -1 && children[index].props && children[index].props.children) children[index].props.children.unshift(this.createTranslateButton());
-	}
 	
-	processChannelTextArea (e) {
-		if (e.instance.props.type != "normal" || e.instance.props.disabled) return;
-		if (this.translating && this.isTranslating) e.instance.props.disabled = true;
-		if (!BDFDB.ModuleUtils.isPatched(this, e.instance.props, "onSubmit")) BDFDB.ModuleUtils.patch(this, e.instance.props, "onSubmit", {instead: e2 => {
+	processChannelTextAreaForm (e) {
+		if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "handleSendMessage")) BDFDB.ModuleUtils.patch(this, e.instance, "handleSendMessage", {instead: e2 => {
 			if (this.translating) {
-				BDFDB.ReactUtils.forceUpdate(e.instance);
 				e2.stopOriginalMethodCall();
 				this.translateText(e2.methodArguments[0], "message", (translation, input, output) => {
 					translation = !translation ? e2.methodArguments[0] : (BDFDB.DataUtils.get(this, "settings", "sendOriginalMessage") ? e2.methodArguments[0] + "\n\n" + translation : translation);
 					e2.originalMethod(translation);
 				});
+				return Promise.resolve({
+					shouldClear: true,
+					shouldRefocus: true
+				});
 			}
-			else e2.callOriginalMethodAfterwards();
+			else return e2.callOriginalMethodAfterwards();
 		}}, true);
+	}
+
+	processChannelEditorContainer (e) {
+		if (this.translating && this.isTranslating) e.instance.props.disabled = true;
+	}
+	
+	processChannelTextAreaContainer (e) {
+		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ChannelEditorContainer"});
+		if (index > -1 && children[index].props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL) {
+			let [children2, index2] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.textareapickerbuttons]]});
+			if (index2 > -1 && children2[index2].props && children2[index2].props.children) children2[index2].props.children.unshift(this.createTranslateButton());
+		}
 	}
 
 	processMessageContent (e) {

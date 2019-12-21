@@ -3,7 +3,7 @@
 class WriteUpperCase {
 	getName () {return "WriteUpperCase";}
 
-	getVersion () {return "1.2.3";}
+	getVersion () {return "1.2.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -17,7 +17,7 @@ class WriteUpperCase {
 		
 		this.patchedModules = {
 			before: {
-				ChannelTextArea: "render"
+				ChannelEditorContainer: "render"
 			}
 		};
 	}
@@ -66,8 +66,8 @@ class WriteUpperCase {
 
 	// begin of own functions
 
-	processChannelTextArea (e) {
-		if (e.instance.props.type && e.instance.props.textValue && e.instance.state.focused) {
+	processChannelEditorContainer (e) {
+		if (e.instance.props.textValue && e.instance.state.focused) {
 			let string = e.instance.props.textValue;
 			if (string.length > 0) {
 				let newstring = string;

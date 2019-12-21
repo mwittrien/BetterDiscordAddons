@@ -3,7 +3,7 @@
 class SendLargeMessages {
 	getName () {return "SendLargeMessages";}
 
-	getVersion () {return "1.5.8";}
+	getVersion () {return "1.5.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -17,7 +17,8 @@ class SendLargeMessages {
 
 		this.patchedModules = {
 			before: {
-				ChannelTextArea: "render"
+				ChannelTextAreaForm: "render",
+				ChannelEditorContainer: "render"
 			}
 		};
 	}
@@ -79,24 +80,29 @@ class SendLargeMessages {
 
 	// begin of own functions
 
-	processChannelTextArea (e) {
-		if (e.instance.props && e.instance.props.type && e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL) {
-			e.instance.props.shouldUploadLongMessages = false;
-			if (!BDFDB.ModuleUtils.isPatched(this, e.instance.props, "onSubmit")) BDFDB.ModuleUtils.patch(this, e.instance.props, "onSubmit", {instead: e2 => {
-				let parsedLength = BDFDB.StringUtils.getParsedLength(e2.methodArguments[0]);
-				if (parsedLength > 2000) {
-					e2.stopOriginalMethodCall();
-					let messages = this.formatText(e2.methodArguments[0], Math.sqrt(Math.pow(parsedLength - e2.methodArguments[0].length, 2)) > Math.max(parsedLength, e2.methodArguments[0].length) / 20);
-					messages.filter(n => n).forEach((message, i) => {
-						BDFDB.TimeUtils.timeout(_ => {
-							e2.originalMethod(message);
-							if (i >= messages.length-1) BDFDB.NotificationUtils.toast(this.labels.toast_allsent_text, {type:"success"});
-						}, this.messageDelay * i);
-					});
-				}
-				else e2.callOriginalMethodAfterwards();
-			}}, true);
-		}
+	processChannelTextAreaForm (e) {
+		if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "handleSendMessage")) BDFDB.ModuleUtils.patch(this, e.instance, "handleSendMessage", {instead: e2 => {
+			let parsedLength = BDFDB.StringUtils.getParsedLength(e2.methodArguments[0]);
+			if (parsedLength > 2000) {
+				e2.stopOriginalMethodCall();
+				let messages = this.formatText(e2.methodArguments[0], Math.sqrt(Math.pow(parsedLength - e2.methodArguments[0].length, 2)) > Math.max(parsedLength, e2.methodArguments[0].length) / 20);
+				messages.filter(n => n).forEach((message, i) => {
+					BDFDB.TimeUtils.timeout(_ => {
+						e2.originalMethod(message);
+						if (i >= messages.length-1) BDFDB.NotificationUtils.toast(this.labels.toast_allsent_text, {type:"success"});
+					}, this.messageDelay * i);
+				});
+				return Promise.resolve({
+					shouldClear: true,
+					shouldRefocus: true
+				});
+			}
+			else return e2.callOriginalMethodAfterwards();
+		}}, true);
+	}
+
+	processChannelEditorContainer (e) {
+		if (e.instance.props.type && e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL) e.instance.props.shouldUploadLongMessages = false;
 	}
 
 	formatText (text, parse) {
