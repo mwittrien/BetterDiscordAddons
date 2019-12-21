@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.8.8";} 
+	getVersion () {return "1.8.9";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -20,7 +20,7 @@ class GoogleTranslateOption {
 				ChannelTextArea: "render"
 			},
 			after: {
-				ChannelTextArea: "render",
+				ChannelTextAreaContainer: "render",
 				MessageContent: "render"
 			}
 		};
@@ -144,7 +144,7 @@ class GoogleTranslateOption {
 			if (instances.Message) for (let ins of instances.Message) ins.props.message = new BDFDB.DiscordObjects.Message(ins.props.message);
 			BDFDB.ReactUtils.forceUpdate(instances.Message, instances.Embeds);
 			
-			BDFDB.ModuleUtils.forceAllUpdates(this, "ChannelTextArea");
+			BDFDB.ModuleUtils.forceAllUpdates(this, ["ChannelTextArea", "ChannelTextAreaContainer"]);
 
 			BDFDB.PluginUtils.clear(this);
 		}
@@ -157,7 +157,7 @@ class GoogleTranslateOption {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
 			this.setLanguages();
-			BDFDB.ModuleUtils.forceAllUpdates(this, "ChannelTextArea");
+			BDFDB.ModuleUtils.forceAllUpdates(this, ["ChannelTextArea", "ChannelTextAreaContainer"]);
 		}
 	}
 
@@ -229,24 +229,25 @@ class GoogleTranslateOption {
 		}
 	}
 
+	processChannelTextAreaContainer (e) {
+		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.textareapickerbuttons]]});
+		if (index > -1 && children[index].props && children[index].props.children) children[index].props.children.unshift(this.createTranslateButton());
+	}
+	
 	processChannelTextArea (e) {
 		if (e.instance.props.type != "normal" || e.instance.props.disabled) return;
 		if (this.translating && this.isTranslating) e.instance.props.disabled = true;
-		if (e.returnvalue) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.textareapickerbuttons]]});
-			if (index > -1 && children[index].props && children[index].props.children) children[index].props.children.unshift(this.createTranslateButton());
-			if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "handleSubmit")) BDFDB.ModuleUtils.patch(this, e.instance, "handleSubmit", {instead: e2 => {
-				if (this.translating) {
-					BDFDB.ReactUtils.forceUpdate(e.instance);
-					e2.stopOriginalMethodCall();
-					this.translateText(e2.methodArguments[0], "message", (translation, input, output) => {
-						translation = !translation ? e2.methodArguments[0] : (BDFDB.DataUtils.get(this, "settings", "sendOriginalMessage") ? e2.methodArguments[0] + "\n\n" + translation : translation);
-						e2.originalMethod(translation);
-					});
-				}
-				else e2.callOriginalMethodAfterwards();
-			}}, true);
-		}
+		if (!BDFDB.ModuleUtils.isPatched(this, e.instance.props, "onSubmit")) BDFDB.ModuleUtils.patch(this, e.instance.props, "onSubmit", {instead: e2 => {
+			if (this.translating) {
+				BDFDB.ReactUtils.forceUpdate(e.instance);
+				e2.stopOriginalMethodCall();
+				this.translateText(e2.methodArguments[0], "message", (translation, input, output) => {
+					translation = !translation ? e2.methodArguments[0] : (BDFDB.DataUtils.get(this, "settings", "sendOriginalMessage") ? e2.methodArguments[0] + "\n\n" + translation : translation);
+					e2.originalMethod(translation);
+				});
+			}
+			else e2.callOriginalMethodAfterwards();
+		}}, true);
 	}
 
 	processMessageContent (e) {

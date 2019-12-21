@@ -6652,7 +6652,7 @@
 		getCounterString() {
 			let input = this.refElement || {}, string = "";
 			if (BDFDB.DOMUtils.containsClass(this.refElement, BDFDB.disCN.textarea)) {
-				let instance = BDFDB.ReactUtils.findOwner(input, {name:"ChannelTextArea", up:true});
+				let instance = BDFDB.ReactUtils.findOwner(input, {name:"ChannelTextAreaForm", up:true});
 				if (instance) string = instance.props.textValue;
 				else string = input.value || input.textContent || "";
 			}
