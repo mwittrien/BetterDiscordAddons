@@ -133,7 +133,8 @@ class MessageUtilities {
 			onClick: (e, instance) => {
 				BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset all Key Bindings?", _ => {
 					BDFDB.DataUtils.remove(this, "bindings");
-					BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(instance, {key: `${this.name}-settingspanel`, up: true}));
+					settingspanel.parentElement.appendChild(this.getSettingsPanel());
+					settingspanel.remove();
 				});
 			},
 			children: BDFDB.LanguageUtils.LanguageStrings.RESET
