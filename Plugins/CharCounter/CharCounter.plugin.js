@@ -129,7 +129,7 @@ class CharCounter {
 
 	processChannelTextAreaContainer (e) {
 		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ChannelEditorContainer"});
-		if (index > -1 && children[index].props.type && this.maxLenghts[children[index].props.type]) {
+		if (index > -1 && children[index].props.type && this.maxLenghts[children[index].props.type] && !children[index].props.disabled) {
 			if (!BDFDB.ArrayUtils.is(e.returnvalue.props.children)) e.returnvalue.props.children = [e.returnvalue.props.children];
 			this.injectCounter(e.returnvalue, e.returnvalue.props.children, children[index].props.type, BDFDB.dotCN.textarea, true);
 		}

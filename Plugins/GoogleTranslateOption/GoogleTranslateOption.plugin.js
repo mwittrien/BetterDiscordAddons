@@ -253,7 +253,7 @@ class GoogleTranslateOption {
 	
 	processChannelTextAreaContainer (e) {
 		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ChannelEditorContainer"});
-		if (index > -1 && children[index].props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL) {
+		if (index > -1 && children[index].props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && !children[index].props.disabled) {
 			let [children2, index2] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.textareapickerbuttons]]});
 			if (index2 > -1 && children2[index2].props && children2[index2].props.children) children2[index2].props.children.unshift(this.createTranslateButton());
 		}
