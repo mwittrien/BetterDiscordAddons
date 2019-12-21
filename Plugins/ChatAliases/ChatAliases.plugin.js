@@ -3,7 +3,7 @@
 class ChatAliases {
 	getName () {return "ChatAliases";}
 
-	getVersion () {return "2.0.3";}
+	getVersion () {return "2.0.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -17,9 +17,7 @@ class ChatAliases {
 
 		this.patchedModules = {
 			before: {
-				ChannelTextArea: "render"
-			},
-			after: {
+				ChannelAutoComplete: "render",
 				ChannelTextArea: "render"
 			}
 		};
@@ -269,199 +267,112 @@ class ChatAliases {
 		}));
 	}
 
-	processChannelTextArea (e) {
-		if (e.instance.props.channel && e.instance.props.type) {
-			if (!e.returnvalue) {
-				e.instance.props.autocompleteOptions.ALIASES = {
-					matches: (firstChar, rest, isFirstWord) => {
-						let currentLastWord = e.instance._editorRef.getCurrentWord().word;
-						for (let word in this.aliases) {
-							let aliasdata = this.aliases[word];
-							if (!aliasdata.regex && aliasdata.autoc) {
-								if (aliasdata.exact) {
-									if (aliasdata.case && word.indexOf(currentLastWord) == 0) return true;
-									else if (!aliasdata.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) == 0) return true;
-								}
-								else {
-									if (aliasdata.case && word.indexOf(currentLastWord) > -1) return true;
-									else if (!aliasdata.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) > -1) return true;
-								}
-							}
+	processChannelAutoComplete (e) {
+		e.instance.state.autocompleteOptions.ALIASES = {
+			matches: (firstChar, rest, isFirstWord) => {
+				let currentLastWord = BDFDB.StringUtils.getCurrentWord(e.instance.props.editorRef.current.props.richValue).word || "";
+				for (let word in this.aliases) {
+					let aliasdata = this.aliases[word];
+					if (!aliasdata.regex && aliasdata.autoc) {
+						if (aliasdata.exact) {
+							if (aliasdata.case && word.indexOf(currentLastWord) == 0) return true;
+							else if (!aliasdata.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) == 0) return true;
 						}
-						return false;
-					},
-					queryResults: (rest) => {
-						let currentLastWord = e.instance._editorRef.getCurrentWord().word;
-						let matches = [];
-						for (let word in this.aliases) {
-							let aliasdata = Object.assign({word}, this.aliases[word]);
-							if (!aliasdata.regex && aliasdata.autoc) {
-								if (aliasdata.exact) {
-									if (aliasdata.case && word.indexOf(currentLastWord) == 0) matches.push(aliasdata);
-									else if (!aliasdata.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) == 0) matches.push(aliasdata);
-								}
-								else {
-									if (aliasdata.case && word.indexOf(currentLastWord) > -1) matches.push(aliasdata);
-									else if (!aliasdata.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) > -1) matches.push(aliasdata);
-								}
-							}
-						}
-						if (matches.length) return {aliases: matches};
-					},
-					renderResults: (rest, currentSelected, setSelected, chooseSelected, autocompletes) => {
-						return [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AutocompleteComponents.Title, {
-								title: [
-									"Aliases: ",
-									BDFDB.ReactUtils.createElement("strong", {
-										children: e.instance._editorRef.getCurrentWord().word
-									})
-								]
-							}),
-							autocompletes.aliases.map((aliasdata, i) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AutocompleteComponents.Generic, {
-								onClick: chooseSelected,
-								onHover: setSelected,
-								index: i,
-								selected: currentSelected === i,
-								text: aliasdata.word,
-								description: aliasdata.replace,
-							}))
-						].flat(10).filter(n => n);
-					},
-					getPlainText: (eventOrIndex, autocompletes) => {
-						return eventOrIndex._targetInst ? eventOrIndex._targetInst.memoizedProps.text : (typeof eventOrIndex == "number" ? autocompletes.aliases[eventOrIndex].word : "");
-					},
-					getRawText: (eventOrIndex, autocompletes) => {
-						return eventOrIndex._targetInst ? eventOrIndex._targetInst.memoizedProps.description : (typeof eventOrIndex == "number" ? autocompletes.aliases[eventOrIndex].replace : "");
-					}
-				};
-				if (e.instance.state.autocompleteType == "COMMAND" && BDFDB.ArrayUtils.is(e.instance.props.autocompletes.commands)) {
-					for (let i in e.instance.props.autocompletes.commands) if (e.instance.props.autocompletes.commands[i].alias) e.instance.props.autocompletes.commands[i] = null;
-					e.instance.props.autocompletes.commands = e.instance.props.autocompletes.commands.filter(n => n);
-					let currentLastWord = e.instance._editorRef.getCurrentWord().word;
-					let commandAliases = BDFDB.ObjectUtils.filter(this.aliases, key => key.startsWith("/"), true);
-					if (currentLastWord) for (let word in commandAliases) {
-						if (e.instance.props.autocompletes.commands.length >= BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS) break;
-						let aliasdata = commandAliases[word];
-						let command = {command: word.slice(1), description: aliasdata.replace, alias:true};
-						if (!aliasdata.regex && aliasdata.autoc) {
-							if (aliasdata.exact) {
-								if (aliasdata.case && word.indexOf(currentLastWord) == 0) e.instance.props.autocompletes.commands.push(command);
-								else if (!aliasdata.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) == 0) e.instance.props.autocompletes.commands.push(command);
-							}
-							else {
-								if (aliasdata.case && word.indexOf(currentLastWord) > -1) e.instance.props.autocompletes.commands.push(command);
-								else if (!aliasdata.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) > -1) e.instance.props.autocompletes.commands.push(command);
-							}
+						else {
+							if (aliasdata.case && word.indexOf(currentLastWord) > -1) return true;
+							else if (!aliasdata.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) > -1) return true;
 						}
 					}
 				}
-			}
-			else {
-				if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "handleSubmit")) BDFDB.ModuleUtils.patch(this, e.instance, "handleSubmit", {before: e2 => {
-					let messageData = this.formatText(e2.methodArguments[0]);
-					if (messageData) {
-						if (messageData.text != null) {
-							e2.methodArguments[0] = messageData.text;
-							if (!messageData.text) {
-								e.instance.props.textValue = "";
-								if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.StringUtils.copyRichValue("", e.instance.props.richValue);
-								BDFDB.ReactUtils.forceUpdate(e.instance);
-							}
+				return false;
+			},
+			queryResults: (rest) => {
+				let currentLastWord = BDFDB.StringUtils.getCurrentWord(e.instance.props.editorRef.current.props.richValue).word || "";
+				let matches = [];
+				for (let word in this.aliases) {
+					if (matches.length >= BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS) break;
+					let aliasdata = Object.assign({word}, this.aliases[word]);
+					if (!aliasdata.regex && aliasdata.autoc) {
+						if (aliasdata.exact) {
+							if (aliasdata.case && word.indexOf(currentLastWord) == 0) matches.push(aliasdata);
+							else if (!aliasdata.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) == 0) matches.push(aliasdata);
 						}
-						if (messageData.files.length > 0 && (e.instance.props.channel.type == 1 || BDFDB.UserUtils.can("ATTACH_FILES"))) {
-							BDFDB.LibraryModules.UploadUtils.instantBatchUpload(e.instance.props.channel.id, messageData.files);
+						else {
+							if (aliasdata.case && word.indexOf(currentLastWord) > -1) matches.push(aliasdata);
+							else if (!aliasdata.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) > -1) matches.push(aliasdata);
 						}
 					}
-				}}, true);
+				}
+				if (matches.length) return {aliases: matches};
+			},
+			renderResults: (rest, currentSelected, setSelected, chooseSelected, autocompletes) => {
+				return [
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AutocompleteComponents.Title, {
+						title: [
+							"Aliases: ",
+							BDFDB.ReactUtils.createElement("strong", {
+								children: BDFDB.StringUtils.getCurrentWord(e.instance.props.editorRef.current.props.richValue).word || ""
+							})
+						]
+					}),
+					autocompletes.aliases.map((aliasdata, i) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AutocompleteComponents.Generic, {
+						onClick: chooseSelected,
+						onHover: setSelected,
+						index: i,
+						selected: currentSelected === i,
+						text: aliasdata.word,
+						description: aliasdata.replace,
+					}))
+				].flat(10).filter(n => n);
+			},
+			getPlainText: (eventOrIndex, autocompletes) => {
+				return eventOrIndex._targetInst ? eventOrIndex._targetInst.memoizedProps.text : (typeof eventOrIndex == "number" ? autocompletes.aliases[eventOrIndex].word : "");
+			},
+			getRawText: (eventOrIndex, autocompletes) => {
+				return eventOrIndex._targetInst ? eventOrIndex._targetInst.memoizedProps.description : (typeof eventOrIndex == "number" ? autocompletes.aliases[eventOrIndex].replace : "");
 			}
-		}
-	}
-
-	addAutoCompleteMenu (textarea) {
-		if (!textarea.value || textarea.parentElement.querySelector(".autocompleteAliasesRow")) return;
-		let words = textarea.value.split(/\s/);
-		let lastword = words[words.length-1].trim();
-		if (words.length == 1 && BDFDB.BDUtils.isPluginEnabled("WriteUpperCase")) {
-			let first = lastword.charAt(0);
-			if (first === first.toUpperCase() && lastword.toLowerCase().indexOf("http") == 0) {
-				lastword = lastword.charAt(0).toLowerCase() + lastword.slice(1);
-			}
-			else if (first === first.toLowerCase() && first !== first.toUpperCase() && lastword.toLowerCase().indexOf("http") != 0) {
-				lastword = lastword.charAt(0).toUpperCase() + lastword.slice(1);
-			}
-		}
-		if (lastword && BDFDB.DataUtils.get(this, "amounts", "minAliasLength") <= lastword.length) {
-			let matchedaliases = {};
-			for (let word in this.aliases) {
-				let aliasdata = this.aliases[word];
+		};
+		if (e.instance.state.autocompleteType == "COMMAND" && BDFDB.ArrayUtils.is(e.instance.state.autocompletes.commands)) {
+			for (let i in e.instance.state.autocompletes.commands) if (e.instance.state.autocompletes.commands[i].alias) e.instance.state.autocompletes.commands[i] = null;
+			e.instance.state.autocompletes.commands = e.instance.state.autocompletes.commands.filter(n => n);
+			let currentLastWord = BDFDB.StringUtils.getCurrentWord(e.instance.props.editorRef.current.props.richValue).word;
+			let commandAliases = BDFDB.ObjectUtils.filter(this.aliases, key => key.startsWith("/"), true);
+			if (currentLastWord) for (let word in commandAliases) {
+				if (e.instance.state.autocompletes.commands.length >= BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS) break;
+				let aliasdata = commandAliases[word];
+				let command = {command: word.slice(1), description: aliasdata.replace, alias:true};
 				if (!aliasdata.regex && aliasdata.autoc) {
 					if (aliasdata.exact) {
-						if (aliasdata.case && word.indexOf(lastword) == 0) matchedaliases[word] = aliasdata;
-						else if (!aliasdata.case && word.toLowerCase().indexOf(lastword.toLowerCase()) == 0) matchedaliases[word] = aliasdata;
+						if (aliasdata.case && word.indexOf(currentLastWord) == 0) e.instance.state.autocompletes.commands.push(command);
+						else if (!aliasdata.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) == 0) e.instance.state.autocompletes.commands.push(command);
 					}
 					else {
-						if (aliasdata.case && word.indexOf(lastword) > -1) matchedaliases[word] = aliasdata;
-						else if (!aliasdata.case && word.toLowerCase().indexOf(lastword.toLowerCase()) > -1) matchedaliases[word] = aliasdata;
+						if (aliasdata.case && word.indexOf(currentLastWord) > -1) e.instance.state.autocompletes.commands.push(command);
+						else if (!aliasdata.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) > -1) e.instance.state.autocompletes.commands.push(command);
 					}
 				}
 			}
-			if (!BDFDB.ObjectUtils.isEmpty(matchedaliases)) {
-				let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCNS.autocomplete + BDFDB.dotCN.autocompleteinner), amount = 15;
-				if (!autocompletemenu) {
-					autocompletemenu = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.autocomplete + BDFDB.disCN.autocomplete2} autocompleteAliases"><div class="${BDFDB.disCN.autocompleteinner}"></div></div>`);
-					textarea.parentElement.appendChild(autocompletemenu);
-					autocompletemenu = autocompletemenu.firstElementChild;
-				}
-				else {
-					amount -= autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable).length;
-				}
-				let autocompleterowheader = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCN.autocompleteselector} autocompleteAliasesSelector"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">Aliases: <strong class="lastword">${BDFDB.StringUtils.htmlEscape(lastword)}</strong></div></div></div>`);
-				autocompletemenu.appendChild(autocompleterowheader);
-				BDFDB.ListenerUtils.add(this, autocompletemenu, "mouseenter", BDFDB.dotCN.autocompleteselectable, event => {
-					var selected = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselected);
-					BDFDB.DOMUtils.removeClass(selected, BDFDB.disCN.autocompleteselected);
-					BDFDB.DOMUtils.addClass(selected, BDFDB.disCN.autocompleteselector);
-					BDFDB.DOMUtils.addClass(event.currentTarget, BDFDB.disCN.autocompleteselected);
-				});
-
-				for (let word in matchedaliases) {
-					if (amount-- < 1) break;
-					let autocompleterow = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteAliasesRow"><div class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable} autocompleteAliasesSelector"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.flexchild} aliasword" style="flex: 1 1 auto;">${BDFDB.StringUtils.htmlEscape(word)}</div><div class="${BDFDB.disCNS.autocompletedescription + BDFDB.disCN.flexchild}">${BDFDB.StringUtils.htmlEscape(matchedaliases[word].replace)}</div></div></div></div>`);
-					autocompleterow.querySelector(BDFDB.dotCN.autocompleteselectable).addEventListener("click", _ => {this.swapWordWithAlias(textarea);});
-					autocompletemenu.appendChild(autocompleterow);
-				}
-				if (!autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected)) {
-					BDFDB.DOMUtils.addClass(autocompletemenu.querySelector(".autocompleteAliasesRow " + BDFDB.dotCN.autocompleteselectable), BDFDB.disCN.autocompleteselected);
-				}
-			}
 		}
 	}
-
-	getNextSelection (menu, selected, forward) {
-		selected = selected ? selected : menu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement;
-		let next, sibling = forward ? selected.nextElementSibling : selected.previousElementSibling;
-		if (sibling) {
-			next = sibling.querySelector(BDFDB.dotCN.autocompleteselectable);
-		}
-		else {
-			let items = menu.querySelectorAll(BDFDB.dotCN.autocompleteselectable);
-			next = forward ? items[0] : items[items.length-1];
-		}
-		return next ? next : this.getNextSelection(menu, sibling, forward);
-	}
-
-	swapWordWithAlias (textarea) {
-		let aliasword = textarea.parentElement.querySelector(".autocompleteAliasesRow " + BDFDB.dotCN.autocompleteselected + " .aliasword").innerText;
-		let lastword = textarea.parentElement.querySelector(".autocompleteAliasesRow .lastword").innerText;
-		if (aliasword && lastword) {
-			BDFDB.DOMUtils.remove(".autocompleteAliases", ".autocompleteAliasesRow");
-			textarea.focus();
-			textarea.selectionStart = textarea.value.length - lastword.length;
-			textarea.selectionEnd = textarea.value.length;
-			document.execCommand("insertText", false, aliasword);
-			textarea.selectionStart = textarea.value.length;
-			textarea.selectionEnd = textarea.value.length;
+	
+	processChannelTextArea (e) {
+		if (e.instance.props.channel && e.instance.props.type) {
+			if (!BDFDB.ModuleUtils.isPatched(this, e.instance.props, "onSubmit")) BDFDB.ModuleUtils.patch(this, e.instance.props, "onSubmit", {before: e2 => {
+				let messageData = this.formatText(e2.methodArguments[0]);
+				if (messageData) {
+					if (messageData.text != null) {
+						e2.methodArguments[0] = messageData.text;
+						if (!messageData.text) {
+							e.instance.props.textValue = "";
+							if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.StringUtils.copyRichValue("", e.instance.props.richValue);
+							BDFDB.ReactUtils.forceUpdate(e.instance);
+						}
+					}
+					if (messageData.files.length > 0 && (e.instance.props.channel.type == 1 || BDFDB.UserUtils.can("ATTACH_FILES"))) {
+						BDFDB.LibraryModules.UploadUtils.instantBatchUpload(e.instance.props.channel.id, messageData.files);
+					}
+				}
+			}}, true);
 		}
 	}
 
