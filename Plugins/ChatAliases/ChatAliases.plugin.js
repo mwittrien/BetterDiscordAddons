@@ -3,7 +3,7 @@
 class ChatAliases {
 	getName () {return "ChatAliases";}
 
-	getVersion () {return "2.0.5";}
+	getVersion () {return "2.0.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ChatAliases {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["New WYSIWYG Textarea","Fixed for the new WYSIWYG Textarea that is hidden by experiments"]],
+			"fixed":[["File Aliases","Fixed issue where file aliases would get replaced for the filepath and not the file"],["New WYSIWYG Textarea","Fixed for the new WYSIWYG Textarea that is hidden by experiments"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
@@ -228,7 +228,8 @@ class ChatAliases {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			BDFDB.DOMUtils.remove(".autocompleteAliases", ".autocompleteAliasesRow");
+			BDFDB.ModuleUtils.forceAllUpdates(this);
+			
 			BDFDB.PluginUtils.clear(this);
 		}
 	}
@@ -323,16 +324,19 @@ class ChatAliases {
 						onHover: setSelected,
 						index: i,
 						selected: currentSelected === i,
+						alias: aliasdata,
 						text: aliasdata.word,
 						description: aliasdata.replace,
 					}))
 				].flat(10).filter(n => n);
 			},
 			getPlainText: (eventOrIndex, autocompletes) => {
-				return eventOrIndex._targetInst ? eventOrIndex._targetInst.memoizedProps.text : (typeof eventOrIndex == "number" ? autocompletes.aliases[eventOrIndex].word : "");
+				let aliasdata = eventOrIndex._targetInst ? eventOrIndex._targetInst.memoizedProps.alias : typeof eventOrIndex == "number" && autocompletes.aliases[eventOrIndex];
+				return aliasdata.word;
 			},
 			getRawText: (eventOrIndex, autocompletes) => {
-				return eventOrIndex._targetInst ? eventOrIndex._targetInst.memoizedProps.description : (typeof eventOrIndex == "number" ? autocompletes.aliases[eventOrIndex].replace : "");
+				let aliasdata = eventOrIndex._targetInst ? eventOrIndex._targetInst.memoizedProps.alias : typeof eventOrIndex == "number" && autocompletes.aliases[eventOrIndex];
+				return aliasdata.file ? aliasdata.word : aliasdata.replace;
 			}
 		};
 		if (e.instance.state.autocompleteType == "COMMAND" && BDFDB.ArrayUtils.is(e.instance.state.autocompletes.commands)) {
