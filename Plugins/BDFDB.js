@@ -1269,7 +1269,7 @@
 		}
 		function patchInstance(instance, type, patchtype) {
 			if (instance) {
-				var name = type.split(" _ _ ")[0];
+				let name = type.split(" _ _ ")[0];
 				instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 				instance = instance.displayName == name || instance.name == name ? instance : (BDFDB.ReactUtils.findConstructor(instance, name) || BDFDB.ReactUtils.findConstructor(instance, name, {up:true}));
 				if (instance) {
@@ -1313,6 +1313,7 @@
 						if ((ele = BDFDB.DOMUtils.containsClass(n, disclass) ? n : n.querySelector(dotclass)) != null) {
 							let ins = BDFDB.ReactUtils.getInstance(ele);
 							if (isCorrectInstance(ins, type)) {
+								if (type == "ChannelTextAreaForm") console.log("yes");
 								found = true;
 								instanceobserver.disconnect();
 								patchInstance(ins, type, patchtype);
@@ -1650,7 +1651,7 @@
 			return key != null && props[key] != null && value != null && (key == "className" ? (" " + props[key] + " ").indexOf(" " + value + " ") > -1 : BDFDB.equals(props[key], value));
 		}
 	};
-	BDFDB.ReactUtils.findConstructor = function (nodeOrInstance, types, config) {
+	BDFDB.ReactUtils.findConstructor = function (nodeOrInstance, types, config = {}) {
 		if (!BDFDB.ObjectUtils.is(config)) return null;
 		if (!nodeOrInstance || !types) return config.all ? (config.group ? {} : []) : null;
 		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
