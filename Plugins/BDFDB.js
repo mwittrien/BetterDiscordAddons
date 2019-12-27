@@ -1313,7 +1313,6 @@
 						if ((ele = BDFDB.DOMUtils.containsClass(n, disclass) ? n : n.querySelector(dotclass)) != null) {
 							let ins = BDFDB.ReactUtils.getInstance(ele);
 							if (isCorrectInstance(ins, type)) {
-								if (type == "ChannelTextAreaForm") console.log("yes");
 								found = true;
 								instanceobserver.disconnect();
 								patchInstance(ins, type, patchtype);
