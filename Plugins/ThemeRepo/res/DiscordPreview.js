@@ -12,6 +12,16 @@ window.onmessage = function (e) {
 		switch (e.data.reason) {
 			case "OnLoad":
 				document.body.innerHTML = document.body.innerHTML.replace(/\t|\n|\r/g, "");
+				if (e.data.username) {
+					document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERNAMESMALL/gi, e.data.username.toLowerCase());
+					document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERNAME/gi, e.data.username);
+				}
+				if (e.data.id) {
+					window.userId = e.data.id;
+					document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERID/gi, e.data.id);
+				}
+				if (e.data.avatar) document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_AVATAR/gi, e.data.avatar.split('"').join('') + "?size=");
+				if (e.data.discriminator) document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_DISCRIMINATOR/gi, e.data.discriminator);
 				if (e.data.classes) window.DiscordClasses = JSON.parse(e.data.classes);
 				if (e.data.classmodules) window.DiscordClassModules = JSON.parse(e.data.classmodules);
 				if (window.disCN != undefined && window.DiscordClasses != undefined && window.DiscordClassModules != undefined) {
@@ -23,13 +33,6 @@ window.onmessage = function (e) {
 					}
 					document.body.innerHTML = newhtml;
 				}
-				if (e.data.username) {
-					document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERNAMESMALL/gi, e.data.username.toLowerCase());
-					document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERNAME/gi, e.data.username);
-				}
-				if (e.data.id) document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERID/gi, e.data.id);
-				if (e.data.avatar) document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_AVATAR/gi, e.data.avatar.split('"').join('') + "?size=");
-				if (e.data.discriminator) document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_DISCRIMINATOR/gi, e.data.discriminator);
 				if (e.data.nativecss) {
 					var theme = document.createElement("link");
 					theme.classList.add(e.data.reason);
@@ -122,19 +125,19 @@ window.getDiscordClass = function (item) {
 	var classname = "Preview_undefined";
 	if (window.DiscordClasses === undefined || window.DiscordClassModules === undefined) return classname;
 	else if (window.DiscordClasses[item] === undefined) {
-		console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', item + ' not found in window.DiscordClasses');
+		if (window.userId == "278543574059057154") console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', item + ' not found in window.DiscordClasses');
 		return classname;
 	} 
 	else if (!Array.isArray(window.DiscordClasses[item]) || window.DiscordClasses[item].length != 2) {
-		console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', item + ' is not an Array of Length 2 in window.DiscordClasses');
+		if (window.userId == "278543574059057154") console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', item + ' is not an Array of Length 2 in window.DiscordClasses');
 		return classname;
 	}
 	else if (window.DiscordClassModules[window.DiscordClasses[item][0]] === undefined) {
-		console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', window.DiscordClasses[item][0] + ' not found in DiscordClassModules');
+		if (window.userId == "278543574059057154") console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', window.DiscordClasses[item][0] + ' not found in DiscordClassModules');
 		return classname;
 	}
 	else if (window.DiscordClassModules[window.DiscordClasses[item][0]][window.DiscordClasses[item][1]] === undefined) {
-		console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', window.DiscordClasses[item][1] + ' not found in ' + window.DiscordClasses[item][0] + ' in DiscordClassModules');
+		if (window.userId == "278543574059057154") console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', window.DiscordClasses[item][1] + ' not found in ' + window.DiscordClasses[item][0] + ' in DiscordClassModules');
 		return classname;
 	}
 	else return classname = window.DiscordClassModules[window.DiscordClasses[item][0]][window.DiscordClasses[item][1]];
