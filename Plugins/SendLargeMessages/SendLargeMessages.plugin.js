@@ -3,7 +3,7 @@
 class SendLargeMessages {
 	getName () {return "SendLargeMessages";}
 
-	getVersion () {return "1.6.0";}
+	getVersion () {return "1.6.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -123,7 +123,7 @@ class SendLargeMessages {
 				}
 			}
 		}
-	}BDFDB.DataUtils.get(this, "settings", "changeInAutoComplete")
+	}
 
 	processChannelEditorContainer (e) {
 		if (e.instance.props.type && e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL) e.instance.props.shouldUploadLongMessages = false;
