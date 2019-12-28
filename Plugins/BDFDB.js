@@ -1004,7 +1004,6 @@
 	WebModulesData.Patchtypes = ["before", "instead", "after"];
 	WebModulesData.Patchmap = {
 		BannedCard: "BannedUser",
-		ChannelTextArea: "ChannelEditorContainer",
 		ChannelWindow: "Channel",
 		InvitationCard: "InviteRow",
 		InviteCard: "InviteRow",
@@ -2114,6 +2113,9 @@
 	};
 
 	BDFDB.ChannelUtils = {};
+	BDFDB.ChannelUtils.isTextChannel = function (channel) {
+		return channel && channel.type && (channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_TEXT || channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_STORE || channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_ANNOUNCEMENT);
+	};
 	BDFDB.ChannelUtils.getId = function (div) {
 		if (!Node.prototype.isPrototypeOf(div) || !BDFDB.ReactUtils.getInstance(div)) return;
 		div = BDFDB.DOMUtils.getParent(BDFDB.dotCNC.categorycontainerdefault + BDFDB.dotCNC.channelcontainerdefault + BDFDB.dotCN.dmchannel, div);

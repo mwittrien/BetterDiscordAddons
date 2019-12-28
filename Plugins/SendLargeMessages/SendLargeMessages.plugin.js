@@ -3,7 +3,7 @@
 class SendLargeMessages {
 	getName () {return "SendLargeMessages";}
 
-	getVersion () {return "1.5.9";}
+	getVersion () {return "1.6.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -12,13 +12,16 @@ class SendLargeMessages {
 	constructor () {
 		this.changelog = {
 			"fixed":[["Switching","Plugin acting weird after switching channels"],["New WYSIWYG Textarea","Fixed for the new WYSIWYG Textarea that is hidden by experiments"]],
-			"improved":[["Sending Messages","The plugin no longer needs the modal to send multiple messages, you can just write larger messages in the channel textarea and it will automatically split it up before sending it"]]
+			"improved":[["Message Amount","Hovering over the red character counter when the character limit exceeds 2000 characters will now again display the amount of messages that is being sent by the plugin"],["Sending Messages","The plugin no longer needs the modal to send multiple messages, you can just write larger messages in the channel textarea and it will automatically split it up before sending it"]]
 		};
 
 		this.patchedModules = {
 			before: {
 				ChannelTextAreaForm: "render",
 				ChannelEditorContainer: "render"
+			},
+			after: {
+				ChannelTextAreaContainer: "render",
 			}
 		};
 	}
@@ -100,6 +103,27 @@ class SendLargeMessages {
 			else return e2.callOriginalMethodAfterwards();
 		}}, true);
 	}
+	
+	processChannelTextAreaContainer (e) {
+		if (e.returnvalue.ref && e.returnvalue.ref.current && BDFDB.DOMUtils.getParent(BDFDB.dotCN.chatform, e.returnvalue.ref.current)) {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "SlateCharacterCount"});
+			if (index > -1) {
+				let text = BDFDB.LibraryModules.SlateSelectionUtils.serialize(children[index].props.document);
+				if (text.length > 1000) {
+					let parsedLength = BDFDB.StringUtils.getParsedLength(text);
+					if (parsedLength > 2000) children[index] = BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCNS.textareacharcounter + BDFDB.disCN.textareacharcountererror,
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+							text: Math.ceil(parsedLength / 1900) + " " + BDFDB.LanguageUtils.LanguageStrings.MESSAGES,
+							children: BDFDB.ReactUtils.createElement("span", {
+								children: 2000 - parsedLength
+							})
+						})
+					});
+				}
+			}
+		}
+	}BDFDB.DataUtils.get(this, "settings", "changeInAutoComplete")
 
 	processChannelEditorContainer (e) {
 		if (e.instance.props.type && e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL) e.instance.props.shouldUploadLongMessages = false;
@@ -155,129 +179,87 @@ class SendLargeMessages {
 		switch (BDFDB.LanguageUtils.getLanguage().id) {
 			case "hr":		//croatian
 				return {
-					toast_allsent_text:					"Sve veliku poslane.",
-					modal_messages_warning:				"Nemojte slati previše veliku!",
-					modal_header_text:					"Pošalji veliku poruku:"
+					toast_allsent_text:					"Sve veliku poslane."
 				};
 			case "da":		//danish
 				return {
-					toast_allsent_text:					"Alle beskeder sendes.",
-					modal_messages_warning:				"Send ikke for mange beskeder!",
-					modal_header_text:					"Send stor besked:"
+					toast_allsent_text:					"Alle beskeder sendes."
 				};
 			case "de":		//german
 				return {
-					toast_allsent_text:					"Alle Nachrichten versendet.",
-					modal_messages_warning:				"Schicke nicht zu viele Nachrichten!",
-					modal_header_text:					"Große Nachricht senden:"
+					toast_allsent_text:					"Alle Nachrichten versendet."
 				};
 			case "es":		//spanish
 				return {
-					toast_allsent_text:					"Todos los mensajes enviados.",
-					modal_messages_warning:				"¡No envíe demasiados mensajes!",
-					modal_header_text:					"Enviar mensaje grande:"
+					toast_allsent_text:					"Todos los mensajes enviados."
 				};
 			case "fr":		//french
 				return {
-					toast_allsent_text:					"Tous les messages envoyés",
-					modal_messages_warning:				"N'envoyez pas trop de messages!",
-					modal_header_text:					"Envoyer un gros message:"
+					toast_allsent_text:					"Tous les messages envoyés"
 				};
 			case "it":		//italian
 				return {
-					toast_allsent_text:					"Tutti i messaggi inviati.",
-					modal_messages_warning:				"Non inviare troppi messaggi!",
-					modal_header_text:					"Invia grande messaggio:"
+					toast_allsent_text:					"Tutti i messaggi inviati."
 				};
 			case "nl":		//dutch
 				return {
-					toast_allsent_text:					"Alle berichten verzonden.",
-					modal_messages_warning:				"Stuur niet te veel berichten!",
-					modal_header_text:					"Stuur een groot bericht:"
+					toast_allsent_text:					"Alle berichten verzonden."
 				};
 			case "no":		//norwegian
 				return {
-					toast_allsent_text:					"Alle meldinger sendt.",
-					modal_messages_warning:				"Ikke send for mange meldinger!",
-					modal_header_text:					"Send stor melding:"
+					toast_allsent_text:					"Alle meldinger sendt."
 				};
 			case "pl":		//polish
 				return {
-					toast_allsent_text:					"Wszystkie wiadomości zostały wysłane.",
-					modal_messages_warning:				"Nie wysyłaj zbyt wielu wiadomości!",
-					modal_header_text:					"Wyślij dużą wiadomość:"
+					toast_allsent_text:					"Wszystkie wiadomości zostały wysłane."
 				};
 			case "pt-BR":	//portuguese (brazil)
 				return {
-					toast_allsent_text:					"Todas as mensagens enviadas.",
-					modal_messages_warning:				"Não envie muitas mensagens!",
-					modal_header_text:					"Enviar mensagem grande:"
+					toast_allsent_text:					"Todas as mensagens enviadas."
 				};
 			case "fi":		//finnish
 				return {
-					toast_allsent_text:					"Kaikki lähetetyt viestit.",
-					modal_messages_warning:				"Älä lähetä liian monta viestiä!",
-					modal_header_text:					"Lähetä suuri viesti:"
+					toast_allsent_text:					"Kaikki lähetetyt viestit."
 				};
 			case "sv":		//swedish
 				return {
-					toast_allsent_text:					"Alla meddelanden skickade.",
-					modal_messages_warning:				"Skicka inte för många meddelanden!",
-					modal_header_text:					"Skicka stort meddelande:"
+					toast_allsent_text:					"Alla meddelanden skickade."
 				};
 			case "tr":		//turkish
 				return {
-					toast_allsent_text:					"Tüm mesajlar gönderildi.",
-					modal_messages_warning:				"Çok fazla mesaj göndermeyin!",
-					modal_header_text:					"Büyük mesaj gönder:"
+					toast_allsent_text:					"Tüm mesajlar gönderildi."
 				};
 			case "cs":		//czech
 				return {
-					toast_allsent_text:					"Všechny zprávy byly odeslány.",
-					modal_messages_warning:				"Neposílejte příliš mnoho zpráv!",
-					modal_header_text:					"Odeslat velkou zprávu:"
+					toast_allsent_text:					"Všechny zprávy byly odeslány."
 				};
 			case "bg":		//bulgarian
 				return {
-					toast_allsent_text:					"Всички изпратени съобщения.",
-					modal_messages_warning:				"Не изпращайте твърде много съобщения!",
-					modal_header_text:					"Изпратете голямо съобщение:"
+					toast_allsent_text:					"Всички изпратени съобщения."
 				};
 			case "ru":		//russian
 				return {
-					toast_allsent_text:					"Все отправленные сообщения.",
-					modal_messages_warning:				"Не отправляйте слишком много сообщений!",
-					modal_header_text:					"Отправить сообщение:"
+					toast_allsent_text:					"Все отправленные сообщения."
 				};
 			case "uk":		//ukrainian
 				return {
-					toast_allsent_text:					"Всі повідомлення надіслано.",
-					modal_messages_warning:				"Не надсилайте надто багато повідомлень!",
-					modal_header_text:					"Надіслати велике повідомлення:"
+					toast_allsent_text:					"Всі повідомлення надіслано."
 				};
 			case "ja":		//japanese
 				return {
-					toast_allsent_text:					"すべてのメッセージが送信されました。",
-					modal_messages_warning:				"あまりにも多くのメッセージを送信しないでください！",
-					modal_header_text:					"大きなメッセージを送信する："
+					toast_allsent_text:					"すべてのメッセージが送信されました。"
 				};
 			case "zh-TW":	//chinese (traditional)
 				return {
-					toast_allsent_text:					"發送的所有消息。",
-					modal_messages_warning:				"不要發送太多信息！",
-					modal_header_text:					"發送大信息："
+					toast_allsent_text:					"發送的所有消息。"
 				};
 			case "ko":		//korean
 				return {
-					toast_allsent_text:					"모든 메시지가 전송되었습니다.",
-					modal_messages_warning:				"너무 많은 메시지를 보내지 마십시오!",
-					modal_header_text:					"큰 메시지 보내기:"
+					toast_allsent_text:					"모든 메시지가 전송되었습니다."
 				};
 			default:		//default: english
 				return {
-					toast_allsent_text:					"All messages sent.",
-					modal_messages_warning:				"Do not send too many messages!",
-					modal_header_text:					"Send large message:"
+					toast_allsent_text:					"All messages sent."
 				};
 		}
 	}
