@@ -45,9 +45,6 @@ https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/tog
 https://raw.githubusercontent.com/Jiiks/BetterDiscordApp/master/Plugins/clock.plugin.js
 https://raw.githubusercontent.com/Jiiks/BetterDiscordApp/master/Plugins/dblClickEdit.plugin.js
 https://raw.githubusercontent.com/kosshishub/BetterCustomCSS-BD-plugin/master/BetterCustomCSS.plugin.js
-https://raw.githubusercontent.com/KyzaGitHub/Khub/master/Plugins/AntiGhostPing/AntiGhostPing.plugin.js
-https://raw.githubusercontent.com/KyzaGitHub/Khub/master/Plugins/CustomDiscordIcon/CustomDiscordIcon.plugin.js
-https://raw.githubusercontent.com/KyzaGitHub/Khub/master/Plugins/SafeEmbedGenerator/SafeEmbedGenerator.plugin.js
 https://raw.githubusercontent.com/l0c4lh057/BetterDiscordStuff/master/Plugins/Minespoiler/Minespoiler.plugin.js
 https://raw.githubusercontent.com/l0c4lh057/BetterDiscordStuff/master/Plugins/TypingIndicator/TypingIndicator.plugin.js
 https://raw.githubusercontent.com/leogx9r/DiscordCrypt/master/build/discordCrypt.plugin.js
