@@ -3,7 +3,7 @@
 class BadgesEverywhere {
 	getName () {return "BadgesEverywhere";} 
 
-	getVersion () {return "1.4.9";}
+	getVersion () {return "1.5.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,8 +11,7 @@ class BadgesEverywhere {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Chat","Elements now properly get added to the chat again"]],
-			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+			"improved":[["Queuing","Queuing badge loading to slow down the request amount per seconds"],["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
 		this.patchedModules = {
@@ -83,6 +82,7 @@ class BadgesEverywhere {
 
 		this.requestedusers = {};
 		this.loadedusers = {};
+		this.RequestQueue = {queue:[], running:false, timeout:null};
 
 		this.defaults = {
 			settings: {
@@ -208,6 +208,8 @@ class BadgesEverywhere {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 			
+			BDFDB.TimeUtils.clear(this.RequestQueue.timeout);
+			
 			BDFDB.PluginUtils.clear(this);
 		}
 	}
@@ -251,15 +253,35 @@ class BadgesEverywhere {
 		if (!BDFDB.ArrayUtils.is(children) || !user || user.bot) return;
 		if (!BDFDB.ArrayUtils.is(this.requestedusers[user.id])) {
 			this.requestedusers[user.id] = [instance];
-			BDFDB.LibraryModules.APIUtils.get(BDFDB.DiscordConstants.Endpoints.USER_PROFILE(user.id)).then(result => {
-				let usercopy = Object.assign({}, result.body.user);
-				if (result.body.premium_since) usercopy.flags += this.nitroflag;
-				usercopy.premium_since = result.body.premium_since;
-				if (result.body.premium_guild_since) usercopy.flags += this.boostflag;
-				usercopy.premium_guild_since = result.body.premium_guild_since;
-				this.loadedusers[user.id] = usercopy;
-				for (let queredinstance of this.requestedusers[user.id]) BDFDB.ReactUtils.forceUpdate(queredinstance);
-			});
+			var queue = _ => {
+				this.RequestQueue.queue.push(user.id);
+				runqueue();
+			};
+			var runqueue = _ => {
+				if (!this.RequestQueue.running) request(this.RequestQueue.queue.shift());
+			};
+			var request = id => {
+				if (id) {
+					this.RequestQueue.running = true;
+					BDFDB.TimeUtils.clear(this.RequestQueue.timeout);
+					this.RequestQueue.timeout = BDFDB.TimeUtils.timeout(_ => {
+						this.RequestQueue.running = false;
+						runqueue();
+					}, 30000);
+					BDFDB.LibraryModules.APIUtils.get(BDFDB.DiscordConstants.Endpoints.USER_PROFILE(id)).then(result => {
+						let usercopy = Object.assign({}, result.body.user);
+						if (result.body.premium_since) usercopy.flags += this.nitroflag;
+						usercopy.premium_since = result.body.premium_since;
+						if (result.body.premium_guild_since) usercopy.flags += this.boostflag;
+						usercopy.premium_guild_since = result.body.premium_guild_since;
+						this.loadedusers[id] = usercopy;
+						for (let queredinstance of this.requestedusers[id]) BDFDB.ReactUtils.forceUpdate(queredinstance);
+						this.RequestQueue.running = false;
+						BDFDB.TimeUtils.timeout(_ => {runqueue();}, 1000);
+					});
+				}
+			};
+			queue();
 		}
 		else if (!this.loadedusers[user.id]) this.requestedusers[user.id].push(instance);
 		else children.push(this.createBadges(user, type, colored));
