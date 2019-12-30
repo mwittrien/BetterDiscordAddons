@@ -3,7 +3,7 @@
 class ReadAllNotificationsButton {
 	getName () {return "ReadAllNotificationsButton";}
 
-	getVersion () {return "1.5.3";}
+	getVersion () {return "1.5.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -141,13 +141,13 @@ class ReadAllNotificationsButton {
 	processGuilds (e) {
 		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ConnectedUnreadDMs"});
 		if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement("div", {
-			className: BDFDB.disCN.guildouter + BDFDB.disCN._readallnotificationsbuttonframe,
+			className: BDFDB.disCNS.guildouter + BDFDB.disCN._readallnotificationsbuttonframe,
 			style: {height: 20},
 			children: BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.disCN.guildiconwrapper + BDFDB.disCN._readallnotificationsbuttoninner,
+				className: BDFDB.disCNS.guildiconwrapper + BDFDB.disCN._readallnotificationsbuttoninner,
 				style: {height: 20},
 					children: BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.disCN.guildiconchildwrapper + BDFDB.disCN._readallnotificationsbuttonbutton,
+					className: BDFDB.disCNS.guildiconchildwrapper + BDFDB.disCN._readallnotificationsbuttonbutton,
 					style: {height: 20},
 					children: "read all",
 					onClick: _ => {

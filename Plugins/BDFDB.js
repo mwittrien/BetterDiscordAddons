@@ -4417,7 +4417,7 @@
 	DiscordClassModules.ReadAllNotificationsButton	= {
 		button: "button-Jt-tIg",
 		frame: "frame-oXWS21",
-		inner: "innerFrame-8Hg64E"
+		innerFrame: "innerFrame-8Hg64E"
 	};
 	DiscordClassModules.ServerFolders = {
 		dragPreview: "dragPreview-nXiByA",
