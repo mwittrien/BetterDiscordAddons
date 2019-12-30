@@ -297,7 +297,7 @@ class EditServers {
 	processMessagesPopout (e) {
 		if (BDFDB.DataUtils.get(this, "settings", "changeInRecentMentions")) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "VerticalScroller"});
-			if (index > -1 && children[index].props.children && BDFDB.ArrayUtils.is(children[index].props.children[0])) for (let dividerAndMessage of children[index].props.children[0]) if (dividerAndMessage[0].props.children[1]) {
+			if (index > -1 && children[index].props.children && BDFDB.ArrayUtils.is(children[index].props.children[0])) for (let dividerAndMessage of children[index].props.children[0]) if (dividerAndMessage && dividerAndMessage[0] && dividerAndMessage[0].props.children && dividerAndMessage[0].props.children[1]) {
 				let channel = BDFDB.ReactUtils.getValue(dividerAndMessage[1], "props.children.props.children.props.channel");
 				if (channel && BDFDB.ChannelUtils.isTextChannel(channel)) dividerAndMessage[0].props.children[1].props.children = this.getGuildData(channel.guild_id).name;
 			}
