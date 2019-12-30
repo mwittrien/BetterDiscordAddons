@@ -3,7 +3,7 @@
 class ReadAllNotificationsButton {
 	getName () {return "ReadAllNotificationsButton";}
 
-	getVersion () {return "1.5.2";}
+	getVersion () {return "1.5.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,23 +11,24 @@ class ReadAllNotificationsButton {
 
 	constructor () {
 		this.changelog = {
+			"fixed":[["Clear Mentions","Clear Mentions buton is now properly added again"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
 		this.patchedModules = {
 			after: {
 				Guilds: "render",
-				RecentMentions: "render"
+				MessagesPopout: "render"
 			}
 		};
 	}
 
 	initConstructor () {
 		this.css = `
-			.RANbutton-frame {
+			${BDFDB.disCN._readallnotificationsbuttonframe} {
 				margin-bottom: 10px;
 			}
-			.RANbutton {
+			${BDFDB.disCN._readallnotificationsbuttonbutton} {
 				cursor: pointer;
 				border-radius: 4px;
 				font-size: 12px;
@@ -140,13 +141,13 @@ class ReadAllNotificationsButton {
 	processGuilds (e) {
 		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ConnectedUnreadDMs"});
 		if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement("div", {
-			className: `${BDFDB.disCN.guildouter} RANbutton-frame`,
+			className: BDFDB.disCN.guildouter + BDFDB.disCN._readallnotificationsbuttonframe,
 			style: {height: 20},
 			children: BDFDB.ReactUtils.createElement("div", {
-				className: `${BDFDB.disCN.guildiconwrapper} RANbutton-inner`,
+				className: BDFDB.disCN.guildiconwrapper + BDFDB.disCN._readallnotificationsbuttoninner,
 				style: {height: 20},
 					children: BDFDB.ReactUtils.createElement("div", {
-					className: `${BDFDB.disCN.guildiconchildwrapper} RANbutton`,
+					className: BDFDB.disCN.guildiconchildwrapper + BDFDB.disCN._readallnotificationsbuttobutton,
 					style: {height: 20},
 					children: "read all",
 					onClick: _ => {
@@ -201,44 +202,34 @@ class ReadAllNotificationsButton {
 		}));
 	}
 
-	processRecentMentions (e) {
-		if (typeof e.returnvalue.props.renderHeader == "function" && e.instance.props.popoutName == "RECENT_MENTIONS_POPOUT" && BDFDB.DataUtils.get(this, "settings", "addClearButton")) {
-			let renderHeader = e.returnvalue.props.renderHeader;
-			e.returnvalue.props.renderHeader = () => {
-				let renderedHeader = renderHeader(e.instance);
-				renderedHeader.props.children = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-					align: BDFDB.LibraryComponents.Flex.Align.BASELINE,
-					children: [,
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-							children: renderedHeader.props.children
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-							grow: 0,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-								look: BDFDB.LibraryComponents.Button.Looks.OUTLINED,
-								color: BDFDB.LibraryComponents.Button.Colors.GREY,
-								hover: BDFDB.LibraryComponents.Button.Hovers.RED,
-								size: BDFDB.LibraryComponents.Button.Sizes.SMALL,
-								children: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
-								onClick: (event, buttoninstance) => {
-									this.clearMentions(e.instance, BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagespopoutwrap, BDFDB.ReactUtils.findDOMNode(buttoninstance)));
-								}
-							})
-						})
-					]
-				});
-				return renderedHeader;
-			};
+	processMessagesPopout (e) {
+		if (e.instance.props.className == BDFDB.disCN.recentmentionspopout && BDFDB.DataUtils.get(this, "settings", "addClearButton")) {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "RecentMentionsHeader"});
+			if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+				look: BDFDB.LibraryComponents.Button.Looks.OUTLINED,
+				color: BDFDB.LibraryComponents.Button.Colors.GREY,
+				hover: BDFDB.LibraryComponents.Button.Hovers.RED,
+				size: BDFDB.LibraryComponents.Button.Sizes.SMALL,
+				children: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
+				onClick: (event, buttoninstance) => {
+					this.clearMentions(e.instance, BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagespopoutwrap, BDFDB.ReactUtils.findDOMNode(buttoninstance)));
+				},
+				style: {
+					position: "absolute",
+					top: 8,
+					right: 20
+				}
+			}));
 		}
 	}
 
 	clearMentions (instance, wrapper) {
-		if (!Node.prototype.isPrototypeOf(wrapper)) return;
+		if (!instance || !Node.prototype.isPrototypeOf(wrapper) || !document.contains(wrapper)) return;
 		let closebuttons = wrapper.querySelectorAll(BDFDB.dotCN.messagespopoutclosebutton);
 		for (let btn of wrapper.querySelectorAll(BDFDB.dotCN.messagespopoutclosebutton)) btn.click();
 		if (closebuttons.length) {
-			instance.loadMore();
-			BDFDB.TimeUtils.timeout(() => {this.clearMentions(instance, wrapper);},3000);
+			instance.props.loadMore();
+			BDFDB.TimeUtils.timeout(_ => {this.clearMentions(instance, wrapper);},3000);
 		}
 	}
 

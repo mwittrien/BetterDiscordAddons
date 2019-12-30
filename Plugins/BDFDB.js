@@ -4414,6 +4414,11 @@
 		unpinButton: "unpinButton-z3-UVO",
 		unpinIcon: "unpinIcon-79ZnEr"
 	};
+	DiscordClassModules.ReadAllNotificationsButton	= {
+		button: "button-Jt-tIg",
+		frame: "frame-oXWS21",
+		inner: "innerFrame-8Hg64E"
+	};
 	DiscordClassModules.ServerFolders = {
 		dragPreview: "dragPreview-nXiByA",
 		guildPlaceholder: "placeholder-7bhR5s",
@@ -4683,6 +4688,9 @@
 		_pindmsrecentplaceholder: ["PinDMs", "recentPlaceholder"],
 		_pindmsunpinbutton: ["PinDMs", "unpinButton"],
 		_pindmsunpinicon: ["PinDMs", "unpinIcon"],
+		_readallnotificationsbuttonbutton: ["ReadAllNotificationsButton", "button"],
+		_readallnotificationsbuttonframe: ["ReadAllNotificationsButton", "frame"],
+		_readallnotificationsbuttoninner: ["ReadAllNotificationsButton", "innerFrame"],
 		_serverfoldersdragpreview: ["ServerFolders", "dragPreview"],
 		_serverfoldersfoldercontent: ["ServerFolders", "folderContent"],
 		_serverfoldersfoldercontentclosed: ["ServerFolders", "folderContentClosed"],
