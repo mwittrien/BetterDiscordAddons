@@ -1022,6 +1022,10 @@
 	WebModulesData.Nonprototype = [
 		"ChannelTextAreaContainer"
 	];
+	WebModulesData.LoadedInComponents = {
+		AutocompleteChannelResult: "AutocompleteComponents.Channel",
+		AutocompleteUserResult: "AutocompleteComponents.User"
+	};
 	WebModulesData.Patchfinder = {
 		Account: "accountinfo",
 		App: "app",
@@ -1048,6 +1052,7 @@
 		QuickSwitchGuildResult: "quickswitchresult",
 		QuickSwitchResult: "quickswitchresult",
 		MemberCard: "guildsettingsmembercard",
+		MessagesPopout: "messagespopout",
 		MutualGuilds: "userprofilebody",
 		MutualFriends: "userprofilebody",
 		NameTag: "nametag",
@@ -1255,22 +1260,26 @@
 		for (let patchtype in plugin.patchedModules) for (let type in plugin.patchedModules[patchtype]) {
 			if (WebModulesData.GlobalModules[type] && typeof WebModulesData.GlobalModules[type] == "function") patchInstance(WebModulesData.GlobalModules[type], type, patchtype);
 			else {
-				let mapped = WebModulesData.Patchmap[type];
-				let classname = WebModulesData.Patchfinder[type.split(" _ _ ")[1] || type];
-				let mappedtype = mapped ? mapped + " _ _ " + type : type;
-				if (mapped) {
-					plugin.patchedModules[patchtype][mappedtype] = plugin.patchedModules[patchtype][type];
-					delete plugin.patchedModules[patchtype][type];
+				let component = WebModulesData.LoadedInComponents[type] && BDFDB.ReactUtils.getValue(LibraryComponents, WebModulesData.LoadedInComponents[type]);
+				if (component) patchInstance(component, type, patchtype);
+				else {
+					let mapped = WebModulesData.Patchmap[type];
+					let classname = WebModulesData.Patchfinder[type.split(" _ _ ")[1] || type];
+					let mappedtype = mapped ? mapped + " _ _ " + type : type;
+					if (mapped) {
+						plugin.patchedModules[patchtype][mappedtype] = plugin.patchedModules[patchtype][type];
+						delete plugin.patchedModules[patchtype][type];
+					}
+					if (!classname) patchInstance(BDFDB.ModuleUtils.findByName(mappedtype.split(" _ _ ")[0]), mappedtype, patchtype);
+					else if (DiscordClasses[classname]) checkForInstance(classname, mappedtype, patchtype, WebModulesData.Forceobserve.includes(type.split(" _ _ ")[1] || type));
 				}
-				if (!classname) patchInstance(BDFDB.ModuleUtils.findByName(mappedtype.split(" _ _ ")[0]), mappedtype, patchtype);
-				else if (DiscordClasses[classname]) checkForInstance(classname, mappedtype, patchtype, WebModulesData.Forceobserve.includes(type.split(" _ _ ")[1] || type));
 			}
 		}
 		function patchInstance(instance, type, patchtype) {
 			if (instance) {
 				let name = type.split(" _ _ ")[0];
 				instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
-				instance = instance.displayName == name || instance.name == name ? instance : (BDFDB.ReactUtils.findConstructor(instance, name) || BDFDB.ReactUtils.findConstructor(instance, name, {up:true}));
+				instance = instance.displayName == name || instance.name == name || WebModulesData.LoadedInComponents[type] ? instance : (BDFDB.ReactUtils.findConstructor(instance, name) || BDFDB.ReactUtils.findConstructor(instance, name, {up:true}));
 				if (instance) {
 					instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 					let patchfunctions = {};
