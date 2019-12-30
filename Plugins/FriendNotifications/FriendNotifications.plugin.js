@@ -510,7 +510,7 @@ class FriendNotifications {
 								let DMid = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(user.id)
 								if (DMid) BDFDB.LibraryModules.SelectChannelUtils.selectPrivateChannel(DMid);
 								else BDFDB.LibraryModules.DirectMessageUtils.openPrivateChannel(BDFDB.UserUtils.me.id, user.id);
-								BDFDB.LibraryRequires.electron.remote.getCurrentWindow().maximize();
+								BDFDB.LibraryRequires.electron.remote.getCurrentWindow().focus();
 							}
 						};
 						if (!users[id].desktop) {
