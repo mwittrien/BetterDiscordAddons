@@ -3,7 +3,7 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.6.6";}
+	getVersion () {return "2.6.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,8 +11,7 @@ class ShowHiddenChannels {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Permission Changes","No longer allows or denies you to see a channel incorrectly after a permission update changed your access to a channel"],["Big gaps","Finally managed to sort out the bug that created huge gaps in the channel list"],["Flashing","Channel list no longer flashes and twitches when connectiong to a voice channel/collapsing a category/scrolling"]],
-			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"],["Sort", "You can now sort hidden channels in the native way, meaning they will be placed below their rightful category"],["Tooltip", "The tooltip was removed and was turned into a more friendly modal, which can be access via the right click menu on a channel"]]
+			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]
 		};
 
 		this.patchedModules = {
@@ -116,6 +115,10 @@ class ShowHiddenChannels {
 			
 			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.UnreadChannelUtils, "hasUnread", {after: e => {
 				return e.returnValue && !this.isChannelHidden(e.methodArguments[0]);
+			}});
+			
+			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.UnreadChannelUtils, "getMentionCount", {after: e => {
+				return this.isChannelHidden(e.methodArguments[0]) ? 0 : e.returnValue;
 			}});
 			
 			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.CategoryCollapseStore, "isCollapsed", {after: e => {
