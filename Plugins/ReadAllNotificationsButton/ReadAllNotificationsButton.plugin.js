@@ -147,7 +147,7 @@ class ReadAllNotificationsButton {
 				className: BDFDB.disCN.guildiconwrapper + BDFDB.disCN._readallnotificationsbuttoninner,
 				style: {height: 20},
 					children: BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.disCN.guildiconchildwrapper + BDFDB.disCN._readallnotificationsbuttobutton,
+					className: BDFDB.disCN.guildiconchildwrapper + BDFDB.disCN._readallnotificationsbuttonbutton,
 					style: {height: 20},
 					children: "read all",
 					onClick: _ => {
