@@ -2122,7 +2122,8 @@
 	};
 
 	BDFDB.ChannelUtils = {};
-	BDFDB.ChannelUtils.isTextChannel = function (channel) {
+	BDFDB.ChannelUtils.isTextChannel = function (channelOrId) {
+		let channel = typeof channelOrId == "string" ? LibraryModules.ChannelStore.getChannel(channelOrId) : channelOrId;
 		return BDFDB.ObjectUtils.is(channel) && (channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_TEXT || channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_STORE || channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_ANNOUNCEMENT);
 	};
 	BDFDB.ChannelUtils.getId = function (div) {
@@ -2189,6 +2190,10 @@
 	};
 	
 	BDFDB.DMUtils = {};
+	BDFDB.DMUtils.isDMChannel = function (channelOrId) {
+		let channel = typeof channelOrId == "string" ? LibraryModules.ChannelStore.getChannel(channelOrId) : channelOrId;
+		return BDFDB.ObjectUtils.is(channel) && (channel.type == BDFDB.DiscordConstants.ChannelTypes.DM || channel.type == BDFDB.DiscordConstants.ChannelTypes.GROUP_DM);
+	};
 	BDFDB.DMUtils.getIcon = function (id) {
 		var channel = LibraryModules.ChannelStore.getChannel(id = typeof id == "number" ? id.toFixed() : id);
 		if (!channel) return null;

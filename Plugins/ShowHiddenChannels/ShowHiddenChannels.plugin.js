@@ -3,7 +3,7 @@
 class ShowHiddenChannels {
 	getName () {return "ShowHiddenChannels";}
 
-	getVersion () {return "2.6.7";}
+	getVersion () {return "2.6.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -316,8 +316,8 @@ class ShowHiddenChannels {
 		}
 	}
 	
-	isChannelHidden (channelid) {
-		return !BDFDB.UserUtils.can("VIEW_CHANNEL", BDFDB.UserUtils.me.id, channelid);
+	isChannelHidden (channelId) {
+		return !BDFDB.DMUtils.isDMChannel(channelId) && !BDFDB.UserUtils.can("VIEW_CHANNEL", BDFDB.UserUtils.me.id, channelId);
 	}
 	
 	getHiddenChannels (guild) {
