@@ -25,10 +25,10 @@ class ReadAllNotificationsButton {
 
 	initConstructor () {
 		this.css = `
-			${BDFDB.disCN._readallnotificationsbuttonframe} {
+			${BDFDB.dotCN._readallnotificationsbuttonframe} {
 				margin-bottom: 10px;
 			}
-			${BDFDB.disCN._readallnotificationsbuttonbutton} {
+			${BDFDB.dotCN._readallnotificationsbuttonbutton} {
 				cursor: pointer;
 				border-radius: 4px;
 				font-size: 12px;
