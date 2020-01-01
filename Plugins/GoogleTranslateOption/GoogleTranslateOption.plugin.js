@@ -3,7 +3,7 @@
 class GoogleTranslateOption {
 	getName () {return "GoogleTranslateOption";}
 
-	getVersion () {return "1.9.0";} 
+	getVersion () {return "1.9.1";} 
 
 	getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ class GoogleTranslateOption {
 	constructor () {
 		this.changelog = {
 			"improved":[["Messages stay translated", "Messages will stay translated even if you switch channels"],["iTranslate & Yandex","Added iTranslate and Yandex engine, these engines got a montly rate limit, so if they don't work switch back to Google"]],
-			"fixed":[["Engine Crash","Fixed issue where a engine switch could crash discord when you opened the output dropdown afterwards"]]
+			"fixed":[["Translated Stamp","Now properly aligned with the message again"]]
 		};
 
 		this.patchedModules = {
@@ -266,8 +266,8 @@ class GoogleTranslateOption {
 				let renderedChildren = renderChildren(...args);
 				let translatedMessage = this.translatedMessages[e.instance.props.message.id];
 				if (translatedMessage) {
-					let [children, index] = BDFDB.ReactUtils.findChildren(renderedChildren, {props: [["className", BDFDB.disCN.messagemarkup]]});
-					if (index > -1) children[index].props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+					let [children, index] = BDFDB.ReactUtils.findChildren(renderedChildren, {props: [["className", BDFDB.disCN.messagemarkuprtl]]});
+					if (index > -1 && children[index].props && children[index].props.children && children[index].props.children.props && BDFDB.ArrayUtils.is(children[index].props.children.props.children)) children[index].props.children.props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						text: `From: ${this.getLanguageName(translatedMessage.input)}\nTo: ${this.getLanguageName(translatedMessage.output)}`,
 						tooltipConfig: {style: "max-width: 400px"},
 						children: BDFDB.ReactUtils.createElement("time", {
