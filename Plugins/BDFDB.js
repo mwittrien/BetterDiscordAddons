@@ -5499,6 +5499,7 @@
 		messagelowbackgroundopacity: ["Message", "lowBackgroundOpacity"],
 		messagemarkup: ["MessageMarkup", "markup"],
 		messagemarkupiscompact: ["MessageBody", "isCompact"],
+		messagemarkuprtl: ["MessageBody", "markupRtl"],
 		messagemediumbackgroundopacity: ["Message", "mediumBackgroundOpacity"],
 		messageoperations: ["MessageOperations", "operations"],
 		messages: ["MessagesWrap", "messages"],
