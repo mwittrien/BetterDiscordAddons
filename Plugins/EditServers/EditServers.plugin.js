@@ -3,7 +3,7 @@
 class EditServers {
 	getName () {return "EditServers";}
 
-	getVersion () {return "2.1.6";}
+	getVersion () {return "2.1.7";}
 	
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,8 @@ class EditServers {
 
 	constructor () {
 		this.changelog = {
-			"improved":[["Recent Mentions","Servernames are now changed in the recent mentions popout"],["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+			"fixed":[["Custom Server Banners","Work again"]],
+			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
 		this.patchedModules = {
@@ -307,7 +308,10 @@ class EditServers {
 	processGuildSidebar (e) {
 		if (e.instance.props.guild) {
 			let data = BDFDB.DataUtils.load(this, "servers", e.instance.props.guild.id);
-			if (data && data.removeBanner) e.instance.props.guild = new BDFDB.DiscordObjects.Guild(Object.assign({}, e.instance.props.guild, {banner: null}));
+			if (data) {
+				if (data.removeBanner) e.instance.props.guild = new BDFDB.DiscordObjects.Guild(Object.assign({}, e.instance.props.guild, {banner: null}));
+				else if (data.banner) e.instance.props.guild = new BDFDB.DiscordObjects.Guild(Object.assign({}, e.instance.props.guild, {banner: data.banner}));
+			}
 		}
 	}
 	
@@ -341,8 +345,12 @@ class EditServers {
 				newGuildObject.icon = null;
 				newGuildObject.getIconURL = _ => {return null;};
 			}
-			else if (data.url) newGuildObject.getIconURL = _ => {return data.url;};
+			else if (data.url) {
+				newGuildObject.icon = data.url;
+				newGuildObject.getIconURL = _ => {return data.url;};
+			}
 			if (data.removeBanner) newGuildObject.banner = null;
+			else if (data.banner) newGuildObject.banner = data.banner;
 			return newGuildObject;
 		}
 		return new BDFDB.DiscordObjects.Guild(guild);
