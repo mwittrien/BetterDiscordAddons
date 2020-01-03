@@ -4756,6 +4756,7 @@
 		applicationstore: ["ApplicationStore", "applicationStore"],
 		appold: ["AppInner", "app"],
 		auditlog: ["AuditLog", "auditLog"],
+		auditlogoverflowellipsis: ["AuditLog", "overflowEllipsis"],
 		auditloguserhook: ["AuditLog", "userHook"],
 		authbox: ["AuthBox", "authBox"],
 		autocomplete: ["Autocomplete", "autocomplete"],
