@@ -6542,6 +6542,7 @@
 	NativeSubComponents.QuickSelect = BDFDB.ModuleUtils.findByName("QuickSelectWrapper");
 	NativeSubComponents.SearchBar = BDFDB.ModuleUtils.find(m => m && m.displayName == "SearchBar" && m.defaultProps.placeholder == BDFDB.LanguageUtils.LanguageStrings.SEARCH);
 	NativeSubComponents.Select = BDFDB.ModuleUtils.findByName("SelectTempWrapper");
+	NativeSubComponents.SvgIcon = BDFDB.ModuleUtils.findByProperties("Gradients", "Names");
 	NativeSubComponents.Switch = BDFDB.ModuleUtils.findByName("Switch");
 	NativeSubComponents.TabBar = BDFDB.ModuleUtils.findByName("TabBar");
 	NativeSubComponents.Table = BDFDB.ModuleUtils.findByName("Table");
@@ -7246,6 +7247,8 @@
 	
 	LibraryComponents.GuildComponents.Pill = BDFDB.ModuleUtils.findByString("opacity:1,height:", "20:8", "default.item");
 	
+	LibraryComponents.HeaderBarComponents = Object.assign({}, BDFDB.ModuleUtils.findByName("HeaderBarContainer"));
+	
 	LibraryComponents.KeybindRecorder = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.KeybindRecorder") || reactInitialized && class BDFDB_KeybindRecorder extends LibraryModules.React.Component {
 		handleChange(arrays) {
 			if (typeof this.props.onChange == "function") this.props.onChange(arrays.map(platformkey => LibraryModules.KeyEvents.codes[BDFDB.LibraryModules.KeyCodeUtils.codeToKey(platformkey)] || platformkey[1]), this);
@@ -7811,7 +7814,17 @@
 	
 	LibraryComponents.Spinner = BDFDB.ModuleUtils.findByName("Spinner");
 	
-	LibraryComponents.SvgIcon = BDFDB.ModuleUtils.findByProperties("Gradients", "Names");
+	LibraryComponents.SvgIcon = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.SvgIcon") || reactInitialized && class BDFDB_Icon extends LibraryModules.React.Component {
+		render() {
+			if (this.props.name && LibraryComponents.SvgIcon[this.props.name]) return BDFDB.ReactUtils.createElement(NativeSubComponents.SvgIcon, this.props);
+			else if (this.props.iconSVG) {
+				let icon = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(this.props.iconSVG));
+				icon.props.className = BDFDB.DOMUtils.formatClassName(!icon.props.nativeClass && BDFDB.disCN.svgicon, icon.props.class, this.props.className);
+				return icon;
+			}
+			return null;
+		}
+	};
 	
 	LibraryComponents.Switch = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.Switch") || reactInitialized && class BDFDB_Switch extends LibraryModules.React.Component {
 		handleChange() {
@@ -9357,17 +9370,18 @@
 
 	InternalBDFDB.patchPlugin(BDFDB);
 
-	if (LibraryComponents.SvgIcon) BDFDB.ModuleUtils.patch(BDFDB, LibraryComponents.SvgIcon.prototype, "render", {
-		after: e => {
-			if (!e.thisObject.props.name) {
-				let iconSVG = e.thisObject.props.iconSVG || BDFDB.ReactUtils.findValue(e.thisObject, "iconSVG", {up:true});
-				if (iconSVG) {
-					e.returnValue = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(iconSVG));
-					e.returnValue.props.class = BDFDB.DOMUtils.formatClassName(!e.thisObject.props.nativeClass && BDFDB.disCN.svgicon, e.returnValue.props.class, e.thisObject.props.className);
+	InternalBDFDB.patchIconComponent = function (component) {
+		BDFDB.ModuleUtils.patch(BDFDB, component.prototype, "componentDidMount", {
+			after: e => {
+				if (e.thisObject.props && e.thisObject.props.style && e.thisObject.props.style.color) {
+					let node = BDFDB.ReactUtils.findDOMNode(e.thisObject);
+					if (node) node.style.setProperty("color", e.thisObject.props.style.color);
 				}
 			}
-		}
-	});
+		});
+	}
+	if (LibraryComponents.HeaderBarComponents && LibraryComponents.HeaderBarComponents.Icon) InternalBDFDB.patchIconComponent(LibraryComponents.HeaderBarComponents.Icon);
+	if (NativeSubComponents.SvgIcon) InternalBDFDB.patchIconComponent(NativeSubComponents.SvgIcon);
 
 	if (LibraryComponents.GuildComponents.BlobMask) {
 		let newBadges = ["lowerLeftBadge", "upperLeftBadge"];
