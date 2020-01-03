@@ -7816,10 +7816,11 @@
 	
 	LibraryComponents.SvgIcon = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.SvgIcon") || reactInitialized && class BDFDB_Icon extends LibraryModules.React.Component {
 		render() {
-			if (this.props.name && LibraryComponents.SvgIcon[this.props.name]) return BDFDB.ReactUtils.createElement(NativeSubComponents.SvgIcon, this.props);
+			if (this.props.name) return BDFDB.ReactUtils.createElement(NativeSubComponents.SvgIcon, this.props);
 			else if (this.props.iconSVG) {
 				let icon = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(this.props.iconSVG));
 				icon.props.className = BDFDB.DOMUtils.formatClassName(!icon.props.nativeClass && BDFDB.disCN.svgicon, icon.props.class, this.props.className);
+				icon.props.style = Object.assign({}, icon.props.style, this.props.style);
 				return icon;
 			}
 			return null;
@@ -9369,19 +9370,6 @@
 	};
 
 	InternalBDFDB.patchPlugin(BDFDB);
-
-	InternalBDFDB.patchIconComponent = function (component) {
-		BDFDB.ModuleUtils.patch(BDFDB, component.prototype, "componentDidMount", {
-			after: e => {
-				if (e.thisObject.props && e.thisObject.props.style && e.thisObject.props.style.color) {
-					let node = BDFDB.ReactUtils.findDOMNode(e.thisObject);
-					if (node) node.style.setProperty("color", e.thisObject.props.style.color);
-				}
-			}
-		});
-	}
-	if (LibraryComponents.HeaderBarComponents && LibraryComponents.HeaderBarComponents.Icon) InternalBDFDB.patchIconComponent(LibraryComponents.HeaderBarComponents.Icon);
-	if (NativeSubComponents.SvgIcon) InternalBDFDB.patchIconComponent(NativeSubComponents.SvgIcon);
 
 	if (LibraryComponents.GuildComponents.BlobMask) {
 		let newBadges = ["lowerLeftBadge", "upperLeftBadge"];
