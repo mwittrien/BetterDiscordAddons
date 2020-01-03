@@ -7819,7 +7819,7 @@
 			if (this.props.name) return BDFDB.ReactUtils.createElement(NativeSubComponents.SvgIcon, this.props);
 			else if (this.props.iconSVG) {
 				let icon = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(this.props.iconSVG));
-				icon.props.className = BDFDB.DOMUtils.formatClassName(!icon.props.nativeClass && BDFDB.disCN.svgicon, icon.props.class, this.props.className);
+				icon.props.className = BDFDB.DOMUtils.formatClassName(!this.props.nativeClass && BDFDB.disCN.svgicon, icon.props.class, this.props.className);
 				icon.props.style = Object.assign({}, icon.props.style, this.props.style);
 				return icon;
 			}
