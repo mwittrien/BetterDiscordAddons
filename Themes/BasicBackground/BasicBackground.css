@@ -10,6 +10,7 @@
 	--dmemberlisttransparency:		0.0;
 	--daccentcolor:					190,78,180;
 	
+	--dfont:						Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
 	--dtextshadow:					transparent;
 	
 	--dbackground:					url(https://mwittrien.github.io/BetterDiscordAddons/ThemesV2/BasicBackground/background.jpg);
@@ -25,6 +26,7 @@
 	--vaccentcolor:					var(--accentcolor,					var(--daccentcolor));
 	--vlinkcolor:					var(--vaccentcolor);
 	
+	--vfont:						var(--font,							var(--dfont));
 	--vtextshadow:					var(--textshadow,					var(--dtextshadow));
 	
 	--vbackground:					var(--background,					var(--dbackground));
@@ -4200,6 +4202,10 @@ body:before {
 
 
 /* ~~~~		16.		GENERAL							~~~~ */
+
+::-webkit-input-placeholder, body, button, input, select, textarea {
+    font-family: var(--vfont);
+}
 
 ::selection {												/* selection												*/
 	background: rgb(var(--vaccentcolor));
