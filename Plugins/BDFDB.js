@@ -882,9 +882,9 @@
 	};
 	BDFDB.ObjectUtils.deepAssign = function (obj, ...objs) {
 		if (!objs.length) return obj;
-		var nextobj = objs.shift();
+		let nextobj = objs.shift();
 		if (BDFDB.ObjectUtils.is(obj) && BDFDB.ObjectUtils.is(nextobj)) {
-			for (var key in nextobj) {
+			for (let key in nextobj) {
 				if (BDFDB.ObjectUtils.is(nextobj[key])) {
 					if (!obj[key]) Object.assign(obj, {[key]:{}});
 					BDFDB.ObjectUtils.deepAssign(obj[key], nextobj[key]);
@@ -2271,90 +2271,96 @@
 	BDFDB.DataUtils = {};
 	BDFDB.DataUtils.cached = {};
 	BDFDB.DataUtils.save = function (data, plugin, key, id) {
-		var configpath, pluginname;
+		let configpath, pluginname;
 		if (!BDFDB.BDUtils.isBDv2()) {
 			pluginname = typeof plugin === "string" ? plugin : plugin.name;
 			configpath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginname + ".config.json");
 		}
 		else {
 			pluginname = typeof plugin === "string" ? plugin.toLowerCase() : null;
-			var contentpath = pluginname ? BDFDB.Plugins[pluginname] ? BDFDB.Plugins[pluginname].contentPath : null : plugin.contentPath;
+			let contentpath = pluginname ? BDFDB.Plugins[pluginname] ? BDFDB.Plugins[pluginname].contentPath : null : plugin.contentPath;
 			if (!contentpath) return;
 			configpath = LibraryRequires.path.join(contentpath, "settings.json");
 		}
 		
-		var exists = LibraryRequires.fs.existsSync(configpath);
-		var config = !exists ? {} : typeof BDFDB.DataUtils.cached[pluginname] !== "undefined" ? BDFDB.DataUtils.cached[pluginname] : InternalBDFDB.readConfig(configpath);
+		let config = BDFDB.DataUtils.cached[pluginname] !== undefined ? BDFDB.DataUtils.cached[pluginname] : (InternalBDFDB.readConfig(configpath) || {});
 		
-		if (id === undefined) config[key] = BDFDB.ObjectUtils.is(data) ? BDFDB.ObjectUtils.sort(data) : data;
+		if (key === undefined) config = BDFDB.ObjectUtils.is(data) ? BDFDB.ObjectUtils.sort(data) : data;
 		else {
-			if (!BDFDB.ObjectUtils.is(config[key])) config[key] = {};
-			config[key][id] = BDFDB.ObjectUtils.is(data) ? BDFDB.ObjectUtils.sort(data) : data;
+			if (id === undefined) config[key] = BDFDB.ObjectUtils.is(data) ? BDFDB.ObjectUtils.sort(data) : data;
+			else {
+				if (!BDFDB.ObjectUtils.is(config[key])) config[key] = {};
+				config[key][id] = BDFDB.ObjectUtils.is(data) ? BDFDB.ObjectUtils.sort(data) : data;
+			}
 		}
 		
-		if (BDFDB.ObjectUtils.isEmpty(config[key])) delete config[key];
+		let configIsObject = BDFDB.ObjectUtils.is(config);
+		if (key !== undefined && configIsObject && BDFDB.ObjectUtils.isEmpty(config[key])) delete config[key];
 		if (BDFDB.ObjectUtils.isEmpty(config)) {
 			delete BDFDB.DataUtils.cached[pluginname];
-			if (exists) LibraryRequires.fs.unlinkSync(configpath);
+			if (LibraryRequires.fs.existsSync(configpath)) LibraryRequires.fs.unlinkSync(configpath);
 		}
 		else {
-			config = BDFDB.ObjectUtils.sort(config);
-			BDFDB.DataUtils.cached[pluginname] = BDFDB.ObjectUtils.deepAssign({}, config);
+			if (configIsObject) config = BDFDB.ObjectUtils.sort(config);
+			BDFDB.DataUtils.cached[pluginname] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
 			LibraryRequires.fs.writeFileSync(configpath, JSON.stringify(config, null, "	"));
 		}
 	};
 
 	BDFDB.DataUtils.load = function (plugin, key, id) {
-		var configpath, pluginname;
+		let configpath, pluginname;
 		if (!BDFDB.BDUtils.isBDv2()) {
 			pluginname = typeof plugin === "string" ? plugin : plugin.name;
 			configpath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginname + ".config.json");
 		}
 		else {
 			pluginname = typeof plugin === "string" ? plugin.toLowerCase() : null;
-			var contentpath = pluginname ? BDFDB.Plugins[pluginname] ? BDFDB.Plugins[pluginname].contentPath : null : plugin.contentPath;
+			let contentpath = pluginname ? BDFDB.Plugins[pluginname] ? BDFDB.Plugins[pluginname].contentPath : null : plugin.contentPath;
 			if (!contentpath) return {};
 			configpath = LibraryRequires.path.join(contentpath, "settings.json");
 		}
 		
-		if (!LibraryRequires.fs.existsSync(configpath)) {
-			delete BDFDB.DataUtils.cached[pluginname];
-			return {};
-		}
-		var config = typeof BDFDB.DataUtils.cached[pluginname] !== "undefined" && typeof BDFDB.DataUtils.cached[pluginname][key] !== "undefined" ? BDFDB.DataUtils.cached[pluginname] : InternalBDFDB.readConfig(configpath);
-		BDFDB.DataUtils.cached[pluginname] = BDFDB.ObjectUtils.deepAssign({}, config);
+		let config = BDFDB.DataUtils.cached[pluginname] !== undefined ? BDFDB.DataUtils.cached[pluginname] : (InternalBDFDB.readConfig(configpath) || {});
+		let configIsObject = BDFDB.ObjectUtils.is(config);
+		BDFDB.DataUtils.cached[pluginname] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
 		
-		let keydata = BDFDB.ObjectUtils.deepAssign({}, config && typeof config[key] !== "undefined" ? config[key] : {});
-		if (id === undefined) return keydata;
-		else return keydata[id] === undefined ? null : keydata[id];
+		if (key === undefined) return config;
+		else {
+			let keydata = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config[key] != undefined ? config[key] : {}) : null;
+			if (id === undefined) return keydata;
+			else return !BDFDB.ObjectUtils.is(keydata) || keydata[id] === undefined ? null : keydata[id];
+		}
 	};
 	BDFDB.DataUtils.remove = function (plugin, key, id) {
-		var configpath, pluginname;
+		let configpath, pluginname;
 		if (!BDFDB.BDUtils.isBDv2()) {
 			pluginname = typeof plugin === "string" ? plugin : plugin.name;
 			configpath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginname + ".config.json");
 		}
 		else {
 			pluginname = typeof plugin === "string" ? plugin.toLowerCase() : null;
-			var contentpath = pluginname ? BDFDB.Plugins[pluginname] ? BDFDB.Plugins[pluginname].contentPath : null : plugin.contentPath;
+			let contentpath = pluginname ? BDFDB.Plugins[pluginname] ? BDFDB.Plugins[pluginname].contentPath : null : plugin.contentPath;
 			if (!contentpath) return;
 			configpath = LibraryRequires.path.join(contentpath, "settings.json");
 		}
 		
-		var exists = LibraryRequires.fs.existsSync(configpath);
-		var config = !exists ? {} : typeof BDFDB.DataUtils.cached[pluginname] !== "undefined" ? BDFDB.DataUtils.cached[pluginname] : InternalBDFDB.readConfig(configpath);
+		let config = BDFDB.DataUtils.cached[pluginname] !== undefined ? BDFDB.DataUtils.cached[pluginname] : (InternalBDFDB.readConfig(configpath) || {});
+		let configIsObject = BDFDB.ObjectUtils.is(config);
 		
-		if (id === undefined) delete config[key];
-		else if (BDFDB.ObjectUtils.is(config[key])) delete config[key][id];
+		if (key === undefined || !configIsObject) config = {};
+		else {
+			if (id === undefined) delete config[key];
+			else if (BDFDB.ObjectUtils.is(config[key])) delete config[key][id];
+		}
 		
 		if (BDFDB.ObjectUtils.isEmpty(config[key])) delete config[key];
 		if (BDFDB.ObjectUtils.isEmpty(config)) {
 			delete BDFDB.DataUtils.cached[pluginname];
-			if (exists) LibraryRequires.fs.unlinkSync(configpath);
+			if (LibraryRequires.fs.existsSync(configpath)) LibraryRequires.fs.unlinkSync(configpath);
 		}
 		else {
-			config = BDFDB.ObjectUtils.sort(config);
-			BDFDB.DataUtils.cached[pluginname] = config;
+			if (configIsObject) config = BDFDB.ObjectUtils.sort(config);
+			BDFDB.DataUtils.cached[pluginname] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
 			LibraryRequires.fs.writeFileSync(configpath, JSON.stringify(config, null, "	"));
 		}
 	};
@@ -7794,9 +7800,7 @@
 				let marker = typeof value == "string" ? `"` : ``;
 				newdata += (marker + value + marker) + "}".repeat(keys.length);
 				newdata = JSON.parse(newdata);
-				if (BDFDB.ObjectUtils.is(newdata)) BDFDB.ObjectUtils.deepAssign(data, newdata);
-				else data = newdata;
-				BDFDB.DataUtils.save(data, this.props.plugin, option);
+				BDFDB.DataUtils.save(BDFDB.ObjectUtils.is(newdata) ? BDFDB.ObjectUtils.deepAssign({}, data, newdata) : newdata, this.props.plugin, option);
 				this.props.plugin.SettingsUpdated = true;
 			}
 			if (typeof this.props.onChange == "function") this.props.onChange(value, this);
