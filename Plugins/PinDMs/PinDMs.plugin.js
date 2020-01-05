@@ -354,7 +354,7 @@ class PinDMs {
 						if (this.hoveredChannel == "header_" + category.id) children.splice(index++, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListItem, {
 							className: BDFDB.disCNS.dmchannel + BDFDB.disCNS._pindmsdmchannelpinned + BDFDB.disCN._pindmsdmchannelplaceholder
 						}));
-						if (!category.collapsed) for (let id of category.dms) if (e.instance.props.pinnedChannels[id] && this.draggedChannel != id) {
+						for (let id of category.dms) if (e.instance.props.pinnedChannels[id] && this.draggedChannel != id && (!category.collapsed || e.instance.props.selectedChannelId == id)) {
 							children.splice(index++, 0, e.instance.props.renderChannel(e.instance.props.pinnedChannels[id], e.instance.props.selectedChannelId == id));
 							if (this.hoveredChannel == id) children.splice(index++, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListItem, {
 								className: BDFDB.disCNS.dmchannel + BDFDB.disCNS._pindmsdmchannelpinned + BDFDB.disCN._pindmsdmchannelplaceholder
