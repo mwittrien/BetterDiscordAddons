@@ -3,7 +3,7 @@
 class JoinedAtDate {
 	getName () {return "JoinedAtDate";}
 
-	getVersion () {return "1.1.7";}
+	getVersion () {return "1.1.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class JoinedAtDate {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["BetterRoleColors","Fixed now working when BRC is enabled ......"]],
+			"added":[["Days Ago","Added a days ago $daysago placeholder, to check how it works read the guide in the settings"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
@@ -161,7 +161,7 @@ class JoinedAtDate {
 			title: "Placeholder Guide",
 			dividertop: true,
 			collapsed: BDFDB.DataUtils.load(this, "hideInfo", "hideInfo"),
-			children: ["$hour will be replaced with the current hour", "$minute will be replaced with the current minutes", "$second will be replaced with the current seconds", "$msecond will be replaced with the current milliseconds", "$timemode will change $hour to a 12h format and will be replaced with AM/PM", "$year will be replaced with the current year", "$month will be replaced with the current month", "$day will be replaced with the current day", "$monthnameL will be replaced with the monthname in long format based on the Discord Language", "$monthnameS will be replaced with the monthname in short format based on the Discord Language", "$weekdayL will be replaced with the weekday in long format based on the Discord Language", "$weekdayS will be replaced with the weekday in short format based on the Discord Language"].map(string => {
+			children: ["$hour will be replaced with the current hour", "$minute will be replaced with the current minutes", "$second will be replaced with the current seconds", "$msecond will be replaced with the current milliseconds", "$timemode will change $hour to a 12h format and will be replaced with AM/PM", "$year will be replaced with the current year", "$month will be replaced with the current month", "$day will be replaced with the current day", "$monthnameL will be replaced with the monthname in long format based on the Discord Language", "$monthnameS will be replaced with the monthname in short format based on the Discord Language", "$weekdayL will be replaced with the weekday in long format based on the Discord Language", "$weekdayS will be replaced with the weekday in short format based on the Discord Language", "$daysago will be replaced with a string to tell you how many days ago the event occured. Will be ignored if the amount of days equals 0. For Example: " + BDFDB.LanguageUtils.LanguageStringsFormat("ACTIVITY_FEED_USER_PLAYED_DAYS_AGO", 3)].map(string => {
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
 					type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
 					children: string
@@ -281,7 +281,7 @@ class JoinedAtDate {
 		else {
 			let ownformat = BDFDB.DataUtils.get(this, "formats", "ownFormat");
 			languageid = BDFDB.LanguageUtils.getLanguage().id;
-			let hour = timeobj.getHours(), minute = timeobj.getMinutes(), second = timeobj.getSeconds(), msecond = timeobj.getMilliseconds(), day = timeobj.getDate(), month = timeobj.getMonth()+1, timemode = "";
+			let hour = timeobj.getHours(), minute = timeobj.getMinutes(), second = timeobj.getSeconds(), msecond = timeobj.getMilliseconds(), day = timeobj.getDate(), month = timeobj.getMonth()+1, timemode = "", daysago = Math.round((new Date() - timeobj)/(1000*60*60*24));
 			if (ownformat.indexOf("$timemode") > -1) {
 				timemode = hour >= 12 ? "PM" : "AM";
 				hour = hour % 12;
@@ -297,9 +297,11 @@ class JoinedAtDate {
 				.replace("$weekdayS", timeobj.toLocaleDateString(languageid,{weekday: "short"}))
 				.replace("$monthnameL", timeobj.toLocaleDateString(languageid,{month: "long"}))
 				.replace("$monthnameS", timeobj.toLocaleDateString(languageid,{month: "short"}))
+				.replace("$daysago", daysago > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("ACTIVITY_FEED_USER_PLAYED_DAYS_AGO", daysago) : "")
 				.replace("$day", settings.forceZeros && day < 10 ? "0" + day : day)
 				.replace("$month", settings.forceZeros && month < 10 ? "0" + month : month)
-				.replace("$year", timeobj.getFullYear());
+				.replace("$year", timeobj.getFullYear())
+				.trim().split(" ").filter(n => n).join(" ");
 		}
 		return timestring;
 	}
