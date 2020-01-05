@@ -127,15 +127,29 @@ class ReadAllNotificationsButton {
 
 	onUserContextMenu (e) {
 		if (e.instance.props.channelId && e.instance.props.type == BDFDB.DiscordConstants.ContextMenuTypes.USER_PRIVATE_CHANNELS) {
-			e.returnvalue.props.children.props.children.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: BDFDB.LibraryComponents.ContextMenuItems.Group});
+			if (index > -1) this.injectItem(children, e.instance.props.channelId);
+		}
+	}
+
+	onGroupDMContextMenu (e) {
+		if (e.instance.props.channelId) {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: BDFDB.LibraryComponents.ContextMenuItems.Group});
+			if (index > -1) this.injectItem(children, e.instance.props.channelId);
+		}
+	}
+	
+	injectItem (children, channelId) {
+		children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+			children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 				label: BDFDB.LanguageUtils.LanguageStrings.MARK_AS_READ,
-				disabled: !BDFDB.LibraryModules.DirectMessageUnreadStore.getUnreadPrivateChannelIds().includes(e.instance.props.channelId),
+				disabled: !BDFDB.LibraryModules.DirectMessageUnreadStore.getUnreadPrivateChannelIds().includes(channelId),
 				action: event => {
 					BDFDB.ContextMenuUtils.close(event.target);
-					BDFDB.DMUtils.markAsRead(e.instance.props.channelId);
+					BDFDB.DMUtils.markAsRead(channelId);
 				}
-			}));
-		}
+			})
+		}));
 	}
 	
 	processGuilds (e) {
