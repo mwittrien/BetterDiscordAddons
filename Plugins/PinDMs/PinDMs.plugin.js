@@ -3,7 +3,7 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.5.3";}
+	getVersion () {return "1.5.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class PinDMs {
 
 	constructor () {
 		this.changelog = {
-			"added":[["Sort Order","You can now enable the option in the plugin settings to sort pinned DMs in the most recent message order within category"]],
+			"added":[["Sort Order","You can now enable the option in the plugin settings to sort pinned DMs in the most recent message order within category"],["Move to other Category","Context Menu Layout was changed you can now pin a DM to another category (this will remove the DM from the other category)"]],
 			"improved":[["Categories","Instead of pinning all your channels into the same category in the private channel list, you can now create your own collapsable categories, old pinned channel data was ported to the new category format"],["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
@@ -221,23 +221,22 @@ class PinDMs {
 		let pinnedInGuild = this.isPinned(id, "pinnedRecents");
 		
 		let categories = this.sortAndUpdateCategories("dmCategories", true);
-		let category = this.getCategory(id, "dmCategories");
+		let currentCategory = this.getCategory(id, "dmCategories");
 		
 		children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
 			label: this.labels.context_pindm_text,
-			render: [
-				category ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-					label: this.labels.context_unpinchannel_text,
-					danger: true,
-					action: _ => {
-						BDFDB.ContextMenuUtils.close(instance);
-						this.removeFromCategory(id, category, "dmCategories");
-					}
-				}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
+			render: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
 					label: this.labels.context_pinchannel_text,
 					render: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+							children: currentCategory ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+								label: this.labels.context_unpinchannel_text,
+								danger: true,
+								action: _ => {
+									BDFDB.ContextMenuUtils.close(instance);
+									this.removeFromCategory(id, currentCategory, "dmCategories");
+								}
+							}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 								label: this.labels.context_addtonewcategory_text,
 								brand: true,
 								action: _ => {
@@ -253,13 +252,14 @@ class PinDMs {
 							})
 						}),
 						categories.length ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-							children: categories.map((category, i) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+							children: categories.map(category => currentCategory && currentCategory.id == category.id ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 								label: category.name || this.labels.header_pinneddms_text,
 								action: _ => {
 									BDFDB.ContextMenuUtils.close(instance);
+									if (currentCategory) this.removeFromCategory(id, currentCategory, "dmCategories");
 									this.addToCategory(id, category, "dmCategories");
 								}
-							}))
+							})).filter(n => n)
 						}) : null
 					].filter(n => n)
 				}),
