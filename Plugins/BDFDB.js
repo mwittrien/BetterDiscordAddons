@@ -19,7 +19,6 @@
 		BDv2Api: window.BDFDB && window.BDFDB.BDv2Api || undefined,
 		name: "$BDFDB"
 	};
-	if (!window.BDFDB) window.BDFDB = BDFDB;
 	var loadid = Math.round(Math.random() * 10000000000000000), InternalBDFDB = {};
 	BDFDB.InternalData.loadid = loadid;
 
@@ -934,7 +933,7 @@
 	};
 	
 	BDFDB.ModuleUtils = {};
-	BDFDB.ModuleUtils.cached = {};
+	BDFDB.ModuleUtils.cached = window.BDFDB && window.BDFDB.ModuleUtils && window.BDFDB.ModuleUtils.cached || {};
 	BDFDB.ModuleUtils.find = function (filter, getExport) {
 		getExport = typeof getExport != "boolean" ? true : getExport;
 		var req = InternalBDFDB.getWebModuleReq();
@@ -2270,7 +2269,7 @@
 	};
 
 	BDFDB.DataUtils = {};
-	BDFDB.DataUtils.cached = {};
+	BDFDB.DataUtils.cached = window.BDFDB && window.BDFDB.DataUtils && window.BDFDB.DataUtils.cached || {};
 	BDFDB.DataUtils.save = function (data, plugin, key, id) {
 		let configpath, pluginname;
 		if (!BDFDB.BDUtils.isBDv2()) {
@@ -2284,7 +2283,7 @@
 			configpath = LibraryRequires.path.join(contentpath, "settings.json");
 		}
 		
-		let config = window.BDFDB.DataUtils.cached[pluginname] !== undefined ? window.BDFDB.DataUtils.cached[pluginname] : (InternalBDFDB.readConfig(configpath) || {});
+		let config = BDFDB.DataUtils.cached[pluginname] !== undefined ? BDFDB.DataUtils.cached[pluginname] : (InternalBDFDB.readConfig(configpath) || {});
 		
 		if (key === undefined) config = BDFDB.ObjectUtils.is(data) ? BDFDB.ObjectUtils.sort(data) : data;
 		else {
@@ -2298,12 +2297,12 @@
 		let configIsObject = BDFDB.ObjectUtils.is(config);
 		if (key !== undefined && configIsObject && BDFDB.ObjectUtils.isEmpty(config[key])) delete config[key];
 		if (BDFDB.ObjectUtils.isEmpty(config)) {
-			delete window.BDFDB.DataUtils.cached[pluginname];
+			delete BDFDB.DataUtils.cached[pluginname];
 			if (LibraryRequires.fs.existsSync(configpath)) LibraryRequires.fs.unlinkSync(configpath);
 		}
 		else {
 			if (configIsObject) config = BDFDB.ObjectUtils.sort(config);
-			window.BDFDB.DataUtils.cached[pluginname] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
+			BDFDB.DataUtils.cached[pluginname] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
 			LibraryRequires.fs.writeFileSync(configpath, JSON.stringify(config, null, "	"));
 		}
 	};
@@ -2321,9 +2320,9 @@
 			configpath = LibraryRequires.path.join(contentpath, "settings.json");
 		}
 		
-		let config = window.BDFDB.DataUtils.cached[pluginname] !== undefined ? window.BDFDB.DataUtils.cached[pluginname] : (InternalBDFDB.readConfig(configpath) || {});
+		let config = BDFDB.DataUtils.cached[pluginname] !== undefined ? BDFDB.DataUtils.cached[pluginname] : (InternalBDFDB.readConfig(configpath) || {});
 		let configIsObject = BDFDB.ObjectUtils.is(config);
-		window.BDFDB.DataUtils.cached[pluginname] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
+		BDFDB.DataUtils.cached[pluginname] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
 		
 		if (key === undefined) return config;
 		else {
@@ -2345,7 +2344,7 @@
 			configpath = LibraryRequires.path.join(contentpath, "settings.json");
 		}
 		
-		let config = window.BDFDB.DataUtils.cached[pluginname] !== undefined ? window.BDFDB.DataUtils.cached[pluginname] : (InternalBDFDB.readConfig(configpath) || {});
+		let config = BDFDB.DataUtils.cached[pluginname] !== undefined ? BDFDB.DataUtils.cached[pluginname] : (InternalBDFDB.readConfig(configpath) || {});
 		let configIsObject = BDFDB.ObjectUtils.is(config);
 		
 		if (key === undefined || !configIsObject) config = {};
@@ -2356,12 +2355,12 @@
 		
 		if (BDFDB.ObjectUtils.isEmpty(config[key])) delete config[key];
 		if (BDFDB.ObjectUtils.isEmpty(config)) {
-			delete window.BDFDB.DataUtils.cached[pluginname];
+			delete BDFDB.DataUtils.cached[pluginname];
 			if (LibraryRequires.fs.existsSync(configpath)) LibraryRequires.fs.unlinkSync(configpath);
 		}
 		else {
 			if (configIsObject) config = BDFDB.ObjectUtils.sort(config);
-			window.BDFDB.DataUtils.cached[pluginname] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
+			BDFDB.DataUtils.cached[pluginname] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
 			LibraryRequires.fs.writeFileSync(configpath, JSON.stringify(config, null, "	"));
 		}
 	};
