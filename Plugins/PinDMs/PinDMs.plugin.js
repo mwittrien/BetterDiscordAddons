@@ -87,8 +87,8 @@ class PinDMs {
 
 		this.defaults = {
 			settings: {
-				showPinIcon:		{value:true, 	description:"Shows a little 'Pin' icon for pinned DMs in the server list:"},
 				sortInRecentOrder:	{value:false, 	description:"Sort pinned DMs in the recent message order instead of the pinned at order:"},
+				showPinIcon:		{value:true, 	description:"Shows a little 'Pin' icon for pinned DMs in the server list:"},
 				showCategoryAmount:	{value:true, 	description:"Shows the amount of pinned DMs in a category in the channel list:"}
 			}
 		};
