@@ -3,7 +3,7 @@
 class EditChannels {
 	getName () {return "EditChannels";}
 
-	getVersion () {return "4.0.8";}
+	getVersion () {return "4.0.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -55,7 +55,6 @@ class EditChannels {
 		this.defaults = {
 			settings: {
 				changeChannelIcon:		{value:true, 	inner:false,	description:"Change color of Channel Icon."},
-				changeUnreadIndicator:	{value:true, 	inner:false,	description:"Change color of Unread Indicator."},
 				changeInChatTextarea:	{value:true, 	inner:true,		description:"Chat Textarea"},
 				changeInMentions:		{value:true, 	inner:true,		description:"Mentions"},
 				changeInChannelList:	{value:true, 	inner:true,		description:"Channel List"},
