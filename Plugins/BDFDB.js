@@ -3079,11 +3079,27 @@
 		}
 		return 0;
 	};
+	BDFDB.DOMUtils.getInnerHeight = function (node) {
+		if (Node.prototype.isPrototypeOf(node) && node.nodeType != Node.TEXT_NODE) {
+			let rects = BDFDB.DOMUtils.getRects(node);
+			let style = getComputedStyle(node);
+			return rects.height - parseInt(style.paddingTop) - parseInt(style.paddingBottom);
+		}
+		return 0;
+	};
 	BDFDB.DOMUtils.getWidth = function (node) {
 		if (Node.prototype.isPrototypeOf(node) && node.nodeType != Node.TEXT_NODE) {
-			var rects = BDFDB.DOMUtils.getRects(node);
-			var style = getComputedStyle(node);
+			let rects = BDFDB.DOMUtils.getRects(node);
+			let style = getComputedStyle(node);
 			return rects.width + parseInt(style.marginLeft) + parseInt(style.marginRight);
+		}
+		return 0;
+	};
+	BDFDB.DOMUtils.getInnerWidth = function (node) {
+		if (Node.prototype.isPrototypeOf(node) && node.nodeType != Node.TEXT_NODE) {
+			let rects = BDFDB.DOMUtils.getRects(node);
+			let style = getComputedStyle(node);
+			return rects.width - parseInt(style.paddingLeft) - parseInt(style.paddingRight);
 		}
 		return 0;
 	};
@@ -8055,16 +8071,16 @@
 				}),
 				ref: instance => {
 					let ele = BDFDB.ReactUtils.findDOMNode(instance);
-					if (ele) {
-						var inner = ele.firstElementChild;
-						var Animation = new LibraryModules.AnimationUtils.Value(0);
+					if (ele && ele.parentElement) {
+						ele.style.setProperty("max-width", `${BDFDB.DOMUtils.getInnerWidth(ele.parentElement)}px`);
+						let Animation = new LibraryModules.AnimationUtils.Value(0);
 						Animation
-							.interpolate({inputRange:[0, 1], outputRange:[0, (BDFDB.DOMUtils.getRects(inner).width - BDFDB.DOMUtils.getRects(ele).width) * -1]})
-							.addListener(v => {inner.style.setProperty("left", v.value + "px", "important");});
+							.interpolate({inputRange:[0, 1], outputRange:[0, (BDFDB.DOMUtils.getRects(ele.firstElementChild).width - BDFDB.DOMUtils.getRects(ele).width) * -1]})
+							.addListener(v => {ele.firstElementChild.style.setProperty("left", v.value + "px", "important");});
 						this.scroll = p => {
-							var w = p + parseFloat(inner.style.getPropertyValue("left")) / (BDFDB.DOMUtils.getRects(inner).width - BDFDB.DOMUtils.getRects(ele).width);
+							let w = p + parseFloat(ele.firstElementChild.style.getPropertyValue("left")) / (BDFDB.DOMUtils.getRects(ele.firstElementChild).width - BDFDB.DOMUtils.getRects(ele).width);
 							w = isNaN(w) || !isFinite(w) ? p : w;
-							w *= BDFDB.DOMUtils.getRects(inner).width / (BDFDB.DOMUtils.getRects(ele).width * 2);
+							w *= BDFDB.DOMUtils.getRects(ele.firstElementChild).width / (BDFDB.DOMUtils.getRects(ele).width * 2);
 							LibraryModules.AnimationUtils.parallel([LibraryModules.AnimationUtils.timing(Animation, {toValue:p, duration:Math.sqrt(w**2) * 4000 / (parseInt(this.props.speed) || 1)})]).start();
 						}
 					}
