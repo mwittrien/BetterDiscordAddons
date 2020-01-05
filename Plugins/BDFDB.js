@@ -7657,7 +7657,6 @@
 						align: LibraryComponents.Flex.Align.CENTER,
 						children: [
 							this.props.label ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
-								wrap: true,
 								children: BDFDB.ReactUtils.createElement(LibraryComponents.SettingsLabel, {
 									mini: this.props.mini,
 									label: this.props.label
@@ -8064,20 +8063,16 @@
 					}
 				},
 				onMouseEnter: e => {
-					var ele = e.currentTarget;
-					var inner = ele.firstElementChild;
-					if (BDFDB.DOMUtils.getRects(ele).width < BDFDB.DOMUtils.getRects(inner).width) {
+					if (BDFDB.DOMUtils.getRects(e.currentTarget).width < BDFDB.DOMUtils.getRects(e.currentTarget.firstElementChild).width) {
 						this.scrolling = true;
-						inner.style.setProperty("display", "block", "important");
+						e.currentTarget.firstElementChild.style.setProperty("display", "block", "important");
 						this.scroll(1);
 					}
 				},
 				onMouseLeave: e => {
-					var ele = e.currentTarget;
-					var inner = ele.firstElementChild;
 					if (this.scrolling) {
 						delete this.scrolling;
-						inner.style.setProperty("display", "inline", "important");
+						e.currentTarget.firstElementChild.style.setProperty("display", "inline", "important");
 						this.scroll(0);
 					}
 				},
