@@ -87,6 +87,7 @@ class PinDMs {
 		this.defaults = {
 			settings: {
 				showPinIcon:		{value:true, 	description:"Shows a little 'Pin' icon for pinned DMs in the server list:"},
+				sortInRecentOrder:	{value:false, 	description:"Sort pinned DMs in the recent message order instead of the pinned at order:"},
 				showCategoryAmount:	{value:true, 	description:"Shows the amount of pinned DMs in a category in the channel list:"}
 			}
 		};
@@ -282,6 +283,7 @@ class PinDMs {
 			for (let category of categories) for (let id of category.dms) if (e.instance.props.channels[id]) {
 				e.instance.props.pinnedChannels[id] = e.instance.props.channels[id];
 				delete e.instance.props.channels[id];
+				BDFDB.ArrayUtils.remove(e.instance.props.privateChannelIds, id, true);
 			}
 			if (e.returnvalue) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ListSectionItem"});
@@ -354,11 +356,14 @@ class PinDMs {
 						if (this.hoveredChannel == "header_" + category.id) children.splice(index++, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListItem, {
 							className: BDFDB.disCNS.dmchannel + BDFDB.disCNS._pindmsdmchannelpinned + BDFDB.disCN._pindmsdmchannelplaceholder
 						}));
-						for (let id of category.dms) if (e.instance.props.pinnedChannels[id] && this.draggedChannel != id && (!category.collapsed || e.instance.props.selectedChannelId == id)) {
-							children.splice(index++, 0, e.instance.props.renderChannel(e.instance.props.pinnedChannels[id], e.instance.props.selectedChannelId == id));
-							if (this.hoveredChannel == id) children.splice(index++, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListItem, {
-								className: BDFDB.disCNS.dmchannel + BDFDB.disCNS._pindmsdmchannelpinned + BDFDB.disCN._pindmsdmchannelplaceholder
-							}));
+						for (let id of category.dms) if (e.instance.props.pinnedChannels[id]) {
+							if (!e.instance.props.privateChannelIds.includes(id)) e.instance.props.privateChannelIds.unshift(id);
+							if (this.draggedChannel != id && (!category.collapsed || e.instance.props.selectedChannelId == id)) {
+								children.splice(index++, 0, e.instance.props.renderChannel(e.instance.props.pinnedChannels[id], e.instance.props.selectedChannelId == id));
+								if (this.hoveredChannel == id) children.splice(index++, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListItem, {
+									className: BDFDB.disCNS.dmchannel + BDFDB.disCNS._pindmsdmchannelpinned + BDFDB.disCN._pindmsdmchannelplaceholder
+								}));
+							}
 						}
 					}
 				}

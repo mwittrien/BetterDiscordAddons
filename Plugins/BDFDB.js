@@ -1494,6 +1494,7 @@
 	LibraryModules.CopyLinkUtils = BDFDB.ModuleUtils.findByProperties("SUPPORTS_COPY", "copy");
 	LibraryModules.CurrentUserStore = BDFDB.ModuleUtils.findByProperties("getCurrentUser");
 	LibraryModules.CurrentVoiceUtils = BDFDB.ModuleUtils.findByProperties("getAveragePing", "isConnected");
+	LibraryModules.DirectMessageStore = BDFDB.ModuleUtils.findByProperties("getPrivateChannelIds", "getPrivateChannelTimestamps");
 	LibraryModules.DirectMessageUnreadStore = BDFDB.ModuleUtils.findByProperties("getUnreadPrivateChannelIds");
 	LibraryModules.DirectMessageUtils = BDFDB.ModuleUtils.findByProperties("addRecipient", "openPrivateChannel");
 	LibraryModules.FriendUtils = BDFDB.ModuleUtils.findByProperties("getFriendIDs", "getRelationships");
