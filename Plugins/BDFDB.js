@@ -19,6 +19,7 @@
 		BDv2Api: window.BDFDB && window.BDFDB.BDv2Api || undefined,
 		name: "$BDFDB"
 	};
+	if (!window.BDFDB) window.BDFDB = BDFDB;
 	var loadid = Math.round(Math.random() * 10000000000000000), InternalBDFDB = {};
 	BDFDB.InternalData.loadid = loadid;
 
@@ -976,14 +977,14 @@
 		return InternalBDFDB.findModule("proto", JSON.stringify(protoprops), m => m.prototype && protoprops.every(prop => m.prototype[prop] !== undefined), getExport);
 	};
 	InternalBDFDB.findModule = function (type, cachestring, filter, getExport) {
-		if (!BDFDB.ObjectUtils.is(BDFDB.ModuleUtils.cached[type])) BDFDB.ModuleUtils.cached[type] = {module:{}, export:{}};
-		if (getExport && BDFDB.ModuleUtils.cached[type].export[cachestring]) return BDFDB.ModuleUtils.cached[type].export[cachestring];
-		else if (!getExport && BDFDB.ModuleUtils.cached[type].module[cachestring]) return BDFDB.ModuleUtils.cached[type].module[cachestring];
+		if (!BDFDB.ObjectUtils.is(window.BDFDB.ModuleUtils.cached[type])) window.BDFDB.ModuleUtils.cached[type] = {module:{}, export:{}};
+		if (getExport && window.BDFDB.ModuleUtils.cached[type].export[cachestring]) return window.BDFDB.ModuleUtils.cached[type].export[cachestring];
+		else if (!getExport && window.BDFDB.ModuleUtils.cached[type].module[cachestring]) return window.BDFDB.ModuleUtils.cached[type].module[cachestring];
 		else {
 			var m = BDFDB.ModuleUtils.find(filter, getExport);
 			if (m) {
-				if (getExport) BDFDB.ModuleUtils.cached[type].export[cachestring] = m;
-				else BDFDB.ModuleUtils.cached[type].module[cachestring] = m;
+				if (getExport) window.BDFDB.ModuleUtils.cached[type].export[cachestring] = m;
+				else window.BDFDB.ModuleUtils.cached[type].module[cachestring] = m;
 				return m;
 			}
 			else BDFDB.LogUtils.warn(`${cachestring} [${type}] not found in WebModules`);
@@ -9811,6 +9812,7 @@
 	BDFDB.LibraryComponents.ContextMenuToggleItem = LibraryComponents.ContextMenuItems.Toggle;
 
 	BDFDB.loaded = true;
+	
 	window.BDFDB = BDFDB;
 	InternalBDFDB.reloadLib = _ => {
 		var libraryScript = document.querySelector("head script#BDFDBLibraryScript");
