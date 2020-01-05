@@ -3,7 +3,7 @@
 class MessageUtilities {
 	getName () {return "MessageUtilities";}
 
-	getVersion () {return "1.6.5";}
+	getVersion () {return "1.6.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class MessageUtilities {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Clear ESC","Works again"],["New WYSIWYG Textarea","Fixed for the new WYSIWYG Textarea that is hidden by experiments"]],
+			"fixed":[["Copy Message Link", "Fixed '@me' indicator being 'null' in DMs"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 		
@@ -341,7 +341,7 @@ class MessageUtilities {
 	doCopyLink ({messagediv, pos, message}, action) {
 		let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 		if (channel) {
-			BDFDB.LibraryRequires.electron.clipboard.write({text:`https://discordapp.com/channels/${channel.guild_id}/${channel.id}/${message.id}`});
+			BDFDB.LibraryRequires.electron.clipboard.write({text:`https://discordapp.com/channels/${channel.guild_id || "@me"}/${channel.id}/${message.id}`});
 			if (BDFDB.DataUtils.get(this, "toasts", action)) BDFDB.NotificationUtils.toast("Messagelink has been copied.", {type:"success"});
 		}
 	}
