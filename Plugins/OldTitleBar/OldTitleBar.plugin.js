@@ -85,28 +85,35 @@ class OldTitleBar {
 		let settings = BDFDB.DataUtils.get(this, "settings");
 		let settingspanel, settingsitems = [];
 		
-		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-			className: BDFDB.disCN.marginbottom8,
-			type: "Switch",
-			plugin: this,
-			keys: ["settings", key],
-			label: this.defaults.settings[key].description,
-			value: settings[key],
-			onChange: key == "displayNative" ? value => {
-				if (this.patchMainScreen(value)) {
-					this.patched = !this.patched;
-					let notifybar = document.querySelector("#OldTitleBarNotifyBar");
-					if (notifybar) notifybar.querySelector(BDFDB.dotCN.noticedismiss).click();
-					if (this.patched) {
-						notifybar = BDFDB.NotificationUtils.notice("Changed nativebar settings, relaunch to see changes:", {type:"danger",btn:"Relaunch",id:"OldTitleBarNotifyBar"});
-						notifybar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", () => {
-							BDFDB.LibraryRequires.electron.remote.app.relaunch();
-							BDFDB.LibraryRequires.electron.remote.app.quit();
-						});
+		let isLinux = !!document.querySelector(".platform-linux");
+		
+		for (let key in settings) {
+			let isNativeTitlebarSetting = key == "displayNative";
+			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+				className: BDFDB.disCN.marginbottom8,
+				type: "Switch",
+				plugin: this,
+				keys: ["settings", key],
+				label: this.defaults.settings[key].description,
+				value: isLinux && isNativeTitlebarSetting || settings[key],
+				disabled: isLinux && isNativeTitlebarSetting,
+				note: isLinux && isNativeTitlebarSetting && "This is disabled on Linux, because Discord/BD forces the titlebar on Linux systems!",
+				onChange: isNativeTitlebarSetting ? value => {
+					if (this.patchMainScreen(value)) {
+						this.patched = !this.patched;
+						let notifybar = document.querySelector("#OldTitleBarNotifyBar");
+						if (notifybar) notifybar.querySelector(BDFDB.dotCN.noticedismiss).click();
+						if (this.patched) {
+							notifybar = BDFDB.NotificationUtils.notice("Changed nativebar settings, relaunch to see changes:", {type:"danger",btn:"Relaunch",id:"OldTitleBarNotifyBar"});
+							notifybar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", () => {
+								BDFDB.LibraryRequires.electron.remote.app.relaunch();
+								BDFDB.LibraryRequires.electron.remote.app.quit();
+							});
+						}
 					}
-				}
-			} : null
-		}));
+				} : null
+			}));
+		}
 		
 		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 	}
