@@ -3,7 +3,7 @@
 class OwnerTag {
 	getName () {return "OwnerTag";}
 
-	getVersion () {return "1.2.3";}
+	getVersion () {return "1.2.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class OwnerTag {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["BetterRoleColors","Fixed now working when BRC is enabled ......"]],
+			"fixed":[["User Profile","Switching users in the user profile modal via mutual friends now properly removes the owner tag"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
@@ -162,6 +162,7 @@ class OwnerTag {
 	}
 
 	processUserPopout (e) {
+		BDFDB.DOMUtils.remove(e.node.querySelectorAll(".owner-tag"));
 		let usertype = this.getUserType(e.instance.props.user);
 		if (usertype && BDFDB.DataUtils.get(this, "settings", "addInUserPopout")) {
 			let nameTag = e.node.querySelector(BDFDB.dotCN.nametag);
@@ -171,6 +172,7 @@ class OwnerTag {
 	}
 
 	processUserProfile (e) {
+		BDFDB.DOMUtils.remove(e.node.querySelectorAll(".owner-tag"));
 		let usertype = this.getUserType(e.instance.props.user);
 		if (usertype && BDFDB.DataUtils.get(this, "settings", "addInUserProfil")) {
 			let nameTag = e.node.querySelector(BDFDB.dotCN.nametag);
