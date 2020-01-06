@@ -88,9 +88,10 @@ class PinDMs {
 
 		this.defaults = {
 			settings: {
-				sortInRecentOrder:	{value:false, 	description:"Sort pinned DMs in the recent message order instead of the pinned at order:"},
-				showPinIcon:		{value:true, 	description:"Shows a little 'Pin' icon for pinned DMs in the server list:"},
-				showCategoryAmount:	{value:true, 	description:"Shows the amount of pinned DMs in a category in the channel list:"}
+				sortInRecentOrder:		{value:false, 	inner:true,		description:"Channel List"},
+				sortInRecentOrderGuild:	{value:false, 	inner:true,		description:"Guild List"},
+				showPinIcon:			{value:true, 	inner:false,	description:"Shows a little 'Pin' icon for pinned DMs in the server list:"},
+				showCategoryAmount:		{value:true, 	inner:false,	description:"Shows the amount of pinned DMs in a category in the channel list:"}
 			}
 		};
 	}
@@ -98,7 +99,7 @@ class PinDMs {
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let settings = BDFDB.DataUtils.get(this, "settings");
-		let settingspanel, settingsitems = [];
+		let settingspanel, settingsitems = [], inneritems = [];
 		
 		for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,
@@ -107,6 +108,11 @@ class PinDMs {
 			keys: ["settings", key],
 			label: this.defaults.settings[key].description,
 			value: settings[key]
+		}));
+		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+			title: "Sort pinned DMs in the recent message order instead of the pinned at order in:",
+			first: settingsitems.length == 0,
+			children: inneritems
 		}));
 		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 			type: "Button",
@@ -283,7 +289,7 @@ class PinDMs {
 			e.instance.props.channels = Object.assign({}, e.instance.props.channels);
 			e.instance.props.pinnedChannels = Object.assign({}, e.instance.props.pinnedChannels);
 			e.instance.props.privateChannelIds = [].concat(e.instance.props.privateChannelIds).filter(n => n);
-			for (let category of categories) for (let id of this.sortDMsByTime(category.dms)) if (e.instance.props.channels[id]) {
+			for (let category of categories) for (let id of this.sortDMsByTime(category.dms, "dmCategories")) if (e.instance.props.channels[id]) {
 				e.instance.props.pinnedChannels[id] = e.instance.props.channels[id];
 				delete e.instance.props.channels[id];
 				BDFDB.ArrayUtils.remove(e.instance.props.privateChannelIds, id, true);
@@ -360,7 +366,7 @@ class PinDMs {
 						if (this.hoveredChannel == "header_" + category.id) children.splice(index++, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListItem, {
 							className: BDFDB.disCNS.dmchannel + BDFDB.disCNS._pindmsdmchannelpinned + BDFDB.disCN._pindmsdmchannelplaceholder
 						}));
-						for (let id of this.sortDMsByTime(category.dms)) {
+						for (let id of this.sortDMsByTime(category.dms, "dmCategories")) {
 							if (e.instance.props.pinnedChannels[id] && this.draggedChannel != id && (!category.collapsed || e.instance.props.selectedChannelId == id)) {
 								children.splice(index++, 0, e.instance.props.renderChannel(e.instance.props.pinnedChannels[id], e.instance.props.selectedChannelId == id));
 								if (this.hoveredChannel == id) children.splice(index++, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListItem, {
@@ -511,7 +517,7 @@ class PinDMs {
 				if (this.isPinned(e.instance.props.channel.id, "pinnedRecents")) {
 					BDFDB.DOMUtils.addClass(e.node, BDFDB.disCN._pindmsrecentpinned);
 					e.node.removeEventListener("mousedown", e.node.PinDMsMouseDownListener);
-					if (!BDFDB.DataUtils.get(this, "settings", "sortInRecentOrder")) {
+					if (!BDFDB.DataUtils.get(this, "settings", "sortInRecentOrderGuild")) {
 						for (let child of e.node.querySelectorAll("a")) child.setAttribute("draggable", false);
 						e.node.PinDMsMouseDownListener = event => {
 							let mousemove = event2 => {
@@ -614,8 +620,8 @@ class PinDMs {
 		return (reverse ? sorted.reverse() : sorted).filter(n => n);
 	}
 	
-	sortDMsByTime (dms) {
-		if (dms.length > 1 && BDFDB.DataUtils.get(this, "settings", "sortInRecentOrder")) {
+	sortDMsByTime (dms, type) {
+		if (dms.length > 1 && BDFDB.DataUtils.get(this, "settings", type == "dmCategories" ? "sortInRecentOrder" : "sortInRecentOrderGuild")) {
 			let timestamps = BDFDB.LibraryModules.DirectMessageStore.getPrivateChannelTimestamps();
 			return [].concat(dms).sort(function (x, y) {return timestamps[x] > timestamps[y] ? -1 : timestamps[x] < timestamps[y] ? 1 : 0;});
 		}
@@ -698,7 +704,7 @@ class PinDMs {
 			if (BDFDB.LibraryModules.ChannelStore.getChannel(sortedDMs[pos])) existingDMs.push(sortedDMs[pos]);
 		}
 		if (!BDFDB.equals(data, newData)) BDFDB.DataUtils.save(newData, this, type);
-		return this.sortDMsByTime(existingDMs);
+		return this.sortDMsByTime(existingDMs, type);
 	}
 
 	forceUpdateAll () {
