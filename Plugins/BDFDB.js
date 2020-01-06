@@ -8072,7 +8072,8 @@
 				ref: instance => {
 					let ele = BDFDB.ReactUtils.findDOMNode(instance);
 					if (ele && ele.parentElement) {
-						ele.style.setProperty("max-width", `${BDFDB.DOMUtils.getInnerWidth(ele.parentElement)}px`);
+						let maxwidth = BDFDB.DOMUtils.getInnerWidth(ele.parentElement);
+						if (maxwidth > 50) ele.style.setProperty("max-width", `${maxwidth}px`);
 						let Animation = new LibraryModules.AnimationUtils.Value(0);
 						Animation
 							.interpolate({inputRange:[0, 1], outputRange:[0, (BDFDB.DOMUtils.getRects(ele.firstElementChild).width - BDFDB.DOMUtils.getRects(ele).width) * -1]})
