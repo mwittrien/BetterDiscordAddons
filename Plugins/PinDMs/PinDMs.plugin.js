@@ -3,7 +3,7 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.5.4";}
+	getVersion () {return "1.5.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -12,6 +12,7 @@ class PinDMs {
 	constructor () {
 		this.changelog = {
 			"added":[["Sort Order","You can now enable the option in the plugin settings to sort pinned DMs in the most recent message order within category"],["Move to other Category","Context Menu Layout was changed you can now pin a DM to another category (this will remove the DM from the other category)"]],
+			"fixed":[["Deleting","Fixed the bug where deleting a category between other categories would break all other categories"]],
 			"improved":[["Categories","Instead of pinning all your channels into the same category in the private channel list, you can now create your own collapsable categories, old pinned channel data was ported to the new category format"],["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
@@ -598,18 +599,19 @@ class PinDMs {
 
 	sortAndUpdateCategories (type, reverse) {
 		let data = BDFDB.ObjectUtils.sort(BDFDB.DataUtils.load(this, type), "pos"), newData = {};
-		let sorted = [], sort = (id, pos) => {
+		let sorted = [], pos = 0, sort = id => {
 			if (sorted[pos] === undefined) {
-				data[id].pos = pos;
-				sorted[pos] = data[id];
-				newData[id] = data[id];
+				newData[id] = Object.assign({}, data[id], {pos});
+				sorted[pos] = newData[id];
 			}
-			else sort(id, pos + 1);
+			else {
+				pos++;
+				sort(id);
+			}
 		};
-		sorted = sorted.filter(n => n);
-		for (let id in data) sort(id, data[id].pos);
+		for (let id in data) sort(id);
 		if (!BDFDB.equals(data, newData)) BDFDB.DataUtils.save(newData, this, type);
-		return reverse ? sorted.reverse() : sorted;
+		return (reverse ? sorted.reverse() : sorted).filter(n => n);
 	}
 	
 	sortDMsByTime (dms) {
