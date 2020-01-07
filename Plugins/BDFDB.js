@@ -1530,7 +1530,6 @@
 	LibraryModules.LastGuildStore = BDFDB.ModuleUtils.findByProperties("getLastSelectedGuildId");
 	LibraryModules.LoginUtils = BDFDB.ModuleUtils.findByProperties("login", "logout");
 	LibraryModules.MemberStore = BDFDB.ModuleUtils.findByProperties("getMember", "getMembers");
-	LibraryModules.MessageCreationUtils = BDFDB.ModuleUtils.findByProperties("parse", "isMentioned");
 	LibraryModules.MessagePinUtils = BDFDB.ModuleUtils.findByProperties("pinMessage", "unpinMessage");
 	LibraryModules.MessageStore = BDFDB.ModuleUtils.findByProperties("getMessage", "getMessages");
 	LibraryModules.MessageUtils = BDFDB.ModuleUtils.findByProperties("receiveMessage", "editMessage");
@@ -3981,11 +3980,9 @@
 	BDFDB.StringUtils.insertNRST = function (string) {
 		return typeof string == "string" && string.replace(/\\r/g, "\r").replace(/\\n/g, "\n").replace(/\\t/g, "\t").replace(/\\s/g, " ");
 	};
-	BDFDB.StringUtils.getParsedLength = function (string, channelid = LibraryModules.LastChannelStore.getChannelId()) {
-		if (typeof string != "string" || !string) return 0;
-		var channel = LibraryModules.ChannelStore.getChannel(channelid);
-		var length = !LibraryModules.MessageCreationUtils || (!channel || string.indexOf("/") == 0 || string.indexOf("s/") == 0 || string.indexOf("+:") == 0) ? string.length : LibraryModules.MessageCreationUtils.parse(channel, string).content.length;
-		return length > string.length ? length : string.length;
+	BDFDB.StringUtils.getParsedLength = function (string) {
+		// REMOVE
+		return typeof string != "string" ? 0 : string.length;
 	};
 	BDFDB.StringUtils.copyRichValue = function (string, richValue) {
 		let newRichValue = LibraryModules.SlateUtils.deserialize(string);
@@ -6747,13 +6744,12 @@
 			}
 			else string = input.value || input.textContent || "";
 			let start = input.selectionStart || 0, end = input.selectionEnd || 0, selectlength = end - start, selection = BDFDB.DOMUtils.getSelection();
-			let length = this.props.parsing ? BDFDB.StringUtils.getParsedLength(string) : string.length;
-			let select = !selectlength && !selection ? 0 : (this.props.parsing ? BDFDB.StringUtils.getParsedLength(selection || string.slice(start, end)) : selectlength || selection.length);
-			select = !select ? 0 : (select > length ? (end || start ? length - (length - end - start) : length) : select);
+			let select = !selectlength && !selection ? 0 : (selectlength || selection.length);
+			select = !select ? 0 : (select > string.length ? (end || start ? string.length - (string.length - end - start) : string.length) : select);
 			let children = [
-				typeof this.props.renderPrefix == "function" && this.props.renderPrefix(length),
-				`${length}${!this.props.max ? "" : "/" + this.props.max}${!select ? "" : " (" + select + ")"}`,
-				typeof this.props.renderSuffix == "function" && this.props.renderSuffix(length)
+				typeof this.props.renderPrefix == "function" && this.props.renderPrefix(string.length),
+				`${string.length}${!this.props.max ? "" : "/" + this.props.max}${!select ? "" : " (" + select + ")"}`,
+				typeof this.props.renderSuffix == "function" && this.props.renderSuffix(string.length)
 			].filter(n => n);
 			return children.length == 1 ? children[0] : BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 				align: LibraryComponents.Flex.Align.CENTER,
@@ -9823,7 +9819,6 @@
 	BDFDB.encodeToHTML = BDFDB.StringUtils.htmlEscape;
 	BDFDB.regEscape = BDFDB.StringUtils.regEscape;
 	BDFDB.insertNRST = BDFDB.StringUtils.insertNRST;
-	BDFDB.getParsedLength = BDFDB.StringUtils.getParsedLength;
 	BDFDB.highlightText = BDFDB.StringUtils.highlight;
 	
 	BDFDB.formatBytes = BDFDB.NumberUtils.formatBytes;
