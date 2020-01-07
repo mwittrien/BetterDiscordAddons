@@ -2339,7 +2339,7 @@
 		
 		if (key === undefined) return config;
 		else {
-			let keydata = configIsObject ? (BDFDB.ObjectUtils.is(config[key]) ? BDFDB.ObjectUtils.deepAssign({}, config[key] != undefined ? config[key] : {}) : config[key]) : null;
+			let keydata = configIsObject ? (BDFDB.ObjectUtils.is(config[key]) || config[key] == undefined ? BDFDB.ObjectUtils.deepAssign({}, config[key]) : config[key]) : null;
 			if (id === undefined) return keydata;
 			else return !BDFDB.ObjectUtils.is(keydata) || keydata[id] === undefined ? null : keydata[id];
 		}
