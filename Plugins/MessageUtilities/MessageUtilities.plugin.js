@@ -3,7 +3,7 @@
 class MessageUtilities {
 	getName () {return "MessageUtilities";}
 
-	getVersion () {return "1.6.6";}
+	getVersion () {return "1.6.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class MessageUtilities {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Copy Message Link", "Fixed '@me' indicator being 'null' in DMs"]],
+			"added":[["Quote Message", "Now supports Discords new native Quote Feature"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 		
@@ -42,17 +42,16 @@ class MessageUtilities {
 				"React_to_Message":			{name:"React to Message",								func:this.doOpenReact,		value:{click:0, 	keycombo:[17,83]}	},
 				"Copy_Raw":					{name:"Copy raw Message",								func:this.doCopyRaw,		value:{click:0, 	keycombo:[17,68]}	},
 				"Copy_Link":				{name:"Copy Message Link",								func:this.doCopyLink,		value:{click:0, 	keycombo:[17,81]}	},
+				"Quote_Message":			{name:"Quote Message",									func:this.doQuote,			value:{click:0, 	keycombo:[17,87]}	},
 				"__Note_Message":			{name:"Note Message (Pesonal Pins)",					func:this.doNote,			value:{click:0, 	keycombo:[16]}, 	plugin:"PersonalPins"},
 				"__Translate_Message":		{name:"Translate Message (Google Translate Option)",	func:this.doTranslate,		value:{click:0, 	keycombo:[20]}, 	plugin:"GoogleTranslateOption"},
-				"__Quote_Message":			{name:"Quote Message (Quoter)",							func:this.doQuote,			value:{click:0, 	keycombo:[17,87]}, 	plugin:"Quoter"},
-				"__Citate_Message":			{name:"Quote Message (Citador)",						func:this.doCitate,			value:{click:0, 	keycombo:[17,78]}, 	plugin:"Citador"},
 				"__Reveal_Spoilers":		{name:"Reveal All Spoilers (RevealAllSpoilersOption)",	func:this.doReveal,			value:{click:0, 	keycombo:[17,74]}, 	plugin:"RevealAllSpoilersOption"}
 			}
 		};
 		for (let type in this.defaults.bindings) {
 			let nativeaction = type.indexOf("__") != 0;
 			this.defaults.settings[type] = {value:nativeaction};
-			if (nativeaction) this.defaults.toasts[type] = {value:type != "Edit_Message" && type != "React_to_Message"};
+			if (nativeaction) this.defaults.toasts[type] = {value:type != "Edit_Message" && type != "React_to_Message" && type != "Quote_Message"};
 		}
 	}
 
@@ -228,6 +227,9 @@ class MessageUtilities {
 							case BDFDB.LanguageUtils.LanguageStrings.DELETE_MESSAGE:
 								action = "Delete_Message";
 								break;
+							case BDFDB.LanguageUtils.LanguageStrings.QUOTE:
+								action = "Quote_Message";
+								break;
 						}
 						if (action) hintlabel = this.getActiveShortcutString(action);
 					}
@@ -346,6 +348,16 @@ class MessageUtilities {
 		}
 	}
 
+	doQuote ({messagediv, pos, message}, action) {
+		let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
+		if (channel && BDFDB.LibraryModules.QuoteUtils.canQuote(message, channel)) {
+			BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatch(BDFDB.DiscordConstants.ComponentActions.INSERT_QUOTE_TEXT, {
+				text: BDFDB.LibraryModules.QuoteUtils.createQuotedText(message, channel)
+			});
+			if (BDFDB.DataUtils.get(this, "toasts", action)) BDFDB.NotificationUtils.toast("Quote has been created.", {type:"success"});
+		}
+	}
+
 	doNote ({messagediv, pos, message}, action) {
 		if (BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings.__Note_Message.plugin)) {
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
@@ -357,20 +369,6 @@ class MessageUtilities {
 		if (BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings.__Translate_Message.plugin)) {
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 			if (channel) BDFDB.BDUtils.getPlugin(this.defaults.bindings.__Translate_Message.plugin).translateMessage(message, messagediv, channel);
-		}
-	}
-
-	doQuote ({messagediv, pos, message}, action) {
-		if (BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings.__Quote_Message.plugin)) {
-			let quoteButton = messagediv.querySelector(".btn-quote");
-			if (quoteButton) quoteButton.click();
-		}
-	}
-
-	doCitate ({messagediv, pos, message}, action) {
-		if (BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings.__Citate_Message.plugin)) {
-			let citarButton = messagediv.parentElement.querySelector(".citar-btn");
-			if (citarButton) citarButton.click();
 		}
 	}
 
