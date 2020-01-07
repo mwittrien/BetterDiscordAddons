@@ -34,6 +34,7 @@ https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/AdjustableSe
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/FrostedGlass/FrostedGlass.theme.css
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/HorizontalServerlist/HorizontalServerlist.theme.css
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/SimplyDark/SimplyDark.theme.css
+https://raw.githubusercontent.com/GoldenLys/BetterDiscord-Elysia/master/ELYSIA.theme.css
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/Glossy-Cyan/Glossy-Cyan.H.theme.css
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/HansAnonymousAdditions/HAA.theme.css
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/Patriotic/Patriotic.theme.css
