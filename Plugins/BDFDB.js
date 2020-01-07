@@ -1350,7 +1350,10 @@
 			if (BDFDB.InternalData.patchMenuQueries[type].module) InternalBDFDB.patchContextMenuPlugin(plugin, type, BDFDB.InternalData.patchMenuQueries[type].module);
 			else BDFDB.InternalData.patchMenuQueries[type].query.push(plugin);
 		}
-		for (let type of LibraryComponents.ContextMenus._NonRenderMenus) if (typeof plugin[`on${type}`] === "function") InternalBDFDB.patchNonRenderContextMenuPlugin(plugin, type, LibraryComponents.ContextMenus._Modules[type]);
+		for (let type of LibraryComponents.ContextMenus._NonRenderMenus) if (typeof plugin[`on${type}`] === "function") {
+			if (BDFDB.InternalData.patchMenuQueries[type].module) InternalBDFDB.patchNonRenderContextMenuPlugin(plugin, type, BDFDB.InternalData.patchMenuQueries[type].module);
+			else BDFDB.InternalData.patchMenuQueries[type].query.push(plugin);
+		}
 	};
 	InternalBDFDB.patchContextMenuPlugin = (plugin, type, module) => {
 		if (module && module.prototype) {
@@ -1426,9 +1429,7 @@
 					if (newmodule && newmodule.displayName && BDFDB.InternalData.patchMenuQueries[newmodule.displayName] && !BDFDB.InternalData.patchMenuQueries[newmodule.displayName].module) {
 						BDFDB.InternalData.patchMenuQueries[newmodule.displayName].module = newmodule;
 						InternalBDFDB.patchContextMenuLib(newmodule, false);
-						while (BDFDB.InternalData.patchMenuQueries[newmodule.displayName].query.length) {
-							InternalBDFDB.patchContextMenuPlugin(BDFDB.InternalData.patchMenuQueries[newmodule.displayName].query.pop(), newmodule.displayName, newmodule);
-						}
+						while (BDFDB.InternalData.patchMenuQueries[newmodule.displayName].query.length) InternalBDFDB.patchContextMenuPlugin(BDFDB.InternalData.patchMenuQueries[newmodule.displayName].query.pop(), newmodule.displayName, newmodule);
 					}
 				}
 			}});
@@ -1463,6 +1464,14 @@
 				}
 			}});
 		}
+	};
+	InternalBDFDB.getContextMenuType = menutype => {
+		if (LibraryComponents.ContextMenus._Types.includes(menutype)) {
+			if (menutype.indexOf("USER") == 0) return "UserContextMenu";
+			else if (menutype.indexOf("CHANNEL") == 0) return "ChannelContextMenu";
+			else if (menutype.indexOf("GUILD") == 0) return "GuildContextMenu";
+		}
+		return null;
 	};
 
 	BDFDB.DiscordConstants = BDFDB.ModuleUtils.findByProperties("Permissions", "ActivityTypes");
@@ -7068,19 +7077,17 @@
 	LibraryComponents.ContextMenus._FluxMenus = ["ApplicationContextMenu", "GroupDMContextMenu"];
 	LibraryComponents.ContextMenus._NonRenderMenus = ["ChannelContextMenu", "GuildContextMenu", "UserContextMenu"];
 	
-	LibraryComponents.ContextMenus._Modules = {};
+	LibraryComponents.ContextMenus._Types = Object.entries(BDFDB.DiscordConstants.ContextMenuTypes).map(n => n[1]);
 	
 	LibraryComponents.ContextMenus.ApplicationContextMenu = BDFDB.ModuleUtils.findByName("FluxContainer(ApplicationContextMenu)");
 	
 	LibraryComponents.ContextMenus.ChannelContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.CHANNEL_LIST_TEXT);
-	LibraryComponents.ContextMenus._Modules.ChannelContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.CHANNEL_LIST_TEXT, false);
 	
 	LibraryComponents.ContextMenus.DeveloperContextMenu = BDFDB.ModuleUtils.findByName("DeveloperContextMenu");
 	
 	LibraryComponents.ContextMenus.GroupDMContextMenu = BDFDB.ModuleUtils.findByName("FluxContainer(GroupDMContextMenu)");
 	
 	LibraryComponents.ContextMenus.GuildContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.GUILD_CHANNEL_LIST);
-	LibraryComponents.ContextMenus._Modules.GuildContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.GUILD_CHANNEL_LIST, false);
 	
 	LibraryComponents.ContextMenus.GuildRoleContextMenu = BDFDB.ModuleUtils.findByName("GuildRoleContextMenu");
 	
@@ -7091,7 +7098,6 @@
 	LibraryComponents.ContextMenus.ScreenshareContextMenu = BDFDB.ModuleUtils.findByName("ScreenshareContextMenu");
 	
 	LibraryComponents.ContextMenus.UserContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.USER_CHANNEL_MEMBERS);
-	LibraryComponents.ContextMenus._Modules.UserContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.USER_CHANNEL_MEMBERS, false);
 	
 	LibraryComponents.ContextMenus.UserSettingsCogContextMenu = BDFDB.ModuleUtils.findByName("UserSettingsCogContextMenu");
 	
@@ -9513,12 +9519,31 @@
 		return e.methodArguments[0].id == "410787888507256842" ? e.methodArguments[0].banner : e.callOriginalMethod();
 	}});
 	
-	for (let type of LibraryComponents.ContextMenus._NormalMenus) InternalBDFDB.patchContextMenuLib(LibraryComponents.ContextMenus[type], false);
 	for (let type of NoFluxPopouts) InternalBDFDB.patchPopoutLib(BDFDB.ModuleUtils.findByName(type), false);
+	for (let type of LibraryComponents.ContextMenus._NormalMenus) InternalBDFDB.patchContextMenuLib(LibraryComponents.ContextMenus[type], false);
 	for (let type of LibraryComponents.ContextMenus._FluxMenus) {
 		BDFDB.InternalData.patchMenuQueries[type] = {query:[], module:null};
 		InternalBDFDB.patchContextMenuLib(LibraryComponents.ContextMenus[type], true);
 	}
+	for (let type of LibraryComponents.ContextMenus._NonRenderMenus) BDFDB.InternalData.patchMenuQueries[type] = {query:[], module:null};
+	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.ContextMenuUtils, "openContextMenu", {before: e => {
+		if (menu.type && menu.props && menu.props.type) {
+			let type = InternalBDFDB.getContextMenuType(menu.props.type);
+			if (type && LibraryComponents.ContextMenus._NonRenderMenus.includes(type)) {
+				module = BDFDB.ModuleUtils.find(m => m == menu.type, false);
+				if (module && module.exports && module.exports.default) {
+					if (!LibraryComponents.ContextMenus[type]) {
+						LibraryComponents.ContextMenus[type] = module.exports.default;
+						BDFDB.LibraryComponents.ContextMenus[type] = module.exports.default;
+					}
+					if (BDFDB.InternalData.patchMenuQueries[type] && !BDFDB.InternalData.patchMenuQueries[type].module) {
+						BDFDB.InternalData.patchMenuQueries[type].module = module;
+						while (BDFDB.InternalData.patchMenuQueries[type].query.length) InternalBDFDB.patchNonRenderContextMenuPlugin(BDFDB.InternalData.patchMenuQueries[type].query.pop(), type, module);
+					}
+				}
+			}
+		}
+	}});
 
 	BDFDB.ModuleUtils.forceAllUpdates(BDFDB);
 	
