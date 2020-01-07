@@ -256,7 +256,7 @@ class EditServers {
 	}
 	
 	processGuildIconWrapper (e) {
-		if (BDFDB.GuildUtils.is(e.instance.props.guild) {
+		if (BDFDB.GuildUtils.is(e.instance.props.guild)) {
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			if (e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.guildfolderguildicon) > -1) e.instance.props.guild = this.getGuildData(e.instance.props.guild.id, settings.changeInGuildList);
 			else if (e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.listavatar) > -1) e.instance.props.guild = this.getGuildData(e.instance.props.guild.id, settings.changeInMutualGuilds);
@@ -265,7 +265,7 @@ class EditServers {
 	}
 	
 	processGuildIcon (e) {
-		if (BDFDB.GuildUtils.is(e.instance.props.guild && e.instance.props.style && (!e.instance.props.style.backgroundImage || e.instance.props.style.backgroundImage == "none")) {
+		if (BDFDB.GuildUtils.is(e.instance.props.guild) && e.instance.props.style && (!e.instance.props.style.backgroundImage || e.instance.props.style.backgroundImage == "none")) {
 			let data = BDFDB.DataUtils.load(this, "servers", e.instance.props.guild.id);
 			if (data) {
 				let settings = BDFDB.DataUtils.get(this, "settings");
