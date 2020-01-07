@@ -2308,7 +2308,7 @@
 		}
 		
 		let configIsObject = BDFDB.ObjectUtils.is(config);
-		if (key !== undefined && configIsObject && BDFDB.ObjectUtils.isEmpty(config[key])) delete config[key];
+		if (key !== undefined && configIsObject && BDFDB.ObjectUtils.is(config[key]) && BDFDB.ObjectUtils.isEmpty(config[key])) delete config[key];
 		if (BDFDB.ObjectUtils.isEmpty(config)) {
 			delete BDFDB.DataUtils.cached[pluginname];
 			if (LibraryRequires.fs.existsSync(configpath)) LibraryRequires.fs.unlinkSync(configpath);
@@ -2339,7 +2339,7 @@
 		
 		if (key === undefined) return config;
 		else {
-			let keydata = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config[key] != undefined ? config[key] : {}) : null;
+			let keydata = configIsObject ? (BDFDB.ObjectUtils.is(config[key]) ? BDFDB.ObjectUtils.deepAssign({}, config[key] != undefined ? config[key] : {}) : config[key]) : null;
 			if (id === undefined) return keydata;
 			else return !BDFDB.ObjectUtils.is(keydata) || keydata[id] === undefined ? null : keydata[id];
 		}
@@ -2366,7 +2366,7 @@
 			else if (BDFDB.ObjectUtils.is(config[key])) delete config[key][id];
 		}
 		
-		if (BDFDB.ObjectUtils.isEmpty(config[key])) delete config[key];
+		if (BDFDB.ObjectUtils.is(config[key]) && BDFDB.ObjectUtils.isEmpty(config[key])) delete config[key];
 		if (BDFDB.ObjectUtils.isEmpty(config)) {
 			delete BDFDB.DataUtils.cached[pluginname];
 			if (LibraryRequires.fs.existsSync(configpath)) LibraryRequires.fs.unlinkSync(configpath);
