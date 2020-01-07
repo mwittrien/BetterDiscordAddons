@@ -3,7 +3,7 @@
 class EditServers {
 	getName () {return "EditServers";}
 
-	getVersion () {return "2.1.7";}
+	getVersion () {return "2.1.8";}
 	
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,6 @@ class EditServers {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Custom Server Banners","Work again"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
@@ -193,7 +192,7 @@ class EditServers {
 	}
 
 	processGuild (e) {
-		if (e.instance.props.guild && BDFDB.DataUtils.get(this, "settings", "changeInGuildList")) {
+		if (BDFDB.GuildUtils.is(e.instance.props.guild) && BDFDB.DataUtils.get(this, "settings", "changeInGuildList")) {
 			e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
 			if (e.returnvalue) {
 				let data = BDFDB.DataUtils.load(this, "servers", e.instance.props.guild.id);
@@ -257,7 +256,7 @@ class EditServers {
 	}
 	
 	processGuildIconWrapper (e) {
-		if (e.instance.props.guild) {
+		if (BDFDB.GuildUtils.is(e.instance.props.guild) {
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			if (e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.guildfolderguildicon) > -1) e.instance.props.guild = this.getGuildData(e.instance.props.guild.id, settings.changeInGuildList);
 			else if (e.instance.props.className && e.instance.props.className.indexOf(BDFDB.disCN.listavatar) > -1) e.instance.props.guild = this.getGuildData(e.instance.props.guild.id, settings.changeInMutualGuilds);
@@ -266,7 +265,7 @@ class EditServers {
 	}
 	
 	processGuildIcon (e) {
-		if (e.instance.props.guild && e.instance.props.style && (!e.instance.props.style.backgroundImage || e.instance.props.style.backgroundImage == "none")) {
+		if (BDFDB.GuildUtils.is(e.instance.props.guild && e.instance.props.style && (!e.instance.props.style.backgroundImage || e.instance.props.style.backgroundImage == "none")) {
 			let data = BDFDB.DataUtils.load(this, "servers", e.instance.props.guild.id);
 			if (data) {
 				let settings = BDFDB.DataUtils.get(this, "settings");
