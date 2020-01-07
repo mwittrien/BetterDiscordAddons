@@ -7091,14 +7091,14 @@
 	LibraryComponents.ContextMenus.ApplicationContextMenu = BDFDB.ModuleUtils.findByName("FluxContainer(ApplicationContextMenu)");
 	
 	LibraryComponents.ContextMenus.ChannelContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.CHANNEL_LIST_TEXT);
-	LibraryComponents.ContextMenus._Exports.ChannelContextMenu = (BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.CHANNEL_LIST_TEXT) || {}).exports;
+	LibraryComponents.ContextMenus._Exports.ChannelContextMenu = (BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.CHANNEL_LIST_TEXT, false) || {}).exports;
 	
 	LibraryComponents.ContextMenus.DeveloperContextMenu = BDFDB.ModuleUtils.findByName("DeveloperContextMenu");
 	
 	LibraryComponents.ContextMenus.GroupDMContextMenu = BDFDB.ModuleUtils.findByName("FluxContainer(GroupDMContextMenu)");
 	
 	LibraryComponents.ContextMenus.GuildContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.GUILD_CHANNEL_LIST);
-	LibraryComponents.ContextMenus._Exports.GuildContextMenu = (BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.GUILD_CHANNEL_LIST) || {}).exports;
+	LibraryComponents.ContextMenus._Exports.GuildContextMenu = (BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.GUILD_CHANNEL_LIST, false) || {}).exports;
 	
 	LibraryComponents.ContextMenus.GuildRoleContextMenu = BDFDB.ModuleUtils.findByName("GuildRoleContextMenu");
 	
@@ -7109,7 +7109,7 @@
 	LibraryComponents.ContextMenus.ScreenshareContextMenu = BDFDB.ModuleUtils.findByName("ScreenshareContextMenu");
 	
 	LibraryComponents.ContextMenus.UserContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.USER_CHANNEL_MEMBERS);
-	LibraryComponents.ContextMenus._Exports.UserContextMenu = (BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.USER_CHANNEL_MEMBERS) || {}).exports;
+	LibraryComponents.ContextMenus._Exports.UserContextMenu = (BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.USER_CHANNEL_MEMBERS, false) || {}).exports;
 	
 	LibraryComponents.ContextMenus.UserSettingsCogContextMenu = BDFDB.ModuleUtils.findByName("UserSettingsCogContextMenu");
 	
