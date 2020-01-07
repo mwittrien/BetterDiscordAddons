@@ -9527,6 +9527,7 @@
 	}
 	for (let type of LibraryComponents.ContextMenus._NonRenderMenus) BDFDB.InternalData.patchMenuQueries[type] = {query:[], module:null};
 	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.ContextMenuUtils, "openContextMenu", {before: e => {
+		let menu = e.methodArguments[1]();
 		if (menu.type && menu.props && menu.props.type) {
 			let type = InternalBDFDB.getContextMenuType(menu.props.type);
 			if (type && LibraryComponents.ContextMenus._NonRenderMenus.includes(type)) {
