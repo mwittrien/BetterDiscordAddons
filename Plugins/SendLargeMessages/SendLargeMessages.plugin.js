@@ -3,7 +3,7 @@
 class SendLargeMessages {
 	getName () {return "SendLargeMessages";}
 
-	getVersion () {return "1.6.1";}
+	getVersion () {return "1.6.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,8 +11,7 @@ class SendLargeMessages {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Switching","Plugin acting weird after switching channels"],["New WYSIWYG Textarea","Fixed for the new WYSIWYG Textarea that is hidden by experiments"]],
-			"improved":[["Message Amount","Hovering over the red character counter when the character limit exceeds 2000 characters will now again display the amount of messages that is being sent by the plugin"],["Sending Messages","The plugin no longer needs the modal to send multiple messages, you can just write larger messages in the channel textarea and it will automatically split it up before sending it"]]
+			"fixed":[["New WYSIWYG Textarea","Fixed for the new WYSIWYG Textarea that is hidden by experiments"]]
 		};
 
 		this.patchedModules = {
@@ -85,10 +84,9 @@ class SendLargeMessages {
 
 	processChannelTextAreaForm (e) {
 		if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "handleSendMessage")) BDFDB.ModuleUtils.patch(this, e.instance, "handleSendMessage", {instead: e2 => {
-			let parsedLength = BDFDB.StringUtils.getParsedLength(e2.methodArguments[0]);
-			if (parsedLength > 2000) {
+			if (e2.methodArguments[0] > BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH) {
 				e2.stopOriginalMethodCall();
-				let messages = this.formatText(e2.methodArguments[0], Math.sqrt(Math.pow(parsedLength - e2.methodArguments[0].length, 2)) > Math.max(parsedLength, e2.methodArguments[0].length) / 20);
+				let messages = this.formatText(e2.methodArguments[0]);
 				messages.filter(n => n).forEach((message, i) => {
 					BDFDB.TimeUtils.timeout(_ => {
 						e2.originalMethod(message);
@@ -108,19 +106,16 @@ class SendLargeMessages {
 		if (e.returnvalue.ref && e.returnvalue.ref.current && BDFDB.DOMUtils.getParent(BDFDB.dotCN.chatform, e.returnvalue.ref.current)) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "SlateCharacterCount"});
 			if (index > -1) {
-				let text = BDFDB.LibraryModules.SlateSelectionUtils.serialize(children[index].props.document);
-				if (text.length > 1000) {
-					let parsedLength = BDFDB.StringUtils.getParsedLength(text);
-					if (parsedLength > 2000) children[index] = BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCNS.textareacharcounter + BDFDB.disCN.textareacharcountererror,
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: Math.ceil(parsedLength / 1900) + " " + BDFDB.LanguageUtils.LanguageStrings.MESSAGES,
-							children: BDFDB.ReactUtils.createElement("span", {
-								children: 2000 - parsedLength
-							})
+				let text = BDFDB.LibraryModules.SlateSelectionUtils.serialize(children[index].props.document, "raw");
+				if (text.length > BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH) children[index] = BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.disCNS.textareacharcounter + BDFDB.disCN.textareacharcountererror,
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						text: Math.ceil(text.length / BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH * (39/40)) + " " + BDFDB.LanguageUtils.LanguageStrings.MESSAGES,
+						children: BDFDB.ReactUtils.createElement("span", {
+							children: BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH - text.length
 						})
-					});
-				}
+					})
+				});
 			}
 		}
 	}
@@ -129,14 +124,14 @@ class SendLargeMessages {
 		if (e.instance.props.type && e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL) e.instance.props.shouldUploadLongMessages = false;
 	}
 
-	formatText (text, parse) {
+	formatText (text) {
 		text = text.replace(/\t/g, "	");
 		let longwords = text.match(/[\S]{1800,}/gm);
 		if (longwords) for (let longword of longwords) {
 			let count1 = 0;
 			let shortwords = [];
 			longword.split("").forEach(c => {
-				if (shortwords[count1] && shortwords[count1].length >= 1800) count1++;
+				if (shortwords[count1] && shortwords[count1].length >= BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH * (19/20)) count1++;
 				shortwords[count1] = shortwords[count1] ? shortwords[count1] + c : c;
 			});
 			text = text.replace(longword, shortwords.join(" "));
@@ -144,7 +139,7 @@ class SendLargeMessages {
 		let messages = [];
 		let count2 = 0;
 		text.split(" ").forEach((word) => {
-			if (messages[count2] && (parse ? BDFDB.StringUtils.getParsedLength(messages[count2] + "" + word) : (messages[count2] + "" + word).length) > 1900) count2++;
+			if (messages[count2] && (messages[count2] + "" + word).length > BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH * (39/40)) count2++;
 			messages[count2] = messages[count2] ? messages[count2] + " " + word : word;
 		});
 
