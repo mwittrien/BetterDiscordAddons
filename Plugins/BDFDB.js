@@ -3984,7 +3984,7 @@
 	BDFDB.StringUtils.getParsedLength = function (string, channelid = LibraryModules.LastChannelStore.getChannelId()) {
 		if (typeof string != "string" || !string) return 0;
 		var channel = LibraryModules.ChannelStore.getChannel(channelid);
-		var length = (!channel || string.indexOf("/") == 0 || string.indexOf("s/") == 0 || string.indexOf("+:") == 0) ? string.length : LibraryModules.MessageCreationUtils.parse(channel, string).content.length;
+		var length = !LibraryModules.MessageCreationUtils || (!channel || string.indexOf("/") == 0 || string.indexOf("s/") == 0 || string.indexOf("+:") == 0) ? string.length : LibraryModules.MessageCreationUtils.parse(channel, string).content.length;
 		return length > string.length ? length : string.length;
 	};
 	BDFDB.StringUtils.copyRichValue = function (string, richValue) {
