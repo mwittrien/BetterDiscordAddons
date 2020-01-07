@@ -1946,6 +1946,9 @@
 
 	BDFDB.UserUtils = {};
 	var myDataUser = LibraryModules.CurrentUserStore ? LibraryModules.CurrentUserStore.getCurrentUser() : null;
+	BDFDB.UserUtils.is = function (user) {
+		return user && user instanceof BDFDB.DiscordObjects.User;
+	};
 	BDFDB.UserUtils.me = new Proxy(myDataUser || {}, {
 		get: function (list, item) {
 			if (!myDataUser) myDataUser = LibraryModules.CurrentUserStore.getCurrentUser();
@@ -1989,6 +1992,9 @@
 	};
 
 	BDFDB.GuildUtils = {};
+	BDFDB.GuildUtils.is = function (guild) {
+		return guild && guild instanceof BDFDB.DiscordObjects.Guild;
+	};
 	BDFDB.GuildUtils.getIcon = function (id) {
 		var guild = LibraryModules.GuildStore.getGuild(typeof id == "number" ? id.toFixed() : id);
 		if (!guild || !guild.icon) return null;
@@ -2135,6 +2141,9 @@
 	};
 
 	BDFDB.ChannelUtils = {};
+	BDFDB.ChannelUtils.is = function (channel) {
+		return channel && channel instanceof BDFDB.DiscordObjects.Channel;
+	};
 	BDFDB.ChannelUtils.isTextChannel = function (channelOrId) {
 		let channel = typeof channelOrId == "string" ? LibraryModules.ChannelStore.getChannel(channelOrId) : channelOrId;
 		return BDFDB.ObjectUtils.is(channel) && (channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_TEXT || channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_STORE || channel.type == BDFDB.DiscordConstants.ChannelTypes.GUILD_ANNOUNCEMENT);
