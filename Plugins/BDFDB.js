@@ -2081,7 +2081,7 @@
 		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 		let guild = LibraryModules.GuildStore.getGuild(id);
 		if (guild) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-			return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenus.GuildContextMenu, Object.assign({}, e, {
+			return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenus._Exports.GuildContextMenu && LibraryComponents.ContextMenus._Exports.GuildContextMenu.default, Object.assign({}, e, {
 				type: BDFDB.DiscordConstants.ContextMenuTypes.GUILD_ICON_BAR,
 				guild: guild,
 				badge: LibraryModules.UnreadGuildUtils.getMentionCount(guild.id),
@@ -2191,7 +2191,7 @@
 				break;
 			}
 			if (type) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-				return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenus.ChannelContextMenu, Object.assign({}, e, {
+				return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenus._Exports.ChannelContextMenu && LibraryComponents.ContextMenus._Exports.ChannelContextMenu.default, Object.assign({}, e, {
 					type: type,
 					channel: channel,
 					guild: LibraryModules.GuildStore.getGuild(channel.guild_id),
@@ -2270,7 +2270,7 @@
 				}));
 			}, {noBlurEvent: true});
 			else LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-				return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenus.UserContextMenu, Object.assign({}, e, {
+				return BDFDB.ReactUtils.createElement(LibraryComponents.ContextMenus._Exports.UserContextMenu && LibraryComponents.ContextMenus._Exports.UserContextMenu.default, Object.assign({}, e, {
 					type: BDFDB.DiscordConstants.ContextMenuTypes.USER_PRIVATE_CHANNELS,
 					user: LibraryModules.UserStore.getUser(channel.recipients[0]),
 					channelId: channel.id,
@@ -7081,6 +7081,7 @@
 	};
 	
 	LibraryComponents.ContextMenus = {};
+	LibraryComponents.ContextMenus._Exports = {};
 	LibraryComponents.ContextMenus._NormalMenus = ["DeveloperContextMenu", "GuildRoleContextMenu", "MessageContextMenu", "NativeContextMenu", "ScreenshareContextMenu", "UserSettingsCogContextMenu"];
 	LibraryComponents.ContextMenus._FluxMenus = ["ApplicationContextMenu", "GroupDMContextMenu"];
 	LibraryComponents.ContextMenus._NonRenderMenus = ["ChannelContextMenu", "GuildContextMenu", "UserContextMenu"];
@@ -7090,12 +7091,14 @@
 	LibraryComponents.ContextMenus.ApplicationContextMenu = BDFDB.ModuleUtils.findByName("FluxContainer(ApplicationContextMenu)");
 	
 	LibraryComponents.ContextMenus.ChannelContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.CHANNEL_LIST_TEXT);
+	LibraryComponents.ContextMenus._Exports.ChannelContextMenu = (BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.CHANNEL_LIST_TEXT) || {}).exports;
 	
 	LibraryComponents.ContextMenus.DeveloperContextMenu = BDFDB.ModuleUtils.findByName("DeveloperContextMenu");
 	
 	LibraryComponents.ContextMenus.GroupDMContextMenu = BDFDB.ModuleUtils.findByName("FluxContainer(GroupDMContextMenu)");
 	
 	LibraryComponents.ContextMenus.GuildContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.GUILD_CHANNEL_LIST);
+	LibraryComponents.ContextMenus._Exports.GuildContextMenu = (BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.GUILD_CHANNEL_LIST) || {}).exports;
 	
 	LibraryComponents.ContextMenus.GuildRoleContextMenu = BDFDB.ModuleUtils.findByName("GuildRoleContextMenu");
 	
@@ -7106,6 +7109,7 @@
 	LibraryComponents.ContextMenus.ScreenshareContextMenu = BDFDB.ModuleUtils.findByName("ScreenshareContextMenu");
 	
 	LibraryComponents.ContextMenus.UserContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.USER_CHANNEL_MEMBERS);
+	LibraryComponents.ContextMenus._Exports.UserContextMenu = (BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.USER_CHANNEL_MEMBERS) || {}).exports;
 	
 	LibraryComponents.ContextMenus.UserSettingsCogContextMenu = BDFDB.ModuleUtils.findByName("UserSettingsCogContextMenu");
 	
@@ -9547,6 +9551,10 @@
 					if (!LibraryComponents.ContextMenus[type]) {
 						LibraryComponents.ContextMenus[type] = module.exports.default;
 						BDFDB.LibraryComponents.ContextMenus[type] = module.exports.default;
+					}
+					if (!LibraryComponents.ContextMenus._Exports[type]) {
+						LibraryComponents.ContextMenus._Exports[type] = module.exports;
+						BDFDB.LibraryComponents.ContextMenus._Exports[type] = module.exports;
 					}
 					if (BDFDB.InternalData.patchMenuQueries[type] && !BDFDB.InternalData.patchMenuQueries[type].module) {
 						BDFDB.InternalData.patchMenuQueries[type].module = module;
