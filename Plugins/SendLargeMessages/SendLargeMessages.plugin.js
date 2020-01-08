@@ -87,7 +87,6 @@ class SendLargeMessages {
 			if (e2.methodArguments[0].length > BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH) {
 				e2.stopOriginalMethodCall();
 				let messages = this.formatText(e2.methodArguments[0]);
-				console.log(messages);
 				messages.filter(n => n).forEach((message, i) => {
 					BDFDB.TimeUtils.timeout(_ => {
 						e2.originalMethod(message);
