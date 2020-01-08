@@ -3,7 +3,7 @@
 class SendLargeMessages {
 	getName () {return "SendLargeMessages";}
 
-	getVersion () {return "1.6.2";}
+	getVersion () {return "1.6.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -84,9 +84,10 @@ class SendLargeMessages {
 
 	processChannelTextAreaForm (e) {
 		if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "handleSendMessage")) BDFDB.ModuleUtils.patch(this, e.instance, "handleSendMessage", {instead: e2 => {
-			if (e2.methodArguments[0] > BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH) {
+			if (e2.methodArguments[0].length > BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH) {
 				e2.stopOriginalMethodCall();
 				let messages = this.formatText(e2.methodArguments[0]);
+				console.log(messages);
 				messages.filter(n => n).forEach((message, i) => {
 					BDFDB.TimeUtils.timeout(_ => {
 						e2.originalMethod(message);
