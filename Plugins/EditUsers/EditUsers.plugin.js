@@ -3,7 +3,7 @@
 class EditUsers {
 	getName () {return "EditUsers";}
 
-	getVersion () {return "3.6.7";}
+	getVersion () {return "3.6.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -618,7 +618,7 @@ class EditUsers {
 					if (channel.type == 1) this.changeName(BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]), channelname);
 					else {
 						if (channelname.EditUsersChangeObserver && typeof channelname.EditUsersChangeObserver.disconnect == "function") channelname.EditUsersChangeObserver.disconnect();
-						if (BDFDB.BDUtils.isPluginEnabled("EditChannels")) BDFDB.BDUtils.getPlugin("EditChannels").changeChannel(channel, channelname);
+						if (BDFDB.BDUtils.isPluginEnabled("EditChannels")) {}
 						else {
 							channelname.style.removeProperty("color");
 							channelname.style.removeProperty("background");
