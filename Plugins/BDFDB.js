@@ -1533,7 +1533,7 @@
 	LibraryModules.MessagePinUtils = BDFDB.ModuleUtils.findByProperties("pinMessage", "unpinMessage");
 	LibraryModules.MessageStore = BDFDB.ModuleUtils.findByProperties("getMessage", "getMessages");
 	LibraryModules.MessageUtils = BDFDB.ModuleUtils.findByProperties("receiveMessage", "editMessage");
-	LibraryModules.ModalUtils = BDFDB.ModuleUtils.findByProperties("openModal", "registerModalDispatch");
+	LibraryModules.ModalUtils = BDFDB.ModuleUtils.findByProperties("openModal", "hasModalOpen");
 	LibraryModules.MutedUtils = BDFDB.ModuleUtils.findByProperties("isGuildOrCategoryOrChannelMuted");
 	LibraryModules.NoteStore = BDFDB.ModuleUtils.findByProperties("getNotes", "getNote");
 	LibraryModules.NotificationSettingsUtils = BDFDB.ModuleUtils.findByProperties("setDesktopType", "setTTSType");
