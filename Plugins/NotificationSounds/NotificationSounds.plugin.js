@@ -3,7 +3,7 @@
 class NotificationSounds {
 	getName () {return "NotificationSounds";}
 
-	getVersion () {return "3.3.5";}
+	getVersion () {return "3.3.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class NotificationSounds {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"fixed":[["DMs & Mentioned","Notificationsounds for DMs and Mentions work again"]]
 		};
 
 		this.patchedModules = {
@@ -28,7 +28,7 @@ class NotificationSounds {
 		this.types = {
 			"message1":				{implemented:true,	name:"New Chatmessage",					src:"/assets/dd920c06a01e5bb8b09678581e29d56f.mp3",	mute:true,	focus:null},
 			"dm":					{implemented:true,	name:"Direct Message",					src:"/assets/84c9fa3d07da865278bd77c97d952db4.mp3",	mute:true,	focus:true},
-			"mentioned":			{implemented:true,	name:"Mention Ping",					src:"/assets/a5f42064e8120e381528b14fd3188b72.mp3",	mute:true,	focus:true},
+			"mentioned":			{implemented:true,	name:"Mentioned",						src:"/assets/a5f42064e8120e381528b14fd3188b72.mp3",	mute:true,	focus:true},
 			"deafen":				{implemented:true,	name:"Voicechat Deafen",				src:"/assets/e4d539271704b87764dc465b1a061abd.mp3",	mute:false,	focus:null},
 			"mute":					{implemented:true,	name:"Voicechat Mute",					src:"/assets/429d09ee3b86e81a75b5e06d3fb482be.mp3",	mute:false,	focus:null},
 			"disconnect":			{implemented:true,	name:"Voicechat Disconnect",			src:"/assets/7e125dc075ec6e5ae796e4c3ab83abb3.mp3",	mute:false,	focus:null},
@@ -37,24 +37,29 @@ class NotificationSounds {
 			"user_join":			{implemented:true,	name:"Voicechat User Joined",			src:"/assets/5dd43c946894005258d85770f0d10cff.mp3",	mute:false,	focus:null},
 			"user_leave":			{implemented:true,	name:"Voicechat User Left",				src:"/assets/4fcfeb2cba26459c4750e60f626cebdc.mp3",	mute:false,	focus:null},
 			"user_moved":			{implemented:true,	name:"Voicechat User Moved",			src:"/assets/e81d11590762728c1b811eadfa5be766.mp3",	mute:false,	focus:null},
+			"reconnect":			{implemented:false,	name:"Voicechat Reconnect",				src:"/assets/471cfd0005b112ff857705e894bf41a6.mp3",	mute:true,	focus:null},
 			"ptt_start":			{implemented:true,	name:"Push2Talk Start",					src:"/assets/8b63833c8d252fedba6b9c4f2517c705.mp3",	mute:false,	focus:null},
 			"ptt_stop":				{implemented:true,	name:"Push2Talk Stop",					src:"/assets/74ab980d6890a0fa6aa0336182f9f620.mp3",	mute:false,	focus:null},
 			"call_calling":			{implemented:true,	name:"Outgoing Call",					src:"/assets/c6e92752668dde4eee5923d70441579f.mp3",	mute:false,	focus:null},
 			"call_ringing":			{implemented:true,	name:"Incoming Call",					src:"/assets/84a1b4e11d634dbfa1e5dd97a96de3ad.mp3",	mute:true,	focus:null},
 			"call_ringing_beat":	{implemented:false,	name:"Incoming Call Beat",				src:"/assets/b9411af07f154a6fef543e7e442e4da9.mp3",	mute:true,	focus:null},
-			"ddr-down":				{implemented:true,	name:"HotKeys Window Down",				src:"/assets/71f048f8aa7d4b24bf4268a87cbbb192.mp3",	mute:true,	focus:null},
-			"ddr-left":				{implemented:true,	name:"HotKeys Window Left",				src:"/assets/1de04408e62b5d52ae3ebbb91e9e1978.mp3",	mute:true,	focus:null},
-			"ddr-right":			{implemented:true,	name:"HotKeys Window Right",			src:"/assets/2c0433f93db8449e4a82b76dc520cb29.mp3",	mute:true,	focus:null},
-			"ddr-up":				{implemented:true,	name:"HotKeys Window Up",				src:"/assets/68472713f7a62c7c37e0a6a5d5a1faeb.mp3",	mute:true,	focus:null},
-			"human_man":			{implemented:false,	name:"Human Man Voice",					src:"/assets/a37dcd6272ae41cf49295d58c9806fe3.mp3",	mute:true,	focus:null},
-			"mention1":				{implemented:false,	name:"Mention Ping 1",					src:"/assets/fa4d62c3cbc80733bf1f01b9c6f181de.mp3",	mute:true,	focus:null},
+			"stream_started":		{implemented:true,	name:"Stream Started",					src:"/assets/9ca817f41727edc1b2f1bc4f1911107c.mp3",	mute:false,	focus:null},
+			"stream_ended":			{implemented:true,	name:"Stream Ended",					src:"/assets/4e30f98aa537854f79f49a76af822bbc.mp3",	mute:false,	focus:null},
+			"stream_user_joined":	{implemented:true,	name:"Stream User Joined",				src:"/assets/5827bbf9a67c61cbb0e02ffbf434b654.mp3",	mute:false,	focus:null},
+			"stream_user_left":		{implemented:true,	name:"Stream User Left",				src:"/assets/7cdcdcbc426cc43583365a671c24b740.mp3",	mute:false,	focus:null},
+			"ddr-down":				{implemented:true,	name:"HotKeys Window Down",				src:"/assets/71f048f8aa7d4b24bf4268a87cbbb192.mp3",	mute:false,	focus:null},
+			"ddr-left":				{implemented:true,	name:"HotKeys Window Left",				src:"/assets/1de04408e62b5d52ae3ebbb91e9e1978.mp3",	mute:false,	focus:null},
+			"ddr-right":			{implemented:true,	name:"HotKeys Window Right",			src:"/assets/2c0433f93db8449e4a82b76dc520cb29.mp3",	mute:false,	focus:null},
+			"ddr-up":				{implemented:true,	name:"HotKeys Window Up",				src:"/assets/68472713f7a62c7c37e0a6a5d5a1faeb.mp3",	mute:false,	focus:null},
+			"mention1":				{implemented:false,	name:"Mention Ping",					src:"/assets/fa4d62c3cbc80733bf1f01b9c6f181de.mp3",	mute:true,	focus:null},
 			"mention2":				{implemented:false,	name:"Mention Ping 2",					src:"/assets/a5f42064e8120e381528b14fd3188b72.mp3",	mute:true,	focus:null},
 			"mention3":				{implemented:false,	name:"Mention Ping 3",					src:"/assets/84c9fa3d07da865278bd77c97d952db4.mp3",	mute:true,	focus:null},
 			"message2":				{implemented:false,	name:"New Chatmessage 2",				src:"/assets/15fe810f6cfab609c7fcda61652b9b34.mp3",	mute:true,	focus:null},
 			"message3":				{implemented:false,	name:"New Chatmessage 3",				src:"/assets/53ce6a92d3c233e8b4ac529d34d374e4.mp3",	mute:true,	focus:null},
-			"overlayunlock":		{implemented:false,	name:"Overlay Unlocked",				src:"/assets/ad322ffe0a88436296158a80d5d11baa.mp3",	mute:true,	focus:null},
-			"reconnect":			{implemented:false,	name:"Voicechat Reconnect",				src:"/assets/471cfd0005b112ff857705e894bf41a6.mp3",	mute:true,	focus:null},
-			"robot_man":			{implemented:false,	name:"Robot Man Voice",					src:"/assets/66598bea6e59eb8acdf32cf2d9d75ba9.mp3",	mute:true,	focus:null}
+			"human_man":			{implemented:false,	name:"Human Man Voice",					src:"/assets/a37dcd6272ae41cf49295d58c9806fe3.mp3",	mute:true,	focus:null},
+			"robot_man":			{implemented:false,	name:"Robot Man Voice",					src:"/assets/66598bea6e59eb8acdf32cf2d9d75ba9.mp3",	mute:true,	focus:null},
+			"discodo":				{implemented:false,	name:"Unknown",							src:"/assets/ae7d16bb2eea76b9b9977db0fad66658.mp3",	mute:true,	focus:null},
+			"overlayunlock":		{implemented:false,	name:"Overlay Unlocked",				src:"/assets/ad322ffe0a88436296158a80d5d11baa.mp3",	mute:true,	focus:null}
 		};
 
 		/* NEVER CHANGE THE SRC LINKS IN THE PLUGIN FILE, TO ADD NEW SONGS ADD THEM IN THE SETTINGS GUI IN THE PLUGINS PAGE */
@@ -71,36 +76,11 @@ class NotificationSounds {
 				"System Fault": 			"https://notificationsounds.com/soundfiles/ebd9629fc3ae5e9f6611e2ee05a31cef/file-sounds-990-system-fault.wav",
 				"You wouldn't believe": 	"https://notificationsounds.com/soundfiles/087408522c31eeb1f982bc0eaf81d35f/file-sounds-949-you-wouldnt-believe.wav"
 			},
-			"Discord": {
-				"HotKeys Window Down":		"/assets/71f048f8aa7d4b24bf4268a87cbbb192.mp3",
-				"HotKeys Window Left":		"/assets/1de04408e62b5d52ae3ebbb91e9e1978.mp3",
-				"HotKeys Window Right":		"/assets/2c0433f93db8449e4a82b76dc520cb29.mp3",
-				"HotKeys Window Up":		"/assets/68472713f7a62c7c37e0a6a5d5a1faeb.mp3",
-				"Human Man Voice":			"/assets/a37dcd6272ae41cf49295d58c9806fe3.mp3",
-				"Incoming Call":			"/assets/84a1b4e11d634dbfa1e5dd97a96de3ad.mp3",
-				"Incoming Call Beat":		"/assets/b9411af07f154a6fef543e7e442e4da9.mp3",
-				"Mention Ping 1":			"/assets/fa4d62c3cbc80733bf1f01b9c6f181de.mp3",
-				"Mention Ping 2":			"/assets/a5f42064e8120e381528b14fd3188b72.mp3",
-				"Mention Ping 3":			"/assets/84c9fa3d07da865278bd77c97d952db4.mp3",
-				"New Chatmessage 1":		"/assets/dd920c06a01e5bb8b09678581e29d56f.mp3",
-				"New Chatmessage 2":		"/assets/15fe810f6cfab609c7fcda61652b9b34.mp3",
-				"New Chatmessage 3":		"/assets/53ce6a92d3c233e8b4ac529d34d374e4.mp3",
-				"Outgoing Call":			"/assets/c6e92752668dde4eee5923d70441579f.mp3",
-				"Overlay Unlocked":			"/assets/ad322ffe0a88436296158a80d5d11baa.mp3",
-				"Push2Talk Start":			"/assets/8b63833c8d252fedba6b9c4f2517c705.mp3",
-				"Push2Talk Stop":			"/assets/74ab980d6890a0fa6aa0336182f9f620.mp3",
-				"Robot Man Voice":			"/assets/66598bea6e59eb8acdf32cf2d9d75ba9.mp3",
-				"Voicechat Deafen":			"/assets/e4d539271704b87764dc465b1a061abd.mp3",
-				"Voicechat Disconnect":		"/assets/7e125dc075ec6e5ae796e4c3ab83abb3.mp3",
-				"Voicechat Mute":			"/assets/429d09ee3b86e81a75b5e06d3fb482be.mp3",
-				"Voicechat Undeafen":		"/assets/5a000a0d4dff083d12a1d4fc2c7cbf66.mp3",
-				"Voicechat Unmute":			"/assets/43805b9dd757ac4f6b9b58c1a8ee5f0d.mp3",
-				"Voicechat User Joined":	"/assets/5dd43c946894005258d85770f0d10cff.mp3",
-				"Voicechat User Left":		"/assets/4fcfeb2cba26459c4750e60f626cebdc.mp3",
-				"Voicechat User Moved":		"/assets/e81d11590762728c1b811eadfa5be766.mp3",
-				"Voicechat Reconnect":		"/assets/471cfd0005b112ff857705e894bf41a6.mp3"
-			}
+			"Discord": {}
 		};
+		
+		for (let id in this.types) if (id != "dm" && id != "mentioned") this.defaults.Discord[this.types[id].name] = this.types[id].src;
+		this.defaults.Discord = BDFDB.ObjectUtils.sort(this.defaults.Discord);
 
 		this.orderTypes = {"category":true, "song":true};
 
@@ -223,16 +203,16 @@ class NotificationSounds {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
 
-			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.MessageUtils, "receiveMessage", {before: e => {
-				let message = e.methodArguments[1];
-				let guildid = message.guild_id ? message.guild_id : null;
-				if (!BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildid, message.channel_id) && message.author.id != BDFDB.UserUtils.me.id) {
-					if (!guildid && !(this.choices.dm.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) {
-						this.fireEvent("dm");
-						this.playAudio("dm");
-					}
-					else if (message.mentions && !(this.choices.mentioned.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) {
-						for (let mention of message.mentions) if (mention.id == BDFDB.UserUtils.me.id) {
+			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dirtyDispatch", {before: e => {
+				if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.MESSAGE_CREATE && e.methodArguments[0].message) {
+					let message = e.methodArguments[0].message;
+					let guildId = message.guild_id || null;
+					if (!BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildId, message.channel_id) && message.author.id != BDFDB.UserUtils.me.id) {
+						if (!guildId && !(this.choices.dm.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) {
+							this.fireEvent("dm");
+							this.playAudio("dm");
+						}
+						else if (message.mentions && !(this.choices.mentioned.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) for (let mention of message.mentions) if (mention.id == BDFDB.UserUtils.me.id) {
 							this.fireEvent("mentioned");
 							this.playAudio("mentioned");
 							break;

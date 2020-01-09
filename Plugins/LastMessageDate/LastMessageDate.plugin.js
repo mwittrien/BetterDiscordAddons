@@ -3,7 +3,7 @@
 class LastMessageDate {
 	getName () {return "LastMessageDate";}
 
-	getVersion () {return "1.1.3";}
+	getVersion () {return "1.1.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -207,10 +207,12 @@ class LastMessageDate {
 
 			this.languages = Object.assign({"own":{name:"Own",id:"own",integrated:false,dic:false}}, BDFDB.LanguageUtils.languages);
 
-			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.MessageUtils, "receiveMessage", {after: e => {
-				let message = e.methodArguments[1];
-				let guildid = message.guild_id || message.channel_id;
-				if (guildid && this.loadedusers[guildid] && this.loadedusers[guildid][message.author.id]) this.loadedusers[guildid][message.author.id] = new Date(message.timestamp);
+			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dirtyDispatch", {after: e => {
+				if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.MESSAGE_CREATE && e.methodArguments[0].message) {
+					let message = e.methodArguments[0].message;
+					let guildId = message.guild_id || message.channel_id;
+					if (guildId && this.loadedusers[guildId] && this.loadedusers[guildId][message.author.id]) this.loadedusers[guildId][message.author.id] = new Date(message.timestamp);
+				}
 			}});
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
