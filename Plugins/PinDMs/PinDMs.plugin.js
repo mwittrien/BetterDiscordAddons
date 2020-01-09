@@ -3,7 +3,7 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.5.6";}
+	getVersion () {return "1.5.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class PinDMs {
 
 	constructor () {
 		this.changelog = {
-			"added":[["Sorting Categories","You can now drag categories to sort them the same way as pinned DMs"],["Sort Order","You can now enable the option in the plugin settings to sort pinned DMs in the most recent message order within category"],["Move to other Category","Context Menu Layout was changed you can now pin a DM to another category (this will remove the DM from the other category)"]],
+			"added":[["Unread Count","Similar to Folders, DM Categories now display the total amound of unread messages as a red badge, can be disabled in the settings"],["Sorting Categories","You can now drag categories to sort them the same way as pinned DMs"],["Sort Order","You can now enable the option in the plugin settings to sort pinned DMs in the most recent message order within category"],["Move to other Category","Context Menu Layout was changed you can now pin a DM to another category (this will remove the DM from the other category)"]],
 			"fixed":[["Deleting","Fixed the bug where deleting a category between other categories would break all other categories"]],
 			"improved":[["Categories","Instead of pinning all your channels into the same category in the private channel list, you can now create your own collapsable categories, old pinned channel data was ported to the new category format"],["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
@@ -97,6 +97,7 @@ class PinDMs {
 				sortInRecentOrder:		{value:false, 	inner:true,		description:"Channel List"},
 				sortInRecentOrderGuild:	{value:false, 	inner:true,		description:"Guild List"},
 				showPinIcon:			{value:true, 	inner:false,	description:"Shows a little 'Pin' icon for pinned DMs in the server list:"},
+				showCategoryUnread:		{value:true, 	inner:false,	description:"Shows the amount of unread Messages in a category in the channel list:"},
 				showCategoryAmount:		{value:true, 	inner:false,	description:"Shows the amount of pinned DMs in a category in the channel list:"}
 			}
 		};
@@ -328,8 +329,9 @@ class PinDMs {
 						delete this.draggedChannel;
 						delete this.releasedChannel;
 					}
-					let showCategoryAmount = BDFDB.DataUtils.get(this, "settings", "showCategoryAmount");
+					let settings = BDFDB.DataUtils.get(this, "settings");
 					for (let category of categories) if (this.draggedCategory != category.id) {
+						let unreadAmount = settings.showCategoryUnread && BDFDB.ArrayUtils.sum(category.dms.map(id => BDFDB.LibraryModules.UnreadChannelUtils.getMentionCount(id)));
 						children.splice(index++, 0, BDFDB.ReactUtils.createElement("header", {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.dmchannelheader, BDFDB.disCN._pindmspinnedchannelsheadercontainer, category.collapsed && BDFDB.disCN._pindmspinnedchannelsheadercollapsed, BDFDB.disCN.namecontainernamecontainer),
 							categoryId: category.id,
@@ -407,7 +409,12 @@ class PinDMs {
 									className: BDFDB.disCN.dmchannelheadertext,
 									children: category.name
 								}),
-								showCategoryAmount ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.NumberBadge, {
+								unreadAmount ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.NumberBadge, {
+									className: BDFDB.disCN._pindmspinnedchannelsheaderamount,
+									count: unreadAmount,
+									style: {backgroundColor: BDFDB.DiscordConstants.Colors.STATUS_RED}
+								}) : null,
+								settings.showCategoryAmount ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.NumberBadge, {
 									className: BDFDB.disCN._pindmspinnedchannelsheaderamount,
 									count: category.dms.length,
 									style: {backgroundColor: BDFDB.DiscordConstants.Colors.BRAND}
