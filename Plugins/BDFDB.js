@@ -904,17 +904,20 @@
 	BDFDB.ArrayUtils.is = function (array) {
 		return array && Array.isArray(array);
 	};
+	BDFDB.ArrayUtils.sum = function (array) {
+		return Array.isArray(array) ? array.reduce((total, num) => total + Math.round(num), 0) : 0;
+	};
 	BDFDB.ArrayUtils.keySort = function (array, key, except) {
 		if (!BDFDB.ArrayUtils.is(array)) return [];
 		if (key == null) return array;
 		if (except === undefined) except = null;
-		return array.sort(function (x, y) {
+		return array.sort((x, y) => {
 			var xvalue = x[key], yvalue = y[key];
 			if (xvalue !== except) return xvalue < yvalue ? -1 : xvalue > yvalue ? 1 : 0;
 		});
 	};
 	BDFDB.ArrayUtils.numSort = function (array) {
-		return array.sort(function (x, y) {return x < y ? -1 : x > y ? 1 : 0;});
+		return array.sort((x, y) => {return x < y ? -1 : x > y ? 1 : 0;});
 	};
 	BDFDB.ArrayUtils.remove = function (array, value, all = false) {
 		if (!BDFDB.ArrayUtils.is(array)) return [];
