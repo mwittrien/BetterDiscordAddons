@@ -13,7 +13,9 @@
 				pageY: 0
 			},
 			patchMenuQueries: {}
-		}, window.BDFDB && window.BDFDB.InternalData, {
+		},
+		window.BDFDB && window.BDFDB.InternalData,
+		{
 			creationTime: performance.now()
 		}),
 		BDv2Api: window.BDFDB && window.BDFDB.BDv2Api || undefined,
@@ -1374,6 +1376,7 @@
 	};
 	InternalBDFDB.patchNonRenderContextMenuPlugin = (plugin, type, module) => {
 		if (module && module.exports) {
+			// REMOVE
 			let isOldType = plugin["on" + type].toString().split("\n")[0].replace(/ /g, "").split(",").length > 1;
 			if (isOldType) BDFDB.ModuleUtils.patch(plugin, module.exports, "default", {after: e => {
 				if (e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({props:e.methodArguments[0]}, document, e.returnValue);
@@ -9538,10 +9541,10 @@
 	for (let type of NoFluxPopouts) InternalBDFDB.patchPopoutLib(BDFDB.ModuleUtils.findByName(type), false);
 	for (let type of LibraryComponents.ContextMenus._NormalMenus) InternalBDFDB.patchContextMenuLib(LibraryComponents.ContextMenus[type], false);
 	for (let type of LibraryComponents.ContextMenus._FluxMenus) {
-		BDFDB.InternalData.patchMenuQueries[type] = {query:[], module:null};
+		if (!BDFDB.InternalData.patchMenuQueries[type]) BDFDB.InternalData.patchMenuQueries[type] = {query:[], module:null};
 		InternalBDFDB.patchContextMenuLib(LibraryComponents.ContextMenus[type], true);
 	}
-	for (let type of LibraryComponents.ContextMenus._NonRenderMenus) BDFDB.InternalData.patchMenuQueries[type] = {query:[], module:null};
+	for (let type of LibraryComponents.ContextMenus._NonRenderMenus) if (!BDFDB.InternalData.patchMenuQueries[type]) BDFDB.InternalData.patchMenuQueries[type] = {query:[], module:null};
 	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.ContextMenuUtils, "openContextMenu", {before: e => {
 		let menu = e.methodArguments[1]();
 		if (menu.type && menu.props && menu.props.type) {
