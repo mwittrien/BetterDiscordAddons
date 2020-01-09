@@ -3,7 +3,7 @@
 class TopRoleEverywhere {
 	getName () {return "TopRoleEverywhere";}
 
-	getVersion () {return "2.9.4";}
+	getVersion () {return "2.9.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,6 +11,7 @@ class TopRoleEverywhere {
 
 	constructor () {
 		this.changelog = {
+			"fixed":[["Compact", "Fixed roles in role style for compact mode"]],
 			"improved":[["Coloress", "If you disabled the plugin for colorless roles and the highest role of a user is a role without color, then the plugin will try to find the next highest role with a color"], ["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
@@ -34,6 +35,9 @@ class TopRoleEverywhere {
 			}
 			.TRE-tag.TRE-roletag {
 				margin: 0 0 0 0.3rem;
+			}
+			${BDFDB.dotCN.messageheadercompact} .TRE-roletag {
+				text-indent: 0;
 			}
 			.TRE-tag.TRE-bottag {
 				margin-left: 0.3rem;
