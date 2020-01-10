@@ -1020,6 +1020,7 @@
 		WebhookCard: "Webhook"
 	};
 	WebModulesData.Forceobserve = [
+		"DirectMessage",
 		"GuildIcon",
 		"QuickSwitchChannelResult",
 		"QuickSwitchGuildResult"
@@ -1886,8 +1887,7 @@
 		}
 	};
 	BDFDB.ReactUtils.forceUpdate = function (...instances) {
-		// REMOVE AppSkeleton CHECK
-		for (let ins of instances.flat(10).filter(n => n)) if (ins.updater && typeof ins.updater.isMounted == "function" && ins.updater.isMounted(ins) && BDFDB.ReactUtils.getValue(ins, "_reactInternalFiber.type.displayName") != "AppSkeleton") ins.forceUpdate();
+		for (let ins of instances.flat(10).filter(n => n)) if (ins.updater && typeof ins.updater.isMounted == "function" && ins.updater.isMounted(ins)) ins.forceUpdate();
 	};
 	BDFDB.ReactUtils.getInstance = function (node) {
 		if (!BDFDB.ObjectUtils.is(node)) return null;
