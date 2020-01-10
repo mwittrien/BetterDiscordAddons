@@ -1041,6 +1041,7 @@
 		ChannelMember: "member",
 		ChannelTextAreaForm: "chatform",
 		ChannelWindow: "chatcontent",
+		DirectMessage: "guildouter",
 		EmojiPicker: "emojipicker",
 		FriendRow: "friendsrow",
 		Guild: "guildouter",
