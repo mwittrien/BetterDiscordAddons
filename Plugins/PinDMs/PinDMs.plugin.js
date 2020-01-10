@@ -181,8 +181,8 @@ class PinDMs {
 				}, this, "dmCategories", id);
 				BDFDB.DataUtils.remove(this, "pinnedDMs");
 			}
-
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			
+			this.forceUpdateAll();
 		}
 		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
@@ -191,7 +191,7 @@ class PinDMs {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			this.forceUpdateAll();
+			this.forceUpdateAll(true);
 			
 			let unreadDMsInstance = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"UnreadDMs", unlimited:true});
 			if (unreadDMsInstance) {
@@ -776,7 +776,7 @@ class PinDMs {
 		return this.sortDMsByTime(existingDMs, type);
 	}
 
-	forceUpdateAll () {
+	forceUpdateAll (stopped) {
 		BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"FluxContainer(PrivateChannels)", all:true, unlimited:true}));
 		BDFDB.ModuleUtils.forceAllUpdates(this);
 	}

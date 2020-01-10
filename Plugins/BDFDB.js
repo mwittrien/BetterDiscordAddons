@@ -1712,13 +1712,9 @@
 							instance.type.BDFDBreactSearch = true;
 							if (config.group) {
 								if (instance.type && (instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name)) {
-									var group = "Default";
-									for (let name of types) if ((instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name).split(" _ _ ")[0]) {
-										group = name;
-										break;
-									}
-									if (typeof foundinstances[group] == "undefined") foundinstances[group] = [];
-									foundinstances[group].push(instance.type);
+									let group = config.name.find(n => (instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name || instance.type).split(" _ _ ")[0] == n) || "Default";
+									if (!BDFDB.ArrayUtils.is(foundinstances[group])) foundinstances[group] = [];
+									foundinstances[group].push(instance.stateNode);
 								}
 							}
 							else foundinstances.push(instance.type);
@@ -1773,12 +1769,8 @@
 							instance.stateNode.BDFDBreactSearch = true;
 							if (config.group) {
 								if (config.name && instance.type && (instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name || instance.type)) {
-									var group = "Default";
-									for (let name of config.name) if ((instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name || instance.type).split(" _ _ ")[0]) {
-										group = name;
-										break;
-									}
-									if (typeof foundinstances[group] == "undefined") foundinstances[group] = [];
+									let group = config.name.find(n => (instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name || instance.type).split(" _ _ ")[0] == n) || "Default";
+									if (!BDFDB.ArrayUtils.is(foundinstances[group])) foundinstances[group] = [];
 									foundinstances[group].push(instance.stateNode);
 								}
 							}
