@@ -3,7 +3,7 @@
 class MoveablePopups {
 	getName () {return "MoveablePopups";}
 
-	getVersion () {return "1.1.4";}
+	getVersion () {return "1.1.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -25,7 +25,7 @@ class MoveablePopups {
 			libraryScript.setAttribute("date", performance.now());
 			libraryScript.addEventListener("load", () => {this.initialize();});
 			document.head.appendChild(libraryScript);
-			this.libLoadTimeout = BDFDB.TimeUtils.timeout(() => {
+			this.libLoadTimeout = setTimeout(() => {
 				libraryScript.remove();
 				require("request")("https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js", (error, response, body) => {
 					if (body) {
