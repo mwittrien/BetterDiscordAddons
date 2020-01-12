@@ -6226,6 +6226,7 @@
 		"ca":			{name:"Catalan",					id:"ca",		ownlang:"Català",						integrated:false,		dic:false},
 		"ceb":			{name:"Cebuano",					id:"ceb",		ownlang:"Bisaya",						integrated:false,		dic:false},
 		"ny":			{name:"Chichewa",					id:"ny",		ownlang:"Nyanja",						integrated:false,		dic:false},
+		"zh":			{name:"Chinese",					id:"zh",		ownlang:"中文",							integrated:false,		dic:false},
 		"zh-HK":		{name:"Chinese (Hong Kong)",		id:"zh-HK",		ownlang:"香港中文",						integrated:false,		dic:false},
 		"zh-CN":		{name:"Chinese (Simplified)",		id:"zh-CN",		ownlang:"简体中文",						integrated:false,		dic:false},
 		"zh-TW":		{name:"Chinese (Traditional)",		id:"zh-TW",		ownlang:"繁體中文",						integrated:true,		dic:false},
