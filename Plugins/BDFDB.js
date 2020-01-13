@@ -7083,7 +7083,7 @@
 	
 	LibraryComponents.ContextMenus = {};
 	LibraryComponents.ContextMenus._Exports = {};
-	LibraryComponents.ContextMenus._NormalMenus = ["DeveloperContextMenu", "GuildRoleContextMenu", "MessageContextMenu", "NativeContextMenu", "ScreenshareContextMenu", "UserSettingsCogContextMenu"];
+	LibraryComponents.ContextMenus._NormalMenus = ["DeveloperContextMenu", "GuildRoleContextMenu", "MessageContextMenu", "NativeContextMenu", "ScreenshareContextMenu", "SlateContextMenu", "UserSettingsCogContextMenu"];
 	LibraryComponents.ContextMenus._FluxMenus = ["ApplicationContextMenu", "GroupDMContextMenu"];
 	LibraryComponents.ContextMenus._NonRenderMenus = ["ChannelContextMenu", "GuildContextMenu", "UserContextMenu"];
 	
@@ -7108,6 +7108,8 @@
 	LibraryComponents.ContextMenus.NativeContextMenu = BDFDB.ModuleUtils.findByName("NativeContextMenu");
 	
 	LibraryComponents.ContextMenus.ScreenshareContextMenu = BDFDB.ModuleUtils.findByName("ScreenshareContextMenu");
+	
+	LibraryComponents.ContextMenus.SlateContextMenu = BDFDB.ModuleUtils.findByName("SlateContextMenu");
 	
 	LibraryComponents.ContextMenus.UserContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.USER_CHANNEL_MEMBERS);
 	LibraryComponents.ContextMenus._Exports.UserContextMenu = (BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.USER_CHANNEL_MEMBERS, false) || {}).exports;

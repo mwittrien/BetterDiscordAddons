@@ -47,11 +47,11 @@ class TimedLightDarkMode {
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
 			libraryScript.setAttribute("date", performance.now());
-			libraryScript.addEventListener("load", () => {this.initialize();});
+			libraryScript.addEventListener("load", _ => {this.initialize();});
 			document.head.appendChild(libraryScript);
 		}
 		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-		this.startTimeout = setTimeout(() => {
+		this.startTimeout = setTimeout(_ => {
 			try {return this.initialize();}
 			catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
 		}, 30000);
@@ -110,7 +110,7 @@ class TimedLightDarkMode {
 			let inverted = values.timer1 > values.timer2;
 			let timer1LOW = this.getTime(values.timer1), timer2LOW = this.getTime(values.timer2);
 			let timer1HIGH = this.getHighTime(timer2LOW), timer2HIGH = this.getHighTime(timer1LOW);
-			let check = () => {
+			let check = _ => {
 				let currenttime = new Date();
 				let currenthours = currenttime.getHours();
 				let currentminutes = currenttime.getMinutes();
@@ -139,7 +139,7 @@ class TimedLightDarkMode {
 		let bubble = BDFDB.DOMUtils.create(`<span class="${BDFDB.disCN.sliderbubble}">${(currenthours > 9 ? currenthours : ("0" + currenthours)) + ":" + (currentminutes > 9 ? currentminutes : ("0" + currentminutes))}</span>`);
 		grabber.appendChild(bubble);
 		grabber.style.setProperty("left", `${this.getPercent(currenttime)}%`);
-		let mouseleave = () => {
+		let mouseleave = _ => {
 			BDFDB.DOMUtils.remove(bubble);
 			grabber.removeEventListener("mouseleave", mouseleave);
 		};
@@ -163,7 +163,7 @@ class TimedLightDarkMode {
 		let sMaxX = sMinX + BDFDB.DOMUtils.getRects(track).width;
 		let bubble = BDFDB.DOMUtils.create(`<span class="${BDFDB.disCN.sliderbubble}">${this.getTime(value, true)}</span>`);
 		grabber.appendChild(bubble);
-		let mouseup = () => {
+		let mouseup = _ => {
 			document.removeEventListener("mouseup", mouseup);
 			document.removeEventListener("mousemove", mousemove);
 			BDFDB.DOMUtils.remove(bubble);

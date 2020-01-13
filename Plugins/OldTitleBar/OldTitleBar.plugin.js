@@ -105,7 +105,7 @@ class OldTitleBar {
 						if (notifybar) notifybar.querySelector(BDFDB.dotCN.noticedismiss).click();
 						if (this.patched) {
 							notifybar = BDFDB.NotificationUtils.notice("Changed nativebar settings, relaunch to see changes:", {type:"danger",btn:"Relaunch",id:"OldTitleBarNotifyBar"});
-							notifybar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", () => {
+							notifybar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", _ => {
 								BDFDB.LibraryRequires.electron.remote.app.relaunch();
 								BDFDB.LibraryRequires.electron.remote.app.quit();
 							});
@@ -132,11 +132,11 @@ class OldTitleBar {
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
 			libraryScript.setAttribute("date", performance.now());
-			libraryScript.addEventListener("load", () => {this.initialize();});
+			libraryScript.addEventListener("load", _ => {this.initialize();});
 			document.head.appendChild(libraryScript);
 		}
 		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-		this.startTimeout = setTimeout(() => {
+		this.startTimeout = setTimeout(_ => {
 			try {return this.initialize();}
 			catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
 		}, 30000);

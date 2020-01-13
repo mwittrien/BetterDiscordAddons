@@ -35,11 +35,11 @@ class ThemeSettings {
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
 			libraryScript.setAttribute("date", performance.now());
-			libraryScript.addEventListener("load", () => {this.initialize();});
+			libraryScript.addEventListener("load", _ => {this.initialize();});
 			document.head.appendChild(libraryScript);
 		}
 		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-		this.startTimeout = setTimeout(() => {
+		this.startTimeout = setTimeout(_ => {
 			try {return this.initialize();}
 			catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
 		}, 30000);
@@ -95,7 +95,7 @@ class ThemeSettings {
 						}
 						let closebutton = BDFDB.DOMUtils.create(`<div style="float: right; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" style="width: 18px; height: 18px;"><g class="background" fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="#dcddde" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div>`);
 						wrapper.appendChild(closebutton);
-						closebutton.addEventListener("click", () => {
+						closebutton.addEventListener("click", _ => {
 							BDFDB.DOMUtils.removeClass(wrapper, BDFDB.disCN._reposettingsopen);
 							BDFDB.DOMUtils.addClass(wrapper, BDFDB.disCN._reposettingsclosed);
 							while (wrapper.childElementCount) wrapper.firstChild.remove();

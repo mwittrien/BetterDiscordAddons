@@ -32,7 +32,7 @@ class UserNotes {
 			color: BDFDB.LibraryComponents.Button.Colors.RED,
 			label: "Delete all Usernotes",
 			onClick: _ => {
-				BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all usernotes?", () => {
+				BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all usernotes?", _ => {
 					BDFDB.DataUtils.remove(this, "notes");
 				});
 			},
@@ -56,11 +56,11 @@ class UserNotes {
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
 			libraryScript.setAttribute("date", performance.now());
-			libraryScript.addEventListener("load", () => {this.initialize();});
+			libraryScript.addEventListener("load", _ => {this.initialize();});
 			document.head.appendChild(libraryScript);
 		}
 		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-		this.startTimeout = setTimeout(() => {
+		this.startTimeout = setTimeout(_ => {
 			try {return this.initialize();}
 			catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
 		}, 30000);

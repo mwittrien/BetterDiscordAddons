@@ -73,7 +73,7 @@ class EditServers {
 			color: BDFDB.LibraryComponents.Button.Colors.RED,
 			label: "Reset all Servers",
 			onClick: _ => {
-				BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset all Servers?", () => {
+				BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset all Servers?", _ => {
 					BDFDB.DataUtils.remove(this, "servers");
 					BDFDB.ModuleUtils.forceAllUpdates(this);;
 				});
@@ -98,11 +98,11 @@ class EditServers {
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
 			libraryScript.setAttribute("date", performance.now());
-			libraryScript.addEventListener("load", () => {this.initialize();});
+			libraryScript.addEventListener("load", _ => {this.initialize();});
 			document.head.appendChild(libraryScript);
 		}
 		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-		this.startTimeout = setTimeout(() => {
+		this.startTimeout = setTimeout(_ => {
 			try {return this.initialize();}
 			catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
 		}, 30000);
@@ -585,7 +585,7 @@ class EditServers {
 			delete instance.props.errorMessage;
 			instance.forceUpdate();
 		}
-		else instance.checkTimeout = BDFDB.TimeUtils.timeout(() => {
+		else instance.checkTimeout = BDFDB.TimeUtils.timeout(_ => {
 			BDFDB.LibraryRequires.request(url.trim(), (error, response, result) => {
 				if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
 					instance.props.success = true;

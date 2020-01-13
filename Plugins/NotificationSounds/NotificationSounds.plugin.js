@@ -128,8 +128,8 @@ class NotificationSounds {
 
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".btn-addsong", e => {this.saveAudio(settingspanel);});
 		BDFDB.ListenerUtils.add(this, settingspanel, "keyup", ".songInput", e => {if (e.which == 13) this.saveAudio(settingspanel);});
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".reset-button", () => {
-			BDFDB.ModalUtils.confirm(this, "Are you sure you want to delete all added songs?", () => {
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".reset-button", _ => {
+			BDFDB.ModalUtils.confirm(this, "Are you sure you want to delete all added songs?", _ => {
 				BDFDB.DataUtils.remove(this, "choices");
 				BDFDB.DataUtils.remove(this, "audios");
 				this.loadAudios();
@@ -188,11 +188,11 @@ class NotificationSounds {
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
 			libraryScript.setAttribute("date", performance.now());
-			libraryScript.addEventListener("load", () => {this.initialize();});
+			libraryScript.addEventListener("load", _ => {this.initialize();});
 			document.head.appendChild(libraryScript);
 		}
 		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-		this.startTimeout = setTimeout(() => {
+		this.startTimeout = setTimeout(_ => {
 			try {return this.initialize();}
 			catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
 		}, 30000);
@@ -223,7 +223,7 @@ class NotificationSounds {
 
 			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "playSound", {instead: e => {
 				let type = e.methodArguments[0];
-				if (this.choices[type]) BDFDB.TimeUtils.timeout(() => {
+				if (this.choices[type]) BDFDB.TimeUtils.timeout(_ => {
 					if (type == "message1") {
 						if (this.firedEvents["dm"]) this.firedEvents["dm"] = false;
 						else if (this.firedEvents["mentioned"]) this.firedEvents["mentioned"] = false;
@@ -238,17 +238,17 @@ class NotificationSounds {
 				let audio = new Audio();
 				audio.src = this.choices[type].src;
 				audio.volume = this.choices[type].volume/100;
-				e.returnValue.play = () => {
+				e.returnValue.play = _ => {
 					if (!audio.paused || this.dontPlayAudio(type)) return;
 					audio.loop = false;
 					audio.play();
 				};
-				e.returnValue.loop = () => {
+				e.returnValue.loop = _ => {
 					if (!audio.paused || this.dontPlayAudio(type)) return;
 					audio.loop = true;
 					audio.play();
 				};
-				e.returnValue.stop = () => {audio.pause();}
+				e.returnValue.stop = _ => {audio.pause();}
 			}});
 
 			this.loadAudios();
@@ -310,7 +310,7 @@ class NotificationSounds {
 			if (e2.target.parentElement != selectMenu) {
 				document.removeEventListener("mousedown", removeMenu);
 				selectMenu.remove();
-				BDFDB.TimeUtils.timeout(() => {BDFDB.DOMUtils.removeClass(selectWrap, BDFDB.disCN.selectisopen);},100);
+				BDFDB.TimeUtils.timeout(_ => {BDFDB.DOMUtils.removeClass(selectWrap, BDFDB.disCN.selectisopen);},100);
 			}
 		};
 		document.addEventListener("mousedown", removeMenu);
@@ -365,7 +365,7 @@ class NotificationSounds {
 		var sMaxX = sMinX + BDFDB.DOMUtils.getRects(track).width;
 		var bubble = BDFDB.DOMUtils.create(`<span class="${BDFDB.disCN.sliderbubble}">${Math.floor(this.choices[type].volume)}%</span>`);
 		grabber.appendChild(bubble);
-		var mouseup = () => {
+		var mouseup = _ => {
 			document.removeEventListener("mouseup", mouseup);
 			document.removeEventListener("mousemove", mousemove);
 			BDFDB.DOMUtils.remove(bubble);
@@ -426,7 +426,7 @@ class NotificationSounds {
 				});
 			}
 
-			successSavedAudio = () => {
+			successSavedAudio = _ => {
 				BDFDB.NotificationUtils.toast(`Song ${song} was added to category ${category}.`, {type:"success"});
 				if (!this.audios[category]) this.audios[category] = {};
 				this.audios[category][song] = url;
@@ -480,19 +480,19 @@ class NotificationSounds {
 
 	fireEvent (type) {
 		this.firedEvents[type] = true;
-		BDFDB.TimeUtils.timeout(() => {this.firedEvents[type] = false;},3000);
+		BDFDB.TimeUtils.timeout(_ => {this.firedEvents[type] = false;},3000);
 	}
 
 	processIncomingCalls (instance, wrapper, returnvalue) {
 		let audio = new Audio();
-		let play = () => {
+		let play = _ => {
 			if (!audio.paused || this.dontPlayAudio("call_ringing")) return;
 			audio.loop = true;
 			audio.src = this.choices["call_ringing"].src;
 			audio.volume = this.choices["call_ringing"].volume/100;
 			audio.play();
 		};
-		let stop = () => {audio.pause();}
+		let stop = _ => {audio.pause();}
 		BDFDB.ModuleUtils.patch(this, instance, "startRinging", {instead: play});
 		BDFDB.ModuleUtils.patch(this, instance, "stopRinging", {instead: stop});
 		BDFDB.ModuleUtils.patch(this, instance._reactInternalFiber.type.prototype, "startRinging", {instead: play});

@@ -94,11 +94,11 @@ class RepoControls {
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
 			libraryScript.setAttribute("date", performance.now());
-			libraryScript.addEventListener("load", () => {this.initialize();});
+			libraryScript.addEventListener("load", _ => {this.initialize();});
 			document.head.appendChild(libraryScript);
 		}
 		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-		this.startTimeout = setTimeout(() => {
+		this.startTimeout = setTimeout(_ => {
 			try {return this.initialize();}
 			catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
 		}, 30000);
@@ -283,7 +283,7 @@ class RepoControls {
 				look: BDFDB.LibraryComponents.Button.Looks.BLANK,
 				size: BDFDB.LibraryComponents.Button.Sizes.NONE,
 				onClick: _ => {
-					let deleteFile = () => {
+					let deleteFile = _ => {
 						BDFDB.LibraryRequires.fs.unlink(e.instance.props.RCdata.path, (error) => {
 							if (error) BDFDB.NotificationUtils.toast(`Unable to delete ${e.instance.props.RCdata.type} "${e.returnvalue.props["data-name"]}".`, {type:"danger"});
 							else BDFDB.NotificationUtils.toast(`Successfully deleted ${e.instance.props.RCdata.type} "${e.returnvalue.props["data-name"]}".`, {type:"success"});
@@ -320,7 +320,7 @@ class RepoControls {
 
 	toggleAll (type, instance, enable) {
 		let listnode = BDFDB.ReactUtils.findDOMNode(BDFDB.ReactUtils.findOwner(instance, {name: "V2C_List"}));
-		if (listnode) BDFDB.ModalUtils.confirm(this, `Are you sure you want to ${enable ? "enable" : "disable"} all ${type[0].toUpperCase() + type.slice(1)}s?`, () => {
+		if (listnode) BDFDB.ModalUtils.confirm(this, `Are you sure you want to ${enable ? "enable" : "disable"} all ${type[0].toUpperCase() + type.slice(1)}s?`, _ => {
 			for (let header of listnode.querySelectorAll(BDFDB.dotCN._repoheader)) {
 				if (header.querySelector(BDFDB.dotCN._reponame).textContent.toLowerCase().indexOf(this.name.toLowerCase()) != 0) {
 					let switchwrap = header.querySelector(BDFDB.dotCN._repocheckboxwrap);

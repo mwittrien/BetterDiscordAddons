@@ -168,11 +168,11 @@ class ChatFilter {
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
 			libraryScript.setAttribute("date", performance.now());
-			libraryScript.addEventListener("load", () => {this.initialize();});
+			libraryScript.addEventListener("load", _ => {this.initialize();});
 			document.head.appendChild(libraryScript);
 		}
 		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-		this.startTimeout = setTimeout(() => {
+		this.startTimeout = setTimeout(_ => {
 			try {return this.initialize();}
 			catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
 		}, 30000);
@@ -205,7 +205,7 @@ class ChatFilter {
 	// begin of own functions
 
 	updateContainer (settingspanel, ele) {
-		var wordvalue = null, replacevalue = null, action = ele.getAttribute("action"), rtype = ele.getAttribute("rtype"), update = () => {
+		var wordvalue = null, replacevalue = null, action = ele.getAttribute("action"), rtype = ele.getAttribute("rtype"), update = _ => {
 			BDFDB.DataUtils.save(this.words, this, "words");
 
 			var containerhtml = ``;
@@ -240,7 +240,7 @@ class ChatFilter {
 			}
 		}
 		else if (action == "removeall") {
-			BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all added Words from your list?", () => {
+			BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all added Words from your list?", _ => {
 				this.words[rtype] = {};
 				update();
 			});
@@ -454,7 +454,7 @@ class ChatFilter {
 	addClickListener (message, addListener) {
 		message.removeEventListener("click", message.clickChatFilterListener);
 		if (addListener) {
-			message.clickChatFilterListener = () => {
+			message.clickChatFilterListener = _ => {
 				if (BDFDB.DOMUtils.containsClass(message, "revealed")) {
 					BDFDB.DOMUtils.removeClass(message, "revealed");
 					message.innerHTML = message.ChatFilterNewHTML;
@@ -478,7 +478,7 @@ class ChatFilter {
 
 		BDFDB.appendModal(chatfilterAddModal);
 
-		wordvalueinput.addEventListener("input", () => {
+		wordvalueinput.addEventListener("input", _ => {
 			if (!wordvalueinput.value.trim()) {
 				addbutton.disabled = true;
 				BDFDB.DOMUtils.addClass(wordvalueinput, "invalid");
@@ -493,7 +493,7 @@ class ChatFilter {
 			}
 		});
 
-		BDFDB.ListenerUtils.addToChildren(chatfilterAddModal, "click", BDFDB.dotCNC.backdrop + BDFDB.dotCNC.modalclose + ".btn-add", () => {
+		BDFDB.ListenerUtils.addToChildren(chatfilterAddModal, "click", BDFDB.dotCNC.backdrop + BDFDB.dotCNC.modalclose + ".btn-add", _ => {
 			BDFDB.DOMUtils.remove(".chatfilter-disabled-tooltip");
 		});
 

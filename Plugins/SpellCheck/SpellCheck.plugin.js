@@ -104,11 +104,11 @@ class SpellCheck {
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
 			libraryScript.setAttribute("date", performance.now());
-			libraryScript.addEventListener("load", () => {this.initialize();});
+			libraryScript.addEventListener("load", _ => {this.initialize();});
 			document.head.appendChild(libraryScript);
 		}
 		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-		this.startTimeout = setTimeout(() => {
+		this.startTimeout = setTimeout(_ => {
 			try {return this.initialize();}
 			catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
 		}, 30000);
@@ -150,7 +150,7 @@ class SpellCheck {
 			if (SCindex > -1) {
 				if (BDFDB.ReactUtils.findValue(e.instance._reactInternalFiber, "spellcheckEnabled") == true) {
 					BDFDB.TimeUtils.clear(this.disableSpellcheckTimeout);
-					this.disableSpellcheckTimeout = BDFDB.TimeUtils.timeout(() => {
+					this.disableSpellcheckTimeout = BDFDB.TimeUtils.timeout(_ => {
 						BDFDB.LibraryModules.SpellCheckUtils.toggleSpellcheck();
 						delete this.disableSpellcheckTimeout;
 					}, 1000);
@@ -215,7 +215,7 @@ class SpellCheck {
 			var textarea = wrapper.querySelector("textarea");
 			if (!textarea) return;
 
-			var updateSpellcheck = () => {
+			var updateSpellcheck = _ => {
 				var style = Object.assign({},getComputedStyle(textarea));
 				for (let i in style) if (i.indexOf("webkit") == -1 && isNaN(parseInt(i))) spellcheck.style[i] = style[i];
 				spellcheck.style.setProperty("color", "transparent", "important");
@@ -242,7 +242,7 @@ class SpellCheck {
 			updateSpellcheck();
 			BDFDB.ListenerUtils.add(this, textarea, "keyup", e => {
 				BDFDB.TimeUtils.clear(textarea.spellchecktimeout);
-				if (textarea.value) textarea.spellchecktimeout = BDFDB.TimeUtils.timeout(() => {updateSpellcheck();},100);
+				if (textarea.value) textarea.spellchecktimeout = BDFDB.TimeUtils.timeout(_ => {updateSpellcheck();},100);
 				else updateSpellcheck();
 			});
 			BDFDB.ListenerUtils.add(this, textarea, "scroll", e => {
@@ -317,7 +317,7 @@ class SpellCheck {
 		this.dictionary = BDFDB.DataUtils.load(this, "owndics", lang) || [];
 		this.killLanguageToast();
 		this.languageToast = BDFDB.NotificationUtils.toast("Grabbing dictionary (" + this.languages[lang].name + "). Please wait", {timeout:0});
-		this.languageToast.interval = BDFDB.TimeUtils.interval(() => {
+		this.languageToast.interval = BDFDB.TimeUtils.interval(_ => {
 			this.languageToast.textContent = this.languageToast.textContent.indexOf(".....") > -1 ? "Grabbing dictionary (" + this.languages[lang].name + "). Please wait" : this.languageToast.textContent + ".";
 		},500);
 		this.languageToast.lang = lang

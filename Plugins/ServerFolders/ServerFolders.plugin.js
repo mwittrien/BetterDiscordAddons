@@ -395,7 +395,7 @@ class ServerFolders {
 			color: BDFDB.LibraryComponents.Button.Colors.RED,
 			label: "Reset all Folders",
 			onClick: _ => {
-				BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset all folders?", () => {
+				BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset all folders?", _ => {
 					BDFDB.DataUtils.remove(this, "folders");
 				});
 			},
@@ -407,7 +407,7 @@ class ServerFolders {
 			color: BDFDB.LibraryComponents.Button.Colors.RED,
 			label: "Remove all custom Icons",
 			onClick: _ => {
-				BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all custom icons?", () => {
+				BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all custom icons?", _ => {
 					BDFDB.DataUtils.remove(this, "customicons");
 				});
 			},
@@ -431,11 +431,11 @@ class ServerFolders {
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
 			libraryScript.setAttribute("date", performance.now());
-			libraryScript.addEventListener("load", () => {this.initialize();});
+			libraryScript.addEventListener("load", _ => {this.initialize();});
 			document.head.appendChild(libraryScript);
 		}
 		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-		this.startTimeout = setTimeout(() => {
+		this.startTimeout = setTimeout(_ => {
 			try {return this.initialize();}
 			catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
 		}, 30000);
@@ -596,7 +596,7 @@ class ServerFolders {
 		if (this.folderStates[e.instance.props.folderId] && !BDFDB.equals(state, this.folderStates[e.instance.props.folderId])) {
 			if (data.autoRead && (state.unread || state.badge > 0)) {
 				BDFDB.TimeUtils.clear(this.folderReads[e.instance.props.folderId]);
-				this.folderReads[e.instance.props.folderId] = BDFDB.TimeUtils.timeout(() => {
+				this.folderReads[e.instance.props.folderId] = BDFDB.TimeUtils.timeout(_ => {
 					BDFDB.GuildUtils.markAsRead(e.instance.props.guildIds);
 				}, 10000);
 			}
@@ -646,7 +646,7 @@ class ServerFolders {
 			}
 			this.guildStates[e.instance.props.guild.id] = state;
 		}
-		if (e.node) BDFDB.ListenerUtils.add(this, e.node, "click", () => {BDFDB.TimeUtils.timeout(() => {
+		if (e.node) BDFDB.ListenerUtils.add(this, e.node, "click", _ => {BDFDB.TimeUtils.timeout(_ => {
 			let folder = BDFDB.GuildUtils.getFolder(e.instance.props.guild.id);
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			if (settings.closeAllFolders) for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (!folder || openFolderId != folder.folderId || !settings.forceOpenFolder) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);

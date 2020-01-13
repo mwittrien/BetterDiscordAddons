@@ -332,11 +332,11 @@ class ThemeRepo {
 
 		BDFDB.initElements(settingspanel, this);
 
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".btn-addtheme", () => {this.addThemeToOwnList(settingspanel);});
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".btn-addtheme", _ => {this.addThemeToOwnList(settingspanel);});
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", "#input-themeurl", e => {if (e.which == 13) this.addThemeToOwnList(settingspanel);});
 		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".remove-theme", e => {this.removeThemeFromOwnList(e);});
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".remove-all", () => {this.removeAllFromOwnList(settingspanel);});
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".refresh-button", () => {
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".remove-all", _ => {this.removeAllFromOwnList(settingspanel);});
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".refresh-button", _ => {
 			this.loading = {is:false, timeout:null, amount:0};
 			this.loadThemes();
 		});
@@ -358,11 +358,11 @@ class ThemeRepo {
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
 			libraryScript.setAttribute("date", performance.now());
-			libraryScript.addEventListener("load", () => {this.initialize();});
+			libraryScript.addEventListener("load", _ => {this.initialize();});
 			document.head.appendChild(libraryScript);
 		}
 		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-		this.startTimeout = setTimeout(() => {
+		this.startTimeout = setTimeout(_ => {
 			try {return this.initialize();}
 			catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
 		}, 30000);
@@ -375,7 +375,7 @@ class ThemeRepo {
 
 			this.loadThemes();
 
-			this.updateInterval = BDFDB.TimeUtils.interval(() => {this.checkForNewThemes();},1000*60*30);
+			this.updateInterval = BDFDB.TimeUtils.interval(_ => {this.checkForNewThemes();},1000*60*30);
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
@@ -417,10 +417,10 @@ class ThemeRepo {
 			var folderbutton = document.querySelector(BDFDB.dotCN._repofolderbutton);
 			if (folderbutton) {
 				var repoButton = BDFDB.DOMUtils.create(`<button class="${BDFDB.disCN._repofolderbutton} bd-themerepobutton">ThemeRepo</button>`);
-				repoButton.addEventListener("click", () => {
+				repoButton.addEventListener("click", _ => {
 					this.openThemeRepoModal();
 				});
-				repoButton.addEventListener("mouseenter", () => {
+				repoButton.addEventListener("mouseenter", _ => {
 					BDFDB.TooltipUtils.create(repoButton, "Open Theme Repo", {type:"top",selector:"themerepo-button-tooltip"});
 				});
 				folderbutton.parentElement.insertBefore(repoButton, folderbutton.nextSibling);
@@ -455,7 +455,7 @@ class ThemeRepo {
 	}
 
 	removeAllFromOwnList (settingspanel) {
-		BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all added Themes from your own list?", () => {
+		BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all added Themes from your own list?", _ => {
 			BDFDB.DataUtils.save([], this, "ownlist", "ownlist");
 			BDFDB.DOMUtils.remove(settingspanel.querySelector(BDFDB.dotCN.hovercard));
 		});
@@ -596,7 +596,7 @@ class ThemeRepo {
 				this.createThemeFile(data.name + ".theme.css", css);
 			}
 		});
-		BDFDB.ListenerUtils.addToChildren(themeRepoModal, "click", BDFDB.dotCNC.modalclose + BDFDB.dotCN.backdrop, () => {
+		BDFDB.ListenerUtils.addToChildren(themeRepoModal, "click", BDFDB.dotCNC.modalclose + BDFDB.dotCN.backdrop, _ => {
 			frame.remove();
 			document.removeEventListener("keyup", keyPressed);
 			window.removeEventListener("message", messageReceived);
@@ -613,16 +613,16 @@ class ThemeRepo {
 			if (!document.querySelector(BDFDB.dotCN.colorpicker)) {
 				themeRepoModal.childNodes[0].style.setProperty("opacity", "0.85");
 				themeRepoModal.childNodes[1].style.setProperty("opacity", "1");
-				BDFDB.TimeUtils.timeout(() => {for (let child of themeRepoModal.childNodes) child.style.removeProperty("transition");}, 500);
+				BDFDB.TimeUtils.timeout(_ => {for (let child of themeRepoModal.childNodes) child.style.removeProperty("transition");}, 500);
 			}
 		});
-		BDFDB.ListenerUtils.addToChildren(themeRepoModal, "keyup", BDFDB.dotCN.searchbarinput, () => {
+		BDFDB.ListenerUtils.addToChildren(themeRepoModal, "keyup", BDFDB.dotCN.searchbarinput, _ => {
 			BDFDB.TimeUtils.clear(themeRepoModal.searchTimeout);
-			themeRepoModal.searchTimeout = BDFDB.TimeUtils.timeout(() => {this.sortEntries(themeRepoModal);},1000);
+			themeRepoModal.searchTimeout = BDFDB.TimeUtils.timeout(_ => {this.sortEntries(themeRepoModal);},1000);
 		});
-		BDFDB.ListenerUtils.addToChildren(themeRepoModal, "click", BDFDB.dotCN.searchbarclear, () => {
+		BDFDB.ListenerUtils.addToChildren(themeRepoModal, "click", BDFDB.dotCN.searchbarclear, _ => {
 			BDFDB.TimeUtils.clear(themeRepoModal.searchTimeout);
-			themeRepoModal.searchTimeout = BDFDB.TimeUtils.timeout(() => {this.sortEntries(themeRepoModal);},1000);
+			themeRepoModal.searchTimeout = BDFDB.TimeUtils.timeout(_ => {this.sortEntries(themeRepoModal);},1000);
 		});
 		BDFDB.ListenerUtils.addToChildren(themeRepoModal, "change", ".hide-checkbox", e => {
 			themeRepoModal.updateHidden = true;
@@ -632,10 +632,10 @@ class ThemeRepo {
 			BDFDB.DataUtils.save(e.currentTarget.checked, this, "RNMstart", "RNMstart");
 		});
 		BDFDB.ListenerUtils.addToChildren(themeRepoModal, "click", ".sort-filter", e => {
-			BDFDB.createSortPopout(e.currentTarget, this.sortPopoutMarkup, () => {this.sortEntries(themeRepoModal);});
+			BDFDB.createSortPopout(e.currentTarget, this.sortPopoutMarkup, _ => {this.sortEntries(themeRepoModal);});
 		});
 		BDFDB.ListenerUtils.addToChildren(themeRepoModal, "click", ".order-filter", e => {
-			BDFDB.createSortPopout(e.currentTarget, this.orderPopoutMarkup, () => {this.sortEntries(themeRepoModal);});
+			BDFDB.createSortPopout(e.currentTarget, this.orderPopoutMarkup, _ => {this.sortEntries(themeRepoModal);});
 		});
 		BDFDB.ListenerUtils.addToChildren(themeRepoModal, "click", BDFDB.dotCN.tabbaritem + "[tab=themes]", e => {
 			if (!BDFDB.DOMUtils.containsClass(e.currentTarget, BDFDB.disCN.settingsitemselected)) {
@@ -747,9 +747,9 @@ class ThemeRepo {
 				container.appendChild(varcontainer);
 			}
 		}
-		let inputs = container.querySelectorAll(".varinput"), updateTimeout, updatePreview = () => {
+		let inputs = container.querySelectorAll(".varinput"), updateTimeout, updatePreview = _ => {
 			BDFDB.TimeUtils.clear(updateTimeout);
-			updateTimeout = BDFDB.TimeUtils.timeout(() => {
+			updateTimeout = BDFDB.TimeUtils.timeout(_ => {
 				let css = data.fullcss;
 				for (let input of inputs) {
 					let oldvalue = input.getAttribute("placeholder");
@@ -817,7 +817,7 @@ class ThemeRepo {
 		entry.querySelector(".btn-download").addEventListener("click", e => {
 			setEntryState(0);
 			this.downloadTheme(data);
-			if (themeRepoModal.querySelector("#input-rnmstart").checked) BDFDB.TimeUtils.timeout(() => {this.applyTheme(data);},3000);
+			if (themeRepoModal.querySelector("#input-rnmstart").checked) BDFDB.TimeUtils.timeout(_ => {this.applyTheme(data);},3000);
 		});
 		entry.querySelector(".previewCheckbox").addEventListener("click", e => {
 			themeRepoModal.querySelector(".generator-select " + BDFDB.dotCN.select).setAttribute('value', "-----");
@@ -902,10 +902,10 @@ class ThemeRepo {
 					}
 					this.foundThemes = this.grabbedThemes.concat(ownlist);
 
-					this.loading = {is:true, timeout:BDFDB.TimeUtils.timeout(() => {
+					this.loading = {is:true, timeout:BDFDB.TimeUtils.timeout(_ => {
 						BDFDB.TimeUtils.clear(this.loading.timeout);
 						if (this.started) {
-							if (this.loading.is && this.loading.amount < 4) BDFDB.TimeUtils.timeout(() => {this.loadThemes();},10000);
+							if (this.loading.is && this.loading.amount < 4) BDFDB.TimeUtils.timeout(_ => {this.loadThemes();},10000);
 							this.loading = {is: false, timeout:null, amount:this.loading.amount};
 						}
 					},1200000), amount:this.loading.amount+1};
@@ -916,12 +916,12 @@ class ThemeRepo {
 					}
 					var loadingicon = BDFDB.DOMUtils.create(this.themeRepoIconMarkup);
 					BDFDB.DOMUtils.addClass(loadingicon, "themerepo-loadingicon");
-					loadingicon.addEventListener("mouseenter", () => {
+					loadingicon.addEventListener("mouseenter", _ => {
 						BDFDB.TooltipUtils.create(loadingicon, this.getLoadingTooltipText(), {type:"left", delay:500, style:"max-width:unset;", selector:"themerepo-loading-tooltip"});
 					});
 					loadingiconwrapper.appendChild(loadingicon);
 
-					getThemeInfo(() => {
+					getThemeInfo(_ => {
 						if (!this.started) {
 							BDFDB.TimeUtils.clear(this.loading.timeout);
 							return;

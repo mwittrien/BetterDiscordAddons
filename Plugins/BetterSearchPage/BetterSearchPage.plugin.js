@@ -98,11 +98,11 @@ class BetterSearchPage {
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
 			libraryScript.setAttribute("date", performance.now());
-			libraryScript.addEventListener("load", () => {this.initialize();});
+			libraryScript.addEventListener("load", _ => {this.initialize();});
 			document.head.appendChild(libraryScript);
 		}
 		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-		this.startTimeout = setTimeout(() => {
+		this.startTimeout = setTimeout(_ => {
 			try {return this.initialize();}
 			catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
 		}, 30000);
@@ -157,26 +157,26 @@ class BetterSearchPage {
 							className: ["BSP-pagination-button", "BSP-pagination-first", currentpage == 1 ? BDFDB.disCN.searchresultspaginationdisabled : null].filter(n => n).join(" "),
 							text: "First",
 							"aria-label": "First",
-							onClick: () => {if (currentpage != 1) doJump(1);}
+							onClick: _ => {if (currentpage != 1) doJump(1);}
 						}) : null,
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 							className: [BDFDB.disCN.searchresultspaginationprevious, currentpage == 1 ? BDFDB.disCN.searchresultspaginationdisabled : null].filter(n => n).join(" "),
 							text: BDFDB.LanguageUtils.LanguageStrings.PAGINATION_PREVIOUS,
 							"aria-label": BDFDB.LanguageUtils.LanguageStrings.PAGINATION_PREVIOUS,
-							onClick: () => {if (currentpage != 1) doJump(currentpage - 1);}
+							onClick: _ => {if (currentpage != 1) doJump(currentpage - 1);}
 						}),
 						BDFDB.LanguageUtils.LanguageStringsFormat("PAGINATOR_OF_PAGES", currentpage, maxpage),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 							className: [BDFDB.disCN.searchresultspaginationnext, currentpage == maxpage ? BDFDB.disCN.searchresultspaginationdisabled : null].filter(n => n).join(" "),
 							text: BDFDB.LanguageUtils.LanguageStrings.PAGINATION_NEXT,
 							"aria-label": BDFDB.LanguageUtils.LanguageStrings.PAGINATION_NEXT,
-							onClick: () => {if (currentpage != maxpage) doJump(currentpage + 1);}
+							onClick: _ => {if (currentpage != maxpage) doJump(currentpage + 1);}
 						}),
 						settings.addFirstLast ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 							className: ["BSP-pagination-button", "BSP-pagination-last", currentpage == maxpage ? BDFDB.disCN.searchresultspaginationdisabled : null].filter(n => n).join(" "),
 							text: "Last",
 							"aria-label": "Last",
-							onClick: () => {if (currentpage != maxpage) doJump(maxpage);}
+							onClick: _ => {if (currentpage != maxpage) doJump(maxpage);}
 						}) : null,
 						settings.addJumpTo ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 							id: "BSP-pagination-jumpinput",

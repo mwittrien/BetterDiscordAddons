@@ -123,7 +123,7 @@ class EditUsers {
 			color: BDFDB.LibraryComponents.Button.Colors.RED,
 			label: "Reset all Users",
 			onClick: _ => {
-				BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset all users?", () => {
+				BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset all users?", _ => {
 					BDFDB.DataUtils.remove(this, "users");
 					this.forceUpdateAll();
 				});
@@ -148,11 +148,11 @@ class EditUsers {
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
 			libraryScript.setAttribute("date", performance.now());
-			libraryScript.addEventListener("load", () => {this.initialize();});
+			libraryScript.addEventListener("load", _ => {this.initialize();});
 			document.head.appendChild(libraryScript);
 		}
 		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-		this.startTimeout = setTimeout(() => {
+		this.startTimeout = setTimeout(_ => {
 			try {return this.initialize();}
 			catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
 		}, 30000);
@@ -163,7 +163,7 @@ class EditUsers {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
 
-			var observer = new MutationObserver(() => {this.changeAppTitle();});
+			var observer = new MutationObserver(_ => {this.changeAppTitle();});
 			BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name:"appTitleObserver",instance:observer}, {childList:true});
 			
 			this.forceUpdateAll();
@@ -418,13 +418,13 @@ class EditUsers {
 					}
 					else if (!e.ctrlKey && e.which != 16 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
 						BDFDB.TimeUtils.clear(textarea.EditUsersAutocompleteTimeout);
-						textarea.EditUsersAutocompleteTimeout = BDFDB.TimeUtils.timeout(() => {this.addAutoCompleteMenu(textarea, channel);},100);
+						textarea.EditUsersAutocompleteTimeout = BDFDB.TimeUtils.timeout(_ => {this.addAutoCompleteMenu(textarea, channel);},100);
 					}
 
 					if (!e.ctrlKey && e.which != 38 && e.which != 40 && !(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) BDFDB.DOMUtils.remove(".autocompleteEditUsers", ".autocompleteEditUsersRow");
 				});
 				BDFDB.ListenerUtils.add(this, textarea, "click", e => {
-					if (textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) BDFDB.TimeUtils.timeout(() => {this.addAutoCompleteMenu(textarea, channel);});
+					if (textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) BDFDB.TimeUtils.timeout(_ => {this.addAutoCompleteMenu(textarea, channel);});
 				});
 			}
 		}
@@ -700,7 +700,7 @@ class EditUsers {
 			instance.props.inputClassName = null;
 			instance.forceUpdate();
 		}
-		else instance.checkTimeout = BDFDB.TimeUtils.timeout(() => {
+		else instance.checkTimeout = BDFDB.TimeUtils.timeout(_ => {
 			BDFDB.LibraryRequires.request(url.trim(), (error, response, result) => {
 				if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
 					if (input) BDFDB.DOMUtils.remove(input.tooltip);
@@ -869,7 +869,7 @@ class EditUsers {
 		wrapper = BDFDB.DOMUtils.containsClass(wrapper, BDFDB.disCN.guildicon) ? wrapper.parentElement.parentElement.parentElement : wrapper;
 		wrapper.removeEventListener("mouseenter", wrapper.tooltipListenerEditUsers);
 		if (data.name) {
-			wrapper.tooltipListenerEditUsers = () => {
+			wrapper.tooltipListenerEditUsers = _ => {
 				BDFDB.TooltipUtils.create(wrapper, data.name, {type, selector:"EditUsers-tooltip", hide:true});
 			};
 			wrapper.addEventListener("mouseenter", wrapper.tooltipListenerEditUsers);
@@ -912,11 +912,11 @@ class EditUsers {
 			else colorDefault();
 
 			if (data.name || data.color1 || data.color2) {
-				dmchannel.mouseenterListenerEditUsers = () => {
+				dmchannel.mouseenterListenerEditUsers = _ => {
 					username.EditUsersHovered = true;
 					colorHover();
 				};
-				dmchannel.mouseleaveListenerEditUsers = () => {
+				dmchannel.mouseleaveListenerEditUsers = _ => {
 					delete username.EditUsersHovered;
 					colorDefault();
 				};
@@ -972,11 +972,11 @@ class EditUsers {
 
 		if (mention.EditUsersHovered) colorHover();
 		else colorDefault();
-		mention.mouseoverListenerEditUsers = () => {
+		mention.mouseoverListenerEditUsers = _ => {
 			mention.EditUsersHovered = true;
 			colorHover();
 		};
-		mention.mouseoutListenerEditUsers = () => {
+		mention.mouseoutListenerEditUsers = _ => {
 			delete mention.EditUsersHovered;
 			colorDefault();
 		};
@@ -1016,11 +1016,11 @@ class EditUsers {
 			if (username.EditUsersHovered) colorHover();
 			else colorDefault();
 			if (data.name || data.color1) {
-				username.mouseoverListenerEditUsers = () => {
+				username.mouseoverListenerEditUsers = _ => {
 					username.EditUsersHovered = true;
 					colorHover();
 				};
-				username.mouseoutListenerEditUsers = () => {
+				username.mouseoutListenerEditUsers = _ => {
 					delete username.EditUsersHovered;
 					colorDefault();
 				};
@@ -1151,7 +1151,7 @@ class EditUsers {
 					let isgradient = data.color1 && BDFDB.ObjectUtils.is(data.color1);
 					let username = isgradient ? `<div class="${BDFDB.disCN.marginleft8}" changed-by-editusers="true" style="flex: 1 1 auto;"><span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color1)} !important;">${BDFDB.StringUtils.htmlEscape(data.name || data.member.nick || data.user.username)}</span></div>` : `<div class="${BDFDB.disCN.marginleft8}" changed-by-editusers="true" style="flex: 1 1 auto;${data.color1 ? (' color: ' + BDFDB.ColorUtils.convert(data.color1, 'RGB') + ' !important;') : ''}">${BDFDB.StringUtils.htmlEscape(data.name || data.member.nick || data.user.username)}</div>`;
 					let autocompleterow = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteEditUsersRow"><div userid="${data.user.id}" class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable} autocompleteEditUsersSelector"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.avatarwrapper}" role="img" aria-label="${data.user.username}, ${BDFDB.LanguageUtils.LanguageStrings["STATUS_" + status.toUpperCase()]}" aria-hidden="false" style="width: 24px; height: 24px;"><svg width="30" height="24" viewBox="0 0 30 24" class="${BDFDB.disCN.avatarmask}" aria-hidden="true"><foreignObject x="0" y="0" width="24" height="24" mask="url(#svg-mask-avatar-status-round-24)"><img src="${data.url || BDFDB.UserUtils.getAvatar(data.user.id)}" alt=" " class="${BDFDB.disCN.avatar}" aria-hidden="true"></foreignObject><rect width="8" height="8" x="16" y="16" fill="${BDFDB.UserUtils.getStatusColor(status)}" mask="url(#svg-mask-status-${status})" class="${BDFDB.disCN.avatarpointerevents}"></rect></svg></div>${username}<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletedescription}" style="flex: 0 1 auto;"><div class="${BDFDB.disCN.autocompletedescriptionusername}">${BDFDB.StringUtils.htmlEscape(data.user.username)}</div><div class="${BDFDB.disCN.autocompletedescriptiondiscriminator}">#${data.user.discriminator}</div></div></div></div></div>`);
-					autocompleterow.querySelector(BDFDB.dotCN.autocompleteselectable).addEventListener("click", () => {this.swapWordWithMention(textarea);});
+					autocompleterow.querySelector(BDFDB.dotCN.autocompleteselectable).addEventListener("click", _ => {this.swapWordWithMention(textarea);});
 					autocompletemenu.appendChild(autocompleterow);
 				}
 				if (!autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected)) {

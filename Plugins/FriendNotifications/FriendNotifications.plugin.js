@@ -290,7 +290,7 @@ class FriendNotifications {
 				else BDFDB.NotificationUtils.toast("Please enter a valid UserID of a user that has been loaded in your client.", {type:"error"});
 			}
 		});
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".btn-timelog", () => {this.showTimeLog();});
+		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".btn-timelog", _ => {this.showTimeLog();});
 
 		return settingspanel;
 	}
@@ -309,11 +309,11 @@ class FriendNotifications {
 			libraryScript.setAttribute("type", "text/javascript");
 			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
 			libraryScript.setAttribute("date", performance.now());
-			libraryScript.addEventListener("load", () => {this.initialize();});
+			libraryScript.addEventListener("load", _ => {this.initialize();});
 			document.head.appendChild(libraryScript);
 		}
 		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-		this.startTimeout = setTimeout(() => {
+		this.startTimeout = setTimeout(_ => {
 			try {return this.initialize();}
 			catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
 		}, 30000);
@@ -492,7 +492,7 @@ class FriendNotifications {
 		for (let id in users) this.userStatusStore[id] = this.getStatusWithMobileAndActivity(id, users[id]).statusname;
 		let toasttime = (amounts.toastTime > amounts.checkInterval ? amounts.checkInterval : amounts.toastTime) * 1000;
 		let desktoptime = (amounts.desktopTime > amounts.checkInterval ? amounts.checkInterval : amounts.desktopTime) * 1000;
-		this.checkInterval = BDFDB.TimeUtils.interval(() => {
+		this.checkInterval = BDFDB.TimeUtils.interval(_ => {
 			for (let id in users) if (!users[id].disabled) {
 				let user = BDFDB.LibraryModules.UserStore.getUser(id);
 				let status = this.getStatusWithMobileAndActivity(id, users[id]);
@@ -505,7 +505,7 @@ class FriendNotifications {
 					let avatar = EUdata.removeIcon ? "" : (EUdata.url ? EUdata.url : BDFDB.UserUtils.getAvatar(user.id));
 					this.timeLog.push({string:toaststring, avatar, time: new Date()});
 					if (!(settings.muteOnDND && BDFDB.UserUtils.getStatus() == "dnd")) {
-						let openChannel = () => {
+						let openChannel = _ => {
 							if (settings.openOnClick) {
 								let DMid = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(user.id)
 								if (DMid) BDFDB.LibraryModules.SelectChannelUtils.selectPrivateChannel(DMid);
