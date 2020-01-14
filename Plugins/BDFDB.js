@@ -1474,10 +1474,13 @@
 		}
 	};
 	InternalBDFDB.getContextMenuType = menutype => {
-		if (LibraryComponents.ContextMenus._Types.includes(menutype)) {
-			if (menutype.indexOf("USER") == 0) return "UserContextMenu";
-			else if (menutype.indexOf("CHANNEL") == 0) return "ChannelContextMenu";
-			else if (menutype.indexOf("GUILD") == 0) return "GuildContextMenu";
+		if (menutype) {
+			if (menutype.endsWith("ContextMenu")) return menutype;
+			else if (LibraryComponents.ContextMenus._Types.includes(menutype)) {
+				if (menutype.indexOf("USER_") == 0) return "UserContextMenu";
+				else if (menutype.indexOf("CHANNEL_") == 0) return "ChannelContextMenu";
+				else if (menutype.indexOf("GUILD_") == 0) return "GuildContextMenu";
+			}
 		}
 		return null;
 	};
@@ -4648,7 +4651,7 @@
 	DiscordClassModules.Modal = BDFDB.ModuleUtils.findByProperties("modal", "sizeLarge");
 	DiscordClassModules.ModalDivider = BDFDB.ModuleUtils.find(m => typeof m.divider == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.ModalItems = BDFDB.ModuleUtils.findByProperties("guildName", "checkboxContainer");
-	DiscordClassModules.ModalMiniContent = BDFDB.ModuleUtils.find(m => typeof m.modal == "string" && typeof m.content == "string" && typeof m.size == "string" && Object.keys(m).length == 3);
+	DiscordClassModules.ModalMiniContent = BDFDB.ModuleUtils.find(m => typeof m.modal == "string" && typeof m.content == "string" && Object.keys(m).length == 2);
 	DiscordClassModules.ModalWrap = BDFDB.ModuleUtils.find(m => typeof m.modal == "string" && typeof m.inner == "string" && Object.keys(m).length == 2);
 	DiscordClassModules.NameContainer = DiscordClassModules.ContextMenu.subMenuContext ? BDFDB.ModuleUtils.findByProperties("nameAndDecorators", "name") : {};
 	DiscordClassModules.NameTag = BDFDB.ModuleUtils.findByProperties("bot", "nameTag");
@@ -5619,7 +5622,6 @@
 		modalinner: ["ModalWrap", "inner"],
 		modalmini: ["ModalMiniContent", "modal"],
 		modalminicontent: ["ModalMiniContent", "content"],
-		modalminisize: ["ModalMiniContent", "size"],
 		modalminitext: ["HeaderBarTopic", "content"],
 		modalseparator: ["Modal", "separator"],
 		modalsizelarge: ["Modal", "sizeLarge"],
@@ -7083,9 +7085,9 @@
 	
 	LibraryComponents.ContextMenus = {};
 	LibraryComponents.ContextMenus._Exports = {};
-	LibraryComponents.ContextMenus._NormalMenus = ["DeveloperContextMenu", "GuildRoleContextMenu", "MessageContextMenu", "NativeContextMenu", "ScreenshareContextMenu", "SlateContextMenu", "UserSettingsCogContextMenu"];
+	LibraryComponents.ContextMenus._NormalMenus = ["DeveloperContextMenu", "GuildRoleContextMenu", "MessageContextMenu", "NativeContextMenu", "ScreenshareContextMenu", "UserSettingsCogContextMenu"];
 	LibraryComponents.ContextMenus._FluxMenus = ["ApplicationContextMenu", "GroupDMContextMenu"];
-	LibraryComponents.ContextMenus._NonRenderMenus = ["ChannelContextMenu", "GuildContextMenu", "UserContextMenu"];
+	LibraryComponents.ContextMenus._NonRenderMenus = ["ChannelContextMenu", "GuildContextMenu", "SlateContextMenu", "UserContextMenu"];
 	
 	LibraryComponents.ContextMenus._Types = Object.entries(BDFDB.DiscordConstants.ContextMenuTypes).map(n => n[1]);
 	
@@ -7110,6 +7112,7 @@
 	LibraryComponents.ContextMenus.ScreenshareContextMenu = BDFDB.ModuleUtils.findByName("ScreenshareContextMenu");
 	
 	LibraryComponents.ContextMenus.SlateContextMenu = BDFDB.ModuleUtils.findByName("SlateContextMenu");
+	LibraryComponents.ContextMenus._Exports.SlateContextMenu = BDFDB.ModuleUtils.findByName("SlateContextMenu", false);
 	
 	LibraryComponents.ContextMenus.UserContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.USER_CHANNEL_MEMBERS);
 	LibraryComponents.ContextMenus._Exports.UserContextMenu = (BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.USER_CHANNEL_MEMBERS, false) || {}).exports;
@@ -8520,7 +8523,7 @@
 			border-top-color: inherit !important;
 		}
 		
-		${BDFDB.dotCNC.layermodallarge + BDFDB.dotCNC.modalsizelarge + BDFDB.dotCN.modalminisize} {
+		${BDFDB.dotCNC.layermodallarge + BDFDB.dotCN.modalsizelarge} {
 			max-height: 95vh;
 		}
 		@media only screen and (max-height: 900px) {
@@ -9546,8 +9549,8 @@
 	for (let type of LibraryComponents.ContextMenus._NonRenderMenus) if (!BDFDB.InternalData.patchMenuQueries[type]) BDFDB.InternalData.patchMenuQueries[type] = {query:[], module:null};
 	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.ContextMenuUtils, "openContextMenu", {before: e => {
 		let menu = e.methodArguments[1]();
-		if (menu.type && menu.props && menu.props.type) {
-			let type = InternalBDFDB.getContextMenuType(menu.props.type);
+		if (BDFDB.ObjectUtils.is(menu)) {
+			let type = InternalBDFDB.getContextMenuType(menu.props && menu.props.type || menu.type && menu.type.displayName);
 			if (type && LibraryComponents.ContextMenus._NonRenderMenus.includes(type)) {
 				module = BDFDB.ModuleUtils.find(m => m == menu.type, false);
 				if (module && module.exports && module.exports.default) {
@@ -9563,6 +9566,7 @@
 						BDFDB.InternalData.patchMenuQueries[type].module = module;
 						while (BDFDB.InternalData.patchMenuQueries[type].query.length) InternalBDFDB.patchNonRenderContextMenuPlugin(BDFDB.InternalData.patchMenuQueries[type].query.pop(), type, module);
 					}
+					if (!module.exports.default.displayName) module.exports.default.displayName = type;
 				}
 			}
 		}
