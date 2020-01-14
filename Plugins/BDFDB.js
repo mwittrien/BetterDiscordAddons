@@ -9552,7 +9552,7 @@
 		if (BDFDB.ObjectUtils.is(menu)) {
 			let type = InternalBDFDB.getContextMenuType(menu.props && menu.props.type || menu.type && menu.type.displayName);
 			if (type && LibraryComponents.ContextMenus._NonRenderMenus.includes(type)) {
-				module = BDFDB.ModuleUtils.find(m => m == menu.type, false);
+				let module = BDFDB.ModuleUtils.find(m => m == menu.type, false);
 				if (module && module.exports && module.exports.default) {
 					if (!LibraryComponents.ContextMenus[type]) {
 						LibraryComponents.ContextMenus[type] = module.exports.default;
