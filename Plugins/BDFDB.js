@@ -1564,9 +1564,9 @@
 	LibraryModules.SlateSelectionUtils = BDFDB.ModuleUtils.findByProperties("serialize", "serializeSelection");
 	LibraryModules.StateStoreUtils = BDFDB.ModuleUtils.findByProperties("useStateFromStores", "useStateFromStoresArray");
 	LibraryModules.StatusMetaUtils = BDFDB.ModuleUtils.findByProperties("getApplicationActivity", "getStatus");
+	LibraryModules.StoreUtils = BDFDB.ModuleUtils.findByProperties("get", "set", "clear", "remove");
 	LibraryModules.StreamUtils = BDFDB.ModuleUtils.findByProperties("getStreamForUser", "getActiveStream");
 	LibraryModules.StringUtils = BDFDB.ModuleUtils.findByProperties("cssValueToNumber", "upperCaseFirstChar");
-	LibraryModules.StoreUtils = BDFDB.ModuleUtils.findByProperties("get", "set", "clear", "remove");
 	LibraryModules.UnreadGuildUtils = BDFDB.ModuleUtils.findByProperties("hasUnread", "getUnreadGuilds");
 	LibraryModules.UnreadChannelUtils = BDFDB.ModuleUtils.findByProperties("getUnreadCount", "getOldestUnreadMessageId");
 	LibraryModules.UploadUtils = BDFDB.ModuleUtils.findByProperties("upload", "instantBatchUpload");
@@ -4484,6 +4484,10 @@
 		iconSwatchPreview: "preview-Bbg_24",
 		iconSwatchSelected: "selected-P5oePO"
 	};
+	DiscordClassModules.SpellCheck	= {
+		error: "error-k9z2IV",
+		overlay: "spellCheckOverlay-cNSap5"
+	};
 	DiscordClassModules.NotFound = {
 		_: "",
 		badgeWrapper: "wrapper-232cHJ",
@@ -4749,6 +4753,8 @@
 		_readallnotificationsbuttonbutton: ["ReadAllNotificationsButton", "button"],
 		_readallnotificationsbuttonframe: ["ReadAllNotificationsButton", "frame"],
 		_readallnotificationsbuttoninner: ["ReadAllNotificationsButton", "innerFrame"],
+		_spellcheckerror: ["SpellCheck", "error"],
+		_spellcheckoverlay: ["SpellCheck", "overlay"],
 		_serverfoldersdragpreview: ["ServerFolders", "dragPreview"],
 		_serverfoldersfoldercontent: ["ServerFolders", "folderContent"],
 		_serverfoldersfoldercontentclosed: ["ServerFolders", "folderContentClosed"],
