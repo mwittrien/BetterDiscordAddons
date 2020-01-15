@@ -735,14 +735,14 @@ body:before {
 }
 
 .divider-3gKybi:not(.dividerRed-MKoLlr) {					/* divider				time								*/
-	color: rgb(var(--fontwhite4));
+	color: rgb(var(--fontwhite3));
 }
 .dividerContent-2L12VI:after,
 .dividerContent-2L12VI:before {
-	background-color: rgba(var(--fontwhite4), 0.2);
+	background-color: rgba(var(--fontwhite3), 0.2);
 }
 .dividerEnabled-2TTlcf {									/* divider				message								*/
-	border-bottom-color: rgba(var(--fontwhite4), 0.2);
+	border-bottom-color: rgba(var(--fontwhite3), 0.2);
 }
 .containerCozy-jafyvG .divider-32i8lo.dividerEnabled-2TTlcf {
 	margin-top: 15px;
