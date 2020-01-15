@@ -1107,6 +1107,27 @@ body:before {
 	color: rgb(var(--fontwhite2));
 }
 
+.toolbar-2bjZV7 {											/* textarea				formattoolbar						*/
+	background-color: rgb(var(--vaccentcolor));
+}
+.toolbar-2bjZV7:before {
+	border-top-color: rgb(var(--vaccentcolor));
+}
+.divider-24xeUg {											/* textarea				formattoolbardivider				*/
+	border-left-color: rgba(var(--fontwhite1), 0.1);
+}
+.active-2HPddW,												/* textarea				buttonactive						*/
+.hover-28QbSq:hover {										/* textarea				buttonhover							*/
+	background-color: rgba(var(--fontwhite1), 0.2);
+}
+.icon-KgGMGo {												/* textarea				buttonicon							*/
+	color: rgb(var(--fontwhite2));
+}
+.active-2HPddW .icon-KgGMGo,
+.hover-28QbSq:hover .icon-KgGMGo {
+	color: rgb(var(--fontwhite1));
+}
+
 /* ----		6.4.	AUTOCOMPLETEMENU				---- */
 
 #app-mount .autocomplete-1vrmpx {							/* autocomplete			container							*/
