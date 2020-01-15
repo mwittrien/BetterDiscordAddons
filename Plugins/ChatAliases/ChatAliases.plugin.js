@@ -250,11 +250,14 @@ class ChatAliases {
 		}
 	}
 
+	onSlateContextMenu (e) {
+		let text = document.getSelection().toString().trim();
+		if (text && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.injectItem(e, text);
+	}
+
 	onMessageContextMenu (e) {
-		if (e.instance.props.message && e.instance.props.channel && e.instance.props.target) {
-			let text = document.getSelection().toString().trim();
-			if (text && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.injectItem(e, text);
-		}
+		let text = document.getSelection().toString().trim();
+		if (text && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.injectItem(e, text);
 	}
  
 	injectItem (e, text) {
@@ -264,7 +267,7 @@ class ChatAliases {
 				label: "Add to ChatAliases",
 				action: _ => {
 					BDFDB.ContextMenuUtils.close(e.instance);
-					this.openAddModal(text);
+					this.openAddModal(text.replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t"));
 				}
 			})
 		}));

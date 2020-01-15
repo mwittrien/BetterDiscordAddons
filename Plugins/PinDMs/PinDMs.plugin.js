@@ -3,7 +3,7 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.5.7";}
+	getVersion () {return "1.5.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,9 +11,8 @@ class PinDMs {
 
 	constructor () {
 		this.changelog = {
-			"added":[["Unread Count","Similar to Folders, DM Categories now display the total amound of unread messages as a red badge, can be disabled in the settings"],["Sorting Categories","You can now drag categories to sort them the same way as pinned DMs"],["Sort Order","You can now enable the option in the plugin settings to sort pinned DMs in the most recent message order within category"],["Move to other Category","Context Menu Layout was changed you can now pin a DM to another category (this will remove the DM from the other category)"]],
-			"fixed":[["Deleting","Fixed the bug where deleting a category between other categories would break all other categories"]],
-			"improved":[["Categories","Instead of pinning all your channels into the same category in the private channel list, you can now create your own collapsable categories, old pinned channel data was ported to the new category format"],["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+			"added":[["Colors","You can now set a font color for each category"],["Unread Count","Similar to Folders, DM Categories now display the total amound of unread messages as a red badge, can be disabled in the settings"],["Sorting Categories","You can now drag categories to sort them the same way as pinned DMs"]],
+			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
 		this.patchedModules = {
@@ -25,7 +24,7 @@ class PinDMs {
 				PrivateChannelsList: "render",
 				UnreadDMs: "render",
 				PrivateChannel: ["render", "componentDidMount"],
-				DirectMessage: ["render", "componentDidMount"]
+				DirectMessage: ["render", "componentDidMount", "componentWillUnmount"]
 			}
 		};
 	}
@@ -44,6 +43,9 @@ class PinDMs {
 			}
 			${BDFDB.dotCNS._pindmspinnedchannelsheadercontainer + BDFDB.dotCN.dmchannelheadertext}  {
 				margin-right: 6px;
+			}
+			${BDFDB.dotCN._pindmspinnedchannelsheadercontainer + BDFDB.dotCN._pindmspinnedchannelsheadercolored}:hover ${BDFDB.dotCN.dmchannelheadertext} {
+				filter: brightness(150%);
 			}
 			${BDFDB.dotCNS._pindmspinnedchannelsheadercontainer + BDFDB.dotCN._pindmspinnedchannelsheaderamount}  {
 				position: relative;
@@ -177,6 +179,7 @@ class PinDMs {
 					name: this.labels.header_pinneddms_text,
 					dms: oldData,
 					pos: 0,
+					color: null,
 					collapsed: false
 				}, this, "dmCategories", id);
 				BDFDB.DataUtils.remove(this, "pinnedDMs");
@@ -331,9 +334,10 @@ class PinDMs {
 					}
 					let settings = BDFDB.DataUtils.get(this, "settings");
 					for (let category of categories) if (this.draggedCategory != category.id) {
+						let color = BDFDB.ColorUtils.convert(category.color, "RGBA");
 						let unreadAmount = settings.showCategoryUnread && BDFDB.ArrayUtils.sum(category.dms.map(id => BDFDB.LibraryModules.UnreadChannelUtils.getMentionCount(id)));
 						children.splice(index++, 0, BDFDB.ReactUtils.createElement("header", {
-							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.dmchannelheader, BDFDB.disCN._pindmspinnedchannelsheadercontainer, category.collapsed && BDFDB.disCN._pindmspinnedchannelsheadercollapsed, BDFDB.disCN.namecontainernamecontainer),
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.dmchannelheader, BDFDB.disCN._pindmspinnedchannelsheadercontainer, category.collapsed && BDFDB.disCN._pindmspinnedchannelsheadercollapsed, color && BDFDB.disCN._pindmspinnedchannelsheadercolored, BDFDB.disCN.namecontainernamecontainer),
 							categoryId: category.id,
 							onMouseDown: event => {
 								let node = BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmspinnedchannelsheadercontainer, event.target).cloneNode(true);
@@ -405,9 +409,16 @@ class PinDMs {
 								}));
 							},
 							children: [
-								BDFDB.ReactUtils.createElement("span", {
+								BDFDB.ObjectUtils.is(color) ? BDFDB.ReactUtils.createElement("span", {
 									className: BDFDB.disCN.dmchannelheadertext,
-									children: category.name
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
+										gradient: BDFDB.ColorUtils.createGradient(color),
+										children: category.name
+									})
+								}) : BDFDB.ReactUtils.createElement("span", {
+									className: BDFDB.disCN.dmchannelheadertext,
+									style: {color: color},
+									children: category.name,
 								}),
 								unreadAmount ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.NumberBadge, {
 									className: BDFDB.disCN._pindmspinnedchannelsheaderamount,
@@ -578,7 +589,7 @@ class PinDMs {
 
 	processDirectMessage (e) {
 		if (e.instance.props.channel) {
-			if (e.node) {
+			if (e.node && e.methodname == "componentDidMount") {
 				BDFDB.DOMUtils.removeClass(e.node, BDFDB.disCN._pindmsrecentpinned);
 				e.node.removeEventListener("contextmenu", e.node.PinDMsContextMenuListener);
 				e.node.PinDMsContextMenuListener = event => {BDFDB.DMUtils.openMenu(e.instance.props.channel.id, event);};
@@ -630,7 +641,10 @@ class PinDMs {
 					}
 				}
 			}
-			if (this.isPinned(e.instance.props.channel.id, "pinnedRecents") && BDFDB.DataUtils.get(this, "settings", "showPinIcon")) {
+			if (e.node && e.methodname == "componentWillUnmount") {
+				BDFDB.ModuleUtils.forceAllUpdates(this, "PrivateChannelsList");
+			}
+			if (e.returnvalue && this.isPinned(e.instance.props.channel.id, "pinnedRecents") && BDFDB.DataUtils.get(this, "settings", "showPinIcon")) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"BlobMask"});
 				if (index > -1) children[index].props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.IconBadge, {
 					className: BDFDB.disCN.guildbadgeiconbadge2,
@@ -699,18 +713,33 @@ class PinDMs {
 	
 	openCategorySettingsModal (data, type, isNew) {
 		if (BDFDB.ObjectUtils.is(data) && type) BDFDB.ModalUtils.open(this, {
-			size: "SMALL",
+			size: "MEDIUM",
 			header: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_SETTINGS,
 			subheader: data.name,
 			children: [
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 					title: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_NAME,
 					className: BDFDB.disCN.marginbottom20 + " input-categoryname",
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-						value: data.name,
-						placeholder: data.name,
-						autoFocus: true
-					})
+					children: [
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+							value: data.name,
+							placeholder: data.name,
+							autoFocus: true
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+							className: BDFDB.disCN.dividerdefault
+						})
+					]
+				}),
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+					title: this.labels.modal_colorpicker1_text,
+					className: BDFDB.disCN.marginbottom20,
+					children: [
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+							color: data.color,
+							number: 1
+						})
+					]
 				})
 			],
 			buttons: [{
@@ -719,6 +748,12 @@ class PinDMs {
 				close: true,
 				click: modal => {
 					data.name = modal.querySelector(".input-categoryname " + BDFDB.dotCN.input).value.trim() || data.name;
+
+					data.color = BDFDB.ColorUtils.getSwatchColor(modal, 1);
+					if (data.color != null && !BDFDB.ObjectUtils.is(data.color)) {
+						if (data.color[0] < 30 && data.color[1] < 30 && data.color[2] < 30) data.color = BDFDB.ColorUtils.change(data.color, 30);
+						else if (data.color[0] > 225 && data.color[1] > 225 && data.color[2] > 225) data.color = BDFDB.ColorUtils.change(data.color, -30);
+					}
 					
 					BDFDB.DataUtils.save(data, this, type, data.id);
 					
@@ -813,7 +848,8 @@ class PinDMs {
 					context_addtonewcategory_text:	"Dodavanje u novu kategoriju",
 					context_pinguild_text:			"Priložite popisu poslužitelja",
 					context_unpinguild_text:		"Ukloni s popisa poslužitelja",
-					header_pinneddms_text:			"Prikvačene Izravne Poruke"
+					header_pinneddms_text:			"Prikvačene Izravne Poruke",
+					modal_colorpicker1_text:		"Boja kategorije"
 				};
 			case "da":		//danish
 				return {
@@ -823,7 +859,8 @@ class PinDMs {
 					context_addtonewcategory_text:	"Føj til ny kategori",
 					context_pinguild_text:			"Vedhæft til serverliste",
 					context_unpinguild_text:		"Fjern fra serverliste",
-					header_pinneddms_text:			"Pinned Privat Beskeder"
+					header_pinneddms_text:			"Pinned Privat Beskeder",
+					modal_colorpicker1_text:		"Kategori farve"
 				};
 			case "de":		//german
 				return {
@@ -833,7 +870,8 @@ class PinDMs {
 					context_addtonewcategory_text:	"Zur neuen Kategorie hinzufügen",
 					context_pinguild_text:			"An Serverliste anheften",
 					context_unpinguild_text:		"Von Serverliste loslösen",
-					header_pinneddms_text:			"Gepinnte Direktnachrichten"
+					header_pinneddms_text:			"Gepinnte Direktnachrichten",
+					modal_colorpicker1_text:		"Kategoriefarbe"
 				};
 			case "es":		//spanish
 				return {
@@ -843,7 +881,8 @@ class PinDMs {
 					context_addtonewcategory_text:	"Agregar a nueva categoría",
 					context_pinguild_text:			"Adjuntar a la lista de servidores",
 					context_unpinguild_text:		"Deshazte de la lista de servidores",
-					header_pinneddms_text:			"Mensajes Directos Fijados"
+					header_pinneddms_text:			"Mensajes Directos Fijados",
+					modal_colorpicker1_text:		"Color de la categoría"
 				};
 			case "fr":		//french
 				return {
@@ -853,7 +892,8 @@ class PinDMs {
 					context_addtonewcategory_text:	"Ajouter à une nouvelle catégorie",
 					context_pinguild_text:			"Épingler à la liste de serveurs",
 					context_unpinguild_text:		"Détacher de la liste de serveurs",
-					header_pinneddms_text:			"Messages Prives Épinglés"
+					header_pinneddms_text:			"Messages Prives Épinglés",
+					modal_colorpicker1_text:		"Couleur de la catégorie"
 				};
 			case "it":		//italian
 				return {
@@ -863,7 +903,8 @@ class PinDMs {
 					context_addtonewcategory_text:	"Aggiungi a nuova categoria",
 					context_pinguild_text:			"Allega alla lista dei server",
 					context_unpinguild_text:		"Rimuovi dalla lista dei server",
-					header_pinneddms_text:			"Messaggi Diretti Aggiunti"
+					header_pinneddms_text:			"Messaggi Diretti Aggiunti",
+					modal_colorpicker1_text:		"Colore della categoria"
 				};
 			case "nl":		//dutch
 				return {
@@ -873,7 +914,8 @@ class PinDMs {
 					context_addtonewcategory_text:	"Toevoegen aan nieuwe categorie",
 					context_pinguild_text:			"Pin naar de serverlijst",
 					context_unpinguild_text:		"Losmaken van serverlijst",
-					header_pinneddms_text:			"Vastgezette Persoonluke Berichten"
+					header_pinneddms_text:			"Vastgezette Persoonluke Berichten",
+					modal_colorpicker1_text:		"Categorie kleur"
 				};
 			case "no":		//norwegian
 				return {
@@ -883,7 +925,8 @@ class PinDMs {
 					context_addtonewcategory_text:	"Legg til i ny kategori",
 					context_pinguild_text:			"Fest på serverliste",
 					context_unpinguild_text:		"Fjern fra serverlisten",
-					header_pinneddms_text:			"Pinned Direktemeldinger"
+					header_pinneddms_text:			"Pinned Direktemeldinger",
+					modal_colorpicker1_text:		"Kategorifarge"
 				};
 			case "pl":		//polish
 				return {
@@ -893,27 +936,30 @@ class PinDMs {
 					context_addtonewcategory_text:	"Dodaj do nowej kategorii",
 					context_pinguild_text:			"Dołącz do listy serwerów",
 					context_unpinguild_text:		"Usuń z listy serwerów",
-					header_pinneddms_text:			"Prywatne Wiadomości Bezpośrednie"
+					header_pinneddms_text:			"Prywatne Wiadomości Bezpośrednie",
+					modal_colorpicker1_text:		"Kolor kategorii"
 				};
 			case "pt-BR":	//portuguese (brazil)
 				return {
 					context_pindm_text:				"Fixar MD",
 					context_pinchannel_text:		"Anexar à lista de canais",
 					context_unpinchannel_text:		"Remover da lista de canais",
-					context_addtonewcategory_text:	"Lisää uuteen luokkaan",
+					context_addtonewcategory_text:	"Adicionar à nova categoria",
 					context_pinguild_text:			"Anexar à lista de servidores",
 					context_unpinguild_text:		"Remover da lista de servidores",
-					header_pinneddms_text:			"Mensagens diretas fixadas"
+					header_pinneddms_text:			"Mensagens diretas fixadas",
+					modal_colorpicker1_text:		"Cor da categoria"
 				};
 			case "fi":		//finnish
 				return {
 					context_pindm_text:				"Kiinnitä yksityisviestit",
 					context_pinchannel_text:		"Liitä kanavaluetteloon",
 					context_unpinchannel_text:		"Poista kanavaluettelosta",
-					context_addtonewcategory_text:	"",
+					context_addtonewcategory_text:	"Lisää uuteen luokkaan",
 					context_pinguild_text:			"Liitä palvelinluetteloon",
 					context_unpinguild_text:		"Poista palvelinluettelosta",
-					header_pinneddms_text:			"Liitetyt yksityisviestit"
+					header_pinneddms_text:			"Liitetyt yksityisviestit",
+					modal_colorpicker1_text:		"Luokan väri"
 				};
 			case "sv":		//swedish
 				return {
@@ -923,7 +969,8 @@ class PinDMs {
 					context_addtonewcategory_text:	"Lägg till i ny kategori",
 					context_pinguild_text:			"Fäst till servernlista",
 					context_unpinguild_text:		"Ta bort från servernlista",
-					header_pinneddms_text:			"Inlagda Direktmeddelanden"
+					header_pinneddms_text:			"Inlagda Direktmeddelanden",
+					modal_colorpicker1_text:		"Kategori färg"
 				};
 			case "tr":		//turkish
 				return {
@@ -933,7 +980,8 @@ class PinDMs {
 					context_addtonewcategory_text:	"Yeni kategoriye ekle",
 					context_pinguild_text:			"Sunucu listesine ekle",
 					context_unpinguild_text:		"Sunucu listesinden kaldır",
-					header_pinneddms_text:			"Direkt Mesajlar Sabitleyin"
+					header_pinneddms_text:			"Direkt Mesajlar Sabitleyin",
+					modal_colorpicker1_text:		"Kategori rengi"
 				};
 			case "cs":		//czech
 				return {
@@ -943,7 +991,8 @@ class PinDMs {
 					context_addtonewcategory_text:	"Přidat do nové kategorie",
 					context_pinguild_text:			"Připojit ke seznamu serverů",
 					context_unpinguild_text:		"Odstranit ze seznamu serverů",
-					header_pinneddms_text:			"Připojené Přímá Zpráva"
+					header_pinneddms_text:			"Připojené Přímá Zpráva",
+					modal_colorpicker1_text:		"Barva kategorie"
 				};
 			case "bg":		//bulgarian
 				return {
@@ -953,7 +1002,8 @@ class PinDMs {
 					context_addtonewcategory_text:	"Добавяне към нова категория",
 					context_pinguild_text:			"Прикачване към списъка със сървъри",
 					context_unpinguild_text:		"Премахване от списъка със сървъри",
-					header_pinneddms_text:			"Свързани директни съобщения"
+					header_pinneddms_text:			"Свързани директни съобщения",
+					modal_colorpicker1_text:		"Цвят на категорията"
 				};
 			case "ru":		//russian
 				return {
@@ -963,7 +1013,8 @@ class PinDMs {
 					context_addtonewcategory_text:	"Добавить в новую категорию",
 					context_pinguild_text:			"Присоединить к списку серверов",
 					context_unpinguild_text:		"Удалить из списка серверов",
-					header_pinneddms_text:			"Прикрепленные Личные Сообщения"
+					header_pinneddms_text:			"Прикрепленные Личные Сообщения",
+					modal_colorpicker1_text:		"Цвет категории"
 				};
 			case "uk":		//ukrainian
 				return {
@@ -973,7 +1024,8 @@ class PinDMs {
 					context_addtonewcategory_text:	"Додати до нової категорії",
 					context_pinguild_text:			"Додайте до списку серверів",
 					context_unpinguild_text:		"Видалити зі списку серверів",
-					header_pinneddms_text:			"Прикріплені oсобисті повідомлення"
+					header_pinneddms_text:			"Прикріплені oсобисті повідомлення",
+					modal_colorpicker1_text:		"Колір категорії"
 				};
 			case "ja":		//japanese
 				return {
@@ -983,7 +1035,8 @@ class PinDMs {
 					context_addtonewcategory_text:	"新しいカテゴリに追加",
 					context_pinguild_text:			"サーバーリストに添付",
 					context_unpinguild_text:		"サーバーリストから削除",
-					header_pinneddms_text:			"固定された直接メッセージ"
+					header_pinneddms_text:			"固定された直接メッセージ",
+					modal_colorpicker1_text:		"カテゴリーの色"
 				};
 			case "zh-TW":	//chinese (traditional)
 				return {
@@ -993,7 +1046,8 @@ class PinDMs {
 					context_addtonewcategory_text:	"添加到新類別",
 					context_pinguild_text:			"附加到服務器列表",
 					context_unpinguild_text:		"從服務器列表中刪除",
-					header_pinneddms_text:			"固定私人信息"
+					header_pinneddms_text:			"固定私人信息",
+					modal_colorpicker1_text:		"類別顏色"
 				};
 			case "ko":		//korean
 				return {
@@ -1003,7 +1057,8 @@ class PinDMs {
 					context_addtonewcategory_text:	"새 카테고리에 추가",
 					context_pinguild_text:			"서버 목록에 첨부",
 					context_unpinguild_text:		"서버 목록에서 제거",
-					header_pinneddms_text:			"고정 된 비공개 메시지"
+					header_pinneddms_text:			"고정 된 비공개 메시지",
+					modal_colorpicker1_text:		"카테고리 색상"
 				};
 			default:		//default: english
 				return {
@@ -1013,7 +1068,8 @@ class PinDMs {
 					context_addtonewcategory_text:	"Add to new Category",
 					context_pinguild_text:			"Pin to Serverlist",
 					context_unpinguild_text:		"Unpin from Serverlist",
-					header_pinneddms_text:			"Pinned Direct Messages"
+					header_pinneddms_text:			"Pinned Direct Messages",
+					modal_colorpicker1_text:		"Categorycolor"
 				};
 		}
 	}
