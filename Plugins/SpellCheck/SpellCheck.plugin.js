@@ -3,7 +3,7 @@
 class SpellCheck {
 	getName () {return "SpellCheck";}
 
-	getVersion () {return "1.3.8";}
+	getVersion () {return "1.3.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,12 +11,12 @@ class SpellCheck {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Edit Textarea","Contextmenu now properly works in all textareas, like the edit message box"]]
+			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
 		this.patchedModules = {
 			after: {
-				"ChannelTextArea":"componentDidMount"
+				SlateChannelTextArea: ["componentDidMount", "componentDidUpdate"]
 			}
 		};
 	}
@@ -26,20 +26,8 @@ class SpellCheck {
 		this.langDictionary = [];
 		this.dictionary = [];
 
-		this.spellCheckLayerMarkup = 
-			`<div class="spellcheck-overlay" style="position:absolute !important; pointer-events:none !important; background:transparent !important; color:transparent !important; text-shadow:none !important;"></div>`;
-
-		this.css = 
-			`.spellcheck-overlay::-webkit-scrollbar,
-			.spellcheck-overlay::-webkit-scrollbar-button,
-			.spellcheck-overlay::-webkit-scrollbar-track,
-			.spellcheck-overlay::-webkit-scrollbar-track-piece,
-			.spellcheck-overlay::-webkit-scrollbar-thumb,
-			.spellcheck-overlay::-webkit-scrollbar-corner,
-			.spellcheck-overlay::-webkit-resizer {
-				visibility: hidden !important;
-			}
-			.spellcheck-overlay .spelling-error {
+		this.css = `
+			${BDFDB.dotCNS._spellcheckoverlay + BDFDB.dotCN._spellcheckerror} {
 				background-image: url('data:image/png;base64,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');
 				background-repeat: repeat-x;
 				background-position: bottom;
@@ -58,36 +46,65 @@ class SpellCheck {
 
 	getSettingsPanel () {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		let settings = BDFDB.DataUtils.get(this, "settings");
-		var choices = BDFDB.DataUtils.get(this, "choices");
-		var amounts = BDFDB.DataUtils.get(this, "amounts");
-		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
-		for (let key in settings) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
-		}
-		for (let key in choices) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCN.flexchild}" style="flex: 0 0 30%;">${this.defaults.choices[key].description}</h3>${BDFDB.createSelectMenu(this.createSelectChoice(choices[key]), choices[key], key)}</div>`;
-		}
-		for (let key in amounts) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCN.flexchild}" style="flex: 0 0 50%;">${this.defaults.amounts[key].description}</h3><div class="${BDFDB.disCN.inputwrapper} inputNumberWrapper ${BDFDB.disCNS.vertical}" style="flex: 1 1 auto;"><span class="numberinput-buttons-zone"><span class="numberinput-button-up"></span><span class="numberinput-button-down"></span></span><input type="number"${(!isNaN(this.defaults.amounts[key].min) && this.defaults.amounts[key].min !== null ? ' min="' + this.defaults.amounts[key].min + '"' : '') + (!isNaN(this.defaults.amounts[key].max) && this.defaults.amounts[key].max !== null ? ' max="' + this.defaults.amounts[key].max + '"' : '')} option="${key}" value="${amounts[key]}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.titlesize16} amount-input"></div></div>`;
-		}
-		var ownDictionary = BDFDB.DataUtils.load(this, "owndics", choices.dictionaryLanguage) || [];
-		settingshtml += `<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Your own Dictionary:</h3><div class="BDFDB-settings-inner-list word-list ${BDFDB.disCN.marginbottom8}">`;
-		for (let word of ownDictionary) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.margintop4 + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis} entryword">${word}</div></div><div class="${BDFDB.disCN.hovercardbutton} remove-word"></div></div>`;
-		}
-		settingshtml += `</div>`;
-		settingshtml += `</div></div>`;
-
-		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
-
-		BDFDB.initElements(settingspanel, this);
-
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".remove-word", e => {this.removeFromOwnDictionarye;});
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", BDFDB.dotCN.selectcontrol, e => {
-			BDFDB.openDropdownMenu(e, this.saveSelectChoice.bind(this), this.createSelectChoice.bind(this), this.languages);
-		});
-		return settingspanel;
+		let choices = BDFDB.DataUtils.get(this, "choices");
+		let amounts = BDFDB.DataUtils.get(this, "amounts");
+		let ownDictionary = BDFDB.DataUtils.load(this, "owndics", choices.dictionaryLanguage) || [];
+		let settingspanel, settingsitems = [], inneritems = [];
+		
+		for (let key in choices) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			className: BDFDB.disCN.marginbottom8,
+			type: "Select",
+			plugin: this,
+			keys: ["choices", key],
+			label: this.defaults.choices[key].description,
+			basis: "70%",
+			value: choices[key],
+			options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(this.languages, (lang, id) => {return {value:id, label:lang.name}})),
+			searchable: true,
+			onChange: value => {
+				this.setDictionary(value);
+				this.refreshSettings(settingspanel);
+			}
+		}));
+		
+		for (let key in amounts) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			className: BDFDB.disCN.marginbottom8,
+			type: "TextInput",
+			childProps: {
+				type: "number"
+			},
+			plugin: this,
+			keys: ["amounts", key],
+			label: this.defaults.amounts[key].description,
+			basis: "20%",
+			min: this.defaults.amounts[key].min,
+			max: this.defaults.amounts[key].max,
+			value: amounts[key]
+		}));
+		
+		for (let word of ownDictionary) inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Card, {
+			children: word.toLowerCase(),
+			onRemove: _ => {
+				BDFDB.ArrayUtils.remove(ownDictionary, word);
+				BDFDB.DataUtils.save(ownDictionary, this, "owndics", choices.dictionaryLanguage);
+				this.dictionary = this.langDictionary.concat(ownDictionary);
+				this.refreshSettings(settingspanel);
+			}
+		}));
+		
+		if (inneritems.length) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+			title: "Your own Dictionary:",
+			first: settingsitems.length == 0,
+			last: true,
+			children: inneritems
+		}));
+		
+		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+	}
+	
+	refreshSettings (settingspanel) {
+		settingspanel.parentElement.appendChild(this.getSettingsPanel());
+		settingspanel.remove();
 	}
 
 	//legacy
@@ -119,9 +136,10 @@ class SpellCheck {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
 
-			this.languages = Object.assign({}, BDFDB.LanguageUtils.languages);
-			this.languages = BDFDB.ObjectUtils.filter(this.languages, (lang) => {return lang.dic == true ? lang : null});
+			this.languages = BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.languages, lang => {return lang.dic == true ? lang : null});
 			this.setDictionary(BDFDB.DataUtils.get(this, "choices", "dictionaryLanguage"));
+			
+			if ((BDFDB.LibraryModules.StoreUtils.get("SpellcheckStore") || {}).enabled) BDFDB.LibraryModules.SpellCheckUtils.toggleSpellcheck();
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
@@ -131,9 +149,8 @@ class SpellCheck {
 	stop () {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
-
-			BDFDB.DOMUtils.remove(".spellcheck-overlay");
-			BDFDB.DOMUtils.removeClassFromDOM("spellcheck-added");
+			
+			BDFDB.DOMUtils.remove(BDFDB.dotCN._spellcheckoverlay);
 
 			this.killLanguageToast();
 
@@ -144,133 +161,116 @@ class SpellCheck {
 
 	// begin of own functions
 
-	onNativeContextMenu (e) {
-		if (e.instance.props.target && e.instance.props.target.tagName == "TEXTAREA") {
-			let [SCparent, SCindex] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["NativeSpellcheckGroup", "FluxContainer(NativeSpellcheckGroup)"]});
-			if (SCindex > -1) {
-				if (BDFDB.ReactUtils.findValue(e.instance._reactInternalFiber, "spellcheckEnabled") == true) {
-					BDFDB.TimeUtils.clear(this.disableSpellcheckTimeout);
-					this.disableSpellcheckTimeout = BDFDB.TimeUtils.timeout(_ => {
-						BDFDB.LibraryModules.SpellCheckUtils.toggleSpellcheck();
-						delete this.disableSpellcheckTimeout;
-					}, 1000);
-				}
-				SCparent.splice(SCindex, 1);
+	onSlateContextMenu (e) {
+		let [SCparent, SCindex] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["NativeSpellcheckGroup", "FluxContainer(NativeSpellcheckGroup)"]});
+		if (SCindex > -1) SCparent.splice(SCindex, 1);
+		let textarea = BDFDB.DOMUtils.getParent(BDFDB.dotCN.textarea, e.instance.props.target), word = null;
+		if (textarea) for (let error of textarea.parentElement.querySelectorAll(BDFDB.dotCN._spellcheckerror)) {
+			let rects = BDFDB.DOMUtils.getRects(error);
+			if (BDFDB.InternalData.mousePosition.pageX > rects.x && BDFDB.InternalData.mousePosition.pageX < (rects.x + rects.width) && BDFDB.InternalData.mousePosition.pageY > rects.y && BDFDB.InternalData.mousePosition.pageY < (rects.y + rects.height)) {
+				word = error.innerText;
+				break;
 			}
-			let textarea = e.instance.props.target, word = null, length = 0;
-			if (textarea.value && (textarea.selectionStart || textarea.selectionEnd)) for (let splitword of textarea.value.split(/\s/g)) {
-				length += splitword.length + 1;
-				if (length > textarea.selectionStart) {
-					word = splitword;
-					break;
-				}
-			}
-			if (true || !word && textarea.value) for (let error of textarea.parentElement.querySelectorAll(".spelling-error")) {
-				let rects = BDFDB.DOMUtils.getRects(error);
-				if (BDFDB.InternalData.mousePosition.pageX > rects.x && BDFDB.InternalData.mousePosition.pageX < (rects.x + rects.width) && BDFDB.InternalData.mousePosition.pageY > rects.y && BDFDB.InternalData.mousePosition.pageY < (rects.y + rects.height)) {
-					word = error.innerText;
-					break;
-				}
-			}
-			if (word && this.isWordNotInDictionary(word)) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-				let items = [];
-				let similarWords = this.getSimilarWords(word.toLowerCase().trim());
-				for (let suggestion of similarWords.sort()) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-					label: suggestion,
-					action: _ => {
-						BDFDB.ContextMenuUtils.close(menu);
-						this.replaceWord(textarea, word, suggestion);
-					}
-				}));
-				if (!items.length) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-					label: this.labels.similarwordssubmenu_none_text,
-					disabled: true
-				}));
-				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
-						label: BDFDB.LanguageUtils.LanguageStrings.SPELLCHECK,
-						render: [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-								label: this.labels.context_spellcheck_text,
-								hint: word,
+		}
+		if (word && this.isWordNotInDictionary(word)) {
+			let similarWords = this.getSimilarWords(word.toLowerCase().trim());
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
+			children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
+					label: BDFDB.LanguageUtils.LanguageStrings.SPELLCHECK,
+					render: [
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+							label: this.labels.context_spellcheck_text,
+							hint: word,
+							action: _ => {
+								BDFDB.ContextMenuUtils.close(e.instance);
+								this.addToOwnDictionary(word);
+							}
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
+							label: this.labels.context_similarwords_text,
+							render: !similarWords.length ? [
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+									label: this.labels.similarwordssubmenu_none_text,
+									disabled: true
+								})
+							] : similarWords.sort().map(suggestion => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+								label: suggestion,
 								action: _ => {
 									BDFDB.ContextMenuUtils.close(e.instance);
-									this.addToOwnDictionary(word);
+									this.replaceWord(e.instance.props.editor, word, suggestion);
 								}
-							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
-								label: this.labels.context_similarwords_text,
-								render: items
-							})
-						]
-					})
-				}));
-			}
+							}))
+						})
+					]
+				})
+			}));
 		}
 	}
 
-	processChannelTextArea (instance, wrapper, returnvalue) {
-		if (instance.props.type) {
-			var textarea = wrapper.querySelector("textarea");
-			if (!textarea) return;
-
-			var updateSpellcheck = _ => {
-				var style = Object.assign({},getComputedStyle(textarea));
-				for (let i in style) if (i.indexOf("webkit") == -1 && isNaN(parseInt(i))) spellcheck.style[i] = style[i];
-				spellcheck.style.setProperty("color", "transparent", "important");
-				spellcheck.style.setProperty("background", "none", "important");
-				spellcheck.style.setProperty("mask", "none", "important");
-				spellcheck.style.setProperty("pointer-events", "none", "important");
-				spellcheck.style.setProperty("position", "absolute", "important");
-				spellcheck.style.setProperty("left", BDFDB.DOMUtils.getRects(textarea).left - BDFDB.DOMUtils.getRects(wrapper).left + "px", "important");
-				spellcheck.style.setProperty("width", BDFDB.DOMUtils.getRects(textarea).width - style.paddingLeft - style.paddingRight + "px", "important");
-				spellcheck.style.setProperty("height", style.height, "important");
-
-				spellcheck.innerHTML = this.spellCheckText(textarea.value);
-				spellcheck.scrollTop = textarea.scrollTop;
+	processSlateChannelTextArea (e) {
+		BDFDB.DOMUtils.remove(e.node.parentElement.querySelectorAll(BDFDB.dotCN._spellcheckoverlay));
+		let overlay = e.node.cloneNode(true), wrapper = BDFDB.DOMUtils.getParent(BDFDB.dotCN.textareainner, e.node);
+		BDFDB.DOMUtils.addClass(overlay, BDFDB.disCN._spellcheckoverlay);
+		let style = Object.assign({}, getComputedStyle(e.node));
+		for (let i in style) if (i.indexOf("webkit") == -1 && isNaN(parseInt(i))) overlay.style[i] = style[i];
+		overlay.style.setProperty("color", "transparent", "important");
+		overlay.style.setProperty("background", "none", "important");
+		overlay.style.setProperty("mask", "none", "important");
+		overlay.style.setProperty("pointer-events", "none", "important");
+		overlay.style.setProperty("position", "absolute", "important");
+		overlay.style.setProperty("left", BDFDB.DOMUtils.getRects(e.node).left - BDFDB.DOMUtils.getRects(wrapper).left + "px", "important");
+		overlay.style.setProperty("width", BDFDB.DOMUtils.getRects(e.node).width - style.paddingLeft - style.paddingRight + "px", "important");
+		overlay.style.setProperty("height", style.height, "important");
+		for (let child of overlay.querySelectorAll("*")) {
+			child.style.setProperty("color", "transparent", "important");
+			child.style.setProperty("background-color", "transparent", "important");
+			child.style.setProperty("border-color", "transparent", "important");
+			child.style.setProperty("text-shadow", "none", "important");
+			child.style.setProperty("pointer-events", "none", "important");
+			if (child.getAttribute("data-slate-string") && child.parentElement.getAttribute("data-slate-leaf")) {
+				let newline = child.querySelector("br");
+				if (newline) newline.remove();
+				child.innerHTML = this.spellCheckText(child.textContent);
+				if (newline) child.appendChild(newline);
 			}
-
-			var spellcheck = BDFDB.DOMUtils.create(this.spellCheckLayerMarkup);
-			BDFDB.DOMUtils.addClass(spellcheck, textarea.className);
-
-			textarea.setAttribute("spellcheck", false);
-
-			textarea.parentElement.appendChild(spellcheck);
-			BDFDB.DOMUtils.addClass(wrapper, "spellcheck-added");
-
-			updateSpellcheck();
-			BDFDB.ListenerUtils.add(this, textarea, "keyup", e => {
-				BDFDB.TimeUtils.clear(textarea.spellchecktimeout);
-				if (textarea.value) textarea.spellchecktimeout = BDFDB.TimeUtils.timeout(_ => {updateSpellcheck();},100);
-				else updateSpellcheck();
-			});
-			BDFDB.ListenerUtils.add(this, textarea, "scroll", e => {
-				spellcheck.scrollTop = textarea.scrollTop;
-			});
 		}
+		e.node.parentElement.appendChild(overlay);
 	}
 
-	replaceWord (textarea, word, replacement) {
-		if (!textarea) return;
-		textarea.focus();
-		textarea.selectionStart = 0;
-		textarea.selectionEnd = textarea.value.length;
-		var firstLetter = word.charAt(0);
-		var isCapitalised = firstLetter.toUpperCase() == firstLetter && firstLetter.toLowerCase() != firstLetter;
-		replacement = isCapitalised ? replacement.charAt(0).toUpperCase() + replacement.slice(1) : replacement;
-		document.execCommand("insertText", false, textarea.value.replace(new RegExp(word.trim(), "i"), replacement));
-		textarea.dispatchEvent(new Event("input"));
-		textarea.dispatchEvent(new Event("keyup"));
-		textarea.dispatchEvent(new Event("change"));
+	spellCheckText (string) {
+		let htmlString = [];
+		string.replace(/\n/g, "\n ").split(" ").forEach(word => {
+			let hasNewline = word.endsWith("\n");
+			word = word.replace(/\n/g, "");
+			htmlString.push(`<label class="${this.isWordNotInDictionary(word) ? BDFDB.disCN._spellcheckerror : ""}" style="color: transparent !important; text-shadow: none !important;">${BDFDB.StringUtils.htmlEscape(word)}</label>${hasNewline ? "\n" : ""}`);
+		});
+		return htmlString.join(" ").replace(/\n /g, "\n");
+	}
+
+	replaceWord (editor, toBeReplaced, replacement) {
+		if (!editor) return;
+		toBeReplaced = toBeReplaced.toUpperCase();
+		let newString = [];
+		BDFDB.LibraryModules.SlateUtils.serialize(editor.props.value).replace(/\n/g, "\n ").split(" ").forEach(word => {
+			let hasNewline = word.endsWith("\n");
+			word = word.replace(/\n/g, "");
+			if (word.toUpperCase() == toBeReplaced) {
+				let firstLetter = word.charAt(0);
+				let isCapitalised = firstLetter.toUpperCase() == firstLetter && firstLetter.toLowerCase() != firstLetter;
+				newString.push((isCapitalised ? replacement.charAt(0).toUpperCase() + replacement.slice(1) : replacement) + (hasNewline ? "\n" : ""));
+			}
+			else newString.push(word + (hasNewline ? "\n" : ""));
+		});
+		editor.setValue(BDFDB.StringUtils.copyRichValue(newString.join(" ").replace(/\n /g, "\n"), editor.props.value));
 	}
 
 	addToOwnDictionary (word) {
 		word = word.split(" ")[0].split("\n")[0].split("\r")[0].split("\t")[0];
 		if (word) {
-			var wordlow = word.toLowerCase();
-			var lang = BDFDB.DataUtils.get(this, "choices", "dictionaryLanguage");
-			var ownDictionary = BDFDB.DataUtils.load(this, "owndics", lang) || [];
+			let wordlow = word.toLowerCase();
+			let lang = BDFDB.DataUtils.get(this, "choices", "dictionaryLanguage");
+			let ownDictionary = BDFDB.DataUtils.load(this, "owndics", lang) || [];
 			if (!ownDictionary.includes(wordlow)) {
 				ownDictionary.push(wordlow);
 				BDFDB.DataUtils.save(ownDictionary, this, "owndics", lang);
@@ -280,46 +280,13 @@ class SpellCheck {
 		}
 	}
 
-	removeFromOwnDictionary (e) {
-		var entry = e.currentTarget.parentElement;
-		var word = entry.querySelector(".entryword").textContent;
-		entry.remove();
-		var lang = BDFDB.DataUtils.get(this, "choices", "dictionaryLanguage");
-		var ownDictionary = BDFDB.DataUtils.load(this, "owndics", lang) || [];
-		BDFDB.ArrayUtils.remove(ownDictionary, word);
-		BDFDB.DataUtils.save(ownDictionary, this, "owndics", lang);
-		this.dictionary = this.langDictionary.concat(ownDictionary);
-	}
-
-	saveSelectChoice (selectWrap, type, choice) {
-		if (type && choice) {			
-			selectWrap.querySelector(BDFDB.dotCN.title).innerText = this.languages[choice].name;
-			this.setDictionary(choice);
-			BDFDB.DataUtils.save(choice, this, "choices", type);
-
-			var settingspanel = BDFDB.DOMUtils.getParent(".BDFDB-settings", selectWrap), listcontainer = settingspanel ? settingspanel.querySelector(".word-list") : null;
-			if (listcontainer) {
-				var ownDictionary = BDFDB.DataUtils.load(this, "owndics", choice) || [];
-				var containerhtml = ``;
-				for (let word of ownDictionary) {
-					containerhtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.margintop4 + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis} entryword">${word}</div></div><div class="${BDFDB.disCN.hovercardbutton} remove-word"></div></div>`;
-				}
-				listcontainer.innerHTML = containerhtml;
-			}
-		}
-	}
-
-	createSelectChoice (choice) {
-		return `<div class="${BDFDB.disCNS.title + BDFDB.disCNS.medium + BDFDB.disCNS.primary + BDFDB.disCNS.weightnormal + BDFDB.disCN.cursorpointer}" style="padding:0;">${this.languages[choice].name}</div>`;
-	}
-
 	setDictionary (lang) {
 		this.dictionary = BDFDB.DataUtils.load(this, "owndics", lang) || [];
 		this.killLanguageToast();
 		this.languageToast = BDFDB.NotificationUtils.toast("Grabbing dictionary (" + this.languages[lang].name + "). Please wait", {timeout:0});
 		this.languageToast.interval = BDFDB.TimeUtils.interval(_ => {
 			this.languageToast.textContent = this.languageToast.textContent.indexOf(".....") > -1 ? "Grabbing dictionary (" + this.languages[lang].name + "). Please wait" : this.languageToast.textContent + ".";
-		},500);
+		}, 500);
 		this.languageToast.lang = lang
 		BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/dic/" + lang + ".dic", (error, response, result) => {
 			if (error || (response && result.toLowerCase().indexOf("<!doctype html>") > -1)) {
@@ -328,8 +295,7 @@ class SpellCheck {
 			}
 			else if (response && this.languageToast.lang == lang) {
 				this.langDictionary = result.split("\n");
-				this.dictionary = this.langDictionary.concat(this.dictionary);
-				this.dictionary = this.dictionary.map(word => word.toLowerCase());
+				this.dictionary = this.langDictionary.concat(this.dictionary).map(word => word.toLowerCase());
 				this.killLanguageToast();
 				BDFDB.NotificationUtils.toast("Successfully grabbed dictionary (" + this.languages[lang].name + ").", {type: "success"});
 			}
@@ -343,16 +309,6 @@ class SpellCheck {
 		}
 	}
 
-	spellCheckText (string) {
-		var htmlString = [];
-		string.replace(/\n/g, "\n ").split(" ").forEach(word => {
-			let hasnewline = word.endsWith("\n");
-			word = word.replace(/\n/g, "");
-			htmlString.push(`<label class="${this.isWordNotInDictionary(word) ? "spelling-error" : "nospelling-error"}" style="color: transparent !important; text-shadow: none !important;">${BDFDB.StringUtils.htmlEscape(word)}</label>${hasnewline ? "\n" : ""}`);
-		});
-		return htmlString.join(" ").replace(/\n /g, "\n");
-	}
-
 	isWordNotInDictionary (word) {
 		var wordLow = word.toLowerCase();
 		var wordWithoutSymbols = wordLow.replace(/[0-9\µ\@\$\£\€\¥\¢\²\³\>\<\|\,\;\.\:\_\#\+\*\~\?\¿\\\´\`\}\=\]\)\[\(\{\/\&\%\§\"\!\¡\^\°\n\t\r]/g, "");
@@ -361,16 +317,17 @@ class SpellCheck {
 
 
 	getSimilarWords (word) {
-		var maxAmount = BDFDB.DataUtils.get(this, "amounts", "maxSimilarAmount"), similarWords = [];
+		let maxAmount = BDFDB.DataUtils.get(this, "amounts", "maxSimilarAmount"), similarWords = [];
 		if (maxAmount > 0) {
-			var sameLetterDic = this.dictionary.filter(string => string.indexOf(word.toLowerCase().charAt(0)) == 0 ? string : null);
-			var similarities = {};
+			let firstLetterLower = word.toLowerCase().charAt(0);
+			let sameLetterDic = this.dictionary.filter(string => string.indexOf(firstLetterLower) == 0 && string);
+			let similarities = {};
 			for (let string of sameLetterDic) {
 				let value = this.wordSimilarity(word, string);
 				if (!similarities[value]) similarities[value] = [];
 				similarities[value].push(string);
 			}
-			var amount = 0;
+			let amount = 0;
 			for (let value of Object.keys(similarities).sort().reverse()) {
 				for (let similarWord of similarities[value]) {
 					if (amount < maxAmount && !similarWords.includes(similarWord)) {
@@ -386,15 +343,14 @@ class SpellCheck {
 	}
 
 	wordSimilarity (a, b) {
-		var temp;
-		if (a.length === 0 || b.length === 0 || a.length - b.length > 3 || b.length - a.length > 3) { return 0; }
+		let temp;
+		if (a.length === 0 || b.length === 0 || a.length - b.length > 3 || b.length - a.length > 3) return 0;
 		if (a.length > b.length) {
 			temp = a;
 			a = b;
 			b = temp;
 		}
-		let result = 0;
-		let row = [...Array(a.length + 1).keys()];
+		let result = 0, row = [...Array(a.length + 1).keys()];
 		for (let i = 1; i <= b.length; i++) {
 			result = i;
 			for (let j = 1; j <= a.length; j++) {

@@ -6715,8 +6715,13 @@
 							if (typeof this.props.onRemove == "function") this.props.onRemove(e, this);
 							BDFDB.ListenerUtils.stopEvent(e);
 						}
-					}) : null
-				].concat(this.props.children).flat(10).filter(n => n)
+					}) : null,
+					typeof this.props.children == "string" ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+						className: BDFDB.disCN.hovercardinner,
+						color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
+						children: this.props.children
+					}) : this.props.children
+				].flat(10).filter(n => n)
 			}), "backdrop", "noRemove"));
 		}
 	};
@@ -8446,6 +8451,15 @@
 		${BDFDB.dotCN.colorpickerswatchsingle} {
 			height: 30px;
 			width: 30px;
+		}
+		
+		${BDFDB.dotCNC.hovercardwrapper + BDFDB.dotCN.hovercardinner} {
+			min-height: 28px;
+		}
+		${BDFDB.dotCN.hovercardinner} {
+			display: flex;
+			align-items: center;
+			z-index: 1;
 		}
 		
 		${BDFDB.dotCN.guildupperleftbadge} {
