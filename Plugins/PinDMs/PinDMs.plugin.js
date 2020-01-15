@@ -263,7 +263,8 @@ class PinDMs {
 										name: `${this.labels.header_pinneddms_text} #${categories.length + 1}`,
 										dms: [id],
 										pos: categories.length,
-										collapsed: false
+										collapsed: false,
+										color: null
 									}, "dmCategories", true);
 								}
 							})
