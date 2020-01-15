@@ -4454,12 +4454,13 @@
 		next: "next-SHEZrz"
 	};
 	DiscordClassModules.PinDMs = {
-		collapsed: "collapsed-3w_-ff",
 		dragPreview: "dragPreview-nXiByA",
 		dmChannelPinned: "pinned-0lM4wD",
 		dmChannelPlaceholder: "placeholder-7bhR5s",
 		pinnedChannelsHeaderAmount: "headerAmount-_-7GrS",
 		pinnedChannelsHeaderArrow: "pinnedChannelsHeaderArrow-44rrTz",
+		pinnedChannelsHeaderCollapsed: "collapsed-3w_-ff",
+		pinnedChannelsHeaderColored: "colored-oIzG5s",
 		pinnedChannelsHeaderContainer: "pinnedChannelsHeaderContainer-89Gjv4",
 		recentPinned: "pinned-jHvFrr",
 		recentPlaceholder: "placeholder-Uff-gH",
@@ -4737,7 +4738,8 @@
 		_pindmsdmchannelplaceholder: ["PinDMs", "dmChannelPlaceholder"],
 		_pindmspinnedchannelsheaderamount: ["PinDMs", "pinnedChannelsHeaderAmount"],
 		_pindmspinnedchannelsheaderarrow: ["PinDMs", "pinnedChannelsHeaderArrow"],
-		_pindmspinnedchannelsheadercollapsed: ["PinDMs", "collapsed"],
+		_pindmspinnedchannelsheadercollapsed: ["PinDMs", "pinnedChannelsHeaderCollapsed"],
+		_pindmspinnedchannelsheadercolored: ["PinDMs", "pinnedChannelsHeaderColored"],
 		_pindmspinnedchannelsheadercontainer: ["PinDMs", "pinnedChannelsHeaderContainer"],
 		_pindmsrecentpinned: ["PinDMs", "recentPinned"],
 		_pindmsrecentplaceholder: ["PinDMs", "recentPlaceholder"],
