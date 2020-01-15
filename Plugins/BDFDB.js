@@ -1566,6 +1566,7 @@
 	LibraryModules.StatusMetaUtils = BDFDB.ModuleUtils.findByProperties("getApplicationActivity", "getStatus");
 	LibraryModules.StreamUtils = BDFDB.ModuleUtils.findByProperties("getStreamForUser", "getActiveStream");
 	LibraryModules.StringUtils = BDFDB.ModuleUtils.findByProperties("cssValueToNumber", "upperCaseFirstChar");
+	LibraryModules.StoreUtils = BDFDB.ModuleUtils.findByProperties("get", "set", "clear", "remove");
 	LibraryModules.UnreadGuildUtils = BDFDB.ModuleUtils.findByProperties("hasUnread", "getUnreadGuilds");
 	LibraryModules.UnreadChannelUtils = BDFDB.ModuleUtils.findByProperties("getUnreadCount", "getOldestUnreadMessageId");
 	LibraryModules.UploadUtils = BDFDB.ModuleUtils.findByProperties("upload", "instantBatchUpload");
