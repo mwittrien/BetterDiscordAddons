@@ -11,6 +11,7 @@ class NotificationSounds {
 
 	constructor () {
 		this.changelog = {
+			"added":[["@here & @everyone","You can now set a unique sound for those two special mention cases"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
