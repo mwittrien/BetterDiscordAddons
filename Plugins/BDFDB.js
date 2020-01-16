@@ -6603,6 +6603,7 @@
 	NativeSubComponents.QuickSelect = BDFDB.ModuleUtils.findByName("QuickSelectWrapper");
 	NativeSubComponents.SearchBar = BDFDB.ModuleUtils.find(m => m && m.displayName == "SearchBar" && m.defaultProps.placeholder == BDFDB.LanguageUtils.LanguageStrings.SEARCH);
 	NativeSubComponents.Select = BDFDB.ModuleUtils.findByName("SelectTempWrapper");
+	NativeSubComponents.Slider = BDFDB.ModuleUtils.findByName("Slider");
 	NativeSubComponents.SvgIcon = BDFDB.ModuleUtils.findByProperties("Gradients", "Names");
 	NativeSubComponents.Switch = BDFDB.ModuleUtils.findByName("Switch");
 	NativeSubComponents.TabBar = BDFDB.ModuleUtils.findByName("TabBar");
@@ -7878,7 +7879,33 @@
 		}
 	};
 	
-	LibraryComponents.Slider = BDFDB.ModuleUtils.findByName("Slider");
+	LibraryComponents.Slider = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.Slider") || reactInitialized && class BDFDB_Slider extends LibraryModules.React.Component {
+		handleValueChange(value) {
+			let newvalue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value) : value;
+			if (typeof this.props.digits == "number") newvalue = Math.round(newvalue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
+			this.props.defaultValue = newvalue;
+			if (typeof this.props.onValueChange == "function") this.props.onValueChange(newvalue, this);
+			BDFDB.ReactUtils.forceUpdate(this);
+		}
+		handleValueRender(value) {
+			let newvalue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value) : value;
+			if (typeof this.props.digits == "number") newvalue = Math.round(newvalue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
+			if (typeof this.props.onValueRender == "function") {
+				let tempreturn = this.props.onValueRender(newvalue, this);
+				if (tempreturn != undefined) newvalue = tempreturn;
+			}
+			return newvalue;
+		}
+		render() {
+			let defaultValue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange(this.props.edges, [0, 100], this.props.defaultValue) : this.props.defaultValue;
+			if (typeof this.props.digits == "number") defaultValue = Math.round(defaultValue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
+			return BDFDB.ReactUtils.createElement(NativeSubComponents.Slider, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+				defaultValue: defaultValue,
+				onValueChange: this.handleValueChange.bind(this),
+				onValueRender: this.handleValueRender.bind(this)
+			}), "digits", "edges"));
+		}
+	};
 	
 	LibraryComponents.Spinner = BDFDB.ModuleUtils.findByName("Spinner");
 	
