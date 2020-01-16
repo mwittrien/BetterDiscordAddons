@@ -7150,17 +7150,18 @@
 	
 	LibraryComponents.FileButton = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.FileButton") || reactInitialized && class BDFDB_FileButton extends LibraryModules.React.Component {
 		render() {
+			let filter = this.props.filter && [this.props.filter].flat(10).filter(n => typeof n == "string");
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Button, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				onClick: e => {e.currentTarget.querySelector("input").click();},
 				children: [
 					BDFDB.LanguageUtils.LibraryStrings.file_navigator_text,
 					BDFDB.ReactUtils.createElement("input", {
 						type: "file",
-						accept: this.props.filter && [this.props.filter].flat(10).filter(n => typeof n == "string").join("/*,") + "/*",
+						accept: filter.length && filter.join("/*,") + "/*",
 						style: {display: "none"},
 						onChange: e => {
 							let file = e.currentTarget.files[0];
-							if (this.refInput && file && (!this.props.filter || file.type.indexOf(this.props.filter) == 0)) {
+							if (this.refInput && file && (!filter.length || filter.some(n => file.type.indexOf(n) == 0))) {
 								this.refInput.props.value = `${this.props.mode == "url" ? "url('" : ""}${this.props.useFilepath ? file.path : `data:${file.type};base64,${BDFDB.LibraryRequires.fs.readFileSync(file.path).toString("base64")}`}${this.props.mode ? "')" : ""}`;
 								BDFDB.ReactUtils.forceUpdate(this.refInput);
 								this.refInput.handleChange(this.refInput.props.value);
@@ -8080,6 +8081,7 @@
 				}) : null,
 				this.props.type == "file" ? BDFDB.ReactUtils.createElement(LibraryComponents.FileButton, {
 					filter: this.props.filter,
+					mode: this.props.mode,
 					useFilepath: this.props.useFilepath,
 				}) : null
 			].filter(n => n);
