@@ -169,11 +169,11 @@
 			updatenotice.querySelector(BDFDB.dotCN.noticedismiss).addEventListener("click", _ => {
 				BDFDB.DOMUtils.remove(".update-clickme-tooltip");
 			});
-			var reloadbutton = updatenotice.querySelector(BDFDB.dotCN.noticebutton);
+			let reloadbutton = updatenotice.querySelector(BDFDB.dotCN.noticebutton);
 			if (reloadbutton) {
 				BDFDB.DOMUtils.toggle(reloadbutton, true);
 				reloadbutton.addEventListener("click", _ => {
-					window.location.reload(false);
+					LibraryRequires.electron.remote.getCurrentWindow().reload();
 				});
 				reloadbutton.addEventListener("mouseenter", _ => {
 					if (window.PluginUpdates.downloaded) BDFDB.TooltipUtils.create(reloadbutton, window.PluginUpdates.downloaded.join(", "), {type:"bottom", selector:"update-notice-tooltip", style: "max-width: 420px"});
@@ -1113,7 +1113,7 @@
 						callOriginalMethodAfterwards: _ => {callInstead = true;},
 						stopOriginalMethodCall: _ => {stopCall = true;}
 					};
-					if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded && module.BDFDBpatch && module.BDFDBpatch[modulefunction]) {
+					if (module.BDFDBpatch && module.BDFDBpatch[modulefunction]) {
 						if (!BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].before)) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[modulefunction].before)) {
 							BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].before[id], `"before" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, module.BDFDBpatch[modulefunction].before[id].pluginname)(data);
 						}
@@ -1291,7 +1291,7 @@
 					instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 					let patchfunctions = {};
 					patchfunctions[patchtype] = e => {
-						if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) InternalBDFDB.initiateProcess(plugin, type, {instance:e.thisObject, returnvalue:e.returnValue, methodname:e.originalMethodName, patchtypes:[patchtype]});
+						InternalBDFDB.initiateProcess(plugin, type, {instance:e.thisObject, returnvalue:e.returnValue, methodname:e.originalMethodName, patchtypes:[patchtype]});
 					}
 					BDFDB.ModuleUtils.patch(plugin, WebModulesData.Nonprototype.includes(name) ? instance : instance.prototype, plugin.patchedModules[patchtype][type], patchfunctions);
 				}
@@ -7877,6 +7877,8 @@
 			}));
 		}
 	};
+	
+	LibraryComponents.Slider = BDFDB.ModuleUtils.findByName("Slider");
 	
 	LibraryComponents.Spinner = BDFDB.ModuleUtils.findByName("Spinner");
 	
