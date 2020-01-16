@@ -7156,7 +7156,7 @@
 					BDFDB.LanguageUtils.LibraryStrings.file_navigator_text,
 					BDFDB.ReactUtils.createElement("input", {
 						type: "file",
-						accept: this.props.filter && [this.props.filter].flat(10).join("/* ") + "/*",
+						accept: this.props.filter && [this.props.filter].flat(10).filter(n => typeof n == "string").join("/*,") + "/*",
 						style: {display: "none"},
 						onChange: e => {
 							let file = e.currentTarget.files[0];
