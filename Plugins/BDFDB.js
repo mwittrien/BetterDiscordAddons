@@ -7900,7 +7900,7 @@
 			let defaultValue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange(this.props.edges, [0, 100], this.props.defaultValue) : this.props.defaultValue;
 			if (typeof this.props.digits == "number") defaultValue = Math.round(defaultValue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
 			return BDFDB.ReactUtils.createElement(NativeSubComponents.Slider, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-				defaultValue: defaultValue,
+				initialValue: defaultValue,
 				onValueChange: this.handleValueChange.bind(this),
 				onValueRender: this.handleValueRender.bind(this)
 			}), "digits", "edges"));
