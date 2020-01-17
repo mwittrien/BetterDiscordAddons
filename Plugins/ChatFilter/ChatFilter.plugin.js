@@ -3,7 +3,7 @@
 class ChatFilter {
 	getName () {return "ChatFilter";}
 
-	getVersion () {return "3.3.5";}
+	getVersion () {return "3.3.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,13 +11,12 @@ class ChatFilter {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Light Theme Update","Fixed bugs for the Light Theme Update, which broke 99% of my plugins"]]
+			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
 		this.patchedModules = {
 			after: {
-				"Message":["componentDidMount","componentDidUpdate"],
-				"StandardSidebarView":"componentWillUnmount"
+				Message: ["componentDidMount","componentDidUpdate"],
 			}
 		};
 	}
@@ -37,121 +36,145 @@ class ChatFilter {
 				exact: 		{value:true,		description:"Handle the wordvalue as an exact word and not as part of a word"}
 			},
 			replaces: {
-				blocked: 	{value:"~~BLOCKED~~",	title:"Block:",		description:"Default Replace Word for blocked Messages:"},
-				censored:	{value:"$!%&%!&",		title:"Censor:",	description:"Default Replace Word for censored Messages:"}
+				blocked: 	{value:"~~BLOCKED~~",		description:"Default Replaceword for blocked Messages:"},
+				censored:	{value:"$!%&%!&",			description:"Default Replaceword for censored Messages:"}
 			},
 			settings: {
-				addContextMenu:			{value:true, 	inner:false,	description:"Add a ContextMenu entry to faster add new blocked/censored Words:"},
-				showMessageOnClick: 	{value:{blocked:true, censored:true},	enabled:{blocked:true, censored:true},	inner:true,	description:"Show original Message on Click:"},
-				hideMessage:			{value:{blocked:false, censored:false},	enabled:{blocked:true, censored:false},	inner:true,	description:"Completely hide targeted Messages:"}
+				addContextMenu:			{value:true,	description:"Add a ContextMenu entry to faster add new blocked/censored Words:"},
+				showMessageOnClick: 	{value:true,	description:"Show original Message on Click:"},
 			}
 		};
-
-		this.chatfilterAddModalMarkup =
-			`<span class="${this.name}-modal BDFDB-modal">
-				<div class="${BDFDB.disCN.backdrop}"></div>
-				<div class="${BDFDB.disCN.modal}">
-					<div class="${BDFDB.disCN.modalinner}">
-						<div class="${BDFDB.disCNS.modalsub + BDFDB.disCN.modalsizemedium}">
-							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.modalheader}" style="flex: 0 0 auto;">
-								<div class="${BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">
-									<h4 class="${BDFDB.disCNS.h4 + BDFDB.disCNS.defaultcolor + BDFDB.disCN.h4defaultmargin}">Add to ChatFilter</h4>
-									<div class="${BDFDB.disCNS.modalguildname + BDFDB.disCNS.small + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCN.primary}"></div>
-								</div>
-								<button type="button" class="${BDFDB.disCNS.modalclose + BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookblank + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCN.buttongrow}">
-									<div class="${BDFDB.disCN.buttoncontents}">
-										<svg name="Close" width="18" height="18" viewBox="0 0 12 12" style="flex: 0 1 auto;">
-											<g fill="none" fill-rule="evenodd">
-												<path d="M0 0h12v12H0"></path>
-												<path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path>
-											</g>
-										</svg>
-									</div>
-								</button>
-							</div>
-							<div class="${BDFDB.disCNS.scrollerwrap + BDFDB.disCNS.modalcontent + BDFDB.disCNS.scrollerthemed + BDFDB.disCN.scrollerthemeghosthairline}">
-								<div class="${BDFDB.disCNS.scroller + BDFDB.disCN.modalsubinner}">
-									<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;">
-										<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Block/Censor:</h3>
-										<input action="add" type="text" placeholder="Wordvalue" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.titlesize16} wordInputs" id="input-wordvalue" style="flex: 1 1 auto;">
-									</div>
-									<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;">
-										<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">With:</h3>
-										<input action="add" type="text" placeholder="Replacevalue" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.titlesize16} wordInputs" id="input-replacevalue" style="flex: 1 1 auto;">
-									</div>
-									<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-										<h3 class="${BDFDB.disCNS.flex2 + BDFDB.disCNS.justifystart + BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Translator:</h3>
-										<h3 class="${BDFDB.disCNS.flex2 + BDFDB.disCNS.justifystart + BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Use as Blockword</h3>
-										<div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCNS.switchthemedefault + BDFDB.disCN.switchvalueunchecked}" style="flex: 0 0 auto;">
-											<input type="checkbox" id="input-choiceblockcensor" value="choiceblockcensor" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}">
-										</div>
-										<h3 class="${BDFDB.disCNS.flex2 + BDFDB.disCNS.justifyend + BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Use as Censorword</h3>
-									</div>
-									${Object.keys(this.defaults.configs).map((key, i) => 
-									`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;">
-										<h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.configs[key].description}</h3>
-										<div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;">
-										<input type="checkbox" id="input-config${key}" value="${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner}"${(this.defaults.configs[key].value ? ' checked' : '')}></div>
-									</div>`).join('')}
-								</div>
-							</div>
-							<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontalreverse + BDFDB.disCNS.horizontalreverse2 + BDFDB.disCNS.directionrowreverse + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.modalfooter}">
-								<button type="button" class="btn-close btn-add ${BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow}">
-									<div class="${BDFDB.disCN.buttoncontents}"></div>
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</span>`;
 	}
 
-	getSettingsPanel () {
+	getSettingsPanel (collapseStates = {}) {
 		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		var replaces = BDFDB.DataUtils.get(this, "replaces");
 		let settings = BDFDB.DataUtils.get(this, "settings");
-		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
-		for (let key in settings) {
-			if (!this.defaults.settings[key].inner) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
-		}
-		for (let rtype in replaces) {
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto; min-width:55px;">${this.defaults.replaces[rtype].title}</h3><input rtype="${rtype}" action="add" type="text" placeholder="Wordvalue" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.titlesize16} wordInputs" id="input-${rtype}-wordvalue" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">With:</h3><input rtype="${rtype}" action="add" type="text" placeholder="Replacevalue" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.titlesize16} wordInputs" id="input-${rtype}-replacevalue" style="flex: 1 1 auto;"><button rtype="${rtype}" action="add" type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorbrand + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} btn-add btn-addword" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}"></div></button></div>`;
-			for (let key in settings) {
-				if (this.defaults.settings[key].inner && this.defaults.settings[key].enabled[rtype]) settingshtml += `<div value="${key}" class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key} ${rtype}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key][rtype] ? " checked" : ""}></div></div>`;
-			}
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto; min-width: 320px;">${this.defaults.replaces[rtype].description}</h3><input rtype="${rtype}" type="text" placeholder="${this.defaults.replaces[rtype].value}" value="${replaces[rtype]}" class="${BDFDB.disCNS.inputdefault + BDFDB.disCNS.input + BDFDB.disCN.titlesize16} defaultInputs" id="input-${rtype}-defaultvalue" style="flex: 1 1 auto;"></div>`;
-			settingshtml += `<div class="${BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto; max-width: ${560 - (Object.keys(this.defaults.configs).length * 33)}px;">List of ${rtype} Words:</h3><div class="${BDFDB.disCNS.flex2 + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifycenter + BDFDB.disCNS.alignend + BDFDB.disCN.nowrap}" style="flex: 1 1 auto; max-width: ${Object.keys(this.defaults.configs).length * 34}px;">`;
-			for (let config in this.defaults.configs) {
-				settingshtml += `<div class="${BDFDB.disCNS.margintop8 +  BDFDB.disCNS.settingstableheadersize + BDFDB.disCNS.titlesize10 + BDFDB.disCNS.primary + BDFDB.disCN.weightbold}" style="flex: 1 1 auto; width: 34px !important; text-align: center;">${config.toUpperCase()}</div>`;
-			}
-			settingshtml += `</div></div><div class="BDFDB-settings-inner-list ${rtype}-list">`;
-			for (let word in this.words[rtype]) {
-				settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis}" style="flex: 1 1 auto;">${BDFDB.StringUtils.htmlEscape(word)} (${BDFDB.StringUtils.htmlEscape(this.words[rtype][word].replace)})</div>`
-				for (let config in this.defaults.configs) {
-					settingshtml += `<div class="${BDFDB.disCNS.checkboxcontainer + BDFDB.disCN.marginreset}" style="flex: 0 0 auto;"><label class="${BDFDB.disCN.checkboxwrapper}"><input word="${word}" rtype="${rtype}" config="${config}" type="checkbox" class="${BDFDB.disCN.checkboxinputdefault}"${this.words[rtype][word][config] ? " checked" : ""}><div class="${BDFDB.disCNS.checkbox + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex2 + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.checkboxround}"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
+		let replaces = BDFDB.DataUtils.get(this, "replaces");
+		let settingspanel, settingsitems = [];
+		
+		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			title: "Settings",
+			collapseStates: collapseStates,
+			children: Object.keys(settings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+				className: BDFDB.disCN.marginbottom8,
+				type: "Switch",
+				plugin: this,
+				keys: ["settings", key],
+				label: this.defaults.settings[key].description,
+				value: settings[key]
+			})).concat(Object.keys(replaces).map(rtype => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+				className: BDFDB.disCN.marginbottom8,
+				type: "TextInput",
+				plugin: this,
+				keys: ["replaces", rtype],
+				label: this.defaults.replaces[rtype].description,
+				value: replaces[rtype],
+				placeholder: this.defaults.replaces[rtype].value
+			})))
+		}));
+		let values = {wordvalue:"", replacevalue:"", choice:"blocked"};
+		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			title: `Add new blocked/censored Word`,
+			collapseStates: collapseStates,
+			dividertop: true,
+			children: [
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+					type: "Button",
+					label: "Pick a Wordvalue and Replacevalue:",
+					key: "ADDBUTTON",
+					disabled: !Object.keys(values).every(valuename => values[valuename]),
+					children: BDFDB.LanguageUtils.LanguageStrings.ADD,
+					onClick: _ => {
+						this.saveWord(values);
+						this.refreshSettings(settingspanel, collapseStates);
+					}
+				}),
+				this.createInputs(values)
+			].flat(10).filter(n => n)
+		}));
+		for (let rtype in replaces) if (!BDFDB.ObjectUtils.isEmpty(this.words[rtype])) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			title: `Added ${rtype} Words`,
+			collapseStates: collapseStates,
+			dividertop: true,
+			children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
+				settings: Object.keys(this.defaults.configs),
+				data: Object.keys(this.words[rtype]).map((wordvalue, i) => Object.assign({}, this.words[rtype][wordvalue], {
+					key: wordvalue,
+					label: wordvalue
+				})),
+				renderLabel: data => BDFDB.ReactUtils.createElement("div", {
+					style: {width: "100%"},
+					children: [
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+							value: data.label,
+							placeholder: data.label,
+							size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
+							maxLength: 100000000000000000000,
+							onChange: value => {
+								this.words[rtype][value] = this.words[rtype][data.label];
+								delete this.words[rtype][data.label];
+								data.label = value;
+								BDFDB.DataUtils.save(this.words, this, "words");
+							}
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+							value: data.replace,
+							placeholder: data.replace,
+							size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
+							maxLength: 100000000000000000000,
+							onChange: value => {
+								this.words[rtype][data.label].replace = value;
+								BDFDB.DataUtils.save(this.words, this, "words");
+							}
+						})
+					]
+				}),
+				onCheckboxChange: (value, instance) => {
+					this.words[rtype][instance.props.cardId][instance.props.settingId] = value;
+					BDFDB.DataUtils.save(this.words, this, "words");
+				},
+				onRemove: (e, instance) => {
+					delete this.words[rtype][instance.props.cardId];
+					BDFDB.DataUtils.save(this.words, this, "words");
+					this.refreshSettings(settingspanel, collapseStates);
 				}
-				settingshtml += `</div><div word="${word}" rtype="${rtype}" action="remove" class="${BDFDB.disCN.hovercardbutton} remove-word"></div></div>`;
-			}
-			settingshtml += `</div>`
-			settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom20}" style="flex: 0 0 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">Remove all added words.</h3><button rtype="${rtype}" action="removeall" type="button" class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.button + BDFDB.disCNS.buttonlookfilled + BDFDB.disCNS.buttoncolorred + BDFDB.disCNS.buttonsizemedium + BDFDB.disCN.buttongrow} remove-all" style="flex: 0 0 auto;"><div class="${BDFDB.disCN.buttoncontents}">Reset</div></button></div>`;
-			settingshtml += `<div class="${BDFDB.disCNS.divider + BDFDB.disCNS.dividerdefault + BDFDB.disCN.marginbottom40}"></div>`;
-		}
-		var infoHidden = BDFDB.DataUtils.load(this, "hideInfo", "hideInfo");
-		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCNS.cursorpointer} toggle-info" style="flex: 1 1 auto;"><svg class="toggle-infoarrow${infoHidden ? (" " + BDFDB.disCN.directionright) : ""}" width="12" height="12" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 10L12 15 17 10"></path></svg><div class="toggle-infotext" style="flex: 1 1 auto;">Information</div></div>`;
-		settingshtml += `<div class="BDFDB-settings-inner-list info-container" ${infoHidden ? "style='display:none;'" : ""}><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Case: Will block/censor words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Not Case: Will block/censor words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Exact: Will block/censor words that are exactly the selected word. apple => apple, not applepie or pineapple</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Not Exact: Will block/censor all words containing the selected word. apple => apple, applepie and pineapple</div><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCN.primary}">Empty: Ignores the default and set replace word and removes the word/message instead.</div></div>`;
-		settingshtml += `</div>`;
-
-		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
-
-		BDFDB.initElements(settingspanel, this);
-
-		BDFDB.ListenerUtils.add(this, settingspanel, "keypress", ".wordInputs", e => {if (e.which == 13) this.updateContainer(settingspanel, e.currentTarget);});
-		BDFDB.ListenerUtils.add(this, settingspanel, "keyup", ".defaultInputs", e => {this.saveReplace(e.currentTarget);});
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".btn-addword, .remove-word, .remove-all", e => {this.updateContainer(settingspanel, e.currentTarget);});
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", BDFDB.dotCN.checkboxinput, e => {this.updateConfig(e.currentTarget);});
-		BDFDB.ListenerUtils.add(this, settingspanel, "click", ".toggle-info", e => {this.toggleInfo(e.currentTarget);});
-
-		return settingspanel;
+			})
+		}));
+		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			title: "Remove All",
+			collapseStates: collapseStates,
+			dividertop: true,
+			children: Object.keys(replaces).map(rtype => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+				type: "Button",
+				className: BDFDB.disCN.marginbottom8,
+				color: BDFDB.LibraryComponents.Button.Colors.RED,
+				label: `Remove all ${rtype} Words`,
+				onClick: _ => {
+					BDFDB.ModalUtils.confirm(this, `Are you sure you want to remove all ${rtype} Words?`, _ => {
+						this.words[rtype] = {};
+						BDFDB.DataUtils.remove(this, "words", rtype);
+						this.refreshSettings(settingspanel, collapseStates);
+					});
+				},
+				children: BDFDB.LanguageUtils.LanguageStrings.REMOVE
+			}))
+		}));
+		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			title: "Config Guide",
+			collapseStates: collapseStates,
+			dividertop: true,
+			children: ["Case: Will block/censor words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe", "Not Case: Will block/censor words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe", "Exact: Will block/censor words that are exactly the selected word. apple => apple, not applepie or pineapple", "Not Exact: Will block/censor all words containing the selected word. apple => apple, applepie and pineapple", "Empty: Ignores the default and set replace word and removes the word/message instead."].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
+				type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
+				children: string
+			}))
+		}));
+		
+		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+	}
+	
+	refreshSettings (settingspanel, collapseStates) {
+		settingspanel.parentElement.appendChild(this.getSettingsPanel(collapseStates));
+		settingspanel.remove();
 	}
 
 	//legacy
@@ -195,7 +218,7 @@ class ChatFilter {
 		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
-			document.querySelectorAll(`${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored, ${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored`).forEach(message => {this.resetMessage(message);});
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 
 			BDFDB.PluginUtils.clear(this);
 		}
@@ -204,120 +227,39 @@ class ChatFilter {
 
 	// begin of own functions
 
-	updateContainer (settingspanel, ele) {
-		var wordvalue = null, replacevalue = null, action = ele.getAttribute("action"), rtype = ele.getAttribute("rtype"), update = _ => {
-			BDFDB.DataUtils.save(this.words, this, "words");
-
-			var containerhtml = ``;
-			for (let word in this.words[rtype]) {
-				containerhtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.directionrow + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCNS.margintop4 + BDFDB.disCNS.marginbottom4 + BDFDB.disCN.hovercard}"><div class="${BDFDB.disCN.hovercardinner}"><div class="${BDFDB.disCNS.description + BDFDB.disCNS.formtext + BDFDB.disCNS.note + BDFDB.disCNS.modedefault + BDFDB.disCNS.primary + BDFDB.disCN.ellipsis}" style="flex: 1 1 auto;">${BDFDB.StringUtils.htmlEscape(word)} (${BDFDB.StringUtils.htmlEscape(this.words[rtype][word].replace)})</div>`
-				for (let config in this.defaults.configs) {
-					containerhtml += `<div class="${BDFDB.disCNS.checkboxcontainer + BDFDB.disCN.marginreset}" style="flex: 0 0 auto;"><label class="${BDFDB.disCN.checkboxwrapper}"><input word="${word}" rtype="${rtype}" config="${config}" type="checkbox" class="${BDFDB.disCN.checkboxinputdefault}"${this.words[rtype][word][config] ? " checked" : ""}><div class="${BDFDB.disCNS.checkbox + BDFDB.disCNS.flexcenter + BDFDB.disCNS.flex2 + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCN.checkboxround}"><svg name="Checkmark" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="transparent" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg></div></label></div>`;
-				}
-				containerhtml += `</div><div word="${word}" rtype="${rtype}" action="remove" class="${BDFDB.disCN.hovercardbutton} remove-word"></div></div>`;
-			}
-			containerhtml += `</div>`;
-			settingspanel.querySelector("." + rtype + "-list").innerHTML = containerhtml;
-			BDFDB.initElements(settingspanel, this);
-			this.SettingsUpdated = true;
-		};
-
-		if (action == "add") {
-			var wordinput = settingspanel.querySelector("#input-" + rtype + "-wordvalue");
-			var replaceinput = settingspanel.querySelector("#input-" + rtype + "-replacevalue");
-			if (wordinput.value && wordinput.value.trim().length > 0) {
-				this.saveWord(wordinput.value.trim(), replaceinput.value.trim(), rtype);
-				wordinput.value = null;
-				replaceinput.value = null;
-				update();
-			}
-		}
-		else if (action == "remove") {
-			var wordvalue = ele.getAttribute("word");
-			if (wordvalue) {
-				delete this.words[rtype][wordvalue];
-				update();
-			}
-		}
-		else if (action == "removeall") {
-			BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all added Words from your list?", _ => {
-				this.words[rtype] = {};
-				update();
-			});
-		}
-	}
-
-	saveWord (wordvalue, replacevalue, rtype, configs = BDFDB.DataUtils.get(this, "configs")) {
-		if (!wordvalue || !replacevalue) return;
-		wordvalue = wordvalue.trim();
-		replacevalue = replacevalue.trim();
-		this.words[rtype][wordvalue] = {
-			replace: replacevalue,
-			empty: configs.empty,
-			case: configs.case,
-			exact: wordvalue.indexOf(" ") > -1 ? false : configs.exact,
-			regex: false
-		};
-	}
-
-	saveReplace (input) {
-		var rtype = input.getAttribute("rtype");
-		var wordvalue = input.value;
-		if (rtype) {
-			var replaces = BDFDB.DataUtils.get(this, "replaces", rtype);
-			BDFDB.DataUtils.save(wordvalue.trim(), this, "replaces", rtype);
-		}
-	}
-
-	updateConfig (ele) {
-		var wordvalue = ele.getAttribute("word");
-		var config = ele.getAttribute("config");
-		var rtype = ele.getAttribute("rtype");
-		if (wordvalue && this.words[rtype][wordvalue] && config) {
-			this.words[rtype][wordvalue][config] = ele.checked;
-			BDFDB.DataUtils.save(this.words, this, "words");
-		}
-	}
-
-	toggleInfo (ele) {
-		BDFDB.DOMUtils.toggleClass(ele.querySelector("svg"), BDFDB.disCN.directionright);
-		BDFDB.DOMUtils.toggle(ele.nextElementSibling);
-		BDFDB.DataUtils.save(BDFDB.DOMUtils.isHidden(ele.nextElementSibling), this, "hideInfo", "hideInfo");
-	}
-
 	onSettingsClosed () {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
-			document.querySelectorAll(`${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored, ${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored`).forEach(message => {this.resetMessage(message);});
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 	}
 
 	onNativeContextMenu (e) {
 		if (e.instance.props.value && e.instance.props.value.trim()) {
-			if ((e.instance.props.type == "NATIVE_TEXT" || e.instance.props.type == "CHANNEL_TEXT_AREA") && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.appendItem(e, e.instance.props.value.trim());
+			if ((e.instance.props.type == "NATIVE_TEXT" || e.instance.props.type == "CHANNEL_TEXT_AREA") && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.injectItem(e, e.instance.props.value.trim());
 		}
+	}
+
+	onSlateContextMenu (e) {
+		let text = document.getSelection().toString().trim();
+		if (text && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.injectItem(e, text);
 	}
 
 	onMessageContextMenu (e) {
-		if (e.instance.props.message && e.instance.props.channel && e.instance.props.target) {
-			let text = document.getSelection().toString().trim();
-			if (text && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.appendItem(e, text);
-		}
+		let text = document.getSelection().toString().trim();
+		if (text && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.injectItem(e, text);
 	}
-
-	appendItem (e, text) {
+ 
+	injectItem (e, text) {
 		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 		children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-			children: [
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-					label: "Add to ChatFilter",
-					action: _ => {
-						BDFDB.ContextMenuUtils.close(e.instance);
-						this.openAddModal(text);
-					}
-				})
-			]
+			children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+				label: "Add to ChatFilter",
+				action: _ => {
+					BDFDB.ContextMenuUtils.close(e.instance);
+					this.openAddModal(text.replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t"));
+				}
+			})
 		}));
 	}
 
@@ -327,39 +269,29 @@ class ChatFilter {
 
 	hideMessage (message) {
 		if (message.tagName && !BDFDB.DOMUtils.containsClass(message, "blocked", "censored", false)) {
-			var orightml = message.innerHTML;
-			var newhtml = "";
+			let orightml = message.innerHTML, newhtml = "";
 
 			if (orightml) {
-				var blocked = null;
-
-				var strings = [];
-				var count = 0;
-				orightml.split("").forEach((chara) => { 
-					if (chara == "<") {
-						if (strings[count]) count++;
-					}
+				let strings = [], count = 0;
+				orightml.split("").forEach(chara => { 
+					if (chara == "<" && strings[count]) count++;
 					strings[count] = strings[count] ? strings[count] + chara : chara;
-					if (chara == ">") {
-						count++;
-					}
+					if (chara == ">") count++;
 				});
 
 				let settings = BDFDB.DataUtils.get(this, "settings");
-				var replaces = BDFDB.DataUtils.get(this, "replaces");
-				var blocked = false;
+				let replaces = BDFDB.DataUtils.get(this, "replaces");
+				let blocked = false;
 				for (let bWord in this.words.blocked) {
-					var blockedReplace = this.words.blocked[bWord].empty ? "" : (this.words.blocked[bWord].replace || replaces.blocked);
-					var reg = this.createReg(bWord, this.words.blocked[bWord]);
+					let blockedReplace = this.words.blocked[bWord].empty ? "" : (this.words.blocked[bWord].replace || replaces.blocked);
+					let reg = this.createReg(bWord, this.words.blocked[bWord]);
 					strings.forEach(string => {
 						if (this.testForEmoji(string, reg)) blocked = true;
 						else if (string.indexOf('<img src="http') == 0) {
-							var url = string.split('src="').length > 0 ? string.split('src="')[1] : null;
-							url = url ? url.split('"')[0] : null;
-							if (reg.test(url)) blocked = true;
+							if (reg.test(string.split('src="').length > 0 && (string.split('src="')[1] || "").split('"')[0])) blocked = true;
 						}
 						else if (string.indexOf("<") != 0) {
-							string.replace(/\n/g, " \n ").split(" ").forEach((word) => {
+							string.replace(/\n/g, " \n ").split(" ").forEach(word => {
 								let wordWithoutSpecial = word.replace(/[\?\¿\!\¡\.\"]/g, "");
 								if (word && reg.test(word) || wordWithoutSpecial && reg.test(wordWithoutSpecial)) blocked = true;
 							});
@@ -368,20 +300,19 @@ class ChatFilter {
 					if (blocked) break;
 				}
 				if (blocked) {
-					if (settings.hideMessage.blocked) BDFDB.DOMUtils.hide(message);
 					newhtml = BDFDB.StringUtils.htmlEscape(blockedReplace);
 					message.innerHTML = newhtml;
 					BDFDB.DOMUtils.addClass(message, "blocked");
 					message.ChatFilterOriginalHTML = orightml;
 					message.ChatFilterNewHTML = newhtml;
 
-					this.addClickListener(message, settings.showMessageOnClick.blocked);
+					this.addClickListener(message, settings.showMessageOnClick);
 				}
 				else {
-					var censored = false;
+					let censored = false;
 					for (let cWord in this.words.censored) {
-						var censoredReplace = this.words.censored[cWord].empty ? "" : (this.words.censored[cWord].replace || replaces.censored);
-						var reg = this.createReg(cWord, this.words.censored[cWord]);
+						let censoredReplace = this.words.censored[cWord].empty ? "" : (this.words.censored[cWord].replace || replaces.censored);
+						let reg = this.createReg(cWord, this.words.censored[cWord]);
 						strings.forEach((string,i) => {
 							if (this.testForEmoji(string, reg)) {
 								censored = true;
@@ -393,24 +324,20 @@ class ChatFilter {
 								}
 							}
 							else if (string.indexOf('<img src="http') == 0) {
-								var url = string.split('src="').length > 0 ? string.split('src="')[1] : null;
-								url = url ? url.split('"')[0] : null;
-								if (reg.test(url)) {
+								if (reg.test(string.split('src="').length > 0 && (string.split('src="')[1] || "").split('"')[0])) {
 									censored = true;
 									strings = [BDFDB.StringUtils.htmlEscape(censoredReplace)];
 								}
 							}
 							else if (string.indexOf("<") != 0) {
-								var newstring = [];
+								let newstring = [];
 								string.replace(/\n/g, " \n ").split(" ").forEach((word) => {
 									let wordWithoutSpecial = word.replace(/[\?\¿\!\¡\.\"]/g, "");
 									if (word && reg.test(word) || wordWithoutSpecial && reg.test(wordWithoutSpecial)) {
 										censored = true;
 										newstring.push(BDFDB.StringUtils.htmlEscape(censoredReplace));
 									}
-									else {
-										newstring.push(word);
-									}
+									else newstring.push(word);
 								});
 								strings[i] = newstring.join(" ").replace(/ \n /g, "\n");
 							}
@@ -423,7 +350,7 @@ class ChatFilter {
 						message.ChatFilterOriginalHTML = orightml;
 						message.ChatFilterNewHTML = newhtml;
 
-						this.addClickListener(message, settings.showMessageOnClick.censored);
+						this.addClickListener(message, settings.showMessageOnClick);
 					}
 				}
 			}
@@ -469,46 +396,78 @@ class ChatFilter {
 	}
 
 	openAddModal (wordvalue) {
-		let chatfilterAddModal = BDFDB.DOMUtils.create(this.chatfilterAddModalMarkup);
-		let wordvalueinput = chatfilterAddModal.querySelector("#input-wordvalue");
-		let replacevalueinput = chatfilterAddModal.querySelector("#input-replacevalue");
-		let addbutton = chatfilterAddModal.querySelector(".btn-add");
-
-		wordvalueinput.value = wordvalue || "";
-
-		BDFDB.appendModal(chatfilterAddModal);
-
-		wordvalueinput.addEventListener("input", _ => {
-			if (!wordvalueinput.value.trim()) {
-				addbutton.disabled = true;
-				BDFDB.DOMUtils.addClass(wordvalueinput, "invalid");
-				addbutton.style.setProperty("pointer-events", "none", "important");
-				BDFDB.TooltipUtils.create(wordvalueinput, "Choose a Wordvalue", {type: "right", color: "red", selector: "chatfilter-disabled-tooltip"});
-			}
-			else {
-				addbutton.disabled = false;
-				BDFDB.DOMUtils.removeClass(wordvalueinput, "invalid");
-				addbutton.style.removeProperty("pointer-events");
-				BDFDB.DOMUtils.remove(".chatfilter-disabled-tooltip");
-			}
+		let values = {wordvalue, replacevalue:"", choice:"blocked"};
+		BDFDB.ModalUtils.open(this, {
+			size: "MEDIUM",
+			header: "Add to ChatAliases",
+			subheader: "",
+			children: [
+				this.createInputs(values),
+				BDFDB.ArrayUtils.remove(Object.keys(this.defaults.configs), "file").map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+					type: "Switch",
+					className: BDFDB.disCN.marginbottom8 + " input-config" + key,
+					label: this.defaults.configs[key].description,
+					value: this.defaults.configs[key].value
+				}))
+			].flat(10).filter(n => n),
+			buttons: [{
+				key: "ADDBUTTON",
+				disabled: !values.wordvalue,
+				contents: BDFDB.LanguageUtils.LanguageStrings.ADD,
+				color: "BRAND",
+				close: true,
+				click: modal => {
+					let configs = {};
+					for (let key in this.defaults.configs) {
+						let configinput = modal.querySelector(`.input-config${key} ${BDFDB.dotCN.switchinner}`);
+						if (configinput) configs[key] = configinput.checked;
+					}
+					this.saveWord(values, configs);
+				}
+			}]
 		});
+	}
+	
+	createInputs (values) {
+		return [{title:"Block/Censor:", error:"Choose a Wordvalue", valuename:"wordvalue"}, {title:"With:", valuename:"replacevalue"}].map(inputdata => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+			title: inputdata.title,
+			className: BDFDB.disCN.marginbottom8 + " input-" + inputdata.valuename,
+			children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+				value: values[inputdata.valuename],
+				placeholder: values[inputdata.valuename],
+				autoFocus: inputdata.valuename == "replacevalue",
+				errorMessage: !values[inputdata.valuename] && inputdata.error,
+				onChange: (value, instance) => {
+					values[inputdata.valuename] = value.trim();
+					if (values[inputdata.valuename]) delete instance.props.errorMessage;
+					else instance.props.errorMessage = inputdata.error;
+					let addbuttonins = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:["BDFDB_Modal", "BDFDB_SettingsPanel"], up:true}), {key:"ADDBUTTON"});
+					if (addbuttonins) {
+						addbuttonins.props.disabled = !values.wordvalue;
+						BDFDB.ReactUtils.forceUpdate(addbuttonins);
+					}
+				}
+			})
+		})).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.RadioGroup, {
+			className: BDFDB.disCN.marginbottom8,
+			value: values.choice,
+			options: [{value:"blocked", name:"Block"}, {value:"censored", name:"Censor"}],
+			onChange: value => {values.choice = value.value;}
+		}));
+	}
 
-		BDFDB.ListenerUtils.addToChildren(chatfilterAddModal, "click", BDFDB.dotCNC.backdrop + BDFDB.dotCNC.modalclose + ".btn-add", _ => {
-			BDFDB.DOMUtils.remove(".chatfilter-disabled-tooltip");
-		});
-
-		addbutton.addEventListener("click", e => {
-			let configs = {};
-			for (let key in this.defaults.configs) {
-				let configinput = chatfilterAddModal.querySelector("#input-config" + key);
-				if (configinput) configs[key] = configinput.checked;
-			}
-			let rtype = chatfilterAddModal.querySelector("#input-choiceblockcensor").checked ? "censored" : "blocked";
-			this.saveWord(wordvalueinput.value.trim(), replacevalueinput.value.trim(), rtype, configs);
-			BDFDB.DataUtils.save(this.words, this, "words");
-			document.querySelectorAll(`${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored, ${BDFDB.dotCN.messagemarkup}.blocked, ${BDFDB.dotCN.messageaccessory}.censored`).forEach(message => {this.resetMessage(message);});
-			BDFDB.ModuleUtils.forceAllUpdates(this);
-		});
-		wordvalueinput.focus();
+	saveWord (values, configs = BDFDB.DataUtils.get(this, "configs")) {
+		if (!values.wordvalue || !values.choice) return;
+		values.wordvalue = values.wordvalue.trim();
+		values.replacevalue = values.replacevalue.trim();
+		if (!BDFDB.ObjectUtils.is(this.words[values.choice])) this.words[values.choice] = {};
+		this.words[values.choice][values.wordvalue] = {
+			replace: values.replacevalue,
+			empty: configs.empty,
+			case: configs.case,
+			exact: values.wordvalue.indexOf(" ") > -1 ? false : configs.exact,
+			regex: false
+		};
+		BDFDB.DataUtils.save(this.words, this, "words");
 	}
 }
