@@ -7604,6 +7604,10 @@
 		}
 	};
 	
+	LibraryComponents.RadioGroup = BDFDB.ModuleUtils.findByName("RadioGroup");
+	
+	LibraryComponents.RadioItem = BDFDB.ModuleUtils.findByName("RadioItem");
+	
 	LibraryComponents.ScrollerHorizontal = BDFDB.ModuleUtils.findByName("HorizontalScroller");
 	
 	LibraryComponents.ScrollerVertical = BDFDB.ModuleUtils.findByName("VerticalScroller");
