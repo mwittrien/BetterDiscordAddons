@@ -1059,6 +1059,7 @@
 		QuickSwitchGuildResult: "quickswitchresult",
 		QuickSwitchResult: "quickswitchresult",
 		MemberCard: "guildsettingsmembercard",
+		Messages: "messages",
 		MessagesPopout: "messagespopout",
 		MutualGuilds: "userprofilebody",
 		MutualFriends: "userprofilebody",
