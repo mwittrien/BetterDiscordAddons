@@ -4601,10 +4601,8 @@
 	DiscordClassModules.Friends = BDFDB.ModuleUtils.findByProperties("friendsColumn", "friendsRow");
 	DiscordClassModules.Game = BDFDB.ModuleUtils.findByProperties("game", "gameName");
 	DiscordClassModules.GameIcon = BDFDB.ModuleUtils.findByProperties("gameIcon", "small", "xsmall");
-	DiscordClassModules.GameLibrary = BDFDB.ModuleUtils.findByProperties("gameLibrary", "scroller");
 	DiscordClassModules.GameLibraryTable = BDFDB.ModuleUtils.findByProperties("stickyHeader", "emptyStateText");
 	DiscordClassModules.GifFavoriteButton = BDFDB.ModuleUtils.findByProperties("gifFavoriteButton", "showPulse");
-	DiscordClassModules.GiftInventory = BDFDB.ModuleUtils.findByProperties("root", "body", "scroller");
 	DiscordClassModules.GoLiveDetails = BDFDB.ModuleUtils.findByProperties("panel", "gameWrapper");
 	DiscordClassModules.Guild = BDFDB.ModuleUtils.findByProperties("wrapper", "lowerBadge", "svg");
 	DiscordClassModules.GuildChannels = BDFDB.ModuleUtils.findByProperties("positionedContainer", "unreadBar");
@@ -5230,7 +5228,6 @@
 		gameiconmedium: ["GameIcon", "medium"],
 		gameiconsmall: ["GameIcon", "small"],
 		gameiconxsmall: ["GameIcon", "xsmall"],
-		gamelibrary: ["GameLibrary", "gameLibrary"],
 		gamelibrarytable: ["GameLibraryTable", "table"],
 		gamelibrarytableheader: ["GameLibraryTable", "header"],
 		gamelibrarytableheadercell: ["GameLibraryTable", "headerCell"],
@@ -5246,7 +5243,6 @@
 		giffavoriteshowpulse: ["GifFavoriteButton", "showPulse"],
 		giffavoritesize: ["GifFavoriteButton", "size"],
 		giffavoriteselected: ["GifFavoriteButton", "selected"],
-		giftinventory: ["GiftInventory", "root"],
 		goliveactions: ["GoLiveDetails", "actions"],
 		golivebody: ["GoLiveDetails", "body"],
 		goliveclickablegamewrapper: ["GoLiveDetails", "clickableGameWrapper"],
@@ -6601,6 +6597,7 @@
 	NativeSubComponents.KeybindRecorder = BDFDB.ModuleUtils.findByName("KeybindRecorder");
 	NativeSubComponents.PopoutContainer = BDFDB.ModuleUtils.findByName("Popout");
 	NativeSubComponents.QuickSelect = BDFDB.ModuleUtils.findByName("QuickSelectWrapper");
+	NativeSubComponents.RadioGroup = BDFDB.ModuleUtils.findByName("RadioGroup");
 	NativeSubComponents.SearchBar = BDFDB.ModuleUtils.find(m => m && m.displayName == "SearchBar" && m.defaultProps.placeholder == BDFDB.LanguageUtils.LanguageStrings.SEARCH);
 	NativeSubComponents.Select = BDFDB.ModuleUtils.findByName("SelectTempWrapper");
 	NativeSubComponents.Slider = BDFDB.ModuleUtils.findByName("Slider");
@@ -7604,9 +7601,18 @@
 		}
 	};
 	
-	LibraryComponents.RadioGroup = BDFDB.ModuleUtils.findByName("RadioGroup");
-	
-	LibraryComponents.RadioItem = BDFDB.ModuleUtils.findByName("RadioItem");
+	LibraryComponents.RadioGroup = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.RadioGroup") || reactInitialized && class BDFDB_RadioGroup extends LibraryModules.React.Component {
+		handleChange(value) {
+			this.props.value = value.value;
+			if (typeof this.props.onChange == "function") this.props.onChange(value, this);
+			BDFDB.ReactUtils.forceUpdate(this);
+		}
+		render() {
+			return BDFDB.ReactUtils.createElement(NativeSubComponents.RadioGroup, Object.assign({}, this.props, {
+				onChange: this.handleChange.bind(this)
+			}));
+		}
+	};
 	
 	LibraryComponents.ScrollerHorizontal = BDFDB.ModuleUtils.findByName("HorizontalScroller");
 	
