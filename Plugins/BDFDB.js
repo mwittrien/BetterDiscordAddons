@@ -4486,6 +4486,9 @@
 		iconSwatchPreview: "preview-Bbg_24",
 		iconSwatchSelected: "selected-P5oePO"
 	};
+	DiscordClassModules.ShowImageDetails = {
+		details: "details-1t6Zms"
+	};
 	DiscordClassModules.SpellCheck	= {
 		error: "error-k9z2IV",
 		overlay: "spellCheckOverlay-cNSap5"
@@ -4753,6 +4756,7 @@
 		_readallnotificationsbuttonbutton: ["ReadAllNotificationsButton", "button"],
 		_readallnotificationsbuttonframe: ["ReadAllNotificationsButton", "frame"],
 		_readallnotificationsbuttoninner: ["ReadAllNotificationsButton", "innerFrame"],
+		_showimagedetailsdetails: ["ShowImageDetails", "details"],
 		_spellcheckerror: ["SpellCheck", "error"],
 		_spellcheckoverlay: ["SpellCheck", "overlay"],
 		_serverfoldersdragpreview: ["ServerFolders", "dragPreview"],

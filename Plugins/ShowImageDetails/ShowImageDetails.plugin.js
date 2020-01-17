@@ -3,7 +3,7 @@
 class ShowImageDetails {
 	getName () {return "ShowImageDetails";}
 
-	getVersion () {return "1.1.7";}
+	getVersion () {return "1.1.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -23,17 +23,15 @@ class ShowImageDetails {
 
 	initConstructor () {
 		this.css = `
-			 .image-details .image-details-size {
-				 margin: 0 10px;
-			 }
-			 .image-details-tooltip {
-				 max-width: 500px;
-			 }
-			 .image-details-tooltip .image-details-tooltip-size {
-				 margin: 10px 0;
-			 }
+			${BDFDB.dotCN._showimagedetailsdetails} {
+				margin-bottom: 10px;
+			}
+			${BDFDB.dotCNS.spoilerhidden + BDFDB.dotCN._showimagedetailsdetails} {
+				visibility: hidden;
+				max-width: 1px;
+			}
 		`;
-
+		
 		this.defaults = {
 			settings: {
 				showOnHover:	{value:false, 	description:"Show the details as Tooltip instead:"}
@@ -154,7 +152,7 @@ class ShowImageDetails {
 				});
 				else return [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-						className: "image-details",
+						className: BDFDB.disCN._showimagedetailsdetails,
 						children: [
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
