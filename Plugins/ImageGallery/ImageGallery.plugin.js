@@ -3,7 +3,7 @@
 class ImageGallery {
 	getName () {return "ImageGallery";}
 
-	getVersion () {return "1.6.1";}
+	getVersion () {return "1.6.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ImageGallery {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Positioning & Overlapping","Preview images of previous and next image no longer overlap current image, this was caused by other plugins"]],
+			"fixed":[["Spoiler Images","No longer included unrevealed as spoiler marked images in the gallery preview"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
@@ -90,8 +90,8 @@ class ImageGallery {
 		let message = this.getMessageGroupOfImage(e.instance.props.src);
 		if (message) {
 			if (e.returnvalue) {
-				let images = message.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img");
-				var next, previous;
+				let images = Array.from(message.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img")).filter(img => !BDFDB.DOMUtils.getParent(BDFDB.dotCN.spoilerhidden, img));
+				let next, previous;
 				for (let i = 0; i < images.length; i++) if (this.getSrcOfImage(e.instance.props.src) == this.getSrcOfImage(images[i])) {
 					next = 	this.getSrcOfImage(images[i+1]);
 					previous = 	this.getSrcOfImage(images[i-1]);
@@ -141,11 +141,11 @@ class ImageGallery {
 		let imagethrowaway = document.createElement("img");
 		imagethrowaway.src = src;
 		imagethrowaway.onload = _ => {
-			var arects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
-			var resizeY = (arects.height/imagethrowaway.naturalHeight) * 0.65, resizeX = (arects.width/imagethrowaway.naturalWidth) * 0.8;
-			var resize = resizeX < resizeY ? resizeX : resizeY;
-			var newHeight = imagethrowaway.naturalHeight * resize;
-			var newWidth = imagethrowaway.naturalWidth * resize;
+			let arects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
+			let resizeY = (arects.height/imagethrowaway.naturalHeight) * 0.65, resizeX = (arects.width/imagethrowaway.naturalWidth) * 0.8;
+			let resize = resizeX < resizeY ? resizeX : resizeY;
+			let newHeight = imagethrowaway.naturalHeight * resize;
+			let newWidth = imagethrowaway.naturalWidth * resize;
 			instance[type + "Ref"] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.LazyImage, {
 				className: BDFDB.disCN[`_imagegallery${type}`],
 				src: src,
