@@ -261,6 +261,18 @@
 		}
 		if (changeLogHTML) BDFDB.ModalUtils.open(plugin, {header:`${plugin.name} ${BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG}`, subheader:`Version ${plugin.version}`, children:BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(changeLogHTML)), className:BDFDB.disCN.modalchangelogmodal, contentClassName:BDFDB.disCNS.changelogcontainer + BDFDB.disCN.modalminicontent});
 	};
+	BDFDB.PluginUtils.addLoadingIcon = function (icon) {
+		if (!Node.prototype.isPrototypeOf(icon)) return;
+		BDFDB.DOMUtils.addClass(icon, BDFDB.disCN.loadingicon);
+		let loadingiconwrapper = document.querySelector(BDFDB.dotCN.app + ">" + BDFDB.dotCN.loadingiconwrapper);
+		if (!loadingiconwrapper) {
+			loadingiconwrapper = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.loadingiconwrapper}"></div>`);
+			document.querySelector(BDFDB.dotCN.app).appendChild(loadingiconwrapper);
+			let killObserver = new MutationObserver(changes => {if (!loadingiconwrapper.firstElementChild) BDFDB.DOMUtils.remove(loadingiconwrapper);});
+			killObserver.observe(loadingiconwrapper, {childList:true});
+		}
+		loadingiconwrapper.appendChild(icon);
+	};
 	BDFDB.PluginUtils.createSettingsPanel = function (plugin, children) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !children || (!BDFDB.ReactUtils.isValidElement(children) && !BDFDB.ArrayUtils.is(children)) || (BDFDB.ArrayUtils.is(children) && !children.length)) return;
 		var settingspanel = BDFDB.DOMUtils.create(`<div class="${plugin.name}-settings ${BDFDB.disCN.settingspanel}"></div>`);
@@ -296,12 +308,12 @@
 	InternalBDFDB.addOnSwitchListener = function (plugin) {
 		if (BDFDB.ObjectUtils.is(plugin) && typeof plugin.onSwitch === "function") {
 			InternalBDFDB.removeOnSwitchListener(plugin);
-			var spacer = document.querySelector(`${BDFDB.dotCN.guildswrapper} ~ * > ${BDFDB.dotCN.chatspacer}`);
+			let spacer = document.querySelector(`${BDFDB.dotCN.guildswrapper} ~ * > ${BDFDB.dotCN.chatspacer}`);
 			if (spacer) {
-				var nochannelobserver = new MutationObserver(changes => {changes.forEach(change => {
+				let nochannelobserver = new MutationObserver(changes => {changes.forEach(change => {
 					if (change.target && BDFDB.DOMUtils.containsClass(change.target, BDFDB.disCN.nochannel)) plugin.onSwitch();
 				});});
-				var nochannel = spacer.querySelector(BDFDB.dotCNC.chat + BDFDB.dotCN.nochannel);
+				let nochannel = spacer.querySelector(BDFDB.dotCNC.chat + BDFDB.dotCN.nochannel);
 				if (nochannel) nochannelobserver.observe(nochannel, {attributes:true});
 				plugin.onSwitchFix = new MutationObserver(changes => {changes.forEach(change => {if (change.addedNodes) {change.addedNodes.forEach(node => {
 					if (BDFDB.DOMUtils.containsClass(node, BDFDB.disCN.chat, BDFDB.disCN.nochannel, false)) nochannelobserver.observe(node, {attributes:true});
@@ -462,26 +474,26 @@
 	var NotificationBars = [], DesktopNotificationQueue = {queue:[], running:false};
 	BDFDB.NotificationUtils = {};
 	BDFDB.NotificationUtils.toast = function (text, options = {}) {
-		var toasts = document.querySelector(".toasts, .bd-toasts");
+		let toasts = document.querySelector(".toasts, .bd-toasts");
 		if (!toasts) {
-			var channels = document.querySelector(BDFDB.dotCN.channels + " + div");
-			var channelrects = channels ? BDFDB.DOMUtils.getRects(channels) : null;
-			var members = channels ? channels.querySelector(BDFDB.dotCN.memberswrap) : null;
-			var left = channelrects ? channelrects.left : 310;
-			var width = channelrects ? (members ? channelrects.width - BDFDB.DOMUtils.getRects(members).width : channelrects.width) : window.outerWidth - 0;
-			var form = channels ? channels.querySelector("form") : null;
-			var bottom = form ? BDFDB.DOMUtils.getRects(form).height : 80;
+			let channels = document.querySelector(BDFDB.dotCN.channels + " + div");
+			let channelrects = channels ? BDFDB.DOMUtils.getRects(channels) : null;
+			let members = channels ? channels.querySelector(BDFDB.dotCN.memberswrap) : null;
+			let left = channelrects ? channelrects.left : 310;
+			let width = channelrects ? (members ? channelrects.width - BDFDB.DOMUtils.getRects(members).width : channelrects.width) : window.outerWidth - 0;
+			let form = channels ? channels.querySelector("form") : null;
+			let bottom = form ? BDFDB.DOMUtils.getRects(form).height : 80;
 			toasts = BDFDB.DOMUtils.create(`<div class="toasts bd-toasts" style="width:${width}px; left:${left}px; bottom:${bottom}px;"></div>`);
 			(document.querySelector(BDFDB.dotCN.app) || document.body).appendChild(toasts);
 		}
 		const {type = "", icon = true, timeout = 3000, html = false, selector = "", nopointer = false, color = ""} = options;
-		var toast = BDFDB.DOMUtils.create(`<div class="toast bd-toast">${html === true ? text : BDFDB.StringUtils.htmlEscape(text)}</div>`);
+		let toast = BDFDB.DOMUtils.create(`<div class="toast bd-toast">${html === true ? text : BDFDB.StringUtils.htmlEscape(text)}</div>`);
 		if (type) {
 			BDFDB.DOMUtils.addClass(toast, "toast-" + type);
 			if (icon) BDFDB.DOMUtils.addClass(toast, "icon");
 		}
 		else if (color) {
-			var rgbcolor = BDFDB.ColorUtils.convert(color, "RGB");
+			let rgbcolor = BDFDB.ColorUtils.convert(color, "RGB");
 			if (rgbcolor) toast.style.setProperty("background-color", rgbcolor);
 		}
 		BDFDB.DOMUtils.addClass(toast, selector);
