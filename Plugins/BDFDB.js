@@ -8251,6 +8251,22 @@
 			margin: 0 4px 0 3px;
 		}
 		
+		${BDFDB.dotCN.loadingiconwrapper} {
+			position: absolute;
+			bottom: 0;
+			right: 0;
+			z-index: 1000;
+			animation: loadingwrapper-fade 3s infinite ease;
+		}
+		${BDFDB.dotCNS.loadingiconwrapper + BDFDB.dotCN.loadingicon} {
+			margin: 0 5px;
+		}
+		@keyframes loadingwrapper-fade {
+			from {opacity: 0.1;}
+			50% {opacity: 0.9;}
+			to {opacity: 0.1;}
+		}
+		
 		${BDFDB.dotCN.settingspanelinner} {
 			padding-left: 15px;
 			padding-right: 5px;
