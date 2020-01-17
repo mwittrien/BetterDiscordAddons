@@ -6739,7 +6739,7 @@
 					typeof this.props.children == "string" ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
 						className: BDFDB.disCN.hovercardinner,
 						color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
-						children: this.props.children
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {children: this.props.children})
 					}) : this.props.children
 				].flat(10).filter(n => n)
 			}), "backdrop", "noRemove"));
@@ -7707,6 +7707,7 @@
 	LibraryComponents.SettingsPanelInner = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.SettingsPanelInner") || reactInitialized && class BDFDB_SettingsPanelInner extends LibraryModules.React.Component {
 		render() {
 			return this.props.children ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+				className: this.props.className,
 				direction: LibraryComponents.Flex.Direction.VERTICAL,
 				children: [
 					!this.props.first ? BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormDivider, {
@@ -8353,15 +8354,25 @@
 			color: ${BDFDB.DiscordConstants.Colors.STATUS_RED};
 		}
 		
+		
+		${BDFDB.dotCNC.hovercardwrapper + BDFDB.dotCN.hovercardinner} {
+			min-height: 28px;
+		}
+		${BDFDB.dotCN.hovercardinner} {
+			width: 100%;
+			padding-right: 5px;
+			display: flex;
+			align-items: center;
+			z-index: 1;
+		}
 		${BDFDB.dotCNS.hovercardwrapper + BDFDB.dotCN.hovercardbutton} {
 			position: absolute;
 			top: -6px;
 			right: -6px;
 			opacity: 0;
 		}
-		${BDFDB.dotCNS.hovercardwrapper + BDFDB.dotCN.hovercard + BDFDB.dotCN.hovercardbutton} {
-			right: -31px;
-			top: -12px;
+		${BDFDB.dotCN.hovercardwrapper + BDFDB.dotCNS.hovercard + BDFDB.dotCN.hovercardbutton} {
+			right: -25px;
 		}
 		${BDFDB.dotCN.hovercardwrapper}:hover ${BDFDB.dotCN.hovercardbutton} {
 			opacity: 1;
@@ -8530,15 +8541,6 @@
 		${BDFDB.dotCN.colorpickerswatchsingle} {
 			height: 30px;
 			width: 30px;
-		}
-		
-		${BDFDB.dotCNC.hovercardwrapper + BDFDB.dotCN.hovercardinner} {
-			min-height: 28px;
-		}
-		${BDFDB.dotCN.hovercardinner} {
-			display: flex;
-			align-items: center;
-			z-index: 1;
 		}
 		
 		${BDFDB.dotCN.guildupperleftbadge} {
