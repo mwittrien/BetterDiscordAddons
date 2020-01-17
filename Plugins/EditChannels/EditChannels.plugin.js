@@ -69,7 +69,7 @@ class EditChannels {
 	}
 
 	getSettingsPanel () {
-		if (!global.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+		if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let settings = BDFDB.DataUtils.get(this, "settings");
 		let settingspanel, settingsitems = [], inneritems = [];
 		
@@ -107,8 +107,8 @@ class EditChannels {
 	load () {}
 
 	start () {
-		if (!global.BDFDB) global.BDFDB = {myPlugins:{}};
-		if (global.BDFDB && global.BDFDB.myPlugins && typeof global.BDFDB.myPlugins == "object") global.BDFDB.myPlugins[this.getName()] = this;
+		if (!window.BDFDB) window.BDFDB = {myPlugins:{}};
+		if (window.BDFDB && window.BDFDB.myPlugins && typeof window.BDFDB.myPlugins == "object") window.BDFDB.myPlugins[this.getName()] = this;
 		var libraryScript = document.querySelector('head script#BDFDBLibraryScript');
 		if (!libraryScript || (performance.now() - libraryScript.getAttribute("date")) > 600000) {
 			if (libraryScript) libraryScript.remove();
@@ -120,7 +120,7 @@ class EditChannels {
 			libraryScript.addEventListener("load", _ => {this.initialize();});
 			document.head.appendChild(libraryScript);
 		}
-		else if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
+		else if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
 		this.startTimeout = setTimeout(_ => {
 			try {return this.initialize();}
 			catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
@@ -128,7 +128,7 @@ class EditChannels {
 	}
 
 	initialize () {
-		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+		if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
 
@@ -141,7 +141,7 @@ class EditChannels {
 	}
 
 	stop () {
-		if (global.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+		if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			this.stopping = true;
 
 			let data = BDFDB.DataUtils.load(this, "channels");
