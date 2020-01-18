@@ -3,7 +3,7 @@
 class RepoControls {
 	getName () {return "RepoControls";}
 
-	getVersion () {return "1.3.3";}
+	getVersion () {return "1.3.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -232,7 +232,7 @@ class RepoControls {
 					});
 					entry.props.RCdata.type = "plugin";
 					entry.props.RCdata.enabled = BDFDB.BDUtils.isPluginEnabled(entry.key) ? 1 : 2;
-					entry.props.RCdata.path = window.bdplugins && window.bdplugins[entry.key] && BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), window.bdplugins[entry.key].filename);
+					entry.props.RCdata.path = window.bdplugins && window.bdplugins[entry.key] && typeof window.bdplugins[entry.key].filename == "string" && BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), window.bdplugins[entry.key].filename);
 				}
 				else if (entry.props.theme) {
 					["name", "author", "version", "description"].forEach(key => {
@@ -241,7 +241,7 @@ class RepoControls {
 					});
 					entry.props.RCdata.type = "theme";
 					entry.props.RCdata.enabled = BDFDB.BDUtils.isThemeEnabled(entry.key) ? 1 : 2;
-					entry.props.RCdata.path = window.bdthemes && window.bdthemes[entry.key] && BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getThemesFolder(), window.bdthemes[entry.key].filename);
+					entry.props.RCdata.path = window.bdthemes && window.bdthemes[entry.key] && typeof window.bdthemes[entry.key].filename == "string" && BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getThemesFolder(), window.bdthemes[entry.key].filename);
 				}
 				let stats = entry.props.RCdata.path && BDFDB.LibraryRequires.fs.statSync(entry.props.RCdata.path);
 				entry.props.RCdata.adddate = stats && stats.atime.getTime();
