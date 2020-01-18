@@ -5,13 +5,13 @@ class PersonalPins {
 
 	getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-	getVersion () {return "1.8.6";} 
+	getVersion () {return "1.8.7";} 
 
 	getAuthor () {return "DevilBro";}
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Embed Crash","Fixed issue where opening the pins could crash Discord because of old embed data"]],
+			"fixed":[["Crash","Fixed a crash that could occur when trying to load a group DM pin"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
@@ -355,7 +355,7 @@ class PersonalPins {
 		if (filter != "channel" && !channelname && channel.recipients.length > 0) {
 			for (let dmuser_id of channel.recipients) {
 				channelname = channelname ? channelname + ", @" : channelname;
-				channelname = channelname + BDFDB.LibraryModules.UserStore.getUser(dmuser_id).username;
+				channelname = channelname + (BDFDB.LibraryModules.UserStore.getUser(dmuser_id) || {}).username || BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER;
 			}
 		}
 		let separator = filter == "channel" ? null : BDFDB.ReactUtils.createElement("div", {
