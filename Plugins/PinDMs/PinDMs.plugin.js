@@ -3,7 +3,7 @@
 class PinDMs {
 	getName () {return "PinDMs";}
 
-	getVersion () {return "1.5.8";}
+	getVersion () {return "1.5.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -12,6 +12,7 @@ class PinDMs {
 	constructor () {
 		this.changelog = {
 			"added":[["Colors","You can now set a font color for each category"],["Unread Count","Similar to Folders, DM Categories now display the total amound of unread messages as a red badge, can be disabled in the settings"],["Sorting Categories","You can now drag categories to sort them the same way as pinned DMs"]],
+			"fixed":[["DM Count","Closed DMs no longer get counted towards the Count Amount"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
@@ -169,7 +170,6 @@ class PinDMs {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
 			
-			
 			// REMOVE 05.01.2020
 			let oldData = this.sortAndUpdate("pinnedDMs");
 			if (oldData.length) {
@@ -242,7 +242,8 @@ class PinDMs {
 		
 		children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
 			label: this.labels.context_pindm_text,
-			render: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
+			render: [
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
 					label: this.labels.context_pinchannel_text,
 					render: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
@@ -336,7 +337,8 @@ class PinDMs {
 					let settings = BDFDB.DataUtils.get(this, "settings");
 					for (let category of categories) if (this.draggedCategory != category.id) {
 						let color = BDFDB.ColorUtils.convert(category.color, "RGBA");
-						let unreadAmount = settings.showCategoryUnread && BDFDB.ArrayUtils.sum(category.dms.map(id => BDFDB.LibraryModules.UnreadChannelUtils.getMentionCount(id)));
+						let foundDMs = this.filterDMs(category.dms);
+						let unreadAmount = settings.showCategoryUnread && BDFDB.ArrayUtils.sum(foundDMs.map(id => BDFDB.LibraryModules.UnreadChannelUtils.getMentionCount(id)));
 						children.splice(index++, 0, BDFDB.ReactUtils.createElement("header", {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.dmchannelheader, BDFDB.disCN._pindmspinnedchannelsheadercontainer, category.collapsed && BDFDB.disCN._pindmspinnedchannelsheadercollapsed, color && BDFDB.disCN._pindmspinnedchannelsheadercolored, BDFDB.disCN.namecontainernamecontainer),
 							categoryId: category.id,
@@ -381,7 +383,7 @@ class PinDMs {
 								document.addEventListener("mouseup", mouseup);
 							},
 							onClick: _ => {
-								if (category.dms.length || !category.collapsed) {
+								if (foundDMs.length || !category.collapsed) {
 									category.collapsed = !category.collapsed;
 									BDFDB.DataUtils.save(category, this, "dmCategories", category.id);
 									BDFDB.ReactUtils.forceUpdate(e.instance);
@@ -428,7 +430,7 @@ class PinDMs {
 								}) : null,
 								settings.showCategoryAmount ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.NumberBadge, {
 									className: BDFDB.disCN._pindmspinnedchannelsheaderamount,
-									count: category.dms.length,
+									count: foundDMs.length,
 									style: {backgroundColor: BDFDB.DiscordConstants.Colors.BRAND}
 								}) : null,
 								BDFDB.ReactUtils.createElement("div", {
@@ -444,7 +446,7 @@ class PinDMs {
 						if (this.hoveredChannel == "header_" + category.id) children.splice(index++, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListItem, {
 							className: BDFDB.disCNS.dmchannel + BDFDB.disCNS._pindmsdmchannelpinned + BDFDB.disCN._pindmsdmchannelplaceholder
 						}));
-						for (let id of this.sortDMsByTime(category.dms, "dmCategories")) {
+						for (let id of this.sortDMsByTime(foundDMs, "dmCategories")) {
 							if (e.instance.props.pinnedChannels[id] && this.draggedChannel != id && (!category.collapsed || e.instance.props.selectedChannelId == id)) {
 								children.splice(index++, 0, e.instance.props.renderChannel(e.instance.props.pinnedChannels[id], e.instance.props.selectedChannelId == id));
 								if (this.hoveredChannel == id) children.splice(index++, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListItem, {
@@ -662,10 +664,14 @@ class PinDMs {
 		let id = Math.round(Math.random() * 10000000000000000);
 		return categories[id] ? this.generateID() : id;
 	}
+	
+	filterDMs (dms) {
+		return dms.filter(id => BDFDB.LibraryModules.ChannelStore.getChannel(id));
+	}
 
 	addToCategory (id, category, type) {
 		if (!id || !category || !type) return;
-		let wasEmpty = !category.dms.length;
+		let wasEmpty = !this.filterDMs(category.dms).length;
 		if (!category.dms.includes(id)) category.dms.unshift(id);
 		if (wasEmpty && category.dms.length) category.collapsed = false;
 		BDFDB.DataUtils.save(category, this, type, category.id);
@@ -675,7 +681,7 @@ class PinDMs {
 	removeFromCategory (id, category, type) {
 		if (!id || !category || !type) return;
 		BDFDB.ArrayUtils.remove(category.dms, id, true);
-		if (!category.dms.length) category.collapsed = true;
+		if (!this.filterDMs(category.dms).length) category.collapsed = true;
 		BDFDB.DataUtils.save(category, this, type, category.id);
 		this.updateContainer(type);
 	}
