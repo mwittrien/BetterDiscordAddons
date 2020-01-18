@@ -7170,14 +7170,14 @@
 	
 	LibraryComponents.FileButton = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.FileButton") || reactInitialized && class BDFDB_FileButton extends LibraryModules.React.Component {
 		render() {
-			let filter = this.props.filter && [this.props.filter].flat(10).filter(n => typeof n == "string");
+			let filter = this.props.filter && [this.props.filter].flat(10).filter(n => typeof n == "string") || [];
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Button, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				onClick: e => {e.currentTarget.querySelector("input").click();},
 				children: [
 					BDFDB.LanguageUtils.LibraryStrings.file_navigator_text,
 					BDFDB.ReactUtils.createElement("input", {
 						type: "file",
-						accept: filter.length && filter.join("/*,") + "/*",
+						accept: filter.length && (filter.join("/*,") + "/*"),
 						style: {display: "none"},
 						onChange: e => {
 							let file = e.currentTarget.files[0];
@@ -7189,7 +7189,7 @@
 						}
 					})
 				]
-			}), "filter"));
+			}), "filter", "mode", "useFilepath"));
 		}
 	};
 	
