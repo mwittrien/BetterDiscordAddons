@@ -3,7 +3,7 @@
 class ChatAliases {
 	getName () {return "ChatAliases";}
 
-	getVersion () {return "2.0.6";}
+	getVersion () {return "2.0.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -339,7 +339,7 @@ class ChatAliases {
 			},
 			getRawText: (eventOrIndex, autocompletes) => {
 				let aliasdata = eventOrIndex._targetInst ? eventOrIndex._targetInst.memoizedProps.alias : typeof eventOrIndex == "number" && autocompletes.aliases[eventOrIndex];
-				return aliasdata.file ? aliasdata.word : aliasdata.replace;
+				return aliasdata.file ? aliasdata.word : BDFDB.StringUtils.insertNRST(aliasdata.replace);
 			}
 		};
 		if (e.instance.state.autocompleteType == "COMMAND" && BDFDB.ArrayUtils.is(e.instance.state.autocompletes.commands)) {
@@ -350,7 +350,7 @@ class ChatAliases {
 			if (currentLastWord.length >= minLength) for (let word in commandAliases) {
 				if (e.instance.state.autocompletes.commands.length >= BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS) break;
 				let aliasdata = commandAliases[word];
-				let command = {command: word.slice(1), description: aliasdata.replace, alias:true};
+				let command = {command: word.slice(1), description: BDFDB.StringUtils.insertNRST(aliasdata.replace), alias:true};
 				if (!aliasdata.regex && aliasdata.autoc) {
 					if (aliasdata.exact) {
 						if (aliasdata.case && word.indexOf(currentLastWord) == 0) e.instance.state.autocompletes.commands.push(command);
@@ -394,7 +394,7 @@ class ChatAliases {
 					BDFDB.ReactUtils.forceUpdate(e.instance);
 				}
 			}
-			if (messageData.files.length > 0 && (e.instance.props.channel.type == 1 || BDFDB.UserUtils.can("ATTACH_FILES"))) {
+			if (messageData.files.length > 0 && (BDFDB.DMUtils.isDMChannel(e.instance.props.channel.id) || BDFDB.UserUtils.can("ATTACH_FILES"))) {
 				BDFDB.LibraryModules.UploadUtils.instantBatchUpload(e.instance.props.channel.id, messageData.files);
 			}
 		}
