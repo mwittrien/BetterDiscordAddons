@@ -355,7 +355,7 @@ class PersonalPins {
 		if (filter != "channel" && !channelname && channel.recipients.length > 0) {
 			for (let dmuser_id of channel.recipients) {
 				channelname = channelname ? channelname + ", @" : channelname;
-				channelname = channelname + (BDFDB.LibraryModules.UserStore.getUser(dmuser_id) || {}).username || BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER;
+				channelname = channelname + ((BDFDB.LibraryModules.UserStore.getUser(dmuser_id) || {}).username || BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER);
 			}
 		}
 		let separator = filter == "channel" ? null : BDFDB.ReactUtils.createElement("div", {
