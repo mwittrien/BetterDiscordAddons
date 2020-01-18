@@ -3,7 +3,7 @@
 class NotificationSounds {
 	getName () {return "NotificationSounds";}
 
-	getVersion () {return "3.3.7";}
+	getVersion () {return "3.3.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -12,12 +12,13 @@ class NotificationSounds {
 	constructor () {
 		this.changelog = {
 			"added":[["@here & @everyone","You can now set a unique sound for those two special mention cases"]],
+			"fixed":[["Incoming","Incoming call now works again"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
 		this.patchedModules = {
 			after: {
-				IncomingCalls: "render",
+				Shakeable: "render"
 			}
 		};
 	}
@@ -343,7 +344,7 @@ class NotificationSounds {
 		if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
-
+			
 			BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dirtyDispatch", {before: e => {
 				if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.MESSAGE_CREATE && e.methodArguments[0].message) {
 					let message = e.methodArguments[0].message;
@@ -409,6 +410,7 @@ class NotificationSounds {
 			this.loadAudios();
 			this.loadChoices();
 
+			this.repatchIncoming = true;
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
@@ -430,24 +432,24 @@ class NotificationSounds {
 	onSettingsClosed () {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
+			this.repatchIncoming = true;
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 			this.settingsaudio.pause();
 		}
 	}
-
-	processIncomingCalls (e) {
-		let audio = new Audio();
-		let play = _ => {
-			if (!audio.paused || this.dontPlayAudio("call_ringing")) return;
-			audio.loop = true;
-			audio.src = this.choices["call_ringing"].src;
-			audio.volume = this.choices["call_ringing"].volume/100;
-			audio.play();
-		};
-		let stop = _ => {audio.pause();}
-		BDFDB.ModuleUtils.patch(this, e.instance, "startRinging", {instead: play});
-		BDFDB.ModuleUtils.patch(this, e.instance, "stopRinging", {instead: stop});
-		BDFDB.ModuleUtils.patch(this, e.instance._reactInternalFiber.type.prototype, "startRinging", {instead: play});
-		BDFDB.ModuleUtils.patch(this, e.instance._reactInternalFiber.type.prototype, "stopRinging", {instead: stop});
+	
+	processShakeable (e) {
+		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "IncomingCalls"});
+		if (index > -1) {
+			if (this.repatchIncoming) {
+				children[index] = null;
+				BDFDB.TimeUtils.timeout(_ => {
+					delete this.repatchIncoming;
+					BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"App", up:true}))
+				});
+			}
+			else children[index] = BDFDB.ReactUtils.createElement(children[index].type, {});
+		}
 	}
 
 	successSavedAudio (settingspanel, collapseStates, data) {
@@ -471,8 +473,14 @@ class NotificationSounds {
 				songFound = true;
 				break;
 			}
-			if (!songFound) choice = {category:"---",song:"---",volume:100,src:this.types[type].src,mute:this.types[type].mute,focus:this.types[type].focus};
-			if (typeof choice.focus == "undefined") choice.focus = this.types[type].focus;
+			if (!songFound) choice = {
+				category: "---",
+				song: "---",
+				volume: 100,
+				src: this.types[type].src,
+				mute: this.types[type].mute,
+				focus: this.types[type].focus
+			};
 			this.choices[type] = choice;
 			this.saveChoice(type, false);
 		}

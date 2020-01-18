@@ -58,11 +58,11 @@
 		
 		InternalBDFDB.clearStartTimeout(plugin);
 
-		var loadmessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
+		let loadmessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
 		BDFDB.LogUtils.log(loadmessage, plugin.name);
 		if (!BDFDB.BDUtils.getSettings("fork-ps-2")) BDFDB.NotificationUtils.toast(plugin.name + " " + loadmessage, {nopointer: true, selector: "plugin-started-toast"});
 
-		var url = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
+		let url = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 		BDFDB.PluginUtils.checkUpdate(plugin.name, url);
 
 		if (BDFDB.ObjectUtils.is(plugin.classes)) InternalBDFDB.addPluginClasses(plugin);
@@ -92,11 +92,11 @@
 
 		delete BDFDB.myPlugins[plugin.name];
 
-		var unloadmessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", "v" + plugin.version);
+		let unloadmessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", "v" + plugin.version);
 		BDFDB.LogUtils.log(unloadmessage, plugin.name);
 		if (!BDFDB.BDUtils.getSettings("fork-ps-2")) BDFDB.NotificationUtils.toast(plugin.name + " " + unloadmessage, {nopointer: true, selector: "plugin-stopped-toast"});
 
-		var url = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
+		let url = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 
 		if (BDFDB.ObjectUtils.is(plugin.classes)) InternalBDFDB.removePluginClasses(plugin);
 		if (typeof plugin.css === "string") BDFDB.DOMUtils.removeLocalStyle(plugin.name);
@@ -112,7 +112,8 @@
 			let closebutton = modal.querySelector(BDFDB.dotCN.modalclose);
 			if (closebutton) closebutton.click();
 		}
-
+		
+		delete BDFDB.DataUtils.cached[plugin.name]
 		delete window.PluginUpdates.plugins[url];
 
 		delete plugin.started;
@@ -1702,7 +1703,7 @@
 		if (!nodeOrInstance || !types) return config.all ? (config.group ? {} : []) : null;
 		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 		if (!BDFDB.ObjectUtils.is(instance)) return config.all ? (config.group ? {} : []) : null;
-		types = types && [types].flat().filter(n => n);
+		types = types && [types].flat(10).filter(n => typeof n == "string");
 		if (!types.length) return config.all ? (config.group ? {} : []) : null;;
 		var depth = -1;
 		var start = performance.now();
