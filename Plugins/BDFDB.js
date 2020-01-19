@@ -738,26 +738,19 @@
 		
 		if (options.hide) BDFDB.DOMUtils.appendLocalStyle("BDFDBhideOtherTooltips" + id, `#app-mount ${BDFDB.dotCN.tooltip}:not([tooltip-id="${id}"]) {display: none !important;}`, itemlayercontainer);
 					
-		var mouseleave = _ => {
-			BDFDB.DOMUtils.remove(itemlayer);
-		};
+		let mouseleave = _ => {BDFDB.DOMUtils.remove(itemlayer);};
 		anker.addEventListener("mouseleave", mouseleave);
 		
-		var observer = new MutationObserver(changes => {
-			changes.forEach(change => {
-				var nodes = Array.from(change.removedNodes);
-				var ownmatch = nodes.indexOf(itemlayer) > -1;
-				var ankermatch = nodes.indexOf(anker) > -1;
-				var parentmatch = nodes.some(n => n.contains(anker));
-				if (ownmatch || ankermatch || parentmatch) {
-					BDFDB.ArrayUtils.remove(Tooltips, id);
-					observer.disconnect();
-					BDFDB.DOMUtils.remove(itemlayer);
-					BDFDB.DOMUtils.removeLocalStyle("BDFDBhideOtherTooltips" + id, itemlayercontainer);
-					anker.removeEventListener("mouseleave", mouseleave);
-				}
-			});
-		});
+		let observer = new MutationObserver(changes => changes.forEach(change => {
+			let nodes = Array.from(change.removedNodes);
+			if (nodes.indexOf(itemlayer) > -1 || nodes.indexOf(anker) > -1 || nodes.some(n => n.contains(anker))) {
+				BDFDB.ArrayUtils.remove(Tooltips, id);
+				observer.disconnect();
+				BDFDB.DOMUtils.remove(itemlayer);
+				BDFDB.DOMUtils.removeLocalStyle("BDFDBhideOtherTooltips" + id, itemlayercontainer);
+				anker.removeEventListener("mouseleave", mouseleave);
+			}
+		}));
 		observer.observe(document.body, {subtree:true, childList:true});
 
 		BDFDB.TooltipUtils.update(tooltip);
@@ -1595,6 +1588,14 @@
 	LibraryModules.ReactDOM = BDFDB.ModuleUtils.findByProperties("render", "findDOMNode");
 	
 	BDFDB.ReactUtils = Object.assign({}, LibraryModules.React, LibraryModules.ReactDOM);
+	BDFDB.ReactUtils.childrenToArray = function (parent) {
+		if (parent && parent.props && parent.props.children && !BDFDB.ArrayUtils.is(parent.props.children)) {
+			var child = parent.props.children;
+			parent.props.children = [];
+			parent.props.children.push(child);
+		}
+		return parent.props.children;
+	}
 	BDFDB.ReactUtils.createElement = function (component, props) {
 		if (component && component.defaultProps) for (let key in component.defaultProps) if (props[key] == null) props[key] = component.defaultProps[key];
 		try {return LibraryModules.React.createElement(component || "div", props || {}) || null;}
@@ -1621,20 +1622,6 @@
 		for (let child of node.childNodes) attributes.children.push(BDFDB.ReactUtils.elementToReact(child));
 		return BDFDB.ReactUtils.createElement(node.tagName, attributes);
 	};
-	BDFDB.ReactUtils.findDOMNode = function (instance) {
-		if (Node.prototype.isPrototypeOf(instance)) return instance;
-		if (!instance || !instance.updater || typeof instance.updater.isMounted !== "function" || !instance.updater.isMounted(instance)) return null;
-		var node = LibraryModules.ReactDOM.findDOMNode(instance) || BDFDB.ReactUtils.getValue(instance, "child.stateNode");
-		return Node.prototype.isPrototypeOf(node) ? node : null;
-	};
-	BDFDB.ReactUtils.childrenToArray = function (parent) {
-		if (parent && parent.props && parent.props.children && !BDFDB.ArrayUtils.is(parent.props.children)) {
-			var child = parent.props.children;
-			parent.props.children = [];
-			parent.props.children.push(child);
-		}
-		return parent.props.children;
-	}
 	BDFDB.ReactUtils.findChildren = function (nodeOrInstance, config) {
 		if (!nodeOrInstance || !BDFDB.ObjectUtils.is(config) || !config.name && !config.key && !config.props && !config.filter) return [null, -1];
 		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
@@ -1752,6 +1739,12 @@
 			depth--;
 			return result;
 		}
+	};
+	BDFDB.ReactUtils.findDOMNode = function (instance) {
+		if (Node.prototype.isPrototypeOf(instance)) return instance;
+		if (!instance || !instance.updater || typeof instance.updater.isMounted !== "function" || !instance.updater.isMounted(instance)) return null;
+		var node = LibraryModules.ReactDOM.findDOMNode(instance) || BDFDB.ReactUtils.getValue(instance, "child.stateNode");
+		return Node.prototype.isPrototypeOf(node) ? node : null;
 	};
 	BDFDB.ReactUtils.findOwner = function (nodeOrInstance, config) {
 		if (!BDFDB.ObjectUtils.is(config)) return null;
@@ -1922,6 +1915,21 @@
 			found = found[value];
 		}
 		return found;
+	};
+	BDFDB.ReactUtils.render = function (component, node) {
+		if (!BDFDB.ReactUtils.isValidElement(component) || !Node.prototype.isPrototypeOf(node)) return;
+		try {
+			LibraryModules.ReactDOM.render(component, node);
+			let observer = new MutationObserver(changes => changes.forEach(change => {
+				let nodes = Array.from(change.removedNodes);
+				if (nodes.indexOf(node) > -1 || nodes.some(n => n.contains(node))) {
+					observer.disconnect();
+					BDFDB.ReactUtils.unmountComponentAtNode(node);
+				}
+			}));
+			observer.observe(document.body, {subtree:true, childList:true});
+		}
+		catch (err) {BDFDB.LogUtils.error("Fatal Error: Could not render react element! " + err);}
 	};
 	InternalBDFDB.setDefaultProps = function (component, defaultProps) {
 		if (BDFDB.ObjectUtils.is(component)) component.defaultProps = Object.assign({}, component.defaultProps, defaultProps);
@@ -4227,7 +4235,7 @@
 				nodeIntegrationInWorker: true
 			}
 		}, options));
-		browserWindow.setMenu(null);
+		browserWindow.removeMenu();
 		browserWindow.loadURL(url);
 		plugin.browserWindows.push(browserWindow);
 		return browserWindow;
