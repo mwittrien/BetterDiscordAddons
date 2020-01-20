@@ -7812,10 +7812,10 @@
 				let headers = Array.from(list.querySelectorAll(BDFDB.dotCN.settingstableheader));
 				headers.shift();
 				if (BDFDB.DOMUtils.getRects(headers[0]).width == 0) BDFDB.TimeUtils.timeout(_ => {this.resizeList(headers);});
-				else this.resizeList(headers);
+				else this.resizeList(list, headers);
 			}
 		}
-		resizeList(headers) {
+		resizeList(list, headers) {
 			let toobig = false, maxWidth = 0;
 			if (!maxWidth) {
 				for (let header of headers) {
@@ -7831,6 +7831,7 @@
 			}
 			else if (maxWidth < 36) maxWidth = 36;
 			this.props.maxWidth = maxWidth;
+			this.props.fullWidth = BDFDB.DOMUtils.getRects(list).width;
 			BDFDB.ReactUtils.forceUpdate(this);
 		}
 		render() {
@@ -7852,13 +7853,16 @@
 						}))
 					}),
 					(BDFDB.ArrayUtils.is(this.props.data) ? this.props.data : [{}]).filter(n => n).map(data => BDFDB.ReactUtils.createElement(LibraryComponents.Card, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.cardprimaryoutline, BDFDB.disCN.settingstablecard, this.props.cardClassName, data.className),
+						className: BDFDB.DOMUtils.formatClassName([this.props.cardClassName, data.className].filter(n => n).join(" ").indexOf(BDFDB.disCN.card) == -1 && BDFDB.disCN.cardprimaryoutline, BDFDB.disCN.settingstablecard, this.props.cardClassName, data.className),
 						cardId: data.key,
 						backdrop: false,
-						stlye: Object.assign({}, this.props.cardStyle, data.style),
+						style: Object.assign({}, this.props.cardStyle, data.style),
 						children: [
 							BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 								align: LibraryComponents.Flex.Align.CENTER,
+								grow: 0,
+								shrink: 0,
+								basis: this.props.maxWidth && this.props.fullWidth && (this.props.fullWidth - 30 - (this.props.maxWidth * this.props.settings.length)) || "auto",
 								children: this.props.renderLabel(data)
 							}),
 							BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
@@ -7883,7 +7887,7 @@
 								})).flat(10).filter(n => n)
 							})
 						]
-					}), "title", "data", "settings", "renderLabel", "cardClassName", "cardStyle", "onCheckboxChange", "maxWidth")))
+					}), "title", "data", "settings", "renderLabel", "cardClassName", "cardStyle", "onCheckboxChange", "maxWidth", "fullWidth")))
 				]
 			});
 		}
