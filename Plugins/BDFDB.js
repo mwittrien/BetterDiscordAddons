@@ -7852,9 +7852,10 @@
 						}))
 					}),
 					(BDFDB.ArrayUtils.is(this.props.data) ? this.props.data : [{}]).filter(n => n).map(data => BDFDB.ReactUtils.createElement(LibraryComponents.Card, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.cardprimaryoutline, BDFDB.disCN.settingstablecard, this.props.cardClassName),
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.cardprimaryoutline, BDFDB.disCN.settingstablecard, this.props.cardClassName, data.className),
 						cardId: data.key,
 						backdrop: false,
+						stlye: Object.assign({}, this.props.cardStyle, data.style),
 						children: [
 							BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 								align: LibraryComponents.Flex.Align.CENTER,
@@ -7882,7 +7883,7 @@
 								})).flat(10).filter(n => n)
 							})
 						]
-					}), "title", "data", "settings", "renderLabel", "cardClassName", "onCheckboxChange", "maxWidth")))
+					}), "title", "data", "settings", "renderLabel", "cardClassName", "cardStyle", "onCheckboxChange", "maxWidth")))
 				]
 			});
 		}
