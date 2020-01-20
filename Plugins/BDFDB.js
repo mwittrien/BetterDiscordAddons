@@ -7837,6 +7837,8 @@
 		render() {
 			this.props.settings = BDFDB.ArrayUtils.is(this.props.settings) ? this.props.settings : [];
 			this.props.renderLabel = typeof this.props.renderLabel == "function" ? this.props.renderLabel : data => data.label;
+			let labelWidth = this.props.maxWidth && this.props.fullWidth && (this.props.fullWidth - 30 - (this.props.maxWidth * this.props.settings.length));
+			let configWidth = this.props.maxWidth && this.props.maxWidth * this.props.settings.length;
 			return BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.settingstablelist, this.props.className),
 				children: [
@@ -7862,7 +7864,8 @@
 								align: LibraryComponents.Flex.Align.CENTER,
 								grow: 0,
 								shrink: 0,
-								basis: this.props.maxWidth && this.props.fullWidth && (this.props.fullWidth - 30 - (this.props.maxWidth * this.props.settings.length)) || "auto",
+								basis: labelWidth || "auto",
+								style: {maxWidth: labelWidth || null},
 								children: this.props.renderLabel(data)
 							}),
 							BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
@@ -7870,7 +7873,8 @@
 								align: LibraryComponents.Flex.Align.CENTER,
 								grow: 0,
 								shrink: 0,
-								basis: this.props.maxWidth && this.props.maxWidth * this.props.settings.length || "auto",
+								basis: configWidth || "auto",
+								style: {maxWidth: configWidth || null},
 								children: this.props.settings.map(setting => BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
 									className: BDFDB.disCN.checkboxcontainer,
 									grow: 0,
