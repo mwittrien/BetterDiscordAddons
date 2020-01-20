@@ -55,7 +55,9 @@ https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/Horizo
 https://raw.githubusercontent.com/mashirochan/Mashiro-chan/master/Plugins/PasteSend/PasteSend.plugin.js
 https://raw.githubusercontent.com/Mega-Mewthree/BetterDiscordPlugins/master/Plugins/AlwaysMentionEveryone/AlwaysMentionEveryone.plugin.js
 https://raw.githubusercontent.com/Mega-Mewthree/BetterDiscordPlugins/master/Plugins/AutoStartRichPresence/AutoStartRichPresence.plugin.js
+https://raw.githubusercontent.com/Mega-Mewthree/BetterDiscordPlugins/master/Plugins/ColorSighted/ColorSighted.plugin.js
 https://raw.githubusercontent.com/Mega-Mewthree/BetterDiscordPlugins/master/Plugins/DiscordCakeDay/DiscordCakeDay.plugin.js
+https://raw.githubusercontent.com/Mega-Mewthree/BetterDiscordPlugins/master/Plugins/MobileForAll/MobileForAll.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/AutoCorrect.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/AvatarIconViewer.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/BDEmoteAutocomplete.plugin.js
