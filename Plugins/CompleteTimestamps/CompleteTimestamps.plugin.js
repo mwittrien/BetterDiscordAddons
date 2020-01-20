@@ -3,7 +3,7 @@
 class CompleteTimestamps {
 	getName () {return "CompleteTimestamps";}
 
-	getVersion () {return "1.3.8";}
+	getVersion () {return "1.3.9";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class CompleteTimestamps {
 
 	constructor () {
 		this.changelog = {
-			"added":[["Days Ago","Added a days ago $daysago placeholder, to check how it works read the guide in the settings"]],
+			"fixed":[["Compact","Fixed first timestamp of messagegroup not being visible without hovering in compact mode"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
@@ -216,7 +216,7 @@ class CompleteTimestamps {
 	processMessage (e) {
 		if (!e.instance.props.isCompact) {
 			let settings = BDFDB.DataUtils.get(this, "settings");
-			if (settings.showInChat) this.injectTimestamp(e.returnvalue, e.instance.props);
+			if (settings.showInChat) this.injectTimestamp(e.returnvalue, e.instance.props.message.timestamp);
 			if (settings.showOnHover) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.messagecontent]]});
 				if (index > -1) {
@@ -239,7 +239,7 @@ class CompleteTimestamps {
 			let renderChildren = e.returnvalue.props.children;
 			e.returnvalue.props.children = (...args) => {
 				let renderedChildren = renderChildren(...args);
-				if (e.instance.props.isCompact && settings.showInChat) this.injectTimestamp(renderedChildren, e.instance.props);
+				if (e.instance.props.isCompact && settings.showInChat) this.injectTimestamp(renderedChildren, e.instance.props.message.timestamp);
 				if (settings.changeForEdit) this.injectEditStamp(renderedChildren, e.instance.props);
 				return renderedChildren;
 			};
@@ -254,9 +254,10 @@ class CompleteTimestamps {
 		}
 	}
 	
-	injectTimestamp (parent, props) {
+	injectTimestamp (parent, timestamp) {
 		let [children, index] = BDFDB.ReactUtils.findChildren(parent, {name: "MessageTimestamp"});
 		if (index > -1) {
+			let props = children[index].props;
 			if (!props.isCompact) children.splice(index++, 0, BDFDB.ReactUtils.createElement("span", {
 				children: "ARABIC-FIX",
 				style: {
@@ -265,14 +266,14 @@ class CompleteTimestamps {
 				}
 			}));
 			children.splice(index, 1, BDFDB.ReactUtils.createElement("time", {
-				className: BDFDB.DOMUtils.formatClassName(props.backgroundOpacity ? BDFDB.disCN["message" + props.backgroundOpacity + "backgroundopacity"] : null, !(props.isEditing || props.isHeader) ? BDFDB.disCN.messagetimestampvisibleonhover : null, props.isCompact ? (props.isMentioned ? BDFDB.disCN.messagetimestampcompactismentioned : BDFDB.disCN.messagetimestampcompact) : BDFDB.disCN.messagetimestampcozy),
-				dateTime: props.message.timestamp,
+				className: BDFDB.DOMUtils.formatClassName(props.backgroundOpacity && BDFDB.disCN["message" + props.backgroundOpacity + "backgroundopacity"], props.isVisibleOnlyOnHover && BDFDB.disCN.messagetimestampvisibleonhover, props.isCompact ? (props.isMentioned ? BDFDB.disCN.messagetimestampcompactismentioned : BDFDB.disCN.messagetimestampcompact) : BDFDB.disCN.messagetimestampcozy),
+				dateTime: timestamp,
 				children: [
 					BDFDB.ReactUtils.createElement("i", {
 						className: BDFDB.disCN.messagetimestampseparatorleft,
 						children: props.isCompact ? "[" : " ["
 					}),
-					this.getTimestamp(this.languages[BDFDB.DataUtils.get(this, "choices", "creationDateLang")].id, props.message.timestamp._i),
+					this.getTimestamp(this.languages[BDFDB.DataUtils.get(this, "choices", "creationDateLang")].id, timestamp._i),
 					BDFDB.ReactUtils.createElement("i", {
 						className: BDFDB.disCN.messagetimestampseparatorright,
 						children: props.isCompact ? "] " : "]"
