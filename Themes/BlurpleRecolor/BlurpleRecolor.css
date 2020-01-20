@@ -1372,15 +1372,8 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 }
 
 /* PLUGINS */
-/* serverfolders */ 
-.folder .wrapper-232cHJ.count {
-	background: rgb(var(--vaccentcolor)) !important;
-}
-/* friendnotifications/stalkernotifications */ 
-.BDFDB-settings .type-toast {
-	background-color: rgb(var(--vaccentcolor)) !important;
-}
-.BDFDB-settings .settings-avatar:not(.disabled):not(.desktop) {
+/* friendnotifications */ 
+.settingsPanel-w2ySNR .settings-avatar:not(.disabled):not(.desktop) {
 	border-color: rgb(var(--vaccentcolor)) !important;
 }
 /* hideutils */

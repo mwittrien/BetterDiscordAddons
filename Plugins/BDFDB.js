@@ -4387,7 +4387,7 @@
 		hotkeyResetButton: "resetButton-hI9Ax7",
 		hotkeyWrapper: "recorder-can0vx",
 		inputNumberButton: "button-J9muv5",
-		inputNumberButtonDown: "down-cOY7Qp button-uv5",
+		inputNumberButtonDown: "down-cOY7Qp button-J9muv5",
 		inputNumberButtonUp: "up-mUs_72 button-J9muv5",
 		inputNumberButtons: "buttons-our3p-",
 		inputNumberWrapper: "numberInputWrapper-j4svZS",
