@@ -7847,6 +7847,7 @@
 						children: [].concat(this.props.title || "", this.props.settings).map((setting, i) => BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.DOMUtils.formatClassName(i == 0 ? BDFDB.disCN.settingstableheadername : BDFDB.disCN.settingstableheaderoption, BDFDB.disCN.settingstableheader, BDFDB.disCN.settingstableheadersize, BDFDB.disCN.primary, BDFDB.disCN.weightbold),
 							children: setting,
+							onClick: _ => {if (typeof this.props.onHeaderClick == "function") this.props.onHeaderClick(setting, this);},
 							style: i != 0 && this.props.maxWidth ? {
 								maxWidth: this.props.maxWidth,
 								width: this.props.maxWidth,
