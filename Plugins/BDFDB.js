@@ -1578,6 +1578,7 @@
 	LibraryModules.UnreadGuildUtils = BDFDB.ModuleUtils.findByProperties("hasUnread", "getUnreadGuilds");
 	LibraryModules.UnreadChannelUtils = BDFDB.ModuleUtils.findByProperties("getUnreadCount", "getOldestUnreadMessageId");
 	LibraryModules.UploadUtils = BDFDB.ModuleUtils.findByProperties("upload", "instantBatchUpload");
+	LibraryModules.UserNameUtils = BDFDB.ModuleUtils.findByProperties("getName", "getNickname");
 	LibraryModules.UserStore = BDFDB.ModuleUtils.findByProperties("getUser", "getUsers");
 	LibraryModules.Utilities = BDFDB.ModuleUtils.findByProperties("flatMap", "cloneDeep");
 	LibraryModules.VoiceUtils = BDFDB.ModuleUtils.findByProperties("getAllVoiceStates", "getVoiceStatesForChannel");
@@ -5146,7 +5147,6 @@
 		contextmenuscroller: ["ContextMenu", "scroller"],
 		contextmenuslider: ["ContextMenu", "slider"],
 		contextmenusubcontext: ["ContextMenu", "subMenuContext"],
-		cooldownwrapper: ["Typing", "cooldownWrapper"],
 		cursordefault: ["Cursor", "cursorDefault"],
 		cursorpointer: ["Cursor", "cursorPointer"],
 		customstatus: ["CustomStatus", "customStatus"],
@@ -6088,6 +6088,8 @@
 		tooltiptop: ["Tooltip", "tooltipTop"],
 		tooltipyellow: ["Tooltip", "tooltipYellow"],
 		typing: ["Typing", "typing"],
+		typingcooldownwrapper: ["Typing", "cooldownWrapper"],
+		typingtext: ["Typing", "text"],
 		underline: ["BDFDB", "underline"],
 		unreadbar: ["UnreadBar", "bar"],
 		unreadbaractive: ["UnreadBar", "active"],

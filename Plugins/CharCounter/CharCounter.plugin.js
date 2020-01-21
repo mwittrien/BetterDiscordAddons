@@ -3,7 +3,7 @@
 class CharCounter {
 	getName () {return "CharCounter";}
 
-	getVersion () {return "1.4.4";}
+	getVersion () {return "1.4.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -35,7 +35,7 @@ class CharCounter {
 		}
 		   
 		this.css = `
-			${BDFDB.dotCNS.typing + BDFDB.dotCN.cooldownwrapper} {
+			${BDFDB.dotCNS.typing + BDFDB.dotCN.typingcooldownwrapper} {
 				margin-right: 64px;
 			}
 			${BDFDB.dotCN._charcountercounteradded} {
