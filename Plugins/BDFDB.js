@@ -4276,7 +4276,8 @@
 				nodeIntegrationInWorker: true
 			}
 		}, options));
-		browserWindow.removeMenu();
+		if (typeof browserWindow.removeMenu == "function") browserWindow.removeMenu();
+		else browserWindow.setMenu(null);
 		browserWindow.loadURL(url);
 		plugin.browserWindows.push(browserWindow);
 		return browserWindow;
