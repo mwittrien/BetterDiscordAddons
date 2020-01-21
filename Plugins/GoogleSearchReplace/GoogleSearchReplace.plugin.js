@@ -80,7 +80,7 @@ class GoogleSearchReplace {
 	start () {
 		if (!window.BDFDB) window.BDFDB = {myPlugins:{}};
 		if (window.BDFDB && window.BDFDB.myPlugins && typeof window.BDFDB.myPlugins == "object") window.BDFDB.myPlugins[this.getName()] = this;
-		var libraryScript = document.querySelector('head script#BDFDBLibraryScript');
+		let libraryScript = document.querySelector("head script#BDFDBLibraryScript");
 		if (!libraryScript || (performance.now() - libraryScript.getAttribute("date")) > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");

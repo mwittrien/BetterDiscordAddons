@@ -3,7 +3,7 @@
 class WriteUpperCase {
 	getName () {return "WriteUpperCase";}
 
-	getVersion () {return "1.2.4";}
+	getVersion () {return "1.2.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -27,7 +27,7 @@ class WriteUpperCase {
 	start () {
 		if (!window.BDFDB) window.BDFDB = {myPlugins:{}};
 		if (window.BDFDB && window.BDFDB.myPlugins && typeof window.BDFDB.myPlugins == "object") window.BDFDB.myPlugins[this.getName()] = this;
-		var libraryScript = document.querySelector('head script#BDFDBLibraryScript');
+		let libraryScript = document.querySelector("head script#BDFDBLibraryScript");
 		if (!libraryScript || (performance.now() - libraryScript.getAttribute("date")) > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -76,7 +76,7 @@ class WriteUpperCase {
 				else if (first === first.toLowerCase() && first !== first.toUpperCase() && string.toLowerCase().indexOf("http") != 0 && string.toLowerCase().indexOf("s/") != 0) newstring = string.charAt(0).toUpperCase() + string.slice(1);
 				if (string != newstring) {
 					e.instance.props.textValue = newstring;
-					if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.StringUtils.copyRichValue(newstring, e.instance.props.richValue);
+					if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.SlateUtils.copyRichValue(newstring, e.instance.props.richValue);
 				}
 			}
 		}

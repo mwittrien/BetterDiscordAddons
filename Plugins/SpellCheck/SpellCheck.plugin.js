@@ -3,7 +3,7 @@
 class SpellCheck {
 	getName () {return "SpellCheck";}
 
-	getVersion () {return "1.3.9";}
+	getVersion () {return "1.4.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -111,7 +111,7 @@ class SpellCheck {
 	start () {
 		if (!window.BDFDB) window.BDFDB = {myPlugins:{}};
 		if (window.BDFDB && window.BDFDB.myPlugins && typeof window.BDFDB.myPlugins == "object") window.BDFDB.myPlugins[this.getName()] = this;
-		var libraryScript = document.querySelector('head script#BDFDBLibraryScript');
+		let libraryScript = document.querySelector("head script#BDFDBLibraryScript");
 		if (!libraryScript || (performance.now() - libraryScript.getAttribute("date")) > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -260,7 +260,7 @@ class SpellCheck {
 			}
 			else newString.push(word + (hasNewline ? "\n" : ""));
 		});
-		editor.setValue(BDFDB.StringUtils.copyRichValue(newString.join(" ").replace(/\n /g, "\n"), editor.props.value));
+		editor.setValue(BDFDB.SlateUtils.copyRichValue(newString.join(" ").replace(/\n /g, "\n"), editor.props.value));
 	}
 
 	addToOwnDictionary (word) {

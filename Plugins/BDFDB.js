@@ -4007,47 +4007,6 @@
 	BDFDB.StringUtils.insertNRST = function (string) {
 		return typeof string == "string" && string.replace(/\\r/g, "\r").replace(/\\n/g, "\n").replace(/\\t/g, "\t").replace(/\\s/g, " ");
 	};
-	BDFDB.StringUtils.getParsedLength = function (string) {
-		// REMOVE
-		return typeof string != "string" ? 0 : string.length;
-	};
-	BDFDB.StringUtils.getCurrentWord = function (richValue) {
-		// REMOVE
-		if (!richValue || !richValue.selection.isCollapsed || BDFDB.StringUtils.hasOpenPlainTextCodeBlock(richValue) || richValue.document.text.trim().length == 0) return {word: null, isAtStart: false};
-		if (richValue.document.text.startsWith("/giphy ") || richValue.document.text.startsWith("/tenor ")) {
-			let node = richValue.document.getNode(richValue.selection.start.key);
-			if (node) return {
-				word: node.text.substring(0, richValue.selection.start.offset),
-				isAtStart: true
-			}
-		}
-		let node = richValue.document.getNode(richValue.selection.start.key);
-		if (node == null) return {
-			word: null,
-			isAtStart: false
-		};
-		let word = "", atStart = false;
-		let offset = richValue.selection.start.offset;
-		let block = richValue.document.getClosestBlock(node.key);
-		while (true) {
-			if (--offset < 0) {
-				if ((node = block.getPreviousNode(node.key) == null)) {
-					atStart = true;
-					break;
-				}
-				if (node.object!== "text") break;
-				offset = node.text.length - 1;
-			}
-			if (node.object !== "text") break;
-			let prefix = node.text[offset];
-			if (/(\t|\s)/.test(prefix)) break;
-			word = prefix + word;
-		}
-		return {
-			word: !word ? null : word,
-			isAtStart: atStart && block.type == "line" && richValue.document.nodes.get(0) === block
-		};
-	};
 	BDFDB.StringUtils.highlight = function (string, searchstring, prefix = `<span class="${BDFDB.disCN.highlight}">`, suffix = `</span>`) {
 		if (typeof string != "string" || !searchstring || searchstring.length < 1) return string;
 		var offset = 0, original = string;
@@ -4092,7 +4051,7 @@
 	};
 	BDFDB.SlateUtils.getCurrentWord = function (editor) {
 		let richValue = BDFDB.ReactUtils.getValue(editor, "props.richValue");
-		if (!BDFDB.SlateUtils.isRichValue(richValue) || !richValue.selection.isCollapsed || BDFDB.StringUtils.hasOpenPlainTextCodeBlock(editor) || richValue.document.text.trim().length == 0) return {word: null, isAtStart: false};
+		if (!BDFDB.SlateUtils.isRichValue(richValue) || !richValue.selection.isCollapsed || BDFDB.SlateUtils.hasOpenPlainTextCodeBlock(editor) || richValue.document.text.trim().length == 0) return {word: null, isAtStart: false};
 		if (editor.props.useSlate) {
 			if (richValue.document.text.startsWith("/giphy ") || richValue.document.text.startsWith("/tenor ")) {
 				let node = richValue.document.getNode(richValue.selection.start.key);
@@ -4129,11 +4088,39 @@
 			};
 		}
 		else {
-			console.log(editor.ref.current._ref._textArea);
-			return {
+			let textarea = BDFDB.ReactUtils.findDOMNode(editor.ref.current);
+			if (!Node.prototype.isPrototypeOf(textarea) || textarea.tagName != "TEXTAREA" || !textarea.value.length || /\s/.test(textarea.value.slice(textarea.selectionStart, textarea.selectionEnd))) return {
 				word: null,
 				isAtStart: true
 			};
+			else {
+				if (textarea.selectionEnd == textarea.value.length) {
+					let words = textarea.value.split(/\s/).reverse();
+					return {
+						word: !words[0] ? null : words[0],
+						isAtStart: words.length > 1
+					};
+				}
+				else {
+					let chars = textarea.value.split(""), word = "", currentWord = "", isCurrentWord = false, isAtStart = true;
+					for (let i in chars) {
+						if (i == textarea.selectionStart) isCurrentWord = true;
+						if (/\s/.test(chars[i])) {
+							word = "";
+							isAtStart = currentWord.length > 0 && isAtStart || false;
+							isCurrentWord = false;
+						}
+						else {
+							word += chars[i];
+							if (isCurrentWord) currentWord = word;
+						}
+					}
+					return {
+						word: !currentWord ? null : currentWord,
+						isAtStart: isAtStart
+					};
+				}
+			}
 		}
 	};
 	

@@ -3,7 +3,7 @@
 class ChatAliases {
 	getName () {return "ChatAliases";}
 
-	getVersion () {return "2.0.7";}
+	getVersion () {return "2.0.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -194,7 +194,7 @@ class ChatAliases {
 	start () {
 		if (!window.BDFDB) window.BDFDB = {myPlugins:{}};
 		if (window.BDFDB && window.BDFDB.myPlugins && typeof window.BDFDB.myPlugins == "object") window.BDFDB.myPlugins[this.getName()] = this;
-		var libraryScript = document.querySelector('head script#BDFDBLibraryScript');
+		let libraryScript = document.querySelector("head script#BDFDBLibraryScript");
 		if (!libraryScript || (performance.now() - libraryScript.getAttribute("date")) > 600000) {
 			if (libraryScript) libraryScript.remove();
 			libraryScript = document.createElement("script");
@@ -277,7 +277,7 @@ class ChatAliases {
 		let minLength = BDFDB.DataUtils.get(this, "amounts", "minAliasLength");
 		e.instance.state.autocompleteOptions.ALIASES = {
 			matches: (firstChar, rest, isFirstWord) => {
-				let currentLastWord = BDFDB.StringUtils.getCurrentWord(e.instance.props.editorRef.current.props.richValue).word || "";
+				let currentLastWord = BDFDB.SlateUtils.getCurrentWord(e.instance.props.editorRef.current).word || "";
 				if (currentLastWord.length >= minLength) for (let word in this.aliases) {
 					let aliasdata = this.aliases[word];
 					if (!aliasdata.regex && aliasdata.autoc) {
@@ -294,7 +294,7 @@ class ChatAliases {
 				return false;
 			},
 			queryResults: (rest) => {
-				let currentLastWord = BDFDB.StringUtils.getCurrentWord(e.instance.props.editorRef.current.props.richValue).word || "";
+				let currentLastWord = BDFDB.SlateUtils.getCurrentWord(e.instance.props.editorRef.current).word || "";
 				let matches = [];
 				for (let word in this.aliases) {
 					if (matches.length >= BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS) break;
@@ -318,7 +318,7 @@ class ChatAliases {
 						title: [
 							"Aliases: ",
 							BDFDB.ReactUtils.createElement("strong", {
-								children: BDFDB.StringUtils.getCurrentWord(e.instance.props.editorRef.current.props.richValue).word || ""
+								children: BDFDB.SlateUtils.getCurrentWord(e.instance.props.editorRef.current).word || ""
 							})
 						]
 					}),
@@ -345,7 +345,7 @@ class ChatAliases {
 		if (e.instance.state.autocompleteType == "COMMAND" && BDFDB.ArrayUtils.is(e.instance.state.autocompletes.commands)) {
 			for (let i in e.instance.state.autocompletes.commands) if (e.instance.state.autocompletes.commands[i].alias) e.instance.state.autocompletes.commands[i] = null;
 			e.instance.state.autocompletes.commands = e.instance.state.autocompletes.commands.filter(n => n);
-			let currentLastWord = BDFDB.StringUtils.getCurrentWord(e.instance.props.editorRef.current.props.richValue).word || "";
+			let currentLastWord = BDFDB.SlateUtils.getCurrentWord(e.instance.props.editorRef.current).word || "";
 			let commandAliases = BDFDB.ObjectUtils.filter(this.aliases, key => key.startsWith("/"), true);
 			if (currentLastWord.length >= minLength) for (let word in commandAliases) {
 				if (e.instance.state.autocompletes.commands.length >= BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS) break;
@@ -390,7 +390,7 @@ class ChatAliases {
 				e2.methodArguments[textIndex] = messageData.text;
 				if (!messageData.text) {
 					e.instance.props.textValue = "";
-					if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.StringUtils.copyRichValue("", e.instance.props.richValue);
+					if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.SlateUtils.copyRichValue("", e.instance.props.richValue);
 					BDFDB.ReactUtils.forceUpdate(e.instance);
 				}
 			}
