@@ -3,7 +3,7 @@
 class ChatFilter {
 	getName () {return "ChatFilter";}
 
-	getVersion () {return "3.3.6";}
+	getVersion () {return "3.3.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -281,9 +281,9 @@ class ChatFilter {
 
 				let settings = BDFDB.DataUtils.get(this, "settings");
 				let replaces = BDFDB.DataUtils.get(this, "replaces");
-				let blocked = false;
+				let blocked = false, blockedReplace;
 				for (let bWord in this.words.blocked) {
-					let blockedReplace = this.words.blocked[bWord].empty ? "" : (this.words.blocked[bWord].replace || replaces.blocked);
+					blockedReplace = this.words.blocked[bWord].empty ? "" : (this.words.blocked[bWord].replace || replaces.blocked);
 					let reg = this.createReg(bWord, this.words.blocked[bWord]);
 					strings.forEach(string => {
 						if (this.testForEmoji(string, reg)) blocked = true;

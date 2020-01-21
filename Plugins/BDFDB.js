@@ -6895,7 +6895,7 @@
 						};
 						BDFDB.ListenerUtils.multiRemove(this.refElement, "mousedown", this._handleSelection);
 						BDFDB.ListenerUtils.multiAdd(this.refElement, "mousedown", this._handleSelection);
-						if (this.refElement.tagName == "input" || this.refElement.tagName == "textarea") {
+						if (this.refElement.tagName == "INPUT" || this.refElement.tagName == "TEXTAREA") {
 							BDFDB.ListenerUtils.multiRemove(this.refElement, "keydown click change", this._updateCounter);
 							BDFDB.ListenerUtils.multiAdd(this.refElement, "keydown click change", this._updateCounter);
 						}
@@ -6914,10 +6914,12 @@
 			}
 			else BDFDB.LogUtils.warn("refClass can not be undefined for BDFDB_CharCounter");
 		}
-		render() {;
+		render() {
+			let string = this.getCounterString();
+			BDFDB.TimeUtils.timeout(_ => {if (string != this.getCounterString()) BDFDB.ReactUtils.forceUpdate(this);});
 			return BDFDB.ReactUtils.createElement("div", BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.charcounter, this.props.className),
-				children: this.getCounterString()
+				children: string
 			}), "parsing", "max", "refClass", "renderPrefix", "renderSuffix"));
 		}
 	};
