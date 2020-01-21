@@ -4011,27 +4011,8 @@
 		// REMOVE
 		return typeof string != "string" ? 0 : string.length;
 	};
-	BDFDB.StringUtils.copyRichValue = function (string, richValue) {
-		let newRichValue = LibraryModules.SlateUtils.deserialize(string);
-		if (richValue && richValue._map && richValue._map._root && BDFDB.ArrayUtils.is(richValue._map._root.entries)) {
-			for (let i in richValue._map._root.entries) if (richValue._map._root.entries[i][0] == "selection") {
-				newRichValue._map._root.entries[i] = richValue._map._root.entries[i];
-				break;
-			}
-		}
-		return newRichValue;
-	};
-	BDFDB.StringUtils.hasOpenPlainTextCodeBlock = function (richValue) {
-		let codeMatches = BDFDB.LibraryModules.SlateSelectionUtils.serializeSelection(richValue.document, {
-			start: {
-				key: richValue.document.getFirstText().key,
-				offset:0
-			},
-			end: richValue.selection.start
-		}, "raw").match(/```/g);
-		return codeMatches && codeMatches.length && codeMatches.length % 2 != 0;
-	};
 	BDFDB.StringUtils.getCurrentWord = function (richValue) {
+		// REMOVE
 		if (!richValue || !richValue.selection.isCollapsed || BDFDB.StringUtils.hasOpenPlainTextCodeBlock(richValue) || richValue.document.text.trim().length == 0) return {word: null, isAtStart: false};
 		if (richValue.document.text.startsWith("/giphy ") || richValue.document.text.startsWith("/tenor ")) {
 			let node = richValue.document.getNode(richValue.selection.start.key);
@@ -4081,6 +4062,79 @@
 			offset++;
 		});
 		return string || original;
+	};
+	
+	BDFDB.SlateUtils = {};
+	BDFDB.SlateUtils.isRichValue = function (richValue) {
+		return BDFDB.ObjectUtils.is(richValue) && LibraryModules.SlateUtils.deserialize("").constructor.prototype.isPrototypeOf(richValue);
+	};
+	BDFDB.SlateUtils.copyRichValue = function (string, richValue) {
+		let newRichValue = LibraryModules.SlateUtils.deserialize(string);
+		if (BDFDB.SlateUtils.isRichValue(richValue) && richValue._map && richValue._map._root && BDFDB.ArrayUtils.is(richValue._map._root.entries)) {
+			for (let i in richValue._map._root.entries) if (richValue._map._root.entries[i][0] == "selection") {
+				newRichValue._map._root.entries[i] = richValue._map._root.entries[i];
+				break;
+			}
+		}
+		return newRichValue;
+	};
+	BDFDB.SlateUtils.hasOpenPlainTextCodeBlock = function (editor) {
+		let richValue = BDFDB.ReactUtils.getValue(editor, "props.richValue");
+		if (!BDFDB.SlateUtils.isRichValue(richValue)) return false;
+		let codeMatches = BDFDB.LibraryModules.SlateSelectionUtils.serializeSelection(richValue.document, {
+			start: {
+				key: richValue.document.getFirstText().key,
+				offset: 0
+			},
+			end: richValue.selection.start
+		}, "raw").match(/```/g);
+		return codeMatches && codeMatches.length && codeMatches.length % 2 != 0;
+	};
+	BDFDB.SlateUtils.getCurrentWord = function (editor) {
+		let richValue = BDFDB.ReactUtils.getValue(editor, "props.richValue");
+		if (!BDFDB.SlateUtils.isRichValue(richValue) || !richValue.selection.isCollapsed || BDFDB.StringUtils.hasOpenPlainTextCodeBlock(editor) || richValue.document.text.trim().length == 0) return {word: null, isAtStart: false};
+		if (editor.props.useSlate) {
+			if (richValue.document.text.startsWith("/giphy ") || richValue.document.text.startsWith("/tenor ")) {
+				let node = richValue.document.getNode(richValue.selection.start.key);
+				if (node) return {
+					word: node.text.substring(0, richValue.selection.start.offset),
+					isAtStart: true
+				}
+			}
+			let node = richValue.document.getNode(richValue.selection.start.key);
+			if (node == null) return {
+				word: null,
+				isAtStart: false
+			};
+			let word = "", atStart = false;
+			let offset = richValue.selection.start.offset;
+			let block = richValue.document.getClosestBlock(node.key);
+			while (true) {
+				if (--offset < 0) {
+					if ((node = block.getPreviousNode(node.key) == null)) {
+						atStart = true;
+						break;
+					}
+					if (node.object!== "text") break;
+					offset = node.text.length - 1;
+				}
+				if (node.object !== "text") break;
+				let prefix = node.text[offset];
+				if (/(\t|\s)/.test(prefix)) break;
+				word = prefix + word;
+			}
+			return {
+				word: !word ? null : word,
+				isAtStart: atStart && block.type == "line" && richValue.document.nodes.get(0) === block
+			};
+		}
+		else {
+			console.log(editor.ref.current._ref._textArea);
+			return {
+				word: null,
+				isAtStart: true
+			};
+		}
 	};
 	
 	BDFDB.NumberUtils = {};

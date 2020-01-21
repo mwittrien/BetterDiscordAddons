@@ -49,7 +49,7 @@ class SpellCheck {
 		let choices = BDFDB.DataUtils.get(this, "choices");
 		let amounts = BDFDB.DataUtils.get(this, "amounts");
 		let ownDictionary = BDFDB.DataUtils.load(this, "owndics", choices.dictionaryLanguage) || [];
-		let settingspanel, settingsitems = [], inneritems = [];
+		let settingspanel, settingsitems = [];
 		
 		for (let key in choices) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,
@@ -82,21 +82,19 @@ class SpellCheck {
 			value: amounts[key]
 		}));
 		
-		for (let word of ownDictionary) inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Card, {
-			children: word.toLowerCase(),
-			onRemove: _ => {
-				BDFDB.ArrayUtils.remove(ownDictionary, word);
-				BDFDB.DataUtils.save(ownDictionary, this, "owndics", choices.dictionaryLanguage);
-				this.dictionary = this.langDictionary.concat(ownDictionary);
-				this.refreshSettings(settingspanel);
-			}
-		}));
-		
-		if (inneritems.length) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+		if (ownDictionary.length) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 			title: "Your own Dictionary:",
 			first: settingsitems.length == 0,
 			last: true,
-			children: inneritems
+			children: ownDictionary.map(word => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Card, {
+				children: word.toLowerCase(),
+				onRemove: _ => {
+					BDFDB.ArrayUtils.remove(ownDictionary, word);
+					BDFDB.DataUtils.save(ownDictionary, this, "owndics", choices.dictionaryLanguage);
+					this.dictionary = this.langDictionary.concat(ownDictionary);
+					this.refreshSettings(settingspanel);
+				}
+			}))
 		}));
 		
 		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
