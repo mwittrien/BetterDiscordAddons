@@ -4455,6 +4455,8 @@
 		settingsPanelList: "settingsList-eZjkXj",
 		settingsPanelTitle: "title-GTF_8J",
 		settingsTableCard: "settingsTableCard-628t52",
+		settingsTableCardConfigs: "settingsTableCardConfigs-w5X9-Z",
+		settingsTableCardLabel: "settingsTableCardLabel-MElgIg",
 		settingsTableHeaders: "settingsTableHeaders-WKzw9_",
 		settingsTableList: "settingsTableList-f6sW2y",
 		svgIcon: "icon-GhnIRB",
@@ -5937,6 +5939,8 @@
 		settingstableheaders: ["BDFDB", "settingsTableHeaders"],
 		settingstableheadersize: ["SettingsTable", "headerSize"],
 		settingstablecard: ["BDFDB", "settingsTableCard"],
+		settingstablecardconfigs: ["BDFDB", "settingsTableCardConfigs"],
+		settingstablecardlabel: ["BDFDB", "settingsTableCardLabel"],
 		settingstablelist: ["BDFDB", "settingsTableList"],
 		sidebarregion: ["SettingsWindow", "sidebarRegion"],
 		sinkinteractions: ["Message", "disableInteraction"],
@@ -7885,13 +7889,13 @@
 		render() {
 			this.props.settings = BDFDB.ArrayUtils.is(this.props.settings) ? this.props.settings : [];
 			this.props.renderLabel = typeof this.props.renderLabel == "function" ? this.props.renderLabel : data => data.label;
-			let labelWidth = this.props.maxWidth && this.props.fullWidth && (this.props.fullWidth - 30 - (this.props.maxWidth * this.props.settings.length));
+			let labelWidth = this.props.maxWidth && this.props.fullWidth && (this.props.fullWidth - 20 - (this.props.maxWidth * this.props.settings.length));
 			let configWidth = this.props.maxWidth && this.props.maxWidth * this.props.settings.length;
 			return BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.settingstablelist, this.props.className),
 				children: [
 					BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
-						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.settingstableheaders),
+						className: BDFDB.disCN.settingstableheaders,
 						align: LibraryComponents.Flex.Align.STRETCH,
 						children: [].concat(this.props.title || "", this.props.settings).map((setting, i) => BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.DOMUtils.formatClassName(i == 0 ? BDFDB.disCN.settingstableheadername : BDFDB.disCN.settingstableheaderoption, BDFDB.disCN.settingstableheader, BDFDB.disCN.settingstableheadersize, BDFDB.disCN.primary, BDFDB.disCN.weightbold),
@@ -7911,6 +7915,7 @@
 						style: Object.assign({}, this.props.cardStyle, data.style),
 						children: [
 							BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+								className: BDFDB.disCN.settingstablecardlabel,
 								align: LibraryComponents.Flex.Align.CENTER,
 								grow: 0,
 								shrink: 0,
@@ -7919,6 +7924,7 @@
 								children: this.props.renderLabel(data)
 							}),
 							BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+								className: BDFDB.disCN.settingstablecardconfigs,
 								justify: LibraryComponents.Flex.Justify.AROUND,
 								align: LibraryComponents.Flex.Align.CENTER,
 								grow: 0,
@@ -8505,7 +8511,15 @@
 		}
 		${BDFDB.dotCN.settingstablecard} {
 			height: 60px;
+			padding: 0 10px;
 			margin-bottom: 10px;
+		}
+		${BDFDB.dotCNS.settingstablecard + BDFDB.dotCN.settingstablecardlabel} {
+			padding-right: 10px;
+		}
+		${BDFDB.dotCNS.settingstablecard + BDFDB.dotCN.settingstablecardlabel},
+		${BDFDB.dotCNS.settingstablecard + BDFDB.dotCN.settingstablecardconfigs} {
+			margin: 0;
 		}
 		${BDFDB.dotCN.settingstableheaders} {
 			margin-right: 10px;
