@@ -4531,6 +4531,11 @@
 		previous: "previous-xsNq6B",
 		next: "next-SHEZrz"
 	};
+	DiscordClassModules.ImageZoom = {
+		backdrop: "lenseBackdrop-yEm7Om",
+		lense: "zoomLense-uOK8xV",
+		modal: "imageModal-8J0ttB"
+	};
 	DiscordClassModules.PinDMs = {
 		dragPreview: "dragPreview-nXiByA",
 		dmChannelPinned: "pinned-0lM4wD",
@@ -4812,6 +4817,9 @@
 		_imagegallerygallery: ["ImageGallery", "gallery"],
 		_imagegalleryprevious: ["ImageGallery", "previous"],
 		_imagegallerynext: ["ImageGallery", "next"],
+		_imagezoombackdrop: ["ImageZoom", "backdrop"],
+		_imagezoomimagemodal: ["ImageZoom", "modal"],
+		_imagezoomlense: ["ImageZoom", "lense"],
 		_googletranslateoptionreversebutton: ["GoogleTranslateOption", "reverseButton"],
 		_googletranslateoptiontranslatebutton: ["GoogleTranslateOption", "translateButton"],
 		_googletranslateoptiontranslated: ["GoogleTranslateOption", "translated"],

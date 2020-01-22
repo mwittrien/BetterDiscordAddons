@@ -3,7 +3,7 @@
 class ImageZoom {
 	getName () {return "ImageZoom";}
 
-	getVersion () {return "1.0.7";}
+	getVersion () {return "1.0.8";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -24,20 +24,10 @@ class ImageZoom {
 
 	initConstructor () {
 		this.css = `
-			.image-modal ${BDFDB.dotCN.modalinner} {
-				display: grid;
-			}
-			.image-modal ${BDFDB.dotCN.modalinner} > ${BDFDB.dotCN.imagewrapper} {
-				grid-column: span 20;
-				grid-row: 1;
-			}
-			.image-modal ${BDFDB.dotCNS.modalinner} > :not(img) {
-				grid-row: 2;
-			}
-			.image-modal .imagezoom-lense {
+			${BDFDB.dotCNS._imagezoomimagemodal + BDFDB.dotCN._imagezoomlense} {
 				border: 2px solid rgb(114, 137, 218);
 			}
-			.image-modal .imagezoom-backdrop {
+			${BDFDB.dotCNS._imagezoomimagemodal + BDFDB.dotCN._imagezoombackdrop} {
 				position: absolute !important;
 				top: 0 !important;
 				right: 0 !important;
@@ -106,39 +96,43 @@ class ImageZoom {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN.downloadlink]]});
 			if (index > -1) {
 				let openContext = event => {
-					let settings = BDFDB.DataUtils.get(this, "settings"), items = [];
-					for (let type in settings) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Slider, {
-						defaultValue: settings[type],
-						digits: this.defaults.settings[type].digits,
-						edges: this.defaults.settings[type].edges,
-						renderLabel: value => {
-							return (this.labels[this.defaults.settings[type].label] || BDFDB.LanguageUtils.LanguageStrings[this.defaults.settings[type].label]) + ": " + value + this.defaults.settings[type].unit;
-						},
-						onValueRender: value => {
-							return value + this.defaults.settings[type].unit;
-						},
-						onValueChange: value => {
-							BDFDB.DataUtils.save(value, this, "settings", type);
-						}
-					}));
+					let settings = BDFDB.DataUtils.get(this, "settings");
 					BDFDB.ContextMenuUtils.open(this, event, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-						children: items
+						children: Object.keys(settings).map(type => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Slider, {
+							defaultValue: settings[type],
+							digits: this.defaults.settings[type].digits,
+							edges: this.defaults.settings[type].edges,
+							renderLabel: value => {
+								return (this.labels[this.defaults.settings[type].label] || BDFDB.LanguageUtils.LanguageStrings[this.defaults.settings[type].label]) + ": " + value + this.defaults.settings[type].unit;
+							},
+							onValueRender: value => {
+								return value + this.defaults.settings[type].unit;
+							},
+							onValueChange: value => {
+								BDFDB.DataUtils.save(value, this, "settings", type);
+							}
+						}))
 					}));
 				};
-				children.push(BDFDB.ReactUtils.createElement("span", {
-					className: BDFDB.disCN.downloadlink,
-					children: "|",
-					style: {margin: "0 5px"}
-				}));
-				children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
-					className: BDFDB.disCN.downloadlink, 
-					children: `Zoom ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}`,
-					onClick: openContext,
-					onContextMenu: openContext
-				}));
+				children[index] = BDFDB.ReactUtils.createElement("span", {
+					children: [
+						children[index],
+						BDFDB.ReactUtils.createElement("span", {
+							className: BDFDB.disCN.downloadlink,
+							children: "|",
+							style: {margin: "0 5px"}
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
+							className: BDFDB.disCN.downloadlink, 
+							children: `Zoom ${BDFDB.LanguageUtils.LanguageStrings.SETTINGS}`,
+							onClick: openContext,
+							onContextMenu: openContext
+						})
+					],
+				});
 			}
 		}
-		if (e.node) BDFDB.DOMUtils.addClass(BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, e.node), "image-modal");
+		if (e.node) BDFDB.DOMUtils.addClass(BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, e.node), BDFDB.disCN._imagezoomimagemodal);
 	}
 
 	processLazyImage (e) {
@@ -150,9 +144,9 @@ class ImageZoom {
 				let imgrects = BDFDB.DOMUtils.getRects(e.node.firstElementChild);
 				let settings = BDFDB.DataUtils.get(this, "settings");
 
-				let lense = BDFDB.DOMUtils.create(`<div class="imagezoom-lense" style="clip-path: circle(${(settings.lensesize/2) + 2}px at center) !important; border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${settings.lensesize}px !important; height: ${settings.lensesize}px !important; position: fixed !important;"><div class="imagezoom-lense-inner" style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; clip-path: circle(${settings.lensesize/2}px at center) !important;"><${e.node.firstElementChild.tagName} class="imagezoom-pane" src="${e.instance.props.src}" style="width: ${imgrects.width * settings.zoomlevel}px; height: ${imgrects.height * settings.zoomlevel}px; position: fixed !important;"${e.node.firstElementChild.tagName == "VIDEO" ? " loop autoplay" : ""}></${e.node.firstElementChild.tagName}></div></div>`);
+				let lense = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imagezoomlense}" style="clip-path: circle(${(settings.lensesize/2) + 2}px at center) !important; border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${settings.lensesize}px !important; height: ${settings.lensesize}px !important; position: fixed !important;"><div class="imagezoom-lense-inner" style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; clip-path: circle(${settings.lensesize/2}px at center) !important;"><${e.node.firstElementChild.tagName} class="imagezoom-pane" src="${e.instance.props.src}" style="width: ${imgrects.width * settings.zoomlevel}px; height: ${imgrects.height * settings.zoomlevel}px; position: fixed !important;"${e.node.firstElementChild.tagName == "VIDEO" ? " loop autoplay" : ""}></${e.node.firstElementChild.tagName}></div></div>`);
 				let pane = lense.querySelector(".imagezoom-pane");
-				let backdrop = BDFDB.DOMUtils.create(`<div class="imagezoom-backdrop" style="background: rgba(0,0,0,0.2) !important;"></div>`);
+				let backdrop = BDFDB.DOMUtils.create(`<div class="BDFDB.disCN._imagezoombackdrop" style="background: rgba(0,0,0,0.2) !important;"></div>`);
 				let appmount = document.querySelector(BDFDB.dotCN.appmount);
 				appmount.appendChild(lense);
 				appmount.appendChild(backdrop);
