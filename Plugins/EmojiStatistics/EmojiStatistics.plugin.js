@@ -3,7 +3,7 @@
 class EmojiStatistics {
 	getName () {return "EmojiStatistics";}
 
-	getVersion () {return "2.9.0";}
+	getVersion () {return "2.9.1";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -171,7 +171,7 @@ class EmojiStatistics {
 					key: data.sortkey || data.key,
 					sort: true,
 					reverse: data.reverse,
-					cellClassName: `${data.cell}-cell`,
+					cellClassName: BDFDB.disCN[`_emojistatistics${data.cell}cell`],
 					renderHeader: _ => {
 						return this.labels[`modal_titles${data.key}_text`]
 					},
