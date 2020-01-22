@@ -97,7 +97,7 @@ class ChatAliases {
 					children: BDFDB.LanguageUtils.LanguageStrings.ADD,
 					onClick: _ => {
 						this.saveWord(values.wordvalue, values.replacevalue, settingspanel.querySelector(".input-replacevalue input[type='file']"));
-						this.refreshSettings(settingspanel, collapseStates);
+						BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
 					}
 				}),
 				this.createInputs(values)
@@ -147,7 +147,7 @@ class ChatAliases {
 				onRemove: (e, instance) => {
 					delete this.aliases[instance.props.cardId];
 					BDFDB.DataUtils.save(this.aliases, this, "words");
-					this.refreshSettings(settingspanel, collapseStates);
+					BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
 				}
 			})
 		}));
@@ -164,7 +164,7 @@ class ChatAliases {
 					BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all added Aliases?", _ => {
 						this.aliases = {};
 						BDFDB.DataUtils.remove(this, "words");
-						this.refreshSettings(settingspanel, collapseStates);
+						BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
 					});
 				},
 				children: BDFDB.LanguageUtils.LanguageStrings.REMOVE

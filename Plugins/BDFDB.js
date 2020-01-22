@@ -284,6 +284,11 @@
 		}), settingspanel);
 		return settingspanel;
 	};
+	BDFDB.PluginUtils.refreshSettingsPanel = function (plugin, settingspanel, ...args) {
+		if (!BDFDB.ObjectUtils.is(plugin) || typeof plugin.getSettingsPanel != "function" || !Node.prototype.isPrototypeOf(settingspanel) || !settingspanel.parentElement) return;
+		settingspanel.parentElement.appendChild(plugin.getSettingsPanel(...args));
+		settingspanel.remove();
+	};
 	InternalBDFDB.addPluginClasses = function (plugin) {
 		DiscordClassModules[`PLUGIN_${plugin.name}`] = plugin.classes;
 		for (let classname in plugin.classes) DiscordClasses[`$${(plugin.name + classname).toLowerCase()}`] = [`PLUGIN_${plugin.name}`, classname];

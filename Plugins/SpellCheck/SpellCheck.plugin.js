@@ -63,7 +63,7 @@ class SpellCheck {
 			searchable: true,
 			onChange: value => {
 				this.setDictionary(value);
-				this.refreshSettings(settingspanel);
+				BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel);
 			}
 		}));
 		
@@ -92,17 +92,12 @@ class SpellCheck {
 					BDFDB.ArrayUtils.remove(ownDictionary, word);
 					BDFDB.DataUtils.save(ownDictionary, this, "owndics", choices.dictionaryLanguage);
 					this.dictionary = this.langDictionary.concat(ownDictionary);
-					this.refreshSettings(settingspanel);
+					BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel);
 				}
 			}))
 		}));
 		
 		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
-	}
-	
-	refreshSettings (settingspanel) {
-		settingspanel.parentElement.appendChild(this.getSettingsPanel());
-		settingspanel.remove();
 	}
 
 	//legacy

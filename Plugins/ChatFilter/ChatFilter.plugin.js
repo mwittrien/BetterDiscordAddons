@@ -86,7 +86,7 @@ class ChatFilter {
 					children: BDFDB.LanguageUtils.LanguageStrings.ADD,
 					onClick: _ => {
 						this.saveWord(values);
-						this.refreshSettings(settingspanel, collapseStates);
+						BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
 					}
 				}),
 				this.createInputs(values)
@@ -136,7 +136,7 @@ class ChatFilter {
 				onRemove: (e, instance) => {
 					delete this.words[rtype][instance.props.cardId];
 					BDFDB.DataUtils.save(this.words, this, "words");
-					this.refreshSettings(settingspanel, collapseStates);
+					BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
 				}
 			})
 		}));
@@ -153,7 +153,7 @@ class ChatFilter {
 					BDFDB.ModalUtils.confirm(this, `Are you sure you want to remove all ${rtype} Words?`, _ => {
 						this.words[rtype] = {};
 						BDFDB.DataUtils.remove(this, "words", rtype);
-						this.refreshSettings(settingspanel, collapseStates);
+						BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
 					});
 				},
 				children: BDFDB.LanguageUtils.LanguageStrings.REMOVE
@@ -170,11 +170,6 @@ class ChatFilter {
 		}));
 		
 		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
-	}
-	
-	refreshSettings (settingspanel, collapseStates) {
-		settingspanel.parentElement.appendChild(this.getSettingsPanel(collapseStates));
-		settingspanel.remove();
 	}
 
 	//legacy

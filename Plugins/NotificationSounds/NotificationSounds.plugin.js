@@ -198,7 +198,7 @@ class NotificationSounds {
 						BDFDB.DataUtils.remove(this, "audios");
 						this.loadAudios();
 						this.loadChoices();
-						this.refreshSettings(settingspanel, collapseStates);
+						BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
 					});
 				},
 				children: BDFDB.LanguageUtils.LanguageStrings.DELETE
@@ -260,7 +260,7 @@ class NotificationSounds {
 									this.choices[type].song = Object.keys(this.audios[category.value] || {})[0];
 									this.choices[type].src = this.audios[this.choices[type].category][this.choices[type].song] || this.types[type].src;
 									this.saveChoice(type, true);
-									this.refreshSettings(settingspanel, collapseStates);
+									BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
 								}
 							})
 						})
@@ -279,7 +279,7 @@ class NotificationSounds {
 									this.choices[type].song = song.value;
 									this.choices[type].src = this.audios[this.choices[type].category][this.choices[type].song] || this.types[type].src;
 									this.saveChoice(type, true);
-									this.refreshSettings(settingspanel, collapseStates);
+									BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
 								}
 							})
 						})
@@ -309,11 +309,6 @@ class NotificationSounds {
 				className: BDFDB.disCN.marginbottom8
 			})
 		];
-	}
-	
-	refreshSettings (settingspanel, collapseStates) {
-		settingspanel.ele.parentElement.appendChild(this.getSettingsPanel(collapseStates));
-		settingspanel.ele.remove();
 	}
 
 	//legacy
@@ -457,7 +452,7 @@ class NotificationSounds {
 		if (!this.audios[data.category]) this.audios[data.category] = {};
 		this.audios[data.category][data.song] = data.source;
 		BDFDB.DataUtils.save(this.audios, this, "audios");
-		this.refreshSettings(settingspanel, collapseStates);
+		BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel.ele, collapseStates);
 		
 	}
 	
