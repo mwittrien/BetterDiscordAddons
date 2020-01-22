@@ -7868,7 +7868,7 @@
 			if (list && !this.props.maxWidth) {
 				let headers = Array.from(list.querySelectorAll(BDFDB.dotCN.settingstableheader));
 				headers.shift();
-				if (BDFDB.DOMUtils.getRects(headers[0]).width == 0) BDFDB.TimeUtils.timeout(_ => {this.resizeList(headers);});
+				if (BDFDB.DOMUtils.getRects(headers[0]).width == 0) BDFDB.TimeUtils.timeout(_ => {this.resizeList(list, headers);});
 				else this.resizeList(list, headers);
 			}
 		}
