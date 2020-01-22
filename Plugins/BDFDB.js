@@ -4455,6 +4455,7 @@
 		settingsPanelList: "settingsList-eZjkXj",
 		settingsPanelTitle: "title-GTF_8J",
 		settingsTableCard: "settingsTableCard-628t52",
+		settingsTableHeaders: "settingsTableHeaders-WKzw9_",
 		settingsTableList: "settingsTableList-f6sW2y",
 		svgIcon: "icon-GhnIRB",
 		table: "table-moqjM0",
@@ -5933,6 +5934,7 @@
 		settingstableheader: ["SettingsTable", "header"],
 		settingstableheadername: ["SettingsTable", "headerName"],
 		settingstableheaderoption: ["SettingsTable", "headerOption"],
+		settingstableheaders: ["BDFDB", "settingsTableHeaders"],
 		settingstableheadersize: ["SettingsTable", "headerSize"],
 		settingstablecard: ["BDFDB", "settingsTableCard"],
 		settingstablelist: ["BDFDB", "settingsTableList"],
@@ -7889,6 +7891,7 @@
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.settingstablelist, this.props.className),
 				children: [
 					BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.settingstableheaders),
 						align: LibraryComponents.Flex.Align.STRETCH,
 						children: [].concat(this.props.title || "", this.props.settings).map((setting, i) => BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.DOMUtils.formatClassName(i == 0 ? BDFDB.disCN.settingstableheadername : BDFDB.disCN.settingstableheaderoption, BDFDB.disCN.settingstableheader, BDFDB.disCN.settingstableheadersize, BDFDB.disCN.primary, BDFDB.disCN.weightbold),
@@ -8500,10 +8503,12 @@
 		${BDFDB.dotCNS.settingstablelist + BDFDB.dotCN.checkboxcontainer}:before {
 			display: none;
 		}
-		
 		${BDFDB.dotCN.settingstablecard} {
 			height: 60px;
 			margin-bottom: 10px;
+		}
+		${BDFDB.dotCN.settingstableheaders} {
+			margin-right: 10px;
 		}
 		
 		${BDFDB.dotCNS.themelight + BDFDB.dotCN.quickselectpopoutwrapper},
