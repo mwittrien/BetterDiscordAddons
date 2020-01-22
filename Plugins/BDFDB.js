@@ -4463,6 +4463,7 @@
 		settingsTableCardConfigs: "settingsTableCardConfigs-w5X9-Z",
 		settingsTableCardLabel: "settingsTableCardLabel-MElgIg",
 		settingsTableHeaders: "settingsTableHeaders-WKzw9_",
+		settingsTableHeaderVertical: "headerVertical-4MNxqk",
 		settingsTableList: "settingsTableList-f6sW2y",
 		svgIcon: "icon-GhnIRB",
 		table: "table-moqjM0",
@@ -5943,6 +5944,7 @@
 		settingstableheaderoption: ["SettingsTable", "headerOption"],
 		settingstableheaders: ["BDFDB", "settingsTableHeaders"],
 		settingstableheadersize: ["SettingsTable", "headerSize"],
+		settingstableheadervertical: ["BDFDB", "settingsTableHeaderVertical"],
 		settingstablecard: ["BDFDB", "settingsTableCard"],
 		settingstablecardconfigs: ["BDFDB", "settingsTableCardConfigs"],
 		settingstablecardlabel: ["BDFDB", "settingsTableCardLabel"],
@@ -7873,7 +7875,7 @@
 			}
 		}
 		resizeList(list, headers) {
-			let toobig = false, maxWidth = 0;
+			let maxWidth = 0, biggestWidth = 0;
 			if (!maxWidth) {
 				for (let header of headers) {
 					header.style = "";
@@ -7881,13 +7883,18 @@
 					maxWidth = width > maxWidth ? width : maxWidth;
 				}
 				maxWidth += 4;
+				biggestWidth = maxWidth;
 			}
 			if (headers.length * maxWidth > 300) {
-				toobig = true;
+				this.props.vertical = true;
 				maxWidth = parseInt(290 / headers.length);
 			}
-			else if (maxWidth < 36) maxWidth = 36;
+			else if (maxWidth < 36) {
+				maxWidth = 36;
+				biggestWidth = maxWidth;
+			}
 			this.props.maxWidth = maxWidth;
+			this.props.biggestWidth = biggestWidth;
 			this.props.fullWidth = BDFDB.DOMUtils.getRects(list).width;
 			BDFDB.ReactUtils.forceUpdate(this);
 		}
@@ -7896,22 +7903,28 @@
 			this.props.renderLabel = typeof this.props.renderLabel == "function" ? this.props.renderLabel : data => data.label;
 			let labelWidth = this.props.maxWidth && this.props.fullWidth && (this.props.fullWidth - 20 - (this.props.maxWidth * this.props.settings.length));
 			let configWidth = this.props.maxWidth && this.props.maxWidth * this.props.settings.length;
+			let isHeaderClickable = typeof this.props.onHeaderClick == "function" || typeof this.props.onHeaderContextMenu == "function";
 			return BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.settingstablelist, this.props.className),
 				children: [
 					BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 						className: BDFDB.disCN.settingstableheaders,
 						align: LibraryComponents.Flex.Align.STRETCH,
+						style: this.props.vertical && this.props.biggestWidth ? {
+							marginTop: this.props.biggestWidth - 25 || 0
+						} : {},
 						children: [].concat(this.props.title || "", this.props.settings).map((setting, i) => BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.DOMUtils.formatClassName(i == 0 ? BDFDB.disCN.settingstableheadername : BDFDB.disCN.settingstableheaderoption, BDFDB.disCN.settingstableheader, BDFDB.disCN.settingstableheadersize, BDFDB.disCN.primary, BDFDB.disCN.weightbold),
-							children: setting,
+							className: BDFDB.DOMUtils.formatClassName(i == 0 ? BDFDB.disCN.settingstableheadername : BDFDB.disCN.settingstableheaderoption, i != 0 && this.props.vertical && BDFDB.disCN.settingstableheadersvertical, BDFDB.disCN.settingstableheader, BDFDB.disCN.settingstableheadersize, BDFDB.disCN.primary, BDFDB.disCN.weightbold, isHeaderClickable && BDFDB.disCN.cursorpointer),
 							onClick: _ => {if (typeof this.props.onHeaderClick == "function") this.props.onHeaderClick(setting, this);},
 							onContextMenu: _ => {if (typeof this.props.onHeaderContextMenu == "function") this.props.onHeaderContextMenu(setting, this);},
 							style: i != 0 && this.props.maxWidth ? {
 								maxWidth: this.props.maxWidth,
 								width: this.props.maxWidth,
 								flex: `0 0 ${this.props.maxWidth}px`
-							} : {}
+							} : {},
+							children: BDFDB.ReactUtils.createElement("span", {
+								children: setting
+							})
 						}))
 					}),
 					(BDFDB.ArrayUtils.is(this.props.data) ? this.props.data : [{}]).filter(n => n).map(data => BDFDB.ReactUtils.createElement(LibraryComponents.Card, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
@@ -7943,6 +7956,7 @@
 									shrink: 0,
 									wrap: true,
 									children: BDFDB.ReactUtils.createElement(LibraryComponents.Checkbox, {
+										disabled: data.disabled,
 										cardId: data.key,
 										settingId: setting,
 										shape: LibraryComponents.Checkbox.Shapes.ROUND,
@@ -8514,6 +8528,16 @@
 		
 		${BDFDB.dotCNS.settingstablelist + BDFDB.dotCN.checkboxcontainer}:before {
 			display: none;
+		}
+		${BDFDB.dotCN.settingstableheadervertical} {
+			position: relative;
+		}
+		${BDFDB.dotCN.settingstableheadervertical} > span {
+			position: absolute;
+			bottom: 50%;
+			right: 14px;
+			margin-bottom: -5px;
+			writing-mode: vertical-rl;
 		}
 		${BDFDB.dotCN.settingstablecard} {
 			height: 60px;
