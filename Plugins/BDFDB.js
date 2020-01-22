@@ -8529,13 +8529,20 @@
 		${BDFDB.dotCNS.settingstablelist + BDFDB.dotCN.checkboxcontainer}:before {
 			display: none;
 		}
+		
+		${BDFDB.dotCNS.settingstablelist + BDFDB.dotCN.settingstableheader} {
+			min-height: 10px;
+		}
+		${BDFDB.dotCNS.settingstablelist + BDFDB.dotCN.settingstableheaderoption} {
+			width: unset;
+		}
 		${BDFDB.dotCN.settingstableheadervertical} {
 			position: relative;
 		}
 		${BDFDB.dotCN.settingstableheadervertical} > span {
 			position: absolute;
 			bottom: 50%;
-			right: 14px;
+			right: calc(50% - 5px);
 			margin-bottom: -5px;
 			writing-mode: vertical-rl;
 		}
