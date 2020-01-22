@@ -98,7 +98,7 @@ class NotificationSounds {
 
 	getSettingsPanel (collapseStates = {}) {
 		if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		let settingspanel = {ele: null}, settingsitems = [];
+		let settingspanel = {node: null}, settingsitems = [];
 		
 		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 			title: "Add new Song",
@@ -149,20 +149,20 @@ class NotificationSounds {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 							style: {marginBottom: 1},
 							onClick: _ => {
-								for (let input of settingspanel.ele.querySelectorAll(".input-newsong " + BDFDB.dotCN.input)) if (!input.value || input.value.length == 0 || input.value.trim().length == 0) return BDFDB.NotificationUtils.toast("Fill out all fields to add a new song.", {type:"danger"});
-								let category = settingspanel.ele.querySelector(".input-category " + BDFDB.dotCN.input).value.trim();
-								let song = settingspanel.ele.querySelector(".input-song " + BDFDB.dotCN.input).value.trim();
-								let source = settingspanel.ele.querySelector(".input-source " + BDFDB.dotCN.input).value.trim();
+								for (let input of settingspanel.node.querySelectorAll(".input-newsong " + BDFDB.dotCN.input)) if (!input.value || input.value.length == 0 || input.value.trim().length == 0) return BDFDB.NotificationUtils.toast("Fill out all fields to add a new song.", {type:"danger"});
+								let category = settingspanel.node.querySelector(".input-category " + BDFDB.dotCN.input).value.trim();
+								let song = settingspanel.node.querySelector(".input-song " + BDFDB.dotCN.input).value.trim();
+								let source = settingspanel.node.querySelector(".input-source " + BDFDB.dotCN.input).value.trim();
 								if (source.indexOf("http") == 0) BDFDB.LibraryRequires.request(source, (error, response, result) => {
 									if (response) {
 										let type = response.headers["content-type"];
-										if (type && (type.indexOf("octet-stream") > -1 || type.indexOf("audio") > -1 || type.indexOf("video") > -1)) return this.successSavedAudio(settingspanel, collapseStates, {category, song, source});
+										if (type && (type.indexOf("octet-stream") > -1 || type.indexOf("audio") > -1 || type.indexOf("video") > -1)) return this.successSavedAudio(settingspanel.node, collapseStates, {category, song, source});
 									}
 									BDFDB.NotificationUtils.toast("Use a valid direct link to a video or audio source. They usually end on something like .mp3, .mp4 or .wav.", {type:"danger"});
 								});
 								else BDFDB.LibraryRequires.fs.readFile(source, (error, response) => {
 									if (error) BDFDB.NotificationUtils.toast("Could not fetch file. Please make sure the file exists.", {type:"danger"});
-									else return this.successSavedAudio(settingspanel, collapseStates, {category, song, source:`data:audio/mpeg;base64,${response.toString("base64")}`});
+									else return this.successSavedAudio(settingspanel.node, collapseStates, {category, song, source:`data:audio/mpeg;base64,${response.toString("base64")}`});
 								});
 							},
 							children: BDFDB.LanguageUtils.LanguageStrings.SAVE
@@ -198,14 +198,14 @@ class NotificationSounds {
 						BDFDB.DataUtils.remove(this, "audios");
 						this.loadAudios();
 						this.loadChoices();
-						BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
+						BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel.node, collapseStates);
 					});
 				},
 				children: BDFDB.LanguageUtils.LanguageStrings.DELETE
 			})
 		}));
 		
-		return settingspanel.ele = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+		return settingspanel.node = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 	}
 	
 	createSoundCard (type, settingspanel, collapseStates) {
@@ -260,7 +260,7 @@ class NotificationSounds {
 									this.choices[type].song = Object.keys(this.audios[category.value] || {})[0];
 									this.choices[type].src = this.audios[this.choices[type].category][this.choices[type].song] || this.types[type].src;
 									this.saveChoice(type, true);
-									BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
+									BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel.node, collapseStates);
 								}
 							})
 						})
@@ -279,7 +279,7 @@ class NotificationSounds {
 									this.choices[type].song = song.value;
 									this.choices[type].src = this.audios[this.choices[type].category][this.choices[type].song] || this.types[type].src;
 									this.saveChoice(type, true);
-									BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
+									BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel.node, collapseStates);
 								}
 							})
 						})
@@ -452,7 +452,7 @@ class NotificationSounds {
 		if (!this.audios[data.category]) this.audios[data.category] = {};
 		this.audios[data.category][data.song] = data.source;
 		BDFDB.DataUtils.save(this.audios, this, "audios");
-		BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel.ele, collapseStates);
+		BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
 		
 	}
 	

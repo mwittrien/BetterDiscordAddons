@@ -182,11 +182,6 @@ class ChatAliases {
 		
 		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 	}
-	
-	refreshSettings (settingspanel, collapseStates) {
-		settingspanel.parentElement.appendChild(this.getSettingsPanel(collapseStates));
-		settingspanel.remove();
-	}
 
 	//legacy
 	load () {}
