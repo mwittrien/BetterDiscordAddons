@@ -9719,7 +9719,7 @@
 	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.ContextMenuUtils, "openContextMenu", {before: e => {
 		let menu = e.methodArguments[1]();
 		if (BDFDB.ObjectUtils.is(menu)) {
-			let type = InternalBDFDB.getContextMenuType(menu.props && menu.props.type || menu.type && menu.type.displayName);
+			let type = InternalBDFDB.getContextMenuType(menu.type && menu.type.displayName || menu.props && menu.props.type);
 			if (type && LibraryComponents.ContextMenus._NonRenderMenus.includes(type)) {
 				let module = BDFDB.ModuleUtils.find(m => m == menu.type, false);
 				if (module && module.exports && module.exports.default) {
