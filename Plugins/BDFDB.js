@@ -1065,6 +1065,7 @@
 		InviteCard: "guildsettingsinvitecard",
 		PopoutContainer: "popout",
 		PrivateChannelCall: "callcurrentcontainer",
+		PrivateChannelRecipientsInvitePopout: "searchpopoutdmaddpopout",
 		PrivateChannelsList: "dmchannelsscroller",
 		QuickSwitchChannelResult: "quickswitchresult",
 		QuickSwitchGuildResult: "quickswitchresult",
