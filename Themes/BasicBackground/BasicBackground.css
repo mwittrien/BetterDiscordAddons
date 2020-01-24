@@ -1977,10 +1977,14 @@ body:before {
 
 /* NEW EXPERIMENT */
 
+.tableHeaderText-2io-_N,									/* tableheader			text								*/
 .onlineStatusGroupTitle-6ObdV6 {							/* groupheader												*/
 	color: rgb(var(--fontwhite2));
 }
 
+.tableHeader-2Ctu7Y {										/* tablerheader			border								*/
+	border-top-color: rgba(var(--fontwhite4), 0.5);
+}
 .peopleListItem-2nzedh {									/* friends				row									*/
 	border-top-color: rgba(var(--fontwhite1), 0.1);
 }
