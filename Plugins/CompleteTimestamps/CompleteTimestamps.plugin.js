@@ -3,7 +3,7 @@
 class CompleteTimestamps {
 	getName () {return "CompleteTimestamps";}
 
-	getVersion () {return "1.3.9";}
+	getVersion () {return "1.4.0";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class CompleteTimestamps {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Compact","Fixed first timestamp of messagegroup not being visible without hovering in compact mode"]],
+			"fixed":[["System Messages", "Now properly works for system messages"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 
@@ -184,6 +184,14 @@ class CompleteTimestamps {
 			BDFDB.PluginUtils.init(this);
 
 			this.languages = Object.assign({"own":{name:"Own",id:"own",integrated:false,dic:false}}, BDFDB.LanguageUtils.languages);
+			
+			let SystemMessageExports = (BDFDB.ModuleUtils.findByName("SystemMessage", false) || {}).exports;
+			if (SystemMessageExports) {
+				BDFDB.ModuleUtils.patch(this, SystemMessageExports, "default", {after: e => {
+					this.processSystemMessage({instance:{props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:"default"});
+				}});
+				SystemMessageExports.default.displayName = "SystemMessage";
+			}
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
@@ -217,19 +225,21 @@ class CompleteTimestamps {
 		if (!e.instance.props.isCompact) {
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			if (settings.showInChat) this.injectTimestamp(e.returnvalue, e.instance.props.message.timestamp);
-			if (settings.showOnHover) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.messagecontent]]});
-				if (index > -1) {
-					let content = children[index];
-					children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-						text: this.getTimestamp(this.languages[BDFDB.DataUtils.get(this, "choices", "creationDateLang")].id, e.instance.props.message.timestamp._i),
-						tooltipConfig: {
-							type: "left"
-						},
-						children: content
-					});
-				}
-			}
+			if (settings.showOnHover) this.injectTooltipWrapper(e.returnvalue, e.instance.props.message.timestamp);
+		}
+	}
+
+	processSystemMessage (e) {
+		if (typeof e.returnvalue.props.children == "function") {
+			let settings = BDFDB.DataUtils.get(this, "settings");
+			let renderChildren = e.returnvalue.props.children;
+			e.returnvalue.props.children = (...args) => {
+				let renderedChildren = renderChildren(...args);
+				if (settings.showInChat) this.injectTimestamp(renderedChildren, e.instance.props.timestamp, true);
+				if (settings.showOnHover) this.injectTooltipWrapper(renderedChildren, e.instance.props.timestamp);
+				return renderedChildren;
+			};
+			BDFDB.TimeUtils.timeout(this.setMaxWidth.bind(this));
 		}
 	}
 
@@ -254,11 +264,22 @@ class CompleteTimestamps {
 		}
 	}
 	
-	injectTimestamp (parent, timestamp) {
-		let [children, index] = BDFDB.ReactUtils.findChildren(parent, {name: "MessageTimestamp"});
+	injectTooltipWrapper (parent, timestamp) {
+		let [children, index] = BDFDB.ReactUtils.findChildren(parent, {props:[["className", [BDFDB.disCN.messagecontent, BDFDB.disCN.messagesystemcontent]]]});
+		if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+			text: this.getTimestamp(this.languages[BDFDB.DataUtils.get(this, "choices", "creationDateLang")].id, timestamp._i),
+			tooltipConfig: {
+				type: "left"
+			},
+			children: children[index]
+		});
+	}
+	
+	injectTimestamp (parent, timestamp, isSystem = false) {
+		let [children, index] = isSystem ? BDFDB.ReactUtils.findChildren(parent, {props: [["className", BDFDB.disCN.messagetimestampsystem]]}) : BDFDB.ReactUtils.findChildren(parent, {name: "MessageTimestamp"});
 		if (index > -1) {
 			let props = children[index].props;
-			if (!props.isCompact) children.splice(index++, 0, BDFDB.ReactUtils.createElement("span", {
+			if (!props.isCompact && !isSystem) children.splice(index++, 0, BDFDB.ReactUtils.createElement("span", {
 				children: "ARABIC-FIX",
 				style: {
 					fontSize: 0,
@@ -266,19 +287,19 @@ class CompleteTimestamps {
 				}
 			}));
 			children.splice(index, 1, BDFDB.ReactUtils.createElement("time", {
-				className: BDFDB.DOMUtils.formatClassName(props.backgroundOpacity && BDFDB.disCN["message" + props.backgroundOpacity + "backgroundopacity"], props.isVisibleOnlyOnHover && BDFDB.disCN.messagetimestampvisibleonhover, props.isCompact ? (props.isMentioned ? BDFDB.disCN.messagetimestampcompactismentioned : BDFDB.disCN.messagetimestampcompact) : BDFDB.disCN.messagetimestampcozy),
+				className: BDFDB.DOMUtils.formatClassName(props.backgroundOpacity && BDFDB.disCN["message" + props.backgroundOpacity + "backgroundopacity"], props.isVisibleOnlyOnHover && BDFDB.disCN.messagetimestampvisibleonhover, isSystem ? BDFDB.disCN.messagetimestampsystem : (props.isCompact ? (props.isMentioned ? BDFDB.disCN.messagetimestampcompactismentioned : BDFDB.disCN.messagetimestampcompact) : BDFDB.disCN.messagetimestampcozy)),
 				dateTime: timestamp,
 				children: [
-					BDFDB.ReactUtils.createElement("i", {
+					!isSystem && BDFDB.ReactUtils.createElement("i", {
 						className: BDFDB.disCN.messagetimestampseparatorleft,
 						children: props.isCompact ? "[" : " ["
 					}),
 					this.getTimestamp(this.languages[BDFDB.DataUtils.get(this, "choices", "creationDateLang")].id, timestamp._i),
-					BDFDB.ReactUtils.createElement("i", {
+					!isSystem && BDFDB.ReactUtils.createElement("i", {
 						className: BDFDB.disCN.messagetimestampseparatorright,
 						children: props.isCompact ? "] " : "]"
 					})
-				]
+				].filter(n => n)
 			}));
 		}
 	}
