@@ -163,6 +163,7 @@ body,														/* body														*/
 #app-mount .activityFeed-1C0EmJ,							/* activityfeed												*/
 #app-mount .applicationStore-1pNvnv,						/* store													*/
 #app-mount .container-3gCOGc,								/* friends													*/
+#app-mount .container-1D34oG,								/* new friends (experiment)									*/
 #app-mount .pageWrapper-1PgVDX,								/* guilddiscovery											*/
 #app-mount .scroller-2FKFPG,								/* scroller													*/
 #app-mount .standardSidebarView-3F1I7i,						/* settings													*/
@@ -190,6 +191,9 @@ body,														/* body														*/
 	background-color: rgba(var(--vtransparencycolor), var(--vguildchanneltransparency));
 }
 #app-mount .membersWrap-2h-GB4 {							/* members				container							*/
+	background-color: rgba(var(--vtransparencycolor), var(--vmemberlisttransparency));
+}
+#app-mount .nowPlayingColumn-2sl4cE {						/* new friends playing (experiment)							*/
 	background-color: rgba(var(--vtransparencycolor), var(--vmemberlisttransparency));
 }
 
@@ -1968,6 +1972,43 @@ body:before {
 }
 .friendsTable-133bsv .friendsRow-2yicud:hover .friendsColumnActions-1LT3_M .friendsAction-__WNE9:hover {
 	background-color: rgb(var(--vaccentcolor));
+	color: rgb(var(--fontwhite1));
+}
+
+/* NEW EXPERIMENT */
+
+.onlineStatusGroupTitle-6ObdV6 {							/* groupheader												*/
+	color: rgb(var(--fontwhite2));
+}
+
+.peopleListItem-2nzedh {									/* friends				row									*/
+	border-top-color: rgba(var(--fontwhite1), 0.1);
+}
+.peopleListItem-2nzedh .username-31C1TQ {					/* friends				username							*/
+	color: rgb(var(--fontwhite2));
+}
+.peopleListItem-2nzedh .discriminator-22Okc1 {				/* friends				discriminator						*/
+	color: rgb(var(--fontwhite4));
+}
+.peopleListItem-2nzedh .subtext-24R4-w {					/* friends				subtext								*/
+	color: rgb(var(--fontwhite3));
+}
+.peopleListItem-2nzedh:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+.peopleListItem-2nzedh:hover .username-31C1TQ {
+	color: rgb(var(--fontwhite1));
+}
+.peopleListItem-2nzedh:hover .discriminator-22Okc1 {
+	color: rgb(var(--fontwhite3));
+}
+.peopleListItem-2nzedh:hover .subtext-24R4-w {
+	color: rgb(var(--fontwhite2));
+}
+.moreMenu-1jOHx_ {											/* friends				burgermenu							*/
+	color: rgb(var(--fontwhite2));
+}
+.moreMenu-1jOHx_:hover {
 	color: rgb(var(--fontwhite1));
 }
 
