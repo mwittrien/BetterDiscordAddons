@@ -185,13 +185,9 @@ class CompleteTimestamps {
 
 			this.languages = Object.assign({"own":{name:"Own",id:"own",integrated:false,dic:false}}, BDFDB.LanguageUtils.languages);
 			
-			let SystemMessageExports = (BDFDB.ModuleUtils.findByName("SystemMessage", false) || {}).exports;
-			if (SystemMessageExports) {
-				BDFDB.ModuleUtils.patch(this, SystemMessageExports, "default", {after: e => {
-					this.processSystemMessage({instance:{props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:"default"});
-				}});
-				SystemMessageExports.default.displayName = "SystemMessage";
-			}
+			BDFDB.ModuleUtils.patch(this, (BDFDB.ModuleUtils.findByName("SystemMessage", false) || {}).exports, "default", {after: e => {
+				this.processSystemMessage({instance:{props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:"default"});
+			}});
 
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
