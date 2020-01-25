@@ -1997,6 +1997,10 @@ body:before {
 .peopleListItem-2nzedh .subtext-24R4-w {					/* friends				subtext								*/
 	color: rgb(var(--fontwhite3));
 }
+.peopleListItem-2nzedh .actionButton-uPB8Fs {				/* friends				actionbutton						*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+	color: rgb(var(--fontwhite4));
+}
 .peopleListItem-2nzedh:hover {
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
@@ -2009,10 +2013,12 @@ body:before {
 .peopleListItem-2nzedh:hover .subtext-24R4-w {
 	color: rgb(var(--fontwhite2));
 }
-.moreMenu-1jOHx_ {											/* friends				burgermenu							*/
-	color: rgb(var(--fontwhite2));
+.peopleListItem-2nzedh:hover .actionButton-uPB8Fs {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+	color: rgb(var(--fontwhite3));
 }
-.moreMenu-1jOHx_:hover {
+.peopleListItem-2nzedh .actionButton-uPB8Fs:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.5);
 	color: rgb(var(--fontwhite1));
 }
 
@@ -2980,8 +2986,12 @@ body:before {
 .uploadModal-2ifh8j .inner-3nWsbo .file-34mY5K .description-2ug5H_ .filename-ovv3c5 {
 	color: rgb(var(--fontwhite1));
 }
+.uploadModalIn-1z07Bv .uploadDropModal-2kTwbc .inner-3nWsbo .title-2Vtl4y {
+	text-shadow: 1px 1px var(--vtextshadow);
+}
 .uploadModalIn-1z07Bv .uploadDropModal-2kTwbc .inner-3nWsbo .instructions-2Du9gG {
 	color: rgb(var(--fontwhite3));
+	text-shadow: 1px 1px var(--vtextshadow);
 }
 .content-P4SiGI {											/* modal				errorcontent						*/
 	color: rgb(var(--fontwhite3));
