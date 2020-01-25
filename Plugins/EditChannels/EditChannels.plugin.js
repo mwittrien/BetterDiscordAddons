@@ -332,7 +332,6 @@ class EditChannels {
 		if (BDFDB.DataUtils.get(this, "settings", "changeInRecentMentions")) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "VerticalScroller"});
 			if (index > -1 && children[index].props.children && BDFDB.ArrayUtils.is(children[index].props.children[0])) for (let dividerAndMessage of children[index].props.children[0]) if (dividerAndMessage) {
-				console.log(dividerAndMessage);
 				let channel = BDFDB.ReactUtils.getValue(dividerAndMessage[1], "props.children.props.children.props.channel");
 				if (channel && BDFDB.ChannelUtils.isTextChannel(channel)) {
 					dividerAndMessage[0].props.children[0].props.children = "#" + this.getChannelData(channel.id).name;
