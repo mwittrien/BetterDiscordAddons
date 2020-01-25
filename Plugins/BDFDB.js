@@ -23,6 +23,8 @@
 	};
 	var loadid = Math.round(Math.random() * 10000000000000000), InternalBDFDB = {};
 	BDFDB.InternalData.loadid = loadid;
+	
+	if (typeof Array.prototype.flat != "function") Array.prototype.flat = function () {return this;}
 
 	BDFDB.LogUtils = {};
 	BDFDB.LogUtils.log = function (string, name) {
