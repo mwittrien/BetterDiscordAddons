@@ -1147,6 +1147,7 @@
 					callInstead = false, stopCall = false;
 					return modulefunction == "render" && data.returnValue === undefined ? null : data.returnValue;
 				};
+				for (let key of Object.keys(originalfunction)) module[modulefunction][key] = originalfunction[key];
 				module[modulefunction].originalsource = originalfunction;
 				module[modulefunction].isBDFDBpatched = true;
 			}
