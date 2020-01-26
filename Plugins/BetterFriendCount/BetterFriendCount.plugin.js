@@ -3,7 +3,7 @@
 class BetterFriendCount {
 	getName () {return "BetterFriendCount";}
 
-	getVersion () {return "1.2.1";}
+	getVersion () {return "1.2.2";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -80,7 +80,7 @@ class BetterFriendCount {
 			for (let type in this.relationshipTypes) relationshipCount[this.relationshipTypes[type]] = 0;
 			for (let id in relationships) relationshipCount[this.relationshipTypes[relationships[id]]]++;
 			for (let child of e.returnvalue.props.children) if (child && child.props.id != "ADD_FRIEND") {
-				let newchildren = [child.props.children].flat();
+				let newchildren = [child.props.children].flat().filter(child => BDFDB.ReactUtils.getValue(child, "type.displayName") != "NumberBadge");
 				switch (child.props.id) {
 					case "ALL":
 						newchildren.push(this.createBadge(relationshipCount.FRIEND));
@@ -111,7 +111,7 @@ class BetterFriendCount {
 	
 	createBadge (amount) {
 		return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.NumberBadge, {
-			className: BDFDB.disCN.settingstabbarbadge,
+			className: BDFDB.disCN.peoplesbadge,
 			count: amount,
 			style: {marginLeft: 6}
 		});

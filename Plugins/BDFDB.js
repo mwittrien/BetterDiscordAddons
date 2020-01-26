@@ -4751,6 +4751,7 @@
 	DiscordClassModules.Note = BDFDB.ModuleUtils.find(m => typeof m.note == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.Notice = BDFDB.ModuleUtils.findByProperties("notice", "noticeFacebook");
 	DiscordClassModules.OptionPopout = BDFDB.ModuleUtils.findByProperties("container", "button", "item");
+	DiscordClassModules.Peoples = BDFDB.ModuleUtils.findByProperties("peopleColumn", "tabBar");
 	DiscordClassModules.PictureInPicture = BDFDB.ModuleUtils.findByProperties("pictureInPicture", "pictureInPictureWindow");
 	DiscordClassModules.PillWrapper = BDFDB.ModuleUtils.find(m => typeof m.item == "string" && typeof m.wrapper == "string" && Object.keys(m).length == 2);
 	DiscordClassModules.PrivateChannel = BDFDB.ModuleUtils.findByProperties("channel", "closeButton");
@@ -5779,6 +5780,11 @@
 		optionpopoutbuttonicon: ["OptionPopout", "icon"],
 		optionpopoutitem: ["OptionPopout", "item"],
 		overflowellipsis: ["BDFDB", "overflowEllipsis"],
+		peoples: ["Peoples", "container"],
+		peoplesbadge: ["Peoples", "badge"],
+		peoplesnowplayingcolumn: ["Peoples", "nowPlayingColumn"],
+		peoplespeoplecolumn: ["Peoples", "peopleColumn"],
+		peoplestabbar: ["Peoples", "tabBar"],
 		pictureinpicture: ["PictureInPicture", "pictureInPicture"],
 		pictureinpicturewindow: ["PictureInPicture", "pictureInPictureWindow"],
 		popout: ["Popout", "popout"],
