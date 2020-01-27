@@ -6148,7 +6148,6 @@
 		userpopoutheaderbottagwithnickname: ["UserPopout", "headerBotTagWithNickname"],
 		userpopoutheadernamewrapper: ["UserPopout", "headerNameWrapper"],
 		userpopoutheadernickname: ["UserPopout", "headerName"],
-		userpopoutheadernonickname: ["UserPopout", "headerTagUsernameNoNickname"],
 		userpopoutheadernormal: ["UserPopout", "headerNormal"],
 		userpopoutheaderplaying: ["UserPopout", "headerPlaying"],
 		userpopoutheaderspotify: ["UserPopout", "headerSpotify"],
@@ -7238,6 +7237,8 @@
 	LibraryComponents.ContextMenus._Exports.UserContextMenu = (BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.USER_CHANNEL_MEMBERS, false) || {}).exports;
 	
 	LibraryComponents.ContextMenus.UserSettingsCogContextMenu = BDFDB.ModuleUtils.findByName("UserSettingsCogContextMenu");
+	
+	LibraryComponents.DiscordTag = BDFDB.ModuleUtils.findByName("DiscordTag");
 	
 	LibraryComponents.FavButton = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.FavButton") || reactInitialized && class BDFDB_FavButton extends LibraryModules.React.Component {
 		handleClick() {
