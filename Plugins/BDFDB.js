@@ -5313,6 +5313,7 @@
 		friends: ["Friends", "container"],
 		friendscolumn: ["Friends", "friendsColumn"],
 		friendscolumnnamewrap: ["Friends", "friendsColumnName"],
+		friendsdiscordtag: ["Friends", "discordTag"],
 		friendsrow: ["Friends", "friendsRow"],
 		friendstable: ["Friends", "friendsTable"],
 		friendstableheader: ["Friends", "friendsTableHeader"],
