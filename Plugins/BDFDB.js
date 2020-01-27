@@ -8218,11 +8218,13 @@
 					maxLength: this.props.type == "file" ? false : this.props.maxLength,
 					ref: this.props.inputRef
 				}), "errorMessage", "focused", "error", "success", "inputClassName", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "filter", "useFilepath")),
-				this.props.type == "color" ? BDFDB.ReactUtils.createElement(LibraryComponents.ColorSwatches, {
-					colors: [],
-					compMode: this.props.mode == "comp",
-					color: this.props.value && this.props.mode == "comp" ? BDFDB.ColorUtils.convert(this.props.value.split(","), "RGB") : this.props.value,
-					pickerConfig: {gradient:false, alpha:this.props.mode != "comp"}
+				this.props.type == "color" ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
+					children: BDFDB.ReactUtils.createElement(LibraryComponents.ColorSwatches, {
+						colors: [],
+						compMode: this.props.mode == "comp",
+						color: this.props.value && this.props.mode == "comp" ? BDFDB.ColorUtils.convert(this.props.value.split(","), "RGB") : this.props.value,
+						pickerConfig: {gradient:false, alpha:this.props.mode != "comp"}
+					})
 				}) : null,
 				this.props.type == "file" ? BDFDB.ReactUtils.createElement(LibraryComponents.FileButton, {
 					filter: this.props.filter,
