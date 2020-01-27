@@ -1030,6 +1030,7 @@
 		QuickSwitchChannelResult: "Channel",
 		QuickSwitchGuildResult: "Guild",
 		QuickSwitchResult: "Result",
+		UserProfile: "UserProfileBody",
 		WebhookCard: "Webhook"
 	};
 	WebModulesData.Forceobserve = [
@@ -1084,6 +1085,7 @@
 		UnreadDMs: "guildsscroller",
 		Upload: "uploadmodal",
 		UserPopout: "userpopout",
+		UserProfile: "userprofile",
 		V2C_ContentColumn: "contentcolumn",
 		V2C_List: "_repolist",
 		V2C_PluginCard: "_repoheader",
