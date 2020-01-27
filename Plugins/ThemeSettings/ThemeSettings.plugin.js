@@ -3,7 +3,7 @@
 class ThemeSettings {
 	getName () {return "ThemeSettings";}
 
-	getVersion () {return "1.1.6";}
+	getVersion () {return "1.1.7";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -80,7 +80,10 @@ class ThemeSettings {
 					e.returnvalue.props.children.push(footer);
 					children = footer.props.children;
 				}
-				else children = children[index].props.children;
+				else {
+					children[index].props.children = [children[index].props.children].flat();
+					children = children[index].props.children;
+				}
 				children.push(BDFDB.ReactUtils.createElement("button", {
 					className: BDFDB.disCNS._reposettingsbutton,
 					children: "Settings",
