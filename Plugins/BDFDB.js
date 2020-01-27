@@ -8219,6 +8219,7 @@
 					ref: this.props.inputRef
 				}), "errorMessage", "focused", "error", "success", "inputClassName", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "filter", "useFilepath")),
 				this.props.type == "color" ? BDFDB.ReactUtils.createElement(LibraryComponents.Flex.Child, {
+					wrap: true,
 					children: BDFDB.ReactUtils.createElement(LibraryComponents.ColorSwatches, {
 						colors: [],
 						compMode: this.props.mode == "comp",

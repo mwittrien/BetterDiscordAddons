@@ -188,8 +188,8 @@ class CompleteTimestamps {
 			BDFDB.ModuleUtils.patch(this, (BDFDB.ModuleUtils.findByName("SystemMessage", false) || {}).exports, "default", {after: e => {
 				this.processSystemMessage({instance:{props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:"default"});
 			}});
-
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			
+			this.forceUpdateAll();
 		}
 		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
@@ -213,7 +213,7 @@ class CompleteTimestamps {
 	onSettingsClosed () {
 		if (this.SettingsUpdated) {
 			delete this.SettingsUpdated;
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			this.forceUpdateAll();
 		}
 	}
 
@@ -399,5 +399,10 @@ class CompleteTimestamps {
 			}
 			else BDFDB.DOMUtils.removeLocalStyle(this.name + "CompactCorrection");
 		}
+	}
+	
+	forceUpdateAll () {
+		BDFDB.ModuleUtils.forceAllUpdates(this);
+		BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"SystemMessageWrapper", unlimited:true, all:true}));
 	}
 }
