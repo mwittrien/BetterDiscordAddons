@@ -1360,11 +1360,17 @@
 		for (let type of ComponentTypeData.NormalContextMenus) if (typeof plugin[`on${type}`] === "function") InternalBDFDB.patchContextMenuPlugin(plugin, type, LibraryComponents.ContextMenus[type]);
 		for (let type of ComponentTypeData.FluxContextMenus) if (typeof plugin[`on${type}`] === "function") {
 			if (BDFDB.InternalData.componentPatchQueries[type].module) InternalBDFDB.patchContextMenuPlugin(plugin, type, BDFDB.InternalData.componentPatchQueries[type].module);
-			else BDFDB.InternalData.componentPatchQueries[type].query.push(plugin);
+			else {
+				BDFDB.InternalData.componentPatchQueries[type].query.push(plugin);
+				BDFDB.InternalData.componentPatchQueries[type].query.sort((x, y) => {return x.name < y.name ? -1 : x.name > y.name ? 1 : 0;});
+			}
 		}
 		for (let type of ComponentTypeData.QueuedComponents) if (typeof plugin[`on${type}`] === "function") {
 			if (BDFDB.InternalData.componentPatchQueries[type].module) InternalBDFDB.patchExportedContextMenuPlugin(plugin, type, BDFDB.InternalData.componentPatchQueries[type].module);
-			else BDFDB.InternalData.componentPatchQueries[type].query.push(plugin);
+			else {
+				BDFDB.InternalData.componentPatchQueries[type].query.push(plugin);
+				BDFDB.InternalData.componentPatchQueries[type].query.sort((x, y) => {return x.name < y.name ? -1 : x.name > y.name ? 1 : 0;});
+			}
 		}
 	};
 	InternalBDFDB.patchContextMenuPlugin = function (plugin, type, module) {
