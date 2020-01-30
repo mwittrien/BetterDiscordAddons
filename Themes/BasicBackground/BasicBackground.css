@@ -1067,7 +1067,7 @@ body:before {
 .button-1ZiXG9:hover {										/* message				button								*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
-.button-1ZiXG9.selected-LCBEAU:hover {
+.button-1ZiXG9.selected-LCBEAU {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 }
 
