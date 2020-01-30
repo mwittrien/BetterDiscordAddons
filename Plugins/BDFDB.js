@@ -974,7 +974,7 @@
 			strings.push(getExport);
 			getExport = true;
 		}
-		return InternalBDFDB.findModule("string", JSON.stringify(strings), m => strings.every(string => typeof m == "function" && (m.toString().indexOf(string) > -1 || m.__originalMethod && m.__originalMethod.toString().indexOf(string) > -1 || m.__originalFunction && m.__originalFunction.toString().indexOf(string) > -1)), getExport);
+		return InternalBDFDB.findModule("string", JSON.stringify(strings), m => strings.every(string => typeof m == "function" && (m.toString().indexOf(string) > -1 || m.__originalMethod && m.__originalMethod.toString().indexOf(string) > -1 || m.__originalFunction && m.__originalFunction.toString().indexOf(string) > -1) || BDFDB.ObjectUtils.is(m) && typeof m.type == "function" && (m.type.toString().indexOf(string) > -1 || m.type.__originalMethod && m.type.__originalMethod.toString().indexOf(string) > -1 || m.type.__originalFunction && m.type.__originalFunction.toString().indexOf(string) > -1)), getExport);
 	};
 	BDFDB.ModuleUtils.findByPrototypes = function (...protoprops) {
 		protoprops = protoprops.flat(10);
