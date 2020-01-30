@@ -1020,17 +1020,17 @@
 		UserProfile: "UserProfileBody",
 		WebhookCard: "Webhook"
 	};
-	WebModulesData.Forceobserve = [
+	WebModulesData.ForceObserve = [
 		"DirectMessage",
 		"GuildIcon",
 		"QuickSwitchChannelResult",
 		"QuickSwitchGuildResult"
 	];
-	WebModulesData.Exported = [
-		"ChannelTextAreaContainer",
+	WebModulesData.DefaultRender = [
 		"Message"
 	];
-	WebModulesData.Nonprototype = [].concat(WebModulesData.Exported, [
+	WebModulesData.NonPrototype = [].concat(WebModulesData.Exported, [
+		"ChannelTextAreaContainer"
 	]);
 	WebModulesData.LoadedInComponents = {
 		AutocompleteChannelResult: "AutocompleteComponents.Channel",
@@ -1288,9 +1288,9 @@
 						plugin.patchedModules[patchtype][mappedtype] = plugin.patchedModules[patchtype][type];
 						delete plugin.patchedModules[patchtype][type];
 					}
-					if (WebModulesData.Exported.includes(type.split(" _ _ ")[1] || type)) patchInstance((BDFDB.ModuleUtils.findByName(mappedtype.split(" _ _ ")[0], false) || {}).exports, mappedtype, patchtype, true);
+					if (WebModulesData.DefaultRender.includes(type.split(" _ _ ")[1] || type)) patchInstance((BDFDB.ModuleUtils.findByName(mappedtype.split(" _ _ ")[0], false) || {}).exports, mappedtype, patchtype, true);
 					else if (!classname) patchInstance(BDFDB.ModuleUtils.findByName(mappedtype.split(" _ _ ")[0]), mappedtype, patchtype);
-					else if (DiscordClasses[classname]) checkForInstance(classname, mappedtype, patchtype, WebModulesData.Forceobserve.includes(type.split(" _ _ ")[1] || type));
+					else if (DiscordClasses[classname]) checkForInstance(classname, mappedtype, patchtype, WebModulesData.ForceObserve.includes(type.split(" _ _ ")[1] || type));
 				}
 			}
 		}
@@ -1303,7 +1303,7 @@
 					instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 					let patchfunctions = {};
 					patchfunctions[patchtype] = e => {InternalBDFDB.initiateProcess(plugin, type, {instance:window != e.thisObject ? e.thisObject : {props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:e.originalMethodName, patchtypes:[patchtype]})};
-					BDFDB.ModuleUtils.patch(plugin, WebModulesData.Nonprototype.includes(name) ? instance : instance.prototype, plugin.patchedModules[patchtype][type], patchfunctions);
+					BDFDB.ModuleUtils.patch(plugin, WebModulesData.NonPrototype.includes(name) ? instance : instance.prototype, plugin.patchedModules[patchtype][type], patchfunctions);
 				}
 			}
 		}
@@ -1682,7 +1682,7 @@
 		var start = performance.now();
 		var maxdepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
 		var maxtime = config.unlimited ? 999999999 : (config.time === undefined ? 150 : config.time);
-		var whitelist = config.up ? {return:true, sibling:true, _reactInternalFiber:true} : {child:true, sibling:true, _reactInternalFiber:true};
+		var whitelist = config.up ? {return:true, sibling:true, default:true, _reactInternalFiber:true} : {child:true, sibling:true, default:true, _reactInternalFiber:true};
 		var foundconstructors = config.group ? {} : [];
 		var singleconstructor = getConstructor(instance);
 		if (config.all) {
