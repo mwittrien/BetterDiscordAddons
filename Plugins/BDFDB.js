@@ -1359,7 +1359,7 @@
 	};
 
 	InternalBDFDB.isInstanceCorrect = function (instance, name) {
-		return instance && ((instance.type && (instance.type.render && instance.type.render.displayName === name || instance.type.displayName === name || instance.type.name === name || instance.type === name)) || instance.render && instance.render.displayName === name);
+		return instance && ((instance.type && (instance.type.render && instance.type.render.displayName === name || instance.type.displayName === name || instance.type.name === name || instance.type === name)) || instance.render && (instance.render.displayName === name || instance.render.name === name) || instance.displayName == name || instance.name === name);
 	};
 	
 	InternalBDFDB.addContextListeners = function (plugin) {
