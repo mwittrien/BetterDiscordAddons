@@ -1406,7 +1406,7 @@
 		}
 	};
 	InternalBDFDB.executeExtraPatchedPatches = function (type, e) {
-		if (BDFDB.InternalData.patchMenuQueries[type] && BDFDB.ArrayUtils.is(BDFDB.InternalData.patchMenuQueries[type].query) for (let plugin of BDFDB.InternalData.patchMenuQueries[type].query) if (e.returnvalue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`](e);
+		if (BDFDB.InternalData.patchMenuQueries[type] && BDFDB.ArrayUtils.is(BDFDB.InternalData.patchMenuQueries[type].query)) for (let plugin of BDFDB.InternalData.patchMenuQueries[type].query) if (e.returnvalue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`](e);
 	};
 	InternalBDFDB.patchPopoutPlugin = function (plugin, type, module) {
 		if (module && module.prototype) {
