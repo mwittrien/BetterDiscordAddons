@@ -2213,7 +2213,7 @@ body:before {
 	color: rgb(var(--fontwhite1));
 }
 .divider-3573oO {											/* settingsitems		settingstitle						*/
-	background-color: rgba(var(--fontwhite4), 0.3);
+	background-color: rgba(var(--fontwhite1), 0.3);
 }
 
 #app-mount .userSettingsAccount-2eMFVR .viewBody-2Qz-jg {	/* myaccount			info								*/
@@ -2513,6 +2513,10 @@ body:before {
 }
 #app-mount .colorPickerSwatch-5GX3Ve.noColor-1pdBDm polyline {
 	stroke: rgb(var(--fontwhite1));
+}
+
+.emptyStateImage-2MrSNs {									/* giftinventory		no gifts							*/
+	opacity: 0.7
 }
 
 .cardWrapper-2Min21 {										/* boostsettings		suggestioncard						*/
@@ -4485,6 +4489,9 @@ body:before {
 	color: rgb(var(--fontwhite1));
 }
 .discriminator-uTZ08z {
+	color: rgb(var(--fontwhite3));
+}
+.h5-18_1nd {
 	color: rgb(var(--fontwhite3));
 }
 .white-1VR_aZ,
