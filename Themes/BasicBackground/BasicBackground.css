@@ -909,9 +909,6 @@ body:before {
 .reactionBtn-2na4rd:hover .icon-3tPbgH {
 	color: rgb(var(--fontwhite1));
 }
-#app-mount .edited-DL9ECl {									/* message				editedtag							*/
-	color: rgb(var(--fontwhite4));
-}
 .content-2M3n_H a {											/* message				systemlink							*/
 	color: rgb(var(--fontwhite1));
 }
@@ -1052,6 +1049,10 @@ body:before {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 	border-radius: 5px 5px 0 5px;
 	margin-bottom: .5625rem;
+}
+
+.edited-DL9ECl {											/* message				editedtag							*/
+	color: rgb(var(--fontwhite3));
 }
 
 .timestampCozy-1HNQR2,										/* message				timestamp							*/
