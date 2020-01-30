@@ -1028,20 +1028,20 @@ body:before {
 .message-2qnXI6.mentioned-xhSam7 .headerCozy-2H1QuU:after {
 	border-right-color: rgba(var(--vaccentcolor), calc(var(--vmessagetransparency) * 100000000000000000000000000000));
 }
-.container-3FojY8:not(.compact-T3H92H) {
-	overflow: visible;
+.message-2qnXI6:not(.compact-T3H92H) {
 	padding-left: 10px;
 	margin-left: 80px;
 }
-.container-3FojY8:not(.compact-T3H92H) .avatar-1BDn8e {
+.avatar-1BDn8e {
 	left: -10px;
 }
-.container-3FojY8:not(.compact-T3H92H) .timestampCozyAlt-1Hs08c {
+.timestampCozyAlt-1Hs08c {
 	margin-left: -80px;
 }
-.messageGroupCozy-2iY6cT.container-3FojY8,
-.messageGroupCozy-1BZuO8.container-3FojY8 {
+.messageGroupWrapper-o-Zw7G .messageGroupCozy-2iY6cT,
+.searchResult-3pzFAB .messageGroupCozy-1BZuO8 {
 	border-radius: 5px;
+	padding-left: 10px;
 	margin-left: 60px;
 }
 
