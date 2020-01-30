@@ -1027,10 +1027,10 @@
 		"QuickSwitchGuildResult"
 	];
 	WebModulesData.Exported = [
+		"ChannelTextAreaContainer",
 		"Message"
 	];
 	WebModulesData.Nonprototype = [].concat(WebModulesData.Exported, [
-		"ChannelTextAreaContainer"
 	]);
 	WebModulesData.LoadedInComponents = {
 		AutocompleteChannelResult: "AutocompleteComponents.Channel",
