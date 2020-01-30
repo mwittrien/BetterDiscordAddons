@@ -290,14 +290,6 @@
 		settingspanel.parentElement.appendChild(plugin.getSettingsPanel(...args));
 		settingspanel.remove();
 	};
-	InternalBDFDB.addPluginClasses = function (plugin) {
-		DiscordClassModules[`PLUGIN_${plugin.name}`] = plugin.classes;
-		for (let classname in plugin.classes) DiscordClasses[`$${(plugin.name + classname).toLowerCase()}`] = [`PLUGIN_${plugin.name}`, classname];
-	};
-	InternalBDFDB.removePluginClasses = function (plugin) {
-		delete DiscordClassModules[`PLUGIN_${plugin.name}`];
-		DiscordClasses = BDFDB.ObjectUtils.filter(DiscordClasses, classArray => classArray[0] != `PLUGIN_${plugin.name}`);
-	};
 	InternalBDFDB.clearStartTimeout = function (plugin) {
 		if (!BDFDB.ObjectUtils.is(plugin)) return;
 		BDFDB.TimeUtils.clear(plugin.startTimeout, plugin.libLoadTimeout);
@@ -4761,6 +4753,7 @@
 	DiscordClassModules.MessageMarkup = BDFDB.ModuleUtils.findByProperties("markup");
 	DiscordClassModules.MessageOperations = BDFDB.ModuleUtils.find(m => typeof m.operations == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.MessageSystem = BDFDB.ModuleUtils.findByProperties("container", "actionAnchor");
+	DiscordClassModules.MessageToolbar = BDFDB.ModuleUtils.findByProperties("container", "icon", "isHeader");
 	DiscordClassModules.MessagesPopout = BDFDB.ModuleUtils.findByProperties("messageGroupWrapperOffsetCorrection", "messagesPopout");
 	DiscordClassModules.MessagesWelcome = BDFDB.ModuleUtils.findByProperties("welcomeMessage", "h1");
 	DiscordClassModules.MessagesWrap = BDFDB.ModuleUtils.findByProperties("messagesWrapper", "messageGroupBlocked");
@@ -5732,6 +5725,10 @@
 		messagetimestampseparatorright: ["Message", "separatorRight"],
 		messagetimestampsystem: ["MessageSystem", "timestamp"],
 		messagetimestampvisibleonhover: ["Message", "timestampVisibleOnHover"],
+		messagetoolbarcontainer: ["MessageToolbar", "container"],
+		messagetoolbaricon: ["MessageToolbar", "icon"],
+		messagetoolbarisheader: ["MessageToolbar", "isHeader"],
+		messagetoolbarpublishicon: ["MessageToolbar", "publishIcon"],
 		messageuploadcancel: ["MessageFile", "cancelButton"],
 		messageusername: ["Message", "username"],
 		modal: ["ModalWrap", "modal"],
