@@ -1302,7 +1302,7 @@
 				if (instance) {
 					instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 					let patchfunctions = {};
-					patchfunctions[patchtype] = e => InternalBDFDB.initiateProcess(plugin, type, {instance:window != e.thisObject ? e.thisObject : {props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:e.originalMethodName, patchtypes:[patchtype]});
+					patchfunctions[patchtype] = e => {InternalBDFDB.initiateProcess(plugin, type, {instance:window != e.thisObject ? e.thisObject : {props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:e.originalMethodName, patchtypes:[patchtype]})};
 					BDFDB.ModuleUtils.patch(plugin, WebModulesData.Nonprototype.includes(name) ? instance : instance.prototype, plugin.patchedModules[patchtype][type], patchfunctions);
 				}
 			}
