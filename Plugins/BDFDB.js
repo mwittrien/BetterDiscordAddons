@@ -107,7 +107,7 @@
 		BDFDB.WindowUtils.closeAll(plugin);
 		BDFDB.WindowUtils.removeListener(plugin);
 		
-		for (let type of BDFDB.InternalData.patchMenuQueries) BDFDB.ArrayUtils.remove(BDFDB.InternalData.patchMenuQueries[type].query, plugin, true);
+		for (let type in BDFDB.InternalData.patchMenuQueries) BDFDB.ArrayUtils.remove(BDFDB.InternalData.patchMenuQueries[type].query, plugin, true);
 		
 		for (let modal of document.querySelectorAll(`.${plugin.name}-modal, .${plugin.name.toLowerCase()}-modal, .${plugin.name}-settingsmodal, .${plugin.name.toLowerCase()}-settingsmodal`)) {
 			let closebutton = modal.querySelector(BDFDB.dotCN.modalclose);
