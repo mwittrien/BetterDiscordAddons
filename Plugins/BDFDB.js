@@ -1355,10 +1355,8 @@
 		}
 	};
 
-	var NoFluxPopouts = ["MessageOptionPopout"];
 	InternalBDFDB.addContextListeners = function (plugin) {
 		for (let type of ComponentTypeData.NormalContextMenus) if (typeof plugin[`on${type}`] === "function") InternalBDFDB.patchContextMenuPlugin(plugin, type, LibraryComponents.ContextMenus[type]);
-		for (let type of NoFluxPopouts) if (typeof plugin[`on${type}`] === "function") InternalBDFDB.patchPopoutPlugin(plugin, type, BDFDB.ModuleUtils.findByName(type));
 		for (let type of ComponentTypeData.FluxContextMenus) if (typeof plugin[`on${type}`] === "function") {
 			if (BDFDB.InternalData.componentPatchQueries[type].module) InternalBDFDB.patchContextMenuPlugin(plugin, type, BDFDB.InternalData.componentPatchQueries[type].module);
 			else BDFDB.InternalData.componentPatchQueries[type].query.push(plugin);
@@ -1399,22 +1397,6 @@
 	};
 	InternalBDFDB.executeExtraPatchedPatches = function (type, e) {
 		if (BDFDB.ObjectUtils.is(BDFDB.InternalData.componentPatchQueries[type]) && BDFDB.ArrayUtils.is(BDFDB.InternalData.componentPatchQueries[type].query)) for (let plugin of BDFDB.InternalData.componentPatchQueries[type].query) if (e.returnvalue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`](e);
-	};
-	InternalBDFDB.patchPopoutPlugin = function (plugin, type, module) {
-		if (module && module.prototype) {
-			// REMOVE
-			let isOldType = plugin["on" + type].toString().split("\n")[0].replace(/ /g, "").split(",").length > 1;
-			if (isOldType) BDFDB.ModuleUtils.patch(plugin, module.prototype, "render", {after: e => {
-				let instance = e.thisObject, menu = BDFDB.ReactUtils.findDOMNode(e.thisObject), returnvalue = e.returnValue;
-				if (instance && menu && returnvalue && typeof plugin[`on${type}`] === "function") {
-					plugin[`on${type}`](instance, menu, returnvalue);
-					if (!instance.BDFDBforceUpdateTimeout) BDFDB.ReactUtils.forceUpdate(instance);
-				}
-			}});
-			else BDFDB.ModuleUtils.patch(plugin, module.prototype, "render", {after: e => {
-				if (e.thisObject && e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});
-			}});
-		}
 	};
 	InternalBDFDB.patchContextMenuLib = function (module, repatch) {
 		if (module && module.prototype) {
@@ -1470,36 +1452,6 @@
 				if (typeof close == "function") close();
 			}
 			if (!module.exports.default.displayName) module.exports.default.displayName = type;
-		}
-	};
-	InternalBDFDB.patchPopoutLib = function (module, repatch) {
-		if (module && module.prototype) {
-			// REMOVE
-			BDFDB.ModuleUtils.patch(BDFDB, module.prototype, "componentDidMount", {after: e => {
-				if (!e.thisObject.BDFDBforceRenderTimeout && !e.thisObject.BDFDBforceUpdateTimeout && typeof e.thisObject.render == "function") e.thisObject.render();
-			}});
-			BDFDB.ModuleUtils.patch(BDFDB, module.prototype, "componentDidUpdate", {after: e => {
-				const updater = BDFDB.ReactUtils.getValue(e, "thisObject._reactInternalFiber.return.return.return.stateNode.updateOffsets");
-				if (updater) updater();
-				e.thisObject.BDFDBforceUpdateTimeout = true;
-				BDFDB.TimeUtils.timeout(_ => {delete e.thisObject.BDFDBforceUpdateTimeout;}, 1000);
-			}});
-			BDFDB.ModuleUtils.patch(BDFDB, module.prototype, "render", {after: e => {
-				if (BDFDB.ReactUtils.findDOMNode(e.thisObject)) {
-					e.thisObject.BDFDBforceRenderTimeout = true;
-					BDFDB.TimeUtils.timeout(_ => {delete e.thisObject.BDFDBforceRenderTimeout;}, 1000);
-				}
-				if (e.thisObject.props.message && !e.thisObject.props.target) {
-					const messageswrap = document.querySelector(BDFDB.dotCN.messages);
-					if (messageswrap) for (let message of BDFDB.ReactUtils.findOwner(messageswrap, {name:"Message", all:true, unlimited:true})) {
-						if (e.thisObject.props.message.id == message.props.message.id) {
-							target = BDFDB.ReactUtils.findDOMNode(message);
-							if (target) e.thisObject.props.target = target
-							break;
-						}
-					}
-				}
-			}});
 		}
 	};
 	InternalBDFDB.getContextMenuType = function (menutype, component) {
@@ -3862,36 +3814,6 @@
 		else BDFDB.LibraryModules.ContextMenuUtils.closeContextMenu();
 	};
 
-	BDFDB.createMessageOptionPopout = function (button) {
-		if (!button) return;
-		var popouts = document.querySelector(BDFDB.dotCN.popouts);
-		if (!popouts) return;
-		button = BDFDB.DOMUtils.containsClass(button, BDFDB.disCN.optionpopoutbutton) ? button : button.querySelector(BDFDB.dotCN.optionpopoutbutton);
-		var containerins = BDFDB.ReactUtils.getInstance(BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagebuttoncontainer, button));
-		containerins = containerins && containerins.child ? containerins.child : null;
-		containerins = containerins && containerins.stateNode && typeof containerins.stateNode.renderReactionPopout == "function" ? containerins.sibling : containerins;
-		if (containerins && containerins.stateNode && typeof containerins.stateNode.renderOptionPopout == "function") {
-			BDFDB.DOMUtils.addClass(button, "popout-open");
-			var popout = BDFDB.DOMUtils.create(`<div role="dialog" class="${BDFDB.disCNS.popoutnoarrow + BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottom + BDFDB.disCN.popoutarrowalignmenttop}" style="z-index:1001; visibility:visible; transform:translateX(-50%) translateY(0%) translateZ(0px);"></div>`);
-			popouts.appendChild(popout);
-			var popoutinstance = containerins.stateNode.renderOptionPopout(containerins.stateNode.props);
-			popoutinstance.props.target = button;
-			popoutinstance.props.onClose = _ => {
-				BDFDB.DOMUtils.removeClass(button, "popout-open");
-				popout.remove();
-			};
-			BDFDB.ReactUtils.render(popoutinstance, popout);
-			var buttonrects = BDFDB.DOMUtils.getRects(button);
-			popout.style.setProperty("left", buttonrects.left + buttonrects.width / 2 + "px");
-			popout.style.setProperty("top", buttonrects.top + buttonrects.height / 2 + "px");
-			var mousedown = e => {
-				document.removeEventListener("mousedown", mousedown);
-				if (!popout.contains(e.target)) popoutinstance.props.onClose();
-			};
-			document.addEventListener("mousedown", mousedown);
-		}
-	};
-
 	BDFDB.createSortPopout = function (anker, markup, callback) {
 		if (!anker || !markup || typeof callback != "function" || BDFDB.DOMUtils.containsClass(anker, "popout-open")) return;
 		var popouts = document.querySelector(BDFDB.dotCN.popouts);
@@ -4494,6 +4416,7 @@
 		tableRow: "row-_9Ehcp",
 		tableStickyHeader: "stickyHeader-JabwjW header-g67q9_",
 		textScroller: "textScroller-dc9_kz",
+		themedPopout: "themedPopout-1TrfdI",
 		tooltipCustom: "tooltipCustom-hH39_Z",
 		underline: "underline-6nu217"
 	};
@@ -4602,6 +4525,7 @@
 		hoverCardButton: "button-2CgfFz",
 		loginScreen: "wrapper-3Q5DdO",
 		mention: "mention",
+		mentionWrapper: "wrapper-3WhCwL",
 		nameContainerNameContainer: "container-2ax-kl",
 		quickSelectPopoutOptionSelected: "selected",
 		select: "css-1kj8ui-container",
@@ -4643,7 +4567,6 @@
 
 	DiscordClassModules.AccountDetails = BDFDB.ModuleUtils.findByProperties("usernameContainer", "container");
 	DiscordClassModules.AccountDetailsButtons = BDFDB.ModuleUtils.findByProperties("button", "enabled", "disabled");
-	DiscordClassModules.ActivityFeed = BDFDB.ModuleUtils.findByProperties("activityFeed");
 	DiscordClassModules.Anchor = BDFDB.ModuleUtils.findByProperties("anchor", "anchorUnderlineOnHover");
 	DiscordClassModules.AnimationContainer = BDFDB.ModuleUtils.findByProperties("animatorLeft", "didRender");
 	DiscordClassModules.AppBase = BDFDB.ModuleUtils.findByProperties("container", "base");
@@ -4667,7 +4590,6 @@
 	DiscordClassModules.CallIncomingInner = BDFDB.ModuleUtils.findByProperties("incomingCallInner", "members");
 	DiscordClassModules.Card = BDFDB.ModuleUtils.findByProperties("card", "cardBrand");
 	DiscordClassModules.CardStatus = BDFDB.ModuleUtils.findByProperties("reset", "error", "card");
-	DiscordClassModules.CardStore = BDFDB.ModuleUtils.findByProperties("card", "interactive", "url");
 	DiscordClassModules.Category = BDFDB.ModuleUtils.findByProperties("wrapper", "children", "muted");
 	DiscordClassModules.CategoryContainer = BDFDB.ModuleUtils.findByProperties("addButtonIcon", "containerDefault");
 	DiscordClassModules.ChangeLog = BDFDB.ModuleUtils.findByProperties("added", "fixed", "improved", "progress");
@@ -4744,17 +4666,16 @@
 	DiscordClassModules.Margins = BDFDB.ModuleUtils.findByProperties("marginBottom4", "marginCenterHorz");
 	DiscordClassModules.Member = BDFDB.ModuleUtils.findByProperties("member", "ownerIcon");
 	DiscordClassModules.MembersWrap = BDFDB.ModuleUtils.findByProperties("membersWrap", "membersGroup");
-	DiscordClassModules.Mention = BDFDB.ModuleUtils.findByProperties("wrapperHover", "wrapperNoHover");
-	DiscordClassModules.Message = BDFDB.ModuleUtils.findByProperties("containerCozy", "content");
+	DiscordClassModules.Message = BDFDB.ModuleUtils.findByProperties("message", "mentioned");
 	DiscordClassModules.MessageAccessory = BDFDB.ModuleUtils.findByProperties("embedWrapper", "gifFavoriteButton");
-	DiscordClassModules.MessageBody = BDFDB.ModuleUtils.findByProperties("buttonContainer", "isMentioned");
+	DiscordClassModules.MessageBody = BDFDB.ModuleUtils.findByProperties("markupRtl", "edited");
 	DiscordClassModules.MessageElements = BDFDB.ModuleUtils.findByProperties("messageGroupBlockedBtn", "dividerRed");
 	DiscordClassModules.MessageFile = BDFDB.ModuleUtils.findByProperties("cancelButton", "filenameLinkWrapper");
 	DiscordClassModules.MessageMarkup = BDFDB.ModuleUtils.findByProperties("markup");
 	DiscordClassModules.MessageOperations = BDFDB.ModuleUtils.find(m => typeof m.operations == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.MessageSystem = BDFDB.ModuleUtils.findByProperties("container", "actionAnchor");
 	DiscordClassModules.MessageToolbar = BDFDB.ModuleUtils.findByProperties("container", "icon", "isHeader");
-	DiscordClassModules.MessagesPopout = BDFDB.ModuleUtils.findByProperties("messageGroupWrapperOffsetCorrection", "messagesPopout");
+	DiscordClassModules.MessagesPopout = BDFDB.ModuleUtils.findByProperties("messagesPopoutWrap", "jumpButton");
 	DiscordClassModules.MessagesWelcome = BDFDB.ModuleUtils.findByProperties("welcomeMessage", "h1");
 	DiscordClassModules.MessagesWrap = BDFDB.ModuleUtils.findByProperties("messagesWrapper", "messageGroupBlocked");
 	DiscordClassModules.Modal = BDFDB.ModuleUtils.findByProperties("modal", "sizeLarge");
@@ -4766,7 +4687,6 @@
 	DiscordClassModules.NameTag = BDFDB.ModuleUtils.findByProperties("bot", "nameTag");
 	DiscordClassModules.Note = BDFDB.ModuleUtils.find(m => typeof m.note == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.Notice = BDFDB.ModuleUtils.findByProperties("notice", "noticeFacebook");
-	DiscordClassModules.OptionPopout = BDFDB.ModuleUtils.findByProperties("container", "button", "item");
 	DiscordClassModules.Peoples = BDFDB.ModuleUtils.findByProperties("peopleColumn", "tabBar");
 	DiscordClassModules.PictureInPicture = BDFDB.ModuleUtils.findByProperties("pictureInPicture", "pictureInPictureWindow");
 	DiscordClassModules.PillWrapper = BDFDB.ModuleUtils.find(m => typeof m.item == "string" && typeof m.wrapper == "string" && Object.keys(m).length == 2);
@@ -4783,11 +4703,11 @@
 	DiscordClassModules.RecentMentions = BDFDB.ModuleUtils.findByProperties("recentMentionsFilterPopout", "mentionFilter");
 	DiscordClassModules.Role = BDFDB.ModuleUtils.findByProperties("roleCircle", "roleName");
 	DiscordClassModules.Scrollbar = BDFDB.ModuleUtils.findByProperties("scrollbar", "scrollbarGhost");
-	DiscordClassModules.Scroller = BDFDB.ModuleUtils.findByProperties("firefoxFixScrollFlex", "scroller");
+	DiscordClassModules.Scroller = BDFDB.ModuleUtils.findByProperties("scrollerThemed", "scroller");
 	DiscordClassModules.SearchBar = BDFDB.ModuleUtils.findByProperties("container", "clear");
 	DiscordClassModules.SearchPopout = BDFDB.ModuleUtils.findByProperties("datePicker", "searchResultChannelIconBackground");
 	DiscordClassModules.SearchPopoutWrap = BDFDB.ModuleUtils.findByProperties("container", "queryContainer");
-	DiscordClassModules.SearchResults = BDFDB.ModuleUtils.findByProperties("resultsWrapper", "searchResults");
+	DiscordClassModules.SearchResults = BDFDB.ModuleUtils.findByProperties("messageGroupCozy", "searchResultsWrap");
 	DiscordClassModules.Select = BDFDB.ModuleUtils.findByProperties("select", "error", "errorMessage");
 	DiscordClassModules.SettingsCloseButton = BDFDB.ModuleUtils.findByProperties("closeButton", "keybind");
 	DiscordClassModules.SettingsItems = BDFDB.ModuleUtils.findByProperties("dividerMini", "note");
@@ -4901,7 +4821,6 @@
 		accountinfobuttonenabled: ["AccountDetailsButtons", "enabled"],
 		accountinfodetails: ["AccountDetails", "usernameContainer"],
 		accountinfonametag: ["AccountDetails", "nameTag"],
-		activityfeed: ["ActivityFeed", "activityFeed"],
 		alignbaseline: ["Flex", "alignBaseline"],
 		aligncenter: ["Flex", "alignCenter"],
 		alignend: ["Flex", "alignEnd"],
@@ -4927,7 +4846,6 @@
 		auditloguserhook: ["AuditLog", "userHook"],
 		authbox: ["AuthBox", "authBox"],
 		autocomplete: ["Autocomplete", "autocomplete"],
-		autocomplete2: ["ChannelTextArea", "autocomplete"],
 		autocompletecontent: ["Autocomplete", "content"],
 		autocompletecontenttitle: ["Autocomplete", "contentTitle"],
 		autocompletedescription: ["Autocomplete", "description"],
@@ -4967,9 +4885,6 @@
 		bottag: ["BotTag", "botTag"],
 		bottaginvert: ["BotTag", "botTagInvert"],
 		bottagmember: ["Member", "botTag"],
-		bottagmessage: ["Message", "botTag"],
-		bottagmessagecompact: ["Message", "botTagCompact"],
-		bottagmessagecozy: ["Message", "botTagCozy"],
 		bottagnametag: ["NameTag", "bot"],
 		bottagregular: ["BotTag", "botTagRegular"],
 		button: ["Button", "button"],
@@ -5036,8 +4951,6 @@
 		cardprimaryeditable: ["Card", "cardPrimaryEditable"],
 		cardprimaryoutline: ["Card", "cardPrimaryOutline"],
 		cardprimaryoutlineeditable: ["Card", "cardPrimaryOutlineEditable"],
-		cardstore: ["CardStore", "card"],
-		cardstoreinteractive: ["CardStore", "interactive"],
 		cardsuccess: ["Card", "cardSuccess"],
 		cardsuccessoutline: ["Card", "cardSuccessOutline"],
 		cardwarning: ["Card", "cardWarning"],
@@ -5131,7 +5044,6 @@
 		checkboxround: ["Checkbox", "round"],
 		checkboxwrapper: ["Checkbox", "checkboxWrapper"],
 		checkboxwrapperdisabled: ["Checkbox", "checkboxWrapperDisabled"],
-		clickable: ["Message", "clickOverride"],
 		collapsecontainer: ["BDFDB", "collapseContainer"],
 		collapsecontainerarrow: ["BDFDB", "collapseContainerArrow"],
 		collapsecontainercollapsed: ["BDFDB", "collapseContainerCollapsed"],
@@ -5243,15 +5155,11 @@
 		embedgrid: ["Embed", "grid"],
 		embedhasthumbnail: ["Embed", "hasThumbnail"],
 		embedhiddenspoiler: ["Embed", "hiddenSpoiler"],
-		embedhighbackgroundopacity: ["Embed", "highBackgroundOpacity"],
 		embediframe: ["Embed", "embedIframe"],
 		embedimage: ["Embed", "embedImage"],
-		embedinner: ["Embed", "embedInner"],
 		embedlink: ["Embed", "embedLink"],
-		embedlowbackgroundopacity: ["Embed", "lowBackgroundOpacity"],
 		embedmargin: ["Embed", "embedMargin"],
 		embedmedia: ["Embed", "embedMedia"],
-		embedmediumbackgroundopacity: ["Embed", "mediumBackgroundOpacity"],
 		embedprovider: ["Embed", "embedProvider"],
 		embedspoilerattachment: ["Embed", "spoilerAttachment"],
 		embedspoilerembed: ["Embed", "spoilerEmbed"],
@@ -5272,29 +5180,20 @@
 		emojibuttonnormal: ["EmojiButton", "emojiButtonNormal"],
 		emojibuttonsprite: ["EmojiButton", "sprite"],
 		emojipicker: ["EmojiPicker", "emojiPicker"],
-		emojipickeractivity: ["EmojiPicker", "activity"],
 		emojipickerbutton: ["Reactions", "reactionBtn"],
 		emojipickercategories: ["EmojiPicker", "categories"],
 		emojipickercategory: ["EmojiPicker", "category"],
-		emojipickercustom: ["EmojiPicker", "custom"],
-		emojipickerdimmer: ["EmojiPicker", "dimmer"],
 		emojipickerdisabled: ["EmojiPicker", "disabled"],
 		emojipickerdiversityselector: ["EmojiPicker", "diversitySelector"],
 		emojipickeremojiitem: ["EmojiPicker", "emojiItem"],
-		emojipickerflags: ["EmojiPicker", "flags"],
-		emojipickerfood: ["EmojiPicker", "food"],
 		emojipickerheader: ["EmojiPicker", "header"],
 		emojipickeritem: ["EmojiPicker", "item"],
-		emojipickernature: ["EmojiPicker", "nature"],
-		emojipickerobjects: ["EmojiPicker", "objects"],
-		emojipickerpeople: ["EmojiPicker", "people"],
 		emojipickerpopout: ["EmojiPicker", "popout"],
 		emojipickerpremiumpromo: ["EmojiPicker", "premiumPromo"],
 		emojipickerpremiumpromoclose: ["EmojiPicker", "premiumPromoClose"],
 		emojipickerpremiumpromodescription: ["EmojiPicker", "premiumPromoDescription"],
 		emojipickerpremiumpromoimage: ["EmojiPicker", "premiumPromoImage"],
 		emojipickerpremiumpromotitle: ["EmojiPicker", "premiumPromoTitle"],
-		emojipickerrecent: ["EmojiPicker", "recent"],
 		emojipickerrow: ["EmojiPicker", "row"],
 		emojipickersearchbar: ["EmojiPicker", "searchBar"],
 		emojipickerscroller: ["EmojiPicker", "scroller"],
@@ -5302,9 +5201,6 @@
 		emojipickerselected: ["EmojiPicker", "selected"],
 		emojipickerspriteitem: ["EmojiPicker", "spriteItem"],
 		emojipickerstickyheader: ["EmojiPicker", "stickyHeader"],
-		emojipickersymbols: ["EmojiPicker", "symbols"],
-		emojipickertravel: ["EmojiPicker", "travel"],
-		emojipickervisible: ["EmojiPicker", "visible"],
 		favbuttoncontainer: ["BDFDB", "favButtonContainer"],
 		fileattachment: ["File", "attachment"],
 		fileattachmentinner: ["File", "attachmentInner"],
@@ -5619,13 +5515,10 @@
 		memberswrap: ["MembersWrap", "membersWrap"],
 		memberusername: ["Member", "roleColor"],
 		mention: ["NotFound", "mention"],
-		mentionwrapper: ["Mention", "wrapper"],
-		mentionwrapperhover: ["Mention", "wrapperHover"],
-		mentionwrappernohover: ["Mention", "wrapperNoHover"],
+		mentionwrapper: ["NotFound", "mentionWrapper"],
+		message: ["Message", "message"],
 		messageaccessory: ["MessageAccessory", "container"],
-		messageaccessorycompact: ["MessageAccessory", "containerCompact"],
-		messageaccessorycozy: ["MessageAccessory", "containerCozy"],
-		messageavatar: ["Message", "avatar"],
+		messagebackgroundflash: ["Message", "backgroundFlash"],
 		messagebarbase: ["MessageElements", "barBase"],
 		messagebarbuttonalt: ["MessageElements", "barButtonAlt"],
 		messagebarbuttonbase: ["MessageElements", "barButtonBase"],
@@ -5638,72 +5531,52 @@
 		messagebarspan: ["MessageElements", "span"],
 		messagebarspinner: ["MessageElements", "spinner"],
 		messagebarspinneritem: ["MessageElements", "spinnerItem"],
-		messagebody: ["MessageBody", "container"],
-		messagebodycompact: ["MessageBody", "containerCompact"],
-		messagebodycozy: ["MessageBody", "containerCozy"],
-		messagebodyismentioned: ["MessageBody", "isMentioned"],
-		messagebodyismentionedcompact: ["MessageBody", "isMentionedCompact"],
-		messagebodyismentionedcozy: ["MessageBody", "isMentionedCozy"],
-		messagebuttoncontainer: ["Message", "buttonContainer"],
-		messagebuttoncontainerouter: ["MessageBody", "buttonContainer"],
-		messagecompact: ["Message", "messageCompact"],
-		messagecontent: ["Message", "content"],
-		messagecontentcompact: ["Message", "contentCompact"],
-		messagecontentcozy: ["Message", "contentCozy"],
+		messagebeforegroup: ["Message", "beforeGroup"],
+		messagebuttons: ["Message", "buttons"],
+		messagechanneltextarea: ["Message", "channelTextArea"],
+		messagecompact: ["Message", "compact"],
+		messagecozy: ["Message", "cozy"],
+		messagedisableinteraction: ["Message", "disableInteraction"],
 		messagedivider: ["Message", "divider"],
-		messagedividerenabled: ["Message", "dividerEnabled"],
 		messageedited: ["MessageBody", "edited"],
-		messagegroup: ["Message", "container"],
+		messagegroupstart: ["Message", "groupStart"],
 		messagegroupblocked: ["MessageElements", "messageGroupBlocked"],
 		messagegroupblockedbtn: ["MessageElements", "messageGroupBlockedBtn"],
 		messagegroupblockedrevealed: ["MessageElements", "revealed"],
-		messagegroupcozy: ["Message", "containerCozy"],
-		messagegroupcompact: ["Message", "containerCompact"],
-		messagegroupwrapper: ["MessagesPopout", "messageGroupWrapper"],
-		messagegroupwrapperoffsetcorrection: ["MessagesPopout", "messageGroupWrapperOffsetCorrection"],
-		messageheadercompact: ["Message", "headerCompact"],
-		messageheadercozy: ["Message", "headerCozy"],
-		messageheadercozymeta: ["Message", "headerCozyMeta"],
-		messagehighbackgroundopacity: ["Message", "highBackgroundOpacity"],
-		messagelocalbotmessage: ["Message", "localBotMessage"],
-		messagelowbackgroundopacity: ["Message", "lowBackgroundOpacity"],
+		messagehascontent: ["Message", "hasContent"],
+		messagelocalbot: ["Message", "localBot"],
 		messagemarkup: ["MessageMarkup", "markup"],
-		messagemarkupiscompact: ["MessageBody", "isCompact"],
+		messagemarkupisfailed: ["MessageBody", "isFailed"],
 		messagemarkuprtl: ["MessageBody", "markupRtl"],
-		messagemediumbackgroundopacity: ["Message", "mediumBackgroundOpacity"],
+		messagementioned: ["Message", "mentioned"],
 		messageoperations: ["MessageOperations", "operations"],
+		messageselected: ["Message", "selected"],
+		messagesystemmessage: ["Message", "systemMessage"],
 		messages: ["MessagesWrap", "messages"],
 		messagesdivider: ["MessagesWrap", "divider"],
 		messagespopout: ["MessagesPopout", "messagesPopout"],
-		messagespopoutaccessories: ["MessagesPopout", "accessories"],
 		messagespopoutactionbuttons: ["MessagesPopout", "actionButtons"],
 		messagespopoutbody: ["MessagesPopout", "body"],
 		messagespopoutbottom: ["MessagesPopout", "bottom"],
 		messagespopoutchannelname: ["MessagesPopout", "channelName"],
 		messagespopoutchannelseparator: ["MessagesPopout", "channelSeparator"],
-		messagespopoutclosebutton: ["MessagesPopout", "closeButton"],
-		messagespopoutcomment: ["MessagesPopout", "comment"],
-		messagespopoutcontainercompactbounded: ["Message", "containerCompactBounded"],
-		messagespopoutcontainercozybounded: ["Message", "containerCozyBounded"],
+		messagespopoutcloseicon: ["MessagesPopout", "closeIcon"],
 		messagespopoutemptyplaceholder: ["MessagesPopout", "emptyPlaceholder"],
 		messagespopoutfooter: ["MessagesPopout", "footer"],
 		messagespopoutguildname: ["MessagesPopout", "guildName"],
+		messagespopoutgroupcozy: ["MessagesPopout", "messageGroupCozy"],
+		messagespopoutgroupwrapper: ["MessagesPopout", "messageGroupWrapper"],
 		messagespopouthasmore: ["MessagesPopout", "hasMore"],
 		messagespopouthasmorebutton: ["MessagesPopout", "hasMoreButton"],
 		messagespopoutheader: ["MessagesPopout", "header"],
-		messagespopouthidden: ["MessagesPopout", "hidden"],
 		messagespopoutimage: ["MessagesPopout", "image"],
 		messagespopoutjumpbutton: ["MessagesPopout", "jumpButton"],
 		messagespopoutloading: ["MessagesPopout", "loading"],
 		messagespopoutloadingmore: ["MessagesPopout", "loadingMore"],
 		messagespopoutloadingplaceholder: ["MessagesPopout", "loadingPlaceholder"],
-		messagespopoutmessagegroupcozy: ["MessagesPopout", "messageGroupCozy"],
-		messagespopoutmessagegroupwrapper: ["MessagesPopout", "messageGroupWrapper"],
-		messagespopoutmessagegroupwrapperoffsetcorrection: ["MessagesPopout", "messageGroupWrapperOffsetCorrection"],
+		messagespopoutscroller: ["MessagesPopout", "scroller"],
 		messagespopoutscrollingfooterwrap: ["MessagesPopout", "scrollingFooterWrap"],
 		messagespopoutspinner: ["MessagesPopout", "spinner"],
-		messagespopouttext: ["MessagesPopout", "text"],
-		messagespopouttip: ["MessagesPopout", "tip"],
 		messagespopouttitle: ["MessagesPopout", "title"],
 		messagespopoutvisible: ["MessagesPopout", "visible"],
 		messagespopoutwrap: ["MessagesPopout", "messagesPopoutWrap"],
@@ -5717,20 +5590,12 @@
 		messagetimedivider: ["MessageElements", "divider"],
 		messagetimedividerred: ["MessageElements", "dividerRed"],
 		messagetimedividercontent: ["MessageElements", "dividerContent"],
-		messagetimestampcompact: ["Message", "timestampCompact"],
-		messagetimestampcompactismentioned: ["Message", "timestampCompactIsMentioned"],
-		messagetimestampcozy: ["Message", "timestampCozy"],
-		messagetimestampseparator: ["Message", "separator"],
-		messagetimestampseparatorleft: ["Message", "separatorLeft"],
-		messagetimestampseparatorright: ["Message", "separatorRight"],
 		messagetimestampsystem: ["MessageSystem", "timestamp"],
-		messagetimestampvisibleonhover: ["Message", "timestampVisibleOnHover"],
 		messagetoolbarcontainer: ["MessageToolbar", "container"],
 		messagetoolbaricon: ["MessageToolbar", "icon"],
 		messagetoolbarisheader: ["MessageToolbar", "isHeader"],
 		messagetoolbarpublishicon: ["MessageToolbar", "publishIcon"],
 		messageuploadcancel: ["MessageFile", "cancelButton"],
-		messageusername: ["Message", "username"],
 		modal: ["ModalWrap", "modal"],
 		modalclose: ["Modal", "close"],
 		modalchangelogmodal: ["BDFDB", "changeLogModal"],
@@ -5785,7 +5650,6 @@
 		noticeplatformicon: ["Notice", "platformIcon"],
 		noticepremium: ["Notice", "noticePremium"],
 		noticepremiumaction: ["Notice", "premiumAction"],
-		noticepremiumgrandfathered: ["Notice", "noticePremiumGrandfathered"],
 		noticepremiumlogo: ["Notice", "premiumLogo"],
 		noticepremiumtext: ["Notice", "premiumText"],
 		noticerichpresence: ["Notice", "noticeRichPresence"],
@@ -5796,10 +5660,6 @@
 		noticewrapper: ["BDFDB", "noticeWrapper"],
 		note: ["SettingsItems", "note"],
 		nowrap: ["Flex", "noWrap"],
-		optionpopout: ["OptionPopout", "container"],
-		optionpopoutbutton: ["OptionPopout", "button"],
-		optionpopoutbuttonicon: ["OptionPopout", "icon"],
-		optionpopoutitem: ["OptionPopout", "item"],
 		overflowellipsis: ["BDFDB", "overflowEllipsis"],
 		peoples: ["Peoples", "container"],
 		peoplesbadge: ["Peoples", "badge"],
@@ -5809,24 +5669,18 @@
 		pictureinpicture: ["PictureInPicture", "pictureInPicture"],
 		pictureinpicturewindow: ["PictureInPicture", "pictureInPictureWindow"],
 		popout: ["Popout", "popout"],
-		popoutarrowalignmenttop: ["Popout", "arrowAlignmentTop"],
 		popoutarrowalignmentmiddle: ["Popout", "arrowAlignmentMiddle"],
-		popoutbody: ["Popout", "body"],
+		popoutarrowalignmenttop: ["Popout", "arrowAlignmentTop"],
 		popoutbottom: ["Popout", "popoutBottom"],
 		popoutbottomleft: ["Popout", "popoutBottomLeft"],
 		popoutbottomright: ["Popout", "popoutBottomRight"],
-		popoutfooter: ["Popout", "footer"],
-		popoutheader: ["Popout", "header"],
 		popoutinvert: ["Popout", "popoutInvert"],
 		popoutleft: ["Popout", "popoutLeft"],
 		popoutnoarrow: ["Popout", "noArrow"],
 		popoutnoshadow: ["Popout", "noShadow"],
 		popoutright: ["Popout", "popoutRight"],
 		popouts: ["Popout", "popouts"],
-		popoutsubtitle: ["Popout", "subtitle"],
-		popoutthemedpopout: ["Popout", "themedPopout"],
-		popouttip: ["Popout", "tip"],
-		popouttitle: ["Popout", "title"],
+		popoutthemedpopout: ["BDFDB", "themedPopout"],
 		popouttop: ["Popout", "popoutTop"],
 		popouttopleft: ["Popout", "popoutTopLeft"],
 		popouttopright: ["Popout", "popoutTopRight"],
@@ -5858,11 +5712,13 @@
 		quickswitchresultusername: ["QuickSwitch", "username"],
 		recentmentionsfilterpopout: ["RecentMentions", "recentMentionsFilterPopout"],
 		recentmentionsheader: ["RecentMentions", "header"],
-		recentmentionsloadingmore: ["RecentMentions", "loadingMore"],
 		recentmentionsmentionfilter: ["RecentMentions", "mentionFilter"],
 		recentmentionsmentionfilterlabel: ["RecentMentions", "label"],
 		recentmentionsmentionfiltervalue: ["RecentMentions", "value"],
 		recentmentionspopout: ["RecentMentions", "recentMentionsPopout"],
+		recentmentionstabbar: ["RecentMentions", "tabBar"],
+		recentmentionstabbaritem: ["RecentMentions", "tabBarItem"],
+		recentmentionstabbarwrapper: ["RecentMentions", "headerTabBarWrapper"],
 		red: ["TextStyle", "statusRed"],
 		reset: ["CardStatus", "reset"],
 		scrollbar: ["Scrollbar", "scrollbar"],
@@ -5871,7 +5727,6 @@
 		scrollbarghosthairline: ["Scrollbar", "scrollbarGhostHairline"],
 		scroller: ["Scroller", "scroller"],
 		scrollerfade: ["Scroller", "scrollerFade"],
-		scrollerfirefoxfixscrollflex: ["Scroller", "firefoxFixScrollFlex"],
 		scrollersystempad: ["Scroller", "systemPad"],
 		scrollerthemed: ["Scroller", "scrollerThemed"],
 		scrollerthemedwithtrack: ["Scroller", "themedWithTrack"],
@@ -5920,15 +5775,19 @@
 		searchpopoutsearchresultchanneliconbackground: ["SearchPopout", "searchResultChannelIconBackground"],
 		searchpopoutselected: ["SearchPopout", "selected"],
 		searchpopoutuser: ["SearchPopout", "user"],
-		searchresults: ["SearchResults", "searchResults"],
+		searchresultsafter: ["SearchResults", "after"],
+		searchresultsalt: ["SearchResults", "alt"],
+		searchresultsbefore: ["SearchResults", "before"],
 		searchresultschannelname: ["SearchResults", "channelName"],
+		searchresultschannelSeparator: ["SearchResults", "channelSeparator"],
+		searchresultsexpanded: ["SearchResults", "expanded"],
+		searchresultshit: ["SearchResults", "hit"],
 		searchresultspagination: ["SearchResults", "pagination"],
+		searchresultspaginationbutton: ["SearchResults", "paginationButton"],
 		searchresultspaginationdisabled: ["SearchResults", "disabled"],
-		searchresultspaginationnext: ["SearchResults", "paginationNext"],
-		searchresultspaginationprevious: ["SearchResults", "paginationPrevious"],
+		searchresultspaginationicon: ["SearchResults", "icon"],
 		searchresultssearchheader: ["SearchResults", "searchHeader"],
 		searchresultswrap: ["SearchResults", "searchResultsWrap"],
-		searchresultswrapper: ["SearchResults", "resultsWrapper"],
 		select: ["NotFound", "select"],
 		selectable: ["TextStyle", "selectable"],
 		selectarrow: ["NotFound", "selectArrow"],
@@ -5989,7 +5848,6 @@
 		settingstablecardlabel: ["BDFDB", "settingsTableCardLabel"],
 		settingstablelist: ["BDFDB", "settingsTableList"],
 		sidebarregion: ["SettingsWindow", "sidebarRegion"],
-		sinkinteractions: ["Message", "disableInteraction"],
 		size10: ["TextSize", "size10"],
 		size12: ["TextSize", "size12"],
 		size14: ["TextSize", "size14"],
@@ -6063,14 +5921,11 @@
 		textareacharcounter: ["ChannelTextAreaCharCounter", "characterCount"],
 		textareacharcountererror: ["ChannelTextAreaCharCounter", "error"],
 		textareadisabled: ["ChannelTextArea", "textAreaDisabled"],
-		textareahighbackgroundopacity: ["ChannelTextArea", "highBackgroundOpacity"],
 		textareahasautocomplete: ["ChannelTextArea", "hasAutocomplete"],
 		textareaicon: ["ChannelTextAreaButton", "icon"],
 		textareaiconpulse: ["ChannelTextAreaButton", "pulseIcon"],
 		textareainner: ["ChannelTextArea", "inner"],
 		textareainnerdisabled: ["ChannelTextArea", "innerDisabled"],
-		textarealowbackgroundopacity: ["ChannelTextArea", "lowBackgroundOpacity"],
-		textareamediumbackgroundopacity: ["ChannelTextArea", "mediumBackgroundOpacity"],
 		textareapickerbutton: ["ChannelTextArea", "button"],
 		textareapickerbuttoncontainer: ["ChannelTextArea", "buttonContainer"],
 		textareapickerbuttons: ["ChannelTextArea", "buttons"],
@@ -6230,7 +6085,6 @@
 		voicedetailsstatusconnected: ["VoiceDetailsPing", "rtcConnectionStatusConnected"],
 		voicedetailsstatusconnecting: ["VoiceDetailsPing", "rtcConnectionStatusConnecting"],
 		voicedetailsstatuserror: ["VoiceDetailsPing", "rtcConnectionStatusError"],
-		voicedetailsstatustooltip: ["VoiceDetails", "statusTooltip"],
 		voicedetailsstatuswithpopout: ["VoiceDetails", "statusWithPopout"],
 		voicedraggable: ["NotFound", "voiceDraggable"],
 		voiceflipped: ["VoiceChannel", "flipped"],
@@ -8758,10 +8612,26 @@
 			box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
 		}
 		
-		${BDFDB.dotCNS.themedark + BDFDB.dotCNS.popoutwrapper + BDFDB.dotCN.popoutthemedpopout} {
-			-webkit-box-shadow: 0 2px 10px 0 rgba(0,0,0,20%);
+		${BDFDB.dotCN.popoutthemedpopout} {
+			background-color: #fff;
+			border: 1px solid hsla(0,0%,74.9%,.3);
+			-webkit-box-shadow: 0 2px 10px 0 rgba(0,0,0,.1);
+			box-shadow: 0 2px 10px 0 rgba(0,0,0,.1);
+			-webkit-box-sizing: border-box;
+			box-sizing: border-box;
+			border-radius: 5px;
+			display: -webkit-box;
+			display: -ms-flexbox;
+			display: flex;
+			-webkit-box-orient: vertical;
+			-webkit-box-direction: normal;
+			-ms-flex-direction: column;
+			flex-direction: column;
+		}
+		${BDFDB.dotCNS.themedark + BDFDB.dotCN.popoutthemedpopout} {
 			background-color: #2f3136;
 			border: 1px solid rgba(28,36,43,.6);
+			-webkit-box-shadow: 0 2px 10px 0 rgba(0,0,0,20%);
 			box-shadow: 0 2px 10px 0 rgba(0,0,0,.2);
 		}
 
@@ -9814,7 +9684,6 @@
 		return e.methodArguments[0].id == "410787888507256842" ? e.methodArguments[0].banner : e.callOriginalMethod();
 	}});
 	
-	for (let type of NoFluxPopouts) InternalBDFDB.patchPopoutLib(BDFDB.ModuleUtils.findByName(type), false);
 	for (let type of ComponentTypeData.NormalContextMenus) InternalBDFDB.patchContextMenuLib(LibraryComponents.ContextMenus[type], false);
 	for (let type of ComponentTypeData.FluxContextMenus) {
 		if (!BDFDB.InternalData.componentPatchQueries[type]) BDFDB.InternalData.componentPatchQueries[type] = {query:[], module:null};

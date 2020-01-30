@@ -72,11 +72,6 @@ class SteamProfileLink {
 			BDFDB.PluginUtils.init(this);
 
 			BDFDB.ListenerUtils.add(this, document, "click", "a[href^='https://steamcommunity.'], a[href^='https://store.steampowered.'], a[href*='a.akamaihd.net/'][href*='steam']", e => {this.openInSteam(e, e.currentTarget.href);});
-
-			BDFDB.ListenerUtils.add(this, document, "click", BDFDB.dotCN.cardstore + BDFDB.dotCN.cardstoreinteractive, e => {
-				let news = BDFDB.ReactUtils.getValue(e.currentTarget, "return.return.memoizedProps.news");
-				if (news && news.url && news.url.includes("steam")) this.openInSteam(e, news.url);
-			});
 		}
 		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
