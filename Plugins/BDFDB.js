@@ -1026,9 +1026,12 @@
 		"QuickSwitchChannelResult",
 		"QuickSwitchGuildResult"
 	];
-	WebModulesData.Nonprototype = [
-		"ChannelTextAreaContainer"
+	WebModulesData.Exported = [
+		"Message"
 	];
+	WebModulesData.Nonprototype = [].concat(WebModulesData.Exported, [
+		"ChannelTextAreaContainer"
+	]);
 	WebModulesData.LoadedInComponents = {
 		AutocompleteChannelResult: "AutocompleteComponents.Channel",
 		AutocompleteUserResult: "AutocompleteComponents.User"
@@ -1254,7 +1257,7 @@
 					}
 				}
 				else {
-					if (e.methodname == "render") {
+					if (e.methodname == "render" || e.methodname == "default") {
 						if (e.returnvalue || e.patchtypes.includes("before")) plugin["process" + type](e);
 					}
 					else {
@@ -1285,22 +1288,21 @@
 						plugin.patchedModules[patchtype][mappedtype] = plugin.patchedModules[patchtype][type];
 						delete plugin.patchedModules[patchtype][type];
 					}
-					if (!classname) patchInstance(BDFDB.ModuleUtils.findByName(mappedtype.split(" _ _ ")[0]), mappedtype, patchtype);
+					if (WebModulesData.Exported.includes(type.split(" _ _ ")[1] || type)) patchInstance((BDFDB.ModuleUtils.findByName(mappedtype.split(" _ _ ")[0], false) || {}).exports, mappedtype, patchtype, true);
+					else if (!classname) patchInstance(BDFDB.ModuleUtils.findByName(mappedtype.split(" _ _ ")[0]), mappedtype, patchtype);
 					else if (DiscordClasses[classname]) checkForInstance(classname, mappedtype, patchtype, WebModulesData.Forceobserve.includes(type.split(" _ _ ")[1] || type));
 				}
 			}
 		}
-		function patchInstance(instance, type, patchtype) {
+		function patchInstance(instance, type, patchtype, exported) {
 			if (instance) {
 				let name = type.split(" _ _ ")[0];
 				instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
-				instance = instance.displayName == name || instance.name == name || WebModulesData.LoadedInComponents[type] ? instance : (BDFDB.ReactUtils.findConstructor(instance, name) || BDFDB.ReactUtils.findConstructor(instance, name, {up:true}));
+				instance = exported || instance.displayName == name || instance.name == name || WebModulesData.LoadedInComponents[type] ? instance : (BDFDB.ReactUtils.findConstructor(instance, name) || BDFDB.ReactUtils.findConstructor(instance, name, {up:true}));
 				if (instance) {
 					instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 					let patchfunctions = {};
-					patchfunctions[patchtype] = e => {
-						InternalBDFDB.initiateProcess(plugin, type, {instance:e.thisObject, returnvalue:e.returnValue, methodname:e.originalMethodName, patchtypes:[patchtype]});
-					}
+					patchfunctions[patchtype] = e => InternalBDFDB.initiateProcess(plugin, type, {instance:e.thisObject, returnvalue:e.returnValue, methodname:e.originalMethodName, patchtypes:[patchtype]});
 					BDFDB.ModuleUtils.patch(plugin, WebModulesData.Nonprototype.includes(name) ? instance : instance.prototype, plugin.patchedModules[patchtype][type], patchfunctions);
 				}
 			}
