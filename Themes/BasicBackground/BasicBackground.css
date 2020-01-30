@@ -763,9 +763,10 @@ body:before {
 	border-color: transparent;
 }
 .content-1o0f9g {											/* divider				content								*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+	color: rgb(var(--fontwhite3));
 	width: 100%;
 	text-align: center;
-	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 .unreadPill-2HyYtt {										/* divider				unread								*/
 	background-color: #601c1c;
@@ -992,7 +993,9 @@ body:before {
 }
 
 /* EXPERIMENT */
-.message-2qnXI6 {											/* message				container							*/
+.message-2qnXI6,											/* message				container							*/
+.messageGroupCozy-2iY6cT,
+.messageGroupCozy-1BZuO8 {
 	background-color: rgba(var(--vtransparencycolor),var(--vmessagetransparency));
 }
 .message-2qnXI6.selected-2P5D_Z, 
@@ -1006,7 +1009,9 @@ body:before {
 	border-radius: 3px;
 	background-color: rgba(var(--vaccentcolor), 0.3);
 }
-.message-2qnXI6 .headerCozy-2H1QuU:after {
+.message-2qnXI6 .headerCozy-2H1QuU:after,
+.messageGroupCozy-2iY6cT .headerCozy-2H1QuU:after,
+.messageGroupCozy-1BZuO8 .headerCozy-2H1QuU:after {
 	content: "";
 	position: absolute;
 	top: 12px;
@@ -1025,7 +1030,6 @@ body:before {
 }
 .container-3FojY8:not(.compact-T3H92H) {
 	overflow: visible;
-	padding-left: 0;
 	padding-left: 10px;
 	margin-left: 80px;
 }
@@ -1035,8 +1039,32 @@ body:before {
 .container-3FojY8:not(.compact-T3H92H) .timestampCozyAlt-1Hs08c {
 	margin-left: -80px;
 }
+.messageGroupCozy-2iY6cT.container-3FojY8,
+.messageGroupCozy-1BZuO8.container-3FojY8 {
+	border-radius: 5px;
+	margin-left: 60px;
+}
 
-.wrapper-2aW0bm {											/* message				buttons							*/
+.expanded-13sWhZ {											/* message				expanded blocked					*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+	border-radius: 5px 5px 0 5px;
+}
+
+.timestampCompact-29LLPQ {									/* message				timestamp							*/
+	color: rgb(var(--fontwhite3));
+}
+
+.reaction-1hd86g {											/* message				reaction							*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+.reactionCount-2mvXRV {										/* message				reactioncount						*/
+	color: rgb(var(--fontwhite4));
+}
+.reaction-1hd86g:hover .reactionCount-2mvXRV {
+	color: rgb(var(--fontwhite2));
+}
+
+.wrapper-2aW0bm {											/* message				buttons								*/
 	background-color: transparent;
 	position: relative;
 }
@@ -3921,7 +3949,36 @@ body:before {
 }
 
 /* ----		15.4.	PINS/MENTIONS					---- */
-
+.messagesPopoutWrap-1MQ1bW {								/* popout				wrapper								*/
+	background-color: transparent;
+	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
+	border: none;
+	overflow: hidden;
+}
+.messagesPopoutWrap-1MQ1bW > * {
+	z-index: 1000;
+}
+.messagesPopoutWrap-1MQ1bW:after,
+.messagesPopoutWrap-1MQ1bW:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.messagesPopoutWrap-1MQ1bW:after {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
+}
+.messagesPopoutWrap-1MQ1bW:before {
+	background: var(--vpopout) center/var(--vpopoutsize);
+	filter: blur(var(--vpopoutblur));
+	background-attachment: fixed;
+}
 .messagesPopoutWrap-1MQ1bW {								/* popout				outerwrap							*/
 	background-color: transparent;
 }
@@ -3944,7 +4001,7 @@ body:before {
 .header-ykumBX .title-3pkaKd {								/* popout				headertitle							*/
 	color: rgb(var(--fontwhite1));
 }
-.mentionFilter-1PQ6ey {										/* popout				mentionfilter						*/
+#app-mount .mentionFilter-1PQ6ey {							/* popout				mentionfilter						*/
 	background: transparent;
 	color: rgb(var(--fontwhite1));
 	position: relative;
@@ -3990,15 +4047,18 @@ body:before {
 	background-color: transparent;
 	box-shadow: none;
 }
-.jumpButton-3DTcS_ {										/* popout				jumpbutton							*/
+.jumpButton-3DTcS_,
+.jumpButton-Ia2hRJ {										/* popout				jumpbutton							*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 	color: rgb(var(--fontwhite2));
 }
-.jumpButton-3DTcS_:hover {
+.jumpButton-3DTcS_:hover,
+.jumpButton-Ia2hRJ:hover {
 	background-color: rgb(var(--vaccentcolor));
 	color: rgb(var(--fontwhite1));
 }
-.jumpButton-3DTcS_ + .jumpButton-3DTcS_ {
+.jumpButton-3DTcS_ + .jumpButton-3DTcS_,
+.jumpButton-Ia2hRJ + .jumpButton-Ia2hRJ {
 	margin-left: 2px;
 }
 .closeButton-17RIVZ {										/* popout				messageclosebutton					*/
