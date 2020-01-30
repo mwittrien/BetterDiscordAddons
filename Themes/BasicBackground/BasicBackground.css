@@ -1048,6 +1048,7 @@ body:before {
 .expanded-13sWhZ {											/* message				expanded blocked					*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 	border-radius: 5px 5px 0 5px;
+	margin-bottom: .5625rem;
 }
 
 .timestampCompact-29LLPQ {									/* message				timestamp							*/
