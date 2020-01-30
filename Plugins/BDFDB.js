@@ -1298,7 +1298,7 @@
 			if (instance) {
 				let name = type.split(" _ _ ")[0];
 				instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
-				instance = exported || instance.displayName == name || instance.name == name || WebModulesData.LoadedInComponents[type] ? instance : (BDFDB.ReactUtils.findConstructor(instance, name) || BDFDB.ReactUtils.findConstructor(instance, name, {up:true}));
+				instance = exported || instance.type && instance.type.render && instance.type.render.displayName === name || instance.type.displayName === name || instance.type.name === name || instance.type === name || WebModulesData.LoadedInComponents[type] ? instance : (BDFDB.ReactUtils.findConstructor(instance, name) || BDFDB.ReactUtils.findConstructor(instance, name, {up:true}));
 				if (instance) {
 					instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 					let patchfunctions = {};
@@ -1353,7 +1353,7 @@
 		function isCorrectInstance(instance, name) {
 			if (!instance) return false;
 			instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
-			instance = instance.displayName == name || instance.name == name ? instance : (BDFDB.ReactUtils.findConstructor(instance, name) || BDFDB.ReactUtils.findConstructor(instance, name, {up:true}));
+			instance = instance.type && instance.type.render && instance.type.render.displayName === name || instance.type.displayName === name || instance.type.name === name || instance.type === name ? instance : (BDFDB.ReactUtils.findConstructor(instance, name) || BDFDB.ReactUtils.findConstructor(instance, name, {up:true}));
 			return !!instance;
 		}
 	};
@@ -4206,7 +4206,7 @@
 		return BDFDB.DOMUtils.containsClass(document.documentElement, BDFDB.disCN.themelight) ? BDFDB.disCN.themelight : BDFDB.disCN.themedark;
 	};
 	BDFDB.DiscordUtils.getMode = function () {
-		return document.querySelectorAll(BDFDB.dotCN.messagegroupcompact).length >= document.querySelectorAll(BDFDB.dotCN.messagegroupcozy).length ? "compact" : "cozy";
+		return document.querySelectorAll(BDFDB.dotCN.messagecompact).length >= document.querySelectorAll(BDFDB.dotCN.messagecozy).length ? "compact" : "cozy";
 	};
 	BDFDB.DiscordUtils.getZoomFactor = function () {
 		var arects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
