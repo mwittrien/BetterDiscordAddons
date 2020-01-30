@@ -2391,6 +2391,12 @@ body:before {
 #app-mount .item-3eFBNF {									/* languagesettings		row									*/
 	box-shadow: 0 1px 0 0 rgba(var(--fontwhite4), 0.3);
 }
+.item-3eFBNF:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.item-3eFBNF.selected-2DeaDa {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
 
 #app-mount .experimentDate-2ymg99 {							/* experiments			date								*/
 	color: rgb(var(--fontwhite3));
