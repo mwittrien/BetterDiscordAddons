@@ -878,9 +878,6 @@ body:before {
 .timestampCompactBase-26h38e {								/* header				timestampcompact					*/
 	color: rgb(var(--fontwhite4));
 }
-.timestamp-1E3uAL {											/* header				timestampsystem						*/
-	color: rgb(var(--fontwhite4));
-}
 .timestampVisibleOnHover-276OMc {
 	color: transparent;
 }
@@ -1007,10 +1004,21 @@ body:before {
 	border-radius: 3px;
 	background-color: rgba(var(--vaccentcolor), 0.3);
 }
-.message-2qnXI6 .headerCozy-2H1QuU:after,
-.preview-2nSL_2 .container-3FojY8 .headerCozy-2H1QuU:after,
-.messageGroupCozy-2iY6cT .headerCozy-2H1QuU:after,
-.messageGroupCozy-1BZuO8 .headerCozy-2H1QuU:after {
+.systemMessage-1I9LCe .iconContainer-3GkGRf {
+	background-color: rgba(var(--vtransparencycolor), var(--vmessagetransparency));
+	border-radius: 50%;
+	left: -65px;
+	height: 40px;
+}
+.systemMessage-1I9LCe .iconContainer-3GkGRf:after {
+	content: "";
+	position: absolute;
+	top: 10px;
+	left: 33px;
+	border: 10px solid transparent;
+	border-right: 12px solid rgba(var(--vtransparencycolor), var(--vmessagetransparency));
+}
+.headerCozy-2H1QuU:after {
 	content: "";
 	position: absolute;
 	top: 12px;
@@ -1019,7 +1027,9 @@ body:before {
 	border-right: 12px solid rgba(var(--vtransparencycolor), var(--vmessagetransparency));
 }
 .message-2qnXI6.selected-2P5D_Z .headerCozy-2H1QuU:after, 
-.mouse-mode .message-2qnXI6:hover .headerCozy-2H1QuU:after {
+.mouse-mode .message-2qnXI6:hover .headerCozy-2H1QuU:after,
+.message-2qnXI6.selected-2P5D_Z .iconContainer-3GkGRf:after,
+.mouse-mode .message-2qnXI6:hover .iconContainer-3GkGRf:after {
 	border-right-color: rgba(var(--vtransparencycolor), calc(var(--vmessagetransparency) * 1.2));
 }
 .message-2qnXI6.mentioned-xhSam7.selected-2P5D_Z .headerCozy-2H1QuU:after, 
@@ -1056,7 +1066,8 @@ body:before {
 }
 
 .timestampCozy-1HNQR2,										/* message				timestamp							*/
-.timestampCompact-29LLPQ {
+.timestampCompact-29LLPQ,
+.timestamp-1E3uAL {
 	color: rgb(var(--fontwhite3));
 }
 

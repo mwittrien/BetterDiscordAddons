@@ -7150,6 +7150,7 @@
 	
 	LibraryComponents.ContextMenuItems.Item = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.ContextMenuItems.Item") || reactInitialized && class BDFDB_ContextMenuItem extends LibraryModules.React.Component {
 		render() {
+			let hintIsString = typeof this.props.hint == "string";
 			return BDFDB.ReactUtils.createElement(LibraryComponents.Clickable, {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.contextmenuitem, !this.props.disabled && BDFDB.disCN.contextmenuitemclickable, this.props.danger && BDFDB.disCN.contextmenuitemdanger, this.props.disabled && BDFDB.disCN.contextmenuitemdisabled, this.props.brand && BDFDB.disCN.contextmenuitembrand, this.props.className),
 				style: this.props.style,
@@ -7162,15 +7163,15 @@
 					}),
 					BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.contextmenuhint,
-						style: this.props.hint ? {
+						style: hintIsString ? {
 							width: 42,
 							maxWidth: 42,
 							marginLeft: 8
 						} : {},
-						children: this.props.hint ? BDFDB.ReactUtils.createElement(LibraryComponents.TextScroller, {
+						children: hintIsString ? BDFDB.ReactUtils.createElement(LibraryComponents.TextScroller, {
 							speed: 2,
 							children: this.props.hint
-						}) : null
+						}) : (this.props.hint || null)
 					}),
 					this.props.children
 				]
