@@ -112,6 +112,7 @@
 		5.	SEARCHPOPOUT
 		6.	COLORPICKER
 		7.	ADDROLE
+		8.	EVERYONEMENTION
 	16.	GENERAL
 		1.	TEXT
 		2.	BUTTONS
@@ -688,6 +689,10 @@ body:before {
 	display: none;
 }
 
+.akaBadge-1M-1Gw {											/* header				aka									*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+
 .icon-22AiRD {												/* header				typeicon							*/
 	color: rgb(var(--fontwhite1));
 }
@@ -748,6 +753,25 @@ body:before {
 .containerCozy-jafyvG .divider-32i8lo.dividerEnabled-2TTlcf {
 	margin-top: 15px;
 	margin-bottom: -15px;
+}
+
+/* EXPERIMENT */
+.divider-JfaTT5:not(.isUnread-3Ef-o9) {						/* divider				time								*/
+	border-color: rgba(var(--fontwhite1), 0.2);
+}
+.divider-JfaTT5.hasContent-1cNJDh {							/* divider				hascontent							*/
+	border-color: transparent;
+}
+.content-1o0f9g {											/* divider				content								*/
+	width: 100%;
+	text-align: center;
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.unreadPill-2HyYtt {										/* divider				unread								*/
+	background-color: #601c1c;
+}
+.unreadPillCapStroke-7rkHbg {
+	fill: #601c1c;
 }
 
 .hasMore-3e72_v {											/* bar					hasmore								*/
@@ -862,7 +886,6 @@ body:before {
 .messageCompact-kQa7ES:hover .timestampVisibleOnHover-276OMc {
 	color: rgb(var(--fontwhite4));
 }
-
 .markup-2BOw-j {											/* message				markup								*/
 	color: rgb(var(--fontwhite2));
 }
@@ -966,6 +989,83 @@ body:before {
 #app-mount .message-2qRu38 {								/* deletemessage		container							*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
+}
+
+/* EXPERIMENT */
+.message-2qnXI6 {											/* message				container							*/
+	background-color: rgba(var(--vtransparencycolor),var(--vmessagetransparency));
+}
+.message-2qnXI6.selected-2P5D_Z, 
+.mouse-mode .message-2qnXI6:hover {
+	background-color: rgba(var(--vtransparencycolor),calc(var(--vmessagetransparency) * 1.2));
+}
+.message-2qnXI6.mentioned-xhSam7:before {					/* message				mentioned							*/
+	background-color: rgb(var(--vaccentcolor));
+}
+.message-2qnXI6.mentioned-xhSam7 .markup-2BOw-j {
+	border-radius: 3px;
+	background-color: rgba(var(--vaccentcolor), 0.3);
+}
+.message-2qnXI6 .headerCozy-2H1QuU:after {
+	content: "";
+	position: absolute;
+	top: 12px;
+	left: 40px;
+	border: 10px solid transparent;
+	border-right: 12px solid rgba(var(--vtransparencycolor), var(--vmessagetransparency));
+}
+.message-2qnXI6.selected-2P5D_Z .headerCozy-2H1QuU:after, 
+.mouse-mode .message-2qnXI6:hover .headerCozy-2H1QuU:after {
+	border-right-color: rgba(var(--vtransparencycolor), calc(var(--vmessagetransparency) * 1.2));
+}
+.message-2qnXI6.mentioned-xhSam7.selected-2P5D_Z .headerCozy-2H1QuU:after, 
+.mouse-mode .message-2qnXI6.mentioned-xhSam7:hover .headerCozy-2H1QuU:after,
+.message-2qnXI6.mentioned-xhSam7 .headerCozy-2H1QuU:after {
+	border-right-color: rgba(var(--vaccentcolor), calc(var(--vmessagetransparency) * 100000000000000000000000000000));
+}
+.container-3FojY8:not(.compact-T3H92H) {
+	overflow: visible;
+	padding-left: 0;
+	padding-left: 10px;
+	margin-left: 80px;
+}
+.container-3FojY8:not(.compact-T3H92H) .avatar-1BDn8e {
+	left: -10px;
+}
+.container-3FojY8:not(.compact-T3H92H) .timestampCozyAlt-1Hs08c {
+	margin-left: -80px;
+}
+
+.wrapper-2aW0bm {											/* message				buttons							*/
+	background-color: transparent;
+	position: relative;
+}
+.wrapper-2aW0bm:after,
+.wrapper-2aW0bm:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.wrapper-2aW0bm:after {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
+}
+.wrapper-2aW0bm:before {
+	background: var(--vpopout) center/var(--vpopoutsize);
+	filter: blur(var(--vpopoutblur));
+	background-attachment: fixed;
+}
+.separator-42rNt0 {											/* message				buttonsseparator					*/
+	border-left-color: rgba(var(--fontwhite1), 0.1);
+}
+.button-1ZiXG9:hover {										/* message				button								*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
 
 /* ====		6.2.2.	EMBEDS							==== */
@@ -4218,6 +4318,58 @@ body:before {
 #app-mount .row-rrHHJU.selected-1pIgLL {
 	background: rgba(var(--vtransparencycolor), 0.2);
 	border-radius: 0 5px 5px 0;
+}
+
+
+/* ----		15.8.	EVERYONEMENTION					---- */
+
+#app-mount .everyonePopout-nEbJY3 {							/* popout				wrapper								*/
+	background-color: transparent;
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
+	border: none;
+	border-radius: 3px;
+	overflow: hidden;
+	position: relative;
+}
+.everyonePopout-nEbJY3:after,
+.everyonePopout-nEbJY3:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.everyonePopout-nEbJY3:after {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.1));
+}
+.everyonePopout-nEbJY3:before {
+	background: var(--vpopout) center/var(--vpopoutsize);
+	filter: blur(var(--vpopoutblur));
+	background-attachment: fixed;
+}
+.everyonePopout-nEbJY3 .animation-3GofIz {
+	opacity: 0.7;
+}
+#app-mount .header-3_S6dz {
+	color: rgb(var(--fontwhite1));
+}
+#app-mount .buttonHint-2OxJB8 {
+	color: rgb(var(--fontwhite3));
+}
+#app-mount .buttonHint-2OxJB8 strong {
+	color: rgb(var(--fontwhite1));
+}
+#app-mount .footer-2aTx0s {
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+	color: rgb(var(--fontwhite3));
+}
+#app-mount .footer-2aTx0s .icon-2qOzDL path {
+	fill: rgb(var(--fontwhite3));
 }
 
 
