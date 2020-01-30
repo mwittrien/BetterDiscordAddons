@@ -5781,6 +5781,7 @@
 		searchresultschannelname: ["SearchResults", "channelName"],
 		searchresultschannelSeparator: ["SearchResults", "channelSeparator"],
 		searchresultsexpanded: ["SearchResults", "expanded"],
+		searchresultsgroupcozy: ["SearchResults", "messageGroupCozy"],
 		searchresultshit: ["SearchResults", "hit"],
 		searchresultspagination: ["SearchResults", "pagination"],
 		searchresultspaginationbutton: ["SearchResults", "paginationButton"],
