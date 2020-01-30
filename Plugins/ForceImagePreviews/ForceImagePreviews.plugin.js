@@ -3,7 +3,7 @@
 class ForceImagePreviews {
 	getName () {return "ForceImagePreviews";}
 
-	getVersion () {return "1.1.4";}
+	getVersion () {return "1.1.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -44,7 +44,7 @@ class ForceImagePreviews {
 			if (this.started) return;
 			BDFDB.PluginUtils.init(this);
 			 
-			BDFDB.ModuleUtils.patch(this, BDFDB.ModuleUtils.findByName("MessageAccessories").prototype, "render", {before: e => {
+			BDFDB.ModuleUtils.patch(this, (BDFDB.ModuleUtils.findByName("MessageAccessories") || {}).prototype, "render", {before: e => {
 				if (e.thisObject.props.message.content) {
 					let message = new BDFDB.DiscordObjects.Message(e.thisObject.props.message);
 					for (let word of e.thisObject.props.message.content.split(/\n|\s|\r|\t|\0/g)) if (word.indexOf("https://") > -1 || word.indexOf("http://") > -1) {
@@ -55,7 +55,7 @@ class ForceImagePreviews {
 				}
 			}});
 			
-			BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"MessageAccessories", all:true, unlimited:true}));
+			BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"MessageAccessories", all:true, noCopies:true, unlimited:true}));
 		}
 		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 	}
