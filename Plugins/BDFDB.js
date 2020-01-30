@@ -4675,6 +4675,7 @@
 	DiscordClassModules.MessageOperations = BDFDB.ModuleUtils.find(m => typeof m.operations == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.MessageSystem = BDFDB.ModuleUtils.findByProperties("container", "actionAnchor");
 	DiscordClassModules.MessageToolbar = BDFDB.ModuleUtils.findByProperties("container", "icon", "isHeader");
+	DiscordClassModules.MessageToolbarItems = BDFDB.ModuleUtils.findByProperties("wrapper", "button", "separator");
 	DiscordClassModules.MessagesPopout = BDFDB.ModuleUtils.findByProperties("messagesPopoutWrap", "jumpButton");
 	DiscordClassModules.MessagesWelcome = BDFDB.ModuleUtils.findByProperties("welcomeMessage", "h1");
 	DiscordClassModules.MessagesWrap = BDFDB.ModuleUtils.findByProperties("messagesWrapper", "messageGroupBlocked");
@@ -5591,10 +5592,15 @@
 		messagetimedividerred: ["MessageElements", "dividerRed"],
 		messagetimedividercontent: ["MessageElements", "dividerContent"],
 		messagetimestampsystem: ["MessageSystem", "timestamp"],
-		messagetoolbarcontainer: ["MessageToolbar", "container"],
+		messagetoolbar: ["MessageToolbar", "container"],
+		messagetoolbarbutton: ["MessageToolbarItems", "button"],
+		messagetoolbarbuttondisabled: ["MessageToolbarItems", "disabled"],
+		messagetoolbarbuttonselected: ["MessageToolbarItems", "selected"],
 		messagetoolbaricon: ["MessageToolbar", "icon"],
+		messagetoolbarinner: ["MessageToolbarItems", "wrapper"],
 		messagetoolbarisheader: ["MessageToolbar", "isHeader"],
 		messagetoolbarpublishicon: ["MessageToolbar", "publishIcon"],
+		messagetoolbarseparator: ["MessageToolbarItems", "separator"],
 		messageuploadcancel: ["MessageFile", "cancelButton"],
 		modal: ["ModalWrap", "modal"],
 		modalclose: ["Modal", "close"],
