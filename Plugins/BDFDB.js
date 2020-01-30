@@ -9836,9 +9836,9 @@
 		}
 	});});}))}, {childList: true});
 	BDFDB.ModuleUtils.patch(BDFDB, BDFDB.ReactUtils.getValue(BDFDB.ModuleUtils.findByString("renderReactions", "canAddNewReactions", "showMoreUtilities", false), "exports.default"), "type", {after: e => {
-		InternalBDFDB.executeExtraPatchedPatches("MessageOptionToolbar", {instance:{props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:"default"});
 		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnValue, {filter: c => c && c.props && c.props.showMoreUtilities != undefined && c.props.showEmojiPicker != undefined && c.props.setPopout != undefined});
 		if (index > -1) BDFDB.ModuleUtils.patch(BDFDB, children[index], "type", {after: e2 => {
+			InternalBDFDB.executeExtraPatchedPatches("MessageOptionToolbar", {instance:{props:e.methodArguments[0]}, returnvalue:e2.returnValue, methodname:"default"});
 			let [children2, index2] = BDFDB.ReactUtils.findChildren(e2.returnValue, {name: "Popout"});
 			if (index2 > -1 && typeof children2[index2].props.renderPopout == "function") {
 				let renderPopout = children2[index2].props.renderPopout;
