@@ -9819,7 +9819,7 @@
 		}
 	}});
 	BDFDB.ObserverUtils.connect(BDFDB, BDFDB.dotCN.appmount +  " > * > " + BDFDB.dotCN.itemlayercontainer, {name:"contextMenuObserver", instance:(new MutationObserver(changes => {changes.forEach(change => {change.addedNodes.forEach(node => {
-		let menu = node && node.nodeType == Node.TEXT_NODE && BDFDB.ReactUtils.getValue(BDFDB.ReactUtils.getInstance(node.querySelector(BDFDB.dotCN.contextmenu)), "return");
+		let menu = node && node.nodeType == Node.TEXT_NODE && (BDFDB.ReactUtils.getInstance(node.querySelector(BDFDB.dotCN.contextmenu)) || {}).return;
 		if (BDFDB.ObjectUtils.is(menu)) {
 			let type = InternalBDFDB.getContextMenuType(menu.type && menu.type.displayName || menu.props && menu.props.type, menu);
 			if (type && LibraryComponents.ContextMenus._ObserverMenus.includes(type)) {
@@ -9836,6 +9836,8 @@
 					if (BDFDB.InternalData.patchMenuQueries[type] && !BDFDB.InternalData.patchMenuQueries[type].module) {
 						BDFDB.InternalData.patchMenuQueries[type].module = module;
 						while (BDFDB.InternalData.patchMenuQueries[type].query.length) InternalBDFDB.patchExportedContextMenuPlugin(BDFDB.InternalData.patchMenuQueries[type].query.pop(), type, module);
+						let close = BDFDB.ReactUtils.getValue(menu, "memoizedProps.onClose");
+						if (typeof close == "function") close();
 					}
 					if (!module.exports.default.displayName) module.exports.default.displayName = type;
 				}
