@@ -2515,6 +2515,16 @@ body:before {
 	stroke: rgb(var(--fontwhite1));
 }
 
+.cardWrapper-2Min21 {										/* boostsettings		suggestioncard						*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.cardWrapper-2Min21:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+.cardWrapper-2Min21 .card-3AyPWq,							/* boostsettings		suggestioncardinner					*/
+.cardWrapper-2Min21 .card-3AyPWq:hover {
+	background-color: transparent;
+}
 .carouselContainer-2-vIZS {									/* boostsettings		scrollercontainer					*/
 	-webkit-mask: linear-gradient(to right, rgba(0,0,0,0) 0px, rgba(0,0,0,1) 22px, rgba(0,0,0,1) 578px, rgba(0,0,0,0) 600px);
 }
