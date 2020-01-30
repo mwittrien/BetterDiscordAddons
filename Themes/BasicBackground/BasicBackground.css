@@ -1065,7 +1065,10 @@ body:before {
 	border-left-color: rgba(var(--fontwhite1), 0.1);
 }
 .button-1ZiXG9:hover {										/* message				button								*/
-	background-color: rgba(var(--vtransparencycolor), 0.3);
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.button-1ZiXG9.selected-LCBEAU:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
 }
 
 /* ====		6.2.2.	EMBEDS							==== */
