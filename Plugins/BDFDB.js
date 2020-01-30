@@ -1455,6 +1455,26 @@
 			}});
 		}
 	};
+	InternalBDFDB.patchExportedContextMenuLib = function (menu, type, shouldCloseOnPatch) {
+		let module = BDFDB.ModuleUtils.find(m => m == menu.type, false);
+		if (module && module.exports && module.exports.default) {
+			if (!LibraryComponents.ContextMenus[type]) {
+				LibraryComponents.ContextMenus[type] = module.exports.default;
+				BDFDB.LibraryComponents.ContextMenus[type] = module.exports.default;
+			}
+			if (!LibraryComponents.ContextMenus._Exports[type]) {
+				LibraryComponents.ContextMenus._Exports[type] = module.exports;
+				BDFDB.LibraryComponents.ContextMenus._Exports[type] = module.exports;
+			}
+			if (BDFDB.InternalData.patchMenuQueries[type] && !BDFDB.InternalData.patchMenuQueries[type].module) {
+				BDFDB.InternalData.patchMenuQueries[type].module = module;
+				while (BDFDB.InternalData.patchMenuQueries[type].query.length) InternalBDFDB.patchExportedContextMenuPlugin(BDFDB.InternalData.patchMenuQueries[type].query.pop(), type, module);
+				let close = shouldCloseOnPatch && BDFDB.ReactUtils.getValue(menu, "memoizedProps.onClose");
+				if (typeof close == "function") close();
+			}
+			if (!module.exports.default.displayName) module.exports.default.displayName = type;
+		}
+	};
 	InternalBDFDB.patchPopoutLib = function (module, repatch) {
 		if (module && module.prototype) {
 			// REMOVE
@@ -1487,8 +1507,7 @@
 	};
 	InternalBDFDB.getContextMenuType = function (menutype, component) {
 		if (menutype) {
-			if (menutype == "MessageContextMenu" && component && component != BDFDB.LibraryComponents.ContextMenus.MessageContextMenu) return "MessageOptionContextMenu";
-			else if (menutype.endsWith("ContextMenu")) return menutype;
+			if (menutype.endsWith("ContextMenu")) return menutype;
 			else if (LibraryComponents.ContextMenus._Types.includes(menutype)) {
 				if (menutype.indexOf("USER_") == 0) return "UserContextMenu";
 				else if (menutype.indexOf("CHANNEL_") == 0) return "ChannelContextMenu";
@@ -7206,7 +7225,7 @@
 	LibraryComponents.ContextMenus._NormalMenus = ["DeveloperContextMenu", "GuildRoleContextMenu", "MessageContextMenu", "NativeContextMenu", "ScreenshareContextMenu", "UserSettingsCogContextMenu"];
 	LibraryComponents.ContextMenus._FluxMenus = ["ApplicationContextMenu", "GroupDMContextMenu"];
 	LibraryComponents.ContextMenus._NonRenderMenus = ["ChannelContextMenu", "GuildContextMenu", "SlateContextMenu", "UserContextMenu"];
-	LibraryComponents.ContextMenus._ObserverMenus = ["MessageOptionContextMenu"];
+	LibraryComponents.ContextMenus._ObserverMenus = [];
 	
 	LibraryComponents.ContextMenus._Types = Object.entries(BDFDB.DiscordConstants.ContextMenuTypes).map(n => n[1]);
 	
@@ -9794,54 +9813,18 @@
 		InternalBDFDB.patchContextMenuLib(LibraryComponents.ContextMenus[type], true);
 	}
 	for (let type of [].concat(LibraryComponents.ContextMenus._NonRenderMenus, LibraryComponents.ContextMenus._ObserverMenus)) if (!BDFDB.InternalData.patchMenuQueries[type]) BDFDB.InternalData.patchMenuQueries[type] = {query:[], module:null};
-	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.ContextMenuUtils, "openContextMenu", {before: e => {
+	if (LibraryComponents.ContextMenus._NonRenderMenus.length) BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.ContextMenuUtils, "openContextMenu", {before: e => {
 		let menu = e.methodArguments[1]();
 		if (BDFDB.ObjectUtils.is(menu)) {
 			let type = InternalBDFDB.getContextMenuType(menu.type && menu.type.displayName || menu.props && menu.props.type, menu);
-			if (type && LibraryComponents.ContextMenus._NonRenderMenus.includes(type)) {
-				let module = BDFDB.ModuleUtils.find(m => m == menu.type, false);
-				if (module && module.exports && module.exports.default) {
-					if (!LibraryComponents.ContextMenus[type]) {
-						LibraryComponents.ContextMenus[type] = module.exports.default;
-						BDFDB.LibraryComponents.ContextMenus[type] = module.exports.default;
-					}
-					if (!LibraryComponents.ContextMenus._Exports[type]) {
-						LibraryComponents.ContextMenus._Exports[type] = module.exports;
-						BDFDB.LibraryComponents.ContextMenus._Exports[type] = module.exports;
-					}
-					if (BDFDB.InternalData.patchMenuQueries[type] && !BDFDB.InternalData.patchMenuQueries[type].module) {
-						BDFDB.InternalData.patchMenuQueries[type].module = module;
-						while (BDFDB.InternalData.patchMenuQueries[type].query.length) InternalBDFDB.patchExportedContextMenuPlugin(BDFDB.InternalData.patchMenuQueries[type].query.pop(), type, module);
-					}
-					if (!module.exports.default.displayName) module.exports.default.displayName = type;
-				}
-			}
+			if (type && LibraryComponents.ContextMenus._NonRenderMenus.includes(type)) InternalBDFDB.patchExportedContextMenuLib(menu, type, false);
 		}
 	}});
-	BDFDB.ObserverUtils.connect(BDFDB, BDFDB.dotCN.appmount +  " > * > " + BDFDB.dotCN.itemlayercontainer, {name:"contextMenuObserver", instance:(new MutationObserver(changes => {changes.forEach(change => {change.addedNodes.forEach(node => {
-		let menu = node && node.nodeType == Node.TEXT_NODE && (BDFDB.ReactUtils.getInstance(node.querySelector(BDFDB.dotCN.contextmenu)) || {}).return;
+	if (LibraryComponents.ContextMenus._ObserverMenus.length) BDFDB.ObserverUtils.connect(BDFDB, BDFDB.dotCN.appmount +  " > * > " + BDFDB.dotCN.itemlayercontainer, {name:"contextMenuObserver", instance:(new MutationObserver(changes => {changes.forEach(change => {change.addedNodes.forEach(node => {
+		let menu = node && node.nodeType != Node.TEXT_NODE && (BDFDB.ReactUtils.getInstance(node.querySelector(BDFDB.dotCN.contextmenu)) || {}).return;
 		if (BDFDB.ObjectUtils.is(menu)) {
 			let type = InternalBDFDB.getContextMenuType(menu.type && menu.type.displayName || menu.props && menu.props.type, menu);
-			if (type && LibraryComponents.ContextMenus._ObserverMenus.includes(type)) {
-				let module = BDFDB.ModuleUtils.find(m => m == menu.type, false);
-				if (module && module.exports && module.exports.default) {
-					if (!LibraryComponents.ContextMenus[type]) {
-						LibraryComponents.ContextMenus[type] = module.exports.default;
-						BDFDB.LibraryComponents.ContextMenus[type] = module.exports.default;
-					}
-					if (!LibraryComponents.ContextMenus._Exports[type]) {
-						LibraryComponents.ContextMenus._Exports[type] = module.exports;
-						BDFDB.LibraryComponents.ContextMenus._Exports[type] = module.exports;
-					}
-					if (BDFDB.InternalData.patchMenuQueries[type] && !BDFDB.InternalData.patchMenuQueries[type].module) {
-						BDFDB.InternalData.patchMenuQueries[type].module = module;
-						while (BDFDB.InternalData.patchMenuQueries[type].query.length) InternalBDFDB.patchExportedContextMenuPlugin(BDFDB.InternalData.patchMenuQueries[type].query.pop(), type, module);
-						let close = BDFDB.ReactUtils.getValue(menu, "memoizedProps.onClose");
-						if (typeof close == "function") close();
-					}
-					if (!module.exports.default.displayName) module.exports.default.displayName = type;
-				}
-			}
+			if (type && LibraryComponents.ContextMenus._ObserverMenus.includes(type)) InternalBDFDB.patchExportedContextMenuLib(menu, type, true);
 		}
 	});});}))}, {childList: true});
 
