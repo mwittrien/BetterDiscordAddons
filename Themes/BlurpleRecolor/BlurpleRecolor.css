@@ -383,6 +383,10 @@
 	border-top-color: rgb(var(--vaccentcolor)) !important;
 }
 
+.reactionMe-wv5HKu:hover .reactionCount-2mvXRV {
+	filter: brightness(200%);
+}
+
 /* FONT */
 .theme-light .closeLink-2MRAUp,
 .theme-light .allGamesContainer-wD_QKF,
@@ -426,6 +430,8 @@
 .noticeBrand-3nQBC_ .button-1MICoQ:hover,
 .noticePremiumGrandfathered-ollUxF .button-1MICoQ:hover,
 .reactionMe-23mbRf .reactionCount-2ddRoS,
+.reactionMe-wv5HKu .reactionCount-2mvXRV,
+.reactionMe-wv5HKu:hover .reactionCount-2mvXRV,
 .regionSelectModalHeader-21khC1,
 .tabBar-1E2ExX .primarySelected-3uHKZn,
 .tabBar-1E2ExX .primary-3j8BhM .badge-xFJoEU,
@@ -589,12 +595,14 @@
 [style*="background-color: rgba(114, 137, 218, 0.6)"] {
 	background-color: rgba(var(--vaccentcolor),0.6) !important;
 }
+.reaction-1hd86g.reactionMe-wv5HKu:hover,
 [style*="background-color: rgba(114, 137, 218, 0.5)"] {
 	background-color: rgba(var(--vaccentcolor),0.5) !important;
 }
 [style*="background-color: rgba(114, 137, 218, 0.4)"] {
 	background-color: rgba(var(--vaccentcolor),0.4) !important;
 }
+.reaction-1hd86g.reactionMe-wv5HKu,
 [style*="background-color: rgba(114, 137, 218, 0.3)"] {
 	background-color: rgba(var(--vaccentcolor),0.3) !important;
 }
