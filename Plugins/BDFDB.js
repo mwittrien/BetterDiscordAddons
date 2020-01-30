@@ -944,7 +944,10 @@
 		for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 			var m = req.c[i].exports;
 			if (m && (typeof m == "object" || typeof m == "function") && filter(m)) return getExport ? m : req.c[i];
-			if (m && m.__esModule) for (let j in m) if (m[j] && (typeof m[j] == "object" || typeof m[j] == "function") && filter(m[j])) return getExport ? m[j] : req.c[i];
+			if (m && m.__esModule) {
+				for (let j in m) if (m[j] && (typeof m[j] == "object" || typeof m[j] == "function") && filter(m[j])) return getExport ? m[j] : req.c[i];
+				if (m.default && (typeof m.default == "object" || typeof m.default == "function")) for (let j in m.default) if (m.default[j] && (typeof m.default[j] == "object" || typeof m.default[j] == "function") && filter(m.default[j])) return getExport ? m.default[j] : req.c[i];
+			}
 		}
 	};
 	BDFDB.ModuleUtils.findByProperties = function (...properties) {
@@ -957,9 +960,7 @@
 		return InternalBDFDB.findModule("prop", JSON.stringify(properties), m => properties.every(prop => m[prop] !== undefined), getExport);
 	};
 	BDFDB.ModuleUtils.findByName = function (name, getExport) {
-		let module = InternalBDFDB.findModule("name", JSON.stringify(name), m => m.displayName === name || m.render && m.render.displayName === name, typeof getExport != "boolean" ? true : getExport);
-		if (module && module.render && module.render.displayName == name) module.displayName = name;
-		return module;
+		return InternalBDFDB.findModule("name", JSON.stringify(name), m => m.displayName === name || m.render && m.render.displayName === name, typeof getExport != "boolean" ? true : getExport);
 	};
 	BDFDB.ModuleUtils.findByString = function (...strings) {
 		strings = strings.flat(10);
