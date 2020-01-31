@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.6.3";}
+	getVersion () {return "6.6.4";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,6 +11,7 @@ class ServerFolders {
 
 	constructor () {
 		this.changelog = {
+			"fixed":[["Drag","Fixed issue where a server would be dragged instead of clicked when clicking swiftly"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 		
@@ -165,13 +166,13 @@ class ServerFolders {
 											}
 										},
 										onMouseDown: (event, instance) => {
-											let node = BDFDB.ReactUtils.findDOMNode(instance).cloneNode(true);
+											event = event.nativeEvent;
 											let mousemove = event2 => {
 												if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
 													BDFDB.ListenerUtils.stopEvent(event);
 													this.draggedGuild = guildId;
+													let dragpreview = plugin.createDragPreview(BDFDB.ReactUtils.findDOMNode(instance).cloneNode(true), event2);
 													BDFDB.ReactUtils.forceUpdate(this);
-													let dragpreview = plugin.createDragPreview(node, event2);
 													document.removeEventListener("mousemove", mousemove);
 													document.removeEventListener("mouseup", mouseup);
 													let dragging = event3 => {
