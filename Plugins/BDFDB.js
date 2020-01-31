@@ -1966,6 +1966,13 @@
 		}
 	};
 
+	BDFDB.MessageUtils = {};
+	BDFDB.MessageUtils.rerenderChat = function () {
+		let isCompact = BDFDB.DiscordUtils.getMode() == "compact";
+		LibraryModules.SettingsUtils.updateLocalSettings({messageDisplayCompact:!isCompact});
+		LibraryModules.SettingsUtils.updateLocalSettings({messageDisplayCompact:isCompact});
+	};
+
 	BDFDB.UserUtils = {};
 	var myDataUser = LibraryModules.CurrentUserStore ? LibraryModules.CurrentUserStore.getCurrentUser() : null;
 	BDFDB.UserUtils.is = function (user) {
@@ -4212,11 +4219,14 @@
 			return version;
 		}
 	};
+	BDFDB.DiscordUtils.isDevModeEnabled = function () {
+		return LibraryModules.StoreUtils.get("UserSettingsStore").developerMode;
+	};
 	BDFDB.DiscordUtils.getTheme = function () {
-		return BDFDB.DOMUtils.containsClass(document.documentElement, BDFDB.disCN.themelight) ? BDFDB.disCN.themelight : BDFDB.disCN.themedark;
+		return LibraryModules.StoreUtils.get("UserSettingsStore").theme == "dark" ? BDFDB.disCN.themedark : BDFDB.disCN.themelight;
 	};
 	BDFDB.DiscordUtils.getMode = function () {
-		return document.querySelectorAll(BDFDB.dotCN.messagecompact).length >= document.querySelectorAll(BDFDB.dotCN.messagecozy).length ? "compact" : "cozy";
+		return LibraryModules.StoreUtils.get("UserSettingsStore").message_display_compact ? "compact" : "cozy";
 	};
 	BDFDB.DiscordUtils.getZoomFactor = function () {
 		var arects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
