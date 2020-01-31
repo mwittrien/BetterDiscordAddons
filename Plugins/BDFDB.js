@@ -1971,12 +1971,12 @@
 		let MessagesIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"Messages", unlimited:true});
 		let MessagesPrototype = BDFDB.ReactUtils.getValue(MessagesIns, "_reactInternalFiber.type.prototype");
 		if (MessagesIns && MessagesPrototype) {
-			let patchCancel = BDFDB.ModuleUtils.patch(BDFDB, MessagesPrototype, "render", {after:e => {
+			let patchCancel = BDFDB.ModuleUtils.patch({name:"tempPatch"}, MessagesPrototype, "render", {after:e => {
 				patchCancel();
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnValue, {props: ["message", "channel"]});
 				if (index > -1) {
-					for (let i in children) children[i] = null;
-					BDFDB.ReactUtils.forceUpdate(MessagesIns);
+					for (let i in children) children[i].props.message = new BDFDB.DiscordObjects.Message({author: new BDFDB.DiscordObjects.User({})});
+					BDFDB.ReactUtils.forceUpdate(e.thisObject);
 				}
 			}});
 			BDFDB.ReactUtils.forceUpdate(MessagesIns);
