@@ -1027,7 +1027,8 @@
 		"QuickSwitchGuildResult"
 	];
 	WebModulesData.DefaultRender = [
-		"Message"
+		"Message",
+		"MessageHeader"
 	];
 	WebModulesData.MemoComponent = [
 		"MessageContent"
@@ -1260,7 +1261,7 @@
 					}
 				}
 				else {
-					if (e.methodname == "render" || e.methodname == "default") {
+					if (e.methodname == "render" || e.methodname == "default" || e.methodname == "type") {
 						if (e.returnvalue || e.patchtypes.includes("before")) plugin["process" + type](e);
 					}
 					else {
