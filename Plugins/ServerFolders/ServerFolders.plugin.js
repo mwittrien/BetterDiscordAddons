@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.6.4";}
+	getVersion () {return "6.6.5";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -11,7 +11,7 @@ class ServerFolders {
 
 	constructor () {
 		this.changelog = {
-			"fixed":[["Drag","Fixed issue where a server would be dragged instead of clicked when clicking swiftly"]],
+			"fixed":[["Tabs","Fixed Settings Tabs not showing in the folder settings modal"],["Drag","Fixed issue where a server would be dragged instead of clicked when clicking swiftly"]],
 			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 		};
 		
@@ -664,7 +664,7 @@ class ServerFolders {
 		if (e.returnvalue) {
 			let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(e.instance.props.folderId);
 			let data = this.getFolderConfig(e.instance.props.folderId);
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "Header"});
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: ["ModalHeader", "Header"]});
 			if (index > -1) {
 				children[index].props.className = BDFDB.DOMUtils.formatClassName(children[index].props.className, BDFDB.disCN.modalheaderhassibling),
 				children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
