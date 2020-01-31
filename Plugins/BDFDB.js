@@ -1029,7 +1029,7 @@
 	WebModulesData.DefaultRender = [
 		"Message"
 	];
-	WebModulesData.NonPrototype = [].concat(WebModulesData.Exported, [
+	WebModulesData.NonPrototype = [].concat(WebModulesData.DefaultRender, [
 		"ChannelTextAreaContainer"
 	]);
 	WebModulesData.LoadedInComponents = {
