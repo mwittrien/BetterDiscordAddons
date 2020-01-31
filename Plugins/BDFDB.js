@@ -9495,7 +9495,7 @@
 			V2C_ThemeCard: "render",
 			UserPopout: "componentDidMount",
 			UserProfile: "componentDidMount",
-			Message: ["componentDidMount","componentDidUpdate"]
+			DiscordTag: "default"
 		}
 	};
 
@@ -9615,8 +9615,8 @@
 	BDFDBprocessFunctions.processUserProfile = function (e) {
 		BDFDBprocessFunctions._processAvatar(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper));
 	};
-	BDFDBprocessFunctions.processMessage = function (e) {
-		BDFDBprocessFunctions._processAvatar(e.instance.props.message.author, e.node.querySelector(BDFDB.dotCN.avatarwrapper));
+	BDFDBprocessFunctions.processDiscordTag = function (e) {
+		if (e.instance && e.instance.props && e.instance.props.user && e.returnvalue) e.returnvalue.props.user = e.instance.props.user;
 	};
 
 	InternalBDFDB.patchPlugin(BDFDB);
