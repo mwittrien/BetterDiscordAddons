@@ -1037,7 +1037,7 @@ body:before {
 .message-2qnXI6.mentioned-xhSam7 .headerCozy-2H1QuU:after {
 	border-right-color: rgba(var(--vaccentcolor), calc(var(--vmessagetransparency) * 100000000000000000000000000000));
 }
-.message-2qnXI6:not(.compact-T3H92H),
+.message-2qnXI6.cozyMessage-3V1Y8y,
 .preview-2nSL_2 .container-3FojY8 {
 	padding-left: 10px;
 	margin-left: 80px;
