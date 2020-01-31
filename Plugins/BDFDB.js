@@ -1966,13 +1966,6 @@
 		}
 	};
 
-	BDFDB.MessageUtils = {};
-	BDFDB.MessageUtils.rerenderAll = function () {
-		let isCompact = BDFDB.DiscordUtils.getMode() == "compact";
-		LibraryModules.SettingsUtils.updateLocalSettings({messageDisplayCompact:!isCompact});
-		LibraryModules.SettingsUtils.updateLocalSettings({messageDisplayCompact:isCompact});
-	};
-
 	BDFDB.UserUtils = {};
 	var myDataUser = LibraryModules.CurrentUserStore ? LibraryModules.CurrentUserStore.getCurrentUser() : null;
 	BDFDB.UserUtils.is = function (user) {
