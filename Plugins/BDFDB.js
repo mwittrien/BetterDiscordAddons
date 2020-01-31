@@ -1027,6 +1027,8 @@
 		"QuickSwitchGuildResult"
 	];
 	WebModulesData.DefaultRender = [
+		"DiscordTag",
+		"NameTag",
 		"Message",
 		"MessageHeader"
 	];
