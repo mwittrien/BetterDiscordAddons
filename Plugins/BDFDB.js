@@ -1027,10 +1027,12 @@
 		"QuickSwitchGuildResult"
 	];
 	WebModulesData.DefaultRender = [
-		"Message",
+		"Message"
+	];
+	WebModulesData.MemoComponent = [
 		"MessageContent"
 	];
-	WebModulesData.NonPrototype = [].concat(WebModulesData.DefaultRender, [
+	WebModulesData.NonPrototype = [].concat(WebModulesData.DefaultRender, WebModulesData.MemoComponent, [
 		"ChannelTextAreaContainer"
 	]);
 	WebModulesData.LoadedInComponents = {
@@ -1290,6 +1292,7 @@
 						delete plugin.patchedModules[patchtype][type];
 					}
 					if (WebModulesData.DefaultRender.includes(type.split(" _ _ ")[1] || type)) patchInstance((BDFDB.ModuleUtils.findByName(mappedtype.split(" _ _ ")[0], false) || {}).exports, mappedtype, patchtype, true);
+					else if (WebModulesData.MemoComponent.includes(type.split(" _ _ ")[1] || type)) patchInstance((BDFDB.ModuleUtils.findByName(mappedtype.split(" _ _ ")[0], false) || {exports:{}}).exports.default, mappedtype, patchtype, true);
 					else if (!classname) patchInstance(BDFDB.ModuleUtils.findByName(mappedtype.split(" _ _ ")[0]), mappedtype, patchtype);
 					else if (DiscordClasses[classname]) checkForInstance(classname, mappedtype, patchtype, WebModulesData.ForceObserve.includes(type.split(" _ _ ")[1] || type));
 				}
