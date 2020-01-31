@@ -1027,7 +1027,8 @@
 		"QuickSwitchGuildResult"
 	];
 	WebModulesData.DefaultRender = [
-		"Message"
+		"Message",
+		"MessageContent"
 	];
 	WebModulesData.NonPrototype = [].concat(WebModulesData.DefaultRender, [
 		"ChannelTextAreaContainer"
@@ -4684,6 +4685,7 @@
 	DiscordClassModules.MessageBody = BDFDB.ModuleUtils.findByProperties("markupRtl", "edited");
 	DiscordClassModules.MessageElements = BDFDB.ModuleUtils.findByProperties("messageGroupBlockedBtn", "dividerRed");
 	DiscordClassModules.MessageFile = BDFDB.ModuleUtils.findByProperties("cancelButton", "filenameLinkWrapper");
+	DiscordClassModules.MessageItems = BDFDB.ModuleUtils.findByProperties("avatar", "botTag", "timestampVisibleOnHover");
 	DiscordClassModules.MessageMarkup = BDFDB.ModuleUtils.findByProperties("markup");
 	DiscordClassModules.MessageOperations = BDFDB.ModuleUtils.find(m => typeof m.operations == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.MessageSystem = BDFDB.ModuleUtils.findByProperties("container", "actionAnchor");
@@ -5532,6 +5534,7 @@
 		mentionwrapper: ["NotFound", "mentionWrapper"],
 		message: ["Message", "message"],
 		messageaccessory: ["MessageAccessory", "container"],
+		messageavatar: ["MessageItems", "avatar"],
 		messagebackgroundflash: ["Message", "backgroundFlash"],
 		messagebarbase: ["MessageElements", "barBase"],
 		messagebarbuttonalt: ["MessageElements", "barButtonAlt"],
@@ -5546,28 +5549,42 @@
 		messagebarspinner: ["MessageElements", "spinner"],
 		messagebarspinneritem: ["MessageElements", "spinnerItem"],
 		messagebeforegroup: ["Message", "beforeGroup"],
+		messagebottag: ["MessageItems", "botTag"],
+		messagebottagcompact: ["MessageItems", "botTagCompact"],
+		messagebottagcozy: ["MessageItems", "botTagCozy"],
+		messagebuttoncontainer: ["MessageItems", "buttonContainer"],
 		messagebuttons: ["Message", "buttons"],
 		messagechanneltextarea: ["Message", "channelTextArea"],
-		messagecompact: ["Message", "compact"],
-		messagecozy: ["Message", "cozy"],
+		messageclickableheader: ["MessageItems", "clickableHeader"],
+		messageclickoverride: ["MessageItems", "clickOverride"],
+		messageclickoverridedisableinteraction: ["MessageItems", "disableInteraction"],
+		messagecompact: ["MessageItems", "compact"],
+		messagecontainer: ["MessageItems", "container"],
+		messagecozy: ["Message", "cozyMessage"],
 		messagedisableinteraction: ["Message", "disableInteraction"],
 		messagedivider: ["Message", "divider"],
+		messagedividerhascontent: ["Message", "hasContent"],
 		messageedited: ["MessageBody", "edited"],
 		messagegroupstart: ["Message", "groupStart"],
 		messagegroupblocked: ["MessageElements", "messageGroupBlocked"],
 		messagegroupblockedbtn: ["MessageElements", "messageGroupBlockedBtn"],
 		messagegroupblockedrevealed: ["MessageElements", "revealed"],
-		messagehascontent: ["Message", "hasContent"],
+		messageheadercompact: ["MessageItems", "headerCompact"],
+		messageheadercozy: ["MessageItems", "headerCozy"],
+		messageheadercozymeta: ["MessageItems", "headerCozyMeta"],
 		messagelocalbot: ["Message", "localBot"],
 		messagemarkup: ["MessageMarkup", "markup"],
+		messagemarkupcontainercompact: ["MessageMarkup", "containerCompact"],
+		messagemarkupcontainercozy: ["MessageMarkup", "containerCozy"],
+		messagemarkupcompact: ["MessageMarkup", "compact"],
 		messagemarkupisfailed: ["MessageBody", "isFailed"],
 		messagemarkuprtl: ["MessageBody", "markupRtl"],
 		messagementioned: ["Message", "mentioned"],
 		messageoperations: ["MessageOperations", "operations"],
 		messageselected: ["Message", "selected"],
-		messagesystemmessage: ["Message", "systemMessage"],
 		messages: ["MessagesWrap", "messages"],
 		messagesdivider: ["MessagesWrap", "divider"],
+		messageseparator: ["MessageItems", "separator"],
 		messagespopout: ["MessagesPopout", "messagesPopout"],
 		messagespopoutactionbuttons: ["MessagesPopout", "actionButtons"],
 		messagespopoutbody: ["MessagesPopout", "body"],
@@ -5599,12 +5616,23 @@
 		messageswelcomemessageheader: ["MessagesWelcome", "h1"],
 		messageswrapper: ["MessagesWrap", "messagesWrapper"],
 		messagesystem: ["MessageSystem", "container"],
+		messagesystemaccessories: ["MessageItems", "systemMessageAccessories"],
 		messagesystemcontent: ["MessageSystem", "content"],
 		messagesystemicon: ["MessageSystem", "icon"],
+		messagesystemmessage: ["Message", "systemMessage"],
 		messagetimedivider: ["MessageElements", "divider"],
 		messagetimedividerred: ["MessageElements", "dividerRed"],
 		messagetimedividercontent: ["MessageElements", "dividerContent"],
+		messagetimestampasiancompact: ["MessageItems", "asianCompactTimeStamp"],
+		messagetimestampbase: ["MessageItems", "timestampBase"],
+		messagetimestampcompact: ["MessageItems", "timestampCompact"],
+		messagetimestampcozy: ["MessageItems", "timestampCozy"],
+		messagetimestampcozyalt: ["MessageItems", "timestampCozyAlt"],
+		messagetimestamplatin12compact: ["MessageItems", "latin12CompactTimeStamp"],
+		messagetimestamplatin24compact: ["MessageItems", "latin24CompactTimeStamp"],
 		messagetimestampsystem: ["MessageSystem", "timestamp"],
+		messagetimestamptooltip: ["MessageItems", "timestampTooltip"],
+		messagetimestampvisibleonhover: ["MessageItems", "timestampVisibleOnHover"],
 		messagetoolbar: ["MessageToolbar", "container"],
 		messagetoolbarbutton: ["MessageToolbarItems", "button"],
 		messagetoolbarbuttondisabled: ["MessageToolbarItems", "disabled"],
@@ -5615,6 +5643,7 @@
 		messagetoolbarpublishicon: ["MessageToolbar", "publishIcon"],
 		messagetoolbarseparator: ["MessageToolbarItems", "separator"],
 		messageuploadcancel: ["MessageFile", "cancelButton"],
+		messageusername: ["MessageItems", "username"],
 		modal: ["ModalWrap", "modal"],
 		modalclose: ["Modal", "close"],
 		modalchangelogmodal: ["BDFDB", "changeLogModal"],
