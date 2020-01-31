@@ -1106,13 +1106,13 @@
 		const pluginid = pluginname.toLowerCase();
 		if (!module.BDFDBpatch) module.BDFDBpatch = {};
 		modulefunctions = [modulefunctions].flat(10).filter(n => n);
-		for (let modulefunction of modulefunctions) {
+		for (let modulefunction of modulefunctions) if (module[modulefunction] == null || typeof module[modulefunction] == "function") {
 			if (!module.BDFDBpatch[modulefunction] || forceRepatch && (!module[modulefunction] || !module[modulefunction].isBDFDBpatched)) {
 				if (!module.BDFDBpatch[modulefunction]) {
 					module.BDFDBpatch[modulefunction] = {};
 					for (let type of WebModulesData.Patchtypes) module.BDFDBpatch[modulefunction][type] = {};
 				}
-				if (!module[modulefunction]) module[modulefunction] = _ => {};
+				if (!module[modulefunction]) module[modulefunction] = (_ => {});
 				const originalfunction = module[modulefunction];
 				module.BDFDBpatch[modulefunction].originalMethod = originalfunction;
 				module[modulefunction] = function () {
