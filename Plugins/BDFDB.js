@@ -1967,7 +1967,7 @@
 	};
 
 	BDFDB.MessageUtils = {};
-	BDFDB.MessageUtils.rerenderChat = function () {
+	BDFDB.MessageUtils.rerenderAll = function () {
 		let isCompact = BDFDB.DiscordUtils.getMode() == "compact";
 		LibraryModules.SettingsUtils.updateLocalSettings({messageDisplayCompact:!isCompact});
 		LibraryModules.SettingsUtils.updateLocalSettings({messageDisplayCompact:isCompact});
