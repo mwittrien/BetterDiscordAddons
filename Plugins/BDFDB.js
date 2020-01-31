@@ -4528,7 +4528,8 @@
 		iconSwatchSelected: "selected-P5oePO"
 	};
 	DiscordClassModules.ShowImageDetails = {
-		details: "details-1t6Zms"
+		details: "details-1t6Zms",
+		detailsAdded: "detailsAdded-SAy48f"
 	};
 	DiscordClassModules.SpellCheck	= {
 		error: "error-k9z2IV",
@@ -4802,6 +4803,7 @@
 		_readallnotificationsbuttonframe: ["ReadAllNotificationsButton", "frame"],
 		_readallnotificationsbuttoninner: ["ReadAllNotificationsButton", "innerFrame"],
 		_showimagedetailsdetails: ["ShowImageDetails", "details"],
+		_showimagedetailsdetailsadded: ["ShowImageDetails", "detailsAdded"],
 		_spellcheckerror: ["SpellCheck", "error"],
 		_spellcheckoverlay: ["SpellCheck", "overlay"],
 		_serverfoldersdragpreview: ["ServerFolders", "dragPreview"],
