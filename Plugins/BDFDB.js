@@ -4845,7 +4845,7 @@
 		_toproleseverywherebadgestyle: ["TopRolesEverywhere", "badgeStyle"],
 		_toproleseverywherechattag: ["TopRolesEverywhere", "chatTag"],
 		_toproleseverywheremembertag: ["TopRolesEverywhere", "memberTag"],
-		_toproleseverywhereolestyle: ["TopRolesEverywhere", "roleStyle"],
+		_toproleseverywhererolestyle: ["TopRolesEverywhere", "roleStyle"],
 		_toproleseverywheretag: ["TopRolesEverywhere", "tag"],
 		_repoauthor: ["BDrepo", "bdaAuthor"],
 		_repocheckbox: ["BDrepo", "switchCheckbox"],
