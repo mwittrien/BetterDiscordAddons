@@ -1030,7 +1030,8 @@
 		"DiscordTag",
 		"NameTag",
 		"Message",
-		"MessageHeader"
+		"MessageHeader",
+		"MessageTimestamp"
 	];
 	WebModulesData.MemoComponent = [
 		"MessageContent"
