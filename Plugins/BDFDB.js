@@ -5630,7 +5630,7 @@
 		messagespopoutbottom: ["MessagesPopout", "bottom"],
 		messagespopoutchannelname: ["MessagesPopout", "channelName"],
 		messagespopoutchannelseparator: ["MessagesPopout", "channelSeparator"],
-		messagespopoutcloseicon: ["MessagesPopout", "closeIcon"],
+		messagespopoutclosebutton: ["MessagesPopout", "closeIcon"],
 		messagespopoutemptyplaceholder: ["MessagesPopout", "emptyPlaceholder"],
 		messagespopoutfooter: ["MessagesPopout", "footer"],
 		messagespopoutguildname: ["MessagesPopout", "guildName"],
