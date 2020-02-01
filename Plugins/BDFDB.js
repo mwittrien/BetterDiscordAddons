@@ -4551,9 +4551,16 @@
 		details: "details-1t6Zms",
 		detailsAdded: "detailsAdded-SAy48f"
 	};
-	DiscordClassModules.SpellCheck	= {
+	DiscordClassModules.SpellCheck = {
 		error: "error-k9z2IV",
 		overlay: "spellCheckOverlay-cNSap5"
+	};
+	DiscordClassModules.TopRolesEverywhere = {
+		botTag: "botTag-tFiEQ8",
+		chatTag: "chatTag-Y-5TDc",
+		memberTag: "memberTag-QVWzGc",
+		roleTag: "roleTag-jQ7KI2",
+		tag: "tag-wWVHyf"
 	};
 	DiscordClassModules.NotFound = {
 		_: "",
@@ -4822,10 +4829,6 @@
 		_readallnotificationsbuttonbutton: ["ReadAllNotificationsButton", "button"],
 		_readallnotificationsbuttonframe: ["ReadAllNotificationsButton", "frame"],
 		_readallnotificationsbuttoninner: ["ReadAllNotificationsButton", "innerFrame"],
-		_showimagedetailsdetails: ["ShowImageDetails", "details"],
-		_showimagedetailsdetailsadded: ["ShowImageDetails", "detailsAdded"],
-		_spellcheckerror: ["SpellCheck", "error"],
-		_spellcheckoverlay: ["SpellCheck", "overlay"],
 		_serverfoldersdragpreview: ["ServerFolders", "dragPreview"],
 		_serverfoldersfoldercontent: ["ServerFolders", "folderContent"],
 		_serverfoldersfoldercontentclosed: ["ServerFolders", "folderContentClosed"],
@@ -4835,6 +4838,15 @@
 		_serverfoldersiconswatchinner: ["ServerFolders", "iconSwatchInner"],
 		_serverfoldersiconswatchpreview: ["ServerFolders", "iconSwatchPreview"],
 		_serverfoldersiconswatchselected: ["ServerFolders", "iconSwatchSelected"],
+		_showimagedetailsdetails: ["ShowImageDetails", "details"],
+		_showimagedetailsdetailsadded: ["ShowImageDetails", "detailsAdded"],
+		_spellcheckerror: ["SpellCheck", "error"],
+		_spellcheckoverlay: ["SpellCheck", "overlay"],
+		_toproleseverywherebottag: ["TopRolesEverywhere", "botTag"],
+		_toproleseverywherechattag: ["TopRolesEverywhere", "chatTag"],
+		_toproleseverywheremembertag: ["TopRolesEverywhere", "memberTag"],
+		_toproleseverywhereoletag: ["TopRolesEverywhere", "roleTag"],
+		_toproleseverywheretag: ["TopRolesEverywhere", "tag"],
 		_repoauthor: ["BDrepo", "bdaAuthor"],
 		_repocheckbox: ["BDrepo", "switchCheckbox"],
 		_repocheckboxchecked: ["BDrepo", "switchChecked"],
