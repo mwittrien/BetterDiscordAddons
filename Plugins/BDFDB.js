@@ -1031,7 +1031,8 @@
 		"NameTag",
 		"Message",
 		"MessageHeader",
-		"MessageTimestamp"
+		"MessageTimestamp",
+		"SystemMessage"
 	];
 	WebModulesData.MemoComponent = [
 		"MessageContent"
