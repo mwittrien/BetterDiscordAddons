@@ -3,7 +3,7 @@
 class ServerFolders {
 	getName () {return "ServerFolders";}
 
-	getVersion () {return "6.6.5";}
+	getVersion () {return "6.6.6";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -786,7 +786,7 @@ class ServerFolders {
 					children: BDFDB.ReactUtils.createElement(this.FolderIconCustomPreviewComponent, {})
 				})
 			];
-			[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "Footer"});
+			[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: ["ModalFooter", "Footer"]});
 			if (index > -1) children[index].props.children = [
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 					children: BDFDB.LanguageUtils.LanguageStrings.SAVE,
