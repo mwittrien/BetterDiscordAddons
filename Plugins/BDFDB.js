@@ -1059,9 +1059,9 @@
 		FriendRow: "friendsrow",
 		Guild: "guildouter",
 		GuildIcon: "avataricon",
-		GuildSettingsBans: "contentregion",
-		GuildSettingsEmoji: "contentregion",
-		GuildSettingsMembers: "contentregion",
+		GuildSettingsBans: "guildsettingsbannedcard",
+		GuildSettingsEmoji: "guildsettingsemojicard",
+		GuildSettingsMembers: "guildsettingsmembercard",
 		GuildSidebar: "guildchannels",
 		I18nLoaderWrapper: "app",
 		InstantInviteModal: "invitemodalwrapper",
@@ -4690,6 +4690,7 @@
 	DiscordClassModules.GuildIcon = BDFDB.ModuleUtils.findByProperties("acronym", "selected", "wrapper");
 	DiscordClassModules.GuildInvite = BDFDB.ModuleUtils.findByProperties("wrapper", "guildIconJoined");
 	DiscordClassModules.GuildSettingsBanned = BDFDB.ModuleUtils.findByProperties("bannedUser", "bannedUserAvatar");
+	DiscordClassModules.GuildSettingsEmoji = BDFDB.ModuleUtils.findByProperties("emojiRow", "emojiAliasPlaceholder");
 	DiscordClassModules.GuildSettingsInvite = BDFDB.ModuleUtils.findByProperties("countdownColumn", "inviteSettingsInviteRow");
 	DiscordClassModules.GuildSettingsMember = BDFDB.ModuleUtils.findByProperties("member", "membersFilterPopout");
 	DiscordClassModules.GuildServer = BDFDB.ModuleUtils.findByProperties("blobContainer", "pill");
@@ -5389,6 +5390,7 @@
 		guildsettingsbannedcard: ["GuildSettingsBanned", "bannedUser"],
 		guildsettingsbanneddiscrim: ["GuildSettingsBanned", "discrim"],
 		guildsettingsbannedusername: ["GuildSettingsBanned", "username"],
+		guildsettingsemojicard: ["GuildSettingsBanned", "emojiRow"],
 		guildsettingsinvitecard: ["GuildSettingsInvite", "inviteSettingsInviteRow"],
 		guildsettingsinvitechannelname: ["GuildSettingsInvite", "channelName"],
 		guildsettingsinviteusername: ["GuildSettingsInvite", "username"],
