@@ -5390,7 +5390,7 @@
 		guildsettingsbannedcard: ["GuildSettingsBanned", "bannedUser"],
 		guildsettingsbanneddiscrim: ["GuildSettingsBanned", "discrim"],
 		guildsettingsbannedusername: ["GuildSettingsBanned", "username"],
-		guildsettingsemojicard: ["GuildSettingsBanned", "emojiRow"],
+		guildsettingsemojicard: ["GuildSettingsEmoji", "emojiRow"],
 		guildsettingsinvitecard: ["GuildSettingsInvite", "inviteSettingsInviteRow"],
 		guildsettingsinvitechannelname: ["GuildSettingsInvite", "channelName"],
 		guildsettingsinviteusername: ["GuildSettingsInvite", "username"],
