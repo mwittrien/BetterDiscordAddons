@@ -768,12 +768,6 @@ body:before {
 	width: 100%;
 	text-align: center;
 }
-.unreadPill-2HyYtt {										/* divider				unread								*/
-	background-color: #601c1c;
-}
-.unreadPillCapStroke-7rkHbg {
-	fill: #601c1c;
-}
 
 .hasMore-3e72_v {											/* bar					hasmore								*/
 	box-shadow: inset 0 0 0 1px rgba(var(--fontwhite1), 0.1);
