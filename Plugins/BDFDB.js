@@ -9720,6 +9720,7 @@
 			className: BDFDB.disCN.marginbottom8,
 			type: "Switch",
 			plugin: BDFDB,
+			disabled: key == "showToasts" && BDFDB.BDUtils.getSettings("fork-ps-2"),
 			keys: ["settings", key],
 			label: InternalBDFDB.defaults.settings[key].description,
 			value: settings[key]
