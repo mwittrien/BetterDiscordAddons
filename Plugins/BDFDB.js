@@ -7828,7 +7828,7 @@
 				stretch: this.props.stretch,
 				children: [
 					this.props.dividertop ? BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormDivider, {
-						className: this.props.mini ? BDFDB.disCN.marginbottom8 : BDFDB.disCN.marginbottom20
+						className: this.props.mini ? BDFDB.disCN.marginbottom4 : BDFDB.disCN.marginbottom8
 					}) : null,
 					BDFDB.ReactUtils.createElement(LibraryComponents.Flex, {
 						align: LibraryComponents.Flex.Align.CENTER,
@@ -7858,7 +7858,7 @@
 						})
 					}) : null,
 					this.props.dividerbottom ? BDFDB.ReactUtils.createElement(LibraryComponents.FormComponents.FormDivider, {
-						className: this.props.mini ? BDFDB.disCN.margintop8 : BDFDB.disCN.margintop20
+						className: this.props.mini ? BDFDB.disCN.margintop4 : BDFDB.disCN.margintop8
 					}) : null
 				]
 			});
@@ -9716,14 +9716,17 @@
 		let settings = BDFDB.DataUtils.get(BDFDB, "settings");
 		let settingspanel, settingsitems = [];
 		
+		let bdToastSetting = BDFDB.BDUtils.getSettings("fork-ps-2");
 		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,
 			type: "Switch",
 			plugin: BDFDB,
-			disabled: key == "showToasts" && BDFDB.BDUtils.getSettings("fork-ps-2"),
+			disabled: key == "showToasts" && bdToastSetting,
 			keys: ["settings", key],
 			label: InternalBDFDB.defaults.settings[key].description,
-			value: settings[key]
+			note: key == "showToasts" && bdToastSetting && "Disable BBDs general 'Show Toast' setting before disabling this",
+			dividerbottom: true,
+			value: settings[key] || key == "showToasts" && bdToastSetting
 		}));
 		
 		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(BDFDB, settingsitems);
