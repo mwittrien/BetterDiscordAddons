@@ -9737,7 +9737,7 @@
 			if (avatar.type == "img") avatar = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatar, Object.assign({}, avatar.props, {
 				className: BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, "")),
 				size: BDFDB.LibraryComponents.Avatar.Sizes.SIZE_40
-			});
+			}));
 			avatar.props["user_by_BDFDB"] = user.id;
 			if (BDFDB_Patrons.includes(user.id) && BDFDB.DataUtils.get(BDFDB, "settings", "showSupportBadges")) {
 				changed = true;
