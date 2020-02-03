@@ -4486,6 +4486,7 @@
 		bdaSlist: "bda-slist",
 		bdaVersion: "bda-version",
 		bdPfbtn: "bd-pfbtn",
+		bdUpdatebtn: "bd-updatebtn",
 		settingsOpen: "settings-open",
 		settingsClosed: "settings-closed",
 		switch: "ui-switch",
@@ -4871,6 +4872,7 @@
 		_reposettingsbutton: ["BDrepo", "bdaSettingsButton"],
 		_reposettingsopen: ["BDrepo", "settingsOpen"],
 		_reposettingsclosed: ["BDrepo", "settingsClosed"],
+		_repoupdatebutton: ["BDrepo", "bdUpdatebtn"],
 		_repoversion: ["BDrepo", "bdaVersion"],
 		accountinfo: ["AccountDetails", "container"],
 		accountinfoavatar: ["AccountDetails", "avatar"],
@@ -8738,8 +8740,11 @@
 			display: inline-block;
 			margin-left: 10px;
 		}
-		#bd-settingspane-container .bd-updatebtn[style] {
+		#bd-settingspane-container ${BDFDB.dotCN._repoupdatebutton}[style] {
 			display: none !important;
+		}
+		#bd-settingspane-container ${BDFDB.dotCNS._repolist + BDFDB.dotCN._repofooter} button + button {
+			margin-left: 10px;
 		}
 		
 		${BDFDB.dotCN.noticewrapper} {
@@ -9644,7 +9649,7 @@
 					children[index].props.children = [children[index].props.children].flat();
 					children = children[index].props.children;
 				}
-				children.push(BDFDB.ReactUtils.createElement("button", {
+				children.splice(children.length - 1, 0, BDFDB.ReactUtils.createElement("button", {
 					className: BDFDB.disCNS._reposettingsbutton,
 					children: "Library Settings",
 					onClick: event => {
