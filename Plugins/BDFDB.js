@@ -9755,7 +9755,6 @@
 					InternalBDFDB._processAvatarRender(e.instance.props.message.author, renderedChildren);
 					return renderedChildren;
 				};
-				console.log(avatarWrapper);
 			}
 		}
 	};
