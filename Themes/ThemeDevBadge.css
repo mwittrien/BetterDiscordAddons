@@ -75,14 +75,23 @@
 	-webkit-mask: var(--themedevbadge) center/cover no-repeat !important;
 	background: #7289DA !important;
 	position: absolute !important;
+	z-index: 2 !important;
 	width: 14px !important;
 	height: 14px !important;
 	left: -2px !important;
 	bottom: -3px !important;
-	z-index: 2 !important;
+}
+.member-3-YXUe .wrapper-3t9DeA.dev-A7f2Rx:after {
+	width: 10px !important;
+	height: 10px !important;
+	left: -1px !important;
+	bottom: -1px !important;
 }
 .wrapper-3t9DeA.dev-A7f2Rx [mask="url(#svg-mask-avatar-default)"] {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 1 1"><circle fill="white" cx="0.5" cy="0.5" r="0.5"></circle><rect fill="black" x="-0.15" y="0.6375" width="0.5" height="0.5" rx="0.13125" ry="0.13125"></rect></svg>');
+}
+.wrapper-3t9DeA.dev-A7f2Rx [mask="url(#svg-mask-avatar-status-round-32)"] {
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 1 1"><circle fill="white" cx="0.5" cy="0.5" r="0.5"></circle><circle fill="black" cx="0.84375" cy="0.84375" r="0.25"></circle><rect fill="black" x="-0.15" y="0.6375" width="0.5" height="0.5" rx="0.13125" ry="0.13125"></rect></svg>');
 }
 .wrapper-3t9DeA.dev-A7f2Rx [mask="url(#svg-mask-avatar-status-round-40)"] {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 1 1"><circle fill="white" cx="0.5" cy="0.5" r="0.5"></circle><circle fill="black" cx="0.85" cy="0.85" r="0.25"></circle><rect fill="black" x="-0.15" y="0.6375" width="0.5" height="0.5" rx="0.13125" ry="0.13125"></rect></svg>');
