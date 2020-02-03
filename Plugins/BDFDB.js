@@ -4404,6 +4404,7 @@
 	var DiscordClassModules = {};
 	DiscordClassModules.BDFDB = {
 		BDFDBundefined: "BDFDB_undefined",
+		avatarBadgeWrapper: "wrapper-hd42F_",
 		avatarStatusHovered: "statusHovered-gF2976",
 		cardInner: "inner-OP_8zd",
 		cardWrapper: "card-rT4Wbb",
@@ -4935,6 +4936,7 @@
 		autocompleteselected: ["Autocomplete", "selectorSelected"],
 		autocompleteselector: ["Autocomplete", "selector"],
 		avatar: ["Avatar", "avatar"],
+		avatarbadgewrapper: ["BDFDB", "avatarBadgeWrapper"],
 		avatarcursordefault: ["Avatar", "cursorDefault"],
 		avataricon: ["AvatarIcon", "icon"],
 		avatariconactivelarge: ["AvatarIcon", "iconActiveLarge"],
@@ -9728,9 +9730,21 @@
 	];
 	InternalBDFDB._processAvatarRender = function (user, avatar) {
 		if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user)) {
+			let changed = false;
+			if (avatar.type == "img") avatar = BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.disCN.avatarbadgewrapper,
+				children: avatar
+			});
 			avatar.props["user_by_BDFDB"] = user.id;
-			if (BDFDB_Patrons.includes(user.id) && BDFDB.DataUtils.get(BDFDB, "settings", "showSupportBadges")) avatar.props.className = BDFDB.DOMUtils.formatClassName(avatar.props.className, BDFDB.disCN.bdfdbsupporter);
-			if (user.id == "278543574059057154") avatar.props.className = BDFDB.DOMUtils.formatClassName(avatar.props.className, BDFDB.disCN.bdfdbdev);
+			if (BDFDB_Patrons.includes(user.id) && BDFDB.DataUtils.get(BDFDB, "settings", "showSupportBadges")) {
+				changed = true;
+				avatar.props.className = BDFDB.DOMUtils.formatClassName(avatar.props.className, BDFDB.disCN.bdfdbsupporter);
+			}
+			if (user.id == "278543574059057154") {
+				changed = true;
+				avatar.props.className = BDFDB.DOMUtils.formatClassName(avatar.props.className, BDFDB.disCN.bdfdbdev);
+			}
+			if (changed) return avatar;
 		}
 	};
 	InternalBDFDB._processAvatarMount = function (user, avatar) {
@@ -9752,8 +9766,7 @@
 				let renderChildren = avatarWrapper.props.children;
 				avatarWrapper.props.children = (...args) => {
 					let renderedChildren = renderChildren(...args);
-					InternalBDFDB._processAvatarRender(e.instance.props.message.author, renderedChildren);
-					return renderedChildren;
+					return InternalBDFDB._processAvatarRender(e.instance.props.message.author, renderedChildren) || renderedChildren;
 				};
 			}
 		}
