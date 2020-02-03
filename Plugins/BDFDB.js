@@ -9801,10 +9801,11 @@
 		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnValue, {filter: c => c && c.props && c.props.showMoreUtilities != undefined && c.props.showEmojiPicker != undefined && c.props.setPopout != undefined});
 		if (index > -1) BDFDB.ModuleUtils.patch(BDFDB, children[index], "type", {after: e2 => {
 			let [children2, index2] = BDFDB.ReactUtils.findChildren(e2.returnValue, {name: "Popout"});
+			let popoutWrapper = children2[index2];
 			InternalBDFDB.executeExtraPatchedPatches("MessageOptionToolbar", {instance:{props:Object.assign({}, e2.methodArguments[0], {hasMorePopout: index2 > -1})}, returnvalue:e2.returnValue, methodname:"default"});
-			if (index2 > -1 && typeof children2[index2].props.renderPopout == "function") {
-				let renderPopout = children2[index2].props.renderPopout;
-				children2[index2].props.renderPopout = (...args) => {
+			if (popoutWrapper && typeof popoutWrapper.props.renderPopout == "function") {
+				let renderPopout = popoutWrapper.props.renderPopout;
+				popoutWrapper.props.renderPopout = (...args) => {
 					let renderedPopout = renderPopout(...args);
 					BDFDB.ModuleUtils.patch(BDFDB, renderedPopout, "type", {after: e3 => {InternalBDFDB.executeExtraPatchedPatches("MessageOptionContextMenu", {instance:{props:e3.methodArguments[0]}, returnvalue:e3.returnValue, methodname:"default"});}});
 					return renderedPopout;
