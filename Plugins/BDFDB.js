@@ -9747,14 +9747,15 @@
 	};
 	InternalBDFDB.processMessageHeader = function (e) {
 		if (e.instance.props.message && e.instance.props.message.author) {
-			let avatarWrapper = BDFDB.ReactUtils.getValue(e, "returnvalue.props.children.0.props.children");
+			let avatarWrapper = BDFDB.ReactUtils.getValue(e, "returnvalue.props.children.0");
 			if (avatarWrapper && avatarWrapper.props && typeof avatarWrapper.props.children == "function") {
 				let renderChildren = avatarWrapper.props.children;
 				avatarWrapper.props.children = (...args) => {
 					let renderedChildren = renderChildren(...args);
 					InternalBDFDB._processAvatarRender(e.instance.props.message.author, renderedChildren);
-					return renderChildren;
+					return renderedChildren;
 				};
+				console.log(avatarWrapper);
 			}
 		}
 	};
