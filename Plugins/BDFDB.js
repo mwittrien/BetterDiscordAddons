@@ -285,11 +285,10 @@
 	};
 	BDFDB.PluginUtils.createSettingsPanel = function (plugin, children) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !children || (!BDFDB.ReactUtils.isValidElement(children) && !BDFDB.ArrayUtils.is(children)) || (BDFDB.ArrayUtils.is(children) && !children.length)) return;
-		let pluginName = plugin.name == "$BDFDB" ? "BDFDB" : plugin.name;
-		let settingspanel = BDFDB.DOMUtils.create(`<div class="${pluginName}-settings ${BDFDB.disCN.settingspanel}"></div>`);
+		let settingspanel = BDFDB.DOMUtils.create(`<div class="${plugin.name}-settings ${BDFDB.disCN.settingspanel}"></div>`);
 		BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(LibraryComponents.SettingsPanel, {
-			key: `${pluginName}-settingspanel`,
-			title: pluginName,
+			key: `${plugin.name}-settingspanel`,
+			title: plugin.name == "$BDFDB" ? "BDFDB" : plugin.name,
 			children
 		}), settingspanel);
 		return settingspanel;
