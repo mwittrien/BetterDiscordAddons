@@ -9555,6 +9555,8 @@
 			V2C_ContentColumn: "render",
 			V2C_PluginCard: "render",
 			V2C_ThemeCard: "render",
+			MessageHeader: "default",
+			MemberListItem: "componentDidMount",
 			UserPopout: "componentDidMount",
 			UserProfile: "componentDidMount",
 			DiscordTag: "default"
@@ -9724,23 +9726,46 @@
 	const BDFDB_Patrons = [
 		"363785301195358221"
 	];
-	InternalBDFDB._processAvatar = function (user, avatar) {
-		if (avatar && user) {
+	InternalBDFDB._processAvatarRender = function (user, avatar) {
+		if (BDFDB.ReactUtils.isValidElement(avatar) && user) {
+			avatar.props["user_by_BDFDB"] = user.id;
+			if (BDFDB_Patrons.includes(user.id) && BDFDB.DataUtils.get(BDFDB, "settings", "showSupportBadges")) avatar.props.className = BDFDB.DOMUtils.formatClassName(avatar.props.className, BDFDB.disCN.bdfdbsupporter);
+			if (user.id == "278543574059057154") avatar.props.className = BDFDB.DOMUtils.formatClassName(avatar.props.className, BDFDB.disCN.bdfdbdev);
+		}
+	};
+	InternalBDFDB._processAvatarMount = function (user, avatar) {
+		if (Node.prototype.isPrototypeOf(avatar) && user) {
 			avatar.setAttribute("user_by_BDFDB", user.id);
 			if (BDFDB_Patrons.includes(user.id) && BDFDB.DataUtils.get(BDFDB, "settings", "showSupportBadges")) BDFDB.DOMUtils.addClass(avatar, BDFDB.disCN.bdfdbsupporter);
 			if (user.id == "278543574059057154") BDFDB.DOMUtils.addClass(avatar, BDFDB.disCN.bdfdbdev);
-			var status = avatar.querySelector(BDFDB.dotCN.avatarpointerevents);
+			let status = avatar.querySelector(BDFDB.dotCN.avatarpointerevents);
 			if (status) {
 				status.addEventListener("mouseenter", _ => {BDFDB.DOMUtils.addClass(avatar, BDFDB.disCN.avatarstatushovered)});
 				status.addEventListener("mouseleave", _ => {BDFDB.DOMUtils.removeClass(avatar, BDFDB.disCN.avatarstatushovered)});
 			}
 		}
 	};
+	InternalBDFDB.processMessageHeader = function (e) {
+		if (e.instance.props.message && e.instance.props.message.author) {
+			let avatarWrapper = BDFDB.ReactUtils.getValue(e, "returnvalue.props.children.0.props.children");
+			if (avatarWrapper && avatarWrapper.props && typeof avatarWrapper.props.children == "function") {
+				let renderChildren = avatarWrapper.props.children;
+				avatarWrapper.props.children = (...args) => {
+					let renderedChildren = renderChildren(...args);
+					InternalBDFDB._processAvatarRender(renderedChildren, e.instance.props.message.author);
+					return renderChildren;
+				});
+			}
+		}
+	};
+	InternalBDFDB.processMemberListItem = function (e) {
+		InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper));
+	};
 	InternalBDFDB.processUserPopout = function (e) {
-		InternalBDFDB._processAvatar(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.userpopoutavatarwrapper));
+		InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.userpopoutavatarwrapper));
 	};
 	InternalBDFDB.processUserProfile = function (e) {
-		InternalBDFDB._processAvatar(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper));
+		InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper));
 	};
 	InternalBDFDB.processDiscordTag = function (e) {
 		if (e.instance && e.instance.props && e.instance.props.user && e.returnvalue) e.returnvalue.props.user = e.instance.props.user;
