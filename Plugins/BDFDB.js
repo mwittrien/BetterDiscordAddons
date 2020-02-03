@@ -26,6 +26,14 @@
 	
 	if (typeof Array.prototype.flat != "function") Array.prototype.flat = function () {return this;}
 
+	InternalBDFDB.defaults = {
+		settings: {
+			showToasts:				{value:true,	description:"Show Plugin start and stop Toasts"},
+			showSupportBadges:		{value:true,	description:"Show little Badges for Users who support my Patreon"},
+			addSupportLinks:		{value:true,	description:"Add PayPal/Patreon links to my Plugin Entries"}
+		}
+	};
+
 	BDFDB.LogUtils = {};
 	BDFDB.LogUtils.log = function (string, name) {
 		if (typeof string != "string") string = "";
@@ -140,18 +148,18 @@
 			}
 		}
 	};
-	BDFDB.PluginUtils.checkUpdate = function (pluginname, url) {
-		if (BDFDB.BDUtils.isBDv2() || !pluginname || !url) return;
+	BDFDB.PluginUtils.checkUpdate = function (pluginName, url) {
+		if (BDFDB.BDUtils.isBDv2() || !pluginName || !url) return;
 		LibraryRequires.request(url, (error, response, result) => {
 			if (error) return;
 			var newversion = result.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
 			if (!newversion) return;
 			if (BDFDB.NumberUtils.getVersionDifference(newversion[0], window.PluginUpdates.plugins[url].version) > 0.2) {
-				BDFDB.NotificationUtils.toast(`${pluginname} will be force updated, because your version is heavily outdated.`, {type:"warn", nopointer:true, selector:"plugin-forceupdate-toast"});
-				BDFDB.PluginUtils.downloadUpdate(pluginname, url);
+				BDFDB.NotificationUtils.toast(`${pluginName} will be force updated, because your version is heavily outdated.`, {type:"warn", nopointer:true, selector:"plugin-forceupdate-toast"});
+				BDFDB.PluginUtils.downloadUpdate(pluginName, url);
 			}
-			else if (BDFDB.NumberUtils.compareVersions(newversion[0], window.PluginUpdates.plugins[url].version)) BDFDB.PluginUtils.showUpdateNotice(pluginname, url);
-			else BDFDB.PluginUtils.removeUpdateNotice(pluginname);
+			else if (BDFDB.NumberUtils.compareVersions(newversion[0], window.PluginUpdates.plugins[url].version)) BDFDB.PluginUtils.showUpdateNotice(pluginName, url);
+			else BDFDB.PluginUtils.removeUpdateNotice(pluginName);
 		});
 	};
 	BDFDB.PluginUtils.checkAllUpdates = function () {
@@ -160,8 +168,8 @@
 			BDFDB.PluginUtils.checkUpdate(plugin.name, plugin.raw);
 		}
 	};
-	BDFDB.PluginUtils.showUpdateNotice = function (pluginname, url) {
-		if (!pluginname || !url) return;
+	BDFDB.PluginUtils.showUpdateNotice = function (pluginName, url) {
+		if (!pluginName || !url) return;
 		var updatenotice = document.querySelector("#pluginNotice");
 		if (!updatenotice) {
 			updatenotice = BDFDB.NotificationUtils.notice(`The following plugins need to be updated:&nbsp;&nbsp;<strong id="outdatedPlugins"></strong>`, {html:true, id:"pluginNotice", type:"info", btn:!BDFDB.BDUtils.isAutoLoadEnabled() ? "Reload" : "", customicon:`<svg height="100%" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="100%" version="1.1" viewBox="0 0 2000 2000"><metadata /><defs><filter id="shadow1"><feDropShadow dx="20" dy="0" stdDeviation="20" flood-color="rgba(0,0,0,0.35)"/></filter><filter id="shadow2"><feDropShadow dx="15" dy="0" stdDeviation="20" flood-color="rgba(255,255,255,0.15)"/></filter><filter id="shadow3"><feDropShadow dx="10" dy="0" stdDeviation="20" flood-color="rgba(0,0,0,0.35)"/></filter></defs><g><path style="filter: url(#shadow3)" d="M1195.44+135.442L1195.44+135.442L997.6+136.442C1024.2+149.742+1170.34+163.542+1193.64+179.742C1264.34+228.842+1319.74+291.242+1358.24+365.042C1398.14+441.642+1419.74+530.642+1422.54+629.642L1422.54+630.842L1422.54+632.042C1422.54+773.142+1422.54+1228.14+1422.54+1369.14L1422.54+1370.34L1422.54+1371.54C1419.84+1470.54+1398.24+1559.54+1358.24+1636.14C1319.74+1709.94+1264.44+1772.34+1193.64+1821.44C1171.04+1837.14+1025.7+1850.54+1000+1863.54L1193.54+1864.54C1539.74+1866.44+1864.54+1693.34+1864.54+1296.64L1864.54+716.942C1866.44+312.442+1541.64+135.442+1195.44+135.442Z" fill="#171717" opacity="1"/><path style="filter: url(#shadow2)" d="M1695.54+631.442C1685.84+278.042+1409.34+135.442+1052.94+135.442L361.74+136.442L803.74+490.442L1060.74+490.442C1335.24+490.442+1335.24+835.342+1060.74+835.342L1060.74+1164.84C1150.22+1164.84+1210.53+1201.48+1241.68+1250.87C1306.07+1353+1245.76+1509.64+1060.74+1509.64L361.74+1863.54L1052.94+1864.54C1409.24+1864.54+1685.74+1721.94+1695.54+1368.54C1695.54+1205.94+1651.04+1084.44+1572.64+999.942C1651.04+915.542+1695.54+794.042+1695.54+631.442Z" fill="#3E82E5" opacity="1"/><path style="filter: url(#shadow1)" d="M1469.25+631.442C1459.55+278.042+1183.05+135.442+826.65+135.442L135.45+135.442L135.45+1004C135.45+1004+135.427+1255.21+355.626+1255.21C575.825+1255.21+575.848+1004+575.848+1004L577.45+490.442L834.45+490.442C1108.95+490.442+1108.95+835.342+834.45+835.342L664.65+835.342L664.65+1164.84L834.45+1164.84C923.932+1164.84+984.244+1201.48+1015.39+1250.87C1079.78+1353+1019.47+1509.64+834.45+1509.64L135.45+1509.64L135.45+1864.54L826.65+1864.54C1182.95+1864.54+1459.45+1721.94+1469.25+1368.54C1469.25+1205.94+1424.75+1084.44+1346.35+999.942C1424.75+915.542+1469.25+794.042+1469.25+631.442Z" fill="#FFFFFF" opacity="1"/></g></svg>`});
@@ -184,20 +192,20 @@
 		}
 		if (updatenotice) {
 			var updatenoticelist = updatenotice.querySelector("#outdatedPlugins");
-			if (updatenoticelist && !updatenoticelist.querySelector(`#${pluginname}-notice`)) {
+			if (updatenoticelist && !updatenoticelist.querySelector(`#${pluginName}-notice`)) {
 				if (updatenoticelist.querySelector("span")) updatenoticelist.appendChild(BDFDB.DOMUtils.create(`<span class="separator">, </span>`));
-				var updateentry = BDFDB.DOMUtils.create(`<span id="${pluginname}-notice">${pluginname}</span>`);
-				updateentry.addEventListener("click", _ => {BDFDB.PluginUtils.downloadUpdate(pluginname, url);});
+				var updateentry = BDFDB.DOMUtils.create(`<span id="${pluginName}-notice">${pluginName}</span>`);
+				updateentry.addEventListener("click", _ => {BDFDB.PluginUtils.downloadUpdate(pluginName, url);});
 				updatenoticelist.appendChild(updateentry);
 				if (!document.querySelector(".update-clickme-tooltip")) BDFDB.TooltipUtils.create(updatenoticelist, "Click us!", {type:"bottom", selector:"update-clickme-tooltip", delay:500});
 			}
 		}
 	};
-	BDFDB.PluginUtils.removeUpdateNotice = function (pluginname, updatenotice = document.querySelector("#pluginNotice")) {
-		if (!pluginname || !updatenotice) return;
+	BDFDB.PluginUtils.removeUpdateNotice = function (pluginName, updatenotice = document.querySelector("#pluginNotice")) {
+		if (!pluginName || !updatenotice) return;
 		var updatenoticelist = updatenotice.querySelector("#outdatedPlugins");
 		if (updatenoticelist) {
-			var noticeentry = updatenoticelist.querySelector(`#${pluginname}-notice`);
+			var noticeentry = updatenoticelist.querySelector(`#${pluginName}-notice`);
 			if (noticeentry) {
 				var nextsibling = noticeentry.nextSibling;
 				var prevsibling = noticeentry.prevSibling;
@@ -215,23 +223,23 @@
 			}
 		}
 	};
-	BDFDB.PluginUtils.downloadUpdate = function (pluginname, url) {
-		if (!pluginname || !url) return;
+	BDFDB.PluginUtils.downloadUpdate = function (pluginName, url) {
+		if (!pluginName || !url) return;
 		LibraryRequires.request(url, (error, response, result) => {
-			if (error) return BDFDB.LogUtils.warn("Unable to get update for " + pluginname);
+			if (error) return BDFDB.LogUtils.warn("Unable to get update for " + pluginName);
 			BDFDB.InternalData.creationTime = 0;
 			var newversion = result.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
 			newversion = newversion.toString().replace(/['"]/g, "");
 			LibraryRequires.fs.writeFileSync(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), url.split("/").slice(-1)[0]), result);
-			BDFDB.NotificationUtils.toast(`${pluginname} v${window.PluginUpdates.plugins[url].version} has been replaced by ${pluginname} v${newversion}.`, {nopointer:true, selector:"plugin-updated-toast"});
+			BDFDB.NotificationUtils.toast(`${pluginName} v${window.PluginUpdates.plugins[url].version} has been replaced by ${pluginName} v${newversion}.`, {nopointer:true, selector:"plugin-updated-toast"});
 			var updatenotice = document.querySelector("#pluginNotice");
 			if (updatenotice) {
 				if (updatenotice.querySelector(BDFDB.dotCN.noticebutton)) {
 					window.PluginUpdates.plugins[url].version = newversion;
 					if (!window.PluginUpdates.downloaded) window.PluginUpdates.downloaded = [];
-					if (!window.PluginUpdates.downloaded.includes(pluginname)) window.PluginUpdates.downloaded.push(pluginname);
+					if (!window.PluginUpdates.downloaded.includes(pluginName)) window.PluginUpdates.downloaded.push(pluginName);
 				}
-				BDFDB.PluginUtils.removeUpdateNotice(pluginname, updatenotice);
+				BDFDB.PluginUtils.removeUpdateNotice(pluginName, updatenotice);
 			}
 		});
 	};
@@ -277,10 +285,11 @@
 	};
 	BDFDB.PluginUtils.createSettingsPanel = function (plugin, children) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !children || (!BDFDB.ReactUtils.isValidElement(children) && !BDFDB.ArrayUtils.is(children)) || (BDFDB.ArrayUtils.is(children) && !children.length)) return;
-		var settingspanel = BDFDB.DOMUtils.create(`<div class="${plugin.name}-settings ${BDFDB.disCN.settingspanel}"></div>`);
+		let pluginName = plugin.name == "$BDFDB" ? "BDFDB" : plugin.name;
+		let settingspanel = BDFDB.DOMUtils.create(`<div class="${pluginName}-settings ${BDFDB.disCN.settingspanel}"></div>`);
 		BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(LibraryComponents.SettingsPanel, {
-			key: `${plugin.name}-settingspanel`,
-			title: plugin.name,
+			key: `${pluginName}-settingspanel`,
+			title: pluginName,
 			children
 		}), settingspanel);
 		return settingspanel;
@@ -1101,15 +1110,15 @@
 	
 	BDFDB.ModuleUtils.isPatched = function (plugin, module, modulefunction) {
 		if (!plugin || !BDFDB.ObjectUtils.is(module) || !module.BDFDBpatch || !modulefunction) return false;
-		const pluginid = (typeof plugin === "string" ? plugin : plugin.name).toLowerCase();
-		return pluginid && module[modulefunction] && module[modulefunction].isBDFDBpatched && module.BDFDBpatch[modulefunction] && Object.keys(module.BDFDBpatch[modulefunction]).some(patchfunc => Object.keys(module.BDFDBpatch[modulefunction][patchfunc]).includes(pluginid));
+		const pluginId = (typeof plugin === "string" ? plugin : plugin.name).toLowerCase();
+		return pluginId && module[modulefunction] && module[modulefunction].isBDFDBpatched && module.BDFDBpatch[modulefunction] && Object.keys(module.BDFDBpatch[modulefunction]).some(patchfunc => Object.keys(module.BDFDBpatch[modulefunction][patchfunc]).includes(pluginId));
 	};
 	BDFDB.ModuleUtils.patch = function (plugin, module, modulefunctions, patchfunctions, forceRepatch = false) {
 		if (!plugin || !BDFDB.ObjectUtils.is(module) || !modulefunctions || !BDFDB.ObjectUtils.is(patchfunctions)) return null;
 		patchfunctions = BDFDB.ObjectUtils.filter(patchfunctions, type => WebModulesData.Patchtypes.includes(type), true);
 		if (BDFDB.ObjectUtils.isEmpty(patchfunctions)) return null;
-		const pluginname = typeof plugin === "string" ? plugin : plugin.name;
-		const pluginid = pluginname.toLowerCase();
+		const pluginName = typeof plugin === "string" ? plugin : plugin.name;
+		const pluginId = pluginName.toLowerCase();
 		if (!module.BDFDBpatch) module.BDFDBpatch = {};
 		modulefunctions = [modulefunctions].flat(10).filter(n => n);
 		for (let modulefunction of modulefunctions) if (module[modulefunction] == null || typeof module[modulefunction] == "function") {
@@ -1134,16 +1143,16 @@
 					};
 					if (module.BDFDBpatch && module.BDFDBpatch[modulefunction]) {
 						if (!BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].before)) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[modulefunction].before)) {
-							BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].before[id], `"before" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, module.BDFDBpatch[modulefunction].before[id].pluginname)(data);
+							BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].before[id], `"before" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, module.BDFDBpatch[modulefunction].before[id].pluginName)(data);
 						}
 						let hasInsteadPatches = !BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].instead);
 						if (hasInsteadPatches) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[modulefunction].instead)) {
-							let tempreturn = BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].instead[id], `"instead" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, module.BDFDBpatch[modulefunction].instead[id].pluginname)(data);
+							let tempreturn = BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].instead[id], `"instead" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, module.BDFDBpatch[modulefunction].instead[id].pluginName)(data);
 							if (tempreturn !== undefined) data.returnValue = tempreturn;
 						}
 						if ((!hasInsteadPatches || callInstead) && !stopCall) BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`)();
 						if (!BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].after)) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[modulefunction].after)) {
-							let tempreturn = BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].after[id], `"after" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, module.BDFDBpatch[modulefunction].after[id].pluginname)(data);
+							let tempreturn = BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].after[id], `"after" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, module.BDFDBpatch[modulefunction].after[id].pluginName)(data);
 							if (tempreturn !== undefined) data.returnValue = tempreturn;
 						}
 					}
@@ -1156,8 +1165,8 @@
 				module[modulefunction].isBDFDBpatched = true;
 			}
 			for (let type in patchfunctions) if (typeof patchfunctions[type] == "function") {
-				module.BDFDBpatch[modulefunction][type][pluginid] = patchfunctions[type];
-				module.BDFDBpatch[modulefunction][type][pluginid].pluginname = pluginname;
+				module.BDFDBpatch[modulefunction][type][pluginId] = patchfunctions[type];
+				module.BDFDBpatch[modulefunction][type][pluginId].pluginName = pluginName;
 			}
 		}
 		let cancel = _ => {BDFDB.ModuleUtils.unpatch(plugin, module, modulefunctions);};
@@ -1176,18 +1185,18 @@
 		}
 		else {
 			if (!BDFDB.ObjectUtils.is(module) || !module.BDFDBpatch) return;
-			const pluginname = !plugin ? null : (typeof plugin === "string" ? plugin : plugin.name).toLowerCase();
+			const pluginName = !plugin ? null : (typeof plugin === "string" ? plugin : plugin.name).toLowerCase();
 			if (modulefunctions) {
-				for (let modulefunction of [modulefunctions].flat(10).filter(n => n)) if (module[modulefunction] && module.BDFDBpatch[modulefunction]) unpatch(modulefunction, pluginname);
+				for (let modulefunction of [modulefunctions].flat(10).filter(n => n)) if (module[modulefunction] && module.BDFDBpatch[modulefunction]) unpatch(modulefunction, pluginName);
 			}
-			else for (let patchedfunction of module.BDFDBpatch) unpatch(patchedfunction, pluginname);
+			else for (let patchedfunction of module.BDFDBpatch) unpatch(patchedfunction, pluginName);
 		}
-		function unpatch (func, pluginname) {
+		function unpatch (func, pluginName) {
 			for (let type of WebModulesData.Patchtypes) {
-				if (pluginname) delete module.BDFDBpatch[func][type][pluginname];
+				if (pluginName) delete module.BDFDBpatch[func][type][pluginName];
 				else delete module.BDFDBpatch[func][type];
 			}
-			var empty = true;
+			let empty = true;
 			for (let type of WebModulesData.Patchtypes) if (!BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[func][type])) empty = false;
 			if (empty) {
 				module[func] = module.BDFDBpatch[func].originalMethod;
@@ -1246,7 +1255,7 @@
 		if (BDFDB.ObjectUtils.is(plugin) && !plugin.stopping && e.instance) {
 			// REMOVE
 			let isLib = plugin.name == "$BDFDB";
-			if (plugin.name == "$BDFDB") plugin = BDFDBprocessFunctions;
+			if (plugin.name == "$BDFDB") plugin = InternalBDFDB;
 			type = (type.split(" _ _ ")[1] || type).replace(/[^A-z0-9]|_/g, "");
 			type = type.charAt(0).toUpperCase() + type.slice(1);
 			if (typeof plugin["process" + type] == "function") {
@@ -2335,19 +2344,19 @@
 	BDFDB.DataUtils = {};
 	BDFDB.DataUtils.cached = window.BDFDB && window.BDFDB.DataUtils && window.BDFDB.DataUtils.cached || {};
 	BDFDB.DataUtils.save = function (data, plugin, key, id) {
-		let configpath, pluginname;
+		let configPath, pluginName;
 		if (!BDFDB.BDUtils.isBDv2()) {
-			pluginname = typeof plugin === "string" ? plugin : plugin.name;
-			configpath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginname + ".config.json");
+			pluginName = typeof plugin === "string" ? plugin : plugin.name;
+			configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".config.json");
 		}
 		else {
-			pluginname = typeof plugin === "string" ? plugin.toLowerCase() : null;
-			let contentpath = pluginname ? BDFDB.Plugins[pluginname] ? BDFDB.Plugins[pluginname].contentPath : null : plugin.contentPath;
+			pluginName = typeof plugin === "string" ? plugin.toLowerCase() : null;
+			let contentpath = pluginName ? BDFDB.Plugins[pluginName] ? BDFDB.Plugins[pluginName].contentPath : null : plugin.contentPath;
 			if (!contentpath) return;
-			configpath = LibraryRequires.path.join(contentpath, "settings.json");
+			configPath = LibraryRequires.path.join(contentpath, "settings.json");
 		}
 		
-		let config = BDFDB.DataUtils.cached[pluginname] !== undefined ? BDFDB.DataUtils.cached[pluginname] : (InternalBDFDB.readConfig(configpath) || {});
+		let config = BDFDB.DataUtils.cached[pluginName] !== undefined ? BDFDB.DataUtils.cached[pluginName] : (InternalBDFDB.readConfig(configPath) || {});
 		
 		if (key === undefined) config = BDFDB.ObjectUtils.is(data) ? BDFDB.ObjectUtils.sort(data) : data;
 		else {
@@ -2361,32 +2370,32 @@
 		let configIsObject = BDFDB.ObjectUtils.is(config);
 		if (key !== undefined && configIsObject && BDFDB.ObjectUtils.is(config[key]) && BDFDB.ObjectUtils.isEmpty(config[key])) delete config[key];
 		if (BDFDB.ObjectUtils.isEmpty(config)) {
-			delete BDFDB.DataUtils.cached[pluginname];
-			if (LibraryRequires.fs.existsSync(configpath)) LibraryRequires.fs.unlinkSync(configpath);
+			delete BDFDB.DataUtils.cached[pluginName];
+			if (LibraryRequires.fs.existsSync(configPath)) LibraryRequires.fs.unlinkSync(configPath);
 		}
 		else {
 			if (configIsObject) config = BDFDB.ObjectUtils.sort(config);
-			BDFDB.DataUtils.cached[pluginname] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
-			LibraryRequires.fs.writeFileSync(configpath, JSON.stringify(config, null, "	"));
+			BDFDB.DataUtils.cached[pluginName] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
+			LibraryRequires.fs.writeFileSync(configPath, JSON.stringify(config, null, "	"));
 		}
 	};
 
 	BDFDB.DataUtils.load = function (plugin, key, id) {
-		let configpath, pluginname;
+		let configPath, pluginName;
 		if (!BDFDB.BDUtils.isBDv2()) {
-			pluginname = typeof plugin === "string" ? plugin : plugin.name;
-			configpath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginname + ".config.json");
+			pluginName = typeof plugin === "string" ? plugin : plugin.name;
+			configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".config.json");
 		}
 		else {
-			pluginname = typeof plugin === "string" ? plugin.toLowerCase() : null;
-			let contentpath = pluginname ? BDFDB.Plugins[pluginname] ? BDFDB.Plugins[pluginname].contentPath : null : plugin.contentPath;
+			pluginName = typeof plugin === "string" ? plugin.toLowerCase() : null;
+			let contentpath = pluginName ? BDFDB.Plugins[pluginName] ? BDFDB.Plugins[pluginName].contentPath : null : plugin.contentPath;
 			if (!contentpath) return {};
-			configpath = LibraryRequires.path.join(contentpath, "settings.json");
+			configPath = LibraryRequires.path.join(contentpath, "settings.json");
 		}
 		
-		let config = BDFDB.DataUtils.cached[pluginname] !== undefined ? BDFDB.DataUtils.cached[pluginname] : (InternalBDFDB.readConfig(configpath) || {});
+		let config = BDFDB.DataUtils.cached[pluginName] !== undefined ? BDFDB.DataUtils.cached[pluginName] : (InternalBDFDB.readConfig(configPath) || {});
 		let configIsObject = BDFDB.ObjectUtils.is(config);
-		BDFDB.DataUtils.cached[pluginname] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
+		BDFDB.DataUtils.cached[pluginName] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
 		
 		if (key === undefined) return config;
 		else {
@@ -2396,19 +2405,19 @@
 		}
 	};
 	BDFDB.DataUtils.remove = function (plugin, key, id) {
-		let configpath, pluginname;
+		let configPath, pluginName;
 		if (!BDFDB.BDUtils.isBDv2()) {
-			pluginname = typeof plugin === "string" ? plugin : plugin.name;
-			configpath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginname + ".config.json");
+			pluginName = typeof plugin === "string" ? plugin : plugin.name;
+			configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".config.json");
 		}
 		else {
-			pluginname = typeof plugin === "string" ? plugin.toLowerCase() : null;
-			let contentpath = pluginname ? BDFDB.Plugins[pluginname] ? BDFDB.Plugins[pluginname].contentPath : null : plugin.contentPath;
+			pluginName = typeof plugin === "string" ? plugin.toLowerCase() : null;
+			let contentpath = pluginName ? BDFDB.Plugins[pluginName] ? BDFDB.Plugins[pluginName].contentPath : null : plugin.contentPath;
 			if (!contentpath) return;
-			configpath = LibraryRequires.path.join(contentpath, "settings.json");
+			configPath = LibraryRequires.path.join(contentpath, "settings.json");
 		}
 		
-		let config = BDFDB.DataUtils.cached[pluginname] !== undefined ? BDFDB.DataUtils.cached[pluginname] : (InternalBDFDB.readConfig(configpath) || {});
+		let config = BDFDB.DataUtils.cached[pluginName] !== undefined ? BDFDB.DataUtils.cached[pluginName] : (InternalBDFDB.readConfig(configPath) || {});
 		let configIsObject = BDFDB.ObjectUtils.is(config);
 		
 		if (key === undefined || !configIsObject) config = {};
@@ -2419,22 +2428,24 @@
 		
 		if (BDFDB.ObjectUtils.is(config[key]) && BDFDB.ObjectUtils.isEmpty(config[key])) delete config[key];
 		if (BDFDB.ObjectUtils.isEmpty(config)) {
-			delete BDFDB.DataUtils.cached[pluginname];
-			if (LibraryRequires.fs.existsSync(configpath)) LibraryRequires.fs.unlinkSync(configpath);
+			delete BDFDB.DataUtils.cached[pluginName];
+			if (LibraryRequires.fs.existsSync(configPath)) LibraryRequires.fs.unlinkSync(configPath);
 		}
 		else {
 			if (configIsObject) config = BDFDB.ObjectUtils.sort(config);
-			BDFDB.DataUtils.cached[pluginname] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
-			LibraryRequires.fs.writeFileSync(configpath, JSON.stringify(config, null, "	"));
+			BDFDB.DataUtils.cached[pluginName] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
+			LibraryRequires.fs.writeFileSync(configPath, JSON.stringify(config, null, "	"));
 		}
 	};
 	BDFDB.DataUtils.get = function (plugin, key, id) {
 		plugin = typeof plugin == "string" ? BDFDB.BDUtils.getPlugin(plugin) : plugin;
-		if (!BDFDB.ObjectUtils.is(plugin) || !plugin.defaults || !plugin.defaults[key]) return id === undefined ? {} : null;
+		if (!BDFDB.ObjectUtils.is(plugin)) return id === undefined ? {} : null;
+		let defaults = (plugin.name == "$BDFDB" ? InternalBDFDB : plugin).defaults;
+		if (!BDFDB.ObjectUtils.is(defaults) || !defaults[key]) return id === undefined ? {} : null;
 		var oldconfig = BDFDB.DataUtils.load(plugin, key), newconfig = {}, update = false;
-		for (let k in plugin.defaults[key]) {
+		for (let k in defaultsObject.defaults[key]) {
 			if (oldconfig[k] == null) {
-				newconfig[k] = BDFDB.ObjectUtils.is(plugin.defaults[key][k].value) ? BDFDB.ObjectUtils.deepAssign({}, plugin.defaults[key][k].value) : plugin.defaults[key][k].value;
+				newconfig[k] = BDFDB.ObjectUtils.is(defaults[key][k].value) ? BDFDB.ObjectUtils.deepAssign({}, defaults[key][k].value) : defaults[key][k].value;
 				update = true;
 			}
 			else newconfig[k] = oldconfig[k];
@@ -4355,13 +4366,13 @@
 	BDFDB.BDUtils.isBDv2 = function () {
 		return typeof BDFDB.BDv2Api !== "undefined";
 	};
-	BDFDB.BDUtils.isPluginEnabled = function (pluginname) {
-		if (!pluginname) return false;
-		if (!BDFDB.BDUtils.isBDv2()) return BdApi.isPluginEnabled(pluginname);
-		else return BDFDB.Plugins[pluginname.toLowerCase()] ? BDFDB.Plugins[pluginname.toLowerCase()].enabled : null;
+	BDFDB.BDUtils.isPluginEnabled = function (pluginName) {
+		if (!pluginName) return false;
+		if (!BDFDB.BDUtils.isBDv2()) return BdApi.isPluginEnabled(pluginName);
+		else return BDFDB.Plugins[pluginName.toLowerCase()] ? BDFDB.Plugins[pluginName.toLowerCase()].enabled : null;
 	};
-	BDFDB.BDUtils.getPlugin = function (pluginname, hasToBeEnabled = false) {
-		if (!hasToBeEnabled || BDFDB.BDUtils.isPluginEnabled(pluginname)) return BdApi.getPlugin(pluginname);
+	BDFDB.BDUtils.getPlugin = function (pluginName, hasToBeEnabled = false) {
+		if (!hasToBeEnabled || BDFDB.BDUtils.isPluginEnabled(pluginName)) return BdApi.getPlugin(pluginName);
 		return null;
 	};
 	BDFDB.BDUtils.isThemeEnabled = function (themename) {
@@ -9543,8 +9554,7 @@
 		}
 	};
 
-	var BDFDBprocessFunctions = {};
-	BDFDBprocessFunctions.processV2CContentColumn = function (e) {
+	InternalBDFDB.processV2CContentColumn = function (e) {
 		if (window.PluginUpdates && window.PluginUpdates.plugins && e.instance.props.title == "Plugins") {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {key: "folder-button"});
 			if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(LibraryComponents.TooltipContainer, {
@@ -9569,7 +9579,7 @@
 		}
 	};
 
-	BDFDBprocessFunctions._processCard = function (e, data) {
+	InternalBDFDB._processCard = function (e, data) {
 		if (e.instance.state && !e.instance.state.settings) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN._repoauthor]]});
 			if (index > -1) {
@@ -9653,16 +9663,54 @@
 					className: BDFDB.disCNS._reposettingsbutton,
 					children: "Library Settings",
 					onClick: event => {
-						console.log(event);
+						let wrapper = BDFDB.DOMUtils.getParent(BDFDB.dotCN._reposettingsclosed, event.currentTarget);
+						if (wrapper) {
+							let settingsPanel = InternalBDFDB.createLibrarySettings();
+							if (settingsPanel) {
+								BDFDB.DOMUtils.addClass(wrapper, BDFDB.disCN._reposettingsopen);
+								BDFDB.DOMUtils.removeClass(wrapper, BDFDB.disCN._reposettingsclosed);
+								let children = [];
+								while (wrapper.childElementCount) {
+									children.push(wrapper.firstChild);
+									wrapper.firstChild.remove();
+								}
+								let closebutton = BDFDB.DOMUtils.create(`<div style="float: right; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" style="width: 18px; height: 18px;"><g class="background" fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="#dcddde" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div>`);
+								wrapper.appendChild(closebutton);
+								closebutton.addEventListener("click", _ => {
+									BDFDB.DOMUtils.removeClass(wrapper, BDFDB.disCN._reposettingsopen);
+									BDFDB.DOMUtils.addClass(wrapper, BDFDB.disCN._reposettingsclosed);
+									while (wrapper.childElementCount) wrapper.firstChild.remove();
+									while (children.length) wrapper.appendChild(children.shift());
+								});
+								wrapper.appendChild(settingsPanel);
+							}
+						}
 					}
 				}));
 			}
 		}
 	};
-	BDFDBprocessFunctions.processV2CPluginCard = function (e) {BDFDBprocessFunctions._processCard(e, e.instance.props.plugin);};
-	BDFDBprocessFunctions.processV2CThemeCard = function (e) {BDFDBprocessFunctions._processCard(e, e.instance.props.theme);};
+	InternalBDFDB.processV2CPluginCard = function (e) {InternalBDFDB._processCard(e, e.instance.props.plugin);};
+	InternalBDFDB.processV2CThemeCard = function (e) {InternalBDFDB._processCard(e, e.instance.props.theme);};
+	
+	InternalBDFDB.createLibrarySettings = function () {
+		if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded) return;
+		let settings = BDFDB.DataUtils.get(BDFDB, "settings");
+		let settingspanel, settingsitems = [];
+		
+		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			className: BDFDB.disCN.marginbottom8,
+			type: "Switch",
+			plugin: BDFDB,
+			keys: ["settings", key],
+			label: InternalBDFDB.defaults.settings[key].description,
+			value: settings[key]
+		}));
+		
+		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(BDFDB, settingsitems);
+	};
 
-	BDFDBprocessFunctions._processAvatar = function (user, avatar) {
+	InternalBDFDB._processAvatar = function (user, avatar) {
 		if (avatar && user) {
 			avatar.setAttribute("user_by_BDFDB", user.id);
 			var status = avatar.querySelector(BDFDB.dotCN.avatarpointerevents);
@@ -9672,13 +9720,13 @@
 			}
 		}
 	};
-	BDFDBprocessFunctions.processUserPopout = function (e) {
-		BDFDBprocessFunctions._processAvatar(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.userpopoutavatarwrapper));
+	InternalBDFDB.processUserPopout = function (e) {
+		InternalBDFDB._processAvatar(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.userpopoutavatarwrapper));
 	};
-	BDFDBprocessFunctions.processUserProfile = function (e) {
-		BDFDBprocessFunctions._processAvatar(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper));
+	InternalBDFDB.processUserProfile = function (e) {
+		InternalBDFDB._processAvatar(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper));
 	};
-	BDFDBprocessFunctions.processDiscordTag = function (e) {
+	InternalBDFDB.processDiscordTag = function (e) {
 		if (e.instance && e.instance.props && e.instance.props.user && e.returnvalue) e.returnvalue.props.user = e.instance.props.user;
 	};
 
