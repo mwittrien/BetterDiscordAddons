@@ -70,7 +70,7 @@
 
 		let loadmessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
 		BDFDB.LogUtils.log(loadmessage, plugin.name);
-		if (!BDFDB.BDUtils.getSettings("fork-ps-2")) BDFDB.NotificationUtils.toast(plugin.name + " " + loadmessage, {nopointer: true, selector: "plugin-started-toast"});
+		if (!BDFDB.BDUtils.getSettings("fork-ps-2") && BDFDB.DataUtils.get(BDFDB, "settings", "showToasts")) BDFDB.NotificationUtils.toast(plugin.name + " " + loadmessage, {nopointer: true, selector: "plugin-started-toast"});
 
 		let url = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 		BDFDB.PluginUtils.checkUpdate(plugin.name, url);
@@ -102,7 +102,7 @@
 
 		let unloadmessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", "v" + plugin.version);
 		BDFDB.LogUtils.log(unloadmessage, plugin.name);
-		if (!BDFDB.BDUtils.getSettings("fork-ps-2")) BDFDB.NotificationUtils.toast(plugin.name + " " + unloadmessage, {nopointer: true, selector: "plugin-stopped-toast"});
+		if (!BDFDB.BDUtils.getSettings("fork-ps-2") && BDFDB.DataUtils.get(BDFDB, "settings", "showToasts")) BDFDB.NotificationUtils.toast(plugin.name + " " + unloadmessage, {nopointer: true, selector: "plugin-stopped-toast"});
 
 		let url = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 
@@ -9584,6 +9584,7 @@
 			if (index > -1) {
 				let author = children[index].props.children;
 				if (author && (author == "DevilBro" || author.indexOf("DevilBro,") == 0)) {
+					let settings = BDFDB.DataUtils.get(BDFDB, "settings");
 					children.splice(index, 1, BDFDB.ReactUtils.createElement(LibraryComponents.Anchor, {
 						className: BDFDB.disCN._repoauthor,
 						children: "DevilBro",
@@ -9630,62 +9631,65 @@
 								else LibraryModules.InviteUtils.acceptInvite("Jx3TjNS").then(_ => {switchguild();});
 							}
 						}));
-						children[index].props.children.push(" | ");
-						children[index].props.children.push(BDFDB.ReactUtils.createElement("a", {
-							className: `${BDFDB.disCN._repolink}`,
-							target: "_blank",
-							href: "https://www.paypal.me/MircoWittrien",
-							children: "PayPal"
-						}));
-						children[index].props.children.push(" | ");
-						children[index].props.children.push(BDFDB.ReactUtils.createElement("a", {
-							className: `${BDFDB.disCN._repolink}`,
-							target: "_blank",
-							href: "https://www.patreon.com/MircoWittrien",
-							children: "Patreon"
-						}));
-					}
-				}
-			}
-			if (BDFDB.ObjectUtils.toArray(BDFDB.myPlugins).some(n => n == data)) {
-				[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN._repofooter]]});
-				if (index == -1) {
-					let footer = BDFDB.ReactUtils.createElement("div", {className: BDFDB.disCN._repofooter, children: []});
-					e.returnvalue.props.children.push(footer);
-					children = footer.props.children;
-				}
-				else {
-					children[index].props.children = [children[index].props.children].flat();
-					children = children[index].props.children;
-				}
-				children.splice(children.length - 1, 0, BDFDB.ReactUtils.createElement("button", {
-					className: BDFDB.disCNS._reposettingsbutton,
-					children: "Library Settings",
-					onClick: event => {
-						let wrapper = BDFDB.DOMUtils.getParent(BDFDB.dotCN._reposettingsclosed, event.currentTarget);
-						if (wrapper) {
-							let settingsPanel = InternalBDFDB.createLibrarySettings();
-							if (settingsPanel) {
-								BDFDB.DOMUtils.addClass(wrapper, BDFDB.disCN._reposettingsopen);
-								BDFDB.DOMUtils.removeClass(wrapper, BDFDB.disCN._reposettingsclosed);
-								let children = [];
-								while (wrapper.childElementCount) {
-									children.push(wrapper.firstChild);
-									wrapper.firstChild.remove();
-								}
-								let closebutton = BDFDB.DOMUtils.create(`<div style="float: right; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" style="width: 18px; height: 18px;"><g class="background" fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="#dcddde" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div>`);
-								wrapper.appendChild(closebutton);
-								closebutton.addEventListener("click", _ => {
-									BDFDB.DOMUtils.removeClass(wrapper, BDFDB.disCN._reposettingsopen);
-									BDFDB.DOMUtils.addClass(wrapper, BDFDB.disCN._reposettingsclosed);
-									while (wrapper.childElementCount) wrapper.firstChild.remove();
-									while (children.length) wrapper.appendChild(children.shift());
-								});
-								wrapper.appendChild(settingsPanel);
-							}
+						if (settings.addSupportLinks) {
+							children[index].props.children.push(" | ");
+							children[index].props.children.push(BDFDB.ReactUtils.createElement("a", {
+								className: `${BDFDB.disCN._repolink}`,
+								target: "_blank",
+								href: "https://www.paypal.me/MircoWittrien",
+								children: "PayPal"
+							}));
+							children[index].props.children.push(" | ");
+							children[index].props.children.push(BDFDB.ReactUtils.createElement("a", {
+								className: `${BDFDB.disCN._repolink}`,
+								target: "_blank",
+								href: "https://www.patreon.com/MircoWittrien",
+								children: "Patreon"
+							}));
 						}
 					}
-				}));
+					
+					if (BDFDB.ObjectUtils.toArray(BDFDB.myPlugins).some(n => n == data)) {
+						[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN._repofooter]]});
+						if (index == -1) {
+							let footer = BDFDB.ReactUtils.createElement("div", {className: BDFDB.disCN._repofooter, children: []});
+							e.returnvalue.props.children.push(footer);
+							children = footer.props.children;
+						}
+						else {
+							children[index].props.children = [children[index].props.children].flat();
+							children = children[index].props.children;
+						}
+						children.splice(children.length - 1, 0, BDFDB.ReactUtils.createElement("button", {
+							className: BDFDB.disCNS._reposettingsbutton,
+							children: "Library Settings",
+							onClick: event => {
+								let wrapper = BDFDB.DOMUtils.getParent(BDFDB.dotCN._reposettingsclosed, event.currentTarget);
+								if (wrapper) {
+									let settingsPanel = InternalBDFDB.createLibrarySettings();
+									if (settingsPanel) {
+										BDFDB.DOMUtils.addClass(wrapper, BDFDB.disCN._reposettingsopen);
+										BDFDB.DOMUtils.removeClass(wrapper, BDFDB.disCN._reposettingsclosed);
+										let children = [];
+										while (wrapper.childElementCount) {
+											children.push(wrapper.firstChild);
+											wrapper.firstChild.remove();
+										}
+										let closebutton = BDFDB.DOMUtils.create(`<div style="float: right; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" style="width: 18px; height: 18px;"><g class="background" fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="#dcddde" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div>`);
+										wrapper.appendChild(closebutton);
+										closebutton.addEventListener("click", _ => {
+											BDFDB.DOMUtils.removeClass(wrapper, BDFDB.disCN._reposettingsopen);
+											BDFDB.DOMUtils.addClass(wrapper, BDFDB.disCN._reposettingsclosed);
+											while (wrapper.childElementCount) wrapper.firstChild.remove();
+											while (children.length) wrapper.appendChild(children.shift());
+										});
+										wrapper.appendChild(settingsPanel);
+									}
+								}
+							}
+						}));
+					}
+				}
 			}
 		}
 	};
