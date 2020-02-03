@@ -4404,7 +4404,6 @@
 	var DiscordClassModules = {};
 	DiscordClassModules.BDFDB = {
 		BDFDBundefined: "BDFDB_undefined",
-		avatarBadgeWrapper: "wrapper-hd42F_",
 		avatarStatusHovered: "statusHovered-gF2976",
 		cardInner: "inner-OP_8zd",
 		cardWrapper: "card-rT4Wbb",
@@ -4936,7 +4935,6 @@
 		autocompleteselected: ["Autocomplete", "selectorSelected"],
 		autocompleteselector: ["Autocomplete", "selector"],
 		avatar: ["Avatar", "avatar"],
-		avatarbadgewrapper: ["BDFDB", "avatarBadgeWrapper"],
 		avatarcursordefault: ["Avatar", "cursorDefault"],
 		avataricon: ["AvatarIcon", "icon"],
 		avatariconactivelarge: ["AvatarIcon", "iconActiveLarge"],
@@ -8436,6 +8434,11 @@
 			text-decoration: line-through;
 		}
 
+		${BDFDB.dotCN.avatarwrapper + BDFDB.dotCN.messageavatar} {
+			overflow: visible;
+			border-radius: 0;
+		}
+
 		${BDFDB.dotCN.favbuttoncontainer} {
 			display: flex;
 			position: relative;
@@ -9731,9 +9734,9 @@
 	InternalBDFDB._processAvatarRender = function (user, avatar) {
 		if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user)) {
 			let changed = false;
-			if (avatar.type == "img") avatar = BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.disCN.avatarbadgewrapper,
-				children: avatar
+			if (avatar.type == "img") avatar = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatar, Object.assign({}, avatar.props, {
+				className: BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, "")),
+				size: BDFDB.LibraryComponents.Avatar.Sizes.SIZE_40
 			});
 			avatar.props["user_by_BDFDB"] = user.id;
 			if (BDFDB_Patrons.includes(user.id) && BDFDB.DataUtils.get(BDFDB, "settings", "showSupportBadges")) {
