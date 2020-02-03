@@ -4404,6 +4404,7 @@
 	var DiscordClassModules = {};
 	DiscordClassModules.BDFDB = {
 		BDFDBundefined: "BDFDB_undefined",
+		avatarStatusHovered: "statusHovered-gF2976",
 		cardInner: "inner-OP_8zd",
 		cardWrapper: "card-rT4Wbb",
 		charCounter: "counter-uAzbKp",
@@ -4421,6 +4422,7 @@
 		colorPickerSwatchSingle: "single-Fbb1wB",
 		colorPickerSwatchSelected: "selected-f5IVXN",
 		confirmModal: "confirmModal-t-WDWJ",
+		dev: "dev-A7f2Rx",
 		favButtonContainer: "favbutton-8Fzu45",
 		guild: "guild-r3yAE_",
 		guildLowerLeftBadge: "lowerLeftBadge-zr4T_9",
@@ -4458,6 +4460,7 @@
 		settingsTableHeaders: "settingsTableHeaders-WKzw9_",
 		settingsTableHeaderVertical: "headerVertical-4MNxqk",
 		settingsTableList: "settingsTableList-f6sW2y",
+		supporter: "supporter-Z3FfwL",
 		svgIcon: "icon-GhnIRB",
 		table: "table-moqjM0",
 		tableBodyCell: "bodyCell-dQam9V",
@@ -4950,9 +4953,12 @@
 		avatarnoicon: ["AvatarIcon", "noIcon"],
 		avatarpointer: ["Avatar", "pointer"],
 		avatarpointerevents: ["Avatar", "pointerEvents"],
+		avatarstatushovered: ["BDFDB", "avatarStatusHovered"],
 		avatarwrapper: ["Avatar", "wrapper"],
 		backdrop: ["Backdrop", "backdrop"],
 		badgewrapper: ["NotFound", "badgeWrapper"],
+		bdfdbdev: ["BDFDB", "dev"],
+		bdfdbsupporter: ["BDFDB", "supporter"],
 		bottag: ["BotTag", "botTag"],
 		bottaginvert: ["BotTag", "botTagInvert"],
 		bottagmember: ["Member", "botTag"],
@@ -8358,6 +8364,8 @@
 	BDFDB.LibraryComponents = Object.assign({}, LibraryComponents);
 
 	BDFDB.DOMUtils.appendLocalStyle("BDFDB", `
+		@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/SupporterBadge.css);
+		
 		${BDFDB.dotCN.changelogicon} {
 			display: inline-block;
 			background: currentColor;
@@ -9713,13 +9721,18 @@
 		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(BDFDB, settingsitems);
 	};
 
+	const BDFDB_Patrons = [
+		"363785301195358221"
+	];
 	InternalBDFDB._processAvatar = function (user, avatar) {
 		if (avatar && user) {
 			avatar.setAttribute("user_by_BDFDB", user.id);
+			if (BDFDB_Patrons.includes(user.id) && BDFDB.DataUtils.get(BDFDB, "settings", "showSupportBadges")) BDFDB.DOMUtils.addClass(avatar, BDFDB.disCN.bdfdbsupporter);
+			if (user.id == "278543574059057154") BDFDB.DOMUtils.addClass(avatar, BDFDB.disCN.bdfdbdev);
 			var status = avatar.querySelector(BDFDB.dotCN.avatarpointerevents);
 			if (status) {
-				status.addEventListener("mouseenter", _ => {BDFDB.DOMUtils.addClass(avatar, "statusHovered")});
-				status.addEventListener("mouseleave", _ => {BDFDB.DOMUtils.removeClass(avatar, "statusHovered")});
+				status.addEventListener("mouseenter", _ => {BDFDB.DOMUtils.addClass(avatar, BDFDB.disCN.avatarstatushovered)});
+				status.addEventListener("mouseleave", _ => {BDFDB.DOMUtils.removeClass(avatar, BDFDB.disCN.avatarstatushovered)});
 			}
 		}
 	};
