@@ -1,4 +1,4 @@
-//META{"name":"CopyRawMessage"}*//
+//META{"name":"CopyRawMessage","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CopyRawMessage","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CopyRawMessage/CopyRawMessage.plugin.js"}*// 
 
 class CopyRawMessage {
 	getName () {return "CopyRawMessage";}
