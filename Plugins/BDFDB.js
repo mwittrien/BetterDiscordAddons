@@ -2443,7 +2443,7 @@
 		let defaults = (plugin.name == "$BDFDB" ? InternalBDFDB : plugin).defaults;
 		if (!BDFDB.ObjectUtils.is(defaults) || !defaults[key]) return id === undefined ? {} : null;
 		var oldconfig = BDFDB.DataUtils.load(plugin, key), newconfig = {}, update = false;
-		for (let k in defaultsObject.defaults[key]) {
+		for (let k in defaults[key]) {
 			if (oldconfig[k] == null) {
 				newconfig[k] = BDFDB.ObjectUtils.is(defaults[key][k].value) ? BDFDB.ObjectUtils.deepAssign({}, defaults[key][k].value) : defaults[key][k].value;
 				update = true;
