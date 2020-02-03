@@ -9727,14 +9727,14 @@
 		"363785301195358221"
 	];
 	InternalBDFDB._processAvatarRender = function (user, avatar) {
-		if (BDFDB.ReactUtils.isValidElement(avatar) && user) {
+		if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user)) {
 			avatar.props["user_by_BDFDB"] = user.id;
 			if (BDFDB_Patrons.includes(user.id) && BDFDB.DataUtils.get(BDFDB, "settings", "showSupportBadges")) avatar.props.className = BDFDB.DOMUtils.formatClassName(avatar.props.className, BDFDB.disCN.bdfdbsupporter);
 			if (user.id == "278543574059057154") avatar.props.className = BDFDB.DOMUtils.formatClassName(avatar.props.className, BDFDB.disCN.bdfdbdev);
 		}
 	};
 	InternalBDFDB._processAvatarMount = function (user, avatar) {
-		if (Node.prototype.isPrototypeOf(avatar) && user) {
+		if (Node.prototype.isPrototypeOf(avatar) && BDFDB.ObjectUtils.is(user)) {
 			avatar.setAttribute("user_by_BDFDB", user.id);
 			if (BDFDB_Patrons.includes(user.id) && BDFDB.DataUtils.get(BDFDB, "settings", "showSupportBadges")) BDFDB.DOMUtils.addClass(avatar, BDFDB.disCN.bdfdbsupporter);
 			if (user.id == "278543574059057154") BDFDB.DOMUtils.addClass(avatar, BDFDB.disCN.bdfdbdev);
@@ -9752,7 +9752,7 @@
 				let renderChildren = avatarWrapper.props.children;
 				avatarWrapper.props.children = (...args) => {
 					let renderedChildren = renderChildren(...args);
-					InternalBDFDB._processAvatarRender(renderedChildren, e.instance.props.message.author);
+					InternalBDFDB._processAvatarRender(e.instance.props.message.author, renderedChildren);
 					return renderChildren;
 				};
 			}
