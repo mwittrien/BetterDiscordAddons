@@ -9754,7 +9754,7 @@
 					let renderedChildren = renderChildren(...args);
 					InternalBDFDB._processAvatarRender(renderedChildren, e.instance.props.message.author);
 					return renderChildren;
-				});
+				};
 			}
 		}
 	};
