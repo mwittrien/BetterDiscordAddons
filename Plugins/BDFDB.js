@@ -9633,6 +9633,25 @@
 					}
 				}
 			}
+			if (BDFDB.ObjectUtils.toArray(BDFDB.myPlugins).some(n => n == data)) {
+				[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN._repofooter]]});
+				if (index == -1) {
+					let footer = BDFDB.ReactUtils.createElement("div", {className: BDFDB.disCN._repofooter, children: []});
+					e.returnvalue.props.children.push(footer);
+					children = footer.props.children;
+				}
+				else {
+					children[index].props.children = [children[index].props.children].flat();
+					children = children[index].props.children;
+				}
+				children.push(BDFDB.ReactUtils.createElement("button", {
+					className: BDFDB.disCNS._reposettingsbutton,
+					children: "Library Settings",
+					onClick: event => {
+						console.log(event);
+					}
+				}));
+			}
 		}
 	};
 	BDFDBprocessFunctions.processV2CPluginCard = function (e) {BDFDBprocessFunctions._processCard(e, e.instance.props.plugin);};
