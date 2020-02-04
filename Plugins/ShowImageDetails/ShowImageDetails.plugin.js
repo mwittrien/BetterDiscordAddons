@@ -3,14 +3,11 @@
 var ShowImageDetails = (_ => {
 	const ImageDetails = class ImageDetails extends BdApi.React.Component {
 		componentDidMount() {
-			let attachment = BDFDB.ReactUtils.findValue(BDFDB.ReactUtils.getValue(this, "_reactInternalFiber.return"), "attachment", {up: true});
-			if (attachment) {
-				this.props.attachment = attachment;
-				BDFDB.ReactUtils.forceUpdate(this);
-			}
+			this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ReactUtils.getValue(this, "_reactInternalFiber.return"), "attachment", {up: true});
+			BDFDB.ReactUtils.forceUpdate(this);
 		}
 		render() {
-			return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+			return !this.props.attachment ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 				className: BDFDB.disCN._showimagedetailsdetails,
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
@@ -44,7 +41,7 @@ var ShowImageDetails = (_ => {
 	return class ShowImageDetails {
 		getName () {return "ShowImageDetails";}
 
-		getVersion () {return "1.2.3";}
+		getVersion () {return "1.2.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -52,7 +49,7 @@ var ShowImageDetails = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Message Update","Fixed the plugin for the new Message Update"],["Scroll issue fixed","Loading images would collapse to 0 height and screw up the chat scroller"]],
+				"fixed":[["Message Update","Fixed the plugin for the new Message Update"],["Scroll issue fixed","Loading images would collapse to 0 height and screw up the chat scroller"],["Embedded images","No longer adds image details without information to embeds"]],
 				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 			};
 
