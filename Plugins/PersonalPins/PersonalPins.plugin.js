@@ -12,7 +12,7 @@ var PersonalPins = (_ => {
 
 		getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-		getVersion () {return "1.8.^9";} 
+		getVersion () {return "1.8.9";} 
 
 		getAuthor () {return "DevilBro";}
 
