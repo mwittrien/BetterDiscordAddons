@@ -6,7 +6,7 @@ var ReverseImageSearch = (_ => {
 	return class ReverseImageSearch {
 		getName () {return "ReverseImageSearch";}
 
-		getVersion () {return "3.5.0";}
+		getVersion () {return "3.5.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -133,8 +133,8 @@ var ReverseImageSearch = (_ => {
 
 		onUserContextMenu (e) {
 			if (e.instance.props.user && e.instance.props.target) {
-				let avatar = BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.avataricon) ? e.instance.props.target : e.instance.props.target.querySelector(BDFDB.dotCN.avatar);
-				if (avatar && BDFDB.DataUtils.get(this, "settings", "addUserAvatarEntry")) this.injectItem(e, avatar.tagName == "IMG" ? avatar.getAttribute("src") :  avatar.style.getPropertyValue("background-image"));
+				let avatar = e.instance.props.target.querySelector(BDFDB.dotCN.avatar) || e.instance.props.target;
+				if (avatar && BDFDB.DataUtils.get(this, "settings", "addUserAvatarEntry")) this.injectItem(e, avatar.tagName == "IMG" ? avatar.getAttribute("src") : avatar.style.getPropertyValue("background-image"));
 			}
 		}
 
@@ -150,6 +150,7 @@ var ReverseImageSearch = (_ => {
 				else if (e.instance.props.target.tagName == "A" && e.instance.props.message.embeds && e.instance.props.message.embeds[0] && e.instance.props.message.embeds[0].type == "image") this.injectItem(e, e.instance.props.target.href);
 				else if (e.instance.props.target.tagName == "IMG") {
 					if (BDFDB.DOMUtils.containsClass(e.instance.props.target.parentElement, BDFDB.disCN.imagewrapper)) this.injectItem(e, e.instance.props.target.src);
+					else if (BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.embedauthoricon) && BDFDB.DataUtils.get(this, "settings", "addUserAvatarEntry")) this.injectItem(e, e.instance.props.target.src);
 					else if (BDFDB.DOMUtils.containsClass(e.instance.props.target, "emoji", "emote", false) && BDFDB.DataUtils.get(this, "settings", "addEmojiEntry")) this.injectItem(e, e.instance.props.target.src);
 				}
 			}
@@ -181,16 +182,14 @@ var ReverseImageSearch = (_ => {
 					disabled: true
 				}));
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-				const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+				if (index > -1) children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
 							label: "Reverse Image Search",
 							render: items
 						})
 					]
-				});
-				if (index > -1) children.splice(index, 0, itemgroup);
-				else children.push(itemgroup);
+				}));
 			}
 		}
 
