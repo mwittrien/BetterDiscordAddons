@@ -1052,8 +1052,35 @@ body:before {
 
 /* ----		6.3.	TEXTAREA						---- */
 
-.form-2fGMdU:before {										/* textarea				form								*/
-	display: none;
+
+
+.form-2fGMdU {												/* textarea				form								*/
+	position: relative;
+	padding-top: 10px;
+}
+.form-2fGMdU > * {
+	z-index: 1;
+}
+.form-2fGMdU:after,
+.form-2fGMdU:before {
+	display: flex;
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 8px;
+	left: 0;
+	height: unset;
+	width: unset;
+	pointer-events: none;
+}
+.form-2fGMdU:after {
+	background-color: rgba(var(--vtransparencycolor), var(--vtransparencyalpha));
+}
+.form-2fGMdU:before {
+	background: var(--vbackground) center/var(--vbackgroundsize);
+	filter: blur(var(--vbackgroundblur));
+	background-attachment: fixed;
 }
 
 .channelTextArea-rNsIhG {									/* textarea				channeltextarea						*/
