@@ -7,7 +7,7 @@ var MessageUtilities = (_ => {
 	return class MessageUtilities {
 		getName () {return "MessageUtilities";}
 
-		getVersion () {return "1.6.8";}
+		getVersion () {return "1.6.9";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -37,7 +37,7 @@ var MessageUtilities = (_ => {
 					"Edit_Message":				{name:"Edit Message",			func:this.doEdit,			value:{click:1, 	keycombo:[]}		},
 					"Delete_Message":			{name:"Delete Message",			func:this.doDelete,			value:{click:0, 	keycombo:[46]}		},
 					"Pin/Unpin_Message":		{name:"Pin/Unpin Message",		func:this.doPinUnPin,		value:{click:0, 	keycombo:[17]}		},
-					"React_to_Message":			{name:"React to Message",		func:this.doOpenReact,		value:{click:0, 	keycombo:[17,83]}	},
+					"React_to_Message":			{name:"Open React Menu",		func:this.doOpenReact,		value:{click:0, 	keycombo:[17,83]}	},
 					"Copy_Raw":					{name:"Copy raw Message",		func:this.doCopyRaw,		value:{click:0, 	keycombo:[17,68]}	},
 					"Copy_Link":				{name:"Copy Message Link",		func:this.doCopyLink,		value:{click:0, 	keycombo:[17,81]}	},
 					"Quote_Message":			{name:"Quote Message",			func:this.doQuote,			value:{click:0, 	keycombo:[17,87]}	},
@@ -301,7 +301,7 @@ var MessageUtilities = (_ => {
 		}
 
 		doOpenReact ({messagediv, message}, action) {
-			let reactButton = messagediv.querySelector(BDFDB.dotCN.emojipickerbutton);
+			let reactButton = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagetoolbarbutton, messagediv.querySelector(`${BDFDB.dotCN.messagetoolbaricon}[name="${BDFDB.LibraryComponents.SvgIcon.Names.NOVA_ADD_REACTION_ALT}"], ${BDFDB.dotCN.messagetoolbaricon}[name="${BDFDB.LibraryComponents.SvgIcon.Names.NOVA_ADD_REACTION}"]`));
 			if (reactButton) {
 				reactButton.click();
 				if (BDFDB.DataUtils.get(this, "toasts", action)) BDFDB.NotificationUtils.toast("Reaction popout has been opened.", {type:"success"});
