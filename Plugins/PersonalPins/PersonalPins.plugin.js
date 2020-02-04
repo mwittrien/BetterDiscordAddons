@@ -12,7 +12,7 @@ var PersonalPins = (_ => {
 
 		getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-		getVersion () {return "1.8.7";} 
+		getVersion () {return "1.8.^9";} 
 
 		getAuthor () {return "DevilBro";}
 
@@ -267,7 +267,7 @@ var PersonalPins = (_ => {
 			buttoninstance.props.searchKey = buttoninstance.props.searchKey || "";
 			return [
 				BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.disCNS.popoutheader + BDFDB.disCN.messagespopoutheader,
+					className: BDFDB.disCN.messagespopoutheader,
 					style: {
 						paddingBottom: 0
 					},
@@ -275,7 +275,7 @@ var PersonalPins = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-									className: BDFDB.disCNS.popouttitle + BDFDB.disCN.messagespopouttitle,
+									className: BDFDB.disCN.messagespopouttitle,
 									children: this.labels.popout_note_text
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
@@ -430,84 +430,69 @@ var PersonalPins = (_ => {
 			});
 
 			return [separator, BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.disCN.messagegroupwrapper,
+				className: BDFDB.disCN.messagespopoutgroupwrapper,
 				key: message.id,
-				children: BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.disCN.messagegroupwrapperoffsetcorrection,
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessageGroup, {
-						cozyClassName: BDFDB.disCN.messagespopoutmessagegroupcozy,
-						messages: [message],
-						channel: channel,
-						inlineAttachmentMedia: true,
-						inlineEmbedMedia: true,
-						renderEmbeds: true,
-						renderEmbedsSmall: true,
-						compact: false,
-						developerMode: false,
-						hasDivider: false,
-						popoutPosition: BDFDB.LibraryComponents.PopoutContainer.Positions.LEFT,
-						groupOption: _ => {
-							return BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN.messagespopoutactionbuttons,
-								children: [
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-										className: BDFDB.disCN.messagespopoutjumpbutton,
-										onClick: _ => {
-											BDFDB.LibraryModules.SelectChannelUtils.selectChannel(channel.guild_id, channel.id, message.id);
-										},
-										children: BDFDB.ReactUtils.createElement("div", {
-											className: BDFDB.disCN.messagespopouttext,
-											children: BDFDB.LanguageUtils.LanguageStrings.JUMP
-										})
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-										className: BDFDB.disCN.messagespopoutjumpbutton,
-										onClick: _ => {
-											if (message.content || message.attachments.length > 1) {
-												let text = message.content || "";
-												for (let attachment of message.attachments) if (attachment.url) text += ((text ? "\n" : "") + attachment.url);
-												BDFDB.LibraryRequires.electron.clipboard.write({text});
+				children: [
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessageGroup, {
+						className: BDFDB.disCN.messagespopoutgroupcozy,
+						message: message,
+						channel: channel
+					}),
+					BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.messagespopoutactionbuttons,
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+								className: BDFDB.disCN.messagespopoutjumpbutton,
+								onClick: _ => {
+									BDFDB.LibraryModules.SelectChannelUtils.selectChannel(channel.guild_id, channel.id, message.id);
+								},
+								children: BDFDB.ReactUtils.createElement("div", {
+									children: BDFDB.LanguageUtils.LanguageStrings.JUMP
+								})
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+								className: BDFDB.disCN.messagespopoutjumpbutton,
+								onClick: _ => {
+									if (message.content || message.attachments.length > 1) {
+										let text = message.content || "";
+										for (let attachment of message.attachments) if (attachment.url) text += ((text ? "\n" : "") + attachment.url);
+										BDFDB.LibraryRequires.electron.clipboard.write({text});
+									}
+									else if (message.attachments.length == 1 && message.attachments[0].url) {
+										BDFDB.LibraryRequires.request({url: message.attachments[0].url, encoding: null}, (error, response, buffer) => {
+											if (buffer) {
+												if (BDFDB.LibraryRequires.process.platform === "win32" || BDFDB.LibraryRequires.process.platform === "darwin") {
+													BDFDB.LibraryRequires.electron.clipboard.write({image: BDFDB.LibraryRequires.electron.nativeImage.createFromBuffer(buffer)});
+												}
+												else {
+													let file = BDFDB.LibraryRequires.path.join(BDFDB.LibraryRequires.process.env["HOME"], "personalpinstemp.png");
+													BDFDB.LibraryRequires.fs.writeFileSync(file, buffer, {encoding: null});
+													BDFDB.LibraryRequires.electron.clipboard.write({image: file});
+													BDFDB.LibraryRequires.fs.unlinkSync(file);
+												}
 											}
-											else if (message.attachments.length == 1 && message.attachments[0].url) {
-												BDFDB.LibraryRequires.request({url: message.attachments[0].url, encoding: null}, (error, response, buffer) => {
-													if (buffer) {
-														if (BDFDB.LibraryRequires.process.platform === "win32" || BDFDB.LibraryRequires.process.platform === "darwin") {
-															BDFDB.LibraryRequires.electron.clipboard.write({image: BDFDB.LibraryRequires.electron.nativeImage.createFromBuffer(buffer)});
-														}
-														else {
-															let file = BDFDB.LibraryRequires.path.join(BDFDB.LibraryRequires.process.env["HOME"], "personalpinstemp.png");
-															BDFDB.LibraryRequires.fs.writeFileSync(file, buffer, {encoding: null});
-															BDFDB.LibraryRequires.electron.clipboard.write({image: file});
-															BDFDB.LibraryRequires.fs.unlinkSync(file);
-														}
-													}
-												});
-											}
-										},
-										children: BDFDB.ReactUtils.createElement("div", {
-											className: BDFDB.disCN.messagespopouttext,
-											children: BDFDB.LanguageUtils.LanguageStrings.COPY
-										})
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-										look: BDFDB.LibraryComponents.Button.Looks.BLANK,
-										size: BDFDB.LibraryComponents.Button.Sizes.NONE,
-										onClick: (e, instance) => {
-											this.removeNoteData(note);
-											BDFDB.ReactUtils.forceUpdate(buttoninstance.popout._owner.stateNode);
-										},
-										children: BDFDB.ReactUtils.createElement("div", {
-											className: BDFDB.disCN.messagespopoutclosebutton
-										})
-									})
-								]
-							});
-						},
-						messageOption: false,
-						canEdit: false,
-						accessoriesClassName: BDFDB.disCN.messagespopoutaccessories
+										});
+									}
+								},
+								children: BDFDB.ReactUtils.createElement("div", {
+									children: BDFDB.LanguageUtils.LanguageStrings.COPY
+								})
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+								look: BDFDB.LibraryComponents.Button.Looks.BLANK,
+								size: BDFDB.LibraryComponents.Button.Sizes.NONE,
+								onClick: (e, instance) => {
+									this.removeNoteData(note);
+									BDFDB.ReactUtils.forceUpdate(buttoninstance.popout._owner.stateNode);
+								},
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+									className: BDFDB.disCN.messagespopoutclosebutton,
+									name: BDFDB.LibraryComponents.SvgIcon.Names.CLOSE
+								})
+							})
+						]
 					})
-				})
+				]
 			})];
 		}
 
