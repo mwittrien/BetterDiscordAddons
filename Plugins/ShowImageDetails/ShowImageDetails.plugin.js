@@ -1,10 +1,50 @@
 //META{"name":"ShowImageDetails","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowImageDetails","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ShowImageDetails/ShowImageDetails.plugin.js"}*//
 
 var ShowImageDetails = (_ => {
+	const ImageDetails = class ImageDetails extends BdApi.React.Component {
+		componentDidMount() {
+			let attachment = BDFDB.ReactUtils.findValue(BDFDB.ReactUtils.getValue(this, "_reactInternalFiber.return"), "attachment", {up: true});
+			if (attachment) {
+				this.props.attachment = attachment;
+				BDFDB.ReactUtils.forceUpdate(this);
+			}
+		}
+		render() {
+			return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+				className: BDFDB.disCN._showimagedetailsdetails,
+				children: [
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
+							title: this.props.original,
+							href: this.props.original,
+							children: this.props.attachment.filename,
+							onClick: event => {
+								BDFDB.ListenerUtils.stopEvent(event);
+								BDFDB.DiscordUtils.openLink(this.props.original);
+							}
+						})
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+							color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
+							children: BDFDB.NumberUtils.formatBytes(this.props.attachment.size)
+						})
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+							color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
+							children: `${this.props.attachment.width}x${this.props.attachment.height}px`
+						})
+					})
+				]
+			});
+		}
+	};
+	
 	return class ShowImageDetails {
 		getName () {return "ShowImageDetails";}
 
-		getVersion () {return "1.2.0";}
+		getVersion () {return "1.2.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -28,21 +68,8 @@ var ShowImageDetails = (_ => {
 
 		initConstructor () {
 			this.css = `
-				${BDFDB.dotCN._showimagedetailsdetailsadded},
-				${BDFDB.dotCN._showimagedetailsdetailsadded}:hover {
-					text-decoration: none;
-					height: unset !important;
-					width: unset !important;
-				}
-				${BDFDB.dotCN._showimagedetailsdetailsadded} img {
-					position: relative !important;
-				}
 				${BDFDB.dotCN._showimagedetailsdetails} {
 					margin: 5px 0;
-				}
-				${BDFDB.dotCNS.spoilerhidden + BDFDB.dotCN._showimagedetailsdetails} {
-					visibility: hidden;
-					max-width: 1px;
 				}
 			`;
 			
@@ -121,8 +148,12 @@ var ShowImageDetails = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
+				
+				BDFDB.ModuleUtils.patch(this, (BDFDB.ModuleUtils.findByName("renderImageComponent", false).exports || {}), "renderImageComponent", {after: e => {
+					if (e.returnValue && e.returnValue.type && (e.returnValue.type.displayName == "LazyImageZoomable" || e.returnValue.type.displayName == "LazyImage") && e.methodArguments[0].original && e.methodArguments[0].src.indexOf("https://media.discordapp.net/attachments") == 0) return this.injectImageDetails(e.methodArguments[0], e.returnValue);
+				}});
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				BDFDB.MessageUtils.rerenderAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -130,8 +161,8 @@ var ShowImageDetails = (_ => {
 		stop () {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
-				
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+
+				BDFDB.MessageUtils.rerenderAll();
 
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -143,61 +174,52 @@ var ShowImageDetails = (_ => {
 		onSettingsClosed () {
 			if (this.SettingsUpdated) {
 				delete this.SettingsUpdated;
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				BDFDB.MessageUtils.rerenderAll();
 			}
 		}
-
+		
+		injectImageDetails (props, child) {
+			let settings = BDFDB.DataUtils.get(this, "settings");
+			if (!settings.showOnHover) {
+				props.detailsAdded = true;
+				return BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.disCN.embedwrapper,
+					children: [
+						BDFDB.ReactUtils.createElement(ImageDetails, {
+							attachment: {
+								height: 0,
+								width: 0,
+								filename: "unknown.png"
+							}
+						}),
+						child
+					]
+				});
+			}
+			return child;
+		}
+		
 		processLazyImage (e) {
-			if (e.instance.props.original && e.instance.props.src.indexOf("https://media.discordapp.net/attachments") == 0 && e.instance.state && e.instance.state.readyState == "READY") {
+			if (e.instance.props.original && e.instance.props.src.indexOf("https://media.discordapp.net/attachments") == 0) {
 				if (!e.returnvalue) e.instance.props.className = BDFDB.DOMUtils.formatClassName(e.instance.props.className, BDFDB.disCN._showimagedetailsdetailsadded);
 				else if (typeof e.returnvalue.props.children == "function") {
 					let attachment = BDFDB.ReactUtils.findValue(e.instance, "attachment", {up:true});
 					if (!attachment) return;
 					let settings = BDFDB.DataUtils.get(this, "settings");
-					let amounts = BDFDB.DataUtils.get(this, "amounts");
-					let renderChildren = e.returnvalue.props.children;
-					e.returnvalue.props.children = (...args) => {
-						let renderedChildren = renderChildren(...args);
-						if (settings.showOnHover) return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: `${attachment.filename}\n${BDFDB.NumberUtils.formatBytes(attachment.size)}\n${attachment.width}x${attachment.height}px`,
-							tooltipConfig: {
-								type: "right",
-								delay: amounts.hoverDelay
-							},
-							children: renderedChildren
-						});
-						else return [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-								className: BDFDB.disCN._showimagedetailsdetails,
-								children: [
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
-											title: e.instance.props.original,
-											href: e.instance.props.original,
-											children: attachment.filename,
-											onClick: event => {
-												BDFDB.ListenerUtils.stopEvent(event);
-												BDFDB.DiscordUtils.openLink(e.instance.props.original);
-											}
-										})
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-											color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
-											children: BDFDB.NumberUtils.formatBytes(attachment.size)
-										})
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-											color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
-											children: `${attachment.width}x${attachment.height}px`
-										})
-									})
-								]
-							}),
-							renderedChildren
-						];
-					};
+					if (settings.showOnHover) {
+						let amounts = BDFDB.DataUtils.get(this, "amounts");
+						let renderChildren = e.returnvalue.props.children;
+						e.returnvalue.props.children = (...args) => {
+							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								text: `${attachment.filename}\n${BDFDB.NumberUtils.formatBytes(attachment.size)}\n${attachment.width}x${attachment.height}px`,
+								tooltipConfig: {
+									type: "right",
+									delay: amounts.hoverDelay
+								},
+								children: renderChildren(...args)
+							});
+						};
+					}
 				}
 			}
 		}
