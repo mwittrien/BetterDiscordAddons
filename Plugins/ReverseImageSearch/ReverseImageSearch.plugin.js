@@ -1,6 +1,8 @@
 //META{"name":"ReverseImageSearch","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ReverseImageSearch","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ReverseImageSearch/ReverseImageSearch.plugin.js"}*//
 
 var ReverseImageSearch = (_ => {
+	const imgUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
+	
 	return class ReverseImageSearch {
 		getName () {return "ReverseImageSearch";}
 
@@ -18,8 +20,6 @@ var ReverseImageSearch = (_ => {
 		}
 
 		initConstructor () {
-			this.imgUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
-
 			this.defaults = {
 				settings: {
 					useChromium: 			{value:false, 	inner:false,	description:"Use an inbuilt browser window instead of opening your default browser"},
@@ -29,16 +29,16 @@ var ReverseImageSearch = (_ => {
 				},
 				engines: {
 					_all: 		{value:true, 	name:BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url:null},
-					Baidu: 		{value:true, 	name:"Baidu", 		url:"http://image.baidu.com/pcdutu?queryImageUrl=" + this.imgUrlReplaceString},
-					Bing: 		{value:true, 	name:"Bing", 		url:"https://www.bing.com/images/search?q=imgurl:" + this.imgUrlReplaceString + "&view=detailv2&iss=sbi&FORM=IRSBIQ"},
-					Google:		{value:true, 	name:"Google", 		url:"https://images.google.com/searchbyimage?image_url=" + this.imgUrlReplaceString},
-					IQDB:		{value:true, 	name:"IQDB", 		url:"https://iqdb.org/?url=" + this.imgUrlReplaceString},
-					Reddit: 	{value:true, 	name:"Reddit", 		url:"http://karmadecay.com/search?q=" + this.imgUrlReplaceString},
-					SauceNAO: 	{value:true, 	name:"SauceNAO", 	url:"https://saucenao.com/search.php?db=999&url=" + this.imgUrlReplaceString},
-					Sogou: 		{value:true, 	name:"Sogou", 		url:"http://pic.sogou.com/ris?flag=1&drag=0&query=" + this.imgUrlReplaceString + "&flag=1"},
-					TinEye:		{value:true, 	name:"TinEye", 		url:"https://tineye.com/search?url=" + this.imgUrlReplaceString},
-					WhatAnime:	{value:true,	name:"WhatAnime",	url:"https://trace.moe/?url=" + this.imgUrlReplaceString},
-					Yandex: 	{value:true, 	name:"Yandex", 		url:"https://yandex.com/images/search?url=" + this.imgUrlReplaceString + "&rpt=imageview"}
+					Baidu: 		{value:true, 	name:"Baidu", 		url:"http://image.baidu.com/pcdutu?queryImageUrl=" + imgUrlReplaceString},
+					Bing: 		{value:true, 	name:"Bing", 		url:"https://www.bing.com/images/search?q=imgurl:" + imgUrlReplaceString + "&view=detailv2&iss=sbi&FORM=IRSBIQ"},
+					Google:		{value:true, 	name:"Google", 		url:"https://images.google.com/searchbyimage?image_url=" + imgUrlReplaceString},
+					IQDB:		{value:true, 	name:"IQDB", 		url:"https://iqdb.org/?url=" + imgUrlReplaceString},
+					Reddit: 	{value:true, 	name:"Reddit", 		url:"http://karmadecay.com/search?q=" + imgUrlReplaceString},
+					SauceNAO: 	{value:true, 	name:"SauceNAO", 	url:"https://saucenao.com/search.php?db=999&url=" + imgUrlReplaceString},
+					Sogou: 		{value:true, 	name:"Sogou", 		url:"http://pic.sogou.com/ris?flag=1&drag=0&query=" + imgUrlReplaceString + "&flag=1"},
+					TinEye:		{value:true, 	name:"TinEye", 		url:"https://tineye.com/search?url=" + imgUrlReplaceString},
+					WhatAnime:	{value:true,	name:"WhatAnime",	url:"https://trace.moe/?url=" + imgUrlReplaceString},
+					Yandex: 	{value:true, 	name:"Yandex", 		url:"https://yandex.com/images/search?url=" + imgUrlReplaceString + "&rpt=imageview"}
 				}
 			};
 		}
@@ -145,7 +145,6 @@ var ReverseImageSearch = (_ => {
 		}
 
 		onMessageContextMenu (e) {
-			console.log(e);
 			if (e.instance.props.message && e.instance.props.channel && e.instance.props.target) {
 				if (e.instance.props.attachment) this.injectItem(e, e.instance.props.attachment.url);
 				else if (e.instance.props.target.tagName == "A" && e.instance.props.message.embeds && e.instance.props.message.embeds[0] && e.instance.props.message.embeds[0].type == "image") this.injectItem(e, e.instance.props.target.href);
@@ -172,9 +171,9 @@ var ReverseImageSearch = (_ => {
 						let useChromium = BDFDB.DataUtils.get(this, "settings", "useChromium");
 						if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
 						if (key == "_all") {
-							for (let key2 in engines) if (key2 != "_all" && engines[key2]) BDFDB.DiscordUtils.openLink(this.defaults.engines[key2].url.replace(this.imgUrlReplaceString, encodeURIComponent(url)), useChromium, event.shiftKey);
+							for (let key2 in engines) if (key2 != "_all" && engines[key2]) BDFDB.DiscordUtils.openLink(this.defaults.engines[key2].url.replace(imgUrlReplaceString, encodeURIComponent(url)), useChromium, event.shiftKey);
 						}
-						else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(this.imgUrlReplaceString, encodeURIComponent(url)), useChromium, event.shiftKey);
+						else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(imgUrlReplaceString, encodeURIComponent(url)), useChromium, event.shiftKey);
 					}
 				}));
 				if (!items.length) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
