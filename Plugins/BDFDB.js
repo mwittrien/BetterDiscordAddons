@@ -5634,7 +5634,7 @@
 		messageheadercompact: ["MessageItems", "headerCompact"],
 		messageheadercozy: ["MessageItems", "headerCozy"],
 		messageheadercozymeta: ["MessageItems", "headerCozyMeta"],
-		messagelocalbot: ["Message", "localBot"],
+		messagelocalbotmessage: ["Message", "localBot"],
 		messagemarkup: ["MessageMarkup", "markup"],
 		messagemarkupcontainercompact: ["MessageMarkup", "containerCompact"],
 		messagemarkupcontainercozy: ["MessageMarkup", "containerCozy"],
