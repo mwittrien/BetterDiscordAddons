@@ -4,7 +4,7 @@ var ShowImageDetails = (_ => {
 	return class ShowImageDetails {
 		getName () {return "ShowImageDetails";}
 
-		getVersion () {return "1.2.0";}
+		getVersion () {return "1.2.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ var ShowImageDetails = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Message Update","Fixed the plugin for the new Message Update"]],
+				"fixed":[["Message Update","Fixed the plugin for the new Message Update"],["Scroll issue fixed","Loading images would collapse to 0 height and screw up the chat scroller"]],
 				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 			};
 
@@ -148,7 +148,7 @@ var ShowImageDetails = (_ => {
 		}
 
 		processLazyImage (e) {
-			if (e.instance.props.original && e.instance.props.src.indexOf("https://media.discordapp.net/attachments") == 0) {
+			if (e.instance.props.original && e.instance.props.src.indexOf("https://media.discordapp.net/attachments") == 0 && e.instance.state && e.instance.state.readyState == "READY") {
 				if (!e.returnvalue) e.instance.props.className = BDFDB.DOMUtils.formatClassName(e.instance.props.className, BDFDB.disCN._showimagedetailsdetailsadded);
 				else if (typeof e.returnvalue.props.children == "function") {
 					let attachment = BDFDB.ReactUtils.findValue(e.instance, "attachment", {up:true});
