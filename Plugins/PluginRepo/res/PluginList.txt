@@ -185,6 +185,5 @@ https://raw.githubusercontent.com/TheDarkBomber/BD-Server-Themes/master/serverTh
 https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/v1/BetterFolders.plugin.js
 https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/v1/BetterReplyer.plugin.js
 https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/v1/Emulator.plugin.js
-https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/v1/GuildSeparators.plugin.js
 https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/v1/OnlineFriendCount.plugin.js
 https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/v1/VoiceEvents.plugin.js
