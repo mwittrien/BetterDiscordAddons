@@ -4,13 +4,17 @@ var RemoveBlockedMessages = (_ => {
 	return class RemoveBlockedMessages {
 		getName () {return "RemoveBlockedMessages";}
 
-		getVersion () {return "1.0.0";}
+		getVersion () {return "1.0.1";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Removes blocked messages completely.";}
 		
 		constructor () {
+			this.changelog = {
+				"fixed":[["Scroll Jump","Fixed issue where chat scroller would jump to the top if last unread messages was a blocked message"]]
+			};
+			
 			this.patchedModules = {
 				before: {
 					Messages: "render"
@@ -73,6 +77,7 @@ var RemoveBlockedMessages = (_ => {
 				e.instance.props.messages = new BDFDB.DiscordObjects.Messages(messages);
 				for (let key in messages) e.instance.props.messages[key] = messages[key];
 				e.instance.props.messages._array = [].concat(e.instance.props.messages._array.filter(n => n.author && !BDFDB.LibraryModules.FriendUtils.isBlocked(n.author.id)));
+				if (e.instance.props.oldestUnreadMessageId && e.instance.props.messages._array.every(n => n.id != e.instance.props.oldestUnreadMessageId)) e.instance.props.oldestUnreadMessageId = null;
 			}
 		}
 	}
