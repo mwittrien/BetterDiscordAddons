@@ -1,215 +1,201 @@
 //META{"name":"RemoveNicknames","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveNicknames","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/RemoveNicknames/RemoveNicknames.plugin.js"}*//
 
-class RemoveNicknames {
-	getName () {return "RemoveNicknames";}
+var RemoveNicknames = (_ => {
+	return class RemoveNicknames {
+		getName () {return "RemoveNicknames";}
 
-	getVersion () {return "1.2.7";}
+		getVersion () {return "1.2.8";}
 
-	getAuthor () {return "DevilBro";}
+		getAuthor () {return "DevilBro";}
 
-	getDescription () {return "Replace all nicknames with the actual accountnames.";}
+		getDescription () {return "Replace all nicknames with the actual accountnames.";}
 
-	constructor () {
-		this.changelog = {
-			"added":[["Ignore Elements","Added an option list that let's you costumize in which places nicknames are being removed"]]
-		};
+		constructor () {
+			this.changelog = {
+				"fixed":[["Message Update","Fixed the plugin for the new Message Update"]],
+				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+			};
 
-		this.patchedModules = {
-			after: {
-				"MemberListItem":"componentDidMount",
-				"MessageUsername":"componentDidMount",
-				"TypingUsers":"componentDidUpdate",
-				"Clickable":"componentDidMount",
-				"StandardSidebarView":"componentWillUnmount"
+			this.patchedModules = {
+				before: {
+					AutocompleteUserResult: "render",
+					VoiceUser: "render",
+					MemberListItem: "render",
+					Message: "default",
+					MessageContent: "type",
+					TypingUsers: "render",
+					Clickable:"componentDidMount"
+				}
+			};
+		}
+
+		initConstructor () {
+			this.defaults = {
+				settings: {
+					replaceOwn:				{value:false, 	inner:false,	description:"Replace your own name:"},
+					replaceBots:			{value:true, 	inner:false,	description:"Replace the nickname of bots:"},
+					addNickname:			{value:false, 	inner:false,	description:"Add nickname as parentheses:"},
+					swapPositions:			{value:false, 	inner:false,	description:"Swap the position of username and nickname:"},
+					changeInChatWindow:		{value:true, 	inner:true,		description:"Messages"},
+					changeInMentions:		{value:true, 	inner:true,		description:"Mentions"},
+					changeInVoiceChat:		{value:true, 	inner:true,		description:"Voice Channels"},
+					changeInMemberList:		{value:true, 	inner:true,		description:"Member List"},
+					changeInTyping:			{value:true, 	inner:true,		description:"Typing List"},
+					changeInAutoComplete:	{value:true, 	inner:true,		description:"Autocomplete Menu"}
+				}
+			};
+		}
+
+		getSettingsPanel () {
+			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+			let settings = BDFDB.DataUtils.get(this, "settings");
+			let settingspanel, settingsitems = [], inneritems = [];
+			
+			for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+				className: BDFDB.disCN.marginbottom8,
+				type: "Switch",
+				plugin: this,
+				keys: ["settings", key],
+				label: this.defaults.settings[key].description,
+				value: settings[key]
+			}));
+			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+				title: "Remove Nicknames in:",
+				first: settingsitems.length == 0,
+				last: true,
+				children: inneritems
+			}));
+			
+			return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+		}
+
+		//legacy
+		load () {}
+
+		start () {
+			if (!window.BDFDB) window.BDFDB = {myPlugins:{}};
+			if (window.BDFDB && window.BDFDB.myPlugins && typeof window.BDFDB.myPlugins == "object") window.BDFDB.myPlugins[this.getName()] = this;
+			let libraryScript = document.querySelector("head script#BDFDBLibraryScript");
+			if (!libraryScript || (performance.now() - libraryScript.getAttribute("date")) > 600000) {
+				if (libraryScript) libraryScript.remove();
+				libraryScript = document.createElement("script");
+				libraryScript.setAttribute("id", "BDFDBLibraryScript");
+				libraryScript.setAttribute("type", "text/javascript");
+				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
+				libraryScript.setAttribute("date", performance.now());
+				libraryScript.addEventListener("load", _ => {this.initialize();});
+				document.head.appendChild(libraryScript);
 			}
-		};
-	}
+			else if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
+			this.startTimeout = setTimeout(_ => {
+				try {return this.initialize();}
+				catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
+			}, 30000);
+		}
 
-	initConstructor () {
-		this.defaults = {
-			settings: {
-				replaceOwn:				{value:false, 	inner:false,	description:"Replace your own name:"},
-				replaceBots:			{value:true, 	inner:false,	description:"Replace the nickname of bots:"},
-				addNickname:			{value:false, 	inner:false,	description:"Add nickname as parentheses:"},
-				swapPositions:			{value:false, 	inner:false,	description:"Swap the position of username and nickname:"},
-				changeInChatWindow:		{value:true, 	inner:true,		description:"Messages"},
-				changeInMentions:		{value:true, 	inner:true,		description:"Mentions"},
-				changeInVoiceChat:		{value:true, 	inner:true,		description:"Voice Channels"},
-				changeInMemberList:		{value:true, 	inner:true,		description:"Member List"},
-				changeInTyping:			{value:true, 	inner:true,		description:"Typing List"},
-				changeInAutoComplete:	{value:true, 	inner:true,		description:"Autocomplete Menu"}
+		initialize () {
+			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+				if (this.started) return;
+				BDFDB.PluginUtils.init(this);
+
+				this.forceUpdateAll();
 			}
-		};
-	}
-
-	getSettingsPanel () {
-		if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		let settings = BDFDB.DataUtils.get(this, "settings");
-		var settingshtml = `<div class="${this.name}-settings BDFDB-settings"><div class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.titlesize18 + BDFDB.disCNS.height24 + BDFDB.disCNS.weightnormal + BDFDB.disCN.marginbottom8}">${this.name}</div><div class="BDFDB-settings-inner">`;
-		for (let key in settings) {
-			if (!this.defaults.settings[key].inner) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
+			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
-		settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 0 0 auto;">Remove Nicknames in:</h3></div><div class="BDFDB-settings-inner-list">`;
-		for (let key in settings) {
-			if (this.defaults.settings[key].inner) settingshtml += `<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.marginbottom8}" style="flex: 1 1 auto;"><h3 class="${BDFDB.disCNS.titledefault + BDFDB.disCNS.marginreset + BDFDB.disCNS.weightmedium + BDFDB.disCNS.titlesize16 + BDFDB.disCNS.height24 + BDFDB.disCN.flexchild}" style="flex: 1 1 auto;">${this.defaults.settings[key].description}</h3><div class="${BDFDB.disCNS.flexchild + BDFDB.disCNS.switchenabled + BDFDB.disCNS.switch + BDFDB.disCNS.switchvalue + BDFDB.disCNS.switchsizedefault + BDFDB.disCNS.switchsize + BDFDB.disCN.switchthemedefault}" style="flex: 0 0 auto;"><input type="checkbox" value="settings ${key}" class="${BDFDB.disCNS.switchinnerenabled + BDFDB.disCN.switchinner} settings-switch"${settings[key] ? " checked" : ""}></div></div>`;
+
+
+		stop () {
+			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+				this.stopping = true;
+				
+				this.forceUpdateAll();
+				
+				BDFDB.PluginUtils.clear(this);
+			}
 		}
-		settingshtml += `</div>`;
-		settingshtml += `</div></div>`;
 
-		let settingspanel = BDFDB.DOMUtils.create(settingshtml);
 
-		BDFDB.initElements(settingspanel, this);
-;
-		return settingspanel;
-	}
+		// begin of own functions
 
-	//legacy
-	load () {}
-
-	start () {
-		if (!window.BDFDB) window.BDFDB = {myPlugins:{}};
-		if (window.BDFDB && window.BDFDB.myPlugins && typeof window.BDFDB.myPlugins == "object") window.BDFDB.myPlugins[this.getName()] = this;
-		let libraryScript = document.querySelector("head script#BDFDBLibraryScript");
-		if (!libraryScript || (performance.now() - libraryScript.getAttribute("date")) > 600000) {
-			if (libraryScript) libraryScript.remove();
-			libraryScript = document.createElement("script");
-			libraryScript.setAttribute("id", "BDFDBLibraryScript");
-			libraryScript.setAttribute("type", "text/javascript");
-			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
-			libraryScript.setAttribute("date", performance.now());
-			libraryScript.addEventListener("load", _ => {this.initialize();});
-			document.head.appendChild(libraryScript);
+		onSettingsClosed (e) {
+			if (this.SettingsUpdated) {
+				delete this.SettingsUpdated;
+				BDFDB.ModuleUtils.forceAllUpdates(this);
+			}
 		}
-		else if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-		this.startTimeout = setTimeout(_ => {
-			try {return this.initialize();}
-			catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
-		}, 30000);
-	}
 
-	initialize () {
-		if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-			if (this.started) return;
-			BDFDB.PluginUtils.init(this);
-
-			this.reseting = false;
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+		processAutocompleteUserResult (e) {
+			if (e.instance.props.user && e.instance.props.nick && BDFDB.DataUtils.get(this, "settings", "changeInAutoComplete")) {
+				let newName = this.getNewName(e.instance.props.user);
+				if (newName) e.instance.props.nick = newName;
+			}
 		}
-		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
-	}
 
-
-	stop () {
-		if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-			this.stopping = true;
-
-			this.reseting = true;
-
-			BDFDB.ModuleUtils.forceAllUpdates(this);
-
-			BDFDB.PluginUtils.clear(this);
+		processVoiceUser (e) {
+			if (e.instance.props.user && e.instance.props.nick && BDFDB.DataUtils.get(this, "settings", "changeInVoiceChat")) {
+				let newName = this.getNewName(e.instance.props.user);
+				if (newName) e.instance.props.nick = newName;
+			}
 		}
-	}
 
-
-	// begin of own functions
-
-	processMemberListItem (instance, wrapper, returnvalue) {
-		let user = BDFDB.ReactUtils.getValue(instance, "props.user");
-		if (user) {
-			let username = wrapper.querySelector(BDFDB.dotCN.memberusername);
-			if (username) BDFDB.DOMUtils.setText(username, this.getNewName(user, wrapper));
+		processMemberListItem (e) {
+			if (e.instance.props.user && e.instance.props.nick && BDFDB.DataUtils.get(this, "settings", "changeInMemberList")) {
+				let newName = this.getNewName(e.instance.props.user);
+				if (newName) e.instance.props.nick = newName;
+			}
 		}
-	}
 
-	processMessageUsername (instance, wrapper, returnvalue) {
-		let message = BDFDB.ReactUtils.getValue(instance, "props.message");
-		if (message) {
-			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
-			if (username) BDFDB.DOMUtils.setText(username, this.getNewName(message.author, wrapper));
-		}
-	}
-
-	processTypingUsers (instance, wrapper, returnvalue) {
-		let users = !instance.props.typingUsers ? [] : Object.keys(instance.props.typingUsers).filter(id => id != BDFDB.UserUtils.me.id).filter(id => !BDFDB.LibraryModules.FriendUtils.isBlocked(id)).map(id => BDFDB.LibraryModules.UserStore.getUser(id)).filter(id => id != null);
-		wrapper.querySelectorAll("strong").forEach((username, i) => {
-			if (users[i] && username) BDFDB.DOMUtils.setText(username, this.getNewName(users[i]));
-		});
-	}
-
-	processClickable (instance, wrapper, returnvalue) {
-		if (!wrapper || !instance.props || !instance.props.className) return;
-		if (instance.props.tag == "a" && instance.props.className.indexOf(BDFDB.disCN.anchorunderlineonhover) > -1) {
-			if (BDFDB.DOMUtils.containsClass(wrapper.parentElement, BDFDB.disCN.messagesystemcontent) && wrapper.parentElement.querySelector("a") == wrapper) {
-				let message = BDFDB.ReactUtils.findValue(wrapper.parentElement, "message", {up:true});
-				if (message) {
-					BDFDB.DOMUtils.setText(wrapper, this.getNewName(message.author, wrapper));
-					if (message.mentions.length == 1) {
-						let seconduser = BDFDB.LibraryModules.UserStore.getUser(message.mentions[0]);
-						let secondwrapper = wrapper.parentElement.querySelectorAll("a")[1];
-						if (seconduser && secondwrapper) BDFDB.DOMUtils.setText(secondwrapper, this.getNewName(seconduser, wrapper));
+		processTypingUsers (e) {
+			if (BDFDB.ObjectUtils.is(e.instance.props.typingUsers) && Object.keys(e.instance.props.typingUsers).length && BDFDB.DataUtils.get(this, "settings", "changeInTyping")) {
+				let users = Object.keys(e.instance.props.typingUsers).filter(id => id != BDFDB.UserUtils.me.id).filter(id => !BDFDB.LibraryModules.FriendUtils.isBlocked(id)).map(id => BDFDB.LibraryModules.UserStore.getUser(id)).filter(user => user);
+				if (users.length) {
+					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN.typingtext]]});
+					if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) for (let child of children[index].props.children) if (child.type == "strong") {
+						let newName = this.getNewName(users.shift());
+						if (newName) child.props.children = newName;
 					}
 				}
 			}
 		}
-		else if (instance.props.tag == "span" && instance.props.className.indexOf(BDFDB.disCN.mention) > -1) {
-			let render = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.return.stateNode.props.render");
-			if (typeof render == "function") {
-				var props = render().props;
-				if (props && props.user) BDFDB.DOMUtils.setText(wrapper, "@" + this.getNewName(props.user, wrapper));
-				else if (props && props.userId) BDFDB.DOMUtils.setText(wrapper, "@" + this.getNewName(BDFDB.LibraryModules.UserStore.getUser(props.userId), wrapper));
-			}
-		}
-		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.voiceuser) > -1) {
-			let user = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.memoizedProps.user");
-			if (user) {
-				let username = wrapper.querySelector(BDFDB.dotCN.voicename);
-				if (username) BDFDB.DOMUtils.setText(username, this.getNewName(user, username));
-			}
-		}
-		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.autocompleterow) > -1) {
-			let user = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.memoizedProps.user");
-			if (user) {
-				let username = wrapper.querySelector(BDFDB.dotCN.marginleft8);
-				if (username) BDFDB.DOMUtils.setText(username, this.getNewName(user, username));
-			}
-		}
-	}
 
-	processStandardSidebarView (instance, wrapper, returnvalue) {
-		if (this.SettingsUpdated) {
-			delete this.SettingsUpdated;
+		processMessage (e) {
+			let header = e.instance.props.childrenHeader;
+			if (header && header.props && header.props.message && header.props.message.nick) {
+				let newName = this.getNewName(header.props.message.author);
+				if (newName) header.props.message = new BDFDB.DiscordObjects.Message(Object.assign({}, header.props.message, {nick: newName}));
+			}
+		}
+		
+		processMessageContent (e) {
+			if (BDFDB.ArrayUtils.is(e.instance.props.content) && BDFDB.DataUtils.get(this, "settings", "changeInMentions")) for (let ele of e.instance.props.content) {
+				if (BDFDB.ReactUtils.isValidElement(ele) && ele.type && (ele.type.displayName || "").toLowerCase().indexOf("popout") > -1 && typeof ele.props.render == "function") {
+					if (BDFDB.ReactUtils.getValue(ele, "props.children.type.displayName") == "Mention") {
+						let newName = this.getNewName(BDFDB.LibraryModules.UserStore.getUser(ele.props.render().props.userId));
+						if (newName) ele.props.children.props.children[0] = "@" + newName;
+					}
+				}
+			}
+			if (e.instance.props.message.type != BDFDB.DiscordConstants.MessageTypes.DEFAULT && e.instance.props.message.nick && BDFDB.DataUtils.get(this, "settings", "changeInChatWindow")) {
+				let newName = this.getNewName(e.instance.props.message.author);
+				if (newName) {
+					e.instance.props.message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.message, {nick: newName}));
+					e.instance.props.children.props.message = e.instance.props.message;
+				}
+			}
+		}
+
+		getNewName (user, wrapper) {
+			if (!user) return null;
+			let settings = BDFDB.DataUtils.get(this, "settings");
+			let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), user.id) || {};
+			if (!member.nick || user.id == BDFDB.UserUtils.me.id && !!settings.replaceOwn || user.bot && !settings.replaceBots) return null;
+			let username = (BDFDB.BDUtils.isPluginEnabled("EditUsers") && BDFDB.DataUtils.load("EditUsers", "users", user.id) || {}).name || user.username;
+			return settings.addNickname ? (settings.swapPositions ? (member.nick + " (" + username + ")") : (username + " (" + member.nick + ")")) : username;
+		}
+		
+		forceUpdateAll () {
 			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.MessageUtils.rerenderAll();
 		}
 	}
-
-	getNewName (info, wrapper) {
-		if (!info) return null;
-		let settings = BDFDB.DataUtils.get(this, "settings");
-		let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), info.id) || {};
-		let EditUsersData = (BDFDB.BDUtils.isPluginEnabled("EditUsers") ? BDFDB.DataUtils.load("EditUsers", "users") : null, info.id) || {};
-		if (this.reseting || !member.nick || info.id == BDFDB.UserUtils.me.id && !settings.replaceOwn || info.bot && !settings.replaceBots || this.ignoreElement(wrapper)) return EditUsersData.name || member.nick || info.username;
-		var username = EditUsersData.name || info.username;
-		return settings.addNickname ? (settings.swapPositions ? (member.nick + " (" + username + ")") : (username + " (" + member.nick + ")")) : username;
-	}
-
-	ignoreElement (id, wrapper) {
-		let allenabled = true, settings = BDFDB.ObjectUtils.filter(BDFDB.DataUtils.get(this, "settings"), key => {return this.defaults.settings[key].inner;}, true);
-		for (let i in settings) if (!settings[i]) {
-			allenabled = false;
-			break;
-		}
-		if (allenabled) return false;
-
-		let key = null;
-		if (!BDFDB.DOMUtils.containsClass(wrapper, BDFDB.disCN.mention) && BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagegroup, wrapper)) key = "changeInChatWindow";
-		else if (BDFDB.DOMUtils.containsClass(wrapper, BDFDB.disCN.mention)) key = "changeInMentions";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.voiceuser, wrapper)) key = "changeInVoiceChat";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.members, wrapper)) key = "changeInMemberList";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.typing, wrapper)) key = "changeInTyping";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.autocomplete, wrapper)) key = "changeInAutoComplete";
-
-		if (!key || settings[key]) return true;
-		return false;
-	}
-}
+})();

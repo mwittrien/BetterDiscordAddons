@@ -1,94 +1,119 @@
 //META{"name":"CopyRawMessage","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CopyRawMessage","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CopyRawMessage/CopyRawMessage.plugin.js"}*// 
 
-class CopyRawMessage {
-	getName () {return "CopyRawMessage";}
+var CopyRawMessage = (_ => {
+	const copyRawIcon = `<svg width="512" height="512" viewBox="0 0 64 64"><path fill="currentColor" d="m54 8h-44c-1.104 0-2 .896-2 2s.896 2 2 2h44c1.104 0 2-.896 2-2s-.896-2-2-2z"/><path fill="currentColor" d="m54 52h-44c-1.104 0-2 .896-2 2s.896 2 2 2h44c1.104 0 2-.896 2-2s-.896-2-2-2z"/><path fill="currentColor" d="m54 19h-28c-1.104 0-2 .896-2 2s.896 2 2 2h28c1.104 0 2-.896 2-2s-.896-2-2-2z"/><path fill="currentColor" d="m54 30h-44c-1.104 0-2 .896-2 2s.896 2 2 2h44c1.104 0 2-.896 2-2s-.896-2-2-2z"/><path fill="currentColor" d="m54 41h-28c-1.104 0-2 .896-2 2s.896 2 2 2h28c1.104 0 2-.896 2-2s-.896-2-2-2z"/></svg>`;
+	
+	return class CopyRawMessage {
+		getName () {return "CopyRawMessage";}
 
-	getVersion () {return "1.0.3";}
+		getVersion () {return "1.0.4";}
 
-	getAuthor () {return "DevilBro";}
+		getAuthor () {return "DevilBro";}
 
-	getDescription () {return "Adds a entry in the contextmenu when you right click a message that allows you to copy the raw contents of a message.";}
+		getDescription () {return "Adds a entry in the contextmenu when you right click a message that allows you to copy the raw contents of a message.";}
 
-	constructor () {
-		this.changelog = {
-			"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
-		};
-	}
-
-	//legacy
-	load () {}
-
-	start () {
-		if (!window.BDFDB) window.BDFDB = {myPlugins:{}};
-		if (window.BDFDB && window.BDFDB.myPlugins && typeof window.BDFDB.myPlugins == "object") window.BDFDB.myPlugins[this.getName()] = this;
-		let libraryScript = document.querySelector("head script#BDFDBLibraryScript");
-		if (!libraryScript || (performance.now() - libraryScript.getAttribute("date")) > 600000) {
-			if (libraryScript) libraryScript.remove();
-			libraryScript = document.createElement("script");
-			libraryScript.setAttribute("id", "BDFDBLibraryScript");
-			libraryScript.setAttribute("type", "text/javascript");
-			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
-			libraryScript.setAttribute("date", performance.now());
-			libraryScript.addEventListener("load", _ => {this.initialize();});
-			document.head.appendChild(libraryScript);
+		constructor () {
+			this.changelog = {
+				"fixed":[["Message Update","Fixed the plugin for the new Message Update"]],
+				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+			};
 		}
-		else if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-		this.startTimeout = setTimeout(_ => {
-			try {return this.initialize();}
-			catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
-		}, 30000);
-	}
 
-	initialize () {
-		if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-			if (this.started) return;
-			BDFDB.PluginUtils.init(this);
+		//legacy
+		load () {}
+
+		start () {
+			if (!window.BDFDB) window.BDFDB = {myPlugins:{}};
+			if (window.BDFDB && window.BDFDB.myPlugins && typeof window.BDFDB.myPlugins == "object") window.BDFDB.myPlugins[this.getName()] = this;
+			let libraryScript = document.querySelector("head script#BDFDBLibraryScript");
+			if (!libraryScript || (performance.now() - libraryScript.getAttribute("date")) > 600000) {
+				if (libraryScript) libraryScript.remove();
+				libraryScript = document.createElement("script");
+				libraryScript.setAttribute("id", "BDFDBLibraryScript");
+				libraryScript.setAttribute("type", "text/javascript");
+				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
+				libraryScript.setAttribute("date", performance.now());
+				libraryScript.addEventListener("load", _ => {this.initialize();});
+				document.head.appendChild(libraryScript);
+			}
+			else if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
+			this.startTimeout = setTimeout(_ => {
+				try {return this.initialize();}
+				catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
+			}, 30000);
 		}
-		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
-	}
 
-	stop () {
-		if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-			this.stopping = true;
-
-			BDFDB.PluginUtils.clear(this);
+		initialize () {
+			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+				if (this.started) return;
+				BDFDB.PluginUtils.init(this);
+			}
+			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
-	}
+
+		stop () {
+			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+				this.stopping = true;
+
+				BDFDB.PluginUtils.clear(this);
+			}
+		}
 
 
-	// begin of own functions
+		// begin of own functions
 
-	onMessageContextMenu (e) {
-		if (e.instance.props.message && e.instance.props.message.content) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-			const itemgroup = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-				children: [
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-						label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
-						hint: BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("Copy_Raw") : null,
-						action: _ => {
-							BDFDB.ContextMenuUtils.close(e.instance);
-							BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});
-						}
+		onMessageContextMenu (e) {
+			if (e.instance.props.message && e.instance.props.message.content) {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
+				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+					children: [
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+							label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
+							hint: BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("Copy_Raw") : null,
+							action: _ => {
+								BDFDB.ContextMenuUtils.close(e.instance);
+								BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});
+							}
+						})
+					]
+				}));
+			}
+		}
+
+		onMessageOptionToolbar (e) {
+			if (!e.instance.props.hasMorePopout && e.instance.props.message && e.instance.props.channel) {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {key: ["mark-unread"]});
+				children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+					text: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+						className: BDFDB.disCNS.messagetoolbarbutton,
+						onClick: _ => {BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});},
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+							className: BDFDB.disCNS.messagetoolbaricon,
+							nativeClass: true,
+							iconSVG: copyRawIcon
+						})
 					})
-				]
-			});
-			if (index > -1) children.splice(index, 0, itemgroup);
-			else children.push(itemgroup);
+				}));
+			}
 		}
-	}
 
-	onMessageOptionPopout (e) {
-		if (e.instance.props.message) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["label", BDFDB.LanguageUtils.LanguageStrings.DELETE]]});
-			children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-				label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
-				className: BDFDB.disCN.optionpopoutitem,
-				action: _ => {
-					BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});
-					e.instance.props.onClose();
-				}
-			}));
+		onMessageOptionContextMenu (e) {
+			if (e.instance.props.message && e.instance.props.channel) {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {key: ["mark-unread"]});
+				children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+					label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
+					hint: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+						className: BDFDB.disCNS.messagetoolbaricon,
+						nativeClass: true,
+						iconSVG: copyRawIcon
+					}),
+					action: _ => {
+						e.instance.props.onClose();
+						BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});
+					}
+				}));
+			}
 		}
 	}
-}
+})();
