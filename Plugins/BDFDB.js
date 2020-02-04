@@ -4857,7 +4857,6 @@
 		_serverfoldersiconswatchpreview: ["ServerFolders", "iconSwatchPreview"],
 		_serverfoldersiconswatchselected: ["ServerFolders", "iconSwatchSelected"],
 		_showimagedetailsdetails: ["ShowImageDetails", "details"],
-		_showimagedetailsdetailsadded: ["ShowImageDetails", "detailsAdded"],
 		_spellcheckerror: ["SpellCheck", "error"],
 		_spellcheckoverlay: ["SpellCheck", "overlay"],
 		_toproleseverywherebadgestyle: ["TopRolesEverywhere", "badgeStyle"],
