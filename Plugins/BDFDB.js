@@ -1110,7 +1110,7 @@
 	BDFDB.ModuleUtils.isPatched = function (plugin, module, modulefunction) {
 		if (!plugin || !BDFDB.ObjectUtils.is(module) || !module.BDFDBpatch || !modulefunction) return false;
 		const pluginId = (typeof plugin === "string" ? plugin : plugin.name).toLowerCase();
-		return pluginId && module[modulefunction] && module[modulefunction].isBDFDBpatched && module.BDFDBpatch[modulefunction] && Object.keys(module.BDFDBpatch[modulefunction]).some(patchfunc => Object.keys(module.BDFDBpatch[modulefunction][patchfunc]).includes(pluginId));
+		return pluginId && module[modulefunction] && module[modulefunction].__isBDFDBpatched && module.BDFDBpatch[modulefunction] && Object.keys(module.BDFDBpatch[modulefunction]).some(patchfunc => Object.keys(module.BDFDBpatch[modulefunction][patchfunc]).includes(pluginId));
 	};
 	BDFDB.ModuleUtils.patch = function (plugin, module, modulefunctions, patchfunctions, forceRepatch = false) {
 		if (!plugin || !BDFDB.ObjectUtils.is(module) || !modulefunctions || !BDFDB.ObjectUtils.is(patchfunctions)) return null;
@@ -1121,7 +1121,7 @@
 		if (!module.BDFDBpatch) module.BDFDBpatch = {};
 		modulefunctions = [modulefunctions].flat(10).filter(n => n);
 		for (let modulefunction of modulefunctions) if (module[modulefunction] == null || typeof module[modulefunction] == "function") {
-			if (!module.BDFDBpatch[modulefunction] || forceRepatch && (!module[modulefunction] || !module[modulefunction].isBDFDBpatched)) {
+			if (!module.BDFDBpatch[modulefunction] || forceRepatch && (!module[modulefunction] || !module[modulefunction].__isBDFDBpatched)) {
 				if (!module.BDFDBpatch[modulefunction]) {
 					module.BDFDBpatch[modulefunction] = {};
 					for (let type of WebModulesData.Patchtypes) module.BDFDBpatch[modulefunction][type] = {};
@@ -1161,7 +1161,7 @@
 				};
 				for (let key of Object.keys(originalfunction)) module[modulefunction][key] = originalfunction[key];
 				module[modulefunction].__originalMethod = originalfunction;
-				module[modulefunction].isBDFDBpatched = true;
+				module[modulefunction].__isBDFDBpatched = true;
 			}
 			for (let type in patchfunctions) if (typeof patchfunctions[type] == "function") {
 				module.BDFDBpatch[modulefunction][type][pluginId] = patchfunctions[type];
@@ -7488,9 +7488,7 @@
 		}
 	};
 	
-	LibraryComponents.MessageComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Message", "MessageTimestamp"));
-	
-	LibraryComponents.MessageGroup = BDFDB.ModuleUtils.findByName("FluxContainer(ConnectedMessageGroup)");
+	LibraryComponents.MessageGroup = BDFDB.ModuleUtils.findByName("ChannelMessage");
 	
 	LibraryComponents.MessagesPopoutComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Header", "EmptyStateBottom"));
 	
@@ -9560,6 +9558,7 @@
 			V2C_ContentColumn: "render",
 			V2C_PluginCard: "render",
 			V2C_ThemeCard: "render",
+			Message: "default",
 			MessageHeader: "default",
 			MemberListItem: "componentDidMount",
 			UserPopout: "componentDidMount",
@@ -9730,6 +9729,13 @@
 		}));
 		
 		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(BDFDB, settingsitems);
+	};
+	
+	let MessageHeaderRender = (BDFDB.ModuleUtils.findByName("MessageHeader", false) || {exports: {}}).exports.default;
+	if (MessageHeaderRender) InternalBDFDB.processMessage = function (e) {
+		if (BDFDB.ReactUtils.getValue(e, "instance.props.childrenHeader.type.type.displayName") == "MessageHeader" && !e.instance.props.childrenHeader.type.type.__isBDFDBpatched) {
+			e.instance.props.childrenHeader.type.type = MessageHeaderRender;
+		}
 	};
 
 	const BDFDB_Patrons = [
