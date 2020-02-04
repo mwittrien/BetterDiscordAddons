@@ -4,7 +4,7 @@ var ShowImageDetails = (_ => {
 	return class ShowImageDetails {
 		getName () {return "ShowImageDetails";}
 
-		getVersion () {return "1.2.1";}
+		getVersion () {return "1.2.0";}
 
 		getAuthor () {return "DevilBro";}
 
