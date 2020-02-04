@@ -1193,6 +1193,10 @@ body:before {
 
 /* ----		6.3.	TEXTAREA						---- */
 
+.form-2fGMdU:before {										/* textarea				form								*/
+	display: none;
+}
+
 .channelTextArea-rNsIhG {									/* textarea				channeltextarea						*/
 	background-color: transparent;
 	border-top-color: rgba(var(--fontwhite1), 0.1);
