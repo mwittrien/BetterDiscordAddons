@@ -44,7 +44,7 @@ var ShowImageDetails = (_ => {
 	return class ShowImageDetails {
 		getName () {return "ShowImageDetails";}
 
-		getVersion () {return "1.2.2";}
+		getVersion () {return "1.2.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -57,9 +57,6 @@ var ShowImageDetails = (_ => {
 			};
 
 			this.patchedModules = {
-				before: {
-					LazyImage: "render"
-				},
 				after: {
 					LazyImage: "render"
 				}
@@ -200,26 +197,23 @@ var ShowImageDetails = (_ => {
 		}
 		
 		processLazyImage (e) {
-			if (e.instance.props.original && e.instance.props.src.indexOf("https://media.discordapp.net/attachments") == 0) {
-				if (!e.returnvalue) e.instance.props.className = BDFDB.DOMUtils.formatClassName(e.instance.props.className, BDFDB.disCN._showimagedetailsdetailsadded);
-				else if (typeof e.returnvalue.props.children == "function") {
-					let attachment = BDFDB.ReactUtils.findValue(e.instance, "attachment", {up:true});
-					if (!attachment) return;
-					let settings = BDFDB.DataUtils.get(this, "settings");
-					if (settings.showOnHover) {
-						let amounts = BDFDB.DataUtils.get(this, "amounts");
-						let renderChildren = e.returnvalue.props.children;
-						e.returnvalue.props.children = (...args) => {
-							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-								text: `${attachment.filename}\n${BDFDB.NumberUtils.formatBytes(attachment.size)}\n${attachment.width}x${attachment.height}px`,
-								tooltipConfig: {
-									type: "right",
-									delay: amounts.hoverDelay
-								},
-								children: renderChildren(...args)
-							});
-						};
-					}
+			if (e.instance.props.original && e.instance.props.src.indexOf("https://media.discordapp.net/attachments") == 0 && typeof e.returnvalue.props.children == "function") {
+				let attachment = BDFDB.ReactUtils.findValue(e.instance, "attachment", {up:true});
+				if (!attachment) return;
+				let settings = BDFDB.DataUtils.get(this, "settings");
+				if (settings.showOnHover) {
+					let amounts = BDFDB.DataUtils.get(this, "amounts");
+					let renderChildren = e.returnvalue.props.children;
+					e.returnvalue.props.children = (...args) => {
+						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+							text: `${attachment.filename}\n${BDFDB.NumberUtils.formatBytes(attachment.size)}\n${attachment.width}x${attachment.height}px`,
+							tooltipConfig: {
+								type: "right",
+								delay: amounts.hoverDelay
+							},
+							children: renderChildren(...args)
+						});
+					};
 				}
 			}
 		}
