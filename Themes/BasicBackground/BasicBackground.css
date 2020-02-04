@@ -797,7 +797,7 @@ body:before {
 }
 .message-2qnXI6.selected-2P5D_Z, 
 .mouse-mode .message-2qnXI6:hover {
-    background-color: rgba(var(--vtransparencycolor), calc(var(--vmessagetransparency) * 1.2 * var(--vusechatbubbles) + 0.3 * (1 - var(--vusechatbubbles))));
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vmessagetransparency) * 1.2 * var(--vusechatbubbles) + 0.3 * (1 - var(--vusechatbubbles))));
 }
 .message-2qnXI6.mentioned-xhSam7 {
 	background-image: linear-gradient(rgba(var(--vaccentcolor), calc(0.2 * (1 - var(--vusechatbubbles)))), rgba(var(--vaccentcolor), calc(0.2 * (1 - var(--vusechatbubbles)))));
@@ -844,20 +844,20 @@ body:before {
 }
 .message-2qnXI6.cozyMessage-3V1Y8y,
 .preview-2nSL_2 .container-3FojY8 {
-    padding-left: calc(1px * (10 * var(--vusechatbubbles) + 72 * (1 - var(--vusechatbubbles))));
-    margin-left: calc(80px * var(--vusechatbubbles));
+	padding-left: calc(1px * (10 * var(--vusechatbubbles) + 72 * (1 - var(--vusechatbubbles))));
+	margin-left: calc(80px * var(--vusechatbubbles));
 }
 .avatar-1BDn8e {
-    left: calc(-10px * var(--vusechatbubbles));
+	left: calc(-10px * var(--vusechatbubbles));
 }
 .timestampCozyAlt-1Hs08c {
-    margin-left: calc(-80px * var(--vusechatbubbles));
+	margin-left: calc(-80px * var(--vusechatbubbles));
 }
 .messageGroupWrapper-o-Zw7G .messageGroupCozy-2iY6cT,
 .searchResult-3pzFAB .messageGroupCozy-1BZuO8 {
 	border-radius: 5px;
-    padding-left: calc(1px * (10 * var(--vusechatbubbles) + 72 * (1 - var(--vusechatbubbles))));
-    margin-left: calc(60px * var(--vusechatbubbles));
+	padding-left: calc(1px * (10 * var(--vusechatbubbles) + 72 * (1 - var(--vusechatbubbles))));
+	margin-left: calc(60px * var(--vusechatbubbles));
 }
 
 .expanded-13sWhZ {											/* message				expanded blocked					*/
@@ -4369,7 +4369,7 @@ body:before {
 /* ~~~~		16.		GENERAL							~~~~ */
 
 ::-webkit-input-placeholder, body, button, input, select, textarea {
-    font-family: var(--vfont);
+	font-family: var(--vfont);
 }
 
 ::selection {												/* selection												*/
@@ -6264,7 +6264,7 @@ html.theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://better
 	background: var(--vbackground) center/var(--vbackgroundsize) !important;
 	background-attachment: fixed !important;
 	border-radius: 5px !important;
-    position: absolute !important;
+	position: absolute !important;
 	top: 0 !important;
 	right: 0 !important;
 	bottom: 0 !important;
@@ -6275,7 +6275,7 @@ html.theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://better
 /* ~~~~		20.		UPDATENOTICE					~~~~ */
 
 html:only-child > head + body > div#app-mount.appMount-3lHmkl > div.app-19_DXt > div.app-2rEoOp:before {
-	content: "Your version of   BasicBackground   by DevilBro is outdated. Please download the newest version from:    https://github.com/mwittrien/BetterDiscordAddons/blob/master/Themes/BasicBackground" !important;
+	content: "Your version of   BasicBackground   by DevilBro is outdated. Please download the newest version from:	https://github.com/mwittrien/BetterDiscordAddons/blob/master/Themes/BasicBackground" !important;
 	display: var(--version1_0_5, block) !important;
 	background-color: #4a90e2 !important;
 	box-shadow: 0 1px 5px 0 rgba(var(--vtransparencycolor), 0.3) !important;
