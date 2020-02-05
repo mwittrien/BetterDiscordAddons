@@ -41,7 +41,7 @@ var ShowImageDetails = (_ => {
 	return class ShowImageDetails {
 		getName () {return "ShowImageDetails";}
 
-		getVersion () {return "1.2.4";}
+		getVersion () {return "1.2.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -64,6 +64,10 @@ var ShowImageDetails = (_ => {
 			this.css = `
 				${BDFDB.dotCN._showimagedetailsdetails} {
 					margin: 5px 0;
+				}
+				${BDFDB.dotCNS.spoilerhidden + BDFDB.dotCN._showimagedetailsdetails} {
+					visibility: hidden;
+					max-width: 1px;
 				}
 			`;
 			
