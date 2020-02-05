@@ -166,7 +166,7 @@ var ShowImageDetails = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
 
-				//BDFDB.MessageUtils.rerenderAll();
+				BDFDB.MessageUtils.rerenderAll();
 
 				BDFDB.PluginUtils.clear(this);
 			}
