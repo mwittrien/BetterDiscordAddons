@@ -7,7 +7,8 @@ var ShowImageDetails = (_ => {
 			BDFDB.ReactUtils.forceUpdate(this);
 		}
 		componentDidUpdate() {
-			if (!this.props.attachment || !this.props.attachment.size) {
+			if ((!this.props.attachment || !this.props.attachment.size) && !this.props.loaded)) {
+				this.props.loaded = true;
 				this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ReactUtils.getValue(this, "_reactInternalFiber.return"), "attachment", {up: true});
 				BDFDB.ReactUtils.forceUpdate(this);
 			}
@@ -47,7 +48,7 @@ var ShowImageDetails = (_ => {
 	return class ShowImageDetails {
 		getName () {return "ShowImageDetails";}
 
-		getVersion () {return "1.2.5";}
+		getVersion () {return "1.2.6";}
 
 		getAuthor () {return "DevilBro";}
 
