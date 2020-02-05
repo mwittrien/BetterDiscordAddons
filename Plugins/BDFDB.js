@@ -4784,6 +4784,7 @@
 	DiscordClassModules.SettingsWindow = BDFDB.ModuleUtils.findByProperties("contentRegion", "standardSidebarView");
 	DiscordClassModules.Slider = BDFDB.ModuleUtils.findByProperties("slider", "grabber");
 	DiscordClassModules.Spoiler = BDFDB.ModuleUtils.findByProperties("spoilerContainer", "hidden");
+	DiscordClassModules.SpoilerEmbed = BDFDB.ModuleUtils.findByProperties("hiddenSpoilers", "spoiler");
 	DiscordClassModules.Switch = BDFDB.ModuleUtils.findByProperties("switchDisabled", "valueChecked");
 	DiscordClassModules.Table = BDFDB.ModuleUtils.findByProperties("stickyHeader", "sortIcon");
 	DiscordClassModules.Text = BDFDB.ModuleUtils.findByProperties("defaultColor", "defaultMarginh1");
@@ -5980,6 +5981,9 @@
 		slidermini: ["Slider", "mini"],
 		slidertrack: ["Slider", "track"],
 		spoilercontainer: ["Spoiler", "spoilerContainer"],
+		spoilerembed: ["SpoilerEmbed", "spoiler"],
+		spoilerembedhidden: ["SpoilerEmbed", "hiddenSpoilers"],
+		spoilerembedinline: ["SpoilerEmbed", "inline"],
 		spoilerhidden: ["Spoiler", "hidden"],
 		spoilertext: ["Spoiler", "spoilerText"],
 		spoilerwarning: ["Spoiler", "spoilerWarning"],

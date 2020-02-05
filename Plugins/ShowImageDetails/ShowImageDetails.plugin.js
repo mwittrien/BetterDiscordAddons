@@ -6,6 +6,12 @@ var ShowImageDetails = (_ => {
 			this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ReactUtils.getValue(this, "_reactInternalFiber.return"), "attachment", {up: true});
 			BDFDB.ReactUtils.forceUpdate(this);
 		}
+		componentDidUpdate() {
+			if (!this.props.attachment || !this.props.attachment.size) {
+				this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ReactUtils.getValue(this, "_reactInternalFiber.return"), "attachment", {up: true});
+				BDFDB.ReactUtils.forceUpdate(this);
+			}
+		}
 		render() {
 			return !this.props.attachment ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 				className: BDFDB.disCN._showimagedetailsdetails,
@@ -160,7 +166,7 @@ var ShowImageDetails = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
 
-				BDFDB.MessageUtils.rerenderAll();
+				//BDFDB.MessageUtils.rerenderAll();
 
 				BDFDB.PluginUtils.clear(this);
 			}
