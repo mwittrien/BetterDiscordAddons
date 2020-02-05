@@ -1952,6 +1952,7 @@
 			if (i > 1000) result = null;
 			else {
 				if (typeof a !== typeof b) result = false;
+				else if (typeof a === "function") result = JSON.stringify(a) == JSON.stringify(b);
 				else if (typeof a === "undefined") result = true;
 				else if (typeof a === "symbol") result = true;
 				else if (typeof a === "boolean") result = a == b;
@@ -1962,7 +1963,7 @@
 				}
 				else if (!a && !b) result = true;
 				else if (!a || !b) result = false;
-				else if (typeof a === "function" || typeof a === "object") {
+				else if (typeof a === "object") {
 					var keysA = Object.getOwnPropertyNames(a);
 					var keysB = Object.getOwnPropertyNames(b);
 					if (keysA.length !== keysB.length) result = false;
