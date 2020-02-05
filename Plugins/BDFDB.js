@@ -1952,7 +1952,7 @@
 			if (i > 1000) result = null;
 			else {
 				if (typeof a !== typeof b) result = false;
-				else if (typeof a === "function") result = JSON.stringify(a) == JSON.stringify(b);
+				else if (typeof a === "function") result = a.toString() == b.toString();
 				else if (typeof a === "undefined") result = true;
 				else if (typeof a === "symbol") result = true;
 				else if (typeof a === "boolean") result = a == b;
