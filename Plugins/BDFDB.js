@@ -1094,6 +1094,7 @@
 		TypingUsers: "typing",
 		UnreadDMs: "guildsscroller",
 		Upload: "uploadmodal",
+		UserHook: "auditloguserhook",
 		UserPopout: "userpopout",
 		UserProfile: "userprofile",
 		V2C_ContentColumn: "contentcolumn",
