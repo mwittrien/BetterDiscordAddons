@@ -5864,6 +5864,7 @@
 		searchpopoutdatepicker: ["SearchPopout", "datePicker"],
 		searchpopoutdatepickerhint: ["SearchPopout", "datePickerHint"],
 		searchpopoutdmaddpopout: ["DmAddPopout", "popout"],
+		searchpopoutddmadddiscordtag: ["DmAddPopoutItems", "discordTag"],
 		searchpopoutddmaddfriend: ["DmAddPopoutItems", "friend"],
 		searchpopoutddmaddfriendwrapper: ["DmAddPopoutItems", "friendWrapper"],
 		searchpopoutdisplayavatar: ["SearchPopout", "displayAvatar"],
