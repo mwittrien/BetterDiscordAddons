@@ -5867,6 +5867,7 @@
 		searchpopoutddmadddiscordtag: ["DmAddPopoutItems", "discordTag"],
 		searchpopoutddmaddfriend: ["DmAddPopoutItems", "friend"],
 		searchpopoutddmaddfriendwrapper: ["DmAddPopoutItems", "friendWrapper"],
+		searchpopoutddmaddnickname: ["DmAddPopoutItems", "nickname"],
 		searchpopoutdisplayavatar: ["SearchPopout", "displayAvatar"],
 		searchpopoutdisplayusername: ["SearchPopout", "displayUsername"],
 		searchpopoutdisplayednick: ["SearchPopout", "displayedNick"],
