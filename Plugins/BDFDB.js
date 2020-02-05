@@ -1036,6 +1036,7 @@
 	];
 	WebModulesData.DefaultRender = [
 		"DiscordTag",
+		"InviteModalUserRow",
 		"NameTag",
 		"Message",
 		"MessageHeader",
