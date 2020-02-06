@@ -4,7 +4,7 @@ var BetterSearchPage = (_ => {
 	return class BetterSearchPage {
 		getName () {return "BetterSearchPage";}
 
-		getVersion () {return "1.1.1";}
+		getVersion () {return "1.1.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -24,43 +24,6 @@ var BetterSearchPage = (_ => {
 		}
 
 		initConstructor () {
-			this.css = `
-				.BSP-pagination-button {
-					background: url('data:image/svg+xml; base64, PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZ2h0PSIyNSI+PGcgZmlsbD0iIzczN2Y4ZCIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZD0iTTE3LjMzOCAxMi40ODVjLTQuMTU2IDQuMTU2LTguMzEyIDguMzEyLTEyLjQ2OCAxMi40NjctMS40MDItMS40MDItMi44MDUtMi44MDQtNC4yMDctNC4yMDYgMi43NTYtMi43NTcgNS41MTMtNS41MTQgOC4yNy04LjI3QzYuMTc2IDkuNzIgMy40MTkgNi45NjMuNjYzIDQuMjA3TDQuODcgMGMtLjA1OC0uMDU5IDEyLjU1NSAxMi41NjIgMTIuNDY4IDEyLjQ4NXoiLz48cGF0aCB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGQ9Ik0xNy4zMzggMTIuNDg1Yy00LjE1NiA0LjE1Ni04LjMxMiA4LjMxMi0xMi40NjggMTIuNDY3LTEuNDAyLTEuNDAyLTIuODA1LTIuODA0LTQuMjA3LTQuMjA2IDIuNzU2LTIuNzU3IDUuNTEzLTUuNTE0IDguMjctOC4yN0M2LjE3NiA5LjcyIDMuNDE5IDYuOTYzLjY2MyA0LjIwN0w0Ljg3IDBjLS4wNTgtLjA1OSAxMi41NTUgMTIuNTYyIDEyLjQ2OCAxMi40ODV6IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMiAwKSIvPjwvZz48L3N2Zz4=') 50%/9px 12px no-repeat;
-					border: 1px solid rgba(79,84,92,.16);
-					border-radius: 2px;
-					cursor: pointer;
-					height: 18px;
-					left: 20px;
-					opacity: .7;
-					top: 20px;
-					width: 18px;
-				}
-				${BDFDB.dotCN.themedark} .BSP-pagination-button {
-					background-image: url('data:image/svg+xml; base64, PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZ2h0PSIyNSI+PGcgZmlsbD0iI0ZGRiIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZD0iTTE3LjMzOCAxMi40ODVjLTQuMTU2IDQuMTU2LTguMzEyIDguMzEyLTEyLjQ2OCAxMi40NjctMS40MDItMS40MDItMi44MDUtMi44MDQtNC4yMDctNC4yMDYgMi43NTYtMi43NTcgNS41MTMtNS41MTQgOC4yNy04LjI3QzYuMTc2IDkuNzIgMy40MTkgNi45NjMuNjYzIDQuMjA3TDQuODcgMGMtLjA1OC0uMDU5IDEyLjU1NSAxMi41NjIgMTIuNDY4IDEyLjQ4NXoiIC8+PHBhdGggeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBkPSJNMTcuMzM4IDEyLjQ4NWMtNC4xNTYgNC4xNTYtOC4zMTIgOC4zMTItMTIuNDY4IDEyLjQ2Ny0xLjQwMi0xLjQwMi0yLjgwNS0yLjgwNC00LjIwNy00LjIwNiAyLjc1Ni0yLjc1NyA1LjUxMy01LjUxNCA4LjI3LTguMjdDNi4xNzYgOS43MiAzLjQxOSA2Ljk2My42NjMgNC4yMDdMNC44NyAwYy0uMDU4LS4wNTkgMTIuNTU1IDEyLjU2MiAxMi40NjggMTIuNDg1eiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTIgMCkiLz48L2c+PC9zdmc+');
-					border: 1px solid hsla(0,0%,100%,.16);
-				}
-				.BSP-pagination-button.BSP-pagination-first {
-					margin-right: 10px;
-					transform: rotate(180deg);
-				}
-				.BSP-pagination-button.BSP-pagination-last {
-					margin-left: 10px;
-					margin-right: 10px;
-				}
-				.BSP-pagination-button.BSP-pagination-jump {
-					margin-left: 10px;
-					transform: rotate(90deg);
-				}
-				.BSP-pagination-button${BDFDB.dotCN.searchresultspaginationdisabled} {
-					cursor: default;
-					opacity: .3;
-				}
-				.BSP-pagination-button${BDFDB.notCN.searchresultspaginationdisabled}:hover {
-					opacity: 1;
-				}
-			`;
-
 			this.defaults = {
 				settings: {
 					addFirstLast:	{value:true, 	description:"Adds a first and last page button."},
@@ -152,6 +115,8 @@ var BetterSearchPage = (_ => {
 						else if (page > currentpage) BDFDB.LibraryModules.SearchPageUtils.searchNextPage(e.instance.props.searchId, (page - currentpage) * BDFDB.DiscordConstants.SEARCH_PAGE_SIZE);
 					};
 					let pagination = children[index].type(children[index].props);
+					if (!pagination) return;
+					
 					if (currentpage >= maxpage) {
 						pagination.props.children[2].props.className = BDFDB.DOMUtils.formatClassName(pagination.props.children[2].props.className, BDFDB.disCN.searchresultspaginationdisabled);
 						pagination.props.children[2].props.onClick = _ => {};
