@@ -91,6 +91,7 @@ https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/UserBi
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/VCMuteSounds.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/ViewGuildRelationships.plugin.js
 https://raw.githubusercontent.com/Metalloriff/BetterDiscordPlugins/master/VoiceChatNotifications.plugin.js
+https://raw.githubusercontent.com/MKSx/Send-Audio-Plugin-BetterDiscord/master/SendAudio.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BadgesEverywhere/BadgesEverywhere.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BetterFriendCount/BetterFriendCount.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BetterNsfwTag/BetterNsfwTag.plugin.js

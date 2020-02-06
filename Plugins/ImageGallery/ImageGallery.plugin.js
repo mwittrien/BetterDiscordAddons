@@ -6,7 +6,7 @@ var ImageGallery = (_ => {
 	return class ImageGallery {
 		getName () {return "ImageGallery";}
 
-		getVersion () {return "1.6.3";}
+		getVersion () {return "1.6.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,7 @@ var ImageGallery = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Message Update","Fixed the plugin for the new Message Update"]],
+				"fixed":[["First Message","No longer includes iamges of a different user when the opened image is in the first message"],["Message Update","Fixed the plugin for the new Message Update"]],
 				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 			};
 
@@ -134,7 +134,7 @@ var ImageGallery = (_ => {
 			if (src) for (let message of document.querySelectorAll(BDFDB.dotCN.message)) for (let img of message.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img")) if (img.src && this.getSrcOfImage(img) == this.getSrcOfImage(src)) {
 				let previousSiblings = [], nextSiblings = [];
 				let previousSibling = message.previousSibling, nextSibling = message.nextSibling;
-				while (previousSibling) {
+				if (!BDFDB.DOMUtils.containsClass(message, BDFDB.disCN.messagegroupstart)) while (previousSibling) {
 					previousSiblings.push(previousSibling);
 					if (BDFDB.DOMUtils.containsClass(previousSibling, BDFDB.disCN.messagegroupstart)) previousSibling = null;
 					else previousSibling = previousSibling.previousSibling;
