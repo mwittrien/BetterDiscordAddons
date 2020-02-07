@@ -82,11 +82,11 @@ var EditUsers = (_ => {
 					position: relative;
 					bottom: 3px;
 				}
-				${BDFDB.dotCNS.userinfo + BDFDB.dotCN.bottag} {
-					visibility: hidden;
+				${BDFDB.dotCNS.userinfo + BDFDB.dotCN.userinfodiscriminator} {
+					display: none;
 				}
-				${BDFDB.dotCNS.userinfohovered + BDFDB.dotCN.bottag} {
-					visibility: visible;
+				${BDFDB.dotCNS.userinfohovered + BDFDB.dotCN.userinfodiscriminator} {
+					display: block;
 				}
 			`;
 			
