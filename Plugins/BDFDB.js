@@ -1038,7 +1038,8 @@
 		"MessageHeader",
 		"MessageTimestamp",
 		"SystemMessage",
-		"SimpleMessageAccessories"
+		"SimpleMessageAccessories",
+		"UserInfo"
 	];
 	WebModulesData.MemoComponent = [
 		"MessageContent"

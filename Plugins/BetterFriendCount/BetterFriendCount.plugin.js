@@ -3,7 +3,7 @@
 class BetterFriendCount {
 	getName () {return "BetterFriendCount";}
 
-	getVersion () {return "1.2.2";}
+	getVersion () {return "1.2.3";}
 
 	getAuthor () {return "DevilBro";}
 
@@ -17,7 +17,7 @@ class BetterFriendCount {
 		this.patchedModules = {
 			after: {
 				TabBar: "render",
-				FriendRow: ["componentWillMount","componentWillUnmount"]
+				PeopleListItem: ["componentWillMount","componentWillUnmount"]
 			}
 		};
 	}
@@ -101,7 +101,7 @@ class BetterFriendCount {
 		}
 	}
 
-	processFriendRow () {
+	processPeopleListItem () {
 		BDFDB.TimeUtils.clear(this.rerenderTimeout);
 		this.rerenderTimeout = BDFDB.TimeUtils.timeout(_ => {
 			delete this.rerenderTimeout;
