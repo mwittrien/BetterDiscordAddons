@@ -429,7 +429,6 @@
 .themeBrand-2qTyWV .button-1_corF .innerText-2pcwrI,
 .noticeBrand-3nQBC_ .button-1MICoQ:hover,
 .noticePremiumGrandfathered-ollUxF .button-1MICoQ:hover,
-.reactionMe-23mbRf .reactionCount-2ddRoS,
 .reactionMe-wv5HKu .reactionCount-2mvXRV,
 .reactionMe-wv5HKu:hover .reactionCount-2mvXRV,
 .regionSelectModalHeader-21khC1,
@@ -527,6 +526,7 @@
 .key-3j3-mG,
 .gdprWrapper-33M2Mg,
 .headerGroupIconBackground-xfEZPb,
+.localBot-GrCgVt:before,
 .regionSelectFlag-3uwFtG,
 .regionSelectFlag-1htPow,
 .wrapper-1cBijl .btn:disabled,
@@ -610,8 +610,8 @@
 [style*="background-color: rgba(114, 137, 218, 0.2)"] {
 	background-color: rgba(var(--vaccentcolor),0.2) !important;
 }
-[style*="background-color: rgba(114, 137, 218, 0.1)"],
-.reactionMe-23mbRf {
+.localBot-GrCgVt,
+[style*="background-color: rgba(114, 137, 218, 0.1)"] {
 	background-color: rgba(var(--vaccentcolor),0.1) !important;
 }
 [style*="background-color: rgba(114, 137, 218, 0.14902)"] {
