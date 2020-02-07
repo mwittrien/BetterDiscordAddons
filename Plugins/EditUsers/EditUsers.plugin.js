@@ -4,7 +4,7 @@ var EditUsers = (_ => {
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.6.9";}
+		getVersion () {return "3.7.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -764,8 +764,8 @@ var EditUsers = (_ => {
 			if (!BDFDB.ArrayUtils.is(children) || !userId) return;
 			let data = BDFDB.DataUtils.load(this, "users", userId);
 			if (data && data.tag) {
-				let fontColor = inverted ? data.color4 : data.color3;
-				let backgroundColor = inverted ? data.color3 : data.color4;
+				let fontColor = !inverted ? data.color4 : data.color3;
+				let backgroundColor = !inverted ? data.color3 : data.color4;
 				let fontGradient = BDFDB.ObjectUtils.is(fontColor);
 				children.splice(insertIndex, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BotTag, {
 					className: botClass,
