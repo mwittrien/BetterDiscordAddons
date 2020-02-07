@@ -1022,19 +1022,13 @@
 		InviteCard: "InviteRow",
 		MemberCard: "Member",
 		PopoutContainer: "Popout",
-		QuickSwitchChannelResult: "Channel",
-		QuickSwitchGuildResult: "Guild",
 		QuickSwitchResult: "Result",
-		QuickSwitchUserResult: "User",
 		UserProfile: "UserProfileBody",
 		WebhookCard: "Webhook"
 	};
 	WebModulesData.ForceObserve = [
 		"DirectMessage",
-		"GuildIcon",
-		"QuickSwitchChannelResult",
-		"QuickSwitchGuildResult",
-		"QuickSwitchUserResult"
+		"GuildIcon"
 	];
 	WebModulesData.DefaultRender = [
 		"DiscordTag",
@@ -1054,7 +1048,11 @@
 	]);
 	WebModulesData.LoadedInComponents = {
 		AutocompleteChannelResult: "AutocompleteComponents.Channel",
-		AutocompleteUserResult: "AutocompleteComponents.User"
+		AutocompleteUserResult: "AutocompleteComponents.User",
+		QuickSwitchChannelResult: "QuickSwitchComponents.Channel",
+		QuickSwitchGroupDMResult: "QuickSwitchComponents.GroupDM",
+		QuickSwitchGuildResult: "QuickSwitchComponents.Guild",
+		QuickSwitchUserResult: "QuickSwitchComponents.User"
 	};
 	WebModulesData.Patchfinder = {
 		Account: "accountinfo",
@@ -7739,6 +7737,10 @@
 			}));
 		}
 	};
+	
+	LibraryComponents.QuickSwitchComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Channel", "GroupDM", "Header"));
+	
+	LibraryComponents.QuickSwitchComponents.Menu = BDFDB.ModuleUtils.findByName("QuickSwitcher");
 	
 	LibraryComponents.RadioGroup = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.RadioGroup") || reactInitialized && class BDFDB_RadioGroup extends LibraryModules.React.Component {
 		handleChange(value) {
