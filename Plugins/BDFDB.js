@@ -9630,6 +9630,7 @@
 			V2C_ContentColumn: "render",
 			V2C_PluginCard: "render",
 			V2C_ThemeCard: "render",
+			Mention: "default",
 			Message: "default",
 			MessageHeader: "default",
 			MemberListItem: "componentDidMount",
@@ -9875,6 +9876,9 @@
 				if (userId && !ele.props.children.props.userId) ele.props.children.props.userId = userId;
 			}
 		}
+	};
+	InternalBDFDB.processMention = function (e) {
+		delete e.returnvalue.props.userId;
 	};
 
 	InternalBDFDB.patchPlugin(BDFDB);
