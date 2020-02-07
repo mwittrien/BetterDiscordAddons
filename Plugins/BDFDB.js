@@ -1643,7 +1643,6 @@
 				if (propValue != null) node.style.setProperty(key, propValue, "important");
 			}
 		};
-		console.log(reactEle);
 	};
 	BDFDB.ReactUtils.findChildren = function (nodeOrInstance, config) {
 		if (!nodeOrInstance || !BDFDB.ObjectUtils.is(config) || !config.name && !config.key && !config.props && !config.filter) return [null, -1];
