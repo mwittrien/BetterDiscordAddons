@@ -816,14 +816,15 @@ body:before {
 .systemMessage-1I9LCe .iconContainer-3GkGRf {
 	background-color: rgba(var(--vtransparencycolor), var(--vmessagetransparency));
 	border-radius: 50%;
-	left: -65px;
-	height: 40px;
+	left: calc(1px * (-58 * var(--vusechatbubbles) + -48 * (1 - var(--vusechatbubbles))));
+	height: 25px;
+	width: 25px;
 }
 .systemMessage-1I9LCe .iconContainer-3GkGRf:after {
 	content: "";
 	position: absolute;
-	top: 10px;
-	left: 33px;
+	top: 3px;
+	left: 26px;
 	border: 10px solid transparent;
 	border-right: 12px solid rgba(var(--vtransparencycolor), var(--vmessagetransparency));
 }
