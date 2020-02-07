@@ -1617,21 +1617,28 @@
 		if (BDFDB.ReactUtils.isValidElement(node)) return node;
 		else if (!Node.prototype.isPrototypeOf(node)) return null;
 		else if (node.nodeType == Node.TEXT_NODE) return node.nodeValue;
-		let attributes = {}, importantstyleprops = {};
+		let attributes = {}, importantStyles = {};
 		for (let attr of node.attributes) attributes[attr.name] = attr.value;
 		if (node.attributes.style) attributes.style = BDFDB.ObjectUtils.filter(node.style, n => node.style[n] && isNaN(parseInt(n)), true);
 		attributes.children = [];
 		if (node.style && node.style.cssText) for (let propstr of node.style.cssText.split(";")) if (propstr.endsWith("!important")) {
-			let importantprop = propstr.split(":")[0];
-			let camelprop = importantprop.replace(/-([a-z]?)/g, (m, g) => g.toUpperCase());
-			if (attributes.style[camelprop] != null) importantstyleprops[importantprop] = attributes.style[camelprop];
-		}
-		if (Object.keys(importantstyleprops).length) attributes.ref = instance => {
-			let ele = BDFDB.ReactUtils.findDOMNode(instance);
-			if (ele) for (let importantprop in importantstyleprops) ele.style.setProperty(importantprop, importantstyleprops[importantprop], "important");
+			let key = propstr.split(":")[0];
+			let camelprop = key.replace(/-([a-z]?)/g, (m, g) => g.toUpperCase());
+			if (attributes.style[camelprop] != null) importantStyles[key] = attributes.style[camelprop];
 		}
 		for (let child of node.childNodes) attributes.children.push(BDFDB.ReactUtils.elementToReact(child));
-		return BDFDB.ReactUtils.createElement(node.tagName, attributes);
+		let reactEle = BDFDB.ReactUtils.createElement(node.tagName, attributes);
+		BDFDB.ReactUtils.forceStyle(reactEle, importantStyles);
+		return reactEle;
+	};
+	BDFDB.ReactUtils.forceStyle = function (reactEle, styles) {
+		if (!BDFDB.ReactUtils.isValidElement(reactEle) || !BDFDB.ObjectUtils.is(styles) || BDFDB.ObjectUtils.isEmpty(styles)) return;
+		let ref = reactEle.ref;
+		reactEle.ref = instance => {
+			if (typeof ref == "function") ref(instance);
+			let node = BDFDB.ReactUtils.findDOMNode(instance);
+			if (Node.prototype.isPrototypeOf(node)) for (let key in styles) ele.style.setProperty(key, styles[key], "important");
+		};
 	};
 	BDFDB.ReactUtils.findChildren = function (nodeOrInstance, config) {
 		if (!nodeOrInstance || !BDFDB.ObjectUtils.is(config) || !config.name && !config.key && !config.props && !config.filter) return [null, -1];
