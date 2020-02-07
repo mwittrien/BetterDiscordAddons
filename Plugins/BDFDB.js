@@ -1637,7 +1637,7 @@
 		reactEle.ref = instance => {
 			if (typeof ref == "function") ref(instance);
 			let node = BDFDB.ReactUtils.findDOMNode(instance);
-			if (Node.prototype.isPrototypeOf(node)) for (let key in styles) ele.style.setProperty(key, styles[key], "important");
+			if (Node.prototype.isPrototypeOf(node)) for (let key in styles) node.style.setProperty(key, styles[key], "important");
 		};
 	};
 	BDFDB.ReactUtils.findChildren = function (nodeOrInstance, config) {
