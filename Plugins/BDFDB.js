@@ -9623,6 +9623,9 @@
 	});
 
 	BDFDB.patchedModules = {
+		before: {
+			MessageContent: "type",
+		},
 		after: {
 			V2C_ContentColumn: "render",
 			V2C_PluginCard: "render",
@@ -9864,6 +9867,14 @@
 	};
 	InternalBDFDB.processDiscordTag = function (e) {
 		if (e.instance && e.instance.props && e.instance.props.user && e.returnvalue) e.returnvalue.props.user = e.instance.props.user;
+	};
+	InternalBDFDB.processMessageContent = function (e) {
+		if (BDFDB.ArrayUtils.is(e.instance.props.content)) for (let ele of e.instance.props.content) {
+			if (BDFDB.ReactUtils.isValidElement(ele) && typeof ele.props.render == "function" && BDFDB.ReactUtils.getValue(ele, "props.children.type.displayName") == "Mention") {
+				let userId = BDFDB.ReactUtils.getValue(ele.props.render(), "props.userId");
+				if (userId && !ele.props.children.props.userId) ele.props.children.props.userId = userId;
+			}
+		}
 	};
 
 	InternalBDFDB.patchPlugin(BDFDB);
