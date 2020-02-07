@@ -4743,6 +4743,7 @@
 	DiscordClassModules.MessageElements = BDFDB.ModuleUtils.findByProperties("messageGroupBlockedBtn", "dividerRed");
 	DiscordClassModules.MessageFile = BDFDB.ModuleUtils.findByProperties("cancelButton", "filenameLinkWrapper");
 	DiscordClassModules.MessageItems = BDFDB.ModuleUtils.findByProperties("avatar", "botTag", "timestampVisibleOnHover");
+	DiscordClassModules.MessageLocalBot = BDFDB.ModuleUtils.find(m => typeof m.localBotMessage == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.MessageMarkup = BDFDB.ModuleUtils.findByProperties("markup");
 	DiscordClassModules.MessageOperations = BDFDB.ModuleUtils.find(m => typeof m.operations == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.MessageSystem = BDFDB.ModuleUtils.findByProperties("container", "actionAnchor");
@@ -5650,7 +5651,8 @@
 		messagegroupblockedrevealed: ["MessageElements", "revealed"],
 		messageheader: ["MessageItems", "header"],
 		messageheaderclickable: ["MessageItems", "clickableHeader"],
-		messagelocalbotmessage: ["Message", "localBot"],
+		messagelocalbot: ["Message", "localBot"],
+		messagelocalbotoperations: ["MessageLocalBot", "localBotMessage"],
 		messagemarkup: ["MessageMarkup", "markup"],
 		messagemarkupcompact: ["MessageBody", "compact"],
 		messagemarkupcontainercompact: ["MessageBody", "containerCompact"],
