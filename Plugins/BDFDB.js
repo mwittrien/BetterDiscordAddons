@@ -1025,6 +1025,7 @@
 		QuickSwitchChannelResult: "Channel",
 		QuickSwitchGuildResult: "Guild",
 		QuickSwitchResult: "Result",
+		QuickSwitchUserResult: "User",
 		UserProfile: "UserProfileBody",
 		WebhookCard: "Webhook"
 	};
@@ -1032,7 +1033,8 @@
 		"DirectMessage",
 		"GuildIcon",
 		"QuickSwitchChannelResult",
-		"QuickSwitchGuildResult"
+		"QuickSwitchGuildResult",
+		"QuickSwitchUserResult"
 	];
 	WebModulesData.DefaultRender = [
 		"DiscordTag",
