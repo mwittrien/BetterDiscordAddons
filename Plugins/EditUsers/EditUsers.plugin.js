@@ -86,7 +86,7 @@ var EditUsers = (_ => {
 					visibility: hidden;
 				}
 				${BDFDB.dotCNS.userinfohovered + BDFDB.dotCN.bottag} {
-					visibility: hidden;
+					visibility: visibile;
 				}
 			`;
 			
