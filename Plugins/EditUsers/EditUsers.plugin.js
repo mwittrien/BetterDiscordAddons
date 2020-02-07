@@ -1,1640 +1,1445 @@
 //META{"name":"EditUsers","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditUsers","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditUsers/EditUsers.plugin.js"}*//
 
-class EditUsers {
-	getName () {return "EditUsers";}
+var EditUsers = (_ => {
+	return class EditUsers {
+		getName () {return "EditUsers";}
 
-	getVersion () {return "3.6.8";}
+		getVersion () {return "3.6.9";}
 
-	getAuthor () {return "DevilBro";}
+		getAuthor () {return "DevilBro";}
 
-	getDescription () {return "Allows you to change the icon, name, tag and color of users.";}
+		getDescription () {return "Allows you to change the icon, name, tag and color of users.";}
 
-	constructor () {
-		this.changelog = {
-			"fixed":[["Account","Fixed the coloring in the account details container"]]
-		};
+		constructor () {
+			this.changelog = {
+				"added":[["Message Color","You can now set unique message colors for users"]],
+				"fixed":[["Message Update","Fixed the plugin for the new Message Update"]],
+				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+			};
 
-		this.patchedModules = {
-			after: {
-				"ChannelTextArea":"componentDidMount",
-				"MemberListItem":["componentDidMount","componentDidUpdate"],
-				"UserPopout":["componentDidMount","componentDidUpdate"],
-				"UserProfile":["componentDidMount","componentDidUpdate"],
-				"FriendRow":"componentDidMount",
-				"VoiceUser":["componentDidMount","componentDidUpdate"],
-				"Account":["componentDidMount","componentDidUpdate"],
-				"AuditLog":"componentDidMount",
-				"BannedCard":"render",
-				"InviteCard":"render",
-				"MemberCard":"render",
-				"InvitationCard":"componentDidMount",
-				"TypingUsers":"componentDidUpdate",
-				"MessageUsername":["componentDidMount","componentDidUpdate"],
-				"DirectMessage":"componentDidMount",
-				"CallAvatar":"componentDidMount",
-				"VideoTile":"componentDidMount",
-				"PictureInPictureVideo":"componentDidMount",
-				"PrivateChannel":["componentDidMount","componentDidUpdate"],
-				"HeaderBar":["componentDidMount","componentDidUpdate"],
-				"HeaderBarContainer":["componentDidMount","componentDidUpdate"],
-				"Clickable":"componentDidMount",
-				"MessageContent":["componentDidMount","componentDidUpdate"],
-				"StandardSidebarView":"componentWillUnmount"
-			}
-		};
-	}
-
-	initConstructor () {
-		this.avatarselector = BDFDB.dotCNC.guildicon + BDFDB.dotCNC.avatar + BDFDB.dotCNC.callavatarwrapper + BDFDB.dotCN.voiceavatarcontainer;
-
-		this.css = `
-			${BDFDB.dotCN.bottag} {
-				line-height: 13px;
-				height: 13px;
-				top: unset;
-				bottom: 0px;
-				position: relative;
-				margin: 0 0 0 1ch;
-			}
-			${BDFDB.dotCN.userpopoutheaderbottagwithnickname} {
-				bottom: 4px;
-			}
-			${BDFDB.dotCN.userpopoutheaderbottagwithnickname} {
-				bottom: 0px;
-			}
-			${BDFDB.dotCNS.userpopoutheadernamewrapper + BDFDB.dotCN.bottag},
-			${BDFDB.dotCN.userprofilebottag},
-			${BDFDB.dotCN.bottagmessagecozy} {
-				bottom: 2px;
-			}
-			${BDFDB.dotCN.bottagmessagecompact} {
-				margin-right: 6px;
-				bottom: 3px;
-			}`;
-
-		this.defaults = {
-			settings: {
-				changeInChatTextarea:	{value:true, 	inner:true,		description:"Chat Textarea"},
-				changeInChatWindow:		{value:true, 	inner:true,		description:"Messages"},
-				changeInMentions:		{value:true, 	inner:true,		description:"Mentions"},
-				changeInVoiceChat:		{value:true, 	inner:true,		description:"Voice Channels"},
-				changeInMemberList:		{value:true, 	inner:true,		description:"Member List"},
-				changeInRecentDms:		{value:true, 	inner:true,		description:"Direct Message Notifications"},
-				changeInDmsList:		{value:true, 	inner:true,		description:"Direct Message List"},
-				changeInDmHeader:		{value:true, 	inner:true,		description:"Direct Message Header"},
-				changeInDmCalls:		{value:true, 	inner:true,		description:"Calls/ScreenShares"},
-				changeInTyping:			{value:true, 	inner:true,		description:"Typing List"},
-				changeInFriendList:		{value:true, 	inner:true,		description:"Friend List"},
-				changeInInviteList:		{value:true, 	inner:true,		description:"Invite List"},
-				changeInActivity:		{value:true, 	inner:true,		description:"Activity Page"},
-				changeInUserPopout:		{value:true, 	inner:true,		description:"User Popouts"},
-				changeInUserProfil:		{value:true, 	inner:true,		description:"User Profile Modal"},
-				changeInAutoComplete:	{value:true, 	inner:true,		description:"Autocomplete Menu"},
-				changeInAuditLog:		{value:true, 	inner:true,		description:"Audit Log"},
-				changeInMemberLog:		{value:true, 	inner:true,		description:"Member Log"},
-				changeInSearchPopout:	{value:true, 	inner:true,		description:"Search Popout"},
-				changeInUserAccount:	{value:true, 	inner:true,		description:"Your Account Information"},
-				changeInAppTitle:		{value:true, 	inner:true,		description:"Discord App Title (DMs)"}
-			}
-		};
-	}
-
-	getSettingsPanel () {
-		if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		let settings = BDFDB.DataUtils.get(this, "settings");
-		let settingspanel, settingsitems = [], inneritems = [];
-		
-		for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-			className: BDFDB.disCN.marginbottom8,
-			type: "Switch",
-			plugin: this,
-			keys: ["settings", key],
-			label: this.defaults.settings[key].description,
-			value: settings[key]
-		}));
-		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
-			title: "Change Users in:",
-			first: settingsitems.length == 0,
-			children: inneritems
-		}));
-		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-			type: "Button",
-			className: BDFDB.disCN.marginbottom8,
-			color: BDFDB.LibraryComponents.Button.Colors.RED,
-			label: "Reset all Users",
-			onClick: _ => {
-				BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset all users?", _ => {
-					BDFDB.DataUtils.remove(this, "users");
-					this.forceUpdateAll();
-				});
-			},
-			children: BDFDB.LanguageUtils.LanguageStrings.RESET
-		}));
-		
-		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
-	}
-
-	//legacy
-	load () {}
-
-	start () {
-		if (!window.BDFDB) window.BDFDB = {myPlugins:{}};
-		if (window.BDFDB && window.BDFDB.myPlugins && typeof window.BDFDB.myPlugins == "object") window.BDFDB.myPlugins[this.getName()] = this;
-		let libraryScript = document.querySelector("head script#BDFDBLibraryScript");
-		if (!libraryScript || (performance.now() - libraryScript.getAttribute("date")) > 600000) {
-			if (libraryScript) libraryScript.remove();
-			libraryScript = document.createElement("script");
-			libraryScript.setAttribute("id", "BDFDBLibraryScript");
-			libraryScript.setAttribute("type", "text/javascript");
-			libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
-			libraryScript.setAttribute("date", performance.now());
-			libraryScript.addEventListener("load", _ => {this.initialize();});
-			document.head.appendChild(libraryScript);
+			this.patchedModules = {
+				before: {
+					HeaderBarContainer: "render",
+					ChannelEditorContainer: "render",
+					ChannelAutoComplete: "render",
+					AutocompleteUserResult: "render",
+					UserPopout: "render",
+					UserProfile: "render",
+					UserInfo: "default",
+					VoiceUser: "render",
+					Account: "render",
+					Message: "default",
+					MessageContent: "type",
+					MemberListItem: "render",
+					AuditLog: "render",
+					GuildSettingsEmoji: "render",
+					MemberCard: "render",
+					SettingsInvites: "render",
+					GuildSettingsBans: "render",
+					InvitationCard: "render",
+					PrivateChannelRecipientsInvitePopout: "render",
+					QuickSwitchUserResult: "render",
+					SearchPopoutComponent: "render",
+					IncomingCall: "render",
+					PrivateChannelCallParticipants: "render",
+					VideoTile: "render"
+				},
+				after: {
+					AutocompleteUserResult: "render",
+					NameTag: "default",
+					UserPopout: "render",
+					VoiceUser: "render",
+					Account: "render",
+					MessageHeader: "default",
+					MessageContent: "type",
+					MemberListItem: "render",
+					UserHook: "render",
+					InvitationCard: "render",
+					InviteModalUserRow: "default",
+					TypingUsers: "render",
+					DirectMessage: "render",
+					PrivateChannel: "render",
+					QuickSwitchUserResult: "render",
+					IncomingCall: "render"
+				}
+			};
 		}
-		else if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
-		this.startTimeout = setTimeout(_ => {
-			try {return this.initialize();}
-			catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
-		}, 30000);
-	}
 
-	initialize () {
-		if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-			if (this.started) return;
-			BDFDB.PluginUtils.init(this);
-
-			var observer = new MutationObserver(_ => {this.changeAppTitle();});
-			BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name:"appTitleObserver",instance:observer}, {childList:true});
+		initConstructor () {
+			this.css = `
+				${BDFDB.dotCN.messageusername}:hover > span[style*="color"] {
+					text-decoration: underline;
+				}
+				${BDFDB.dotCN.dmchannel}:hover ${BDFDB.dotCN.namecontainername} span[style*="color"] {
+					filter: brightness(150%);
+				}
+				${BDFDB.dotCNS.userpopoutheadernamewrapper + BDFDB.dotCN.bottag} {
+					position: relative;
+					bottom: 1px;
+				}
+				${BDFDB.dotCNS.dmchannel + BDFDB.dotCN.bottag} {
+					margin-left: 4px;
+					position: relative;
+					bottom: 3px;
+				}
+				${BDFDB.dotCNS.userinfo + BDFDB.dotCN.bottag} {
+					visibility: hidden;
+				}
+				${BDFDB.dotCNS.userinfohovered + BDFDB.dotCN.bottag} {
+					visibility: hidden;
+				}
+			`;
 			
-			this.forceUpdateAll();
+			this.defaults = {
+				settings: {
+					changeInChatTextarea:	{value:true, 	inner:true,		description:"Chat Textarea"},
+					changeInChatWindow:		{value:true, 	inner:true,		description:"Messages"},
+					changeInMentions:		{value:true, 	inner:true,		description:"Mentions"},
+					changeInVoiceChat:		{value:true, 	inner:true,		description:"Voice Channels"},
+					changeInMemberList:		{value:true, 	inner:true,		description:"Member List"},
+					changeInRecentDms:		{value:true, 	inner:true,		description:"Direct Message Notifications"},
+					changeInDmsList:		{value:true, 	inner:true,		description:"Direct Message List"},
+					changeInDmHeader:		{value:true, 	inner:true,		description:"Direct Message Header"},
+					changeInDmCalls:		{value:true, 	inner:true,		description:"Calls/ScreenShares"},
+					changeInTyping:			{value:true, 	inner:true,		description:"Typing List"},
+					changeInFriendList:		{value:true, 	inner:true,		description:"Friend List"},
+					changeInInviteList:		{value:true, 	inner:true,		description:"Invite List"},
+					changeInActivity:		{value:true, 	inner:true,		description:"Activity Page"},
+					changeInUserPopout:		{value:true, 	inner:true,		description:"User Popouts"},
+					changeInUserProfile:	{value:true, 	inner:true,		description:"User Profile Modal"},
+					changeInAutoComplete:	{value:true, 	inner:true,		description:"Autocomplete Menu"},
+					changeInAuditLog:		{value:true, 	inner:true,		description:"Audit Log"},
+					changeInEmojiLog:		{value:true, 	inner:true,		description:"Emoji Upload Log"},
+					changeInMemberLog:		{value:true, 	inner:true,		description:"Member Log"},
+					changeInQuickSwitcher:	{value:true, 	inner:true,		description:"Quick Switcher"},
+					changeInSearchPopout:	{value:true, 	inner:true,		description:"Search Popout"},
+					changeInUserAccount:	{value:true, 	inner:true,		description:"Your Account Information"},
+					changeInAppTitle:		{value:true, 	inner:true,		description:"Discord App Title (DMs)"}
+				}
+			};
 		}
-		else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
-	}
 
-
-	stop () {
-		if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
-			this.stopping = true;
-
-			let data = BDFDB.DataUtils.load(this, "users");
-			BDFDB.DataUtils.remove(this, "users");
-			try {this.forceUpdateAll();} catch (err) {}
-			BDFDB.DataUtils.save(data, this, "users");
-
-			BDFDB.DOMUtils.remove(".autocompleteEditUsers", ".autocompleteEditUsersRow");
-
-			BDFDB.PluginUtils.clear(this);
+		getSettingsPanel () {
+			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+			let settings = BDFDB.DataUtils.get(this, "settings");
+			let settingspanel, settingsitems = [], inneritems = [];
+			
+			for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+				className: BDFDB.disCN.marginbottom8,
+				type: "Switch",
+				plugin: this,
+				keys: ["settings", key],
+				label: this.defaults.settings[key].description,
+				value: settings[key]
+			}));
+			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+				title: "Change Users in:",
+				first: settingsitems.length == 0,
+				children: inneritems
+			}));
+			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+				type: "Button",
+				className: BDFDB.disCN.marginbottom8,
+				color: BDFDB.LibraryComponents.Button.Colors.RED,
+				label: "Reset all Users",
+				onClick: _ => {
+					BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset all users?", _ => {
+						BDFDB.DataUtils.remove(this, "users");
+						this.forceUpdateAll();
+					});
+				},
+				children: BDFDB.LanguageUtils.LanguageStrings.RESET
+			}));
+			
+			return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 		}
-	}
+
+		//legacy
+		load () {}
+
+		start () {
+			if (!window.BDFDB) window.BDFDB = {myPlugins:{}};
+			if (window.BDFDB && window.BDFDB.myPlugins && typeof window.BDFDB.myPlugins == "object") window.BDFDB.myPlugins[this.getName()] = this;
+			let libraryScript = document.querySelector("head script#BDFDBLibraryScript");
+			if (!libraryScript || (performance.now() - libraryScript.getAttribute("date")) > 600000) {
+				if (libraryScript) libraryScript.remove();
+				libraryScript = document.createElement("script");
+				libraryScript.setAttribute("id", "BDFDBLibraryScript");
+				libraryScript.setAttribute("type", "text/javascript");
+				libraryScript.setAttribute("src", "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB.min.js");
+				libraryScript.setAttribute("date", performance.now());
+				libraryScript.addEventListener("load", _ => {this.initialize();});
+				document.head.appendChild(libraryScript);
+			}
+			else if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) this.initialize();
+			this.startTimeout = setTimeout(_ => {
+				try {return this.initialize();}
+				catch (err) {console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not initiate plugin! " + err);}
+			}, 30000);
+		}
+
+		initialize () {
+			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+				if (this.started) return;
+				BDFDB.PluginUtils.init(this);
+
+				let observer = new MutationObserver(_ => {this.changeAppTitle();});
+				BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name:"appTitleObserver", instance:observer}, {childList:true});
+				
+				let searchGroupData = BDFDB.ReactUtils.getValue(BDFDB.ModuleUtils.findByName("SearchPopoutComponent", false), "exports.GroupData");
+				if (BDFDB.ObjectUtils.is(searchGroupData)) {
+					BDFDB.ModuleUtils.patch(this, searchGroupData.FILTER_FROM, "component", {after: e => {
+						if (typeof e.returnValue.props.renderResult == "function") {
+							let renderResult = e.returnValue.props.renderResult;
+							e.returnValue.props.renderResult = (...args) => {
+								let result = renderResult(...args);
+								this.processSearchPopoutUserResult({instance: {props: e.methodArguments[0]}, returnvalue: result});
+								return result;
+							}
+						}
+					}});
+					BDFDB.ModuleUtils.patch(this, searchGroupData.FILTER_MENTIONS, "component", {after: e => {
+						if (typeof e.returnValue.props.renderResult == "function") {
+							let renderResult = e.returnValue.props.renderResult;
+							e.returnValue.props.renderResult = (...args) => {
+								let result = renderResult(...args);
+								this.processSearchPopoutUserResult({instance: {props: e.methodArguments[0]}, returnvalue: result});
+								return result;
+							}
+						}
+					}});
+				}
+				
+				this.forceUpdateAll();
+			}
+			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
+		}
 
 
-	// begin of own functions
-	
-	onUserContextMenu (e) {
-		if (e.instance.props.user) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-			children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+		stop () {
+			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
+				this.stopping = true;
+				
+				this.forceUpdateAll();
+
+				BDFDB.PluginUtils.clear(this);
+			}
+		}
+
+
+		// begin of own functions
+		
+		onUserContextMenu (e) {
+			if (e.instance.props.user) {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
+				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+					children: [
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
+							label: this.labels.context_localusersettings_text,
+							render: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+								children: [
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+										label: this.labels.submenu_usersettings_text,
+										action: _ => {
+											BDFDB.ContextMenuUtils.close(e.instance);
+											this.showUserSettings(e.instance.props.user);
+										}
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+										label: this.labels.submenu_resetsettings_text,
+										disabled: !BDFDB.DataUtils.load(this, "users", e.instance.props.user.id),
+										action: _ => {
+											BDFDB.ContextMenuUtils.close(e.instance);
+											BDFDB.DataUtils.remove(this, "users", e.instance.props.user.id);
+											this.forceUpdateAll();
+										}
+									})
+								]
+							})]
+						})
+					]
+				}));
+			}
+		}
+
+		onSettingsClosed () {
+			if (this.SettingsUpdated) {
+				delete this.SettingsUpdated;
+				this.forceUpdateAll();
+			}
+		}
+		
+		processChannelEditorContainer (e) {
+			if (!e.instance.props.disabled && e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && BDFDB.DataUtils.get(this, "settings", "changeInChatTextarea")) {
+				let user = BDFDB.LibraryModules.UserStore.getUser(e.instance.props.channel.recipients[0]);
+				if (user) {
+					let data = BDFDB.DataUtils.load(this, "users", user.id);
+					e.instance.props.placeholder = BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `@${data && data.name || user.username}`);
+				}
+			}
+		}
+
+		processChannelAutoComplete (e) {
+			if (e.instance.state.autocompleteType == "MENTIONS" && BDFDB.ArrayUtils.is(e.instance.state.autocompletes.users) && e.instance.props.channel) {
+				let lastword = (e.instance.props.textValue || "").slice(1).toLowerCase();
+				let users = BDFDB.DataUtils.load(this, "users");
+				if (!users || !lastword) return;
+				let userarray = [];
+				for (let id in users) if (users[id] && users[id].name) {
+					let user = BDFDB.LibraryModules.UserStore.getUser(id);
+					if (user && (e.instance.props.channel.recipients.includes(id) || (e.instance.props.channel.guild_id && BDFDB.LibraryModules.MemberStore.getMember(e.instance.props.channel.guild_id, id)))) userarray.push(Object.assign({
+						lowercasename: users[id].name.toLowerCase(),
+						user
+					}, users[id]));
+				}
+				userarray = BDFDB.ArrayUtils.keySort(userarray.filter(n => e.instance.state.autocompletes.users.every(comp => comp.user.id != n.user.id) && n.lowercasename.indexOf(lastword) != -1), "lowercasename");
+				e.instance.state.autocompletes.users = [].concat(e.instance.state.autocompletes.users, userarray.map(n => {return {user: n.user};})).slice(0, BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS);
+			}
+		}
+
+		processAutocompleteUserResult (e) {
+			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInAutoComplete")) {
+				if (!e.returnvalue) {
+					e.instance.props.user = this.getUserData(e.instance.props.user.id);
+					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
+					if (data && data.name) e.instance.props.nick = data.name;
+				}
+				else {
+					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.marginleft8]]});
+					if (index > -1) this.changeUserColor(children[index], e.instance.props.user.id);
+				}
+			}
+		}
+
+		processHeaderBarContainer (e) {
+			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.channelId);
+			if (channel && channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && BDFDB.DataUtils.get(this, "settings", "changeInDmHeader")) {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.instance, {name: "Title"});
+				if (index > -1) {
+					let recipientId = channel.getRecipientId();
+					children[index].props.children = this.getUserData(recipientId).username;
+					this.changeUserColor(children[index], recipientId);
+				}
+			}
+		}
+		
+		processNameTag (e) {
+			if (e.instance.props.user && e.instance.props.className) {
+				let change = false, options = {changeBackground: false}, botClass = "";
+				switch (e.instance.props.className) {
+					case BDFDB.disCN.userpopoutheadertagnonickname:
+						change = BDFDB.DataUtils.get(this, "settings", "changeInUserPopout");
+						options.changeBackground = true;
+						botClass = BDFDB.disCN.bottagnametag;
+						break;
+					case BDFDB.disCN.userprofilenametag:
+						change = BDFDB.DataUtils.get(this, "settings", "changeInUserProfile");
+						options.changeBackground = true;
+						botClass = BDFDB.disCNS.userprofilebottag + BDFDB.disCN.bottagnametag;
+						break;
+					case BDFDB.disCN.guildsettingsinviteusername:
+						change = BDFDB.DataUtils.get(this, "settings", "changeInMemberLog");
+						break;
+					case BDFDB.disCN.userinfodiscordtag:
+						change = BDFDB.DataUtils.get(this, "settings", "changeInFriendList");
+						botClass = BDFDB.disCN.bottagnametag;
+						break;
+				}
+				if (change) {
+					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.username]]});
+					if (index > -1) this.changeUserColor(children[index], e.instance.props.user.id, options);
+					if (botClass) this.injectBadge(e.returnvalue.props.children, e.instance.props.user.id, 2, botClass, e.instance.props.invertBotTagColor);
+				}
+			}
+		}
+
+		processUserPopout (e) {
+			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInUserPopout")) {
+				if (!e.returnvalue) {
+					e.instance.props.user = this.getUserData(e.instance.props.user.id, true, true);
+					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
+					if (data && data.name) {
+						e.instance.props.nickname = data.name;
+						e.instance.props.guildMember = Object.assign({}, e.instance.props.guildMember, {nick: data.name});
+					}
+				}
+				else {
+					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadernickname]]});
+					if (index > -1) {
+						this.changeUserColor(children[index], e.instance.props.user.id, {changeBackground:true});
+						this.injectBadge(children, e.instance.props.user.id, 2, BDFDB.disCN.bottagnametag, !!e.instance.props.activity);
+					}
+				}
+			}
+		}
+
+		processUserProfile (e) {
+			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInUserProfile")) e.instance.props.user = this.getUserData(e.instance.props.user.id);
+		}
+
+		processUserInfo (e) {
+			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInFriendList")) e.instance.props.user = this.getUserData(e.instance.props.user.id);
+		}
+
+		processVoiceUser (e) {
+			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInVoiceChat")) {
+				if (!e.returnvalue) {
+					e.instance.props.user = this.getUserData(e.instance.props.user.id);
+					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
+					if (data && data.name) e.instance.props.nick = data.name;
+				}
+				else {
+					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN.voicename]]});
+					if (index > -1) this.changeUserColor(children[index], e.instance.props.user.id, {modify: e.instance.props});
+				}
+			}
+		}
+
+		processAccount (e) {
+			if (e.instance.props.currentUser && BDFDB.DataUtils.get(this, "settings", "changeInUserAccount")) {
+				if (!e.returnvalue) e.instance.props.currentUser = this.getUserData(e.instance.props.currentUser.id);
+				else {
+					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "Tooltip"});
+					if (index > -1) {
+						if (typeof children[index].props.children == "function") {
+							let data = BDFDB.DataUtils.load(this, "users", e.instance.props.currentUser.id);
+							if (data && (data.color1 || data.color2)) {
+								let renderChildren = children[index].props.children;
+								children[index].props.children = (...args) => {
+									let renderedChildren = renderChildren(...args);
+									let [children2, index2] = BDFDB.ReactUtils.findChildren(renderedChildren, {name: "PanelTitle"});
+									if (index2 > -1) this.changeUserColor(children2[index2], e.instance.props.currentUser.id);
+									return renderedChildren;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		processMessage (e) {
+			let header = e.instance.props.childrenHeader;
+			if (header && header.props && header.props.message) {
+				let message = new BDFDB.DiscordObjects.Message(Object.assign({}, header.props.message, {author: this.getUserData(header.props.message.author.id)}));
+				let data = BDFDB.DataUtils.load(this, "users", header.props.message.author.id);
+				if (data) {
+					if (data.name) message.nick = data.name;
+					if (data.color1) message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[0] : data.color1, "HEX");
+				}
+				header.props.message = message;
+			}
+		}
+		
+		processMessageHeader (e) {
+			if (e.instance.props.message && BDFDB.DataUtils.get(this, "settings", "changeInChatWindow")) {
+				let data = BDFDB.DataUtils.load(this, "users", e.instance.props.message.author.id);
+				if (data && (data.color1 || data.color2)) {
+					let usernamePopout = BDFDB.ReactUtils.getValue(e, "returnvalue.props.children.2.props.children.1")
+					if (usernamePopout && usernamePopout.props && typeof usernamePopout.props.children == "function") {
+						let renderChildren = usernamePopout.props.children;
+						usernamePopout.props.children = (...args) => {
+							let renderedChildren = renderChildren(...args);
+							this.changeUserColor(renderedChildren, e.instance.props.message.author.id);
+							return renderedChildren;
+						}
+					}
+				}
+				this.injectBadge(e.returnvalue.props.children[2].props.children, e.instance.props.message.author.id, 2, e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy);
+			}
+		}
+		
+		processMessageContent (e) {
+			if (!e.returnvalue) {
+				if (BDFDB.ArrayUtils.is(e.instance.props.content) && BDFDB.DataUtils.get(this, "settings", "changeInMentions")) for (let ele of e.instance.props.content) {
+					if (BDFDB.ReactUtils.isValidElement(ele) && ele.type && (ele.type.displayName || "").toLowerCase().indexOf("popout") > -1 && typeof ele.props.render == "function") {
+						if (BDFDB.ReactUtils.getValue(ele, "props.children.type.displayName") == "Mention") {
+							let data = BDFDB.DataUtils.load(this, "users", ele.props.render().props.userId);
+							if (data) {
+								if (data.name) ele.props.children.props.children[0] = "@" + data.name;
+								if (data.color1) {
+									let color1_0 = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[0] : data.color1, "RGBA");
+									let color0_1 = BDFDB.ColorUtils.setAlpha(color1_0, e.instance.props.message.mentioned ? 0 : 0.1, "RGBA");
+									let color0_7 = BDFDB.ColorUtils.setAlpha(color1_0, 0.7, "RGBA");
+									ele.props.children.props.style = Object.assign({}, ele.props.children.props.style, {
+										background: color0_1,
+										color: color1_0
+									});
+									let onMouseEnter = ele.props.children.props.onMouseEnter || ( _ => {});
+									ele.props.children.props.onMouseEnter = event => {
+										onMouseEnter(event);
+										event.target.style.setProperty("background", color0_7, "important");
+										event.target.style.setProperty("color", "#FFFFFF", "important");
+									};
+									let onMouseLeave = ele.props.children.props.onMouseLeave || ( _ => {});
+									ele.props.children.props.onMouseLeave = event => {
+										onMouseLeave(event);
+										event.target.style.setProperty("background", color0_1, "important");
+										event.target.style.setProperty("color", color1_0, "important");
+									};
+								}
+							}
+						}
+					}
+				}
+				if (e.instance.props.message.type != BDFDB.DiscordConstants.MessageTypes.DEFAULT && BDFDB.DataUtils.get(this, "settings", "changeInChatWindow")) {
+					let message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.message, {author: this.getUserData(e.instance.props.message.author.id)}));
+					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.message.author.id);
+					if (data) {
+						if (data.name) message.nick = data.name;
+						if (data.color1) message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[0] : data.color1, "HEX");
+					}
+					e.instance.props.message = message;
+					e.instance.props.children.props.message = e.instance.props.message;
+				}
+			}
+			else {
+				if (e.instance.props.message && BDFDB.DataUtils.get(this, "settings", "changeInChatWindow")) {
+					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.message.author.id);
+					let messageColor = data && (data.color5 || (BDFDB.BDUtils.getSettings("bda-gs-7") && data.color1));
+					if (messageColor) e.returnvalue.props.style = Object.assign({}, e.returnvalue.props.style, {color: BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(messageColor) ? messageColor[0] : messageColor, "RGBA")});
+				}
+			}
+		}
+
+		processMemberListItem (e) {
+			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInMemberList")) {
+				if (!e.returnvalue) {
+					e.instance.props.user = this.getUserData(e.instance.props.user.id);
+					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
+					if (data && data.name) e.instance.props.nick = data.name;
+				}
+				else {
+					this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {changeBackground: true});
+					this.injectBadge(BDFDB.ReactUtils.getValue(e.returnvalue, "props.decorators.props.children"), e.instance.props.user.id, 2, BDFDB.disCN.bottagmember);
+				}
+			}
+		}
+
+		processAuditLog (e) {
+			if (e.instance.props.log && BDFDB.DataUtils.get(this, "settings", "changeInAuditLog")) {
+				if (e.instance.props.log.user) e.instance.props.log.user = this.getUserData(e.instance.props.log.user.id);
+				if (e.instance.props.log.target && e.instance.props.log.targetType == "USER") e.instance.props.log.target = this.getUserData(e.instance.props.log.target.id);
+			}
+		}
+
+		processUserHook (e) {
+			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInAuditLog")) {
+				this.changeUserColor(e.returnvalue.props.children[0], e.instance.props.user.id);
+			}
+		}
+
+		processGuildSettingsEmoji (e) {
+			if (BDFDB.ArrayUtils.is(e.instance.props.emojis) && BDFDB.DataUtils.get(this, "settings", "changeInEmojiLog")) {
+				e.instance.props.emojis = [].concat(e.instance.props.emojis);
+				for (let i in e.instance.props.emojis) e.instance.props.emojis[i] = Object.assign({}, e.instance.props.emojis[i], {user: this.getUserData(e.instance.props.emojis[i].user.id)});
+			}
+		}
+
+		processMemberCard (e) {
+			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInMemberLog")) e.instance.props.user = this.getUserData(e.instance.props.user.id);
+		}
+
+		processSettingsInvites (e) {
+			if (BDFDB.ObjectUtils.is(e.instance.props.invites) && BDFDB.DataUtils.get(this, "settings", "changeInMemberLog")) {
+				e.instance.props.invites = Object.assign({}, e.instance.props.invites);
+				for (let id in e.instance.props.invites) e.instance.props.invites[id] = new BDFDB.DiscordObjects.Invite(Object.assign({}, e.instance.props.invites[id], {inviter: this.getUserData(e.instance.props.invites[id].inviter.id)}));
+			}
+		}
+
+		processGuildSettingsBans (e) {
+			if (BDFDB.ObjectUtils.is(e.instance.props.bans) && BDFDB.DataUtils.get(this, "settings", "changeInMemberLog")) {
+				e.instance.props.bans = Object.assign({}, e.instance.props.bans);
+				for (let id in e.instance.props.bans) e.instance.props.bans[id] = Object.assign({}, e.instance.props.bans[id], {user: this.getUserData(e.instance.props.bans[id].user.id)});
+			}
+		}
+
+		processInvitationCard (e) {
+			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInInviteList")) {
+				if (!e.returnvalue) e.instance.props.user = this.getUserData(e.instance.props.user.id);
+				else {
+					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN.invitemodalinviterowname]]});
+					if (index > -1) this.changeUserColor(children[index], e.instance.props.user.id);
+				}
+			}
+		}
+
+		processPrivateChannelRecipientsInvitePopout (e) {
+			if (BDFDB.ArrayUtils.is(e.instance.props.results) && BDFDB.DataUtils.get(this, "settings", "changeInInviteList")) {
+				for (let result of e.instance.props.results) result.user = this.getUserData(result.user.id);
+			}
+		}
+
+		processInviteModalUserRow (e) {
+			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInInviteList")) {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN.searchpopoutddmaddnickname]]});
+				if (index > -1) this.changeUserColor(children[index], e.instance.props.user.id);
+			}
+		}
+
+		processTypingUsers (e) {
+			if (BDFDB.ObjectUtils.is(e.instance.props.typingUsers) && Object.keys(e.instance.props.typingUsers).length && BDFDB.DataUtils.get(this, "settings", "changeInTyping")) {
+				let users = Object.keys(e.instance.props.typingUsers).filter(id => id != BDFDB.UserUtils.me.id).filter(id => !BDFDB.LibraryModules.FriendUtils.isBlocked(id)).map(id => BDFDB.LibraryModules.UserStore.getUser(id)).filter(user => user);
+				if (users.length) {
+					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN.typingtext]]});
+					if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) for (let child of children[index].props.children) if (child.type == "strong") {
+						let userId = (users.shift() || {}).id;
+						if (userId) {
+							child.props.children = this.getUserData(userId).username;
+							this.changeUserColor(child, userId);
+						}
+					}
+				}
+			}
+		}
+
+		processDirectMessage (e) {
+			if (e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && BDFDB.DataUtils.get(this, "settings", "changeInRecentDms")) {
+				let recipientId = e.instance.props.channel.getRecipientId();
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ListItemTooltip"});
+				if (index > -1) children[index].props.text = this.getUserData(recipientId).username;
+				[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "NavItem"});
+				if (index > -1) children[index].props.icon = this.getUserAvatar(recipientId);
+			}
+		}
+
+		processPrivateChannel (e) {
+			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInDmsList")) {
+				e.returnvalue.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getUserData(e.instance.props.user.id).username});
+				e.returnvalue.props.avatar.props.src = this.getUserAvatar(e.instance.props.user.id);
+				this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {changeBackground: true});
+				e.returnvalue.props.name = [e.returnvalue.props.name];
+				this.injectBadge(e.returnvalue.props.name, e.instance.props.user.id, 1);
+			}
+		}
+
+		processQuickSwitchUserResult (e) {
+			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInQuickSwitcher")) {
+				if (!e.returnvalue) e.instance.props.user = this.getUserData(e.instance.props.user.id);
+				else {
+					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.quickswitchresultmatch]]});
+					if (index > -1) {
+						let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
+						if (data && data.name) children[index].props.children = data.name;
+						this.changeUserColor(children[index], e.instance.props.user.id, {modify: BDFDB.ObjectUtils.extract(e.instance.props, "focused", "unread", "mentions")});
+					}
+				}
+			}
+		}
+
+		processSearchPopoutComponent (e) {
+			if (BDFDB.ArrayUtils.is(BDFDB.ReactUtils.getValue(e, "instance.props.resultsState.autocompletes")) && BDFDB.DataUtils.get(this, "settings", "changeInSearchPopout")) {
+				for (let autocomplete of e.instance.props.resultsState.autocompletes) if (autocomplete && BDFDB.ArrayUtils.is(autocomplete.results)) for (let result of autocomplete.results) if (result.user) result.user = this.getUserData(result.user.id);
+			}
+		}
+
+		processSearchPopoutUserResult (e) {
+			if (e.instance.props.result && e.instance.props.result.user && BDFDB.DataUtils.get(this, "settings", "changeInSearchPopout")) {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.searchpopoutdisplayednick]]});
+				if (index > -1) {
+					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.result.user.id);
+					if (data && data.name) children[index].props.children = data.name;
+					this.changeUserColor(children[index], e.instance.props.result.user.id);
+				}
+			}
+		}
+
+		processIncomingCall (e) {
+			if (e.instance.props.channelId && BDFDB.DataUtils.get(this, "settings", "changeInDmCalls")) {
+				let user = BDFDB.LibraryModules.UserStore.getUser(e.instance.props.channelId);
+				if (!user) {
+					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.channelId);
+					if (channel && channel.type == BDFDB.DiscordConstants.ChannelTypes.DM) user = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
+				}
+				if (user) {
+					if (!e.returnvalue) {
+						e.instance.props.channelName = this.getUserData(user.id).username;
+						e.instance.props.avatarUrl = this.getUserAvatar(user.id);
+					}
+					else {
+						let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.callmembers]]});
+						if (index > -1) this.changeUserColor(children[index], user.id);
+					}
+				}
+			}
+		}
+
+		processPrivateChannelCallParticipants (e) {
+			if (BDFDB.ArrayUtils.is(e.instance.props.participants) && BDFDB.DataUtils.get(this, "settings", "changeInDmCalls")) {
+				for (let participant of e.instance.props.participants) if (participant && participant.user) participant.user = this.getUserData(participant.user.id);
+			}
+		}
+
+		processVideoTile (e) {
+			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInDmCalls")) e.instance.props.user = this.getUserData(e.instance.props.user.id);
+		}
+
+		changeAppTitle () {
+			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());
+			let title = document.head.querySelector("title");
+			if (title && channel && channel.type == 1) {
+				let info = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
+				if (info) {
+					let data = this.getUserData(info.id, title);
+					BDFDB.DOMUtils.setText(title, "@" + (data.name || info.username));
+				}
+			}
+		}
+		
+		changeUserColor (parent, userId, options = {}) {
+			if (BDFDB.ReactUtils.isValidElement(parent)) {
+				let data = BDFDB.DataUtils.load(this, "users", userId) || {};
+				if (data.color1 || (data.color2 && options.changeBackground)) {
+					let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), userId) || {};
+					let fontColor = options.modify ? this.chooseColor(data.color1, options.modify) : data.color1;
+					let backgroundColor = options.changeBackground && data.color2;
+					let fontGradient = BDFDB.ObjectUtils.is(fontColor);
+					if (BDFDB.ObjectUtils.is(parent.props.style)) {
+						delete parent.props.style.color;
+						delete parent.props.style.backgroundColor;
+					}
+					parent.props.children = BDFDB.ReactUtils.createElement("span", {
+						style: {
+							background: BDFDB.ObjectUtils.is(backgroundColor) ? BDFDB.ColorUtils.createGradient(backgroundColor) : BDFDB.ColorUtils.convert(backgroundColor, "RGBA"),
+							color: fontGradient ? BDFDB.ColorUtils.convert(fontColor[0], "RGBA") : BDFDB.ColorUtils.convert(fontColor, "RGBA")
+						},
+						children: fontGradient ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
+							gradient: BDFDB.ColorUtils.createGradient(fontColor),
+							children: parent.props.children
+						}) : parent.props.children
+					});
+				}
+			}
+		}
+
+		chooseColor (color, config = {}) {
+			if (color) {
+				if (BDFDB.ObjectUtils.is(config)) {
+					if (config.mentions || config.focused || config.hovered || config.selected || config.unread || config.speaking) color = BDFDB.ColorUtils.change(color, 0.5);
+					else if (config.muted || config.locked) color = BDFDB.ColorUtils.change(color, -0.5);
+				}
+				return color;
+			}
+			return null;
+		}
+		
+		getUserData (userId, change = true, keepName = false) {
+			let user = BDFDB.LibraryModules.UserStore.getUser(userId);
+			if (!user) return new BDFDB.DiscordObjects.User({});
+			let data = change && BDFDB.DataUtils.load(this, "users", user.id);
+			if (data) {
+				let newUserObject = {}, nativeObject = new BDFDB.DiscordObjects.User(user);
+				for (let key in nativeObject) newUserObject[key] = nativeObject[key];
+				newUserObject.tag = nativeObject.tag;
+				newUserObject.createdAt = nativeObject.createdAt;
+				newUserObject.username = !keepName && data.name || nativeObject.username;
+				newUserObject.usernameNormalized = !keepName &&data.name && data.name.toLowerCase() || nativeObject.usernameNormalized;
+				if (data.removeIcon) {
+					newUserObject.avatar = null;
+					newUserObject.avatarURL = null;
+					newUserObject.getAvatarURL = _ => {return null;};
+				}
+				else if (data.url) {
+					newUserObject.avatar = data.url;
+					newUserObject.avatarURL = data.url;
+					newUserObject.getAvatarURL = _ => {return data.url;};
+				}
+				return newUserObject;
+			}
+			return new BDFDB.DiscordObjects.User(user);
+		}
+		
+		getUserAvatar (userId, change = true) {
+			let user = BDFDB.LibraryModules.UserStore.getUser(userId);
+			if (!user) return "";
+			let data = change && BDFDB.DataUtils.load(this, "users", user.id);
+			if (data) {
+				if (data.removeIcon) return "";
+				else if (data.url) return data.url;
+			}
+			return BDFDB.LibraryModules.IconUtils.getUserAvatarURL(user);
+		}
+		
+		injectBadge (children, userId, insertIndex, botClass = "", inverted = false) {
+			if (!BDFDB.ArrayUtils.is(children) || !userId) return;
+			let data = BDFDB.DataUtils.load(this, "users", userId);
+			if (data && data.tag) {
+				let fontColor = inverted ? data.color4 : data.color3;
+				let backgroundColor = inverted ? data.color3 : data.color4;
+				let fontGradient = BDFDB.ObjectUtils.is(fontColor);
+				children.splice(insertIndex, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BotTag, {
+					className: botClass,
+					invertColor: inverted,
+					style: {
+						background: BDFDB.ObjectUtils.is(backgroundColor) ? BDFDB.ColorUtils.createGradient(backgroundColor) : BDFDB.ColorUtils.convert(backgroundColor, "RGBA"),
+						color: fontGradient ? BDFDB.ColorUtils.convert(fontColor[0], "RGBA") : BDFDB.ColorUtils.convert(fontColor, "RGBA")
+					},
+					tag: fontGradient ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
+						gradient: BDFDB.ColorUtils.createGradient(fontColor),
+						children: data.tag
+					}) : data.tag
+				}));
+			}
+		}
+		
+		forceUpdateAll () {
+			this.changeAppTitle();
+			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.MessageUtils.rerenderAll();
+		}
+
+		showUserSettings (info) {
+			let data = BDFDB.DataUtils.load(this, "users", info.id) || {};
+			let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), info.id) || {};
+			
+			BDFDB.ModalUtils.open(this, {
+				size: "MEDIUM",
+				header: this.labels.modal_header_text,
+				subheader: member.nick || info.username,
 				children: [
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
-						label: this.labels.context_localusersettings_text,
-						render: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-									label: this.labels.submenu_usersettings_text,
-									action: _ => {
-										BDFDB.ContextMenuUtils.close(e.instance);
-										this.showUserSettings(e.instance.props.user);
-									}
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-									label: this.labels.submenu_resetsettings_text,
-									disabled: !BDFDB.DataUtils.load(this, "users", e.instance.props.user.id),
-									action: _ => {
-										BDFDB.ContextMenuUtils.close(e.instance);
-										BDFDB.DataUtils.remove(this, "users", e.instance.props.user.id);
-										this.forceUpdateAll();
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+						tab: this.labels.modal_tabheader1_text,
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								title: this.labels.modal_username_text,
+								className: BDFDB.disCN.marginbottom20 + " input-username",
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+									value: data.name,
+									placeholder: member.nick || info.username,
+									autoFocus: true
+								})
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								title: this.labels.modal_usertag_text,
+								className: BDFDB.disCN.marginbottom20 + " input-usertag",
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+									value: data.tag
+								})
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								title: this.labels.modal_useravatar_text,
+								className: BDFDB.disCN.marginbottom8 + " input-useravatar",
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+									inputClassName: !data.removeIcon && data.url ? BDFDB.disCN.inputsuccess : null,
+									inputId: "USERAVATAR",
+									value: data.url,
+									placeholder: BDFDB.UserUtils.getAvatar(info.id),
+									disabled: data.removeIcon,
+									onChange: (value, instance) => {
+										this.checkUrl(value, instance);
 									}
 								})
-							]
-						})]
-					})
-				]
-			}));
-		}
-	}
-	
-	forceUpdateAll () {
-		this.changeAppTitle();
-		BDFDB.ModuleUtils.forceAllUpdates(this);
-	}
-
-	showUserSettings (info) {
-		let data = BDFDB.DataUtils.load(this, "users", info.id) || {};
-		let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), info.id) || {};
-		
-		BDFDB.ModalUtils.open(this, {
-			size: "MEDIUM",
-			header: this.labels.modal_header_text,
-			subheader: member.nick || info.username,
-			children: [
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-					tab: this.labels.modal_tabheader1_text,
-					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-							title: this.labels.modal_username_text,
-							className: BDFDB.disCN.marginbottom20 + " input-username",
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-								value: data.name,
-								placeholder: member.nick || info.username,
-								autoFocus: true
-							})
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-							title: this.labels.modal_usertag_text,
-							className: BDFDB.disCN.marginbottom20 + " input-usertag",
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-								value: data.tag
-							})
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-							title: this.labels.modal_useravatar_text,
-							className: BDFDB.disCN.marginbottom8 + " input-useravatar",
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-								inputClassName: !data.removeIcon && data.url ? BDFDB.disCN.inputsuccess : null,
-								inputId: "USERAVATAR",
-								value: data.url,
-								placeholder: BDFDB.UserUtils.getAvatar(info.id),
-								disabled: data.removeIcon,
-								onFocus: e => {
-									this.createNoticeTooltip(e.target);
-								},
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+								type: "Switch",
+								className: BDFDB.disCN.marginbottom20 + " input-removeicon",
+								label: this.labels.modal_removeicon_text,
+								value: data.removeIcon,
 								onChange: (value, instance) => {
-									this.checkUrl(value, instance);
+									let avatarinputins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","USERAVATAR"]]});
+									if (avatarinputins) {
+										delete avatarinputins.props.success;
+										delete avatarinputins.props.errorMessage;
+										avatarinputins.props.disabled = value;
+										BDFDB.ReactUtils.forceUpdate(avatarinputins);
+									}
 								}
 							})
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-							type: "Switch",
-							className: BDFDB.disCN.marginbottom20 + " input-removeicon",
-							label: this.labels.modal_removeicon_text,
-							value: data.removeIcon,
-							onChange: (value, instance) => {
-								let avatarinputins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","USERAVATAR"]]});
-								if (avatarinputins) {
-									avatarinputins.props.inputClassName = null;
-									avatarinputins.props.disabled = value;
-									BDFDB.ReactUtils.forceUpdate(avatarinputins);
+						]
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+						tab: this.labels.modal_tabheader2_text,
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								title: this.labels.modal_colorpicker1_text,
+								className: BDFDB.disCN.marginbottom20,
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+									color: data.color1,
+									number: 1
+								})
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								title: this.labels.modal_colorpicker2_text,
+								className: BDFDB.disCN.marginbottom20,
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+									color: data.color2,
+									number: 2
+								})
+							})
+						]
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+						tab: this.labels.modal_tabheader3_text,
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								title: this.labels.modal_colorpicker3_text,
+								className: BDFDB.disCN.marginbottom20,
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+									color: data.color3,
+									number: 3,
+									disabled: data.ignoreTagColor
+								})
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								title: this.labels.modal_colorpicker4_text,
+								className: BDFDB.disCN.marginbottom20,
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+									color: data.color4,
+									number: 4,
+									disabled: data.ignoreTagColor
+								})
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+								type: "Switch",
+								className: BDFDB.disCN.marginbottom20 + " input-ignoretagcolor",
+								label: this.labels.modal_ignoretagcolor_text,
+								value: data.ignoreTagColor,
+								onChange: (value, instance) => {
+									let colorpicker3ins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["number",3]]});
+									let colorpicker4ins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["number",4]]});
+									if (colorpicker3ins) colorpicker3ins.setState({disabled: value});
+									if (colorpicker4ins) colorpicker4ins.setState({disabled: value});
 								}
-							}
-						})
-					]
-				}),
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-					tab: this.labels.modal_tabheader2_text,
-					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-							title: this.labels.modal_colorpicker1_text,
-							className: BDFDB.disCN.marginbottom20,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
-								color: data.color1,
-								number: 1
 							})
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-							title: this.labels.modal_colorpicker2_text,
-							className: BDFDB.disCN.marginbottom20,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
-								color: data.color2,
-								number: 2
+						]
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+						tab: this.labels.modal_tabheader4_text,
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								title: this.labels.modal_colorpicker5_text,
+								className: BDFDB.disCN.marginbottom20,
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
+									color: data.color5,
+									pickerConfig: {gradient: false},
+									number: 5
+								})
 							})
-						})
-					]
-				}),
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-					tab: this.labels.modal_tabheader3_text,
-					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-							title: this.labels.modal_colorpicker3_text,
-							className: BDFDB.disCN.marginbottom20,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
-								color: data.color3,
-								number: 3,
-								disabled: data.ignoreTagColor
-							})
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-							title: this.labels.modal_colorpicker4_text,
-							className: BDFDB.disCN.marginbottom20,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ColorSwatches, {
-								color: data.color4,
-								number: 4,
-								disabled: data.ignoreTagColor
-							})
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-							type: "Switch",
-							className: BDFDB.disCN.marginbottom20 + " input-ignoretagcolor",
-							label: this.labels.modal_ignoretagcolor_text,
-							value: data.ignoreTagColor,
-							onChange: (value, instance) => {
-								let colorpicker3ins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["number",3]]});
-								let colorpicker4ins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["number",4]]});
-								if (colorpicker3ins) colorpicker3ins.setState({disabled: value});
-								if (colorpicker4ins) colorpicker4ins.setState({disabled: value});
-							}
-						})
-					]
-				})
-			],
-			buttons: [{
-				contents: BDFDB.LanguageUtils.LanguageStrings.SAVE,
-				color: "BRAND",
-				close: true,
-				click: modal => {
-					let olddata = Object.assign({}, data);
-					
-					let usernameinput = modal.querySelector(".input-username " + BDFDB.dotCN.input);
-					let usertaginput = modal.querySelector(".input-usertag " + BDFDB.dotCN.input);
-					let useravatarinput = modal.querySelector(".input-useravatar " + BDFDB.dotCN.input);
-					let removeiconinput = modal.querySelector(".input-removeicon " + BDFDB.dotCN.switchinner);
-					let ignoretagcolorinput = modal.querySelector(".input-ignoretagcolor " + BDFDB.dotCN.switchinner);
-					
-					data.name = usernameinput.value.trim() || null;
-					data.tag = usertaginput.value.trim() || null;
-					data.url = (!data.removeIcon && BDFDB.DOMUtils.containsClass(useravatarinput, BDFDB.disCN.inputsuccess) ? useravatarinput.value.trim() : null) || null;
-					data.removeIcon = removeiconinput.checked;
-					data.ignoreTagColor = ignoretagcolorinput.checked;
+						]
+					})
+				],
+				buttons: [{
+					contents: BDFDB.LanguageUtils.LanguageStrings.SAVE,
+					color: "BRAND",
+					close: true,
+					click: modal => {
+						let olddata = Object.assign({}, data);
+						
+						let usernameinput = modal.querySelector(".input-username " + BDFDB.dotCN.input);
+						let usertaginput = modal.querySelector(".input-usertag " + BDFDB.dotCN.input);
+						let useravatarinput = modal.querySelector(".input-useravatar " + BDFDB.dotCN.input);
+						let removeiconinput = modal.querySelector(".input-removeicon " + BDFDB.dotCN.switchinner);
+						let ignoretagcolorinput = modal.querySelector(".input-ignoretagcolor " + BDFDB.dotCN.switchinner);
+						
+						data.name = usernameinput.value.trim() || null;
+						data.tag = usertaginput.value.trim() || null;
+						data.url = (!data.removeIcon && BDFDB.DOMUtils.containsClass(useravatarinput, BDFDB.disCN.inputsuccess) ? useravatarinput.value.trim() : null) || null;
+						data.removeIcon = removeiconinput.checked;
+						data.ignoreTagColor = ignoretagcolorinput.checked;
 
-					data.color1 = BDFDB.ColorUtils.getSwatchColor(modal, 1);
-					data.color2 = BDFDB.ColorUtils.getSwatchColor(modal, 2);
-					data.color3 = BDFDB.ColorUtils.getSwatchColor(modal, 3);
-					data.color4 = BDFDB.ColorUtils.getSwatchColor(modal, 4);
+						data.color1 = BDFDB.ColorUtils.getSwatchColor(modal, 1);
+						data.color2 = BDFDB.ColorUtils.getSwatchColor(modal, 2);
+						data.color3 = BDFDB.ColorUtils.getSwatchColor(modal, 3);
+						data.color4 = BDFDB.ColorUtils.getSwatchColor(modal, 4);
+						data.color5 = BDFDB.ColorUtils.getSwatchColor(modal, 5);
 
-					let changed = false;
-					if (Object.keys(data).every(key => data[key] == null || data[key] == false) && (changed = true)) BDFDB.DataUtils.remove(this, "users", info.id);
-					else if (!BDFDB.equals(olddata, data) && (changed = true)) BDFDB.DataUtils.save(data, this, "users", info.id);
-					if (changed) this.forceUpdateAll();
-				}
-			}]
-		});
-	}
-	
-	processChannelTextArea (instance, wrapper, returnvalue) {
-		let channel = BDFDB.ReactUtils.getValue(instance, "props.channel");
-		if (channel) {
-			var textarea = wrapper.querySelector("textarea");
-			if (!textarea) return;
-			if (channel.type == 1 && instance.props.type == "normal" && !instance.props.disabled) {
-				let user = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
-				if (user) {
-					let data = this.getUserData(user.id, wrapper);
-					textarea.setAttribute("placeholder", BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `@${data.name || user.username}`));
-				}
-			}
-			BDFDB.ListenerUtils.remove(this, textarea);
-			if (BDFDB.DataUtils.get(this, "settings", "changeInAutoComplete")) {
-				BDFDB.ListenerUtils.add(this, textarea, "keydown", e => {
-					let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCN.autocomplete);
-					if (autocompletemenu && (e.which == 9 || e.which == 13)) {
-						if (BDFDB.DOMUtils.containsClass(autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement, "autocompleteEditUsersRow")) {
-							BDFDB.ListenerUtils.stopEvent(e);
-							this.swapWordWithMention(textarea);
-						}
+						let changed = false;
+						if (Object.keys(data).every(key => data[key] == null || data[key] == false) && (changed = true)) BDFDB.DataUtils.remove(this, "users", info.id);
+						else if (!BDFDB.equals(olddata, data) && (changed = true)) BDFDB.DataUtils.save(data, this, "users", info.id);
+						if (changed) this.forceUpdateAll();
 					}
-					else if (autocompletemenu && (e.which == 38 || e.which == 40)) {
-						let autocompleteitems = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable + ":not(.autocompleteEditUsersSelector)");
-						let selected = autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected);
-						if (BDFDB.DOMUtils.containsClass(selected, "autocompleteEditUsersSelector") || autocompleteitems[e.which == 38 ? 0 : (autocompleteitems.length-1)] == selected) {
-							BDFDB.ListenerUtils.stopEvent(e);
-							let next = this.getNextSelection(autocompletemenu, null, e.which == 38 ? false : true);
-							BDFDB.DOMUtils.removeClass(selected, BDFDB.disCN.autocompleteselected);
-							BDFDB.DOMUtils.addClass(selected, BDFDB.disCN.autocompleteselector);
-							BDFDB.DOMUtils.addClass(next, BDFDB.disCN.autocompleteselected);
-						}
-					}
-					else if (textarea.value && !e.shiftKey && e.which == 13 && !autocompletemenu && textarea.value.indexOf("s/") != 0) {
-						this.format = true;
-						textarea.dispatchEvent(new Event("input"));
-					}
-					else if (!e.ctrlKey && e.which != 16 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) {
-						BDFDB.TimeUtils.clear(textarea.EditUsersAutocompleteTimeout);
-						textarea.EditUsersAutocompleteTimeout = BDFDB.TimeUtils.timeout(_ => {this.addAutoCompleteMenu(textarea, channel);},100);
-					}
-
-					if (!e.ctrlKey && e.which != 38 && e.which != 40 && !(e.which == 39 && textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length)) BDFDB.DOMUtils.remove(".autocompleteEditUsers", ".autocompleteEditUsersRow");
-				});
-				BDFDB.ListenerUtils.add(this, textarea, "click", e => {
-					if (textarea.selectionStart == textarea.selectionEnd && textarea.selectionEnd == textarea.value.length) BDFDB.TimeUtils.timeout(_ => {this.addAutoCompleteMenu(textarea, channel);});
-				});
-			}
-		}
-	}
-
-	processMemberListItem (instance, wrapper, returnvalue) {
-		let username = wrapper.querySelector(BDFDB.dotCN.memberusername);
-		if (username) {
-			this.changeName(instance.props.user, username);
-			this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
-			this.addTag(instance.props.user, username.parentElement, BDFDB.disCN.bottagmember);
-		}
-	}
-
-	processUserPopout (instance, wrapper, returnvalue) {
-		let username = wrapper.querySelector(BDFDB.dotCNC.userpopoutheadertagusernamenonickname + BDFDB.dotCN.userpopoutheadernickname);
-		if (username) {
-			this.changeName(instance.props.user, username);
-			this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
-			this.addTag(instance.props.user, username.parentElement, BDFDB.disCN.bottagnametag, wrapper);
-		}
-	}
-
-	processUserProfile (instance, wrapper, returnvalue) {
-		let username = wrapper.querySelector(BDFDB.dotCN.userprofileusername);
-		if (username) {
-			this.changeName(instance.props.user, username);
-			this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
-			this.addTag(instance.props.user, username.parentElement, BDFDB.disCNS.userprofilebottag + BDFDB.disCN.bottagnametag, wrapper);
-		}
-	}
-
-	processFriendRow (instance, wrapper, returnvalue) {
-		let username = wrapper.querySelector(BDFDB.dotCN.friendsusername);
-		if (username) {
-			this.changeName(instance.props.user, username);
-			this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
-		}
-	}
-
-	processVoiceUser (instance, wrapper, returnvalue) {
-		let user = instance.props.user;
-		if (user && wrapper.className) {
-			this.changeVoiceUser(user, wrapper.querySelector(BDFDB.dotCN.voicename), instance.props.speaking);
-			this.changeAvatar(user, this.getAvatarDiv(wrapper));
-		}
-	}
-
-	processAccount (instance, wrapper, returnvalue) {
-		let user = instance.props.currentUser;
-		if (user) {
-			this.changeName(user, wrapper.querySelector(BDFDB.dotCN.accountinfodetails).firstElementChild);
-			this.changeAvatar(user, this.getAvatarDiv(wrapper));
-		}
-	}
-
-	processMessageUsername (instance, wrapper, returnvalue) {
-		let message = BDFDB.ReactUtils.getValue(instance, "props.message");
-		if (message) {
-			let username = wrapper.querySelector(BDFDB.dotCN.messageusername);
-			if (username) {
-				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id) || {};
-				this.changeName(message.author, username, channel.guild_id);
-				if (!BDFDB.DOMUtils.containsClass(wrapper.parentElement, BDFDB.disCN.messageheadercompact)) this.changeAvatar(message.author, this.getAvatarDiv(wrapper));
-				let messagegroup = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagegroup, wrapper);
-				this.addTag(message.author, wrapper, BDFDB.DOMUtils.containsClass(messagegroup, BDFDB.disCN.messagegroupcozy) ? BDFDB.disCN.bottagmessagecozy : BDFDB.disCN.bottagmessagecompact);
-			}
-		}
-	}
-
-	processAuditLog (instance, wrapper, returnvalue) {
-		let log = BDFDB.ReactUtils.getValue(instance, "props.log");
-		if (log && log.user) {
-			let hooks = wrapper.querySelectorAll(BDFDB.dotCN.auditloguserhook);
-			let guild_id = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.memoizedProps.guildId");
-			if (hooks.length > 0) this.changeName2(log.user, hooks[0].firstChild, guild_id);
-			if (hooks.length > 1 && log.targetType == "USER") this.changeName2(log.target, hooks[1].firstChild, guild_id);
-		}
-	}
-
-	processBannedCard (instance, wrapper, returnvalue) {
-		if (instance.props.user && instance.props.guild) {
-			let username = wrapper.querySelector(BDFDB.dotCN.guildsettingsbannedusername);
-			if (username) {
-				this.changeName3(instance.props.user, username);
-				this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
-			}
-		}
-	}
-
-	processInviteCard (instance, wrapper, returnvalue) {
-		let invite = BDFDB.ReactUtils.getValue(instance, "props.invite");
-		if (invite && invite.inviter && invite.guild) {
-			let username = wrapper.querySelector(BDFDB.dotCN.username);
-			if (username) {
-				this.changeName2(invite.inviter, username, invite.guild.id);
-				this.changeAvatar(invite.inviter, this.getAvatarDiv(wrapper));
-			}
-		}
-	}
-
-	processMemberCard (instance, wrapper, returnvalue) {
-		if (instance.props.user && instance.props.guild) {
-			let username = wrapper.querySelector(BDFDB.dotCN.guildsettingsmembername);
-			if (username) {
-				this.changeName2(instance.props.user, username, instance.props.guild.id);
-				this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
-			}
-		}
-	}
-
-	processInvitationCard (instance, wrapper, returnvalue) {
-		if (instance.props.user) {
-			let username = wrapper.querySelector(BDFDB.dotCN.invitemodalinviterowname);
-			if (username) {
-				this.changeName3(instance.props.user, username);
-				this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
-			}
-		}
-	}
-
-	processTypingUsers (instance, wrapper, returnvalue) {
-		let users = !instance.props.typingUsers ? [] : Object.keys(instance.props.typingUsers).filter(id => id != BDFDB.UserUtils.me.id).filter(id => !BDFDB.LibraryModules.FriendUtils.isBlocked(id)).map(id => BDFDB.LibraryModules.UserStore.getUser(id)).filter(id => id != null);
-		wrapper.querySelectorAll(BDFDB.dotCNS.typing + "strong").forEach((username, i) => {
-			if (users[i] && username) this.changeName2(users[i], username);
-		});
-	}
-
-	processDirectMessage (instance, wrapper, returnvalue) {
-		let channel = BDFDB.ReactUtils.getValue(instance, "props.channel");
-		if (channel && channel.type == 1) {
-			let user = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
-			if (user) {
-				let avatar = this.getAvatarDiv(wrapper);
-				if (avatar) {
-					this.changeAvatar(user, avatar);
-					this.changeTooltip(user, avatar, "right");
-				}
-			}
-		}
-	}
-
-	processCallAvatar (instance, wrapper, returnvalue) {
-		if (instance.props.id) {
-			let user = BDFDB.LibraryModules.UserStore.getUser(instance.props.id);
-			if (!user) {
-				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(instance.props.id);
-				if (channel && channel.type == 1) user = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
-			}
-			if (user) {
-				this.changeName2(user, wrapper.parentElement.querySelector(BDFDB.dotCN.callmembers));
-				let avatar = this.getAvatarDiv(wrapper);
-				if (avatar) {
-					this.changeAvatar(user, avatar);
-					if (BDFDB.DOMUtils.containsClass(avatar.parentElement, BDFDB.disCN.callvideo)) this.changeTooltip(user, avatar.parentElement, "left");
-				}
-			}
-		}
-	}
-
-	processVideoTile (instance, wrapper, returnvalue) {
-		if (instance.props.user) this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
-	}
-
-	processPictureInPictureVideo (instance, wrapper, returnvalue) {
-		if (instance.props.backgroundKey) {
-			let user = BDFDB.LibraryModules.UserStore.getUser(instance.props.backgroundKey);
-			if (user) this.changeAvatar(user, this.getAvatarDiv(wrapper));
-		}
-	}
-
-	processPrivateChannel (instance, wrapper, returnvalue) {
-		if (instance.props.user) {
-			let username = wrapper.querySelector(BDFDB.dotCN.namecontainername);
-			this.changePrivateChannel(instance.props.user, username && username.firstElementChild ? username.firstElementChild : username);
-			this.changeAvatar(instance.props.user, this.getAvatarDiv(wrapper));
-		}
-	}
-
-	processHeaderBarContainer (instance, wrapper, returnvalue) {
-		this.processHeaderBar(instance, wrapper);
-	}
-
-	processHeaderBar (instance, wrapper, returnvalue) {
-		let channel_id = BDFDB.ReactUtils.getValue(instance, "props.channelId") || BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.memoizedProps.channelId");
-		if (channel_id) {
-			let channelname = wrapper.querySelector(BDFDB.dotCN.channelheaderheaderbartitle);
-			if (channelname) {
-				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(channel_id);
-				if (channel) {
-					if (channel.type == 1) this.changeName(BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]), channelname);
-					else {
-						if (channelname.EditUsersChangeObserver && typeof channelname.EditUsersChangeObserver.disconnect == "function") channelname.EditUsersChangeObserver.disconnect();
-						if (BDFDB.BDUtils.isPluginEnabled("EditChannels")) {}
-						else {
-							channelname.style.removeProperty("color");
-							channelname.style.removeProperty("background");
-							BDFDB.DOMUtils.setText(channelname, channel.name);
-						}
-					}
-				}
-			}
-		}
-	}
-
-	processClickable (instance, wrapper, returnvalue) {
-		if (!wrapper || !instance.props || !instance.props.className) return;
-		if (instance.props.tag == "a" && instance.props.className.indexOf(BDFDB.disCN.anchorunderlineonhover) > -1) {
-			if (BDFDB.DOMUtils.containsClass(wrapper.parentElement, BDFDB.disCN.messagesystemcontent) && wrapper.parentElement.querySelector("a") == wrapper) {
-				let message = BDFDB.ReactUtils.findValue(wrapper.parentElement, "message", {up:true});
-				if (message) {
-					this.changeName(message.author, wrapper);
-					if (message.mentions.length == 1) this.changeName(BDFDB.LibraryModules.UserStore.getUser(message.mentions[0]), wrapper.parentElement.querySelectorAll("a")[1]);
-				}
-			}
-		}
-		else if (instance.props.tag == "span" && instance.props.className.indexOf(BDFDB.disCN.mention) > -1) {
-			let render = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.return.stateNode.props.render");
-			if (typeof render == "function") {
-				var props = render().props;
-				if (props && props.user) this.changeMention(props.user, wrapper);
-				else if (props && props.userId) this.changeMention(BDFDB.LibraryModules.UserStore.getUser(props.userId), wrapper);
-			}
-		}
-		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.quickswitchresult) > -1) {
-			let user = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.return.memoizedProps.user");
-			if (user) {
-				this.changeName2(user, wrapper.querySelector(BDFDB.dotCN.quickswitchresultmatch));
-				this.changeAvatar(user, this.getAvatarDiv(wrapper));
-			}
-		}
-		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.autocompleterow) > -1) {
-			let user = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.memoizedProps.user");
-			if (user) {
-				this.changeName2(user, wrapper.querySelector(BDFDB.dotCN.marginleft8));
-				this.changeAvatar(user, this.getAvatarDiv(wrapper));
-			}
-		}
-		else if (instance.props.tag == "div" && instance.props.className.indexOf(BDFDB.disCN.searchpopoutuser) > -1) {
-			let result = BDFDB.ReactUtils.getValue(instance, "_reactInternalFiber.return.memoizedProps.result");
-			if (result && result.user) {
-				this.changeName3(result.user, wrapper.querySelector(BDFDB.dotCN.searchpopoutdisplayednick));
-				this.changeAvatar(result.user, wrapper.querySelector(BDFDB.dotCN.searchpopoutdisplayavatar));
-			}
-		}
-	}
-
-	processMessageContent (instance, wrapper, returnvalue) {
-		let message = BDFDB.ReactUtils.getValue(instance, "props.message");
-		if (message && message.author) {
-			let markup = wrapper.querySelector(BDFDB.dotCN.messagemarkup);
-			if (markup) {
-				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id) || {};
-				let member = BDFDB.LibraryModules.MemberStore.getMember(channel.guild_id, message.author.id) || {};
-				let data = this.getUserData(message.author.id, wrapper);
-				markup.style.setProperty("color", window.settingsCookie["bda-gs-7"] ? BDFDB.ColorUtils.convert(data.color1 && !BDFDB.ObjectUtils.is(data.color1) ? data.color1 : member.colorString, "RGBA") : null, "important");
-			}
-		}
-	}
-
-	processStandardSidebarView (instance, wrapper, returnvalue) {
-		if (this.SettingsUpdated) {
-			delete this.SettingsUpdated;
-			this.forceUpdateAll();
-		}
-	}
-	
-	checkUrl (url, instance) {
-		let input = BDFDB.ReactUtils.findDOMNode(instance).firstElementChild;
-		BDFDB.TimeUtils.clear(instance.checkTimeout);
-		if (url == null || !url.trim()) {
-			if (input) BDFDB.DOMUtils.remove(input.tooltip);
-			instance.props.inputClassName = null;
-			instance.forceUpdate();
-		}
-		else instance.checkTimeout = BDFDB.TimeUtils.timeout(_ => {
-			BDFDB.LibraryRequires.request(url.trim(), (error, response, result) => {
-				if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
-					if (input) BDFDB.DOMUtils.remove(input.tooltip);
-					instance.props.inputClassName = BDFDB.disCN.inputsuccess;
-				}
-				else {
-					this.createNoticeTooltip(input, true);
-					instance.props.inputClassName = BDFDB.disCN.inputerror;
-				}
-				delete instance.checkTimeout;
-				instance.forceUpdate();
+				}]
 			});
-		}, 1000);
-	}
-
-	createNoticeTooltip (input, isinvalid = false) {
-		if (!input) return;
-		BDFDB.DOMUtils.remove(input.tooltip);
-		var invalid = isinvalid || BDFDB.DOMUtils.containsClass(input, BDFDB.disCN.inputerror);
-		var valid = invalid ? false : BDFDB.DOMUtils.containsClass(input, BDFDB.disCN.inputsuccess);
-		if (invalid || valid) input.tooltip = BDFDB.TooltipUtils.create(input, invalid ? this.labels.modal_invalidurl_text : this.labels.modal_validurl_text, {type:"right", selector:"notice-tooltip", color: invalid ? "red" : "green"});
-	}
-
-	changeAppTitle () {
-		let channel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());
-		let title = document.head.querySelector("title");
-		if (title && channel && channel.type == 1) {
-			let info = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
-			if (info) {
-				let data = this.getUserData(info.id, title);
-				BDFDB.DOMUtils.setText(title, "@" + (data.name || info.username));
-			}
 		}
-	}
-
-	changeName (info, username, guildid = BDFDB.LibraryModules.LastGuildStore.getGuildId()) {
-		if (!info || !username || !username.parentElement) return;
-		if (username.EditUsersChangeObserver && typeof username.EditUsersChangeObserver.disconnect == "function") username.EditUsersChangeObserver.disconnect();
-		let data = this.getUserData(info.id, username);
-		let member = BDFDB.LibraryModules.MemberStore.getMember(guildid, info.id) || {};
-		this.changeBotTags(data, username, member);
-		if (data.name || data.color1 || data.color2 || username.getAttribute("changed-by-editusers")) {
-			let isBRCenabled = BDFDB.BDUtils.isPluginEnabled("BetterRoleColors");
-			let usenick = !BDFDB.DOMUtils.containsClass(username, BDFDB.disCN.userprofileusername) && !BDFDB.DOMUtils.containsClass(username.parentElement, BDFDB.disCN.listname, BDFDB.disCN.accountinfodetails, false) && member.nick;
-			let usemembercolor = !BDFDB.DOMUtils.containsClass(username.parentElement, BDFDB.disCN.listname) && (BDFDB.DOMUtils.containsClass(username, BDFDB.disCN.memberusername, BDFDB.disCN.messageusername, false) || isBRCenabled);
-
-			if (BDFDB.ObjectUtils.is(data.color1)) {
-				username.style.setProperty("color", BDFDB.ColorUtils.convert(data.color1[Object.keys(data.color1)[0]], "RGBA"), "important");
-				BDFDB.DOMUtils.setText(username, BDFDB.DOMUtils.create(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color1)} !important;">${BDFDB.StringUtils.htmlEscape(data.name || (usenick ? member.nick : info.username))}</span>`));
+		
+		checkUrl (url, instance) {
+			BDFDB.TimeUtils.clear(instance.checkTimeout);
+			if (url == null || !url.trim()) {
+				delete instance.props.success;
+				delete instance.props.errorMessage;
+				instance.forceUpdate();
 			}
-			else {
-				username.style.setProperty("color", BDFDB.ColorUtils.convert(data.color1 || (usemembercolor ? member.colorString : null), "RGBA"), "important");
-				BDFDB.DOMUtils.setText(username, data.name || (usenick ? member.nick : info.username));
-			}
-
-			username.style.setProperty("background", BDFDB.ObjectUtils.is(data.color2) ? BDFDB.ColorUtils.createGradient(data.color2) : BDFDB.ColorUtils.convert(data.color2, "RGBA"), "important");
-
-			if (data.name || data.color1 || data.color2) {
-				username.setAttribute("changed-by-editusers", true);
-				username.EditUsersChangeObserver = new MutationObserver((changes, _) => {
-					username.EditUsersChangeObserver.disconnect();
-					this.changeName(info, username);
+			else instance.checkTimeout = BDFDB.TimeUtils.timeout(_ => {
+				BDFDB.LibraryRequires.request(url.trim(), (error, response, result) => {
+					if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1) {
+						instance.props.success = true;
+						delete instance.props.errorMessage;
+					}
+					else {
+						delete instance.props.success;
+						instance.props.errorMessage = this.labels.modal_invalidurl_text;
+					}
+					delete instance.checkTimeout;
+					instance.forceUpdate();
 				});
-				username.EditUsersChangeObserver.observe(username, {attributes:true});
+			}, 1000);
+		}
+
+		setLabelsByLanguage () {
+			switch (BDFDB.LanguageUtils.getLanguage().id) {
+				case "hr":		//croatian
+					return {
+						context_localusersettings_text:		"Lokalne korisničke postavke",
+						submenu_usersettings_text:			"Promijeni postavke",
+						submenu_resetsettings_text:			"Poništi korisnika",
+						modal_header_text:					"Lokalne korisničke postavke",
+						modal_username_text:				"Lokalno korisničko ime",
+						modal_usertag_text:					"Oznaka",
+						modal_useravatar_text:				"Ikona",
+						modal_removeicon_text:				"Ukloni ikonu",
+						modal_tabheader1_text:				"Korisnik",
+						modal_tabheader2_text:				"Boja naziva",
+						modal_tabheader3_text:				"Boja oznaka",
+						modal_tabheader4_text:				"Boja poruke",
+						modal_colorpicker1_text:			"Boja naziva",
+						modal_colorpicker2_text:			"Boja pozadine",
+						modal_colorpicker3_text:			"Boja oznaka",
+						modal_colorpicker4_text:			"Boja fonta",
+						modal_colorpicker5_text:			"Boja fonta",
+						modal_ignoretagcolor_text:			"Upotrijebite boju uloga",
+						modal_invalidurl_text:				"Nevažeći URL"
+					};
+				case "da":		//danish
+					return {
+						context_localusersettings_text:		"Lokal brugerindstillinger",
+						submenu_usersettings_text:			"Skift indstillinger",
+						submenu_resetsettings_text:			"Nulstil bruger",
+						modal_header_text:					"Lokal brugerindstillinger",
+						modal_username_text:				"Lokalt brugernavn",
+						modal_usertag_text:					"Initialer",
+						modal_useravatar_text:				"Ikon",
+						modal_removeicon_text:				"Fjern ikon",
+						modal_tabheader1_text:				"Bruger",
+						modal_tabheader2_text:				"Navnefarve",
+						modal_tabheader3_text:				"Etiketfarve",
+						modal_tabheader4_text:				"Meddelelsesfarve",
+						modal_colorpicker1_text:			"Navnefarve",
+						modal_colorpicker2_text:			"Baggrundsfarve",
+						modal_colorpicker3_text:			"Etiketfarve",
+						modal_colorpicker4_text:			"Skriftfarve",
+						modal_colorpicker5_text:			"Skriftfarve",
+						modal_ignoretagcolor_text:			"Brug rollefarve",
+						modal_invalidurl_text:				"Ugyldig URL"
+					};
+				case "de":		//german
+					return {
+						context_localusersettings_text:		"Lokale Benutzereinstellungen",
+						submenu_usersettings_text:			"Einstellungen ändern",
+						submenu_resetsettings_text:			"Benutzer zurücksetzen",
+						modal_header_text:					"Lokale Benutzereinstellungen",
+						modal_username_text:				"Lokaler Benutzername",
+						modal_usertag_text:					"Etikett",
+						modal_useravatar_text:				"Icon",
+						modal_removeicon_text:				"Entferne Icon",
+						modal_tabheader1_text:				"Benutzer",
+						modal_tabheader2_text:				"Namensfarbe",
+						modal_tabheader3_text:				"Etikettfarbe",
+						modal_tabheader4_text:				"Nachrichtenfarbe",
+						modal_colorpicker1_text:			"Namensfarbe",
+						modal_colorpicker2_text:			"Hintergrundfarbe",
+						modal_colorpicker3_text:			"Etikettfarbe",
+						modal_colorpicker4_text:			"Schriftfarbe",
+						modal_colorpicker5_text:			"Schriftfarbe",
+						modal_ignoretagcolor_text:			"Benutze Rollenfarbe",
+						modal_invalidurl_text:				"Ungültige URL"
+					};
+				case "es":		//spanish
+					return {
+						context_localusersettings_text:		"Ajustes local de usuario",
+						submenu_usersettings_text:			"Cambiar ajustes",
+						submenu_resetsettings_text:			"Restablecer usuario",
+						modal_header_text:					"Ajustes local de usuario",
+						modal_username_text:				"Nombre local de usuario",
+						modal_usertag_text:					"Etiqueta",
+						modal_useravatar_text:				"Icono",
+						modal_removeicon_text:				"Eliminar icono",
+						modal_tabheader1_text:				"Usuario",
+						modal_tabheader2_text:				"Color del nombre",
+						modal_tabheader3_text:				"Color de la etiqueta",
+						modal_tabheader4_text:				"Color del mensaje",
+						modal_colorpicker1_text:			"Color del nombre",
+						modal_colorpicker2_text:			"Color de fondo",
+						modal_colorpicker3_text:			"Color de la etiqueta",
+						modal_colorpicker4_text:			"Color de fuente",
+						modal_colorpicker5_text:			"Color de fuente",
+						modal_ignoretagcolor_text:			"Usar color de rol",
+						modal_invalidurl_text:				"URL inválida"
+					};
+				case "fr":		//french
+					return {
+						context_localusersettings_text:		"Paramètres locale d'utilisateur",
+						submenu_usersettings_text:			"Modifier les paramètres",
+						submenu_resetsettings_text:			"Réinitialiser l'utilisateur",
+						modal_header_text:					"Paramètres locale d'utilisateur",
+						modal_username_text:				"Nom local d'utilisateur",
+						modal_usertag_text:					"Étiquette",
+						modal_useravatar_text:				"Icône",
+						modal_removeicon_text:				"Supprimer l'icône",
+						modal_tabheader1_text:				"Serveur",
+						modal_tabheader2_text:				"Couleur du nom",
+						modal_tabheader3_text:				"Couleur de l'étiquette",
+						modal_tabheader4_text:				"Couleur du message",
+						modal_colorpicker1_text:			"Couleur du nom",
+						modal_colorpicker2_text:			"Couleur de fond",
+						modal_colorpicker3_text:			"Couleur de l'étiquette",
+						modal_colorpicker4_text:			"Couleur de la police",
+						modal_colorpicker5_text:			"Couleur de la police",
+						modal_ignoretagcolor_text:			"Utiliser la couleur de rôle",
+						modal_invalidurl_text:				"URL invalide"
+					};
+				case "it":		//italian
+					return {
+						context_localusersettings_text:		"Impostazioni locale utente",
+						submenu_usersettings_text:			"Cambia impostazioni",
+						submenu_resetsettings_text:			"Ripristina utente",
+						modal_header_text:					"Impostazioni locale utente",
+						modal_username_text:				"Nome locale utente",
+						modal_usertag_text:					"Etichetta",
+						modal_useravatar_text:				"Icona",
+						modal_removeicon_text:				"Rimuova l'icona",
+						modal_tabheader1_text:				"Utente",
+						modal_tabheader2_text:				"Colore del nome",
+						modal_tabheader3_text:				"Colore della etichetta",
+						modal_tabheader4_text:				"Colore del messaggio",
+						modal_colorpicker1_text:			"Colore del nome",
+						modal_colorpicker2_text:			"Colore di sfondo",
+						modal_colorpicker3_text:			"Colore della etichetta",
+						modal_colorpicker4_text:			"Colore del carattere",
+						modal_colorpicker5_text:			"Colore del carattere",
+						modal_ignoretagcolor_text:			"Usa il colore del ruolo",
+						modal_invalidurl_text:				"URL non valido"
+					};
+				case "nl":		//dutch
+					return {
+						context_localusersettings_text:		"Lokale gebruikerinstellingen",
+						submenu_usersettings_text:			"Verandere instellingen",
+						submenu_resetsettings_text:			"Reset gebruiker",
+						modal_header_text:					"Lokale gebruikerinstellingen",
+						modal_username_text:				"Lokale gebruikernaam",
+						modal_usertag_text:					"Etiket",
+						modal_useravatar_text:				"Icoon",
+						modal_removeicon_text:				"Verwijder icoon",
+						modal_tabheader1_text:				"Gebruiker",
+						modal_tabheader2_text:				"Naamkleur",
+						modal_tabheader3_text:				"Etiketkleur",
+						modal_tabheader4_text:				"Berichtkleur",
+						modal_colorpicker1_text:			"Naamkleur",
+						modal_colorpicker2_text:			"Achtergrondkleur",
+						modal_colorpicker3_text:			"Etiketkleur",
+						modal_colorpicker4_text:			"Doopvontkleur",
+						modal_colorpicker5_text:			"Doopvontkleur",
+						modal_ignoretagcolor_text:			"Gebruik rolkleur",
+						modal_invalidurl_text:				"Ongeldige URL"
+					};
+				case "no":		//norwegian
+					return {
+						context_localusersettings_text:		"Lokal brukerinnstillinger",
+						submenu_usersettings_text:			"Endre innstillinger",
+						submenu_resetsettings_text:			"Tilbakestill bruker",
+						modal_header_text:					"Lokal brukerinnstillinger",
+						modal_username_text:				"Lokalt gebruikernavn",
+						modal_usertag_text:					"Stikkord",
+						modal_useravatar_text:				"Ikon",
+						modal_removeicon_text:				"Fjern ikon",
+						modal_tabheader1_text:				"Bruker",
+						modal_tabheader2_text:				"Navnfarge",
+						modal_tabheader3_text:				"Stikkordfarge",
+						modal_tabheader4_text:				"Meldingsfarge",
+						modal_colorpicker1_text:			"Navnfarge",
+						modal_colorpicker2_text:			"Bakgrunnfarge",
+						modal_colorpicker3_text:			"Stikkordfarge",
+						modal_colorpicker4_text:			"Skriftfarge",
+						modal_colorpicker5_text:			"Skriftfarge",
+						modal_ignoretagcolor_text:			"Bruk rollefarge",
+						modal_invalidurl_text:				"Ugyldig URL"
+					};
+				case "pl":		//polish
+					return {
+						context_localusersettings_text:		"Lokalne ustawienia użytkownika",
+						submenu_usersettings_text:			"Zmień ustawienia",
+						submenu_resetsettings_text:			"Resetuj ustawienia",
+						modal_header_text:					"Lokalne ustawienia użytkownika",
+						modal_username_text:				"Lokalna nazwa użytkownika",
+						modal_usertag_text:					"Etykieta",
+						modal_useravatar_text:				"Ikona",
+						modal_removeicon_text:				"Usuń ikonę",
+						modal_tabheader1_text:				"Użytkownik",
+						modal_tabheader2_text:				"Kolor nazwy",
+						modal_tabheader3_text:				"Kolor etykiety",
+						modal_tabheader4_text:				"Kolor wiadomości",
+						modal_colorpicker1_text:			"Kolor nazwy",
+						modal_colorpicker2_text:			"Kolor tła",
+						modal_colorpicker3_text:			"Kolor etykiety",
+						modal_colorpicker4_text:			"Kolor czcionki",
+						modal_colorpicker5_text:			"Kolor czcionki",
+						modal_ignoretagcolor_text:			"Użyj kolor roli",
+						modal_invalidurl_text:				"Nieprawidłowe URL"
+					};
+				case "pt-BR":	//portuguese (brazil)
+					return {
+						context_localusersettings_text:		"Configurações local do utilizador",
+						submenu_usersettings_text:			"Mudar configurações",
+						submenu_resetsettings_text:			"Redefinir utilizador",
+						modal_header_text:					"Configurações local do utilizador",
+						modal_username_text:				"Nome local do utilizador",
+						modal_usertag_text:					"Etiqueta",
+						modal_useravatar_text:				"Icone",
+						modal_removeicon_text:				"Remover ícone",
+						modal_tabheader1_text:				"Utilizador",
+						modal_tabheader2_text:				"Cor do nome",
+						modal_tabheader3_text:				"Cor da etiqueta",
+						modal_tabheader4_text:				"Cor da mensagem",
+						modal_colorpicker1_text:			"Cor do nome",
+						modal_colorpicker2_text:			"Cor do fundo",
+						modal_colorpicker3_text:			"Cor da etiqueta",
+						modal_colorpicker4_text:			"Cor da fonte",
+						modal_colorpicker5_text:			"Cor da fonte",
+						modal_ignoretagcolor_text:			"Use a cor do papel",
+						modal_invalidurl_text:				"URL inválida"
+					};
+				case "fi":		//finnish
+					return {
+						context_localusersettings_text:		"Paikallinen käyttäjä asetukset",
+						submenu_usersettings_text:			"Vaihda asetuksia",
+						submenu_resetsettings_text:			"Nollaa käyttäjä",
+						modal_header_text:					"Paikallinen käyttäjä asetukset",
+						modal_username_text:				"Paikallinen käyttäjätunnus",
+						modal_usertag_text:					"Merkki",
+						modal_useravatar_text:				"Ikonin",
+						modal_removeicon_text:				"Poista kuvake",
+						modal_tabheader1_text:				"Käyttäjä",
+						modal_tabheader2_text:				"Nimiväri",
+						modal_tabheader3_text:				"Merkkiväri",
+						modal_tabheader4_text:				"Viestinväri",
+						modal_colorpicker1_text:			"Nimiväri",
+						modal_colorpicker2_text:			"Taustaväri",
+						modal_colorpicker3_text:			"Merkkiväri",
+						modal_colorpicker4_text:			"Fontinväri",
+						modal_colorpicker5_text:			"Fontinväri",
+						modal_ignoretagcolor_text:			"Käytä rooliväriä",
+						modal_invalidurl_text:				"Virheellinen URL"
+					};
+				case "sv":		//swedish
+					return {
+						context_localusersettings_text:		"Lokal användareinställningar",
+						submenu_usersettings_text:			"Ändra inställningar",
+						submenu_resetsettings_text:			"Återställ användare",
+						modal_header_text:					"Lokal användareinställningar",
+						modal_username_text:				"Lokalt användarenamn",
+						modal_usertag_text:					"Märka",
+						modal_useravatar_text:				"Ikon",
+						modal_removeicon_text:				"Ta bort ikonen",
+						modal_tabheader1_text:				"Användare",
+						modal_tabheader2_text:				"Namnfärg",
+						modal_tabheader3_text:				"Märkafärg",
+						modal_tabheader4_text:				"Meddelandefärg",
+						modal_colorpicker1_text:			"Namnfärg",
+						modal_colorpicker2_text:			"Bakgrundfärg",
+						modal_colorpicker3_text:			"Märkafärg",
+						modal_colorpicker4_text:			"Fontfärg",
+						modal_colorpicker5_text:			"Fontfärg",
+						modal_ignoretagcolor_text:			"Använd rollfärg",
+						modal_invalidurl_text:				"Ogiltig URL"
+					};
+				case "tr":		//turkish
+					return {
+						context_localusersettings_text:		"Yerel Kullanıcı Ayarları",
+						submenu_usersettings_text:			"Ayarları Değiştir",
+						submenu_resetsettings_text:			"Kullanıcı Sıfırla",
+						modal_header_text:					"Yerel Kullanıcı Ayarları",
+						modal_username_text:				"Yerel Kullanıcı Isim",
+						modal_usertag_text:					"Etiket",
+						modal_useravatar_text:				"Simge",
+						modal_removeicon_text:				"Simge kaldır",
+						modal_tabheader1_text:				"Kullanıcı",
+						modal_tabheader2_text:				"Simge rengi",
+						modal_tabheader3_text:				"Isim rengi",
+						modal_tabheader4_text:				"Mesaj rengi",
+						modal_colorpicker1_text:			"Simge rengi",
+						modal_colorpicker2_text:			"Arka fon rengi",
+						modal_colorpicker3_text:			"Etiket rengi",
+						modal_colorpicker4_text:			"Yazı rengi",
+						modal_colorpicker5_text:			"Yazı rengi",
+						modal_ignoretagcolor_text:			"Rol rengini kullan",
+						modal_invalidurl_text:				"Geçersiz URL"
+					};
+				case "cs":		//czech
+					return {
+						context_localusersettings_text:		"Místní nastavení uživatel",
+						submenu_usersettings_text:			"Změnit nastavení",
+						submenu_resetsettings_text:			"Obnovit uživatel",
+						modal_header_text:					"Místní nastavení uživatel",
+						modal_username_text:				"Místní název uživatel",
+						modal_usertag_text:					"Štítek",
+						modal_useravatar_text:				"Ikony",
+						modal_removeicon_text:				"Odstranit ikonu",
+						modal_tabheader1_text:				"Uživatel",
+						modal_tabheader2_text:				"Barva název",
+						modal_tabheader3_text:				"Barva štítek",
+						modal_tabheader4_text:				"Barva zprávy",
+						modal_colorpicker1_text:			"Barva název",
+						modal_colorpicker2_text:			"Barva pozadí",
+						modal_colorpicker3_text:			"Barva štítek",
+						modal_colorpicker4_text:			"Barva fontu",
+						modal_colorpicker5_text:			"Barva fontu",
+						modal_ignoretagcolor_text:			"Použijte barva role",
+						modal_invalidurl_text:				"Neplatná URL"
+					};
+				case "bg":		//bulgarian
+					return {
+						context_localusersettings_text:		"Настройки за локални потребител",
+						submenu_usersettings_text:			"Промяна на настройките",
+						submenu_resetsettings_text:			"Възстановяване на потребител",
+						modal_header_text:					"Настройки за локални потребител",
+						modal_username_text:				"Локално име на потребител",
+						modal_usertag_text:					"Cвободен край",
+						modal_useravatar_text:				"Икона",
+						modal_removeicon_text:				"Премахване на иконата",
+						modal_tabheader1_text:				"Потребител",
+						modal_tabheader2_text:				"Цвят на име",
+						modal_tabheader3_text:				"Цвят на свободен край",
+						modal_tabheader4_text:				"Цвят на съобщението",
+						modal_colorpicker1_text:			"Цвят на име",
+						modal_colorpicker2_text:			"Цвят на заден план",
+						modal_colorpicker3_text:			"Цвят на свободен край",
+						modal_colorpicker4_text:			"Цвят на шрифта",
+						modal_colorpicker5_text:			"Цвят на шрифта",
+						modal_ignoretagcolor_text:			"Използвайте цвят на ролите",
+						modal_invalidurl_text:				"Невалиден URL"
+					};
+				case "ru":		//russian
+					return {
+						context_localusersettings_text:		"Настройки локального пользователь",
+						submenu_usersettings_text:			"Изменить настройки",
+						submenu_resetsettings_text:			"Сбросить пользователь",
+						modal_header_text:					"Настройки локального пользователь",
+						modal_username_text:				"Имя локального пользователь",
+						modal_usertag_text:					"Tег",
+						modal_useravatar_text:				"Значок",
+						modal_removeicon_text:				"Удалить значок",
+						modal_tabheader1_text:				"Пользователь",
+						modal_tabheader2_text:				"Цвет имя",
+						modal_tabheader3_text:				"Цвет тег",
+						modal_tabheader4_text:				"Цвет сообщения",
+						modal_colorpicker1_text:			"Цвет имя",
+						modal_colorpicker2_text:			"Цвет задний план",
+						modal_colorpicker3_text:			"Цвет тег",
+						modal_colorpicker4_text:			"Цвет шрифта",
+						modal_colorpicker5_text:			"Цвет шрифта",
+						modal_ignoretagcolor_text:			"Использовать цвет ролей",
+						modal_invalidurl_text:				"Неверная URL"
+					};
+				case "uk":		//ukrainian
+					return {
+						context_localusersettings_text:		"Налаштування локального користувач",
+						submenu_usersettings_text:			"Змінити налаштування",
+						submenu_resetsettings_text:			"Скидання користувач",
+						modal_header_text:					"Налаштування локального користувач",
+						modal_username_text:				"Локальне ім'я користувач",
+						modal_usertag_text:					"Tег",
+						modal_useravatar_text:				"Іконка",
+						modal_removeicon_text:				"Видалити піктограму",
+						modal_tabheader1_text:				"Користувач",
+						modal_tabheader2_text:				"Колір ім'я",
+						modal_tabheader3_text:				"Колір тег",
+						modal_tabheader4_text:				"Колір повідомлення",
+						modal_colorpicker1_text:			"Колір ім'я",
+						modal_colorpicker2_text:			"Колір фон",
+						modal_colorpicker3_text:			"Колір тег",
+						modal_colorpicker4_text:			"Колір шрифту",
+						modal_colorpicker5_text:			"Колір шрифту",
+						modal_ignoretagcolor_text:			"Використовуйте рольовий колір",
+						modal_invalidurl_text:				"Недійсна URL"
+					};
+				case "ja":		//japanese
+					return {
+						context_localusersettings_text:		"ローカルユーザーー設定",
+						submenu_usersettings_text:			"設定を変更する",
+						submenu_resetsettings_text:			"ユーザーーをリセットする",
+						modal_header_text:					"ローカルユーザーー設定",
+						modal_username_text:				"ローカルユーザーー名",
+						modal_usertag_text:					"タグ",
+						modal_useravatar_text:				"アイコン",
+						modal_removeicon_text:				"アイコンを削除",
+						modal_tabheader1_text:				"ユーザー",
+						modal_tabheader2_text:				"名の色",
+						modal_tabheader3_text:				"タグの色",
+						modal_tabheader4_text:				"メッセージの色",
+						modal_colorpicker1_text:			"名の色",
+						modal_colorpicker2_text:			"バックグラウンドの色",
+						modal_colorpicker3_text:			"タグの色",
+						modal_colorpicker4_text:			"フォントの色",
+						modal_colorpicker5_text:			"フォントの色",
+						modal_ignoretagcolor_text:			"ロールカラーを使用する",
+						modal_invalidurl_text:				"無効な URL"
+					};
+				case "zh-TW":	//chinese (traditional)
+					return {
+						context_localusersettings_text:		"本地用戶設置",
+						submenu_usersettings_text:			"更改設置",
+						submenu_resetsettings_text:			"重置用戶",
+						modal_header_text:					"本地用戶設置",
+						modal_username_text:				"用戶名稱",
+						modal_usertag_text:					"標籤",
+						modal_useravatar_text:				"圖標",
+						modal_removeicon_text:				"刪除圖標",
+						modal_tabheader1_text:				"用戶",
+						modal_tabheader2_text:				"名稱顏色",
+						modal_tabheader3_text:				"標籤顏色",
+						modal_tabheader4_text:				"訊息顏色",
+						modal_colorpicker1_text:			"名稱顏色",
+						modal_colorpicker2_text:			"背景顏色",
+						modal_colorpicker3_text:			"標籤顏色",
+						modal_colorpicker4_text:			"字體顏色",
+						modal_colorpicker5_text:			"字體顏色",
+						modal_ignoretagcolor_text:			"使用角色",
+						modal_invalidurl_text:				"無效的 URL"
+					};
+				case "ko":		//korean
+					return {
+						context_localusersettings_text:		"로컬 사용자 설정",
+						submenu_usersettings_text:			"설정 변경",
+						submenu_resetsettings_text:			"사용자 재설정",
+						modal_header_text:					"로컬 사용자 설정",
+						modal_username_text:				"로컬 사용자 이름",
+						modal_usertag_text:					"꼬리표",
+						modal_useravatar_text:				"상",
+						modal_removeicon_text:				"상 삭제",
+						modal_tabheader1_text:				"사용자",
+						modal_tabheader2_text:				"이름 색깔",
+						modal_tabheader3_text:				"꼬리표 색깔",
+						modal_tabheader4_text:				"메시지 색상",
+						modal_colorpicker1_text:			"이름 색깔",
+						modal_colorpicker2_text:			"배경 색깔",
+						modal_colorpicker3_text:			"꼬리표 색깔",
+						modal_colorpicker4_text:			"글꼴 색깔",
+						modal_colorpicker5_text:			"글꼴 색깔",
+						modal_ignoretagcolor_text:			"역할 색상 사용",
+						modal_invalidurl_text:				"잘못된 URL"
+					};
+				default:	//default: english
+					return {
+						context_localusersettings_text:		"Local Usersettings",
+						submenu_usersettings_text:			"Change Settings",
+						submenu_resetsettings_text:			"Reset User",
+						modal_header_text:					"Local Usersettings",
+						modal_username_text:				"Local Username",
+						modal_usertag_text:					"Tag",
+						modal_useravatar_text:				"Icon",
+						modal_removeicon_text:				"Remove Icon",
+						modal_tabheader1_text:				"User",
+						modal_tabheader2_text:				"Namecolor",
+						modal_tabheader3_text:				"Tagcolor",
+						modal_tabheader4_text:				"Messagecolor",
+						modal_colorpicker1_text:			"Namecolor",
+						modal_colorpicker2_text:			"Backgroundcolor",
+						modal_colorpicker3_text:			"Tagcolor",
+						modal_colorpicker4_text:			"Fontcolor",
+						modal_colorpicker5_text:			"Fontcolor",
+						modal_ignoretagcolor_text:			"Use Rolecolor",
+						modal_invalidurl_text:				"Invalid URL"
+					};
 			}
-			else username.removeAttribute("changed-by-editusers");
 		}
 	}
-
-	changeName2 (info, username, guildid = BDFDB.LibraryModules.LastGuildStore.getGuildId()) {
-		if (!info || !username || !username.parentElement) return;
-		if (username.EditUsersChangeObserver && typeof username.EditUsersChangeObserver.disconnect == "function") username.EditUsersChangeObserver.disconnect();
-		let data = this.getUserData(info.id, username);
-		let member = BDFDB.LibraryModules.MemberStore.getMember(guildid, info.id) || {};
-		this.changeBotTags(data, username, member);
-		if (data.name || data.color1 || username.getAttribute("changed-by-editusers")) {
-			if (BDFDB.ObjectUtils.is(data.color1)) {
-				username.style.setProperty("color", BDFDB.ColorUtils.convert(data.color1[Object.keys(data.color1)[0]], "RGBA"), "important");
-				BDFDB.DOMUtils.setText(username, BDFDB.DOMUtils.create(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color1)} !important;">${BDFDB.StringUtils.htmlEscape(data.name || member.nick || info.username)}</span>`));
-			}
-			else {
-				username.style.setProperty("color", BDFDB.ColorUtils.convert(data.color1 || (BDFDB.BDUtils.isPluginEnabled("BetterRoleColors") ? member.colorString : null), "RGBA"), "important");
-				BDFDB.DOMUtils.setText(username, data.name || member.nick || info.username);
-			}
-			if (data.name || data.color1) {
-				username.setAttribute("changed-by-editusers", true);
-				username.EditUsersChangeObserver = new MutationObserver((changes, _) => {
-					username.EditUsersChangeObserver.disconnect();
-					this.changeName(info, username);
-				});
-				username.EditUsersChangeObserver.observe(username, {attributes:true});
-			}
-			else username.removeAttribute("changed-by-editusers");
-		}
-	}
-
-	changeName3 (info, username, adddisc = false) {
-		if (!info || !username || !username.parentElement) return;
-		if (username.EditUsersChangeObserver && typeof username.EditUsersChangeObserver.disconnect == "function") username.EditUsersChangeObserver.disconnect();
-		let data = this.getUserData(info.id, username);
-		if (data.name || data.color1 || username.getAttribute("changed-by-editusers")) {
-			if (adddisc) {
-				BDFDB.DOMUtils.setText(username, BDFDB.DOMUtils.create(`<span ${data.color1 ? (BDFDB.ObjectUtils.is(data.color1) ? 'style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image:' + BDFDB.ColorUtils.createGradient(data.color1) + ' !important;"' : 'style="color:' + data.color1 + ' !important;"'): ''}>${BDFDB.StringUtils.htmlEscape(data.name || info.username)}</span><span${typeof adddisc == "string" ? ' class="' + adddisc + '"' : ''}>#${info.discriminator}</span>`));
-			}
-			else {
-				if (BDFDB.ObjectUtils.is(data.color1)) {
-					username.style.setProperty("color", BDFDB.ColorUtils.convert(data.color1[Object.keys(data.color1)[0]], "RGBA"), "important");
-					BDFDB.DOMUtils.setText(username, BDFDB.DOMUtils.create(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color1)} !important;">${BDFDB.StringUtils.htmlEscape(data.name || info.username)}</span>`));
-				}
-				else {
-					username.style.setProperty("color", BDFDB.ColorUtils.convert(data.color1, "RGBA"), "important");
-					BDFDB.DOMUtils.setText(username, data.name || info.username);
-				}
-			}
-			if (data.name || data.color1) {
-				username.setAttribute("changed-by-editusers", true);
-				username.EditUsersChangeObserver = new MutationObserver((changes, _) => {
-					username.EditUsersChangeObserver.disconnect();
-					this.changeName(info, username);
-				});
-				username.EditUsersChangeObserver.observe(username, {attributes:true});
-			}
-			else username.removeAttribute("changed-by-editusers");
-		}
-	}
-
-	changeBotTags (data, username, member) {
-		for (let tag of username.parentElement.parentElement.querySelectorAll(BDFDB.dotCN.bottag)) if (!BDFDB.DOMUtils.containsClass(tag, "TRE-tag")) {
-			let isBRCbottagsEnabled = BDFDB.ReactUtils.getValue(BDFDB.BDUtils.getPlugin("BetterRoleColors", true), "settings.modules.botTags");
-			let tagcolor =  BDFDB.ColorUtils.convert(data.color1 || (isBRCbottagsEnabled || BDFDB.DOMUtils.containsClass(tag, "owner-tag-rolecolor") ? member.colorString : null), "RGBA");
-			tagcolor = BDFDB.ColorUtils.isBright(tagcolor) ? BDFDB.ColorUtils.change(tagcolor, -0.3) : tagcolor;
-			tag.style.setProperty(BDFDB.DOMUtils.containsClass(tag, BDFDB.disCN.bottaginvert) ? "color" : "background-color", tagcolor, "important");
-		}
-	}
-
-	changeAvatar (info, avatar) {
-		if (!info || !avatar || !avatar.parentElement) return;
-		if (avatar.EditUsersChangeObserver && typeof avatar.EditUsersChangeObserver.disconnect == "function") avatar.EditUsersChangeObserver.disconnect();
-		let data = this.getUserData(info.id, avatar);
-		if (data.url || data.removeIcon || avatar.getAttribute("changed-by-editusers")) {
-			if (avatar.tagName == "IMG") avatar.setAttribute("src", data.removeIcon ? null : (data.url || BDFDB.UserUtils.getAvatar(info.id)));
-			else {
-				let url = data.removeIcon ? null : ("url(" + (data.url || BDFDB.UserUtils.getAvatar(info.id)) + ")");
-				if (url && BDFDB.DOMUtils.getParent(BDFDB.dotCN.userprofile, avatar) && url.search(/discordapp\.com\/avatars\/[0-9]*\/a_/) > -1) url = url.replace(".webp)", ".gif)");
-				avatar.style.setProperty("background-image", url);
-				if (data.url && !data.removeIcon) {
-					avatar.style.setProperty("background-position", "center");
-					avatar.style.setProperty("background-size", "cover");
-				}
-			}
-			if (data.url || data.removeIcon) {
-				avatar.setAttribute("changed-by-editusers", true);
-				avatar.EditUsersChangeObserver = new MutationObserver((changes, _) => {changes.forEach((change, i) => {
-					avatar.EditUsersChangeObserver.disconnect();
-					this.changeAvatar(info, avatar);
-				});});
-				avatar.EditUsersChangeObserver.observe(avatar, {attributes:true});
-			}
-			else avatar.removeAttribute("changed-by-editusers");
-		}
-	}
-
-	changeTooltip (info, wrapper, type) {
-		if (!info || !wrapper || !wrapper.parentElement) return;
-		let data = this.getUserData(info.id, wrapper);
-		wrapper = BDFDB.DOMUtils.containsClass(wrapper, BDFDB.disCN.guildicon) ? wrapper.parentElement.parentElement.parentElement : wrapper;
-		wrapper.removeEventListener("mouseenter", wrapper.tooltipListenerEditUsers);
-		if (data.name) {
-			wrapper.tooltipListenerEditUsers = _ => {
-				BDFDB.TooltipUtils.create(wrapper, data.name, {type, selector:"EditUsers-tooltip", hide:true});
-			};
-			wrapper.addEventListener("mouseenter", wrapper.tooltipListenerEditUsers);
-		}
-	}
-
-	addTag (info, wrapper, selector = "", container) {
-		if (!info || !wrapper || !wrapper.parentElement || BDFDB.DOMUtils.containsClass(wrapper, BDFDB.disCN.accountinfodetails) || BDFDB.DOMUtils.containsClass(wrapper, "discord-tag")) return;
-		BDFDB.DOMUtils.remove(wrapper.querySelectorAll(".EditUsers-tag"));
-		let data = this.getUserData(info.id, wrapper);
-		if (data.tag) {
-			let member = data.ignoreTagColor ? (BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), info.id) || {}) : {};
-			let color3 = BDFDB.ObjectUtils.is(data.color3) && !data.ignoreTagColor ? BDFDB.ColorUtils.createGradient(data.color3) : BDFDB.ColorUtils.convert(!data.ignoreTagColor ? data.color3 : member.colorString, "RGBA");
-			let color4 = BDFDB.ObjectUtils.is(data.color4) && !data.ignoreTagColor ? BDFDB.ColorUtils.createGradient(data.color4) : (!data.ignoreTagColor && data.color4 ? BDFDB.ColorUtils.convert(data.color4, "RGBA") : (color3 ? (BDFDB.ColorUtils.isBright(color3) ? "black" : "white") : null));
-			let tag = document.createElement("span");
-			let invert = container && !color3 && !color4 && container.firstElementChild && !(BDFDB.DOMUtils.containsClass(container.firstElementChild, BDFDB.disCN.userpopoutheadernormal) || BDFDB.DOMUtils.containsClass(container.firstElementChild, BDFDB.disCN.userprofiletopsectionnormal));
-			tag.className = "EditUsers-tag " + (!invert ? BDFDB.disCN.bottagregular : BDFDB.disCN.bottaginvert) + (selector ? (" " + selector) : "");
-			tag.style.setProperty("background", !invert ? color3 : color4, "important");
-			let fontcolor = invert ? color3 : color4;
-			let fontobj = invert ? data.color3 : data.color4;
-			if (BDFDB.ObjectUtils.is(fontobj)) tag.appendChild(BDFDB.DOMUtils.create(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${fontcolor} !important;">${BDFDB.StringUtils.htmlEscape(data.tag)}</span>`));
-			else {
-				tag.innerText = data.tag;
-				tag.style.setProperty("color", fontcolor, "important");
-			}
-			wrapper.appendChild(tag);
-		}
-	}
-
-	changePrivateChannel (info, username) {
-		if (!info || !username || !username.parentElement) return;
-		let dmchannel = BDFDB.DOMUtils.getParent(BDFDB.dotCN.dmchannel, username);
-		if (!dmchannel) return;
-		if (username.EditUsersChangeObserver && typeof username.EditUsersChangeObserver.disconnect == "function") username.EditUsersChangeObserver.disconnect();
-		dmchannel.removeEventListener("mouseenter", dmchannel.mouseenterListenerEditUsers);
-		dmchannel.removeEventListener("mouseleave", dmchannel.mouseleaveListenerEditUsers);
-		let data = this.getUserData(info.id, username);
-		if (data.name || data.color1 || data.color2 || username.getAttribute("changed-by-editusers")) {
-			if (username.EditUsersHovered || BDFDB.DOMUtils.containsClass(dmchannel, BDFDB.disCN.namecontainerselected)) colorHover();
-			else colorDefault();
-
-			if (data.name || data.color1 || data.color2) {
-				dmchannel.mouseenterListenerEditUsers = _ => {
-					username.EditUsersHovered = true;
-					colorHover();
-				};
-				dmchannel.mouseleaveListenerEditUsers = _ => {
-					delete username.EditUsersHovered;
-					colorDefault();
-				};
-				dmchannel.addEventListener("mouseenter", dmchannel.mouseenterListenerEditUsers);
-				dmchannel.addEventListener("mouseleave", dmchannel.mouseleaveListenerEditUsers);
-				username.setAttribute("changed-by-editusers", true);
-				username.EditUsersChangeObserver = new MutationObserver((changes, _) => {
-					username.EditUsersChangeObserver.disconnect();
-					this.changePrivateChannel(info, username);
-				});
-				username.EditUsersChangeObserver.observe(username, {attributes:true});
-			}
-			else username.removeAttribute("changed-by-editusers");
-			function colorDefault() {
-				if (BDFDB.ObjectUtils.is(data.color1)) {
-					username.style.removeProperty("color");
-					BDFDB.DOMUtils.setText(username, BDFDB.DOMUtils.create(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(BDFDB.ColorUtils.change(data.color1, -0.5))} !important;">${BDFDB.StringUtils.htmlEscape(data.name || info.username)}</span>`));
-				}
-				else {
-					username.style.setProperty("color", BDFDB.ColorUtils.change(data.color1, -0.5, "RGBA"), "important");
-					BDFDB.DOMUtils.setText(username, data.name || info.username);
-				}
-				username.style.setProperty("background", BDFDB.ObjectUtils.is(data.color2) ? BDFDB.ColorUtils.createGradient(BDFDB.ColorUtils.change(data.color2, -0.5)) : BDFDB.ColorUtils.change(data.color2, -0.5, "RGBA"), "important");
-			}
-			function colorHover() {
-				if (BDFDB.ObjectUtils.is(data.color1)) {
-					username.style.removeProperty("color");
-					BDFDB.DOMUtils.setText(username, BDFDB.DOMUtils.create(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color1)} !important;">${BDFDB.StringUtils.htmlEscape(data.name || info.username)}</span>`));
-				}
-				else {
-					username.style.setProperty("color", BDFDB.ColorUtils.convert(data.color1, "RGBA"), "important");
-					BDFDB.DOMUtils.setText(username, data.name || info.username);
-				}
-				username.style.setProperty("background", BDFDB.ObjectUtils.is(data.color2) ? BDFDB.ColorUtils.createGradient(data.color2) : BDFDB.ColorUtils.convert(data.color2, "RGBA"), "important");
-			}
-		}
-	}
-
-	changeMention (info, mention) {
-		if (!info || !mention || !mention.parentElement) return;
-		if (mention.EditUsersChangeObserver && typeof mention.EditUsersChangeObserver.disconnect == "function") mention.EditUsersChangeObserver.disconnect();
-		mention.removeEventListener("mouseover", mention.mouseoverListenerEditUsers);
-		mention.removeEventListener("mouseout", mention.mouseoutListenerEditUsers);
-		let data = this.getUserData(info.id, mention);
-		let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), info.id) || {};
-		let name = "@" + (data.name ? data.name : (BDFDB.BDUtils.isPluginEnabled("RemoveNicknames") ? BDFDB.BDUtils.getPlugin("RemoveNicknames").getNewName(info, mention) : member.nick || info.username));
-
-		let isgradient = data.color1 && BDFDB.ObjectUtils.is(data.color1);
-		let datacolor = data.color1 || (BDFDB.BDUtils.isPluginEnabled("BetterRoleColors") ? member.colorString : null);
-		let color = isgradient ? BDFDB.ColorUtils.createGradient(data.color1) : BDFDB.ColorUtils.convert(datacolor, "RGBA");
-		let color0_1 = isgradient ? BDFDB.ColorUtils.createGradient(BDFDB.ColorUtils.setAlpha(data.color1, 0.1, "RGBA")) : BDFDB.ColorUtils.setAlpha(datacolor, 0.1, "RGBA");
-		let color0_7 = isgradient ? BDFDB.ColorUtils.createGradient(BDFDB.ColorUtils.setAlpha(data.color1, 0.7, "RGBA")) : BDFDB.ColorUtils.setAlpha(datacolor, 0.7, "RGBA");
-
-		if (mention.EditUsersHovered) colorHover();
-		else colorDefault();
-		mention.mouseoverListenerEditUsers = _ => {
-			mention.EditUsersHovered = true;
-			colorHover();
-		};
-		mention.mouseoutListenerEditUsers = _ => {
-			delete mention.EditUsersHovered;
-			colorDefault();
-		};
-		mention.addEventListener("mouseover", mention.mouseoverListenerEditUsers);
-		mention.addEventListener("mouseout", mention.mouseoutListenerEditUsers);
-		mention.EditUsersChangeObserver = new MutationObserver((changes, _) => {
-			mention.EditUsersChangeObserver.disconnect();
-			this.changeMention(info, mention);
-		});
-		mention.EditUsersChangeObserver.observe(mention, {attributes:true});
-		function colorDefault() {
-			mention.style.setProperty("background", color0_1, "important");
-			if (isgradient) {
-				mention.style.removeProperty("color");
-				BDFDB.DOMUtils.setText(mention, BDFDB.DOMUtils.create(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${color} !important;">${BDFDB.StringUtils.htmlEscape(name)}</span>`));
-			}
-			else {
-				mention.style.setProperty("color", color, "important");
-				BDFDB.DOMUtils.setText(mention, name);
-			}
-		}
-		function colorHover() {
-			mention.style.setProperty("background", color0_7, "important");
-			mention.style.setProperty("color", data.color1 ? "#FFFFFF" : null, "important");
-			BDFDB.DOMUtils.setText(mention, name);
-		}
-	}
-
-	changeVoiceUser (info, username, speaking) {
-		if (!info || !username || !username.parentElement) return;
-		if (username.EditUsersChangeObserver && typeof username.EditUsersChangeObserver.disconnect == "function") username.EditUsersChangeObserver.disconnect();
-		username.removeEventListener("mouseover", username.mouseoverListenerEditUsers);
-		username.removeEventListener("mouseout", username.mouseoutListenerEditUsers);
-		let data = this.getUserData(info.id, username);
-		if (data.name || data.color1 || username.getAttribute("changed-by-editusers")) {
-			let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), info.id) || {};
-			if (username.EditUsersHovered) colorHover();
-			else colorDefault();
-			if (data.name || data.color1) {
-				username.mouseoverListenerEditUsers = _ => {
-					username.EditUsersHovered = true;
-					colorHover();
-				};
-				username.mouseoutListenerEditUsers = _ => {
-					delete username.EditUsersHovered;
-					colorDefault();
-				};
-				username.parentElement.parentElement.addEventListener("mouseover", username.mouseoverListenerEditUsers);
-				username.parentElement.parentElement.addEventListener("mouseout", username.mouseoutListenerEditUsers);
-				username.EditUsersChangeObserver = new MutationObserver((changes, _) => {
-					username.EditUsersChangeObserver.disconnect();
-					this.changeVoiceUser(info, username, speaking);
-				});
-				username.EditUsersChangeObserver.observe(username, {attributes:true});
-			}
-			else username.removeAttribute("changed-by-editusers");
-			function colorDefault() {
-				if (BDFDB.ObjectUtils.is(data.color1)) {
-					username.style.removeProperty("color");
-					BDFDB.DOMUtils.setText(username, BDFDB.DOMUtils.create(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(!speaking ? BDFDB.ColorUtils.change(data.color1, -50) : data.color1)} !important;">${BDFDB.StringUtils.htmlEscape(data.name || member.nick || info.username)}</span>`));
-				}
-				else {
-					var color1 = data.color1 || (BDFDB.BDUtils.isPluginEnabled("BetterRoleColors") ? member.colorString : "");
-					username.style.setProperty("color", !speaking ? BDFDB.ColorUtils.change(color1, -50, "RGBA") : BDFDB.ColorUtils.convert(color1, "RGBA"), "important");
-					BDFDB.DOMUtils.setText(username, data.name || member.nick || info.username);
-				}
-			}
-			function colorHover() {
-				if (BDFDB.ObjectUtils.is(data.color1)) {
-					username.style.removeProperty("color");
-					BDFDB.DOMUtils.setText(username, BDFDB.DOMUtils.create(`<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color1)} !important;">${BDFDB.StringUtils.htmlEscape(data.name || member.nick || info.username)}</span>`));
-				}
-				else {
-					username.style.setProperty("color", BDFDB.ColorUtils.convert(data.color1, "RGBA"), "important");
-					BDFDB.DOMUtils.setText(username, data.name || member.nick || info.username);
-				}
-			}
-		}
-	}
-
-	getAvatarDiv (wrapper) {
-		var avatar = wrapper.querySelector(this.avatarselector);
-		while (!avatar && wrapper.parentElement) {
-			wrapper = wrapper.parentElement;
-			avatar = wrapper.querySelector(this.avatarselector);
-		}
-		return avatar.querySelector("img") || avatar.firstElementChild || avatar;
-	}
-
-	getUserData (id, wrapper) {
-		let data = BDFDB.DataUtils.load(this, "users", id);
-		if (!data) {
-			delete wrapper.EditUsersCachedDataState;
-			return {};
-		}
-		else if (wrapper.EditUsersCachedDataState) {
-			return data;
-		}
-
-		let allenabled = true, settings = BDFDB.DataUtils.get(this, "settings");
-		for (let i in settings) if (!settings[i]) {
-			allenabled = false;
-			break;
-		}
-		if (allenabled) return data;
-
-		let key = null;
-		if (!BDFDB.DOMUtils.containsClass(wrapper, BDFDB.disCN.mention) && BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagegroup, wrapper)) key = "changeInChatWindow";
-		else if (BDFDB.DOMUtils.containsClass(wrapper, BDFDB.disCN.mention)) key = "changeInMentions";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.textareawrapchat, wrapper)) key = "changeInChatTextarea";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.voiceuser, wrapper)) key = "changeInVoiceChat";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.members, wrapper)) key = "changeInMemberList";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildouter, wrapper)) key = "changeInRecentDms";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.dmchannels, wrapper)) key = "changeInDmsList";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.channelheaderheaderbar, wrapper)) key = "changeInDmHeader";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.callavatarwrapper, wrapper) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.callincoming, wrapper) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.callcurrentcontainer, wrapper) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.pictureinpicture, wrapper)) key = "changeInDmCalls";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.typing, wrapper)) key = "changeInTyping";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.friends, wrapper) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.userprofilebody, wrapper)) key = "changeInFriendList";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.invitemodalinviterow, wrapper)) key = "changeInInviteList";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.activityfeed, wrapper)) key = "changeInActivity";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.userpopout, wrapper)) key = "changeInUserPopout";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.userprofileheader, wrapper)) key = "changeInUserProfil";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.autocomplete, wrapper)) key = "changeInAutoComplete";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.auditlog, wrapper)) key = "changeInAuditLog";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildsettingsbannedcard, wrapper) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildsettingsinvitecard, wrapper) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildsettingsmembercard, wrapper)) key = "changeInMemberLog";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.searchpopout, wrapper) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.searchpopoutdmaddpopout, wrapper) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.quickswitcher, wrapper)) key = "changeInSearchPopout";
-		else if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.accountinfo, wrapper)) key = "changeInUserAccount";
-		else if (wrapper.parentElement == document.head) key = "changeInAppTitle";
-
-		if (!key || settings[key]) {
-			wrapper.EditUsersCachedDataState = true;
-			return data;
-		}
-		else return {};
-	}
-
-	addAutoCompleteMenu (textarea, channel) {
-		if (textarea.parentElement.querySelector(".autocompleteEditUsersRow")) return;
-		let words = textarea.value.split(/\s/);
-		let lastword = words[words.length-1].trim();
-		if (lastword && lastword.length > 1 && lastword[0] == "@") {
-			let users = BDFDB.DataUtils.load(this, "users");
-			if (!users) return;
-			let userarray = [];
-			for (let id in users) if (users[id].name) {
-				let user = BDFDB.LibraryModules.UserStore.getUser(id);
-				let member = user ? BDFDB.LibraryModules.MemberStore.getMember(channel.guild_id, id) : null;
-				if (user && member) userarray.push(Object.assign({lowercasename:users[id].name.toLowerCase(),user,member},users[id]));
-			}
-			userarray = BDFDB.ArrayUtils.keySort(userarray.filter(n => n.lowercasename.indexOf(lastword.toLowerCase().slice(1)) != -1), "lowercasename");
-			if (userarray.length) {
-				let autocompletemenu = textarea.parentElement.querySelector(BDFDB.dotCNS.autocomplete + BDFDB.dotCN.autocompleteinner), amount = 15;
-				if (!autocompletemenu) {
-					autocompletemenu = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.autocomplete + BDFDB.disCN.autocomplete2} autocompleteEditUsers"><div class="${BDFDB.disCN.autocompleteinner}"><div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteEditUsersRow"><div class="${BDFDB.disCN.autocompleteselector} autocompleteEditUsersSelector"><div class="${BDFDB.disCNS.autocompletecontenttitle + BDFDB.disCNS.small + BDFDB.disCNS.titlesize12 + BDFDB.disCNS.height16 + BDFDB.disCN.weightsemibold}">${BDFDB.LanguageUtils.LanguageStrings.MEMBERS_MATCHING.replace("{{prefix}}", BDFDB.StringUtils.htmlEscape(lastword))}</strong></div></div></div></div></div>`);
-					textarea.parentElement.appendChild(autocompletemenu);
-					autocompletemenu = autocompletemenu.firstElementChild;
-				}
-				else {
-					amount -= autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselectable).length;
-				}
-
-				BDFDB.ListenerUtils.add(this, autocompletemenu, "mouseenter", BDFDB.dotCN.autocompleteselectable, e => {
-					var selected = autocompletemenu.querySelectorAll(BDFDB.dotCN.autocompleteselected);
-					BDFDB.DOMUtils.removeClass(selected, BDFDB.disCN.autocompleteselected);
-					BDFDB.DOMUtils.addClass(selected, BDFDB.disCN.autocompleteselector);
-					BDFDB.DOMUtils.addClass(e.currentTarget, BDFDB.disCN.autocompleteselected);
-				});
-
-				for (let data of userarray) {
-					if (amount-- < 1) break;
-					let status = BDFDB.UserUtils.getStatus(data.user.id);
-					let isgradient = data.color1 && BDFDB.ObjectUtils.is(data.color1);
-					let username = isgradient ? `<div class="${BDFDB.disCN.marginleft8}" changed-by-editusers="true" style="flex: 1 1 auto;"><span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(data.color1)} !important;">${BDFDB.StringUtils.htmlEscape(data.name || data.member.nick || data.user.username)}</span></div>` : `<div class="${BDFDB.disCN.marginleft8}" changed-by-editusers="true" style="flex: 1 1 auto;${data.color1 ? (' color: ' + BDFDB.ColorUtils.convert(data.color1, 'RGB') + ' !important;') : ''}">${BDFDB.StringUtils.htmlEscape(data.name || data.member.nick || data.user.username)}</div>`;
-					let autocompleterow = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.autocompleterowvertical + BDFDB.disCN.autocompleterow} autocompleteEditUsersRow"><div userid="${data.user.id}" class="${BDFDB.disCNS.autocompleteselector + BDFDB.disCN.autocompleteselectable} autocompleteEditUsersSelector"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.aligncenter + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletecontent}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.avatarwrapper}" role="img" aria-label="${data.user.username}, ${BDFDB.LanguageUtils.LanguageStrings["STATUS_" + status.toUpperCase()]}" aria-hidden="false" style="width: 24px; height: 24px;"><svg width="30" height="24" viewBox="0 0 30 24" class="${BDFDB.disCN.avatarmask}" aria-hidden="true"><foreignObject x="0" y="0" width="24" height="24" mask="url(#svg-mask-avatar-status-round-24)"><img src="${data.url || BDFDB.UserUtils.getAvatar(data.user.id)}" alt=" " class="${BDFDB.disCN.avatar}" aria-hidden="true"></foreignObject><rect width="8" height="8" x="16" y="16" fill="${BDFDB.UserUtils.getStatusColor(status)}" mask="url(#svg-mask-status-${status})" class="${BDFDB.disCN.avatarpointerevents}"></rect></svg></div>${username}<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCN.autocompletedescription}" style="flex: 0 1 auto;"><div class="${BDFDB.disCN.autocompletedescriptionusername}">${BDFDB.StringUtils.htmlEscape(data.user.username)}</div><div class="${BDFDB.disCN.autocompletedescriptiondiscriminator}">#${data.user.discriminator}</div></div></div></div></div>`);
-					autocompleterow.querySelector(BDFDB.dotCN.autocompleteselectable).addEventListener("click", _ => {this.swapWordWithMention(textarea);});
-					autocompletemenu.appendChild(autocompleterow);
-				}
-				if (!autocompletemenu.querySelector(BDFDB.dotCN.autocompleteselected)) {
-					BDFDB.DOMUtils.addClass(autocompletemenu.querySelector(".autocompleteEditUsersRow " + BDFDB.dotCN.autocompleteselectable), BDFDB.disCN.autocompleteselected);
-				}
-			}
-		}
-	}
-
-	getNextSelection (menu, selected, forward) {
-		selected = selected ? selected : menu.querySelector(BDFDB.dotCN.autocompleteselected).parentElement;
-		let next, sibling = forward ? selected.nextElementSibling : selected.previousElementSibling;
-		if (sibling) {
-			next = sibling.querySelector(BDFDB.dotCN.autocompleteselectable);
-		}
-		else {
-			let items = menu.querySelectorAll(BDFDB.dotCN.autocompleteselectable);
-			next = forward ? items[0] : items[items.length-1];
-		}
-		return next ? next : this.getNextSelection(menu, sibling, forward);
-	}
-
-	swapWordWithMention (textarea) {
-		let selected = textarea.parentElement.querySelector(".autocompleteEditUsersRow " + BDFDB.dotCN.autocompleteselected);
-		let words = textarea.value.split(/\s/);
-		let lastword = words[words.length-1].trim();
-		if (selected && lastword) {
-			let username = selected.querySelector(BDFDB.dotCN.autocompletedescriptionusername).textContent;
-			let discriminator = selected.querySelector(BDFDB.dotCN.autocompletedescriptiondiscriminator).textContent;
-			let userid = selected.getAttribute("userid");
-			BDFDB.DOMUtils.remove(".autocompleteEditUsers", ".autocompleteEditUsersRow");
-			textarea.focus();
-			textarea.selectionStart = textarea.value.length - lastword.length;
-			textarea.selectionEnd = textarea.value.length;
-			document.execCommand("insertText", false, (username && discriminator ? ("@" + username + discriminator) : `<@!${userid}>`) + " ");
-			textarea.selectionStart = textarea.value.length;
-			textarea.selectionEnd = textarea.value.length;
-		}
-	}
-
-	setLabelsByLanguage () {
-		switch (BDFDB.LanguageUtils.getLanguage().id) {
-			case "hr":		//croatian
-				return {
-					context_localusersettings_text:		"Lokalne korisničke postavke",
-					submenu_usersettings_text:			"Promijeni postavke",
-					submenu_resetsettings_text:			"Poništi korisnika",
-					modal_header_text:					"Lokalne korisničke postavke",
-					modal_username_text:				"Lokalno korisničko ime",
-					modal_usertag_text:					"Oznaka",
-					modal_useravatar_text:				"Ikona",
-					modal_removeicon_text:				"Ukloni ikonu",
-					modal_tabheader1_text:				"Korisnik",
-					modal_tabheader2_text:				"Boja naziva",
-					modal_tabheader3_text:				"Boja oznaka",
-					modal_colorpicker1_text:			"Boja naziva",
-					modal_colorpicker2_text:			"Boja pozadine",
-					modal_colorpicker3_text:			"Boja oznaka",
-					modal_colorpicker4_text:			"Boja fonta",
-					modal_ignoretagcolor_text:			"Upotrijebite boju uloga",
-					modal_validurl_text:				"Vrijedi URL",
-					modal_invalidurl_text:				"Nevažeći URL"
-				};
-			case "da":		//danish
-				return {
-					context_localusersettings_text:		"Lokal brugerindstillinger",
-					submenu_usersettings_text:			"Skift indstillinger",
-					submenu_resetsettings_text:			"Nulstil bruger",
-					modal_header_text:					"Lokal brugerindstillinger",
-					modal_username_text:				"Lokalt brugernavn",
-					modal_usertag_text:					"Initialer",
-					modal_useravatar_text:				"Ikon",
-					modal_removeicon_text:				"Fjern ikon",
-					modal_tabheader1_text:				"Bruger",
-					modal_tabheader2_text:				"Navnefarve",
-					modal_tabheader3_text:				"Etiketfarve",
-					modal_colorpicker1_text:			"Navnefarve",
-					modal_colorpicker2_text:			"Baggrundsfarve",
-					modal_colorpicker3_text:			"Etiketfarve",
-					modal_colorpicker4_text:			"Skriftfarve",
-					modal_ignoretagcolor_text:			"Brug rollefarve",
-					modal_validurl_text:				"Gyldig URL",
-					modal_invalidurl_text:				"Ugyldig URL"
-				};
-			case "de":		//german
-				return {
-					context_localusersettings_text:		"Lokale Benutzereinstellungen",
-					submenu_usersettings_text:			"Einstellungen ändern",
-					submenu_resetsettings_text:			"Benutzer zurücksetzen",
-					modal_header_text:					"Lokale Benutzereinstellungen",
-					modal_username_text:				"Lokaler Benutzername",
-					modal_usertag_text:					"Etikett",
-					modal_useravatar_text:				"Icon",
-					modal_removeicon_text:				"Entferne Icon",
-					modal_tabheader1_text:				"Benutzer",
-					modal_tabheader2_text:				"Namensfarbe",
-					modal_tabheader3_text:				"Etikettfarbe",
-					modal_colorpicker1_text:			"Namensfarbe",
-					modal_colorpicker2_text:			"Hintergrundfarbe",
-					modal_colorpicker3_text:			"Etikettfarbe",
-					modal_colorpicker4_text:			"Schriftfarbe",
-					modal_ignoretagcolor_text:			"Benutze Rollenfarbe",
-					modal_validurl_text:				"Gültige URL",
-					modal_invalidurl_text:				"Ungültige URL"
-				};
-			case "es":		//spanish
-				return {
-					context_localusersettings_text:		"Ajustes local de usuario",
-					submenu_usersettings_text:			"Cambiar ajustes",
-					submenu_resetsettings_text:			"Restablecer usuario",
-					modal_header_text:					"Ajustes local de usuario",
-					modal_username_text:				"Nombre local de usuario",
-					modal_usertag_text:					"Etiqueta",
-					modal_useravatar_text:				"Icono",
-					modal_removeicon_text:				"Eliminar icono",
-					modal_tabheader1_text:				"Usuario",
-					modal_tabheader2_text:				"Color del nombre",
-					modal_tabheader3_text:				"Color de la etiqueta",
-					modal_colorpicker1_text:			"Color del nombre",
-					modal_colorpicker2_text:			"Color de fondo",
-					modal_colorpicker3_text:			"Color de la etiqueta",
-					modal_colorpicker4_text:			"Color de fuente",
-					modal_ignoretagcolor_text:			"Usar color de rol",
-					modal_validurl_text:				"URL válida",
-					modal_invalidurl_text:				"URL inválida"
-				};
-			case "fr":		//french
-				return {
-					context_localusersettings_text:		"Paramètres locale d'utilisateur",
-					submenu_usersettings_text:			"Modifier les paramètres",
-					submenu_resetsettings_text:			"Réinitialiser l'utilisateur",
-					modal_header_text:					"Paramètres locale d'utilisateur",
-					modal_username_text:				"Nom local d'utilisateur",
-					modal_usertag_text:					"Étiquette",
-					modal_useravatar_text:				"Icône",
-					modal_removeicon_text:				"Supprimer l'icône",
-					modal_tabheader1_text:				"Serveur",
-					modal_tabheader2_text:				"Couleur du nom",
-					modal_tabheader3_text:				"Couleur de l'étiquette",
-					modal_colorpicker1_text:			"Couleur du nom",
-					modal_colorpicker2_text:			"Couleur de fond",
-					modal_colorpicker3_text:			"Couleur de l'étiquette",
-					modal_colorpicker4_text:			"Couleur de la police",
-					modal_ignoretagcolor_text:			"Utiliser la couleur de rôle",
-					modal_validurl_text:				"URL valide",
-					modal_invalidurl_text:				"URL invalide"
-				};
-			case "it":		//italian
-				return {
-					context_localusersettings_text:		"Impostazioni locale utente",
-					submenu_usersettings_text:			"Cambia impostazioni",
-					submenu_resetsettings_text:			"Ripristina utente",
-					modal_header_text:					"Impostazioni locale utente",
-					modal_username_text:				"Nome locale utente",
-					modal_usertag_text:					"Etichetta",
-					modal_useravatar_text:				"Icona",
-					modal_removeicon_text:				"Rimuova l'icona",
-					modal_tabheader1_text:				"Utente",
-					modal_tabheader2_text:				"Colore del nome",
-					modal_tabheader3_text:				"Colore della etichetta",
-					modal_colorpicker1_text:			"Colore del nome",
-					modal_colorpicker2_text:			"Colore di sfondo",
-					modal_colorpicker3_text:			"Colore della etichetta",
-					modal_colorpicker4_text:			"Colore del carattere",
-					modal_ignoretagcolor_text:			"Usa il colore del ruolo",
-					modal_validurl_text:				"URL valido",
-					modal_invalidurl_text:				"URL non valido"
-				};
-			case "nl":		//dutch
-				return {
-					context_localusersettings_text:		"Lokale gebruikerinstellingen",
-					submenu_usersettings_text:			"Verandere instellingen",
-					submenu_resetsettings_text:			"Reset gebruiker",
-					modal_header_text:					"Lokale gebruikerinstellingen",
-					modal_username_text:				"Lokale gebruikernaam",
-					modal_usertag_text:					"Etiket",
-					modal_useravatar_text:				"Icoon",
-					modal_removeicon_text:				"Verwijder icoon",
-					modal_tabheader1_text:				"Gebruiker",
-					modal_tabheader2_text:				"Naamkleur",
-					modal_tabheader3_text:				"Etiketkleur",
-					modal_colorpicker1_text:			"Naamkleur",
-					modal_colorpicker2_text:			"Achtergrondkleur",
-					modal_colorpicker3_text:			"Etiketkleur",
-					modal_colorpicker4_text:			"Doopvontkleur",
-					modal_ignoretagcolor_text:			"Gebruik rolkleur",
-					modal_validurl_text:				"Geldige URL",
-					modal_invalidurl_text:				"Ongeldige URL"
-				};
-			case "no":		//norwegian
-				return {
-					context_localusersettings_text:		"Lokal brukerinnstillinger",
-					submenu_usersettings_text:			"Endre innstillinger",
-					submenu_resetsettings_text:			"Tilbakestill bruker",
-					modal_header_text:					"Lokal brukerinnstillinger",
-					modal_username_text:				"Lokalt gebruikernavn",
-					modal_usertag_text:					"Stikkord",
-					modal_useravatar_text:				"Ikon",
-					modal_removeicon_text:				"Fjern ikon",
-					modal_tabheader1_text:				"Bruker",
-					modal_tabheader2_text:				"Navnfarge",
-					modal_tabheader3_text:				"Stikkordfarge",
-					modal_colorpicker1_text:			"Navnfarge",
-					modal_colorpicker2_text:			"Bakgrunnfarge",
-					modal_colorpicker3_text:			"Stikkordfarge",
-					modal_colorpicker4_text:			"Skriftfarge",
-					modal_ignoretagcolor_text:			"Bruk rollefarge",
-					modal_validurl_text:				"Gyldig URL",
-					modal_invalidurl_text:				"Ugyldig URL"
-				};
-			case "pl":		//polish
-				return {
-					context_localusersettings_text:		"Lokalne ustawienia użytkownika",
-					submenu_usersettings_text:			"Zmień ustawienia",
-					submenu_resetsettings_text:			"Resetuj ustawienia",
-					modal_header_text:					"Lokalne ustawienia użytkownika",
-					modal_username_text:				"Lokalna nazwa użytkownika",
-					modal_usertag_text:					"Etykieta",
-					modal_useravatar_text:				"Ikona",
-					modal_removeicon_text:				"Usuń ikonę",
-					modal_tabheader1_text:				"Użytkownik",
-					modal_tabheader2_text:				"Kolor nazwy",
-					modal_tabheader3_text:				"Kolor etykiety",
-					modal_colorpicker1_text:			"Kolor nazwy",
-					modal_colorpicker2_text:			"Kolor tła",
-					modal_colorpicker3_text:			"Kolor etykiety",
-					modal_colorpicker4_text:			"Kolor czcionki",
-					modal_ignoretagcolor_text:			"Użyj kolor roli",
-					modal_validurl_text:				"Prawidłowe URL",
-					modal_invalidurl_text:				"Nieprawidłowe URL"
-				};
-			case "pt-BR":	//portuguese (brazil)
-				return {
-					context_localusersettings_text:		"Configurações local do utilizador",
-					submenu_usersettings_text:			"Mudar configurações",
-					submenu_resetsettings_text:			"Redefinir utilizador",
-					modal_header_text:					"Configurações local do utilizador",
-					modal_username_text:				"Nome local do utilizador",
-					modal_usertag_text:					"Etiqueta",
-					modal_useravatar_text:				"Icone",
-					modal_removeicon_text:				"Remover ícone",
-					modal_tabheader1_text:				"Utilizador",
-					modal_tabheader2_text:				"Cor do nome",
-					modal_tabheader3_text:				"Cor da etiqueta",
-					modal_colorpicker1_text:			"Cor do nome",
-					modal_colorpicker2_text:			"Cor do fundo",
-					modal_colorpicker3_text:			"Cor da etiqueta",
-					modal_colorpicker4_text:			"Cor da fonte",
-					modal_ignoretagcolor_text:			"Use a cor do papel",
-					modal_validurl_text:				"URL válido",
-					modal_invalidurl_text:				"URL inválida"
-				};
-			case "fi":		//finnish
-				return {
-					context_localusersettings_text:		"Paikallinen käyttäjä asetukset",
-					submenu_usersettings_text:			"Vaihda asetuksia",
-					submenu_resetsettings_text:			"Nollaa käyttäjä",
-					modal_header_text:					"Paikallinen käyttäjä asetukset",
-					modal_username_text:				"Paikallinen käyttäjätunnus",
-					modal_usertag_text:					"Merkki",
-					modal_useravatar_text:				"Ikonin",
-					modal_removeicon_text:				"Poista kuvake",
-					modal_tabheader1_text:				"Käyttäjä",
-					modal_tabheader2_text:				"Nimiväri",
-					modal_tabheader3_text:				"Merkkiväri",
-					modal_colorpicker1_text:			"Nimiväri",
-					modal_colorpicker2_text:			"Taustaväri",
-					modal_colorpicker3_text:			"Merkkiväri",
-					modal_colorpicker4_text:			"Fontinväri",
-					modal_ignoretagcolor_text:			"Käytä rooliväriä",
-					modal_validurl_text:				"Voimassa URL",
-					modal_invalidurl_text:				"Virheellinen URL"
-				};
-			case "sv":		//swedish
-				return {
-					context_localusersettings_text:		"Lokal användareinställningar",
-					submenu_usersettings_text:			"Ändra inställningar",
-					submenu_resetsettings_text:			"Återställ användare",
-					modal_header_text:					"Lokal användareinställningar",
-					modal_username_text:				"Lokalt användarenamn",
-					modal_usertag_text:					"Märka",
-					modal_useravatar_text:				"Ikon",
-					modal_removeicon_text:				"Ta bort ikonen",
-					modal_tabheader1_text:				"Användare",
-					modal_tabheader2_text:				"Namnfärg",
-					modal_tabheader3_text:				"Märkafärg",
-					modal_colorpicker1_text:			"Namnfärg",
-					modal_colorpicker2_text:			"Bakgrundfärg",
-					modal_colorpicker3_text:			"Märkafärg",
-					modal_colorpicker4_text:			"Fontfärg",
-					modal_ignoretagcolor_text:			"Använd rollfärg",
-					modal_validurl_text:				"Giltig URL",
-					modal_invalidurl_text:				"Ogiltig URL"
-				};
-			case "tr":		//turkish
-				return {
-					context_localusersettings_text:		"Yerel Kullanıcı Ayarları",
-					submenu_usersettings_text:			"Ayarları Değiştir",
-					submenu_resetsettings_text:			"Kullanıcı Sıfırla",
-					modal_header_text:					"Yerel Kullanıcı Ayarları",
-					modal_username_text:				"Yerel Kullanıcı Isim",
-					modal_usertag_text:					"Etiket",
-					modal_useravatar_text:				"Simge",
-					modal_removeicon_text:				"Simge kaldır",
-					modal_tabheader1_text:				"Kullanıcı",
-					modal_tabheader2_text:				"Simge rengi",
-					modal_tabheader3_text:				"Isim rengi",
-					modal_colorpicker1_text:			"Simge rengi",
-					modal_colorpicker2_text:			"Arka fon rengi",
-					modal_colorpicker3_text:			"Etiket rengi",
-					modal_colorpicker4_text:			"Yazı rengi",
-					modal_ignoretagcolor_text:			"Rol rengini kullan",
-					modal_validurl_text:				"Geçerli URL",
-					modal_invalidurl_text:				"Geçersiz URL"
-				};
-			case "cs":		//czech
-				return {
-					context_localusersettings_text:		"Místní nastavení uživatel",
-					submenu_usersettings_text:			"Změnit nastavení",
-					submenu_resetsettings_text:			"Obnovit uživatel",
-					modal_header_text:					"Místní nastavení uživatel",
-					modal_username_text:				"Místní název uživatel",
-					modal_usertag_text:					"Štítek",
-					modal_useravatar_text:				"Ikony",
-					modal_removeicon_text:				"Odstranit ikonu",
-					modal_tabheader1_text:				"Uživatel",
-					modal_tabheader2_text:				"Barva název",
-					modal_tabheader3_text:				"Barva štítek",
-					modal_colorpicker1_text:			"Barva název",
-					modal_colorpicker2_text:			"Barva pozadí",
-					modal_colorpicker3_text:			"Barva štítek",
-					modal_colorpicker4_text:			"Barva fontu",
-					modal_ignoretagcolor_text:			"Použijte barva role",
-					modal_validurl_text:				"Platná URL",
-					modal_invalidurl_text:				"Neplatná URL"
-				};
-			case "bg":		//bulgarian
-				return {
-					context_localusersettings_text:		"Настройки за локални потребител",
-					submenu_usersettings_text:			"Промяна на настройките",
-					submenu_resetsettings_text:			"Възстановяване на потребител",
-					modal_header_text:					"Настройки за локални потребител",
-					modal_username_text:				"Локално име на потребител",
-					modal_usertag_text:					"Cвободен край",
-					modal_useravatar_text:				"Икона",
-					modal_removeicon_text:				"Премахване на иконата",
-					modal_tabheader1_text:				"Потребител",
-					modal_tabheader2_text:				"Цвят на име",
-					modal_tabheader3_text:				"Цвят на свободен край",
-					modal_colorpicker1_text:			"Цвят на име",
-					modal_colorpicker2_text:			"Цвят на заден план",
-					modal_colorpicker3_text:			"Цвят на свободен край",
-					modal_colorpicker4_text:			"Цвят на шрифта",
-					modal_ignoretagcolor_text:			"Използвайте цвят на ролите",
-					modal_validurl_text:				"Валиден URL",
-					modal_invalidurl_text:				"Невалиден URL"
-				};
-			case "ru":		//russian
-				return {
-					context_localusersettings_text:		"Настройки локального пользователь",
-					submenu_usersettings_text:			"Изменить настройки",
-					submenu_resetsettings_text:			"Сбросить пользователь",
-					modal_header_text:					"Настройки локального пользователь",
-					modal_username_text:				"Имя локального пользователь",
-					modal_usertag_text:					"Tег",
-					modal_useravatar_text:				"Значок",
-					modal_removeicon_text:				"Удалить значок",
-					modal_tabheader1_text:				"Пользователь",
-					modal_tabheader2_text:				"Цвет имя",
-					modal_tabheader3_text:				"Цвет тег",
-					modal_colorpicker1_text:			"Цвет имя",
-					modal_colorpicker2_text:			"Цвет задний план",
-					modal_colorpicker3_text:			"Цвет тег",
-					modal_colorpicker4_text:			"Цвет шрифта",
-					modal_ignoretagcolor_text:			"Использовать цвет ролей",
-					modal_validurl_text:				"Действительный URL",
-					modal_invalidurl_text:				"Неверная URL"
-				};
-			case "uk":		//ukrainian
-				return {
-					context_localusersettings_text:		"Налаштування локального користувач",
-					submenu_usersettings_text:			"Змінити налаштування",
-					submenu_resetsettings_text:			"Скидання користувач",
-					modal_header_text:					"Налаштування локального користувач",
-					modal_username_text:				"Локальне ім'я користувач",
-					modal_usertag_text:					"Tег",
-					modal_useravatar_text:				"Іконка",
-					modal_removeicon_text:				"Видалити піктограму",
-					modal_tabheader1_text:				"Користувач",
-					modal_tabheader2_text:				"Колір ім'я",
-					modal_tabheader3_text:				"Колір тег",
-					modal_colorpicker1_text:			"Колір ім'я",
-					modal_colorpicker2_text:			"Колір фон",
-					modal_colorpicker3_text:			"Колір тег",
-					modal_colorpicker4_text:			"Колір шрифту",
-					modal_ignoretagcolor_text:			"Використовуйте рольовий колір",
-					modal_validurl_text:				"Дійсна URL",
-					modal_invalidurl_text:				"Недійсна URL"
-				};
-			case "ja":		//japanese
-				return {
-					context_localusersettings_text:		"ローカルユーザーー設定",
-					submenu_usersettings_text:			"設定を変更する",
-					submenu_resetsettings_text:			"ユーザーーをリセットする",
-					modal_header_text:					"ローカルユーザーー設定",
-					modal_username_text:				"ローカルユーザーー名",
-					modal_usertag_text:					"タグ",
-					modal_useravatar_text:				"アイコン",
-					modal_removeicon_text:				"アイコンを削除",
-					modal_tabheader1_text:				"ユーザー",
-					modal_tabheader2_text:				"名の色",
-					modal_tabheader3_text:				"タグの色",
-					modal_colorpicker1_text:			"名の色",
-					modal_colorpicker2_text:			"バックグラウンドの色",
-					modal_colorpicker3_text:			"タグの色",
-					modal_colorpicker4_text:			"フォントの色",
-					modal_ignoretagcolor_text:			"ロールカラーを使用する",
-					modal_validurl_text:				"有効な URL",
-					modal_invalidurl_text:				"無効な URL"
-				};
-			case "zh-TW":	//chinese (traditional)
-				return {
-					context_localusersettings_text:		"本地用戶設置",
-					submenu_usersettings_text:			"更改設置",
-					submenu_resetsettings_text:			"重置用戶",
-					modal_header_text:					"本地用戶設置",
-					modal_username_text:				"用戶名稱",
-					modal_usertag_text:					"標籤",
-					modal_useravatar_text:				"圖標",
-					modal_removeicon_text:				"刪除圖標",
-					modal_tabheader1_text:				"用戶",
-					modal_tabheader2_text:				"名稱顏色",
-					modal_tabheader3_text:				"標籤顏色",
-					modal_colorpicker1_text:			"名稱顏色",
-					modal_colorpicker2_text:			"背景顏色",
-					modal_colorpicker3_text:			"標籤顏色",
-					modal_colorpicker4_text:			"字體顏色",
-					modal_ignoretagcolor_text:			"使用角色",
-					modal_validurl_text:				"有效的 URL",
-					modal_invalidurl_text:				"無效的 URL"
-				};
-			case "ko":		//korean
-				return {
-					context_localusersettings_text:		"로컬 사용자 설정",
-					submenu_usersettings_text:			"설정 변경",
-					submenu_resetsettings_text:			"사용자 재설정",
-					modal_header_text:					"로컬 사용자 설정",
-					modal_username_text:				"로컬 사용자 이름",
-					modal_usertag_text:					"꼬리표",
-					modal_useravatar_text:				"상",
-					modal_removeicon_text:				"상 삭제",
-					modal_tabheader1_text:				"사용자",
-					modal_tabheader2_text:				"이름 색깔",
-					modal_tabheader3_text:				"꼬리표 색깔",
-					modal_colorpicker1_text:			"이름 색깔",
-					modal_colorpicker2_text:			"배경 색깔",
-					modal_colorpicker3_text:			"꼬리표 색깔",
-					modal_colorpicker4_text:			"글꼴 색깔",
-					modal_ignoretagcolor_text:			"역할 색상 사용",
-					modal_validurl_text:				"유효한 URL",
-					modal_invalidurl_text:				"잘못된 URL"
-				};
-			default:	//default: english
-				return {
-					context_localusersettings_text:		"Local Usersettings",
-					submenu_usersettings_text:			"Change Settings",
-					submenu_resetsettings_text:			"Reset User",
-					modal_header_text:					"Local Usersettings",
-					modal_username_text:				"Local Username",
-					modal_usertag_text:					"Tag",
-					modal_useravatar_text:				"Icon",
-					modal_removeicon_text:				"Remove Icon",
-					modal_tabheader1_text:				"User",
-					modal_tabheader2_text:				"Namecolor",
-					modal_tabheader3_text:				"Tagcolor",
-					modal_colorpicker1_text:			"Namecolor",
-					modal_colorpicker2_text:			"Backgroundcolor",
-					modal_colorpicker3_text:			"Tagcolor",
-					modal_colorpicker4_text:			"Fontcolor",
-					modal_ignoretagcolor_text:			"Use Rolecolor",
-					modal_validurl_text:				"Valid URL",
-					modal_invalidurl_text:				"Invalid URL"
-				};
-		}
-	}
-}
+})();

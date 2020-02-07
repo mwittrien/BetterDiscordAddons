@@ -4807,6 +4807,7 @@
 	DiscordClassModules.Typing = BDFDB.ModuleUtils.findByProperties("cooldownWrapper", "typing");
 	DiscordClassModules.UnreadBar = BDFDB.ModuleUtils.findByProperties("active", "bar", "unread");
 	DiscordClassModules.UploadModal = BDFDB.ModuleUtils.findByProperties("uploadModal", "bgScale");
+	DiscordClassModules.UserInfo = BDFDB.ModuleUtils.findByProperties("userInfo", "discordTag");
 	DiscordClassModules.UserPopout = BDFDB.ModuleUtils.findByProperties("userPopout", "headerPlaying");
 	DiscordClassModules.UserProfile = BDFDB.ModuleUtils.findByProperties("topSectionNormal", "tabBarContainer");
 	DiscordClassModules.Video = BDFDB.ModuleUtils.findByProperties("video", "fullScreen");
@@ -6125,7 +6126,6 @@
 		titlesize12: ["UserPopout", "size12"],
 		titlesize14: ["UserPopout", "size14"],
 		titlesize16: ["UserPopout", "size16"],
-		size18: ["Title", "size18"], // REMOVE
 		titlesize18: ["Title", "size18"],
 		tooltip: ["Tooltip", "tooltip"],
 		tooltipactivityicon: ["TooltipGuild", "activityIcon"],
@@ -6159,6 +6159,14 @@
 		unreadbartext: ["UnreadBar", "text"],
 		unreadbarunread: ["UnreadBar", "unread"],
 		uploadmodal: ["UploadModal", "uploadModal"],
+		userinfo: ["UserInfo", "userInfo"],
+		userinfoavatar: ["UserInfo", "avatar"],
+		userinfodiscordtag: ["UserInfo", "discordTag"],
+		userinfodiscriminator: ["UserInfo", "discriminator"],
+		userinfohovered: ["UserInfo", "hovered"],
+		userinfosubtext: ["UserInfo", "subtext"],
+		userinfotext: ["UserInfo", "text"],
+		userinfousername: ["UserInfo", "username"],
 		userpopout: ["UserPopout", "userPopout"],
 		userpopoutavatarhint: ["UserPopout", "avatarHint"],
 		userpopoutavatarhintinner: ["UserPopout", "avatarHintInner"],
