@@ -7,7 +7,7 @@ var MessageUtilities = (_ => {
 	return class MessageUtilities {
 		getName () {return "MessageUtilities";}
 
-		getVersion () {return "1.6.9";}
+		getVersion () {return "1.7.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -15,13 +15,13 @@ var MessageUtilities = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Message Update","Fixed the plugin for the new Message Update"]],
+				"fixed":[["Message ContextMenu Update","Fixed the plugin for the new Message ContextMenu Update"], ["Message Update","Fixed the plugin for the new Message Update"]],
 				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 			};
 			
 			this.patchedModules = {
 				after: {
-					MessageContextMenu: ["componentDidMount","componentDidUpdate"]
+					ContextMenuItem: "default"
 				}
 			};
 		}
@@ -193,44 +193,34 @@ var MessageUtilities = (_ => {
 
 		//begin of own functions
 		
-		processMessageContextMenu (e) {
-			if (e.instance.props.message && e.instance.props.channel) {
-				for (let itemlabel of e.node.querySelectorAll(BDFDB.dotCN.contextmenulabel)) {
-					let hint = itemlabel.parentElement.querySelector(BDFDB.dotCN.contextmenuhint);
-					if (hint) {
-						let hintlabel;
-						if (itemlabel.innerText == BDFDB.LanguageUtils.LanguageStrings.MARK_UNREAD) {
-							if (BDFDB.DataUtils.get(this, "settings", "addHints")) hintlabel = `${clickMap[0]}+${BDFDB.LibraryModules.KeyCodeUtils.getString(18)}`;
-						}
-						else {
-							let action = null;
-							switch (itemlabel.innerText) {
-								case BDFDB.LanguageUtils.LanguageStrings.COPY_MESSAGE_LINK:
-									action = "Copy_Link";
-									break;
-								case BDFDB.LanguageUtils.LanguageStrings.EDIT_MESSAGE:
-									action = "Edit_Message";
-									break;
-								case BDFDB.LanguageUtils.LanguageStrings.PIN_MESSAGE:
-								case BDFDB.LanguageUtils.LanguageStrings.UNPIN_MESSAGE:
-									action = "Pin/Unpin_Message";
-									break;
-								case BDFDB.LanguageUtils.LanguageStrings.DELETE_MESSAGE:
-									action = "Delete_Message";
-									break;
-								case BDFDB.LanguageUtils.LanguageStrings.QUOTE:
-									action = "Quote_Message";
-									break;
-							}
-							if (action) hintlabel = this.getActiveShortcutString(action);
-						}
-						if (hintlabel) {
-							hint.style.setProperty("width", "42px");
-							hint.style.setProperty("max-width", "42px");
-							hint.style.setProperty("margin-left", "8px");
-							BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {speed: 2, children: hintlabel}), hint);
-						}
+		processContextMenuItem (e) {
+			if (e.instance.props.label && !e.instance.props.hint && BDFDB.DataUtils.get(this, "settings", "addHints")) {
+				let hint, action;
+				if (e.instance.props.label == BDFDB.LanguageUtils.LanguageStrings.MARK_UNREAD) hint = `${clickMap[0]}+${BDFDB.LibraryModules.KeyCodeUtils.getString(18)}`;
+				else {
+					switch (e.instance.props.label) {
+						case BDFDB.LanguageUtils.LanguageStrings.COPY_MESSAGE_LINK:
+							action = "Copy_Link";
+							break;
+						case BDFDB.LanguageUtils.LanguageStrings.EDIT_MESSAGE:
+							action = "Edit_Message";
+							break;
+						case BDFDB.LanguageUtils.LanguageStrings.PIN_MESSAGE:
+						case BDFDB.LanguageUtils.LanguageStrings.UNPIN_MESSAGE:
+							action = "Pin/Unpin_Message";
+							break;
+						case BDFDB.LanguageUtils.LanguageStrings.DELETE_MESSAGE:
+							action = "Delete_Message";
+							break;
+						case BDFDB.LanguageUtils.LanguageStrings.QUOTE:
+							action = "Quote_Message";
+							break;
 					}
+					if (action) hint = this.getActiveShortcutString(action);
+				}
+				if (hint) {
+					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN.contextmenuhint]]});
+					if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Hint, {hint});
 				}
 			}
 		}

@@ -1151,16 +1151,16 @@
 					};
 					if (module.BDFDBpatch && module.BDFDBpatch[modulefunction]) {
 						if (!BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].before)) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[modulefunction].before)) {
-							BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].before[id], `"before" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, module.BDFDBpatch[modulefunction].before[id].pluginName)(data);
+							BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].before[id], `"before" callback of ${modulefunction} in ${module.constructor ? (module.constructor.displayName || module.constructor.name) : "module"}`, module.BDFDBpatch[modulefunction].before[id].pluginName)(data);
 						}
 						let hasInsteadPatches = !BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].instead);
 						if (hasInsteadPatches) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[modulefunction].instead)) {
-							let tempreturn = BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].instead[id], `"instead" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, module.BDFDBpatch[modulefunction].instead[id].pluginName)(data);
+							let tempreturn = BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].instead[id], `"instead" callback of ${modulefunction} in ${module.constructor ? (module.constructor.displayName || module.constructor.name) : "module"}`, module.BDFDBpatch[modulefunction].instead[id].pluginName)(data);
 							if (tempreturn !== undefined) data.returnValue = tempreturn;
 						}
-						if ((!hasInsteadPatches || callInstead) && !stopCall) BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`)();
+						if ((!hasInsteadPatches || callInstead) && !stopCall) BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${modulefunction} in ${module.constructor ? (module.constructor.displayName || module.constructor.name) : "module"}`)();
 						if (!BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[modulefunction].after)) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[modulefunction].after)) {
-							let tempreturn = BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].after[id], `"after" callback of ${modulefunction} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`, module.BDFDBpatch[modulefunction].after[id].pluginName)(data);
+							let tempreturn = BDFDB.TimeUtils.suppress(module.BDFDBpatch[modulefunction].after[id], `"after" callback of ${modulefunction} in ${module.constructor ? (module.constructor.displayName || module.constructor.name) : "module"}`, module.BDFDBpatch[modulefunction].after[id].pluginName)(data);
 							if (tempreturn !== undefined) data.returnValue = tempreturn;
 						}
 					}
@@ -1619,7 +1619,7 @@
 	BDFDB.ReactUtils.createElement = function (component, props) {
 		if (component && component.defaultProps) for (let key in component.defaultProps) if (props[key] == null) props[key] = component.defaultProps[key];
 		try {return LibraryModules.React.createElement(component || "div", props || {}) || null;}
-		catch (err) {BDFDB.LogUtils.error("Fatal Error: Could not create react element! " + err);}
+		catch (err) {BDFDB.LogUtils.error("Could not create react element! " + err);}
 		return null;
 	};
 	BDFDB.ReactUtils.elementToReact = function (node) {
@@ -1959,7 +1959,7 @@
 			}));
 			observer.observe(document.body, {subtree:true, childList:true});
 		}
-		catch (err) {BDFDB.LogUtils.error("Fatal Error: Could not render react element! " + err);}
+		catch (err) {BDFDB.LogUtils.error("Could not render react element! " + err);}
 	};
 	InternalBDFDB.setDefaultProps = function (component, defaultProps) {
 		if (BDFDB.ObjectUtils.is(component)) component.defaultProps = Object.assign({}, component.defaultProps, defaultProps);
