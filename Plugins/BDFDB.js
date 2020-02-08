@@ -7187,6 +7187,26 @@
 	
 	InternalComponents.LibraryComponents.ContextMenuItems = {};
 	
+	InternalComponents.LibraryComponents.ContextMenuItems.Group = BDFDB.ModuleUtils.findByString(`"div",{className`, `default.itemGroup}`);
+	
+	InternalComponents.LibraryComponents.ContextMenuItems.Hint = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.ContextMenuItems.Hint") || reactInitialized && class BDFDB_ContextMenuItemHint extends LibraryModules.React.Component {
+		render() {
+			let hintIsString = typeof this.props.hint == "string";
+			return BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.disCN.contextmenuhint,
+				style: hintIsString ? {
+					width: 42,
+					maxWidth: 42,
+					marginLeft: 8
+				} : {},
+				children: hintIsString ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextScroller, {
+					speed: 2,
+					children: this.props.hint
+				}) : (this.props.hint || null)
+			});
+		}
+	};
+	
 	InternalComponents.LibraryComponents.ContextMenuItems.Item = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.ContextMenuItems.Item") || reactInitialized && class BDFDB_ContextMenuItem extends LibraryModules.React.Component {
 		render() {
 			let hintIsString = typeof this.props.hint == "string";
@@ -7200,25 +7220,12 @@
 						className: BDFDB.disCN.contextmenulabel,
 						children: this.props.label
 					}),
-					BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.contextmenuhint,
-						style: hintIsString ? {
-							width: 42,
-							maxWidth: 42,
-							marginLeft: 8
-						} : {},
-						children: hintIsString ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextScroller, {
-							speed: 2,
-							children: this.props.hint
-						}) : (this.props.hint || null)
-					}),
+					BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ContextMenuItems.Hint, {hint: this.props.hint}),
 					this.props.children
 				]
 			});
 		}
 	};
-	
-	InternalComponents.LibraryComponents.ContextMenuItems.Group = BDFDB.ModuleUtils.findByString(`"div",{className`, `default.itemGroup}`);
 	
 	InternalComponents.LibraryComponents.ContextMenuItems.Slider = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.ContextMenuItems.Slider") || reactInitialized && class BDFDB_ContextMenuSliderItem extends LibraryModules.React.Component {
 		handleValueChange(value) {
