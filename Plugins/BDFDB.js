@@ -1051,12 +1051,13 @@
 		"ChannelTextAreaContainer"
 	]);
 	WebModulesData.LoadedInComponents = {
-		AutocompleteChannelResult: "AutocompleteComponents.Channel",
-		AutocompleteUserResult: "AutocompleteComponents.User",
-		QuickSwitchChannelResult: "QuickSwitchComponents.Channel",
-		QuickSwitchGroupDMResult: "QuickSwitchComponents.GroupDM",
-		QuickSwitchGuildResult: "QuickSwitchComponents.Guild",
-		QuickSwitchUserResult: "QuickSwitchComponents.User"
+		AutocompleteChannelResult: "LibraryComponents.AutocompleteComponents.Channel",
+		AutocompleteUserResult: "LibraryComponents.AutocompleteComponents.User",
+		ContextMenuItem: "NativeSubComponents.ContextMenuItem",
+		QuickSwitchChannelResult: "LibraryComponents.QuickSwitchComponents.Channel",
+		QuickSwitchGroupDMResult: "LibraryComponents.QuickSwitchComponents.GroupDM",
+		QuickSwitchGuildResult: "LibraryComponents.QuickSwitchComponents.Guild",
+		QuickSwitchUserResult: "LibraryComponents.QuickSwitchComponents.User"
 	};
 	WebModulesData.Patchfinder = {
 		Account: "accountinfo",
@@ -1167,7 +1168,8 @@
 					return modulefunction == "render" && data.returnValue === undefined ? null : data.returnValue;
 				};
 				for (let key of Object.keys(originalfunction)) module[modulefunction][key] = originalfunction[key];
-				module[modulefunction].__originalMethod = originalfunction;
+				if (!module[modulefunction].__originalMethod) module[modulefunction].__originalMethod = originalfunction;
+				if (!module[modulefunction].__originalFunction) module[modulefunction].__originalFunction = originalfunction;
 				module[modulefunction].__isBDFDBpatched = true;
 			}
 			for (let type in patchfunctions) if (typeof patchfunctions[type] == "function") {
@@ -1301,7 +1303,7 @@
 		for (let patchtype in plugin.patchedModules) for (let type in plugin.patchedModules[patchtype]) {
 			if (WebModulesData.GlobalModules[type] && typeof WebModulesData.GlobalModules[type] == "function") patchInstance(WebModulesData.GlobalModules[type], type, patchtype);
 			else {
-				let component = WebModulesData.LoadedInComponents[type] && BDFDB.ReactUtils.getValue(LibraryComponents, WebModulesData.LoadedInComponents[type]);
+				let component = WebModulesData.LoadedInComponents[type] && BDFDB.ReactUtils.getValue(BDFDB, WebModulesData.LoadedInComponents[type]);
 				if (component) patchInstance(component, type, patchtype);
 				else {
 					let mapped = WebModulesData.Patchmap[type];
@@ -6750,6 +6752,7 @@
 	var NativeSubComponents = {}, LibraryComponents = {}, reactInitialized = LibraryModules.React && LibraryModules.React.Component;
 	NativeSubComponents.Button = BDFDB.ModuleUtils.findByProperties("Colors", "Hovers", "Looks");
 	NativeSubComponents.Checkbox = BDFDB.ModuleUtils.findByName("Checkbox");
+	NativeSubComponents.ContextMenuItem = BDFDB.ModuleUtils.findByString("default.item", "default.hint", "danger", "brand");
 	NativeSubComponents.ContextMenuSliderItem = BDFDB.ModuleUtils.findByName("SliderMenuItem");
 	NativeSubComponents.ContextMenuToggleItem = BDFDB.ModuleUtils.findByName("ToggleMenuItem");
 	NativeSubComponents.FavButton = BDFDB.ModuleUtils.findByName("GIFFavButton");
