@@ -1033,11 +1033,12 @@
 	WebModulesData.DefaultRender = [
 		"DiscordTag",
 		"InviteModalUserRow",
-		"NameTag",
 		"Mention",
 		"Message",
 		"MessageHeader",
 		"MessageTimestamp",
+		"NameTag",
+		"NowPlayingItem",
 		"SystemMessage",
 		"SimpleMessageAccessories",
 		"UserInfo"
@@ -1497,6 +1498,7 @@
 				if (menutype.indexOf("USER_") == 0) return "UserContextMenu";
 				else if (menutype.indexOf("CHANNEL_") == 0) return "ChannelContextMenu";
 				else if (menutype.indexOf("GUILD_") == 0) return "GuildContextMenu";
+				else if (menutype.indexOf("MESSAGE_") == 0) return "MessageContextMenu";
 			}
 		}
 		return null;
@@ -7255,9 +7257,9 @@
 	};
 	
 	var ComponentTypeData = {};
-	ComponentTypeData.NormalContextMenus = ["DeveloperContextMenu", "GuildRoleContextMenu", "MessageContextMenu", "NativeContextMenu", "ScreenshareContextMenu", "UserSettingsCogContextMenu"];
+	ComponentTypeData.NormalContextMenus = ["DeveloperContextMenu", "GuildRoleContextMenu", "NativeContextMenu", "ScreenshareContextMenu", "UserSettingsCogContextMenu"];
 	ComponentTypeData.FluxContextMenus = ["ApplicationContextMenu", "GroupDMContextMenu"];
-	ComponentTypeData.NonRenderContextMenus = ["ChannelContextMenu", "GuildContextMenu", "SlateContextMenu", "UserContextMenu"];
+	ComponentTypeData.NonRenderContextMenus = ["ChannelContextMenu", "GuildContextMenu", "MessageContextMenu", "SlateContextMenu", "UserContextMenu"];
 	ComponentTypeData.ObservedContextMenus = [];
 	ComponentTypeData.ExtraPatchedComponents = ["MessageOptionContextMenu", "MessageOptionToolbar"];
 	ComponentTypeData.QueuedComponents = [].concat(ComponentTypeData.NonRenderContextMenus, ComponentTypeData.ObservedContextMenus, ComponentTypeData.ExtraPatchedComponents);
@@ -7281,7 +7283,8 @@
 	
 	LibraryComponents.ContextMenus.GuildRoleContextMenu = BDFDB.ModuleUtils.findByName("GuildRoleContextMenu");
 	
-	LibraryComponents.ContextMenus.MessageContextMenu = BDFDB.ModuleUtils.findByName("MessageContextMenu");
+	LibraryComponents.ContextMenus.MessageContextMenu = BDFDB.ModuleUtils.findByString("message", "target", BDFDB.DiscordConstants.ContextMenuTypes.MESSAGE_MAIN);
+	LibraryComponents.ContextMenus._Exports.MessageContextMenu = (BDFDB.ModuleUtils.findByString("message", "target", BDFDB.DiscordConstants.ContextMenuTypes.MESSAGE_MAIN, false) || {}).exports;
 	
 	LibraryComponents.ContextMenus.NativeContextMenu = BDFDB.ModuleUtils.findByName("NativeContextMenu");
 	
