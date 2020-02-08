@@ -1038,6 +1038,7 @@
 		"MessageHeader",
 		"MessageTimestamp",
 		"NameTag",
+		"NowPlayingHeader",
 		"NowPlayingItem",
 		"SystemMessage",
 		"SimpleMessageAccessories",
