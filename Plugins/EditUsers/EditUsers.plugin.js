@@ -4,7 +4,7 @@ var EditUsers = (_ => {
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.7.1";}
+		getVersion () {return "3.7.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -13,7 +13,7 @@ var EditUsers = (_ => {
 		constructor () {
 			this.changelog = {
 				"added":[["Message Color","You can now set unique message colors for users"]],
-				"fixed":[["Mentions","No collision with BRC anymore"],["Tags","use role color for tags works again"],["Message Update","Fixed the plugin for the new Message Update"]],
+				"fixed":[["Now Playing","Now Playing list is now also affected via the Friend List settings"],["Mentions","No collision with BRC anymore"],["Tags","use role color for tags works again"],["Message Update","Fixed the plugin for the new Message Update"]],
 				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 			};
 
@@ -26,6 +26,7 @@ var EditUsers = (_ => {
 					UserPopout: "render",
 					UserProfile: "render",
 					UserInfo: "default",
+					NowPlayingHeader: "Header",
 					VoiceUser: "render",
 					Account: "render",
 					Message: "default",
@@ -48,6 +49,7 @@ var EditUsers = (_ => {
 					AutocompleteUserResult: "render",
 					NameTag: "default",
 					UserPopout: "render",
+					NowPlayingHeader: "Header",
 					VoiceUser: "render",
 					Account: "render",
 					MessageHeader: "default",
@@ -382,6 +384,20 @@ var EditUsers = (_ => {
 
 		processUserInfo (e) {
 			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInFriendList")) e.instance.props.user = this.getUserData(e.instance.props.user.id);
+		}
+
+		processNowPlayingHeader (e) {
+			if (BDFDB.ObjectUtils.is(e.instance.props.priorityUser) && e.instance.props.priorityUser.user && BDFDB.DataUtils.get(this, "settings", "changeInFriendList")) {
+				if (!e.returnvalue) {
+					let titleIsName = e.instance.props.priorityUser.user.username == e.instance.props.title;
+					e.instance.props.priorityUser.user = this.getUserData(e.instance.props.priorityUser.user.id);
+					if (titleIsName) e.instance.props.title = e.instance.props.priorityUser.user.username;
+				}
+				else {
+					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "Header"});
+					if (index > -1) this.changeUserColor(children[index], e.instance.props.priorityUser.user.id);
+				}
+			}
 		}
 
 		processVoiceUser (e) {
