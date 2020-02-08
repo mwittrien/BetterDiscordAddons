@@ -1044,7 +1044,8 @@
 		"UserInfo"
 	];
 	WebModulesData.MemoComponent = [
-		"MessageContent"
+		"MessageContent",
+		"NowPlayingHeader"
 	];
 	WebModulesData.NonPrototype = [].concat(WebModulesData.DefaultRender, WebModulesData.MemoComponent, [
 		"ChannelTextAreaContainer"
@@ -7624,10 +7625,6 @@
 	};
 	
 	LibraryComponents.NavItem = BDFDB.ModuleUtils.findByName("NavItem");
-	
-	LibraryComponents.NowPlayingComponents = Object.assign({}, BDFDB.ModuleUtils.findByName("NowPlayingItem"));
-	
-	LibraryComponents.NowPlayingComponents.Card = BDFDB.ModuleUtils.findByName("NowPlayingItem");
 	
 	LibraryComponents.Popout = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.Popout") || reactInitialized && class BDFDB_Popout extends LibraryModules.React.Component {
 		componentWillUnmount() {
