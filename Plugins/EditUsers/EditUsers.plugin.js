@@ -4,7 +4,7 @@ var EditUsers = (_ => {
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.7.2";}
+		getVersion () {return "3.7.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -360,19 +360,21 @@ var EditUsers = (_ => {
 
 		processUserPopout (e) {
 			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInUserPopout")) {
+				let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
 				if (!e.returnvalue) {
 					e.instance.props.user = this.getUserData(e.instance.props.user.id, true, true);
-					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
 					if (data && data.name) {
 						e.instance.props.nickname = data.name;
 						e.instance.props.guildMember = Object.assign({}, e.instance.props.guildMember, {nick: data.name});
 					}
 				}
 				else {
-					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadernickname]]});
-					if (index > -1) {
-						this.changeUserColor(children[index], e.instance.props.user.id, {changeBackground:true});
-						this.injectBadge(children, e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, BDFDB.disCN.bottagnametag, !!e.instance.props.activity);
+					if (data && (data.color1 || data.color2 || data.tag)) {
+						let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadernickname]]});
+						if (index > -1) {
+							this.changeUserColor(children[index], e.instance.props.user.id, {changeBackground:true});
+							this.injectBadge(children, e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, BDFDB.disCN.bottagnametag, !!e.instance.props.activity);
+						}
 					}
 				}
 			}
