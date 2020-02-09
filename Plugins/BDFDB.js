@@ -3749,6 +3749,7 @@
 			}
 			if (tabBarItems.length) headerChildren.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 				className: BDFDB.disCN.tabbarcontainer,
+				align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
 				children: [
 					BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TabBar, {
 						className: BDFDB.disCN.tabbar,
