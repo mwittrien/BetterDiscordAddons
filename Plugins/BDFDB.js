@@ -8384,8 +8384,14 @@
 				ref: instance => {
 					let ele = BDFDB.ReactUtils.findDOMNode(instance);
 					if (ele && ele.parentElement) {
-						let maxwidth = BDFDB.DOMUtils.getInnerWidth(ele.parentElement);
-						if (maxwidth > 150) ele.style.setProperty("max-width", `${maxwidth}px`);
+						let maxWidth = BDFDB.DOMUtils.getInnerWidth(ele.parentElement);
+						if (maxWidth > 50) ele.style.setProperty("max-width", `${maxWidth}px`);
+						BDFDB.TimeUtils.timeout(_ => {
+							if (document.contains(ele.parentElement)) {
+								let newMaxWidth = BDFDB.DOMUtils.getInnerWidth(ele.parentElement);
+								if (newMaxWidth > maxWidth) ele.style.setProperty("max-width", `${newMaxWidth}px`);
+							}
+						}, 3000);
 						let Animation = new LibraryModules.AnimationUtils.Value(0);
 						Animation
 							.interpolate({inputRange:[0, 1], outputRange:[0, (BDFDB.DOMUtils.getRects(ele.firstElementChild).width - BDFDB.DOMUtils.getRects(ele).width) * -1]})
