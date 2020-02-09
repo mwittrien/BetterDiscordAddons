@@ -6798,6 +6798,65 @@
 	InternalComponents.NativeSubComponents.TextInput = BDFDB.ModuleUtils.findByName("TextInput");
 	InternalComponents.NativeSubComponents.TooltipContainer = BDFDB.ModuleUtils.findByName("Tooltip");
 	
+	InternalComponents.LibraryComponents.AddonCard = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.AddonCard") || reactInitialized && class BDFDB_AddonCard extends LibraryModules.React.Component {
+		render() {
+			return !BDFDB.ObjectUtils.is(this.props.data) ? null : BDFDB.ReactUtils.createElement("li", {
+				className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCNS._reposettingsclosed + BDFDB.disCN._repocheckboxitem),
+				children: [
+					BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN._repoheader,
+						children: [
+							BDFDB.ReactUtils.createElement("span", {
+								className: BDFDB.disCN._repoheadertitle,
+								children: [
+									BDFDB.ReactUtils.createElement("span", {
+										className: BDFDB.disCN._reponame,
+										children: this.props.data.name
+									}),
+									" v",
+									BDFDB.ReactUtils.createElement("span", {
+										className: BDFDB.disCN._repoversion,
+										children: this.props.data.version
+									}),
+									" by ",
+									BDFDB.ReactUtils.createElement("span", {
+										className: BDFDB.disCN._repoauthor,
+										children: this.props.data.author
+									})
+								]
+							}),
+							BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN._repocontrols,
+								children: this.props.controls
+							})
+						]
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ScrollerVertical, {
+						outerClassName: BDFDB.disCNS._repodescriptionwrap,
+						className: BDFDB.disCNS._repodescription,
+						children: this.props.data.description
+					}),
+					BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN._repofooter,
+						children: [
+							BDFDB.ReactUtils.createElement("span", {
+								className: BDFDB.disCN._repolinks,
+								children: [].concat(this.props.links).map((link, i) => BDFDB.ObjectUtils.is(link) && [
+									i > 0 && " | ",
+									BDFDB.ReactUtils.createElement("a", {
+										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repolink, typeof link.label == "string" && BDFDB.disCN._repolink + "-" + link.label.toLowerCase().replace(/\s/g, "")),
+										href: link.href,
+										children: link.label
+									})
+								]).flat(10).filter(n => n)
+							}),
+							this.props.buttons
+						].flat(10).filter(n => n)
+					}),
+				]
+			});
+		}
+	};
 	
 	InternalComponents.LibraryComponents.Anchor = BDFDB.ModuleUtils.findByName("Anchor");
 	
