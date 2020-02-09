@@ -4536,6 +4536,12 @@
 		switchItem: "ui-switch-item",
 		switchWrapper: "ui-switch-wrapper"
 	};
+	DiscordClassModules.ChatFilter = {
+		blocked: "blocked-jUhayi",
+		blockedStamp: "blockedStamp-ijVeNn",
+		censored: "censored-UYfeYg",
+		censoredStamp: "censoredStamp-fb2cYb"
+	};
 	DiscordClassModules.CharCounter = {
 		charCounter: "charCounter-7fw40k charcounter",
 		counterAdded: "counterAdded-zz9O4t"
@@ -4850,6 +4856,10 @@
 		_bdguildvideo: ["BDrepo", "bdGuildVideo"],
 		_bdpillselected: ["BDrepo", "bdPillSelected"],
 		_bdpillunread: ["BDrepo", "bdPillUnread"],
+		_chatfilterblocked: ["ChatFilter", "blocked"],
+		_chatfilterblockedstamp: ["ChatFilter", "blockedStamp"],
+		_chatfiltercensored: ["ChatFilter", "censored"],
+		_chatfiltercensoredstamp: ["ChatFilter", "censoredStamp"],
 		_charcountercounter: ["CharCounter", "charCounter"],
 		_charcountercounteradded: ["CharCounter", "counterAdded"],
 		_emojistatisticsstatisticsbutton: ["EmojiStatistics", "statisticsButton"],
