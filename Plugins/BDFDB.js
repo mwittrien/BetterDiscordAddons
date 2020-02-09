@@ -3730,9 +3730,9 @@
 		let modal, modalInstance, modalProps, cancels = [], closeModal = _ => {
 			if (BDFDB.ObjectUtils.is(modalProps) && typeof modalProps.onClose == "function") modalProps.onClose();
 		};
-		let headerChildren = BDFDB.ArrayUtils.is(config.headerChildren) ? config.headerChildren : [];
-		let contentChildren = BDFDB.ArrayUtils.is(config.contentChildren) ? config.contentChildren : [];
-		let footerChildren = BDFDB.ArrayUtils.is(config.footerChildren) ? config.footerChildren : [];
+		let headerChildren = [].concat(BDFDB.ArrayUtils.is(config.headerChildren) ? config.headerChildren : []);
+		let contentChildren = [].concat(BDFDB.ArrayUtils.is(config.contentChildren) ? config.contentChildren : []);
+		let footerChildren = [].concat(BDFDB.ArrayUtils.is(config.footerChildren) ? config.footerChildren : []);
 		if (typeof config.text == "string") {
 			contentChildren.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
 				color: InternalComponents.LibraryComponents.TextElement.Colors.PRIMARY,
@@ -3749,7 +3749,7 @@
 				}
 				contentChildren.push(child);
 			}
-			if (tabBarItems.length) headerchildren.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+			if (tabBarItems.length) headerChildren.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 				className: BDFDB.disCN.tabbarcontainer,
 				children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TabBar, {
 					className: BDFDB.disCN.tabbar,
