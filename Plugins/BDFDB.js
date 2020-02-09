@@ -1084,6 +1084,7 @@
 		InvitationCard: "invitemodalinviterow",
 		InviteCard: "guildsettingsinvitecard",
 		PopoutContainer: "popout",
+		Popouts: "popouts",
 		PrivateChannelCall: "callcurrentcontainer",
 		PrivateChannelCallParticipants: "callcurrentcontainer",
 		PrivateChannelRecipientsInvitePopout: "searchpopoutdmaddpopout",
