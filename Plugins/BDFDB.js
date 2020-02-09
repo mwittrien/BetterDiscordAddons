@@ -8838,6 +8838,7 @@
 			background: rgba(0, 0, 0, 0.1);
 			border: none;
 			box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.05);
+			padding-right: 12px;
 		}
 		${BDFDB.dotCNS.themedark + BDFDB.dotCNS.modalwrapper + BDFDB.dotCN.tabbarcontainer} {
 			background: rgba(0, 0, 0, 0.2);
