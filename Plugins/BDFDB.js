@@ -3730,9 +3730,7 @@
 		let modal, modalInstance, modalProps, cancels = [], closeModal = _ => {
 			if (BDFDB.ObjectUtils.is(modalProps) && typeof modalProps.onClose == "function") modalProps.onClose();
 		};
-		let headerChildren = [].concat(BDFDB.ArrayUtils.is(config.headerChildren) ? config.headerChildren : []);
-		let contentChildren = [].concat(BDFDB.ArrayUtils.is(config.contentChildren) ? config.contentChildren : []);
-		let footerChildren = [].concat(BDFDB.ArrayUtils.is(config.footerChildren) ? config.footerChildren : []);
+		let headerChildren = [], contentChildren = [], footerChildren = [];
 		if (typeof config.text == "string") {
 			contentChildren.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
 				color: InternalComponents.LibraryComponents.TextElement.Colors.PRIMARY,
@@ -3751,20 +3749,23 @@
 			}
 			if (tabBarItems.length) headerChildren.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 				className: BDFDB.disCN.tabbarcontainer,
-				children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TabBar, {
-					className: BDFDB.disCN.tabbar,
-					itemClassName: BDFDB.disCN.tabbaritem,
-					type: InternalComponents.LibraryComponents.TabBar.Types.TOP,
-					items: tabBarItems,
-					onItemSelect: (value, instance) => {
-						let tabContentInstances = BDFDB.ReactUtils.findOwner(modal, {name:"BDFDB_ModalTabContent", all:true, unlimited:true});
-						for (let ins of tabContentInstances) {
-							if (ins.props.tab == value) ins.props.open = true;
-							else delete ins.props.open;
+				children: [
+					BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TabBar, {
+						className: BDFDB.disCN.tabbar,
+						itemClassName: BDFDB.disCN.tabbaritem,
+						type: InternalComponents.LibraryComponents.TabBar.Types.TOP,
+						items: tabBarItems,
+						onItemSelect: (value, instance) => {
+							let tabContentInstances = BDFDB.ReactUtils.findOwner(modal, {name:"BDFDB_ModalTabContent", all:true, unlimited:true});
+							for (let ins of tabContentInstances) {
+								if (ins.props.tab == value) ins.props.open = true;
+								else delete ins.props.open;
+							}
+							BDFDB.ReactUtils.forceUpdate(tabContentInstances);
 						}
-						BDFDB.ReactUtils.forceUpdate(tabContentInstances);
-					}
-				})
+					}),
+					config.tabBarChildren
+				].flat(10).filter(n => n)
 			}));
 		}
 		if (BDFDB.ArrayUtils.is(config.buttons)) for (let button of config.buttons) {
@@ -3787,9 +3788,9 @@
 				}), "click", "close", "cancel", "contents")));
 			}
 		}
-		contentChildren = contentChildren.filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
-		headerChildren = headerChildren.filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
-		footerChildren = footerChildren.filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
+		contentChildren = contentChildren.concat(config.contentChildren).filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
+		headerChildren = headerChildren.concat(config.headerChildren).filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
+		footerChildren = footerChildren.concat(config.footerChildren).filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
 		if (contentChildren.length) {
 			if (typeof config.onClose != "function") config.onClose = _ => {};
 			if (typeof config.onOpen != "function") config.onOpen = _ => {};
