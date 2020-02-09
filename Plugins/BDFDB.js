@@ -4556,9 +4556,11 @@
 		translating: "translating-Yi-YxC"
 	};
 	DiscordClassModules.ImageGallery = {
+		icon: "icon-QY6cR4",
 		gallery: "gallery-JViwKR",
+		next: "next-SHEZrz",
 		previous: "previous-xsNq6B",
-		next: "next-SHEZrz"
+		sibling: "sibling-6vI7Pu"
 	};
 	DiscordClassModules.ImageZoom = {
 		backdrop: "lenseBackdrop-yEm7Om",
@@ -4864,8 +4866,10 @@
 		_emojistatisticsiconcell: ["EmojiStatistics", "iconCell"],
 		_emojistatisticsnamecell: ["EmojiStatistics", "nameCell"],
 		_imagegallerygallery: ["ImageGallery", "gallery"],
-		_imagegalleryprevious: ["ImageGallery", "previous"],
+		_imagegalleryicon: ["ImageGallery", "icon"],
 		_imagegallerynext: ["ImageGallery", "next"],
+		_imagegalleryprevious: ["ImageGallery", "previous"],
+		_imagegallerysibling: ["ImageGallery", "sibling"],
 		_imagezoombackdrop: ["ImageZoom", "backdrop"],
 		_imagezoomimagemodal: ["ImageZoom", "modal"],
 		_imagezoomlense: ["ImageZoom", "lense"],
