@@ -1,12 +1,12 @@
 //META{"name":"ImageGallery","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ImageGallery","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ImageGallery/ImageGallery.plugin.js"}*//
 
 var ImageGallery = (_ => {
-	var eventFired;
+	var eventFired, clickedImage;
 	
 	return class ImageGallery {
 		getName () {return "ImageGallery";}
 
-		getVersion () {return "1.6.4";}
+		getVersion () {return "1.6.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,7 @@ var ImageGallery = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["First Message","No longer includes iamges of a different user when the opened image is in the first message"],["Message Update","Fixed the plugin for the new Message Update"]],
+				"added":[["Details","Added some details about the current image and amount of images"]],
 				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 			};
 
@@ -27,17 +27,37 @@ var ImageGallery = (_ => {
 
 		initConstructor () {
 			this.css = `
-				${BDFDB.dotCNS._imagegallerygallery + BDFDB.dotCN.imagewrapper + BDFDB.dotCN._imagegalleryprevious},
-				${BDFDB.dotCNS._imagegallerygallery + BDFDB.dotCN.imagewrapper + BDFDB.dotCN._imagegallerynext} {
+				${BDFDB.dotCN._imagegallerysibling} {
+					display: flex;
+					align-items: center;
 					position: fixed;
 					z-index: -1;
 				}
-				${BDFDB.dotCNS._imagegallerygallery + BDFDB.dotCN.imagewrapper + BDFDB.dotCN._imagegalleryprevious} {
+				${BDFDB.dotCN._imagegalleryprevious} {
+					justify-content: flex-end;
 					right: 90%;
 				} 
-				${BDFDB.dotCNS._imagegallerygallery + BDFDB.dotCN.imagewrapper + BDFDB.dotCN._imagegallerynext} {
+				${BDFDB.dotCN._imagegallerynext} {
+					justify-content: flex-start;
 					left: 90%;
-				}`;
+				}
+				${BDFDB.dotCN._imagegalleryicon} {
+					position: absolute;
+					background: rgba(0, 0, 0, 0.3);
+					border-radius: 50%;
+					padding: 15px;
+					transition: all 0.3s ease;
+				}
+				${BDFDB.dotCNS._imagegalleryprevious + BDFDB.dotCN._imagegalleryicon} {
+					right: 10px;
+				} 
+				${BDFDB.dotCNS._imagegallerynext + BDFDB.dotCN._imagegalleryicon} {
+					left: 10px;
+				}
+				${BDFDB.dotCN._imagegallerysibling}:hover ${BDFDB.dotCN._imagegalleryicon} {
+					background: rgba(0, 0, 0, 0.5);
+				}
+			`;
 		}
 
 		//legacy
@@ -70,6 +90,12 @@ var ImageGallery = (_ => {
 				BDFDB.PluginUtils.init(this);
 				
 				eventFired = false;
+				clickedImage = null;
+
+				BDFDB.ListenerUtils.add(this, document.body, "click", BDFDB.dotCNS.message + BDFDB.dotCNS.imagewrapper + "img", e => {
+					clickedImage = e.target;
+					BDFDB.TimeUtils.timeout(_ => {clickedImage = null;});
+				});
 
 				BDFDB.ModuleUtils.forceAllUpdates(this);
 			}
@@ -90,24 +116,50 @@ var ImageGallery = (_ => {
 		// begin of own functions
 
 		processImageModal (e) {
-			let messages = this.getMessageGroupOfImage(e.instance.props.src);
+			if (clickedImage) e.instance.props.cachedImage = clickedImage;
+			let src = e.instance.props.cachedImage && e.instance.props.cachedImage.src ? e.instance.props.cachedImage : e.instance.props.src;
+			let messages = this.getMessageGroupOfImage(src);
+			console.log(e);
 			if (messages.length) {
 				if (e.returnvalue) {
 					let images = messages.map(n => Array.from(n.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img"))).flat().filter(img => !BDFDB.DOMUtils.getParent(BDFDB.dotCN.spoilerhidden, img));
-					let next, previous;
-					for (let i = 0; i < images.length; i++) if (this.getSrcOfImage(e.instance.props.src) == this.getSrcOfImage(images[i])) {
-						next = this.getSrcOfImage(images[i+1]);
-						previous = this.getSrcOfImage(images[i-1]);
+					let next, previous, index = 0, amount = images.length;
+					for (let i = 0; i < amount; i++) if (this.isSameImage(src, images[i])) {
+						index = i;
+						previous = images[i-1];
+						next = images[i+1];
 						break;
 					}
-					if (next) {
-						if (e.instance.nextRef) e.returnvalue.props.children.splice(1, 0, e.instance.nextRef);
-						else this.loadImage(e.instance, this.getSrcOfImage(next), "next");
-					}
 					if (previous) {
-						if (e.instance.previousRef) e.returnvalue.props.children.push(e.instance.previousRef);
-						else this.loadImage(e.instance, this.getSrcOfImage(previous), "previous");
+						if (e.instance.previousRef) e.returnvalue.props.children.push(this.createImageWrapper(e.instance, e.instance.previousRef, "previous", BDFDB.LibraryComponents.SvgIcon.Names.LEFT_CARET));
+						else this.loadImage(e.instance, previous, "previous");
 					}
+					if (next) {
+						if (e.instance.nextRef) e.returnvalue.props.children.splice(1, 0, this.createImageWrapper(e.instance, e.instance.nextRef, "next", BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_CARET));
+						else this.loadImage(e.instance, next, "next");
+					}
+					e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
+						className: "a",
+						children: [
+							{label: "Source", text: e.instance.props.src},
+							{label: "Size", text: `${e.instance.props.width} x ${e.instance.props.height}px`},
+							{label: "Image", text: `${index+1} of ${amount}`}
+						].map(data => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+							className: "b " + BDFDB.disCN.primary,
+							children: [
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+									grow: 0,
+									shrink: 0,
+									basis: 100,
+									className: "c",
+									children: data.label + ":"
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
+									children: data.text
+								})
+							]
+						}))
+					}));
 				}
 				if (e.node) {
 					BDFDB.DOMUtils.addClass(BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, e.node), BDFDB.disCN._imagegallerygallery);
@@ -131,7 +183,7 @@ var ImageGallery = (_ => {
 		}
 
 		getMessageGroupOfImage (src) {
-			if (src) for (let message of document.querySelectorAll(BDFDB.dotCN.message)) for (let img of message.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img")) if (img.src && this.getSrcOfImage(img) == this.getSrcOfImage(src)) {
+			if (src) for (let message of document.querySelectorAll(BDFDB.dotCN.message)) for (let img of message.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img")) if (this.isSameImage(src, img)) {
 				let previousSiblings = [], nextSiblings = [];
 				let previousSibling = message.previousSibling, nextSibling = message.nextSibling;
 				if (!BDFDB.DOMUtils.containsClass(message, BDFDB.disCN.messagegroupstart)) while (previousSibling) {
@@ -150,44 +202,65 @@ var ImageGallery = (_ => {
 			}
 			return [];
 		}
+		
+		isSameImage (src, img) {
+			return img.src && (Node.prototype.isPrototypeOf(src) && img == src || !Node.prototype.isPrototypeOf(src) && this.getSrcOfImage(img) == this.getSrcOfImage(src));
+		}
 
 		getSrcOfImage (img) {
 			if (!img) return null;
 			return (typeof img == "string" ? img : (img.src || (img.querySelector("canvas") ? img.querySelector("canvas").src : ""))).split("?width=")[0];
 		}
 		
-		loadImage (instance, src, type) {
+		createImageWrapper (instance, imgRef, type, svgIcon) {
+			return BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.disCNS.imagewrapper + BDFDB.disCNS.imageclickable + BDFDB.disCNS._imagegallerysibling + BDFDB.disCN[`_imagegallery${type}`],
+				onClick: _ => {this.switchImages(instance, type);},
+				children: [
+					imgRef,
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+						className: BDFDB.disCNS._imagegalleryicon + BDFDB.disCN.svgicon,
+						name: svgIcon
+					})
+				]
+			});
+		}
+		
+		loadImage (instance, img, type) {
 			let imagethrowaway = document.createElement("img");
-			imagethrowaway.src = src;
+			imagethrowaway.src = img.src;
 			imagethrowaway.onload = _ => {
 				let arects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
 				let resizeY = (arects.height/imagethrowaway.naturalHeight) * 0.65, resizeX = (arects.width/imagethrowaway.naturalWidth) * 0.8;
 				let resize = resizeX < resizeY ? resizeX : resizeY;
 				let newHeight = imagethrowaway.naturalHeight * resize;
 				let newWidth = imagethrowaway.naturalWidth * resize;
+				instance[type + "Img"] = img;
 				instance[type + "Ref"] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.LazyImage, {
-					className: BDFDB.disCN[`_imagegallery${type}`],
-					src: src,
+					src: img.src,
 					height: imagethrowaway.naturalHeight,
 					width: imagethrowaway.naturalWidth,
 					maxHeight: newHeight,
 					maxWidth: newWidth,
-					onClick: _ => {this.switchImages(instance, type);}
 				});
 				BDFDB.ReactUtils.forceUpdate(instance);
 			};
 		}
 		
 		switchImages (instance, type) {
-			let imageRef = instance[type + "Ref"];
-			if (!imageRef) return;
+			let img = instance[type + "Img"];
+			let imgRef = instance[type + "Ref"];
+			if (!img || !imgRef) return;
 			delete instance.previousRef;
 			delete instance.nextRef;
-			instance.props.original = imageRef.props.src;
-			instance.props.placeholder = imageRef.props.src;
-			instance.props.src = imageRef.props.src;
-			instance.props.height = imageRef.props.height;
-			instance.props.width = imageRef.props.width;
+			delete instance.previousImg;
+			delete instance.nextImg;
+			instance.props.original = imgRef.props.src;
+			instance.props.placeholder = imgRef.props.src;
+			instance.props.src = imgRef.props.src;
+			instance.props.height = imgRef.props.height;
+			instance.props.width = imgRef.props.width;
+			instance.props.cachedImage = img;
 			BDFDB.ReactUtils.forceUpdate(instance);
 		}
 		

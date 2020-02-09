@@ -4556,8 +4556,11 @@
 		translating: "translating-Yi-YxC"
 	};
 	DiscordClassModules.ImageGallery = {
-		icon: "icon-QY6cR4",
+		details: "details-9dkFPc",
+		detailsLabel: "label-mrlccN",
+		detailsWrapper: "detailsWrapper-TE1mu5",
 		gallery: "gallery-JViwKR",
+		icon: "icon-QY6cR4",
 		next: "next-SHEZrz",
 		previous: "previous-xsNq6B",
 		sibling: "sibling-6vI7Pu"
@@ -4865,6 +4868,9 @@
 		_emojistatisticsamountcell: ["EmojiStatistics", "amountCell"],
 		_emojistatisticsiconcell: ["EmojiStatistics", "iconCell"],
 		_emojistatisticsnamecell: ["EmojiStatistics", "nameCell"],
+		_imagegallerydetails: ["ImageGallery", "details"],
+		_imagegallerydetailslabel: ["ImageGallery", "detailsLabel"],
+		_imagegallerydetailswrapper: ["ImageGallery", "detailsWrapper"],
 		_imagegallerygallery: ["ImageGallery", "gallery"],
 		_imagegalleryicon: ["ImageGallery", "icon"],
 		_imagegallerynext: ["ImageGallery", "next"],
