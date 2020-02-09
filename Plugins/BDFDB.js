@@ -3727,32 +3727,35 @@
 	BDFDB.ModalUtils = {};
 	BDFDB.ModalUtils.open = function (plugin, config) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !BDFDB.ObjectUtils.is(config)) return;
-		var modal, modalInstance, headerchildren = [], contentchildren = [], footerchildren = [], modalprops, cancels = [], closeModal = _ => {
-			if (BDFDB.ObjectUtils.is(modalprops) && typeof modalprops.onClose == "function") modalprops.onClose();
+		let modal, modalInstance, modalProps, cancels = [], closeModal = _ => {
+			if (BDFDB.ObjectUtils.is(modalProps) && typeof modalProps.onClose == "function") modalProps.onClose();
 		};
+		let headerChildren = BDFDB.ArrayUtils.is(config.headerChildren) ? config.headerChildren : [];
+		let contentChildren = BDFDB.ArrayUtils.is(config.contentChildren) ? config.contentChildren : [];
+		let footerChildren = BDFDB.ArrayUtils.is(config.footerChildren) ? config.footerChildren : [];
 		if (typeof config.text == "string") {
-			contentchildren.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
+			contentChildren.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
 				color: InternalComponents.LibraryComponents.TextElement.Colors.PRIMARY,
 				children: config.text
 			}));
 		}
 		if (config.children) {
-			let selectedtab, tabbaritems = [];
+			let tabBarItems = [];
 			for (let child of [config.children].flat(10).filter(n => n)) if (LibraryModules.React.isValidElement(child)) {
 				if (child.type == InternalComponents.LibraryComponents.ModalComponents.ModalTabContent) {
-					if (!tabbaritems.length) child.props.open = true;
+					if (!tabBarItems.length) child.props.open = true;
 					else delete child.props.open;
-					tabbaritems.push({value:child.props.tab});
+					tabBarItems.push({value:child.props.tab});
 				}
-				contentchildren.push(child);
+				contentChildren.push(child);
 			}
-			if (tabbaritems.length) headerchildren.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+			if (tabBarItems.length) headerchildren.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 				className: BDFDB.disCN.tabbarcontainer,
 				children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TabBar, {
 					className: BDFDB.disCN.tabbar,
 					itemClassName: BDFDB.disCN.tabbaritem,
 					type: InternalComponents.LibraryComponents.TabBar.Types.TOP,
-					items: tabbaritems,
+					items: tabBarItems,
 					onItemSelect: (value, instance) => {
 						let tabContentInstances = BDFDB.ReactUtils.findOwner(modal, {name:"BDFDB_ModalTabContent", all:true, unlimited:true});
 						for (let ins of tabContentInstances) {
@@ -3773,7 +3776,7 @@
 				
 				if (button.cancel) cancels.push(click);
 				
-				footerchildren.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Button, BDFDB.ObjectUtils.exclude(Object.assign({}, button, {
+				footerChildren.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Button, BDFDB.ObjectUtils.exclude(Object.assign({}, button, {
 					look: look || (color ? InternalComponents.LibraryComponents.Button.Looks.FILLED : InternalComponents.LibraryComponents.Button.Looks.LINK),
 					color: color || InternalComponents.LibraryComponents.Button.Colors.PRIMARY,
 					onClick: _ => {
@@ -3784,10 +3787,10 @@
 				}), "click", "close", "cancel", "contents")));
 			}
 		}
-		contentchildren = contentchildren.filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
+		contentChildren = contentChildren.filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
 		headerchildren = headerchildren.filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
-		footerchildren = footerchildren.filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
-		if (contentchildren.length) {
+		footerChildren = footerChildren.filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
+		if (contentChildren.length) {
 			if (typeof config.onClose != "function") config.onClose = _ => {};
 			if (typeof config.onOpen != "function") config.onOpen = _ => {};
 			
@@ -3796,7 +3799,7 @@
 			let size = typeof config.size == "string" && InternalComponents.LibraryComponents.ModalComponents.ModalSize[config.size.toUpperCase()];
 			let oldTransitionState = 0;
 			LibraryModules.ModalUtils.openModal(props => {
-				modalprops = props;
+				modalProps = props;
 				return BDFDB.ReactUtils.createElement(class BDFDB_Modal extends LibraryModules.React.Component {
 					render () {
 						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ModalComponents.ModalRoot, {
@@ -3805,7 +3808,7 @@
 							transitionState: props.transitionState,
 							children: [
 								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ModalComponents.ModalHeader, {
-									className: BDFDB.DOMUtils.formatClassName(config.headerClassName, headerchildren.length && BDFDB.disCN.modalheaderhassibling),
+									className: BDFDB.DOMUtils.formatClassName(config.headerClassName, headerChildren.length && BDFDB.disCN.modalheaderhassibling),
 									separator: config.headerSeparator || false,
 									children: [
 										BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
@@ -3826,19 +3829,19 @@
 										})
 									]
 								}),
-								headerchildren.length ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+								headerChildren.length ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 									grow: 0,
 									shrink: 0,
-									children: headerchildren
+									children: headerChildren
 								}) : null,
 								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ModalComponents.ModalContent, {
 									className: config.contentClassName,
 									scroller: config.scroller,
-									children: contentchildren
+									children: contentChildren
 								}),
-								footerchildren.length ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ModalComponents.ModalFooter, {
+								footerChildren.length ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ModalComponents.ModalFooter, {
 									className: config.footerClassName,
-									children: footerchildren
+									children: footerChildren
 								}) : null
 							]
 						});
