@@ -3788,7 +3788,7 @@
 			}
 		}
 		contentChildren = contentChildren.filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
-		headerchildren = headerchildren.filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
+		headerChildren = headerChildren.filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
 		footerChildren = footerChildren.filter(n => n && (typeof n == "string" || BDFDB.ReactUtils.isValidElement(n)));
 		if (contentChildren.length) {
 			if (typeof config.onClose != "function") config.onClose = _ => {};
