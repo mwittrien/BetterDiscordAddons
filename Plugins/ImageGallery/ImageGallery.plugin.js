@@ -57,6 +57,20 @@ var ImageGallery = (_ => {
 				${BDFDB.dotCN._imagegallerysibling}:hover ${BDFDB.dotCN._imagegalleryicon} {
 					background: rgba(0, 0, 0, 0.5);
 				}
+				${BDFDB.dotCN._imagegallerydetailswrapper} {
+					position: fixed;
+					bottom: 10px;
+					left: 15px;
+					right: 15px;
+				}
+				${BDFDB.dotCN._imagegallerydetails} {
+					margin-top: 5px;
+					font-size: 14px;
+					font-weight: 500;
+				}
+				${BDFDB.dotCN._imagegallerydetailslabel} {
+					font-weight: 600;
+				}
 			`;
 		}
 
@@ -119,7 +133,6 @@ var ImageGallery = (_ => {
 			if (clickedImage) e.instance.props.cachedImage = clickedImage;
 			let src = e.instance.props.cachedImage && e.instance.props.cachedImage.src ? e.instance.props.cachedImage : e.instance.props.src;
 			let messages = this.getMessageGroupOfImage(src);
-			console.log(e);
 			if (messages.length) {
 				if (e.returnvalue) {
 					let images = messages.map(n => Array.from(n.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img"))).flat().filter(img => !BDFDB.DOMUtils.getParent(BDFDB.dotCN.spoilerhidden, img));
@@ -139,19 +152,19 @@ var ImageGallery = (_ => {
 						else this.loadImage(e.instance, next, "next");
 					}
 					e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
-						className: "a",
+						className: BDFDB.disCN._imagegallerydetailswrapper,
 						children: [
 							{label: "Source", text: e.instance.props.src},
 							{label: "Size", text: `${e.instance.props.width} x ${e.instance.props.height}px`},
 							{label: "Image", text: `${index+1} of ${amount}`}
 						].map(data => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-							className: "b " + BDFDB.disCN.primary,
+							className: BDFDB.disCNS._imagegallerydetails + BDFDB.disCN.primary,
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 									grow: 0,
 									shrink: 0,
 									basis: 100,
-									className: "c",
+									className: BDFDB.disCN._imagegallerydetailslabel,
 									children: data.label + ":"
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
