@@ -7787,7 +7787,7 @@
 				renderPopout: instance => {
 					let items = options.map(option => {
 						let selected = option.value && option.value === selectedOption.value || option.key && option.key === selectedOption.key;
-						return typeof this.props.renderOption == "function" ? this.props.renderOption(option) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ContextMenuItem, {
+						return typeof this.props.renderOption == "function" ? this.props.renderOption(option) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ContextMenuItems.Item, {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.quickselectpopoutoption, selected && BDFDB.disCN.quickselectpopoutoptionselected),
 							action: selected ? null : _ => {
 								instance.close();
