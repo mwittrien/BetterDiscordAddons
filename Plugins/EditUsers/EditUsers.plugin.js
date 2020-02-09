@@ -4,7 +4,7 @@ var EditUsers = (_ => {
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.7.3";}
+		getVersion () {return "3.7.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -442,13 +442,13 @@ var EditUsers = (_ => {
 		processMessage (e) {
 			let header = e.instance.props.childrenHeader;
 			if (header && header.props && header.props.message) {
-				let message = new BDFDB.DiscordObjects.Message(Object.assign({}, header.props.message, {author: this.getUserData(header.props.message.author.id)}));
 				let data = BDFDB.DataUtils.load(this, "users", header.props.message.author.id);
 				if (data) {
+					let message = new BDFDB.DiscordObjects.Message(Object.assign({}, header.props.message, {author: this.getUserData(header.props.message.author.id)}));
 					if (data.name) message.nick = data.name;
 					if (data.color1) message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[0] : data.color1, "HEX");
+					header.props.message = message;
 				}
-				header.props.message = message;
 			}
 		}
 		
