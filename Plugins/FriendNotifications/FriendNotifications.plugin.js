@@ -10,7 +10,7 @@ var FriendNotifications = (_ => {
 
 		getAuthor () {return "DevilBro";}
 
-		getDescription () {return "Notifies you when a Friend or a User your choose to observe changing his online status, can be configured individually in the settings.";}
+		getDescription () {return "Notifies you when a Friend or a User your choose to observe changes their online status, can be configured individually in the settings.";}
 
 		constructor () {
 			this.changelog = {

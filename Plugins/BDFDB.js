@@ -3816,12 +3816,12 @@
 											children: [
 												BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormTitle, {
 													tag: InternalComponents.LibraryComponents.FormComponents.FormTitle.Tags.H4,
-													children: typeof config.header == "string" ? config.header : ""
+													children: config.header
 												}),
 												BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
 													size: InternalComponents.LibraryComponents.TextElement.Sizes.SMALL,
 													color: InternalComponents.LibraryComponents.TextElement.Colors.PRIMARY,
-													children: typeof config.subheader == "string" ? config.subheader : (name || "")
+													children: typeof config.subheader == "string" || BDFDB.ReactUtils.isValidElement(config.subheader) ? config.subheader : (name || "")
 												})
 											]
 										}),
