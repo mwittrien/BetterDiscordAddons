@@ -1,7 +1,7 @@
 //META{"name":"PluginRepo","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PluginRepo","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PluginRepo/PluginRepo.plugin.js"}*// 
 
 var PluginRepo = (_ => {
-	var loading, cachedPlugins, grabbedPlugins, foundPlugins, loadedPlugins, updateInterval, currentSearchString, selectedSortKey, selectedOrderKey;
+	var loading, cachedPlugins, grabbedPlugins, foundPlugins, loadedPlugins, updateInterval;
 	
 	const pluginStates = {
 		UPDATED: 0,
@@ -72,7 +72,7 @@ var PluginRepo = (_ => {
 	return class PluginRepo {
 		getName () {return "PluginRepo";} 
 
-		getVersion () {return "1.8.8";}
+		getVersion () {return "1.9.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -323,12 +323,17 @@ var PluginRepo = (_ => {
 		openPluginRepoModal (options = {}) {
 			if (loading.is) BDFDB.NotificationUtils.toast(`Plugins are still being fetched. Try again in some seconds.`, {type:"danger"});
 			else {
-				currentSearchString = "";
-				selectedSortKey = options.forcedSort || Object.keys(sortKeys)[0];
-				selectedOrderKey = options.forcedOrder || Object.keys(orderKeys)[0];
-				let searchTimeout;
-				let modalSettings = BDFDB.DataUtils.get(this, "modalSettings"), automaticLoading = BDFDB.BDUtils.isAutoLoadEnabled();
-				let entries = this.createEntries();
+				let modalSettings = BDFDB.DataUtils.get(this, "modalSettings");
+				let searchTimeout, automaticLoading = BDFDB.BDUtils.isAutoLoadEnabled();
+				options = Object.assign(options, modalSettings);
+				options.updated = options.updated && !options.showOnlyOutdated;
+				options.outdated = options.updated || options.showOnlyOutdated;
+				options.downloadable = options.downloadable && !options.showOnlyOutdated;
+				options.searchString = "";
+				options.sortKey = options.forcedSort || Object.keys(sortKeys)[0];
+				options.orderKey = options.forcedOrder || Object.keys(orderKeys)[0];
+				
+				let entries = this.createEntries(options);
 				BDFDB.ModalUtils.open(this, {
 					className: "repo-modal",
 					size: "LARGE",
@@ -340,16 +345,17 @@ var PluginRepo = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
 								autoFocus: true,
+								query: options.searchString,
 								onChange: (value, instance) => {
 									BDFDB.TimeUtils.clear(searchTimeout);
 									searchTimeout = BDFDB.TimeUtils.timeout(_ => {
-										currentSearchString = value.replace(/[<|>]/g, "").toUpperCase();
-										this.updateList(instance);
+										options.searchString = value.replace(/[<|>]/g, "").toUpperCase();
+										this.updateList(instance, options);
 									}, 1000);
 								},
 								onClear: instance => {
-									currentSearchString = "";
-									this.updateList(instance);
+									options.searchString = "";
+									this.updateList(instance, options);
 								}
 							})
 						}),
@@ -357,16 +363,16 @@ var PluginRepo = (_ => {
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
 								label: "Sort by:",
 								value: {
-									label: sortKeys[selectedSortKey],
-									value: selectedSortKey
+									label: sortKeys[options.sortKey],
+									value: options.sortKey
 								},
 								options: Object.keys(sortKeys).map(key => {return {
 									label: sortKeys[key],
 									value: key
 								};}),
 								onChange: (key, instance) => {
-									selectedSortKey = key;
-									this.updateList(instance);
+									options.sortKey = key;
+									this.updateList(instance, options);
 								}
 							})
 						}),
@@ -374,16 +380,16 @@ var PluginRepo = (_ => {
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
 								label: "Order:",
 								value: {
-									label: orderKeys[selectedOrderKey],
-									value: selectedOrderKey
+									label: orderKeys[options.orderKey],
+									value: options.orderKey
 								},
 								options: Object.keys(orderKeys).map(key => {return {
 									label: orderKeys[key],
 									value: key
 								};}),
 								onChange: (key, instance) => {
-									selectedOrderKey = key;
-									this.updateList(instance);
+									options.orderKey = key;
+									this.updateList(instance, options);
 								}
 							})
 						})
@@ -416,9 +422,10 @@ var PluginRepo = (_ => {
 									label: this.defaults.modalSettings[key].description,
 									note: key == "rnmStart" && !automaticLoading && "Automatic Loading has to be enabled",
 									disabled: key == "rnmStart" && !automaticLoading,
-									value: modalSettings[key] && (key != "outdated" || !options.showOnlyOutdated) || (this.defaults.modalSettings[key].modify && options.showOnlyOutdated),
+									value: options[key],
 									onChange: (value, instance) => {
-										this.updateList(instance);
+										options[key] = value;
+										this.updateList(instance, options);
 									}
 								}))
 							].flat(10).filter(n => n)
@@ -428,13 +435,13 @@ var PluginRepo = (_ => {
 			}
 		}
 		
-		updateList (instance) {
+		updateList (instance, options = {}) {
 			let modalIns = BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_Modal", up:true});
 			if (modalIns) {
 				let listIns = BDFDB.ReactUtils.findOwner(modalIns, {key:"repo-list"});
 				let amountIns = BDFDB.ReactUtils.findOwner(modalIns, {name:"RepoAmount"});
 				if (listIns && amountIns) {
-					let entries = this.createEntries();
+					let entries = this.createEntries(options);
 					listIns.props.entries = entries;
 					amountIns.props.entries = entries;
 					BDFDB.ReactUtils.forceUpdate(listIns, amountIns);
@@ -442,9 +449,9 @@ var PluginRepo = (_ => {
 			}
 		}
 
-		createEntries () {
+		createEntries (options = {}) {
+			console.log(options);
 			let favorites = BDFDB.DataUtils.load(this, "favorites");
-			let modalSettings = BDFDB.DataUtils.get(this, "modalSettings");
 			let plugins = Object.keys(loadedPlugins).map(url => {
 				let plugin = loadedPlugins[url];
 				let instPlugin = BDFDB.BDUtils.getPlugin(plugin.getName);
@@ -462,18 +469,18 @@ var PluginRepo = (_ => {
 					state: plugin.getState
 				};
 			});
-			if (!modalSettings.updated)			plugins = plugins.filter(plugin => plugin.state == pluginStates.UPDATED);
-			if (!modalSettings.outdated)		plugins = plugins.filter(plugin => plugin.state == pluginStates.OUTDATED);
-			if (!modalSettings.downloadable)	plugins = plugins.filter(plugin => plugin.state == pluginStates.DOWNLOADABLE);
-			if (currentSearchString) 			plugins = plugins.filter(plugin => plugin.search.indexOf(currentSearchString) > -1).map(plugin => Object.assign({}, plugin, {
-				name: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(plugin.name, currentSearchString))) || plugin.name,
-				version: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(plugin.version, currentSearchString))) || plugin.version,
-				author: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(plugin.author, currentSearchString))) || plugin.author,
-				description: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(plugin.description, currentSearchString))) || plugin.description
+			if (!options.updated)		plugins = plugins.filter(plugin => plugin.state == pluginStates.UPDATED);
+			if (!options.outdated)		plugins = plugins.filter(plugin => plugin.state == pluginStates.OUTDATED);
+			if (!options.downloadable)	plugins = plugins.filter(plugin => plugin.state == pluginStates.DOWNLOADABLE);
+			if (options.searchString) 	plugins = plugins.filter(plugin => plugin.search.indexOf(options.searchString) > -1).map(plugin => Object.assign({}, plugin, {
+				name: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(plugin.name, options.searchString))) || plugin.name,
+				version: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(plugin.version, options.searchString))) || plugin.version,
+				author: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(plugin.author, options.searchString))) || plugin.author,
+				description: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(plugin.description, options.searchString))) || plugin.description
 			}));
 
-			BDFDB.ArrayUtils.keySort(plugins, (selectedSortKey == "NEW" && !plugins.some(plugin => plugin.new == newStates.NEW) ? Object.keys(sortKeys)[0] : selectedSortKey).toLowerCase());
-			if (selectedOrderKey == "DESC") plugins.reverse();
+			BDFDB.ArrayUtils.keySort(plugins, (options.sortKey == "NEW" && !plugins.some(plugin => plugin.new == newStates.NEW) ? Object.keys(sortKeys)[0] : options.sortKey).toLowerCase());
+			if (options.orderKey == "DESC") plugins.reverse();
 			return plugins.map(plugin => {
 				let buttonConfig = buttonData[(Object.entries(pluginStates).find(n => n[1] == plugin.state) || [])[0]]
 				return buttonConfig && {
@@ -530,7 +537,7 @@ var PluginRepo = (_ => {
 								onClick: (e, instance) => {
 									this.deletePluginFile(plugin);
 									BDFDB.TimeUtils.timeout(_ => {
-										this.updateList(instance);
+										this.updateList(instance, options);
 										if (!BDFDB.BDUtils.isAutoLoadEnabled()) this.stopPlugin(plugin);
 									}, 3000);
 								}
@@ -544,8 +551,8 @@ var PluginRepo = (_ => {
 							onClick: (e, instance) => {
 								this.downloadPlugin(plugin);
 								BDFDB.TimeUtils.timeout(_ => {
-									this.updateList(instance);
-									if (modalSettings.rnmStart) this.startPlugin(plugin);
+									this.updateList(instance, options);
+									if (options.rnmStart) this.startPlugin(plugin);
 								}, 3000);
 							}
 						})
@@ -719,8 +726,7 @@ var PluginRepo = (_ => {
 						if (!tags.some(tag => !plugin[tag] || plugin[tag].length > 10000)) {
 							plugin.url = url;
 							loadedPlugins[url] = plugin;
-							let instPlugin = BDFDB.BDUtils.getPlugin(plugin.getName);
-							if (instPlugin && typeof instPlugin.getAuthor == "function" && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion && PluginUpdates && PluginUpdates.plugins && !PluginUpdates.plugins[url]) outdated++;
+							if (this.isPluginOutdated(plugin, url)) outdated++;
 							if (!cachedPlugins.includes(url)) newentries++;
 						}
 						else if (frame && frame.contentWindow) {
@@ -783,8 +789,7 @@ var PluginRepo = (_ => {
 						if (BDFDB.ObjectUtils.is(plugin)) {
 							plugin.url = url;
 							loadedPlugins[url] = plugin;
-							let instPlugin = BDFDB.BDUtils.getPlugin(plugin.getName);
-							if (instPlugin && typeof instPlugin.getAuthor == "function" && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion) outdated++;
+							if (this.isPluginOutdated(plugin, url)) outdated++;
 							if (!cachedPlugins.includes(url)) newentries++;
 						}
 						framerunning = false;
@@ -823,6 +828,23 @@ var PluginRepo = (_ => {
 
 		getLoadingTooltipText () {
 			return `Loading PluginRepo - [${Object.keys(loadedPlugins).length}/${Object.keys(grabbedPlugins).length}]`;
+		}
+		
+		isPluginOutdated (plugin, url) {
+			let instPlugin = BDFDB.BDUtils.getPlugin(plugin.getName);
+			return instPlugin && typeof instPlugin.getAuthor == "function" && this.getString(instPlugin.getAuthor()).toUpperCase() == plugin.getAuthor.toUpperCase() && this.getString(instPlugin.getVersion()) != plugin.getVersion && !this.pluginHasUpdateCheck(url);
+		}
+		
+		pluginHasUpdateCheck (url) {
+			if (!BDFDB.ObjectUtils.is(window.PluginUpdates) || !BDFDB.ObjectUtils.is(window.PluginUpdates.plugins)) return false;
+			if (window.PluginUpdates.plugins[url]) return true;
+			else {
+				let temp = "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PluginRepo/PluginRepo.plugin.js".replace("//raw.githubusercontent.com", "//").split("/");
+				let gitname = temp.splice(3, 1);
+				temp.splice(4, 1);
+				temp.splice(2, 1, gitname + ".github.io");
+				return !!window.PluginUpdates.plugins[temp.join("/")];
+			}
 		}
 
 		getString (obj) {
