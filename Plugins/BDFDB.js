@@ -948,9 +948,9 @@
 	BDFDB.ModuleUtils.cached = window.BDFDB && window.BDFDB.ModuleUtils && window.BDFDB.ModuleUtils.cached || {};
 	BDFDB.ModuleUtils.find = function (filter, getExport) {
 		getExport = typeof getExport != "boolean" ? true : getExport;
-		var req = InternalBDFDB.getWebModuleReq();
+		let req = InternalBDFDB.getWebModuleReq();
 		for (let i in req.c) if (req.c.hasOwnProperty(i)) {
-			var m = req.c[i].exports;
+			let m = req.c[i].exports;
 			if (m && (typeof m == "object" || typeof m == "function") && filter(m)) return getExport ? m : req.c[i];
 			if (m && m.__esModule) {
 				for (let j in m) if (m[j] && (typeof m[j] == "object" || typeof m[j] == "function") && filter(m[j])) return getExport ? m[j] : req.c[i];
@@ -10209,7 +10209,7 @@
 			return InternalBDFDB.getWebModuleReq().c[index];
 		};
 		BDFDB.ModuleUtils.DevFuncs.findPropAny = function (...strings) {
-			var req = InternalBDFDB.getWebModuleReq();
+			let req = InternalBDFDB.getWebModuleReq();
 			window.t = {"$filter":(prop => [...strings].flat(10).filter(n => typeof n == "string").every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
@@ -10220,7 +10220,7 @@
 			console.log(window.t);
 		};
 		BDFDB.ModuleUtils.DevFuncs.findPropFunc = function (...strings) {
-			var req = InternalBDFDB.getWebModuleReq();
+			let req = InternalBDFDB.getWebModuleReq();
 			window.t = {"$filter":(prop => [...strings].flat(10).filter(n => typeof n == "string").every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
@@ -10231,7 +10231,7 @@
 			console.log(window.t);
 		};
 		BDFDB.ModuleUtils.DevFuncs.findPropStringLib = function (...strings) {
-			var req = InternalBDFDB.getWebModuleReq();
+			let req = InternalBDFDB.getWebModuleReq();
 			window.t = {"$filter":(prop => [...strings].flat(10).filter(n => typeof n == "string").every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
@@ -10242,7 +10242,7 @@
 			console.log(window.t);
 		};
 		BDFDB.ModuleUtils.DevFuncs.findNameAny = function (...strings) {
-			var req = InternalBDFDB.getWebModuleReq();
+			let req = InternalBDFDB.getWebModuleReq();
 			window.t = {"$filter":(modu => [...strings].flat(10).filter(n => typeof n == "string").some(string => typeof modu.displayName == "string" && modu.displayName.toLowerCase().indexOf(string.toLowerCase()) > -1 || modu.name == "string" && modu.name.toLowerCase().indexOf(string.toLowerCase()) > -1))};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
@@ -10253,28 +10253,22 @@
 			console.log(window.t);
 		};
 		BDFDB.ModuleUtils.DevFuncs.findCodeAny = function (...strings) {
-			var req = InternalBDFDB.getWebModuleReq();
+			let req = InternalBDFDB.getWebModuleReq();
 			window.t = {"$filter":(prop => [...strings].flat(10).filter(n => typeof n == "string").every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
-				if (m && typeof m == "object") for (let j in m) {
-					let f = m[j];
-					if (typeof f == "function" && window.t.$filter(f.toString())) window.t[j + "_module_" + i] = {string:f.toString(), func:f, module:m};
-				}
-				if (m && typeof m == "object" && typeof m.default == "object") for (let j in m.default) {
-					let f = m.default[j];
-					if (typeof f == "function" && window.t.$filter(f.toString())) window.t[j + "_default_" + i] = {string:f.toString(), func:f, module:m.default};
+				if (m && typeof m == "function" && filter(m)) window.t["module_" + i] = {string:m.toString(), func:m};
+				if (m && m.__esModule) {
+					for (let j in m) if (m[j] && typeof m[j] == "function" && window.t.$filter(m[j].toString())) window.t[j + "_module_" + i] = {string:m[j].toString(), func:m[j], module:m};
+					if (m.default && (typeof m.default == "object" || typeof m.default == "function")) for (let j in m.default) if (m.default[j] && typeof m.default[j] == "function" && window.t.$filter(m.default[j].toString())) window.t[j + "_module_" + i + "_default"] = {string:m.default[j].toString(), func:m.default[j], module:m};
 				}
 			}
-			for (let i in req.m) { 
-				let f = req.m[i];
-				if (typeof f == "function" && window.t.$filter(f.toString())) window.t["funtion_" + i] = {string:f.toString(), func:f};
-			}
+			for (let i in req.m) if (typeof req.m[i] == "function" && window.t.$filter(req.m[i].toString())) window.t["funtion_" + i] = {string:req.m[i].toString(), func:req.m[i]};
 			console.clear();
 			console.log(window.t);
 		};
 		BDFDB.ModuleUtils.DevFuncs.getAllModules = function () {
-			var req = InternalBDFDB.getWebModuleReq(); window.t = {};
+			let req = InternalBDFDB.getWebModuleReq(); window.t = {};
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
 				if (m && typeof m == "object") window.t[i] = m;
@@ -10283,7 +10277,7 @@
 			console.log(window.t);
 		};
 		BDFDB.ModuleUtils.DevFuncs.getAllStringLibs = function () {
-			var req = InternalBDFDB.getWebModuleReq(); window.t = [];
+			let req = InternalBDFDB.getWebModuleReq(); window.t = [];
 			for (let i in req.c) if (req.c.hasOwnProperty(i)) {
 				let m = req.c[i].exports;
 				if (m && typeof m == "object" && !BDFDB.ArrayUtils.is(m) && Object.keys(m).length) {
