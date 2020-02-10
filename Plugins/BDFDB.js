@@ -1072,7 +1072,6 @@
 		ChannelWindow: "chatcontent",
 		DirectMessage: "guildouter",
 		EmojiPicker: "emojipicker",
-		FriendRow: "friendsrow",
 		Guild: "guildouter",
 		GuildIcon: "avataricon",
 		GuildSettingsBans: "guildsettingsbannedcard",
@@ -4686,7 +4685,6 @@
 	DiscordClassModules.FlexChild = BDFDB.ModuleUtils.findByProperties("flexChild", "flex");
 	DiscordClassModules.FlowerStar = BDFDB.ModuleUtils.findByProperties("flowerStarContainer", "flowerStar");
 	DiscordClassModules.FormText = BDFDB.ModuleUtils.findByProperties("description", "modeDefault");
-	DiscordClassModules.Friends = BDFDB.ModuleUtils.findByProperties("friendsColumn", "friendsRow");
 	DiscordClassModules.Game = BDFDB.ModuleUtils.findByProperties("game", "gameName");
 	DiscordClassModules.GameIcon = BDFDB.ModuleUtils.findByProperties("gameIcon", "small", "xsmall");
 	DiscordClassModules.GameLibraryTable = BDFDB.ModuleUtils.findByProperties("stickyHeader", "emptyStateText");
@@ -4726,6 +4724,7 @@
 	DiscordClassModules.LayerModal = BDFDB.ModuleUtils.findByProperties("root", "small", "medium");
 	DiscordClassModules.Layers = BDFDB.ModuleUtils.findByProperties("layer", "layers");
 	DiscordClassModules.LiveTag = BDFDB.ModuleUtils.findByProperties("liveLarge", "live");
+	DiscordClassModules.LoadingScreen = BDFDB.ModuleUtils.findByProperties("container", "problemsText", "problems");
 	DiscordClassModules.Margins = BDFDB.ModuleUtils.findByProperties("marginBottom4", "marginCenterHorz");
 	DiscordClassModules.Member = BDFDB.ModuleUtils.findByProperties("member", "ownerIcon");
 	DiscordClassModules.MembersWrap = BDFDB.ModuleUtils.findByProperties("membersWrap", "membersGroup");
@@ -5311,14 +5310,6 @@
 		flowerstarchild: ["FlowerStar", "childContainer"],
 		flowerstarcontainer: ["FlowerStar", "flowerStarContainer"],
 		formtext: ["FormText", "formText"],
-		friends: ["Friends", "container"],
-		friendscolumn: ["Friends", "friendsColumn"],
-		friendscolumnnamewrap: ["Friends", "friendsColumnName"],
-		friendsdiscordtag: ["Friends", "discordTag"],
-		friendsrow: ["Friends", "friendsRow"],
-		friendstable: ["Friends", "friendsTable"],
-		friendstableheader: ["Friends", "friendsTableHeader"],
-		friendsusername: ["Friends", "username"],
 		game: ["Game", "game"],
 		gameicon: ["GameIcon", "gameIcon"],
 		gameiconlarge: ["GameIcon", "large"],
@@ -5580,6 +5571,7 @@
 		livetagsmall: ["LiveTag", "liveSmall"],
 		loadingicon: ["BDFDB", "loadingIcon"],
 		loadingiconwrapper: ["BDFDB", "loadingIconWrapper"],
+		loadingscreen: ["LoadingScreen", "container"],
 		loginscreen: ["NotFound", "loginScreen"],
 		marginbottom4: ["Margins", "marginBottom4"],
 		marginbottom8: ["Margins", "marginBottom8"],
@@ -5981,9 +5973,6 @@
 		settingspanellist: ["BDFDB", "settingsPanelList"],
 		settingspaneltitle: ["BDFDB", "settingsPanelTitle"],
 		settingsseparator: ["Item", "separator"],
-		settingstabbar: ["Friends", "tabBar"],
-		settingstabbarbadge: ["Friends", "badge"],
-		settingstabbartoppill: ["Item", "topPill"],
 		settingstableheader: ["SettingsTable", "header"],
 		settingstableheadername: ["SettingsTable", "headerName"],
 		settingstableheaderoption: ["SettingsTable", "headerOption"],

@@ -91,7 +91,7 @@
 	7.	ACTIVITYPAGE
 	8.	LIBRARY
 	9.	STORE/NITRO
-	10.	FRIENDS
+	10.	PEOPLES
 	11.	DISCOVERY
 	12.	USERSETTINGS
 	13.	GUILDSETTINGS
@@ -162,9 +162,7 @@ body,														/* body														*/
 #app-mount .panels-j1Uci_ > *,								/* account/voice		inner								*/
 #app-mount .chat-3bRxxu,									/* chat					container							*/
 #app-mount .noChannel-Z1DQK7,								/* nochannel												*/
-#app-mount .activityFeed-1C0EmJ,							/* activityfeed												*/
-#app-mount .applicationStore-1pNvnv,						/* store													*/
-#app-mount .container-1D34oG,								/* friends													*/
+#app-mount .container-1D34oG,								/* peoples													*/
 #app-mount .pageWrapper-1PgVDX,								/* guilddiscovery											*/
 #app-mount .scroller-2FKFPG,								/* scroller													*/
 #app-mount .standardSidebarView-3F1I7i,						/* settings													*/
@@ -194,7 +192,7 @@ body,														/* body														*/
 #app-mount .membersWrap-2h-GB4 {							/* members				container							*/
 	background-color: rgba(var(--vtransparencycolor), var(--vmemberlisttransparency));
 }
-#app-mount .nowPlayingColumn-2sl4cE {						/* friends				now playing							*/
+#app-mount .nowPlayingColumn-2sl4cE {						/* peoples				now playing							*/
 	background-color: rgba(var(--vtransparencycolor), var(--vmemberlisttransparency));
 }
 
@@ -1941,7 +1939,7 @@ body:before {
 }
 
 
-/* ~~~~		10.		FRIENDS							~~~~ */
+/* ~~~~		10.		PEOPLES							~~~~ */
 
 .wrapper-1cBijl {											/* friendsadd			inputcontainer						*/
 	background-color: rgba(var(--vtransparencycolor), 0.1);
@@ -1966,19 +1964,19 @@ body:before {
 .tableHeader-2Ctu7Y {										/* tablerheader			border								*/
 	border-top-color: rgba(var(--fontwhite4), 0.5);
 }
-.peopleListItem-2nzedh {									/* friends				row									*/
+.peopleListItem-2nzedh {									/* peoples				row									*/
 	border-top-color: rgba(var(--fontwhite1), 0.1);
 }
-.peopleListItem-2nzedh .username-31C1TQ {					/* friends				username							*/
+.peopleListItem-2nzedh .username-31C1TQ {					/* peoples				username							*/
 	color: rgb(var(--fontwhite2));
 }
-.peopleListItem-2nzedh .discriminator-22Okc1 {				/* friends				discriminator						*/
+.peopleListItem-2nzedh .discriminator-22Okc1 {				/* peoples				discriminator						*/
 	color: rgb(var(--fontwhite4));
 }
-.peopleListItem-2nzedh .subtext-24R4-w {					/* friends				subtext								*/
+.peopleListItem-2nzedh .subtext-24R4-w {					/* peoples				subtext								*/
 	color: rgb(var(--fontwhite3));
 }
-.peopleListItem-2nzedh .actionButton-uPB8Fs {				/* friends				actionbutton						*/
+.peopleListItem-2nzedh .actionButton-uPB8Fs {				/* peoples				actionbutton						*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 	color: rgb(var(--fontwhite4));
 }
@@ -2002,13 +2000,13 @@ body:before {
 	background-color: rgba(var(--vtransparencycolor), 0.5);
 	color: rgb(var(--fontwhite1));
 }
-.header-13Cw0- {											/* friends				playing header						*/
+.header-13Cw0- {											/* peoples				playing header						*/
 	color: rgb(var(--fontwhite2));
 }
-.outer-1AjyKL {												/* friends				playing card						*/
+.outer-1AjyKL {												/* peoples				playing card						*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
-.emptyCard-1RJw8n {											/* friends				playing empty card					*/
+.emptyCard-1RJw8n {											/* peoples				playing empty card					*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 
@@ -5160,7 +5158,7 @@ body:before {
 /* ----		16.6.	ICONS							---- */
 
 .emptySearchImage-1qOMLW,									/* empty search												*/
-.image-1GzsFd {												/* no friends/webhooks/etc.									*/
+.image-1GzsFd {												/* no peoples/webhooks/etc.									*/
 	opacity: 0.6;
 }
 
