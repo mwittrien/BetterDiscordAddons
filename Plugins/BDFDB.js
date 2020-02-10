@@ -4694,7 +4694,7 @@
 	DiscordClassModules.Autocomplete = BDFDB.ModuleUtils.findByProperties("autocomplete", "autocompleteRow");
 	DiscordClassModules.Avatar = BDFDB.ModuleUtils.findByProperties("avatar", "mask", "wrapper");
 	DiscordClassModules.AvatarIcon = BDFDB.ModuleUtils.findByProperties("iconActiveLarge", "iconActiveMedium");
-	DiscordClassModules.Backdrop = BDFDB.ModuleUtils.findByProperties("backdrop");
+	DiscordClassModules.Backdrop = BDFDB.ModuleUtils.findByProperties("backdrop", "backdropWithLayer");
 	DiscordClassModules.Badge = BDFDB.ModuleUtils.findByProperties("numberBadge", "textBadge", "iconBadge");
 	DiscordClassModules.BotTag = BDFDB.ModuleUtils.findByProperties("botTag", "botTagInvert");
 	DiscordClassModules.Button = BDFDB.ModuleUtils.findByProperties("colorBlack", "button");
@@ -5022,6 +5022,7 @@
 		avatarstatushovered: ["BDFDB", "avatarStatusHovered"],
 		avatarwrapper: ["Avatar", "wrapper"],
 		backdrop: ["Backdrop", "backdrop"],
+		backdropwithlayer: ["Backdrop", "backdropWithLayer"],
 		badgewrapper: ["NotFound", "badgeWrapper"],
 		bdfdbdev: ["BDFDB", "dev"],
 		bdfdbsupporter: ["BDFDB", "supporter"],
