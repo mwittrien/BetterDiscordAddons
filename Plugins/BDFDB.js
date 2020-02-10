@@ -8621,6 +8621,7 @@
 		${BDFDB.dotCN.favbuttoncontainer} {
 			display: flex;
 			position: relative;
+			cursor: pointer;
 		}
 
 		${BDFDB.dotCN.cursordefault} {
