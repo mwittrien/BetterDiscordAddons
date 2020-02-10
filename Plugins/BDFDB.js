@@ -8224,9 +8224,11 @@
 			if (this.props.name) return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.SvgIcon, this.props);
 			else if (this.props.iconSVG) {
 				let icon = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(this.props.iconSVG));
-				icon.props.className = BDFDB.DOMUtils.formatClassName(!this.props.nativeClass && BDFDB.disCN.svgicon, icon.props.class, this.props.className);
-				icon.props.style = Object.assign({}, icon.props.style, this.props.style);
-				return icon;
+				if (icon) {
+					icon.props.className = BDFDB.DOMUtils.formatClassName(!this.props.nativeClass && BDFDB.disCN.svgicon, icon.props.class, this.props.className);
+					icon.props.style = Object.assign({}, icon.props.style, this.props.style);
+					return icon;
+				}
 			}
 			return null;
 		}
@@ -8947,6 +8949,7 @@
 		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repofooter + BDFDB.dotCN._repolinks} + * {
 			margin-left: auto;
 		}
+		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repocontrols} *,
 		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repofooter} button + button,
 		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repofooter + BDFDB.dotCN._repolinks} + * ~ * {
 			margin-left: 8px;
