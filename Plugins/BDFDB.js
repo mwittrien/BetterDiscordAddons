@@ -3857,11 +3857,11 @@
 						modalInstance = this;
 						modal = BDFDB.ReactUtils.findDOMNode(this);
 						modal = modal && modal.parentElement ? modal.parentElement.querySelector(BDFDB.dotCN.modalwrapper) : null;
-						if (modal && props.transitionState == 2 && props.transitionState > oldTransitionState) config.onOpen(modal, this);
+						if (modal && props.transitionState == 1 && props.transitionState > oldTransitionState) config.onOpen(modal, this);
 						oldTransitionState = props.transitionState;
 					}
 					componentWillUnmount () {
-						if (modal && props.transitionState == 4) {
+						if (modal && props.transitionState == 3) {
 							for (let cancel of cancels) cancel(modal);
 							config.onClose(modal, this);
 						}
@@ -4825,7 +4825,7 @@
 	DiscordClassModules.Role = BDFDB.ModuleUtils.findByProperties("roleCircle", "roleName");
 	DiscordClassModules.Scrollbar = BDFDB.ModuleUtils.findByProperties("scrollbar", "scrollbarGhost");
 	DiscordClassModules.Scroller = BDFDB.ModuleUtils.findByProperties("scrollerThemed", "scroller");
-	DiscordClassModules.SearchBar = BDFDB.ModuleUtils.findByProperties("container", "clear");
+	DiscordClassModules.SearchBar = BDFDB.ModuleUtils.findByProperties("clear", "container", "pointer");
 	DiscordClassModules.SearchPopout = BDFDB.ModuleUtils.findByProperties("datePicker", "searchResultChannelIconBackground");
 	DiscordClassModules.SearchPopoutWrap = BDFDB.ModuleUtils.findByProperties("container", "queryContainer");
 	DiscordClassModules.SearchResults = BDFDB.ModuleUtils.findByProperties("messageGroupCozy", "searchResultsWrap");
