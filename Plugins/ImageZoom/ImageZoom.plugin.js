@@ -4,7 +4,7 @@ var ImageZoom = (_ => {
 	return class ImageZoom {
 		getName () {return "ImageZoom";}
 
-		getVersion () {return "1.0.9";}
+		getVersion () {return "1.1.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -131,7 +131,7 @@ var ImageZoom = (_ => {
 		}
 
 		processLazyImage (e) {
-			if (BDFDB.ReactUtils.findOwner(BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, e.node), {name: "ImageModal"})) {
+			if (!BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imagegallerysibling) && BDFDB.ReactUtils.findOwner(BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, e.node), {name: "ImageModal"})) {
 				e.node.addEventListener("mousedown", event => {
 					BDFDB.ListenerUtils.stopEvent(event);
 

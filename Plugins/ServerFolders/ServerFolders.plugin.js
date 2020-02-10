@@ -276,7 +276,7 @@ var ServerFolders = (_ => {
 	return class ServerFolders {
 		getName () {return "ServerFolders";}
 
-		getVersion () {return "6.6.7";}
+		getVersion () {return "6.6.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -284,6 +284,7 @@ var ServerFolders = (_ => {
 
 		constructor () {
 			this.changelog = {
+				"fixed":[["Adding Servers to Folders","Adding Servers to FOlders via the conxtextmenu works again"]],
 				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 			};
 			
@@ -562,7 +563,7 @@ var ServerFolders = (_ => {
 										this.openFolderCreationMenu(unfolderedGuilds, e.instance.props.guild.id);
 									}
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents[folders.length ? "ContextMenuSubItem" : "ContextMenuItem"], {
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems[folders.length ? "Sub" : "Item"], {
 									label: this.labels.serversubmenu_addtofolder_text,
 									disabled: !folders.length,
 									render: folders.map((folder, i) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
