@@ -8949,7 +8949,7 @@
 		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repofooter + BDFDB.dotCN._repolinks} + * {
 			margin-left: auto;
 		}
-		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repocontrols} *,
+		${BDFDB.dotCNS._repolist + BDFDB.dotCN._repocontrols} > *,
 		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repofooter} button + button,
 		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repofooter + BDFDB.dotCN._repolinks} + * ~ * {
 			margin-left: 8px;
