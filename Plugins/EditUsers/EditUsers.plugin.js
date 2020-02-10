@@ -4,7 +4,7 @@ var EditUsers = (_ => {
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.7.4";}
+		getVersion () {return "3.7.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -13,7 +13,7 @@ var EditUsers = (_ => {
 		constructor () {
 			this.changelog = {
 				"added":[["Message Color","You can now set unique message colors for users"]],
-				"fixed":[["Now Playing","Now Playing list is now also affected via the Friend List settings"],["Mentions","No collision with BRC anymore"],["Tags","use role color for tags works again"],["Message Update","Fixed the plugin for the new Message Update"]],
+				"fixed":[["Colored Text","Changing a User Color will now properly change the message color if Colored Text is enabled"],["Message Update","Fixed the plugin for the new Message Update"]],
 				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 			};
 
@@ -448,6 +448,17 @@ var EditUsers = (_ => {
 					if (data.name) message.nick = data.name;
 					if (data.color1) message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[0] : data.color1, "HEX");
 					header.props.message = message;
+				}
+			}
+			let content = e.instance.props.childrenMessageContent;
+			if (content && content.type && content.type.type) {
+				let data = BDFDB.DataUtils.load(this, "users", content.props.message.author.id);
+				let messageColor = data && (data.color5 || (BDFDB.BDUtils.getSettings("bda-gs-7") && data.color1));
+				if (messageColor) {
+					let message = new BDFDB.DiscordObjects.Message(Object.assign({}, content.props.message, {author: this.getUserData(content.props.message.author.id)}));
+					if (data.name) message.nick = data.name;
+					message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(messageColor) ? messageColor[0] : messageColor, "HEX");
+					content.props.message = message;
 				}
 			}
 		}
