@@ -6782,6 +6782,7 @@
 	var InternalComponents = {NativeSubComponents: {}, LibraryComponents: {}}, reactInitialized = LibraryModules.React && LibraryModules.React.Component;
 	InternalComponents.NativeSubComponents.Button = BDFDB.ModuleUtils.findByProperties("Colors", "Hovers", "Looks");
 	InternalComponents.NativeSubComponents.Checkbox = BDFDB.ModuleUtils.findByName("Checkbox");
+	InternalComponents.NativeSubComponents.Clickable = BDFDB.ModuleUtils.findByName("Clickable");
 	InternalComponents.NativeSubComponents.ContextMenuItem = BDFDB.ModuleUtils.findByString("default.item", "default.hint", "danger", "brand");
 	InternalComponents.NativeSubComponents.ContextMenuSliderItem = BDFDB.ModuleUtils.findByName("SliderMenuItem");
 	InternalComponents.NativeSubComponents.ContextMenuToggleItem = BDFDB.ModuleUtils.findByName("ToggleMenuItem");
@@ -7112,7 +7113,25 @@
 		}
 	};
 	
-	InternalComponents.LibraryComponents.Clickable = BDFDB.ModuleUtils.findByName("Clickable");
+	InternalComponents.LibraryComponents.Clickable = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.Clickable") || reactInitialized && class BDFDB_Clickable extends LibraryModules.React.Component {
+		handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}
+		handleContextMenu(e) {if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);}
+		handleMouseDown(e) {if (typeof this.props.onMouseDown == "function") this.props.onMouseDown(e, this);}
+		handleMouseUp(e) {if (typeof this.props.onMouseUp == "function") this.props.onMouseUp(e, this);}
+		handleMouseEnter(e) {if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);}
+		handleMouseLeave(e) {if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);}
+		render() {
+			return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.Clickable, Object.assign({}, this.props, {
+				className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.cursorpointer),
+				onClick: this.handleClick.bind(this),
+				onContextMenu: this.handleContextMenu.bind(this),
+				onMouseUp: this.handleMouseDown.bind(this),
+				onMouseDown: !this.props.disabled && this.handleMouseUp.bind(this),
+				onMouseEnter: this.handleMouseEnter.bind(this),
+				onMouseLeave: this.handleMouseLeave.bind(this)
+			}));
+		}
+	};
 	
 	InternalComponents.LibraryComponents.CollapseContainer = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.CollapseContainer") || reactInitialized && class BDFDB_CollapseContainer extends LibraryModules.React.Component {
 		render() {
