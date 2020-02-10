@@ -450,7 +450,6 @@ var PluginRepo = (_ => {
 		}
 
 		createEntries (options = {}) {
-			console.log(options);
 			let favorites = BDFDB.DataUtils.load(this, "favorites");
 			let plugins = Object.keys(loadedPlugins).map(url => {
 				let plugin = loadedPlugins[url];
