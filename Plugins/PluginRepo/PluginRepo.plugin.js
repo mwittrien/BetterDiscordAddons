@@ -72,7 +72,7 @@ var PluginRepo = (_ => {
 	return class PluginRepo {
 		getName () {return "PluginRepo";} 
 
-		getVersion () {return "1.8.9";}
+		getVersion () {return "1.8.8";}
 
 		getAuthor () {return "DevilBro";}
 
