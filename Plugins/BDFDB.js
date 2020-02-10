@@ -1171,7 +1171,6 @@
 					return modulefunction == "render" && data.returnValue === undefined ? null : data.returnValue;
 				};
 				for (let key of Object.keys(originalfunction)) module[modulefunction][key] = originalfunction[key];
-				if (!module[modulefunction].__originalMethod) module[modulefunction].__originalMethod = originalfunction;
 				if (!module[modulefunction].__originalFunction) module[modulefunction].__originalFunction = originalfunction;
 				module[modulefunction].__isBDFDBpatched = true;
 			}
@@ -7411,7 +7410,7 @@
 		render() {
 			return BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.favbuttoncontainer, this.props.className),
-				children: BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.FavButton, Object.assign({}, this.props, {onClick: this.handleClick.bind(this)}))
+				children: BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.FavButton, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {onClick: this.handleClick.bind(this)}), "className"))
 			});
 		}
 	};
