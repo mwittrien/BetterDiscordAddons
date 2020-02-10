@@ -22,13 +22,9 @@ https://raw.githubusercontent.com/Finicalmist/CopyCode/master/copyCode.plugin.js
 https://raw.githubusercontent.com/hammy1/BDStuff/master/Plugins/dateViewer/dateViewer.plugin.js
 https://raw.githubusercontent.com/Hyperbot-one/hideServersChannels-plugin/master/hideServersChannels.plugin.js
 https://raw.githubusercontent.com/Hyperbot-one/showEmojiServer-plugin/master/showEmojiServer.plugin.js
-https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/autocompleteHoverFix.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/AvatarHover.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/botInfo.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/channelHistory.plugin.js
-https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/CharacterCounter.plugin.js
-https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/clearInputOnEsc.plugin.js
-https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/debugger.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/defaultToEmojis.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/directDownload.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/discordexperiments.plugin.js
@@ -37,8 +33,6 @@ https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/lin
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/localFileServer.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/minimizeShortcut.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/MultiInstance.plugin.js
-https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/QuickDeleteMessages.plugin.js
-https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/restartNoMore.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/scrollToLast.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/Snowfall.plugin.js
 https://raw.githubusercontent.com/Inve1951/BetterDiscordStuff/master/plugins/toggleYourStuff.plugin.js
