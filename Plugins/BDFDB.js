@@ -4437,6 +4437,7 @@
 	DiscordClassModules.BDFDB = {
 		BDFDBundefined: "BDFDB_undefined",
 		avatarStatusHovered: "statusHovered-gF2976",
+		bdaRepoEntry: "entry-9JnAPs",
 		cardInner: "inner-OP_8zd",
 		cardWrapper: "card-rT4Wbb",
 		charCounter: "counter-uAzbKp",
@@ -4931,6 +4932,7 @@
 		_repocontrols: ["BDrepo", "bdaControls"],
 		_repodescription: ["BDrepo", "bdaDescription"],
 		_repodescriptionwrap: ["BDrepo", "bdaDescriptionWrap"],
+		_repoentry: ["BDFDB", "bdaRepoEntry"],
 		_repofolderbutton: ["BDrepo", "bdPfbtn"],
 		_repofooter: ["BDrepo", "bdaFooter"],
 		_repoheader: ["BDrepo", "bdaHeader"],
@@ -6801,7 +6803,7 @@
 	InternalComponents.LibraryComponents.AddonCard = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.AddonCard") || reactInitialized && class BDFDB_AddonCard extends LibraryModules.React.Component {
 		render() {
 			return !BDFDB.ObjectUtils.is(this.props.data) ? null : BDFDB.ReactUtils.createElement("li", {
-				className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCNS._reposettingsclosed + BDFDB.disCN._repocheckboxitem),
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repoentry, this.props.className, BDFDB.disCN._reposettingsclosed + BDFDB.disCN._repocheckboxitem),
 				children: [
 					BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN._repoheader,
@@ -8940,8 +8942,12 @@
 		#bd-settingspane-container ${BDFDB.dotCN._repoupdatebutton}[style] {
 			display: none !important;
 		}
-		#bd-settingspane-container ${BDFDB.dotCNS._repolist + BDFDB.dotCN._repofooter} button + button {
-			margin-left: 10px;
+		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repofooter + BDFDB.dotCN._repolinks} + * {
+			margin-left: auto;
+		}
+		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repofooter} button + button,
+		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repofooter + BDFDB.dotCN._repolinks} + * ~ * {
+			margin-left: 8px;
 		}
 		
 		${BDFDB.dotCN.noticewrapper} {
