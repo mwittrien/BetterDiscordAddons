@@ -7,7 +7,7 @@ var MessageUtilities = (_ => {
 	return class MessageUtilities {
 		getName () {return "MessageUtilities";}
 
-		getVersion () {return "1.7.0";}
+		getVersion () {return "1.7.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -272,7 +272,7 @@ var MessageUtilities = (_ => {
 		}
 
 		doDelete ({messagediv, message}, action) {
-			let deletelink = messagediv.parentElement.querySelector(BDFDB.dotCNS.messagelocalbotmessage + BDFDB.dotCN.anchor);
+			let deletelink = messagediv.parentElement.querySelector(BDFDB.dotCNS.messagelocalbotoperations + BDFDB.dotCN.anchor);
 			if (deletelink) deletelink.click();
 			else {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
