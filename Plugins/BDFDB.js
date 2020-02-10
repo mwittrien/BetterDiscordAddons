@@ -977,7 +977,7 @@
 			strings.push(getExport);
 			getExport = true;
 		}
-		return InternalBDFDB.findModule("string", JSON.stringify(strings), m => strings.every(string => typeof m == "function" && (m.toString().indexOf(string) > -1 || m.__originalMethod && m.__originalMethod.toString().indexOf(string) > -1 || m.__originalFunction && m.__originalFunction.toString().indexOf(string) > -1) || BDFDB.ObjectUtils.is(m) && typeof m.type == "function" && (m.type.toString().indexOf(string) > -1 || m.type.__originalMethod && m.type.__originalMethod.toString().indexOf(string) > -1 || m.type.__originalFunction && m.type.__originalFunction.toString().indexOf(string) > -1)), getExport);
+		return InternalBDFDB.findModule("string", JSON.stringify(strings), m => strings.every(string => typeof m == "function" && m.toString().indexOf(string) > -1 || BDFDB.ObjectUtils.is(m) && typeof m.type == "function" && m.type.toString().indexOf(string) > -1), getExport);
 	};
 	BDFDB.ModuleUtils.findByPrototypes = function (...protoprops) {
 		protoprops = protoprops.flat(10);
@@ -1138,14 +1138,14 @@
 					for (let type of WebModulesData.Patchtypes) module.BDFDBpatch[methodName][type] = {};
 				}
 				if (!module[methodName]) module[methodName] = (_ => {});
-				const originalfunction = module[methodName];
-				module.BDFDBpatch[methodName].originalMethod = originalfunction;
+				const originalMethod = module[methodName];
+				module.BDFDBpatch[methodName].originalMethod = originalMethod;
 				module[methodName] = function () {
 					let callInstead = false, stopCall = false;
 					const data = {
 						thisObject: this,
 						methodArguments: arguments,
-						originalMethod: originalfunction,
+						originalMethod: originalMethod,
 						originalMethodName: methodName,
 						callOriginalMethod: _ => {if (!stopCall) data.returnValue = data.originalMethod.apply(data.thisObject, data.methodArguments)},
 						callOriginalMethodAfterwards: _ => {callInstead = true;},
@@ -1170,8 +1170,14 @@
 					callInstead = false, stopCall = false;
 					return methodName == "render" && data.returnValue === undefined ? null : data.returnValue;
 				};
-				for (let key of Object.keys(originalfunction)) module[methodName][key] = originalfunction[key];
-				if (!module[methodName].__originalFunction) module[methodName].__originalFunction = originalfunction;
+				for (let key of Object.keys(originalMethod)) module[methodName][key] = originalMethod[key];
+				if (!module[methodName].__originalMethod) {
+					let realOriginalMethod = originalMethod.__originalMethod || originalMethod;
+					if (typeof realOriginalMethod == "function") {
+						module[methodName].__originalMethod = realOriginalMethod;
+						module[methodName].toString = _ => {return realOriginalMethod.toString();};
+					}
+				}
 				module[methodName].__isBDFDBpatched = true;
 			}
 			for (let type in patchfunctions) if (typeof patchfunctions[type] == "function") {
