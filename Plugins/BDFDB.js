@@ -6809,6 +6809,7 @@
 				children: [
 					BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN._repoheader,
+						style: {overflow: "visible"},
 						children: [
 							BDFDB.ReactUtils.createElement("span", {
 								className: BDFDB.disCN._repoheadertitle,
@@ -8945,6 +8946,11 @@
 		}
 		#bd-settingspane-container ${BDFDB.dotCN._repoupdatebutton}[style] {
 			display: none !important;
+		}
+		${BDFDB.dotCNS._repolist + BDFDB.dotCN._repocontrols} {
+			display: flex;
+			justify-content: center;
+			align-items: center;
 		}
 		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repofooter + BDFDB.dotCN._repolinks} + * {
 			margin-left: auto;
