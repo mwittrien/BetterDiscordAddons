@@ -7410,7 +7410,7 @@
 		}
 		render() {
 			return BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.disCN.favbuttoncontainer,
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.favbuttoncontainer, this.props.className),
 				children: BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.FavButton, Object.assign({}, this.props, {onClick: this.handleClick.bind(this)}))
 			});
 		}
