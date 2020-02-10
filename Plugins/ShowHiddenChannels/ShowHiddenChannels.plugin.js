@@ -336,10 +336,10 @@ class ShowHiddenChannels {
 	
 	showAccessModal (channel, allowed) {
 		let guild = BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id);
-		if (guild) {
+		let myMember = guild && BDFDB.LibraryModules.MemberStore.getMember(guild.id, BDFDB.UserUtils.me.id);
+		if (myMember) {
 			let category = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.ChannelStore.getChannel(channel.id).parent_id);
 			let lighttheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
-			let myMember = BDFDB.LibraryModules.MemberStore.getMember(guild.id, BDFDB.UserUtils.me.id);
 			let allowedRoles = [], allowedUsers = [], deniedRoles = [], deniedUsers = [], everyoneDenied = false;
 			for (let id in channel.permissionOverwrites) {
 				if (channel.permissionOverwrites[id].type == "role" && (guild.roles[id] && guild.roles[id].name != "@everyone") && ((channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow || (channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].allow)) {
