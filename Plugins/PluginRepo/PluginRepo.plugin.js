@@ -60,9 +60,7 @@ var PluginRepo = (_ => {
 					margin: "unset",
 					width: "unset"
 				},
-				children: [].concat(this.props.entries).filter(n => n).map(entry => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AddonCard, Object.assign({}, entry, {
-					
-				})))
+				children: [].concat(this.props.entries).filter(n => n).map(entry => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AddonCard, entry))
 			});
 			BDFDB.ReactUtils.forceStyle(list, ["display", "flex-direction", "margin", "width"]);
 			return list;
@@ -319,7 +317,6 @@ var PluginRepo = (_ => {
 			return BDFDB.ArrayUtils.is(customlist) ? customlist : [];
 		}
 
-
 		openPluginRepoModal (options = {}) {
 			if (loading.is) BDFDB.NotificationUtils.toast(`Plugins are still being fetched. Try again in some seconds.`, {type:"danger"});
 			else {
@@ -398,7 +395,6 @@ var PluginRepo = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: "Plugins",
 							children: BDFDB.ReactUtils.createElement(repoListComponent, {
-								key: "repo-list",
 								plugin: this,
 								entries: entries
 							})
@@ -438,7 +434,7 @@ var PluginRepo = (_ => {
 		updateList (instance, options = {}) {
 			let modalIns = BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_Modal", up:true});
 			if (modalIns) {
-				let listIns = BDFDB.ReactUtils.findOwner(modalIns, {key:"repo-list"});
+				let listIns = BDFDB.ReactUtils.findOwner(modalIns, {name:"PluginList"});
 				let amountIns = BDFDB.ReactUtils.findOwner(modalIns, {name:"RepoAmount"});
 				if (listIns && amountIns) {
 					let entries = this.createEntries(options);
@@ -462,7 +458,7 @@ var PluginRepo = (_ => {
 					name: plugin.getName,
 					version: plugin.getVersion,
 					author: plugin.getAuthor,
-					description: plugin.getDescription ? plugin.getDescription : "No Description found.",
+					description: plugin.getDescription || "No Description found.",
 					fav: favorites[url] ? favStates.FAVORIZED : favStates.NOT_FAVORIZED,
 					new: !cachedPlugins.includes(url) ? newStates.NEW : newStates.NOT_NEW,
 					state: plugin.getState
