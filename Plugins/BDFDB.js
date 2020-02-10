@@ -1172,7 +1172,7 @@
 				};
 				for (let key of Object.keys(originalfunction)) module[methodName][key] = originalfunction[key];
 				if (!module[methodName].__originalMethod) module[methodName].__originalMethod = originalfunction.__originalMethod || originalfunction;
-				module[methodName].toString = _ => module[methodName].__originalMethod.toString;
+				module[methodName].toString = _ => {return module[methodName].__originalMethod.toString();};
 				module[methodName].__isBDFDBpatched = true;
 			}
 			for (let type in patchfunctions) if (typeof patchfunctions[type] == "function") {
