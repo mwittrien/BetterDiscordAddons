@@ -4265,13 +4265,10 @@
 		return browserWindow;
 	};
 	BDFDB.WindowUtils.close = function (browserWindow) {
-		if (BDFDB.ObjectUtils.is(browserWindow) && !browserWindow.isDestroyed() && browserWindow.closeable) browserWindow.close();
+		if (BDFDB.ObjectUtils.is(browserWindow) && !browserWindow.isDestroyed() && browserWindow.closable) browserWindow.close();
 	};
 	BDFDB.WindowUtils.closeAll = function (plugin) {
-		if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ArrayUtils.is(plugin.browserWindows)) {
-			for (let browserWindow of plugin.browserWindows) BDFDB.WindowUtils.close(browserWindow);
-			plugin.browserWindows = [];
-		}
+		if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ArrayUtils.is(plugin.browserWindows)) while (plugin.browserWindows.length) BDFDB.WindowUtils.close(plugin.browserWindows.pop());
 	};
 	BDFDB.WindowUtils.addListener = function (plugin, actions, callback) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !actions || typeof callback != "function") return;
