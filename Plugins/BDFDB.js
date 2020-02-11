@@ -1030,7 +1030,7 @@
 		"DirectMessage",
 		"GuildIcon"
 	];
-	WebModulesData.DefaultRender = [
+	WebModulesData.NonRender = [
 		"ContextMenuItem",
 		"DiscordTag",
 		"InviteModalUserRow",
@@ -1042,14 +1042,16 @@
 		"NowPlayingItem",
 		"SystemMessage",
 		"SimpleMessageAccessories",
-		"UnavailableGuildsButton",
 		"UserInfo"
+	];
+	WebModulesData.PropsFind = [
+		"UnavailableGuildsButton"
 	];
 	WebModulesData.MemoComponent = [
 		"MessageContent",
 		"NowPlayingHeader"
 	];
-	WebModulesData.NonPrototype = [].concat(WebModulesData.DefaultRender, WebModulesData.MemoComponent, [
+	WebModulesData.NonPrototype = [].concat(WebModulesData.NonRender, WebModulesData.PropsFind, WebModulesData.MemoComponent, [
 		"ChannelTextAreaContainer"
 	]);
 	WebModulesData.LoadedInComponents = {
@@ -1060,7 +1062,6 @@
 		QuickSwitchGroupDMResult: "LibraryComponents.QuickSwitchComponents.GroupDM",
 		QuickSwitchGuildResult: "LibraryComponents.QuickSwitchComponents.Guild",
 		QuickSwitchUserResult: "LibraryComponents.QuickSwitchComponents.User",
-		UnavailableGuildsButton: "LibraryComponents.GuildComponents.UnavailableGuildsButton"
 	};
 	WebModulesData.Patchfinder = {
 		Account: "accountinfo",
@@ -1314,7 +1315,7 @@
 			else {
 				let unmappedtype = type.split(" _ _ ")[1] || type;
 				let component = WebModulesData.LoadedInComponents[type] && BDFDB.ReactUtils.getValue(InternalComponents, WebModulesData.LoadedInComponents[type]);
-				if (component) patchInstance(WebModulesData.DefaultRender.includes(unmappedtype) ? (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports : component, type, patchtype);
+				if (component) patchInstance(WebModulesData.NonRender.includes(unmappedtype) ? (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports : component, type, patchtype);
 				else {
 					let classname = WebModulesData.Patchfinder[unmappedtype];
 					let mapped = WebModulesData.Patchmap[type];
@@ -1324,7 +1325,8 @@
 						plugin.patchedModules[patchtype][mappedtype] = plugin.patchedModules[patchtype][type];
 						delete plugin.patchedModules[patchtype][type];
 					}
-					if (WebModulesData.DefaultRender.includes(unmappedtype)) patchInstance((BDFDB.ModuleUtils.findByName(name, false) || {}).exports, mappedtype, patchtype, true);
+					if (WebModulesData.PropsFind.includes(unmappedtype)) patchInstance((BDFDB.ModuleUtils.findByProperties(name, false) || {}).exports, mappedtype, patchtype, true);
+					else if (WebModulesData.NonRender.includes(unmappedtype)) patchInstance((BDFDB.ModuleUtils.findByName(name, false) || {}).exports, mappedtype, patchtype, true);
 					else if (WebModulesData.MemoComponent.includes(unmappedtype)) patchInstance((BDFDB.ModuleUtils.findByName(name, false) || {exports:{}}).exports.default, mappedtype, patchtype, true);
 					else if (!classname) patchInstance(BDFDB.ModuleUtils.findByName(name), mappedtype, patchtype);
 					else if (DiscordClasses[classname]) checkForInstance(classname, mappedtype, patchtype, WebModulesData.ForceObserve.includes(unmappedtype));
