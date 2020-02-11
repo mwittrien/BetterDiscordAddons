@@ -631,8 +631,8 @@ var ServerFolders = (_ => {
 			if (BDFDB.DataUtils.get(this, "settings", "showCountBadge")) {
 				[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"BlobMask"});
 				if (index > -1) {
-					children[index].props.upperLeftBadgeWidth = BDFDB.LibraryComponents.BadgeComponents.getBadgeWidthForValue(e.instance.props.guildIds.length);
-					children[index].props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.NumberBadge, {
+					children[index].props.upperLeftBadgeWidth = BDFDB.LibraryComponents.Badges.getBadgeWidthForValue(e.instance.props.guildIds.length);
+					children[index].props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
 						count: e.instance.props.guildIds.length,
 						style: {backgroundColor: BDFDB.DiscordConstants.Colors.BRAND}
 					});

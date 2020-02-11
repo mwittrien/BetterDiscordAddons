@@ -6832,9 +6832,7 @@
 	
 	InternalComponents.LibraryComponents.Avatar = (BDFDB.ModuleUtils.findByProperties("AnimatedAvatar") || {}).default;
 	
-	InternalComponents.LibraryComponents.BadgeComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("IconBadge", "NumberBadge"));
-	
-	InternalComponents.LibraryComponents.BadgeComponents.AnimationContainer = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.BadgeComponents.AnimationContainer") || reactInitialized && class BDFDB_BadgeContainer extends LibraryModules.React.Component {
+	InternalComponents.LibraryComponents.BadgeAnimationContainer = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.BadgeAnimationContainer") || reactInitialized && class BDFDB_BadgeAnimationContainer extends LibraryModules.React.Component {
 		componentDidMount() {BDFDB.ReactUtils.forceUpdate(this);}
 		componentWillAppear(e) {if (typeof e == "function") e();}
 		componentWillEnter(e) {if (typeof e == "function") e();}
@@ -6848,6 +6846,8 @@
 			});
 		}
 	};
+	
+	InternalComponents.LibraryComponents.Badges = BDFDB.ModuleUtils.findByProperties("IconBadge", "NumberBadge");
 	
 	InternalComponents.LibraryComponents.BotTag = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.BotTag") || reactInitialized && class BDFDB_BotTag extends LibraryModules.React.Component {
 		handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}
@@ -7510,7 +7510,7 @@
 					selected: this.state.isDropHovering || this.props.selected || this.state.hovered,
 					upperBadge: this.props.unavailable ? InternalComponents.LibraryComponents.GuildComponents.Items.renderUnavailableBadge() : InternalComponents.LibraryComponents.GuildComponents.Items.renderIconBadge(this.props.audio, this.props.video, this.props.screenshare),
 					lowerBadge: this.props.badge > 0 ? InternalComponents.LibraryComponents.GuildComponents.Items.renderMentionBadge(this.props.badge) : null,
-					lowerBadgeWidth: InternalComponents.LibraryComponents.BadgeComponents.getBadgeWidthForValue(this.props.badge),
+					lowerBadgeWidth: InternalComponents.LibraryComponents.Badges.getBadgeWidthForValue(this.props.badge),
 					children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.NavItem, {
 						to: {
 							pathname: BDFDB.DiscordConstants.Routes.CHANNEL(this.props.guild.id, this.props.selectedChannelId),
@@ -10008,13 +10008,13 @@
 			after: e => {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnValue, {name: "TransitionGroup"});
 				if (index > -1) {
-					children[index].props.children.push(!e.thisObject.props.lowerLeftBadge ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.AnimationContainer, {
+					children[index].props.children.push(!e.thisObject.props.lowerLeftBadge ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeAnimationContainer, {
 						className: BDFDB.disCN.guildlowerleftbadge,
 						key: "lower-left-badge",
 						animatedStyle: e.thisObject.getLowerLeftBadgeStyles(),
 						children: e.thisObject.props.lowerLeftBadge
 					}));
-					children[index].props.children.push(!e.thisObject.props.upperLeftBadge ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.AnimationContainer, {
+					children[index].props.children.push(!e.thisObject.props.upperLeftBadge ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeAnimationContainer, {
 						className: BDFDB.disCN.guildupperleftbadge,
 						key: "upper-left-badge",
 						animatedStyle: e.thisObject.getUpperLeftBadgeStyles(),

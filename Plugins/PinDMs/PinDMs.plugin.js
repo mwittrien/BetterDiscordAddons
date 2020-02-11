@@ -424,12 +424,12 @@ var PinDMs = (_ => {
 										style: {color: color},
 										children: category.name,
 									}),
-									unreadAmount ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.NumberBadge, {
+									unreadAmount ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
 										className: BDFDB.disCN._pindmspinnedchannelsheaderamount,
 										count: unreadAmount,
 										style: {backgroundColor: BDFDB.DiscordConstants.Colors.STATUS_RED}
 									}) : null,
-									settings.showCategoryAmount ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.NumberBadge, {
+									settings.showCategoryAmount ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
 										className: BDFDB.disCN._pindmspinnedchannelsheaderamount,
 										count: foundDMs.length,
 										style: {backgroundColor: BDFDB.DiscordConstants.Colors.BRAND}
@@ -650,7 +650,7 @@ var PinDMs = (_ => {
 				}
 				if (e.returnvalue && this.isPinned(e.instance.props.channel.id, "pinnedRecents") && BDFDB.DataUtils.get(this, "settings", "showPinIcon")) {
 					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"BlobMask"});
-					if (index > -1) children[index].props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.IconBadge, {
+					if (index > -1) children[index].props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.IconBadge, {
 						className: BDFDB.disCN.guildbadgeiconbadge2,
 						name: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_PIN,
 						style: {backgroundColor: null, transform: "scale(-1, 1)"}

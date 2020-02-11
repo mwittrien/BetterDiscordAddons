@@ -70,7 +70,7 @@ var PluginRepo = (_ => {
 	return class PluginRepo {
 		getName () {return "PluginRepo";} 
 
-		getVersion () {return "1.9.0";}
+		getVersion () {return "1.9.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -481,7 +481,7 @@ var PluginRepo = (_ => {
 				return buttonConfig && {
 					data: plugin,
 					controls: [
-						plugin.new == newStates.NEW && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.TextBadge, {
+						plugin.new == newStates.NEW && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
 							style: {
 								borderRadius: 3,
 								textTransform: "uppercase",

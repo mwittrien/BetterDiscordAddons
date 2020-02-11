@@ -126,7 +126,7 @@ var ThemeRepo = (_ => {
 	return class ThemeRepo {
 		getName () {return "ThemeRepo";}
 
-		getVersion () {return "1.9.0";}
+		getVersion () {return "1.9.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -707,7 +707,7 @@ var ThemeRepo = (_ => {
 				return buttonConfig && {
 					data: theme,
 					controls: [
-						theme.new == newStates.NEW && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeComponents.TextBadge, {
+						theme.new == newStates.NEW && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
 							style: {
 								borderRadius: 3,
 								textTransform: "uppercase",
