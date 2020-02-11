@@ -74,6 +74,7 @@ var ImageGallery = (_ => {
 					margin-top: 5px;
 					font-size: 14px;
 					font-weight: 500;
+					pointer-events: none;
 				}
 				${BDFDB.dotCN._imagegallerydetailslabel} {
 					font-weight: 600;
