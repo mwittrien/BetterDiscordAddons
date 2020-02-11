@@ -1563,6 +1563,7 @@
 	LibraryModules.GuildEmojiStore = BDFDB.ModuleUtils.findByProperties("getGuildEmoji", "getDisambiguatedEmojiContext");
 	LibraryModules.GuildSettingsUtils = BDFDB.ModuleUtils.findByProperties("updateChannelOverrideSettings", "updateNotificationSettings");
 	LibraryModules.GuildStore = BDFDB.ModuleUtils.findByProperties("getGuild", "getGuilds");
+	LibraryModules.GuildUnavailableStore = BDFDB.ModuleUtils.findByProperties("isUnavailable", "totalUnavailableGuilds");
 	LibraryModules.GuildUtils = BDFDB.ModuleUtils.findByProperties("transitionToGuildSync");
 	LibraryModules.HistoryUtils = BDFDB.ModuleUtils.findByProperties("transitionTo", "replaceWith", "getHistory");;
 	LibraryModules.IconUtils = BDFDB.ModuleUtils.findByProperties("getGuildIconURL", "getGuildBannerURL");
@@ -7448,7 +7449,11 @@
 		}
 	};
 	
-	InternalComponents.LibraryComponents.GuildComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Separator", "DragPlaceholder"));
+	InternalComponents.LibraryComponents.GuildComponents = {};
+	
+	InternalComponents.LibraryComponents.GuildComponents.NativeComponents = BDFDB.ModuleUtils.findByProperties("Separator", "DragPlaceholder");
+	
+	InternalComponents.LibraryComponents.GuildComponents = Object.assign(InternalComponents.LibraryComponents.GuildComponents, InternalComponents.LibraryComponents.GuildComponents.NativeComponents);
 	
 	InternalComponents.LibraryComponents.GuildComponents.Badge = BDFDB.ModuleUtils.findByName("GuildBadge");
 	
