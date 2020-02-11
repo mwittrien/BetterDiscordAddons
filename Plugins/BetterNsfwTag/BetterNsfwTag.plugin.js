@@ -86,4 +86,4 @@ var BetterNsfwTag = (_ => {
 			}
 		}
 	}
-}();
+})();
