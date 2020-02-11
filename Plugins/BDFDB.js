@@ -4500,6 +4500,10 @@
 		charCounter: "charCounter-7fw40k charcounter",
 		counterAdded: "counterAdded-zz9O4t"
 	};
+	DiscordClassModules.DisplayServersAsChannels = {
+		name: "name-z5133D",
+		styled: "styled-DNHtg_"
+	};
 	DiscordClassModules.EmojiStatistics = {
 		statisticsButton: "statisticsButton-nW2KoM",
 		amountCell: "amountCell-g_W6Rx",
@@ -4526,6 +4530,11 @@
 		backdrop: "lenseBackdrop-yEm7Om",
 		lense: "zoomLense-uOK8xV",
 		modal: "imageModal-8J0ttB"
+	};
+	DiscordClassModules.OldTitleBar = {
+		oldTitleBar: "name-D8ppJQ",
+		settingsToolbar: "settingsToolbar-wu4yfQ",
+		toolbar: "toolbar-hRzFw-"
 	};
 	DiscordClassModules.PinDMs = {
 		dragPreview: "dragPreview-nXiByA",
@@ -4821,6 +4830,8 @@
 		_chatfiltercensoredstamp: ["ChatFilter", "censoredStamp"],
 		_charcountercounter: ["CharCounter", "charCounter"],
 		_charcountercounteradded: ["CharCounter", "counterAdded"],
+		_displayserversaschannelsname: ["DisplayServersAsChannels", "styled"],
+		_displayserversaschannelsstyled: ["DisplayServersAsChannels", "name"],
 		_emojistatisticsstatisticsbutton: ["EmojiStatistics", "statisticsButton"],
 		_emojistatisticsamountcell: ["EmojiStatistics", "amountCell"],
 		_emojistatisticsiconcell: ["EmojiStatistics", "iconCell"],
@@ -4840,6 +4851,9 @@
 		_googletranslateoptiontranslatebutton: ["GoogleTranslateOption", "translateButton"],
 		_googletranslateoptiontranslated: ["GoogleTranslateOption", "translated"],
 		_googletranslateoptiontranslating: ["GoogleTranslateOption", "translating"],
+		_oldtitlebaroldtitlebar: ["OldTitleBar", "oldTitleBar"],
+		_oldtitlebarsettingstoolbar: ["OldTitleBar", "settingsToolbar"],
+		_oldtitlebartoolbar: ["OldTitleBar", "toolbar"],
 		_pindmsdragpreview: ["PinDMs", "dragPreview"],
 		_pindmsdmchannelpinned: ["PinDMs", "dmChannelPinned"],
 		_pindmsdmchannelplaceholder: ["PinDMs", "dmChannelPlaceholder"],
