@@ -4,7 +4,7 @@ var EditChannels = (_ => {
 	return class EditChannels {
 		getName () {return "EditChannels";}
 
-		getVersion () {return "4.1.0";}
+		getVersion () {return "4.1.1";}
 
 		getAuthor () {return "DevilBro";}
 
