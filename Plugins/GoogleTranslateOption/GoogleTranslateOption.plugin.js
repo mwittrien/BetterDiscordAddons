@@ -25,7 +25,7 @@ var GoogleTranslateOption = (_ => {
 	return class GoogleTranslateOption {
 		getName () {return "GoogleTranslateOption";}
 
-		getVersion () {return "1.9.2";}
+		getVersion () {return "1.9.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -33,7 +33,7 @@ var GoogleTranslateOption = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Message Update","Fixed the plugin for the new Message Update"]],
+				"fixed":[["TextArea Button","The option to not add the button to the channeltextarea works again"],["Message Update","Fixed the plugin for the new Message Update"]],
 				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 			};
 
@@ -294,70 +294,72 @@ var GoogleTranslateOption = (_ => {
 		}
 		
 		processChannelTextAreaContainer (e) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ChannelEditorContainer"});
-			if (index > -1 && children[index].props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && !children[index].props.disabled) {
-				let [children2, index2] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.textareapickerbuttons]]});
-				if (index2 > -1 && children2[index2].props && children2[index2].props.children) children2[index2].props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ChannelTextAreaButton, {
-						key: "translate-button",
-						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._googletranslateoptiontranslatebutton, translating && BDFDB.disCN._googletranslateoptiontranslating, BDFDB.disCN.textareapickerbutton),
-						iconClassName: BDFDB.disCN.textareaicon,
-						iconSVG: translateIconGeneral
-					}),
-					width: 400,
-					padding: 10,
-					animation: BDFDB.LibraryComponents.PopoutContainer.Animation.SCALE,
-					position: BDFDB.LibraryComponents.PopoutContainer.Positions.TOP,
-					align: BDFDB.LibraryComponents.PopoutContainer.Align.RIGHT,
-					onClose: instance => {
-						let channelTextareaButtonIns = BDFDB.ReactUtils.findOwner(instance, {key: "translate-button"});
-						if (channelTextareaButtonIns) {
-							channelTextareaButtonIns.props.isActive = false;
-							BDFDB.ReactUtils.forceUpdate(channelTextareaButtonIns);
-						}
-					},
-					onContextMenu: (e, instance) => {
-						translating = !translating;
-						let channelTextareaButtonIns = BDFDB.ReactUtils.findOwner(instance, {key: "translate-button"});
-						if (channelTextareaButtonIns) {
-							channelTextareaButtonIns.props.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._googletranslateoptiontranslatebutton, translating && BDFDB.disCN._googletranslateoptiontranslating, BDFDB.disCN.textareapickerbutton);
-							BDFDB.ReactUtils.forceUpdate(channelTextareaButtonIns);
-							instance.close();
-						}
-					},
-					renderPopout: instance => {
-						let channelTextareaButtonIns = BDFDB.ReactUtils.findOwner(instance, {key: "translate-button"});
-						if (channelTextareaButtonIns) {
-							channelTextareaButtonIns.props.isActive = true;
-							BDFDB.ReactUtils.forceUpdate(channelTextareaButtonIns);
-						}
-						let popoutelements = [];
-						popoutelements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-							className: BDFDB.disCN.marginbottom8,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
-								label: `Words starting with "!" will be ignored`
-							})
-						}));
-						popoutelements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-							className: BDFDB.disCN.marginbottom8
-						})),
-						popoutelements = popoutelements.concat(this.createSelects(true));
-						popoutelements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-							type: "Switch",
-							className: BDFDB.disCN.marginbottom8,
-							label: "Translate your Messages before sending",
-							value: translating,
-							onChange: value => {
-								translating = value;
-								if (channelTextareaButtonIns) {
-									channelTextareaButtonIns.props.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._googletranslateoptiontranslatebutton, translating && BDFDB.disCN._googletranslateoptiontranslating, BDFDB.disCN.textareapickerbutton);
-									BDFDB.ReactUtils.forceUpdate(channelTextareaButtonIns);
-								}
+			if (BDFDB.DataUtils.get(this, "settings", "addTranslateButton")) {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ChannelEditorContainer"});
+				if (index > -1 && children[index].props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && !children[index].props.disabled) {
+					let [children2, index2] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.textareapickerbuttons]]});
+					if (index2 > -1 && children2[index2].props && children2[index2].props.children) children2[index2].props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ChannelTextAreaButton, {
+							key: "translate-button",
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._googletranslateoptiontranslatebutton, translating && BDFDB.disCN._googletranslateoptiontranslating, BDFDB.disCN.textareapickerbutton),
+							iconClassName: BDFDB.disCN.textareaicon,
+							iconSVG: translateIconGeneral
+						}),
+						width: 400,
+						padding: 10,
+						animation: BDFDB.LibraryComponents.PopoutContainer.Animation.SCALE,
+						position: BDFDB.LibraryComponents.PopoutContainer.Positions.TOP,
+						align: BDFDB.LibraryComponents.PopoutContainer.Align.RIGHT,
+						onClose: instance => {
+							let channelTextareaButtonIns = BDFDB.ReactUtils.findOwner(instance, {key: "translate-button"});
+							if (channelTextareaButtonIns) {
+								channelTextareaButtonIns.props.isActive = false;
+								BDFDB.ReactUtils.forceUpdate(channelTextareaButtonIns);
 							}
-						}));
-						return popoutelements;
-					}
-				}));
+						},
+						onContextMenu: (e, instance) => {
+							translating = !translating;
+							let channelTextareaButtonIns = BDFDB.ReactUtils.findOwner(instance, {key: "translate-button"});
+							if (channelTextareaButtonIns) {
+								channelTextareaButtonIns.props.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._googletranslateoptiontranslatebutton, translating && BDFDB.disCN._googletranslateoptiontranslating, BDFDB.disCN.textareapickerbutton);
+								BDFDB.ReactUtils.forceUpdate(channelTextareaButtonIns);
+								instance.close();
+							}
+						},
+						renderPopout: instance => {
+							let channelTextareaButtonIns = BDFDB.ReactUtils.findOwner(instance, {key: "translate-button"});
+							if (channelTextareaButtonIns) {
+								channelTextareaButtonIns.props.isActive = true;
+								BDFDB.ReactUtils.forceUpdate(channelTextareaButtonIns);
+							}
+							let popoutelements = [];
+							popoutelements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+								className: BDFDB.disCN.marginbottom8,
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
+									label: `Words starting with "!" will be ignored`
+								})
+							}));
+							popoutelements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+								className: BDFDB.disCN.marginbottom8
+							})),
+							popoutelements = popoutelements.concat(this.createSelects(true));
+							popoutelements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+								type: "Switch",
+								className: BDFDB.disCN.marginbottom8,
+								label: "Translate your Messages before sending",
+								value: translating,
+								onChange: value => {
+									translating = value;
+									if (channelTextareaButtonIns) {
+										channelTextareaButtonIns.props.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._googletranslateoptiontranslatebutton, translating && BDFDB.disCN._googletranslateoptiontranslating, BDFDB.disCN.textareapickerbutton);
+										BDFDB.ReactUtils.forceUpdate(channelTextareaButtonIns);
+									}
+								}
+							}));
+							return popoutelements;
+						}
+					}));
+				}
 			}
 		}
 

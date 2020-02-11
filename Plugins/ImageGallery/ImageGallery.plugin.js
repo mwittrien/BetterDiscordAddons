@@ -6,7 +6,7 @@ var ImageGallery = (_ => {
 	return class ImageGallery {
 		getName () {return "ImageGallery";}
 
-		getVersion () {return "1.6.5";}
+		getVersion () {return "1.6.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,8 @@ var ImageGallery = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["Details","Added some details about the current image and amount of images"]],
+				"added":[["Details","Added some details about the current image and amount of images, can be turned off in settings now"]],
+				"fixed":[["Size","Images in the gallery no longer get resized to a thumbnail size"]],
 				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 			};
 
@@ -26,6 +27,12 @@ var ImageGallery = (_ => {
 		}
 
 		initConstructor () {
+			this.defaults = {
+				settings: {
+					addDetails: 	{value:true,			description:"Adds details (name, size, amount) to the Image Modal"}
+				}
+			};
+			
 			this.css = `
 				${BDFDB.dotCN._imagegallerysibling} {
 					display: flex;
@@ -72,6 +79,23 @@ var ImageGallery = (_ => {
 					font-weight: 600;
 				}
 			`;
+		}
+
+		getSettingsPanel () {
+			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+			let settings = BDFDB.DataUtils.get(this, "settings");
+			let settingspanel, settingsitems = [];
+			
+			for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+				className: BDFDB.disCN.marginbottom8,
+				type: "Switch",
+				plugin: this,
+				keys: ["settings", key],
+				label: this.defaults.settings[key].description,
+				value: settings[key]
+			}));
+			
+			return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
 		}
 
 		//legacy
@@ -151,7 +175,7 @@ var ImageGallery = (_ => {
 						if (e.instance.nextRef) e.returnvalue.props.children.splice(1, 0, this.createImageWrapper(e.instance, e.instance.nextRef, "next", BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_CARET));
 						else this.loadImage(e.instance, next, "next");
 					}
-					e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
+					if (BDFDB.DataUtils.get(this, "settings", "addDetails")) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN._imagegallerydetailswrapper,
 						children: [
 							{label: "Source", text: e.instance.props.src},
@@ -217,10 +241,10 @@ var ImageGallery = (_ => {
 		}
 		
 		isSameImage (src, img) {
-			return img.src && (Node.prototype.isPrototypeOf(src) && img == src || !Node.prototype.isPrototypeOf(src) && this.getSrcOfImage(img) == this.getSrcOfImage(src));
+			return img.src && (Node.prototype.isPrototypeOf(src) && img == src || !Node.prototype.isPrototypeOf(src) && this.getImageSrc(img) == this.getImageSrc(src));
 		}
 
-		getSrcOfImage (img) {
+		getImageSrc (img) {
 			if (!img) return null;
 			return (typeof img == "string" ? img : (img.src || (img.querySelector("canvas") ? img.querySelector("canvas").src : ""))).split("?width=")[0];
 		}
@@ -241,7 +265,8 @@ var ImageGallery = (_ => {
 		
 		loadImage (instance, img, type) {
 			let imagethrowaway = document.createElement("img");
-			imagethrowaway.src = img.src;
+			let src = this.getImageSrc(img);
+			imagethrowaway.src = src;
 			imagethrowaway.onload = _ => {
 				let arects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
 				let resizeY = (arects.height/imagethrowaway.naturalHeight) * 0.65, resizeX = (arects.width/imagethrowaway.naturalWidth) * 0.8;
@@ -250,7 +275,7 @@ var ImageGallery = (_ => {
 				let newWidth = imagethrowaway.naturalWidth * resize;
 				instance[type + "Img"] = img;
 				instance[type + "Ref"] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.LazyImage, {
-					src: img.src,
+					src: src,
 					height: imagethrowaway.naturalHeight,
 					width: imagethrowaway.naturalWidth,
 					maxHeight: newHeight,
