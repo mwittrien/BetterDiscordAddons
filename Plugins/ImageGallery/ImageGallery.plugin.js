@@ -69,12 +69,12 @@ var ImageGallery = (_ => {
 					bottom: 10px;
 					left: 15px;
 					right: 15px;
+					pointer-events: none;
 				}
 				${BDFDB.dotCN._imagegallerydetails} {
 					margin-top: 5px;
 					font-size: 14px;
 					font-weight: 500;
-					pointer-events: none;
 				}
 				${BDFDB.dotCN._imagegallerydetailslabel} {
 					font-weight: 600;
