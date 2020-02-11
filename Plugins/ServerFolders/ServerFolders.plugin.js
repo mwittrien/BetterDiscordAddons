@@ -130,7 +130,7 @@ var ServerFolders = (_ => {
 								})
 							]
 						}) : null;
-					}).filter(n => n).reduce((r, a) => r.concat(a, BDFDB.DataUtils.get(this.props.plugin, "settings", "addSeparators") ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Separator, {}) : null), [0]).slice(1, -1).flat(10).filter(n => n)
+					}).filter(n => n).reduce((r, a) => r.concat(a, BDFDB.DataUtils.get(this.props.plugin, "settings", "addSeparators") ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Items.Separator, {}) : null), [0]).slice(1, -1).flat(10).filter(n => n)
 				})
 			});
 		}
@@ -276,7 +276,7 @@ var ServerFolders = (_ => {
 	return class ServerFolders {
 		getName () {return "ServerFolders";}
 
-		getVersion () {return "6.6.9";}
+		getVersion () {return "6.7.0";}
 
 		getAuthor () {return "DevilBro";}
 

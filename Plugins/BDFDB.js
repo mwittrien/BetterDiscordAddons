@@ -977,7 +977,7 @@
 			strings.push(getExport);
 			getExport = true;
 		}
-		return InternalBDFDB.findModule("string", JSON.stringify(strings), m => strings.every(string => typeof m == "function" && (m.toString().indexOf(string) > -1 || typeof m.__originalMethod == "function" && m.__originalMethod.toString().indexOf(string) > -1) || BDFDB.ObjectUtils.is(m) && typeof m.type == "function" && m.type.toString().indexOf(string) > -1), getExport);
+		return InternalBDFDB.findModule("string", JSON.stringify(strings), m => strings.every(string => typeof m == "function" && (m.toString().indexOf(string) > -1 || typeof m.__originalMethod == "function" && m.__originalMethod.toString().indexOf(string) > -1 || typeof m.__originalFunction == "function" && m.__originalFunction.toString().indexOf(string) > -1) || BDFDB.ObjectUtils.is(m) && typeof m.type == "function" && m.type.toString().indexOf(string) > -1), getExport);
 	};
 	BDFDB.ModuleUtils.findByPrototypes = function (...protoprops) {
 		protoprops = protoprops.flat(10);
@@ -1174,9 +1174,9 @@
 					return methodName == "render" && data.returnValue === undefined ? null : data.returnValue;
 				};
 				for (let key of Object.keys(originalMethod)) module[methodName][key] = originalMethod[key];
-				if (!module[methodName].__originalMethod) {
-					let realOriginalMethod = originalMethod.__originalMethod || originalMethod;
-					if (typeof realOriginalMethod == "function") module[methodName].__originalMethod = realOriginalMethod;
+				if (!module[methodName].__originalFunction) {
+					let realOriginalMethod = originalMethod.__originalMethod || originalMethod.__originalFunction || originalMethod;
+					if (typeof realOriginalMethod == "function") module[methodName].__originalFunction = realOriginalMethod;
 				}
 				module[methodName].__isBDFDBpatched = true;
 			}
