@@ -48,7 +48,7 @@ var ShowImageDetails = (_ => {
 	return class ShowImageDetails {
 		getName () {return "ShowImageDetails";}
 
-		getVersion () {return "1.2.7";}
+		getVersion () {return "1.2.9";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -56,7 +56,7 @@ var ShowImageDetails = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Message Update","Fixed the plugin for the new Message Update"],["Scroll issue fixed","Loading images would collapse to 0 height and screw up the chat scroller"],["Embedded images","No longer adds image details without information to embeds"]],
+				"fixed":[["Image Link","Clicking an image link in the details now properly opens the image in a new window"]],
 				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 			};
 
@@ -154,7 +154,7 @@ var ShowImageDetails = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 				
-				BDFDB.ModuleUtils.patch(this, BDFDB.ModuleUtils.findByProperties("renderImageComponent"), "renderImageComponent", {after: e => {
+				BDFDB.ModuleUtils.patch(this, (BDFDB.ModuleUtils.findByName("renderImageComponent", false).exports || {}), "renderImageComponent", {after: e => {
 					if (e.returnValue && e.returnValue.type && (e.returnValue.type.displayName == "LazyImageZoomable" || e.returnValue.type.displayName == "LazyImage") && e.methodArguments[0].original && e.methodArguments[0].src.indexOf("https://media.discordapp.net/attachments") == 0) return this.injectImageDetails(e.methodArguments[0], e.returnValue);
 				}});
 
@@ -191,6 +191,7 @@ var ShowImageDetails = (_ => {
 					className: BDFDB.disCN.embedwrapper,
 					children: [
 						BDFDB.ReactUtils.createElement(ImageDetails, {
+							original: props.original,
 							attachment: {
 								height: 0,
 								width: 0,
