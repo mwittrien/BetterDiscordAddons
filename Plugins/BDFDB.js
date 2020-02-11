@@ -4503,7 +4503,7 @@
 	DiscordClassModules.DisplayServersAsChannels = {
 		badge: "badge-fxFrUP",
 		name: "name-z5133D",
-		styled: "styled-DNHtg_"
+		styled: "styledGuildsAsChannels-DNHtg_"
 	};
 	DiscordClassModules.EmojiStatistics = {
 		statisticsButton: "statisticsButton-nW2KoM",
@@ -8488,7 +8488,7 @@
 			child.props.onMouseEnter = (e, childthis) => {
 				if (!shown) {
 					shown = true;
-					BDFDB.TooltipUtils.create(e.currentTarget, this.props.text, Object.assign({}, this.props.tooltipConfig));
+					BDFDB.TooltipUtils.create(e.currentTarget, this.props.text, Object.assign({delay: this.props.delay}, this.props.tooltipConfig));
 					if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);
 					if (typeof childMouseEnter == "function") childMouseEnter(e, childthis);
 				}
