@@ -27,7 +27,7 @@ var EditChannels = (_ => {
 					ChannelCategoryItem: "render",
 					ChannelItem: "render",
 					QuickSwitchChannelResult: "render",
-					MessageContent: "render"
+					MessageContent: "type"
 				},
 				after: {
 					AutocompleteChannelResult: "render",
