@@ -1042,6 +1042,7 @@
 		"NowPlayingItem",
 		"SystemMessage",
 		"SimpleMessageAccessories",
+		"UnavailableGuildsButton",
 		"UserInfo"
 	];
 	WebModulesData.MemoComponent = [
@@ -1058,7 +1059,8 @@
 		QuickSwitchChannelResult: "LibraryComponents.QuickSwitchComponents.Channel",
 		QuickSwitchGroupDMResult: "LibraryComponents.QuickSwitchComponents.GroupDM",
 		QuickSwitchGuildResult: "LibraryComponents.QuickSwitchComponents.Guild",
-		QuickSwitchUserResult: "LibraryComponents.QuickSwitchComponents.User"
+		QuickSwitchUserResult: "LibraryComponents.QuickSwitchComponents.User",
+		UnavailableGuildsButton: "LibraryComponents.GuildComponents.UnavailableGuildsButton"
 	};
 	WebModulesData.Patchfinder = {
 		Account: "accountinfo",
