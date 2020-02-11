@@ -125,7 +125,7 @@ var ServerFolders = (_ => {
 								this.hoveredGuild != guildId ? null : BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCNS.guildouter + BDFDB.disCN._serverfoldersguildplaceholder,
 									children: BDFDB.ReactUtils.createElement("div", {
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.DragPlaceholder, {})
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Items.DragPlaceholder, {})
 									})
 								})
 							]
@@ -276,7 +276,7 @@ var ServerFolders = (_ => {
 	return class ServerFolders {
 		getName () {return "ServerFolders";}
 
-		getVersion () {return "6.6.8";}
+		getVersion () {return "6.6.9";}
 
 		getAuthor () {return "DevilBro";}
 

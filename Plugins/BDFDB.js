@@ -1055,13 +1055,13 @@
 		"ChannelTextAreaContainer"
 	]);
 	WebModulesData.LoadedInComponents = {
-		AutocompleteChannelResult: "LibraryComponents.AutocompleteComponents.Channel",
-		AutocompleteUserResult: "LibraryComponents.AutocompleteComponents.User",
+		AutocompleteChannelResult: "LibraryComponents.AutocompleteItems.Channel",
+		AutocompleteUserResult: "LibraryComponents.AutocompleteItems.User",
 		ContextMenuItem: "NativeSubComponents.ContextMenuItem",
-		QuickSwitchChannelResult: "LibraryComponents.QuickSwitchComponents.Channel",
-		QuickSwitchGroupDMResult: "LibraryComponents.QuickSwitchComponents.GroupDM",
-		QuickSwitchGuildResult: "LibraryComponents.QuickSwitchComponents.Guild",
-		QuickSwitchUserResult: "LibraryComponents.QuickSwitchComponents.User",
+		QuickSwitchChannelResult: "LibraryComponents.QuickSwitchItems.Channel",
+		QuickSwitchGroupDMResult: "LibraryComponents.QuickSwitchItems.GroupDM",
+		QuickSwitchGuildResult: "LibraryComponents.QuickSwitchItems.Guild",
+		QuickSwitchUserResult: "LibraryComponents.QuickSwitchItems.User",
 	};
 	WebModulesData.Patchfinder = {
 		Account: "accountinfo",
@@ -6826,9 +6826,9 @@
 	
 	InternalComponents.LibraryComponents.Animations = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Controller", "Spring"));
 	
-	InternalComponents.LibraryComponents.AutocompleteComponents = Object.assign({}, BDFDB.ModuleUtils.findByName("Autocomplete"));
+	InternalComponents.LibraryComponents.AutocompleteItems = BDFDB.ModuleUtils.findByProperties("Generic", "User", "Command");
 	
-	InternalComponents.LibraryComponents.AutocompleteComponents.Menu = BDFDB.ModuleUtils.findByName("Autocomplete");
+	InternalComponents.LibraryComponents.AutocompleteMenu = BDFDB.ModuleUtils.findByName("Autocomplete");
 	
 	InternalComponents.LibraryComponents.Avatar = (BDFDB.ModuleUtils.findByProperties("AnimatedAvatar") || {}).default;
 	
@@ -7451,10 +7451,6 @@
 	
 	InternalComponents.LibraryComponents.GuildComponents = {};
 	
-	InternalComponents.LibraryComponents.GuildComponents.NativeComponents = BDFDB.ModuleUtils.findByProperties("Separator", "DragPlaceholder");
-	
-	InternalComponents.LibraryComponents.GuildComponents = Object.assign(InternalComponents.LibraryComponents.GuildComponents, InternalComponents.LibraryComponents.GuildComponents.NativeComponents);
-	
 	InternalComponents.LibraryComponents.GuildComponents.Badge = BDFDB.ModuleUtils.findByName("GuildBadge");
 	
 	InternalComponents.LibraryComponents.GuildComponents.BlobMask = BDFDB.ModuleUtils.findByName("BlobMask");
@@ -7507,13 +7503,13 @@
 			this.props.animatable = this.props.state ? LibraryModules.IconUtils.hasAnimatedGuildIcon(this.props.guild) : false;
 			var isDraggedGuild = this.props.draggingGuildId === this.props.guild.id;
 			var Guild = isDraggedGuild ? BDFDB.ReactUtils.createElement("div", {
-				children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.DragPlaceholder, {})
+				children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.Items.DragPlaceholder, {})
 			}) : BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.disCN.guildcontainer,
 				children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.BlobMask, {
 					selected: this.state.isDropHovering || this.props.selected || this.state.hovered,
-					upperBadge: this.props.unavailable ? InternalComponents.LibraryComponents.GuildComponents.renderUnavailableBadge() : InternalComponents.LibraryComponents.GuildComponents.renderIconBadge(this.props.audio, this.props.video, this.props.screenshare),
-					lowerBadge: this.props.badge > 0 ? InternalComponents.LibraryComponents.GuildComponents.renderMentionBadge(this.props.badge) : null,
+					upperBadge: this.props.unavailable ? InternalComponents.LibraryComponents.GuildComponents.Items.renderUnavailableBadge() : InternalComponents.LibraryComponents.GuildComponents.Items.renderIconBadge(this.props.audio, this.props.video, this.props.screenshare),
+					lowerBadge: this.props.badge > 0 ? InternalComponents.LibraryComponents.GuildComponents.Items.renderMentionBadge(this.props.badge) : null,
 					lowerBadgeWidth: InternalComponents.LibraryComponents.BadgeComponents.getBadgeWidthForValue(this.props.badge),
 					children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.NavItem, {
 						to: {
@@ -7553,7 +7549,7 @@
 					children: Guild
 				})
 			].filter(n => n);
-			return this.props.list ? InternalComponents.LibraryComponents.GuildComponents.renderListItem(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
+			return this.props.list ? InternalComponents.LibraryComponents.GuildComponents.Items.renderListItem(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 				children: children
 			}), null != this.props.setRef ? this.setRef : null) : BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.guild, this.props.className),
@@ -7565,9 +7561,11 @@
 	
 	InternalComponents.LibraryComponents.GuildComponents.Icon = BDFDB.ModuleUtils.findByName("GuildIconWrapper");
 	
+	InternalComponents.LibraryComponents.GuildComponents.Items = BDFDB.ModuleUtils.findByProperties("Separator", "DragPlaceholder");
+	
 	InternalComponents.LibraryComponents.GuildComponents.Pill = BDFDB.ModuleUtils.findByString("opacity:1,height:", "20:8", "default.item");
 	
-	InternalComponents.LibraryComponents.HeaderBarComponents = Object.assign({}, BDFDB.ModuleUtils.findByName("HeaderBarContainer"));
+	InternalComponents.LibraryComponents.HeaderBarComponents = BDFDB.ModuleUtils.findByName("HeaderBarContainer");
 	
 	InternalComponents.LibraryComponents.KeybindRecorder = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.KeybindRecorder") || reactInitialized && class BDFDB_KeybindRecorder extends LibraryModules.React.Component {
 		handleChange(arrays) {
@@ -7641,7 +7639,7 @@
 	
 	InternalComponents.LibraryComponents.MessageGroup = BDFDB.ModuleUtils.findByName("ChannelMessage");
 	
-	InternalComponents.LibraryComponents.MessagesPopoutComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Header", "EmptyStateBottom"));
+	InternalComponents.LibraryComponents.MessagesPopoutComponents = BDFDB.ModuleUtils.findByProperties("Header", "EmptyStateBottom");
 	
 	InternalComponents.LibraryComponents.MemberRole = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.MemberRole") || reactInitialized && class BDFDB_MemberRole extends LibraryModules.React.Component {
 		handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}
@@ -7851,9 +7849,9 @@
 		}
 	};
 	
-	InternalComponents.LibraryComponents.QuickSwitchComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Channel", "GroupDM", "Header"));
+	InternalComponents.LibraryComponents.QuickSwitchItems = BDFDB.ModuleUtils.findByProperties("Channel", "GroupDM", "Header");
 	
-	InternalComponents.LibraryComponents.QuickSwitchComponents.Menu = BDFDB.ModuleUtils.findByName("QuickSwitcher");
+	InternalComponents.LibraryComponents.QuickSwitchMenu = BDFDB.ModuleUtils.findByName("QuickSwitcher");
 	
 	InternalComponents.LibraryComponents.RadioGroup = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.RadioGroup") || reactInitialized && class BDFDB_RadioGroup extends LibraryModules.React.Component {
 		handleChange(value) {
