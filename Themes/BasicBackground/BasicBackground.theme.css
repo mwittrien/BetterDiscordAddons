@@ -13,7 +13,7 @@
 	--font:							Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;		/* font used in most places														*/
 	--textshadow:					transparent;				/* default: transparent			(add a textshadow to text that might be unreadable due to bright accentcolor)	*/
 	
-	--background:					url(https://mwittrien.github.io/BetterDiscordAddons/ThemesV2/BasicBackground/background.jpg);	/* general background image					*/
+	--background:					url(https://mwittrien.github.io/BetterDiscordAddons/Themes/BasicBackground/background.jpg);	/* general background image						*/
 	--backgroundsize:				cover;						/* default: cover				(sizefit of general background - values: [cover/contain/auto])					*/
 	--backgroundblur:				0px;						/* default: 0px					(only works when --background is set to an image)								*/
 	
