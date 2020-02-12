@@ -2894,14 +2894,13 @@
 		}
 		function updateGradient () {
 			gradientpane.style.removeProperty("background-color");
-			var gradient = {};
+			let gradient = {};
 			for (let cursor of gradientpane.querySelectorAll(".gradient-cursor")) gradient[parseFloat(cursor.style.getPropertyValue("left"))/100] = cursor.firstElementChild.style.getPropertyValue("background-color");
 			gradientpane.style.setProperty("background-image", BDFDB.ColorUtils.createGradient(gradient));
-			if (isreact) container.setState({
+			container.setState({
 				selectedColor: gradient,
 				customColor: gradient
 			});
-			else setSwatch(container.querySelector(BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatch), gradient, true);
 		}
 	};
 
