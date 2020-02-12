@@ -4268,7 +4268,7 @@
 		return browserWindow;
 	};
 	BDFDB.WindowUtils.close = function (browserWindow) {
-		if (BDFDB.ObjectUtils.is(browserWindow) && !browserWindow.isDestroyed() && browserWindow.isCloseable()) browserWindow.close();
+		if (BDFDB.ObjectUtils.is(browserWindow) && !browserWindow.isDestroyed() && browserWindow.isClosable()) browserWindow.close();
 	};
 	BDFDB.WindowUtils.closeAll = function (plugin) {
 		if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ArrayUtils.is(plugin.browserWindows)) while (plugin.browserWindows.length) BDFDB.WindowUtils.close(plugin.browserWindows.pop());
