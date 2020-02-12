@@ -276,7 +276,7 @@ var ServerFolders = (_ => {
 	return class ServerFolders {
 		getName () {return "ServerFolders";}
 
-		getVersion () {return "6.7.0";}
+		getVersion () {return "6.7.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -336,7 +336,7 @@ var ServerFolders = (_ => {
 					top: -10px;
 					right: -10px;
 				}
-				${BDFDB.dotCN.guildfolderexpandendbackground},
+				${BDFDB.dotCN.guildfolderexpandedbackground},
 				${BDFDB.dotCN.guildfolderexpandedguilds} {
 					display: none !important;
 				}
