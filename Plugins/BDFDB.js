@@ -9660,6 +9660,11 @@
 		BDFDB.LibraryComponents[component] = "div";
 	}
 
+	// REMOVE
+	BDFDB.loadMessage = BDFDB.PluginUtils.init;
+	BDFDB.unloadMessage = BDFDB.PluginUtils.clear;
+	BDFDB.createSettingsPanel = BDFDB.PluginUtils.createSettingsPanel;
+
 	BDFDB.loaded = true;
 	window.BDFDB = BDFDB;
 	InternalBDFDB.reloadLib = _ => {
