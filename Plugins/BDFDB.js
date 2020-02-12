@@ -2663,7 +2663,8 @@
 		return BDFDB.ColorUtils.convert(BDFDB.ReactUtils.findValue(BDFDB.ReactUtils.getInstance(swatches), "selectedColor", {up:true, blacklist:{"props":true}}));
 	};
 	BDFDB.ColorUtils.openPicker = function (container, target, color, options = {gradient: true, alpha: true, callback: _ => {}}) {
-		if (!container || !target) return;
+		let itemlayercontainer = document.querySelector(BDFDB.dotCN.appmount +  " > * > " + BDFDB.dotCN.itemlayercontainer);
+		if (!itemlayercontainer || !container || !target) return;
 		
 		if (typeof options.callback != "function") options.callback = _ => {};
 		
@@ -2676,8 +2677,9 @@
 		a = a == null ? 1 : a;
 			 
 		let targetrects = BDFDB.DOMUtils.getRects(target);
-		let colorPicker = BDFDB.DOMUtils.create(`<div role="dialog" class="BDFDB-colorpicker ${BDFDB.disCNS.popoutnoarrow + BDFDB.disCNS.popoutnoshadow + BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottom + BDFDB.disCNS.popoutarrowalignmenttop + BDFDB.disCN.themeundefined}" style="z-index: 2001; visibility: visible; left: ${targetrects.left + targetrects.width/2}px; top: ${targetrects.top + targetrects.height}px; transform: translateX(-50%) translateY(0%) translateZ(0px);"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.colorpicker}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.colorpickerinner}"><div class="${BDFDB.disCN.colorpickersaturation}"><div class="saturation-color" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; background: ${BDFDB.ColorUtils.convert([h, "100%", "100%"], "RGB")} !important;"><style>.saturation-white {background: -webkit-linear-gradient(to right, #fff, rgba(255,255,255,0));background: linear-gradient(to right, #fff, rgba(255,255,255,0));}.saturation-black {background: -webkit-linear-gradient(to top, #000, rgba(0,0,0,0));background: linear-gradient(to top, #000, rgba(0,0,0,0));}</style><div class="saturation-white" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="saturation-black" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"></div><div class="saturation-cursor" style="position: absolute; top: 55.2941%; left: 44.7368%; cursor: default;"><div style="width: 4px; height: 4px; box-shadow: rgb(255, 255, 255) 0px 0px 0px 1.5px, rgba(0, 0, 0, 0.3) 0px 0px 1px 1px inset, rgba(0, 0, 0, 0.4) 0px 0px 1px 2px; border-radius: 50%; transform: translate(-2px, -2px);"></div></div></div></div></div><div class="${BDFDB.disCN.colorpickerhue}"><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="hue-horizontal" style="padding: 0px 2px; position: relative; height: 100%;"><style>.hue-horizontal {background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);background: -webkit-linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);}.hue-vertical {background: linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);background: -webkit-linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);}</style><div class="hue-cursor" style="position: absolute; left: 0%;"><div style="margin-top: -4px !important; width: 4px; border-radius: 1px; height: 8px; box-shadow: rgba(0, 0, 0, 0.6) 0px 0px 2px; background: rgb(255, 255, 255); transform: translateX(-2px);"></div></div></div></div></div><div class="alpha-bar" style="position: relative; height: 8px; margin: 16px 0 8px;"><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="alpha-checker" style="padding: 0px 2px; position: relative; height: 100%; background-color: transparent;"></div></div><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="alpha-horizontal" style="padding: 0px 2px; position: relative; height: 100%;"><div class="alpha-cursor" style="position: absolute; left: 0%;"><div style="margin-top: -4px; width: 8px; border-radius: 3px; height: 16px; box-shadow: rgba(0, 0, 0, 0.6) 0px 0px 2px; background: rgb(255, 255, 255); transform: translateX(-2px);"></div></div></div></div></div><div class="gradient-bar" style="position: relative; height: 8px; margin: 27px 2px 2px 2px;${!isGradient ? " display: none;" : ""}"><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="alpha-checker" style="padding: 0px 2px; position: relative; height: 100%; background-color: transparent;"></div></div><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="gradient-horizontal" style="padding: 0px 2px; position: relative; height: 100%; background-color: ${selectedColor};"><div class="gradient-cursor edge selected" style="position: absolute; left: 0%;"><div style="background-color: ${selectedColor} !important;"></div></div><div class="gradient-cursor edge" style="position: absolute; left: 100%;"><div style="background-color: ${isGradient ? BDFDB.ColorUtils.convert(color[1], "RGBA") : selectedColor} !important;"></div></div></div></div></div></div><div class="${BDFDB.disCNS.horizontal + BDFDB.disCNS.colorpickerhexinput + BDFDB.disCN.margintop8}"><input class="${BDFDB.disCN.inputdefault}" maxlength="${options.alpha ? 9 : 7}" name="" type="text" placeholder="${selectedColor}" value="${selectedColor}"></input><div class="gradient-button${isGradient ? " selected" : ""}" style="transform: rotate(-90deg); margin: 2px 0 0 5px; cursor: pointer; border-radius: 5px; height: 36px;"><svg width="36" height="36" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M469.333333 384h85.333334v85.333333h-85.333334z m-85.333333 85.333333h85.333333v85.333334H384z m170.666667 0h85.333333v85.333334h-85.333333z m85.333333-85.333333h85.333333v85.333333h-85.333333zM298.666667 384h85.333333v85.333333H298.666667z m512-256H213.333333c-46.933333 0-85.333333 38.4-85.333333 85.333333v597.333334c0 46.933333 38.4 85.333333 85.333333 85.333333h597.333334c46.933333 0 85.333333-38.4 85.333333-85.333333V213.333333c0-46.933333-38.4-85.333333-85.333333-85.333333zM384 768H298.666667v-85.333333h85.333333v85.333333z m170.666667 0h-85.333334v-85.333333h85.333334v85.333333z m170.666666 0h-85.333333v-85.333333h85.333333v85.333333z m85.333334-298.666667h-85.333334v85.333334h85.333334v85.333333h-85.333334v-85.333333h-85.333333v85.333333h-85.333333v-85.333333h-85.333334v85.333333H384v-85.333333H298.666667v85.333333H213.333333v-85.333333h85.333334v-85.333334H213.333333V213.333333h597.333334v256z"></path></svg></div></div></div><div class="move-corner" style="width: 10px; height: 10px; cursor: move; position: absolute; top: 0; left: 0;"></div><div class="move-corner" style="width: 10px; height: 10px; cursor: move; position: absolute; top: 0; right: 0;"></div><div class="move-corner" style="width: 10px; height: 10px; cursor: move; position: absolute; bottom: 0; right: 0;"></div><div class="move-corner" style="width: 10px; height: 10px; cursor: move; position: absolute; bottom: 0; left: 0;"></div></div>`);
-		document.querySelector(BDFDB.dotCN.popouts).appendChild(colorPicker);
+		let colorPicker = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.itemlayer}"><div role="dialog" class="${BDFDB.disCNS.colorpickerwrapper + BDFDB.disCNS.popoutnoarrow + BDFDB.disCNS.popoutnoshadow + BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottom + BDFDB.disCNS.popoutarrowalignmenttop + BDFDB.disCN.themeundefined}" style="z-index: 2001; visibility: visible; left: ${targetrects.left + targetrects.width/2}px; top: ${targetrects.top + targetrects.height}px; transform: translateX(-50%) translateY(0%) translateZ(0px);"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.colorpicker}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.colorpickerinner}"><div class="${BDFDB.disCN.colorpickersaturation}"><div class="saturation-color" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; background: ${BDFDB.ColorUtils.convert([h, "100%", "100%"], "RGB")} !important;"><style>.saturation-white {background: -webkit-linear-gradient(to right, #fff, rgba(255,255,255,0));background: linear-gradient(to right, #fff, rgba(255,255,255,0));}.saturation-black {background: -webkit-linear-gradient(to top, #000, rgba(0,0,0,0));background: linear-gradient(to top, #000, rgba(0,0,0,0));}</style><div class="saturation-white" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="saturation-black" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"></div><div class="saturation-cursor" style="position: absolute; top: 55.2941%; left: 44.7368%; cursor: default;"><div style="width: 4px; height: 4px; box-shadow: rgb(255, 255, 255) 0px 0px 0px 1.5px, rgba(0, 0, 0, 0.3) 0px 0px 1px 1px inset, rgba(0, 0, 0, 0.4) 0px 0px 1px 2px; border-radius: 50%; transform: translate(-2px, -2px);"></div></div></div></div></div><div class="${BDFDB.disCN.colorpickerhue}"><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="hue-horizontal" style="padding: 0px 2px; position: relative; height: 100%;"><style>.hue-horizontal {background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);background: -webkit-linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);}.hue-vertical {background: linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);background: -webkit-linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);}</style><div class="hue-cursor" style="position: absolute; left: 0%;"><div style="margin-top: -4px !important; width: 4px; border-radius: 1px; height: 8px; box-shadow: rgba(0, 0, 0, 0.6) 0px 0px 2px; background: rgb(255, 255, 255); transform: translateX(-2px);"></div></div></div></div></div><div class="alpha-bar" style="position: relative; height: 8px; margin: 16px 0 8px;"><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="alpha-checker" style="padding: 0px 2px; position: relative; height: 100%; background-color: transparent;"></div></div><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="alpha-horizontal" style="padding: 0px 2px; position: relative; height: 100%;"><div class="alpha-cursor" style="position: absolute; left: 0%;"><div style="margin-top: -4px; width: 8px; border-radius: 3px; height: 16px; box-shadow: rgba(0, 0, 0, 0.6) 0px 0px 2px; background: rgb(255, 255, 255); transform: translateX(-2px);"></div></div></div></div></div><div class="gradient-bar" style="position: relative; height: 8px; margin: 27px 2px 2px 2px;${!isGradient ? " display: none;" : ""}"><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="alpha-checker" style="padding: 0px 2px; position: relative; height: 100%; background-color: transparent;"></div></div><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="gradient-horizontal" style="padding: 0px 2px; position: relative; height: 100%; background-color: ${selectedColor};"><div class="gradient-cursor edge selected" style="position: absolute; left: 0%;"><div style="background-color: ${selectedColor} !important;"></div></div><div class="gradient-cursor edge" style="position: absolute; left: 100%;"><div style="background-color: ${isGradient ? BDFDB.ColorUtils.convert(color[1], "RGBA") : selectedColor} !important;"></div></div></div></div></div></div><div class="${BDFDB.disCNS.horizontal + BDFDB.disCNS.colorpickerhexinput + BDFDB.disCN.margintop8}"><input class="${BDFDB.disCN.inputdefault}" maxlength="${options.alpha ? 9 : 7}" name="" type="text" placeholder="${selectedColor}" value="${selectedColor}"></input><div class="gradient-button${isGradient ? " selected" : ""}" style="transform: rotate(-90deg); margin: 2px 0 0 5px; cursor: pointer; border-radius: 5px; height: 36px;"><svg width="36" height="36" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M469.333333 384h85.333334v85.333333h-85.333334z m-85.333333 85.333333h85.333333v85.333334H384z m170.666667 0h85.333333v85.333334h-85.333333z m85.333333-85.333333h85.333333v85.333333h-85.333333zM298.666667 384h85.333333v85.333333H298.666667z m512-256H213.333333c-46.933333 0-85.333333 38.4-85.333333 85.333333v597.333334c0 46.933333 38.4 85.333333 85.333333 85.333333h597.333334c46.933333 0 85.333333-38.4 85.333333-85.333333V213.333333c0-46.933333-38.4-85.333333-85.333333-85.333333zM384 768H298.666667v-85.333333h85.333333v85.333333z m170.666667 0h-85.333334v-85.333333h85.333334v85.333333z m170.666666 0h-85.333333v-85.333333h85.333333v85.333333z m85.333334-298.666667h-85.333334v85.333334h85.333334v85.333333h-85.333334v-85.333333h-85.333333v85.333333h-85.333333v-85.333333h-85.333334v85.333333H384v-85.333333H298.666667v85.333333H213.333333v-85.333333h85.333334v-85.333334H213.333333V213.333333h597.333334v256z"></path></svg></div></div></div><div class="move-corner" style="width: 10px; height: 10px; cursor: move; position: absolute; top: 0; left: 0;"></div><div class="move-corner" style="width: 10px; height: 10px; cursor: move; position: absolute; top: 0; right: 0;"></div><div class="move-corner" style="width: 10px; height: 10px; cursor: move; position: absolute; bottom: 0; right: 0;"></div><div class="move-corner" style="width: 10px; height: 10px; cursor: move; position: absolute; bottom: 0; left: 0;"></div></div></div>`);
+		
+		itemlayercontainer.appendChild(colorPicker);
 
 		var removePopout = e => {
 			if (!colorPicker.contains(e.target)) {
@@ -3797,6 +3799,7 @@
 		collapseContainerInner: "inner-TkGytd",
 		collapseContainerMini: "container-fAVkOf containerMini-_k6Rts",
 		collapseContainerTitle: "title-ROsJi-",
+		colorPicker: "colorPicker-h5sF8g",
 		colorPickerSwatches: "swatches-QxZw_N",
 		colorPickerSwatchesDisabled: "disabled-2JgNxl",
 		colorPickerSwatchSingle: "single-Fbb1wB",
@@ -3825,8 +3828,8 @@
 		quickSelectPopoutWrapper: "quickSelectPopout-u2dtIf",
 		modalHeaderHasSibling: "hasSiblings-fRyjyl",
 		modalInnerScrollerLess: "inner-YgPpF3",
-		modalTabContent: "tab-content",
-		modalTabContentOpen: "open",
+		modalTabContent: "tabContent-nZ-1U5",
+		modalTabContentOpen: "open-yICTYu",
 		modalWrapper: "modal-6GHvdM",
 		noticeWrapper: "noticeWrapper-8z511t",
 		selectWrapper: "selectWrapper-yPjeij",
@@ -4585,6 +4588,7 @@
 		colorpickerswatchnocolor: ["ColorPicker", "noColor"],
 		colorpickerswatchselected: ["BDFDB", "colorPickerSwatchSelected"],
 		colorpickerswatchsingle: ["BDFDB", "colorPickerSwatchSingle"],
+		colorpickerwrapper: ["BDFDB", "colorPicker"],
 		colorstandard: ["TextColor", "colorStandard"],
 		contentcolumn: ["SettingsWindow", "contentColumn"],
 		contentregion: ["SettingsWindow", "contentRegion"],
@@ -8218,15 +8222,6 @@
 			transform: rotate(180deg);
 		}
 		
-		${BDFDB.dotCN.colorpickerswatches + BDFDB.dotCN.colorpickerswatchesdisabled} {
-			cursor: no-drop;
-			filter: grayscale(70%) brightness(50%);
-		}
-		${BDFDB.dotCN.colorpickerswatchsingle} {
-			height: 30px;
-			width: 30px;
-		}
-		
 		${BDFDB.dotCN.guildupperleftbadge} {
 			top: 0;
 		}
@@ -8346,6 +8341,122 @@
 			border-top-color: inherit !important;
 		}
 		
+		${BDFDB.dotCN.colorpickerswatchsingle} {
+			height: 30px;
+			width: 30px;
+		}
+		${BDFDB.dotCN.colorpickerswatches + BDFDB.dotCN.colorpickerswatchesdisabled} {
+			cursor: no-drop;
+			filter: grayscale(70%) brightness(50%);
+		}
+		${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault + BDFDB.notCN.colorpickerswatchdisabled} {
+			overflow: hidden;
+		}
+		${BDFDB.dotCN.colorpickerwrapper} .gradient-bar .gradient-cursor > div:after,
+		${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault + BDFDB.notCN.colorpickerswatchdisabled}:after {
+			content: "";
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			z-index: -1;
+		}
+		${BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchcustom}[style*="background"] {
+			border: none;
+		}
+		${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchdefault}:after {
+			border-radius: 3px;
+		}
+		${BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchcustom + BDFDB.notCN.colorpickerswatchdefault}:after {
+			border-radius: 5px;
+		}
+		${BDFDB.dotCN.colorpickerwrapper} .alpha-checker,
+		${BDFDB.dotCN.colorpickerwrapper} .gradient-bar .gradient-cursor > div:after,
+		${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault + BDFDB.notCN.colorpickerswatchdisabled}:after {
+			background: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect x="0" y="0" width="4" height="4" fill="black"></rect><rect x="0" y="4" width="4" height="4" fill="white"></rect><rect x="4" y="0" width="4" height="4" fill="white"></rect><rect x="4" y="4" width="4" height="4" fill="black"></rect></svg>') center repeat;
+		}
+		${BDFDB.dotCNS.themelight + BDFDB.dotCN.colorpickersaturation} > div > div > div > div {
+			box-shadow: rgb(200, 200, 200) 0px 0px 0px 1.5px, rgba(0, 0, 0, 0.6) 0px 0px 1px 1px inset, rgba(0, 0, 0, 0.6) 0px 0px 1px 2px !important;
+		}
+		${BDFDB.dotCNS.themelight + BDFDB.dotCN.colorpickerhue} > div > div > div > div,
+		${BDFDB.dotCNS.themelight + BDFDB.dotCN.colorpickerwrapper} .alpha-bar > div > div > div > div {
+			background: rgb(200, 200, 200) !important;
+			box-shadow: rgba(0, 0, 0, 1) 0px 0px 2px !important;
+		}
+		${BDFDB.dotCN.colorpickerwrapper} .gradient-button {
+			cursor: pointer;
+			opacity: 0.3;
+			transition: all 200ms ease;
+		}
+		${BDFDB.dotCN.colorpickerwrapper} .gradient-button:hover {
+			opacity: 0.6;
+		}
+		${BDFDB.dotCN.colorpickerwrapper} .gradient-button.selected,
+		${BDFDB.dotCN.colorpickerwrapper} .gradient-button.selected:hover {
+			opacity: 1;
+		}
+		${BDFDB.dotCNS.themelight + BDFDB.dotCN.colorpickerwrapper} .gradient-button {
+			color: #4f545c;
+		}
+		${BDFDB.dotCNS.themedark + BDFDB.dotCN.colorpickerwrapper} .gradient-button {
+			color: #fff;
+		}
+		${BDFDB.dotCN.colorpickerwrapper} .alpha-checker,
+		${BDFDB.dotCN.colorpickerwrapper} .alpha-horizontal,
+		${BDFDB.dotCN.colorpickerwrapper} .gradient-horizontal {
+			border-radius: 3px;
+		}
+		${BDFDB.dotCN.colorpickerwrapper} .alpha-bar .alpha-cursor,
+		${BDFDB.dotCN.colorpickerwrapper} .gradient-bar .gradient-cursor {
+			position: absolute;
+		}
+		${BDFDB.dotCN.colorpickerwrapper} .gradient-bar .gradient-cursor > div {
+			height: 8px;
+			width: 8px;
+			margin-top: -15px;
+			border: 1px solid rgb(128, 128, 128);
+			border-radius: 3px;
+			transform: translateX(-5px);
+			transform-style: preserve-3d;
+		}
+		${BDFDB.dotCN.colorpickerwrapper} .gradient-bar .gradient-cursor > div:after {
+			border-radius: 3px;
+			transform: translateZ(-1px);
+		}
+		${BDFDB.dotCN.colorpickerwrapper} .gradient-bar .gradient-cursor > div:before {
+			content: "";
+			position: absolute;
+			border: 3px solid transparent;
+			border-top-width: 5px;
+			border-top-color: rgb(128, 128, 128);
+			width: 0;
+			height: 0;
+			top: 100%;
+			left: -50%;
+			transform: translateX(5px);
+		}
+		${BDFDB.dotCN.colorpickerwrapper} .gradient-bar .gradient-cursor.edge > div:before {
+			border-right-width: 0;
+			border-left-width: 5px;
+		}
+		${BDFDB.dotCN.colorpickerwrapper} .gradient-bar .gradient-cursor.edge ~ .gradient-cursor.edge > div:before {
+			border-right-width: 5px;
+			border-left-width: 0;
+		}
+		${BDFDB.dotCNS.themelight + BDFDB.dotCN.colorpickerwrapper} .gradient-bar .gradient-cursor.selected > div {
+			border-color: rgb(55, 55, 55);
+		}
+		${BDFDB.dotCNS.themelight + BDFDB.dotCN.colorpickerwrapper} .gradient-bar .gradient-cursor.selected > div:before {
+			border-top-color: rgb(55, 55, 55);
+		}
+		${BDFDB.dotCNS.themedark + BDFDB.dotCN.colorpickerwrapper} .gradient-bar .gradient-cursor.selected > div {
+			border-color: rgb(200, 200, 200);
+		}
+		${BDFDB.dotCNS.themedark + BDFDB.dotCN.colorpickerwrapper} .gradient-bar .gradient-cursor.selected > div:before {
+			border-top-color: rgb(200, 200, 200);
+		}
+		
 		${BDFDB.dotCNC.layermodallarge + BDFDB.dotCN.modalsizelarge} {
 			max-height: 95vh;
 		}
@@ -8353,22 +8464,6 @@
 			${BDFDB.dotCNC.layermodalmedium + BDFDB.dotCN.modalsizemedium} {
 				max-height: 75vh;
 			}
-		}
-		
-		
-		/*OLD*/
-		
-		.BDFDB-modal ${BDFDB.dotCN.modalheader + BDFDB.dotCN.modalheaderhassibling} {
-			padding-bottom: 10px;
-		}
-		.BDFDB-modal ${BDFDB.dotCN.tabbarcontainer} {
-			background: rgba(0, 0, 0, 0.1);
-			border: none !important;
-			box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.05);
-		}
-		${BDFDB.dotCN.themedark} .BDFDB-modal ${BDFDB.dotCN.tabbarcontainer} {
-			background: rgba(0, 0, 0, 0.2);
-			box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
 		}
 		
 		#pluginNotice #outdatedPlugins span {
@@ -8379,9 +8474,7 @@
 		#pluginNotice #outdatedPlugins span:hover {
 			text-decoration: underline;
 		}
-		.BDFDB-itemlayercontainer, .BDFDB-itemlayer {
-			z-index: 3002;
-		}
+		
 		.toasts {
 			position: fixed;
 			display: flex;
@@ -8508,584 +8601,6 @@
 		.toast.toast-warning.icon,
 		.toast.toast-warn.icon {
 			background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPiAgICA8cGF0aCBkPSJNMSAyMWgyMkwxMiAyIDEgMjF6bTEyLTNoLTJ2LTJoMnYyem0wLTRoLTJ2LTRoMnY0eiIvPjwvc3ZnPg==);
-		}
-		.BDFDB-quickSelectPopout {
-			min-width: 210px !important;
-			position: relative !important;
-			width: auto !important;
-		}
-		.BDFDB-modal .BDFDB-settings-inner .BDFDB-containertext,
-		.BDFDB-settings .BDFDB-settings-inner .BDFDB-containertext {
-			margin-left: -18px;
-		}
-		.BDFDB-modal .BDFDB-containerarrow,
-		.BDFDB-settings .BDFDB-containerarrow {
-			background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxOS4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iQ2FscXVlXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSItOTUwIDUzMiAxOCAxOCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAtOTUwIDUzMiAxOCAxODsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4NCgkuc3Qwe2ZpbGw6bm9uZTt9DQoJLnN0MXtmaWxsOm5vbmU7c3Ryb2tlOiNGRkZGRkY7c3Ryb2tlLXdpZHRoOjEuNTtzdHJva2UtbWl0ZXJsaW1pdDoxMDt9DQo8L3N0eWxlPg0KPHBhdGggY2xhc3M9InN0MCIgZD0iTS05MzIsNTMydjE4aC0xOHYtMThILTkzMnoiLz4NCjxwb2x5bGluZSBjbGFzcz0ic3QxIiBwb2ludHM9Ii05MzYuNiw1MzguOCAtOTQxLDU0My4yIC05NDUuNCw1MzguOCAiLz4NCjwvc3ZnPg0K);
-			height: 16px;
-			width: 16px;
-			display: inline-block;
-			position: relative;
-			top: 2px;
-			transition: transform .3s ease;
-			transform: rotate(0);
-		}
-		.BDFDB-modal .BDFDB-containerarrow.closed,
-		.BDFDB-settings .BDFDB-containerarrow.closed {
-			transform: rotate(-90deg);
-		}
-		.BDFDB-settings .BDFDB-settings-inner {
-			padding-left: 15px;
-			padding-right: 5px;
-		}
-		.BDFDB-settings .BDFDB-settings-inner-list {
-			padding-left: 15px;
-		}
-		.inputNumberWrapper .numberinput-buttons-zone:hover + ${BDFDB.dotCN.input} {
-			border-color: black;
-		}
-		.inputNumberWrapper .numberinput-buttons-zone:hover + ${BDFDB.dotCN.input}:focus,
-		.inputNumberWrapper .numberinput-buttons-zone.pressed + ${BDFDB.dotCN.input} {
-			border-color: #7289da;
-		}
-		.inputNumberWrapper {
-			position: relative !important;
-		}
-		.inputNumberWrapper ${BDFDB.dotCN.input}[type=number] {
-			padding-right: 25px;
-		}
-		.inputNumberWrapper.inputNumberWrapperMini ${BDFDB.dotCN.input}[type=number] {
-			padding-left: 6px;
-			padding-right: 17px;
-		}
-		.inputNumberWrapper ${BDFDB.dotCN.input}[type=number]::-webkit-inner-spin-button, 
-		.inputNumberWrapper ${BDFDB.dotCN.input}[type=number]::-webkit-outer-spin-button{
-			-webkit-appearance: none;
-		}
-		.inputNumberWrapper .numberinput-buttons-zone {
-			cursor: pointer;
-			position: absolute;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: space-around;
-			height: 110%;
-			right: 8px;
-			top: -5%;
-		}
-		.inputNumberWrapper.inputNumberWrapperMini .numberinput-buttons-zone {
-			right: 4px;
-		}
-		.inputNumberWrapper .numberinput-button-up {
-			border-color: transparent transparent #999 transparent;
-			border-style: solid;
-			border-width: 2.5px 5px 5px 5px;
-			display: inline-block;
-		}
-		.inputNumberWrapper .numberinput-button-up:hover {
-			border-bottom-color: #666;
-		}
-		${BDFDB.dotCN.themelight} .inputNumberWrapper .numberinput-button-up {
-			border-bottom-color: #dcddde;
-		}
-		${BDFDB.dotCN.themelight} .inputNumberWrapper .numberinput-button-up:hover {
-			border-bottom-color: #4f545c;
-		}
-		${BDFDB.dotCN.themedark} .inputNumberWrapper .numberinput-button-up {
-			border-bottom-color: #72767d;
-		}
-		${BDFDB.dotCN.themedark} .inputNumberWrapper .numberinput-button-up:hover {
-			border-bottom-color: #f6f6f7;
-		}
-		.inputNumberWrapper .numberinput-button-down {
-			border-color: #999 transparent transparent transparent;
-			border-style: solid;
-			border-width: 5px 5px 2.5px 5px;
-			display: inline-block;
-		}
-		.inputNumberWrapper .numberinput-button-down:hover {
-			border-top-color: #666;
-		}
-		${BDFDB.dotCN.themelight} .inputNumberWrapper .numberinput-button-down {
-			border-top-color: #dcddde;
-		}
-		${BDFDB.dotCN.themelight} .inputNumberWrapper .numberinput-button-down:hover {
-			border-top-color: #4f545c;
-		}
-		${BDFDB.dotCN.themedark} .inputNumberWrapper .numberinput-button-down {
-			border-top-color: #72767d;
-		}
-		${BDFDB.dotCN.themedark} .inputNumberWrapper .numberinput-button-down:hover {
-			border-top-color: #f6f6f7;
-		}
-		.BDFDB-select ${BDFDB.dotCN.select} {
-			position: relative;
-			box-sizing: border-box;
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectcontrol} {
-			-webkit-box-align: center;
-			align-items: center;
-			display: flex;
-			flex-wrap: wrap;
-			-webkit-box-pack: justify;
-			justify-content: space-between;
-			min-height: 40px;
-			position: relative;
-			box-sizing: border-box;
-			border-radius: 3px;
-			border-style: solid;
-			border-width: 1px;
-			transition: border 0.15s ease 0s;
-			outline: 0px !important;
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectcontrollight} {
-			background-color: rgba(79, 84, 92, 0.02);
-			background-color: rgba(79, 84, 92, 0.02);
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectcontroldark} {
-			background-color: rgba(0, 0, 0, 0.1);
-			border-color: rgba(0, 0, 0, 0.3);
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectvalue} {
-			-webkit-box-align: center;
-			align-items: center;
-			display: flex;
-			flex-wrap: wrap;
-			position: relative;
-			box-sizing: border-box;
-			flex: 1 1 0%;
-			padding: 2px 8px;
-			overflow: hidden;
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectsingle} {
-			margin-left: 2px;
-			margin-right: 2px;
-			max-width: calc(100% - 8px);
-			width: calc(100% - 8px);
-			position: absolute;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-			top: 50%;
-			transform: translateY(-50%);
-			box-sizing: border-box;
-			opacity: 1;
-			overflow: hidden;
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectsinglelight} {
-			color: rgb(32, 34, 37);
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectsingledark} {
-			color: rgb(246, 246, 247);
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectdummyinput} {
-			font-size: inherit;
-			width: 1px;
-			color: transparent;
-			left: -100px;
-			opacity: 0;
-			position: relative;
-			transform: scale(0);
-			background: 0px center;
-			border-width: 0px;
-			border-style: initial;
-			border-color: initial;
-			border-image: initial;
-			outline: 0px;
-			padding: 0px;
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectarrowzone} {
-			-webkit-box-align: center;
-			align-items: center;
-			align-self: stretch;
-			display: flex;
-			flex-shrink: 0;
-			box-sizing: border-box;
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectarrowcontainer} {
-			display: flex;
-			box-sizing: border-box;
-			cursor: pointer;
-			opacity: 0.3;
-			padding: 8px 8px 8px 0px;
-			transition: color 150ms ease 0s;
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectarrowcontainerlight} {
-			color: rgb(32, 34, 37);
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectarrowcontainerdark} {
-			color: rgb(246, 246, 247);
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectarrow} {
-			display: inline-block;
-			fill: currentcolor;
-			line-height: 1;
-			stroke: currentcolor;
-			stroke-width: 0;
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectmenuouter} {
-			top: 100%;
-			margin-bottom: -1px;
-			margin-top: -1px;
-			position: absolute;
-			width: 100%;
-			z-index: 100;
-			box-sizing: border-box;
-			border-radius: 0px 0px 3px 3px;
-			border-width: 1px;
-			border-style: solid;
-			border-image: initial;
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectmenuouter}.above-select {
-			border-radius: 3px 3px 0 0;
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectmenuouterlight} {
-			background-color: rgb(255, 255, 255);
-			border-color: rgb(185, 187, 190);
-			color: rgb(32, 34, 37);
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectmenuouterdark} {
-			background-color: rgb(47, 49, 54);
-			border-color: rgb(32, 34, 37);
-			color: rgb(246, 246, 247);
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectmenu} {
-			max-height: 300px;
-			overflow-y: auto;
-			position: relative;
-			box-sizing: border-box;
-			padding: 0px;
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectmenu}::-webkit-scrollbar {
-			width: 8px;
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectmenu}::-webkit-scrollbar-thumb {
-			background-color: rgba(0, 0, 0, 0.4);
-			background-clip: padding-box;
-			border-color: transparent;
-			border-radius: 4px;
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectmenu}::-webkit-scrollbar-track-piece {
-			background-color: transparent;
-			border-color: transparent;
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectoption} {
-			cursor: pointer;
-			display: flex;
-			font-size: inherit;
-			width: 100%;
-			user-select: none;
-			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-			box-sizing: border-box;
-			-webkit-box-align: center;
-			align-items: center;
-			min-height: 40px;
-			padding: 8px 12px;
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectoptionlight} {
-			background-color: transparent;
-			color: rgb(32, 34, 37);
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectoptiondark} {
-			background-color: transparent;
-			color: rgb(246, 246, 247);
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectoptionhoverlight} {
-			background-color: rgb(246, 246, 247);
-			color: rgb(32, 34, 37);
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectoptionhoverdark} {
-			background-color: rgba(0, 0, 0, 0.1);
-			color: rgb(246, 246, 247);
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectoptionselectlight} {
-			background-color: rgb(220, 221, 222);
-			color: rgb(32, 34, 37);
-		}
-		.BDFDB-select ${BDFDB.dotCN.selectoptionselectdark} {
-			background-color: rgba(0, 0, 0, 0.2);
-			color: rgb(246, 246, 247);
-		}
-		.BDFDB-settings ${BDFDB.dotCN.hovercard},
-		.BDFDB-settings ${BDFDB.dotCNS.hovercard + BDFDB.dotCN.hovercardinner} {
-			width: 550px;
-			min-height: 28px;
-		}
-		.BDFDB-settingsmodal .BDFDB-settings {
-			margin-bottom: 20px;
-		}
-		.BDFDB-settingsmodal .BDFDB-settings ${BDFDB.dotCN.hovercard},
-		.BDFDB-settingsmodal .BDFDB-settings ${BDFDB.dotCNS.hovercard + BDFDB.dotCN.hovercardinner} {
-			width: 520px;
-		}
-		.BDFDB-settings ${BDFDB.dotCN.hovercard}:before {
-			z-index: 50;
-			left: -10px;
-		}
-		.BDFDB-settings ${BDFDB.dotCNS.hovercard + BDFDB.dotCN.hovercardinner} {
-			overflow: hidden;
-			display: flex;
-			align-items: center;
-			position: relative;
-			z-index: 100;
-		}
-		.BDFDB-settings ${BDFDB.dotCNS.hovercard + BDFDB.dotCN.hovercardbutton} {
-			opacity: 0;
-			position: absolute;
-			right: -31px;
-			top: -12px;
-			z-index: 200;
-		}
-		.BDFDB-settings ${BDFDB.dotCN.hovercard}:hover ${BDFDB.dotCN.hovercardbutton} {
-			opacity: 1;
-		}		
-		.BDFDB-modal ${BDFDB.dotCN.checkboxcontainer},
-		.BDFDB-settings ${BDFDB.dotCN.checkboxcontainer} {
-			display: flex;
-			align-items: center;
-			flex-direction: column;
-			margin-right: 5px;
-			margin-left: 5px;
-		}		
-		.BDFDB-modal ${BDFDB.dotCN.checkboxcontainer}:before,
-		.BDFDB-settings ${BDFDB.dotCN.checkboxcontainer}:before {
-			display: none;
-		}
-		.BDFDB-modal ${BDFDB.dotCN.colorpickerswatches + BDFDB.dotCN.colorpickerswatchesdisabled},
-		.BDFDB-settings ${BDFDB.dotCN.colorpickerswatches + BDFDB.dotCN.colorpickerswatchesdisabled} {
-			cursor: no-drop;
-			filter: grayscale(70%) brightness(50%);
-		}
-		.BDFDB-modal ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault + BDFDB.notCN.colorpickerswatchdisabled},
-		.BDFDB-settings ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault + BDFDB.notCN.colorpickerswatchdisabled} {
-			overflow: hidden;
-		}
-		.BDFDB-colorpicker .gradient-bar .gradient-cursor > div:after,
-		.BDFDB-modal ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault + BDFDB.notCN.colorpickerswatchdisabled}:after,
-		.BDFDB-settings ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault + BDFDB.notCN.colorpickerswatchdisabled}:after {
-			content: "";
-			position: absolute;
-			top: 0;
-			right: 0;
-			bottom: 0;
-			left: 0;
-			z-index: -1;
-		}
-		.BDFDB-modal ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchdefault}:after,
-		.BDFDB-settings ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchdefault}:after {
-			border-radius: 3px;
-		}
-		.BDFDB-modal ${BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchcustom + BDFDB.notCN.colorpickerswatchdefault}:after,
-		.BDFDB-settings ${BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchcustom + BDFDB.notCN.colorpickerswatchdefault}:after {
-			border-radius: 5px;
-		}
-		.BDFDB-colorpicker .alpha-checker,
-		.BDFDB-colorpicker .gradient-bar .gradient-cursor > div:after,
-		.BDFDB-modal ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault + BDFDB.notCN.colorpickerswatchdisabled}:after,
-		.BDFDB-settings ${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault + BDFDB.notCN.colorpickerswatchdisabled}:after {
-			background: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect x="0" y="0" width="4" height="4" fill="black"></rect><rect x="0" y="4" width="4" height="4" fill="white"></rect><rect x="4" y="0" width="4" height="4" fill="white"></rect><rect x="4" y="4" width="4" height="4" fill="black"></rect></svg>') center repeat
-		}
-		.BDFDB-modal ${BDFDB.dotCN.colorpickerswatches + BDFDB.dotCN.colorpickerswatchesdisabled} ${BDFDB.dotCN.colorpickerswatch},
-		.BDFDB-settings ${BDFDB.dotCN.colorpickerswatches + BDFDB.dotCN.colorpickerswatchesdisabled} ${BDFDB.dotCN.colorpickerswatch} {
-			cursor: no-drop;
-		}
-		.BDFDB-modal ${BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchcustom}[style*="background"],
-		.BDFDB-settings ${BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchcustom}[style*="background"] {
-			border: none;
-		}
-		${BDFDB.dotCNS.themelight + BDFDB.dotCN.colorpickersaturation} > div > div > div > div {
-			box-shadow: rgb(200, 200, 200) 0px 0px 0px 1.5px, rgba(0, 0, 0, 0.6) 0px 0px 1px 1px inset, rgba(0, 0, 0, 0.6) 0px 0px 1px 2px !important;
-		}
-		${BDFDB.dotCNS.themelight + BDFDB.dotCN.colorpickerhue} > div > div > div > div,
-		${BDFDB.dotCN.themelight} .BDFDB-colorpicker .alpha-bar > div > div > div > div {
-			background: rgb(200, 200, 200) !important;
-			box-shadow: rgba(0, 0, 0, 1) 0px 0px 2px !important;
-		}
-		.BDFDB-colorpicker .gradient-button {
-			cursor: pointer;
-			opacity: 0.3;
-			transition: all 200ms ease;
-		}
-		.BDFDB-colorpicker .gradient-button:hover {
-			opacity: 0.6;
-		}
-		.BDFDB-colorpicker .gradient-button.selected,
-		.BDFDB-colorpicker .gradient-button.selected:hover {
-			opacity: 1;
-		}
-		${BDFDB.dotCN.themelight} .BDFDB-colorpicker .gradient-button {
-			color: #4f545c;
-		}
-		${BDFDB.dotCN.themedark} .BDFDB-colorpicker .gradient-button {
-			color: #fff;
-		}
-		.BDFDB-colorpicker .alpha-checker,
-		.BDFDB-colorpicker .alpha-horizontal,
-		.BDFDB-colorpicker .gradient-horizontal {
-			border-radius: 3px;
-		}
-		.BDFDB-colorpicker .alpha-bar .alpha-cursor,
-		.BDFDB-colorpicker .gradient-bar .gradient-cursor {
-			position: absolute;
-		}
-		.BDFDB-colorpicker .gradient-bar .gradient-cursor > div {
-			height: 8px;
-			width: 8px;
-			margin-top: -15px;
-			border: 1px solid rgb(128, 128, 128);
-			border-radius: 3px;
-			transform: translateX(-5px);
-			transform-style: preserve-3d;
-		}
-		.BDFDB-colorpicker .gradient-bar .gradient-cursor > div:after {
-			border-radius: 3px;
-			transform: translateZ(-1px);
-		}
-		.BDFDB-colorpicker .gradient-bar .gradient-cursor > div:before {
-			content: "";
-			position: absolute;
-			border: 3px solid transparent;
-			border-top-width: 5px;
-			border-top-color: rgb(128, 128, 128);
-			width: 0;
-			height: 0;
-			top: 100%;
-			left: -50%;
-			transform: translateX(5px);
-		}
-		.BDFDB-colorpicker .gradient-bar .gradient-cursor.edge > div:before {
-			border-right-width: 0;
-			border-left-width: 5px;
-		}
-		.BDFDB-colorpicker .gradient-bar .gradient-cursor.edge ~ .gradient-cursor.edge > div:before {
-			border-right-width: 5px;
-			border-left-width: 0;
-		}
-		${BDFDB.dotCN.themelight} .BDFDB-colorpicker .gradient-bar .gradient-cursor.selected > div {
-			border-color: rgb(55, 55, 55);
-		}
-		${BDFDB.dotCN.themelight} .BDFDB-colorpicker .gradient-bar .gradient-cursor.selected > div:before {
-			border-top-color: rgb(55, 55, 55);
-		}
-		${BDFDB.dotCN.themedark} .BDFDB-colorpicker .gradient-bar .gradient-cursor.selected > div {
-			border-color: rgb(200, 200, 200);
-		}
-		${BDFDB.dotCN.themedark} .BDFDB-colorpicker .gradient-bar .gradient-cursor.selected > div:before {
-			border-top-color: rgb(200, 200, 200);
-		}
-		.BDFDB-modal ${BDFDB.dotCN.inputdefault}.valid {
-			background-color: rgba(67, 181 ,129, 0.5);
-		}
-		.BDFDB-modal ${BDFDB.dotCN.inputdefault}.valid:hover {
-			border-color: rgb(27, 141, 89);
-		}
-		.BDFDB-modal ${BDFDB.dotCN.inputdefault}.valid:focus {
-			border-color: rgb(67, 181, 129);
-		}
-		.BDFDB-modal ${BDFDB.dotCN.inputdefault}.valid::placeholder {
-			color: rgba(67, 181, 129, 0.7);
-		}
-		.BDFDB-modal ${BDFDB.dotCN.inputdefault}.invalid {
-			background-color: rgba(241, 71, 71, 0.5);
-		}
-		.BDFDB-modal ${BDFDB.dotCN.inputdefault}.invalid:hover {
-			border-color: rgb(201, 31, 31);
-		}
-		.BDFDB-modal ${BDFDB.dotCN.inputdefault}.invalid:focus {
-			border-color: rgb(241, 71, 71);
-		}
-		.BDFDB-modal ${BDFDB.dotCN.inputdefault}.invalid::placeholder {
-			color: rgba(241, 71, 71, 0.7);
-		}
-		.BDFDB-modal ${BDFDB.dotCN.inputdefault}:disabled {
-			color: #555555;
-			cursor: no-drop;
-			background-color: rgba(0, 0, 0, 0.5);
-		}
-		/* REMOVE */
-		.BDFDB-modal ${BDFDB.dotCN.modaltabcontent + BDFDB.dotCN.modaltabcontentopen} {
-			display: flex;
-			flex-direction: column;
-			flex-wrap: nowrap;
-			justify-content: flex-start;
-			align-items: stretch;
-		}
-		.BDFDB-modal ${BDFDB.dotCN.modaltabcontent + BDFDB.notCN.modaltabcontentopen} {
-			display: none;
-		}
-		/* REMOVE */
-		.BDFDB-modal *${BDFDB.notCN.modalsubinner} > ${BDFDB.dotCN.modaltabcontent + BDFDB.dotCN.modaltabcontentopen + BDFDB.notCN.modalsubinner} > * {
-			padding: 0 20px 0 12px;
-		}
-		.colorpicker-modal .colorpicker-container {
-			padding: 10px 10px 10px 30px;
-			overflow: hidden;
-			display: initial;
-			margin: auto;
-		}
-		.colorpicker-modal .colorpicker-color,
-		.colorpicker-modal .colorpicker-slider,
-		.colorpicker-modal .colorpicker-controls {
-			float: left;
-			margin-right: 20px;
-		}
-		.colorpicker-modal .colorpicker-inputs {
-			text-align: center;
-			width: 150px;
-			padding: 3px 3px 3px 10px;
-			margin-top: 87px;
-		}
-		.colorpicker-modal .colorpicker-pickerpane, 
-		.colorpicker-modal .colorpicker-black, 
-		.colorpicker-modal .colorpicker-white, 
-		.colorpicker-modal .colorpicker-color {
-			position: relative;
-			top: 0px;
-			left: 0px;
-			height: 308px;
-			width: 308px;
-		}
-		.colorpicker-modal .colorpicker-pickercursor {
-			position: absolute;
-			height: 14px;
-			width: 14px;
-		}
-		.colorpicker-modal .colorpicker-pickercursor svg {
-			position: relative;
-			height: 14px;
-			width: 14px;
-		}
-		.colorpicker-modal .colorpicker-sliderpane, 
-		.colorpicker-modal .colorpicker-slider {
-			position: relative;
-			top: 0px;
-			left: 0px;
-			height: 308px;
-			width: 20px;
-		}
-		.colorpicker-modal .colorpicker-slidercursor {
-			position: absolute;
-			left: -6px;
-			height: 12px;
-			width: 32px;
-		}
-		.colorpicker-modal .colorpicker-slidercursor svg {
-			position: relative;
-			height: 12px;
-			width: 32px;
-		}	
-		.colorpicker-modal [class^="colorpicker-preview-"] {
-			background-color: #808080;
-			border: 3px solid transparent;
-			height: 65px;
-			width: 80px;
-			float: left;
-		}
-		.colorpicker-modal .colorpicker-preview-0 {
-			border-radius: 5px 0 0 5px;
-			border-right: none;
-		}
-		.colorpicker-modal .colorpicker-preview-2 {
-			border-radius: 0 5px 5px 0;
-			border-left: none;
 		}`);
 
 	BDFDB.ListenerUtils.add(BDFDB, document, "click.BDFDBPluginClick", ".bd-settingswrap .bd-refresh-button, .bd-settingswrap .bd-switch-checkbox", _ => {
