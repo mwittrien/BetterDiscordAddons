@@ -4,7 +4,7 @@ var BetterNsfwTag = (_ => {
 	return class BetterNsfwTag {
 		getName () {return "BetterNsfwTag";}
 
-		getVersion () {return "1.2.3";}
+		getVersion () {return "1.2.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ var BetterNsfwTag = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"improved":[["Position","Tag was repositioned similar to the mentions badge"],["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 			};
 			
 			this.patchedModules = {
@@ -76,11 +76,14 @@ var BetterNsfwTag = (_ => {
 				if (index > -1 && children[index].props && children[index].props.children) {
 					let [oldTagParent, oldTagIndex] = BDFDB.ReactUtils.findChildren(children[index], {key: "NSFW-badge"});
 					if (oldTagIndex > -1) oldTagParent.splice(oldTagIndex, 1);
-					children[index].props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
-						className: "NSFW-badge",
+					children[index].props.children.push(BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.channelchildiconbase,
 						key: "NSFW-badge",
-						style: {borderRadius: "3px"},
-						text: "NSFW"
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
+							className: BDFDB.disCN._betternsfwtagtag,
+							style: {borderRadius: "3px"},
+							text: "NSFW"
+						})
 					}));
 				}
 			}

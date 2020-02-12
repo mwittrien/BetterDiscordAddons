@@ -3885,6 +3885,9 @@
 		switchItem: "ui-switch-item",
 		switchWrapper: "ui-switch-wrapper"
 	};
+	DiscordClassModules.BetterNsfwTag = {
+		nsfwTag: "nsfwTag-666omg"
+	};
 	DiscordClassModules.ChatFilter = {
 		blocked: "blocked-jUhayi",
 		blockedStamp: "blockedStamp-ijVeNn",
@@ -4225,6 +4228,7 @@
 		_bdguildvideo: ["BDrepo", "bdGuildVideo"],
 		_bdpillselected: ["BDrepo", "bdPillSelected"],
 		_bdpillunread: ["BDrepo", "bdPillUnread"],
+		_betternsfwtagtag: ["BetterNsfwTag", "nsfwTag"],
 		_chatfilterblocked: ["ChatFilter", "blocked"],
 		_chatfilterblockedstamp: ["ChatFilter", "blockedStamp"],
 		_chatfiltercensored: ["ChatFilter", "censored"],
