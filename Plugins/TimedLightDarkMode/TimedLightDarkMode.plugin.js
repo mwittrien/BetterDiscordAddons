@@ -88,7 +88,7 @@ class TimedLightDarkMode {
 		if (e.instance.props && Array.isArray(e.instance.props.options) && e.instance.props.options[0] && (e.instance.props.options[0].value == "light" || e.instance.props.options[0].value == "dark") && e.instance.props.options[1] && (e.instance.props.options[1].value == "light" || e.instance.props.options[1].value == "dark") && e.node.parentElement.firstElementChild.innerText && e.node.parentElement.firstElementChild.innerText.toUpperCase() == BDFDB.LanguageUtils.LanguageStrings.THEME.toUpperCase()) {
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let values = BDFDB.DataUtils.get(this, "values");
-			let settingsbox = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS._timedlightdarkmodetimersettings + BDFDB.disCN.margintop8}"></div>`);
+			let slider, settingsbox = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS._timedlightdarkmodetimersettings + BDFDB.disCN.margintop8}"></div>`);
 			BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
@@ -101,14 +101,15 @@ class TimedLightDarkMode {
 						tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 						onChange: (value, instance) => {
 							this.startInterval();
-							BDFDB.DOMUtils.toggleClass(slider, BDFDB.disCN.sliderdisabled, !value);
+							if (slider) BDFDB.DOMUtils.toggleClass(slider, BDFDB.disCN.sliderdisabled, !value);
 						}
 					}),
 					BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.slider + BDFDB.disCN.margintop20}${!settings.running ? (" " + BDFDB.disCN.sliderdisabled): ""}"><input type="number" timer="timer1" class="${BDFDB.disCN.sliderinput}" value="${values.timer1}" readonly=""><input type="number" timer="timer2" class="${BDFDB.disCN.sliderinput}" value="${values.timer2}" readonly=""><div class="${BDFDB.disCN.slidertrack}"><div class="${BDFDB.disCN.slidermark}" style="left: 0%;"><div class="${BDFDB.disCN.slidermarkvalue}">00:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 12.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">03:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 25%;"><div class="${BDFDB.disCN.slidermarkvalue}">06:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 37.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">09:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 50%;"><div class="${BDFDB.disCN.slidermarkvalue}">12:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 62.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">15:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 75%;"><div class="${BDFDB.disCN.slidermarkvalue}">18:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 87.5%;"><div class="${BDFDB.disCN.slidermarkvalue}">21:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div><div class="${BDFDB.disCN.slidermark}" style="left: 100%;"><div class="${BDFDB.disCN.slidermarkvalue}">24:00</div><div class="${BDFDB.disCN.slidermarkdash}"></div></div></div><div class="${BDFDB.disCN.sliderbar}"><div class="${BDFDB.disCN.sliderbarfill}"></div></div><div class="${BDFDB.disCN.slidertrack}"><div class="${BDFDB.disCNS.slidergrabber + BDFDB.disCN._timedlightdarkmodetimergrabber}" timer="timer1" style="left: ${values.timer1}%;"></div><div class="${BDFDB.disCNS.slidergrabber + BDFDB.disCN._timedlightdarkmodetimergrabber}" timer="timer2" style="left: ${values.timer2}%;"></div><div class="${BDFDB.disCNS.slidergrabber + BDFDB.disCN._timedlightdarkmodedategrabber}" timer="current" style="left: ${this.getPercent(new Date())}%; cursor: help !important; height: 12px; margin-top: -7px;"></div></div></div>`), node => {
 						if (Node.prototype.isPrototypeOf(node)) {
-							this.updateSlider(node, values);
-							BDFDB.ListenerUtils.addToChildren(node, "mousedown", BDFDB.dotCN._timedlightdarkmodetimergrabber, event => {this.dragSlider(event.currentTarget);});
-							BDFDB.ListenerUtils.addToChildren(node, "mouseenter", BDFDB.dotCN._timedlightdarkmodedategrabber, event => {this.showCurrentTime(event.currentTarget);});
+							slider = node;
+							this.updateSlider(slider, values);
+							BDFDB.ListenerUtils.addToChildren(slider, "mousedown", BDFDB.dotCN._timedlightdarkmodetimergrabber, event => {this.dragSlider(event.currentTarget);});
+							BDFDB.ListenerUtils.addToChildren(slider, "mouseenter", BDFDB.dotCN._timedlightdarkmodedategrabber, event => {this.showCurrentTime(event.currentTarget);});
 						}
 					})
 				]
