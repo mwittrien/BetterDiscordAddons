@@ -1263,39 +1263,19 @@
 	};
 	InternalBDFDB.initiateProcess = function (plugin, type, e) {
 		if (BDFDB.ObjectUtils.is(plugin) && !plugin.stopping && e.instance) {
-			// REMOVE
-			let isLib = plugin == BDFDB;
-			if (isLib) plugin = InternalBDFDB;
 			type = (type.split(" _ _ ")[1] || type).replace(/[^A-z0-9]|_/g, "");
 			type = type.charAt(0).toUpperCase() + type.slice(1);
 			if (typeof plugin["process" + type] == "function") {
-				// REMOVE
-				let isOldType = !isLib && plugin["process" + type].toString().split("\n")[0].replace(/ /g, "").split(",").length > 1;
-				if (isOldType) {
-					if (e.methodname == "render") {
-						if (e.returnvalue) plugin["process" + type](e.instance, null, e.returnvalue, [e.methodname]);
-					}
-					else {
-						let wrapper = BDFDB.ReactUtils.findDOMNode(e.instance);
-						if (wrapper) plugin["process" + type](e.instance, wrapper, e.returnvalue, [e.methodname]);
-						else BDFDB.TimeUtils.timeout(_ => {
-							wrapper = BDFDB.ReactUtils.findDOMNode(e.instance);
-							if (wrapper) plugin["process" + type](e.instance, wrapper, e.returnvalue, [e.methodname]);
-						});
-					}
-				}
-				else {
-					if (typeof e.methodname == "string" && (e.methodname.indexOf("componentDid") == 0 || e.methodname.indexOf("componentWill") == 0)) {
+				if (typeof e.methodname == "string" && (e.methodname.indexOf("componentDid") == 0 || e.methodname.indexOf("componentWill") == 0)) {
+					e.node = BDFDB.ReactUtils.findDOMNode(e.instance);
+					if (e.node) plugin["process" + type](e);
+					else BDFDB.TimeUtils.timeout(_ => {
 						e.node = BDFDB.ReactUtils.findDOMNode(e.instance);
 						if (e.node) plugin["process" + type](e);
-						else BDFDB.TimeUtils.timeout(_ => {
-							e.node = BDFDB.ReactUtils.findDOMNode(e.instance);
-							if (e.node) plugin["process" + type](e);
-						});
-						
-					}
-					else if (e.returnvalue || e.patchtypes.includes("before")) plugin["process" + type](e);
+					});
+					
 				}
+				else if (e.returnvalue || e.patchtypes.includes("before")) plugin["process" + type](e);
 			}
 		}
 	};
@@ -1411,61 +1391,26 @@
 		}
 	};
 	InternalBDFDB.patchContextMenuPlugin = function (plugin, type, module) {
-		if (module && module.prototype) {
-			// REMOVE
-			let isOldType = plugin["on" + type].toString().split("\n")[0].replace(/ /g, "").split(",").length > 1;
-			if (isOldType) {
-				BDFDB.ModuleUtils.patch(plugin, module.prototype, "render", {after: e => {
-					let instance = e.thisObject, menu = BDFDB.ReactUtils.findDOMNode(e.thisObject), returnvalue = e.returnValue;
-					if (instance && menu && returnvalue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`](instance, menu, returnvalue);
-				}});
-			}
-			else {
-				BDFDB.ModuleUtils.patch(plugin, module.prototype, "render", {after: e => {
-					if (e.thisObject && e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});
-				}});
-			}
-		}
+		if (module && module.prototype) BDFDB.ModuleUtils.patch(plugin, module.prototype, "render", {after: e => {
+			if (e.thisObject && e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});
+		}});
 	};
 	InternalBDFDB.patchExportedContextMenuPlugin = function (plugin, type, module) {
-		if (module && module.exports) {
-			// REMOVE
-			let isOldType = plugin["on" + type].toString().split("\n")[0].replace(/ /g, "").split(",").length > 1;
-			if (isOldType) BDFDB.ModuleUtils.patch(plugin, module.exports, "default", {after: e => {
-				if (e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({props:e.methodArguments[0]}, document, e.returnValue);
-			}});
-			else BDFDB.ModuleUtils.patch(plugin, module.exports, "default", {after: e => {
-				if (e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:{props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:"default"});
-			}});
-		}
+		if (module && module.exports) BDFDB.ModuleUtils.patch(plugin, module.exports, "default", {after: e => {
+			if (e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:{props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:"default"});
+		}});
 	};
 	InternalBDFDB.executeExtraPatchedPatches = function (type, e) {
 		if (BDFDB.ObjectUtils.is(BDFDB.InternalData.componentPatchQueries[type]) && BDFDB.ArrayUtils.is(BDFDB.InternalData.componentPatchQueries[type].query)) for (let plugin of BDFDB.InternalData.componentPatchQueries[type].query) if (e.returnvalue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`](e);
 	};
 	InternalBDFDB.patchContextMenuLib = function (module, repatch) {
 		if (module && module.prototype) {
-			// REMOVE
-			BDFDB.ModuleUtils.patch(BDFDB, module.prototype, "componentDidMount", {after: e => {
-				if (!e.thisObject.BDFDBforceRenderTimeout && typeof e.thisObject.render == "function") e.thisObject.render();
-			}});
-			BDFDB.ModuleUtils.patch(BDFDB, module.prototype, "componentDidUpdate", {after: e => {
-				var menu = BDFDB.ReactUtils.findDOMNode(e.thisObject);
-				if (menu) {
-					const updater = BDFDB.ReactUtils.getValue(e, "thisObject._reactInternalFiber.stateNode.props.onHeightUpdate");
-					const mrects = BDFDB.DOMUtils.getRects(menu), arects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
-					if (updater && (mrects.top + mrects.height > arects.height)) updater();
-				}
-			}});
 			BDFDB.ModuleUtils.patch(BDFDB, module.prototype, "render", {after: e => {
 				if (e.thisObject.props.BDFDBcontextMenu && e.thisObject.props.children && e.returnValue && e.returnValue.props) {
 					e.returnValue.props.children = e.thisObject.props.children;
 					delete e.thisObject.props.value;
 					delete e.thisObject.props.children;
 					delete e.thisObject.props.BDFDBcontextMenu;
-				}
-				if (BDFDB.ReactUtils.findDOMNode(e.thisObject)) {
-					e.thisObject.BDFDBforceRenderTimeout = true;
-					BDFDB.TimeUtils.timeout(_ => {delete e.thisObject.BDFDBforceRenderTimeout;}, 1000);
 				}
 				if (repatch) {
 					let newmodule = BDFDB.ReactUtils.getValue(e, "thisObject._reactInternalFiber.child.type");
@@ -3581,133 +3526,6 @@
 			ele.addEventListener(action, callback, true);
 		};
 	};
-
-	// REMOVE ONCE REWRITTEN
-	BDFDB.appendModal = function (modalwrapper) {
-		if (!Node.prototype.isPrototypeOf(modalwrapper)) return;
-		if (!BDFDB.appendModal.modals || !document.contains(BDFDB.appendModal.modals)) BDFDB.appendModal.modals = BDFDB.ReactUtils.findDOMNode(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"Modals", unlimited:true}));
-		if (!BDFDB.appendModal.modals) return;
-
-		var modal = BDFDB.DOMUtils.containsClass(modalwrapper, BDFDB.disCN.modal) ? modalwrapper : modalwrapper.querySelector(BDFDB.dotCN.modal);
-		var backdrop = modal ? modal.previousElementSibling : null;
-
-		var modalOpacity = new LibraryModules.AnimationUtils.Value(0);
-		modalOpacity
-			.interpolate({inputRange: [0, 1], outputRange: [0, 1]})
-			.addListener((value) => {if (modal) modal.style.setProperty("opacity", `${value.value}`);});
-		var modalTransform = new LibraryModules.AnimationUtils.Value(0);
-		modalTransform
-			.interpolate({inputRange: [0, 1], outputRange: [0.7, 1]})
-			.addListener((value) => {if (modal) modal.style.setProperty("transform", `scale(${value.value}) translateZ(0px)`);});
-		var backdropOpacity = new LibraryModules.AnimationUtils.Value(0);
-		backdropOpacity
-			.interpolate({inputRange: [0, 1], outputRange: [0, 0.85]})
-			.addListener((value) => {if (backdrop) {
-				backdrop.style.setProperty("opacity", `${value.value}`);
-				backdrop.style.setProperty("background-color", "rgb(0, 0, 0)");
-				backdrop.style.setProperty("z-index", "1000");
-				backdrop.style.setProperty("transform", "translateZ(0px)");
-			}});
-
-		var animate = (v) => {
-			LibraryModules.AnimationUtils.parallel([
-				LibraryModules.AnimationUtils.timing(modalOpacity, {toValue: v, duration: 250, easing: LibraryModules.AnimationUtils.Easing.inOut(LibraryModules.AnimationUtils.Easing.ease)}),
-				LibraryModules.AnimationUtils.timing(modalTransform, {toValue: v, duration: 250, easing: LibraryModules.AnimationUtils.Easing.inOut(LibraryModules.AnimationUtils.Easing.ease)}),
-				LibraryModules.AnimationUtils.timing(backdropOpacity, {toValue: v, duration: 200, delay:50}),
-			]).start();
-		};
-
-		var keydown = e => {
-			if (!document.contains(modalwrapper)) document.removeEventListener("keydown", keydown);
-			else if (e.which == 27 && backdrop) backdrop.click();
-		};
-		document.addEventListener("keydown", keydown);
-		BDFDB.ListenerUtils.addToChildren(modalwrapper, "click", BDFDB.dotCNC.backdrop + BDFDB.dotCNC.modalclose + ".btn-close, .btn-save, .btn-send, .btn-cancel, .btn-ok, .btn-done", _ => {
-			document.removeEventListener("keydown", keydown);
-			animate(0);
-			BDFDB.TimeUtils.timeout(_ => {modalwrapper.remove();}, 300);
-		});
-		BDFDB.appendModal.modals.appendChild(modalwrapper);
-		BDFDB.initElements(modalwrapper);
-		animate(1);
-	};
-
-	BDFDB.createSearchBar = function (size = "small") {
-		if (typeof size != "string" || !["small","medium","large"].includes(size.toLowerCase())) size = "small";
-		var sizeclass = DiscordClassModules.SearchBar[size] ? (" " + BDFDB.disCN["searchbar" + size]) : "";
-		var searchBar = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.searchbar + sizeclass}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.searchbarinner}"><input class="${BDFDB.disCN.searchbarinput}" type="text" spellcheck="false" placeholder="" value=""><div tabindex="0" class="${BDFDB.disCN.searchbariconlayout + sizeclass}" role="button"><div class="${BDFDB.disCN.searchbariconwrap}"><svg name="Search" class="${BDFDB.disCNS.searchbaricon + BDFDB.disCN.searchbarvisible}" width="18" height="18" viewBox="0 0 18 18"><g fill="none" fill-rule="evenodd"><path fill="currentColor" d="M3.60091481,7.20297313 C3.60091481,5.20983419 5.20983419,3.60091481 7.20297313,3.60091481 C9.19611206,3.60091481 10.8050314,5.20983419 10.8050314,7.20297313 C10.8050314,9.19611206 9.19611206,10.8050314 7.20297313,10.8050314 C5.20983419,10.8050314 3.60091481,9.19611206 3.60091481,7.20297313 Z M12.0057176,10.8050314 L11.3733562,10.8050314 L11.1492281,10.5889079 C11.9336764,9.67638651 12.4059463,8.49170955 12.4059463,7.20297313 C12.4059463,4.32933105 10.0766152,2 7.20297313,2 C4.32933105,2 2,4.32933105 2,7.20297313 C2,10.0766152 4.32933105,12.4059463 7.20297313,12.4059463 C8.49170955,12.4059463 9.67638651,11.9336764 10.5889079,11.1492281 L10.8050314,11.3733562 L10.8050314,12.0057176 L14.8073185,16 L16,14.8073185 L12.2102538,11.0099776 L12.0057176,10.8050314 Z"></path></g></svg><svg name="Clear" class="${BDFDB.disCNS.searchbaricon + BDFDB.disCN.searchbarclear}" width="12" height="12" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="currentColor" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div></div></div></div>`);
-		BDFDB.initElements(searchBar);
-		return searchBar;
-	};
-
-	BDFDB.createSelectMenu = function (inner, value, type = "", dark = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themedark) {
-		if (typeof inner != "string" || (typeof value != "string" && typeof value != "number")) return BDFDB.DOMUtils.create(`<div></div>`);
-		var suffix = dark ? "dark" : "light";
-		return `<div class="${BDFDB.disCN.selectwrap} BDFDB-select" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.select}" type="${type}" value="${value}"><div class="${BDFDB.disCNS.selectcontrol + BDFDB.disCN["selectcontrol" + suffix]}"><div class="${BDFDB.disCN.selectvalue}"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.horizontal + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignbaseline + BDFDB.disCNS.nowrap + BDFDB.disCNS.selectsingle + BDFDB.disCN["selectsingle" + suffix]}">${inner}</div><input readonly="" tabindex="0" class="${BDFDB.disCN.selectdummyinput}" value=""></div><div class="${BDFDB.disCN.selectarrowzone}"><div aria-hidden="true" class="${BDFDB.disCNS.selectarrowcontainer + BDFDB.disCN["selectarrowcontainer" + suffix]}"><svg height="20" width="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false" class="${BDFDB.disCN.selectarrow}"><path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path></svg></div></div></div></div></div>`;
-	};
-
-	BDFDB.openDropdownMenu = function (e, callback, createinner, values, above = false, dark = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themedark) {
-		if (typeof callback != "function" || typeof createinner != "function" || !values || typeof values != "object") return;
-		let selectControl = (BDFDB.DOMUtils.getParent(BDFDB.dotCN.selectwrap, e.currentTarget) || e.currentTarget).querySelector(BDFDB.dotCN.selectcontrol);
-		let selectWrap = selectControl.parentElement;
-		if (BDFDB.DOMUtils.containsClass(selectWrap, BDFDB.disCN.selectisopen)) return;
-
-		BDFDB.DOMUtils.addClass(selectWrap, BDFDB.disCN.selectisopen);
-
-		var type = selectWrap.getAttribute("type");
-		var oldchoice = selectWrap.getAttribute("value");
-		var suffix = dark ? "dark" : "light";
-		var menuhtml = `<div class="${BDFDB.disCNS.selectmenuouter + BDFDB.disCN["selectmenuouter" + suffix]}"><div class="${BDFDB.disCN.selectmenu}">`;
-		for (var key in values) menuhtml += `<div value="${key}" class="${BDFDB.disCNS.selectoption + (key == oldchoice ? BDFDB.disCN["selectoptionselect" + suffix] : BDFDB.disCN["selectoption" + suffix])}" style="flex: 1 1 auto; display: flex;">${createinner(key)}</div>`;
-		menuhtml += `</div></div>`;
-		var selectMenu = BDFDB.DOMUtils.create(menuhtml);
-		if (above) {
-			BDFDB.DOMUtils.addClass(selectMenu, "above-select");
-			selectMenu.style.setProperty("top", "unset", "important");
-			selectMenu.style.setProperty("bottom", BDFDB.DOMUtils.getRects(selectWrap).height + "px", "important");
-		}
-		selectWrap.appendChild(selectMenu);
-		BDFDB.initElements(selectMenu);
-
-		BDFDB.ListenerUtils.addToChildren(selectMenu, "mouseenter", BDFDB.dotCN.selectoption + BDFDB.notCN.selectoptionselectlight + BDFDB.notCN.selectoptionselectdark, e2 => {
-			if (dark) {
-				BDFDB.DOMUtils.removeClass(e2.currentTarget, BDFDB.disCN.selectoptiondark);
-				BDFDB.DOMUtils.addClass(e2.currentTarget, BDFDB.disCN.selectoptionhoverdark);
-			}
-			else {
-				BDFDB.DOMUtils.removeClass(e2.currentTarget, BDFDB.disCN.selectoptionlight);
-				BDFDB.DOMUtils.addClass(e2.currentTarget, BDFDB.disCN.selectoptionhoverlight);
-			}
-		});
-		BDFDB.ListenerUtils.addToChildren(selectMenu, "mouseleave", BDFDB.dotCN.selectoption + BDFDB.notCN.selectoptionselectlight + BDFDB.notCN.selectoptionselectdark, e2 => {
-			if (dark) {
-				BDFDB.DOMUtils.removeClass(e2.currentTarget, BDFDB.disCN.selectoptionhoverdark);
-				BDFDB.DOMUtils.addClass(e2.currentTarget, BDFDB.disCN.selectoptiondark);
-			}
-			else {
-				BDFDB.DOMUtils.removeClass(e2.currentTarget, BDFDB.disCN.selectoptionhoverlight);
-				BDFDB.DOMUtils.addClass(e2.currentTarget, BDFDB.disCN.selectoptionlight);
-			}	
-		});
-		BDFDB.ListenerUtils.addToChildren(selectMenu, "mousedown", BDFDB.dotCN.selectoption, e2 => {
-			if (!BDFDB.DOMUtils.getParent(BDFDB.dotCN.giffavoritebutton, e2.target)) {
-				var newchoice = e2.currentTarget.getAttribute("value");
-				selectWrap.setAttribute("value", newchoice);
-				callback(selectWrap, type, newchoice);
-			}
-		});
-
-		var removeMenu = e2 => {
-			if (e2.target.parentElement != selectMenu && !BDFDB.DOMUtils.getParent(BDFDB.dotCN.giffavoritebutton, e2.target)) {
-				document.removeEventListener("mousedown", removeMenu);
-				selectMenu.remove();
-				BDFDB.TimeUtils.timeout(_ => {BDFDB.DOMUtils.removeClass(selectWrap, BDFDB.disCN.selectisopen);},100);
-			}
-		};
-		document.addEventListener("mousedown", removeMenu);
-		
-		return selectMenu;
-	};
 	
 	BDFDB.ModalUtils = {};
 	BDFDB.ModalUtils.open = function (plugin, config) {
@@ -3910,38 +3728,6 @@
 			}
 		};
 		document.addEventListener("mousedown", mousedown);
-	};
-
-	// REMOVE ONCE REWRITTEN
-	var setSwatch = (swatch, color, selected) => {
-		if (!swatch) return;
-		else if (selected) {
-			BDFDB.DOMUtils.addClass(swatch, BDFDB.disCN.colorpickerswatchselected);
-			var iscustom = BDFDB.DOMUtils.containsClass(swatch, BDFDB.disCN.colorpickerswatchcustom);
-			var isGradient = color && BDFDB.ObjectUtils.is(color);
-			var selectedColor = BDFDB.ObjectUtils.is(color) ? BDFDB.ColorUtils.createGradient(color) : BDFDB.ColorUtils.convert(color, "RGBA");
-			var bright = selectedColor && !isGradient ? BDFDB.ColorUtils.isBright(selectedColor) : false;
-			if (!swatch.querySelector(`svg[name="Checkmark"]`)) swatch.appendChild(BDFDB.DOMUtils.create(`<svg class="swatch-checkmark" name="Checkmark" aria-hidden="false" width="${iscustom ? 32 : 16}" height="${iscustom ? 24 : 16}" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="${bright ? "#000000" : "#ffffff"}" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg>`));
-			if (iscustom) {
-				BDFDB.DOMUtils.removeClass(swatch, BDFDB.disCN.colorpickerswatchnocolor);
-				swatch.querySelector(BDFDB.dotCN.colorpickerswatchdropperfg).setAttribute("fill", bright ? "#000000" : "#ffffff");
-				if (selectedColor) {
-					if (isGradient) swatch.gradient = color;
-					swatch.style.setProperty(isGradient ? "background-image" : "background-color", selectedColor, "important");
-				}
-			}
-		}
-		else {
-			delete swatch.gradient;
-			BDFDB.DOMUtils.removeClass(swatch, BDFDB.disCN.colorpickerswatchselected);
-			BDFDB.DOMUtils.remove(swatch.querySelectorAll(".swatch-checkmark"));
-			if (BDFDB.DOMUtils.containsClass(swatch, BDFDB.disCN.colorpickerswatchcustom)) {
-				BDFDB.DOMUtils.addClass(swatch, BDFDB.disCN.colorpickerswatchnocolor);
-				swatch.querySelector(BDFDB.dotCN.colorpickerswatchdropperfg).setAttribute("fill", "#ffffff");
-				swatch.style.removeProperty("background-color");
-				swatch.style.removeProperty("background-image");
-			}
-		}
 	};
 
 	BDFDB.TimeUtils = {};
@@ -5218,9 +5004,6 @@
 		divider: ["ModalDivider", "divider"],
 		dividerdefault: ["SettingsItems", "dividerDefault"],
 		dividermini: ["SettingsItems", "dividerMini"],
-		modaldivider: ["ModalDivider", "divider"], // REMOVE
-		modaldividerdefault: ["SettingsItems", "dividerDefault"], // REMOVE
-		modaldividermini: ["SettingsItems", "dividerMini"], // REMOVE
 		dmchannel: ["PrivateChannel", "channel"],
 		dmchannelactivity: ["PrivateChannel", "activity"],
 		dmchannelactivityemoji: ["PrivateChannel", "activityEmoji"],
@@ -6490,148 +6273,127 @@
 			toast_plugin_started: "{{var0}} je započeo.",
 			toast_plugin_stopped: "{{var0}} zaustavljen.",
 			toast_plugin_translated: "prijevod na {{var0}}.",
-			file_navigator_text: "Pregledajte datoteku",
-			btn_all_text: "Sve" //REMOVE
+			file_navigator_text: "Pregledajte datoteku"
 		},
 		"da": {
 			toast_plugin_started: "{{var0}} er startet.",
 			toast_plugin_stopped: "{{var0}} er stoppet.",
 			toast_plugin_translated: "oversat til {{var0}}.",
-			file_navigator_text: "Gennemse fil",
-			btn_all_text: "Alle"
+			file_navigator_text: "Gennemse fil"
 		},
 		"de": {
 			toast_plugin_started: "{{var0}} wurde gestartet.",
 			toast_plugin_stopped: "{{var0}} wurde gestoppt.",
 			toast_plugin_translated: "auf {{var0}} übersetzt.",
-			file_navigator_text: "Datei durchsuchen",
-			btn_all_text: "Alle"
+			file_navigator_text: "Datei durchsuchen"
 		},
 		"es": {
 			toast_plugin_started: "{{var0}} se guilddiv iniciado.",
 			toast_plugin_stopped: "{{var0}} se guilddiv detenido.",
 			toast_plugin_translated: "traducido a {{var0}}.",
-			file_navigator_text: "Buscar archivo",
-			btn_all_text: "Todo"
+			file_navigator_text: "Buscar archivo"
 		},
 		"fr": {
 			toast_plugin_started: "{{var0}} a été démarré.",
 			toast_plugin_stopped: "{{var0}} a été arrêté.",
 			toast_plugin_translated: "traduit en {{var0}}.",
-			file_navigator_text: "Parcourir le fichier",
-			btn_all_text: "Tout"
+			file_navigator_text: "Parcourir le fichier"
 		},
 		"it": {
 			toast_plugin_started: "{{var0}} è stato avviato.",
 			toast_plugin_stopped: "{{var0}} è stato interrotto.",
 			toast_plugin_translated: "tradotto in {{var0}}.",
-			file_navigator_text: "Sfoglia file",
-			btn_all_text: "Tutto"
+			file_navigator_text: "Sfoglia file"
 		},
 		"nl": {
 			toast_plugin_started: "{{var0}} is gestart.",
 			toast_plugin_stopped: "{{var0}} is gestopt.",
 			toast_plugin_translated: "vertaald naar {{var0}}.",
-			file_navigator_text: "Bestand zoeken",
-			btn_all_text: "Alle"
+			file_navigator_text: "Bestand zoeken"
 		},
 		"no": {
 			toast_plugin_started: "{{var0}} er startet.",
 			toast_plugin_stopped: "{{var0}} er stoppet.",
 			toast_plugin_translated: "oversatt til {{var0}}.",
-			file_navigator_text: "Bla gjennom fil",
-			btn_all_text: "Alle"
+			file_navigator_text: "Bla gjennom fil"
 		},
 		"pl": {
 			toast_plugin_started: "{{var0}} został uruchomiony.",
 			toast_plugin_stopped: "{{var0}} został zatrzymany.",
 			toast_plugin_translated: "przetłumaczono na {{var0}}.",
-			file_navigator_text: "Przeglądać plik",
-			btn_all_text: "Wszystkie"
+			file_navigator_text: "Przeglądać plik"
 		},
 		"pt-BR": {
 			toast_plugin_started: "{{var0}} foi iniciado.",
 			toast_plugin_stopped: "{{var0}} foi interrompido.",
 			toast_plugin_translated: "traduzido para {{var0}}.",
-			file_navigator_text: "Procurar arquivo",
-			btn_all_text: "Todo"
+			file_navigator_text: "Procurar arquivo"
 		},
 		"fi": {
 			toast_plugin_started: "{{var0}} on käynnistetty.",
 			toast_plugin_stopped: "{{var0}} on pysäytetty.",
 			toast_plugin_translated: "käännetty osoitteeseen {{var0}}.",
-			file_navigator_text: "Selaa tiedostoa",
-			btn_all_text: "Kaikki"
+			file_navigator_text: "Selaa tiedostoa"
 		},
 		"sv": {
 			toast_plugin_started: "{{var0}} har startats.",
 			toast_plugin_stopped: "{{var0}} har blivit stoppad.",
 			toast_plugin_translated: "översatt till {{var0}}.",
-			file_navigator_text: "Bläddra i fil",
-			btn_all_text: "All"
+			file_navigator_text: "Bläddra i fil"
 		},
 		"tr": {
 			toast_plugin_started: "{{var0}} başlatıldı.",
 			toast_plugin_stopped: "{{var0}} durduruldu.",
 			toast_plugin_translated: "{{var0}} olarak çevrildi.",
-			file_navigator_text: "Dosyaya gözat",
-			btn_all_text: "Her"
+			file_navigator_text: "Dosyaya gözat"
 		},
 		"cs": {
 			toast_plugin_started: "{{var0}} byl spuštěn.",
 			toast_plugin_stopped: "{{var0}} byl zastaven.",
 			toast_plugin_translated: "přeložen do {{var0}}.",
-			file_navigator_text: "Procházet soubor",
-			btn_all_text: "Vše"
+			file_navigator_text: "Procházet soubor"
 		},
 		"bg": {
 			toast_plugin_started: "{{var0}} е стартиран.",
 			toast_plugin_stopped: "{{var0}} е спрян.",
 			toast_plugin_translated: "преведена на {{var0}}.",
-			file_navigator_text: "Прегледайте файла",
-			btn_all_text: "Bсичко"
+			file_navigator_text: "Прегледайте файла"
 		},
 		"ru": {
 			toast_plugin_started: "{{var0}} запущен.",
 			toast_plugin_stopped: "{{var0}} остановлен.",
 			toast_plugin_translated: "переведен на {{var0}}.",
-			file_navigator_text: "Просмотр файла",
-			btn_all_text: "Все"
+			file_navigator_text: "Просмотр файла"
 		},
 		"uk": {
 			toast_plugin_started: "{{var0}} було запущено.",
 			toast_plugin_stopped: "{{var0}} було зупинено.",
 			toast_plugin_translated: "перекладено {{var0}}.",
-			file_navigator_text: "Перегляньте файл",
-			btn_all_text: "Все"
+			file_navigator_text: "Перегляньте файл"
 		},
 		"ja": {
 			toast_plugin_started: "{{var0}}が開始されました.",
 			toast_plugin_stopped: "{{var0}}が停止しました.",
 			toast_plugin_translated: "は{{var0}}に翻訳されました.",
-			file_navigator_text: "ファイルを参照",
-			btn_all_text: "すべて"
+			file_navigator_text: "ファイルを参照"
 		},
 		"zh-TW": {
 			toast_plugin_started: "{{var0}}已經啟動.",
 			toast_plugin_stopped: "{{var0}}已停止.",
 			toast_plugin_translated: "翻譯為{{var0}}.",
-			file_navigator_text: "瀏覽文件",
-			btn_all_text: "所有"
+			file_navigator_text: "瀏覽文件"
 		},
 		"ko": {
 			toast_plugin_started: "{{var0}} 시작되었습니다.",
 			toast_plugin_stopped: "{{var0}} 중지되었습니다.",
 			toast_plugin_translated: "{{var0}} 로 번역되었습니다.",
-			file_navigator_text: "파일 찾아보기",
-			btn_all_text: "모든"
+			file_navigator_text: "파일 찾아보기"
 		},
 		"default": {
 			toast_plugin_started: "{{var0}} has been started.",
 			toast_plugin_stopped: "{{var0}} has been stopped.",
 			toast_plugin_translated: "translated to {{var0}}.",
-			file_navigator_text: "Browse File",
-			btn_all_text: "All"
+			file_navigator_text: "Browse File"
 		}
 	};
 	BDFDB.LanguageUtils.getLanguage = function () {
@@ -8154,14 +7916,6 @@
 			return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsItem, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				onChange: this.saveSettings.bind(this)
 			}), "keys", "plugin"));
-		}
-	};
-	
-	InternalComponents.LibraryComponents.SettingsSwitch = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.SettingsSwitch") || reactInitialized && class BDFDB_SettingsSwitch extends LibraryModules.React.Component { // REMOVE
-		render() {
-			return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsSaveItem, Object.assign({keys:[]}, this.props, {
-				type: "Switch"
-			}));
 		}
 	};
 	
@@ -10281,167 +10035,10 @@
 		BDFDB.LibraryComponents[component] = "div";
 	}
 
-	BDFDB.loadMessage = BDFDB.PluginUtils.init;
-	BDFDB.unloadMessage = BDFDB.PluginUtils.clear;
-	BDFDB.createSettingsPanel = BDFDB.PluginUtils.createSettingsPanel;
-	
-	BDFDB.addObserver = BDFDB.ObserverUtils.connect;
-	BDFDB.killObservers = BDFDB.ObserverUtils.disconnect;
-	
-	BDFDB.addEventListener = BDFDB.ListenerUtils.add;
-	BDFDB.removeEventListener = BDFDB.ListenerUtils.remove;
-	BDFDB.addChildEventListener = BDFDB.ListenerUtils.addToChildren;
-	BDFDB.copyEvent = BDFDB.ListenerUtils.copyEvent;
-	BDFDB.stopEvent = BDFDB.ListenerUtils.stopEvent;
-	
-	BDFDB.showToast = BDFDB.NotificationUtils.toast;
-	BDFDB.showDesktopNotification = BDFDB.NotificationUtils.desktop;
-	BDFDB.createNotificationsBar = BDFDB.NotificationUtils.notice;
-	
-	BDFDB.createTooltip = (string, ele, config) => {return BDFDB.TooltipUtils.create(ele, string, config);};
-	BDFDB.updateTooltipPosition = BDFDB.TooltipUtils.update;
-	
-	BDFDB.isObject = BDFDB.ObjectUtils.is;
-	BDFDB.sortObject = BDFDB.ObjectUtils.sort;
-	BDFDB.reverseObject = BDFDB.ObjectUtils.reverse;
-	BDFDB.filterObject = BDFDB.ObjectUtils.filter;
-	BDFDB.mapObject = BDFDB.ObjectUtils.map;
-	BDFDB.isObjectEmpty = BDFDB.ObjectUtils.isEmpty;
-	
-	BDFDB.sortArrayByKey = BDFDB.ArrayUtils.keySort;
-	BDFDB.numSortArray = BDFDB.ArrayUtils.numSort;
-	BDFDB.removeFromArray = BDFDB.ArrayUtils.remove;
-	BDFDB.getAllIndexes = BDFDB.ArrayUtils.getAllIndexes;
-	BDFDB.removeCopiesFromArray = BDFDB.ArrayUtils.removeCopies;
-	
-	BDFDB.React = Object.assign({}, BDFDB.ReactUtils);
-	BDFDB.getKeyInformation = (config) => {return BDFDB.ReactUtils.findValue(config.node || config.instance, config.key, config);};
-	BDFDB.getReactInstance = BDFDB.ReactUtils.getInstance;
-	BDFDB.getOwnerInstance = (config) => {return BDFDB.ReactUtils.findOwner(config.node || config.instance, config);};
-	BDFDB.ReactUtils.getOwner = BDFDB.ReactUtils.findOwner;
-	BDFDB.getContextMenuGroupAndIndex = (startchildren, names) => {return BDFDB.ReactUtils.findChildren(startchildren, {name:names, props:[["label",names]]});};
-	BDFDB.getReactValue = BDFDB.ReactUtils.getValue;
-	
-	BDFDB.WebModules = Object.assign({}, BDFDB.ModuleUtils);
-	BDFDB.WebModules.patch = (module, methodNames, plugin, patchMethods) => {return BDFDB.ModuleUtils.patch(plugin, module, methodNames, patchMethods)};
-	BDFDB.ModuleUtils.initiateProcess = InternalBDFDB.initiateProcess;
-	BDFDB.WebModules.initiateProcess = InternalBDFDB.initiateProcess;
-	
-	BDFDB.myData = BDFDB.UserUtils.me;
-	BDFDB.getUserStatus = BDFDB.UserUtils.getStatus;
-	BDFDB.getUserStatusColor = BDFDB.UserUtils.getStatusColor;
-	BDFDB.getUserAvatar = BDFDB.UserUtils.getAvatar;
-	BDFDB.isUserAllowedTo = BDFDB.UserUtils.can;
-	
-	BDFDB.getGuildIcon = BDFDB.GuildUtils.getIcon;
-	BDFDB.getGuildBanner = BDFDB.GuildUtils.getBanner;
-	BDFDB.getServerDiv = BDFDB.GuildUtils.getDiv;
-	BDFDB.getServerData = BDFDB.GuildUtils.getData;
-	BDFDB.readServerList = BDFDB.GuildUtils.getAll;
-	BDFDB.readUnreadServerList = BDFDB.GuildUtils.getUnread;
-	BDFDB.readPingedServerList = BDFDB.GuildUtils.getPinged;
-	BDFDB.readMutedServerList = BDFDB.GuildUtils.getMuted;
-	BDFDB.getSelectedServer = BDFDB.GuildUtils.getSelected;
-	BDFDB.openGuildContextMenu = BDFDB.GuildUtils.openMenu;
-	BDFDB.markGuildAsRead = BDFDB.GuildUtils.markAsRead;
-	
-	BDFDB.getFolderID = BDFDB.FolderUtils.getId;
-	BDFDB.getFolderDiv = BDFDB.FolderUtils.getDiv;
-	
-	BDFDB.getChannelDiv = BDFDB.ChannelUtils.getDiv;
-	BDFDB.getSelectedChannel = BDFDB.ChannelUtils.getSelected;
-	BDFDB.openChannelContextMenu = BDFDB.ChannelUtils.openMenu;
-	BDFDB.markChannelAsRead = BDFDB.ChannelUtils.markAsRead;
-	
-	BDFDB.DmUtils = BDFDB.DMUtils;
-	BDFDB.getDmDiv = BDFDB.DMUtils.getDiv;
-	BDFDB.getChannelIcon = BDFDB.DMUtils.getIcon;
-	BDFDB.readDmList = BDFDB.DMUtils.getAll;
-	
-	BDFDB.saveAllData = (data, plugin, key) => {BDFDB.DataUtils.save(data, plugin, key)};
-	BDFDB.saveData = (id, data, plugin, key) => {BDFDB.DataUtils.save(data, plugin, key, id)};
-	BDFDB.loadAllData = (plugin, key) => {return BDFDB.DataUtils.load(plugin, key)};
-	BDFDB.loadData = (id, plugin, key) => {return BDFDB.DataUtils.load(plugin, key, id)};
-	BDFDB.removeAllData = (plugin, key) => {BDFDB.DataUtils.remove(plugin, key)};
-	BDFDB.removeData = (id, plugin, key) => {BDFDB.DataUtils.remove(plugin, key, id)};
-	BDFDB.getAllData = (plugin, key) => {return BDFDB.DataUtils.get(plugin, key)};
-	BDFDB.getData = (id, plugin, key) => {return BDFDB.DataUtils.get(plugin, key, id)};
-	
-	BDFDB.colorCONVERT = BDFDB.ColorUtils.convert;
-	BDFDB.colorSETALPHA = BDFDB.ColorUtils.setAlpha;
-	BDFDB.colorGETALPHA = BDFDB.ColorUtils.getAlpha;
-	BDFDB.colorCHANGE = BDFDB.ColorUtils.change;
-	BDFDB.colorINV = BDFDB.ColorUtils.invert;
-	BDFDB.colorCOMPARE = BDFDB.ColorUtils.compare;
-	BDFDB.colorISBRIGHT = BDFDB.ColorUtils.isBright;
-	BDFDB.colorTYPE = BDFDB.ColorUtils.getType;
-	BDFDB.colorGRADIENT = BDFDB.ColorUtils.createGradient;
-	BDFDB.getSwatchColor = BDFDB.ColorUtils.getSwatchColor;
-	BDFDB.openColorPicker = BDFDB.ColorUtils.openPicker;
-	
-	BDFDB.addClass = BDFDB.DOMUtils.addClass;
-	BDFDB.removeClass = BDFDB.DOMUtils.removeClass;
-	BDFDB.toggleClass = BDFDB.DOMUtils.toggleClass;
-	BDFDB.containsClass = BDFDB.DOMUtils.containsClass;
-	BDFDB.replaceClass = BDFDB.DOMUtils.replaceClass;
-	BDFDB.removeClasses = BDFDB.DOMUtils.removeClassFromDOM;
-	BDFDB.toggleEles = BDFDB.DOMUtils.toggle;
-	BDFDB.isEleHidden = BDFDB.DOMUtils.isHidden;
-	BDFDB.removeEles = BDFDB.DOMUtils.remove;
-	BDFDB.htmlToElement = BDFDB.DOMUtils.create;
-	BDFDB.getParentEle = BDFDB.DOMUtils.getParent;
-	BDFDB.setInnerText = BDFDB.DOMUtils.setText;
-	BDFDB.getInnerText = BDFDB.DOMUtils.getText;
-	BDFDB.getRects = BDFDB.DOMUtils.getRects;
-	BDFDB.getTotalHeight = BDFDB.DOMUtils.getHeight;
-	BDFDB.getTotalWidth = BDFDB.DOMUtils.getWidth;
-	BDFDB.appendLocalStyle = BDFDB.DOMUtils.appendLocalStyle;
-	BDFDB.removeLocalStyle = BDFDB.DOMUtils.removeLocalStyle;
-	
-	BDFDB.encodeToHTML = BDFDB.StringUtils.htmlEscape;
-	BDFDB.regEscape = BDFDB.StringUtils.regEscape;
-	BDFDB.insertNRST = BDFDB.StringUtils.insertNRST;
-	BDFDB.highlightText = BDFDB.StringUtils.highlight;
-	
-	BDFDB.formatBytes = BDFDB.NumberUtils.formatBytes;
-	BDFDB.mapRange = BDFDB.NumberUtils.mapRange;
-	
-	BDFDB.getDiscordTheme = BDFDB.DiscordUtils.getTheme;
-	BDFDB.getDiscordMode = BDFDB.DiscordUtils.getMode;
-	BDFDB.getDiscordZoomFactor = BDFDB.DiscordUtils.getZoomFactor;
-	BDFDB.getDiscordFontScale = BDFDB.DiscordUtils.getFontScale;
-	
-	BDFDB.openModal = BDFDB.ModalUtils.open;
-	BDFDB.openConfirmModal = BDFDB.ModalUtils.confirm;
-	
-	BDFDB.openContextMenu = BDFDB.ContextMenuUtils.open;
-	BDFDB.closeContextMenu = BDFDB.ContextMenuUtils.close;
-	
-	BDFDB.BdUtils = BDFDB.BDUtils;
-	BDFDB.getPluginsFolder = BDFDB.BDUtils.getPluginsFolder;
-	BDFDB.getThemesFolder = BDFDB.BDUtils.getThemesFolder;
-	BDFDB.isPluginEnabled = BDFDB.BDUtils.isPluginEnabled;
-	BDFDB.getPlugin = BDFDB.BDUtils.getPlugin;
-	BDFDB.isThemeEnabled = BDFDB.BDUtils.isThemeEnabled;
-	BDFDB.getTheme = BDFDB.BDUtils.getTheme;
-	BDFDB.isRestartNoMoreEnabled = BDFDB.BDUtils.isAutoLoadEnabled;
-	
-	BDFDB.languages = BDFDB.LanguageUtils.languages;
-	BDFDB.getDiscordLanguage = BDFDB.LanguageUtils.getLanguage;
-	BDFDB.LanguageStrings = BDFDB.LanguageUtils.LanguageStrings;
-	BDFDB.LanguageStringsCheck = BDFDB.LanguageUtils.LanguageStringsCheck;
-	BDFDB.LanguageStringsFormat = BDFDB.LanguageUtils.LanguageStringsFormat;
-	BDFDB.getLibraryStrings = _ => {
-		let languageid = BDFDB.LanguageUtils.getLanguage().id;
-		if (InternalBDFDB.LibraryStrings[languageid]) return InternalBDFDB.LibraryStrings[languageid];
-		return InternalBDFDB.LibraryStrings.default;
-	};
-
 	BDFDB.loaded = true;
-	
 	window.BDFDB = BDFDB;
 	InternalBDFDB.reloadLib = _ => {
-		var libraryScript = document.querySelector("head script#BDFDBLibraryScript");
+		let libraryScript = document.querySelector("head script#BDFDBLibraryScript");
 		if (libraryScript) libraryScript.remove();
 		libraryScript = document.createElement("script");
 		libraryScript.setAttribute("id", "BDFDBLibraryScript");
@@ -10450,7 +10047,7 @@
 		libraryScript.setAttribute("date", performance.now());
 		document.head.appendChild(libraryScript);
 	};
-	var libKeys = Object.keys(BDFDB).length - 10, crashInterval = BDFDB.TimeUtils.interval(_ => {
+	let libKeys = Object.keys(BDFDB).length - 10, crashInterval = BDFDB.TimeUtils.interval(_ => {
 		if (!window.BDFDB || typeof BDFDB != "object" || Object.keys(BDFDB).length < libKeys || !BDFDB.InternalData.loadid) {
 			BDFDB.LogUtils.warn("Reloading library due to internal error.");
 			BDFDB.TimeUtils.clear(crashInterval);
