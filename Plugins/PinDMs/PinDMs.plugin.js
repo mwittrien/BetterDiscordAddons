@@ -4,7 +4,7 @@ var PinDMs = (_ => {
 	return class PinDMs {
 		getName () {return "PinDMs";}
 
-		getVersion () {return "1.6.0";}
+		getVersion () {return "1.6.1";}
 
 		getAuthor () {return "DevilBro";}
 
