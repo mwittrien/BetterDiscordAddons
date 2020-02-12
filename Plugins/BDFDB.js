@@ -7420,6 +7420,8 @@
 	
 	InternalComponents.LibraryComponents.Flex = BDFDB.ModuleUtils.findByProperties("Wrap", "Direction", "Child");
 	
+	InternalComponents.LibraryComponents.FlowerStarIcon = BDFDB.ModuleUtils.findByName("FlowerStarIcon");
+	
 	InternalComponents.LibraryComponents.FormComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("FormSection", "FormText"));
 	
 	InternalComponents.LibraryComponents.FormComponents.FormItem = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.FormComponents.FormItem") || reactInitialized && class BDFDB_FormItem extends LibraryModules.React.Component {
