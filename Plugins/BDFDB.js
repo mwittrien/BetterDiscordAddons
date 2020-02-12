@@ -3342,38 +3342,6 @@
 		else BDFDB.LibraryModules.ContextMenuUtils.closeContextMenu();
 	};
 
-	BDFDB.createSortPopout = function (anker, markup, callback) {
-		if (!anker || !markup || typeof callback != "function" || BDFDB.DOMUtils.containsClass(anker, "popout-open")) return;
-		var popouts = document.querySelector(BDFDB.dotCN.popouts);
-		var valueinput = anker.querySelector(BDFDB.dotCNC.quickselectvalue + BDFDB.dotCN.recentmentionsmentionfiltervalue);
-		if (!popouts || !valueinput) return;
-		BDFDB.DOMUtils.addClass(anker, "popout-open");
-		var popout = BDFDB.DOMUtils.create(markup);
-		var ankerrects = BDFDB.DOMUtils.getRects(anker);
-		popout.style.setProperty("left", ankerrects.left + ankerrects.width + "px");
-		popout.style.setProperty("top", ankerrects.top + BDFDB.DOMUtils.getRects(valueinput).height + "px");
-		BDFDB.DOMUtils.addClass(popout.querySelector(BDFDB.dotCN.contextmenu), BDFDB.DiscordUtils.getTheme());
-		BDFDB.ListenerUtils.addToChildren(popout, "click", BDFDB.dotCN.contextmenuitem, e => {
-			valueinput.innerText = e.currentTarget.innerText;
-			valueinput.setAttribute("option", e.currentTarget.getAttribute("option"));
-			document.removeEventListener("mousedown", mousedown);
-			popout.remove();
-			BDFDB.TimeUtils.timeout(_ => {BDFDB.DOMUtils.removeClass(anker, "popout-open");}, 300);
-			callback();
-		});
-		popouts.appendChild(popout);
-		BDFDB.initElements(popout);
-		var mousedown = e => {
-			if (!document.contains(popout)) document.removeEventListener("mousedown", mousedown);
-			else if (!popout.contains(e.target)) {
-				document.removeEventListener("mousedown", mousedown);
-				popout.remove();
-				BDFDB.TimeUtils.timeout(_ => {BDFDB.DOMUtils.removeClass(anker, "popout-open");}, 300);
-			}
-		};
-		document.addEventListener("mousedown", mousedown);
-	};
-
 	BDFDB.TimeUtils = {};
 	BDFDB.TimeUtils.interval = function (callback, delay) {
 		if (typeof callback != "function" || typeof delay != "number" || delay < 1) return;
@@ -4002,6 +3970,11 @@
 		error: "error-k9z2IV",
 		overlay: "spellCheckOverlay-cNSap5"
 	};
+	DiscordClassModules.TimedLightDarkMode = {
+		dateGrabber: "dateGrabber-QrRkIX",
+		timerGrabber: "timerGrabber-zpRAIk",
+		timerSettings: "timerSettings-wkvEfF"
+	};
 	DiscordClassModules.TopRolesEverywhere = {
 		badgeStyle: "badgeStyle-tFiEQ8",
 		chatTag: "chatTag-Y-5TDc",
@@ -4310,6 +4283,9 @@
 		_showimagedetailsdetails: ["ShowImageDetails", "details"],
 		_spellcheckerror: ["SpellCheck", "error"],
 		_spellcheckoverlay: ["SpellCheck", "overlay"],
+		_timedlightdarkmodedategrabber: ["TimedLightDarkMode", "dateGrabber"],
+		_timedlightdarkmodetimergrabber: ["TimedLightDarkMode", "timerGrabber"],
+		_timedlightdarkmodetimersettings: ["TimedLightDarkMode", "timerSettings"],
 		_toproleseverywherebadgestyle: ["TopRolesEverywhere", "badgeStyle"],
 		_toproleseverywherechattag: ["TopRolesEverywhere", "chatTag"],
 		_toproleseverywheremembertag: ["TopRolesEverywhere", "memberTag"],
