@@ -2837,6 +2837,9 @@ body:before {
 #app-mount .wrapper-2ZbzR9 {								/* modal				wrapper								*/
 	background: transparent;
 }
+.wrapper-2ZbzR9 > * > * {
+	transform: unset !important;
+}
 #app-mount .slide-2pHaq5 {									/* modal				slide								*/
 	background: transparent;
 }
