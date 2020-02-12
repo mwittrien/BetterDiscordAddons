@@ -54,12 +54,6 @@
 		plugin.author = plugin.author || (typeof plugin.getAuthor == "function" ? plugin.getAuthor() : null);
 		plugin.description = plugin.description || (typeof plugin.getDescription == "function" ? plugin.getDescription() : null);
 		
-		if (plugin.patchModules) {
-			plugin.patchedModules = {after: plugin.patchModules};
-			delete plugin.patchModules;
-		}
-		plugin.patchedModules = BDFDB.ObjectUtils.filter(plugin.patchedModules, type => WebModulesData.Patchtypes.includes(type), true);
-		
 		InternalBDFDB.clearStartTimeout(plugin);
 
 		let loadmessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
@@ -1267,6 +1261,7 @@
 	};
 	InternalBDFDB.initiateProcess = function (plugin, type, e) {
 		if (BDFDB.ObjectUtils.is(plugin) && !plugin.stopping && e.instance) {
+			plugin = plugin == BDFDB && InternalBDFDB || plugin;
 			type = (type.split(" _ _ ")[1] || type).replace(/[^A-z0-9]|_/g, "");
 			type = type.charAt(0).toUpperCase() + type.slice(1);
 			if (typeof plugin["process" + type] == "function") {
@@ -2419,7 +2414,7 @@
 		if (!BDFDB.ObjectUtils.is(plugin)) return id === undefined ? {} : null;
 		let defaults = (plugin == BDFDB && InternalBDFDB || plugin).defaults;
 		if (!BDFDB.ObjectUtils.is(defaults) || !defaults[key]) return id === undefined ? {} : null;
-		var oldconfig = BDFDB.DataUtils.load(plugin, key), newconfig = {}, update = false;
+		let oldconfig = BDFDB.DataUtils.load(plugin, key), newconfig = {}, update = false;
 		for (let k in defaults[key]) {
 			if (oldconfig[k] == null) {
 				newconfig[k] = BDFDB.ObjectUtils.is(defaults[key][k].value) ? BDFDB.ObjectUtils.deepAssign({}, defaults[key][k].value) : defaults[key][k].value;
