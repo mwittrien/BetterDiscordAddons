@@ -635,13 +635,13 @@
 	var Tooltips = [];
 	BDFDB.TooltipUtils = {};
 	BDFDB.TooltipUtils.create = function (anker, text, options = {}) {
-		var itemlayercontainer = document.querySelector(BDFDB.dotCN.appmount +  " > * > " + BDFDB.dotCN.itemlayercontainer);
+		let itemlayercontainer = document.querySelector(BDFDB.dotCN.appmount +  " > * > " + BDFDB.dotCN.itemlayercontainer);
 		if (!itemlayercontainer || (typeof text != "string" && !BDFDB.ObjectUtils.is(options.guild)) || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
-		var id = BDFDB.NumberUtils.generateId(Tooltips);
-		var itemlayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"></div></div>`);
+		let id = BDFDB.NumberUtils.generateId(Tooltips);
+		let itemlayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"></div></div>`);
 		itemlayercontainer.appendChild(itemlayer);
 		
-		var tooltip = itemlayer.firstElementChild;
+		let tooltip = itemlayer.firstElementChild;
 		
 		if (options.id) tooltip.id = options.id.split(" ").join("");
 		
@@ -662,6 +662,10 @@
 			style = (style ? (style + " ") : "") + `background: ${backgroundColor} !important; border-color: ${backgroundColorIsGradient ? BDFDB.ColorUtils.convert(options.backgroundColor[options.type == "left" ? 100 : 0], "RGBA") : backgroundColor} !important;`;
 		}
 		if (style) tooltip.style = style;
+		if (typeof options.zIndex == "number") {
+			itemlayer.style.setProperty("z-index", options.zIndex, "important");
+			tooltip.style.setProperty("z-index", options.zIndex, "important");
+		}
 		if (customBackgroundColor) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltipcustom);
 		else if (options.color && BDFDB.disCN["tooltip" + options.color.toLowerCase()]) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN["tooltip" + options.color.toLowerCase()]);
 		else BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltipblack);
@@ -2847,7 +2851,7 @@
 			updateColors(true);
 		});
 		gradientbutton.addEventListener("mouseenter", e => {
-			BDFDB.TooltipUtils.create(gradientbutton, "Color Gradient", {type: "bottom"});
+			BDFDB.TooltipUtils.create(gradientbutton, "Color Gradient", {type: "bottom", zIndex: 3001});
 		});
 		function updateRects () {
 			let satpanerects = BDFDB.DOMUtils.getRects(satpane);
