@@ -113,7 +113,6 @@ class TimedLightDarkMode {
 					})
 				]
 			}), settingsbox);
-			console.log(settingsbox);
 			e.node.parentElement.appendChild(settingsbox);
 		}
 	}
