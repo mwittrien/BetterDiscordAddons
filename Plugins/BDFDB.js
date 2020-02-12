@@ -1570,11 +1570,12 @@
 		catch (err) {BDFDB.LogUtils.error("Could not create react element! " + err);}
 		return null;
 	};
-	BDFDB.ReactUtils.elementToReact = function (node) {
+	BDFDB.ReactUtils.elementToReact = function (node, ref) {
 		if (BDFDB.ReactUtils.isValidElement(node)) return node;
 		else if (!Node.prototype.isPrototypeOf(node)) return null;
 		else if (node.nodeType == Node.TEXT_NODE) return node.nodeValue;
 		let attributes = {}, importantStyles = [];
+		if (typeof ref == "function") attributes.ref = ref;
 		for (let attr of node.attributes) attributes[attr.name] = attr.value;
 		if (node.attributes.style) attributes.style = BDFDB.ObjectUtils.filter(node.style, n => node.style[n] && isNaN(parseInt(n)), true);
 		attributes.children = [];
@@ -3168,363 +3169,6 @@
 		container = container || document.head.querySelector("bd-head bd-styles") || document.head;
 		container = Node.prototype.isPrototypeOf(container) ? container : document.head;
 		BDFDB.DOMUtils.remove(container.querySelectorAll(`style[id="${id}CSS"]`));
-	};
-
-	BDFDB.triggerSend = function (textarea) {
-		if (!textarea) return;
-		BDFDB.TimeUtils.timeout(_ => {
-			var e = new KeyboardEvent("keypress", {key:"Enter", code:"Enter", which:13, keyCode:13, bubbles:true });
-			Object.defineProperty(e, "keyCode", {value:13});
-			Object.defineProperty(e, "which", {value:13});
-			textarea.dispatchEvent(e);
-		});
-	};
-
-	BDFDB.initElements = function (container, plugin) {
-		if (!Node.prototype.isPrototypeOf(container)) return;
-		var islighttheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
-		container.querySelectorAll(".BDFDB-containertext").forEach(ele => {
-			if (BDFDB.DOMUtils.containsClass(ele.nextElementSibling, "BDFDB-collapsecontainer")) {
-				if (BDFDB.DOMUtils.containsClass(ele.firstElementChild, "closed")) BDFDB.DOMUtils.toggle(ele.nextElementSibling, false);
-				ele.BDFDBupdateElement = _ => {
-					BDFDB.DOMUtils.toggle(ele.nextElementSibling, BDFDB.DOMUtils.containsClass(ele.firstElementChild, "closed"));
-					BDFDB.DOMUtils.toggleClass(ele.firstElementChild, "closed");
-				};
-				addInitEventListener(ele, "click", ele.BDFDBupdateElement);
-			}
-		});
-		container.querySelectorAll(BDFDB.dotCN.switchinner).forEach(ele => {
-			setSwitch(ele, false);
-			ele.BDFDBupdateElement = _ => {
-				setSwitch(ele, true);
-			};
-			addInitEventListener(ele, "click", ele.BDFDBupdateElement);
-		});
-		container.querySelectorAll(BDFDB.dotCNS.checkboxwrapper + BDFDB.dotCN.checkboxinput).forEach(ele => {
-			setCheckbox(ele);
-			ele.BDFDBupdateElement = _ => {
-				setCheckbox(ele);
-			};
-			addInitEventListener(ele, "click", ele.BDFDBupdateElement);
-		});
-		container.querySelectorAll(BDFDB.dotCN.giffavoritebutton).forEach(ele => {
-			setGifFavButton(ele);
-			ele.BDFDBupdateElement = _ => {
-				BDFDB.DOMUtils.toggleClass(ele, BDFDB.disCN.giffavoriteselected);
-				setGifFavButton(ele);
-			};
-			addInitEventListener(ele, "click", ele.BDFDBupdateElement);
-			var id = "FAV_s" + Math.round(Math.random() * 10000000000000000);
-			addInitEventListener(ele, "mouseenter", _ => {
-				BDFDB.DOMUtils.remove(`#${id}_tooltip`);
-				BDFDB.TooltipUtils.create(ele, BDFDB.LanguageUtils.LanguageStrings[`GIF_TOOLTIP_${BDFDB.DOMUtils.containsClass(ele, BDFDB.disCN.giffavoriteselected) ? "REMOVE_FROM" : "ADD_TO"}_FAVORITES`], {type:"top", id:id+"_tooltip"});
-			});
-		});
-		container.querySelectorAll(".file-navigator").forEach(ele => {
-			ele.BDFDBupdateElement = _ => {
-				var input = ele.querySelector(`input[type="file"]`);
-				if (input) input.click();
-			};
-			addInitEventListener(ele, "click", ele.BDFDBupdateElement);
-		});
-		container.querySelectorAll(`input[type="file"]`).forEach(ele => {
-			addInitEventListener(ele, "change", e => {
-				var input = ele.parentElement.parentElement.querySelector(`input[type="text"]`);
-				var file = ele.files[0];
-				if (input && file) input.value = file.path;
-			});
-		});
-		container.querySelectorAll(BDFDB.dotCN.input).forEach(ele => {
-			addInitEventListener(ele, "keydown", e => {
-				e.stopPropagation();
-			});
-		});
-		container.querySelectorAll(BDFDB.dotCNS.searchbar + BDFDB.dotCN.searchbarinput).forEach(ele => {
-			ele.setAttribute("placeholder", BDFDB.LanguageUtils.LanguageStrings.SEARCHING);
-			addInitEventListener(ele, "keyup", e => {
-				let icons = ele.parentElement.querySelectorAll(BDFDB.dotCN.searchbaricon);
-				BDFDB.DOMUtils.toggleClass(icons[0], BDFDB.disCN.searchbarvisible, ele.value.length == 0);
-				BDFDB.DOMUtils.toggleClass(icons[1], BDFDB.disCN.searchbarvisible, ele.value.length);
-			});
-		});
-		container.querySelectorAll(BDFDB.dotCNS.searchbar + BDFDB.dotCN.searchbarclear).forEach(ele => {
-			addInitEventListener(ele, "click", e => {
-				if (BDFDB.DOMUtils.containsClass(ele, BDFDB.disCN.searchbarvisible)) {
-					var input = BDFDB.DOMUtils.getParent(BDFDB.dotCN.searchbar, ele).querySelector(BDFDB.dotCN.searchbarinput);
-					input.value = "";
-					input.dispatchEvent(new Event("change"));
-					input.dispatchEvent(new Event("input"));
-					input.dispatchEvent(new Event("keydown"));
-					input.dispatchEvent(new Event("keyup"));
-					input.dispatchEvent(new Event("keypressed"));
-					BDFDB.DOMUtils.addClass(ele.parentElement.querySelectorAll(BDFDB.dotCN.searchbaricon)[0], BDFDB.disCN.searchbarvisible);
-					BDFDB.DOMUtils.removeClass(ele, BDFDB.disCN.searchbarvisible);
-				}
-			});
-		});
-		container.querySelectorAll(".numberinput-button-up").forEach(ele => {
-			addInitEventListener(ele, "click", e => {
-				var input = ele.parentElement.parentElement.querySelector("input");
-				var min = parseInt(input.getAttribute("min"));
-				var max = parseInt(input.getAttribute("max"));
-				var newv = parseInt(input.value) + 1;
-				if (isNaN(max) || !isNaN(max) && newv <= max) {
-					BDFDB.DOMUtils.addClass(ele.parentElement, "pressed");
-					BDFDB.TimeUtils.clear(ele.parentElement.pressedTimeout);
-					input.value = isNaN(min) || !isNaN(min) && newv >= min ? newv : min;
-					input.dispatchEvent(new Event("change"));
-					input.dispatchEvent(new Event("input"));
-					input.dispatchEvent(new Event("keydown"));
-					input.dispatchEvent(new Event("keyup"));
-					input.dispatchEvent(new Event("keypressed"));
-					ele.parentElement.pressedTimeout = BDFDB.TimeUtils.timeout(_ => {BDFDB.DOMUtils.removeClass(ele.parentElement, "pressed");}, 3000);
-				}
-			});
-		});
-		container.querySelectorAll(".numberinput-button-down").forEach(ele => {
-			addInitEventListener(ele, "click", e => {
-				var input = ele.parentElement.parentElement.querySelector("input");
-				var min = parseInt(input.getAttribute("min"));
-				var max = parseInt(input.getAttribute("max"));
-				var newv = parseInt(input.value) - 1;
-				if (isNaN(min) || !isNaN(min) && newv >= min) {
-					BDFDB.DOMUtils.addClass(ele.parentElement, "pressed");
-					BDFDB.TimeUtils.clear(ele.parentElement.pressedTimeout);
-					input.value = isNaN(max) || !isNaN(max) && newv <= max ? newv : max;
-					input.dispatchEvent(new Event("change"));
-					input.dispatchEvent(new Event("input"));
-					input.dispatchEvent(new Event("keydown"));
-					input.dispatchEvent(new Event("keyup"));
-					input.dispatchEvent(new Event("keypressed"));
-					ele.parentElement.pressedTimeout = BDFDB.TimeUtils.timeout(_ => {BDFDB.DOMUtils.removeClass(ele.parentElement, "pressed");}, 3000);
-				}
-			});
-		});
-		container.querySelectorAll(".amount-input").forEach(ele => {
-			addInitEventListener(ele, "input", e => {
-				if (BDFDB.ObjectUtils.is(plugin)) {
-					var option = ele.getAttribute("option");
-					var newv = parseInt(ele.value);
-					var min = parseInt(ele.getAttribute("min"));
-					var max = parseInt(ele.getAttribute("max"));
-					if (option && !isNaN(newv) && (isNaN(min) || !isNaN(min) && newv >= min) && (isNaN(max) || !isNaN(max) && newv <= max)) {
-						BDFDB.DataUtils.save(newv, plugin, "amounts", option);
-						plugin.SettingsUpdated = true;
-					}
-				}
-			});
-		});
-		container.querySelectorAll(BDFDB.dotCNC.tabbaritem + BDFDB.dotCN.tabbarheaderitem).forEach(ele => {
-			setTabitem(ele, ele.parentElement.querySelector(BDFDB.dotCNC.tabbaritem + BDFDB.dotCN.tabbarheaderitem) == ele ? 2 : 0);
-			addInitEventListener(ele, "click", e => {
-				BDFDB.DOMUtils.removeClass(container.querySelectorAll(BDFDB.dotCN.modaltabcontent + BDFDB.dotCN.modaltabcontentopen), BDFDB.disCN.modaltabcontentopen);
-				ele.parentElement.querySelectorAll(BDFDB.dotCNC.tabbaritem + BDFDB.dotCN.tabbarheaderitem).forEach(ele => {setTabitem(ele, 0);});
-				var tab = container.querySelector(`${BDFDB.dotCN.modaltabcontent}[tab="${ele.getAttribute("tab")}"]`);
-				if (tab) BDFDB.DOMUtils.addClass(tab, BDFDB.disCN.modaltabcontentopen);
-				setTabitem(ele, 2);
-			});
-			addInitEventListener(ele, "mouseenter", e => {
-				if (!BDFDB.DOMUtils.containsClass(ele, BDFDB.disCN.settingsitemselected)) setTabitem(ele, 1);
-			});
-			addInitEventListener(ele, "mouseleave", e => {
-				if (!BDFDB.DOMUtils.containsClass(ele, BDFDB.disCN.settingsitemselected)) setTabitem(ele, 0);
-			});
-		});
-		container.querySelectorAll(".BDFDB-textscrollwrapper").forEach(ele => {
-			var inner = ele.querySelector(".BDFDB-textscroll");
-			if (inner) {
-				if (BDFDB.DOMUtils.containsClass(ele.parentElement, BDFDB.disCN.contextmenuitemsubmenu)) ele.style.setProperty("margin-right", "10px");
-				if (BDFDB.DOMUtils.getRects(ele).width > 100) ele.style.setProperty("text-overflow", "ellipsis", "important");
-				ele.style.setProperty("position", "relative", "important");
-				ele.style.setProperty("display", "block", "important");
-				ele.style.setProperty("overflow", "hidden", "important");
-				inner.style.setProperty("left", "0px", "important");
-				inner.style.setProperty("position", "relative", "important");
-				inner.style.setProperty("white-space", "nowrap", "important");
-				inner.style.setProperty("display", "inline", "important");
-				var animate, Animation;
-				addInitEventListener(ele, "mouseenter", e => {
-					if (BDFDB.DOMUtils.getRects(ele).width < BDFDB.DOMUtils.getRects(inner).width) {
-						BDFDB.DOMUtils.addClass(ele, "scrolling");
-						if (!Animation || !animate) initAnimation();
-						animate(1);
-						inner.style.setProperty("display", "block", "important");
-					}
-				});
-				addInitEventListener(ele, "mouseleave", e => {
-					if (BDFDB.DOMUtils.containsClass(ele, "scrolling")) {
-						BDFDB.DOMUtils.removeClass(ele, "scrolling");
-						inner.style.setProperty("display", "inline", "important");
-						if (!Animation || !animate) initAnimation();
-						animate(0);
-					}
-				});
-				function initAnimation() {
-					Animation = new LibraryModules.AnimationUtils.Value(0);
-					Animation
-						.interpolate({inputRange:[0, 1], outputRange:[0, (BDFDB.DOMUtils.getRects(inner).width - BDFDB.DOMUtils.getRects(ele).width) * -1]})
-						.addListener(v => {inner.style.setProperty("left", v.value + "px", "important");});
-					animate = p => {
-						var w = p + parseFloat(inner.style.getPropertyValue("left")) / (BDFDB.DOMUtils.getRects(inner).width - BDFDB.DOMUtils.getRects(ele).width);
-						w = isNaN(w) || !isFinite(w) ? p : w;
-						w *= BDFDB.DOMUtils.getRects(inner).width / (BDFDB.DOMUtils.getRects(ele).width * 2);
-						LibraryModules.AnimationUtils.parallel([LibraryModules.AnimationUtils.timing(Animation, {toValue:p, duration:Math.sqrt(w**2) * 4000 / (ele.getAttribute("speed") || 1)})]).start();
-					};
-				}
-			}
-		});
-
-		BDFDB.DOMUtils.removeClass(container.querySelectorAll(BDFDB.dotCN.modaltabcontent), BDFDB.disCN.modaltabcontentopen);
-		BDFDB.DOMUtils.addClass(container.querySelector(BDFDB.dotCN.modaltabcontent), BDFDB.disCN.modaltabcontentopen);
-
-		container.querySelectorAll(".btn-add " + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageUtils.LanguageStrings.ADD;});
-		container.querySelectorAll(".btn-all " + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL;});
-		container.querySelectorAll(".btn-cancel " + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageUtils.LanguageStrings.CANCEL;});
-		container.querySelectorAll(".btn-done " + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageUtils.LanguageStrings.DONE;});
-		container.querySelectorAll(".btn-download " + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageUtils.LanguageStrings.DOWNLOAD;});
-		container.querySelectorAll(".btn-ok " + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageUtils.LanguageStrings.OKAY;});
-		container.querySelectorAll(".btn-save " + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageUtils.LanguageStrings.SAVE;});
-		container.querySelectorAll(".btn-send " + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageUtils.LanguageStrings.SEND;});
-		container.querySelectorAll(".file-navigator " + BDFDB.dotCN.buttoncontents).forEach(ele => {ele.innerText = BDFDB.LanguageUtils.LibraryStrings.file_navigator_text;});
-
-		if (islighttheme) {
-			BDFDB.DOMUtils.replaceClass(container.querySelectorAll(BDFDB.dotCN.selectcontroldark), BDFDB.disCN.selectcontroldark, BDFDB.disCN.selectcontrollight);
-			BDFDB.DOMUtils.replaceClass(container.querySelectorAll(BDFDB.dotCN.selectsingledark), BDFDB.disCN.selectsingledark, BDFDB.disCN.selectsinglelight);
-			BDFDB.DOMUtils.replaceClass(container.querySelectorAll(BDFDB.dotCN.selectarrowcontainerdark), BDFDB.disCN.selectarrowcontainerdark, BDFDB.disCN.selectarrowcontainerlight);
-		}
-		else {
-			BDFDB.DOMUtils.replaceClass(container.querySelectorAll(BDFDB.dotCN.selectcontrollight), BDFDB.disCN.selectcontrollight, BDFDB.disCN.selectcontroldark);
-			BDFDB.DOMUtils.replaceClass(container.querySelectorAll(BDFDB.dotCN.selectsinglelight), BDFDB.disCN.selectsinglelight, BDFDB.disCN.selectsingledark);
-			BDFDB.DOMUtils.replaceClass(container.querySelectorAll(BDFDB.dotCN.selectarrowcontainerlight), BDFDB.disCN.selectarrowcontainerlight, BDFDB.disCN.selectarrowcontainerdark);
-		}
-
-		var executeDelayedIfNotAppened = _ => {
-			container.querySelectorAll(".BDFDB-tableheader").forEach(ele => {
-				var panel = BDFDB.DOMUtils.getParent(".BDFDB-modal, .BDFDB-settings", ele);
-				var tableid = ele.getAttribute("table-id");
-				var text = ele.querySelector(".BDFDB-tableheadertext");
-				var columns = ele.querySelectorAll(".BDFDB-tableheadercolumns .BDFDB-tableheadercolumn");
-				if (panel && tableid && text && columns.length) {
-					let toobig = false, maxwidth = BDFDB.ObjectUtils.is(panel["BDFDB-tableheader-maxwidth"]) ? panel["BDFDB-tableheader-maxwidth"][tableid] : 0;
-					if (!maxwidth) {
-						for (let column of columns) {
-							let width = BDFDB.DOMUtils.getRects(column).width;
-							maxwidth = width > maxwidth ? width : maxwidth;
-						}
-						maxwidth += 4;
-					}
-					if (columns.length * maxwidth > 300) {
-						toobig = true;
-						maxwidth = parseInt(290 / columns.length);
-					}
-					else if (maxwidth < 36) {
-						maxwidth = 36;
-					}
-					columns.forEach((column, i) => {
-						column.style.setProperty("flex", `0 0 ${maxwidth}px`, "important");
-						if (toobig) {
-							if (i == 0) column.style.setProperty("margin-left", `${-1 * (10 + maxwidth/2)}px`, "important");
-							column.style.setProperty("margin-top", "0", "important");
-							column.style.setProperty("text-align", "right", "important");
-							column.style.setProperty("writing-mode", "vertical-rl", "important");
-						}
-						else column.style.setProperty("text-align", "center", "important");
-					});
-					text.style.setProperty("flex", `0 0 ${556 - (columns.length * maxwidth)}px`, "important");
-					columns[0].parentElement.style.setProperty("flex", `0 0 ${columns.length * maxwidth}px`, "important");
-					if (!BDFDB.ObjectUtils.is(panel["BDFDB-tableheader-maxwidth"])) panel["BDFDB-tableheader-maxwidth"] = {}
-					panel["BDFDB-tableheader-maxwidth"][tableid] = maxwidth;
-				}
-			});
-			container.querySelectorAll(".BDFDB-tablecheckbox").forEach(ele => {
-				var panel = BDFDB.DOMUtils.getParent(".BDFDB-modal, .BDFDB-settings", ele);
-				var tableid = ele.getAttribute("table-id");
-				if (panel && tableid && BDFDB.ObjectUtils.is(panel["BDFDB-tableheader-maxwidth"]) && panel["BDFDB-tableheader-maxwidth"][tableid]) {
-					var style = getComputedStyle(ele);
-					ele.style.setProperty("flex", `0 0 ${panel["BDFDB-tableheader-maxwidth"][tableid] - parseInt(style.marginLeft) - parseInt(style.marginRight)}px`, "important");
-				}
-			});
-		};
-
-		if (document.contains(container)) executeDelayedIfNotAppened();
-		else BDFDB.TimeUtils.timeout(_ => {executeDelayedIfNotAppened();});
-
-		function setSwitch(switchitem, triggered) {
-			if (!switchitem) return;
-			var checked = switchitem.checked;
-			BDFDB.DOMUtils.toggleClass(switchitem.parentElement, BDFDB.disCN.switchvaluechecked, checked);
-			BDFDB.DOMUtils.toggleClass(switchitem.parentElement, BDFDB.disCN.switchvalueunchecked, !checked);
-			if (triggered && BDFDB.ObjectUtils.is(plugin) && BDFDB.DOMUtils.containsClass(switchitem, "settings-switch")) {
-				let keys = switchitem.getAttribute("value").trim().split(" ").filter(n => n);
-				let option = keys.shift();
-				if (option) {
-					var data = BDFDB.DataUtils.load(plugin, option);
-					var newdata = "";
-					for (let key of keys) newdata += `{"${key}":`;
-					newdata += checked + "}".repeat(keys.length);
-					newdata = JSON.parse(newdata);
-					if (BDFDB.ObjectUtils.is(newdata)) BDFDB.ObjectUtils.deepAssign(data, newdata);
-					else data = newdata;
-					BDFDB.DataUtils.save(data, plugin, option);
-					plugin.SettingsUpdated = true;
-				}
-			}
-		};
-		function setCheckbox(checkbox) {
-			if (!checkbox) return;
-			var checkboxstyle = checkbox.parentElement.querySelector(BDFDB.dotCN.checkbox);
-			var checkboxstyleinner = checkboxstyle.querySelector("polyline");
-			if (checkbox.checked) {
-				BDFDB.DOMUtils.addClass(checkboxstyle, BDFDB.disCN.checkboxchecked);
-				checkboxstyle.style.setProperty("background-color", "rgb(67, 181, 129)");
-				checkboxstyle.style.setProperty("border-color", "rgb(67, 181, 129)");
-				if (checkboxstyleinner) checkboxstyleinner.setAttribute("stroke", "#ffffff");
-			}
-			else {
-				BDFDB.DOMUtils.removeClass(checkboxstyle, BDFDB.disCN.checkboxchecked);
-				checkboxstyle.style.removeProperty("background-color");
-				checkboxstyle.style.removeProperty("border-color");
-				if (checkboxstyleinner) checkboxstyleinner.setAttribute("stroke", "transparent");
-			}
-		};
-		function setGifFavButton(button) {
-			var selected = BDFDB.DOMUtils.containsClass(button, BDFDB.disCN.giffavoriteselected);
-			var icon = button.querySelector(BDFDB.dotCN.giffavoriteicon);
-			if (icon) {
-				icon.setAttribute("name", selected ? "FavoriteFilled" : "Favorite");
-				icon.innerHTML = selected ? `<path d="M0,0H24V24H0Z" fill="none"></path><path fill="currentColor" d="M12.5,17.6l3.6,2.2a1,1,0,0,0,1.5-1.1l-1-4.1a1,1,0,0,1,.3-1l3.2-2.8A1,1,0,0,0,19.5,9l-4.2-.4a.87.87,0,0,1-.8-.6L12.9,4.1a1.05,1.05,0,0,0-1.9,0l-1.6,4a1,1,0,0,1-.8.6L4.4,9a1.06,1.06,0,0,0-.6,1.8L7,13.6a.91.91,0,0,1,.3,1l-1,4.1a1,1,0,0,0,1.5,1.1l3.6-2.2A1.08,1.08,0,0,1,12.5,17.6Z"></path>` : `<path fill="currentColor" d="M19.6,9l-4.2-0.4c-0.4,0-0.7-0.3-0.8-0.6l-1.6-3.9c-0.3-0.8-1.5-0.8-1.8,0L9.4,8.1C9.3,8.4,9,8.6,8.6,8.7L4.4,9c-0.9,0.1-1.2,1.2-0.6,1.8L7,13.6c0.3,0.2,0.4,0.6,0.3,1l-1,4.1c-0.2,0.9,0.7,1.5,1.5,1.1l3.6-2.2c0.3-0.2,0.7-0.2,1,0l3.6,2.2c0.8,0.5,1.7-0.2,1.5-1.1l-1-4.1c-0.1-0.4,0-0.7,0.3-1l3.2-2.8C20.9,10.2,20.5,9.1,19.6,9zM12,15.4l-3.8,2.3l1-4.3l-3.3-2.9l4.4-0.4l1.7-4l1.7,4l4.4,0.4l-3.3,2.9l1,4.3L12,15.4z"></path>`;
-			}
-			if (selected) {
-				BDFDB.DOMUtils.addClass(button, BDFDB.disCN.giffavoriteshowpulse);
-				BDFDB.TimeUtils.timeout(_ => {BDFDB.DOMUtils.removeClass(button, BDFDB.disCN.giffavoriteshowpulse);}, 500);
-			}
-		};
-		function setTabitem(item, state) {
-			if (!item) return;
-			switch (state) {
-				case 0:
-					BDFDB.DOMUtils.removeClass(item, BDFDB.disCN.settingsitemselected);
-					item.style.setProperty("border-color", "transparent");
-					item.style.setProperty("color", islighttheme ? "rgba(79, 84, 92, 0.4)" : "rgba(255, 255, 255, 0.4)");
-					break;
-				case 1:
-					BDFDB.DOMUtils.removeClass(item, BDFDB.disCN.settingsitemselected);
-					item.style.setProperty("border-color", islighttheme ? "rgba(79, 84, 92, 0.6)" : "rgba(255, 255, 255, 0.6)");
-					item.style.setProperty("color", islighttheme ? "rgba(79, 84, 92, 0.6)" : "rgba(255, 255, 255, 0.6)");
-					break;
-				case 2:
-					BDFDB.DOMUtils.addClass(item, BDFDB.disCN.settingsitemselected);
-					item.style.setProperty("border-color", islighttheme ? "rgb(79, 84, 92)" : "rgb(255, 255, 255)");
-					item.style.setProperty("color", islighttheme ? "rgb(79, 84, 92)" : "rgb(255, 255, 255)");
-					break;
-				}
-		};
-		function addInitEventListener(ele, action, callback) {
-			if (!ele.BDFDBupdateElementsListeners) ele.BDFDBupdateElementsListeners = {};
-			if (ele.BDFDBupdateElementsListeners[action]) ele.removeEventListener(action, ele.BDFDBupdateElementsListeners[action]);
-			ele.BDFDBupdateElementsListeners[action] = callback;
-			ele.addEventListener(action, callback, true);
-		};
 	};
 	
 	BDFDB.ModalUtils = {};
@@ -7742,19 +7386,24 @@
 					BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 						align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
 						children: [
-							this.props.label ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
+							this.props.label ? (this.props.tag ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormTitle, {
+								className: this.props.labelClassName,
+								tag: this.props.tag,
+								children: this.props.label
+							}) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
 								children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsLabel, {
+									className: this.props.labelClassName,
 									mini: this.props.mini,
 									label: this.props.label
 								})
-							}) : null,
+							})) : null,
 							this.props.labelchildren,
 							BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
 								grow: 0,
 								shrink: this.props.basis ? 0 : 1,
 								basis: this.props.basis,
 								wrap: true,
-								children: BDFDB.ReactUtils.createElement(childcomponent, BDFDB.ObjectUtils.exclude(Object.assign(BDFDB.ObjectUtils.exclude(this.props, "className", "id", "type"), this.props.childProps, {onChange: this.handleChange.bind(this)}), "grow", "stretch", "basis", "dividerbottom", "dividertop", "label", "labelchildren", "mini", "note", "childProps"))
+								children: BDFDB.ReactUtils.createElement(childcomponent, BDFDB.ObjectUtils.exclude(Object.assign(BDFDB.ObjectUtils.exclude(this.props, "className", "id", "type"), this.props.childProps, {onChange: this.handleChange.bind(this)}), "grow", "stretch", "basis", "dividerbottom", "dividertop", "label", "labelClassName", "labelchildren", "tag", "mini", "note", "childProps"))
 							})
 						].flat(10).filter(n => n)
 					}),
@@ -7777,7 +7426,7 @@
 	InternalComponents.LibraryComponents.SettingsLabel = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.SettingsLabel") || reactInitialized && class BDFDB_SettingsLabel extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextScroller, {
-				className: BDFDB.DOMUtils.formatClassName(this.props.mini ? BDFDB.disCN.titlemini : BDFDB.disCN.titledefault, BDFDB.disCN.cursordefault),
+				className: BDFDB.DOMUtils.formatClassName(this.props.className, this.props.mini ? BDFDB.disCN.titlemini : BDFDB.disCN.titledefault, BDFDB.disCN.cursordefault),
 				speed: 2,
 				children: this.props.label
 			});
