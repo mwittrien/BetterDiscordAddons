@@ -2656,6 +2656,10 @@ body:before {
 	filter: blur(var(--vpopoutblur));
 	background-attachment: fixed;
 }
+.root-1gCeng .modal-yWgWj-:after,
+.root-1gCeng .modal-yWgWj-:before {
+	display: none;
+}
 #app-mount .footer-3rDWdC {									/* modal				footer							*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 	box-shadow: none;
@@ -2833,6 +2837,9 @@ body:before {
 #app-mount .wrapper-2ZbzR9 {								/* modal				wrapper								*/
 	background: transparent;
 }
+#app-mount .slide-2pHaq5 {									/* modal				slide								*/
+	background: transparent;
+}
 #app-mount .action-1lSjCi {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 	border-color: rgba(var(--vtransparencycolor), 0.2);
@@ -2849,6 +2856,13 @@ body:before {
 	background: none;
 	color: rgb(var(--fontwhite1));
 	line-height: 306px;
+    order: unset;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    border-radius: unset;
+    border: unset;
 }
 .or-3THJsp:after,
 .or-3THJsp:before {
