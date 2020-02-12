@@ -1202,10 +1202,13 @@
 		}
 		function unpatch (funcName, pluginId) {
 			for (let type of WebModulesData.Patchtypes) {
-				if (pluginId) delete module.BDFDBpatch[funcName][type][pluginId];
+				if (pluginId) for (let priority in module.BDFDBpatch[funcName][type]) {
+					delete module.BDFDBpatch[funcName][type][priority][pluginId];
+					if (BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[funcName][type][priority])) delete module.BDFDBpatch[funcName][type][priority];
+				}
 				else delete module.BDFDBpatch[funcName][type];
 			}
-			if (!BDFDB.ObjectUtils.toArray(module.BDFDBpatch[funcName]).some(patchObj => BDFDB.ObjectUtils.toArray(patchObj).some(priorityObj => !BDFDB.ObjectUtils.isEmpty(priorityObj)))) {
+			if (!BDFDB.ObjectUtils.toArray(module.BDFDBpatch[funcName]).some(patchObj => !BDFDB.ObjectUtils.isEmpty(patchObj))) {
 				module[funcName] = module.BDFDBpatch[funcName].originalMethod;
 				delete module.BDFDBpatch[funcName];
 				if (BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch)) delete module.BDFDBpatch;
@@ -7501,7 +7504,7 @@
 				className: BDFDB.disCN.guildcontainer,
 				children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.BlobMask, {
 					selected: this.state.isDropHovering || this.props.selected || this.state.hovered,
-					upperBadge: this.props.unavailable ? InternalComponents.LibraryComponents.GuildComponents.Items.renderUnavailableBadge() : InternalComponents.LibraryComponents.GuildComponents.Items.renderIconBadge(this.props.audio, this.props.video, this.props.screenshare),
+					upperBadge: this.props.unavailable ? InternalComponents.LibraryComponents.GuildComponents.Items.renderUnavailableBadge() : InternalComponents.LibraryComponents.GuildComponents.Items.renderIconBadge(this.props.audio, this.props.video, this.props.screenshare, this.props.isCurrentUserInThisGuildVoice),
 					lowerBadge: this.props.badge > 0 ? InternalComponents.LibraryComponents.GuildComponents.Items.renderMentionBadge(this.props.badge) : null,
 					lowerBadgeWidth: InternalComponents.LibraryComponents.Badges.getBadgeWidthForValue(this.props.badge),
 					children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.NavItem, {
