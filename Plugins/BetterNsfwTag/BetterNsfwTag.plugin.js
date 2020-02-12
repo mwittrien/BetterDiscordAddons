@@ -77,10 +77,9 @@ var BetterNsfwTag = (_ => {
 					let [oldTagParent, oldTagIndex] = BDFDB.ReactUtils.findChildren(children[index], {key: "NSFW-badge"});
 					if (oldTagIndex > -1) oldTagParent.splice(oldTagIndex, 1);
 					children[index].props.children.push(BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.channelchildiconbase,
+						className: BDFDB.disCNS._betternsfwtagtag + BDFDB.disCN.channelchildiconbase,
 						key: "NSFW-badge",
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
-							className: BDFDB.disCN._betternsfwtagtag,
 							style: {borderRadius: "3px"},
 							text: "NSFW"
 						})
