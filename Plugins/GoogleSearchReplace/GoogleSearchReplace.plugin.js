@@ -14,7 +14,7 @@ var GoogleSearchReplace = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["One Engine", "enabling only one search engine doesn't create a SubMenu anymore"],["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"improved":[["One Engine", "Enabling only one search engine doesn't create a SubMenu anymore"],["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 			};
 				
 			this.patchedModules = {

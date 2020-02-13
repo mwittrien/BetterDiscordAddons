@@ -6,7 +6,7 @@ var ReverseImageSearch = (_ => {
 	return class ReverseImageSearch {
 		getName () {return "ReverseImageSearch";}
 
-		getVersion () {return "3.5.1";}
+		getVersion () {return "3.5.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,8 +14,7 @@ var ReverseImageSearch = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Message Update","Fixed the plugin for the new Message Update"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"improved":[["One Engine", "Enabling only one search engine doesn't create a SubMenu anymore"],["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 			};
 		}
 
@@ -163,31 +162,43 @@ var ReverseImageSearch = (_ => {
 					if (url.split("/https/").length != 1) url = "https://" + url.split("/https/")[url.split("/https/").length-1];
 					else if (url.split("/http/").length != 1) url = "http://" + url.split("/http/")[url.split("/http/").length-1];
 				}
-				let engines = BDFDB.DataUtils.get(this, "engines");
-				let items = [];
-				for (let key in engines) if (engines[key]) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-					label: this.defaults.engines[key].name,
-					danger: key == "_all",
+				let enabledEngines = BDFDB.ObjectUtils.filter(BDFDB.DataUtils.get(this, "engines"), n => n);
+				let enginesWithoutAll = BDFDB.ObjectUtils.filter(enabledEngines, n => n != "_all", true);
+				let engineKeys = Object.keys(enginesWithoutAll);
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
+				if (engineKeys.length == 1) children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+					label: this.labels.context_reverseimagesearch_text.replace("...", this.defaults.engines[engineKeys[0]].name),
 					action: event => {
 						let useChromium = BDFDB.DataUtils.get(this, "settings", "useChromium");
 						if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
-						if (key == "_all") {
-							for (let key2 in engines) if (key2 != "_all" && engines[key2]) BDFDB.DiscordUtils.openLink(this.defaults.engines[key2].url.replace(imgUrlReplaceString, encodeURIComponent(url)), useChromium, event.shiftKey);
-						}
-						else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(imgUrlReplaceString, encodeURIComponent(url)), useChromium, event.shiftKey);
+						BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(imgUrlReplaceString, encodeURIComponent(url)), useChromium, event.shiftKey);
 					}
 				}));
-				if (!items.length) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-					label: this.labels.submenu_disabled_text,
-					disabled: true
-				}));
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
-						label: "Reverse Image Search",
-						render: items
-					})
-				}));
+				else {
+					let items = [];
+					for (let key in enabledEngines) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+						label: this.defaults.engines[key].name,
+						danger: key == "_all",
+						action: event => {
+							let useChromium = BDFDB.DataUtils.get(this, "settings", "useChromium");
+							if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
+							if (key == "_all") {
+								for (let key2 in enginesWithoutAll) BDFDB.DiscordUtils.openLink(this.defaults.engines[key2].url.replace(imgUrlReplaceString, encodeURIComponent(url)), useChromium, event.shiftKey);
+							}
+							else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(imgUrlReplaceString, encodeURIComponent(url)), useChromium, event.shiftKey);
+						}
+					}));
+					if (!items.length) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+						label: this.labels.submenu_disabled_text,
+						disabled: true
+					}));
+					children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
+							label: this.labels.context_reverseimagesearch_text,
+							render: items
+						})
+					}));
+				}
 			}
 		}
 
@@ -195,86 +206,107 @@ var ReverseImageSearch = (_ => {
 			switch (BDFDB.LanguageUtils.getLanguage().id) {
 				case "hr":		//croatian
 					return {
+						context_reverseimagesearch_text:	"Traži sliku ...",
 						submenu_disabled_text:				"Svi su onemogućeni"
 					};
 				case "da":		//danish
 					return {
+						context_reverseimagesearch_text:	"Søg billede med ...",
 						submenu_disabled_text:				"Alle deaktiveret"
 					};
 				case "de":		//german
 					return {
+						context_reverseimagesearch_text:	"Bild suchen mit ...",
 						submenu_disabled_text:				"Alle deaktiviert"
 					};
 				case "es":		//spanish
 					return {
+						context_reverseimagesearch_text:	"Buscar imagen con ...",
 						submenu_disabled_text:				"Todo desactivado"
 					};
 				case "fr":		//french
 					return {
+						context_reverseimagesearch_text:	"Rechercher une image avec ...",
 						submenu_disabled_text:				"Tous désactivés"
 					};
 				case "it":		//italian
 					return {
+						context_reverseimagesearch_text:	"Cerca immagine con ...",
 						submenu_disabled_text:				"Tutto disattivato"
 					};
 				case "nl":		//dutch
 					return {
+						context_reverseimagesearch_text:	"Afbeelding zoeken met ...",
 						submenu_disabled_text:				"Alles gedeactiveerd"
 					};
 				case "no":		//norwegian
 					return {
+						context_reverseimagesearch_text:	"Søk på bilde med ...",
 						submenu_disabled_text:				"Alle deaktivert"
 					};
 				case "pl":		//polish
 					return {
+						context_reverseimagesearch_text:	"Wyszukaj obraz za pomocą ...",
 						submenu_disabled_text:				"Wszystkie wyłączone"
 					};
 				case "pt-BR":	//portuguese (brazil)
 					return {
+						context_reverseimagesearch_text:	"Pesquisar imagem com ...",
 						submenu_disabled_text:				"Todos desativados"
 					};
 				case "fi":		//finnish
 					return {
+						context_reverseimagesearch_text:	"Hae kuvaa ...",
 						submenu_disabled_text:				"Kaikki on poistettu käytöstä"
 					};
 				case "sv":		//swedish
 					return {
+						context_reverseimagesearch_text:	"Sök bild med ...",
 						submenu_disabled_text:				"Alla avaktiverade"
 					};
 				case "tr":		//turkish
 					return {
+						context_reverseimagesearch_text:	"Görüntüyü şununla ara ...",
 						submenu_disabled_text:				"Hepsi deaktive"
 					};
 				case "cs":		//czech
 					return {
+						context_reverseimagesearch_text:	"Vyhledat obrázek pomocí ...",
 						submenu_disabled_text:				"Všechny deaktivované"
 					};
 				case "bg":		//bulgarian
 					return {
+						context_reverseimagesearch_text:	"Търсене на изображение с ...",
 						submenu_disabled_text:				"Всички са деактивирани"
 					};
 				case "ru":		//russian
 					return {
+						context_reverseimagesearch_text:	"Поиск изображения с ...",
 						submenu_disabled_text:				"Все деактивированные"
 					};
 				case "uk":		//ukrainian
 					return {
+						context_reverseimagesearch_text:	"Шукати зображення за допомогою ...",
 						submenu_disabled_text:				"Всі вимкнені"
 					};
 				case "ja":		//japanese
 					return {
+						context_reverseimagesearch_text:	"で画像を検索 ...",
 						submenu_disabled_text:				"すべて非アクティブ化"
 					};
 				case "zh-TW":	//chinese (traditional)
 					return {
+						context_reverseimagesearch_text:	"搜尋圖片 ...",
 						submenu_disabled_text:				"全部停用"
 					};
 				case "ko":		//korean
 					return {
+						context_reverseimagesearch_text:	"로 이미지 검색 ...",
 						submenu_disabled_text:				"모두 비활성화 됨"
 					};
 				default:		//default: english
 					return {
+						context_reverseimagesearch_text:	"Search image with ...",
 						submenu_disabled_text:				"All disabled"
 					};
 			}
