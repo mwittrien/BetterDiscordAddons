@@ -1493,6 +1493,7 @@
 	LibraryModules.DispatchApiUtils = BDFDB.ModuleUtils.findByProperties("dirtyDispatch", "isDispatching");
 	LibraryModules.DispatchUtils = BDFDB.ModuleUtils.findByProperties("ComponentDispatch");
 	LibraryModules.DirectMessageUtils = BDFDB.ModuleUtils.findByProperties("addRecipient", "openPrivateChannel");
+	LibraryModules.EmojiUtils = BDFDB.ModuleUtils.findByProperties("translateInlineEmojiToSurrogates", "translateSurrogatesToInlineEmoji");
 	LibraryModules.FriendUtils = BDFDB.ModuleUtils.findByProperties("getFriendIDs", "getRelationships");
 	LibraryModules.FolderStore = BDFDB.ModuleUtils.findByProperties("getGuildFolderById", "getFlattenedGuilds");
 	LibraryModules.FolderUtils = BDFDB.ModuleUtils.findByProperties("isFolderExpanded", "getExpandedFolders");
