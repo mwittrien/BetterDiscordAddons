@@ -6,7 +6,7 @@ var ChatFilter = (_ => {
 	return class ChatFilter {
 		getName () {return "ChatFilter";}
 
-		getVersion () {return "3.3.8";}
+		getVersion () {return "3.3.9";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,7 @@ var ChatFilter = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Message Update","Fixed the plugin for the new Message Update"]],
+				"fixed":[["Emojis","Emojis are now properly targeted again, make sure to properly syntax them, for example :dog: or :FeelsBadMan:"]],
 				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 			};
 
@@ -322,8 +322,7 @@ var ChatFilter = (_ => {
 					blockedReplace = words.blocked[bWord].empty ? "" : (words.blocked[bWord].replace || replaces.blocked);
 					let reg = this.createReg(bWord, words.blocked[bWord]);
 					content.replace(/\n/g, " \n ").split(" ").forEach(word => {
-						let wordWithoutSpecial = word.replace(/[\?\¿\!\¡\.\"]/g, "");
-						if (word && reg.test(word) || wordWithoutSpecial && reg.test(wordWithoutSpecial)) blocked = true;
+						if (this.testWord(word, reg)) blocked = true;
 					});
 					if (blocked) break;
 				}
@@ -334,9 +333,8 @@ var ChatFilter = (_ => {
 						let censoredReplace = words.censored[cWord].empty ? "" : (words.censored[cWord].replace || replaces.censored);
 						let reg = this.createReg(cWord, words.censored[cWord]);
 						let newstring = [];
-						content.replace(/\n/g, " \n ").split(" ").forEach((word) => {
-							let wordWithoutSpecial = word.replace(/[\?\¿\!\¡\.\"]/g, "");
-							if (word && reg.test(word) || wordWithoutSpecial && reg.test(wordWithoutSpecial)) {
+						content.replace(/\n/g, " \n ").split(" ").forEach(word => {
+							if (this.testWord(word, reg)) {
 								censored = true;
 								newstring.push(censoredReplace);
 							}
@@ -347,6 +345,21 @@ var ChatFilter = (_ => {
 				}
 			}
 			return {blocked, censored, content};
+		}
+		
+		testWord (word, reg) {
+			let nativeEmoji = BDFDB.LibraryModules.EmojiUtils.translateSurrogatesToInlineEmoji(word);
+			if (nativeEmoji != word) return this.regTest(nativeEmoji, reg);
+			else {
+				let customEmoji = (/<(:.*:)[0-9]{7,}>/.exec(word) || [])[1];
+				if (customEmoji) return this.regTest(customEmoji, reg);
+				else return this.regTest(word, reg);
+			}
+		}
+		
+		regTest (word, reg) {
+			let wordWithoutSpecial = word.replace(/[\?\¿\!\¡\.\"]/g, "");
+			return word && reg.test(word) || wordWithoutSpecial && reg.test(wordWithoutSpecial);
 		}
 
 		createReg (word, config) {

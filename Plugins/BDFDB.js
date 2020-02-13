@@ -4459,10 +4459,12 @@
 		cardbrandoutline: ["Card", "cardBrandOutline"],
 		carddanger: ["Card", "cardDanger"],
 		carddangeroutline: ["Card", "cardDangerOutline"],
+		carderror: ["CardStatus", "error"],
 		cardprimary: ["Card", "cardPrimary"],
 		cardprimaryeditable: ["Card", "cardPrimaryEditable"],
 		cardprimaryoutline: ["Card", "cardPrimaryOutline"],
 		cardprimaryoutlineeditable: ["Card", "cardPrimaryOutlineEditable"],
+		cardreset: ["CardStatus", "reset"],
 		cardsuccess: ["Card", "cardSuccess"],
 		cardsuccessoutline: ["Card", "cardSuccessOutline"],
 		cardwarning: ["Card", "cardWarning"],
@@ -4918,7 +4920,6 @@
 		inputdisabled: ["Input", "disabled"],
 		inputeditable: ["Input", "editable"],
 		inputerror: ["Input", "error"],
-		inputerrormessage: ["Input", "errorMessage"],
 		inputfocused: ["Input", "focused"],
 		inputmini: ["Input", "inputMini"],
 		inputprefix: ["Input", "inputPrefix"],
@@ -5276,7 +5277,6 @@
 		recentmentionstabbaritem: ["RecentMentions", "tabBarItem"],
 		recentmentionstabbarwrapper: ["RecentMentions", "headerTabBarWrapper"],
 		red: ["TextStyle", "statusRed"],
-		reset: ["CardStatus", "reset"],
 		scrollbar: ["Scrollbar", "scrollbar"],
 		scrollbardefault: ["Scrollbar", "scrollbarDefault"],
 		scrollbarghost: ["Scrollbar", "scrollbarGhost"],
@@ -7797,7 +7797,7 @@
 						children: inputchildren.map((child, i) => i != 0 ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {shrink: 0, children: child}) : child)
 					}),
 					this.props.errorMessage ? BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.inputerrormessage,
+						className: BDFDB.disCNS.carderror + BDFDB.disCNS.small + BDFDB.disCN.red,
 						children: this.props.errorMessage
 					}) : null
 				].filter(n => n)
