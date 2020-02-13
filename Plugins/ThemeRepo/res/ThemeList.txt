@@ -137,6 +137,7 @@ https://raw.githubusercontent.com/Twiistrz/TransparencyTheme/master/Transparency
 https://raw.githubusercontent.com/VaporousCreeper/BetterDiscord-ThemesAndPlugins/master/Themes/GGO_Kirito/GGO_Kirito.theme.css
 https://raw.githubusercontent.com/Vaxuuu/Indigo-Theme/master/Indigo.theme.css
 https://raw.githubusercontent.com/Wahrandz/NieR-Automata-/master/Theme css/Final; Nier_Automata By AbdelBouklech.theme.css
+https://raw.githubusercontent.com/XYZenix/XYZenixThemes/master/DTM-16.theme.css
 https://raw.githubusercontent.com/YuraBrm/BetterDiscordThemes/master/Avis/Avis.theme.css
 https://raw.githubusercontent.com/Zerthox/ClearVision/master/themes/ClearVision_Amber.theme.css
 https://raw.githubusercontent.com/Zerthox/ClearVision/master/themes/ClearVision_Amethyst.theme.css
