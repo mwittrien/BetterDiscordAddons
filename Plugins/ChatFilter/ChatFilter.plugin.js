@@ -6,7 +6,7 @@ var ChatFilter = (_ => {
 	return class ChatFilter {
 		getName () {return "ChatFilter";}
 
-		getVersion () {return "3.3.9";}
+		getVersion () {return "3.4.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -351,7 +351,7 @@ var ChatFilter = (_ => {
 			let nativeEmoji = BDFDB.LibraryModules.EmojiUtils.translateSurrogatesToInlineEmoji(word);
 			if (nativeEmoji != word) return this.regTest(nativeEmoji, reg);
 			else {
-				let customEmoji = (/<(:.*:)[0-9]{7,}>/.exec(word) || [])[1];
+				let customEmoji = (/<a{0,1}(:.*:)[0-9]{7,}>/i.exec(word) || [])[1];
 				if (customEmoji) return this.regTest(customEmoji, reg);
 				else return this.regTest(word, reg);
 			}
@@ -364,40 +364,6 @@ var ChatFilter = (_ => {
 
 		createReg (word, config) {
 			return new RegExp(BDFDB.StringUtils.htmlEscape(config.exact ? "^" + BDFDB.StringUtils.regEscape(word) + "$" : BDFDB.StringUtils.regEscape(word)), config.case ? "" : "i");
-		}
-
-		testForEmoji (string, reg) {
-			if (string.indexOf("<img ") == 0 && (string.indexOf('class="emote') > -1 || string.indexOf('class="emoji') > -1)) {
-				var emojiname = string.split('alt="').length > 0 ? string.split('alt="')[1].split('"')[0] : null;
-				return emojiname = !emojiname ? false : (reg.test(emojiname) || reg.test(emojiname.replace(/:/g, "")));
-			}
-			return false;
-		}
-
-		resetMessage (message) {
-			message.innerHTML = message.ChatFilterOriginalHTML;
-			BDFDB.DOMUtils.removeClass(message, "blocked", "censored", "revealed");
-			BDFDB.DOMUtils.show(message);
-			delete message.ChatFilterOriginalHTML;
-			delete message.ChatFilterNewHTML;
-			message.removeEventListener("click", message.clickChatFilterListener);
-		}
-
-		addClickListener (message, addListener) {
-			message.removeEventListener("click", message.clickChatFilterListener);
-			if (addListener) {
-				message.clickChatFilterListener = _ => {
-					if (BDFDB.DOMUtils.containsClass(message, "revealed")) {
-						BDFDB.DOMUtils.removeClass(message, "revealed");
-						message.innerHTML = message.ChatFilterNewHTML;
-					}
-					else {
-						BDFDB.DOMUtils.addClass(message, "revealed");
-						message.innerHTML = message.ChatFilterOriginalHTML;
-					}
-				};
-				message.addEventListener("click", message.clickChatFilterListener);
-			}
 		}
 
 		openAddModal (wordvalue) {
