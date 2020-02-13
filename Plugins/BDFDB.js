@@ -1267,14 +1267,14 @@
 			if (typeof plugin["process" + type] == "function") {
 				if (typeof e.methodname == "string" && (e.methodname.indexOf("componentDid") == 0 || e.methodname.indexOf("componentWill") == 0)) {
 					e.node = BDFDB.ReactUtils.findDOMNode(e.instance);
-					if (e.node) plugin["process" + type](e);
+					if (e.node) return plugin["process" + type](e);
 					else BDFDB.TimeUtils.timeout(_ => {
 						e.node = BDFDB.ReactUtils.findDOMNode(e.instance);
-						if (e.node) plugin["process" + type](e);
+						if (e.node) return plugin["process" + type](e);
 					});
 					
 				}
-				else if (e.returnvalue || e.patchtypes.includes("before")) plugin["process" + type](e);
+				else if (e.returnvalue || e.patchtypes.includes("before")) return plugin["process" + type](e);
 			}
 		}
 	};
@@ -1312,7 +1312,7 @@
 				if (instance) {
 					instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 					let patchMethods = {};
-					patchMethods[patchtype] = e => {InternalBDFDB.initiateProcess(plugin, type, {instance:window != e.thisObject ? e.thisObject : {props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:e.originalMethodName, patchtypes:[patchtype]})};
+					patchMethods[patchtype] = e => {return InternalBDFDB.initiateProcess(plugin, type, {instance:window != e.thisObject ? e.thisObject : {props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:e.originalMethodName, patchtypes:[patchtype]})};
 					BDFDB.ModuleUtils.patch(plugin, WebModulesData.NonPrototype.includes(name) ? instance : instance.prototype, plugin.patchedModules[patchtype][type], patchMethods);
 				}
 			}
