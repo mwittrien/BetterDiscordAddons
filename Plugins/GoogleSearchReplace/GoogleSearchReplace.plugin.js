@@ -14,7 +14,7 @@ var GoogleSearchReplace = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Inbuilt Window","Option to use an inbuilt browser instead of the default OS browser"],["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"improved":[["One Engine", "enabling only one search engine doesn't create a SubMenu anymore"],["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 			};
 				
 			this.patchedModules = {
