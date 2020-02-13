@@ -244,7 +244,7 @@ var PluginRepo = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 				
-				// REMOVE 18.01.2020
+				// REMOVE 10.02.2020
 				let olddata = BDFDB.DataUtils.load(this, "ownlist", "ownlist");
 				if (olddata) {
 					BDFDB.DataUtils.save(olddata, this, "custom");

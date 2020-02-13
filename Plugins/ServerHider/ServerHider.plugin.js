@@ -73,13 +73,6 @@ var ServerHider = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 				
-				// REMOVE 22.11.2019
-				let olddata = BDFDB.DataUtils.load(this, "hiddenservers", "hiddenservers");
-				if (olddata) {
-					BDFDB.DataUtils.save(olddata, this, "hidden", "servers");
-					BDFDB.DataUtils.remove(this, "hiddenservers");
-				}
-				
 				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.FolderStore, "getGuildFolderById", {after: e => {
 					let hiddenGuildIds = BDFDB.DataUtils.load(this, "hidden", "servers") || [];
 					if (e.returnValue && hiddenGuildIds.length) {

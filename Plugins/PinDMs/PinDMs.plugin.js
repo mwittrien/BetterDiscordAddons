@@ -171,21 +171,6 @@ var PinDMs = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 				
-				// REMOVE 05.01.2020
-				let oldData = this.sortAndUpdate("pinnedDMs");
-				if (oldData.length) {
-					let id = this.generateID("dmCategories").toString();
-					BDFDB.DataUtils.save({
-						id: id,
-						name: this.labels.header_pinneddms_text,
-						dms: oldData,
-						pos: 0,
-						color: null,
-						collapsed: false
-					}, this, "dmCategories", id);
-					BDFDB.DataUtils.remove(this, "pinnedDMs");
-				}
-				
 				this.forceUpdateAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
