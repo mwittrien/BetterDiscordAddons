@@ -176,6 +176,7 @@ https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/Ser
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/StatusEverywhere/StatusEverywhere.plugin.js
 https://raw.githubusercontent.com/samogot/betterdiscord-plugins/master/v1/1lib_discord_internals.plugin.js
 https://raw.githubusercontent.com/samogot/betterdiscord-plugins/master/v1/quoter.plugin.js
+https://raw.githubusercontent.com/Strencher/BetterDiscordStuff/master/OpenSpotifylinksInSpotify/OpenSpotifylinksInSpotify.plugin.js
 https://raw.githubusercontent.com/TheDarkBomber/BD-Server-Themes/master/serverTheme.plugin.js
 https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/v1/BetterFolders.plugin.js
 https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/v1/BetterReplyer.plugin.js
