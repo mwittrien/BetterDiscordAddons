@@ -180,9 +180,8 @@ var GoogleTranslateOption = (_ => {
 				}));
 				let text = document.getSelection().toString();
 				if (text) {
-					let GSRstring = BDFDB.ReactUtils.getValue(BDFDB.BDUtils.getPlugin("GoogleSearchReplace", true), "labels.context_googlesearchreplace_text");
 					let translating, foundtranslation, foundinput, foundoutput;
-					let [children2, index2] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"SearchWithGoogle", props: GSRstring ? [["label", GSRstring]] : null});
+					let [children2, index2] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"SearchWithGoogle"});
 					if (index2 > -1) children2.splice(index2 > -1 ? index2 : children2.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 						label: this.labels.context_googletranslateoption_text,
 						disabled: isTranslating,
