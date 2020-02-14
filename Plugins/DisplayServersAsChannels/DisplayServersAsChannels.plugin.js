@@ -4,7 +4,7 @@ var DisplayServersAsChannels = (_ => {
 	return class DisplayServersAsChannels {
 		getName () {return "DisplayServersAsChannels";}
 
-		getVersion () {return "1.3.2";}
+		getVersion () {return "1.3.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,6 +12,7 @@ var DisplayServersAsChannels = (_ => {
 
 		constructor () {
 			this.changelog = {
+				"fixed":[["DMs","Properly styles DMs now"]],
 				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 			};
 
@@ -21,6 +22,7 @@ var DisplayServersAsChannels = (_ => {
 				after: {
 					Guilds: "render",
 					DefaultHomeButton: "render",
+					DirectMessage: "render",
 					Guild: "render",
 					GuildFolder: "render",
 					CircleIconButton: "render",
@@ -140,11 +142,27 @@ var DisplayServersAsChannels = (_ => {
 			this.addElementName(e.returnvalue, BDFDB.LanguageUtils.LanguageStrings.HOME);
 		}
 		
-		processGuild (e) {
-			if (e.instance.props.guild) {
+		processDirectMessage (e) {
+			if (e.instance.props.channel.id) {
+				let amounts = BDFDB.DataUtils.get(this, "amounts");
+				let text = BDFDB.ReactUtils.findValue(e.returnvalue, "text");
+				let icon = BDFDB.ReactUtils.findValue(e.returnvalue, "icon");
 				this.removeTooltip(e.returnvalue);
 				this.removeMask(e.returnvalue);
+				this.addElementName(e.returnvalue, text, {
+					badge: icon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatar, {
+						src: icon,
+						size: BDFDB.LibraryComponents.Avatar.Sizes.SIZE_24,
+					})
+				});
+			}
+		}
+		
+		processGuild (e) {
+			if (e.instance.props.guild) {
 				let amounts = BDFDB.DataUtils.get(this, "amounts");
+				this.removeTooltip(e.returnvalue);
+				this.removeMask(e.returnvalue);
 				this.addElementName(e.returnvalue, e.instance.props.guild.name, {
 					badge: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Badge, {
 						size: amounts.serverElementHeight * 0.5,
@@ -204,11 +222,11 @@ var DisplayServersAsChannels = (_ => {
 			if (index > -1) {
 				let badges = [];
 				for (let key of Object.keys(children[index].props)) if (key && key.endsWith("Badge") && BDFDB.ReactUtils.isValidElement(children[index].props[key])) badges.push(children[index].props[key]);
-				children[index].props.children.props.children = [
-					children[index].props.children.props.children,
+				(children[index].props.children[0] || children[index].props.children).props.children = [
+					(children[index].props.children[0] || children[index].props.children).props.children,
 					badges
-				].flat().filter(n => n);
-				children[index] = children[index].props.children
+				].flat(10).filter(n => n);
+				children[index] = children[index].props.children;
 			}
 		}
 		
@@ -292,6 +310,11 @@ var DisplayServersAsChannels = (_ => {
 				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.homebuttonicon} {
 					width: ${amounts.serverElementHeight/32 * 28}px;
 					height: ${amounts.serverElementHeight/32 * 20}px;
+				}
+
+				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.avatarwrapper} {
+					width: ${amounts.serverElementHeight/32 * 24}px !important;
+					height: ${amounts.serverElementHeight/32 * 24}px !important;
 				}
 				
 				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildseparator} {
