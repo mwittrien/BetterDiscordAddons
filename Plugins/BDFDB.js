@@ -2718,8 +2718,8 @@
 		let sMinX, sMaxX, sMinY, sMaxY, hMinX, hMaxX, aMinX, aMaxX, gMinX, gMaxX;
 
 		updateRects();
-
-		if (isGradient) for (let pos in color) if (pos > 0 && pos < 1) gradientpane.appendChild(BDFDB.DOMUtils.create(`<div class="gradient-cursor" style="position: absolute; left: ${pos * 100}%;"><div style="background-color: ${color[pos]} !important;"></div></div>`));
+		
+		if (isGradient) for (let pos in color) if (pos > 0 && pos < 1) gradientpane.appendChild(BDFDB.DOMUtils.create(`<div class="gradient-cursor" style="position: absolute; left: ${pos * 100}%;"><div style="background-color: ${BDFDB.ColorUtils.convert(color[pos], "RGBA")} !important;"></div></div>`));
 
 		updateColors(false);
 		
