@@ -2191,6 +2191,24 @@
 		for (let info of BDFDB.ChannelUtils.getAll()) if (info && info.id == id) return info;
 		return null;
 	};
+	BDFDB.ChannelUtils.getName = function (id, addPrefix) {
+		let channel = BDFDB.LibraryModules.ChannelStore.getChannel(id);
+		if (!channel) return "";
+		switch (channel.type) {
+			case BDFDB.DiscordConstants.ChannelTypes.DM:
+				let user = channel.recipients.map(BDFDB.LibraryModules.UserStore.getUser).filter(n => n)[0];
+				return (addPrefix && "@" || "") + (user && user.toString() || "");
+			case BDFDB.DiscordConstants.ChannelTypes.GROUP_DM:
+				if (channel.name) return channel.name;
+				let users = channel.recipients.map(BDFDB.LibraryModules.UserStore.getUser).filter(n => n);
+				return users.length > 0 ? users.map(user => user.toString).join(", ") : BDFDB.LanguageUtils.LanguageStrings.UNNAMED;
+			case BDFDB.DiscordConstants.ChannelTypes.GUILD_ANNOUNCEMENT:
+			case BDFDB.DiscordConstants.ChannelTypes.GUILD_TEXT:
+				return (addPrefix && "#" || "") + channel.name;
+			default:
+				return channel.name
+		}
+	};
 	BDFDB.ChannelUtils.getAll = function () {
 		var found = [];
 		for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.channels), {name: ["ChannelCategoryItem", "ChannelItem", "PrivateChannel"], all:true, unlimited:true})) if (ins.props && !ins.props.ispin && ins.props.channel && ins._reactInternalFiber.return) {
