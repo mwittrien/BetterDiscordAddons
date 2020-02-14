@@ -4,7 +4,7 @@ var PinDMs = (_ => {
 	return class PinDMs {
 		getName () {return "PinDMs";}
 
-		getVersion () {return "1.6.1";}
+		getVersion () {return "1.6.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -20,7 +20,7 @@ var PinDMs = (_ => {
 			this.patchedModules = {
 				before: {
 					PrivateChannelsList: "render",
-					UnreadDMs: "render",
+					UnreadDMs: "render"
 				},
 				after: {
 					PrivateChannelsList: "render",
@@ -502,7 +502,7 @@ var PinDMs = (_ => {
 						if (!BDFDB.DataUtils.get(this, "settings", "sortInRecentOrder")) {
 							e.node.setAttribute("draggable", false);
 							e.node.PinDMsMouseDownListener = event => {
-								if (!BDFDB.BdUtils.isPluginEnabled("PinDMs")) e.node.removeEventListener("mousedown", e.node.PinDMsMouseDownListener);
+								if (!BDFDB.BDUtils.isPluginEnabled("PinDMs")) e.node.removeEventListener("mousedown", e.node.PinDMsMouseDownListener);
 								else {
 									let mousemove = event2 => {
 										if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
@@ -554,24 +554,23 @@ var PinDMs = (_ => {
 							e.node.addEventListener("mousedown", e.node.PinDMsMouseDownListener);
 						}
 					}
-					if (e.returnvalue) {
-						e.returnvalue.props.children = [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-								text: BDFDB.LanguageUtils.LanguageStrings.UNPIN,
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-									className: BDFDB.disCN._pindmsunpinbutton,
-									onClick: event => {
-										BDFDB.ListenerUtils.stopEvent(event);
-										this.removeFromCategory(e.instance.props.channel.id, category, "dmCategories");
-									},
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-										className: BDFDB.disCN._pindmsunpinicon,
-										name: BDFDB.LibraryComponents.SvgIcon.Names.PIN
-									})
+					if (e.returnvalue) e.returnvalue.props.children = [
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+							text: BDFDB.LanguageUtils.LanguageStrings.UNPIN,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+								className: BDFDB.disCN._pindmsunpinbutton,
+								onClick: event => {
+									BDFDB.ListenerUtils.stopEvent(event);
+									this.removeFromCategory(e.instance.props.channel.id, category, "dmCategories");
+								},
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+									className: BDFDB.disCN._pindmsunpinicon,
+									name: BDFDB.LibraryComponents.SvgIcon.Names.PIN
 								})
 							})
-						].concat(e.returnvalue.props.children).flat(10);
-					}
+						}),
+						e.returnvalue.props.children
+					].flat(10).filter(n => n);
 				}
 			}
 		}
