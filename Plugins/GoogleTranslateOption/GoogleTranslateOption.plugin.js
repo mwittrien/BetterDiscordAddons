@@ -346,6 +346,7 @@ var GoogleTranslateOption = (_ => {
 								type: "Switch",
 								className: BDFDB.disCN.marginbottom8,
 								label: "Translate your Messages before sending",
+								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 								value: translating,
 								onChange: value => {
 									translating = value;

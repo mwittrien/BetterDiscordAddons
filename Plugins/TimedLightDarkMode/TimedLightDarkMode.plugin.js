@@ -97,7 +97,6 @@ class TimedLightDarkMode {
 						keys: ["settings", "running"],
 						value: settings.running,
 						label: `${BDFDB.LanguageUtils.LanguageStrings.THEME} Timer`,
-						labelClassName: BDFDB.disCN.marginreset,
 						tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 						onChange: (value, instance) => {
 							this.startInterval();

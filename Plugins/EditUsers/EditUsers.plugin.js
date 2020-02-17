@@ -245,7 +245,7 @@ var EditUsers = (_ => {
 										label: this.labels.submenu_usersettings_text,
 										action: _ => {
 											BDFDB.ContextMenuUtils.close(e.instance);
-											this.showUserSettings(e.instance.props.user);
+											this.openUserSettingsModal(e.instance.props.user);
 										}
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
@@ -820,7 +820,7 @@ var EditUsers = (_ => {
 			BDFDB.MessageUtils.rerenderAll();
 		}
 
-		showUserSettings (info) {
+		openUserSettingsModal (info) {
 			let data = BDFDB.DataUtils.load(this, "users", info.id) || {};
 			let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), info.id) || {};
 			
@@ -866,6 +866,7 @@ var EditUsers = (_ => {
 								type: "Switch",
 								className: BDFDB.disCN.marginbottom20 + " input-removeicon",
 								label: this.labels.modal_removeicon_text,
+								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 								value: data.removeIcon,
 								onChange: (value, instance) => {
 									let avatarinputins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","USERAVATAR"]]});
@@ -925,6 +926,7 @@ var EditUsers = (_ => {
 								type: "Switch",
 								className: BDFDB.disCN.marginbottom20 + " input-ignoretagcolor",
 								label: this.labels.modal_ignoretagcolor_text,
+								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 								value: data.ignoreTagColor,
 								onChange: (value, instance) => {
 									let colorpicker3ins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["number",3]]});

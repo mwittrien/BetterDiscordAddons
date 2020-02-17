@@ -724,6 +724,7 @@ var ServerFolders = (_ => {
 								type: "Switch",
 								className: BDFDB.disCN.marginbottom20 + " input-usecloseicon",
 								label: this.labels.modal_usecloseicon_text,
+								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 								value: data.useCloseIcon
 							})
 						]
@@ -753,6 +754,7 @@ var ServerFolders = (_ => {
 								type: "Switch",
 								className: BDFDB.disCN.marginbottom20 + " input-swapcolors",
 								label: this.labels.modal_swapcolor_text,
+								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 								value: data.swapColors
 							})
 						]
@@ -780,6 +782,7 @@ var ServerFolders = (_ => {
 								type: "Switch",
 								className: BDFDB.disCN.marginbottom20 + " input-copytooltipcolor",
 								label: this.labels.modal_copytooltipcolor_text,
+								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 								value: data.copyTooltipColor
 							})
 						]

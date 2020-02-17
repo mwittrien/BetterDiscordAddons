@@ -7397,7 +7397,7 @@
 						align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
 						children: [
 							this.props.label ? (this.props.tag ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormTitle, {
-								className: this.props.labelClassName,
+								className: BDFDB.DOMUtils.formatClassName(this.props.labelClassName, BDFDB.disCN.marginreset),
 								tag: this.props.tag,
 								children: this.props.label
 							}) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {

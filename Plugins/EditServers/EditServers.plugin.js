@@ -168,7 +168,7 @@ var EditServers = (_ => {
 										label: this.labels.submenu_serversettings_text,
 										action: _ => {
 											BDFDB.ContextMenuUtils.close(e.instance);
-											this.showServerSettings(e.instance.props.guild.id);
+											this.openGuildSettingsModal(e.instance.props.guild.id);
 										}
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
@@ -372,7 +372,7 @@ var EditServers = (_ => {
 			}
 		}
 
-		showServerSettings (guildId) {
+		openGuildSettingsModal (guildId) {
 			let guild = BDFDB.LibraryModules.GuildStore.getGuild(guildId);
 			if (!guild) return;
 			let data = BDFDB.DataUtils.load(this, "servers", guild.id) || {};
@@ -420,6 +420,7 @@ var EditServers = (_ => {
 								type: "Switch",
 								className: BDFDB.disCN.marginbottom8 + " input-ignorecustomname",
 								label: this.labels.modal_ignorecustomname_text,
+								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 								value: data.ignoreCustomName,
 								onChange: (value, instance) => {
 									currentIgnoreCustomNameState = value;
@@ -449,6 +450,7 @@ var EditServers = (_ => {
 								type: "Switch",
 								className: BDFDB.disCN.marginbottom8 + " input-removeicon",
 								label: this.labels.modal_removeicon_text,
+								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 								value: data.removeIcon,
 								onChange: (value, instance) => {
 									let iconinputins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","GUILDICON"]]});
@@ -479,6 +481,7 @@ var EditServers = (_ => {
 								type: "Switch",
 								className: BDFDB.disCN.marginbottom20 + " input-removebanner",
 								label: this.labels.modal_removebanner_text,
+								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 								value: data.removeBanner,
 								disabled: guild.id == "410787888507256842",
 								onChange: (value, instance) => {

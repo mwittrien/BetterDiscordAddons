@@ -173,7 +173,7 @@ var EditChannels = (_ => {
 										label: this.labels.submenu_channelsettings_text,
 										action: _ => {
 											BDFDB.ContextMenuUtils.close(e.instance);
-											this.showChannelSettings(e.instance.props.channel);
+											this.openChannelSettingsModal(e.instance.props.channel);
 										}
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
@@ -494,7 +494,7 @@ var EditChannels = (_ => {
 			BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"Channel", unlimited:true}));
 		}
 
-		showChannelSettings (channel) {
+		openChannelSettingsModal (channel) {
 			let data = BDFDB.DataUtils.load(this, "channels", channel.id) || {};
 			
 			BDFDB.ModalUtils.open(this, {
@@ -530,6 +530,7 @@ var EditChannels = (_ => {
 						type: "Switch",
 						className: BDFDB.disCN.marginbottom20 + " input-inheritcolor",
 						label: this.labels.modal_inheritcolor_text,
+						tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 						value: channel.type == 4 && data.inheritColor,
 						disabled: channel.type != 4
 					})
