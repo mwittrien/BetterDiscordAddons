@@ -1914,6 +1914,10 @@
 		if (BDFDB.ObjectUtils.is(component)) component.defaultProps = Object.assign({}, component.defaultProps, defaultProps);
 	};
 
+	BDFDB.sameProto = function (a, b) {
+		if (a != null && typeof a == "object") return a.constructor && a.constructor.prototype && typeof a.constructor.prototype.isPrototypeOf == "function" && a.constructor.prototype.isPrototypeOf(b);
+		else return typeof a == typeof b;
+	};
 	BDFDB.equals = function (mainA, mainB, sorted) {
 		var i = -1;
 		if (sorted === undefined || typeof sorted !== "boolean") sorted = false;
@@ -2433,18 +2437,19 @@
 		if (!BDFDB.ObjectUtils.is(plugin)) return id === undefined ? {} : null;
 		let defaults = (plugin == BDFDB && InternalBDFDB || plugin).defaults;
 		if (!BDFDB.ObjectUtils.is(defaults) || !defaults[key]) return id === undefined ? {} : null;
-		let oldconfig = BDFDB.DataUtils.load(plugin, key), newconfig = {}, update = false;
+		let oldC = BDFDB.DataUtils.load(plugin, key), newC = {}, update = false;
 		for (let k in defaults[key]) {
-			if (oldconfig[k] == null) {
-				newconfig[k] = BDFDB.ObjectUtils.is(defaults[key][k].value) ? BDFDB.ObjectUtils.deepAssign({}, defaults[key][k].value) : defaults[key][k].value;
+			let isObj = BDFDB.ObjectUtils.is(defaults[key][k].value);
+			if (oldC[k] == null || isObj && (!BDFDB.ObjectUtils.is(oldC[k]) || Object.keys(defaults[key][k]).some(n => defaults[key][k][n] != null && !BDFDB.sameProto(defaults[key][k][n], oldC[k][n])))) {
+				newC[k] = isObj ? BDFDB.ObjectUtils.deepAssign({}, defaults[key][k].value) : defaults[key][k].value;
 				update = true;
 			}
-			else newconfig[k] = oldconfig[k];
+			else newC[k] = oldC[k];
 		}
-		if (update) BDFDB.DataUtils.save(newconfig, plugin, key);
+		if (update) BDFDB.DataUtils.save(newC, plugin, key);
 		
-		if (id === undefined) return newconfig;
-		else return newconfig[id] === undefined ? null : newconfig[id];
+		if (id === undefined) return newC;
+		else return newC[id] === undefined ? null : newC[id];
 	};
 	InternalBDFDB.readConfig = function (path) {
 		try {return JSON.parse(LibraryRequires.fs.readFileSync(path));}
