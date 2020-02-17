@@ -4,7 +4,7 @@ var EditUsers = (_ => {
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.7.6";}
+		getVersion () {return "3.7.7";}
 
 		getAuthor () {return "DevilBro";}
 
