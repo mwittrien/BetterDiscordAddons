@@ -2440,7 +2440,7 @@
 		let oldC = BDFDB.DataUtils.load(plugin, key), newC = {}, update = false;
 		for (let k in defaults[key]) {
 			let isObj = BDFDB.ObjectUtils.is(defaults[key][k].value);
-			if (oldC[k] == null || isObj && (!BDFDB.ObjectUtils.is(oldC[k]) || Object.keys(defaults[key][k]).some(n => defaults[key][k][n] != null && !BDFDB.sameProto(defaults[key][k][n], oldC[k][n])))) {
+			if (oldC[k] == null || isObj && (!BDFDB.ObjectUtils.is(oldC[k]) || Object.keys(defaults[key][k].value).some(n => defaults[key][k].value[n] != null && !BDFDB.sameProto(defaults[key][k].value[n], oldC[k][n])))) {
 				newC[k] = isObj ? BDFDB.ObjectUtils.deepAssign({}, defaults[key][k].value) : defaults[key][k].value;
 				update = true;
 			}
