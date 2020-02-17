@@ -834,7 +834,7 @@ var EditUsers = (_ => {
 						children: [
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 								title: this.labels.modal_username_text,
-								className: BDFDB.disCN.marginbottom20 + " input-username",
+								className: BDFDB.disCN.marginbottom8 + " input-username",
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 									value: data.name,
 									placeholder: member.nick || info.username,
@@ -843,17 +843,17 @@ var EditUsers = (_ => {
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 								title: this.labels.modal_usertag_text,
-								className: BDFDB.disCN.marginbottom20 + " input-usertag",
+								className: BDFDB.disCN.marginbottom8 + " input-usertag",
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 									value: data.tag
 								})
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 								title: this.labels.modal_useravatar_text,
-								className: BDFDB.disCN.marginbottom8 + " input-useravatar",
+								className: BDFDB.disCN.marginbottom4 + " input-useravatar",
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-									inputClassName: !data.removeIcon && data.url ? BDFDB.disCN.inputsuccess : null,
 									inputId: "USERAVATAR",
+									success: !data.removeIcon && data.url,
 									value: data.url,
 									placeholder: BDFDB.UserUtils.getAvatar(info.id),
 									disabled: data.removeIcon,
@@ -864,17 +864,43 @@ var EditUsers = (_ => {
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 								type: "Switch",
-								className: BDFDB.disCN.marginbottom20 + " input-removeicon",
+								className: BDFDB.disCN.marginbottom8 + " input-removeicon",
 								label: this.labels.modal_removeicon_text,
 								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 								value: data.removeIcon,
 								onChange: (value, instance) => {
-									let avatarinputins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","USERAVATAR"]]});
-									if (avatarinputins) {
-										delete avatarinputins.props.success;
-										delete avatarinputins.props.errorMessage;
-										avatarinputins.props.disabled = value;
-										BDFDB.ReactUtils.forceUpdate(avatarinputins);
+									let avatarInputIins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","USERAVATAR"]]});
+									if (avatarInputIins) {
+										delete avatarInputIins.props.success;
+										delete avatarInputIins.props.errorMessage;
+										avatarInputIins.props.disabled = value;
+										BDFDB.ReactUtils.forceUpdate(avatarInputIins);
+									}
+								}
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+								title: this.labels.modal_useravatar_text,
+								className: BDFDB.disCN.marginbottom4 + " input-userstatus",
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+									inputId: "USERSTATUS",
+									value: data.url,
+									placeholder: BDFDB.UserUtils.getAvatar(info.id),
+									disabled: data.removeStatus
+								})
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+								type: "Switch",
+								className: BDFDB.disCN.marginbottom8 + " input-removestatus",
+								label: this.labels.modal_removeicon_text,
+								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+								value: data.removeStatus,
+								onChange: (value, instance) => {
+									let statusInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","USERSTATUS"]]});
+									if (statusInputIns) {
+										delete statusInputIns.props.success;
+										delete statusInputIns.props.errorMessage;
+										statusInputIns.props.disabled = value;
+										BDFDB.ReactUtils.forceUpdate(statusInputIns);
 									}
 								}
 							})
