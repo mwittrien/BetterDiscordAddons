@@ -389,18 +389,18 @@ var EditServers = (_ => {
 						children: [
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 								title: this.labels.modal_guildname_text,
-								className: BDFDB.disCN.marginbottom8,
+								className: BDFDB.disCN.marginbottom8 + " input-guildname",
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-									inputClassName: "input-guildname",
+									inputId: "GUILDNAME",
 									value: data.name,
 									placeholder: guild.name,
 									autoFocus: true,
 									onChange: (value, instance) => {
 										if (!currentIgnoreCustomNameState) {
-											let acronyminputins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return.return, {props:[["inputId","GUILDACRONYM"]]});
-											if (acronyminputins) {
-												acronyminputins.props.placeholder = value && BDFDB.LibraryModules.StringUtils.getAcronym(value) || guild.acronym;
-												BDFDB.ReactUtils.forceUpdate(acronyminputins);
+											let acronymInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return.return, {props:[["inputId","GUILDACRONYM"]]});
+											if (acronymInputIns) {
+												acronymInputIns.props.placeholder = value && BDFDB.LibraryModules.StringUtils.getAcronym(value) || guild.acronym;
+												BDFDB.ReactUtils.forceUpdate(acronymInputIns);
 											}
 										}
 									}
@@ -408,9 +408,9 @@ var EditServers = (_ => {
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 								title: this.labels.modal_guildacronym_text,
-								className: BDFDB.disCN.marginbottom4,
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-									inputClassName: "input-guildacronym",
+								className: BDFDB.disCN.marginbottom4 + " input-guildacronym",
+								children: 
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 									inputId: "GUILDACRONYM",
 									value: data.shortName,
 									placeholder: !data.ignoreCustomName && data.name && BDFDB.LibraryModules.StringUtils.getAcronym(data.name) || guild.acronym
@@ -424,18 +424,18 @@ var EditServers = (_ => {
 								value: data.ignoreCustomName,
 								onChange: (value, instance) => {
 									currentIgnoreCustomNameState = value;
-									let acronyminputins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","GUILDACRONYM"]]});
-									if (acronyminputins) {
-										acronyminputins.props.placeholder = !value && data.name && BDFDB.LibraryModules.StringUtils.getAcronym(data.name) || guild.acronym;
-										BDFDB.ReactUtils.forceUpdate(acronyminputins);
+									let nameInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","GUILDNAME"]]});
+									let acronymInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","GUILDACRONYM"]]});
+									if (nameInputIns && acronymInputIns) {
+										acronymInputIns.props.placeholder = !value && nameInputIns.props.value && BDFDB.LibraryModules.StringUtils.getAcronym(nameInputIns.props.value) || guild.acronym;
+										BDFDB.ReactUtils.forceUpdate(acronymInputIns);
 									}
 								}
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 								title: this.labels.modal_guildicon_text,
-								className: BDFDB.disCN.marginbottom4,
+								className: BDFDB.disCN.marginbottom4 + " input-guildicon",
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-									inputClassName: "input-guildicon",
 									inputId: "GUILDICON",
 									success: !data.removeIcon && data.url,
 									value: data.url,
@@ -453,20 +453,19 @@ var EditServers = (_ => {
 								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 								value: data.removeIcon,
 								onChange: (value, instance) => {
-									let iconinputins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","GUILDICON"]]});
-									if (iconinputins) {
-										delete iconinputins.props.success;
-										delete iconinputins.props.errorMessage;
-										iconinputins.props.disabled = value;
-										BDFDB.ReactUtils.forceUpdate(iconinputins);
+									let iconInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","GUILDICON"]]});
+									if (iconInputIns) {
+										delete iconInputIns.props.success;
+										delete iconInputIns.props.errorMessage;
+										iconInputIns.props.disabled = value;
+										BDFDB.ReactUtils.forceUpdate(iconInputIns);
 									}
 								}
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 								title: this.labels.modal_guildbanner_text,
-								className: BDFDB.disCN.marginbottom4,
+								className: BDFDB.disCN.marginbottom4 + " input-guildbanner",
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-									inputClassName: "input-guildbanner",
 									inputId: "GUILDBANNER",
 									success: !data.removeBanner && data.banner,
 									value: data.banner,
@@ -485,12 +484,12 @@ var EditServers = (_ => {
 								value: data.removeBanner,
 								disabled: guild.id == "410787888507256842",
 								onChange: (value, instance) => {
-									let bannerinputins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","GUILDBANNER"]]});
-									if (bannerinputins) {
-										delete bannerinputins.props.success;
-										delete bannerinputins.props.errorMessage;
-										bannerinputins.props.disabled = value;
-										BDFDB.ReactUtils.forceUpdate(bannerinputins);
+									let bannerInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","GUILDBANNER"]]});
+									if (bannerInputIns) {
+										delete bannerInputIns.props.success;
+										delete bannerInputIns.props.errorMessage;
+										bannerInputIns.props.disabled = value;
+										BDFDB.ReactUtils.forceUpdate(bannerInputIns);
 									}
 								}
 							})
@@ -554,12 +553,12 @@ var EditServers = (_ => {
 					click: modal => {
 						let olddata = Object.assign({}, data);
 						
-						let guildnameinput = modal.querySelector(".input-guildname");
-						let guildacronyminput = modal.querySelector(".input-guildacronym");
+						let guildnameinput = modal.querySelector(".input-guildname " + BDFDB.dotCN.input);
+						let guildacronyminput = modal.querySelector(".input-guildacronym " + BDFDB.dotCN.input);
 						let ignorecustomnameinput = modal.querySelector(".input-ignorecustomname " + BDFDB.dotCN.switchinner);
-						let guildiconinput = modal.querySelector(".input-guildicon");
+						let guildiconinput = modal.querySelector(".input-guildicon " + BDFDB.dotCN.input);
 						let removeiconinput = modal.querySelector(".input-removeicon " + BDFDB.dotCN.switchinner);
-						let guildbannerinput = modal.querySelector(".input-guildbanner");
+						let guildbannerinput = modal.querySelector(".input-guildbanner " + BDFDB.dotCN.input);
 						let removebannerinput = modal.querySelector(".input-removebanner " + BDFDB.dotCN.switchinner);
 						
 						data.name = guildnameinput.value.trim() || null;
