@@ -389,15 +389,16 @@ var EditServers = (_ => {
 						children: [
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 								title: this.labels.modal_guildname_text,
-								className: BDFDB.disCN.marginbottom8 + " input-guildname",
+								className: BDFDB.disCN.marginbottom20,
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-									inputId: "GUILDNAME",
+									className: "input-guildname",
+									key: "GUILDNAME",
 									value: data.name,
 									placeholder: guild.name,
 									autoFocus: true,
 									onChange: (value, instance) => {
 										if (!currentIgnoreCustomNameState) {
-											let acronymInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return.return, {props:[["inputId","GUILDACRONYM"]]});
+											let acronymInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return.return, {key: "GUILDACRONYM"});
 											if (acronymInputIns) {
 												acronymInputIns.props.placeholder = value && BDFDB.LibraryModules.StringUtils.getAcronym(value) || guild.acronym;
 												BDFDB.ReactUtils.forceUpdate(acronymInputIns);
@@ -408,90 +409,123 @@ var EditServers = (_ => {
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 								title: this.labels.modal_guildacronym_text,
-								className: BDFDB.disCN.marginbottom4 + " input-guildacronym",
+								className: BDFDB.disCN.marginbottom8,
 								children: 
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-									inputId: "GUILDACRONYM",
+									className: "input-guildacronym",
+									key: "GUILDACRONYM",
 									value: data.shortName,
 									placeholder: !data.ignoreCustomName && data.name && BDFDB.LibraryModules.StringUtils.getAcronym(data.name) || guild.acronym
 								})
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 								type: "Switch",
-								className: BDFDB.disCN.marginbottom8 + " input-ignorecustomname",
+								className: BDFDB.disCN.marginbottom20 + " input-ignorecustomname",
 								label: this.labels.modal_ignorecustomname_text,
 								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 								value: data.ignoreCustomName,
 								onChange: (value, instance) => {
 									currentIgnoreCustomNameState = value;
-									let nameInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","GUILDNAME"]]});
-									let acronymInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","GUILDACRONYM"]]});
+									let nameInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key: "GUILDNAME"});
+									let acronymInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key: "GUILDACRONYM"});
 									if (nameInputIns && acronymInputIns) {
 										acronymInputIns.props.placeholder = !value && nameInputIns.props.value && BDFDB.LibraryModules.StringUtils.getAcronym(nameInputIns.props.value) || guild.acronym;
 										BDFDB.ReactUtils.forceUpdate(acronymInputIns);
 									}
 								}
 							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-								title: this.labels.modal_guildicon_text,
-								className: BDFDB.disCN.marginbottom4 + " input-guildicon",
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-									inputId: "GUILDICON",
-									success: !data.removeIcon && data.url,
-									value: data.url,
-									placeholder: BDFDB.GuildUtils.getIcon(guild.id),
-									disabled: data.removeIcon,
-									onChange: (value, instance) => {
-										this.checkUrl(value, instance);
-									}
-								})
+							BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN.marginbottom20,
+								children: [
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+										className: BDFDB.disCN.marginbottom8,
+										align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+										direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
+										children: [
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+												className: BDFDB.disCN.marginreset,
+												tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+												children: this.labels.modal_guildicon_text
+											}),
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+												className: "input-removeicon",
+												type: "Switch",
+												grow: 0,
+												label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
+												tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+												value: data.removeIcon,
+												onChange: (value, instance) => {
+													let iconInputIins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return, {key: "GUILDICON"});
+													if (iconInputIins) {
+														delete iconInputIins.props.success;
+														delete iconInputIins.props.errorMessage;
+														iconInputIins.props.disabled = value;
+														BDFDB.ReactUtils.forceUpdate(iconInputIins);
+													}
+												}
+											})
+										]
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+										className: "input-guildicon",
+										key: "GUILDICON",
+										success: !data.removeIcon && data.url,
+										maxLength: 100000000000000000000,
+										value: data.url,
+										placeholder: BDFDB.GuildUtils.getIcon(guild.id),
+										disabled: data.removeIcon,
+										onChange: (value, instance) => {
+											this.checkUrl(value, instance);
+										}
+									})
+								]
 							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-								type: "Switch",
-								className: BDFDB.disCN.marginbottom8 + " input-removeicon",
-								label: this.labels.modal_removeicon_text,
-								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-								value: data.removeIcon,
-								onChange: (value, instance) => {
-									let iconInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","GUILDICON"]]});
-									if (iconInputIns) {
-										delete iconInputIns.props.success;
-										delete iconInputIns.props.errorMessage;
-										iconInputIns.props.disabled = value;
-										BDFDB.ReactUtils.forceUpdate(iconInputIns);
-									}
-								}
-							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-								title: this.labels.modal_guildbanner_text,
-								className: BDFDB.disCN.marginbottom4 + " input-guildbanner",
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-									inputId: "GUILDBANNER",
-									success: !data.removeBanner && data.banner,
-									value: data.banner,
-									placeholder: BDFDB.GuildUtils.getBanner(guild.id),
-									disabled: data.removeBanner || guild.id == "410787888507256842",
-									onChange: (value, instance) => {
-										this.checkUrl(value, instance);
-									}
-								})
-							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-								type: "Switch",
-								className: BDFDB.disCN.marginbottom20 + " input-removebanner",
-								label: this.labels.modal_removebanner_text,
-								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-								value: data.removeBanner,
-								disabled: guild.id == "410787888507256842",
-								onChange: (value, instance) => {
-									let bannerInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","GUILDBANNER"]]});
-									if (bannerInputIns) {
-										delete bannerInputIns.props.success;
-										delete bannerInputIns.props.errorMessage;
-										bannerInputIns.props.disabled = value;
-										BDFDB.ReactUtils.forceUpdate(bannerInputIns);
-									}
-								}
+							BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN.marginbottom20,
+								children: [
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+										className: BDFDB.disCN.marginbottom8,
+										align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+										direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
+										children: [
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+												className: BDFDB.disCN.marginreset,
+												tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+												children: this.labels.modal_guildbanner_text
+											}),
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+												className: "input-removebanner",
+												type: "Switch",
+												grow: 0,
+												label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
+												tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+												value: data.removeBanner && guild.id != "410787888507256842",
+												disabled: guild.id == "410787888507256842",
+												onChange: (value, instance) => {
+													let bannerInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return, {key: "GUILDBANNER"});
+													if (bannerInputIns) {
+														delete bannerInputIns.props.success;
+														delete bannerInputIns.props.errorMessage;
+														bannerInputIns.props.disabled = value;
+														BDFDB.ReactUtils.forceUpdate(bannerInputIns);
+													}
+												}
+											})
+										]
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+										className: "input-guildbanner",
+										key: "GUILDBANNER",
+										success: !data.removeBanner && data.banner,
+										maxLength: 100000000000000000000,
+										value: data.banner,
+										placeholder: BDFDB.GuildUtils.getBanner(guild.id),
+										disabled: data.removeBanner || guild.id == "410787888507256842",
+										onChange: (value, instance) => {
+											this.checkUrl(value, instance);
+										}
+									})
+								]
 							})
 						]
 					}),
@@ -626,9 +660,7 @@ var EditServers = (_ => {
 						modal_guildacronym_text:			"Akronim lokalnog poslužitelja",
 						modal_ignorecustomname_text:		"Koristite izvorno ime poslužitelja za akronim poslužitelja",
 						modal_guildicon_text:				"Ikona",
-						modal_removeicon_text:				"Ukloni ikonu",
 						modal_guildbanner_text:				"Baner",
-						modal_removebanner_text:			"Uklonite baner",
 						modal_tabheader1_text:				"Poslužitelja",
 						modal_tabheader2_text:				"Boja ikona",
 						modal_tabheader3_text:				"Boja tooltip",
@@ -648,9 +680,7 @@ var EditServers = (_ => {
 						modal_guildacronym_text:			"Lokalt serverakronym",
 						modal_ignorecustomname_text:		"Brug det originale servernavn til serverens akronym",
 						modal_guildicon_text:				"Ikon",
-						modal_removeicon_text:				"Fjern ikon",
 						modal_guildbanner_text:				"Banner",
-						modal_removebanner_text:			"Fjern banner",
 						modal_tabheader1_text:				"Server",
 						modal_tabheader2_text:				"Ikonfarve",
 						modal_tabheader3_text:				"Tooltipfarve",
@@ -670,9 +700,7 @@ var EditServers = (_ => {
 						modal_guildacronym_text:			"Lokale Serverkürzel",
 						modal_ignorecustomname_text:		"Benutze den ursprünglichen Servernamen für das Serverkürzel",
 						modal_guildicon_text:				"Icon",
-						modal_removeicon_text:				"Icon entfernen",
 						modal_guildbanner_text:				"Banner",
-						modal_removebanner_text:			"Banner entfernen",
 						modal_tabheader1_text:				"Server",
 						modal_tabheader2_text:				"Iconfarbe",
 						modal_tabheader3_text:				"Tooltipfarbe",
@@ -692,9 +720,7 @@ var EditServers = (_ => {
 						modal_guildacronym_text:			"Acrónimo local del servidor",
 						modal_ignorecustomname_text:		"Use el nombre del servidor original para el acrónimo del servidor",
 						modal_guildicon_text:				"Icono",
-						modal_removeicon_text:				"Eliminar icono",
 						modal_guildbanner_text:				"Bandera",
-						modal_removebanner_text:			"Eliminar bandera",
 						modal_tabheader1_text:				"Servidor",
 						modal_tabheader2_text:				"Color del icono",
 						modal_tabheader3_text:				"Color de tooltip",
@@ -714,9 +740,7 @@ var EditServers = (_ => {
 						modal_guildacronym_text:			"Acronyme local de serveur",
 						modal_ignorecustomname_text:		"Utilisez le nom de serveur d'origine pour l'acronyme de serveur",
 						modal_guildicon_text:				"Icône",
-						modal_removeicon_text:				"Supprimer l'icône",
 						modal_guildbanner_text:				"Bannière",
-						modal_removebanner_text:			"Supprimer la bannière",
 						modal_tabheader1_text:				"Serveur",
 						modal_tabheader2_text:				"Couleur de l'icône",
 						modal_tabheader3_text:				"Couleur de tooltip",
@@ -736,9 +760,7 @@ var EditServers = (_ => {
 						modal_guildacronym_text:			"Acronimo locale server",
 						modal_ignorecustomname_text:		"Utilizzare il nome del server originale per l'acronimo del server",
 						modal_guildicon_text:				"Icona",
-						modal_removeicon_text:				"Rimuova l'icona",
 						modal_guildbanner_text:				"Bandiera",
-						modal_removebanner_text:			"Rimuovi bandiera",
 						modal_tabheader1_text:				"Server",
 						modal_tabheader2_text:				"Colore dell'icona",
 						modal_tabheader3_text:				"Colore della tooltip",
@@ -758,9 +780,7 @@ var EditServers = (_ => {
 						modal_guildacronym_text:			"Lokale server acroniem",
 						modal_ignorecustomname_text:		"Gebruik de oorspronkelijke servernaam voor het serveracrononiem",
 						modal_guildicon_text:				"Icoon",
-						modal_removeicon_text:				"Verwijder icoon",
 						modal_guildbanner_text:				"Banier",
-						modal_removebanner_text:			"Verwijder banier",
 						modal_tabheader1_text:				"Server",
 						modal_tabheader2_text:				"Icoonkleur",
 						modal_tabheader3_text:				"Tooltipkleur",
@@ -780,9 +800,7 @@ var EditServers = (_ => {
 						modal_guildacronym_text:			"Lokalt serverforkortelse",
 						modal_ignorecustomname_text:		"Bruk det originale servernavnet til serverforkortelsen",
 						modal_guildicon_text:				"Ikon",
-						modal_removeicon_text:				"Fjern ikon",
 						modal_guildbanner_text:				"Banner",
-						modal_removebanner_text:			"Fjern banner",
 						modal_tabheader1_text:				"Server",
 						modal_tabheader2_text:				"Ikonfarge",
 						modal_tabheader3_text:				"Tooltipfarge",
@@ -802,9 +820,7 @@ var EditServers = (_ => {
 						modal_guildacronym_text:			"Akronim lokalnego serwera",
 						modal_ignorecustomname_text:		"Użyj oryginalnej nazwy serwera dla akronimu serwera",
 						modal_guildicon_text:				"Ikona",
-						modal_removeicon_text:				"Usuń ikonę",
 						modal_guildbanner_text:				"Baner",
-						modal_removebanner_text:			"Usuń baner",
 						modal_tabheader1_text:				"Serwer",
 						modal_tabheader2_text:				"Kolor ikony",
 						modal_tabheader3_text:				"Kolor podpowiedzi",
@@ -824,9 +840,7 @@ var EditServers = (_ => {
 						modal_guildacronym_text:			"Acrônimo local de servidor",
 						modal_ignorecustomname_text:		"Use o nome do servidor original para a sigla do servidor",
 						modal_guildicon_text:				"Icone",
-						modal_removeicon_text:				"Remover ícone",
 						modal_guildbanner_text:				"Bandeira",
-						modal_removebanner_text:			"Remover bandeira",
 						modal_tabheader1_text:				"Servidor",
 						modal_tabheader2_text:				"Cor do ícone",
 						modal_tabheader3_text:				"Cor da tooltip",
@@ -846,9 +860,7 @@ var EditServers = (_ => {
 						modal_guildacronym_text:			"Paikallisen palvelimen lyhenne",
 						modal_ignorecustomname_text:		"Käytä alkuperäistä palvelimen nimeä palvelimen lyhenteessä",
 						modal_guildicon_text:				"Ikonin",
-						modal_removeicon_text:				"Poista kuvake",
 						modal_guildbanner_text:				"Banneri",
-						modal_removebanner_text:			"Poista banneri",
 						modal_tabheader1_text:				"Palvelimen",
 						modal_tabheader2_text:				"Ikoninväri",
 						modal_tabheader3_text:				"Tooltipväri",
@@ -868,9 +880,7 @@ var EditServers = (_ => {
 						modal_guildacronym_text:			"Lokal server förkortning",
 						modal_ignorecustomname_text:		"Använd det ursprungliga servernamnet för serverförkortningen",
 						modal_guildicon_text:				"Ikon",
-						modal_removeicon_text:				"Ta bort ikonen",
 						modal_guildbanner_text:				"Banderoll",
-						modal_removebanner_text:			"Ta bort banderoll",
 						modal_tabheader1_text:				"Server",
 						modal_tabheader2_text:				"Ikonfärg",
 						modal_tabheader3_text:				"Tooltipfärg",
@@ -890,9 +900,7 @@ var EditServers = (_ => {
 						modal_guildacronym_text:			"Yerel sunucu kısaltması",
 						modal_ignorecustomname_text:		"Sunucu kısaltması için orijinal sunucu adını kullanın",
 						modal_guildicon_text:				"Simge",
-						modal_removeicon_text:				"Simge kaldır",
 						modal_guildbanner_text:				"Afişi",
-						modal_removebanner_text:			"Afişi kaldır",
 						modal_tabheader1_text:				"Sunucu",
 						modal_tabheader2_text:				"Simge rengi",
 						modal_tabheader3_text:				"Tooltip rengi",
@@ -912,9 +920,7 @@ var EditServers = (_ => {
 						modal_guildacronym_text:			"Zkratka místního serveru",
 						modal_ignorecustomname_text:		"Pro zkratku serveru použijte původní název serveru",
 						modal_guildicon_text:				"Ikony",
-						modal_removeicon_text:				"Odstranit ikonu",
 						modal_guildbanner_text:				"Prapor",
-						modal_removebanner_text:			"Odstraňte prapor",
 						modal_tabheader1_text:				"Server",
 						modal_tabheader2_text:				"Barva ikony",
 						modal_tabheader3_text:				"Barva tooltip",
@@ -934,9 +940,7 @@ var EditServers = (_ => {
 						modal_guildacronym_text:			"Акроним на локалния сървър",
 						modal_ignorecustomname_text:		"Използвайте оригиналното име на сървъра за съкращението на сървъра",
 						modal_guildicon_text:				"Икона",
-						modal_removeicon_text:				"Премахване на иконата",
 						modal_guildbanner_text:				"Знаме",
-						modal_removebanner_text:			"Премахване на знаме",
 						modal_tabheader1_text:				"Cървър",
 						modal_tabheader2_text:				"Цвят на иконата",
 						modal_tabheader3_text:				"Цвят на подсказка",
@@ -956,9 +960,7 @@ var EditServers = (_ => {
 						modal_guildacronym_text:			"Акроним локального сервера",
 						modal_ignorecustomname_text:		"Используйте оригинальное имя сервера для сокращения сервера",
 						modal_guildicon_text:				"Значок",
-						modal_removeicon_text:				"Удалить значок",
 						modal_guildbanner_text:				"Баннер",
-						modal_removebanner_text:			"Удалить баннер",
 						modal_tabheader1_text:				"Cервер",
 						modal_tabheader2_text:				"Цвет значков",
 						modal_tabheader3_text:				"Цвет подсказка",
@@ -978,9 +980,7 @@ var EditServers = (_ => {
 						modal_guildacronym_text:			"Акронім локального сервера",
 						modal_ignorecustomname_text:		"Використовуйте оригінальне ім'я сервера для абревіатури сервера",
 						modal_guildicon_text:				"Іконка",
-						modal_removeicon_text:				"Видалити піктограму",
 						modal_guildbanner_text:				"Банер",
-						modal_removebanner_text:			"Видалити банер",
 						modal_tabheader1_text:				"Cервер",
 						modal_tabheader2_text:				"Колір ікони",
 						modal_tabheader3_text:				"Колір підказка",
@@ -1000,9 +1000,7 @@ var EditServers = (_ => {
 						modal_guildacronym_text:			"ローカルサーバーの頭字語",
 						modal_ignorecustomname_text:		"サーバーの頭字語に元のサーバー名を使用する",
 						modal_guildicon_text:				"アイコン",
-						modal_removeicon_text:				"アイコンを削除",
 						modal_guildbanner_text:				"バナー",
-						modal_removebanner_text:			"バナーを削除",
 						modal_tabheader1_text:				"サーバー",
 						modal_tabheader2_text:				"アイコンの色",
 						modal_tabheader3_text:				"ツールチップの色",
@@ -1022,9 +1020,7 @@ var EditServers = (_ => {
 						modal_guildacronym_text:			"本地服務器縮寫",
 						modal_ignorecustomname_text:		"使用原始服務器名稱作為服務器首字母縮寫",
 						modal_guildicon_text:				"圖標",
-						modal_removeicon_text:				"刪除圖標",
 						modal_guildbanner_text:				"旗幟",
-						modal_removebanner_text:			"刪除橫幅",
 						modal_tabheader1_text:				"服務器",
 						modal_tabheader2_text:				"圖標顏色",
 						modal_tabheader3_text:				"工具提示顏色",
@@ -1044,9 +1040,7 @@ var EditServers = (_ => {
 						modal_guildacronym_text:			"로컬 서버 약어",
 						modal_ignorecustomname_text:		"서버 약어에 원래 서버 이름을 사용하십시오",
 						modal_guildicon_text:				"상",
-						modal_removeicon_text:				"상 삭제",
 						modal_guildbanner_text:				"기치",
-						modal_removebanner_text:			"배너 삭제",
 						modal_tabheader1_text:				"서버",
 						modal_tabheader2_text:				"상 색깔",
 						modal_tabheader3_text:				"툴팁 색깔",
@@ -1066,9 +1060,7 @@ var EditServers = (_ => {
 						modal_guildacronym_text:			"Local Serveracronym",
 						modal_ignorecustomname_text:		"Use the original Servername for the Serveracronym",
 						modal_guildicon_text:				"Icon",
-						modal_removeicon_text:				"Remove Icon",
 						modal_guildbanner_text:				"Banner",
-						modal_removebanner_text:			"Remove Banner",
 						modal_tabheader1_text:				"Server",
 						modal_tabheader2_text:				"Iconcolor",
 						modal_tabheader3_text:				"Tooltipcolor",

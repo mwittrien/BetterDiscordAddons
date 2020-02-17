@@ -4,7 +4,7 @@ var EditUsers = (_ => {
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.7.5";}
+		getVersion () {return "3.7.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ var EditUsers = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["Message Color","You can now set unique message colors for users"]],
+				"added":[["Custom Status","Ever been spoiled by a custom status of a user? You can now set your own local status for ppl or complete remove the status of a user"],["Message Color","You can now set unique message colors for users"]],
 				"fixed":[["Colored Text","Changing a User Color will now properly change the message color if Colored Text is enabled"],["Message Update","Fixed the plugin for the new Message Update"]],
 				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 			};
@@ -38,6 +38,7 @@ var EditUsers = (_ => {
 					SettingsInvites: "render",
 					GuildSettingsBans: "render",
 					InvitationCard: "render",
+					PrivateChannel: "render",
 					PrivateChannelRecipientsInvitePopout: "render",
 					QuickSwitchUserResult: "render",
 					SearchPopoutComponent: "render",
@@ -363,9 +364,12 @@ var EditUsers = (_ => {
 				let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
 				if (!e.returnvalue) {
 					e.instance.props.user = this.getUserData(e.instance.props.user.id, true, true);
-					if (data && data.name) {
-						e.instance.props.nickname = data.name;
-						e.instance.props.guildMember = Object.assign({}, e.instance.props.guildMember, {nick: data.name});
+					if (data) {
+						if (data.name) {
+							e.instance.props.nickname = data.name;
+							e.instance.props.guildMember = Object.assign({}, e.instance.props.guildMember, {nick: data.name});
+						}
+						if (data.removeStatus || data.status) e.instance.props.customStatusActivity = this.createCustomStatus(data);
 					}
 				}
 				else {
@@ -381,11 +385,25 @@ var EditUsers = (_ => {
 		}
 
 		processUserProfile (e) {
-			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInUserProfile")) e.instance.props.user = this.getUserData(e.instance.props.user.id);
+			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInUserProfile")) {
+				e.instance.props.user = this.getUserData(e.instance.props.user.id);
+				let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
+				if (data && (data.removeStatus || data.status)) e.instance.props.customStatusActivity = this.createCustomStatus(data);
+			}
 		}
 
 		processUserInfo (e) {
-			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInFriendList")) e.instance.props.user = this.getUserData(e.instance.props.user.id);
+			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInFriendList")) {
+				e.instance.props.user = this.getUserData(e.instance.props.user.id);
+				if (BDFDB.ReactUtils.isValidElement(e.instance.props.subText)) {
+					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
+					if (data && (data.removeStatus || data.status)) {
+						e.instance.props.subText.props.activities = [].concat(e.instance.props.subText.props.activities).filter(n => n && n.type != 4);
+						let activity = this.createCustomStatus(data);
+						if (activity) e.instance.props.subText.props.activities.unshift(activity);
+					}
+				}
+			}
 		}
 
 		processNowPlayingHeader (e) {
@@ -418,20 +436,21 @@ var EditUsers = (_ => {
 
 		processAccount (e) {
 			if (e.instance.props.currentUser && BDFDB.DataUtils.get(this, "settings", "changeInUserAccount")) {
-				if (!e.returnvalue) e.instance.props.currentUser = this.getUserData(e.instance.props.currentUser.id);
+					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.currentUser.id);
+				if (!e.returnvalue) {
+					e.instance.props.currentUser = this.getUserData(e.instance.props.currentUser.id);
+					if (data && (data.removeStatus || data.status)) e.instance.props.customStatusActivity = this.createCustomStatus(data);
+				}
 				else {
-					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "Tooltip"});
-					if (index > -1) {
-						if (typeof children[index].props.children == "function") {
-							let data = BDFDB.DataUtils.load(this, "users", e.instance.props.currentUser.id);
-							if (data && (data.color1 || data.color2)) {
-								let renderChildren = children[index].props.children;
-								children[index].props.children = (...args) => {
-									let renderedChildren = renderChildren(...args);
-									let [children2, index2] = BDFDB.ReactUtils.findChildren(renderedChildren, {name: "PanelTitle"});
-									if (index2 > -1) this.changeUserColor(children2[index2], e.instance.props.currentUser.id);
-									return renderedChildren;
-								}
+					if (data && (data.color1 || data.color2)) {
+						let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "Tooltip"});
+						if (index > -1 && typeof children[index].props.children == "function") {
+							let renderChildren = children[index].props.children;
+							children[index].props.children = (...args) => {
+								let renderedChildren = renderChildren(...args);
+								let [children2, index2] = BDFDB.ReactUtils.findChildren(renderedChildren, {name: "PanelTitle"});
+								if (index2 > -1) this.changeUserColor(children2[index2], e.instance.props.currentUser.id);
+								return renderedChildren;
 							}
 						}
 					}
@@ -538,7 +557,14 @@ var EditUsers = (_ => {
 				if (!e.returnvalue) {
 					e.instance.props.user = this.getUserData(e.instance.props.user.id);
 					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
-					if (data && data.name) e.instance.props.nick = data.name;
+					if (data) {
+						if (data.name) e.instance.props.nick = data.name;
+						if (data.removeStatus || data.status) {
+							e.instance.props.activities = [].concat(e.instance.props.activities).filter(n => n.type != 4);
+							let activity = this.createCustomStatus(data);
+							if (activity) e.instance.props.activities.unshift(activity);
+						}
+					}
 				}
 				else {
 					this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {changeBackground: true});
@@ -637,11 +663,20 @@ var EditUsers = (_ => {
 
 		processPrivateChannel (e) {
 			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInDmsList")) {
-				e.returnvalue.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getUserData(e.instance.props.user.id).username});
-				e.returnvalue.props.avatar.props.src = this.getUserAvatar(e.instance.props.user.id);
-				this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {changeBackground: true});
-				e.returnvalue.props.name = [e.returnvalue.props.name];
-				this.injectBadge(e.returnvalue.props.name, e.instance.props.user.id, null, 1);
+				if (!e.returnvalue) {
+					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
+					if (data && (data.removeStatus || data.status)) {
+						e.instance.props.activities = [].concat(e.instance.props.activities).filter(n => n.type != 4);
+						let activity = this.createCustomStatus(data);
+						if (activity) e.instance.props.activities.unshift(activity);
+					}
+				}
+				else {
+					e.returnvalue.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getUserData(e.instance.props.user.id).username});
+					this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {changeBackground: true});
+					e.returnvalue.props.name = [e.returnvalue.props.name];
+					this.injectBadge(e.returnvalue.props.name, e.instance.props.user.id, null, 1);
+				}
 			}
 		}
 
@@ -814,95 +849,139 @@ var EditUsers = (_ => {
 			}
 		}
 		
+		createCustomStatus (data) {
+			return !BDFDB.ObjectUtils.is(data) || data.removeStatus ? null : {
+				created_at: (new Date()).getTime().toString(),
+				emoji: null,
+				id: "custom",
+				name: "Custom Status",
+				state: data.status,
+				type: 4
+			}
+		}
+		
 		forceUpdateAll () {
 			this.changeAppTitle();
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 			BDFDB.MessageUtils.rerenderAll();
 		}
 
-		openUserSettingsModal (info) {
-			let data = BDFDB.DataUtils.load(this, "users", info.id) || {};
-			let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), info.id) || {};
+		openUserSettingsModal (user) {
+			let data = BDFDB.DataUtils.load(this, "users", user.id) || {};
+			let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), user.id) || {};
+			let activity = BDFDB.LibraryModules.StatusMetaUtils.getApplicationActivity(user.id);
 			
 			BDFDB.ModalUtils.open(this, {
 				size: "MEDIUM",
 				header: this.labels.modal_header_text,
-				subheader: member.nick || info.username,
+				subheader: member.nick || user.username,
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 						tab: this.labels.modal_tabheader1_text,
 						children: [
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 								title: this.labels.modal_username_text,
-								className: BDFDB.disCN.marginbottom8 + " input-username",
+								className: BDFDB.disCN.marginbottom20 + " input-username",
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 									value: data.name,
-									placeholder: member.nick || info.username,
+									placeholder: member.nick || user.username,
 									autoFocus: true
 								})
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 								title: this.labels.modal_usertag_text,
-								className: BDFDB.disCN.marginbottom8 + " input-usertag",
+								className: BDFDB.disCN.marginbottom20 + " input-usertag",
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 									value: data.tag
 								})
 							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-								title: this.labels.modal_useravatar_text,
-								className: BDFDB.disCN.marginbottom4 + " input-useravatar",
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-									inputId: "USERAVATAR",
-									success: !data.removeIcon && data.url,
-									value: data.url,
-									placeholder: BDFDB.UserUtils.getAvatar(info.id),
-									disabled: data.removeIcon,
-									onChange: (value, instance) => {
-										this.checkUrl(value, instance);
-									}
-								})
+							BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN.marginbottom20,
+								children: [
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+										className: BDFDB.disCN.marginbottom8,
+										align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+										direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
+										children: [
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+												className: BDFDB.disCN.marginreset,
+												tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+												children: this.labels.modal_useravatar_text
+											}),
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+												className: "input-removeicon",
+												type: "Switch",
+												grow: 0,
+												label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
+												tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+												value: data.removeIcon,
+												onChange: (value, instance) => {
+													let avatarInputIins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return, {key: "USERAVATAR"});
+													if (avatarInputIins) {
+														delete avatarInputIins.props.success;
+														delete avatarInputIins.props.errorMessage;
+														avatarInputIins.props.disabled = value;
+														BDFDB.ReactUtils.forceUpdate(avatarInputIins);
+													}
+												}
+											})
+										]
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+										className: "input-useravatar",
+										key: "USERAVATAR",
+										success: !data.removeIcon && data.url,
+										maxLength: 100000000000000000000,
+										value: data.url,
+										placeholder: BDFDB.UserUtils.getAvatar(user.id),
+										disabled: data.removeIcon,
+										onChange: (value, instance) => {
+											this.checkUrl(value, instance);
+										}
+									})
+								]
 							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-								type: "Switch",
-								className: BDFDB.disCN.marginbottom8 + " input-removeicon",
-								label: this.labels.modal_removeicon_text,
-								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-								value: data.removeIcon,
-								onChange: (value, instance) => {
-									let avatarInputIins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","USERAVATAR"]]});
-									if (avatarInputIins) {
-										delete avatarInputIins.props.success;
-										delete avatarInputIins.props.errorMessage;
-										avatarInputIins.props.disabled = value;
-										BDFDB.ReactUtils.forceUpdate(avatarInputIins);
-									}
-								}
-							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-								title: this.labels.modal_useravatar_text,
-								className: BDFDB.disCN.marginbottom4 + " input-userstatus",
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-									inputId: "USERSTATUS",
-									value: data.url,
-									placeholder: BDFDB.UserUtils.getAvatar(info.id),
-									disabled: data.removeStatus
-								})
-							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-								type: "Switch",
-								className: BDFDB.disCN.marginbottom8 + " input-removestatus",
-								label: this.labels.modal_removeicon_text,
-								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
-								value: data.removeStatus,
-								onChange: (value, instance) => {
-									let statusInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {props:[["inputId","USERSTATUS"]]});
-									if (statusInputIns) {
-										delete statusInputIns.props.success;
-										delete statusInputIns.props.errorMessage;
-										statusInputIns.props.disabled = value;
-										BDFDB.ReactUtils.forceUpdate(statusInputIns);
-									}
-								}
+							BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN.marginbottom20,
+								children: [
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+										className: BDFDB.disCN.marginbottom8,
+										align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+										direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
+										children: [
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+												className: BDFDB.disCN.marginreset,
+												tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+												children: BDFDB.LanguageUtils.LanguageStrings.CUSTOM_STATUS
+											}),
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+												className: "input-removestatus",
+												type: "Switch",
+												grow: 0,
+												label: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
+												tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+												value: data.removeStatus,
+												onChange: (value, instance) => {
+													let statusInputIins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return, {key: "USERSTATUS"});
+													if (statusInputIins) {
+														delete statusInputIins.props.success;
+														delete statusInputIins.props.errorMessage;
+														statusInputIins.props.disabled = value;
+														BDFDB.ReactUtils.forceUpdate(statusInputIins);
+													}
+												}
+											})
+										]
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+										className: "input-userstatus",
+										key: "USERSTATUS",
+										maxLength: 100000000000000000000,
+										value: data.status,
+										placeholder: activity && activity.type == 4 && activity.state || "",
+										disabled: data.removeStatus
+									})
+								]
 							})
 						]
 					}),
@@ -985,17 +1064,21 @@ var EditUsers = (_ => {
 					click: modal => {
 						let olddata = Object.assign({}, data);
 						
-						let usernameinput = modal.querySelector(".input-username " + BDFDB.dotCN.input);
-						let usertaginput = modal.querySelector(".input-usertag " + BDFDB.dotCN.input);
-						let useravatarinput = modal.querySelector(".input-useravatar " + BDFDB.dotCN.input);
-						let removeiconinput = modal.querySelector(".input-removeicon " + BDFDB.dotCN.switchinner);
-						let ignoretagcolorinput = modal.querySelector(".input-ignoretagcolor " + BDFDB.dotCN.switchinner);
+						let userNameInput = modal.querySelector(".input-username " + BDFDB.dotCN.input);
+						let userTagInput = modal.querySelector(".input-usertag " + BDFDB.dotCN.input);
+						let userAvatarInput = modal.querySelector(".input-useravatar " + BDFDB.dotCN.input);
+						let removeIconInput = modal.querySelector(".input-removeicon " + BDFDB.dotCN.switchinner);
+						let userStatusInput = modal.querySelector(".input-userstatus " + BDFDB.dotCN.input);
+						let removeStatusInput = modal.querySelector(".input-removestatus " + BDFDB.dotCN.switchinner);
+						let ignoreTagColorInput = modal.querySelector(".input-ignoretagcolor " + BDFDB.dotCN.switchinner);
 						
-						data.name = usernameinput.value.trim() || null;
-						data.tag = usertaginput.value.trim() || null;
-						data.url = (!data.removeIcon && BDFDB.DOMUtils.containsClass(useravatarinput, BDFDB.disCN.inputsuccess) ? useravatarinput.value.trim() : null) || null;
-						data.removeIcon = removeiconinput.checked;
-						data.ignoreTagColor = ignoretagcolorinput.checked;
+						data.name = userNameInput.value.trim() || null;
+						data.tag = userTagInput.value.trim() || null;
+						data.url = (!data.removeIcon && BDFDB.DOMUtils.containsClass(userAvatarInput, BDFDB.disCN.inputsuccess) ? userAvatarInput.value.trim() : null) || null;
+						data.removeIcon = removeIconInput.checked;
+						data.status = !data.removeStatus && userStatusInput.value.trim() || null;
+						data.removeStatus = removeStatusInput.checked;
+						data.ignoreTagColor = ignoreTagColorInput.checked;
 
 						data.color1 = BDFDB.ColorUtils.getSwatchColor(modal, 1);
 						data.color2 = BDFDB.ColorUtils.getSwatchColor(modal, 2);
@@ -1004,8 +1087,8 @@ var EditUsers = (_ => {
 						data.color5 = BDFDB.ColorUtils.getSwatchColor(modal, 5);
 
 						let changed = false;
-						if (Object.keys(data).every(key => data[key] == null || data[key] == false) && (changed = true)) BDFDB.DataUtils.remove(this, "users", info.id);
-						else if (!BDFDB.equals(olddata, data) && (changed = true)) BDFDB.DataUtils.save(data, this, "users", info.id);
+						if (Object.keys(data).every(key => data[key] == null || data[key] == false) && (changed = true)) BDFDB.DataUtils.remove(this, "users", user.id);
+						else if (!BDFDB.equals(olddata, data) && (changed = true)) BDFDB.DataUtils.save(data, this, "users", user.id);
 						if (changed) this.forceUpdateAll();
 					}
 				}]
@@ -1046,7 +1129,6 @@ var EditUsers = (_ => {
 						modal_username_text:				"Lokalno korisničko ime",
 						modal_usertag_text:					"Oznaka",
 						modal_useravatar_text:				"Ikona",
-						modal_removeicon_text:				"Ukloni ikonu",
 						modal_tabheader1_text:				"Korisnik",
 						modal_tabheader2_text:				"Boja naziva",
 						modal_tabheader3_text:				"Boja oznaka",
@@ -1068,7 +1150,6 @@ var EditUsers = (_ => {
 						modal_username_text:				"Lokalt brugernavn",
 						modal_usertag_text:					"Initialer",
 						modal_useravatar_text:				"Ikon",
-						modal_removeicon_text:				"Fjern ikon",
 						modal_tabheader1_text:				"Bruger",
 						modal_tabheader2_text:				"Navnefarve",
 						modal_tabheader3_text:				"Etiketfarve",
@@ -1090,7 +1171,6 @@ var EditUsers = (_ => {
 						modal_username_text:				"Lokaler Benutzername",
 						modal_usertag_text:					"Etikett",
 						modal_useravatar_text:				"Icon",
-						modal_removeicon_text:				"Entferne Icon",
 						modal_tabheader1_text:				"Benutzer",
 						modal_tabheader2_text:				"Namensfarbe",
 						modal_tabheader3_text:				"Etikettfarbe",
@@ -1112,7 +1192,6 @@ var EditUsers = (_ => {
 						modal_username_text:				"Nombre local de usuario",
 						modal_usertag_text:					"Etiqueta",
 						modal_useravatar_text:				"Icono",
-						modal_removeicon_text:				"Eliminar icono",
 						modal_tabheader1_text:				"Usuario",
 						modal_tabheader2_text:				"Color del nombre",
 						modal_tabheader3_text:				"Color de la etiqueta",
@@ -1134,7 +1213,6 @@ var EditUsers = (_ => {
 						modal_username_text:				"Nom local d'utilisateur",
 						modal_usertag_text:					"Étiquette",
 						modal_useravatar_text:				"Icône",
-						modal_removeicon_text:				"Supprimer l'icône",
 						modal_tabheader1_text:				"Serveur",
 						modal_tabheader2_text:				"Couleur du nom",
 						modal_tabheader3_text:				"Couleur de l'étiquette",
@@ -1156,7 +1234,6 @@ var EditUsers = (_ => {
 						modal_username_text:				"Nome locale utente",
 						modal_usertag_text:					"Etichetta",
 						modal_useravatar_text:				"Icona",
-						modal_removeicon_text:				"Rimuova l'icona",
 						modal_tabheader1_text:				"Utente",
 						modal_tabheader2_text:				"Colore del nome",
 						modal_tabheader3_text:				"Colore della etichetta",
@@ -1178,7 +1255,6 @@ var EditUsers = (_ => {
 						modal_username_text:				"Lokale gebruikernaam",
 						modal_usertag_text:					"Etiket",
 						modal_useravatar_text:				"Icoon",
-						modal_removeicon_text:				"Verwijder icoon",
 						modal_tabheader1_text:				"Gebruiker",
 						modal_tabheader2_text:				"Naamkleur",
 						modal_tabheader3_text:				"Etiketkleur",
@@ -1200,7 +1276,6 @@ var EditUsers = (_ => {
 						modal_username_text:				"Lokalt gebruikernavn",
 						modal_usertag_text:					"Stikkord",
 						modal_useravatar_text:				"Ikon",
-						modal_removeicon_text:				"Fjern ikon",
 						modal_tabheader1_text:				"Bruker",
 						modal_tabheader2_text:				"Navnfarge",
 						modal_tabheader3_text:				"Stikkordfarge",
@@ -1222,7 +1297,6 @@ var EditUsers = (_ => {
 						modal_username_text:				"Lokalna nazwa użytkownika",
 						modal_usertag_text:					"Etykieta",
 						modal_useravatar_text:				"Ikona",
-						modal_removeicon_text:				"Usuń ikonę",
 						modal_tabheader1_text:				"Użytkownik",
 						modal_tabheader2_text:				"Kolor nazwy",
 						modal_tabheader3_text:				"Kolor etykiety",
@@ -1244,7 +1318,6 @@ var EditUsers = (_ => {
 						modal_username_text:				"Nome local do utilizador",
 						modal_usertag_text:					"Etiqueta",
 						modal_useravatar_text:				"Icone",
-						modal_removeicon_text:				"Remover ícone",
 						modal_tabheader1_text:				"Utilizador",
 						modal_tabheader2_text:				"Cor do nome",
 						modal_tabheader3_text:				"Cor da etiqueta",
@@ -1266,7 +1339,6 @@ var EditUsers = (_ => {
 						modal_username_text:				"Paikallinen käyttäjätunnus",
 						modal_usertag_text:					"Merkki",
 						modal_useravatar_text:				"Ikonin",
-						modal_removeicon_text:				"Poista kuvake",
 						modal_tabheader1_text:				"Käyttäjä",
 						modal_tabheader2_text:				"Nimiväri",
 						modal_tabheader3_text:				"Merkkiväri",
@@ -1288,7 +1360,6 @@ var EditUsers = (_ => {
 						modal_username_text:				"Lokalt användarenamn",
 						modal_usertag_text:					"Märka",
 						modal_useravatar_text:				"Ikon",
-						modal_removeicon_text:				"Ta bort ikonen",
 						modal_tabheader1_text:				"Användare",
 						modal_tabheader2_text:				"Namnfärg",
 						modal_tabheader3_text:				"Märkafärg",
@@ -1310,7 +1381,6 @@ var EditUsers = (_ => {
 						modal_username_text:				"Yerel Kullanıcı Isim",
 						modal_usertag_text:					"Etiket",
 						modal_useravatar_text:				"Simge",
-						modal_removeicon_text:				"Simge kaldır",
 						modal_tabheader1_text:				"Kullanıcı",
 						modal_tabheader2_text:				"Simge rengi",
 						modal_tabheader3_text:				"Isim rengi",
@@ -1332,7 +1402,6 @@ var EditUsers = (_ => {
 						modal_username_text:				"Místní název uživatel",
 						modal_usertag_text:					"Štítek",
 						modal_useravatar_text:				"Ikony",
-						modal_removeicon_text:				"Odstranit ikonu",
 						modal_tabheader1_text:				"Uživatel",
 						modal_tabheader2_text:				"Barva název",
 						modal_tabheader3_text:				"Barva štítek",
@@ -1354,7 +1423,6 @@ var EditUsers = (_ => {
 						modal_username_text:				"Локално име на потребител",
 						modal_usertag_text:					"Cвободен край",
 						modal_useravatar_text:				"Икона",
-						modal_removeicon_text:				"Премахване на иконата",
 						modal_tabheader1_text:				"Потребител",
 						modal_tabheader2_text:				"Цвят на име",
 						modal_tabheader3_text:				"Цвят на свободен край",
@@ -1376,7 +1444,6 @@ var EditUsers = (_ => {
 						modal_username_text:				"Имя локального пользователь",
 						modal_usertag_text:					"Tег",
 						modal_useravatar_text:				"Значок",
-						modal_removeicon_text:				"Удалить значок",
 						modal_tabheader1_text:				"Пользователь",
 						modal_tabheader2_text:				"Цвет имя",
 						modal_tabheader3_text:				"Цвет тег",
@@ -1398,7 +1465,6 @@ var EditUsers = (_ => {
 						modal_username_text:				"Локальне ім'я користувач",
 						modal_usertag_text:					"Tег",
 						modal_useravatar_text:				"Іконка",
-						modal_removeicon_text:				"Видалити піктограму",
 						modal_tabheader1_text:				"Користувач",
 						modal_tabheader2_text:				"Колір ім'я",
 						modal_tabheader3_text:				"Колір тег",
@@ -1420,7 +1486,6 @@ var EditUsers = (_ => {
 						modal_username_text:				"ローカルユーザーー名",
 						modal_usertag_text:					"タグ",
 						modal_useravatar_text:				"アイコン",
-						modal_removeicon_text:				"アイコンを削除",
 						modal_tabheader1_text:				"ユーザー",
 						modal_tabheader2_text:				"名の色",
 						modal_tabheader3_text:				"タグの色",
@@ -1442,7 +1507,6 @@ var EditUsers = (_ => {
 						modal_username_text:				"用戶名稱",
 						modal_usertag_text:					"標籤",
 						modal_useravatar_text:				"圖標",
-						modal_removeicon_text:				"刪除圖標",
 						modal_tabheader1_text:				"用戶",
 						modal_tabheader2_text:				"名稱顏色",
 						modal_tabheader3_text:				"標籤顏色",
@@ -1464,7 +1528,6 @@ var EditUsers = (_ => {
 						modal_username_text:				"로컬 사용자 이름",
 						modal_usertag_text:					"꼬리표",
 						modal_useravatar_text:				"상",
-						modal_removeicon_text:				"상 삭제",
 						modal_tabheader1_text:				"사용자",
 						modal_tabheader2_text:				"이름 색깔",
 						modal_tabheader3_text:				"꼬리표 색깔",
@@ -1486,7 +1549,6 @@ var EditUsers = (_ => {
 						modal_username_text:				"Local Username",
 						modal_usertag_text:					"Tag",
 						modal_useravatar_text:				"Icon",
-						modal_removeicon_text:				"Remove Icon",
 						modal_tabheader1_text:				"User",
 						modal_tabheader2_text:				"Namecolor",
 						modal_tabheader3_text:				"Tagcolor",
