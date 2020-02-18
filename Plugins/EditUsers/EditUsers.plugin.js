@@ -4,7 +4,7 @@ var EditUsers = (_ => {
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.7.7";}
+		getVersion () {return "3.7.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ var EditUsers = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["Custom Status","Ever been spoiled by a custom status of a user? You can now set your own local status for ppl or complete remove the status of a user"],["Message Color","You can now set unique message colors for users"]],
+				"added":[["Custom Status","Ever been spoiled by a custom status of a user? You can now set your own local status for ppl or complete remove the status of a user"],["Custom Status Part 2","You can now select your own emoji for the local custom status"],["Message Color","You can now set unique message colors for users"]],
 				"fixed":[["Colored Text","Changing a User Color will now properly change the message color if Colored Text is enabled"],["Message Update","Fixed the plugin for the new Message Update"]],
 				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 			};
@@ -369,7 +369,7 @@ var EditUsers = (_ => {
 							e.instance.props.nickname = data.name;
 							e.instance.props.guildMember = Object.assign({}, e.instance.props.guildMember, {nick: data.name});
 						}
-						if (data.removeStatus || data.status) e.instance.props.customStatusActivity = this.createCustomStatus(data);
+						if (data.removeStatus || data.status || data.statusEmoji) e.instance.props.customStatusActivity = this.createCustomStatus(data);
 					}
 				}
 				else {
@@ -388,7 +388,7 @@ var EditUsers = (_ => {
 			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInUserProfile")) {
 				e.instance.props.user = this.getUserData(e.instance.props.user.id);
 				let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
-				if (data && (data.removeStatus || data.status)) e.instance.props.customStatusActivity = this.createCustomStatus(data);
+				if (data && (data.removeStatus || data.status || data.statusEmoji)) e.instance.props.customStatusActivity = this.createCustomStatus(data);
 			}
 		}
 
@@ -397,7 +397,7 @@ var EditUsers = (_ => {
 				e.instance.props.user = this.getUserData(e.instance.props.user.id);
 				if (BDFDB.ReactUtils.isValidElement(e.instance.props.subText)) {
 					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
-					if (data && (data.removeStatus || data.status)) {
+					if (data && (data.removeStatus || data.status || data.statusEmoji)) {
 						e.instance.props.subText.props.activities = [].concat(e.instance.props.subText.props.activities).filter(n => n && n.type != 4);
 						let activity = this.createCustomStatus(data);
 						if (activity) e.instance.props.subText.props.activities.unshift(activity);
@@ -439,7 +439,7 @@ var EditUsers = (_ => {
 					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.currentUser.id);
 				if (!e.returnvalue) {
 					e.instance.props.currentUser = this.getUserData(e.instance.props.currentUser.id);
-					if (data && (data.removeStatus || data.status)) e.instance.props.customStatusActivity = this.createCustomStatus(data);
+					if (data && (data.removeStatus || data.status || data.statusEmoji)) e.instance.props.customStatusActivity = this.createCustomStatus(data);
 				}
 				else {
 					if (data && (data.color1 || data.color2)) {
@@ -559,7 +559,7 @@ var EditUsers = (_ => {
 					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
 					if (data) {
 						if (data.name) e.instance.props.nick = data.name;
-						if (data.removeStatus || data.status) {
+						if (data.removeStatus || data.status || data.statusEmoji) {
 							e.instance.props.activities = [].concat(e.instance.props.activities).filter(n => n.type != 4);
 							let activity = this.createCustomStatus(data);
 							if (activity) e.instance.props.activities.unshift(activity);
@@ -665,7 +665,7 @@ var EditUsers = (_ => {
 			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInDmsList")) {
 				if (!e.returnvalue) {
 					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
-					if (data && (data.removeStatus || data.status)) {
+					if (data && (data.removeStatus || data.status || data.statusEmoji)) {
 						e.instance.props.activities = [].concat(e.instance.props.activities).filter(n => n.type != 4);
 						let activity = this.createCustomStatus(data);
 						if (activity) e.instance.props.activities.unshift(activity);
@@ -852,7 +852,7 @@ var EditUsers = (_ => {
 		createCustomStatus (data) {
 			return !BDFDB.ObjectUtils.is(data) || data.removeStatus ? null : {
 				created_at: (new Date()).getTime().toString(),
-				emoji: null,
+				emoji: data.statusEmoji,
 				id: "custom",
 				name: "Custom Status",
 				state: data.status,
@@ -962,24 +962,58 @@ var EditUsers = (_ => {
 												tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H5,
 												value: data.removeStatus,
 												onChange: (value, instance) => {
-													let statusInputIins = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return, {key: "USERSTATUS"});
-													if (statusInputIins) {
-														delete statusInputIins.props.success;
-														delete statusInputIins.props.errorMessage;
-														statusInputIins.props.disabled = value;
-														BDFDB.ReactUtils.forceUpdate(statusInputIins);
+													let statusInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return, {key: "USERSTATUS"});
+													let statusEmojiInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return, {key: "USERSTATUSEMOJI"});
+													if (statusInputIns && statusEmojiInputIns) {
+														delete statusInputIns.props.success;
+														delete statusInputIns.props.errorMessage;
+														statusInputIns.props.disabled = value;
+														delete statusEmojiInputIns.props.emoji;
+														BDFDB.ReactUtils.forceUpdate(statusInputIns, statusEmojiInputIns);
 													}
 												}
 											})
 										]
 									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-										className: "input-userstatus",
-										key: "USERSTATUS",
-										maxLength: 100000000000000000000,
-										value: data.status,
-										placeholder: activity && activity.type == 4 && activity.state || "",
-										disabled: data.removeStatus
+									BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCN.emojiinputcontainer,
+										children: [
+											BDFDB.ReactUtils.createElement("div", {
+												className: BDFDB.disCN.emojiinputbuttoncontainer,
+												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.EmojiPickerButton, {
+													className: "input-useremojistatus",
+													key: "USERSTATUSEMOJI",
+													emoji: data.statusEmoji
+												})
+											}),
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+												className: "input-userstatus",
+												inputClassName: BDFDB.disCN.emojiinput,
+												key: "USERSTATUS",
+												maxLength: 100000000000000000000,
+												value: data.status,
+												placeholder: activity && activity.type == 4 && activity.state || "",
+												disabled: data.removeStatus
+											}),
+											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+												size: BDFDB.LibraryComponents.Button.Sizes.NONE,
+												look: BDFDB.LibraryComponents.Button.Looks.BLANK,
+												className: BDFDB.disCN.emojiinputclearbutton,
+												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+													className: BDFDB.disCN.emojiinputclearicon,
+													name: BDFDB.LibraryComponents.SvgIcon.Names.CLOSE_CIRCLE
+												}),
+												onClick: (e, instance) => {
+													let statusInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return, {key: "USERSTATUS"});
+													let statusEmojiInputIns = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return.return, {key: "USERSTATUSEMOJI"});
+													if (statusInputIns && statusEmojiInputIns) {
+														statusInputIns.props.value = "";
+														delete statusEmojiInputIns.props.emoji;
+														BDFDB.ReactUtils.forceUpdate(statusInputIns, statusEmojiInputIns);
+													}
+												}
+											})
+										]
 									})
 								]
 							})
@@ -1069,6 +1103,7 @@ var EditUsers = (_ => {
 						let userAvatarInput = modal.querySelector(".input-useravatar " + BDFDB.dotCN.input);
 						let removeIconInput = modal.querySelector(".input-removeicon " + BDFDB.dotCN.switchinner);
 						let userStatusInput = modal.querySelector(".input-userstatus " + BDFDB.dotCN.input);
+						let userStatusEmojiPicker = modal.querySelector(".input-useremojistatus " + BDFDB.dotCN.emojiold);
 						let removeStatusInput = modal.querySelector(".input-removestatus " + BDFDB.dotCN.switchinner);
 						let ignoreTagColorInput = modal.querySelector(".input-ignoretagcolor " + BDFDB.dotCN.switchinner);
 						
@@ -1077,6 +1112,7 @@ var EditUsers = (_ => {
 						data.url = (!data.removeIcon && BDFDB.DOMUtils.containsClass(userAvatarInput, BDFDB.disCN.inputsuccess) ? userAvatarInput.value.trim() : null) || null;
 						data.removeIcon = removeIconInput.checked;
 						data.status = !data.removeStatus && userStatusInput.value.trim() || null;
+						data.statusEmoji = !data.removeStatus && BDFDB.ReactUtils.findValue(userStatusEmojiPicker, "emoji", {up: true}) || null;
 						data.removeStatus = removeStatusInput.checked;
 						data.ignoreTagColor = ignoreTagColorInput.checked;
 
