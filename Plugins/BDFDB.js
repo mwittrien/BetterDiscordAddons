@@ -6796,6 +6796,8 @@
 	
 	InternalComponents.LibraryComponents.EmojiButton = BDFDB.ModuleUtils.findByName("EmojiButton");
 	
+	InternalComponents.LibraryComponents.EmojiPicker = BDFDB.ModuleUtils.findByString("allowManagedEmojis", "theme");
+	
 	InternalComponents.LibraryComponents.FavButton = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.FavButton") || reactInitialized && class BDFDB_FavButton extends LibraryModules.React.Component {
 		handleClick() {
 			this.props.isFavorite = !this.props.isFavorite;
@@ -7152,7 +7154,8 @@
 	
 	InternalComponents.LibraryComponents.PopoutContainer = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.PopoutContainer") || reactInitialized && class BDFDB_PopoutContainer extends LibraryModules.React.Component {
 		handleRender(e) {
-			return this.popout = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Popout, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+			let children = typeof this.props.renderPopout == "function" ? this.props.renderPopout(this) : null;
+			return this.popout = !children ? null : (!this.props.wrap ? children : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Popout, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				className: this.props.popoutClassName,
 				containerInstance: this,
 				isChild: true,
@@ -7160,7 +7163,7 @@
 				style: this.props.popoutStyle,
 				onClose: typeof this.props.onClose == "function" ? this.props.onClose.bind(this) : _ => {},
 				children: typeof this.props.renderPopout == "function" ? this.props.renderPopout(this) : null
-			}), "popoutStyle", "popoutClassName"));
+			}), "popoutStyle", "popoutClassName")));
 		}
 		componentDidMount() {
 			let basepopout = BDFDB.ReactUtils.findOwner(this, {name:"BasePopout"});
@@ -7197,6 +7200,7 @@
 			});
 		}
 	};
+	InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.PopoutContainer, {wrap:true});
 	
 	InternalComponents.LibraryComponents.QuickSelect = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.QuickSelect") || reactInitialized && class BDFDB_QuickSelect extends LibraryModules.React.Component {
 		handleChange(option) {
