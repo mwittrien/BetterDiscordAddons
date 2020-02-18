@@ -4,7 +4,7 @@ var ChatAliases = (_ => {
 	return class ChatAliases {
 		getName () {return "ChatAliases";}
 
-		getVersion () {return "2.0.8";}
+		getVersion () {return "2.0.9";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ var ChatAliases = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["File Aliases","Fixed issue where file aliases would get replaced for the filepath and not the file"],["New WYSIWYG Textarea","Fixed for the new WYSIWYG Textarea that is hidden by experiments"]],
+				"fixed":[["Aliases Autocomplete","Fixed menu not showing up"]],
 				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 			};
 
@@ -310,7 +310,7 @@ var ChatAliases = (_ => {
 				},
 				renderResults: (rest, currentSelected, setSelected, chooseSelected, autocompletes) => {
 					return [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AutocompleteComponents.Title, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AutocompleteItems.Title, {
 							title: [
 								"Aliases: ",
 								BDFDB.ReactUtils.createElement("strong", {
@@ -318,7 +318,7 @@ var ChatAliases = (_ => {
 								})
 							]
 						}),
-						autocompletes.aliases.map((aliasdata, i) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AutocompleteComponents.Generic, {
+						autocompletes.aliases.map((aliasdata, i) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AutocompleteItems.Generic, {
 							onClick: chooseSelected,
 							onHover: setSelected,
 							index: i,
