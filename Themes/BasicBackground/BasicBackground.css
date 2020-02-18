@@ -88,6 +88,7 @@
 		5.	MEMBERLIST
 		6.	SEARCHPAGE
 		7.	CALL
+		8.	UNAVAILABLE SCREEN
 	7.	ACTIVITYPAGE
 	8.	LIBRARY
 	9.	STORE/NITRO
@@ -162,6 +163,7 @@ body,														/* body														*/
 #app-mount .panels-j1Uci_ > *,								/* account/voice		inner								*/
 #app-mount .chat-3bRxxu,									/* chat					container							*/
 #app-mount .noChannel-Z1DQK7,								/* nochannel												*/
+#app-mount .content-MLh4nU,									/* unavailable												*/
 #app-mount .container-1D34oG,								/* peoples													*/
 #app-mount .pageWrapper-1PgVDX,								/* guilddiscovery											*/
 #app-mount .scroller-2FKFPG,								/* scroller													*/
@@ -1486,6 +1488,21 @@ body:before {
 .regionSelectPopout-p9-0_W {
 	width: 170px;
 }
+
+/* ----		6.8.	UNAVAILABLE SCREEN				---- */
+
+.category-2haXBH,											/* loadingplaceholders										*/
+.channelIcon-1TvDoP,
+.channelName-2wrHHc {
+	background-color: rgb(var(--vaccentcolor));
+}
+.splashImage-13vBzp {										/* screen				image								*/
+	opacity: 0.6;
+}
+.splashHeader-ehL7gZ {										/* screen				headertext							*/
+	color: rgb(var(--fontwhite1));
+}
+
 
 /* ~~~~		7.		ACTIVITYPAGE					~~~~ */
 
