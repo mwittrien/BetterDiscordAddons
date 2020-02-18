@@ -4718,6 +4718,8 @@
 		emojiinput: ["EmojiInput", "input"],
 		emojiinputbutton: ["EmojiInput", "emojiButton"],
 		emojiinputbuttoncontainer: ["EmojiInput", "emojiButtonContainer"],
+		emojiinputclearbutton: ["EmojiInput", "clearButton"],
+		emojiinputclearicon: ["EmojiInput", "clearIcon"],
 		emojiinputcontainer: ["EmojiInput", "inputContainer"],
 		emojipicker: ["EmojiPicker", "emojiPicker"],
 		emojipickerbutton: ["Reactions", "reactionBtn"],
@@ -6794,9 +6796,52 @@
 	
 	InternalComponents.LibraryComponents.DiscordTag = BDFDB.ModuleUtils.findByName("DiscordTag");
 	
+	InternalComponents.LibraryComponents.Emoji = BDFDB.ModuleUtils.findByName("Emoji");
+	
 	InternalComponents.LibraryComponents.EmojiButton = BDFDB.ModuleUtils.findByName("EmojiButton");
 	
 	InternalComponents.LibraryComponents.EmojiPicker = BDFDB.ModuleUtils.findByString("allowManagedEmojis", "theme");
+	
+	InternalComponents.LibraryComponents.EmojiPickerButton = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.EmojiPickerButton") || reactInitialized && class BDFDB_EmojiPickerButton extends LibraryModules.React.Component {
+		handleEmojiChange(emoji) {
+			if (emoji != null) {
+				this.props.emoji = emoji.id ? {
+					id: emoji.id,
+					name: emoji.name,
+					animated: emoji.animated
+				} : {
+					id: null,
+					name: emoji.optionallyDiverseSequence,
+					animated: false
+				};
+				if (typeof this.props.onSelect == "function") this.props.onSelect(this.props.emoji, this);
+				BDFDB.ReactUtils.forceUpdate(this);
+			}
+		}
+		render() {
+			return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.PopoutContainer, {
+				className: BDFDB.disCN.emojiinputbuttoncontainer,
+				children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.EmojiButton, {
+					className: BDFDB.disCN.emojiinputbutton,
+					renderButtonContents: this.props.emoji ? _ => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Emoji, {
+						className: BDFDB.disCN.emoji,
+						emoji: this.props.emoji
+					}) : null
+				}),
+				wrap: false,
+				animation: InternalComponents.LibraryComponents.PopoutContainer.Animation.NONE,
+				position: InternalComponents.LibraryComponents.PopoutContainer.Positions.TOP,
+				align: InternalComponents.LibraryComponents.PopoutContainer.Align.LEFT,
+				renderPopout: instance => {
+					return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.EmojiPicker, {
+						closePopout: instance.close,
+						onSelectEmoji: this.handleEmojiChange.bind(this),
+						allowManagedEmojis: false
+					});
+				}
+			})
+		}
+	};
 	
 	InternalComponents.LibraryComponents.FavButton = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.FavButton") || reactInitialized && class BDFDB_FavButton extends LibraryModules.React.Component {
 		handleClick() {
