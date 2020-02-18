@@ -6822,7 +6822,7 @@
 			return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.PopoutContainer, {
 				className: BDFDB.disCN.emojiinputbuttoncontainer,
 				children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.EmojiButton, {
-					className: BDFDB.disCN.emojiinputbutton,
+					className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.emojiinputbutton),
 					renderButtonContents: this.props.emoji ? _ => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Emoji, {
 						className: BDFDB.disCN.emoji,
 						emoji: this.props.emoji
