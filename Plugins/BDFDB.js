@@ -4114,6 +4114,7 @@
 	DiscordClassModules.EmbedActions = BDFDB.ModuleUtils.findByProperties("iconPlay", "iconWrapperActive");
 	DiscordClassModules.Emoji = BDFDB.ModuleUtils.find(m => typeof m.emoji == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.EmojiButton = BDFDB.ModuleUtils.findByProperties("emojiButton", "sprite");
+	DiscordClassModules.EmojiInput = BDFDB.ModuleUtils.findByProperties("inputContainer", "emojiButton");
 	DiscordClassModules.EmojiPicker = BDFDB.ModuleUtils.findByProperties("emojiPicker", "categories");
 	DiscordClassModules.File = BDFDB.ModuleUtils.findByProperties("downloadButton", "fileNameLink");
 	DiscordClassModules.Flex = BDFDB.ModuleUtils.findByProperties("alignBaseline", "alignCenter");
@@ -4714,6 +4715,10 @@
 		emojibuttonhovered: ["EmojiButton", "emojiButtonHovered"],
 		emojibuttonnormal: ["EmojiButton", "emojiButtonNormal"],
 		emojibuttonsprite: ["EmojiButton", "sprite"],
+		emojiinput: ["EmojiInput", "input"],
+		emojiinputbutton: ["EmojiInput", "emojiButton"],
+		emojiinputbuttoncontainer: ["EmojiInput", "emojiButtonContainer"],
+		emojiinputcontainer: ["EmojiInput", "inputContainer"],
 		emojipicker: ["EmojiPicker", "emojiPicker"],
 		emojipickerbutton: ["Reactions", "reactionBtn"],
 		emojipickercategories: ["EmojiPicker", "categories"],
@@ -6788,6 +6793,8 @@
 	InternalComponents.LibraryComponents.ContextMenus.UserSettingsCogContextMenu = BDFDB.ModuleUtils.findByName("UserSettingsCogContextMenu");
 	
 	InternalComponents.LibraryComponents.DiscordTag = BDFDB.ModuleUtils.findByName("DiscordTag");
+	
+	InternalComponents.LibraryComponents.EmojiButton = BDFDB.ModuleUtils.findByName("EmojiButton");
 	
 	InternalComponents.LibraryComponents.FavButton = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.FavButton") || reactInitialized && class BDFDB_FavButton extends LibraryModules.React.Component {
 		handleClick() {
