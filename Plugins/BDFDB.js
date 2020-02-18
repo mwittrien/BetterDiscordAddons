@@ -6966,6 +6966,7 @@
 			this.props.screenshare = this.props.state ? !!LibraryModules.StreamUtils.getAllApplicationStreams().filter(stream => stream.guildId == this.props.guild.id)[0] : false;
 			this.props.isCurrentUserInThisGuildVoice = this.props.state ? !LibraryModules.CurrentVoiceUtils.isDisabled() && LibraryModules.CurrentVoiceUtils.getGuildId() == this.props.guild.id : false;
 			this.props.animatable = this.props.state ? LibraryModules.IconUtils.hasAnimatedGuildIcon(this.props.guild) : false;
+			this.props.unavailable = this.props.state ? LibraryModules.GuildUnavailableStore.unavailableGuilds.includes(this.props.guild.id) : false;
 			var isDraggedGuild = this.props.draggingGuildId === this.props.guild.id;
 			var Guild = isDraggedGuild ? BDFDB.ReactUtils.createElement("div", {
 				children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.Items.DragPlaceholder, {})
