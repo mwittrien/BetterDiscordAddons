@@ -1,5 +1,6 @@
 (_ => {
 	if (window.BDFDB && window.BDFDB.ListenerUtils && typeof window.BDFDB.ListenerUtils.remove == "function") window.BDFDB.ListenerUtils.remove(window.BDFDB);
+	if (window.BDFDB && window.BDFDB.StoreChangeUtils && typeof window.BDFDB.StoreChangeUtils.remove == "function") window.BDFDB.StoreChangeUtils.remove(window.BDFDB);
 	if (window.BDFDB && window.BDFDB.ObserverUtils && typeof window.BDFDB.ObserverUtils.disconnect == "function") window.BDFDB.ObserverUtils.disconnect(window.BDFDB);
 	if (window.BDFDB && window.BDFDB.ModuleUtils && typeof window.BDFDB.ModuleUtils.unpatch == "function") window.BDFDB.ModuleUtils.unpatch(window.BDFDB);
 	if (window.BDFDB && window.BDFDB.WindowUtils && typeof window.BDFDB.WindowUtils.closeAll == "function") window.BDFDB.WindowUtils.closeAll(window.BDFDB);
@@ -99,6 +100,7 @@
 
 		BDFDB.ModuleUtils.unpatch(plugin);
 		BDFDB.ListenerUtils.remove(plugin);
+		BDFDB.StoreChangeUtils.remove(plugin);
 		BDFDB.ObserverUtils.disconnect(plugin);
 		BDFDB.WindowUtils.closeAll(plugin);
 		BDFDB.WindowUtils.removeListener(plugin);
@@ -346,23 +348,57 @@
 		}
 	};
 
+	BDFDB.StoreChangeUtils = {};
+	BDFDB.StoreChangeUtils.add = function (plugin, store, callback) {
+		if (!BDFDB.ObjectUtils.is(plugin) || !BDFDB.ObjectUtils.is(store) || typeof store.addChangeListener != "function" ||  typeof callback != "function") return;
+		BDFDB.ListenerUtils.remove(plugin, store, callback);
+		if (!BDFDB.ArrayUtils.is(plugin.changeListeners)) plugin.changeListeners = [];
+		plugin.changeListeners.push({store, callback});
+		store.addChangeListener(callback);
+	};
+	BDFDB.StoreChangeUtils.remove = function (plugin, store, callback) {
+		if (!BDFDB.ObjectUtils.is(plugin) || !BDFDB.ArrayUtils.is(plugin.changeListeners)) return;
+		if (!store) {
+			while (plugin.changeListeners.length) {
+				let listener = plugin.changeListeners.pop();
+				listener.store.removeChangeListener(listener.callback);
+			}
+		}
+		else if (BDFDB.ObjectUtils.is(store) && typeof store.addChangeListener == "function") {
+			if (!callback) {
+				for (let listener of plugin.changeListeners) {
+					let removedListeners = [];
+					if (listener.store == store) {
+						listener.store.removeChangeListener(listener.callback);
+						removedListeners.push(listener);
+					}
+					if (removedListeners.length) plugin.changeListeners = plugin.changeListeners.filter(listener => !removedListeners.includes(listener));
+				}
+			}
+			else if (typeof callback == "function") {
+				store.removeChangeListener(callback);
+				plugin.changeListeners = plugin.changeListeners.filter(listener => listener.store == store && listener.callback == callback);
+			}
+		}
+	};
+
 	BDFDB.ListenerUtils = {};
 	BDFDB.ListenerUtils.add = function (plugin, ele, actions, selectorOrCallback, callbackOrNothing) {
 		if (!BDFDB.ObjectUtils.is(plugin) || (!Node.prototype.isPrototypeOf(ele) && ele !== window) || !actions) return;
-		var callbackIs4th = typeof selectorOrCallback == "function";
-		var selector = callbackIs4th ? undefined : selectorOrCallback;
-		var callback = callbackIs4th ? selectorOrCallback : callbackOrNothing;
+		let callbackIs4th = typeof selectorOrCallback == "function";
+		let selector = callbackIs4th ? undefined : selectorOrCallback;
+		let callback = callbackIs4th ? selectorOrCallback : callbackOrNothing;
 		if (typeof callback != "function") return;
 		BDFDB.ListenerUtils.remove(plugin, ele, actions, selector);
-		for (var action of actions.split(" ")) {
+		for (let action of actions.split(" ")) {
 			action = action.split(".");
-			var eventname = action.shift().toLowerCase();
+			let eventname = action.shift().toLowerCase();
 			if (!eventname) return;
-			var origeventname = eventname;
+			let origeventname = eventname;
 			eventname = eventname == "mouseenter" || eventname == "mouseleave" ? "mouseover" : eventname;
-			var namespace = (action.join(".") || "") + plugin.name;
-			if (!BDFDB.ArrayUtils.is(plugin.listeners)) plugin.listeners = [];
-			var eventcallback = null;
+			let namespace = (action.join(".") || "") + plugin.name;
+			if (!BDFDB.ArrayUtils.is(plugin.eventListeners)) plugin.eventListeners = [];
+			let eventcallback = null;
 			if (selector) {
 				if (origeventname == "mouseenter" || origeventname == "mouseleave") {
 					eventcallback = e => {
@@ -392,44 +428,46 @@
 			}
 			else eventcallback = e => {callback(BDFDB.ListenerUtils.copyEvent(e, ele));};
 
-			plugin.listeners.push({ele, eventname, origeventname, namespace, selector, eventcallback});
+			plugin.eventListeners.push({ele, eventname, origeventname, namespace, selector, eventcallback});
 			ele.addEventListener(eventname, eventcallback, true);
 		}
 	};
 	BDFDB.ListenerUtils.remove = function (plugin, ele, actions = "", selector) {
-		if (!BDFDB.ObjectUtils.is(plugin) || !BDFDB.ArrayUtils.is(plugin.listeners)) return;
-		if (Node.prototype.isPrototypeOf(ele) || ele === window) {
-			for (var action of actions.split(" ")) {
-				action = action.split(".");
-				var eventname = action.shift().toLowerCase();
-				var namespace = (action.join(".") || "") + plugin.name;
-				for (let listener of plugin.listeners) {
-					let removedlisteners = [];
-					if (listener.ele == ele && (!eventname || listener.origeventname == eventname) && listener.namespace == namespace && (selector === undefined || listener.selector == selector)) {
-						ele.removeEventListener(listener.eventname, listener.eventcallback, true);
-						removedlisteners.push(listener);
-					}
-					if (removedlisteners.length) plugin.listeners = plugin.listeners.filter(listener => {return removedlisteners.indexOf(listener) < 0;});
-				}
+		if (!BDFDB.ObjectUtils.is(plugin) || !BDFDB.ArrayUtils.is(plugin.eventListeners)) return;
+		if (!ele) {
+			while (plugin.eventListeners.length) {
+				let listener = plugin.eventListeners.pop();
+				listener.ele.removeEventListener(listener.eventname, listener.eventcallback, true);
 			}
 		}
-		else if (!ele) {
-			for (let listener of plugin.listeners) listener.ele.removeEventListener(listener.eventname, listener.eventcallback, true);
-			plugin.listeners = [];
+		else if (Node.prototype.isPrototypeOf(ele) || ele === window) {
+			for (let action of actions.split(" ")) {
+				action = action.split(".");
+				let eventname = action.shift().toLowerCase();
+				let namespace = (action.join(".") || "") + plugin.name;
+				for (let listener of plugin.eventListeners) {
+					let removedListeners = [];
+					if (listener.ele == ele && (!eventname || listener.origeventname == eventname) && listener.namespace == namespace && (selector === undefined || listener.selector == selector)) {
+						listener.ele.removeEventListener(listener.eventname, listener.eventcallback, true);
+						removedListeners.push(listener);
+					}
+					if (removedListeners.length) plugin.eventListeners = plugin.eventListeners.filter(listener => !removedListeners.includes(listener));
+				}
+			}
 		}
 	};
 	BDFDB.ListenerUtils.multiAdd = function (node, actions, callback) {
 		if (!Node.prototype.isPrototypeOf(node) || !actions || typeof callback != "function") return;
-		for (var action of actions.trim().split(" ").filter(n => n)) node.addEventListener(action, callback, true);
+		for (let action of actions.trim().split(" ").filter(n => n)) node.addEventListener(action, callback, true);
 	};
 	BDFDB.ListenerUtils.multiRemove = function (node, actions, callback) {
 		if (!Node.prototype.isPrototypeOf(node) || !actions || typeof callback != "function") return;
-		for (var action of actions.trim().split(" ").filter(n => n)) node.removeEventListener(action, callback, true);
+		for (let action of actions.trim().split(" ").filter(n => n)) node.removeEventListener(action, callback, true);
 	};
 	BDFDB.ListenerUtils.addToChildren = function (node, actions, selector, callback) {
 		if (!Node.prototype.isPrototypeOf(node) || !actions || !selector || !selector.trim() || typeof callback != "function") return;
-		for (var action of actions.trim().split(" ").filter(n => n)) {
-			var eventcallback = callback;
+		for (let action of actions.trim().split(" ").filter(n => n)) {
+			let eventcallback = callback;
 			if (action == "mouseenter" || action == "mouseleave") eventcallback = e => {if (e.target.matches(selector)) callback(e);};
 			node.querySelectorAll(selector.trim()).forEach(child => {child.addEventListener(action, eventcallback, true);});
 		}
@@ -1539,7 +1577,7 @@
 	LibraryModules.SlateSelectionUtils = BDFDB.ModuleUtils.findByProperties("serialize", "serializeSelection");
 	LibraryModules.StateStoreUtils = BDFDB.ModuleUtils.findByProperties("useStateFromStores", "useStateFromStoresArray");
 	LibraryModules.StatusMetaUtils = BDFDB.ModuleUtils.findByProperties("getApplicationActivity", "getStatus");
-	LibraryModules.StoreUtils = BDFDB.ModuleUtils.findByProperties("get", "set", "clear", "remove");
+	LibraryModules.StoreChangeUtils = BDFDB.ModuleUtils.findByProperties("get", "set", "clear", "remove");
 	LibraryModules.StreamUtils = BDFDB.ModuleUtils.findByProperties("getStreamForUser", "getActiveStream");
 	LibraryModules.StringUtils = BDFDB.ModuleUtils.findByProperties("cssValueToNumber", "upperCaseFirstChar");
 	LibraryModules.UnreadGuildUtils = BDFDB.ModuleUtils.findByProperties("hasUnread", "getUnreadGuilds");
@@ -3645,13 +3683,13 @@
 		}
 	};
 	BDFDB.DiscordUtils.isDevModeEnabled = function () {
-		return LibraryModules.StoreUtils.get("UserSettingsStore").developerMode;
+		return LibraryModules.StoreChangeUtils.get("UserSettingsStore").developerMode;
 	};
 	BDFDB.DiscordUtils.getTheme = function () {
-		return LibraryModules.StoreUtils.get("UserSettingsStore").theme == "dark" ? BDFDB.disCN.themedark : BDFDB.disCN.themelight;
+		return LibraryModules.StoreChangeUtils.get("UserSettingsStore").theme == "dark" ? BDFDB.disCN.themedark : BDFDB.disCN.themelight;
 	};
 	BDFDB.DiscordUtils.getMode = function () {
-		return LibraryModules.StoreUtils.get("UserSettingsStore").message_display_compact ? "compact" : "cozy";
+		return LibraryModules.StoreChangeUtils.get("UserSettingsStore").message_display_compact ? "compact" : "cozy";
 	};
 	BDFDB.DiscordUtils.getZoomFactor = function () {
 		var arects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
@@ -3711,12 +3749,12 @@
 				let eventname = action.shift();
 				let namespace = (action.join(".") || "") + plugin.name;
 				for (let listener of plugin.ipcListeners) {
-					let removedlisteners = [];
+					let removedListeners = [];
 					if (listener.eventname == eventname && listener.namespace == namespace) {
 						LibraryRequires.electron.ipcRenderer.off(listener.eventname, listener.callback);
-						removedlisteners.push(listener);
+						removedListeners.push(listener);
 					}
-					if (removedlisteners.length) plugin.ipcListeners = plugin.ipcListeners.filter(listener => {return removedlisteners.indexOf(listener) < 0;});
+					if (removedListeners.length) plugin.ipcListeners = plugin.ipcListeners.filter(listener => {return removedListeners.indexOf(listener) < 0;});
 				}
 			}
 		}
@@ -8706,6 +8744,8 @@
 	BDFDB.ListenerUtils.add(BDFDB, window, "focus.BDFDBPressedKeysReset", e => {
 		BDFDB.InternalData.pressedKeys = [];
 	});
+	
+	/* unavailable */
 
 	BDFDB.patchPriority = 0;
 	
@@ -9135,6 +9175,61 @@
 	InternalBDFDB.addContextListeners(BDFDB);
 
 	if (BDFDB.UserUtils.me.id == "278543574059057154") {
+		let cachedGuilds = {};
+		InternalBDFDB.cacheGuilds = function () {
+			cachedGuilds = Object.assign(cachedGuilds, {
+				"86004744966914048": {
+					default_message_notifications: 1,
+					icon: "292e7f6bfff2b71dfd13e508a859aedd",
+					id: "86004744966914048",
+					joined_at: Date.now(),
+					name: "BetterDiscord",
+					owner_id: "81388395867156480"
+				},
+				"280806472928198656": {
+					default_message_notifications: 1,
+					icon: "cbdda04c041699d80689b99c4e5e89dc",
+					id: "280806472928198656",
+					joined_at: Date.now(),
+					name: "BetterDiscord2",
+					owner_id: "81388395867156480"
+				}
+			}, BDFDB.ObjectUtils.map(BDFDB.LibraryModules.GuildStore.getGuilds(), guild => {
+				return {
+					default_message_notifications: guild.defaultMessageNotifications,
+					icon: guild.icon,
+					id: guild.id,
+					joined_at: guild.joinedAt,
+					name: guild.name,
+					owner_id: guild.ownerId
+				};
+			}));
+		};
+		InternalBDFDB.guildStoreChanged = function () {
+			InternalBDFDB.cacheGuilds();
+			BDFDB.LibraryModules.DispatchApiUtils.wait(_ => {
+				for (let guildId of BDFDB.LibraryModules.GuildUnavailableStore.unavailableGuilds) if (cachedGuilds[guildId] && !BDFDB.LibraryModules.GuildStore.getGuild(guildId)) {
+					BDFDB.LibraryModules.DispatchApiUtils.dispatch({
+						type: "GUILD_CREATE",
+						guild: Object.assign({
+							channels: [],
+							icon: null,
+							members: [],
+							presences: [],
+							roles: {},
+							unavailable: true
+						}, cachedGuilds[guildId])
+					});
+					BDFDB.LibraryModules.DispatchApiUtils.dispatch({
+						type: "GUILD_UNAVAILABLE",
+						guildId: guildId
+					});
+				}
+			});
+		};
+		BDFDB.ListenerUtils.add(BDFDB, BDFDB.LibraryModules.GuildStore, InternalBDFDB.guildStoreChanged);
+		InternalBDFDB.guildStoreChanged();
+	
 		for (let module in DiscordClassModules) if (!DiscordClassModules[module]) BDFDB.LogUtils.warn(module + " not initialized in DiscordClassModules");
 		for (let obj in DiscordObjects) if (!DiscordObjects[obj]) BDFDB.LogUtils.warn(obj + " not initialized in DiscordObjects");
 		for (let require in LibraryRequires) if (!LibraryRequires[require]) BDFDB.LogUtils.warn(require + " not initialized in LibraryRequires");
