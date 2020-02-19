@@ -88,13 +88,13 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 .wrapper-1Rf91z .upperBadge-2XnnGB .base-PmTxvP {
 	transform: translate(calc(1.5px * ((50 - var(--vguildsize))/10)), calc(-1.5px * ((50 - var(--vguildsize))/10))) scale(calc(var(--vguildsize)/50)) !important;
 }
-.wrapper-1Rf91z .upperBadge-2XnnGB.count .base-PmTxvP {
+.wrapper-1Rf91z .upperLeftBadge-e35IpL .base-PmTxvP {
 	transform: translate(calc(-1.5px * ((50 - var(--vguildsize))/10)), calc(-1.5px * ((50 - var(--vguildsize))/10))) scale(calc(var(--vguildsize)/50)) !important;
 }
 .wrapper-1Rf91z .lowerBadge-29hYVK .base-PmTxvP {
 	transform: translate(calc(1.5px * ((50 - var(--vguildsize))/10)), calc(1.5px * ((50 - var(--vguildsize))/10))) scale(calc(var(--vguildsize)/50)) !important;
 }
-.wrapper-1Rf91z .lowerBadge-29hYVK.unread-count-badge .base-PmTxvP {
+.wrapper-1Rf91z .lowerLeftBadge-zr4T_9 .base-PmTxvP {
 	transform: translate(calc(-1.5px * ((50 - var(--vguildsize))/10)), calc(1.5px * ((50 - var(--vguildsize))/10))) scale(calc(var(--vguildsize)/50)) !important;
 }
 .wrapper-1Rf91z .wrapper-sa6paO {
