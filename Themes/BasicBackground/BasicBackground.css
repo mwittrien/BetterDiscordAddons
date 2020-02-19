@@ -88,15 +88,13 @@
 		5.	MEMBERLIST
 		6.	SEARCHPAGE
 		7.	CALL
-		8.	UNAVAILABLE SCREEN
-	7.	ACTIVITYPAGE
-	8.	LIBRARY
-	9.	STORE/NITRO
-	10.	PEOPLES
-	11.	DISCOVERY
-	12.	USERSETTINGS
-	13.	GUILDSETTINGS
-	14.	MODALS
+		8.	UNAVAILABLESCREEN
+	7.	STORE/NITRO
+	8.	PEOPLES
+	9.	DISCOVERY
+	10.	USERSETTINGS
+	11.	GUILDSETTINGS
+	12.	MODALS
 		1.	USERMODAL
 		2.	GUILDADD/CREATION
 		3.	REGIONSELECTMODAL
@@ -106,7 +104,8 @@
 		7.	INVITEMODAL
 		8.	LOGINSCREEN
 		9.	TERMACCEPTMODAL
-	15.	POPOUTS
+		10.	DOWNLOADAPPMODAL
+	13.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
 		3.	EMOJIPICKER
@@ -115,7 +114,7 @@
 		6.	COLORPICKER
 		7.	ADDROLE
 		8.	EVERYONEMENTION
-	16.	GENERAL
+	14.	GENERAL
 		1.	TEXT
 		2.	BUTTONS
 		3.	INPUTS
@@ -126,8 +125,8 @@
 		8.	NOTIFICATIONBAR
 		9.	TOOLTIPS
 		10.	TOASTS
-	17.	BDSUPPORT
-	18.	PLUGINSUPPORT
+	15.	BDSUPPORT
+	16.	PLUGINSUPPORT
 		1.	DATEVIEWER
 		2.	SERVERFOLDERS
 		3.	MEMBERCOUNT
@@ -142,11 +141,11 @@
 		12.	DIRECTDOWNLOAD
 		13.	BETTERFORMATINGREDUX
 		14.	PLUGIN/THEMEREPO
-	19.	THEMESUPPORT
+	17.	THEMESUPPORT
 		1.	THEMEDEVBADGE
 		2.	BETTERDOCSBLOCK
-	20.	UPDATENOTICE
-	21.	WATERMARK
+	18.	UPDATENOTICE
+	19.	WATERMARK
 */
 
 
@@ -1489,7 +1488,7 @@ body:before {
 	width: 170px;
 }
 
-/* ----		6.8.	UNAVAILABLE SCREEN				---- */
+/* ----		6.8.	UNAVAILABLESCREEN				---- */
 
 .category-2haXBH,											/* loadingplaceholders										*/
 .channelIcon-1TvDoP,
@@ -1504,204 +1503,7 @@ body:before {
 }
 
 
-/* ~~~~		7.		ACTIVITYPAGE					~~~~ */
-
-.outer-2IVh5n {												/* activitycard			container							*/
-	background-color: rgba(var(--vtransparencycolor), 0.2);
-}
-#app-mount .outer-2IVh5n.interactive-1BeKSi:hover {
-	background-color: rgba(var(--vtransparencycolor), 0.4);
-}
-.outer-2IVh5n .outer-2IVh5n {
-	background-color: transparent !important;
-}
-#app-mount .emptyCard-3CNsz2 {								/* activitycard			emptygamecard						*/
-	background-color: rgba(var(--vtransparencycolor), 0.2);
-}
-.base-1x0h_U {												/* activitycard			title								*/
-	color: rgb(var(--fontwhite1));
-}
-#app-mount .separator-2c4hi3 {								/* activitycard			separator							*/
-	background-color: rgba(var(--fontwhite4), 0.5);
-}
-#app-mount .inset-GQDQYw {									/* activitycard			childcontainer						*/
-	background-color: rgba(var(--vtransparencycolor), 0.2);
-}
-#app-mount .header-3uLGFv {									/* activitycard			header								*/
-	color: rgb(var(--fontwhite1));
-}
-#app-mount .wrapper-9ppXpy {								/* activitycard			footer								*/
-	box-shadow: inset 0 1px 0 rgba(var(--fontwhite4), 0.5);
-}
-#app-mount .timestamp-2Xe6Co:before {						/* activitycard			footertimestamp						*/
-	background-color: rgb(var(--fontwhite4));
-}
-#app-mount .interactive-1FxC7B:hover {						/* activitycard			activityicon						*/
-	background-color: rgba(var(--vtransparencycolor), 0.2);
-}
-#app-mount .placeholderWrapper-3FaLtZ {						/* activitycard			placeholder							*/
-	background-color: rgba(var(--vtransparencycolor), 0.1);
-}
-
-#app-mount .recentlyPlayedContainer-2F3MqS,					/* playedcontainer		container							*/
-#app-mount .recentlyPlayedContainer-2F3MqS.homepage-3nzCdM {
-	background-color: rgba(var(--vtransparencycolor), 0.2);
-	border: none;
-}
-#app-mount .homepageSeparator-3fLz4j {						/* playedcontainer		separator							*/
-	background-color: rgba(var(--fontwhite4), 0.5);
-}
-#app-mount .partyMemberOverflow-1tfvpb {					/* playedcontainer		overflow							*/
-	background-color: rgba(var(--vtransparencycolor), 0.3);
-	color: rgb(var(--fontwhite2));
-}
-.headerIcon-2AzihC path[fill^="#"] {						/* playedcontainer		headericon							*/
-	fill: rgb(var(--fontwhite1));
-}
-#app-mount .voiceSectionIcon-1I6KSn,						/* playedcontainer		voiceicon							*/
-#app-mount .xboxSectionIcon-1BipKf {						/* playedcontainer		xboxicon							*/
-	color: rgb(var(--fontwhite1));
-}
-
-#app-mount .wrapper-3UweLa {								/* noplayers			container							*/
-	background-color: rgba(var(--vtransparencycolor), 0.3);
-	color: rgb(var(--fontwhite2));
-}
-
-#app-mount .gdprWrapper-33M2Mg {							/* gdprwrapper			container							*/
-	color: rgb(var(--fontwhite2));
-}
-#app-mount .gdprWrapper-33M2Mg a {							/* gdprwrapper			link								*/
-	color: rgb(var(--fontwhite1));
-}
-#app-mount .gdprWrapper-33M2Mg header {						/* gdprwrapper			header								*/
-	color: rgb(var(--fontwhite1));
-}
-#app-mount .popoutContainer-3WC9HR:hover {					/* playingpopout		container							*/
-	background-color: rgba(var(--vtransparencycolor), 0.2);
-}
-#app-mount .popout-3G62UL {									/* playingpopout		container							*/
-	background-color: transparent;
-	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 8px 16px 0 rgba(var(--vtransparencycolor), 0.3);
-	overflow: hidden;
-}
-.popout-3G62UL:after,
-.popout-3G62UL:before {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	width: unset;
-	height: unset;
-	pointer-events: none;
-	z-index: -1;
-}
-.popout-3G62UL:after {
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.35));
-}
-.popout-3G62UL:before {
-	background: var(--vpopout) center/var(--vpopoutsize);
-	filter: blur(var(--vpopoutblur));
-	background-attachment: fixed;
-}
-#app-mount .memberListHeader-Qq9531 {						/* popoutcontainer		title								*/
-	color: rgb(var(--fontwhite2));
-}
-#app-mount .enabled-5QKLzu:hover,
-#app-mount .memberListItem-2ZX2pl:not(.popoutDisabled-xucru2):hover {
-	background-color: rgba(var(--vtransparencycolor), 0.2);
-	color: rgb(var(--fontwhite1));
-}
-
-.empty-hejAOj,												/* quickstart			empty								*/
-.unwrapped-37iUtM,											/* quickstart			unwrapped							*/
-.wrapped-15rg6t,											/* quickstart			wrapped								*/
-.empty-hejAOj.discover-1fCxe9,
-.unwrapped-37iUtM.discover-1fCxe9 {
-	background-color: rgba(var(--vtransparencycolor), 0.2);
-}
-.empty-hejAOj.clickable-nnkAZy:hover,
-.unwrapped-37iUtM.clickable-nnkAZy:hover,
-.wrapped-15rg6t.clickable-nnkAZy:hover,
-.unwrapped-37iUtM.discover-1fCxe9.clickable-nnkAZy:hover {
-	background-color: rgb(var(--vaccentcolor));
-}
-
-
-/* ~~~~		8.		LIBRARY							~~~~ */
-
-.header-39GIC8 {											/* table				header								*/
-	border-bottom-color: rgba(var(--fontwhite4), 0.5);
-	color: rgb(var(--fontwhite3));
-}
-.header-39GIC8:after,
-.header-39GIC8:before {
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	pointer-events: none;
-	z-index: -1;
-}
-.header-39GIC8:after {
-	background-color: rgba(var(--vtransparencycolor), var(--vtransparencyalpha));
-}
-.header-39GIC8:before {
-	background: var(--vbackground) center/var(--vbackgroundsize);
-	filter: blur(var(--vbackgroundblur));
-	background-attachment: fixed;
-}
-.headerCell-3L6rFG {										/* table				headercell							*/
-	border-left-color: rgba(var(--fontwhite4), 0.3);
-}
-.clickable-VxMZ3b {
-	color: rgb(var(--fontwhite2));
-}
-.clickable-VxMZ3b:hover {
-	color: rgb(var(--fontwhite1));
-}
-.lastPlayedCell-2arbtc,
-.platformCell-XyBBs6 {
-	color: rgb(var(--fontwhite3));
-}
-.headerCellSorted-3a5AzJ,
-.headerCellSorted-3a5AzJ:hover {
-	color: rgb(var(--fontwhite1));
-}
-.row-ZLfFhY {												/* table				row									*/
-	color: rgb(var(--fontwhite3));
-}
-.rowWrapperActive-2L7i9f {
-	background-color: rgba(var(--vtransparencycolor), 0.2);
-}
-.rowWrapper-2fB6P0 + .rowWrapper-2fB6P0 .row-ZLfFhY {
-	border-top-color: rgba(var(--fontwhite4), 0.3);
-}
-.nameCellText-1mpqtF {										/* table				namecell							*/
-	color: rgb(var(--fontwhite2));
-}
-.row-ZLfFhY:hover .nameCellText-1mpqtF {
-	color: rgb(var(--fontwhite1));
-}
-.textCell-1aBIUP {											/* table				textcell							*/
-	color: rgb(var(--fontwhite4));
-}
-.row-ZLfFhY:hover .textCell-1aBIUP {
-	color: rgb(var(--fontwhite3));
-}
-.icon-1IKq3C {												/* table				icon								*/
-	color: rgb(var(--fontwhite4));
-}
-.row-ZLfFhY:hover .icon-1IKq3C {
-	color: rgb(var(--fontwhite3));
-}
-
-
-/* ~~~~		9.		STORE/NITRO						~~~~ */
+/* ~~~~		7.		STORE/NITRO						~~~~ */
 
 .sectionHeader-127c3L {										/* header													*/
 	color: rgb(var(--fontwhite1));
@@ -1956,7 +1758,7 @@ body:before {
 }
 
 
-/* ~~~~		10.		PEOPLES							~~~~ */
+/* ~~~~		8.		PEOPLES							~~~~ */
 
 .wrapper-1cBijl {											/* friendsadd			inputcontainer						*/
 	background-color: rgba(var(--vtransparencycolor), 0.1);
@@ -2017,18 +1819,55 @@ body:before {
 	background-color: rgba(var(--vtransparencycolor), 0.5);
 	color: rgb(var(--fontwhite1));
 }
-.header-13Cw0- {											/* peoples				playing header						*/
+.header-13Cw0- {											/* playing				header								*/
 	color: rgb(var(--fontwhite2));
 }
-.outer-1AjyKL {												/* peoples				playing card						*/
+#app-mount .outer-1AjyKL {									/* playing				card								*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
-.emptyCard-1RJw8n {											/* peoples				playing empty card					*/
+#app-mount .outer-1AjyKL.active-1xchHY,
+#app-mount .outer-1AjyKL.interactive-3B9GmY:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+#app-mount .inset-3sAvek {									/* playing				card inner							*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.emptyCard-1RJw8n {											/* playing				empty card							*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+#app-mount .popout-38lTFE {									/* playing				popout								*/
+	background-color: transparent;
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 8px 16px 0 rgba(var(--vtransparencycolor), 0.3);
+	overflow: hidden;
+}
+.popout-38lTFE:after,
+.popout-38lTFE:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.popout-38lTFE:after {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.3));
+}
+.popout-38lTFE:before {
+	background: var(--vpopout) center/var(--vpopoutsize);
+	filter: blur(var(--vpopoutblur));
+	background-attachment: fixed;
+}
+#app-mount .memberListItem-31QoHj:not(.popoutDisabled-2RK7MF):hover,
+#app-mount .enabled-1t_Gxm:hover {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 
 
-/* ~~~~		11.		DISCOVERY						~~~~ */
+/* ~~~~		9.		DISCOVERY						~~~~ */
 
 #app-mount .pageWrapper-1PgVDX {							/* guilddiscovery		container							*/
 	color: rgb(var(--fontwhite1));
@@ -2075,7 +1914,7 @@ body:before {
 }
 
 
-/* ~~~~		12.		USERSETTINGS					~~~~ */
+/* ~~~~		10.		USERSETTINGS					~~~~ */
 
 .themed-OHr7kt.item-PXvHYJ {								/* sidebar				item								*/
 	color: rgb(var(--fontwhite3));
@@ -2342,7 +2181,7 @@ body:before {
 }
 
 
-/* ~~~~		13.		GUILDSETTINGS					~~~~ */
+/* ~~~~		11.		GUILDSETTINGS					~~~~ */
 
 #app-mount .selectableItem-1MP3MQ {							/* auditlogs			popoutitem							*/
 	color: rgb(var(--fontwhite2));
@@ -2638,7 +2477,7 @@ body:before {
 }
 
 
-/* ~~~~		14.		MODALS							~~~~ */
+/* ~~~~		12.		MODALS							~~~~ */
 
 #app-mount .root-1gCeng,									/* modal				container (foldersettings)			*/
 #app-mount .modal-yWgWj- {									/* modal				container							*/
@@ -2741,7 +2580,7 @@ body:before {
 	background-color: rgb(var(--fontwhite2));
 }
 
-/* ----		14.1.	USERMODAL						----- */
+/* ----		12.1.	USERMODAL						----- */
 
 #app-mount .root-SR8cQa {									/* modal				container							*/
 	background-color: transparent;
@@ -2849,7 +2688,7 @@ body:before {
 	color: rgb(var(--fontwhite2));
 }
 
-/* ----		14.2.	GUILDADD/CREATION				----- */
+/* ----		12.2.	GUILDADD/CREATION				----- */
 
 #app-mount .wrapper-2ZbzR9 {								/* modal				wrapper								*/
 	background: transparent;
@@ -2954,7 +2793,7 @@ body:before {
 	color: rgb(var(--fontwhite2));
 }
 
-/* ----		14.3.	REGIONSELECTMODAL				---- */
+/* ----		12.3.	REGIONSELECTMODAL				---- */
 
 #app-mount .regionSelectModal-12e-57 {						/* modal				container							*/
 	background-color: transparent;
@@ -2994,7 +2833,7 @@ body:before {
 	color: rgb(var(--fontwhite3));
 }
 
-/* ----		14.4.	UPLOADMODAL						---- */
+/* ----		12.4.	UPLOADMODAL						---- */
 
 #app-mount .uploadModal-2ifh8j {							/* modal				container							*/
 	background-color: transparent;
@@ -3061,7 +2900,7 @@ body:before {
 	box-shadow: 0 2px 8px rgba(var(--vtransparencycolor), 0.4);
 }
 
-/* ----		14.5.	KEYBOARDSHORTCUTSMODAL			---- */
+/* ----		12.5.	KEYBOARDSHORTCUTSMODAL			---- */
 
 #app-mount .keyboardShortcutsModal-3piNz7 {					/* modal				container							*/
 	background-color: transparent;
@@ -3113,7 +2952,7 @@ body:before {
 	fill: rgb(var(--fontwhite1));
 }
 
-/* ----		14.6.	QUICKSWITCHER					---- */
+/* ----		12.6.	QUICKSWITCHER					---- */
 
 #app-mount .quickswitcher-3JagVE {							/* modal				container							*/
 	background-color: transparent;
@@ -3185,7 +3024,7 @@ body:before {
 	background-color: rgba(var(--fontwhite4), 0.3);
 }
 
-/* ----		14.7.	INVITEMODAL						---- */
+/* ----		12.7.	INVITEMODAL						---- */
 
 #app-mount .contentWrapper-3WC1ID {								/* modal				guildinvitemodal				*/
 	background-color: transparent;
@@ -3242,7 +3081,7 @@ body:before {
 	background-color: rgba(var(--vtransparencycolor), 0.5);
 }
 
-/* ----		14.8.	LOGINSCREEN						---- */
+/* ----		12.8.	LOGINSCREEN						---- */
 
 #app-mount .wrapper-3Q5DdO {								/* login				wrapper								*/
 	background: transparent;
@@ -3272,7 +3111,7 @@ body:before {
 	color: rgb(var(--fontwhite3));
 }
 
-/* ----		14.9.	TERMACCEPTMODAL					---- */
+/* ----		12.9.	TERMACCEPTMODAL					---- */
 
 #app-mount .modal-DRZfgq {									/* modal				container							*/
 	background-color: transparent;
@@ -3322,8 +3161,53 @@ body:before {
 	box-shadow: none;
 }
 
+/* ----		12.10.	DOWNLOADAPPMODAL				---- */
 
-/* ~~~~		15.		POPOUTS							~~~~ */
+#app-mount .downloadApps-wbBFdZ {							/* modal				container							*/
+	background-color: transparent;
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
+	position: relative;
+	overflow: hidden;
+}
+.downloadApps-wbBFdZ:after,
+.downloadApps-wbBFdZ:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.downloadApps-wbBFdZ:after {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+}
+.downloadApps-wbBFdZ:before {
+	background: var(--vpopout) center/var(--vpopoutsize);
+	filter: blur(var(--vpopoutblur));
+	background-attachment: fixed;
+}
+.downloadApps-wbBFdZ .header-nJMe-Q {
+	color: rgb(var(--fontwhite2));
+}
+.downloadApps-wbBFdZ .platforms-28Rb-3 .platform-iik236 {
+	border-color: rgb(var(--fontwhite3));
+}
+.downloadApps-wbBFdZ .platforms-28Rb-3 .platform-iik236 p {
+	color: rgb(var(--fontwhite3));
+}
+.downloadApps-wbBFdZ .platforms-28Rb-3 .platform-iik236 .downloadButton-1bWXpg {
+	background-color: rgb(var(--fontwhite3));
+}
+.downloadApps-wbBFdZ .footer-1nkeBm {
+	color: rgb(var(--fontwhite3));
+}
+
+
+/* ~~~~		13.		POPOUTS							~~~~ */
 
 #app-mount .popout-2iWAc-:not(.noShadow-3pu20z) {
 	box-shadow: 0 0 1px rgba(var(--vtransparencycolor), 0.2), 0 1px 4px rgba(var(--vtransparencycolor), 0.1);
@@ -3492,7 +3376,7 @@ body:before {
 	background-attachment: fixed;
 }
 
-/* ----		15.1.	CONTEXTMENU						---- */
+/* ----		13.1.	CONTEXTMENU						---- */
 
 .menu-Sp6bN1,												/* contextmenu			container (guildheader/status)		*/
 .contextMenu-HLZMGh,										/* contextmenu			container (contextmenu)				*/
@@ -3586,7 +3470,7 @@ body:before {
 	border-color: rgb(var(--fontwhite1));
 }
 
-/* ----		15.2.	USERPOPOUT						---- */
+/* ----		13.2.	USERPOPOUT						---- */
 
 .userPopout-3XzG_A {										/* popout				container							*/
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
@@ -3749,7 +3633,7 @@ body:before {
 	color: rgb(var(--fontwhite3));
 }
 
-/* ----		15.3.	EMOJIPICKER						---- */
+/* ----		13.3.	EMOJIPICKER						---- */
 
 #app-mount .emojiPicker-3m1S-j,								/* picker				container							*/
 #app-mount .diversitySelector-tmmMv0 .popout-2nUePc,		/* picker				diversitypopout						*/
@@ -3925,7 +3809,7 @@ body:before {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 
-/* ----		15.4.	PINS/MENTIONS					---- */
+/* ----		13.4.	PINS/MENTIONS					---- */
 .messagesPopoutWrap-1MQ1bW {								/* popout				wrapper								*/
 	background-color: transparent;
 	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
@@ -4082,7 +3966,7 @@ body:before {
 	opacity: 0.6;
 }
 
-/* ----		15.5.	SEARCHPOPOUT					---- */
+/* ----		13.5.	SEARCHPOPOUT					---- */
 
 #app-mount .container-3ayLPN {								/* popout				wrapper								*/
 	background-color: transparent;
@@ -4243,7 +4127,7 @@ body:before {
 	justify-content: center;
 }
 
-/* ----		15.6.	COLORPICKER						---- */
+/* ----		13.6.	COLORPICKER						---- */
 
 #app-mount .colorPickerCustom-2CWBn2 {						/* popout				wrapper								*/
 	background-color: transparent;
@@ -4297,7 +4181,7 @@ body:before {
 	border-top-color: rgb(var(--fontwhite1));
 }
 
-/* ----		15.7.	ADDROLE							---- */
+/* ----		13.7.	ADDROLE							---- */
 
 #app-mount .container-VSDcQc {								/* popout				wrapper								*/
 	background-color: transparent;
@@ -4361,7 +4245,7 @@ body:before {
 }
 
 
-/* ----		15.8.	EVERYONEMENTION					---- */
+/* ----		13.8.	EVERYONEMENTION					---- */
 
 #app-mount .everyonePopout-nEbJY3 {							/* popout				wrapper								*/
 	background-color: transparent;
@@ -4413,7 +4297,7 @@ body:before {
 }
 
 
-/* ~~~~		16.		GENERAL							~~~~ */
+/* ~~~~		14.		GENERAL							~~~~ */
 
 ::-webkit-input-placeholder, body, button, input, select, textarea {
 	font-family: var(--vfont);
@@ -4445,7 +4329,7 @@ body:before {
 	color: rgb(var(--fontwhite1));
 }
 
-/* ----		16.1.	TEXT							---- */
+/* ----		14.1.	TEXT							---- */
 
 .username-3gJmXY {
 	color: rgb(var(--fontwhite1));
@@ -4479,7 +4363,7 @@ body:before {
 	color: rgb(var(--fontwhite1));
 }
 
-/* ----		16.2.	BUTTONS							---- */
+/* ----		14.2.	BUTTONS							---- */
 
 .searchSuggestion-2K8OBX:hover,
 .form-236Xmo .btnPrimary-346kfV,
@@ -4499,6 +4383,7 @@ body:before {
 .lookFilled-1Gx00P.colorBrand-3pXr91:not([style*="background-color"]) {
 	text-shadow: 1px 1px var(--vtextshadow);
 }
+
 .lookFilled-1Gx00P:not(.colorWhite-rEQuAQ) .spinnerItem-3GlVyU {
 	background-color: rgb(var(--fontwhite1)) !important;
 }
@@ -4532,7 +4417,7 @@ body:before {
 }
 .lookInverted-2D7oAl.colorWhite-rEQuAQ .spinnerItem-3GlVyU,
 .lookOutlined-3sRXeN.colorWhite-rEQuAQ .spinnerItem-3GlVyU,
-.lookGhost-2Fn_0-.colorBlack-1jwPVL .spinnerItem-3GlVyU,
+.lookGhost-2Fn_0-.colorWhite-rEQuAQ .spinnerItem-3GlVyU,
 .lookLink-9FtZy-.colorWhite-rEQuAQ .spinnerItem-3GlVyU {
 	background-color: rgb(var(--fontwhite1));
 }
@@ -4594,7 +4479,7 @@ body:before {
 }
 .lookGhost-2Fn_0-.colorWhite-rEQuAQ:active,
 #app-mount .lookGhost-2Fn_0-.hoverWhite-2uUmXw.hasHover-3X1-zV:active {
-	background-color: rgba(var(--fontwhite1), 0.15);
+	background-color: rgba(var(--fontwhite1), 0.2);
 	color: rgb(var(--fontwhite1));
 }
 .lookGhost-2Fn_0-.colorWhite-rEQuAQ:disabled {
@@ -4656,7 +4541,7 @@ body:before {
 }
 .lookGhost-2Fn_0-.colorBlack-1jwPVL:active,
 #app-mount .lookGhost-2Fn_0-.hoverBlack-3jULb8.hasHover-3X1-zV:active {
-	background-color: rgba(var(--vtransparencycolor), 0.15);
+	background-color: rgba(var(--vtransparencycolor), 0.2);
 	color: rgb(var(--vtransparencycolor));
 }
 .lookGhost-2Fn_0-.colorBlack-1jwPVL,
@@ -4741,7 +4626,7 @@ body:before {
 #app-mount .lookGhost-2Fn_0-.hoverGrey-2CBXu0.hasHover-3X1-zV:active,
 #app-mount .lookGhost-2Fn_0-.colorPrimary-3b3xI6:active,
 #app-mount .lookGhost-2Fn_0-.hoverPrimary-2D1j2r.hasHover-3X1-zV:active {
-	background-color: rgba(var(--fontwhite4), 0.15);
+	background-color: rgba(var(--fontwhite4), 0.2);
 }
 #app-mount .lookGhost-2Fn_0-.colorGrey-2DXtkV,
 #app-mount .lookGhost-2Fn_0-.colorGrey-2DXtkV:disabled,
@@ -4817,7 +4702,7 @@ body:before {
 }
 #app-mount .lookGhost-2Fn_0-.colorTransparent-1ewNp9:active,
 #app-mount .lookGhost-2Fn_0-.hoverTransparent-2Lz5CN.hasHover-3X1-zV:active {
-	background-color: rgba(var(--fontwhite2), 0.15);
+	background-color: rgba(var(--fontwhite2), 0.2);
 	color: rgb(var(--fontwhite2));
 }
 #app-mount .lookGhost-2Fn_0-.colorTransparent-1ewNp9,
@@ -4834,7 +4719,7 @@ body:before {
 	color: rgb(var(--fontwhite2));
 }
 
-/* ----		16.3.	INPUTS							---- */
+/* ----		14.3.	INPUTS							---- */
 
 .input-cIJ7To {												/* valueinput			bordered							*/
 	background-color: rgba(var(--vtransparencycolor), 0.1);
@@ -5101,7 +4986,7 @@ body:before {
 }
 
 
-/* ----		16.4.	SEARCHBARS						---- */
+/* ----		14.4.	SEARCHBARS						---- */
 
 .container-2XeR5Z,											/* searchbar			inner								*/
 .container-cMG81i {
@@ -5147,7 +5032,7 @@ body:before {
 
 #app-mount .searchResultsContainer-1ma_dc {} /* TODO GAME PAGE */
 
-/* ----		16.5.	TAGS							---- */
+/* ----		14.5.	TAGS							---- */
 
 .botTagRegular-2HEhHi {										/* bottag				regular								*/
 	color: rgb(var(--fontwhite1));
@@ -5189,7 +5074,7 @@ body:before {
 	color: rgb(var(--fontwhite1));
 }
 
-/* ----		16.6.	ICONS							---- */
+/* ----		14.6.	ICONS							---- */
 
 .emptySearchImage-1qOMLW,									/* empty search												*/
 .image-1GzsFd {												/* no peoples/webhooks/etc.									*/
@@ -5334,7 +5219,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	-webkit-mask: url(https://discordapp.com/assets/d01bee8a9b41bd9dda26a43221b2e7e8.svg) center/contain no-repeat;
 }
 
-/* ----		16.7.	SCROLLBARS						---- */
+/* ----		14.7.	SCROLLBARS						---- */
 
 ::-webkit-scrollbar,
 #app-mount ::-webkit-scrollbar {
@@ -5379,7 +5264,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	display: none;
 }
 
-/* ----		16.8.	NOTIFICATIONBAR					---- */
+/* ----		14.8.	NOTIFICATIONBAR					---- */
 
 #app-mount .notice-2FJMB4 {
 	box-shadow: 0 1px 5px 0 rgba(var(--vtransparencycolor), 0.3);
@@ -5434,7 +5319,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	background: var(--vtextshadow);
 }
 
-/* ----		16.9.	TOOLTIPS						---- */
+/* ----		14.9.	TOOLTIPS						---- */
 
 .headerText-1h7zBw {
 	color: rgb(var(--fontwhite1));
@@ -5451,7 +5336,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	border-top-color: rgb(var(--vaccentcolor));
 }
 
-/* ----		16.10.	TOASTS							---- */
+/* ----		14.10.	TOASTS							---- */
 
 .toast,
 .bd-toast {
@@ -5531,7 +5416,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 }
 
 
-/* ~~~~		17.		BDSUPPORT						~~~~ */
+/* ~~~~		15.		BDSUPPORT						~~~~ */
 
 .arrow-uglXxc {
 	-webkit-mask: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxOS4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iQ2FscXVlXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSItOTUwIDUzMiAxOCAxOCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAtOTUwIDUzMiAxOCAxODsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4NCgkuc3Qwe2ZpbGw6bm9uZTt9DQoJLnN0MXtmaWxsOm5vbmU7c3Ryb2tlOiNGRkZGRkY7c3Ryb2tlLXdpZHRoOjEuNTtzdHJva2UtbWl0ZXJsaW1pdDoxMDt9DQo8L3N0eWxlPg0KPHBhdGggY2xhc3M9InN0MCIgZD0iTS05MzIsNTMydjE4aC0xOHYtMThILTkzMnoiLz4NCjxwb2x5bGluZSBjbGFzcz0ic3QxIiBwb2ludHM9Ii05MzYuNiw1MzguOCAtOTQxLDU0My4yIC05NDUuNCw1MzguOCAiLz4NCjwvc3ZnPg0K);
@@ -5899,9 +5784,9 @@ body #ace_settingsmenu input[type="checkbox"]:checked:after {
 }
 
 
-/* ~~~~		18.		PLUGINSUPPORT					~~~~ */
+/* ~~~~		16.		PLUGINSUPPORT					~~~~ */
 
-/* ----		18.1.	DATEVIEWER						---- */
+/* ----		16.1.	DATEVIEWER						---- */
 
 #app-mount #dv-mount {
 	background: transparent;
@@ -5915,7 +5800,7 @@ body #ace_settingsmenu input[type="checkbox"]:checked:after {
 	opacity: 1;
 }
 
-/* ----		18.2.	SERVERFOLDERS					---- */
+/* ----		16.2.	SERVERFOLDERS					---- */
 
 body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP,
 body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
@@ -5928,7 +5813,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	text-shadow: 1px 1px var(--vtextshadow);
 }
 
-/* ----		18.3.	MEMBERCOUNT						---- */
+/* ----		16.3.	MEMBERCOUNT						---- */
 
 #app-mount #MemberCount {
 	background-color: transparent;
@@ -5958,7 +5843,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	background-attachment: fixed;
 }
 
-/* ----		18.4.	SENDBUTTON						---- */
+/* ----		16.4.	SENDBUTTON						---- */
 
 .send-button img {
 	-webkit-mask: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTIuMDEgMjFMMjMgMTIgMi4wMSAzIDIgMTBsMTUgMi0xNSAyeiIvPiAgICA8cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+PC9zdmc+) center/contain no-repeat;
@@ -5978,7 +5863,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	display: none;
 }
 
-/* ----		18.5.	CHARCOUNTER						---- */
+/* ----		16.5.	CHARCOUNTER						---- */
 
 #app-mount #charcounter {
 	color: rgb(var(--fontwhite3));
@@ -5988,7 +5873,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	display: none;
 }
 
-/* ----		18.6.	REPLYER							---- */
+/* ----		16.6.	REPLYER							---- */
 
 .replyer-icon {
 	-webkit-mask: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTEwIDlWNWwtNyA3IDcgN3YtNC4xYzUgMCA4LjUgMS42IDExIDUuMS0xLTUtNC0xMC0xMS0xMXoiLz4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==) center/contain no-repeat !important;
@@ -6022,7 +5907,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	background: rgb(var(--vaccentcolor)) url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTEwIDlWNWwtNyA3IDcgN3YtNC4xYzUgMCA4LjUgMS42IDExIDUuMS0xLTUtNC0xMC0xMS0xMXoiLz4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==) center/70% no-repeat !important;
 }
 
-/* ----		18.7.	CITADOR							---- */
+/* ----		16.7.	CITADOR							---- */
 
 .quote-msg {
 	background-color: rgba(var(--vtransparencycolor) , 0.2);
@@ -6067,7 +5952,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	-webkit-mask: none !important;
 	background: rgb(var(--vaccentcolor)) url(https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_format_quote_white_48px.svg) center/contain no-repeat !important;
 }
-/* ----		18.8.	LINENUMBERS						---- */
+/* ----		16.8.	LINENUMBERS						---- */
 
 .hljs ol li {
 	border-left-color: rgba(var(--fontwhite1), 0.2);
@@ -6076,7 +5961,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	color: rgb(var(--fontwhite4));
 }
 
-/* ----		18.9.	PERMISSIONVIEWER				---- */
+/* ----		16.9.	PERMISSIONVIEWER				---- */
 
 #permissions-modal-wrapper #permissions-modal {				/* modal				container							*/
 	background-color: transparent;
@@ -6139,7 +6024,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	color: rgb(var(--fontwhite3));
 }
 
-/* ----		18.10.	BETTERSEARCHPAGE				---- */
+/* ----		16.10.	BETTERSEARCHPAGE				---- */
 
 #app-mount .BSP-pagination-button {
 	background: transparent;
@@ -6160,7 +6045,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	width: 20px;
 }
 
-/* ----		18.11.	REPOCONTROLS					---- */
+/* ----		16.11.	REPOCONTROLS					---- */
 
 #app-mount #bd-settingspane-container .editIcon,
 #app-mount #bd-settingspane-container .trashIcon {
@@ -6171,7 +6056,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	color: rgb(var(--fontwhite1));
 }
 
-/* ----		18.12.	DIRECTDOWNLOAD					---- */
+/* ----		16.12.	DIRECTDOWNLOAD					---- */
 
 #files_directDownload .file {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
@@ -6192,7 +6077,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	background-color: rgb(var(--vaccentcolor));
 }
 
-/* ----		18.13.	BETTERFORMATINGREDUX			---- */
+/* ----		16.13.	BETTERFORMATINGREDUX			---- */
 
 .innerDisabled-2mc-iF ~ .bf-toolbar {
 	display: none;
@@ -6250,7 +6135,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	color: rgb(var(--fontwhite1));
 }
 
-/* ----		18.14	PLUGIN/THEMEREPO				---- */
+/* ----		16.14	PLUGIN/THEMEREPO				---- */
 
 #app-mount .pluginEntry svg[fill="currentColor"],
 #app-mount .pluginEntry .gifFavoriteButton-1gYkEU:not(.selected-2QpwIN),
@@ -6267,9 +6152,9 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 }
 
 
-/* ~~~~		19.		THEMESUPPORT					~~~~ */
+/* ~~~~		17.		THEMESUPPORT					~~~~ */
 
-/* ~~~~		19.1.	THEMEDEVBADGE					~~~~ */
+/* ----		17.1.	THEMEDEVBADGE					---- */
 
 #app-mount .root-SR8cQa .wrapper-3t9DeA.dev-A7f2Rx:not(.statusHovered-gF2976):hover + .headerInfo-30uryT:before,
 #app-mount .userPopout-3XzG_A .avatarWrapper-3H_478.dev-A7f2Rx:not(.statusHovered-gF2976):hover .wrapper-3t9DeA:before,
@@ -6288,7 +6173,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	border-top-color: rgb(var(--vaccentcolor)) !important;
 }
 
-/* ~~~~		19.2.	BETTERDOCSBLOCK					~~~~ */
+/* ----		17.2.	BETTERDOCSBLOCK					---- */
 
 html.theme-dark body #app-mount .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" i]::before,
 html.theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.discordsource." i]::before,
@@ -6319,7 +6204,7 @@ html.theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://better
 }
 
 
-/* ~~~~		20.		UPDATENOTICE					~~~~ */
+/* ~~~~		18.		UPDATENOTICE					~~~~ */
 
 html:only-child > head + body > div#app-mount.appMount-3lHmkl > div.app-1q1i1E > div.app-2rEoOp:before {
 	content: "Your version of   BasicBackground   by DevilBro is outdated. Please download the newest version from:	https://github.com/mwittrien/BetterDiscordAddons/blob/master/Themes/BasicBackground" !important;
@@ -6355,7 +6240,7 @@ html:only-child > head + body > div#app-mount.appMount-3lHmkl > div.app-1q1i1E >
 }
 
 
-/* ~~~~		21.		WATERMARK						~~~~ */
+/* ~~~~		19.		WATERMARK						~~~~ */
 
 html:only-child > head + body > div#app-mount.appMount-3lHmkl > div.typeWindows-1za-n7.titleBar-AC4pGV.horizontalReverse-3tRjY7.flex-1O1GKY.directionRowReverse-m8IjIq.justifyStart-2NDFzi.alignStretch-DpGPf3 > div.wordmark-2iDDfm {
 	color: white !important;
