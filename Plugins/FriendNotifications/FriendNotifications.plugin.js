@@ -1,12 +1,30 @@
 //META{"name":"FriendNotifications","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/FriendNotifications","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/FriendNotifications/FriendNotifications.plugin.js"}*//
 
 var FriendNotifications = (_ => {
-	var userStatusStore, timeLog, lastTimes, activityTypes;
+	var userStatusStore, timeLog, lastTimes, activityTypes, friendCounter, checkInterval;
+	
+	const FriendOnlineCounter = class FriendOnlineCounter extends BdApi.React.Component {
+		componentDidMount() {
+			friendCounter = this;
+		}
+		render() {
+			return BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.disCN.guildouter,
+				children: BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.disCN._friendnotificationsfriendsonline,
+					children: BDFDB.LanguageUtils.LanguageStringsFormat("FRIENDS_ONLINE_HEADER", this.props.amount),
+					onClick: _ => {
+						this.props.plugin.showTimeLog();
+					}
+				})
+			});
+		}
+	};
 		
 	return class FriendNotifications {
 		getName () {return "FriendNotifications";}
 
-		getVersion () {return "1.3.8";}
+		getVersion () {return "1.3.9";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +32,14 @@ var FriendNotifications = (_ => {
 
 		constructor () {
 			this.changelog = {
+				"added":[["Online Friend Counter","Readded the online friend counter in the server list, which discord removed decades ago, can be disabled in settings"]],
 				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+			};
+
+			this.patchedModules = {
+				after: {
+					Guilds: "render"
+				}
 			};
 		}
 
@@ -22,11 +47,12 @@ var FriendNotifications = (_ => {
 			userStatusStore = {};
 			timeLog = [];
 			lastTimes = {};
+			friendCounter = null;
 		
 			this.css = `
 				.${this.name}-Log-modal .log-time {
 					width: 160px;
-				}  
+				}	
 				.${this.name}-Log-modal .log-user {
 					margin: 0 10px;
 				}
@@ -46,13 +72,34 @@ var FriendNotifications = (_ => {
 				}
 				.${this.name}-settings .settings-avatar.disabled {
 					filter: grayscale(100%) brightness(50%);
-				}`;
+				}
+				
+				${BDFDB.dotCN._friendnotificationsfriendsonline} {
+					color: var(--text-muted);
+					text-align: center;
+					text-transform: uppercase;
+					font-size: 10px;
+					font-weight: 500;
+					line-height: 1.3;
+					width: 70px;
+					word-wrap: normal;
+					white-space: nowrap;
+					cursor: pointer;
+				}
+				${BDFDB.dotCN._friendnotificationsfriendsonline}:hover {
+					color: var(--header-secondary);
+				}
+				${BDFDB.dotCN._friendnotificationsfriendsonline}:active {
+					color: var(--header-primary);
+				}
+			`;
 
 			this.defaults = {
 				settings: {
+					addOnlineCount:		{value:true, 	description:"Adds an online friend counter to the server list (click to open logs)"},
 					disableForNew:		{value:false, 	description:"Disable Notifications for newly added Friends:"},
-					muteOnDND:			{value:false, 	description:"Do not notify me when I am DnD:"},
-					openOnClick:		{value:false, 	description:"Open the DM when you click a Notification:"}
+					muteOnDND:			{value:false, 	description:"Do not notify me when I am DnD"},
+					openOnClick:		{value:false, 	description:"Open the DM when you click a Notification"}
 				},
 				notificationstrings: {
 					online: 			{value:"$user changed status to '$status'",			libstring:"STATUS_ONLINE",			init:true},
@@ -450,7 +497,10 @@ var FriendNotifications = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
 
-				BDFDB.TimeUtils.clear(this.checkInterval);
+				BDFDB.TimeUtils.clear(checkInterval);
+				
+				BDFDB.ModuleUtils.forceAllUpdates(this);
+				
 				BDFDB.PluginUtils.clear(this);
 			}
 		}
@@ -462,6 +512,16 @@ var FriendNotifications = (_ => {
 			if (this.SettingsUpdated) {
 				delete this.SettingsUpdated;
 				this.startInterval();
+			}
+		}
+		
+		processGuilds (e) {
+			if (BDFDB.DataUtils.get(this, "settings", "addOnlineCount")) {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ConnectedUnreadDMs"});
+				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(FriendOnlineCounter, {
+					amount: BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount(),
+					plugin: this
+				}));
 			}
 		}
 
@@ -488,7 +548,7 @@ var FriendNotifications = (_ => {
 		}
 
 		startInterval () {
-			BDFDB.TimeUtils.clear(this.checkInterval);
+			BDFDB.TimeUtils.clear(checkInterval);
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let amounts = BDFDB.DataUtils.get(this, "amounts");
 			let notificationstrings = BDFDB.DataUtils.get(this, "notificationstrings");
@@ -497,7 +557,12 @@ var FriendNotifications = (_ => {
 			for (let id in users) userStatusStore[id] = this.getStatusWithMobileAndActivity(id, users[id]).statusname;
 			let toasttime = (amounts.toastTime > amounts.checkInterval ? amounts.checkInterval : amounts.toastTime) * 1000;
 			let desktoptime = (amounts.desktopTime > amounts.checkInterval ? amounts.checkInterval : amounts.desktopTime) * 1000;
-			this.checkInterval = BDFDB.TimeUtils.interval(_ => {
+			checkInterval = BDFDB.TimeUtils.interval(_ => {
+				let amount = BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount();
+				if (friendCounter && friendCounter.props.amount != amount) {
+					friendCounter.props.amount = amount;
+					BDFDB.ReactUtils.forceUpdate(friendCounter);
+				}
 				for (let id in users) if (!users[id].disabled) {
 					let user = BDFDB.LibraryModules.UserStore.getUser(id);
 					let status = this.getStatusWithMobileAndActivity(id, users[id]);
