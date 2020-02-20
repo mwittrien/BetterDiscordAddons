@@ -8941,7 +8941,7 @@
 	let MessageHeaderRender = (BDFDB.ModuleUtils.findByName("MessageHeader", false) || {exports: {}}).exports.default;
 	if (MessageHeaderRender) InternalBDFDB.processMessage = function (e) {
 		if (BDFDB.ReactUtils.getValue(e, "instance.props.childrenHeader.type.type.displayName") == "MessageHeader" && !e.instance.props.childrenHeader.type.type.__isBDFDBpatched) {
-			e.instance.props.childrenHeader.type.type = MessageHeaderRender;
+			e.instance.props.childrenHeader.type = MessageHeaderRender;
 		}
 	};
 
