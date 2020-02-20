@@ -3972,6 +3972,9 @@
 		iconCell: "iconCell--wniOu",
 		nameCell: "nameCell-xyXENZ"
 	};
+	DiscordClassModules.FriendNotifications = {
+		friendsOnline: "friendsOnline-2JkivW"
+	};
 	DiscordClassModules.GoogleTranslateOption = {
 		reverseButton: "reverseButton-5S47qV",
 		translateButton: "translateButton-DhP9x8",
@@ -4317,6 +4320,7 @@
 		_imagezoombackdrop: ["ImageZoom", "backdrop"],
 		_imagezoomimagemodal: ["ImageZoom", "modal"],
 		_imagezoomlense: ["ImageZoom", "lense"],
+		_friendnotificationsfriendsonline: ["FriendNotifications", "friendsOnline"],
 		_googletranslateoptionreversebutton: ["GoogleTranslateOption", "reverseButton"],
 		_googletranslateoptiontranslatebutton: ["GoogleTranslateOption", "translateButton"],
 		_googletranslateoptiontranslated: ["GoogleTranslateOption", "translated"],
