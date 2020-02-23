@@ -1,15 +1,51 @@
 //META{"name":"CustomQuoter","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CustomQuoter","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CustomQuoter/CustomQuoter.plugin.js"}*//
 
 var CustomQuoter = (_ => {
+	const PreviewMessage = class PreviewMessage extends BdApi.React.Component {
+		render() {
+			let spoofChannel = new BDFDB.DiscordObjects.Channel({
+				id: "126223823845647771",
+				name: "Test Channel"
+			});
+			let spoofQuotedMessage = new BDFDB.DiscordObjects.Message({
+				author: new BDFDB.DiscordObjects.User({
+					id: "230422432565221049",
+					username: "Quoted User"
+				}),
+				channel_id: spoofChannel.id,
+				content: "This is a test message\nto showcase what the quote would look like"
+			});
+			let spoofMessage = new BDFDB.DiscordObjects.Message({
+				author: new BDFDB.DiscordObjects.User({
+					id: "222242304256531049",
+					username: "Test User"
+				}),
+				channel_id: spoofChannel.id,
+				content: this.props.plugin.parseQuote(spoofQuotedMessage, spoofChannel)
+			});
+			return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessageGroup, {
+				className: BDFDB.disCNS.message + BDFDB.disCN.messagecozymessage,
+				message: spoofMessage,
+				channel: spoofChannel
+			});
+		}
+	};
+	
 	return class CustomQuoter {
 		getName () {return "CustomQuoter";}
 
-		getVersion () {return "1.0.0";}
+		getVersion () {return "1.0.1";}
 
 		getAuthor () {return "DevilBro";}
 
-		getDescription () {return "Let's you customize the output of the native quote feature of discord";}
+		getDescription () {return "Let's you customize the output of the native quote feature of Discord";}
 
+		constructor () {
+			this.changelog = {
+				"improved":[["Message Preview","Added a message preview that let's you check your quote settings in real time"]]
+			};
+		}
+		
 		initConstructor () {
 			this.defaults = {
 				settings: {
@@ -57,8 +93,18 @@ var CustomQuoter = (_ => {
 				basis: "70%",
 				value: formats[key],
 				onChange: (e, instance) => {
-					BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_SettingsPanel", up:true}), {name:"BDFDB_Select", all:true, noCopies:true}));
+					BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key:"PREVIEW_MESSAGE"}));
 				}
+			}));
+			inneritems.push(BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.disCN.marginbottom8,
+				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
+					label: "Preview:"
+				})
+			}));
+			inneritems.push(BDFDB.ReactUtils.createElement(PreviewMessage, {
+				plugin: this,
+				key: "PREVIEW_MESSAGE",
 			}));
 			
 			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
@@ -175,18 +221,18 @@ var CustomQuoter = (_ => {
 			let unquotedLines = message.content.split("\n").filter(line => !line.startsWith("> "));
 			unquotedLines = unquotedLines.slice(unquotedLines.findIndex(line => line.trim().length > 0)).join("\n");
 			
-			let guild = BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id) || {id: "@me", name: BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES};
+			let guild = channel.guild_id ? (BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id) || {id: "850725684241078788", name: "Test Server"}) : {id: "@me", name: BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES};
 			
 			return customQuote
-				.replace("$quote", unquotedLines.split("\n").map(line => "> " + line + "\n").join(""))
+				.replace("$quote", unquotedLines.split("\n").map(line => "> " + line + "\n").join("") || "")
 				.replace("$mention", settings.ignoreMentionInDM && channel.isDM() ? "" : `<@!${message.author.id}>`)
-				.replace("$authorId", message.author.id)
-				.replace("$authorName", message.author.name)
+				.replace("$authorId", message.author.id || "")
+				.replace("$authorName", message.author.username || "")
 				.replace("$channel", channel.isDM() ? "" : `<#${channel.id}>`)
-				.replace("$channelId", channel.id)
-				.replace("$channelName", channel.name)
-				.replace("$serverId", guild.id)
-				.replace("$serverName", guild.name)
+				.replace("$channelId", channel.id || "")
+				.replace("$channelName", channel.name || "")
+				.replace("$serverId", guild.id || "")
+				.replace("$serverName", guild.name || "")
 				.replace("$hour", settings.forceZeros && hour < 10 ? "0" + hour : hour)
 				.replace("$minute", minute < 10 ? "0" + minute : minute)
 				.replace("$second", second < 10 ? "0" + second : second)
