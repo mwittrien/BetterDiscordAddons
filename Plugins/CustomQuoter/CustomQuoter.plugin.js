@@ -34,7 +34,7 @@ var CustomQuoter = (_ => {
 	return class CustomQuoter {
 		getName () {return "CustomQuoter";}
 
-		getVersion () {return "1.0.1";}
+		getVersion () {return "1.0.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -224,13 +224,12 @@ var CustomQuoter = (_ => {
 			let guild = channel.guild_id ? (BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id) || {id: "850725684241078788", name: "Test Server"}) : {id: "@me", name: BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES};
 			
 			return customQuote
-				.replace("$quote", unquotedLines.split("\n").map(line => "> " + line + "\n").join("") || "")
 				.replace("$mention", settings.ignoreMentionInDM && channel.isDM() ? "" : `<@!${message.author.id}>`)
-				.replace("$authorId", message.author.id || "")
 				.replace("$authorName", message.author.username || "")
-				.replace("$channel", channel.isDM() ? "" : `<#${channel.id}>`)
-				.replace("$channelId", channel.id || "")
+				.replace("$authorId", message.author.id || "")
 				.replace("$channelName", channel.name || "")
+				.replace("$channelId", channel.id || "")
+				.replace("$channel", channel.isDM() ? "" : `<#${channel.id}>`)
 				.replace("$serverId", guild.id || "")
 				.replace("$serverName", guild.name || "")
 				.replace("$hour", settings.forceZeros && hour < 10 ? "0" + hour : hour)
@@ -245,6 +244,7 @@ var CustomQuoter = (_ => {
 				.replace("$day", settings.forceZeros && day < 10 ? "0" + day : day)
 				.replace("$month", settings.forceZeros && month < 10 ? "0" + month : month)
 				.replace("$year", timestamp.getFullYear())
+				.replace("$quote", unquotedLines.split("\n").map(line => "> " + line + "\n").join("") || "")
 				.trim().split(" ").filter(n => n).join(" ");
 		}
 
