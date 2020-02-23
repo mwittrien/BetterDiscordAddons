@@ -7660,8 +7660,9 @@
 				let newdata = "";
 				for (let key of keys) newdata += `{"${key}":`;
 				value = value != null && value.value != null ? value.value : value;
-				let marker = typeof value == "string" ? `"` : ``;
-				newdata += (marker + value + marker) + "}".repeat(keys.length);
+				let isString = typeof value == "string";
+				let marker = isString ? `"` : ``;
+				newdata += (marker + (isString ? value.replace(/\\/g, "\\\\") : value) + marker) + "}".repeat(keys.length);
 				newdata = JSON.parse(newdata);
 				BDFDB.DataUtils.save(BDFDB.ObjectUtils.is(newdata) ? BDFDB.ObjectUtils.deepAssign({}, data, newdata) : newdata, this.props.plugin, option);
 				this.props.plugin.SettingsUpdated = true;
