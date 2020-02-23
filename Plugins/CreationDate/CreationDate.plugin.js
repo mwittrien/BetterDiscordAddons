@@ -66,7 +66,7 @@ class CreationDate {
 		};
 	}
 
-	getSettingsPanel () {
+	getSettingsPanel (collapseStates = {}) {
 		if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 		let settings = BDFDB.DataUtils.get(this, "settings");
 		let choices = BDFDB.DataUtils.get(this, "choices");
@@ -158,16 +158,27 @@ class CreationDate {
 		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 			title: "Placeholder Guide",
 			dividertop: true,
-			collapsed: BDFDB.DataUtils.load(this, "hideInfo", "hideInfo"),
-			children: ["$hour will be replaced with the current hour", "$minute will be replaced with the current minutes", "$second will be replaced with the current seconds", "$msecond will be replaced with the current milliseconds", "$timemode will change $hour to a 12h format and will be replaced with AM/PM", "$year will be replaced with the current year", "$month will be replaced with the current month", "$day will be replaced with the current day", "$monthnameL will be replaced with the monthname in long format based on the Discord Language", "$monthnameS will be replaced with the monthname in short format based on the Discord Language", "$weekdayL will be replaced with the weekday in long format based on the Discord Language", "$weekdayS will be replaced with the weekday in short format based on the Discord Language", "$daysago will be replaced with a string to tell you how many days ago the event occured. For Example: " + BDFDB.LanguageUtils.LanguageStringsFormat("ACTIVITY_FEED_USER_PLAYED_DAYS_AGO", 3)].map(string => {
+			collapseStates: collapseStates,
+			children: [
+				"$hour will be replaced with the current hour",
+				"$minute will be replaced with the current minutes",
+				"$second will be replaced with the current seconds",
+				"$msecond will be replaced with the current milliseconds",
+				"$timemode will change $hour to a 12h format and will be replaced with AM/PM",
+				"$year will be replaced with the current year",
+				"$month will be replaced with the current month",
+				"$day will be replaced with the current day",
+				"$monthnameL will be replaced with the monthname in long format based on the Discord Language",
+				"$monthnameS will be replaced with the monthname in short format based on the Discord Language",
+				"$weekdayL will be replaced with the weekday in long format based on the Discord Language",
+				"$weekdayS will be replaced with the weekday in short format based on the Discord Language",
+				"$daysago will be replaced with a string to tell you how many days ago the event occured. For Example: " + BDFDB.LanguageUtils.LanguageStringsFormat("ACTIVITY_FEED_USER_PLAYED_DAYS_AGO", 3)
+			].map(string => {
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
 					type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
 					children: string
 				});
-			}),
-			onClick: collapsed => {
-				BDFDB.DataUtils.save(collapsed, this, "hideInfo", "hideInfo");
-			}
+			})
 		}));
 		
 		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);

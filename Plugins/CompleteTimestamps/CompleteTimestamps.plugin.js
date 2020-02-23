@@ -32,15 +32,15 @@ var CompleteTimestamps = (_ => {
 		initConstructor () {
 			this.defaults = {
 				settings: {
-					showInChat:		{value:true, 	description:"Replace Chat Timestamp with Complete Timestamp:"},
-					showInEmbed:	{value:true, 	description:"Replace Embed Timestamp with Complete Timestamp:"},
-					changeForChat:	{value:true, 	description:"Change the Time for the Chat Time Tooltips:"},
-					changeForEdit:	{value:true, 	description:"Change the Time for the Edited Time Tooltips:"},
-					displayTime:	{value:true, 	description:"Display the Time in the Timestamp:"},
-					displayDate:	{value:true, 	description:"Display the Date in the Timestamp:"},
-					cutSeconds:		{value:false, 	description:"Cut off Seconds of the Time:"},
-					forceZeros:		{value:false, 	description:"Force leading Zeros:"},
-					otherOrder:		{value:false, 	description:"Show the Time before the Date:"}
+					showInChat:				{value:true, 	description:"Replace Chat Timestamp with Complete Timestamp:"},
+					showInEmbed:			{value:true, 	description:"Replace Embed Timestamp with Complete Timestamp:"},
+					changeForChat:			{value:true, 	description:"Change the Time for the Chat Time Tooltips:"},
+					changeForEdit:			{value:true, 	description:"Change the Time for the Edited Time Tooltips:"},
+					displayTime:			{value:true, 	description:"Display the Time in the Timestamp:"},
+					displayDate:			{value:true, 	description:"Display the Date in the Timestamp:"},
+					cutSeconds:				{value:false, 	description:"Cut off Seconds of the Time:"},
+					forceZeros:				{value:false, 	description:"Force leading Zeros:"},
+					otherOrder:				{value:false, 	description:"Show the Time before the Date:"}
 				},
 				choices: {
 					creationDateLang:		{value:"$discord", 	description:"Timestamp Format:"}
@@ -155,7 +155,21 @@ var CompleteTimestamps = (_ => {
 				title: "Placeholder Guide",
 				collapseStates: collapseStates,
 				dividertop: true,
-				children: ["$hour will be replaced with the current hour", "$minute will be replaced with the current minutes", "$second will be replaced with the current seconds", "$msecond will be replaced with the current milliseconds", "$timemode will change $hour to a 12h format and will be replaced with AM/PM", "$year will be replaced with the current year", "$month will be replaced with the current month", "$day will be replaced with the current day", "$monthnameL will be replaced with the monthname in long format based on the Discord Language", "$monthnameS will be replaced with the monthname in short format based on the Discord Language", "$weekdayL will be replaced with the weekday in long format based on the Discord Language", "$weekdayS will be replaced with the weekday in short format based on the Discord Language", "$daysago will be replaced with a string to tell you how many days ago the event occured. For Example: " + BDFDB.LanguageUtils.LanguageStringsFormat("ACTIVITY_FEED_USER_PLAYED_DAYS_AGO", 3)].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
+				children: [
+					"$hour will be replaced with the current hour",
+					"$minute will be replaced with the current minutes",
+					"$second will be replaced with the current seconds",
+					"$msecond will be replaced with the current milliseconds",
+					"$timemode will change $hour to a 12h format and will be replaced with AM/PM",
+					"$year will be replaced with the current year",
+					"$month will be replaced with the current month",
+					"$day will be replaced with the current day",
+					"$monthnameL will be replaced with the monthname in long format based on the Discord Language",
+					"$monthnameS will be replaced with the monthname in short format based on the Discord Language",
+					"$weekdayL will be replaced with the weekday in long format based on the Discord Language",
+					"$weekdayS will be replaced with the weekday in short format based on the Discord Language",
+					"$daysago will be replaced with a string to tell you how many days ago the event occured. For Example: " + BDFDB.LanguageUtils.LanguageStringsFormat("ACTIVITY_FEED_USER_PLAYED_DAYS_AGO", 3)
+				].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
 					type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
 					children: string
 				}))
@@ -205,8 +219,6 @@ var CompleteTimestamps = (_ => {
 		stop () {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
-				
-				BDFDB.DOMUtils.removeLocalStyle(this.name + "CompactCorrection");
 
 				this.forceUpdateAll();
 
