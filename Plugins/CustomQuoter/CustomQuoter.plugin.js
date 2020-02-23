@@ -177,7 +177,6 @@ var CustomQuoter = (_ => {
 			
 			let guild = BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id) || {id: "@me", name: BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES};
 			
-			console.log(message);
 			return customQuote
 				.replace("$quote", unquotedLines.split("\n").map(line => "> " + line + "\n").join(""))
 				.replace("$mention", settings.ignoreMentionInDM && channel.isDM() ? "" : `<@!${message.author.id}>`)
