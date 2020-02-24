@@ -1672,6 +1672,13 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 	color: rgb(var(--fontwhite1, var(--dfontwhite1)));
 	background-color: rgb(var(--vaccentcolor));
 }
+#pubslayer button {
+	background-color: rgb(var(--vaccentcolor));
+}
+.bd-server-card.bd-server-card-pinned:after {
+	background: rgb(var(--vaccentcolor));
+}
+
 .bd-pfbtn {
 	background-color: rgb(var(--vaccentcolor));
 }
