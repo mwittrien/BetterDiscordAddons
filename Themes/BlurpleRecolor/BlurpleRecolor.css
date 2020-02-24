@@ -376,6 +376,10 @@
 	color: rgb(var(--vaccentcolor));
 }
 
+.icon-360yEu {												/* systemmessage		guild sub easter egg icon			*/
+	color: rgb(var(--vaccentcolor));
+}
+
 .message-15tBk4 strong,										/* mention				in header							*/
 .wrapper-3WhCwL {											/* mention													*/
 	background-color: rgba(var(--vaccentcolor), 0.1);
@@ -594,11 +598,26 @@
 	background-color: #bbb;
 }
 
+.activeTransferGuildCardBorder-2jUQ7t{
+	background: rgb(255, 255, 255) linear-gradient(135deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+}
+
+.premiumGuildSubscriptionRowActive-1WxLXI{
+	background: rgb(255, 255, 255) linear-gradient(135deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+}
+
 .theme-light .animationContainer-cNePAf {
 	color: rgb(var(--vaccentcolor));
 }
 .theme-light .shine-KMI5j7 {
 	color: rgba(var(--vaccentcolor), 0.2);
+}
+
+.grandfatheredMessage-1BnHtv {
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+}
+.tierGrandfathered-R6zrrD.banner-3Kac2g {
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5) 75.25%);
 }
 
 .headerTier1-2Ckjmd {										/* submodal				tier1 header						*/
@@ -610,26 +629,36 @@
 .tier1HeaderBackground-3LjWgU {								/* submodal				tier1 bg							*/
 	background-color: rgb(var(--vaccentcolor));
 }
+.tier1-1ttHRY.banner-3Kac2g {
+	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5) 75.25%);
+}
+
 .headerTier2-3FKMxd {										/* submodal				tier2 header						*/
 	background: #ffcd4b linear-gradient(45deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
 }
+.tier2HeaderBackground-2BUqcl {								/* submodal				tier2 bg							*/
+	background: #ffcd4b linear-gradient(45deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+}
+.tier2-3hSil0.banner-3Kac2g {
+	background: #ffcd4b linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5) 75.25%);
+}
+
 .price-1rEl-z {												/* submodal				price								*/
 	color: rgb(var(--vaccentcolor));
 }
 
 .iconBackgroundTier1-2GOcU8 {								/* tierlist				tier1 bg							*/
-	background-color: rgb(var(--vaccentcolor));
-	background-image: none;
+	background: rgb(255, 255, 255) linear-gradient(45deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
 }
 .iconBackgroundTier2-2TeI3a {								/* tierlist				tier2 bg							*/
 	background: #ffcd4b linear-gradient(45deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
 }
 
 .xboxPromotion-1k0m0c {										/* bannerpromo			xboxpromo							*/
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: #ffcd4b linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
 }
 .bannerPromotionLogoPremium-2cB301 {						/* bannerpromo			logo								*/
-	background: rgb(255, 255, 255) linear-gradient(rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: #ffcd4b linear-gradient(rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
 }
 
 #app-mount .tag-HanR-9 {									/* tag														*/
@@ -644,6 +673,11 @@
 .skuButtonTier1-3-EFd9 {
 	background: rgb(255, 255, 255) linear-gradient(32.3deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5) 75.25%);
 }
+.skuButtonTier2-2asv3-,
+.skuButtonTier2-i01WfL {
+	background: #ffcd4b linear-gradient(32.3deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+}
+
 #app-mount .alternativeSkuSelected-3Qhw9n {
 	background-color: rgb(var(--vaccentcolor));
 }
@@ -729,6 +763,11 @@
 #app-mount .tierUnlocked-27DwHo {							/* boostsettings		tierunlocked						*/
 	color: rgb(var(--vaccentcolor));
 }
+#app-mount .tierAccomplished-2eXPdI,
+#app-mount .tierCurrent-Lw7-4E,
+#app-mount .tierDefault-2qaRkD {
+	background: #ffcd4b linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+}
 #app-mount .tierCloseHint-380zIA {							/* boostsettings		tierclosehint						*/
 	background-color: rgb(var(--vaccentcolor));
 }
@@ -736,7 +775,7 @@
 	border-right-color: rgb(var(--vaccentcolor));
 }
 #app-mount .tierHeaderUnlockedBackground-MW5XJU {			/* boostsettings		tierheaderunlockedbg				*/
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: #ffcd4b linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
 }
 .emojiIcon-2xOPMD {											/* boostsettings		perkicon emoji						*/
 	color: rgb(var(--vaccentcolor));
@@ -1200,7 +1239,7 @@
 	color: rgb(var(--vaccentcolor));
 }
 #app-mount .tierHeaderUnlocked-1n-OTI {						/* modal				tierheaderunlockedbg				*/
-	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+	background: #ffcd4b linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
 }
 .wrapper-3nSjSv {											/* modal				boostaddwrapper						*/
 	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
