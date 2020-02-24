@@ -1758,6 +1758,10 @@ body:before {
 	color: rgb(var(--fontwhite3));
 }
 
+.gridHalfCard-qNnKSA .gridItemCopy-CiErsn {					/* nitrosettings		halfcard							*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+
 
 /* ~~~~		8.		PEOPLES							~~~~ */
 

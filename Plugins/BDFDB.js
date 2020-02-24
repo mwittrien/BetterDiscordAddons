@@ -5285,6 +5285,8 @@
 		noticepremiumaction: ["Notice", "premiumAction"],
 		noticepremiumlogo: ["Notice", "premiumLogo"],
 		noticepremiumtext: ["Notice", "premiumText"],
+		noticepremiumtier1: ["Notice", "noticePremiumTier1"],
+		noticepremiumtier2: ["Notice", "noticePremiumTier2"],
 		noticerichpresence: ["Notice", "noticeRichPresence"],
 		noticespotify: ["Notice", "noticeSpotify"],
 		noticestreamer: ["Notice", "noticeStreamerMode"],
