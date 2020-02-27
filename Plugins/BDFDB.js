@@ -8656,6 +8656,7 @@
 			margin-right: 5px;
 			width: 25px;
 			height: 25px;
+			flex: 0 0 auto;
 			background-size: cover;
 			background-position: center;
 			border-radius: 50%;
