@@ -1718,6 +1718,13 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 	background: rgb(var(--vaccentcolor));
 }
 
+.bd-modal-wrapper .footer button {
+	background-color: rgb(var(--vaccentcolor));
+}
+.bd-modal-wrapper .footer button:hover {
+	background: rgb(var(--vaccentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
+}
+
 .bd-pfbtn {
 	background-color: rgb(var(--vaccentcolor));
 }
