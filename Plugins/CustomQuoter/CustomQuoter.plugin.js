@@ -1,4 +1,4 @@
-//META{"name":"CustomQuoter","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CustomQuoter","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CustomQuoter/CustomQuoter.plugin.js"}*//
+//META{"name":"CustomQuoter","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CustomQuoter","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CustomQuoter/CustomQuoter.plugin.js"}*//
 
 var CustomQuoter = (_ => {
 	const PreviewMessage = class PreviewMessage extends BdApi.React.Component {

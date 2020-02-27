@@ -1,4 +1,4 @@
-//META{"name":"QuickMention","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/QuickMention","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/QuickMention/QuickMention.plugin.js"}*//
+//META{"name":"QuickMention","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/QuickMention","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/QuickMention/QuickMention.plugin.js"}*//
 
 var QuickMention = (_ => {
 	return class QuickMention {

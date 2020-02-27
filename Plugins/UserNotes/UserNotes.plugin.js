@@ -1,4 +1,4 @@
-﻿//META{"name":"UserNotes","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/UserNotes","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/UserNotes/UserNotes.plugin.js"}*//
+﻿//META{"name":"UserNotes","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/UserNotes","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/UserNotes/UserNotes.plugin.js"}*//
 
 class UserNotes {
 	getName () {return "UserNotes";}
