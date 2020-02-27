@@ -3,9 +3,9 @@
 
 :root {
 	--daccentcolor: 114,137,218;
-	--vaccentcolor: var(--accentcolor,var(--daccentcolor));
+	--vaccentcolor: var(--accentcolor, var(--daccentcolor));
 	--dlinkcolor: 0,176,244;
-	--vlinkcolor: var(--linkcolor,var(--dlinkcolor));
+	--vlinkcolor: var(--linkcolor, var(--dlinkcolor));
 	
 	--dfontwhite1: 255,255,255;
 }
