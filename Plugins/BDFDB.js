@@ -1087,6 +1087,7 @@
 		AutocompleteChannelResult: "LibraryComponents.AutocompleteItems.Channel",
 		AutocompleteUserResult: "LibraryComponents.AutocompleteItems.User",
 		ContextMenuItem: "NativeSubComponents.ContextMenuItem",
+		MessageHeader: "LibraryComponents.MessageHeader",
 		QuickSwitchChannelResult: "LibraryComponents.QuickSwitchItems.Channel",
 		QuickSwitchGroupDMResult: "LibraryComponents.QuickSwitchItems.GroupDM",
 		QuickSwitchGuildResult: "LibraryComponents.QuickSwitchItems.Guild",
@@ -7148,6 +7149,8 @@
 	
 	InternalComponents.LibraryComponents.MessageGroup = BDFDB.ModuleUtils.findByName("ChannelMessage");
 	
+	InternalComponents.LibraryComponents.MessageHeader = (BDFDB.ModuleUtils.findByProperties("MessageTimestamp") || {}).default;
+	
 	InternalComponents.LibraryComponents.MessagesPopoutComponents = BDFDB.ModuleUtils.findByProperties("Header", "EmptyStateBottom");
 	
 	InternalComponents.LibraryComponents.MemberRole = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.MemberRole") || reactInitialized && class BDFDB_MemberRole extends LibraryModules.React.Component {
@@ -8882,10 +8885,9 @@
 		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(BDFDB, settingsitems);
 	};
 	
-	let MessageHeaderRender = (BDFDB.ModuleUtils.findByName("MessageHeader", false) || {exports: {}}).exports.default;
-	if (MessageHeaderRender) InternalBDFDB.processMessage = function (e) {
+	if (InternalComponents.LibraryComponents.MessageHeader) InternalBDFDB.processMessage = function (e) {
 		if (BDFDB.ReactUtils.getValue(e, "instance.props.childrenHeader.type.type.displayName") == "MessageHeader" && !e.instance.props.childrenHeader.type.type.__isBDFDBpatched) {
-			e.instance.props.childrenHeader.type = MessageHeaderRender;
+			e.instance.props.childrenHeader.type = InternalComponents.LibraryComponents.MessageHeader;
 		}
 	};
 
