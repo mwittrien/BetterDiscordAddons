@@ -1561,8 +1561,9 @@
 	LibraryModules.ModalUtils = BDFDB.ModuleUtils.findByProperties("openModal", "hasModalOpen");
 	LibraryModules.MutedUtils = BDFDB.ModuleUtils.findByProperties("isGuildOrCategoryOrChannelMuted");
 	LibraryModules.NoteStore = BDFDB.ModuleUtils.findByProperties("getNotes", "getNote");
-	LibraryModules.NotificationSettingsUtils = BDFDB.ModuleUtils.findByProperties("setDesktopType", "setTTSType");
 	LibraryModules.NotificationSettingsStore = BDFDB.ModuleUtils.findByProperties("getDesktopType", "getTTSType");
+	LibraryModules.NotificationSettingsUtils = BDFDB.ModuleUtils.findByProperties("setDesktopType", "setTTSType");
+	LibraryModules.NotificationUtils = BDFDB.ModuleUtils.findByProperties("makeTextChatNotification", "shouldNotify");
 	LibraryModules.PlatformUtils = BDFDB.ModuleUtils.findByProperties("isWindows", "isLinux");
 	LibraryModules.PermissionUtils = BDFDB.ModuleUtils.findByProperties("getChannelPermissions", "canUser");
 	LibraryModules.PermissionRoleUtils = BDFDB.ModuleUtils.findByProperties("getHighestRole", "can");
@@ -7592,7 +7593,7 @@
 						className: BDFDB.disCN.settingstableheaders,
 						align: InternalComponents.LibraryComponents.Flex.Align.STRETCH,
 						style: this.props.vertical && this.props.biggestWidth ? {
-							marginTop: this.props.biggestWidth - 25 || 0
+							marginTop: this.props.biggestWidth - 15 || 0
 						} : {},
 						children: [].concat(this.props.title || "", this.props.settings).map((setting, i) => BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.DOMUtils.formatClassName(i == 0 ? BDFDB.disCN.settingstableheadername : BDFDB.disCN.settingstableheaderoption, i != 0 && this.props.vertical && BDFDB.disCN.settingstableheadervertical, BDFDB.disCN.settingstableheader, BDFDB.disCN.settingstableheadersize, BDFDB.disCN.primary, BDFDB.disCN.weightbold, isHeaderClickable && BDFDB.disCN.cursorpointer),
