@@ -4,7 +4,7 @@ var TopRoleEverywhere = (_ => {
 	return class TopRoleEverywhere {
 		getName () {return "TopRoleEverywhere";}
 
-		getVersion () {return "2.9.6";}
+		getVersion () {return "2.9.7";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -156,7 +156,8 @@ var TopRoleEverywhere = (_ => {
 
 		processMessageHeader (e) {
 			if (e.instance.props.message && BDFDB.DataUtils.get(this, "settings", "showInChat")) {
-				this.injectRoleTag(BDFDB.ReactUtils.getValue(e.returnvalue, "props.children.2.props.children"), e.instance.props.message.author, "chat", e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy);
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue.props.children.slice(1), {name: "Popout"});
+				if (index > -1) this.injectRoleTag(children, e.instance.props.message.author, "chat", e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy);
 			}
 		}
 
