@@ -1244,7 +1244,7 @@
 				}
 				else delete module.BDFDBpatch[funcName][type];
 			}
-			if (!BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.filter(module.BDFDBpatch[funcName], key => WebModulesData.Patchtypes.includes(key), true)).some(patchObj => BDFDB.ObjectUtils.is(patchObj) && !BDFDB.ObjectUtils.isEmpty(patchObj))) {
+			if (BDFDB.ObjectUtils.isEmpty(BDFDB.ObjectUtils.filter(module.BDFDBpatch[funcName], key => WebModulesData.Patchtypes.includes(key) && !BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[funcName][key]), true))) {
 				module[funcName] = module.BDFDBpatch[funcName].originalMethod;
 				delete module.BDFDBpatch[funcName];
 				if (BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch)) delete module.BDFDBpatch;
