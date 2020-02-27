@@ -9243,16 +9243,16 @@
 			console.log(window.t);
 		};
 		BDFDB.ModuleUtils.DevFuncs.findCodeAny = function (...strings) {
-			window.t = {"$filter":(prop => [...strings].flat(10).filter(n => typeof n == "string").every(string => prop.toLowerCase().indexOf(string.toLowerCase()) > -1))};
+			window.t = {"$filter":(m => [...strings].flat(10).filter(n => typeof n == "string").every(string => typeof m == "function" && (m.toString().indexOf(string) > -1 || typeof m.__originalMethod == "function" && m.__originalMethod.toString().indexOf(string) > -1 || typeof m.__originalFunction == "function" && m.__originalFunction.toString().indexOf(string) > -1) || BDFDB.ObjectUtils.is(m) && typeof m.type == "function" && m.type.toString().indexOf(string) > -1))};
 			for (let i in BDFDB.ModuleUtils.DevFuncs.req.c) if (BDFDB.ModuleUtils.DevFuncs.req.c.hasOwnProperty(i)) {
 				let m = BDFDB.ModuleUtils.DevFuncs.req.c[i].exports;
-				if (m && typeof m == "function" && window.t.$filter(m.toString())) window.t["module_" + i] = {string:m.toString(), func:m};
+				if (m && typeof m == "function" && window.t.$filter(m)) window.t["module_" + i] = {string:m.toString(), func:m};
 				if (m && m.__esModule) {
-					for (let j in m) if (m[j] && typeof m[j] == "function" && window.t.$filter(m[j].toString())) window.t[j + "_module_" + i] = {string:m[j].toString(), func:m[j], module:m};
-					if (m.default && (typeof m.default == "object" || typeof m.default == "function")) for (let j in m.default) if (m.default[j] && typeof m.default[j] == "function" && window.t.$filter(m.default[j].toString())) window.t[j + "_module_" + i + "_default"] = {string:m.default[j].toString(), func:m.default[j], module:m};
+					for (let j in m) if (m[j] && typeof m[j] == "function" && window.t.$filter(m[j])) window.t[j + "_module_" + i] = {string:m[j].toString(), func:m[j], module:m};
+					if (m.default && (typeof m.default == "object" || typeof m.default == "function")) for (let j in m.default) if (m.default[j] && typeof m.default[j] == "function" && window.t.$filter(m.default[j])) window.t[j + "_module_" + i + "_default"] = {string:m.default[j].toString(), func:m.default[j], module:m};
 				}
 			}
-			for (let i in BDFDB.ModuleUtils.DevFuncs.req.m) if (typeof BDFDB.ModuleUtils.DevFuncs.req.m[i] == "function" && window.t.$filter(BDFDB.ModuleUtils.DevFuncs.req.m[i].toString())) window.t["funtion_" + i] = {string:BDFDB.ModuleUtils.DevFuncs.req.m[i].toString(), func:BDFDB.ModuleUtils.DevFuncs.req.m[i]};
+			for (let i in BDFDB.ModuleUtils.DevFuncs.req.m) if (typeof BDFDB.ModuleUtils.DevFuncs.req.m[i] == "function" && window.t.$filter(BDFDB.ModuleUtils.DevFuncs.req.m[i])) window.t["funtion_" + i] = {string:BDFDB.ModuleUtils.DevFuncs.req.m[i].toString(), func:BDFDB.ModuleUtils.DevFuncs.req.m[i]};
 			console.clear();
 			console.log(window.t);
 		};
