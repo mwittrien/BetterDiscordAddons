@@ -791,7 +791,7 @@ body:before {
 /* ====		6.2.1.	MESSAGE							==== */
 
 .message-2qnXI6,											/* message				container							*/
-.preview-2nSL_2 .container-3FojY8,
+.preview-2nSL_2 .contents-2mQqc9,
 .messageGroupCozy-2iY6cT,
 .messageGroupCozy-1BZuO8 {
 	background-color: rgba(var(--vtransparencycolor), var(--vmessagetransparency));
@@ -833,7 +833,7 @@ body:before {
 	content: "";
 	position: absolute;
 	top: 12px;
-	left: 40px;
+	left: -32px;
 	border: 10px solid transparent;
 	border-right: 12px solid rgba(var(--vtransparencycolor), var(--vmessagetransparency));
 }
@@ -847,32 +847,21 @@ body:before {
 #app-mount .mentioned-xhSam7.cozy-3raOZG .header-23xsNx:after {
 	border-right-color: rgba(var(--vaccentcolor), calc(var(--vmessagetransparency) * 100000000000000000000000000000));
 }
-.container-3FojY8 {
+.zalgo-jN1Ica.cozy-3raOZG .header-23xsNx {
 	overflow: visible;
 }
 .avatar-1BDn8e {
 	left: calc(-10px * var(--vusechatbubbles));
 }
-.timestampCozyAlt-1Hs08c {
-	margin-left: calc(-80px * var(--vusechatbubbles));
-}
-.cozyMessage-3V1Y8y,
+.cozyMessage-3V1Y8y.wrapper-2a6GCs,
 .preview-2nSL_2 {
 	margin-left: calc(80px * var(--vusechatbubbles));
-}
-.cozyMessage-3V1Y8y .container-3FojY8,
-.preview-2nSL_2 .container-3FojY8 {
-	overflow: visible;
 	padding-left: calc(1px * (10 * var(--vusechatbubbles) + 72 * (1 - var(--vusechatbubbles))));
 }
 .messageGroupWrapper-o-Zw7G .messageGroupCozy-2iY6cT,
 .searchResult-3pzFAB .messageGroupCozy-1BZuO8 {
 	border-radius: 5px;
 	margin-left: calc(60px * var(--vusechatbubbles));
-}
-.messageGroupWrapper-o-Zw7G .messageGroupCozy-2iY6cT .container-3FojY8,
-.searchResult-3pzFAB .messageGroupCozy-1BZuO8 .container-3FojY8 {
-	padding-left: calc(1px * (10 * var(--vusechatbubbles) + 72 * (1 - var(--vusechatbubbles))));
 }
 
 .expanded-13sWhZ {											/* message				expanded blocked					*/
