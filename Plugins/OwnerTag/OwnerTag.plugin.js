@@ -37,6 +37,9 @@ var OwnerTag = (_ => {
 				${BDFDB.dotCNS.userprofile + BDFDB.dotCN.memberownericon} {
 					top: 0px;
 				}
+				${BDFDB.dotCNS.messagecozy + BDFDB.dotCN.memberownericon} {
+					margin-right: .25rem;
+				}
 				${BDFDB.dotCNS.messagecozy + BDFDB.dotCN.messageusername} + ${BDFDB.dotCN.memberownericon} {
 					margin-left: 0;
 				}
