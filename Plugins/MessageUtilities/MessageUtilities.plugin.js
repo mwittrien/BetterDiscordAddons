@@ -324,7 +324,7 @@ var MessageUtilities = (_ => {
 		doCopyLink ({messagediv, message}, action) {
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 			if (channel) {
-				BDFDB.LibraryRequires.electron.clipboard.write({text:`https://discordapp.com/channels/${channel.guild_id || "@me"}/${channel.id}/${message.id}`});
+				BDFDB.LibraryRequires.electron.clipboard.write({text:`https://discordapp.com/channels/${channel.guild_id || BDFDB.DiscordConstants.ME}/${channel.id}/${message.id}`});
 				if (BDFDB.DataUtils.get(this, "toasts", action)) BDFDB.NotificationUtils.toast("Messagelink has been copied.", {type:"success"});
 			}
 		}

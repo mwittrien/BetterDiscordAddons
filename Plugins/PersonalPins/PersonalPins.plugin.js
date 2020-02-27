@@ -374,7 +374,7 @@ var PersonalPins = (_ => {
 					messages = messages.filter(messagedata => messagedata.channel_id == currentchannel.id);
 					break;
 				case "server":
-					messages = messages.filter(messagedata => messagedata.guild_id == (currentchannel.guild_id || "@me"));
+					messages = messages.filter(messagedata => messagedata.guild_id == (currentchannel.guild_id || BDFDB.DiscordConstants.ME));
 					break;
 				case "allservers":
 					messages = messages;
@@ -500,7 +500,7 @@ var PersonalPins = (_ => {
 			if (!message) return;
 			let notes = BDFDB.DataUtils.load(this, "notes");
 			channel = channel || BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
-			let guild_id = channel.guild_id || "@me";
+			let guild_id = channel.guild_id || BDFDB.DiscordConstants.ME;
 			notes[guild_id] = notes[guild_id] || {};
 			notes[guild_id][channel.id] = notes[guild_id][channel.id] || {}
 			if (!notes[guild_id][channel.id][message.id]) {
@@ -525,7 +525,7 @@ var PersonalPins = (_ => {
 		getNoteData (message, channel) {
 			if (!message) return;
 			channel = channel || BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
-			let guild_id = channel.guild_id || "@me";
+			let guild_id = channel.guild_id || BDFDB.DiscordConstants.ME;
 			let notes = BDFDB.DataUtils.load(this, "notes");
 			return notes[guild_id] && notes[guild_id][channel.id] && notes[guild_id][channel.id][message.id];
 		}
@@ -534,7 +534,7 @@ var PersonalPins = (_ => {
 			let message = JSON.parse(note.message);
 			let channel = JSON.parse(note.channel);
 			if (!message || !channel) return;
-			let guild_id = channel.guild_id || "@me";
+			let guild_id = channel.guild_id || BDFDB.DiscordConstants.ME;
 			let notes = BDFDB.DataUtils.load(this, "notes");
 			notes[guild_id][channel.id][note.id].message = JSON.stringify(newmessage);
 			BDFDB.DataUtils.save(notes, this, "notes");
@@ -545,7 +545,7 @@ var PersonalPins = (_ => {
 			let message = JSON.parse(note.message);
 			let channel = JSON.parse(note.channel);
 			if (!message || !channel) return;
-			let guild_id = channel.guild_id || "@me";
+			let guild_id = channel.guild_id || BDFDB.DiscordConstants.ME;
 			let notes = BDFDB.DataUtils.load(this, "notes");
 			delete notes[guild_id][channel.id][note.id];
 			if (BDFDB.ObjectUtils.isEmpty(notes[guild_id][channel.id])) {

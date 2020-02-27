@@ -7,7 +7,7 @@ var BadgesEverywhere = (_ => {
 	return class BadgesEverywhere {
 		getName () {return "BadgesEverywhere";} 
 
-		getVersion () {return "1.5.2";}
+		getVersion () {return "1.5.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -245,7 +245,8 @@ var BadgesEverywhere = (_ => {
 
 		processMessageHeader (e) {
 			if (e.instance.props.message && BDFDB.DataUtils.get(this, "settings", "showInChat")) {
-				this.injectBadges(e.instance, e.returnvalue.props.children[2].props.children, e.instance.props.message.author, "chat");
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue.props.children.slice(1), {name: "Popout"});
+				if (index > -1) this.injectBadges(e.instance, children, e.instance.props.message.author, "chat");
 			}
 		}
 

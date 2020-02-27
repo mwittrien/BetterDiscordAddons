@@ -4,7 +4,7 @@ var EditUsers = (_ => {
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.7.8";}
+		getVersion () {return "3.7.9";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -484,19 +484,21 @@ var EditUsers = (_ => {
 		
 		processMessageHeader (e) {
 			if (e.instance.props.message && BDFDB.DataUtils.get(this, "settings", "changeInChatWindow")) {
-				let data = BDFDB.DataUtils.load(this, "users", e.instance.props.message.author.id);
-				if (data && (data.color1 || data.color2)) {
-					let usernamePopout = BDFDB.ReactUtils.getValue(e, "returnvalue.props.children.2.props.children.1")
-					if (usernamePopout && usernamePopout.props && typeof usernamePopout.props.children == "function") {
-						let renderChildren = usernamePopout.props.children;
-						usernamePopout.props.children = (...args) => {
-							let renderedChildren = renderChildren(...args);
-							this.changeUserColor(renderedChildren, e.instance.props.message.author.id);
-							return renderedChildren;
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue.props.children.slice(1), {name: "Popout"});
+				if (index > -1) {
+					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.message.author.id);
+					if (data && (data.color1 || data.color2)) {
+						if (children[index] && children[index].props && typeof children[index].props.children == "function") {
+							let renderChildren = children[index].props.children;
+							children[index].props.children = (...args) => {
+								let renderedChildren = renderChildren(...args);
+								this.changeUserColor(renderedChildren, e.instance.props.message.author.id);
+								return renderedChildren;
+							}
 						}
 					}
+					this.injectBadge(children, e.instance.props.message.author.id, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, 2, e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy);
 				}
-				this.injectBadge(e.returnvalue.props.children[2].props.children, e.instance.props.message.author.id, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, 2, e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy);
 			}
 		}
 		

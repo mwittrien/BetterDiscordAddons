@@ -222,7 +222,7 @@ var CustomQuoter = (_ => {
 			let unquotedLines = message.content.split("\n").filter(line => !line.startsWith("> "));
 			unquotedLines = unquotedLines.slice(unquotedLines.findIndex(line => line.trim().length > 0)).join("\n");
 			
-			let guild = channel.guild_id ? (BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id) || {id: channel.guild_id, name: "Test Server"}) : {id: "@me", name: BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES};
+			let guild = channel.guild_id ? (BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id) || {id: channel.guild_id, name: "Test Server"}) : {id: BDFDB.DiscordConstants.ME, name: BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES};
 			
 			
 			return BDFDB.StringUtils.insertNRST(customQuote)

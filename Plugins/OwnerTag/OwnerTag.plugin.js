@@ -4,7 +4,7 @@ var OwnerTag = (_ => {
 	return class OwnerTag {
 		getName () {return "OwnerTag";}
 
-		getVersion () {return "1.2.5";}
+		getVersion () {return "1.2.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -161,7 +161,10 @@ var OwnerTag = (_ => {
 		processMessageHeader (e) {
 			if (e.instance.props.message && BDFDB.DataUtils.get(this, "settings", "addInChatWindow")) {
 				let usertype = this.getUserType(e.instance.props.message.author);
-				if (usertype) this.injectOwnerTag(e.returnvalue.props.children[2].props.children, e.instance.props.message.author, usertype, e.instance.props.compact ? 0 : 2, e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy);
+				if (usertype) {
+					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue.props.children.slice(1), {name: "Popout"});
+					if (index > -1) this.injectOwnerTag(children, e.instance.props.message.author, usertype, e.instance.props.compact ? 0 : 2, e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy);
+				}
 			}
 		}
 
