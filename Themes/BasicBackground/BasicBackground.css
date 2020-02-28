@@ -790,8 +790,12 @@ body:before {
 
 /* ====		6.2.1.	MESSAGE							==== */
 
+#app-mount .message-2qRu38 {								/* message				confirm modal						*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+	box-shadow: none;
+}
 .message-2qnXI6,											/* message				container							*/
-.preview-2nSL_2 .contents-2mQqc9,
+.message-2qRu38 .wrapper-2a6GCs,
 .messageGroupCozy-2iY6cT,
 .messageGroupCozy-1BZuO8 {
 	background-color: rgba(var(--vtransparencycolor), var(--vmessagetransparency));
@@ -814,17 +818,18 @@ body:before {
 	border-radius: 3px;
 	background-color: rgba(var(--vaccentcolor), calc(0.3 * var(--vusechatbubbles)));
 }
-.systemMessage-1I9LCe .iconContainer-3GkGRf {
+.cozy-3raOZG .iconContainer-3GkGRf {
 	background-color: rgba(var(--vtransparencycolor), var(--vmessagetransparency));
 	border-radius: 50%;
 	left: calc(1px * (-58 * var(--vusechatbubbles) + -48 * (1 - var(--vusechatbubbles))));
 	height: 25px;
 	width: 25px;
+	padding: 0;
 }
-.systemMessage-1I9LCe .iconContainer-3GkGRf:after {
+.cozy-3raOZG .iconContainer-3GkGRf:after {
 	content: "";
 	position: absolute;
-	top: 3px;
+	top: 2px;
 	left: 26px;
 	border: 10px solid transparent;
 	border-right: 12px solid rgba(var(--vtransparencycolor), var(--vmessagetransparency));
@@ -836,6 +841,10 @@ body:before {
 	left: -32px;
 	border: 10px solid transparent;
 	border-right: 12px solid rgba(var(--vtransparencycolor), var(--vmessagetransparency));
+}
+.messageGroupWrapper-o-Zw7G .messageGroupCozy-2iY6cT .header-23xsNx:after,
+.searchResult-3pzFAB .messageGroupCozy-1BZuO8 .header-23xsNx:after {
+	top: 2px;
 }
 .selected-2P5D_Z.cozy-3raOZG .header-23xsNx:after, 
 .mouse-mode .cozy-3raOZG:hover .header-23xsNx:after,
@@ -851,17 +860,18 @@ body:before {
 	overflow: visible;
 }
 .avatar-1BDn8e {
-	left: calc(-10px * var(--vusechatbubbles));
+	left: calc(-70px * var(--vusechatbubbles) + 16px);
 }
-.cozyMessage-3V1Y8y.wrapper-2a6GCs,
-.preview-2nSL_2 {
+.cozyMessage-3V1Y8y.wrapper-2a6GCs {
 	margin-left: calc(80px * var(--vusechatbubbles));
 	padding-left: calc(1px * (10 * var(--vusechatbubbles) + 72 * (1 - var(--vusechatbubbles))));
 }
+.message-2qRu38 .wrapper-2a6GCs,
 .messageGroupWrapper-o-Zw7G .messageGroupCozy-2iY6cT,
 .searchResult-3pzFAB .messageGroupCozy-1BZuO8 {
 	border-radius: 5px;
 	margin-left: calc(60px * var(--vusechatbubbles));
+	padding-left: calc(1px * (10 * var(--vusechatbubbles) + 72 * (1 - var(--vusechatbubbles))));
 }
 
 .expanded-13sWhZ {											/* message				expanded blocked					*/
