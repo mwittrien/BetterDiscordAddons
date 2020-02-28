@@ -818,6 +818,27 @@ body:before {
 	border-radius: 3px;
 	background-color: rgba(var(--vaccentcolor), calc(0.3 * var(--vusechatbubbles)));
 }
+.avatar-1BDn8e {
+	left: calc(-70px * var(--vusechatbubbles) + 16px);
+}
+.container-3FojY8 .avatar-1BDn8e {
+	left: calc(-10px * var(--vusechatbubbles));
+}
+.cozy-3raOZG .header-23xsNx:after {
+	content: "";
+	position: absolute;
+	top: 12px;
+	left: -32px;
+	border: 10px solid transparent;
+	border-right: 12px solid rgba(var(--vtransparencycolor), var(--vmessagetransparency));
+}
+.cozy-3raOZG .container-3FojY8  .header-23xsNx:after {
+	left: 40px;
+}
+.messageGroupWrapper-o-Zw7G .messageGroupCozy-2iY6cT .header-23xsNx:after,
+.searchResult-3pzFAB .messageGroupCozy-1BZuO8 .header-23xsNx:after {
+	top: 2px;
+}
 .cozy-3raOZG .iconContainer-3GkGRf {
 	background-color: rgba(var(--vtransparencycolor), var(--vmessagetransparency));
 	border-radius: 50%;
@@ -834,18 +855,6 @@ body:before {
 	border: 10px solid transparent;
 	border-right: 12px solid rgba(var(--vtransparencycolor), var(--vmessagetransparency));
 }
-.cozy-3raOZG .header-23xsNx:after {
-	content: "";
-	position: absolute;
-	top: 12px;
-	left: -32px;
-	border: 10px solid transparent;
-	border-right: 12px solid rgba(var(--vtransparencycolor), var(--vmessagetransparency));
-}
-.messageGroupWrapper-o-Zw7G .messageGroupCozy-2iY6cT .header-23xsNx:after,
-.searchResult-3pzFAB .messageGroupCozy-1BZuO8 .header-23xsNx:after {
-	top: 2px;
-}
 .selected-2P5D_Z.cozy-3raOZG .header-23xsNx:after, 
 .mouse-mode .cozy-3raOZG:hover .header-23xsNx:after,
 .selected-2P5D_Z.cozy-3raOZG .iconContainer-3GkGRf:after,
@@ -859,10 +868,11 @@ body:before {
 .zalgo-jN1Ica.cozy-3raOZG .header-23xsNx {
 	overflow: visible;
 }
-.avatar-1BDn8e {
-	left: calc(-70px * var(--vusechatbubbles) + 16px);
+.container-3FojY8 {
+	padding: 0;
+	overflow: visible;
 }
-.cozyMessage-3V1Y8y.wrapper-2a6GCs {
+#app-mount .cozyMessage-3V1Y8y {
 	margin-left: calc(80px * var(--vusechatbubbles));
 	padding-left: calc(1px * (10 * var(--vusechatbubbles) + 72 * (1 - var(--vusechatbubbles))));
 }
