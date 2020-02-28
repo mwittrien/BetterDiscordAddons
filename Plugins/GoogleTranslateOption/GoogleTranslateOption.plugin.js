@@ -15,6 +15,7 @@ var GoogleTranslateOption = (_ => {
 	};
 	
 	const translationEngines = {
+		googleapi: 					{name:"GoogleApi",		funcName:"googleApiTranslate",		languages: ["af","sq","am","ar","hy","az","eu","be","bn","bs","bg","my","ca","ceb","ny","zh-CN","co","hr","cs","da","nl","en","eo","et","fi","fr","fy","gl","ka","de","el","gu","ht","ha","haw","iw","hi","hmn","hu","is","ig","id","ga","it","ja","jw","kn","kk","km","ko","ku","ky","lo","la","lv","lt","lb","mk","mg","ms","ml","mt","mi","mr","mn","ne","no","ps","fa","pl","pt","pa","ro","ru","sm","gd","sr","st","sn","sd","si","sk","sl","so","es","sw","sv","tg","ta","te","th","tr","uk","ur","uz","vi","cy","xh","yi","yo","zu"]},
 		google: 					{name:"Google",			funcName:"googleTranslate",			languages: ["af","sq","am","ar","hy","az","eu","be","bn","bs","bg","my","ca","ceb","ny","zh-CN","co","hr","cs","da","nl","en","eo","et","fi","fr","fy","gl","ka","de","el","gu","ht","ha","haw","iw","hi","hmn","hu","is","ig","id","ga","it","ja","jw","kn","kk","km","ko","ku","ky","lo","la","lv","lt","lb","mk","mg","ms","ml","mt","mi","mr","mn","ne","no","ps","fa","pl","pt","pa","ro","ru","sm","gd","sr","st","sn","sd","si","sk","sl","so","es","sw","sv","tg","ta","te","th","tr","uk","ur","uz","vi","cy","xh","yi","yo","zu"]},
 		itranslate: 				{name:"iTranslate",		funcName:"iTranslateTranslate",		languages: ["af","sq","ar","hy","az","eu","be","bn","bs","bg","ca","ceb","ny","zh-CN","zh-TW","hr","cs","da","nl","en","eo","et","fil","fi","fr","gl","ka","de","el","gu","ht","he","ha","hi","hmn","hu","is","ig","id","ga","it","ja","jw","kn","kk","km","ko","lo","la","lv","lt","mk","mg","ms","ml","mt","mi","mr","mn","my","ne","no","fa","pl","pt-BR","pt-PT","pa","ro","ru","sr","st","si","sk","sl","so","es","su","sw","sv","tg","ta","te","th","tr","uk","ur","uz","vi","we","yi","yo","zu"]},
 		yandex: 					{name:"Yandex",			funcName:"yandexTranslate",			languages: ["af","sq","am","ar","hy","az","ba","eu","be","bn","bs","bg","my","ca","ceb","zh","hr","cs","da","nl","en","eo","et","fi","fr","gl","ka","de","el","gu","ht","he","hi","hu","is","id","ga","it","ja","jv","kn","kk","km","ko","ky","lo","la","lv","lt","lb","mk","mg","ms","ml","mt","mi","mr","mhr","mn","ne","no","pap","fa","pl","pt","pa","ro","ru","gd","sr","si","sk","sl","es","su","sw","sv","tl","tg","ta","tt","te","th","tr","udm","uk","ur","uz","vi","cy","xh","yi"]}
@@ -25,7 +26,7 @@ var GoogleTranslateOption = (_ => {
 	return class GoogleTranslateOption {
 		getName () {return "GoogleTranslateOption";}
 
-		getVersion () {return "1.9.3";}
+		getVersion () {return "1.9.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -33,7 +34,7 @@ var GoogleTranslateOption = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["TextArea Button","The option to not add the button to the channeltextarea works again"],["Message Update","Fixed the plugin for the new Message Update"]],
+				"added":[["GoogleApi","Added a new way faster Google Api that uses a translation API provided by Google, which does not rely on using an invisible brower window to translate the text, this API is limited to 100 requests per hour, so you might get rate limited quickly"]],
 				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
 			};
 
@@ -66,7 +67,7 @@ var GoogleTranslateOption = (_ => {
 					outputMessage:			{value:"$discord", 		direction:"output",		place:"Message", 		description:"Output Language in sent Messages:"}
 				},
 				engines: {
-					translator:				{value:"google", 		description:"Translation Engine:"}
+					translator:				{value:"googleapi", 	description:"Translation Engine:"}
 				}
 			};
 
@@ -615,6 +616,27 @@ var GoogleTranslateOption = (_ => {
 			});
 		}
 		
+		googleApiTranslate (data, callback) {
+			BDFDB.LibraryRequires.request(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${data.input.id}&tl=${data.output.id}&dt=t&dj=1&source=input&q=${encodeURIComponent(data.text)}`, (error, response, result) => {
+				if (!error && result && response.statusCode == 200) {
+					try {
+						result = JSON.parse(result);
+						if (!data.specialcase && result.src && result.src && languages[result.src]) {
+							data.input.name = languages[result.src].name;
+							data.input.ownlang = languages[result.src].ownlang;
+						}
+						callback(result.sentences[0].trans);
+					}
+					catch (err) {callback("");}
+					callback("");
+				}
+				else {
+					BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down or Request Limit per Hour is reached. Try another Translate Engine.", {type:"error"});
+					callback("");
+				}
+			});
+		}
+		
 		iTranslateTranslate (data, callback) {
 			let translate = _ => {
 				BDFDB.LibraryRequires.request({
@@ -635,12 +657,12 @@ var GoogleTranslateOption = (_ => {
 				}, (error, response, result) => {
 					if (!error && response && response.statusCode == 200) {
 						try {
-							let response = JSON.parse(result);
-							if (!data.specialcase && response.source && response.source.detected && languages[response.source.detected]) {
-								data.input.name = languages[response.source.detected].name;
-								data.input.ownlang = languages[response.source.detected].ownlang;
+							result = JSON.parse(result);
+							if (!data.specialcase && result.source && result.source.detected && languages[result.source.detected]) {
+								data.input.name = languages[result.source.detected].name;
+								data.input.ownlang = languages[result.source.detected].ownlang;
 							}
-							callback(response.target.text);
+							callback(result.target.text);
 						}
 						catch (err) {callback("");}
 					}
