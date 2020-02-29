@@ -14,11 +14,12 @@ var GoogleTranslateOption = (_ => {
 		"0":"−−−−−", "1":"·−−−−", "2":"··−−−", "3":"···−−", "4":"····−", "5":"·····", "6":"−····", "7":"−−···", "8":"−−−··", "9":"−−−−·", "!":"−·−·−−", "\"":"·−··−·", "$":"···−··−", "&":"·−···", "'":"·−−−−·", "(":"−·−−·", ")":"−·−−·−", "+":"·−·−·", ",":"−−··−−", "-":"−····−", ".":"·−·−·−", "/":"−··−·", ":":"−−−···", ";":"−·−·−·", "=":"−···−", "?":"··−−··", "@":"·−−·−·", "a":"·−", "b":"−···", "c":"−·−·", "d":"−··", "e":"·", "f":"··−·", "g":"−−·", "h":"····", "i":"··", "j":"·−−−", "k":"−·−", "l":"·−··", "m":"−−", "n":"−·", "o":"−−−", "p":"·−−·", "q":"−−·−", "r":"·−·", "s":"···", "t":"−", "u":"··−", "v":"···−", "w":"·−−", "x":"−··−", "y":"−·−−", "z":"−−··", "·":"e", "··":"i", "···":"s", "····":"h", "·····":"5", "····−":"4", "···−":"v", "···−··−":"$", "···−−":"3", "··−":"u", "··−·":"f", "··−−··":"?", "··−−·−":"_", "··−−−":"2", "·−":"a", "·−·":"r", "·−··":"l", "·−···":"&", "·−··−·":"\"", "·−·−·":"+", "·−·−·−":".", "·−−":"w", "·−−·":"p", "·−−·−·":"@", "·−−−":"j", "·−−−−":"1", "·−−−−·":"'", "−":"t", "−·":"n", "−··":"d", "−···":"b", "−····":"6", "−····−":"-", "−···−":"=", "−··−":"x", "−··−·":"/", "−·−":"k", "−·−·":"c", "−·−·−·":";", "−·−·−−":"!", "−·−−":"y", "−·−−·":"(", "−·−−·−":")", "−−":"m", "−−·":"g", "−−··":"z", "−−···":"7", "−−··−−":",", "−−·−":"q", "−−−":"o", "−−−··":"8", "−−−···":":", "−−−−·":"9", "−−−−−":"0", "_":"··−−·−"
 	};
 	
+	const googleLanguages = ["af","am","ar","az","be","bg","bn","bs","ca","ceb","co","cs","cy","da","de","el","en","eo","es","et","eu","fa","fi","fr","fy","ga","gd","gl","gu","ha","haw","hi","hmn","hr","ht","hu","hy","id","ig","is","it","iw","ja","jw","ka","kk","km","kn","ko","ku","ky","la","lb","lo","lt","lv","mg","mi","mk","ml","mn","mr","ms","mt","my","ne","nl","no","ny","or","pa","pl","ps","pt","ro","ru","rw","sd","si","sk","sl","sm","sn","so","sq","sr","st","su","sv","sw","ta","te","tg","th","tk","tl","tr","tt","ug","uk","ur","uz","vi","xh","yi","yo","zh-CN","zu"];
 	const translationEngines = {
-		googleapi: 					{name:"GoogleApi",		funcName:"googleApiTranslate",		languages: ["af","sq","am","ar","hy","az","eu","be","bn","bs","bg","my","ca","ceb","ny","zh-CN","co","hr","cs","da","nl","en","eo","et","fi","fr","fy","gl","ka","de","el","gu","ht","ha","haw","iw","hi","hmn","hu","is","ig","id","ga","it","ja","jw","kn","kk","km","ko","ku","ky","lo","la","lv","lt","lb","mk","mg","ms","ml","mt","mi","mr","mn","ne","no","ps","fa","pl","pt","pa","ro","ru","sm","gd","sr","st","sn","sd","si","sk","sl","so","es","sw","sv","tg","ta","te","th","tr","uk","ur","uz","vi","cy","xh","yi","yo","zu"]},
-		google: 					{name:"Google",			funcName:"googleTranslate",			languages: ["af","sq","am","ar","hy","az","eu","be","bn","bs","bg","my","ca","ceb","ny","zh-CN","co","hr","cs","da","nl","en","eo","et","fi","fr","fy","gl","ka","de","el","gu","ht","ha","haw","iw","hi","hmn","hu","is","ig","id","ga","it","ja","jw","kn","kk","km","ko","ku","ky","lo","la","lv","lt","lb","mk","mg","ms","ml","mt","mi","mr","mn","ne","no","ps","fa","pl","pt","pa","ro","ru","sm","gd","sr","st","sn","sd","si","sk","sl","so","es","sw","sv","tg","ta","te","th","tr","uk","ur","uz","vi","cy","xh","yi","yo","zu"]},
-		itranslate: 				{name:"iTranslate",		funcName:"iTranslateTranslate",		languages: ["af","sq","ar","hy","az","eu","be","bn","bs","bg","ca","ceb","ny","zh-CN","zh-TW","hr","cs","da","nl","en","eo","et","fil","fi","fr","gl","ka","de","el","gu","ht","he","ha","hi","hmn","hu","is","ig","id","ga","it","ja","jw","kn","kk","km","ko","lo","la","lv","lt","mk","mg","ms","ml","mt","mi","mr","mn","my","ne","no","fa","pl","pt-BR","pt-PT","pa","ro","ru","sr","st","si","sk","sl","so","es","su","sw","sv","tg","ta","te","th","tr","uk","ur","uz","vi","we","yi","yo","zu"]},
-		yandex: 					{name:"Yandex",			funcName:"yandexTranslate",			languages: ["af","sq","am","ar","hy","az","ba","eu","be","bn","bs","bg","my","ca","ceb","zh","hr","cs","da","nl","en","eo","et","fi","fr","gl","ka","de","el","gu","ht","he","hi","hu","is","id","ga","it","ja","jv","kn","kk","km","ko","ky","lo","la","lv","lt","lb","mk","mg","ms","ml","mt","mi","mr","mhr","mn","ne","no","pap","fa","pl","pt","pa","ro","ru","gd","sr","si","sk","sl","es","su","sw","sv","tl","tg","ta","tt","te","th","tr","udm","uk","ur","uz","vi","cy","xh","yi"]}
+		googleapi: 					{name:"GoogleApi",		funcName:"googleApiTranslate",		languages: googleLanguages},
+		google: 					{name:"Google",			funcName:"googleTranslate",			languages: googleLanguages},
+		itranslate: 				{name:"iTranslate",		funcName:"iTranslateTranslate",		languages: [...new Set(["af","ar","az","be","bg","bn","bs","ca","ceb","cs","cy","da","de","el","en","eo","es","et","eu","fa","fi","fil","fr","ga","gl","gu","ha","he","hi","hmn","hr","ht","hu","hy","id","ig","is","it","ja","jw","ka","kk","km","kn","ko","la","lo","lt","lv","mg","mi","mk","ml","mn","mr","ms","mt","my","ne","nl","no","ny","pa","pl","pt-BR","pt-PT","ro","ru","si","sk","sl","so","sq","sr","st","su","sv","sw","ta","te","tg","th","tr","uk","ur","uz","vi","we","yi","yo","zh-CN","zh-TW","zu"].concat(googleLanguages))].sort()},
+		yandex: 					{name:"Yandex",			funcName:"yandexTranslate",			languages: ["af","am","ar","az","ba","be","bg","bn","bs","ca","ceb","cs","cy","da","de","el","en","eo","es","et","eu","fa","fi","fr","ga","gd","gl","gu","he","hi","hr","ht","hu","hy","id","is","it","ja","jv","ka","kk","km","kn","ko","ky","la","lb","lo","lt","lv","mg","mhr","mi","mk","ml","mn","mr","ms","mt","my","ne","nl","no","pa","pap","pl","pt","ro","ru","si","sk","sl","sq","sr","su","sv","sw","ta","te","tg","th","tl","tr","tt","udm","uk","ur","uz","vi","xh","yi","zh"]}
 	};
 	
 	var languages, translating, isTranslating, translatedMessages;
@@ -26,7 +27,7 @@ var GoogleTranslateOption = (_ => {
 	return class GoogleTranslateOption {
 		getName () {return "GoogleTranslateOption";}
 
-		getVersion () {return "1.9.4";}
+		getVersion () {return "1.9.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -277,7 +278,7 @@ var GoogleTranslateOption = (_ => {
 				if (translating) {
 					e2.stopOriginalMethodCall();
 					this.translateText(e2.methodArguments[0], "message", (translation, input, output) => {
-						translation = !translation ? e2.methodArguments[0] : (BDFDB.DataUtils.get(this, "settings", "sendOriginalMessage") ? e2.methodArguments[0] + "\n\n" + translation : translation);
+						translation = !translation ? e2.methodArguments[0] : (BDFDB.DataUtils.get(this, "settings", "sendOriginalMessage") ? (e2.methodArguments[0] + "\n\n" + translation) : translation);
 						e2.originalMethod(translation);
 					});
 					return Promise.resolve({
@@ -429,7 +430,7 @@ var GoogleTranslateOption = (_ => {
 							input = input == "auto" ? "en" : input;
 							BDFDB.DataUtils.save(output, this, "choices", "input" + place);
 							BDFDB.DataUtils.save(input, this, "choices", "output" + place);
-							for (let selectIns of BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(e._targetInst, {name:["BDFDB_Popout", "BDFDB_SettingsPanel"], up:true}), {name:"BDFDB_Select", all:true, noCopies:true})) if (selectIns && selectIns.props && selectIns.props.id && this.defaults.choices[selectIns.props.id].place == place) {
+							for (let selectIns of BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(e._targetInst, {name:["BDFDB_Popout", "BDFDB_SettingsPanel"], up:true}), {name:"BDFDB_Select", all:true, noCopies:true})) if (selectIns && selectIns.props && selectIns.props.id && this.defaults.choices[selectIns.props.id] && this.defaults.choices[selectIns.props.id].place == place) {
 								selectIns.props.value = this.defaults.choices[selectIns.props.id].direction == "input" ? output : input;
 								BDFDB.ReactUtils.forceUpdate(selectIns);
 							}
@@ -539,7 +540,7 @@ var GoogleTranslateOption = (_ => {
 						let content = strings.shift().trim(), embeds = {};
 						for (let i in message.embeds) {
 							message.embeds[i].messageId = message.id;
-							embeds[message.embeds[i].id] = strings.shift().trim() || message.embeds[i].rawDescription;
+							embeds[message.embeds[i].id] = (strings.shift() || message.embeds[i].rawDescription).trim();
 						}
 						translatedMessages[message.id] = {content, embeds, message, input, output};
 						BDFDB.ModuleUtils.forceAllUpdates(this, ["Messages", "Embed"]);
@@ -628,7 +629,6 @@ var GoogleTranslateOption = (_ => {
 						callback(result.sentences[0].trans);
 					}
 					catch (err) {callback("");}
-					callback("");
 				}
 				else {
 					BDFDB.NotificationUtils.toast("Failed to translate text. Translation Server is down or Request Limit per Hour is reached. Try another Translate Engine.", {type:"error"});
@@ -643,7 +643,7 @@ var GoogleTranslateOption = (_ => {
 					method: "POST",
 					url: "https://web-api.itranslateapp.com/v3/texts/translate",
 					headers: {
-						"API-KEY": "d2aefeac9dc661bc98eebd6cc12f0b82"
+						"API-KEY": data.engine.APIkey
 					},
 					body: JSON.stringify({
 						source: {
@@ -658,9 +658,9 @@ var GoogleTranslateOption = (_ => {
 					if (!error && response && response.statusCode == 200) {
 						try {
 							result = JSON.parse(result);
-							if (!data.specialcase && result.source && result.source.detected && languages[result.source.detected]) {
-								data.input.name = languages[result.source.detected].name;
-								data.input.ownlang = languages[result.source.detected].ownlang;
+							if (!data.specialcase && result.source && result.source.dialect && languages[result.source.dialect]) {
+								data.input.name = languages[result.source.dialect].name;
+								data.input.ownlang = languages[result.source.dialect].ownlang;
 							}
 							callback(result.target.text);
 						}
@@ -673,7 +673,7 @@ var GoogleTranslateOption = (_ => {
 				});
 			};
 			if (data.engine.APIkey) translate();
-			else BDFDB.LibraryRequires.request("https://www.itranslate.com/themes/itranslate2016/assets/webapp/js/main.js", {gzip: true}, (error, response, result) => {
+			else BDFDB.LibraryRequires.request("https://www.itranslate.com/js/webapp/main.js", {gzip: true}, (error, response, result) => {
 				if (!error && result) {
 					let APIkey = /var API_KEY = "(.+)"/.exec(result);
 					if (APIkey) {
