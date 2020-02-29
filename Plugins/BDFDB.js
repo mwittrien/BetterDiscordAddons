@@ -1069,6 +1069,7 @@
 		"MessageTimestamp",
 		"NameTag",
 		"NowPlayingItem",
+		"PrivateChannelEmptyMessage",
 		"SystemMessage",
 		"SimpleMessageAccessories",
 		"UserInfo"
