@@ -839,6 +839,9 @@ body:before {
 .searchResult-3pzFAB .messageGroupCozy-1BZuO8 .header-23xsNx:after {
 	top: 2px;
 }
+.cozy-3raOZG .timestamp-3ZCmNB.alt-1uNpEt {
+	left: calc(-78px * var(--vusechatbubbles));
+}
 .cozy-3raOZG .iconContainer-3GkGRf {
 	background-color: rgba(var(--vtransparencycolor), var(--vmessagetransparency));
 	border-radius: 50%;
@@ -875,6 +878,10 @@ body:before {
 #app-mount .cozyMessage-3V1Y8y {
 	margin-left: calc(80px * var(--vusechatbubbles));
 	padding-left: calc(1px * (10 * var(--vusechatbubbles) + 72 * (1 - var(--vusechatbubbles))));
+}
+.cozy-3raOZG .messageContent-2qWWxC {
+	margin-left: 0;
+	padding-left: 0;
 }
 .message-2qRu38 .wrapper-2a6GCs,
 .messageGroupWrapper-o-Zw7G .messageGroupCozy-2iY6cT,
