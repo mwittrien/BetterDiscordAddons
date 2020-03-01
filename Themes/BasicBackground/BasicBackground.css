@@ -819,7 +819,7 @@ body:before {
 	background-color: rgba(var(--vaccentcolor), calc(0.3 * var(--vusechatbubbles)));
 }
 .avatar-1BDn8e {
-	left: calc(-70px * var(--vusechatbubbles) + 16px);
+	left: calc(-78px * var(--vusechatbubbles) + 16px);
 }
 .container-3FojY8 .avatar-1BDn8e {
 	left: calc(-10px * var(--vusechatbubbles));
