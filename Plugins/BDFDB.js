@@ -8902,7 +8902,7 @@
 		"363785301195358221"
 	];
 	InternalBDFDB._processAvatarRender = function (user, avatar) {
-		if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user) && BDFDB.DataUtils.get(BDFDB, "settings", "showSupportBadges")) {
+		if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user)) {
 			let changed = false;
 			if (avatar.type == "img") avatar = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatar, Object.assign({}, avatar.props, {
 				className: BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, "")),
@@ -8917,7 +8917,7 @@
 				changed = true;
 				avatar.props.className = BDFDB.DOMUtils.formatClassName(avatar.props.className, BDFDB.disCN.bdfdbdev);
 			}
-			if (changed) return avatar;
+			if (changed && BDFDB.DataUtils.get(BDFDB, "settings", "showSupportBadges")) return avatar;
 		}
 	};
 	InternalBDFDB._processAvatarMount = function (user, avatar) {
