@@ -7718,13 +7718,13 @@
 	
 	InternalComponents.LibraryComponents.SvgIcon = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.SvgIcon") || reactInitialized && class BDFDB_Icon extends LibraryModules.React.Component {
 		render() {
-			if (this.props.name && InternalComponents.LibraryComponents.SvgIcon.Names[this.props.name]) {
-				this.props.iconSVG = InternalComponents.LibraryComponents.SvgIcon.Names[this.props.name].icon;
+			if (BDFDB.ObjectUtils.is(this.props.name)) {
+				this.props.iconSVG = this.props.name.icon;
 				let props = Object.assign({
 					width: 24,
 					height: 24,
 					color: "currentColor"
-				}, InternalComponents.LibraryComponents.SvgIcon.Names[this.props.name].defaultProps, this.props);
+				}, this.props.name.defaultProps, this.props);
 				for (let key in props) this.props.iconSVG = this.props.iconSVG.replace(new RegExp(`%%${key}`, "g"), props[key]);
 			}
 			if (this.props.iconSVG) {
