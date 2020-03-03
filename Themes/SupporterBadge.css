@@ -93,6 +93,9 @@
 .wrapper-3t9DeA.supporter-Z3FfwL [mask="url(#svg-mask-avatar-status-round-32)"] {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 1 1"><circle fill="white" cx="0.5" cy="0.5" r="0.5"></circle><circle fill="black" cx="0.84375" cy="0.84375" r="0.25"></circle><rect fill="black" x="-0.15" y="0.6375" width="0.5" height="0.5" rx="0.13125" ry="0.13125"></rect></svg>');
 }
+.wrapper-3t9DeA.supporter-Z3FfwL [mask="url(#svg-mask-avatar-status-mobile-32)"] {
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 1 1"><circle fill="white" cx="0.5" cy="0.5" r="0.5"></circle><rect fill="black" x="0.59375" y="0.4375" width="0.5" height="0.65625" rx="0.13125" ry="0.13125"></rect><rect fill="black" x="-0.15" y="0.6375" width="0.5" height="0.5" rx="0.13125" ry="0.13125"></rect></svg>');
+}
 .wrapper-3t9DeA.supporter-Z3FfwL [mask="url(#svg-mask-avatar-status-round-40)"] {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 1 1"><circle fill="white" cx="0.5" cy="0.5" r="0.5"></circle><circle fill="black" cx="0.85" cy="0.85" r="0.25"></circle><rect fill="black" x="-0.15" y="0.6375" width="0.5" height="0.5" rx="0.13125" ry="0.13125"></rect></svg>');
 }
