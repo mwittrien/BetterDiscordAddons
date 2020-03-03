@@ -6220,7 +6220,6 @@
 	InternalComponents.NativeSubComponents.SearchBar = BDFDB.ModuleUtils.find(m => m && m.displayName == "SearchBar" && m.defaultProps.placeholder == BDFDB.LanguageUtils.LanguageStrings.SEARCH);
 	InternalComponents.NativeSubComponents.Select = BDFDB.ModuleUtils.findByName("SelectTempWrapper");
 	InternalComponents.NativeSubComponents.Slider = BDFDB.ModuleUtils.findByName("Slider");
-	InternalComponents.NativeSubComponents.SvgIcon = BDFDB.ModuleUtils.findByProperties("Gradients", "Names");
 	InternalComponents.NativeSubComponents.Switch = BDFDB.ModuleUtils.findByName("Switch");
 	InternalComponents.NativeSubComponents.TabBar = BDFDB.ModuleUtils.findByName("TabBar");
 	InternalComponents.NativeSubComponents.Table = BDFDB.ModuleUtils.findByName("Table");
@@ -7719,8 +7718,16 @@
 	
 	InternalComponents.LibraryComponents.SvgIcon = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.SvgIcon") || reactInitialized && class BDFDB_Icon extends LibraryModules.React.Component {
 		render() {
-			if (this.props.name) return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.SvgIcon, this.props);
-			else if (this.props.iconSVG) {
+			if (this.props.name && InternalComponents.LibraryComponents.SvgIcon.Names[this.props.name]) {
+				this.props.iconSVG = InternalComponents.LibraryComponents.SvgIcon.Names[this.props.name].icon;
+				let props = Object.assign({
+					width: 24,
+					height: 24,
+					color: "currentColor"
+				}, InternalComponents.LibraryComponents.SvgIcon.Names[this.props.name].defaultProps, this.props);
+				for (let key in props) this.props.iconSVG = this.props.iconSVG.replace(new RegExp(`%%${key}`, "g"), props[key]);
+			}
+			if (this.props.iconSVG) {
 				let icon = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(this.props.iconSVG));
 				if (icon) {
 					icon.props.className = BDFDB.DOMUtils.formatClassName(!this.props.nativeClass && BDFDB.disCN.svgicon, icon.props.class, this.props.className);
@@ -7729,6 +7736,77 @@
 				}
 			}
 			return null;
+		}
+	};
+	InternalComponents.LibraryComponents.SvgIcon.Names = {
+		CHECKMARK: {
+			defaultProps: {
+				width: 18,
+				height: 18,
+			},
+			icon: `<svg name="Checkmark" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="%%color" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg>`
+		},
+		CLOSE: {
+			defaultProps: {
+				width: 12,
+				height: 12,
+			},
+			icon: `<svg name="Close" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 12 12"><g fill="none" fill-rule="evenodd" aria-hidden="true"><path d="M0 0h12v12H0"></path><path class="fill" fill="%%color" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg>`
+		},
+		CLOSE_CIRCLE: {
+			icon: `<svg name="CloseCircle" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 14 14"><path fill="%%color" d="M7.02799 0.333252C3.346 0.333252 0.361328 3.31792 0.361328 6.99992C0.361328 10.6819 3.346 13.6666 7.02799 13.6666C10.71 13.6666 13.6947 10.6819 13.6947 6.99992C13.6947 3.31792 10.7093 0.333252 7.02799 0.333252ZM10.166 9.19525L9.22333 10.1379L7.02799 7.94325L4.83266 10.1379L3.89 9.19525L6.08466 6.99992L3.88933 4.80459L4.832 3.86259L7.02733 6.05792L9.22266 3.86259L10.1653 4.80459L7.97066 6.99992L10.166 9.19525Z"></path></svg>`
+		},
+		CROWN: {
+			icon: `<svg name="Crown" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M13.6572 5.42868C13.8879 5.29002 14.1806 5.30402 14.3973 5.46468C14.6133 5.62602 14.7119 5.90068 14.6473 6.16202L13.3139 11.4954C13.2393 11.7927 12.9726 12.0007 12.6666 12.0007H3.33325C3.02725 12.0007 2.76058 11.792 2.68592 11.4954L1.35258 6.16202C1.28792 5.90068 1.38658 5.62602 1.60258 5.46468C1.81992 5.30468 2.11192 5.29068 2.34325 5.42868L5.13192 7.10202L7.44592 3.63068C7.46173 3.60697 7.48377 3.5913 7.50588 3.57559C7.5192 3.56612 7.53255 3.55663 7.54458 3.54535L6.90258 2.90268C6.77325 2.77335 6.77325 2.56068 6.90258 2.43135L7.76458 1.56935C7.89392 1.44002 8.10658 1.44002 8.23592 1.56935L9.09792 2.43135C9.22725 2.56068 9.22725 2.77335 9.09792 2.90268L8.45592 3.54535C8.46794 3.55686 8.48154 3.56651 8.49516 3.57618C8.51703 3.5917 8.53897 3.60727 8.55458 3.63068L10.8686 7.10202L13.6572 5.42868ZM2.66667 12.6673H13.3333V14.0007H2.66667V12.6673Z" fill="%%color" aria-hidden="true"></path></svg>`
+		},
+		DROPPER: {
+			defaultProps: {
+				width: 16,
+				height: 16,
+				foreground: ""
+			},
+			icon: `<svg width="%%width" height="%%height" viewBox="0 0 16 16"><g fill="none"><path d="M-4-4h24v24H-4z"></path><path className="%%foreground" fill="%%color" d="M14.994 1.006C13.858-.257 11.904-.3 10.72.89L8.637 2.975l-.696-.697-1.387 1.388 5.557 5.557 1.387-1.388-.697-.697 1.964-1.964c1.13-1.13 1.3-2.985.23-4.168zm-13.25 10.25c-.225.224-.408.48-.55.764L.02 14.37l1.39 1.39 2.35-1.174c.283-.14.54-.33.765-.55l4.808-4.808-2.776-2.776-4.813 4.803z"></path></g></svg>`
+		},
+		FOLDER: {
+			icon: `<svg name="Folder" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><path fill="%%color" d="M20 7H12L10.553 5.106C10.214 4.428 9.521 4 8.764 4H3C2.447 4 2 4.447 2 5V19C2 20.104 2.895 21 4 21H20C21.104 21 22 20.104 22 19V9C22 7.896 21.104 7 20 7Z"></path></svg>`
+		},
+		LOCK_CLOSED: {
+			icon: `<svg width="%%width" height="%%height" viewBox="0 0 24 24"><path fill="%%color" d="M17 11V7C17 4.243 14.756 2 12 2C9.242 2 7 4.243 7 7V11C5.897 11 5 11.896 5 13V20C5 21.103 5.897 22 7 22H17C18.103 22 19 21.103 19 20V13C19 11.896 18.103 11 17 11ZM12 18C11.172 18 10.5 17.328 10.5 16.5C10.5 15.672 11.172 15 12 15C12.828 15 13.5 15.672 13.5 16.5C13.5 17.328 12.828 18 12 18ZM15 11H9V7C9 5.346 10.346 4 12 4C13.654 4 15 5.346 15 7V11Z"></path></svg>`
+		},
+		LEFT_CARET: {
+			icon: `<svg name="LeftCaret" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><polygon fill="%%color" fill-rule="nonzero" points="18.35 4.35 16 2 6 12 16 22 18.35 19.65 10.717 12"></polygon><polygon points="0 0 24 0 24 24 0 24"></polygon></g></svg>`
+		},
+		NOVA_AT: {
+			icon: `<svg name="Nova_At" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><path fill="%%color" d="M12 2C6.486 2 2 6.486 2 12C2 17.515 6.486 22 12 22C14.039 22 15.993 21.398 17.652 20.259L16.521 18.611C15.195 19.519 13.633 20 12 20C7.589 20 4 16.411 4 12C4 7.589 7.589 4 12 4C16.411 4 20 7.589 20 12V12.782C20 14.17 19.402 15 18.4 15L18.398 15.018C18.338 15.005 18.273 15 18.209 15H18C17.437 15 16.6 14.182 16.6 13.631V12C16.6 9.464 14.537 7.4 12 7.4C9.463 7.4 7.4 9.463 7.4 12C7.4 14.537 9.463 16.6 12 16.6C13.234 16.6 14.35 16.106 15.177 15.313C15.826 16.269 16.93 17 18 17L18.002 16.981C18.064 16.994 18.129 17 18.195 17H18.4C20.552 17 22 15.306 22 12.782V12C22 6.486 17.514 2 12 2ZM12 14.599C10.566 14.599 9.4 13.433 9.4 11.999C9.4 10.565 10.566 9.399 12 9.399C13.434 9.399 14.6 10.565 14.6 11.999C14.6 13.433 13.434 14.599 12 14.599Z"></path></svg>`
+		},
+		NOVA_PIN: {
+			icon: `<svg name="Nova_Pin" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><path fill="%%color" d="M22 12L12.101 2.10101L10.686 3.51401L12.101 4.92901L7.15096 9.87801V9.88001L5.73596 8.46501L4.32196 9.88001L8.56496 14.122L2.90796 19.778L4.32196 21.192L9.97896 15.536L14.222 19.778L15.636 18.364L14.222 16.95L19.171 12H19.172L20.586 13.414L22 12Z"></path></svg>`
+		},
+		NOVA_TRASH: {
+			icon: `<svg name="Nova_Trash" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><path fill="%%color" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="%%color" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg>`
+		},
+		PENCIL: {
+			defaultProps: {
+				width: 16,
+				height: 16
+			},
+			icon: `<svg name="Pencil" aria-hidden="false" width="16" height="16" viewBox="0 0 24 24"><path fill="%%color" d="M20.1039 9.58997L20.8239 8.87097C22.3929 7.30197 22.3929 4.74797 20.8239 3.17797C19.2549 1.60897 16.6999 1.60897 15.1309 3.17797L14.4119 3.89797L20.1039 9.58997ZM12.9966 5.30896L4.42847 13.8795L10.1214 19.5709L18.6896 11.0003L12.9966 5.30896ZM3.24398 21.968L8.39998 20.68L3.31998 15.6L2.03098 20.756C1.94598 21.096 2.04598 21.457 2.29398 21.705C2.54198 21.953 2.90298 22.052 3.24398 21.968Z"></path></svg>`
+		},
+		PIN: {
+			defaultProps: {
+				width: 16,
+				height: 16
+			},
+			icon: `<svg name="Pin" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path fill="%%color" d="M19 3H5V5H7V12H5V14H11V22H13V14H19V12H17V5H19V3Z"></path></g></svg>`
+		},
+		RIGHT_CARET: {
+			icon: `<svg name="RightCaret" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><polygon fill="%%color" fill-rule="nonzero" points="8.47 2 6.12 4.35 13.753 12 6.12 19.65 8.47 22 18.47 12"></polygon><polygon points="0 0 24 0 24 24 0 24"></polygon></g></svg>`
+		},
+		SPEAKER: {
+			icon: `<svg name="Speaker" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><path fill="%%color" fill-rule="evenodd" clip-rule="evenodd" d="M11.383 3.07904C11.009 2.92504 10.579 3.01004 10.293 3.29604L6 8.00204H3C2.45 8.00204 2 8.45304 2 9.00204V15.002C2 15.552 2.45 16.002 3 16.002H6L10.293 20.71C10.579 20.996 11.009 21.082 11.383 20.927C11.757 20.772 12 20.407 12 20.002V4.00204C12 3.59904 11.757 3.23204 11.383 3.07904ZM14 5.00195V7.00195C16.757 7.00195 19 9.24595 19 12.002C19 14.759 16.757 17.002 14 17.002V19.002C17.86 19.002 21 15.863 21 12.002C21 8.14295 17.86 5.00195 14 5.00195ZM14 9.00195C15.654 9.00195 17 10.349 17 12.002C17 13.657 15.654 15.002 14 15.002V13.002C14.551 13.002 15 12.553 15 12.002C15 11.451 14.551 11.002 14 11.002V9.00195Z"></path></svg>`
+		},
+		STREAM: {
+			icon: `<svg name="Stream" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><path fill="%%color" fill-rule="evenodd" clip-rule="evenodd" d="M20 3V4L23 3V7L20 6V7C20 7.553 19.552 8 19 8H15C14.448 8 14 7.553 14 7V3C14 2.447 14.448 2 15 2H19C19.552 2 20 2.447 20 3ZM18 15V10H19H20V17C20 18.104 19.103 19 18 19H11V21H15V23H5V21H9V19H2C0.897 19 0 18.104 0 17V6C0 4.897 0.897 4 2 4H12V6H2V15H7H10H13H18Z"></path></svg>`
 		}
 	};
 	
