@@ -4459,6 +4459,11 @@
 		avatarwrapper: ["Avatar", "wrapper"],
 		backdrop: ["Backdrop", "backdrop"],
 		backdropwithlayer: ["Backdrop", "backdropWithLayer"],
+		badgebase: ["Badge", "base"],
+		badgeicon: ["Badge", "icon"],
+		badgeiconbadge: ["Badge", "iconBadge"],
+		badgenumberbadge: ["Badge", "numberBadge"],
+		badgetextbadge: ["Badge", "textBadge"],
 		badgewrapper: ["NotFound", "badgeWrapper"],
 		bdfdbdev: ["BDFDB", "dev"],
 		bdfdbsupporter: ["BDFDB", "supporter"],
@@ -4838,12 +4843,6 @@
 		green: ["TextStyle", "statusGreen"],
 		grey: ["TextStyle", "statusGrey"],
 		guild: ["BDFDB", "guild"],
-		guildbadgebase: ["Badge", "base"],
-		guildbadgeicon: ["Badge", "icon"],
-		guildbadgeiconbadge: ["Badge", "iconBadge"],
-		guildbadgeiconbadge2: ["GuildsItems", "iconBadge"],
-		guildbadgenumberbadge: ["Badge", "numberBadge"],
-		guildbadgetextbadge: ["Badge", "textBadge"],
 		guildbuttoncontainer: ["GuildsItems", "circleButtonMask"],
 		guildbuttoninner: ["GuildsItems", "circleIconButton"],
 		guildbuttonicon: ["GuildsItems", "circleIcon"],
@@ -4891,6 +4890,7 @@
 		guildheadername: ["GuildHeader", "name"],
 		guildicon: ["GuildIcon", "icon"],
 		guildiconacronym: ["GuildIcon", "acronym"],
+		guildiconbadge: ["GuildsItems", "iconBadge"],
 		guildiconchildwrapper: ["GuildIcon", "childWrapper"],
 		guildiconselected: ["GuildIcon", "selected"],
 		guildiconwrapper: ["GuildIcon", "wrapper"],
@@ -6313,7 +6313,21 @@
 		}
 	};
 	
-	InternalComponents.LibraryComponents.Badges = BDFDB.ModuleUtils.findByProperties("IconBadge", "NumberBadge");
+	InternalComponents.LibraryComponents.Badges = Object.assign({}, BDFDB.ModuleUtils.findByProperties("IconBadge", "NumberBadge"));
+	InternalComponents.LibraryComponents.Badges.IconBadge = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.Badges.IconBadge") || reactInitialized && class BDFDB_IconBadge extends LibraryModules.React.Component {
+		render() {
+			return BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.badgeiconbadge, this.props.className),
+				style: Object.assign({
+					backgroundColor: this.props.disableColor ? null : (this.props.color || BDFDB.DiscordConstants.Colors.STATUS_RED)
+				}, this.props.style),
+				children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+					className: BDFDB.disCN.badgeicon,
+					name: this.props.icon
+				})
+			});
+		}
+	};
 	
 	InternalComponents.LibraryComponents.BotTag = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.BotTag") || reactInitialized && class BDFDB_BotTag extends LibraryModules.React.Component {
 		handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}
@@ -7720,6 +7734,7 @@
 		render() {
 			if (BDFDB.ObjectUtils.is(this.props.name)) {
 				this.props.iconSVG = this.props.name.icon;
+				this.props.nativeClass = true;
 				let props = Object.assign({
 					width: 24,
 					height: 24,
