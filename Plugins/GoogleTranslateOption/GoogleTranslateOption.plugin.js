@@ -27,7 +27,7 @@ var GoogleTranslateOption = (_ => {
 	return class GoogleTranslateOption {
 		getName () {return "GoogleTranslateOption";}
 
-		getVersion () {return "1.9.5";}
+		getVersion () {return "1.9.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -36,7 +36,7 @@ var GoogleTranslateOption = (_ => {
 		constructor () {
 			this.changelog = {
 				"added":[["GoogleApi","Added a new way faster Google Api that uses a translation API provided by Google, which does not rely on using an invisible brower window to translate the text, this API is limited to 100 requests per hour, so you might get rate limited quickly"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"fixed":[["GoogleApi","Fixed issue where GoogleApi would cut off sentences"]]
 			};
 
 			this.patchedModules = {
@@ -626,7 +626,7 @@ var GoogleTranslateOption = (_ => {
 							data.input.name = languages[result.src].name;
 							data.input.ownlang = languages[result.src].ownlang;
 						}
-						callback(result.sentences[0].trans);
+						callback(result.sentences.map(n => n && n.trans).filter(n => n).join(""));
 					}
 					catch (err) {callback("");}
 				}
