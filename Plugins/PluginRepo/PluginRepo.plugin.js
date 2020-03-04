@@ -48,7 +48,6 @@ var PluginRepo = (_ => {
 	};
 	
 	const pluginRepoIcon = `<svg width="34" height="31" viewBox="0 0 400 382"><path d="M0.000 183.023 L 0.000 366.046 46.377 366.046 L 92.754 366.046 92.754 312.629 L 92.754 259.213 127.223 259.213 C 174.433 259.213,187.432 257.146,210.766 245.926 C 311.105 197.681,301.344 41.358,195.859 7.193 C 173.603 -0.015,173.838 0.000,80.846 0.000 L 0.000 0.000 0.000 183.023 M157.615 88.195 C 193.007 97.413,198.827 152.678,166.407 171.674 C 158.993 176.019,155.494 176.398,122.807 176.398 L 92.754 176.398 92.754 131.677 L 92.754 86.957 122.807 86.957 C 146.807 86.957,153.819 87.206,157.615 88.195" stroke="none" fill="#7289da" fill-rule="evenodd"></path><path d="M226.647 3.824 C 258.085 21.580,282.721 54.248,291.095 89.281 C 292.183 93.834,293.041 95.659,294.560 96.655 C 310.880 107.348,312.400 140.701,297.286 156.464 C 293.685 160.221,293.134 161.348,291.162 169.006 C 282.026 204.468,259.916 235.185,230.701 253.002 C 229.548 253.705,235.510 262.261,270.237 309.731 L 311.131 365.631 355.565 365.846 L 400.000 366.060 400.000 348.309 L 400.000 330.557 364.338 285.630 L 328.676 240.703 333.494 238.892 C 373.356 223.907,395.248 189.691,399.313 136.020 C 404.504 67.495,372.510 19.710,311.375 4.675 C 294.592 0.548,287.694 -0.000,252.482 0.000 L 219.876 0.000 226.647 3.824 M202.899 265.964 C 183.869 272.635,168.536 274.960,139.752 275.540 L 116.770 276.003 116.770 321.024 L 116.770 366.046 163.975 366.046 L 211.180 366.046 211.180 314.700 C 211.180 286.460,210.901 263.386,210.559 263.425 C 210.217 263.464,206.770 264.607,202.899 265.964" stroke="none" fill="#7f8186" fill-rule="evenodd"></path></svg>`;
-	const gitHubIcon = `<svg width="24" height="24" viewBox="0 0 24 24"><g fill="currentColor" transform="translate(2, 2)"><path d="M 7.19, 16.027 c -0.139, 0.026 -0.199, 0.091 -0.182, 0.195 c 0.017, 0.104, 0.095, 0.138, 0.234, 0.104 c 0.139 -0.035, 0.199 -0.095, 0.182 -0.182 C 7.406, 16.049, 7.328, 16.01, 7.19, 16.027 z"></path><path d="M 6.45, 16.131 c -0.138, 0 -0.208, 0.047 -0.208, 0.143 c 0, 0.112, 0.074, 0.16, 0.221, 0.143 c 0.138, 0, 0.208 -0.048, 0.208 -0.143 C 6.671, 16.162, 6.597, 16.114, 6.45, 16.131 z"></path><path d="M 5.438, 16.092 c -0.035, 0.095, 0.022, 0.16, 0.169, 0.195 c 0.13, 0.052, 0.212, 0.026, 0.247 -0.078 c 0.026 -0.095 -0.03 -0.164 -0.169 -0.208 C 5.554, 15.967, 5.472, 15.996, 5.438, 16.092 z"></path><path d="M 18.837, 1.097 C 18.106, 0.366, 17.226, 0, 16.196, 0 H 3.738 C 2.708, 0, 1.828, 0.366, 1.097, 1.097 C 0.366, 1.828, 0, 2.708, 0, 3.738 v 12.459 c 0, 1.03, 0.366, 1.91, 1.097, 2.641 c 0.731, 0.731, 1.612, 1.097, 2.641, 1.097 h 2.907 c 0.19, 0, 0.333 -0.007, 0.428 -0.019 c 0.095 -0.013, 0.19 -0.069, 0.285 -0.169 c 0.095 -0.099, 0.143 -0.244, 0.143 -0.435 c 0 -0.026 -0.002 -0.32 -0.007 -0.883 c -0.004 -0.562 -0.007 -1.008 -0.007 -1.337 l -0.298, 0.052 c -0.19, 0.035 -0.43, 0.05 -0.72, 0.045 c -0.29 -0.004 -0.59 -0.035 -0.902 -0.091 c -0.312 -0.056 -0.601 -0.186 -0.87 -0.389 c -0.268 -0.203 -0.458 -0.469 -0.571 -0.798 l -0.13 -0.299 c -0.086 -0.199 -0.223 -0.419 -0.409 -0.662 c -0.186 -0.242 -0.374 -0.407 -0.564 -0.493 l -0.091 -0.065 c -0.06 -0.043 -0.117 -0.095 -0.169 -0.156 c -0.052 -0.061 -0.091 -0.121 -0.117 -0.182 c -0.026 -0.061 -0.004 -0.11, 0.065 -0.149 c 0.069 -0.039, 0.195 -0.058, 0.376 -0.058 l 0.259, 0.039 c 0.173, 0.035, 0.387, 0.138, 0.642, 0.311 c 0.255, 0.173, 0.465, 0.398, 0.629, 0.675 c 0.199, 0.355, 0.439, 0.625, 0.72, 0.811 c 0.281, 0.186, 0.565, 0.279, 0.85, 0.279 s 0.532 -0.022, 0.74 -0.065 c 0.208 -0.043, 0.402 -0.108, 0.584 -0.195 c 0.078 -0.58, 0.29 -1.025, 0.636 -1.337 c -0.493 -0.052 -0.936 -0.13 -1.33 -0.234 c -0.394 -0.104 -0.8 -0.272 -1.22 -0.506 c -0.42 -0.234 -0.768 -0.523 -1.045 -0.87 c -0.277 -0.346 -0.504 -0.8 -0.681 -1.363 c -0.177 -0.562 -0.266 -1.211 -0.266 -1.947 c 0 -1.047, 0.342 -1.938, 1.025 -2.673 c -0.32 -0.787 -0.29 -1.67, 0.091 -2.647 c 0.251 -0.078, 0.623 -0.019, 1.116, 0.175 c 0.493, 0.195, 0.854, 0.361, 1.084, 0.5 c 0.229, 0.138, 0.413, 0.255, 0.552, 0.35 c 0.805 -0.225, 1.635 -0.337, 2.492 -0.337 c 0.856, 0, 1.687, 0.112, 2.492, 0.337 l 0.493 -0.311 c 0.338 -0.208, 0.735 -0.398, 1.194 -0.571 c 0.459 -0.173, 0.809 -0.221, 1.051 -0.143 c 0.389, 0.978, 0.424, 1.86, 0.104, 2.647 c 0.683, 0.735, 1.025, 1.627, 1.025, 2.673 c 0, 0.735 -0.089, 1.387 -0.266, 1.953 c -0.177, 0.567 -0.406, 1.021 -0.688, 1.363 c -0.281, 0.342 -0.632, 0.629 -1.051, 0.863 c -0.42, 0.234 -0.826, 0.402 -1.22, 0.506 c -0.394, 0.104 -0.837, 0.182 -1.33, 0.234 c 0.45, 0.389, 0.675, 1.003, 0.675, 1.843 v 3.102 c 0, 0.147, 0.021, 0.266, 0.065, 0.357 c 0.044, 0.091, 0.113, 0.153, 0.208, 0.188 c 0.096, 0.035, 0.18, 0.056, 0.253, 0.065 c 0.074, 0.009, 0.18, 0.013, 0.318, 0.013 h 2.907 c 1.029, 0, 1.91 -0.366, 2.641 -1.097 c 0.731 -0.731, 1.097 -1.612, 1.097 -2.641 V 3.738 C 19.933, 2.708, 19.568, 1.827, 18.837, 1.097 z"></path><path d="M 3.945, 14.509 c -0.06, 0.043 -0.052, 0.112, 0.026, 0.208 c 0.087, 0.086, 0.156, 0.1, 0.208, 0.039 c 0.061 -0.043, 0.052 -0.112 -0.026 -0.208 C 4.066, 14.47, 3.997, 14.457, 3.945, 14.509 z"></path><path d="M 3.517, 14.184 c -0.026, 0.061, 0.004, 0.113, 0.091, 0.156 c 0.069, 0.043, 0.126, 0.035, 0.169 -0.026 c 0.026 -0.061 -0.004 -0.113 -0.091 -0.156 C 3.599, 14.132, 3.543, 14.141, 3.517, 14.184 z"></path><path d="M 4.348, 15.015 c -0.078, 0.043 -0.078, 0.121, 0, 0.234 c 0.078, 0.113, 0.151, 0.143, 0.221, 0.091 c 0.078 -0.061, 0.078 -0.143, 0 -0.247 C 4.499, 14.981, 4.425, 14.954, 4.348, 15.015 z"></path><path d="M 4.802, 15.599 c -0.078, 0.069 -0.061, 0.151, 0.052, 0.247 c 0.104, 0.104, 0.19, 0.117, 0.259, 0.039 c 0.069 -0.069, 0.052 -0.151 -0.052 -0.246 C 4.958, 15.534, 4.871, 15.521, 4.802, 15.599 z"></path></g></svg>`;
 	
 	const repoListComponent = class PluginList extends BdApi.React.Component {
 		render() {
@@ -70,7 +69,7 @@ var PluginRepo = (_ => {
 	return class PluginRepo {
 		getName () {return "PluginRepo";} 
 
-		getVersion () {return "1.9.1";}
+		getVersion () {return "1.9.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -78,7 +77,7 @@ var PluginRepo = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"fixed":[["Fetching","Fixed an issue with some plugins while fetching"]]
 			};
 
 			this.patchedModules = {
@@ -515,7 +514,7 @@ var PluginRepo = (_ => {
 									if (giturl) BDFDB.DiscordUtils.openLink(giturl, BDFDB.DataUtils.get(this, "settings", "useChromium"));
 								},
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-									iconSVG: gitHubIcon
+									name: BDFDB.LibraryComponents.SvgIcon.Names.GITHUB
 								})
 							})
 						})
@@ -559,7 +558,7 @@ var PluginRepo = (_ => {
 		loadPlugins () {
 			BDFDB.DOMUtils.remove("iframe.discordSandbox", ".pluginrepo-loadingicon");
 			let settings = BDFDB.DataUtils.load(this, "settings");
-			let getPluginInfo, createFrame, runInFrame;
+			let getPluginInfo, extractConfigInfo, createFrame, runInFrame;
 			let frame, framerunning = false, framequeue = [], outdated = 0, newentries = 0, i = 0;
 			let tags = ["getName", "getVersion", "getAuthor", "getDescription"];
 			let seps = ["\"", "\'", "\`"];
@@ -681,31 +680,26 @@ var PluginRepo = (_ => {
 					}
 					else if (body && body.indexOf("404: Not Found") != 0 && response.statusCode == 200) {
 						let plugin = {};
-						let bodycopy = body;
+						let bodyCopy = body;
 						if (body.length / body.split("\n").length > 1000) {
 							/* code is minified -> add newlines */
-							bodycopy = body.replace(/}/g, "}\n");
+							bodyCopy = body.replace(/}/g, "}\n");
 						}
-						let configreg = /(module\.exports|config)\s*=\s*\{\n*\r*\t*["'`]*info["'`]*\s*:\s*/i.exec(bodycopy);
+						let bodyWithoutSpecial = bodyCopy.replace(/\n|\r|\t/g, "");
+						let configreg = /(module\.exports|config)\s*=\s*\{["'`]*info["'`]*\s*:\s*/i.exec(bodyWithoutSpecial);
 						if (url != "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PluginRepo/PluginRepo.plugin.js" && configreg) {
 							try {
-								let config = JSON.parse('{"info":' + bodycopy.substring(configreg.index).split(configreg[0])[1].split("};")[0] + '}');
-								plugin.getName = config.info.name.charAt(0).toUpperCase() + config.info.name.slice(1);
-								plugin.getDescription = config.info.description.charAt(0).toUpperCase() + config.info.description.slice(1);
-								plugin.getVersion = config.info.version;
-								plugin.getAuthor = "";
-								if (typeof config.info.author == "string") plugin.getAuthor = config.info.author.charAt(0).toUpperCase() + config.info.author.slice(1);
-								else if (typeof config.info.authors == "string") plugin.getAuthor = config.info.authors.charAt(0).toUpperCase() + config.info.authors.slice(1);
-								else if (Array.isArray(config.info.authors)) for (let author of config.info.authors) {
-									plugin.getAuthor += (plugin.getAuthor + (plugin.getAuthor ? ", " : "") + (typeof author == "string" ? author : author.name));
-								}
+								extractConfigInfo(plugin, JSON.parse('{"info":' + bodyWithoutSpecial.substring(configreg.index).split(configreg[0])[1].split("};")[0] + '}'));
 							}
-							catch (err) {}
+							catch (err) {
+								try {extractConfigInfo(plugin, JSON.parse(('{"info":' + bodyWithoutSpecial.substring(configreg.index).split(configreg[0])[1].split("};")[0] + '}').replace(/,/g, ',"').replace(/:/g, '":').replace(/{/g, '{"').replace(/""/g, '"').replace(/" /g, ' ').replace(/,"{/g, ',{').replace(/,"\[/g, ',[').replace(/":\/\//g, ':\/\/')));}
+								catch (err2) {}
+							}
 						}
 						else {
 							for (let tag of tags) {
-								let result = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(bodycopy);
-								if (!result) result = new RegExp("get " + tag.replace("get", "").toLowerCase() + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(bodycopy);
+								let result = new RegExp(tag + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(bodyCopy);
+								if (!result) result = new RegExp("get " + tag.replace("get", "").toLowerCase() + "[\\s|\\t|\\n|\\r|=|>|_|:|function|\(|\)|\{|return]*([\"|\'|\`]).*\\1","gi").exec(bodyCopy);
 								if (result) {
 									let separator = result[1];
 									result = result[0].replace(new RegExp("\\\\" + separator, "g"), separator).split(separator);
@@ -739,7 +733,19 @@ var PluginRepo = (_ => {
 					
 					getPluginInfo(callback);
 				});
-			}
+			};
+			
+			extractConfigInfo = (plugin, config) => {
+				plugin.getName = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(config.info.name);
+				plugin.getDescription = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(config.info.description);
+				plugin.getVersion = config.info.version;
+				plugin.getAuthor = "";
+				if (typeof config.info.author == "string") plugin.getAuthor = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(config.info.author);
+				else if (typeof config.info.authors == "string") plugin.getAuthor = BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(config.info.authors);
+				else if (Array.isArray(config.info.authors)) for (let author of config.info.authors) {
+					plugin.getAuthor += (plugin.getAuthor + (plugin.getAuthor ? ", " : "") + BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(typeof author == "string" ? author : author.name || ""));
+				}
+			};
 
 			createFrame = _ => {
 				return new Promise(callback => {
@@ -801,7 +807,7 @@ var PluginRepo = (_ => {
 						}
 					};
 					window.addEventListener("message", evalResultReceived);
-					frame.contentWindow.postMessage({origin:"PluginRepo",reason:"Eval",jsstring:`
+					if (frame.contentWindow) frame.contentWindow.postMessage({origin:"PluginRepo",reason:"Eval",jsstring:`
 						try {
 							${body}
 							var p = new ${name}();
