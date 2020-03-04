@@ -7733,8 +7733,8 @@
 	InternalComponents.LibraryComponents.SvgIcon = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.SvgIcon") || reactInitialized && class BDFDB_Icon extends LibraryModules.React.Component {
 		render() {
 			if (BDFDB.ObjectUtils.is(this.props.name)) {
+				if (this.props.className) this.props.nativeClass = true;
 				this.props.iconSVG = this.props.name.icon;
-				this.props.nativeClass = true;
 				let props = Object.assign({
 					width: 24,
 					height: 24,
