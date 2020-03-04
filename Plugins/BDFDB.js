@@ -6261,7 +6261,7 @@
 							})
 						]
 					}),
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ScrollerVertical, {
+					BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ScrollerVertical, {
 						outerClassName: BDFDB.disCNS._repodescriptionwrap,
 						className: BDFDB.disCNS._repodescription,
 						children: this.props.data.description
@@ -6392,10 +6392,10 @@
 							BDFDB.ListenerUtils.stopEvent(e);
 						}
 					}) : null,
-					typeof this.props.children == "string" ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+					typeof this.props.children == "string" ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
 						className: BDFDB.disCN.hovercardinner,
-						color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {children: this.props.children})
+						color: InternalComponents.LibraryComponents.TextElement.Colors.PRIMARY,
+						children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextScroller, {children: this.props.children})
 					}) : this.props.children
 				].flat(10).filter(n => n)
 			}), "backdrop", "noRemove"));
@@ -6881,7 +6881,7 @@
 				position: InternalComponents.LibraryComponents.PopoutContainer.Positions.TOP,
 				align: InternalComponents.LibraryComponents.PopoutContainer.Align.LEFT,
 				renderPopout: instance => {
-					return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.EmojiPicker, {
+					return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.EmojiPicker, {
 						closePopout: instance.close,
 						onSelectEmoji: this.handleEmojiChange.bind(this),
 						allowManagedEmojis: false
@@ -7344,9 +7344,9 @@
 				}),
 				popoutClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.quickselectpopout, this.props.popoutClassName, BDFDB.disCN.contextmenu, BDFDB.disCN.quickselectpopoutwrapper, this.props.scroller && BDFDB.disCN.quickselectpopoutscroll),
 				themed: false,
-				animation: BDFDB.LibraryComponents.PopoutContainer.Animation.TRANSLATE,
-				position: BDFDB.LibraryComponents.PopoutContainer.Positions.BOTTOM,
-				align: BDFDB.LibraryComponents.PopoutContainer.Align.RIGHT,
+				animation: InternalComponents.LibraryComponents.PopoutContainer.Animation.TRANSLATE,
+				position: InternalComponents.LibraryComponents.PopoutContainer.Positions.BOTTOM,
+				align: InternalComponents.LibraryComponents.PopoutContainer.Align.RIGHT,
 				renderPopout: instance => {
 					let items = options.map(option => {
 						let selected = option.value && option.value === selectedOption.value || option.key && option.key === selectedOption.key;
@@ -7729,7 +7729,7 @@
 			}
 			if (this.props.iconSVG) {
 				let icon = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(this.props.iconSVG));
-				if (icon) {
+				if (BDFDB.ReactUtils.isValidElement(icon)) {
 					icon.props.className = BDFDB.DOMUtils.formatClassName(!this.props.nativeClass && BDFDB.disCN.svgicon, icon.props.class, this.props.className);
 					icon.props.style = Object.assign({}, icon.props.style, this.props.style);
 					return icon;
@@ -8955,7 +8955,7 @@
 		let settingspanel, settingsitems = [];
 		
 		let bdToastSetting = BDFDB.BDUtils.getSettings("fork-ps-2");
-		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,
 			type: "Switch",
 			plugin: BDFDB,
@@ -8982,9 +8982,9 @@
 	InternalBDFDB._processAvatarRender = function (user, avatar) {
 		if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user)) {
 			let changed = false;
-			if (avatar.type == "img") avatar = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatar, Object.assign({}, avatar.props, {
+			if (avatar.type == "img") avatar = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Avatar, Object.assign({}, avatar.props, {
 				className: BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, "")),
-				size: BDFDB.LibraryComponents.Avatar.Sizes.SIZE_40
+				size: InternalComponents.LibraryComponents.Avatar.Sizes.SIZE_40
 			}));
 			avatar.props["user_by_BDFDB"] = user.id;
 			if (BDFDB_Patrons.includes(user.id)) {
@@ -9064,13 +9064,13 @@
 			after: e => {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnValue, {name: "TransitionGroup"});
 				if (index > -1) {
-					children[index].props.children.push(!e.thisObject.props.lowerLeftBadge ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeAnimationContainer, {
+					children[index].props.children.push(!e.thisObject.props.lowerLeftBadge ? null : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.BadgeAnimationContainer, {
 						className: BDFDB.disCN.guildlowerleftbadge,
 						key: "lower-left-badge",
 						animatedStyle: e.thisObject.getLowerLeftBadgeStyles(),
 						children: e.thisObject.props.lowerLeftBadge
 					}));
-					children[index].props.children.push(!e.thisObject.props.upperLeftBadge ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BadgeAnimationContainer, {
+					children[index].props.children.push(!e.thisObject.props.upperLeftBadge ? null : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.BadgeAnimationContainer, {
 						className: BDFDB.disCN.guildupperleftbadge,
 						key: "upper-left-badge",
 						animatedStyle: e.thisObject.getUpperLeftBadgeStyles(),
