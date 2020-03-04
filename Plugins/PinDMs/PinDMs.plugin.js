@@ -4,7 +4,7 @@ var PinDMs = (_ => {
 	return class PinDMs {
 		getName () {return "PinDMs";}
 
-		getVersion () {return "1.6.2";}
+		getVersion () {return "1.6.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,9 +12,7 @@ var PinDMs = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["Colors","You can now set a font color for each category"],["Unread Count","Similar to Folders, DM Categories now display the total amound of unread messages as a red badge, can be disabled in the settings"],["Sorting Categories","You can now drag categories to sort them the same way as pinned DMs"]],
-				"fixed":[["DM Count","Closed DMs no longer get counted towards the Count Amount"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"fixed":[["Pin Icon","Fixed Pin Icon not showing in stable and causing a crash in canary"]]
 			};
 
 			this.patchedModules = {
@@ -635,9 +633,10 @@ var PinDMs = (_ => {
 				if (e.returnvalue && this.isPinned(e.instance.props.channel.id, "pinnedRecents") && BDFDB.DataUtils.get(this, "settings", "showPinIcon")) {
 					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"BlobMask"});
 					if (index > -1) children[index].props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.IconBadge, {
-						className: BDFDB.disCN.guildbadgeiconbadge2,
-						name: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_PIN,
-						style: {backgroundColor: null, transform: "scale(-1, 1)"}
+						className: BDFDB.disCN.guildiconbadge,
+						disableColor: true,
+						style: {transform: "scale(-1, 1)"},
+						icon: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_PIN
 					});
 				}
 			}
