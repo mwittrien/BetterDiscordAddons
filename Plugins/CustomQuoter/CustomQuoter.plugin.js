@@ -9,6 +9,7 @@ var CustomQuoter = (_ => {
 				name: "Test Channel"
 			});
 			let spoofQuotedMessage = new BDFDB.DiscordObjects.Message({
+				id: "562432230424221059",
 				author: new BDFDB.DiscordObjects.User({
 					id: "230422432565221049",
 					username: "Quoted User"
@@ -35,7 +36,7 @@ var CustomQuoter = (_ => {
 	return class CustomQuoter {
 		getName () {return "CustomQuoter";}
 
-		getVersion () {return "1.0.3";}
+		getVersion () {return "1.0.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -43,7 +44,7 @@ var CustomQuoter = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Message Preview","Added a message preview that let's you check your quote settings in real time"]]
+				"added":[["Link Option","Added a link placeholder that will be replaced with the direct message link that jumps to the quoted message if clicked"]]
 			};
 		}
 		
@@ -122,6 +123,7 @@ var CustomQuoter = (_ => {
 				children: [
 					"$quote will be replaced with the quoted message content",
 					"$mention will be replaced with a mention of the message author",
+					"$link will be replaced with a discord direct link pointing to the message",
 					"$authorId will be replaced with the ID of the message author",
 					"$authorName will be replaced with the name of the message author",
 					"$channel will be replaced with a mention of the channel (ignored for DMs)",
@@ -227,6 +229,7 @@ var CustomQuoter = (_ => {
 			
 			return BDFDB.StringUtils.insertNRST(customQuote)
 				.replace("$mention", settings.ignoreMentionInDM && channel.isDM() ? "" : `<@!${message.author.id}>`)
+				.replace("$link", `https://discordapp.com/channels/${guild.id}/${channel.id}/${message.id}`)
 				.replace("$authorName", message.author.username || "")
 				.replace("$authorId", message.author.id || "")
 				.replace("$channelName", channel.name || "")

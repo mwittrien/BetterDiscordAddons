@@ -1043,8 +1043,8 @@
 	};
 	
 	var WebModulesData = {};
-	WebModulesData.Patchtypes = ["before", "instead", "after"];
-	WebModulesData.Patchmap = {
+	WebModulesData.PatchTypes = ["before", "instead", "after"];
+	WebModulesData.PatchMap = {
 		BannedCard: "BannedUser",
 		ChannelWindow: "Channel",
 		InvitationCard: "InviteRow",
@@ -1073,17 +1073,10 @@
 		"SimpleMessageAccessories",
 		"UserInfo"
 	];
-	WebModulesData.PropsFind = {
-		MessageHeader: "MessageTimestamp",
-		UnavailableGuildsButton: "UnavailableGuildsButton"
-	};
 	WebModulesData.MemoComponent = [
 		"MessageContent",
 		"NowPlayingHeader"
 	];
-	WebModulesData.NonPrototype = [].concat(WebModulesData.NonRender, Object.keys(WebModulesData.PropsFind), WebModulesData.MemoComponent, [
-		"ChannelTextAreaContainer"
-	]);
 	WebModulesData.LoadedInComponents = {
 		AutocompleteChannelResult: "LibraryComponents.AutocompleteItems.Channel",
 		AutocompleteUserResult: "LibraryComponents.AutocompleteItems.User",
@@ -1144,6 +1137,13 @@
 		V2C_PluginCard: "_repoheader",
 		V2C_ThemeCard: "_repoheader"
 	};
+	WebModulesData.PropsFinder = {
+		MessageHeader: "MessageTimestamp",
+		UnavailableGuildsButton: "UnavailableGuildsButton"
+	};
+	WebModulesData.NonPrototype = [].concat(WebModulesData.NonRender, Object.keys(WebModulesData.PropsFinder), WebModulesData.MemoComponent, [
+		"ChannelTextAreaContainer"
+	]);
 	WebModulesData.GlobalModules = {};
 	try {WebModulesData.GlobalModules["V2C_ContentColumn"] = V2C_ContentColumn;} catch(err) {BDFDB.LogUtils.warn(`Could not find global Module "V2C_ContentColumn"`);}
 	try {WebModulesData.GlobalModules["V2C_List"] = V2C_List;} catch(err) {BDFDB.LogUtils.warn(`Could not find global Module "V2C_List"`);}
@@ -1157,7 +1157,7 @@
 	};
 	BDFDB.ModuleUtils.patch = function (plugin, module, methodNames, patchMethods, forceRepatch = false) {
 		if (!plugin || !BDFDB.ObjectUtils.is(module) || !methodNames || !BDFDB.ObjectUtils.is(patchMethods)) return null;
-		patchMethods = BDFDB.ObjectUtils.filter(patchMethods, type => WebModulesData.Patchtypes.includes(type), true);
+		patchMethods = BDFDB.ObjectUtils.filter(patchMethods, type => WebModulesData.PatchTypes.includes(type), true);
 		if (BDFDB.ObjectUtils.isEmpty(patchMethods)) return null;
 		const pluginName = typeof plugin === "string" ? plugin : plugin.name;
 		const pluginId = pluginName.toLowerCase();
@@ -1169,7 +1169,7 @@
 			if (!module.BDFDBpatch[methodName] || forceRepatch && (!module[methodName] || !module[methodName].__isBDFDBpatched)) {
 				if (!module.BDFDBpatch[methodName]) {
 					module.BDFDBpatch[methodName] = {};
-					for (let type of WebModulesData.Patchtypes) module.BDFDBpatch[methodName][type] = {};
+					for (let type of WebModulesData.PatchTypes) module.BDFDBpatch[methodName][type] = {};
 				}
 				if (!module[methodName]) module[methodName] = (_ => {});
 				const originalMethod = module[methodName];
@@ -1237,14 +1237,14 @@
 			else for (let patchedMethod of module.BDFDBpatch) unpatch(patchedMethod, pluginId);
 		}
 		function unpatch (funcName, pluginId) {
-			for (let type of WebModulesData.Patchtypes) {
+			for (let type of WebModulesData.PatchTypes) {
 				if (pluginId) for (let priority in module.BDFDBpatch[funcName][type]) {
 					delete module.BDFDBpatch[funcName][type][priority][pluginId];
 					if (BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[funcName][type][priority])) delete module.BDFDBpatch[funcName][type][priority];
 				}
 				else delete module.BDFDBpatch[funcName][type];
 			}
-			if (BDFDB.ObjectUtils.isEmpty(BDFDB.ObjectUtils.filter(module.BDFDBpatch[funcName], key => WebModulesData.Patchtypes.includes(key) && !BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[funcName][key]), true))) {
+			if (BDFDB.ObjectUtils.isEmpty(BDFDB.ObjectUtils.filter(module.BDFDBpatch[funcName], key => WebModulesData.PatchTypes.includes(key) && !BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[funcName][key]), true))) {
 				module[funcName] = module.BDFDBpatch[funcName].originalMethod;
 				delete module.BDFDBpatch[funcName];
 				if (BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch)) delete module.BDFDBpatch;
@@ -1268,7 +1268,7 @@
 				}
 				selectedtypes = [selectedtypes].flat(10).filter(n => n);
 				if (selectedtypes.length) {
-					selectedtypes = selectedtypes.map(type => type && WebModulesData.Patchmap[type] ? WebModulesData.Patchmap[type] + " _ _ " + type : type);
+					selectedtypes = selectedtypes.map(type => type && WebModulesData.PatchMap[type] ? WebModulesData.PatchMap[type] + " _ _ " + type : type);
 					filteredmodules = filteredmodules.filter(type => selectedtypes.indexOf(type) > -1);
 				}
 				filteredmodules = BDFDB.ArrayUtils.removeCopies(filteredmodules);
@@ -1327,8 +1327,8 @@
 				if (component) patchInstance(WebModulesData.NonRender.includes(unmappedType) ? (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports : component, type, patchType);
 				else {
 					let className = WebModulesData.PatchFinder[unmappedType];
-					let propertyFind = WebModulesData.PropsFind[unmappedType];
-					let mapped = WebModulesData.Patchmap[type];
+					let propertyFind = WebModulesData.PropsFinder[unmappedType];
+					let mapped = WebModulesData.PatchMap[type];
 					let mappedType = mapped ? mapped + " _ _ " + type : type;
 					let name = mappedType.split(" _ _ ")[0];
 					if (mapped) {
