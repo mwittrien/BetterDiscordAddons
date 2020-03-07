@@ -7,7 +7,7 @@ var MessageUtilities = (_ => {
 	return class MessageUtilities {
 		getName () {return "MessageUtilities";}
 
-		getVersion () {return "1.7.1";}
+		getVersion () {return "1.7.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -15,8 +15,7 @@ var MessageUtilities = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Message ContextMenu Update","Fixed the plugin for the new Message ContextMenu Update"], ["Message Update","Fixed the plugin for the new Message Update"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"fixed":[["Open React Menu","Works again"]]
 			};
 			
 			this.patchedModules = {
@@ -291,7 +290,7 @@ var MessageUtilities = (_ => {
 		}
 
 		doOpenReact ({messagediv, message}, action) {
-			let reactButton = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagetoolbarbutton, messagediv.querySelector(`${BDFDB.dotCN.messagetoolbaricon}[name="${BDFDB.LibraryComponents.SvgIcon.Names.NOVA_ADD_REACTION_ALT}"], ${BDFDB.dotCN.messagetoolbaricon}[name="${BDFDB.LibraryComponents.SvgIcon.Names.NOVA_ADD_REACTION}"]`));
+			let reactButton = messagediv.querySelector(`${BDFDB.dotCN.messagetoolbarbutton}[aria-label="${BDFDB.LanguageUtils.LanguageStrings.ADD_REACTION}"]`);
 			if (reactButton) {
 				reactButton.click();
 				if (BDFDB.DataUtils.get(this, "toasts", action)) BDFDB.NotificationUtils.toast("Reaction popout has been opened.", {type:"success"});
