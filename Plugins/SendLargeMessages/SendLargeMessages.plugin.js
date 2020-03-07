@@ -7,7 +7,7 @@ class SendLargeMessages {
 
 	getAuthor () {return "DevilBro";}
 
-	getDescription () {return "Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.";}
+	getDescription () {return "Allows you to enter larger messages in the chattextarea, which allows you to automatically send the message in several smaller messages.";}
 
 	constructor () {
 		this.changelog = {
