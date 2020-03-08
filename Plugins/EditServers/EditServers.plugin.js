@@ -697,7 +697,7 @@ var EditServers = (_ => {
 						submenu_resetsettings_text:			"Server zurücksetzen",
 						modal_header_text:					"Lokale Servereinstellungen",
 						modal_guildname_text:				"Lokaler Servername",
-						modal_guildacronym_text:			"Lokale Serverkürzel",
+						modal_guildacronym_text:			"Lokales Serverkürzel",
 						modal_ignorecustomname_text:		"Benutze den ursprünglichen Servernamen für das Serverkürzel",
 						modal_guildicon_text:				"Icon",
 						modal_guildbanner_text:				"Banner",
