@@ -5336,6 +5336,8 @@
 		quickswitchresult: ["QuickSwitch", "result"],
 		quickswitchresultfocused: ["QuickSwitch", "resultFocused"],
 		quickswitchresultguildicon: ["QuickSwitch", "guildIcon"],
+		quickswitchresulticon: ["QuickSwitch", "icon"],
+		quickswitchresulticoncontainer: ["QuickSwitch", "iconContainer"],
 		quickswitchresultmatch: ["QuickSwitch", "match"],
 		quickswitchresultmisccontainer: ["QuickSwitchWrap", "miscContainer"],
 		quickswitchresultname: ["QuickSwitch", "name"],
