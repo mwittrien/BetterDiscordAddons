@@ -6626,7 +6626,7 @@
 			this.state = props;
 			
 			var swatches = this;
-			this.ColorSwatch = class ColorSwatch extends LibraryModules.React.Component {
+			this.ColorSwatch = class BDFDB_ColorSwatch extends LibraryModules.React.Component {
 				render() {
 					let usewhite = !BDFDB.ColorUtils.isBright(this.props.color);
 					let swatch = BDFDB.ReactUtils.createElement("button", {

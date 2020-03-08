@@ -237,10 +237,7 @@ var EditChannels = (_ => {
 					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.marginleft4]]});
 					if (index > -1) this.changeChannelColor(children[index], e.instance.props.channel.id);
 					[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.autocompleteicon]]});
-					if (index > -1) {
-						console.log(children[index]);
-						this.changeChannelIconColor(children[index], e.instance.props.channel.id, {alpha: 0.6});
-					}
+					if (index > -1) this.changeChannelIconColor(children[index], e.instance.props.channel.id, {alpha: 0.6});
 					if (e.instance.props.category) {
 						[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.autocompletedescription]]});
 						if (index > -1) this.changeChannelColor(children[index], e.instance.props.category.id);
