@@ -1,12 +1,12 @@
 //META{"name":"CompleteTimestamps","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CompleteTimestamps","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CompleteTimestamps/CompleteTimestamps.plugin.js"}*//
 
 var CompleteTimestamps = (_ => {
-	var languages;
+	var languages, currentMode;
 	
 	return class CompleteTimestamps {
 		getName () {return "CompleteTimestamps";}
 
-		getVersion () {return "1.4.1";}
+		getVersion () {return "1.4.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,8 +14,7 @@ var CompleteTimestamps = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Message Update","Fixed the plugin for the new Message Update"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"fixed":[["Compact Mode","All timestamps are now changed to your choosen format in compact mode, like the plugin used to (disable 'Replace Chat ...' to disable this)"]]
 			};
 
 			this.patchedModules = {
@@ -46,7 +45,7 @@ var CompleteTimestamps = (_ => {
 					creationDateLang:		{value:"$discord", 	description:"Timestamp Format:"}
 				},
 				formats: {
-					ownFormat:				{value:"$hour:$minute:$second, $day.$month.$year", 	description:"Own Format:"}
+					ownformat:				{value:"$hour:$minute:$second, $day.$month.$year", 	description:"Own Format:"}
 				}
 			};
 		}
@@ -232,6 +231,7 @@ var CompleteTimestamps = (_ => {
 		onSettingsClosed () {
 			if (this.SettingsUpdated) {
 				delete this.SettingsUpdated;
+				currentMode = null;
 				this.forceUpdateAll();
 			}
 		}
@@ -247,7 +247,8 @@ var CompleteTimestamps = (_ => {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "MessageTimestamp"});
 			if (index > -1) {
 				let settings = BDFDB.DataUtils.get(this, "settings");
-				this.changeTimestamp(children, index, {child:!e.instance.props.compact && settings.showInChat, tooltip:settings.changeForChat});
+				this.changeTimestamp(children, index, {child:settings.showInChat, tooltip:settings.changeForChat});
+				this.setMaxWidth(children[index], e.instance.props.compact);
 			}
 		}
 		
@@ -301,39 +302,39 @@ var CompleteTimestamps = (_ => {
 			parent[index] = stamp;
 		}
 
-		getTimestamp (languageid, time) {
+		getTimestamp (languageId, time) {
 			let timeobj = time ? time : new Date();
 			if (typeof time == "string") timeobj = new Date(time);
 			if (timeobj.toString() == "Invalid Date") timeobj = new Date(parseInt(time));
 			if (timeobj.toString() == "Invalid Date") return;
 			let settings = BDFDB.DataUtils.get(this, "settings"), timestring = "";
-			if (languageid != "own") {
+			if (languageId != "own") {
 				let timestamp = [];
-				if (settings.displayDate) 	timestamp.push(timeobj.toLocaleDateString(languageid));
-				if (settings.displayTime) 	timestamp.push(settings.cutSeconds ? this.cutOffSeconds(timeobj.toLocaleTimeString(languageid)) : timeobj.toLocaleTimeString(languageid));
+				if (settings.displayDate) 	timestamp.push(timeobj.toLocaleDateString(languageId));
+				if (settings.displayTime) 	timestamp.push(settings.cutSeconds ? this.cutOffSeconds(timeobj.toLocaleTimeString(languageId)) : timeobj.toLocaleTimeString(languageId));
 				if (settings.otherOrder)	timestamp.reverse();
 				timestring = timestamp.length > 1 ? timestamp.join(", ") : (timestamp.length > 0 ? timestamp[0] : "");
 				if (timestring && settings.forceZeros) timestring = this.addLeadingZeros(timestring);
 			}
 			else {
-				let ownformat = BDFDB.DataUtils.get(this, "formats", "ownFormat");
-				languageid = BDFDB.LanguageUtils.getLanguage().id;
+				let ownFormat = BDFDB.DataUtils.get(this, "formats", "ownformat");
+				languageId = BDFDB.LanguageUtils.getLanguage().id;
 				let hour = timeobj.getHours(), minute = timeobj.getMinutes(), second = timeobj.getSeconds(), msecond = timeobj.getMilliseconds(), day = timeobj.getDate(), month = timeobj.getMonth()+1, timemode = "", daysago = Math.round((new Date() - timeobj)/(1000*60*60*24));
-				if (ownformat.indexOf("$timemode") > -1) {
+				if (ownFormat.indexOf("$timemode") > -1) {
 					timemode = hour >= 12 ? "PM" : "AM";
 					hour = hour % 12;
 					hour = hour ? hour : 12;
 				}
-				timestring = ownformat
+				timestring = ownFormat
 					.replace("$hour", settings.forceZeros && hour < 10 ? "0" + hour : hour)
 					.replace("$minute", minute < 10 ? "0" + minute : minute)
 					.replace("$second", second < 10 ? "0" + second : second)
 					.replace("$msecond", settings.forceZeros ? (msecond < 10 ? "00" + msecond : (msecond < 100 ? "0" + msecond : msecond)) : msecond)
 					.replace("$timemode", timemode)
-					.replace("$weekdayL", timeobj.toLocaleDateString(languageid,{weekday: "long"}))
-					.replace("$weekdayS", timeobj.toLocaleDateString(languageid,{weekday: "short"}))
-					.replace("$monthnameL", timeobj.toLocaleDateString(languageid,{month: "long"}))
-					.replace("$monthnameS", timeobj.toLocaleDateString(languageid,{month: "short"}))
+					.replace("$weekdayL", timeobj.toLocaleDateString(languageId,{weekday: "long"}))
+					.replace("$weekdayS", timeobj.toLocaleDateString(languageId,{weekday: "short"}))
+					.replace("$monthnameL", timeobj.toLocaleDateString(languageId,{month: "long"}))
+					.replace("$monthnameS", timeobj.toLocaleDateString(languageId,{month: "short"}))
 					.replace("$daysago", daysago > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("ACTIVITY_FEED_USER_PLAYED_DAYS_AGO", daysago) : BDFDB.LanguageUtils.LanguageStrings.SEARCH_SHORTCUT_TODAY)
 					.replace("$day", settings.forceZeros && day < 10 ? "0" + day : day)
 					.replace("$month", settings.forceZeros && month < 10 ? "0" + month : month)
@@ -355,6 +356,32 @@ var CompleteTimestamps = (_ => {
 			}
 
 			return chararray.join("");
+		}
+		
+		setMaxWidth (timestamp, compact) {
+			if (currentMode != compact) {
+				currentMode = compact;
+				if (compact && timestamp.props.className && typeof timestamp.type == "string") {
+					let tempTimestamp = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.messagecompact}"><${timestamp.type} class="${timestamp.props.className}" style="width: auto !important;">${this.getTimestamp(BDFDB.DataUtils.get(this, "choices", "creationDateLang"), new Date(253402124399995))}</${timestamp.type}></div>`);
+					document.body.appendChild(tempTimestamp);
+					let width = BDFDB.DOMUtils.getRects(tempTimestamp.firstElementChild).width + 5;
+					tempTimestamp.remove();
+					BDFDB.DOMUtils.appendLocalStyle(this.name + "CompactCorrection", `
+						${BDFDB.dotCN.messagecompact + BDFDB.dotCN.messagewrapper} {
+							padding-left: ${44 + width}px;
+						}
+						${BDFDB.dotCNS.messagecompact + BDFDB.dotCN.messagecontents} {
+							margin-left: -${44 + width}px;
+							padding-left: ${44 + width}px;
+							text-indent: calc(-${44 + width}px - -1rem);
+						}
+						${BDFDB.dotCNS.messagecompact + BDFDB.dotCN.messagetimestamp} {
+							width: ${width}px;
+						}
+					`);
+				}
+				else BDFDB.DOMUtils.removeLocalStyle(this.name + "CompactCorrection");
+			}
 		}
 			
 		forceUpdateAll() {
