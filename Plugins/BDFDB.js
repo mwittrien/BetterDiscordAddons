@@ -8134,6 +8134,10 @@
 	BDFDB.DOMUtils.appendLocalStyle("BDFDB", `
 		@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/SupporterBadge.css);
 		
+		img:not([src]), img[src=""], img[src="null"] {
+			opacity: 0;
+		}
+
 		${BDFDB.dotCN.changelogicon} {
 			display: inline-block;
 			background: currentColor;
