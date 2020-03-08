@@ -1744,7 +1744,7 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 /* ----		14.1.	IMAGEZOOM						---- */
 
 .zoomLense-uOK8xV {
-	border-color: rgb(var(--vaccentcolor));
+	border-color: rgb(var(--vaccentcolor)) !important;
 }
 
 /* ----		14.2.	HIDEUTILS						---- */
