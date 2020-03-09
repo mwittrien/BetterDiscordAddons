@@ -686,13 +686,13 @@ var PluginRepo = (_ => {
 							bodyCopy = body.replace(/}/g, "}\n");
 						}
 						let bodyWithoutSpecial = bodyCopy.replace(/\n|\r|\t/g, "");
-						let configreg = /(module\.exports|config)\s*=\s*\{["'`]*info["'`]*\s*:\s*/i.exec(bodyWithoutSpecial);
+						let configreg = /(\.exports|config)\s*=\s*\{["'`]*info["'`]*\s*:\s*/i.exec(bodyWithoutSpecial);
 						if (url != "https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PluginRepo/PluginRepo.plugin.js" && configreg) {
 							try {
-								extractConfigInfo(plugin, JSON.parse('{"info":' + bodyWithoutSpecial.substring(configreg.index).split(configreg[0])[1].split("};")[0] + '}'));
+								extractConfigInfo(plugin, JSON.parse('{"info":' + bodyWithoutSpecial.substring(configreg.index).split(configreg[0])[1].split("};")[0].split("}},")[0] + '}'));
 							}
 							catch (err) {
-								try {extractConfigInfo(plugin, JSON.parse(('{"info":' + bodyWithoutSpecial.substring(configreg.index).split(configreg[0])[1].split("};")[0] + '}').replace(/,/g, ',"').replace(/:/g, '":').replace(/{/g, '{"').replace(/""/g, '"').replace(/" /g, ' ').replace(/,"{/g, ',{').replace(/,"\[/g, ',[').replace(/":\/\//g, ':\/\/')));}
+								try {extractConfigInfo(plugin, JSON.parse(('{"info":' + bodyWithoutSpecial.substring(configreg.index).split(configreg[0])[1].split("};")[0].split("}},")[0] + '}').replace(/,/g, ',"').replace(/:/g, '":').replace(/{/g, '{"').replace(/""/g, '"').replace(/" /g, ' ').replace(/,"{/g, ',{').replace(/,"\[/g, ',[').replace(/":\/\//g, ':\/\/')));}
 								catch (err2) {}
 							}
 						}
