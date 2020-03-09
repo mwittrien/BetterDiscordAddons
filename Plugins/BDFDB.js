@@ -1069,8 +1069,6 @@
 		"NameTag",
 		"NowPlayingItem",
 		"PrivateChannelEmptyMessage",
-		"RecentMentions",
-		"RecentMentionsHeader",
 		"SystemMessage",
 		"SimpleMessageAccessories",
 		"UserInfo"
@@ -1127,7 +1125,6 @@
 		QuickSwitchChannelResult: "quickswitchresult",
 		QuickSwitchGuildResult: "quickswitchresult",
 		QuickSwitchResult: "quickswitchresult",
-		RecentMentionsHeader: "recentmentionsheader",
 		SearchResults: "searchresultswrap",
 		TypingUsers: "typing",
 		UnreadDMs: "guildsscroller",
@@ -1338,11 +1335,11 @@
 						plugin.patchedModules[patchType][mappedType] = plugin.patchedModules[patchType][type];
 						delete plugin.patchedModules[patchType][type];
 					}
-					if (className && DiscordClasses[className]) checkForInstance(className, mappedType, patchType, WebModulesData.ForceObserve.includes(unmappedType), WebModulesData.NonRender.includes(unmappedType));
-					else if (propertyFind) patchInstance((BDFDB.ModuleUtils.findByProperties(propertyFind, false) || {}).exports, mappedType, patchType, true);
+					if (propertyFind) patchInstance((BDFDB.ModuleUtils.findByProperties(propertyFind, false) || {}).exports, mappedType, patchType, true);
 					else if (WebModulesData.NonRender.includes(unmappedType)) patchInstance((BDFDB.ModuleUtils.findByName(name, false) || {}).exports, mappedType, patchType, true);
 					else if (WebModulesData.MemoComponent.includes(unmappedType)) patchInstance((BDFDB.ModuleUtils.findByName(name, false) || {exports:{}}).exports.default, mappedType, patchType, true);
-					else patchInstance(BDFDB.ModuleUtils.findByName(name), mappedType, patchType);
+					else if (!className) patchInstance(BDFDB.ModuleUtils.findByName(name), mappedType, patchType);
+					else if (DiscordClasses[className]) checkForInstance(className, mappedType, patchType, WebModulesData.ForceObserve.includes(unmappedType));
 				}
 			}
 		}
@@ -1359,29 +1356,26 @@
 				}
 			}
 		}
-		function patchFoundInstance(instance, type, patchType, exported) {
-			patchInstance(exported ? (BDFDB.ModuleUtils.find(m => m == instance.type, false) || {}).exports : instance, type, patchType, exported);
-		}
-		function checkForInstance(className, type, patchType, forceObserve, exported) {
+		function checkForInstance(className, type, patchType, forceobserve) {
 			const app = document.querySelector(BDFDB.dotCN.app), bdsettings = document.querySelector("#bd-settingspane-container " + BDFDB.dotCN.scrollerwrap);
-			let instanceFound = false;
-			if (!forceObserve) {
+			let instancefound = false;
+			if (!forceobserve) {
 				if (app) {
 					let appins = BDFDB.ReactUtils.findConstructor(app, type, {unlimited:true}) || BDFDB.ReactUtils.findConstructor(app, type, {unlimited:true, up:true});
-					if (appins && (instanceFound = true)) patchFoundInstance(appins, type, patchType, exported);
+					if (appins && (instancefound = true)) patchInstance(appins, type, patchType);
 				}
-				if (!instanceFound && bdsettings) {
+				if (!instancefound && bdsettings) {
 					let bdsettingsins = BDFDB.ReactUtils.findConstructor(bdsettings, type, {unlimited:true});
-					if (bdsettingsins && (instanceFound = true)) patchFoundInstance(bdsettingsins, type, patchType, exported);
+					if (bdsettingsins && (instancefound = true)) patchInstance(bdsettingsins, type, patchType);
 				}
 			}
-			if (!instanceFound) {
+			if (!instancefound) {
 				let found = false, disclass = BDFDB.disCN[className], dotclass = BDFDB.dotCN[className];
 				for (let ele of document.querySelectorAll(dotclass)) {
 					let ins = BDFDB.ReactUtils.getInstance(ele);
 					if (isCorrectInstance(ins, type)) {
 						found = true;
-						patchFoundInstance(ins, type, patchType, exported);
+						patchInstance(ins, type, patchType);
 						BDFDB.ModuleUtils.forceAllUpdates(plugin, type);
 						break;
 					}
@@ -1395,7 +1389,7 @@
 							if (isCorrectInstance(ins, type)) {
 								found = true;
 								instanceobserver.disconnect();
-								patchFoundInstance(ins, type, patchType, exported);
+								patchInstance(ins, type, patchType);
 								BDFDB.ModuleUtils.forceAllUpdates(plugin, type);
 							}
 						}
