@@ -15,8 +15,7 @@ var BadgesEverywhere = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Message Update","Fixed the plugin for the new Message Update"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"fixed":[["Compact","Added a margin to add some spaces between badges and the message in compact mode"]]
 			};
 
 			this.patchedModules = {
@@ -81,6 +80,9 @@ var BadgesEverywhere = (_ => {
 				}
 				${BDFDB.dotCNS.messagecozy + BDFDB.dotCN.messageusername} + .BE-badges .BE-badge:first-of-type {
 					margin-left: 0;
+				}
+				${BDFDB.dotCNS.messagecompact + BDFDB.dotCN.messageusername} ~ .BE-badges .BE-badge:last-of-type {
+					margin-right: .25rem;
 				}
 
 				.BE-badge.BE-badge-CurrentGuildBoost {height:14px !important; width:14px !important; min-width:14px !important;}
