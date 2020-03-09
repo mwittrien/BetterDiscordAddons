@@ -6,7 +6,7 @@ var CompleteTimestamps = (_ => {
 	return class CompleteTimestamps {
 		getName () {return "CompleteTimestamps";}
 
-		getVersion () {return "1.4.2";}
+		getVersion () {return "1.4.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,7 @@ var CompleteTimestamps = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Compact Mode","All timestamps are now changed to your choosen format in compact mode, like the plugin used to (disable 'Replace Chat ...' to disable this)"]]
+				"fixed":[["Compact Mode","All timestamps are now changed to your choosen format in compact mode, like the plugin used to (disable 'Replace Chat ...' to disable this)"],["Extra Space for Compact","In some cases the space for the compact timestamp wouldn't be enough for the timestamp forcing it to wrap into two lines, added extra space"]]
 			};
 
 			this.patchedModules = {
@@ -364,7 +364,7 @@ var CompleteTimestamps = (_ => {
 				if (compact && timestamp.props.className && typeof timestamp.type == "string") {
 					let tempTimestamp = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.messagecompact}"><${timestamp.type} class="${timestamp.props.className}" style="width: auto !important;">${this.getTimestamp(BDFDB.DataUtils.get(this, "choices", "creationDateLang"), new Date(253402124399995))}</${timestamp.type}></div>`);
 					document.body.appendChild(tempTimestamp);
-					let width = BDFDB.DOMUtils.getRects(tempTimestamp.firstElementChild).width + 5;
+					let width = BDFDB.DOMUtils.getRects(tempTimestamp.firstElementChild).width + 10;
 					tempTimestamp.remove();
 					BDFDB.DOMUtils.appendLocalStyle(this.name + "CompactCorrection", `
 						${BDFDB.dotCN.messagecompact + BDFDB.dotCN.messagewrapper} {
