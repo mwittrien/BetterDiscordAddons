@@ -81,6 +81,9 @@ var BadgesEverywhere = (_ => {
 				${BDFDB.dotCNS.messagecozy + BDFDB.dotCN.messageusername} + .BE-badges .BE-badge:first-of-type {
 					margin-left: 0;
 				}
+				${BDFDB.dotCNS.messagecompact + BDFDB.dotCN.messagetimestampseparator} + .BE-badges .BE-badge:first-of-type {
+					margin-left: 0;
+				}
 				${BDFDB.dotCNS.messagecompact + BDFDB.dotCN.messageusername} ~ .BE-badges .BE-badge:last-of-type {
 					margin-right: .25rem;
 				}
