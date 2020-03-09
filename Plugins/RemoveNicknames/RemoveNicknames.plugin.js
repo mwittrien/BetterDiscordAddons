@@ -4,7 +4,7 @@ var RemoveNicknames = (_ => {
 	return class RemoveNicknames {
 		getName () {return "RemoveNicknames";}
 
-		getVersion () {return "1.2.8";}
+		getVersion () {return "1.2.9";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,8 +12,7 @@ var RemoveNicknames = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Message Update","Fixed the plugin for the new Message Update"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"fixed":[["Replace Own","Setting was switched around (enabled was disabled)"]]
 			};
 
 			this.patchedModules = {
@@ -188,7 +187,7 @@ var RemoveNicknames = (_ => {
 			if (!user) return null;
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), user.id) || {};
-			if (!member.nick || user.id == BDFDB.UserUtils.me.id && !!settings.replaceOwn || user.bot && !settings.replaceBots) return null;
+			if (!member.nick || user.id == BDFDB.UserUtils.me.id && !settings.replaceOwn || user.bot && !settings.replaceBots) return null;
 			let username = (BDFDB.BDUtils.isPluginEnabled("EditUsers") && BDFDB.DataUtils.load("EditUsers", "users", user.id) || {}).name || user.username;
 			return settings.addNickname ? (settings.swapPositions ? (member.nick + " (" + username + ")") : (username + " (" + member.nick + ")")) : username;
 		}
