@@ -3,7 +3,7 @@
 var NotificationSounds = (_ => {
 	var audios, choices, firedEvents;
 			
-	const settingsaudio = new Audio();
+	const settingsAudio = new Audio();
 	
 	/* NEVER CHANGE THE SRC LINKS IN THE PLUGIN FILE, TO ADD NEW SONGS ADD THEM IN THE SETTINGS GUI IN THE PLUGINS PAGE */
 	const types = {
