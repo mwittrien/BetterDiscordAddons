@@ -27,7 +27,7 @@ var GoogleTranslateOption = (_ => {
 	return class GoogleTranslateOption {
 		getName () {return "GoogleTranslateOption";}
 
-		getVersion () {return "1.9.7";}
+		getVersion () {return "1.9.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -35,7 +35,7 @@ var GoogleTranslateOption = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Emojis","Emojis are now properly inserted when a message is translated"]]
+				"fixed":[["Emojis","Emojis are now properly inserted when a message is translated, really now"]]
 			};
 
 			this.patchedModules = {
@@ -810,7 +810,7 @@ var GoogleTranslateOption = (_ => {
 			}
 			else {
 				string.split(" ").forEach(word => {
-					if (word.indexOf("<@!") == 0 || word.indexOf(":") == 0 || word.indexOf("<:") == 0 || word.indexOf("@") == 0 || word.indexOf("#") == 0 || (word.indexOf("!") == 0 && word.length > 1)) {
+					if (word.indexOf("<@!") == 0 || word.indexOf(":") == 0 || word.indexOf("<:") == 0 || word.indexOf("<a:") == 0 || word.indexOf("@") == 0 || word.indexOf("#") == 0 || (word.indexOf("!") == 0 && word.length > 1)) {
 						newString.push(`[/////${count}]`);
 						exceptions[count] = word;
 						count++;
