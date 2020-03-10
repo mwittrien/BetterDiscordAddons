@@ -27,7 +27,7 @@ var GoogleTranslateOption = (_ => {
 	return class GoogleTranslateOption {
 		getName () {return "GoogleTranslateOption";}
 
-		getVersion () {return "1.9.6";}
+		getVersion () {return "1.9.7";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -35,8 +35,7 @@ var GoogleTranslateOption = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["GoogleApi","Added a new way faster Google Api that uses a translation API provided by Google, which does not rely on using an invisible brower window to translate the text, this API is limited to 100 requests per hour, so you might get rate limited quickly"]],
-				"fixed":[["GoogleApi","Fixed issue where GoogleApi would cut off sentences"]]
+				"fixed":[["Emojis","Emojis are now properly inserted when a message is translated"]]
 			};
 
 			this.patchedModules = {
@@ -595,10 +594,10 @@ var GoogleTranslateOption = (_ => {
 						isTranslating = true;
 						this[translationEngines[translator].funcName].apply(this, [{input, output, text:newtext, specialcase, engine:translationEngines[translator]}, finishTranslation]);
 					}
-					else finishTranslation("");
+					else finishTranslation();
 				}
 			}
-			else finishTranslation(text);
+			else finishTranslation();
 		}
 		
 		googleTranslate (data, callback) {
@@ -811,7 +810,7 @@ var GoogleTranslateOption = (_ => {
 			}
 			else {
 				string.split(" ").forEach(word => {
-					if (word.indexOf("<@!") == 0 || word.indexOf(":") == 0 || word.indexOf("@") == 0 || word.indexOf("#") == 0 || (word.indexOf("!") == 0 && word.length > 1)) {
+					if (word.indexOf("<@!") == 0 || word.indexOf(":") == 0 || word.indexOf("<:") == 0 || word.indexOf("@") == 0 || word.indexOf("#") == 0 || (word.indexOf("!") == 0 && word.length > 1)) {
 						newString.push(`[/////${count}]`);
 						exceptions[count] = word;
 						count++;
