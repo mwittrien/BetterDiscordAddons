@@ -818,7 +818,8 @@ body:before {
 	border-radius: 3px;
 	background-color: rgba(var(--vaccentcolor), calc(0.3 * var(--vusechatbubbles)));
 }
-.avatar-1BDn8e {
+#app-mount .avatar-1BDn8e {
+	top: 4px;
 	left: calc(-70px * var(--vusechatbubbles) + 16px);
 }
 .container-3FojY8 .avatar-1BDn8e {
@@ -879,7 +880,8 @@ body:before {
 	margin-left: calc(80px * var(--vusechatbubbles));
 	padding-left: calc(1px * (10 * var(--vusechatbubbles) + 72 * (1 - var(--vusechatbubbles))));
 }
-.cozy-3raOZG .messageContent-2qWWxC {
+#app-mount .cozy-3raOZG .header-23xsNx,
+#app-mount .cozy-3raOZG .messageContent-2qWWxC {
 	margin-left: 0;
 	padding-left: 0;
 }
