@@ -24,7 +24,7 @@ var FriendNotifications = (_ => {
 	return class FriendNotifications {
 		getName () {return "FriendNotifications";}
 
-		getVersion () {return "1.3.9";}
+		getVersion () {return "1.4.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -32,8 +32,7 @@ var FriendNotifications = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["Online Friend Counter","Readded the online friend counter in the server list, which discord removed decades ago, can be disabled in settings"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"improved":[["TYPE header","Clicking the type header twice will now disable all entries in the list"]]
 			};
 
 			this.patchedModules = {
@@ -63,9 +62,6 @@ var FriendNotifications = (_ => {
 					border-radius: 3px;
 					padding: 0 3px;
 					margin: 0 6px;
-				}
-				.${this.name}-settings .settings-name {
-					max-width: 200px;
 				}
 				.${this.name}-settings .settings-avatar {
 					margin-right: 15px;
@@ -144,7 +140,8 @@ var FriendNotifications = (_ => {
 				if (config == "type") {
 					config = "desktop";
 					enable = !enable;
-					for (let id in data) data[id].disabled = false;
+					let disabled = BDFDB.ObjectUtils.toArray(data).every(d => !d.disabled && d[config] == enable);
+					for (let id in data) data[id].disabled = disabled;
 				}
 				for (let id in data) data[id][config] = enable;
 				BDFDB.DataUtils.save(data, this, type);
@@ -585,7 +582,7 @@ var FriendNotifications = (_ => {
 							timestring
 						});
 						
-						if (!(settings.muteOnDND && BDFDB.UserUtils.getStatus() == "dnd") && (!lastTimes[user.id] || lastTimes[user.id] != timestring)) {
+						if (!(settings.muteOnDND && BDFDB.UserUtils.getStatus() == BDFDB.DiscordConstants.StatusTypes.DND) && (!lastTimes[user.id] || lastTimes[user.id] != timestring)) {
 						
 							lastTimes[user.id] = timestring;
 							
