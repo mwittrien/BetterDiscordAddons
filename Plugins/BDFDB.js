@@ -3894,6 +3894,7 @@
 		selectWrapper: "selectWrapper-yPjeij",
 		settingsGuild: "guild-J3Egt5",
 		settingsGuildDisabled: "disabled-b2o83O",
+		settingsPanel: "settingsPanel-w2ySNR",
 		settingsPanelInner: "settingsInner-zw1xAY",
 		settingsPanelList: "settingsList-eZjkXj",
 		settingsPanelTitle: "title-GTF_8J",
