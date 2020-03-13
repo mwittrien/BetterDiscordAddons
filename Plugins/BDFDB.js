@@ -7440,7 +7440,7 @@
 		}
 	};
 	
-	InternalComponents.LibraryComponents.SettingsGuildsList = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.SettingsGuildsList") || reactInitialized && class BDFDB_SettingsGuildsList extends LibraryModules.React.Component {
+	InternalComponents.LibraryComponents.SettingsGuildList = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.SettingsGuildList") || reactInitialized && class BDFDB_SettingsGuildList extends LibraryModules.React.Component {
 		render() {
 			this.props.disabled = BDFDB.ArrayUtils.is(this.props.disabled) ? this.props.disabled : [];
 			return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
