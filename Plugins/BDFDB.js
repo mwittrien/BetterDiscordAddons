@@ -3892,7 +3892,8 @@
 		modalWrapper: "modal-6GHvdM",
 		noticeWrapper: "noticeWrapper-8z511t",
 		selectWrapper: "selectWrapper-yPjeij",
-		settingsPanel: "settingsPanel-w2ySNR",
+		settingsGuild: "guild-J3Egt5",
+		settingsGuildDisabled: "disabled-b2o83O",
 		settingsPanelInner: "settingsInner-zw1xAY",
 		settingsPanelList: "settingsList-eZjkXj",
 		settingsPanelTitle: "title-GTF_8J",
@@ -5456,6 +5457,8 @@
 		selectwrapper: ["BDFDB", "selectWrapper"],
 		settingsclosebutton: ["SettingsCloseButton", "closeButton"],
 		settingsclosebuttoncontainer: ["SettingsCloseButton", "container"],
+		settingsguild: ["BDFDB", "settingsGuild"],
+		settingsguilddisabled: ["BDFDB", "settingsGuildDisabled"],
 		settingsheader: ["Item", "header"],
 		settingsitem: ["Item", "item"],
 		settingsitemdragged: ["ItemRole", "dragged"],
@@ -7437,6 +7440,33 @@
 		}
 	};
 	
+	InternalComponents.LibraryComponents.SettingsGuildsList = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.SettingsGuildsList") || reactInitialized && class BDFDB_SettingsGuildsList extends LibraryModules.React.Component {
+		render() {
+			this.props.disabled = BDFDB.ArrayUtils.is(this.props.disabled) ? this.props.disabled : [];
+			return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+				className: this.props.className,
+				wrap: BDFDB.LibraryComponents.Flex.Wrap.WRAP,
+				children: [this.props.includeDMs && {name:"Direct Messages", acronym:"DMs", id:BDFDB.DiscordConstants.ME, getIconURL: _ => {}}].concat(BDFDB.LibraryModules.FolderStore.getFlattenedGuilds()).filter(n => n).map(guild => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+					text: guild.name,
+					children: BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.DOMUtils.formatClassName(this.props.guildClassName, BDFDB.disCN.settingsguild, this.props.disabled.includes(guild.id) && BDFDB.disCN.settingsguilddisabled),
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Icon, {
+							guild: guild,
+							size: this.props.size || BDFDB.LibraryComponents.GuildComponents.Icon.Sizes.MEDIUM
+						}),
+						onClick: e => {
+							let isDisabled = this.props.disabled.includes(guild.id);
+							if (isDisabled) BDFDB.ArrayUtils.remove(this.props.disabled, guild.id, true);
+							else this.props.disabled.push(guild.id);
+							if (typeof this.props.onClick == "function") this.props.onClick(this.props.disabled, this);
+							BDFDB.ReactUtils.forceUpdate(this);
+						}
+					})
+				}))
+			});
+		}
+	};
+	
 	InternalComponents.LibraryComponents.SettingsPanel = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.SettingsPanel") || reactInitialized && class BDFDB_SettingsPanel extends LibraryModules.React.Component {
 		render() {
 			return this.props.children ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
@@ -8193,6 +8223,19 @@
 		}
 		${BDFDB.dotCNS.collapsecontainercollapsed + BDFDB.dotCN.collapsecontainerarrow} {
 			transform: rotate(-90deg);
+		}
+		
+		${BDFDB.dotCN.settingsguild} {
+			border-radius: 50%;
+			border: 3px solid ${BDFDB.DiscordConstants.Colors.STATUS_GREEN};
+			box-sizing: border-box;
+			cursor: pointer;
+			margin: 3px;
+			overflow: hidden;
+		}
+		${BDFDB.dotCN.settingsguilddisabled} {
+			border-color: ${BDFDB.DiscordConstants.Colors.STATUS_GREY};
+			filter: grayscale(100%) brightness(50%);
 		}
 		
 		${BDFDB.dotCN.overflowellipsis} {
