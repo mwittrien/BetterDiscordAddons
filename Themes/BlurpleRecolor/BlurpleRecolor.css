@@ -1718,6 +1718,10 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 	background: rgb(var(--vaccentcolor));
 }
 
+.standardSidebarView-3F1I7i #editor-detached button {
+	background: rgb(var(--vaccentcolor));
+}
+
 .bd-modal-wrapper .footer button {
 	background-color: rgb(var(--vaccentcolor));
 }

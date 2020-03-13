@@ -5723,6 +5723,18 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 .standardSidebarView-3F1I7i #bd-customcss-attach-controls button,
 .bd-detached-css-editor #bd-customcss-attach-controls button {
 	color: rgb(var(--fontwhite1));
+	background: rgba(var(--vtransparencycolor), 0.5);
+	border: none !important;
+	border-radius: 3px !important;
+	margin: 5px 5px 0 0;
+	transition: background-color 0.1s ease;
+}
+.standardSidebarView-3F1I7i #bd-customcss-attach-controls button:hover,
+.bd-detached-css-editor #bd-customcss-attach-controls button:hover {
+	background: rgb(var(--vaccentcolor));
+}
+.standardSidebarView-3F1I7i #editor-detached h3 {
+	color: rgb(var(--fontwhite3));
 }
 #bd-customcss-attach-controls .help-text .inline {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
