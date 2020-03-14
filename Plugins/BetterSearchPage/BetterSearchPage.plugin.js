@@ -4,7 +4,7 @@ var BetterSearchPage = (_ => {
 	return class BetterSearchPage {
 		getName () {return "BetterSearchPage";}
 
-		getVersion () {return "1.1.3";}
+		getVersion () {return "1.1.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,8 +12,7 @@ var BetterSearchPage = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Message Update","Fixed the plugin for the new Message Update"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"fixed":[["Settings","now can be opened properly"]]
 			};
 
 			this.patchedModules = {
@@ -37,8 +36,6 @@ var BetterSearchPage = (_ => {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let settingspanel, settingsitems = [];
-			
-			settingsitems = settingsitems.concat(this.createSelects(false));
 			
 			for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
