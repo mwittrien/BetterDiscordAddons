@@ -1524,6 +1524,12 @@
 .input-cIJ7To:focus {
 	border-color: rgb(var(--vaccentcolor));
 }
+.input-cIJ7To.error-2O5WFJ {
+	border-color: #f04747;
+}
+.input-cIJ7To.success-2-F980 {
+	border-color: #43b581;
+}
 .focused-1mmYsC {
 	border-color: rgb(var(--vaccentcolor));
 }
