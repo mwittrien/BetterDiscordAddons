@@ -6,7 +6,7 @@ var ReverseImageSearch = (_ => {
 	return class ReverseImageSearch {
 		getName () {return "ReverseImageSearch";}
 
-		getVersion () {return "3.5.3";}
+		getVersion () {return "3.5.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,7 @@ var ReverseImageSearch = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["One Engine", "Enabling only one search engine doesn't create a SubMenu anymore"],["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"fixed":[["Avatar Search", "Fixed a small issue with the user avatar search entry"]]
 			};
 		}
 
@@ -132,7 +132,7 @@ var ReverseImageSearch = (_ => {
 
 		onUserContextMenu (e) {
 			if (e.instance.props.user && e.instance.props.target) {
-				let avatar = e.instance.props.target.querySelector(BDFDB.dotCN.avatar) || e.instance.props.target;
+				let avatar = BDFDB.DOMUtils.getParent(BDFDB.dotCN.avatarwrapper, e.instance.props.target) && e.instance.props.target.querySelector(BDFDB.dotCN.avatar) || e.instance.props.target;
 				if (avatar && BDFDB.DataUtils.get(this, "settings", "addUserAvatarEntry")) this.injectItem(e, avatar.tagName == "IMG" ? avatar.getAttribute("src") : avatar.style.getPropertyValue("background-image"));
 			}
 		}
