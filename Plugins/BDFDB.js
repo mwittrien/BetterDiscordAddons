@@ -3822,9 +3822,8 @@
 		return null;
 	};
 	BDFDB.BDUtils.getSettings = function (key) {
-		if (!window.settingsCookie) return null;
-		if (!key) return window.settingsCookie;
-		return window.settingsCookie[key];
+		if (key) return BdApi.isSettingEnabled(key);
+		else return BDFDB.ReactUtils.getValue(BdApi.getBDData("settings"), `${BDFDB.DiscordUtils.getBuilt()}.settings`);
 	};
 	BDFDB.BDUtils.isAutoLoadEnabled = function () {
 		return BDFDB.BDUtils.getSettings("fork-ps-5") === true || BDFDB.BDUtils.isPluginEnabled("Restart-No-More") || BDFDB.BDUtils.isPluginEnabled("Restart No More");
