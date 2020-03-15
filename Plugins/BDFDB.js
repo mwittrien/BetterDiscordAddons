@@ -3778,14 +3778,27 @@
 		if (!pluginName) return false;
 		return BdApi.isPluginEnabled(pluginName);
 	};
+	BDFDB.BDUtils.enablePlugin = function (pluginName, showToast = true) {
+		BdApi.Plugins && BdApi.Plugins.manager.enable(pluginName, !showToast) || window.pluginModule && window.pluginModule.startPlugin(pluginName);
+	};
+	BDFDB.BDUtils.disablePlugin = function (pluginName, showToast = true) {
+		BdApi.Plugins && BdApi.Plugins.manager.disable(pluginName, !showToast) || window.pluginModule && window.pluginModule.stopPlugin(pluginName);
+	};
 	BDFDB.BDUtils.getPlugin = function (pluginName, hasToBeEnabled = false, overHeader = false) {
-		if (BdApi.Plugins && BdApi.Plugins.list && (!hasToBeEnabled || BDFDB.BDUtils.isPluginEnabled(pluginName))) return !overHeader ? BdApi.getPlugin(pluginName) : BdApi.Plugins.list[pluginName];
+		if (!hasToBeEnabled || BDFDB.BDUtils.isPluginEnabled(pluginName)) return !overHeader ? BdApi.getPlugin(pluginName) : (BdApi.Plugins && BdApi.Plugins.list && BdApi.Plugins.list[pluginName] || window.bdplugins && window.bdplugins[pluginName]);
+		return null;
 	};
 	BDFDB.BDUtils.isThemeEnabled = function (themeName) {
 		return BdApi.isThemeEnabled(themeName);
 	};
+	BDFDB.BDUtils.enableTheme = function (themeName, showToast = true) {
+		BdApi.Themes && BdApi.Themes.manager.enable(themeName, !showToast) || window.themeModule && window.themeModule.enableTheme(themeName);
+	};
+	BDFDB.BDUtils.disableTheme = function (themeName, showToast = true) {
+		BdApi.Themes && BdApi.Themes.manager.disable(themeName, !showToast) || window.themeModule && window.themeModule.disableTheme(themeName);
+	};
 	BDFDB.BDUtils.getTheme = function (themeName, hasToBeEnabled = false) {
-		if (BdApi.Themes && BdApi.Themes.list && (!hasToBeEnabled || BDFDB.BDUtils.isThemeEnabled(themeName))) return BdApi.Themes.list[themeName];
+		if (!hasToBeEnabled || BDFDB.BDUtils.isThemeEnabled(pluginName)) return BdApi.Themes && BdApi.Themes.list && BdApi.Themes.list[themeName] || window.bdthemes && window.bdthemes[themeName];
 		return null;
 	};
 	BDFDB.BDUtils.getSettings = function (key) {
