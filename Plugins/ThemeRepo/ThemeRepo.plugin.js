@@ -1081,7 +1081,7 @@ var ThemeRepo = (_ => {
 			if (BDFDB.BDUtils.isThemeEnabled(data.name) == false) {
 				BDFDB.DOMUtils.remove(`style#${data.name}`);
 				document.head.appendChild(BDFDB.DOMUtils.create(`<style id=${data.name}>${data.css}</style>`));
-				window.themeModule.enableTheme(data.name);
+				BDFDB.BDUtils.enableTheme(data.name, false);
 				BDFDB.LogUtils.log(`Applied Theme ${data.name}.`, this.name);
 			}
 		}
@@ -1097,7 +1097,7 @@ var ThemeRepo = (_ => {
 		removeTheme (data) {
 			if (BDFDB.BDUtils.isThemeEnabled(data.name) == true) {
 				BDFDB.DOMUtils.remove(`style#${data.name}`);
-				window.themeModule.disableTheme(data.name);
+				BDFDB.BDUtils.disableTheme(data.name, false);
 				BDFDB.LogUtils.log(`Removed Theme ${data.name}.`, this.name);
 			}
 		}

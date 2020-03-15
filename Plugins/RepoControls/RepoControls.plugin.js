@@ -1,20 +1,18 @@
 //META{"name":"RepoControls","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RepoControls","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/RepoControls/RepoControls.plugin.js"}*//
 
 var RepoControls = (_ => {
+	let searchTimeout;
+	
 	return class RepoControls {
 		getName () {return "RepoControls";}
 
-		getVersion () {return "1.3.5";}
+		getVersion () {return "1.3.6";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Lets you sort and filter your list of downloaded Themes and Plugins.";}
 
 		constructor () {
-			this.changelog = {
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
-			};
-
 			this.patchedModules = {
 				after: {
 					V2C_List: "render",
@@ -124,7 +122,7 @@ var RepoControls = (_ => {
 		// begin of own functions
 
 		processV2CContentColumn (e) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "V2C_List"});
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {key: ["plugin-list", "theme-list"]});
 			if (index > -1) {
 				let list = children[index];
 				this.injectControls(e.instance, list, children, index, children[index].key.split("-")[0]);
@@ -180,7 +178,6 @@ var RepoControls = (_ => {
 		
 		injectControls (instance, parent, children, index, type) {
 			let sortings = BDFDB.DataUtils.get(this, "sortings");
-			this.searchTimeout;
 			children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 				className: BDFDB.disCN.marginbottom8,
 				justify: BDFDB.LibraryComponents.Flex.Justify.BETWEEN,
@@ -188,8 +185,8 @@ var RepoControls = (_ => {
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
 						onChange: value => {
-							BDFDB.TimeUtils.clear(this.searchTimeout);
-							this.searchTimeout = BDFDB.TimeUtils.timeout(_ => {
+							BDFDB.TimeUtils.clear(searchTimeout);
+							searchTimeout = BDFDB.TimeUtils.timeout(_ => {
 								this.sortEntries(instance, parent, value);
 							}, 1000);
 						},
@@ -258,7 +255,8 @@ var RepoControls = (_ => {
 						});
 						entry.props.RCdata.type = "plugin";
 						entry.props.RCdata.enabled = BDFDB.BDUtils.isPluginEnabled(entry.key) ? 1 : 2;
-						entry.props.RCdata.path = window.bdplugins && window.bdplugins[entry.key] && typeof window.bdplugins[entry.key].filename == "string" && BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), window.bdplugins[entry.key].filename);
+						let loadedPlugin = BDFDB.BDUtils.getPlugin(entry.key, false, true);
+						entry.props.RCdata.path = loadedPlugin && typeof loadedPlugin.filename == "string" && BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), loadedPlugin.filename);
 					}
 					else if (entry.props.theme) {
 						["name", "author", "version", "description"].forEach(key => {
@@ -267,7 +265,8 @@ var RepoControls = (_ => {
 						});
 						entry.props.RCdata.type = "theme";
 						entry.props.RCdata.enabled = BDFDB.BDUtils.isThemeEnabled(entry.key) ? 1 : 2;
-						entry.props.RCdata.path = window.bdthemes && window.bdthemes[entry.key] && typeof window.bdthemes[entry.key].filename == "string" && BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getThemesFolder(), window.bdthemes[entry.key].filename);
+						let loadedTheme = BDFDB.BDUtils.getTheme(entry.key, false);
+						entry.props.RCdata.path = loadedTheme && typeof loadedTheme.filename == "string" && BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getThemesFolder(), loadedTheme.filename);
 					}
 					let stats = entry.props.RCdata.path && BDFDB.LibraryRequires.fs.statSync(entry.props.RCdata.path);
 					entry.props.RCdata.adddate = stats && stats.atime.getTime();

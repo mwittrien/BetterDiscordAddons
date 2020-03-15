@@ -883,7 +883,7 @@ var PluginRepo = (_ => {
 
 		startPlugin (data) {
 			if (BDFDB.BDUtils.isPluginEnabled(data.name) == false) {
-				window.pluginModule.startPlugin(data.name);
+				BDFDB.BDUtils.enablePlugin(data.name, false);
 				BDFDB.LogUtils.log(`Started Plugin ${data.name}.`, this.name);
 			}
 		}
@@ -898,7 +898,7 @@ var PluginRepo = (_ => {
 
 		stopPlugin (data) {
 			if (BDFDB.BDUtils.isPluginEnabled(data.name) == true) {
-				window.pluginModule.stopPlugin(data.name);
+				BDFDB.BDUtils.disablePlugin(data.name, false);
 				BDFDB.LogUtils.log(`Stopped Plugin ${data.name}.`, this.name);
 			}
 		}
