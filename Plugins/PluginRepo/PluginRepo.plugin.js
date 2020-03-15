@@ -358,7 +358,7 @@ var PluginRepo = (_ => {
 									label: sortKeys[options.sortKey],
 									value: options.sortKey
 								},
-								options: Object.keys(sortKeys).filter(n => n != "NEW" || Object.keys(loadedPlugins).some(p => !cachedPlugins.includes[p])).map(key => ({
+								options: Object.keys(sortKeys).filter(n => n != "NEW" || Object.keys(loadedPlugins).some(p => !cachedPlugins.includes(p))).map(key => ({
 									label: sortKeys[key],
 									value: key
 								})),

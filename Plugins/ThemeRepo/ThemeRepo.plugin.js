@@ -429,7 +429,7 @@ var ThemeRepo = (_ => {
 									label: sortKeys[options.sortKey],
 									value: options.sortKey
 								},
-								options: Object.keys(sortKeys).filter(n => n != "NEW" || Object.keys(loadedThemes).some(t => !cachedThemes.includes[t])).map(key => ({
+								options: Object.keys(sortKeys).filter(n => n != "NEW" || Object.keys(loadedThemes).some(t => !cachedThemes.includes(t))).map(key => ({
 									label: sortKeys[key],
 									value: key
 								})),
