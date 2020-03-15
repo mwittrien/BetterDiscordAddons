@@ -125,13 +125,17 @@ var ThemeRepo = (_ => {
 	return class ThemeRepo {
 		getName () {return "ThemeRepo";}
 
-		getVersion () {return "1.9.1";}
+		getVersion () {return "1.9.3";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
 		constructor () {
+			this.changelog = {
+				"fixed":[["Show X","Filter options for the modal work again"]]
+			};
+			
 			this.patchedModules = {
 				after: {
 					V2C_ContentColumn: "render"
@@ -685,9 +689,9 @@ var ThemeRepo = (_ => {
 					fullcss: theme.fullcss
 				};
 			});
-			if (!options.updated)		themes = themes.filter(theme => theme.state == themeStates.UPDATED);
-			if (!options.outdated)		themes = themes.filter(theme => theme.state == themeStates.OUTDATED);
-			if (!options.downloadable)	themes = themes.filter(theme => theme.state == themeStates.DOWNLOADABLE);
+			if (!options.updated)		themes = themes.filter(theme => theme.state != themeStates.UPDATED);
+			if (!options.outdated)		themes = themes.filter(theme => theme.state != themeStates.OUTDATED);
+			if (!options.downloadable)	themes = themes.filter(theme => theme.state != themeStates.DOWNLOADABLE);
 			if (options.searchString) 	themes = themes.filter(theme => theme.search.indexOf(options.searchString) > -1).map(theme => Object.assign({}, theme, {
 				name: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(theme.name, options.searchString))) || theme.name,
 				version: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(theme.version, options.searchString))) || theme.version,

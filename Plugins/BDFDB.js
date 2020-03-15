@@ -9375,7 +9375,7 @@
 			console.log(window.t);
 		};
 		BDFDB.ModuleUtils.DevFuncs.findCodeAny = function (...strings) {
-			window.t = {"$filter":(m => [...strings].flat(10).filter(n => typeof n == "string").every(string => typeof m == "function" && (m.toString().indexOf(string) > -1 || typeof m.__originalMethod == "function" && m.__originalMethod.toString().indexOf(string) > -1 || typeof m.__originalFunction == "function" && m.__originalFunction.toString().indexOf(string) > -1) || BDFDB.ObjectUtils.is(m) && typeof m.type == "function" && m.type.toString().indexOf(string) > -1))};
+			window.t = {"$filter":(m => [...strings].flat(10).filter(n => typeof n == "string").map(string => string.toLowerCase()).every(string => typeof m == "function" && (m.toString().toLowerCase().indexOf(string) > -1 || typeof m.__originalMethod == "function" && m.__originalMethod.toString().toLowerCase().indexOf(string) > -1 || typeof m.__originalFunction == "function" && m.__originalFunction.toString().toLowerCase().indexOf(string) > -1) || BDFDB.ObjectUtils.is(m) && typeof m.type == "function" && m.type.toString().toLowerCase().indexOf(string) > -1))};
 			for (let i in BDFDB.ModuleUtils.DevFuncs.req.c) if (BDFDB.ModuleUtils.DevFuncs.req.c.hasOwnProperty(i)) {
 				let m = BDFDB.ModuleUtils.DevFuncs.req.c[i].exports;
 				if (m && typeof m == "function" && window.t.$filter(m)) window.t["module_" + i] = {string:m.toString(), func:m};

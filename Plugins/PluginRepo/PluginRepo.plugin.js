@@ -69,13 +69,17 @@ var PluginRepo = (_ => {
 	return class PluginRepo {
 		getName () {return "PluginRepo";} 
 
-		getVersion () {return "1.9.2";}
+		getVersion () {return "1.9.3";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
 		constructor () {
+			this.changelog = {
+				"fixed":[["Show X","Filter options for the modal work again"]]
+			};
+			
 			this.patchedModules = {
 				after: {
 					V2C_ContentColumn: "render"
@@ -459,9 +463,9 @@ var PluginRepo = (_ => {
 					state: plugin.getState
 				};
 			});
-			if (!options.updated)		plugins = plugins.filter(plugin => plugin.state == pluginStates.UPDATED);
-			if (!options.outdated)		plugins = plugins.filter(plugin => plugin.state == pluginStates.OUTDATED);
-			if (!options.downloadable)	plugins = plugins.filter(plugin => plugin.state == pluginStates.DOWNLOADABLE);
+			if (!options.updated)		plugins = plugins.filter(plugin => plugin.state != pluginStates.UPDATED);
+			if (!options.outdated)		plugins = plugins.filter(plugin => plugin.state != pluginStates.OUTDATED);
+			if (!options.downloadable)	plugins = plugins.filter(plugin => plugin.state != pluginStates.DOWNLOADABLE);
 			if (options.searchString) 	plugins = plugins.filter(plugin => plugin.search.indexOf(options.searchString) > -1).map(plugin => Object.assign({}, plugin, {
 				name: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(plugin.name, options.searchString))) || plugin.name,
 				version: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(plugin.version, options.searchString))) || plugin.version,
