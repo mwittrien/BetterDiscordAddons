@@ -76,10 +76,6 @@ var PluginRepo = (_ => {
 		getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
 		constructor () {
-			this.changelog = {
-				"fixed":[["Fetching","Fixed an issue with some plugins while fetching"]]
-			};
-
 			this.patchedModules = {
 				after: {
 					V2C_ContentColumn: "render"
@@ -362,10 +358,10 @@ var PluginRepo = (_ => {
 									label: sortKeys[options.sortKey],
 									value: options.sortKey
 								},
-								options: Object.keys(sortKeys).map(key => {return {
+								options: Object.keys(sortKeys).filter(n => n != "NEW" || Object.keys(loadedPlugins).some(p => !cachedPlugins.includes[p])).map(key => ({
 									label: sortKeys[key],
 									value: key
-								};}),
+								})),
 								onChange: (key, instance) => {
 									options.sortKey = key;
 									this.updateList(instance, options);
@@ -379,10 +375,10 @@ var PluginRepo = (_ => {
 									label: orderKeys[options.orderKey],
 									value: options.orderKey
 								},
-								options: Object.keys(orderKeys).map(key => {return {
+								options: Object.keys(orderKeys).map(key => ({
 									label: orderKeys[key],
 									value: key
-								};}),
+								})),
 								onChange: (key, instance) => {
 									options.orderKey = key;
 									this.updateList(instance, options);

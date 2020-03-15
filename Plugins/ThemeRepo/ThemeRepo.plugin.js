@@ -132,10 +132,6 @@ var ThemeRepo = (_ => {
 		getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
 		constructor () {
-			this.changelog = {
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
-			};
-
 			this.patchedModules = {
 				after: {
 					V2C_ContentColumn: "render"
@@ -433,10 +429,10 @@ var ThemeRepo = (_ => {
 									label: sortKeys[options.sortKey],
 									value: options.sortKey
 								},
-								options: Object.keys(sortKeys).map(key => {return {
+								options: Object.keys(sortKeys).filter(n => n != "NEW" || Object.keys(loadedThemes).some(t => !cachedThemes.includes[t])).map(key => ({
 									label: sortKeys[key],
 									value: key
-								};}),
+								})),
 								onChange: (key, instance) => {
 									options.sortKey = key;
 									this.updateList(instance, options);
@@ -450,10 +446,10 @@ var ThemeRepo = (_ => {
 									label: orderKeys[options.orderKey],
 									value: options.orderKey
 								},
-								options: Object.keys(orderKeys).map(key => {return {
+								options: Object.keys(orderKeys).map(key => ({
 									label: orderKeys[key],
 									value: key
-								};}),
+								})),
 								onChange: (key, instance) => {
 									options.orderKey = key;
 									this.updateList(instance, options);

@@ -3785,26 +3785,39 @@
 		return BdApi.isPluginEnabled(pluginName);
 	};
 	BDFDB.BDUtils.enablePlugin = function (pluginName, showToast = true) {
-		BdApi.Plugins && BdApi.Plugins.manager.enable(pluginName, !showToast) || window.pluginModule && window.pluginModule.startPlugin(pluginName);
+		if (BdApi.Plugins) BdApi.Plugins.manager.enable(pluginName, !showToast);
+		else if (window.pluginModule) window.pluginModule.startPlugin(pluginName);
 	};
 	BDFDB.BDUtils.disablePlugin = function (pluginName, showToast = true) {
-		BdApi.Plugins && BdApi.Plugins.manager.disable(pluginName, !showToast) || window.pluginModule && window.pluginModule.stopPlugin(pluginName);
+		if (BdApi.Plugins) BdApi.Plugins.manager.disable(pluginName, !showToast);
+		else if (window.pluginModule) window.pluginModule.stopPlugin(pluginName);
 	};
 	BDFDB.BDUtils.getPlugin = function (pluginName, hasToBeEnabled = false, overHeader = false) {
-		if (!hasToBeEnabled || BDFDB.BDUtils.isPluginEnabled(pluginName)) return !overHeader ? BdApi.getPlugin(pluginName) : (BdApi.Plugins && BdApi.Plugins.list && BdApi.Plugins.list[pluginName] || window.bdplugins && window.bdplugins[pluginName]);
+		if (!hasToBeEnabled || BDFDB.BDUtils.isPluginEnabled(pluginName)) {
+			if (overHeader) {
+				if (BdApi.Plugins && BdApi.Plugins.list) return BdApi.Plugins.list[pluginName];
+				else if (window.bdplugins) window.bdplugins[pluginName];
+			}
+			else return BdApi.getPlugin(pluginName);
+		}
 		return null;
 	};
 	BDFDB.BDUtils.isThemeEnabled = function (themeName) {
 		return BdApi.isThemeEnabled(themeName);
 	};
 	BDFDB.BDUtils.enableTheme = function (themeName, showToast = true) {
-		BdApi.Themes && BdApi.Themes.manager.enable(themeName, !showToast) || window.themeModule && window.themeModule.enableTheme(themeName);
+		if (BdApi.Themes) BdApi.Themes.manager.enable(themeName, !showToast);
+		else if (window.themeModule) window.themeModule.enableTheme(themeName);
 	};
 	BDFDB.BDUtils.disableTheme = function (themeName, showToast = true) {
-		BdApi.Themes && BdApi.Themes.manager.disable(themeName, !showToast) || window.themeModule && window.themeModule.disableTheme(themeName);
+		if (BdApi.Themes) BdApi.Themes.manager.disable(themeName, !showToast);
+		else if (window.themeModule) window.themeModule.disableTheme(themeName);
 	};
 	BDFDB.BDUtils.getTheme = function (themeName, hasToBeEnabled = false) {
-		if (!hasToBeEnabled || BDFDB.BDUtils.isThemeEnabled(pluginName)) return BdApi.Themes && BdApi.Themes.list && BdApi.Themes.list[themeName] || window.bdthemes && window.bdthemes[themeName];
+		if (!hasToBeEnabled || BDFDB.BDUtils.isThemeEnabled(themeName)) {
+			if (BdApi.Themes && BdApi.Themes.list) return BdApi.Themes.list[themeName];
+			else if (window.bdthemes) window.bdthemes[themeName];
+		}
 		return null;
 	};
 	BDFDB.BDUtils.getSettings = function (key) {
