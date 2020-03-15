@@ -1087,10 +1087,9 @@
 		QuickSwitchUserResult: "LibraryComponents.QuickSwitchItems.User",
 	};
 	WebModulesData.SpecialFilter = {
-		V2C_ContentColumn: ins => ins && ins.return && (ins.return.key == "pcolumn" || ins.return.key == "tcolumn") && ins.return.type
-		/* V2C_List: "_repolist",
-		V2C_PluginCard: "_repoheader",
-		V2C_ThemeCard: "_repoheader" */
+		V2C_ContentColumn: ins => ins && ins.return && (ins.return.key == "pcolumn" || ins.return.key == "tcolumn") && ins.return.type,
+		V2C_PluginCard: ins && ins.child && ins.child.stateNode && ins.child.stateNode.props && ins.child.stateNode.props.plugin && ins.child.type,
+		V2C_ThemeCard: ins && ins.child && ins.child.stateNode && ins.child.stateNode.props && ins.child.stateNode.props.theme && ins.child.type
 	};
 	WebModulesData.PatchFinder = {
 		Account: "accountinfo",
