@@ -1086,6 +1086,12 @@
 		QuickSwitchGuildResult: "LibraryComponents.QuickSwitchItems.Guild",
 		QuickSwitchUserResult: "LibraryComponents.QuickSwitchItems.User",
 	};
+	WebModulesData.SpecialFilter = {
+		V2C_ContentColumn: ins => ins && ins.return && (ins.return.key == "pcolumn" || ins.return.key == "tcolumn") && ins.return.type
+		/* V2C_List: "_repolist",
+		V2C_PluginCard: "_repoheader",
+		V2C_ThemeCard: "_repoheader" */
+	};
 	WebModulesData.PatchFinder = {
 		Account: "accountinfo",
 		App: "app",
@@ -1144,11 +1150,6 @@
 	WebModulesData.NonPrototype = [].concat(WebModulesData.NonRender, Object.keys(WebModulesData.PropsFinder), WebModulesData.MemoComponent, [
 		"ChannelTextAreaContainer"
 	]);
-	WebModulesData.GlobalModules = {};
-	try {WebModulesData.GlobalModules["V2C_ContentColumn"] = V2C_ContentColumn;} catch(err) {BDFDB.LogUtils.warn(`Could not find global Module "V2C_ContentColumn"`);}
-	try {WebModulesData.GlobalModules["V2C_List"] = V2C_List;} catch(err) {BDFDB.LogUtils.warn(`Could not find global Module "V2C_List"`);}
-	try {WebModulesData.GlobalModules["V2C_PluginCard"] = V2C_PluginCard;} catch(err) {BDFDB.LogUtils.warn(`Could not find global Module "V2C_PluginCard"`);}
-	try {WebModulesData.GlobalModules["V2C_ThemeCard"] = V2C_ThemeCard;} catch(err) {BDFDB.LogUtils.warn(`Could not find global Module "V2C_ThemeCard"`);}
 	
 	BDFDB.ModuleUtils.isPatched = function (plugin, module, methodName) {
 		if (!plugin || !BDFDB.ObjectUtils.is(module) || !module.BDFDBpatch || !methodName) return false;
@@ -1320,34 +1321,31 @@
 		if (!BDFDB.ObjectUtils.is(plugin) || !BDFDB.ObjectUtils.is(plugin.patchedModules)) return;
 		BDFDB.ModuleUtils.unpatch(plugin);
 		for (let patchType in plugin.patchedModules) for (let type in plugin.patchedModules[patchType]) {
-			if (WebModulesData.GlobalModules[type] && typeof WebModulesData.GlobalModules[type] == "function") patchInstance(WebModulesData.GlobalModules[type], type, patchType);
+			let unmappedType = type.split(" _ _ ")[1] || type;
+			let component = WebModulesData.LoadedInComponents[type] && BDFDB.ReactUtils.getValue(InternalComponents, WebModulesData.LoadedInComponents[type]);
+			if (component) patchInstance(WebModulesData.NonRender.includes(unmappedType) ? (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports : component, type, patchType);
 			else {
-				let unmappedType = type.split(" _ _ ")[1] || type;
-				let component = WebModulesData.LoadedInComponents[type] && BDFDB.ReactUtils.getValue(InternalComponents, WebModulesData.LoadedInComponents[type]);
-				if (component) patchInstance(WebModulesData.NonRender.includes(unmappedType) ? (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports : component, type, patchType);
-				else {
-					let className = WebModulesData.PatchFinder[unmappedType];
-					let propertyFind = WebModulesData.PropsFinder[unmappedType];
-					let mapped = WebModulesData.PatchMap[type];
-					let mappedType = mapped ? mapped + " _ _ " + type : type;
-					let name = mappedType.split(" _ _ ")[0];
-					if (mapped) {
-						plugin.patchedModules[patchType][mappedType] = plugin.patchedModules[patchType][type];
-						delete plugin.patchedModules[patchType][type];
-					}
-					if (propertyFind) patchInstance((BDFDB.ModuleUtils.findByProperties(propertyFind, false) || {}).exports, mappedType, patchType, true);
-					else if (WebModulesData.NonRender.includes(unmappedType)) patchInstance((BDFDB.ModuleUtils.findByName(name, false) || {}).exports, mappedType, patchType, true);
-					else if (WebModulesData.MemoComponent.includes(unmappedType)) patchInstance((BDFDB.ModuleUtils.findByName(name, false) || {exports:{}}).exports.default, mappedType, patchType, true);
-					else if (!className) patchInstance(BDFDB.ModuleUtils.findByName(name), mappedType, patchType);
-					else if (DiscordClasses[className]) checkForInstance(className, mappedType, patchType, WebModulesData.ForceObserve.includes(unmappedType));
+				let className = WebModulesData.PatchFinder[unmappedType];
+				let propertyFind = WebModulesData.PropsFinder[unmappedType];
+				let mapped = WebModulesData.PatchMap[type];
+				let mappedType = mapped ? mapped + " _ _ " + type : type;
+				let name = mappedType.split(" _ _ ")[0];
+				if (mapped) {
+					plugin.patchedModules[patchType][mappedType] = plugin.patchedModules[patchType][type];
+					delete plugin.patchedModules[patchType][type];
 				}
+				if (propertyFind) patchInstance((BDFDB.ModuleUtils.findByProperties(propertyFind, false) || {}).exports, mappedType, patchType, true);
+				else if (WebModulesData.NonRender.includes(unmappedType)) patchInstance((BDFDB.ModuleUtils.findByName(name, false) || {}).exports, mappedType, patchType, true);
+				else if (WebModulesData.MemoComponent.includes(unmappedType)) patchInstance((BDFDB.ModuleUtils.findByName(name, false) || {exports:{}}).exports.default, mappedType, patchType, true);
+				else if (!className) patchInstance(BDFDB.ModuleUtils.findByName(name), mappedType, patchType);
+				else if (DiscordClasses[className]) checkForInstance(className, mappedType, patchType, WebModulesData.ForceObserve.includes(unmappedType));
 			}
 		}
-		function patchInstance(instance, type, patchType, exported) {
+		function patchInstance(instance, type, patchType, ignoreCheck) {
 			if (instance) {
 				let name = type.split(" _ _ ")[0];
 				instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
-				instance = exported || InternalBDFDB.isInstanceCorrect(instance, name) || WebModulesData.LoadedInComponents[type] ? instance : (BDFDB.ReactUtils.findConstructor(instance, name) || BDFDB.ReactUtils.findConstructor(instance, name, {up:true}));
+				instance = ignoreCheck || InternalBDFDB.isInstanceCorrect(instance, name) || WebModulesData.LoadedInComponents[type] ? instance : (BDFDB.ReactUtils.findConstructor(instance, name) || BDFDB.ReactUtils.findConstructor(instance, name, {up:true}));
 				if (instance) {
 					instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 					let patchMethods = {};
@@ -1355,6 +1353,24 @@
 					BDFDB.ModuleUtils.patch(plugin, WebModulesData.NonPrototype.includes(name) ? instance : instance.prototype, plugin.patchedModules[patchType][type], patchMethods);
 				}
 			}
+		}
+		function checkEle(ele, type, patchType, instanceObserver) {
+			let ins = BDFDB.ReactUtils.getInstance(ele);
+			let filter = WebModulesData.SpecialFilter[type];
+			if (typeof filter == "function") {
+				let constro = filter(ins);
+				if (constro) {
+					patchInstance(constro, type, patchType, true);
+					BDFDB.ReactUtils.forceUpdate(ins.return.stateNode);
+					return true;
+				}
+			}
+			else if (isCorrectInstance(ins, type)) {
+				patchInstance(ins, type, patchType);
+				BDFDB.ModuleUtils.forceAllUpdates(plugin, type);
+				return true;
+			}
+			return false;
 		}
 		function checkForInstance(className, type, patchType, forceobserve) {
 			const app = document.querySelector(BDFDB.dotCN.app), bdsettings = document.querySelector("#bd-settingspane-container " + BDFDB.dotCN.scrollerwrap);
@@ -1372,29 +1388,19 @@
 			if (!instancefound) {
 				let found = false, disclass = BDFDB.disCN[className], dotclass = BDFDB.dotCN[className];
 				for (let ele of document.querySelectorAll(dotclass)) {
-					let ins = BDFDB.ReactUtils.getInstance(ele);
-					if (isCorrectInstance(ins, type)) {
-						found = true;
-						patchInstance(ins, type, patchType);
-						BDFDB.ModuleUtils.forceAllUpdates(plugin, type);
-						break;
-					}
+					found = checkEle(ele, type, patchType);
+					if (found) break;
 				}
 				if (!found) {
-					let instanceobserver = new MutationObserver(cs => {cs.forEach(c => {c.addedNodes.forEach(n => {
+					let instanceObserver = new MutationObserver(cs => {cs.forEach(c => {c.addedNodes.forEach(n => {
 						if (found || !n || !n.tagName) return;
 						let ele = null;
 						if ((ele = BDFDB.DOMUtils.containsClass(n, disclass) ? n : n.querySelector(dotclass)) != null) {
-							let ins = BDFDB.ReactUtils.getInstance(ele);
-							if (isCorrectInstance(ins, type)) {
-								found = true;
-								instanceobserver.disconnect();
-								patchInstance(ins, type, patchType);
-								BDFDB.ModuleUtils.forceAllUpdates(plugin, type);
-							}
+							found = checkEle(ele, type, patchType);
+							if (found) instanceObserver.disconnect();
 						}
 					});});});
-					BDFDB.ObserverUtils.connect(plugin, BDFDB.dotCN.appmount, {name:"checkForInstanceObserver", instance:instanceobserver, multi:true
+					BDFDB.ObserverUtils.connect(plugin, BDFDB.dotCN.appmount, {name:"checkForinstanceObserver", instance:instanceObserver, multi:true
 					}, {childList:true, subtree:true});
 				}
 			}
