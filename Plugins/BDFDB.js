@@ -1088,6 +1088,7 @@
 	};
 	WebModulesData.SpecialFilter = {
 		V2C_ContentColumn: ins => ins && ins.return && (ins.return.key == "pcolumn" || ins.return.key == "tcolumn") && ins.return.type,
+		V2C_List: ins => ins && ins.return && (ins.return.key == "plugin-list" || ins.return.key == "theme-list") && ins.return.type,
 		V2C_PluginCard: ins && ins.child && ins.child.stateNode && ins.child.stateNode.props && ins.child.stateNode.props.plugin && ins.child.type,
 		V2C_ThemeCard: ins && ins.child && ins.child.stateNode && ins.child.stateNode.props && ins.child.stateNode.props.theme && ins.child.type
 	};
@@ -1139,8 +1140,8 @@
 		UserProfile: "userprofile",
 		V2C_ContentColumn: "contentcolumn",
 		V2C_List: "_repolist",
-		V2C_PluginCard: "_repoheader",
-		V2C_ThemeCard: "_repoheader"
+		V2C_PluginCard: "_repolist",
+		V2C_ThemeCard: "_repolist"
 	};
 	WebModulesData.PropsFinder = {
 		MessageHeader: "MessageTimestamp",
