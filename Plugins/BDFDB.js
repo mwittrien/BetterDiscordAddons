@@ -138,7 +138,7 @@
 		}
 	};
 	BDFDB.PluginUtils.checkUpdate = function (pluginName, url) {
-		if (BDFDB.BDUtils.isBDv2() || !pluginName || !url) return;
+		if (!pluginName || !url) return;
 		LibraryRequires.request(url, (error, response, result) => {
 			if (error) return;
 			var newversion = result.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
@@ -2379,17 +2379,8 @@
 	BDFDB.DataUtils = {};
 	BDFDB.DataUtils.cached = window.BDFDB && window.BDFDB.DataUtils && window.BDFDB.DataUtils.cached || {};
 	BDFDB.DataUtils.save = function (data, plugin, key, id) {
-		let configPath, pluginName;
-		if (!BDFDB.BDUtils.isBDv2()) {
-			pluginName = typeof plugin === "string" ? plugin : plugin.name;
-			configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".config.json");
-		}
-		else {
-			pluginName = typeof plugin === "string" ? plugin.toLowerCase() : null;
-			let contentpath = pluginName ? BDFDB.Plugins[pluginName] ? BDFDB.Plugins[pluginName].contentPath : null : plugin.contentPath;
-			if (!contentpath) return;
-			configPath = LibraryRequires.path.join(contentpath, "settings.json");
-		}
+		let pluginName = typeof plugin === "string" ? plugin : plugin.name;
+		let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".config.json");
 		
 		let config = BDFDB.DataUtils.cached[pluginName] !== undefined ? BDFDB.DataUtils.cached[pluginName] : (InternalBDFDB.readConfig(configPath) || {});
 		
@@ -2416,17 +2407,8 @@
 	};
 
 	BDFDB.DataUtils.load = function (plugin, key, id) {
-		let configPath, pluginName;
-		if (!BDFDB.BDUtils.isBDv2()) {
-			pluginName = typeof plugin === "string" ? plugin : plugin.name;
-			configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".config.json");
-		}
-		else {
-			pluginName = typeof plugin === "string" ? plugin.toLowerCase() : null;
-			let contentpath = pluginName ? BDFDB.Plugins[pluginName] ? BDFDB.Plugins[pluginName].contentPath : null : plugin.contentPath;
-			if (!contentpath) return {};
-			configPath = LibraryRequires.path.join(contentpath, "settings.json");
-		}
+		let pluginName = typeof plugin === "string" ? plugin : plugin.name;
+		let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".config.json");
 		
 		let config = BDFDB.DataUtils.cached[pluginName] !== undefined ? BDFDB.DataUtils.cached[pluginName] : (InternalBDFDB.readConfig(configPath) || {});
 		let configIsObject = BDFDB.ObjectUtils.is(config);
@@ -2440,17 +2422,8 @@
 		}
 	};
 	BDFDB.DataUtils.remove = function (plugin, key, id) {
-		let configPath, pluginName;
-		if (!BDFDB.BDUtils.isBDv2()) {
-			pluginName = typeof plugin === "string" ? plugin : plugin.name;
-			configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".config.json");
-		}
-		else {
-			pluginName = typeof plugin === "string" ? plugin.toLowerCase() : null;
-			let contentpath = pluginName ? BDFDB.Plugins[pluginName] ? BDFDB.Plugins[pluginName].contentPath : null : plugin.contentPath;
-			if (!contentpath) return;
-			configPath = LibraryRequires.path.join(contentpath, "settings.json");
-		}
+		let pluginName = typeof plugin === "string" ? plugin : plugin.name;
+		let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".config.json");
 		
 		let config = BDFDB.DataUtils.cached[pluginName] !== undefined ? BDFDB.DataUtils.cached[pluginName] : (InternalBDFDB.readConfig(configPath) || {});
 		let configIsObject = BDFDB.ObjectUtils.is(config);
@@ -3793,32 +3766,26 @@
 	};
 	BDFDB.BDUtils.checkRepoPage = function (usersettings = document.querySelector(BDFDB.dotCN.layer + `[layer-id="user-settings"]`)) {
 		if (!usersettings) return;
-		var folderbutton = usersettings.querySelector(BDFDB.dotCN._repofolderbutton);
+		let folderbutton = usersettings.querySelector(BDFDB.dotCN._repofolderbutton);
 		if (!folderbutton) return;
-		var header = folderbutton.parentElement.querySelector("h2");
+		let header = folderbutton.parentElement.querySelector("h2");
 		if (header && header.innerText) {
 			let headertext = header.innerText.toLowerCase();
 			if (headertext === "plugins" || headertext === "themes") return headertext;
 		}
 	};
-	BDFDB.BDUtils.isBDv2 = function () {
-		return typeof BDFDB.BDv2Api !== "undefined";
-	};
 	BDFDB.BDUtils.isPluginEnabled = function (pluginName) {
 		if (!pluginName) return false;
-		if (!BDFDB.BDUtils.isBDv2()) return BdApi.isPluginEnabled(pluginName);
-		else return BDFDB.Plugins[pluginName.toLowerCase()] ? BDFDB.Plugins[pluginName.toLowerCase()].enabled : null;
+		return BdApi.isPluginEnabled(pluginName);
 	};
-	BDFDB.BDUtils.getPlugin = function (pluginName, hasToBeEnabled = false) {
-		if (!hasToBeEnabled || BDFDB.BDUtils.isPluginEnabled(pluginName)) return BdApi.getPlugin(pluginName);
-		return null;
+	BDFDB.BDUtils.getPlugin = function (pluginName, hasToBeEnabled = false, overHeader = false) {
+		if (BdApi.Plugins && BdApi.Plugins.list && (!hasToBeEnabled || BDFDB.BDUtils.isPluginEnabled(pluginName))) return !overHeader ? BdApi.getPlugin(pluginName) : BdApi.Plugins.list[pluginName];
 	};
-	BDFDB.BDUtils.isThemeEnabled = function (themename) {
-		if (!BDFDB.BDUtils.isBDv2()) return BdApi.isThemeEnabled(themename)
-		else return BDFDB.Themes[themename.toLowerCase()] ? BDFDB.Themes[themename.toLowerCase()].enabled : null;
+	BDFDB.BDUtils.isThemeEnabled = function (themeName) {
+		return BdApi.isThemeEnabled(themeName);
 	};
-	BDFDB.BDUtils.getTheme = function (themename, hasToBeEnabled = false) {
-		if (window.bdthemes && (!hasToBeEnabled || BDFDB.BDUtils.isThemeEnabled(themename))) return window.bdthemes[themename];
+	BDFDB.BDUtils.getTheme = function (themeName, hasToBeEnabled = false) {
+		if (BdApi.Themes && BdApi.Themes.list && (!hasToBeEnabled || BDFDB.BDUtils.isThemeEnabled(themeName))) return BdApi.Themes.list[themeName];
 		return null;
 	};
 	BDFDB.BDUtils.getSettings = function (key) {
@@ -3828,16 +3795,6 @@
 	BDFDB.BDUtils.isAutoLoadEnabled = function () {
 		return BDFDB.BDUtils.getSettings("fork-ps-5") === true || BDFDB.BDUtils.isPluginEnabled("Restart-No-More") || BDFDB.BDUtils.isPluginEnabled("Restart No More");
 	};
-	(BDFDB.BDUtils.setPluginCache = function () {
-		if (!BDFDB.BDUtils.isBDv2()) return;
-		BDFDB.Plugins = {};
-		for (let plugin of BDFDB.BDv2Api.Plugins.listPlugins()) BDFDB.BDv2Api.Plugins.getPlugin(plugin).then(plugindata => {BDFDB.Plugins[plugin] = plugindata;});
-	})();
-	(BDFDB.BDUtils.setThemeCache = function () {
-		if (!BDFDB.BDUtils.isBDv2()) return;
-		BDFDB.Themes = {};
-		for (let theme of BDFDB.BDv2Api.Themes.listThemes()) BDFDB.BDv2Api.Themes.getTheme(theme).then(themedata => {BDFDB.Themes[theme] = themedata;});
-	})();
 
 	var DiscordClassModules = {};
 	DiscordClassModules.BDFDB = {
