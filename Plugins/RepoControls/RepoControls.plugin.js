@@ -6,7 +6,7 @@ var RepoControls = (_ => {
 	return class RepoControls {
 		getName () {return "RepoControls";}
 
-		getVersion () {return "1.3.6";}
+		getVersion () {return "1.3.7";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -232,7 +232,7 @@ var RepoControls = (_ => {
 		}
 
 		sortEntries (instance, parent, searchkey = parent.props.searchkey) {
-			if (instance) instance = BDFDB.ReactUtils.findOwner(instance, {name: "V2C_List"});
+			if (instance) instance = BDFDB.ReactUtils.findOwner(instance, {key: ["plugin-list", "theme-list"]});
 			
 			let sortings = BDFDB.DataUtils.get(this, "sortings");
 			
@@ -284,7 +284,9 @@ var RepoControls = (_ => {
 			
 			if (instance) {
 				BDFDB.ReactUtils.forceUpdate(instance);
-				BDFDB.TimeUtils.timeout(_ => {BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(instance, {name: ["V2C_PluginCard", "V2C_ThemeCard"]}));});
+				BDFDB.TimeUtils.timeout(_ => {
+					BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(instance, {props: instance._reactInternalFiber.key.split("-")[0], all:true}));
+				});
 			}
 		}
 		
@@ -301,7 +303,7 @@ var RepoControls = (_ => {
 		}
 
 		toggleAll (type, instance, enable) {
-			let listnode = BDFDB.ReactUtils.findDOMNode(BDFDB.ReactUtils.findOwner(instance, {name: "V2C_List"}));
+			let listnode = BDFDB.ReactUtils.findDOMNode(BDFDB.ReactUtils.findOwner(instance, {key: ["plugin-list", "theme-list"]}));
 			if (listnode) BDFDB.ModalUtils.confirm(this, `Are you sure you want to ${enable ? "enable" : "disable"} all ${type[0].toUpperCase() + type.slice(1)}s?`, _ => {
 				for (let header of listnode.querySelectorAll(BDFDB.dotCN._repoheader)) {
 					if (header.querySelector(BDFDB.dotCN._reponame).textContent.toLowerCase().indexOf(this.name.toLowerCase()) != 0) {
