@@ -12,7 +12,7 @@ var FriendNotifications = (_ => {
 				className: BDFDB.disCN.guildouter,
 				children: BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCN._friendnotificationsfriendsonline,
-					children: BDFDB.LanguageUtils.LanguageStringsFormat("FRIENDS_ONLINE_HEADER", this.props.amount),
+					children: BDFDB.LanguageUtils.LanguageStringsFormat("FRIENDS_ONLINE_HEADER", this.props.amount || 0),
 					onClick: _ => {
 						this.props.plugin.showTimeLog();
 					}
