@@ -4,7 +4,7 @@ var ForceImagePreviews = (_ => {
 	return class ForceImagePreviews {
 		getName () {return "ForceImagePreviews";}
 
-		getVersion () {return "1.1.6";}
+		getVersion () {return "1.1.7";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,8 +12,7 @@ var ForceImagePreviews = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Message Update","Fixed the plugin for the new Message Update"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"fixed":[["Imgur","No longer double emebds imgur images"]]
 			};
 
 			this.patchedModules = {
@@ -53,6 +52,7 @@ var ForceImagePreviews = (_ => {
 				BDFDB.PluginUtils.init(this);
 				
 				BDFDB.ModuleUtils.forceAllUpdates(this);
+				BDFDB.MessageUtils.rerenderAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -62,6 +62,7 @@ var ForceImagePreviews = (_ => {
 				this.stopping = true;
 				
 				BDFDB.ModuleUtils.forceAllUpdates(this);
+				BDFDB.MessageUtils.rerenderAll();
 				
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -141,7 +142,7 @@ var ForceImagePreviews = (_ => {
 		}
 		
 		isEmbedded (embeds, link) {
-			for (let embed of embeds) if (embed.url == link) return true;
+			for (let embed of embeds) if (embed.url == link || embed.image && embed.image.url == link) return true;
 			return false;
 		}
 	}
