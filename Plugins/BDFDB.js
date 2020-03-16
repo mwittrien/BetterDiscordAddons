@@ -890,10 +890,10 @@
 		for (let key of (sort === undefined || !sort) ? Object.keys(obj).reverse() : Object.keys(obj).sort().reverse()) newobj[key] = obj[key];
 		return newobj;
 	};
-	BDFDB.ObjectUtils.filter = function (obj, filter, bykey = false) {
+	BDFDB.ObjectUtils.filter = function (obj, filter, byKey = false) {
 		if (!BDFDB.ObjectUtils.is(obj)) return {};
 		if (typeof filter != "function") return obj;
-		return Object.keys(obj).filter(key => filter(bykey ? key : obj[key])).reduce((newobj, key) => (newobj[key] = obj[key], newobj), {});
+		return Object.keys(obj).filter(key => filter(byKey ? key : obj[key])).reduce((newobj, key) => (newobj[key] = obj[key], newobj), {});
 	};
 	BDFDB.ObjectUtils.push = function (obj, value) {
 		if (BDFDB.ObjectUtils.is(obj)) obj[Object.keys(obj).length] = value;
@@ -954,6 +954,23 @@
 	};
 	BDFDB.ArrayUtils.numSort = function (array) {
 		return array.sort((x, y) => {return x < y ? -1 : x > y ? 1 : 0;});
+	};
+	BDFDB.ArrayUtils.includes = function (array, ...values) {
+		if (!BDFDB.ArrayUtils.is(array)) return null;
+		if (!array.length) return false;
+		let all = values.pop();
+		if (typeof all != "boolean") {
+			values.push(all);
+			all = true;
+		}
+		if (!values.length) return false;
+		let contained = undefined;
+		for (let v of values) {
+			if (contained === undefined) contained = all;
+			if (all && !array.includes(v)) contained = false;
+			if (!all && array.includes(v)) contained = true;
+		}
+		return contained;
 	};
 	BDFDB.ArrayUtils.remove = function (array, value, all = false) {
 		if (!BDFDB.ArrayUtils.is(array)) return [];
@@ -1252,36 +1269,44 @@
 			}
 		}
 	};
-	BDFDB.ModuleUtils.forceAllUpdates = function (plugin, selectedtypes) {
+	BDFDB.ModuleUtils.forceAllUpdates = function (plugin, selectedTypes) {
 		if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ObjectUtils.is(plugin.patchedModules)) {
 			const app = document.querySelector(BDFDB.dotCN.app);
-			const bdsettings = document.querySelector("#bd-settingspane-container " + BDFDB.dotCN.scrollerwrap);
+			const bdSettings = document.querySelector("#bd-settingspane-container " + BDFDB.dotCN.scrollerwrap);
 			if (app) {
-				let filteredmodules = [], patchtypes = {};
+				selectedTypes = [selectedTypes].flat(10).filter(n => n).map(type => type && WebModulesData.PatchMap[type] ? WebModulesData.PatchMap[type] + " _ _ " + type : type);
+				let filteredModules = [], specialModules = {}, patchtypes = {};
 				for (let patchType in plugin.patchedModules) for (let type in plugin.patchedModules[patchType]) {
 					let methodnames = [plugin.patchedModules[patchType][type]].flat(10).filter(n => n);
-					if (methodnames.includes("componentDidMount") || methodnames.includes("componentDidUpdate") || methodnames.includes("render")) {
-						filteredmodules.push(type);
-						let unmappedType = type.split(" _ _ ")[0];
-						if (!patchtypes[unmappedType]) patchtypes[unmappedType] = [];
-						patchtypes[unmappedType].push(patchType);
+					if (BDFDB.ArrayUtils.includes(methodnames, "componentDidMount", "componentDidUpdate", "render", false) && (!selectedTypes.length || selectedTypes.includes(type))) {
+						let unmappedType = type.split(" _ _ ")[1] || type;
+						let className = WebModulesData.PatchFinder[unmappedType];
+						let filter = WebModulesData.SpecialFilter[unmappedType];
+						if (className && DiscordClasses[className] && typeof filter == "function") {
+							for (let ele of document.querySelectorAll(BDFDB.dotCN[className])) {
+								let constro = filter(BDFDB.ReactUtils.getInstance(ele));
+								if (constro) {
+									specialModules[type] = constro;
+									break;
+								}
+							}
+						}
+						else filteredModules.push(type);
+						let name = type.split(" _ _ ")[0];
+						if (!patchtypes[name]) patchtypes[name] = [];
+						patchtypes[name].push(patchType);
 					}
 				}
-				selectedtypes = [selectedtypes].flat(10).filter(n => n);
-				if (selectedtypes.length) {
-					selectedtypes = selectedtypes.map(type => type && WebModulesData.PatchMap[type] ? WebModulesData.PatchMap[type] + " _ _ " + type : type);
-					filteredmodules = filteredmodules.filter(type => selectedtypes.indexOf(type) > -1);
-				}
-				filteredmodules = BDFDB.ArrayUtils.removeCopies(filteredmodules);
-				if (filteredmodules.length) {
+				if (filteredModules.length || !BDFDB.ObjectUtils.isEmpty(specialModules)) {
+					filteredModules = BDFDB.ArrayUtils.removeCopies(filteredModules);
 					try {
-						const appinsdown = BDFDB.ReactUtils.findOwner(app, {name:filteredmodules, all:true, group:true, unlimited:true});
-						const appinsup = BDFDB.ReactUtils.findOwner(app, {name:filteredmodules, all:true, group:true, unlimited:true, up:true});
-						for (let type in appinsdown) for (let ins of appinsdown[type]) InternalBDFDB.forceInitiateProcess(plugin, ins, type, patchtypes[type]);
-						for (let type in appinsup) for (let ins of appinsup[type]) InternalBDFDB.forceInitiateProcess(plugin, ins, type, patchtypes[type]);
-						if (bdsettings) {
-							const bdsettingsins = BDFDB.ReactUtils.findOwner(bdsettings, {name:filteredmodules, all:true, group:true, unlimited:true});
-							for (let type in bdsettingsins) for (let ins of bdsettingsins[type]) InternalBDFDB.forceInitiateProcess(plugin, ins, type, patchtypes[type]);
+						const appInsDown = BDFDB.ReactUtils.findOwner(app, {name:filteredModules, type:specialModules, all:true, group:true, unlimited:true});
+						const appInsUp = BDFDB.ReactUtils.findOwner(app, {name:filteredModules, type:specialModules, all:true, group:true, unlimited:true, up:true});
+						for (let type in appInsDown) for (let ins of appInsDown[type]) InternalBDFDB.forceInitiateProcess(plugin, ins, type, patchtypes[type]);
+						for (let type in appInsUp) for (let ins of appInsUp[type]) InternalBDFDB.forceInitiateProcess(plugin, ins, type, patchtypes[type]);
+						if (bdSettings) {
+							const bdSettingsIns = BDFDB.ReactUtils.findOwner(bdSettings, {name:filteredModules, type:specialModules, all:true, group:true, unlimited:true});
+							for (let type in bdSettingsIns) for (let ins of bdSettingsIns[type]) InternalBDFDB.forceInitiateProcess(plugin, ins, type, patchtypes[type]);
 						}
 					}
 					catch (err) {BDFDB.LogUtils.error("Could not force update components! " + err, plugin.name);}
@@ -1356,12 +1381,12 @@
 		}
 		function checkEle(ele, type, patchType, instanceObserver) {
 			let ins = BDFDB.ReactUtils.getInstance(ele);
-			let filter = WebModulesData.SpecialFilter[type];
+			let filter = WebModulesData.SpecialFilter[type.split(" _ _ ")[1] || type];
 			if (typeof filter == "function") {
 				let constro = filter(ins);
 				if (constro) {
 					patchInstance(constro, type, patchType, true);
-					BDFDB.ReactUtils.forceUpdate(ins.return.stateNode);
+					BDFDB.ModuleUtils.forceAllUpdates(plugin, type);
 					return true;
 				}
 			}
@@ -1373,16 +1398,16 @@
 			return false;
 		}
 		function checkForInstance(className, type, patchType, forceobserve) {
-			const app = document.querySelector(BDFDB.dotCN.app), bdsettings = document.querySelector("#bd-settingspane-container " + BDFDB.dotCN.scrollerwrap);
+			const app = document.querySelector(BDFDB.dotCN.app), bdSettings = document.querySelector("#bd-settingspane-container " + BDFDB.dotCN.scrollerwrap);
 			let instancefound = false;
 			if (!forceobserve) {
 				if (app) {
 					let appins = BDFDB.ReactUtils.findConstructor(app, type, {unlimited:true}) || BDFDB.ReactUtils.findConstructor(app, type, {unlimited:true, up:true});
 					if (appins && (instancefound = true)) patchInstance(appins, type, patchType);
 				}
-				if (!instancefound && bdsettings) {
-					let bdsettingsins = BDFDB.ReactUtils.findConstructor(bdsettings, type, {unlimited:true});
-					if (bdsettingsins && (instancefound = true)) patchInstance(bdsettingsins, type, patchType);
+				if (!instancefound && bdSettings) {
+					let bdSettingsIns = BDFDB.ReactUtils.findConstructor(bdSettings, type, {unlimited:true});
+					if (bdSettingsIns && (instancefound = true)) patchInstance(bdSettingsIns, type, patchType);
 				}
 			}
 			if (!instancefound) {
@@ -1722,16 +1747,16 @@
 		var maxdepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
 		var maxtime = config.unlimited ? 999999999 : (config.time === undefined ? 150 : config.time);
 		var whitelist = config.up ? {return:true, sibling:true, default:true, _reactInternalFiber:true} : {child:true, sibling:true, default:true, _reactInternalFiber:true};
-		var foundconstructors = config.group ? {} : [];
-		var singleconstructor = getConstructor(instance);
+		var foundConstructors = config.group ? {} : [];
+		var singleConstructor = getConstructor(instance);
 		if (config.all) {
-			for (let i in foundconstructors) {
-				if (config.group) for (let j in foundconstructors[i]) delete foundconstructors[i][j].BDFDBreactSearch;
-				else delete foundconstructors[i].BDFDBreactSearch;
+			for (let i in foundConstructors) {
+				if (config.group) for (let j in foundConstructors[i]) delete foundConstructors[i][j].BDFDBreactSearch;
+				else delete foundConstructors[i].BDFDBreactSearch;
 			}
-			return foundconstructors;
+			return foundConstructors;
 		}
-		else return singleconstructor;
+		else return singleConstructor;
 
 		function getConstructor (instance) {
 			depth++;
@@ -1745,11 +1770,11 @@
 							if (config.group) {
 								if (instance.type && (instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name)) {
 									let group = config.name.find(n => (instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name || instance.type).split(" _ _ ")[0] == n) || "Default";
-									if (!BDFDB.ArrayUtils.is(foundinstances[group])) foundinstances[group] = [];
-									foundinstances[group].push(instance.stateNode);
+									if (!BDFDB.ArrayUtils.is(foundConstructors[group])) foundConstructors[group] = [];
+									foundConstructors[group].push(instance.stateNode);
 								}
 							}
-							else foundinstances.push(instance.type);
+							else foundConstructors.push(instance.type);
 						}
 					}
 				}
@@ -1773,10 +1798,11 @@
 	};
 	BDFDB.ReactUtils.findOwner = function (nodeOrInstance, config) {
 		if (!BDFDB.ObjectUtils.is(config)) return null;
-		if (!nodeOrInstance || !config.name && !config.key && !config.props) return config.all ? (config.group ? {} : []) : null;
+		if (!nodeOrInstance || !config.name && !config.type && !config.key && !config.props) return config.all ? (config.group ? {} : []) : null;
 		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 		if (!BDFDB.ObjectUtils.is(instance)) return config.all ? (config.group ? {} : []) : null;
 		config.name = config.name && [config.name].flat().filter(n => n);
+		config.type = config.type && [config.type].flat().filter(n => n);
 		config.key = config.key && [config.key].flat().filter(n => n);
 		config.props = config.props && [config.props].flat().filter(n => n);
 		var depth = -1;
@@ -1784,35 +1810,40 @@
 		var maxdepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
 		var maxtime = config.unlimited ? 999999999 : (config.time === undefined ? 150 : config.time);
 		var whitelist = config.up ? {return:true, sibling:true, _reactInternalFiber:true} : {child:true, sibling:true, _reactInternalFiber:true};
-		var foundinstances = config.group ? {} : [];
-		var singleinstance = getOwner(instance);
+		var foundInstances = config.group ? {} : [];
+		var singleInstance = getOwner(instance);
 		if (config.all) {
-			for (let i in foundinstances) {
-				if (config.group) for (let j in foundinstances[i]) delete foundinstances[i][j].BDFDBreactSearch;
-				else delete foundinstances[i].BDFDBreactSearch;
+			for (let i in foundInstances) {
+				if (config.group) for (let j in foundInstances[i]) delete foundInstances[i][j].BDFDBreactSearch;
+				else delete foundInstances[i].BDFDBreactSearch;
 			}
-			return foundinstances;
+			return foundInstances;
 		}
-		else return singleinstance;
+		else return singleInstance;
 
 		function getOwner (instance) {
 			depth++;
 			var result = undefined;
 			if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxdepth && performance.now() - start < maxtime) {
 				let props = instance.stateNode ? instance.stateNode.props : instance.props;
-				if (instance.stateNode && !Node.prototype.isPrototypeOf(instance.stateNode) && (instance.type && config.name && config.name.some(name => InternalBDFDB.isInstanceCorrect(instance, name.split(" _ _ ")[0])) || config.key && config.key.some(key => instance.key == key) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => BDFDB.equals(props[prop[0]], checkvalue)) : BDFDB.equals(props[prop[0]], prop[1])) : props[prop] !== undefined))) {
+				if (instance.stateNode && !Node.prototype.isPrototypeOf(instance.stateNode) && (instance.type && config.name && config.name.some(name => InternalBDFDB.isInstanceCorrect(instance, name.split(" _ _ ")[0])) || instance.type && config.type && config.type.some(type => BDFDB.ArrayUtils.is(type) ? instance.type === type[1] : instance.type === type) || config.key && config.key.some(key => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => BDFDB.equals(props[prop[0]], checkvalue)) : BDFDB.equals(props[prop[0]], prop[1])) : props[prop] !== undefined) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => BDFDB.equals(props[prop[0]], checkvalue)) : BDFDB.equals(props[prop[0]], prop[1])) : props[prop] !== undefined))) {
 					if (config.all === undefined || !config.all) result = instance.stateNode;
 					else if (config.all) {
 						if (!instance.stateNode.BDFDBreactSearch) {
 							instance.stateNode.BDFDBreactSearch = true;
 							if (config.group) {
 								if (config.name && instance.type && (instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name || instance.type)) {
-									let group = config.name.find(n => (instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name || instance.type).split(" _ _ ")[0] == n) || "Default";
-									if (!BDFDB.ArrayUtils.is(foundinstances[group])) foundinstances[group] = [];
-									foundinstances[group].push(instance.stateNode);
+									let group = config.name.find(n => (instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name || instance.type) == n.split(" _ _ ")[0]) || "Default";
+									if (!BDFDB.ArrayUtils.is(foundInstances[group])) foundInstances[group] = [];
+									foundInstances[group].push(instance.stateNode);
+								}
+								if (config.type && instance.type) {
+									let group = config.type.find(t => BDFDB.ArrayUtils.is(t) && instance.type === t) || "Default";
+									if (!BDFDB.ArrayUtils.is(foundInstances[group])) foundInstances[group] = [];
+									foundInstances[group].push(instance.stateNode);
 								}
 							}
-							else foundinstances.push(instance.stateNode);
+							else foundInstances.push(instance.stateNode);
 						}
 					}
 				}
