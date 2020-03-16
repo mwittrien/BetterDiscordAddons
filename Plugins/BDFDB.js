@@ -6130,7 +6130,8 @@
 					try {returnvalue = stringobj.format(formatvars);}
 					catch (err) {
 						returnvalue = null;
-						formatvars[err.toString().split("for: ")[1]] = values.shift() || "undefined";
+						let value = values.shift();
+						formatvars[err.toString().split("for: ")[1]] = value != null ? value : "undefined";
 					}
 				}
 				if (returnvalue) {
