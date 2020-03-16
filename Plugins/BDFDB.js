@@ -6131,7 +6131,7 @@
 					catch (err) {
 						returnvalue = null;
 						let value = values.shift();
-						formatvars[err.toString().split("for: ")[1]] = value != null ? value : "undefined";
+						formatvars[err.toString().split("for: ")[1]] = value != null ? (value === 0 ? "0" : value) : "undefined";
 					}
 				}
 				if (returnvalue) {
