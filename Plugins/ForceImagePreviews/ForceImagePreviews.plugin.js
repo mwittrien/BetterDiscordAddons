@@ -4,7 +4,7 @@ var ForceImagePreviews = (_ => {
 	return class ForceImagePreviews {
 		getName () {return "ForceImagePreviews";}
 
-		getVersion () {return "1.1.7";}
+		getVersion () {return "1.1.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ var ForceImagePreviews = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Imgur","No longer double emebds imgur images"]]
+				"fixed":[["Imgur","No longer double emebds imgur images"], ["Youtube","No longer double embeds some special youtube links like 'youtu.be'"]]
 			};
 
 			this.patchedModules = {
@@ -142,7 +142,13 @@ var ForceImagePreviews = (_ => {
 		}
 		
 		isEmbedded (embeds, link) {
-			for (let embed of embeds) if (embed.url == link || embed.image && embed.image.url == link) return true;
+			if (link.indexOf("youtube.") > -1 || link.indexOf("youtu.be") > -1) {
+				let videoId = link.split("watch?v=")[1] || link.split("?")[0].split("/").pop();
+				if (videoId) for (let embed of embeds) if (embed.url == link || embed.video && embed.url.indexOf(videoId) > -1) return true;
+			}
+			else {
+				for (let embed of embeds) if (embed.url == link || embed.image && embed.image.url == link) return true;
+			}
 			return false;
 		}
 	}
