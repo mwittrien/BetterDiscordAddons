@@ -6,7 +6,7 @@ var ShowHiddenChannels = (_ => {
 	return class ShowHiddenChannels {
 		getName () {return "ShowHiddenChannels";}
 
-		getVersion () {return "2.7.0";}
+		getVersion () {return "2.7.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,12 +14,12 @@ var ShowHiddenChannels = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["Blacklist","You can now configure the list of servers you want to see hidden channels in"]]
+				"fixed":[["Working","Fuck u Discord"]]
 			};
 
 			this.patchedModules = {
 				before: {
-					Channels: "render"
+					GuildSidebar: "render"
 				},
 				after: {
 					ChannelItem: ["render", "componentDidMount", "componentDidUpdate"]
@@ -244,7 +244,7 @@ var ShowHiddenChannels = (_ => {
 			}
 		}
 
-		processChannels (e) {
+		processGuildSidebar (e) {
 			if (!e.instance.props.guild || blacklist.includes(e.instance.props.guild.id)) return;
 			let [hiddenChannels, amount] = this.getHiddenChannels(e.instance.props.guild);
 			if (amount) {
