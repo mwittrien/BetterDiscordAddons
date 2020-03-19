@@ -1,10 +1,12 @@
 //META{"name":"ReadAllNotificationsButton","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ReadAllNotificationsButton","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ReadAllNotificationsButton/ReadAllNotificationsButton.plugin.js"}*//
 
 var ReadAllNotificationsButton = (_ => {
+	var blacklist;
+	
 	return class ReadAllNotificationsButton {
 		getName () {return "ReadAllNotificationsButton";}
 
-		getVersion () {return "1.5.5";}
+		getVersion () {return "1.5.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,8 +14,7 @@ var ReadAllNotificationsButton = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Message Update","Fixed the plugin for the new Message Update"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"improved":[["Blacklist","You can now set a blacklist of servers, servers included in the blacklist will never get marked as read by the plugin"]]
 			};
 
 			this.patchedModules = {
@@ -48,33 +49,68 @@ var ReadAllNotificationsButton = (_ => {
 			};
 		}
 
-		getSettingsPanel () {
+		getSettingsPanel (collapseStates = {}) {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 			let settings = BDFDB.DataUtils.get(this, "settings");
-			let settingspanel, settingsitems = [], inneritems = [];
+			let settingspanel, settingsitems = [];
 			
-			for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-				className: BDFDB.disCN.marginbottom8,
-				type: "Switch",
-				plugin: this,
-				keys: ["settings", key],
-				label: this.defaults.settings[key].description,
-				value: settings[key],
-				disabled: key == "includeMuted" && !settings.includeGuilds,
-				onChange: (value, instance) => {
-					if (key != "includeGuilds") return;
-					let mutedSwitchIns = BDFDB.ReactUtils.findOwner(instance, {props:[["keys",["settings", "includeMuted"]]]});
-					if (mutedSwitchIns) {
-						mutedSwitchIns.props.disabled = !value;
-						BDFDB.ReactUtils.forceUpdate(mutedSwitchIns);
-					}
-				}
+			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+				title: "Settings",
+				collapseStates: collapseStates,
+				children: Object.keys(settings).filter(key => !this.defaults.settings[key].inner).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+					className: BDFDB.disCN.marginbottom8,
+					type: "Switch",
+					plugin: this,
+					keys: ["settings", key],
+					label: this.defaults.settings[key].description,
+					value: settings[key]
+				})).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+					title: "When left clicking the 'read all' button mark following Elements as read:",
+					first: false,
+					last: true,
+					children: Object.keys(settings).filter(key => this.defaults.settings[key].inner).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+						className: BDFDB.disCN.marginbottom8,
+						type: "Switch",
+						plugin: this,
+						keys: ["settings", key],
+						label: this.defaults.settings[key].description,
+						value: settings[key]
+					}))
+				}))
 			}));
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
-				title: "When left clicking the 'read all' button mark following Elements as read:",
-				first: settingsitems.length == 0,
-				last: true,
-				children: inneritems
+			
+			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+				title: "Server Black List",
+				collapseStates: collapseStates,
+				children: [
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsGuildList, {
+						className: BDFDB.disCN.marginbottom20,
+						disabled: BDFDB.DataUtils.load(this, "blacklist"),
+						onClick: disabledGuilds => {
+							this.saveBlacklist(disabledGuilds);
+						}
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+						type: "Button",
+						className: BDFDB.disCN.marginbottom8,
+						color: BDFDB.LibraryComponents.Button.Colors.GREEN,
+						label: "Enable for all Servers",
+						onClick: _ => {
+							this.batchSetGuilds(settingspanel, collapseStates, true);
+						},
+						children: BDFDB.LanguageUtils.LanguageStrings.ENABLE
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+						type: "Button",
+						className: BDFDB.disCN.marginbottom8,
+						color: BDFDB.LibraryComponents.Button.Colors.PRIMARY,
+						label: "Disable for all Servers",
+						onClick: _ => {
+							this.batchSetGuilds(settingspanel, collapseStates, false);
+						},
+						children: BDFDB.LanguageUtils.LanguageStrings.DISABLE
+					})
+				]
 			}));
 			
 			return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
@@ -108,6 +144,9 @@ var ReadAllNotificationsButton = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
+				
+				let loadedBlacklist = BDFDB.DataUtils.load(this, "blacklist");
+				this.saveBlacklist(!BDFDB.ArrayUtils.is(loadedBlacklist) ? [] : loadedBlacklist);
 
 				BDFDB.ModuleUtils.forceAllUpdates(this);
 			}
@@ -168,7 +207,7 @@ var ReadAllNotificationsButton = (_ => {
 						children: "read all",
 						onClick: _ => {
 							let settings = BDFDB.DataUtils.get(this, "settings"), clear = _ => {
-								if (settings.includeGuilds) BDFDB.GuildUtils.markAsRead(settings.includeMuted ? BDFDB.GuildUtils.getAll() : BDFDB.GuildUtils.getUnread());
+								if (settings.includeGuilds) this.markGuildsAsRead(settings.includeMuted ? BDFDB.GuildUtils.getAll() : BDFDB.GuildUtils.getUnread());
 								if (settings.includeDMs) BDFDB.DMUtils.markAsRead(BDFDB.DMUtils.getAll());
 							};
 							if (!settings.confirmClear) clear();
@@ -181,21 +220,21 @@ var ReadAllNotificationsButton = (_ => {
 										label: this.labels.context_unreadguilds_text,
 										action: event2 => {
 											BDFDB.ContextMenuUtils.close(event2._targetInst);
-											BDFDB.GuildUtils.markAsRead(BDFDB.GuildUtils.getUnread());
+											this.markGuildsAsRead(BDFDB.GuildUtils.getUnread());
 										}
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 										label: this.labels.context_pingedguilds_text,
 										action: event2 => {
 											BDFDB.ContextMenuUtils.close(event2._targetInst);
-											BDFDB.GuildUtils.markAsRead(BDFDB.GuildUtils.getPinged());
+											this.markGuildsAsRead(BDFDB.GuildUtils.getPinged());
 										}
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 										label: this.labels.context_mutedguilds_text,
 										action: event2 => {
 											BDFDB.ContextMenuUtils.close(event2._targetInst);
-											BDFDB.GuildUtils.markAsRead(BDFDB.GuildUtils.getMuted());
+											this.markGuildsAsRead(BDFDB.GuildUtils.getMuted());
 										}
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
@@ -203,7 +242,7 @@ var ReadAllNotificationsButton = (_ => {
 										action: event2 => {
 											BDFDB.ContextMenuUtils.close(event2._targetInst);
 											this.addPinnedRecent(instance.props.channel.id);
-											BDFDB.GuildUtils.markAsRead(BDFDB.GuildUtils.getAll());
+											this.markGuildsAsRead(BDFDB.GuildUtils.getAll());
 										}
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
@@ -255,6 +294,24 @@ var ReadAllNotificationsButton = (_ => {
 				instance.props.loadMore();
 				BDFDB.TimeUtils.timeout(_ => {this.clearMentions(instance, wrapper);},3000);
 			}
+		}
+		
+		markGuildsAsRead (guilds) {
+			BDFDB.GuildUtils.markAsRead(guilds.filter(g => g && g.id && !blacklist.includes(g.id)));
+		}
+		
+		batchSetGuilds (settingspanel, collapseStates, value) {
+			if (!value) {
+				for (let id of BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds()) blacklist.push(id);
+				this.saveBlacklist(BDFDB.ArrayUtils.removeCopies(blacklist));
+			}
+			else this.saveBlacklist([]);
+			BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
+		}
+		
+		saveBlacklist (savedBlacklist) {
+			blacklist = savedBlacklist;
+			BDFDB.DataUtils.save(savedBlacklist, this, "blacklist");
 		}
 
 		setLabelsByLanguage () {
