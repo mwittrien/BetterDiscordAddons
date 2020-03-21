@@ -1161,10 +1161,9 @@
 		V2C_ThemeCard: "_repolist"
 	};
 	WebModulesData.CodeFinder = {
-		MessageHeader: ["usernameProfile", "avatarProfile", "subscribeToGroupId"]
 	};
 	WebModulesData.PropsFinder = {
-		PopoutMessageHeader: "MessageTimestamp",
+		MessageHeader: "MessageTimestamp",
 		UnavailableGuildsButton: "UnavailableGuildsButton"
 	};
 	WebModulesData.NonPrototype = [].concat(WebModulesData.NonRender, Object.keys(WebModulesData.CodeFinder), Object.keys(WebModulesData.PropsFinder), WebModulesData.MemoComponent, [
@@ -2151,7 +2150,7 @@
 			if (foundobj) found.push(foundobj);
 			else {
 				let guild = BDFDB.LibraryModules.GuildStore.getGuild(id);
-				found.push(Object.assign(new guild.constructor(guild), {div:null, instance:null}))
+				if (guild) found.push(Object.assign(new guild.constructor(guild), {div:null, instance:null}))
 			}
 		}
 		return found;
