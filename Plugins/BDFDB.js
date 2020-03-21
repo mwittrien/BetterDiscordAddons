@@ -1160,11 +1160,14 @@
 		V2C_PluginCard: "_repolist",
 		V2C_ThemeCard: "_repolist"
 	};
+	WebModulesData.CodeFinder = {
+		MessageHeader: ["usernameProfile", "avatarProfile", "subscribeToGroupId"]
+	};
 	WebModulesData.PropsFinder = {
-		MessageHeader: "MessageTimestamp",
+		PopoutMessageHeader: "MessageTimestamp",
 		UnavailableGuildsButton: "UnavailableGuildsButton"
 	};
-	WebModulesData.NonPrototype = [].concat(WebModulesData.NonRender, Object.keys(WebModulesData.PropsFinder), WebModulesData.MemoComponent, [
+	WebModulesData.NonPrototype = [].concat(WebModulesData.NonRender, Object.keys(WebModulesData.CodeFinder), Object.keys(WebModulesData.PropsFinder), WebModulesData.MemoComponent, [
 		"ChannelTextAreaContainer"
 	]);
 	
@@ -1355,6 +1358,7 @@
 			if (component) patchInstance(WebModulesData.NonRender.includes(unmappedType) ? (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports : component, type, patchType);
 			else {
 				let className = WebModulesData.PatchFinder[unmappedType];
+				let codeFind = WebModulesData.CodeFinder[unmappedType];
 				let propertyFind = WebModulesData.PropsFinder[unmappedType];
 				let mapped = WebModulesData.PatchMap[type];
 				let mappedType = mapped ? mapped + " _ _ " + type : type;
@@ -1363,7 +1367,8 @@
 					plugin.patchedModules[patchType][mappedType] = plugin.patchedModules[patchType][type];
 					delete plugin.patchedModules[patchType][type];
 				}
-				if (propertyFind) patchInstance((BDFDB.ModuleUtils.findByProperties(propertyFind, false) || {}).exports, mappedType, patchType, true);
+				if (codeFind) patchInstance((BDFDB.ModuleUtils.findByString(codeFind, false) || {}).exports, mappedType, patchType, true);
+				else if (propertyFind) patchInstance((BDFDB.ModuleUtils.findByProperties(propertyFind, false) || {}).exports, mappedType, patchType, true);
 				else if (WebModulesData.NonRender.includes(unmappedType)) patchInstance((BDFDB.ModuleUtils.findByName(name, false) || {}).exports, mappedType, patchType, true);
 				else if (WebModulesData.MemoComponent.includes(unmappedType)) patchInstance((BDFDB.ModuleUtils.findByName(name, false) || {exports:{}}).exports.default, mappedType, patchType, true);
 				else if (!className) patchInstance(BDFDB.ModuleUtils.findByName(name), mappedType, patchType);
@@ -9052,13 +9057,6 @@
 		}));
 		
 		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(BDFDB, settingsitems);
-	};
-	
-	let MessageHeaderExport = BDFDB.ModuleUtils.findByProperties("MessageTimestamp", false);
-	if (MessageHeaderExport) InternalBDFDB.processMessage = function (e) {
-		if (BDFDB.ReactUtils.getValue(e, "instance.props.childrenHeader.type.type.displayName") == "MessageHeader" && !e.instance.props.childrenHeader.type.type.__isBDFDBpatched) {
-			e.instance.props.childrenHeader.type = MessageHeaderExport.exports.default;
-		}
 	};
 
 	const BDFDB_Patrons = [
