@@ -800,8 +800,9 @@ body:before {
 .messageGroupCozy-1BZuO8 {
 	background-color: rgba(var(--vtransparencycolor), var(--vmessagetransparency));
 }
-.message-2qnXI6.selected-2P5D_Z, 
-.mouse-mode .message-2qnXI6:hover {
+.message-2qnXI6.selected-2P5D_Z,
+.mouse-mode .message-2qnXI6:hover,
+.mouse-mode.full-motion .message-2qnXI6:hover {
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vmessagetransparency) * 1.2 * var(--vusechatbubbles) + 0.3 * (1 - var(--vusechatbubbles))));
 }
 .message-2qnXI6.localBot-GrCgVt {							/* message				localbot							*/
