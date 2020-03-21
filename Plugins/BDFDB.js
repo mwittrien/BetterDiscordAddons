@@ -9109,6 +9109,7 @@
 					return InternalBDFDB._processAvatarRender(e.instance.props.message.author, renderedChildren) || renderedChildren;
 				};
 			}
+			else if (avatarWrapper && avatarWrapper.type == "img") e.returnvalue.props.children[0] = InternalBDFDB._processAvatarRender(e.instance.props.message.author, avatarWrapper) || avatarWrapper;
 		}
 	};
 	InternalBDFDB.processMemberListItem = function (e) {
