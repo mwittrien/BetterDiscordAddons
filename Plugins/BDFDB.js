@@ -9279,7 +9279,7 @@
 	BDFDB.ModuleUtils.patch(BDFDB, BDFDB.ReactUtils.getValue(BDFDB.ModuleUtils.findByString("renderReactions", "canAddNewReactions", "showMoreUtilities", false), "exports.default"), "type", {after: e => {
 		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnValue, {filter: c => c && c.props && c.props.showMoreUtilities != undefined && c.props.showEmojiPicker != undefined && c.props.setPopout != undefined});
 		if (index > -1) BDFDB.ModuleUtils.patch(BDFDB, children[index], "type", {after: e2 => {
-			let [children2, index2] = BDFDB.ReactUtils.findChildren(e2.returnValue, {name: "Popout"});
+			let [children2, index2] = BDFDB.ReactUtils.findChildren(e2.returnValue, {filter: c => c && c.props && typeof c.props.onRequestClose == "function" && c.props.onRequestClose.toString().indexOf("moreUtilities") > -1});
 			let popoutWrapper = children2[index2];
 			InternalBDFDB.executeExtraPatchedPatches("MessageOptionToolbar", {instance:{props:Object.assign({}, e2.methodArguments[0], {hasMorePopout: index2 > -1})}, returnvalue:e2.returnValue, methodname:"default"});
 			if (popoutWrapper && typeof popoutWrapper.props.renderPopout == "function") {
