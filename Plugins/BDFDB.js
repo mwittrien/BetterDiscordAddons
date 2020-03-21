@@ -9057,6 +9057,13 @@
 		
 		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(BDFDB, settingsitems);
 	};
+	
+	let MessageHeaderExport = BDFDB.ModuleUtils.findByProperties("MessageTimestamp", false);
+	if (MessageHeaderExport) InternalBDFDB.processMessage = function (e) {
+		if (BDFDB.ReactUtils.getValue(e, "instance.props.childrenHeader.type.type.name") && BDFDB.ReactUtils.getValue(e, "instance.props.childrenHeader.props.message")) {
+			e.instance.props.childrenHeader.type = MessageHeaderExport.exports.default;
+		}
+	};
 
 	const BDFDB_Patrons = [
 		"363785301195358221"
