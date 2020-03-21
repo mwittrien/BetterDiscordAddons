@@ -36,7 +36,7 @@ var CustomQuoter = (_ => {
 	return class CustomQuoter {
 		getName () {return "CustomQuoter";}
 
-		getVersion () {return "1.0.4";}
+		getVersion () {return "1.0.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -44,7 +44,7 @@ var CustomQuoter = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["Link Option","Added a link placeholder that will be replaced with the direct message link that jumps to the quoted message if clicked"]]
+				"improved":[["Placeholders","$authorName will now use the server nickname of a user if one is set, $authorAccount was added which gets replaced by ACCOUNTNAME#DISCRIMINATOR (User#1234)"]]
 			};
 		}
 		
@@ -125,7 +125,8 @@ var CustomQuoter = (_ => {
 					"$mention will be replaced with a mention of the message author",
 					"$link will be replaced with a discord direct link pointing to the message",
 					"$authorId will be replaced with the ID of the message author",
-					"$authorName will be replaced with the name of the message author",
+					"$authorName will be replaced with the username of the message author",
+					"$authorAccount will be replaced with the accountname of the message author + discriminator",
 					"$channel will be replaced with a mention of the channel (ignored for DMs)",
 					"$channelId will be replaced with the ID of the channel",
 					"$channelName will be replaced with the Name of the channel",
@@ -226,11 +227,13 @@ var CustomQuoter = (_ => {
 			
 			let guild = channel.guild_id ? (BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id) || {id: channel.guild_id, name: "Test Server"}) : {id: BDFDB.DiscordConstants.ME, name: BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES};
 			
+			let member = BDFDB.LibraryModules.MemberStore.getMember(guild && guild.id, message.author.id);
 			
 			return BDFDB.StringUtils.insertNRST(customQuote)
 				.replace("$mention", settings.ignoreMentionInDM && channel.isDM() ? "" : `<@!${message.author.id}>`)
 				.replace("$link", `https://discordapp.com/channels/${guild.id}/${channel.id}/${message.id}`)
-				.replace("$authorName", message.author.username || "")
+				.replace("$authorName", member && member.nick || message.author.username || "")
+				.replace("$authorAccount", `${message.author.username}#message.author.discriminator` || "")
 				.replace("$authorId", message.author.id || "")
 				.replace("$channelName", channel.name || "")
 				.replace("$channelId", channel.id || "")
