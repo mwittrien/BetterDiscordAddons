@@ -4,7 +4,7 @@ var TopRoleEverywhere = (_ => {
 	return class TopRoleEverywhere {
 		getName () {return "TopRoleEverywhere";}
 
-		getVersion () {return "2.9.7";}
+		getVersion () {return "2.9.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,8 +12,7 @@ var TopRoleEverywhere = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Message Update","Fixed the plugin for the new Message Update"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"fixed":[["Messages Popout","Now works in popouts like the recent mentions popout"]]
 			};
 
 			this.patchedModules = {
@@ -156,7 +155,7 @@ var TopRoleEverywhere = (_ => {
 
 		processMessageHeader (e) {
 			if (e.instance.props.message && BDFDB.DataUtils.get(this, "settings", "showInChat")) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue.props.children.slice(1), {name: "Popout"});
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue.props.children.slice(1), {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
 				if (index > -1) this.injectRoleTag(children, e.instance.props.message.author, "chat", e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy);
 			}
 		}

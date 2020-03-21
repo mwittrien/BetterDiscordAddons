@@ -4,7 +4,7 @@ var EditUsers = (_ => {
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.8.0";}
+		getVersion () {return "3.8.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ var EditUsers = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Avatars","Fixed avatars not being changed in some places"]]
+				"fixed":[["Messages Popout","Now works in popouts like the recent mentions popout"]]
 			};
 
 			this.patchedModules = {
@@ -71,7 +71,7 @@ var EditUsers = (_ => {
 
 		initConstructor () {
 			this.css = `
-				${BDFDB.dotCN.messageusername}:hover > span[style*="color"] {
+				${BDFDB.dotCNS.chat + BDFDB.dotCN.messageusername}:hover > span[style*="color"] {
 					text-decoration: underline;
 				}
 				${BDFDB.dotCN.dmchannel}:hover ${BDFDB.dotCN.namecontainername} span[style*="color"] {
@@ -506,11 +506,11 @@ var EditUsers = (_ => {
 		
 		processMessageHeader (e) {
 			if (e.instance.props.message && BDFDB.DataUtils.get(this, "settings", "changeInChatWindow")) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue.props.children.slice(1), {name: "Popout"});
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue.props.children.slice(1), {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
 				if (index > -1) {
 					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.message.author.id);
 					if (data && (data.color1 || data.color2)) {
-						if (children[index] && children[index].props && typeof children[index].props.children == "function") {
+						if (children[index].props && typeof children[index].props.children == "function") {
 							let renderChildren = children[index].props.children;
 							children[index].props.children = (...args) => {
 								let renderedChildren = renderChildren(...args);
@@ -518,6 +518,7 @@ var EditUsers = (_ => {
 								return renderedChildren;
 							}
 						}
+						else this.changeUserColor(children[index], e.instance.props.message.author.id);
 					}
 					this.injectBadge(children, e.instance.props.message.author.id, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, 2, e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy);
 				}

@@ -4,7 +4,7 @@ var OwnerTag = (_ => {
 	return class OwnerTag {
 		getName () {return "OwnerTag";}
 
-		getVersion () {return "1.2.6";}
+		getVersion () {return "1.2.7";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,8 +12,7 @@ var OwnerTag = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Message Update","Fixed the plugin for the new Message Update"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"fixed":[["Messages Popout","Now works in popouts like the recent mentions popout"]]
 			};
 
 			this.patchedModules = {
@@ -165,7 +164,7 @@ var OwnerTag = (_ => {
 			if (e.instance.props.message && BDFDB.DataUtils.get(this, "settings", "addInChatWindow")) {
 				let usertype = this.getUserType(e.instance.props.message.author);
 				if (usertype) {
-					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue.props.children.slice(1), {name: "Popout"});
+					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue.props.children.slice(1), {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
 					if (index > -1) this.injectOwnerTag(children, e.instance.props.message.author, usertype, e.instance.props.compact ? 0 : 2, e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy);
 				}
 			}

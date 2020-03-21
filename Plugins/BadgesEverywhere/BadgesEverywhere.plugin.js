@@ -7,7 +7,7 @@ var BadgesEverywhere = (_ => {
 	return class BadgesEverywhere {
 		getName () {return "BadgesEverywhere";} 
 
-		getVersion () {return "1.5.3";}
+		getVersion () {return "1.5.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -15,7 +15,7 @@ var BadgesEverywhere = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Compact","Added a margin to add some spaces between badges and the message in compact mode"]]
+				"fixed":[["Messages Popout","Now works in popouts like the recent mentions popout"]]
 			};
 
 			this.patchedModules = {
@@ -250,7 +250,7 @@ var BadgesEverywhere = (_ => {
 
 		processMessageHeader (e) {
 			if (e.instance.props.message && BDFDB.DataUtils.get(this, "settings", "showInChat")) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue.props.children.slice(1), {name: "Popout"});
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue.props.children.slice(1), {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
 				if (index > -1) this.injectBadges(e.instance, children, e.instance.props.message.author, "chat");
 			}
 		}
