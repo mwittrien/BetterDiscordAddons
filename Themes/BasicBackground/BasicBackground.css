@@ -3578,6 +3578,12 @@ body:before {
 .checkbox-3kaeSU .checkboxInner-3yjcPe .checkboxElement-1qV33p:checked + span:after {
 	border-color: rgb(var(--fontwhite1));
 }
+.button-1I8KM5 {												/* contextmenu			quick reaction button				*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+.button-1I8KM5:hover {
+	background-color: rgb(var(--vaccentcolor));
+}
 
 /* ----		13.2.	USERPOPOUT						---- */
 
