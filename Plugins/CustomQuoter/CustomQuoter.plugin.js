@@ -36,7 +36,7 @@ var CustomQuoter = (_ => {
 	return class CustomQuoter {
 		getName () {return "CustomQuoter";}
 
-		getVersion () {return "1.0.6";}
+		getVersion () {return "1.0.7";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -44,7 +44,8 @@ var CustomQuoter = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Placeholders","$authorName will now use the server nickname of a user if one is set, $authorAccount was added which gets replaced by ACCOUNTNAME#DISCRIMINATOR (User#1234)"]]
+				"improved":[["Placeholders","$authorName will now use the server nickname of a user if one is set, $authorAccount was added which gets replaced by ACCOUNTNAME#DISCRIMINATOR (User#1234)"]],
+				"fixed":[["$authorAccount","$authorAccount works properly now"]]
 			};
 		}
 		
@@ -233,7 +234,7 @@ var CustomQuoter = (_ => {
 				.replace("$mention", settings.ignoreMentionInDM && channel.isDM() ? "" : `<@!${message.author.id}>`)
 				.replace("$link", `https://discordapp.com/channels/${guild.id}/${channel.id}/${message.id}`)
 				.replace("$authorName", member && member.nick || message.author.username || "")
-				.replace("$authorAccount", `${message.author.username}#message.author.discriminator` || "")
+				.replace("$authorAccount", `${message.author.username}#${message.author.discriminator}`)
 				.replace("$authorId", message.author.id || "")
 				.replace("$channelName", channel.name || "")
 				.replace("$channelId", channel.id || "")
