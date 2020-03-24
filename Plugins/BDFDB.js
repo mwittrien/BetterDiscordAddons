@@ -3835,46 +3835,48 @@
 		if (!folderbutton) return;
 		let header = folderbutton.parentElement.querySelector("h2");
 		if (header && header.innerText) {
-			let headertext = header.innerText.toLowerCase();
-			if (headertext === "plugins" || headertext === "themes") return headertext;
+			let headerText = header.innerText.toLowerCase();
+			if (headerText === "plugins" || headerText === "themes") return headerText;
 		}
 	};
 	BDFDB.BDUtils.isPluginEnabled = function (pluginName) {
-		if (!pluginName) return false;
-		return BdApi.isPluginEnabled(pluginName);
+		if (BdApi.Plugins && typeof BdApi.Plugins.Plugins == "function") return BdApi.Plugins.isEnabled(pluginName);
+		else if (typeof BdApi.isPluginEnabled == "function") return BdApi.isPluginEnabled(pluginName);
 	};
-	BDFDB.BDUtils.enablePlugin = function (pluginName, showToast = true) {
-		if (BdApi.Plugins) BdApi.Plugins.manager.enable(pluginName, !showToast);
+	BDFDB.BDUtils.enablePlugin = function (pluginName) {
+		if (BdApi.Plugins && typeof BdApi.Plugins.enable == "function") BdApi.Plugins.enable(pluginName);
 		else if (window.pluginModule) window.pluginModule.startPlugin(pluginName);
 	};
-	BDFDB.BDUtils.disablePlugin = function (pluginName, showToast = true) {
-		if (BdApi.Plugins) BdApi.Plugins.manager.disable(pluginName, !showToast);
+	BDFDB.BDUtils.disablePlugin = function (pluginName) {
+		if (BdApi.Plugins && typeof BdApi.Plugins.disable == "function") BdApi.Plugins.disable(pluginName);
 		else if (window.pluginModule) window.pluginModule.stopPlugin(pluginName);
 	};
-	BDFDB.BDUtils.getPlugin = function (pluginName, hasToBeEnabled = false, overHeader = false) {
-		if (!hasToBeEnabled || BDFDB.BDUtils.isPluginEnabled(pluginName)) {
-			if (overHeader) {
-				if (BdApi.Plugins && BdApi.Plugins.list) return BdApi.Plugins.list[pluginName];
-				else if (window.bdplugins) window.bdplugins[pluginName];
+	BDFDB.BDUtils.getPlugin = function (pluginName, hasToBeEnabled = false, overHead = false) {
+		if (!hasToBeEnabled || BDFDB.BDUtils.isPluginEnabled(pluginName)) {	
+			if (BdApi.Plugins.get && typeof BdApi.Plugins.get == "function") {
+				let plugin = BdApi.Plugins.get(pluginName);
+				if (overHead) return plugin ? {filename: LibraryRequires.fs.existsSync(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), `${pluginName}.plugin.js`)) ? `${pluginName}.plugin.js` : null, id: pluginName, name: pluginName, plugin: plugin} : null;
+				else return plugin;
 			}
-			else return BdApi.getPlugin(pluginName);
+			else if (window.bdplugins) overHead ? window.bdplugins[pluginName] : (window.bdplugins[pluginName] || {}).plugin;
 		}
 		return null;
 	};
 	BDFDB.BDUtils.isThemeEnabled = function (themeName) {
-		return BdApi.isThemeEnabled(themeName);
+		if (BdApi.Themes && typeof BdApi.Themes.isEnabled == "function") return BdApi.Themes.isEnabled(themeName);
+		else if (typeof BdApi.isThemeEnabled == "function") return BdApi.isThemeEnabled(themeName);
 	};
-	BDFDB.BDUtils.enableTheme = function (themeName, showToast = true) {
-		if (BdApi.Themes) BdApi.Themes.manager.enable(themeName, !showToast);
+	BDFDB.BDUtils.enableTheme = function (themeName) {
+		if (BdApi.Themes && typeof BdApi.Themes.enable == "function") BdApi.Themes.enable(themeName);
 		else if (window.themeModule) window.themeModule.enableTheme(themeName);
 	};
-	BDFDB.BDUtils.disableTheme = function (themeName, showToast = true) {
-		if (BdApi.Themes) BdApi.Themes.manager.disable(themeName, !showToast);
+	BDFDB.BDUtils.disableTheme = function (themeName) {
+		if (BdApi.Themes && typeof BdApi.Themes.disable == "function") BdApi.Themes.disable(themeName);
 		else if (window.themeModule) window.themeModule.disableTheme(themeName);
 	};
 	BDFDB.BDUtils.getTheme = function (themeName, hasToBeEnabled = false) {
 		if (!hasToBeEnabled || BDFDB.BDUtils.isThemeEnabled(themeName)) {
-			if (BdApi.Themes && BdApi.Themes.list) return BdApi.Themes.list[themeName];
+			if (BdApi.Themes && typeof BdApi.Themes.get == "function") return BdApi.Themes.get(themeName);
 			else if (window.bdthemes) window.bdthemes[themeName];
 		}
 		return null;
