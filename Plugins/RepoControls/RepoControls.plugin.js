@@ -6,7 +6,7 @@ var RepoControls = (_ => {
 	return class RepoControls {
 		getName () {return "RepoControls";}
 
-		getVersion () {return "1.3.7";}
+		getVersion () {return "1.3.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -15,10 +15,9 @@ var RepoControls = (_ => {
 		constructor () {
 			this.patchedModules = {
 				after: {
-					V2C_List: "render",
+					V2C_ContentColumn: "render",
 					V2C_PluginCard: "render",
 					V2C_ThemeCard: "render",
-					V2C_ContentColumn: "render"
 				}
 			};
 		}
@@ -136,7 +135,7 @@ var RepoControls = (_ => {
 
 		processV2CThemeCard (e) {
 			if (!e.instance.props.RCdata) return;
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", "bda-controls"]]});
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN._repocontrols]]});
 			if (index > -1) {
 				let settings = BDFDB.DataUtils.get(this, "settings");
 				if (settings.addDeleteButton) children[index].props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
@@ -172,7 +171,7 @@ var RepoControls = (_ => {
 						}
 					})
 				}));
-				this.highlightSearchKey(e);
+				this.highlightsearchKey(e);
 			}
 		}
 		
@@ -231,50 +230,51 @@ var RepoControls = (_ => {
 			}));
 		}
 
-		sortEntries (instance, parent, searchkey = parent.props.searchkey) {
+		sortEntries (instance, parent, searchKey = parent.props.searchKey) {
 			if (instance) instance = BDFDB.ReactUtils.findOwner(instance, {key: ["plugin-list", "theme-list"]});
 			
 			let sortings = BDFDB.DataUtils.get(this, "sortings");
 			
-			parent.props.searchkey = (searchkey || "").toUpperCase();
+			parent.props.searchKey = (searchKey || "").toUpperCase();
 			
 			if (!parent.props.entries) parent.props.entries = parent.props.children;
 			
 			let entries = [].concat(parent.props.entries);
 			
 			for (let i in entries) {
-				let entry = entries[i];
-				if (!entry.props.RCdata) {
-					entry.props.RCdata = {};
-					if (entry.props.plugin) {
-						["name", "author", "version", "description"].forEach(key => {
-							let funcname = "get" + key.charAt(0).toUpperCase() + key.slice(1);
-							let value = typeof entry.props.plugin[funcname] == "function" ? entry.props.plugin[funcname]() : "";
-							if (value) entry.props.RCdata[key] = value.toUpperCase().trim();
-							else entry.props.RCdata[key] = "";
-						});
-						entry.props.RCdata.type = "plugin";
-						entry.props.RCdata.enabled = BDFDB.BDUtils.isPluginEnabled(entry.key) ? 1 : 2;
-						let loadedPlugin = BDFDB.BDUtils.getPlugin(entry.key, false, true);
-						entry.props.RCdata.path = loadedPlugin && typeof loadedPlugin.filename == "string" && BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), loadedPlugin.filename);
+				let entry = BDFDB.ReactUtils.findChild(entries[i], {props: ["plugin", "theme"], someProps: true});
+				if (entry) {
+					if (!entry.props.RCdata) {
+						entry.props.RCdata = {};
+						if (entry.props.plugin) {
+							["name", "author", "version", "description"].forEach(key => {
+								let funcName = "get" + BDFDB.LibraryModules.StringUtils.upperCaseFirstChar(key);
+								let value = typeof entry.props.plugin[funcName] == "function" ? entry.props.plugin[funcName]() : "";
+								entry.props.RCdata[key] = value && value.toUpperCase().trim() || "";
+							});
+							entry.props.RCdata.type = "plugin";
+							entry.props.RCdata.enabled = BDFDB.BDUtils.isPluginEnabled(entry.key) ? 1 : 2;
+							let loadedPlugin = BDFDB.BDUtils.getPlugin(entry.key, false, true);
+							entry.props.RCdata.path = loadedPlugin && typeof loadedPlugin.filename == "string" && BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), loadedPlugin.filename);
+						}
+						else if (entry.props.theme) {
+							["name", "author", "version", "description"].forEach(key => {
+								entry.props.RCdata[key] = entry.props.theme[key] && entry.props.theme[key].toUpperCase().trim() || "";
+							});
+							entry.props.RCdata.type = "theme";
+							entry.props.RCdata.enabled = BDFDB.BDUtils.isThemeEnabled(entry.key) ? 1 : 2;
+							let loadedTheme = BDFDB.BDUtils.getTheme(entry.key, false);
+							entry.props.RCdata.path = loadedTheme && typeof loadedTheme.filename == "string" && BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getThemesFolder(), loadedTheme.filename);
+						}
+						let stats = entry.props.RCdata.path && BDFDB.LibraryRequires.fs.statSync(entry.props.RCdata.path);
+						entry.props.RCdata.adddate = stats && stats.atime.getTime();
+						entry.props.RCdata.moddate = stats && stats.mtime.getTime();
+						entry.props.RCdata.search = [entry.props.RCdata.name, entry.props.RCdata.author, entry.props.RCdata.description].filter(n => n).join(" ");
 					}
-					else if (entry.props.theme) {
-						["name", "author", "version", "description"].forEach(key => {
-							if (entry.props.theme[key]) entry.props.RCdata[key] = entry.props.theme[key].toUpperCase().trim();
-							else entry.props.RCdata[key] = "";
-						});
-						entry.props.RCdata.type = "theme";
-						entry.props.RCdata.enabled = BDFDB.BDUtils.isThemeEnabled(entry.key) ? 1 : 2;
-						let loadedTheme = BDFDB.BDUtils.getTheme(entry.key, false);
-						entry.props.RCdata.path = loadedTheme && typeof loadedTheme.filename == "string" && BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getThemesFolder(), loadedTheme.filename);
-					}
-					let stats = entry.props.RCdata.path && BDFDB.LibraryRequires.fs.statSync(entry.props.RCdata.path);
-					entry.props.RCdata.adddate = stats && stats.atime.getTime();
-					entry.props.RCdata.moddate = stats && stats.mtime.getTime();
-					entry.props.RCdata.search = [entry.props.RCdata.name, entry.props.RCdata.author, entry.props.RCdata.description].filter(n => n).join(" ");
+					entry.props.RCdata.searchKey = parent.props.searchKey;
+					if (parent.props.searchKey && entry.props.RCdata.search.indexOf(parent.props.searchKey) == -1) entries[i] = null;
+					else entries[i].props.RCdata = entry.props.RCdata;
 				}
-				entry.props.RCdata.searchkey = parent.props.searchkey;
-				if (parent.props.searchkey && entry.props.RCdata.search.indexOf(parent.props.searchkey) == -1) entries[i] = null;
 			}
 			
 			let order = sortings.order == "asc" ? -1 : 1;
@@ -290,13 +290,13 @@ var RepoControls = (_ => {
 			}
 		}
 		
-		highlightSearchKey (e) {
-			if (!e.instance.props.RCdata.searchkey) return;
+		highlightsearchKey (e) {
+			if (!e.instance.props.RCdata.searchKey) return;
 			[BDFDB.disCN._reponame, BDFDB.disCN._repoauthor, BDFDB.disCN._repodescription].forEach(className => {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", className]]});
 				if (index > -1) {
 					let originalText = BDFDB.StringUtils.htmlEscape(children[index].props.children);
-					let highlightedText = BDFDB.StringUtils.highlight(originalText, e.instance.props.RCdata.searchkey);
+					let highlightedText = BDFDB.StringUtils.highlight(originalText, e.instance.props.RCdata.searchKey);
 					if (highlightedText != originalText) children[index].props.children = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(highlightedText));
 				}
 			});
