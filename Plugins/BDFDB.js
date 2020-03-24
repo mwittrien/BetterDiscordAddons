@@ -122,15 +122,15 @@
 		if (typeof plugin.setLabelsByLanguage === "function" || typeof plugin.changeLanguageStrings === "function") {
 			if (document.querySelector("html").lang) translate();
 			else {
-				var translateinterval = BDFDB.TimeUtils.interval(_ => {
+				let translateInterval = BDFDB.TimeUtils.interval(_ => {
 					if (document.querySelector("html").lang) {
-						BDFDB.TimeUtils.clear(translateinterval);
+						BDFDB.TimeUtils.clear(translateInterval);
 						translate();
 					}
 				}, 100);
 			}
 			function translate() {
-				var language = BDFDB.LanguageUtils.getLanguage();
+				let language = BDFDB.LanguageUtils.getLanguage();
 				if (typeof plugin.setLabelsByLanguage === "function") plugin.labels = plugin.setLabelsByLanguage(language.id);
 				if (typeof plugin.changeLanguageStrings === "function") plugin.changeLanguageStrings();
 				BDFDB.LogUtils.log(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_translated", language.ownlang), plugin.name);
@@ -138,77 +138,97 @@
 		}
 	};
 	BDFDB.PluginUtils.checkUpdate = function (pluginName, url) {
-		if (!pluginName || !url) return;
-		LibraryRequires.request(url, (error, response, result) => {
-			if (error) return;
-			var newversion = result.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
-			if (!newversion) return;
-			if (BDFDB.NumberUtils.getVersionDifference(newversion[0], window.PluginUpdates.plugins[url].version) > 0.2) {
-				BDFDB.NotificationUtils.toast(`${pluginName} will be force updated, because your version is heavily outdated.`, {type:"warn", nopointer:true, selector:"plugin-forceupdate-toast"});
-				BDFDB.PluginUtils.downloadUpdate(pluginName, url);
-			}
-			else if (BDFDB.NumberUtils.compareVersions(newversion[0], window.PluginUpdates.plugins[url].version)) BDFDB.PluginUtils.showUpdateNotice(pluginName, url);
-			else BDFDB.PluginUtils.removeUpdateNotice(pluginName);
+		if (pluginName && url) return new Promise(callback => {
+			LibraryRequires.request(url, (error, response, result) => {
+				if (error) return callback(null);
+				let newVersion = result.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
+				if (!newVersion) return callback(null);
+				if (BDFDB.NumberUtils.getVersionDifference(newVersion[0], window.PluginUpdates.plugins[url].version) > 0.2) {
+					BDFDB.NotificationUtils.toast(`${pluginName} will be force updated, because your version is heavily outdated.`, {
+						type: "warn",
+						nopointer: true,
+						selector: "plugin-forceupdate-toast"
+					});
+					BDFDB.PluginUtils.downloadUpdate(pluginName, url);
+					return callback(2);
+				}
+				else if (BDFDB.NumberUtils.compareVersions(newVersion[0], window.PluginUpdates.plugins[url].version)) {
+					BDFDB.PluginUtils.showUpdateNotice(pluginName, url);
+					return callback(1);
+				}
+				else {
+					BDFDB.PluginUtils.removeUpdateNotice(pluginName);
+					return callback(0);
+				}
+			});
 		});
+		return new Promise(_ => {callback(null);});
 	};
 	BDFDB.PluginUtils.checkAllUpdates = function () {
-		for (let url in window.PluginUpdates.plugins) {
-			var plugin = window.PluginUpdates.plugins[url];
-			BDFDB.PluginUtils.checkUpdate(plugin.name, plugin.raw);
-		}
+		return new Promise(callback => {
+			let finished = 0, amount = 0;
+			for (let url in window.PluginUpdates.plugins) {
+				let plugin = window.PluginUpdates.plugins[url];
+				if (plugin) BDFDB.PluginUtils.checkUpdate(plugin.name, plugin.raw).then(state => {
+					finished++;
+					if (state == 1) amount++;
+					if (finished >= Object.keys(window.PluginUpdates.plugins).length) callback(amount);
+				});
+			}
+		});
 	};
 	BDFDB.PluginUtils.showUpdateNotice = function (pluginName, url) {
 		if (!pluginName || !url) return;
-		var updatenotice = document.querySelector("#pluginNotice");
-		if (!updatenotice) {
-			updatenotice = BDFDB.NotificationUtils.notice(`The following plugins need to be updated:&nbsp;&nbsp;<strong id="outdatedPlugins"></strong>`, {html:true, id:"pluginNotice", type:"info", btn:!BDFDB.BDUtils.isAutoLoadEnabled() ? "Reload" : "", customicon:`<svg height="100%" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="100%" version="1.1" viewBox="0 0 2000 2000"><metadata /><defs><filter id="shadow1"><feDropShadow dx="20" dy="0" stdDeviation="20" flood-color="rgba(0,0,0,0.35)"/></filter><filter id="shadow2"><feDropShadow dx="15" dy="0" stdDeviation="20" flood-color="rgba(255,255,255,0.15)"/></filter><filter id="shadow3"><feDropShadow dx="10" dy="0" stdDeviation="20" flood-color="rgba(0,0,0,0.35)"/></filter></defs><g><path style="filter: url(#shadow3)" d="M1195.44+135.442L1195.44+135.442L997.6+136.442C1024.2+149.742+1170.34+163.542+1193.64+179.742C1264.34+228.842+1319.74+291.242+1358.24+365.042C1398.14+441.642+1419.74+530.642+1422.54+629.642L1422.54+630.842L1422.54+632.042C1422.54+773.142+1422.54+1228.14+1422.54+1369.14L1422.54+1370.34L1422.54+1371.54C1419.84+1470.54+1398.24+1559.54+1358.24+1636.14C1319.74+1709.94+1264.44+1772.34+1193.64+1821.44C1171.04+1837.14+1025.7+1850.54+1000+1863.54L1193.54+1864.54C1539.74+1866.44+1864.54+1693.34+1864.54+1296.64L1864.54+716.942C1866.44+312.442+1541.64+135.442+1195.44+135.442Z" fill="#171717" opacity="1"/><path style="filter: url(#shadow2)" d="M1695.54+631.442C1685.84+278.042+1409.34+135.442+1052.94+135.442L361.74+136.442L803.74+490.442L1060.74+490.442C1335.24+490.442+1335.24+835.342+1060.74+835.342L1060.74+1164.84C1150.22+1164.84+1210.53+1201.48+1241.68+1250.87C1306.07+1353+1245.76+1509.64+1060.74+1509.64L361.74+1863.54L1052.94+1864.54C1409.24+1864.54+1685.74+1721.94+1695.54+1368.54C1695.54+1205.94+1651.04+1084.44+1572.64+999.942C1651.04+915.542+1695.54+794.042+1695.54+631.442Z" fill="#3E82E5" opacity="1"/><path style="filter: url(#shadow1)" d="M1469.25+631.442C1459.55+278.042+1183.05+135.442+826.65+135.442L135.45+135.442L135.45+1004C135.45+1004+135.427+1255.21+355.626+1255.21C575.825+1255.21+575.848+1004+575.848+1004L577.45+490.442L834.45+490.442C1108.95+490.442+1108.95+835.342+834.45+835.342L664.65+835.342L664.65+1164.84L834.45+1164.84C923.932+1164.84+984.244+1201.48+1015.39+1250.87C1079.78+1353+1019.47+1509.64+834.45+1509.64L135.45+1509.64L135.45+1864.54L826.65+1864.54C1182.95+1864.54+1459.45+1721.94+1469.25+1368.54C1469.25+1205.94+1424.75+1084.44+1346.35+999.942C1424.75+915.542+1469.25+794.042+1469.25+631.442Z" fill="#FFFFFF" opacity="1"/></g></svg>`});
-			updatenotice.style.setProperty("display", "block", "important");
-			updatenotice.style.setProperty("visibility", "visible", "important");
-			updatenotice.style.setProperty("opacity", "1", "important");
-			updatenotice.querySelector(BDFDB.dotCN.noticedismiss).addEventListener("click", _ => {
+		let updateNotice = document.querySelector("#pluginNotice");
+		if (!updateNotice) {
+			updateNotice = BDFDB.NotificationUtils.notice(`The following plugins need to be updated:&nbsp;&nbsp;<strong id="outdatedPlugins"></strong>`, {html:true, id:"pluginNotice", type:"info", btn:!BDFDB.BDUtils.isAutoLoadEnabled() ? "Reload" : "", customicon:`<svg height="100%" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="100%" version="1.1" viewBox="0 0 2000 2000"><metadata /><defs><filter id="shadow1"><feDropShadow dx="20" dy="0" stdDeviation="20" flood-color="rgba(0,0,0,0.35)"/></filter><filter id="shadow2"><feDropShadow dx="15" dy="0" stdDeviation="20" flood-color="rgba(255,255,255,0.15)"/></filter><filter id="shadow3"><feDropShadow dx="10" dy="0" stdDeviation="20" flood-color="rgba(0,0,0,0.35)"/></filter></defs><g><path style="filter: url(#shadow3)" d="M1195.44+135.442L1195.44+135.442L997.6+136.442C1024.2+149.742+1170.34+163.542+1193.64+179.742C1264.34+228.842+1319.74+291.242+1358.24+365.042C1398.14+441.642+1419.74+530.642+1422.54+629.642L1422.54+630.842L1422.54+632.042C1422.54+773.142+1422.54+1228.14+1422.54+1369.14L1422.54+1370.34L1422.54+1371.54C1419.84+1470.54+1398.24+1559.54+1358.24+1636.14C1319.74+1709.94+1264.44+1772.34+1193.64+1821.44C1171.04+1837.14+1025.7+1850.54+1000+1863.54L1193.54+1864.54C1539.74+1866.44+1864.54+1693.34+1864.54+1296.64L1864.54+716.942C1866.44+312.442+1541.64+135.442+1195.44+135.442Z" fill="#171717" opacity="1"/><path style="filter: url(#shadow2)" d="M1695.54+631.442C1685.84+278.042+1409.34+135.442+1052.94+135.442L361.74+136.442L803.74+490.442L1060.74+490.442C1335.24+490.442+1335.24+835.342+1060.74+835.342L1060.74+1164.84C1150.22+1164.84+1210.53+1201.48+1241.68+1250.87C1306.07+1353+1245.76+1509.64+1060.74+1509.64L361.74+1863.54L1052.94+1864.54C1409.24+1864.54+1685.74+1721.94+1695.54+1368.54C1695.54+1205.94+1651.04+1084.44+1572.64+999.942C1651.04+915.542+1695.54+794.042+1695.54+631.442Z" fill="#3E82E5" opacity="1"/><path style="filter: url(#shadow1)" d="M1469.25+631.442C1459.55+278.042+1183.05+135.442+826.65+135.442L135.45+135.442L135.45+1004C135.45+1004+135.427+1255.21+355.626+1255.21C575.825+1255.21+575.848+1004+575.848+1004L577.45+490.442L834.45+490.442C1108.95+490.442+1108.95+835.342+834.45+835.342L664.65+835.342L664.65+1164.84L834.45+1164.84C923.932+1164.84+984.244+1201.48+1015.39+1250.87C1079.78+1353+1019.47+1509.64+834.45+1509.64L135.45+1509.64L135.45+1864.54L826.65+1864.54C1182.95+1864.54+1459.45+1721.94+1469.25+1368.54C1469.25+1205.94+1424.75+1084.44+1346.35+999.942C1424.75+915.542+1469.25+794.042+1469.25+631.442Z" fill="#FFFFFF" opacity="1"/></g></svg>`});
+			updateNotice.style.setProperty("display", "block", "important");
+			updateNotice.style.setProperty("visibility", "visible", "important");
+			updateNotice.style.setProperty("opacity", "1", "important");
+			updateNotice.querySelector(BDFDB.dotCN.noticedismiss).addEventListener("click", _ => {
 				BDFDB.DOMUtils.remove(".update-clickme-tooltip");
 			});
-			let reloadbutton = updatenotice.querySelector(BDFDB.dotCN.noticebutton);
-			if (reloadbutton) {
-				BDFDB.DOMUtils.toggle(reloadbutton, true);
-				reloadbutton.addEventListener("click", _ => {
+			let reloadButton = updateNotice.querySelector(BDFDB.dotCN.noticebutton);
+			if (reloadButton) {
+				BDFDB.DOMUtils.toggle(reloadButton, true);
+				reloadButton.addEventListener("click", _ => {
 					LibraryRequires.electron.remote.getCurrentWindow().reload();
 				});
-				reloadbutton.addEventListener("mouseenter", _ => {
-					if (window.PluginUpdates.downloaded) BDFDB.TooltipUtils.create(reloadbutton, window.PluginUpdates.downloaded.join(", "), {type:"bottom", selector:"update-notice-tooltip", style: "max-width: 420px"});
+				reloadButton.addEventListener("mouseenter", _ => {
+					if (window.PluginUpdates.downloaded) BDFDB.TooltipUtils.create(reloadButton, window.PluginUpdates.downloaded.join(", "), {type:"bottom", selector:"update-notice-tooltip", style: "max-width: 420px"});
 				});
 			}
 		}
-		if (updatenotice) {
-			var updatenoticelist = updatenotice.querySelector("#outdatedPlugins");
-			if (updatenoticelist && !updatenoticelist.querySelector(`#${pluginName}-notice`)) {
-				if (updatenoticelist.querySelector("span")) updatenoticelist.appendChild(BDFDB.DOMUtils.create(`<span class="separator">, </span>`));
-				var updateentry = BDFDB.DOMUtils.create(`<span id="${pluginName}-notice">${pluginName}</span>`);
-				updateentry.addEventListener("click", _ => {BDFDB.PluginUtils.downloadUpdate(pluginName, url);});
-				updatenoticelist.appendChild(updateentry);
-				if (!document.querySelector(".update-clickme-tooltip")) BDFDB.TooltipUtils.create(updatenoticelist, "Click us!", {type:"bottom", selector:"update-clickme-tooltip", delay:500});
+		if (updateNotice) {
+			let updateNoticeList = updateNotice.querySelector("#outdatedPlugins");
+			if (updateNoticeList && !updateNoticeList.querySelector(`#${pluginName}-notice`)) {
+				if (updateNoticeList.querySelector("span")) updateNoticeList.appendChild(BDFDB.DOMUtils.create(`<span class="separator">, </span>`));
+				let updateEntry = BDFDB.DOMUtils.create(`<span id="${pluginName}-notice">${pluginName}</span>`);
+				updateEntry.addEventListener("click", _ => {BDFDB.PluginUtils.downloadUpdate(pluginName, url);});
+				updateNoticeList.appendChild(updateEntry);
+				if (!document.querySelector(".update-clickme-tooltip")) BDFDB.TooltipUtils.create(updateNoticeList, "Click us!", {type:"bottom", selector:"update-clickme-tooltip", delay:500});
 			}
 		}
 	};
-	BDFDB.PluginUtils.removeUpdateNotice = function (pluginName, updatenotice = document.querySelector("#pluginNotice")) {
-		if (!pluginName || !updatenotice) return;
-		var updatenoticelist = updatenotice.querySelector("#outdatedPlugins");
-		if (updatenoticelist) {
-			var noticeentry = updatenoticelist.querySelector(`#${pluginName}-notice`);
-			if (noticeentry) {
-				var nextsibling = noticeentry.nextSibling;
-				var prevsibling = noticeentry.prevSibling;
-				if (nextsibling && BDFDB.DOMUtils.containsClass(nextsibling, "separator")) nextsibling.remove();
-				else if (prevsibling && BDFDB.DOMUtils.containsClass(prevsibling, "separator")) prevsibling.remove();
-				noticeentry.remove();
+	BDFDB.PluginUtils.removeUpdateNotice = function (pluginName, updateNotice = document.querySelector("#pluginNotice")) {
+		if (!pluginName || !updateNotice) return;
+		let updateNoticeList = updateNotice.querySelector("#outdatedPlugins");
+		if (updateNoticeList) {
+			let noticeEntry = updateNoticeList.querySelector(`#${pluginName}-notice`);
+			if (noticeEntry) {
+				let nextSibling = noticeEntry.nextSibling;
+				let prevSibling = noticeEntry.prevSibling;
+				if (nextSibling && BDFDB.DOMUtils.containsClass(nextSibling, "separator")) nextSibling.remove();
+				else if (prevSibling && BDFDB.DOMUtils.containsClass(prevSibling, "separator")) prevSibling.remove();
+				noticeEntry.remove();
 			}
-			if (!updatenoticelist.querySelector("span")) {
-				var reloadbutton = updatenotice.querySelector(BDFDB.dotCN.noticebutton);
-				if (reloadbutton) {
-					updatenotice.querySelector(".notice-message").innerText = "To finish updating you need to reload.";
-					BDFDB.DOMUtils.toggle(reloadbutton, false);
+			if (!updateNoticeList.querySelector("span")) {
+				let reloadButton = updateNotice.querySelector(BDFDB.dotCN.noticebutton);
+				if (reloadButton) {
+					updateNotice.querySelector(".notice-message").innerText = "To finish updating you need to reload.";
+					BDFDB.DOMUtils.toggle(reloadButton, false);
 				}
-				else updatenotice.querySelector(BDFDB.dotCN.noticedismiss).click();
+				else updateNotice.querySelector(BDFDB.dotCN.noticedismiss).click();
 			}
 		}
 	};
@@ -217,33 +237,33 @@
 		LibraryRequires.request(url, (error, response, result) => {
 			if (error) return BDFDB.LogUtils.warn("Unable to get update for " + pluginName);
 			BDFDB.InternalData.creationTime = 0;
-			var newversion = result.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
-			newversion = newversion.toString().replace(/['"]/g, "");
+			let newVersion = result.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
+			newVersion = newVersion.toString().replace(/['"]/g, "");
 			LibraryRequires.fs.writeFileSync(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), url.split("/").slice(-1)[0]), result);
-			BDFDB.NotificationUtils.toast(`${pluginName} v${window.PluginUpdates.plugins[url].version} has been replaced by ${pluginName} v${newversion}.`, {nopointer:true, selector:"plugin-updated-toast"});
-			var updatenotice = document.querySelector("#pluginNotice");
-			if (updatenotice) {
-				if (updatenotice.querySelector(BDFDB.dotCN.noticebutton)) {
-					window.PluginUpdates.plugins[url].version = newversion;
+			BDFDB.NotificationUtils.toast(`${pluginName} v${window.PluginUpdates.plugins[url].version} has been replaced by ${pluginName} v${newVersion}.`, {nopointer:true, selector:"plugin-updated-toast"});
+			let updateNotice = document.querySelector("#pluginNotice");
+			if (updateNotice) {
+				if (updateNotice.querySelector(BDFDB.dotCN.noticebutton)) {
+					window.PluginUpdates.plugins[url].version = newVersion;
 					if (!window.PluginUpdates.downloaded) window.PluginUpdates.downloaded = [];
 					if (!window.PluginUpdates.downloaded.includes(pluginName)) window.PluginUpdates.downloaded.push(pluginName);
 				}
-				BDFDB.PluginUtils.removeUpdateNotice(pluginName, updatenotice);
+				BDFDB.PluginUtils.removeUpdateNotice(pluginName, updateNotice);
 			}
 		});
 	};
 	BDFDB.PluginUtils.checkChangeLog = function (plugin) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !plugin.changelog) return;
-		var changelog = BDFDB.DataUtils.load(plugin, "changelog");
-		if (!changelog.currentversion || BDFDB.NumberUtils.compareVersions(plugin.version, changelog.currentversion)) {
-			changelog.currentversion = plugin.version;
-			BDFDB.DataUtils.save(changelog, plugin, "changelog");
+		let changeLog = BDFDB.DataUtils.load(plugin, "changelog");
+		if (!changeLog.currentversion || BDFDB.NumberUtils.compareVersions(plugin.version, changeLog.currentversion)) {
+			changeLog.currentversion = plugin.version;
+			BDFDB.DataUtils.save(changeLog, plugin, "changelog");
 			BDFDB.PluginUtils.openChangeLog(plugin);
 		}
 	};
 	BDFDB.PluginUtils.openChangeLog = function (plugin) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !plugin.changelog) return;
-		var changeLogHTML = "", headers = {
+		let changeLogHTML = "", headers = {
 			added: "New Features",
 			fixed: "Bug Fixes",
 			improved: "Improvements",
@@ -251,9 +271,9 @@
 		};
 		for (let type in plugin.changelog) {
 			type = type.toLowerCase();
-			var classname = BDFDB.disCN["changelog" + type];
-			if (classname) {
-				changeLogHTML += `<h1 class="${classname} ${BDFDB.disCN.margintop20}"${changeLogHTML.indexOf("<h1") == -1 ? `style="margin-top: 0px !important;"` : ""}>${headers[type]}</h1><ul>`;
+			let className = BDFDB.disCN["changelog" + type];
+			if (className) {
+				changeLogHTML += `<h1 class="${className} ${BDFDB.disCN.margintop20}"${changeLogHTML.indexOf("<h1") == -1 ? `style="margin-top: 0px !important;"` : ""}>${headers[type]}</h1><ul>`;
 				for (let log of plugin.changelog[type]) changeLogHTML += `<li><strong>${log[0]}</strong>${log[1] ? (": " + log[1] + ".") : ""}</li>`;
 				changeLogHTML += `</ul>`
 			}
@@ -263,29 +283,29 @@
 	BDFDB.PluginUtils.addLoadingIcon = function (icon) {
 		if (!Node.prototype.isPrototypeOf(icon)) return;
 		BDFDB.DOMUtils.addClass(icon, BDFDB.disCN.loadingicon);
-		let loadingiconwrapper = document.querySelector(BDFDB.dotCN.app + ">" + BDFDB.dotCN.loadingiconwrapper);
-		if (!loadingiconwrapper) {
-			loadingiconwrapper = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.loadingiconwrapper}"></div>`);
-			document.querySelector(BDFDB.dotCN.app).appendChild(loadingiconwrapper);
-			let killObserver = new MutationObserver(changes => {if (!loadingiconwrapper.firstElementChild) BDFDB.DOMUtils.remove(loadingiconwrapper);});
-			killObserver.observe(loadingiconwrapper, {childList:true});
+		let loadingIconWrapper = document.querySelector(BDFDB.dotCN.app + ">" + BDFDB.dotCN.loadingIconWrapper);
+		if (!loadingIconWrapper) {
+			loadingIconWrapper = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.loadingIconWrapper}"></div>`);
+			document.querySelector(BDFDB.dotCN.app).appendChild(loadingIconWrapper);
+			let killObserver = new MutationObserver(changes => {if (!loadingIconWrapper.firstElementChild) BDFDB.DOMUtils.remove(loadingIconWrapper);});
+			killObserver.observe(loadingIconWrapper, {childList:true});
 		}
-		loadingiconwrapper.appendChild(icon);
+		loadingIconWrapper.appendChild(icon);
 	};
 	BDFDB.PluginUtils.createSettingsPanel = function (plugin, children) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !children || (!BDFDB.ReactUtils.isValidElement(children) && !BDFDB.ArrayUtils.is(children)) || (BDFDB.ArrayUtils.is(children) && !children.length)) return;
-		let settingspanel = BDFDB.DOMUtils.create(`<div class="${plugin.name}-settings ${BDFDB.disCN.settingspanel}"></div>`);
+		let settingsPanel = BDFDB.DOMUtils.create(`<div class="${plugin.name}-settings ${BDFDB.disCN.settingspanel}"></div>`);
 		BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsPanel, {
 			key: `${plugin.name}-settingspanel`,
 			title: plugin.name,
 			children
-		}), settingspanel);
-		return settingspanel;
+		}), settingsPanel);
+		return settingsPanel;
 	};
-	BDFDB.PluginUtils.refreshSettingsPanel = function (plugin, settingspanel, ...args) {
-		if (!BDFDB.ObjectUtils.is(plugin) || typeof plugin.getSettingsPanel != "function" || !Node.prototype.isPrototypeOf(settingspanel) || !settingspanel.parentElement) return;
-		settingspanel.parentElement.appendChild(plugin.getSettingsPanel(...args));
-		settingspanel.remove();
+	BDFDB.PluginUtils.refreshSettingsPanel = function (plugin, settingsPanel, ...args) {
+		if (!BDFDB.ObjectUtils.is(plugin) || typeof plugin.getSettingsPanel != "function" || !Node.prototype.isPrototypeOf(settingsPanel) || !settingsPanel.parentElement) return;
+		settingsPanel.parentElement.appendChild(plugin.getSettingsPanel(...args));
+		settingsPanel.remove();
 	};
 	InternalBDFDB.clearStartTimeout = function (plugin) {
 		if (!BDFDB.ObjectUtils.is(plugin)) return;
@@ -327,9 +347,9 @@
 		if (!BDFDB.ArrayUtils.is(plugin.observers[observer.name])) plugin.observers[observer.name] = [];
 		if (!observer.multi) for (let subinstance of plugin.observers[observer.name]) subinstance.disconnect();
 		if (observer.instance) plugin.observers[observer.name].push(observer.instance);
-		var instance = plugin.observers[observer.name][plugin.observers[observer.name].length - 1];
+		let instance = plugin.observers[observer.name][plugin.observers[observer.name].length - 1];
 		if (instance) {
-			var node = Node.prototype.isPrototypeOf(eleOrSelec) ? eleOrSelec : typeof eleOrSelec === "string" ? document.querySelector(eleOrSelec) : null;
+			let node = Node.prototype.isPrototypeOf(eleOrSelec) ? eleOrSelec : typeof eleOrSelec === "string" ? document.querySelector(eleOrSelec) : null;
 			if (node) instance.observe(node, config);
 		}
 	};
@@ -473,7 +493,7 @@
 	};
 	BDFDB.ListenerUtils.copyEvent = function (e, ele) {
 		if (!e || !e.constructor || !e.type) return e;
-		var ecopy = new e.constructor(e.type, e);
+		let ecopy = new e.constructor(e.type, e);
 		Object.defineProperty(ecopy, "originalEvent", {value: e});
 		Object.defineProperty(ecopy, "which", {value: e.which});
 		Object.defineProperty(ecopy, "keyCode", {value: e.keyCode});
@@ -541,23 +561,23 @@
 		return toast;
 	};
 	BDFDB.NotificationUtils.desktop = function (parsedcontent, parsedoptions = {}) {
-		var queue = _ => {
+		const queue = _ => {
 			DesktopNotificationQueue.queue.push({parsedcontent, parsedoptions});
 			runqueue();
 		};
-		var runqueue = _ => {
+		const runqueue = _ => {
 			if (!DesktopNotificationQueue.running) {
-				var notification = DesktopNotificationQueue.queue.shift();
+				let notification = DesktopNotificationQueue.queue.shift();
 				if (notification) notify(notification.parsedcontent, notification.parsedoptions);
 			}
 		};
-		var notify = (content, options) => {
+		const notify = (content, options) => {
 			DesktopNotificationQueue.running = true;
-			var muted = options.silent;
+			let muted = options.silent;
 			options.silent = options.silent || options.sound ? true : false;
-			var notification = new Notification(content, options);
-			var audio = new Audio();
-			var timeout = BDFDB.TimeUtils.timeout(_ => {close();}, options.timeout ? options.timeout : 3000);
+			let notification = new Notification(content, options);
+			let audio = new Audio();
+			let timeout = BDFDB.TimeUtils.timeout(_ => {close();}, options.timeout ? options.timeout : 3000);
 			if (typeof options.click == "function") notification.onclick = _ => {
 				BDFDB.TimeUtils.clear(timeout);
 				close();
@@ -567,7 +587,7 @@
 				audio.src = options.sound;
 				audio.play();
 			}
-			var close = _ => {
+			const close = _ => {
 				audio.pause();
 				notification.close();
 				DesktopNotificationQueue.running = false;
@@ -580,17 +600,17 @@
 	};
 	BDFDB.NotificationUtils.notice = function (text, options = {}) {
 		if (!text) return;
-		var layers = document.querySelector(BDFDB.dotCN.layers);
+		let layers = document.querySelector(BDFDB.dotCN.layers);
 		if (!layers) return;
-		var id = BDFDB.NumberUtils.generateId(NotificationBars);
-		var notice = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.notice + BDFDB.disCN.noticewrapper}" notice-id="${id}"><div class="${BDFDB.disCN.noticedismiss}" style="height: 36px !important; position: absolute !important; top: 0 !important; right: 0 !important; left: unset !important;"></div><span class="notice-message"></span></div>`);
+		let id = BDFDB.NumberUtils.generateId(NotificationBars);
+		let notice = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.notice + BDFDB.disCN.noticewrapper}" notice-id="${id}"><div class="${BDFDB.disCN.noticedismiss}" style="height: 36px !important; position: absolute !important; top: 0 !important; right: 0 !important; left: unset !important;"></div><span class="notice-message"></span></div>`);
 		layers.parentElement.insertBefore(notice, layers);
-		var noticemessage = notice.querySelector(".notice-message");
+		let noticeMessage = notice.querySelector(".notice-message");
 		if (options.platform) for (let platform of options.platform.split(" ")) if (DiscordClasses["noticeicon" + platform]) {
 			let icon = BDFDB.DOMUtils.create(`<i class="${BDFDB.disCN["noticeicon" + platform]}"></i>`);
 			BDFDB.DOMUtils.addClass(icon, BDFDB.disCN.noticeplatformicon);
 			BDFDB.DOMUtils.removeClass(icon, BDFDB.disCN.noticeicon);
-			notice.insertBefore(icon, noticemessage);
+			notice.insertBefore(icon, noticeMessage);
 		}
 		if (options.customicon) {
 			let iconinner = BDFDB.DOMUtils.create(options.customicon)
@@ -599,41 +619,41 @@
 			else icon.appendChild(iconinner);
 			BDFDB.DOMUtils.addClass(icon, BDFDB.disCN.noticeplatformicon);
 			BDFDB.DOMUtils.removeClass(icon, BDFDB.disCN.noticeicon);
-			notice.insertBefore(icon, noticemessage);
+			notice.insertBefore(icon, noticeMessage);
 		}
 		if (options.btn || options.button) notice.appendChild(BDFDB.DOMUtils.create(`<button class="${BDFDB.disCNS.noticebutton + BDFDB.disCNS.titlesize14 + BDFDB.disCN.weightmedium}">${options.btn || options.button}</button>`));
 		if (options.id) notice.id = options.id.split(" ").join("");
 		if (options.selector) BDFDB.DOMUtils.addClass(notice, options.selector);
-		if (options.css) BDFDB.DOMUtils.appendLocalStyle("BDFDBcustomnotificationbar" + id, options.css);
+		if (options.css) BDFDB.DOMUtils.appendLocalStyle("BDFDBcustomNotificationBar" + id, options.css);
 		if (options.style) notice.style = options.style;
-		if (options.html === true) noticemessage.innerHTML = text;
+		if (options.html === true) noticeMessage.innerHTML = text;
 		else {
-			var link = document.createElement("a");
-			var newtext = [];
+			let link = document.createElement("a");
+			let newText = [];
 			for (let word of text.split(" ")) {
-				var encodedword = BDFDB.StringUtils.htmlEscape(word);
+				let encodedWord = BDFDB.StringUtils.htmlEscape(word);
 				link.href = word;
-				newtext.push(link.host && link.host !== window.location.host ? `<label class="${BDFDB.disCN.textlink}">${encodedword}</label>` : encodedword);
+				newText.push(link.host && link.host !== window.location.host ? `<label class="${BDFDB.disCN.textlink}">${encodedWord}</label>` : encodedWord);
 			}
-			noticemessage.innerHTML = newtext.join(" ");
+			noticeMessage.innerHTML = newText.join(" ");
 		}
-		var type = null;
+		let type = null;
 		if (options.type && !document.querySelector(BDFDB.dotCNS.chatbase + BDFDB.dotCN.noticestreamer)) {
 			if (type = BDFDB.disCN["notice" + options.type]) BDFDB.DOMUtils.addClass(notice, type);
 			if (options.type == "premium") {
-				var noticebutton = notice.querySelector(BDFDB.dotCN.noticebutton);
-				if (noticebutton) BDFDB.DOMUtils.addClass(noticebutton, BDFDB.disCN.noticepremiumaction);
-				BDFDB.DOMUtils.addClass(noticemessage, BDFDB.disCN.noticepremiumtext);
-				notice.insertBefore(BDFDB.DOMUtils.create(`<i class="${BDFDB.disCN.noticepremiumlogo}"></i>`), noticemessage);
+				let noticeButton = notice.querySelector(BDFDB.dotCN.noticebutton);
+				if (noticeButton) BDFDB.DOMUtils.addClass(noticeButton, BDFDB.disCN.noticepremiumaction);
+				BDFDB.DOMUtils.addClass(noticeMessage, BDFDB.disCN.noticepremiumtext);
+				notice.insertBefore(BDFDB.DOMUtils.create(`<i class="${BDFDB.disCN.noticepremiumlogo}"></i>`), noticeMessage);
 			}
 		}
 		if (!type) {
-			var comp = BDFDB.ColorUtils.convert(options.color, "RGBCOMP");
+			let comp = BDFDB.ColorUtils.convert(options.color, "RGBCOMP");
 			if (comp) {
-				var fontcolor = comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? "#000" : "#FFF";
-				var backgroundcolor = BDFDB.ColorUtils.convert(comp, "HEX");
-				var filter = comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? "brightness(0%)" : "brightness(100%)";
-				BDFDB.DOMUtils.appendLocalStyle("BDFDBcustomnotificationbarColorCorrection" + id, `${BDFDB.dotCN.noticewrapper}[notice-id="${id}"]{background-color:${backgroundcolor} !important;}${BDFDB.dotCN.noticewrapper}[notice-id="${id}"] .notice-message {color:${fontcolor} !important;}${BDFDB.dotCN.noticewrapper}[notice-id="${id}"] ${BDFDB.dotCN.noticebutton} {color:${fontcolor} !important;border-color:${BDFDB.ColorUtils.setAlpha(fontcolor,0.25,"RGBA")} !important;}${BDFDB.dotCN.noticewrapper}[notice-id="${id}"] ${BDFDB.dotCN.noticebutton}:hover {color:${backgroundcolor} !important;background-color:${fontcolor} !important;}${BDFDB.dotCN.noticewrapper}[notice-id="${id}"] ${BDFDB.dotCN.noticedismiss} {filter:${filter} !important;}`);
+				let fontColor = comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? "#000" : "#FFF";
+				let backgroundcolor = BDFDB.ColorUtils.convert(comp, "HEX");
+				let filter = comp[0] > 180 && comp[1] > 180 && comp[2] > 180 ? "brightness(0%)" : "brightness(100%)";
+				BDFDB.DOMUtils.appendLocalStyle("BDFDBcustomNotificationBarColorCorrection" + id, `${BDFDB.dotCN.noticewrapper}[notice-id="${id}"]{background-color:${backgroundcolor} !important;}${BDFDB.dotCN.noticewrapper}[notice-id="${id}"] .notice-message {color:${fontColor} !important;}${BDFDB.dotCN.noticewrapper}[notice-id="${id}"] ${BDFDB.dotCN.noticebutton} {color:${fontColor} !important;border-color:${BDFDB.ColorUtils.setAlpha(fontColor, 0.25, "RGBA")} !important;}${BDFDB.dotCN.noticewrapper}[notice-id="${id}"] ${BDFDB.dotCN.noticebutton}:hover {color:${backgroundcolor} !important;background-color:${fontColor} !important;}${BDFDB.dotCN.noticewrapper}[notice-id="${id}"] ${BDFDB.dotCN.noticedismiss} {filter:${filter} !important;}`);
 			}
 			else BDFDB.DOMUtils.addClass(notice, BDFDB.disCN.noticedefault);
 		}
@@ -641,19 +661,19 @@
 		notice.style.setProperty("min-width", "70vw", "important");
 		notice.style.setProperty("left", "unset", "important");
 		notice.style.setProperty("right", "unset", "important");
-		let sidemargin = ((BDFDB.DOMUtils.getWidth(document.body.firstElementChild) - BDFDB.DOMUtils.getWidth(notice))/2);
-		notice.style.setProperty("left", sidemargin + "px", "important");
-		notice.style.setProperty("right", sidemargin + "px", "important");
+		let sideMargin = ((BDFDB.DOMUtils.getWidth(document.body.firstElementChild) - BDFDB.DOMUtils.getWidth(notice))/2);
+		notice.style.setProperty("left", sideMargin + "px", "important");
+		notice.style.setProperty("right", sideMargin + "px", "important");
 		notice.style.setProperty("min-width", "unset", "important");
 		notice.style.setProperty("width", "unset", "important");
-		notice.style.setProperty("max-width", "calc(100vw - " + (sidemargin*2) + "px)", "important");
+		notice.style.setProperty("max-width", "calc(100vw - " + (sideMargin*2) + "px)", "important");
 		notice.querySelector(BDFDB.dotCN.noticedismiss).addEventListener("click", _ => {
 			notice.style.setProperty("overflow", "hidden", "important");
 			notice.style.setProperty("height", "0px", "important");
 			BDFDB.TimeUtils.timeout(_ => {
 				BDFDB.ArrayUtils.remove(NotificationBars, id);
-				BDFDB.DOMUtils.removeLocalStyle("BDFDBcustomnotificationbar" + id);
-				BDFDB.DOMUtils.removeLocalStyle("BDFDBcustomnotificationbarColorCorrection" + id);
+				BDFDB.DOMUtils.removeLocalStyle("BDFDBcustomNotificationBar" + id);
+				BDFDB.DOMUtils.removeLocalStyle("BDFDBcustomNotificationBarColorCorrection" + id);
 				notice.remove();
 			}, 500);
 		});
@@ -666,13 +686,13 @@
 	var Tooltips = [];
 	BDFDB.TooltipUtils = {};
 	BDFDB.TooltipUtils.create = function (anker, text, options = {}) {
-		let itemlayercontainer = document.querySelector(BDFDB.dotCN.appmount +  " > * > " + BDFDB.dotCN.itemlayercontainer);
-		if (!itemlayercontainer || (typeof text != "string" && !BDFDB.ObjectUtils.is(options.guild)) || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
+		let itemLayerContainer = document.querySelector(BDFDB.dotCN.appmount +  " > * > " + BDFDB.dotCN.itemlayercontainer);
+		if (!itemLayerContainer || (typeof text != "string" && !BDFDB.ObjectUtils.is(options.guild)) || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
 		let id = BDFDB.NumberUtils.generateId(Tooltips);
-		let itemlayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"></div></div>`);
-		itemlayercontainer.appendChild(itemlayer);
+		let itemLayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"></div></div>`);
+		itemLayerContainer.appendChild(itemLayer);
 		
-		let tooltip = itemlayer.firstElementChild;
+		let tooltip = itemLayer.firstElementChild;
 		
 		if (options.id) tooltip.id = options.id.split(" ").join("");
 		
@@ -694,7 +714,7 @@
 		}
 		if (style) tooltip.style = style;
 		if (typeof options.zIndex == "number") {
-			itemlayer.style.setProperty("z-index", options.zIndex, "important");
+			itemLayer.style.setProperty("z-index", options.zIndex, "important");
 			tooltip.style.setProperty("z-index", options.zIndex, "important");
 		}
 		if (customBackgroundColor) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltipcustom);
@@ -709,8 +729,8 @@
 			let streamOwnerIds = LibraryModules.StreamUtils.getAllApplicationStreams().filter(app => app.guildId === options.guild.id).map(app => app.ownerId);
 			let streamOwners = streamOwnerIds.map(ownerId => LibraryModules.UserStore.getUser(ownerId)).filter(n => n);
 			let connectedUsers = Object.keys(LibraryModules.VoiceUtils.getVoiceStates(options.guild.id)).map(userId => !streamOwnerIds.includes(userId) && BDFDB.LibraryModules.UserStore.getUser(userId)).filter(n => n);
-			let tooltiptext = text || options.guild.toString();
-			if (fontColorIsGradient) tooltiptext = `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(options.fontColor)} !important;">${BDFDB.StringUtils.htmlEscape(tooltiptext)}</span>`;
+			let tooltipText = text || options.guild.toString();
+			if (fontColorIsGradient) tooltipText = `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(options.fontColor)} !important;">${BDFDB.StringUtils.htmlEscape(tooltipText)}</span>`;
 			BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 				children: [
 					BDFDB.ReactUtils.createElement("div", {
@@ -723,7 +743,7 @@
 							}),
 							BDFDB.ReactUtils.createElement("span", {
 								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipguildnametext, (connectedUsers.length || streamOwners.length) && BDFDB.disCN.tooltipguildnametextlimitedsize),
-								children: fontColorIsGradient || options.html ? BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(tooltiptext)) : tooltiptext
+								children: fontColorIsGradient || options.html ? BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(tooltipText)) : tooltipText
 							})
 						]
 					}),
@@ -766,18 +786,18 @@
 		
 		tooltip.anker = anker;
 		
-		if (options.hide) BDFDB.DOMUtils.appendLocalStyle("BDFDBhideOtherTooltips" + id, `#app-mount ${BDFDB.dotCN.tooltip}:not([tooltip-id="${id}"]) {display: none !important;}`, itemlayercontainer);
+		if (options.hide) BDFDB.DOMUtils.appendLocalStyle("BDFDBhideOtherTooltips" + id, `#app-mount ${BDFDB.dotCN.tooltip}:not([tooltip-id="${id}"]) {display: none !important;}`, itemLayerContainer);
 					
-		let mouseleave = _ => {BDFDB.DOMUtils.remove(itemlayer);};
+		let mouseleave = _ => {BDFDB.DOMUtils.remove(itemLayer);};
 		anker.addEventListener("mouseleave", mouseleave);
 		
 		let observer = new MutationObserver(changes => changes.forEach(change => {
 			let nodes = Array.from(change.removedNodes);
-			if (nodes.indexOf(itemlayer) > -1 || nodes.indexOf(anker) > -1 || nodes.some(n => n.contains(anker))) {
+			if (nodes.indexOf(itemLayer) > -1 || nodes.indexOf(anker) > -1 || nodes.some(n => n.contains(anker))) {
 				BDFDB.ArrayUtils.remove(Tooltips, id);
 				observer.disconnect();
-				BDFDB.DOMUtils.remove(itemlayer);
-				BDFDB.DOMUtils.removeLocalStyle("BDFDBhideOtherTooltips" + id, itemlayercontainer);
+				BDFDB.DOMUtils.remove(itemLayer);
+				BDFDB.DOMUtils.removeLocalStyle("BDFDBhideOtherTooltips" + id, itemLayerContainer);
 				anker.removeEventListener("mouseleave", mouseleave);
 			}
 		}));
@@ -786,20 +806,20 @@
 		BDFDB.TooltipUtils.update(tooltip);
 		
 		if (options.delay) {
-			BDFDB.DOMUtils.toggle(itemlayer);
-			BDFDB.TimeUtils.timeout(_ => {BDFDB.DOMUtils.toggle(itemlayer);}, options.delay);
+			BDFDB.DOMUtils.toggle(itemLayer);
+			BDFDB.TimeUtils.timeout(_ => {BDFDB.DOMUtils.toggle(itemLayer);}, options.delay);
 		}
-		return itemlayer;
+		return itemLayer;
 	};
 	BDFDB.TooltipUtils.update = function (tooltip) {
 		if (!Node.prototype.isPrototypeOf(tooltip)) return;
-		let itemlayer = BDFDB.DOMUtils.getParent(BDFDB.dotCN.itemlayer, tooltip);
-		if (!Node.prototype.isPrototypeOf(itemlayer)) return;
-		tooltip = itemlayer.querySelector(BDFDB.dotCN.tooltip);
+		let itemLayer = BDFDB.DOMUtils.getParent(BDFDB.dotCN.itemlayer, tooltip);
+		if (!Node.prototype.isPrototypeOf(itemLayer)) return;
+		tooltip = itemLayer.querySelector(BDFDB.dotCN.tooltip);
 		if (!Node.prototype.isPrototypeOf(tooltip) || !Node.prototype.isPrototypeOf(tooltip.anker) || !tooltip.type) return;
 		
-		var pointer = tooltip.querySelector(BDFDB.dotCN.tooltippointer);
-		var left, top, trects = BDFDB.DOMUtils.getRects(tooltip.anker), irects = BDFDB.DOMUtils.getRects(itemlayer), arects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount)), positionoffsets = {height: 10, width: 10};
+		let pointer = tooltip.querySelector(BDFDB.dotCN.tooltippointer);
+		let left, top, trects = BDFDB.DOMUtils.getRects(tooltip.anker), irects = BDFDB.DOMUtils.getRects(itemLayer), arects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount)), positionoffsets = {height: 10, width: 10};
 		switch (tooltip.type) {
 			case "top":
 				top = trects.top - irects.height - positionoffsets.height + 2;
@@ -819,34 +839,34 @@
 				break;
 			}
 			
-		itemlayer.style.setProperty("top", top + "px");
-		itemlayer.style.setProperty("left", left + "px");
+		itemLayer.style.setProperty("top", top + "px");
+		itemLayer.style.setProperty("left", left + "px");
 		
 		pointer.style.removeProperty("margin-left");
 		pointer.style.removeProperty("margin-top");
 		if (tooltip.type == "top" || tooltip.type == "bottom") {
 			if (left < 0) {
-				itemlayer.style.setProperty("left", "5px");
+				itemLayer.style.setProperty("left", "5px");
 				pointer.style.setProperty("margin-left", `${left - 10}px`);
 			}
 			else {
-				var rightmargin = arects.width - (left + irects.width);
-				if (rightmargin < 0) {
-					itemlayer.style.setProperty("left", arects.width - irects.width - 5 + "px");
-					pointer.style.setProperty("margin-left", `${-1*rightmargin}px`);
+				let rightMargin = arects.width - (left + irects.width);
+				if (rightMargin < 0) {
+					itemLayer.style.setProperty("left", arects.width - irects.width - 5 + "px");
+					pointer.style.setProperty("margin-left", `${-1*rightMargin}px`);
 				}
 			}
 		}
 		else if (tooltip.type == "left" || tooltip.type == "right") {
 			if (top < 0) {
-				itemlayer.style.setProperty("top", "5px");
+				itemLayer.style.setProperty("top", "5px");
 				pointer.style.setProperty("margin-top", `${top - 10}px`);
 			}
 			else {
-				var bottommargin = arects.height - (top + irects.height);
-				if (bottommargin < 0) {
-					itemlayer.style.setProperty("top", arects.height - irects.height - 5 + "px");
-					pointer.style.setProperty("margin-top", `${-1*bottommargin}px`);
+				let bottomMargin = arects.height - (top + irects.height);
+				if (bottomMargin < 0) {
+					itemLayer.style.setProperty("top", arects.height - irects.height - 5 + "px");
+					pointer.style.setProperty("margin-top", `${-1*bottomMargin}px`);
 				}
 			}
 		}
@@ -857,43 +877,43 @@
 		return obj && Object.prototype.isPrototypeOf(obj) && !Array.prototype.isPrototypeOf(obj);
 	};
 	BDFDB.ObjectUtils.extract = function (obj, ...keys) {
-		let newobj = {};
-		if (BDFDB.ObjectUtils.is(obj)) for (let key of keys.flat(10).filter(n => n)) if (obj[key]) newobj[key] = obj[key];
-		return newobj;
+		let newObj = {};
+		if (BDFDB.ObjectUtils.is(obj)) for (let key of keys.flat(10).filter(n => n)) if (obj[key]) newObj[key] = obj[key];
+		return newObj;
 	};
 	BDFDB.ObjectUtils.exclude = function (obj, ...keys) {
-		let newobj = Object.assign({}, obj);
-		BDFDB.ObjectUtils.delete(newobj, ...keys)
-		return newobj;
+		let newObj = Object.assign({}, obj);
+		BDFDB.ObjectUtils.delete(newObj, ...keys)
+		return newObj;
 	};
 	BDFDB.ObjectUtils.delete = function (obj, ...keys) {
 		if (BDFDB.ObjectUtils.is(obj)) for (let key of keys.flat(10).filter(n => n)) delete obj[key];
 	};
 	BDFDB.ObjectUtils.sort = function (obj, sort, except) {
 		if (!BDFDB.ObjectUtils.is(obj)) return {};
-		var newobj = {};
-		if (sort === undefined || !sort) for (let key of Object.keys(obj).sort()) newobj[key] = obj[key];
+		let newObj = {};
+		if (sort === undefined || !sort) for (let key of Object.keys(obj).sort()) newObj[key] = obj[key];
 		else {
 			let values = [];
 			for (let key in obj) values.push(obj[key]);
 			values = BDFDB.ArrayUtils.keySort(values, sort, except);
 			for (let value of values) for (let key in obj) if (BDFDB.equals(value, obj[key])) {
-				newobj[key] = value;
+				newObj[key] = value;
 				break;
 			}
 		}
-		return newobj;
+		return newObj;
 	};
 	BDFDB.ObjectUtils.reverse = function (obj, sort) {
 		if (!BDFDB.ObjectUtils.is(obj)) return {};
-		var newobj = {};
-		for (let key of (sort === undefined || !sort) ? Object.keys(obj).reverse() : Object.keys(obj).sort().reverse()) newobj[key] = obj[key];
-		return newobj;
+		let newObj = {};
+		for (let key of (sort === undefined || !sort) ? Object.keys(obj).reverse() : Object.keys(obj).sort().reverse()) newObj[key] = obj[key];
+		return newObj;
 	};
 	BDFDB.ObjectUtils.filter = function (obj, filter, byKey = false) {
 		if (!BDFDB.ObjectUtils.is(obj)) return {};
 		if (typeof filter != "function") return obj;
-		return Object.keys(obj).filter(key => filter(byKey ? key : obj[key])).reduce((newobj, key) => (newobj[key] = obj[key], newobj), {});
+		return Object.keys(obj).filter(key => filter(byKey ? key : obj[key])).reduce((newObj, key) => (newObj[key] = obj[key], newObj), {});
 	};
 	BDFDB.ObjectUtils.push = function (obj, value) {
 		if (BDFDB.ObjectUtils.is(obj)) obj[Object.keys(obj).length] = value;
@@ -910,9 +930,9 @@
 	BDFDB.ObjectUtils.map = function (obj, mapfunc) {
 		if (!BDFDB.ObjectUtils.is(obj)) return {};
 		if (typeof mapfunc != "string" && typeof mapfunc != "function") return obj;
-		var newobj = {};
-		for (let key in obj) if (BDFDB.ObjectUtils.is(obj[key])) newobj[key] = typeof mapfunc == "string" ? obj[key][mapfunc] : mapfunc(obj[key], key);
-		return newobj;
+		let newObj = {};
+		for (let key in obj) if (BDFDB.ObjectUtils.is(obj[key])) newObj[key] = typeof mapfunc == "string" ? obj[key][mapfunc] : mapfunc(obj[key], key);
+		return newObj;
 	};
 	BDFDB.ObjectUtils.toArray = function (obj) {
 		if (!BDFDB.ObjectUtils.is(obj)) return [];
@@ -948,8 +968,8 @@
 		if (key == null) return array;
 		if (except === undefined) except = null;
 		return array.sort((x, y) => {
-			var xvalue = x[key], yvalue = y[key];
-			if (xvalue !== except) return xvalue < yvalue ? -1 : xvalue > yvalue ? 1 : 0;
+			let xValue = x[key], yValue = y[key];
+			if (xValue !== except) return xValue < yValue ? -1 : xValue > yValue ? 1 : 0;
 		});
 	};
 	BDFDB.ArrayUtils.numSort = function (array) {
@@ -2740,8 +2760,8 @@
 		return BDFDB.ColorUtils.convert(BDFDB.ReactUtils.findValue(BDFDB.ReactUtils.getInstance(swatches), "selectedColor", {up:true, blacklist:{"props":true}}));
 	};
 	BDFDB.ColorUtils.openPicker = function (container, target, color, options = {gradient: true, alpha: true, callback: _ => {}}) {
-		let itemlayercontainer = document.querySelector(BDFDB.dotCN.appmount +  " > * > " + BDFDB.dotCN.itemlayercontainer);
-		if (!itemlayercontainer || !container || !target) return;
+		let itemLayerContainer = document.querySelector(BDFDB.dotCN.appmount +  " > * > " + BDFDB.dotCN.itemlayercontainer);
+		if (!itemLayerContainer || !container || !target) return;
 		
 		if (typeof options.callback != "function") options.callback = _ => {};
 		
@@ -2756,7 +2776,7 @@
 		let targetrects = BDFDB.DOMUtils.getRects(target);
 		let colorPicker = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.itemlayer}"><div role="dialog" class="${BDFDB.disCNS.colorpickerwrapper + BDFDB.disCNS.popoutnoarrow + BDFDB.disCNS.popoutnoshadow + BDFDB.disCNS.popout + BDFDB.disCNS.popoutbottom + BDFDB.disCNS.popoutarrowalignmenttop + BDFDB.disCN.themeundefined}" style="z-index: 2001; visibility: visible; left: ${targetrects.left + targetrects.width/2}px; top: ${targetrects.top + targetrects.height}px; transform: translateX(-50%) translateY(0%) translateZ(0px);"><div class="${BDFDB.disCNS.flex + BDFDB.disCNS.vertical + BDFDB.disCNS.justifystart + BDFDB.disCNS.alignstretch + BDFDB.disCNS.nowrap + BDFDB.disCN.colorpicker}" style="flex: 1 1 auto;"><div class="${BDFDB.disCN.colorpickerinner}"><div class="${BDFDB.disCN.colorpickersaturation}"><div class="saturation-color" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px; background: ${BDFDB.ColorUtils.convert([h, "100%", "100%"], "RGB")} !important;"><style>.saturation-white {background: -webkit-linear-gradient(to right, #fff, rgba(255,255,255,0));background: linear-gradient(to right, #fff, rgba(255,255,255,0));}.saturation-black {background: -webkit-linear-gradient(to top, #000, rgba(0,0,0,0));background: linear-gradient(to top, #000, rgba(0,0,0,0));}</style><div class="saturation-white" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="saturation-black" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"></div><div class="saturation-cursor" style="position: absolute; top: 55.2941%; left: 44.7368%; cursor: default;"><div style="width: 4px; height: 4px; box-shadow: rgb(255, 255, 255) 0px 0px 0px 1.5px, rgba(0, 0, 0, 0.3) 0px 0px 1px 1px inset, rgba(0, 0, 0, 0.4) 0px 0px 1px 2px; border-radius: 50%; transform: translate(-2px, -2px);"></div></div></div></div></div><div class="${BDFDB.disCN.colorpickerhue}"><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="hue-horizontal" style="padding: 0px 2px; position: relative; height: 100%;"><style>.hue-horizontal {background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);background: -webkit-linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);}.hue-vertical {background: linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);background: -webkit-linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);}</style><div class="hue-cursor" style="position: absolute; left: 0%;"><div style="margin-top: -4px !important; width: 4px; border-radius: 1px; height: 8px; box-shadow: rgba(0, 0, 0, 0.6) 0px 0px 2px; background: rgb(255, 255, 255); transform: translateX(-2px);"></div></div></div></div></div><div class="alpha-bar" style="position: relative; height: 8px; margin: 16px 0 8px;"><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="alpha-checker" style="padding: 0px 2px; position: relative; height: 100%; background-color: transparent;"></div></div><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="alpha-horizontal" style="padding: 0px 2px; position: relative; height: 100%;"><div class="alpha-cursor" style="position: absolute; left: 0%;"><div style="margin-top: -4px; width: 8px; border-radius: 3px; height: 16px; box-shadow: rgba(0, 0, 0, 0.6) 0px 0px 2px; background: rgb(255, 255, 255); transform: translateX(-2px);"></div></div></div></div></div><div class="gradient-bar" style="position: relative; height: 8px; margin: 27px 2px 2px 2px;${!isGradient ? " display: none;" : ""}"><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="alpha-checker" style="padding: 0px 2px; position: relative; height: 100%; background-color: transparent;"></div></div><div style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"><div class="gradient-horizontal" style="padding: 0px 2px; position: relative; height: 100%; background-color: ${selectedColor};"><div class="gradient-cursor edge selected" style="position: absolute; left: 0%;"><div style="background-color: ${selectedColor} !important;"></div></div><div class="gradient-cursor edge" style="position: absolute; left: 100%;"><div style="background-color: ${isGradient ? BDFDB.ColorUtils.convert(color[1], "RGBA") : selectedColor} !important;"></div></div></div></div></div></div><div class="${BDFDB.disCNS.horizontal + BDFDB.disCNS.colorpickerhexinput + BDFDB.disCN.margintop8}"><input class="${BDFDB.disCN.inputdefault}" maxlength="${options.alpha ? 9 : 7}" name="" type="text" placeholder="${selectedColor}" value="${selectedColor}"></input><div class="gradient-button${isGradient ? " selected" : ""}" style="transform: rotate(-90deg); margin: 2px 0 0 5px; cursor: pointer; border-radius: 5px; height: 36px;"><svg width="36" height="36" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M469.333333 384h85.333334v85.333333h-85.333334z m-85.333333 85.333333h85.333333v85.333334H384z m170.666667 0h85.333333v85.333334h-85.333333z m85.333333-85.333333h85.333333v85.333333h-85.333333zM298.666667 384h85.333333v85.333333H298.666667z m512-256H213.333333c-46.933333 0-85.333333 38.4-85.333333 85.333333v597.333334c0 46.933333 38.4 85.333333 85.333333 85.333333h597.333334c46.933333 0 85.333333-38.4 85.333333-85.333333V213.333333c0-46.933333-38.4-85.333333-85.333333-85.333333zM384 768H298.666667v-85.333333h85.333333v85.333333z m170.666667 0h-85.333334v-85.333333h85.333334v85.333333z m170.666666 0h-85.333333v-85.333333h85.333333v85.333333z m85.333334-298.666667h-85.333334v85.333334h85.333334v85.333333h-85.333334v-85.333333h-85.333333v85.333333h-85.333333v-85.333333h-85.333334v85.333333H384v-85.333333H298.666667v85.333333H213.333333v-85.333333h85.333334v-85.333334H213.333333V213.333333h597.333334v256z"></path></svg></div></div></div><div class="move-corner" style="width: 10px; height: 10px; cursor: move; position: absolute; top: 0; left: 0;"></div><div class="move-corner" style="width: 10px; height: 10px; cursor: move; position: absolute; top: 0; right: 0;"></div><div class="move-corner" style="width: 10px; height: 10px; cursor: move; position: absolute; bottom: 0; right: 0;"></div><div class="move-corner" style="width: 10px; height: 10px; cursor: move; position: absolute; bottom: 0; left: 0;"></div></div></div>`);
 		
-		itemlayercontainer.appendChild(colorPicker);
+		itemLayerContainer.appendChild(colorPicker);
 
 		var removePopout = e => {
 			if (!colorPicker.contains(e.target)) {
@@ -5097,7 +5117,7 @@
 		livetaglarge: ["LiveTag", "liveLarge"],
 		livetagsmall: ["LiveTag", "liveSmall"],
 		loadingicon: ["BDFDB", "loadingIcon"],
-		loadingiconwrapper: ["BDFDB", "loadingIconWrapper"],
+		loadingIconWrapper: ["BDFDB", "loadingIconWrapper"],
 		loadingscreen: ["LoadingScreen", "container"],
 		loginscreen: ["NotFound", "loginScreen"],
 		marginbottom4: ["Margins", "marginBottom4"],
@@ -8207,14 +8227,14 @@
 			margin: 0 4px 0 3px;
 		}
 		
-		${BDFDB.dotCN.loadingiconwrapper} {
+		${BDFDB.dotCN.loadingIconWrapper} {
 			position: absolute;
 			bottom: 0;
 			right: 0;
 			z-index: 1000;
 			animation: loadingwrapper-fade 3s infinite ease;
 		}
-		${BDFDB.dotCNS.loadingiconwrapper + BDFDB.dotCN.loadingicon} {
+		${BDFDB.dotCNS.loadingIconWrapper + BDFDB.dotCN.loadingicon} {
 			margin: 0 5px;
 		}
 		@keyframes loadingwrapper-fade {
@@ -8963,13 +8983,16 @@
 				},
 				children: BDFDB.ReactUtils.createElement("button", {
 					className: `${BDFDB.disCN._repofolderbutton} bd-updatebtn`,
-					onClick: _ => {BDFDB.PluginUtils.checkAllUpdates();},
+					onClick: _ => {
+						let toast = BDFDB.NotificationUtils.toast("Plugin update check in progress.", {type: "info", timeout: 0});
+						BDFDB.PluginUtils.checkAllUpdates().then(outdated => {
+							toast.close();
+							if (outdated > 0) BDFDB.NotificationUtils.toast(`Plugin update check complete. ${outdated} outdated!`, {type: "error"});
+							else BDFDB.NotificationUtils.toast(`Plugin update check complete.`, {type: "success"});
+						});
+					},
 					onContextMenu: e => {
-						if (window.PluginUpdates && window.PluginUpdates.plugins && !document.querySelector(".update-list-tooltip")) {
-							var pluginnames = [];
-							for (let url in window.PluginUpdates.plugins) pluginnames.push(window.PluginUpdates.plugins[url].name);
-							BDFDB.TooltipUtils.create(e.currentTarget, pluginnames.sort().join(", "), {type: "bottom", selector: "update-list-tooltip", style: "max-width: 420px"});
-						}
+						if (window.PluginUpdates && window.PluginUpdates.plugins && !document.querySelector(".update-list-tooltip")) BDFDB.TooltipUtils.create(e.currentTarget, BDFDB.ObjectUtils.toArray(window.PluginUpdates.plugins).map(p => p.name).filter(n => n).sort().join(", "), {type: "bottom", selector: "update-list-tooltip", style: "max-width: 420px"});
 					},
 					children: "Check for Updates"
 				})
