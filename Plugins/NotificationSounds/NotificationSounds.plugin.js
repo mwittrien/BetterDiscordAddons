@@ -10,6 +10,7 @@ var NotificationSounds = (_ => {
 		"message1":				{implemented:true,	name:"New Chatmessage",			src:"/assets/dd920c06a01e5bb8b09678581e29d56f.mp3",	mute:true,	focus:null,	include:true},
 		"dm":					{implemented:true,	name:"Direct Message",			src:"/assets/84c9fa3d07da865278bd77c97d952db4.mp3",	mute:true,	focus:true,	include:false},
 		"mentioned":			{implemented:true,	name:"Mentioned",				src:"/assets/a5f42064e8120e381528b14fd3188b72.mp3",	mute:true,	focus:true,	include:false},
+		"role":					{implemented:true,	name:"Mentioned (role)",		src:"/assets/a5f42064e8120e381528b14fd3188b72.mp3",	mute:true,	focus:true,	include:false},
 		"everyone":				{implemented:true,	name:"Mentioned (@everyone)",	src:"/assets/a5f42064e8120e381528b14fd3188b72.mp3",	mute:true,	focus:true,	include:false},
 		"here":					{implemented:true,	name:"Mentioned (@here)",		src:"/assets/a5f42064e8120e381528b14fd3188b72.mp3",	mute:true,	focus:true,	include:false},
 		"deafen":				{implemented:true,	name:"Voicechat Deafen",		src:"/assets/e4d539271704b87764dc465b1a061abd.mp3",	mute:false,	focus:null,	include:true},
@@ -48,7 +49,7 @@ var NotificationSounds = (_ => {
 	return class NotificationSounds {
 		getName () {return "NotificationSounds";}
 
-		getVersion () {return "3.3.9";}
+		getVersion () {return "3.4.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -56,7 +57,7 @@ var NotificationSounds = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["@here & @everyone","No longer players unique message sound when @here & @everyone is suppressed in the channel"]]
+				"added":[["Role Mention","Similar to @everyone and @here you can not set a unique sound that plays when you are mentioned via a role mention"]]
 			};
 
 			this.patchedModules = {
@@ -340,26 +341,35 @@ var NotificationSounds = (_ => {
 					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.MESSAGE_CREATE && e.methodArguments[0].message) {
 						let message = e.methodArguments[0].message;
 						let guildId = message.guild_id || null;
-						if (!BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildId, message.channel_id) && message.author.id != BDFDB.UserUtils.me.id) {
+						if (BDFDB.LibraryModules.MentionUtils.isRawMessageMentioned(message, BDFDB.UserUtils.me.id) && !BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildId, message.channel_id)) {
 							if (!guildId && !(choices.dm.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) {
 								this.fireEvent("dm");
 								this.playAudio("dm");
+								return;
 							}
-							else if (message.mentions.length && !(choices.mentioned.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) {
-								for (let mention of message.mentions) if (mention.id == BDFDB.UserUtils.me.id) {
-									this.fireEvent("mentioned");
-									this.playAudio("mentioned");
-									break;
+							if (message.mentions.length && !(choices.mentioned.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) for (let mention of message.mentions) if (mention.id == BDFDB.UserUtils.me.id) {
+								this.fireEvent("mentioned");
+								this.playAudio("mentioned");
+								return;
+							}
+							if (guildId && message.mention_roles.length && !BDFDB.LibraryModules.MutedUtils.isSuppressRolesEnabled(guildId, message.channel_id) && !(choices.role.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) {
+								let member = BDFDB.LibraryModules.MemberStore.getMember(guildId, BDFDB.UserUtils.me.id);
+								if (member && member.roles.length) for (let roleId of message.mention_roles) if (member.roles.includes(roleId)) {
+									this.fireEvent("role");
+									this.playAudio("role");
+									return;
 								}
 							}
-							else if (message.mention_everyone && !BDFDB.LibraryModules.MutedUtils.isSuppressEveryoneEnabled(guildId, message.channel_id)) {
+							if (message.mention_everyone && !BDFDB.LibraryModules.MutedUtils.isSuppressEveryoneEnabled(guildId, message.channel_id)) {
 								if (message.content.indexOf("@everyone") > -1 && !(choices.everyone.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) {
 									this.fireEvent("everyone");
 									this.playAudio("everyone");
+									return;
 								}
-								else if (message.content.indexOf("@here") > -1 && !(choices.here.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) {
+								if (message.content.indexOf("@here") > -1 && !(choices.here.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) {
 									this.fireEvent("here");
 									this.playAudio("here");
+									return;
 								}
 							}
 						}
@@ -372,6 +382,7 @@ var NotificationSounds = (_ => {
 						if (type == "message1") {
 							if (firedEvents["dm"]) firedEvents["dm"] = false;
 							else if (firedEvents["mentioned"]) firedEvents["mentioned"] = false;
+							else if (firedEvents["role"]) firedEvents["role"] = false;
 							else if (firedEvents["everyone"]) firedEvents["everyone"] = false;
 							else if (firedEvents["here"]) firedEvents["here"] = false;
 							else this.playAudio(type);
