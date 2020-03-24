@@ -1787,14 +1787,14 @@
 			depth++;
 			var result = undefined;
 			if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxdepth && performance.now() - start < maxtime) {
-				if (instance.type && types.some(name => (instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name) === name.split(" _ _ ")[0])) {
+				if (instance.type && types.some(name => InternalBDFDB.isInstanceCorrect(instance, name.split(" _ _ ")[0]))) {
 					if (config.all === undefined || !config.all) result = instance.type;
 					else if (config.all) {
 						if (!instance.type.BDFDBreactSearch) {
 							instance.type.BDFDBreactSearch = true;
 							if (config.group) {
 								if (instance.type && (instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name)) {
-									let group = config.name.find(n => (instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name || instance.type).split(" _ _ ")[0] == n) || "Default";
+									let group = config.name.find(name => (instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name || instance.type) == name.split(" _ _ ")[0]) || "Default";
 									if (!BDFDB.ArrayUtils.is(foundConstructors[group])) foundConstructors[group] = [];
 									foundConstructors[group].push(instance.stateNode);
 								}
@@ -1858,7 +1858,7 @@
 							instance.stateNode.BDFDBreactSearch = true;
 							if (config.group) {
 								if (config.name && instance.type && (instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name || instance.type)) {
-									let group = config.name.find(n => (instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name || instance.type) == n.split(" _ _ ")[0]) || "Default";
+									let group = config.name.find(name => (instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name || instance.type) == name.split(" _ _ ")[0]) || "Default";
 									if (!BDFDB.ArrayUtils.is(foundInstances[group])) foundInstances[group] = [];
 									foundInstances[group].push(instance.stateNode);
 								}
@@ -1902,7 +1902,7 @@
 			depth++;
 			var result = undefined;
 			if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxdepth && performance.now() - start < maxtime) {
-				if (instance.memoizedProps && (instance.type && config.name && config.name.some(name => (instance.type.render && instance.type.render.displayName || instance.type.displayName || instance.type.name || instance.type) === name.split(" _ _ ")[0]) || config.key && config.key.some(key => instance.key == key))) result = instance.memoizedProps;
+				if (instance.memoizedProps && (instance.type && config.name && config.name.some(name => InternalBDFDB.isInstanceCorrect(instance, name.split(" _ _ ")[0])) || config.key && config.key.some(key => instance.key == key))) result = instance.memoizedProps;
 				if (result === undefined) {
 					let keys = Object.getOwnPropertyNames(instance);
 					for (let i = 0; result === undefined && i < keys.length; i++) {
