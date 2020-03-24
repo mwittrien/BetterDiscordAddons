@@ -6,17 +6,13 @@ var OldTitleBar = (_ => {
 	return class OldTitleBar {
 		getName () {return "OldTitleBar";}
 
-		getVersion () {return "1.6.5";}
+		getVersion () {return "1.6.6";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Reverts the title bar back to its former self.";}
 
 		constructor () {
-			this.changelog = {
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
-			};
-
 			this.patchedModules = {
 				after: {
 					App: "render",
@@ -284,11 +280,16 @@ var OldTitleBar = (_ => {
 		}
 
 		patchMainScreen (enable) {
-			if (BdApi.getWindowPreference("frame") != enable) {
-				BdApi.setWindowPreference("frame", enable);
-				return true;
+			try {
+				if (BdApi.getWindowPreference("frame") != enable) {
+					BdApi.setWindowPreference("frame", enable);
+					return true;
+				}
+				return false;
 			}
-			return false;
+			catch (err) {
+				return false;
+			}
 		}
 	}
 })();
