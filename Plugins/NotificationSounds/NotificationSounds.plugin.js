@@ -49,7 +49,7 @@ var NotificationSounds = (_ => {
 	return class NotificationSounds {
 		getName () {return "NotificationSounds";}
 
-		getVersion () {return "3.4.0";}
+		getVersion () {return "3.4.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -341,35 +341,37 @@ var NotificationSounds = (_ => {
 					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.MESSAGE_CREATE && e.methodArguments[0].message) {
 						let message = e.methodArguments[0].message;
 						let guildId = message.guild_id || null;
-						if (BDFDB.LibraryModules.MentionUtils.isRawMessageMentioned(message, BDFDB.UserUtils.me.id) && !BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildId, message.channel_id)) {
+						if (!BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildId, message.channel_id) && message.author.id != BDFDB.UserUtils.me.id) {
 							if (!guildId && !(choices.dm.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) {
 								this.fireEvent("dm");
 								this.playAudio("dm");
 								return;
 							}
-							if (message.mentions.length && !(choices.mentioned.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) for (let mention of message.mentions) if (mention.id == BDFDB.UserUtils.me.id) {
-								this.fireEvent("mentioned");
-								this.playAudio("mentioned");
-								return;
-							}
-							if (guildId && message.mention_roles.length && !BDFDB.LibraryModules.MutedUtils.isSuppressRolesEnabled(guildId, message.channel_id) && !(choices.role.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) {
-								let member = BDFDB.LibraryModules.MemberStore.getMember(guildId, BDFDB.UserUtils.me.id);
-								if (member && member.roles.length) for (let roleId of message.mention_roles) if (member.roles.includes(roleId)) {
-									this.fireEvent("role");
-									this.playAudio("role");
+							else if (BDFDB.LibraryModules.MentionUtils.isRawMessageMentioned(message, BDFDB.UserUtils.me.id)) {
+								if (message.mentions.length && !(choices.mentioned.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) for (let mention of message.mentions) if (mention.id == BDFDB.UserUtils.me.id) {
+									this.fireEvent("mentioned");
+									this.playAudio("mentioned");
 									return;
 								}
-							}
-							if (message.mention_everyone && !BDFDB.LibraryModules.MutedUtils.isSuppressEveryoneEnabled(guildId, message.channel_id)) {
-								if (message.content.indexOf("@everyone") > -1 && !(choices.everyone.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) {
-									this.fireEvent("everyone");
-									this.playAudio("everyone");
-									return;
+								if (guildId && message.mention_roles.length && !BDFDB.LibraryModules.MutedUtils.isSuppressRolesEnabled(guildId, message.channel_id) && !(choices.role.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) {
+									let member = BDFDB.LibraryModules.MemberStore.getMember(guildId, BDFDB.UserUtils.me.id);
+									if (member && member.roles.length) for (let roleId of message.mention_roles) if (member.roles.includes(roleId)) {
+										this.fireEvent("role");
+										this.playAudio("role");
+										return;
+									}
 								}
-								if (message.content.indexOf("@here") > -1 && !(choices.here.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) {
-									this.fireEvent("here");
-									this.playAudio("here");
-									return;
+								if (message.mention_everyone && !BDFDB.LibraryModules.MutedUtils.isSuppressEveryoneEnabled(guildId, message.channel_id)) {
+									if (message.content.indexOf("@everyone") > -1 && !(choices.everyone.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) {
+										this.fireEvent("everyone");
+										this.playAudio("everyone");
+										return;
+									}
+									if (message.content.indexOf("@here") > -1 && !(choices.here.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) {
+										this.fireEvent("here");
+										this.playAudio("here");
+										return;
+									}
 								}
 							}
 						}
