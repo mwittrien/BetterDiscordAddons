@@ -1993,7 +1993,7 @@
 		let foundKeys = [];
 		let singleKey = getKey(instance);
 		if (config.all) return foundKeys;
-		else return singlekey;
+		else return singleKey;
 		function getKey(instance) {
 			depth++;
 			let result = undefined;
