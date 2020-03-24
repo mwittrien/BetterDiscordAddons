@@ -368,6 +368,7 @@
 	background-color: rgb(var(--vaccentcolor));
 }
 .message-2qnXI6.localBot-GrCgVt.selected-2P5D_Z,
+.mouse-mode.full-motion .localBot-GrCgVt:hover,
 .mouse-mode .localBot-GrCgVt:hover {
 	background-color: rgba(var(--vaccentcolor), 0.1);
 }
