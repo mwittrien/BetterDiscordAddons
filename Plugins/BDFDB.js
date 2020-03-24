@@ -1712,7 +1712,7 @@
 		return getChildren(instance);
 		function getChildren (children) {
 			let result = null;
-			if (!children) return result;
+			if (!children || depth >= maxDepth && performance.now() - start >= maxTime) return result;
 			if (!BDFDB.ArrayUtils.is(children)) {
 				if (check(children)) result = children;
 				else if (children.props && children.props.children) {
@@ -1763,7 +1763,7 @@
 		return getChildren(instance);
 		function getChildren (children) {
 			let result = [firstArray, -1];
-			if (!children || depth >= maxDepth && performance.now() - start >= maxTime) return result;
+			if (!children) return result;
 			if (!BDFDB.ArrayUtils.is(children)) {
 				if (check(children)) result = found(children);
 				else if (children.props && children.props.children) {
