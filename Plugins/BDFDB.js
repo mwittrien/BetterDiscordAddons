@@ -1697,27 +1697,73 @@
 			}
 		};
 	};
+	BDFDB.ReactUtils.findChild = function (nodeOrInstance, config) {
+		if (!nodeOrInstance || !BDFDB.ObjectUtils.is(config) || !config.name && !config.key && !config.props && !config.filter) return null;
+		let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
+		if (!BDFDB.ObjectUtils.is(instance) && !BDFDB.ArrayUtils.is(instance)) return null;
+		config.name = config.name && [config.name].flat().filter(n => n);
+		config.key = config.key && [config.key].flat().filter(n => n);
+		config.props = config.props && [config.props].flat().filter(n => n);
+		config.filter = typeof config.filter == "function" && config.filter;
+		let depth = -1;
+		let start = performance.now();
+		let maxDepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
+		let maxTime = config.unlimited ? 999999999 : (config.time === undefined ? 150 : config.time);
+		return getChildren(instance);
+		function getChildren (children) {
+			let result = null;
+			if (!children) return result;
+			if (!BDFDB.ArrayUtils.is(children)) {
+				if (check(children)) result = children;
+				else if (children.props && children.props.children) {
+					depth++;
+					result = getChildren(children.props.children);
+					depth--;
+				}
+			}
+			else {
+				for (let child of children) if (child) {
+					if (BDFDB.ArrayUtils.is(child)) result = getChildren(child);
+					else if (check(child)) result = child;
+					else if (child.props && child.props.children) {
+						depth++;
+						result = getChildren(child.props.children);
+						depth--;
+					}
+				}
+			}
+			return result;
+		}
+		function check (instance) {
+			if (!instance) return false;
+			let props = instance.stateNode ? instance.stateNode.props : instance.props;
+			return instance.type && config.name && config.name.some(name => InternalBDFDB.isInstanceCorrect(instance, name)) || config.key && config.key.some(key => instance.key == key) || props && config.props && config.props[config.someProps ? "some" : "every"](prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => propCheck(props, prop[0], checkvalue)) : propCheck(props, prop[0], prop[1])) : props[prop] !== undefined) || config.filter && config.filter(instance);
+		}
+		function propCheck (props, key, value) {
+			return key != null && props[key] != null && value != null && (key == "className" ? (" " + props[key] + " ").indexOf(" " + value + " ") > -1 : BDFDB.equals(props[key], value));
+		}
+	};
 	BDFDB.ReactUtils.findChildren = function (nodeOrInstance, config) {
 		if (!nodeOrInstance || !BDFDB.ObjectUtils.is(config) || !config.name && !config.key && !config.props && !config.filter) return [null, -1];
-		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
+		let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 		if (!BDFDB.ObjectUtils.is(instance) && !BDFDB.ArrayUtils.is(instance)) return [null, -1];
 		config.name = config.name && [config.name].flat().filter(n => n);
 		config.key = config.key && [config.key].flat().filter(n => n);
 		config.props = config.props && [config.props].flat().filter(n => n);
 		config.filter = typeof config.filter == "function" && config.filter;
-		var parent = firstarray = instance;
-		while (!BDFDB.ArrayUtils.is(firstarray) && firstarray.props && firstarray.props.children) firstarray = firstarray.props.children;
-		if (!BDFDB.ArrayUtils.is(firstarray)) {
+		let parent = firstArray = instance;
+		while (!BDFDB.ArrayUtils.is(firstArray) && firstArray.props && firstArray.props.children) firstArray = firstArray.props.children;
+		if (!BDFDB.ArrayUtils.is(firstArray)) {
 			if (parent && parent.props) {
 				parent.props.children = [parent.props.children];
-				firstarray = parent.props.children;
+				firstArray = parent.props.children;
 			}
-			else firstarray = [];
+			else firstArray = [];
 		}
 		return getChildren(instance);
 		function getChildren (children) {
-			var result = [firstarray, -1];
-			if (!children) return result;
+			let result = [firstArray, -1];
+			if (!children || depth >= maxDepth && performance.now() - start >= maxTime) return result;
 			if (!BDFDB.ArrayUtils.is(children)) {
 				if (check(children)) result = found(children);
 				else if (children.props && children.props.children) {
@@ -1754,7 +1800,7 @@
 		function check (instance) {
 			if (!instance) return false;
 			let props = instance.stateNode ? instance.stateNode.props : instance.props;
-			return instance.type && config.name && config.name.some(name => InternalBDFDB.isInstanceCorrect(instance, name)) || config.key && config.key.some(key => instance.key == key) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => propCheck(props, prop[0], checkvalue)) : propCheck(props, prop[0], prop[1])) : props[prop] !== undefined) || config.filter && config.filter(instance);
+			return instance.type && config.name && config.name.some(name => InternalBDFDB.isInstanceCorrect(instance, name)) || config.key && config.key.some(key => instance.key == key) || props && config.props && config.props[config.someProps ? "some" : "every"](prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => propCheck(props, prop[0], checkvalue)) : propCheck(props, prop[0], prop[1])) : props[prop] !== undefined) || config.filter && config.filter(instance);
 		}
 		function propCheck (props, key, value) {
 			return key != null && props[key] != null && value != null && (key == "className" ? (" " + props[key] + " ").indexOf(" " + value + " ") > -1 : BDFDB.equals(props[key], value));
@@ -1763,17 +1809,17 @@
 	BDFDB.ReactUtils.findConstructor = function (nodeOrInstance, types, config = {}) {
 		if (!BDFDB.ObjectUtils.is(config)) return null;
 		if (!nodeOrInstance || !types) return config.all ? (config.group ? {} : []) : null;
-		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
+		let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 		if (!BDFDB.ObjectUtils.is(instance)) return config.all ? (config.group ? {} : []) : null;
 		types = types && [types].flat(10).filter(n => typeof n == "string");
 		if (!types.length) return config.all ? (config.group ? {} : []) : null;;
-		var depth = -1;
-		var start = performance.now();
-		var maxdepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
-		var maxtime = config.unlimited ? 999999999 : (config.time === undefined ? 150 : config.time);
-		var whitelist = config.up ? {return:true, sibling:true, default:true, _reactInternalFiber:true} : {child:true, sibling:true, default:true, _reactInternalFiber:true};
-		var foundConstructors = config.group ? {} : [];
-		var singleConstructor = getConstructor(instance);
+		let depth = -1;
+		let start = performance.now();
+		let maxDepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
+		let maxTime = config.unlimited ? 999999999 : (config.time === undefined ? 150 : config.time);
+		let whitelist = config.up ? {return:true, sibling:true, default:true, _reactInternalFiber:true} : {child:true, sibling:true, default:true, _reactInternalFiber:true};
+		let foundConstructors = config.group ? {} : [];
+		let singleConstructor = getConstructor(instance);
 		if (config.all) {
 			for (let i in foundConstructors) {
 				if (config.group) for (let j in foundConstructors[i]) delete foundConstructors[i][j].BDFDBreactSearch;
@@ -1785,8 +1831,8 @@
 
 		function getConstructor (instance) {
 			depth++;
-			var result = undefined;
-			if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxdepth && performance.now() - start < maxtime) {
+			let result = undefined;
+			if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxDepth && performance.now() - start < maxTime) {
 				if (instance.type && types.some(name => InternalBDFDB.isInstanceCorrect(instance, name.split(" _ _ ")[0]))) {
 					if (config.all === undefined || !config.all) result = instance.type;
 					else if (config.all) {
@@ -1818,25 +1864,25 @@
 	BDFDB.ReactUtils.findDOMNode = function (instance) {
 		if (Node.prototype.isPrototypeOf(instance)) return instance;
 		if (!instance || !instance.updater || typeof instance.updater.isMounted !== "function" || !instance.updater.isMounted(instance)) return null;
-		var node = LibraryModules.ReactDOM.findDOMNode(instance) || BDFDB.ReactUtils.getValue(instance, "child.stateNode");
+		let node = LibraryModules.ReactDOM.findDOMNode(instance) || BDFDB.ReactUtils.getValue(instance, "child.stateNode");
 		return Node.prototype.isPrototypeOf(node) ? node : null;
 	};
 	BDFDB.ReactUtils.findOwner = function (nodeOrInstance, config) {
 		if (!BDFDB.ObjectUtils.is(config)) return null;
 		if (!nodeOrInstance || !config.name && !config.type && !config.key && !config.props) return config.all ? (config.group ? {} : []) : null;
-		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
+		let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 		if (!BDFDB.ObjectUtils.is(instance)) return config.all ? (config.group ? {} : []) : null;
 		config.name = config.name && [config.name].flat().filter(n => n);
 		config.type = config.type && [config.type].flat().filter(n => n);
 		config.key = config.key && [config.key].flat().filter(n => n);
 		config.props = config.props && [config.props].flat().filter(n => n);
-		var depth = -1;
-		var start = performance.now();
-		var maxdepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
-		var maxtime = config.unlimited ? 999999999 : (config.time === undefined ? 150 : config.time);
-		var whitelist = config.up ? {return:true, sibling:true, _reactInternalFiber:true} : {child:true, sibling:true, _reactInternalFiber:true};
-		var foundInstances = config.group ? {} : [];
-		var singleInstance = getOwner(instance);
+		let depth = -1;
+		let start = performance.now();
+		let maxDepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
+		let maxTime = config.unlimited ? 999999999 : (config.time === undefined ? 150 : config.time);
+		let whitelist = config.up ? {return:true, sibling:true, _reactInternalFiber:true} : {child:true, sibling:true, _reactInternalFiber:true};
+		let foundInstances = config.group ? {} : [];
+		let singleInstance = getOwner(instance);
 		if (config.all) {
 			for (let i in foundInstances) {
 				if (config.group) for (let j in foundInstances[i]) delete foundInstances[i][j].BDFDBreactSearch;
@@ -1848,8 +1894,8 @@
 
 		function getOwner (instance) {
 			depth++;
-			var result = undefined;
-			if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxdepth && performance.now() - start < maxtime) {
+			let result = undefined;
+			if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxDepth && performance.now() - start < maxTime) {
 				let props = instance.stateNode ? instance.stateNode.props : instance.props;
 				if (instance.stateNode && !Node.prototype.isPrototypeOf(instance.stateNode) && (instance.type && config.name && config.name.some(name => InternalBDFDB.isInstanceCorrect(instance, name.split(" _ _ ")[0])) || instance.type && config.type && config.type.some(type => BDFDB.ArrayUtils.is(type) ? instance.type === type[1] : instance.type === type) || instance.key && config.key && config.key.some(key => instance.key == key) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => BDFDB.equals(props[prop[0]], checkvalue)) : BDFDB.equals(props[prop[0]], prop[1])) : props[prop] !== undefined))) {
 					if (config.all === undefined || !config.all) result = instance.stateNode;
@@ -1887,21 +1933,21 @@
 	BDFDB.ReactUtils.findProps = function (nodeOrInstance, config) {
 		if (!BDFDB.ObjectUtils.is(config)) return null;
 		if (!nodeOrInstance || !config.name && !config.key) return null;
-		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
+		let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 		if (!BDFDB.ObjectUtils.is(instance)) return null;
 		config.name = config.name && [config.name].flat().filter(n => n);
 		config.key = config.key && [config.key].flat().filter(n => n);
-		var depth = -1;
-		var start = performance.now();
-		var maxdepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
-		var maxtime = config.unlimited ? 999999999 : (config.time === undefined ? 150 : config.time);
-		var whitelist = config.up ? {return:true, sibling:true, _reactInternalFiber:true} : {child:true, sibling:true, _reactInternalFiber:true};
+		let depth = -1;
+		let start = performance.now();
+		let maxDepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
+		let maxTime = config.unlimited ? 999999999 : (config.time === undefined ? 150 : config.time);
+		let whitelist = config.up ? {return:true, sibling:true, _reactInternalFiber:true} : {child:true, sibling:true, _reactInternalFiber:true};
 		return findProps(instance);
 
 		function findProps (instance) {
 			depth++;
-			var result = undefined;
-			if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxdepth && performance.now() - start < maxtime) {
+			let result = undefined;
+			if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxDepth && performance.now() - start < maxTime) {
 				if (instance.memoizedProps && (instance.type && config.name && config.name.some(name => InternalBDFDB.isInstanceCorrect(instance, name.split(" _ _ ")[0])) || config.key && config.key.some(key => instance.key == key))) result = instance.memoizedProps;
 				if (result === undefined) {
 					let keys = Object.getOwnPropertyNames(instance);
@@ -1915,17 +1961,17 @@
 			return result;
 		}
 	};
-	BDFDB.ReactUtils.findValue = function (nodeOrInstance, searchkey, config = {}) {
+	BDFDB.ReactUtils.findValue = function (nodeOrInstance, searchKey, config = {}) {
 		if (!BDFDB.ObjectUtils.is(config)) return null;
-		if (!nodeOrInstance || typeof searchkey != "string") return config.all ? [] : null;
-		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
+		if (!nodeOrInstance || typeof searchKey != "string") return config.all ? [] : null;
+		let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 		if (!BDFDB.ObjectUtils.is(instance)) return config.all ? [] : null;
 		instance = instance._reactInternalFiber || instance;
-		var depth = -1;
-		var start = performance.now();
-		var maxdepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
-		var maxtime = config.unlimited ? 999999999 : (config.time === undefined ? 150 : config.time);
-		var whitelist = {
+		let depth = -1;
+		let start = performance.now();
+		let maxDepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
+		let maxTime = config.unlimited ? 999999999 : (config.time === undefined ? 150 : config.time);
+		let whitelist = {
 			props: true,
 			state: true,
 			stateNode: true,
@@ -1939,35 +1985,35 @@
 			return: config.up ? true : false,
 			sibling: config.up ? false : true
 		};
-		var blacklist = {
+		let blacklist = {
 			contextSection: true
 		};
 		if (BDFDB.ObjectUtils.is(config.whitelist)) Object.assign(whitelist, config.whiteList);
 		if (BDFDB.ObjectUtils.is(config.blacklist)) Object.assign(blacklist, config.blacklist);
-		var foundkeys = [];
-		var singlekey = getKey(instance);
-		if (config.all) return foundkeys;
+		let foundKeys = [];
+		let singleKey = getKey(instance);
+		if (config.all) return foundKeys;
 		else return singlekey;
 		function getKey(instance) {
 			depth++;
-			var result = undefined;
-			if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxdepth && performance.now() - start < maxtime) {
+			let result = undefined;
+			if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxDepth && performance.now() - start < maxTime) {
 				let keys = Object.getOwnPropertyNames(instance);
 				for (let i = 0; result === undefined && i < keys.length; i++) {
 					let key = keys[i];
 					if (key && !blacklist[key]) {
-						var value = instance[key];
-						if (searchkey === key && (config.value === undefined || BDFDB.equals(config.value, value))) {
+						let value = instance[key];
+						if (searchKey === key && (config.value === undefined || BDFDB.equals(config.value, value))) {
 							if (config.all === undefined || !config.all) result = value;
 							else if (config.all) {
-								if (config.noCopies === undefined || !config.noCopies) foundkeys.push(value);
+								if (config.noCopies === undefined || !config.noCopies) foundKeys.push(value);
 								else if (config.noCopies) {
-									var copy = false;
-									for (let foundkey of foundkeys) if (BDFDB.equals(value, foundkey)) {
+									let copy = false;
+									for (let foundKey of foundKeys) if (BDFDB.equals(value, foundKey)) {
 										copy = true;
 										break;
 									}
-									if (!copy) foundkeys.push(value);
+									if (!copy) foundKeys.push(value);
 								}
 							}
 						}
@@ -1988,9 +2034,9 @@
 	};
 	BDFDB.ReactUtils.getValue = function (nodeOrInstance, valuepath) {
 		if (!nodeOrInstance || !valuepath) return null;
-		var instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
+		let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 		if (!BDFDB.ObjectUtils.is(instance)) return null;
-		var found = instance, values = valuepath.split(".").filter(n => n);
+		let found = instance, values = valuepath.split(".").filter(n => n);
 		for (value of values) {
 			if (!found) return null;
 			found = found[value];

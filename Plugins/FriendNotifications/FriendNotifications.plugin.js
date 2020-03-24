@@ -307,7 +307,7 @@ var FriendNotifications = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 								className: `input-newstranger`,
-								placeholder: "userId",
+								placeholder: "user (id or name#discriminator)",
 								value: ""
 							})
 						}),
@@ -317,13 +317,12 @@ var FriendNotifications = (_ => {
 								if (friendIDs.includes(userId)) BDFDB.NotificationUtils.toast("User is already a friend of yours. Please use the 'Friend-List' area to configure him/her.", {type:"error"});
 								else if (Object.keys(nonFriends).includes(userId)) BDFDB.NotificationUtils.toast("User is already being observed as a 'Stranger'.", {type:"error"});
 								else {
-									let user = BDFDB.LibraryModules.UserStore.getUser(userId);
+									let user = /.+#[0-9]{4}/.test(userId) ? BDFDB.LibraryModules.UserStore.findByTag(userId.split("#").slice(0, -1).join("#"), userId.split("#").prop()) : BDFDB.LibraryModules.UserStore.getUser(userId);
 									if (user) {
 										BDFDB.DataUtils.save(this.createDefaultConfig(), this, "nonfriends", userId);
 										this.SettingsUpdated = true;
 										BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
 									}
-									else if (/.+#[0-9]{4}/.test(userId)) BDFDB.NotificationUtils.toast("A UserID does not consist of the username and discriminator.", {type:"error"});
 									else BDFDB.NotificationUtils.toast("Please enter a valid UserID of a user that has been loaded in your client.", {type:"error"});
 								}
 							},
