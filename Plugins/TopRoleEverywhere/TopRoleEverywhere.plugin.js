@@ -4,7 +4,7 @@ var TopRoleEverywhere = (_ => {
 	return class TopRoleEverywhere {
 		getName () {return "TopRoleEverywhere";}
 
-		getVersion () {return "2.9.8";}
+		getVersion () {return "2.9.9";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ var TopRoleEverywhere = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Messages Popout","Now works in popouts like the recent mentions popout"]]
+				"fixed":[["Compact","Fuck u compact mode"]]
 			};
 
 			this.patchedModules = {
@@ -40,9 +40,18 @@ var TopRoleEverywhere = (_ => {
 				${BDFDB.dotCN._toproleseverywherebadgestyle} {
 					margin-left: 0.3rem;
 				}
-				${BDFDB.dotCNS.messageheadercompact + BDFDB.dotCN._toproleseverywherebadgestyle} {
+				${BDFDB.dotCNS.themelight + BDFDB.dotCN._toproleseverywhererolestyle} {
+					color: rgba(79, 84, 92, 0.8);
+				}
+				${BDFDB.dotCNS.themedark + BDFDB.dotCN._toproleseverywhererolestyle} {
+					color: hsla(0, 0%, 100%, 0.8);
+				}
+				${BDFDB.dotCNS.messagecompact + BDFDB.dotCNS.messageheader + BDFDB.dotCN._toproleseverywherebadgestyle} {
 					margin-left: 0.1rem;
 					margin-right: 0.2rem;
+				}
+				${BDFDB.dotCNS.messagecompact + BDFDB.dotCNS.messageheader + BDFDB.dotCN._toproleseverywhererolestyle} {
+					margin-right: 0.3rem;
 				}
 				${BDFDB.dotCN._toproleseverywhererolestyle} {
 					display: inline-flex;
@@ -51,7 +60,7 @@ var TopRoleEverywhere = (_ => {
 				${BDFDB.dotCNS._toproleseverywhererolestyle + BDFDB.dotCN.userpopoutrolecircle} {
 					flex: 0 0 auto;
 				}
-				${BDFDB.dotCNS.messageheadercompact + BDFDB.dotCN._toproleseverywhererolestyle} {
+				${BDFDB.dotCNS.messagecompact + BDFDB.dotCNS.messageheader + BDFDB.dotCN._toproleseverywhererolestyle} {
 					text-indent: 0;
 				}`;
 
