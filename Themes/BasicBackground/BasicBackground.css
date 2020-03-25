@@ -2210,6 +2210,10 @@ body:before {
 
 /* ~~~~		11.		GUILDSETTINGS					~~~~ */
 
+#app-mount .emojiAliasInput-1y-NBz .emojiInput-1aLNse {		/* emojisettings		nameinput							*/
+	background-color: rgba(var(--vtransparencycolor), 0.1);
+}
+
 #app-mount .selectableItem-1MP3MQ {							/* auditlogs			popoutitem							*/
 	color: rgb(var(--fontwhite2));
 }
@@ -2630,6 +2634,7 @@ body:before {
 	background: transparent;
 }
 .wrapper-2ZbzR9 > * > * {
+	top: unset !important;
 	transform: unset !important;
 }
 #app-mount .slide-2pHaq5 {									/* modal				slide								*/
@@ -4328,6 +4333,7 @@ body:before {
 	filter: blur(var(--vpopoutblur));
 	background-attachment: fixed;
 }
+#app-mount .header-2bNvm4,
 #app-mount .autocompleteHeaderBackground-30T70q {			/* popout				header								*/
 	background: rgba(var(--vtransparencycolor), 0.3);
 	border-radius: 5px 5px 0 0;
@@ -4897,7 +4903,7 @@ body:before {
 	border-color: rgba(var(--vtransparencycolor), 0.3);
 	color: rgb(var(--fontwhite1));
 }
-.input-cIJ7To:hover {
+.input-cIJ7To:hover:not(:focus) {
 	border-color: rgb(var(--vtransparencycolor));
 }
 .input-cIJ7To::placeholder {
@@ -5505,6 +5511,12 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 }
 #app-mount .tooltipBlack-PPG47z .tooltipPointer-3ZfirK {
 	border-top-color: rgb(var(--vaccentcolor));
+}
+.emptyUser-7txhlW {
+	background: rgba(var(--vtransparencycolor), 0.5);
+}
+.moreUsers-7v8yWY {
+	background: rgba(var(--vtransparencycolor), 0.5);
 }
 
 /* ----		14.10.	TOASTS							---- */
