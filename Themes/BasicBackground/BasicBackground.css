@@ -89,12 +89,13 @@
 		6.	SEARCHPAGE
 		7.	CALL
 		8.	UNAVAILABLESCREEN
-	7.	STORE/NITRO
-	8.	PEOPLES
-	9.	DISCOVERY
-	10.	USERSETTINGS
-	11.	GUILDSETTINGS
-	12.	MODALS
+	7.	PEOPLES
+	8.	STORE/NITRO
+	9.	LIBRARY
+	10.	DISCOVERY
+	11.	USERSETTINGS
+	12.	GUILDSETTINGS
+	13.	MODALS
 		1.	USERMODAL
 		2.	GUILDADD/CREATION
 		3.	REGIONSELECTMODAL
@@ -107,7 +108,7 @@
 		10.	DOWNLOADAPPMODAL
 		11.	GUILDBOOSTMODAL
 		12.	NEWUSERMODAL
-	13.	POPOUTS
+	14.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
 		3.	EMOJIPICKER
@@ -118,7 +119,7 @@
 		8.	EVERYONEMENTION
 		9.	CHANNELFOLLOW
 		10.	CHANNELFOLLOWINFO
-	14.	GENERAL
+	15.	GENERAL
 		1.	TEXT
 		2.	BUTTONS
 		3.	INPUTS
@@ -129,8 +130,8 @@
 		8.	NOTIFICATIONBAR
 		9.	TOOLTIPS
 		10.	TOASTS
-	15.	BDSUPPORT
-	16.	PLUGINSUPPORT
+	16.	BDSUPPORT
+	17.	PLUGINSUPPORT
 		1.	DATEVIEWER
 		2.	SERVERFOLDERS
 		3.	MEMBERCOUNT
@@ -145,11 +146,11 @@
 		12.	DIRECTDOWNLOAD
 		13.	BETTERFORMATINGREDUX
 		14.	PLUGIN/THEMEREPO
-	17.	THEMESUPPORT
+	18.	THEMESUPPORT
 		1.	THEMEDEVBADGE
 		2.	BETTERDOCSBLOCK
-	18.	UPDATENOTICE
-	19.	WATERMARK
+	19.	UPDATENOTICE
+	20.	WATERMARK
 */
 
 
@@ -168,6 +169,7 @@ body,														/* body														*/
 #app-mount .noChannel-Z1DQK7,								/* nochannel												*/
 #app-mount .content-MLh4nU,									/* unavailable												*/
 #app-mount .container-1D34oG,								/* peoples													*/
+#app-mount .applicationStore-1pNvnv,						/* nitro													*/
 #app-mount .pageWrapper-1PgVDX,								/* guilddiscovery											*/
 #app-mount .scroller-2FKFPG,								/* scroller													*/
 #app-mount .standardSidebarView-3F1I7i,						/* settings													*/
@@ -865,10 +867,12 @@ body:before {
 	border: 10px solid transparent;
 	border-right: 12px solid rgba(var(--vtransparencycolor), var(--vmessagetransparency));
 }
-.selected-2P5D_Z.cozy-3raOZG .header-23xsNx:after, 
-.mouse-mode .cozy-3raOZG:hover .header-23xsNx:after,
-.selected-2P5D_Z.cozy-3raOZG .iconContainer-3GkGRf:after,
-.mouse-mode .cozy-3raOZG:hover .iconContainer-3GkGRf:after {
+.selected-2P5D_Z.message-2qnXI6.cozy-3raOZG .header-23xsNx:after, 
+.mouse-mode .message-2qnXI6.cozy-3raOZG:hover .header-23xsNx:after,
+.mouse-mode.full-motion .message-2qnXI6.cozy-3raOZG:hover .header-23xsNx:after,
+.selected-2P5D_Z.message-2qnXI6.cozy-3raOZG .iconContainer-3GkGRf:after,
+.mouse-mode .message-2qnXI6.cozy-3raOZG:hover .iconContainer-3GkGRf:after,
+.mouse-mode.full-motion .message-2qnXI6.cozy-3raOZG:hover .iconContainer-3GkGRf:after {
 	border-right-color: rgba(var(--vtransparencycolor), calc(var(--vmessagetransparency) * 1.2));
 }
 #app-mount .localBot-GrCgVt.cozy-3raOZG .header-23xsNx:after,
@@ -977,7 +981,10 @@ body:before {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 	border-color: rgba(var(--vtransparencycolor), 0.1);
 }
-.markup-2BOw-j .inline {									/* messageelement		inline								*/
+.markup-2BOw-j .inline,										/* messageelement		inline								*/
+.after_inlineCode-1KfVgj,
+.before_inlineCode-1G9rTK,
+.inlineCode-2ngu6Y {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 }
 .markup-2BOw-j .hljs {										/* messageelement		hljs								*/
@@ -1039,6 +1046,10 @@ body:before {
 #app-mount .attachment-33OFj0 {								/* attachment			container							*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 	border-color: rgba(var(--vtransparencycolor), 0.1);
+	margin-left: 18px;
+}
+#app-mount .message-2qnXI6 .attachment-33OFj0 {
+	margin-left: 0;
 }
 #app-mount .metadata-3WGS0M {								/* attachment			metadata							*/
 	color: rgb(var(--fontwhite4));
@@ -1534,7 +1545,124 @@ body:before {
 }
 
 
+/* ~~~~		7.		PEOPLES							~~~~ */
+
+.wrapper-1cBijl {											/* friendsadd			inputcontainer						*/
+	background-color: rgba(var(--vtransparencycolor), 0.1);
+	border-color: rgba(var(--vtransparencycolor), 0.3);
+}
+.wrapper-1cBijl:hover {
+	border-color: rgb(var(--vtransparencycolor));
+}
+.wrapper-1cBijl .addFriendInput-4bcerK {
+	color: rgb(var(--fontwhite1));
+}
+.wrapper-1cBijl .addFriendInput-4bcerK::placeholder,
+.addFriendHint-3Y70FX {
+	color: rgb(var(--fontwhite4));
+}
+
+.tableHeaderText-2io-_N,									/* tableheader			text								*/
+.onlineStatusGroupTitle-6ObdV6 {							/* groupheader												*/
+	color: rgb(var(--fontwhite2));
+}
+
+.tableHeader-2Ctu7Y {										/* tablerheader			border								*/
+	border-top-color: rgba(var(--fontwhite4), 0.5);
+}
+.peopleListItem-2nzedh {									/* peoples				row									*/
+	border-top-color: rgba(var(--fontwhite1), 0.1);
+}
+.peopleListItem-2nzedh .username-31C1TQ {					/* peoples				username							*/
+	color: rgb(var(--fontwhite2));
+}
+.peopleListItem-2nzedh .discriminator-22Okc1 {				/* peoples				discriminator						*/
+	color: rgb(var(--fontwhite4));
+}
+.peopleListItem-2nzedh .subtext-24R4-w {					/* peoples				subtext								*/
+	color: rgb(var(--fontwhite3));
+}
+.peopleListItem-2nzedh .actionButton-uPB8Fs {				/* peoples				actionbutton						*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+	color: rgb(var(--fontwhite4));
+}
+.peopleListItem-2nzedh:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+.peopleListItem-2nzedh:hover .username-31C1TQ {
+	color: rgb(var(--fontwhite1));
+}
+.peopleListItem-2nzedh:hover .discriminator-22Okc1 {
+	color: rgb(var(--fontwhite3));
+}
+.peopleListItem-2nzedh:hover .subtext-24R4-w {
+	color: rgb(var(--fontwhite2));
+}
+.peopleListItem-2nzedh:hover .actionButton-uPB8Fs {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+	color: rgb(var(--fontwhite3));
+}
+.peopleListItem-2nzedh .actionButton-uPB8Fs:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.5);
+	color: rgb(var(--fontwhite1));
+}
+.header-13Cw0- {											/* playing				header								*/
+	color: rgb(var(--fontwhite2));
+}
+#app-mount .outer-1AjyKL {									/* playing				card								*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+#app-mount .outer-1AjyKL.active-1xchHY,
+#app-mount .outer-1AjyKL.interactive-3B9GmY:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+#app-mount .inset-3sAvek {									/* playing				card inner							*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.emptyCard-1RJw8n {											/* playing				empty card							*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+#app-mount .popout-38lTFE {									/* playing				popout								*/
+	background-color: transparent;
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 8px 16px 0 rgba(var(--vtransparencycolor), 0.3);
+	overflow: hidden;
+}
+.popout-38lTFE:after,
+.popout-38lTFE:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.popout-38lTFE:after {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.3));
+}
+.popout-38lTFE:before {
+	background: var(--vpopout) center/var(--vpopoutsize);
+	filter: blur(var(--vpopoutblur));
+	background-attachment: fixed;
+}
+#app-mount .memberListItem-31QoHj:not(.popoutDisabled-2RK7MF):hover,
+#app-mount .enabled-1t_Gxm:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+
+
 /* ~~~~		7.		STORE/NITRO						~~~~ */
+
+.marketingHeader-2Iq7qk {									/* marketingheader											*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+
+.detailsBlock-FoDTGA {										/* billing 				details								*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
 
 .sectionHeader-127c3L {										/* header													*/
 	color: rgb(var(--fontwhite1));
@@ -1788,95 +1916,17 @@ body:before {
 	color: rgb(var(--fontwhite3));
 }
 
-.gridHalfCard-qNnKSA .gridItemCopy-CiErsn {					/* nitrosettings		halfcard							*/
-	background-color: rgba(var(--vtransparencycolor), 0.4);
-}
 
+/* ~~~~		9.		LIBRARY							~~~~ */
 
-/* ~~~~		8.		PEOPLES							~~~~ */
-
-.wrapper-1cBijl {											/* friendsadd			inputcontainer						*/
-	background-color: rgba(var(--vtransparencycolor), 0.1);
-	border-color: rgba(var(--vtransparencycolor), 0.3);
-}
-.wrapper-1cBijl:hover {
-	border-color: rgb(var(--vtransparencycolor));
-}
-.wrapper-1cBijl .addFriendInput-4bcerK {
-	color: rgb(var(--fontwhite1));
-}
-.wrapper-1cBijl .addFriendInput-4bcerK::placeholder,
-.addFriendHint-3Y70FX {
-	color: rgb(var(--fontwhite4));
-}
-
-.tableHeaderText-2io-_N,									/* tableheader			text								*/
-.onlineStatusGroupTitle-6ObdV6 {							/* groupheader												*/
-	color: rgb(var(--fontwhite2));
-}
-
-.tableHeader-2Ctu7Y {										/* tablerheader			border								*/
-	border-top-color: rgba(var(--fontwhite4), 0.5);
-}
-.peopleListItem-2nzedh {									/* peoples				row									*/
-	border-top-color: rgba(var(--fontwhite1), 0.1);
-}
-.peopleListItem-2nzedh .username-31C1TQ {					/* peoples				username							*/
-	color: rgb(var(--fontwhite2));
-}
-.peopleListItem-2nzedh .discriminator-22Okc1 {				/* peoples				discriminator						*/
-	color: rgb(var(--fontwhite4));
-}
-.peopleListItem-2nzedh .subtext-24R4-w {					/* peoples				subtext								*/
+.header-39GIC8 {											/* library				table header						*/
+	background: transparent;
+	border-bottom-color: rgba(var(--fontwhite4), 0.5);
 	color: rgb(var(--fontwhite3));
+	position: relative;
 }
-.peopleListItem-2nzedh .actionButton-uPB8Fs {				/* peoples				actionbutton						*/
-	background-color: rgba(var(--vtransparencycolor), 0.2);
-	color: rgb(var(--fontwhite4));
-}
-.peopleListItem-2nzedh:hover {
-	background-color: rgba(var(--vtransparencycolor), 0.3);
-}
-.peopleListItem-2nzedh:hover .username-31C1TQ {
-	color: rgb(var(--fontwhite1));
-}
-.peopleListItem-2nzedh:hover .discriminator-22Okc1 {
-	color: rgb(var(--fontwhite3));
-}
-.peopleListItem-2nzedh:hover .subtext-24R4-w {
-	color: rgb(var(--fontwhite2));
-}
-.peopleListItem-2nzedh:hover .actionButton-uPB8Fs {
-	background-color: rgba(var(--vtransparencycolor), 0.4);
-	color: rgb(var(--fontwhite3));
-}
-.peopleListItem-2nzedh .actionButton-uPB8Fs:hover {
-	background-color: rgba(var(--vtransparencycolor), 0.5);
-	color: rgb(var(--fontwhite1));
-}
-.header-13Cw0- {											/* playing				header								*/
-	color: rgb(var(--fontwhite2));
-}
-#app-mount .outer-1AjyKL {									/* playing				card								*/
-	background-color: rgba(var(--vtransparencycolor), 0.2);
-}
-#app-mount .outer-1AjyKL.active-1xchHY,
-#app-mount .outer-1AjyKL.interactive-3B9GmY:hover {
-	background-color: rgba(var(--vtransparencycolor), 0.4);
-}
-#app-mount .inset-3sAvek {									/* playing				card inner							*/
-	background-color: rgba(var(--vtransparencycolor), 0.2);
-}
-.emptyCard-1RJw8n {											/* playing				empty card							*/
-	background-color: rgba(var(--vtransparencycolor), 0.2);
-}
-#app-mount .popout-38lTFE {									/* playing				popout								*/
-	background-color: transparent;
-	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 8px 16px 0 rgba(var(--vtransparencycolor), 0.3);
-	overflow: hidden;
-}
-.popout-38lTFE:after,
-.popout-38lTFE:before {
+.header-39GIC8:after,
+.header-39GIC8:before {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -1888,21 +1938,64 @@ body:before {
 	pointer-events: none;
 	z-index: -1;
 }
-.popout-38lTFE:after {
-	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.3));
+.header-39GIC8:after {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
 }
-.popout-38lTFE:before {
-	background: var(--vpopout) center/var(--vpopoutsize);
-	filter: blur(var(--vpopoutblur));
+.header-39GIC8:before {
+	background: var(--vbackground) center/var(--vbackgroundsize);
+	filter: blur(var(--vbackgroundblur));
 	background-attachment: fixed;
 }
-#app-mount .memberListItem-31QoHj:not(.popoutDisabled-2RK7MF):hover,
-#app-mount .enabled-1t_Gxm:hover {
+.headerCell-3L6rFG {										/* library				table headercell					*/
+	border-left-color: rgba(var(--fontwhite4), 0.3);
+}
+.clickable-VxMZ3b {
+	color: rgb(var(--fontwhite2));
+}
+.clickable-VxMZ3b:hover {
+	color: rgb(var(--fontwhite1));
+}
+.lastPlayedCell-2arbtc,
+.platformCell-XyBBs6 {
+	color: rgb(var(--fontwhite3));
+}
+.headerCellSorted-3a5AzJ,
+.headerCellSorted-3a5AzJ:hover {
+	color: rgb(var(--fontwhite1));
+}
+.row-ZLfFhY {												/* library				table row							*/
+	color: rgb(var(--fontwhite3));
+}
+.rowWrapperActive-2L7i9f {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.rowWrapper-2fB6P0 + .rowWrapper-2fB6P0 .row-ZLfFhY {
+	border-top-color: rgba(var(--fontwhite4), 0.3);
+}
+.nameCellText-1mpqtF {										/* library				table namecell						*/
+	color: rgb(var(--fontwhite2));
+}
+.row-ZLfFhY:hover .nameCellText-1mpqtF {
+	color: rgb(var(--fontwhite1));
+}
+.textCell-1aBIUP {											/* library				table textcell						*/
+	color: rgb(var(--fontwhite4));
+}
+.row-ZLfFhY:hover .textCell-1aBIUP {
+	color: rgb(var(--fontwhite3));
+}
+.icon-1IKq3C {												/* library				table icon							*/
+	color: rgb(var(--fontwhite4));
+}
+.row-ZLfFhY:hover .icon-1IKq3C {
+	color: rgb(var(--fontwhite3));
+}
+.emptyWumpus-12J3jI {										/* library				no games							*/
+	opacity: 0.6;
 }
 
 
-/* ~~~~		9.		DISCOVERY						~~~~ */
+/* ~~~~		10.		DISCOVERY						~~~~ */
 
 #app-mount .pageWrapper-1PgVDX {							/* guilddiscovery		container							*/
 	color: rgb(var(--fontwhite1));
@@ -1950,7 +2043,7 @@ body:before {
 }
 
 
-/* ~~~~		10.		USERSETTINGS					~~~~ */
+/* ~~~~		11.		USERSETTINGS					~~~~ */
 
 .themed-OHr7kt.item-PXvHYJ {								/* sidebar				item								*/
 	color: rgb(var(--fontwhite3));
@@ -2075,6 +2168,30 @@ body:before {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 	border-color: rgba(var(--vtransparencycolor), 0.1);
 	color: rgb(var(--fontwhite1));
+}
+
+.emptyStateImage-2MrSNs {									/* giftinventory		no gifts							*/
+	opacity: 0.6;
+}
+
+.guildHeader-3nh5RK {										/* boostsettings		suggestioncard						*/
+	background-color: rgba(var(--vtransparencycolor), 0.5);
+}
+.guildSubscriptionSlots-JPXXvN {							/* boostsettings		suggestioncard						*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+.cardWrapper-2Min21 {										/* boostsettings		suggestioncard						*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.cardWrapper-2Min21:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+.cardWrapper-2Min21 .card-3AyPWq,							/* boostsettings		suggestioncard inner				*/
+.cardWrapper-2Min21 .card-3AyPWq:hover {
+	background-color: transparent;
+}
+#app-mount .gemIndicatorContainer-2jdECl {					/* boostsettings		suggestioncard circle				*/
+	background-color: transparent;
 }
 
 .introHeader-4MPach {										/* hypesquad			header								*/
@@ -2217,7 +2334,7 @@ body:before {
 }
 
 
-/* ~~~~		11.		GUILDSETTINGS					~~~~ */
+/* ~~~~		12.		GUILDSETTINGS					~~~~ */
 
 #app-mount .emojiAliasInput-1y-NBz .emojiInput-1aLNse {		/* emojisettings		nameinput							*/
 	background-color: rgba(var(--vtransparencycolor), 0.1);
@@ -2339,32 +2456,14 @@ body:before {
 	stroke: rgb(var(--fontwhite1));
 }
 
-.emptyStateImage-2MrSNs {									/* giftinventory		no gifts							*/
-	opacity: 0.7
-}
-
-.cardWrapper-2Min21 {										/* boostsettings		suggestioncard						*/
-	background-color: rgba(var(--vtransparencycolor), 0.2);
-}
-.cardWrapper-2Min21:hover {
-	background-color: rgba(var(--vtransparencycolor), 0.4);
-}
-.cardWrapper-2Min21 .card-3AyPWq,							/* boostsettings		suggestioncard inner				*/
-.cardWrapper-2Min21 .card-3AyPWq:hover {
-	background-color: transparent;
-}
-#app-mount .gemIndicatorContainer-2jdECl {					/* boostsettings		suggestioncard circle				*/
-	background-color: transparent;
-}
-
-#app-mount .tierHeaderLocked-1s2JJz {						/* boostsettings		tierheaderlocked					*/
+#app-mount .tierHeaderLocked-1a2opw {						/* boostsettings		tierheaderlocked					*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 	color: rgb(var(--fontwhite3));
 }
 #app-mount .tierLock-1oFMOZ {								/* boostsettings		tierlock							*/
 	color: rgb(var(--fontwhite4));
 }
-#app-mount .tierHeaderUnlocked-2RhWqn {						/* boostsettings		tierheaderunlocked				*/
+#app-mount .tierHeaderUnlocked-2RhWqn {						/* boostsettings		tierheaderunlocked					*/
 	background-color: rgba(var(--vtransparencycolor), 0.5);
 	color: rgb(var(--fontwhite1));
 }
@@ -2375,7 +2474,7 @@ body:before {
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 	color: rgb(var(--fontwhite3));
 }
-#app-mount .tierInProgress-3mBoXq {							/* boostsettings		tiermilestone					*/
+#app-mount .tierInProgress-3mBoXq {							/* boostsettings		tiermilestone						*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
 #app-mount .background-3xPPFc {								/* boostsettings		tierbar	(settings)					*/
@@ -2397,6 +2496,46 @@ body:before {
 }
 #app-mount .member-1q7VfX .overflowIconFg-QMRRFI {			/* membersettings		3-doticon							*/
 	fill: rgb(var(--fontwhite1));
+}
+
+#app-mount .overflowRolesPopout-140n9i,						/* membersettings		roleoverflow popout					*/
+#app-mount .overflowRolesPopoutArrow-2O66oH {
+	background-color: transparent;
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.2), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.2);
+	border: none;
+	border-radius: 3px;
+	overflow: hidden;
+}
+.overflowRolesPopout-140n9i:after,
+.overflowRolesPopout-140n9i:before,
+.overflowRolesPopoutArrow-2O66oH:after,
+.overflowRolesPopoutArrow-2O66oH:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.overflowRolesPopout-140n9i:after,
+.overflowRolesPopoutArrow-2O66oH:after {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.1));
+}
+.overflowRolesPopout-140n9i:before,
+.overflowRolesPopoutArrow-2O66oH:before {
+	background: var(--vpopout) center/var(--vpopoutsize);
+	filter: blur(var(--vpopoutblur));
+	background-attachment: fixed;
+}
+.overflowRolesPopoutHeaderIcon-6PNEZA path {
+	fill: rgb(var(--fontwhite2));
+}
+.overflowRolesPopoutHeaderText-1SW-y3 {
+	color: rgb(var(--fontwhite2));
 }
 
 #app-mount .inviteSettingsInviteRow-3p2O-N {				/* invitesettings		invitecard							*/
@@ -2426,7 +2565,7 @@ body:before {
 }
 
 
-/* ~~~~		12.		MODALS							~~~~ */
+/* ~~~~		13.		MODALS							~~~~ */
 
 #app-mount .root-1gCeng,									/* modal				container (foldersettings)			*/
 #app-mount .modal-yWgWj- {									/* modal				container							*/
@@ -2529,7 +2668,7 @@ body:before {
 	background-color: rgb(var(--fontwhite2));
 }
 
-/* ----		12.1.	USERMODAL						----- */
+/* ----		13.1.	USERMODAL						----- */
 
 #app-mount .root-SR8cQa {									/* modal				container							*/
 	background-color: transparent;
@@ -2637,7 +2776,7 @@ body:before {
 	color: rgb(var(--fontwhite2));
 }
 
-/* ----		12.2.	GUILDADD/CREATION				----- */
+/* ----		13.2.	GUILDADD/CREATION				----- */
 
 #app-mount .wrapper-2ZbzR9 {								/* modal				wrapper								*/
 	background: transparent;
@@ -2743,7 +2882,7 @@ body:before {
 	color: rgb(var(--fontwhite2));
 }
 
-/* ----		12.3.	REGIONSELECTMODAL				---- */
+/* ----		13.3.	REGIONSELECTMODAL				---- */
 
 #app-mount .regionSelectModal-12e-57 {						/* modal				container							*/
 	background-color: transparent;
@@ -2783,7 +2922,7 @@ body:before {
 	color: rgb(var(--fontwhite3));
 }
 
-/* ----		12.4.	UPLOADMODAL						---- */
+/* ----		13.4.	UPLOADMODAL						---- */
 
 #app-mount .uploadModal-2ifh8j {							/* modal				container							*/
 	background-color: transparent;
@@ -2850,7 +2989,7 @@ body:before {
 	box-shadow: 0 2px 8px rgba(var(--vtransparencycolor), 0.4);
 }
 
-/* ----		12.5.	KEYBOARDSHORTCUTSMODAL			---- */
+/* ----		13.5.	KEYBOARDSHORTCUTSMODAL			---- */
 
 #app-mount .keyboardShortcutsModal-3piNz7 {					/* modal				container							*/
 	background-color: transparent;
@@ -2902,7 +3041,7 @@ body:before {
 	fill: rgb(var(--fontwhite1));
 }
 
-/* ----		12.6.	QUICKSWITCHER					---- */
+/* ----		13.6.	QUICKSWITCHER					---- */
 
 #app-mount .quickswitcher-3JagVE {							/* modal				container							*/
 	background-color: transparent;
@@ -2974,7 +3113,7 @@ body:before {
 	background-color: rgba(var(--fontwhite4), 0.3);
 }
 
-/* ----		12.7.	INVITEMODAL						---- */
+/* ----		13.7.	INVITEMODAL						---- */
 
 #app-mount .contentWrapper-3WC1ID {								/* modal				guildinvitemodal				*/
 	background-color: transparent;
@@ -3031,7 +3170,7 @@ body:before {
 	background-color: rgba(var(--vtransparencycolor), 0.5);
 }
 
-/* ----		12.8.	LOGINSCREEN						---- */
+/* ----		13.8.	LOGINSCREEN						---- */
 
 #app-mount .wrapper-3Q5DdO {								/* login				wrapper								*/
 	background: transparent;
@@ -3061,7 +3200,7 @@ body:before {
 	color: rgb(var(--fontwhite3));
 }
 
-/* ----		12.9.	TERMACCEPTMODAL					---- */
+/* ----		13.9.	TERMACCEPTMODAL					---- */
 
 #app-mount .modal-DRZfgq {									/* modal				container							*/
 	background-color: transparent;
@@ -3111,7 +3250,7 @@ body:before {
 	box-shadow: none;
 }
 
-/* ----		12.10.	DOWNLOADAPPMODAL				---- */
+/* ----		13.10.	DOWNLOADAPPMODAL				---- */
 
 #app-mount .downloadApps-wbBFdZ {							/* modal				container							*/
 	background-color: transparent;
@@ -3156,7 +3295,7 @@ body:before {
 	color: rgb(var(--fontwhite3));
 }
 
-/* ----		12.11.	GUILDBOOSTMODAL					---- */
+/* ----		13.11.	GUILDBOOSTMODAL					---- */
 
 .carouselContainer-2-vIZS {									/* modal				scrollercontainer					*/
 	-webkit-mask: linear-gradient(to right, rgba(0,0,0,0) 0px, rgba(0,0,0,1) 60px, rgba(0,0,0,1) calc(100vw - 60px), rgba(0,0,0,0) 100vw);
@@ -3270,6 +3409,9 @@ body:before {
 #app-mount .barBackground-2EEiLw {							/* modal				tierbar 								*/
 	background: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 3%, rgba(var(--vtransparencycolor), 0.3) 3%, rgba(var(--vtransparencycolor), 0.3) 30.2%, rgba(0,0,0,0) 30.2%, rgba(0,0,0,0) 36.2%, rgba(var(--vtransparencycolor), 0.3) 36.2%, rgba(var(--vtransparencycolor), 0.3) 63.5%, rgba(0,0,0,0) 63.5%, rgba(0,0,0,0) 69.5%, rgba(var(--vtransparencycolor), 0.3) 69.5%, rgba(var(--vtransparencycolor), 0.3) 96.7%, rgba(0,0,0,0) 96.7%, rgba(0,0,0,0) 100%);
 }
+.barSecondary-3B1aP2 {
+	background-color: rgb(var(--vaccentcolor));
+}
 #app-mount .giftIcon-2Pjbiy {								/* modal				gifticon							*/
 	color: rgb(var(--fontwhite3));
 	margin: 0 18px;
@@ -3281,7 +3423,37 @@ body:before {
 	color: rgb(var(--fontwhite1));
 }
 
-/* ----		12.12.	NEWUSERMODAL					---- */
+.header-1F6gxU {											/* prebuy popout		header								*/
+	background: rgba(var(--vtransparencycolor), 0.3);
+	padding-bottom: 10px;
+	margin-bottom: 10px;
+}
+#app-mount .iconWrapper-3LVgIo {							/* prebuy popout		amount icon wrapper					*/
+	background: rgba(var(--vtransparencycolor), 0.3);
+}
+.icon-TYbVk4:hover {										/* prebuy popout		amount icon							*/
+	background: rgb(var(--vaccentcolor));
+	color: rgb(var(--fontwhite1));
+}
+.upsellFooter-6EgwMe {										/* prebuy popout		footer details						*/
+	background: rgba(var(--vtransparencycolor), 0.3);
+}
+.perksList-1vtwXn {											/* prebuy popout		perkslist							*/
+	background: rgba(var(--vtransparencycolor), 0.3);
+}
+.perkRow-2dYUqs {											/* prebuy popout		perkrow								*/
+	border-bottom-color: rgba(var(--fontwhite3), 0.3);
+}
+
+#app-mount .selectGuild-1Ygl76:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+#app-mount .tierPill-3gJ0eN {
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+	color: rgb(var(--fontwhite1));
+}
+
+/* ----		13.12.	NEWUSERMODAL					---- */
 
 #app-mount .modalNewUser-3IRw8L {							/* modal				container							*/
 	background-color: transparent;
@@ -3332,7 +3504,7 @@ body:before {
 }
 
 
-/* ~~~~		13.		POPOUTS							~~~~ */
+/* ~~~~		14.		POPOUTS							~~~~ */
 
 #app-mount .popout-2iWAc-:not(.noShadow-3pu20z) {
 	box-shadow: 0 0 1px rgba(var(--vtransparencycolor), 0.2), 0 1px 4px rgba(var(--vtransparencycolor), 0.1);
@@ -3501,7 +3673,7 @@ body:before {
 	background-attachment: fixed;
 }
 
-/* ----		13.1.	CONTEXTMENU						---- */
+/* ----		14.1.	CONTEXTMENU						---- */
 
 .menu-Sp6bN1,												/* contextmenu			container (guildheader/status)		*/
 .contextMenu-HLZMGh,										/* contextmenu			container (contextmenu)				*/
@@ -3601,7 +3773,7 @@ body:before {
 	background-color: rgb(var(--vaccentcolor));
 }
 
-/* ----		13.2.	USERPOPOUT						---- */
+/* ----		14.2.	USERPOPOUT						---- */
 
 .userPopout-3XzG_A {										/* popout				container							*/
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
@@ -3764,7 +3936,7 @@ body:before {
 	color: rgb(var(--fontwhite3));
 }
 
-/* ----		13.3.	EMOJIPICKER						---- */
+/* ----		14.3.	EMOJIPICKER						---- */
 
 #app-mount .emojiPicker-3m1S-j,								/* picker				container							*/
 #app-mount .diversitySelector-tmmMv0 .popout-2nUePc,		/* picker				diversitypopout						*/
@@ -3942,7 +4114,7 @@ body:before {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 
-/* ----		13.4.	PINS/MENTIONS					---- */
+/* ----		14.4.	PINS/MENTIONS					---- */
 .messagesPopoutWrap-1MQ1bW {								/* popout				wrapper								*/
 	background-color: transparent;
 	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
@@ -4099,7 +4271,7 @@ body:before {
 	opacity: 0.6;
 }
 
-/* ----		13.5.	SEARCHPOPOUT					---- */
+/* ----		14.5.	SEARCHPOPOUT					---- */
 
 #app-mount .container-3ayLPN {								/* popout				wrapper								*/
 	background-color: transparent;
@@ -4260,7 +4432,7 @@ body:before {
 	justify-content: center;
 }
 
-/* ----		13.6.	COLORPICKER						---- */
+/* ----		14.6.	COLORPICKER						---- */
 
 #app-mount .colorPickerCustom-2CWBn2 {						/* popout				wrapper								*/
 	background-color: transparent;
@@ -4314,7 +4486,7 @@ body:before {
 	border-top-color: rgb(var(--fontwhite1));
 }
 
-/* ----		13.7.	ADDROLE							---- */
+/* ----		14.7.	ADDROLE							---- */
 
 #app-mount .container-VSDcQc {								/* popout				wrapper								*/
 	background-color: transparent;
@@ -4379,7 +4551,7 @@ body:before {
 }
 
 
-/* ----		13.8.	EVERYONEMENTION					---- */
+/* ----		14.8.	EVERYONEMENTION					---- */
 
 #app-mount .everyonePopout-nEbJY3 {							/* popout				wrapper								*/
 	background-color: transparent;
@@ -4431,7 +4603,7 @@ body:before {
 }
 
 
-/* ----		13.9.	CHANNELFOLLOW					---- */
+/* ----		14.9.	CHANNELFOLLOW					---- */
 
 #app-mount .header-1pGpFt {
 	background: rgba(var(--vtransparencycolor), 0.3);
@@ -4452,7 +4624,7 @@ body:before {
 	color: rgb(var(--fontwhite3));
 }
 
-/* ----		13.10.	CHANNELFOLLOWINFO				---- */
+/* ----		14.10.	CHANNELFOLLOWINFO				---- */
 
 #app-mount .guildPopout-3CgKqR {							/* popout				wrapper								*/
 	background-color: transparent;
@@ -4485,7 +4657,7 @@ body:before {
 }
 
 
-/* ~~~~		14.		GENERAL							~~~~ */
+/* ~~~~		15.		GENERAL							~~~~ */
 
 ::-webkit-input-placeholder, body, button, input, select, textarea {
 	font-family: var(--vfont);
@@ -4517,7 +4689,7 @@ body:before {
 	color: rgb(var(--fontwhite1));
 }
 
-/* ----		14.1.	TEXT							---- */
+/* ----		15.1.	TEXT							---- */
 
 .username-3gJmXY {
 	color: rgb(var(--fontwhite1));
@@ -4551,7 +4723,7 @@ body:before {
 	color: rgb(var(--fontwhite1));
 }
 
-/* ----		14.2.	BUTTONS							---- */
+/* ----		15.2.	BUTTONS							---- */
 
 .searchSuggestion-2K8OBX:hover,
 .form-236Xmo .btnPrimary-346kfV,
@@ -4907,7 +5079,7 @@ body:before {
 	color: rgb(var(--fontwhite2));
 }
 
-/* ----		14.3.	INPUTS							---- */
+/* ----		15.3.	INPUTS							---- */
 
 .input-cIJ7To {												/* valueinput			bordered							*/
 	background-color: rgba(var(--vtransparencycolor), 0.1);
@@ -5174,7 +5346,7 @@ body:before {
 }
 
 
-/* ----		14.4.	SEARCHBARS						---- */
+/* ----		15.4.	SEARCHBARS						---- */
 
 .container-2XeR5Z,											/* searchbar			inner								*/
 .container-cMG81i {
@@ -5220,7 +5392,7 @@ body:before {
 
 #app-mount .searchResultsContainer-1ma_dc {} /* TODO GAME PAGE */
 
-/* ----		14.5.	TAGS							---- */
+/* ----		15.5.	TAGS							---- */
 
 .botTagRegular-2HEhHi {										/* bottag				regular								*/
 	color: rgb(var(--fontwhite1));
@@ -5262,7 +5434,7 @@ body:before {
 	color: rgb(var(--fontwhite1));
 }
 
-/* ----		14.6.	ICONS							---- */
+/* ----		15.6.	ICONS							---- */
 
 .emptySearchImage-1qOMLW,									/* empty search												*/
 .image-1GzsFd {												/* no peoples/webhooks/etc.									*/
@@ -5407,7 +5579,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	-webkit-mask: url(https://discordapp.com/assets/d01bee8a9b41bd9dda26a43221b2e7e8.svg) center/contain no-repeat;
 }
 
-/* ----		14.7.	SCROLLBARS						---- */
+/* ----		15.7.	SCROLLBARS						---- */
 
 ::-webkit-scrollbar,
 #app-mount ::-webkit-scrollbar {
@@ -5452,7 +5624,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	display: none;
 }
 
-/* ----		14.8.	NOTIFICATIONBAR					---- */
+/* ----		15.8.	NOTIFICATIONBAR					---- */
 
 #app-mount .notice-2FJMB4 {
 	box-shadow: 0 1px 5px 0 rgba(var(--vtransparencycolor), 0.3);
@@ -5507,7 +5679,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	background: var(--vtextshadow);
 }
 
-/* ----		14.9.	TOOLTIPS						---- */
+/* ----		15.9.	TOOLTIPS						---- */
 
 .headerText-1h7zBw {
 	color: rgb(var(--fontwhite1));
@@ -5530,7 +5702,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	background: rgba(var(--vtransparencycolor), 0.5);
 }
 
-/* ----		14.10.	TOASTS							---- */
+/* ----		15.10.	TOASTS							---- */
 
 .toast,
 .bd-toast {
@@ -5610,7 +5782,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 }
 
 
-/* ~~~~		15.		BDSUPPORT						~~~~ */
+/* ~~~~		16.		BDSUPPORT						~~~~ */
 
 .arrow-uglXxc {
 	-webkit-mask: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxOS4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iQ2FscXVlXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSItOTUwIDUzMiAxOCAxOCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAtOTUwIDUzMiAxOCAxODsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4NCgkuc3Qwe2ZpbGw6bm9uZTt9DQoJLnN0MXtmaWxsOm5vbmU7c3Ryb2tlOiNGRkZGRkY7c3Ryb2tlLXdpZHRoOjEuNTtzdHJva2UtbWl0ZXJsaW1pdDoxMDt9DQo8L3N0eWxlPg0KPHBhdGggY2xhc3M9InN0MCIgZD0iTS05MzIsNTMydjE4aC0xOHYtMThILTkzMnoiLz4NCjxwb2x5bGluZSBjbGFzcz0ic3QxIiBwb2ludHM9Ii05MzYuNiw1MzguOCAtOTQxLDU0My4yIC05NDUuNCw1MzguOCAiLz4NCjwvc3ZnPg0K);
@@ -5990,9 +6162,9 @@ body #ace_settingsmenu input[type="checkbox"]:checked:after {
 }
 
 
-/* ~~~~		16.		PLUGINSUPPORT					~~~~ */
+/* ~~~~		17.		PLUGINSUPPORT					~~~~ */
 
-/* ----		16.1.	DATEVIEWER						---- */
+/* ----		17.1.	DATEVIEWER						---- */
 
 #app-mount #dv-mount {
 	background: transparent;
@@ -6006,7 +6178,7 @@ body #ace_settingsmenu input[type="checkbox"]:checked:after {
 	opacity: 1;
 }
 
-/* ----		16.2.	SERVERFOLDERS					---- */
+/* ----		17.2.	SERVERFOLDERS					---- */
 
 body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP,
 body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
@@ -6019,7 +6191,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	text-shadow: 1px 1px var(--vtextshadow);
 }
 
-/* ----		16.3.	MEMBERCOUNT						---- */
+/* ----		17.3.	MEMBERCOUNT						---- */
 
 #app-mount #MemberCount {
 	background-color: transparent;
@@ -6049,7 +6221,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	background-attachment: fixed;
 }
 
-/* ----		16.4.	SENDBUTTON						---- */
+/* ----		17.4.	SENDBUTTON						---- */
 
 .send-button img {
 	-webkit-mask: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTIuMDEgMjFMMjMgMTIgMi4wMSAzIDIgMTBsMTUgMi0xNSAyeiIvPiAgICA8cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+PC9zdmc+) center/contain no-repeat;
@@ -6069,7 +6241,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	display: none;
 }
 
-/* ----		16.5.	CHARCOUNTER						---- */
+/* ----		17.5.	CHARCOUNTER						---- */
 
 #app-mount #charcounter {
 	color: rgb(var(--fontwhite3));
@@ -6079,7 +6251,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	display: none;
 }
 
-/* ----		16.6.	REPLYER							---- */
+/* ----		17.6.	REPLYER							---- */
 
 .replyer-icon {
 	-webkit-mask: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTEwIDlWNWwtNyA3IDcgN3YtNC4xYzUgMCA4LjUgMS42IDExIDUuMS0xLTUtNC0xMC0xMS0xMXoiLz4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==) center/contain no-repeat !important;
@@ -6113,7 +6285,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	background: rgb(var(--vaccentcolor)) url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTEwIDlWNWwtNyA3IDcgN3YtNC4xYzUgMCA4LjUgMS42IDExIDUuMS0xLTUtNC0xMC0xMS0xMXoiLz4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==) center/70% no-repeat !important;
 }
 
-/* ----		16.7.	CITADOR							---- */
+/* ----		17.7.	CITADOR							---- */
 
 .quote-msg {
 	background-color: rgba(var(--vtransparencycolor) , 0.2);
@@ -6158,7 +6330,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	-webkit-mask: none !important;
 	background: rgb(var(--vaccentcolor)) url(https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_format_quote_white_48px.svg) center/contain no-repeat !important;
 }
-/* ----		16.8.	LINENUMBERS						---- */
+/* ----		17.8.	LINENUMBERS						---- */
 
 .hljs ol li {
 	border-left-color: rgba(var(--fontwhite1), 0.2);
@@ -6167,7 +6339,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	color: rgb(var(--fontwhite4));
 }
 
-/* ----		16.9.	PERMISSIONVIEWER				---- */
+/* ----		17.9.	PERMISSIONVIEWER				---- */
 
 #permissions-modal-wrapper #permissions-modal {				/* modal				container							*/
 	background-color: transparent;
@@ -6230,7 +6402,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	color: rgb(var(--fontwhite3));
 }
 
-/* ----		16.10.	BETTERSEARCHPAGE				---- */
+/* ----		17.10.	BETTERSEARCHPAGE				---- */
 
 #app-mount .BSP-pagination-button {
 	background: transparent;
@@ -6251,7 +6423,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	width: 20px;
 }
 
-/* ----		16.11.	REPOCONTROLS					---- */
+/* ----		17.11.	REPOCONTROLS					---- */
 
 #app-mount #bd-settingspane-container .editIcon,
 #app-mount #bd-settingspane-container .trashIcon {
@@ -6262,7 +6434,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	color: rgb(var(--fontwhite1));
 }
 
-/* ----		16.12.	DIRECTDOWNLOAD					---- */
+/* ----		17.12.	DIRECTDOWNLOAD					---- */
 
 #files_directDownload .file {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
@@ -6283,7 +6455,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	background-color: rgb(var(--vaccentcolor));
 }
 
-/* ----		16.13.	BETTERFORMATINGREDUX			---- */
+/* ----		17.13.	BETTERFORMATINGREDUX			---- */
 
 .innerDisabled-2mc-iF ~ .bf-toolbar {
 	display: none;
@@ -6341,7 +6513,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	color: rgb(var(--fontwhite1));
 }
 
-/* ----		16.14	PLUGIN/THEMEREPO				---- */
+/* ----		17.14	PLUGIN/THEMEREPO				---- */
 
 #app-mount .pluginEntry svg[fill="currentColor"],
 #app-mount .pluginEntry .gifFavoriteButton-1gYkEU:not(.selected-2QpwIN),
@@ -6358,9 +6530,9 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 }
 
 
-/* ~~~~		17.		THEMESUPPORT					~~~~ */
+/* ~~~~		18.		THEMESUPPORT					~~~~ */
 
-/* ----		17.1.	THEMEDEVBADGE					---- */
+/* ----		18.1.	THEMEDEVBADGE					---- */
 
 #app-mount .root-SR8cQa .wrapper-3t9DeA.dev-A7f2Rx:not(.statusHovered-gF2976):hover + .headerInfo-30uryT:before,
 #app-mount .userPopout-3XzG_A .avatarWrapper-3H_478.dev-A7f2Rx:not(.statusHovered-gF2976):hover .wrapper-3t9DeA:before,
@@ -6379,7 +6551,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	border-top-color: rgb(var(--vaccentcolor)) !important;
 }
 
-/* ----		17.2.	BETTERDOCSBLOCK					---- */
+/* ----		18.2.	BETTERDOCSBLOCK					---- */
 
 html.theme-dark body #app-mount .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" i]::before,
 html.theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.discordsource." i]::before,
@@ -6410,7 +6582,7 @@ html.theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="://better
 }
 
 
-/* ~~~~		18.		UPDATENOTICE					~~~~ */
+/* ~~~~		19.		UPDATENOTICE					~~~~ */
 
 html:only-child > head + body > div#app-mount.appMount-3lHmkl > div.app-1q1i1E > div.app-2rEoOp:before {
 	content: "Your version of   BasicBackground   by DevilBro is outdated. Please download the newest version from:	https://github.com/mwittrien/BetterDiscordAddons/blob/master/Themes/BasicBackground" !important;
@@ -6446,7 +6618,7 @@ html:only-child > head + body > div#app-mount.appMount-3lHmkl > div.app-1q1i1E >
 }
 
 
-/* ~~~~		19.		WATERMARK						~~~~ */
+/* ~~~~		20.		WATERMARK						~~~~ */
 
 html:only-child > head + body > div#app-mount.appMount-3lHmkl > div.typeWindows-1za-n7.titleBar-AC4pGV.horizontalReverse-3tRjY7.flex-1O1GKY.directionRowReverse-m8IjIq.justifyStart-2NDFzi.alignStretch-DpGPf3 > div.wordmark-2iDDfm {
 	color: white !important;

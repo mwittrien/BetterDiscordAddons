@@ -1251,10 +1251,6 @@
 #app-mount .iconIncluded-24npcq {							/* modal				included perkicon					*/
 	color: rgb(var(--vaccentcolor));
 }
-.perkIconChatPerks-BnKNFh {									/* modal				perkicon chat						*/
-	color: rgb(var(--vaccentcolor));
-	filter: brightness(120%);
-}
 #app-mount .upload-2-2ZMI {									/* modal				perkicon upload						*/
 	color: rgb(var(--vaccentcolor));
 }
@@ -1270,6 +1266,23 @@
 }
 .wrapper-3nSjSv {											/* modal				boostaddwrapper						*/
 	background: rgb(255, 255, 255) linear-gradient(90deg, rgb(var(--vaccentcolor)), rgba(var(--vaccentcolor), 0.5));
+}
+.tierMarkerLabelPlusIcon-1OS7E9 {							/* modal				prebuy icon							*/
+	color: rgb(var(--vaccentcolor));
+}
+.upsellFooterIcon-2105bD path {								/* prebuy popout		footer icon							*/
+	fill: rgb(var(--vaccentcolor));
+}
+.perkIconGuild-KLNhuR {										/* prebuy popout		perkicon guild						*/
+	color: rgb(var(--vaccentcolor));
+}
+.perkIconChatPerks-BnKNFh {									/* prebuy popout		perkicon chat						*/
+	color: rgb(var(--vaccentcolor));
+	filter: brightness(120%);
+}
+.perkIconStream-7wqAvn {									/* prebuy popout		perkicon stream						*/
+	color: rgb(var(--vaccentcolor));
+	filter: brightness(150%);
 }
 
 /* ----		10.9.	NEWUSERMODAL					---- */

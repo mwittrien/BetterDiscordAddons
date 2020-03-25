@@ -4324,6 +4324,7 @@
 	DiscordClassModules.ModalWrap = BDFDB.ModuleUtils.find(m => typeof m.modal == "string" && typeof m.inner == "string" && Object.keys(m).length == 2);
 	DiscordClassModules.NameContainer = DiscordClassModules.ContextMenu.subMenuContext ? BDFDB.ModuleUtils.findByProperties("nameAndDecorators", "name") : {};
 	DiscordClassModules.NameTag = BDFDB.ModuleUtils.findByProperties("bot", "nameTag");
+	DiscordClassModules.NitroStore = BDFDB.ModuleUtils.findByProperties("applicationStore", "marketingHeader");
 	DiscordClassModules.Note = BDFDB.ModuleUtils.find(m => typeof m.note == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.Notice = BDFDB.ModuleUtils.findByProperties("notice", "noticeFacebook");
 	DiscordClassModules.Peoples = BDFDB.ModuleUtils.findByProperties("peopleColumn", "tabBar");
@@ -5357,6 +5358,7 @@
 		namecontainerselected: ["NameContainer", "selected"],
 		namecontainersubtext: ["NameContainer", "subText"],
 		nametag: ["NameTag", "nameTag"],
+		nitrostore: ["NitroStore", "applicationStore"],
 		nochannel: ["ChatWindow", "noChannel"],
 		notice: ["Notice", "notice"],
 		noticebrand: ["Notice", "noticeBrand"],
