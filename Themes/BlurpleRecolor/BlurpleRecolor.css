@@ -157,57 +157,89 @@
 }
 
 [style*="background-color: rgb(255, 115, 250)"],
+[style*="background: rgb(255, 115, 250)"],
 [style*="background-color: #ff73fa"],
+[style*="background: #ff73fa"],
 [style*="background-color: #FF73FA"],
+[style*="background: #FF73FA"],
 [background-color="rgb(255, 115, 250)"],
+[background="rgb(255, 115, 250)"],
 [background-color="#ff73fa"],
+[background="#ff73fa"],
 [background-color="#FF73FA"],
+[background="#FF73FA"],
 [style*="background-color: rgb(114, 137, 218)"],
+[style*="background: rgb(114, 137, 218)"],
 [style*="background-color: #7289da"],
+[style*="background: #7289da"],
 [style*="background-color: #7289DA"],
+[style*="background: #7289DA"],
 [background-color="rgb(114, 137, 218)"],
+[background="rgb(114, 137, 218)"],
 [background-color="#7289da"],
-[background-color="#7289DA"] {
+[background="#7289da"],
+[background-color="#7289DA"],
+[background="#7289DA"] {
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
 [style*="background-color: rgba(255, 115, 250, 0.9"],
-[style*="background-color: rgba(114, 137, 218, 0.9"] {
+[style*="background: rgba(255, 115, 250, 0.9"],
+[style*="background-color: rgba(114, 137, 218, 0.9"],
+[style*="background: rgba(114, 137, 218, 0.9"] {
 	background-color: rgba(var(--vaccentcolor), 0.9) !important;
 }
 [style*="background-color: rgba(255, 115, 250, 0.8"],
-[style*="background-color: rgba(114, 137, 218, 0.8"] {
+[style*="background: rgba(255, 115, 250, 0.8"],
+[style*="background-color: rgba(114, 137, 218, 0.8"],
+[style*="background: rgba(114, 137, 218, 0.8"] {
 	background-color: rgba(var(--vaccentcolor), 0.8) !important;
 }
 [style*="background-color: rgba(255, 115, 250, 0.7"],
-[style*="background-color: rgba(114, 137, 218, 0.7"] {
+[style*="background: rgba(255, 115, 250, 0.7"],
+[style*="background-color: rgba(114, 137, 218, 0.7"],
+[style*="background: rgba(114, 137, 218, 0.7"] {
 	background-color: rgba(var(--vaccentcolor), 0.7) !important;
 }
 [style*="background-color: rgba(255, 115, 250, 0.6"],
-[style*="background-color: rgba(114, 137, 218, 0.6"] {
+[style*="background: rgba(255, 115, 250, 0.6"],
+[style*="background-color: rgba(114, 137, 218, 0.6"],
+[style*="background: rgba(114, 137, 218, 0.6"] {
 	background-color: rgba(var(--vaccentcolor), 0.6) !important;
 }
 [style*="background-color: rgba(255, 115, 250, 0.5"],
-[style*="background-color: rgba(114, 137, 218, 0.5"] {
+[style*="background: rgba(255, 115, 250, 0.5"],
+[style*="background-color: rgba(114, 137, 218, 0.5"],
+[style*="background: rgba(114, 137, 218, 0.5"] {
 	background-color: rgba(var(--vaccentcolor), 0.5) !important;
 }
 [style*="background-color: rgba(255, 115, 250, 0.4"],
-[style*="background-color: rgba(114, 137, 218, 0.4"] {
+[style*="background: rgba(255, 115, 250, 0.4"],
+[style*="background-color: rgba(114, 137, 218, 0.4"],
+[style*="background: rgba(114, 137, 218, 0.4"] {
 	background-color: rgba(var(--vaccentcolor), 0.4) !important;
 }
 [style*="background-color: rgba(255, 115, 250, 0.3"],
-[style*="background-color: rgba(114, 137, 218, 0.3"] {
+[style*="background: rgba(255, 115, 250, 0.3"],
+[style*="background-color: rgba(114, 137, 218, 0.3"],
+[style*="background: rgba(114, 137, 218, 0.3"] {
 	background-color: rgba(var(--vaccentcolor), 0.3) !important;
 }
 [style*="background-color: rgba(255, 115, 250, 0.2"],
-[style*="background-color: rgba(114, 137, 218, 0.2"] {
+[style*="background: rgba(255, 115, 250, 0.2"],
+[style*="background-color: rgba(114, 137, 218, 0.2"],
+[style*="background: rgba(114, 137, 218, 0.2"] {
 	background-color: rgba(var(--vaccentcolor), 0.2) !important;
 }
 [style*="background-color: rgba(255, 115, 250, 0.1"],
-[style*="background-color: rgba(114, 137, 218, 0.1"] {
+[style*="background: rgba(255, 115, 250, 0.1"],
+[style*="background-color: rgba(114, 137, 218, 0.1"],
+[style*="background: rgba(114, 137, 218, 0.1"] {
 	background-color: rgba(var(--vaccentcolor), 0.1) !important;
 }
 [style*="background-color: rgba(255, 115, 250, 0.0"],
-[style*="background-color: rgba(114, 137, 218, 0.0"] {
+[style*="background: rgba(255, 115, 250, 0.0"],
+[style*="background-color: rgba(114, 137, 218, 0.0"],
+[style*="background: rgba(114, 137, 218, 0.0"] {
 	background-color: rgba(var(--vaccentcolor), 0) !important;
 }
 

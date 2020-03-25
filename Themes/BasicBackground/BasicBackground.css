@@ -734,6 +734,9 @@ body:before {
 
 /* ----		6.2.	MESSAGES						---- */
 
+.base-19D3Qq {												/* welcomemessage											*/
+	padding-bottom: 0;
+}
 .base-34jWEe h1 {											/* welcomemessage		dmchannel							*/
 	color: rgb(var(--fontwhite1));
 }
@@ -872,6 +875,7 @@ body:before {
 #app-mount .mentioned-xhSam7.cozy-3raOZG .header-23xsNx:after {
 	border-right-color: rgba(var(--vaccentcolor), calc(var(--vmessagetransparency) * 100000000000000000000000000000));
 }
+.zalgo-jN1Ica .messageContent-2qWWxC,
 .zalgo-jN1Ica.cozy-3raOZG .header-23xsNx {
 	overflow: visible;
 }
@@ -1056,6 +1060,10 @@ body:before {
 }
 #app-mount .twitchSectionPlayButton-2RamGG:hover {
 	background-color: rgba(var(--vtransparencycolor), 0.8);
+}
+
+#app-mount .wrapper-2TxpI8 {								/* attachment			videowrapper						*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
 
 #app-mount .embedSuppressButton-1FonMn {					/* attachment			closebutton							*/
@@ -1915,7 +1923,8 @@ body:before {
 #app-mount .sectionSeparator-2OWiNT {						/* guilddiscovery		separator							*/
 	border-top-color: rgba(var(--fontwhite4), 0.3);
 }
-#app-mount .pageButton-MknE-_:hover {						/* guilddiscovery		pagebutton							*/
+															/* guilddiscovery		pagebutton							*/
+#app-mount .pageButton-MknE-_:not(.activeButton-1BJAiN):hover {
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 	color: rgb(var(--fontwhite1));
 }
@@ -3853,10 +3862,12 @@ body:before {
 	box-sizing: border-box;
 }
 #app-mount #bda-qem {
+	background-color: rgb(var(--vtransparencycolor), 0.3);
 	overflow: hidden;
 	padding: 0 !important;
 }
 #app-mount #bda-qem button {
+	background-color: transparent;
 	border: none;
 	border-radius: 0;
 	box-shadow: none;
