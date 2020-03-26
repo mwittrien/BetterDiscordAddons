@@ -122,16 +122,19 @@
 }
 
 #app-mount .bda-slist li.settings-open::-webkit-scrollbar,
+#app-mount .bd-addon-list .bd-addon-card.settings-open::-webkit-scrollbar,
 #app-mount .bda-description.scroller::-webkit-scrollbar {
 	width: 6px;
 }
 #app-mount .bda-slist li.settings-open::-webkit-scrollbar-thumb,
+#app-mount .bd-addon-list .bd-addon-card.settings-open::-webkit-scrollbar-thumb,
 #app-mount .bda-description.scroller::-webkit-scrollbar-thumb {
 	background-clip: padding-box;
 	border: 1px solid transparent;
 	background-color: #202225;
 }
 #app-mount .bda-slist li.settings-open::-webkit-scrollbar-track-piece,
+#app-mount .bd-addon-list .bd-addon-card.settings-open::-webkit-scrollbar-track-piece,
 #app-mount .bda-description.scroller::-webkit-scrollbar-track-piece {
 	background-color: transparent;
 }
