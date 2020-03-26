@@ -5,7 +5,8 @@
 	if (window.BDFDB && window.BDFDB.ModuleUtils && typeof window.BDFDB.ModuleUtils.unpatch == "function") window.BDFDB.ModuleUtils.unpatch(window.BDFDB);
 	if (window.BDFDB && window.BDFDB.WindowUtils && typeof window.BDFDB.WindowUtils.closeAll == "function") window.BDFDB.WindowUtils.closeAll(window.BDFDB);
 	if (window.BDFDB && window.BDFDB.WindowUtils && typeof window.BDFDB.WindowUtils.removeListener == "function") window.BDFDB.WindowUtils.removeListener(window.BDFDB);
-	var BDFDB = {
+	
+	const BDFDB = {
 		myPlugins: Object.assign({}, window.BDFDB && window.BDFDB.myPlugins),
 		InternalData: Object.assign({
 			pressedKeys: [],
@@ -22,8 +23,12 @@
 		BDv2Api: window.BDFDB && window.BDFDB.BDv2Api || undefined,
 		name: "BDFDB"
 	};
-	var loadid = Math.round(Math.random() * 10000000000000000), InternalBDFDB = {};
-	BDFDB.InternalData.loadid = loadid;
+	const InternalBDFDB = {
+		name: "BDFDB",
+		patchPriority: 0
+	};
+	const loadId = Math.round(Math.random() * 10000000000000000);
+	BDFDB.InternalData.loadId = loadId;
 	
 	if (typeof Array.prototype.flat != "function") Array.prototype.flat = function () {return this;}
 
@@ -342,6 +347,7 @@
 	
 	BDFDB.ObserverUtils = {};
 	BDFDB.ObserverUtils.connect = function (plugin, eleOrSelec, observer, config = {childList: true}) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (!BDFDB.ObjectUtils.is(plugin) || !eleOrSelec || !observer) return;
 		if (BDFDB.ObjectUtils.isEmpty(plugin.observers)) plugin.observers = {};
 		if (!BDFDB.ArrayUtils.is(plugin.observers[observer.name])) plugin.observers[observer.name] = [];
@@ -354,6 +360,7 @@
 		}
 	};
 	BDFDB.ObserverUtils.disconnect = function (plugin, observer) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (BDFDB.ObjectUtils.is(plugin) && !BDFDB.ObjectUtils.isEmpty(plugin.observers)) {
 			let observername = typeof observer == "string" ? observer : (BDFDB.ObjectUtils.is(observer) ? observer.name : null);
 			if (!observername) {
@@ -369,6 +376,7 @@
 
 	BDFDB.StoreChangeUtils = {};
 	BDFDB.StoreChangeUtils.add = function (plugin, store, callback) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (!BDFDB.ObjectUtils.is(plugin) || !BDFDB.ObjectUtils.is(store) || typeof store.addChangeListener != "function" ||  typeof callback != "function") return;
 		BDFDB.ListenerUtils.remove(plugin, store, callback);
 		if (!BDFDB.ArrayUtils.is(plugin.changeListeners)) plugin.changeListeners = [];
@@ -376,6 +384,7 @@
 		store.addChangeListener(callback);
 	};
 	BDFDB.StoreChangeUtils.remove = function (plugin, store, callback) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (!BDFDB.ObjectUtils.is(plugin) || !BDFDB.ArrayUtils.is(plugin.changeListeners)) return;
 		if (!store) {
 			while (plugin.changeListeners.length) {
@@ -403,6 +412,7 @@
 
 	BDFDB.ListenerUtils = {};
 	BDFDB.ListenerUtils.add = function (plugin, ele, actions, selectorOrCallback, callbackOrNothing) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (!BDFDB.ObjectUtils.is(plugin) || (!Node.prototype.isPrototypeOf(ele) && ele !== window) || !actions) return;
 		let callbackIs4th = typeof selectorOrCallback == "function";
 		let selector = callbackIs4th ? undefined : selectorOrCallback;
@@ -452,6 +462,7 @@
 		}
 	};
 	BDFDB.ListenerUtils.remove = function (plugin, ele, actions = "", selector) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (!BDFDB.ObjectUtils.is(plugin) || !BDFDB.ArrayUtils.is(plugin.eventListeners)) return;
 		if (!ele) {
 			while (plugin.eventListeners.length) {
@@ -1187,11 +1198,13 @@
 	]);
 	
 	BDFDB.ModuleUtils.isPatched = function (plugin, module, methodName) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (!plugin || !BDFDB.ObjectUtils.is(module) || !module.BDFDBpatch || !methodName) return false;
 		const pluginId = (typeof plugin === "string" ? plugin : plugin.name).toLowerCase();
 		return pluginId && module[methodName] && module[methodName].__isBDFDBpatched && module.BDFDBpatch[methodName] && BDFDB.ObjectUtils.toArray(module.BDFDBpatch[methodName]).some(patchObj => BDFDB.ObjectUtils.toArray(patchObj).some(priorityObj => Object.keys(priorityObj).includes(pluginId)));
 	};
 	BDFDB.ModuleUtils.patch = function (plugin, module, methodNames, patchMethods, forceRepatch = false) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (!plugin || !BDFDB.ObjectUtils.is(module) || !methodNames || !BDFDB.ObjectUtils.is(patchMethods)) return null;
 		patchMethods = BDFDB.ObjectUtils.filter(patchMethods, type => WebModulesData.PatchTypes.includes(type), true);
 		if (BDFDB.ObjectUtils.isEmpty(patchMethods)) return null;
@@ -1261,6 +1274,7 @@
 		return cancel;
 	};
 	BDFDB.ModuleUtils.unpatch = function (plugin, module, methodNames) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (!module && !methodNames) {
 			if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ArrayUtils.is(plugin.patchCancels)) while (plugin.patchCancels.length) (plugin.patchCancels.pop())();
 		}
@@ -1288,6 +1302,7 @@
 		}
 	};
 	BDFDB.ModuleUtils.forceAllUpdates = function (plugin, selectedTypes) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ObjectUtils.is(plugin.patchedModules)) {
 			const app = document.querySelector(BDFDB.dotCN.app);
 			const bdSettings = document.querySelector("#bd-settingspane-container > *");
@@ -1337,6 +1352,7 @@
 		}
 	};
 	InternalBDFDB.forceInitiateProcess = function (plugin, instance, type, patchtypes) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (!plugin || !instance || !type) return;
 		let methodnames = [];
 		for (let patchType in plugin.patchedModules) if (plugin.patchedModules[patchType][type]) methodnames.push(plugin.patchedModules[patchType][type]);
@@ -1346,8 +1362,8 @@
 		else if (methodnames.includes("componentDidUpdate")) InternalBDFDB.initiateProcess(plugin, type, {instance, methodname:"componentDidUpdate", patchtypes});
 	};
 	InternalBDFDB.initiateProcess = function (plugin, type, e) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (BDFDB.ObjectUtils.is(plugin) && !plugin.stopping && e.instance) {
-			plugin = plugin == BDFDB && InternalBDFDB || plugin;
 			type = (type.split(" _ _ ")[1] || type).replace(/[^A-z0-9]|_/g, "");
 			type = type.charAt(0).toUpperCase() + type.slice(1);
 			if (typeof plugin["process" + type] == "function") {
@@ -1365,6 +1381,7 @@
 		}
 	};
 	InternalBDFDB.patchPlugin = function (plugin) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (!BDFDB.ObjectUtils.is(plugin) || !BDFDB.ObjectUtils.is(plugin.patchedModules)) return;
 		BDFDB.ModuleUtils.unpatch(plugin);
 		for (let patchType in plugin.patchedModules) for (let type in plugin.patchedModules[patchType]) {
@@ -1467,6 +1484,7 @@
 	};
 	
 	InternalBDFDB.addContextListeners = function (plugin) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		for (let type of ComponentTypeData.NormalContextMenus) if (typeof plugin[`on${type}`] === "function") InternalBDFDB.patchContextMenuPlugin(plugin, type, InternalComponents.LibraryComponents.ContextMenus[type]);
 		for (let type of ComponentTypeData.FluxContextMenus) if (typeof plugin[`on${type}`] === "function") {
 			if (BDFDB.InternalData.componentPatchQueries[type].module) InternalBDFDB.patchContextMenuPlugin(plugin, type, BDFDB.InternalData.componentPatchQueries[type].module);
@@ -1484,11 +1502,13 @@
 		}
 	};
 	InternalBDFDB.patchContextMenuPlugin = function (plugin, type, module) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (module && module.prototype) BDFDB.ModuleUtils.patch(plugin, module.prototype, "render", {after: e => {
 			if (e.thisObject && e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});
 		}});
 	};
 	InternalBDFDB.patchExportedContextMenuPlugin = function (plugin, type, module) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (module && module.exports) BDFDB.ModuleUtils.patch(plugin, module.exports, "default", {after: e => {
 			if (e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:{props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:"default"});
 		}});
@@ -1536,15 +1556,15 @@
 			if (!module.exports.default.displayName) module.exports.default.displayName = type;
 		}
 	};
-	InternalBDFDB.getContextMenuType = function (menutype, component) {
-		if (menutype) {
-			if (menutype == "MessageContextMenu" && component && component.type != InternalComponents.LibraryComponents.ContextMenus.MessageContextMenu) return "MessageOptionContextMenu";
-			else if (menutype.endsWith("ContextMenu")) return menutype;
-			else if (InternalComponents.LibraryComponents.ContextMenus._Types.includes(menutype)) {
-				if (menutype.indexOf("USER_") == 0) return "UserContextMenu";
-				else if (menutype.indexOf("CHANNEL_") == 0) return "ChannelContextMenu";
-				else if (menutype.indexOf("GUILD_") == 0) return "GuildContextMenu";
-				else if (menutype.indexOf("MESSAGE_") == 0) return "MessageContextMenu";
+	InternalBDFDB.getContextMenuType = function (menuType, component) {
+		if (menuType) {
+			if (menuType == "MessageContextMenu" && component && component.type != InternalComponents.LibraryComponents.ContextMenus.MessageContextMenu) return "MessageOptionContextMenu";
+			else if (menuType.endsWith("ContextMenu")) return menuType;
+			else if (InternalComponents.LibraryComponents.ContextMenus._Types.includes(menuType)) {
+				if (menuType.indexOf("USER_") == 0) return "UserContextMenu";
+				else if (menuType.indexOf("CHANNEL_") == 0) return "ChannelContextMenu";
+				else if (menuType.indexOf("GUILD_") == 0) return "GuildContextMenu";
+				else if (menuType.indexOf("MESSAGE_") == 0) return "MessageContextMenu";
 			}
 		}
 		return null;
@@ -2487,6 +2507,7 @@
 	BDFDB.DataUtils = {};
 	BDFDB.DataUtils.cached = window.BDFDB && window.BDFDB.DataUtils && window.BDFDB.DataUtils.cached || {};
 	BDFDB.DataUtils.save = function (data, plugin, key, id) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		let pluginName = typeof plugin === "string" ? plugin : plugin.name;
 		let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".config.json");
 		
@@ -2515,6 +2536,7 @@
 	};
 
 	BDFDB.DataUtils.load = function (plugin, key, id) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		let pluginName = typeof plugin === "string" ? plugin : plugin.name;
 		let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".config.json");
 		
@@ -2530,6 +2552,7 @@
 		}
 	};
 	BDFDB.DataUtils.remove = function (plugin, key, id) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		let pluginName = typeof plugin === "string" ? plugin : plugin.name;
 		let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".config.json");
 		
@@ -2554,9 +2577,10 @@
 		}
 	};
 	BDFDB.DataUtils.get = function (plugin, key, id) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		plugin = typeof plugin == "string" ? BDFDB.BDUtils.getPlugin(plugin) : plugin;
 		if (!BDFDB.ObjectUtils.is(plugin)) return id === undefined ? {} : null;
-		let defaults = (plugin == BDFDB && InternalBDFDB || plugin).defaults;
+		let defaults = plugin.defaults;
 		if (!BDFDB.ObjectUtils.is(defaults) || !defaults[key]) return id === undefined ? {} : null;
 		let oldC = BDFDB.DataUtils.load(plugin, key), newC = {}, update = false;
 		for (let k in defaults[key]) {
@@ -3789,6 +3813,7 @@
 
 	BDFDB.WindowUtils = {};
 	BDFDB.WindowUtils.open = function (plugin, url, options) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (!BDFDB.ObjectUtils.is(plugin) || !url) return;
 		if (!BDFDB.ArrayUtils.is(plugin.browserWindows)) plugin.browserWindows = [];
 		let browserWindow = new LibraryRequires.electron.remote.BrowserWindow(Object.assign({
@@ -3808,9 +3833,11 @@
 		if (BDFDB.ObjectUtils.is(browserWindow) && !browserWindow.isDestroyed() && browserWindow.isClosable()) browserWindow.close();
 	};
 	BDFDB.WindowUtils.closeAll = function (plugin) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ArrayUtils.is(plugin.browserWindows)) while (plugin.browserWindows.length) BDFDB.WindowUtils.close(plugin.browserWindows.pop());
 	};
 	BDFDB.WindowUtils.addListener = function (plugin, actions, callback) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (!BDFDB.ObjectUtils.is(plugin) || !actions || typeof callback != "function") return;
 		BDFDB.WindowUtils.removeListener(plugin, actions);
 		for (let action of actions.split(" ")) {
@@ -3825,6 +3852,7 @@
 		}
 	};
 	BDFDB.WindowUtils.removeListener = function (plugin, actions = "") {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (!BDFDB.ObjectUtils.is(plugin) || !BDFDB.ArrayUtils.is(plugin.ipcListeners)) return;
 		if (actions) {
 			for (let action of actions.split(" ")) {
@@ -8998,10 +9026,8 @@
 	});
 	
 	/* unavailable */
-
-	BDFDB.patchPriority = 0;
 	
-	BDFDB.patchedModules = {
+	InternalBDFDB.patchedModules = {
 		before: {
 			MessageContent: "type",
 		},
@@ -9572,12 +9598,12 @@
 		document.head.appendChild(libraryScript);
 	};
 	let libKeys = Object.keys(BDFDB).length - 10, crashInterval = BDFDB.TimeUtils.interval(_ => {
-		if (!window.BDFDB || typeof BDFDB != "object" || Object.keys(BDFDB).length < libKeys || !BDFDB.InternalData.loadid) {
+		if (!window.BDFDB || typeof BDFDB != "object" || Object.keys(BDFDB).length < libKeys || !BDFDB.InternalData.loadId) {
 			BDFDB.LogUtils.warn("Reloading library due to internal error.");
 			BDFDB.TimeUtils.clear(crashInterval);
 			InternalBDFDB.reloadLib();
 		}
-		else if (BDFDB.InternalData.loadid != loadid) {
+		else if (BDFDB.InternalData.loadId != loadId) {
 			BDFDB.TimeUtils.clear(crashInterval);
 		}
 		else if (!BDFDB.InternalData.creationTime || performance.now() - BDFDB.InternalData.creationTime > 18000000) {

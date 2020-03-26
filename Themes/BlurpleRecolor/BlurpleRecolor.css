@@ -1803,13 +1803,16 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 .bd-pfbtn {
 	background-color: rgb(var(--vaccentcolor));
 }
-.bda-slist .bda-footer a {
+.bda-slist .bda-footer a,
+.bd-addon-list .bda-footer a {
 	color: rgb(var(--vaccentcolor));
 }
-.bda-slist .bda-footer button {
+.bda-slist .bda-footer button,
+.bd-addon-list .bda-footer button {
 	background-color: rgb(var(--vaccentcolor));
 }
-#bd-settingspane-container .ui-switch-item .ui-switch-wrapper .ui-switch.checked {
+#bd-settingspane-container .ui-switch-item .ui-switch-wrapper .ui-switch.checked,
+.bd-switch-checked {
 	background-color: rgb(var(--vaccentcolor));
 }
 

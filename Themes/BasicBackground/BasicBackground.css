@@ -5409,8 +5409,6 @@ body:before {
 	box-shadow: 0 2px 5px 0 rgba(var(--vtransparencycolor), 0.2);
 }
 
-#app-mount .searchResultsContainer-1ma_dc {} /* TODO GAME PAGE */
-
 /* ----		15.5.	TAGS							---- */
 
 .botTagRegular-2HEhHi {										/* bottag				regular								*/
@@ -5903,7 +5901,13 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 .bd-server-card .bd-server-tags {							/* pubslayer			guildtags							*/
 	color: rgb(var(--fontwhite3));
 }
-#pubslayer input {
+#pubslayer h2.ui-form-title {								/* pubslayer			header								*/
+	color: rgb(var(--fontwhite1));
+}
+#pubslayer button {											/* pubslayer			button								*/
+	color: rgb(var(--fontwhite1));
+}
+#pubslayer input {											/* pubslayer			input								*/
 	background-color: rgba(var(--vtransparencycolor), 0.1);
 	border-color: rgba(var(--vtransparencycolor), 0.3);
 	color: rgb(var(--fontwhite1));
@@ -5915,7 +5919,6 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	color: rgb(var(--fontwhite3));
 }
 
-#pubslayer h2.ui-form-title,
 #app-mount #bd-settingspane-container h2.ui-form-title {	/* settingsitems		header								*/
 	color: rgb(var(--fontwhite1));
 }
@@ -5927,44 +5930,70 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	color: rgb(var(--fontwhite3));
 }
 
-#bd-settingspane-container .ui-switch-item .ui-switch-wrapper .ui-switch {
+#bd-settingspane-container .ui-switch-item .ui-switch-wrapper .ui-switch,
+.bd-switch {												/* bd switch												*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 	box-shadow: inset 0 1px 1px rgba(var(--vtransparencycolor), 0.15);
 }
-#bd-settingspane-container .ui-switch-item .ui-switch-wrapper .ui-switch:before {
+#bd-settingspane-container .ui-switch-item .ui-switch-wrapper .ui-switch:before,
+.bd-switch:before {
 	background-color: rgb(var(--fontwhite1));
 	box-shadow: 0 2px 4px rgba(var(--vtransparencycolor), 0.3);
 }
 
-#pubslayer button,
-.bda-slist .bda-footer button,
-.bd-pfbtn {
+.bd-pfbtn {													/* addonlist			folderbutton						*/
 	color: rgb(var(--fontwhite1));
 }
-#app-mount .bda-slist li {
-	background-color: rgba(var(--vtransparencycolor), 0.2);
-	border-color: rgba(var(--vtransparencycolor), 0.3);
+
+.bd-search-wrapper {										/* addonlist			searchbar container					*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
 	color: rgb(var(--fontwhite1));
 }
-#app-mount .bda-slist .bda-header {
-	color: rgb(var(--fontwhite1));
-	border-bottom-color: rgba(var(--fontwhite4), 0.3);
+.bd-search {												/* addonlist			searchbar input						*/
+	color: rgb(var(--fontwhite1))
 }
-#app-mount .bda-slist .bda-description {
+.bd-search::placeholder {
 	color: rgb(var(--fontwhite3));
 }
-#app-mount .bda-slist .bda-description::-webkit-scrollbar {
+.bd-search-wrapper svg[fill] {								/* addonlist			searchbar icon						*/
+	fill: rgb(var(--fontwhite1));
+}
+
+#app-mount .bda-slist li,
+#app-mount .bd-addon-list .bd-addon-card {					/* addonlist			addoncard							*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+	border-color: transparent;
+	color: rgb(var(--fontwhite1));
+}
+#app-mount .bda-slist .bda-header,
+#app-mount .bd-addon-list .bda-header {						/* addonlist			header								*/
+	color: rgb(var(--fontwhite1));
+	border-bottom-color: rgba(var(--fontwhite2), 0.3);
+}
+.bda-slist li svg path[fill="#dcddde"],
+#app-mount .bda-slist .bd-addon-button svg[fill] {			/* addonlist			header button icon					*/
+	fill: rgb(var(--fontwhite3));
+}
+.bda-slist li svg:hover path[fill="#dcddde"],
+#app-mount .bda-slist .bd-addon-button svg[fill]:hover {
+	fill: rgb(var(--fontwhite1));
+}
+#app-mount .bda-slist .bda-descriptionm,
+#app-mount .bd-addon-list .bda-description {				/* addonlist			description							*/
+	color: rgb(var(--fontwhite2));
+}
+#app-mount .bda-slist .bda-description::-webkit-scrollbar,
+#app-mount .bd-addon-list .bda-description::-webkit-scrollbar {
 	width: 4px;
 	height: 4px;
 }
-#app-mount .bda-slist .bda-footer {
-	border-top-color: rgba(var(--fontwhite4), 0.3);
+#app-mount .bda-slist .bda-footer,
+#app-mount .bd-addon-list .bda-footer {						/* addonlist			footer								*/
+	border-top-color: rgba(var(--fontwhite2), 0.3);
 }
-.bda-slist li svg path[fill="#dcddde"] {
-	fill: rgb(var(--fontwhite3));
-}
-.bda-slist li svg:hover path[fill="#dcddde"] {
-	fill: rgb(var(--fontwhite1));
+.bda-slist .bda-footer button,
+.bd-addon-list .bda-footer button {							/* addonlist			footer button						*/
+	color: rgb(var(--fontwhite1));
 }
 
 #bd-customcss-editor {										/* customcsseditor		container							*/
