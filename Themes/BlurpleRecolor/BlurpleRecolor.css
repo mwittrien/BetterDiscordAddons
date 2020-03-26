@@ -1812,7 +1812,7 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 	background-color: rgb(var(--vaccentcolor));
 }
 #bd-settingspane-container .ui-switch-item .ui-switch-wrapper .ui-switch.checked,
-.bd-switch-checked {
+.bd-switch.bd-switch-checked {
 	background-color: rgb(var(--vaccentcolor));
 }
 
