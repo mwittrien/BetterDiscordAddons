@@ -69,17 +69,13 @@ var PluginRepo = (_ => {
 	return class PluginRepo {
 		getName () {return "PluginRepo";} 
 
-		getVersion () {return "1.9.3";}
+		getVersion () {return "1.9.4";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Allows you to look at all plugins from the plugin repo and download them on the fly. Repo button is in the plugins settings.";}
 
-		constructor () {
-			this.changelog = {
-				"fixed":[["Show X","Filter options for the modal work again"]]
-			};
-			
+		constructor () {			
 			this.patchedModules = {
 				after: {
 					V2C_ContentColumn: "render"
@@ -298,12 +294,12 @@ var PluginRepo = (_ => {
 		}
 		
 		processV2CContentColumn (e) {
-			if (e.instance.props.title == "Plugins") {
+			if (typeof e.instance.props.title == "string" && e.instance.props.title.toUpperCase().indexOf("PLUGINS") == 0) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {key: "folder-button"});
 				if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: "Open Plugin Repo",
 					children: BDFDB.ReactUtils.createElement("button", {
-						className: `${BDFDB.disCN._repofolderbutton} bd-pluginrepobutton`,
+						className: `${BDFDB.disCNS._repobutton + BDFDB.disCN._repofolderbutton} bd-pluginrepobutton`,
 						onClick: _ => {this.openPluginRepoModal();},
 						children: "PluginRepo"
 					})

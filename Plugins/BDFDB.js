@@ -9056,7 +9056,7 @@
 	};
 
 	InternalBDFDB.processV2CContentColumn = function (e) {
-		if (window.PluginUpdates && window.PluginUpdates.plugins && e.instance.props.title == "Plugins") {
+		if (window.PluginUpdates && window.PluginUpdates.plugins && typeof e.instance.props.title == "string" && e.instance.props.title.toUpperCase().indexOf("PLUGINS") == 0) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {key: "folder-button"});
 			if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 				text: "Only checks for updates of plugins, which support the updatecheck. Rightclick for a list of supported plugins. (Listed ≠ Outdated)",
@@ -9065,7 +9065,7 @@
 					style: "max-width: 420px"
 				},
 				children: BDFDB.ReactUtils.createElement("button", {
-					className: `${BDFDB.disCN._repofolderbutton} bd-updatebtn`,
+					className: `${BDFDB.disCNS._repobutton + BDFDB.disCN._repofolderbutton} bd-updatebtn`,
 					onClick: _ => {
 						let toast = BDFDB.NotificationUtils.toast("Plugin update check in progress.", {type: "info", timeout: 0});
 						BDFDB.PluginUtils.checkAllUpdates().then(outdated => {
