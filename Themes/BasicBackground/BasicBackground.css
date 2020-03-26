@@ -2193,6 +2193,25 @@ body:before {
 #app-mount .gemIndicatorContainer-2jdECl {					/* boostsettings		suggestioncard circle				*/
 	background-color: transparent;
 }
+#app-mount .paymentPane-3bwJ6A {							/* boostsettings		past transations					*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+	color: rgb(var(--fontwhite1));
+}
+#app-mount .paginator-166-09 {								/* boostsettings		past transations paginator			*/
+	background: rgba(var(--vtransparencycolor), 0.3);
+}
+#app-mount .bottomDivider-1K9Gao {							/* boostsettings		past transations divider			*/
+	border-bottom-color: rgba(var(--fontwhite3), 0.5);
+}
+#app-mount .tab-1kx2RU {									/* boostsettings		past transations tab				*/
+	color: rgb(var(--fontwhite3));
+}
+#app-mount .appleRowHeader-241O5v {							/* boostsettings		past transations applerowheader		*/
+	color: rgb(var(--fontwhite2));
+}
+#app-mount .appleRowBody-2B5tp2 {							/* boostsettings		past transations applerowbody		*/
+	color: rgb(var(--fontwhite3));
+}
 
 .introHeader-4MPach {										/* hypesquad			header								*/
 	color: rgb(var(--fontwhite1));
@@ -3677,13 +3696,13 @@ body:before {
 
 .menu-Sp6bN1,												/* contextmenu			container (guildheader/status)		*/
 .contextMenu-HLZMGh,										/* contextmenu			container (contextmenu)				*/
-.container-3cGP6G {											/* contextmenu			container (messagemenu)				*/
+.container-1gR2ZK {											/* contextmenu			container (boost)					*/
 	background: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 }
 .menu-Sp6bN1,
 .contextMenu-HLZMGh,
-.container-3cGP6G ,
+.container-1gR2ZK ,
 .subMenuContext-2n_9YM {
 	z-index: 1;
 }
@@ -3693,8 +3712,8 @@ body:before {
 .contextMenu-HLZMGh:not(.scroller-2FKFPG):before,
 .subMenuContext-2n_9YM .scrollerWrap-2lJEkd:after,
 .subMenuContext-2n_9YM .scrollerWrap-2lJEkd:before,
-.container-3cGP6G:after,
-.container-3cGP6G:before {
+.container-1gR2ZK:after,
+.container-1gR2ZK:before {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -3710,13 +3729,13 @@ body:before {
 .menu-Sp6bN1:after,
 .contextMenu-HLZMGh:not(.scroller-2FKFPG):after,
 .subMenuContext-2n_9YM .scrollerWrap-2lJEkd:after,
-.container-3cGP6G:after {
+.container-1gR2ZK:after {
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.3));
 }
 .menu-Sp6bN1:before,
 .contextMenu-HLZMGh:not(.scroller-2FKFPG):before,
 .subMenuContext-2n_9YM .scrollerWrap-2lJEkd:before,
-.container-3cGP6G:before {
+.container-1gR2ZK:before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	filter: blur(var(--vpopoutblur));
 	background-attachment: fixed;

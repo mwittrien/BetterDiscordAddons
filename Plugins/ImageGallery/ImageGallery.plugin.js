@@ -6,7 +6,7 @@ var ImageGallery = (_ => {
 	return class ImageGallery {
 		getName () {return "ImageGallery";}
 
-		getVersion () {return "1.6.6";}
+		getVersion () {return "1.6.7";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,9 +14,7 @@ var ImageGallery = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["Details","Added some details about the current image and amount of images, can be turned off in settings now"]],
-				"fixed":[["Size","Images in the gallery no longer get resized to a thumbnail size"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"improved":[["Positioning","Improved the position of the sibling images to be placed in the center"]]
 			};
 
 			this.patchedModules = {
@@ -38,6 +36,9 @@ var ImageGallery = (_ => {
 					display: flex;
 					align-items: center;
 					position: fixed;
+					top: 50%;
+					bottom: 50%;
+					cursor: pointer;
 					z-index: -1;
 				}
 				${BDFDB.dotCN._imagegalleryprevious} {
@@ -252,7 +253,7 @@ var ImageGallery = (_ => {
 		
 		createImageWrapper (instance, imgRef, type, svgIcon) {
 			return BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.disCNS.imagewrapper + BDFDB.disCNS.imageclickable + BDFDB.disCNS._imagegallerysibling + BDFDB.disCN[`_imagegallery${type}`],
+				className: BDFDB.disCNS._imagegallerysibling + BDFDB.disCN[`_imagegallery${type}`],
 				onClick: _ => {this.switchImages(instance, type);},
 				children: [
 					imgRef,
