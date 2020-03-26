@@ -9110,7 +9110,7 @@
 					children = children[index].props.children;
 				}
 				children.splice(children.length - 1, 0, BDFDB.ReactUtils.createElement("button", {
-					className: BDFDB.disCNS._reposettingsbutton,
+					className: BDFDB.disCNS._repobutton + BDFDB.disCN._reposettingsbutton,
 					children: "Library Settings",
 					onClick: event => {
 						let wrapper = BDFDB.DOMUtils.getParent(BDFDB.dotCN._reposettingsclosed, event.currentTarget);
@@ -9140,8 +9140,8 @@
 			}
 		}
 	};
-	InternalBDFDB.processV2CPluginCard = function (e) {InternalBDFDB._processCard(e, e.instance.props.plugin);};
-	InternalBDFDB.processV2CThemeCard = function (e) {InternalBDFDB._processCard(e, e.instance.props.theme);};
+	InternalBDFDB.processV2CPluginCard = function (e) {InternalBDFDB._processCard(e, e.instance.props.addon && e.instance.props.addon.plugin || e.instance.props.plugin);};
+	InternalBDFDB.processV2CThemeCard = function (e) {InternalBDFDB._processCard(e, e.instance.props.addon && e.instance.props.addon.theme || e.instance.props.theme);};
 	
 	InternalBDFDB.createLibrarySettings = function () {
 		if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded) return;
