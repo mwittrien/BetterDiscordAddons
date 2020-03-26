@@ -6,17 +6,13 @@ var ReadAllNotificationsButton = (_ => {
 	return class ReadAllNotificationsButton {
 		getName () {return "ReadAllNotificationsButton";}
 
-		getVersion () {return "1.5.6";}
+		getVersion () {return "1.5.7";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Adds a button to clear all notifications.";}
 
 		constructor () {
-			this.changelog = {
-				"improved":[["Blacklist","You can now set a blacklist of servers, servers included in the blacklist will never get marked as read by the plugin"]]
-			};
-
 			this.patchedModules = {
 				after: {
 					Guilds: "render",
@@ -280,7 +276,7 @@ var ReadAllNotificationsButton = (_ => {
 						position: "absolute",
 						top: 14,
 						right: 16,
-						zIndex: 1
+						zIndex: 2001
 					}
 				}));
 			}
