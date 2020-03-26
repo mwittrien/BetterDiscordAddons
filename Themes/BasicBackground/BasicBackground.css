@@ -5941,6 +5941,71 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	box-shadow: 0 2px 4px rgba(var(--vtransparencycolor), 0.3);
 }
 
+.bd-select-wrapper {										/* bd select			wrapper								*/
+	color: rgb(var(--fontwhite1));
+}
+.bd-select {												/* bd select			inner								*/
+	background-color: rgba(var(--vtransparencycolor), 0.1);
+	border-color:  rgba(var(--vtransparencycolor), 0.3);
+	color: rgb(var(--fontwhite1));
+}
+.bd-select-arrow {											/* bd select			arrow								*/
+	fill: rgb(var(--fontwhite1));
+}
+.bd-select .bd-select-options {								/* bd select			popout								*/
+	background: transparent;
+	border: none;
+	border-radius: 4px;
+	box-shadow: rgba(var(--vtransparencycolor), 0.3) 0px 2px 5px 0px;
+    box-sizing: border-box;
+    padding: 6px 8px;
+	margin-left: -9px;
+}
+.bd-select .bd-select-options:after,
+.bd-select .bd-select-options:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	border-radius: 4px;
+	pointer-events: none;
+	z-index: -1;
+}
+.bd-select .bd-select-options:after {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.3));
+}
+.bd-select .bd-select-options:before {
+	background: var(--vpopout) center/var(--vpopoutsize);
+	filter: blur(var(--vpopoutblur));
+	background-attachment: fixed;
+}
+.bd-select .bd-select-option {								/* bd select			popout option						*/
+    display: flex;
+    align-items: center;
+    min-height: 32px;
+    border-radius: 2px;
+    box-sizing: border-box;
+	color: var(--interactive-normal);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 18px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    padding: 0 8px;
+}
+.bd-select .bd-select-option:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+	color: var(--interactive-hover);
+}
+.bd-select .bd-select-option.selected {
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+	color: var(--interactive-active);
+}
+
 .bd-pfbtn {													/* addonlist			folderbutton						*/
 	color: rgb(var(--fontwhite1));
 }
