@@ -26,6 +26,9 @@ var ReadAllNotificationsButton = (_ => {
 				${BDFDB.dotCN._readallnotificationsbuttonframe} {
 					margin-bottom: 10px;
 				}
+				${BDFDB.dotCN._readallnotificationsbuttonframe}:active {
+					transform: translateY(1px);
+				}
 				${BDFDB.dotCN._readallnotificationsbuttonbutton} {
 					cursor: pointer;
 					border-radius: 4px;

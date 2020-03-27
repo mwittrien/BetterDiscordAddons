@@ -9,7 +9,7 @@
 	
 	--dfontwhite1: 255,255,255;
 	
-	--vaccentcolor-hover: rgb(var(--vaccentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
+	--vaccentcolor-hover: rgb(var(--vaccentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15));
 	--vaccentcolor-active: rgb(var(--vaccentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3));
 	
 	--bd-blue: rgb(var(--vaccentcolor));
@@ -70,6 +70,7 @@
 	14.	PLUGINSUPPORT
 		1.	IMAGEZOOM
 		2.	HIDEUTILS
+		3.	READALLNOTIFICATIONSBUTTON
 	15.	THEMESUPPORT
 		1.	THEMEDEVBADGE
 */
@@ -555,10 +556,10 @@
 	background-color: rgb(var(--vaccentcolor)) !important;
 }
 .result-3w1ZcL[style*="background-color: rgb(146, 154, 250)"] {
-	background: rgb(var(--vaccentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15));
+	background: var(--vaccentcolor-hover) !important;
 }
 .result-3w1ZcL[style*="background-color: rgb(179, 174, 255)"] {
-	background: rgb(var(--vaccentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3));
+	background: var(--vaccentcolor-active) !important;
 }
 .theme-light .focused-1En8bG:after,							/* gifpicker			result hover						*/
 .theme-light .result-3w1ZcL:hover:after {
@@ -1775,6 +1776,7 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 /* ~~~~		13.		BDSUPPORT						~~~~ */
 
 #bd-pub-button {
+	color: var(--text-normal);
 	transition: background-color .15s ease-out, color .15s ease-out;
 }
 #bd-pub-button:hover {
@@ -1782,6 +1784,7 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 	background-color: rgb(var(--vaccentcolor));
 }
 #bd-pub-button:active {
+	color: rgb(var(--fontwhite1, var(--dfontwhite1)));
 	background: var(--vaccentcolor-hover);
 }
 #pubslayer button:hover {
@@ -1808,6 +1811,13 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 	background: var(--vaccentcolor-active);
 }
 
+.bd-addon-list .bd-card-footer button:hover {
+	background: var(--vaccentcolor-hover);
+}
+.bd-addon-list .bd-card-footer button:active {
+	background: var(--vaccentcolor-active);
+}
+
 
 /* ~~~~		14.		PLUGINSUPPORT					~~~~ */
 
@@ -1821,6 +1831,13 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 
 #HideUtils-Settings button {
 	background-color: rgb(var(--vaccentcolor)) !important;
+}
+
+/* ----		14.3.	READALLNOTIFICATIONSBUTTON		---- */
+
+.wrapper-1BJsBx:active .childWrapper-anI2G9.button-Jt-tIg{
+	background: var(--vaccentcolor-hover);
+	color: rgb(var(--fontwhite1, var(--dfontwhite1)));
 }
 
 
