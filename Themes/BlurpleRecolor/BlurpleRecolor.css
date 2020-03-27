@@ -8,6 +8,13 @@
 	--vlinkcolor: var(--linkcolor, var(--dlinkcolor));
 	
 	--dfontwhite1: 255,255,255;
+	
+	--vaccentcolor-hover: rgb(var(--vaccentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
+	--vaccentcolor-active: rgb(var(--vaccentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3));
+	
+	--bd-blue: rgb(var(--vaccentcolor));
+	--bd-blue-hover: var(--vaccentcolor-hover);
+	--bd-blue-active: var(--vaccentcolor-active);
 }
 .theme-dark, .theme-light {
 	--text-link: rgb(var(--vlinkcolor));
@@ -784,7 +791,7 @@
 	background-color: rgb(var(--vaccentcolor));
 }
 #app-mount .questionMark-CWEQZn:hover {
-	background: rgb(var(--vaccentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
+	background: var(--vaccentcolor-hover);
 }
 
 #app-mount .tierUnlocked-27DwHo {							/* boostsettings		tierunlocked						*/
@@ -1308,7 +1315,7 @@
 	background-color: rgb(var(--vaccentcolor));
 }
 .form-236Xmo .btnPrimary-346kfV:hover {
-	background: rgb(var(--vaccentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
+	background: var(--vaccentcolor-hover);
 }
 .modalNewUser-3IRw8L h5 {
 	color: rgb(var(--vaccentcolor));
@@ -1433,11 +1440,6 @@
 	border-bottom-color: rgb(var(--vaccentcolor));
 }
 
-#bda-qem button.active,
-#bda-qem button.active:hover {
-	background-color: rgb(var(--vaccentcolor));
-}
-
 /* ----		11.4.	PINS/MENTIONS					---- */
 
 .hasMoreButton-1MELpI {										/* popout				hasmore button						*/
@@ -1495,11 +1497,11 @@
 .btn-1PnLxm.btnPrimary-1jluZW:hover:not(:disabled),
 .lookFilled-1Gx00P.colorBrand-3pXr91:hover,
 #app-mount .lookFilled-1Gx00P.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover {
-	background: rgb(var(--vaccentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
+	background: var(--vaccentcolor-hover);
 }
 .lookFilled-1Gx00P.colorBrand-3pXr91:active,
 #app-mount .lookFilled-1Gx00P.hoverBrand-1_Fxlk.hasHover-3X1-zV:active {
-	background: rgb(var(--vaccentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3));
+	background: var(--vaccentcolor-active);
 }
 .btn-1PnLxm.btnPrimary-1jluZW,
 .lookFilled-1Gx00P.colorBrand-3pXr91,
@@ -1779,41 +1781,31 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 	color: rgb(var(--fontwhite1, var(--dfontwhite1)));
 	background-color: rgb(var(--vaccentcolor));
 }
-#pubslayer button {
-	background-color: rgb(var(--vaccentcolor));
+#bd-pub-button:active {
+	background: var(--vaccentcolor-hover);
 }
 #pubslayer button:hover {
-	background: rgb(var(--vaccentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
+	background: var(--vaccentcolor-hover);
+}
+#pubslayer button:active {
+	background: var(--vaccentcolor-active);
 }
 .bd-server-card.bd-server-card-pinned:after {
-	background: rgb(var(--vaccentcolor));
+	background: rgb(var(--bd-blue));
 }
 
-.standardSidebarView-3F1I7i #editor-detached button {
-	background: rgb(var(--vaccentcolor));
-}
-
-.bd-modal-wrapper .footer button {
-	background-color: rgb(var(--vaccentcolor));
-}
 .bd-modal-wrapper .footer button:hover {
-	background: rgb(var(--vaccentcolor)) linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
+	background: var(--vaccentcolor-hover);
+}
+.bd-modal-wrapper .footer button:active {
+	background: var(--vaccentcolor-active);
 }
 
-.bd-pfbtn {
-	background-color: rgb(var(--vaccentcolor));
+.bd-button:hover {
+	background: var(--vaccentcolor-hover);
 }
-.bda-slist .bda-footer a,
-.bd-addon-list .bda-footer a {
-	color: rgb(var(--vaccentcolor));
-}
-.bda-slist .bda-footer button,
-.bd-addon-list .bda-footer button {
-	background-color: rgb(var(--vaccentcolor));
-}
-#bd-settingspane-container .ui-switch-item .ui-switch-wrapper .ui-switch.checked,
-.bd-switch.bd-switch-checked {
-	background-color: rgb(var(--vaccentcolor));
+.bd-button:active {
+	background: var(--vaccentcolor-active);
 }
 
 
