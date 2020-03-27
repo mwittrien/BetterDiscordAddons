@@ -6,17 +6,13 @@ var SpellCheck = (_ => {
 	return class SpellCheck {
 		getName () {return "SpellCheck";}
 
-		getVersion () {return "1.4.0";}
+		getVersion () {return "1.4.1";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary.";}
 
 		constructor () {
-			this.changelog = {
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
-			};
-
 			this.patchedModules = {
 				after: {
 					SlateChannelTextArea: ["componentDidMount", "componentDidUpdate"]
@@ -135,7 +131,7 @@ var SpellCheck = (_ => {
 				languages = BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.languages, lang => {return lang.dic == true ? lang : null});
 				this.setDictionary(BDFDB.DataUtils.get(this, "choices", "dictionaryLanguage"));
 				
-				if ((BDFDB.LibraryModules.StoreUtils.get("SpellcheckStore") || {}).enabled) BDFDB.LibraryModules.SpellCheckUtils.toggleSpellcheck();
+				if ((BDFDB.LibraryModules.StoreChangeUtils && BDFDB.LibraryModules.StoreChangeUtils.get("SpellcheckStore") || {}).enabled) BDFDB.LibraryModules.SpellCheckUtils.toggleSpellcheck();
 
 				BDFDB.ModuleUtils.forceAllUpdates(this);
 			}
