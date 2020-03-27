@@ -1270,7 +1270,7 @@
 				module.BDFDBpatch[methodName][type][patchPriority][pluginId].pluginName = pluginName;
 			}
 		}
-		if (BDFDB.ObjectUtils.is(plugin) && !config.once) {
+		if (BDFDB.ObjectUtils.is(plugin) && !config.once && !config.noCache) {
 			if (!BDFDB.ArrayUtils.is(plugin.patchCancels)) plugin.patchCancels = [];
 			plugin.patchCancels.push(cancel);
 		}
@@ -9399,7 +9399,7 @@
 					let renderedPopout = renderPopout(...args);
 					BDFDB.ModuleUtils.patch(BDFDB, renderedPopout, "type", {after: e3 => {
 						InternalBDFDB.executeExtraPatchedPatches("MessageOptionContextMenu", {instance:{props:e3.methodArguments[0]}, returnvalue:e3.returnValue, methodname:"default"});
-					}}, {once: true});
+					}}, {noCache: true});
 					return renderedPopout;
 				}
 			}
