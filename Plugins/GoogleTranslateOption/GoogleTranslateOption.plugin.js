@@ -286,7 +286,7 @@ var GoogleTranslateOption = (_ => {
 					});
 				}
 				else return e2.callOriginalMethodAfterwards();
-			}}, true);
+			}}, {force: true});
 		}
 
 		processChannelEditorContainer (e) {

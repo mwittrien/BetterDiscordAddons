@@ -364,19 +364,19 @@ var ChatAliases = (_ => {
 		processChannelTextAreaForm (e) {
 			if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "handleSendMessage")) BDFDB.ModuleUtils.patch(this, e.instance, "handleSendMessage", {before: e2 => {
 				this.handleSubmit(e, e2, 0);
-			}}, true);
+			}}, {force: true});
 		}
 		
 		processMessageEditor (e) {
 			if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "onSubmit")) BDFDB.ModuleUtils.patch(this, e.instance, "onSubmit", {before: e2 => {
 				this.handleSubmit(e, e2, 0);
-			}}, true);
+			}}, {force: true});
 		}
 		
 		processUpload (e) {
 			if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "submitUpload")) BDFDB.ModuleUtils.patch(this, e.instance, "submitUpload", {before: e2 => {
 				this.handleSubmit(e, e2, 1);
-			}}, true);
+			}}, {force: true});
 		}
 		
 		handleSubmit (e, e2, textIndex) {

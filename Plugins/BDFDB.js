@@ -1203,7 +1203,9 @@
 		const pluginId = (typeof plugin === "string" ? plugin : plugin.name).toLowerCase();
 		return pluginId && module[methodName] && module[methodName].__isBDFDBpatched && module.BDFDBpatch[methodName] && BDFDB.ObjectUtils.toArray(module.BDFDBpatch[methodName]).some(patchObj => BDFDB.ObjectUtils.toArray(patchObj).some(priorityObj => Object.keys(priorityObj).includes(pluginId)));
 	};
-	BDFDB.ModuleUtils.patch = function (plugin, module, methodNames, patchMethods, forceRepatch = false) {
+	BDFDB.ModuleUtils.patch = function (plugin, module, methodNames, patchMethods, config = {}) {
+		// REMOVE
+		config = BDFDB.ObjectUtils.is(config) ? config : {force:config};
 		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (!plugin || !BDFDB.ObjectUtils.is(module) || !methodNames || !BDFDB.ObjectUtils.is(patchMethods)) return null;
 		patchMethods = BDFDB.ObjectUtils.filter(patchMethods, type => WebModulesData.PatchTypes.includes(type), true);
@@ -1213,9 +1215,10 @@
 		const patchPriority = BDFDB.ObjectUtils.is(plugin) && !isNaN(plugin.patchPriority) ? (plugin.patchPriority < 0 ? 0 : (plugin.patchPriority > 10 ? 10 : Math.round(plugin.patchPriority))) : 5;
 		if (!BDFDB.ObjectUtils.is(module.BDFDBpatch)) module.BDFDBpatch = {};
 		methodNames = [methodNames].flat(10).filter(n => n);
+		let cancel = _ => {BDFDB.ModuleUtils.unpatch(plugin, module, methodNames);};
 		for (let methodName of methodNames) if (module[methodName] == null || typeof module[methodName] == "function") {
 			let i = 0;
-			if (!module.BDFDBpatch[methodName] || forceRepatch && (!module[methodName] || !module[methodName].__isBDFDBpatched)) {
+			if (!module.BDFDBpatch[methodName] || config.force && (!module[methodName] || !module[methodName].__isBDFDBpatched)) {
 				if (!module.BDFDBpatch[methodName]) {
 					module.BDFDBpatch[methodName] = {};
 					for (let type of WebModulesData.PatchTypes) module.BDFDBpatch[methodName][type] = {};
@@ -1251,6 +1254,7 @@
 					}
 					else BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${methodName} in ${module.constructor ? module.constructor.displayName || module.constructor.name : "module"}`)();
 					callInstead = false, stopCall = false;
+					if (config.once) cancel();
 					return methodName == "render" && data.returnValue === undefined ? null : data.returnValue;
 				};
 				for (let key of Object.keys(originalMethod)) module[methodName][key] = originalMethod[key];
@@ -1266,8 +1270,7 @@
 				module.BDFDBpatch[methodName][type][patchPriority][pluginId].pluginName = pluginName;
 			}
 		}
-		let cancel = _ => {BDFDB.ModuleUtils.unpatch(plugin, module, methodNames);};
-		if (BDFDB.ObjectUtils.is(plugin)) {
+		if (BDFDB.ObjectUtils.is(plugin) && !config.once) {
 			if (!BDFDB.ArrayUtils.is(plugin.patchCancels)) plugin.patchCancels = [];
 			plugin.patchCancels.push(cancel);
 		}
@@ -1364,19 +1367,18 @@
 	InternalBDFDB.initiateProcess = function (plugin, type, e) {
 		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (BDFDB.ObjectUtils.is(plugin) && !plugin.stopping && e.instance) {
-			type = (type.split(" _ _ ")[1] || type).replace(/[^A-z0-9]|_/g, "");
-			type = type.charAt(0).toUpperCase() + type.slice(1);
-			if (typeof plugin["process" + type] == "function") {
+			type = LibraryModules.StringUtils.upperCaseFirstChar(type.split(" _ _ ")[1] || type).replace(/[^A-z0-9]|_/g, "");
+			if (typeof plugin[`process${type}`] == "function") {
 				if (typeof e.methodname == "string" && (e.methodname.indexOf("componentDid") == 0 || e.methodname.indexOf("componentWill") == 0)) {
 					e.node = BDFDB.ReactUtils.findDOMNode(e.instance);
-					if (e.node) return plugin["process" + type](e);
+					if (e.node) return plugin[`process${type}`](e);
 					else BDFDB.TimeUtils.timeout(_ => {
 						e.node = BDFDB.ReactUtils.findDOMNode(e.instance);
-						if (e.node) return plugin["process" + type](e);
+						if (e.node) return plugin[`process${type}`](e);
 					});
 					
 				}
-				else if (e.returnvalue || e.patchtypes.includes("before")) return plugin["process" + type](e);
+				else if (e.returnvalue || e.patchtypes.includes("before")) return plugin[`process${type}`](e);
 			}
 		}
 	};
@@ -2130,11 +2132,10 @@
 			let MessagesIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"Messages", unlimited:true});
 			let MessagesPrototype = BDFDB.ReactUtils.getValue(MessagesIns, "_reactInternalFiber.type.prototype");
 			if (MessagesIns && MessagesPrototype) {
-				let patchCancel = BDFDB.ModuleUtils.patch({name:"tempPatch"}, MessagesPrototype, "render", {after: e => {
-					patchCancel();
+				BDFDB.ModuleUtils.patch(BDFDB, MessagesPrototype, "render", {after: e => {
 					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnValue, {props: ["message", "channel"]});
 					if (index > -1) for (let ele of children) if (ele.props.message) ele.props.message = new BDFDB.DiscordObjects.Message(ele.props.message);
-				}});
+				}}, {once: true});
 				BDFDB.ReactUtils.forceUpdate(MessagesIns);
 			}
 		}, 1000);
@@ -9205,7 +9206,7 @@
 		}
 	};
 	InternalBDFDB.processMessageHeader = function (e) {
-		if (e.instance.props.message && e.instance.props.message.author && !document.querySelector(BDFDB.dotCN.emojipicker)) {
+		if (e.instance.props.message && e.instance.props.message.author) {
 			let avatarWrapper = BDFDB.ReactUtils.getValue(e, "returnvalue.props.children.0");
 			if (avatarWrapper && avatarWrapper.props && typeof avatarWrapper.props.children == "function") {
 				let renderChildren = avatarWrapper.props.children;
@@ -9387,20 +9388,22 @@
 		}
 	});});}))}, {childList: true});
 	BDFDB.ModuleUtils.patch(BDFDB, BDFDB.ReactUtils.getValue(BDFDB.ModuleUtils.findByString("renderReactions", "canAddNewReactions", "showMoreUtilities", false), "exports.default"), "type", {after: e => {
-		let [children, index] = BDFDB.ReactUtils.findChildren(e.returnValue, {filter: c => c && c.props && c.props.showMoreUtilities != undefined && c.props.showEmojiPicker != undefined && c.props.setPopout != undefined});
-		if (index > -1) BDFDB.ModuleUtils.patch(BDFDB, children[index], "type", {after: e2 => {
-			let [children2, index2] = BDFDB.ReactUtils.findChildren(e2.returnValue, {filter: c => c && c.props && typeof c.props.onRequestClose == "function" && c.props.onRequestClose.toString().indexOf("moreUtilities") > -1});
-			let popoutWrapper = children2[index2];
-			InternalBDFDB.executeExtraPatchedPatches("MessageOptionToolbar", {instance:{props:Object.assign({}, e2.methodArguments[0], {hasMorePopout: index2 > -1})}, returnvalue:e2.returnValue, methodname:"default"});
-			if (popoutWrapper && typeof popoutWrapper.props.renderPopout == "function") {
-				let renderPopout = popoutWrapper.props.renderPopout;
-				popoutWrapper.props.renderPopout = (...args) => {
+		if (document.querySelector(BDFDB.dotCN.emojipicker)) return; // avoid multi react EmojiPicker rerender
+		let toolbar = BDFDB.ReactUtils.findChild(e.returnValue, {filter: c => c && c.props && c.props.showMoreUtilities != undefined && c.props.showEmojiPicker != undefined && c.props.setPopout != undefined});
+		if (toolbar) BDFDB.ModuleUtils.patch(BDFDB, toolbar, "type", {after: e2 => {
+			let menu = BDFDB.ReactUtils.findChild(e2.returnValue, {filter: c => c && c.props && typeof c.props.onRequestClose == "function" && c.props.onRequestClose.toString().indexOf("moreUtilities") > -1});
+			InternalBDFDB.executeExtraPatchedPatches("MessageOptionToolbar", {instance:{props:Object.assign({}, e2.methodArguments[0], {hasMorePopout: !!menu})}, returnvalue:e2.returnValue, methodname:"default"});
+			if (menu && typeof menu.props.renderPopout == "function") {
+				let renderPopout = menu.props.renderPopout;
+				menu.props.renderPopout = (...args) => {
 					let renderedPopout = renderPopout(...args);
-					BDFDB.ModuleUtils.patch(BDFDB, renderedPopout, "type", {after: e3 => {InternalBDFDB.executeExtraPatchedPatches("MessageOptionContextMenu", {instance:{props:e3.methodArguments[0]}, returnvalue:e3.returnValue, methodname:"default"});}});
+					BDFDB.ModuleUtils.patch(BDFDB, renderedPopout, "type", {after: e3 => {
+						InternalBDFDB.executeExtraPatchedPatches("MessageOptionContextMenu", {instance:{props:e3.methodArguments[0]}, returnvalue:e3.returnValue, methodname:"default"});
+					}}, {once: true});
 					return renderedPopout;
 				}
 			}
-		}});
+		}}, {once: true});
 	}});
 
 	BDFDB.ModuleUtils.forceAllUpdates(BDFDB);
