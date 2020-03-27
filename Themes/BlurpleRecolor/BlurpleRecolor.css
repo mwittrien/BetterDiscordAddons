@@ -1597,8 +1597,20 @@
 .themeDefault-24hCdX.valueChecked-m-4IJZ {					/* switch				checked 							*/
 	background-color: rgb(var(--vaccentcolor));
 }
+.themeDefault-24hCdX.valueChecked-m-4IJZ:hover {
+	background: var(--vaccentcolor-hover);
+}
+.themeDefault-24hCdX.valueChecked-m-4IJZ:active {
+	background: var(--vaccentcolor-active);
+}
 .themeClear-1EjkE4.valueChecked-m-4IJZ {					/* switch				checked clear						*/
 	background-color: rgb(var(--vaccentcolor));
+}
+.themeClear-1EjkE4.valueChecked-m-4IJZ:hover {
+	background: var(--vaccentcolor-hover);
+}
+.themeClear-1EjkE4.valueChecked-m-4IJZ:active {
+	background: var(--vaccentcolor-active);
 }
 
 .barFill-23-gu- {											/* slider				barfill								*/
@@ -1815,6 +1827,15 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 	background: var(--vaccentcolor-hover);
 }
 .bd-addon-list .bd-card-footer button:active {
+	background: var(--vaccentcolor-active);
+}
+
+#bd-settingspane-container .ui-switch-item .ui-switch-wrapper .ui-switch.checked:hover,
+.bd-switch-checked:hover {
+	background: var(--vaccentcolor-hover);
+}
+#bd-settingspane-container .ui-switch-item .ui-switch-wrapper .ui-switch.checked:active,
+.bd-switch-checked:active {
 	background: var(--vaccentcolor-active);
 }
 
