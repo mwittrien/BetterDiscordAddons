@@ -3386,11 +3386,11 @@
 			}));
 		}
 		if (BDFDB.ArrayUtils.is(config.buttons)) for (let button of config.buttons) {
-			let contents = typeof button.contents == "string" ? button.contents : null;
+			let contents = typeof button.contents == "string" && button.contents;
 			if (contents) {
 				let color = typeof button.color == "string" && InternalComponents.LibraryComponents.Button.Colors[button.color.toUpperCase()];
 				let look = typeof button.look == "string" && InternalComponents.LibraryComponents.Button.Looks[button.look.toUpperCase()];
-				let click = typeof button.click == "function" ? button.click : _ => {};
+				let click = typeof button.click == "function" ? button.click : (typeof button.onClick == "function" ? button.onClick : _ => {});
 				
 				if (button.cancel) cancels.push(click);
 				
@@ -3414,7 +3414,6 @@
 			
 			let name = plugin.name || (typeof plugin.getName == "function" ? plugin.getName() : null);
 			name = typeof name == "string" ? name : null;
-			let size = typeof config.size == "string" && InternalComponents.LibraryComponents.ModalComponents.ModalSize[config.size.toUpperCase()];
 			let oldTransitionState = 0;
 			LibraryModules.ModalUtils.openModal(props => {
 				modalProps = props;
@@ -3422,7 +3421,7 @@
 					render () {
 						return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ModalComponents.ModalRoot, {
 							className: BDFDB.DOMUtils.formatClassName(name && `${name}-modal`, BDFDB.disCN.modalwrapper, config.className),
-							size: size || InternalComponents.LibraryComponents.ModalComponents.ModalSize.SMALL,
+							size: typeof config.size == "string" && InternalComponents.LibraryComponents.ModalComponents.ModalSize[config.size.toUpperCase()] || InternalComponents.LibraryComponents.ModalComponents.ModalSize.SMALL,
 							transitionState: props.transitionState,
 							children: [
 								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ModalComponents.ModalHeader, {
@@ -9206,7 +9205,7 @@
 		}
 	};
 	InternalBDFDB.processMessageHeader = function (e) {
-		if (e.instance.props.message && e.instance.props.message.author) {
+		if (e.instance.props.message && e.instance.props.message.author && !document.querySelector(BDFDB.dotCN.emojipicker)) {
 			let avatarWrapper = BDFDB.ReactUtils.getValue(e, "returnvalue.props.children.0");
 			if (avatarWrapper && avatarWrapper.props && typeof avatarWrapper.props.children == "function") {
 				let renderChildren = avatarWrapper.props.children;
