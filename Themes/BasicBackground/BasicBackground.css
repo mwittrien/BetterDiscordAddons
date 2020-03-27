@@ -108,6 +108,7 @@
 		10.	DOWNLOADAPPMODAL
 		11.	GUILDBOOSTMODAL
 		12.	NEWUSERMODAL
+		12.	REACTIONSMODAL
 	14.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -3543,6 +3544,47 @@ body:before {
 .form-236Xmo .btnDefault-3gHhPM {
 	background: transparent;
 	border-color: transparent;
+}
+
+/* ----		13.13.	REACTIONSMODAL					---- */
+
+#app-mount .sidebar-1-SQro {								/* modal				sidebar								*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+#app-mount .reactors-Blmlhw {								/* modal				list								*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+#app-mount .reactionDefault-GBA58K:hover {					/* modal				reaction							*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+#app-mount .reactionSelected-1pqISm {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+#app-mount .count-1vzEyg {									/* modal				reaction count						*/
+	color: rgb(var(--fontwhite2));
+}
+#app-mount .reactionDefault-GBA58K:hover .count-1vzEyg,
+#app-mount .reactionSelected-1pqISm .count-1vzEyg {
+	color: rgb(var(--fontwhite1));
+}
+#app-mount .nickname-miBZxb {								/* modal				nickname							*/
+	color: rgb(var(--fontwhite1));
+}
+#app-mount .username-Af3M5Y {								/* modal				username							*/
+	color: rgb(var(--fontwhite1));
+}
+#app-mount .discriminator-byOsvi {							/* modal				discriminator						*/
+	color: rgb(var(--fontwhite3));
+}
+#app-mount .tagFaded-WP86yt {
+	opacity: 0.5;
+}
+#app-mount .remove-3V-yj8 {									/* modal				remove								*/
+	color: rgb(var(--fontwhite2));
+}
+#app-mount .remove-3V-yj8:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+	color: rgb(var(--fontwhite1));
 }
 
 
