@@ -27,17 +27,13 @@ var GoogleTranslateOption = (_ => {
 	return class GoogleTranslateOption {
 		getName () {return "GoogleTranslateOption";}
 
-		getVersion () {return "1.9.8";}
+		getVersion () {return "1.9.9";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send.";}
 
 		constructor () {
-			this.changelog = {
-				"fixed":[["Emojis","Emojis are now properly inserted when a message is translated, really now"]]
-			};
-
 			this.patchedModules = {
 				before: {
 					ChannelTextAreaForm: "render",
@@ -286,7 +282,7 @@ var GoogleTranslateOption = (_ => {
 					});
 				}
 				else return e2.callOriginalMethodAfterwards();
-			}}, {force: true});
+			}}, {force: true, noCache: true});
 		}
 
 		processChannelEditorContainer (e) {

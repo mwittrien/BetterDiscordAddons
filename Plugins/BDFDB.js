@@ -1135,6 +1135,9 @@
 		QuickSwitchUserResult: "LibraryComponents.QuickSwitchItems.User",
 	};
 	WebModulesData.SpecialFilter = {
+		V2C_ContentColumn: ins => ins && ins.return && ins.return.stateNode && ins.return.stateNode.props && typeof ins.return.stateNode.props.title == "string" && (ins.return.stateNode.props.title.toUpperCase().indexOf("PLUGINS") == 0 || ins.return.stateNode.props.title.toUpperCase().indexOf("THEMES") == 0) && ins.return.type,
+		V2C_PluginCard: ins => ins && ins.return && ins.return.stateNode && ins.return.stateNode.props && ins.return.stateNode.props.addon && ins.return.stateNode.props.addon.plugin && ins.return.type,
+		V2C_ThemeCard: ins => ins && ins.return && ins.return.stateNode && ins.return.stateNode.props && ins.return.stateNode.props.addon && ins.return.stateNode.props.addon.theme && ins.return.type
 	};
 	WebModulesData.PatchFinder = {
 		Account: "accountinfo",
@@ -1183,9 +1186,8 @@
 		UserPopout: "userpopout",
 		UserProfile: "userprofile",
 		V2C_ContentColumn: "contentcolumn",
-		V2C_List: "_repolist",
-		V2C_PluginCard: "_repolist",
-		V2C_ThemeCard: "_repolist"
+		V2C_PluginCard: "_repocard",
+		V2C_ThemeCard: "_repocard"
 	};
 	WebModulesData.CodeFinder = {
 	};

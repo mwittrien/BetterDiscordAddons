@@ -4,18 +4,13 @@ var ChatAliases = (_ => {
 	return class ChatAliases {
 		getName () {return "ChatAliases";}
 
-		getVersion () {return "2.0.9";}
+		getVersion () {return "2.1.0";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
 		constructor () {
-			this.changelog = {
-				"fixed":[["Aliases Autocomplete","Fixed menu not showing up"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
-			};
-
 			this.patchedModules = {
 				before: {
 					ChannelAutoComplete: "render",
@@ -364,19 +359,19 @@ var ChatAliases = (_ => {
 		processChannelTextAreaForm (e) {
 			if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "handleSendMessage")) BDFDB.ModuleUtils.patch(this, e.instance, "handleSendMessage", {before: e2 => {
 				this.handleSubmit(e, e2, 0);
-			}}, {force: true});
+			}}, {force: true, noCache: true});
 		}
 		
 		processMessageEditor (e) {
 			if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "onSubmit")) BDFDB.ModuleUtils.patch(this, e.instance, "onSubmit", {before: e2 => {
 				this.handleSubmit(e, e2, 0);
-			}}, {force: true});
+			}}, {force: true, noCache: true});
 		}
 		
 		processUpload (e) {
 			if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "submitUpload")) BDFDB.ModuleUtils.patch(this, e.instance, "submitUpload", {before: e2 => {
 				this.handleSubmit(e, e2, 1);
-			}}, {force: true});
+			}}, {force: true, noCache: true});
 		}
 		
 		handleSubmit (e, e2, textIndex) {
