@@ -1733,25 +1733,25 @@
 		let start = performance.now();
 		let maxDepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
 		let maxTime = config.unlimited ? 999999999 : (config.time === undefined ? 150 : config.time);
-		return getChildren(instance);
-		function getChildren (children) {
+		return getChild(instance);
+		function getChild (children) {
 			let result = null;
 			if (!children || depth >= maxDepth && performance.now() - start >= maxTime) return result;
 			if (!BDFDB.ArrayUtils.is(children)) {
 				if (check(children)) result = children;
 				else if (children.props && children.props.children) {
 					depth++;
-					result = getChildren(children.props.children);
+					result = getChild(children.props.children);
 					depth--;
 				}
 			}
 			else {
 				for (let child of children) if (child) {
-					if (BDFDB.ArrayUtils.is(child)) result = getChildren(child);
+					if (BDFDB.ArrayUtils.is(child)) result = getChild(child);
 					else if (check(child)) result = child;
 					else if (child.props && child.props.children) {
 						depth++;
-						result = getChildren(child.props.children);
+						result = getChild(child.props.children);
 						depth--;
 					}
 				}
@@ -1828,6 +1828,31 @@
 		}
 		function propCheck (props, key, value) {
 			return key != null && props[key] != null && value != null && (key == "className" ? (" " + props[key] + " ").indexOf(" " + value + " ") > -1 : BDFDB.equals(props[key], value));
+		}
+	};
+	BDFDB.ReactUtils.setChild = function (parent, stringOrChild) {
+		if (!BDFDB.ReactUtils.isValidElement(parent) || (!BDFDB.ReactUtils.isValidElement(stringOrChild) && typeof stringOrChild != "string" && !BDFDB.ArrayUtils.is(stringOrChild))) return;
+		let set = false;
+		checkParent(parent);
+		function checkParent(child) {
+			if (set) return;
+			if (!BDFDB.ArrayUtils.is(child)) checkChild(child);
+			else for (let subChild of child) checkChild(subChild);
+		}
+		function checkChild(child) {
+			if (!BDFDB.ReactUtils.isValidElement(child)) return;
+			if (BDFDB.ReactUtils.isValidElement(child.props.children)) checkParent(child.props.children);
+			else if (BDFDB.ArrayUtils.is(child.props.children)) {
+				if (child.props.children.every(c => !c || typeof c == "string")) {
+					set = true;
+					child.props.children = [stringOrChild].flat(10);
+				}
+				else checkParent(child.props.children);
+			}
+			else {
+				set = true;
+				child.props.children = stringOrChild;
+			}
 		}
 	};
 	BDFDB.ReactUtils.findConstructor = function (nodeOrInstance, types, config = {}) {
@@ -3219,11 +3244,11 @@
 		}
 	};
 	BDFDB.DOMUtils.getParent = function (listOrSelector, node) {
-		var parent = null;
+		varletparent = null;
 		if (Node.prototype.isPrototypeOf(node) && listOrSelector) {
-			var list = NodeList.prototype.isPrototypeOf(listOrSelector) ? listOrSelector : typeof listOrSelector == "string" ? document.querySelectorAll(listOrSelector) : null;
-			if (list) for (let listnode of list) if (listnode.contains(node)) {
-				parent = listnode;
+			let list = NodeList.prototype.isPrototypeOf(listOrSelector) ? listOrSelector : typeof listOrSelector == "string" ? document.querySelectorAll(listOrSelector) : null;
+			if (list) for (let listNode of list) if (listNode.contains(node)) {
+				parent = listNode;
 				break;
 			}
 		}
@@ -3231,7 +3256,7 @@
 	};
 	BDFDB.DOMUtils.setText = function (node, stringOrNode) {
 		if (!node || !Node.prototype.isPrototypeOf(node)) return;
-		var textnode = node.nodeType == Node.TEXT_NODE ? node : null;
+		let textnode = node.nodeType == Node.TEXT_NODE ? node : null;
 		if (!textnode) for (let child of node.childNodes) if (child.nodeType == Node.TEXT_NODE || BDFDB.DOMUtils.containsClass(child, "BDFDB-textnode")) {
 			textnode = child;
 			break;
@@ -3251,25 +3276,25 @@
 		for (let child of node.childNodes) if (child.nodeType == Node.TEXT_NODE) return child.textContent;
 	};
 	BDFDB.DOMUtils.getRects = function (node) {
-		var rects = {};
+		let rects = {};
 		if (Node.prototype.isPrototypeOf(node) && node.nodeType != Node.TEXT_NODE) {
-			var hidenode = node;
-			while (hidenode) {
-				var hidden = BDFDB.DOMUtils.isHidden(hidenode);
+			let hideNode = node;
+			while (hideNode) {
+				let hidden = BDFDB.DOMUtils.isHidden(hideNode);
 				if (hidden) {
-					BDFDB.DOMUtils.toggle(hidenode, true);
-					hidenode.BDFDBgetRectsHidden = true;
+					BDFDB.DOMUtils.toggle(hideNode, true);
+					hideNode.BDFDBgetRectsHidden = true;
 				}
-				hidenode = hidenode.parentElement;
+				hideNode = hideNode.parentElement;
 			}
 			rects = node.getBoundingClientRect();
-			hidenode = node;
-			while (hidenode) {
-				if (hidenode.BDFDBgetRectsHidden) {
-					BDFDB.DOMUtils.toggle(hidenode, false);
-					delete hidenode.BDFDBgetRectsHidden;
+			hideNode = node;
+			while (hideNode) {
+				if (hideNode.BDFDBgetRectsHidden) {
+					BDFDB.DOMUtils.toggle(hideNode, false);
+					delete hideNode.BDFDBgetRectsHidden;
 				}
-				hidenode = hidenode.parentElement;
+				hideNode = hideNode.parentElement;
 			}
 		}
 		return rects;

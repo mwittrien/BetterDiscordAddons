@@ -4,7 +4,7 @@ var RemoveNicknames = (_ => {
 	return class RemoveNicknames {
 		getName () {return "RemoveNicknames";}
 
-		getVersion () {return "1.2.9";}
+		getVersion () {return "1.3.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ var RemoveNicknames = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Replace Own","Setting was switched around (enabled was disabled)"]]
+				"fixed":[["Typing List","Works now"]]
 			};
 
 			this.patchedModules = {
@@ -22,8 +22,9 @@ var RemoveNicknames = (_ => {
 					MemberListItem: "render",
 					Message: "default",
 					MessageContent: "type",
-					TypingUsers: "render",
-					Clickable:"componentDidMount"
+				},
+				after: {
+					TypingUsers: "render"
 				}
 			};
 		}
@@ -151,7 +152,7 @@ var RemoveNicknames = (_ => {
 					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN.typingtext]]});
 					if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) for (let child of children[index].props.children) if (child.type == "strong") {
 						let newName = this.getNewName(users.shift());
-						if (newName) child.props.children = newName;
+						if (newName) BDFDB.ReactUtils.setChild(child, newName);
 					}
 				}
 			}
