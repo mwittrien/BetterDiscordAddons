@@ -73,7 +73,7 @@ var ServerFolders = (_ => {
 										}
 									},
 									onMouseDown: (event, instance) => {
-										event = event.nativeEvent;
+										event = event.nativeEvent || event;
 										let mousemove = event2 => {
 											if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
 												BDFDB.ListenerUtils.stopEvent(event);

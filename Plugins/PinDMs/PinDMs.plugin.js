@@ -4,17 +4,13 @@ var PinDMs = (_ => {
 	return class PinDMs {
 		getName () {return "PinDMs";}
 
-		getVersion () {return "1.6.3";}
+		getVersion () {return "1.6.4";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Allows you to pin DMs, making them appear at the top of your DMs/Guild-list.";}
 
 		constructor () {
-			this.changelog = {
-				"fixed":[["Pin Icon","Fixed Pin Icon not showing in stable and causing a crash in canary"]]
-			};
-
 			this.patchedModules = {
 				before: {
 					PrivateChannelsList: "render",
@@ -327,13 +323,13 @@ var PinDMs = (_ => {
 								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.dmchannelheader, BDFDB.disCN._pindmspinnedchannelsheadercontainer, category.collapsed && BDFDB.disCN._pindmspinnedchannelsheadercollapsed, color && BDFDB.disCN._pindmspinnedchannelsheadercolored, BDFDB.disCN.namecontainernamecontainer),
 								categoryId: category.id,
 								onMouseDown: event => {
-									let node = BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmspinnedchannelsheadercontainer, event.target).cloneNode(true);
+									event = event.nativeEvent || event;
 									let mousemove = event2 => {
 										if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
 											BDFDB.ListenerUtils.stopEvent(event);
 											this.draggedCategory = category.id;
 											this.updateContainer("dmCategories");
-											let dragpreview = this.createDragPreview(node, event2);
+											let dragpreview = this.createDragPreview(BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmspinnedchannelsheadercontainer, event.target).cloneNode(true), event2);
 											document.removeEventListener("mousemove", mousemove);
 											document.removeEventListener("mouseup", mouseup);
 											let dragging = event3 => {
@@ -502,6 +498,7 @@ var PinDMs = (_ => {
 							e.node.PinDMsMouseDownListener = event => {
 								if (!BDFDB.BDUtils.isPluginEnabled("PinDMs")) e.node.removeEventListener("mousedown", e.node.PinDMsMouseDownListener);
 								else {
+									event = event.nativeEvent || event;
 									let mousemove = event2 => {
 										if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
 											BDFDB.ListenerUtils.stopEvent(event);
