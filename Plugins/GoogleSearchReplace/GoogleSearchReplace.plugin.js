@@ -53,9 +53,9 @@ var GoogleSearchReplace = (_ => {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let engines = BDFDB.DataUtils.get(this, "engines");
-			let settingspanel, settingsitems = [], engineitems = [];
+			let settingsPanel, settingsItems = [], engineitems = [];
 			
-			for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "Switch",
 				plugin: this,
@@ -71,14 +71,14 @@ var GoogleSearchReplace = (_ => {
 				label: this.defaults.engines[key].name,
 				value: engines[key]
 			}));
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 				title: "Search Engines:",
-				first: settingsitems.length == 0,
+				first: settingsItems.length == 0,
 				last: true,
 				children: engineitems
 			}));
 			
-			return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
 		//legacy

@@ -133,7 +133,7 @@ var FriendNotifications = (_ => {
 				data.disabled = disableon;
 				BDFDB.DataUtils.save(data, this, type, userId);
 				this.SettingsUpdated = true;
-				BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
+				BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 			};
 			let changeAllConfigs = (type, config, enable) => {
 				let data = BDFDB.DataUtils.load(this, type);
@@ -146,7 +146,7 @@ var FriendNotifications = (_ => {
 				for (let id in data) data[id][config] = enable;
 				BDFDB.DataUtils.save(data, this, type);
 				this.SettingsUpdated = true;
-				BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
+				BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 			};
 			let successSavedAudio = (type, parsedurl, parseddata) => {
 				if (parsedurl && parseddata) BDFDB.NotificationUtils.toast(`Sound was saved successfully.`, {type:"success"});
@@ -220,7 +220,7 @@ var FriendNotifications = (_ => {
 					onRemove: (e, instance) => {
 						BDFDB.DataUtils.remove(this, type, instance.props.cardId);
 						this.SettingsUpdated = true;
-						BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
+						BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 					}
 				}));
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
@@ -240,7 +240,7 @@ var FriendNotifications = (_ => {
 			let friendsData = BDFDB.DataUtils.load(this, "friends"), nonFriendsData = BDFDB.DataUtils.load(this, "nonfriends");
 			let friends = [], nonFriends = [];
 			
-			let settingspanel, settingsitems = [], inneritems = [];
+			let settingsPanel, settingsItems = [], innerItems = [];
 			
 			for (let id of friendIDs) {
 				let user = BDFDB.LibraryModules.UserStore.getUser(id);
@@ -267,7 +267,7 @@ var FriendNotifications = (_ => {
 			BDFDB.DataUtils.save(friendsData, this, "friends");
 			BDFDB.DataUtils.save(nonFriendsData, this, "nonfriends");
 			
-			for (let key in settings) inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let key in settings) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "Switch",
 				plugin: this,
@@ -275,7 +275,7 @@ var FriendNotifications = (_ => {
 				label: this.defaults.settings[key].description,
 				value: settings[key]
 			}));
-			for (let key in amounts) if (key.indexOf("desktop") == -1 || "Notification" in window) inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let key in amounts) if (key.indexOf("desktop") == -1 || "Notification" in window) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "TextInput",
 				childProps: {
@@ -289,14 +289,14 @@ var FriendNotifications = (_ => {
 				max: this.defaults.amounts[key].max,
 				value: amounts[key]
 			}));
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Settings",
 				collapseStates: collapseStates,
-				children: inneritems
+				children: innerItems
 			}));
 			
-			if (friends.length) settingsitems.push(createUserList(friends, "friends", "Friend-List"));
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			if (friends.length) settingsItems.push(createUserList(friends, "friends", "Friend-List"));
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Add new Stranger",
 				collapseStates: collapseStates,
 				dividertop: true,
@@ -313,7 +313,7 @@ var FriendNotifications = (_ => {
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 							onClick: _ => {
-								let userId = settingspanel.querySelector(`.input-newstranger ` + BDFDB.dotCN.input).value.trim();
+								let userId = settingsPanel.querySelector(`.input-newstranger ` + BDFDB.dotCN.input).value.trim();
 								if (friendIDs.includes(userId)) BDFDB.NotificationUtils.toast("User is already a friend of yours. Please use the 'Friend-List' area to configure him/her.", {type:"error"});
 								else if (Object.keys(nonFriends).includes(userId)) BDFDB.NotificationUtils.toast("User is already being observed as a 'Stranger'.", {type:"error"});
 								else {
@@ -321,7 +321,7 @@ var FriendNotifications = (_ => {
 									if (user) {
 										BDFDB.DataUtils.save(this.createDefaultConfig(), this, "nonfriends", userId);
 										this.SettingsUpdated = true;
-										BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
+										BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 									}
 									else BDFDB.NotificationUtils.toast("Please enter a valid UserID of a user that has been loaded in your client.", {type:"error"});
 								}
@@ -331,9 +331,9 @@ var FriendNotifications = (_ => {
 					]
 				})
 			}));
-			if (nonFriends.length) settingsitems.push(createUserList(nonFriends, "nonfriends", "Stranger-List"));
+			if (nonFriends.length) settingsItems.push(createUserList(nonFriends, "nonfriends", "Stranger-List"));
 			
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "LogIn/-Out Timelog",
 				collapseStates: collapseStates,
 				dividertop: true,
@@ -345,7 +345,7 @@ var FriendNotifications = (_ => {
 					children: "Timelog"
 				})
 			}));
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Notification Messages",
 				collapseStates: collapseStates,
 				dividertop: true,
@@ -378,7 +378,7 @@ var FriendNotifications = (_ => {
 					value: notificationstrings[key]
 				})))
 			}));
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Notification Sounds",
 				collapseStates: collapseStates,
 				dividertop: true,
@@ -423,7 +423,7 @@ var FriendNotifications = (_ => {
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 								onClick: _ => {
-									let source = settingspanel.querySelector(`.input-${key}src ` + BDFDB.dotCN.input).value.trim();
+									let source = settingsPanel.querySelector(`.input-${key}src ` + BDFDB.dotCN.input).value.trim();
 									if (!source.length) {
 										BDFDB.NotificationUtils.toast(`Sound file was removed.`, {type:"warn"});
 										successSavedAudio(key, source, source);
@@ -450,7 +450,7 @@ var FriendNotifications = (_ => {
 				]).flat(10).filter(n => n)
 			}));
 			
-			return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
 		//legacy

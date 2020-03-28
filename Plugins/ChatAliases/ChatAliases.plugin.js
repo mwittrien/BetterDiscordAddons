@@ -50,9 +50,9 @@ var ChatAliases = (_ => {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let amounts = BDFDB.DataUtils.get(this, "amounts");
-			let settingspanel, settingsitems = [], inneritems = [];
+			let settingsPanel, settingsItems = [], innerItems = [];
 			
-			for (let key in settings) inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let key in settings) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "Switch",
 				plugin: this,
@@ -60,7 +60,7 @@ var ChatAliases = (_ => {
 				label: this.defaults.settings[key].description,
 				value: settings[key]
 			}));
-			for (let key in amounts) inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let key in amounts) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "TextInput",
 				childProps: {
@@ -74,13 +74,13 @@ var ChatAliases = (_ => {
 				max: this.defaults.amounts[key].max,
 				value: amounts[key]
 			}));
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Settings",
 				collapseStates: collapseStates,
-				children: inneritems
+				children: innerItems
 			}));
 			let values = {wordvalue:"", replacevalue:""};
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Add new Alias",
 				collapseStates: collapseStates,
 				dividertop: true,
@@ -92,14 +92,14 @@ var ChatAliases = (_ => {
 						disabled: !Object.keys(values).every(valuename => values[valuename]),
 						children: BDFDB.LanguageUtils.LanguageStrings.ADD,
 						onClick: _ => {
-							this.saveWord(values.wordvalue, values.replacevalue, settingspanel.querySelector(".input-replacevalue input[type='file']"));
-							BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
+							this.saveWord(values.wordvalue, values.replacevalue, settingsPanel.querySelector(".input-replacevalue input[type='file']"));
+							BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 						}
 					}),
 					this.createInputs(values)
 				].flat(10).filter(n => n)
 			}));
-			if (!BDFDB.ObjectUtils.isEmpty(this.aliases)) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			if (!BDFDB.ObjectUtils.isEmpty(this.aliases)) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Added Aliases",
 				collapseStates: collapseStates,
 				dividertop: true,
@@ -143,11 +143,11 @@ var ChatAliases = (_ => {
 					onRemove: (e, instance) => {
 						delete this.aliases[instance.props.cardId];
 						BDFDB.DataUtils.save(this.aliases, this, "words");
-						BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
+						BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 					}
 				})
 			}));
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Remove All",
 				collapseStates: collapseStates,
 				dividertop: true,
@@ -160,13 +160,13 @@ var ChatAliases = (_ => {
 						BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all added Aliases?", _ => {
 							this.aliases = {};
 							BDFDB.DataUtils.remove(this, "words");
-							BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
+							BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 						});
 					},
 					children: BDFDB.LanguageUtils.LanguageStrings.REMOVE
 				})
 			}));
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Config Guide",
 				collapseStates: collapseStates,
 				dividertop: true,
@@ -176,7 +176,7 @@ var ChatAliases = (_ => {
 				}))
 			}));
 			
-			return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
 		//legacy

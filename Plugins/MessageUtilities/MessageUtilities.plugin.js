@@ -57,9 +57,9 @@ var MessageUtilities = (_ => {
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let bindings = BDFDB.DataUtils.get(this, "bindings");
 			let toasts = BDFDB.DataUtils.get(this, "toasts");
-			let settingspanel, settingsitems = [];
+			let settingsPanel, settingsItems = [];
 			
-			for (let key in settings) if (this.defaults.settings[key].description) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let key in settings) if (this.defaults.settings[key].description) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "Switch",
 				plugin: this,
@@ -67,11 +67,11 @@ var MessageUtilities = (_ => {
 				label: this.defaults.settings[key].description,
 				value: settings[key]
 			}));
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 				className: BDFDB.disCN.marginbottom8
 			}));
 			for (let action in bindings) if (!this.defaults.bindings[action].plugin || BDFDB.BDUtils.isPluginEnabled(this.defaults.bindings[action].plugin)) {
-				settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 					className: BDFDB.disCN.marginbottom8,
 					align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 					direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
@@ -90,7 +90,7 @@ var MessageUtilities = (_ => {
 						}) : null
 					].filter(n => n)
 				}));
-				settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 					className: BDFDB.disCN.marginbottom8,
 					type: "Switch",
 					dividerbottom: true,
@@ -121,7 +121,7 @@ var MessageUtilities = (_ => {
 					})
 				}));
 			}
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 				type: "Button",
 				className: BDFDB.disCN.marginbottom8,
 				color: BDFDB.LibraryComponents.Button.Colors.RED,
@@ -129,14 +129,14 @@ var MessageUtilities = (_ => {
 				onClick: (e, instance) => {
 					BDFDB.ModalUtils.confirm(this, "Are you sure you want to reset all Key Bindings?", _ => {
 						BDFDB.DataUtils.remove(this, "bindings");
-						settingspanel.parentElement.appendChild(this.getSettingsPanel());
-						settingspanel.remove();
+						settingsPanel.parentElement.appendChild(this.getSettingsPanel());
+						settingsPanel.remove();
 					});
 				},
 				children: BDFDB.LanguageUtils.LanguageStrings.RESET
 			}));
 			
-			return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
 		//legacy

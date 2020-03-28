@@ -55,9 +55,9 @@ var ChatFilter = (_ => {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let replaces = BDFDB.DataUtils.get(this, "replaces");
-			let settingspanel, settingsitems = [];
+			let settingsPanel, settingsItems = [];
 			
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Settings",
 				collapseStates: collapseStates,
 				children: Object.keys(settings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
@@ -78,7 +78,7 @@ var ChatFilter = (_ => {
 				})))
 			}));
 			let values = {wordvalue:"", replacevalue:"", choice:"blocked"};
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: `Add new blocked/censored Word`,
 				collapseStates: collapseStates,
 				dividertop: true,
@@ -91,13 +91,13 @@ var ChatFilter = (_ => {
 						children: BDFDB.LanguageUtils.LanguageStrings.ADD,
 						onClick: _ => {
 							this.saveWord(values);
-							BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
+							BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 						}
 					}),
 					this.createInputs(values)
 				].flat(10).filter(n => n)
 			}));
-			for (let rtype in replaces) if (!BDFDB.ObjectUtils.isEmpty(words[rtype])) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			for (let rtype in replaces) if (!BDFDB.ObjectUtils.isEmpty(words[rtype])) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: `Added ${rtype} Words`,
 				collapseStates: collapseStates,
 				dividertop: true,
@@ -141,11 +141,11 @@ var ChatFilter = (_ => {
 					onRemove: (e, instance) => {
 						delete words[rtype][instance.props.cardId];
 						BDFDB.DataUtils.save(words, this, "words");
-						BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
+						BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 					}
 				})
 			}));
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Remove All",
 				collapseStates: collapseStates,
 				dividertop: true,
@@ -158,13 +158,13 @@ var ChatFilter = (_ => {
 						BDFDB.ModalUtils.confirm(this, `Are you sure you want to remove all ${rtype} Words?`, _ => {
 							words[rtype] = {};
 							BDFDB.DataUtils.remove(this, "words", rtype);
-							BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
+							BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 						});
 					},
 					children: BDFDB.LanguageUtils.LanguageStrings.REMOVE
 				}))
 			}));
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Config Guide",
 				collapseStates: collapseStates,
 				dividertop: true,
@@ -174,7 +174,7 @@ var ChatFilter = (_ => {
 				}))
 			}));
 			
-			return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
 		//legacy

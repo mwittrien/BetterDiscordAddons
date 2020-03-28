@@ -143,9 +143,9 @@ var BadgesEverywhere = (_ => {
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let badges = BDFDB.DataUtils.get(this, "badges");
 			let indicators = BDFDB.DataUtils.get(this, "indicators");
-			let settingspanel, settingsitems = [], inneritems = [];
+			let settingsPanel, settingsItems = [], innerItems = [];
 			
-			for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "Switch",
 				plugin: this,
@@ -153,7 +153,7 @@ var BadgesEverywhere = (_ => {
 				label: this.defaults.settings[key].description,
 				value: settings[key]
 			}));
-			for (let flag in badges) inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let flag in badges) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "Switch",
 				plugin: this,
@@ -162,7 +162,7 @@ var BadgesEverywhere = (_ => {
 				value: badges[flag],
 				labelchildren: this.createSettingsBadges(flag)
 			}));
-			for (let flag in indicators) inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let flag in indicators) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "Switch",
 				plugin: this,
@@ -171,14 +171,14 @@ var BadgesEverywhere = (_ => {
 				value: indicators[flag],
 				labelchildren: this.createSettingsBadges(flag)
 			}));
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 				title: "Display Badges:",
-				first: settingsitems.length == 0,
+				first: settingsItems.length == 0,
 				last: true,
-				children: inneritems
+				children: innerItems
 			}));
 			
-			return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
 		//legacy

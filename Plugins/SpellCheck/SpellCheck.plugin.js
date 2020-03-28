@@ -48,9 +48,9 @@ var SpellCheck = (_ => {
 			let choices = BDFDB.DataUtils.get(this, "choices");
 			let amounts = BDFDB.DataUtils.get(this, "amounts");
 			let ownDictionary = BDFDB.DataUtils.load(this, "owndics", choices.dictionaryLanguage) || [];
-			let settingspanel, settingsitems = [];
+			let settingsPanel, settingsItems = [];
 			
-			for (let key in choices) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let key in choices) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "Select",
 				plugin: this,
@@ -62,11 +62,11 @@ var SpellCheck = (_ => {
 				searchable: true,
 				onChange: value => {
 					this.setDictionary(value);
-					BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel);
+					BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel);
 				}
 			}));
 			
-			for (let key in amounts) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let key in amounts) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "TextInput",
 				childProps: {
@@ -81,9 +81,9 @@ var SpellCheck = (_ => {
 				value: amounts[key]
 			}));
 			
-			if (ownDictionary.length) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+			if (ownDictionary.length) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 				title: "Your own Dictionary:",
-				first: settingsitems.length == 0,
+				first: settingsItems.length == 0,
 				last: true,
 				children: ownDictionary.map(word => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Card, {
 					children: word.toLowerCase(),
@@ -91,12 +91,12 @@ var SpellCheck = (_ => {
 						BDFDB.ArrayUtils.remove(ownDictionary, word);
 						BDFDB.DataUtils.save(ownDictionary, this, "owndics", choices.dictionaryLanguage);
 						dictionary = langDictionary.concat(ownDictionary);
-						BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel);
+						BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel);
 					}
 				}))
 			}));
 			
-			return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
 		//legacy

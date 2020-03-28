@@ -126,9 +126,9 @@ var EditUsers = (_ => {
 		getSettingsPanel () {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 			let settings = BDFDB.DataUtils.get(this, "settings");
-			let settingspanel, settingsitems = [], inneritems = [];
+			let settingsPanel, settingsItems = [], innerItems = [];
 			
-			for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let key in settings) (!this.defaults.settings[key].inner ? settingsItems : innerItems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "Switch",
 				plugin: this,
@@ -136,12 +136,12 @@ var EditUsers = (_ => {
 				label: this.defaults.settings[key].description,
 				value: settings[key]
 			}));
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 				title: "Change Users in:",
-				first: settingsitems.length == 0,
-				children: inneritems
+				first: settingsItems.length == 0,
+				children: innerItems
 			}));
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 				type: "Button",
 				className: BDFDB.disCN.marginbottom8,
 				color: BDFDB.LibraryComponents.Button.Colors.RED,
@@ -155,7 +155,7 @@ var EditUsers = (_ => {
 				children: BDFDB.LanguageUtils.LanguageStrings.RESET
 			}));
 			
-			return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
 		//legacy

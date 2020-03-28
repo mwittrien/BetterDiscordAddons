@@ -92,9 +92,9 @@ var ShowImageDetails = (_ => {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let amounts = BDFDB.DataUtils.get(this, "amounts");
-			let settingspanel, settingsitems = [];
+			let settingsPanel, settingsItems = [];
 			
-			for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "Switch",
 				plugin: this,
@@ -103,11 +103,11 @@ var ShowImageDetails = (_ => {
 				value: settings[key]
 			}));
 			
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 				className: BDFDB.disCN.marginbottom8
 			}));
 			
-			for (let key in amounts) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let key in amounts) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "TextInput",
 				childProps: {
@@ -122,7 +122,7 @@ var ShowImageDetails = (_ => {
 				value: amounts[key]
 			}));
 			
-			return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
 		//legacy

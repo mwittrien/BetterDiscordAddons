@@ -299,9 +299,9 @@
 	};
 	BDFDB.PluginUtils.createSettingsPanel = function (plugin, children) {
 		if (!BDFDB.ObjectUtils.is(plugin) || !children || (!BDFDB.ReactUtils.isValidElement(children) && !BDFDB.ArrayUtils.is(children)) || (BDFDB.ArrayUtils.is(children) && !children.length)) return;
-		let settingsPanel = BDFDB.DOMUtils.create(`<div class="${plugin.name}-settings ${BDFDB.disCN.settingspanel}"></div>`);
+		let settingsPanel = BDFDB.DOMUtils.create(`<div class="${plugin.name}-settings ${BDFDB.disCN.settingsPanel}"></div>`);
 		BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsPanel, {
-			key: `${plugin.name}-settingspanel`,
+			key: `${plugin.name}-settingsPanel`,
 			title: plugin.name,
 			children
 		}), settingsPanel);
@@ -1137,7 +1137,7 @@
 	WebModulesData.SpecialFilter = {
 		V2C_ContentColumn: ins => ins && ins.return && ins.return.stateNode && ins.return.stateNode.props && typeof ins.return.stateNode.props.title == "string" && (ins.return.stateNode.props.title.toUpperCase().indexOf("PLUGINS") == 0 || ins.return.stateNode.props.title.toUpperCase().indexOf("THEMES") == 0) && ins.return.type,
 		V2C_PluginCard: ins => ins && ins.return && ins.return.stateNode && ins.return.stateNode.props && ins.return.stateNode.props.addon && ins.return.stateNode.props.addon.plugin && ins.return.type,
-		V2C_ThemeCard: ins => ins && ins.return && ins.return.stateNode && ins.return.stateNode.props && ins.return.stateNode.props.addon && ins.return.stateNode.props.addon.theme && ins.return.type
+		V2C_ThemeCard: ins => ins && ins.return && ins.return.stateNode && ins.return.stateNode.props && ins.return.stateNode.props.addon && ins.return.stateNode.props.addon.css && ins.return.type
 	};
 	WebModulesData.PatchFinder = {
 		Account: "accountinfo",
@@ -5602,7 +5602,7 @@
 		settingsitemroleinner: ["ItemRole", "roleInner"],
 		settingsitemselected: ["Item", "selected"],
 		settingsitemthemed: ["Item", "themed"],
-		settingspanel: ["BDFDB", "settingsPanel"],
+		settingsPanel: ["BDFDB", "settingsPanel"],
 		settingspanelinner: ["BDFDB", "settingsPanelInner"],
 		settingspanellist: ["BDFDB", "settingsPanelList"],
 		settingspaneltitle: ["BDFDB", "settingsPanelTitle"],
@@ -6364,7 +6364,7 @@
 	
 	InternalComponents.LibraryComponents.AddonCard = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.AddonCard") || reactInitialized && class BDFDB_AddonCard extends LibraryModules.React.Component {
 		render() {
-			return !BDFDB.ObjectUtils.is(this.props.data) ? null : BDFDB.ReactUtils.createElement("li", {
+			return !BDFDB.ObjectUtils.is(this.props.data) ? null : BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repoentry, this.props.className, BDFDB.disCN._repocard, BDFDB.disCN._reposettingsclosed, BDFDB.disCN._repocheckboxitem),
 				children: [
 					BDFDB.ReactUtils.createElement("div", {
@@ -9126,9 +9126,9 @@
 									children.push(wrapper.firstChild);
 									wrapper.firstChild.remove();
 								}
-								let closebutton = BDFDB.DOMUtils.create(`<div style="float: right; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" style="width: 18px; height: 18px;"><g class="background" fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="#dcddde" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div>`);
-								wrapper.appendChild(closebutton);
-								closebutton.addEventListener("click", _ => {
+								let closeButton = BDFDB.DOMUtils.create(`<div style="float: right; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" style="width: 18px; height: 18px;"><g class="background" fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="#dcddde" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div>`);
+								wrapper.appendChild(closeButton);
+								closeButton.addEventListener("click", _ => {
 									BDFDB.DOMUtils.removeClass(wrapper, BDFDB.disCN._reposettingsopen);
 									BDFDB.DOMUtils.addClass(wrapper, BDFDB.disCN._reposettingsclosed);
 									while (wrapper.childElementCount) wrapper.firstChild.remove();
@@ -9142,16 +9142,16 @@
 			}
 		}
 	};
-	InternalBDFDB.processV2CPluginCard = function (e) {InternalBDFDB._processCard(e, e.instance.props.addon && e.instance.props.addon.plugin || e.instance.props.plugin);};
-	InternalBDFDB.processV2CThemeCard = function (e) {InternalBDFDB._processCard(e, e.instance.props.addon && e.instance.props.addon.theme || e.instance.props.theme);};
+	InternalBDFDB.processV2CPluginCard = function (e) {InternalBDFDB._processCard(e, e.instance.props.addon && e.instance.props.addon.plugin);};
+	InternalBDFDB.processV2CThemeCard = function (e) {InternalBDFDB._processCard(e, e.instance.props.addon);};
 	
 	InternalBDFDB.createLibrarySettings = function () {
 		if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded) return;
 		let settings = BDFDB.DataUtils.get(BDFDB, "settings");
-		let settingspanel, settingsitems = [];
+		let settingsPanel, settingsItems = [];
 		
 		let bdToastSetting = BDFDB.BDUtils.getSettings("fork-ps-2");
-		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsSaveItem, {
+		for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,
 			type: "Switch",
 			plugin: BDFDB,
@@ -9163,7 +9163,7 @@
 			value: settings[key] || key == "showToasts" && bdToastSetting
 		}));
 		
-		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(BDFDB, settingsitems);
+		return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(BDFDB, settingsItems);
 	};
 	
 	let MessageHeaderExport = BDFDB.ModuleUtils.findByProperties("MessageTimestamp", false);

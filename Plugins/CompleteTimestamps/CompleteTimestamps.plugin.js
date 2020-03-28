@@ -55,9 +55,9 @@ var CompleteTimestamps = (_ => {
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let choices = BDFDB.DataUtils.get(this, "choices");
 			let formats = BDFDB.DataUtils.get(this, "formats");
-			let settingspanel, settingsitems = [], inneritems = [];
+			let settingsPanel, settingsItems = [], innerItems = [];
 			
-			for (let key in settings) inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let key in settings) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "Switch",
 				plugin: this,
@@ -69,15 +69,15 @@ var CompleteTimestamps = (_ => {
 				}
 			}));
 			
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Settings",
 				collapseStates: collapseStates,
-				children: inneritems
+				children: innerItems
 			}));
 			
-			inneritems = [];
+			innerItems = [];
 			
-			for (let key in choices) inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let key in choices) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "Select",
 				plugin: this,
@@ -126,11 +126,11 @@ var CompleteTimestamps = (_ => {
 				}
 			}));
 			
-			inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+			innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 				className: BDFDB.disCN.marginbottom8
 			}));
 			
-			for (let key in formats) inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let key in formats) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "TextInput",
 				plugin: this,
@@ -143,14 +143,14 @@ var CompleteTimestamps = (_ => {
 				}
 			}));
 			
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Format",
 				collapseStates: collapseStates,
 				dividertop: true,
-				children: inneritems
+				children: innerItems
 			}));
 			
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Placeholder Guide",
 				collapseStates: collapseStates,
 				dividertop: true,
@@ -174,7 +174,7 @@ var CompleteTimestamps = (_ => {
 				}))
 			}));
 			
-			return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
 

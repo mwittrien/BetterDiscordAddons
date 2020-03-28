@@ -190,9 +190,9 @@ var ThemeRepo = (_ => {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let customList = this.getCustomList(), customUrl = "";
-			let settingspanel, settingsitems = [];
+			let settingsPanel, settingsItems = [];
 			
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Settings",
 				collapseStates: collapseStates,
 				children: Object.keys(settings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
@@ -204,7 +204,7 @@ var ThemeRepo = (_ => {
 					value: settings[key]
 				}))
 			}));
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Custom Themes",
 				collapseStates: collapseStates,
 				dividertop: true,
@@ -228,7 +228,7 @@ var ThemeRepo = (_ => {
 										if (customUrl) {
 											customList.push(customUrl);
 											BDFDB.DataUtils.save(BDFDB.ArrayUtils.removeCopies(customList), this, "custom");
-											BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
+											BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 										}
 									},
 									children: BDFDB.LanguageUtils.LanguageStrings.ADD
@@ -246,7 +246,7 @@ var ThemeRepo = (_ => {
 							onRemove: _ => {
 								BDFDB.ArrayUtils.remove(customList, url, true);
 								BDFDB.DataUtils.save(customList, this, "custom");
-								BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
+								BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 							}
 						}))
 					}) : null,
@@ -257,14 +257,14 @@ var ThemeRepo = (_ => {
 						onClick: _ => {
 							BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all added Themes from your own list", _ => {
 								BDFDB.DataUtils.save([], this, "custom");
-								BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
+								BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 							});
 						},
 						children: BDFDB.LanguageUtils.LanguageStrings.REMOVE
 					})
 				].flat(10).filter(n => n)
 			}));
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Refetch All",
 				collapseStates: collapseStates,
 				dividertop: true,
@@ -279,7 +279,7 @@ var ThemeRepo = (_ => {
 				})
 			}));
 			
-			return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
 		//legacy

@@ -25,9 +25,9 @@ var ServerHider = (_ => {
 
 		getSettingsPanel () {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-			let settingspanel, settingsitems = [];
+			let settingsPanel, settingsItems = [];
 			
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 				type: "Button",
 				className: BDFDB.disCN.marginbottom8,
 				color: BDFDB.LibraryComponents.Button.Colors.RED,
@@ -41,7 +41,7 @@ var ServerHider = (_ => {
 				children: BDFDB.LanguageUtils.LanguageStrings.RESET
 			}));
 			
-			return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
 		//legacy

@@ -51,9 +51,9 @@ var ReadAllNotificationsButton = (_ => {
 		getSettingsPanel (collapseStates = {}) {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 			let settings = BDFDB.DataUtils.get(this, "settings");
-			let settingspanel, settingsitems = [];
+			let settingsPanel, settingsItems = [];
 			
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Settings",
 				collapseStates: collapseStates,
 				children: Object.keys(settings).filter(key => !this.defaults.settings[key].inner).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
@@ -78,7 +78,7 @@ var ReadAllNotificationsButton = (_ => {
 				}))
 			}));
 			
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Server Black List",
 				collapseStates: collapseStates,
 				children: [
@@ -95,7 +95,7 @@ var ReadAllNotificationsButton = (_ => {
 						color: BDFDB.LibraryComponents.Button.Colors.GREEN,
 						label: "Enable for all Servers",
 						onClick: _ => {
-							this.batchSetGuilds(settingspanel, collapseStates, true);
+							this.batchSetGuilds(settingsPanel, collapseStates, true);
 						},
 						children: BDFDB.LanguageUtils.LanguageStrings.ENABLE
 					}),
@@ -105,14 +105,14 @@ var ReadAllNotificationsButton = (_ => {
 						color: BDFDB.LibraryComponents.Button.Colors.PRIMARY,
 						label: "Disable for all Servers",
 						onClick: _ => {
-							this.batchSetGuilds(settingspanel, collapseStates, false);
+							this.batchSetGuilds(settingsPanel, collapseStates, false);
 						},
 						children: BDFDB.LanguageUtils.LanguageStrings.DISABLE
 					})
 				]
 			}));
 			
-			return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
 		//legacy
@@ -299,13 +299,13 @@ var ReadAllNotificationsButton = (_ => {
 			BDFDB.GuildUtils.markAsRead(guilds.filter(g => g && g.id && !blacklist.includes(g.id)));
 		}
 		
-		batchSetGuilds (settingspanel, collapseStates, value) {
+		batchSetGuilds (settingsPanel, collapseStates, value) {
 			if (!value) {
 				for (let id of BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds()) blacklist.push(id);
 				this.saveBlacklist(BDFDB.ArrayUtils.removeCopies(blacklist));
 			}
 			else this.saveBlacklist([]);
-			BDFDB.PluginUtils.refreshSettingsPanel(this, settingspanel, collapseStates);
+			BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 		}
 		
 		saveBlacklist (savedBlacklist) {

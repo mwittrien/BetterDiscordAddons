@@ -71,9 +71,9 @@ class CreationDate {
 		let settings = BDFDB.DataUtils.get(this, "settings");
 		let choices = BDFDB.DataUtils.get(this, "choices");
 		let formats = BDFDB.DataUtils.get(this, "formats");
-		let settingspanel, settingsitems = [], inneritems = [];
+		let settingsPanel, settingsItems = [], innerItems = [];
 		
-		for (let key in settings) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+		for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,
 			type: "Switch",
 			plugin: this,
@@ -85,11 +85,11 @@ class CreationDate {
 			}
 		}));
 		
-		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+		settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 			className: BDFDB.disCN.marginbottom8
 		}));
 		
-		for (let key in choices) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+		for (let key in choices) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,
 			type: "Select",
 			plugin: this,
@@ -138,11 +138,11 @@ class CreationDate {
 			}
 		}));
 		
-		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+		settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 			className: BDFDB.disCN.marginbottom8
 		}));
 		
-		for (let key in formats) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+		for (let key in formats) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,
 			type: "TextInput",
 			plugin: this,
@@ -155,7 +155,7 @@ class CreationDate {
 			}
 		}));
 		
-		settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+		settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 			title: "Placeholder Guide",
 			dividertop: true,
 			collapseStates: collapseStates,
@@ -181,7 +181,7 @@ class CreationDate {
 			})
 		}));
 		
-		return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+		return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 	}
 
 	//legacy

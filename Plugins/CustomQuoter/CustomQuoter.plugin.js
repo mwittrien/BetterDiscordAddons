@@ -65,9 +65,9 @@ var CustomQuoter = (_ => {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let formats = BDFDB.DataUtils.get(this, "formats");
-			let settingspanel, settingsitems = [], inneritems = [];
+			let settingsPanel, settingsItems = [], innerItems = [];
 			
-			for (let key in settings) inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let key in settings) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "Switch",
 				plugin: this,
@@ -79,15 +79,15 @@ var CustomQuoter = (_ => {
 				}
 			}));
 			
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Settings",
 				collapseStates: collapseStates,
-				children: inneritems
+				children: innerItems
 			}));
 			
-			inneritems = [];
+			innerItems = [];
 			
-			for (let key in formats) inneritems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let key in formats) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "TextInput",
 				plugin: this,
@@ -99,25 +99,25 @@ var CustomQuoter = (_ => {
 					BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key:"PREVIEW_MESSAGE"}));
 				}
 			}));
-			inneritems.push(BDFDB.ReactUtils.createElement("div", {
+			innerItems.push(BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.disCN.marginbottom8,
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
 					label: "Preview:"
 				})
 			}));
-			inneritems.push(BDFDB.ReactUtils.createElement(PreviewMessage, {
+			innerItems.push(BDFDB.ReactUtils.createElement(PreviewMessage, {
 				plugin: this,
 				key: "PREVIEW_MESSAGE",
 			}));
 			
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Format",
 				collapseStates: collapseStates,
 				dividertop: true,
-				children: inneritems
+				children: innerItems
 			}));
 			
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Placeholder Guide",
 				collapseStates: collapseStates,
 				dividertop: true,
@@ -151,7 +151,7 @@ var CustomQuoter = (_ => {
 				}))
 			}));
 			
-			return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
 

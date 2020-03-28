@@ -46,9 +46,9 @@ var ReverseImageSearch = (_ => {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let engines = BDFDB.DataUtils.get(this, "engines");
-			let settingspanel, settingsitems = [], inneritems = [], engineitems = [];
+			let settingsPanel, settingsItems = [], innerItems = [], engineitems = [];
 			
-			for (let key in settings) (!this.defaults.settings[key].inner ? settingsitems : inneritems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let key in settings) (!this.defaults.settings[key].inner ? settingsItems : innerItems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "Switch",
 				plugin: this,
@@ -64,20 +64,20 @@ var ReverseImageSearch = (_ => {
 				label: this.defaults.engines[key].name,
 				value: engines[key]
 			}));
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 				title: "Add extra ContextMenu Entry for:",
-				first: settingsitems.length == 0,
+				first: settingsItems.length == 0,
 				last: true,
-				children: inneritems
+				children: innerItems
 			}));
-			settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
 				title: "Search Engines:",
-				first: settingsitems.length == 0,
+				first: settingsItems.length == 0,
 				last: true,
 				children: engineitems
 			}));
 			
-			return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
 		//legacy

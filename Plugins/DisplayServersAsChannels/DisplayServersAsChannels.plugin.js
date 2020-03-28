@@ -43,9 +43,9 @@ var DisplayServersAsChannels = (_ => {
 		getSettingsPanel () {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 			let amounts = BDFDB.DataUtils.get(this, "amounts");
-			let settingspanel, settingsitems = [];
+			let settingsPanel, settingsItems = [];
 			
-			for (let key in amounts) settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let key in amounts) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "TextInput",
 				childProps: {
@@ -60,7 +60,7 @@ var DisplayServersAsChannels = (_ => {
 				value: amounts[key]
 			}));
 			
-			return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
 		//legacy

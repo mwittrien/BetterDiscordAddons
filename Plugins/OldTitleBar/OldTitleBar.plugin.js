@@ -84,13 +84,13 @@ var OldTitleBar = (_ => {
 		getSettingsPanel () {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 			let settings = BDFDB.DataUtils.get(this, "settings");
-			let settingspanel, settingsitems = [];
+			let settingsPanel, settingsItems = [];
 			
 			let isLinux = !!document.querySelector(".platform-linux");
 			
 			for (let key in settings) {
 				let isNativeTitlebarSetting = key == "displayNative";
-				settingsitems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+				settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 					className: BDFDB.disCN.marginbottom8,
 					type: "Switch",
 					plugin: this,
@@ -116,7 +116,7 @@ var OldTitleBar = (_ => {
 				}));
 			}
 			
-			return settingspanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsitems);
+			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
 		//legacy
