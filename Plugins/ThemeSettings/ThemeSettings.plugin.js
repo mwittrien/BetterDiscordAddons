@@ -68,7 +68,6 @@ var ThemeSettings = (_ => {
 		// begin of own functions
 
 		processV2CThemeCard (e) {
-			console.log(e);
 			if (e.instance.props.addon && !e.instance.state.settings) {
 				let vars = this.getThemeVars(e.instance.props.addon.css);
 				if (vars.length) {
