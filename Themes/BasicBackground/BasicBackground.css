@@ -1517,8 +1517,11 @@ body:before {
 	color: rgb(var(--fontwhite3));
 }
 
-#app-mount .wrapper-29NfPK {								/* call					wrapper							*/
+#app-mount .wrapper-KXM2i0 {								/* call					wrapper							*/
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vguildchanneltransparency) * 0.8));
+}
+#app-mount .root-3B6O5N {									/* call					root							*/
+	color: rgb(var(--fontwhite1));
 }
 #app-mount .video-1FfuMD {									/* call					video							*/
 	background-color: transparent;

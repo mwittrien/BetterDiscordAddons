@@ -4,7 +4,7 @@ var EditUsers = (_ => {
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.8.1";}
+		getVersion () {return "3.8.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ var EditUsers = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Messages Popout","Now works in popouts like the recent mentions popout"]]
+				"fixed":[["DM Call","Works again in private calls"]]
 			};
 
 			this.patchedModules = {
@@ -42,6 +42,7 @@ var EditUsers = (_ => {
 					SearchPopoutComponent: "render",
 					IncomingCall: "render",
 					PrivateChannelCallParticipants: "render",
+					ChannelCall: "render",
 					VideoTile: "render",
 					UserSummaryItem: "render"
 				},
@@ -762,6 +763,13 @@ var EditUsers = (_ => {
 				for (let participant of e.instance.props.participants) if (participant && participant.user) participant.user = this.getUserData(participant.user.id);
 			}
 		}
+		
+		processChannelCall (e) {
+			if (BDFDB.ArrayUtils.is(e.instance.props.participants) && BDFDB.DataUtils.get(this, "settings", "changeInDmCalls")) {
+				for (let participant of e.instance.props.participants) if (participant && participant.user) participant.user = this.getUserData(participant.user.id);
+			}
+		}
+		
 		processVideoTile (e) {
 			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInDmCalls")) e.instance.props.user = this.getUserData(e.instance.props.user.id);
 		}
