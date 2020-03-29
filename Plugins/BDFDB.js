@@ -288,9 +288,9 @@
 	BDFDB.PluginUtils.addLoadingIcon = function (icon) {
 		if (!Node.prototype.isPrototypeOf(icon)) return;
 		BDFDB.DOMUtils.addClass(icon, BDFDB.disCN.loadingicon);
-		let loadingIconWrapper = document.querySelector(BDFDB.dotCN.app + ">" + BDFDB.dotCN.loadingIconWrapper);
+		let loadingIconWrapper = document.querySelector(BDFDB.dotCN.app + ">" + BDFDB.dotCN.loadingiconwrapper);
 		if (!loadingIconWrapper) {
-			loadingIconWrapper = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.loadingIconWrapper}"></div>`);
+			loadingIconWrapper = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.loadingiconwrapper}"></div>`);
 			document.querySelector(BDFDB.dotCN.app).appendChild(loadingIconWrapper);
 			let killObserver = new MutationObserver(changes => {if (!loadingIconWrapper.firstElementChild) BDFDB.DOMUtils.remove(loadingIconWrapper);});
 			killObserver.observe(loadingIconWrapper, {childList:true});
@@ -1316,8 +1316,8 @@
 				selectedTypes = [selectedTypes].flat(10).filter(n => n).map(type => type && WebModulesData.PatchMap[type] ? WebModulesData.PatchMap[type] + " _ _ " + type : type);
 				let filteredModules = [], specialModules = [], patchtypes = {};
 				for (let patchType in plugin.patchedModules) for (let type in plugin.patchedModules[patchType]) {
-					let methodnames = [plugin.patchedModules[patchType][type]].flat(10).filter(n => n);
-					if (BDFDB.ArrayUtils.includes(methodnames, "componentDidMount", "componentDidUpdate", "render", false) && (!selectedTypes.length || selectedTypes.includes(type))) {
+					let methodNames = [plugin.patchedModules[patchType][type]].flat(10).filter(n => n);
+					if (BDFDB.ArrayUtils.includes(methodNames, "componentDidMount", "componentDidUpdate", "render", false) && (!selectedTypes.length || selectedTypes.includes(type))) {
 						let unmappedType = type.split(" _ _ ")[1] || type;
 						let className = WebModulesData.PatchFinder[unmappedType];
 						let filter = WebModulesData.SpecialFilter[unmappedType];
@@ -1360,12 +1360,12 @@
 	InternalBDFDB.forceInitiateProcess = function (plugin, instance, type, patchtypes) {
 		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (!plugin || !instance || !type) return;
-		let methodnames = [];
-		for (let patchType in plugin.patchedModules) if (plugin.patchedModules[patchType][type]) methodnames.push(plugin.patchedModules[patchType][type]);
-		methodnames = BDFDB.ArrayUtils.removeCopies(methodnames).flat(10).filter(n => n);
-		if (methodnames.includes("componentDidMount")) InternalBDFDB.initiateProcess(plugin, type, {instance, methodname:"componentDidMount", patchtypes});
-		if (methodnames.includes("render")) BDFDB.ReactUtils.forceUpdate(instance);
-		else if (methodnames.includes("componentDidUpdate")) InternalBDFDB.initiateProcess(plugin, type, {instance, methodname:"componentDidUpdate", patchtypes});
+		let methodNames = [];
+		for (let patchType in plugin.patchedModules) if (plugin.patchedModules[patchType][type]) methodNames.push(plugin.patchedModules[patchType][type]);
+		methodNames = BDFDB.ArrayUtils.removeCopies(methodNames).flat(10).filter(n => n);
+		if (methodNames.includes("componentDidMount")) InternalBDFDB.initiateProcess(plugin, type, {instance, methodname:"componentDidMount", patchtypes});
+		if (methodNames.includes("render")) BDFDB.ReactUtils.forceUpdate(instance);
+		else if (methodNames.includes("componentDidUpdate")) InternalBDFDB.initiateProcess(plugin, type, {instance, methodname:"componentDidUpdate", patchtypes});
 	};
 	InternalBDFDB.initiateProcess = function (plugin, type, e) {
 		plugin = plugin == BDFDB && InternalBDFDB || plugin;
@@ -1700,8 +1700,8 @@
 		for (let attr of node.attributes) attributes[attr.name] = attr.value;
 		if (node.attributes.style) attributes.style = BDFDB.ObjectUtils.filter(node.style, n => node.style[n] && isNaN(parseInt(n)), true);
 		attributes.children = [];
-		if (node.style && node.style.cssText) for (let propstr of node.style.cssText.split(";")) if (propstr.endsWith("!important")) {
-			let key = propstr.split(":")[0];
+		if (node.style && node.style.cssText) for (let propStr of node.style.cssText.split(";")) if (propStr.endsWith("!important")) {
+			let key = propStr.split(":")[0];
 			let camelprop = key.replace(/-([a-z]?)/g, (m, g) => g.toUpperCase());
 			if (attributes.style[camelprop] != null) importantStyles.push(key);
 		}
@@ -3997,7 +3997,6 @@
 		cardInner: "inner-OP_8zd",
 		cardWrapper: "card-rT4Wbb",
 		charCounter: "counter-uAzbKp",
-		changeLogIcon: "icon-vGGh7_",
 		changeLogModal: "changeLogModal-ny_dHC",
 		collapseContainer: "container-fAVkOf",
 		collapseContainerArrow: "arrow-uglXxc",
@@ -4091,6 +4090,7 @@
 		bdGuildSeparator: "bd-guild-separator",
 		bdGuildUnread: "bd-unread",
 		bdGuildVideo: "bd-video",
+		bdIcon: "bd-icon",
 		bdPillSelected: "bd-selected",
 		bdPillUnread: "bd-unread",
 		bdPfbtn: "bd-pfbtn",
@@ -4539,6 +4539,7 @@
 		_repofooter: ["BDrepo", "bdaFooter"],
 		_repoheader: ["BDrepo", "bdaHeader"],
 		_repoheadertitle: ["BDrepo", "bdaHeaderTitle"],
+		_repoicon: ["BDrepo", "bdIcon"],
 		_repolist: ["BDrepo", "bdaSlist"],
 		_repolink: ["BDrepo", "bdaLink"],
 		_repolinks: ["BDrepo", "bdaLinks"],
@@ -4719,7 +4720,6 @@
 		changelogadded: ["ChangeLog", "added"],
 		changelogcontainer: ["ChangeLog", "container"],
 		changelogfixed: ["ChangeLog", "fixed"],
-		changelogicon: ["BDFDB", "changeLogIcon"],
 		changelogimproved: ["ChangeLog", "improved"],
 		changelogprogress: ["ChangeLog", "added"],
 		changelogtitle: ["ChangeLog", "title"],
@@ -5231,7 +5231,7 @@
 		livetaglarge: ["LiveTag", "liveLarge"],
 		livetagsmall: ["LiveTag", "liveSmall"],
 		loadingicon: ["BDFDB", "loadingIcon"],
-		loadingIconWrapper: ["BDFDB", "loadingIconWrapper"],
+		loadingiconwrapper: ["BDFDB", "loadingIconWrapper"],
 		loadingscreen: ["LoadingScreen", "container"],
 		loginscreen: ["NotFound", "loginScreen"],
 		marginbottom4: ["Margins", "marginBottom4"],
@@ -7933,6 +7933,7 @@
 				if (BDFDB.ReactUtils.isValidElement(icon)) {
 					icon.props.className = BDFDB.DOMUtils.formatClassName(!this.props.nativeClass && BDFDB.disCN.svgicon, icon.props.class, this.props.className);
 					icon.props.style = Object.assign({}, icon.props.style, this.props.style);
+					icon.props = Object.assign({}, this.props, icon.props);
 					return icon;
 				}
 			}
@@ -7940,12 +7941,15 @@
 		}
 	};
 	InternalComponents.LibraryComponents.SvgIcon.Names = {
+		CHANGELOG: {
+			icon: `<svg name="Changelog" viewBox="0 0 24 24" fill="%%color" width="%%width" height="%%height"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"></path></svg>`
+		},
 		CHECKMARK: {
 			defaultProps: {
 				width: 18,
 				height: 18,
 			},
-			icon: `<svg name="Checkmark" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><polyline stroke="%%color" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg>`
+			icon: `<svg name="Checkmark" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 18 18"><g fill="none" fill-rule="evenodd"><polyline stroke="%%color" stroke-width="2" points="3.5 9.5 7 13 15 5"></polyline></g></svg>`
 		},
 		CLOSE: {
 			defaultProps: {
@@ -8001,7 +8005,7 @@
 				width: 16,
 				height: 16
 			},
-			icon: `<svg name="Pin" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path fill="%%color" d="M19 3H5V5H7V12H5V14H11V22H13V14H19V12H17V5H19V3Z"></path></g></svg>`
+			icon: `<svg name="Pin" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path fill="%%color" d="M19 3H5V5H7V12H5V14H11V22H13V14H19V12H17V5H19V3Z"></path></g></svg>`
 		},
 		RIGHT_CARET: {
 			icon: `<svg name="RightCaret" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><polygon fill="%%color" fill-rule="nonzero" points="8.47 2 6.12 4.35 13.753 12 6.12 19.65 8.47 22 18.47 12"></polygon><polygon points="0 0 24 0 24 24 0 24"></polygon></g></svg>`
@@ -8331,23 +8335,15 @@
 		img:not([src]), img[src=""], img[src="null"] {
 			opacity: 0;
 		}
-
-		${BDFDB.dotCN.changelogicon} {
-			display: inline-block;
-			background: currentColor;
-			-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 510 510"><path fill="currentColor" d="M267.75,12.75c-89.25,0-168.3,48.45-209.1,122.4L0,76.5v165.75h165.75 l-71.4-71.4c33.15-63.75,96.9-107.1,173.4-107.1C372.3,63.75,459,150.45,459,255s-86.7,191.25-191.25,191.25 c-84.15,0-153-53.55-181.05-127.5H33.15c28.05,102,122.4,178.5,234.6,178.5C402.9,497.25,510,387.6,510,255 C510,122.4,400.35,12.75,267.75,12.75z M229.5,140.25V270.3l119.85,71.4l20.4-33.15l-102-61.2v-107.1H229.5z"></path></svg>') center/contain no-repeat;
-			cursor: pointer;
-			margin: 0 4px 0 3px;
-		}
 		
-		${BDFDB.dotCN.loadingIconWrapper} {
+		${BDFDB.dotCN.loadingiconwrapper} {
 			position: absolute;
 			bottom: 0;
 			right: 0;
 			z-index: 1000;
 			animation: loadingwrapper-fade 3s infinite ease;
 		}
-		${BDFDB.dotCNS.loadingIconWrapper + BDFDB.dotCN.loadingicon} {
+		${BDFDB.dotCNS.loadingiconwrapper + BDFDB.dotCN.loadingicon} {
 			margin: 0 5px;
 		}
 		@keyframes loadingwrapper-fade {
@@ -9116,16 +9112,19 @@
 			if (BDFDB.ObjectUtils.toArray(BDFDB.myPlugins).some(n => n == data)) {
 				let children, index;
 				if (data.changelog) {
-					[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN._repoversion]]});
-					if (index > -1) children[index].props.children = [children[index].props.children, BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
-						text: BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG,
-						children: BDFDB.ReactUtils.createElement("span", {
-							className: BDFDB.disCN.changelogicon,
-							children: "     ",
-							style: {whiteSpace: "pre"},
-							onClick: _ => {BDFDB.PluginUtils.openChangeLog(data);}
+					[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN._repocontrols]]});
+					if (index > -1) children[index].props.children.unshift(BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN._repocontrolsbutton,
+						children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
+							text: BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG,
+							children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+								name: InternalComponents.LibraryComponents.SvgIcon.Names.CHANGELOG,
+								color: "#FFFFFF",
+								className: BDFDB.disCN._repoicon,
+								onClick: _ => {BDFDB.PluginUtils.openChangeLog(data);}
+							})
 						})
-					})];
+					}));
 				}
 				[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN._repofooter]]});
 				if (index == -1) {
