@@ -6102,12 +6102,12 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	color: rgb(var(--fontwhite3));
 }
 
-#bd-settingspane-container .ui-switch-item .ui-switch-wrapper .ui-switch,
-.bd-switch {												/* bd switch												*/
-	background-color: rgba(var(--vtransparencycolor), 0.3);
+.bd-switch: {												/* bd switch												*/
 	box-shadow: inset 0 1px 1px rgba(var(--vtransparencycolor), 0.15);
 }
-#bd-settingspane-container .ui-switch-item .ui-switch-wrapper .ui-switch:before,
+.bd-switch:not(.bd-switch-checked) {
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
 .bd-switch:before {
 	background-color: rgb(var(--fontwhite1));
 	box-shadow: 0 2px 4px rgba(var(--vtransparencycolor), 0.3);
@@ -6196,39 +6196,34 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	fill: rgb(var(--fontwhite1));
 }
 
-#app-mount .bda-slist li,
 #app-mount .bd-addon-list .bd-addon-card {					/* addonlist			addoncard							*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 	border-color: transparent;
 	color: rgb(var(--fontwhite1));
 }
-#app-mount .bda-slist .bda-header,
 #app-mount .bd-addon-list .bda-header {						/* addonlist			header								*/
 	color: rgb(var(--fontwhite1));
 	border-bottom-color: rgba(var(--fontwhite2), 0.3);
 }
-.bda-slist li svg path[fill="#dcddde"],
 #app-mount .bda-slist .bd-addon-button svg[fill] {			/* addonlist			header button icon					*/
-	fill: rgb(var(--fontwhite3));
+	fill: currentColor;
 }
-.bda-slist li svg:hover path[fill="#dcddde"],
-#app-mount .bda-slist .bd-addon-button svg[fill]:hover {
-	fill: rgb(var(--fontwhite1));
+#app-mount .bda-slist .bd-addon-button svg {				/* addonlist			header button icon					*/
+	color: rgb(var(--fontwhite3));
 }
-#app-mount .bda-slist .bda-descriptionm,
+#app-mount .bda-slist .bd-addon-button svg:hover {
+	color: rgb(var(--fontwhite1));
+}
 #app-mount .bd-addon-list .bda-description {				/* addonlist			description							*/
 	color: rgb(var(--fontwhite2));
 }
-#app-mount .bda-slist .bda-description::-webkit-scrollbar,
 #app-mount .bd-addon-list .bda-description::-webkit-scrollbar {
 	width: 4px;
 	height: 4px;
 }
-#app-mount .bda-slist .bda-footer,
 #app-mount .bd-addon-list .bda-footer {						/* addonlist			footer								*/
 	border-top-color: rgba(var(--fontwhite2), 0.3);
 }
-.bda-slist .bda-footer button,
 .bd-addon-list .bda-footer button {							/* addonlist			footer button						*/
 	color: rgb(var(--fontwhite1));
 }
