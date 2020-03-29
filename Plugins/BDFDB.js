@@ -3993,7 +3993,6 @@
 		BDFDBundefined: "BDFDB_undefined",
 		avatarStatusHovered: "statusHovered-gF2976",
 		bdaRepoEntry: "entry-9JnAPs",
-		bdaRepoEntryIconWrapper: "iconWrapper-kuCycr",
 		cardInner: "inner-OP_8zd",
 		cardWrapper: "card-rT4Wbb",
 		charCounter: "counter-uAzbKp",
@@ -4534,7 +4533,6 @@
 		_repodescription: ["BDrepo", "bdaDescription"],
 		_repodescriptionwrap: ["BDrepo", "bdaDescriptionWrap"],
 		_repoentry: ["BDFDB", "bdaRepoEntry"],
-		_repoentryiconwrapper: ["BDFDB", "bdaRepoEntryIconWrapper"],
 		_repofolderbutton: ["BDrepo", "bdPfbtn"],
 		_repofooter: ["BDrepo", "bdaFooter"],
 		_repoheader: ["BDrepo", "bdaHeader"],
@@ -8747,10 +8745,8 @@
 		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repofooter + BDFDB.dotCN._repolinks} + * ~ * {
 			margin-left: 8px;
 		}
-		${BDFDB.dotCN._repoentryiconwrapper} {
-			display: flex;
-			justify-content: center;
-			align-items: center;
+		${BDFDB.dotCN._repoicon} {
+			color: var(--interactive-active);
 		}
 		
 		${BDFDB.dotCN.noticewrapper} {
@@ -9119,7 +9115,6 @@
 							text: BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG,
 							children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
 								name: InternalComponents.LibraryComponents.SvgIcon.Names.CHANGELOG,
-								color: "#FFFFFF",
 								className: BDFDB.disCN._repoicon,
 								onClick: _ => {BDFDB.PluginUtils.openChangeLog(data);}
 							})

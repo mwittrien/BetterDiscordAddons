@@ -69,7 +69,7 @@ var PluginRepo = (_ => {
 	return class PluginRepo {
 		getName () {return "PluginRepo";} 
 
-		getVersion () {return "1.9.4";}
+		getVersion () {return "1.9.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -493,44 +493,45 @@ var PluginRepo = (_ => {
 								else BDFDB.DataUtils.remove(this, "favorites", plugin.url);
 							}
 						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: "Go to Source",
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-								className: BDFDB.disCNS._repoentryiconwrapper,
-								onClick: _ => {
-									let giturl = null;
-									if (plugin.url.indexOf("https://raw.githubusercontent.com") == 0) {
-										let temp = plugin.url.replace("//raw.githubusercontent", "//github").split("/");
-										temp.splice(5, 0, "blob");
-										giturl = temp.join("/");
-									}
-									else if (plugin.url.indexOf("https://gist.githubusercontent.com/") == 0) {
-										giturl = plugin.url.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
-									}
-									if (giturl) BDFDB.DiscordUtils.openLink(giturl, BDFDB.DataUtils.get(this, "settings", "useChromium"));
-								},
+						BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN._repocontrolsbutton,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								text: "Go to Source",
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-									name: BDFDB.LibraryComponents.SvgIcon.Names.GITHUB
+									name: BDFDB.LibraryComponents.SvgIcon.Names.GITHUB,
+									className: BDFDB.disCN._repoicon,
+									onClick: _ => {
+										let giturl = null;
+										if (plugin.url.indexOf("https://raw.githubusercontent.com") == 0) {
+											let temp = plugin.url.replace("//raw.githubusercontent", "//github").split("/");
+											temp.splice(5, 0, "blob");
+											giturl = temp.join("/");
+										}
+										else if (plugin.url.indexOf("https://gist.githubusercontent.com/") == 0) {
+											giturl = plugin.url.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
+										}
+										if (giturl) BDFDB.DiscordUtils.openLink(giturl, BDFDB.DataUtils.get(this, "settings", "useChromium"));
+									}
 								})
 							})
-						})
+						}),
 					],
 					buttons: [
-						plugin.state != pluginStates.DOWNLOADABLE && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: "Delete Pluginfile",
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-								className: BDFDB.disCN._repoentryiconwrapper,
+						plugin.state != pluginStates.DOWNLOADABLE && BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN._repocontrolsbutton,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								text: "Delete Pluginfile",
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-									className: BDFDB.disCN.svgicon,
-									name: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_TRASH
-								}),
-								onClick: (e, instance) => {
-									this.deletePluginFile(plugin);
-									BDFDB.TimeUtils.timeout(_ => {
-										this.updateList(instance, options);
-										if (!BDFDB.BDUtils.isAutoLoadEnabled()) this.stopPlugin(plugin);
-									}, 3000);
-								}
+									name: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_TRASH,
+									className: BDFDB.disCN._repoicon,
+									onClick: (e, instance) => {
+										this.deletePluginFile(plugin);
+										BDFDB.TimeUtils.timeout(_ => {
+											this.updateList(instance, options);
+											if (!BDFDB.BDUtils.isAutoLoadEnabled()) this.stopPlugin(plugin);
+										}, 3000);
+									}
+								})
 							})
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {

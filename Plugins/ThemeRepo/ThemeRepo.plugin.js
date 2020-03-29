@@ -218,7 +218,6 @@ var ThemeRepo = (_ => {
 							children: [
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-										placeholder: customUrl,
 										placeholder: "Insert Raw Github Link of Theme (https://raw.githubusercontent.com/...)",
 										onChange: value => {customUrl = value.trim();}
 									})
@@ -719,24 +718,25 @@ var ThemeRepo = (_ => {
 								else BDFDB.DataUtils.remove(this, "favorites", theme.url);
 							}
 						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: "Go to Source",
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-								className: BDFDB.disCNS._repoentryiconwrapper,
-								onClick: _ => {
-									let giturl = null;
-									if (theme.requesturl.indexOf("https://raw.githubusercontent.com") == 0) {
-										let temp = theme.requesturl.replace("//raw.githubusercontent", "//github").split("/");
-										temp.splice(5, 0, "blob");
-										giturl = temp.join("/");
-									}
-									else if (theme.requesturl.indexOf("https://gist.githubusercontent.com/") == 0) {
-										giturl = theme.requesturl.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
-									}
-									if (giturl) BDFDB.DiscordUtils.openLink(giturl, BDFDB.DataUtils.get(this, "settings", "useChromium"));
-								},
+						BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN._repocontrolsbutton,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								text: "Go to Source",
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-									name: BDFDB.LibraryComponents.SvgIcon.Names.GITHUB
+									name: BDFDB.LibraryComponents.SvgIcon.Names.GITHUB,
+									className: BDFDB.disCN._repoicon,
+									onClick: _ => {
+										let giturl = null;
+										if (theme.requesturl.indexOf("https://raw.githubusercontent.com") == 0) {
+											let temp = theme.requesturl.replace("//raw.githubusercontent", "//github").split("/");
+											temp.splice(5, 0, "blob");
+											giturl = temp.join("/");
+										}
+										else if (theme.requesturl.indexOf("https://gist.githubusercontent.com/") == 0) {
+											giturl = theme.requesturl.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
+										}
+										if (giturl) BDFDB.DiscordUtils.openLink(giturl, BDFDB.DataUtils.get(this, "settings", "useChromium"));
+									}
 								})
 							})
 						}),
@@ -758,21 +758,21 @@ var ThemeRepo = (_ => {
 						})
 					],
 					buttons: [
-						theme.state != themeStates.DOWNLOADABLE && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: "Delete Themefile",
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-								className: BDFDB.disCN._repoentryiconwrapper,
+						theme.state != themeStates.DOWNLOADABLE && BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN._repocontrolsbutton,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								text: "Delete Themefile",
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-									className: BDFDB.disCN.svgicon,
-									name: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_TRASH
-								}),
-								onClick: (e, instance) => {
-									this.deleteThemeFile(theme);
-									BDFDB.TimeUtils.timeout(_ => {
-										this.updateList(instance, options);
-										if (!BDFDB.BDUtils.isAutoLoadEnabled()) this.removeTheme(theme);
-									}, 3000);
-								}
+									name: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_TRASH,
+									className: BDFDB.disCN._repoicon,
+									onClick: (e, instance) => {
+										this.deleteThemeFile(theme);
+										BDFDB.TimeUtils.timeout(_ => {
+											this.updateList(instance, options);
+											if (!BDFDB.BDUtils.isAutoLoadEnabled()) this.removeTheme(theme);
+										}, 3000);
+									}
+								})
 							})
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
