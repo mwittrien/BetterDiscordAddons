@@ -125,7 +125,7 @@ var ThemeRepo = (_ => {
 	return class ThemeRepo {
 		getName () {return "ThemeRepo";}
 
-		getVersion () {return "1.9.4";}
+		getVersion () {return "1.9.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -814,47 +814,47 @@ var ThemeRepo = (_ => {
 			vars = vars.split("}")[0];
 			vars = vars.slice(2).split(/;--|\*\/--/);
 			let inputRefs = [], updateTimeout;
-			for (let varstr of vars) {
-				varstr = varstr.split(":");
-				let varname = varstr.shift().trim();
-				varstr = varstr.join(":").split(/;[^A-z0-9]|\/\*/);
-				let oldvalue = varstr.shift().trim();
-				if (oldvalue) {
+			for (let varStr of vars) {
+				varStr = varStr.split(":");
+				let varName = varStr.shift().trim();
+				varStr = varStr.join(":").split(/;[^A-z0-9]|\/\*/);
+				let oldValue = varStr.shift().trim();
+				if (oldValue) {
 					let childType = "text", childMode = "";
-					let iscolor = BDFDB.ColorUtils.getType(oldvalue);
-					let iscomp = !iscolor && /[0-9 ]+,[0-9 ]+,[0-9 ]+/g.test(oldvalue);
-					if (iscolor || iscomp) {
+					let isColor = BDFDB.ColorUtils.getType(oldValue);
+					let isComp = !isColor && /[0-9 ]+,[0-9 ]+,[0-9 ]+/g.test(oldValue);
+					if (isColor || isComp) {
 						childType = "color";
-						childMode = iscomp && "comp";
+						childMode = isComp && "comp";
 					}
 					else {
-						let isurlfile = /url\(.+\)/gi.test(oldvalue);
-						let isfile = !isurlfile && /(http(s)?):\/\/[(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(oldvalue);
-						if (isfile || isurlfile) {
+						let isUrlFile = /url\(.+\)/gi.test(oldValue);
+						let isFile = !isUrlFile && /(http(s)?):\/\/[(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(oldValue);
+						if (isFile || isUrlFile) {
 							childType = "file";
-							childMode = isurlfile && "url";
+							childMode = isUrlFile && "url";
 						}
 					}
-					let vardescription = varstr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
-					options.generatorValues[varname] = {value:oldvalue, oldvalue};
+					let varDescription = varStr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
+					options.generatorValues[varName] = {value:oldValue, oldValue};
 					inputRefs.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 						className: BDFDB.disCN.marginbottom20,
-						dividerbottom: vars[vars.length-1] != varstr,
+						dividerbottom: vars[vars.length-1] != varStr,
 						type: "TextInput",
 						childProps: {
 							type: childType,
 							mode: childMode,
 							filter: childType == "file" && "image"
 						},
-						label: varname[0].toUpperCase() + varname.slice(1),
-						note: vardescription && vardescription.indexOf("*") == 0 ? vardescription.slice(1) : vardescription,
+						label: varName[0].toUpperCase() + varName.slice(1),
+						note: varDescription && varDescription.indexOf("*") == 0 ? varDescription.slice(1) : varDescription,
 						basis: "70%",
-						value: oldvalue,
-						placeholder: oldvalue,
+						value: oldValue,
+						placeholder: oldValue,
 						onChange: value => {
 							BDFDB.TimeUtils.clear(updateTimeout);
 							updateTimeout = BDFDB.TimeUtils.timeout(_ => {
-								options.generatorValues[varname] = {value, oldvalue};
+								options.generatorValues[varName] = {value, oldValue};
 								options.frame.contentWindow.postMessage({
 									origin: "ThemeRepo",
 									reason: "NewTheme",
@@ -872,7 +872,7 @@ var ThemeRepo = (_ => {
 		generateTheme (theme, options = {}) {
 			if (!BDFDB.ObjectUtils.is(theme) || !BDFDB.ObjectUtils.is(options) || !BDFDB.ObjectUtils.is(options.generatorValues)) return "";
 			let css = theme.fullcss;
-			for (let inputId in options.generatorValues) if (options.generatorValues[inputId].value && options.generatorValues[inputId].value.trim() && options.generatorValues[inputId].value != options.generatorValues[inputId].oldvalue) css = css.replace(new RegExp(`--${BDFDB.StringUtils.regEscape(inputId)}(\\s*):(\\s*)${BDFDB.StringUtils.regEscape(options.generatorValues[inputId].oldvalue)}`,"g"),`--${inputId}$1:$2${options.generatorValues[inputId].value}`);
+			for (let inputId in options.generatorValues) if (options.generatorValues[inputId].value && options.generatorValues[inputId].value.trim() && options.generatorValues[inputId].value != options.generatorValues[inputId].oldValue) css = css.replace(new RegExp(`--${BDFDB.StringUtils.regEscape(inputId)}(\\s*):(\\s*)${BDFDB.StringUtils.regEscape(options.generatorValues[inputId].oldValue)}`,"g"),`--${inputId}$1:$2${options.generatorValues[inputId].value}`);
 			return css;
 		}
 
@@ -1075,8 +1075,9 @@ var ThemeRepo = (_ => {
 
 		applyTheme (data) {
 			if (BDFDB.BDUtils.isThemeEnabled(data.name) == false) {
-				BDFDB.DOMUtils.remove(`style#${data.name}`);
-				document.head.appendChild(BDFDB.DOMUtils.create(`<style id=${data.name}>${data.css}</style>`));
+				let id = data.name.replace(/^[^a-z]+|[^\w-]+/gi, "-");
+				BDFDB.DOMUtils.remove(`style#${id}`);
+				document.head.appendChild(BDFDB.DOMUtils.create(`<style id=${id}>${data.css}</style>`));
 				BDFDB.BDUtils.enableTheme(data.name, false);
 				BDFDB.LogUtils.log(`Applied Theme ${data.name}.`, this.name);
 			}
@@ -1092,7 +1093,8 @@ var ThemeRepo = (_ => {
 
 		removeTheme (data) {
 			if (BDFDB.BDUtils.isThemeEnabled(data.name) == true) {
-				BDFDB.DOMUtils.remove(`style#${data.name}`);
+				let id = data.name.replace(/^[^a-z]+|[^\w-]+/gi, "-");
+				BDFDB.DOMUtils.remove(`style#${id}`);
 				BDFDB.BDUtils.disableTheme(data.name, false);
 				BDFDB.LogUtils.log(`Removed Theme ${data.name}.`, this.name);
 			}
