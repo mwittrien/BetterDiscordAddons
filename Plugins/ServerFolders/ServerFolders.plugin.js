@@ -334,7 +334,7 @@ var ServerFolders = (_ => {
 					right: -10px;
 				}
 				${BDFDB.dotCN.guildfolderwrapper} [role="group"],
-				${BDFDB.dotCN.guildfolderexpandedguilds} {
+				${BDFDB.dotCN.guildfolderexpandedbackground} {
 					display: none !important;
 				}
 				${BDFDB.dotCN._serverfoldersdragpreview} {
