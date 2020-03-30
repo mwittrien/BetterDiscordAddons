@@ -1035,10 +1035,10 @@ var ThemeRepo = (_ => {
 					}
 					i++;
 					
-					let loadingtooltip = document.querySelector(".themerepo-loading-tooltip");
-					if (loadingtooltip) {
-						BDFDB.DOMUtils.setText(loadingtooltip, this.getLoadingTooltipText());
-						BDFDB.TooltipUtils.update(loadingtooltip);
+					let loadingTooltip = document.querySelector(".themerepo-loading-tooltip");
+					if (loadingTooltip) {
+						BDFDB.DOMUtils.setText(loadingTooltip, this.getLoadingTooltipText());
+						loadingTooltip.update();
 					}
 					
 					getThemeInfo(callback);

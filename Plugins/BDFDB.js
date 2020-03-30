@@ -707,9 +707,9 @@
 		
 		if (options.id) tooltip.id = options.id.split(" ").join("");
 		
-		if (!options.type || !BDFDB.disCN["tooltip" + options.type.toLowerCase()]) options.type = "top";
-		BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN["tooltip" + options.type.toLowerCase()]);
-		tooltip.type = options.type.toLowerCase();
+		if (typeof options.type != "string" || !BDFDB.disCN["tooltip" + options.type.toLowerCase()]) options.type = "top";
+		let type = options.type.toLowerCase();
+		BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN["tooltip" + type]);
 		
 		let fontColorIsGradient = false, customBackgroundColor = false, style = "";
 		if (options.style) style += options.style;
@@ -721,10 +721,9 @@
 			customBackgroundColor = true;
 			let backgroundColorIsGradient = BDFDB.ObjectUtils.is(options.backgroundColor);
 			let backgroundColor = !backgroundColorIsGradient ? BDFDB.ColorUtils.convert(options.backgroundColor, "RGBA") : BDFDB.ColorUtils.createGradient(options.backgroundColor);
-			style = (style ? (style + " ") : "") + `background: ${backgroundColor} !important; border-color: ${backgroundColorIsGradient ? BDFDB.ColorUtils.convert(options.backgroundColor[options.type == "left" ? 100 : 0], "RGBA") : backgroundColor} !important;`;
+			style = (style ? (style + " ") : "") + `background: ${backgroundColor} !important; border-color: ${backgroundColorIsGradient ? BDFDB.ColorUtils.convert(options.backgroundColor[type == "left" ? 100 : 0], "RGBA") : backgroundColor} !important;`;
 		}
 		if (style) tooltip.style = style;
-		tooltip.offset = typeof options.offset == "number" ? options.offset : 0;
 		if (typeof options.zIndex == "number") {
 			itemLayer.style.setProperty("z-index", options.zIndex, "important");
 			tooltip.style.setProperty("z-index", options.zIndex, "important");
@@ -796,8 +795,6 @@
 		
 		tooltip.appendChild(BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.tooltippointer}"></div>`));
 		
-		tooltip.anker = anker;
-		
 		if (options.hide) BDFDB.DOMUtils.appendLocalStyle("BDFDBhideOtherTooltips" + id, `#app-mount ${BDFDB.dotCN.tooltip}:not([tooltip-id="${id}"]) {display: none !important;}`, itemLayerContainer);
 					
 		let mouseleave = _ => {BDFDB.DOMUtils.remove(itemLayer);};
@@ -815,7 +812,60 @@
 		}));
 		observer.observe(document.body, {subtree:true, childList:true});
 
-		BDFDB.TooltipUtils.update(tooltip);
+		(tooltip.update = _ => {
+			let pointer = tooltip.querySelector(BDFDB.dotCN.tooltippointer);
+			let left, top, trects = BDFDB.DOMUtils.getRects(anker), irects = BDFDB.DOMUtils.getRects(itemLayer), arects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount)), positionOffsets = {height: 10, width: 10}, offset = typeof options.offset == "number" ? options.offset : 0;
+			switch (type) {
+				case "top":
+					top = trects.top - irects.height - positionOffsets.height + 2 - offset;
+					left = trects.left + (trects.width - irects.width) / 2;
+					break;
+				case "bottom":
+					top = trects.top + trects.height + positionOffsets.height - 2 + offset;
+					left = trects.left + (trects.width - irects.width) / 2;
+					break;
+				case "left":
+					top = trects.top + (trects.height - irects.height) / 2;
+					left = trects.left - irects.width - positionOffsets.width + 2 - offset;
+					break;
+				case "right":
+					top = trects.top + (trects.height - irects.height) / 2;
+					left = trects.left + trects.width + positionOffsets.width - 2 + offset;
+					break;
+				}
+				
+			itemLayer.style.setProperty("top", top + "px");
+			itemLayer.style.setProperty("left", left + "px");
+			
+			pointer.style.removeProperty("margin-left");
+			pointer.style.removeProperty("margin-top");
+			if (type == "top" || type == "bottom") {
+				if (left < 0) {
+					itemLayer.style.setProperty("left", "5px");
+					pointer.style.setProperty("margin-left", `${left - 10}px`);
+				}
+				else {
+					let rightMargin = arects.width - (left + irects.width);
+					if (rightMargin < 0) {
+						itemLayer.style.setProperty("left", arects.width - irects.width - 5 + "px");
+						pointer.style.setProperty("margin-left", `${-1*rightMargin}px`);
+					}
+				}
+			}
+			else if (type == "left" || type == "right") {
+				if (top < 0) {
+					itemLayer.style.setProperty("top", "5px");
+					pointer.style.setProperty("margin-top", `${top - 10}px`);
+				}
+				else {
+					let bottomMargin = arects.height - (top + irects.height);
+					if (bottomMargin < 0) {
+						itemLayer.style.setProperty("top", arects.height - irects.height - 5 + "px");
+						pointer.style.setProperty("margin-top", `${-1*bottomMargin}px`);
+					}
+				}
+			}
+		})();
 		
 		if (options.delay) {
 			BDFDB.DOMUtils.toggle(itemLayer);
@@ -824,64 +874,7 @@
 		return itemLayer;
 	};
 	BDFDB.TooltipUtils.update = function (tooltip) {
-		if (!Node.prototype.isPrototypeOf(tooltip)) return;
-		let itemLayer = BDFDB.DOMUtils.getParent(BDFDB.dotCN.itemlayer, tooltip);
-		if (!Node.prototype.isPrototypeOf(itemLayer)) return;
-		tooltip = itemLayer.querySelector(BDFDB.dotCN.tooltip);
-		if (!Node.prototype.isPrototypeOf(tooltip) || !Node.prototype.isPrototypeOf(tooltip.anker) || !tooltip.type) return;
-		
-		let pointer = tooltip.querySelector(BDFDB.dotCN.tooltippointer);
-		let left, top, trects = BDFDB.DOMUtils.getRects(tooltip.anker), irects = BDFDB.DOMUtils.getRects(itemLayer), arects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount)), positionoffsets = {height: 10, width: 10};
-		switch (tooltip.type) {
-			case "top":
-				top = trects.top - irects.height - positionoffsets.height + 2 - tooltip.offset;
-				left = trects.left + (trects.width - irects.width) / 2;
-				break;
-			case "bottom":
-				top = trects.top + trects.height + positionoffsets.height - 2 + tooltip.offset;
-				left = trects.left + (trects.width - irects.width) / 2;
-				break;
-			case "left":
-				top = trects.top + (trects.height - irects.height) / 2;
-				left = trects.left - irects.width - positionoffsets.width + 2 - tooltip.offset;
-				break;
-			case "right":
-				top = trects.top + (trects.height - irects.height) / 2;
-				left = trects.left + trects.width + positionoffsets.width - 2 + tooltip.offset;
-				break;
-			}
-			
-		itemLayer.style.setProperty("top", top + "px");
-		itemLayer.style.setProperty("left", left + "px");
-		
-		pointer.style.removeProperty("margin-left");
-		pointer.style.removeProperty("margin-top");
-		if (tooltip.type == "top" || tooltip.type == "bottom") {
-			if (left < 0) {
-				itemLayer.style.setProperty("left", "5px");
-				pointer.style.setProperty("margin-left", `${left - 10}px`);
-			}
-			else {
-				let rightMargin = arects.width - (left + irects.width);
-				if (rightMargin < 0) {
-					itemLayer.style.setProperty("left", arects.width - irects.width - 5 + "px");
-					pointer.style.setProperty("margin-left", `${-1*rightMargin}px`);
-				}
-			}
-		}
-		else if (tooltip.type == "left" || tooltip.type == "right") {
-			if (top < 0) {
-				itemLayer.style.setProperty("top", "5px");
-				pointer.style.setProperty("margin-top", `${top - 10}px`);
-			}
-			else {
-				let bottomMargin = arects.height - (top + irects.height);
-				if (bottomMargin < 0) {
-					itemLayer.style.setProperty("top", arects.height - irects.height - 5 + "px");
-					pointer.style.setProperty("margin-top", `${-1*bottomMargin}px`);
-				}
-			}
-		}
+		tooltip.update();
 	};
 
 	BDFDB.ObjectUtils = {};
@@ -7250,7 +7243,7 @@
 				
 			if (this.props.draggable && typeof this.props.connectDragSource == "function") guild = this.props.connectDragSource(guild);
 			
-			var children = [
+			let children = [
 				this.props.list || this.props.pill ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.Pill, {
 					hovered: !isDraggedGuild && this.state.hovered,
 					selected: !isDraggedGuild && this.props.selected,

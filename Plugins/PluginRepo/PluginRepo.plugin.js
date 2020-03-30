@@ -722,10 +722,10 @@ var PluginRepo = (_ => {
 					}
 					i++;
 					
-					let loadingtooltip = document.querySelector(".pluginrepo-loading-tooltip");
-					if (loadingtooltip) {
-						BDFDB.DOMUtils.setText(loadingtooltip, this.getLoadingTooltipText());
-						BDFDB.TooltipUtils.update(loadingtooltip);
+					let loadingTooltip = document.querySelector(".pluginrepo-loading-tooltip");
+					if (loadingTooltip) {
+						BDFDB.DOMUtils.setText(loadingTooltip, this.getLoadingTooltipText());
+						loadingTooltip.update();
 					}
 					
 					getPluginInfo(callback);
