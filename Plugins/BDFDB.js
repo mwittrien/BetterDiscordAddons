@@ -9180,8 +9180,8 @@
 			}
 		}
 	};
-	InternalBDFDB.processV2CPluginCardNO = function (e) {InternalBDFDB._processCard(e, e.instance.props.addon && e.instance.props.addon.plugin);};
-	InternalBDFDB.processV2CThemeCardNO = function (e) {InternalBDFDB._processCard(e, e.instance.props.addon && !e.instance.props.addon.plugin && e.instance.props.addon.css);};
+	InternalBDFDB.processV2CPluginCard = function (e) {InternalBDFDB._processCard(e, e.instance.props.addon && e.instance.props.addon.plugin);};
+	InternalBDFDB.processV2CThemeCard = function (e) {InternalBDFDB._processCard(e, e.instance.props.addon && !e.instance.props.addon.plugin && e.instance.props.addon.css);};
 	
 	InternalBDFDB.createLibrarySettings = function () {
 		if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded) return;
