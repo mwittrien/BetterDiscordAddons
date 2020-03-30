@@ -1154,6 +1154,7 @@
 		EmojiPicker: "emojipicker",
 		Guild: "guildouter",
 		GuildIcon: "avataricon",
+		Guilds: "guildswrapper",
 		GuildSettingsBans: "guildsettingsbannedcard",
 		GuildSettingsEmoji: "guildsettingsemojicard",
 		GuildSettingsMembers: "guildsettingsmembercard",
