@@ -50,10 +50,12 @@ var ServerFolders = (_ => {
 									guild: BDFDB.LibraryModules.GuildStore.getGuild(guildId),
 									state: true,
 									list: true,
-									tooltipConfig: data.copyTooltipColor && {
+									tooltipConfig: Object.assign({
+										offset: 12
+									}, data.copyTooltipColor && {
 										backgroundColor: data.color3,
-										fontColor: data.color4
-									},
+										fontColor: data.color4,
+									}),
 									onClick: event => {
 										if (BDFDB.InternalData.pressedKeys.includes(46)) {
 											BDFDB.ListenerUtils.stopEvent(event);
@@ -62,13 +64,9 @@ var ServerFolders = (_ => {
 										else {
 											let settings = BDFDB.DataUtils.get(this.props.plugin, "settings");
 											if (settings.closeAllFolders) {
-												for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) {
-													if (openFolderId != folderId || !settings.forceOpenFolder) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
-												}
+												for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (openFolderId != folderId || !settings.forceOpenFolder) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
 											}
-											else if (settings.closeTheFolder && !settings.forceOpenFolder && BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folderId)) {
-												BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folderId);
-											}
+											else if (settings.closeTheFolder && !settings.forceOpenFolder && BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folderId)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folderId);
 											else BDFDB.ReactUtils.forceUpdate(this);
 										}
 									},
@@ -276,7 +274,7 @@ var ServerFolders = (_ => {
 	return class ServerFolders {
 		getName () {return "ServerFolders";}
 
-		getVersion () {return "6.7.1";}
+		getVersion () {return "6.7.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -284,14 +282,13 @@ var ServerFolders = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Adding Servers to Folders","Adding Servers to FOlders via the conxtextmenu works again"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"fixed":[["Silent updated? NANI!","Fixed for discords sneaky updates"]]
 			};
 			
 			this.patchedModules = {
 				after: {
 					AppView: "render",
-					GuildFolder: "render",
+					GuildFolder: "type",
 					Guild: ["componentDidMount", "render"],
 					GuildFolderSettingsModal: ["componentDidMount", "render"]
 				}
@@ -336,7 +333,7 @@ var ServerFolders = (_ => {
 					top: -10px;
 					right: -10px;
 				}
-				${BDFDB.dotCN.guildfolderexpandedbackground},
+				${BDFDB.dotCN.guildfolderwrapper} [role="group"],
 				${BDFDB.dotCN.guildfolderexpandedguilds} {
 					display: none !important;
 				}
@@ -458,7 +455,7 @@ var ServerFolders = (_ => {
 					}
 				}});
 				
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -467,7 +464,7 @@ var ServerFolders = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
 				
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 				
 				BDFDB.DOMUtils.removeClassFromDOM(BDFDB.disCN._serverfoldersfoldercontentisopen);
 				
@@ -488,8 +485,8 @@ var ServerFolders = (_ => {
 		onSettingsClosed () {
 			if (this.SettingsUpdated) {
 				delete this.SettingsUpdated;
-				folderStates = {};
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				folderStates = {};			
+				this.forceUpdateAll();
 			}
 		}
 
@@ -582,7 +579,7 @@ var ServerFolders = (_ => {
 		}
 
 		processAppView (e) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "FluxContainer(Guilds)"});
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: ["FluxContainer(Guilds)", "FluxContainer(NavigableGuilds)"]});
 			if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(folderGuildContentComponent, {
 				plugin: this,
 				themeOverride: children[index].props.themeOverride
@@ -612,6 +609,7 @@ var ServerFolders = (_ => {
 				tooltipConfig: {
 					type: "right",
 					list: true,
+					offset: 12,
 					backgroundColor: data.color3,
 					fontColor: data.color4
 				},
@@ -822,7 +820,7 @@ var ServerFolders = (_ => {
 							});
 							if (!BDFDB.equals(olddata, data)) {
 								BDFDB.DataUtils.save(data, this, "folders", e.instance.props.folderId);
-								BDFDB.ModuleUtils.forceAllUpdates(this, "GuildFolder");
+								BDFDB.GuildUtils.rerenderAll();
 								BDFDB.ReactUtils.forceUpdate(folderGuildContent);
 							}
 							e.instance.close();
@@ -1038,6 +1036,11 @@ var ServerFolders = (_ => {
 			BDFDB.DOMUtils.show(dragpreview);
 			dragpreview.style.setProperty("left", event.clientX - 25 + "px", "important");
 			dragpreview.style.setProperty("top", event.clientY - 25 + "px", "important");
+		}
+		
+		forceUpdateAll() {
+			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.GuildUtils.rerenderAll();
 		}
 
 		setLabelsByLanguage () {

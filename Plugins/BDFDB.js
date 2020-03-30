@@ -1084,7 +1084,6 @@
 		return InternalBDFDB.getWebModuleReq.req;
 	};
 	
-	var isGuildFolderThere = !!BDFDB.ModuleUtils.findByName("GuildFolder"); // REMOVE
 	var WebModulesData = {};
 	WebModulesData.PatchTypes = ["before", "instead", "after"];
 	WebModulesData.PatchMap = {
@@ -1117,7 +1116,7 @@
 		"UserInfo"
 	];
 	WebModulesData.MemoComponent = [
-		!isGuildFolderThere && "GuildFolder",
+		"GuildFolder",
 		"MessageContent",
 		"NowPlayingHeader"
 	];
@@ -1134,7 +1133,7 @@
 		V2C_ContentColumn: ins => ins && ins.return && ins.return.stateNode && ins.return.stateNode.props && typeof ins.return.stateNode.props.title == "string" && (ins.return.stateNode.props.title.toUpperCase().indexOf("PLUGINS") == 0 || ins.return.stateNode.props.title.toUpperCase().indexOf("THEMES") == 0) && ins.return.type,
 		V2C_PluginCard: ins => ins && ins.return && ins.return.stateNode && ins.return.stateNode.props && ins.return.stateNode.props.addon && ins.return.stateNode.props.addon.plugin && ins.return.type,
 		V2C_ThemeCard: ins => ins && ins.return && ins.return.stateNode && ins.return.stateNode.props && ins.return.stateNode.props.addon && ins.return.stateNode.props.addon.css && ins.return.type,
-		GuildFolder: isGuildFolderThere ? null : ins => ins && ins.return && ins.return.memoizedProps && ins.return.memoizedProps.folderId && ins.return.memoizedProps.guildIds && ins.return.type
+		GuildFolder: ins => ins && ins.return && ins.return.memoizedProps && ins.return.memoizedProps.folderId && ins.return.memoizedProps.guildIds && ins.return.type
 	};
 	WebModulesData.PatchFinder = {
 		Account: "accountinfo",
@@ -1150,7 +1149,7 @@
 		DirectMessage: "guildouter",
 		EmojiPicker: "emojipicker",
 		Guild: "guildouter",
-		GuildFolder: isGuildFolderThere ? null : "guildfolderwrapper",
+		GuildFolder: "guildfolderwrapper",
 		GuildIcon: "avataricon",
 		Guilds: "guildswrapper",
 		GuildSettingsBans: "guildsettingsbannedcard",
@@ -5040,7 +5039,6 @@
 		guildfolderexpandedbackground: ["GuildFolder", "expandedFolderBackground"],
 		guildfolderexpandedbackgroundcollapsed: ["GuildFolder", "collapsed"],
 		guildfolderexpandedbackgroundhover: ["GuildFolder", "hover"],
-		guildfolderexpandedguilds: ["GuildFolder", "expandedGuilds"],
 		guildfolderguildicon: ["GuildFolder", "guildIcon"],
 		guildfoldericonwrapper: ["GuildFolder", "folderIconWrapper"],
 		guildfoldericonwrapperclosed: ["GuildFolder", "closedFolderIconWrapper"],
@@ -7313,8 +7311,6 @@
 	InternalComponents.LibraryComponents.LazyImage = BDFDB.ModuleUtils.findByName("LazyImage");
 	
 	InternalComponents.LibraryComponents.ListHeader = BDFDB.ModuleUtils.findByName("ListSectionItem");
-	
-	InternalComponents.LibraryComponents.ListItem = BDFDB.ModuleUtils.findByName("ListItem");
 	
 	InternalComponents.LibraryComponents.ListRow = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.ListRow") || reactInitialized && class BDFDB_ListRow extends LibraryModules.React.Component {
 		render () {
