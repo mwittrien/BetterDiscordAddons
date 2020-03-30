@@ -12,14 +12,13 @@ var PersonalPins = (_ => {
 
 		getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-		getVersion () {return "1.8.9";} 
+		getVersion () {return "1.9.0";} 
 
 		getAuthor () {return "DevilBro";}
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Message Update","Fixed the plugin for the new Message Update"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"fixed":[["Crash","Fixed some weird rare crash occuring for some people"]]
 			};
 
 			this.patchedModules = {
@@ -260,11 +259,12 @@ var PersonalPins = (_ => {
 			}));
 		}
 		
-		createNotesPopout (buttoninstance) {
-			let tabkeys = ["channel", "server", "all"], sortkeys = ["notetime", "messagetime"];
-			buttoninstance.props.selectedFilter = buttoninstance.props.selectedFilter || this.getValue(tabkeys[0], "filter");
-			buttoninstance.props.selectedSort = buttoninstance.props.selectedSort || this.getValue(sortkeys[0], "sort");
-			buttoninstance.props.searchKey = buttoninstance.props.searchKey || "";
+		createNotesPopout (buttonInstance) {
+			const tabKeys = ["channel", "server", "all"], sortKeys = ["notetime", "messagetime"];
+			buttonInstance.props.selectedFilter = buttonInstance.props.selectedFilter || this.getValue(tabKeys[0], "filter");
+			buttonInstance.props.selectedSort = buttonInstance.props.selectedSort || this.getValue(sortKeys[0], "sort");
+			buttonInstance.props.searchKey = buttonInstance.props.searchKey || "";
+			let searchTimeout;
 			return [
 				BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCN.messagespopoutheader,
@@ -279,17 +279,17 @@ var PersonalPins = (_ => {
 									children: this.labels.popout_note_text
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
-									query: buttoninstance.props.searchKey,
+									query: buttonInstance.props.searchKey,
 									onChange: value => {
-										BDFDB.TimeUtils.clear(this.searchTimeout);
-										this.searchTimeout = BDFDB.TimeUtils.timeout(_ => {
-											buttoninstance.props.searchKey = value;
-											BDFDB.ReactUtils.forceUpdate(buttoninstance.popout._owner.stateNode);
+										BDFDB.TimeUtils.clear(searchTimeout);
+										searchTimeout = BDFDB.TimeUtils.timeout(_ => {
+											buttonInstance.props.searchKey = value;
+											BDFDB.ReactUtils.forceUpdate(buttonInstance.popout._owner.stateNode);
 										}, 1000);
 									},
 									onClear: _ => {
-										buttoninstance.props.searchKey = "";
-										BDFDB.ReactUtils.forceUpdate(buttoninstance.popout._owner.stateNode);
+										buttonInstance.props.searchKey = "";
+										BDFDB.ReactUtils.forceUpdate(buttonInstance.popout._owner.stateNode);
 									}
 								})
 							]
@@ -301,21 +301,21 @@ var PersonalPins = (_ => {
 									className: BDFDB.disCN.tabbarheader,
 									itemClassName: BDFDB.disCN.tabbarheaderitem,
 									type: BDFDB.LibraryComponents.TabBar.Types.TOP,
-									selectedItem: buttoninstance.props.selectedFilter.value,
-									items: tabkeys.map(key => this.getValue(key, "filter")),
+									selectedItem: buttonInstance.props.selectedFilter.value,
+									items: tabKeys.map(key => this.getValue(key, "filter")),
 									onItemSelect: key => {
-										buttoninstance.props.selectedFilter = this.getValue(key, "filter");
-										BDFDB.ReactUtils.forceUpdate(buttoninstance.popout._owner.stateNode);
+										buttonInstance.props.selectedFilter = this.getValue(key, "filter");
+										BDFDB.ReactUtils.forceUpdate(buttonInstance.popout._owner.stateNode);
 									}
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
 									spacing: -25,
 									label: this.labels.popout_sort_text + ":",
-									value: buttoninstance.props.selectedSort,
-									options: sortkeys.map(key => this.getValue(key, "sort")),
+									value: buttonInstance.props.selectedSort,
+									options: sortKeys.map(key => this.getValue(key, "sort")),
 									onChange: key => {
-										buttoninstance.props.selectedSort = this.getValue(key, "sort");
-										BDFDB.ReactUtils.forceUpdate(buttoninstance.popout._owner.stateNode);
+										buttonInstance.props.selectedSort = this.getValue(key, "sort");
+										BDFDB.ReactUtils.forceUpdate(buttonInstance.popout._owner.stateNode);
 									}
 								})
 							]
@@ -324,7 +324,7 @@ var PersonalPins = (_ => {
 				}),
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ScrollerVertical, {
 					className: BDFDB.disCN.messagespopout,
-					children: this.filterMessages(buttoninstance, buttoninstance.props.selectedFilter.value, buttoninstance.props.selectedSort.value, buttoninstance.props.searchKey.toUpperCase())
+					children: this.filterMessages(buttonInstance, buttonInstance.props.selectedFilter.value, buttonInstance.props.selectedSort.value, buttonInstance.props.searchKey.toUpperCase())
 				})
 			];
 		}
@@ -336,7 +336,7 @@ var PersonalPins = (_ => {
 			}
 		}
 		
-		filterMessages (buttoninstance, filter, sort, searchkey) {
+		filterMessages (buttonInstance, filter, sort, searchkey) {
 			let lighttheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
 			let messages = [], notes = BDFDB.DataUtils.load(this, "notes"), updatedata = false;
 			for (let guild_id in notes) for (let channel_id in notes[guild_id]) for (let message_idPOS in notes[guild_id][channel_id]) {
@@ -344,10 +344,12 @@ var PersonalPins = (_ => {
 				message.author = new BDFDB.DiscordObjects.User(message.author);
 				message.timestamp = new BDFDB.DiscordObjects.Timestamp(message.timestamp);
 				message.editedTimestamp = message.editedTimestamp && new BDFDB.DiscordObjects.Timestamp(message.editedTimestamp);
+				if (message.customRenderedContent && message.customRenderedContent.content.length) message.customRenderedContent.content = message.customRenderedContent.content.filter(n => n).map(n => typeof n == "string" ? n : (n.props && n.props.href ? BDFDB.ReactUtils.createElement("a", n.props) : null));
 				for (let embed of message.embeds) {
 					embed.color = typeof embed.color != "string" ? null : embed.color;
 					embed.timestamp = embed.timestamp && new BDFDB.DiscordObjects.Timestamp(embed.timestamp);
 				}
+				message.embeds = message.embeds.filter(n => !(n && n.type == "gifv"));
 				message = new BDFDB.DiscordObjects.Message(message);
 				let channel = notes[guild_id][channel_id][message_idPOS].channel && new BDFDB.DiscordObjects.Channel(JSON.parse(notes[guild_id][channel_id][message_idPOS].channel));
 				if (!channel) {
@@ -371,10 +373,10 @@ var PersonalPins = (_ => {
 			let currentchannel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId()) || {};
 			switch (filter) {
 				case "channel":
-					messages = messages.filter(messagedata => messagedata.channel_id == currentchannel.id);
+					messages = messages.filter(messageData => messageData.channel_id == currentchannel.id);
 					break;
 				case "server":
-					messages = messages.filter(messagedata => messagedata.guild_id == (currentchannel.guild_id || BDFDB.DiscordConstants.ME));
+					messages = messages.filter(messageData => messageData.guild_id == (currentchannel.guild_id || BDFDB.DiscordConstants.ME));
 					break;
 				case "allservers":
 					messages = messages;
@@ -382,12 +384,12 @@ var PersonalPins = (_ => {
 			}
 			if (searchkey) {
 				let searchvalues = ["content", "author.username", "rawDescription", "author.name"];
-				messages = messages.filter(messagedata => searchvalues.some(key => this.containsSearchkey(messagedata.message, key, searchkey) || messagedata.message.embeds.some(embed => this.containsSearchkey(embed, key, searchkey))));
+				messages = messages.filter(messageData => searchvalues.some(key => this.containsSearchkey(messageData.message, key, searchkey) || messageData.message.embeds.some(embed => this.containsSearchkey(embed, key, searchkey))));
 			}
 			BDFDB.ArrayUtils.keySort(messages, sort);
 			messages.reverse();
 			return Object.keys(messages).length ? 
-				messages.map(messagedata => this.renderMessage(buttoninstance, messagedata.note, messagedata.message, messagedata.channel, filter)).flat(10).filter(n => n) :
+				messages.map(messageData => this.renderMessage(buttonInstance, messageData.note, messageData.message, messageData.channel, filter)).flat(10).filter(n => n) :
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessagesPopoutComponents.EmptyStateCenter, {
 					msg: BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER,
 					image: lighttheme ? "/assets/03c7541028afafafd1a9f6a81cb7f149.svg" : "/assets/6793e022dc1b065b21f12d6df02f91bd.svg"
@@ -399,7 +401,7 @@ var PersonalPins = (_ => {
 			return value && value.toUpperCase().indexOf(searchkey) > -1
 		}
 		
-		renderMessage (buttoninstance, note, message, channel, filter) {
+		renderMessage (buttonInstance, note, message, channel, filter) {
 			if (!message || !channel) return null;
 			let channelname = channel.name;
 			let guild = channel.guild_id && BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id);
@@ -411,7 +413,7 @@ var PersonalPins = (_ => {
 					channelname = channelname + ((BDFDB.LibraryModules.UserStore.getUser(dmuser_id) || {}).username || BDFDB.LanguageUtils.LanguageStrings.UNKNOWN_USER);
 				}
 			}
-			let separator = filter == "channel" ? null : BDFDB.ReactUtils.createElement("div", {
+			return [filter == "channel" ? null : BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.disCN.messagespopoutchannelseparator,
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
@@ -427,9 +429,7 @@ var PersonalPins = (_ => {
 						children: channel.guild_id ? (BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id) || {}).name || BDFDB.LanguageUtils.LanguageStrings.GUILD_UNAVAILABLE_HEADER : BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES
 					}) : null
 				]
-			});
-
-			return [separator, BDFDB.ReactUtils.createElement("div", {
+			}), BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.disCN.messagespopoutgroupwrapper,
 				key: message.id,
 				children: [
@@ -483,7 +483,7 @@ var PersonalPins = (_ => {
 								size: BDFDB.LibraryComponents.Button.Sizes.NONE,
 								onClick: (e, instance) => {
 									this.removeNoteData(note);
-									BDFDB.ReactUtils.forceUpdate(buttoninstance.popout._owner.stateNode);
+									BDFDB.ReactUtils.forceUpdate(buttonInstance.popout._owner.stateNode);
 								},
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 									className: BDFDB.disCN.messagespopoutclosebutton,
