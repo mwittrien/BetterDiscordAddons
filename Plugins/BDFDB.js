@@ -7250,7 +7250,7 @@
 				})
 			});
 				
-			if (this.props.draggable && typeof this.props.connectDragSource == "function") Guild = this.props.connectDragSource(Guild);
+			if (this.props.draggable && typeof this.props.connectDragSource == "function") guild = this.props.connectDragSource(guild);
 			
 			var children = [
 				this.props.list || this.props.pill ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.Pill, {
@@ -7259,9 +7259,9 @@
 					unread: !isDraggedGuild && this.props.unread,
 					className: BDFDB.disCN.guildpill
 				}) : null,
-				!this.props.tooltip ? Guild : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
+				!this.props.tooltip ? guild : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 					tooltipConfig: Object.assign({type: "right"}, this.props.tooltipConfig, {guild: this.props.list && this.props.guild}),
-					children: Guild
+					children: guild
 				})
 			].filter(n => n);
 			return this.props.list ? InternalComponents.LibraryComponents.GuildComponents.Items.renderListItem(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
