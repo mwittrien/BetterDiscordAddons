@@ -1347,8 +1347,8 @@
 						if (bdSettings) {
 							const bdSettingsIns = BDFDB.ReactUtils.findOwner(bdSettings, {name:filteredModules, type:specialModules, all:true, unlimited:true});
 							if (bdSettingsIns.length) {
-								const bdSettingsChange = BDFDB.ReactUtils.findValue(BDFDB.ReactUtils.getInstance(bdSettings), "onChange", {up:true})
-								if (typeof bdSettingsChange == "function") bdSettingsChange();
+								const bdSettingsWrap = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.getInstance(document.querySelector("#bd-settingspane-container > *")), {props:"onChange", up:true});
+								if (bdSettingsWrap && bdSettingsWrap.props && typeof bdSettingsWrap.props.onChange == "function") bdSettingsWrap.props.onChange(bdSettingsWrap.props.type);
 							}
 						}
 					}
