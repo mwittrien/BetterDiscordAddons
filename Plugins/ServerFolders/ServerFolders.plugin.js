@@ -282,7 +282,7 @@ var ServerFolders = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Silent updated? NANI!","Fixed for discords sneaky updates"]]
+				"fixed":[["Silent updates? NANI!","Fixed for discords sneaky updates"]]
 			};
 			
 			this.patchedModules = {
