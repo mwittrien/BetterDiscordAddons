@@ -3262,7 +3262,7 @@
 		}
 	};
 	BDFDB.DOMUtils.getParent = function (listOrSelector, node) {
-		varletparent = null;
+		let parent = null;
 		if (Node.prototype.isPrototypeOf(node) && listOrSelector) {
 			let list = NodeList.prototype.isPrototypeOf(listOrSelector) ? listOrSelector : typeof listOrSelector == "string" ? document.querySelectorAll(listOrSelector) : null;
 			if (list) for (let listNode of list) if (listNode.contains(node)) {
