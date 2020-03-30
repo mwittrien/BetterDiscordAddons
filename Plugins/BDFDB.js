@@ -1267,7 +1267,7 @@
 				if (!BDFDB.ObjectUtils.is(module.BDFDBpatch[methodName][type][patchPriority])) module.BDFDBpatch[methodName][type][patchPriority] = {};
 				module.BDFDBpatch[methodName][type][patchPriority][pluginId] = (...args) => {
 					if (config.once) cancel();
-					patchMethods[type](...args);
+					return patchMethods[type](...args);
 				};
 				module.BDFDBpatch[methodName][type][patchPriority][pluginId].pluginName = pluginName;
 			}
