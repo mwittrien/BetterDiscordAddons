@@ -724,6 +724,7 @@
 			style = (style ? (style + " ") : "") + `background: ${backgroundColor} !important; border-color: ${backgroundColorIsGradient ? BDFDB.ColorUtils.convert(options.backgroundColor[options.type == "left" ? 100 : 0], "RGBA") : backgroundColor} !important;`;
 		}
 		if (style) tooltip.style = style;
+		tooltip.offset = typeof options.offset == "number" ? options.offset : 0;
 		if (typeof options.zIndex == "number") {
 			itemLayer.style.setProperty("z-index", options.zIndex, "important");
 			tooltip.style.setProperty("z-index", options.zIndex, "important");
@@ -833,20 +834,20 @@
 		let left, top, trects = BDFDB.DOMUtils.getRects(tooltip.anker), irects = BDFDB.DOMUtils.getRects(itemLayer), arects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount)), positionoffsets = {height: 10, width: 10};
 		switch (tooltip.type) {
 			case "top":
-				top = trects.top - irects.height - positionoffsets.height + 2;
+				top = trects.top - irects.height - positionoffsets.height + 2 - tooltip.offset;
 				left = trects.left + (trects.width - irects.width) / 2;
 				break;
 			case "bottom":
-				top = trects.top + trects.height + positionoffsets.height - 2;
+				top = trects.top + trects.height + positionoffsets.height - 2 + tooltip.offset;
 				left = trects.left + (trects.width - irects.width) / 2;
 				break;
 			case "left":
 				top = trects.top + (trects.height - irects.height) / 2;
-				left = trects.left - irects.width - positionoffsets.width + 2;
+				left = trects.left - irects.width - positionoffsets.width + 2 - tooltip.offset;
 				break;
 			case "right":
 				top = trects.top + (trects.height - irects.height) / 2;
-				left = trects.left + trects.width + positionoffsets.width - 2;
+				left = trects.left + trects.width + positionoffsets.width - 2 + tooltip.offset;
 				break;
 			}
 			
