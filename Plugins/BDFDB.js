@@ -1437,8 +1437,6 @@
 			if (typeof filter == "function") {
 				let component = filter(ins);
 				if (component) {
-					console.log(unmappedType);
-					console.log(BDFDB.ModuleUtils.find(m => m == component, false));
 					if (WebModulesData.NonRender.includes(unmappedType)) patchInstance((BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports, type, patchType, true);
 					else if (WebModulesData.MemoComponent.includes(unmappedType)) patchInstance((BDFDB.ModuleUtils.find(m => m == component, false) || {exports:{}}).exports.default, type, patchType, true);
 					else patchInstance(component, type, patchType, true);
@@ -2344,7 +2342,6 @@
 			let GuildsPrototype = BDFDB.ReactUtils.getValue(GuildsIns, "_reactInternalFiber.type.prototype");
 			if (GuildsIns && GuildsPrototype) {
 				BDFDB.ModuleUtils.patch(BDFDB, GuildsPrototype, "render", {after: e => {
-					console.log(e);
 					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnValue, {name: "ConnectedUnreadDMs"});
 					if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement("div", {}));
 					BDFDB.ReactUtils.forceUpdate(GuildsIns);
