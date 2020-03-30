@@ -354,10 +354,10 @@ body:before {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 }
 
-.expandedGuilds-1JMD4M {									/* folder				guildwrap							*/
+.wrapper-1Rf91z .wrapper-21YSNc [role="group"] {			/* folder				guildwrap							*/
 	height: auto !important;
 }
-.expandedGuilds-1JMD4M .listItem-2P_4kh:last-child {
+.wrapper-1Rf91z .wrapper-21YSNc [role="group"] .listItem-2P_4kh:last-child {
 	margin-bottom: 0;
 }
 

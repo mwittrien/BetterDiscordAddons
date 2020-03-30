@@ -4,6 +4,7 @@
 	--vguildgap: var(--guildgap, 3);
 	--valigndms: var(--aligndms, 1);
 }
+
 .container-2lgZY8 {
 	display: flex !important;
 }
@@ -19,7 +20,6 @@
 .titleBar-AC4pGV.typeMacOS-3EmCyP,
 .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC,
 .wrapper-1Rf91z,
-.wrapper-1Rf91z.foldercontent.foldercontentopen,
 .wrapper-1Rf91z .unreadMentionsIndicatorTop-gA6RCh,
 .wrapper-1Rf91z .unreadMentionsIndicatorBottom-BXS58x {
 	width: calc(1px * ((var(--vguildsize) + 12 * var(--vguildsize)/50) * var(--vcolumns) + 35 - 25)) !important;
@@ -47,6 +47,9 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 }
 .wrapper-1Rf91z .scrollerWrap-1IAIlv .scroller-2TZvBN {
 	padding: 0 0 calc(10px * var(--vguildsize)/50) calc(10px * var(--vguildsize)/50) !important;
+}
+.wrapper-1Rf91z .scrollerWrap-1IAIlv .scroller-2TZvBN,
+.wrapper-1Rf91z .scrollerWrap-1IAIlv .scroller-2TZvBN > [role="tree"] {
 	margin: 0 !important;
 	display: flex !important;
 	flex-flow: row wrap !important;
@@ -170,17 +173,17 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 .wrapper-1Rf91z .wrapper-21YSNc > .listItem-2P_4kh {
 	margin: 0 !important;
 }
-.wrapper-1Rf91z .wrapper-21YSNc .expandedGuilds-1JMD4M .listItem-2P_4kh {
-	margin: 6px 0 !important;
-}
-.wrapper-1Rf91z .wrapper-21YSNc .expandedGuilds-1JMD4M .listItem-2P_4kh:last-child {
-	margin-bottom: 0 !important;
-}
-.wrapper-1Rf91z .expandedGuilds-1JMD4M {
+.wrapper-1Rf91z .wrapper-21YSNc [role="group"] {
 	overflow: visible !important;
 	margin-left: -1px !important;
 	padding-left: 1px !important;
 	height: auto !important;
+}
+.wrapper-1Rf91z .wrapper-21YSNc [role="group"] .listItem-2P_4kh {
+	margin: 6px 0 !important;
+}
+.wrapper-1Rf91z .wrapper-21YSNc [role="group"] .listItem-2P_4kh:last-child {
+	margin-bottom: 0 !important;
 }
 .wrapper-1Rf91z .expandedFolderBackground-2sPsd- {
 	width: calc(1px * var(--vguildsize)) !important;
