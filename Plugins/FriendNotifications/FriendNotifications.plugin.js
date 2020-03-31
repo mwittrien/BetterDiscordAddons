@@ -24,17 +24,13 @@ var FriendNotifications = (_ => {
 	return class FriendNotifications {
 		getName () {return "FriendNotifications";}
 
-		getVersion () {return "1.4.0";}
+		getVersion () {return "1.4.2";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Notifies you when a Friend or a User your choose to observe changes their online status, can be configured individually in the settings.";}
 
 		constructor () {
-			this.changelog = {
-				"improved":[["TYPE header","Clicking the type header twice will now disable all entries in the list"]]
-			};
-
 			this.patchedModules = {
 				after: {
 					Guilds: "render"
@@ -572,6 +568,8 @@ var FriendNotifications = (_ => {
 						let string = notificationstrings[status.statusname] || "$user changed status to $status";
 						let toaststring = BDFDB.StringUtils.htmlEscape(string).replace(/'{0,1}\$user'{0,1}/g, `<strong>${BDFDB.StringUtils.htmlEscape(name)}</strong>`).replace(/'{0,1}\$status'{0,1}/g, `<strong>${libstring}</strong>`);
 						if (status.isactivity) toaststring = toaststring.replace(/'{0,1}\$song'{0,1}|'{0,1}\$game'{0,1}/g, `<strong>${status.name || status.details}</strong>`).replace(/'{0,1}\$artist'{0,1}/g, `<strong>${status.state}</strong>`);
+						
+						if (timeLog.length > 200) timeLog.shift();
 						
 						timeLog.push({
 							string: toaststring,
