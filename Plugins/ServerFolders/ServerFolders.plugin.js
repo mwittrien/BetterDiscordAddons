@@ -274,7 +274,7 @@ var ServerFolders = (_ => {
 	return class ServerFolders {
 		getName () {return "ServerFolders";}
 
-		getVersion () {return "6.7.2";}
+		getVersion () {return "6.7.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -332,10 +332,6 @@ var ServerFolders = (_ => {
 					position: absolute;
 					top: -10px;
 					right: -10px;
-				}
-				${BDFDB.dotCN.guildfolderwrapper} [role="group"],
-				${BDFDB.dotCN.guildfolderexpandedbackground} {
-					display: none !important;
 				}
 				${BDFDB.dotCN._serverfoldersdragpreview} {
 					pointer-events: none !important;
@@ -636,6 +632,8 @@ var ServerFolders = (_ => {
 					});
 				}
 			}
+			e.returnvalue.props.children[0] = null;
+			e.returnvalue.props.children[2] = null;
 		}
 
 		processGuild (e) {
