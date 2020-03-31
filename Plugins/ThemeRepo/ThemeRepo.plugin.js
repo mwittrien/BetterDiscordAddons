@@ -125,7 +125,7 @@ var ThemeRepo = (_ => {
 	return class ThemeRepo {
 		getName () {return "ThemeRepo";}
 
-		getVersion () {return "1.9.5";}
+		getVersion () {return "1.9.6";}
 
 		getAuthor () {return "DevilBro";}
 

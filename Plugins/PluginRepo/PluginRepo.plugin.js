@@ -69,7 +69,7 @@ var PluginRepo = (_ => {
 	return class PluginRepo {
 		getName () {return "PluginRepo";} 
 
-		getVersion () {return "1.9.5";}
+		getVersion () {return "1.9.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -689,8 +689,19 @@ var PluginRepo = (_ => {
 								extractConfigInfo(plugin, JSON.parse('{"info":' + bodyWithoutSpecial.substring(configreg.index).split(configreg[0])[1].split("};")[0].split("}},")[0] + '}'));
 							}
 							catch (err) {
-								try {extractConfigInfo(plugin, JSON.parse(('{"info":' + bodyWithoutSpecial.substring(configreg.index).split(configreg[0])[1].split("};")[0].split("}},")[0] + '}').replace(/,/g, ',"').replace(/:/g, '":').replace(/{/g, '{"').replace(/""/g, '"').replace(/" /g, ' ').replace(/,"{/g, ',{').replace(/,"\[/g, ',[').replace(/":\/\//g, ':\/\/')));}
-								catch (err2) {}
+								try {
+									let i = 0, j = 0, configString = "";
+									for (let c of (bodyWithoutSpecial.substring(configreg.index).split(configreg[0])[1].split("};")[0].split("}},")[0]).replace(/,/g, ',"').replace(/:/g, '":').replace(/{/g, '{"').replace(/""/g, '"').replace(/" /g, ' ').replace(/,"{/g, ',{').replace(/,"\[/g, ',[').replace(/":\/\//g, ':\/\/')) {
+										configString += c;
+										if (c == "{") i++;
+										else if (c == "}") j++;
+										if (i > 0 && i == j) break;
+									}
+									extractConfigInfo(plugin, JSON.parse('{"info":' + configString + '}'));
+								}
+								catch (err2) {
+									console.log(err2);
+								}
 							}
 						}
 						else {
