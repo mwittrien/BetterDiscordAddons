@@ -173,15 +173,18 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 .wrapper-1Rf91z .wrapper-21YSNc > .listItem-2P_4kh {
 	margin: 0 !important;
 }
+.wrapper-1Rf91z .wrapper-21YSNc .expandedGuilds-1JMD4M,
 .wrapper-1Rf91z .wrapper-21YSNc [role="group"] {
 	overflow: visible !important;
 	margin-left: -1px !important;
 	padding-left: 1px !important;
 	height: auto !important;
 }
+.wrapper-1Rf91z .wrapper-21YSNc .expandedGuilds-1JMD4M .listItem-2P_4kh,
 .wrapper-1Rf91z .wrapper-21YSNc [role="group"] .listItem-2P_4kh {
 	margin: 6px 0 !important;
 }
+.wrapper-1Rf91z .wrapper-21YSNc .expandedGuilds-1JMD4M .listItem-2P_4kh:last-child,
 .wrapper-1Rf91z .wrapper-21YSNc [role="group"] .listItem-2P_4kh:last-child {
 	margin-bottom: 0 !important;
 }
