@@ -157,7 +157,6 @@ https://raw.githubusercontent.com/planetarian/BetterDiscordPlugins/master/Zalgo.
 https://raw.githubusercontent.com/qwerasd205/qwerasd205.github.io/master/EditUploads.plugin.js
 https://raw.githubusercontent.com/qwerasd205/qwerasd205.github.io/master/EmptyEnter.plugin.js
 https://raw.githubusercontent.com/qwerasd205/qwerasd205.github.io/master/ExtendedContextMenu.plugin.js
-https://raw.githubusercontent.com/qwerasd205/qwerasd205.github.io/master/RepoUtils.plugin.js
 https://raw.githubusercontent.com/qwerasd205/qwerasd205.github.io/master/WordNotifications.plugin.js
 https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js
 https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/AccountDetailsPlus/AccountDetailsPlus.plugin.js

@@ -309,13 +309,6 @@ var ThemeRepo = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
-				
-				// REMOVE 10.02.2020
-				let olddata = BDFDB.DataUtils.load(this, "ownlist", "ownlist");
-				if (olddata) {
-					BDFDB.DataUtils.save(olddata, this, "custom");
-					BDFDB.DataUtils.remove(this, "ownlist");
-				}
 
 				this.loadThemes();
 

@@ -4296,7 +4296,7 @@
 	DiscordClassModules.Badge = BDFDB.ModuleUtils.findByProperties("numberBadge", "textBadge", "iconBadge");
 	DiscordClassModules.BotTag = BDFDB.ModuleUtils.findByProperties("botTag", "botTagInvert");
 	DiscordClassModules.Button = BDFDB.ModuleUtils.findByProperties("colorBlack", "button");
-	DiscordClassModules.Call = BDFDB.ModuleUtils.findByProperties("callAvatarWrapper", "video");
+	DiscordClassModules.CallAvatar = BDFDB.ModuleUtils.findByProperties("callAvatarMask", "video");
 	DiscordClassModules.CallCurrent = BDFDB.ModuleUtils.findByProperties("wrapper", "fullScreen");
 	DiscordClassModules.CallDetails = BDFDB.ModuleUtils.findByProperties("container", "hotspot");
 	DiscordClassModules.CallIncoming = BDFDB.ModuleUtils.findByProperties("incomingCall", "container");
@@ -4695,9 +4695,10 @@
 		buttonspinner: ["Button", "spinner"],
 		buttonspinneritem: ["Button", "spinnerItem"],
 		buttonsubmitting: ["Button", "submitting"],
-		callavatarvideo: ["Call", "callAvatarVideo"],
-		callavatarvoice: ["Call", "callAvatarVoice"],
-		callavatarwrapper: ["Call", "callAvatarWrapper"],
+		callavatarmask: ["CallAvatar", "callAvatarMask"],
+		callavatarvideo: ["CallAvatar", "videoAvatar"],
+		callavatarvoice: ["CallAvatar", "voiceAvatar"],
+		callavatarwrapper: ["CallAvatar", "wrapper"],
 		callcurrentcontainer: ["CallCurrent", "wrapper"],
 		callcurrentdetails: ["CallDetails", "container"],
 		callcurrentvideo: ["Video", "video"],
@@ -4705,8 +4706,8 @@
 		callincomingcontainer: ["CallIncoming", "container"],
 		callincominginner: ["CallIncomingInner", "incomingCallInner"],
 		callmembers: ["CallIncomingInner", "members"],
-		callselected: ["Call", "selected"],
-		callvideo: ["Call", "video"],
+		callselected: ["CallAvatar", "selected"],
+		callvideo: ["CallAvatar", "video"],
 		card: ["Card", "card"],
 		cardbrand: ["Card", "cardBrand"],
 		cardbrandoutline: ["Card", "cardBrandOutline"],

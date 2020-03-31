@@ -76,17 +76,6 @@ var PersonalPins = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
-				
-				// REMOVE 30.01.2020
-				let notesold = BDFDB.DataUtils.load(this, "notes"), notes = {};
-				for (let guild_id in notesold) {
-					notes[guild_id] = {};
-					for (let channel_id in notesold[guild_id]) {
-						notes[guild_id][channel_id] = {};
-						for (let message_idPOS in notesold[guild_id][channel_id]) notes[guild_id][channel_id][message_idPOS.split("_")[0]] = notesold[guild_id][channel_id][message_idPOS];
-					}
-				}
-				BDFDB.DataUtils.save(notes, this, "notes");
 
 				BDFDB.ModuleUtils.forceAllUpdates(this);
 			}
