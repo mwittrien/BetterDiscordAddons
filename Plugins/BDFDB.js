@@ -30,7 +30,7 @@
 	const loadId = Math.round(Math.random() * 10000000000000000);
 	BDFDB.InternalData.loadId = loadId;
 	
-	const isGuildFolderThere = false; //REMOVE
+	var isGuildFolderThere = false; //REMOVE
 	
 	if (typeof Array.prototype.flat != "function") Array.prototype.flat = function () {return this;}
 
