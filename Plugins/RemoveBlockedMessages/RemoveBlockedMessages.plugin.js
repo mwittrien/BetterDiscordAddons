@@ -4,17 +4,13 @@ var RemoveBlockedMessages = (_ => {
 	return class RemoveBlockedMessages {
 		getName () {return "RemoveBlockedMessages";}
 
-		getVersion () {return "1.0.1";}
+		getVersion () {return "1.0.2";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Removes blocked messages completely.";}
 		
-		constructor () {
-			this.changelog = {
-				"fixed":[["Scroll Jump","Fixed issue where chat scroller would jump to the top if last unread messages was a blocked message"]]
-			};
-			
+		constructor () {			
 			this.patchedModules = {
 				before: {
 					Messages: "render"
@@ -72,6 +68,7 @@ var RemoveBlockedMessages = (_ => {
 		// begin of own functions
 		
 		processMessages (e) {
+			if (BDFDB.ArrayUtils.is(e.instance.props.channelStream)) e.instance.props.channelStream = [].concat(e.instance.props.channelStream.filter(n => n.type != "MESSAGE_GROUP_BLOCKED"));
 			if (BDFDB.ObjectUtils.is(e.instance.props.messages) && BDFDB.ArrayUtils.is(e.instance.props.messages._array)) {
 				let messages = e.instance.props.messages;
 				e.instance.props.messages = new BDFDB.DiscordObjects.Messages(messages);
