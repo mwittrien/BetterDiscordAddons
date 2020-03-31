@@ -567,7 +567,6 @@ var PluginRepo = (_ => {
 					loadedPlugins = {};
 					grabbedPlugins = result.split("\n").filter(n => n);
 					foundPlugins = grabbedPlugins.concat(customList);
-					foundPlugins = ["https://raw.githubusercontent.com/l0c4lh057/BetterDiscordStuff/master/Plugins/TypingIndicator/TypingIndicator.plugin.js"];
 					
 					loading = {is:true, timeout:BDFDB.TimeUtils.timeout(_ => {
 						BDFDB.TimeUtils.clear(loading.timeout);
