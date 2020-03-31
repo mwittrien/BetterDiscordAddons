@@ -274,7 +274,7 @@ var ServerFolders = (_ => {
 	return class ServerFolders {
 		getName () {return "ServerFolders";}
 
-		getVersion () {return "6.7.3";}
+		getVersion () {return "6.7.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -296,6 +296,8 @@ var ServerFolders = (_ => {
 		}
 
 		initConstructor () {
+			folderStates = {}, folderReads = {}, guildStates = {};
+				
 			this.css = `
 				.${this.name}-modal ${BDFDB.dotCN._serverfoldersiconswatch} {
 					position: relative;
@@ -439,8 +441,6 @@ var ServerFolders = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
-				
-				folderStates = {}, folderReads = {}, guildStates = {};
 				
 				let forceClosing = false;
 				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.GuildUtils, "toggleGuildFolderExpand", {after: e => {
@@ -586,9 +586,11 @@ var ServerFolders = (_ => {
 			let expandedFolders = BDFDB.LibraryModules.FolderUtils.getExpandedFolders();
 			if (expandedFolders.size) BDFDB.DOMUtils.addClass(document.body, BDFDB.disCN._serverfoldersfoldercontentisopen);
 			else BDFDB.DOMUtils.removeClassFromDOM(BDFDB.disCN._serverfoldersfoldercontentisopen);
-			let state = this.getState(e.instance);
+			
 			let data = this.getFolderConfig(e.instance.props.folderId);
 			if (data.muteFolder) for (let guildId of e.instance.props.guildIds) if (!BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildId)) BDFDB.LibraryModules.GuildSettingsUtils.updateNotificationSettings(guildId, {muted:true, suppress_everyone:true});
+			
+			let state = this.getState(e.instance);
 			if (folderStates[e.instance.props.folderId] && !BDFDB.equals(state, folderStates[e.instance.props.folderId])) {
 				if (data.autoRead && (state.unread || state.badge > 0)) {
 					BDFDB.TimeUtils.clear(folderReads[e.instance.props.folderId]);
@@ -599,6 +601,7 @@ var ServerFolders = (_ => {
 				BDFDB.ReactUtils.forceUpdate(folderGuildContent);
 			}
 			folderStates[e.instance.props.folderId] = state;
+			
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ListItemTooltip"});
 			if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 				text: e.instance.props.folderName || BDFDB.FolderUtils.getDefaultName(e.instance.props.folderId),
@@ -632,8 +635,12 @@ var ServerFolders = (_ => {
 					});
 				}
 			}
+			
 			e.returnvalue.props.children[0] = null;
-			e.returnvalue.props.children[2] = null;
+			e.returnvalue.props.children[2] = BDFDB.ReactUtils.createElement("div", {
+				children: e.returnvalue.props.children[2],
+				style: {display: "none"}
+			});
 		}
 
 		processGuild (e) {
