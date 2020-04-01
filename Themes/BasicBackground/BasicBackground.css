@@ -108,7 +108,8 @@
 		10.	DOWNLOADAPPMODAL
 		11.	GUILDBOOSTMODAL
 		12.	NEWUSERMODAL
-		12.	REACTIONSMODAL
+		13.	REACTIONSMODAL
+		14.	GUILDTEMPLATEMODAL
 	14.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -2505,6 +2506,10 @@ body:before {
 	stroke: rgb(var(--fontwhite1));
 }
 
+.descriptionBox-1EKQKL {									/* temlatesettings		descriptionbox					*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+
 #app-mount .tierHeaderLocked-1a2opw {						/* boostsettings		tierheaderlocked					*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 	color: rgb(var(--fontwhite3));
@@ -3591,6 +3596,71 @@ body:before {
 #app-mount .remove-3V-yj8:hover {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 	color: rgb(var(--fontwhite1));
+}
+
+/* ----		13.14.	GUILDTEMPLATEMODAL				---- */
+
+.ctaSection-izWwhs {										/* modal				ctasection							*/
+	background-color: transparent;
+}
+.formSection-1NFAGI {										/* modal				formsection							*/
+	background-color: transparent;
+}
+
+.divider-2gQcba {											/* modal				divider							*/
+	border-color: rgba(var(--fontwhite3), 0.5);
+}
+
+.usagePill-2WGS4A {											/* modal				usagepill 1							*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+.usagePill-_nSrnP {											/* modal				usagePill 2							*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+
+.channelsWrapper-2HhUER {									/* modal				channelswrapper						*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+
+.channel-OaJouZ {											/* modal				channel								*/
+	color: rgb(var(--fontwhite3));
+}
+
+.rolesWrapper-2yOx9S {										/* modal				roleswrapper							*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+
+#app-mount .role-3paDXR {									/* modal				role								*/
+	border-color: rgba(var(--fontwhite3), 0.6);
+	border-radius: 5px;
+	padding: 0 5px;
+	position: relative;
+}
+#app-mount .role-3paDXR[style*="border-color: rgba(185, 187, 190, 0.6)"] {
+	border-color: rgba(var(--fontwhite3), 0.6) !important;
+}
+#app-mount .role-3paDXR .roleName-1JcOmP {					/* modal				rolename							*/
+	color: rgb(var(--fontwhite1));
+	margin: 0;
+	font-weight: normal;
+	position: relative;
+	height: 20px;
+	line-height: 20px;
+	z-index: 1000;
+	pointer-events: none;
+}
+#app-mount .role-3paDXR .roleCircle-3DE8xJ {				/* modal				rolecircle							*/
+	position: absolute;
+	background-color: rgb(var(--fontwhite3));
+	border-radius: 3px;
+	opacity: 0.3;
+	height: 100%;
+	width: 100%;
+	left: 0;
+	top: 0;
+}
+#app-mount .role-3paDXR .roleCircle-3DE8xJ[style*="background-color: rgb(185, 187, 190)"] {
+	background-color: rgb(var(--fontwhite3)) !important;
 }
 
 
