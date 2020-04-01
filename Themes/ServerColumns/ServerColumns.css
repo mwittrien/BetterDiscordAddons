@@ -121,6 +121,10 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 	margin: calc(1px * (var(--vguildsize)/10)) 0 !important;
 	display: block !important;
 }
+.wrapper-1Rf91z [role=tree] ~ .listItem-2P_4kh .listItemWrapper-3X98Pc,
+.wrapper-1Rf91z [role=tree] ~ * .listItem-2P_4kh .listItemWrapper-3X98Pc {
+	margin: 0 !important;
+}
 .wrapper-1Rf91z .guildsError-b7zR5H {
 	height: calc(1px * var(--vguildsize)) !important;
 	width: calc(1px * var(--vguildsize)) !important;
