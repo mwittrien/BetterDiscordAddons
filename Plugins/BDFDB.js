@@ -62,10 +62,23 @@
 		plugin.description = plugin.description || (typeof plugin.getDescription == "function" ? plugin.getDescription() : null);
 		
 		InternalBDFDB.clearStartTimeout(plugin);
+		
+		if (plugin.name == "PinDMs" && !BDFDB.DataUtils.load(plugin, "warnings", "01_04_2020")) BDFDB.ModalUtils.open(plugin, {
+			header: plugin.name,
+			subheader: "Issues",
+			text: `I am aware that PinDMs is broken right now, I will fix it as soon as I got some free time. Stop reporting this issue please and thank you.`,
+			buttons: [{
+				contents: "Understood",
+				close: true
+			}],
+			onClose: _ => {
+				BDFDB.DataUtils.save(true, plugin, "warnings", "01_04_2020");
+			}
+		});
 
-		let loadmessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
-		BDFDB.LogUtils.log(loadmessage, plugin.name);
-		if (!BDFDB.BDUtils.getSettings("fork-ps-2") && BDFDB.DataUtils.get(BDFDB, "settings", "showToasts")) BDFDB.NotificationUtils.toast(plugin.name + " " + loadmessage, {nopointer: true, selector: "plugin-started-toast"});
+		let loadMessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
+		BDFDB.LogUtils.log(loadMessage, plugin.name);
+		if (!BDFDB.BDUtils.getSettings("fork-ps-2") && BDFDB.DataUtils.get(BDFDB, "settings", "showToasts")) BDFDB.NotificationUtils.toast(plugin.name + " " + loadMessage, {nopointer: true, selector: "plugin-started-toast"});
 
 		let url = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 		BDFDB.PluginUtils.checkUpdate(plugin.name, url);
@@ -95,9 +108,9 @@
 
 		delete BDFDB.myPlugins[plugin.name];
 
-		let unloadmessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", "v" + plugin.version);
-		BDFDB.LogUtils.log(unloadmessage, plugin.name);
-		if (!BDFDB.BDUtils.getSettings("fork-ps-2") && BDFDB.DataUtils.get(BDFDB, "settings", "showToasts")) BDFDB.NotificationUtils.toast(plugin.name + " " + unloadmessage, {nopointer: true, selector: "plugin-stopped-toast"});
+		let unloadMessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", "v" + plugin.version);
+		BDFDB.LogUtils.log(unloadMessage, plugin.name);
+		if (!BDFDB.BDUtils.getSettings("fork-ps-2") && BDFDB.DataUtils.get(BDFDB, "settings", "showToasts")) BDFDB.NotificationUtils.toast(plugin.name + " " + unloadMessage, {nopointer: true, selector: "plugin-stopped-toast"});
 
 		let url = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 
@@ -3532,9 +3545,8 @@
 	};
 	BDFDB.ModalUtils.confirm = function (plugin, text, callback) {
 		if (!BDFDB.ObjectUtils.is(plugin) || typeof text != "string") return;
-		callback = typeof callback == "function" ? callback : _ => {};
 		BDFDB.ModalUtils.open(plugin, {text, header:"Are you sure?", className:BDFDB.disCN.modalconfirmmodal, scroller:false, buttons:[
-			{contents: BDFDB.LanguageUtils.LanguageStrings.OKAY, close:true, color:"RED", click:callback},
+			{contents: BDFDB.LanguageUtils.LanguageStrings.OKAY, close:true, color:"RED", click:typeof callback == "function" ? callback : _ => {}},
 			{contents: BDFDB.LanguageUtils.LanguageStrings.CANCEL, close:true}
 		]});
 	};
