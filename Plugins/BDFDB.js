@@ -7496,6 +7496,8 @@
 	};
 	InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.PopoutContainer, {wrap:true});
 	
+	InternalComponents.LibraryComponents.PrivateChannelItems = BDFDB.ModuleUtils.findByProperties("DirectMessage", "GroupDM");
+	
 	InternalComponents.LibraryComponents.QuickSelect = BDFDB.ReactUtils.getValue(window.BDFDB, "LibraryComponents.QuickSelect") || reactInitialized && class BDFDB_QuickSelect extends LibraryModules.React.Component {
 		handleChange(option) {
 			this.props.value = option;
