@@ -1114,6 +1114,7 @@
 		"GuildIcon"
 	];
 	WebModulesData.NonRender = [
+		"ConnectedPrivateChannelsList",
 		"ContextMenuItem",
 		"DiscordTag",
 		"InviteModalUserRow",
