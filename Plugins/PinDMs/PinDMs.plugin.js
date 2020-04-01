@@ -81,7 +81,7 @@ var PinDMs = (_ => {
 					box-sizing: border-box;
 					border: 1px dashed currentColor;
 				}
-				${BDFDB.dotCN._pindmspinnedchannelsheadercontainer + BDFDB.dotCNS._pindmsdmchannelplaceholder} {
+				${BDFDB.dotCN._pindmspinnedchannelsheadercontainer + BDFDB.dotCN._pindmsdmchannelplaceholder} {
 					margin-left: 8px;
 					height: 12px;
 					box-sizing: border-box;
@@ -407,7 +407,10 @@ var PinDMs = (_ => {
 							].filter(n => n)
 						}));
 						if (this.hoveredChannel == "header_" + category.id) elements.push(BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCNS.dmchannel + BDFDB.disCNS._pindmsdmchannelpinned + BDFDB.disCNS._pindmsdmchannelplaceholder + BDFDB.disCN.namecontainernamecontainer
+							className: BDFDB.disCNS.dmchannel + BDFDB.disCNS._pindmsdmchannelpinned + BDFDB.disCNS._pindmsdmchannelplaceholder + BDFDB.disCN.namecontainernamecontainer,
+							children: BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN.namecontainerlayout
+							})
 						}));
 						for (let id of this.sortDMsByTime(foundDMs, "dmCategories")) {
 							let channel = BDFDB.LibraryModules.ChannelStore.getChannel(id);
@@ -418,7 +421,10 @@ var PinDMs = (_ => {
 									selected: id === selectedChannelId
 								}));
 								if (this.hoveredChannel == id) elements.push(BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCNS.dmchannel + BDFDB.disCNS._pindmsdmchannelpinned + BDFDB.disCNS._pindmsdmchannelplaceholder + BDFDB.disCN.namecontainernamecontainer
+									className: BDFDB.disCNS.dmchannel + BDFDB.disCNS._pindmsdmchannelpinned + BDFDB.disCNS._pindmsdmchannelplaceholder + BDFDB.disCN.namecontainernamecontainer,
+									children: BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCN.namecontainerlayout
+									})
 								}));
 							}
 						}
