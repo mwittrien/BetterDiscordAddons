@@ -4,7 +4,7 @@ var DisplayServersAsChannels = (_ => {
 	return class DisplayServersAsChannels {
 		getName () {return "DisplayServersAsChannels";}
 
-		getVersion () {return "1.3.3";}
+		getVersion () {return "1.3.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,8 +12,7 @@ var DisplayServersAsChannels = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["DMs","Properly styles DMs now"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"fixed":[["Silent updates? NANI!","Fixed for discords sneaky updates"]]
 			};
 
 			this.patchPriority = 10;
@@ -24,7 +23,7 @@ var DisplayServersAsChannels = (_ => {
 					DefaultHomeButton: "render",
 					DirectMessage: "render",
 					Guild: "render",
-					GuildFolder: "render",
+					GuildFolder: "type",
 					CircleIconButton: "render",
 					UnavailableGuildsButton: "UnavailableGuildsButton"
 				}
@@ -100,7 +99,7 @@ var DisplayServersAsChannels = (_ => {
 					if (e.thisObject.props.list) this.processGuild({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});
 				}});
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -113,7 +112,7 @@ var DisplayServersAsChannels = (_ => {
 
 				BDFDB.DOMUtils.removeLocalStyle("DSACStyle" + this.name);
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -126,6 +125,7 @@ var DisplayServersAsChannels = (_ => {
 			if (this.SettingsUpdated) {
 				delete this.SettingsUpdated;
 				this.addCSS();
+				this.forceUpdateAll();
 			}
 		}
 		
@@ -258,6 +258,11 @@ var DisplayServersAsChannels = (_ => {
 				
 			}
 		}
+		
+		forceUpdateAll() {
+			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.GuildUtils.rerenderAll();
+		}
 
 		addCSS () {
 			let amounts = BDFDB.DataUtils.get(this, "amounts");
@@ -272,7 +277,7 @@ var DisplayServersAsChannels = (_ => {
 				
 				${BDFDB.dotCNS.themedark + BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildsscroller}::-webkit-scrollbar-thumb,
 				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.guildswrapper + BDFDB.dotCNS.themedark + BDFDB.dotCN.guildsscroller}::-webkit-scrollbar-thumb {
-					background-color: #18191c;
+					background-color: ${BDFDB.DiscordConstants.Colors.PRIMARY_DARK_800};
 				}
 
 				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildouter} {
@@ -303,7 +308,7 @@ var DisplayServersAsChannels = (_ => {
 					display: flex;
 					margin-right: 4px;
 				}
-				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildiconchildwrapper + BDFDB.dotCN.guildbadgebase} {
+				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildiconchildwrapper + BDFDB.dotCN.badgebase} {
 					margin-left: 4px;
 				}
 
@@ -342,10 +347,10 @@ var DisplayServersAsChannels = (_ => {
 					border-radius: 4px;
 					margin-bottom: 10px;
 				}
-				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderexpandedguilds} {
+				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderwrapper} [role="group"] {
 					height: auto !important;
 				}
-				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildfolderexpandedguilds + BDFDB.dotCN.guildouter}:last-child {
+				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderwrapper} [role="group"] ${BDFDB.dotCN.guildouter}:last-child {
 					margin-bottom: 10px;
 				}
 
@@ -383,7 +388,12 @@ var DisplayServersAsChannels = (_ => {
 					height: ${amounts.serverElementHeight}px !important;
 					width: ${amounts.serverListWidth - 20}px;
 				}
+				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN._friendnotificationsfriendsonline} {
+					height: ${amounts.serverElementHeight * 0.6}px !important;
+					width: ${amounts.serverListWidth - 20}px;
+				}
 				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN._readallnotificationsbuttonbutton},
+				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN._friendnotificationsfriendsonline},
 				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.guildswrapper} #bd-pub-button {
 					display: flex;
 					justify-content: flex-start;
