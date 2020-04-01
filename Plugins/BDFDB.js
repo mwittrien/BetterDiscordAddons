@@ -83,7 +83,6 @@
 		let url = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 		BDFDB.PluginUtils.checkUpdate(plugin.name, url);
 
-		if (BDFDB.ObjectUtils.is(plugin.classes)) InternalBDFDB.addPluginClasses(plugin);
 		if (typeof plugin.initConstructor === "function") BDFDB.TimeUtils.suppress(plugin.initConstructor.bind(plugin), "Could not initiate constructor!", plugin.name)();
 		if (typeof plugin.css === "string") BDFDB.DOMUtils.appendLocalStyle(plugin.name, plugin.css);
 
@@ -114,7 +113,6 @@
 
 		let url = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 
-		if (BDFDB.ObjectUtils.is(plugin.classes)) InternalBDFDB.removePluginClasses(plugin);
 		if (typeof plugin.css === "string") BDFDB.DOMUtils.removeLocalStyle(plugin.name);
 
 		BDFDB.ModuleUtils.unpatch(plugin);
@@ -127,8 +125,8 @@
 		for (let type in BDFDB.InternalData.componentPatchQueries) BDFDB.ArrayUtils.remove(BDFDB.InternalData.componentPatchQueries[type].query, plugin, true);
 		
 		for (let modal of document.querySelectorAll(`.${plugin.name}-modal, .${plugin.name.toLowerCase()}-modal, .${plugin.name}-settingsmodal, .${plugin.name.toLowerCase()}-settingsmodal`)) {
-			let closebutton = modal.querySelector(BDFDB.dotCN.modalclose);
-			if (closebutton) closebutton.click();
+			let closeButton = modal.querySelector(BDFDB.dotCN.modalclose);
+			if (closeButton) closeButton.click();
 		}
 		
 		delete BDFDB.DataUtils.cached[plugin.name]
