@@ -60,21 +60,6 @@
 		plugin.version = plugin.version || (typeof plugin.getVersion == "function" ? plugin.getVersion() : null);
 		plugin.author = plugin.author || (typeof plugin.getAuthor == "function" ? plugin.getAuthor() : null);
 		plugin.description = plugin.description || (typeof plugin.getDescription == "function" ? plugin.getDescription() : null);
-		
-		InternalBDFDB.clearStartTimeout(plugin);
-		
-		if (plugin.name == "PinDMs" && !BDFDB.DataUtils.load(plugin, "warnings", "01_04_2020")) BDFDB.ModalUtils.open(plugin, {
-			header: plugin.name,
-			subheader: "Issues",
-			text: `I am aware that PinDMs is broken right now, I will fix it as soon as I got some free time. Stop reporting this issue please and thank you.`,
-			buttons: [{
-				contents: "Understood",
-				close: true
-			}],
-			onClose: _ => {
-				BDFDB.DataUtils.save(true, plugin, "warnings", "01_04_2020");
-			}
-		});
 
 		let loadMessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
 		BDFDB.LogUtils.log(loadMessage, plugin.name);
