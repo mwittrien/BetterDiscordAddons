@@ -9222,7 +9222,8 @@
 	};
 
 	const BDFDB_Patrons = [
-		"363785301195358221"
+		"363785301195358221",
+		"443943393660239872"
 	];
 	InternalBDFDB._processAvatarRender = function (user, avatar) {
 		if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user)) {
