@@ -4,7 +4,7 @@ var ServerHider = (_ => {
 	return class ServerHider {
 		getName () {return "ServerHider";}
 
-		getVersion () {return "6.1.3";}
+		getVersion () {return "6.1.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,8 +12,7 @@ var ServerHider = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["No Folders","Plugin now works properly even if you got no server folders"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"],["Folder Support","You can now also hide folders with the plugin"]]
+				"fixed":[["Silent updates? NANI!","Fixed for discords sneaky updates"]]
 			};
 
 			this.patchedModules = {
@@ -138,30 +137,21 @@ var ServerHider = (_ => {
 			let hiddenGuildIds = BDFDB.DataUtils.load(this, "hidden", "servers") || [];
 			let hiddenFolderIds = BDFDB.DataUtils.load(this, "hidden", "folders") || [];
 			if (hiddenGuildIds.length || hiddenFolderIds.length) {
-				let guildChildren;
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["DragSource(ForwardRef(FluxContainer(GuildFolder)))", "DragSource(ForwardRef(FluxContainer(Guild)))"]});
-				if (index > -1) guildChildren = children;
-				else {
-					[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ConnectedUnreadDMs"});
-					if (index > -1) for (let sub of children) if (BDFDB.ArrayUtils.is(sub) && sub[0] && sub[0].type && sub[0].type.displayName == "DragSource(ConnectedGuild)") {
-						guildChildren = sub;
-						break;
-					}
-				}
-				if (guildChildren) for (let i in guildChildren) {
-					let child = guildChildren[i];
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:["folderId", "guildId"], someProps:true});
+				if (index > -1) for (let i in children) {
+					let child = children[i];
 					if (child.props.folderId) {
-						if (hiddenFolderIds.includes(child.props.folderId))	guildChildren[i] = null;
+						if (hiddenFolderIds.includes(child.props.folderId))	children[i] = null;
 						else {
 							let guildIds = [].concat(child.props.guildIds.filter(guildId => !hiddenGuildIds.includes(guildId)));
 							if (guildIds.length) {
 								child.props.hiddenGuildIds = [].concat(child.props.guildIds.filter(guildId => hiddenGuildIds.includes(guildId)));
 								child.props.guildIds = guildIds;
 							}
-							else guildChildren[i] = null;
+							else children[i] = null;
 						}
 					}
-					else if (child.props.guildId && hiddenGuildIds.includes(child.props.guildId)) guildChildren[i] = null;
+					else if (child.props.guildId && hiddenGuildIds.includes(child.props.guildId)) children[i] = null;
 				}
 			}
 		}
@@ -203,7 +193,7 @@ var ServerHider = (_ => {
 													className: BDFDB.disCN.guildfoldericonwrapperexpanded,
 													children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 														name: BDFDB.LibraryComponents.SvgIcon.Names.FOLDER,
-														style: {color: BDFDB.ColorUtils.convert(folder.folderColor, "RGB")}
+														color: BDFDB.ColorUtils.convert(folder.folderColor, "RGB") || BDFDB.DiscordConstants.Colors.BRAND
 													})
 												})
 											})

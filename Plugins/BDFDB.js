@@ -5103,6 +5103,7 @@
 		guildswrapperunreadmentionsbar: ["GuildsWrapper", "unreadMentionsBar"],
 		guildswrapperunreadmentionsbarbottom: ["GuildsWrapper", "unreadMentionsIndicatorBottom"],
 		guildswrapperunreadmentionsbartop: ["GuildsWrapper", "unreadMentionsIndicatorTop"],
+		guildtutorialcontainer: ["GuildsItems", "tutorialContainer"],
 		guildupperbadge: ["Guild", "upperBadge"],
 		guildupperleftbadge: ["BDFDB", "guildUpperLeftBadge"],
 		h1: ["Text", "h1"],
