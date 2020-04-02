@@ -49,7 +49,7 @@ var NotificationSounds = (_ => {
 	return class NotificationSounds {
 		getName () {return "NotificationSounds";}
 
-		getVersion () {return "3.4.1";}
+		getVersion () {return "3.4.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -57,7 +57,7 @@ var NotificationSounds = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["Role Mention","Similar to @everyone and @here you can not set a unique sound that plays when you are mentioned via a role mention"]]
+				"added":[["Blocked","No longer play mentioned sounds when a blocked user mentions you"]]
 			};
 
 			this.patchedModules = {
@@ -341,7 +341,7 @@ var NotificationSounds = (_ => {
 					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.MESSAGE_CREATE && e.methodArguments[0].message) {
 						let message = e.methodArguments[0].message;
 						let guildId = message.guild_id || null;
-						if (!BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildId, message.channel_id) && message.author.id != BDFDB.UserUtils.me.id) {
+						if (!BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildId, message.channel_id) && message.author.id != BDFDB.UserUtils.me.id && !BDFDB.LibraryModules.FriendUtils.isBlocked(message.author.id)) {
 							if (!guildId && !(choices.dm.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) {
 								this.fireEvent("dm");
 								this.playAudio("dm");
