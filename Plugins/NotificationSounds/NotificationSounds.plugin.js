@@ -57,7 +57,7 @@ var NotificationSounds = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["Blocked","No longer play mentioned sounds when a blocked user mentions you"]]
+				"fixed":[["Blocked","No longer play mentioned sounds when a blocked user mentions you"]]
 			};
 
 			this.patchedModules = {
