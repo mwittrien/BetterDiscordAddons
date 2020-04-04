@@ -30,8 +30,6 @@
 	const loadId = Math.round(Math.random() * 10000000000000000);
 	BDFDB.InternalData.loadId = loadId;
 	
-	var isGuildFolderThere = false; //REMOVE
-	
 	if (typeof Array.prototype.flat != "function") Array.prototype.flat = function () {return this;}
 
 	InternalBDFDB.defaults = {
@@ -1079,8 +1077,6 @@
 		return InternalBDFDB.getWebModuleReq.req;
 	};
 	
-	isGuildFolderThere = !!BDFDB.ModuleUtils.findByName("GuildFolder"); //REMOVE
-	
 	var WebModulesData = {};
 	WebModulesData.PatchTypes = ["before", "instead", "after"];
 	WebModulesData.PatchMap = {
@@ -1114,7 +1110,7 @@
 		"UserInfo"
 	];
 	WebModulesData.MemoComponent = [
-		!isGuildFolderThere && "GuildFolder", //REMOVE
+		"GuildFolder",
 		"MessageContent",
 		"NowPlayingHeader"
 	];
@@ -1131,7 +1127,7 @@
 		V2C_ContentColumn: ins => ins && ins.return && ins.return.stateNode && ins.return.stateNode.props && typeof ins.return.stateNode.props.title == "string" && (ins.return.stateNode.props.title.toUpperCase().indexOf("PLUGINS") == 0 || ins.return.stateNode.props.title.toUpperCase().indexOf("THEMES") == 0) && ins.return.type,
 		V2C_PluginCard: ins => ins && ins.return && ins.return.stateNode && ins.return.stateNode.props && ins.return.stateNode.props.addon && ins.return.stateNode.props.addon.plugin && ins.return.type,
 		V2C_ThemeCard: ins => ins && ins.return && ins.return.stateNode && ins.return.stateNode.props && ins.return.stateNode.props.addon && ins.return.stateNode.props.addon.css && ins.return.type,
-		GuildFolder: isGuildFolderThere ? null :ins => ins && ins.return && ins.return.memoizedProps && ins.return.memoizedProps.folderId && ins.return.memoizedProps.guildIds && ins.return.type //REMOVE
+		GuildFolder: ins => ins && ins.return && ins.return.memoizedProps && ins.return.memoizedProps.folderId && ins.return.memoizedProps.guildIds && ins.return.type
 	};
 	WebModulesData.PatchFinder = {
 		Account: "accountinfo",
@@ -1147,7 +1143,7 @@
 		DirectMessage: "guildouter",
 		EmojiPicker: "emojipicker",
 		Guild: "guildouter",
-		GuildFolder: isGuildFolderThere ? null :"guildfolderwrapper", //REMOVE
+		GuildFolder: "guildfolderwrapper",
 		GuildIcon: "avataricon",
 		Guilds: "guildswrapper",
 		GuildSettingsBans: "guildsettingsbannedcard",
@@ -1386,7 +1382,6 @@
 		if (!BDFDB.ObjectUtils.is(plugin) || !BDFDB.ObjectUtils.is(plugin.patchedModules)) return;
 		BDFDB.ModuleUtils.unpatch(plugin);
 		for (let patchType in plugin.patchedModules) for (let type in plugin.patchedModules[patchType]) {
-			if (isGuildFolderThere && type == "GuildFolder") plugin.patchedModules[patchType][type] = "render"; //REMOVE
 			let unmappedType = type.split(" _ _ ")[1] || type;
 			let component = WebModulesData.LoadedInComponents[type] && BDFDB.ReactUtils.getValue(InternalComponents, WebModulesData.LoadedInComponents[type]);
 			if (component) patchInstance(WebModulesData.NonRender.includes(unmappedType) ? (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports : component, type, patchType);
@@ -9629,11 +9624,6 @@
 		InternalComponents.LibraryComponents[component] = "div";
 		BDFDB.LibraryComponents[component] = "div";
 	}
-
-	// REMOVE
-	BDFDB.loadMessage = BDFDB.PluginUtils.init;
-	BDFDB.unloadMessage = BDFDB.PluginUtils.clear;
-	BDFDB.createSettingsPanel = BDFDB.PluginUtils.createSettingsPanel;
 
 	BDFDB.loaded = true;
 	window.BDFDB = BDFDB;
