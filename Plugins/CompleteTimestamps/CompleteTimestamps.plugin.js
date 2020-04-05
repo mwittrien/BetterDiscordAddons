@@ -6,17 +6,13 @@ var CompleteTimestamps = (_ => {
 	return class CompleteTimestamps {
 		getName () {return "CompleteTimestamps";}
 
-		getVersion () {return "1.4.3";}
+		getVersion () {return "1.4.4";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Replace all timestamps with complete timestamps.";}
 
 		constructor () {
-			this.changelog = {
-				"fixed":[["Compact Mode","All timestamps are now changed to your choosen format in compact mode, like the plugin used to (disable 'Replace Chat ...' to disable this)"],["Extra Space for Compact","In some cases the space for the compact timestamp wouldn't be enough for the timestamp forcing it to wrap into two lines, added extra space"]]
-			};
-
 			this.patchedModules = {
 				after: {
 					Message: "default",
@@ -362,7 +358,7 @@ var CompleteTimestamps = (_ => {
 			if (currentMode != compact) {
 				currentMode = compact;
 				if (compact && timestamp.props.className && typeof timestamp.type == "string") {
-					let tempTimestamp = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.messagecompact}"><${timestamp.type} class="${timestamp.props.className}" style="width: auto !important;">${this.getTimestamp(BDFDB.DataUtils.get(this, "choices", "creationDateLang"), new Date(253402124399995))}</${timestamp.type}></div>`);
+					let tempTimestamp = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.messagecompact}"><${timestamp.type} class="${timestamp.props.className}" style="width: auto !important;">${this.getTimestamp(languages[BDFDB.DataUtils.get(this, "choices", "creationDateLang")].id, new Date(253402124399995))}</${timestamp.type}></div>`);
 					document.body.appendChild(tempTimestamp);
 					let width = BDFDB.DOMUtils.getRects(tempTimestamp.firstElementChild).width + 10;
 					tempTimestamp.remove();
