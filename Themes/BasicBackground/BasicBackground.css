@@ -1123,7 +1123,8 @@ body:before {
 	position: relative;
 	padding-top: 10px;
 }
-.form-2fGMdU > * {
+.form-2fGMdU > *,
+.channelTextArea-rNsIhG {
 	z-index: 1;
 }
 .form-2fGMdU:after,
