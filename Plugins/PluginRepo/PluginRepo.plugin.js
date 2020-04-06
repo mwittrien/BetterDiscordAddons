@@ -478,7 +478,7 @@ var PluginRepo = (_ => {
 							text: BDFDB.LanguageUtils.LanguageStrings.NEW
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FavButton, {
-							className: BDFDB.disCNS._repoentryiconwrapper + BDFDB.disCN.cursorpointer,
+							className: BDFDB.disCN._repocontrolsbutton,
 							isFavorite: plugin.fav == favStates.FAVORIZED,
 							onClick: value => {
 								plugin.fav = value ? favStates.FAVORIZED : favStates.NOT_FAVORIZED;
