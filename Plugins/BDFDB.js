@@ -4642,7 +4642,11 @@
 		bottaginvert: ["BotTag", "botTagInvert"],
 		bottagmember: ["Member", "botTag"],
 		bottagnametag: ["NameTag", "bot"],
+		bottagpx: ["BotTag", "px"],
 		bottagregular: ["BotTag", "botTagRegular"],
+		bottagrem: ["BotTag", "rem"],
+		bottagtext: ["BotTag", "botText"],
+		bottagverified: ["BotTag", "botTagVerified"],
 		button: ["Button", "button"],
 		buttoncolorblack: ["Button", "colorBlack"],
 		buttoncolorbrand: ["Button", "colorBrand"],
@@ -6503,11 +6507,14 @@
 		handleContextMenu(e) {if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);}
 		render() {
 			return BDFDB.ReactUtils.createElement("span", {
-				className: BDFDB.DOMUtils.formatClassName(this.props.invertColor ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular, this.props.className),
+				className: BDFDB.DOMUtils.formatClassName(this.props.className, this.props.invertColor ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular, this.props.useRemSizes ? BDFDB.disCN.bottagrem : BDFDB.disCN.bottagpx),
 				style: this.props.style,
 				onClick: this.handleClick.bind(this),
 				onContextMenu: this.handleContextMenu.bind(this),
-				children: this.props.tag || BDFDB.LanguageUtils.LanguageStrings.BOT_TAG_BOT
+				children: BDFDB.ReactUtils.createElement("span", {
+					className: BDFDB.disCN.bottagtxt,
+					children: this.props.tag || BDFDB.LanguageUtils.LanguageStrings.BOT_TAG_BOT
+				})
 			});
 		}
 	};
