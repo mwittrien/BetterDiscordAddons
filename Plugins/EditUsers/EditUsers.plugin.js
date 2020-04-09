@@ -43,7 +43,6 @@ var EditUsers = (_ => {
 					IncomingCall: "render",
 					PrivateChannelCallParticipants: "render",
 					ChannelCall: "render",
-					VideoTile: "render",
 					UserSummaryItem: "render"
 				},
 				after: {
@@ -768,10 +767,6 @@ var EditUsers = (_ => {
 			if (BDFDB.ArrayUtils.is(e.instance.props.participants) && BDFDB.DataUtils.get(this, "settings", "changeInDmCalls")) {
 				for (let participant of e.instance.props.participants) if (participant && participant.user) participant.user = this.getUserData(participant.user.id);
 			}
-		}
-		
-		processVideoTile (e) {
-			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInDmCalls")) e.instance.props.user = this.getUserData(e.instance.props.user.id);
 		}
 
 		processUserSummaryItem (e) {
