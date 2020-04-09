@@ -6512,7 +6512,7 @@
 				onClick: this.handleClick.bind(this),
 				onContextMenu: this.handleContextMenu.bind(this),
 				children: BDFDB.ReactUtils.createElement("span", {
-					className: BDFDB.disCN.bottagtxt,
+					className: BDFDB.disCN.bottagtext,
 					children: this.props.tag || BDFDB.LanguageUtils.LanguageStrings.BOT_TAG_BOT
 				})
 			});
