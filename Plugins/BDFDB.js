@@ -2112,7 +2112,7 @@
 	InternalBDFDB.setDefaultProps = function (component, defaultProps) {
 		if (BDFDB.ObjectUtils.is(component)) component.defaultProps = Object.assign({}, component.defaultProps, defaultProps);
 	};
-	InternalBDFDB.loadPatchedComp = function (name) {
+	InternalBDFDB.loadPatchedComp = function (path) {
 		let comp = BDFDB.ReactUtils.getValue(window.BDFDB, `LibraryComponents.${path}`);
 		if (comp && comp.prototype && comp.prototype.BDFDBpatch) return comp;
 	};
