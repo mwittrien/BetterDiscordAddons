@@ -1160,7 +1160,6 @@
 		ModalLayer: "layermodal",
 		MutualGuilds: "userprofilebody",
 		MutualFriends: "userprofilebody",
-		NameTag: "nametag",
 		Note: "usernote",
 		PopoutContainer: "popout",
 		Popouts: "popouts",
@@ -1412,7 +1411,14 @@
 				if (instance) {
 					instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 					let patchMethods = {};
-					patchMethods[patchType] = e => {return InternalBDFDB.initiateProcess(plugin, type, {instance:window != e.thisObject ? e.thisObject : {props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:e.originalMethodName, patchtypes:[patchType]})};
+					patchMethods[patchType] = e => {
+						return InternalBDFDB.initiateProcess(plugin, type, {
+							instance: window != e.thisObject ? e.thisObject : {props:e.methodArguments[0]},
+							returnvalue: e.returnValue,
+							methodname: e.originalMethodName,
+							patchtypes: [patchType]
+						})
+					};
 					BDFDB.ModuleUtils.patch(plugin, WebModulesData.NonPrototype.includes(name) ? instance : instance.prototype, plugin.patchedModules[patchType][type], patchMethods);
 				}
 			}
