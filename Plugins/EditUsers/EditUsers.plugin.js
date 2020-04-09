@@ -4,7 +4,7 @@ var EditUsers = (_ => {
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.8.2";}
+		getVersion () {return "3.8.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ var EditUsers = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["DM Call","Works again in private calls"]]
+				"fixed":[["Tags","Properly work again"]]
 			};
 
 			this.patchedModules = {
@@ -329,32 +329,40 @@ var EditUsers = (_ => {
 		
 		processNameTag (e) {
 			if (e.instance.props.user && e.instance.props.className) {
-				let change = false, guildId = null, options = {changeBackground: false}, botClass = "";
+				let change = false, guildId = null;
+				let changeBackground = false;
+				let tagClass = "";
 				switch (e.instance.props.className) {
 					case BDFDB.disCN.userpopoutheadertagnonickname:
 						change = BDFDB.DataUtils.get(this, "settings", "changeInUserPopout");
 						guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
-						options.changeBackground = true;
-						botClass = BDFDB.disCN.bottagnametag;
+						changeBackground = true;
+						tagClass = BDFDB.disCN.bottagnametag;
 						break;
 					case BDFDB.disCN.userprofilenametag:
 						change = BDFDB.DataUtils.get(this, "settings", "changeInUserProfile");
 						guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
-						options.changeBackground = true;
-						botClass = BDFDB.disCNS.userprofilebottag + BDFDB.disCN.bottagnametag;
+						changeBackground = true;
+						tagClass = BDFDB.disCNS.userprofilebottag + BDFDB.disCN.bottagnametag;
 						break;
 					case BDFDB.disCN.guildsettingsinviteusername:
 						change = BDFDB.DataUtils.get(this, "settings", "changeInMemberLog");
 						break;
 					case BDFDB.disCN.userinfodiscordtag:
 						change = BDFDB.DataUtils.get(this, "settings", "changeInFriendList");
-						botClass = BDFDB.disCN.bottagnametag;
+						tagClass = BDFDB.disCN.bottagnametag;
 						break;
 				}
 				if (change) {
 					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.username]]});
-					if (index > -1) this.changeUserColor(children[index], e.instance.props.user.id, options);
-					if (botClass) this.injectBadge(e.returnvalue.props.children, e.instance.props.user.id, guildId, 2, botClass, e.instance.props.invertBotTagColor);
+					if (index > -1) this.changeUserColor(children[index], e.instance.props.user.id, {
+						changeBackground: changeBackground
+					});
+					if (tagClass) this.injectBadge(e.returnvalue.props.children, e.instance.props.user.id, guildId, 2, {
+						tagClass: tagClass,
+						useRem: e.instance.props.useRemSizes,
+						inverted: e.instance.props.invertBotTagColor
+					});
 				}
 			}
 		}
@@ -377,7 +385,10 @@ var EditUsers = (_ => {
 						let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadernickname]]});
 						if (index > -1) {
 							this.changeUserColor(children[index], e.instance.props.user.id, {changeBackground:true});
-							this.injectBadge(children, e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, BDFDB.disCN.bottagnametag, !!e.instance.props.activity);
+							this.injectBadge(children, e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
+								tagClass: BDFDB.disCN.bottagnametag,
+								inverted: !!e.instance.props.activity
+							});
 						}
 					}
 				}
@@ -520,7 +531,10 @@ var EditUsers = (_ => {
 						}
 						else this.changeUserColor(children[index], e.instance.props.message.author.id);
 					}
-					this.injectBadge(children, e.instance.props.message.author.id, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, 2, e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy);
+					this.injectBadge(children, e.instance.props.message.author.id, (BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id) || {}).guild_id, 2, {
+						tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
+						useRem: true
+					});
 				}
 			}
 		}
@@ -593,7 +607,9 @@ var EditUsers = (_ => {
 				}
 				else {
 					this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {changeBackground: true});
-					this.injectBadge(BDFDB.ReactUtils.getValue(e.returnvalue, "props.decorators.props.children"), e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, BDFDB.disCN.bottagmember);
+					this.injectBadge(BDFDB.ReactUtils.getValue(e.returnvalue, "props.decorators.props.children"), e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
+						tagClass: BDFDB.disCN.bottagmember
+					});
 				}
 			}
 		}
@@ -860,17 +876,18 @@ var EditUsers = (_ => {
 			return BDFDB.LibraryModules.IconUtils.getUserAvatarURL(user);
 		}
 		
-		injectBadge (children, userId, guildId, insertIndex, botClass = "", inverted = false) {
+		injectBadge (children, userId, guildId, insertIndex, config = {}) {
 			if (!BDFDB.ArrayUtils.is(children) || !userId) return;
 			let data = BDFDB.DataUtils.load(this, "users", userId);
 			if (data && data.tag) {
 				let memberColor = data.ignoreTagColor && (BDFDB.LibraryModules.MemberStore.getMember(guildId, userId) || {}).colorString;
-				let fontColor = !inverted ? data.color4 : (memberColor || data.color3);
-				let backgroundColor = !inverted ? (memberColor || data.color3) : data.color4;
+				let fontColor = !config.inverted ? data.color4 : (memberColor || data.color3);
+				let backgroundColor = !config.inverted ? (memberColor || data.color3) : data.color4;
 				let fontGradient = BDFDB.ObjectUtils.is(fontColor);
 				children.splice(insertIndex, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.BotTag, {
-					className: botClass,
-					invertColor: inverted,
+					className: config.tagClass,
+					useRemSizes: config.useRem,
+					invertColor: config.inverted,
 					style: {
 						background: BDFDB.ObjectUtils.is(backgroundColor) ? BDFDB.ColorUtils.createGradient(backgroundColor) : BDFDB.ColorUtils.convert(backgroundColor, "RGBA"),
 						color: fontGradient ? BDFDB.ColorUtils.convert(fontColor[0], "RGBA") : BDFDB.ColorUtils.convert(fontColor, "RGBA")
