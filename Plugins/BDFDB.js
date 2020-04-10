@@ -2181,7 +2181,7 @@
 	var myDataUser = LibraryModules.CurrentUserStore && LibraryModules.CurrentUserStore.getCurrentUser();
 	BDFDB.UserUtils.me = new Proxy(myDataUser || {}, {
 		get: function (list, item) {
-			return (myDataUser = LibraryModules.CurrentUserStore.getCurrentUser()) != null && myDataUser[item];
+			return (myDataUser = LibraryModules.CurrentUserStore.getCurrentUser()) && myDataUser[item];
 		}
 	});
 	BDFDB.UserUtils.getStatus = function (id = BDFDB.UserUtils.me.id) {
