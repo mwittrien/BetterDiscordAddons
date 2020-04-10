@@ -24,6 +24,7 @@ https://raw.githubusercontent.com/Curtis-D/FullScreenSearch/master/FullScreenSea
 https://raw.githubusercontent.com/Curtis-D/PinnedMessagesPlugin/master/PinnedMessagesPage.plugin.js
 https://raw.githubusercontent.com/Curtis-D/VIPs/master/VIPs.plugin.js
 https://raw.githubusercontent.com/DeathStrikeV/EvenBetterDiscord/master/EvenBetterDiscord.plugin.js
+https://raw.githubusercontent.com/Egrodo/DiscordPlugins/master/GameActivityToggle.plugin.js
 https://raw.githubusercontent.com/Finicalmist/ChangingBackground/master/changingBackground.plugin.js
 https://raw.githubusercontent.com/Finicalmist/CopyCode/master/copyCode.plugin.js
 https://raw.githubusercontent.com/hammy1/BDStuff/master/Plugins/dateViewer/dateViewer.plugin.js
@@ -181,6 +182,7 @@ https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/Sta
 https://raw.githubusercontent.com/samogot/betterdiscord-plugins/master/v1/1lib_discord_internals.plugin.js
 https://raw.githubusercontent.com/samogot/betterdiscord-plugins/master/v1/quoter.plugin.js
 https://raw.githubusercontent.com/Strencher/BetterDiscordStuff/master/OpenSpotifylinksInSpotify/OpenSpotifylinksInSpotify.plugin.js
+https://raw.githubusercontent.com/Strencher/BetterDiscordStuff/master/QuickMuteChannels/QuickMuteChannels.plugin.js
 https://raw.githubusercontent.com/TheDarkBomber/BD-Server-Themes/master/serverTheme.plugin.js
 https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/v1/BetterFolders.plugin.js
 https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/v1/BetterReplyer.plugin.js
