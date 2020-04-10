@@ -5907,7 +5907,6 @@
 		voiceclickable: ["VoiceChannel", "clickable"],
 		voicecontent: ["VoiceChannel", "content"],
 		voicedetails: ["VoiceDetails", "container"],
-		voicedetailsactive: ["VoiceDetailsPing", "active"],
 		voicedetailschannel: ["VoiceDetails", "channel"],
 		voicedetailscustomstatuscontainer: ["VoiceDetails", "customStatusContainer"],
 		voicedetailshotspot: ["VoiceDetails", "hotspot"],
