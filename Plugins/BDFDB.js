@@ -2175,14 +2175,13 @@
 	};
 		
 	BDFDB.UserUtils = {};
-	var myDataUser = LibraryModules.CurrentUserStore ? LibraryModules.CurrentUserStore.getCurrentUser() : null;
 	BDFDB.UserUtils.is = function (user) {
 		return user && user instanceof BDFDB.DiscordObjects.User;
 	};
+	var myDataUser = LibraryModules.CurrentUserStore && LibraryModules.CurrentUserStore.getCurrentUser();
 	BDFDB.UserUtils.me = new Proxy(myDataUser || {}, {
 		get: function (list, item) {
-			if (!myDataUser) myDataUser = LibraryModules.CurrentUserStore.getCurrentUser();
-			return myDataUser ? myDataUser[item] : null;
+			return (myDataUser = LibraryModules.CurrentUserStore.getCurrentUser()) != null && myDataUser[item];
 		}
 	});
 	BDFDB.UserUtils.getStatus = function (id = BDFDB.UserUtils.me.id) {
