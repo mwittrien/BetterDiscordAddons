@@ -5915,6 +5915,7 @@
 		voicedetailsinner: ["VoiceDetails", "inner"],
 		voicedetailslabelwrapper: ["VoiceDetailsPing", "labelWrapper"],
 		voicedetailsping: ["VoiceDetailsPing", "ping"],
+		voicedetailspingforeground: ["VoiceDetailsPing", "pingForeground"],
 		voicedetailsqualityaverage: ["VoiceDetailsPing", "rtcConnectionQualityAverage"],
 		voicedetailsqualitybad: ["VoiceDetailsPing", "rtcConnectionQualityBad"],
 		voicedetailsqualityfine: ["VoiceDetailsPing", "rtcConnectionQualityFine"],
