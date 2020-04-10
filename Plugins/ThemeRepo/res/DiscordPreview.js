@@ -1,3 +1,5 @@
+console.log("this is a test");
+
 window.global = window;
 
 window.onload = function () {

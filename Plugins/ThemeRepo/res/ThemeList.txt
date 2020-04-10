@@ -1,5 +1,3 @@
-https://gist.githubusercontent.com/Jiiks/0caa8a575125cca6634424eeaefca4f4/raw/ServerGrid.theme.css
-https://gist.githubusercontent.com/Jiiks/e1026d29aac91e7a7ad2d90dee87c90c/raw/ServerGrid2C.theme.css
 https://raw.githubusercontent.com/AccraZed/YoRHA-UI-BetterDiscord/master/NieR-Automata-UI-import.theme.css
 https://raw.githubusercontent.com/AltenGD/Altens-betterdiscord-Themes-Plugins/master/Themes/FrostedGlassRewrite.theme.css
 https://raw.githubusercontent.com/AltenGD/Altens-betterdiscord-Themes-Plugins/master/Themes/MiniTheme.theme.css
