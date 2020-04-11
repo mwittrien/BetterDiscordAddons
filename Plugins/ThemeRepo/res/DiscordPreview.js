@@ -5,9 +5,9 @@
 	
 	window.respondToParent = function (data = {}) {
 		if (window.parent && typeof window.parent.postMessage == "function") window.parent.postMessage(data, "*");
-		else if (window.hostId && window.hostName) {
+		else if (data.hostId && data.hostName) {
 			let ipcRenderer = (require("electron") || {}).ipcRenderer;
-			if (ipcRenderer && typeof ipcRenderer.sendTo == "function") ipcRenderer.sendTo(window.hostId, window.hostName, data);
+			if (ipcRenderer && typeof ipcRenderer.sendTo == "function") ipcRenderer.sendTo(data.hostId, data.hostName, data);
 		}
 	};
 
