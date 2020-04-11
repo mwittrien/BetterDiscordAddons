@@ -76,7 +76,7 @@
 						if (browserWindow) document.addEventListener("click", event => {
 							let button = getParent(dotCNC.titlebarmacbutton + dotCN.titlebarwinbutton, event.target);
 							if (button) {
-								if (button.className.indexOf(disCN.titlebarmacbuttonclose) > -1 || button.className.indexOf(disCN.titlebarmacbuttonclose) > -1) browserWindow.close();
+								if (button.className.indexOf(disCN.titlebarmacbuttonclose) > -1 || button.className.indexOf(disCN.titlebarwinbuttonclose) > -1) browserWindow.close();
 								else if (button.className.indexOf(disCN.titlebarmacbuttonmax) > -1 || (button.className.indexOf(disCN.titlebarwinbuttonminmax) > -1 && button.parentElement.lastElementChild != button)) {
 									if (browserWindow.isMaximized()) browserWindow.unmaximize();
 									else browserWindow.maximize();
