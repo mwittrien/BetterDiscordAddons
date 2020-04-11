@@ -5948,30 +5948,30 @@
 	BDFDB.DiscordClasses = Object.assign({}, DiscordClasses);
 
 	InternalBDFDB.getDiscordClass = (item, selector) => {
-		var classname = DiscordClassModules.BDFDB.BDFDBundefined;
+		let className = DiscordClassModules.BDFDB.BDFDBundefined;
 		if (DiscordClasses[item] === undefined) {
 			BDFDB.LogUtils.warn(item + " not found in DiscordClasses");
-			return classname;
+			return className;
 		} 
 		else if (!BDFDB.ArrayUtils.is(DiscordClasses[item]) || DiscordClasses[item].length != 2) {
 			BDFDB.LogUtils.warn(item + " is not an Array of Length 2 in DiscordClasses");
-			return classname;
+			return className;
 		}
 		else if (DiscordClassModules[DiscordClasses[item][0]] === undefined) {
 			BDFDB.LogUtils.warn(DiscordClasses[item][0] + " not found in DiscordClassModules");
-			return classname;
+			return className;
 		}
 		else if (DiscordClassModules[DiscordClasses[item][0]][DiscordClasses[item][1]] === undefined) {
 			BDFDB.LogUtils.warn(DiscordClasses[item][1] + " not found in " + DiscordClasses[item][0] + " in DiscordClassModules");
-			return classname;
+			return className;
 		}
 		else {
-			classname = DiscordClassModules[DiscordClasses[item][0]][DiscordClasses[item][1]];
+			className = DiscordClassModules[DiscordClasses[item][0]][DiscordClasses[item][1]];
 			if (selector) {
-				classname = classname.split(" ").filter(n => n.indexOf("da-") != 0).join(selector ? "." : " ");
-				classname = classname || DiscordClassModules.BDFDB.BDFDBundefined;
+				className = className.split(" ").filter(n => n.indexOf("da-") != 0).join(selector ? "." : " ");
+				className = className || DiscordClassModules.BDFDB.BDFDBundefined;
 			}
-			return classname;
+			return className;
 		}	
 	};
 	BDFDB.disCN = new Proxy(DiscordClasses, {
@@ -5991,20 +5991,20 @@
 	});
 	BDFDB.dotCN = new Proxy(DiscordClasses, {
 		get: function (list, item) {
-			let classname = InternalBDFDB.getDiscordClass(item, true);
-			return (classname.indexOf("#") == 0 ? "" : ".") + classname;
+			let className = InternalBDFDB.getDiscordClass(item, true);
+			return (className.indexOf("#") == 0 ? "" : ".") + className;
 		}
 	});
 	BDFDB.dotCNS = new Proxy(DiscordClasses, {
 		get: function (list, item) {
-			let classname = InternalBDFDB.getDiscordClass(item, true);
-			return (classname.indexOf("#") == 0 ? "" : ".") + classname + " ";
+			let className = InternalBDFDB.getDiscordClass(item, true);
+			return (className.indexOf("#") == 0 ? "" : ".") + className + " ";
 		}
 	});
 	BDFDB.dotCNC = new Proxy(DiscordClasses, {
 		get: function (list, item) {
-			let classname = InternalBDFDB.getDiscordClass(item, true);
-			return (classname.indexOf("#") == 0 ? "" : ".") + classname + ",";
+			let className = InternalBDFDB.getDiscordClass(item, true);
+			return (className.indexOf("#") == 0 ? "" : ".") + className + ",";
 		}
 	});
 	BDFDB.notCN = new Proxy(DiscordClasses, {

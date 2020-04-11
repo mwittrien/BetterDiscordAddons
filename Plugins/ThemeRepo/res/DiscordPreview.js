@@ -122,20 +122,61 @@
 			}
 		}
 	};
-	
-	let disCN = new Proxy({}, {
+	let disCN = new Proxy(DiscordClasses, {
 		get: function (list, item) {
-			return getDiscordClass(item).replace('#', '');
+			return getDiscordClass(item, false).replace("#", "");
 		}
 	});
-	let getDiscordClass = function (item) {
+	let disCNS = new Proxy(DiscordClasses, {
+		get: function (list, item) {
+			return getDiscordClass(item, false).replace("#", "") + " ";
+		}
+	});
+	let disCNC = new Proxy(DiscordClasses, {
+		get: function (list, item) {
+			return getDiscordClass(item, false).replace("#", "") + ",";
+		}
+	});
+	let dotCN = new Proxy(DiscordClasses, {
+		get: function (list, item) {
+			let className = getDiscordClass(item, true);
+			return (className.indexOf("#") == 0 ? "" : ".") + className;
+		}
+	});
+	let dotCNS = new Proxy(DiscordClasses, {
+		get: function (list, item) {
+			let className = getDiscordClass(item, true);
+			return (className.indexOf("#") == 0 ? "" : ".") + className + " ";
+		}
+	});
+	let dotCNC = new Proxy(DiscordClasses, {
+		get: function (list, item) {
+			let className = getDiscordClass(item, true);
+			return (className.indexOf("#") == 0 ? "" : ".") + className + ",";
+		}
+	});
+	let notCN = new Proxy(DiscordClasses, {
+		get: function (list, item) {
+			return `:not(.${getDiscordClass(item, true).split(".")[0]})`;
+		}
+	});
+	let notCNS = new Proxy(DiscordClasses, {
+		get: function (list, item) {
+			return `:not(.${getDiscordClass(item, true).split(".")[0]}) `;
+		}
+	});
+	let notCNC = new Proxy(DiscordClasses, {
+		get: function (list, item) {
+			return `:not(.${getDiscordClass(item, true).split(".")[0]}),`;
+		}
+	});
+	let getDiscordClass = function (item, selector) {
 		let className = "Preview_undefined";
-		if (DiscordClasses === undefined || DiscordClassModules === undefined) return className;
-		else if (DiscordClasses[item] === undefined) {
+		if (DiscordClasses[item] === undefined) {
 			if (userId == "278543574059057154") console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', item + ' not found in DiscordClasses');
 			return className;
 		} 
-		else if (!Array.isArray(DiscordClasses[item]) || DiscordClasses[item].length != 2) {
+		else if (!BDFDB.ArrayUtils.is(DiscordClasses[item]) || DiscordClasses[item].length != 2) {
 			if (userId == "278543574059057154") console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', item + ' is not an Array of Length 2 in DiscordClasses');
 			return className;
 		}
@@ -147,7 +188,14 @@
 			if (userId == "278543574059057154") console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', DiscordClasses[item][1] + ' not found in ' + DiscordClasses[item][0] + ' in DiscordClassModules');
 			return className;
 		}
-		else return className = DiscordClassModules[DiscordClasses[item][0]][DiscordClasses[item][1]];
+		else {
+			className = DiscordClassModules[DiscordClasses[item][0]][DiscordClasses[item][1]];
+			if (selector) {
+				className = className.split(" ").filter(n => n.indexOf("da-") != 0).join(selector ? "." : " ");
+				className = className || "Preview_undefined";
+			}
+			return className;
+		}
 	};
 	
 	if (typeof window.require != "function") window.require = function () {
