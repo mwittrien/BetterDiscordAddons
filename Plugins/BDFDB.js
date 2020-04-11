@@ -3858,21 +3858,23 @@
 	};
 
 	BDFDB.WindowUtils = {};
-	BDFDB.WindowUtils.open = function (plugin, url, options) {
+	BDFDB.WindowUtils.open = function (plugin, url, options = {}) {
 		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (!BDFDB.ObjectUtils.is(plugin) || !url) return;
 		if (!BDFDB.ArrayUtils.is(plugin.browserWindows)) plugin.browserWindows = [];
-		let browserWindow = new LibraryRequires.electron.remote.BrowserWindow(Object.assign({
+		let config = Object.assign({
 			show: false,
 			webPreferences: {
 				nodeIntegration: true,
 				nodeIntegrationInWorker: true
 			}
-		}, options));
+		}, options);
+		let browserWindow = new LibraryRequires.electron.remote.BrowserWindow(config);
+		if (!config.show && config.showOnReady) browserWindow.once("ready-to-show", browserWindow.show);
 		if (typeof browserWindow.removeMenu == "function") browserWindow.removeMenu();
 		else browserWindow.setMenu(null);
 		browserWindow.loadURL(url);
-		browserWindow.executeJavaScriptSafe = javaJS => {if (!browserWindow.isDestroyed()) browserWindow.webContents.executeJavaScript(javaJS);};
+		browserWindow.executeJavaScriptSafe = js => {if (!browserWindow.isDestroyed()) browserWindow.webContents.executeJavaScript(js);};
 		plugin.browserWindows.push(browserWindow);
 		return browserWindow;
 	};
