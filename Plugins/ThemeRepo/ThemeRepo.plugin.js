@@ -97,12 +97,12 @@ var ThemeRepo = (_ => {
 						}
 						delete this.props.options.currentTheme;
 						this.props.plugin.updateList(instance, this.props.options);
-						this.props.options.frame.contentWindow.postMessage({
+						this.props.options.frame.executeJavaScriptSafe(`window.onmessage({
 							origin: "ThemeRepo",
 							reason: "NewTheme",
 							checked: true,
-							css: (loadedThemes[value.value] || {}).fullcss
-						}, "*");
+							css: ${JSON.stringify((loadedThemes[value.value] || {}).fullcss || "")}
+						})`);
 					}
 				}),
 				theme && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -125,13 +125,17 @@ var ThemeRepo = (_ => {
 	return class ThemeRepo {
 		getName () {return "ThemeRepo";}
 
-		getVersion () {return "1.9.6";}
+		getVersion () {return "1.9.7";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-		constructor () {			
+		constructor () {
+			this.changelog = {
+				"improved":[["Preview","Switched from using and iFrame to using an extra Browser Window to display the preview"]]
+			};
+			
 			this.patchedModules = {
 				after: {
 					V2C_ContentColumn: "render"
@@ -151,6 +155,7 @@ var ThemeRepo = (_ => {
 			this.defaults = {
 				settings: {
 					useChromium: 		{value:false,		description:"Use an inbuilt browser window instead of opening your default browser"},
+					keepOnTop: 			{value:false,		description:"Keep the preview window always on top"},
 					notifyOutdated:		{value:true, 		description:"Notifies you when one of your Themes is outdated"},
 					notifyNewentries:	{value:true, 		description:"Notifies you when there are new entries in the Repo"}
 				},
@@ -366,16 +371,14 @@ var ThemeRepo = (_ => {
 		}
 		
 		getCustomList () {
-			let customlist = BDFDB.DataUtils.load(this, "custom");
-			return BDFDB.ArrayUtils.is(customlist) ? customlist : [];
+			let customList = BDFDB.DataUtils.load(this, "custom");
+			return BDFDB.ArrayUtils.is(customList) ? customList : [];
 		}
 
 
 		openThemeRepoModal (options = {}) {
 			if (loading.is) BDFDB.NotificationUtils.toast(`Themes are still being fetched. Try again in some seconds.`, {type:"danger"});
-			else {
-				let keyPressed, messageReceived;
-				
+			else {				
 				let modalSettings = BDFDB.DataUtils.get(this, "modalSettings");
 				let searchTimeout, automaticLoading = BDFDB.BDUtils.isAutoLoadEnabled();
 				options = Object.assign(options, modalSettings);
@@ -386,7 +389,33 @@ var ThemeRepo = (_ => {
 				options.sortKey = options.forcedSort || Object.keys(sortKeys)[0];
 				options.orderKey = options.forcedOrder || Object.keys(orderKeys)[0];
 				
-				options.frame = BDFDB.DOMUtils.create(`<iframe class="discordPreview" src="https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/DiscordPreview.html"></iframe>`)
+				options.frame = BDFDB.WindowUtils.open(this, "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/DiscordPreview.html", {
+					alwaysOnTop: BDFDB.DataUtils.get(this, "settings", "keepOnTop"),
+					showOnReady: true,
+					frame: false,
+					onLoad: _ => {
+						let nativeCSS = document.querySelector("head link[rel='stylesheet'][integrity]");
+						let titleBar = document.querySelector(BDFDB.dotCN.titlebar);
+						options.frame.executeJavaScriptSafe(`window.onmessage({
+							origin: "ThemeRepo",
+							reason: "OnLoad",
+							username: ${JSON.stringify(BDFDB.UserUtils.me.username || "")},
+							id: ${JSON.stringify(BDFDB.UserUtils.me.id || "")},
+							discriminator: ${JSON.stringify(BDFDB.UserUtils.me.discriminator || "")},
+							avatar: ${JSON.stringify(BDFDB.UserUtils.getAvatar() || "")},
+							classes: ${JSON.stringify(JSON.stringify(BDFDB.DiscordClasses))},
+							classModules: ${JSON.stringify(JSON.stringify(BDFDB.DiscordClassModules))},
+							nativeCSS: ${JSON.stringify(nativeCSS && nativeCSS.href || "")},
+							htmlClassName: ${JSON.stringify(document.documentElement.className || "")},
+							titleBar: ${JSON.stringify(titleBar && titleBar.outerHTML || "")}
+						})`);
+						options.frame.executeJavaScriptSafe(`window.onmessage({
+							origin: "ThemeRepo",
+							reason: "DarkLight",
+							checked: ${BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight}
+						})`);
+					}
+				});
 				
 				let entries = this.createEntries(options);
 				BDFDB.ModalUtils.open(this, {
@@ -489,11 +518,11 @@ var ThemeRepo = (_ => {
 									label: "Preview in light mode",
 									value: BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight,
 									onChange: (value, instance) => {
-										options.frame.contentWindow.postMessage({
+										options.frame.executeJavaScriptSafe(`window.onmessage({
 											origin: "ThemeRepo",
 											reason: "DarkLight",
-											checked: value
-										}, "*");
+											checked: ${value}
+										})`);
 									}
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -502,11 +531,11 @@ var ThemeRepo = (_ => {
 									label: "Preview with normalized classes",
 									value: BDFDB.BDUtils.getSettings("fork-ps-4"),
 									onChange: (value, instance) => {
-										options.frame.contentWindow.postMessage({
+										options.frame.executeJavaScriptSafe(`window.onmessage({
 											origin: "ThemeRepo",
 											reason: "Normalize",
-											checked: value
-										}, "*");
+											checked: ${value}
+										})`);
 									}
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -516,12 +545,12 @@ var ThemeRepo = (_ => {
 									value: false,
 									onChange: (value, instance) => {
 										let customCSS = document.querySelector("style#customcss");
-										if (customCSS && customCSS.innerText.length > 0) options.frame.contentWindow.postMessage({
+										if (customCSS && customCSS.innerText.length > 0) options.frame.executeJavaScriptSafe(`window.onmessage({
 											origin: "ThemeRepo",
 											reason: "CustomCSS",
-											checked: value,
-											css: customCSS.innerText
-										}, "*");
+											checked: ${value},
+											css: ${JSON.stringify(customCSS.innerText || "")}
+										})`);
 									}
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
@@ -531,12 +560,12 @@ var ThemeRepo = (_ => {
 									value: false,
 									onChange: (value, instance) => {
 										BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeFixer.css", (error, response, body) => {
-											options.frame.contentWindow.postMessage({
+											options.frame.executeJavaScriptSafe(`window.onmessage({
 												origin: "ThemeRepo",
 												reason: "ThemeFixer",
-												checked: value,
-												css: this.createFixerCSS(body)
-											}, "*");
+												checked: ${value},
+												css: ${JSON.stringify(this.createFixerCSS(body) || "")}
+											})`);
 										});
 									}
 								}),
@@ -568,73 +597,8 @@ var ThemeRepo = (_ => {
 							].flat(10).filter(n => n)
 						})
 					],
-					onOpen: (modal, instance) => {
-						let layerContainer = BDFDB.DOMUtils.getParent(BDFDB.dotCN.itemlayercontainer, modal);
-						BDFDB.ListenerUtils.addToChildren(layerContainer, "mouseenter", BDFDB.dotCN.backdropwithlayer, e => {
-							if (!document.querySelector(BDFDB.dotCN.colorpicker)) {
-								for (let child of layerContainer.childNodes) {
-									child.style.setProperty("transition", "opacity .5s ease-in-out", "important");
-									child.style.setProperty("opacity", "0", "important");
-								}
-							}
-						});
-						BDFDB.ListenerUtils.addToChildren(layerContainer, "mouseleave", BDFDB.dotCN.backdropwithlayer, e => {
-							if (!document.querySelector(BDFDB.dotCN.colorpicker)) {
-								layerContainer.childNodes[0].style.setProperty("opacity", "0.85");
-								layerContainer.childNodes[1].style.setProperty("opacity", "1");
-								BDFDB.TimeUtils.timeout(_ => {for (let child of layerContainer.childNodes) child.style.removeProperty("transition");}, 500);
-							}
-						});
-						keyPressed = e => {
-							if (e.which == 17) {
-								if (!Array.from(document.querySelectorAll(BDFDB.dotCNC.input + BDFDB.dotCN.searchbarinput)).some(ele => ele == document.activeElement)) BDFDB.DOMUtils.toggle(layerContainer);
-							}
-							else if (e.which == 27) options.frame.remove();
-						};
-						messageReceived = e => {
-							if (!document.contains(options.frame)) {
-								document.removeEventListener("keyup", keyPressed);
-								window.removeEventListener("message", messageReceived);
-							}
-							else if (typeof e.data === "object" && e.data.origin == "DiscordPreview") {
-								switch (e.data.reason) {
-									case "OnLoad":
-										let nativecss = document.querySelector("head link[rel='stylesheet'][integrity]");
-										let titlebar = document.querySelector(BDFDB.dotCN.titlebar);
-										options.frame.contentWindow.postMessage({
-											origin: "ThemeRepo",
-											reason: "OnLoad",
-											classes: JSON.stringify(BDFDB.DiscordClasses),
-											classmodules: JSON.stringify(BDFDB.DiscordClassModules),
-											username: BDFDB.UserUtils.me.username,
-											id: BDFDB.UserUtils.me.id,
-											discriminator: BDFDB.UserUtils.me.discriminator,
-											avatar: BDFDB.UserUtils.getAvatar(),
-											nativecss: nativecss && nativecss.href,
-											html: document.documentElement.className,
-											titlebar: titlebar && titlebar.outerHTML
-										}, "*");
-										options.frame.contentWindow.postMessage({
-											origin: "ThemeRepo",
-											reason: "DarkLight",
-											checked: BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight
-										}, "*");
-										break;
-									case "KeyUp":
-										keyPressed(e.data);
-										break;
-								}
-							}
-						};
-
-						document.addEventListener("keyup", keyPressed);
-						window.addEventListener("message", messageReceived);
-						document.body.insertBefore(options.frame, document.body.firstElementChild);
-					},
 					onClose: (modal, instance) => {
-						options.frame.remove();
-						document.removeEventListener("keyup", keyPressed);
-						window.removeEventListener("message", messageReceived);
+						BDFDB.WindowUtils.close(options.frame);
 					}
 				});
 			}
@@ -719,16 +683,16 @@ var ThemeRepo = (_ => {
 									name: BDFDB.LibraryComponents.SvgIcon.Names.GITHUB,
 									className: BDFDB.disCN._repoicon,
 									onClick: _ => {
-										let giturl = null;
+										let gitUrl = null;
 										if (theme.requesturl.indexOf("https://raw.githubusercontent.com") == 0) {
 											let temp = theme.requesturl.replace("//raw.githubusercontent", "//github").split("/");
 											temp.splice(5, 0, "blob");
-											giturl = temp.join("/");
+											gitUrl = temp.join("/");
 										}
 										else if (theme.requesturl.indexOf("https://gist.githubusercontent.com/") == 0) {
-											giturl = theme.requesturl.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
+											gitUrl = theme.requesturl.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
 										}
-										if (giturl) BDFDB.DiscordUtils.openLink(giturl, BDFDB.DataUtils.get(this, "settings", "useChromium"));
+										if (gitUrl) BDFDB.DiscordUtils.openLink(gitUrl, BDFDB.DataUtils.get(this, "settings", "useChromium"));
 									}
 								})
 							})
@@ -741,12 +705,12 @@ var ThemeRepo = (_ => {
 								delete options.currentGenerator;
 								delete options.generatorValues;
 								this.updateList(instance, options);
-								options.frame.contentWindow.postMessage({
+								options.frame.executeJavaScriptSafe(`window.onmessage({
 									origin: "ThemeRepo",
 									reason: "NewTheme",
-									checked: value,
-									css: theme.css
-								}, "*");
+									checked: ${value},
+									css: ${JSON.stringify(theme.css || "")}
+								})`);
 							}
 						})
 					],
@@ -848,12 +812,12 @@ var ThemeRepo = (_ => {
 							BDFDB.TimeUtils.clear(updateTimeout);
 							updateTimeout = BDFDB.TimeUtils.timeout(_ => {
 								options.generatorValues[varName] = {value, oldValue};
-								options.frame.contentWindow.postMessage({
+								options.frame.executeJavaScriptSafe(`window.onmessage({
 									origin: "ThemeRepo",
 									reason: "NewTheme",
 									checked: true,
-									css: this.generateTheme(theme, options)
-								}, "*");
+									css: ${JSON.stringify(this.generateTheme(theme, options) || "")}
+								})`);
 							}, 1000);
 						}
 					}));
