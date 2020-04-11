@@ -531,10 +531,10 @@
 		let toasts = document.querySelector(".toasts, .bd-toasts");
 		if (!toasts) {
 			let channels = document.querySelector(BDFDB.dotCN.channels + " + div");
-			let channelrects = channels ? BDFDB.DOMUtils.getRects(channels) : null;
+			let channelRects = channels ? BDFDB.DOMUtils.getRects(channels) : null;
 			let members = channels ? channels.querySelector(BDFDB.dotCN.memberswrap) : null;
-			let left = channelrects ? channelrects.left : 310;
-			let width = channelrects ? (members ? channelrects.width - BDFDB.DOMUtils.getRects(members).width : channelrects.width) : window.outerWidth - 0;
+			let left = channelRects ? channelRects.left : 310;
+			let width = channelRects ? (members ? channelRects.width - BDFDB.DOMUtils.getRects(members).width : channelRects.width) : window.outerWidth - 0;
 			let form = channels ? channels.querySelector("form") : null;
 			let bottom = form ? BDFDB.DOMUtils.getRects(form).height : 80;
 			toasts = BDFDB.DOMUtils.create(`<div class="toasts bd-toasts" style="width:${width}px; left:${left}px; bottom:${bottom}px;"></div>`);
@@ -810,23 +810,23 @@
 
 		(tooltip.update = _ => {
 			let pointer = tooltip.querySelector(BDFDB.dotCN.tooltippointer);
-			let left, top, trects = BDFDB.DOMUtils.getRects(anker), irects = BDFDB.DOMUtils.getRects(itemLayer), arects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount)), positionOffsets = {height: 10, width: 10}, offset = typeof options.offset == "number" ? options.offset : 0;
+			let left, top, tRects = BDFDB.DOMUtils.getRects(anker), iRects = BDFDB.DOMUtils.getRects(itemLayer), aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount)), positionOffsets = {height: 10, width: 10}, offset = typeof options.offset == "number" ? options.offset : 0;
 			switch (type) {
 				case "top":
-					top = trects.top - irects.height - positionOffsets.height + 2 - offset;
-					left = trects.left + (trects.width - irects.width) / 2;
+					top = tRects.top - iRects.height - positionOffsets.height + 2 - offset;
+					left = tRects.left + (tRects.width - iRects.width) / 2;
 					break;
 				case "bottom":
-					top = trects.top + trects.height + positionOffsets.height - 2 + offset;
-					left = trects.left + (trects.width - irects.width) / 2;
+					top = tRects.top + tRects.height + positionOffsets.height - 2 + offset;
+					left = tRects.left + (tRects.width - iRects.width) / 2;
 					break;
 				case "left":
-					top = trects.top + (trects.height - irects.height) / 2;
-					left = trects.left - irects.width - positionOffsets.width + 2 - offset;
+					top = tRects.top + (tRects.height - iRects.height) / 2;
+					left = tRects.left - iRects.width - positionOffsets.width + 2 - offset;
 					break;
 				case "right":
-					top = trects.top + (trects.height - irects.height) / 2;
-					left = trects.left + trects.width + positionOffsets.width - 2 + offset;
+					top = tRects.top + (tRects.height - iRects.height) / 2;
+					left = tRects.left + tRects.width + positionOffsets.width - 2 + offset;
 					break;
 				}
 				
@@ -841,9 +841,9 @@
 					pointer.style.setProperty("margin-left", `${left - 10}px`);
 				}
 				else {
-					let rightMargin = arects.width - (left + irects.width);
+					let rightMargin = aRects.width - (left + iRects.width);
 					if (rightMargin < 0) {
-						itemLayer.style.setProperty("left", (arects.width - irects.width - 5) + "px");
+						itemLayer.style.setProperty("left", (aRects.width - iRects.width - 5) + "px");
 						pointer.style.setProperty("margin-left", `${-1*rightMargin}px`);
 					}
 				}
@@ -854,9 +854,9 @@
 					pointer.style.setProperty("margin-top", `${top - 10}px`);
 				}
 				else {
-					let bottomMargin = arects.height - (top + irects.height);
+					let bottomMargin = aRects.height - (top + iRects.height);
 					if (bottomMargin < 0) {
-						itemLayer.style.setProperty("top", arects.height - irects.height - 5 + "px");
+						itemLayer.style.setProperty("top", aRects.height - iRects.height - 5 + "px");
 						pointer.style.setProperty("margin-top", `${-1*bottomMargin}px`);
 					}
 				}
@@ -2902,23 +2902,22 @@
 		};
 		document.addEventListener("mousedown", removePopout);
 
-		let hexinput = colorPicker.querySelector(BDFDB.dotCNS.colorpickerhexinput + BDFDB.dotCN.input);
-		let satpane = colorPicker.querySelector(".saturation-color");
-		let satcursor = colorPicker.querySelector(".saturation-cursor");
-		let huepane = colorPicker.querySelector(".hue-horizontal");
-		let huecursor = colorPicker.querySelector(".hue-cursor");
-		let alphabar = colorPicker.querySelector(".alpha-bar");
-		let alphapane = colorPicker.querySelector(".alpha-horizontal");
-		let alphacursor = colorPicker.querySelector(".alpha-cursor");
-		let gradientbutton = colorPicker.querySelector(".gradient-button");
-		let gradientbar = colorPicker.querySelector(".gradient-bar");
-		let gradientpane = colorPicker.querySelector(".gradient-horizontal");
+		let hexInput = colorPicker.querySelector(BDFDB.dotCNS.colorpickerhexinput + BDFDB.dotCN.input);
+		let satPane = colorPicker.querySelector(".saturation-color");
+		let satCursor = colorPicker.querySelector(".saturation-cursor");
+		let huePane = colorPicker.querySelector(".hue-horizontal");
+		let hueCursor = colorPicker.querySelector(".hue-cursor");
+		let alphaPane = colorPicker.querySelector(".alpha-horizontal");
+		let alphaCursor = colorPicker.querySelector(".alpha-cursor");
+		let gradientButton = colorPicker.querySelector(".gradient-button");
+		let gradientBar = colorPicker.querySelector(".gradient-bar");
+		let gradientPane = colorPicker.querySelector(".gradient-horizontal");
 
 		let sMinX, sMaxX, sMinY, sMaxY, hMinX, hMaxX, aMinX, aMaxX, gMinX, gMaxX;
 
 		updateRects();
 		
-		if (isGradient) for (let pos in color) if (pos > 0 && pos < 1) gradientpane.appendChild(BDFDB.DOMUtils.create(`<div class="gradient-cursor" style="position: absolute; left: ${pos * 100}%;"><div style="background-color: ${BDFDB.ColorUtils.convert(color[pos], "RGBA")} !important;"></div></div>`));
+		if (isGradient) for (let pos in color) if (pos > 0 && pos < 1) gradientPane.appendChild(BDFDB.DOMUtils.create(`<div class="gradient-cursor" style="position: absolute; left: ${pos * 100}%;"><div style="background-color: ${BDFDB.ColorUtils.convert(color[pos], "RGBA")} !important;"></div></div>`));
 
 		updateColors(false);
 		
@@ -2949,7 +2948,7 @@
 			document.addEventListener("mouseup", mouseup);
 			document.addEventListener("mousemove", mousemove);
 		});
-		satpane.addEventListener("mousedown", e => {
+		satPane.addEventListener("mousedown", e => {
 			s = BDFDB.NumberUtils.mapRange([sMinX, sMaxX], [0, 100], e.clientX) + "%";
 			l = BDFDB.NumberUtils.mapRange([sMinY, sMaxY], [100, 0], e.clientY) + "%";
 			updateColors(true);
@@ -2965,7 +2964,7 @@
 			document.addEventListener("mouseup", mouseup);
 			document.addEventListener("mousemove", mousemove);
 		});
-		huepane.addEventListener("mousedown", e => {
+		huePane.addEventListener("mousedown", e => {
 			h = BDFDB.NumberUtils.mapRange([hMinX, hMaxX], [0, 360], e.clientX);
 			updateColors(true);
 			let mouseup = _ => {
@@ -2979,7 +2978,7 @@
 			document.addEventListener("mouseup", mouseup);
 			document.addEventListener("mousemove", mousemove);
 		});
-		alphapane.addEventListener("mousedown", e => {
+		alphaPane.addEventListener("mousedown", e => {
 			a = BDFDB.NumberUtils.mapRange([aMinX, aMaxX], [0, 1], e.clientX);
 			updateColors(true);
 			let bubble = BDFDB.DOMUtils.create(`<span class="${BDFDB.disCN.sliderbubble}" style="opacity: 1 !important; left: -24px !important;"></span>`);
@@ -2989,7 +2988,7 @@
 				document.removeEventListener("mousemove", mousemove);
 			};
 			let mousemove = e2 => {
-				if (!bubble.parentElement) alphacursor.appendChild(bubble);
+				if (!bubble.parentElement) alphaCursor.appendChild(bubble);
 				a = Math.floor(BDFDB.NumberUtils.mapRange([aMinX, aMaxX], [0, 100], e2.clientX))/100;
 				bubble.innerText = a;
 				updateColors(true);
@@ -2997,12 +2996,12 @@
 			document.addEventListener("mouseup", mouseup);
 			document.addEventListener("mousemove", mousemove);
 		});
-		gradientpane.addEventListener("mousedown", e => {
+		gradientPane.addEventListener("mousedown", e => {
 			BDFDB.TimeUtils.timeout(_ => {
 				if (BDFDB.DOMUtils.containsClass(e.target.parentElement, "gradient-cursor")) {
 					if (e.which == 1) {
 						if (!BDFDB.DOMUtils.containsClass(e.target.parentElement, "selected")) {
-							BDFDB.DOMUtils.removeClass(gradientpane.querySelectorAll(".gradient-cursor.selected"), "selected");
+							BDFDB.DOMUtils.removeClass(gradientPane.querySelectorAll(".gradient-cursor.selected"), "selected");
 							BDFDB.DOMUtils.addClass(e.target.parentElement, "selected");
 							[h, s, l] = BDFDB.ColorUtils.convert(e.target.style.getPropertyValue("background-color"), "HSLCOMP");
 							a = BDFDB.ColorUtils.getAlpha(e.target.style.getPropertyValue("background-color"));
@@ -3024,7 +3023,7 @@
 					else if (e.which == 3 && !BDFDB.DOMUtils.containsClass(e.target.parentElement, "edge")) {
 						BDFDB.DOMUtils.remove(e.target.parentElement);
 						if (BDFDB.DOMUtils.containsClass(e.target.parentElement, "selected")) {
-							let firstcursor = gradientpane.querySelector(".gradient-cursor");
+							let firstcursor = gradientPane.querySelector(".gradient-cursor");
 							BDFDB.DOMUtils.addClass(firstcursor, "selected");
 							[h, s, l] = BDFDB.ColorUtils.convert(firstcursor.firstElementChild.style.getPropertyValue("background-color"), "HSLCOMP");
 							a = BDFDB.ColorUtils.getAlpha(firstElementChild.style.getPropertyValue("background-color"));
@@ -3032,10 +3031,10 @@
 						updateColors(true);
 					}
 				}
-				else if (gradientpane == e.target && e.which == 1) {
-					BDFDB.DOMUtils.removeClass(gradientpane.querySelectorAll(".gradient-cursor.selected"), "selected");
+				else if (gradientPane == e.target && e.which == 1) {
+					BDFDB.DOMUtils.removeClass(gradientPane.querySelectorAll(".gradient-cursor.selected"), "selected");
 					let newcursor = BDFDB.DOMUtils.create(`<div class="gradient-cursor selected" style="position: absolute; left: ${BDFDB.NumberUtils.mapRange([gMinX, gMaxX], [1, 99], e.clientX)}%;"><div style="background-color: rgba(0, 0, 0, 1) !important;"></div></div>`);
-					gradientpane.appendChild(newcursor);
+					gradientPane.appendChild(newcursor);
 					[h, s, l] = [0, "0%", "0%"];
 					a = 1;
 					updateColors(true);
@@ -3052,49 +3051,49 @@
 				}
 			});
 		});
-		hexinput.addEventListener("input", e => {
-			if (hexRegex.test(hexinput.value)) {
-				[h, s, l, a] = BDFDB.ColorUtils.convert(hexinput.value, "HSLCOMP");
+		hexInput.addEventListener("input", e => {
+			if (hexRegex.test(hexInput.value)) {
+				[h, s, l, a] = BDFDB.ColorUtils.convert(hexInput.value, "HSLCOMP");
 				if (a == null) a = 1;
 				updateColors(false);
 			}
 		});
-		gradientbutton.addEventListener("click", e => {
+		gradientButton.addEventListener("click", e => {
 			isGradient = !isGradient;
-			BDFDB.DOMUtils.toggle(gradientbar, isGradient);
-			BDFDB.DOMUtils.toggleClass(gradientbutton, "selected", isGradient);
+			BDFDB.DOMUtils.toggle(gradientBar, isGradient);
+			BDFDB.DOMUtils.toggleClass(gradientButton, "selected", isGradient);
 			updateColors(true);
 		});
-		gradientbutton.addEventListener("mouseenter", e => {
-			BDFDB.TooltipUtils.create(gradientbutton, "Color Gradient", {type: "bottom", zIndex: 3001});
+		gradientButton.addEventListener("mouseenter", e => {
+			BDFDB.TooltipUtils.create(gradientButton, "Color Gradient", {type: "bottom", zIndex: 3001});
 		});
 		function updateRects () {
-			let satpanerects = BDFDB.DOMUtils.getRects(satpane);
-			sMinX = satpanerects.left;
-			sMaxX = sMinX + satpanerects.width;
-			sMinY = satpanerects.top;
-			sMaxY = sMinY + satpanerects.height;
-			let huepanerects = BDFDB.DOMUtils.getRects(huepane);
-			hMinX = huepanerects.left;
-			hMaxX = hMinX + huepanerects.width;
-			let alphapanerects = BDFDB.DOMUtils.getRects(alphapane);
-			aMinX = alphapanerects.left;
-			aMaxX = aMinX + alphapanerects.width;
-			let gradientpanerects = BDFDB.DOMUtils.getRects(gradientpane);
-			gMinX = gradientpanerects.left;
-			gMaxX = gMinX + gradientpanerects.width;
+			let satPaneRects = BDFDB.DOMUtils.getRects(satPane);
+			sMinX = satPaneRects.left;
+			sMaxX = sMinX + satPaneRects.width;
+			sMinY = satPaneRects.top;
+			sMaxY = sMinY + satPaneRects.height;
+			let huePaneRects = BDFDB.DOMUtils.getRects(huePane);
+			hMinX = huePaneRects.left;
+			hMaxX = hMinX + huePaneRects.width;
+			let alphaPaneRects = BDFDB.DOMUtils.getRects(alphaPane);
+			aMinX = alphaPaneRects.left;
+			aMaxX = aMinX + alphaPaneRects.width;
+			let gradientPaneRects = BDFDB.DOMUtils.getRects(gradientPane);
+			gMinX = gradientPaneRects.left;
+			gMaxX = gMinX + gradientPaneRects.width;
 		}
 		function updateColors (setInput) {
-			satpane.style.setProperty("background", BDFDB.ColorUtils.convert([h, "100%", "100%"], "RGB"), "important");
-			satcursor.style.setProperty("left", s, "important");
-			satcursor.style.setProperty("top", BDFDB.NumberUtils.mapRange([0, 100], [100, 0], parseFloat(l)) + "%", "important");
-			huecursor.style.setProperty("left", BDFDB.NumberUtils.mapRange([0, 360], [0, 100], h) + "%", "important");
-			alphapane.style.setProperty("background", `linear-gradient(to right, ${BDFDB.ColorUtils.setAlpha([h, s, l], 0, "RGBA")}, ${BDFDB.ColorUtils.setAlpha([h, s, l], 1, "RGBA")}`, "important");
-			alphacursor.style.setProperty("left", (a * 100) + "%", "important");
+			satPane.style.setProperty("background", BDFDB.ColorUtils.convert([h, "100%", "100%"], "RGB"), "important");
+			satCursor.style.setProperty("left", s, "important");
+			satCursor.style.setProperty("top", BDFDB.NumberUtils.mapRange([0, 100], [100, 0], parseFloat(l)) + "%", "important");
+			hueCursor.style.setProperty("left", BDFDB.NumberUtils.mapRange([0, 360], [0, 100], h) + "%", "important");
+			alphaPane.style.setProperty("background", `linear-gradient(to right, ${BDFDB.ColorUtils.setAlpha([h, s, l], 0, "RGBA")}, ${BDFDB.ColorUtils.setAlpha([h, s, l], 1, "RGBA")}`, "important");
+			alphaCursor.style.setProperty("left", (a * 100) + "%", "important");
 			let hex = BDFDB.ColorUtils.convert([h, s, l, a], hexFormat);
 			let rgb = BDFDB.ColorUtils.convert(hex, "RGBA");
 			if (isGradient) {
-				gradientpane.querySelector(".gradient-cursor.selected").firstElementChild.style.setProperty("background-color", rgb);
+				gradientPane.querySelector(".gradient-cursor.selected").firstElementChild.style.setProperty("background-color", rgb);
 				updateGradient();
 			}
 			else {
@@ -3108,14 +3107,14 @@
 					container.refInput.handleChange(container.refInput.props.value);
 				}
 			}
-			if (setInput) hexinput.value = hex;
+			if (setInput) hexInput.value = hex;
 			options.callback(rgb);
 		}
 		function updateGradient () {
-			gradientpane.style.removeProperty("background-color");
+			gradientPane.style.removeProperty("background-color");
 			let gradient = {};
-			for (let cursor of gradientpane.querySelectorAll(".gradient-cursor")) gradient[parseFloat(cursor.style.getPropertyValue("left"))/100] = cursor.firstElementChild.style.getPropertyValue("background-color");
-			gradientpane.style.setProperty("background-image", BDFDB.ColorUtils.createGradient(gradient));
+			for (let cursor of gradientPane.querySelectorAll(".gradient-cursor")) gradient[parseFloat(cursor.style.getPropertyValue("left"))/100] = cursor.firstElementChild.style.getPropertyValue("background-color");
+			gradientPane.style.setProperty("background-image", BDFDB.ColorUtils.createGradient(gradient));
 			container.setState({
 				selectedColor: gradient,
 				customColor: gradient
@@ -3322,8 +3321,8 @@
 	};
 	BDFDB.DOMUtils.getHeight = function (node) {
 		if (Node.prototype.isPrototypeOf(node) && node.nodeType != Node.TEXT_NODE) {
-			var rects = BDFDB.DOMUtils.getRects(node);
-			var style = getComputedStyle(node);
+			let rects = BDFDB.DOMUtils.getRects(node);
+			let style = getComputedStyle(node);
 			return rects.height + parseInt(style.marginTop) + parseInt(style.marginBottom);
 		}
 		return 0;
@@ -3829,7 +3828,7 @@
 	BDFDB.DiscordUtils.getVersion = function () {
 		if (BDFDB.DiscordUtils.getBuilt.version) return BDFDB.DiscordUtils.getBuilt.version;
 		else {
-			var version = null;
+			let version = null;
 			try {version = LibraryRequires.electron.remote.app.getVersion();}
 			catch (err) {version = "";}
 			BDFDB.DiscordUtils.getBuilt.version = version;
@@ -3846,10 +3845,10 @@
 		return LibraryModules.StoreChangeUtils.get("UserSettingsStore").message_display_compact ? "compact" : "cozy";
 	};
 	BDFDB.DiscordUtils.getZoomFactor = function () {
-		var arects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
-		var widthzoom = Math.round(100 * window.outerWidth / arects.width);
-		var heightzoom = Math.round(100 * window.outerHeight / arects.height);
-		return widthzoom < heightzoom ? widthzoom : heightzoom;
+		let aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
+		let widthZoom = Math.round(100 * window.outerWidth / aRects.width);
+		let heightZoom = Math.round(100 * window.outerHeight / aRects.height);
+		return widthZoom < heightZoom ? widthZoom : heightZoom;
 	};
 	BDFDB.DiscordUtils.getFontScale = function () {
 		return parseInt(document.firstElementChild.style.fontSize.replace("%", ""));
