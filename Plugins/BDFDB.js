@@ -3877,7 +3877,7 @@
 		if (typeof browserWindow.removeMenu == "function") browserWindow.removeMenu();
 		else browserWindow.setMenu(null);
 		browserWindow.loadURL(url);
-		browserWindow.executeJavaScriptSafe = js => {if (!browserWindow.isDestroyed()) browserWindow.webContents.executeJavaScript(js);};
+		browserWindow.executeJavaScriptSafe = js => {if (!browserWindow.isDestroyed()) browserWindow.webContents.executeJavaScript(`(_ => {${js}})();`);};
 		plugin.browserWindows.push(browserWindow);
 		return browserWindow;
 	};
