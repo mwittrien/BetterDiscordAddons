@@ -31,7 +31,7 @@ var SendLargeMessages = (_ => {
 				}`;
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -77,7 +77,7 @@ var SendLargeMessages = (_ => {
 		}
 
 
-		// begin of own functions
+		// Begin of own functions
 
 		processChannelTextAreaForm (e) {
 			if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "handleSendMessage")) BDFDB.ModuleUtils.patch(this, e.instance, "handleSendMessage", {instead: e2 => {

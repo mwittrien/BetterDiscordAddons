@@ -115,7 +115,7 @@ var ReadAllNotificationsButton = (_ => {
 			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -163,7 +163,7 @@ var ReadAllNotificationsButton = (_ => {
 		}
 
 
-		// begin of own functions
+		// Begin of own functions
 
 		onUserContextMenu (e) {
 			if (e.instance.props.channelId && e.instance.props.type == BDFDB.DiscordConstants.ContextMenuTypes.USER_PRIVATE_CHANNELS) {

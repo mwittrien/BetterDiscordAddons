@@ -64,7 +64,7 @@ class WriteUpperCase {
 	}
 
 
-	// begin of own functions
+	// Begin of own functions
 
 	processChannelEditorContainer (e) {
 		if (e.instance.props.textValue && e.instance.state.focused) {

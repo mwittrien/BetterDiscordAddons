@@ -139,7 +139,7 @@ var MessageUtilities = (_ => {
 			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {

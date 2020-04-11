@@ -27,7 +27,7 @@ var MoveablePopups = (_ => {
 			};
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -73,7 +73,7 @@ var MoveablePopups = (_ => {
 		}
 
 
-		// begin of own functions
+		// Begin of own functions
 		
 		processPopouts (e) {
 			BDFDB.ObserverUtils.connect(this, e.node, {name:"popoutObserver", instance:new MutationObserver(changes => {changes.forEach(change => {change.addedNodes.forEach(node => {

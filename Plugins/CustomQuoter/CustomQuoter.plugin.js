@@ -155,7 +155,7 @@ var CustomQuoter = (_ => {
 		}
 
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -201,7 +201,7 @@ var CustomQuoter = (_ => {
 		}
 
 
-		// begin of own functions
+		// Begin of own functions
 
 		onSettingsClosed () {
 			if (this.SettingsUpdated) {

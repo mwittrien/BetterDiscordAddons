@@ -158,7 +158,7 @@ var EditUsers = (_ => {
 			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -231,7 +231,7 @@ var EditUsers = (_ => {
 		}
 
 
-		// begin of own functions
+		// Begin of own functions
 		
 		onUserContextMenu (e) {
 			if (e.instance.props.user) {

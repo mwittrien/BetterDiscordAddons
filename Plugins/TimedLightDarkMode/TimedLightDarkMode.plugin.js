@@ -33,7 +33,7 @@ class TimedLightDarkMode {
 		};
 	}
 
-	//legacy
+	// Legacy
 	load () {}
 
 	start () {
@@ -82,7 +82,7 @@ class TimedLightDarkMode {
 	}
 
 
-	// begin of own functions
+	// Begin of own functions
 
 	processRadioGroup (e) {
 		if (e.instance.props && Array.isArray(e.instance.props.options) && e.instance.props.options[0] && (e.instance.props.options[0].value == "light" || e.instance.props.options[0].value == "dark") && e.instance.props.options[1] && (e.instance.props.options[1].value == "light" || e.instance.props.options[1].value == "dark") && e.node.parentElement.firstElementChild.innerText && e.node.parentElement.firstElementChild.innerText.toUpperCase() == BDFDB.LanguageUtils.LanguageStrings.THEME.toUpperCase()) {

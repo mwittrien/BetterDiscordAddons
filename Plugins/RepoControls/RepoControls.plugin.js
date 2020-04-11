@@ -12,7 +12,7 @@ var RepoControls = (_ => {
 
 		getDescription () {return "NO LONGER NEEDED";}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {

@@ -308,7 +308,7 @@ var NotificationSounds = (_ => {
 			];
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -431,7 +431,7 @@ var NotificationSounds = (_ => {
 		}
 
 
-		// begin of own functions
+		// Begin of own functions
 
 		onSettingsClosed () {
 			if (this.SettingsUpdated) {

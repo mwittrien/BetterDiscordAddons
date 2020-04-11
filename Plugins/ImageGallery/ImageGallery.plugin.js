@@ -100,7 +100,7 @@ var ImageGallery = (_ => {
 			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -153,7 +153,7 @@ var ImageGallery = (_ => {
 		}
 
 
-		// begin of own functions
+		// Begin of own functions
 
 		processImageModal (e) {
 			if (clickedImage) e.instance.props.cachedImage = clickedImage;

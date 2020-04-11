@@ -125,7 +125,7 @@ var ShowHiddenChannels = (_ => {
 			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -210,7 +210,7 @@ var ShowHiddenChannels = (_ => {
 		}
 
 
-		// begin of own functions
+		// Begin of own functions
 
 		onSettingsClosed (instance, wrapper, returnvalue) {
 			if (this.SettingsUpdated) {

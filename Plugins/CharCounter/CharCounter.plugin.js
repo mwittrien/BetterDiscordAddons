@@ -80,7 +80,7 @@ var CharCounter = (_ => {
 				}`;
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -126,7 +126,7 @@ var CharCounter = (_ => {
 		}
 
 
-		// begin of own functions
+		// Begin of own functions
 
 		processChannelTextAreaContainer (e) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ChannelEditorContainer"});

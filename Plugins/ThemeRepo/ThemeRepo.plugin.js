@@ -281,7 +281,7 @@ var ThemeRepo = (_ => {
 			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -336,7 +336,7 @@ var ThemeRepo = (_ => {
 		}
 
 
-		// begin of own functions
+		// Begin of own functions
 
 		onUserSettingsCogContextMenu (e) {
 			BDFDB.TimeUtils.timeout(_ => {

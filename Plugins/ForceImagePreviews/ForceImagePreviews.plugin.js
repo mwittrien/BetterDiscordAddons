@@ -22,7 +22,7 @@ var ForceImagePreviews = (_ => {
 			};
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -69,7 +69,7 @@ var ForceImagePreviews = (_ => {
 		}
 
 
-		// begin of own functions
+		// Begin of own functions
 		
 		processSimpleMessageAccessories (e) {
 			if (e.instance.props.message.content) {

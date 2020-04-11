@@ -76,7 +76,7 @@ class EmojiStatistics {
 		return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 	}
 
-	//legacy
+	// Legacy
 	load () {}
 
 	start () {
@@ -121,7 +121,7 @@ class EmojiStatistics {
 	}
 
 
-	// begin of own functions
+	// Begin of own functions
 
 	processEmojiPicker (e) {
 		this.loadEmojiList();

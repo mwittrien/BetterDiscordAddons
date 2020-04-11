@@ -186,7 +186,7 @@ class JoinedAtDate {
 		return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 	}
 
-	//legacy
+	// Legacy
 	load () {}
 
 	start () {
@@ -234,7 +234,7 @@ class JoinedAtDate {
 	}
 
 
-	// begin of own functions
+	// Begin of own functions
 
 	processUserPopout (e) {
 		if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "addInUserPopout")) {

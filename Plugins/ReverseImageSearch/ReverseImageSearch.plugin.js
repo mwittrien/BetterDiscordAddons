@@ -80,7 +80,7 @@ var ReverseImageSearch = (_ => {
 			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -121,7 +121,7 @@ var ReverseImageSearch = (_ => {
 		}
 
 
-		// begin of own functions
+		// Begin of own functions
 
 		onGuildContextMenu (e) {
 			if (e.instance.props.guild && e.instance.props.target) {

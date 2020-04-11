@@ -22,7 +22,7 @@ var BetterNsfwTag = (_ => {
 			};
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -68,7 +68,7 @@ var BetterNsfwTag = (_ => {
 		}
 
 
-		// begin of own functions
+		// Begin of own functions
 
 		processChannelItem (e) {
 			if (e.instance.props.channel && e.instance.props.channel.nsfw) {

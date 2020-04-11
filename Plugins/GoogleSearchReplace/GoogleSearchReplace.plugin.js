@@ -81,7 +81,7 @@ var GoogleSearchReplace = (_ => {
 			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -122,7 +122,7 @@ var GoogleSearchReplace = (_ => {
 		}
 
 
-		// begin of own functions
+		// Begin of own functions
 
 		processSearchWithGoogle (e) {
 			if (e.instance.props.value) {

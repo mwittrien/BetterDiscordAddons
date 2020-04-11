@@ -123,7 +123,7 @@ var ShowImageDetails = (_ => {
 			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -172,7 +172,7 @@ var ShowImageDetails = (_ => {
 		}
 
 
-		// begin of own functions
+		// Begin of own functions
 
 		onSettingsClosed () {
 			if (this.SettingsUpdated) {

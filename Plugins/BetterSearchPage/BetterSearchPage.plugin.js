@@ -49,7 +49,7 @@ var BetterSearchPage = (_ => {
 			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -94,7 +94,7 @@ var BetterSearchPage = (_ => {
 		}
 
 
-		// begin of own functions
+		// Begin of own functions
 
 		onSettingsClosed (e) {
 			if (this.SettingsUpdated) {

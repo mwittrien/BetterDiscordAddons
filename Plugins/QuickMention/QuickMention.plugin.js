@@ -10,7 +10,7 @@ var QuickMention = (_ => {
 
 		getDescription () {return "Adds a mention entry to the message option toolbar.";}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -53,7 +53,7 @@ var QuickMention = (_ => {
 		}
 
 		
-		// begin of own functions
+		// Begin of own functions
 		
 		onMessageOptionToolbar (e) {
 			if (e.instance.props.message.author.id != BDFDB.UserUtils.me.id && e.instance.props.message.type == BDFDB.DiscordConstants.MessageTypes.DEFAULT && BDFDB.UserUtils.can("SEND_MESSAGES")) e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {

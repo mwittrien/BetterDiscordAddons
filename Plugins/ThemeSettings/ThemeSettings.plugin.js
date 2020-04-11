@@ -18,7 +18,7 @@ var ThemeSettings = (_ => {
 			};
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -65,7 +65,7 @@ var ThemeSettings = (_ => {
 		}
 
 
-		// begin of own functions
+		// Begin of own functions
 
 		processV2CThemeCard (e) {
 			if (e.instance.props.addon && e.instance.props.addon.css && !e.instance.state.settings) {

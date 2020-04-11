@@ -99,7 +99,7 @@ var SpellCheck = (_ => {
 			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -151,7 +151,7 @@ var SpellCheck = (_ => {
 		}
 
 
-		// begin of own functions
+		// Begin of own functions
 
 		onSlateContextMenu (e) {
 			let [SCparent, SCindex] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["NativeSpellcheckGroup", "FluxContainer(NativeSpellcheckGroup)"]});

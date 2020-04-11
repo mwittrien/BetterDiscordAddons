@@ -28,7 +28,7 @@ var BetterFriendCount = (_ => {
 			for (let type in BDFDB.DiscordConstants.RelationshipTypes) this.relationshipTypes[BDFDB.DiscordConstants.RelationshipTypes[type]] = type;
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -73,7 +73,7 @@ var BetterFriendCount = (_ => {
 		}
 
 
-		// begin of own functions
+		// Begin of own functions
 
 		processTabBar (e) {
 			if (e.returnvalue.props.children) for (let checkchild of e.returnvalue.props.children) if (checkchild && checkchild.props.id == "ADD_FRIEND") {

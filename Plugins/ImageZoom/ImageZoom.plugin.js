@@ -39,7 +39,7 @@ var ImageZoom = (_ => {
 			};
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -84,7 +84,7 @@ var ImageZoom = (_ => {
 		}
 
 
-		// begin of own functions
+		// Begin of own functions
 
 		processImageModal (e) {
 			if (e.returnvalue) {

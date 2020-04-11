@@ -18,7 +18,7 @@ var RemoveBlockedMessages = (_ => {
 			};
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -65,7 +65,7 @@ var RemoveBlockedMessages = (_ => {
 		}
 
 		
-		// begin of own functions
+		// Begin of own functions
 		
 		processMessages (e) {
 			if (BDFDB.ArrayUtils.is(e.instance.props.channelStream)) e.instance.props.channelStream = [].concat(e.instance.props.channelStream.filter(n => n.type != "MESSAGE_GROUP_BLOCKED"));

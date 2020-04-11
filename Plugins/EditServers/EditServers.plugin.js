@@ -86,7 +86,7 @@ var EditServers = (_ => {
 			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -153,7 +153,7 @@ var EditServers = (_ => {
 			}
 		}
 
-		// begin of own functions
+		// Begin of own functions
 		
 		onGuildContextMenu (e) {
 			if (e.instance.props.guild) {

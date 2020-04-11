@@ -48,7 +48,7 @@ var PersonalPins = (_ => {
 			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
-		//legacy
+		// Legacy
 		load () {}
 
 		start () {
@@ -94,7 +94,7 @@ var PersonalPins = (_ => {
 		}
 
 
-		// begin of own functions
+		// Begin of own functions
 
 		onMessageContextMenu (e) {
 			if (e.instance.props.message && e.instance.props.channel) {
