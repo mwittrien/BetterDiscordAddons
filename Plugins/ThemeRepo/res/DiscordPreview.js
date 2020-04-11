@@ -42,7 +42,7 @@
 					if (data.avatar) document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_AVATAR/gi, data.avatar.split('"').join('') + "?size=");
 					if (data.discriminator) document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_DISCRIMINATOR/gi, data.discriminator);
 					if (data.classes) DiscordClasses = JSON.parse(data.classes);
-					if (data.classmodules) DiscordClassModules = JSON.parse(data.classmodules);
+					if (data.classmodules || data.classModules) DiscordClassModules = JSON.parse(data.classmodules || data.classModules);
 					
 					if (disCN != undefined && DiscordClasses != undefined && DiscordClassModules != undefined) {
 						let oldHTML = document.body.innerHTML.split("REPLACE_CLASS_");
@@ -54,11 +54,11 @@
 						document.body.innerHTML = newHTML;
 					}
 					
-					if (data.nativecss) {
+					if (data.nativecss || data.nativeCSS) {
 						let theme = document.createElement("link");
 						theme.classList.add(data.reason);
 						theme.rel = "stylesheet";
-						theme.href = data.nativecss;
+						theme.href = data.nativecss || data.nativeCSS;
 						document.head.appendChild(theme);
 					}
 					
@@ -66,7 +66,7 @@
 					document.documentElement.classList.add("mouse-mode");
 					document.documentElement.classList.add("full-motion");
 					
-					if (data.titlebar) document.querySelector(".preview-titlebar").outerHTML = data.titlebar;
+					if (data.titlebar || data.titleBar) document.querySelector(".preview-titlebar").outerHTML = data.titlebar || data.titleBar;
 					
 					document.body.firstElementChild.style.removeProperty("display");
 	
