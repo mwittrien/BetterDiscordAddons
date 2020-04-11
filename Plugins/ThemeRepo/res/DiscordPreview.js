@@ -81,7 +81,7 @@
 								if (browserWindow.isMaximized()) browserWindow.unmaximize();
 								else browserWindow.maximize();
 							});
-							let minButton = document.querySelector(dotCNC.titlebarmacbuttonmax + dotCN.titlebarwinbuttonminmax + ":last-child")
+							let minButton = document.querySelector(dotCNC.titlebarmacbuttonmin + dotCN.titlebarwinbuttonminmax + ":last-child")
 							if (minButton) minButton.addEventListener("click", browserWindow.minimize);
 						}
 					}
