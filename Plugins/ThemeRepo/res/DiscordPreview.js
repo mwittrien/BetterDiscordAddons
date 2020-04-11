@@ -81,7 +81,7 @@
 									if (browserWindow.isMaximized()) browserWindow.unmaximize();
 									else browserWindow.maximize();
 								}
-								else if (button.className.indexOf(disCN.titlebarmacbuttonmin) > -1 || (button.className.indexOf(disCN.titlebarwinbuttonminmax) > -1 && button.parentElement.lastElementChild == button) browserWindow.minimize();
+								else if (button.className.indexOf(disCN.titlebarmacbuttonmin) > -1 || (button.className.indexOf(disCN.titlebarwinbuttonminmax) > -1 && button.parentElement.lastElementChild == button)) browserWindow.minimize();
 							}
 						});
 					}
