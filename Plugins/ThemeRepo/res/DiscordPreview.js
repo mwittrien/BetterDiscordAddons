@@ -36,8 +36,8 @@
 					if (e.data.classmodules) DiscordClassModules = JSON.parse(e.data.classmodules);
 					
 					if (disCN != undefined && DiscordClasses != undefined && DiscordClassModules != undefined) {
-						var oldHTML = document.body.innerHTML.split("REPLACE_CLASS_");
-						var newHTML = oldHTML.shift();
+						let oldHTML = document.body.innerHTML.split("REPLACE_CLASS_");
+						let newHTML = oldHTML.shift();
 						for (let html of oldHTML) {
 							let reg = /([A-z0-9_]+)(.+)/.exec(html);
 							newHTML += disCN[reg[1]] + reg[2];
@@ -46,7 +46,7 @@
 					}
 					
 					if (e.data.nativecss) {
-						var theme = document.createElement("link");
+						let theme = document.createElement("link");
 						theme.classList.add(e.data.reason);
 						theme.rel = "stylesheet";
 						theme.href = e.data.nativecss;
@@ -75,7 +75,7 @@
 				case "ThemeFixer":
 					document.querySelectorAll("style." + e.data.reason).forEach(theme => theme.remove());
 					if (e.data.checked) {
-						var theme = document.createElement("style");
+						let theme = document.createElement("style");
 						theme.classList.add(e.data.reason);
 						theme.innerText = e.data.css;
 						document.head.appendChild(theme);
@@ -86,13 +86,13 @@
 					else document.body.innerHTML = document.body.innerHTML.replace(new RegExp(disCN.themelight, "g"), disCN.themedark);
 					break;
 				case "Normalize":
-					var oldHTML = document.body.innerHTML.split('class="');
-					var newHTML = oldHTML.shift();
-					for (let html of oldHTML) {
+					let oldHTML2 = document.body.innerHTML.split('class="');
+					let newHTML2 = oldHTML2.shift();
+					for (let html of oldHTML2) {
 						html = html.split('"');
-						newHTML += 'class="' + (e.data.checked ? html[0].split(" ").map(n => n.replace(/([A-z0-9]+?)-([A-z0-9_-]{6})/g, "$1-$2 da-$1")).join(" ") : html[0].split(" ").filter(n => n.indexOf("da-") != 0).join(" ")) + '"' + html.slice(1).join('"');
+						newHTML2 += 'class="' + (e.data.checked ? html[0].split(" ").map(n => n.replace(/([A-z0-9]+?)-([A-z0-9_-]{6})/g, "$1-$2 da-$1")).join(" ") : html[0].split(" ").filter(n => n.indexOf("da-") != 0).join(" ")) + '"' + html.slice(1).join('"');
 					}
-					document.body.innerHTML = newHTML;
+					document.body.innerHTML = newHTML2;
 					break;
 			}
 		}
