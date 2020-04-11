@@ -73,17 +73,17 @@
 					let electron = require("electron");
 					if (electron) {
 						let browserWindow = electron.remote.getCurrentWindow();
-						if (browserWindow) {
-							let closeButton = document.querySelector(dotCNC.titlebarmacbuttonclose + dotCN.titlebarwinbuttonclose);
-							if (closeButton) closeButton.addEventListener("click", browserWindow.close);
-							let maxButton = document.querySelector(dotCNC.titlebarmacbuttonmax + dotCN.titlebarwinbuttonminmax)
-							if (maxButton) maxButton.addEventListener("click", _ => {
-								if (browserWindow.isMaximized()) browserWindow.unmaximize();
-								else browserWindow.maximize();
-							});
-							let minButton = document.querySelector(dotCNC.titlebarmacbuttonmin + dotCN.titlebarwinbuttonminmax + ":last-child")
-							if (minButton) minButton.addEventListener("click", browserWindow.minimize);
-						}
+						if (browserWindow) document.addEventListener("click", event => {
+							let button = getParent(dotCNC.titlebarmacbutton + dotCN.titlebarwinbutton, event.target);
+							if (button) {
+								if (button.className.indexOf(disCN.titlebarmacbuttonclose) > -1 || button.className.indexOf(disCN.titlebarmacbuttonclose) > -1) browserWindow.close();
+								else if (button.className.indexOf(disCN.titlebarmacbuttonmax) > -1 || (button.className.indexOf(disCN.titlebarwinbuttonminmax) > -1 && button.parentElement.lastElementChild != button) {
+									if (browserWindow.isMaximized()) browserWindow.unmaximize();
+									else browserWindow.maximize();
+								}
+								else if (button.className.indexOf(disCN.titlebarmacbuttonmin) > -1 || (button.className.indexOf(disCN.titlebarwinbuttonminmax) > -1 && button.parentElement.lastElementChild == button) browserWindow.minimize();
+							}
+						});
 					}
 					break;
 				case "Eval":
@@ -196,6 +196,18 @@
 			}
 			return className;
 		}
+	};
+	
+	let getParent = function (listOrSelector, node) {
+		let parent = null;
+		if (Node.prototype.isPrototypeOf(node) && listOrSelector) {
+			let list = NodeList.prototype.isPrototypeOf(listOrSelector) ? listOrSelector : typeof listOrSelector == "string" ? document.querySelectorAll(listOrSelector) : null;
+			if (list) for (let listNode of list) if (listNode.contains(node)) {
+				parent = listNode;
+				break;
+			}
+		}
+		return parent;
 	};
 	
 	if (typeof window.require != "function") window.require = function () {
