@@ -62,7 +62,7 @@
 						document.head.appendChild(theme);
 					}
 					
-					if (data.html) document.documentElement.className = data.html;
+					if (data.html || data.htmlClassName) document.documentElement.className = data.html || data.htmlClassName;
 					document.documentElement.classList.add("mouse-mode");
 					document.documentElement.classList.add("full-motion");
 					
