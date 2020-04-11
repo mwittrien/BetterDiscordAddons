@@ -25,23 +25,24 @@
 		});
 	};
 	window.onmessage = function (e) {
-		if (typeof e.data === "object" && (e.data.origin == "PluginRepo" || e.data.origin == "ThemeRepo")) {
-			switch (e.data.reason) {
+		let data = e.data || e;
+		if (typeof data === "object" && (data.origin == "PluginRepo" || data.origin == "ThemeRepo")) {
+			switch (data.reason) {
 				case "OnLoad":
 					document.body.innerHTML = document.body.innerHTML.replace(/\t|\n|\r/g, "");
 					
-					if (e.data.username) {
-						document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERNAMESMALL/gi, e.data.username.toLowerCase());
-						document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERNAME/gi, e.data.username);
+					if (data.username) {
+						document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERNAMESMALL/gi, data.username.toLowerCase());
+						document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERNAME/gi, data.username);
 					}
-					if (e.data.id) {
-						userId = e.data.id;
-						document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERID/gi, e.data.id);
+					if (data.id) {
+						userId = data.id;
+						document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_USERID/gi, data.id);
 					}
-					if (e.data.avatar) document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_AVATAR/gi, e.data.avatar.split('"').join('') + "?size=");
-					if (e.data.discriminator) document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_DISCRIMINATOR/gi, e.data.discriminator);
-					if (e.data.classes) DiscordClasses = JSON.parse(e.data.classes);
-					if (e.data.classmodules) DiscordClassModules = JSON.parse(e.data.classmodules);
+					if (data.avatar) document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_AVATAR/gi, data.avatar.split('"').join('') + "?size=");
+					if (data.discriminator) document.body.innerHTML = document.body.innerHTML.replace(/REPLACE_DISCRIMINATOR/gi, data.discriminator);
+					if (data.classes) DiscordClasses = JSON.parse(data.classes);
+					if (data.classmodules) DiscordClassModules = JSON.parse(data.classmodules);
 					
 					if (disCN != undefined && DiscordClasses != undefined && DiscordClassModules != undefined) {
 						let oldHTML = document.body.innerHTML.split("REPLACE_CLASS_");
@@ -53,25 +54,25 @@
 						document.body.innerHTML = newHTML;
 					}
 					
-					if (e.data.nativecss) {
+					if (data.nativecss) {
 						let theme = document.createElement("link");
-						theme.classList.add(e.data.reason);
+						theme.classList.add(data.reason);
 						theme.rel = "stylesheet";
-						theme.href = e.data.nativecss;
+						theme.href = data.nativecss;
 						document.head.appendChild(theme);
 					}
 					
-					if (e.data.html) document.documentElement.className = e.data.html;
+					if (data.html) document.documentElement.className = data.html;
 					document.documentElement.classList.add("mouse-mode");
 					document.documentElement.classList.add("full-motion");
 					
-					if (e.data.titlebar) document.querySelector(".preview-titlebar").outerHTML = e.data.titlebar;
+					if (data.titlebar) document.querySelector(".preview-titlebar").outerHTML = data.titlebar;
 					
 					document.body.firstElementChild.style.removeProperty("display");
 					break;
 				case "Eval":
 					window.evalResult = null;
-					if (e.data.jsstring) window.eval(`(_ => {${e.data.jsstring}})()`);
+					if (data.jsstring) window.eval(`(_ => {${data.jsstring}})()`);
 					window.respondToParent({
 						origin: "DiscordPreview",
 						reason: "EvalResult",
@@ -81,16 +82,16 @@
 				case "NewTheme":
 				case "CustomCSS":
 				case "ThemeFixer":
-					document.querySelectorAll("style." + e.data.reason).forEach(theme => theme.remove());
-					if (e.data.checked) {
+					document.querySelectorAll("style." + data.reason).forEach(theme => theme.remove());
+					if (data.checked) {
 						let theme = document.createElement("style");
-						theme.classList.add(e.data.reason);
-						theme.innerText = e.data.css;
+						theme.classList.add(data.reason);
+						theme.innerText = data.css;
 						document.head.appendChild(theme);
 					}
 					break;
 				case "DarkLight":
-					if (e.data.checked) document.body.innerHTML = document.body.innerHTML.replace(new RegExp(disCN.themedark, "g"), disCN.themelight);
+					if (data.checked) document.body.innerHTML = document.body.innerHTML.replace(new RegExp(disCN.themedark, "g"), disCN.themelight);
 					else document.body.innerHTML = document.body.innerHTML.replace(new RegExp(disCN.themelight, "g"), disCN.themedark);
 					break;
 				case "Normalize":
@@ -98,7 +99,7 @@
 					let newHTML2 = oldHTML2.shift();
 					for (let html of oldHTML2) {
 						html = html.split('"');
-						newHTML2 += 'class="' + (e.data.checked ? html[0].split(" ").map(n => n.replace(/([A-z0-9]+?)-([A-z0-9_-]{6})/g, "$1-$2 da-$1")).join(" ") : html[0].split(" ").filter(n => n.indexOf("da-") != 0).join(" ")) + '"' + html.slice(1).join('"');
+						newHTML2 += 'class="' + (data.checked ? html[0].split(" ").map(n => n.replace(/([A-z0-9]+?)-([A-z0-9_-]{6})/g, "$1-$2 da-$1")).join(" ") : html[0].split(" ").filter(n => n.indexOf("da-") != 0).join(" ")) + '"' + html.slice(1).join('"');
 					}
 					document.body.innerHTML = newHTML2;
 					break;
