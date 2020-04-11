@@ -150,11 +150,11 @@
 		else return className = DiscordClassModules[DiscordClasses[item][0]][DiscordClasses[item][1]];
 	};
 	
-	if (typeof !window.require != "function") window.require = function () {
+	if (typeof window.require != "function") window.require = function () {
 		return _ => {};
 	};
 	
-	if (typeof !window.getString != "function") window.getString = function (obj) {
+	if (typeof window.getString != "function") window.getString = function (obj) {
 		let string = "";
 		if (typeof obj == "string") string = obj;
 		else if (obj && obj.props) {
@@ -164,7 +164,7 @@
 		return string;
 	};
 	
-	if (typeof !window.webpackJsonp != "function") window.webpackJsonp = function () {
+	if (typeof window.webpackJsonp != "function") window.webpackJsonp = function () {
 		return {
 			default: {
 				m: {},
