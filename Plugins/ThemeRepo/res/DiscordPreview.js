@@ -5,7 +5,7 @@
 	
 	window.respondToParent = function (data = {}) {
 		if (window.parent && typeof window.parent.postMessage == "function") window.parent.postMessage(data, "*");
-		else if (data.hostId != null && data.hostName != null) {
+		if (data.hostId != null && data.hostName != null) {
 			let ipcRenderer = (require("electron") || {}).ipcRenderer;
 			if (ipcRenderer && typeof ipcRenderer.sendTo == "function") ipcRenderer.sendTo(data.hostId, data.hostName, data);
 		}
