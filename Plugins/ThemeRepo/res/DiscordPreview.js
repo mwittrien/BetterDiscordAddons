@@ -107,8 +107,14 @@
 					}
 					break;
 				case "DarkLight":
-					if (data.checked) document.body.innerHTML = document.body.innerHTML.replace(new RegExp(disCN.themedark, "g"), disCN.themelight);
-					else document.body.innerHTML = document.body.innerHTML.replace(new RegExp(disCN.themelight, "g"), disCN.themedark);
+					if (data.checked) {
+						document.documentElement.className = document.documentElement.className.replace(new RegExp(disCN.themedark, "g"), disCN.themelight);
+						document.body.innerHTML = document.body.innerHTML.replace(new RegExp(disCN.themedark, "g"), disCN.themelight);
+					}
+					else {
+						document.documentElement.className = document.documentElement.className.replace(new RegExp(disCN.themelight, "g"), disCN.themedark);
+						document.body.innerHTML = document.body.innerHTML.replace(new RegExp(disCN.themelight, "g"), disCN.themedark);
+					}
 					break;
 				case "Normalize":
 					let oldHTML2 = document.body.innerHTML.split('class="');
