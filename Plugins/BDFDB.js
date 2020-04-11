@@ -628,7 +628,7 @@
 			BDFDB.DOMUtils.removeClass(icon, BDFDB.disCN.noticeicon);
 			notice.insertBefore(icon, noticeMessage);
 		}
-		if (options.btn || options.button) notice.appendChild(BDFDB.DOMUtils.create(`<button class="${BDFDB.disCNS.noticebutton + BDFDB.disCNS.titlesize14 + BDFDB.disCN.weightmedium}">${options.btn || options.button}</button>`));
+		if (options.btn || options.button) notice.appendChild(BDFDB.DOMUtils.create(`<button class="${BDFDB.disCNS.noticebutton + BDFDB.disCN.titlesize14}">${options.btn || options.button}</button>`));
 		if (options.id) notice.id = options.id.split(" ").join("");
 		if (options.selector) BDFDB.DOMUtils.addClass(notice, options.selector);
 		if (options.css) BDFDB.DOMUtils.appendLocalStyle("BDFDBcustomNotificationBar" + id, options.css);
@@ -3400,7 +3400,6 @@
 		let headerChildren = [], contentChildren = [], footerChildren = [];
 		if (typeof config.text == "string") {
 			contentChildren.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
-				color: InternalComponents.LibraryComponents.TextElement.Colors.PRIMARY,
 				children: config.text
 			}));
 		}
@@ -3486,8 +3485,7 @@
 													children: config.header
 												}),
 												BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
-													size: InternalComponents.LibraryComponents.TextElement.Sizes.SMALL,
-													color: InternalComponents.LibraryComponents.TextElement.Colors.PRIMARY,
+													size: InternalComponents.LibraryComponents.TextElement.Sizes.SIZE_12,
 													children: typeof config.subheader == "string" || BDFDB.ReactUtils.isValidElement(config.subheader) ? config.subheader : (name || "")
 												})
 											]
@@ -4433,7 +4431,7 @@
 	DiscordClassModules.Select = BDFDB.ModuleUtils.findByProperties("select", "error", "errorMessage");
 	DiscordClassModules.SettingsCloseButton = BDFDB.ModuleUtils.findByProperties("closeButton", "keybind");
 	DiscordClassModules.SettingsItems = BDFDB.ModuleUtils.findByProperties("dividerMini", "note");
-	DiscordClassModules.SettingsTable = BDFDB.ModuleUtils.findByProperties("headerOption", "headerSize");
+	DiscordClassModules.SettingsTable = BDFDB.ModuleUtils.findByProperties("headerOption", "headerName");
 	DiscordClassModules.SettingsWindow = BDFDB.ModuleUtils.findByProperties("contentRegion", "standardSidebarView");
 	DiscordClassModules.Slider = BDFDB.ModuleUtils.findByProperties("slider", "grabber");
 	DiscordClassModules.Spoiler = BDFDB.ModuleUtils.findByProperties("spoilerContainer", "hidden");
@@ -4442,9 +4440,8 @@
 	DiscordClassModules.Table = BDFDB.ModuleUtils.findByProperties("stickyHeader", "sortIcon");
 	DiscordClassModules.Text = BDFDB.ModuleUtils.findByProperties("defaultColor", "defaultMarginh1");
 	DiscordClassModules.TextColor = BDFDB.ModuleUtils.findByProperties("colorStandard", "colorMuted", "colorError");
-	DiscordClassModules.TextColor2 = BDFDB.ModuleUtils.findByProperties("base", "muted", "wrapper");
+	DiscordClassModules.TextColor2 = BDFDB.ModuleUtils.findByProperties("muted", "wrapper", "base");
 	DiscordClassModules.TextSize = BDFDB.ModuleUtils.findByProperties("size10", "size14", "size20");
-	DiscordClassModules.TextStyle = BDFDB.ModuleUtils.findByProperties("large", "primary", "selectable");
 	DiscordClassModules.Tip = BDFDB.ModuleUtils.findByProperties("pro", "inline");
 	DiscordClassModules.Title = BDFDB.ModuleUtils.findByProperties("title", "size18");
 	DiscordClassModules.TitleBar = BDFDB.ModuleUtils.findByProperties("titleBar", "wordmark");
@@ -4825,9 +4822,10 @@
 		collapsecontainermini: ["BDFDB", "collapseContainerMini"],
 		collapsecontainertitle: ["BDFDB", "collapseContainerTitle"],
 		colorbase: ["TextColor2", "base"],
+		colorbrand: ["TextColor", "colorBrand"],
 		colorerror: ["TextColor", "colorError"],
 		colormuted: ["TextColor", "colorMuted"],
-		colormuted2: ["TextColor2", "muted"],
+		colorgreen: ["TextColor", "colorStatusGreen"],
 		colorpicker: ["ColorPicker", "colorPickerCustom"],
 		colorpickerhexinput: ["ColorPicker", "customColorPickerInput"],
 		colorpickerhue: ["ColorPickerInner", "hue"],
@@ -4846,7 +4844,12 @@
 		colorpickerswatchselected: ["BDFDB", "colorPickerSwatchSelected"],
 		colorpickerswatchsingle: ["BDFDB", "colorPickerSwatchSingle"],
 		colorpickerwrapper: ["BDFDB", "colorPicker"],
+		colorprimary: ["TextColor", "colorHeaderPrimary"],
+		colorred: ["TextColor", "colorStatusRed"],
+		colorsecondary: ["TextColor", "colorHeaderSecondary"],
+		colorselectable: ["TextColor", "selectable"],
 		colorstandard: ["TextColor", "colorStandard"],
+		coloryellow: ["TextColor", "colorStatusYellow"],
 		contentcolumn: ["SettingsWindow", "contentColumn"],
 		contentregion: ["SettingsWindow", "contentRegion"],
 		contextmenu: ["ContextMenu", "contextMenu"],
@@ -5025,8 +5028,6 @@
 		golivegamewrapper: ["GoLiveDetails", "gameWrapper"],
 		goliveinfo: ["GoLiveDetails", "info"],
 		golivepanel: ["GoLiveDetails", "panel"],
-		green: ["TextStyle", "statusGreen"],
-		grey: ["TextStyle", "statusGrey"],
 		guild: ["BDFDB", "guild"],
 		guildbuttoncontainer: ["GuildsItems", "circleButtonMask"],
 		guildbuttoninner: ["GuildsItems", "circleIconButton"],
@@ -5233,7 +5234,6 @@
 		justifycenter: ["Flex", "justifyCenter"],
 		justifyend: ["Flex", "justifyEnd"],
 		justifystart: ["Flex", "justifyStart"],
-		large: ["TextStyle", "large"],
 		layermodal: ["LayerModal", "root"],
 		layermodallarge: ["LayerModal", "large"],
 		layermodalmedium: ["LayerModal", "medium"],
@@ -5271,7 +5271,6 @@
 		margintop20: ["Margins", "marginTop20"],
 		margintop40: ["Margins", "marginTop40"],
 		margintop60: ["Margins", "marginTop60"],
-		medium: ["TextStyle", "medium"],
 		member: ["Member", "member"],
 		memberactivity: ["Member", "activity"],
 		membericon: ["Member", "icon"],
@@ -5454,6 +5453,7 @@
 		noticebutton: ["Notice", "button"],
 		noticedanger: ["Notice", "noticeDanger"],
 		noticedefault: ["Notice", "noticeDefault"],
+		noticedownload: ["Notice", "noticeDownload"],
 		noticedismiss: ["Notice", "dismiss"],
 		noticefacebook: ["Notice", "noticeFacebook"],
 		noticeicon: ["Notice", "icon"],
@@ -5461,6 +5461,7 @@
 		noticeiconapple: ["Notice", "iconApple"],
 		noticeiconwindows: ["Notice", "iconWindows"],
 		noticeinfo: ["Notice", "noticeInfo"],
+		noticenotification: ["Notice", "noticeNotification"],
 		noticeplatformicon: ["Notice", "platformIcon"],
 		noticepremium: ["Notice", "noticePremium"],
 		noticepremiumaction: ["Notice", "premiumAction"],
@@ -5501,7 +5502,6 @@
 		popouttopleft: ["Popout", "popoutTopLeft"],
 		popouttopright: ["Popout", "popoutTopRight"],
 		popoutwrapper: ["BDFDB", "popoutWrapper"],
-		primary: ["TextStyle", "primary"],
 		quickmessage: ["QuickMessage", "quickMessage"],
 		quickmessagepopout: ["UserPopout", "quickMessage"],
 		quickselect: ["QuickSelect", "quickSelect"],
@@ -5537,7 +5537,6 @@
 		recentmentionstabbar: ["RecentMentions", "tabBar"],
 		recentmentionstabbaritem: ["RecentMentions", "tabBarItem"],
 		recentmentionstabbarwrapper: ["RecentMentions", "headerTabBarWrapper"],
-		red: ["TextStyle", "statusRed"],
 		scrollbar: ["Scrollbar", "scrollbar"],
 		scrollbardefault: ["Scrollbar", "scrollbarDefault"],
 		scrollbarghost: ["Scrollbar", "scrollbarGhost"],
@@ -5609,7 +5608,6 @@
 		searchresultssearchheader: ["SearchResults", "searchHeader"],
 		searchresultswrap: ["SearchResults", "searchResultsWrap"],
 		select: ["NotFound", "select"],
-		selectable: ["TextStyle", "selectable"],
 		selectarrow: ["NotFound", "selectArrow"],
 		selectarrowcontainer: ["NotFound", "selectArrowContainer"],
 		selectarrowcontainerdark: ["NotFound", "selectArrowContainerDark"],
@@ -5660,7 +5658,6 @@
 		settingstableheadername: ["SettingsTable", "headerName"],
 		settingstableheaderoption: ["SettingsTable", "headerOption"],
 		settingstableheaders: ["BDFDB", "settingsTableHeaders"],
-		settingstableheadersize: ["SettingsTable", "headerSize"],
 		settingstableheadervertical: ["BDFDB", "settingsTableHeaderVertical"],
 		settingstablecard: ["BDFDB", "settingsTableCard"],
 		settingstablecardconfigs: ["BDFDB", "settingsTableCardConfigs"],
@@ -5694,7 +5691,6 @@
 		spoilerhidden: ["Spoiler", "hidden"],
 		spoilertext: ["Spoiler", "spoilerText"],
 		spoilerwarning: ["Spoiler", "spoilerWarning"],
-		small: ["TextStyle", "small"],
 		splashbackground: ["NotFound", "splashBackground"],
 		standardsidebarview: ["SettingsWindow", "standardSidebarView"],
 		status: ["Avatar", "status"],
@@ -5946,11 +5942,8 @@
 		weightmedium: ["TextStyle", "weightMedium"],
 		weightnormal: ["TextStyle", "weightNormal"],
 		weightsemibold: ["TextStyle", "weightSemiBold"],
-		white: ["TextStyle", "white"],
-		whitney: ["TextStyle", "whitney"],
 		wrap: ["Flex", "wrap"],
-		wrapreverse: ["Flex", "wrapReverse"],
-		yellow: ["TextStyle", "statusYellow"]
+		wrapreverse: ["Flex", "wrapReverse"]
 	};
 	BDFDB.DiscordClasses = Object.assign({}, DiscordClasses);
 
@@ -6595,7 +6588,6 @@
 					}) : null,
 					typeof this.props.children == "string" ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
 						className: BDFDB.disCN.hovercardinner,
-						color: InternalComponents.LibraryComponents.TextElement.Colors.PRIMARY,
 						children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextScroller, {children: this.props.children})
 					}) : this.props.children
 				].flat(10).filter(n => n)
@@ -7826,7 +7818,7 @@
 							marginTop: this.props.biggestWidth - 15 || 0
 						} : {},
 						children: [].concat(this.props.title || "", this.props.settings).map((setting, i) => BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.DOMUtils.formatClassName(i == 0 ? BDFDB.disCN.settingstableheadername : BDFDB.disCN.settingstableheaderoption, i != 0 && this.props.vertical && BDFDB.disCN.settingstableheadervertical, BDFDB.disCN.settingstableheader, BDFDB.disCN.settingstableheadersize, BDFDB.disCN.primary, BDFDB.disCN.weightbold, isHeaderClickable && BDFDB.disCN.cursorpointer),
+							className: BDFDB.DOMUtils.formatClassName(i == 0 ? BDFDB.disCN.settingstableheadername : BDFDB.disCN.settingstableheaderoption, i != 0 && this.props.vertical && BDFDB.disCN.settingstableheadervertical, BDFDB.disCN.colorbase, BDFDB.disCN.size10, isHeaderClickable && BDFDB.disCN.cursorpointer),
 							onClick: _ => {if (typeof this.props.onHeaderClick == "function") this.props.onHeaderClick(setting, this);},
 							onContextMenu: _ => {if (typeof this.props.onHeaderContextMenu == "function") this.props.onHeaderContextMenu(setting, this);},
 							style: i != 0 && this.props.maxWidth ? {
@@ -8244,8 +8236,10 @@
 						align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
 						children: inputchildren.map((child, i) => i != 0 ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {shrink: 0, children: child}) : child)
 					}),
-					this.props.errorMessage ? BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCNS.carderror + BDFDB.disCNS.small + BDFDB.disCN.red,
+					this.props.errorMessage ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextElement, {
+						className: BDFDB.disCN.carderror,
+						size: InternalComponents.LibraryComponents.TextElement.Sizes.SIZE_12,
+						color: InternalComponents.LibraryComponents.TextElement.Colors.STATUS_RED,
 						children: this.props.errorMessage
 					}) : null
 				].filter(n => n)

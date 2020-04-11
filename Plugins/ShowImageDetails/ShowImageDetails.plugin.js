@@ -30,13 +30,11 @@ var ShowImageDetails = (_ => {
 					}),
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-							color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
 							children: BDFDB.NumberUtils.formatBytes(this.props.attachment.size)
 						})
 					}),
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-							color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
 							children: `${this.props.attachment.width}x${this.props.attachment.height}px`
 						})
 					})

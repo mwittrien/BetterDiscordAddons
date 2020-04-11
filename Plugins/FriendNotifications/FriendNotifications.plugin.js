@@ -631,7 +631,6 @@ var FriendNotifications = (_ => {
 						align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 						children: [
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-								color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
 								className: "log-time",
 								children: `[${log.timestring}]`
 							}),
@@ -645,7 +644,6 @@ var FriendNotifications = (_ => {
 								className: "log-content",
 								speed: 1,
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-									color: BDFDB.LibraryComponents.TextElement.Colors.PRIMARY,
 									children: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(log.string))
 								})
 							})

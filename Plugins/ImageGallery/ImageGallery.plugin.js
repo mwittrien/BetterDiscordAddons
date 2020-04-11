@@ -6,7 +6,7 @@ var ImageGallery = (_ => {
 	return class ImageGallery {
 		getName () {return "ImageGallery";}
 
-		getVersion () {return "1.6.7";}
+		getVersion () {return "1.6.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,7 @@ var ImageGallery = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Positioning","Improved the position of the sibling images to be placed in the center"]]
+				"improved":[["Styling","Fixed the style for the details section"]]
 			};
 
 			this.patchedModules = {
@@ -183,19 +183,14 @@ var ImageGallery = (_ => {
 							{label: "Source", text: e.instance.props.src},
 							{label: "Size", text: `${e.instance.props.width} x ${e.instance.props.height}px`},
 							{label: "Image", text: `${index+1} of ${amount}`}
-						].map(data => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-							className: BDFDB.disCNS._imagegallerydetails + BDFDB.disCN.primary,
+						].map(data => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+							className: BDFDB.disCN._imagegallerydetails,
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-									grow: 0,
-									shrink: 0,
-									basis: 100,
+								BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN._imagegallerydetailslabel,
 									children: data.label + ":"
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
-									children: data.text
-								})
+								data.text
 							]
 						}))
 					}));
