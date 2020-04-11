@@ -122,50 +122,50 @@
 			}
 		}
 	};
-	let disCN = new Proxy(DiscordClasses, {
+	let disCN = new Proxy({}, {
 		get: function (list, item) {
 			return getDiscordClass(item, false).replace("#", "");
 		}
 	});
-	let disCNS = new Proxy(DiscordClasses, {
+	let disCNS = new Proxy({}, {
 		get: function (list, item) {
 			return getDiscordClass(item, false).replace("#", "") + " ";
 		}
 	});
-	let disCNC = new Proxy(DiscordClasses, {
+	let disCNC = new Proxy({}, {
 		get: function (list, item) {
 			return getDiscordClass(item, false).replace("#", "") + ",";
 		}
 	});
-	let dotCN = new Proxy(DiscordClasses, {
+	let dotCN = new Proxy({}, {
 		get: function (list, item) {
 			let className = getDiscordClass(item, true);
 			return (className.indexOf("#") == 0 ? "" : ".") + className;
 		}
 	});
-	let dotCNS = new Proxy(DiscordClasses, {
+	let dotCNS = new Proxy({}, {
 		get: function (list, item) {
 			let className = getDiscordClass(item, true);
 			return (className.indexOf("#") == 0 ? "" : ".") + className + " ";
 		}
 	});
-	let dotCNC = new Proxy(DiscordClasses, {
+	let dotCNC = new Proxy({}, {
 		get: function (list, item) {
 			let className = getDiscordClass(item, true);
 			return (className.indexOf("#") == 0 ? "" : ".") + className + ",";
 		}
 	});
-	let notCN = new Proxy(DiscordClasses, {
+	let notCN = new Proxy({}, {
 		get: function (list, item) {
 			return `:not(.${getDiscordClass(item, true).split(".")[0]})`;
 		}
 	});
-	let notCNS = new Proxy(DiscordClasses, {
+	let notCNS = new Proxy({}, {
 		get: function (list, item) {
 			return `:not(.${getDiscordClass(item, true).split(".")[0]}) `;
 		}
 	});
-	let notCNC = new Proxy(DiscordClasses, {
+	let notCNC = new Proxy({}, {
 		get: function (list, item) {
 			return `:not(.${getDiscordClass(item, true).split(".")[0]}),`;
 		}
