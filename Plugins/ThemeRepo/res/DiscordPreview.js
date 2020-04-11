@@ -69,6 +69,22 @@
 					if (data.titlebar) document.querySelector(".preview-titlebar").outerHTML = data.titlebar;
 					
 					document.body.firstElementChild.style.removeProperty("display");
+	
+					let electron = require("electron");
+					if (electron) {
+						let browserWindow = electron.remote.getCurrentWindow();
+						if (browserWindow) {
+							let closeButton = document.querySelector(dotCNC.titlebarmacbuttonclose + dotCN.titlebarwinbuttonclose);
+							if (closeButton) closeButton.addEventListener("click", browserWindow.close);
+							let maxButton = document.querySelector(dotCNC.titlebarmacbuttonmax + dotCN.titlebarwinbuttonminmax)
+							if (maxButton) maxButton.addEventListener("click", _ => {
+								if (browserWindow.isMaximized()) browserWindow.unmaximize();
+								else browserWindow.maximize();
+							});
+							let minButton = document.querySelector(dotCNC.titlebarmacbuttonmax + dotCN.titlebarwinbuttonminmax + ":last-child")
+							if (minButton) minButton.addEventListener("click", browserWindow.minimize);
+						}
+					}
 					break;
 				case "Eval":
 					window.evalResult = null;
