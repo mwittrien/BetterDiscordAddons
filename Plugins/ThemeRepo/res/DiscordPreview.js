@@ -176,7 +176,7 @@
 			if (userId == "278543574059057154") console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', item + ' not found in DiscordClasses');
 			return className;
 		} 
-		else if (!BDFDB.ArrayUtils.is(DiscordClasses[item]) || DiscordClasses[item].length != 2) {
+		else if (!Array.is(DiscordClasses[item]) || DiscordClasses[item].length != 2) {
 			if (userId == "278543574059057154") console.warn(`%c[Preview]%c`, 'color:#3a71c1; font-weight:700;', '', item + ' is not an Array of Length 2 in DiscordClasses');
 			return className;
 		}
