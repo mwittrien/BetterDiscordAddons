@@ -71,7 +71,7 @@
 					document.body.firstElementChild.style.removeProperty("display");
 	
 					let electron = require("electron");
-					if (electron) {
+					if (electron && electron.remote) {
 						let browserWindow = electron.remote.getCurrentWindow();
 						if (browserWindow) document.addEventListener("click", event => {
 							let button = getParent(dotCNC.titlebarmacbutton + dotCN.titlebarwinbutton, event.target);
