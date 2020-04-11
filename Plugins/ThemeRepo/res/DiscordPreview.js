@@ -86,15 +86,6 @@
 						});
 					}
 					break;
-				case "Eval":
-					window.evalResult = null;
-					if (data.jsstring) window.eval(`(_ => {${data.jsstring}})()`);
-					window.respondToParent({
-						origin: "DiscordPreview",
-						reason: "EvalResult",
-						result: window.evalResult
-					});
-					break;
 				case "NewTheme":
 				case "CustomCSS":
 				case "ThemeFixer":
