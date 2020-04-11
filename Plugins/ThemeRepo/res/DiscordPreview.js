@@ -2,19 +2,27 @@
 	let DiscordClassModules, DiscordClasses, userId;
 	
 	window.global = window;
+	
+	window.respondToParent = function (data = {}) {
+		if (window.parent && typeof window.parent.postMessage == "function") window.parent.postMessage(data, "*");
+		else if (window.hostId && window.hostName) {
+			let ipcRenderer = (require("electron") || {}).ipcRenderer;
+			if (ipcRenderer && typeof ipcRenderer.sendTo == "function") ipcRenderer.sendTo(window.hostId, window.hostName, data);
+		}
+	};
 
 	window.onload = function () {
-		window.parent.postMessage({
+		window.respondToParent({
 			origin: "DiscordPreview",
 			reason: "OnLoad"
-		}, "*");
+		});
 	};
 	window.onkeyup = function (e) {
-		window.parent.postMessage({
+		window.respondToParent({
 			origin: "DiscordPreview",
 			reason: "KeyUp",
 			which: e.which
-		} ,"*");
+		});
 	};
 	window.onmessage = function (e) {
 		if (typeof e.data === "object" && (e.data.origin == "PluginRepo" || e.data.origin == "ThemeRepo")) {
@@ -64,11 +72,11 @@
 				case "Eval":
 					window.evalResult = null;
 					if (e.data.jsstring) window.eval(`(_ => {${e.data.jsstring}})()`);
-					window.parent.postMessage({
+					window.respondToParent({
 						origin: "DiscordPreview",
 						reason: "EvalResult",
 						result: window.evalResult
-					}, "*");
+					});
 					break;
 				case "NewTheme":
 				case "CustomCSS":
@@ -125,11 +133,11 @@
 		else return className = DiscordClassModules[DiscordClasses[item][0]][DiscordClasses[item][1]];
 	};
 	
-	window.require = function () {
+	if (typeof !window.require != "function") window.require = function () {
 		return _ => {};
 	};
 	
-	window.getString = function (obj) {
+	if (typeof !window.getString != "function") window.getString = function (obj) {
 		let string = "";
 		if (typeof obj == "string") string = obj;
 		else if (obj && obj.props) {
@@ -139,7 +147,7 @@
 		return string;
 	};
 	
-	window.webpackJsonp = function () {
+	if (typeof !window.webpackJsonp != "function") window.webpackJsonp = function () {
 		return {
 			default: {
 				m: {},
@@ -147,6 +155,7 @@
 			}
 		};
 	};
+	
 	let WebModulesFind = function (filter) {
 		const id = "PluginRepo-WebModules";
 		const req = typeof(window.webpackJsonp) == "function" ? window.webpackJsonp([], {[id]: (module, exports, req) => exports.default = req}, [id]).default : window.webpackJsonp.push([[], {[id]: (module, exports, req) => module.exports = req}, [[id]]]);
