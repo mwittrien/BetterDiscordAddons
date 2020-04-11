@@ -168,21 +168,6 @@ var ThemeRepo = (_ => {
 			};
 
 			this.css = `
-				iframe.discordPreview {
-					width: 100vw !important;
-					height: 100vh !important;
-					position: absolute !important;
-					z-index: 999 !important;
-				}
-				iframe.discordPreview ~ ${BDFDB.dotCN.appmount} {
-					position: absolute !important;
-					top: 0 !important;
-				}
-				iframe.discordPreview ~ ${BDFDB.dotCNS.appmount + BDFDB.dotCN.titlebar},
-				iframe.discordPreview ~ ${BDFDB.dotCNS.appmount + BDFDB.dotCN.app} > *:not(.toasts):not(.bd-toasts) {
-					opacity: 0 !important;
-					visibility: hidden !important;
-				}
 				.${this.name}-modal.repo-modal {
 					max-width: 800px;
 					min-height: 90vh;
@@ -334,7 +319,7 @@ var ThemeRepo = (_ => {
 
 				BDFDB.ModuleUtils.forceAllUpdates(this);
 
-				BDFDB.DOMUtils.remove("iframe.discordPreview", ".bd-themerepobutton", ".themerepo-notice", ".themerepo-loadingicon");
+				BDFDB.DOMUtils.remove(".bd-themerepobutton", ".themerepo-notice", ".themerepo-loadingicon");
 
 				BDFDB.PluginUtils.clear(this);
 			}
