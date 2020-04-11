@@ -76,7 +76,7 @@ var ThemeRepo = (_ => {
 				}, 500);
 			}
 			let theme = this.props.options && loadedThemes[this.props.options.currentGenerator];
-			return !this.props.options || !this.props.options.frame ? null : [
+			return !this.props.options || !this.props.options.preview ? null : [
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 					className: BDFDB.disCN.marginbottom20,
 					type: "Select",
@@ -97,7 +97,7 @@ var ThemeRepo = (_ => {
 						}
 						delete this.props.options.currentTheme;
 						this.props.plugin.updateList(instance, this.props.options);
-						this.props.options.frame.executeJavaScriptSafe(`window.onmessage({
+						this.props.options.preview.executeJavaScriptSafe(`window.onmessage({
 							origin: "ThemeRepo",
 							reason: "NewTheme",
 							checked: true,
@@ -374,14 +374,14 @@ var ThemeRepo = (_ => {
 				options.sortKey = options.forcedSort || Object.keys(sortKeys)[0];
 				options.orderKey = options.forcedOrder || Object.keys(orderKeys)[0];
 				
-				options.frame = BDFDB.WindowUtils.open(this, "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/DiscordPreview.html", {
+				options.preview = BDFDB.WindowUtils.open(this, "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/DiscordPreview.html", {
 					alwaysOnTop: BDFDB.DataUtils.get(this, "settings", "keepOnTop"),
 					showOnReady: true,
 					frame: false,
 					onLoad: _ => {
 						let nativeCSS = document.querySelector("head link[rel='stylesheet'][integrity]");
 						let titleBar = document.querySelector(BDFDB.dotCN.titlebar);
-						options.frame.executeJavaScriptSafe(`window.onmessage({
+						options.preview.executeJavaScriptSafe(`window.onmessage({
 							origin: "ThemeRepo",
 							reason: "OnLoad",
 							username: ${JSON.stringify(BDFDB.UserUtils.me.username || "")},
@@ -394,7 +394,7 @@ var ThemeRepo = (_ => {
 							htmlClassName: ${JSON.stringify(document.documentElement.className || "")},
 							titleBar: ${JSON.stringify(titleBar && titleBar.outerHTML || "")}
 						})`);
-						options.frame.executeJavaScriptSafe(`window.onmessage({
+						options.preview.executeJavaScriptSafe(`window.onmessage({
 							origin: "ThemeRepo",
 							reason: "DarkLight",
 							checked: ${BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight}
@@ -503,7 +503,7 @@ var ThemeRepo = (_ => {
 									label: "Preview in light mode",
 									value: BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight,
 									onChange: (value, instance) => {
-										options.frame.executeJavaScriptSafe(`window.onmessage({
+										options.preview.executeJavaScriptSafe(`window.onmessage({
 											origin: "ThemeRepo",
 											reason: "DarkLight",
 											checked: ${value}
@@ -516,7 +516,7 @@ var ThemeRepo = (_ => {
 									label: "Preview with normalized classes",
 									value: BDFDB.BDUtils.getSettings("fork-ps-4"),
 									onChange: (value, instance) => {
-										options.frame.executeJavaScriptSafe(`window.onmessage({
+										options.preview.executeJavaScriptSafe(`window.onmessage({
 											origin: "ThemeRepo",
 											reason: "Normalize",
 											checked: ${value}
@@ -530,7 +530,7 @@ var ThemeRepo = (_ => {
 									value: false,
 									onChange: (value, instance) => {
 										let customCSS = document.querySelector("style#customcss");
-										if (customCSS && customCSS.innerText.length > 0) options.frame.executeJavaScriptSafe(`window.onmessage({
+										if (customCSS && customCSS.innerText.length > 0) options.preview.executeJavaScriptSafe(`window.onmessage({
 											origin: "ThemeRepo",
 											reason: "CustomCSS",
 											checked: ${value},
@@ -545,7 +545,7 @@ var ThemeRepo = (_ => {
 									value: false,
 									onChange: (value, instance) => {
 										BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeFixer.css", (error, response, body) => {
-											options.frame.executeJavaScriptSafe(`window.onmessage({
+											options.preview.executeJavaScriptSafe(`window.onmessage({
 												origin: "ThemeRepo",
 												reason: "ThemeFixer",
 												checked: ${value},
@@ -583,7 +583,7 @@ var ThemeRepo = (_ => {
 						})
 					],
 					onClose: (modal, instance) => {
-						BDFDB.WindowUtils.close(options.frame);
+						BDFDB.WindowUtils.close(options.preview);
 					}
 				});
 			}
@@ -690,7 +690,7 @@ var ThemeRepo = (_ => {
 								delete options.currentGenerator;
 								delete options.generatorValues;
 								this.updateList(instance, options);
-								options.frame.executeJavaScriptSafe(`window.onmessage({
+								options.preview.executeJavaScriptSafe(`window.onmessage({
 									origin: "ThemeRepo",
 									reason: "NewTheme",
 									checked: ${value},
@@ -746,7 +746,7 @@ var ThemeRepo = (_ => {
 		}
 		
 		createGeneratorInputs (theme, options = {}) {
-			if (!options.frame || !BDFDB.ObjectUtils.is(options.generatorValues) || !BDFDB.ObjectUtils.is(theme) || !theme.fullcss) return null;
+			if (!options.preview || !BDFDB.ObjectUtils.is(options.generatorValues) || !BDFDB.ObjectUtils.is(theme) || !theme.fullcss) return null;
 			let vars = theme.fullcss.split(":root");
 			if (vars.length < 2) return null;
 			vars = vars[1].replace(/\t\(/g, " (").replace(/\r|\t| {2,}/g, "").replace(/\/\*\n*((?!\/\*|\*\/).|\n)*\n+((?!\/\*|\*\/).|\n)*\n*\*\//g, "").replace(/\n\/\*.*?\*\//g, "").replace(/\n/g, "");
@@ -797,7 +797,7 @@ var ThemeRepo = (_ => {
 							BDFDB.TimeUtils.clear(updateTimeout);
 							updateTimeout = BDFDB.TimeUtils.timeout(_ => {
 								options.generatorValues[varName] = {value, oldValue};
-								options.frame.executeJavaScriptSafe(`window.onmessage({
+								options.preview.executeJavaScriptSafe(`window.onmessage({
 									origin: "ThemeRepo",
 									reason: "NewTheme",
 									checked: true,
