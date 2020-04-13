@@ -36,22 +36,22 @@ var CustomQuoter = (_ => {
 	return class CustomQuoter {
 		getName () {return "CustomQuoter";}
 
-		getVersion () {return "1.0.7";}
+		getVersion () {return "1.0.8";}
 
 		getAuthor () {return "DevilBro";}
 
-		getDescription () {return "Let's you customize the output of the native quote feature of Discord";}
+		getDescription () {return "Let's you customize the output of the native quote feature of Discord.";}
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Placeholders","$authorName will now use the server nickname of a user if one is set, $authorAccount was added which gets replaced by ACCOUNTNAME#DISCRIMINATOR (User#1234)"]],
-				"fixed":[["$authorAccount","$authorAccount works properly now"]]
+				"improved":[["Quoting only parts","If you select a part of a message with your mouse, right click it and press Quote it will only insert the selected text in the quoted message (can be disabled in the plugin settings, does NOT work when the selected text goes out of the bounds of the original message"]]
 			};
 		}
 		
 		initConstructor () {
 			this.defaults = {
 				settings: {
+					quoteOnlySelected:		{value:true, 				description:"Only insert selected text in a quoted message"},
 					ignoreMentionInDM:		{value:true, 				description:"Do not add a mention in DM channels"},
 					forceZeros:				{value:false, 				description:"Force leading Zeros"}
 				},
@@ -223,7 +223,10 @@ var CustomQuoter = (_ => {
 				hour = hour ? hour : 12;
 			}
 			
-			let unquotedLines = message.content.split("\n").filter(line => !line.startsWith("> "));
+			let content = message.content;
+			let selectedText = settings.quoteOnlySelected && document.getSelection().toString().trim();
+			if (selectedText && content.indexOf(selectedText) > -1) content = selectedText;
+			let unquotedLines = content.split("\n").filter(line => !line.startsWith("> "));
 			unquotedLines = unquotedLines.slice(unquotedLines.findIndex(line => line.trim().length > 0)).join("\n");
 			
 			let guild = channel.guild_id ? (BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id) || {id: channel.guild_id, name: "Test Server"}) : {id: BDFDB.DiscordConstants.ME, name: BDFDB.LanguageUtils.LanguageStrings.DIRECT_MESSAGES};
