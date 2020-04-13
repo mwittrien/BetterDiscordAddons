@@ -147,7 +147,8 @@
 		11.	REPOCONTROLS
 		12.	DIRECTDOWNLOAD
 		13.	BETTERFORMATINGREDUX
-		14.	PLUGIN/THEMEREPO
+		14.	PLUGIN/THEMEREPOTHEMEREPO
+		15.	CHANNELHISTORY
 	18.	THEMESUPPORT
 		1.	THEMEDEVBADGE
 		2.	BETTERDOCSBLOCK
@@ -6904,6 +6905,13 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 #app-mount .themeEntry svg[fill="currentColor"]:hover,
 #app-mount .themeEntry .gifFavoriteButton-1gYkEU:not(.selected-2QpwIN):hover {
 	color: rgb(var(--fontwhite1)) !important;
+}
+
+/* ----		17.15	CHANNELHISTORY					---- */
+
+.channelHistoryButtons {
+	top: 4px;
+	left: 310px;
 }
 
 
