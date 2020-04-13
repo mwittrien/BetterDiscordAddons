@@ -7,7 +7,7 @@ var BadgesEverywhere = (_ => {
 	return class BadgesEverywhere {
 		getName () {return "BadgesEverywhere";} 
 
-		getVersion () {return "1.5.4";}
+		getVersion () {return "1.5.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -15,7 +15,7 @@ var BadgesEverywhere = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Messages Popout","Now works in popouts like the recent mentions popout"]]
+				"added":[["Bot Developer","Verified Bot Developer badge was added"]]
 			};
 
 			this.patchedModules = {
@@ -45,20 +45,18 @@ var BadgesEverywhere = (_ => {
 				.BE-badge.BE-badge-popout:not(.BE-badge-CurrentGuildBoost) {
 					top: 3px;
 				}
-				.BE-badge.BE-badge-popout.BE-badge-CurrentGuildBoost {
-					top: 1px;
-				}
 				.BE-badge.BE-badge-list:not(.BE-badge-CurrentGuildBoost) {
 					top: 1px;
 				}
 				.BE-badge.BE-badge-chat:not(.BE-badge-CurrentGuildBoost) {
 					top: 2px;
 				}
-				.BE-badge.BE-badge-chat.BE-badge-CurrentGuildBoost {
-					top: 1px;
+				.BE-badge.BE-badge-list.BE-badge-CurrentGuildBoost {
+					top: 0px;
 				}
-				${BDFDB.dotCN.userprofiletopsectionplaying} .BE-badge.BE-badge-CurrentGuildBoost svg {
-					color: white !important;
+				${BDFDB.dotCN.userprofiletopsectionplaying} svg.BE-badge,
+				${BDFDB.dotCN.userprofiletopsectionplaying} .BE-badge svg {
+					color: unset !important;
 				}
 				.BE-badge {height:17px !important;}
 				.BE-badge.BE-size-17 {width:17px !important; min-width:17px !important;}
@@ -103,24 +101,101 @@ var BadgesEverywhere = (_ => {
 					showNitroDate:		{value:true, 	description:"Show the subscription date for Nitro/Boost Badges"}
 				},
 				badges: {
-					"STAFF":						{value:true, 	id:"Staff",				name:"STAFF_BADGE_TOOLTIP",			icon:"profileBadgeStaff",						px:17},
-					"PARTNER":						{value:true, 	id:"Partner",			name:"PARTNER_BADGE_TOOLTIP",		icon:"profileBadgePartner",						px:22},
-					"HYPESQUAD":					{value:true, 	id:"HypeSquad",			name:"HYPESQUAD_BADGE_TOOLTIP",		icon:"profileBadgeHypesquad",					px:17},
-					"BUG_HUNTER_LEVEL_1":			{value:true, 	id:"BugHunter1",		name:"BUG_HUNTER_BADGE_TOOLTIP",	icon:"profileBadgeBugHunterLevel1",				px:17,	suffix: "Level 1"},
-					"BUG_HUNTER_LEVEL_2":			{value:true, 	id:"BugHunter2",		name:"BUG_HUNTER_BADGE_TOOLTIP",	icon:"profileBadgeBugHunterLevel2",				px:17,	suffix: "Level 2"},
-					"MFA_SMS":						{value:false, 	id:null,				name:null,							icon:false,										px:0},
-					"PREMIUM_PROMO_DISMISSED":		{value:false, 	id:null,				name:null,							icon:false,										px:0},
-					"HYPESQUAD_ONLINE_HOUSE_1":		{value:true, 	id:"HypeSquad1",		name:"HypeSquad Bravery",			icon:"profileBadgeHypeSquadOnlineHouse1",		px:17},
-					"HYPESQUAD_ONLINE_HOUSE_2":		{value:true, 	id:"HypeSquad2",		name:"HypeSquad Brilliance",		icon:"profileBadgeHypeSquadOnlineHouse2",		px:17},
-					"HYPESQUAD_ONLINE_HOUSE_3":		{value:true, 	id:"HypeSquad3",		name:"HypeSquad Balance",			icon:"profileBadgeHypeSquadOnlineHouse3",		px:17},
-					"PREMIUM_EARLY_SUPPORTER":		{value:true, 	id:"EarlySupporter",	name:"EARLY_SUPPORTER_TOOLTIP",		icon:"profileBadgeEarlySupporter",				px:24},
-					"NITRO":						{value:true, 	id:"Nitro",				name:"Nitro",						icon:"profileBadgePremium",						px:21},
-					"SYSTEM":						{value:false, 	id:null,				name:null,							icon:null,										px:0},
-					"HAS_UNREAD_URGENT_MESSAGES":	{value:false, 	id:null,				name:null,							icon:null,										px:0},
-					"GUILD_BOOST":					{value:true, 	id:"NitroGuildBoost",	name:"Nitro Guild Boost", 			icon:"profileGuildSubscriberlvl",				px:17,	types:[1,2,3,4,5,6,7,8,9]},
+					"STAFF": {
+						value: true,
+						id: "Staff",
+						name: "STAFF_BADGE_TOOLTIP",
+						icon: "profileBadgeStaff",
+						size: 17
+					},
+					"PARTNER": {
+						value: true,
+						id: "Partner",
+						name: "PARTNER_BADGE_TOOLTIP",
+						icon: "profileBadgePartner",
+						size: 22
+					},
+					"HYPESQUAD": {
+						value: true,
+						id: "HypeSquad",
+						name: "HYPESQUAD_BADGE_TOOLTIP",
+						icon: "profileBadgeHypesquad",
+						size: 17
+					},
+					"BUG_HUNTER_LEVEL_1": {
+						value: true,
+						id: "BugHunter1",
+						name: "BUG_HUNTER_BADGE_TOOLTIP",
+						icon: "profileBadgeBugHunterLevel1",
+						size: 17,
+						suffix: "Level 1"
+					},
+					"BUG_HUNTER_LEVEL_2": {
+						value: true,
+						id: "BugHunter2",
+						name: "BUG_HUNTER_BADGE_TOOLTIP",
+						icon: "profileBadgeBugHunterLevel2",
+						size: 17,
+						suffix: "Level 2"
+					},
+					"VERIFIED_DEVELOPER": {
+						value: true,
+						id: "VerifiedDeveloper",
+						name: "VERIFIED_DEVELOPER_BADGE_TOOLTIP",
+						icon: "profileBadgeVerifiedDeveloper",
+						size: 17
+					},
+					"HYPESQUAD_ONLINE_HOUSE_1": {
+						value: true,
+						id: "HypeSquad1",
+						name: "HypeSquad Bravery",
+						icon: "profileBadgeHypeSquadOnlineHouse1",
+						size: 17
+					},
+					"HYPESQUAD_ONLINE_HOUSE_2": {
+						value: true,
+						id: "HypeSquad2",
+						name: "HypeSquad Brilliance",
+						icon: "profileBadgeHypeSquadOnlineHouse2",
+						size: 17
+					},
+					"HYPESQUAD_ONLINE_HOUSE_3": {
+						value: true,
+						id: "HypeSquad3",
+						name: "HypeSquad Balance",
+						icon: "profileBadgeHypeSquadOnlineHouse3",
+						size: 17
+					},
+					"PREMIUM_EARLY_SUPPORTER": {
+						value: true,
+						id: "EarlySupporter",
+						name: "EARLY_SUPPORTER_TOOLTIP",
+						icon: "profileBadgeEarlySupporter",
+						size: 24
+					},
+					"NITRO": {
+						value: true,
+						id: "Nitro",
+						name: "Nitro",
+						icon: "profileBadgePremium",
+						size: 21
+					},
+					"GUILD_BOOST": {
+						value: true,
+						id: "NitroGuildBoost",
+						name: "Nitro Guild Boost",
+						icon: "profileGuildSubscriberlvl",
+						size: 17,
+						types: [1,2,3,4,5,6,7,8,9]
+					}
 				},
 				indicators: {
-					"CURRENT_GUILD_BOOST":		{value:true, 	id:"CurrentGuildBoost",		name:"Current Nitro Guild Boost", 	inner:`<svg name="PremiumGuildSubscriberBadge" class="BE-badge-CurrentGuildBoost-inner ${BDFDB.disCNS.memberpremiumicon + BDFDB.disCN.membericon}" aria-hidden="false" width="24" height="24" viewBox="0 0 8 12" style="margin: 0;"><path d="M4 0L0 4V8L4 12L8 8V4L4 0ZM7 7.59L4 10.59L1 7.59V4.41L4 1.41L7 4.41V7.59Z" fill="currentColor"></path><path d="M2 4.83V7.17L4 9.17L6 7.17V4.83L4 2.83L2 4.83Z" fill="currentColor"></path></svg>`},
+					"CURRENT_GUILD_BOOST": {
+						value: true,
+						id: "CurrentGuildBoost",
+						name: "Current Nitro Guild Boost",
+						inner: `<svg name="PremiumGuildSubscriberBadge" class="BE-badge-CurrentGuildBoost-inner ${BDFDB.disCNS.memberpremiumicon + BDFDB.disCN.membericon}" aria-hidden="false" width="24" height="24" viewBox="0 0 8 12"><path d="M4 0L0 4V8L4 12L8 8V4L4 0ZM7 7.59L4 10.59L1 7.59V4.41L4 1.41L7 4.41V7.59Z" fill="currentColor"></path><path d="M2 4.83V7.17L4 9.17L6 7.17V4.83L4 2.83L2 4.83Z" fill="currentColor"></path></svg>`
+					},
 				}
 			};
 
@@ -321,13 +396,13 @@ var BadgesEverywhere = (_ => {
 			let data = this.defaults.badges[flag] || this.defaults.indicators[flag];
 			if (!data) return null;
 			return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-				className: BDFDB.DOMUtils.formatClassName(`BE-badge`, `BE-badge-${type}`, ["list", "chat"].includes(type) ? `BE-badge-mini` : null, data.id ? `BE-badge-${data.id}` : null, data.icon ? badgeClasses[data.icon + (rank || "")] : null, data.px ? `BE-size-${data.px}` : null),
+				className: BDFDB.DOMUtils.formatClassName(`BE-badge`, `BE-badge-${type}`, ["list", "chat"].includes(type) && `BE-badge-mini`, data.id && `BE-badge-${data.id}`, data.icon && badgeClasses[data.icon + (rank || "")], data.size && `BE-size-${data.size}`),
 				text: timestring || (data.name + (data.suffix ? ` ${data.suffix}` : "") + (rank ? ` Level ${rank}` : "")),
 				tooltipConfig: {
 					style: "white-space: nowrap; max-width: unset;"
 				},
 				children: data.inner ? BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(data.inner)) : null
-			})
+			});
 		}
 		
 		getTimeString (id, flag) {
@@ -342,21 +417,21 @@ var BadgesEverywhere = (_ => {
 			let data = this.defaults.badges[flag] || this.defaults.indicators[flag];
 			if (!data) return null;
 			let eles = null;
-			let colorbadgewrapper = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(`<span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;"></span>`));
-			let uncolorbadgewrapper = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(`<span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionplaying}" style="all: unset !important;"></span>`));
+			let colorBadgeWrapper = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(`<span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;"></span>`));
+			let uncolorBadgeWrapper = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(`<span class="BE-badges BE-badges-settings ${BDFDB.disCN.userprofiletopsectionplaying}" style="all: unset !important;"></span>`));
 			if (Array.isArray(data.types)) {
 				for (let rank of data.types) {
 					let badge = this.createBadge(null, "settings", flag, rank);
-					colorbadgewrapper.props.children.push(badge);
-					uncolorbadgewrapper.props.children.push(badge);
+					colorBadgeWrapper.props.children.push(badge);
+					uncolorBadgeWrapper.props.children.push(badge);
 				}
-				eles = BDFDB.ReactUtils.createElement("div", {children: [colorbadgewrapper, BDFDB.ReactUtils.createElement("br"), uncolorbadgewrapper]});
+				eles = BDFDB.ReactUtils.createElement("div", {children: [colorBadgeWrapper, BDFDB.ReactUtils.createElement("br"), uncolorBadgeWrapper]});
 			}
 			else {
 				let badge = this.createBadge(null, "settings", flag);
-				colorbadgewrapper.props.children.push(badge);
-				uncolorbadgewrapper.props.children.push(badge);
-				eles = [colorbadgewrapper, uncolorbadgewrapper];
+				colorBadgeWrapper.props.children.push(badge);
+				uncolorBadgeWrapper.props.children.push(badge);
+				eles = [colorBadgeWrapper, uncolorBadgeWrapper];
 			}
 			return eles;
 		}
