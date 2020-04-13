@@ -1,7 +1,7 @@
 //META{"name":"FriendNotifications","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/FriendNotifications","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/FriendNotifications/FriendNotifications.plugin.js"}*//
 
 var FriendNotifications = (_ => {
-	var userStatusStore, timeLog, lastTimes, activityTypes, friendCounter, checkInterval;
+	var userStatusStore, timeLog, lastTimes, friendCounter, checkInterval;
 	
 	const FriendOnlineCounter = class FriendOnlineCounter extends BdApi.React.Component {
 		componentDidMount() {
@@ -98,8 +98,8 @@ var FriendNotifications = (_ => {
 					mobile: 			{value:"$user changed status to '$status'",			libstring:"STATUS_ONLINE_MOBILE",	init:true},
 					idle: 				{value:"$user changed status to '$status'",			libstring:"STATUS_IDLE",			init:false},
 					dnd: 				{value:"$user changed status to '$status'",			libstring:"STATUS_DND",				init:false},
-					playing: 			{value:"$user started playing '$game'",				statusname:"Playing",				init:false},
-					listening: 			{value:"$user started listening to '$song'",		statusname:"Listening",				init:false},
+					playing: 			{value:"$user started playing '$game'",				statusName:"Playing",				init:false},
+					listening: 			{value:"$user started listening to '$song'",		statusName:"Listening",				init:false},
 					streaming: 			{value:"$user started streaming '$game'",			libstring:"STATUS_STREAMING",		init:false},
 					offline: 			{value:"$user changed status to '$status'",			libstring:"STATUS_OFFLINE",			init:true}
 				},
@@ -115,9 +115,6 @@ var FriendNotifications = (_ => {
 				this.defaults.notificationsounds["toast" + type] = {value:{url:null,song:null,mute:false}};
 				this.defaults.notificationsounds["desktop" + type] = {value:{url:null,song:null,mute:false}};
 			}
-			
-			activityTypes = {};
-			for (let type in BDFDB.DiscordConstants.ActivityTypes) activityTypes[BDFDB.DiscordConstants.ActivityTypes[type]] = type;
 		}
 
 		getSettingsPanel (collapseStates = {}) {
@@ -354,7 +351,7 @@ var FriendNotifications = (_ => {
 							BDFDB.ReactUtils.createElement("strong", {children: "$user"}),
 							" is the placeholder for the username, ",
 							BDFDB.ReactUtils.createElement("strong", {children: "$status"}),
-							" for the statusname, ",
+							" for the statusName, ",
 							BDFDB.ReactUtils.createElement("strong", {children: "$game"}),
 							" for the gamename, ",
 							BDFDB.ReactUtils.createElement("strong", {children: "$song"}),
@@ -525,17 +522,17 @@ var FriendNotifications = (_ => {
 		}
 
 		getStatusWithMobileAndActivity (id, config) {
-			let statusname = BDFDB.UserUtils.getStatus(id);
-			let status = {statusname, isactivity:false};
+			let statusName = BDFDB.UserUtils.getStatus(id);
+			let status = {statusName, isActivity:false};
 			let activity = BDFDB.UserUtils.getActivitiy(id);
-			if (activity && activityTypes[activity.type]) {
-				let activityname = activityTypes[activity.type].toLowerCase();
-				if (this.defaults.notificationstrings[activityname] && config[activityname]) {
-					status = Object.assign({statusname:activityname, isactivity:true}, activity);
-					if (activityname == "listening" || activityname == "streaming") delete status.name;
+			if (activity && BDFDB.DiscordConstants.ActivityTypes[activity.type]) {
+				let activityName = BDFDB.DiscordConstants.ActivityTypes[activity.type].toLowerCase();
+				if (this.defaults.notificationstrings[activityName] && config[activityName]) {
+					status = Object.assign({statusName:activityName, isActivity:true}, activity);
+					if (activityName == "listening" || activityName == "streaming") delete status.name;
 				}
 			}
-			if (status.statusname == "online" && BDFDB.LibraryModules.StatusMetaUtils.isMobileOnline(id)) status.statusname = "mobile";
+			if (status.statusName == "online" && BDFDB.LibraryModules.StatusMetaUtils.isMobileOnline(id)) status.statusName = "mobile";
 			return status;
 		}
 
@@ -545,10 +542,13 @@ var FriendNotifications = (_ => {
 			let amounts = BDFDB.DataUtils.get(this, "amounts");
 			let notificationstrings = BDFDB.DataUtils.get(this, "notificationstrings");
 			let notificationsounds = BDFDB.DataUtils.get(this, "notificationsounds");
+			
 			let users = Object.assign({}, BDFDB.DataUtils.load(this, "nonfriends"), BDFDB.DataUtils.load(this, "friends"));
-			for (let id in users) userStatusStore[id] = this.getStatusWithMobileAndActivity(id, users[id]).statusname;
-			let toasttime = (amounts.toastTime > amounts.checkInterval ? amounts.checkInterval : amounts.toastTime) * 1000;
-			let desktoptime = (amounts.desktopTime > amounts.checkInterval ? amounts.checkInterval : amounts.desktopTime) * 1000;
+			for (let id in users) userStatusStore[id] = this.getStatusWithMobileAndActivity(id, users[id]).statusName;
+			
+			let toastTime = (amounts.toastTime > amounts.checkInterval ? amounts.checkInterval : amounts.toastTime) * 1000;
+			let desktopTime = (amounts.desktopTime > amounts.checkInterval ? amounts.checkInterval : amounts.desktopTime) * 1000;
+			
 			checkInterval = BDFDB.TimeUtils.interval(_ => {
 				let amount = BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount();
 				if (friendCounter && friendCounter.props.amount != amount) {
@@ -558,16 +558,16 @@ var FriendNotifications = (_ => {
 				for (let id in users) if (!users[id].disabled) {
 					let user = BDFDB.LibraryModules.UserStore.getUser(id);
 					let status = this.getStatusWithMobileAndActivity(id, users[id]);
-					if (user && userStatusStore[id] != status.statusname && users[id][status.statusname]) {
+					if (user && userStatusStore[id] != status.statusName && users[id][status.statusName]) {
 						let EUdata = BDFDB.BDUtils.isPluginEnabled("EditUsers") && BDFDB.DataUtils.load("EditUsers", "users", user.id) || {};
 						let name = EUdata.name || user.username;
 						let avatar = EUdata.removeIcon ? "" : (EUdata.url || BDFDB.UserUtils.getAvatar(user.id));
 						let timestring = (new Date()).toLocaleString();
 						
-						let libstring = (this.defaults.notificationstrings[status.statusname].libstring ? BDFDB.LanguageUtils.LanguageStrings[this.defaults.notificationstrings[status.statusname].libstring] : (this.defaults.notificationstrings[status.statusname].statusname || "")).toLowerCase();
-						let string = notificationstrings[status.statusname] || "$user changed status to $status";
+						let libstring = (this.defaults.notificationstrings[status.statusName].libstring ? BDFDB.LanguageUtils.LanguageStrings[this.defaults.notificationstrings[status.statusName].libstring] : (this.defaults.notificationstrings[status.statusName].statusName || "")).toLowerCase();
+						let string = notificationstrings[status.statusName] || "$user changed status to $status";
 						let toaststring = BDFDB.StringUtils.htmlEscape(string).replace(/'{0,1}\$user'{0,1}/g, `<strong>${BDFDB.StringUtils.htmlEscape(name)}</strong>`).replace(/'{0,1}\$status'{0,1}/g, `<strong>${libstring}</strong>`);
-						if (status.isactivity) toaststring = toaststring.replace(/'{0,1}\$song'{0,1}|'{0,1}\$game'{0,1}/g, `<strong>${status.name || status.details}</strong>`).replace(/'{0,1}\$artist'{0,1}/g, `<strong>${status.state}</strong>`);
+						if (status.isActivity) toaststring = toaststring.replace(/'{0,1}\$song'{0,1}|'{0,1}\$game'{0,1}/g, `<strong>${status.name || status.details}</strong>`).replace(/'{0,1}\$artist'{0,1}/g, `<strong>${status.state}</strong>`);
 						
 						if (timeLog.length > 200) timeLog.shift();
 						
@@ -593,9 +593,9 @@ var FriendNotifications = (_ => {
 							};
 							if (!users[id].desktop) {
 								if (!document.querySelector(`.friendnotifications-${id}-toast`)) {
-									let toast = BDFDB.NotificationUtils.toast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${toaststring}</div></div>`, {html:true, timeout:toasttime, color:BDFDB.UserUtils.getStatusColor(status.statusname), icon:false, selector:`friendnotifications-${status.statusname}-toast friendnotifications-${id}-toast`});
+									let toast = BDFDB.NotificationUtils.toast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${toaststring}</div></div>`, {html:true, timeout:toastTime, color:BDFDB.UserUtils.getStatusColor(status.statusName), icon:false, selector:`friendnotifications-${status.statusName}-toast friendnotifications-${id}-toast`});
 									toast.addEventListener("click", openChannel);
-									let notificationsound = notificationsounds["toast" + status.statusname] || {};
+									let notificationsound = notificationsounds["toast" + status.statusName] || {};
 									if (!notificationsound.mute && notificationsound.song) {
 										let audio = new Audio();
 										audio.src = notificationsound.song;
@@ -605,13 +605,13 @@ var FriendNotifications = (_ => {
 							}
 							else {
 								let desktopstring = string.replace(/\$user/g, name).replace(/\$status/g, libstring);
-								if (status.isactivity) desktopstring = desktopstring.replace(/\$song|\$game/g, status.name || status.details).replace(/\$artist/g, status.state);
-								let notificationsound = notificationsounds["desktop" + status.statusname] || {};
-								BDFDB.NotificationUtils.desktop(desktopstring, {icon:avatar, timeout:desktoptime, click:openChannel, silent:notificationsound.mute, sound:notificationsound.song});
+								if (status.isActivity) desktopstring = desktopstring.replace(/\$song|\$game/g, status.name || status.details).replace(/\$artist/g, status.state);
+								let notificationsound = notificationsounds["desktop" + status.statusName] || {};
+								BDFDB.NotificationUtils.desktop(desktopstring, {icon:avatar, timeout:desktopTime, click:openChannel, silent:notificationsound.mute, sound:notificationsound.song});
 							}
 						}
 					}
-					userStatusStore[id] = status.statusname;
+					userStatusStore[id] = status.statusName;
 				}
 			}, amounts.checkInterval * 1000);
 		}	

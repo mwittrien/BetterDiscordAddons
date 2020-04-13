@@ -1707,6 +1707,8 @@
 			if (attributes.style[camelprop] != null) importantStyles.push(key);
 		}
 		for (let child of node.childNodes) attributes.children.push(BDFDB.ReactUtils.elementToReact(child));
+		attributes.className = BDFDB.DOMUtils.formatClassName(attributes.className, attributes.class);
+		delete attributes.class;
 		let reactEle = BDFDB.ReactUtils.createElement(node.tagName, attributes);
 		BDFDB.ReactUtils.forceStyle(reactEle, importantStyles);
 		return reactEle;
@@ -7954,7 +7956,7 @@
 			if (this.props.iconSVG) {
 				let icon = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(this.props.iconSVG));
 				if (BDFDB.ReactUtils.isValidElement(icon)) {
-					icon.props.className = BDFDB.DOMUtils.formatClassName(!this.props.nativeClass && BDFDB.disCN.svgicon, icon.props.class, this.props.className);
+					icon.props.className = BDFDB.DOMUtils.formatClassName(!this.props.nativeClass && BDFDB.disCN.svgicon, icon.props.className, this.props.className);
 					icon.props.style = Object.assign({}, icon.props.style, this.props.style);
 					icon.props = Object.assign({}, BDFDB.ObjectUtils.extract(this.props, "onClick", "onContextMenu", "onMouseDown", "onMouseUp", "onMouseEnter", "onMouseLeave"), icon.props);
 					return icon;
