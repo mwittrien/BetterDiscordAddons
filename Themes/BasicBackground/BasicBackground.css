@@ -2062,6 +2062,13 @@ body:before {
 #app-mount .card-3DjzTQ {									/* guildcard			container							*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
+#app-mount .iconMask-3b8GzQ {								/* guildcard			iconmask							*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+#app-mount .card-3DjzTQ:hover,
+#app-mount .iconMask-3b8GzQ:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
 #app-mount .cardPlaceholder-1zrbbe {						/* guildcard			placeholder							*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
@@ -4106,6 +4113,10 @@ body:before {
 	color: rgba(var(--fontwhite4));
 }
 
+.wumpusWrapper-yrvoR3 {										/* footer				wumpus new user 					*/
+	margin-top: 27px;
+}
+
 #app-mount .quickMessage-1yeL4E {							/* footer				quickmessage						*/
 	background-color: rgba(var(--vtransparencycolor), 0.1);
 	border-color: rgba(var(--vtransparencycolor), 0.3);
@@ -5916,6 +5927,9 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 #app-mount .notice-2FJMB4 {
 	box-shadow: 0 1px 5px 0 rgba(var(--vtransparencycolor), 0.3);
 	color: rgb(var(--fontwhite1));
+}
+#app-mount .notice-2X5hT5 {
+	background-color: rgba(var(--vtransparencycolor), 0.6);
 }
 #app-mount .button-1MICoQ:not(:hover) {
 	border-color: rgba(var(--fontwhite1), 0.25);
