@@ -1,6 +1,8 @@
 //META{"name":"ThemeRepo","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeRepo","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ThemeRepo/ThemeRepo.plugin.js"}*//
 
 var ThemeRepo = (_ => {
+	var _this;
+	
 	var loading, cachedThemes, grabbedThemes, foundThemes, loadedThemes, generatorThemes, updateInterval;
 	
 	const themeStates = {
@@ -51,7 +53,7 @@ var ThemeRepo = (_ => {
 	
 	const repoListComponent = class ThemeList extends BdApi.React.Component {
 		render() {
-			let list = BDFDB.ReactUtils.createElement("ul", {
+			let list = BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.disCN._repolist,
 				style: {
 					display: "flex",
@@ -96,7 +98,7 @@ var ThemeRepo = (_ => {
 							delete this.props.options.generatorValues;
 						}
 						delete this.props.options.currentTheme;
-						this.props.plugin.updateList(instance, this.props.options);
+						_this.updateList(instance, this.props.options);
 						this.props.options.preview.executeJavaScriptSafe(`window.onmessage({
 							origin: "ThemeRepo",
 							reason: "NewTheme",
@@ -111,13 +113,13 @@ var ThemeRepo = (_ => {
 					label: "Download generated Theme",
 					children: "Download",
 					onClick: _ => {
-						this.props.plugin.createThemeFile(theme.name + ".theme.css", this.props.plugin.generateTheme(theme, this.props.options));
+						_this.createThemeFile(theme.name + ".theme.css", _this.generateTheme(theme, this.props.options));
 					}
 				}),
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 					className: BDFDB.disCN.marginbottom20
 				}),
-				theme && !forceRerenderGenerator && this.props.plugin.createGeneratorInputs(theme, this.props.options)
+				theme && !forceRerenderGenerator && _this.createGeneratorInputs(theme, this.props.options)
 			].flat(10).filter(n => n)
 		}
 	};
@@ -144,6 +146,8 @@ var ThemeRepo = (_ => {
 		}
 
 		initConstructor () {
+			_this = this;
+			
 			loading = {is:false, timeout:null, amount:0};
 			
 			cachedThemes = [];
@@ -467,14 +471,12 @@ var ThemeRepo = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: "Themes",
 							children: BDFDB.ReactUtils.createElement(repoListComponent, {
-								plugin: this,
 								entries: entries
 							})
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 							tab: "Generator",
 							children: BDFDB.ReactUtils.createElement(generatorComponent, {
-								plugin: this,
 								options: options
 							})
 						}),

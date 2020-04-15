@@ -1,6 +1,8 @@
 //META{"name":"CustomQuoter","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CustomQuoter","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CustomQuoter/CustomQuoter.plugin.js"}*//
 
 var CustomQuoter = (_ => {
+	var _this;
+	
 	const PreviewMessage = class PreviewMessage extends BdApi.React.Component {
 		render() {
 			let spoofChannel = new BDFDB.DiscordObjects.Channel({
@@ -23,7 +25,7 @@ var CustomQuoter = (_ => {
 					username: "Test User"
 				}),
 				channel_id: spoofChannel.id,
-				content: this.props.plugin.parseQuote(spoofQuotedMessage, spoofChannel)
+				content: _this.parseQuote(spoofQuotedMessage, spoofChannel)
 			});
 			return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessageGroup, {
 				className: BDFDB.disCNS.message + BDFDB.disCN.messagecozymessage,
@@ -49,6 +51,8 @@ var CustomQuoter = (_ => {
 		}
 		
 		initConstructor () {
+			_this = this;
+			
 			this.defaults = {
 				settings: {
 					quoteOnlySelected:		{value:true, 				description:"Only insert selected text in a quoted message"},
@@ -106,8 +110,7 @@ var CustomQuoter = (_ => {
 				})
 			}));
 			innerItems.push(BDFDB.ReactUtils.createElement(PreviewMessage, {
-				plugin: this,
-				key: "PREVIEW_MESSAGE",
+				key: "PREVIEW_MESSAGE"
 			}));
 			
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {

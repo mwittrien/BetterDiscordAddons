@@ -51,7 +51,7 @@ var PluginRepo = (_ => {
 	
 	const repoListComponent = class PluginList extends BdApi.React.Component {
 		render() {
-			let list = BDFDB.ReactUtils.createElement("ul", {
+			let list = BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.disCN._repolist,
 				style: {
 					display: "flex",

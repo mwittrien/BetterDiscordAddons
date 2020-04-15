@@ -1,6 +1,8 @@
 //META{"name":"FriendNotifications","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/FriendNotifications","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/FriendNotifications/FriendNotifications.plugin.js"}*//
 
 var FriendNotifications = (_ => {
+	var _this;
+	
 	var userStatusStore, timeLog, lastTimes, friendCounter, checkInterval;
 	
 	const FriendOnlineCounter = class FriendOnlineCounter extends BdApi.React.Component {
@@ -14,7 +16,7 @@ var FriendNotifications = (_ => {
 					className: BDFDB.disCN._friendnotificationsfriendsonline,
 					children: BDFDB.LanguageUtils.LanguageStringsFormat("FRIENDS_ONLINE_HEADER", this.props.amount),
 					onClick: _ => {
-						this.props.plugin.showTimeLog();
+						_this.showTimeLog();
 					}
 				})
 			});
@@ -39,6 +41,8 @@ var FriendNotifications = (_ => {
 		}
 
 		initConstructor () {
+			_this = this;
+			
 			userStatusStore = {};
 			timeLog = [];
 			lastTimes = {};
@@ -508,8 +512,7 @@ var FriendNotifications = (_ => {
 			if (BDFDB.DataUtils.get(this, "settings", "addOnlineCount")) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ConnectedUnreadDMs"});
 				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(FriendOnlineCounter, {
-					amount: BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount(),
-					plugin: this
+					amount: BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount()
 				}));
 			}
 		}
@@ -669,7 +672,7 @@ var FriendNotifications = (_ => {
 					className: BDFDB.disCN._friendnotificationsfriendsonline,
 					children: BDFDB.LanguageUtils.LanguageStringsFormat("FRIENDS_ONLINE_HEADER", this.props.amount),
 					onClick: _ => {
-						this.props.plugin.showTimeLog();
+						_this.showTimeLog();
 					}
 				})
 			});
@@ -1163,8 +1166,7 @@ var FriendNotifications = (_ => {
 			if (BDFDB.DataUtils.get(this, "settings", "addOnlineCount")) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ConnectedUnreadDMs"});
 				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(FriendOnlineCounter, {
-					amount: BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount(),
-					plugin: this
+					amount: BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount()
 				}));
 			}
 		}

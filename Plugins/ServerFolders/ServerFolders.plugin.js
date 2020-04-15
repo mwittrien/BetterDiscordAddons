@@ -1,6 +1,8 @@
 //META{"name":"ServerFolders","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerFolders","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ServerFolders/ServerFolders.plugin.js"}*//
 
 var ServerFolders = (_ => {
+	var _this;
+	
 	var folderStates, folderReads, guildStates;
 
 	const folderIcons = [
@@ -43,7 +45,7 @@ var ServerFolders = (_ => {
 					theme: BDFDB.LibraryComponents.ScrollerVertical.Themes.GHOST_HAIRLINE,
 					children: this.props.folders.map(folderId => {
 						let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(folderId);
-						let data = this.props.plugin.getFolderConfig(folderId);
+						let data = _this.getFolderConfig(folderId);
 						return folder ? folder.guildIds.map(guildId => {
 							return [
 								this.draggedGuild == guildId ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Guild, {
@@ -59,10 +61,10 @@ var ServerFolders = (_ => {
 									onClick: event => {
 										if (BDFDB.InternalData.pressedKeys.includes(46)) {
 											BDFDB.ListenerUtils.stopEvent(event);
-											this.props.plugin.removeGuildFromFolder(folderId, guildId);
+											_this.removeGuildFromFolder(folderId, guildId);
 										}
 										else {
-											let settings = BDFDB.DataUtils.get(this.props.plugin, "settings");
+											let settings = BDFDB.DataUtils.get(_this, "settings");
 											if (settings.closeAllFolders) {
 												for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (openFolderId != folderId || !settings.forceOpenFolder) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
 											}
@@ -76,12 +78,12 @@ var ServerFolders = (_ => {
 											if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
 												BDFDB.ListenerUtils.stopEvent(event);
 												this.draggedGuild = guildId;
-												let dragpreview = this.props.plugin.createDragPreview(BDFDB.ReactUtils.findDOMNode(instance).cloneNode(true), event2);
+												let dragpreview = _this.createDragPreview(BDFDB.ReactUtils.findDOMNode(instance).cloneNode(true), event2);
 												BDFDB.ReactUtils.forceUpdate(this);
 												document.removeEventListener("mousemove", mousemove);
 												document.removeEventListener("mouseup", mouseup);
 												let dragging = event3 => {
-													this.props.plugin.updateDragPreview(dragpreview, event3);
+													_this.updateDragPreview(dragpreview, event3);
 													let placeholder = BDFDB.DOMUtils.getParent(BDFDB.dotCN._serverfoldersguildplaceholder, event3.target);
 													let hoveredGuild = (BDFDB.ReactUtils.findValue(BDFDB.DOMUtils.getParent(BDFDB.dotCNS._serverfoldersfoldercontent + BDFDB.dotCN.guildouter, placeholder ? placeholder.previousSibling : event3.target), "guild", {up: true}) || {}).id;
 													if (hoveredGuild) {
@@ -100,7 +102,7 @@ var ServerFolders = (_ => {
 														let guildIds = [].concat(folder.guildIds);
 														BDFDB.ArrayUtils.remove(guildIds, this.draggedGuild, true);
 														guildIds.splice(guildIds.indexOf(this.hoveredGuild) + 1, 0, this.draggedGuild);
-														this.props.plugin.updateFolder(Object.assign({}, folder, {guildIds}));
+														_this.updateFolder(Object.assign({}, folder, {guildIds}));
 													}
 													delete this.draggedGuild;
 													delete this.hoveredGuild;
@@ -128,7 +130,7 @@ var ServerFolders = (_ => {
 								})
 							]
 						}) : null;
-					}).filter(n => n).reduce((r, a) => r.concat(a, BDFDB.DataUtils.get(this.props.plugin, "settings", "addSeparators") ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Items.Separator, {}) : null), [0]).slice(1, -1).flat(10).filter(n => n)
+					}).filter(n => n).reduce((r, a) => r.concat(a, BDFDB.DataUtils.get(_this, "settings", "addSeparators") ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Items.Separator, {}) : null), [0]).slice(1, -1).flat(10).filter(n => n)
 				})
 			});
 		}
@@ -136,10 +138,10 @@ var ServerFolders = (_ => {
 	
 	const folderIconPickerComponent = class FolderIconPicker extends BdApi.React.Component {
 		render() {
-			let folderIcons = this.props.plugin.loadAllIcons();
+			let folderIcons = _this.loadAllIcons();
 			for (let id in folderIcons) if (!folderIcons[id].customID) {
-				folderIcons[id].openicon = this.props.plugin.createBase64SVG(folderIcons[id].openicon);
-				folderIcons[id].closedicon = this.props.plugin.createBase64SVG(folderIcons[id].closedicon);
+				folderIcons[id].openicon = _this.createBase64SVG(folderIcons[id].openicon);
+				folderIcons[id].closedicon = _this.createBase64SVG(folderIcons[id].closedicon);
 			}
 			folderIcons["-1"] = {};
 			return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
@@ -165,7 +167,7 @@ var ServerFolders = (_ => {
 							BDFDB.ReactUtils.forceUpdate(this);
 						},
 						onRemove: _ => {
-							BDFDB.DataUtils.remove(this.props.plugin, "customicons", id);
+							BDFDB.DataUtils.remove(_this, "customicons", id);
 							BDFDB.ReactUtils.forceUpdate(this);
 						},
 						children: folderIcons[id].closedicon ? BDFDB.ReactUtils.createElement("div", {
@@ -197,7 +199,7 @@ var ServerFolders = (_ => {
 		render() {
 			return [
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-					title: this.props.plugin.labels.modal_customopen_text,
+					title: _this.labels.modal_customopen_text,
 					className: BDFDB.disCN.marginbottom20,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 						type: "file",
@@ -210,7 +212,7 @@ var ServerFolders = (_ => {
 					})
 				}),
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-					title: this.props.plugin.labels.modal_customclosed_text,
+					title: _this.labels.modal_customclosed_text,
 					className: BDFDB.disCN.marginbottom20,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 						type: "file",
@@ -223,7 +225,7 @@ var ServerFolders = (_ => {
 					})
 				}),
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-					title: this.props.plugin.labels.modal_custompreview_text,
+					title: _this.labels.modal_custompreview_text,
 					className: BDFDB.disCN.marginbottom20,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 						justify: BDFDB.LibraryComponents.Flex.Justify.BETWEEN,
@@ -255,7 +257,7 @@ var ServerFolders = (_ => {
 								onClick: (e, instance) => {
 									let inputIns = BDFDB.ReactUtils.findOwner(this, {name: "BDFDB_TextInput", all:true, unlimited:true});
 									if (inputIns.length == 2 && inputIns[0].props.value && inputIns[1].props.value) {
-										BDFDB.DataUtils.save({openicon: inputIns[0].props.value, closedicon: inputIns[1].props.value}, this.props.plugin, "customicons", this.props.plugin.generateID("customicon"));
+										BDFDB.DataUtils.save({openicon: inputIns[0].props.value, closedicon: inputIns[1].props.value}, _this, "customicons", _this.generateID("customicon"));
 										this.props.open = null;
 										this.props.closed = null;
 										BDFDB.ModuleUtils.forceAllUpdates(this, "GuildFolderSettingsModal");
@@ -296,7 +298,11 @@ var ServerFolders = (_ => {
 		}
 
 		initConstructor () {
-			folderStates = {}, folderReads = {}, guildStates = {};
+			_this = this;
+			
+			folderStates = {};
+			folderReads = {};
+			guildStates = {};
 				
 			this.css = `
 				.${this.name}-modal ${BDFDB.dotCN._serverfoldersiconswatch} {
@@ -577,7 +583,6 @@ var ServerFolders = (_ => {
 		processAppView (e) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: ["FluxContainer(Guilds)", "FluxContainer(NavigableGuilds)"]});
 			if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(folderGuildContentComponent, {
-				plugin: this,
 				themeOverride: children[index].props.themeOverride
 			}));
 		}
@@ -719,7 +724,6 @@ var ServerFolders = (_ => {
 								title: this.labels.modal_iconpicker_text,
 								className: BDFDB.disCN.marginbottom20,
 								children: BDFDB.ReactUtils.createElement(folderIconPickerComponent, {
-									plugin: this,
 									selectedIcon: data.iconID
 								})
 							}),
@@ -792,9 +796,7 @@ var ServerFolders = (_ => {
 					}),
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 						tab: this.labels.modal_tabheader4_text,
-						children: BDFDB.ReactUtils.createElement(folderIconCustomPreviewComponent, {
-							plugin: this
-						})
+						children: BDFDB.ReactUtils.createElement(folderIconCustomPreviewComponent, {})
 					})
 				];
 				[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: ["ModalFooter", "Footer"]});
