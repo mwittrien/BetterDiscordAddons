@@ -1251,7 +1251,10 @@
 				for (let key of Object.keys(originalMethod)) module[methodName][key] = originalMethod[key];
 				if (!module[methodName].__originalFunction) {
 					let realOriginalMethod = originalMethod.__originalMethod || originalMethod.__originalFunction || originalMethod;
-					if (typeof realOriginalMethod == "function") module[methodName].__originalFunction = realOriginalMethod;
+					if (typeof realOriginalMethod == "function") {
+						module[methodName].__originalFunction = realOriginalMethod;
+						module[methodName].toString = _ => realOriginalMethod.toString();
+					}
 				}
 				module[methodName].__isBDFDBpatched = true;
 			}
