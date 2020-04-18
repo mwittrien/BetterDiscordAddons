@@ -802,11 +802,13 @@ body:before {
 
 /* ====		6.2.1.	MESSAGE							==== */
 
+
 #app-mount .message-2qRu38 {								/* message				confirm modal						*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 	box-shadow: none;
 }
 .message-2qnXI6,											/* message				container							*/
+.message-2DieIs,											/* message				mention popout						*/
 .message-2qRu38 .wrapper-2a6GCs,
 .messageGroupCozy-2iY6cT,
 .messageGroupCozy-1BZuO8 {
@@ -890,6 +892,7 @@ body:before {
 #app-mount .mentioned-xhSam7.cozy-3raOZG .header-23xsNx:after {
 	border-right-color: rgba(var(--vaccentcolor), calc(var(--vmessagetransparency) * 100000000000000000000000000000));
 }
+.message-2DieIs,
 .zalgo-jN1Ica .messageContent-2qWWxC,
 .zalgo-jN1Ica.cozy-3raOZG .header-23xsNx {
 	overflow: visible;
@@ -907,6 +910,7 @@ body:before {
 	margin-left: 0;
 	padding-left: 0;
 }
+.messageContainer-gbhlwo .wrapper-2a6GCs,
 .message-2qRu38 .wrapper-2a6GCs,
 .messageGroupWrapper-o-Zw7G .messageGroupCozy-2iY6cT,
 .searchResult-3pzFAB .messageGroupCozy-1BZuO8 {
@@ -4466,6 +4470,34 @@ body:before {
 }
 .image-2JDb81 {												/* popout				emptyimage							*/
 	opacity: 0.6;
+}
+
+/* NEW */
+
+															/* popout				active tab							*/
+#app-mount .header-2-Imhb .tabBar-1kuXvJ .tab-ck0077.active-1MbGPa {
+	background-color: rgb(var(--vaccentcolor));
+}
+.secondary-dIudih,											/* popout				header button						*/
+.tertiary-aMXF0g {											/* popout				message button						*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+	color: rgb(var(--fontwhite3));
+}
+.secondary-dIudih:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+	color: rgb(var(--fontwhite1));
+}
+.channelHeader-3Gd2xq {										/* popout				channelheader						*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+	padding-right: 16px;
+	border-radius: 5px 5px 0 0;
+}
+.messageContainer-gbhlwo {									/* popout				messagecontainer					*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+	border-radius: 0;
+}
+.messageContainer-gbhlwo:last-child {
+	border-radius: 0 0 5px 5px;
 }
 
 /* ----		14.5.	SEARCHPOPOUT					---- */
