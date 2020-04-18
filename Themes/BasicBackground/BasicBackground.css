@@ -4483,7 +4483,8 @@ body:before {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 	color: rgb(var(--fontwhite3));
 }
-.secondary-dIudih:hover {
+.secondary-dIudih:hover,
+.tertiary-aMXF0g:hover {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 	color: rgb(var(--fontwhite1));
 }
