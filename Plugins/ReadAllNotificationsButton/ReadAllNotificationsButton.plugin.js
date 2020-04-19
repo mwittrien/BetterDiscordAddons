@@ -1,28 +1,39 @@
 //META{"name":"ReadAllNotificationsButton","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ReadAllNotificationsButton","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ReadAllNotificationsButton/ReadAllNotificationsButton.plugin.js"}*//
 
 var ReadAllNotificationsButton = (_ => {
-	var blacklist;
+	var blacklist, clearing;
 	
 	return class ReadAllNotificationsButton {
 		getName () {return "ReadAllNotificationsButton";}
 
-		getVersion () {return "1.5.7";}
+		getVersion () {return "1.5.8";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Adds a button to clear all notifications.";}
 
 		constructor () {
+			this.changelog = {
+				"fixed":[["Clear All Mentions","Fixed for new recent mentions popout style"]]
+			};
+			
 			this.patchedModules = {
 				after: {
 					Guilds: "render",
-					MessagesPopout: "render"
+					MessagesPopout: "render",
+					RecentsHeader: "default"
 				}
 			};
 		}
 
 		initConstructor () {
 			this.css = `
+				${BDFDB.dotCN.messagespopouttabbar}) {
+					flex: 1 0 auto;
+				}
+				${BDFDB.dotCN.messagespopouttabbar} ~ * {
+					margin-left: 10px;
+				}
 				${BDFDB.dotCN._readallnotificationsbuttonframe} {
 					margin-bottom: 10px;
 				}
@@ -260,39 +271,47 @@ var ReadAllNotificationsButton = (_ => {
 		}
 
 		processMessagesPopout (e) {
-			if (e.instance.props.className == BDFDB.disCN.recentmentionspopout && BDFDB.DataUtils.get(this, "settings", "addClearButton")) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "RecentMentionsHeader"});
-				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-					look: BDFDB.LibraryComponents.Button.Looks.OUTLINED,
-					color: BDFDB.LibraryComponents.Button.Colors.GREY,
-					hover: BDFDB.LibraryComponents.Button.Hovers.RED,
-					size: BDFDB.LibraryComponents.Button.Sizes.MIN,
-					children: BDFDB.LanguageUtils.LanguageStrings.REMOVE,
-					onClick: (event, buttoninstance) => {
-						let clear = _ => {
-							this.clearMentions(e.instance, BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagespopoutwrap, BDFDB.ReactUtils.findDOMNode(buttoninstance)));
-						};
-						if (!BDFDB.DataUtils.get(this, "settings", "confirmClear")) clear();
-						else BDFDB.ModalUtils.confirm(this, `Are you sure you want to mark all Mentions as read?`, clear);
-					},
-					style: {
-						position: "absolute",
-						top: 14,
-						right: 16,
-						zIndex: 2001
-					}
-				}));
+			if (e.instance.props.className == BDFDB.disCN.recentmentionspopout && e.returnvalue.props.children && e.returnvalue.props.children[0]) {
+				e.returnvalue.props.children[0].props.messages = e.instance.props.messages;
 			}
 		}
 
-		clearMentions (instance, wrapper) {
-			if (!instance || !Node.prototype.isPrototypeOf(wrapper) || !document.contains(wrapper)) return;
-			let closebuttons = wrapper.querySelectorAll(BDFDB.dotCN.messagespopoutclosebutton);
-			for (let btn of closebuttons) btn.click();
-			if (closebuttons.length) {
-				instance.props.loadMore();
-				BDFDB.TimeUtils.timeout(_ => {this.clearMentions(instance, wrapper);},3000);
-			}
+		processRecentsHeader (e) {
+			let settings = BDFDB.DataUtils.get(this, "settings");
+			if (settings.addClearButton) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
+				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+					text: `${BDFDB.LanguageUtils.LanguageStrings.CLOSE} (${BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL})`,
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+						className: BDFDB.disCNS.messagespopoutbutton + BDFDB.disCN.messagespopoutbuttonsecondary,
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+							nativeClass: true,
+							name: BDFDB.LibraryComponents.SvgIcon.Names.CLOSE,
+							width: 16,
+							height: 16
+						}),
+						onClick: _ => {
+							let clear = _ => {
+								if (clearing) return BDFDB.NotificationUtils.toast("Already clearing some recent mentions, please wait...", {type: "error"});
+								let messages = [].concat(e.instance.props.messages);
+								if (messages.length) {
+									clearing = true;
+									let toast = BDFDB.NotificationUtils.toast("Clearing all recent mentions, please wait...", {timeout:0});
+									for (let i = 0; i < messages.length; i++) BDFDB.TimeUtils.timeout(_ => {
+										BDFDB.LibraryModules.RecentMentionUtils.deleteRecentMention(messages[i].id);
+										if (i == messages.length - 1) {
+											clearing = false;
+											toast.close();
+											BDFDB.NotificationUtils.toast("Cleared all recent mentions.", {type: "success"});
+										}
+									}, i * 1000);
+								}
+							};
+							if (settings.confirmClear) BDFDB.ModalUtils.confirm(this, `Are you sure you want to mark all mentions as read?`, clear);
+							else clear();
+						}
+					})
+				})
+			}));
 		}
 		
 		markGuildsAsRead (guilds) {
