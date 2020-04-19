@@ -1183,7 +1183,6 @@
 		V2C_ThemeCard: "_repocard"
 	};
 	WebModulesData.CodeFinder = {
-		MessageAttachment: ["Types.ATTACHMENT", "default.hiddenSpoilers", "default.inline"]
 	};
 	WebModulesData.PropsFinder = {
 		MessageHeader: "MessageTimestamp",
@@ -4149,6 +4148,9 @@
 		charCounter: "charCounter-7fw40k charcounter",
 		counterAdded: "counterAdded-zz9O4t"
 	};
+	DiscordClassModules.DisplayLargeMessages = {
+		injectButton: "injectButton-8eKqGu"
+	};
 	DiscordClassModules.DisplayServersAsChannels = {
 		badge: "badge-fxFrUP",
 		name: "name-z5133D",
@@ -4489,6 +4491,7 @@
 		_chatfiltercensoredstamp: ["ChatFilter", "censoredStamp"],
 		_charcountercounter: ["CharCounter", "charCounter"],
 		_charcountercounteradded: ["CharCounter", "counterAdded"],
+		_displaylargemessagesinjectbutton: ["DisplayLargeMessages", "injectButton"],
 		_displayserversaschannelsbadge: ["DisplayServersAsChannels", "badge"],
 		_displayserversaschannelsname: ["DisplayServersAsChannels", "name"],
 		_displayserversaschannelsstyled: ["DisplayServersAsChannels", "styled"],
@@ -8036,6 +8039,9 @@
 				height: 16
 			},
 			icon: `<svg name="Pin" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path fill="%%color" d="M19 3H5V5H7V12H5V14H11V22H13V14H19V12H17V5H19V3Z"></path></g></svg>`
+		},
+		RAW_TEXT: {
+			icon: `<svg name="RawText" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><path fill="%%color" d="m 8.22,4.11 h 2.74 v 1.37 h 2.74 V 1.37 H 0 v 4.11 h 2.74 v -1.37 H 5.48 V 17.82 H 2.74 v 2.74 h 8.22 v -2.74 H 8.22 Z"></path><path fill="%%color" d="m 10.96,8.22 v 4.11 h 2.74 v -1.37 h 1.37 v 6.85 h -1.37 v 2.74 h 5.48 v -2.74 h -1.37 v -6.85 h 1.37 v 1.37 h 2.74 V 8.22 H 10.96 Z"</path></svg>`
 		},
 		RIGHT_CARET: {
 			icon: `<svg name="RightCaret" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><polygon fill="%%color" fill-rule="nonzero" points="8.47 2 6.12 4.35 13.753 12 6.12 19.65 8.47 22 18.47 12"></polygon><polygon points="0 0 24 0 24 24 0 24"></polygon></g></svg>`

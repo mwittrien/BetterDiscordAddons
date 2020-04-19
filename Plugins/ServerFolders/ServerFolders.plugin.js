@@ -37,7 +37,7 @@ var ServerFolders = (_ => {
 				this.props.closing = true;
 				BDFDB.ReactUtils.forceUpdate(this);
 			}, 300);
-			return BDFDB.ReactUtils.createElement("div", {
+			return BDFDB.ReactUtils.createElement("nav", {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.guildswrapper, BDFDB.disCN.guilds, this.props.themeOverride && BDFDB.disCN.themedark, BDFDB.disCN._serverfoldersfoldercontent, (!folders.length || closing) && BDFDB.disCN._serverfoldersfoldercontentclosed),
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ScrollerVertical, {
 					outerClassName: BDFDB.disCN.guildsscrollerwrap,
