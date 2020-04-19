@@ -1,12 +1,12 @@
 //META{"name":"DisplayLargeMessages","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/DisplayLargeMessages","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/DisplayLargeMessages/DisplayLargeMessages.plugin.js"}*//
 
 var DisplayLargeMessages = (_ => {
-	var encodedMessages, requestedMessages, updateTimeout, messagesInstance;
+	var encodedMessages, requestedMessages, updateTimeout;
 	
 	return class DisplayLargeMessages {
 		getName () {return "DisplayLargeMessages";}
 
-		getVersion () {return "1.0.1";}
+		getVersion () {return "1.0.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -157,7 +157,6 @@ var DisplayLargeMessages = (_ => {
 		}
 
 		processMessages (e) {
-			messagesInstance = e.instance;
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let amounts = BDFDB.DataUtils.get(this, "amounts");
 			for (let i in e.instance.props.messages._array) {
@@ -170,7 +169,7 @@ var DisplayLargeMessages = (_ => {
 						}));
 						message.attachments = message.attachments.filter(n => n.filename != "message.txt");
 						e.instance.props.messages._array[i] = message;
-						let stream = e.instance.props.channelStream.find(n => n.groupId == message.id);
+						let stream = e.instance.props.channelStream.find(n => n.content && n.content.id == message.id);
 						if (stream) stream.content = message;
 					}
 				}
@@ -184,7 +183,7 @@ var DisplayLargeMessages = (_ => {
 							};
 							BDFDB.TimeUtils.clear(updateTimeout);
 							updateTimeout = BDFDB.TimeUtils.timeout(_ => {
-								BDFDB.ReactUtils.forceUpdate(messagesInstance);
+								BDFDB.ReactUtils.forceUpdate(e.instance);
 							}, 1000);
 						});
 					}
@@ -203,17 +202,20 @@ var DisplayLargeMessages = (_ => {
 						target: "_blank",
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 							className: BDFDB.disCN._displaylargemessagesinjectbutton,
-							name: BDFDB.LibraryComponents.SvgIcon.Names.RAW_TEXT
+							name: BDFDB.LibraryComponents.SvgIcon.Names.RAW_TEXT,
+							width: 20,
+							height: 20
 						}),
 						onClick: event => {
 							BDFDB.ListenerUtils.stopEvent(event);
-							let message = BDFDB.ReactUtils.findValue(event.target, "message", {up: true});
+							let target = event.target;
+							let message = BDFDB.ReactUtils.findValue(target, "message", {up: true});
 							if (message) BDFDB.LibraryRequires.request(e.instance.props.url, (error, response, body) => {
 								encodedMessages[message.id] = {
 									content: message.content || "",
 									attachment: body || ""
 								};
-								BDFDB.ReactUtils.forceUpdate(messagesInstance);
+								BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(target, {name: "Messages", up: true}));
 							});
 						}
 					})
