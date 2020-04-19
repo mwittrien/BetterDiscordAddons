@@ -1,7 +1,7 @@
 //META{"name":"ShowHiddenChannels","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowHiddenChannels","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ShowHiddenChannels/ShowHiddenChannels.plugin.js"}*//
 
 var ShowHiddenChannels = (_ => {
-	var blacklist, changedInstances, channelTypes;
+	var blacklist, changedInstances;
 			
 	const settingsMap = {
 		GUILD_TEXT: "showText",
@@ -52,9 +52,6 @@ var ShowHiddenChannels = (_ => {
 		initConstructor () {
 			changedInstances = {};
 
-			channelTypes = {};
-			for (let type in BDFDB.DiscordConstants.ChannelTypes) channelTypes[BDFDB.DiscordConstants.ChannelTypes[type]] = type;
-
 			this.defaults = {
 				settings: {
 					sortNative:				{value:false, 	description:"Sort hidden Channels in the native Order"},
@@ -63,9 +60,6 @@ var ShowHiddenChannels = (_ => {
 					showAnnouncement:		{value:true, 	description:"Show hidden Announcement Channels"},
 					showStore:				{value:true, 	description:"Show hidden Store Channels"},
 					showForNormal:			{value:false,	description:"Add Access-Overview ContextMenu Entry for non-hidden Channels"},
-				},
-				amounts: {
-					hoverDelay:				{value:0, 		min:0,			description:"Tooltip delay in millisec:"}
 				}
 			};
 		}
@@ -250,13 +244,12 @@ var ShowHiddenChannels = (_ => {
 			if (amount) {
 				let settings = BDFDB.DataUtils.get(this, "settings"), index = -1;
 				for (let catId in e.instance.props.categories) for (let channelObj of e.instance.props.categories[catId]) if (channelObj.index > index) index = channelObj.index;
-				let categoryType = BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY;
 				if (!settings.sortNative) {
 					let hiddenCategory = new BDFDB.DiscordObjects.Channel({
 						guild_id: e.instance.props.guild.id,
 						id: e.instance.props.guild.id + "_hidden",
 						name: "hidden",
-						type: categoryType
+						type: BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY
 					});
 					if (!BDFDB.ArrayUtils.is(e.instance.props.categories[hiddenCategory.id])) e.instance.props.categories[hiddenCategory.id] = [];
 					if (!e.instance.props.categories._categories.some(categoryObj => categoryObj.channel && categoryObj.channel.id == hiddenCategory.id)) {
@@ -265,9 +258,9 @@ var ShowHiddenChannels = (_ => {
 							index: ++index
 						});
 					}
-					if (!e.instance.props.channels[categoryType].some(categoryObj => categoryObj.channel && categoryObj.channel.id == hiddenCategory.id)) {
-						e.instance.props.channels[categoryType].push({
-							comparator: ++(e.instance.props.channels[categoryType][e.instance.props.channels[categoryType].length - 1] || {comparator: 0}).comparator,
+					if (!e.instance.props.channels[BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY].some(categoryObj => categoryObj.channel && categoryObj.channel.id == hiddenCategory.id)) {
+						e.instance.props.channels[BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY].push({
+							comparator: ++(e.instance.props.channels[BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY][e.instance.props.channels[BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY].length - 1] || {comparator: 0}).comparator,
 							channel: hiddenCategory
 						});
 					}
@@ -315,7 +308,7 @@ var ShowHiddenChannels = (_ => {
 					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "Icon"});
 					if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 						nativeClass: true,
-						iconSVG: `<svg class="${BDFDB.disCN.channelicon}" width="24" height="24" viewBox="0 0 24 24"><mask id="${this.name + e.instance.props.channel.id}" fill="black"><path d="M 0 0 H 24 V 24 H 0 Z" fill="white"></path><path d="M24 0 H 13 V 12 H 24 Z" fill="black"></path></mask><path mask="url(#${this.name + e.instance.props.channel.id})" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="${this.channelIcons[channelTypes[e.instance.props.channel.type]] || this.channelIcons.DEFAULT}"></path><path fill="currentColor" d="M 21.025 5 V 4 C 21.025 2.88 20.05 2 19 2 C 17.95 2 17 2.88 17 4 V 5 C 16.4477 5 16 5.44772 16 6 V 9 C 16 9.55228 16.4477 10 17 10 H 19 H 21 C 21.5523 10 22 9.55228 22 9 V 5.975C22 5.43652 21.5635 5 21.025 5 Z M 20 5 H 18 V 4 C 18 3.42857 18.4667 3 19 3 C 19.5333 3 20 3.42857 20 4 V 5 Z"></path></svg>`
+						iconSVG: `<svg class="${BDFDB.disCN.channelicon}" width="24" height="24" viewBox="0 0 24 24"><mask id="${this.name + e.instance.props.channel.id}" fill="black"><path d="M 0 0 H 24 V 24 H 0 Z" fill="white"></path><path d="M24 0 H 13 V 12 H 24 Z" fill="black"></path></mask><path mask="url(#${this.name + e.instance.props.channel.id})" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="${this.channelIcons[BDFDB.DiscordConstants.ChannelTypes[e.instance.props.channel.type]] || this.channelIcons.DEFAULT}"></path><path fill="currentColor" d="M 21.025 5 V 4 C 21.025 2.88 20.05 2 19 2 C 17.95 2 17 2.88 17 4 V 5 C 16.4477 5 16 5.44772 16 6 V 9 C 16 9.55228 16.4477 10 17 10 H 19 H 21 C 21.5523 10 22 9.55228 22 9 V 5.975C22 5.43652 21.5635 5 21.025 5 Z M 20 5 H 18 V 4 C 18 3.42857 18.4667 3 19 3 C 19.5333 3 20 3.42857 20 4 V 5 Z"></path></svg>`
 					});
 					[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.channelchildren]]});
 					if (index > -1 && children[index].props && children[index].props.children) {
@@ -343,17 +336,17 @@ var ShowHiddenChannels = (_ => {
 			let instance = changedInstances[guildid];
 			if (instance) {
 				delete instance.props.categories[guildid + "_hidden"];
-				let removedCategories = [], categoryType = BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY;
+				let removedCategories = [];
 				for (let categoryObj of instance.props.categories._categories) if (categoryObj.channel.id.endsWith("hidden")) removedCategories.push(categoryObj);
 				for (let categoryObj of removedCategories) BDFDB.ArrayUtils.remove(instance.props.categories._categories, categoryObj);
 				for (let id in instance.props.categories) if (BDFDB.ArrayUtils.is(instance.props.categories[id])) {
 					let removedChannels = [];
-					for (let channelObj of instance.props.categories[id]) if (this.isChannelHidden(channelObj.channel.id) && (channelObj.channel.type != categoryType || channelObj.channel.id.endsWith("hidden"))) removedChannels.push(channelObj);
+					for (let channelObj of instance.props.categories[id]) if (this.isChannelHidden(channelObj.channel.id) && (channelObj.channel.type != BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY || channelObj.channel.id.endsWith("hidden"))) removedChannels.push(channelObj);
 					for (let channelObj of removedChannels) BDFDB.ArrayUtils.remove(instance.props.categories[id], channelObj);
 				}
 				for (let type in instance.props.channels) if (BDFDB.ArrayUtils.is(instance.props.channels[type])) {
 					let removedChannels = [];
-					for (let channelObj of instance.props.channels[type]) if (this.isChannelHidden(channelObj.channel.id) && (channelObj.channel.type != categoryType || channelObj.channel.id.endsWith("hidden"))) removedChannels.push(channelObj);
+					for (let channelObj of instance.props.channels[type]) if (this.isChannelHidden(channelObj.channel.id) && (channelObj.channel.type != BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY || channelObj.channel.id.endsWith("hidden"))) removedChannels.push(channelObj);
 					for (let channelObj of removedChannels) BDFDB.ArrayUtils.remove(instance.props.channels[type], channelObj);
 				}
 				delete changedInstances[guildid].instance;
@@ -367,12 +360,12 @@ var ShowHiddenChannels = (_ => {
 		
 		getHiddenChannels (guild) {
 			if (!guild) return [{}, 0];
-			let settings = BDFDB.DataUtils.get(this, "settings"), categoryType = BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY;;
+			let settings = BDFDB.DataUtils.get(this, "settings");
 			let all = BDFDB.LibraryModules.ChannelStore.getChannels(), hidden = {}, amount = 0;
 			for (let type in BDFDB.DiscordConstants.ChannelTypes) hidden[BDFDB.DiscordConstants.ChannelTypes[type]] = [];
 			for (let channel_id in all) {
 				let channel = all[channel_id];
-				if (channel.guild_id == guild.id && channel.type != categoryType && (settings[settingsMap[channelTypes[channel.type]]] || settings[settingsMap[channelTypes[channel.type]]] === undefined) && this.isChannelHidden(channel.id)) {
+				if (channel.guild_id == guild.id && channel.type != BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY && (settings[settingsMap[BDFDB.DiscordConstants.ChannelTypes[channel.type]]] || settings[settingsMap[BDFDB.DiscordConstants.ChannelTypes[channel.type]]] === undefined) && this.isChannelHidden(channel.id)) {
 					amount++;
 					hidden[channel.type].push(channel);
 				}
@@ -444,7 +437,7 @@ var ShowHiddenChannels = (_ => {
 									text: channel.topic || BDFDB.LanguageUtils.LanguageStrings.CHANNEL_TOPIC_EMPTY
 								}, {
 									title: BDFDB.LanguageUtils.LanguageStrings.CHANNEL_TYPE,
-									text: BDFDB.LanguageUtils.LanguageStrings[typeNameMap[channelTypes[channel.type]]]
+									text: BDFDB.LanguageUtils.LanguageStrings[typeNameMap[BDFDB.DiscordConstants.ChannelTypes[channel.type]]]
 								}, {
 									title: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_NAME,
 									text: category && category.name || BDFDB.LanguageUtils.LanguageStrings.NO_CATEGORY

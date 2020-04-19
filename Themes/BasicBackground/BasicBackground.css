@@ -6184,7 +6184,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	border-color: rgba(var(--fontwhite4), 0.3);
 	color: rgb(var(--fontwhite1));
 }
-		
+	
 #pubslayer .ui-tab-bar-item,
 #app-mount #bd-settings-sidebar .ui-tab-bar-item {			/* sidebar				item								*/
 	color: rgb(var(--fontwhite3));
@@ -6238,6 +6238,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 
 #app-mount #bd-settingspane-container h2.ui-form-title {	/* settingsitems		header								*/
 	color: rgb(var(--fontwhite1));
+	min-width: 100px;
 }
 #app-mount #bd-settingspane-container .ui-switch-item h3 {
 	color: rgb(var(--fontwhite1));
