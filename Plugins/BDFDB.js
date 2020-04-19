@@ -1657,6 +1657,7 @@
 	LibraryModules.PermissionRoleUtils = BDFDB.ModuleUtils.findByProperties("getHighestRole", "can");
 	LibraryModules.QuoteUtils = BDFDB.ModuleUtils.findByProperties("canQuote", "createQuotedText");
 	LibraryModules.ReactionUtils = BDFDB.ModuleUtils.findByProperties("addReaction", "removeReaction");
+	LibraryModules.RecentMentionUtils = BDFDB.ModuleUtils.findByProperties("deleteRecentMention", "fetchRecentMentions");
 	LibraryModules.SearchPageUtils = BDFDB.ModuleUtils.findByProperties("searchNextPage", "searchPreviousPage");
 	LibraryModules.SelectChannelUtils = BDFDB.ModuleUtils.findByProperties("selectChannel", "selectPrivateChannel");
 	LibraryModules.SettingsUtils = BDFDB.ModuleUtils.findByProperties("updateRemoteSettings", "updateLocalSettings");
