@@ -15,7 +15,7 @@ var DisplayLargeMessages = (_ => {
 		constructor () {
 			this.changelog = {
 				"added":[["On demand option","Added option to load the content of a 'message.txt' on demand instead of automatically"]],
-				"improved":[["Max Filesize","Added a max file size optiopn for the automatic-mode to protect the app from injecting huge files, possibly causing a slowdown"]],
+				"improved":[["Max Filesize","Added a max file size option for the automatic-mode to protect the app from injecting huge files, possibly causing a slowdown"]],
 				"fixed":[["Editing","Content of a 'message.txt' no longer gets inserted in the input when you edit your own message"],["Scrolling","No longer force scrolls to the bottom on large messages"]]
 			};
 			
