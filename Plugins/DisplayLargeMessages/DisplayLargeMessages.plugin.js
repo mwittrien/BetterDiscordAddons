@@ -1,7 +1,7 @@
 //META{"name":"DisplayLargeMessages","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/DisplayLargeMessages","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/DisplayLargeMessages/DisplayLargeMessages.plugin.js"}*//
 
 var DisplayLargeMessages = (_ => {
-	var encodedMessages, requestedMessages, updateTimeout;
+	var encodedMessages, requestedMessages, updateTimeout, messagesInstance;
 	
 	return class DisplayLargeMessages {
 		getName () {return "DisplayLargeMessages";}
@@ -157,6 +157,7 @@ var DisplayLargeMessages = (_ => {
 		}
 
 		processMessages (e) {
+			messagesInstance = e.instance;
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let amounts = BDFDB.DataUtils.get(this, "amounts");
 			for (let i in e.instance.props.messages._array) {
@@ -183,7 +184,7 @@ var DisplayLargeMessages = (_ => {
 							};
 							BDFDB.TimeUtils.clear(updateTimeout);
 							updateTimeout = BDFDB.TimeUtils.timeout(_ => {
-								BDFDB.ReactUtils.forceUpdate(e.instance);
+								BDFDB.ReactUtils.forceUpdate(messagesInstance);
 							}, 1000);
 						});
 					}
@@ -206,14 +207,13 @@ var DisplayLargeMessages = (_ => {
 						}),
 						onClick: event => {
 							BDFDB.ListenerUtils.stopEvent(event);
-							let target = event.target;
-							let message = BDFDB.ReactUtils.findValue(target, "message", {up: true});
+							let message = BDFDB.ReactUtils.findValue(event.target, "message", {up: true});
 							if (message) BDFDB.LibraryRequires.request(e.instance.props.url, (error, response, body) => {
 								encodedMessages[message.id] = {
 									content: message.content || "",
 									attachment: body || ""
 								};
-								BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(target, {name: "Messages", up: true}));
+								BDFDB.ReactUtils.forceUpdate(messagesInstance);
 							});
 						}
 					})
