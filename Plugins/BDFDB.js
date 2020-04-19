@@ -5383,6 +5383,8 @@
 		messagespopouttitle: ["MessagesPopout", "title"],
 		messagespopoutvisible: ["MessagesPopout", "visible"],
 		messagespopoutwrap: ["MessagesPopout", "messagesPopoutWrap"],
+		messagesscroller: ["MessagesWrap", "scroller"],
+		messagesscrollerinner: ["MessagesWrap", "scrollerInner"],
 		messagesscrollerwrapper: ["MessagesWrap", "scrollerWrap"],
 		messageswelcomemessage: ["MessagesWelcome", "welcomeMessage"],
 		messageswelcomemessageheader: ["MessagesWelcome", "h1"],
