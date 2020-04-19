@@ -1183,6 +1183,7 @@
 		V2C_ThemeCard: "_repocard"
 	};
 	WebModulesData.CodeFinder = {
+		MessageAttachment: ["Types.ATTACHMENT", "default.hiddenSpoilers", "default.inline"]
 	};
 	WebModulesData.PropsFinder = {
 		MessageHeader: "MessageTimestamp",
@@ -3720,12 +3721,12 @@
 	};
 	
 	BDFDB.NumberUtils = {};
-	BDFDB.NumberUtils.formatBytes = function (bytes, sigdigits) {
+	BDFDB.NumberUtils.formatBytes = function (bytes, sigDigits) {
 		bytes = parseInt(bytes);
 		if (isNaN(bytes) || bytes < 0) return "0 Bytes";
 		if (bytes == 1) return "1 Byte";
-		var size = Math.floor(Math.log(bytes) / Math.log(1024));
-		return parseFloat((bytes / Math.pow(1024, size)).toFixed(sigdigits < 1 ? 0 : sigdigits > 20 ? 20 : sigdigits || 2)) + " " + ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"][size];
+		let size = Math.floor(Math.log(bytes) / Math.log(1024));
+		return parseFloat((bytes / Math.pow(1024, size)).toFixed(sigDigits < 1 ? 0 : sigDigits > 20 ? 20 : sigDigits || 2)) + " " + ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"][size];
 	};
 	BDFDB.NumberUtils.mapRange = function (from, to, value) {
 		if (parseFloat(value) < parseFloat(from[0])) return parseFloat(to[0]);
