@@ -1106,6 +1106,7 @@
 		"NameTag",
 		"NowPlayingItem",
 		"PrivateChannelEmptyMessage",
+		"RecentsHeader",
 		"SystemMessage",
 		"SimpleMessageAccessories",
 		"UserInfo"
@@ -4409,6 +4410,7 @@
 	DiscordClassModules.MessageToolbar = BDFDB.ModuleUtils.findByProperties("container", "icon", "isHeader");
 	DiscordClassModules.MessageToolbarItems = BDFDB.ModuleUtils.findByProperties("wrapper", "button", "separator");
 	DiscordClassModules.MessagesPopout = BDFDB.ModuleUtils.findByProperties("messagesPopoutWrap", "jumpButton");
+	DiscordClassModules.MessagesPopoutButtons = BDFDB.ModuleUtils.findByProperties("secondary", "tertiary", "button");
 	DiscordClassModules.MessagesWelcome = BDFDB.ModuleUtils.findByProperties("welcomeMessage", "h1");
 	DiscordClassModules.MessagesWrap = BDFDB.ModuleUtils.findByProperties("messagesWrapper", "messageGroupBlocked");
 	DiscordClassModules.Modal = BDFDB.ModuleUtils.findByProperties("modal", "sizeLarge");
@@ -5361,6 +5363,9 @@
 		messagespopoutactionbuttons: ["MessagesPopout", "actionButtons"],
 		messagespopoutbody: ["MessagesPopout", "body"],
 		messagespopoutbottom: ["MessagesPopout", "bottom"],
+		messagespopoutbutton: ["MessagesPopoutButtons", "button"],
+		messagespopoutbuttonsecondary: ["MessagesPopoutButtons", "secondary"],
+		messagespopoutbuttontertiary: ["MessagesPopoutButtons", "tertiary"],
 		messagespopoutchannelname: ["MessagesPopout", "channelName"],
 		messagespopoutchannelseparator: ["MessagesPopout", "channelSeparator"],
 		messagespopoutclosebutton: ["MessagesPopout", "closeIcon"],
