@@ -4492,6 +4492,7 @@ body:before {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 	padding-right: 16px;
 	border-radius: 5px 5px 0 0;
+	position: static;
 }
 .messageContainer-gbhlwo {									/* popout				messagecontainer					*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
