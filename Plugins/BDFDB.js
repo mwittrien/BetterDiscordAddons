@@ -4411,6 +4411,7 @@
 	DiscordClassModules.MessageToolbarItems = BDFDB.ModuleUtils.findByProperties("wrapper", "button", "separator");
 	DiscordClassModules.MessagesPopout = BDFDB.ModuleUtils.findByProperties("messagesPopoutWrap", "jumpButton");
 	DiscordClassModules.MessagesPopoutButtons = BDFDB.ModuleUtils.findByProperties("secondary", "tertiary", "button");
+	DiscordClassModules.MessagesPopoutTabBar = BDFDB.ModuleUtils.findByProperties("header", "tabBar", "active");
 	DiscordClassModules.MessagesWelcome = BDFDB.ModuleUtils.findByProperties("welcomeMessage", "h1");
 	DiscordClassModules.MessagesWrap = BDFDB.ModuleUtils.findByProperties("messagesWrapper", "messageGroupBlocked");
 	DiscordClassModules.Modal = BDFDB.ModuleUtils.findByProperties("modal", "sizeLarge");
@@ -5385,6 +5386,10 @@
 		messagespopoutscroller: ["MessagesPopout", "scroller"],
 		messagespopoutscrollingfooterwrap: ["MessagesPopout", "scrollingFooterWrap"],
 		messagespopoutspinner: ["MessagesPopout", "spinner"],
+		messagespopouttabbar: ["MessagesPopoutTabBar", "tabBar"],
+		messagespopouttabbarheader: ["MessagesPopoutTabBar", "header"],
+		messagespopouttabbartab: ["MessagesPopoutTabBar", "tab"],
+		messagespopouttabbartabactive: ["MessagesPopoutTabBar", "active"],
 		messagespopouttitle: ["MessagesPopout", "title"],
 		messagespopoutvisible: ["MessagesPopout", "visible"],
 		messagespopoutwrap: ["MessagesPopout", "messagesPopoutWrap"],
