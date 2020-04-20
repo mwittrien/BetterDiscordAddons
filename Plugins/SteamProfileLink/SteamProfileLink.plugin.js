@@ -12,7 +12,7 @@ var SteamProfileLink = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Support links","ALso works for support links now"]]
+				"improved":[["Support links","Also works for support links now"]]
 			};
 		}
 
