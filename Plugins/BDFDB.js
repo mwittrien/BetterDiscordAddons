@@ -8086,12 +8086,13 @@
 		}
 		render() {
 			let items = (BDFDB.ArrayUtils.is(this.props.items) ? this.props.items : [{}]).filter(n => n);
+			let selectedItem = this.props.selectedItem || (items[0] || {}).value;
 			return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.TabBar, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-				selectedItem: this.props.selectedItem || (items[0] || {}).value,
+				selectedItem: selectedItem,
 				onItemSelect: this.handleItemSelect.bind(this),
 				children: items.map(data => {
 					return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TabBar.Item, {
-						className: this.props.itemClassName,
+						className: BDFDB.DOMUtils.formatClassName(this.props.itemClassName, this.props.itemSelectedClassName && selectedItem == data.value),
 						itemType: this.props.type,
 						id: data.value,
 						children: data.label || data.value,
