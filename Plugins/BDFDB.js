@@ -8611,6 +8611,13 @@
 			margin-right: 10px;
 		}
 		
+		${BDFDB.dotCNS.popoutwrapper + BDFDB.dotCN.messagespopouttabbarheader} {
+			align-items: center;
+		}
+		${BDFDB.dotCNS.popoutwrapper + BDFDB.dotCNS.messagespopouttabbarheader + BDFDB.dotCN.messagespopouttabbar} {
+			min-height: 32px;
+		}
+		
 		${BDFDB.dotCNS.themelight + BDFDB.dotCN.quickselectpopoutwrapper},
 		${BDFDB.dotCNS.themedark + BDFDB.dotCN.quickselectpopoutwrapper} {
 			border-radius: 4px;
