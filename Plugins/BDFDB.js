@@ -8092,7 +8092,7 @@
 				onItemSelect: this.handleItemSelect.bind(this),
 				children: items.map(data => {
 					return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TabBar.Item, {
-						className: BDFDB.DOMUtils.formatClassName(this.props.itemClassName, this.props.itemSelectedClassName && selectedItem == data.value),
+						className: BDFDB.DOMUtils.formatClassName(this.props.itemClassName, selectedItem == data.value && this.props.itemSelectedClassName),
 						itemType: this.props.type,
 						id: data.value,
 						children: data.label || data.value,
