@@ -28,7 +28,7 @@ var ReadAllNotificationsButton = (_ => {
 
 		initConstructor () {
 			this.css = `
-				${BDFDB.dotCN.messagespopouttabbar}) {
+				${BDFDB.dotCN.messagespopouttabbar} {
 					flex: 1 0 auto;
 				}
 				${BDFDB.dotCN.messagespopouttabbar} ~ * {
