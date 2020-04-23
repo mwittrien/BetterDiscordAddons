@@ -7489,19 +7489,19 @@
 			let child = (BDFDB.ArrayUtils.is(this.props.children) ? this.props.children[0] : this.props.children) || BDFDB.ReactUtils.createElement("div", {style: {height: "100%", width: "100%"}});
 			child.props.className = BDFDB.DOMUtils.formatClassName(child.props.className, this.props.className);
 			let childClick = child.props.onClick, childContextMenu = child.props.onContextMenu;
-			child.props.onClick = (e, childthis) => {
+			child.props.onClick = (e, childThis) => {
 				if (!this.domElementRef.current || this.domElementRef.current.contains(e.target)) {
-					if ((this.props.openOnClick || this.props.openOnClick === undefined) && typeof this.handleClick == "function") this.handleClick();
+					if ((this.props.openOnClick || this.props.openOnClick === undefined) && typeof this.handleClick == "function") this.handleClick(e);
 					if (typeof this.props.onClick == "function") this.props.onClick(e, this);
-					if (typeof childClick == "function") childClick(e, childthis);
+					if (typeof childClick == "function") childClick(e, childThis);
 				}
 				else e.stopPropagation();
 			};
-			child.props.onContextMenu = (e, childthis) => {
+			child.props.onContextMenu = (e, childThis) => {
 				if (!this.domElementRef.current || this.domElementRef.current.contains(e.target)) {
-					if (this.props.openOnContextMenu && typeof this.handleClick == "function") this.handleClick();
+					if (this.props.openOnContextMenu && typeof this.handleClick == "function") this.handleClick(e);
 					if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
-					if (typeof childContextMenu == "function") childContextMenu(e, childthis);
+					if (typeof childContextMenu == "function") childContextMenu(e, childThis);
 				}
 				else e.stopPropagation();
 			};
@@ -8345,26 +8345,26 @@
 			child.props.className = BDFDB.DOMUtils.formatClassName(child.props.className, this.props.className);
 			let childMouseEnter = child.props.onMouseEnter, childMouseLeave = child.props.onMouseLeave, childClick = child.props.onClick, childContextMenu = child.props.onContextMenu;
 			let shown = false;
-			child.props.onMouseEnter = (e, childthis) => {
+			child.props.onMouseEnter = (e, childThis) => {
 				if (!shown) {
 					shown = true;
 					BDFDB.TooltipUtils.create(e.currentTarget, this.props.text, Object.assign({delay: this.props.delay}, this.props.tooltipConfig));
 					if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);
-					if (typeof childMouseEnter == "function") childMouseEnter(e, childthis);
+					if (typeof childMouseEnter == "function") childMouseEnter(e, childThis);
 				}
 			};
-			child.props.onMouseLeave = (e, childthis) => {
+			child.props.onMouseLeave = (e, childThis) => {
 				shown = false;
 				if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);
-				if (typeof childMouseLeave == "function") childMouseLeave(e, childthis);
+				if (typeof childMouseLeave == "function") childMouseLeave(e, childThis);
 			};
-			child.props.onClick = (e, childthis) => {
+			child.props.onClick = (e, childThis) => {
 				if (typeof this.props.onClick == "function") this.props.onClick(e, this);
-				if (typeof childClick == "function") childClick(e, childthis);
+				if (typeof childClick == "function") childClick(e, childThis);
 			};
-			child.props.onContextMenu = (e, childthis) => {
+			child.props.onContextMenu = (e, childThis) => {
 				if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);
-				if (typeof childContextMenu == "function") childContextMenu(e, childthis);
+				if (typeof childContextMenu == "function") childContextMenu(e, childThis);
 			};
 			return BDFDB.ReactUtils.createElement(LibraryModules.React.Fragment, {
 				children: child
