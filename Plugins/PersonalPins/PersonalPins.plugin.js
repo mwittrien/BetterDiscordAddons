@@ -12,13 +12,13 @@ var PersonalPins = (_ => {
 
 		getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-		getVersion () {return "1.9.0";} 
+		getVersion () {return "1.9.1";} 
 
 		getAuthor () {return "DevilBro";}
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Crash","Fixed some weird rare crash occuring for some people"]]
+				"fixed":[["Styling","Adjusted the styling to the new styling of the recent mentions popout"]]
 			};
 
 			this.patchedModules = {
@@ -256,60 +256,66 @@ var PersonalPins = (_ => {
 			let searchTimeout;
 			return [
 				BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.disCN.messagespopoutheader,
+					className: BDFDB.disCNS.messagespopouttabbarheader + BDFDB.disCN.messagespopoutheader,
 					style: {
-						paddingBottom: 0
+						paddingBottom: 4
 					},
-					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-									className: BDFDB.disCN.messagespopouttitle,
-									children: this.labels.popout_note_text
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
-									query: buttonInstance.props.searchKey,
-									onChange: value => {
-										BDFDB.TimeUtils.clear(searchTimeout);
-										searchTimeout = BDFDB.TimeUtils.timeout(_ => {
-											buttonInstance.props.searchKey = value;
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+						direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+								className: BDFDB.disCN.marginbottom4,
+								align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+								children: [
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+										className: BDFDB.disCN.messagespopouttitle,
+										children: this.labels.popout_note_text
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
+										query: buttonInstance.props.searchKey,
+										onChange: value => {
+											BDFDB.TimeUtils.clear(searchTimeout);
+											searchTimeout = BDFDB.TimeUtils.timeout(_ => {
+												buttonInstance.props.searchKey = value;
+												BDFDB.ReactUtils.forceUpdate(buttonInstance.popout._owner.stateNode);
+											}, 1000);
+										},
+										onClear: _ => {
+											buttonInstance.props.searchKey = "";
 											BDFDB.ReactUtils.forceUpdate(buttonInstance.popout._owner.stateNode);
-										}, 1000);
-									},
-									onClear: _ => {
-										buttonInstance.props.searchKey = "";
-										BDFDB.ReactUtils.forceUpdate(buttonInstance.popout._owner.stateNode);
-									}
-								})
-							]
-						}),
-						BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN.tabbarheadercontainer,
-							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar, {
-									className: BDFDB.disCN.tabbarheader,
-									itemClassName: BDFDB.disCN.tabbarheaderitem,
-									type: BDFDB.LibraryComponents.TabBar.Types.TOP,
-									selectedItem: buttonInstance.props.selectedFilter.value,
-									items: tabKeys.map(key => this.getValue(key, "filter")),
-									onItemSelect: key => {
-										buttonInstance.props.selectedFilter = this.getValue(key, "filter");
-										BDFDB.ReactUtils.forceUpdate(buttonInstance.popout._owner.stateNode);
-									}
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
-									spacing: -25,
-									label: this.labels.popout_sort_text + ":",
-									value: buttonInstance.props.selectedSort,
-									options: sortKeys.map(key => this.getValue(key, "sort")),
-									onChange: key => {
-										buttonInstance.props.selectedSort = this.getValue(key, "sort");
-										BDFDB.ReactUtils.forceUpdate(buttonInstance.popout._owner.stateNode);
-									}
-								})
-							]
-						})
-					]
+										}
+									})
+								]
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+								align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+								children: [
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar, {
+										className: BDFDB.disCN.messagespopouttabbar,
+										itemClassName: BDFDB.disCN.messagespopouttabbartab,
+										itemSelectedClassName: BDFDB.disCN.messagespopouttabbartabactive,
+										type: BDFDB.LibraryComponents.TabBar.Types.TOP_PILL,
+										selectedItem: buttonInstance.props.selectedFilter.value,
+										items: tabKeys.map(key => this.getValue(key, "filter")),
+										onItemSelect: key => {
+											buttonInstance.props.selectedFilter = this.getValue(key, "filter");
+											BDFDB.ReactUtils.forceUpdate(buttonInstance.popout._owner.stateNode);
+										}
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
+										spacing: -2,
+										label: this.labels.popout_sort_text + ":",
+										value: buttonInstance.props.selectedSort,
+										options: sortKeys.map(key => this.getValue(key, "sort")),
+										onChange: key => {
+											buttonInstance.props.selectedSort = this.getValue(key, "sort");
+											BDFDB.ReactUtils.forceUpdate(buttonInstance.popout._owner.stateNode);
+										}
+									})
+								]
+							})
+						]
+					})
 				}),
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ScrollerVertical, {
 					className: BDFDB.disCN.messagespopout,
