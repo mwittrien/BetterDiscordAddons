@@ -8613,6 +8613,8 @@
 		
 		${BDFDB.dotCNS.popoutwrapper + BDFDB.dotCN.messagespopouttabbarheader} {
 			align-items: center;
+			height: unset;
+			min-height: 56px;
 		}
 		${BDFDB.dotCNS.popoutwrapper + BDFDB.dotCNS.messagespopouttabbarheader + BDFDB.dotCN.messagespopouttabbar} {
 			min-height: 32px;
