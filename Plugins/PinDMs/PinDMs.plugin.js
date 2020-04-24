@@ -7,7 +7,7 @@ var PinDMs = (_ => {
 	return class PinDMs {
 		getName () {return "PinDMs";}
 
-		getVersion () {return "1.6.6";}
+		getVersion () {return "1.6.7";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -288,8 +288,9 @@ var PinDMs = (_ => {
 				e.instance.props.channels = Object.assign({}, e.instance.props.channels);
 				e.instance.props.privateChannelIds = [].concat(e.instance.props.privateChannelIds || []);
 				e.instance.props.pinnedChannelIds = Object.assign({}, e.instance.props.pinnedChannelIds);
+				e.instance.props.shownPinnedChannelIds = Object.assign({}, e.instance.props.shownPinnedChannelIds);
 				if (!e.returnvalue) {
-					let settings = BDFDB.DataUtils.get(this, "settings"), selectedChannelId = BDFDB.LibraryModules.LastChannelStore.getChannelId();
+					let settings = BDFDB.DataUtils.get(this, "settings");
 					if (draggedChannel && releasedChannel) {
 						let categoryId = releasedChannel.split("header_")[1];
 						let category = categories.find(n => categoryId != undefined ? n.id == categoryId : n.dms.includes(releasedChannel));
@@ -315,14 +316,18 @@ var PinDMs = (_ => {
 						releasedCategory = null;
 					}
 					e.instance.props.pinnedChannelIds = {};
+					e.instance.props.shownPinnedChannelIds = {};
 					for (let category of [].concat(categories).reverse()) {
 						e.instance.props.pinnedChannelIds[category.id] = [];
+						e.instance.props.shownPinnedChannelIds[category.id] = [];
 						for (let id of this.sortDMsByTime(this.filterDMs(category.dms), "dmCategories").reverse()) {
 							BDFDB.ArrayUtils.remove(e.instance.props.privateChannelIds, id, true);
+							e.instance.props.pinnedChannelIds[category.id].push(id);
 							if (!category.collapsed || e.instance.props.selectedChannelId == id) {
 								e.instance.props.privateChannelIds.unshift(id);
-								e.instance.props.pinnedChannelIds[category.id].push(id);
+								e.instance.props.shownPinnedChannelIds[category.id].push(id);
 							}
+							else e.instance.props.privateChannelIds.unshift(null);
 						}
 					}
 					BDFDB.ModuleUtils.unpatch(this, e.instance, "renderSection");
@@ -460,22 +465,31 @@ var PinDMs = (_ => {
 							let category = categories[e2.methodArguments[0] - 1];
 							let id = e.instance.props.privateChannelIds[e2.methodArguments[1]];
 							if (category) {
-								if (category.collapsed && e.instance.props.selectedChannelId != id || !category.dms.includes(id) || draggedCategory == category.id  || draggedChannel == id) e2.returnValue = null;
-								else if (hoveredCategory == category.id && [].concat(category.dms).reverse()[0] == id) e2.returnValue = [
-									e2.returnValue,
-									BDFDB.ReactUtils.createElement("h2", {
-										className: BDFDB.disCNS.dmchannelheadercontainer + BDFDB.disCNS._pindmspinnedchannelsheadercontainer + BDFDB.disCNS._pindmsdmchannelplaceholder + BDFDB.disCN.namecontainernamecontainer
-									})
-								]
-								else if (hoveredChannel == id) e2.returnValue = [
-									e2.returnValue,
-									BDFDB.ReactUtils.createElement("div", {
-										className: BDFDB.disCNS.dmchannel + BDFDB.disCNS._pindmsdmchannelpinned + BDFDB.disCNS._pindmsdmchannelplaceholder + BDFDB.disCN.namecontainernamecontainer,
-										children: BDFDB.ReactUtils.createElement("div", {
-											className: BDFDB.disCN.namecontainerlayout
+								if (!id || category.collapsed && e.instance.props.selectedChannelId != id || !category.dms.includes(id) || draggedCategory == category.id  || draggedChannel == id) e2.returnValue = null;
+								else {
+									e2.returnValue = e.instance.props.channels[id] ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PrivateChannelItems[e.instance.props.channels[id].isMultiUserDM() ? "GroupDM" : "DirectMessage"], Object.assign({
+										key: id,
+										channel: e.instance.props.channels[id],
+										selected: e.instance.props.selectedChannelId == id
+									}, e.instance.props.navigator.getItemProps({
+										index: e2.methodArguments[2]
+									}))) : null;
+									if (hoveredCategory == category.id && [].concat(category.dms).reverse()[0] == id) e2.returnValue = [
+										e2.returnValue,
+										BDFDB.ReactUtils.createElement("h2", {
+											className: BDFDB.disCNS.dmchannelheadercontainer + BDFDB.disCNS._pindmspinnedchannelsheadercontainer + BDFDB.disCNS._pindmsdmchannelplaceholder + BDFDB.disCN.namecontainernamecontainer
 										})
-									})
-								]
+									].filter(n => n);
+									else if (hoveredChannel == id) e2.returnValue = [
+										e2.returnValue,
+										BDFDB.ReactUtils.createElement("div", {
+											className: BDFDB.disCNS.dmchannel + BDFDB.disCNS._pindmsdmchannelpinned + BDFDB.disCNS._pindmsdmchannelplaceholder + BDFDB.disCN.namecontainernamecontainer,
+											children: BDFDB.ReactUtils.createElement("div", {
+												className: BDFDB.disCN.namecontainerlayout
+											})
+										})
+									].filter(n => n);
+								}
 							}
 						}
 					}}, {force: true, noCache: true});
@@ -491,9 +505,9 @@ var PinDMs = (_ => {
 				else {
 					e.returnvalue.props.sections = [];
 					e.returnvalue.props.sections.push(e.instance.state.preRenderedChildren);
-					let pinnedIds = BDFDB.ObjectUtils.toArray(e.instance.props.pinnedChannelIds).reverse();
-					for (let ids of pinnedIds) e.returnvalue.props.sections.push(ids.length || 1);
-					e.returnvalue.props.sections.push(e.instance.props.privateChannelIds.length - pinnedIds.flat().length);
+					let shownPinnedIds = BDFDB.ObjectUtils.toArray(e.instance.props.shownPinnedChannelIds).reverse();
+					for (let ids of shownPinnedIds) e.returnvalue.props.sections.push(ids.length || 1);
+					e.returnvalue.props.sections.push(e.instance.props.privateChannelIds.length - shownPinnedIds.flat().length);
 				}
 			}
 		}
