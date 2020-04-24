@@ -1,10 +1,13 @@
 //META{"name":"PinDMs","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PinDMs","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PinDMs/PinDMs.plugin.js"}*//
 
 var PinDMs = (_ => {
+	let hoveredCategory, draggedCategory, releasedCategory;
+	let hoveredChannel, draggedChannel, releasedChannel;
+	
 	return class PinDMs {
 		getName () {return "PinDMs";}
 
-		getVersion () {return "1.6.5";}
+		getVersion () {return "1.6.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,16 +15,16 @@ var PinDMs = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Silent updates? NANI!","Fixed for discords sneaky updates"]]
+				"fixed":[["List flickering","Fixed the weird bugs where the list would jump around, flicker or leave huge gaps"]]
 			};
 			
 			this.patchedModules = {
 				before: {
-					ConnectedPrivateChannelsList: "default",
 					PrivateChannelsList: "render",
 					UnreadDMs: "render"
 				},
 				after: {
+					PrivateChannelsList: "render",
 					UnreadDMs: "render",
 					PrivateChannel: ["render", "componentDidMount"],
 					DirectMessage: ["render", "componentDidMount", "componentWillUnmount"]
@@ -278,190 +281,219 @@ var PinDMs = (_ => {
 				]
 			}));
 		}
-
-		processConnectedPrivateChannelsList (e) {
-			BDFDB.ArrayUtils.remove(e.instance.props.children, e.instance.props.children.find(f => f && f.functionName == "renderPinnedCategories"), true);
-			let categories = this.sortAndUpdateCategories("dmCategories", true);
-			if (categories.length) {
-				let renderPinnedCategories = _ => {
-					let elements = [];
-					if (this.draggedChannel && this.releasedChannel) {
-						let categoryId = this.releasedChannel.split("header_")[1];
-						let category = categories.find(n => categoryId != undefined ? n.id == categoryId : n.dms.includes(this.releasedChannel));
-						if (category) {
-							BDFDB.ArrayUtils.remove(category.dms, this.draggedChannel, true);
-							category.dms.splice(categoryId != undefined ? 0 : category.dms.indexOf(this.releasedChannel) + 1, 0, this.draggedChannel);
-							BDFDB.DataUtils.save(category, this, "dmCategories", category.id);
-						}
-						delete this.draggedChannel;
-						delete this.releasedChannel;
-					}
-					let settings = BDFDB.DataUtils.get(this, "settings"), selectedChannelId = BDFDB.LibraryModules.LastChannelStore.getChannelId();
-					for (let category of categories) if (this.draggedCategory != category.id) {
-						let color = BDFDB.ColorUtils.convert(category.color, "RGBA");
-						let foundDMs = this.filterDMs(category.dms);
-						let unreadAmount = settings.showCategoryUnread && BDFDB.ArrayUtils.sum(foundDMs.map(id => BDFDB.LibraryModules.UnreadChannelUtils.getMentionCount(id)));
-						elements.push(BDFDB.ReactUtils.createElement("h2", {
-							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.dmchannelheadercontainer, BDFDB.disCN._pindmspinnedchannelsheadercontainer, category.collapsed && BDFDB.disCN._pindmspinnedchannelsheadercollapsed, color && BDFDB.disCN._pindmspinnedchannelsheadercolored, BDFDB.disCN.namecontainernamecontainer),
-							categoryId: category.id,
-							onMouseDown: event => {
-								event = event.nativeEvent || event;
-								let node = BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmspinnedchannelsheadercontainer, event.target).cloneNode(true);
-								let mousemove = event2 => {
-									if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
-										BDFDB.ListenerUtils.stopEvent(event);
-										this.draggedCategory = category.id;
-										this.updateContainer("dmCategories");
-										let dragpreview = this.createDragPreview(node, event2);
-										document.removeEventListener("mousemove", mousemove);
-										document.removeEventListener("mouseup", mouseup);
-										let dragging = event3 => {
-											this.updateDragPreview(dragpreview, event3);
-											let placeholder = BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmsdmchannelplaceholder, event3.target);
-											let categoryNode = BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmspinnedchannelsheadercontainer, placeholder ? placeholder.previousSibling : event3.target);
-											let hoveredCategory = categoryNode && categoryNode.getAttribute("categoryId");
-											let update = hoveredCategory != this.hoveredCategory;
-											if (hoveredCategory) this.hoveredCategory = hoveredCategory;
-											else delete this.hoveredCategory; 
-											if (update) this.updateContainer("dmCategories");
-										};
-										let releasing = event3 => {
-											BDFDB.DOMUtils.remove(dragpreview);
-											if (this.hoveredCategory) this.releasedCategory = this.hoveredCategory;
-											else delete this.draggedCategory;
-											delete this.hoveredCategory;
-											this.updateContainer("dmCategories");
-											document.removeEventListener("mousemove", dragging);
-											document.removeEventListener("mouseup", releasing);
-										};
-										document.addEventListener("mousemove", dragging);
-										document.addEventListener("mouseup", releasing);
-									}
-								};
-								let mouseup = _ => {
-									document.removeEventListener("mousemove", mousemove);
-									document.removeEventListener("mouseup", mouseup);
-								};
-								document.addEventListener("mousemove", mousemove);
-								document.addEventListener("mouseup", mouseup);
-							},
-							onClick: _ => {
-								if (foundDMs.length || !category.collapsed) {
-									category.collapsed = !category.collapsed;
-									BDFDB.DataUtils.save(category, this, "dmCategories", category.id);
-									this.forceUpdatePrivateChannels();
-								}
-							},
-							onContextMenu: event => {
-								BDFDB.ContextMenuUtils.open(this, event, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-									children: [
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-											label: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_SETTINGS,
-											action: event2 => {
-												BDFDB.ContextMenuUtils.close(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, event2.target));
-												this.openCategorySettingsModal(category, "dmCategories");
-											}
-										}),
-										BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-											label: BDFDB.LanguageUtils.LanguageStrings.DELETE_CATEGORY,
-											danger: true,
-											action: event2 => {
-												BDFDB.ContextMenuUtils.close(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, event2.target));
-												BDFDB.DataUtils.remove(this, "dmCategories", category.id);
-												this.forceUpdatePrivateChannels();
-											}
-										})
-									]
-								}));
-							},
-							children: [
-								BDFDB.ObjectUtils.is(color) ? BDFDB.ReactUtils.createElement("span", {
-									className: BDFDB.disCN.dmchannelheadertext,
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
-										gradient: BDFDB.ColorUtils.createGradient(color),
-										children: category.name
-									})
-								}) : BDFDB.ReactUtils.createElement("span", {
-									className: BDFDB.disCN.dmchannelheadertext,
-									style: {color: color},
-									children: category.name,
-								}),
-								unreadAmount ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
-									className: BDFDB.disCN._pindmspinnedchannelsheaderamount,
-									count: unreadAmount,
-									style: {backgroundColor: BDFDB.DiscordConstants.Colors.STATUS_RED}
-								}) : null,
-								settings.showCategoryAmount ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
-									className: BDFDB.disCN._pindmspinnedchannelsheaderamount,
-									count: foundDMs.length,
-									style: {backgroundColor: BDFDB.DiscordConstants.Colors.BRAND}
-								}) : null,
-								BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCNS._pindmspinnedchannelsheaderarrow + BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-										className: BDFDB.disCNS._pindmspinnedchannelsheaderarrow + BDFDB.disCN.channelheadericon,
-										nativeClass: true,
-										iconSVG: `<svg width="24" height="24" viewBox="4 4 16 16"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M16.59 8.59004L12 13.17L7.41 8.59004L6 10L12 16L18 10L16.59 8.59004Z"></path></svg>`
-									})
-								})
-							].filter(n => n)
-						}));
-						if (this.hoveredChannel == "header_" + category.id) elements.push(BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCNS.dmchannel + BDFDB.disCNS._pindmsdmchannelpinned + BDFDB.disCNS._pindmsdmchannelplaceholder + BDFDB.disCN.namecontainernamecontainer,
-							children: BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN.namecontainerlayout
-							})
-						}));
-						for (let id of this.sortDMsByTime(foundDMs, "dmCategories")) {
-							let channel = BDFDB.LibraryModules.ChannelStore.getChannel(id);
-							if (channel && this.draggedChannel != id && (!category.collapsed || selectedChannelId == id)) {
-								elements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PrivateChannelItems[channel.isMultiUserDM() ? "GroupDM" : "DirectMessage"], {
-									key: id,
-									channel: channel,
-									selected: id === selectedChannelId
-								}));
-								if (this.hoveredChannel == id) elements.push(BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCNS.dmchannel + BDFDB.disCNS._pindmsdmchannelpinned + BDFDB.disCNS._pindmsdmchannelplaceholder + BDFDB.disCN.namecontainernamecontainer,
-									children: BDFDB.ReactUtils.createElement("div", {
-										className: BDFDB.disCN.namecontainerlayout
-									})
-								}));
-							}
-						}
-						if (this.hoveredCategory == category.id) elements.push(BDFDB.ReactUtils.createElement("h2", {
-							className: BDFDB.disCNS.dmchannelheadercontainer + BDFDB.disCNS._pindmspinnedchannelsheadercontainer + BDFDB.disCNS._pindmsdmchannelplaceholder + BDFDB.disCN.namecontainernamecontainer
-						}));
-					}
-					return elements;
-				};
-				renderPinnedCategories.functionName = "renderPinnedCategories";
-				e.instance.props.children.push(renderPinnedCategories);
-			}
-		}
 		
 		processPrivateChannelsList (e) {
 			let categories = this.sortAndUpdateCategories("dmCategories", true);
 			if (categories.length) {
-				if (this.draggedCategory && this.releasedCategory) {
-					let draggedCategory = categories.find(n => n.id == this.draggedCategory);
-					let releasedCategory = categories.find(n => n.id == this.releasedCategory);
-					if (draggedCategory && releasedCategory) {
-						BDFDB.ArrayUtils.remove(categories, draggedCategory, true);
-						categories.splice(categories.indexOf(releasedCategory) + 1, 0, draggedCategory);
-						let newCategories = {}, newPos = 0;
-						for (let category of [].concat(categories).reverse()) newCategories[category.id] = Object.assign(category, {pos:newPos++});
-						BDFDB.DataUtils.save(newCategories, this, "dmCategories");
-					}
-					delete this.draggedCategory;
-					delete this.releasedCategory;
-					this.forceUpdatePrivateChannels();
-				}
 				e.instance.props.channels = Object.assign({}, e.instance.props.channels);
-				e.instance.props.privateChannelIds = [].concat(e.instance.props.privateChannelIds).filter(n => n);
-				for (let category of categories) for (let id of this.sortDMsByTime(category.dms, "dmCategories")) if (e.instance.props.channels[id]) {
-					delete e.instance.props.channels[id];
-					BDFDB.ArrayUtils.remove(e.instance.props.privateChannelIds, id, true);
-					if (!category.collapsed || e.instance.props.selectedChannelId == id) e.instance.props.privateChannelIds.unshift(id);
+				e.instance.props.privateChannelIds = [].concat(e.instance.props.privateChannelIds || []);
+				e.instance.props.pinnedChannelIds = Object.assign({}, e.instance.props.pinnedChannelIds);
+				if (!e.returnvalue) {
+					let settings = BDFDB.DataUtils.get(this, "settings"), selectedChannelId = BDFDB.LibraryModules.LastChannelStore.getChannelId();
+					if (draggedChannel && releasedChannel) {
+						let categoryId = releasedChannel.split("header_")[1];
+						let category = categories.find(n => categoryId != undefined ? n.id == categoryId : n.dms.includes(releasedChannel));
+						if (category) {
+							BDFDB.ArrayUtils.remove(category.dms, draggedChannel, true);
+							category.dms.splice(categoryId != undefined ? 0 : category.dms.indexOf(releasedChannel) + 1, 0, draggedChannel);
+							BDFDB.DataUtils.save(category, this, "dmCategories", category.id);
+						}
+						draggedChannel = null;
+						releasedChannel = null;
+					}
+					if (draggedCategory && releasedCategory) {
+						let maybedDraggedCategory = categories.find(n => n.id == draggedCategory);
+						let maybedReleasedCategory = categories.find(n => n.id == releasedCategory);
+						if (maybedDraggedCategory && maybedReleasedCategory) {
+							BDFDB.ArrayUtils.remove(categories, maybedDraggedCategory, true);
+							categories.splice(categories.indexOf(maybedReleasedCategory) + 1, 0, maybedDraggedCategory);
+							let newCategories = {}, newPos = 0;
+							for (let category of [].concat(categories).reverse()) newCategories[category.id] = Object.assign(category, {pos:newPos++});
+							BDFDB.DataUtils.save(newCategories, this, "dmCategories");
+						}
+						draggedCategory = null;
+						releasedCategory = null;
+					}
+					e.instance.props.pinnedChannelIds = {};
+					for (let category of [].concat(categories).reverse()) {
+						e.instance.props.pinnedChannelIds[category.id] = [];
+						for (let id of this.sortDMsByTime(this.filterDMs(category.dms), "dmCategories").reverse()) {
+							BDFDB.ArrayUtils.remove(e.instance.props.privateChannelIds, id, true);
+							if (!category.collapsed || e.instance.props.selectedChannelId == id) {
+								e.instance.props.privateChannelIds.unshift(id);
+								e.instance.props.pinnedChannelIds[category.id].push(id);
+							}
+						}
+					}
+					BDFDB.ModuleUtils.unpatch(this, e.instance, "renderSection");
+					BDFDB.ModuleUtils.patch(this, e.instance, "renderSection", {after: e2 => {
+						if (e2.methodArguments[0].section != 0 && e2.methodArguments[0].section != e.instance.props.listRef.current.props.sections.length - 1) {
+							let category = categories[e2.methodArguments[0].section - 1];
+							if (category && draggedCategory != category.id) {
+								let color = BDFDB.ColorUtils.convert(category.color, "RGBA");
+								let foundDMs = this.filterDMs(category.dms);
+								let unreadAmount = settings.showCategoryUnread && BDFDB.ArrayUtils.sum(foundDMs.map(id => BDFDB.LibraryModules.UnreadChannelUtils.getMentionCount(id)));
+								e2.returnValue = [
+									BDFDB.ReactUtils.createElement("h2", {
+										className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.dmchannelheadercontainer, BDFDB.disCN._pindmspinnedchannelsheadercontainer, category.collapsed && BDFDB.disCN._pindmspinnedchannelsheadercollapsed, color && BDFDB.disCN._pindmspinnedchannelsheadercolored, BDFDB.disCN.namecontainernamecontainer),
+										categoryId: category.id,
+										onMouseDown: event => {
+											event = event.nativeEvent || event;
+											let node = BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmspinnedchannelsheadercontainer, event.target).cloneNode(true);
+											let mousemove = event2 => {
+												if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
+													BDFDB.ListenerUtils.stopEvent(event);
+													draggedCategory = category.id;
+													this.updateContainer("dmCategories");
+													let dragPreview = this.createDragPreview(node, event2);
+													document.removeEventListener("mousemove", mousemove);
+													document.removeEventListener("mouseup", mouseup);
+													let dragging = event3 => {
+														this.updateDragPreview(dragPreview, event3);
+														let placeholder = BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmsdmchannelplaceholder, event3.target);
+														let categoryNode = BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmspinnedchannelsheadercontainer, placeholder ? placeholder.previousSibling : event3.target);
+														let maybeHoveredCategory = categoryNode && categoryNode.getAttribute("categoryId");
+														let update = maybeHoveredCategory != hoveredCategory;
+														if (maybeHoveredCategory) hoveredCategory = maybeHoveredCategory;
+														else hoveredCategory = null;
+														if (update) this.updateContainer("dmCategories");
+													};
+													let releasing = event3 => {
+														BDFDB.DOMUtils.remove(dragPreview);
+														if (hoveredCategory) releasedCategory = hoveredCategory;
+														else draggedCategory = null;
+														hoveredCategory = null;
+														this.updateContainer("dmCategories");
+														document.removeEventListener("mousemove", dragging);
+														document.removeEventListener("mouseup", releasing);
+													};
+													document.addEventListener("mousemove", dragging);
+													document.addEventListener("mouseup", releasing);
+												}
+											};
+											let mouseup = _ => {
+												document.removeEventListener("mousemove", mousemove);
+												document.removeEventListener("mouseup", mouseup);
+											};
+											document.addEventListener("mousemove", mousemove);
+											document.addEventListener("mouseup", mouseup);
+										},
+										onClick: _ => {
+											if (foundDMs.length || !category.collapsed) {
+												category.collapsed = !category.collapsed;
+												BDFDB.DataUtils.save(category, this, "dmCategories", category.id);
+												this.updateContainer("dmCategories");
+											}
+										},
+										onContextMenu: event => {
+											BDFDB.ContextMenuUtils.open(this, event, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+												children: [
+													BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+														label: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_SETTINGS,
+														action: event2 => {
+															BDFDB.ContextMenuUtils.close(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, event2.target));
+															this.openCategorySettingsModal(category, "dmCategories");
+														}
+													}),
+													BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+														label: BDFDB.LanguageUtils.LanguageStrings.DELETE_CATEGORY,
+														danger: true,
+														action: event2 => {
+															BDFDB.ContextMenuUtils.close(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, event2.target));
+															BDFDB.DataUtils.remove(this, "dmCategories", category.id);
+															this.updateContainer("dmCategories");
+														}
+													})
+												]
+											}));
+										},
+										children: [
+											BDFDB.ObjectUtils.is(color) ? BDFDB.ReactUtils.createElement("span", {
+												className: BDFDB.disCN.dmchannelheadertext,
+												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
+													gradient: BDFDB.ColorUtils.createGradient(color),
+													children: category.name
+												})
+											}) : BDFDB.ReactUtils.createElement("span", {
+												className: BDFDB.disCN.dmchannelheadertext,
+												style: {color: color},
+												children: category.name,
+											}),
+											unreadAmount ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
+												className: BDFDB.disCN._pindmspinnedchannelsheaderamount,
+												count: unreadAmount,
+												style: {backgroundColor: BDFDB.DiscordConstants.Colors.STATUS_RED}
+											}) : null,
+											settings.showCategoryAmount ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
+												className: BDFDB.disCN._pindmspinnedchannelsheaderamount,
+												count: foundDMs.length,
+												style: {backgroundColor: BDFDB.DiscordConstants.Colors.BRAND}
+											}) : null,
+											BDFDB.ReactUtils.createElement("div", {
+												className: BDFDB.disCNS._pindmspinnedchannelsheaderarrow + BDFDB.disCNS.channelheadericonwrapper + BDFDB.disCN.channelheadericonclickable,
+												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+													className: BDFDB.disCNS._pindmspinnedchannelsheaderarrow + BDFDB.disCN.channelheadericon,
+													nativeClass: true,
+													iconSVG: `<svg width="24" height="24" viewBox="4 4 16 16"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M16.59 8.59004L12 13.17L7.41 8.59004L6 10L12 16L18 10L16.59 8.59004Z"></path></svg>`
+												})
+											})
+										].filter(n => n)
+									}),
+									hoveredChannel == "header_" + category.id && BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCNS.dmchannel + BDFDB.disCNS._pindmsdmchannelpinned + BDFDB.disCNS._pindmsdmchannelplaceholder + BDFDB.disCN.namecontainernamecontainer,
+										children: BDFDB.ReactUtils.createElement("div", {
+											className: BDFDB.disCN.namecontainerlayout
+										})
+									})
+								].filter(n => n);
+							}
+							else e2.returnValue = null;
+						}
+					}}, {force: true, noCache: true});
+					
+					let pinnedIds = BDFDB.ObjectUtils.toArray(e.instance.props.pinnedChannelIds).reverse();
+					BDFDB.ModuleUtils.unpatch(this, e.instance, "renderDM");
+					BDFDB.ModuleUtils.patch(this, e.instance, "renderDM", {before: e2 => {
+						if (e2.methodArguments[0] != 0) e2.methodArguments[1] += pinnedIds.slice(0, e2.methodArguments[0] - 1).flat().length;
+					}, after: e2 => {
+						if (e2.methodArguments[0] != 0 && e2.methodArguments[0] != e.instance.props.listRef.current.props.sections.length - 1) {
+							let category = categories[e2.methodArguments[0] - 1];
+							let id = e.instance.props.privateChannelIds[e2.methodArguments[1]];
+							if (category) {
+								if (category.collapsed && e.instance.props.selectedChannelId != id || !category.dms.includes(id) || draggedCategory == category.id  || draggedChannel == id) e2.returnValue = null;
+								else if (hoveredCategory == category.id && [].concat(category.dms).reverse()[0] == id) e2.returnValue = [
+									e2.returnValue,
+									BDFDB.ReactUtils.createElement("h2", {
+										className: BDFDB.disCNS.dmchannelheadercontainer + BDFDB.disCNS._pindmspinnedchannelsheadercontainer + BDFDB.disCNS._pindmsdmchannelplaceholder + BDFDB.disCN.namecontainernamecontainer
+									})
+								]
+								else if (hoveredChannel == id) e2.returnValue = [
+									e2.returnValue,
+									BDFDB.ReactUtils.createElement("div", {
+										className: BDFDB.disCNS.dmchannel + BDFDB.disCNS._pindmsdmchannelpinned + BDFDB.disCNS._pindmsdmchannelplaceholder + BDFDB.disCN.namecontainernamecontainer,
+										children: BDFDB.ReactUtils.createElement("div", {
+											className: BDFDB.disCN.namecontainerlayout
+										})
+									})
+								]
+							}
+						}
+					}}, {force: true, noCache: true});
+					
+					BDFDB.ModuleUtils.unpatch(this, e.instance, "getSectionHeight");
+					BDFDB.ModuleUtils.patch(this, e.instance, "getSectionHeight", {after: e2 => {
+						if (e2.methodArguments[0] != 0 && e2.methodArguments[0] != e.instance.props.listRef.current.props.sections.length - 1) {
+							let category = categories[e2.methodArguments[0] - 1];
+							if (category && (category.collapsed && !category.dms.some(id => id == e.instance.props.selectedChannelId) || category.id == draggedCategory)) e2.returnValue = 0;
+						}
+					}}, {force: true, noCache: true});
+				}
+				else {
+					e.returnvalue.props.sections = [];
+					e.returnvalue.props.sections.push(e.instance.state.preRenderedChildren);
+					let pinnedIds = BDFDB.ObjectUtils.toArray(e.instance.props.pinnedChannelIds).reverse();
+					for (let ids of pinnedIds) e.returnvalue.props.sections.push(ids.length || 1);
+					e.returnvalue.props.sections.push(e.instance.props.privateChannelIds.length - pinnedIds.flat().length);
 				}
 			}
 		}
@@ -480,18 +512,18 @@ var PinDMs = (_ => {
 				}
 				e.instance.props.unreadPrivateChannelIds = e.instance.props.unreadPrivateChannelIds.concat(BDFDB.LibraryModules.DirectMessageUnreadStore.getUnreadPrivateChannelIds());
 				if (e.returnvalue) {
-					if (this.draggedChannel && this.releasedChannel) {
+					if (draggedChannel && releasedChannel) {
 						let pinnedPrivateChannelIds = [].concat(e.instance.props.pinnedPrivateChannelIds), newData = {};
-						BDFDB.ArrayUtils.remove(pinnedPrivateChannelIds, this.draggedChannel, true);
-						pinnedPrivateChannelIds.splice(pinnedPrivateChannelIds.indexOf(this.releasedChannel) + 1, 0, this.draggedChannel);
+						BDFDB.ArrayUtils.remove(pinnedPrivateChannelIds, draggedChannel, true);
+						pinnedPrivateChannelIds.splice(pinnedPrivateChannelIds.indexOf(releasedChannel) + 1, 0, draggedChannel);
 						for (let pos in pinnedPrivateChannelIds) newData[pinnedPrivateChannelIds[pos]] = parseInt(pos);
 						BDFDB.DataUtils.save(newData, this, "pinnedRecents");
-						delete this.draggedChannel;
-						delete this.releasedChannel;
+						draggedChannel = null;
+						releasedChannel = null;
 						BDFDB.ReactUtils.forceUpdate(e.instance);
 					}
-					if (this.draggedChannel) {
-						let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {filter: child => BDFDB.ReactUtils.getValue(child, "props.channel.id") == this.draggedChannel});
+					if (draggedChannel) {
+						let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {filter: child => BDFDB.ReactUtils.getValue(child, "props.channel.id") == draggedChannel});
 						children.splice(index, 1);
 					}
 					if (this.hoveredChannel) {
@@ -524,34 +556,35 @@ var PinDMs = (_ => {
 									let mousemove = event2 => {
 										if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
 											BDFDB.ListenerUtils.stopEvent(event);
-											this.draggedChannel = e.instance.props.channel.id;
+											draggedChannel = e.instance.props.channel.id;
 											this.updateContainer("dmCategories");
-											let dragpreview = this.createDragPreview(e.node, event2);
+											let dragPreview = this.createDragPreview(e.node, event2);
 											document.removeEventListener("mousemove", mousemove);
 											document.removeEventListener("mouseup", mouseup);
 											let dragging = event3 => {
-												this.updateDragPreview(dragpreview, event3);
-												let hoveredChannel = null;
-												if (BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmspinnedchannelsheadercontainer, event3.target)) {
-													let hoveredCategoryId = BDFDB.ReactUtils.findValue(event3.target, "categoryId", {up: true});
-													if (hoveredCategoryId && hoveredCategoryId == category.id) hoveredChannel = "header_" + category.id;
+												this.updateDragPreview(dragPreview, event3);
+												let maybeHoveredChannel = null;
+												let categoryNode = BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmspinnedchannelsheadercontainer, event3.target);
+												if (categoryNode) {
+													let hoveredCategoryId = categoryNode.getAttribute("categoryid");
+													if (hoveredCategoryId && hoveredCategoryId == category.id) maybeHoveredChannel = "header_" + category.id;
 												}
 												else {
 													let placeholder = BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmsdmchannelplaceholder, event3.target);
-													hoveredChannel = (BDFDB.ReactUtils.findValue(BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmsdmchannelpinned, placeholder ? placeholder.previousSibling : event3.target), "channel", {up: true}) || {}).id;
-													let hoveredCategory = hoveredChannel && this.getCategory(hoveredChannel, "dmCategories");
-													if (!hoveredCategory || hoveredCategory.id != category.id) hoveredChannel = null;
+													maybeHoveredChannel = (BDFDB.ReactUtils.findValue(BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmsdmchannelpinned, placeholder ? placeholder.previousSibling : event3.target), "channel", {up: true}) || {}).id;
+													let maybeHoveredCategory = maybeHoveredChannel && this.getCategory(maybeHoveredChannel, "dmCategories");
+													if (!maybeHoveredCategory || maybeHoveredCategory.id != category.id) maybeHoveredChannel = null;
 												};
-												let update = hoveredChannel != this.hoveredChannel;
-												if (hoveredChannel) this.hoveredChannel = hoveredChannel;
-												else delete this.hoveredChannel; 
+												let update = maybeHoveredChannel != hoveredChannel;
+												if (maybeHoveredChannel) hoveredChannel = maybeHoveredChannel;
+												else hoveredChannel = null; 
 												if (update) this.updateContainer("dmCategories");
 											};
 											let releasing = event3 => {
-												BDFDB.DOMUtils.remove(dragpreview);
-												if (this.hoveredChannel) this.releasedChannel = this.hoveredChannel;
-												else delete this.draggedChannel;
-												delete this.hoveredChannel;
+												BDFDB.DOMUtils.remove(dragPreview);
+												if (hoveredChannel) releasedChannel = hoveredChannel;
+												else draggedChannel = null;
+												hoveredChannel = null;
 												this.updateContainer("dmCategories");
 												document.removeEventListener("mousemove", dragging);
 												document.removeEventListener("mouseup", releasing);
@@ -608,25 +641,25 @@ var PinDMs = (_ => {
 								let mousemove = event2 => {
 									if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
 										BDFDB.ListenerUtils.stopEvent(event);
-										this.draggedChannel = e.instance.props.channel.id;
+										draggedChannel = e.instance.props.channel.id;
 										BDFDB.ModuleUtils.forceAllUpdates(this, "UnreadDMs");
-										let dragpreview = this.createDragPreview(e.node, event2);
+										let dragPreview = this.createDragPreview(e.node, event2);
 										document.removeEventListener("mousemove", mousemove);
 										document.removeEventListener("mouseup", mouseup);
 										let dragging = event3 => {
-											this.updateDragPreview(dragpreview, event3);
+											this.updateDragPreview(dragPreview, event3);
 											let placeholder = BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmsrecentplaceholder, event3.target);
-											let hoveredChannel = (BDFDB.ReactUtils.findValue(BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmsrecentpinned, placeholder ? placeholder.previousSibling : event3.target), "channel", {up: true}) || {}).id;
-											let update = hoveredChannel != this.hoveredChannel;
-											if (hoveredChannel) this.hoveredChannel = hoveredChannel;
-											else delete this.hoveredChannel; 
+											let maybeHoveredChannel = (BDFDB.ReactUtils.findValue(BDFDB.DOMUtils.getParent(BDFDB.dotCN._pindmsrecentpinned, placeholder ? placeholder.previousSibling : event3.target), "channel", {up: true}) || {}).id;
+											let update = maybeHoveredChannel != hoveredChannel;
+											if (maybeHoveredChannel) hoveredChannel = maybeHoveredChannel;
+											else hoveredChannel = null; 
 											if (update) BDFDB.ModuleUtils.forceAllUpdates(this, "UnreadDMs");
 										};
 										let releasing = event3 => {
-											BDFDB.DOMUtils.remove(dragpreview);
-											if (this.hoveredChannel) this.releasedChannel = this.hoveredChannel;
-											else delete this.draggedChannel;
-											delete this.hoveredChannel;
+											BDFDB.DOMUtils.remove(dragPreview);
+											if (hoveredChannel) releasedChannel = hoveredChannel;
+											else draggedChannel = null;
+											hoveredChannel = null;
 											BDFDB.ModuleUtils.forceAllUpdates(this, "UnreadDMs");
 											document.removeEventListener("mousemove", dragging);
 											document.removeEventListener("mouseup", releasing);
@@ -659,12 +692,6 @@ var PinDMs = (_ => {
 					});
 				}
 			}
-		}
-		
-		forceUpdatePrivateChannels () {
-			this.updateContainer("dmCategories");
-			let ins = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.dmchannels), {name:"PrivateChannelsList"});
-			if (ins && ins._list) BDFDB.ReactUtils.forceUpdate(ins._list);
 		}
 
 		generateID (type) {
@@ -834,24 +861,24 @@ var PinDMs = (_ => {
 
 		createDragPreview (div, event) {
 			if (!Node.prototype.isPrototypeOf(div)) return;
-			let dragpreview = div.cloneNode(true);
-			BDFDB.DOMUtils.addClass(dragpreview, BDFDB.disCN._pindmsdragpreview);
-			BDFDB.DOMUtils.remove(dragpreview.querySelector(BDFDB.dotCNC.guildlowerbadge + BDFDB.dotCNC.guildupperbadge + BDFDB.dotCN.guildpillwrapper));
-			document.querySelector(BDFDB.dotCN.appmount).appendChild(dragpreview);
-			let rects = BDFDB.DOMUtils.getRects(dragpreview);
-			BDFDB.DOMUtils.hide(dragpreview);
-			dragpreview.style.setProperty("pointer-events", "none", "important");
-			dragpreview.style.setProperty("left", event.clientX - (rects.width/2) + "px", "important");
-			dragpreview.style.setProperty("top", event.clientY - (rects.height/2) + "px", "important");
-			return dragpreview;
+			let dragPreview = div.cloneNode(true);
+			BDFDB.DOMUtils.addClass(dragPreview, BDFDB.disCN._pindmsdragpreview);
+			BDFDB.DOMUtils.remove(dragPreview.querySelector(BDFDB.dotCNC.guildlowerbadge + BDFDB.dotCNC.guildupperbadge + BDFDB.dotCN.guildpillwrapper));
+			document.querySelector(BDFDB.dotCN.appmount).appendChild(dragPreview);
+			let rects = BDFDB.DOMUtils.getRects(dragPreview);
+			BDFDB.DOMUtils.hide(dragPreview);
+			dragPreview.style.setProperty("pointer-events", "none", "important");
+			dragPreview.style.setProperty("left", event.clientX - (rects.width/2) + "px", "important");
+			dragPreview.style.setProperty("top", event.clientY - (rects.height/2) + "px", "important");
+			return dragPreview;
 		}
 
-		updateDragPreview (dragpreview, event) {
-			if (!Node.prototype.isPrototypeOf(dragpreview)) return;
-			BDFDB.DOMUtils.show(dragpreview);
-			let rects = BDFDB.DOMUtils.getRects(dragpreview);
-			dragpreview.style.setProperty("left", event.clientX - (rects.width/2) + "px", "important");
-			dragpreview.style.setProperty("top", event.clientY - (rects.height/2) + "px", "important");
+		updateDragPreview (dragPreview, event) {
+			if (!Node.prototype.isPrototypeOf(dragPreview)) return;
+			BDFDB.DOMUtils.show(dragPreview);
+			let rects = BDFDB.DOMUtils.getRects(dragPreview);
+			dragPreview.style.setProperty("left", event.clientX - (rects.width/2) + "px", "important");
+			dragPreview.style.setProperty("top", event.clientY - (rects.height/2) + "px", "important");
 		}
 
 		setLabelsByLanguage () {
