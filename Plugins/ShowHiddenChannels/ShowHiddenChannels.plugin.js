@@ -28,7 +28,7 @@ var ShowHiddenChannels = (_ => {
 	return class ShowHiddenChannels {
 		getName () {return "ShowHiddenChannels";}
 
-		getVersion () {return "2.7.2";}
+		getVersion () {return "2.7.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -36,7 +36,7 @@ var ShowHiddenChannels = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Native Order","Improved/Fixed the way the native order sorts the channel making it use the native order 100%"]]
+				"fixed":[["Access Modal","Users that could not be loaded (deleted users or no-cached users) are now displayed via their ID and not blank"]]
 			};
 
 			this.patchedModules = {
@@ -399,18 +399,18 @@ var ShowHiddenChannels = (_ => {
 						allowedRoles.push(Object.assign({overwritten: myMember.roles.includes(id) && !allowed}, guild.roles[id]));
 					}
 					else if (channel.permissionOverwrites[id].type == "member" && ((channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow || (channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].allow)) {
-						let user = BDFDB.LibraryModules.UserStore.getUser(id);
-						let member = BDFDB.LibraryModules.MemberStore.getMember(guild.id,id);
+						let user = BDFDB.LibraryModules.UserStore.getUser(id), member = BDFDB.LibraryModules.MemberStore.getMember(guild.id,id);
 						if (user && member) allowedUsers.push(Object.assign({}, user, member));
+						else allowedUsers.push({id: id, username:`UserId: ${id}`});
 					}
 					if (channel.permissionOverwrites[id].type == "role" && ((channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny || (channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].deny)) {
 						deniedRoles.push(guild.roles[id]);
 						if (guild.roles[id] && guild.roles[id].name == "@everyone") everyoneDenied = true;
 					}
 					else if (channel.permissionOverwrites[id].type == "member" && ((channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny || (channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].deny)) {
-						let user = BDFDB.LibraryModules.UserStore.getUser(id);
-						let member = BDFDB.LibraryModules.MemberStore.getMember(guild.id, id);
+						let user = BDFDB.LibraryModules.UserStore.getUser(id), member = BDFDB.LibraryModules.MemberStore.getMember(guild.id, id);
 						if (user && member) deniedUsers.push(Object.assign({}, user, member));
+						else deniedUsers.push({id: id, username:`UserId: ${id}`});
 					}
 				}
 				if (allowed && !everyoneDenied) allowedRoles.push({name: "@everyone"});
@@ -515,7 +515,7 @@ var ShowHiddenChannels = (_ => {
 						children: user.username,
 						style: {color: user.colorString}
 					}),
-					BDFDB.ReactUtils.createElement("span", {
+					!user.discriminator ? null : BDFDB.ReactUtils.createElement("span", {
 						className: BDFDB.disCN.listdiscriminator,
 						children: `#${user.discriminator}`
 					})
