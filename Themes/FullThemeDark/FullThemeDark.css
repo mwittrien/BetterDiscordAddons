@@ -121,126 +121,19 @@
 	border-color: #2F3136;
 }
 
-#app-mount .bda-slist li.settings-open::-webkit-scrollbar,
 #app-mount .bd-addon-list .bd-addon-card.settings-open::-webkit-scrollbar,
 #app-mount .bda-description.scroller::-webkit-scrollbar {
 	width: 6px;
 }
-#app-mount .bda-slist li.settings-open::-webkit-scrollbar-thumb,
 #app-mount .bd-addon-list .bd-addon-card.settings-open::-webkit-scrollbar-thumb,
 #app-mount .bda-description.scroller::-webkit-scrollbar-thumb {
 	background-clip: padding-box;
 	border: 1px solid transparent;
 	background-color: #202225;
 }
-#app-mount .bda-slist li.settings-open::-webkit-scrollbar-track-piece,
 #app-mount .bd-addon-list .bd-addon-card.settings-open::-webkit-scrollbar-track-piece,
 #app-mount .bda-description.scroller::-webkit-scrollbar-track-piece {
 	background-color: transparent;
-}
-
-#app-mount .popout-2iWAc-:not(.noShadow-3pu20z) {
-	box-shadow: 0 2px 10px 0 rgba(0,0,0,.2);
-}
-#app-mount #bda-qem,
-#app-mount #bda-qem-twitch-container,
-#app-mount #bda-qem-favourite-container,
-#app-mount #bda-qem button  {
-	background-color: #2F3136;
-}
-#app-mount #bda-qem button:hover {
-	background-color: #36393F;
-}
-#app-mount #bda-qem-twitch-container .emote-container:hover,
-#app-mount #bda-qem-favourite-container .emote-container:hover,
-#app-mount #bda-qem button.active {
-	background-color: #484C52;
-}
-#app-mount .noShadow-321ZPm #bda-qem,
-#app-mount .noShadow-321ZPm #bda-qem-twitch-container,
-#app-mount .noShadow-321ZPm #bda-qem-favourite-container {
-	box-shadow: 0 2px 10px 0 rgba(0,0,0,.2);
-}
-#app-mount #bda-qem,
-#app-mount #bda-qem-twitch-container,
-#app-mount #bda-qem-favourite-container {
-	border: 1px solid rgba(28,36,43,.6);
-}
-#app-mount #bda-qem {
-	border-bottom: none;
-}
-#app-mount #bda-qem button {
-	border: none;
-}
-#app-mount .emojiPicker-3m1S-j:not(:only-child),
-#app-mount #bda-qem-twitch-container:not(:only-child),
-#app-mount #bda-qem-favourite-container:not(:only-child) {
-	border-top: none;
-}
-#app-mount .emojiPicker-3m1S-j:only-child,
-#app-mount #bda-qem-twitch-container:only-child,
-#app-mount #bda-qem-favourite-container:only-child {
-	border-radius: 5px;
-}
-#app-mount .emojiPicker-3m1S-j,
-#app-mount #bda-qem,
-#app-mount #bda-qem-twitch-container,
-#app-mount #bda-qem-favourite-container {
-	width: 384px;
-	box-sizing: border-box;
-}
-#app-mount .emojiPicker-3m1S-j,
-#bda-qem-twitch-container,
-#bda-qem-favourite-container {
-	height: 424px;
-}
-#app-mount .emojiPicker-3m1S-j .scrollerWrap-2lJEkd {
-	height: unset;
-}
-#app-mount .emojiPicker-3m1S-j .dimmer-3iH-5D.visible-3k45bQ {
-	display: none;
-}
-#app-mount .emojiPicker-3m1S-j .dimmer-3iH-5D.visible-3k45bQ ~ * > *:not(.diversitySelector-tmmMv0) {
-	opacity: 0.1;
-}
-#app-mount #bda-qem {
-	border-bottom: none !important;
-	padding: 0 !important;
-}
-#app-mount #bda-qem button {
-	border-color: #36393F;
-	box-shadow: none;
-}
-#app-mount #bda-qem button:first-of-type {
-	border-left: none;
-}
-#app-mount #bda-qem button {
-	color: #FFF;
-}
-#app-mount #bda-qem-twitch-container .scroller-wrap .scroller::-webkit-scrollbar,
-#app-mount #bda-qem-favourite-container .scroller-wrap .scroller::-webkit-scrollbar {
-	height: 14px;
-	width: 14px;
-}
-#app-mount #bda-qem-twitch-container .scroller-wrap .scroller::-webkit-scrollbar-thumb,
-#app-mount #bda-qem-twitch-container .scroller-wrap .scroller::-webkit-scrollbar-track-piece,
-#app-mount #bda-qem-favourite-container .scroller-wrap .scroller::-webkit-scrollbar-thumb,
-#app-mount #bda-qem-favourite-container .scroller-wrap .scroller::-webkit-scrollbar-track-piece {
-	border-style: solid;
-	border-width: 3px;
-	border-radius: 7px;
-	visibility: visible;
-}
-#app-mount #bda-qem-twitch-container .scroller-wrap .scroller::-webkit-scrollbar-thumb,
-#app-mount #bda-qem-favourite-container .scroller-wrap .scroller::-webkit-scrollbar-thumb {
-	background-clip: padding-box;
-	background-color: #202225;
-	border-color: transparent;
-}
-#app-mount #bda-qem-twitch-container .scroller-wrap .scroller::-webkit-scrollbar-track-piece,
-#app-mount #bda-qem-favourite-container .scroller-wrap .scroller::-webkit-scrollbar-track-piece {
-	background-color: #2B2C31;
-	border-color: #2F3136;
 }
 
 #app-mount .backdrop-1wrmKB[style*="background-color: rgb(255,255,255)"] {

@@ -4314,6 +4314,125 @@ body:before {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 
+/* NEW */
+
+.contentWrapper-2txmjs,										/* picker				wrapper								*/
+.diversitySelectorPopout-3FiGaM {							/* picker				diversityselector					*/
+	background-color: transparent;
+	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
+	border: none;
+	overflow: hidden;
+}
+.contentWrapper-2txmjs:after,
+.contentWrapper-2txmjs:before,
+.diversitySelectorPopout-3FiGaM:after,
+.diversitySelectorPopout-3FiGaM:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.contentWrapper-2txmjs:after,
+.diversitySelectorPopout-3FiGaM:after {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
+}
+.contentWrapper-2txmjs:before,
+.diversitySelectorPopout-3FiGaM:before {
+	background: var(--vpopout) center/var(--vpopoutsize);
+	filter: blur(var(--vpopoutblur));
+	background-attachment: fixed;
+}
+.diversitySelectorPopout-3FiGaM:after,
+.diversitySelectorPopout-3FiGaM:before {
+	border-radius: 5px;
+}
+
+.diversityEmojiItem-L6_IXw:hover {							/* picker				diversityemoji						*/
+	background-color: rgb(var(--vaccentcolor));
+}
+
+.navButton-3Mnpqt {											/* picker				navbutton							*/
+	color: rgb(var(--fontwhite3));
+}
+.navButtonActive-3RPAJy {									/* picker				navbuttonactive						*/
+	background-color: rgb(var(--vaccentcolor));
+	color: rgb(var(--fontwhite1));
+}
+
+.wrapper-2N7X54 {											/* picker				sidebar								*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+
+.guildIcon-3h-1IH {											/* picker				guildicon							*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+
+.categoryItemDefaultCategory-aBZ6nJ:hover {					/* picker				categoryitem						*/
+	background-color: rgb(var(--vaccentcolor));
+	color: rgb(var(--fontwhite3));
+	
+}
+.categoryItemDefaultCategory-aBZ6nJ:hover .categoryIcon-1SvUHG {
+	color: rgb(var(--fontwhite1));
+}
+
+.unicodeShortcut-15J8Ck {									/* picker				unicodeemojis shortcut				*/
+	background-color: transparent;
+	color: rgb(var(--fontwhite3));
+	border: none;
+	overflow: hidden;
+	z-index: 100;
+}
+.unicodeShortcut-15J8Ck:hover {
+	color: rgb(var(--fontwhite1));
+}
+.unicodeShortcut-15J8Ck:after,
+.unicodeShortcut-15J8Ck:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.unicodeShortcut-15J8Ck:after {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.35));
+}
+.unicodeShortcut-15J8Ck:before {
+	background: var(--vpopout) center/var(--vpopoutsize);
+	filter: blur(var(--vpopoutblur));
+	background-attachment: fixed;
+}
+
+.inspector-sdLnLS {											/* picker				emojiinfowrapper					*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+
+.categoryWrapper-UZ5YNj {									/* picker				categoryheader						*/
+	background: transparent;
+	position: static;
+}
+
+.emojiItem-14v6tW.emojiItemSelected-1aLkfV {				/* picker				emoji selected						*/
+	background-color: rgb(var(--vaccentcolor));
+}
+
+#app-mount .emojiItemImageLoading-1yEIxx {					/* picker				emoji loading						*/
+	border-radius: 10px;
+	background: rgba(var(--vtransparencycolor), 0.3);
+}
+
+
 /* ----		14.4.	PINS/MENTIONS					---- */
 
 .messagesPopoutWrap-1MQ1bW {								/* popout				wrapper								*/
@@ -4368,27 +4487,6 @@ body:before {
 .header-ykumBX .title-3pkaKd {								/* popout				headertitle							*/
 	color: rgb(var(--fontwhite1));
 }
-#app-mount .mentionFilter-1PQ6ey {							/* popout				mentionfilter						*/
-	background: transparent;
-	color: rgb(var(--fontwhite1));
-	position: relative;
-}
-.mentionFilter-1PQ6ey:after {
-	content: "";
-	position: absolute;
-	top: 6px;
-	right: 0;
-	height: 5px;
-	width: 9px;
-	-webkit-mask: url(https://discordapp.com/assets/a548e6d1dcea000b680726ff489a84a8.svg) center/cover no-repeat;
-	background-color: rgb(var(--fontwhite1));
-}
-.mentionFilter-1PQ6ey .label-12YslM {						/* popout				mentionfiltelabel					*/
-	color: rgb(var(--fontwhite2));
-}
-.mentionFilter-1PQ6ey .value-2k8Drt {						/* popout				mentionfiltervalue					*/
-	color: rgb(var(--fontwhite1));
-}
 .messageGroupWrapper-o-Zw7G {
 	background-color: transparent;
 	border: none;
@@ -4439,26 +4537,11 @@ body:before {
 .messageGroupWrapper-o-Zw7G:hover .actionButtons-1sUUug .closeButton-17RIVZ {
 	opacity: 1;
 }
-.channelSeparator-1MxuvT {									/* popout				divider								*/
-	overflow: hidden;
-	position: relative;
-}
 .channelName-3kBz6H {										/* popout				dividerchannelname					*/
 	color: rgb(var(--fontwhite1));
 }
 .guildName-1Bc3Ta {											/* popout				dividerguildname					*/
 	color: rgb(var(--fontwhite2));
-}
-.channelSeparator-1MxuvT .guildName-1Bc3Ta:after {
-	content: "";
-	border-bottom: 1px solid rgba(var(--fontwhite2), 0.5);
-	height: 1px;
-	margin-left: 10px;
-	position: absolute;
-	pointer-events: none;
-	top: 50%;
-	width: 100vw;
-	z-index: 0;
 }
 .hasMoreButton-1MELpI {										/* popout				hasmorebutton						*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
@@ -4471,8 +4554,6 @@ body:before {
 .image-2JDb81 {												/* popout				emptyimage							*/
 	opacity: 0.6;
 }
-
-/* NEW */
 
 															/* popout				active tab							*/
 #app-mount .header-2-Imhb .tabBar-1kuXvJ .tab-ck0077.active-1MbGPa {
@@ -6352,13 +6433,13 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	color: rgb(var(--fontwhite1));
 	border-bottom-color: rgba(var(--fontwhite2), 0.3);
 }
-#app-mount .bda-slist .bd-addon-button svg[fill] {			/* addonlist			header button icon					*/
+#app-mount .bd-addon-list .bd-addon-button svg[fill] {			/* addonlist			header button icon					*/
 	fill: currentColor;
 }
-#app-mount .bda-slist .bd-addon-button svg {				/* addonlist			header button icon					*/
+#app-mount .bd-addon-list .bd-addon-button svg {				/* addonlist			header button icon					*/
 	color: rgb(var(--fontwhite3));
 }
-#app-mount .bda-slist .bd-addon-button svg:hover {
+#app-mount .bd-addon-list .bd-addon-button svg:hover {
 	color: rgb(var(--fontwhite1));
 }
 #app-mount .bd-addon-list .bda-description {				/* addonlist			description							*/
