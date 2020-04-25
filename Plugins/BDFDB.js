@@ -4075,7 +4075,6 @@
 		inputNumberWrapperMini: "numberInputWrapperMini-wtUU31 numberInputWrapper-j4svZS",
 		loadingIcon: "loadingIcon-cOYMPl",
 		loadingIconWrapper: "loadingIconWrapper-PsVJ9m",
-		lineThrough: "lineThrough-MPlPsV",
 		overflowEllipsis: "ellipsis-qlo9sA",
 		popoutWrapper: "popout-xwjvsX",
 		quickSelectWrapper: "quickSelectWrapper-UCfTKz",
@@ -4111,8 +4110,7 @@
 		tableStickyHeader: "stickyHeader-JabwjW header-g67q9_",
 		textScroller: "textScroller-dc9_kz",
 		themedPopout: "themedPopout-1TrfdI",
-		tooltipCustom: "tooltipCustom-hH39_Z",
-		underline: "underline-6nu217"
+		tooltipCustom: "tooltipCustom-hH39_Z"
 	};
 	DiscordClassModules.BDrepo = {
 		bdAddonCard: "bd-card bd-addon-card",
@@ -4477,6 +4475,7 @@
 	DiscordClassModules.TextColor = BDFDB.ModuleUtils.findByProperties("colorStandard", "colorMuted", "colorError");
 	DiscordClassModules.TextColor2 = BDFDB.ModuleUtils.findByProperties("muted", "wrapper", "base");
 	DiscordClassModules.TextSize = BDFDB.ModuleUtils.findByProperties("size10", "size14", "size20");
+	DiscordClassModules.TextStyle = BDFDB.ModuleUtils.findByProperties("strikethrough", "underline", "bold");
 	DiscordClassModules.Tip = BDFDB.ModuleUtils.findByProperties("pro", "inline");
 	DiscordClassModules.Title = BDFDB.ModuleUtils.findByProperties("title", "size18");
 	DiscordClassModules.TitleBar = BDFDB.ModuleUtils.findByProperties("titleBar", "wordmark");
@@ -4682,6 +4681,7 @@
 		badgewrapper: ["NotFound", "badgeWrapper"],
 		bdfdbdev: ["BDFDB", "dev"],
 		bdfdbsupporter: ["BDFDB", "supporter"],
+		bold: ["TextStyle", "bold"],
 		bottag: ["BotTag", "botTag"],
 		bottaginvert: ["BotTag", "botTagInvert"],
 		bottagmember: ["Member", "botTag"],
@@ -5267,6 +5267,7 @@
 		invitestatusoffline: ["GuildInvite", "statusOffline"],
 		invitestatusonline: ["GuildInvite", "statusOnline"],
 		inviteuserselectnone: ["GuildInvite", "userSelectNone"],
+		italics: ["TextStyle", "italics"],
 		justifycenter: ["Flex", "justifyCenter"],
 		justifyend: ["Flex", "justifyEnd"],
 		justifystart: ["Flex", "justifyStart"],
@@ -5278,7 +5279,7 @@
 		layerbase: ["Layers", "baseLayer"],
 		layers: ["Layers", "layers"],
 		layersbg: ["Layers", "bg"],
-		linethrough: ["BDFDB", "lineThrough"],
+		linethrough: ["TextStyle", "strikethrough"],
 		listavatar: ["UserProfile", "listAvatar"],
 		listdiscriminator: ["UserProfile", "listDiscriminator"],
 		listname: ["UserProfile", "listName"],
@@ -5740,6 +5741,7 @@
 		spoilerwarning: ["Spoiler", "spoilerWarning"],
 		splashbackground: ["NotFound", "splashBackground"],
 		standardsidebarview: ["SettingsWindow", "standardSidebarView"],
+		strikethrough: ["TextStyle", "strikeThrough"],
 		status: ["Avatar", "status"],
 		stopanimations: ["NotFound", "stopAnimations"],
 		subtext: ["NotFound", "subtext"],
@@ -5866,7 +5868,7 @@
 		typing: ["Typing", "typing"],
 		typingcooldownwrapper: ["Typing", "cooldownWrapper"],
 		typingtext: ["Typing", "text"],
-		underline: ["BDFDB", "underline"],
+		underline: ["TextStyle", "underline"],
 		unreadbar: ["UnreadBar", "bar"],
 		unreadbaractive: ["UnreadBar", "active"],
 		unreadbarcontainer: ["UnreadBar", "container"],
@@ -5981,11 +5983,6 @@
 		voiceuser: ["VoiceChannel", "voiceUser"],
 		voiceuserlarge: ["VoiceChannel", "userLarge"],
 		voiceusersmall: ["VoiceChannel", "userSmall"],
-		weightbold: ["TextStyle", "weightBold"],
-		weightlight: ["TextStyle", "weightLight"],
-		weightmedium: ["TextStyle", "weightMedium"],
-		weightnormal: ["TextStyle", "weightNormal"],
-		weightsemibold: ["TextStyle", "weightSemiBold"],
 		wrap: ["Flex", "wrap"],
 		wrapreverse: ["Flex", "wrapReverse"]
 	};
@@ -8467,14 +8464,6 @@
 		${BDFDB.dotCN.overflowellipsis} {
 			overflow: hidden;
 			text-overflow: ellipsis;
-		}
-		
-		${BDFDB.dotCN.underline} {
-			text-decoration: underline;
-		}
-		
-		${BDFDB.dotCN.linethrough} {
-			text-decoration: line-through;
 		}
 
 		${BDFDB.dotCN.avatarwrapper + BDFDB.dotCN.messageavatar} {

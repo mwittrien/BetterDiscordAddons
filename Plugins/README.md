@@ -32,7 +32,6 @@
  - [Joined At Date](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/JoinedAtDate) - Displays the Joined At Date of a Member in the UserPopout and UserModal.
  - [Last Message Date](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/LastMessageDate) - Displays the Date of the last sent Message of a Member for the current Server/DM in the UserPopout and UserModal.
  - [Message Utilities](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/MessageUtilities) - Offers a number of useful message options.
- - [Moveable Popups](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/MoveablePopups) - Adds the feature to move all popups and modals around like on a normal desktop. Ctrl + drag with your left mousebutton to drag element.
  - [Notification Sounds](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/NotificationSounds) - Allows you to replace the native sounds of Discord with your own.
  - [Old Title Bar](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OldTitleBar) - Reverts the title bar back to its former self.
  - [Owner Tag](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/OwnerTag) - Adds a Tag like Bottags to the Serverowner..

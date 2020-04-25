@@ -493,7 +493,7 @@ var ShowHiddenChannels = (_ => {
 						}
 					})
 				}),
-				labelClassName: role.overwritten && BDFDB.disCN.linethrough,
+				labelClassName: role.overwritten && BDFDB.disCN.strikethrough,
 				label: BDFDB.ReactUtils.createElement("span", {
 					children: role.name,
 					style: {color: role.colorString}
