@@ -1113,6 +1113,7 @@
 	];
 	WebModulesData.MemoComponent = [
 		"ExpressionPicker",
+		"ExpressionEmojiPicker",
 		"GuildFolder",
 		"MessageContent",
 		"NowPlayingHeader"
@@ -1185,6 +1186,7 @@
 		V2C_ThemeCard: "_repocard"
 	};
 	WebModulesData.CodeFinder = {
+		ExpressionEmojiPicker: ["allowManagedEmojis", "EMOJI_PICKER_TAB_PANEL_ID", "diversitySelector"]
 	};
 	WebModulesData.PropsFinder = {
 		MessageHeader: "MessageTimestamp",
@@ -1402,10 +1404,18 @@
 					delete plugin.patchedModules[patchType][type];
 				}
 				if (className && DiscordClasses[className]) checkForInstance(className, mappedType, patchType, WebModulesData.ForceObserve.includes(unmappedType));
-				else if (codeFind) patchInstance((BDFDB.ModuleUtils.findByString(codeFind, false) || {}).exports, mappedType, patchType, true);
-				else if (propertyFind) patchInstance((BDFDB.ModuleUtils.findByProperties(propertyFind, false) || {}).exports, mappedType, patchType, true);
-				else if (WebModulesData.NonRender.includes(unmappedType)) patchInstance((BDFDB.ModuleUtils.findByName(name, false) || {}).exports, mappedType, patchType, true);
-				else if (WebModulesData.MemoComponent.includes(unmappedType)) patchInstance((BDFDB.ModuleUtils.findByName(name, false) || {exports:{}}).exports.default, mappedType, patchType, true);
+				else if (codeFind) {
+					let exports = (BDFDB.ModuleUtils.findByString(codeFind, false) || {}).exports;
+					patchInstance(exports && WebModulesData.MemoComponent.includes(unmappedType) ? exports.default : exports, mappedType, patchType, true);
+				}
+				else if (propertyFind) {
+					let exports = (BDFDB.ModuleUtils.findByProperties(propertyFind, false) || {}).exports;
+					patchInstance(exports && WebModulesData.MemoComponent.includes(unmappedType) ? exports.default : exports, mappedType, patchType, true);
+				}
+				else if (WebModulesData.NonRender.includes(unmappedType)) {
+					let exports = (BDFDB.ModuleUtils.findByName(name, false) || {}).exports;
+					patchInstance(exports && WebModulesData.MemoComponent.includes(unmappedType) ? exports.default : exports, mappedType, patchType, true);
+				}
 				else patchInstance(BDFDB.ModuleUtils.findByName(name), mappedType, patchType);
 			}
 		}
