@@ -2335,7 +2335,10 @@
 		for (let guild of BDFDB.ArrayUtils.is(guilds) ? guilds : (typeof guilds == "string" || typeof guilds == "number" ? Array.of(guilds) : Array.from(guilds))) {
 			let id = Node.prototype.isPrototypeOf(guild) ? BDFDB.GuildUtils.getId(guild) : (guild && typeof guild == "object" ? guild.id : guild);
 			let channels = id && LibraryModules.GuildChannelStore.getChannels(id);
-			if (channels) for (let type in channels) if (BDFDB.ArrayUtils.is(channels[type])) for (let channelobj of channels[type]) unreadChannels.push(channelobj.channel.id);
+			if (channels) for (let type in channels) if (BDFDB.ArrayUtils.is(channels[type])) for (let channelobj of channels[type]) if (BDFDB.ChannelUtils.isTextChannel(channelobj.channel)) unreadChannels.push({
+				channelId: channelobj.channel.id,
+				messageId: LibraryModules.UnreadChannelUtils.getOldestUnreadMessageId(channelobj.channel.id)
+			});
 		}
 		if (unreadChannels.length) LibraryModules.AckUtils.bulkAck(unreadChannels);
 	};
@@ -2477,7 +2480,10 @@
 		let unreadChannels = [];
 		for (let channel of channels = BDFDB.ArrayUtils.is(channels) ? channels : (typeof channels == "string" || typeof channels == "number" ? Array.of(channels) : Array.from(channels))) {
 			let id = Node.prototype.isPrototypeOf(channel) ? BDFDB.ChannelUtils.getId(channel) : (channel && typeof channel == "object" ? channel.id : channel);
-			if (id) unreadChannels.push(id);
+			if (id && BDFDB.ChannelUtils.isTextChannel(id)) unreadChannels.push({
+				channelId: id,
+				messageId: LibraryModules.UnreadChannelUtils.getOldestUnreadMessageId(id)
+			});
 		}
 		if (unreadChannels.length) LibraryModules.AckUtils.bulkAck(unreadChannels);
 	};

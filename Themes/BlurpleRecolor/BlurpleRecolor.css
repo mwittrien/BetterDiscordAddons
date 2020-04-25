@@ -563,17 +563,20 @@
 }
 .theme-light .focused-1En8bG:after,							/* gifpicker			result hover						*/
 .theme-light .result-3w1ZcL:hover:after {
-	 box-shadow: inset 0 0 0 2px rgb(var(--vaccentcolor)), inset 0 0 0 3px #dcddde;
+	box-shadow: inset 0 0 0 2px rgb(var(--vaccentcolor)), inset 0 0 0 3px #dcddde;
 }
 .theme-dark .focused-1En8bG:after,							/* gifpicker			result hover						*/
 .theme-dark .result-3w1ZcL:hover:after {
-	 box-shadow: inset 0 0 0 2px rgb(var(--vaccentcolor)), inset 0 0 0 3px #2f3136;
+	box-shadow: inset 0 0 0 2px rgb(var(--vaccentcolor)), inset 0 0 0 3px #2f3136;
 }
 #app-mount .categoryFadeBlurple-1j72_A {					/* gifpicker			categoryfade						*/
 	background-color: rgba(var(--vaccentcolor), 0.8);
 }
 #app-mount .categoryFadeBlurple-1j72_A:hover {
 	background-color: rgba(var(--vaccentcolor), 0.95);
+}
+.introductionAction-M1r6AX {								/* gifpicker			introductionaction tooltip			*/
+	color: rgb(var(--vaccentcolor));
 }
 
 /* ----		4.3.	MEMBERLIST						---- */
