@@ -1099,7 +1099,6 @@
 		"ConnectedPrivateChannelsList",
 		"ContextMenuItem",
 		"DiscordTag",
-		"ExpressionPicker",
 		"InviteModalUserRow",
 		"Mention",
 		"Message",
@@ -1113,6 +1112,7 @@
 		"UserInfo"
 	];
 	WebModulesData.MemoComponent = [
+		"ExpressionPicker",
 		"GuildFolder",
 		"MessageContent",
 		"NowPlayingHeader"
