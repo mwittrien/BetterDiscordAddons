@@ -1099,6 +1099,7 @@
 		"ConnectedPrivateChannelsList",
 		"ContextMenuItem",
 		"DiscordTag",
+		"ExpressionPicker",
 		"InviteModalUserRow",
 		"Mention",
 		"Message",
