@@ -1094,7 +1094,14 @@
 		"DirectMessage",
 		"GuildIcon"
 	];
-	WebModulesData.NonRender = [
+	WebModulesData.MemoComponent = [
+		"ExpressionPicker",
+		"ExpressionEmojiPicker",
+		"GuildFolder",
+		"MessageContent",
+		"NowPlayingHeader"
+	];
+	WebModulesData.NonRender = BDFDB.ArrayUtils.removeCopies([].concat(WebModulesData.MemoComponent, [
 		"Attachment",
 		"ConnectedPrivateChannelsList",
 		"ContextMenuItem",
@@ -1110,14 +1117,7 @@
 		"SystemMessage",
 		"SimpleMessageAccessories",
 		"UserInfo"
-	];
-	WebModulesData.MemoComponent = [
-		"ExpressionPicker",
-		"ExpressionEmojiPicker",
-		"GuildFolder",
-		"MessageContent",
-		"NowPlayingHeader"
-	];
+	]));
 	WebModulesData.LoadedInComponents = {
 		AutocompleteChannelResult: "LibraryComponents.AutocompleteItems.Channel",
 		AutocompleteUserResult: "LibraryComponents.AutocompleteItems.User",
@@ -1192,9 +1192,9 @@
 		MessageHeader: "MessageTimestamp",
 		UnavailableGuildsButton: "UnavailableGuildsButton"
 	};
-	WebModulesData.NonPrototype = [].concat(WebModulesData.NonRender, Object.keys(WebModulesData.CodeFinder), Object.keys(WebModulesData.PropsFinder), WebModulesData.MemoComponent, [
+	WebModulesData.NonPrototype = BDFDB.ArrayUtils.removeCopies([].concat(WebModulesData.NonRender, Object.keys(WebModulesData.CodeFinder), Object.keys(WebModulesData.PropsFinder), [
 		"ChannelTextAreaContainer"
-	]);
+	]));
 	
 	BDFDB.ModuleUtils.isPatched = function (plugin, module, methodName) {
 		plugin = plugin == BDFDB && InternalBDFDB || plugin;
@@ -1446,8 +1446,10 @@
 			if (typeof filter == "function") {
 				let component = filter(ins);
 				if (component) {
-					if (WebModulesData.NonRender.includes(unmappedType)) patchInstance((BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports, type, patchType, true);
-					else if (WebModulesData.MemoComponent.includes(unmappedType)) patchInstance((BDFDB.ModuleUtils.find(m => m == component, false) || {exports:{}}).exports.default, type, patchType, true);
+					if (WebModulesData.NonRender.includes(unmappedType)) {
+						let exports = (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports;
+						patchInstance(exports && WebModulesData.MemoComponent.includes(unmappedType) ? exports.default : exports, type, patchType, true);
+					}
 					else patchInstance(component, type, patchType, true);
 					BDFDB.ModuleUtils.forceAllUpdates(plugin, type);
 					return true;
