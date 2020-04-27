@@ -4425,10 +4425,43 @@ body:before {
 .emojiItem-14v6tW.emojiItemSelected-1aLkfV {				/* picker				emoji selected						*/
 	background-color: rgb(var(--vaccentcolor));
 }
-
+.emojiItemDisabled-1FvFuF {									/* picker				emoji disabled						*/
+	filter: none;
+	cursor: no-drop;
+}
+.emojiItemDisabled-1FvFuF > * {
+	filter: grayscale(1);;
+}
 #app-mount .emojiItemImageLoading-1yEIxx {					/* picker				emoji loading						*/
 	border-radius: 10px;
 	background: rgba(var(--vtransparencycolor), 0.3);
+}
+
+.premiumPromo-fVlLu- {										/* picker				premium warning						*/
+	background-color: transparent;
+	opacity: 1;
+}
+.premiumPromo-fVlLu-:after,
+.premiumPromo-fVlLu-:before {
+	content: "";
+	opacity: 0.9;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	pointer-events: none;
+	z-index: -1;
+}
+.premiumPromo-fVlLu-:after {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.29));
+}
+.premiumPromo-fVlLu-:before {
+	background: var(--vpopout) center/var(--vpopoutsize);
+	filter: blur(var(--vpopoutblur));
+	background-attachment: fixed;
 }
 
 
