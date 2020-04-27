@@ -4374,12 +4374,11 @@ body:before {
 }
 
 .categoryItemDefaultCategory-aBZ6nJ:hover {					/* picker				categoryitem						*/
-	background-color: rgb(var(--vaccentcolor));
-	color: rgb(var(--fontwhite3));
-	
+	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
-.categoryItemDefaultCategory-aBZ6nJ:hover .categoryIcon-1SvUHG {
-	color: rgb(var(--fontwhite1));
+.categoryItemDefaultCategorySelected-_HCKoz,
+.categoryItemDefaultCategorySelected-_HCKoz:hover {			/* picker				categoryitem selected				*/
+	background-color: rgb(var(--vaccentcolor));
 }
 
 .unicodeShortcut-15J8Ck {									/* picker				unicodeemojis shortcut				*/

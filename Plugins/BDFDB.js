@@ -4229,9 +4229,9 @@
 	DiscordClassModules.ServerFolders = {
 		dragPreview: "dragPreview-nXiByA",
 		guildPlaceholder: "placeholder-7bhR5s",
-		folderContent: "content-Pph8t6 foldercontent",
-		folderContentClosed: "closed-j55_T- foldercontentclosed",
-		folderContentIsOpen: "folderContentIsOpen-zz6FgW foldercontentopened",
+		folderContent: "content-Pph8t6",
+		folderContentClosed: "closed-j55_T-",
+		folderContentIsOpen: "folderContentIsOpen-zz6FgW",
 		iconSwatch: "iconSwatch-_78Ghj",
 		iconSwatchInner: "iconInner-aOY-qk",
 		iconSwatchPreview: "preview-Bbg_24",
@@ -7422,7 +7422,7 @@
 	
 	InternalComponents.LibraryComponents.ModalComponents.ModalContent = InternalBDFDB.loadPatchedComp("ModalComponents.ModalContent") || reactInitialized && class BDFDB_ModalContent extends LibraryModules.React.Component {
 		render() {
-			return this.props.scroller || this.props.scroller === undefined ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ScrollerVertical, {
+			return this.props.scroller ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ScrollerVertical, {
 				outerClassName: BDFDB.disCN.modalcontent,
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.modalsubinner, this.props.className),
 				theme: InternalComponents.LibraryComponents.ScrollerVertical.Themes.GHOST_HAIRLINE,
@@ -7441,6 +7441,7 @@
 			});
 		}
 	};
+	InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.ModalComponents.ModalContent, {scroller:true});
 	
 	InternalComponents.LibraryComponents.ModalComponents.ModalTabContent = InternalBDFDB.loadPatchedComp("ModalComponents.ModalTabContent") || reactInitialized && class BDFDB_ModalTabContent extends LibraryModules.React.Component {
 		render() {
