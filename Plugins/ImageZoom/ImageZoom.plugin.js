@@ -4,7 +4,7 @@ var ImageZoom = (_ => {
 	return class ImageZoom {
 		getName () {return "ImageZoom";}
 
-		getVersion () {return "1.1.0";}
+		getVersion () {return "1.1.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,8 +12,7 @@ var ImageZoom = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Styling","Fixed some styling issues with the zoom lense"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"fixed":[["Overlapping","Fixed the overlapping of the options in the image modal"]]
 			};
 
 			this.patchedModules = {
@@ -28,6 +27,9 @@ var ImageZoom = (_ => {
 			this.css = `
 				${BDFDB.dotCN._imagezoomlense} {
 					border: 2px solid rgb(114, 137, 218);
+				}
+				${BDFDB.dotCN.downloadlink} {
+					position: relative;
 				}
 			`;
 
