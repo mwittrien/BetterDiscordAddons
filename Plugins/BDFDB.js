@@ -693,7 +693,7 @@
 	var Tooltips = [];
 	BDFDB.TooltipUtils = {};
 	BDFDB.TooltipUtils.create = function (anker, text, options = {}) {
-		let itemLayerContainer = document.querySelector(BDFDB.dotCN.appmount +  " > * > " + BDFDB.dotCN.itemlayercontainer);
+		let itemLayerContainer = document.querySelector(BDFDB.dotCN.appmount +  " > " + BDFDB.dotCN.itemlayercontainer);
 		if (!itemLayerContainer || (typeof text != "string" && !BDFDB.ObjectUtils.is(options.guild)) || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
 		let id = BDFDB.NumberUtils.generateId(Tooltips);
 		let itemLayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"></div></div>`);
@@ -1632,6 +1632,7 @@
 	LibraryModules.DispatchUtils = BDFDB.ModuleUtils.findByProperties("ComponentDispatch");
 	LibraryModules.DirectMessageUtils = BDFDB.ModuleUtils.findByProperties("addRecipient", "openPrivateChannel");
 	LibraryModules.EmojiUtils = BDFDB.ModuleUtils.findByProperties("translateInlineEmojiToSurrogates", "translateSurrogatesToInlineEmoji");
+	LibraryModules.EmojiStateUtils = BDFDB.ModuleUtils.findByProperties("getURL", "isEmojiDisabled");
 	LibraryModules.FriendUtils = BDFDB.ModuleUtils.findByProperties("getFriendIDs", "getRelationships");
 	LibraryModules.FolderStore = BDFDB.ModuleUtils.findByProperties("getGuildFolderById", "getFlattenedGuilds");
 	LibraryModules.FolderUtils = BDFDB.ModuleUtils.findByProperties("isFolderExpanded", "getExpandedFolders");
@@ -2900,7 +2901,7 @@
 		return BDFDB.ColorUtils.convert(BDFDB.ReactUtils.findValue(BDFDB.ReactUtils.getInstance(swatches), "selectedColor", {up:true, blacklist:{"props":true}}));
 	};
 	BDFDB.ColorUtils.openPicker = function (container, target, color, options = {gradient: true, alpha: true, callback: _ => {}}) {
-		let itemLayerContainer = document.querySelector(BDFDB.dotCN.appmount +  " > * > " + BDFDB.dotCN.itemlayercontainer);
+		let itemLayerContainer = document.querySelector(BDFDB.dotCN.appmount +  " > " + BDFDB.dotCN.itemlayercontainer);
 		if (!itemLayerContainer || !container || !target) return;
 		
 		if (typeof options.callback != "function") options.callback = _ => {};
@@ -9475,7 +9476,7 @@
 			if (type && ComponentTypeData.NonRenderContextMenus.includes(type)) InternalBDFDB.patchExportedContextMenuLib(menu, type, false);
 		}
 	}});
-	if (ComponentTypeData.ObservedContextMenus.length) BDFDB.ObserverUtils.connect(BDFDB, BDFDB.dotCN.appmount +  " > * > " + BDFDB.dotCN.itemlayercontainer, {name:"contextMenuObserver", instance:(new MutationObserver(changes => {changes.forEach(change => {change.addedNodes.forEach(node => {
+	if (ComponentTypeData.ObservedContextMenus.length) BDFDB.ObserverUtils.connect(BDFDB, BDFDB.dotCN.appmount +  " > " + BDFDB.dotCN.itemlayercontainer, {name:"contextMenuObserver", instance:(new MutationObserver(changes => {changes.forEach(change => {change.addedNodes.forEach(node => {
 		let menu = node && node.nodeType != Node.TEXT_NODE && (BDFDB.ReactUtils.getInstance(node.querySelector(BDFDB.dotCN.contextmenu)) || {}).return;
 		if (BDFDB.ObjectUtils.is(menu)) {
 			let type = InternalBDFDB.getContextMenuType(menu.type && menu.type.displayName || menu.props && menu.props.type, menu);
