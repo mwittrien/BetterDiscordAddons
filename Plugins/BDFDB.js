@@ -7502,7 +7502,7 @@
 		componentDidMount() {
 			let basepopout = BDFDB.ReactUtils.findOwner(this, {name:"BasePopout"});
 			if (!basepopout || !basepopout.handleClick) return;
-			this.handleClick = basepopout.handleClick;
+			this.handleClick = e => {return basepopout.handleClick(BDFDB.ObjectUtils.is(e) ? e : (new MouseEvent({})));};
 			this.close = basepopout.close;
 			this.domElementRef = basepopout.domElementRef;
 		}
