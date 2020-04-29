@@ -1021,6 +1021,10 @@
 				if (m.default && (typeof m.default == "object" || typeof m.default == "function")) for (let j in m.default) if (m.default[j] && (typeof m.default[j] == "object" || typeof m.default[j] == "function") && filter(m.default[j])) return getExport ? m.default[j] : req.c[i];
 			}
 		}
+		for (let i in req.m) if (req.m.hasOwnProperty(i)) {
+			let m = req.m[i];
+			if (m && (typeof m == "object" || typeof m == "function") && filter(m)) return getExport ? req.c[i].exports : req.c[i];
+		}
 	};
 	BDFDB.ModuleUtils.findByProperties = function (...properties) {
 		properties = properties.flat(10);
