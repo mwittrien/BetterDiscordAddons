@@ -1027,7 +1027,7 @@
 				if (req.c[i]) return getExport ? req.c[i].exports : req.c[i];
 				else {
 					let resolved = {};
-					req.m[i](exports, null, req);
+					req.m[i](resolved, null, req);
 					return getExport ? resolved.exports : resolved;
 				}
 			}
