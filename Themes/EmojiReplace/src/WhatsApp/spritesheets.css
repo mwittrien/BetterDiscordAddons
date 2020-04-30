@@ -69,6 +69,6 @@
 }
 
 /* picker 44px */
-[style*='background-image: url(/assets/3c3e548508cc8055a9abe104d6fb4902.png)'], [style*='background-image: url("/assets/3c3e548508cc8055a9abe104d6fb4902.png")'] {
+.sprite-2iCowe, [style*='background-image: url(/assets/3c3e548508cc8055a9abe104d6fb4902.png)'], [style*='background-image: url("/assets/3c3e548508cc8055a9abe104d6fb4902.png")'] {
 	background-image: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/spritesheets/WhatsApp/picker_44.png") !important;
 }
