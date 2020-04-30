@@ -6,7 +6,7 @@ var EmojiStatistics = (_ => {
 	return class EmojiStatistics {
 		getName () {return "EmojiStatistics";}
 
-		getVersion () {return "2.9.2";}
+		getVersion () {return "2.9.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -68,23 +68,6 @@ var EmojiStatistics = (_ => {
 					width: 24px;
 					height: 24px;
 				}`;
-		}
-
-		getSettingsPanel () {
-			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-			let settings = BDFDB.DataUtils.get(this, "settings");
-			let settingsPanel, settingsItems = [];
-			
-			for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-				className: BDFDB.disCN.marginbottom8,
-				type: "Switch",
-				plugin: this,
-				keys: ["settings", key],
-				label: this.defaults.settings[key].description,
-				value: settings[key]
-			}));
-			
-			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
 		// Legacy
