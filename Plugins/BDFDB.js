@@ -4374,7 +4374,8 @@
 	DiscordClassModules.Emoji = BDFDB.ModuleUtils.find(m => typeof m.emoji == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.EmojiButton = BDFDB.ModuleUtils.findByProperties("emojiButton", "sprite");
 	DiscordClassModules.EmojiInput = BDFDB.ModuleUtils.findByProperties("inputContainer", "emojiButton");
-	DiscordClassModules.EmojiPicker = BDFDB.ModuleUtils.findByProperties("emojiPicker", "diversitySelector");
+	DiscordClassModules.EmojiPicker = BDFDB.ModuleUtils.findByProperties("emojiPicker", "categories");
+	DiscordClassModules.EmojiExpressionPicker = BDFDB.ModuleUtils.findByProperties("emojiPicker", "inspector");
 	DiscordClassModules.ExpressionPicker = BDFDB.ModuleUtils.findByProperties("contentWrapper", "navButton", "navList");
 	DiscordClassModules.File = BDFDB.ModuleUtils.findByProperties("downloadButton", "fileNameLink");
 	DiscordClassModules.Flex = BDFDB.ModuleUtils.findByProperties("alignBaseline", "alignCenter");
@@ -5028,6 +5029,8 @@
 		emojipickerselected: ["EmojiPicker", "selected"],
 		emojipickerspriteitem: ["EmojiPicker", "spriteItem"],
 		emojipickerstickyheader: ["EmojiPicker", "stickyHeader"],
+		expressionemojipicker: ["ExpressionEmojiPicker", "emojiPicker"],
+		expressionemojipickerheader: ["ExpressionEmojiPicker", "header"],
 		expressionpicker: ["ExpressionPicker", "contentWrapper"],
 		expressionpickernav: ["ExpressionPicker", "nav"],
 		expressionpickernavbutton: ["ExpressionPicker", "navButton"],

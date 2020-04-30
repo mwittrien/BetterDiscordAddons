@@ -6,7 +6,7 @@ var EmojiStatistics = (_ => {
 	return class EmojiStatistics {
 		getName () {return "EmojiStatistics";}
 
-		getVersion () {return "2.9.3";}
+		getVersion () {return "2.9.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -39,13 +39,13 @@ var EmojiStatistics = (_ => {
 					width: 120px;
 				}
 
-				${BDFDB.dotCN._emojistatisticsstatisticsbutton}.old {
+				${BDFDB.dotCNS.emojipicker + BDFDB.dotCN._emojistatisticsstatisticsbutton} {
 					width: 28px;
 					height: 28px;
 					margin-right: 12px;
 					cursor: pointer;
 				}
-				${BDFDB.dotCN._emojistatisticsstatisticsbutton}.old > div {
+				${BDFDB.dotCNS.emojipicker + BDFDB.dotCN._emojistatisticsstatisticsbutton} > div {
 					padding: 4px;
 					flex-shrink: 0;
 					width: 22px;
@@ -55,16 +55,16 @@ var EmojiStatistics = (_ => {
 					background-size: 22px 22px;
 				}
 
-				${BDFDB.dotCN.emojipickerheader} {
+				${BDFDB.dotCNS.expressionemojipicker + BDFDB.dotCN.expressionemojipickerheader} {
 					grid-template-columns: auto 24px 24px;
 				}
 
-				${BDFDB.dotCN._emojistatisticsstatisticsbutton} {
+				${BDFDB.dotCNS.expressionemojipicker + BDFDB.dotCN._emojistatisticsstatisticsbutton} {
 					width: 24px;
 					height: 24px;
 					grid-column: 3/4;
 				}
-				${BDFDB.dotCN._emojistatisticsstatisticsbutton} > div {
+				${BDFDB.dotCNS.expressionemojipicker + BDFDB.dotCN._emojistatisticsstatisticsbutton} > div {
 					width: 24px;
 					height: 24px;
 				}`;
@@ -138,12 +138,13 @@ var EmojiStatistics = (_ => {
 		}
 
 		processEmojiPicker (e) {
+			console.log(e);
 			this.loadEmojiList();
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"DiversitySelector"});
 			if (index > -1) children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 				text: "Emoji Statistics",
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-					className: BDFDB.disCN._emojistatisticsstatisticsbutton + " old",
+					className: BDFDB.disCN._emojistatisticsstatisticsbutton,
 					children: BDFDB.ReactUtils.createElement("div", {
 						style: {
 							backgroundImage: "url(/assets/5e9d1e5a1536cf6e2fcaf05f3eaf64dc.svg)"
