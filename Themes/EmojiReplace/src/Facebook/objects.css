@@ -28,7 +28,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/keyboard.png") !important;
 }
 
-/* desktop, desktop_computer */
+/* desktop */
 [src="/assets/54b027c5a0fdb9c92545820e12544ab4.svg"], [style*="background-image: url(/assets/54b027c5a0fdb9c92545820e12544ab4.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/desktop.png") !important;
@@ -40,7 +40,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/printer.png") !important;
 }
 
-/* mouse_three_button, three_button_mouse */
+/* mouse_three_button */
 [src="/assets/e97b992acec4ceea9cf5412d65c38332.svg"], [style*="background-image: url(/assets/e97b992acec4ceea9cf5412d65c38332.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/mouse_three_button.png") !important;
@@ -118,7 +118,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/movie_camera.png") !important;
 }
 
-/* projector, film_projector */
+/* projector */
 [src="/assets/654212b1a4cdf391b4a8bb37faf7d18c.svg"], [style*="background-image: url(/assets/654212b1a4cdf391b4a8bb37faf7d18c.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/projector.png") !important;
@@ -166,7 +166,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/radio.png") !important;
 }
 
-/* microphone2, studio_microphone */
+/* microphone2 */
 [src="/assets/59bdcc534c0d1adc1fb7575a1a4785a6.svg"], [style*="background-image: url(/assets/59bdcc534c0d1adc1fb7575a1a4785a6.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/microphone2.png") !important;
@@ -196,7 +196,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/stopwatch.png") !important;
 }
 
-/* timer, timer_clock */
+/* timer */
 [src="/assets/c3b6bfe6efe3d61d1e9198fe347ca06c.svg"], [style*="background-image: url(/assets/c3b6bfe6efe3d61d1e9198fe347ca06c.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/timer.png") !important;
@@ -208,7 +208,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/alarm_clock.png") !important;
 }
 
-/* clock, mantlepiece_clock */
+/* clock */
 [src="/assets/e75125914de0c65e43aab08786e23b06.svg"], [style*="background-image: url(/assets/e75125914de0c65e43aab08786e23b06.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/clock.png") !important;
@@ -268,7 +268,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/fire_extinguisher.png") !important;
 }
 
-/* oil, oil_drum */
+/* oil */
 [src="/assets/ab7865e51cabbc0f7497b2ef0a28f503.svg"], [style*="background-image: url(/assets/ab7865e51cabbc0f7497b2ef0a28f503.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/oil.png") !important;
@@ -346,13 +346,13 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/hammer.png") !important;
 }
 
-/* hammer_pick, hammer_and_pick */
+/* hammer_pick */
 [src="/assets/3c660250c99f7f232505c273d29e6a7e.svg"], [style*="background-image: url(/assets/3c660250c99f7f232505c273d29e6a7e.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/hammer_pick.png") !important;
 }
 
-/* tools, hammer_and_wrench */
+/* tools */
 [src="/assets/28a6206f93399999d1a908d5c45232ad.svg"], [style*="background-image: url(/assets/28a6206f93399999d1a908d5c45232ad.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/tools.png") !important;
@@ -430,7 +430,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/knife.png") !important;
 }
 
-/* dagger, dagger_knife */
+/* dagger */
 [src="/assets/0032dd59d36507a4e350d17097afbebe.svg"], [style*="background-image: url(/assets/0032dd59d36507a4e350d17097afbebe.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/dagger.png") !important;
@@ -460,7 +460,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/coffin.png") !important;
 }
 
-/* urn, funeral_urn */
+/* urn */
 [src="/assets/69a6d1386a64620065532c7e72882d8a.svg"], [style*="background-image: url(/assets/69a6d1386a64620065532c7e72882d8a.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/urn.png") !important;
@@ -694,7 +694,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/squeeze_bottle.png") !important;
 }
 
-/* bellhop, bellhop_bell */
+/* bellhop */
 [src="/assets/791e391602ab4e6b10c64f43095342b9.svg"], [style*="background-image: url(/assets/791e391602ab4e6b10c64f43095342b9.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/bellhop.png") !important;
@@ -706,7 +706,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/key.png") !important;
 }
 
-/* key2, old_key */
+/* key2 */
 [src="/assets/e14bea9653868307f4d1e70fa17e2535.svg"], [style*="background-image: url(/assets/e14bea9653868307f4d1e70fa17e2535.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/key2.png") !important;
@@ -718,7 +718,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/door.png") !important;
 }
 
-/* couch, couch_and_lamp */
+/* couch */
 [src="/assets/052c2cb602f1fe2bafb5900b67cf236a.svg"], [style*="background-image: url(/assets/052c2cb602f1fe2bafb5900b67cf236a.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/couch.png") !important;
@@ -736,31 +736,31 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/sleeping_accommodation.png") !important;
 }
 
-/* person_in_bed_tone1, person_in_bed_light_skin_tone */
+/* person_in_bed_tone1 */
 [src="/assets/5baead4e3ce7a0ded1977fcfeceb4176.svg"], [style*="background-image: url(/assets/5baead4e3ce7a0ded1977fcfeceb4176.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/person_in_bed_tone1.png") !important;
 }
 
-/* person_in_bed_tone2, person_in_bed_medium_light_skin_tone */
+/* person_in_bed_tone2 */
 [src="/assets/ceea7dbdb52a88a800a3f538c27ab4f2.svg"], [style*="background-image: url(/assets/ceea7dbdb52a88a800a3f538c27ab4f2.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/person_in_bed_tone2.png") !important;
 }
 
-/* person_in_bed_tone3, person_in_bed_medium_skin_tone */
+/* person_in_bed_tone3 */
 [src="/assets/85062b7ca20c887bcbe93977b070b456.svg"], [style*="background-image: url(/assets/85062b7ca20c887bcbe93977b070b456.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/person_in_bed_tone3.png") !important;
 }
 
-/* person_in_bed_tone4, person_in_bed_medium_dark_skin_tone */
+/* person_in_bed_tone4 */
 [src="/assets/831b74f22f01cb59cc4ba8f64ec0c327.svg"], [style*="background-image: url(/assets/831b74f22f01cb59cc4ba8f64ec0c327.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/person_in_bed_tone4.png") !important;
 }
 
-/* person_in_bed_tone5, person_in_bed_dark_skin_tone */
+/* person_in_bed_tone5 */
 [src="/assets/298f6b746370fda33a91d6748fd0c830.svg"], [style*="background-image: url(/assets/298f6b746370fda33a91d6748fd0c830.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/person_in_bed_tone5.png") !important;
@@ -772,7 +772,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/teddy_bear.png") !important;
 }
 
-/* frame_photo, frame_with_picture */
+/* frame_photo */
 [src="/assets/c4424d3d5068cba14a10467cfafd6580.svg"], [style*="background-image: url(/assets/c4424d3d5068cba14a10467cfafd6580.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/frame_photo.png") !important;
@@ -784,7 +784,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/shopping_bags.png") !important;
 }
 
-/* shopping_cart, shopping_trolley */
+/* shopping_cart */
 [src="/assets/3f0519f01b411bfdaf3fe311ea34b74c.svg"], [style*="background-image: url(/assets/3f0519f01b411bfdaf3fe311ea34b74c.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/shopping_cart.png") !important;
@@ -868,7 +868,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/incoming_envelope.png") !important;
 }
 
-/* e_mail, email */
+/* e_mail */
 [src="/assets/701414a67cb18fe339ec2bbe21a1d448.svg"], [style*="background-image: url(/assets/701414a67cb18fe339ec2bbe21a1d448.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/e_mail.png") !important;
@@ -988,13 +988,13 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/chart_with_downwards_trend.png") !important;
 }
 
-/* notepad_spiral, spiral_note_pad */
+/* notepad_spiral */
 [src="/assets/3391ce4715f3c814d6067911438e5bf7.svg"], [style*="background-image: url(/assets/3391ce4715f3c814d6067911438e5bf7.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/notepad_spiral.png") !important;
 }
 
-/* calendar_spiral, spiral_calendar_pad */
+/* calendar_spiral */
 [src="/assets/7be2358758e81e1ab253eb071a9527c7.svg"], [style*="background-image: url(/assets/7be2358758e81e1ab253eb071a9527c7.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/calendar_spiral.png") !important;
@@ -1024,13 +1024,13 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/card_index.png") !important;
 }
 
-/* card_box, card_file_box */
+/* card_box */
 [src="/assets/b542a360ed4cdceeac3bca73b455ebc6.svg"], [style*="background-image: url(/assets/b542a360ed4cdceeac3bca73b455ebc6.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/card_box.png") !important;
 }
 
-/* ballot_box, ballot_box_with_ballot */
+/* ballot_box */
 [src="/assets/ff85a1aae50ad48506e3275656768e89.svg"], [style*="background-image: url(/assets/ff85a1aae50ad48506e3275656768e89.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/ballot_box.png") !important;
@@ -1060,13 +1060,13 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/open_file_folder.png") !important;
 }
 
-/* dividers, card_index_dividers */
+/* dividers */
 [src="/assets/b9248f302c72a7bf6000495bc443229c.svg"], [style*="background-image: url(/assets/b9248f302c72a7bf6000495bc443229c.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/dividers.png") !important;
 }
 
-/* newspaper2, rolled_up_newspaper */
+/* newspaper2 */
 [src="/assets/a5054ee2699eac86708c28d32dcc087d.svg"], [style*="background-image: url(/assets/a5054ee2699eac86708c28d32dcc087d.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/newspaper2.png") !important;
@@ -1156,7 +1156,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/paperclip.png") !important;
 }
 
-/* paperclips, linked_paperclips */
+/* paperclips */
 [src="/assets/99176ba5499c1a3fa03ab6030f9a3ccb.svg"], [style*="background-image: url(/assets/99176ba5499c1a3fa03ab6030f9a3ccb.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/paperclips.png") !important;
@@ -1198,13 +1198,13 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/scissors.png") !important;
 }
 
-/* pen_ballpoint, lower_left_ballpoint_pen */
+/* pen_ballpoint */
 [src="/assets/ef166777e2f79997d529055dc66f0ab7.svg"], [style*="background-image: url(/assets/ef166777e2f79997d529055dc66f0ab7.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/pen_ballpoint.png") !important;
 }
 
-/* pen_fountain, lower_left_fountain_pen */
+/* pen_fountain */
 [src="/assets/5d831ad22096d754a2d4961374aa9f7a.svg"], [style*="background-image: url(/assets/5d831ad22096d754a2d4961374aa9f7a.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/pen_fountain.png") !important;
@@ -1216,19 +1216,19 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/black_nib.png") !important;
 }
 
-/* paintbrush, lower_left_paintbrush */
+/* paintbrush */
 [src="/assets/1f90b12fb5df52074f2f863802f09382.svg"], [style*="background-image: url(/assets/1f90b12fb5df52074f2f863802f09382.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/paintbrush.png") !important;
 }
 
-/* crayon, lower_left_crayon */
+/* crayon */
 [src="/assets/8ad04dbb11c573c22adf06a81995dbcd.svg"], [style*="background-image: url(/assets/8ad04dbb11c573c22adf06a81995dbcd.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/crayon.png") !important;
 }
 
-/* pencil, memo */
+/* pencil */
 [src="/assets/e1ec53c5d89c0291001989a36716aa9a.svg"], [style*="background-image: url(/assets/e1ec53c5d89c0291001989a36716aa9a.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Facebook/objects/pencil.png") !important;

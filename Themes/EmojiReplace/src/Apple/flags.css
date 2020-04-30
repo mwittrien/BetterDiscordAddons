@@ -22,7 +22,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/flags/triangular_flag_on_post.png") !important;
 }
 
-/* rainbow_flag, gay_pride_flag */
+/* rainbow_flag */
 [src="/assets/fd4b28db5d02e26f4ee43ab549ecffd4.svg"], [style*="background-image: url(/assets/fd4b28db5d02e26f4ee43ab549ecffd4.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/flags/rainbow_flag.png") !important;

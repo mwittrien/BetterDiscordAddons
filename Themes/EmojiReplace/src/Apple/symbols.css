@@ -58,7 +58,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/broken_heart.png") !important;
 }
 
-/* heart_exclamation, heavy_heart_exclamation_mark_ornament */
+/* heart_exclamation */
 [src="/assets/fcc6e0e5fd313e770f13408321d2d50b.svg"], [style*="background-image: url(/assets/fcc6e0e5fd313e770f13408321d2d50b.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/heart_exclamation.png") !important;
@@ -112,13 +112,13 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/heart_decoration.png") !important;
 }
 
-/* peace, peace_symbol */
+/* peace */
 [src="/assets/d7bbe0154d7fe493cad8d0254bf151cb.svg"], [style*="background-image: url(/assets/d7bbe0154d7fe493cad8d0254bf151cb.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/peace.png") !important;
 }
 
-/* cross, latin_cross */
+/* cross */
 [src="/assets/30ee6669f72802f601cd8569d3237fee.svg"], [style*="background-image: url(/assets/30ee6669f72802f601cd8569d3237fee.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/cross.png") !important;
@@ -172,7 +172,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/orthodox_cross.png") !important;
 }
 
-/* place_of_worship, worship_symbol */
+/* place_of_worship */
 [src="/assets/182f6ee66279e4564729eedd02f113ef.svg"], [style*="background-image: url(/assets/182f6ee66279e4564729eedd02f113ef.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/place_of_worship.png") !important;
@@ -262,7 +262,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/id.png") !important;
 }
 
-/* atom, atom_symbol */
+/* atom */
 [src="/assets/f70b9bba067a9d6a02d73385aff6449c.svg"], [style*="background-image: url(/assets/f70b9bba067a9d6a02d73385aff6449c.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/atom.png") !important;
@@ -274,13 +274,13 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/accept.png") !important;
 }
 
-/* radioactive, radioactive_sign */
+/* radioactive */
 [src="/assets/9445b59878fd9d95fad861939d5a25a7.svg"], [style*="background-image: url(/assets/9445b59878fd9d95fad861939d5a25a7.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/radioactive.png") !important;
 }
 
-/* biohazard, biohazard_sign */
+/* biohazard */
 [src="/assets/672f8aca9a57812526e1e5875916efbe.svg"], [style*="background-image: url(/assets/672f8aca9a57812526e1e5875916efbe.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/biohazard.png") !important;
@@ -436,7 +436,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/o.png") !important;
 }
 
-/* octagonal_sign, stop_sign */
+/* octagonal_sign */
 [src="/assets/2ff27b392104b9f10c0faa72f68e3fbd.svg"], [style*="background-image: url(/assets/2ff27b392104b9f10c0faa72f68e3fbd.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/octagonal_sign.png") !important;
@@ -928,13 +928,13 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/hash.png") !important;
 }
 
-/* asterisk, keycap_asterisk */
+/* asterisk */
 [src="/assets/63f52f1c8a74fd85d7a4c1b36957e7bd.svg"], [style*="background-image: url(/assets/63f52f1c8a74fd85d7a4c1b36957e7bd.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/asterisk.png") !important;
 }
 
-/* eject, eject_symbol */
+/* eject */
 [src="/assets/d303e410b0ca930c1415c3b420675997.svg"], [style*="background-image: url(/assets/d303e410b0ca930c1415c3b420675997.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/eject.png") !important;
@@ -946,7 +946,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/arrow_forward.png") !important;
 }
 
-/* pause_button, double_vertical_bar */
+/* pause_button */
 [src="/assets/c76aff0be5af2818d6a54a7041f42a11.svg"], [style*="background-image: url(/assets/c76aff0be5af2818d6a54a7041f42a11.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/pause_button.png") !important;
@@ -970,13 +970,13 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/record_button.png") !important;
 }
 
-/* track_next, next_track */
+/* track_next */
 [src="/assets/5c453c22c9759622b0cd8a103b368801.svg"], [style*="background-image: url(/assets/5c453c22c9759622b0cd8a103b368801.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/track_next.png") !important;
 }
 
-/* track_previous, previous_track */
+/* track_previous */
 [src="/assets/f6f5399e57ef77e62130ed0b16104a4f.svg"], [style*="background-image: url(/assets/f6f5399e57ef77e62130ed0b16104a4f.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/track_previous.png") !important;
@@ -1498,7 +1498,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/loudspeaker.png") !important;
 }
 
-/* speech_left, left_speech_bubble */
+/* speech_left */
 [src="/assets/972f4783c40bf1217f007fcfd944ac30.svg"], [style*="background-image: url(/assets/972f4783c40bf1217f007fcfd944ac30.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/speech_left.png") !important;
@@ -1522,7 +1522,7 @@
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/thought_balloon.png") !important;
 }
 
-/* anger_right, right_anger_bubble */
+/* anger_right */
 [src="/assets/3cde66c399ecfb908ead029f0f1f7e5e.svg"], [style*="background-image: url(/assets/3cde66c399ecfb908ead029f0f1f7e5e.svg)"] {
 	background: transparent !important;
 	content: url("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/EmojiReplace/emojis/Apple/symbols/anger_right.png") !important;
