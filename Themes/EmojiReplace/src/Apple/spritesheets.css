@@ -1,3 +1,38 @@
+/* yellow 44px */
+[style*='background-image: url(/assets/df854ca9a022bf3b5fe42ded8725e1bc.png)'], [style*='background-image: url("/assets/df854ca9a022bf3b5fe42ded8725e1bc.png")'] {
+	background-image: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/spritesheets/Apple/yellow_44.png") !important;
+}
+
+/* light 44px */
+[style*='background-image: url(/assets/d5576612981f35a5efc4471a0d967b54.png)'], [style*='background-image: url("/assets/d5576612981f35a5efc4471a0d967b54.png")'] {
+	background-image: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/spritesheets/Apple/light_44.png") !important;
+}
+
+/* light_medium 44px */
+[style*='background-image: url(/assets/84d40f6d9dfac3808e60b42e954579fa.png)'], [style*='background-image: url("/assets/84d40f6d9dfac3808e60b42e954579fa.png")'] {
+	background-image: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/spritesheets/Apple/light_medium_44.png") !important;
+}
+
+/* medium 44px */
+[style*='background-image: url(/assets/7df570ef230fe1610e75daad5bc78cd9.png)'], [style*='background-image: url("/assets/7df570ef230fe1610e75daad5bc78cd9.png")'] {
+	background-image: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/spritesheets/Apple/medium_44.png") !important;
+}
+
+/* dark_medium 44px */
+[style*='background-image: url(/assets/727ef9fe7ffc6bc1cf2f4d255ed2335c.png)'], [style*='background-image: url("/assets/727ef9fe7ffc6bc1cf2f4d255ed2335c.png")'] {
+	background-image: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/spritesheets/Apple/dark_medium_44.png") !important;
+}
+
+/* dark 44px */
+[style*='background-image: url(/assets/62645ad3c786ff787a0701b7269ecdc2.png)'], [style*='background-image: url("/assets/62645ad3c786ff787a0701b7269ecdc2.png")'] {
+	background-image: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/spritesheets/Apple/dark_44.png") !important;
+}
+
+/* emoji 44px */
+[style*='background-image: url(/assets/afc96e77efee1190e1fbe3cc69f149f8.png)'], [style*='background-image: url("/assets/afc96e77efee1190e1fbe3cc69f149f8.png")'] {
+	background-image: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/spritesheets/Apple/emoji_44.png") !important;
+}
+
 /* yellow 64px */
 [style*='background-image: url(/assets/b50bb95edd6677c357af09e05637044e.png)'], [style*='background-image: url("/assets/b50bb95edd6677c357af09e05637044e.png")'] {
 	background-image: url("https://mwittrien.github.io/BetterDiscordAddons/Themes/EmojiReplace/spritesheets/Apple/yellow_64.png") !important;
