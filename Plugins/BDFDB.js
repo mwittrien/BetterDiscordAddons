@@ -1023,7 +1023,7 @@
 		}
 		for (let i in req.m) if (req.m.hasOwnProperty(i)) {
 			let m = req.m[i];
-			if (m && (typeof m == "object" || typeof m == "function") && filter(m)) return getExport ? eq.c[i] && req.c[i].exports : req.c[i];
+			if (m && (typeof m == "object" || typeof m == "function") && filter(m)) return getExport ? req.c[i] && req.c[i].exports : req.c[i];
 		}
 	};
 	BDFDB.ModuleUtils.findByProperties = function (...properties) {
