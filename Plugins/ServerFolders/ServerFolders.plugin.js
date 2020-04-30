@@ -276,7 +276,7 @@ var ServerFolders = (_ => {
 	return class ServerFolders {
 		getName () {return "ServerFolders";}
 
-		getVersion () {return "6.7.4";}
+		getVersion () {return "6.7.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -284,7 +284,7 @@ var ServerFolders = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Silent updates? NANI!","Fixed for discords sneaky updates"]]
+				"fixed":[["Color Gradients","Fixed color gradients not working on icons"]]
 			};
 			
 			this.patchedModules = {
@@ -891,20 +891,22 @@ var ServerFolders = (_ => {
 
 		createBase64SVG (paths, color1 = "#000000", color2 = "#FFFFFF") {
 			if (paths.indexOf("<path ") != 0) return paths;
-			let isgradient1 = color1 && BDFDB.ObjectUtils.is(color1);
-			let isgradient2 = color1 && BDFDB.ObjectUtils.is(color2);
+			let isGradient1 = color1 && BDFDB.ObjectUtils.is(color1);
+			let isGradient2 = color2 && BDFDB.ObjectUtils.is(color2);
 			let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" viewBox="-60 -50 1100 1100">`;
-			if (isgradient1) {
+			if (isGradient1) {
+				color1 = BDFDB.ColorUtils.convert(color1, "RGBA");
 				svg += `<linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">`;
 				for (let pos of Object.keys(color1).sort()) svg += `<stop offset="${pos * 100}%" style="stop-color: ${color1[pos]};"></stop>`;
 				svg += `</linearGradient>`;
 			}
-			if (isgradient2) {
+			if (isGradient2) {
+				color2 = BDFDB.ColorUtils.convert(color2, "RGBA");
 				svg += `<linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">`;
 				for (let pos of Object.keys(color2).sort()) svg += `<stop offset="${pos * 100}%" style="stop-color: ${color2[pos]};"></stop>`;
 				svg += `</linearGradient>`;
 			}
-			svg += `${paths.replace("REPLACE_FILL1", isgradient1 ? "url(#grad1)" : BDFDB.ColorUtils.convert(color1, "RGBA")).replace("REPLACE_FILL2", isgradient2 ? "url(#grad2)" : BDFDB.ColorUtils.convert(color2, "RGBA"))}</svg>`;
+			svg += `${paths.replace("REPLACE_FILL1", isGradient1 ? "url(#grad1)" : BDFDB.ColorUtils.convert(color1, "RGBA")).replace("REPLACE_FILL2", isGradient2 ? "url(#grad2)" : BDFDB.ColorUtils.convert(color2, "RGBA"))}</svg>`;
 			return `data:image/svg+xml;base64,${btoa(svg)}`;
 		}
 
