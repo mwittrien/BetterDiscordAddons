@@ -126,7 +126,7 @@ var EmojiStatistics = (_ => {
 					className: BDFDB.disCN._emojistatisticsstatisticsbutton,
 					children: BDFDB.ReactUtils.createElement("div", {
 						style: {
-							backgroundImage: "url(/assets/5e9d1e5a1536cf6e2fcaf05f3eaf64dc.svg)"
+							backgroundImage: "url(/assets/0477c6a43026315dd623bc6367e18acb.svg)"
 						}
 					})
 				}),
@@ -147,7 +147,7 @@ var EmojiStatistics = (_ => {
 					className: BDFDB.disCN._emojistatisticsstatisticsbutton,
 					children: BDFDB.ReactUtils.createElement("div", {
 						style: {
-							backgroundImage: "url(/assets/5e9d1e5a1536cf6e2fcaf05f3eaf64dc.svg)"
+							backgroundImage: "url(/assets/0477c6a43026315dd623bc6367e18acb.svg)"
 						}
 					})
 				}),
