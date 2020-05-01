@@ -4377,6 +4377,8 @@
 	DiscordClassModules.EmojiPicker = BDFDB.ModuleUtils.findByProperties("emojiPicker", "categories");
 	DiscordClassModules.ExpressionPicker = BDFDB.ModuleUtils.findByProperties("contentWrapper", "navButton", "navList");
 	DiscordClassModules.ExpressionEmojiPicker = BDFDB.ModuleUtils.findByProperties("emojiPicker", "inspector");
+	DiscordClassModules.ExpressionEmojiPickerItem = BDFDB.ModuleUtils.findByProperties("emojiItemImage", "emojiItemImageLoading");
+	DiscordClassModules.ExpressionEmojiPickerInspector = BDFDB.ModuleUtils.findByProperties("inspector", "glyphEmoji");
 	DiscordClassModules.File = BDFDB.ModuleUtils.findByProperties("downloadButton", "fileNameLink");
 	DiscordClassModules.Flex = BDFDB.ModuleUtils.findByProperties("alignBaseline", "alignCenter");
 	DiscordClassModules.FlexChild = BDFDB.ModuleUtils.findByProperties("flexChild", "flex");
@@ -5013,9 +5015,11 @@
 		emojipickercategory: ["EmojiPicker", "category"],
 		emojipickerdisabled: ["EmojiPicker", "disabled"],
 		emojipickerdiversityselector: ["EmojiPicker", "diversitySelector"],
+		emojipickerdiversityselectoritem: ["EmojiPicker", "item"],
 		emojipickeremojiitem: ["EmojiPicker", "emojiItem"],
 		emojipickerheader: ["EmojiPicker", "header"],
-		emojipickeritem: ["EmojiPicker", "item"],
+		emojipickerinfobar: ["EmojiPicker", "infoBar"],
+		emojipickerinfobaremoji: ["EmojiPicker", "infoBarEmoji"],
 		emojipickerpopout: ["EmojiPicker", "popout"],
 		emojipickerpremiumpromo: ["EmojiPicker", "premiumPromo"],
 		emojipickerpremiumpromoclose: ["EmojiPicker", "premiumPromoClose"],
@@ -5032,7 +5036,11 @@
 		expressionemojipicker: ["ExpressionEmojiPicker", "emojiPicker"],
 		expressionemojipickerdiversityselector: ["ExpressionEmojiPicker", "diversitySelector"],
 		expressionemojipickerdiversityemojiitemimage: ["ExpressionEmojiPicker", "diversityEmojiItemImage"],
+		expressionemojipickeremojiitemimage: ["ExpressionEmojiPickerItem", "emojiItemImage"],
+		expressionemojipickeremojiitemimageloading: ["ExpressionEmojiPickerItem", "emojiItemImageLoading"],
 		expressionemojipickerheader: ["ExpressionEmojiPicker", "header"],
+		expressionemojipickerinspector: ["ExpressionEmojiPickerInspector", "inspector"],
+		expressionemojipickerinspectoremoji: ["ExpressionEmojiPickerInspector", "emoji"],
 		expressionpicker: ["ExpressionPicker", "contentWrapper"],
 		expressionpickernav: ["ExpressionPicker", "nav"],
 		expressionpickernavbutton: ["ExpressionPicker", "navButton"],

@@ -43,7 +43,6 @@ var EmojiStatistics = (_ => {
 					width: 28px;
 					height: 28px;
 					margin-right: 12px;
-					cursor: pointer;
 				}
 				${BDFDB.dotCNS.emojipicker + BDFDB.dotCN._emojistatisticsstatisticsbutton} > div {
 					padding: 4px;
@@ -63,10 +62,6 @@ var EmojiStatistics = (_ => {
 					width: 24px;
 					height: 24px;
 					grid-column: 3/4;
-				}
-				${BDFDB.dotCNS.expressionemojipicker + BDFDB.dotCN._emojistatisticsstatisticsbutton} > div {
-					width: 24px;
-					height: 24px;
 				}`;
 		}
 
@@ -125,6 +120,7 @@ var EmojiStatistics = (_ => {
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 					className: BDFDB.disCN._emojistatisticsstatisticsbutton,
 					children: BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.expressionemojipickerdiversityemojiitemimage,
 						style: {
 							backgroundImage: "url(/assets/0477c6a43026315dd623bc6367e18acb.svg)"
 						}
@@ -138,7 +134,6 @@ var EmojiStatistics = (_ => {
 		}
 
 		processEmojiPicker (e) {
-			console.log(e);
 			this.loadEmojiList();
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"DiversitySelector"});
 			if (index > -1) children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
@@ -146,6 +141,7 @@ var EmojiStatistics = (_ => {
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 					className: BDFDB.disCN._emojistatisticsstatisticsbutton,
 					children: BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.emojipickerdiversityselectoritem,
 						style: {
 							backgroundImage: "url(/assets/0477c6a43026315dd623bc6367e18acb.svg)"
 						}
