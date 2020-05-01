@@ -200,7 +200,6 @@ var ImageGallery = (_ => {
 					}));
 				}
 				if (e.node) {
-					console.log(e.node);
 					let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCNC.modal + BDFDB.dotCN.layermodal, e.node);
 					if (modal) {
 						BDFDB.DOMUtils.addClass(modal, BDFDB.disCN._imagegallerygallery);
