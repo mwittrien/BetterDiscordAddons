@@ -14,7 +14,7 @@ var ImageGallery = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Styling","Fixed the style for the new image modal layout"]]
+				"fixed":[["Styling","Fixed the style for the new image modal layout"]]
 			};
 
 			this.patchedModules = {

@@ -4,7 +4,7 @@ var ImageZoom = (_ => {
 	return class ImageZoom {
 		getName () {return "ImageZoom";}
 
-		getVersion () {return "1.1.1";}
+		getVersion () {return "1.1.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ var ImageZoom = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Overlapping","Fixed the overlapping of the options in the image modal"]]
+				"fixed":[["Styling && Functionality","Fixed the style for the new image modal layout"]]
 			};
 
 			this.patchedModules = {
@@ -28,8 +28,14 @@ var ImageZoom = (_ => {
 				${BDFDB.dotCN._imagezoomlense} {
 					border: 2px solid rgb(114, 137, 218);
 				}
-				${BDFDB.dotCN.downloadlink} {
-					position: relative;
+				${BDFDB.dotCN._imagezoomoperations} {
+					position: absolute;
+				}
+				${BDFDB.dotCNS._imagezoomoperations + BDFDB.dotCN.downloadlink} {
+					position: relative !important;
+				}
+				${BDFDB.dotCNS._imagezoomoperations + BDFDB.dotCN.anchor + BDFDB.dotCN.downloadlink} {
+					margin: 0 !important;
 				}
 			`;
 
@@ -112,6 +118,7 @@ var ImageZoom = (_ => {
 						}));
 					};
 					children[index] = BDFDB.ReactUtils.createElement("span", {
+						className: BDFDB.disCN._imagezoomoperations,
 						children: [
 							children[index],
 							BDFDB.ReactUtils.createElement("span", {
@@ -133,36 +140,36 @@ var ImageZoom = (_ => {
 		}
 
 		processLazyImage (e) {
-			if (!BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imagegallerysibling) && BDFDB.ReactUtils.findOwner(BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, e.node), {name: "ImageModal"})) {
+			if (!BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imagegallerysibling) && BDFDB.ReactUtils.findOwner(BDFDB.DOMUtils.getParent(BDFDB.dotCNC.modal + BDFDB.dotCN.layermodal, e.node), {name: "ImageModal"})) {
 				e.node.addEventListener("mousedown", event => {
 					BDFDB.ListenerUtils.stopEvent(event);
 
-					let imgrects = BDFDB.DOMUtils.getRects(e.node.firstElementChild);
+					let imgRects = BDFDB.DOMUtils.getRects(e.node.firstElementChild);
 					let settings = BDFDB.DataUtils.get(this, "settings");
 
-					let lense = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imagezoomlense}" style="clip-path: circle(${(settings.lensesize/2) + 2}px at center) !important; border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${settings.lensesize}px !important; height: ${settings.lensesize}px !important; position: fixed !important;"><div style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; clip-path: circle(${settings.lensesize/2}px at center) !important;"><${e.node.firstElementChild.tagName} src="${e.instance.props.src}" style="width: ${imgrects.width * settings.zoomlevel}px; height: ${imgrects.height * settings.zoomlevel}px; position: fixed !important;"${e.node.firstElementChild.tagName == "VIDEO" ? " loop autoplay" : ""}></${e.node.firstElementChild.tagName}></div></div>`);
+					let lense = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imagezoomlense}" style="clip-path: circle(${(settings.lensesize/2) + 2}px at center) !important; border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${settings.lensesize}px !important; height: ${settings.lensesize}px !important; position: fixed !important;"><div style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; clip-path: circle(${settings.lensesize/2}px at center) !important;"><${e.node.firstElementChild.tagName} src="${e.instance.props.src}" style="width: ${imgRects.width * settings.zoomlevel}px; height: ${imgRects.height * settings.zoomlevel}px; position: fixed !important;"${e.node.firstElementChild.tagName == "VIDEO" ? " loop autoplay" : ""}></${e.node.firstElementChild.tagName}></div></div>`);
 					let pane = lense.firstElementChild.firstElementChild;
 					let backdrop = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imagezoombackdrop}" style="background: rgba(0, 0, 0, 0.3) !important; position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; pointer-events: none !important; z-index: 8000 !important;"></div>`);
-					let appmount = document.querySelector(BDFDB.dotCN.appmount);
-					appmount.appendChild(lense);
-					appmount.appendChild(backdrop);
+					let appMount = document.querySelector(BDFDB.dotCN.appmount);
+					appMount.appendChild(lense);
+					appMount.appendChild(backdrop);
 
 					let lenserects = BDFDB.DOMUtils.getRects(lense), panerects = BDFDB.DOMUtils.getRects(pane);
 					let halfW = lenserects.width / 2, halfH = lenserects.height / 2;
-					let minX = imgrects.left, maxX = minX + imgrects.width;
-					let minY = imgrects.top, maxY = minY + imgrects.height;
+					let minX = imgRects.left, maxX = minX + imgRects.width;
+					let minY = imgRects.top, maxY = minY + imgRects.height;
 					lense.style.setProperty("left", event.clientX - halfW + "px", "important");
 					lense.style.setProperty("top", event.clientY - halfH + "px", "important");
-					pane.style.setProperty("left", imgrects.left + ((settings.zoomlevel - 1) * (imgrects.left - event.clientX)) + "px", "important");
-					pane.style.setProperty("top", imgrects.top + ((settings.zoomlevel - 1) * (imgrects.top - event.clientY)) + "px", "important");
+					pane.style.setProperty("left", imgRects.left + ((settings.zoomlevel - 1) * (imgRects.left - event.clientX)) + "px", "important");
+					pane.style.setProperty("top", imgRects.top + ((settings.zoomlevel - 1) * (imgRects.top - event.clientY)) + "px", "important");
 
 					let dragging = event2 => {
 						let x = event2.clientX > maxX ? maxX - halfW : event2.clientX < minX ? minX - halfW : event2.clientX - halfW;
 						let y = event2.clientY > maxY ? maxY - halfH : event2.clientY < minY ? minY - halfH : event2.clientY - halfH;
 						lense.style.setProperty("left", x + "px", "important");
 						lense.style.setProperty("top", y + "px", "important");
-						pane.style.setProperty("left", imgrects.left + ((settings.zoomlevel - 1) * (imgrects.left - x - halfW)) + "px", "important");
-						pane.style.setProperty("top", imgrects.top + ((settings.zoomlevel - 1) * (imgrects.top - y - halfH)) + "px", "important");
+						pane.style.setProperty("left", imgRects.left + ((settings.zoomlevel - 1) * (imgRects.left - x - halfW)) + "px", "important");
+						pane.style.setProperty("top", imgRects.top + ((settings.zoomlevel - 1) * (imgRects.top - y - halfH)) + "px", "important");
 					};
 					let releasing = _ => {
 						document.removeEventListener("mousemove", dragging);
