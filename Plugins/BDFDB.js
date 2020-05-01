@@ -4212,7 +4212,8 @@
 	DiscordClassModules.ImageZoom = {
 		backdrop: "lenseBackdrop-yEm7Om",
 		lense: "zoomLense-uOK8xV",
-		modal: "imageModal-8J0ttB"
+		modal: "imageModal-8J0ttB",
+		operations: "operations-3V47CY"
 	};
 	DiscordClassModules.OldTitleBar = {
 		oldTitleBarEnabled: "oldTitleBarEnabled-D8ppJQ",
@@ -4546,6 +4547,7 @@
 		_imagezoombackdrop: ["ImageZoom", "backdrop"],
 		_imagezoomimagemodal: ["ImageZoom", "modal"],
 		_imagezoomlense: ["ImageZoom", "lense"],
+		_imagezoomoperations: ["ImageZoom", "operations"],
 		_friendnotificationsfriendsonline: ["FriendNotifications", "friendsOnline"],
 		_googletranslateoptionreversebutton: ["GoogleTranslateOption", "reverseButton"],
 		_googletranslateoptiontranslatebutton: ["GoogleTranslateOption", "translateButton"],

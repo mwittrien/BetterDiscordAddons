@@ -6,7 +6,7 @@ var ImageGallery = (_ => {
 	return class ImageGallery {
 		getName () {return "ImageGallery";}
 
-		getVersion () {return "1.6.8";}
+		getVersion () {return "1.6.9";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,7 @@ var ImageGallery = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Styling","Fixed the style for the details section"]]
+				"improved":[["Styling","Fixed the style for the new image modal layout"]]
 			};
 
 			this.patchedModules = {
@@ -32,6 +32,10 @@ var ImageGallery = (_ => {
 			};
 			
 			this.css = `
+				${BDFDB.dotCN._imagegallerygallery} {
+					transform: unset !important;
+					z-index: 1001;
+				}
 				${BDFDB.dotCN._imagegallerysibling} {
 					display: flex;
 					align-items: center;
@@ -196,22 +200,26 @@ var ImageGallery = (_ => {
 					}));
 				}
 				if (e.node) {
-					BDFDB.DOMUtils.addClass(BDFDB.DOMUtils.getParent(BDFDB.dotCN.modal, e.node), BDFDB.disCN._imagegallerygallery);
-					this.cleanUpListeners();
-					document.keydownImageGalleryListener = event => {
-						if (!document.contains(e.node)) this.cleanUpListeners();
-						else if (!eventFired) {
-							eventFired = true;
-							if (event.keyCode == 37) this.switchImages(e.instance, "previous");
-							else if (event.keyCode == 39) this.switchImages(e.instance, "next");
-						}
-					};
-					document.keyupImageGalleryListener = _ => {
-						eventFired = false;
-						if (!document.contains(e.node)) this.cleanUpListeners();
-					};
-					document.addEventListener("keydown", document.keydownImageGalleryListener);
-					document.addEventListener("keyup", document.keyupImageGalleryListener);
+					console.log(e.node);
+					let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCNC.modal + BDFDB.dotCN.layermodal, e.node);
+					if (modal) {
+						BDFDB.DOMUtils.addClass(modal, BDFDB.disCN._imagegallerygallery);
+						this.cleanUpListeners();
+						document.keydownImageGalleryListener = event => {
+							if (!document.contains(e.node)) this.cleanUpListeners();
+							else if (!eventFired) {
+								eventFired = true;
+								if (event.keyCode == 37) this.switchImages(e.instance, "previous");
+								else if (event.keyCode == 39) this.switchImages(e.instance, "next");
+							}
+						};
+						document.keyupImageGalleryListener = _ => {
+							eventFired = false;
+							if (!document.contains(e.node)) this.cleanUpListeners();
+						};
+						document.addEventListener("keydown", document.keydownImageGalleryListener);
+						document.addEventListener("keyup", document.keyupImageGalleryListener);
+					}
 				}
 			}
 		}
