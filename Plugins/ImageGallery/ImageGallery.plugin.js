@@ -6,7 +6,7 @@ var ImageGallery = (_ => {
 	return class ImageGallery {
 		getName () {return "ImageGallery";}
 
-		getVersion () {return "1.6.9";}
+		getVersion () {return "1.7.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -32,7 +32,7 @@ var ImageGallery = (_ => {
 			};
 			
 			this.css = `
-				${BDFDB.dotCN._imagegallerygallery} {
+				${BDFDB.dotCN._imagegallerygallery}:not([style*="opacity: 0;"]) {
 					transform: unset !important;
 					z-index: 1001;
 				}
