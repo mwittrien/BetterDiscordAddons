@@ -5030,6 +5030,8 @@
 		emojipickerspriteitem: ["EmojiPicker", "spriteItem"],
 		emojipickerstickyheader: ["EmojiPicker", "stickyHeader"],
 		expressionemojipicker: ["ExpressionEmojiPicker", "emojiPicker"],
+		expressionemojipickerdiversityselector: ["ExpressionEmojiPicker", "diversitySelector"],
+		expressionemojipickerdiversityemojiitemimage: ["ExpressionEmojiPicker", "diversityEmojiItemImage"],
 		expressionemojipickerheader: ["ExpressionEmojiPicker", "header"],
 		expressionpicker: ["ExpressionPicker", "contentWrapper"],
 		expressionpickernav: ["ExpressionPicker", "nav"],
