@@ -4377,6 +4377,7 @@
 	DiscordClassModules.EmojiPicker = BDFDB.ModuleUtils.findByProperties("emojiPicker", "categories");
 	DiscordClassModules.ExpressionPicker = BDFDB.ModuleUtils.findByProperties("contentWrapper", "navButton", "navList");
 	DiscordClassModules.ExpressionEmojiPicker = BDFDB.ModuleUtils.findByProperties("emojiPicker", "inspector");
+	DiscordClassModules.ExpressionEmojiPickerDiversitySelector = BDFDB.ModuleUtils.findByProperties("diversityEmojiItemImage", "diversitySelectorPopout");
 	DiscordClassModules.ExpressionEmojiPickerItem = BDFDB.ModuleUtils.findByProperties("emojiItemImage", "emojiItemImageLoading");
 	DiscordClassModules.ExpressionEmojiPickerInspector = BDFDB.ModuleUtils.findByProperties("inspector", "glyphEmoji");
 	DiscordClassModules.File = BDFDB.ModuleUtils.findByProperties("downloadButton", "fileNameLink");
@@ -5034,8 +5035,11 @@
 		emojipickerspriteitem: ["EmojiPicker", "spriteItem"],
 		emojipickerstickyheader: ["EmojiPicker", "stickyHeader"],
 		expressionemojipicker: ["ExpressionEmojiPicker", "emojiPicker"],
-		expressionemojipickerdiversityselector: ["ExpressionEmojiPicker", "diversitySelector"],
-		expressionemojipickerdiversityemojiitemimage: ["ExpressionEmojiPicker", "diversityEmojiItemImage"],
+		expressionemojipickerdiversityemojiitem: ["ExpressionEmojiPickerDiversitySelector", "diversityEmojiItem"],
+		expressionemojipickerdiversityemojiitemimage: ["ExpressionEmojiPickerDiversitySelector", "diversityEmojiItemImage"],
+		expressionemojipickerdiversityselector: ["ExpressionEmojiPickerDiversitySelector", "diversitySelector"],
+		expressionemojipickerdiversityselectorpopout: ["ExpressionEmojiPickerDiversitySelector", "diversitySelectorPopout"],
+		expressionemojipickerdiversityselectorwrapper: ["ExpressionEmojiPicker", "diversitySelector"],
 		expressionemojipickeremojiitemimage: ["ExpressionEmojiPickerItem", "emojiItemImage"],
 		expressionemojipickeremojiitemimageloading: ["ExpressionEmojiPickerItem", "emojiItemImageLoading"],
 		expressionemojipickerheader: ["ExpressionEmojiPicker", "header"],
