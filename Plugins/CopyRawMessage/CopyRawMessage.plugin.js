@@ -4,7 +4,7 @@ var CopyRawMessage = (_ => {
 	return class CopyRawMessage {
 		getName () {return "CopyRawMessage";}
 
-		getVersion () {return "1.0.5";}
+		getVersion () {return "1.0.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -60,34 +60,37 @@ var CopyRawMessage = (_ => {
 		// Begin of own functions
 
 		onMessageContextMenu (e) {
-			if (e.instance.props.message && e.instance.props.message.content) {
+			if (e.instance.props.message) {
 				let embed = BDFDB.DOMUtils.getParent(BDFDB.dotCN.embedwrapper, e.instance.props.target);
 				let embedIndex = embed ? Array.from(embed.parentElement.querySelectorAll(BDFDB.dotCN.embedwrapper)).indexOf(embed) : -1;
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-							label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
-							hint: BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("Copy_Raw") : null,
-							action: _ => {
-								BDFDB.ContextMenuUtils.close(e.instance);
-								BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});
-							}
-						}),
-						embed && embed.querySelector(BDFDB.dotCN.embeddescription) && e.instance.props.message.embeds[embedIndex] && e.instance.props.message.embeds[embedIndex].rawDescription && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-							label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw Embed)",
-							action: _ => {
-								BDFDB.ContextMenuUtils.close(e.instance);
-								BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.embeds[embedIndex].rawDescription});
-							}
-						})
-					].filter(n => n)
-				}));
+				let entries = [
+					e.instance.props.message.content && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+						label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
+						hint: BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("Copy_Raw") : null,
+						action: _ => {
+							BDFDB.ContextMenuUtils.close(e.instance);
+							BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});
+						}
+					}),
+					embed && embed.querySelector(BDFDB.dotCN.embeddescription) && e.instance.props.message.embeds[embedIndex] && e.instance.props.message.embeds[embedIndex].rawDescription && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+						label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw Embed)",
+						action: _ => {
+							BDFDB.ContextMenuUtils.close(e.instance);
+							BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.embeds[embedIndex].rawDescription});
+						}
+					})
+				].filter(n => n);
+				if (entries.length) {
+					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
+					children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+						children: entries
+					}));
+				}
 			}
 		}
 
 		onMessageOptionContextMenu (e) {
-			if (e.instance.props.message && e.instance.props.channel) {
+			if (e.instance.props.message && e.instance.props.message.content) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {key: ["mark-unread"]});
 				children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 					label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
