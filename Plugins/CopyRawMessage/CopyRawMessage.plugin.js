@@ -4,7 +4,7 @@ var CopyRawMessage = (_ => {
 	return class CopyRawMessage {
 		getName () {return "CopyRawMessage";}
 
-		getVersion () {return "1.0.4";}
+		getVersion () {return "1.0.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,8 +12,7 @@ var CopyRawMessage = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Message Update","Fixed the plugin for the new Message Update"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"improved":[["Raw Embed Text","Right clicking inside an embed which contains a description will add an extra option in the context menu to copy the raw contents of the embed description"]]
 			};
 		}
 
@@ -62,6 +61,8 @@ var CopyRawMessage = (_ => {
 
 		onMessageContextMenu (e) {
 			if (e.instance.props.message && e.instance.props.message.content) {
+				let embed = BDFDB.DOMUtils.getParent(BDFDB.dotCN.embedwrapper, e.instance.props.target);
+				let embedIndex = embed ? Array.from(embed.parentElement.querySelectorAll(BDFDB.dotCN.embedwrapper)).indexOf(embed) : -1;
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
 				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
 					children: [
@@ -72,25 +73,15 @@ var CopyRawMessage = (_ => {
 								BDFDB.ContextMenuUtils.close(e.instance);
 								BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});
 							}
+						}),
+						embed && embed.querySelector(BDFDB.dotCN.embeddescription) && e.instance.props.message.embeds[embedIndex] && e.instance.props.message.embeds[embedIndex].rawDescription && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+							label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw Embed)",
+							action: _ => {
+								BDFDB.ContextMenuUtils.close(e.instance);
+								BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.embeds[embedIndex].rawDescription});
+							}
 						})
-					]
-				}));
-			}
-		}
-
-		onMessageOptionToolbar (e) {
-			if (!e.instance.props.hasMorePopout && e.instance.props.message && e.instance.props.channel) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {key: ["mark-unread"]});
-				children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-					text: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-						className: BDFDB.disCNS.messagetoolbarbutton,
-						onClick: _ => {BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});},
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-							className: BDFDB.disCNS.messagetoolbaricon,
-							name: BDFDB.LibraryComponents.SvgIcon.Names.RAW_TEXT
-						})
-					})
+					].filter(n => n)
 				}));
 			}
 		}

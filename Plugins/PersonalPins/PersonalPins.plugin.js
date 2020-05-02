@@ -124,69 +124,6 @@ var PersonalPins = (_ => {
 			}
 		}
 
-		onMessageOptionToolbar (e) {
-			if (!e.instance.props.hasMorePopout && e.instance.props.message && e.instance.props.channel) {
-				let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {key: ["pin", "unpin"]});
-				children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-					key: "add/remove note",
-					text: note ? this.labels.context_unpinoption_text : this.labels.context_pinoption_text,
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-						className: BDFDB.disCNS.messagetoolbarbutton,
-						onClick: event => {
-							this.addMessageToNotes(e.instance.props.message, e.instance.props.channel);
-							let buttonIns = BDFDB.ReactUtils.getInstance(BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagetoolbarbutton, event.target));
-							if (buttonIns) {
-								let isNoted = !!this.getNoteData(e.instance.props.message, e.instance.props.channel);
-								let svgInstance = BDFDB.ReactUtils.findOwner(buttonIns, {props: "iconSVG"});
-								let tooltipInstance = BDFDB.ReactUtils.findOwner(buttonIns, {key: "add/remove note", up:true});
-								if (svgInstance) {
-									svgInstance.props.iconSVG = isNoted ? pinIconDelete : pinIcon;
-									BDFDB.ReactUtils.forceUpdate(svgInstance);
-								}
-								if (tooltipInstance) {
-									tooltipInstance.props.text = isNoted ? this.labels.context_unpinoption_text : this.labels.context_pinoption_text;
-									BDFDB.ReactUtils.forceUpdate(tooltipInstance);
-								}
-								if (!isNoted) {
-									tooltipInstance = BDFDB.ReactUtils.findOwner(buttonIns.return.return, {key: "update note"});
-									if (tooltipInstance) {
-										tooltipInstance.props.children = null;
-										BDFDB.ReactUtils.forceUpdate(tooltipInstance);
-									}
-								}
-							}
-						},
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-							className: BDFDB.disCNS.messagetoolbaricon,
-							nativeClass: true,
-							iconSVG: note ? pinIconDelete : pinIcon
-						})
-					})
-				}));
-				if (this.isNoteOutdated(note, e.instance.props.message)) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-					key: "update note",
-					text: this.labels.context_updateoption_text,
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-						className: BDFDB.disCNS.messagetoolbarbutton,
-						onClick: event => {
-							this.updateNoteData(note, e.instance.props.message);
-							let tooltipInstance = BDFDB.ReactUtils.findOwner(event._targetInst, {key: "update note", up:true});
-							if (tooltipInstance) {
-								tooltipInstance.props.children = null;
-								BDFDB.ReactUtils.forceUpdate(tooltipInstance);
-							}
-						},
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-							className: BDFDB.disCNS.messagetoolbaricon,
-							nativeClass: true,
-							iconSVG: pinIconUpdate
-						})
-					})
-				}));
-			}
-		}
-
 		onMessageOptionContextMenu (e) {
 			if (e.instance.props.message && e.instance.props.channel) {
 				let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);

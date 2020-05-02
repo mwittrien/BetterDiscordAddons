@@ -211,43 +211,6 @@ var GoogleTranslateOption = (_ => {
 			}
 		}
 
-		onMessageOptionToolbar (e) {
-			if (!e.instance.props.hasMorePopout && e.instance.props.message && e.instance.props.channel) {
-				let translated = !!translatedMessages[e.instance.props.message.id];
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {key: ["pin", "unpin"]});
-				children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-					key: "translate",
-					text: translated ? this.labels.context_messageuntranslateoption_text : this.labels.context_messagetranslateoption_text,
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-						className: BDFDB.disCNS.messagetoolbarbutton,
-						disabled: isTranslating,
-						onClick: event => {
-							this.translateMessage(e.instance.props.message, e.instance.props.channel);
-							let buttonIns = BDFDB.ReactUtils.getInstance(BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagetoolbarbutton, event.target));
-							if (buttonIns) {
-								let isTranslated = !!translatedMessages[e.instance.props.message.id];
-								let svgInstance = BDFDB.ReactUtils.findOwner(buttonIns, {props: "iconSVG"});
-								let tooltipInstance = BDFDB.ReactUtils.findOwner(buttonIns, {key: "translate", up:true});
-								if (svgInstance) {
-									svgInstance.props.iconSVG = isTranslated ? translateIconUntranslate : translateIcon;
-									BDFDB.ReactUtils.forceUpdate(svgInstance);
-								}
-								if (tooltipInstance) {
-									tooltipInstance.props.text = isTranslated ? this.labels.context_messageuntranslateoption_text : this.labels.context_messagetranslateoption_text;
-									BDFDB.ReactUtils.forceUpdate(tooltipInstance);
-								}
-							}
-						},
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-							className: BDFDB.disCNS.messagetoolbaricon,
-							nativeClass: true,
-							iconSVG: translated ? translateIconUntranslate : translateIcon
-						})
-					})
-				}));
-			}
-		}
-
 		onMessageOptionContextMenu (e) {
 			if (e.instance.props.message && e.instance.props.channel) {
 				let translated = !!translatedMessages[e.instance.props.message.id];
