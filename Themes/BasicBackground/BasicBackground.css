@@ -834,6 +834,7 @@ body:before {
 	background-color: rgba(var(--vaccentcolor), calc(0.3 * var(--vusechatbubbles)));
 }
 #app-mount .avatar-1BDn8e {
+	position: absolute;
 	top: 4px;
 	left: calc(-70px * var(--vusechatbubbles) + 16px);
 }

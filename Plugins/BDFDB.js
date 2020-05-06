@@ -9317,7 +9317,7 @@
 			}
 			if (user.id == "278543574059057154") {
 				changed = true;
-				avatar.props.className = BDFDB.DOMUtils.formatClassName(avatar.props.className, BDFDB.disCN.bdfdbbadge, BDFDB.disCN.bdfdbsupporter);
+				avatar.props.className = BDFDB.DOMUtils.formatClassName(avatar.props.className, BDFDB.disCN.bdfdbbadge, BDFDB.disCN.bdfdbdev);
 			}
 			if (changed && BDFDB.DataUtils.get(BDFDB, "settings", "showSupportBadges")) return avatar;
 		}
