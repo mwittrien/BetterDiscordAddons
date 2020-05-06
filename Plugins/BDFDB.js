@@ -5363,6 +5363,7 @@
 		message: ["Message", "message"],
 		messageaccessory: ["MessageAccessory", "container"],
 		messageavatar: ["MessageBody", "avatar"],
+		messageavatarclickable: ["MessageBody", "clickable"],
 		messagebackgroundflash: ["Message", "backgroundFlash"],
 		messagebarbase: ["MessageElements", "barBase"],
 		messagebarbuttonalt: ["MessageElements", "barButtonAlt"],
