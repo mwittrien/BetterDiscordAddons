@@ -1120,6 +1120,9 @@ body:before {
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 	border-color: rgba(var(--vtransparencycolor), 0.1);
 }
+#app-mount .guildIconImage-3qTk45 {							/* invite				icon								*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
 #app-mount .guildName-2hvnt_ {								/* invite				name								*/
 	color: rgb(var(--fontwhite1));
 }
@@ -1127,9 +1130,8 @@ body:before {
 	color: rgb(var(--fontwhite4));
 }
 
+
 /* ----		6.3.	TEXTAREA						---- */
-
-
 
 .form-2fGMdU {												/* textarea				form								*/
 	position: relative;
