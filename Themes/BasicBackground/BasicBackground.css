@@ -1341,6 +1341,14 @@ body:before {
 	color: rgb(var(--fontwhite2));
 }
 
+#app-mount .searchSuggestion-2K8OBX:hover {					/* gifpicker			suggestions							*/
+	color: rgb(var(--fontwhite1));
+}
+
+#app-mount .placeholder-1kJjXI {							/* gifpicker			result placeholder					*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+
 
 /* ----		6.5.	MEMBERLIST						---- */
 
@@ -1620,8 +1628,8 @@ body:before {
 	color: rgb(var(--fontwhite3));
 }
 .peopleListItem-2nzedh .actionButton-uPB8Fs {				/* peoples				actionbutton						*/
-	background-color: rgba(var(--vtransparencycolor), 0.2);
-	color: rgb(var(--fontwhite4));
+	background-color: rgba(var(--vtransparencycolor), 0.1);
+	color: rgb(var(--fontwhite3));
 }
 .peopleListItem-2nzedh:hover {
 	background-color: rgba(var(--vtransparencycolor), 0.3);
@@ -1636,11 +1644,11 @@ body:before {
 	color: rgb(var(--fontwhite2));
 }
 .peopleListItem-2nzedh:hover .actionButton-uPB8Fs {
-	background-color: rgba(var(--vtransparencycolor), 0.4);
-	color: rgb(var(--fontwhite3));
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+	color: rgb(var(--fontwhite2));
 }
 .peopleListItem-2nzedh .actionButton-uPB8Fs:hover {
-	background-color: rgba(var(--vtransparencycolor), 0.5);
+	background-color: rgb(var(--vaccentcolor));
 	color: rgb(var(--fontwhite1));
 }
 .header-13Cw0- {											/* playing				header								*/
@@ -5716,6 +5724,9 @@ body:before {
 
 #app-mount .quickSelect-3BxO0K {							/* quickselect			container							*/
 	color: rgb(var(--fontwhite1));
+}
+#app-mount .quickSelectLabel-2r3iJ_ {						/* quickselect			label								*/
+	color: rgb(var(--fontwhite3));
 }
 #app-mount .quickSelectArrow-1QublR {						/* quickselect			arrow								*/
 	-webkit-mask: url(https://discordapp.com/assets/f58cf3b8fc79e9d671ab649ab37651a9.svg) 50% no-repeat;
