@@ -1,7 +1,7 @@
 //META{"name":"ShowHiddenChannels","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowHiddenChannels","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ShowHiddenChannels/ShowHiddenChannels.plugin.js"}*//
 
 var ShowHiddenChannels = (_ => {
-	var blacklist, changedInstances;
+	var blacklist;
 			
 	const settingsMap = {
 		GUILD_TEXT: "showText",
@@ -28,20 +28,16 @@ var ShowHiddenChannels = (_ => {
 	return class ShowHiddenChannels {
 		getName () {return "ShowHiddenChannels";}
 
-		getVersion () {return "2.7.3";}
+		getVersion () {return "2.7.4";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
 		constructor () {
-			this.changelog = {
-				"fixed":[["Access Modal","Users that could not be loaded (deleted users or no-cached users) are now displayed via their ID and not blank"]]
-			};
-
 			this.patchedModules = {
 				before: {
-					GuildSidebar: "render"
+					Channels: "render"
 				},
 				after: {
 					ChannelItem: ["render", "componentDidMount", "componentDidUpdate"]
@@ -50,8 +46,6 @@ var ShowHiddenChannels = (_ => {
 		}
 
 		initConstructor () {
-			changedInstances = {};
-
 			this.defaults = {
 				settings: {
 					sortNative:				{value:false, 	description:"Sort hidden Channels in the native Order"},
@@ -196,8 +190,8 @@ var ShowHiddenChannels = (_ => {
 		stop () {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
-				
-				for (let guildid in changedInstances) this.resetInstance(guildid, true);
+
+				BDFDB.ModuleUtils.forceAllUpdates(this);
 				
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -209,10 +203,8 @@ var ShowHiddenChannels = (_ => {
 		onSettingsClosed (instance, wrapper, returnvalue) {
 			if (this.SettingsUpdated) {
 				delete this.SettingsUpdated;
-				
-				for (let guildid in changedInstances) this.resetInstance(guildid, false);
 
-				BDFDB.TimeUtils.timeout(_ => {BDFDB.ModuleUtils.forceAllUpdates(this)}, 3000);
+				BDFDB.ModuleUtils.forceAllUpdates(this);
 			}
 		}
 		
@@ -237,13 +229,18 @@ var ShowHiddenChannels = (_ => {
 				}
 			}
 		}
-
-		processGuildSidebar (e) {
+		
+		processChannels (e) {
 			if (!e.instance.props.guild || blacklist.includes(e.instance.props.guild.id)) return;
 			let [hiddenChannels, amount] = this.getHiddenChannels(e.instance.props.guild);
 			if (amount) {
+				e.instance.props.categories = Object.assign({}, e.instance.props.categories);
+				for (let catId in e.instance.props.categories) e.instance.props.categories[catId] = [].concat(e.instance.props.categories[catId]);
+				e.instance.props.channels = Object.assign({}, e.instance.props.channels);
+				for (let type in e.instance.props.channels) e.instance.props.channels[type] = [].concat(e.instance.props.channels[type]);
+				
 				let settings = BDFDB.DataUtils.get(this, "settings"), index = -1;
-				for (let catId in e.instance.props.categories) for (let channelObj of e.instance.props.categories[catId]) if (channelObj.index > index) index = channelObj.index;
+				for (let catId in e.instance.props.categories) for (let channelObj of e.instance.props.categories[catId]) if (channelObj.index >= index) index = channelObj.index;
 				if (!settings.sortNative) {
 					let hiddenCategory = new BDFDB.DiscordObjects.Channel({
 						guild_id: e.instance.props.guild.id,
@@ -291,8 +288,6 @@ var ShowHiddenChannels = (_ => {
 				
 				for (let parent_id in e.instance.props.categories) BDFDB.ArrayUtils.keySort(e.instance.props.categories[parent_id], "index");
 				for (let channelType in e.instance.props.channels) BDFDB.ArrayUtils.keySort(e.instance.props.channels[channelType], "comparator");
-				
-				changedInstances[e.instance.props.guild.id] = e.instance;
 			}
 		}
 
@@ -329,28 +324,6 @@ var ShowHiddenChannels = (_ => {
 					e.node.addEventListener("mousedown", BDFDB.ListenerUtils.stopEvent);
 					e.node.addEventListener("mouseup", BDFDB.ListenerUtils.stopEvent);
 				}
-			}
-		}
-		
-		resetInstance (guildid, update) {
-			let instance = changedInstances[guildid];
-			if (instance) {
-				delete instance.props.categories[guildid + "_hidden"];
-				let removedCategories = [];
-				for (let categoryObj of instance.props.categories._categories) if (categoryObj.channel.id.endsWith("hidden")) removedCategories.push(categoryObj);
-				for (let categoryObj of removedCategories) BDFDB.ArrayUtils.remove(instance.props.categories._categories, categoryObj);
-				for (let id in instance.props.categories) if (BDFDB.ArrayUtils.is(instance.props.categories[id])) {
-					let removedChannels = [];
-					for (let channelObj of instance.props.categories[id]) if (this.isChannelHidden(channelObj.channel.id) && (channelObj.channel.type != BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY || channelObj.channel.id.endsWith("hidden"))) removedChannels.push(channelObj);
-					for (let channelObj of removedChannels) BDFDB.ArrayUtils.remove(instance.props.categories[id], channelObj);
-				}
-				for (let type in instance.props.channels) if (BDFDB.ArrayUtils.is(instance.props.channels[type])) {
-					let removedChannels = [];
-					for (let channelObj of instance.props.channels[type]) if (this.isChannelHidden(channelObj.channel.id) && (channelObj.channel.type != BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY || channelObj.channel.id.endsWith("hidden"))) removedChannels.push(channelObj);
-					for (let channelObj of removedChannels) BDFDB.ArrayUtils.remove(instance.props.channels[type], channelObj);
-				}
-				delete changedInstances[guildid].instance;
-				if (update) BDFDB.ReactUtils.forceUpdate(instance);
 			}
 		}
 		

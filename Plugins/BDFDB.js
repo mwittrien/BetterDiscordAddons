@@ -5319,7 +5319,6 @@
 		layerbase: ["Layers", "baseLayer"],
 		layers: ["Layers", "layers"],
 		layersbg: ["Layers", "bg"],
-		linethrough: ["TextStyle", "strikethrough"],
 		listavatar: ["UserProfile", "listAvatar"],
 		listdiscriminator: ["UserProfile", "listDiscriminator"],
 		listname: ["UserProfile", "listName"],

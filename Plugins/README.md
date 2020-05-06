@@ -27,6 +27,7 @@
  - [Friend Notifications](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/FriendNotifications) - Notifies you when a Friend or a User your choose to observe changing his online status, can be configured individually in the settings.
  - [Google Search Replace](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleSearchReplace) - Replaces the default Google Text Search with a selection menu of several search engines.
  - [Google Translate Option](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleTranslateOption) - Adds a Google Translate option to your context menu, which will open the selected text in Google Translate.
+ - [Hide Muted Categories](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/HideMutedCategories) - Hides muted categories the same way muted channels are hidden, when the server is set to hide muted channels.
  - [Image Gallery](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ImageGallery) - Allows the user to browse through images sent inside the same message.
  - [Image Zoom](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ImageZoom) - Allows you to zoom in opened Images by holding left clicking on them in the Image Modal.
  - [Joined At Date](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/JoinedAtDate) - Displays the Joined At Date of a Member in the UserPopout and UserModal.
