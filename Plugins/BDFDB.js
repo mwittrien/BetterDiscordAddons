@@ -1153,6 +1153,7 @@
 		BannedCard: "guildsettingsbannedcard",
 		ChannelCall: "callcurrentcontainer",
 		ChannelMember: "member",
+		Channels: "channels",
 		ChannelTextAreaForm: "chatform",
 		ChannelWindow: "chatcontent",
 		DirectMessage: "guildouter",
