@@ -1153,7 +1153,7 @@
 		BannedCard: "guildsettingsbannedcard",
 		ChannelCall: "callcurrentcontainer",
 		ChannelMember: "member",
-		Channels: "channels",
+		Channels: "guildchannels",
 		ChannelTextAreaForm: "chatform",
 		ChannelWindow: "chatcontent",
 		DirectMessage: "guildouter",
@@ -1474,22 +1474,22 @@
 			}
 			return false;
 		}
-		function checkForInstance(className, type, patchType, forceobserve) {
+		function checkForInstance(className, type, patchType, forceObserve) {
 			const app = document.querySelector(BDFDB.dotCN.app), bdSettings = document.querySelector("#bd-settingspane-container " + BDFDB.dotCN.scrollerwrap);
-			let instancefound = false;
-			if (!forceobserve) {
+			let instanceFound = false;
+			if (!forceObserve) {
 				if (app) {
-					let appins = BDFDB.ReactUtils.findConstructor(app, type, {unlimited:true}) || BDFDB.ReactUtils.findConstructor(app, type, {unlimited:true, up:true});
-					if (appins && (instancefound = true)) patchInstance(appins, type, patchType);
+					let appIns = BDFDB.ReactUtils.findConstructor(app, type, {unlimited:true}) || BDFDB.ReactUtils.findConstructor(app, type, {unlimited:true, up:true});
+					if (appIns && (instanceFound = true)) patchInstance(appIns, type, patchType);
 				}
-				if (!instancefound && bdSettings) {
+				if (!instanceFound && bdSettings) {
 					let bdSettingsIns = BDFDB.ReactUtils.findConstructor(bdSettings, type, {unlimited:true});
-					if (bdSettingsIns && (instancefound = true)) patchInstance(bdSettingsIns, type, patchType);
+					if (bdSettingsIns && (instanceFound = true)) patchInstance(bdSettingsIns, type, patchType);
 				}
 			}
-			if (!instancefound) {
-				let found = false, disclass = BDFDB.disCN[className], dotclass = BDFDB.dotCN[className];
-				for (let ele of document.querySelectorAll(dotclass)) {
+			if (!instanceFound) {
+				let found = false, disClass = BDFDB.disCN[className], dotClass = BDFDB.dotCN[className];
+				for (let ele of document.querySelectorAll(dotClass)) {
 					found = checkEle(ele, type, patchType);
 					if (found) break;
 				}
@@ -1497,7 +1497,7 @@
 					let instanceObserver = new MutationObserver(cs => {cs.forEach(c => {c.addedNodes.forEach(n => {
 						if (found || !n || !n.tagName) return;
 						let ele = null;
-						if ((ele = BDFDB.DOMUtils.containsClass(n, disclass) ? n : n.querySelector(dotclass)) != null) {
+						if ((ele = BDFDB.DOMUtils.containsClass(n, disClass) ? n : n.querySelector(dotClass)) != null) {
 							found = checkEle(ele, type, patchType);
 							if (found) instanceObserver.disconnect();
 						}
