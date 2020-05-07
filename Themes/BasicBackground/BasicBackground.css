@@ -1544,18 +1544,22 @@ body:before {
 	color: rgb(var(--fontwhite3));
 }
 
-#app-mount .wrapper-KXM2i0,
 #app-mount .wrapper-2qzCYF {								/* call					wrapper							*/
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vguildchanneltransparency) * 0.8));
 }
-#app-mount .root-3B6O5N,
 #app-mount .root-217Brm {									/* call					root							*/
 	color: rgb(var(--fontwhite1));
 }
-#app-mount .video-1FfuMD {									/* call					video							*/
+.videoWrapper-2v09vt	{									/* call					video wrapper					*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+.video-1FfuMD {												/* call					video							*/
 	background-color: transparent;
 }
-#app-mount .gradientContainer-10lXLB {
+.tile-2gi3tr {												/* call					user video						*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+.gradientContainer-10lXLB {
 	background: linear-gradient(rgb(var(--vtransparencycolor)), transparent 15%, transparent 85%, rgb(var(--vtransparencycolor)));
 }
 .centerButton-3CaNcJ {
@@ -1569,10 +1573,6 @@ body:before {
 }
 .controlButton-2MhVEL.leaveButton-2YnTyt:hover {
 	background-color: rgb(240, 71, 71);
-}
-#app-mount .wrapper-29NfPK.minimum-2d6zH6 .actions-2vadYq .center-1Vp33r {
-	background-color: rgba(var(--vtransparencycolor), 0.4);
-	border: none;
 }
 .regionSelectPopout-p9-0_W {
 	width: 170px;
