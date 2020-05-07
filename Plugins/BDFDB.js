@@ -1630,6 +1630,7 @@
 	LibraryModules.AnalyticsUtils = BDFDB.ModuleUtils.findByProperties("isThrottled", "track");
 	LibraryModules.AnimationUtils = BDFDB.ModuleUtils.findByProperties("spring", "decay");
 	LibraryModules.BadgeUtils = BDFDB.ModuleUtils.findByProperties("getBadgeCountString", "getBadgeWidthForValue");
+	LibraryModules.CallUtils = BDFDB.ModuleUtils.findByProperties("getCalls", "isCallActive");
 	LibraryModules.CategoryCollapseStore = BDFDB.ModuleUtils.findByProperties("getCollapsedCategories", "isCollapsed");
 	LibraryModules.CategoryCollapseUtils = BDFDB.ModuleUtils.findByProperties("categoryCollapse", "categoryCollapseAll");
 	LibraryModules.ChannelStore = BDFDB.ModuleUtils.findByProperties("getChannel", "getChannels");
@@ -1687,6 +1688,7 @@
 	LibraryModules.SearchPageUtils = BDFDB.ModuleUtils.findByProperties("searchNextPage", "searchPreviousPage");
 	LibraryModules.SelectChannelUtils = BDFDB.ModuleUtils.findByProperties("selectChannel", "selectPrivateChannel");
 	LibraryModules.SettingsUtils = BDFDB.ModuleUtils.findByProperties("updateRemoteSettings", "updateLocalSettings");
+	LibraryModules.SoundStateUtils = BDFDB.ModuleUtils.findByProperties("isSoundDisabled", "getDisabledSounds");
 	LibraryModules.SoundUtils = BDFDB.ModuleUtils.findByProperties("playSound", "createSound");
 	LibraryModules.SpellCheckUtils = BDFDB.ModuleUtils.findByProperties("learnWord", "toggleSpellcheck");
 	LibraryModules.SlateUtils = BDFDB.ModuleUtils.findByProperties("serialize", "deserialize");
@@ -1694,6 +1696,7 @@
 	LibraryModules.StateStoreUtils = BDFDB.ModuleUtils.findByProperties("useStateFromStores", "useStateFromStoresArray");
 	LibraryModules.StatusMetaUtils = BDFDB.ModuleUtils.findByProperties("getApplicationActivity", "getStatus");
 	LibraryModules.StoreChangeUtils = BDFDB.ModuleUtils.findByProperties("get", "set", "clear", "remove");
+	LibraryModules.StreamerModeStore = BDFDB.ModuleUtils.findByProperties("disableSounds", "hidePersonalInformation");
 	LibraryModules.StreamUtils = BDFDB.ModuleUtils.findByProperties("getStreamForUser", "getActiveStream");
 	LibraryModules.StringUtils = BDFDB.ModuleUtils.findByProperties("cssValueToNumber", "upperCaseFirstChar");
 	LibraryModules.UnreadGuildUtils = BDFDB.ModuleUtils.findByProperties("hasUnread", "getUnreadGuilds");
