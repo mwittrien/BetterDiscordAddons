@@ -4368,6 +4368,7 @@
 	DiscordClassModules.ColorPickerInner = BDFDB.ModuleUtils.findByProperties("saturation", "hue", "wrapper");
 	DiscordClassModules.ContextMenu = BDFDB.ModuleUtils.findByProperties("contextMenu", "itemGroup");
 	DiscordClassModules.ContextMenuCheckbox = BDFDB.ModuleUtils.findByProperties("checkboxInner", "checkboxElement");
+	DiscordClassModules.ContextMenuReactButton = BDFDB.ModuleUtils.find(m => typeof m.wrapper == "string" && typeof m.button == "string" && typeof m.icon == "string" && Object.keys(m).length == 3);
 	DiscordClassModules.CtaVerification = BDFDB.ModuleUtils.findByProperties("attendeeCTA", "verificationNotice");
 	DiscordClassModules.Cursor = BDFDB.ModuleUtils.findByProperties("cursorDefault", "userSelectNone");
 	DiscordClassModules.CustomStatus = BDFDB.ModuleUtils.findByProperties("customStatusContentIcon", "customStatus");
@@ -4931,6 +4932,9 @@
 		contextmenuitemsubmenu: ["ContextMenu", "itemSubMenu"],
 		contextmenuitemsubmenucaret: ["ContextMenu", "caret"],
 		contextmenulabel: ["ContextMenu", "label"],
+		contextmenureactbutton: ["ContextMenuReactButton", "button"],
+		contextmenureactbuttonicon: ["ContextMenuReactButton", "icon"],
+		contextmenureactbuttons: ["ContextMenuReactButton", "wrapper"],
 		contextmenuscroller: ["ContextMenu", "scroller"],
 		contextmenuslider: ["ContextMenu", "slider"],
 		contextmenusubcontext: ["ContextMenu", "subMenuContext"],
