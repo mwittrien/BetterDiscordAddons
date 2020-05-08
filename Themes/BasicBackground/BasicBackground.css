@@ -813,6 +813,7 @@ body:before {
 }
 .message-2qnXI6,											/* message				container							*/
 .message-2DieIs,											/* message				mention popout						*/
+.message-2g38UB,											/* message				inbox								*/
 .message-2qRu38 .wrapper-2a6GCs,
 .messageGroupCozy-2iY6cT,
 .messageGroupCozy-1BZuO8 {
@@ -898,6 +899,7 @@ body:before {
 	border-right-color: rgba(var(--vaccentcolor), calc(var(--vmessagetransparency) * 100000000000000000000000000000));
 }
 .message-2DieIs,
+.message-2g38UB,
 .zalgo-jN1Ica .messageContent-2qWWxC,
 .zalgo-jN1Ica.cozy-3raOZG .header-23xsNx {
 	overflow: visible;
@@ -916,12 +918,16 @@ body:before {
 	padding-left: 0;
 }
 .messageContainer-gbhlwo .wrapper-2a6GCs,
+.messages-3G3erD .wrapper-2a6GCs,
 .message-2qRu38 .wrapper-2a6GCs,
 .messageGroupWrapper-o-Zw7G .messageGroupCozy-2iY6cT,
 .searchResult-3pzFAB .messageGroupCozy-1BZuO8 {
 	border-radius: 5px;
 	margin-left: calc(60px * var(--vusechatbubbles));
 	padding-left: calc(1px * (10 * var(--vusechatbubbles) + 72 * (1 - var(--vusechatbubbles))));
+}
+.messages-3G3erD .wrapper-2a6GCs {
+	border-radius: 0;
 }
 
 .expanded-13sWhZ {											/* message				expanded blocked					*/
@@ -4574,6 +4580,10 @@ body:before {
 .tutorial-i_drPV {											/* popout				tutorial							*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
+.tutorialIcon-G9i5Ne {										/* popout				tutorial icon						*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+	color: rgb(var(--fontwhite1));
+}
 
 
 .messageGroupWrapper-o-Zw7G {
@@ -4664,11 +4674,13 @@ body:before {
 	border-radius: 5px 5px 0 0;
 	position: static;
 }
-.messageContainer-gbhlwo {									/* popout				messagecontainer					*/
+.messageContainer-gbhlwo,									/* popout				messagecontainer					*/
+.messages-3G3erD {											/* popout				messagecontainer (inbox)			*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 	border-radius: 0;
 }
-.messageContainer-gbhlwo:last-child {
+.messageContainer-gbhlwo:last-child,
+.messages-3G3erD:last-child {
 	border-radius: 0 0 5px 5px;
 }
 
