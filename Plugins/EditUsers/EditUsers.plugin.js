@@ -1,10 +1,12 @@
 //META{"name":"EditUsers","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditUsers","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditUsers/EditUsers.plugin.js"}*//
 
 var EditUsers = (_ => {
+	var changedUsers, settings;
+	
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.8.3";}
+		getVersion () {return "3.8.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +14,7 @@ var EditUsers = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Tags","Properly work again"]]
+				"improved":[["Performance","Reduced the amount of config calls to increase the performance"]]
 			};
 
 			this.patchedModules = {
@@ -83,8 +85,6 @@ var EditUsers = (_ => {
 				}
 				${BDFDB.dotCNS.dmchannel + BDFDB.dotCN.bottag} {
 					margin-left: 4px;
-					position: relative;
-					bottom: 3px;
 				}
 				${BDFDB.dotCNS.userinfo + BDFDB.dotCN.userinfodiscriminator} {
 					display: none;
@@ -251,7 +251,7 @@ var EditUsers = (_ => {
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
 										label: this.labels.submenu_resetsettings_text,
-										disabled: !BDFDB.DataUtils.load(this, "users", e.instance.props.user.id),
+										disabled: !changedUsers[e.instance.props.user.id],
 										action: _ => {
 											BDFDB.ContextMenuUtils.close(e.instance);
 											BDFDB.DataUtils.remove(this, "users", e.instance.props.user.id);
@@ -274,38 +274,34 @@ var EditUsers = (_ => {
 		}
 		
 		processChannelEditorContainer (e) {
-			if (!e.instance.props.disabled && e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && BDFDB.DataUtils.get(this, "settings", "changeInChatTextarea")) {
+			if (!e.instance.props.disabled && e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && e.instance.props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && settings.changeInChatTextarea) {
 				let user = BDFDB.LibraryModules.UserStore.getUser(e.instance.props.channel.recipients[0]);
-				if (user) {
-					let data = BDFDB.DataUtils.load(this, "users", user.id);
-					e.instance.props.placeholder = BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `@${data && data.name || user.username}`);
-				}
+				if (user) e.instance.props.placeholder = BDFDB.LanguageUtils.LanguageStringsFormat("TEXTAREA_PLACEHOLDER", `@${changedUsers[user.id] && changedUsers[user.id].name || user.username}`);
 			}
 		}
 
 		processChannelAutoComplete (e) {
 			if (e.instance.state.autocompleteType == "MENTIONS" && BDFDB.ArrayUtils.is(e.instance.state.autocompletes.users) && e.instance.props.channel) {
 				let lastword = (e.instance.props.textValue || "").slice(1).toLowerCase();
-				let users = BDFDB.DataUtils.load(this, "users");
-				if (!users || !lastword) return;
-				let userarray = [];
-				for (let id in users) if (users[id] && users[id].name) {
+				if (!lastword) return;
+				let userArray = [];
+				for (let id in changedUsers) if (changedUsers[id] && changedUsers[id].name) {
 					let user = BDFDB.LibraryModules.UserStore.getUser(id);
-					if (user && (e.instance.props.channel.recipients.includes(id) || (e.instance.props.channel.guild_id && BDFDB.LibraryModules.MemberStore.getMember(e.instance.props.channel.guild_id, id)))) userarray.push(Object.assign({
-						lowercasename: users[id].name.toLowerCase(),
+					if (user && (e.instance.props.channel.recipients.includes(id) || (e.instance.props.channel.guild_id && BDFDB.LibraryModules.MemberStore.getMember(e.instance.props.channel.guild_id, id)))) userArray.push(Object.assign({
+						lowerCaseName: changedUsers[id].name.toLowerCase(),
 						user
-					}, users[id]));
+					}, changedUsers[id]));
 				}
-				userarray = BDFDB.ArrayUtils.keySort(userarray.filter(n => e.instance.state.autocompletes.users.every(comp => comp.user.id != n.user.id) && n.lowercasename.indexOf(lastword) != -1), "lowercasename");
-				e.instance.state.autocompletes.users = [].concat(e.instance.state.autocompletes.users, userarray.map(n => {return {user: n.user};})).slice(0, BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS);
+				userArray = BDFDB.ArrayUtils.keySort(userArray.filter(n => e.instance.state.autocompletes.users.every(comp => comp.user.id != n.user.id) && n.lowerCaseName.indexOf(lastword) != -1), "lowerCaseName");
+				e.instance.state.autocompletes.users = [].concat(e.instance.state.autocompletes.users, userArray.map(n => {return {user: n.user};})).slice(0, BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS);
 			}
 		}
 
 		processAutocompleteUserResult (e) {
-			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInAutoComplete")) {
+			if (e.instance.props.user && settings.changeInAutoComplete) {
 				if (!e.returnvalue) {
 					e.instance.props.user = this.getUserData(e.instance.props.user.id);
-					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
+					let data = changedUsers[e.instance.props.user.id];
 					if (data && data.name) e.instance.props.nick = data.name;
 				}
 				else {
@@ -317,7 +313,7 @@ var EditUsers = (_ => {
 
 		processHeaderBarContainer (e) {
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.channelId);
-			if (channel && channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && BDFDB.DataUtils.get(this, "settings", "changeInDmHeader")) {
+			if (channel && channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && settings.changeInDmHeader) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.instance, {name: "Title"});
 				if (index > -1) {
 					let recipientId = channel.getRecipientId();
@@ -334,22 +330,22 @@ var EditUsers = (_ => {
 				let tagClass = "";
 				switch (e.instance.props.className) {
 					case BDFDB.disCN.userpopoutheadertagnonickname:
-						change = BDFDB.DataUtils.get(this, "settings", "changeInUserPopout");
+						change = settings.changeInUserPopout;
 						guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
 						changeBackground = true;
 						tagClass = BDFDB.disCN.bottagnametag;
 						break;
 					case BDFDB.disCN.userprofilenametag:
-						change = BDFDB.DataUtils.get(this, "settings", "changeInUserProfile");
+						change = settings.changeInUserProfile;
 						guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
 						changeBackground = true;
 						tagClass = BDFDB.disCNS.userprofilebottag + BDFDB.disCN.bottagnametag;
 						break;
 					case BDFDB.disCN.guildsettingsinviteusername:
-						change = BDFDB.DataUtils.get(this, "settings", "changeInMemberLog");
+						change = settings.changeInMemberLog;
 						break;
 					case BDFDB.disCN.userinfodiscordtag:
-						change = BDFDB.DataUtils.get(this, "settings", "changeInFriendList");
+						change = settings.changeInFriendList;
 						tagClass = BDFDB.disCN.bottagnametag;
 						break;
 				}
@@ -368,8 +364,8 @@ var EditUsers = (_ => {
 		}
 
 		processUserPopout (e) {
-			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInUserPopout")) {
-				let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
+			if (e.instance.props.user && settings.changeInUserPopout) {
+				let data = changedUsers[e.instance.props.user.id];
 				if (!e.returnvalue) {
 					e.instance.props.user = this.getUserData(e.instance.props.user.id, true, true);
 					if (data) {
@@ -396,18 +392,18 @@ var EditUsers = (_ => {
 		}
 
 		processUserProfile (e) {
-			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInUserProfile")) {
+			if (e.instance.props.user && settings.changeInUserProfile) {
 				e.instance.props.user = this.getUserData(e.instance.props.user.id);
-				let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
+				let data = changedUsers[e.instance.props.user.id];
 				if (data && (data.removeStatus || data.status || data.statusEmoji)) e.instance.props.customStatusActivity = this.createCustomStatus(data);
 			}
 		}
 
 		processUserInfo (e) {
-			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInFriendList")) {
+			if (e.instance.props.user && settings.changeInFriendList) {
 				e.instance.props.user = this.getUserData(e.instance.props.user.id);
 				if (BDFDB.ReactUtils.isValidElement(e.instance.props.subText)) {
-					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
+					let data = changedUsers[e.instance.props.user.id];
 					if (data && (data.removeStatus || data.status || data.statusEmoji)) {
 						e.instance.props.subText.props.activities = [].concat(e.instance.props.subText.props.activities).filter(n => n && n.type != 4);
 						let activity = this.createCustomStatus(data);
@@ -418,7 +414,7 @@ var EditUsers = (_ => {
 		}
 
 		processNowPlayingHeader (e) {
-			if (BDFDB.ObjectUtils.is(e.instance.props.priorityUser) && e.instance.props.priorityUser.user && BDFDB.DataUtils.get(this, "settings", "changeInFriendList")) {
+			if (BDFDB.ObjectUtils.is(e.instance.props.priorityUser) && e.instance.props.priorityUser.user && settings.changeInFriendList) {
 				if (!e.returnvalue) {
 					let titleIsName = e.instance.props.priorityUser.user.username == e.instance.props.title;
 					e.instance.props.priorityUser.user = this.getUserData(e.instance.props.priorityUser.user.id);
@@ -432,10 +428,10 @@ var EditUsers = (_ => {
 		}
 
 		processVoiceUser (e) {
-			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInVoiceChat")) {
+			if (e.instance.props.user && settings.changeInVoiceChat) {
 				if (!e.returnvalue) {
 					e.instance.props.user = this.getUserData(e.instance.props.user.id);
-					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
+					let data = changedUsers[e.instance.props.user.id];
 					if (data && data.name) e.instance.props.nick = data.name;
 				}
 				else {
@@ -446,8 +442,8 @@ var EditUsers = (_ => {
 		}
 
 		processAccount (e) {
-			if (e.instance.props.currentUser && BDFDB.DataUtils.get(this, "settings", "changeInUserAccount")) {
-					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.currentUser.id);
+			if (e.instance.props.currentUser && settings.changeInUserAccount) {
+				let data = changedUsers[e.instance.props.currentUser.id];
 				if (!e.returnvalue) {
 					e.instance.props.currentUser = this.getUserData(e.instance.props.currentUser.id);
 					if (data && (data.removeStatus || data.status || data.statusEmoji)) e.instance.props.customStatusActivity = this.createCustomStatus(data);
@@ -470,7 +466,7 @@ var EditUsers = (_ => {
 		}
 
 		processPrivateChannelEmptyMessage (e) {
-			if (e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && BDFDB.DataUtils.get(this, "settings", "changeInChatWindow")) {
+			if (e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && settings.changeInChatWindow) {
 				let recipientId = e.instance.props.channel.getRecipientId();
 				let name = this.getUserData(recipientId).username;
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue.props.children, {props:"src"});
@@ -490,10 +486,10 @@ var EditUsers = (_ => {
 		}
 		
 		processMessage (e) {
-			if (BDFDB.DataUtils.get(this, "settings", "changeInChatWindow")) {
+			if (settings.changeInChatWindow) {
 				let header = e.instance.props.childrenHeader;
 				if (header && header.props && header.props.message) {
-					let data = BDFDB.DataUtils.load(this, "users", header.props.message.author.id);
+					let data = changedUsers[header.props.message.author.id];
 					if (data) {
 						let message = new BDFDB.DiscordObjects.Message(Object.assign({}, header.props.message, {author: this.getUserData(header.props.message.author.id)}));
 						if (data.name) message.nick = data.name;
@@ -503,7 +499,7 @@ var EditUsers = (_ => {
 				}
 				let content = e.instance.props.childrenMessageContent;
 				if (content && content.type && content.type.type) {
-					let data = BDFDB.DataUtils.load(this, "users", content.props.message.author.id);
+					let data = changedUsers[content.props.message.author.id];
 					let messageColor = data && (data.color5 || (BDFDB.BDUtils.getSettings("bda-gs-7") && data.color1));
 					if (messageColor) {
 						let message = new BDFDB.DiscordObjects.Message(Object.assign({}, content.props.message, {author: this.getUserData(content.props.message.author.id)}));
@@ -516,10 +512,10 @@ var EditUsers = (_ => {
 		}
 		
 		processMessageHeader (e) {
-			if (e.instance.props.message && BDFDB.DataUtils.get(this, "settings", "changeInChatWindow")) {
+			if (e.instance.props.message && settings.changeInChatWindow) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue.props.children.slice(1), {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
 				if (index > -1) {
-					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.message.author.id);
+					let data = changedUsers[e.instance.props.message.author.id];
 					if (data && (data.color1 || data.color2)) {
 						if (children[index].props && typeof children[index].props.children == "function") {
 							let renderChildren = children[index].props.children;
@@ -540,11 +536,11 @@ var EditUsers = (_ => {
 		}
 		
 		processMessageContent (e) {
-			if (e.instance.props.message && BDFDB.DataUtils.get(this, "settings", "changeInChatWindow")) {
+			if (e.instance.props.message && settings.changeInChatWindow) {
 				if (!e.returnvalue) {
 					if (e.instance.props.message.type != BDFDB.DiscordConstants.MessageTypes.DEFAULT) {
 						let message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.message, {author: this.getUserData(e.instance.props.message.author.id)}));
-						let data = BDFDB.DataUtils.load(this, "users", e.instance.props.message.author.id);
+						let data = changedUsers[e.instance.props.message.author.id];
 						if (data) {
 							if (data.name) message.nick = data.name;
 							if (data.color1) message.colorString = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[0] : data.color1, "HEX");
@@ -554,7 +550,7 @@ var EditUsers = (_ => {
 					}
 				}
 				else {
-					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.message.author.id);
+					let data = changedUsers[e.instance.props.message.author.id];
 					let messageColor = data && (data.color5 || (BDFDB.BDUtils.getSettings("bda-gs-7") && data.color1));
 					if (messageColor) e.returnvalue.props.style = Object.assign({}, e.returnvalue.props.style, {color: BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(messageColor) ? messageColor[0] : messageColor, "RGBA")});
 				}
@@ -562,8 +558,8 @@ var EditUsers = (_ => {
 		}
 		
 		processMention (e) {
-			if (e.instance.props.userId && BDFDB.DataUtils.get(this, "settings", "changeInMentions")) {
-				let data = BDFDB.DataUtils.load(this, "users", e.instance.props.userId);
+			if (e.instance.props.userId && settings.changeInMentions) {
+				let data = changedUsers[e.instance.props.userId];
 				if (data) {
 					if (data.name) e.returnvalue.props.children[0] = "@" + data.name;
 					if (data.color1) {
@@ -592,10 +588,10 @@ var EditUsers = (_ => {
 		}
 
 		processMemberListItem (e) {
-			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInMemberList")) {
+			if (e.instance.props.user && settings.changeInMemberList) {
 				if (!e.returnvalue) {
 					e.instance.props.user = this.getUserData(e.instance.props.user.id);
-					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
+					let data = changedUsers[e.instance.props.user.id];
 					if (data) {
 						if (data.name) e.instance.props.nick = data.name;
 						if (data.removeStatus || data.status || data.statusEmoji) {
@@ -615,45 +611,45 @@ var EditUsers = (_ => {
 		}
 
 		processAuditLog (e) {
-			if (e.instance.props.log && BDFDB.DataUtils.get(this, "settings", "changeInAuditLog")) {
+			if (e.instance.props.log && settings.changeInAuditLog) {
 				if (e.instance.props.log.user) e.instance.props.log.user = this.getUserData(e.instance.props.log.user.id);
 				if (e.instance.props.log.target && e.instance.props.log.targetType == "USER") e.instance.props.log.target = this.getUserData(e.instance.props.log.target.id);
 			}
 		}
 
 		processUserHook (e) {
-			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInAuditLog")) {
+			if (e.instance.props.user && settings.changeInAuditLog) {
 				this.changeUserColor(e.returnvalue.props.children[0], e.instance.props.user.id);
 			}
 		}
 
 		processGuildSettingsEmoji (e) {
-			if (BDFDB.ArrayUtils.is(e.instance.props.emojis) && BDFDB.DataUtils.get(this, "settings", "changeInEmojiLog")) {
+			if (BDFDB.ArrayUtils.is(e.instance.props.emojis) && settings.changeInEmojiLog) {
 				e.instance.props.emojis = [].concat(e.instance.props.emojis);
 				for (let i in e.instance.props.emojis) e.instance.props.emojis[i] = Object.assign({}, e.instance.props.emojis[i], {user: this.getUserData(e.instance.props.emojis[i].user.id)});
 			}
 		}
 
 		processMemberCard (e) {
-			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInMemberLog")) e.instance.props.user = this.getUserData(e.instance.props.user.id);
+			if (e.instance.props.user && settings.changeInMemberLog) e.instance.props.user = this.getUserData(e.instance.props.user.id);
 		}
 
 		processSettingsInvites (e) {
-			if (BDFDB.ObjectUtils.is(e.instance.props.invites) && BDFDB.DataUtils.get(this, "settings", "changeInMemberLog")) {
+			if (BDFDB.ObjectUtils.is(e.instance.props.invites) && settings.changeInMemberLog) {
 				e.instance.props.invites = Object.assign({}, e.instance.props.invites);
 				for (let id in e.instance.props.invites) e.instance.props.invites[id] = new BDFDB.DiscordObjects.Invite(Object.assign({}, e.instance.props.invites[id], {inviter: this.getUserData(e.instance.props.invites[id].inviter.id)}));
 			}
 		}
 
 		processGuildSettingsBans (e) {
-			if (BDFDB.ObjectUtils.is(e.instance.props.bans) && BDFDB.DataUtils.get(this, "settings", "changeInMemberLog")) {
+			if (BDFDB.ObjectUtils.is(e.instance.props.bans) && settings.changeInMemberLog) {
 				e.instance.props.bans = Object.assign({}, e.instance.props.bans);
 				for (let id in e.instance.props.bans) e.instance.props.bans[id] = Object.assign({}, e.instance.props.bans[id], {user: this.getUserData(e.instance.props.bans[id].user.id)});
 			}
 		}
 
 		processInvitationCard (e) {
-			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInInviteList")) {
+			if (e.instance.props.user && settings.changeInInviteList) {
 				if (!e.returnvalue) e.instance.props.user = this.getUserData(e.instance.props.user.id);
 				else {
 					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN.invitemodalinviterowname]]});
@@ -663,27 +659,27 @@ var EditUsers = (_ => {
 		}
 
 		processPrivateChannelRecipientsInvitePopout (e) {
-			if (BDFDB.ArrayUtils.is(e.instance.props.results) && BDFDB.DataUtils.get(this, "settings", "changeInInviteList")) {
+			if (BDFDB.ArrayUtils.is(e.instance.props.results) && settings.changeInInviteList) {
 				for (let result of e.instance.props.results) result.user = this.getUserData(result.user.id);
 			}
 		}
 
 		processInviteModalUserRow (e) {
-			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInInviteList")) {
+			if (e.instance.props.user && settings.changeInInviteList) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN.searchpopoutddmaddnickname]]});
 				if (index > -1) this.changeUserColor(children[index], e.instance.props.user.id);
 			}
 		}
 
 		processTypingUsers (e) {
-			if (BDFDB.ObjectUtils.is(e.instance.props.typingUsers) && Object.keys(e.instance.props.typingUsers).length && BDFDB.DataUtils.get(this, "settings", "changeInTyping")) {
+			if (BDFDB.ObjectUtils.is(e.instance.props.typingUsers) && Object.keys(e.instance.props.typingUsers).length && settings.changeInTyping) {
 				let users = Object.keys(e.instance.props.typingUsers).filter(id => id != BDFDB.UserUtils.me.id).filter(id => !BDFDB.LibraryModules.FriendUtils.isBlocked(id)).map(id => BDFDB.LibraryModules.UserStore.getUser(id)).filter(user => user);
 				if (users.length) {
 					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN.typingtext]]});
 					if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) for (let child of children[index].props.children) if (child.type == "strong") {
 						let userId = (users.shift() || {}).id;
 						if (userId) {
-							let data = BDFDB.DataUtils.load(this, "users", userId);
+							let data = changedUsers[userId];
 							if (data && data.name) child.props.children = data.name;
 							this.changeUserColor(child, userId);
 						}
@@ -693,7 +689,7 @@ var EditUsers = (_ => {
 		}
 
 		processDirectMessage (e) {
-			if (e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && BDFDB.DataUtils.get(this, "settings", "changeInRecentDms")) {
+			if (e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && settings.changeInRecentDms) {
 				let recipientId = e.instance.props.channel.getRecipientId();
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ListItemTooltip"});
 				if (index > -1) children[index].props.text = this.getUserData(recipientId).username;
@@ -703,9 +699,9 @@ var EditUsers = (_ => {
 		}
 
 		processPrivateChannel (e) {
-			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInDmsList")) {
+			if (e.instance.props.user && settings.changeInDmsList) {
 				if (!e.returnvalue) {
-					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
+					let data = changedUsers[e.instance.props.user.id];
 					if (data && (data.removeStatus || data.status || data.statusEmoji)) {
 						e.instance.props.activities = [].concat(e.instance.props.activities).filter(n => n.type != 4);
 						let activity = this.createCustomStatus(data);
@@ -723,12 +719,12 @@ var EditUsers = (_ => {
 		}
 
 		processQuickSwitchUserResult (e) {
-			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "changeInQuickSwitcher")) {
+			if (e.instance.props.user && settings.changeInQuickSwitcher) {
 				if (!e.returnvalue) e.instance.props.user = this.getUserData(e.instance.props.user.id);
 				else {
 					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.quickswitchresultmatch]]});
 					if (index > -1) {
-						let data = BDFDB.DataUtils.load(this, "users", e.instance.props.user.id);
+						let data = changedUsers[e.instance.props.user.id];
 						if (data && data.name) children[index].props.children = data.name;
 						this.changeUserColor(children[index], e.instance.props.user.id, {modify: BDFDB.ObjectUtils.extract(e.instance.props, "focused", "unread", "mentions")});
 					}
@@ -737,16 +733,16 @@ var EditUsers = (_ => {
 		}
 
 		processSearchPopoutComponent (e) {
-			if (BDFDB.ArrayUtils.is(BDFDB.ReactUtils.getValue(e, "instance.props.resultsState.autocompletes")) && BDFDB.DataUtils.get(this, "settings", "changeInSearchPopout")) {
+			if (BDFDB.ArrayUtils.is(BDFDB.ReactUtils.getValue(e, "instance.props.resultsState.autocompletes")) && settings.changeInSearchPopout) {
 				for (let autocomplete of e.instance.props.resultsState.autocompletes) if (autocomplete && BDFDB.ArrayUtils.is(autocomplete.results)) for (let result of autocomplete.results) if (result.user) result.user = this.getUserData(result.user.id);
 			}
 		}
 
 		processSearchPopoutUserResult (e) {
-			if (e.instance.props.result && e.instance.props.result.user && BDFDB.DataUtils.get(this, "settings", "changeInSearchPopout")) {
+			if (e.instance.props.result && e.instance.props.result.user && settings.changeInSearchPopout) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.searchpopoutdisplayednick]]});
 				if (index > -1) {
-					let data = BDFDB.DataUtils.load(this, "users", e.instance.props.result.user.id);
+					let data = changedUsers[e.instance.props.result.user.id];
 					if (data && data.name) children[index].props.children = data.name;
 					this.changeUserColor(children[index], e.instance.props.result.user.id);
 				}
@@ -754,7 +750,7 @@ var EditUsers = (_ => {
 		}
 
 		processIncomingCall (e) {
-			if (e.instance.props.channelId && BDFDB.DataUtils.get(this, "settings", "changeInDmCalls")) {
+			if (e.instance.props.channelId && settings.changeInDmCalls) {
 				let user = BDFDB.LibraryModules.UserStore.getUser(e.instance.props.channelId);
 				if (!user) {
 					let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.channelId);
@@ -774,13 +770,13 @@ var EditUsers = (_ => {
 		}
 
 		processPrivateChannelCallParticipants (e) {
-			if (BDFDB.ArrayUtils.is(e.instance.props.participants) && BDFDB.DataUtils.get(this, "settings", "changeInDmCalls")) {
+			if (BDFDB.ArrayUtils.is(e.instance.props.participants) && settings.changeInDmCalls) {
 				for (let participant of e.instance.props.participants) if (participant && participant.user) participant.user = this.getUserData(participant.user.id);
 			}
 		}
 		
 		processChannelCall (e) {
-			if (BDFDB.ArrayUtils.is(e.instance.props.participants) && BDFDB.DataUtils.get(this, "settings", "changeInDmCalls")) {
+			if (BDFDB.ArrayUtils.is(e.instance.props.participants) && settings.changeInDmCalls) {
 				for (let participant of e.instance.props.participants) if (participant && participant.user) participant.user = this.getUserData(participant.user.id);
 			}
 		}
@@ -805,7 +801,7 @@ var EditUsers = (_ => {
 		
 		changeUserColor (parent, userId, options = {}) {
 			if (BDFDB.ReactUtils.isValidElement(parent)) {
-				let data = BDFDB.DataUtils.load(this, "users", userId) || {};
+				let data = changedUsers[userId] || {};
 				if (data.color1 || (data.color2 && options.changeBackground)) {
 					let fontColor = options.modify ? this.chooseColor(data.color1, options.modify) : data.color1;
 					let backgroundColor = options.changeBackground && data.color2;
@@ -842,7 +838,7 @@ var EditUsers = (_ => {
 		getUserData (userId, change = true, keepName = false) {
 			let user = BDFDB.LibraryModules.UserStore.getUser(userId);
 			if (!user) return new BDFDB.DiscordObjects.User({});
-			let data = change && BDFDB.DataUtils.load(this, "users", user.id);
+			let data = change && changedUsers[user.id];
 			if (data) {
 				let newUserObject = {}, nativeObject = new BDFDB.DiscordObjects.User(user);
 				for (let key in nativeObject) newUserObject[key] = nativeObject[key];
@@ -868,7 +864,7 @@ var EditUsers = (_ => {
 		getUserAvatar (userId, change = true) {
 			let user = BDFDB.LibraryModules.UserStore.getUser(userId);
 			if (!user) return "";
-			let data = change && BDFDB.DataUtils.load(this, "users", user.id);
+			let data = change && changedUsers[user.id];
 			if (data) {
 				if (data.removeIcon) return "";
 				else if (data.url) return data.url;
@@ -878,7 +874,7 @@ var EditUsers = (_ => {
 		
 		injectBadge (children, userId, guildId, insertIndex, config = {}) {
 			if (!BDFDB.ArrayUtils.is(children) || !userId) return;
-			let data = BDFDB.DataUtils.load(this, "users", userId);
+			let data = changedUsers[userId];
 			if (data && data.tag) {
 				let memberColor = data.ignoreTagColor && (BDFDB.LibraryModules.MemberStore.getMember(guildId, userId) || {}).colorString;
 				let fontColor = !config.inverted ? data.color4 : (memberColor || data.color3);
@@ -912,13 +908,16 @@ var EditUsers = (_ => {
 		}
 		
 		forceUpdateAll () {
+			changedUsers = BDFDB.DataUtils.load(this, "users");
+			settings = BDFDB.DataUtils.get(this, "settings");
+				
 			this.changeAppTitle();
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 			BDFDB.MessageUtils.rerenderAll();
 		}
 
 		openUserSettingsModal (user) {
-			let data = BDFDB.DataUtils.load(this, "users", user.id) || {};
+			let data = changedUsers[user.id] || {};
 			let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), user.id) || {};
 			let activity = BDFDB.LibraryModules.StatusMetaUtils.getApplicationActivity(user.id);
 			
