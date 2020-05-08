@@ -4552,6 +4552,7 @@ body:before {
 #app-mount .messagesPopout-24nkyi {							/* popout				innerwrap							*/
 	background-color: transparent;
 }
+
 .themedPopout-1TrfdI .header-2Kf7Yu {
 	box-shadow: 0 2px 3px 0 rgba(var(--vtransparencycolor), 0.1);
 }
@@ -4559,15 +4560,22 @@ body:before {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 	box-shadow: 0 2px 3px 0 rgba(var(--vtransparencycolor), 0.2);
 }
+.header-ykumBX .title-3pkaKd {								/* popout				headertitle							*/
+	color: rgb(var(--fontwhite1));
+}
+
 .themedPopout-1TrfdI .footer-1K57q_ {
 	background-color: rgba(var(--vtransparencycolor), 0.1);
 }
 .footer-1kmXd4 {											/* popout				footer								*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
-.header-ykumBX .title-3pkaKd {								/* popout				headertitle							*/
-	color: rgb(var(--fontwhite1));
+
+.tutorial-i_drPV {											/* popout				tutorial							*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
+
+
 .messageGroupWrapper-o-Zw7G {
 	background-color: transparent;
 	border: none;
