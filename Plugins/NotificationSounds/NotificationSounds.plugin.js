@@ -1,7 +1,7 @@
 //META{"name":"NotificationSounds","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/NotificationSounds","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/NotificationSounds/NotificationSounds.plugin.js"}*//
 
 var NotificationSounds = (_ => {
-	var audios, choices, firedEvents, callAudio;
+	var audios, choices, firedEvents, repatchIncoming, callAudio;
 			
 	const settingsAudio = new Audio();
 	
@@ -49,7 +49,7 @@ var NotificationSounds = (_ => {
 	return class NotificationSounds {
 		getName () {return "NotificationSounds";}
 
-		getVersion () {return "3.4.3";}
+		getVersion () {return "3.4.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -57,7 +57,7 @@ var NotificationSounds = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Call Sound","Outgoing call sound works again"]]
+				"fixed":[["Call Sound","Outgoing and Incomming call sounds work again"]]
 			};
 
 			this.patchedModules = {
@@ -416,7 +416,6 @@ var NotificationSounds = (_ => {
 				
 				let callListenerModule = BDFDB.ModuleUtils.findByProperties("handleRingUpdate");
 				if (callListenerModule) {
-					callAudio = BDFDB.LibraryModules.SoundUtils.createSound("call_calling");
 					callListenerModule.terminate();
 					BDFDB.ModuleUtils.patch(this, callListenerModule, "handleRingUpdate", {instead: e => {
 						BDFDB.LibraryModules.CallUtils.getCalls().filter(call => call.ringing.length > 0 && BDFDB.LibraryModules.VoiceUtils.getCurrentClientVoiceChannelId() === call.channelId).length > 0 && !BDFDB.LibraryModules.SoundStateUtils.isSoundDisabled("call_calling") && !BDFDB.LibraryModules.StreamerModeStore.disableSounds ? callAudio.loop() : callAudio.stop();
@@ -424,7 +423,7 @@ var NotificationSounds = (_ => {
 					callListenerModule.initialize();
 				}
 				
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -445,9 +444,23 @@ var NotificationSounds = (_ => {
 		onSettingsClosed () {
 			if (this.SettingsUpdated) {
 				delete this.SettingsUpdated;
-				BDFDB.ModuleUtils.forceAllUpdates(this);
-				callAudio = BDFDB.LibraryModules.SoundUtils.createSound("call_calling");
 				settingsAudio.pause();
+				
+				this.forceUpdateAll();
+			}
+		}
+
+		processShakeable (e) {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "IncomingCalls"});
+			if (index > -1) {
+				if (repatchIncoming) {
+					children[index] = null;
+					BDFDB.TimeUtils.timeout(_ => {
+						repatchIncoming = false;
+						BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"App", up:true}))
+					});
+				}
+				else children[index] = BDFDB.ReactUtils.createElement(children[index].type, {});
 			}
 		}
 
@@ -458,6 +471,13 @@ var NotificationSounds = (_ => {
 			BDFDB.DataUtils.save(audios, this, "audios");
 			BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 			
+		}
+		
+		forceUpdateAll () {
+				repatchIncoming = true;
+				callAudio = BDFDB.LibraryModules.SoundUtils.createSound("call_calling");
+				
+				BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 		
 		loadAudios () {
