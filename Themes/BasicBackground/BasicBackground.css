@@ -4659,20 +4659,43 @@ body:before {
 	background-color: rgb(var(--vaccentcolor));
 }
 .secondary-dIudih,											/* popout				header button						*/
-.tertiary-aMXF0g {											/* popout				message button						*/
+.tertiary-aMXF0g,											/* popout				message button						*/
+.collapseButton-3V3Cqh {									/* popout				collapse button						*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 	color: rgb(var(--fontwhite3));
 }
 .secondary-dIudih:hover,
-.tertiary-aMXF0g:hover {
+.tertiary-aMXF0g:hover,
+.collapseButton-3V3Cqh:hover {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 	color: rgb(var(--fontwhite1));
 }
+.collapseButton-3V3Cqh {
+	position: static;
+	margin-left: 12px;
+	border-radius: 32px;
+	box-sizing: border-box;
+	cursor: pointer;
+	flex-shrink: 0;
+	height: 32px;
+	min-height: 32px;
+	width: 32px;
+	min-width: 32px;
+	padding: 8px;
+	transform: unset !important;
+}
+.collapseButton-3V3Cqh.collapsed-b6uSCG svg {
+	transform: rotate(-90deg);
+}
+
 .channelHeader-3Gd2xq {										/* popout				channelheader						*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 	padding-right: 16px;
 	border-radius: 5px 5px 0 0;
 	position: static;
+}
+.channelHeader-3Gd2xq:only-child {
+	border-radius: 0;
 }
 .messageContainer-gbhlwo,									/* popout				messagecontainer					*/
 .messages-3G3erD {											/* popout				messagecontainer (inbox)			*/
