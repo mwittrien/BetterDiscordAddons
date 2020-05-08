@@ -722,6 +722,10 @@ body:before {
 	color: rgb(var(--fontwhite1));
 }
 
+.badge-2qGa_k:after {										/* header				iconbadge red dot					*/
+	border: none;
+}
+
 .divider-3FBTu8 {											/* header				divider								*/
 	background-color: rgba(var(--fontwhite1), 0.1);
 }
@@ -4509,17 +4513,21 @@ body:before {
 
 /* ----		14.4.	PINS/MENTIONS					---- */
 
-.messagesPopoutWrap-1MQ1bW {								/* popout				wrapper								*/
+.messagesPopoutWrap-1MQ1bW,								/* popout				wrapper								*/
+.container-PbeQka {										/* popout				wrapper	(inbox)						*/
 	background-color: transparent;
 	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	border: none;
 	overflow: hidden;
 }
-.messagesPopoutWrap-1MQ1bW > * {
+.messagesPopoutWrap-1MQ1bW > *,
+.container-PbeQka > * {
 	z-index: 1000;
 }
 .messagesPopoutWrap-1MQ1bW:after,
-.messagesPopoutWrap-1MQ1bW:before {
+.messagesPopoutWrap-1MQ1bW:before,
+.container-PbeQka:after,
+.container-PbeQka:before {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -4531,16 +4539,15 @@ body:before {
 	pointer-events: none;
 	z-index: -1;
 }
-.messagesPopoutWrap-1MQ1bW:after {
+.messagesPopoutWrap-1MQ1bW:after,
+.container-PbeQka:after {
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
 }
-.messagesPopoutWrap-1MQ1bW:before {
+.messagesPopoutWrap-1MQ1bW:before,
+.container-PbeQka:before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	filter: blur(var(--vpopoutblur));
 	background-attachment: fixed;
-}
-.messagesPopoutWrap-1MQ1bW {								/* popout				outerwrap							*/
-	background-color: transparent;
 }
 #app-mount .messagesPopout-24nkyi {							/* popout				innerwrap							*/
 	background-color: transparent;
