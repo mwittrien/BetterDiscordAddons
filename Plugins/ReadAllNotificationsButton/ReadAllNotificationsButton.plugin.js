@@ -278,7 +278,7 @@ var ReadAllNotificationsButton = (_ => {
 
 		processRecentsHeader (e) {
 			let settings = BDFDB.DataUtils.get(this, "settings");
-			if (settings.addClearButton) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
+			if (settings.addClearButton && e.instance.props.tab == "Recent Mentions") e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: `${BDFDB.LanguageUtils.LanguageStrings.CLOSE} (${BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL})`,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
