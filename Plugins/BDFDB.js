@@ -85,7 +85,7 @@
 
 		for (let name in BDFDB.myPlugins) if (!BDFDB.myPlugins[name].started && typeof BDFDB.myPlugins[name].initialize == "function") setImmediate(_ => {BDFDB.TimeUtils.suppress(BDFDB.myPlugins[name].initialize.bind(BDFDB.myPlugins[name]), "Could not initiate plugin!", name)();});
 	};
-	BDFDB.PluginUtils.clear = function (plugin) {
+	BDFDB.PluginUtils.clear = BDFDB.unloadMessage = function (plugin) {
 		InternalBDFDB.clearStartTimeout(plugin);
 
 		delete BDFDB.myPlugins[plugin.name];
