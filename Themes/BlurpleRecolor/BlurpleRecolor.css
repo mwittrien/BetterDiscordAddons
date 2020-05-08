@@ -1270,6 +1270,10 @@
 #app-mount .upload-2-2ZMI {									/* modal				perkicon upload						*/
 	color: rgb(var(--vaccentcolor));
 }
+#app-mount .animated-XlVkOl {								/* modal				perkicon animated					*/
+	color: rgb(var(--vaccentcolor));
+	filter: brightness(75%);
+}
 #app-mount .stream-3mNTxK {									/* modal				perkicon stream						*/
 	color: rgb(var(--vaccentcolor));
 	filter: brightness(150%);
