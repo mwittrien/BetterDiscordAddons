@@ -4707,6 +4707,11 @@ body:before {
 	border-radius: 0 0 5px 5px;
 }
 
+.emptyStateIcon-3VCpT2 {									/* popout				no messages (inbox)					*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+	color: rgb(var(--fontwhite2));
+}
+
 /* ----		14.5.	SEARCHPOPOUT					---- */
 
 #app-mount .container-3ayLPN {								/* popout				wrapper								*/
