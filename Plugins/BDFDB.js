@@ -4920,6 +4920,7 @@
 		contextmenucheckboxinner: ["ContextMenuCheckbox", "checkboxInner"],
 		contextmenucheckboxelement: ["ContextMenuCheckbox", "checkboxElement"],
 		contextmenuhint: ["ContextMenu", "hint"],
+		contextmenuimage: ["ContextMenu", "image"],
 		contextmenuitem: ["ContextMenu", "item"],
 		contextmenuitembrand: ["ContextMenu", "brand"],
 		contextmenuitemclickable: ["ContextMenu", "clickable"],
