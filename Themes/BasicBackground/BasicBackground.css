@@ -2045,6 +2045,34 @@ body:before {
 
 /* ~~~~		10.		DISCOVERY						~~~~ */
 
+.categoryItem-3zFJns {										/* categoryitem			container						*/
+	color: rgb(var(--fontwhite3));
+}
+.clickable-1JJAn8.categoryItem-3zFJns:hover {
+	color: rgb(var(--fontwhite2));
+}
+.clickable-1JJAn8.categoryItem-3zFJns:active,
+.selected-aXhQR6.categoryItem-3zFJns {
+	color: rgb(var(--fontwhite1));
+}
+.categoryItem-3zFJns:hover .layout-2DM8Md {					/* categoryitem			inner							*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.selected-aXhQR6.categoryItem-3zFJns .layout-2DM8Md {
+	background-color: rgb(var(--vaccentcolor));
+	text-shadow: 1px 1px var(--vtextshadow);
+}
+.selected-aXhQR6.categoryItem-3zFJns .layout-2DM8Md svg {
+	filter: drop-shadow(1px 1px var(--vtextshadow));
+}
+.categoryItem-3zFJns .name-uJV0GL {
+	color: rgb(var(--fontwhite2));
+}
+.categoryItem-3zFJns:hover .name-uJV0GL,
+.categoryItem-3zFJns.selected-aXhQR6 .name-uJV0GL {
+	color: rgb(var(--fontwhite1));
+}
+
 #app-mount .pageWrapper-1PgVDX {							/* guilddiscovery		container							*/
 	color: rgb(var(--fontwhite1));
 }
@@ -2059,6 +2087,9 @@ body:before {
 	opacity: 1;
 }
 .select-2TCrqx.languageSelector-1R8fPE [class*="css-"][class*="-control"] {
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+.container-RHl2Ju {											/* guilddiscovery		news container						*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
 #app-mount .sectionSeparator-2OWiNT {						/* guilddiscovery		separator							*/

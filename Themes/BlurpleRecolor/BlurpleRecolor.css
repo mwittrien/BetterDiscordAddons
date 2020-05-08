@@ -766,6 +766,11 @@
 	background-color: rgb(var(--vaccentcolor));
 }
 
+															/* categorylist			selected item						*/
+.categoryItem-3zFJns.selectedCategoryItem-3X8ujp .itemInner-3gVXMG {
+	background-color: rgb(var(--vaccentcolor));
+}
+
 
 /* ~~~~		8.		USERSETTINGS					~~~~ */
 
