@@ -53,7 +53,7 @@
 	BDFDB.LogUtils.log("Loading library.");
 	
 	BDFDB.PluginUtils = {};
-	BDFDB.PluginUtils.init = function (plugin) {
+	BDFDB.PluginUtils.init = BDFDB.loadMessage = function (plugin) {
 		plugin.name = plugin.name || (typeof plugin.getName == "function" ? plugin.getName() : null);
 		plugin.version = plugin.version || (typeof plugin.getVersion == "function" ? plugin.getVersion() : null);
 		plugin.author = plugin.author || (typeof plugin.getAuthor == "function" ? plugin.getAuthor() : null);
