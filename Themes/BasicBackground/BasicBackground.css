@@ -149,6 +149,7 @@
 		13.	BETTERFORMATINGREDUX
 		14.	PLUGIN/THEMEREPO
 		15.	CHANNELHISTORY
+		16.	DISPLAYLARGEMESSAGES
 	18.	THEMESUPPORT
 		1.	THEMEDEVBADGE
 		2.	BETTERDOCSBLOCK
@@ -1078,15 +1079,24 @@ body:before {
 #app-mount .message-2qnXI6 .attachment-33OFj0 {
 	margin-left: 0;
 }
+#app-mount .filename-3eBB_v {								/* attachment			filename							*/
+	color:	rgb(var(--fontwhite1));
+}
+#app-mount .size-1Arx_I {									/* attachment			sizesize							*/
+	color:	rgb(var(--fontwhite4));
+}
 #app-mount .metadata-3WGS0M {								/* attachment			metadata							*/
 	color: rgb(var(--fontwhite4));
 }
+#app-mount .cancelButton-3hVEV6,							/* attachment			cancelbutton						*/
 #app-mount .downloadButton-23tKQp {							/* attachment			downloadbutton						*/
 	color: rgb(var(--fontwhite4));
 }
+#app-mount .cancelButton-3hVEV6:hover,
 #app-mount .downloadButton-23tKQp:hover {
 	color: rgb(var(--fontwhite3));
 }
+#app-mount .cancelButton-3hVEV6:active,
 #app-mount .downloadButton-23tKQp:active {
 	color: rgb(var(--fontwhite2));
 }
@@ -7181,6 +7191,18 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 .channelHistoryButtons {
 	top: 4px;
 	left: 310px;
+}
+
+/* ----		17.16	DISPLAYLARGEMESSAGES			---- */
+
+#app-mount .injectButton-8eKqGu {							/* attachment			injectbutton						*/
+	color: rgb(var(--fontwhite4));
+}
+#app-mount .injectButton-8eKqGu:hover {
+	color: rgb(var(--fontwhite3));
+}
+#app-mount .injectButton-8eKqGu:active {
+	color: rgb(var(--fontwhite2));
 }
 
 
