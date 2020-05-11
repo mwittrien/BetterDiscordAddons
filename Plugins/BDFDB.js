@@ -1151,6 +1151,7 @@
 		AppView: "appcontainer",
 		AuthWrapper: "loginscreen",
 		BannedCard: "guildsettingsbannedcard",
+		Category: "categorycontainerdefault",
 		ChannelCall: "callcurrentcontainer",
 		ChannelMember: "member",
 		Channels: "guildchannels",

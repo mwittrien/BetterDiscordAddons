@@ -1,7 +1,7 @@
 //META{"name":"ShowHiddenChannels","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowHiddenChannels","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ShowHiddenChannels/ShowHiddenChannels.plugin.js"}*//
 
 var ShowHiddenChannels = (_ => {
-	var blacklist;
+	var blacklist, hiddenCategory;
 			
 	const settingsMap = {
 		GUILD_TEXT: "showText",
@@ -28,16 +28,21 @@ var ShowHiddenChannels = (_ => {
 	return class ShowHiddenChannels {
 		getName () {return "ShowHiddenChannels";}
 
-		getVersion () {return "2.7.4";}
+		getVersion () {return "2.7.5";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Displays channels that are hidden from you by role restrictions.";}
 
 		constructor () {
+			this.changelog = {
+				"fixed":[["Extra category","Sorting the hidden channels in an extra category works again without issues"]]
+			};
+			
 			this.patchedModules = {
 				before: {
-					Channels: "render"
+					Channels: "render",
+					ChannelCategoryItem: "render"
 				},
 				after: {
 					ChannelItem: ["render", "componentDidMount", "componentDidUpdate"]
@@ -238,51 +243,53 @@ var ShowHiddenChannels = (_ => {
 				for (let catId in e.instance.props.categories) e.instance.props.categories[catId] = [].concat(e.instance.props.categories[catId]);
 				e.instance.props.channels = Object.assign({}, e.instance.props.channels);
 				for (let type in e.instance.props.channels) e.instance.props.channels[type] = [].concat(e.instance.props.channels[type]);
+					
+				let hiddenId = e.instance.props.guild.id + "_hidden";
+				
+				delete e.instance.props.categories[hiddenId];
+				e.instance.props.categories._categories = e.instance.props.categories._categories.filter(n => n.channel.id != hiddenId);
+				e.instance.props.channels[BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY] = e.instance.props.channels[BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY].filter(n => n.channel.id != hiddenId);
 				
 				let settings = BDFDB.DataUtils.get(this, "settings"), index = -1;
-				for (let catId in e.instance.props.categories) for (let channelObj of e.instance.props.categories[catId]) if (channelObj.index >= index) index = channelObj.index;
+				for (let catId in e.instance.props.categories) {
+					if (catId != "_categories") e.instance.props.categories[catId] = e.instance.props.categories[catId].filter(n => !this.isChannelHidden(n.channel.id));
+					for (let channelObj of e.instance.props.categories[catId]) if (channelObj.index > index) index = parseInt(channelObj.index);
+				}
 				if (!settings.sortNative) {
-					let hiddenCategory = new BDFDB.DiscordObjects.Channel({
+					hiddenCategory = new BDFDB.DiscordObjects.Channel({
 						guild_id: e.instance.props.guild.id,
-						id: e.instance.props.guild.id + "_hidden",
+						id: hiddenId,
 						name: "hidden",
 						type: BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY
 					});
-					if (!BDFDB.ArrayUtils.is(e.instance.props.categories[hiddenCategory.id])) e.instance.props.categories[hiddenCategory.id] = [];
-					if (!e.instance.props.categories._categories.some(categoryObj => categoryObj.channel && categoryObj.channel.id == hiddenCategory.id)) {
-						e.instance.props.categories._categories.push({
-							channel: hiddenCategory,
-							index: ++index
-						});
-					}
-					if (!e.instance.props.channels[BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY].some(categoryObj => categoryObj.channel && categoryObj.channel.id == hiddenCategory.id)) {
-						e.instance.props.channels[BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY].push({
-							comparator: ++(e.instance.props.channels[BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY][e.instance.props.channels[BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY].length - 1] || {comparator: 0}).comparator,
-							channel: hiddenCategory
-						});
-					}
+					e.instance.props.categories[hiddenId] = [];
+					e.instance.props.categories._categories.push({
+						channel: hiddenCategory,
+						index: ++index
+					});
+					e.instance.props.channels[BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY].push({
+						comparator: (e.instance.props.channels[BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY][e.instance.props.channels[BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY].length - 1] || {comparator: 0}).comparator + 1,
+						channel: hiddenCategory
+					});
 				}
+				else hiddenCategory = null;
 					
 				for (let type in hiddenChannels) {
 					let channelType = type == BDFDB.DiscordConstants.ChannelTypes.GUILD_TEXT && e.instance.props.channels.SELECTABLE ? "SELECTABLE" : type;
 					if (!BDFDB.ArrayUtils.is(e.instance.props.channels[channelType])) e.instance.props.channels[channelType] = [];
 					for (let channel of hiddenChannels[type]) {
 						let hiddenChannel = new BDFDB.DiscordObjects.Channel(Object.assign({}, channel, {
-							parent_id: settings.sortNative ? channel.parent_id : (e.instance.props.guild.id + "_hidden")
+							parent_id: hiddenCategory ? hiddenId : channel.parent_id
 						}));
 						let parent_id = hiddenChannel.parent_id || "null";
-						if (!e.instance.props.categories[parent_id].some(channelObj => channelObj.channel && channelObj.channel.id == hiddenChannel.id)) {
-							e.instance.props.categories[parent_id].push({
-								channel: hiddenChannel,
-								index: hiddenChannel.position
-							});
-						}
-						if (!e.instance.props.channels[channelType].some(channelObj => channelObj.channel && channelObj.channel.id == hiddenChannel.id)) {
-							e.instance.props.channels[channelType].push({
-								comparator: hiddenChannel.position,
-								channel: hiddenChannel
-							});
-						}
+						e.instance.props.categories[parent_id].push({
+							channel: hiddenChannel,
+							index: hiddenChannel.position
+						});
+						e.instance.props.channels[channelType].push({
+							comparator: hiddenChannel.position,
+							channel: hiddenChannel
+						});
 					}
 				}
 				
@@ -290,7 +297,11 @@ var ShowHiddenChannels = (_ => {
 				for (let channelType in e.instance.props.channels) BDFDB.ArrayUtils.keySort(e.instance.props.channels[channelType], "comparator");
 			}
 		}
-
+		
+		processChannelCategoryItem (e) {
+			if (hiddenCategory && e.instance.props.channel && !e.instance.props.channel.id && e.instance.props.channel.type != BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY) e.instance.props.channel = hiddenCategory;
+		}
+		
 		processChannelItem (e) {
 			if (e.node) {
 				if (e.instance.props.className.indexOf(BDFDB.disCN.channelmodelocked) == -1) BDFDB.DOMUtils.removeClass(e.node, BDFDB.disCN.channelmodelocked);
@@ -365,7 +376,7 @@ var ShowHiddenChannels = (_ => {
 			let myMember = guild && BDFDB.LibraryModules.MemberStore.getMember(guild.id, BDFDB.UserUtils.me.id);
 			if (myMember) {
 				let category = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.ChannelStore.getChannel(channel.id).parent_id);
-				let lighttheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
+				let lightTheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
 				let allowedRoles = [], allowedUsers = [], deniedRoles = [], deniedUsers = [], everyoneDenied = false;
 				for (let id in channel.permissionOverwrites) {
 					if (channel.permissionOverwrites[id].type == "role" && (guild.roles[id] && guild.roles[id].name != "@everyone") && ((channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow || (channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].allow)) {
@@ -433,7 +444,7 @@ var ShowHiddenChannels = (_ => {
 							children: allowedElements.length ? allowedElements :
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessagesPopoutComponents.EmptyStateBottom, {
 									msg: BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER,
-									image: lighttheme ? "/assets/9b0d90147f7fab54f00dd193fe7f85cd.svg" : "/assets/308e587f3a68412f137f7317206e92c2.svg"
+									image: lightTheme ? "/assets/9b0d90147f7fab54f00dd193fe7f85cd.svg" : "/assets/308e587f3a68412f137f7317206e92c2.svg"
 								})
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
@@ -441,7 +452,7 @@ var ShowHiddenChannels = (_ => {
 							children: deniedElements.length ? deniedElements :
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessagesPopoutComponents.EmptyStateBottom, {
 									msg: BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER,
-									image: lighttheme ? "/assets/9b0d90147f7fab54f00dd193fe7f85cd.svg" : "/assets/308e587f3a68412f137f7317206e92c2.svg"
+									image: lightTheme ? "/assets/9b0d90147f7fab54f00dd193fe7f85cd.svg" : "/assets/308e587f3a68412f137f7317206e92c2.svg"
 								})
 						})
 					]
