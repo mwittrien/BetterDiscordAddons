@@ -759,7 +759,7 @@
 
 .searchBox-3Y2Vi7:focus,									/* searchbox			focus								*/
 .searchBox-3Y2Vi7:focus-within {
-	border--color: rgb(var(--vaccentcolor));
+	border-color: rgb(var(--vaccentcolor));
 }
 
 #app-mount .activeButton-1BJAiN,							/* pagination			button								*/
