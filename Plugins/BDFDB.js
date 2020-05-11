@@ -2260,7 +2260,9 @@
 	let GuildsRerenderTimeout;
 	BDFDB.GuildUtils = {};
 	BDFDB.GuildUtils.is = function (guild) {
-		return guild && guild instanceof BDFDB.DiscordObjects.Guild;
+		if (!BDFDB.ObjectUtils.is(guild)) return false;
+		let keys = Object.keys(guild);
+		return guild instanceof BDFDB.DiscordObjects.Guild || Object.keys(new BDFDB.DiscordObjects.Guild({})).every(key => keys.indexOf(key) > -1);
 	};
 	BDFDB.GuildUtils.getIcon = function (id) {
 		let guild = LibraryModules.GuildStore.getGuild(typeof id == "number" ? id.toFixed() : id);
@@ -2424,7 +2426,9 @@
 
 	BDFDB.ChannelUtils = {};
 	BDFDB.ChannelUtils.is = function (channel) {
-		return channel && channel instanceof BDFDB.DiscordObjects.Channel;
+		if (!BDFDB.ObjectUtils.is(channel)) return false;
+		let keys = Object.keys(channel);
+		return channel instanceof BDFDB.DiscordObjects.Channel || Object.keys(new BDFDB.DiscordObjects.Channel({})).every(key => keys.indexOf(key) > -1);
 	};
 	BDFDB.ChannelUtils.isTextChannel = function (channelOrId) {
 		let channel = typeof channelOrId == "string" ? LibraryModules.ChannelStore.getChannel(channelOrId) : channelOrId;

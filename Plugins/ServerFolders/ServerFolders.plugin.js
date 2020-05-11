@@ -276,7 +276,7 @@ var ServerFolders = (_ => {
 	return class ServerFolders {
 		getName () {return "ServerFolders";}
 
-		getVersion () {return "6.7.5";}
+		getVersion () {return "6.7.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -284,7 +284,7 @@ var ServerFolders = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Color Gradients","Fixed color gradients not working on icons"]]
+				"added":[["No extra column","Added the option to disable the unique way of displaying the servers in an extra column"]]
 			};
 			
 			this.patchedModules = {
@@ -373,7 +373,8 @@ var ServerFolders = (_ => {
 					closeAllFolders:	{value:false, 	description:"Close All Folders when selecting a Server."},
 					forceOpenFolder:	{value:false, 	description:"Force a Folder to open when switching to a Server of that Folder."},
 					showCountBadge:		{value:true, 	description:"Display Badge for Amount of Servers in a Folder."},
-					addSeparators:		{value:true, 	description:"Adds separators between Servers of different Folders."}
+					extraColumn:		{value:true, 	description:"Moves the Servers from opened Folders in an extra column."},
+					addSeparators:		{value:true, 	description:"Adds separators between Servers of different Folders in extra column."}
 				}
 			};
 		}
@@ -581,10 +582,12 @@ var ServerFolders = (_ => {
 		}
 
 		processAppView (e) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: ["FluxContainer(Guilds)", "FluxContainer(NavigableGuilds)"]});
-			if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(folderGuildContentComponent, {
-				themeOverride: children[index].props.themeOverride
-			}));
+			if (BDFDB.DataUtils.get(this, "settings", "extraColumn")) {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: ["FluxContainer(Guilds)", "FluxContainer(NavigableGuilds)"]});
+				if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(folderGuildContentComponent, {
+					themeOverride: children[index].props.themeOverride
+				}));
+			}
 		}
 		
 		processGuildFolder (e) {
@@ -594,6 +597,8 @@ var ServerFolders = (_ => {
 			
 			let data = this.getFolderConfig(e.instance.props.folderId);
 			if (data.muteFolder) for (let guildId of e.instance.props.guildIds) if (!BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildId)) BDFDB.LibraryModules.GuildSettingsUtils.updateNotificationSettings(guildId, {muted:true, suppress_everyone:true});
+			
+			let settings = BDFDB.DataUtils.get(this, "settings");
 			
 			let state = this.getState(e.instance);
 			if (folderStates[e.instance.props.folderId] && !BDFDB.equals(state, folderStates[e.instance.props.folderId])) {
@@ -630,7 +635,7 @@ var ServerFolders = (_ => {
 					});
 				}
 			}
-			if (BDFDB.DataUtils.get(this, "settings", "showCountBadge")) {
+			if (settings.showCountBadge) {
 				[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"BlobMask"});
 				if (index > -1) {
 					children[index].props.upperLeftBadgeWidth = BDFDB.LibraryComponents.Badges.getBadgeWidthForValue(e.instance.props.guildIds.length);
@@ -640,12 +645,13 @@ var ServerFolders = (_ => {
 					});
 				}
 			}
-			
-			e.returnvalue.props.children[0] = null;
-			e.returnvalue.props.children[2] = BDFDB.ReactUtils.createElement("div", {
-				children: e.returnvalue.props.children[2],
-				style: {display: "none"}
-			});
+			if (settings.extraColumn) {
+				e.returnvalue.props.children[0] = null;
+				e.returnvalue.props.children[2] = BDFDB.ReactUtils.createElement("div", {
+					children: e.returnvalue.props.children[2],
+					style: {display: "none"}
+				});
+			}
 		}
 
 		processGuild (e) {
@@ -656,6 +662,22 @@ var ServerFolders = (_ => {
 					BDFDB.ReactUtils.forceUpdate(folderGuildContent);
 				}
 				guildStates[e.instance.props.guild.id] = state;
+				if (e.returnvalue) {
+					let data = this.getFolderConfig(folder.folderId);
+					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: ["GuildTooltip", "BDFDB_TooltipContainer"]});
+					if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						tooltipConfig: Object.assign({
+							type: "right",
+							list: true,
+							guild: e.instance.props.guild,
+							offset: 12
+						}, data.copyTooltipColor && {
+							backgroundColor: data.color3,
+							fontColor: data.color4,
+						}),
+						children: children[index].props.children
+					});
+				}
 			}
 			if (e.node) BDFDB.ListenerUtils.add(this, e.node, "click", _ => {BDFDB.TimeUtils.timeout(_ => {
 				let folder = BDFDB.GuildUtils.getFolder(e.instance.props.guild.id);

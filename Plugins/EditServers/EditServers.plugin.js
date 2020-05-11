@@ -4,7 +4,7 @@ var EditServers = (_ => {
 	return class EditServers {
 		getName () {return "EditServers";}
 
-		getVersion () {return "2.1.9";}
+		getVersion () {return "2.2.0";}
 		
 		getAuthor () {return "DevilBro";}
 
@@ -12,8 +12,7 @@ var EditServers = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Message Update","Fixed the plugin for the new Message Update"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"improved":[["Server Folders","Works better with Server Folders now"]]
 			};
 
 			this.patchedModules = {
@@ -36,6 +35,8 @@ var EditServers = (_ => {
 					GuildHeader: "render"
 				}
 			};
+			
+			this.patchPriority = 7;
 		}
 
 		initConstructor () {
@@ -200,6 +201,7 @@ var EditServers = (_ => {
 								type: "right",
 								guild: e.instance.props.guild,
 								list: true,
+								offset: 12,
 								backgroundColor: data.color3,
 								fontColor: data.color4
 							},
