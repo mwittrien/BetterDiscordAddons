@@ -318,10 +318,6 @@ body:before {
 .guildIconUnavailable-5PMHDN,								/* guilderror			miniicon							*/
 .guildsError-b7zR5H {										/* guilderror			innerwrap							*/
 	background-color: rgba(240, 71, 71, 0.3);
-	color: rgb(var(--fontwhite1));
-}
-.guildsError-b7zR5H:hover {
-	color: rgb(var(--fontwhite1));
 }
 
 .dragInner-_SHftW {											/* dragplaceholder											*/
@@ -762,6 +758,9 @@ body:before {
 }
 .divider-JfaTT5.hasContent-1cNJDh {							/* divider				hascontent							*/
 	border-color: transparent;
+}
+.unreadPill-2HyYtt {										/* divider				unreadPill							*/
+	color: rgb(var(--fontwhite1));
 }
 .content-1o0f9g {											/* divider				content								*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
@@ -2879,7 +2878,11 @@ body:before {
 #app-mount .activityProfile-2bJRaP .name-29ETJS {			/* header				activityname						*/
 	color: rgb(var(--fontwhite2));
 }
-
+.activityName-1IaRLn,
+.nameNormal-2lqVQK,
+.nameWrap-3Z4G_9 {
+	color: rgb(var(--fontwhite1));
+}
 .userInfoSectionHeader-CBvMDh {								/* body					sectionheader						*/
 	color: rgb(var(--fontwhite3));
 }
