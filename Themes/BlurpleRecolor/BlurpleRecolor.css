@@ -757,6 +757,11 @@
 
 /* ~~~~		7.		DISCOVERY						~~~~ */
 
+.searchBox-3Y2Vi7:focus,									/* searchbox			focus								*/
+.searchBox-3Y2Vi7:focus-within {
+	border--color: rgb(var(--vaccentcolor));
+}
+
 #app-mount .activeButton-1BJAiN,							/* pagination			button								*/
 #app-mount .activeButton-1BJAiN:hover {
 	background-color: rgb(var(--vaccentcolor));
