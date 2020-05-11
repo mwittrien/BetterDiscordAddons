@@ -6,7 +6,7 @@ var ImageGallery = (_ => {
 	return class ImageGallery {
 		getName () {return "ImageGallery";}
 
-		getVersion () {return "1.7.0";}
+		getVersion () {return "1.7.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -34,7 +34,6 @@ var ImageGallery = (_ => {
 			this.css = `
 				${BDFDB.dotCN._imagegallerygallery}:not([style*="opacity: 0;"]) {
 					transform: unset !important;
-					z-index: 1001;
 				}
 				${BDFDB.dotCN._imagegallerysibling} {
 					display: flex;
@@ -43,7 +42,6 @@ var ImageGallery = (_ => {
 					top: 50%;
 					bottom: 50%;
 					cursor: pointer;
-					z-index: -1;
 				}
 				${BDFDB.dotCN._imagegalleryprevious} {
 					justify-content: flex-end;
