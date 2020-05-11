@@ -3099,6 +3099,9 @@ body:before {
 	background-attachment: fixed;
 }
 
+.uploadModalIn-1z07Bv .uploadDropModal-2kTwbc {
+	width: unset;
+}
 .uploadModal-2ifh8j .inner-3nWsbo,							/* modal				inner								*/
 .uploadModalIn-1z07Bv .uploadDropModal-2kTwbc .inner-3nWsbo {
 	border-color: rgba(var(--fontwhite1), 0.5);
