@@ -291,7 +291,7 @@ body:before {
 .childWrapper-anI2G9,										/* homebutton/acronym	innerwrap							*/
 #bd-pub-button {											/* publicbutton			innerwrap							*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
-	color: rgb(var(--fontwhite1));
+	color: rgb(var(--fontwhite2));
 	font-weight: 500;
 }
 .wrapper-1BJsBx:hover svg,
@@ -301,11 +301,12 @@ body:before {
 .wrapper-1BJsBx:hover .childWrapper-anI2G9,
 .wrapper-1BJsBx.selected-bZ3Lue .childWrapper-anI2G9,
 #bd-pub-button:hover {
+	color: rgb(var(--fontwhite1));
 	text-shadow: 1px 1px var(--vtextshadow);
 }
 .noIcon-1a_FrS {											/* acronym				minicontainer						*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
-	color: rgb(var(--fontwhite1));
+	color: rgb(var(--fontwhite2));
 }
 
 .circleIconButton-jET_ig {									/* guildadd/discovery	innerwrap							*/

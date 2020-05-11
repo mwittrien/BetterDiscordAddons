@@ -45,6 +45,7 @@ var ReadAllNotificationsButton = (_ => {
 					border-radius: 4px;
 					font-size: 12px;
 					line-height: 1.3;
+					white-space: nowrap;
 				}
 			`;
 
