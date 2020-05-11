@@ -7201,14 +7201,14 @@
 						onChange: e => {
 							let file = e.currentTarget.files[0];
 							if (this.refInput && file && (!filter.length || filter.some(n => file.type.indexOf(n) == 0))) {
-								this.refInput.props.value = `${this.props.mode == "url" ? "url('" : ""}${this.props.useFilepath ? file.path : `data:${file.type};base64,${BDFDB.LibraryRequires.fs.readFileSync(file.path).toString("base64")}`}${this.props.mode ? "')" : ""}`;
+								this.refInput.props.value = `${this.props.mode == "url" ? "url('" : ""}${this.props.useFilePath ? file.path : `data:${file.type};base64,${BDFDB.LibraryRequires.fs.readFileSync(file.path).toString("base64")}`}${this.props.mode ? "')" : ""}`;
 								BDFDB.ReactUtils.forceUpdate(this.refInput);
 								this.refInput.handleChange(this.refInput.props.value);
 							}
 						}
 					})
 				]
-			}), "filter", "mode", "useFilepath"));
+			}), "filter", "mode", "useFilePath"));
 		}
 	};
 	
@@ -8279,7 +8279,7 @@
 					onMouseLeave: this.handleMouseLeave.bind(this),
 					maxLength: this.props.type == "file" ? false : this.props.maxLength,
 					ref: this.props.inputRef
-				}), "errorMessage", "focused", "error", "success", "inputClassName", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "filter", "useFilepath")),
+				}), "errorMessage", "focused", "error", "success", "inputClassName", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "filter", "useFilePath")),
 				this.props.type == "color" ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
 					wrap: true,
 					children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ColorSwatches, {
@@ -8292,7 +8292,7 @@
 				this.props.type == "file" ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FileButton, {
 					filter: this.props.filter,
 					mode: this.props.mode,
-					useFilepath: this.props.useFilepath,
+					useFilePath: this.props.useFilePath,
 				}) : null
 			].filter(n => n);
 			
