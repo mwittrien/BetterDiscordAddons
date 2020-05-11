@@ -103,8 +103,7 @@ var ServerHider = (_ => {
 		onGuildContextMenu (e) {
 			if (document.querySelector(BDFDB.dotCN.modalwrapper)) return;
 			if (e.instance.props.target && e.instance.props.type.startsWith("GUILD_ICON_")) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+				let entry = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
 							label: this.labels.context_serverhider_text,
@@ -129,7 +128,17 @@ var ServerHider = (_ => {
 							})]
 						})
 					]
-				}));
+				});
+				if (e.instance.props.type == BDFDB.DiscordConstants.ContextMenuTypes.GUILD_ICON_NEW) {
+					e.returnvalue.props.children = [
+						e.returnvalue.props.children,
+						entry
+					].flat(10).filter(n => n);
+				}
+				else {
+					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
+					children.splice(index > -1 ? index : children.length, 0, entry);
+				}
 			}
 		}
 
