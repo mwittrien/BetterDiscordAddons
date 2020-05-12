@@ -137,7 +137,7 @@ var NotificationSounds = (_ => {
 										className: "input-newsong input-source",
 										type: "file",
 										filter: ["audio", "video"],
-										useFilepath: true,
+										useFilePath: true,
 										value: "",
 										placeholder: "Source"
 									})

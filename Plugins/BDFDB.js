@@ -7334,14 +7334,14 @@
 						onChange: e => {
 							let file = e.currentTarget.files[0];
 							if (this.refInput && file && (!filter.length || filter.some(n => file.type.indexOf(n) == 0))) {
-								this.refInput.props.value = `${this.props.mode == "url" ? "url('" : ""}${this.props.useFilePath ? file.path : `data:${file.type};base64,${BDFDB.LibraryRequires.fs.readFileSync(file.path).toString("base64")}`}${this.props.mode ? "')" : ""}`;
+								this.refInput.props.value = `${this.props.mode == "url" ? "url('" : ""}${(this.props.useFilePath || this.props.useFilepath) ? file.path : `data:${file.type};base64,${BDFDB.LibraryRequires.fs.readFileSync(file.path).toString("base64")}`}${this.props.mode ? "')" : ""}`;
 								BDFDB.ReactUtils.forceUpdate(this.refInput);
 								this.refInput.handleChange(this.refInput.props.value);
 							}
 						}
 					})
 				]
-			}), "filter", "mode", "useFilePath"));
+			}), "filter", "mode", "useFilePath", "useFilepath"));
 		}
 	};
 	
@@ -8411,7 +8411,7 @@
 					onMouseLeave: this.handleMouseLeave.bind(this),
 					maxLength: this.props.type == "file" ? false : this.props.maxLength,
 					ref: this.props.inputRef
-				}), "errorMessage", "focused", "error", "success", "inputClassName", "inputChildren", "valuePrefix", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "filter", "useFilePath")),
+				}), "errorMessage", "focused", "error", "success", "inputClassName", "inputChildren", "valuePrefix", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "filter", "useFilePath", "useFilepath")),
 				this.props.inputChildren,
 				this.props.type == "color" ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
 					wrap: true,
@@ -8427,7 +8427,7 @@
 				this.props.type == "file" ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FileButton, {
 					filter: this.props.filter,
 					mode: this.props.mode,
-					useFilePath: this.props.useFilePath,
+					useFilePath: this.props.useFilePath || this.props.useFilepath,
 				}) : null
 			].flat(10).filter(n => n);
 			

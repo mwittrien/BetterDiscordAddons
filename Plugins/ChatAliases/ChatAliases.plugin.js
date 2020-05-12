@@ -479,7 +479,7 @@ var ChatAliases = (_ => {
 				className: BDFDB.disCN.marginbottom8 + " input-" + inputdata.valuename,
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 					type: inputdata.type,
-					useFilepath: inputdata.type == "file",
+					useFileath: inputdata.type == "file",
 					value: values[inputdata.valuename],
 					placeholder: values[inputdata.valuename],
 					autoFocus: inputdata.valuename == "replacevalue",
