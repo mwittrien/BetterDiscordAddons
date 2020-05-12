@@ -1635,6 +1635,10 @@
 .mediaBarProgress-1xaPtl:before {
 	background-color: rgb(var(--vaccentcolor));
 }
+.mediaBarInteraction-37i2O4:hover .mediaBarGrabber-1FqnbN {
+	background-color: rgb(var(--vaccentcolor));
+	filter: brightness(120%);
+}
 
 .theme-light .select-1Pkeg4:focus,							/* dropdown select		nitro subscription					*/
 .theme-light .lookFilled-1h1y05.select-1Pkeg4:focus {

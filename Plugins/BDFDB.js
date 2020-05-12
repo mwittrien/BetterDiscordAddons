@@ -6647,9 +6647,10 @@
 			super(props);
 			if (!this.state) this.state = {};
 			this.state.isGradient = props.gradient && props.color && BDFDB.ObjectUtils.is(props.color);
-			if (this.state.gradientBarEnabled == undefined) this.state.gradientBarEnabled = this.state.isGradient;
-			if (this.state.draggingGradientCursor == undefined) this.state.draggingGradientCursor = false;
-			if (this.state.selectedGradientCursor == undefined || !this.state.gradientBarEnabled || this.state.isGradient && Object.keys(props.color).indexOf(this.state.selectedGradientCursor) == -1) this.state.selectedGradientCursor = 0;
+			this.state.gradientBarEnabled = this.state.isGradient;
+			this.state.draggingAlphaCursor = false;
+			this.state.draggingGradientCursor = false;
+			this.state.selectedGradientCursor = 0;
 		}
 		handleColorChange(color) {
 			let changed = false;
@@ -6711,11 +6712,15 @@
 								className: BDFDB.disCN.colorpickersaturation,
 								children: BDFDB.ReactUtils.createElement("div", {
 									className: BDFDB.disCN.colorpickersaturationcolor,
-									style: {position: "absolute", top: 0, right: 0, bottom: 0, left: 0, backgroundColor: BDFDB.ColorUtils.convert([h, "100%", "100%"], "RGB")},
+									style: {position: "absolute", top: 0, right: 0, bottom: 0, left: 0, cursor: "crosshair", backgroundColor: BDFDB.ColorUtils.convert([h, "100%", "100%"], "RGB")},
+									onClick: event => {
+										let rects = BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickersaturationcolor, event.target));
+										let newS = BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 100], event.clientX) + "%";
+										let newL = BDFDB.NumberUtils.mapRange([rects.top, rects.top + rects.height], [100, 0], event.clientY) + "%";
+										this.handleColorChange(BDFDB.ColorUtils.convert([h, newS, newL, a], hslFormat));
+									},
 									onMouseDown: event => {
-										let pane = BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickersaturationcolor, event.target);
-										let cursor = pane.querySelector(BDFDB.dotCN.colorpickersaturationcursor);
-										let rects = BDFDB.DOMUtils.getRects(pane);
+										let rects = BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickersaturationcolor, event.target));
 										
 										let mouseup = _ => {
 											document.removeEventListener("mouseup", mouseup);
@@ -6743,7 +6748,7 @@
 												}),
 												BDFDB.ReactUtils.createElement("div", {
 													className: BDFDB.disCN.colorpickersaturationcursor,
-													style: {position: "absolute", cursor: "default", left: s, top: `${BDFDB.NumberUtils.mapRange([0, 100], [100, 0], parseFloat(l))}%`},
+													style: {position: "absolute", cursor: "crosshair", left: s, top: `${BDFDB.NumberUtils.mapRange([0, 100], [100, 0], parseFloat(l))}%`},
 													children: BDFDB.ReactUtils.createElement("div", {
 														style: {width: 4, height: 4, boxShadow: "rgb(255, 255, 255) 0px 0px 0px 1.5px, rgba(0, 0, 0, 0.3) 0px 0px 1px 1px inset, rgba(0, 0, 0, 0.4) 0px 0px 1px 2px", borderRadius: "50%", transform: "translate(-2px, -2px)"}
 													})
@@ -6760,10 +6765,13 @@
 									children: BDFDB.ReactUtils.createElement("div", {
 										className: BDFDB.disCN.colorpickerhuehorizontal,
 										style: {padding: "0px 2px", position: "relative", height: "100%"},
+										onClick: event => {
+											let rects = BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickerhuehorizontal, event.target));
+											let newH = BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 360], event.clientX);
+											this.handleColorChange(BDFDB.ColorUtils.convert([newH, s, l, a], hslFormat));
+										},
 										onMouseDown: event => {
-											let bar = BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickerhuehorizontal, event.target);
-											let cursor = bar.querySelector(BDFDB.dotCN.colorpickerhuecursor);
-											let rects = BDFDB.DOMUtils.getRects(bar);
+											let rects = BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickerhuehorizontal, event.target));
 											
 											let mouseup = _ => {
 												document.removeEventListener("mouseup", mouseup);
@@ -6782,7 +6790,7 @@
 											}),
 											BDFDB.ReactUtils.createElement("div", {
 												className: BDFDB.disCN.colorpickerhuecursor,
-												style: {position: "absolute", left: `${BDFDB.NumberUtils.mapRange([0, 360], [0, 100], h)}%`},
+												style: {position: "absolute", cursor: "ew-resize", left: `${BDFDB.NumberUtils.mapRange([0, 360], [0, 100], h)}%`},
 												children: BDFDB.ReactUtils.createElement("div", {
 													style: {marginTop: 1, width: 4, borderRadius: 1, height: 8, boxShadow: "rgba(0, 0, 0, 0.6) 0px 0px 2px", background: "rgb(255, 255, 255)", transform: "translateX(-2px)"}
 												})
@@ -6806,22 +6814,23 @@
 										children: BDFDB.ReactUtils.createElement("div", {
 											className: BDFDB.disCN.colorpickeralphahorizontal,
 											style: {padding: "0px 2px", position: "relative", height: "100%", background: `linear-gradient(to right, ${BDFDB.ColorUtils.setAlpha([h, s, l], 0, "RGBA")}, ${BDFDB.ColorUtils.setAlpha([h, s, l], 1, "RGBA")}`},
+											onClick: event => {
+												let rects = BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickeralphahorizontal, event.target));
+												let newA = BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 1], event.clientX);
+												this.handleColorChange(BDFDB.ColorUtils.setAlpha(selectedColor, newA, hslFormat));
+											},
 											onMouseDown: event => {
-												let bar = BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickeralphahorizontal, event.target);
-												let cursor = bar.querySelector(BDFDB.dotCN.colorpickeralphacursor);
-												let rects = BDFDB.DOMUtils.getRects(bar);
-												let bubble = BDFDB.DOMUtils.create(`<span class="${BDFDB.disCN.sliderbubble}" style="opacity: 1 !important; visibility: visible !important; left: 2px !important;"></span>`);
+												let rects = BDFDB.DOMUtils.getRects(BDFDB.DOMUtils.getParent(BDFDB.dotCN.colorpickeralphahorizontal, event.target));
 												
 												let mouseup = _ => {
 													document.removeEventListener("mouseup", mouseup);
 													document.removeEventListener("mousemove", mousemove);
-													bubble.remove();
+													this.state.draggingAlphaCursor = false;
+													BDFDB.ReactUtils.forceUpdate(this);
 												};
 												let mousemove = event2 => {
-													if (!bubble.parentElement) cursor.appendChild(bubble);
-													
+													this.state.draggingAlphaCursor = true;
 													let newA = BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0, 1], event2.clientX);
-													bubble.innerText = `${Math.floor(newA * 100)}%`;
 													this.handleColorChange(BDFDB.ColorUtils.setAlpha(selectedColor, newA, hslFormat));
 												};
 												document.addEventListener("mouseup", mouseup);
@@ -6829,10 +6838,17 @@
 											},
 											children: BDFDB.ReactUtils.createElement("div", {
 												className: BDFDB.disCN.colorpickeralphacursor,
-												style: {position: "absolute", left: `${a * 100}%`},
-												children: BDFDB.ReactUtils.createElement("div", {
-													style: {marginTop: 1, width: 4, borderRadius: 1, height: 8, boxShadow: "rgba(0, 0, 0, 0.6) 0px 0px 2px", background: "rgb(255, 255, 255)", transform: "translateX(-2px)"}
-												})
+												style: {position: "absolute", cursor: "ew-resize", left: `${a * 100}%`},
+												children: [
+													BDFDB.ReactUtils.createElement("div", {
+														style: {marginTop: 1, width: 4, borderRadius: 1, height: 8, boxShadow: "rgba(0, 0, 0, 0.6) 0px 0px 2px", background: "rgb(255, 255, 255)", transform: "translateX(-2px)"}
+													}),
+													this.state.draggingAlphaCursor && BDFDB.ReactUtils.createElement("span", {
+														className: BDFDB.disCN.sliderbubble,
+														style: {opacity: 1, visibility: "visible", left: 2},
+														children: `${Math.floor(a * 100)}%`
+													})
+												].filter(n => n)
 											})
 										})
 									})
@@ -6852,7 +6868,7 @@
 										style: {position: "absolute", top: 0, right: 0, bottom: 0, left: 0},
 										children: BDFDB.ReactUtils.createElement("div", {
 											className: BDFDB.disCN.colorpickergradienthorizontal,
-											style: {padding: "0px 2px", position: "relative", height: "100%", background: BDFDB.ColorUtils.createGradient(currentGradient.reduce((colorObj, posAndColor) => (colorObj[posAndColor[0]] = posAndColor[1], colorObj), {}))},
+											style: {padding: "0px 2px", position: "relative", cursor: "copy", height: "100%", background: BDFDB.ColorUtils.createGradient(currentGradient.reduce((colorObj, posAndColor) => (colorObj[posAndColor[0]] = posAndColor[1], colorObj), {}))},
 											onClick: event => {
 												let rects = BDFDB.DOMUtils.getRects(event.target);
 												let pos = BDFDB.NumberUtils.mapRange([rects.left, rects.left + rects.width], [0.01, 0.99], event.clientX);
@@ -6864,7 +6880,7 @@
 											},
 											children: currentGradient.map(posAndColor => BDFDB.ReactUtils.createElement("div", {
 												className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.colorpickergradientcursor, (posAndColor[0] == 0 || posAndColor[0] == 1) && BDFDB.disCNS.colorpickergradientcursoredge, this.state.selectedGradientCursor == posAndColor[0] && BDFDB.disCN.colorpickergradientcursorselected),
-												style: {position: "absolute", left: `${posAndColor[0] * 100}%`},
+												style: {position: "absolute", cursor: "pointer", left: `${posAndColor[0] * 100}%`},
 												onMouseDown: posAndColor[0] == 0 || posAndColor[0] == 1 ? _ => {} : event => {
 													event = event.nativeEvent || event;
 													let mousemove = event2 => {
@@ -7203,7 +7219,7 @@
 	};
 	
 	var ComponentTypeData = {};
-	ComponentTypeData.NormalContextMenus = ["DeveloperContextMenu", "GuildRoleContextMenu", "NativeContextMenu", "ScreenshareContextMenu", "UserSettingsCogContextMenu"];
+	ComponentTypeData.NormalContextMenus = ["DeveloperContextMenu", "GuildRoleContextMenu", "NativeContextMenu", "UserSettingsCogContextMenu"];
 	ComponentTypeData.FluxContextMenus = ["ApplicationContextMenu", "GroupDMContextMenu"];
 	ComponentTypeData.NonRenderContextMenus = ["ChannelContextMenu", "GuildContextMenu", "MessageContextMenu", "SlateContextMenu", "UserContextMenu"];
 	ComponentTypeData.ObservedContextMenus = [];
@@ -7233,8 +7249,6 @@
 	InternalComponents.LibraryComponents.ContextMenus._Exports.MessageContextMenu = (BDFDB.ModuleUtils.findByString("message", "target", BDFDB.DiscordConstants.ContextMenuTypes.MESSAGE_MAIN, false) || {}).exports;
 	
 	InternalComponents.LibraryComponents.ContextMenus.NativeContextMenu = BDFDB.ModuleUtils.findByName("NativeContextMenu");
-	
-	InternalComponents.LibraryComponents.ContextMenus.ScreenshareContextMenu = BDFDB.ModuleUtils.findByName("ScreenshareContextMenu");
 	
 	InternalComponents.LibraryComponents.ContextMenus.SlateContextMenu = BDFDB.ModuleUtils.findByName("SlateContextMenu");
 	InternalComponents.LibraryComponents.ContextMenus._Exports.SlateContextMenu = BDFDB.ModuleUtils.findByName("SlateContextMenu", false);
