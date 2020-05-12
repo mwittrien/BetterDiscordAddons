@@ -2237,6 +2237,43 @@ body:before {
 	color: rgb(var(--fontwhite2));
 }
 
+															/* connections			platforms							*/
+.connection-1fbD7X[style*="background-color: rgb(89, 54, 149)"] {
+	background-color: rgba(89, 54, 149, 0.8) !important;
+}
+.connection-1fbD7X[style*="background-color: rgb(203, 33, 32)"] {
+	background-color: rgba(203, 33, 32, 0.8) !important;
+}
+.connection-1fbD7X[style*="background-color: rgb(0, 157, 215)"] {
+	background-color: rgba(0, 157, 215, 0.8) !important;
+}
+.connection-1fbD7X[style*="background-color: rgb(24, 35, 50)"] {
+	background-color: rgba(24, 35, 50, 0.8) !important;
+}
+.connection-1fbD7X[style*="background-color: rgb(2, 31, 37)"] {
+	background-color: rgba(2, 31, 37, 0.8) !important;
+}
+.connection-1fbD7X[style*="background-color: rgb(0, 154, 229)"] {
+	background-color: rgba(0, 154, 229, 0.8) !important;
+}
+.connection-1fbD7X[style*="background-color: rgb(255, 69, 0)"] {
+	background-color: rgba(255, 69, 0, 0.8) !important;
+}
+.connection-1fbD7X[style*="background-color: rgb(29, 161, 242)"] {
+	background-color: rgba(29, 161, 242, 0.8) !important;
+}
+.connection-1fbD7X[style*="background-color: rgb(29, 185, 84)"] {
+	background-color: rgba(29, 185, 84, 0.8) !important;
+}
+.connection-1fbD7X[style*="background-color: rgb(53, 80, 137)"] {
+	background-color: rgba(53, 80, 137, 0.8) !important;
+}
+.connection-1fbD7X[style*="background-color: rgb(16, 124, 16)"] {
+	background-color: rgba(16, 124, 16, 0.8) !important;
+}
+.connection-1fbD7X[style*="background-color: rgb(20, 41, 160)"] {
+	background-color: rgba(20, 41, 160, 0.8) !important;
+}
 .accountBtn-2Nozo3 .accountBtnInner-sj5jLs {				/* connections			connectioninner						*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
@@ -2251,6 +2288,7 @@ body:before {
 }
 .connectionHeader-2MDqhu .description-3_Ncsb {
 	color: rgb(var(--fontwhite2)) !important;
+	opacity: 1;
 }
 .subEnabledTitle-2ElRo_ {
 	color: rgb(var(--fontwhite1));
@@ -2356,6 +2394,15 @@ body:before {
 }
 .attendeeCTA-3ZZQWt {										/* hypesquad			attendeeCTA							*/
 	color: rgb(var(--fontwhite2));
+}
+.membershipDialogHouse1-3KhKE- {							/* hypesquad			membershipdialogs					*/
+	background-color: rgba(156, 132, 239, 0.8);
+}
+.membershipDialogHouse2-35h9SY {
+	background-color: rgba(244, 123, 103, 0.8);
+}
+.membershipDialogHouse3-15OBIQ {
+	background-color: rgba(69, 221, 192, 0.8);
 }
 
 .container-3PXSwK {											/* voicesettings		voicebarcontainer					*/
