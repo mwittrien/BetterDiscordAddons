@@ -4,7 +4,7 @@ var TopRoleEverywhere = (_ => {
 	return class TopRoleEverywhere {
 		getName () {return "TopRoleEverywhere";}
 
-		getVersion () {return "3.0.0";}
+		getVersion () {return "3.0.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ var TopRoleEverywhere = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Tags","Properly work again"]]
+				"fixed":[["ContextMenu","Role context menu works again"]]
 			};
 			
 			this.patchedModules = {
@@ -221,7 +221,7 @@ var TopRoleEverywhere = (_ => {
 		
 		openRoleContextMenu (e, role) {
 			BDFDB.LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-				return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("GuildRoleContextMenu"), Object.assign({}, e, {roleId: role.id}));
+				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenus.DeveloperContextMenu, Object.assign({}, e, {id: role.id}));
 			});
 		}
 	
