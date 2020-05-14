@@ -4142,8 +4142,7 @@
 	DiscordClassModules.ContextMenuReactButton = BDFDB.ModuleUtils.find(m => typeof m.wrapper == "string" && typeof m.button == "string" && typeof m.icon == "string" && Object.keys(m).length == 3);
 	DiscordClassModules.CtaVerification = BDFDB.ModuleUtils.findByProperties("attendeeCTA", "verificationNotice");
 	DiscordClassModules.Cursor = BDFDB.ModuleUtils.findByProperties("cursorDefault", "userSelectNone");
-	DiscordClassModules.CustomStatus = BDFDB.ModuleUtils.findByProperties("customStatusContentIcon", "customStatus");
-	DiscordClassModules.CustomStatusIcon = BDFDB.ModuleUtils.findByProperties("icon", "emoji");
+	DiscordClassModules.CustomStatusIcon = BDFDB.ModuleUtils.findByProperties("textRuler", "emoji", "icon");
 	DiscordClassModules.DmAddPopout = BDFDB.ModuleUtils.findByProperties("popout", "searchBarComponent");
 	DiscordClassModules.DmAddPopoutItems = BDFDB.ModuleUtils.findByProperties("friendSelected", "friendWrapper");
 	DiscordClassModules.DownloadLink = BDFDB.ModuleUtils.findByProperties("downloadLink");
@@ -4204,6 +4203,7 @@
 	DiscordClassModules.LiveTag = BDFDB.ModuleUtils.findByProperties("liveLarge", "live");
 	DiscordClassModules.LoadingScreen = BDFDB.ModuleUtils.findByProperties("container", "problemsText", "problems");
 	DiscordClassModules.Margins = BDFDB.ModuleUtils.findByProperties("marginBottom4", "marginCenterHorz");
+	DiscordClassModules.Menu = BDFDB.ModuleUtils.findByProperties("menu", "styleFlexible", "item");
 	DiscordClassModules.Member = BDFDB.ModuleUtils.findByProperties("member", "ownerIcon");
 	DiscordClassModules.MembersWrap = BDFDB.ModuleUtils.findByProperties("membersWrap", "membersGroup");
 	DiscordClassModules.Message = BDFDB.ModuleUtils.findByProperties("message", "mentioned");
@@ -4725,8 +4725,6 @@
 		contextmenusubcontext: ["ContextMenu", "subMenuContext"],
 		cursordefault: ["Cursor", "cursorDefault"],
 		cursorpointer: ["Cursor", "cursorPointer"],
-		customstatus: ["CustomStatus", "customStatus"],
-		customstatuscontenticon: ["CustomStatus", "customStatusContentIcon"],
 		customstatusemoji: ["CustomStatusIcon", "emoji"],
 		customstatusicon: ["CustomStatusIcon", "icon"],
 		defaultcolor: ["Text", "defaultColor"],
@@ -5152,6 +5150,34 @@
 		mention: ["NotFound", "mention"],
 		mentioninteractive: ["NotFound", "mentionInteractive"],
 		mentionwrapper: ["NotFound", "mentionWrapper"],
+		menumenu: ["Menu", "menu"],
+		menuaccommodatescrollbar: ["Menu", "accommodateScrollbar"],
+		menucaret: ["Menu", "caret"],
+		menucheck: ["Menu", "check"],
+		menucheckbox: ["Menu", "checkbox"],
+		menucolorbrand: ["Menu", "colorBrand"],
+		menucolordanger: ["Menu", "colorDanger"],
+		menucolordefault: ["Menu", "colorDefault"],
+		menucolorpremium: ["Menu", "colorPremium"],
+		menucustomitem: ["Menu", "customItem"],
+		menudisabled: ["Menu", "disabled"],
+		menufocused: ["Menu", "focused"],
+		menuhideinteraction: ["Menu", "hideInteraction"],
+		menuhintcontainer: ["Menu", "hintContainer"],
+		menuicon: ["Menu", "icon"],
+		menuiconcontainer: ["Menu", "iconContainer"],
+		menuimage: ["Menu", "image"],
+		menuimagecontainer: ["Menu", "imageContainer"],
+		menuitem: ["Menu", "item"],
+		menulabel: ["Menu", "label"],
+		menulabelcontainer: ["Menu", "labelContainer"],
+		menuscroller: ["Menu", "scroller"],
+		menuseparator: ["Menu", "separator"],
+		menustylefixed: ["Menu", "styleFixed"],
+		menustyleflexible: ["Menu", "styleFlexible"],
+		menusubmenu: ["Menu", "submenu"],
+		menusubmenucontainer: ["Menu", "submenuContainer"],
+		menusubtext: ["Menu", "subtext"],
 		message: ["Message", "message"],
 		messageaccessory: ["MessageAccessory", "container"],
 		messageavatar: ["MessageBody", "avatar"],
@@ -7157,7 +7183,6 @@
 	
 	InternalComponents.LibraryComponents.ContextMenuItems.Item = InternalBDFDB.loadPatchedComp("ContextMenuItems.Item") || reactInitialized && class BDFDB_ContextMenuItem extends LibraryModules.React.Component {
 		render() {
-			let hintIsString = typeof this.props.hint == "string";
 			return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.contextmenuitem, !this.props.disabled && BDFDB.disCN.contextmenuitemclickable, this.props.danger && BDFDB.disCN.contextmenuitemdanger, this.props.disabled && BDFDB.disCN.contextmenuitemdisabled, this.props.brand && BDFDB.disCN.contextmenuitembrand, this.props.className),
 				style: this.props.style,
@@ -7219,7 +7244,7 @@
 	};
 	
 	var ComponentTypeData = {};
-	ComponentTypeData.NormalContextMenus = ["DeveloperContextMenu", "GuildRoleContextMenu", "NativeContextMenu", "UserSettingsCogContextMenu"];
+	ComponentTypeData.NormalContextMenus = ["DeveloperContextMenu", "NativeContextMenu", "UserSettingsCogContextMenu"];
 	ComponentTypeData.FluxContextMenus = ["ApplicationContextMenu", "GroupDMContextMenu"];
 	ComponentTypeData.NonRenderContextMenus = ["ChannelContextMenu", "GuildContextMenu", "MessageContextMenu", "SlateContextMenu", "UserContextMenu"];
 	ComponentTypeData.ObservedContextMenus = [];
@@ -7242,8 +7267,6 @@
 	
 	InternalComponents.LibraryComponents.ContextMenus.GuildContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.GUILD_CHANNEL_LIST);
 	InternalComponents.LibraryComponents.ContextMenus._Exports.GuildContextMenu = (BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.GUILD_CHANNEL_LIST, false) || {}).exports;
-	
-	InternalComponents.LibraryComponents.ContextMenus.GuildRoleContextMenu = BDFDB.ModuleUtils.findByName("GuildRoleContextMenu");
 	
 	InternalComponents.LibraryComponents.ContextMenus.MessageContextMenu = BDFDB.ModuleUtils.findByString("message", "target", BDFDB.DiscordConstants.ContextMenuTypes.MESSAGE_MAIN);
 	InternalComponents.LibraryComponents.ContextMenus._Exports.MessageContextMenu = (BDFDB.ModuleUtils.findByString("message", "target", BDFDB.DiscordConstants.ContextMenuTypes.MESSAGE_MAIN, false) || {}).exports;
@@ -7565,10 +7588,6 @@
 		}
 	};
 	
-	InternalComponents.LibraryComponents.MessageGroup = BDFDB.ModuleUtils.findByName("ChannelMessage");
-	
-	InternalComponents.LibraryComponents.MessagesPopoutComponents = BDFDB.ModuleUtils.findByProperties("Header", "EmptyStateBottom");
-	
 	InternalComponents.LibraryComponents.MemberRole = InternalBDFDB.loadPatchedComp("MemberRole") || reactInitialized && class BDFDB_MemberRole extends LibraryModules.React.Component {
 		handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}
 		handleContextMenu(e) {if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);}
@@ -7592,6 +7611,12 @@
 			});
 		}
 	};
+	
+	InternalComponents.LibraryComponents.MenuItems = BDFDB.ModuleUtils.findByProperties("MenuItem", "MenuGroup");
+	
+	InternalComponents.LibraryComponents.MessageGroup = BDFDB.ModuleUtils.findByName("ChannelMessage");
+	
+	InternalComponents.LibraryComponents.MessagesPopoutComponents = BDFDB.ModuleUtils.findByProperties("Header", "EmptyStateBottom");
 	
 	InternalComponents.LibraryComponents.ModalComponents = Object.assign({}, BDFDB.ModuleUtils.findByProperties("ModalContent", "ModalFooter"));
 	

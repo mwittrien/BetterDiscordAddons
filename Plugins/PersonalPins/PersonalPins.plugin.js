@@ -12,13 +12,13 @@ var PersonalPins = (_ => {
 
 		getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-		getVersion () {return "1.9.1";} 
+		getVersion () {return "1.9.2";} 
 
 		getAuthor () {return "DevilBro";}
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Styling","Adjusted the styling to the new styling of the recent mentions popout"]]
+				"fixed":[["Crash","Fixed crash on message 3-dot menu"]]
 			};
 
 			this.patchedModules = {
@@ -123,30 +123,36 @@ var PersonalPins = (_ => {
 				}
 			}
 		}
-
+		
 		onMessageOptionContextMenu (e) {
 			if (e.instance.props.message && e.instance.props.channel) {
 				let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {key: ["pin", "unpin"]});
-				children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", ["pin", "unpin"]]]});
+				children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: note ? this.labels.context_unpinoption_text : this.labels.context_pinoption_text,
-					hint: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-						className: BDFDB.disCNS.messagetoolbaricon,
-						nativeClass: true,
-						iconSVG: note ? pinIconDelete : pinIcon
-					}),
+					id: note ? "unpin-note" : "pin-note",
+					icon: _ => {
+						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+							className: BDFDB.disCN.menuicon,
+							nativeClass: true,
+							iconSVG: note ? pinIconDelete : pinIcon
+						});
+					},
 					action: _ => {
 						e.instance.props.onClose();
 						this.addMessageToNotes(e.instance.props.message, e.instance.props.channel);
 					}
 				}));
-				if (this.isNoteOutdated(note, e.instance.props.message)) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+				if (this.isNoteOutdated(note, e.instance.props.message)) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: this.labels.context_updateoption_text,
-					hint: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-						className: BDFDB.disCNS.messagetoolbaricon,
-						nativeClass: true,
-						iconSVG: pinIconUpdate
-					}),
+					id: "update-note",
+					icon: _ => {
+						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+							className: BDFDB.disCN.menuicon,
+							nativeClass: true,
+							iconSVG: pinIconUpdate
+						});
+					},
 					action: _ => {
 						e.instance.props.onClose();
 						this.updateNoteData(note, e.instance.props.message);

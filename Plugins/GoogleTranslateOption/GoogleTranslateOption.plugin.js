@@ -27,13 +27,17 @@ var GoogleTranslateOption = (_ => {
 	return class GoogleTranslateOption {
 		getName () {return "GoogleTranslateOption";}
 
-		getVersion () {return "1.9.9";}
+		getVersion () {return "2.0.0";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Adds a Google Translate option to your context menu, which shows a preview of the translated text and on click will open the selected text in Google Translate. Also adds a translation button to your textareas, which will automatically translate the text for you before it is being send.";}
 
 		constructor () {
+			this.changelog = {
+				"fixed":[["Crash","Fixed crash on message 3-dot menu"]]
+			};
+			
 			this.patchedModules = {
 				before: {
 					ChannelTextAreaForm: "render",
@@ -50,6 +54,11 @@ var GoogleTranslateOption = (_ => {
 		}
 
 		initConstructor () {
+			languages = {};
+			translating = false;
+			isTranslating = false;	
+			translatedMessages = {};
+				
 			this.defaults = {
 				settings: {
 					useChromium: 			{value:false,			description:"Use an inbuilt browser window instead of opening your default browser"},
@@ -128,11 +137,6 @@ var GoogleTranslateOption = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
-	
-				languages = {};
-				translating = false;
-				isTranslating = false;	
-				translatedMessages = {};
 
 				this.setLanguages();
 
@@ -210,19 +214,22 @@ var GoogleTranslateOption = (_ => {
 				}
 			}
 		}
-
+		
 		onMessageOptionContextMenu (e) {
 			if (e.instance.props.message && e.instance.props.channel) {
 				let translated = !!translatedMessages[e.instance.props.message.id];
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {key: ["pin", "unpin"]});
-				children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", ["pin", "unpin"]]]});
+				children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: translated ? this.labels.context_messageuntranslateoption_text : this.labels.context_messagetranslateoption_text,
 					disabled: isTranslating,
-					hint: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-						className: BDFDB.disCNS.messagetoolbaricon,
-						nativeClass: true,
-						iconSVG: translated ? translateIconUntranslate : translateIcon
-					}),
+					id: "translation",
+					icon: _ => {
+						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+							className: BDFDB.disCN.menuicon,
+							nativeClass: true,
+							iconSVG: translated ? translateIconUntranslate : translateIcon
+						});
+					},
 					action: _ => {
 						e.instance.props.onClose();
 						this.translateMessage(e.instance.props.message, e.instance.props.channel);
@@ -300,7 +307,7 @@ var GoogleTranslateOption = (_ => {
 							}));
 							popoutelements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 								className: BDFDB.disCN.marginbottom8
-							})),
+							}));
 							popoutelements = popoutelements.concat(this.createSelects(true));
 							popoutelements.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 								type: "Switch",
@@ -564,14 +571,14 @@ var GoogleTranslateOption = (_ => {
 			googleTranslateWindow.webContents.on("did-finish-load", _ => {
 				googleTranslateWindow.webContents.executeJavaScript(`require("electron").ipcRenderer.sendTo(${BDFDB.LibraryRequires.electron.remote.getCurrentWindow().webContents.id}, "GTO-translation", [(document.querySelector(".translation") || {}).innerText, [(new RegExp("{code:'([^']*)',name:'" + [(new RegExp((window.source_language_detected || "").replace("%1$s", "([A-z]{2,})"), "g")).exec(document.body.innerHTML)].flat()[1] +"'}", "g")).exec(document.body.innerHTML)].flat()[1]]);`);
 			});
-			BDFDB.WindowUtils.addListener(this, "GTO-translation", (event, messagedata) => {
+			BDFDB.WindowUtils.addListener(this, "GTO-translation", (event, messageData) => {
 				BDFDB.WindowUtils.close(googleTranslateWindow);
 				BDFDB.WindowUtils.removeListener(this, "GTO-translation");
-				if (!data.specialcase && messagedata[1] && languages[messagedata[1]]) {
-					data.input.name = languages[messagedata[1]].name;
-					data.input.ownlang = languages[messagedata[1]].ownlang;
+				if (!data.specialcase && messageData[1] && languages[messageData[1]]) {
+					data.input.name = languages[messageData[1]].name;
+					data.input.ownlang = languages[messageData[1]].ownlang;
 				}
-				callback(messagedata[0]);
+				callback(messageData[0]);
 			});
 		}
 		

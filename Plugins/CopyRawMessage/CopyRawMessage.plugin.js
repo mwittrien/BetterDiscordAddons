@@ -4,13 +4,16 @@ var CopyRawMessage = (_ => {
 	return class CopyRawMessage {
 		getName () {return "CopyRawMessage";}
 
-		getVersion () {return "1.0.6";}
+		getVersion () {return "1.0.7";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Adds a entry in the contextmenu when you right click a message that allows you to copy the raw contents of a message.";}
 
 		constructor () {
+			this.changelog = {
+				"fixed":[["Crash","Fixed crash on message 3-dot menu"]]
+			};
 			this.changelog = {
 				"improved":[["Raw Embed Text","Right clicking inside an embed which contains a description will add an extra option in the context menu to copy the raw contents of the embed description"]]
 			};
@@ -91,13 +94,16 @@ var CopyRawMessage = (_ => {
 
 		onMessageOptionContextMenu (e) {
 			if (e.instance.props.message && e.instance.props.message.content) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {key: ["mark-unread"]});
-				children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "mark-unread"]]});
+				children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
-					hint: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-						className: BDFDB.disCNS.messagetoolbaricon,
-						name: BDFDB.LibraryComponents.SvgIcon.Names.RAW_TEXT
-					}),
+					id: "copy-raw",
+					icon: _ => {
+						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+							className: BDFDB.disCN.menuicon,
+							name: BDFDB.LibraryComponents.SvgIcon.Names.RAW_TEXT
+						});
+					},
 					action: _ => {
 						e.instance.props.onClose();
 						BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});
