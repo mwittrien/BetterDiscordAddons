@@ -1424,18 +1424,27 @@
 .itemBase-tz5SeC.brand-3igrJY:hover {
 	color: rgb(var(--vaccentcolor));
 }
-.itemBase-1Qj4z6.invite-271nFU,								/* guildheadmenu		invite								*/
-.itemBase-1Qj4z6.invite-271nFU:hover {
+.colorBrand-ROmMP1,											/* guildheadmenu		brand								*/
+.colorPremium-p4p7qO {										/* guildheadmenu		premium								*/
 	color: rgb(var(--vaccentcolor));
 }
-.item-1GzJrl.invite-271nFU:hover > * {
-	filter: brightness(125%);
+.colorDefault-2K3EoJ.focused-3afm-j,
+.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O) {
+	background-color: rgb(var(--vaccentcolor));
 }
-.premiumGuildIcon-BhwtRn {									/* guildheadmenu		premiumicon							*/
+.colorDanger-2qLCe1.focused-3afm-j,
+.colorDanger-2qLCe1:hover:not(.hideInteraction-1iHO1O) {
+	background-color: #F04747;
+}
+.colorDefault-2K3EoJ .checkbox-3s5GYZ {						/* guildheadmenu		checkbox							*/
 	color: rgb(var(--vaccentcolor));
 }
-.item-1GzJrl:hover .premiumGuildIcon-BhwtRn {
-	filter: brightness(125%);
+.colorDefault-2K3EoJ.focused-3afm-j .check-1JyqgN,			/* guildheadmenu		checkmark							*/
+.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O) .check-1JyqgN {
+	color: rgb(var(--vaccentcolor));
+}
+.colorPremium-p4p7qO .icon-LYJorE {							/* guildheadmenu		premiumicon							*/
+	color: rgb(var(--vaccentcolor));
 }
 
 /* ----		11.2.	USERPOPOUT						---- */
