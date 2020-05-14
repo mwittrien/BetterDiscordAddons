@@ -9691,7 +9691,7 @@
 		if (toolbar) BDFDB.ModuleUtils.patch(BDFDB, toolbar, "type", {after: e2 => {
 			let menu = BDFDB.ReactUtils.findChild(e2.returnValue, {filter: c => c && c.props && typeof c.props.onRequestClose == "function" && c.props.onRequestClose.toString().indexOf("moreUtilities") > -1});
 			InternalBDFDB.executeExtraPatchedPatches("MessageOptionToolbar", {instance:{props:Object.assign({}, e2.methodArguments[0], {hasMorePopout: !!menu})}, returnvalue:e2.returnValue, methodname:"default"});
-			if (menu && typeof menu.props.renderPopout == "function") {
+			if (false && menu && typeof menu.props.renderPopout == "function") {
 				let renderPopout = menu.props.renderPopout;
 				menu.props.renderPopout = (...args) => {
 					let renderedPopout = renderPopout(...args);
