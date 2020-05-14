@@ -61,6 +61,9 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 .wrapper-1Rf91z #server-search {
 	margin: calc(1px * var(--vguildgap)) calc(1px * (((var(--vguildsize) + 12 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2)) !important;
 }
+.wrapper-1Rf91z #server-search .pill-3YxEhL {
+	display: none;
+}
 .wrapper-1Rf91z .listItem-2P_4kh:first-child .listItemWrapper-3X98Pc {
 	margin: 0 calc(1px * (((var(--vguildsize) + 12 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2)) calc(1px * var(--vguildgap)) calc(1px * ((((var(--vguildsize) + 12 * var(--vguildsize)/50) * (var(--vcolumns) - 1))/2))) !important;
 }

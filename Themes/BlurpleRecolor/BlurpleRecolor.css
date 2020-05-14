@@ -71,6 +71,7 @@
 		1.	IMAGEZOOM
 		2.	HIDEUTILS
 		3.	READALLNOTIFICATIONSBUTTON
+		4.	SERVERSEARCH
 	15.	THEMESUPPORT
 		1.	THEMEDEVBADGE
 */
@@ -1892,6 +1893,16 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 .wrapper-1BJsBx:active .childWrapper-anI2G9.button-Jt-tIg{
 	background: var(--vaccentcolor-hover);
 	color: rgb(var(--fontwhite1, var(--dfontwhite1)));
+}
+
+/* ----		14.4.	SERVERSEARCH					---- */
+
+#server-search .wrapper-25eVIn {
+	background-color: rgb(47, 49, 54) !important;
+	transition: background-color .15s ease-out;
+}
+#server-search .wrapper-25eVIn:hover {
+	background-color: rgb(var(--vaccentcolor)) !important;
 }
 
 
