@@ -22,12 +22,12 @@ var GoogleTranslateOption = (_ => {
 		yandex: 					{name:"Yandex",			funcName:"yandexTranslate",			languages: ["af","am","ar","az","ba","be","bg","bn","bs","ca","ceb","cs","cy","da","de","el","en","eo","es","et","eu","fa","fi","fr","ga","gd","gl","gu","he","hi","hr","ht","hu","hy","id","is","it","ja","jv","ka","kk","km","kn","ko","ky","la","lb","lo","lt","lv","mg","mhr","mi","mk","ml","mn","mr","ms","mt","my","ne","nl","no","pa","pap","pl","pt","ro","ru","si","sk","sl","sq","sr","su","sv","sw","ta","te","tg","th","tl","tr","tt","udm","uk","ur","uz","vi","xh","yi","zh"]}
 	};
 	
-	var languages, translating, isTranslating, translatedMessages;
+	var languages, translating, isTranslating, translatedMessages, oldMessages;
 	
 	return class GoogleTranslateOption {
 		getName () {return "GoogleTranslateOption";}
 
-		getVersion () {return "2.0.0";}
+		getVersion () {return "2.0.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -35,18 +35,18 @@ var GoogleTranslateOption = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Crash","Fixed crash on message 3-dot menu"]]
+				"fixed":[["Crash","Fixed crash on message 3-dot menu"], ["3-dot Menu not clickable","Fixed issue where the 3-dot menu for messages could not be ued on translated messages"]]
 			};
 			
 			this.patchedModules = {
 				before: {
 					ChannelTextAreaForm: "render",
 					ChannelEditorContainer: "render",
+					Messages: "render",
 					Embed: "render"
 				},
 				after: {
 					ChannelTextAreaContainer: "render",
-					Messages: "render",
 					MessageContent: "type",
 					Embed: "render"
 				}
@@ -58,6 +58,7 @@ var GoogleTranslateOption = (_ => {
 			translating = false;
 			isTranslating = false;	
 			translatedMessages = {};
+			oldMessages = {};
 				
 			this.defaults = {
 				settings: {
@@ -330,6 +331,19 @@ var GoogleTranslateOption = (_ => {
 		}
 
 		processMessages (e) {
+			e.instance.props.channelStream = [].concat(e.instance.props.channelStream);
+			for (let i in e.instance.props.channelStream) {
+				let message = e.instance.props.channelStream[i].content;
+				if (message) {
+					let translation = translatedMessages[message.id];
+					if (translation) e.instance.props.channelStream[i].content.content = translation.content;
+					else if (oldMessages[message.id] && Object.keys(message).some(key => !BDFDB.equals(oldMessages[message.id][key], message[key]))) {
+						e.instance.props.channelStream[i].content.content = oldMessages[message.id].content;
+						delete oldMessages[message.id];
+					}
+				}
+			}
+			return;
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: ["message", "channel"]});
 			if (index > -1) for (let ele of children) if (ele && ele.props && ele.props.message) {
 				let translation = translatedMessages[ele.props.message.id];
@@ -500,13 +514,14 @@ var GoogleTranslateOption = (_ => {
 				for (let embed of message.embeds) content += ("\n__________________ __________________ __________________\n" + embed.rawDescription);
 				this.translateText(content, "context", (translation, input, output) => {
 					if (translation) {
+						oldMessages[message.id] = new BDFDB.DiscordObjects.Message(message);
 						let strings = translation.split("\n__________________ __________________ __________________\n");
 						let content = strings.shift().trim(), embeds = {};
 						for (let i in message.embeds) {
 							message.embeds[i].messageId = message.id;
 							embeds[message.embeds[i].id] = (strings.shift() || message.embeds[i].rawDescription).trim();
 						}
-						translatedMessages[message.id] = {content, embeds, message, input, output};
+						translatedMessages[message.id] = {content, embeds, input, output};
 						BDFDB.ModuleUtils.forceAllUpdates(this, ["Messages", "Embed"]);
 					}
 				});
