@@ -105,7 +105,6 @@ var CopyRawMessage = (_ => {
 						});
 					},
 					action: _ => {
-						e.instance.props.onClose();
 						BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});
 					}
 				}));

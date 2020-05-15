@@ -283,11 +283,13 @@
 	};
 	BDFDB.PluginUtils.addLoadingIcon = function (icon) {
 		if (!Node.prototype.isPrototypeOf(icon)) return;
+		let app = document.querySelector(BDFDB.dotCN.app);
+		if (!app) return;
 		BDFDB.DOMUtils.addClass(icon, BDFDB.disCN.loadingicon);
-		let loadingIconWrapper = document.querySelector(BDFDB.dotCN.app + ">" + BDFDB.dotCN.loadingiconwrapper);
+		let loadingIconWrapper = document.querySelector(BDFDB.dotCN.app + ">" + BDFDB.dotCN.loadingiconwrapper)
 		if (!loadingIconWrapper) {
 			loadingIconWrapper = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.loadingiconwrapper}"></div>`);
-			document.querySelector(BDFDB.dotCN.app).appendChild(loadingIconWrapper);
+			app.appendChild(loadingIconWrapper);
 			let killObserver = new MutationObserver(changes => {if (!loadingIconWrapper.firstElementChild) BDFDB.DOMUtils.remove(loadingIconWrapper);});
 			killObserver.observe(loadingIconWrapper, {childList:true});
 		}
@@ -3373,7 +3375,7 @@
 	};
 	BDFDB.ContextMenuUtils.close = function (nodeOrInstance) {
 		if (!BDFDB.ObjectUtils.is(nodeOrInstance)) return;
-		var instance = BDFDB.ReactUtils.findOwner(nodeOrInstance, {props:"closeContextMenu", up:true});
+		let instance = BDFDB.ReactUtils.findOwner(nodeOrInstance, {props:"closeContextMenu", up:true});
 		if (BDFDB.ObjectUtils.is(instance) && instance.props && typeof instance.props.closeContextMenu == "function") instance.props.closeContextMenu();
 		else BDFDB.LibraryModules.ContextMenuUtils.closeContextMenu();
 	};

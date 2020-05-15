@@ -231,7 +231,6 @@ var GoogleTranslateOption = (_ => {
 						});
 					},
 					action: _ => {
-						e.instance.props.onClose();
 						this.translateMessage(e.instance.props.message, e.instance.props.channel);
 					}
 				}));

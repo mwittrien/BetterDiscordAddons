@@ -139,7 +139,6 @@ var PersonalPins = (_ => {
 						});
 					},
 					action: _ => {
-						e.instance.props.onClose();
 						this.addMessageToNotes(e.instance.props.message, e.instance.props.channel);
 					}
 				}));
@@ -154,7 +153,6 @@ var PersonalPins = (_ => {
 						});
 					},
 					action: _ => {
-						e.instance.props.onClose();
 						this.updateNoteData(note, e.instance.props.message);
 					}
 				}));
