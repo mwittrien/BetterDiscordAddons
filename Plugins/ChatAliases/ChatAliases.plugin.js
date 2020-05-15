@@ -4,13 +4,17 @@ var ChatAliases = (_ => {
 	return class ChatAliases {
 		getName () {return "ChatAliases";}
 
-		getVersion () {return "2.1.0";}
+		getVersion () {return "2.1.1";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent.";}
 
 		constructor () {
+			this.changelog = {
+				"fixed":[["Left over placeholder","Sending a an aliases for a file upload without any other text no longer leaves the message in the textarea"]]
+			};
+			
 			this.patchedModules = {
 				before: {
 					ChannelAutoComplete: "render",
@@ -379,11 +383,9 @@ var ChatAliases = (_ => {
 			if (messageData) {
 				if (messageData.text != null) {
 					e2.methodArguments[textIndex] = messageData.text;
-					if (!messageData.text) {
-						e.instance.props.textValue = "";
-						if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.SlateUtils.copyRichValue("", e.instance.props.richValue);
-						BDFDB.ReactUtils.forceUpdate(e.instance);
-					}
+					e.instance.state.textValue = "";
+					if (e.instance.state.richValue) e.instance.state.richValue = BDFDB.SlateUtils.copyRichValue("", e.instance.state.richValue);
+					BDFDB.ReactUtils.forceUpdate(e.instance);
 				}
 				if (messageData.files.length > 0 && (BDFDB.DMUtils.isDMChannel(e.instance.props.channel.id) || BDFDB.UserUtils.can("ATTACH_FILES"))) {
 					BDFDB.LibraryModules.UploadUtils.instantBatchUpload(e.instance.props.channel.id, messageData.files);
