@@ -4,7 +4,7 @@ var ChatAliases = (_ => {
 	return class ChatAliases {
 		getName () {return "ChatAliases";}
 
-		getVersion () {return "2.1.1";}
+		getVersion () {return "2.1.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -383,8 +383,12 @@ var ChatAliases = (_ => {
 			if (messageData) {
 				if (messageData.text != null) {
 					e2.methodArguments[textIndex] = messageData.text;
-					e.instance.state.textValue = "";
-					if (e.instance.state.richValue) e.instance.state.richValue = BDFDB.SlateUtils.copyRichValue("", e.instance.state.richValue);
+					e.instance.props.textValue = "";
+					if (e.instance.props.richValue) e.instance.props.richValue = BDFDB.SlateUtils.copyRichValue("", e.instance.props.richValue);
+					if (e.instance.state) {
+						e.instance.state.textValue = "";
+						if (e.instance.state.richValue) e.instance.state.richValue = BDFDB.SlateUtils.copyRichValue("", e.instance.state.richValue);
+					}
 					BDFDB.ReactUtils.forceUpdate(e.instance);
 				}
 				if (messageData.files.length > 0 && (BDFDB.DMUtils.isDMChannel(e.instance.props.channel.id) || BDFDB.UserUtils.can("ATTACH_FILES"))) {
