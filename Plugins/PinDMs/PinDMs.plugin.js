@@ -7,17 +7,13 @@ var PinDMs = (_ => {
 	return class PinDMs {
 		getName () {return "PinDMs";}
 
-		getVersion () {return "1.6.9";}
+		getVersion () {return "1.7.0";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Allows you to pin DMs, making them appear at the top of your DMs/Guild-list.";}
 
-		constructor () {
-			this.changelog = {
-				"fixed":[["List flickering","Fixed the weird bugs where the list would jump around, flicker or leave huge gaps"],["Selected DM","Fixed issue where a selected DM outside of a category would not be marked as selected"]]
-			};
-			
+		constructor () {			
 			this.patchedModules = {
 				before: {
 					PrivateChannelsList: "render",
@@ -491,7 +487,7 @@ var PinDMs = (_ => {
 							key: id,
 							channel: e.instance.props.channels[id],
 							selected: e.instance.props.selectedChannelId == id
-						}, e.instance.props.navigator.getItemProps({
+						}, (e.instance.props.navigator || e.instance.props.listNavigator).getItemProps({
 							index: e2.methodArguments[2]
 						}))) : null;
 						
