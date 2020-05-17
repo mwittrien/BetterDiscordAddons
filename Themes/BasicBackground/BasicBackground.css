@@ -110,6 +110,7 @@
 		12.	NEWUSERMODAL
 		13.	REACTIONSMODAL
 		14.	GUILDTEMPLATEMODAL
+		15.	GUILDWELCOMEMODAL
 	14.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -2096,16 +2097,6 @@ body:before {
 #app-mount .pageWrapper-1PgVDX {							/* guilddiscovery		container							*/
 	color: rgb(var(--fontwhite1));
 }
-.pageWrapper-1PgVDX .bg-AYqtMd {							/* guilddiscovery		background							*/
-	-webkit-mask: linear-gradient(rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
-}
-.searchHelpText-19imBp {
-	opacity: 0;
-	transition: opacity .08s ease-out, bottom .08s ease-out;
-}
-.searchHelpTextVisible-1mRnNd {
-	opacity: 1;
-}
 .select-2TCrqx.languageSelector-1R8fPE [class*="css-"][class*="-control"] {
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
@@ -3759,7 +3750,7 @@ body:before {
 	background-color: transparent;
 }
 
-.divider-2gQcba {											/* modal				divider							*/
+.divider-2gQcba {											/* modal				divider								*/
 	border-color: rgba(var(--fontwhite3), 0.5);
 }
 
@@ -3813,6 +3804,15 @@ body:before {
 }
 #app-mount .role-3paDXR .roleCircle-3DE8xJ[style*="background-color: rgb(185, 187, 190)"] {
 	background-color: rgb(var(--fontwhite3)) !important;
+}
+
+/* ----		13.15.	GUILDWELCOMEMODAL				---- */
+
+.optionContainer-15srkc {									/* modal				option								*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.optionContainer-15srkc:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
 }
 
 
