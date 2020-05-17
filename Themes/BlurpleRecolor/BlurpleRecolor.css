@@ -759,7 +759,9 @@
 /* ~~~~		7.		DISCOVERY						~~~~ */
 
 .searchBox-3Y2Vi7:focus,									/* searchbox			focus								*/
-.searchBox-3Y2Vi7:focus-within {
+.searchBox-3Y2Vi7:focus-within,
+.searchPage-3GKAdT .search-1iTphC .searchBox-2_mAlO:focus,
+.searchPage-3GKAdT .search-1iTphC .searchBox-2_mAlO:focus-within {
 	border-color: rgb(var(--vaccentcolor));
 }
 
