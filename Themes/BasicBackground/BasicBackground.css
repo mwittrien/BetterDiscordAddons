@@ -2106,6 +2106,11 @@ body:before {
 #app-mount .sectionSeparator-2OWiNT {						/* guilddiscovery		separator							*/
 	border-top-color: rgba(var(--fontwhite4), 0.3);
 }
+
+.categoryPill-34fszg .categoryLabel-2G3r2V {				/* guilddiscovery		search categorypill					*/
+	color: rgb(var(--fontwhite3));
+}
+
 															/* guilddiscovery		pagebutton							*/
 #app-mount .pageButton-MknE-_:not(.activeButton-1BJAiN):hover {
 	background-color: rgba(var(--vtransparencycolor), 0.3);
@@ -2137,6 +2142,9 @@ body:before {
 }
 #app-mount .description-2QALGo {							/* guildcard			description							*/
 	color: rgb(var(--fontwhite3));
+}
+.emojiContainer-1u-_sQ {									/* guildcard			emojicontainer						*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
 
 
