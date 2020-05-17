@@ -121,9 +121,9 @@
 	BDFDB.PluginUtils.translate = function (plugin) {
 		plugin.labels = {};
 		if (typeof plugin.setLabelsByLanguage === "function" || typeof plugin.changeLanguageStrings === "function") {
-			if (document.querySelector("html").lang) translate();
+			if (LibraryModules.LanguageStore.chosenLocale) translate();
 			else BDFDB.TimeUtils.interval(interval => {
-				if (document.querySelector("html").lang) {
+				if (LibraryModules.LanguageStore.chosenLocale) {
 					BDFDB.TimeUtils.clear(interval);
 					translate();
 				}
@@ -6169,7 +6169,7 @@
 		}
 	};
 	BDFDB.LanguageUtils.getLanguage = function () {
-		let lang = document.querySelector("html").lang || "en";
+		let lang = LibraryModules.LanguageStore.chosenLocale || "en";
 		if (lang == "en-GB" || lang == "en-US") lang = "en";
 		let langIds = lang.split("-");
 		let langId = langIds[0];
@@ -6257,9 +6257,9 @@
 		return "";
 	};
 	BDFDB.TimeUtils.interval(interval => {
-		if (document.querySelector("html").lang) {
+		if (LibraryModules.LanguageStore.chosenLocale) {
 			BDFDB.TimeUtils.clear(interval);
-			var language = BDFDB.LanguageUtils.getLanguage();
+			let language = BDFDB.LanguageUtils.getLanguage();
 			BDFDB.LanguageUtils.languages.$discord.name = `Discord (${language.name})`;
 			BDFDB.LanguageUtils.languages.$discord.id = language.id;
 			BDFDB.LanguageUtils.languages.$discord.google = language.google;
