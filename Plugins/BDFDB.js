@@ -1539,13 +1539,13 @@
 	};
 	InternalBDFDB.patchContextMenuPlugin = function (plugin, type, module) {
 		plugin = plugin == BDFDB && InternalBDFDB || plugin;
-		if (module && module.prototype) BDFDB.ModuleUtils.patch(plugin, module.prototype, "render", {after: e => {
+		if (module && module.prototype && module.prototype.render) BDFDB.ModuleUtils.patch(plugin, module.prototype, "render", {after: e => {
 			if (e.thisObject && e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});
 		}});
 	};
 	InternalBDFDB.patchExportedContextMenuPlugin = function (plugin, type, module) {
 		plugin = plugin == BDFDB && InternalBDFDB || plugin;
-		if (module && module.exports) BDFDB.ModuleUtils.patch(plugin, module.exports, "default", {after: e => {
+		if (module && module.exports && module.exports.default) BDFDB.ModuleUtils.patch(plugin, module.exports, "default", {after: e => {
 			if (e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:{props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:"default"});
 		}});
 	};
@@ -1553,24 +1553,22 @@
 		if (BDFDB.ObjectUtils.is(BDFDB.InternalData.componentPatchQueries[type]) && BDFDB.ArrayUtils.is(BDFDB.InternalData.componentPatchQueries[type].query)) for (let plugin of BDFDB.InternalData.componentPatchQueries[type].query) if (e.returnvalue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`](e);
 	};
 	InternalBDFDB.patchContextMenuLib = function (module, repatch) {
-		if (module && module.prototype) {
-			BDFDB.ModuleUtils.patch(BDFDB, module.prototype, "render", {after: e => {
-				if (e.thisObject.props.BDFDBcontextMenu && e.thisObject.props.children && e.returnValue && e.returnValue.props) {
-					e.returnValue.props.children = e.thisObject.props.children;
-					delete e.thisObject.props.value;
-					delete e.thisObject.props.children;
-					delete e.thisObject.props.BDFDBcontextMenu;
+		if (module && module.prototype && module.prototype.render) BDFDB.ModuleUtils.patch(BDFDB, module.prototype, "render", {after: e => {
+			if (e.thisObject.props.BDFDBcontextMenu && e.thisObject.props.children && e.returnValue && e.returnValue.props) {
+				e.returnValue.props.children = e.thisObject.props.children;
+				delete e.thisObject.props.value;
+				delete e.thisObject.props.children;
+				delete e.thisObject.props.BDFDBcontextMenu;
+			}
+			if (repatch) {
+				let newmodule = BDFDB.ReactUtils.getValue(e, "thisObject._reactInternalFiber.child.type");
+				if (newmodule && newmodule.displayName && BDFDB.InternalData.componentPatchQueries[newmodule.displayName] && !BDFDB.InternalData.componentPatchQueries[newmodule.displayName].module) {
+					BDFDB.InternalData.componentPatchQueries[newmodule.displayName].module = newmodule;
+					InternalBDFDB.patchContextMenuLib(newmodule, false);
+					while (BDFDB.InternalData.componentPatchQueries[newmodule.displayName].query.length) InternalBDFDB.patchContextMenuPlugin(BDFDB.InternalData.componentPatchQueries[newmodule.displayName].query.pop(), newmodule.displayName, newmodule);
 				}
-				if (repatch) {
-					let newmodule = BDFDB.ReactUtils.getValue(e, "thisObject._reactInternalFiber.child.type");
-					if (newmodule && newmodule.displayName && BDFDB.InternalData.componentPatchQueries[newmodule.displayName] && !BDFDB.InternalData.componentPatchQueries[newmodule.displayName].module) {
-						BDFDB.InternalData.componentPatchQueries[newmodule.displayName].module = newmodule;
-						InternalBDFDB.patchContextMenuLib(newmodule, false);
-						while (BDFDB.InternalData.componentPatchQueries[newmodule.displayName].query.length) InternalBDFDB.patchContextMenuPlugin(BDFDB.InternalData.componentPatchQueries[newmodule.displayName].query.pop(), newmodule.displayName, newmodule);
-					}
-				}
-			}});
-		}
+			}
+		}});
 	};
 	InternalBDFDB.patchExportedContextMenuLib = function (menu, type, shouldCloseOnPatch) {
 		let module = BDFDB.ModuleUtils.find(m => m == menu.type, false);
@@ -9696,6 +9694,17 @@
 	
 	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.GuildStore, "getGuild", {after: e => {
 		if (e.returnValue && e.methodArguments[0] == myGuildId) e.returnValue.banner = "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BDFDB_banner.png";
+	}});
+	
+	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.GuildWelcomeStore, "get", {instead: e => {
+		return e.methodArguments[0] == myGuildId ? {
+			description: "The official Discord for Minecraft! Chat with other players about all things Minecraft, from triumphant adventures to magnificent creations!",welcome_channels: [
+				{channel_id: "410788933153325057", 	description: "information", 	emoji_id: null, 	emoji_name: "📋"},
+				{channel_id: "645955231670337536", 	description: "rules", 			emoji_id: null, 	emoji_name: "📰"},
+				{channel_id: "410787888507256844", 	description: "support", 		emoji_id: null, 	emoji_name: "🐶"},
+				{channel_id: "545278364899082241", 	description: "downloads",		emoji_id: null, 	emoji_name: "🏰"}
+			]
+		} : e.callOriginalMethod();
 	}});
 
 	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.IconUtils, "getGuildBannerURL", {instead: e => {
