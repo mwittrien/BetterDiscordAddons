@@ -3995,9 +3995,10 @@ body:before {
 
 /* ----		14.1.	CONTEXTMENU						---- */
 
-.contextMenu-HLZMGh,										/* contextmenu			container (contextmenu)				*/
-.styleFlexible-wGDiIL,										/* contextmenu			container (messagemenu)				*/
-.styleFixed-sX-yHV,											/* contextmenu			container (guildheader/status)		*/
+.contextMenu-HLZMGh,										/* contextmenu			container (old)						*/
+.styleFlexible-wGDiIL,										/* contextmenu			container (flexible)				*/
+.styleFixed-sX-yHV,											/* contextmenu			container (fixed)					*/
+.submenu-2-ysNh,											/* contextmenu			container (submenu)					*/
 .container-1gR2ZK {											/* contextmenu			container (boost)					*/
 	background: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
@@ -4005,6 +4006,7 @@ body:before {
 .contextMenu-HLZMGh,
 .styleFlexible-wGDiIL,
 .styleFixed-sX-yHV,
+.submenu-2-ysNh,
 .container-1gR2ZK,
 .subMenuContext-2n_9YM {
 	z-index: 1;
@@ -4015,6 +4017,8 @@ body:before {
 .styleFlexible-wGDiIL:before,
 .styleFixed-sX-yHV:after,
 .styleFixed-sX-yHV:before,
+.submenu-2-ysNh:after,
+.submenu-2-ysNh:before,
 .subMenuContext-2n_9YM .scrollerWrap-2lJEkd:after,
 .subMenuContext-2n_9YM .scrollerWrap-2lJEkd:before,
 .container-1gR2ZK:after,
@@ -4034,6 +4038,7 @@ body:before {
 .contextMenu-HLZMGh:not(.scroller-2FKFPG):after,
 .styleFlexible-wGDiIL:after,
 .styleFixed-sX-yHV:after,
+.submenu-2-ysNh:after,
 .subMenuContext-2n_9YM .scrollerWrap-2lJEkd:after,
 .container-1gR2ZK:after {
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.3));
@@ -4041,17 +4046,18 @@ body:before {
 .contextMenu-HLZMGh:not(.scroller-2FKFPG):before,
 .styleFlexible-wGDiIL:before,
 .styleFixed-sX-yHV:before,
+.submenu-2-ysNh:before,
 .subMenuContext-2n_9YM .scrollerWrap-2lJEkd:before,
 .container-1gR2ZK:before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	filter: blur(var(--vpopoutblur));
 	background-attachment: fixed;
 }
-.itemGroup-1tL0uz {												/* contextmenu			itemgroup (guildheader/status)		*/
+.itemGroup-1tL0uz {												/* contextmenu			itemgroup							*/
 	border-top-color: rgba(var(--fontwhite4), 0.3);
 }
-.itemBase-tz5SeC,												/* contextmenu			item (contextmenu)					*/
-.item-1tOPte.colorDefault-2K3EoJ {								/* contextmenu			item (messagemenu)					*/
+.itemBase-tz5SeC,												/* contextmenu			item (old)							*/
+.item-1tOPte.colorDefault-2K3EoJ {								/* contextmenu			item								*/
 	color: rgb(var(--fontwhite2));
 }
 .item-1tOPte.colorBrand-ROmMP1,
@@ -4094,10 +4100,10 @@ body:before {
 .hint-22uc-R {
 	color: inherit !important;
 }
-.separator-2I32lJ {												/* contextmenu			separator (guildheader/status)		*/
+.separator-2I32lJ {												/* contextmenu			separator							*/
 	border-bottom-color: rgba(var(--fontwhite4), 0.3);
 }
-#app-mount .checkbox-3kaeSU .checkboxInner-3yjcPe span {		/* contextmenu			checkbox (contextmenu)				*/
+#app-mount .checkbox-3kaeSU .checkboxInner-3yjcPe span {		/* contextmenu			checkbox (old)						*/
 	border-color: rgba(var(--fontwhite2), 0.2);
 }
 #app-mount .clickable-11uBi-:hover .checkbox-3kaeSU .checkboxInner-3yjcPe span,
