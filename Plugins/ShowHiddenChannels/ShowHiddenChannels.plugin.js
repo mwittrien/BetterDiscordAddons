@@ -28,7 +28,7 @@ var ShowHiddenChannels = (_ => {
 	return class ShowHiddenChannels {
 		getName () {return "ShowHiddenChannels";}
 
-		getVersion () {return "2.7.5";}
+		getVersion () {return "2.7.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -36,7 +36,7 @@ var ShowHiddenChannels = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Extra category","Sorting the hidden channels in an extra category works again without issues"]]
+				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
 			};
 			
 			this.patchedModules = {
@@ -221,10 +221,11 @@ var ShowHiddenChannels = (_ => {
 				}
 				let isHidden = this.isChannelHidden(e.instance.props.channel.id);
 				if (isHidden || BDFDB.DataUtils.get(this, "settings", "showForNormal")) {
-					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-					children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
+					children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: BDFDB.LanguageUtils.LanguageStrings.CHANNEL + " " + BDFDB.LanguageUtils.LanguageStrings.ACCESSIBILITY,
+							id: BDFDB.ContextMenuUtils.createItemId(this.name, "permissions"),
 							action: _ => {
 								BDFDB.ContextMenuUtils.close(e.instance);
 								this.showAccessModal(e.instance.props.channel, !isHidden);
