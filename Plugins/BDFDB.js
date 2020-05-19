@@ -6185,9 +6185,6 @@
 	InternalComponents.NativeSubComponents.Button = BDFDB.ModuleUtils.findByProperties("Colors", "Hovers", "Looks");
 	InternalComponents.NativeSubComponents.Checkbox = BDFDB.ModuleUtils.findByName("Checkbox");
 	InternalComponents.NativeSubComponents.Clickable = BDFDB.ModuleUtils.findByName("Clickable");
-	InternalComponents.NativeSubComponents.ContextMenuItem = BDFDB.ModuleUtils.findByString("default.item", "default.hint", "danger", "brand");
-	InternalComponents.NativeSubComponents.ContextMenuSliderItem = BDFDB.ModuleUtils.findByName("SliderMenuItem");
-	InternalComponents.NativeSubComponents.ContextMenuToggleItem = BDFDB.ModuleUtils.findByName("ToggleMenuItem");
 	InternalComponents.NativeSubComponents.FavButton = BDFDB.ModuleUtils.findByName("GIFFavButton");
 	InternalComponents.NativeSubComponents.KeybindRecorder = BDFDB.ModuleUtils.findByName("KeybindRecorder");
 	InternalComponents.NativeSubComponents.PopoutContainer = BDFDB.ModuleUtils.findByName("Popout");
@@ -9538,7 +9535,7 @@
 		if (module && module.exports && module.exports.default && BDFDB.InternalData.componentPatchQueries[type]) {
 			BDFDB.InternalData.componentPatchQueries[type].modules.push(module);
 			BDFDB.InternalData.componentPatchQueries[type].modules = BDFDB.ArrayUtils.removeCopies(BDFDB.InternalData.componentPatchQueries[type].modules);
-			for (let plugin in BDFDB.InternalData.componentPatchQueries[type].query) InternalBDFDB.patchContextMenuForPlugin(plugin, type, module);
+			for (let plugin of BDFDB.InternalData.componentPatchQueries[type].query) InternalBDFDB.patchContextMenuForPlugin(plugin, type, module);
 		}
 	};
 	InternalBDFDB.executeExtraPatchedPatches = function (type, e) {
@@ -9548,12 +9545,10 @@
 	};
 	
 	for (let type of ContextMenuTypes) if (!BDFDB.InternalData.componentPatchQueries[type]) BDFDB.InternalData.componentPatchQueries[type] = {query:[], modules:[]};
-	if (ComponentTypeData.NonRenderContextMenus.length) BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.ContextMenuUtils, "openContextMenu", {before: e => {
+	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.ContextMenuUtils, "openContextMenu", {before: e => {
 		let menu = e.methodArguments[1]();
 		if (BDFDB.ObjectUtils.is(menu) && menu.type && menu.type.displayName) {
 			for (let type of ContextMenuTypes) if (menu.type.displayName.indexOf(type) > -1) {
-				console.log(menu.type.displayName);
-				console.log(type);
 				InternalBDFDB.patchContextMenuForLib(menu, type);
 				break;
 			}
