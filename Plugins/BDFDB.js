@@ -2266,7 +2266,7 @@
 		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 		let guild = LibraryModules.GuildStore.getGuild(id);
 		if (guild) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-			return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("GuildContextMenu"), Object.assign({}, e, {
+			return BDFDB.ReactUtils.createElement((BDFDB.ModuleUtils.findByName("GuildContextMenu", false) || {exports:{}}).exports.default, Object.assign({}, e, {
 				type: BDFDB.DiscordConstants.ContextMenuTypes.GUILD_ICON_BAR,
 				guild: guild,
 				badge: LibraryModules.UnreadGuildUtils.getMentionCount(guild.id),
@@ -2467,13 +2467,13 @@
 		let channel = LibraryModules.ChannelStore.getChannel(id);
 		if (channel) {
 			if (channel.isMultiUserDM()) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-				return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("GroupDMContextMenu"), Object.assign({}, e, {
+				return BDFDB.ReactUtils.createElement((BDFDB.ModuleUtils.findByName("GroupDMContextMenu", false) || {exports:{}}).exports.default, Object.assign({}, e, {
 					channel: channel,
 					selected: channel.id == LibraryModules.LastChannelStore.getChannelId()
 				}));
 			});
 			else LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-				return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("DMUserContextMenu"), Object.assign({}, e, {
+				return BDFDB.ReactUtils.createElement((BDFDB.ModuleUtils.findByName("DMUserContextMenu", false) || {exports:{}}).exports.default, Object.assign({}, e, {
 					user: LibraryModules.UserStore.getUser(channel.recipients[0]),
 					channel: channel,
 					selected: channel.id == LibraryModules.LastChannelStore.getChannelId()
