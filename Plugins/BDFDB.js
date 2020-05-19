@@ -7437,7 +7437,7 @@
 	InternalComponents.LibraryComponents.ContextMenuItems.Group = InternalComponents.LibraryComponents.MenuItems.MenuGroup;
 	InternalComponents.LibraryComponents.ContextMenuItems.Item = InternalComponents.LibraryComponents.MenuItems.MenuItem;
 	InternalComponents.LibraryComponents.ContextMenuItems.Slider = InternalComponents.LibraryComponents.MenuItems.MenuControlItem;
-	InternalComponents.LibraryComponents.ContextMenuItems.Sub = InternalComponents.LibraryComponents.MenuItems.MenuItem;
+	InternalComponents.LibraryComponents.ContextMenuItems.Sub = InternalComponents.LibraryComponents.MenuItems.MenuSeparator;
 	InternalComponents.LibraryComponents.ContextMenuItems.Toggle = InternalComponents.LibraryComponents.MenuItems.MenuCheckboxItem;
 	
 	InternalComponents.LibraryComponents.MessageGroup = BDFDB.ModuleUtils.findByName("ChannelMessage");
