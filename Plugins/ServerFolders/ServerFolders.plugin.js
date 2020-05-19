@@ -276,7 +276,7 @@ var ServerFolders = (_ => {
 	return class ServerFolders {
 		getName () {return "ServerFolders";}
 
-		getVersion () {return "6.7.6";}
+		getVersion () {return "6.7.7";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -284,7 +284,7 @@ var ServerFolders = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["No extra column","Added the option to disable the unique way of displaying the servers in an extra column"]]
+				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
 			};
 			
 			this.patchedModules = {
@@ -495,7 +495,57 @@ var ServerFolders = (_ => {
 
 		onGuildContextMenu (e) {
 			if (document.querySelector(BDFDB.dotCN.modalwrapper)) return;
-			if (e.instance.props.target && e.instance.props.folderId && e.instance.props.type == BDFDB.DiscordConstants.ContextMenuTypes.GUILD_ICON_FOLDER) {
+			if (e.instance.props.guild) {
+				let folders = BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId);
+				let folder = BDFDB.GuildUtils.getFolder(e.instance.props.guild.id);
+				let unfolderedGuilds = BDFDB.LibraryModules.FolderStore.getSortedGuilds().filter(n => !n.folderId).map(n => n.guilds[0]).filter(n => n);
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
+				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						label: this.labels.servercontext_serverfolders_text,
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-add"),
+						children: folder ? [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+								label: this.labels.serversubmenu_removefromfolder_text,
+								id: BDFDB.ContextMenuUtils.createItemId(this.name, "remove-from-folder"),
+								color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
+								action: _ => {
+									BDFDB.ContextMenuUtils.close(e.instance);
+									this.removeGuildFromFolder(folder.folderId, e.instance.props.guild.id);
+								}
+							})
+						] : [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+								label: this.labels.serversubmenu_createfolder_text,
+								id: BDFDB.ContextMenuUtils.createItemId(this.name, "create-folder"),
+								disabled: !unfolderedGuilds.length,
+								action: _ => {
+									BDFDB.ContextMenuUtils.close(e.instance);
+									this.openFolderCreationMenu(unfolderedGuilds, e.instance.props.guild.id);
+								}
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+								label: this.labels.serversubmenu_addtofolder_text,
+								id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-add-to-folder"),
+								disabled: !folders.length,
+								children: folders.map((folder, i) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+									label: folder.folderName || `${BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER} #${i + 1}`,
+									id: BDFDB.ContextMenuUtils.createItemId(this.name, "add-to-folder", i + 1),
+									action: _ => {
+										BDFDB.ContextMenuUtils.close(e.instance);
+										this.addGuildToFolder(folder.folderId, e.instance.props.guild.id);
+									}
+								}))
+							})
+						]
+					})
+				}));
+			}
+		}
+		
+		onGuildFolderContextMenu (e) {
+			if (document.querySelector(BDFDB.dotCN.modalwrapper)) return;
+			if (e.instance.props.target && e.instance.props.folderId) {
 				let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(e.instance.props.folderId);
 				let data = this.getFolderConfig(e.instance.props.folderId);
 				let muted = data.muteFolder && folder.guildIds.every(guildid => BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildid));
@@ -503,30 +553,41 @@ var ServerFolders = (_ => {
 					data.muteFolder = muted;
 					BDFDB.DataUtils.save(data, this, "folders", e.instance.props.folderId);
 				}
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"GuildFolderMarkReadItem"});
-				children.splice(index > -1 ? index + 1 : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Toggle, {
-					label: this.labels.foldercontext_autoreadfolder_text,
-					active: data.autoRead,
-					action: state => {
-						data.autoRead = state;
-						BDFDB.DataUtils.save(data, this, "folders", e.instance.props.folderId);
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "mark-folder-read"]]});
+				children.splice(index > -1 ? index + 1 : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					id: BDFDB.ContextMenuUtils.createItemId(this.name, "auto-read-folder"),
+					render: itemData => {
+						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuCheckboxItem, Object.assign({
+							label: this.labels.foldercontext_autoreadfolder_text,
+							checked: data.autoRead,
+							action: state => {
+								data.autoRead = state;
+								BDFDB.DataUtils.save(data, this, "folders", e.instance.props.folderId);
+							}
+						}, itemData));
 					}
 				}));
-				e.returnvalue.props.children.splice(e.returnvalue.props.children.length - 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Toggle, {
-						label: this.labels.foldercontext_mutefolder_text,
-						active: muted,
-						action: state => {
-							data.muteFolder = state;
-							BDFDB.DataUtils.save(data, this, "folders", e.instance.props.folderId);
-							for (let guildid of folder.guildIds) if (BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildid) != state) BDFDB.LibraryModules.GuildSettingsUtils.updateNotificationSettings(guildid, {muted:state, suppress_everyone:state, suppress_roles:state});
+				e.returnvalue.props.children.splice(e.returnvalue.props.children.length - 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "mute-folder"),
+						render: itemData => {
+							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuCheckboxItem, Object.assign({
+								label: this.labels.foldercontext_mutefolder_text,
+								checked: muted,
+								action: state => {
+									data.muteFolder = state;
+									BDFDB.DataUtils.save(data, this, "folders", e.instance.props.folderId);
+									for (let guildid of folder.guildIds) if (BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildid) != state) BDFDB.LibraryModules.GuildSettingsUtils.updateNotificationSettings(guildid, {muted:state, suppress_everyone:state, suppress_roles:state});
+								}
+							}, itemData));
 						}
 					})
 				}));
-				e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+				e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.labels.foldercontext_removefolder_text,
-						danger: true,
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "remove-folder"),
+						color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
 						action: event => {
 							BDFDB.ContextMenuUtils.close(event.target);
 							BDFDB.ModalUtils.confirm(this, `Are you sure you want to remove the folder${folder.folderName ? ` '${folder.folderName}'` : ""}?`, _ => {
@@ -534,49 +595,6 @@ var ServerFolders = (_ => {
 							});
 						}
 					})
-				}));
-			}
-			else if (e.instance.props.target && e.instance.props.guild && e.instance.props.type == BDFDB.DiscordConstants.ContextMenuTypes.GUILD_ICON_BAR) {
-				let folders = BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId);
-				let folder = BDFDB.GuildUtils.getFolder(e.instance.props.guild.id);
-				let unfolderedGuilds = BDFDB.LibraryModules.FolderStore.getSortedGuilds().filter(n => !n.folderId).map(n => n.guilds[0]).filter(n => n);
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
-							label: this.labels.servercontext_serverfolders_text,
-							render: folder ? [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-									label: this.labels.serversubmenu_removefromfolder_text,
-									danger: true,
-									action: _ => {
-										BDFDB.ContextMenuUtils.close(e.instance);
-										this.removeGuildFromFolder(folder.folderId, e.instance.props.guild.id);
-									}
-								})
-							] : [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-									label: this.labels.serversubmenu_createfolder_text,
-									disabled: !unfolderedGuilds.length,
-									action: _ => {
-										BDFDB.ContextMenuUtils.close(e.instance);
-										this.openFolderCreationMenu(unfolderedGuilds, e.instance.props.guild.id);
-									}
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems[folders.length ? "Sub" : "Item"], {
-									label: this.labels.serversubmenu_addtofolder_text,
-									disabled: !folders.length,
-									render: folders.map((folder, i) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-										label: folder.folderName || `${BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER} #${i + 1}`,
-										action: _ => {
-											BDFDB.ContextMenuUtils.close(e.instance);
-											this.addGuildToFolder(folder.folderId, e.instance.props.guild.id);
-										}
-									}))
-								})
-							]
-						})
-					]
 				}));
 			}
 		}
