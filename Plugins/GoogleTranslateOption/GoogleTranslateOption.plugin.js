@@ -232,10 +232,8 @@ var GoogleTranslateOption = (_ => {
 					disabled: isTranslating,
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, translated ? "untranslate-message" : "translate-message"),
 					icon: _ => {
-						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-							className: BDFDB.disCN.menuicon,
-							nativeClass: true,
-							iconSVG: translated ? translateIconUntranslate : translateIcon
+						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+							icon: translated ? translateIconUntranslate : translateIcon
 						});
 					},
 					action: _ => {

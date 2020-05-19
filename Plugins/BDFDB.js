@@ -7435,13 +7435,24 @@
 	};
 	
 	InternalComponents.LibraryComponents.MenuItems = Object.assign({}, BDFDB.ModuleUtils.findByProperties("MenuItem", "MenuGroup"));
+	
 	InternalComponents.LibraryComponents.MenuItems.MenuHint = InternalBDFDB.loadPatchedComp("MenuItems.MenuHint") || reactInitialized && class BDFDB_MenuHint extends LibraryModules.React.Component {
 		render() {
 			return !this.props.hint ? null : BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.disCN.menuhint,
-				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
+				children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextScroller, {
 					children: this.props.hint
 				})
+			});
+		}
+	};
+	
+	InternalComponents.LibraryComponents.MenuItems.MenuIcon = InternalBDFDB.loadPatchedComp("MenuItems.MenuIcon") || reactInitialized && class BDFDB_MenuIcon extends LibraryModules.React.Component {
+		render() {
+			!this.props.icon ? null : return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+				className: BDFDB.disCN.menuicon,
+				nativeClass: true,
+				iconSVG: this.props.icon
 			});
 		}
 	};
