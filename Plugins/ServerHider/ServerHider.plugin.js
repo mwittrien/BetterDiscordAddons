@@ -4,7 +4,7 @@ var ServerHider = (_ => {
 	return class ServerHider {
 		getName () {return "ServerHider";}
 
-		getVersion () {return "6.1.4";}
+		getVersion () {return "6.1.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ var ServerHider = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Silent updates? NANI!","Fixed for discords sneaky updates"]]
+				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
 			};
 
 			this.patchedModules = {
@@ -102,44 +102,52 @@ var ServerHider = (_ => {
 
 		onGuildContextMenu (e) {
 			if (document.querySelector(BDFDB.dotCN.modalwrapper)) return;
-			if (e.instance.props.target && e.instance.props.type.startsWith("GUILD_ICON_")) {
-				let entry = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
-							label: this.labels.context_serverhider_text,
-							render: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-								children: [
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-										label: this.labels.submenu_openhidemenu_text,
-										action: _ => {
-											BDFDB.ContextMenuUtils.close(e.instance);
-											this.showHideModal();
-										}
-									}),
-									!e.instance.props.guild && !e.instance.props.folderId ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-										label: e.instance.props.guild ? this.labels.submenu_hideserver_text : this.labels.submenu_hidefolder_text,
-										action: _ => {
-											BDFDB.ContextMenuUtils.close(e.instance);
-											if (e.instance.props.guild) this.toggleItem(BDFDB.DataUtils.load(this, "hidden", "servers") || [], e.instance.props.guild.id, "servers");
-											else this.toggleItem(BDFDB.DataUtils.load(this, "hidden", "folders") || [], e.instance.props.folderId, "folders");
-										}
-									})
-								].filter(n => n)
-							})]
-						})
-					]
-				});
-				if (e.instance.props.type == BDFDB.DiscordConstants.ContextMenuTypes.GUILD_ICON_NEW) {
-					e.returnvalue.props.children = [
-						e.returnvalue.props.children,
-						entry
-					].flat(10).filter(n => n);
-				}
-				else {
-					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-					children.splice(index > -1 ? index : children.length, 0, entry);
-				}
+			if (e.type == "GuildIconNewContextMenu") {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "create"]]});
+				this.injectItem(e.instance, children, -1);
 			}
+			else {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
+				this.injectItem(e.instance, children, index);
+			}
+		}
+
+		onGuildFolderContextMenu (e) {
+			if (document.querySelector(BDFDB.dotCN.modalwrapper)) return;
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
+			this.injectItem(e.instance, children, index);
+		}
+		
+		injectItem (instance, children, index) {
+			children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+				children: [
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						label: this.labels.context_serverhider_text,
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-hide"),
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+							children: [
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+									label: this.labels.submenu_openhidemenu_text,
+									id: BDFDB.ContextMenuUtils.createItemId(this.name, "openmenu"),
+									action: _ => {
+										BDFDB.ContextMenuUtils.close(instance);
+										this.showHideModal();
+									}
+								}),
+								!instance.props.guild && !instance.props.folderId ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+									label: instance.props.guild ? this.labels.submenu_hideserver_text : this.labels.submenu_hidefolder_text,
+									id: BDFDB.ContextMenuUtils.createItemId(this.name, "hide"),
+									action: _ => {
+										BDFDB.ContextMenuUtils.close(instance);
+										if (instance.props.guild) this.toggleItem(BDFDB.DataUtils.load(this, "hidden", "servers") || [], instance.props.guild.id, "servers");
+										else this.toggleItem(BDFDB.DataUtils.load(this, "hidden", "folders") || [], instance.props.folderId, "folders");
+									}
+								})
+							].filter(n => n)
+						})
+					})
+				]
+			}));
 		}
 
 		processGuilds (e) {
