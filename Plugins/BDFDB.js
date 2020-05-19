@@ -3276,10 +3276,7 @@
 	BDFDB.ContextMenuUtils = {};
 	BDFDB.ContextMenuUtils.open = function (plugin, e, children) {
 		LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-			return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ContextMenus.NativeContextMenu, Object.assign({}, e, {
-				BDFDBcontextMenu: true,
-				type: BDFDB.DiscordConstants.ContextMenuTypes.NATIVE_TEXT,
-				value: "",
+			return BDFDB.ReactUtils.createElement("div", Object.assign({}, e, {
 				className: BDFDB.disCN.contextmenu,
 				children: children
 			}));
@@ -9560,7 +9557,7 @@
 	InternalBDFDB.patchContextMenuForPlugin = function (plugin, type, module) {
 		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (module && module.exports && module.exports.default) BDFDB.ModuleUtils.patch(plugin, module.exports, "default", {after: e => {
-			if (e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:{props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:"default"});
+			if (e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:{props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:"default", type:module.exports.default.displayName});
 		}});
 	};
 	InternalBDFDB.patchContextMenuForLib = function (menu, type) {
