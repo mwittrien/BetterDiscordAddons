@@ -166,15 +166,17 @@ var ReverseImageSearch = (_ => {
 				let enginesWithoutAll = BDFDB.ObjectUtils.filter(enabledEngines, n => n != "_all", true);
 				let engineKeys = Object.keys(enginesWithoutAll);
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
-				if (engineKeys.length == 1) children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-					label: this.labels.context_reverseimagesearch_text.replace("...", this.defaults.engines[engineKeys[0]].name),
-					id: BDFDB.ContextMenuUtils.createItemId(this.name, "single-search"),
-					action: event => {
-						let useChromium = BDFDB.DataUtils.get(this, "settings", "useChromium");
-						if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
-						BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(imgUrlReplaceString, encodeURIComponent(url)), useChromium, event.shiftKey);
-					}
-				}));
+				if (engineKeys.length == 1) {
+					children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						label: this.labels.context_reverseimagesearch_text.replace("...", this.defaults.engines[engineKeys[0]].name),
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "single-search"),
+						action: event => {
+							let useChromium = BDFDB.DataUtils.get(this, "settings", "useChromium");
+							if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
+							BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(imgUrlReplaceString, encodeURIComponent(url)), useChromium, event.shiftKey);
+						}
+					}));
+				}
 				else {
 					let items = [];
 					for (let key in enabledEngines) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
