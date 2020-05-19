@@ -4149,7 +4149,7 @@
 	DiscordClassModules.ColorPickerInner = BDFDB.ModuleUtils.findByProperties("saturation", "hue", "wrapper");
 	DiscordClassModules.ContextMenu = BDFDB.ModuleUtils.findByProperties("contextMenu", "itemGroup");
 	DiscordClassModules.ContextMenuCheckbox = BDFDB.ModuleUtils.findByProperties("checkboxInner", "checkboxElement");
-	DiscordClassModules.ContextMenuReactButton = BDFDB.ModuleUtils.find(m => typeof m.wrapper == "string" && typeof m.button == "string" && typeof m.icon == "string" && Object.keys(m).length == 3);
+	DiscordClassModules.ContextMenuReactButton = BDFDB.ModuleUtils.findByProperties("wrapper", "icon", "focused");
 	DiscordClassModules.CtaVerification = BDFDB.ModuleUtils.findByProperties("attendeeCTA", "verificationNotice");
 	DiscordClassModules.Cursor = BDFDB.ModuleUtils.findByProperties("cursorDefault", "userSelectNone");
 	DiscordClassModules.CustomStatusIcon = BDFDB.ModuleUtils.findByProperties("textRuler", "emoji", "icon");
@@ -4179,7 +4179,7 @@
 	DiscordClassModules.GoLiveDetails = BDFDB.ModuleUtils.findByProperties("panel", "gameWrapper");
 	DiscordClassModules.Guild = BDFDB.ModuleUtils.findByProperties("wrapper", "lowerBadge", "svg");
 	DiscordClassModules.GuildChannels = BDFDB.ModuleUtils.findByProperties("positionedContainer", "unreadBar");
-	DiscordClassModules.GuildDiscovery = BDFDB.ModuleUtils.findByProperties("pageWrapper", "guildCard");
+	DiscordClassModules.GuildDiscovery = BDFDB.ModuleUtils.findByProperties("pageWrapper", "guildList");
 	DiscordClassModules.GuildDm = BDFDB.ModuleUtils.find(m => typeof m.pill == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.GuildEdges = BDFDB.ModuleUtils.findByProperties("wrapper", "edge", "autoPointerEvents");
 	DiscordClassModules.GuildFolder = BDFDB.ModuleUtils.findByProperties("folder", "expandedFolderIconWrapper");
@@ -4728,6 +4728,7 @@
 		contextmenuitemsubmenucaret: ["ContextMenu", "caret"],
 		contextmenulabel: ["ContextMenu", "label"],
 		contextmenureactbutton: ["ContextMenuReactButton", "button"],
+		contextmenureactbuttonfocused: ["ContextMenuReactButton", "focused"],
 		contextmenureactbuttonicon: ["ContextMenuReactButton", "icon"],
 		contextmenureactbuttons: ["ContextMenuReactButton", "wrapper"],
 		contextmenuscroller: ["ContextMenu", "scroller"],
@@ -7269,8 +7270,6 @@
 	ComponentTypeData.ObservedContextMenus = [];
 	ComponentTypeData.ExtraPatchedComponents = [];
 	ComponentTypeData.QueuedComponents = [];
-	
-	InternalComponents.LibraryComponents.ContextMenus.UserSettingsCogContextMenu = BDFDB.ModuleUtils.findByName("UserSettingsCogContextMenu");
 	
 	InternalComponents.LibraryComponents.DiscordTag = BDFDB.ModuleUtils.findByName("DiscordTag");
 	
