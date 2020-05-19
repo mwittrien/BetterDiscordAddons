@@ -7433,6 +7433,8 @@
 	
 	InternalComponents.LibraryComponents.MenuItems = Object.assign({}, BDFDB.ModuleUtils.findByProperties("MenuItem", "MenuGroup"));
 	
+	InternalComponents.LibraryComponents.MenuItems.Colors = ((BDFDB.ModuleUtils.findByProperties("MenuItemColor") || {}).MenuItemColor || {});
+	
 	InternalComponents.LibraryComponents.MenuItems.MenuHint = InternalBDFDB.loadPatchedComp("MenuItems.MenuHint") || reactInitialized && class BDFDB_MenuHint extends LibraryModules.React.Component {
 		render() {
 			return !this.props.hint ? null : BDFDB.ReactUtils.createElement("div", {
