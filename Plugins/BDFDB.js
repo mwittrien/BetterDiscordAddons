@@ -2400,26 +2400,6 @@
 		if (info) return BDFDB.ChannelUtils.getData(info.id) || Object.assign(new info.constructor(info), {div:null, instance:null});
 		else return null;
 	};
-	BDFDB.ChannelUtils.openMenu = function (eleOrInfoOrId, e = BDFDB.InternalData.mousePosition) {
-		if (!eleOrInfoOrId) return;
-		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.ChannelUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
-		let channel = LibraryModules.ChannelStore.getChannel(id);
-		if (channel) {
-			let type = null;
-			for (let t in BDFDB.DiscordConstants.ChannelTypes) if (BDFDB.DiscordConstants.ChannelTypes[t] == channel.type) {
-				type = BDFDB.DiscordConstants.ContextMenuTypes[(t == "GUILD_CATEGORY" ? "CHANNEL_" : "CHANNEL_LIST_") + t.replace("GUILD_", "")];
-				break;
-			}
-			if (type) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-				return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ContextMenus._Exports.ChannelContextMenu && InternalComponents.LibraryComponents.ContextMenus._Exports.ChannelContextMenu.default, Object.assign({}, e, {
-					type: type,
-					channel: channel,
-					guild: LibraryModules.GuildStore.getGuild(channel.guild_id),
-					selected: channel.id == LibraryModules.LastChannelStore.getChannelId()
-				}));
-			});
-		}
-	};
 	BDFDB.ChannelUtils.markAsRead = function (channels) {
 		if (!channels) return;
 		let unreadChannels = [];
@@ -2487,16 +2467,15 @@
 		let channel = LibraryModules.ChannelStore.getChannel(id);
 		if (channel) {
 			if (channel.isMultiUserDM()) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-				return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ContextMenus.GroupDMContextMenu, Object.assign({}, e, {
-					channelId: channel.id,
+				return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("GroupDMContextMenu"), Object.assign({}, e, {
+					channel: channel,
 					selected: channel.id == LibraryModules.LastChannelStore.getChannelId()
 				}));
-			}, {noBlurEvent: true});
+			});
 			else LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-				return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ContextMenus._Exports.UserContextMenu && InternalComponents.LibraryComponents.ContextMenus._Exports.UserContextMenu.default, Object.assign({}, e, {
-					type: BDFDB.DiscordConstants.ContextMenuTypes.USER_PRIVATE_CHANNELS,
+				return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("DMUserContextMenu"), Object.assign({}, e, {
 					user: LibraryModules.UserStore.getUser(channel.recipients[0]),
-					channelId: channel.id,
+					channel: channel,
 					selected: channel.id == LibraryModules.LastChannelStore.getChannelId()
 				}));
 			});
