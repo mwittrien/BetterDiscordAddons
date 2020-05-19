@@ -3255,10 +3255,11 @@
 	BDFDB.ContextMenuUtils = {};
 	BDFDB.ContextMenuUtils.open = function (plugin, e, children) {
 		LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-			return BDFDB.ReactUtils.createElement("div", Object.assign({}, e, {
-				className: BDFDB.disCN.contextmenu,
+			return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Menu, {
+				navId: "bdfdb-context",
+				onClose: BDFDB.LibraryModules.ContextMenuUtils.closeContextMenu,
 				children: children
-			}));
+			});
 		});
 	};
 	BDFDB.ContextMenuUtils.close = function (nodeOrInstance) {
@@ -6442,8 +6443,6 @@
 				});
 			};
 			let click = _ => {
-				var contexttype = BDFDB.ReactUtils.getValue(document.querySelector(BDFDB.dotCN.contextmenu), "return.stateNode.props.type");
-				if (!contexttype || !contexttype.startsWith("CHANNEL_TEXT_AREA")) this.forceUpdateCounter();
 				BDFDB.TimeUtils.timeout(this.forceUpdateCounter.bind(this), 100);
 				document.removeEventListener("mousemove", mousemove);
 				document.removeEventListener("mouseup", mouseup);
@@ -7410,6 +7409,8 @@
 			});
 		}
 	};
+	
+	InternalComponents.LibraryComponents.Menu = BDFDB.ModuleUtils.findByName("Menu");
 	
 	InternalComponents.LibraryComponents.MenuItems = Object.assign({}, BDFDB.ModuleUtils.findByProperties("MenuItem", "MenuGroup"));
 	

@@ -7,7 +7,7 @@ var PinDMs = (_ => {
 	return class PinDMs {
 		getName () {return "PinDMs";}
 
-		getVersion () {return "1.7.1";}
+		getVersion () {return "1.7.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -425,6 +425,7 @@ var PinDMs = (_ => {
 											children: [
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 													label: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_SETTINGS,
+													id: BDFDB.ContextMenuUtils.createItemId(this.name, "category-settings"),
 													action: event2 => {
 														BDFDB.ContextMenuUtils.close(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, event2.target));
 														this.openCategorySettingsModal(category, "dmCategories");
@@ -432,7 +433,8 @@ var PinDMs = (_ => {
 												}),
 												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 													label: BDFDB.LanguageUtils.LanguageStrings.DELETE_CATEGORY,
-													danger: true,
+													id: BDFDB.ContextMenuUtils.createItemId(this.name, "remove-category"),
+													color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
 													action: event2 => {
 														BDFDB.ContextMenuUtils.close(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, event2.target));
 														BDFDB.DataUtils.remove(this, "dmCategories", category.id);

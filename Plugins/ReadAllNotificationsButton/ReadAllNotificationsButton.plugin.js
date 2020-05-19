@@ -6,7 +6,7 @@ var ReadAllNotificationsButton = (_ => {
 	return class ReadAllNotificationsButton {
 		getName () {return "ReadAllNotificationsButton";}
 
-		getVersion () {return "1.5.9";}
+		getVersion () {return "1.6.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -230,6 +230,7 @@ var ReadAllNotificationsButton = (_ => {
 								children: [
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.context_unreadguilds_text,
+										id: BDFDB.ContextMenuUtils.createItemId(this.name, "mark-unread-read"),
 										action: event2 => {
 											BDFDB.ContextMenuUtils.close(event2._targetInst);
 											this.markGuildsAsRead(BDFDB.GuildUtils.getUnread());
@@ -237,6 +238,7 @@ var ReadAllNotificationsButton = (_ => {
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.context_pingedguilds_text,
+										id: BDFDB.ContextMenuUtils.createItemId(this.name, "mark-pinged-read"),
 										action: event2 => {
 											BDFDB.ContextMenuUtils.close(event2._targetInst);
 											this.markGuildsAsRead(BDFDB.GuildUtils.getPinged());
@@ -244,6 +246,7 @@ var ReadAllNotificationsButton = (_ => {
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.context_mutedguilds_text,
+										id: BDFDB.ContextMenuUtils.createItemId(this.name, "mark-muted-read"),
 										action: event2 => {
 											BDFDB.ContextMenuUtils.close(event2._targetInst);
 											this.markGuildsAsRead(BDFDB.GuildUtils.getMuted());
@@ -251,6 +254,7 @@ var ReadAllNotificationsButton = (_ => {
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.context_guilds_text,
+										id: BDFDB.ContextMenuUtils.createItemId(this.name, "mark-all-read"),
 										action: event2 => {
 											BDFDB.ContextMenuUtils.close(event2._targetInst);
 											this.addPinnedRecent(instance.props.channel.id);
@@ -259,6 +263,7 @@ var ReadAllNotificationsButton = (_ => {
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.context_dms_text,
+										id: BDFDB.ContextMenuUtils.createItemId(this.name, "mark-dms-read"),
 										action: event2 => {
 											BDFDB.ContextMenuUtils.close(event2._targetInst);
 											BDFDB.DMUtils.markAsRead(BDFDB.DMUtils.getAll());
