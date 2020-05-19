@@ -18,6 +18,7 @@
 }
 .theme-dark, .theme-light {
 	--text-link: rgb(var(--vlinkcolor));
+	--focus-primary: rgb(var(--vlinkcolor));
 }
 
 
