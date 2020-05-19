@@ -3796,7 +3796,6 @@
 		colorPickerSwatchSingle: "single-Fbb1wB",
 		colorPickerSwatchSelected: "selected-f5IVXN",
 		confirmModal: "confirmModal-t-WDWJ",
-		contextMenuHint: "hint-BK71lM",
 		dev: "dev-A7f2Rx",
 		favButtonContainer: "favbutton-8Fzu45",
 		guild: "guild-r3yAE_",
@@ -3817,6 +3816,7 @@
 		popoutWrapper: "popout-xwjvsX",
 		quickSelectWrapper: "quickSelectWrapper-UCfTKz",
 		quickSelectPopoutWrapper: "quickSelectPopout-u2dtIf",
+		menuItemHint: "hint-BK71lM",
 		modalHeaderHasSibling: "hasSiblings-fRyjyl",
 		modalInnerScrollerLess: "inner-YgPpF3",
 		modalTabContent: "tabContent-nZ-1U5",
@@ -4632,7 +4632,6 @@
 		contextmenucheckboxdisabled: ["ContextMenuCheckbox", "disabled"],
 		contextmenucheckboxinner: ["ContextMenuCheckbox", "checkboxInner"],
 		contextmenucheckboxelement: ["ContextMenuCheckbox", "checkboxElement"],
-		contextmenuhint: ["BDFDB", "contextMenuHint"],
 		contextmenuimage: ["ContextMenu", "image"],
 		contextmenuitem: ["ContextMenu", "item"],
 		contextmenuitembrand: ["ContextMenu", "brand"],
@@ -5080,7 +5079,7 @@
 		mention: ["NotFound", "mention"],
 		mentioninteractive: ["NotFound", "mentionInteractive"],
 		mentionwrapper: ["NotFound", "mentionWrapper"],
-		menumenu: ["Menu", "menu"],
+		menu: ["Menu", "menu"],
 		menuaccommodatescrollbar: ["Menu", "accommodateScrollbar"],
 		menucaret: ["Menu", "caret"],
 		menucheck: ["Menu", "check"],
@@ -5093,6 +5092,7 @@
 		menudisabled: ["Menu", "disabled"],
 		menufocused: ["Menu", "focused"],
 		menuhideinteraction: ["Menu", "hideInteraction"],
+		menuhint: ["BDFDB", "menuItemHint"],
 		menuhintcontainer: ["Menu", "hintContainer"],
 		menuicon: ["Menu", "icon"],
 		menuiconcontainer: ["Menu", "iconContainer"],
@@ -7438,7 +7438,7 @@
 	InternalComponents.LibraryComponents.MenuItems.MenuHint = InternalBDFDB.loadPatchedComp("MenuItems.MenuHint") || reactInitialized && class BDFDB_MenuHint extends LibraryModules.React.Component {
 		render() {
 			return !this.props.hint ? null : BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.disCN.contextmenuhint,
+				className: BDFDB.disCN.menuhint,
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
 					children: this.props.hint
 				})
@@ -8527,7 +8527,7 @@
 			cursor: pointer;
 		}
 
-		${BDFDB.dotCN.contextmenuhint} {
+		${BDFDB.dotCN.menuhint} {
 			width: 42px;
 			max-width: 42px;
 			margin-left: 8px;
@@ -9534,10 +9534,12 @@
 		return e.methodArguments[0].id == myGuildId ? e.methodArguments[0].banner : e.callOriginalMethod();
 	}});
 	
-	const ContextMenuTypes = ["UserSettingsCog", "User", "Developer", "Slate", "GuildFolder", "GroupDM", "Message", "Native", "Channel", "Guild"];	
+	const ContextMenuTypes = ["UserSettingsCog", "User", "Developer", "Slate", "GuildFolder", "GroupDM", "Message", "Native", "Channel", "Guild"].map(n => n + "ContextMenu");	
+	const ExtraPatchedPatches = ["MessageOptionContextMenu", "MessageOptionToolbar"];	
+	const QueuedComponents = BDFDB.ArrayUtils.removeCopies([].concat(ContextMenuTypes, ExtraPatchedPatches));	
 	InternalBDFDB.addContextListeners = function (plugin) {
 		plugin = plugin == BDFDB && InternalBDFDB || plugin;
-		for (let type of ContextMenuTypes) if (typeof plugin[`on${type}ContextMenu`] === "function") {
+		for (let type of QueuedComponents) if (typeof plugin[`on${type}`] === "function") {
 			BDFDB.InternalData.componentPatchQueries[type].query.push(plugin);
 			BDFDB.InternalData.componentPatchQueries[type].query = BDFDB.ArrayUtils.removeCopies(BDFDB.InternalData.componentPatchQueries[type].query);
 			BDFDB.InternalData.componentPatchQueries[type].query.sort((x, y) => {return x.name < y.name ? -1 : x.name > y.name ? 1 : 0;});
@@ -9547,7 +9549,7 @@
 	InternalBDFDB.patchContextMenuForPlugin = function (plugin, type, module) {
 		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (module && module.exports && module.exports.default) BDFDB.ModuleUtils.patch(plugin, module.exports, "default", {after: e => {
-			if (e.returnValue && typeof plugin[`on${type}ContextMenu`] === "function") plugin[`on${type}ContextMenu`]({instance:{props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:"default"});
+			if (e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:{props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:"default"});
 		}});
 	};
 	InternalBDFDB.patchContextMenuForLib = function (menu, type) {
@@ -9564,7 +9566,7 @@
 		}
 	};
 	
-	for (let type of ContextMenuTypes) if (!BDFDB.InternalData.componentPatchQueries[type]) BDFDB.InternalData.componentPatchQueries[type] = {query:[], modules:[]};
+	for (let type of QueuedComponents) if (!BDFDB.InternalData.componentPatchQueries[type]) BDFDB.InternalData.componentPatchQueries[type] = {query:[], modules:[]};
 	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.ContextMenuUtils, "openContextMenu", {before: e => {
 		let menu = e.methodArguments[1]();
 		if (BDFDB.ObjectUtils.is(menu) && menu.type && menu.type.displayName) {

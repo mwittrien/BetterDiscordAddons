@@ -4,7 +4,7 @@ var EditChannels = (_ => {
 	return class EditChannels {
 		getName () {return "EditChannels";}
 
-		getVersion () {return "4.1.2";}
+		getVersion () {return "4.1.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ var EditChannels = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Icons","Icons are now properly colored again"]]
+				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
 			};
 
 			this.patchedModules = {
@@ -159,32 +159,33 @@ var EditChannels = (_ => {
 
 		onChannelContextMenu (e) {
 			if (e.instance.props.channel) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
+				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.labels.context_localchannelsettings_text,
-						render: [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-								children: [
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-										label: this.labels.submenu_channelsettings_text,
-										action: _ => {
-											BDFDB.ContextMenuUtils.close(e.instance);
-											this.openChannelSettingsModal(e.instance.props.channel);
-										}
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-										label: this.labels.submenu_resetsettings_text,
-										disabled: !BDFDB.DataUtils.load(this, "channels", e.instance.props.channel.id),
-										action: _ => {
-											BDFDB.ContextMenuUtils.close(e.instance);
-											BDFDB.DataUtils.remove(this, "channels", e.instance.props.channel.id);
-											this.forceUpdateAll();
-										}
-									})
-								]
-							})
-						]
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-submenu"),
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+							children: [
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+									label: this.labels.submenu_channelsettings_text,
+									id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-change"),
+									action: _ => {
+										BDFDB.ContextMenuUtils.close(e.instance);
+										this.openChannelSettingsModal(e.instance.props.channel);
+									}
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+									label: this.labels.submenu_resetsettings_text,
+									id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-reset"),
+									disabled: !BDFDB.DataUtils.load(this, "channels", e.instance.props.channel.id),
+									action: _ => {
+										BDFDB.ContextMenuUtils.close(e.instance);
+										BDFDB.DataUtils.remove(this, "channels", e.instance.props.channel.id);
+										this.forceUpdateAll();
+									}
+								})
+							]
+						})
 					})
 				}));
 			}

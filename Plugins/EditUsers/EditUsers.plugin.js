@@ -245,7 +245,7 @@ var EditUsers = (_ => {
 								children: [
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.submenu_usersettings_text,
-										id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-open"),
+										id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-change"),
 										action: _ => {
 											BDFDB.ContextMenuUtils.close(e.instance);
 											this.openUserSettingsModal(e.instance.props.user);

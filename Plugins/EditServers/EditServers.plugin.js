@@ -4,7 +4,7 @@ var EditServers = (_ => {
 	return class EditServers {
 		getName () {return "EditServers";}
 
-		getVersion () {return "2.2.0";}
+		getVersion () {return "2.2.1";}
 		
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ var EditServers = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Server Folders","Works better with Server Folders now"]]
+				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
 			};
 
 			this.patchedModules = {
@@ -158,33 +158,34 @@ var EditServers = (_ => {
 		
 		onGuildContextMenu (e) {
 			if (e.instance.props.guild) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
-							label: this.labels.context_localserversettings_text,
-							render: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-								children: [
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-										label: this.labels.submenu_serversettings_text,
-										action: _ => {
-											BDFDB.ContextMenuUtils.close(e.instance);
-											this.openGuildSettingsModal(e.instance.props.guild.id);
-										}
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-										label: this.labels.submenu_resetsettings_text,
-										disabled: !BDFDB.DataUtils.load(this, "servers", e.instance.props.guild.id),
-										action: _ => {
-											BDFDB.ContextMenuUtils.close(e.instance);
-											BDFDB.DataUtils.remove(this, "servers", e.instance.props.guild.id);
-											BDFDB.ModuleUtils.forceAllUpdates(this);
-										}
-									})
-								]
-							})]
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
+				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						label: this.labels.context_localserversettings_text,
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-submenu"),
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+							children: [
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+									label: this.labels.submenu_serversettings_text,
+									id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-change"),
+									action: _ => {
+										BDFDB.ContextMenuUtils.close(e.instance);
+										this.openGuildSettingsModal(e.instance.props.guild.id);
+									}
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+									label: this.labels.submenu_resetsettings_text,
+									id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-reset"),
+									disabled: !BDFDB.DataUtils.load(this, "servers", e.instance.props.guild.id),
+									action: _ => {
+										BDFDB.ContextMenuUtils.close(e.instance);
+										BDFDB.DataUtils.remove(this, "servers", e.instance.props.guild.id);
+										BDFDB.ModuleUtils.forceAllUpdates(this);
+									}
+								})
+							]
 						})
-					]
+					})
 				}));
 			}
 		}
