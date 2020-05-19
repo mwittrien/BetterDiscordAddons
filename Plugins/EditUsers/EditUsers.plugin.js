@@ -1,12 +1,12 @@
 //META{"name":"EditUsers","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditUsers","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditUsers/EditUsers.plugin.js"}*//
 
 var EditUsers = (_ => {
-	var changedUsers, settings;
+	var changedUsers = {}, settings = {};
 	
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.8.4";}
+		getVersion () {return "3.8.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,7 @@ var EditUsers = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Performance","Reduced the amount of config calls to increase the performance"]]
+				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
 			};
 
 			this.patchedModules = {
@@ -235,22 +235,25 @@ var EditUsers = (_ => {
 		
 		onUserContextMenu (e) {
 			if (e.instance.props.user) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
+				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels.context_localusersettings_text,
-							render: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+							id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-submenu"),
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 								children: [
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.submenu_usersettings_text,
+										id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-open"),
 										action: _ => {
 											BDFDB.ContextMenuUtils.close(e.instance);
 											this.openUserSettingsModal(e.instance.props.user);
 										}
 									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.submenu_resetsettings_text,
+										id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-reset"),
 										disabled: !changedUsers[e.instance.props.user.id],
 										action: _ => {
 											BDFDB.ContextMenuUtils.close(e.instance);
@@ -259,7 +262,7 @@ var EditUsers = (_ => {
 										}
 									})
 								]
-							})]
+							})
 						})
 					]
 				}));
