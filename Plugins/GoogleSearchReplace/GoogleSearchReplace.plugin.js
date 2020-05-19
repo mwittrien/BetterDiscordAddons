@@ -6,7 +6,7 @@ var GoogleSearchReplace = (_ => {
 	return class GoogleSearchReplace {
 		getName () {return "GoogleSearchReplace";}
 
-		getVersion () {return "1.2.4";}
+		getVersion () {return "1.2.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,13 +14,7 @@ var GoogleSearchReplace = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["One Engine", "Enabling only one search engine doesn't create a SubMenu anymore"],["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
-			};
-				
-			this.patchedModules = {
-				after: {
-					SearchWithGoogle: "render"
-				}
+				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
 			};
 		}
 
@@ -124,41 +118,55 @@ var GoogleSearchReplace = (_ => {
 
 		// Begin of own functions
 
-		processSearchWithGoogle (e) {
-			if (e.instance.props.value) {
+		onMessageContextMenu (e) {
+			this.injectItem(e);
+		}
+
+		onNativeContextMenu (e) {
+			this.injectItem(e);
+		}
+		
+		injectItem (e) {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "search-google"]]});
+			if (index > -1) {
+				let text = document.getSelection().toString();
 				let enabledEngines = BDFDB.ObjectUtils.filter(BDFDB.DataUtils.get(this, "engines"), n => n);
 				let enginesWithoutAll = BDFDB.ObjectUtils.filter(enabledEngines, n => n != "_all", true);
 				let engineKeys = Object.keys(enginesWithoutAll);
-				if (engineKeys.length == 1) return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+				if (engineKeys.length == 1) return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: this.labels.context_googlesearchreplace_text.replace("...", this.defaults.engines[engineKeys[0]].name),
+					id: BDFDB.ContextMenuUtils.createItemId(this.name, "single-search"),
 					action: event => {
 						let useChromium = BDFDB.DataUtils.get(this, "settings", "useChromium");
 						if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
-						BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(textUrlReplaceString, encodeURIComponent(e.instance.props.value)), useChromium, event.shiftKey);
+						BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(textUrlReplaceString, encodeURIComponent(text)), useChromium, event.shiftKey);
 					}
 				});
 				else {
 					let items = [];
-					for (let key in enabledEngines) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+					for (let key in enabledEngines) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.defaults.engines[key].name,
-						danger: key == "_all",
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "search", key),
+						color: key == "_all" ? BDFDB.LibraryComponents.MenuItems.Colors.DANGER : BDFDB.LibraryComponents.MenuItems.Colors.DEFAULT,
 						action: event => {
 							let useChromium = BDFDB.DataUtils.get(this, "settings", "useChromium");
 							if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
 							if (key == "_all") {
-								for (let key2 in enginesWithoutAll) BDFDB.DiscordUtils.openLink(this.defaults.engines[key2].url.replace(textUrlReplaceString, encodeURIComponent(e.instance.props.value)), useChromium, event.shiftKey);
+								for (let key2 in enginesWithoutAll) BDFDB.DiscordUtils.openLink(this.defaults.engines[key2].url.replace(textUrlReplaceString, encodeURIComponent(text)), useChromium, event.shiftKey);
 							}
-							else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(textUrlReplaceString, encodeURIComponent(e.instance.props.value)), useChromium, event.shiftKey);
+							else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(textUrlReplaceString, encodeURIComponent(text)), useChromium, event.shiftKey);
 						}
 					}));
-					if (!items.length) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+					if (!items.length) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.labels.submenu_disabled_text,
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "disabled"),
 						disabled: true
 					}));
-					return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
+					children.splice(index, 1, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.labels.context_googlesearchreplace_text,
-						render: items
-					});
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-search"),
+						children: items
+					}));
 				}
 			}
 		}

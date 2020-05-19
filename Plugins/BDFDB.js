@@ -1067,7 +1067,7 @@
 		if (getExport && BDFDB.ModuleUtils.cached[type].export[cachestring]) return BDFDB.ModuleUtils.cached[type].export[cachestring];
 		else if (!getExport && BDFDB.ModuleUtils.cached[type].module[cachestring]) return BDFDB.ModuleUtils.cached[type].module[cachestring];
 		else {
-			var m = BDFDB.ModuleUtils.find(filter, getExport);
+			let m = BDFDB.ModuleUtils.find(filter, getExport);
 			if (m) {
 				if (getExport) BDFDB.ModuleUtils.cached[type].export[cachestring] = m;
 				else BDFDB.ModuleUtils.cached[type].module[cachestring] = m;
