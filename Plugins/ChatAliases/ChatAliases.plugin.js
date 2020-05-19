@@ -4,7 +4,7 @@ var ChatAliases = (_ => {
 	return class ChatAliases {
 		getName () {return "ChatAliases";}
 
-		getVersion () {return "2.1.2";}
+		getVersion () {return "2.1.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ var ChatAliases = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Left over placeholder","Sending a an aliases for a file upload without any other text no longer leaves the message in the textarea"]]
+				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
 			};
 			
 			this.patchedModules = {
@@ -256,10 +256,11 @@ var ChatAliases = (_ => {
 		}
 	 
 		injectItem (e, text) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-			children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
+			children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: "Add to ChatAliases",
+					id: BDFDB.ContextMenuUtils.createItemId(this.name, "add-alias"),
 					action: _ => {
 						BDFDB.ContextMenuUtils.close(e.instance);
 						this.openAddModal(text.replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t"));

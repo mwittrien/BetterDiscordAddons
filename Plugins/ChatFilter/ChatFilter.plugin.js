@@ -6,7 +6,7 @@ var ChatFilter = (_ => {
 	return class ChatFilter {
 		getName () {return "ChatFilter";}
 
-		getVersion () {return "3.4.0";}
+		getVersion () {return "3.4.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,8 +14,7 @@ var ChatFilter = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Emojis","Emojis are now properly targeted again, make sure to properly syntax them, for example :dog: or :FeelsBadMan:"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
 			};
 
 			this.patchedModules = {
@@ -258,10 +257,11 @@ var ChatFilter = (_ => {
 		}
 	 
 		injectItem (e, text) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-			children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
+			children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: "Add to ChatFilter",
+					id: BDFDB.ContextMenuUtils.createItemId(this.name, "add-filter"),
 					action: _ => {
 						BDFDB.ContextMenuUtils.close(e.instance);
 						this.openAddModal(text.replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t"));
