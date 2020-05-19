@@ -4,7 +4,7 @@ var CopyRawMessage = (_ => {
 	return class CopyRawMessage {
 		getName () {return "CopyRawMessage";}
 
-		getVersion () {return "1.0.7";}
+		getVersion () {return "1.0.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,10 +12,7 @@ var CopyRawMessage = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Crash","Fixed crash on message 3-dot menu"]]
-			};
-			this.changelog = {
-				"improved":[["Raw Embed Text","Right clicking inside an embed which contains a description will add an extra option in the context menu to copy the raw contents of the embed description"]]
+				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
 			};
 		}
 
@@ -66,17 +63,24 @@ var CopyRawMessage = (_ => {
 			if (e.instance.props.message) {
 				let embed = BDFDB.DOMUtils.getParent(BDFDB.dotCN.embedwrapper, e.instance.props.target);
 				let embedIndex = embed ? Array.from(embed.parentElement.querySelectorAll(BDFDB.dotCN.embedwrapper)).indexOf(embed) : -1;
+				let hint = BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("Copy_Raw") : null;
 				let entries = [
-					e.instance.props.message.content && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+					e.instance.props.message.content && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
-						hint: BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("Copy_Raw") : null,
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-message"),
+						hint: hint && (_ => {
+							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
+								hint: hint
+							});
+						}),
 						action: _ => {
 							BDFDB.ContextMenuUtils.close(e.instance);
 							BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});
 						}
 					}),
-					embed && embed.querySelector(BDFDB.dotCN.embeddescription) && e.instance.props.message.embeds[embedIndex] && e.instance.props.message.embeds[embedIndex].rawDescription && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+					embed && embed.querySelector(BDFDB.dotCN.embeddescription) && e.instance.props.message.embeds[embedIndex] && e.instance.props.message.embeds[embedIndex].rawDescription && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw Embed)",
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-embed"),
 						action: _ => {
 							BDFDB.ContextMenuUtils.close(e.instance);
 							BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.embeds[embedIndex].rawDescription});
@@ -84,8 +88,8 @@ var CopyRawMessage = (_ => {
 					})
 				].filter(n => n);
 				if (entries.length) {
-					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-					children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
+					children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 						children: entries
 					}));
 				}
@@ -97,7 +101,7 @@ var CopyRawMessage = (_ => {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "mark-unread"]]});
 				children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
-					id: "copy-raw",
+					id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-message"),
 					icon: _ => {
 						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 							className: BDFDB.disCN.menuicon,

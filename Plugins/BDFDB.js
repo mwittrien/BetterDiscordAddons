@@ -3796,6 +3796,7 @@
 		colorPickerSwatchSingle: "single-Fbb1wB",
 		colorPickerSwatchSelected: "selected-f5IVXN",
 		confirmModal: "confirmModal-t-WDWJ",
+		contextMenuHint: "hint-BK71lM",
 		dev: "dev-A7f2Rx",
 		favButtonContainer: "favbutton-8Fzu45",
 		guild: "guild-r3yAE_",
@@ -4631,7 +4632,7 @@
 		contextmenucheckboxdisabled: ["ContextMenuCheckbox", "disabled"],
 		contextmenucheckboxinner: ["ContextMenuCheckbox", "checkboxInner"],
 		contextmenucheckboxelement: ["ContextMenuCheckbox", "checkboxElement"],
-		contextmenuhint: ["ContextMenu", "hint"],
+		contextmenuhint: ["BDFDB", "contextMenuHint"],
 		contextmenuimage: ["ContextMenu", "image"],
 		contextmenuitem: ["ContextMenu", "item"],
 		contextmenuitembrand: ["ContextMenu", "brand"],
@@ -7433,7 +7434,17 @@
 		}
 	};
 	
-	InternalComponents.LibraryComponents.MenuItems = BDFDB.ModuleUtils.findByProperties("MenuItem", "MenuGroup");
+	InternalComponents.LibraryComponents.MenuItems = Object.assign({}, BDFDB.ModuleUtils.findByProperties("MenuItem", "MenuGroup"));
+	InternalComponents.LibraryComponents.MenuItems.MenuHint = InternalBDFDB.loadPatchedComp("MenuItems.MenuHint") || reactInitialized && class BDFDB_MenuHint extends LibraryModules.React.Component {
+		render() {
+			return !this.props.hint ? null : BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.disCN.contextmenuhint,
+				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
+					children: this.props.hint
+				})
+			});
+		}
+	};
 	
 	// REMOVE
 	InternalComponents.LibraryComponents.ContextMenuItems = {};
@@ -8514,6 +8525,12 @@
 			display: flex;
 			position: relative;
 			cursor: pointer;
+		}
+
+		${BDFDB.dotCN.contextmenuhint} {
+			width: 42px;
+			max-width: 42px;
+			margin-left: 8px;
 		}
 
 		${BDFDB.dotCN.cursordefault} {
