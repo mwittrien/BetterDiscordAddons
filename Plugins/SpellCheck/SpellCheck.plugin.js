@@ -6,13 +6,17 @@ var SpellCheck = (_ => {
 	return class SpellCheck {
 		getName () {return "SpellCheck";}
 
-		getVersion () {return "1.4.1";}
+		getVersion () {return "1.4.2";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Adds a spellcheck to all textareas. Select a word and rightclick it to add it to your dictionary.";}
 
 		constructor () {
+			this.changelog = {
+				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
+			};
+			
 			this.patchedModules = {
 				after: {
 					SlateChannelTextArea: ["componentDidMount", "componentDidUpdate"]
@@ -154,7 +158,7 @@ var SpellCheck = (_ => {
 		// Begin of own functions
 
 		onSlateContextMenu (e) {
-			let [SCparent, SCindex] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["NativeSpellcheckGroup", "FluxContainer(NativeSpellcheckGroup)"]});
+			let [SCparent, SCindex] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "spellcheck"]]});
 			if (SCindex > -1) SCparent.splice(SCindex, 1);
 			let textarea = BDFDB.DOMUtils.getParent(BDFDB.dotCN.textarea, e.instance.props.target), word = null;
 			if (textarea) for (let error of textarea.parentElement.querySelectorAll(BDFDB.dotCN._spellcheckerror)) {
@@ -166,28 +170,35 @@ var SpellCheck = (_ => {
 			}
 			if (word && this.isWordNotInDictionary(word)) {
 				let similarWords = this.getSimilarWords(word.toLowerCase().trim());
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
+				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: BDFDB.LanguageUtils.LanguageStrings.SPELLCHECK,
-						render: [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "spellcheck"),
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 								label: this.labels.context_spellcheck_text,
-								hint: word,
+								id: BDFDB.ContextMenuUtils.createItemId(this.name, "add-to-spellcheck"),
+								hint: _ => {
+									return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
+										hint: word
+									});
+								},
 								action: _ => {
 									BDFDB.ContextMenuUtils.close(e.instance);
 									this.addToOwnDictionary(word);
 								}
 							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 								label: this.labels.context_similarwords_text,
-								render: !similarWords.length ? [
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-										label: this.labels.similarwordssubmenu_none_text,
-										disabled: true
-									})
-								] : similarWords.sort().map(suggestion => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+								id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-suggestions"),
+								children: !similarWords.length ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+									label: this.labels.similarwordssubmenu_none_text,
+									id: BDFDB.ContextMenuUtils.createItemId(this.name, "no-suggestions"),
+									disabled: true
+								}) : similarWords.sort().map(suggestion => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 									label: suggestion,
+									id: BDFDB.ContextMenuUtils.createItemId(this.name, "suggestion", suggestion),
 									action: _ => {
 										BDFDB.ContextMenuUtils.close(e.instance);
 										this.replaceWord(e.instance.props.editor, word, suggestion);
