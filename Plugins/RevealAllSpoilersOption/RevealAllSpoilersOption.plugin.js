@@ -4,7 +4,7 @@ var RevealAllSpoilersOption = (_ => {
 	return class RevealAllSpoilersOption {
 		getName () {return "RevealAllSpoilersOption";}
 
-		getVersion () {return "1.0.4";}
+		getVersion () {return "1.0.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,8 +12,7 @@ var RevealAllSpoilersOption = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Message Update","Fixed the plugin for the new Message Update"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
 			};
 		}
 
@@ -63,28 +62,32 @@ var RevealAllSpoilersOption = (_ => {
 
 		onMessageContextMenu (e) {
 			if (e.instance.props.message && e.instance.props.target) {
-				let messagediv = BDFDB.DOMUtils.getParent(BDFDB.dotCN.message, e.instance.props.target);
-				if (!messagediv || !messagediv.querySelector(BDFDB.dotCN.spoilerhidden)) return;
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:["FluxContainer(MessageDeveloperModeGroup)", "DeveloperModeGroup"]});
-				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
-							label: "Reveal all Spoilers",
-							hint: BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Reveal_Spoilers") : null,
-							action: _ => {
-								BDFDB.ContextMenuUtils.close(e.instance);
-								this.revealAllSpoilers(messagediv);
-							}
-						})
-					]
+				let messageDiv = BDFDB.DOMUtils.getParent(BDFDB.dotCN.message, e.instance.props.target);
+				if (!messageDiv || !messageDiv.querySelector(BDFDB.dotCN.spoilerhidden)) return;
+				let hint = BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Reveal_Spoilers") : null;
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
+				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						label: "Reveal all Spoilers",
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "reveal-all"),
+						hint: hint && (_ => {
+							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
+								hint: hint
+							});
+						}),
+						action: _ => {
+							BDFDB.ContextMenuUtils.close(e.instance);
+							this.revealAllSpoilers(messageDiv);
+						}
+					})
 				}));
 			}
 		}
 
 		revealAllSpoilers (target) {
-			let messagediv = BDFDB.DOMUtils.getParent(BDFDB.dotCN.message, target);
-			if (!messagediv) return;
-			for (let spoiler of messagediv.querySelectorAll(BDFDB.dotCN.spoilerhidden)) spoiler.click();
+			let messageDiv = BDFDB.DOMUtils.getParent(BDFDB.dotCN.message, target);
+			if (!messageDiv) return;
+			for (let spoiler of messageDiv.querySelectorAll(BDFDB.dotCN.spoilerhidden)) spoiler.click();
 		}
 	}
 })();
