@@ -101,7 +101,7 @@ var PersonalPins = (_ => {
 				let note = this.getNoteData(e.instance.props.message, e.instance.props.channel);
 				let hint = BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Note_Message") : null;
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", ["pin", "unpin"]]]});
-				children.splice(index > -1 ? index + 1: children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+				children.splice(index > -1 ? index + 1: 0, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: note ? this.labels.context_unpinoption_text : this.labels.context_pinoption_text,
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, note ? "unpin-note" : "pin-note"),
 					hint: hint && (_ => {
@@ -114,7 +114,7 @@ var PersonalPins = (_ => {
 						this.addMessageToNotes(e.instance.props.message, e.instance.props.channel);
 					}
 				}));
-				if (this.isNoteOutdated(note, e.instance.props.message)) children.splice(index > -1 ? index + 1: children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+				if (this.isNoteOutdated(note, e.instance.props.message)) children.splice(index > -1 ? index + 1: 0, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: this.labels.context_updateoption_text,
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "update-note"),
 					action: _ => {

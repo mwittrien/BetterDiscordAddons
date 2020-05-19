@@ -172,7 +172,7 @@ var GoogleTranslateOption = (_ => {
 				let translated = translatedMessages[e.instance.props.message.id];
 				let hint = BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Translate_Message") : null;
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", ["pin", "unpin"]]]});
-				children.splice(index > -1 ? index + 1: children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+				children.splice(index > -1 ? index + 1: 0, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: translated ? this.labels.context_messageuntranslateoption_text : this.labels.context_messagetranslateoption_text,
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, translated ? "untranslate-message" : "translate-message"),
 					hint: hint && (_ => {
@@ -190,7 +190,7 @@ var GoogleTranslateOption = (_ => {
 				if (text) {
 					let translating, foundTranslation, foundInput, foundOutput;
 					let [children2, index2] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "search-google"]]});
-					if (index2 > -1) children2.splice(index2 > -1 ? index2 + 1 : children2.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					if (index2 > -1) children2.splice(index2 > -1 ? index2 + 1 : 0, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.labels.context_googletranslateoption_text,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "search-translation"),
 						disabled: isTranslating,
@@ -347,12 +347,6 @@ var GoogleTranslateOption = (_ => {
 						delete oldMessages[message.id];
 					}
 				}
-			}
-			return;
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: ["message", "channel"]});
-			if (index > -1) for (let ele of children) if (ele && ele.props && ele.props.message) {
-				let translation = translatedMessages[ele.props.message.id];
-				if (translation) ele.props.message = new BDFDB.DiscordObjects.Message(Object.assign({}, ele.props.message, {content: translation.content}));
 			}
 		}
 
