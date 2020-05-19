@@ -127,7 +127,7 @@ var ThemeRepo = (_ => {
 	return class ThemeRepo {
 		getName () {return "ThemeRepo";}
 
-		getVersion () {return "1.9.7";}
+		getVersion () {return "1.9.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -135,7 +135,7 @@ var ThemeRepo = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Preview","Switched from using and iFrame to using an extra Browser Window to display the preview"]]
+				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
 			};
 			
 			this.patchedModules = {
@@ -335,8 +335,9 @@ var ThemeRepo = (_ => {
 		onUserSettingsCogContextMenu (e) {
 			BDFDB.TimeUtils.timeout(_ => {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["label", "BandagedBD"]]});
-				if (index > -1) children[index].props.render.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+				if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: "Theme Repo",
+					id: BDFDB.ContextMenuUtils.createItemId(this.name, "repo"),
 					action: _ => {
 						if (!loading.is) BDFDB.ContextMenuUtils.close(e.instance);
 						this.openThemeRepoModal();
