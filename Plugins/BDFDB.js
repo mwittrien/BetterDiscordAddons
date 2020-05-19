@@ -7172,90 +7172,6 @@
 	
 	InternalComponents.LibraryComponents.Connectors = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Router", "Link"));
 	
-	InternalComponents.LibraryComponents.ContextMenuItems = {};
-	
-	InternalComponents.LibraryComponents.ContextMenuItems.Group = BDFDB.ModuleUtils.findByString(`"div",{className`, `default.itemGroup}`);
-	
-	InternalComponents.LibraryComponents.ContextMenuItems.Hint = InternalBDFDB.loadPatchedComp("ContextMenuItems.Hint") || reactInitialized && class BDFDB_ContextMenuItemHint extends LibraryModules.React.Component {
-		render() {
-			let hintIsString = typeof this.props.hint == "string";
-			return BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.disCN.contextmenuhint,
-				style: hintIsString ? {
-					width: 42,
-					maxWidth: 42,
-					marginLeft: 8
-				} : {},
-				children: hintIsString ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TextScroller, {
-					speed: 2,
-					children: this.props.hint
-				}) : (this.props.hint || null)
-			});
-		}
-	};
-	
-	InternalComponents.LibraryComponents.ContextMenuItems.Item = InternalBDFDB.loadPatchedComp("ContextMenuItems.Item") || reactInitialized && class BDFDB_ContextMenuItem extends LibraryModules.React.Component {
-		render() {
-			return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
-				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.contextmenuitem, !this.props.disabled && BDFDB.disCN.contextmenuitemclickable, this.props.danger && BDFDB.disCN.contextmenuitemdanger, this.props.disabled && BDFDB.disCN.contextmenuitemdisabled, this.props.brand && BDFDB.disCN.contextmenuitembrand, this.props.className),
-				style: this.props.style,
-				role: "menuitem",
-				onClick: this.props.disabled || typeof this.props.action != "function" ? null : this.props.action,
-				children: [
-					BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.contextmenulabel,
-						children: this.props.label
-					}),
-					BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ContextMenuItems.Hint, {hint: this.props.hint}),
-					this.props.children
-				]
-			});
-		}
-	};
-	
-	InternalComponents.LibraryComponents.ContextMenuItems.Slider = InternalBDFDB.loadPatchedComp("ContextMenuItems.Slider") || reactInitialized && class BDFDB_ContextMenuSliderItem extends LibraryModules.React.Component {
-		handleValueChange(value) {
-			let newvalue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value) : value;
-			if (typeof this.props.digits == "number") newvalue = Math.round(newvalue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
-			this.props.defaultValue = newvalue;
-			if (typeof this.props.onValueChange == "function") this.props.onValueChange(newvalue, this);
-			BDFDB.ReactUtils.forceUpdate(this);
-		}
-		handleValueRender(value) {
-			let newvalue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value) : value;
-			if (typeof this.props.digits == "number") newvalue = Math.round(newvalue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
-			if (typeof this.props.renderLabel == "function") this.props.label = this.props.renderLabel(newvalue);
-			if (typeof this.props.onValueRender == "function") {
-				let tempReturn = this.props.onValueRender(newvalue, this);
-				if (tempReturn != undefined) newvalue = tempReturn;
-			}
-			return newvalue;
-		}
-		render() {
-			let defaultValue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange(this.props.edges, [0, 100], this.props.defaultValue) : this.props.defaultValue;
-			if (typeof this.props.digits == "number") defaultValue = Math.round(defaultValue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
-			return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.ContextMenuSliderItem, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
-				defaultValue: defaultValue,
-				label: typeof this.props.renderLabel == "function" ? this.props.renderLabel(this.props.defaultValue) : this.props.label,
-				onValueChange: this.handleValueChange.bind(this),
-				onValueRender: this.handleValueRender.bind(this)
-			}), "digits", "edges", "renderLabel"));
-		}
-	};
-	
-	InternalComponents.LibraryComponents.ContextMenuItems.Sub = BDFDB.ModuleUtils.findByName("FluxContainer(SubMenuItem)");
-	
-	InternalComponents.LibraryComponents.ContextMenuItems.Toggle = InternalBDFDB.loadPatchedComp("ContextMenuItems.Toggle") || reactInitialized && class BDFDB_ContextMenuToggleItem extends LibraryModules.React.Component {
-		handleToggle() {
-			this.props.active = !this.props.active;
-			if (typeof this.props.action == "function") this.props.action(this.props.active);
-			BDFDB.ReactUtils.forceUpdate(this);
-		}
-		render() {
-			return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.ContextMenuToggleItem, Object.assign({}, this.props, {action: this.handleToggle.bind(this)}));
-		}
-	};
-	
 	var ComponentTypeData = {};
 	/* ComponentTypeData.NormalContextMenus = ["DeveloperContextMenu", "NativeContextMenu", "UserSettingsCogContextMenu"];
 	ComponentTypeData.FluxContextMenus = ["ApplicationContextMenu", "GroupDMContextMenu"];
@@ -7603,6 +7519,14 @@
 	};
 	
 	InternalComponents.LibraryComponents.MenuItems = BDFDB.ModuleUtils.findByProperties("MenuItem", "MenuGroup");
+	
+	// REMOVE
+	InternalComponents.LibraryComponents.ContextMenuItems = {};
+	InternalComponents.LibraryComponents.ContextMenuItems.Group = BDFDB.LibraryComponents.MenuItems.MenuGroup;
+	InternalComponents.LibraryComponents.ContextMenuItems.Item = BDFDB.LibraryComponents.MenuItems.MenuItem;
+	InternalComponents.LibraryComponents.ContextMenuItems.Slider = BDFDB.LibraryComponents.MenuItems.MenuControlItem;
+	InternalComponents.LibraryComponents.ContextMenuItems.Sub = BDFDB.LibraryComponents.MenuItems.MenuItem;
+	InternalComponents.LibraryComponents.ContextMenuItems.Toggle = BDFDB.LibraryComponents.MenuItems.MenuCheckboxItem;
 	
 	InternalComponents.LibraryComponents.MessageGroup = BDFDB.ModuleUtils.findByName("ChannelMessage");
 	
