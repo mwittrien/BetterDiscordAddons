@@ -3292,7 +3292,7 @@
 		else BDFDB.LibraryModules.ContextMenuUtils.closeContextMenu();
 	};
 	BDFDB.ContextMenuUtils.createItemId = function (...strings) {
-		return strings.filter(s => typeof s == "string").map(s => s.toLowerCase().replace(/\s/, "-")).join("-");
+		return strings.map(s => typeof s == "number" ? s.toString() : s).filter(s => typeof s == "string").map(s => s.toLowerCase().replace(/\s/, "-")).join("-");
 	};
 
 	BDFDB.TimeUtils = {};
