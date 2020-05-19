@@ -3291,8 +3291,8 @@
 		if (BDFDB.ObjectUtils.is(instance) && instance.props && typeof instance.props.closeContextMenu == "function") instance.props.closeContextMenu();
 		else BDFDB.LibraryModules.ContextMenuUtils.closeContextMenu();
 	};
-	BDFDB.ContextMenuUtils.createItemId = function (name, id) {
-		return `${(typeof name == "string" ? name : "").toLowerCase().replace(/\s/, "-")}-${(typeof id == "string" ? id : "").toLowerCase().replace(/\s/, "-")}`;
+	BDFDB.ContextMenuUtils.createItemId = function (...strings) {
+		return strings.filter(s => typeof s == "string").map(s => s.toLowerCase().replace(/\s/, "-")).join("-");
 	};
 
 	BDFDB.TimeUtils = {};
