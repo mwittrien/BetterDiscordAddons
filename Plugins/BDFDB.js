@@ -9578,9 +9578,8 @@
 		return e.methodArguments[0].id == myGuildId ? e.methodArguments[0].banner : e.callOriginalMethod();
 	}});
 	
-	const ContextMenuTypes = ["UserSettingsCog", "User", "Developer", "Slate", "GuildFolder", "GroupDM", "Message", "Native", "Channel", "Guild"].map(n => n + "ContextMenu");	
-	const ExtraPatchedPatches = ["MessageOptionContextMenu", "MessageOptionToolbar"];	
-	const QueuedComponents = BDFDB.ArrayUtils.removeCopies([].concat(ContextMenuTypes, ExtraPatchedPatches));	
+	const ContextMenuTypes = ["UserSettingsCog", "User", "Developer", "Slate", "GuildFolder", "GroupDM", "Message", "Native", "Channel", "Guild"];
+	const QueuedComponents = BDFDB.ArrayUtils.removeCopies([].concat(ContextMenuTypes.map(n => n + "ContextMenu"), ["MessageOptionContextMenu", "MessageOptionToolbar"]));	
 	InternalBDFDB.addContextListeners = function (plugin) {
 		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		for (let type of QueuedComponents) if (typeof plugin[`on${type}`] === "function") {
@@ -9596,14 +9595,6 @@
 			if (e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:{props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:"default", type:module.exports.default.displayName});
 		}});
 	};
-	InternalBDFDB.patchContextMenuForLib = function (menu, type) {
-		let module = BDFDB.ModuleUtils.find(m => m == menu.type, false);
-		if (module && module.exports && module.exports.default && BDFDB.InternalData.componentPatchQueries[type]) {
-			BDFDB.InternalData.componentPatchQueries[type].modules.push(module);
-			BDFDB.InternalData.componentPatchQueries[type].modules = BDFDB.ArrayUtils.removeCopies(BDFDB.InternalData.componentPatchQueries[type].modules);
-			for (let plugin of BDFDB.InternalData.componentPatchQueries[type].query) InternalBDFDB.patchContextMenuForPlugin(plugin, type, module);
-		}
-	};
 	InternalBDFDB.executeExtraPatchedPatches = function (type, e) {
 		if (e.returnvalue && BDFDB.ObjectUtils.is(BDFDB.InternalData.componentPatchQueries[type]) && BDFDB.ArrayUtils.is(BDFDB.InternalData.componentPatchQueries[type].query)) {
 			for (let plugin of BDFDB.InternalData.componentPatchQueries[type].query) if(typeof plugin[`on${type}`] === "function") plugin[`on${type}`](e);
@@ -9615,7 +9606,13 @@
 		let menu = e.methodArguments[1]();
 		if (BDFDB.ObjectUtils.is(menu) && menu.type && menu.type.displayName) {
 			for (let type of ContextMenuTypes) if (menu.type.displayName.indexOf(type) > -1) {
-				InternalBDFDB.patchContextMenuForLib(menu, type);
+				let patchType = type + "ContextMenu";
+				let module = BDFDB.ModuleUtils.find(m => m == menu.type, false);
+				if (module && module.exports && module.exports.default && BDFDB.InternalData.componentPatchQueries[patchType]) {
+					BDFDB.InternalData.componentPatchQueries[patchType].modules.push(module);
+					BDFDB.InternalData.componentPatchQueries[patchType].modules = BDFDB.ArrayUtils.removeCopies(BDFDB.InternalData.componentPatchQueries[patchType].modules);
+					for (let plugin of BDFDB.InternalData.componentPatchQueries[patchType].query) InternalBDFDB.patchContextMenuForPlugin(plugin, patchType, module);
+				}
 				break;
 			}
 		}
