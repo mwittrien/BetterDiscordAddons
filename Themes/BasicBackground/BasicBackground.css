@@ -4689,17 +4689,17 @@ body:before {
 	background-color: transparent;
 	box-shadow: none;
 }
-.jumpButton-3DTcS_,
+.jumpButton-1ol35X,
 .jumpButton-Ia2hRJ {										/* popout				jumpbutton							*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 	color: rgb(var(--fontwhite2));
 }
-.jumpButton-3DTcS_:hover,
+.jumpButton-1ol35X:hover,
 .jumpButton-Ia2hRJ:hover {
 	background-color: rgb(var(--vaccentcolor));
 	color: rgb(var(--fontwhite1));
 }
-.jumpButton-3DTcS_ + .jumpButton-3DTcS_,
+.jumpButton-1ol35X + .jumpButton-1ol35X,
 .jumpButton-Ia2hRJ + .jumpButton-Ia2hRJ {
 	margin-left: 2px;
 }
