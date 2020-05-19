@@ -7,13 +7,17 @@ var PinDMs = (_ => {
 	return class PinDMs {
 		getName () {return "PinDMs";}
 
-		getVersion () {return "1.7.0";}
+		getVersion () {return "1.7.1";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Allows you to pin DMs, making them appear at the top of your DMs/Guild-list.";}
 
-		constructor () {			
+		constructor () {
+			this.changelog = {
+				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
+			};
+			
 			this.patchedModules = {
 				before: {
 					PrivateChannelsList: "render",
@@ -202,7 +206,7 @@ var PinDMs = (_ => {
 
 		onUserContextMenu (e) {
 			if (e.instance.props.user) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"UserCloseChatItem"});
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "close-dm"]]});
 				if (index > -1) {
 					let id = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(e.instance.props.user.id);
 					if (id) this.injectItem(e.instance, id, children, index);
@@ -211,9 +215,9 @@ var PinDMs = (_ => {
 		}
 
 		onGroupDMContextMenu (e) {
-			if (e.instance.props.channelId) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"ChangeIcon"});
-				if (index > -1) this.injectItem(e.instance, e.instance.props.channelId, children, index);
+			if (e.instance.props.channel) {
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "change-icon"]]});
+				if (index > -1) this.injectItem(e.instance, e.instance.props.channel.id, children, index + 1);
 			}
 		}
 
@@ -223,22 +227,26 @@ var PinDMs = (_ => {
 			let categories = this.sortAndUpdateCategories("dmCategories", true);
 			let currentCategory = this.getCategory(id, "dmCategories");
 			
-			children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
+			children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 				label: this.labels.context_pindm_text,
-				render: [
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Sub, {
+				id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-pin"),
+				children: [
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.labels.context_pinchannel_text,
-						render: [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-								children: currentCategory ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-channelist"),
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+								children: currentCategory ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 									label: this.labels.context_unpinchannel_text,
+									id: BDFDB.ContextMenuUtils.createItemId(this.name, "unpin-channellist"),
 									danger: true,
 									action: _ => {
 										BDFDB.ContextMenuUtils.close(instance);
 										this.removeFromCategory(id, currentCategory, "dmCategories");
 									}
-								}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+								}) : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 									label: this.labels.context_addtonewcategory_text,
+									id: BDFDB.ContextMenuUtils.createItemId(this.name, "new-channellist"),
 									brand: true,
 									action: _ => {
 										BDFDB.ContextMenuUtils.close(instance);
@@ -253,9 +261,10 @@ var PinDMs = (_ => {
 									}
 								})
 							}),
-							categories.length ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
-								children: categories.map(category => currentCategory && currentCategory.id == category.id ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+							categories.length ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+								children: categories.map(category => currentCategory && currentCategory.id == category.id ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 									label: category.name || this.labels.header_pinneddms_text,
+									id: BDFDB.ContextMenuUtils.createItemId(this.name, "pin-channellist", category.id),
 									action: _ => {
 										BDFDB.ContextMenuUtils.close(instance);
 										if (currentCategory) this.removeFromCategory(id, currentCategory, "dmCategories");
@@ -265,8 +274,9 @@ var PinDMs = (_ => {
 							}) : null
 						].filter(n => n)
 					}),
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.labels[pinnedInGuild ? "context_unpinguild_text" : "context_pinguild_text"],
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, pinnedInGuild ? "unpin-serverlist" : "pin-serverlist"),
 						danger: pinnedInGuild,
 						action: _ => {
 							BDFDB.ContextMenuUtils.close(instance);
@@ -411,16 +421,16 @@ var PinDMs = (_ => {
 										}
 									},
 									onContextMenu: event => {
-										BDFDB.ContextMenuUtils.open(this, event, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Group, {
+										BDFDB.ContextMenuUtils.open(this, event, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 											children: [
-												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 													label: BDFDB.LanguageUtils.LanguageStrings.CATEGORY_SETTINGS,
 													action: event2 => {
 														BDFDB.ContextMenuUtils.close(BDFDB.DOMUtils.getParent(BDFDB.dotCN.contextmenu, event2.target));
 														this.openCategorySettingsModal(category, "dmCategories");
 													}
 												}),
-												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ContextMenuItems.Item, {
+												BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 													label: BDFDB.LanguageUtils.LanguageStrings.DELETE_CATEGORY,
 													danger: true,
 													action: event2 => {
