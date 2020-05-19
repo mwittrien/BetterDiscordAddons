@@ -133,15 +133,17 @@ var GoogleSearchReplace = (_ => {
 				let enabledEngines = BDFDB.ObjectUtils.filter(BDFDB.DataUtils.get(this, "engines"), n => n);
 				let enginesWithoutAll = BDFDB.ObjectUtils.filter(enabledEngines, n => n != "_all", true);
 				let engineKeys = Object.keys(enginesWithoutAll);
-				if (engineKeys.length == 1) return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-					label: this.labels.context_googlesearchreplace_text.replace("...", this.defaults.engines[engineKeys[0]].name),
-					id: BDFDB.ContextMenuUtils.createItemId(this.name, "single-search"),
-					action: event => {
-						let useChromium = BDFDB.DataUtils.get(this, "settings", "useChromium");
-						if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
-						BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(textUrlReplaceString, encodeURIComponent(text)), useChromium, event.shiftKey);
-					}
-				});
+				if (engineKeys.length == 1) {
+					children.splice(index, 1, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						label: this.labels.context_googlesearchreplace_text.replace("...", this.defaults.engines[engineKeys[0]].name),
+						id: children[index].props.id,
+						action: event => {
+							let useChromium = BDFDB.DataUtils.get(this, "settings", "useChromium");
+							if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
+							BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(textUrlReplaceString, encodeURIComponent(text)), useChromium, event.shiftKey);
+						}
+					}));
+				}
 				else {
 					let items = [];
 					for (let key in enabledEngines) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
