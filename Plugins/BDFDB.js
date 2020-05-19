@@ -2351,7 +2351,7 @@
 		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 		let guild = LibraryModules.GuildStore.getGuild(id);
 		if (guild) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
-			return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ContextMenus._Exports.GuildContextMenu && InternalComponents.LibraryComponents.ContextMenus._Exports.GuildContextMenu.default, Object.assign({}, e, {
+			return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("GuildContextMenu"), Object.assign({}, e, {
 				type: BDFDB.DiscordConstants.ContextMenuTypes.GUILD_ICON_BAR,
 				guild: guild,
 				badge: LibraryModules.UnreadGuildUtils.getMentionCount(guild.id),
@@ -7256,40 +7256,19 @@
 	};
 	
 	var ComponentTypeData = {};
-	ComponentTypeData.NormalContextMenus = ["DeveloperContextMenu", "NativeContextMenu", "UserSettingsCogContextMenu"];
+	/* ComponentTypeData.NormalContextMenus = ["DeveloperContextMenu", "NativeContextMenu", "UserSettingsCogContextMenu"];
 	ComponentTypeData.FluxContextMenus = ["ApplicationContextMenu", "GroupDMContextMenu"];
 	ComponentTypeData.NonRenderContextMenus = ["ChannelContextMenu", "GuildContextMenu", "MessageContextMenu", "SlateContextMenu", "UserContextMenu"];
 	ComponentTypeData.ObservedContextMenus = [];
 	ComponentTypeData.ExtraPatchedComponents = ["MessageOptionContextMenu", "MessageOptionToolbar"];
-	ComponentTypeData.QueuedComponents = [].concat(ComponentTypeData.NonRenderContextMenus, ComponentTypeData.ObservedContextMenus, ComponentTypeData.ExtraPatchedComponents);
+	ComponentTypeData.QueuedComponents = [].concat(ComponentTypeData.NonRenderContextMenus, ComponentTypeData.ObservedContextMenus, ComponentTypeData.ExtraPatchedComponents); */
 	
-	InternalComponents.LibraryComponents.ContextMenus = {};
-	InternalComponents.LibraryComponents.ContextMenus._Exports = {};
-	
-	InternalComponents.LibraryComponents.ContextMenus._Types = Object.entries(BDFDB.DiscordConstants.ContextMenuTypes).map(n => n[1]);
-	
-	InternalComponents.LibraryComponents.ContextMenus.ApplicationContextMenu = BDFDB.ModuleUtils.findByName("FluxContainer(ApplicationContextMenu)");
-	
-	InternalComponents.LibraryComponents.ContextMenus.ChannelContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.CHANNEL_LIST_TEXT);
-	InternalComponents.LibraryComponents.ContextMenus._Exports.ChannelContextMenu = (BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.CHANNEL_LIST_TEXT, false) || {}).exports;
-	
-	InternalComponents.LibraryComponents.ContextMenus.DeveloperContextMenu = BDFDB.ModuleUtils.findByName("DeveloperContextMenu");
-	
-	InternalComponents.LibraryComponents.ContextMenus.GroupDMContextMenu = BDFDB.ModuleUtils.findByName("FluxContainer(GroupDMContextMenu)");
-	
-	InternalComponents.LibraryComponents.ContextMenus.GuildContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.GUILD_CHANNEL_LIST);
-	InternalComponents.LibraryComponents.ContextMenus._Exports.GuildContextMenu = (BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.GUILD_CHANNEL_LIST, false) || {}).exports;
-	
-	InternalComponents.LibraryComponents.ContextMenus.MessageContextMenu = BDFDB.ModuleUtils.findByString("message", "target", BDFDB.DiscordConstants.ContextMenuTypes.MESSAGE_MAIN);
-	InternalComponents.LibraryComponents.ContextMenus._Exports.MessageContextMenu = (BDFDB.ModuleUtils.findByString("message", "target", BDFDB.DiscordConstants.ContextMenuTypes.MESSAGE_MAIN, false) || {}).exports;
-	
-	InternalComponents.LibraryComponents.ContextMenus.NativeContextMenu = BDFDB.ModuleUtils.findByName("NativeContextMenu");
-	
-	InternalComponents.LibraryComponents.ContextMenus.SlateContextMenu = BDFDB.ModuleUtils.findByName("SlateContextMenu");
-	InternalComponents.LibraryComponents.ContextMenus._Exports.SlateContextMenu = BDFDB.ModuleUtils.findByName("SlateContextMenu", false);
-	
-	InternalComponents.LibraryComponents.ContextMenus.UserContextMenu = BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.USER_CHANNEL_MEMBERS);
-	InternalComponents.LibraryComponents.ContextMenus._Exports.UserContextMenu = (BDFDB.ModuleUtils.findByString("Error - no such ctx menu type", BDFDB.DiscordConstants.ContextMenuTypes.USER_CHANNEL_MEMBERS, false) || {}).exports;
+	ComponentTypeData.NormalContextMenus = [];
+	ComponentTypeData.FluxContextMenus = [];
+	ComponentTypeData.NonRenderContextMenus = [];
+	ComponentTypeData.ObservedContextMenus = [];
+	ComponentTypeData.ExtraPatchedComponents = [];
+	ComponentTypeData.QueuedComponents = [];
 	
 	InternalComponents.LibraryComponents.ContextMenus.UserSettingsCogContextMenu = BDFDB.ModuleUtils.findByName("UserSettingsCogContextMenu");
 	
