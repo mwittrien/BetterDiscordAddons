@@ -9514,7 +9514,7 @@
 		return e.methodArguments[0].id == myGuildId ? e.methodArguments[0].banner : e.callOriginalMethod();
 	}});
 	
-	const ContextMenuTypes = ["UserSettingsCog", "User", "Developer", "GuildFolder", "GroupDM", "Message", "Native", "Channel", "Guild"];	
+	const ContextMenuTypes = ["UserSettingsCog", "User", "Developer", "Slate", "GuildFolder", "GroupDM", "Message", "Native", "Channel", "Guild"];	
 	InternalBDFDB.addContextListeners = function (plugin) {
 		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		for (let type of ContextMenuTypes) if (typeof plugin[`on${type}ContextMenu`] === "function") {
