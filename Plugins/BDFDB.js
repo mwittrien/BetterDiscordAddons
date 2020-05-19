@@ -937,14 +937,14 @@
 	};
 	BDFDB.ObjectUtils.deepAssign = function (obj, ...objs) {
 		if (!objs.length) return obj;
-		let nextobj = objs.shift();
-		if (BDFDB.ObjectUtils.is(obj) && BDFDB.ObjectUtils.is(nextobj)) {
-			for (let key in nextobj) {
-				if (BDFDB.ObjectUtils.is(nextobj[key])) {
+		let nextObj = objs.shift();
+		if (BDFDB.ObjectUtils.is(obj) && BDFDB.ObjectUtils.is(nextObj)) {
+			for (let key in nextObj) {
+				if (BDFDB.ObjectUtils.is(nextObj[key])) {
 					if (!obj[key]) Object.assign(obj, {[key]:{}});
-					BDFDB.ObjectUtils.deepAssign(obj[key], nextobj[key]);
+					BDFDB.ObjectUtils.deepAssign(obj[key], nextObj[key]);
 				}
-				else Object.assign(obj, {[key]:nextobj[key]});
+				else Object.assign(obj, {[key]:nextObj[key]});
 			}
 		}
 		return BDFDB.ObjectUtils.deepAssign(obj, ...objs);
@@ -5060,6 +5060,7 @@
 		menucaret: ["Menu", "caret"],
 		menucheck: ["Menu", "check"],
 		menucheckbox: ["Menu", "checkbox"],
+		menucheckboxempty: ["Menu", "checkboxEmpty"],
 		menucolorbrand: ["Menu", "colorBrand"],
 		menucolordanger: ["Menu", "colorDanger"],
 		menucolordefault: ["Menu", "colorDefault"],
@@ -7414,6 +7415,47 @@
 	
 	InternalComponents.LibraryComponents.MenuItems.Colors = ((BDFDB.ModuleUtils.findByProperties("MenuItemColor") || {}).MenuItemColor || {});
 	
+	InternalComponents.LibraryComponents.MenuItems.MenuCheckboxItem = InternalBDFDB.loadPatchedComp("MenuItems.MenuCheckboxItem") || reactInitialized && class BDFDB_MenuCheckboxItem extends LibraryModules.React.Component {
+		handleClick() {
+			this.props.checked = !this.props.checked;
+			if (typeof this.props.action == "function") this.props.action(this.props.checked, this);
+			BDFDB.ReactUtils.forceUpdate(this);
+		}
+		render() {
+			return BDFDB.ReactUtils.createElement("div", Object.assign({
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.menuitem, BDFDB.disCN.menulabelcontainer, this.props.color && BDFDB.disCN["menu" + this.props.color.toLowerCase()], this.props.disabled && BDFDB.disCN.menudisabled, this.props.isFocused && BDFDB.disCN.menufocused),
+				onClick: !this.props.disabled && this.handleClick.bind(this)
+			}, this.props, {
+				"aria-checked": this.props.checked,
+				"aria-disabled": this.props.disabled,
+				children: [
+					BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.menulabel,
+						children: [
+							this.props.label,
+							this.props.subtext && BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN.menusubtext,
+								children: this.props.subtext
+							})
+						].filter(n => n)
+					}),
+					BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.menuiconcontainer,
+						children: this.props.checked ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+							name: InternalComponents.LibraryComponents.SvgIcon.Names.CHECKBOX,
+							className: BDFDB.disCN.menuicon,
+							background: BDFDB.disCN.menucheckbox,
+							foreground: BDFDB.disCN.menucheck
+						}) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+							name: InternalComponents.LibraryComponents.SvgIcon.Names.CHECKBOX_EMPTY,
+							className: BDFDB.disCN.menuicon
+						})
+					})
+				].filter(n => n)
+			}));
+		}
+	};
+	
 	InternalComponents.LibraryComponents.MenuItems.MenuHint = InternalBDFDB.loadPatchedComp("MenuItems.MenuHint") || reactInitialized && class BDFDB_MenuHint extends LibraryModules.React.Component {
 		render() {
 			return !this.props.hint ? null : BDFDB.ReactUtils.createElement("div", {
@@ -7441,7 +7483,7 @@
 	InternalComponents.LibraryComponents.ContextMenuItems.Item = InternalComponents.LibraryComponents.MenuItems.MenuItem;
 	InternalComponents.LibraryComponents.ContextMenuItems.Slider = InternalComponents.LibraryComponents.MenuItems.MenuControlItem;
 	InternalComponents.LibraryComponents.ContextMenuItems.Sub = InternalComponents.LibraryComponents.MenuItems.MenuSeparator;
-	InternalComponents.LibraryComponents.ContextMenuItems.Toggle = InternalComponents.LibraryComponents.MenuItems.MenuCheckboxItem;
+	InternalComponents.LibraryComponents.ContextMenuItems.Toggle = InternalComponents.LibraryComponents.MenuItems.MenuItem;
 	
 	InternalComponents.LibraryComponents.MessageGroup = BDFDB.ModuleUtils.findByName("ChannelMessage");
 	
@@ -8034,6 +8076,19 @@
 	InternalComponents.LibraryComponents.SvgIcon.Names = {
 		CHANGELOG: {
 			icon: `<svg name="ChangeLog" viewBox="0 0 24 24" fill="%%color" width="%%width" height="%%height"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"></path></svg>`
+		},
+		CHECKBOX: {
+			defaultProps: {
+				background: "",
+				foreground: ""
+			},
+			icon: `<svg aria-hidden="false" width="24" height="24" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.37499 3H18.625C19.9197 3 21.0056 4.08803 21 5.375V18.625C21 19.936 19.9359 21 18.625 21H5.37499C4.06518 21 3 19.936 3 18.625V5.375C3 4.06519 4.06518 3 5.37499 3Z" class="%%background" fill="%%color"></path><path d="M9.58473 14.8636L6.04944 11.4051L4.50003 12.9978L9.58473 18L19.5 8.26174L17.9656 6.64795L9.58473 14.8636Z" class="%%foreground" fill="%%color"></path></svg>`
+		},
+		CHECKBOX_EMPTY: {
+			defaultProps: {
+				foreground: ""
+			},
+			icon: `<svg name="CheckBoxEmpty" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M18.625 3H5.375C4.06519 3 3 4.06519 3 5.375V18.625C3 19.936 4.06519 21 5.375 21H18.625C19.936 21 21 19.936 21 18.625V5.375C21.0057 4.08803 19.9197 3 18.625 3ZM19 19V5H4.99999V19H19Z" class="%%foreground" fill="%%color"></path></svg>`
 		},
 		CHECKMARK: {
 			defaultProps: {
