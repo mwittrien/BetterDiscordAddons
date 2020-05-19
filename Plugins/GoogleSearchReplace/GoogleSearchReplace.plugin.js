@@ -6,7 +6,7 @@ var GoogleSearchReplace = (_ => {
 	return class GoogleSearchReplace {
 		getName () {return "GoogleSearchReplace";}
 
-		getVersion () {return "1.2.6";}
+		getVersion () {return "1.2.7";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -164,7 +164,7 @@ var GoogleSearchReplace = (_ => {
 					}));
 					children.splice(index, 1, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.labels.context_googlesearchreplace_text,
-						id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-search"),
+						id: children[index].props.id,
 						children: items
 					}));
 				}
