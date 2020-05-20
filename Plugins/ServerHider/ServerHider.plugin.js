@@ -103,18 +103,18 @@ var ServerHider = (_ => {
 		onGuildContextMenu (e) {
 			if (document.querySelector(BDFDB.dotCN.modalwrapper)) return;
 			if (e.type == "GuildIconNewContextMenu") {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "create"]]});
+				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "create", group: true});
 				this.injectItem(e.instance, children, -1);
 			}
 			else {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
+				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 				this.injectItem(e.instance, children, index);
 			}
 		}
 
 		onGuildFolderContextMenu (e) {
 			if (document.querySelector(BDFDB.dotCN.modalwrapper)) return;
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
+			let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 			this.injectItem(e.instance, children, index);
 		}
 		

@@ -158,7 +158,7 @@ var SpellCheck = (_ => {
 		// Begin of own functions
 
 		onSlateContextMenu (e) {
-			let [SCparent, SCindex] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "spellcheck"]]});
+			let [SCparent, SCindex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "spellcheck"});
 			if (SCindex > -1) SCparent.splice(SCindex, 1);
 			let textarea = BDFDB.DOMUtils.getParent(BDFDB.dotCN.textarea, e.instance.props.target), word = null;
 			if (textarea) for (let error of textarea.parentElement.querySelectorAll(BDFDB.dotCN._spellcheckerror)) {
@@ -170,7 +170,7 @@ var SpellCheck = (_ => {
 			}
 			if (word && this.isWordNotInDictionary(word)) {
 				let similarWords = this.getSimilarWords(word.toLowerCase().trim());
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
+				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: BDFDB.LanguageUtils.LanguageStrings.SPELLCHECK,
@@ -180,7 +180,7 @@ var SpellCheck = (_ => {
 								label: this.labels.context_spellcheck_text,
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, "add-to-spellcheck"),
 								hint: _ => {
-									return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuHint, {
+									return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
 										hint: word
 									});
 								},

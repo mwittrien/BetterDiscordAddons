@@ -6,7 +6,7 @@ var ReverseImageSearch = (_ => {
 	return class ReverseImageSearch {
 		getName () {return "ReverseImageSearch";}
 
-		getVersion () {return "3.5.5";}
+		getVersion () {return "3.5.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -125,7 +125,7 @@ var ReverseImageSearch = (_ => {
 
 		onGuildContextMenu (e) {
 			if (e.instance.props.guild && e.instance.props.target) {
-				let guildIcon = BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.avataricon) ? e.instance.props.target : e.instance.props.target.querySelector(BDFDB.dotCN.guildIcon);
+				let guildIcon = BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.avataricon) ? e.instance.props.target : e.instance.props.target.querySelector(BDFDB.dotCN.guildicon);
 				if (guildIcon && BDFDB.DataUtils.get(this, "settings", "addGuildIconEntry")) this.injectItem(e, guildIcon.tagName == "IMG" ? guildIcon.getAttribute("src") :  guildIcon.style.getPropertyValue("background-image"));
 			}
 		}
@@ -165,7 +165,7 @@ var ReverseImageSearch = (_ => {
 				let enabledEngines = BDFDB.ObjectUtils.filter(BDFDB.DataUtils.get(this, "engines"), n => n);
 				let enginesWithoutAll = BDFDB.ObjectUtils.filter(enabledEngines, n => n != "_all", true);
 				let engineKeys = Object.keys(enginesWithoutAll);
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
+				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 				if (engineKeys.length == 1) {
 					children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.labels.context_reverseimagesearch_text.replace("...", this.defaults.engines[engineKeys[0]].name),

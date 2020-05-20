@@ -171,12 +171,12 @@ var GoogleTranslateOption = (_ => {
 			if (e.instance.props.message && e.instance.props.channel) {
 				let translated = translatedMessages[e.instance.props.message.id];
 				let hint = BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Translate_Message") : null;
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", ["pin", "unpin"]]]});
+				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["pin", "unpin"]});
 				children.splice(index > -1 ? index + 1: 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: translated ? this.labels.context_messageuntranslateoption_text : this.labels.context_messagetranslateoption_text,
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, translated ? "untranslate-message" : "translate-message"),
 					hint: hint && (_ => {
-						return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuHint, {
+						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
 							hint: hint
 						});
 					}),
@@ -202,7 +202,7 @@ var GoogleTranslateOption = (_ => {
 			let text = document.getSelection().toString();
 			if (text) {
 				let translating, foundTranslation, foundInput, foundOutput;
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", ["devmode-copy-id", "search-google"]]]});
+				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["devmode-copy-id", "search-google"], group: true});
 				children.splice(index > -1 ? index + 1 : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuPersistingItem, {
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "search-translation"),
 					disabled: isTranslating,
@@ -238,13 +238,13 @@ var GoogleTranslateOption = (_ => {
 		onMessageOptionContextMenu (e) {
 			if (e.instance.props.message && e.instance.props.channel) {
 				let translated = !!translatedMessages[e.instance.props.message.id];
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", ["pin", "unpin"]]]});
+				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["pin", "unpin"]});
 				children.splice(index + 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: translated ? this.labels.context_messageuntranslateoption_text : this.labels.context_messagetranslateoption_text,
 					disabled: isTranslating,
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, translated ? "untranslate-message" : "translate-message"),
 					icon: _ => {
-						return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
 							icon: translated ? translateIconUntranslate : translateIcon
 						});
 					},

@@ -276,7 +276,7 @@ var ServerFolders = (_ => {
 	return class ServerFolders {
 		getName () {return "ServerFolders";}
 
-		getVersion () {return "6.7.7";}
+		getVersion () {return "6.7.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -499,7 +499,7 @@ var ServerFolders = (_ => {
 				let folders = BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId);
 				let folder = BDFDB.GuildUtils.getFolder(e.instance.props.guild.id);
 				let unfolderedGuilds = BDFDB.LibraryModules.FolderStore.getSortedGuilds().filter(n => !n.folderId).map(n => n.guilds[0]).filter(n => n);
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
+				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.labels.servercontext_serverfolders_text,
@@ -553,33 +553,25 @@ var ServerFolders = (_ => {
 					data.muteFolder = muted;
 					BDFDB.DataUtils.save(data, this, "folders", e.instance.props.folderId);
 				}
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "mark-folder-read"]]});
-				children.splice(index > -1 ? index + 1 : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "mark-folder-read"});
+				children.splice(index > -1 ? index + 1 : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuCheckboxItem, {
+					label: this.labels.foldercontext_autoreadfolder_text,
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "auto-read-folder"),
-					render: itemData => {
-						return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuCheckboxItem, Object.assign({
-							label: this.labels.foldercontext_autoreadfolder_text,
-							checked: data.autoRead,
-							action: state => {
-								data.autoRead = state;
-								BDFDB.DataUtils.save(data, this, "folders", e.instance.props.folderId);
-							}
-						}, itemData));
+					checked: data.autoRead,
+					action: state => {
+						data.autoRead = state;
+						BDFDB.DataUtils.save(data, this, "folders", e.instance.props.folderId);
 					}
 				}));
 				e.returnvalue.props.children.splice(e.returnvalue.props.children.length - 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuCheckboxItem, {
+						label: this.labels.foldercontext_mutefolder_text,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "mute-folder"),
-						render: itemData => {
-							return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuCheckboxItem, Object.assign({
-								label: this.labels.foldercontext_mutefolder_text,
-								checked: muted,
-								action: state => {
-									data.muteFolder = state;
-									BDFDB.DataUtils.save(data, this, "folders", e.instance.props.folderId);
-									for (let guildid of folder.guildIds) if (BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildid) != state) BDFDB.LibraryModules.GuildSettingsUtils.updateNotificationSettings(guildid, {muted:state, suppress_everyone:state, suppress_roles:state});
-								}
-							}, itemData));
+						checked: muted,
+						action: state => {
+							data.muteFolder = state;
+							BDFDB.DataUtils.save(data, this, "folders", e.instance.props.folderId);
+							for (let guildid of folder.guildIds) if (BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildid) != state) BDFDB.LibraryModules.GuildSettingsUtils.updateNotificationSettings(guildid, {muted:state, suppress_everyone:state, suppress_roles:state});
 						}
 					})
 				}));

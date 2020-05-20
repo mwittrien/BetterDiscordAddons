@@ -127,7 +127,7 @@ var GoogleSearchReplace = (_ => {
 		}
 		
 		injectItem (e) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "search-google"]]});
+			let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "search-google"});
 			if (index > -1) {
 				let text = document.getSelection().toString();
 				let enabledEngines = BDFDB.ObjectUtils.filter(BDFDB.DataUtils.get(this, "engines"), n => n);

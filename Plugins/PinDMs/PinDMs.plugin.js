@@ -206,7 +206,7 @@ var PinDMs = (_ => {
 
 		onUserContextMenu (e) {
 			if (e.instance.props.user) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "close-dm"]]});
+				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "close-dm"});
 				if (index > -1) {
 					let id = BDFDB.LibraryModules.ChannelStore.getDMFromUserId(e.instance.props.user.id);
 					if (id) this.injectItem(e.instance, id, children, index);
@@ -216,7 +216,7 @@ var PinDMs = (_ => {
 
 		onGroupDMContextMenu (e) {
 			if (e.instance.props.channel) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "change-icon"]]});
+				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "change-icon"});
 				if (index > -1) this.injectItem(e.instance, e.instance.props.channel.id, children, index + 1);
 			}
 		}
