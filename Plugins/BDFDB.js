@@ -3292,7 +3292,7 @@
 			if (BDFDB.ArrayUtils.is(returnvalue.props.children[i].props.children)) {
 				for (let j in returnvalue.props.children[i].props.children) if (check(returnvalue.props.children[i].props.children[j])) {
 					if (config.group) return [returnvalue.props.children, i];
-					else return [returnvalue.props.children.props.children, j];
+					else return [returnvalue.props.children[i].props.children, j];
 				}
 			}
 			else if (check(returnvalue.props.children[i].props.children)) {
