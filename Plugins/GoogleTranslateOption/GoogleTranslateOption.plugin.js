@@ -27,7 +27,7 @@ var GoogleTranslateOption = (_ => {
 	return class GoogleTranslateOption {
 		getName () {return "GoogleTranslateOption";}
 
-		getVersion () {return "2.0.2";}
+		getVersion () {return "2.0.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -186,40 +186,56 @@ var GoogleTranslateOption = (_ => {
 						this.translateMessage(e.instance.props.message, e.instance.props.channel);
 					}
 				}));
-				let text = document.getSelection().toString();
-				if (text) {
-					let translating, foundTranslation, foundInput, foundOutput;
-					let [children2, index2] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "search-google"]]});
-					if (index2 > -1) children2.splice(index2 > -1 ? index2 + 1 : 0, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: this.labels.context_googletranslateoption_text,
-						id: BDFDB.ContextMenuUtils.createItemId(this.name, "search-translation"),
-						disabled: isTranslating,
-						action: event => {
-							let item = BDFDB.DOMUtils.getParent(BDFDB.dotCN.menuitem, event.target);
-							if (item) {
-								let createTooltip = _ => {
-									BDFDB.TooltipUtils.create(item, `From ${foundInput.name}:\n${text}\n\nTo ${foundOutput.name}:\n${foundTranslation}`, {type:"right", selector:"googletranslate-tooltip"});
-								};
-								if (foundTranslation && foundInput && foundOutput) {
-									if (document.querySelector(".googletranslate-tooltip")) {
-										BDFDB.ContextMenuUtils.close(e.instance);
-										BDFDB.DiscordUtils.openLink(this.getGoogleTranslatePageURL(foundInput.id, foundOutput.id, text), BDFDB.DataUtils.get(this, "settings", "useChromium"));
-									}
-									else createTooltip();
-								}
-								else if (!translating) {
-									translating = true;
-									this.translateText(text, "context", (translation, input, output) => {
-										if (translation) {
-											foundTranslation = translation, foundInput = input, foundOutput = output;
-											createTooltip();
+				this.injectSearchItem(e);
+			}
+		}
+		
+		onNativeContextMenu (e) {
+			this.injectSearchItem(e);
+		}
+		
+		onSlateContextMenu (e) {
+			this.injectSearchItem(e);
+		}
+		
+		injectSearchItem (e) {
+			let text = document.getSelection().toString();
+			if (text) {
+				let translating, foundTranslation, foundInput, foundOutput;
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", ["devmode-copy-id", "search-google"]]]});
+				children.splice(index > -1 ? index + 1 : 0, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					id: BDFDB.ContextMenuUtils.createItemId(this.name, "search-translation"),
+					disabled: isTranslating,
+					render: itemData => {
+						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.ChildItem, Object.assign({
+							label: this.labels.context_googletranslateoption_text,
+							action: event => {
+								let item = BDFDB.DOMUtils.getParent(BDFDB.dotCN.menuitem, event.target);
+								if (item) {
+									let createTooltip = _ => {
+										BDFDB.TooltipUtils.create(item, `From ${foundInput.name}:\n${text}\n\nTo ${foundOutput.name}:\n${foundTranslation}`, {type:"right", selector:"googletranslate-tooltip"});
+									};
+									if (foundTranslation && foundInput && foundOutput) {
+										if (document.querySelector(".googletranslate-tooltip")) {
+											BDFDB.ContextMenuUtils.close(e.instance);
+											BDFDB.DiscordUtils.openLink(this.getGoogleTranslatePageURL(foundInput.id, foundOutput.id, text), BDFDB.DataUtils.get(this, "settings", "useChromium"));
 										}
-									});
+										else createTooltip();
+									}
+									else if (!translating) {
+										translating = true;
+										this.translateText(text, "context", (translation, input, output) => {
+											if (translation) {
+												foundTranslation = translation, foundInput = input, foundOutput = output;
+												createTooltip();
+											}
+										});
+									}
 								}
 							}
-						}
-					}));
-				}
+						}, itemData));
+					}
+				}));
 			}
 		}
 		
