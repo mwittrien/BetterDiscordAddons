@@ -7414,6 +7414,47 @@
 	
 	InternalComponents.LibraryComponents.MenuItems = Object.assign({}, BDFDB.ModuleUtils.findByProperties("MenuItem", "MenuGroup"));
 	
+	InternalComponents.LibraryComponents.MenuItems.ChildItem = InternalBDFDB.loadPatchedComp("MenuItems.ChildItem") || reactInitialized && class BDFDB_ChildItem extends LibraryModules.React.Component {
+		render() {
+			return BDFDB.ReactUtils.createElement("div", Object.assign({
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.menuitem, BDFDB.disCN.menulabelcontainer, this.props.color && BDFDB.disCN["menu" + this.props.color.toLowerCase()], this.props.disabled && BDFDB.disCN.menudisabled, this.props.isFocused && BDFDB.disCN.menufocused),
+				onClick: !this.props.disabled && this.props.action
+			}, this.props, {
+				"aria-disabled": this.props.disabled,
+				children: [
+					BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.menulabel,
+						children: [
+							typeof this.props.label == "function" ? this.props.label(this) : this.props.label,
+							this.props.subtext && BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN.menusubtext,
+								children: this.props.subtext
+							})
+						].filter(n => n)
+					}),
+					this.props.hint && BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.menuhintcontainer,
+						children: typeof this.props.hint == "function" ? this.props.hint(this) : this.props.hint
+					}),
+					this.props.icon && BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.menuiconcontainer,
+						children: BDFDB.ReactUtils.createElement(this.props.icon, {
+							className: BDFDB.disCN.menuicon
+						})
+					}),
+					this.props.imageUrl && BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.menuimagecontainer,
+						children: BDFDB.ReactUtils.createElement("img", {
+							className: BDFDB.disCN.menuimage,
+							src: typeof this.props.imageUrl == "function" ? this.props.imageUrl(this) : this.props.imageUrl,
+							alt: ""
+						})
+					})
+				].filter(n => n)
+			}));
+		}
+	};
+	
 	InternalComponents.LibraryComponents.MenuItems.Colors = ((BDFDB.ModuleUtils.findByProperties("MenuItemColor") || {}).MenuItemColor || {});
 	
 	InternalComponents.LibraryComponents.MenuItems.MenuCheckboxItem = InternalBDFDB.loadPatchedComp("MenuItems.MenuCheckboxItem") || reactInitialized && class BDFDB_MenuCheckboxItem extends LibraryModules.React.Component {
@@ -7433,7 +7474,7 @@
 					BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.menulabel,
 						children: [
-							this.props.label,
+							typeof this.props.label == "function" ? this.props.label(this) : this.props.label,
 							this.props.subtext && BDFDB.ReactUtils.createElement("div", {
 								className: BDFDB.disCN.menusubtext,
 								children: this.props.subtext
@@ -7475,47 +7516,6 @@
 				nativeClass: true,
 				iconSVG: this.props.icon
 			});
-		}
-	};
-	
-	InternalComponents.LibraryComponents.MenuItems.SiblingItem = InternalBDFDB.loadPatchedComp("MenuItems.SiblingItem") || reactInitialized && class BDFDB_SiblingItem extends LibraryModules.React.Component {
-		render() {
-			return BDFDB.ReactUtils.createElement("div", Object.assign({
-				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.menuitem, BDFDB.disCN.menulabelcontainer, this.props.color && BDFDB.disCN["menu" + this.props.color.toLowerCase()], this.props.disabled && BDFDB.disCN.menudisabled, this.props.isFocused && BDFDB.disCN.menufocused),
-				onClick: !this.props.disabled && this.props.action
-			}, this.props, {
-				"aria-disabled": this.props.disabled,
-				children: [
-					BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.menulabel,
-						children: [
-							this.props.label,
-							this.props.subtext && BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN.menusubtext,
-								children: this.props.subtext
-							})
-						].filter(n => n)
-					}),
-					this.props.hint && BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.menuhintcontainer,
-						children: this.props.hint
-					}),
-					this.props.icon && BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.menuiconcontainer,
-						children: BDFDB.ReactUtils.createElement(this.props.icon, {
-							className: BDFDB.disCN.menuicon
-						})
-					}),
-					this.props.imageUrl && BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.menuimagecontainer,
-						children: BDFDB.ReactUtils.createElement("img", {
-							className: BDFDB.disCN.menuimage,
-							src: this.props.imageUrl,
-							alt: ""
-						})
-					})
-				].filter(n => n)
-			}));
 		}
 	};
 	
