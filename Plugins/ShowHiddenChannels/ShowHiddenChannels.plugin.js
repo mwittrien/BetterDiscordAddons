@@ -1,7 +1,7 @@
 //META{"name":"ShowHiddenChannels","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowHiddenChannels","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ShowHiddenChannels/ShowHiddenChannels.plugin.js"}*//
 
 var ShowHiddenChannels = (_ => {
-	var blacklist, hiddenCategory;
+	var blacklist = [], hiddenCategory;
 			
 	const settingsMap = {
 		GUILD_TEXT: "showText",
@@ -28,7 +28,7 @@ var ShowHiddenChannels = (_ => {
 	return class ShowHiddenChannels {
 		getName () {return "ShowHiddenChannels";}
 
-		getVersion () {return "2.7.6";}
+		getVersion () {return "2.7.7";}
 
 		getAuthor () {return "DevilBro";}
 
