@@ -3289,19 +3289,22 @@
 		config.label = config.label && [config.label].flat().filter(n => n);
 		config.id = config.id && [config.id].flat().filter(n => n);
 		for (let i in returnvalue.props.children) {
-			if (BDFDB.ArrayUtils.is(returnvalue.props.children[i].props.children)) {
-				for (let j in returnvalue.props.children[i].props.children) if (check(returnvalue.props.children[i].props.children[j])) {
+			if (returnvalue.props.children[i] && returnvalue.props.children[i].type == RealMenuItems.MenuGroup) {
+				if (BDFDB.ArrayUtils.is(returnvalue.props.children[i].props.children)) {
+					for (let j in returnvalue.props.children[i].props.children) if (check(returnvalue.props.children[i].props.children[j])) {
+						if (config.group) return [returnvalue.props.children, parseInt(i)];
+						else return [returnvalue.props.children[i].props.children, parseInt(j)];
+					}
+				}
+				else if (returnvalue.props.children[i] && returnvalue.props.children[i].props && check(returnvalue.props.children[i].props.children)) {
 					if (config.group) return [returnvalue.props.children, parseInt(i)];
-					else return [returnvalue.props.children[i].props.children, parseInt(j)];
+					else {
+						returnvalue.props.children[i].props.children = [returnvalue.props.children[i].props.children];
+						return [returnvalue.props.children[i].props.children, 0];
+					}
 				}
 			}
-			else if (check(returnvalue.props.children[i].props.children)) {
-				if (config.group) return [returnvalue.props.children, parseInt(i)];
-				else {
-					returnvalue.props.children[i].props.children = [returnvalue.props.children[i].props.children];
-					return [returnvalue.props.children[i].props.children, 0];
-				}
-			}
+			else if (check(returnvalue.props.children[i])) return [returnvalue.props.children, parseInt(i)];
 		}
 		return [null, -1];
 		function check (child) {
