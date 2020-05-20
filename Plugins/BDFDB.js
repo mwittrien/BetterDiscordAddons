@@ -7478,6 +7478,47 @@
 		}
 	};
 	
+	InternalComponents.LibraryComponents.MenuItems.SiblingItem = InternalBDFDB.loadPatchedComp("MenuItems.SiblingItem") || reactInitialized && class BDFDB_SiblingItem extends LibraryModules.React.Component {
+		render() {
+			return BDFDB.ReactUtils.createElement("div", Object.assign({
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.menuitem, BDFDB.disCN.menulabelcontainer, this.props.color && BDFDB.disCN["menu" + this.props.color.toLowerCase()], this.props.disabled && BDFDB.disCN.menudisabled, this.props.isFocused && BDFDB.disCN.menufocused),
+				onClick: !this.props.disabled && this.props.action
+			}, this.props, {
+				"aria-disabled": this.props.disabled,
+				children: [
+					BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.menulabel,
+						children: [
+							this.props.label,
+							this.props.subtext && BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN.menusubtext,
+								children: this.props.subtext
+							})
+						].filter(n => n)
+					}),
+					this.props.hint && BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.menuhintcontainer,
+						children: this.props.hint
+					}),
+					this.props.icon && BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.menuiconcontainer,
+						children: BDFDB.ReactUtils.createElement(this.props.icon, {
+							className: BDFDB.disCN.menuicon
+						})
+					}),
+					this.props.imageUrl && BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.menuimagecontainer,
+						children: BDFDB.ReactUtils.createElement("img", {
+							className: BDFDB.disCN.menuimage,
+							src: this.props.imageUrl,
+							alt: ""
+						})
+					})
+				].filter(n => n)
+			}));
+		}
+	};
+	
 	// REMOVE
 	InternalComponents.LibraryComponents.ContextMenuItems = {};
 	InternalComponents.LibraryComponents.ContextMenuItems.Group = InternalComponents.LibraryComponents.MenuItems.MenuGroup;
