@@ -3285,26 +3285,27 @@
 		return strings.map(s => typeof s == "number" ? s.toString() : s).filter(s => typeof s == "string").map(s => s.toLowerCase().replace(/\s/, "-")).join("-");
 	};
 	BDFDB.ContextMenuUtils.findItem = function (returnvalue, config) {
-		if (!returnvalue || !returnvalue.props || !BDFDB.ArrayUtils.is(returnvalue.props.children) || !BDFDB.ObjectUtils.is(config) || !config.label && !config.id) return [null, -1];
+		if (!returnvalue || !BDFDB.ObjectUtils.is(config) || !config.label && !config.id) return [null, -1];
 		config.label = config.label && [config.label].flat().filter(n => n);
 		config.id = config.id && [config.id].flat().filter(n => n);
-		for (let i in returnvalue.props.children) {
-			if (returnvalue.props.children[i] && returnvalue.props.children[i].type == RealMenuItems.MenuGroup) {
-				if (BDFDB.ArrayUtils.is(returnvalue.props.children[i].props.children)) {
-					for (let j in returnvalue.props.children[i].props.children) if (check(returnvalue.props.children[i].props.children[j])) {
-						if (config.group) return [returnvalue.props.children, parseInt(i)];
-						else return [returnvalue.props.children[i].props.children, parseInt(j)];
+		let contextMenu = BDFDB.ReactUtils.findChild(returnvalue, {props: "navId"});
+		if (contextMenu) for (let i in contextMenu.props.children) {
+			if (contextMenu.props.children[i] && contextMenu.props.children[i].type == RealMenuItems.MenuGroup) {
+				if (BDFDB.ArrayUtils.is(contextMenu.props.children[i].props.children)) {
+					for (let j in contextMenu.props.children[i].props.children) if (check(contextMenu.props.children[i].props.children[j])) {
+						if (config.group) return [contextMenu.props.children, parseInt(i)];
+						else return [contextMenu.props.children[i].props.children, parseInt(j)];
 					}
 				}
-				else if (returnvalue.props.children[i] && returnvalue.props.children[i].props && check(returnvalue.props.children[i].props.children)) {
-					if (config.group) return [returnvalue.props.children, parseInt(i)];
+				else if (contextMenu.props.children[i] && contextMenu.props.children[i].props && check(contextMenu.props.children[i].props.children)) {
+					if (config.group) return [contextMenu.props.children, parseInt(i)];
 					else {
-						returnvalue.props.children[i].props.children = [returnvalue.props.children[i].props.children];
-						return [returnvalue.props.children[i].props.children, 0];
+						contextMenu.props.children[i].props.children = [contextMenu.props.children[i].props.children];
+						return [contextMenu.props.children[i].props.children, 0];
 					}
 				}
 			}
-			else if (check(returnvalue.props.children[i])) return [returnvalue.props.children, parseInt(i)];
+			else if (check(contextMenu.props.children[i])) return [contextMenu.props.children, parseInt(i)];
 		}
 		return [null, -1];
 		function check (child) {
