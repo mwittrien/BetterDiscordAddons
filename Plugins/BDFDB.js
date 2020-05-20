@@ -1114,7 +1114,6 @@
 	WebModulesData.NonRender = BDFDB.ArrayUtils.removeCopies([].concat(WebModulesData.MemoComponent, [
 		"Attachment",
 		"ConnectedPrivateChannelsList",
-		"ContextMenuItem",
 		"DiscordTag",
 		"InviteModalUserRow",
 		"Mention",
@@ -1131,7 +1130,6 @@
 	WebModulesData.LoadedInComponents = {
 		AutocompleteChannelResult: "LibraryComponents.AutocompleteItems.Channel",
 		AutocompleteUserResult: "LibraryComponents.AutocompleteItems.User",
-		ContextMenuItem: "NativeSubComponents.ContextMenuItem",
 		QuickSwitchChannelResult: "LibraryComponents.QuickSwitchItems.Channel",
 		QuickSwitchGroupDMResult: "LibraryComponents.QuickSwitchItems.GroupDM",
 		QuickSwitchGuildResult: "LibraryComponents.QuickSwitchItems.Guild",
@@ -3267,6 +3265,20 @@
 		let instance = BDFDB.ReactUtils.findOwner(nodeOrInstance, {props:"closeContextMenu", up:true});
 		if (BDFDB.ObjectUtils.is(instance) && instance.props && typeof instance.props.closeContextMenu == "function") instance.props.closeContextMenu();
 		else BDFDB.LibraryModules.ContextMenuUtils.closeContextMenu();
+	};
+	const RealMenuItems = BDFDB.ModuleUtils.findByProperties("MenuItem", "MenuGroup");
+	BDFDB.ContextMenuUtils.createItem = function (component, props = {}) {
+		if (!component) return ReactUtils.createElement(RealMenuItems.MenuGroup, {});
+		else {
+			if (BDFDB.ObjectUtils.toArray(RealMenuItems).some(c => c == component)) return ReactUtils.createElement(component, props);
+			else BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+				id: props.id,
+				disabled: props.disabled,
+				render: menuItemProps => {
+					return BDFDB.ReactUtils.createElement(component, BDFDB.ObjectUtils.exclude(Object.assign({}, props, menuItemProps), "id", "disabled"));
+				}
+			});
+		}
 	};
 	BDFDB.ContextMenuUtils.createItemId = function (...strings) {
 		return strings.map(s => typeof s == "number" ? s.toString() : s).filter(s => typeof s == "string").map(s => s.toLowerCase().replace(/\s/, "-")).join("-");
@@ -6169,6 +6181,8 @@
 	InternalComponents.NativeSubComponents.Clickable = BDFDB.ModuleUtils.findByName("Clickable");
 	InternalComponents.NativeSubComponents.FavButton = BDFDB.ModuleUtils.findByName("GIFFavButton");
 	InternalComponents.NativeSubComponents.KeybindRecorder = BDFDB.ModuleUtils.findByName("KeybindRecorder");
+	InternalComponents.NativeSubComponents.MenuCheckboxItem = BDFDB.ModuleUtils.findByName("MenuCheckboxItem");
+	InternalComponents.NativeSubComponents.MenuItem = BDFDB.ModuleUtils.findByName("MenuItem");
 	InternalComponents.NativeSubComponents.PopoutContainer = BDFDB.ModuleUtils.findByName("Popout");
 	InternalComponents.NativeSubComponents.QuickSelect = BDFDB.ModuleUtils.findByName("QuickSelectWrapper");
 	InternalComponents.NativeSubComponents.RadioGroup = BDFDB.ModuleUtils.findByName("RadioGroup");
@@ -7416,42 +7430,7 @@
 	
 	InternalComponents.LibraryComponents.MenuItems.ChildItem = InternalBDFDB.loadPatchedComp("MenuItems.ChildItem") || reactInitialized && class BDFDB_ChildItem extends LibraryModules.React.Component {
 		render() {
-			return BDFDB.ReactUtils.createElement("div", Object.assign({
-				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.menuitem, BDFDB.disCN.menulabelcontainer, this.props.color && BDFDB.disCN["menu" + this.props.color.toLowerCase()], this.props.disabled && BDFDB.disCN.menudisabled, this.props.isFocused && BDFDB.disCN.menufocused),
-				onClick: !this.props.disabled && this.props.action
-			}, this.props, {
-				"aria-disabled": this.props.disabled,
-				children: [
-					BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.menulabel,
-						children: [
-							typeof this.props.label == "function" ? this.props.label(this) : this.props.label,
-							this.props.subtext && BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN.menusubtext,
-								children: this.props.subtext
-							})
-						].filter(n => n)
-					}),
-					this.props.hint && BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.menuhintcontainer,
-						children: typeof this.props.hint == "function" ? this.props.hint(this) : this.props.hint
-					}),
-					this.props.icon && BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.menuiconcontainer,
-						children: BDFDB.ReactUtils.createElement(this.props.icon, {
-							className: BDFDB.disCN.menuicon
-						})
-					}),
-					this.props.imageUrl && BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.menuimagecontainer,
-						children: BDFDB.ReactUtils.createElement("img", {
-							className: BDFDB.disCN.menuimage,
-							src: typeof this.props.imageUrl == "function" ? this.props.imageUrl(this) : this.props.imageUrl,
-							alt: ""
-						})
-					})
-				].filter(n => n)
-			}));
+			return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.MenuItem, Object.assign({}, this.props, {onClose: _ => {}}));
 		}
 	};
 	
