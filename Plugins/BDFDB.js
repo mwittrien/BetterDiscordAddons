@@ -3271,7 +3271,7 @@
 		if (!component) return null;
 		else {
 			if (BDFDB.ObjectUtils.toArray(RealMenuItems).some(c => c == component)) return BDFDB.ReactUtils.createElement(component, props);
-			else return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+			else return BDFDB.ReactUtils.createElement(RealMenuItems.MenuItem, {
 				id: props.id,
 				disabled: props.disabled,
 				render: menuItemProps => {
