@@ -2260,7 +2260,6 @@
 		else return null;
 	};
 	BDFDB.GuildUtils.openMenu = function (eleOrInfoOrId, e = BDFDB.InternalData.mousePosition) {
-		return;
 		if (!eleOrInfoOrId) return;
 		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 		let guild = LibraryModules.GuildStore.getGuild(id);
