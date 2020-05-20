@@ -90,8 +90,8 @@ var UserNotes = (_ => {
 		onUserContextMenu (e) {
 			if (e.instance.props.user) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
-				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: BDFDB.LanguageUtils.LanguageStrings.USERS + " " + BDFDB.LanguageUtils.LanguageStrings.NOTE,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "user-note"),
 						action: _ => {

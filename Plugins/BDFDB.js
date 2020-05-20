@@ -3268,10 +3268,10 @@
 	};
 	const RealMenuItems = BDFDB.ModuleUtils.findByProperties("MenuItem", "MenuGroup");
 	BDFDB.ContextMenuUtils.createItem = function (component, props = {}) {
-		if (!component) return ReactUtils.createElement(RealMenuItems.MenuGroup, {});
+		if (!component) return null;
 		else {
 			if (BDFDB.ObjectUtils.toArray(RealMenuItems).some(c => c == component)) return ReactUtils.createElement(component, props);
-			else BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+			else return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 				id: props.id,
 				disabled: props.disabled,
 				render: menuItemProps => {
@@ -7428,12 +7428,6 @@
 	
 	InternalComponents.LibraryComponents.MenuItems = Object.assign({}, BDFDB.ModuleUtils.findByProperties("MenuItem", "MenuGroup"));
 	
-	InternalComponents.LibraryComponents.MenuItems.ChildItem = InternalBDFDB.loadPatchedComp("MenuItems.ChildItem") || reactInitialized && class BDFDB_ChildItem extends LibraryModules.React.Component {
-		render() {
-			return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.MenuItem, Object.assign({}, this.props, {onClose: _ => {}}));
-		}
-	};
-	
 	InternalComponents.LibraryComponents.MenuItems.Colors = ((BDFDB.ModuleUtils.findByProperties("MenuItemColor") || {}).MenuItemColor || {});
 	
 	InternalComponents.LibraryComponents.MenuItems.MenuCheckboxItem = InternalBDFDB.loadPatchedComp("MenuItems.MenuCheckboxItem") || reactInitialized && class BDFDB_MenuCheckboxItem extends LibraryModules.React.Component {
@@ -7495,6 +7489,12 @@
 				nativeClass: true,
 				iconSVG: this.props.icon
 			});
+		}
+	};
+	
+	InternalComponents.LibraryComponents.MenuItems.MenuPersistingItem = InternalBDFDB.loadPatchedComp("MenuItems.MenuPersistingItem") || reactInitialized && class BDFDB_MenuPersistingItem extends LibraryModules.React.Component {
+		render() {
+			return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.MenuItem, Object.assign({}, this.props, {onClose: _ => {}}));
 		}
 	};
 	

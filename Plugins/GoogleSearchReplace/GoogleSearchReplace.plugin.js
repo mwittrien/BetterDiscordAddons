@@ -134,7 +134,7 @@ var GoogleSearchReplace = (_ => {
 				let enginesWithoutAll = BDFDB.ObjectUtils.filter(enabledEngines, n => n != "_all", true);
 				let engineKeys = Object.keys(enginesWithoutAll);
 				if (engineKeys.length == 1) {
-					children.splice(index, 1, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					children.splice(index, 1, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.labels.context_googlesearchreplace_text.replace("...", this.defaults.engines[engineKeys[0]].name),
 						id: children[index].props.id,
 						action: event => {
@@ -146,7 +146,7 @@ var GoogleSearchReplace = (_ => {
 				}
 				else {
 					let items = [];
-					for (let key in enabledEngines) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					for (let key in enabledEngines) items.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.defaults.engines[key].name,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "search", key),
 						color: key == "_all" ? BDFDB.LibraryComponents.MenuItems.Colors.DANGER : BDFDB.LibraryComponents.MenuItems.Colors.DEFAULT,
@@ -159,12 +159,12 @@ var GoogleSearchReplace = (_ => {
 							else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(textUrlReplaceString, encodeURIComponent(text)), useChromium, event.shiftKey);
 						}
 					}));
-					if (!items.length) items.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					if (!items.length) items.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.labels.submenu_disabled_text,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "disabled"),
 						disabled: true
 					}));
-					children.splice(index, 1, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					children.splice(index, 1, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.labels.context_googlesearchreplace_text,
 						id: children[index].props.id,
 						children: items

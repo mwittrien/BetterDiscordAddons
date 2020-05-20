@@ -66,12 +66,12 @@ var RevealAllSpoilersOption = (_ => {
 				if (!messageDiv || !messageDiv.querySelector(BDFDB.dotCN.spoilerhidden)) return;
 				let hint = BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Reveal_Spoilers") : null;
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
-				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: "Reveal all Spoilers",
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "reveal-all"),
 						hint: hint && (_ => {
-							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
+							return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuHint, {
 								hint: hint
 							});
 						}),

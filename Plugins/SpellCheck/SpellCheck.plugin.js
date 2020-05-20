@@ -171,16 +171,16 @@ var SpellCheck = (_ => {
 			if (word && this.isWordNotInDictionary(word)) {
 				let similarWords = this.getSimilarWords(word.toLowerCase().trim());
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
-				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: BDFDB.LanguageUtils.LanguageStrings.SPELLCHECK,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "spellcheck"),
 						children: [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 								label: this.labels.context_spellcheck_text,
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, "add-to-spellcheck"),
 								hint: _ => {
-									return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
+									return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuHint, {
 										hint: word
 									});
 								},
@@ -189,14 +189,14 @@ var SpellCheck = (_ => {
 									this.addToOwnDictionary(word);
 								}
 							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 								label: this.labels.context_similarwords_text,
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-suggestions"),
-								children: !similarWords.length ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+								children: !similarWords.length ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 									label: this.labels.similarwordssubmenu_none_text,
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "no-suggestions"),
 									disabled: true
-								}) : similarWords.sort().map(suggestion => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+								}) : similarWords.sort().map(suggestion => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 									label: suggestion,
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "suggestion", suggestion),
 									action: _ => {

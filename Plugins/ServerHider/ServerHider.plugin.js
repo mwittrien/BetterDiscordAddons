@@ -119,14 +119,14 @@ var ServerHider = (_ => {
 		}
 		
 		injectItem (instance, children, index) {
-			children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+			children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 				children: [
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.labels.context_serverhider_text,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-hide"),
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+						children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+								BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 									label: this.labels.submenu_openhidemenu_text,
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "openmenu"),
 									action: _ => {
@@ -134,7 +134,7 @@ var ServerHider = (_ => {
 										this.showHideModal();
 									}
 								}),
-								!instance.props.guild && !instance.props.folderId ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+								!instance.props.guild && !instance.props.folderId ? null : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 									label: instance.props.guild ? this.labels.submenu_hideserver_text : this.labels.submenu_hidefolder_text,
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "hide"),
 									action: _ => {

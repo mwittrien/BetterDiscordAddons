@@ -65,11 +65,11 @@ var CopyRawMessage = (_ => {
 				let embedIndex = embed ? Array.from(embed.parentElement.querySelectorAll(BDFDB.dotCN.embedwrapper)).indexOf(embed) : -1;
 				let hint = BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("Copy_Raw") : null;
 				let entries = [
-					e.instance.props.message.content && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					e.instance.props.message.content && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-message"),
 						hint: hint && (_ => {
-							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
+							return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuHint, {
 								hint: hint
 							});
 						}),
@@ -78,7 +78,7 @@ var CopyRawMessage = (_ => {
 							BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});
 						}
 					}),
-					embed && embed.querySelector(BDFDB.dotCN.embeddescription) && e.instance.props.message.embeds[embedIndex] && e.instance.props.message.embeds[embedIndex].rawDescription && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					embed && embed.querySelector(BDFDB.dotCN.embeddescription) && e.instance.props.message.embeds[embedIndex] && e.instance.props.message.embeds[embedIndex].rawDescription && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw Embed)",
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-embed"),
 						action: _ => {
@@ -89,7 +89,7 @@ var CopyRawMessage = (_ => {
 				].filter(n => n);
 				if (entries.length) {
 					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
-					children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+					children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 						children: entries
 					}));
 				}
@@ -99,7 +99,7 @@ var CopyRawMessage = (_ => {
 		onMessageOptionContextMenu (e) {
 			if (e.instance.props.message && e.instance.props.message.content) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "mark-unread"]]});
-				children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+				children.splice(index + 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-message"),
 					icon: _ => {

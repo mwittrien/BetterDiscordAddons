@@ -160,13 +160,13 @@ var EditChannels = (_ => {
 		onChannelContextMenu (e) {
 			if (e.instance.props.channel) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
-				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.labels.context_localchannelsettings_text,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-submenu"),
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+						children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 							children: [
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+								BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 									label: this.labels.submenu_channelsettings_text,
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-change"),
 									action: _ => {
@@ -174,7 +174,7 @@ var EditChannels = (_ => {
 										this.openChannelSettingsModal(e.instance.props.channel);
 									}
 								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+								BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 									label: this.labels.submenu_resetsettings_text,
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-reset"),
 									disabled: !BDFDB.DataUtils.load(this, "channels", e.instance.props.channel.id),

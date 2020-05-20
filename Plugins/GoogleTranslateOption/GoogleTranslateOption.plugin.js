@@ -27,7 +27,7 @@ var GoogleTranslateOption = (_ => {
 	return class GoogleTranslateOption {
 		getName () {return "GoogleTranslateOption";}
 
-		getVersion () {return "2.0.3";}
+		getVersion () {return "2.0.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -172,11 +172,11 @@ var GoogleTranslateOption = (_ => {
 				let translated = translatedMessages[e.instance.props.message.id];
 				let hint = BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Translate_Message") : null;
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", ["pin", "unpin"]]]});
-				children.splice(index > -1 ? index + 1: 0, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+				children.splice(index > -1 ? index + 1: 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: translated ? this.labels.context_messageuntranslateoption_text : this.labels.context_messagetranslateoption_text,
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, translated ? "untranslate-message" : "translate-message"),
 					hint: hint && (_ => {
-						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuHint, {
+						return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuHint, {
 							hint: hint
 						});
 					}),
@@ -203,37 +203,33 @@ var GoogleTranslateOption = (_ => {
 			if (text) {
 				let translating, foundTranslation, foundInput, foundOutput;
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", ["devmode-copy-id", "search-google"]]]});
-				children.splice(index > -1 ? index + 1 : 0, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+				children.splice(index > -1 ? index + 1 : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuPersistingItem, {
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "search-translation"),
 					disabled: isTranslating,
-					render: itemData => {
-						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.ChildItem, Object.assign({
-							label: this.labels.context_googletranslateoption_text,
-							action: event => {
-								let item = BDFDB.DOMUtils.getParent(BDFDB.dotCN.menuitem, event.target);
-								if (item) {
-									let createTooltip = _ => {
-										BDFDB.TooltipUtils.create(item, `From ${foundInput.name}:\n${text}\n\nTo ${foundOutput.name}:\n${foundTranslation}`, {type:"right", selector:"googletranslate-tooltip"});
-									};
-									if (foundTranslation && foundInput && foundOutput) {
-										if (document.querySelector(".googletranslate-tooltip")) {
-											BDFDB.ContextMenuUtils.close(e.instance);
-											BDFDB.DiscordUtils.openLink(this.getGoogleTranslatePageURL(foundInput.id, foundOutput.id, text), BDFDB.DataUtils.get(this, "settings", "useChromium"));
-										}
-										else createTooltip();
-									}
-									else if (!translating) {
-										translating = true;
-										this.translateText(text, "context", (translation, input, output) => {
-											if (translation) {
-												foundTranslation = translation, foundInput = input, foundOutput = output;
-												createTooltip();
-											}
-										});
-									}
+					label: this.labels.context_googletranslateoption_text,
+					action: event => {
+						let item = BDFDB.DOMUtils.getParent(BDFDB.dotCN.menuitem, event.target);
+						if (item) {
+							let createTooltip = _ => {
+								BDFDB.TooltipUtils.create(item, `From ${foundInput.name}:\n${text}\n\nTo ${foundOutput.name}:\n${foundTranslation}`, {type:"right", selector:"googletranslate-tooltip"});
+							};
+							if (foundTranslation && foundInput && foundOutput) {
+								if (document.querySelector(".googletranslate-tooltip")) {
+									BDFDB.ContextMenuUtils.close(e.instance);
+									BDFDB.DiscordUtils.openLink(this.getGoogleTranslatePageURL(foundInput.id, foundOutput.id, text), BDFDB.DataUtils.get(this, "settings", "useChromium"));
 								}
+								else createTooltip();
 							}
-						}, itemData));
+							else if (!translating) {
+								translating = true;
+								this.translateText(text, "context", (translation, input, output) => {
+									if (translation) {
+										foundTranslation = translation, foundInput = input, foundOutput = output;
+										createTooltip();
+									}
+								});
+							}
+						}
 					}
 				}));
 			}
@@ -243,12 +239,12 @@ var GoogleTranslateOption = (_ => {
 			if (e.instance.props.message && e.instance.props.channel) {
 				let translated = !!translatedMessages[e.instance.props.message.id];
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", ["pin", "unpin"]]]});
-				children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+				children.splice(index + 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: translated ? this.labels.context_messageuntranslateoption_text : this.labels.context_messagetranslateoption_text,
 					disabled: isTranslating,
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, translated ? "untranslate-message" : "translate-message"),
 					icon: _ => {
-						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
+						return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuIcon, {
 							icon: translated ? translateIconUntranslate : translateIcon
 						});
 					},

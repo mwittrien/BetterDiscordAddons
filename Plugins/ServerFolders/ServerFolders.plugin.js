@@ -500,12 +500,12 @@ var ServerFolders = (_ => {
 				let folder = BDFDB.GuildUtils.getFolder(e.instance.props.guild.id);
 				let unfolderedGuilds = BDFDB.LibraryModules.FolderStore.getSortedGuilds().filter(n => !n.folderId).map(n => n.guilds[0]).filter(n => n);
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
-				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.labels.servercontext_serverfolders_text,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-add"),
 						children: folder ? [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 								label: this.labels.serversubmenu_removefromfolder_text,
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, "remove-from-folder"),
 								color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
@@ -515,7 +515,7 @@ var ServerFolders = (_ => {
 								}
 							})
 						] : [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 								label: this.labels.serversubmenu_createfolder_text,
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, "create-folder"),
 								disabled: !unfolderedGuilds.length,
@@ -524,11 +524,11 @@ var ServerFolders = (_ => {
 									this.openFolderCreationMenu(unfolderedGuilds, e.instance.props.guild.id);
 								}
 							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 								label: this.labels.serversubmenu_addtofolder_text,
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-add-to-folder"),
 								disabled: !folders.length,
-								children: folders.map((folder, i) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+								children: folders.map((folder, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 									label: folder.folderName || `${BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER} #${i + 1}`,
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "add-to-folder", i + 1),
 									action: _ => {
@@ -554,10 +554,10 @@ var ServerFolders = (_ => {
 					BDFDB.DataUtils.save(data, this, "folders", e.instance.props.folderId);
 				}
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "mark-folder-read"]]});
-				children.splice(index > -1 ? index + 1 : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+				children.splice(index > -1 ? index + 1 : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "auto-read-folder"),
 					render: itemData => {
-						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuCheckboxItem, Object.assign({
+						return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuCheckboxItem, Object.assign({
 							label: this.labels.foldercontext_autoreadfolder_text,
 							checked: data.autoRead,
 							action: state => {
@@ -567,11 +567,11 @@ var ServerFolders = (_ => {
 						}, itemData));
 					}
 				}));
-				e.returnvalue.props.children.splice(e.returnvalue.props.children.length - 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+				e.returnvalue.props.children.splice(e.returnvalue.props.children.length - 1, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "mute-folder"),
 						render: itemData => {
-							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuCheckboxItem, Object.assign({
+							return BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuCheckboxItem, Object.assign({
 								label: this.labels.foldercontext_mutefolder_text,
 								checked: muted,
 								action: state => {
@@ -583,8 +583,8 @@ var ServerFolders = (_ => {
 						}
 					})
 				}));
-				e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+				e.returnvalue.props.children.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.labels.foldercontext_removefolder_text,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "remove-folder"),
 						color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,

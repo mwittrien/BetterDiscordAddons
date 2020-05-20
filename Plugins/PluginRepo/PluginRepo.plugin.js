@@ -274,7 +274,7 @@ var PluginRepo = (_ => {
 		onUserSettingsCogContextMenu (e) {
 			BDFDB.TimeUtils.timeout(_ => {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["label", "BandagedBD"]]});
-				if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+				if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: "Plugin Repo",
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "repo"),
 					action: _ => {

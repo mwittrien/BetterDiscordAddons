@@ -192,8 +192,8 @@ var ReadAllNotificationsButton = (_ => {
 		}
 		
 		injectItem (children, channelId) {
-			children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+			children.unshift(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+				children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: BDFDB.LanguageUtils.LanguageStrings.MARK_AS_READ,
 					id: "mark-dm-read",
 					disabled: !BDFDB.LibraryModules.DirectMessageUnreadStore.getUnreadPrivateChannelIds().includes(channelId),
@@ -226,9 +226,9 @@ var ReadAllNotificationsButton = (_ => {
 							else BDFDB.ModalUtils.confirm(this, `Are you sure you want to mark all Notifications as read?`, clear);
 						},
 						onContextMenu: event => {
-							BDFDB.ContextMenuUtils.open(this, event, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+							BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 								children: [
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.context_unreadguilds_text,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "mark-unread-read"),
 										action: event2 => {
@@ -236,7 +236,7 @@ var ReadAllNotificationsButton = (_ => {
 											this.markGuildsAsRead(BDFDB.GuildUtils.getUnread());
 										}
 									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.context_pingedguilds_text,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "mark-pinged-read"),
 										action: event2 => {
@@ -244,7 +244,7 @@ var ReadAllNotificationsButton = (_ => {
 											this.markGuildsAsRead(BDFDB.GuildUtils.getPinged());
 										}
 									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.context_mutedguilds_text,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "mark-muted-read"),
 										action: event2 => {
@@ -252,7 +252,7 @@ var ReadAllNotificationsButton = (_ => {
 											this.markGuildsAsRead(BDFDB.GuildUtils.getMuted());
 										}
 									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.context_guilds_text,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "mark-all-read"),
 										action: event2 => {
@@ -261,7 +261,7 @@ var ReadAllNotificationsButton = (_ => {
 											this.markGuildsAsRead(BDFDB.GuildUtils.getAll());
 										}
 									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.context_dms_text,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "mark-dms-read"),
 										action: event2 => {

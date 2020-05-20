@@ -236,14 +236,14 @@ var EditUsers = (_ => {
 		onUserContextMenu (e) {
 			if (e.instance.props.user) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["id", "devmode-copy-id"]]});
-				children.splice(index > -1 ? index : children.length, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 							label: this.labels.context_localusersettings_text,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-submenu"),
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+							children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 								children: [
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.submenu_usersettings_text,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-change"),
 										action: _ => {
@@ -251,7 +251,7 @@ var EditUsers = (_ => {
 											this.openUserSettingsModal(e.instance.props.user);
 										}
 									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+									BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 										label: this.labels.submenu_resetsettings_text,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-reset"),
 										disabled: !changedUsers[e.instance.props.user.id],
