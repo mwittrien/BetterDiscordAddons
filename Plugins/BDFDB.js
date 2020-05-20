@@ -3289,23 +3289,26 @@
 		config.label = config.label && [config.label].flat().filter(n => n);
 		config.id = config.id && [config.id].flat().filter(n => n);
 		let contextMenu = BDFDB.ReactUtils.findChild(returnvalue, {props: "navId"});
-		if (contextMenu) for (let i in contextMenu.props.children) {
-			if (contextMenu.props.children[i] && contextMenu.props.children[i].type == RealMenuItems.MenuGroup) {
-				if (BDFDB.ArrayUtils.is(contextMenu.props.children[i].props.children)) {
-					for (let j in contextMenu.props.children[i].props.children) if (check(contextMenu.props.children[i].props.children[j])) {
+		if (contextMenu) {
+			for (let i in contextMenu.props.children) {
+				if (contextMenu.props.children[i] && contextMenu.props.children[i].type == RealMenuItems.MenuGroup) {
+					if (BDFDB.ArrayUtils.is(contextMenu.props.children[i].props.children)) {
+						for (let j in contextMenu.props.children[i].props.children) if (check(contextMenu.props.children[i].props.children[j])) {
+							if (config.group) return [contextMenu.props.children, parseInt(i)];
+							else return [contextMenu.props.children[i].props.children, parseInt(j)];
+						}
+					}
+					else if (contextMenu.props.children[i] && contextMenu.props.children[i].props && check(contextMenu.props.children[i].props.children)) {
 						if (config.group) return [contextMenu.props.children, parseInt(i)];
-						else return [contextMenu.props.children[i].props.children, parseInt(j)];
+						else {
+							contextMenu.props.children[i].props.children = [contextMenu.props.children[i].props.children];
+							return [contextMenu.props.children[i].props.children, 0];
+						}
 					}
 				}
-				else if (contextMenu.props.children[i] && contextMenu.props.children[i].props && check(contextMenu.props.children[i].props.children)) {
-					if (config.group) return [contextMenu.props.children, parseInt(i)];
-					else {
-						contextMenu.props.children[i].props.children = [contextMenu.props.children[i].props.children];
-						return [contextMenu.props.children[i].props.children, 0];
-					}
-				}
+				else if (check(contextMenu.props.children[i])) return [contextMenu.props.children, parseInt(i)];
 			}
-			else if (check(contextMenu.props.children[i])) return [contextMenu.props.children, parseInt(i)];
+			return [contextMenu.props.children, -1];
 		}
 		return [null, -1];
 		function check (child) {
