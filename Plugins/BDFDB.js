@@ -2260,16 +2260,13 @@
 		else return null;
 	};
 	BDFDB.GuildUtils.openMenu = function (eleOrInfoOrId, e = BDFDB.InternalData.mousePosition) {
+		return;
 		if (!eleOrInfoOrId) return;
 		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.GuildUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 		let guild = LibraryModules.GuildStore.getGuild(id);
 		if (guild) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
 			return BDFDB.ReactUtils.createElement((BDFDB.ModuleUtils.findByName("GuildContextMenu", false) || {exports:{}}).exports.default, Object.assign({}, e, {
-				type: BDFDB.DiscordConstants.ContextMenuTypes.GUILD_ICON_BAR,
-				guild: guild,
-				badge: LibraryModules.UnreadGuildUtils.getMentionCount(guild.id),
-				link: BDFDB.DiscordConstants.Routes.CHANNEL(guild.id, LibraryModules.LastChannelStore.getChannelId(guild.id)),
-				selected: guild.id == LibraryModules.LastGuildStore.getGuildId()
+				guild: guild
 			}));
 		});
 	};
@@ -3250,6 +3247,7 @@
 		]});
 	};
 	
+	const RealMenuItems = BDFDB.ModuleUtils.findByProperties("MenuItem", "MenuGroup");
 	BDFDB.ContextMenuUtils = {};
 	BDFDB.ContextMenuUtils.open = function (plugin, e, children) {
 		LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
@@ -3266,7 +3264,6 @@
 		if (BDFDB.ObjectUtils.is(instance) && instance.props && typeof instance.props.closeContextMenu == "function") instance.props.closeContextMenu();
 		else BDFDB.LibraryModules.ContextMenuUtils.closeContextMenu();
 	};
-	const RealMenuItems = BDFDB.ModuleUtils.findByProperties("MenuItem", "MenuGroup");
 	BDFDB.ContextMenuUtils.createItem = function (component, props = {}) {
 		if (!component) return null;
 		else {
@@ -3283,6 +3280,36 @@
 	};
 	BDFDB.ContextMenuUtils.createItemId = function (...strings) {
 		return strings.map(s => typeof s == "number" ? s.toString() : s).filter(s => typeof s == "string").map(s => s.toLowerCase().replace(/\s/, "-")).join("-");
+	};
+	BDFDB.ContextMenuUtils.createItemId = function (...strings) {
+		return strings.map(s => typeof s == "number" ? s.toString() : s).filter(s => typeof s == "string").map(s => s.toLowerCase().replace(/\s/, "-")).join("-");
+	};
+	BDFDB.ContextMenuUtils.findItem = function (returnvalue, config) {
+		if (!returnvalue || !returnvalue.props || !BDFDB.ArrayUtils.is(returnvalue.props.children) || !BDFDB.ObjectUtils.is(config) || !config.label && !config.id) return [null, -1];
+		config.label = config.label && [config.label].flat().filter(n => n);
+		config.id = config.id && [config.id].flat().filter(n => n);
+		for (let i in returnvalue.props.children) {
+			if (BDFDB.ArrayUtils.is(returnvalue.props.children[i].props.children)) {
+				for (let j in returnvalue.props.children[i].props.children) if (check(returnvalue.props.children[i].props.children[j])) {
+					if (config.group) return [returnvalue.props.children, i];
+					else return [returnvalue.props.children.props.children, j];
+				}
+			}
+			else if (check(returnvalue.props.children[i].props.children)) {
+				if (config.group) return [returnvalue.props.children, i];
+				else {
+					returnvalue.props.children[i].props.children = [returnvalue.props.children[i].props.children];
+					return [returnvalue.props.children[i].props.children, 0];
+				}
+			}
+		}
+		return [null, -1];
+		function check (child) {
+			if (!child) return false;
+			let props = child.stateNode ? child.stateNode.props : child.props;
+			if (!props) return false;
+			return config.id && config.id.some(key => props.id == key) || config.label && config.label.some(key => props.label == key);
+		}
 	};
 
 	BDFDB.TimeUtils = {};
