@@ -1634,9 +1634,9 @@
 		}
 		return parent.props.children;
 	}
-	BDFDB.ReactUtils.createElement = function (component, props) {
+	BDFDB.ReactUtils.createElement = function (component, props = {}) {
 		if (component && component.defaultProps) for (let key in component.defaultProps) if (props[key] == null) props[key] = component.defaultProps[key];
-		try {return LibraryModules.React.createElement(component || "div", props || {}) || null;}
+		try {return LibraryModules.React.createElement(component || "div", props) || null;}
 		catch (err) {BDFDB.LogUtils.error("Could not create react element! " + err);}
 		return null;
 	};
@@ -3275,7 +3275,8 @@
 				id: props.id,
 				disabled: props.disabled,
 				render: menuItemProps => {
-					return BDFDB.ReactUtils.createElement(component, BDFDB.ObjectUtils.exclude(Object.assign({}, props, menuItemProps), "id", "disabled"));
+					if (!props.state) props.state = BDFDB.ObjectUtils.extract(props, "checked", "value");
+					return BDFDB.ReactUtils.createElement(component, Object.assign(props, menuItemProps));
 				}
 			});
 		}
@@ -7432,41 +7433,16 @@
 	
 	InternalComponents.LibraryComponents.MenuItems.MenuCheckboxItem = InternalBDFDB.loadPatchedComp("MenuItems.MenuCheckboxItem") || reactInitialized && class BDFDB_MenuCheckboxItem extends LibraryModules.React.Component {
 		handleClick() {
-			this.props.checked = !this.props.checked;
-			if (typeof this.props.action == "function") this.props.action(this.props.checked, this);
+			if (this.props.state) {
+				this.props.state.checked = !this.props.state.checked;
+				if (typeof this.props.action == "function") this.props.action(this.props.state.checked, this);
+			}
 			BDFDB.ReactUtils.forceUpdate(this);
 		}
 		render() {
-			return BDFDB.ReactUtils.createElement("div", Object.assign({
-				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.menuitem, BDFDB.disCN.menulabelcontainer, this.props.color && BDFDB.disCN["menu" + this.props.color.toLowerCase()], this.props.disabled && BDFDB.disCN.menudisabled, this.props.isFocused && BDFDB.disCN.menufocused),
-				onClick: !this.props.disabled && this.handleClick.bind(this)
-			}, this.props, {
-				"aria-checked": this.props.checked,
-				"aria-disabled": this.props.disabled,
-				children: [
-					BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.menulabel,
-						children: [
-							typeof this.props.label == "function" ? this.props.label(this) : this.props.label,
-							this.props.subtext && BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN.menusubtext,
-								children: this.props.subtext
-							})
-						].filter(n => n)
-					}),
-					BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.menuiconcontainer,
-						children: this.props.checked ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
-							name: InternalComponents.LibraryComponents.SvgIcon.Names.CHECKBOX,
-							className: BDFDB.disCN.menuicon,
-							background: BDFDB.disCN.menucheckbox,
-							foreground: BDFDB.disCN.menucheck
-						}) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
-							name: InternalComponents.LibraryComponents.SvgIcon.Names.CHECKBOX_EMPTY,
-							className: BDFDB.disCN.menuicon
-						})
-					})
-				].filter(n => n)
+			return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.MenuCheckboxItem, Object.assign({}, this.props, {
+				checked: this.props.state && this.props.state.checked,
+				action: this.handleClick.bind(this)
 			}));
 		}
 	};
