@@ -3291,12 +3291,12 @@
 		for (let i in returnvalue.props.children) {
 			if (BDFDB.ArrayUtils.is(returnvalue.props.children[i].props.children)) {
 				for (let j in returnvalue.props.children[i].props.children) if (check(returnvalue.props.children[i].props.children[j])) {
-					if (config.group) return [returnvalue.props.children, i];
-					else return [returnvalue.props.children[i].props.children, j];
+					if (config.group) return [returnvalue.props.children, parseInt(i)];
+					else return [returnvalue.props.children[i].props.children, parseInt(j)];
 				}
 			}
 			else if (check(returnvalue.props.children[i].props.children)) {
-				if (config.group) return [returnvalue.props.children, i];
+				if (config.group) return [returnvalue.props.children, parseInt(i)];
 				else {
 					returnvalue.props.children[i].props.children = [returnvalue.props.children[i].props.children];
 					return [returnvalue.props.children[i].props.children, 0];
