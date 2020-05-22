@@ -1,23 +1,27 @@
 //META{"name":"ThemeSettings","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeSettings","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ThemeSettings/ThemeSettings.plugin.js"}*//
 
 var ThemeSettings = (_ => {
+	var dir;
+	
 	return class ThemeSettings {
 		getName () {return "ThemeSettings";}
 
-		getVersion () {return "1.1.8";}
+		getVersion () {return "1.1.9";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Allows you to change Theme Variables within BetterDiscord. Adds a Settings button (similar to Plugins) to customizable Themes in your Themes Page.";}
 
-		constructor () {			
-			this.patchedModules = {
-				after: {
-					V2C_ThemeCard: "render"
-				}
+		constructor () {
+			this.changelog = {
+				"fixed":[["Works","again"]]
 			};
 		}
-
+		
+		initConstructor () {
+			dir = BDFDB.BDUtils.getThemesFolder();
+		}
+		
 		// Legacy
 		load () {}
 
@@ -47,9 +51,15 @@ var ThemeSettings = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 				
-				this.dir = BDFDB.BDUtils.getThemesFolder();
-
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				let cardObserver = (new MutationObserver(changes => {changes.forEach(change => {if (change.addedNodes) {change.addedNodes.forEach(node => {
+					if (BDFDB.DOMUtils.containsClass(node, BDFDB.disCN._repocard)) this.appendSettingsButton(node);
+					for (let child of node.querySelectorAll(BDFDB.dotCN._repocard)) this.appendSettingsButton(child);
+				});}});}));
+				BDFDB.ObserverUtils.connect(this, document.querySelector("#user-settings"), {name:"cardObserver", instance:cardObserver}, {childList: true, subtree:true});
+				BDFDB.ObserverUtils.connect(this, BDFDB.dotCN.applayers, {name:"appLayerObserver", instance:(new MutationObserver(changes => {changes.forEach(change => {if (change.addedNodes) {change.addedNodes.forEach(node => {
+					if (node.id == "user-settings") BDFDB.ObserverUtils.connect(this, node, {name:"cardObserver", instance:cardObserver}, {childList: true, subtree:true});
+				});}});}))}, {childList: true});
+				for (let child of document.querySelectorAll(BDFDB.dotCN._repocard)) this.appendSettingsButton(child);
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -57,8 +67,8 @@ var ThemeSettings = (_ => {
 		stop () {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
-
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				
+				BDFDB.DOMUtils.remove(".theme-settings-button");
 				
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -66,44 +76,41 @@ var ThemeSettings = (_ => {
 
 
 		// Begin of own functions
-
-		processV2CThemeCard (e) {
-			if (e.instance.props.addon && e.instance.props.addon.css && !e.instance.state.settings) {
-				let vars = this.getThemeVars(e.instance.props.addon.css);
+		
+		appendSettingsButton (card) {
+			if (card.querySelector(".theme-settings-button")) return;
+			let addon = BDFDB.ReactUtils.getValue(BDFDB.ReactUtils.getInstance(card), "return.stateNode.props.addon");
+			if (addon && !addon.plugin) {
+				let vars = this.getThemeVars(addon.css);
 				if (vars.length) {
-					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN._repofooter]]});
-					if (index == -1) {
-						let footer = BDFDB.ReactUtils.createElement("div", {className: BDFDB.disCN._repofooter, children: []});
-						e.returnvalue.props.children.push(footer);
-						children = footer.props.children;
+					let footer = card.querySelector(BDFDB.dotCN._repofooter);
+					if (!footer) {
+						footer = document.createElement("div");
+						footer.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repofooter);
+						card.appendChild(footer);
 					}
-					else {
-						children[index].props.children = [children[index].props.children].flat();
-						children = children[index].props.children;
-					}
-					children.push(BDFDB.ReactUtils.createElement("button", {
-						className: BDFDB.disCNS._reposettingsbutton,
-						children: "Settings",
-						onClick: event => {
-							let wrapper = BDFDB.DOMUtils.getParent(BDFDB.dotCN._reposettingsclosed, event.currentTarget);
-							BDFDB.DOMUtils.addClass(wrapper, BDFDB.disCN._reposettingsopen);
-							BDFDB.DOMUtils.removeClass(wrapper, BDFDB.disCN._reposettingsclosed);
-							let children = [];
-							while (wrapper.childElementCount) {
-								children.push(wrapper.firstChild);
-								wrapper.firstChild.remove();
-							}
-							let closeButton = BDFDB.DOMUtils.create(`<div style="float: right; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" style="width: 18px; height: 18px;"><g class="background" fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="#dcddde" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div>`);
-							wrapper.appendChild(closeButton);
-							closeButton.addEventListener("click", _ => {
-								BDFDB.DOMUtils.removeClass(wrapper, BDFDB.disCN._reposettingsopen);
-								BDFDB.DOMUtils.addClass(wrapper, BDFDB.disCN._reposettingsclosed);
-								while (wrapper.childElementCount) wrapper.firstChild.remove();
-								while (children.length) wrapper.appendChild(children.shift());
-							});
-							this.createThemeSettings(wrapper, e.instance.props.addon, vars);
+					let settingsButton = document.createElement("button");
+					settingsButton.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._reposettingsbutton, "theme-settings-button");
+					settingsButton.innerText = "Settings";
+					footer.appendChild(settingsButton);
+					settingsButton.addEventListener("click", _ => {
+						BDFDB.DOMUtils.addClass(card, BDFDB.disCN._reposettingsopen);
+						BDFDB.DOMUtils.removeClass(card, BDFDB.disCN._reposettingsclosed);
+						let children = [];
+						while (card.childElementCount) {
+							children.push(card.firstChild);
+							card.firstChild.remove();
 						}
-					}));
+						let closeButton = BDFDB.DOMUtils.create(`<div style="float: right; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" style="width: 18px; height: 18px;"><g class="background" fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="#dcddde" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div>`);
+						card.appendChild(closeButton);
+						closeButton.addEventListener("click", _ => {
+							BDFDB.DOMUtils.removeClass(card, BDFDB.disCN._reposettingsopen);
+							BDFDB.DOMUtils.addClass(card, BDFDB.disCN._reposettingsclosed);
+							while (card.childElementCount) card.firstChild.remove();
+							while (children.length) card.appendChild(children.shift());
+						});
+						this.createThemeSettings(card, addon, vars);
+					});
 				}
 			}
 		}
