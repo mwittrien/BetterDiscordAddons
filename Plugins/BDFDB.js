@@ -1253,7 +1253,8 @@
 		V2C_ContentColumn: "contentcolumn"
 	};
 	WebModulesData.CodeFinder = {
-		EmojiPicker: ["allowManagedEmojis", "EMOJI_PICKER_TAB_PANEL_ID", "diversitySelector"]
+		EmojiPicker: ["allowManagedEmojis", "EMOJI_PICKER_TAB_PANEL_ID", "diversitySelector"],
+		SearchResultsInner: ["SEARCH_HIDE_BLOCKED_MESSAGES", "totalResults", "SEARCH_PAGE_SIZE"]
 	};
 	WebModulesData.PropsFinder = {
 		MessageHeader: "MessageTimestamp",
