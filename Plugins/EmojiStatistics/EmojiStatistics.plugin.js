@@ -14,7 +14,7 @@ var EmojiStatistics = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["New Style","Fixed for the new expression picker (emoji + gif combo) that is being tested on canary"]]
+				"fixed":[["New Style","Fixed for the new expression picker (emoji + gif combo)"]]
 			};
 
 			this.patchedModules = {
