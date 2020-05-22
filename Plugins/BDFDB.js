@@ -1105,8 +1105,8 @@
 		"GuildIcon"
 	];
 	WebModulesData.MemoComponent = [
+		"EmojiPicker",
 		"ExpressionPicker",
-		"ExpressionEmojiPicker",
 		"GuildFolder",
 		"MessageContent",
 		"NowPlayingHeader"
@@ -1155,7 +1155,6 @@
 		ChannelTextAreaForm: "chatform",
 		ChannelWindow: "chatcontent",
 		DirectMessage: "guildouter",
-		EmojiPicker: "emojipicker",
 		Guild: "guildouter",
 		GuildFolder: "guildfolderwrapper",
 		GuildIcon: "avataricon",
@@ -1196,7 +1195,7 @@
 		V2C_ThemeCard: "_repocard"
 	};
 	WebModulesData.CodeFinder = {
-		ExpressionEmojiPicker: ["allowManagedEmojis", "EMOJI_PICKER_TAB_PANEL_ID", "diversitySelector"]
+		EmojiPicker: ["allowManagedEmojis", "EMOJI_PICKER_TAB_PANEL_ID", "diversitySelector"]
 	};
 	WebModulesData.PropsFinder = {
 		MessageHeader: "MessageTimestamp",
@@ -4089,9 +4088,6 @@
 	DiscordClassModules.Checkbox = BDFDB.ModuleUtils.findByProperties("checkboxWrapper", "round");
 	DiscordClassModules.ColorPicker = BDFDB.ModuleUtils.findByProperties("colorPickerCustom", "customColorPickerInput");
 	DiscordClassModules.ColorPickerInner = BDFDB.ModuleUtils.findByProperties("saturation", "hue", "wrapper");
-	DiscordClassModules.ContextMenu = BDFDB.ModuleUtils.findByProperties("contextMenu", "itemGroup");
-	DiscordClassModules.ContextMenuCheckbox = BDFDB.ModuleUtils.findByProperties("checkboxInner", "checkboxElement");
-	DiscordClassModules.ContextMenuReactButton = BDFDB.ModuleUtils.findByProperties("wrapper", "icon", "focused");
 	DiscordClassModules.CtaVerification = BDFDB.ModuleUtils.findByProperties("attendeeCTA", "verificationNotice");
 	DiscordClassModules.Cursor = BDFDB.ModuleUtils.findByProperties("cursorDefault", "userSelectNone");
 	DiscordClassModules.CustomStatusIcon = BDFDB.ModuleUtils.findByProperties("textRuler", "emoji", "icon");
@@ -4103,12 +4099,11 @@
 	DiscordClassModules.Emoji = BDFDB.ModuleUtils.find(m => typeof m.emoji == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.EmojiButton = BDFDB.ModuleUtils.findByProperties("emojiButton", "sprite");
 	DiscordClassModules.EmojiInput = BDFDB.ModuleUtils.findByProperties("inputContainer", "emojiButton");
-	DiscordClassModules.EmojiPicker = BDFDB.ModuleUtils.findByProperties("emojiPicker", "categories");
+	DiscordClassModules.EmojiPicker = BDFDB.ModuleUtils.findByProperties("emojiPicker", "inspector");
+	DiscordClassModules.EmojiPickerDiversitySelector = BDFDB.ModuleUtils.findByProperties("diversityEmojiItemImage", "diversitySelectorPopout");
+	DiscordClassModules.EmojiPickerItem = BDFDB.ModuleUtils.findByProperties("emojiItemImage", "emojiItemImageLoading");
+	DiscordClassModules.EmojiPickerInspector = BDFDB.ModuleUtils.findByProperties("inspector", "glyphEmoji");
 	DiscordClassModules.ExpressionPicker = BDFDB.ModuleUtils.findByProperties("contentWrapper", "navButton", "navList");
-	DiscordClassModules.ExpressionEmojiPicker = BDFDB.ModuleUtils.findByProperties("emojiPicker", "inspector");
-	DiscordClassModules.ExpressionEmojiPickerDiversitySelector = BDFDB.ModuleUtils.findByProperties("diversityEmojiItemImage", "diversitySelectorPopout");
-	DiscordClassModules.ExpressionEmojiPickerItem = BDFDB.ModuleUtils.findByProperties("emojiItemImage", "emojiItemImageLoading");
-	DiscordClassModules.ExpressionEmojiPickerInspector = BDFDB.ModuleUtils.findByProperties("inspector", "glyphEmoji");
 	DiscordClassModules.File = BDFDB.ModuleUtils.findByProperties("downloadButton", "fileNameLink");
 	DiscordClassModules.Flex = BDFDB.ModuleUtils.findByProperties("alignBaseline", "alignCenter");
 	DiscordClassModules.FlexChild = BDFDB.ModuleUtils.findByProperties("flexChild", "flex");
@@ -4156,6 +4151,7 @@
 	DiscordClassModules.LoadingScreen = BDFDB.ModuleUtils.findByProperties("container", "problemsText", "problems");
 	DiscordClassModules.Margins = BDFDB.ModuleUtils.findByProperties("marginBottom4", "marginCenterHorz");
 	DiscordClassModules.Menu = BDFDB.ModuleUtils.findByProperties("menu", "styleFlexible", "item");
+	DiscordClassModules.MenuReactButton = BDFDB.ModuleUtils.findByProperties("wrapper", "icon", "focused");
 	DiscordClassModules.Member = BDFDB.ModuleUtils.findByProperties("member", "ownerIcon");
 	DiscordClassModules.MembersWrap = BDFDB.ModuleUtils.findByProperties("membersWrap", "membersGroup");
 	DiscordClassModules.Message = BDFDB.ModuleUtils.findByProperties("message", "mentioned");
@@ -4649,32 +4645,6 @@
 		coloryellow: ["TextColor", "colorStatusYellow"],
 		contentcolumn: ["SettingsWindow", "contentColumn"],
 		contentregion: ["SettingsWindow", "contentRegion"],
-		contextmenu: ["ContextMenu", "contextMenu"],
-		contextmenucheckbox: ["ContextMenuCheckbox", "checkbox"],
-		contextmenucheckbox2: ["ContextMenu", "checkbox"],
-		contextmenucheckboxdisabled: ["ContextMenuCheckbox", "disabled"],
-		contextmenucheckboxinner: ["ContextMenuCheckbox", "checkboxInner"],
-		contextmenucheckboxelement: ["ContextMenuCheckbox", "checkboxElement"],
-		contextmenuimage: ["ContextMenu", "image"],
-		contextmenuitem: ["ContextMenu", "item"],
-		contextmenuitembrand: ["ContextMenu", "brand"],
-		contextmenuitemclickable: ["ContextMenu", "clickable"],
-		contextmenuitemdanger: ["ContextMenu", "danger"],
-		contextmenuitemdisabled: ["ContextMenu", "disabled"],
-		contextmenuitemgroup: ["ContextMenu", "itemGroup"],
-		contextmenuitemtoggle: ["ContextMenu", "itemToggle"],
-		contextmenuitemselected: ["ContextMenu", "selected"],
-		contextmenuitemslider: ["ContextMenu", "itemSlider"],
-		contextmenuitemsubmenu: ["ContextMenu", "itemSubMenu"],
-		contextmenuitemsubmenucaret: ["ContextMenu", "caret"],
-		contextmenulabel: ["ContextMenu", "label"],
-		contextmenureactbutton: ["ContextMenuReactButton", "button"],
-		contextmenureactbuttonfocused: ["ContextMenuReactButton", "focused"],
-		contextmenureactbuttonicon: ["ContextMenuReactButton", "icon"],
-		contextmenureactbuttons: ["ContextMenuReactButton", "wrapper"],
-		contextmenuscroller: ["ContextMenu", "scroller"],
-		contextmenuslider: ["ContextMenu", "slider"],
-		contextmenusubcontext: ["ContextMenu", "subMenuContext"],
 		cursordefault: ["Cursor", "cursorDefault"],
 		cursorpointer: ["Cursor", "cursorPointer"],
 		customstatusemoji: ["CustomStatusIcon", "emoji"],
@@ -4757,41 +4727,18 @@
 		emojiinputclearbutton: ["EmojiInput", "clearButton"],
 		emojiinputclearicon: ["EmojiInput", "clearIcon"],
 		emojiinputcontainer: ["EmojiInput", "inputContainer"],
-		emojipicker: ["EmojiPicker", "emojiPicker"],
 		emojipickerbutton: ["Reactions", "reactionBtn"],
-		emojipickercategories: ["EmojiPicker", "categories"],
-		emojipickercategory: ["EmojiPicker", "category"],
-		emojipickerdisabled: ["EmojiPicker", "disabled"],
-		emojipickerdiversityselector: ["EmojiPicker", "diversitySelector"],
-		emojipickerdiversityselectoritem: ["EmojiPicker", "item"],
-		emojipickeremojiitem: ["EmojiPicker", "emojiItem"],
+		emojipicker: ["EmojiPicker", "emojiPicker"],
+		emojipickerdiversityemojiitem: ["EmojiPickerDiversitySelector", "diversityEmojiItem"],
+		emojipickerdiversityemojiitemimage: ["EmojiPickerDiversitySelector", "diversityEmojiItemImage"],
+		emojipickerdiversityselector: ["EmojiPickerDiversitySelector", "diversitySelector"],
+		emojipickerdiversityselectorpopout: ["EmojiPickerDiversitySelector", "diversitySelectorPopout"],
+		emojipickerdiversityselectorwrapper: ["EmojiPicker", "diversitySelector"],
+		emojipickeremojiitemimage: ["EmojiPickerItem", "emojiItemImage"],
+		emojipickeremojiitemimageloading: ["EmojiPickerItem", "emojiItemImageLoading"],
 		emojipickerheader: ["EmojiPicker", "header"],
-		emojipickerinfobar: ["EmojiPicker", "infoBar"],
-		emojipickerinfobaremoji: ["EmojiPicker", "infoBarEmoji"],
-		emojipickerpopout: ["EmojiPicker", "popout"],
-		emojipickerpremiumpromo: ["EmojiPicker", "premiumPromo"],
-		emojipickerpremiumpromoclose: ["EmojiPicker", "premiumPromoClose"],
-		emojipickerpremiumpromodescription: ["EmojiPicker", "premiumPromoDescription"],
-		emojipickerpremiumpromoimage: ["EmojiPicker", "premiumPromoImage"],
-		emojipickerpremiumpromotitle: ["EmojiPicker", "premiumPromoTitle"],
-		emojipickerrow: ["EmojiPicker", "row"],
-		emojipickersearchbar: ["EmojiPicker", "searchBar"],
-		emojipickerscroller: ["EmojiPicker", "scroller"],
-		emojipickerscrollerwrap: ["EmojiPicker", "scrollerWrap"],
-		emojipickerselected: ["EmojiPicker", "selected"],
-		emojipickerspriteitem: ["EmojiPicker", "spriteItem"],
-		emojipickerstickyheader: ["EmojiPicker", "stickyHeader"],
-		expressionemojipicker: ["ExpressionEmojiPicker", "emojiPicker"],
-		expressionemojipickerdiversityemojiitem: ["ExpressionEmojiPickerDiversitySelector", "diversityEmojiItem"],
-		expressionemojipickerdiversityemojiitemimage: ["ExpressionEmojiPickerDiversitySelector", "diversityEmojiItemImage"],
-		expressionemojipickerdiversityselector: ["ExpressionEmojiPickerDiversitySelector", "diversitySelector"],
-		expressionemojipickerdiversityselectorpopout: ["ExpressionEmojiPickerDiversitySelector", "diversitySelectorPopout"],
-		expressionemojipickerdiversityselectorwrapper: ["ExpressionEmojiPicker", "diversitySelector"],
-		expressionemojipickeremojiitemimage: ["ExpressionEmojiPickerItem", "emojiItemImage"],
-		expressionemojipickeremojiitemimageloading: ["ExpressionEmojiPickerItem", "emojiItemImageLoading"],
-		expressionemojipickerheader: ["ExpressionEmojiPicker", "header"],
-		expressionemojipickerinspector: ["ExpressionEmojiPickerInspector", "inspector"],
-		expressionemojipickerinspectoremoji: ["ExpressionEmojiPickerInspector", "emoji"],
+		emojipickerinspector: ["EmojiPickerInspector", "inspector"],
+		emojipickerinspectoremoji: ["EmojiPickerInspector", "emoji"],
 		expressionpicker: ["ExpressionPicker", "contentWrapper"],
 		expressionpickernav: ["ExpressionPicker", "nav"],
 		expressionpickernavbutton: ["ExpressionPicker", "navButton"],
@@ -5125,6 +5072,10 @@
 		menuitem: ["Menu", "item"],
 		menulabel: ["Menu", "label"],
 		menulabelcontainer: ["Menu", "labelContainer"],
+		menureactbutton: ["MenuReactButton", "button"],
+		menureactbuttonfocused: ["MenuReactButton", "focused"],
+		menureactbuttonicon: ["MenuReactButton", "icon"],
+		menureactbuttons: ["MenuReactButton", "wrapper"],
 		menuscroller: ["Menu", "scroller"],
 		menuseparator: ["Menu", "separator"],
 		menustylefixed: ["Menu", "styleFixed"],
@@ -7131,8 +7082,6 @@
 	InternalComponents.LibraryComponents.Emoji = BDFDB.ModuleUtils.findByName("Emoji");
 	
 	InternalComponents.LibraryComponents.EmojiButton = BDFDB.ModuleUtils.findByName("EmojiButton");
-	
-	InternalComponents.LibraryComponents.EmojiPicker = BDFDB.ModuleUtils.findByString("allowManagedEmojis", "theme");
 	
 	InternalComponents.LibraryComponents.EmojiPickerButton = InternalBDFDB.loadPatchedComp("EmojiPickerButton") || reactInitialized && class BDFDB_EmojiPickerButton extends LibraryModules.React.Component {
 		handleEmojiChange(emoji) {
