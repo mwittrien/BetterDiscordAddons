@@ -20,7 +20,6 @@
 		{
 			creationTime: performance.now()
 		}),
-		BDv2Api: window.BDFDB && window.BDFDB.BDv2Api || undefined,
 		name: "BDFDB"
 	};
 	const InternalBDFDB = {
@@ -299,7 +298,48 @@
 		BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsPanel, {
 			key: `${plugin.name}-settingsPanel`,
 			title: plugin.name,
-			children
+			controls: [
+				plugin.changelog && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
+					className: BDFDB.disCN.settingspanelheaderbutton,
+					children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
+						text: BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG,
+						children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+							name: InternalComponents.LibraryComponents.SvgIcon.Names.CHANGELOG,
+							onClick: _ => {BDFDB.PluginUtils.openChangeLog(plugin);}
+						})
+					})
+				}),
+				plugin != BDFDB && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Button, {
+					size: InternalComponents.LibraryComponents.Button.Sizes.MIN,
+					children: "Library Settings",
+					onClick: event => {
+						let wrapper = BDFDB.DOMUtils.getParent(BDFDB.dotCN._repocard, event.currentTarget);
+						if (wrapper) {
+							let settingsPanel = InternalBDFDB.createLibrarySettings();
+							if (settingsPanel) {
+								let savedChildren = [];
+								while (wrapper.childElementCount) {
+									savedChildren.push(wrapper.firstChild);
+									wrapper.firstChild.remove();
+								}
+								let closeButton = BDFDB.DOMUtils.create(`<div style="float: right; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" style="width: 18px; height: 18px;"><g class="background" fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="#dcddde" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div>`);
+								wrapper.appendChild(closeButton);
+								closeButton.addEventListener("click", _ => {
+									while (wrapper.childElementCount) wrapper.firstChild.remove();
+									while (savedChildren.length) wrapper.appendChild(savedChildren.shift());
+									let settings = wrapper.querySelector(BDFDB.dotCN._reposettings);
+									if (settings) {
+										while (settings.childElementCount) settings.firstChild.remove();
+										settings.appendChild(plugin.getSettingsPanel());
+									}
+								});
+								wrapper.appendChild(settingsPanel);
+							}
+						}
+					}
+				})
+			],
+			children: children
 		}), settingsPanel);
 		return settingsPanel;
 	};
@@ -307,6 +347,26 @@
 		if (!BDFDB.ObjectUtils.is(plugin) || typeof plugin.getSettingsPanel != "function" || !Node.prototype.isPrototypeOf(settingsPanel) || !settingsPanel.parentElement) return;
 		settingsPanel.parentElement.appendChild(plugin.getSettingsPanel(...args));
 		settingsPanel.remove();
+	};
+	InternalBDFDB.createLibrarySettings = function () {
+		if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded) return;
+		let settings = BDFDB.DataUtils.get(BDFDB, "settings");
+		let settingsPanel, settingsItems = [];
+		
+		let bdToastSetting = BDFDB.BDUtils.getSettings("fork-ps-2");
+		for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsSaveItem, {
+			className: BDFDB.disCN.marginbottom8,
+			type: "Switch",
+			plugin: BDFDB,
+			disabled: key == "showToasts" && bdToastSetting,
+			keys: ["settings", key],
+			label: InternalBDFDB.defaults.settings[key].description,
+			note: key == "showToasts" && bdToastSetting && "Disable BBDs general 'Show Toast' setting before disabling this",
+			dividerbottom: true,
+			value: settings[key] || key == "showToasts" && bdToastSetting
+		}));
+		
+		return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(BDFDB, settingsItems);
 	};
 	InternalBDFDB.clearStartTimeout = function (plugin) {
 		if (!BDFDB.ObjectUtils.is(plugin)) return;
@@ -1137,8 +1197,6 @@
 	};
 	WebModulesData.SpecialFilter = {
 		V2C_ContentColumn: ins => ins && ins.return && ins.return.stateNode && ins.return.stateNode.props && typeof ins.return.stateNode.props.title == "string" && (ins.return.stateNode.props.title.toUpperCase().indexOf("PLUGINS") == 0 || ins.return.stateNode.props.title.toUpperCase().indexOf("THEMES") == 0) && ins.return.type,
-		V2C_PluginCard: ins => ins && ins.return && ins.return.stateNode && ins.return.stateNode.props && ins.return.stateNode.props.addon && ins.return.stateNode.props.addon.plugin && ins.return.type,
-		V2C_ThemeCard: ins => ins && ins.return && ins.return.stateNode && ins.return.stateNode.props && ins.return.stateNode.props.addon && ins.return.stateNode.props.addon.css && ins.return.type,
 		GuildFolder: ins => ins && ins.return && ins.return.memoizedProps && ins.return.memoizedProps.folderId && ins.return.memoizedProps.guildIds && ins.return.type
 	};
 	WebModulesData.PatchFinder = {
@@ -1190,9 +1248,7 @@
 		UserHook: "auditloguserhook",
 		UserPopout: "userpopout",
 		UserProfile: "userprofile",
-		V2C_ContentColumn: "contentcolumn",
-		V2C_PluginCard: "_repocard",
-		V2C_ThemeCard: "_repocard"
+		V2C_ContentColumn: "contentcolumn"
 	};
 	WebModulesData.CodeFinder = {
 		EmojiPicker: ["allowManagedEmojis", "EMOJI_PICKER_TAB_PANEL_ID", "diversitySelector"]
@@ -3849,6 +3905,9 @@
 		settingsGuild: "guild-J3Egt5",
 		settingsGuildDisabled: "disabled-b2o83O",
 		settingsPanel: "settingsPanel-w2ySNR",
+		settingsPanelHeader: "settingsHeader-7g994w",
+		settingsPanelHeaderButton: "button-ff4a_z",
+		settingsPanelHeaderControls: "controls-g2WW5_",
 		settingsPanelInner: "settingsInner-zw1xAY",
 		settingsPanelList: "settingsList-eZjkXj",
 		settingsPanelTitle: "title-GTF_8J",
@@ -3904,6 +3963,7 @@
 		bdSwitchChecked: "bd-switch-checked",
 		bdSwitchInner: "bd-checkbox",
 		bdUpdatebtn: "bd-updatebtn",
+		settings: "plugin-settings",
 		settingsOpen: "settings-open",
 		settingsClosed: "settings-closed",
 		switch: "ui-switch",
@@ -4338,6 +4398,7 @@
 		_repolink: ["BDrepo", "bdaLink"],
 		_repolinks: ["BDrepo", "bdaLinks"],
 		_reponame: ["BDrepo", "bdaName"],
+		_reposettings: ["BDrepo", "settings"],
 		_reposettingsbutton: ["BDrepo", "bdaSettingsButton"],
 		_reposettingsopen: ["BDrepo", "settingsOpen"],
 		_reposettingsclosed: ["BDrepo", "settingsClosed"],
@@ -5433,6 +5494,9 @@
 		settingsitemselected: ["Item", "selected"],
 		settingsitemthemed: ["Item", "themed"],
 		settingsPanel: ["BDFDB", "settingsPanel"],
+		settingspanelheader: ["BDFDB", "settingsPanelHeader"],
+		settingspanelheaderbutton: ["BDFDB", "settingsPanelHeaderButton"],
+		settingspanelheadercontrols: ["BDFDB", "settingsPanelHeaderControls"],
 		settingspanelinner: ["BDFDB", "settingsPanelInner"],
 		settingspanellist: ["BDFDB", "settingsPanelList"],
 		settingspaneltitle: ["BDFDB", "settingsPanelTitle"],
@@ -7248,7 +7312,7 @@
 			this.props.isCurrentUserInThisGuildVoice = this.props.state ? !LibraryModules.CurrentVoiceUtils.isDisabled() && LibraryModules.CurrentVoiceUtils.getGuildId() == this.props.guild.id : false;
 			this.props.animatable = this.props.state ? LibraryModules.IconUtils.hasAnimatedGuildIcon(this.props.guild) : false;
 			this.props.unavailable = this.props.state ? LibraryModules.GuildUnavailableStore.unavailableGuilds.includes(this.props.guild.id) : false;
-			var isDraggedGuild = this.props.draggingGuildId === this.props.guild.id;
+			let isDraggedGuild = this.props.draggingGuildId === this.props.guild.id;
 			let guild = isDraggedGuild ? BDFDB.ReactUtils.createElement("div", {
 				children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.Items.DragPlaceholder, {})
 			}) : BDFDB.ReactUtils.createElement("div", {
@@ -7742,24 +7806,39 @@
 	
 	InternalComponents.LibraryComponents.SettingsPanel = InternalBDFDB.loadPatchedComp("SettingsPanel") || reactInitialized && class BDFDB_SettingsPanel extends LibraryModules.React.Component {
 		render() {
+			let headerItems = [
+				this.props.title && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormTitle, {
+					className: BDFDB.disCN.settingspaneltitle,
+					tag: InternalComponents.LibraryComponents.FormComponents.FormTitle.Tags.H2,
+					children: this.props.title
+				}),
+				this.props.controls && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+					className: BDFDB.disCN.settingspanelheadercontrols,
+					align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
+					grow: 0,
+					children: this.props.controls
+				})
+			].flat(10).filter(n => n);
 			return this.props.children ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 				direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
 				grow: 1,
 				children: [
-					typeof this.props.title == "string" ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormTitle, {
-						className: BDFDB.disCN.settingspaneltitle,
-						tag: InternalComponents.LibraryComponents.FormComponents.FormTitle.Tags.H2,
-						children: this.props.title
-					}) : null,
-					typeof this.props.title == "string" ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormDivider, {
-						className: BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom8
-					}) : null,
+					headerItems.length ? [
+						BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+							className: BDFDB.disCN.settingspanelheader,
+							align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
+							children: headerItems
+						}),
+						BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormDivider, {
+							className: BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom8
+						})
+					] : null,
 					BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 						className: BDFDB.disCN.settingspanelinner,
 						direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
 						children: this.props.children
 					})
-				]
+				].flat(10).filter(n => n)
 			}) : null;
 		}
 	};
@@ -8488,6 +8567,15 @@
 			to {opacity: 0.1;}
 		}
 		
+		${BDFDB.dotCN.settingspanelheader} {
+			padding-right: 5px;
+		}
+		${BDFDB.dotCN.settingspanelheadercontrols} > * {
+			margin-left: 8px;
+		}
+		${BDFDB.dotCN.settingspanelheaderbutton} {
+			height: 24px;
+		}
 		${BDFDB.dotCN.settingspanelinner} {
 			padding-left: 15px;
 			padding-right: 5px;
@@ -8879,22 +8967,6 @@
 		#bd-settingspane-container ${BDFDB.dotCN._repoupdatebutton}[style] {
 			display: none !important;
 		}
-		${BDFDB.dotCNS._repolist + BDFDB.dotCN._repocontrols} {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
-		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repofooter + BDFDB.dotCN._repolinks} + * {
-			margin-left: auto;
-		}
-		${BDFDB.dotCNS._repolist + BDFDB.dotCN._repocontrols} > *,
-		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repofooter} button + button,
-		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repofooter + BDFDB.dotCN._repolinks} + * ~ * {
-			margin-left: 8px;
-		}
-		${BDFDB.dotCN._repoicon} {
-			color: var(--interactive-active);
-		}
 		
 		${BDFDB.dotCN.noticewrapper} {
 			transition: height 0.5s ease !important;
@@ -9216,8 +9288,6 @@
 		BDFDB.InternalData.pressedKeys = [];
 	});
 	
-	/* unavailable */
-	
 	InternalBDFDB.patchedModules = {
 		before: {
 			MessageContent: "type"
@@ -9230,9 +9300,7 @@
 			MemberListItem: "componentDidMount",
 			UserPopout: "componentDidMount",
 			UserProfile: "componentDidMount",
-			V2C_ContentColumn: "render",
-			V2C_PluginCard: "render",
-			V2C_ThemeCard: "render"
+			V2C_ContentColumn: "render"
 		}
 	};
 	
@@ -9262,89 +9330,6 @@
 				})
 			}));
 		}
-	};
-
-	InternalBDFDB._processCard = function (e, data) {
-		if (e.instance.state && !e.instance.state.settings) {
-			if (BDFDB.ObjectUtils.toArray(BDFDB.myPlugins).some(n => n == data)) {
-				let children, index;
-				if (data.changelog) {
-					[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN._repocontrols]]});
-					if (index > -1) children[index].props.children.unshift(BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN._repocontrolsbutton,
-						children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
-							text: BDFDB.LanguageUtils.LanguageStrings.CHANGE_LOG,
-							children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
-								name: InternalComponents.LibraryComponents.SvgIcon.Names.CHANGELOG,
-								className: BDFDB.disCN._repoicon,
-								onClick: _ => {BDFDB.PluginUtils.openChangeLog(data);}
-							})
-						})
-					}));
-				}
-				[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN._repofooter]]});
-				if (index == -1) {
-					let footer = BDFDB.ReactUtils.createElement("div", {className: BDFDB.disCN._repofooter, children: []});
-					e.returnvalue.props.children.push(footer);
-					children = footer.props.children;
-				}
-				else {
-					children[index].props.children = [children[index].props.children].flat();
-					children = children[index].props.children;
-				}
-				children.splice(children.length - 1, 0, BDFDB.ReactUtils.createElement("button", {
-					className: BDFDB.disCNS._repobutton + BDFDB.disCN._reposettingsbutton,
-					children: "Library Settings",
-					onClick: event => {
-						let wrapper = BDFDB.DOMUtils.getParent(BDFDB.dotCN._reposettingsclosed, event.currentTarget);
-						if (wrapper) {
-							let settingsPanel = InternalBDFDB.createLibrarySettings();
-							if (settingsPanel) {
-								BDFDB.DOMUtils.addClass(wrapper, BDFDB.disCN._reposettingsopen);
-								BDFDB.DOMUtils.removeClass(wrapper, BDFDB.disCN._reposettingsclosed);
-								let children = [];
-								while (wrapper.childElementCount) {
-									children.push(wrapper.firstChild);
-									wrapper.firstChild.remove();
-								}
-								let closeButton = BDFDB.DOMUtils.create(`<div style="float: right; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" style="width: 18px; height: 18px;"><g class="background" fill="none" fill-rule="evenodd"><path d="M0 0h12v12H0"></path><path class="fill" fill="#dcddde" d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5l-.705.705L5.295 6 2.5 8.795l.705.705L6 6.705 8.795 9.5l.705-.705L6.705 6"></path></g></svg></div>`);
-								wrapper.appendChild(closeButton);
-								closeButton.addEventListener("click", _ => {
-									BDFDB.DOMUtils.removeClass(wrapper, BDFDB.disCN._reposettingsopen);
-									BDFDB.DOMUtils.addClass(wrapper, BDFDB.disCN._reposettingsclosed);
-									while (wrapper.childElementCount) wrapper.firstChild.remove();
-									while (children.length) wrapper.appendChild(children.shift());
-								});
-								wrapper.appendChild(settingsPanel);
-							}
-						}
-					}
-				}));
-			}
-		}
-	};
-	InternalBDFDB.processV2CPluginCard = function (e) {InternalBDFDB._processCard(e, e.instance.props.addon && e.instance.props.addon.plugin);};
-	InternalBDFDB.processV2CThemeCard = function (e) {InternalBDFDB._processCard(e, e.instance.props.addon && !e.instance.props.addon.plugin && e.instance.props.addon.css);};
-	
-	InternalBDFDB.createLibrarySettings = function () {
-		if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded) return;
-		let settings = BDFDB.DataUtils.get(BDFDB, "settings");
-		let settingsPanel, settingsItems = [];
-		
-		let bdToastSetting = BDFDB.BDUtils.getSettings("fork-ps-2");
-		for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsSaveItem, {
-			className: BDFDB.disCN.marginbottom8,
-			type: "Switch",
-			plugin: BDFDB,
-			disabled: key == "showToasts" && bdToastSetting,
-			keys: ["settings", key],
-			label: InternalBDFDB.defaults.settings[key].description,
-			note: key == "showToasts" && bdToastSetting && "Disable BBDs general 'Show Toast' setting before disabling this",
-			dividerbottom: true,
-			value: settings[key] || key == "showToasts" && bdToastSetting
-		}));
-		
-		return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(BDFDB, settingsItems);
 	};
 	
 	let MessageHeaderExport = BDFDB.ModuleUtils.findByProperties("MessageTimestamp", false);
