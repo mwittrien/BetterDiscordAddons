@@ -750,6 +750,9 @@ body:before {
 .base-34jWEe h1 {											/* welcomemessage		dmchannel							*/
 	color: rgb(var(--fontwhite1));
 }
+.emptyChannelIcon-3IXV5M {									/* welcomemessage		emptychannelicon					*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
 .welcomeMessage-3_Mcht .h1-1IDj26 {							/* welcomemessage		header								*/
 	color: rgb(var(--fontwhite1));
 }
