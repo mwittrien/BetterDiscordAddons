@@ -4177,7 +4177,7 @@
 	DiscordClassModules.ModalItems = BDFDB.ModuleUtils.findByProperties("guildName", "checkboxContainer");
 	DiscordClassModules.ModalMiniContent = BDFDB.ModuleUtils.find(m => typeof m.modal == "string" && typeof m.content == "string" && Object.keys(m).length == 2);
 	DiscordClassModules.ModalWrap = BDFDB.ModuleUtils.find(m => typeof m.modal == "string" && typeof m.inner == "string" && Object.keys(m).length == 2);
-	DiscordClassModules.NameContainer = DiscordClassModules.ContextMenu.subMenuContext ? BDFDB.ModuleUtils.findByProperties("nameAndDecorators", "name") : {};
+	DiscordClassModules.NameContainer = BDFDB.ModuleUtils.findByProperties("nameAndDecorators", "name");
 	DiscordClassModules.NameTag = BDFDB.ModuleUtils.findByProperties("bot", "nameTag");
 	DiscordClassModules.NitroStore = BDFDB.ModuleUtils.findByProperties("applicationStore", "marketingHeader");
 	DiscordClassModules.Note = BDFDB.ModuleUtils.find(m => typeof m.note == "string" && Object.keys(m).length == 1);
