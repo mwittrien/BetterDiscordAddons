@@ -4,7 +4,7 @@ var ImageZoom = (_ => {
 	return class ImageZoom {
 		getName () {return "ImageZoom";}
 
-		getVersion () {return "1.1.2";}
+		getVersion () {return "1.1.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ var ImageZoom = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Styling && Functionality","Fixed the style for the new image modal layout"]]
+				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
 			};
 
 			this.patchedModules = {
@@ -41,8 +41,8 @@ var ImageZoom = (_ => {
 
 			this.defaults = {
 				settings: {
-					zoomlevel:		{value:2,		digits:1,		edges:[1, 10],		unit:"x",	label:"ACCESSIBILITY_ZOOM_LEVEL_LABEL"},
-					lensesize:		{value:200,		digits:0,		edges:[50, 1000],	unit:"px",	label:"context_lensesize_text"}
+					zoomlevel:		{value:2,		digits:1,		minValue: 1,	maxValue: 10,		unit:"x",	label:"ACCESSIBILITY_ZOOM_LEVEL_LABEL"},
+					lensesize:		{value:200,		digits:0,		minValue: 50, 	maxValue: 1000,		unit:"px",	label:"context_lensesize_text"}
 				}
 			};
 		}
@@ -101,20 +101,16 @@ var ImageZoom = (_ => {
 					let openContext = event => {
 						let settings = BDFDB.DataUtils.get(this, "settings");
 						BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-							children: Object.keys(settings).map(type => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuControlItem, {
-								defaultValue: settings[type],
-								digits: this.defaults.settings[type].digits,
-								edges: this.defaults.settings[type].edges,
+							children: Object.keys(settings).map(type => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuSliderItem, Object.assign({
+								id: BDFDB.ContextMenuUtils.createItemId(this.name, type),
+								value: settings[type],
 								renderLabel: value => {
 									return (this.labels[this.defaults.settings[type].label] || BDFDB.LanguageUtils.LanguageStrings[this.defaults.settings[type].label]) + ": " + value + this.defaults.settings[type].unit;
 								},
-								onValueRender: value => {
-									return value + this.defaults.settings[type].unit;
-								},
-								onValueChange: value => {
+								onChange: value => {
 									BDFDB.DataUtils.save(value, this, "settings", type);
 								}
-							}))
+							}, BDFDB.ObjectUtils.extract(this.defaults.settings[type], "digits", "minValue", "maxValue"))))
 						}));
 					};
 					children[index] = BDFDB.ReactUtils.createElement("span", {

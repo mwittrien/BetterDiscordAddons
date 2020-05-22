@@ -6234,7 +6234,9 @@
 	InternalComponents.NativeSubComponents.FavButton = BDFDB.ModuleUtils.findByName("GIFFavButton");
 	InternalComponents.NativeSubComponents.KeybindRecorder = BDFDB.ModuleUtils.findByName("KeybindRecorder");
 	InternalComponents.NativeSubComponents.MenuCheckboxItem = BDFDB.ModuleUtils.findByName("MenuCheckboxItem");
+	InternalComponents.NativeSubComponents.MenuControlItem = BDFDB.ModuleUtils.findByName("MenuControlItem");
 	InternalComponents.NativeSubComponents.MenuItem = BDFDB.ModuleUtils.findByName("MenuItem");
+	InternalComponents.NativeSubComponents.MenuSlider = BDFDB.ModuleUtils.findByString("minValue", "maxValue", "sliderContainer");
 	InternalComponents.NativeSubComponents.PopoutContainer = BDFDB.ModuleUtils.findByName("Popout");
 	InternalComponents.NativeSubComponents.QuickSelect = BDFDB.ModuleUtils.findByName("QuickSelectWrapper");
 	InternalComponents.NativeSubComponents.RadioGroup = BDFDB.ModuleUtils.findByName("RadioGroup");
@@ -7522,13 +7524,29 @@
 		}
 	};
 	
-	// REMOVE
-	InternalComponents.LibraryComponents.ContextMenuItems = {};
-	InternalComponents.LibraryComponents.ContextMenuItems.Group = InternalComponents.LibraryComponents.MenuItems.MenuGroup;
-	InternalComponents.LibraryComponents.ContextMenuItems.Item = InternalComponents.LibraryComponents.MenuItems.MenuItem;
-	InternalComponents.LibraryComponents.ContextMenuItems.Slider = InternalComponents.LibraryComponents.MenuItems.MenuControlItem;
-	InternalComponents.LibraryComponents.ContextMenuItems.Sub = InternalComponents.LibraryComponents.MenuItems.MenuSeparator;
-	InternalComponents.LibraryComponents.ContextMenuItems.Toggle = InternalComponents.LibraryComponents.MenuItems.MenuItem;
+	InternalComponents.LibraryComponents.MenuItems.MenuSliderItem = InternalBDFDB.loadPatchedComp("MenuItems.MenuSliderItem") || reactInitialized && class BDFDB_MenuSliderItem extends LibraryModules.React.Component {
+		handleChange(value) {
+			if (this.props.state) {
+				this.props.state.value = Math.round(BDFDB.NumberUtils.mapRange([0, 100], [this.props.minValue, this.props.maxValue], value) * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
+				if (typeof this.props.onChange == "function") this.props.onChange(this.props.state.value, this);
+			}
+			BDFDB.ReactUtils.forceUpdate(this);
+		}
+		render() {
+			let value = this.props.state && this.props.state.value || 0;
+			return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.MenuControlItem, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+				label: typeof this.props.renderLabel == "function" ? this.props.renderLabel(Math.round(value * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits)) : this.props.label,
+				control: (menuItemProps, ref) => {
+					return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.MenuSlider, Object.assign({}, menuItemProps, {
+						ref: ref,
+						value: Math.round(BDFDB.NumberUtils.mapRange([this.props.minValue, this.props.maxValue], [0, 100], value) * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits),
+						onChange: this.handleChange.bind(this)
+					}));
+				}
+			}), "digits", "renderLabel"));
+		}
+	};
+	InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.MenuItems.MenuSliderItem, {minValue:0, maxValue:100, digits:0});
 	
 	InternalComponents.LibraryComponents.MessageGroup = BDFDB.ModuleUtils.findByName("ChannelMessage");
 	
@@ -8086,20 +8104,20 @@
 	
 	InternalComponents.LibraryComponents.Slider = InternalBDFDB.loadPatchedComp("Slider") || reactInitialized && class BDFDB_Slider extends LibraryModules.React.Component {
 		handleValueChange(value) {
-			let newvalue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value) : value;
-			if (typeof this.props.digits == "number") newvalue = Math.round(newvalue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
-			this.props.defaultValue = newvalue;
-			if (typeof this.props.onValueChange == "function") this.props.onValueChange(newvalue, this);
+			let newValue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value) : value;
+			if (typeof this.props.digits == "number") newValue = Math.round(newValue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
+			this.props.defaultValue = newValue;
+			if (typeof this.props.onValueChange == "function") this.props.onValueChange(newValue, this);
 			BDFDB.ReactUtils.forceUpdate(this);
 		}
 		handleValueRender(value) {
-			let newvalue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value) : value;
-			if (typeof this.props.digits == "number") newvalue = Math.round(newvalue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
+			let newValue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value) : value;
+			if (typeof this.props.digits == "number") newValue = Math.round(newValue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
 			if (typeof this.props.onValueRender == "function") {
-				let tempReturn = this.props.onValueRender(newvalue, this);
-				if (tempReturn != undefined) newvalue = tempReturn;
+				let tempReturn = this.props.onValueRender(newValue, this);
+				if (tempReturn != undefined) newValue = tempReturn;
 			}
-			return newvalue;
+			return newValue;
 		}
 		render() {
 			let defaultValue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange(this.props.edges, [0, 100], this.props.defaultValue) : this.props.defaultValue;
