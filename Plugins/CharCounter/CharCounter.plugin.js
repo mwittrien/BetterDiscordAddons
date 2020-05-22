@@ -13,18 +13,13 @@ var CharCounter = (_ => {
 	return class CharCounter {
 		getName () {return "CharCounter";}
 
-		getVersion () {return "1.4.6";}
+		getVersion () {return "1.4.7";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Adds a charcounter in the chat.";}
 
 		constructor () {
-			this.changelog = {
-				"fixed":[["Message Update","Fixed the plugin for the new Message Update"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
-			};
-
 			this.patchedModules = {
 				after: {
 					ChannelTextAreaContainer: "render",
@@ -36,9 +31,6 @@ var CharCounter = (_ => {
 
 		initConstructor () {
 			this.css = `
-				${BDFDB.dotCNS.typing + BDFDB.dotCN.typingcooldownwrapper} {
-					margin-right: 64px;
-				}
 				${BDFDB.dotCN._charcountercounteradded} {
 					position: relative !important;
 				}
@@ -151,12 +143,20 @@ var CharCounter = (_ => {
 		
 		injectCounter (parent, children, type, refClass, parsing) {
 			if (!children) return;
-			parent.props.className = ((parent.props.className || "") + " " + BDFDB.disCN._charcountercounteradded).trim();
+			parent.props.className = BDFDB.DOMUtils.formatClassName(parent.props.className, BDFDB.disCN._charcountercounteradded);
 			children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CharCounter, {
 				className: `${BDFDB.disCN._charcountercounter} ${type}`,
 				refClass: refClass,
 				parsing: parsing,
-				max: maxLenghts[type]
+				max: maxLenghts[type],
+				onChange: instance => {
+					let node = BDFDB.ReactUtils.findDOMNode(instance);
+					let form = node && BDFDB.DOMUtils.getParent(BDFDB.dotCN.chatform, node);
+					if (form) {
+						let typing = form.querySelector(BDFDB.dotCN.typing);
+						if (typing) typing.style.setProperty("margin-right", `${BDFDB.DOMUtils.getWidth(node) + 10}px`);
+					}
+				}
 			}));
 		}
 	}

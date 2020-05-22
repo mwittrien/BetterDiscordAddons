@@ -6484,6 +6484,7 @@
 				`${string.length}${!this.props.max ? "" : "/" + this.props.max}${!select ? "" : " (" + select + ")"}`,
 				typeof this.props.renderSuffix == "function" && this.props.renderSuffix(string.length)
 			].filter(n => n);
+			if (typeof this.props.onChange == "function") this.props.onChange(this);
 			return children.length == 1 ? children[0] : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 				align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
 				children: children
@@ -6497,7 +6498,6 @@
 		forceUpdateCounter() {
 			if (!this.refElement) return;
 			this.props.children = this.getCounterString();
-			if (typeof this.props.onChange == "function") this.props.onChange(this);
 			BDFDB.ReactUtils.forceUpdate(this);
 		}
 		handleSelection() {
