@@ -4,20 +4,16 @@ var BetterSearchPage = (_ => {
 	return class BetterSearchPage {
 		getName () {return "BetterSearchPage";}
 
-		getVersion () {return "1.1.4";}
+		getVersion () {return "1.1.5";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Adds some extra controls to the search results page.";}
 
 		constructor () {
-			this.changelog = {
-				"fixed":[["Settings","now can be opened properly"]]
-			};
-
 			this.patchedModules = {
 				after: {
-					SearchResults: "render"
+					SearchResultsInner: "default"
 				}
 			};
 		}
@@ -103,9 +99,9 @@ var BetterSearchPage = (_ => {
 			}
 		}
 
-		processSearchResults (e) {
+		processSearchResultsInner (e) {
 			if (e.instance.props.search) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"Pagination"});
+				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"SearchPagination"});
 				if (index > -1) {
 					let settings = BDFDB.DataUtils.get(this, "settings");
 					let currentpage = parseInt(Math.floor(e.instance.props.search.offset / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE)) + 1;
