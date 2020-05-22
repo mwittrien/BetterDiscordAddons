@@ -6620,7 +6620,6 @@
 	};
 	InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.CollapseContainer, {collapsed:true, mini:true});
 	
-	// FIX COLOR PICKER NOT OPENING IN BD RENDER //
 	InternalComponents.LibraryComponents.ColorPicker = InternalBDFDB.loadPatchedComp("ColorPicker") || reactInitialized && class BDFDB_ColorPicker extends LibraryModules.React.Component {
 		constructor(props) {
 			super(props);
@@ -9408,7 +9407,8 @@
 
 	const BDFDB_Patrons = [
 		"363785301195358221",
-		"443943393660239872"
+		"443943393660239872",
+		"592471476192673814"
 	];
 	InternalBDFDB._processAvatarRender = function (user, avatar) {
 		if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user)) {
