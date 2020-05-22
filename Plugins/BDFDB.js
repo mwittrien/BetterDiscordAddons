@@ -6497,6 +6497,7 @@
 		forceUpdateCounter() {
 			if (!this.refElement) return;
 			this.props.children = this.getCounterString();
+			if (typeof this.props.onChange == "function") this.props.onChange(this);
 			BDFDB.ReactUtils.forceUpdate(this);
 		}
 		handleSelection() {
