@@ -57,6 +57,8 @@
 		plugin.version = plugin.version || (typeof plugin.getVersion == "function" ? plugin.getVersion() : null);
 		plugin.author = plugin.author || (typeof plugin.getAuthor == "function" ? plugin.getAuthor() : null);
 		plugin.description = plugin.description || (typeof plugin.getDescription == "function" ? plugin.getDescription() : null);
+		
+		if (typeof plugin.getSettingsPanel != "function") plugin.getSettingsPanel = _ => {return plugin.started && BDFDB.PluginUtils.createSettingsPanel(plugin, []);};
 
 		let loadMessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
 		BDFDB.LogUtils.log(loadMessage, plugin.name);
@@ -293,7 +295,7 @@
 		loadingIconWrapper.appendChild(icon);
 	};
 	BDFDB.PluginUtils.createSettingsPanel = function (plugin, children) {
-		if (!BDFDB.ObjectUtils.is(plugin) || !children || (!BDFDB.ReactUtils.isValidElement(children) && !BDFDB.ArrayUtils.is(children)) || (BDFDB.ArrayUtils.is(children) && !children.length)) return;
+		if (!BDFDB.ObjectUtils.is(plugin) || !children || (!BDFDB.ReactUtils.isValidElement(children) && !BDFDB.ArrayUtils.is(children))) return;
 		let settingsPanel = BDFDB.DOMUtils.create(`<div class="${plugin.name}-settings ${BDFDB.disCN.settingsPanel}"></div>`);
 		BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsPanel, {
 			key: `${plugin.name}-settingsPanel`,
@@ -7819,27 +7821,32 @@
 					children: this.props.controls
 				})
 			].flat(10).filter(n => n);
-			return this.props.children ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+			
+			let panelItems = [
+				this.props.children
+			].flat(10).filter(n => n);
+			
+			return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 				direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
 				grow: 1,
 				children: [
-					headerItems.length ? [
+					headerItems.length && [
 						BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 							className: BDFDB.disCN.settingspanelheader,
 							align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
 							children: headerItems
 						}),
-						BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormDivider, {
+						panelItems.length && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormDivider, {
 							className: BDFDB.disCNS.margintop4 + BDFDB.disCN.marginbottom8
 						})
-					] : null,
+					],
 					BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 						className: BDFDB.disCN.settingspanelinner,
 						direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
-						children: this.props.children
+						children: panelItems
 					})
 				].flat(10).filter(n => n)
-			}) : null;
+			});
 		}
 	};
 	
