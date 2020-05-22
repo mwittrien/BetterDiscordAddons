@@ -1444,12 +1444,22 @@
 .colorDefault-2K3EoJ .radioSelection-1HmrQS {				/* contextmenu			radioselection						*/
 	color: rgb(var(--vaccentcolor));
 }
+.colorDanger-2qLCe1 .radioSelection-1HmrQS {
+	color: #F04747;
+}
 .colorDefault-2K3EoJ .checkbox-3s5GYZ {						/* contextmenu			checkbox							*/
 	color: rgb(var(--vaccentcolor));
+}
+.colorDanger-2qLCe1 .checkbox-3s5GYZ {
+	color: #F04747;
 }
 .colorDefault-2K3EoJ.focused-3afm-j .check-1JyqgN,			/* contextmenu			checkmark							*/
 .colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O) .check-1JyqgN {
 	color: rgb(var(--vaccentcolor));
+}
+.colorDanger-2qLCe1.focused-3afm-j .check-1JyqgN,			/* contextmenu			checkmark							*/
+.colorDanger-2qLCe1:hover:not(.hideInteraction-1iHO1O) .check-1JyqgN {
+	color: #F04747;
 }
 .colorPremium-p4p7qO .icon-LYJorE {							/* contextmenu			premiumicon							*/
 	color: rgb(var(--vaccentcolor));
