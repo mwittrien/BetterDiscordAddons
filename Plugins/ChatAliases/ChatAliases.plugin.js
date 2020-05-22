@@ -4,7 +4,7 @@ var ChatAliases = (_ => {
 	return class ChatAliases {
 		getName () {return "ChatAliases";}
 
-		getVersion () {return "2.1.3";}
+		getVersion () {return "2.1.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ var ChatAliases = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
+				"fixed":[["File Alias","Properly base-64's the file again"], ["Slowmode", "No longer clears chatinput in slowmode"]]
 			};
 			
 			this.patchedModules = {
@@ -275,15 +275,15 @@ var ChatAliases = (_ => {
 				matches: (firstChar, rest, isFirstWord) => {
 					let currentLastWord = BDFDB.SlateUtils.getCurrentWord(e.instance.props.editorRef.current).word || "";
 					if (currentLastWord.length >= minLength) for (let word in this.aliases) {
-						let aliasdata = this.aliases[word];
-						if (!aliasdata.regex && aliasdata.autoc) {
-							if (aliasdata.exact) {
-								if (aliasdata.case && word.indexOf(currentLastWord) == 0) return true;
-								else if (!aliasdata.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) == 0) return true;
+						let aliasData = this.aliases[word];
+						if (!aliasData.regex && aliasData.autoc) {
+							if (aliasData.exact) {
+								if (aliasData.case && word.indexOf(currentLastWord) == 0) return true;
+								else if (!aliasData.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) == 0) return true;
 							}
 							else {
-								if (aliasdata.case && word.indexOf(currentLastWord) > -1) return true;
-								else if (!aliasdata.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) > -1) return true;
+								if (aliasData.case && word.indexOf(currentLastWord) > -1) return true;
+								else if (!aliasData.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) > -1) return true;
 							}
 						}
 					}
@@ -294,15 +294,15 @@ var ChatAliases = (_ => {
 					let matches = [];
 					for (let word in this.aliases) {
 						if (matches.length >= BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS) break;
-						let aliasdata = Object.assign({word}, this.aliases[word]);
-						if (!aliasdata.regex && aliasdata.autoc) {
-							if (aliasdata.exact) {
-								if (aliasdata.case && word.indexOf(currentLastWord) == 0) matches.push(aliasdata);
-								else if (!aliasdata.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) == 0) matches.push(aliasdata);
+						let aliasData = Object.assign({word}, this.aliases[word]);
+						if (!aliasData.regex && aliasData.autoc) {
+							if (aliasData.exact) {
+								if (aliasData.case && word.indexOf(currentLastWord) == 0) matches.push(aliasData);
+								else if (!aliasData.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) == 0) matches.push(aliasData);
 							}
 							else {
-								if (aliasdata.case && word.indexOf(currentLastWord) > -1) matches.push(aliasdata);
-								else if (!aliasdata.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) > -1) matches.push(aliasdata);
+								if (aliasData.case && word.indexOf(currentLastWord) > -1) matches.push(aliasData);
+								else if (!aliasData.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) > -1) matches.push(aliasData);
 							}
 						}
 					}
@@ -318,24 +318,24 @@ var ChatAliases = (_ => {
 								})
 							]
 						}),
-						autocompletes.aliases.map((aliasdata, i) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AutocompleteItems.Generic, {
+						autocompletes.aliases.map((aliasData, i) => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AutocompleteItems.Generic, {
 							onClick: chooseSelected,
 							onHover: setSelected,
 							index: i,
 							selected: currentSelected === i,
-							alias: aliasdata,
-							text: aliasdata.word,
-							description: aliasdata.replace,
+							alias: aliasData,
+							text: aliasData.word,
+							description: aliasData.replace,
 						}))
 					].flat(10).filter(n => n);
 				},
 				getPlainText: (eventOrIndex, autocompletes) => {
-					let aliasdata = eventOrIndex._targetInst ? eventOrIndex._targetInst.memoizedProps.alias : typeof eventOrIndex == "number" && autocompletes.aliases[eventOrIndex];
-					return aliasdata.word;
+					let aliasData = eventOrIndex._targetInst ? eventOrIndex._targetInst.memoizedProps.alias : typeof eventOrIndex == "number" && autocompletes.aliases[eventOrIndex];
+					return aliasData.word;
 				},
 				getRawText: (eventOrIndex, autocompletes) => {
-					let aliasdata = eventOrIndex._targetInst ? eventOrIndex._targetInst.memoizedProps.alias : typeof eventOrIndex == "number" && autocompletes.aliases[eventOrIndex];
-					return aliasdata.file ? aliasdata.word : BDFDB.StringUtils.insertNRST(aliasdata.replace);
+					let aliasData = eventOrIndex._targetInst ? eventOrIndex._targetInst.memoizedProps.alias : typeof eventOrIndex == "number" && autocompletes.aliases[eventOrIndex];
+					return aliasData.file ? aliasData.word : BDFDB.StringUtils.insertNRST(aliasData.replace);
 				}
 			};
 			if (e.instance.state.autocompleteType == "COMMAND" && BDFDB.ArrayUtils.is(e.instance.state.autocompletes.commands)) {
@@ -345,16 +345,16 @@ var ChatAliases = (_ => {
 				let commandAliases = BDFDB.ObjectUtils.filter(this.aliases, key => key.startsWith("/"), true);
 				if (currentLastWord.length >= minLength) for (let word in commandAliases) {
 					if (e.instance.state.autocompletes.commands.length >= BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS) break;
-					let aliasdata = commandAliases[word];
-					let command = {command: word.slice(1), description: BDFDB.StringUtils.insertNRST(aliasdata.replace), alias:true};
-					if (!aliasdata.regex && aliasdata.autoc) {
-						if (aliasdata.exact) {
-							if (aliasdata.case && word.indexOf(currentLastWord) == 0) e.instance.state.autocompletes.commands.push(command);
-							else if (!aliasdata.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) == 0) e.instance.state.autocompletes.commands.push(command);
+					let aliasData = commandAliases[word];
+					let command = {command: word.slice(1), description: BDFDB.StringUtils.insertNRST(aliasData.replace), alias:true};
+					if (!aliasData.regex && aliasData.autoc) {
+						if (aliasData.exact) {
+							if (aliasData.case && word.indexOf(currentLastWord) == 0) e.instance.state.autocompletes.commands.push(command);
+							else if (!aliasData.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) == 0) e.instance.state.autocompletes.commands.push(command);
 						}
 						else {
-							if (aliasdata.case && word.indexOf(currentLastWord) > -1) e.instance.state.autocompletes.commands.push(command);
-							else if (!aliasdata.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) > -1) e.instance.state.autocompletes.commands.push(command);
+							if (aliasData.case && word.indexOf(currentLastWord) > -1) e.instance.state.autocompletes.commands.push(command);
+							else if (!aliasData.case && word.toLowerCase().indexOf(currentLastWord.toLowerCase()) > -1) e.instance.state.autocompletes.commands.push(command);
 						}
 					}
 				}
@@ -380,6 +380,7 @@ var ChatAliases = (_ => {
 		}
 		
 		handleSubmit (e, e2, textIndex) {
+			if (BDFDB.LibraryModules.SlowmodeUtils.getSlowmodeCooldownGuess(e.instance.props.channel.id) > 0) return;
 			let messageData = this.formatText(e2.methodArguments[textIndex]);
 			if (messageData) {
 				if (messageData.text != null) {
@@ -400,7 +401,7 @@ var ChatAliases = (_ => {
 
 		formatText (text) {
 			text = text.replace(/([\n\t\r])/g, " $1 ");
-			var newText = [], files = [], wordAliases = {}, multiAliases = {};
+			let newText = [], files = [], wordAliases = {}, multiAliases = {};
 			for (let word in this.aliases) {
 				if (!this.aliases[word].regex && word.indexOf(" ") == -1) wordAliases[word] = this.aliases[word];
 				else multiAliases[word] = this.aliases[word];
@@ -414,31 +415,31 @@ var ChatAliases = (_ => {
 			return {text:newText, files};
 		}
 
-		useAliases (string, aliases, files, singleword) {
+		useAliases (string, aliases, files, singleWord) {
 			for (let word in aliases) {
-				let aliasdata = aliases[word];
-				let escpAlias = aliasdata.regex ? word : BDFDB.StringUtils.regEscape(word);
+				let aliasData = aliases[word];
+				let escpAlias = aliasData.regex ? word : BDFDB.StringUtils.regEscape(word);
 				let result = true, replaced = false, tempstring1 = string, tempstring2 = "";
-				let regstring = aliasdata.exact ? "^" + escpAlias + "$" : escpAlias;
+				let regString = aliasData.exact ? "^" + escpAlias + "$" : escpAlias;
 				while (result != null) {
-					result = new RegExp(regstring, (aliasdata.case ? "" : "i") + (aliasdata.exact ? "" : "g")).exec(tempstring1);
+					result = new RegExp(regString, (aliasData.case ? "" : "i") + (aliasData.exact ? "" : "g")).exec(tempstring1);
 					if (result) {
 						replaced = true;
-						let replace = aliasdata.file ? "" : BDFDB.StringUtils.insertNRST(aliasdata.replace);
+						let replace = aliasData.file ? "" : BDFDB.StringUtils.insertNRST(aliasData.replace);
 						if (result.length > 1) for (let i = 1; i < result.length; i++) replace = replace.replace(new RegExp("\\\\" + i + "|\\$" + i, "g"), result[i]);
 						tempstring2 += tempstring1.slice(0, result.index + result[0].length).replace(result[0], replace);
 						tempstring1 = tempstring1.slice(result.index + result[0].length);
-						if (aliasdata.file && typeof aliasdata.filedata == "string") {
-							let filedata = JSON.parse(aliasdata.filedata);
+						if (aliasData.file && typeof aliasData.filedata == "string") {
+							let filedata = JSON.parse(aliasData.filedata);
 							files.push(new File([Uint8Array.from(atob(filedata.data), c => c.charCodeAt(0))], filedata.name, {type:filedata.type}));
 						}
-						if (aliasdata.regex && regstring.indexOf("^") == 0) result = null;
+						if (aliasData.regex && regString.indexOf("^") == 0) result = null;
 					}
 					if (!result) tempstring2 += tempstring1;
 				}
 				if (replaced) {
 					string = tempstring2;
-					if (singleword) break;
+					if (singleWord) break;
 				}
 			}
 			return string;
@@ -486,7 +487,7 @@ var ChatAliases = (_ => {
 				className: BDFDB.disCN.marginbottom8 + " input-" + inputdata.valuename,
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
 					type: inputdata.type,
-					useFileath: inputdata.type == "file",
+					useFilePath: inputdata.type == "file",
 					value: values[inputdata.valuename],
 					placeholder: values[inputdata.valuename],
 					autoFocus: inputdata.valuename == "replacevalue",
@@ -495,10 +496,10 @@ var ChatAliases = (_ => {
 						values[inputdata.valuename] = value.trim();
 						if (values[inputdata.valuename]) delete instance.props.errorMessage;
 						else instance.props.errorMessage = inputdata.error;
-						let addbuttonins = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:["BDFDB_Modal", "BDFDB_SettingsPanel"], up:true}), {key:"ADDBUTTON"});
-						if (addbuttonins) {
-							addbuttonins.props.disabled = !Object.keys(values).every(valuename => values[valuename]);
-							BDFDB.ReactUtils.forceUpdate(addbuttonins);
+						let addButtonIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:["BDFDB_Modal", "BDFDB_SettingsPanel"], up:true}), {key:"ADDBUTTON"});
+						if (addButtonIns) {
+							addButtonIns.props.disabled = !Object.keys(values).every(valuename => values[valuename]);
+							BDFDB.ReactUtils.forceUpdate(addButtonIns);
 						}
 					}
 				})
