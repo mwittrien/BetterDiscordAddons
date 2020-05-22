@@ -7113,7 +7113,7 @@
 				position: InternalComponents.LibraryComponents.PopoutContainer.Positions.TOP,
 				align: InternalComponents.LibraryComponents.PopoutContainer.Align.LEFT,
 				renderPopout: instance => {
-					return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.EmojiPicker, {
+					return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByString("allowManagedEmojis", "EMOJI_PICKER_TAB_PANEL_ID", "diversitySelector"), {
 						closePopout: instance.close,
 						onSelectEmoji: this.handleEmojiChange.bind(this),
 						allowManagedEmojis: false
