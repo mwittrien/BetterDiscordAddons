@@ -138,7 +138,7 @@ var ThemeSettings = (_ => {
 				color: BDFDB.LibraryComponents.Button.Colors.GREEN,
 				label: "Update all variables",
 				onClick: _ => {
-					let path = BDFDB.LibraryRequires.path.join(this.dir, theme.filename);
+					let path = BDFDB.LibraryRequires.path.join(dir, theme.filename);
 					let css = BDFDB.LibraryRequires.fs.readFileSync(path).toString();
 					if (css) {
 						let amount = 0;
