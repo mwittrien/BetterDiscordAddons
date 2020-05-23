@@ -228,7 +228,7 @@ var CustomQuoter = (_ => {
 			
 			let content = message.content;
 			let selectedText = settings.quoteOnlySelected && document.getSelection().toString().trim();
-			if (selectedText && content.indexOf(selectedText) > -1) content = selectedText;
+			if (selectedText && content.replace(/[`~_-]/g, "").indexOf(selectedText) > -1) content = selectedText;
 			let unquotedLines = content.split("\n").filter(line => !line.startsWith("> "));
 			unquotedLines = unquotedLines.slice(unquotedLines.findIndex(line => line.trim().length > 0)).join("\n");
 			
