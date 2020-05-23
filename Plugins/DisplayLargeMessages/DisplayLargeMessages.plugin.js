@@ -6,7 +6,7 @@ var DisplayLargeMessages = (_ => {
 	return class DisplayLargeMessages {
 		getName () {return "DisplayLargeMessages";}
 
-		getVersion () {return "1.0.3";}
+		getVersion () {return "1.0.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -188,15 +188,15 @@ var DisplayLargeMessages = (_ => {
 					if (encodedContent != null) {
 						if (message.content.indexOf(encodedContent.attachment) == -1) {
 							e.instance.props.channelStream[i].content.content = (message.content && (message.content + "\n\n") || "") + encodedContent.attachment;
-							e.instance.props.channelStream[i].content.attachments = message.attachments.filter(n => n.filename != "message.txt");
+							if (BDFDB.ArrayUtils.is(message.attachments)) e.instance.props.channelStream[i].content.attachments = message.attachments.filter(n => n.filename != "message.txt");
 						}
 					}
 					else if (oldMessages[message.id] && Object.keys(message).some(key => !BDFDB.equals(oldMessages[message.id][key], message[key]))) {
 						e.instance.props.channelStream[i].content.content = oldMessages[message.id].content;
-						e.instance.props.channelStream[i].content.attachments = oldMessages[message.id].attachments;
+						if (BDFDB.ArrayUtils.is(oldMessages[message.id].attachments)) e.instance.props.channelStream[i].content.attachments = oldMessages[message.id].attachments;
 						delete oldMessages[message.id];
 					}
-					else if (!settings.onDemand && !requestedMessages.includes(message.id)) for (let attachment of message.attachments) {
+					else if (!settings.onDemand && !requestedMessages.includes(message.id) && BDFDB.ArrayUtils.is(message.attachments)) for (let attachment of message.attachments) {
 						if (attachment.filename == "message.txt" && (!amounts.maxFileSize || (amounts.maxFileSize >= attachment.size/1024))) {
 							requestedMessages.push(message.id);
 							BDFDB.LibraryRequires.request(attachment.url, (error, response, body) => {
