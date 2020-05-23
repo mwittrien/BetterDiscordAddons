@@ -184,33 +184,39 @@ var DisplayLargeMessages = (_ => {
 			for (let i in e.instance.props.channelStream) {
 				let message = e.instance.props.channelStream[i].content;
 				if (message) {
-					let encodedContent = encodedMessages[message.id];
-					if (encodedContent != null) {
-						if (message.content.indexOf(encodedContent.attachment) == -1) {
-							e.instance.props.channelStream[i].content.content = (message.content && (message.content + "\n\n") || "") + encodedContent.attachment;
-							if (BDFDB.ArrayUtils.is(message.attachments)) e.instance.props.channelStream[i].content.attachments = message.attachments.filter(n => n.filename != "message.txt");
-						}
+					if (BDFDB.ArrayUtils.is(message.attachments)) this.checkMessage(e.instance, e.instance.props.channelStream[i], message, settings, amounts);
+					else if (BDFDB.ArrayUtils.is(message)) for (let j in message) {
+						let childMessage = message[j].content;
+						if (childMessage && BDFDB.ArrayUtils.is(childMessage.attachments)) this.checkMessage(e.instance, message[j], childMessage, settings, amounts);
 					}
-					else if (oldMessages[message.id] && Object.keys(message).some(key => !BDFDB.equals(oldMessages[message.id][key], message[key]))) {
-						e.instance.props.channelStream[i].content.content = oldMessages[message.id].content;
-						if (BDFDB.ArrayUtils.is(oldMessages[message.id].attachments)) e.instance.props.channelStream[i].content.attachments = oldMessages[message.id].attachments;
-						delete oldMessages[message.id];
-					}
-					else if (!settings.onDemand && !requestedMessages.includes(message.id) && BDFDB.ArrayUtils.is(message.attachments)) for (let attachment of message.attachments) {
-						if (attachment.filename == "message.txt" && (!amounts.maxFileSize || (amounts.maxFileSize >= attachment.size/1024))) {
-							requestedMessages.push(message.id);
-							BDFDB.LibraryRequires.request(attachment.url, (error, response, body) => {
-								encodedMessages[message.id] = {
-									content: message.content || "",
-									attachment: body || ""
-								};
-								BDFDB.TimeUtils.clear(updateTimeout);
-								updateTimeout = BDFDB.TimeUtils.timeout(_ => {
-									BDFDB.ReactUtils.forceUpdate(e.instance);
-								}, 1000);
-							});
-						}
-					}
+				}
+			}
+		}
+		
+		checkMessage (instance, stream, message, settings, amounts) {
+			let encodedContent = encodedMessages[message.id];
+			if (encodedContent != null) {
+				if (message.content.indexOf(encodedContent.attachment) == -1) {
+					stream.content.content = (message.content && (message.content + "\n\n") || "") + encodedContent.attachment;
+					stream.content.attachments = message.attachments.filter(n => n.filename != "message.txt");
+				}
+			}
+			else if (oldMessages[message.id] && Object.keys(message).some(key => !BDFDB.equals(oldMessages[message.id][key], message[key]))) {
+				stream.content.content = oldMessages[message.id].content;
+				stream.content.attachments = oldMessages[message.id].attachments;
+				delete oldMessages[message.id];
+			}
+			else if (!settings.onDemand && !requestedMessages.includes(message.id)) for (let attachment of message.attachments) {
+				if (attachment.filename == "message.txt" && (!amounts.maxFileSize || (amounts.maxFileSize >= attachment.size/1024))) {
+					requestedMessages.push(message.id);
+					BDFDB.LibraryRequires.request(attachment.url, (error, response, body) => {
+						encodedMessages[message.id] = {
+							content: message.content || "",
+							attachment: body || ""
+						};
+						BDFDB.TimeUtils.clear(updateTimeout);
+						updateTimeout = BDFDB.TimeUtils.timeout(_ => {BDFDB.ReactUtils.forceUpdate(instance);}, 1000);
+					});
 				}
 			}
 		}
