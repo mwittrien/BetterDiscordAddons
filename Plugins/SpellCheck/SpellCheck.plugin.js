@@ -1,12 +1,12 @@
 //META{"name":"SpellCheck","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpellCheck","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/SpellCheck/SpellCheck.plugin.js"}*//
 
 var SpellCheck = (_ => {
-	var languages, langDictionary, dictionary;
+	var languages, dictionaries, langDictionaries, languageToasts;
 	
 	return class SpellCheck {
 		getName () {return "SpellCheck";}
 
-		getVersion () {return "1.4.2";}
+		getVersion () {return "1.4.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,7 @@ var SpellCheck = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
+				"added":[["Secondary","You can now set a secondary language in the plugin settings"]]
 			};
 			
 			this.patchedModules = {
@@ -26,8 +26,9 @@ var SpellCheck = (_ => {
 
 		initConstructor () {
 			languages = {};
-			langDictionary = [];
-			dictionary = [];
+			dictionaries = {};
+			langDictionaries = {};
+			languageToasts = {};
 
 			this.css = `
 				${BDFDB.dotCNS._spellcheckoverlay + BDFDB.dotCN._spellcheckerror} {
@@ -39,10 +40,11 @@ var SpellCheck = (_ => {
 
 			this.defaults = {
 				choices: {
-					dictionaryLanguage:			{value:"en", 	description:"Dictionary Language:"}
+					dictionaryLanguage:			{value:"en", 	force:true,		description:"Primary Language:"},
+					secondaryLanguage:			{value:"-", 	force:false,	description:"Secondary Language:"}
 				},
 				amounts: {
-					maxSimilarAmount:			{value:6, 		min:1,	max:30,	description:"Maximal Amount of suggested Words:"}
+					maxSimilarAmount:			{value:6, 		min:1,		max:30,		description:"Maximal Amount of suggested Words:"}
 				}
 			};
 		}
@@ -62,10 +64,10 @@ var SpellCheck = (_ => {
 				label: this.defaults.choices[key].description,
 				basis: "70%",
 				value: choices[key],
-				options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => {return {value:id, label:lang.name}})),
+				options: (this.defaults.choices[key].force ? [] : [{value:"-", label:BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_NOTHING}]).concat(BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => ({value:id, label:this.getLanguageName(lang)})))),
 				searchable: true,
 				onChange: value => {
-					this.setDictionary(value);
+					this.setDictionary(key, value);
 					BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel);
 				}
 			}));
@@ -94,7 +96,7 @@ var SpellCheck = (_ => {
 					onRemove: _ => {
 						BDFDB.ArrayUtils.remove(ownDictionary, word);
 						BDFDB.DataUtils.save(ownDictionary, this, "owndics", choices.dictionaryLanguage);
-						dictionary = langDictionary.concat(ownDictionary);
+						dictionaries.dictionaryLanguage = langDictionaries.dictionaryLanguage.concat(ownDictionary);
 						BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel);
 					}
 				}))
@@ -133,7 +135,8 @@ var SpellCheck = (_ => {
 				BDFDB.PluginUtils.init(this);
 
 				languages = BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.languages, lang => {return lang.dic == true ? lang : null});
-				this.setDictionary(BDFDB.DataUtils.get(this, "choices", "dictionaryLanguage"));
+				let choices = BDFDB.DataUtils.get(this, "choices");
+				for (let key in choices) this.setDictionary(key, choices[key]);
 				
 				if ((BDFDB.LibraryModules.StoreChangeUtils && BDFDB.LibraryModules.StoreChangeUtils.get("SpellcheckStore") || {}).enabled) BDFDB.LibraryModules.SpellCheckUtils.toggleSpellcheck();
 
@@ -148,7 +151,7 @@ var SpellCheck = (_ => {
 				
 				BDFDB.DOMUtils.remove(BDFDB.dotCN._spellcheckoverlay);
 
-				this.killLanguageToast();
+				for (let key in languageToasts) this.killLanguageToast(key);
 
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -271,51 +274,65 @@ var SpellCheck = (_ => {
 		addToOwnDictionary (word) {
 			word = word.split(" ")[0].split("\n")[0].split("\r")[0].split("\t")[0];
 			if (word) {
-				let wordlow = word.toLowerCase();
+				let wordLow = word.toLowerCase();
 				let lang = BDFDB.DataUtils.get(this, "choices", "dictionaryLanguage");
-				let ownDictionary = BDFDB.DataUtils.load(this, "owndics", lang) || [];
-				if (!ownDictionary.includes(wordlow)) {
-					ownDictionary.push(wordlow);
-					BDFDB.DataUtils.save(ownDictionary, this, "owndics", lang);
-					BDFDB.NotificationUtils.toast(this.labels.toast_wordadd_text ? this.labels.toast_wordadd_text.replace("${word}", word).replace("${dicname}", languages[lang].name) : "", {type:"success"});
-					dictionary = langDictionary.concat(ownDictionary);
+				if (languages[lang]) {
+					let ownDictionary = BDFDB.DataUtils.load(this, "owndics", lang) || [];
+					if (!ownDictionary.includes(wordLow)) {
+						ownDictionary.push(wordLow);
+						BDFDB.DataUtils.save(ownDictionary, this, "owndics", lang);
+						BDFDB.NotificationUtils.toast(this.labels.toast_wordadd_text.replace("${word}", word).replace("${dicName}", this.getLanguageName(languages[lang])), {type:"success"});
+						dictionaries.dictionaryLanguage = langDictionaries.dictionaryLanguage.concat(ownDictionary);
+					}
 				}
 			}
 		}
 
-		setDictionary (lang) {
-			dictionary = BDFDB.DataUtils.load(this, "owndics", lang) || [];
-			this.killLanguageToast();
-			this.languageToast = BDFDB.NotificationUtils.toast("Grabbing dictionary (" + languages[lang].name + "). Please wait", {timeout:0});
-			this.languageToast.interval = BDFDB.TimeUtils.interval(_ => {
-				this.languageToast.textContent = this.languageToast.textContent.indexOf(".....") > -1 ? "Grabbing dictionary (" + languages[lang].name + "). Please wait" : this.languageToast.textContent + ".";
-			}, 500);
-			this.languageToast.lang = lang
-			BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/dic/" + lang + ".dic", (error, response, result) => {
-				if (error || (response && result.toLowerCase().indexOf("<!doctype html>") > -1)) {
-					this.killLanguageToast();
-					BDFDB.NotificationUtils.toast("Failed to grab dictionary (" + languages[lang].name + ").", {type: "error"});
-				}
-				else if (response && this.languageToast.lang == lang) {
-					langDictionary = result.split("\n");
-					dictionary = langDictionary.concat(dictionary).map(word => word.toLowerCase());
-					this.killLanguageToast();
-					BDFDB.NotificationUtils.toast("Successfully grabbed dictionary (" + languages[lang].name + ").", {type: "success"});
-				}
-			});
+		setDictionary (key, lang) {
+			this.killLanguageToast(key);
+			if (languages[lang]) {
+				dictionaries[key] = BDFDB.DataUtils.load(this, "owndics", lang) || [];
+				languageToasts[key] = BDFDB.NotificationUtils.toast("Grabbing dictionary (" + this.getLanguageName(languages[lang]) + "). Please wait", {timeout:0});
+				languageToasts[key].interval = BDFDB.TimeUtils.interval(_ => {
+					languageToasts[key].textContent = languageToasts[key].textContent.indexOf(".....") > -1 ? "Grabbing dictionary (" + this.getLanguageName(languages[lang]) + "). Please wait" : languageToasts[key].textContent + ".";
+				}, 500);
+				languageToasts[key].lang = lang
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/dic/" + lang + ".dic", (error, response, result) => {
+					if (error || (response && result.toLowerCase().indexOf("<!doctype html>") > -1)) {
+						this.killLanguageToast(key);
+						BDFDB.NotificationUtils.toast("Failed to grab dictionary (" + this.getLanguageName(languages[lang]) + ").", {type: "error"});
+					}
+					else if (response && languageToasts[key].lang == lang) {
+						langDictionaries[key] = result.split("\n");
+						dictionaries[key] = langDictionaries[key].concat(dictionaries[key]).map(word => word.toLowerCase()).filter(n => n);
+						this.killLanguageToast(key);
+						BDFDB.NotificationUtils.toast("Successfully grabbed dictionary (" + this.getLanguageName(languages[lang]) + ").", {type: "success"});
+					}
+				});
+			}
+			else {
+				delete dictionaries[key];
+				delete langDictionaries[key];
+			}
 		}
 
-		killLanguageToast () {
-			if (this.languageToast && typeof this.languageToast.close == "function") {
-				BDFDB.TimeUtils.clear(this.languageToast.interval);
-				this.languageToast.close();
+		killLanguageToast (key) {
+			if (languageToasts[key] && typeof languageToasts[key].close == "function") {
+				BDFDB.TimeUtils.clear(languageToasts[key].interval);
+				languageToasts[key].close();
 			}
 		}
 
 		isWordNotInDictionary (word) {
-			var wordLow = word.toLowerCase();
-			var wordWithoutSymbols = wordLow.replace(/[0-9\µ\@\$\£\€\¥\¢\²\³\>\<\|\,\;\.\:\_\#\+\*\~\?\¿\\\´\`\}\=\]\)\[\(\{\/\&\%\§\"\!\¡\^\°\n\t\r]/g, "");
-			return (wordLow.indexOf("http://") != 0 && wordLow.indexOf("https://") != 0 && wordWithoutSymbols && Array.isArray(dictionary) && dictionary.length > 0 && !dictionary.includes(wordLow) && !dictionary.includes(wordWithoutSymbols));
+			let wordLow = word.toLowerCase();
+			let wordWithoutSymbols = wordLow.replace(/[0-9\µ\@\$\£\€\¥\¢\²\³\>\<\|\,\;\.\:\_\#\+\*\~\?\¿\\\´\`\}\=\]\)\[\(\{\/\&\%\§\"\!\¡\^\°\n\t\r]/g, "");
+			if (wordLow.indexOf("http://") != 0 && wordLow.indexOf("https://") != 0 && wordWithoutSymbols) {
+				for (let key in dictionaries) {
+					if (Array.isArray(dictionaries[key]) && dictionaries[key].includes(wordLow) && dictionaries[key].includes(wordWithoutSymbols)) return false;
+				}
+				return true;
+			}
+			return false;
 		}
 
 
@@ -323,7 +340,7 @@ var SpellCheck = (_ => {
 			let maxAmount = BDFDB.DataUtils.get(this, "amounts", "maxSimilarAmount"), similarWords = [];
 			if (maxAmount > 0) {
 				let firstLetterLower = word.toLowerCase().charAt(0);
-				let sameLetterDic = dictionary.filter(string => string.indexOf(firstLetterLower) == 0 && string);
+				let sameLetterDic = BDFDB.ArrayUtils.removeCopies(BDFDB.ObjectUtils.toArray(dictionaries).flat()).filter(string => string.indexOf(firstLetterLower) == 0 && string);
 				let similarities = {};
 				for (let string of sameLetterDic) {
 					let value = this.wordSimilarity(word, string);
@@ -364,6 +381,11 @@ var SpellCheck = (_ => {
 			}
 			return (b.length - result) / b.length;
 		}
+		
+		getLanguageName (language) {
+			if (language.name.startsWith("Discord")) return language.name.slice(0, -1) + (language.ownlang && languages[language.id].name != language.ownlang ? ` / ${language.ownlang}` : "") + ")";
+			else return language.name + (language.ownlang && language.name != language.ownlang ? ` / ${language.ownlang}` : "");
+		}
 
 		setLabelsByLanguage () {
 			switch (BDFDB.LanguageUtils.getLanguage().id) {
@@ -372,147 +394,147 @@ var SpellCheck = (_ => {
 						context_spellcheck_text:				"Dodaj u rječnik",
 						context_similarwords_text:				"Pretraga sličnih riječi...",
 						similarwordssubmenu_none_text:			"Nema sličnih riječi",
-						toast_wordadd_text:						"Riječ ${word} dodana je u rječnik ${dicname}."
+						toast_wordadd_text:						"Riječ ${word} dodana je u rječnik ${dicName}."
 					};
 				case "da":		//danish
 					return {
 						context_spellcheck_text:				"Tilføj til ordbog",
 						context_similarwords_text:				"Søg lignende ord...",
 						similarwordssubmenu_none_text:			"Ingen lignende ord",
-						toast_wordadd_text:						"Ord ${word} tilføjet til ordbog ${dicname}."
+						toast_wordadd_text:						"Ord ${word} tilføjet til ordbog ${dicName}."
 					};
 				case "de":		//german
 					return {
 						context_spellcheck_text:				"Zum Wörterbuch hinzufügen",
 						context_similarwords_text:				"Ähnliche Wörter suchen...",
 						similarwordssubmenu_none_text:			"Keine ähnlichen Wörter",
-						toast_wordadd_text:						"Wort ${word} wurde zum Wörterbuch ${dicname} hinzugefügt."
+						toast_wordadd_text:						"Wort ${word} wurde zum Wörterbuch ${dicName} hinzugefügt."
 					};
 				case "es":		//spanish
 					return {
 						context_spellcheck_text:				"Agregar al diccionario",
 						context_similarwords_text:				"Buscar palabras similares...",
 						similarwordssubmenu_none_text:			"No hay palabras similares",
-						toast_wordadd_text:						"Se agregó la palabra ${word} al diccionario ${dicname}."
+						toast_wordadd_text:						"Se agregó la palabra ${word} al diccionario ${dicName}."
 					};
 				case "fr":		//french
 					return {
 						context_spellcheck_text:				"Ajouter au dictionnaire",
 						context_similarwords_text:				"Chercher des mots similaires...",
 						similarwordssubmenu_none_text:			"Pas de mots similaires",
-						toast_wordadd_text:						"Le mot ${word} a été ajouté au dictionnaire ${dicname}."
+						toast_wordadd_text:						"Le mot ${word} a été ajouté au dictionnaire ${dicName}."
 					};
 				case "it":		//italian
 					return {
 						context_spellcheck_text:				"Aggiungi al dizionario",
 						context_similarwords_text:				"Cerca parole simili...",
 						similarwordssubmenu_none_text:			"Nessuna parola simile",
-						toast_wordadd_text:						"Parola ${word} aggiunta al dizionario ${dicname}."
+						toast_wordadd_text:						"Parola ${word} aggiunta al dizionario ${dicName}."
 					};
 				case "nl":		//dutch
 					return {
 						context_spellcheck_text:				"Toevoegen aan woordenboek",
 						context_similarwords_text:				"Zoek vergelijkbare woorden...",
 						similarwordssubmenu_none_text:			"Geen vergelijkbare woorden",
-						toast_wordadd_text:						"Word ${word} toegevoegd aan woordenboek ${dicname}."
+						toast_wordadd_text:						"Word ${word} toegevoegd aan woordenboek ${dicName}."
 					};
 				case "no":		//norwegian
 					return {
 						context_spellcheck_text:				"Legg til i ordbok",
 						context_similarwords_text:				"Søk lignende ord...",
 						similarwordssubmenu_none_text:			"Ingen lignende ord",
-						toast_wordadd_text:						"Ord ${word} legges til ordbok ${dicname}."
+						toast_wordadd_text:						"Ord ${word} legges til ordbok ${dicName}."
 					};
 				case "pl":		//polish
 					return {
 						context_spellcheck_text:				"Dodaj do słownika",
 						context_similarwords_text:				"Wyszukaj podobne słowa...",
 						similarwordssubmenu_none_text:			"Brak podobnych słów",
-						toast_wordadd_text:						"Słowo ${word} dodane do słownika ${dicname}."
+						toast_wordadd_text:						"Słowo ${word} dodane do słownika ${dicName}."
 					};
 				case "pt-BR":	//portuguese (brazil)
 					return {
 						context_spellcheck_text:				"Adicionar ao dicionário",
 						context_similarwords_text:				"Pesquisar palavras similares...",
 						similarwordssubmenu_none_text:			"Sem palavras semelhantes",
-						toast_wordadd_text:						"Palavra ${word} adicionado ao dicionário ${dicname}."
+						toast_wordadd_text:						"Palavra ${word} adicionado ao dicionário ${dicName}."
 					};
 				case "fi":		//finnish
 					return {
 						context_spellcheck_text:				"Lisää sanakirjaan",
 						context_similarwords_text:				"Hae samankaltaisia sanoja...",
 						similarwordssubmenu_none_text:			"Ei vastaavia sanoja",
-						toast_wordadd_text:						"Sana ${word} lisättiin sanakirjaan ${dicname}."
+						toast_wordadd_text:						"Sana ${word} lisättiin sanakirjaan ${dicName}."
 					};
 				case "sv":		//swedish
 					return {
 						context_spellcheck_text:				"Lägg till i ordbok",
 						context_similarwords_text:				"Sök liknande ord...",
 						similarwordssubmenu_none_text:			"Inga liknande ord",
-						toast_wordadd_text:						"Ord ${word} läggs till ordbok ${dicname}."
+						toast_wordadd_text:						"Ord ${word} läggs till ordbok ${dicName}."
 					};
 				case "tr":		//turkish
 					return {
 						context_spellcheck_text:				"Sözlükye Ekle",
 						context_similarwords_text:				"Benzer Kelimeler Ara...",
 						similarwordssubmenu_none_text:			"Benzer kelime yoktur",
-						toast_wordadd_text:						"Sözcük ${word} sözlük ${dicname}'ye eklendi."
+						toast_wordadd_text:						"Sözcük ${word} sözlük ${dicName}'ye eklendi."
 					};
 				case "cs":		//czech
 					return {
 						context_spellcheck_text:				"Přidat do slovníku",
 						context_similarwords_text:				"Hledat podobné výrazy...",
 						similarwordssubmenu_none_text:			"Žádné podobné slova",
-						toast_wordadd_text:						"Slovo ${word} bylo přidáno do slovníku ${dicname}."
+						toast_wordadd_text:						"Slovo ${word} bylo přidáno do slovníku ${dicName}."
 					};
 				case "bg":		//bulgarian
 					return {
 						context_spellcheck_text:				"Добави в речника",
 						context_similarwords_text:				"Търсене на подобни думи...",
 						similarwordssubmenu_none_text:			"Няма подобни думи",
-						toast_wordadd_text:						"Думата ${word} е добавена към речника ${dicname}."
+						toast_wordadd_text:						"Думата ${word} е добавена към речника ${dicName}."
 					};
 				case "ru":		//russian
 					return {
 						context_spellcheck_text:				"Добавить в словарь",
 						context_similarwords_text:				"Поиск похожих слов...",
 						similarwordssubmenu_none_text:			"Нет похожих слов",
-						toast_wordadd_text:						"Слово ${word} добавлено в словарь ${dicname}."
+						toast_wordadd_text:						"Слово ${word} добавлено в словарь ${dicName}."
 					};
 				case "uk":		//ukrainian
 					return {
 						context_spellcheck_text:				"Додати до словника",
 						context_similarwords_text:				"Шукати схожі слова...",
 						similarwordssubmenu_none_text:			"Немає подібних слів",
-						toast_wordadd_text:						"Словник ${word} додається до словника ${dicname}."
+						toast_wordadd_text:						"Словник ${word} додається до словника ${dicName}."
 					};
 				case "ja":		//japanese
 					return {
 						context_spellcheck_text:				"辞書に追加",
 						context_similarwords_text:				"類似のワードを検索...",
 						similarwordssubmenu_none_text:			"類似の単語はありません",
-						toast_wordadd_text:						"単語 ${word} が辞書 ${dicname} に追加されました。"
+						toast_wordadd_text:						"単語 ${word} が辞書 ${dicName} に追加されました。"
 					};
 				case "zh-TW":	//chinese (traditional)
 					return {
 						context_spellcheck_text:				"添加到詞典",
 						context_similarwords_text:				"搜索類似的單詞...",
 						similarwordssubmenu_none_text:			"沒有類似的詞",
-						toast_wordadd_text:						"單詞 ${word} 添加到字典 ${dicname}。"
+						toast_wordadd_text:						"單詞 ${word} 添加到字典 ${dicName}。"
 					};
 				case "ko":		//korean
 					return {
 						context_spellcheck_text:				"사전에 추가",
 						context_similarwords_text:				"비슷한 단어 검색...",
 						similarwordssubmenu_none_text:			"유사한 단어 없음",
-						toast_wordadd_text:						"단어 ${word} 사전 ${dicname} 에 추가되었습니다."
+						toast_wordadd_text:						"단어 ${word} 사전 ${dicName} 에 추가되었습니다."
 					};
 				default:		//default: english
 					return {
 						context_spellcheck_text:				"Add to Dictionary",
 						context_similarwords_text:				"Search similar Words...",
 						similarwordssubmenu_none_text:			"No similar Words",
-						toast_wordadd_text:						"Word ${word} added to dictionary ${dicname}."
+						toast_wordadd_text:						"Word ${word} added to dictionary ${dicName}."
 					};
 			}
 		}
