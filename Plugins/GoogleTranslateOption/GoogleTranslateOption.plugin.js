@@ -27,7 +27,7 @@ var GoogleTranslateOption = (_ => {
 	return class GoogleTranslateOption {
 		getName () {return "GoogleTranslateOption";}
 
-		getVersion () {return "2.0.4";}
+		getVersion () {return "2.0.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -150,6 +150,8 @@ var GoogleTranslateOption = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
 				
+				translating = false;
+				
 				BDFDB.ModuleUtils.forceAllUpdates(this);
 
 				BDFDB.PluginUtils.clear(this);
@@ -172,7 +174,7 @@ var GoogleTranslateOption = (_ => {
 				let translated = translatedMessages[e.instance.props.message.id];
 				let hint = BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("__Translate_Message") : null;
 				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["pin", "unpin"]});
-				children.splice(index > -1 ? index + 1: 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+				children.splice(index > -1 ? index + 1 : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: translated ? this.labels.context_messageuntranslateoption_text : this.labels.context_messagetranslateoption_text,
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, translated ? "untranslate-message" : "translate-message"),
 					hint: hint && (_ => {
@@ -203,34 +205,36 @@ var GoogleTranslateOption = (_ => {
 			if (text) {
 				let translating, foundTranslation, foundInput, foundOutput;
 				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: ["devmode-copy-id", "search-google"], group: true});
-				children.splice(index > -1 ? index + 1 : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuPersistingItem, {
-					id: BDFDB.ContextMenuUtils.createItemId(this.name, "search-translation"),
-					disabled: isTranslating,
-					label: this.labels.context_googletranslateoption_text,
-					action: event => {
-						let item = BDFDB.DOMUtils.getParent(BDFDB.dotCN.menuitem, event.target);
-						if (item) {
-							let createTooltip = _ => {
-								BDFDB.TooltipUtils.create(item, `From ${foundInput.name}:\n${text}\n\nTo ${foundOutput.name}:\n${foundTranslation}`, {type:"right", selector:"googletranslate-tooltip"});
-							};
-							if (foundTranslation && foundInput && foundOutput) {
-								if (document.querySelector(".googletranslate-tooltip")) {
-									BDFDB.ContextMenuUtils.close(e.instance);
-									BDFDB.DiscordUtils.openLink(this.getGoogleTranslatePageURL(foundInput.id, foundOutput.id, text), BDFDB.DataUtils.get(this, "settings", "useChromium"));
-								}
-								else createTooltip();
-							}
-							else if (!translating) {
-								translating = true;
-								this.translateText(text, "context", (translation, input, output) => {
-									if (translation) {
-										foundTranslation = translation, foundInput = input, foundOutput = output;
-										createTooltip();
+				children.splice(index > -1 ? index + 1 : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuPersistingItem, {
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "search-translation"),
+						disabled: isTranslating,
+						label: this.labels.context_googletranslateoption_text,
+						action: event => {
+							let item = BDFDB.DOMUtils.getParent(BDFDB.dotCN.menuitem, event.target);
+							if (item) {
+								let createTooltip = _ => {
+									BDFDB.TooltipUtils.create(item, `From ${foundInput.name}:\n${text}\n\nTo ${foundOutput.name}:\n${foundTranslation}`, {type:"right", selector:"googletranslate-tooltip"});
+								};
+								if (foundTranslation && foundInput && foundOutput) {
+									if (document.querySelector(".googletranslate-tooltip")) {
+										BDFDB.ContextMenuUtils.close(e.instance);
+										BDFDB.DiscordUtils.openLink(this.getGoogleTranslatePageURL(foundInput.id, foundOutput.id, text), BDFDB.DataUtils.get(this, "settings", "useChromium"));
 									}
-								});
+									else createTooltip();
+								}
+								else if (!translating) {
+									translating = true;
+									this.translateText(text, "context", (translation, input, output) => {
+										if (translation) {
+											foundTranslation = translation, foundInput = input, foundOutput = output;
+											createTooltip();
+										}
+									});
+								}
 							}
 						}
-					}
+					})
 				}));
 			}
 		}
@@ -256,7 +260,7 @@ var GoogleTranslateOption = (_ => {
 		}
 		
 		processChannelTextAreaForm (e) {
-			if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "handleSendMessage")) BDFDB.ModuleUtils.patch(this, e.instance, "handleSendMessage", {instead: e2 => {
+			BDFDB.ModuleUtils.patch(this, e.instance, "handleSendMessage", {instead: e2 => {
 				if (translating) {
 					e2.stopOriginalMethodCall();
 					this.translateText(e2.methodArguments[0], "message", (translation, input, output) => {
@@ -352,13 +356,21 @@ var GoogleTranslateOption = (_ => {
 			for (let i in e.instance.props.channelStream) {
 				let message = e.instance.props.channelStream[i].content;
 				if (message) {
-					let translation = translatedMessages[message.id];
-					if (translation) e.instance.props.channelStream[i].content.content = translation.content;
-					else if (oldMessages[message.id] && Object.keys(message).some(key => !BDFDB.equals(oldMessages[message.id][key], message[key]))) {
-						e.instance.props.channelStream[i].content.content = oldMessages[message.id].content;
-						delete oldMessages[message.id];
+					if (BDFDB.ArrayUtils.is(message.attachments)) this.checkMessage(e.instance.props.channelStream[i], message);
+					else if (BDFDB.ArrayUtils.is(message)) for (let j in message) {
+						let childMessage = message[j].content;
+						if (childMessage && BDFDB.ArrayUtils.is(childMessage.attachments)) this.checkMessage(message[j], childMessage);
 					}
 				}
+			}
+		}
+		
+		checkMessage (stream, message) {
+			let translation = translatedMessages[message.id];
+			if (translation) stream.content.content = translation.content;
+			else if (oldMessages[message.id] && Object.keys(message).some(key => !BDFDB.equals(oldMessages[message.id][key], message[key]))) {
+				stream.content.content = oldMessages[message.id].content;
+				delete oldMessages[message.id];
 			}
 		}
 
@@ -592,9 +604,15 @@ var GoogleTranslateOption = (_ => {
 		}
 		
 		googleTranslate (data, callback) {
-			let googleTranslateWindow = BDFDB.WindowUtils.open(this, this.getGoogleTranslatePageURL(data.input.id, data.output.id, data.text));
-			googleTranslateWindow.webContents.on("did-finish-load", _ => {
-				googleTranslateWindow.webContents.executeJavaScript(`require("electron").ipcRenderer.sendTo(${BDFDB.LibraryRequires.electron.remote.getCurrentWindow().webContents.id}, "GTO-translation", [(document.querySelector(".translation") || {}).innerText, [(new RegExp("{code:'([^']*)',name:'" + [(new RegExp((window.source_language_detected || "").replace("%1$s", "([A-z]{2,})"), "g")).exec(document.body.innerHTML)].flat()[1] +"'}", "g")).exec(document.body.innerHTML)].flat()[1]]);`);
+			let googleTranslateWindow = BDFDB.WindowUtils.open(this, this.getGoogleTranslatePageURL(data.input.id, data.output.id, data.text), {
+				onLoad: _ => {
+					googleTranslateWindow.executeJavaScriptSafe(`
+						require("electron").ipcRenderer.sendTo(${BDFDB.LibraryRequires.electron.remote.getCurrentWindow().webContents.id}, "GTO-translation", [
+							(document.querySelector(".translation") || {}).innerText,
+							[(new RegExp("{code:'([^']*)',name:'" + [(new RegExp((window.source_language_detected || "").replace("%1$s", "([A-z]{2,})"), "g")).exec(document.body.innerHTML)].flat()[1] +"'}", "g")).exec(document.body.innerHTML)].flat(10)[1]
+						]);
+					`);
+				}
 			});
 			BDFDB.WindowUtils.addListener(this, "GTO-translation", (event, messageData) => {
 				BDFDB.WindowUtils.close(googleTranslateWindow);
@@ -813,8 +831,7 @@ var GoogleTranslateOption = (_ => {
 		}
 
 		getGoogleTranslatePageURL (input, output, text) {
-			input = BDFDB.LanguageUtils.languages[input] ? input : "auto";
-			return "https://translate.google.com/#" + input + "/" + output + "/" + encodeURIComponent(text);
+			return "https://translate.google.com/#" + (BDFDB.LanguageUtils.languages[input] ? input : "auto") + "/" + output + "/" + encodeURIComponent(text);
 		}
 		
 		getLanguageName (language) {
