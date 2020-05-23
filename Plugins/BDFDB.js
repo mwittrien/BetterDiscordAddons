@@ -3361,11 +3361,19 @@
 							else return [contextMenu.props.children[i].props.children, parseInt(j)];
 						}
 					}
-					else if (contextMenu.props.children[i] && contextMenu.props.children[i].props && check(contextMenu.props.children[i].props.children)) {
-						if (config.group) return [contextMenu.props.children, parseInt(i)];
-						else {
-							contextMenu.props.children[i].props.children = [contextMenu.props.children[i].props.children];
-							return [contextMenu.props.children[i].props.children, 0];
+					else if (contextMenu.props.children[i] && contextMenu.props.children[i].props) {
+						if (check(contextMenu.props.children[i].props.children)) {
+							if (config.group) return [contextMenu.props.children, parseInt(i)];
+							else {
+								contextMenu.props.children[i].props.children = [contextMenu.props.children[i].props.children];
+								return [contextMenu.props.children[i].props.children, 0];
+							}
+						}
+						else if (contextMenu.props.children[i].props.children && contextMenu.props.children[i].props.children.props && BDFDB.ArrayUtils.is(contextMenu.props.children[i].props.children.props.children)) {
+							for (let j in contextMenu.props.children[i].props.children.props.children) if (check(contextMenu.props.children[i].props.children.props.children[j])) {
+								if (config.group) return [contextMenu.props.children, parseInt(i)];
+								else return [contextMenu.props.children[i].props.children.props.children, parseInt(j)];
+							}
 						}
 					}
 				}

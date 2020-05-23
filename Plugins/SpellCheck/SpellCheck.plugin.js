@@ -161,7 +161,7 @@ var SpellCheck = (_ => {
 		// Begin of own functions
 
 		onSlateContextMenu (e) {
-			let [SCparent, SCindex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "spellcheck"});
+			let [SCparent, SCindex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "spellcheck", group:true});
 			if (SCindex > -1) SCparent.splice(SCindex, 1);
 			let textarea = BDFDB.DOMUtils.getParent(BDFDB.dotCN.textarea, e.instance.props.target), word = null;
 			if (textarea) for (let error of textarea.parentElement.querySelectorAll(BDFDB.dotCN._spellcheckerror)) {
