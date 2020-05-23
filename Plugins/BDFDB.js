@@ -24,6 +24,7 @@
 	};
 	const InternalBDFDB = {
 		name: "BDFDB",
+		started: true,
 		patchPriority: 0
 	};
 	const loadId = Math.round(Math.random() * 10000000000000000), myId = "278543574059057154", myGuildId = "410787888507256842";
@@ -1334,7 +1335,7 @@
 			for (let type in patchMethods) if (typeof patchMethods[type] == "function") {
 				if (!BDFDB.ObjectUtils.is(module.BDFDBpatch[methodName][type][patchPriority])) module.BDFDBpatch[methodName][type][patchPriority] = {};
 				module.BDFDBpatch[methodName][type][patchPriority][pluginId] = (...args) => {
-					if (config.once) cancel();
+					if (config.once || !plugin.started) cancel();
 					return patchMethods[type](...args);
 				};
 				module.BDFDBpatch[methodName][type][patchPriority][pluginId].pluginName = pluginName;
@@ -9784,7 +9785,7 @@
 		InternalComponents.LibraryComponents[component] = "div";
 		BDFDB.LibraryComponents[component] = "div";
 	}
-
+	
 	BDFDB.loaded = true;
 	window.BDFDB = BDFDB;
 	InternalBDFDB.reloadLib = _ => {
