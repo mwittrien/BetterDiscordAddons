@@ -3989,26 +3989,30 @@ body:before {
 
 /* ----		14.1.	CONTEXTMENU						---- */
 
-.contextMenu-HLZMGh,											/* contextmenu			container (quickselect)				*/
 .styleFlexible-wGDiIL,											/* contextmenu			container (flexible)				*/
 .styleFixed-sX-yHV,												/* contextmenu			container (fixed)					*/
+.submenu-2-ysNh,												/* contextmenu			container (submenu)					*/
+.contextMenu-HLZMGh,											/* contextmenu			container (quickselect)				*/
+.subMenuContext-2n_9YM,											/* contextmenu			container (quickselect sub)			*/
 .container-1gR2ZK {												/* contextmenu			container (boost)					*/
 	background: transparent;
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 }
-.contextMenu-HLZMGh,
 .styleFlexible-wGDiIL,
 .styleFixed-sX-yHV,
 .container-1gR2ZK,
-.subMenuContext-2n_9YM {
+.subMenuContext-2n_9YM,
+.contextMenu-HLZMGh {
 	z-index: 1;
 }
-.contextMenu-HLZMGh:not(.scroller-2FKFPG):after,
-.contextMenu-HLZMGh:not(.scroller-2FKFPG):before,
 .styleFlexible-wGDiIL:after,
 .styleFlexible-wGDiIL:before,
 .styleFixed-sX-yHV:after,
 .styleFixed-sX-yHV:before,
+.submenu-2-ysNh:after,
+.submenu-2-ysNh:before,
+.contextMenu-HLZMGh:not(.scroller-2FKFPG):after,
+.contextMenu-HLZMGh:not(.scroller-2FKFPG):before,
 .subMenuContext-2n_9YM .scrollerWrap-2lJEkd:after,
 .subMenuContext-2n_9YM .scrollerWrap-2lJEkd:before,
 .container-1gR2ZK:after,
@@ -4025,16 +4029,18 @@ body:before {
 	pointer-events: none;
 	z-index: -1;
 }
-.contextMenu-HLZMGh:not(.scroller-2FKFPG):after,
 .styleFlexible-wGDiIL:after,
 .styleFixed-sX-yHV:after,
+.submenu-2-ysNh:after,
+.contextMenu-HLZMGh:not(.scroller-2FKFPG):after,
 .subMenuContext-2n_9YM .scrollerWrap-2lJEkd:after,
 .container-1gR2ZK:after {
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.3));
 }
-.contextMenu-HLZMGh:not(.scroller-2FKFPG):before,
 .styleFlexible-wGDiIL:before,
 .styleFixed-sX-yHV:before,
+.submenu-2-ysNh:before,
+.contextMenu-HLZMGh:not(.scroller-2FKFPG):before,
 .subMenuContext-2n_9YM .scrollerWrap-2lJEkd:before,
 .container-1gR2ZK:before {
 	background: var(--vpopout) center/var(--vpopoutsize);
