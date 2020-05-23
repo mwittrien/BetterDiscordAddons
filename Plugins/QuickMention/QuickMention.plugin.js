@@ -60,7 +60,7 @@ var QuickMention = (_ => {
 				key: "mention",
 				text: BDFDB.LanguageUtils.LanguageStrings.MENTION,
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-					className: BDFDB.disCNS.messagetoolbarbutton,
+					className: BDFDB.disCN.messagetoolbarbutton,
 					onClick: _ => {
 						BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatchToLastSubscribed(BDFDB.DiscordConstants.ComponentActions.INSERT_TEXT, {
 							content: `<@!${e.instance.props.message.author.id}>`

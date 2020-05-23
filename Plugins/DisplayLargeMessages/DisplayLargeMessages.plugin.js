@@ -1,12 +1,12 @@
 //META{"name":"DisplayLargeMessages","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/DisplayLargeMessages","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/DisplayLargeMessages/DisplayLargeMessages.plugin.js"}*//
 
 var DisplayLargeMessages = (_ => {
-	var encodedMessages, requestedMessages, updateTimeout;
+	var encodedMessages, requestedMessages, oldMessages, updateTimeout;
 	
 	return class DisplayLargeMessages {
 		getName () {return "DisplayLargeMessages";}
 
-		getVersion () {return "1.0.2";}
+		getVersion () {return "1.0.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,9 +14,7 @@ var DisplayLargeMessages = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["On demand option","Added option to load the content of a 'message.txt' on demand instead of automatically"]],
-				"improved":[["Max Filesize","Added a max file size option for the automatic-mode to protect the app from injecting huge files, possibly causing a slowdown"]],
-				"fixed":[["Editing","Content of a 'message.txt' no longer gets inserted in the input when you edit your own message"],["Scrolling","No longer force scrolls to the bottom on large messages"]]
+				"added":[["Remove injection","You can now revert the on-demand injection after you clicked the inject button in the attachment, via clicking the newly loaded message and choosing 'unload'"]]
 			};
 			
 			this.patchedModules = {
@@ -32,15 +30,16 @@ var DisplayLargeMessages = (_ => {
 		initConstructor () {
 			encodedMessages = {};
 			requestedMessages = [];
+			oldMessages = {};
 			
 			this.css = `
 				${BDFDB.dotCN._displaylargemessagesinjectbutton} {
-					color: #4f545c;
+					color: var(--interactive-normal);
 					cursor: pointer;
 					margin-left: 4px;
 				}
 				${BDFDB.dotCN._displaylargemessagesinjectbutton}:hover {
-					color: rgba(114, 118, 125, 0.6);
+					color: var(--interactive-hover);
 				}`;
 
 			this.defaults = {
@@ -126,7 +125,9 @@ var DisplayLargeMessages = (_ => {
 				
 				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.MessageUtils, "editMessage", {before: e => {
 					let encodedContent = encodedMessages[e.methodArguments[1]];
+					let oldMessage = oldMessages[e.methodArguments[1]];
 					if (encodedContent != null) encodedContent.content = e.methodArguments[2].content;
+					if (oldMessage != null) oldMessage.content = e.methodArguments[2].content;
 				}});
 
 				this.forceUpdateAll();
@@ -156,36 +157,59 @@ var DisplayLargeMessages = (_ => {
 			}
 		}
 
+		onMessageContextMenu (e) {
+			if (e.instance.props.message && !requestedMessages.includes(e.instance.props.message.id)) {
+				let encodedContent = encodedMessages[e.instance.props.message.id];
+				if (encodedContent) {
+					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
+					children.splice(index > -1 ? index : 0, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+						children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							label: this.labels.context_uninjectattchment_text,
+							id: BDFDB.ContextMenuUtils.createItemId(this.name, "uninject-attachment"),
+							action: _ => {
+								BDFDB.ContextMenuUtils.close(e.instance);
+								delete encodedMessages[e.instance.props.message.id];
+								BDFDB.ModuleUtils.forceAllUpdates(this, ["Messages", "Attachment"]);
+							}
+						})
+					}));
+				}
+			}
+		}
+
 		processMessages (e) {
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let amounts = BDFDB.DataUtils.get(this, "amounts");
-			for (let i in e.instance.props.messages._array) {
-				let message = e.instance.props.messages._array[i];
-				let encodedContent = encodedMessages[e.instance.props.messages._array[i].id];
-				if (encodedContent != null) {
-					if (message.content.indexOf(encodedContent.attachment) == -1) {
-						message = new BDFDB.DiscordObjects.Message(Object.assign({}, message, {
-							content: (message.content && (message.content + "\n\n") || "") + encodedContent.attachment
-						}));
-						message.attachments = message.attachments.filter(n => n.filename != "message.txt");
-						e.instance.props.messages._array[i] = message;
-						let stream = e.instance.props.channelStream.find(n => n.content && n.content.id == message.id);
-						if (stream) stream.content = message;
+			e.instance.props.channelStream = [].concat(e.instance.props.channelStream);
+			for (let i in e.instance.props.channelStream) {
+				let message = e.instance.props.channelStream[i].content;
+				if (message) {
+					let encodedContent = encodedMessages[message.id];
+					if (encodedContent != null) {
+						if (message.content.indexOf(encodedContent.attachment) == -1) {
+							e.instance.props.channelStream[i].content.content = (message.content && (message.content + "\n\n") || "") + encodedContent.attachment;
+							e.instance.props.channelStream[i].content.attachments = message.attachments.filter(n => n.filename != "message.txt");
+						}
 					}
-				}
-				else if (!settings.onDemand && !requestedMessages.includes(message.id)) for (let attachment of message.attachments) {
-					if (attachment.filename == "message.txt" && (!amounts.maxFileSize || (amounts.maxFileSize >= attachment.size/1024))) {
-						requestedMessages.push(message.id);
-						BDFDB.LibraryRequires.request(attachment.url, (error, response, body) => {
-							encodedMessages[message.id] = {
-								content: message.content || "",
-								attachment: body || ""
-							};
-							BDFDB.TimeUtils.clear(updateTimeout);
-							updateTimeout = BDFDB.TimeUtils.timeout(_ => {
-								BDFDB.ReactUtils.forceUpdate(e.instance);
-							}, 1000);
-						});
+					else if (oldMessages[message.id] && Object.keys(message).some(key => !BDFDB.equals(oldMessages[message.id][key], message[key]))) {
+						e.instance.props.channelStream[i].content.content = oldMessages[message.id].content;
+						e.instance.props.channelStream[i].content.attachments = oldMessages[message.id].attachments;
+						delete oldMessages[message.id];
+					}
+					else if (!settings.onDemand && !requestedMessages.includes(message.id)) for (let attachment of message.attachments) {
+						if (attachment.filename == "message.txt" && (!amounts.maxFileSize || (amounts.maxFileSize >= attachment.size/1024))) {
+							requestedMessages.push(message.id);
+							BDFDB.LibraryRequires.request(attachment.url, (error, response, body) => {
+								encodedMessages[message.id] = {
+									content: message.content || "",
+									attachment: body || ""
+								};
+								BDFDB.TimeUtils.clear(updateTimeout);
+								updateTimeout = BDFDB.TimeUtils.timeout(_ => {
+									BDFDB.ReactUtils.forceUpdate(e.instance);
+								}, 1000);
+							});
+						}
 					}
 				}
 			}
@@ -196,7 +220,7 @@ var DisplayLargeMessages = (_ => {
 				let settings = BDFDB.DataUtils.get(this, "settings");
 				let amounts = BDFDB.DataUtils.get(this, "amounts");
 				if (settings.onDemand || amounts.maxFileSize && (amounts.maxFileSize < e.instance.props.size/1024)) e.returnvalue.props.children.splice(2, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-					text: BDFDB.LanguageUtils.LanguageStrings.TEXT,
+					text: this.labels.button_injectattchment_text,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
 						rel: "noreferrer noopener",
 						target: "_blank",
@@ -211,11 +235,12 @@ var DisplayLargeMessages = (_ => {
 							let target = event.target;
 							let message = BDFDB.ReactUtils.findValue(target, "message", {up: true});
 							if (message) BDFDB.LibraryRequires.request(e.instance.props.url, (error, response, body) => {
+								oldMessages[message.id] = new BDFDB.DiscordObjects.Message(message);
 								encodedMessages[message.id] = {
 									content: message.content || "",
 									attachment: body || ""
 								};
-								BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(target, {name: "Messages", up: true}));
+								BDFDB.ModuleUtils.forceAllUpdates(this, "Messages");
 							});
 						}
 					})
@@ -226,6 +251,116 @@ var DisplayLargeMessages = (_ => {
 		forceUpdateAll () {
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 			BDFDB.MessageUtils.rerenderAll();
+		}
+
+		setLabelsByLanguage () {
+			switch (BDFDB.LanguageUtils.getLanguage().id) {
+				case "hr":		//croatian
+					return {
+						context_uninjectattchment_text:		"Uklonite učitani sadržaj poruke",
+						button_injectattchment_text:		"Učitajte sadržaj poruke"
+					};
+				case "da":		//danish
+					return {
+						context_uninjectattchment_text:		"Fjern indlæst meddelelsesindhold",
+						button_injectattchment_text:		"Indlæs meddelelsesindhold"
+					};
+				case "de":		//german
+					return {
+						context_uninjectattchment_text:		"Geladenen Nachrichteninhalt entfernen",
+						button_injectattchment_text:		"Nachrichteninhalt laden"
+					};
+				case "es":		//spanish
+					return {
+						context_uninjectattchment_text:		"Eliminar contenido del mensaje cargado",
+						button_injectattchment_text:		"Cargar contenido del mensaje"
+					};
+				case "fr":		//french
+					return {
+						context_uninjectattchment_text:		"Supprimer le contenu du message chargé",
+						button_injectattchment_text:		"Charger le contenu du message"
+					};
+				case "it":		//italian
+					return {
+						context_uninjectattchment_text:		"Rimuovi il contenuto del messaggio caricato",
+						button_injectattchment_text:		"Carica il contenuto del messaggio"
+					};
+				case "nl":		//dutch
+					return {
+						context_uninjectattchment_text:		"Verwijder geladen berichtinhoud",
+						button_injectattchment_text:		"Laad berichtinhoud"
+					};
+				case "no":		//norwegian
+					return {
+						context_uninjectattchment_text:		"Fjern lastet meldingens innhold",
+						button_injectattchment_text:		"Last inn meldingens innhold"
+					};
+				case "pl":		//polish
+					return {
+						context_uninjectattchment_text:		"Usuń załadowaną treść wiadomości",
+						button_injectattchment_text:		"Załaduj treść wiadomości"
+					};
+				case "pt-BR":	//portuguese (brazil)
+					return {
+						context_uninjectattchment_text:		"Remover o conteúdo da mensagem carregada",
+						button_injectattchment_text:		"Carregar conteúdo da mensagem"
+					};
+				case "fi":		//finnish
+					return {
+						context_uninjectattchment_text:		"Poista ladattu viestin sisältö",
+						button_injectattchment_text:		"Lataa viestin sisältö"
+					};
+				case "sv":		//swedish
+					return {
+						context_uninjectattchment_text:		"Ta bort laddat meddelandeinnehåll",
+						button_injectattchment_text:		"Ladda meddelandets innehåll"
+					};
+				case "tr":		//turkish
+					return {
+						context_uninjectattchment_text:		"Yüklenen mesaj içeriğini kaldır",
+						button_injectattchment_text:		"Mesaj içeriğini yükle"
+					};
+				case "cs":		//czech
+					return {
+						context_uninjectattchment_text:		"Odebrat načtený obsah zprávy",
+						button_injectattchment_text:		"Načíst obsah zprávy"
+					};
+				case "bg":		//bulgarian
+					return {
+						context_uninjectattchment_text:		"Премахнете зареденото съдържание на съобщението",
+						button_injectattchment_text:		"Заредете съдържание на съобщението"
+					};
+				case "ru":		//russian
+					return {
+						context_uninjectattchment_text:		"Удалить загруженное содержимое сообщения",
+						button_injectattchment_text:		"Загрузить содержимое сообщения"
+					};
+				case "uk":		//ukrainian
+					return {
+						context_uninjectattchment_text:		"Видаліть завантажений вміст повідомлення",
+						button_injectattchment_text:		"Завантажте вміст повідомлення"
+					};
+				case "ja":		//japanese
+					return {
+						context_uninjectattchment_text:		"ロードされたメッセージコンテンツを削除する",
+						button_injectattchment_text:		"メッセージの内容を読み込む"
+					};
+				case "zh-TW":	//chinese (traditional)
+					return {
+						context_uninjectattchment_text:		"刪除已加載的郵件內容",
+						button_injectattchment_text:		"加載消息內容"
+					};
+				case "ko":		//korean
+					return {
+						context_uninjectattchment_text:		"로드 된 메시지 내용 제거",
+						button_injectattchment_text:		"메시지 내용로드"
+					};
+				default:		//default: english
+					return {
+						context_uninjectattchment_text:		"Remove loaded message content",
+						button_injectattchment_text:		"Load message content"
+					};
+			}
 		}
 	}
 })();
