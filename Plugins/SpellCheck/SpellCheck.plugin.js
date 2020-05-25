@@ -6,7 +6,7 @@ var SpellCheck = (_ => {
 	return class SpellCheck {
 		getName () {return "SpellCheck";}
 
-		getVersion () {return "1.4.3";}
+		getVersion () {return "1.4.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,8 @@ var SpellCheck = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["Secondary","You can now set a secondary language in the plugin settings"]]
+				"improved":[["Performance","Redesigned dictionaries to speed up error check"]],
+				"fixed":[["Punctuation","Words with a '.' etc. no longer get marked as errors"]]
 			};
 			
 			this.patchedModules = {
@@ -96,7 +97,7 @@ var SpellCheck = (_ => {
 					onRemove: _ => {
 						BDFDB.ArrayUtils.remove(ownDictionary, word);
 						BDFDB.DataUtils.save(ownDictionary, this, "owndics", choices.dictionaryLanguage);
-						dictionaries.dictionaryLanguage = langDictionaries.dictionaryLanguage.concat(ownDictionary);
+						dictionaries.dictionaryLanguage = this.formatDictionary(langDictionaries.dictionaryLanguage.concat(ownDictionary));
 						BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel);
 					}
 				}))
@@ -282,7 +283,7 @@ var SpellCheck = (_ => {
 						ownDictionary.push(wordLow);
 						BDFDB.DataUtils.save(ownDictionary, this, "owndics", lang);
 						BDFDB.NotificationUtils.toast(this.labels.toast_wordadd_text.replace("${word}", word).replace("${dicName}", this.getLanguageName(languages[lang])), {type:"success"});
-						dictionaries.dictionaryLanguage = langDictionaries.dictionaryLanguage.concat(ownDictionary);
+						dictionaries.dictionaryLanguage = this.formatDictionary(langDictionaries.dictionaryLanguage.concat(ownDictionary));
 					}
 				}
 			}
@@ -291,7 +292,7 @@ var SpellCheck = (_ => {
 		setDictionary (key, lang) {
 			this.killLanguageToast(key);
 			if (languages[lang]) {
-				dictionaries[key] = BDFDB.DataUtils.load(this, "owndics", lang) || [];
+				let ownDictionary = BDFDB.DataUtils.load(this, "owndics", lang) || [];
 				languageToasts[key] = BDFDB.NotificationUtils.toast("Grabbing dictionary (" + this.getLanguageName(languages[lang]) + "). Please wait", {timeout:0});
 				languageToasts[key].interval = BDFDB.TimeUtils.interval(_ => {
 					languageToasts[key].textContent = languageToasts[key].textContent.indexOf(".....") > -1 ? "Grabbing dictionary (" + this.getLanguageName(languages[lang]) + "). Please wait" : languageToasts[key].textContent + ".";
@@ -304,7 +305,7 @@ var SpellCheck = (_ => {
 					}
 					else if (response && languageToasts[key].lang == lang) {
 						langDictionaries[key] = result.split("\n");
-						dictionaries[key] = langDictionaries[key].concat(dictionaries[key]).map(word => word.toLowerCase()).filter(n => n);
+						dictionaries[key] = this.formatDictionary(langDictionaries[key].concat(ownDictionary).map(word => word.toLowerCase()).filter(n => typeof n == "string"));
 						this.killLanguageToast(key);
 						BDFDB.NotificationUtils.toast("Successfully grabbed dictionary (" + this.getLanguageName(languages[lang]) + ").", {type: "success"});
 					}
@@ -315,6 +316,17 @@ var SpellCheck = (_ => {
 				delete langDictionaries[key];
 			}
 		}
+		
+		formatDictionary (words) {
+			let dictionary = {};
+			for (let word of words.filter(n => typeof n == "string")) {
+				let firstLetterLower = word.charAt(0).toLowerCase();
+				if (!dictionary[firstLetterLower]) dictionary[firstLetterLower] = {};
+				if (!dictionary[firstLetterLower][word.length]) dictionary[firstLetterLower][word.length] = [];
+				if (!dictionary[firstLetterLower][word.length].includes(word)) dictionary[firstLetterLower][word.length].push(word);
+			}
+			return dictionary;
+		}
 
 		killLanguageToast (key) {
 			if (languageToasts[key] && typeof languageToasts[key].close == "function") {
@@ -323,12 +335,15 @@ var SpellCheck = (_ => {
 			}
 		}
 
-		isWordNotInDictionary (word) {
-			let wordLow = word.toLowerCase();
+		isWordNotInDictionary (unformatedWord) {
+			let wordLow = unformatedWord.toLowerCase();
 			let wordWithoutSymbols = wordLow.replace(/[0-9\µ\@\$\£\€\¥\¢\²\³\>\<\|\,\;\.\:\_\#\+\*\~\?\¿\\\´\`\}\=\]\)\[\(\{\/\&\%\§\"\!\¡\^\°\n\t\r]/g, "");
 			if (wordLow.indexOf("http://") != 0 && wordLow.indexOf("https://") != 0 && wordWithoutSymbols) {
 				for (let key in dictionaries) {
-					if (Array.isArray(dictionaries[key]) && dictionaries[key].includes(wordLow) && dictionaries[key].includes(wordWithoutSymbols)) return false;
+					for (let word of [wordLow, wordWithoutSymbols]) {
+						let firstLetterLower = word.charAt(0).toLowerCase();
+						if (dictionaries[key] && dictionaries[key][firstLetterLower] && dictionaries[key][firstLetterLower][word.length] && dictionaries[key][firstLetterLower][word.length].includes(word)) return false;
+					}
 				}
 				return true;
 			}
@@ -339,10 +354,12 @@ var SpellCheck = (_ => {
 		getSimilarWords (word) {
 			let maxAmount = BDFDB.DataUtils.get(this, "amounts", "maxSimilarAmount"), similarWords = [];
 			if (maxAmount > 0) {
-				let firstLetterLower = word.toLowerCase().charAt(0);
-				let sameLetterDic = BDFDB.ArrayUtils.removeCopies(BDFDB.ObjectUtils.toArray(dictionaries).flat()).filter(string => string.indexOf(firstLetterLower) == 0 && string);
+				let firstLetterLower = word.charAt(0).toLowerCase();
+				let possibilities = [];
+				for (let key in dictionaries) if (dictionaries[key] && dictionaries[key][firstLetterLower]) possibilities = possibilities.concat(BDFDB.ObjectUtils.toArray(dictionaries[key][firstLetterLower]).flat());
+				possibilities = BDFDB.ArrayUtils.removeCopies(possibilities);
 				let similarities = {};
-				for (let string of sameLetterDic) {
+				for (let string of possibilities) {
 					let value = this.wordSimilarity(word, string);
 					if (!similarities[value]) similarities[value] = [];
 					similarities[value].push(string);
