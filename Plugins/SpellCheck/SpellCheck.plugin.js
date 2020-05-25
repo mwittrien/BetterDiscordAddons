@@ -6,7 +6,7 @@ var SpellCheck = (_ => {
 	return class SpellCheck {
 		getName () {return "SpellCheck";}
 
-		getVersion () {return "1.4.5";}
+		getVersion () {return "1.4.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,6 +14,7 @@ var SpellCheck = (_ => {
 
 		constructor () {
 			this.changelog = {
+				"added":[["Local Support","You can now tell the plugin to download the dictionary so next time it grabs it, it doesn't have to fetch it from the web"]],
 				"improved":[["Performance","Redesigned dictionaries to speed up error check"]],
 				"fixed":[["Punctuation","Words with a '.' etc. no longer get marked as errors"]]
 			};
@@ -40,6 +41,9 @@ var SpellCheck = (_ => {
 
 
 			this.defaults = {
+				settings: {
+					downloadDictionary:			{value:false, 	description:"Use local dictionary file (downloads dictionary on first useage)"}
+				},
 				choices: {
 					dictionaryLanguage:			{value:"en", 	force:true,		description:"Primary Language:"},
 					secondaryLanguage:			{value:"-", 	force:false,	description:"Secondary Language:"}
@@ -52,10 +56,20 @@ var SpellCheck = (_ => {
 
 		getSettingsPanel () {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+			let settings = BDFDB.DataUtils.get(this, "settings");
 			let choices = BDFDB.DataUtils.get(this, "choices");
 			let amounts = BDFDB.DataUtils.get(this, "amounts");
 			let ownDictionary = BDFDB.DataUtils.load(this, "owndics", choices.dictionaryLanguage) || [];
 			let settingsPanel, settingsItems = [];
+			
+			for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+				className: BDFDB.disCN.marginbottom8,
+				type: "Switch",
+				plugin: this,
+				keys: ["settings", key],
+				label: this.defaults.settings[key].description,
+				value: settings[key]
+			}));
 			
 			for (let key in choices) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
@@ -298,17 +312,32 @@ var SpellCheck = (_ => {
 					languageToasts[key].textContent = languageToasts[key].textContent.indexOf(".....") > -1 ? "Grabbing dictionary (" + this.getLanguageName(languages[lang]) + "). Please wait" : languageToasts[key].textContent + ".";
 				}, 500);
 				languageToasts[key].lang = lang
-				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/dic/" + lang + ".dic", (error, response, body) => {
+				
+				let folder = BDFDB.LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), "dictionaries");
+				let filePath = BDFDB.LibraryRequires.path.join(folder, lang + ".dic");
+				
+				let parse = (error, response, body, download) => {
+					this.killLanguageToast(key);
 					if (error || (response && body.toLowerCase().indexOf("<!doctype html>") > -1)) {
-						this.killLanguageToast(key);
 						BDFDB.NotificationUtils.toast("Failed to grab dictionary (" + this.getLanguageName(languages[lang]) + ").", {type: "error"});
 					}
 					else if (response && languageToasts[key].lang == lang) {
+						if (download) {
+							if (!BDFDB.LibraryRequires.fs.existsSync(folder)) BDFDB.LibraryRequires.fs.mkdirSync(folder);
+							BDFDB.LibraryRequires.fs.writeFile(filePath, body, _ => {});
+						}
 						langDictionaries[key] = body.toLowerCase().replace(/\r/g, "").split("\n");
 						dictionaries[key] = this.formatDictionary(langDictionaries[key].concat(ownDictionary));
-						this.killLanguageToast(key);
 						BDFDB.NotificationUtils.toast("Successfully grabbed dictionary (" + this.getLanguageName(languages[lang]) + ").", {type: "success"});
 					}
+				};
+				
+				let shouldDownload = BDFDB.DataUtils.get(this, "settings", "downloadDictionary");
+				if (shouldDownload && BDFDB.LibraryRequires.fs.existsSync(filePath)) BDFDB.LibraryRequires.fs.readFile(filePath, (error, buffer) => {
+					parse(error, buffer, buffer.toString(), false);
+				});
+				else BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/dic/" + lang + ".dic", (error, response, body) => {
+					parse(error, response, body, shouldDownload);
 				});
 			}
 			else {
