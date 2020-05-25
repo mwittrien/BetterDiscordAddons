@@ -7,10 +7,12 @@ var OwnerTag = (_ => {
 		OWNER: 2
 	};
 	
+	var settings = {};
+	
 	return class OwnerTag {
 		getName () {return "OwnerTag";}
 
-		getVersion () {return "1.2.8";}
+		getVersion () {return "1.2.9";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -18,7 +20,7 @@ var OwnerTag = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Tags","Properly work again"]]
+				"added":[["Ignore bots","Added options to not add admin tag for bots with admin rights"]]
 			};
 
 			this.patchedModules = {
@@ -60,7 +62,8 @@ var OwnerTag = (_ => {
 					useBlackFont:			{value:false, 	inner:false,	description:"Instead of darkening the Rolecolor on bright colors use black font."},
 					useCrown:				{value:false, 	inner:false,	description:"Use the Crown Icon instead of the OwnerTag."},
 					hideNativeCrown:		{value:true, 	inner:false,	description:"Hide the native Crown Icon (not the Plugin one)."},
-					addForAdmins:			{value:false, 	inner:false,	description:"Also add the Tag for any user with Admin rights."}
+					addForAdmins:			{value:false, 	inner:false,	description:"Also add an Admin Tag for any user with Admin rights."},
+					ignoreBotAdmins:		{value:false, 	inner:false,	description:"Do not add the Admin tag for bots with Admin rights."}
 				},
 				inputs: {
 					ownTagName:				{value:"Owner", 	description:"Owner Tag Text for Owners"},
@@ -161,7 +164,7 @@ var OwnerTag = (_ => {
 
 		processMemberListItem (e) {
 			let userType = this.getUserType(e.instance.props.user);
-			if (userType && BDFDB.DataUtils.get(this, "settings", "addInMemberList")) {
+			if (userType && settings.addInMemberList) {
 				this.injectOwnerTag(BDFDB.ReactUtils.getValue(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, userType, 1, {
 					tagClass: BDFDB.disCN.bottagmember
 				});
@@ -169,7 +172,7 @@ var OwnerTag = (_ => {
 		}
 
 		processMessageHeader (e) {
-			if (e.instance.props.message && BDFDB.DataUtils.get(this, "settings", "addInChatWindow")) {
+			if (e.instance.props.message && settings.addInChatWindow) {
 				let userType = this.getUserType(e.instance.props.message.author);
 				if (userType) {
 					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue.props.children.slice(1), {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
@@ -188,11 +191,11 @@ var OwnerTag = (_ => {
 					let inject = false, tagClass = "";
 					switch (e.instance.props.className) {
 						case BDFDB.disCN.userpopoutheadertagnonickname:
-							inject = BDFDB.DataUtils.get(this, "settings", "addInUserPopout");
+							inject = settings.addInUserPopout;
 							tagClass = BDFDB.disCN.bottagnametag;
 							break;
 						case BDFDB.disCN.userprofilenametag:
-							inject = BDFDB.DataUtils.get(this, "settings", "addInUserProfile");
+							inject = settings.addInUserProfile;
 							tagClass = BDFDB.disCNS.userprofilebottag + BDFDB.disCN.bottagnametag;
 							break;
 					}
@@ -206,7 +209,7 @@ var OwnerTag = (_ => {
 		}
 
 		processUserPopout (e) {
-			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "addInUserPopout")) {
+			if (e.instance.props.user && settings.addInUserPopout) {
 				let userType = this.getUserType(e.instance.props.user);
 				if (userType) {
 					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadertagwithnickname]]});
@@ -219,7 +222,6 @@ var OwnerTag = (_ => {
 
 		injectOwnerTag (children, user, userType, insertIndex, config = {}) {
 			if (!BDFDB.ArrayUtils.is(children) || !user) return;
-			let settings = BDFDB.DataUtils.get(this, "settings");
 			if (settings.useCrown || settings.hideNativeCrown) {
 				let [_, index] = BDFDB.ReactUtils.findChildren(children, {props: [["text",[BDFDB.LanguageUtils.LanguageStrings.GROUP_OWNER, BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER]]]});
 				if (index > -1) children[index] = null;
@@ -263,11 +265,13 @@ var OwnerTag = (_ => {
 			if (!channel) return userTypes.NONE;
 			let guild = BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id);
 			let isOwner = channel.ownerId == user.id || guild && guild.ownerId == user.id;
-			if (!(isOwner || (BDFDB.DataUtils.get(this, "settings", "addForAdmins") && BDFDB.UserUtils.can("ADMINISTRATOR", user.id)))) return userTypes.NONE;
+			if (!(isOwner || (settings.addForAdmins && BDFDB.UserUtils.can("ADMINISTRATOR", user.id) && !(settings.ignoreBotAdmins && user.bot)))) return userTypes.NONE;
 			return isOwner ? userTypes.OWNER : userTypes.ADMIN;
 		}
 	
 		forceUpdateAll () {
+			settings = BDFDB.DataUtils.get(this, "settings");
+			
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 			BDFDB.MessageUtils.rerenderAll();
 		}
