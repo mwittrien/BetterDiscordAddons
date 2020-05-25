@@ -982,7 +982,7 @@ var ThemeRepo = (_ => {
 					
 					let loadingTooltip = document.querySelector(".themerepo-loading-tooltip");
 					if (loadingTooltip) {
-						BDFDB.DOMUtils.setText(loadingTooltip, this.getLoadingTooltipText());
+						BDFDB.DOMUtils.setText(loadingTooltip.querySelector(BDFDB.dotCN.tooltipcontent), this.getLoadingTooltipText());
 						loadingTooltip.update();
 					}
 					

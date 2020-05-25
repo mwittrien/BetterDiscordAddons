@@ -729,7 +729,7 @@ var PluginRepo = (_ => {
 					
 					let loadingTooltip = document.querySelector(".pluginrepo-loading-tooltip");
 					if (loadingTooltip) {
-						BDFDB.DOMUtils.setText(loadingTooltip, this.getLoadingTooltipText());
+						BDFDB.DOMUtils.setText(loadingTooltip.querySelector(BDFDB.dotCN.tooltipcontent), this.getLoadingTooltipText());
 						loadingTooltip.update();
 					}
 					
