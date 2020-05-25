@@ -6,7 +6,7 @@ var SpellCheck = (_ => {
 	return class SpellCheck {
 		getName () {return "SpellCheck";}
 
-		getVersion () {return "1.4.4";}
+		getVersion () {return "1.4.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -298,14 +298,14 @@ var SpellCheck = (_ => {
 					languageToasts[key].textContent = languageToasts[key].textContent.indexOf(".....") > -1 ? "Grabbing dictionary (" + this.getLanguageName(languages[lang]) + "). Please wait" : languageToasts[key].textContent + ".";
 				}, 500);
 				languageToasts[key].lang = lang
-				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/dic/" + lang + ".dic", (error, response, result) => {
-					if (error || (response && result.toLowerCase().indexOf("<!doctype html>") > -1)) {
+				BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/dic/" + lang + ".dic", (error, response, body) => {
+					if (error || (response && body.toLowerCase().indexOf("<!doctype html>") > -1)) {
 						this.killLanguageToast(key);
 						BDFDB.NotificationUtils.toast("Failed to grab dictionary (" + this.getLanguageName(languages[lang]) + ").", {type: "error"});
 					}
 					else if (response && languageToasts[key].lang == lang) {
-						langDictionaries[key] = result.split("\n");
-						dictionaries[key] = this.formatDictionary(langDictionaries[key].concat(ownDictionary).map(word => word.toLowerCase()).filter(n => typeof n == "string"));
+						langDictionaries[key] = body.toLowerCase().replace(/\r/g, "").split("\n");
+						dictionaries[key] = this.formatDictionary(langDictionaries[key].concat(ownDictionary));
 						this.killLanguageToast(key);
 						BDFDB.NotificationUtils.toast("Successfully grabbed dictionary (" + this.getLanguageName(languages[lang]) + ").", {type: "success"});
 					}
@@ -318,14 +318,14 @@ var SpellCheck = (_ => {
 		}
 		
 		formatDictionary (words) {
-			let dictionary = {};
-			for (let word of words.filter(n => typeof n == "string")) {
+			let i = 0;
+			return words.reduce((dictionary, word) => {
 				let firstLetterLower = word.charAt(0).toLowerCase();
 				if (!dictionary[firstLetterLower]) dictionary[firstLetterLower] = {};
 				if (!dictionary[firstLetterLower][word.length]) dictionary[firstLetterLower][word.length] = [];
-				if (!dictionary[firstLetterLower][word.length].includes(word)) dictionary[firstLetterLower][word.length].push(word);
-			}
-			return dictionary;
+				dictionary[firstLetterLower][word.length].push(word);
+				return dictionary;
+			}, {});
 		}
 
 		killLanguageToast (key) {
