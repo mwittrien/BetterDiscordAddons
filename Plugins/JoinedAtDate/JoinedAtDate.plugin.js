@@ -259,21 +259,21 @@ var JoinedAtDate = (_ => {
 
 		injectDate (instance, children, index, user) {
 			if (!BDFDB.ArrayUtils.is(children) || !user || user.discriminator == "0000") return;
-			let guildid = BDFDB.LibraryModules.LastGuildStore.getGuildId();
-			if (!guildid) return;
-			if (!loadedUsers[guildid]) loadedUsers[guildid] = {};
-			if (!this.requestedUsers[guildid]) this.requestedUsers[guildid] = {};
-			if (!BDFDB.ArrayUtils.is(this.requestedUsers[guildid][user.id])) {
-				this.requestedUsers[guildid][user.id] = [instance];
-				BDFDB.LibraryModules.APIUtils.get(BDFDB.DiscordConstants.Endpoints.GUILD_MEMBER(guildid, user.id)).then(result => {
-					loadedUsers[guildid][user.id] = new Date(result.body.joined_at);
-					for (let queredinstance of this.requestedUsers[guildid][user.id]) BDFDB.ReactUtils.forceUpdate(queredinstance);
+			let guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
+			if (!guildId) return;
+			if (!loadedUsers[guildId]) loadedUsers[guildId] = {};
+			if (!requestedUsers[guildId]) requestedUsers[guildId] = {};
+			if (!BDFDB.ArrayUtils.is(requestedUsers[guildId][user.id])) {
+				requestedUsers[guildId][user.id] = [instance];
+				BDFDB.LibraryModules.APIUtils.get(BDFDB.DiscordConstants.Endpoints.GUILD_MEMBER(guildId, user.id)).then(result => {
+					loadedUsers[guildId][user.id] = new Date(result.body.joined_at);
+					for (let queredinstance of requestedUsers[guildId][user.id]) BDFDB.ReactUtils.forceUpdate(queredinstance);
 				});
 			}
-			else if (!loadedUsers[guildid][user.id]) this.requestedUsers[guildid][user.id].push(instance);
+			else if (!loadedUsers[guildId][user.id]) requestedUsers[guildId][user.id].push(instance);
 			else children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
 				className: "joinedAtDate " + BDFDB.disCN.textrow,
-				children: this.labels.joinedat_text.replace("{{time}}", this.getTimestamp(languages[BDFDB.DataUtils.get(this, "choices", "joinedAtDateLang")].id, loadedUsers[guildid][user.id]))
+				children: this.labels.joinedat_text.replace("{{time}}", this.getTimestamp(languages[BDFDB.DataUtils.get(this, "choices", "joinedAtDateLang")].id, loadedUsers[guildId][user.id]))
 			}));
 		}
 

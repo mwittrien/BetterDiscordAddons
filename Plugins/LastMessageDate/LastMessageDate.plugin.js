@@ -270,34 +270,34 @@ var LastMessageDate = (_ => {
 
 		injectDate (instance, children, index, user) {
 			if (!BDFDB.ArrayUtils.is(children) || !user || user.discriminator == "0000") return;
-			let guildid = BDFDB.LibraryModules.LastGuildStore.getGuildId();
-			let isguild = !!guildid;
-			guildid = guildid || BDFDB.LibraryModules.LastChannelStore.getChannelId();
-			if (!guildid) return;
-			if (!loadedUsers[guildid]) loadedUsers[guildid] = {};
-			if (!requestedUsers[guildid]) requestedUsers[guildid] = {};
-			if (!BDFDB.ArrayUtils.is(requestedUsers[guildid][user.id])) {
-				requestedUsers[guildid][user.id] = [instance];
-				BDFDB.LibraryModules.APIUtils.get((isguild ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(guildid) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(guildid)) + "?author_id=" + user.id).then(result => {
+			let guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
+			let isguild = !!guildId;
+			guildId = guildId || BDFDB.LibraryModules.LastChannelStore.getChannelId();
+			if (!guildId) return;
+			if (!loadedUsers[guildId]) loadedUsers[guildId] = {};
+			if (!requestedUsers[guildId]) requestedUsers[guildId] = {};
+			if (!BDFDB.ArrayUtils.is(requestedUsers[guildId][user.id])) {
+				requestedUsers[guildId][user.id] = [instance];
+				BDFDB.LibraryModules.APIUtils.get((isguild ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(guildId) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(guildId)) + "?author_id=" + user.id).then(result => {
 					if (typeof result.body.retry_after != "number") {
 						if (result.body.messages && Array.isArray(result.body.messages[0])) {
 							for (let message of result.body.messages[0]) if (message.hit && message.author.id == user.id) {
-								loadedUsers[guildid][user.id] = new Date(message.timestamp);
+								loadedUsers[guildId][user.id] = new Date(message.timestamp);
 							}
 						}
-						else loadedUsers[guildid][user.id] = null;
-						for (let queredinstance of requestedUsers[guildid][user.id]) BDFDB.ReactUtils.forceUpdate(queredinstance);
+						else loadedUsers[guildId][user.id] = null;
+						for (let queredinstance of requestedUsers[guildId][user.id]) BDFDB.ReactUtils.forceUpdate(queredinstance);
 					}
 					else {
-						delete requestedUsers[guildid][user.id];
+						delete requestedUsers[guildId][user.id];
 						BDFDB.TimeUtils.timeout(_ => {this.injectDate(instance, children, index, user);}, result.body.retry_after + 500);
 					}
 				});
 			}
-			else if (loadedUsers[guildid][user.id] === undefined) requestedUsers[guildid][user.id].push(instance);
+			else if (loadedUsers[guildId][user.id] === undefined) requestedUsers[guildId][user.id].push(instance);
 			else children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
 				className: "lastMessageDate " + BDFDB.disCN.textrow,
-				children: this.labels.lastmessage_text.replace("{{time}}", loadedUsers[guildid][user.id] ? this.getTimestamp(languages[BDFDB.DataUtils.get(this, "choices", "lastMessageDateLang")].id, loadedUsers[guildid][user.id]) : "---")
+				children: this.labels.lastmessage_text.replace("{{time}}", loadedUsers[guildId][user.id] ? this.getTimestamp(languages[BDFDB.DataUtils.get(this, "choices", "lastMessageDateLang")].id, loadedUsers[guildId][user.id]) : "---")
 			}));
 		}
 		
