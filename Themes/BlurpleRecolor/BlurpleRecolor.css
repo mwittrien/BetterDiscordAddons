@@ -1900,6 +1900,10 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 	background: var(--vaccentcolor-active);
 }
 
+.embedFull-2tM8--[style*="border-color: rgb(62, 130, 226)"] {
+	border-color: rgb(var(--vaccentcolor)) !important;
+}
+
 
 /* ~~~~		14.		PLUGINSUPPORT					~~~~ */
 
