@@ -1,12 +1,12 @@
 ﻿//META{"name":"LastMessageDate","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/LastMessageDate","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/LastMessageDate/LastMessageDate.plugin.js"}*//
 
 var LastMessageDate = (_ => {
-	var loadedUsers, requestedUsers;
+	var loadedUsers, requestedUsers, languages;
 	
 	return class LastMessageDate {
 		getName () {return "LastMessageDate";}
 
-		getVersion () {return "1.1.4";}
+		getVersion () {return "1.1.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,8 +14,7 @@ var LastMessageDate = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["Days Ago","Added a days ago $daysago placeholder, to check how it works read the guide in the settings"]],
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"fixed":[["Days Ago","Now properly shows the amount of days relative to the date instead of calculated from the amount of passed hours"]]
 			};
 
 			this.patchedModules = {
@@ -103,7 +102,7 @@ var LastMessageDate = (_ => {
 				label: this.defaults.choices[key].description,
 				basis: "70%",
 				value: choices[key],
-				options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(this.languages, (lang, id) => {return {value:id, label:lang.name}})),
+				options: BDFDB.ObjectUtils.toArray(BDFDB.ObjectUtils.map(languages, (lang, id) => {return {value:id, label:lang.name}})),
 				searchable: true,
 				optionRenderer: lang => {
 					return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
@@ -119,7 +118,7 @@ var LastMessageDate = (_ => {
 								grow: 0,
 								shrink: 0,
 								basis: "60%",
-								children: this.getTimestamp(this.languages[lang.value].id)
+								children: this.getTimestamp(languages[lang.value].id)
 							})
 						]
 					});
@@ -137,7 +136,7 @@ var LastMessageDate = (_ => {
 								grow: 1,
 								shrink: 0,
 								basis: "70%",
-								children: this.getTimestamp(this.languages[lang.value].id)
+								children: this.getTimestamp(languages[lang.value].id)
 							})
 						]
 					});
@@ -219,7 +218,7 @@ var LastMessageDate = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 
-				this.languages = Object.assign({"own":{name:"Own",id:"own",integrated:false,dic:false}}, BDFDB.LanguageUtils.languages);
+				languages = Object.assign({"own":{name:"Own",id:"own",integrated:false,dic:false}}, BDFDB.LanguageUtils.languages);
 
 				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dirtyDispatch", {after: e => {
 					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.MESSAGE_CREATE && e.methodArguments[0].message) {
@@ -298,7 +297,7 @@ var LastMessageDate = (_ => {
 			else if (loadedUsers[guildid][user.id] === undefined) requestedUsers[guildid][user.id].push(instance);
 			else children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
 				className: "lastMessageDate " + BDFDB.disCN.textrow,
-				children: this.labels.lastmessage_text.replace("{{time}}", loadedUsers[guildid][user.id] ? this.getTimestamp(this.languages[BDFDB.DataUtils.get(this, "choices", "lastMessageDateLang")].id, loadedUsers[guildid][user.id]) : "---")
+				children: this.labels.lastmessage_text.replace("{{time}}", loadedUsers[guildid][user.id] ? this.getTimestamp(languages[BDFDB.DataUtils.get(this, "choices", "lastMessageDateLang")].id, loadedUsers[guildid][user.id]) : "---")
 			}));
 		}
 		
@@ -319,7 +318,8 @@ var LastMessageDate = (_ => {
 			else {
 				let ownformat = BDFDB.DataUtils.get(this, "formats", "ownFormat");
 				languageid = BDFDB.LanguageUtils.getLanguage().id;
-				let hour = timeobj.getHours(), minute = timeobj.getMinutes(), second = timeobj.getSeconds(), msecond = timeobj.getMilliseconds(), day = timeobj.getDate(), month = timeobj.getMonth()+1, timemode = "", daysago = Math.round((new Date() - timeobj)/(1000*60*60*24));
+				let now = new Date();
+				let hour = timeobj.getHours(), minute = timeobj.getMinutes(), second = timeobj.getSeconds(), msecond = timeobj.getMilliseconds(), day = timeobj.getDate(), month = timeobj.getMonth()+1, timemode = "", daysago = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(timeobj.getFullYear(), timeobj.getMonth(), timeobj.getDate()))/(1000*60*60*24));
 				if (ownformat.indexOf("$timemode") > -1) {
 					timemode = hour >= 12 ? "PM" : "AM";
 					hour = hour % 12;

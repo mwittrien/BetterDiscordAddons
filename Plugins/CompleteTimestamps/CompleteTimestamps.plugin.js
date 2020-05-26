@@ -6,13 +6,17 @@ var CompleteTimestamps = (_ => {
 	return class CompleteTimestamps {
 		getName () {return "CompleteTimestamps";}
 
-		getVersion () {return "1.4.4";}
+		getVersion () {return "1.4.5";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Replace all timestamps with complete timestamps.";}
 
 		constructor () {
+			this.changelog = {
+				"fixed":[["Days Ago","Now properly shows the amount of days relative to the date instead of calculated from the amount of passed hours"]]
+			};
+			
 			this.patchedModules = {
 				after: {
 					Message: "default",
@@ -315,7 +319,8 @@ var CompleteTimestamps = (_ => {
 			else {
 				let ownFormat = BDFDB.DataUtils.get(this, "formats", "ownformat");
 				languageId = BDFDB.LanguageUtils.getLanguage().id;
-				let hour = timeobj.getHours(), minute = timeobj.getMinutes(), second = timeobj.getSeconds(), msecond = timeobj.getMilliseconds(), day = timeobj.getDate(), month = timeobj.getMonth()+1, timemode = "", daysago = Math.round((new Date() - timeobj)/(1000*60*60*24));
+				let now = new Date();
+				let hour = timeobj.getHours(), minute = timeobj.getMinutes(), second = timeobj.getSeconds(), msecond = timeobj.getMilliseconds(), day = timeobj.getDate(), month = timeobj.getMonth()+1, timemode = "", daysago = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(timeobj.getFullYear(), timeobj.getMonth(), timeobj.getDate()))/(1000*60*60*24));
 				if (ownFormat.indexOf("$timemode") > -1) {
 					timemode = hour >= 12 ? "PM" : "AM";
 					hour = hour % 12;
