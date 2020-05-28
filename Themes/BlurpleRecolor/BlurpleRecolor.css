@@ -997,9 +997,6 @@
 
 /* ----		10.2.	GUILDADD/CREATION				---- */
 
-#app-mount .header-3ZP1MY {									/* modal				general title						*/
-	color: rgb(var(--vaccentcolor));
-}
 #app-mount .title-2Dc-Cb {									/* modal				create title						*/
 	color: rgb(var(--vaccentcolor));
 }
