@@ -8847,6 +8847,7 @@
 			white-space: nowrap;
 			text-overflow: ellipsis;
 			overflow: hidden;
+			display: flex;
 			align-items: center;
 			position: relative;
 			font-weight: 500;
@@ -9008,6 +9009,12 @@
 		}
 		#bd-settingspane-container ${BDFDB.dotCN._repoupdatebutton}[style] {
 			display: none !important;
+		}
+		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repoentry + BDFDB.dotCN._repofooter} > * {
+			margin-left: 10px;
+		}
+		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repoentry + BDFDB.dotCN._repofooter} > *:first-child {
+			margin-left: auto;
 		}
 		
 		${BDFDB.dotCN.noticewrapper} {
