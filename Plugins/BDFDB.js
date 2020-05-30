@@ -4166,7 +4166,6 @@
 	DiscordClassModules.Checkbox = BDFDB.ModuleUtils.findByProperties("checkboxWrapper", "round");
 	DiscordClassModules.ColorPicker = BDFDB.ModuleUtils.findByProperties("colorPickerCustom", "customColorPickerInput");
 	DiscordClassModules.ColorPickerInner = BDFDB.ModuleUtils.findByProperties("saturation", "hue", "wrapper");
-	DiscordClassModules.ContextMenu = BDFDB.ModuleUtils.findByProperties("contextMenu", "itemGroup");
 	DiscordClassModules.CtaVerification = BDFDB.ModuleUtils.findByProperties("attendeeCTA", "verificationNotice");
 	DiscordClassModules.Cursor = BDFDB.ModuleUtils.findByProperties("cursorDefault", "userSelectNone");
 	DiscordClassModules.CustomStatusIcon = BDFDB.ModuleUtils.findByProperties("textRuler", "emoji", "icon");
@@ -4725,29 +4724,6 @@
 		coloryellow: ["TextColor", "colorStatusYellow"],
 		contentcolumn: ["SettingsWindow", "contentColumn"],
 		contentregion: ["SettingsWindow", "contentRegion"],
-		contextmenu: ["ContextMenu", "contextMenu"],
-		contextmenucheckbox: ["ContextMenuCheckbox", "checkbox"],
-		contextmenucheckbox2: ["ContextMenu", "checkbox"],
-		contextmenucheckboxdisabled: ["ContextMenuCheckbox", "disabled"],
-		contextmenucheckboxinner: ["ContextMenuCheckbox", "checkboxInner"],
-		contextmenucheckboxelement: ["ContextMenuCheckbox", "checkboxElement"],
-		contextmenuhint: ["ContextMenu", "hint"],
-		contextmenuimage: ["ContextMenu", "image"],
-		contextmenuitem: ["ContextMenu", "item"],
-		contextmenuitembrand: ["ContextMenu", "brand"],
-		contextmenuitemclickable: ["ContextMenu", "clickable"],
-		contextmenuitemdanger: ["ContextMenu", "danger"],
-		contextmenuitemdisabled: ["ContextMenu", "disabled"],
-		contextmenuitemgroup: ["ContextMenu", "itemGroup"],
-		contextmenuitemtoggle: ["ContextMenu", "itemToggle"],
-		contextmenuitemselected: ["ContextMenu", "selected"],
-		contextmenuitemslider: ["ContextMenu", "itemSlider"],
-		contextmenuitemsubmenu: ["ContextMenu", "itemSubMenu"],
-		contextmenuitemsubmenucaret: ["ContextMenu", "caret"],
-		contextmenulabel: ["ContextMenu", "label"],
-		contextmenuscroller: ["ContextMenu", "scroller"],
-		contextmenuslider: ["ContextMenu", "slider"],
-		contextmenusubcontext: ["ContextMenu", "subMenuContext"],
 		cursordefault: ["Cursor", "cursorDefault"],
 		cursorpointer: ["Cursor", "cursorPointer"],
 		customstatusemoji: ["CustomStatusIcon", "emoji"],
@@ -6278,7 +6254,6 @@
 	InternalComponents.NativeSubComponents.MenuSlider = BDFDB.ModuleUtils.findByString("minValue", "maxValue", "sliderContainer");
 	InternalComponents.NativeSubComponents.PopoutContainer = BDFDB.ModuleUtils.findByName("Popout");
 	InternalComponents.NativeSubComponents.QuickSelect = BDFDB.ModuleUtils.findByName("QuickSelectWrapper");
-	InternalComponents.NativeSubComponents.QuickSelectItem = BDFDB.ModuleUtils.findByString("default.item", "default.hint", "danger", "brand");
 	InternalComponents.NativeSubComponents.RadioGroup = BDFDB.ModuleUtils.findByName("RadioGroup");
 	InternalComponents.NativeSubComponents.SearchBar = BDFDB.ModuleUtils.find(m => m && m.displayName == "SearchBar" && m.defaultProps.placeholder == BDFDB.LanguageUtils.LanguageStrings.SEARCH);
 	InternalComponents.NativeSubComponents.Select = BDFDB.ModuleUtils.findByName("SelectTempWrapper");
@@ -7752,7 +7727,7 @@
 						]
 					})
 				}),
-				popoutClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.quickselectpopout, this.props.popoutClassName, BDFDB.disCN.contextmenu, BDFDB.disCN.quickselectpopoutwrapper, this.props.scroller && BDFDB.disCN.quickselectpopoutscroll),
+				popoutClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.quickselectpopout, this.props.popoutClassName, BDFDB.disCN.quickselectpopoutwrapper, this.props.scroller && BDFDB.disCN.quickselectpopoutscroll),
 				themed: false,
 				animation: InternalComponents.LibraryComponents.PopoutContainer.Animation.TRANSLATE,
 				position: InternalComponents.LibraryComponents.PopoutContainer.Positions.BOTTOM,
@@ -7760,13 +7735,13 @@
 				renderPopout: instance => {
 					let items = options.map(option => {
 						let selected = option.value && option.value === selectedOption.value || option.key && option.key === selectedOption.key;
-						return typeof this.props.renderOption == "function" ? this.props.renderOption(option) : BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.QuickSelectItem, {
+						return typeof this.props.renderOption == "function" ? this.props.renderOption(option) : BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.quickselectpopoutoption, selected && BDFDB.disCN.quickselectpopoutoptionselected),
-							action: selected ? null : _ => {
+							onClick: selected ? null : _ => {
 								instance.close();
 								this.handleChange.bind(this)(option)
 							},
-							label: option.label
+							children: option.label
 						});
 					});
 					return this.props.scroller ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ScrollerVertical, {
