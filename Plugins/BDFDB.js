@@ -3911,7 +3911,6 @@
 		overflowEllipsis: "ellipsis-qlo9sA",
 		popoutWrapper: "popout-xwjvsX",
 		quickSelectWrapper: "quickSelectWrapper-UCfTKz",
-		quickSelectPopoutWrapper: "quickSelectPopout-u2dtIf",
 		menuItemHint: "hint-BK71lM",
 		modalHeaderHasSibling: "hasSiblings-fRyjyl",
 		modalInnerScrollerLess: "inner-YgPpF3",
@@ -4110,7 +4109,6 @@
 		mentionInteractive: "interactive",
 		mentionWrapper: "wrapper-3WhCwL",
 		nameContainerNameContainer: "container-2ax-kl",
-		quickSelectPopoutOptionSelected: "selected",
 		hueCursor: "hue-cursor",
 		hueHorizontal: "hue-horizontal",
 		hueVertical: "hue-vertical",
@@ -5396,13 +5394,6 @@
 		quickselectarrow: ["QuickSelect", "quickSelectArrow"],
 		quickselectclick: ["QuickSelect", "quickSelectClick"],
 		quickselectlabel: ["QuickSelect", "quickSelectLabel"],
-		quickselectpopout: ["QuickSelect", "quickSelectPopout"],
-		quickselectpopoutoption: ["QuickSelect", "quickSelectPopoutOption"],
-		quickselectpopoutoptionselected: ["NotFound", "quickSelectPopoutOptionSelected"],
-		quickselectpopoutscroll: ["QuickSelect", "quickSelectPopoutScroll"],
-		quickselectpopoutwrapper: ["BDFDB", "quickSelectPopoutWrapper"],
-		quickselectscroller: ["QuickSelect", "quickSelectScroller"],
-		quickselectselected: ["QuickSelect", "selected"],
 		quickselectvalue: ["QuickSelect", "quickSelectValue"],
 		quickselectwrapper: ["BDFDB", "quickSelectWrapper"],
 		quickswitcher: ["QuickSwitchWrap", "quickswitcher"],
@@ -7700,56 +7691,54 @@
 		render() {
 			let options = (BDFDB.ArrayUtils.is(this.props.options) ? this.props.options : [{}]).filter(n => n);
 			let selectedOption = BDFDB.ObjectUtils.is(this.props.value) ? this.props.value : (options[0] || {});
-			return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.PopoutContainer, Object.assign({}, this.props, {
-				children: BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.quickselectwrapper),
-					children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-						className: BDFDB.disCN.quickselect,
-						align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
-						children: [
-							BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN.quickselectlabel,
-								children: this.props.label
-							}),
-							BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-								align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
-								className: BDFDB.disCN.quickselectclick,
-								children: [
-									BDFDB.ReactUtils.createElement("div", {
-										className: BDFDB.disCN.quickselectvalue,
-										children: typeof this.props.renderValue == "function" ? this.props.renderValue(this.props.value) : this.props.value.label
-									}),
-									BDFDB.ReactUtils.createElement("div", {
-										className: BDFDB.disCN.quickselectarrow
-									})
-								]
-							})
-						]
-					})
-				}),
-				popoutClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.quickselectpopout, this.props.popoutClassName, BDFDB.disCN.quickselectpopoutwrapper, this.props.scroller && BDFDB.disCN.quickselectpopoutscroll),
-				themed: false,
-				animation: InternalComponents.LibraryComponents.PopoutContainer.Animation.TRANSLATE,
-				position: InternalComponents.LibraryComponents.PopoutContainer.Positions.BOTTOM,
-				align: InternalComponents.LibraryComponents.PopoutContainer.Align.RIGHT,
-				renderPopout: instance => {
-					let items = options.map(option => {
-						let selected = option.value && option.value === selectedOption.value || option.key && option.key === selectedOption.key;
-						return typeof this.props.renderOption == "function" ? this.props.renderOption(option) : BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.quickselectpopoutoption, selected && BDFDB.disCN.quickselectpopoutoptionselected),
-							onClick: selected ? null : _ => {
-								instance.close();
-								this.handleChange.bind(this)(option)
+			return BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.quickselectwrapper),
+				children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+					className: BDFDB.disCN.quickselect,
+					align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
+					children: [
+						BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.quickselectlabel,
+							children: this.props.label
+						}),
+						BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+							align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
+							className: BDFDB.disCN.quickselectclick,
+							onClick: event => {
+								LibraryModules.ContextMenuUtils.openContextMenu(event, _ => {
+									return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Menu, {
+										navId: "bdfdb-quickselect",
+										onClose: BDFDB.LibraryModules.ContextMenuUtils.closeContextMenu,
+										className: this.props.popoutClassName,
+										children: BDFDB.ContextMenuUtils.createItem(InternalComponents.LibraryComponents.MenuItems.MenuGroup, {
+											children: options.map((option, i) => {
+												let selected = option.value && option.value === selectedOption.value || option.key && option.key === selectedOption.key;
+												return BDFDB.ContextMenuUtils.createItem(InternalComponents.LibraryComponents.MenuItems.MenuItem, {
+													label: option.label,
+													id: BDFDB.ContextMenuUtils.createItemId("option", option.key || option.value || i),
+													action: selected ? null : event2 => {
+														BDFDB.ContextMenuUtils.close(event2._targetInst);
+														this.handleChange.bind(this)(option)
+													}
+												})
+											})
+										})
+									});
+								});
 							},
-							children: option.label
-						});
-					});
-					return this.props.scroller ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ScrollerVertical, {
-						className: BDFDB.disCN.quickselectscroller,
-						children: items
-					}) : items;
-				}
-			}));
+							children: [
+								BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.quickselectvalue,
+									children: typeof this.props.renderValue == "function" ? this.props.renderValue(this.props.value) : this.props.value.label
+								}),
+								BDFDB.ReactUtils.createElement("div", {
+									className: BDFDB.disCN.quickselectarrow
+								})
+							]
+						})
+					]
+				})
+			});
 		}
 	};
 	
@@ -8832,42 +8821,6 @@
 		}
 		${BDFDB.dotCNS.popoutwrapper + BDFDB.dotCNS.messagespopouttabbarheader + BDFDB.dotCN.messagespopouttabbar} {
 			min-height: 32px;
-		}
-		
-		${BDFDB.dotCNS.themelight + BDFDB.dotCN.quickselectpopoutwrapper},
-		${BDFDB.dotCNS.themedark + BDFDB.dotCN.quickselectpopoutwrapper} {
-			border-radius: 4px;
-			padding: 6px 8px;
-			cursor: default;
-			background-color: var(--background-floating);
-			box-sizing: border-box;
-			box-shadow: var(--elevation-high);
-		}
-		${BDFDB.dotCNS.quickselectpopoutwrapper + BDFDB.dotCN.quickselectpopoutoption} {
-			white-space: nowrap;
-			text-overflow: ellipsis;
-			overflow: hidden;
-			display: flex;
-			align-items: center;
-			position: relative;
-			font-weight: 500;
-			box-sizing: border-box;
-			margin-top: 2px;
-			margin-bottom: 2px;
-			padding: 0 8px;
-			font-size: 14px;
-			line-height: 18px;
-			min-height: 32px;
-			border-radius: 2px;
-			color: var(--interactive-normal);
-		}
-		${BDFDB.dotCNS.quickselectpopoutwrapper + BDFDB.dotCN.quickselectpopoutoption}:hover {
-			color: var(--interactive-hover);
-			background-color: var(--background-modifier-hover);
-		}
-		${BDFDB.dotCNS.quickselectpopoutwrapper + BDFDB.dotCN.quickselectpopoutoption + BDFDB.dotCN.quickselectpopoutoptionselected} {
-			color: var(--interactive-active);
-			background-color: var(--background-modifier-selected);
 		}
 		
 		${BDFDB.dotCN.charcounter} {
