@@ -241,7 +241,6 @@ var PersonalPins = (_ => {
 										}
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
-										spacing: -2,
 										label: this.labels.popout_sort_text + ":",
 										value: buttonInstance.props.selectedSort,
 										options: sortKeys.map(key => this.getValue(key, "sort")),
