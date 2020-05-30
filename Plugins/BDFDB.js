@@ -2576,7 +2576,7 @@
 		else {
 			if (configIsObject) config = BDFDB.ObjectUtils.sort(config);
 			BDFDB.DataUtils.cached[pluginName] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
-			LibraryRequires.fs.writeFileSync(configPath, JSON.stringify(config, null, "	"));
+			InternalBDFDB.writeConfig(configPath, config);
 		}
 	};
 
@@ -2618,7 +2618,7 @@
 		else {
 			if (configIsObject) config = BDFDB.ObjectUtils.sort(config);
 			BDFDB.DataUtils.cached[pluginName] = configIsObject ? BDFDB.ObjectUtils.deepAssign({}, config) : config;
-			LibraryRequires.fs.writeFileSync(configPath, JSON.stringify(config, null, "	"));
+			InternalBDFDB.writeConfig(configPath, config);
 		}
 	};
 	BDFDB.DataUtils.get = function (plugin, key, id) {
@@ -2640,6 +2640,10 @@
 		
 		if (id === undefined) return newC;
 		else return newC[id] === undefined ? null : newC[id];
+	};
+	InternalBDFDB.writeConfig = function (path, config) {
+		try {LibraryRequires.fs.writeFileSync(path, JSON.stringify(config, null, "	"));}
+		catch (err) {}
 	};
 	InternalBDFDB.readConfig = function (path) {
 		try {return JSON.parse(LibraryRequires.fs.readFileSync(path));}

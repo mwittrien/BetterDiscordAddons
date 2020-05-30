@@ -282,6 +282,7 @@ var PersonalPins = (_ => {
 					embed.timestamp = embed.timestamp && new BDFDB.DiscordObjects.Timestamp(embed.timestamp);
 				}
 				message.embeds = message.embeds.filter(n => !(n && n.type == "gifv"));
+				message.reactions = [];
 				message = new BDFDB.DiscordObjects.Message(message);
 				let channel = notes[guild_id][channel_id][message_idPOS].channel && new BDFDB.DiscordObjects.Channel(JSON.parse(notes[guild_id][channel_id][message_idPOS].channel));
 				if (!channel) {

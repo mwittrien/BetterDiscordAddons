@@ -45,6 +45,25 @@ var NotificationSounds = (_ => {
 		"discodo":				{implemented:false,	name:"Unknown",					src:"/assets/ae7d16bb2eea76b9b9977db0fad66658.mp3",	mute:true,	focus:null,	include:true},
 		"overlayunlock":		{implemented:false,	name:"Overlay Unlocked",		src:"/assets/ad322ffe0a88436296158a80d5d11baa.mp3",	mute:true,	focus:null,	include:true}
 	};
+
+	/* NEVER CHANGE THE SRC LINKS IN THE PLUGIN FILE, TO ADD NEW SONGS ADD THEM IN THE SETTINGS GUI IN THE PLUGINS PAGE */
+	const defaultAudios = {
+		"---": {
+			"---":						null
+		},
+		"Default": {
+			"Communication Channel": 	"https://notificationsounds.com/soundfiles/63538fe6ef330c13a05a3ed7e599d5f7/file-sounds-917-communication-channel.wav",
+			"Isn't it": 				"https://notificationsounds.com/soundfiles/ba2fd310dcaa8781a9a652a31baf3c68/file-sounds-969-isnt-it.wav",
+			"Job Done": 				"https://notificationsounds.com/soundfiles/5b69b9cb83065d403869739ae7f0995e/file-sounds-937-job-done.wav",
+			"Served": 					"https://notificationsounds.com/soundfiles/b337e84de8752b27eda3a12363109e80/file-sounds-913-served.wav",
+			"Solemn": 					"https://notificationsounds.com/soundfiles/53fde96fcc4b4ce72d7739202324cd49/file-sounds-882-solemn.wav",
+			"System Fault": 			"https://notificationsounds.com/soundfiles/ebd9629fc3ae5e9f6611e2ee05a31cef/file-sounds-990-system-fault.wav",
+			"You wouldn't believe": 	"https://notificationsounds.com/soundfiles/087408522c31eeb1f982bc0eaf81d35f/file-sounds-949-you-wouldnt-believe.wav"
+		},
+		"Discord": {}
+	};
+	
+	for (let id in types) if (types[id].include) defaultAudios.Discord[types[id].name] = types[id].src;
 			
 	return class NotificationSounds {
 		getName () {return "NotificationSounds";}
@@ -71,26 +90,6 @@ var NotificationSounds = (_ => {
 			audios = {};
 			choices = {};
 			firedEvents = {};
-
-			/* NEVER CHANGE THE SRC LINKS IN THE PLUGIN FILE, TO ADD NEW SONGS ADD THEM IN THE SETTINGS GUI IN THE PLUGINS PAGE */
-			this.defaults = {
-				"---": {
-					"---":						null
-				},
-				"Default": {
-					"Communication Channel": 	"https://notificationsounds.com/soundfiles/63538fe6ef330c13a05a3ed7e599d5f7/file-sounds-917-communication-channel.wav",
-					"Isn't it": 				"https://notificationsounds.com/soundfiles/ba2fd310dcaa8781a9a652a31baf3c68/file-sounds-969-isnt-it.wav",
-					"Job Done": 				"https://notificationsounds.com/soundfiles/5b69b9cb83065d403869739ae7f0995e/file-sounds-937-job-done.wav",
-					"Served": 					"https://notificationsounds.com/soundfiles/b337e84de8752b27eda3a12363109e80/file-sounds-913-served.wav",
-					"Solemn": 					"https://notificationsounds.com/soundfiles/53fde96fcc4b4ce72d7739202324cd49/file-sounds-882-solemn.wav",
-					"System Fault": 			"https://notificationsounds.com/soundfiles/ebd9629fc3ae5e9f6611e2ee05a31cef/file-sounds-990-system-fault.wav",
-					"You wouldn't believe": 	"https://notificationsounds.com/soundfiles/087408522c31eeb1f982bc0eaf81d35f/file-sounds-949-you-wouldnt-believe.wav"
-				},
-				"Discord": {}
-			};
-			
-			for (let id in types) if (types[id].include) this.defaults.Discord[types[id].name] = types[id].src;
-			this.defaults.Discord = BDFDB.ObjectUtils.sort(this.defaults.Discord);
 		}
 
 		getSettingsPanel (collapseStates = {}) {
@@ -410,6 +409,9 @@ var NotificationSounds = (_ => {
 					};
 					e.returnValue.stop = _ => {audio.pause();}
 				}});
+				
+				
+				for (let key in defaultAudios) defaultAudios[key] = BDFDB.ObjectUtils.sort(defaultAudios[key]);
 
 				this.loadAudios();
 				this.loadChoices();
@@ -474,21 +476,22 @@ var NotificationSounds = (_ => {
 		}
 		
 		forceUpdateAll () {
-				repatchIncoming = true;
-				callAudio = BDFDB.LibraryModules.SoundUtils.createSound("call_calling");
-				
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+			repatchIncoming = true;
+			callAudio = BDFDB.LibraryModules.SoundUtils.createSound("call_calling");
+			
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 		
 		loadAudios () {
-			audios = Object.assign({}, this.defaults, BDFDB.DataUtils.load(this, "audios"));
+			audios = Object.assign({}, defaultAudios, BDFDB.DataUtils.load(this, "audios"));
 			BDFDB.DataUtils.save(audios, this, "audios");
 		}
 
 		loadChoices () {
+			let loadedChoices = BDFDB.DataUtils.load(this, "choices");
 			for (let type in types) {
-				let choice = BDFDB.DataUtils.load(this, "choices", type) || {}, songFound = false;
-				for (let category in audios) if (choice.category == category) for (var song in audios[category]) if (choice.song == song) {
+				let choice = loadedChoices[type] || {}, songFound = false;
+				for (let category in audios) if (choice.category == category) for (let song in audios[category]) if (choice.song == song) {
 					songFound = true;
 					break;
 				}
