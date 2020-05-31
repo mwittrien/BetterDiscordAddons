@@ -7142,21 +7142,6 @@
 	
 	InternalComponents.LibraryComponents.Connectors = Object.assign({}, BDFDB.ModuleUtils.findByProperties("Router", "Link"));
 	
-	var ComponentTypeData = {};
-	/* ComponentTypeData.NormalContextMenus = ["DeveloperContextMenu", "NativeContextMenu", "UserSettingsCogContextMenu"];
-	ComponentTypeData.FluxContextMenus = ["ApplicationContextMenu", "GroupDMContextMenu"];
-	ComponentTypeData.NonRenderContextMenus = ["ChannelContextMenu", "GuildContextMenu", "MessageContextMenu", "SlateContextMenu", "UserContextMenu"];
-	ComponentTypeData.ObservedContextMenus = [];
-	ComponentTypeData.ExtraPatchedComponents = ["MessageOptionContextMenu", "MessageOptionToolbar"];
-	ComponentTypeData.QueuedComponents = [].concat(ComponentTypeData.NonRenderContextMenus, ComponentTypeData.ObservedContextMenus, ComponentTypeData.ExtraPatchedComponents); */
-	
-	ComponentTypeData.NormalContextMenus = [];
-	ComponentTypeData.FluxContextMenus = [];
-	ComponentTypeData.NonRenderContextMenus = [];
-	ComponentTypeData.ObservedContextMenus = [];
-	ComponentTypeData.ExtraPatchedComponents = [];
-	ComponentTypeData.QueuedComponents = [];
-	
 	InternalComponents.LibraryComponents.DiscordTag = BDFDB.ModuleUtils.findByName("DiscordTag");
 	
 	InternalComponents.LibraryComponents.Emoji = BDFDB.ModuleUtils.findByName("Emoji");
@@ -9590,6 +9575,7 @@
 	}});
 	
 	BDFDB.ModuleUtils.patch(BDFDB, BDFDB.ReactUtils.getValue(BDFDB.ModuleUtils.findByString("renderReactions", "canAddNewReactions", "showMoreUtilities", false), "exports.default"), "type", {after: e => {
+		if (document.querySelector(BDFDB.dotCN.emojipicker)) return;
 		let toolbar = BDFDB.ReactUtils.findChild(e.returnValue, {filter: c => c && c.props && c.props.showMoreUtilities != undefined && c.props.showEmojiPicker != undefined && c.props.setPopout != undefined});
 		if (toolbar) BDFDB.ModuleUtils.patch(BDFDB, toolbar, "type", {after: e2 => {
 			let menu = BDFDB.ReactUtils.findChild(e2.returnValue, {filter: c => c && c.props && typeof c.props.onRequestClose == "function" && c.props.onRequestClose.toString().indexOf("moreUtilities") > -1});
