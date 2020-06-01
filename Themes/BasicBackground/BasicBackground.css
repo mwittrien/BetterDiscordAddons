@@ -666,6 +666,9 @@ body:before {
 	opacity: 1;
 	background-color: rgb(var(--vaccentcolor));
 }
+.button-14-BFJ.enabled-2cQ-u7:hover svg {
+	filter: drop-shadow(1px 1px var(--vtextshadow));
+}
 
 
 /* ~~~~		6.		CHAT							~~~~ */
@@ -4511,6 +4514,10 @@ body:before {
 .categoryItemDefaultCategorySelected-_HCKoz:hover {			/* picker				categoryitem selected				*/
 	background-color: rgb(var(--vaccentcolor));
 }
+.categoryItemDefaultCategorySelected-_HCKoz svg,
+.categoryItemDefaultCategorySelected-_HCKoz:hover svg {		/* picker				categoryitem selected				*/
+	filter: drop-shadow(1px 1px var(--vtextshadow));
+}
 
 .unicodeShortcut-15J8Ck {									/* picker				unicodeemojis shortcut				*/
 	background-color: transparent;
@@ -6022,6 +6029,9 @@ body:before {
 }
 .botTagRegular-2HEhHi:not([style]) {						/* bottag				regular								*/
 	text-shadow: 1px 1px var(--vtextshadow);
+}
+.botTagRegular-2HEhHi:not([style]) svg {
+	filter: drop-shadow(1px 1px var(--vtextshadow));
 }
 .botTagInvert-18-95s {										/* bottag				inverted							*/
 	background-color: rgb(var(--fontwhite1));
