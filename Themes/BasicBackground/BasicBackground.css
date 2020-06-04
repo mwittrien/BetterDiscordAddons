@@ -4236,9 +4236,10 @@ body:before {
 #app-mount .role-2irmRk .roleCircle-3xAZ1j[style*="background-color: rgb(185, 187, 190)"] {
 	background-color: rgb(var(--fontwhite3)) !important;
 }
-#app-mount .role-2irmRk .roleCircleButton-377y0l:hover {	/* body					rolecirclebutton					*/
+#app-mount .role-2irmRk .roleCircle-3xAZ1j:not(:empty):hover {
 	opacity: 1;
 	z-index: 2000;
+	cursor: pointer;
 }
 
 .note-3kmerW textarea {										/* body					note								*/
