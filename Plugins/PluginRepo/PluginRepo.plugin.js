@@ -520,7 +520,7 @@ var PluginRepo = (_ => {
 										this.deletePluginFile(plugin);
 										BDFDB.TimeUtils.timeout(_ => {
 											this.updateList(instance, options);
-											if (!BDFDB.BDUtils.isAutoLoadEnabled()) this.stopPlugin(plugin);
+											this.stopPlugin(plugin);
 										}, 3000);
 									}
 								})

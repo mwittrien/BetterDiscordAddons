@@ -714,7 +714,7 @@ var ThemeRepo = (_ => {
 										this.deleteThemeFile(theme);
 										BDFDB.TimeUtils.timeout(_ => {
 											this.updateList(instance, options);
-											if (!BDFDB.BDUtils.isAutoLoadEnabled()) this.removeTheme(theme);
+											this.removeTheme(theme);
 										}, 3000);
 									}
 								})
