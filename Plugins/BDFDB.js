@@ -8952,6 +8952,9 @@
 		#bd-settingspane-container ${BDFDB.dotCN._repoupdatebutton}[style] {
 			display: none !important;
 		}
+		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repoentry + BDFDB.dotCN._repocontrols} > * {
+			margin-left: 10px;
+		}
 		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repoentry + BDFDB.dotCN._repofooter} > * {
 			margin-left: 10px;
 		}
