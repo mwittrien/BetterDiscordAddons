@@ -90,10 +90,7 @@ var HideMutedCategories = (_ => {
 					let renderSection = list.props.renderSection;
 					list.props.renderSection = (...args) => {
 						let section = renderSection(...args);
-						if (section && section.props && section.props.channel && BDFDB.LibraryModules.MutedUtils.isChannelMuted(e.instance.props.guild.id, section.props.channel.id)) {
-							console.log(section);
-							return null;
-						}
+						if (section && section.props && section.props.channel && BDFDB.LibraryModules.MutedUtils.isChannelMuted(e.instance.props.guild.id, section.props.channel.id))return null;
 						else return section;
 					};
 				}
