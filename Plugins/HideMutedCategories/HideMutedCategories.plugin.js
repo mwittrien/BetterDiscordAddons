@@ -4,17 +4,24 @@ var HideMutedCategories = (_ => {
 	return class HideMutedCategories {
 		getName () {return "HideMutedCategories";}
 
-		getVersion () {return "1.0.0";}
+		getVersion () {return "1.0.1";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Hides muted categories the same way muted channels are hidden, when the server is set to hide muted channels.";}
 
 		constructor () {
+			this.changelog = {
+				"fixed":[["Owner/Admin","Properly hides muted categories when you are owner/admin on a server"]]
+			};
+			
 			this.patchPriority = 10;
 			
 			this.patchedModules = {
 				before: {
+					Channels: "render"
+				},
+				after: {
 					Channels: "render"
 				}
 			};
@@ -71,9 +78,26 @@ var HideMutedCategories = (_ => {
 
 		processChannels (e) {
 			if (!e.instance.props.guild || !e.instance.props.collapseMuted) return;
-			e.instance.props.categories = Object.assign({}, e.instance.props.categories);
 			
-			for (let catId in e.instance.props.categories) if (BDFDB.LibraryModules.MutedUtils.isChannelMuted(e.instance.props.guild.id, catId)) e.instance.props.categories[catId] = [];
+			if (!e.returnvalue) {
+				e.instance.props.categories = Object.assign({}, e.instance.props.categories);
+				
+				for (let catId in e.instance.props.categories) if (BDFDB.LibraryModules.MutedUtils.isChannelMuted(e.instance.props.guild.id, catId)) e.instance.props.categories[catId] = [];
+			}
+			else {
+				let list = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "List"});
+				if (list) {
+					let renderSection = list.props.renderSection;
+					list.props.renderSection = (...args) => {
+						let section = renderSection(...args);
+						if (section && section.props && section.props.channel && BDFDB.LibraryModules.MutedUtils.isChannelMuted(e.instance.props.guild.id, section.props.channel.id)) {
+							console.log(section);
+							return null;
+						}
+						else return section;
+					};
+				}
+			}
 		}
 	}
 })();
