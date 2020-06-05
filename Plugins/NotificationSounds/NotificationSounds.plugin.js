@@ -68,7 +68,7 @@ var NotificationSounds = (_ => {
 	return class NotificationSounds {
 		getName () {return "NotificationSounds";}
 
-		getVersion () {return "3.4.4";}
+		getVersion () {return "3.4.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -76,7 +76,7 @@ var NotificationSounds = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Call Sound","Outgoing and Incomming call sounds work again"]]
+				"fixed":[["Mention Sound","No longer plays when the server/channel has message notifications completely disabled"]]
 			};
 
 			this.patchedModules = {
@@ -347,7 +347,7 @@ var NotificationSounds = (_ => {
 								return;
 							}
 							else if (BDFDB.LibraryModules.MentionUtils.isRawMessageMentioned(message, BDFDB.UserUtils.me.id)) {
-								if (message.mentions.length && !(choices.mentioned.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) for (let mention of message.mentions) if (mention.id == BDFDB.UserUtils.me.id) {
+								if (message.mentions.length && !this.isSuppressMentionEnabled(guildId, message.channel_id) && !(choices.mentioned.focus && document.hasFocus() && BDFDB.LibraryModules.LastChannelStore.getChannelId() == message.channel_id)) for (let mention of message.mentions) if (mention.id == BDFDB.UserUtils.me.id) {
 									this.fireEvent("mentioned");
 									this.playAudio("mentioned");
 									return;
@@ -526,6 +526,11 @@ var NotificationSounds = (_ => {
 			audio.src = choices[type].src;
 			audio.volume = choices[type].volume/100;
 			audio.play();
+		}
+
+		isSuppressMentionEnabled (guildId, channelId) {
+			let channelSettings = BDFDB.LibraryModules.MutedUtils.getChannelMessageNotifications(guildId, channelId);
+			return channelSettings && (channelSettings == BDFDB.DiscordConstants.UserNotificationSettings.NO_MESSAGES || channelSettings == BDFDB.DiscordConstants.UserNotificationSettings.NULL && BDFDB.LibraryModules.MutedUtils.getMessageNotifications(guildId) == BDFDB.DiscordConstants.UserNotificationSettings.NO_MESSAGES);
 		}
 
 		dontPlayAudio (type) {
