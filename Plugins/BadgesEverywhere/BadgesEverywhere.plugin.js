@@ -7,7 +7,7 @@ var BadgesEverywhere = (_ => {
 	return class BadgesEverywhere {
 		getName () {return "BadgesEverywhere";} 
 
-		getVersion () {return "1.5.5";}
+		getVersion () {return "1.5.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -15,7 +15,7 @@ var BadgesEverywhere = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["Bot Developer","Verified Bot Developer badge was added"]]
+				"improved":[["Caching","The plugin now caches the badge flags in a local file to allow the plugin to more swiftly load badges on a restart"]]
 			};
 
 			this.patchedModules = {
@@ -289,6 +289,20 @@ var BadgesEverywhere = (_ => {
 
 				requestedUsers = {}, loadedUsers = {};
 				requestQueue = {queue:[], running:false, timeout:null};
+				
+				let badgeCache = BDFDB.DataUtils.load(this, "badgeCache");
+				if (badgeCache) {
+					let now = (new Date()).getTime(), month = 1000*60*60*24*30;
+					for (let id in badgeCache) {
+						if (now - badgeCache[id].date > month) delete badgeCache[id];
+						else loadedUsers[id] = badgeCache[id];
+					}
+					BDFDB.DataUtils.save(badgeCache, this, "badgeCache");
+				}
+				
+				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {after: e => {
+					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.USER_PROFILE_MODAL_FETCH_SUCCESS && e.methodArguments[0].user) this.extractFlags(e.methodArguments[0]);
+				}});
 
 				this.forceUpdateAll();
 			}
@@ -339,16 +353,17 @@ var BadgesEverywhere = (_ => {
 
 		injectBadges (instance, children, user, type, colored) {
 			if (!BDFDB.ArrayUtils.is(children) || !user || user.bot) return;
-			if (!BDFDB.ArrayUtils.is(requestedUsers[user.id])) {
+			if (loadedUsers[user.id] && ((new Date()).getTime() - loadedUsers[user.id].date < 1000*60*60*24*7)) children.push(this.createBadges(user, type, colored));
+			else if (!BDFDB.ArrayUtils.is(requestedUsers[user.id])) {
 				requestedUsers[user.id] = [instance];
-				var queue = _ => {
+				let queue = _ => {
 					requestQueue.queue.push(user.id);
 					runqueue();
 				};
-				var runqueue = _ => {
+				let runqueue = _ => {
 					if (!requestQueue.running) request(requestQueue.queue.shift());
 				};
-				var request = id => {
+				let request = id => {
 					if (id) {
 						requestQueue.running = true;
 						BDFDB.TimeUtils.clear(requestQueue.timeout);
@@ -357,13 +372,8 @@ var BadgesEverywhere = (_ => {
 							runqueue();
 						}, 30000);
 						BDFDB.LibraryModules.APIUtils.get(BDFDB.DiscordConstants.Endpoints.USER_PROFILE(id)).then(result => {
-							let usercopy = Object.assign({}, result.body.user);
-							if (result.body.premium_since) usercopy.flags += nitroflag;
-							usercopy.premium_since = result.body.premium_since;
-							if (result.body.premium_guild_since) usercopy.flags += boostflag;
-							usercopy.premium_guild_since = result.body.premium_guild_since;
-							loadedUsers[id] = usercopy;
-							for (let ins of requestedUsers[id]) BDFDB.ReactUtils.forceUpdate(ins);
+							this.extractFlags(result.body);
+							while (requestedUsers[id].length) BDFDB.ReactUtils.forceUpdate(requestedUsers[id].pop());
 							requestQueue.running = false;
 							BDFDB.TimeUtils.timeout(_ => {runqueue();}, 1000);
 						});
@@ -371,8 +381,19 @@ var BadgesEverywhere = (_ => {
 				};
 				queue();
 			}
-			else if (!loadedUsers[user.id]) requestedUsers[user.id].push(instance);
-			else children.push(this.createBadges(user, type, colored));
+			else requestedUsers[user.id].push(instance);
+		}
+		
+		extractFlags (result) {
+			if (!result) return;
+			let userCopy = Object.assign({}, result.user);
+			if (result.premium_since) userCopy.flags += nitroflag;
+			userCopy.premium_since = result.premium_since;
+			if (result.premium_guild_since) userCopy.flags += boostflag;
+			userCopy.premium_guild_since = result.premium_guild_since;
+			loadedUsers[result.user.id] = BDFDB.ObjectUtils.extract(userCopy, "flags", "premium_since", "premium_guild_since");
+			loadedUsers[result.user.id].date = (new Date()).getTime();
+			BDFDB.DataUtils.save(loadedUsers[result.user.id], this, "badgeCache", result.user.id);
 		}
 
 		createBadges (user, type, uncolored) {
