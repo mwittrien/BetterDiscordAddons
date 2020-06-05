@@ -217,7 +217,12 @@ var JoinedAtDate = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 
-				languages = Object.assign({"own":{name:"Own",id:"own",integrated:false,dic:false}},BDFDB.LanguageUtils.languages);
+				languages = Object.assign({
+					own: {
+						name: "Own",
+						id: "own"
+					}
+				}, BDFDB.LanguageUtils.languages);
 
 				BDFDB.ModuleUtils.forceAllUpdates(this);
 			}

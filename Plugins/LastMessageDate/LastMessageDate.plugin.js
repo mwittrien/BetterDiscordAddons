@@ -218,7 +218,12 @@ var LastMessageDate = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 
-				languages = Object.assign({"own":{name:"Own",id:"own",integrated:false,dic:false}}, BDFDB.LanguageUtils.languages);
+				languages = Object.assign({
+					own: {
+						name: "Own",
+						id: "own"
+					}
+				}, BDFDB.LanguageUtils.languages);
 
 				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dirtyDispatch", {after: e => {
 					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.MESSAGE_CREATE && e.methodArguments[0].message) {

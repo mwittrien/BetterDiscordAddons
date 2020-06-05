@@ -506,11 +506,27 @@ var GoogleTranslateOption = (_ => {
 		setLanguages () {
 			let languageIds = (translationEngines[BDFDB.DataUtils.get(this, "engines", "translator")] || {}).languages || [];
 			languages = Object.assign(
-				{"auto":	{name:"Auto",			id:"auto",		integrated:false,	dic:false}},
+				{
+					auto: {
+						name: "Auto",
+						id: "auto"
+					}
+				},
 				BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.languages, lang => languageIds.includes(lang.id)),
-				{"binary":	{name:"Binary",			id:"binary",	integrated:false,	dic:false}},
-				{"braille":	{name:"Braille 6-dot",	id:"braille",	integrated:false,	dic:false}},
-				{"morse":	{name:"Morse",			id:"morse",		integrated:false,	dic:false}}
+				{
+					binary:	{
+						name: "Binary",
+						id: "binary"
+					},
+					braille: {
+						name: "Braille 6-dot",
+						id: "braille"
+					},
+					morse: {
+						name: "Morse",
+						id: "morse"
+					}
+				}
 			);
 			let favorites = BDFDB.DataUtils.load(this, "favorites");
 			for (let id in languages) languages[id].fav = favorites[id] != undefined ? 0 : 1;

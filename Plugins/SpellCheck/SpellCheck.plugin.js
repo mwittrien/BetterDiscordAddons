@@ -6,7 +6,7 @@ var SpellCheck = (_ => {
 	return class SpellCheck {
 		getName () {return "SpellCheck";}
 
-		getVersion () {return "1.4.7";}
+		getVersion () {return "1.4.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,9 +14,7 @@ var SpellCheck = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["Local Support","You can now tell the plugin to download the dictionary so next time it grabs it, it doesn't have to fetch it from the web"]],
-				"improved":[["Replace Word","Removed the extra sub context menu for faster word replacing"]],
-				"fixed":[["Formatting","Replacing a word no longer kills the formatting of the input (like quotes, mentions, etc.)"]]
+				"improved":[["Performance & Languages","Increased performance and variety of dictionaries"]]
 			};
 			
 			this.patchedModules = {
@@ -148,14 +146,23 @@ var SpellCheck = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
-
-				languages = BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.languages, lang => {return lang.dic == true ? lang : null});
-				let choices = BDFDB.DataUtils.get(this, "choices");
-				for (let key in choices) this.setDictionary(key, choices[key]);
 				
-				if ((BDFDB.LibraryModules.StoreChangeUtils && BDFDB.LibraryModules.StoreChangeUtils.get("SpellcheckStore") || {}).enabled) BDFDB.LibraryModules.SpellCheckUtils.toggleSpellcheck();
+				BDFDB.LibraryRequires.request("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpellCheck/dic", (error, response, body) => {
+					let dictionaryLanguageIds = Array.from(BDFDB.DOMUtils.create(body).querySelectorAll(`[href*="/mwittrien/BetterDiscordAddons/blob/master/Plugins/SpellCheck/dic/"]`)).map(n => n.innerText.split(".")[0]).filter(n => n);
+					languages = BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.languages, langId => dictionaryLanguageIds.includes(langId), true);
+					let choices = BDFDB.DataUtils.get(this, "choices");
+					for (let key in choices) {
+						if (key == "dictionaryLanguage" && !languages[key]) {
+							choices[key] = "en";
+							BDFDB.DataUtils.get(choices[key], this, "choices", key);
+						}
+						this.setDictionary(key, choices[key]);
+					}
+					
+					if ((BDFDB.LibraryModules.StoreChangeUtils && BDFDB.LibraryModules.StoreChangeUtils.get("SpellcheckStore") || {}).enabled) BDFDB.LibraryModules.SpellCheckUtils.toggleSpellcheck();
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+					BDFDB.ModuleUtils.forceAllUpdates(this);
+				});
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
