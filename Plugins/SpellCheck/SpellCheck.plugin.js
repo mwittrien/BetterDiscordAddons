@@ -6,7 +6,7 @@ var SpellCheck = (_ => {
 	return class SpellCheck {
 		getName () {return "SpellCheck";}
 
-		getVersion () {return "1.4.8";}
+		getVersion () {return "1.4.9";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,6 +14,7 @@ var SpellCheck = (_ => {
 
 		constructor () {
 			this.changelog = {
+				"fixed":[["'s & n't & n'","No longer marks words with extra suffix/prefix as incorrect"]],
 				"improved":[["Performance & Languages","Increased performance and variety of dictionaries"]]
 			};
 			
@@ -373,7 +374,9 @@ var SpellCheck = (_ => {
 			let wordLow = unformatedWord.toLowerCase();
 			let wordWithoutSymbols = wordLow.replace(/[0-9\µ\@\$\£\€\¥\¢\²\³\>\<\|\,\;\.\:\-\_\#\+\*\~\?\¿\\\´\`\}\=\]\)\[\(\{\/\&\%\§\"\!\¡\^\°\n\t\r]/g, "");
 			if (wordLow.indexOf("http://") != 0 && wordLow.indexOf("https://") != 0 && wordWithoutSymbols) {
-				for (let key in dictionaries) for (let word of [wordLow, wordWithoutSymbols]) {
+				let wordStartingPos = /^.{1}'/.test(wordWithoutSymbols) ? wordWithoutSymbols.split("'")[1] : "";
+				let wordEndingPos = /'.{1}$/.test(wordWithoutSymbols) ? wordWithoutSymbols.split("'").reverse()[1] : "";
+				for (let key in dictionaries) for (let word of BDFDB.ArrayUtils.removeCopies([wordLow, wordWithoutSymbols, wordStartingPos, wordEndingPos].filter(n => n))) {
 					let firstLetterLower = word.charAt(0);
 					if (dictionaries[key] && dictionaries[key][firstLetterLower] && dictionaries[key][firstLetterLower][word.length] && dictionaries[key][firstLetterLower][word.length].includes(word)) return false;
 				}
