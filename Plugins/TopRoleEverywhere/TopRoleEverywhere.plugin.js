@@ -1,10 +1,12 @@
 //META{"name":"TopRoleEverywhere","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/TopRoleEverywhere","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/TopRoleEverywhere/TopRoleEverywhere.plugin.js"}*//
 
 var TopRoleEverywhere = (_ => {
+	var settings = {};
+	
 	return class TopRoleEverywhere {
 		getName () {return "TopRoleEverywhere";}
 
-		getVersion () {return "3.0.2";}
+		getVersion () {return "3.0.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +14,7 @@ var TopRoleEverywhere = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["ContextMenu","Role context menu works again"]]
+				"improved":[["Chat Role Tag & Id Tag","The tags for the role and id in the message history now use their own settings separately, so you can disable the role tag in the chat but still show the id tag"]]
 			};
 			
 			this.patchedModules = {
@@ -157,7 +159,7 @@ var TopRoleEverywhere = (_ => {
 		}
 
 		processMemberListItem (e) {
-			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "showInMemberList")) {
+			if (e.instance.props.user && settings.showInMemberList) {
 				this.injectRoleTag(BDFDB.ReactUtils.getValue(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, "member", {
 					tagClass: BDFDB.disCN.bottagmember
 				});
@@ -165,19 +167,24 @@ var TopRoleEverywhere = (_ => {
 		}
 
 		processMessageHeader (e) {
-			if (e.instance.props.message && BDFDB.DataUtils.get(this, "settings", "showInChat")) {
+			if (e.instance.props.message) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue.props.children.slice(1), {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
-				if (index > -1) this.injectRoleTag(children, e.instance.props.message.author, "chat", {
-					tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
-					useRem: true
-				});
+				if (index > -1) {
+					if (settings.showInChat) this.injectRoleTag(children, e.instance.props.message.author, "chat", {
+						tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
+						useRem: true
+					});
+					if (settings.addUserID) this.injectIdTag(children, e.instance.props.message.author, "chat", {
+						tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
+						useRem: true
+					});
+				}
 			}
 		}
 
 		injectRoleTag (children, user, type, config = {}) {
 			if (!BDFDB.ArrayUtils.is(children) || !user) return;
 			let guild = BDFDB.LibraryModules.GuildStore.getGuild(BDFDB.LibraryModules.LastGuildStore.getGuildId());
-			let settings = BDFDB.DataUtils.get(this, "settings");
 			if (!guild || user.bot && settings.disableForBots) return;
 			let role = BDFDB.LibraryModules.PermissionRoleUtils.getHighestRole(guild, user.id);
 			if (role && !role.colorString && !settings.includeColorless) {
@@ -187,15 +194,19 @@ var TopRoleEverywhere = (_ => {
 					break;
 				}
 			}
-			if (role && (role.colorString || settings.includeColorless)) children.push(this.createRoleTag(settings, Object.assign({}, role, {
+			if (role && (role.colorString || settings.includeColorless)) children.push(this.createTag(Object.assign({}, role, {
 				name: settings.showOwnerRole && user.id == guild.ownerId ? BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER : role.name
 			}), type, config));
-			if (type == "chat" && settings.addUserID) children.push(this.createRoleTag(settings, {
+		}
+
+		injectIdTag (children, user, type, config = {}) {
+			if (!BDFDB.ArrayUtils.is(children) || !user) return;
+			children.push(this.createTag({
 				name: user.id
 			}, type, config));
 		}
 		
-		createRoleTag (settings, role, type, config = {}) {
+		createTag (role, type, config = {}) {
 			if (settings.useOtherStyle) {
 				let tagColor = BDFDB.ColorUtils.convert(role.colorString || BDFDB.DiscordConstants.Colors.PRIMARY_DARK_500, "RGB")
 				let isBright = role.colorString && BDFDB.ColorUtils.isBright(tagColor);
@@ -226,6 +237,8 @@ var TopRoleEverywhere = (_ => {
 		}
 	
 		forceUpdateAll () {
+			settings = BDFDB.DataUtils.get(this, "settings");
+			
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 			BDFDB.MessageUtils.rerenderAll();
 		}
