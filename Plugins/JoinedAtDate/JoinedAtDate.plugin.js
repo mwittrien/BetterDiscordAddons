@@ -2,6 +2,7 @@
 
 var JoinedAtDate = (_ => {
 	var loadedUsers, requestedUsers, languages;
+	var settings = {}, choices = {}, formats = {};
 	
 	return class JoinedAtDate {
 		getName () {return "JoinedAtDate";}
@@ -224,7 +225,7 @@ var JoinedAtDate = (_ => {
 					}
 				}, BDFDB.LanguageUtils.languages);
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -234,7 +235,7 @@ var JoinedAtDate = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 				
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -244,14 +245,14 @@ var JoinedAtDate = (_ => {
 		// Begin of own functions
 
 		processUserPopout (e) {
-			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "addInUserPopout")) {
+			if (e.instance.props.user && settings.addInUserPopout) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "CustomStatus"});
 				if (index > -1) this.injectDate(e.instance, children, 2, e.instance.props.user);
 			}
 		}
 
 		processAnalyticsContext (e) {
-			if (typeof e.returnvalue.props.children == "function" && e.instance.props.section == "Profile Modal" && BDFDB.DataUtils.get(this, "settings", "addInUserProfil")) {
+			if (typeof e.returnvalue.props.children == "function" && e.instance.props.section == "Profile Modal" && settings.addInUserProfil) {
 				let renderChildren = e.returnvalue.props.children;
 				e.returnvalue.props.children = (...args) => {
 					let renderedChildren = renderChildren(...args);
@@ -278,44 +279,43 @@ var JoinedAtDate = (_ => {
 			else if (!loadedUsers[guildId][user.id]) requestedUsers[guildId][user.id].push(instance);
 			else children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
 				className: "joinedAtDate " + BDFDB.disCN.textrow,
-				children: this.labels.joinedat_text.replace("{{time}}", this.getTimestamp(languages[BDFDB.DataUtils.get(this, "choices", "joinedAtDateLang")].id, loadedUsers[guildId][user.id]))
+				children: this.labels.joinedat_text.replace("{{time}}", this.getTimestamp(languages[formats.joinedAtDateLang].id, loadedUsers[guildId][user.id]))
 			}));
 		}
 
-		getTimestamp (languageid, time) {
+		getTimestamp (languageId, time) {
 			let timeobj = time ? time : new Date();
 			if (typeof time == "string") timeobj = new Date(time);
 			if (timeobj.toString() == "Invalid Date") timeobj = new Date(parseInt(time));
 			if (timeobj.toString() == "Invalid Date") return;
-			let settings = BDFDB.DataUtils.get(this, "settings"), timestring = "";
-			if (languageid != "own") {
+			let timestring = "";
+			if (languageId != "own") {
 				let timestamp = [];
-				if (settings.displayDate) 	timestamp.push(timeobj.toLocaleDateString(languageid));
-				if (settings.displayTime) 	timestamp.push(settings.cutSeconds ? this.cutOffSeconds(timeobj.toLocaleTimeString(languageid)) : timeobj.toLocaleTimeString(languageid));
+				if (settings.displayDate) 	timestamp.push(timeobj.toLocaleDateString(languageId));
+				if (settings.displayTime) 	timestamp.push(settings.cutSeconds ? this.cutOffSeconds(timeobj.toLocaleTimeString(languageId)) : timeobj.toLocaleTimeString(languageId));
 				if (settings.otherOrder)	timestamp.reverse();
 				timestring = timestamp.length > 1 ? timestamp.join(", ") : (timestamp.length > 0 ? timestamp[0] : "");
 				if (timestring && settings.forceZeros) timestring = this.addLeadingZeros(timestring);
 			}
 			else {
-				let ownformat = BDFDB.DataUtils.get(this, "formats", "ownFormat");
-				languageid = BDFDB.LanguageUtils.getLanguage().id;
+				languageId = BDFDB.LanguageUtils.getLanguage().id;
 				let now = new Date();
 				let hour = timeobj.getHours(), minute = timeobj.getMinutes(), second = timeobj.getSeconds(), msecond = timeobj.getMilliseconds(), day = timeobj.getDate(), month = timeobj.getMonth()+1, timemode = "", daysago = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(timeobj.getFullYear(), timeobj.getMonth(), timeobj.getDate()))/(1000*60*60*24));
-				if (ownformat.indexOf("$timemode") > -1) {
+				if (formats.ownFormat.indexOf("$timemode") > -1) {
 					timemode = hour >= 12 ? "PM" : "AM";
 					hour = hour % 12;
 					hour = hour ? hour : 12;
 				}
-				timestring = ownformat
+				timestring = formats.ownFormat
 					.replace("$hour", settings.forceZeros && hour < 10 ? "0" + hour : hour)
 					.replace("$minute", minute < 10 ? "0" + minute : minute)
 					.replace("$second", second < 10 ? "0" + second : second)
 					.replace("$msecond", settings.forceZeros ? (msecond < 10 ? "00" + msecond : (msecond < 100 ? "0" + msecond : msecond)) : msecond)
 					.replace("$timemode", timemode)
-					.replace("$weekdayL", timeobj.toLocaleDateString(languageid,{weekday: "long"}))
-					.replace("$weekdayS", timeobj.toLocaleDateString(languageid,{weekday: "short"}))
-					.replace("$monthnameL", timeobj.toLocaleDateString(languageid,{month: "long"}))
-					.replace("$monthnameS", timeobj.toLocaleDateString(languageid,{month: "short"}))
+					.replace("$weekdayL", timeobj.toLocaleDateString(languageId,{weekday: "long"}))
+					.replace("$weekdayS", timeobj.toLocaleDateString(languageId,{weekday: "short"}))
+					.replace("$monthnameL", timeobj.toLocaleDateString(languageId,{month: "long"}))
+					.replace("$monthnameS", timeobj.toLocaleDateString(languageId,{month: "short"}))
 					.replace("$daysago", daysago > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("ACTIVITY_FEED_USER_PLAYED_DAYS_AGO", daysago) : BDFDB.LanguageUtils.LanguageStrings.SEARCH_SHORTCUT_TODAY)
 					.replace("$day", settings.forceZeros && day < 10 ? "0" + day : day)
 					.replace("$month", settings.forceZeros && month < 10 ? "0" + month : month)
@@ -330,13 +330,21 @@ var JoinedAtDate = (_ => {
 		}
 
 		addLeadingZeros (timestring) {
-			let chararray = timestring.split("");
+			let charArray = timestring.split("");
 			let numreg = /[0-9]/;
-			for (let i = 0; i < chararray.length; i++) {
-				if (!numreg.test(chararray[i-1]) && numreg.test(chararray[i]) && !numreg.test(chararray[i+1])) chararray[i] = "0" + chararray[i];
+			for (let i = 0; i < charArray.length; i++) {
+				if (!numreg.test(charArray[i-1]) && numreg.test(charArray[i]) && !numreg.test(charArray[i+1])) charArray[i] = "0" + charArray[i];
 			}
 
-			return chararray.join("");
+			return charArray.join("");
+		}
+		
+		forceUpdateAll() {
+			settings = BDFDB.DataUtils.get(this, "settings");
+			choices = BDFDB.DataUtils.get(this, "choices");
+			formats = BDFDB.DataUtils.get(this, "formats");
+			
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 
 		setLabelsByLanguage () {
