@@ -8,7 +8,7 @@ var BadgesEverywhere = (_ => {
 	return class BadgesEverywhere {
 		getName () {return "BadgesEverywhere";} 
 
-		getVersion () {return "1.5.7";}
+		getVersion () {return "1.5.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -334,20 +334,20 @@ var BadgesEverywhere = (_ => {
 		}
 
 		processMemberListItem (e) {
-			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "showInMemberList")) {
+			if (e.instance.props.user && settings.showInMemberList) {
 				this.injectBadges(e.instance, BDFDB.ReactUtils.getValue(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, "list");
 			}
 		}
 
 		processMessageHeader (e) {
-			if (e.instance.props.message && BDFDB.DataUtils.get(this, "settings", "showInChat")) {
+			if (e.instance.props.message && settings.showInChat) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue.props.children.slice(1), {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
 				if (index > -1) this.injectBadges(e.instance, children, e.instance.props.message.author, "chat");
 			}
 		}
 
 		processUserPopout (e) {
-			if (e.instance.props.user && BDFDB.DataUtils.get(this, "settings", "showInPopout")) {
+			if (e.instance.props.user && settings.showInPopout) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "CustomStatus"});
 				if (index > -1) this.injectBadges(e.instance, children, e.instance.props.user, "popout", e.instance.props.activity && e.instance.props.activity.type != BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS);
 			}

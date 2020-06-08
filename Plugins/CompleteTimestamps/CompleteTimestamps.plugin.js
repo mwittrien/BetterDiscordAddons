@@ -2,6 +2,7 @@
 
 var CompleteTimestamps = (_ => {
 	var languages, currentMode;
+	var settings = {}, choices = {}, formats = {};
 	
 	return class CompleteTimestamps {
 		getName () {return "CompleteTimestamps";}
@@ -242,7 +243,7 @@ var CompleteTimestamps = (_ => {
 		}
 
 		processMessage (e) {
-			if (BDFDB.ReactUtils.getValue(e, "instance.props.childrenHeader.type.type.displayName") == "MessageTimestamp" && BDFDB.DataUtils.get(this, "settings", "changeForChat")) {
+			if (BDFDB.ReactUtils.getValue(e, "instance.props.childrenHeader.type.type.displayName") == "MessageTimestamp" && settings.changeForChat) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: e.instance.props.childrenHeader.type});
 				if (index > -1) this.changeTimestamp(children, index, {child:false, tooltip:true});
 			}
@@ -251,30 +252,29 @@ var CompleteTimestamps = (_ => {
 		processMessageHeader (e) {
 			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "MessageTimestamp"});
 			if (index > -1) {
-				let settings = BDFDB.DataUtils.get(this, "settings");
 				this.changeTimestamp(children, index, {child:settings.showInChat, tooltip:settings.changeForChat});
 				this.setMaxWidth(children[index], e.instance.props.compact);
 			}
 		}
 		
 		processMessageContent (e) {
-			if (e.instance.props.message.editedTimestamp && BDFDB.DataUtils.get(this, "settings", "changeForEdit")) {
+			if (e.instance.props.message.editedTimestamp && settings.changeForEdit) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "SuffixEdited"});
 				if (index > -1) this.changeTimestamp(children, index, {child:false, tooltip:true});
 			}
 		}
 
 		processEmbed (e) {
-			if (e.instance.props.embed.timestamp && BDFDB.DataUtils.get(this, "settings", "showInEmbed")) {
+			if (e.instance.props.embed.timestamp && settings.showInEmbed) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.embedfootertext]]});
-				if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children.splice(children[index].props.children.length-1, 1, this.getTimestamp(languages[BDFDB.DataUtils.get(this, "choices", "creationDateLang")].id, e.instance.props.embed.timestamp._i));
+				if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children.splice(children[index].props.children.length - 1, 1, this.getTimestamp(languages[choices.creationDateLang].id, e.instance.props.embed.timestamp._i));
 			}
 		}
 
 		processSystemMessage (e) {
-			if (BDFDB.DataUtils.get(this, "settings", "showInChat")) {
+			if (settings.showInChat) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "time"});
-				if (index > -1) children[index].props.children = this.getTimestamp(languages[BDFDB.DataUtils.get(this, "choices", "creationDateLang")].id, e.instance.props.timestamp._i);
+				if (index > -1) children[index].props.children = this.getTimestamp(languages[choices.creationDateLang].id, e.instance.props.timestamp._i);
 			}
 		}
 		
@@ -288,7 +288,7 @@ var CompleteTimestamps = (_ => {
 				if (tooltipIndex > -1) tooltipWrapper = children[tooltipIndex];
 			}
 			if (tooltipWrapper) {
-				let timestamp = this.getTimestamp(languages[BDFDB.DataUtils.get(this, "choices", "creationDateLang")].id, parent[index].props.timestamp._i);
+				let timestamp = this.getTimestamp(languages[choices.creationDateLang].id, parent[index].props.timestamp._i);
 				if (change.tooltip) {
 					tooltipWrapper.props.text = timestamp;
 					tooltipWrapper.props.delay = 0;
@@ -312,7 +312,7 @@ var CompleteTimestamps = (_ => {
 			if (typeof time == "string") timeobj = new Date(time);
 			if (timeobj.toString() == "Invalid Date") timeobj = new Date(parseInt(time));
 			if (timeobj.toString() == "Invalid Date") return;
-			let settings = BDFDB.DataUtils.get(this, "settings"), timestring = "";
+			let timestring = "";
 			if (languageId != "own") {
 				let timestamp = [];
 				if (settings.displayDate) 	timestamp.push(timeobj.toLocaleDateString(languageId));
@@ -322,16 +322,15 @@ var CompleteTimestamps = (_ => {
 				if (timestring && settings.forceZeros) timestring = this.addLeadingZeros(timestring);
 			}
 			else {
-				let ownFormat = BDFDB.DataUtils.get(this, "formats", "ownformat");
 				languageId = BDFDB.LanguageUtils.getLanguage().id;
 				let now = new Date();
 				let hour = timeobj.getHours(), minute = timeobj.getMinutes(), second = timeobj.getSeconds(), msecond = timeobj.getMilliseconds(), day = timeobj.getDate(), month = timeobj.getMonth()+1, timemode = "", daysago = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(timeobj.getFullYear(), timeobj.getMonth(), timeobj.getDate()))/(1000*60*60*24));
-				if (ownFormat.indexOf("$timemode") > -1) {
+				if (formats.ownformat.indexOf("$timemode") > -1) {
 					timemode = hour >= 12 ? "PM" : "AM";
 					hour = hour % 12;
 					hour = hour ? hour : 12;
 				}
-				timestring = ownFormat
+				timestring = formats.ownformat
 					.replace("$hour", settings.forceZeros && hour < 10 ? "0" + hour : hour)
 					.replace("$minute", minute < 10 ? "0" + minute : minute)
 					.replace("$second", second < 10 ? "0" + second : second)
@@ -355,20 +354,20 @@ var CompleteTimestamps = (_ => {
 		}
 
 		addLeadingZeros (timestring) {
-			let chararray = timestring.split("");
+			let charArray = timestring.split("");
 			let numreg = /[0-9]/;
-			for (let i = 0; i < chararray.length; i++) {
-				if (!numreg.test(chararray[i-1]) && numreg.test(chararray[i]) && !numreg.test(chararray[i+1])) chararray[i] = "0" + chararray[i];
+			for (let i = 0; i < charArray.length; i++) {
+				if (!numreg.test(charArray[i-1]) && numreg.test(charArray[i]) && !numreg.test(charArray[i+1])) charArray[i] = "0" + charArray[i];
 			}
 
-			return chararray.join("");
+			return charArray.join("");
 		}
 		
 		setMaxWidth (timestamp, compact) {
 			if (currentMode != compact) {
 				currentMode = compact;
 				if (compact && timestamp.props.className && typeof timestamp.type == "string") {
-					let tempTimestamp = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.messagecompact}"><${timestamp.type} class="${timestamp.props.className}" style="width: auto !important;">${this.getTimestamp(languages[BDFDB.DataUtils.get(this, "choices", "creationDateLang")].id, new Date(253402124399995))}</${timestamp.type}></div>`);
+					let tempTimestamp = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.messagecompact}"><${timestamp.type} class="${timestamp.props.className}" style="width: auto !important;">${this.getTimestamp(languages[choices.creationDateLang].id, new Date(253402124399995))}</${timestamp.type}></div>`);
 					document.body.appendChild(tempTimestamp);
 					let width = BDFDB.DOMUtils.getRects(tempTimestamp.firstElementChild).width + 10;
 					tempTimestamp.remove();
@@ -389,8 +388,12 @@ var CompleteTimestamps = (_ => {
 				else BDFDB.DOMUtils.removeLocalStyle(this.name + "CompactCorrection");
 			}
 		}
-			
+		
 		forceUpdateAll() {
+			settings = BDFDB.DataUtils.get(this, "settings");
+			choices = BDFDB.DataUtils.get(this, "choices");
+			formats = BDFDB.DataUtils.get(this, "formats");
+			
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 			BDFDB.MessageUtils.rerenderAll();
 		}

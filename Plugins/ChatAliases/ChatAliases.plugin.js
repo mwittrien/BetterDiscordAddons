@@ -6,7 +6,7 @@ var ChatAliases = (_ => {
 	return class ChatAliases {
 		getName () {return "ChatAliases";}
 
-		getVersion () {return "2.1.4";}
+		getVersion () {return "2.1.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,7 @@ var ChatAliases = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["File Alias","Properly base-64's the file again"], ["Slowmode", "No longer clears chatinput in slowmode"]]
+				"added":[["Textarea Choices","You can now disable automatic alias replacement in the three different message textareas"]]
 			};
 			
 			this.patchedModules = {
@@ -43,8 +43,11 @@ var ChatAliases = (_ => {
 					file: 				{value:false,		description:"Handle the replacevalue as a filepath"}
 				},
 				settings: {
-					addContextMenu:		{value:true, 		description:"Add a ContextMenu entry to faster add new Aliases:"},
-					addAutoComplete:	{value:true, 		description:"Add an Autocomplete-Menu for Non-RegExp Aliases:"}
+					addContextMenu:		{value:true, 		inner:false,	description:"Add a ContextMenu entry to faster add new Aliases:"},
+					addAutoComplete:	{value:true, 		inner:false,	description:"Add an Autocomplete-Menu for Non-RegExp Aliases:"},
+					triggerNormal:		{value:true, 		inner:true,		description:"Normal Message Textarea"},
+					triggerEdit:		{value:true, 		inner:true,		description:"Edit Message Textarea"},
+					triggerUpload:		{value:true, 		inner:true,		description:"Upload Message Prompt"}
 				},
 				amounts: {
 					minAliasLength:		{value:2, 			min:1,	description:"Minimal Character Length to open Autocomplete-Menu:"}
@@ -56,9 +59,9 @@ var ChatAliases = (_ => {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let amounts = BDFDB.DataUtils.get(this, "amounts");
-			let settingsPanel, settingsItems = [], innerItems = [];
+			let settingsPanel, settingsItems = [], innerItems = [], subInnerItems = [];
 			
-			for (let key in settings) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let key in settings) (!this.defaults.settings[key].inner ? innerItems : subInnerItems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "Switch",
 				plugin: this,
@@ -79,6 +82,12 @@ var ChatAliases = (_ => {
 				min: this.defaults.amounts[key].min,
 				max: this.defaults.amounts[key].max,
 				value: amounts[key]
+			}));
+			innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
+				title: "Automatically replace Aliases in:",
+				first: innerItems.length == 0,
+				last: true,
+				children: subInnerItems
 			}));
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Settings",
@@ -366,19 +375,19 @@ var ChatAliases = (_ => {
 		
 		processChannelTextAreaForm (e) {
 			if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "handleSendMessage")) BDFDB.ModuleUtils.patch(this, e.instance, "handleSendMessage", {before: e2 => {
-				this.handleSubmit(e, e2, 0);
+				if (settings.triggerNormal) this.handleSubmit(e, e2, 0);
 			}}, {force: true, noCache: true});
 		}
 		
 		processMessageEditor (e) {
 			if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "onSubmit")) BDFDB.ModuleUtils.patch(this, e.instance, "onSubmit", {before: e2 => {
-				this.handleSubmit(e, e2, 0);
+				if (settings.triggerEdit) this.handleSubmit(e, e2, 0);
 			}}, {force: true, noCache: true});
 		}
 		
 		processUpload (e) {
 			if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "submitUpload")) BDFDB.ModuleUtils.patch(this, e.instance, "submitUpload", {before: e2 => {
-				this.handleSubmit(e, e2, 1);
+				if (settings.triggerUpload) this.handleSubmit(e, e2, 1);
 			}}, {force: true, noCache: true});
 		}
 		
