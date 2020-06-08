@@ -1,13 +1,14 @@
 //META{"name":"BadgesEverywhere","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BadgesEverywhere","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BadgesEverywhere/BadgesEverywhere.plugin.js"}*//
 
 var BadgesEverywhere = (_ => {
-	var badgeClasses, requestedUsers = {}, loadedUsers = {}, requestQueue = {queue:[], running:false, timeout:null};
+	var badgeClasses, requestedUsers = {}, loadedUsers = {}, requestQueue = {queue:[], running:false, timeout:null}, cacheTimeout;
 	var nitroflag, boostflag;
+	var settings = {}, badges = {}, indicators = {};
 			
 	return class BadgesEverywhere {
 		getName () {return "BadgesEverywhere";} 
 
-		getVersion () {return "1.5.6";}
+		getVersion () {return "1.5.7";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -15,7 +16,8 @@ var BadgesEverywhere = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Caching","The plugin now caches the badge flags in a local file to allow the plugin to more swiftly load badges on a restart"]]
+				"improved":[["Caching","The plugin now caches the badge flags in a local file to allow the plugin to more swiftly load badges on a restart"]],
+				"fixed":[["Lags","Should have fixed lags"]]
 			};
 
 			this.patchedModules = {
@@ -393,24 +395,23 @@ var BadgesEverywhere = (_ => {
 			userCopy.premium_guild_since = result.premium_guild_since;
 			loadedUsers[result.user.id] = BDFDB.ObjectUtils.extract(userCopy, "flags", "premium_since", "premium_guild_since");
 			loadedUsers[result.user.id].date = (new Date()).getTime();
-			BDFDB.DataUtils.save(loadedUsers[result.user.id], this, "badgeCache", result.user.id);
+			
+			BDFDB.TimeUtils.clear(cacheTimeout);
+			cacheTimeout = BDFDB.TimeUtils.timeout(_ => {BDFDB.DataUtils.save(loadedUsers, this, "badgeCache");}, 5000);
 		}
 
 		createBadges (user, type, uncolored) {
-			let badges = BDFDB.DataUtils.get(this, "badges");
-			let indicators = BDFDB.DataUtils.get(this, "indicators");
-			let settings = BDFDB.DataUtils.get(this, "settings");
 			if (uncolored == undefined) uncolored = !settings.useColoredVersion;
-			let badgewrapper = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(`<span class="BE-badges BE-badges-${type} ${uncolored ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;"></span>`));
-			badgewrapper.props.children = [];
+			let badgeWrapper = BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(`<span class="BE-badges BE-badges-${type} ${uncolored ? BDFDB.disCN.userprofiletopsectionplaying : BDFDB.disCN.userprofiletopsectionnormal}" style="all: unset !important;"></span>`));
+			badgeWrapper.props.children = [];
 			for (let flag in badges) if ((loadedUsers[user.id].flags | flag) == loadedUsers[user.id].flags && badges[flag]) {
-				badgewrapper.props.children.push(this.createBadge(settings.showNitroDate ? this.getTimeString(user.id, flag) : null, type, flag, flag == boostflag ? BDFDB.LibraryModules.GuildBoostUtils.getUserLevel(loadedUsers[user.id].premium_guild_since) : null));
+				badgeWrapper.props.children.push(this.createBadge(settings.showNitroDate ? this.getTimeString(user.id, flag) : null, type, flag, flag == boostflag ? BDFDB.LibraryModules.GuildBoostUtils.getUserLevel(loadedUsers[user.id].premium_guild_since) : null));
 			}
 			let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), user.id);
 			if (indicators.CURRENT_GUILD_BOOST && member && member.premiumSince) {
-				badgewrapper.props.children.push(this.createBadge(settings.showNitroDate ? this.getTimeString(user.id, "CURRENT_GUILD_BOOST") : null, type, "CURRENT_GUILD_BOOST"));
+				badgeWrapper.props.children.push(this.createBadge(settings.showNitroDate ? this.getTimeString(user.id, "CURRENT_GUILD_BOOST") : null, type, "CURRENT_GUILD_BOOST"));
 			}
-			return badgewrapper.props.children.length ? badgewrapper : null;
+			return badgeWrapper.props.children.length ? badgeWrapper : null;
 		}
 		
 		createBadge (timestring, type, flag, rank) {
@@ -458,6 +459,10 @@ var BadgesEverywhere = (_ => {
 		}
 		
 		forceUpdateAll() {
+			settings = BDFDB.DataUtils.get(this, "settings");
+			badges = BDFDB.DataUtils.get(this, "badges");
+			indicators = BDFDB.DataUtils.get(this, "indicators");
+			
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 			BDFDB.MessageUtils.rerenderAll();
 		}
