@@ -2,6 +2,7 @@
 
 var ChatFilter = (_ => {
 	var blockedMessages, censoredMessages, words;
+	var settings = {}, replaces = {};
 	
 	return class ChatFilter {
 		getName () {return "ChatFilter";}
@@ -208,10 +209,7 @@ var ChatFilter = (_ => {
 				words = BDFDB.DataUtils.load(this, "words");
 				for (let rtype in this.defaults.replaces) if (!BDFDB.ObjectUtils.is(words[rtype])) words[rtype] = {};
 				
-				blockedMessages = {};
-				censoredMessages = {};
-				
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -220,7 +218,7 @@ var ChatFilter = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
 				
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -233,27 +231,24 @@ var ChatFilter = (_ => {
 			if (this.SettingsUpdated) {
 				delete this.SettingsUpdated;
 				
-				blockedMessages = {};
-				censoredMessages = {};
-				
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 			}
 		}
 
 		onNativeContextMenu (e) {
 			if (e.instance.props.value && e.instance.props.value.trim()) {
-				if ((e.instance.props.type == "NATIVE_TEXT" || e.instance.props.type == "CHANNEL_TEXT_AREA") && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.injectItem(e, e.instance.props.value.trim());
+				if ((e.instance.props.type == "NATIVE_TEXT" || e.instance.props.type == "CHANNEL_TEXT_AREA") && settings.addContextMenu) this.injectItem(e, e.instance.props.value.trim());
 			}
 		}
 
 		onSlateContextMenu (e) {
 			let text = document.getSelection().toString().trim();
-			if (text && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.injectItem(e, text);
+			if (text && settings.addContextMenu) this.injectItem(e, text);
 		}
 
 		onMessageContextMenu (e) {
 			let text = document.getSelection().toString().trim();
-			if (text && BDFDB.DataUtils.get(this, "settings", "addContextMenu")) this.injectItem(e, text);
+			if (text && settings.addContextMenu) this.injectItem(e, text);
 		}
 	 
 		injectItem (e, text) {
@@ -315,8 +310,6 @@ var ChatFilter = (_ => {
 		parseContent (content) {
 			let blocked = false, censored = false;
 			if (typeof content == "string") {
-				let settings = BDFDB.DataUtils.get(this, "settings");
-				let replaces = BDFDB.DataUtils.get(this, "replaces");
 				let blockedReplace;
 				for (let bWord in words.blocked) {
 					blockedReplace = words.blocked[bWord].empty ? "" : (words.blocked[bWord].replace || replaces.blocked);
@@ -440,6 +433,16 @@ var ChatFilter = (_ => {
 				regex: false
 			};
 			BDFDB.DataUtils.save(words, this, "words");
+		}
+		
+		forceUpdateAll () {
+			settings = BDFDB.DataUtils.get(this, "settings");
+			replaces = BDFDB.DataUtils.get(this, "replaces");
+				
+			blockedMessages = {};
+			censoredMessages = {};
+			
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 	}
 })();

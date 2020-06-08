@@ -1,6 +1,8 @@
 //META{"name":"BetterSearchPage","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterSearchPage","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/BetterSearchPage/BetterSearchPage.plugin.js"}*//
 
 var BetterSearchPage = (_ => {
+	var settings = {};
+	
 	return class BetterSearchPage {
 		getName () {return "BetterSearchPage";}
 
@@ -74,7 +76,7 @@ var BetterSearchPage = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 				
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -83,7 +85,7 @@ var BetterSearchPage = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
 				
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -95,7 +97,7 @@ var BetterSearchPage = (_ => {
 		onSettingsClosed (e) {
 			if (this.SettingsUpdated) {
 				delete this.SettingsUpdated;
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 			}
 		}
 
@@ -103,7 +105,6 @@ var BetterSearchPage = (_ => {
 			if (e.instance.props.search) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"SearchPagination"});
 				if (index > -1) {
-					let settings = BDFDB.DataUtils.get(this, "settings");
 					let currentpage = parseInt(Math.floor(e.instance.props.search.offset / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE)) + 1;
 					let maxpage = e.instance.props.search.totalResults > 5000 ? parseInt(Math.ceil(5000 / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE)) : parseInt(Math.ceil(e.instance.props.search.totalResults / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE));
 					let doJump = page => {
@@ -189,6 +190,12 @@ var BetterSearchPage = (_ => {
 					if (settings.cloneToTheTop) children.unshift(pagination);
 				}
 			}
+		}
+		
+		forceUpdateAll () {
+			settings = BDFDB.DataUtils.get(this, "settings");
+			
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 	}
 })();
