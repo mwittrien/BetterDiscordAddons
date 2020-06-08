@@ -1,6 +1,8 @@
 //META{"name":"DisplayServersAsChannels","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/DisplayServersAsChannels","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/DisplayServersAsChannels/DisplayServersAsChannels.plugin.js"}*//
 
 var DisplayServersAsChannels = (_ => {
+	var amounts = {};
+	
 	return class DisplayServersAsChannels {
 		getName () {return "DisplayServersAsChannels";}
 
@@ -93,13 +95,12 @@ var DisplayServersAsChannels = (_ => {
 
 				BDFDB.DOMUtils.addClass(document.body, BDFDB.disCN._displayserversaschannelsstyled);
 
-				this.addCSS();
-
 				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryComponents.GuildComponents.Guild.prototype, "render", {after: e => {
 					if (e.thisObject.props.list) this.processGuild({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});
 				}});
 
 				this.forceUpdateAll();
+				this.addCSS();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -124,8 +125,8 @@ var DisplayServersAsChannels = (_ => {
 		onSettingsClosed () {
 			if (this.SettingsUpdated) {
 				delete this.SettingsUpdated;
-				this.addCSS();
 				this.forceUpdateAll();
+				this.addCSS();
 			}
 		}
 		
@@ -144,7 +145,6 @@ var DisplayServersAsChannels = (_ => {
 		
 		processDirectMessage (e) {
 			if (e.instance.props.channel.id) {
-				let amounts = BDFDB.DataUtils.get(this, "amounts");
 				let text = BDFDB.ReactUtils.findValue(e.returnvalue, "text");
 				let icon = BDFDB.ReactUtils.findValue(e.returnvalue, "icon");
 				this.removeTooltip(e.returnvalue);
@@ -160,7 +160,6 @@ var DisplayServersAsChannels = (_ => {
 		
 		processGuild (e) {
 			if (e.instance.props.guild) {
-				let amounts = BDFDB.DataUtils.get(this, "amounts");
 				this.removeTooltip(e.returnvalue);
 				this.removeMask(e.returnvalue);
 				this.addElementName(e.returnvalue, e.instance.props.guild.name, {
@@ -179,7 +178,6 @@ var DisplayServersAsChannels = (_ => {
 			if (e.instance.props.folderId) {
 				this.removeTooltip(e.returnvalue);
 				this.removeMask(e.returnvalue);
-				let amounts = BDFDB.DataUtils.get(this, "amounts");
 				let folderColor = BDFDB.ColorUtils.convert(e.instance.props.folderColor, "HEX") || BDFDB.DiscordConstants.Colors.BRAND;
 				let folderSize = Math.round(amounts.serverElementHeight * 0.6);
 				this.addElementName(e.returnvalue, e.instance.props.folderName || BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER, {
@@ -260,12 +258,13 @@ var DisplayServersAsChannels = (_ => {
 		}
 		
 		forceUpdateAll() {
+			amounts = BDFDB.DataUtils.get(this, "amounts");
+			
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 			BDFDB.GuildUtils.rerenderAll();
 		}
 
 		addCSS () {
-			let amounts = BDFDB.DataUtils.get(this, "amounts");
 			BDFDB.DOMUtils.appendLocalStyle("DSACStyle" + this.name, `
 				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.guildswrapper},
 				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildsscrollerwrap},
