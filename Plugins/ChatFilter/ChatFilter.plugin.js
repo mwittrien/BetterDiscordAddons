@@ -2,7 +2,7 @@
 
 var ChatFilter = (_ => {
 	var blockedMessages, censoredMessages, words;
-	var settings = {}, replaces = {};
+	var settings = {}, replaces = {}, configs = {};
 	
 	return class ChatFilter {
 		getName () {return "ChatFilter";}
@@ -420,16 +420,16 @@ var ChatFilter = (_ => {
 			}));
 		}
 
-		saveWord (values, configs = BDFDB.DataUtils.get(this, "configs")) {
+		saveWord (values, wordConfigs = configs) {
 			if (!values.wordvalue || !values.choice) return;
 			values.wordvalue = values.wordvalue.trim();
 			values.replacevalue = values.replacevalue.trim();
 			if (!BDFDB.ObjectUtils.is(words[values.choice])) words[values.choice] = {};
 			words[values.choice][values.wordvalue] = {
 				replace: values.replacevalue,
-				empty: configs.empty,
-				case: configs.case,
-				exact: values.wordvalue.indexOf(" ") > -1 ? false : configs.exact,
+				empty: wordConfigs.empty,
+				case: wordConfigs.case,
+				exact: values.wordvalue.indexOf(" ") > -1 ? false : wordConfigs.exact,
 				regex: false
 			};
 			BDFDB.DataUtils.save(words, this, "words");
@@ -438,6 +438,7 @@ var ChatFilter = (_ => {
 		forceUpdateAll () {
 			settings = BDFDB.DataUtils.get(this, "settings");
 			replaces = BDFDB.DataUtils.get(this, "replaces");
+			configs = BDFDB.DataUtils.get(this, "configs");
 				
 			blockedMessages = {};
 			censoredMessages = {};
