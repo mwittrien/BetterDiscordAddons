@@ -3,6 +3,7 @@
 var MessageUtilities = (_ => {
 	var firedEvents = [];
 	var clickMap = ["CLICK", "DBLCLICK"];
+	var settings = {}, bindings = {}, toasts = {};
 	
 	return class MessageUtilities {
 		getName () {return "MessageUtilities";}
@@ -107,6 +108,7 @@ var MessageUtilities = (_ => {
 								onChange: keycombo => {
 									bindings[action].keycombo = keycombo;
 									BDFDB.DataUtils.save(bindings, this, "bindings");
+									this.SettingsUpdated = true;
 								}
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
@@ -115,6 +117,7 @@ var MessageUtilities = (_ => {
 								onChange: choice => {
 									bindings[action].click = choice.value;
 									BDFDB.DataUtils.save(bindings, this, "bindings");
+									this.SettingsUpdated = true;
 								}
 							})
 						]
@@ -131,6 +134,7 @@ var MessageUtilities = (_ => {
 						BDFDB.DataUtils.remove(this, "bindings");
 						settingsPanel.parentElement.appendChild(this.getSettingsPanel());
 						settingsPanel.remove();
+						this.SettingsUpdated = true;
 					});
 				},
 				children: BDFDB.LanguageUtils.LanguageStrings.RESET
@@ -177,6 +181,8 @@ var MessageUtilities = (_ => {
 				BDFDB.ListenerUtils.add(this, document, "keydown", e => {
 					if (BDFDB.DOMUtils.getParent(BDFDB.dotCN.textareawrapchat, document.activeElement)) this.onKeyDown(document.activeElement, e.which, "onKeyDown");
 				});
+				
+				this.loadConfig();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -230,11 +236,22 @@ var MessageUtilities = (_ => {
 			}
 		}
 
+		onSettingsClosed () {
+			if (this.SettingsUpdated) {
+				delete this.SettingsUpdated;
+				this.loadConfig();
+			}
+		}
+		
+		loadConfig () {
+			settings = BDFDB.DataUtils.get(this, "settings");
+			bindings = BDFDB.ObjectUtils.filter(BDFDB.DataUtils.get(this, "bindings"), action => settings[action], true);
+			toasts = BDFDB.DataUtils.get(this, "toasts");
+		}
+
 		onClick (e, click, name) {
 			if (!firedEvents.includes(name)) {
 				firedEvents.push(name);
-				let settings = BDFDB.DataUtils.get(this, "settings");
-				let bindings = BDFDB.ObjectUtils.filter(BDFDB.DataUtils.get(this, "bindings"), action => settings[action], true);
 				let priorityAction = null;
 				for (let action in bindings) {
 					let binding = bindings[action];
@@ -246,7 +263,7 @@ var MessageUtilities = (_ => {
 					if (messageDiv && message) {
 						BDFDB.ListenerUtils.stopEvent(e);
 						BDFDB.TimeUtils.clear(this.clickTimeout);
-						if (!this.hasDoubleClickOverwrite(bindings, bindings[priorityAction])) {
+						if (!this.hasDoubleClickOverwrite(bindings[priorityAction])) {
 							this.defaults.bindings[priorityAction].func.apply(this, [{messageDiv, message}, priorityAction]);
 						}
 						else this.clickTimeout = BDFDB.TimeUtils.timeout(_ => {
@@ -265,7 +282,7 @@ var MessageUtilities = (_ => {
 			return valid;
 		}
 
-		hasDoubleClickOverwrite (bindings, binding) {
+		hasDoubleClickOverwrite (binding) {
 			if (binding.click == 1) return false;
 			let dblbindings = BDFDB.ObjectUtils.filter(bindings, bndg => {return bndg.click == 1});
 			for (let dblaction in dblbindings) {
@@ -277,13 +294,13 @@ var MessageUtilities = (_ => {
 		}
 
 		doDelete ({messageDiv, message}, action) {
-			let deletelink = messageDiv.parentElement.querySelector(BDFDB.dotCNS.messagelocalbotoperations + BDFDB.dotCN.anchor);
-			if (deletelink) deletelink.click();
+			let deleteLink = messageDiv.parentElement.querySelector(BDFDB.dotCNS.messagelocalbotoperations + BDFDB.dotCN.anchor);
+			if (deleteLink) deleteLink.click();
 			else {
 				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 				if ((channel && BDFDB.UserUtils.can("MANAGE_MESSAGES")) || message.author.id == BDFDB.UserUtils.me.id && message.type != 1 && message.type != 2 && message.type != 3) {
 					BDFDB.LibraryModules.MessageUtils.deleteMessage(message.channel_id, message.id, message.state != "SENT");
-					if (BDFDB.DataUtils.get(this, "toasts", action)) BDFDB.NotificationUtils.toast("Message has been deleted.", {type:"success"});
+					if (toasts[action]) BDFDB.NotificationUtils.toast("Message has been deleted.", {type:"success"});
 				}
 			}
 		}
@@ -291,7 +308,7 @@ var MessageUtilities = (_ => {
 		doEdit ({messageDiv, message}, action) {
 			if (message.author.id == BDFDB.UserUtils.me.id && !messageDiv.querySelector("textarea")) {
 				BDFDB.LibraryModules.MessageUtils.startEditMessage(message.channel_id, message.id, message.content);
-				if (BDFDB.DataUtils.get(this, "toasts", action)) BDFDB.NotificationUtils.toast("Started editing.", {type:"success"});
+				if (toasts[action]) BDFDB.NotificationUtils.toast("Started editing.", {type:"success"});
 			}
 		}
 
@@ -299,7 +316,7 @@ var MessageUtilities = (_ => {
 			let reactButton = messageDiv.querySelector(`${BDFDB.dotCN.messagetoolbarbutton}[aria-label="${BDFDB.LanguageUtils.LanguageStrings.ADD_REACTION}"]`);
 			if (reactButton) {
 				reactButton.click();
-				if (BDFDB.DataUtils.get(this, "toasts", action)) BDFDB.NotificationUtils.toast("Reaction popout has been opened.", {type:"success"});
+				if (toasts[action]) BDFDB.NotificationUtils.toast("Reaction popout has been opened.", {type:"success"});
 			}
 		}
 
@@ -309,11 +326,11 @@ var MessageUtilities = (_ => {
 				if (channel && (channel.type == 1 || channel.type == 3 || BDFDB.UserUtils.can("MANAGE_MESSAGES")) && message.type == 0) {
 					if (message.pinned) {
 						BDFDB.LibraryModules.MessagePinUtils.unpinMessage(channel, message.id);
-						if (BDFDB.DataUtils.get(this, "toasts", action)) BDFDB.NotificationUtils.toast("Message has been unpinned.", {type:"error"});
+						if (toasts[action]) BDFDB.NotificationUtils.toast("Message has been unpinned.", {type:"error"});
 					}
 					else {
 						BDFDB.LibraryModules.MessagePinUtils.pinMessage(channel, message.id);
-						if (BDFDB.DataUtils.get(this, "toasts", action)) BDFDB.NotificationUtils.toast("Message has been pinned.", {type:"success"});
+						if (toasts[action]) BDFDB.NotificationUtils.toast("Message has been pinned.", {type:"success"});
 					}
 				}
 			}
@@ -322,7 +339,7 @@ var MessageUtilities = (_ => {
 		doCopyRaw ({messageDiv, message}, action) {
 			if (message.content) {
 				BDFDB.LibraryRequires.electron.clipboard.write({text:message.content});
-				if (BDFDB.DataUtils.get(this, "toasts", action)) BDFDB.NotificationUtils.toast("Raw message content has been copied.", {type:"success"});
+				if (toasts[action]) BDFDB.NotificationUtils.toast("Raw message content has been copied.", {type:"success"});
 			}
 		}
 
@@ -330,7 +347,7 @@ var MessageUtilities = (_ => {
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 			if (channel) {
 				BDFDB.LibraryRequires.electron.clipboard.write({text:`https://discordapp.com/channels/${channel.guild_id || BDFDB.DiscordConstants.ME}/${channel.id}/${message.id}`});
-				if (BDFDB.DataUtils.get(this, "toasts", action)) BDFDB.NotificationUtils.toast("Messagelink has been copied.", {type:"success"});
+				if (toasts[action]) BDFDB.NotificationUtils.toast("Messagelink has been copied.", {type:"success"});
 			}
 		}
 
@@ -340,7 +357,7 @@ var MessageUtilities = (_ => {
 				BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatch(BDFDB.DiscordConstants.ComponentActions.INSERT_QUOTE_TEXT, {
 					text: BDFDB.LibraryModules.QuoteUtils.createQuotedText(message, channel)
 				});
-				if (BDFDB.DataUtils.get(this, "toasts", action)) BDFDB.NotificationUtils.toast("Quote has been created.", {type:"success"});
+				if (toasts[action]) BDFDB.NotificationUtils.toast("Quote has been created.", {type:"success"});
 			}
 		}
 
@@ -367,7 +384,7 @@ var MessageUtilities = (_ => {
 		onKeyDown (target, key, name) {
 			if (!firedEvents.includes(name)) {
 				firedEvents.push(name);
-				if (key == 27 && BDFDB.DataUtils.get(this, "settings", "clearOnEscape")) {
+				if (key == 27 && settings.clearOnEscape) {
 					let chatform = BDFDB.DOMUtils.getParent(BDFDB.dotCN.chatform, target);
 					if (chatform) {
 						let instance = BDFDB.ReactUtils.findOwner(chatform, {name:"ChannelTextAreaForm"}) || BDFDB.ReactUtils.findOwner(chatform, {name:"ChannelTextAreaForm", up:true});
@@ -380,13 +397,10 @@ var MessageUtilities = (_ => {
 
 		getActiveShortcutString (action) {
 			if (!action) return null;
-			let str = "", settings = BDFDB.DataUtils.get(this, "settings");
-			if (settings.addHints && settings[action]) {
-				let binding = BDFDB.DataUtils.get(this, "bindings", action);
-				if (binding) {
-					str += clickMap[binding.click];
-					if (binding.keycombo.length) str += " + " + BDFDB.LibraryModules.KeyCodeUtils.getString(binding.keycombo);
-				}
+			let str = "";
+			if (settings.addHints && settings[action] && bindings[action]) {
+				str += clickMap[bindings[action].click];
+				if (bindings[action].keycombo.length) str += " + " + BDFDB.LibraryModules.KeyCodeUtils.getString(bindings[action].keycombo);
 			}
 			return str.replace(/ /g, "");
 		}
