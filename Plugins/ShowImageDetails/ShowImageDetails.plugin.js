@@ -1,6 +1,8 @@
 //META{"name":"ShowImageDetails","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowImageDetails","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ShowImageDetails/ShowImageDetails.plugin.js"}*//
 
 var ShowImageDetails = (_ => {
+	var settings = {}, amounts = {};
+	
 	const ImageDetails = class ImageDetails extends BdApi.React.Component {
 		componentDidMount() {
 			this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ReactUtils.getValue(this, "_reactInternalFiber.return"), "attachment", {up: true});
@@ -156,7 +158,7 @@ var ShowImageDetails = (_ => {
 					if (e.returnValue && e.returnValue.type && (e.returnValue.type.displayName == "LazyImageZoomable" || e.returnValue.type.displayName == "LazyImage") && e.methodArguments[0].original && e.methodArguments[0].src.indexOf("https://media.discordapp.net/attachments") == 0) return this.injectImageDetails(e.methodArguments[0], e.returnValue);
 				}});
 
-				BDFDB.MessageUtils.rerenderAll();
+				this.forceUpdateAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -165,7 +167,7 @@ var ShowImageDetails = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
 
-				BDFDB.MessageUtils.rerenderAll();
+				this.forceUpdateAll();
 
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -177,12 +179,11 @@ var ShowImageDetails = (_ => {
 		onSettingsClosed () {
 			if (this.SettingsUpdated) {
 				delete this.SettingsUpdated;
-				BDFDB.MessageUtils.rerenderAll();
+				this.forceUpdateAll();
 			}
 		}
 		
 		injectImageDetails (props, child) {
-			let settings = BDFDB.DataUtils.get(this, "settings");
 			if (!settings.showOnHover) {
 				props.detailsAdded = true;
 				return BDFDB.ReactUtils.createElement("div", {
@@ -207,9 +208,7 @@ var ShowImageDetails = (_ => {
 			if (e.instance.props.original && e.instance.props.src.indexOf("https://media.discordapp.net/attachments") == 0 && typeof e.returnvalue.props.children == "function") {
 				let attachment = BDFDB.ReactUtils.findValue(e.instance, "attachment", {up:true});
 				if (!attachment) return;
-				let settings = BDFDB.DataUtils.get(this, "settings");
 				if (settings.showOnHover) {
-					let amounts = BDFDB.DataUtils.get(this, "amounts");
 					let renderChildren = e.returnvalue.props.children;
 					e.returnvalue.props.children = (...args) => {
 						return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
@@ -223,6 +222,13 @@ var ShowImageDetails = (_ => {
 					};
 				}
 			}
+		}
+		
+		forceUpdateAll () {
+			settings = BDFDB.DataUtils.get(this, "settings");
+			amounts = BDFDB.DataUtils.get(this, "amounts");
+
+			BDFDB.MessageUtils.rerenderAll();
 		}
 	}
 })();
