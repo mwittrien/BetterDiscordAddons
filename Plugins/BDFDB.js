@@ -84,8 +84,9 @@
 
 		plugin.started = true;
 		delete plugin.stopping;
-
-		for (let name in BDFDB.myPlugins) if (!BDFDB.myPlugins[name].started && typeof BDFDB.myPlugins[name].initialize == "function") setImmediate(_ => {BDFDB.TimeUtils.suppress(BDFDB.myPlugins[name].initialize.bind(BDFDB.myPlugins[name]), "Could not initiate plugin!", name)();});
+		
+		let startAmount = 1;
+		for (let name in BDFDB.myPlugins) if (!BDFDB.myPlugins[name].started && typeof BDFDB.myPlugins[name].initialize == "function") setTimeout(_ => {BDFDB.TimeUtils.suppress(BDFDB.myPlugins[name].initialize.bind(BDFDB.myPlugins[name]), "Could not initiate plugin!", name)();}, 100 * (startAmount++));
 	};
 	BDFDB.PluginUtils.clear = BDFDB.unloadMessage = function (plugin) {
 		InternalBDFDB.clearStartTimeout(plugin);
@@ -3348,9 +3349,6 @@
 	BDFDB.ContextMenuUtils.createItemId = function (...strings) {
 		return strings.map(s => typeof s == "number" ? s.toString() : s).filter(s => typeof s == "string").map(s => s.toLowerCase().replace(/\s/, "-")).join("-");
 	};
-	BDFDB.ContextMenuUtils.createItemId = function (...strings) {
-		return strings.map(s => typeof s == "number" ? s.toString() : s).filter(s => typeof s == "string").map(s => s.toLowerCase().replace(/\s/, "-")).join("-");
-	};
 	BDFDB.ContextMenuUtils.findItem = function (returnvalue, config) {
 		if (!returnvalue || !BDFDB.ObjectUtils.is(config) || !config.label && !config.id) return [null, -1];
 		config.label = config.label && [config.label].flat().filter(n => n);
@@ -3398,9 +3396,7 @@
 	BDFDB.TimeUtils.interval = function (callback, delay, ...args) {
 		if (typeof callback != "function" || typeof delay != "number" || delay < 1) return;
 		else {
-			let count = 0, interval = setInterval(_ => {
-				BDFDB.TimeUtils.suppress(callback, "Interval")(...[interval, count++, args].flat());
-			}, delay);
+			let count = 0, interval = setInterval(_ => {BDFDB.TimeUtils.suppress(callback, "Interval")(...[interval, count++, args].flat());}, delay);
 			return interval;
 		}
 	};
@@ -3426,15 +3422,12 @@
 	};
 	BDFDB.TimeUtils.suppress = function (callback, string, name) {return function (...args) {
 		try {return callback(...args);}
-		catch (err) {
-			if (typeof string != "string") string = "";
-			BDFDB.LogUtils.error(string + " " + err, name);
-		}
+		catch (err) {BDFDB.LogUtils.error((typeof string == "string" && string || "") + " " + err, name);}
 	}};
 
 	BDFDB.StringUtils = {};
 	BDFDB.StringUtils.htmlEscape = function (string) {
-		var ele = document.createElement("div");
+		let ele = document.createElement("div");
 		ele.innerText = string;
 		return ele.innerHTML;
 	};
