@@ -2,8 +2,8 @@
 
 var ServerFolders = (_ => {
 	var _this;
-	
 	var folderStates, folderReads, guildStates;
+	var settings = {};
 
 	const folderIcons = [
 		{openicon:`<path d="M 200,390 H 955 L 795,770 H 200 Z" fill="REPLACE_FILL2"/><path d="M 176.6,811 C 163.9,811 155.1,802.6 155,784.7 V 212.9 C 157.9,190.5 169,179.8 195.9,176 h 246 c 20.3,3.2 34.5,18.7 41,28.6 C 494.9,228.3 492.9,240.4 494,266 l 313.6,1.3 c 17.6,0.4 23.3,3.7 23.3,3.7 8.6,4.2 14.8,10.7 19,19.5 C 856.3,319.5 854,360 854,360 h 108.9 c 4.4,2.4 13.7,1.2 11.8,23.5 L 815.8,789.4 c -2.1,5.2 -12.5,13.6 -18.7,16.1 -6.8,2.7 -18.5,5.5 -23.9,5.5 z M 767,759 897,430 H 360 L 230,759 Z" fill="REPLACE_FILL1"/>`,
@@ -64,7 +64,6 @@ var ServerFolders = (_ => {
 											_this.removeGuildFromFolder(folderId, guildId);
 										}
 										else {
-											let settings = BDFDB.DataUtils.get(_this, "settings");
 											if (settings.closeAllFolders) {
 												for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (openFolderId != folderId || !settings.forceOpenFolder) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
 											}
@@ -130,7 +129,7 @@ var ServerFolders = (_ => {
 								})
 							]
 						}) : null;
-					}).filter(n => n).reduce((r, a) => r.concat(a, BDFDB.DataUtils.get(_this, "settings", "addSeparators") ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Items.Separator, {}) : null), [0]).slice(1, -1).flat(10).filter(n => n)
+					}).filter(n => n).reduce((r, a) => r.concat(a, settings.addSeparators ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Items.Separator, {}) : null), [0]).slice(1, -1).flat(10).filter(n => n)
 				})
 			});
 		}
@@ -451,7 +450,7 @@ var ServerFolders = (_ => {
 				
 				let forceClosing = false;
 				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.GuildUtils, "toggleGuildFolderExpand", {after: e => {
-					if (BDFDB.DataUtils.get(this, "settings", "closeOtherFolders") && !forceClosing) {
+					if (settings.closeOtherFolders && !forceClosing) {
 						forceClosing = true;
 						for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (openFolderId != e.methodArguments[0]) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
 						forceClosing = false;
@@ -476,7 +475,7 @@ var ServerFolders = (_ => {
 		}
 
 		onSwitch () {
-			if (typeof BDFDB === "object" && BDFDB.DataUtils.get(this, "settings", "forceOpenFolder")) {
+			if (typeof BDFDB === "object" && settings.forceOpenFolder) {
 				let folder = BDFDB.GuildUtils.getFolder(BDFDB.LibraryModules.LastGuildStore.getGuildId());
 				if (folder && !BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folder.folderId)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folder.folderId);
 			}
@@ -592,7 +591,7 @@ var ServerFolders = (_ => {
 		}
 
 		processAppView (e) {
-			if (BDFDB.DataUtils.get(this, "settings", "extraColumn")) {
+			if (settings.extraColumn) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: ["FluxContainer(Guilds)", "FluxContainer(NavigableGuilds)"]});
 				if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(folderGuildContentComponent, {
 					themeOverride: children[index].props.themeOverride
@@ -607,8 +606,6 @@ var ServerFolders = (_ => {
 			
 			let data = this.getFolderConfig(e.instance.props.folderId);
 			if (data.muteFolder) for (let guildId of e.instance.props.guildIds) if (!BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildId)) BDFDB.LibraryModules.GuildSettingsUtils.updateNotificationSettings(guildId, {muted:true, suppress_everyone:true});
-			
-			let settings = BDFDB.DataUtils.get(this, "settings");
 			
 			let state = this.getState(e.instance);
 			if (folderStates[e.instance.props.folderId] && !BDFDB.equals(state, folderStates[e.instance.props.folderId])) {
@@ -691,7 +688,6 @@ var ServerFolders = (_ => {
 			}
 			if (e.node) BDFDB.ListenerUtils.add(this, e.node, "click", _ => {BDFDB.TimeUtils.timeout(_ => {
 				let folder = BDFDB.GuildUtils.getFolder(e.instance.props.guild.id);
-				let settings = BDFDB.DataUtils.get(this, "settings");
 				if (settings.closeAllFolders) for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (!folder || openFolderId != folder.folderId || !settings.forceOpenFolder) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
 				else if (folder && settings.closeTheFolder && !settings.forceOpenFolder && BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folder.folderId)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folder.folderId);
 			})});
@@ -1080,6 +1076,8 @@ var ServerFolders = (_ => {
 		}
 		
 		forceUpdateAll() {
+			settings = BDFDB.DataUtils.get(this, "settings");
+			
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 			BDFDB.GuildUtils.rerenderAll();
 		}
