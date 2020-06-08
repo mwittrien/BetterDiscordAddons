@@ -2,6 +2,7 @@
 
 var DisplayLargeMessages = (_ => {
 	var encodedMessages, requestedMessages, oldMessages, updateTimeout;
+	var settings = {}, amounts = {};
 	
 	return class DisplayLargeMessages {
 		getName () {return "DisplayLargeMessages";}
@@ -178,22 +179,20 @@ var DisplayLargeMessages = (_ => {
 		}
 
 		processMessages (e) {
-			let settings = BDFDB.DataUtils.get(this, "settings");
-			let amounts = BDFDB.DataUtils.get(this, "amounts");
 			e.instance.props.channelStream = [].concat(e.instance.props.channelStream);
 			for (let i in e.instance.props.channelStream) {
 				let message = e.instance.props.channelStream[i].content;
 				if (message) {
-					if (BDFDB.ArrayUtils.is(message.attachments)) this.checkMessage(e.instance, e.instance.props.channelStream[i], message, settings, amounts);
+					if (BDFDB.ArrayUtils.is(message.attachments)) this.checkMessage(e.instance, e.instance.props.channelStream[i], message);
 					else if (BDFDB.ArrayUtils.is(message)) for (let j in message) {
 						let childMessage = message[j].content;
-						if (childMessage && BDFDB.ArrayUtils.is(childMessage.attachments)) this.checkMessage(e.instance, message[j], childMessage, settings, amounts);
+						if (childMessage && BDFDB.ArrayUtils.is(childMessage.attachments)) this.checkMessage(e.instance, message[j], childMessage);
 					}
 				}
 			}
 		}
 		
-		checkMessage (instance, stream, message, settings, amounts) {
+		checkMessage (instance, stream, message) {
 			let encodedContent = encodedMessages[message.id];
 			if (encodedContent != null) {
 				if (message.content.indexOf(encodedContent.attachment) == -1) {
@@ -222,39 +221,38 @@ var DisplayLargeMessages = (_ => {
 		}
 		
 		processAttachment (e) {
-			if (e.instance.props.filename == "message.txt") {
-				let settings = BDFDB.DataUtils.get(this, "settings");
-				let amounts = BDFDB.DataUtils.get(this, "amounts");
-				if (settings.onDemand || amounts.maxFileSize && (amounts.maxFileSize < e.instance.props.size/1024)) e.returnvalue.props.children.splice(2, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-					text: this.labels.button_injectattchment_text,
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
-						rel: "noreferrer noopener",
-						target: "_blank",
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-							className: BDFDB.disCN._displaylargemessagesinjectbutton,
-							name: BDFDB.LibraryComponents.SvgIcon.Names.RAW_TEXT,
-							width: 20,
-							height: 20
-						}),
-						onClick: event => {
-							BDFDB.ListenerUtils.stopEvent(event);
-							let target = event.target;
-							let message = BDFDB.ReactUtils.findValue(target, "message", {up: true});
-							if (message) BDFDB.LibraryRequires.request(e.instance.props.url, (error, response, body) => {
-								oldMessages[message.id] = new BDFDB.DiscordObjects.Message(message);
-								encodedMessages[message.id] = {
-									content: message.content || "",
-									attachment: body || ""
-								};
-								BDFDB.ModuleUtils.forceAllUpdates(this, "Messages");
-							});
-						}
-					})
-				}));
-			}
+			if (e.instance.props.filename == "message.txt" && settings.onDemand || amounts.maxFileSize && (amounts.maxFileSize < e.instance.props.size/1024)) e.returnvalue.props.children.splice(2, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+				text: this.labels.button_injectattchment_text,
+				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
+					rel: "noreferrer noopener",
+					target: "_blank",
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+						className: BDFDB.disCN._displaylargemessagesinjectbutton,
+						name: BDFDB.LibraryComponents.SvgIcon.Names.RAW_TEXT,
+						width: 20,
+						height: 20
+					}),
+					onClick: event => {
+						BDFDB.ListenerUtils.stopEvent(event);
+						let target = event.target;
+						let message = BDFDB.ReactUtils.findValue(target, "message", {up: true});
+						if (message) BDFDB.LibraryRequires.request(e.instance.props.url, (error, response, body) => {
+							oldMessages[message.id] = new BDFDB.DiscordObjects.Message(message);
+							encodedMessages[message.id] = {
+								content: message.content || "",
+								attachment: body || ""
+							};
+							BDFDB.ModuleUtils.forceAllUpdates(this, "Messages");
+						});
+					}
+				})
+			}));
 		}
 		
 		forceUpdateAll () {
+			settings = BDFDB.DataUtils.get(this, "settings");
+			amounts = BDFDB.DataUtils.get(this, "amounts");
+			
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 			BDFDB.MessageUtils.rerenderAll();
 		}

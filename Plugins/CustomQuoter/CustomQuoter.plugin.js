@@ -2,6 +2,7 @@
 
 var CustomQuoter = (_ => {
 	var _this;
+	var settings = {}, formats = {};
 	
 	const PreviewMessage = class PreviewMessage extends BdApi.React.Component {
 		render() {
@@ -214,13 +215,11 @@ var CustomQuoter = (_ => {
 		}
 
 		parseQuote (message, channel) {
-			let settings = BDFDB.DataUtils.get(this, "settings");
-			let customQuote = BDFDB.DataUtils.get(this, "formats", "customQuote");
 			let languageId = BDFDB.LanguageUtils.getLanguage().id;
 			
 			let timestamp = new Date(message.editedTimestamp || message.timestamp);
 			let hour = timestamp.getHours(), minute = timestamp.getMinutes(), second = timestamp.getSeconds(), msecond = timestamp.getMilliseconds(), day = timestamp.getDate(), month = timestamp.getMonth()+1, timemode = "";
-			if (customQuote.indexOf("$timemode") > -1) {
+			if (formats.customQuote.indexOf("$timemode") > -1) {
 				timemode = hour >= 12 ? "PM" : "AM";
 				hour = hour % 12;
 				hour = hour ? hour : 12;
@@ -236,7 +235,7 @@ var CustomQuoter = (_ => {
 			
 			let member = BDFDB.LibraryModules.MemberStore.getMember(guild && guild.id, message.author.id);
 			
-			return BDFDB.StringUtils.insertNRST(customQuote)
+			return BDFDB.StringUtils.insertNRST(formats.customQuote)
 				.replace("$mention", settings.ignoreMentionInDM && channel.isDM() ? "" : `<@!${message.author.id}>`)
 				.replace("$link", `https://discordapp.com/channels/${guild.id}/${channel.id}/${message.id}`)
 				.replace("$authorName", member && member.nick || message.author.username || "")
@@ -264,14 +263,17 @@ var CustomQuoter = (_ => {
 		}
 
 		addLeadingZeros (timestring) {
-			let chararray = timestring.split("");
+			let charArray = timestring.split("");
 			let numreg = /[0-9]/;
-			for (let i = 0; i < chararray.length; i++) if (!numreg.test(chararray[i-1]) && numreg.test(chararray[i]) && !numreg.test(chararray[i+1])) chararray[i] = "0" + chararray[i];
+			for (let i = 0; i < charArray.length; i++) if (!numreg.test(charArray[i-1]) && numreg.test(charArray[i]) && !numreg.test(charArray[i+1])) charArray[i] = "0" + charArray[i];
 
-			return chararray.join("");
+			return charArray.join("");
 		}
 			
 		forceUpdateAll() {
+			settings = BDFDB.DataUtils.get(this, "settings");
+			formats = BDFDB.DataUtils.get(this, "formats");
+			
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 			BDFDB.MessageUtils.rerenderAll();
 		}
