@@ -9261,7 +9261,7 @@
 			BDFDB.InternalData.pressedKeys.push(e.which);
 			KeyDownTimeouts[e.which] = BDFDB.TimeUtils.timeout(_ => {
 				BDFDB.ArrayUtils.remove(BDFDB.InternalData.pressedKeys, e.which, true);
-			},60000);
+			}, 60000);
 		}
 	});
 	BDFDB.ListenerUtils.add(BDFDB, document, "keyup.BDFDBPressedKeys", e => {
