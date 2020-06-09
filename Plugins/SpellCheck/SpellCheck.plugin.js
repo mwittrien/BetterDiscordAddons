@@ -1,12 +1,13 @@
 //META{"name":"SpellCheck","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpellCheck","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/SpellCheck/SpellCheck.plugin.js"}*//
 
 var SpellCheck = (_ => {
-	var languages, dictionaries, langDictionaries, languageToasts;
+	var languages, dictionaries, langDictionaries, languageToasts, checkTimeout;
+	var settings = {}, choices = {}, amounts = {};
 	
 	return class SpellCheck {
 		getName () {return "SpellCheck";}
 
-		getVersion () {return "1.4.9";}
+		getVersion () {return "1.5.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -151,18 +152,18 @@ var SpellCheck = (_ => {
 				BDFDB.LibraryRequires.request("https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpellCheck/dic", (error, response, body) => {
 					let dictionaryLanguageIds = Array.from(BDFDB.DOMUtils.create(body).querySelectorAll(`[href*="/mwittrien/BetterDiscordAddons/blob/master/Plugins/SpellCheck/dic/"]`)).map(n => n.innerText.split(".")[0]).filter(n => n);
 					languages = BDFDB.ObjectUtils.filter(BDFDB.LanguageUtils.languages, langId => dictionaryLanguageIds.includes(langId), true);
-					let choices = BDFDB.DataUtils.get(this, "choices");
-					for (let key in choices) {
-						if (key == "dictionaryLanguage" && !languages[key]) {
-							choices[key] = "en";
-							BDFDB.DataUtils.get(choices[key], this, "choices", key);
-						}
-						this.setDictionary(key, choices[key]);
-					}
 					
 					if ((BDFDB.LibraryModules.StoreChangeUtils && BDFDB.LibraryModules.StoreChangeUtils.get("SpellcheckStore") || {}).enabled) BDFDB.LibraryModules.SpellCheckUtils.toggleSpellcheck();
 
-					BDFDB.ModuleUtils.forceAllUpdates(this);
+					this.forceUpdateAll();
+					
+					for (let key in choices) {
+						if (key == "dictionaryLanguage" && !languages[key]) {
+							choices[key] = "en";
+							BDFDB.DataUtils.save(choices[key], this, "choices", key);
+						}
+						this.setDictionary(key, choices[key]);
+					}
 				});
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
@@ -234,34 +235,44 @@ var SpellCheck = (_ => {
 			}
 		}
 
+		onSettingsClosed () {
+			if (this.SettingsUpdated) {
+				delete this.SettingsUpdated;
+				this.forceUpdateAll();
+			}
+		}
+
 		processSlateChannelTextArea (e) {
 			BDFDB.DOMUtils.remove(e.node.parentElement.querySelectorAll(BDFDB.dotCN._spellcheckoverlay));
-			let overlay = e.node.cloneNode(true), wrapper = BDFDB.DOMUtils.getParent(BDFDB.dotCN.textareainner, e.node);
-			BDFDB.DOMUtils.addClass(overlay, BDFDB.disCN._spellcheckoverlay);
-			let style = Object.assign({}, getComputedStyle(e.node));
-			for (let i in style) if (i.indexOf("webkit") == -1 && isNaN(parseInt(i))) overlay.style[i] = style[i];
-			overlay.style.setProperty("color", "transparent", "important");
-			overlay.style.setProperty("background", "none", "important");
-			overlay.style.setProperty("mask", "none", "important");
-			overlay.style.setProperty("pointer-events", "none", "important");
-			overlay.style.setProperty("position", "absolute", "important");
-			overlay.style.setProperty("left", BDFDB.DOMUtils.getRects(e.node).left - BDFDB.DOMUtils.getRects(wrapper).left + "px", "important");
-			overlay.style.setProperty("width", BDFDB.DOMUtils.getRects(e.node).width - style.paddingLeft - style.paddingRight + "px", "important");
-			overlay.style.setProperty("height", style.height, "important");
-			for (let child of overlay.querySelectorAll("*")) {
-				child.style.setProperty("color", "transparent", "important");
-				child.style.setProperty("background-color", "transparent", "important");
-				child.style.setProperty("border-color", "transparent", "important");
-				child.style.setProperty("text-shadow", "none", "important");
-				child.style.setProperty("pointer-events", "none", "important");
-				if (child.getAttribute("data-slate-string") && child.parentElement.getAttribute("data-slate-leaf")) {
-					let newline = child.querySelector("br");
-					if (newline) newline.remove();
-					child.innerHTML = this.spellCheckText(child.textContent);
-					if (newline) child.appendChild(newline);
+			BDFDB.TimeUtils.clear(checkTimeout);
+			checkTimeout = BDFDB.TimeUtils.timeout(_ => {
+				let overlay = e.node.cloneNode(true), wrapper = BDFDB.DOMUtils.getParent(BDFDB.dotCN.textareainner, e.node);
+				BDFDB.DOMUtils.addClass(overlay, BDFDB.disCN._spellcheckoverlay);
+				let style = Object.assign({}, getComputedStyle(e.node));
+				for (let i in style) if (i.indexOf("webkit") == -1 && isNaN(parseInt(i))) overlay.style[i] = style[i];
+				overlay.style.setProperty("color", "transparent", "important");
+				overlay.style.setProperty("background", "none", "important");
+				overlay.style.setProperty("mask", "none", "important");
+				overlay.style.setProperty("pointer-events", "none", "important");
+				overlay.style.setProperty("position", "absolute", "important");
+				overlay.style.setProperty("left", BDFDB.DOMUtils.getRects(e.node).left - BDFDB.DOMUtils.getRects(wrapper).left + "px", "important");
+				overlay.style.setProperty("width", BDFDB.DOMUtils.getRects(e.node).width - style.paddingLeft - style.paddingRight + "px", "important");
+				overlay.style.setProperty("height", style.height, "important");
+				for (let child of overlay.querySelectorAll("*")) {
+					child.style.setProperty("color", "transparent", "important");
+					child.style.setProperty("background-color", "transparent", "important");
+					child.style.setProperty("border-color", "transparent", "important");
+					child.style.setProperty("text-shadow", "none", "important");
+					child.style.setProperty("pointer-events", "none", "important");
+					if (child.getAttribute("data-slate-string") && child.parentElement.getAttribute("data-slate-leaf")) {
+						let newline = child.querySelector("br");
+						if (newline) newline.remove();
+						child.innerHTML = this.spellCheckText(child.textContent);
+						if (newline) child.appendChild(newline);
+					}
 				}
-			}
-			e.node.parentElement.appendChild(overlay);
+				e.node.parentElement.appendChild(overlay);
+			}, 300);
 		}
 
 		spellCheckText (string) {
@@ -296,13 +307,12 @@ var SpellCheck = (_ => {
 			word = word.split(" ")[0].split("\n")[0].split("\r")[0].split("\t")[0];
 			if (word) {
 				let wordLow = word.toLowerCase();
-				let lang = BDFDB.DataUtils.get(this, "choices", "dictionaryLanguage");
-				if (languages[lang]) {
-					let ownDictionary = BDFDB.DataUtils.load(this, "owndics", lang) || [];
+				if (languages[choices.dictionaryLanguage]) {
+					let ownDictionary = BDFDB.DataUtils.load(this, "owndics", choices.dictionaryLanguage) || [];
 					if (!ownDictionary.includes(wordLow)) {
 						ownDictionary.push(wordLow);
-						BDFDB.DataUtils.save(ownDictionary, this, "owndics", lang);
-						BDFDB.NotificationUtils.toast(this.labels.toast_wordadd_text.replace("${word}", word).replace("${dicName}", this.getLanguageName(languages[lang])), {type:"success"});
+						BDFDB.DataUtils.save(ownDictionary, this, "owndics", choices.dictionaryLanguage);
+						BDFDB.NotificationUtils.toast(this.labels.toast_wordadd_text.replace("${word}", word).replace("${dicName}", this.getLanguageName(languages[choices.dictionaryLanguage])), {type:"success"});
 						dictionaries.dictionaryLanguage = this.formatDictionary(langDictionaries.dictionaryLanguage.concat(ownDictionary));
 					}
 				}
@@ -338,12 +348,11 @@ var SpellCheck = (_ => {
 					}
 				};
 				
-				let shouldDownload = BDFDB.DataUtils.get(this, "settings", "downloadDictionary");
-				if (shouldDownload && BDFDB.LibraryRequires.fs.existsSync(filePath)) BDFDB.LibraryRequires.fs.readFile(filePath, (error, buffer) => {
+				if (settings.downloadDictionary && BDFDB.LibraryRequires.fs.existsSync(filePath)) BDFDB.LibraryRequires.fs.readFile(filePath, (error, buffer) => {
 					parse(error, buffer, buffer.toString(), false);
 				});
 				else BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpellCheck/dic/" + lang + ".dic", (error, response, body) => {
-					parse(error, response, body, shouldDownload);
+					parse(error, response, body, settings.downloadDictionary);
 				});
 			}
 			else {
@@ -386,8 +395,8 @@ var SpellCheck = (_ => {
 		}
 
 		getSimilarWords (word) {
-			let maxAmount = BDFDB.DataUtils.get(this, "amounts", "maxSimilarAmount"), similarWords = [];
-			if (maxAmount > 0) {
+			let similarWords = [];
+			if (amounts.maxSimilarAmount > 0) {
 				let firstLetterLower = word.charAt(0).toLowerCase();
 				let possibilities = [];
 				for (let key in dictionaries) if (dictionaries[key] && dictionaries[key][firstLetterLower]) possibilities = possibilities.concat(BDFDB.ObjectUtils.toArray(dictionaries[key][firstLetterLower]).flat());
@@ -436,6 +445,14 @@ var SpellCheck = (_ => {
 		getLanguageName (language) {
 			if (language.name.startsWith("Discord")) return language.name.slice(0, -1) + (language.ownlang && languages[language.id].name != language.ownlang ? ` / ${language.ownlang}` : "") + ")";
 			else return language.name + (language.ownlang && language.name != language.ownlang ? ` / ${language.ownlang}` : "");
+		}
+		
+		forceUpdateAll () {
+			settings = BDFDB.DataUtils.get(this, "settings");
+			choices = BDFDB.DataUtils.get(this, "choices");
+			amounts = BDFDB.DataUtils.get(this, "amounts");
+			
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 
 		setLabelsByLanguage () {
