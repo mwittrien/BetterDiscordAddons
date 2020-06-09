@@ -2,6 +2,7 @@
 
 var GoogleSearchReplace = (_ => {
 	const textUrlReplaceString = "DEVILBRO_BD_GOOGLESEARCHREPLACE_REPLACE_TEXTURL";
+	var enabledEngines = {}, settings = {};
 	
 	return class GoogleSearchReplace {
 		getName () {return "GoogleSearchReplace";}
@@ -102,6 +103,8 @@ var GoogleSearchReplace = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
+				
+				this.forceUpdateAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -129,7 +132,6 @@ var GoogleSearchReplace = (_ => {
 			let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "search-google"});
 			if (index > -1) {
 				let text = document.getSelection().toString();
-				let enabledEngines = BDFDB.ObjectUtils.filter(BDFDB.DataUtils.get(this, "engines"), n => n);
 				let enginesWithoutAll = BDFDB.ObjectUtils.filter(enabledEngines, n => n != "_all", true);
 				let engineKeys = Object.keys(enginesWithoutAll);
 				if (engineKeys.length == 1) {
@@ -137,9 +139,8 @@ var GoogleSearchReplace = (_ => {
 						label: this.labels.context_googlesearchreplace_text.replace("...", this.defaults.engines[engineKeys[0]].name),
 						id: children[index].props.id,
 						action: event => {
-							let useChromium = BDFDB.DataUtils.get(this, "settings", "useChromium");
 							if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
-							BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(textUrlReplaceString, encodeURIComponent(text)), useChromium, event.shiftKey);
+							BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(textUrlReplaceString, encodeURIComponent(text)), settings.useChromium, event.shiftKey);
 						}
 					}));
 				}
@@ -150,12 +151,11 @@ var GoogleSearchReplace = (_ => {
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "search", key),
 						color: key == "_all" ? BDFDB.LibraryComponents.MenuItems.Colors.DANGER : BDFDB.LibraryComponents.MenuItems.Colors.DEFAULT,
 						action: event => {
-							let useChromium = BDFDB.DataUtils.get(this, "settings", "useChromium");
 							if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
 							if (key == "_all") {
-								for (let key2 in enginesWithoutAll) BDFDB.DiscordUtils.openLink(this.defaults.engines[key2].url.replace(textUrlReplaceString, encodeURIComponent(text)), useChromium, event.shiftKey);
+								for (let key2 in enginesWithoutAll) BDFDB.DiscordUtils.openLink(this.defaults.engines[key2].url.replace(textUrlReplaceString, encodeURIComponent(text)), settings.useChromium, event.shiftKey);
 							}
-							else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(textUrlReplaceString, encodeURIComponent(text)), useChromium, event.shiftKey);
+							else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(textUrlReplaceString, encodeURIComponent(text)), settings.useChromium, event.shiftKey);
 						}
 					}));
 					if (!items.length) items.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
@@ -170,6 +170,18 @@ var GoogleSearchReplace = (_ => {
 					}));
 				}
 			}
+		}
+
+		onSettingsClosed () {
+			if (this.SettingsUpdated) {
+				delete this.SettingsUpdated;
+				this.forceUpdateAll();
+			}
+		}
+		
+		forceUpdateAll () {
+			enabledEngines = BDFDB.ObjectUtils.filter(BDFDB.DataUtils.get(this, "engines"), n => n);
+			settings = BDFDB.DataUtils.get(this, "settings");
 		}
 
 		setLabelsByLanguage () {

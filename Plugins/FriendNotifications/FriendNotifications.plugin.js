@@ -147,10 +147,9 @@ var FriendNotifications = (_ => {
 			};
 			let successSavedAudio = (type, parsedUrl, parsedData) => {
 				if (parsedUrl && parsedData) BDFDB.NotificationUtils.toast(`Sound was saved successfully.`, {type:"success"});
-				let notificationsound = BDFDB.DataUtils.get(this, "notificationsounds", type);
-				notificationsound.url = parsedUrl;
-				notificationsound.song = parsedData;
-				BDFDB.DataUtils.save(notificationsound, this, "notificationsounds", type);
+				notificationSounds[type].url = parsedUrl;
+				notificationSounds[type].song = parsedData;
+				BDFDB.DataUtils.save(notificationSounds[type], this, "notificationsounds", type);
 				this.SettingsUpdated = true;
 			};
 			let createUserList = (users, type, title) => {

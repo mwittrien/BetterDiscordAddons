@@ -4243,7 +4243,6 @@
 	DiscordClassModules.MessagesPopout = BDFDB.ModuleUtils.findByProperties("messagesPopoutWrap", "jumpButton");
 	DiscordClassModules.MessagesPopoutButtons = BDFDB.ModuleUtils.findByProperties("secondary", "tertiary", "button");
 	DiscordClassModules.MessagesPopoutTabBar = BDFDB.ModuleUtils.findByProperties("header", "tabBar", "active");
-	DiscordClassModules.MessagesWelcome = BDFDB.ModuleUtils.findByProperties("welcomeMessage", "h1");
 	DiscordClassModules.MessagesWrap = BDFDB.ModuleUtils.findByProperties("messagesWrapper", "messageGroupBlocked");
 	DiscordClassModules.Modal = BDFDB.ModuleUtils.findByProperties("modal", "sizeLarge");
 	DiscordClassModules.ModalDivider = BDFDB.ModuleUtils.find(m => typeof m.divider == "string" && Object.keys(m).length == 1);
@@ -5252,8 +5251,6 @@
 		messagesscroller: ["MessagesWrap", "scroller"],
 		messagesscrollerinner: ["MessagesWrap", "scrollerInner"],
 		messagesscrollerwrapper: ["MessagesWrap", "scrollerWrap"],
-		messageswelcomemessage: ["MessagesWelcome", "welcomeMessage"],
-		messageswelcomemessageheader: ["MessagesWelcome", "h1"],
 		messageswrapper: ["MessagesWrap", "messagesWrapper"],
 		messageswrapperplaceholder: ["MessagesWrap", "placeholder"],
 		messagesystem: ["Message", "systemMessage"],

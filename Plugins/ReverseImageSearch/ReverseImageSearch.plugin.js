@@ -2,6 +2,7 @@
 
 var ReverseImageSearch = (_ => {
 	const imgUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
+	var enabledEngines = {}, settings = {};
 	
 	return class ReverseImageSearch {
 		getName () {return "ReverseImageSearch";}
@@ -107,6 +108,8 @@ var ReverseImageSearch = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
+				
+				this.forceUpdateAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -125,14 +128,14 @@ var ReverseImageSearch = (_ => {
 		onGuildContextMenu (e) {
 			if (e.instance.props.guild && e.instance.props.target) {
 				let guildIcon = BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.avataricon) ? e.instance.props.target : e.instance.props.target.querySelector(BDFDB.dotCN.guildicon);
-				if (guildIcon && BDFDB.DataUtils.get(this, "settings", "addGuildIconEntry")) this.injectItem(e, guildIcon.tagName == "IMG" ? guildIcon.getAttribute("src") :  guildIcon.style.getPropertyValue("background-image"));
+				if (guildIcon && settings.addGuildIconEntry) this.injectItem(e, guildIcon.tagName == "IMG" ? guildIcon.getAttribute("src") :  guildIcon.style.getPropertyValue("background-image"));
 			}
 		}
 
 		onUserContextMenu (e) {
 			if (e.instance.props.user && e.instance.props.target) {
 				let avatar = BDFDB.DOMUtils.getParent(BDFDB.dotCN.avatarwrapper, e.instance.props.target) && e.instance.props.target.querySelector(BDFDB.dotCN.avatar) || e.instance.props.target;
-				if (avatar && BDFDB.DataUtils.get(this, "settings", "addUserAvatarEntry")) this.injectItem(e, avatar.tagName == "IMG" ? avatar.getAttribute("src") : avatar.style.getPropertyValue("background-image"));
+				if (avatar && settings.addUserAvatarEntry) this.injectItem(e, avatar.tagName == "IMG" ? avatar.getAttribute("src") : avatar.style.getPropertyValue("background-image"));
 			}
 		}
 
@@ -148,8 +151,8 @@ var ReverseImageSearch = (_ => {
 				else if (e.instance.props.target.tagName == "A" && e.instance.props.message.embeds && e.instance.props.message.embeds[0] && e.instance.props.message.embeds[0].type == "image") this.injectItem(e, e.instance.props.target.href);
 				else if (e.instance.props.target.tagName == "IMG") {
 					if (BDFDB.DOMUtils.containsClass(e.instance.props.target.parentElement, BDFDB.disCN.imagewrapper)) this.injectItem(e, e.instance.props.target.src);
-					else if (BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.embedauthoricon) && BDFDB.DataUtils.get(this, "settings", "addUserAvatarEntry")) this.injectItem(e, e.instance.props.target.src);
-					else if (BDFDB.DOMUtils.containsClass(e.instance.props.target, "emoji", "emote", false) && BDFDB.DataUtils.get(this, "settings", "addEmojiEntry")) this.injectItem(e, e.instance.props.target.src);
+					else if (BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.embedauthoricon) && settings.addUserAvatarEntry) this.injectItem(e, e.instance.props.target.src);
+					else if (BDFDB.DOMUtils.containsClass(e.instance.props.target, "emoji", "emote", false) && settings.addEmojiEntry) this.injectItem(e, e.instance.props.target.src);
 				}
 			}
 		}
@@ -161,7 +164,6 @@ var ReverseImageSearch = (_ => {
 					if (url.split("/https/").length != 1) url = "https://" + url.split("/https/")[url.split("/https/").length-1];
 					else if (url.split("/http/").length != 1) url = "http://" + url.split("/http/")[url.split("/http/").length-1];
 				}
-				let enabledEngines = BDFDB.ObjectUtils.filter(BDFDB.DataUtils.get(this, "engines"), n => n);
 				let enginesWithoutAll = BDFDB.ObjectUtils.filter(enabledEngines, n => n != "_all", true);
 				let engineKeys = Object.keys(enginesWithoutAll);
 				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
@@ -170,9 +172,8 @@ var ReverseImageSearch = (_ => {
 						label: this.labels.context_reverseimagesearch_text.replace("...", this.defaults.engines[engineKeys[0]].name),
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "single-search"),
 						action: event => {
-							let useChromium = BDFDB.DataUtils.get(this, "settings", "useChromium");
 							if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
-							BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(imgUrlReplaceString, encodeURIComponent(url)), useChromium, event.shiftKey);
+							BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(imgUrlReplaceString, encodeURIComponent(url)), settings.useChromium, event.shiftKey);
 						}
 					}));
 				}
@@ -183,12 +184,11 @@ var ReverseImageSearch = (_ => {
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "search", key),
 						color: key == "_all" ? BDFDB.LibraryComponents.MenuItems.Colors.DANGER : BDFDB.LibraryComponents.MenuItems.Colors.DEFAULT,
 						action: event => {
-							let useChromium = BDFDB.DataUtils.get(this, "settings", "useChromium");
 							if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
 							if (key == "_all") {
-								for (let key2 in enginesWithoutAll) BDFDB.DiscordUtils.openLink(this.defaults.engines[key2].url.replace(imgUrlReplaceString, encodeURIComponent(url)), useChromium, event.shiftKey);
+								for (let key2 in enginesWithoutAll) BDFDB.DiscordUtils.openLink(this.defaults.engines[key2].url.replace(imgUrlReplaceString, encodeURIComponent(url)), settings.useChromium, event.shiftKey);
 							}
-							else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(imgUrlReplaceString, encodeURIComponent(url)), useChromium, event.shiftKey);
+							else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(imgUrlReplaceString, encodeURIComponent(url)), settings.useChromium, event.shiftKey);
 						}
 					}));
 					if (!items.length) items.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
@@ -205,6 +205,18 @@ var ReverseImageSearch = (_ => {
 					}));
 				}
 			}
+		}
+
+		onSettingsClosed () {
+			if (this.SettingsUpdated) {
+				delete this.SettingsUpdated;
+				this.forceUpdateAll();
+			}
+		}
+		
+		forceUpdateAll () {
+			enabledEngines = BDFDB.ObjectUtils.filter(BDFDB.DataUtils.get(this, "engines"), n => n);
+			settings = BDFDB.DataUtils.get(this, "settings");
 		}
 
 		setLabelsByLanguage () {
