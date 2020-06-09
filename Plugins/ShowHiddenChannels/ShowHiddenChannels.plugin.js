@@ -25,10 +25,70 @@ var ShowHiddenChannels = (_ => {
 		DEFAULT: `M 11.44 0 c 4.07 0 8.07 1.87 8.07 6.35 c 0 4.13 -4.74 5.72 -5.75 7.21 c -0.76 1.11 -0.51 2.67 -2.61 2.67 c -1.37 0 -2.03 -1.11 -2.03 -2.13 c 0 -3.78 5.56 -4.64 5.56 -7.76 c 0 -1.72 -1.14 -2.73 -3.05 -2.73 c -4.07 0 -2.48 4.19 -5.56 4.19 c -1.11 0 -2.07 -0.67 -2.07 -1.94 C 4 2.76 7.56 0 11.44 0 z M 11.28 18.3 c 1.43 0 2.61 1.17 2.61 2.61 c 0 1.43 -1.18 2.61 -2.61 2.61 c -1.43 0 -2.61 -1.17 -2.61 -2.61 C 8.68 19.48 9.85 18.3 11.28 18.3 z`
 	};
 	
+	const userRowComponent = class UserRow extends BdApi.React.Component {
+		componentDidMount() {
+			if (this.props.user.fetchable) {
+				this.props.user.fetchable = false;
+				BDFDB.LibraryModules.UserFetchUtils.getUser(this.props.user.id).then(fetchedUser => {
+					this.props.user = Object.assign({}, fetchedUser, BDFDB.LibraryModules.MemberStore.getMember(this.props.guildId, this.props.user.id) || {});
+					BDFDB.ReactUtils.forceUpdate(this);
+				});
+			}
+		}
+		render() {
+			return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListRow, {
+				prefix: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatar, {
+					className: BDFDB.disCN.listavatar,
+					src: BDFDB.UserUtils.getAvatar(this.props.user.id),
+					status: BDFDB.UserUtils.getStatus(this.props.user.id),
+					size: BDFDB.LibraryComponents.Avatar.Sizes.SIZE_40
+				}),
+				label: [
+					BDFDB.ReactUtils.createElement("span", {
+						className: BDFDB.disCN.username,
+						children: this.props.user.username,
+						style: {color: this.props.user.colorString}
+					}),
+					!this.props.user.discriminator ? null : BDFDB.ReactUtils.createElement("span", {
+						className: BDFDB.disCN.listdiscriminator,
+						children: `#${this.props.user.discriminator}`
+					})
+				]
+			});
+		}
+	};
+	
+	const roleRowComponent = class RoleRow extends BdApi.React.Component {
+		render() {
+			return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListRow, {
+				prefix: BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.disCNS.avataricon + BDFDB.disCNS.listavatar + BDFDB.disCNS.avatariconsizemedium + BDFDB.disCN.avatariconinactive,
+					style: {
+						boxSizing: "border-box",
+						padding: 10
+					},
+					children: BDFDB.ReactUtils.createElement("div", {
+						style: {
+							borderRadius: "50%",
+							height: "100%",
+							width: "100%",
+							backgroundColor: BDFDB.ColorUtils.convert(this.props.role.colorString || BDFDB.DiscordConstants.Colors.PRIMARY_DARK_300, "RGB")
+						}
+					})
+				}),
+				labelClassName: this.props.role.overwritten && BDFDB.disCN.strikethrough,
+				label: BDFDB.ReactUtils.createElement("span", {
+					children: this.props.role.name,
+					style: {color: this.props.role.colorString}
+				})
+			});
+		}
+	};
+	
 	return class ShowHiddenChannels {
 		getName () {return "ShowHiddenChannels";}
 
-		getVersion () {return "2.7.7";}
+		getVersion () {return "2.7.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -36,7 +96,7 @@ var ShowHiddenChannels = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
+				"improved":[["UserId: id...","Instead of just showing the user id when a user is not cached, the plugin now tries to fetch the user"]]
 			};
 			
 			this.patchedModules = {
@@ -384,26 +444,26 @@ var ShowHiddenChannels = (_ => {
 						allowedRoles.push(Object.assign({overwritten: myMember.roles.includes(id) && !allowed}, guild.roles[id]));
 					}
 					else if (channel.permissionOverwrites[id].type == "member" && ((channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].allow || (channel.permissionOverwrites[id].allow | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].allow)) {
-						let user = BDFDB.LibraryModules.UserStore.getUser(id), member = BDFDB.LibraryModules.MemberStore.getMember(guild.id,id);
-						if (user && member) allowedUsers.push(Object.assign({}, user, member));
-						else allowedUsers.push({id: id, username:`UserId: ${id}`});
+						let user = BDFDB.LibraryModules.UserStore.getUser(id);
+						if (user) allowedUsers.push(Object.assign({}, user, BDFDB.LibraryModules.MemberStore.getMember(guild.id, id) || {}));
+						else allowedUsers.push({id: id, username: `UserId: ${id}`, fetchable: true});
 					}
 					if (channel.permissionOverwrites[id].type == "role" && ((channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny || (channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].deny)) {
 						deniedRoles.push(guild.roles[id]);
 						if (guild.roles[id] && guild.roles[id].name == "@everyone") everyoneDenied = true;
 					}
 					else if (channel.permissionOverwrites[id].type == "member" && ((channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.VIEW_CHANNEL) == channel.permissionOverwrites[id].deny || (channel.permissionOverwrites[id].deny | BDFDB.DiscordConstants.Permissions.CONNECT) == channel.permissionOverwrites[id].deny)) {
-						let user = BDFDB.LibraryModules.UserStore.getUser(id), member = BDFDB.LibraryModules.MemberStore.getMember(guild.id, id);
-						if (user && member) deniedUsers.push(Object.assign({}, user, member));
-						else deniedUsers.push({id: id, username:`UserId: ${id}`});
+						let user = BDFDB.LibraryModules.UserStore.getUser(id);
+						if (user) deniedUsers.push(Object.assign({}, user, BDFDB.LibraryModules.MemberStore.getMember(guild.id, id) || {}));
+						else deniedUsers.push({id: id, username: `UserId: ${id}`, fetchable: true});
 					}
 				}
 				if (allowed && !everyoneDenied) allowedRoles.push({name: "@everyone"});
 				let allowedElements = [], deniedElements = [];
-				for (let role of allowedRoles) allowedElements.push(this.createRoleRow(role));
-				for (let user of allowedUsers) allowedElements.push(this.createUserRow(user));
-				for (let role of deniedRoles) deniedElements.push(this.createRoleRow(role));
-				for (let user of deniedUsers) deniedElements.push(this.createUserRow(user));
+				for (let role of allowedRoles) allowedElements.push(BDFDB.ReactUtils.createElement(roleRowComponent, {role: role, guildId: guild.id, channelId: channel.id}));
+				for (let user of allowedUsers) allowedElements.push(BDFDB.ReactUtils.createElement(userRowComponent, {user: user, guildId: guild.id, channelId: channel.id}));
+				for (let role of deniedRoles) deniedElements.push(BDFDB.ReactUtils.createElement(roleRowComponent, {role: role, guildId: guild.id, channelId: channel.id}));
+				for (let user of deniedUsers) deniedElements.push(BDFDB.ReactUtils.createElement(userRowComponent, {user: user, guildId: guild.id, channelId: channel.id}));
 				
 				BDFDB.ModalUtils.open(this, {
 					size: "MEDIUM",
@@ -459,53 +519,6 @@ var ShowHiddenChannels = (_ => {
 					]
 				});
 			}
-		}
-		
-		createRoleRow (role) {
-			return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListRow, {
-				prefix: BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.disCNS.avataricon + BDFDB.disCNS.listavatar + BDFDB.disCNS.avatariconsizemedium + BDFDB.disCN.avatariconinactive,
-					style: {
-						boxSizing: "border-box",
-						padding: 10
-					},
-					children: BDFDB.ReactUtils.createElement("div", {
-						style: {
-							borderRadius: "50%",
-							height: "100%",
-							width: "100%",
-							backgroundColor: BDFDB.ColorUtils.convert(role.colorString || BDFDB.DiscordConstants.Colors.PRIMARY_DARK_300, "RGB")
-						}
-					})
-				}),
-				labelClassName: role.overwritten && BDFDB.disCN.strikethrough,
-				label: BDFDB.ReactUtils.createElement("span", {
-					children: role.name,
-					style: {color: role.colorString}
-				})
-			});
-		}
-		
-		createUserRow (user) {
-			return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListRow, {
-				prefix: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatar, {
-					className: BDFDB.disCN.listavatar,
-					src: BDFDB.UserUtils.getAvatar(user.id),
-					status: BDFDB.UserUtils.getStatus(user.id),
-					size: BDFDB.LibraryComponents.Avatar.Sizes.SIZE_40
-				}),
-				label: [
-					BDFDB.ReactUtils.createElement("span", {
-						className: BDFDB.disCN.username,
-						children: user.username,
-						style: {color: user.colorString}
-					}),
-					!user.discriminator ? null : BDFDB.ReactUtils.createElement("span", {
-						className: BDFDB.disCN.listdiscriminator,
-						children: `#${user.discriminator}`
-					})
-				]
-			});
 		}
 
 		setLabelsByLanguage () {
