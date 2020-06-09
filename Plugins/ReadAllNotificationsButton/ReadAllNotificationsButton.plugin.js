@@ -2,6 +2,7 @@
 
 var ReadAllNotificationsButton = (_ => {
 	var blacklist, clearing;
+	var settings = {};
 	
 	return class ReadAllNotificationsButton {
 		getName () {return "ReadAllNotificationsButton";}
@@ -180,7 +181,6 @@ var ReadAllNotificationsButton = (_ => {
 		onSettingsClosed () {
 			if (this.SettingsUpdated) {
 				delete this.SettingsUpdated;
-
 				this.forceUpdateAll();
 			}
 		}
