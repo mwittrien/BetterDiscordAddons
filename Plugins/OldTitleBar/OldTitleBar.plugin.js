@@ -184,7 +184,7 @@ var OldTitleBar = (_ => {
 			if (this.SettingsUpdated) {
 				delete this.SettingsUpdated;
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 			}
 		}
 

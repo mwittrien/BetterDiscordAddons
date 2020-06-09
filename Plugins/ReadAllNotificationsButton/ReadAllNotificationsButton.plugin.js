@@ -159,7 +159,7 @@ var ReadAllNotificationsButton = (_ => {
 				let loadedBlacklist = BDFDB.DataUtils.load(this, "blacklist");
 				this.saveBlacklist(!BDFDB.ArrayUtils.is(loadedBlacklist) ? [] : loadedBlacklist);
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -168,7 +168,7 @@ var ReadAllNotificationsButton = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 				
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -176,6 +176,14 @@ var ReadAllNotificationsButton = (_ => {
 
 
 		// Begin of own functions
+
+		onSettingsClosed () {
+			if (this.SettingsUpdated) {
+				delete this.SettingsUpdated;
+
+				this.forceUpdateAll();
+			}
+		}
 
 		onUserContextMenu (e) {
 			if (e.instance.props.channel && e.type == "DMUserContextMenu") {
@@ -218,7 +226,7 @@ var ReadAllNotificationsButton = (_ => {
 						style: {height: 20},
 						children: "read all",
 						onClick: _ => {
-							let settings = BDFDB.DataUtils.get(this, "settings"), clear = _ => {
+							let clear = _ => {
 								if (settings.includeGuilds) this.markGuildsAsRead(settings.includeMuted ? BDFDB.GuildUtils.getAll() : BDFDB.GuildUtils.getUnread());
 								if (settings.includeDMs) BDFDB.DMUtils.markAsRead(BDFDB.DMUtils.getAll());
 							};
@@ -284,7 +292,6 @@ var ReadAllNotificationsButton = (_ => {
 		}
 
 		processRecentsHeader (e) {
-			let settings = BDFDB.DataUtils.get(this, "settings");
 			if (settings.addClearButton && e.instance.props.tab == "Recent Mentions") e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: `${BDFDB.LanguageUtils.LanguageStrings.CLOSE} (${BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL})`,
@@ -337,6 +344,12 @@ var ReadAllNotificationsButton = (_ => {
 		saveBlacklist (savedBlacklist) {
 			blacklist = savedBlacklist;
 			BDFDB.DataUtils.save(savedBlacklist, this, "blacklist");
+		}
+		
+		forceUpdateAll () {
+			settings = BDFDB.DataUtils.get(this, "settings");
+			
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 
 		setLabelsByLanguage () {
