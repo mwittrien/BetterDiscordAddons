@@ -753,14 +753,14 @@ body:before {
 .base-34jWEe h1 {											/* welcomemessage		dmchannel							*/
 	color: rgb(var(--fontwhite1));
 }
-.emptyChannelIcon-3IXV5M {									/* welcomemessage		emptychannelicon					*/
+.emptyChannelIcon-3IXV5M {									/* welcomemessage		empty channelicon					*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 }
-.welcomeMessage-3_Mcht .h1-1IDj26 {							/* welcomemessage		header								*/
-	color: rgb(var(--fontwhite1));
+.card-1yV8cG {												/* welcomemessage		first steps card					*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
-.welcomeMessage-3_Mcht p {									/* welcomemessage		line								*/
-	color: rgb(var(--fontwhite2));
+.card-1yV8cG:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.5);
 }
 .divider-JfaTT5:not(.isUnread-3Ef-o9) {						/* divider				time								*/
 	border-color: rgba(var(--fontwhite1), 0.2);
