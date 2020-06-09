@@ -3934,6 +3934,7 @@
 		settingsTableList: "settingsTableList-f6sW2y",
 		supporter: "supporter-Z3FfwL",
 		svgIcon: "icon-GhnIRB",
+		svgIconWrapper: "iconWrapper-g20jFn",
 		table: "table-moqjM0",
 		tableBodyCell: "bodyCell-dQam9V",
 		tableHeader: "header-g67q9_",
@@ -5549,6 +5550,7 @@
 		stopanimations: ["NotFound", "stopAnimations"],
 		subtext: ["NotFound", "subtext"],
 		svgicon: ["BDFDB", "svgIcon"],
+		svgiconwrapper: ["BDFDB", "svgIconWrapper"],
 		switch: ["Switch", "switch"],
 		switchdisabled: ["Switch", "switchDisabled"],
 		switchenabled: ["Switch", "switchEnabled"],
@@ -8880,6 +8882,11 @@
 			left: 0;
 		}
 		
+		${BDFDB.dotCN.svgiconwrapper} {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
 		${BDFDB.dotCN.svgicon} {
 			color: var(--interactive-normal);
 		}
