@@ -1,13 +1,13 @@
 //META{"name":"SpellCheck","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpellCheck","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/SpellCheck/SpellCheck.plugin.js"}*//
 
 var SpellCheck = (_ => {
-	var languages, dictionaries, langDictionaries, languageToasts, checkTimeout;
+	var languages, dictionaries, langDictionaries, languageToasts, checkTimeout, currentText;
 	var settings = {}, choices = {}, amounts = {};
 	
 	return class SpellCheck {
 		getName () {return "SpellCheck";}
 
-		getVersion () {return "1.5.0";}
+		getVersion () {return "1.5.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -243,36 +243,40 @@ var SpellCheck = (_ => {
 		}
 
 		processSlateChannelTextArea (e) {
-			BDFDB.DOMUtils.remove(e.node.parentElement.querySelectorAll(BDFDB.dotCN._spellcheckoverlay));
-			BDFDB.TimeUtils.clear(checkTimeout);
-			checkTimeout = BDFDB.TimeUtils.timeout(_ => {
-				let overlay = e.node.cloneNode(true), wrapper = BDFDB.DOMUtils.getParent(BDFDB.dotCN.textareainner, e.node);
-				BDFDB.DOMUtils.addClass(overlay, BDFDB.disCN._spellcheckoverlay);
-				let style = Object.assign({}, getComputedStyle(e.node));
-				for (let i in style) if (i.indexOf("webkit") == -1 && isNaN(parseInt(i))) overlay.style[i] = style[i];
-				overlay.style.setProperty("color", "transparent", "important");
-				overlay.style.setProperty("background", "none", "important");
-				overlay.style.setProperty("mask", "none", "important");
-				overlay.style.setProperty("pointer-events", "none", "important");
-				overlay.style.setProperty("position", "absolute", "important");
-				overlay.style.setProperty("left", BDFDB.DOMUtils.getRects(e.node).left - BDFDB.DOMUtils.getRects(wrapper).left + "px", "important");
-				overlay.style.setProperty("width", BDFDB.DOMUtils.getRects(e.node).width - style.paddingLeft - style.paddingRight + "px", "important");
-				overlay.style.setProperty("height", style.height, "important");
-				for (let child of overlay.querySelectorAll("*")) {
-					child.style.setProperty("color", "transparent", "important");
-					child.style.setProperty("background-color", "transparent", "important");
-					child.style.setProperty("border-color", "transparent", "important");
-					child.style.setProperty("text-shadow", "none", "important");
-					child.style.setProperty("pointer-events", "none", "important");
-					if (child.getAttribute("data-slate-string") && child.parentElement.getAttribute("data-slate-leaf")) {
-						let newline = child.querySelector("br");
-						if (newline) newline.remove();
-						child.innerHTML = this.spellCheckText(child.textContent);
-						if (newline) child.appendChild(newline);
+			let newText = BDFDB.LibraryModules.SlateUtils.serialize(e.instance.props.value);
+			if (newText != currentText) {
+				currentText = newText;
+				BDFDB.DOMUtils.remove(e.node.parentElement.querySelectorAll(BDFDB.dotCN._spellcheckoverlay));
+				BDFDB.TimeUtils.clear(checkTimeout);
+				checkTimeout = BDFDB.TimeUtils.timeout(_ => {
+					let overlay = e.node.cloneNode(true), wrapper = BDFDB.DOMUtils.getParent(BDFDB.dotCN.textareainner, e.node);
+					BDFDB.DOMUtils.addClass(overlay, BDFDB.disCN._spellcheckoverlay);
+					let style = Object.assign({}, getComputedStyle(e.node));
+					for (let i in style) if (i.indexOf("webkit") == -1 && isNaN(parseInt(i))) overlay.style[i] = style[i];
+					overlay.style.setProperty("color", "transparent", "important");
+					overlay.style.setProperty("background", "none", "important");
+					overlay.style.setProperty("mask", "none", "important");
+					overlay.style.setProperty("pointer-events", "none", "important");
+					overlay.style.setProperty("position", "absolute", "important");
+					overlay.style.setProperty("left", BDFDB.DOMUtils.getRects(e.node).left - BDFDB.DOMUtils.getRects(wrapper).left + "px", "important");
+					overlay.style.setProperty("width", BDFDB.DOMUtils.getRects(e.node).width - style.paddingLeft - style.paddingRight + "px", "important");
+					overlay.style.setProperty("height", style.height, "important");
+					for (let child of overlay.querySelectorAll("*")) {
+						child.style.setProperty("color", "transparent", "important");
+						child.style.setProperty("background-color", "transparent", "important");
+						child.style.setProperty("border-color", "transparent", "important");
+						child.style.setProperty("text-shadow", "none", "important");
+						child.style.setProperty("pointer-events", "none", "important");
+						if (child.getAttribute("data-slate-string") && child.parentElement.getAttribute("data-slate-leaf")) {
+							let newline = child.querySelector("br");
+							if (newline) newline.remove();
+							child.innerHTML = this.spellCheckText(child.textContent);
+							if (newline) child.appendChild(newline);
+						}
 					}
-				}
-				e.node.parentElement.appendChild(overlay);
-			}, 300);
+					e.node.parentElement.appendChild(overlay);
+				}, 300);
+			}
 		}
 
 		spellCheckText (string) {
@@ -410,13 +414,13 @@ var SpellCheck = (_ => {
 				let amount = 0;
 				for (let value of Object.keys(similarities).sort().reverse()) {
 					for (let similarWord of similarities[value]) {
-						if (amount < maxAmount && !similarWords.includes(similarWord)) {
+						if (amount < amounts.maxSimilarAmount && !similarWords.includes(similarWord)) {
 							similarWords.push(similarWord);
 							amount++;
 						}
-						if (amount >= maxAmount) break;
+						if (amount >= amounts.maxSimilarAmount) break;
 					}
-					if (amount >= maxAmount) break;
+					if (amount >= amounts.maxSimilarAmount) break;
 				}
 			}
 			return similarWords;
