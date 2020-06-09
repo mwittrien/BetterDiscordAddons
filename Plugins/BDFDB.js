@@ -1680,6 +1680,7 @@
 	LibraryModules.UnreadGuildUtils = BDFDB.ModuleUtils.findByProperties("hasUnread", "getUnreadGuilds");
 	LibraryModules.UnreadChannelUtils = BDFDB.ModuleUtils.findByProperties("getUnreadCount", "getOldestUnreadMessageId");
 	LibraryModules.UploadUtils = BDFDB.ModuleUtils.findByProperties("upload", "instantBatchUpload");
+	LibraryModules.UserFetchUtils = BDFDB.ModuleUtils.findByProperties("fetchCurrentUser", "getUser");
 	LibraryModules.UserNameUtils = BDFDB.ModuleUtils.findByProperties("getName", "getNickname");
 	LibraryModules.UserStore = BDFDB.ModuleUtils.findByProperties("getUser", "getUsers");
 	LibraryModules.Utilities = BDFDB.ModuleUtils.findByProperties("flatMap", "cloneDeep");
