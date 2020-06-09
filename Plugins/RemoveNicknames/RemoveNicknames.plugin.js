@@ -1,6 +1,8 @@
 //META{"name":"RemoveNicknames","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveNicknames","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/RemoveNicknames/RemoveNicknames.plugin.js"}*//
 
 var RemoveNicknames = (_ => {
+	var settings = {};
+	
 	return class RemoveNicknames {
 		getName () {return "RemoveNicknames";}
 
@@ -120,33 +122,33 @@ var RemoveNicknames = (_ => {
 		onSettingsClosed (e) {
 			if (this.SettingsUpdated) {
 				delete this.SettingsUpdated;
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 			}
 		}
 
 		processAutocompleteUserResult (e) {
-			if (e.instance.props.user && e.instance.props.nick && BDFDB.DataUtils.get(this, "settings", "changeInAutoComplete")) {
+			if (e.instance.props.user && e.instance.props.nick && settings.changeInAutoComplete) {
 				let newName = this.getNewName(e.instance.props.user);
 				if (newName) e.instance.props.nick = newName;
 			}
 		}
 
 		processVoiceUser (e) {
-			if (e.instance.props.user && e.instance.props.nick && BDFDB.DataUtils.get(this, "settings", "changeInVoiceChat")) {
+			if (e.instance.props.user && e.instance.props.nick && settings.changeInVoiceChat) {
 				let newName = this.getNewName(e.instance.props.user);
 				if (newName) e.instance.props.nick = newName;
 			}
 		}
 
 		processMemberListItem (e) {
-			if (e.instance.props.user && e.instance.props.nick && BDFDB.DataUtils.get(this, "settings", "changeInMemberList")) {
+			if (e.instance.props.user && e.instance.props.nick && settings.changeInMemberList) {
 				let newName = this.getNewName(e.instance.props.user);
 				if (newName) e.instance.props.nick = newName;
 			}
 		}
 
 		processTypingUsers (e) {
-			if (BDFDB.ObjectUtils.is(e.instance.props.typingUsers) && Object.keys(e.instance.props.typingUsers).length && BDFDB.DataUtils.get(this, "settings", "changeInTyping")) {
+			if (BDFDB.ObjectUtils.is(e.instance.props.typingUsers) && Object.keys(e.instance.props.typingUsers).length && settings.changeInTyping) {
 				let users = Object.keys(e.instance.props.typingUsers).filter(id => id != BDFDB.UserUtils.me.id).filter(id => !BDFDB.LibraryModules.FriendUtils.isBlocked(id)).map(id => BDFDB.LibraryModules.UserStore.getUser(id)).filter(user => user);
 				if (users.length) {
 					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN.typingtext]]});
@@ -167,7 +169,7 @@ var RemoveNicknames = (_ => {
 		}
 		
 		processMessageContent (e) {
-			if (BDFDB.ArrayUtils.is(e.instance.props.content) && BDFDB.DataUtils.get(this, "settings", "changeInMentions")) for (let ele of e.instance.props.content) {
+			if (BDFDB.ArrayUtils.is(e.instance.props.content) && settings.changeInMentions) for (let ele of e.instance.props.content) {
 				if (BDFDB.ReactUtils.isValidElement(ele) && ele.type && (ele.type.displayName || "").toLowerCase().indexOf("popout") > -1 && typeof ele.props.render == "function") {
 					if (BDFDB.ReactUtils.getValue(ele, "props.children.type.displayName") == "Mention") {
 						let newName = this.getNewName(BDFDB.LibraryModules.UserStore.getUser(ele.props.render().props.userId));
@@ -175,7 +177,7 @@ var RemoveNicknames = (_ => {
 					}
 				}
 			}
-			if (e.instance.props.message.type != BDFDB.DiscordConstants.MessageTypes.DEFAULT && e.instance.props.message.nick && BDFDB.DataUtils.get(this, "settings", "changeInChatWindow")) {
+			if (e.instance.props.message.type != BDFDB.DiscordConstants.MessageTypes.DEFAULT && e.instance.props.message.nick && settings.changeInChatWindow) {
 				let newName = this.getNewName(e.instance.props.message.author);
 				if (newName) {
 					e.instance.props.message = new BDFDB.DiscordObjects.Message(Object.assign({}, e.instance.props.message, {nick: newName}));
@@ -186,7 +188,6 @@ var RemoveNicknames = (_ => {
 
 		getNewName (user, wrapper) {
 			if (!user) return null;
-			let settings = BDFDB.DataUtils.get(this, "settings");
 			let member = BDFDB.LibraryModules.MemberStore.getMember(BDFDB.LibraryModules.LastGuildStore.getGuildId(), user.id) || {};
 			if (!member.nick || user.id == BDFDB.UserUtils.me.id && !settings.replaceOwn || user.bot && !settings.replaceBots) return null;
 			let username = (BDFDB.BDUtils.isPluginEnabled("EditUsers") && BDFDB.DataUtils.load("EditUsers", "users", user.id) || {}).name || user.username;
@@ -194,6 +195,8 @@ var RemoveNicknames = (_ => {
 		}
 		
 		forceUpdateAll () {
+			settings = BDFDB.DataUtils.get(this, "settings");
+			
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 			BDFDB.MessageUtils.rerenderAll();
 		}
