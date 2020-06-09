@@ -6,7 +6,7 @@ var ChatAliases = (_ => {
 	return class ChatAliases {
 		getName () {return "ChatAliases";}
 
-		getVersion () {return "2.1.5";}
+		getVersion () {return "2.1.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -354,7 +354,7 @@ var ChatAliases = (_ => {
 					e.instance.state.autocompletes.commands = e.instance.state.autocompletes.commands.filter(n => n);
 					let currentLastWord = BDFDB.SlateUtils.getCurrentWord(e.instance.props.editorRef.current).word || "";
 					let commandAliases = BDFDB.ObjectUtils.filter(aliases, key => key.startsWith("/"), true);
-					if (currentLastWord.length >= minLength) for (let word in commandAliases) {
+					if (currentLastWord.length >= amounts.minAliasLength) for (let word in commandAliases) {
 						if (e.instance.state.autocompletes.commands.length >= BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS) break;
 						let aliasData = commandAliases[word];
 						let command = {command: word.slice(1), description: BDFDB.StringUtils.insertNRST(aliasData.replace), alias:true};
