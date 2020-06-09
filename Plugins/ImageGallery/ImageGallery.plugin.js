@@ -2,6 +2,7 @@
 
 var ImageGallery = (_ => {
 	var eventFired, clickedImage;
+	var settings = {};
 	
 	return class ImageGallery {
 		getName () {return "ImageGallery";}
@@ -25,6 +26,9 @@ var ImageGallery = (_ => {
 		}
 
 		initConstructor () {
+			eventFired = false;
+			clickedImage = null;
+				
 			this.defaults = {
 				settings: {
 					addDetails: 	{value:true,			description:"Adds details (name, size, amount) to the Image Modal"}
@@ -130,16 +134,13 @@ var ImageGallery = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
-				
-				eventFired = false;
-				clickedImage = null;
 
 				BDFDB.ListenerUtils.add(this, document.body, "click", BDFDB.dotCNS.message + BDFDB.dotCNS.imagewrapper + "img", e => {
 					clickedImage = e.target;
 					BDFDB.TimeUtils.timeout(_ => {clickedImage = null;});
 				});
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -148,7 +149,7 @@ var ImageGallery = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -156,6 +157,13 @@ var ImageGallery = (_ => {
 
 
 		// Begin of own functions
+		
+		onSettingsClosed (instance, wrapper, returnvalue) {
+			if (this.SettingsUpdated) {
+				delete this.SettingsUpdated;
+				this.forceUpdateAll();
+			}
+		}
 
 		processImageModal (e) {
 			if (clickedImage) e.instance.props.cachedImage = clickedImage;
@@ -179,7 +187,7 @@ var ImageGallery = (_ => {
 						if (e.instance.nextRef) e.returnvalue.props.children.splice(1, 0, this.createImageWrapper(e.instance, e.instance.nextRef, "next", BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_CARET));
 						else this.loadImage(e.instance, next, "next");
 					}
-					if (BDFDB.DataUtils.get(this, "settings", "addDetails")) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
+					if (settings.addDetails) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN._imagegallerydetailswrapper,
 						children: [
 							{label: "Source", text: e.instance.props.src},
@@ -266,20 +274,20 @@ var ImageGallery = (_ => {
 		}
 		
 		loadImage (instance, img, type) {
-			let imagethrowaway = document.createElement("img");
+			let imageThrowaway = document.createElement("img");
 			let src = this.getImageSrc(img);
-			imagethrowaway.src = src;
-			imagethrowaway.onload = _ => {
+			imageThrowaway.src = src;
+			imageThrowaway.onload = _ => {
 				let arects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount));
-				let resizeY = (arects.height/imagethrowaway.naturalHeight) * 0.65, resizeX = (arects.width/imagethrowaway.naturalWidth) * 0.8;
+				let resizeY = (arects.height/imageThrowaway.naturalHeight) * 0.65, resizeX = (arects.width/imageThrowaway.naturalWidth) * 0.8;
 				let resize = resizeX < resizeY ? resizeX : resizeY;
-				let newHeight = imagethrowaway.naturalHeight * resize;
-				let newWidth = imagethrowaway.naturalWidth * resize;
+				let newHeight = imageThrowaway.naturalHeight * resize;
+				let newWidth = imageThrowaway.naturalWidth * resize;
 				instance[type + "Img"] = img;
 				instance[type + "Ref"] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.LazyImage, {
 					src: src,
-					height: imagethrowaway.naturalHeight,
-					width: imagethrowaway.naturalWidth,
+					height: imageThrowaway.naturalHeight,
+					width: imageThrowaway.naturalWidth,
 					maxHeight: newHeight,
 					maxWidth: newWidth,
 				});
@@ -309,6 +317,12 @@ var ImageGallery = (_ => {
 			document.removeEventListener("keyup", document.keyupImageGalleryListener);
 			delete document.keydownImageGalleryListener;
 			delete document.keyupImageGalleryListener;
+		}
+		
+		forceUpdateAll () {
+			settings = BDFDB.DataUtils.get(this, "settings");
+			
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 	}
 })();

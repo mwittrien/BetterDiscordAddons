@@ -23,6 +23,7 @@ var GoogleTranslateOption = (_ => {
 	};
 	
 	var languages, translating, isTranslating, translatedMessages, oldMessages;
+	var settings = {}, choices = {}, engines = {}, favorites = {};
 	
 	return class GoogleTranslateOption {
 		getName () {return "GoogleTranslateOption";}
@@ -139,9 +140,7 @@ var GoogleTranslateOption = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 
-				this.setLanguages();
-
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -151,8 +150,8 @@ var GoogleTranslateOption = (_ => {
 				this.stopping = true;
 				
 				translating = false;
-				
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+
+				this.forceUpdateAll();
 
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -164,8 +163,7 @@ var GoogleTranslateOption = (_ => {
 		onSettingsClosed (instance, wrapper, returnvalue) {
 			if (this.SettingsUpdated) {
 				delete this.SettingsUpdated;
-				this.setLanguages();
-				BDFDB.ModuleUtils.forceAllUpdates(this, ["ChannelTextAreaForm", "ChannelTextAreaContainer"]);
+				this.forceUpdateAll();
 			}
 		}
 
@@ -219,7 +217,7 @@ var GoogleTranslateOption = (_ => {
 								if (foundTranslation && foundInput && foundOutput) {
 									if (document.querySelector(".googletranslate-tooltip")) {
 										BDFDB.ContextMenuUtils.close(e.instance);
-										BDFDB.DiscordUtils.openLink(this.getGoogleTranslatePageURL(foundInput.id, foundOutput.id, text), BDFDB.DataUtils.get(this, "settings", "useChromium"));
+										BDFDB.DiscordUtils.openLink(this.getGoogleTranslatePageURL(foundInput.id, foundOutput.id, text), settings.useChromium);
 									}
 									else createTooltip();
 								}
@@ -264,7 +262,7 @@ var GoogleTranslateOption = (_ => {
 				if (translating) {
 					e2.stopOriginalMethodCall();
 					this.translateText(e2.methodArguments[0], "message", (translation, input, output) => {
-						translation = !translation ? e2.methodArguments[0] : (BDFDB.DataUtils.get(this, "settings", "sendOriginalMessage") ? (e2.methodArguments[0] + "\n\n" + translation) : translation);
+						translation = !translation ? e2.methodArguments[0] : (settings.sendOriginalMessage ? (e2.methodArguments[0] + "\n\n" + translation) : translation);
 						e2.originalMethod(translation);
 					});
 					return Promise.resolve({
@@ -281,7 +279,7 @@ var GoogleTranslateOption = (_ => {
 		}
 		
 		processChannelTextAreaContainer (e) {
-			if (BDFDB.DataUtils.get(this, "settings", "addTranslateButton")) {
+			if (settings.addTranslateButton) {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ChannelEditorContainer"});
 				if (index > -1 && children[index].props.type == BDFDB.DiscordConstants.TextareaTypes.NORMAL && !children[index].props.disabled) {
 					let [children2, index2] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.textareapickerbuttons]]});
@@ -429,8 +427,11 @@ var GoogleTranslateOption = (_ => {
 							let input = this.getLanguageChoice("input", place);
 							let output = this.getLanguageChoice("output", place);
 							input = input == "auto" ? "en" : input;
-							BDFDB.DataUtils.save(output, this, "choices", "input" + place);
-							BDFDB.DataUtils.save(input, this, "choices", "output" + place);
+							
+							choices["input" + place] = output;
+							choices["output" + place] = input;
+							BDFDB.DataUtils.save(choices, this, "choices");
+							
 							for (let selectIns of BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(e._targetInst, {name:["BDFDB_Popout", "BDFDB_SettingsPanel"], up:true}), {name:"BDFDB_Select", all:true, noCopies:true})) if (selectIns && selectIns.props && selectIns.props.id && this.defaults.choices[selectIns.props.id] && this.defaults.choices[selectIns.props.id].place == place) {
 								selectIns.props.value = this.defaults.choices[selectIns.props.id].direction == "input" ? output : input;
 								BDFDB.ReactUtils.forceUpdate(selectIns);
@@ -460,8 +461,9 @@ var GoogleTranslateOption = (_ => {
 									inPopout ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FavButton, {
 										isFavorite: languages[lang.value].fav == 0,
 										onClick: value => {
-											if (value) BDFDB.DataUtils.save(true, this, "favorites", lang.value);
-											else BDFDB.DataUtils.remove(this, "favorites", lang.value);
+											if (value) favorites[lang.value] = true;
+											else delete favorites[lang.value];
+											BDFDB.DataUtils.save(favorites, this, "favorites");
 											this.setLanguages();
 										}
 									}) : null
@@ -469,7 +471,8 @@ var GoogleTranslateOption = (_ => {
 							}) : null;
 						},
 						onChange: lang => {
-							BDFDB.DataUtils.save(lang.value, this, "choices", key);
+							choices[key] = lang.value;
+							BDFDB.DataUtils.save(choices, this, "choices");
 						}
 					})
 				}));
@@ -477,34 +480,32 @@ var GoogleTranslateOption = (_ => {
 					className: BDFDB.disCN.marginbottom8
 				}));
 			}
-			let engines = BDFDB.DataUtils.get(this, "engines");
-			for (let key in engines) {
-				selects.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-					title: this.defaults.engines[key].description,
-					className: BDFDB.disCN.marginbottom8,
-					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
-						menuPlacement: inPopout ? BDFDB.LibraryComponents.Select.MenuPlacements.TOP : BDFDB.LibraryComponents.Select.MenuPlacements.BOTTOM,
-						value: engines[key],
-						id: key,
-						options: Object.keys(translationEngines).map(engineKey => {return {value:engineKey, label:translationEngines[engineKey].name}}),
-						searchable: true,
-						onChange: (engine, instance) => {
-							BDFDB.DataUtils.save(engine.value, this, "engines", key);
-							this.setLanguages();
-							let popoutInstance = BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_PopoutContainer", up:true});
-							if (popoutInstance) {
-								popoutInstance.close();
-								popoutInstance.handleClick();
-							}
+			for (let key in engines) selects.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+				title: this.defaults.engines[key].description,
+				className: BDFDB.disCN.marginbottom8,
+				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
+					menuPlacement: inPopout ? BDFDB.LibraryComponents.Select.MenuPlacements.TOP : BDFDB.LibraryComponents.Select.MenuPlacements.BOTTOM,
+					value: engines[key],
+					id: key,
+					options: Object.keys(translationEngines).map(engineKey => {return {value:engineKey, label:translationEngines[engineKey].name}}),
+					searchable: true,
+					onChange: (engine, instance) => {
+						engines[key] = engine.value;
+						BDFDB.DataUtils.save(engines, this, "engines");
+						this.setLanguages();
+						let popoutInstance = BDFDB.ReactUtils.findOwner(instance, {name: "BDFDB_PopoutContainer", up:true});
+						if (popoutInstance) {
+							popoutInstance.close();
+							popoutInstance.handleClick();
 						}
-					})
-				}));
-			}
+					}
+				})
+			}));
 			return selects;
 		}
 
 		setLanguages () {
-			let languageIds = (translationEngines[BDFDB.DataUtils.get(this, "engines", "translator")] || {}).languages || [];
+			let languageIds = (translationEngines[engines.translator] || {}).languages || [];
 			languages = Object.assign(
 				{
 					auto: {
@@ -528,7 +529,6 @@ var GoogleTranslateOption = (_ => {
 					}
 				}
 			);
-			let favorites = BDFDB.DataUtils.load(this, "favorites");
 			for (let id in languages) languages[id].fav = favorites[id] != undefined ? 0 : 1;
 			languages = BDFDB.ObjectUtils.sort(languages, "fav");
 		}
@@ -536,7 +536,7 @@ var GoogleTranslateOption = (_ => {
 		getLanguageChoice (direction, place) {
 			this.setLanguages();
 			let type = place === undefined ? direction : direction.toLowerCase() + place.charAt(0).toUpperCase() + place.slice(1).toLowerCase();
-			let choice = BDFDB.DataUtils.get(this, "choices", type);
+			let choice = choices[type];
 			choice = languages[choice] ? choice : Object.keys(languages)[0];
 			choice = type.indexOf("output") > -1 && choice == "auto" ? "en" : choice;
 			return choice;
@@ -608,10 +608,9 @@ var GoogleTranslateOption = (_ => {
 					finishTranslation(newtext);
 				}
 				else {
-					let translator = BDFDB.DataUtils.get(this, "engines", "translator");
-					if (translationEngines[translator] && typeof this[translationEngines[translator].funcName] == "function") {
+					if (translationEngines[engines.translator] && typeof this[translationEngines[engines.translator].funcName] == "function") {
 						isTranslating = true;
-						this[translationEngines[translator].funcName].apply(this, [{input, output, text:newtext, specialcase, engine:translationEngines[translator]}, finishTranslation]);
+						this[translationEngines[engines.translator].funcName].apply(this, [{input, output, text:newtext, specialcase, engine:translationEngines[engines.translator]}, finishTranslation]);
 					}
 					else finishTranslation();
 				}
@@ -853,6 +852,16 @@ var GoogleTranslateOption = (_ => {
 		getLanguageName (language) {
 			if (language.name.startsWith("Discord")) return language.name.slice(0, -1) + (language.ownlang && languages[language.id].name != language.ownlang ? ` / ${language.ownlang}` : "") + ")";
 			else return language.name + (language.ownlang && language.name != language.ownlang ? ` / ${language.ownlang}` : "");
+		}
+		
+		forceUpdateAll () {
+			settings = BDFDB.DataUtils.get(this, "settings");
+			choices = BDFDB.DataUtils.get(this, "choices");
+			engines = BDFDB.DataUtils.get(this, "engines");
+			favorites = BDFDB.DataUtils.load(this, "favorites");
+			
+			this.setLanguages();
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 
 		setLabelsByLanguage () {
