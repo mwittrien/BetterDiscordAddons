@@ -7,7 +7,7 @@ var OwnerTag = (_ => {
 		OWNER: 2
 	};
 	
-	var settings = {};
+	var settings = {}, inputs = {};
 	
 	return class OwnerTag {
 		getName () {return "OwnerTag";}
@@ -253,7 +253,7 @@ var OwnerTag = (_ => {
 						backgroundColor: config.inverted ? (isBright && settings.useBlackFont ? "black" : null) : tagColor,
 						color: !config.inverted ? (isBright && settings.useBlackFont ? "black" : null) : tagColor
 					},
-					tag: BDFDB.DataUtils.get(this, "inputs", isOwner ? "ownTagName" : "ownAdminTagName")
+					tag: inputs[isOwner ? "ownTagName" : "ownAdminTagName"]
 				});
 			}
 			children.splice(insertIndex, 0, tag);
@@ -271,6 +271,7 @@ var OwnerTag = (_ => {
 	
 		forceUpdateAll () {
 			settings = BDFDB.DataUtils.get(this, "settings");
+			inputs = BDFDB.DataUtils.get(this, "inputs");
 			
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 			BDFDB.MessageUtils.rerenderAll();
