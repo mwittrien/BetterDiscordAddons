@@ -1,6 +1,8 @@
 //META{"name":"SteamProfileLink","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SteamProfileLink","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/SteamProfileLink/SteamProfileLink.plugin.js"}*//
 
 var SteamProfileLink = (_ => {
+	var settings = {};
+	
 	return class SteamProfileLink {
 		getName () {return "SteamProfileLink";}
 
@@ -73,6 +75,8 @@ var SteamProfileLink = (_ => {
 				BDFDB.PluginUtils.init(this);
 
 				BDFDB.ListenerUtils.add(this, document, "click", "a[href^='https://steamcommunity.'], a[href^='https://help.steampowered.'], a[href^='https://store.steampowered.'], a[href*='a.akamaihd.net/'][href*='steam']", e => {this.openInSteam(e, e.currentTarget.href);});
+				
+				this.forceUpdateAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -86,12 +90,23 @@ var SteamProfileLink = (_ => {
 			}
 		}
 
+		onSettingsClosed () {
+			if (this.SettingsUpdated) {
+				delete this.SettingsUpdated;
+				this.forceUpdateAll();
+			}
+		}
+
 		openInSteam (e, url) {
 			BDFDB.ListenerUtils.stopEvent(e);
 			BDFDB.LibraryRequires.request(url, (error, response, body) => {
 				if (BDFDB.LibraryRequires.electron.shell.openExternal("steam://openurl/" + response.request.href));
-				else BDFDB.DiscordUtils.openLink(response.request.href, BDFDB.DataUtils.get(this, "settings", "useChromium"));
+				else BDFDB.DiscordUtils.openLink(response.request.href, settings.useChromium);
 			});
+		}
+		
+		forceUpdateAll () {
+			settings = BDFDB.DataUtils.get(this, "settings");
 		}
 	}
 })();
