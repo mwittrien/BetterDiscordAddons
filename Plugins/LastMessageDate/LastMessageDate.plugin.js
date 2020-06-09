@@ -277,14 +277,14 @@ var LastMessageDate = (_ => {
 		injectDate (instance, children, index, user) {
 			if (!BDFDB.ArrayUtils.is(children) || !user || user.discriminator == "0000") return;
 			let guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
-			let isguild = !!guildId;
+			let isGuild = !!guildId;
 			guildId = guildId || BDFDB.LibraryModules.LastChannelStore.getChannelId();
 			if (!guildId) return;
 			if (!loadedUsers[guildId]) loadedUsers[guildId] = {};
 			if (!requestedUsers[guildId]) requestedUsers[guildId] = {};
 			if (!BDFDB.ArrayUtils.is(requestedUsers[guildId][user.id])) {
 				requestedUsers[guildId][user.id] = [instance];
-				BDFDB.LibraryModules.APIUtils.get((isguild ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(guildId) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(guildId)) + "?author_id=" + user.id).then(result => {
+				BDFDB.LibraryModules.APIUtils.get((isGuild ? BDFDB.DiscordConstants.Endpoints.SEARCH_GUILD(guildId) : BDFDB.DiscordConstants.Endpoints.SEARCH_CHANNEL(guildId)) + "?author_id=" + user.id).then(result => {
 					if (typeof result.body.retry_after != "number") {
 						if (result.body.messages && Array.isArray(result.body.messages[0])) {
 							for (let message of result.body.messages[0]) if (message.hit && message.author.id == user.id) {
@@ -303,12 +303,12 @@ var LastMessageDate = (_ => {
 			else if (loadedUsers[guildId][user.id] === undefined) requestedUsers[guildId][user.id].push(instance);
 			else children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
 				className: "lastMessageDate " + BDFDB.disCN.textrow,
-				children: this.labels.lastmessage_text.replace("{{time}}", loadedUsers[guildId][user.id] ? this.getTimestamp(languages[formats.lastMessageDateLang].id, loadedUsers[guildId][user.id]) : "---")
+				children: this.labels.lastmessage_text.replace("{{time}}", loadedUsers[guildId][user.id] ? this.getTimestamp(languages[choices.lastMessageDateLang].id, loadedUsers[guildId][user.id]) : "---")
 			}));
 		}
 		
 		getTimestamp (languageId, time) {
-			let timeobj = time ? time : new Date();
+			let timeobj = time || new Date();
 			if (typeof time == "string") timeobj = new Date(time);
 			if (timeobj.toString() == "Invalid Date") timeobj = new Date(parseInt(time));
 			if (timeobj.toString() == "Invalid Date") return;

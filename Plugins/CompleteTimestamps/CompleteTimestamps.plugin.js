@@ -308,7 +308,7 @@ var CompleteTimestamps = (_ => {
 		}
 
 		getTimestamp (languageId, time) {
-			let timeobj = time ? time : new Date();
+			let timeobj = time || new Date();
 			if (typeof time == "string") timeobj = new Date(time);
 			if (timeobj.toString() == "Invalid Date") timeobj = new Date(parseInt(time));
 			if (timeobj.toString() == "Invalid Date") return;

@@ -279,12 +279,12 @@ var JoinedAtDate = (_ => {
 			else if (!loadedUsers[guildId][user.id]) requestedUsers[guildId][user.id].push(instance);
 			else children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
 				className: "joinedAtDate " + BDFDB.disCN.textrow,
-				children: this.labels.joinedat_text.replace("{{time}}", this.getTimestamp(languages[formats.joinedAtDateLang].id, loadedUsers[guildId][user.id]))
+				children: this.labels.joinedat_text.replace("{{time}}", this.getTimestamp(languages[choices.joinedAtDateLang].id, loadedUsers[guildId][user.id]))
 			}));
 		}
 
 		getTimestamp (languageId, time) {
-			let timeobj = time ? time : new Date();
+			let timeobj = time || new Date();
 			if (typeof time == "string") timeobj = new Date(time);
 			if (timeobj.toString() == "Invalid Date") timeobj = new Date(parseInt(time));
 			if (timeobj.toString() == "Invalid Date") return;
