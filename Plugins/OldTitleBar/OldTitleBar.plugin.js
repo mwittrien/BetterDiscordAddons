@@ -2,6 +2,7 @@
 
 var OldTitleBar = (_ => {
 	var patched, electronWindow;
+	var settings = {};
 	
 	return class OldTitleBar {
 		getName () {return "OldTitleBar";}
@@ -152,11 +153,11 @@ var OldTitleBar = (_ => {
 					BDFDB.ModuleUtils.forceAllUpdates(this, ["HeaderBarContainer", "StandardSidebarView"]);
 				});
 
-				this.patchMainScreen(BDFDB.DataUtils.get(this, "settings", "displayNative"));
-
 				BDFDB.DOMUtils.addClass(document.body, BDFDB.disCN._oldtitlebarenabled);
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
+
+				this.patchMainScreen(settings.displayNative);
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -165,8 +166,8 @@ var OldTitleBar = (_ => {
 		stop () {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
-
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				
+				this.forceUpdateAll();
 				
 				BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"App"}));
 
@@ -182,7 +183,8 @@ var OldTitleBar = (_ => {
 		onSettingsClosed () {
 			if (this.SettingsUpdated) {
 				delete this.SettingsUpdated;
-				BDFDB.ModuleUtils.forceAllUpdates(this, ["HeaderBarContainer", "StandardSidebarView"]);
+
+				BDFDB.ModuleUtils.forceAllUpdates(this);
 			}
 		}
 
@@ -196,7 +198,7 @@ var OldTitleBar = (_ => {
 		}
 
 		processHeaderBarContainer (e) {
-			if (!BDFDB.DataUtils.get(this, "settings", "addOldBar")) return;
+			if (!settings.addOldBar) return;
 			let children = BDFDB.ReactUtils.getValue(e.returnvalue, "props.toolbar.props.children");
 			if (!children) {
 				let [oldToolbarParent, oldToolbarIndex] = BDFDB.ReactUtils.findChildren(e.returnvalue, {key: "OldTitleBar-toolbar"});
@@ -223,7 +225,7 @@ var OldTitleBar = (_ => {
 		}
 		
 		injectSettingsToolbar (children, fixed) {
-			if (!BDFDB.DataUtils.get(this, "settings", "addToSettings")) return;
+			if (!settings.addToSettings) return;
 			let toolbar = BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.disCNS.channelheadertoolbar + BDFDB.disCN._oldtitlebarsettingstoolbar,
 				children: [],
@@ -235,7 +237,7 @@ var OldTitleBar = (_ => {
 		
 		injectButtons (children, addFirstDivider) {
 			if (addFirstDivider) children.push(BDFDB.ReactUtils.createElement("div", {className: BDFDB.disCN.channelheaderdivider}))
-			if (BDFDB.DataUtils.get(this, "settings", "reloadButton")) {
+			if (settings.reloadButton) {
 				children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: BDFDB.LanguageUtils.LanguageStrings.ERRORS_RELOAD,
 					tooltipConfig: {type: "bottom"},
@@ -290,6 +292,12 @@ var OldTitleBar = (_ => {
 			catch (err) {
 				return false;
 			}
+		}
+		
+		forceUpdateAll () {
+			settings = BDFDB.DataUtils.get(this, "settings");
+			
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 	}
 })();
