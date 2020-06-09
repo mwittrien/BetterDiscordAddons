@@ -1,6 +1,8 @@
 ﻿//META{"name":"ImageZoom","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ImageZoom","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ImageZoom/ImageZoom.plugin.js"}*//
 
 var ImageZoom = (_ => {
+	var settings = {};
+	
 	return class ImageZoom {
 		getName () {return "ImageZoom";}
 
@@ -76,7 +78,7 @@ var ImageZoom = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -85,7 +87,7 @@ var ImageZoom = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -99,7 +101,6 @@ var ImageZoom = (_ => {
 				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN.downloadlink]]});
 				if (index > -1) {
 					let openContext = event => {
-						let settings = BDFDB.DataUtils.get(this, "settings");
 						BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 							children: Object.keys(settings).map(type => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuSliderItem, Object.assign({
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, type),
@@ -108,7 +109,8 @@ var ImageZoom = (_ => {
 									return (this.labels[this.defaults.settings[type].label] || BDFDB.LanguageUtils.LanguageStrings[this.defaults.settings[type].label]) + ": " + value + this.defaults.settings[type].unit;
 								},
 								onChange: value => {
-									BDFDB.DataUtils.save(value, this, "settings", type);
+									settings[type] = value;
+									BDFDB.DataUtils.save(settings, this, "settings");
 								}
 							}, BDFDB.ObjectUtils.extract(this.defaults.settings[type], "digits", "minValue", "maxValue"))))
 						}));
@@ -141,7 +143,6 @@ var ImageZoom = (_ => {
 					BDFDB.ListenerUtils.stopEvent(event);
 
 					let imgRects = BDFDB.DOMUtils.getRects(e.node.firstElementChild);
-					let settings = BDFDB.DataUtils.get(this, "settings");
 
 					let lense = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imagezoomlense}" style="clip-path: circle(${(settings.lensesize/2) + 2}px at center) !important; border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${settings.lensesize}px !important; height: ${settings.lensesize}px !important; position: fixed !important;"><div style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; clip-path: circle(${settings.lensesize/2}px at center) !important;"><${e.node.firstElementChild.tagName} src="${e.instance.props.src}" style="width: ${imgRects.width * settings.zoomlevel}px; height: ${imgRects.height * settings.zoomlevel}px; position: fixed !important;"${e.node.firstElementChild.tagName == "VIDEO" ? " loop autoplay" : ""}></${e.node.firstElementChild.tagName}></div></div>`);
 					let pane = lense.firstElementChild.firstElementChild;
@@ -176,6 +177,12 @@ var ImageZoom = (_ => {
 					document.addEventListener("mouseup", releasing);
 				});
 			}
+		}
+		
+		forceUpdateAll () {
+			settings = BDFDB.DataUtils.get(this, "settings");
+			
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 
 		setLabelsByLanguage () {
