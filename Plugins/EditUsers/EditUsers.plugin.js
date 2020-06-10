@@ -285,8 +285,8 @@ var EditUsers = (_ => {
 
 		processChannelAutoComplete (e) {
 			if (e.instance.state.autocompleteType == "MENTIONS" && BDFDB.ArrayUtils.is(e.instance.state.autocompletes.users) && e.instance.props.channel) {
-				let lastword = (e.instance.props.textValue || "").slice(1).toLowerCase();
-				if (!lastword) return;
+				let lastWord = (e.instance.props.textValue || "").slice(1).toLowerCase();
+				if (!lastWord) return;
 				let userArray = [];
 				for (let id in changedUsers) if (changedUsers[id] && changedUsers[id].name) {
 					let user = BDFDB.LibraryModules.UserStore.getUser(id);
@@ -295,7 +295,7 @@ var EditUsers = (_ => {
 						user
 					}, changedUsers[id]));
 				}
-				userArray = BDFDB.ArrayUtils.keySort(userArray.filter(n => e.instance.state.autocompletes.users.every(comp => comp.user.id != n.user.id) && n.lowerCaseName.indexOf(lastword) != -1), "lowerCaseName");
+				userArray = BDFDB.ArrayUtils.keySort(userArray.filter(n => e.instance.state.autocompletes.users.every(comp => comp.user.id != n.user.id) && n.lowerCaseName.indexOf(lastWord) != -1), "lowerCaseName");
 				e.instance.state.autocompletes.users = [].concat(e.instance.state.autocompletes.users, userArray.map(n => {return {user: n.user};})).slice(0, BDFDB.DiscordConstants.MAX_AUTOCOMPLETE_RESULTS);
 			}
 		}
@@ -567,8 +567,9 @@ var EditUsers = (_ => {
 					if (data.name) e.returnvalue.props.children[0] = "@" + data.name;
 					if (data.color1) {
 						let color1_0 = BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data.color1) ? data.color1[0] : data.color1, "RGBA");
-						let color0_1 = BDFDB.ColorUtils.setAlpha(color1_0, 0.1, "RGBA");
-						let color0_7 = BDFDB.ColorUtils.setAlpha(color1_0, 0.7, "RGBA");
+						let color0_1 = e.instance.props.mentioned ? "transparent" : BDFDB.ColorUtils.setAlpha(color1_0, 0.1, "RGBA");
+						let color0_7 = e.instance.props.mentioned ? "transparent" : BDFDB.ColorUtils.setAlpha(color1_0, 0.7, "RGBA");
+						let white = e.instance.props.mentioned ? color1_0 : "#FFFFFF";
 						e.returnvalue.props.style = Object.assign({}, e.returnvalue.props.style, {
 							background: color0_1,
 							color: color1_0
@@ -577,7 +578,7 @@ var EditUsers = (_ => {
 						e.returnvalue.props.onMouseEnter = event => {
 							onMouseEnter(event);
 							event.target.style.setProperty("background", color0_7, "important");
-							event.target.style.setProperty("color", "#FFFFFF", "important");
+							event.target.style.setProperty("color", white, "important");
 						};
 						let onMouseLeave = e.returnvalue.props.onMouseLeave || ( _ => {});
 						e.returnvalue.props.onMouseLeave = event => {
