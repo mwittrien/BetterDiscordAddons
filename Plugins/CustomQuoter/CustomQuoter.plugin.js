@@ -39,18 +39,12 @@ var CustomQuoter = (_ => {
 	return class CustomQuoter {
 		getName () {return "CustomQuoter";}
 
-		getVersion () {return "1.0.8";}
+		getVersion () {return "1.0.9";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Let's you customize the output of the native quote feature of Discord.";}
 
-		constructor () {
-			this.changelog = {
-				"improved":[["Quoting only parts","If you select a part of a message with your mouse, right click it and press Quote it will only insert the selected text in the quoted message (can be disabled in the plugin settings, does NOT work when the selected text goes out of the bounds of the original message"]]
-			};
-		}
-		
 		initConstructor () {
 			_this = this;
 			
@@ -191,6 +185,8 @@ var CustomQuoter = (_ => {
 				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.QuoteUtils, "createQuotedText", {instead: e => {
 					return this.parseQuote(e.methodArguments[0], e.methodArguments[1]);
 				}});
+				
+				this.forceUpdateAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
