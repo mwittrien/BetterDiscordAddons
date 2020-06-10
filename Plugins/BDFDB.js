@@ -9401,18 +9401,19 @@
 		if (e.instance && e.instance.props && e.instance.props.user && e.returnvalue) e.returnvalue.props.user = e.instance.props.user;
 	};
 	InternalBDFDB.processMessageContent = function (e) {
-		if (BDFDB.ArrayUtils.is(e.instance.props.content)) for (let ele of e.instance.props.content) InternalBDFDB._processMessageContentEle(ele);
+		if (BDFDB.ArrayUtils.is(e.instance.props.content)) for (let ele of e.instance.props.content) InternalBDFDB._processMessageContentEle(ele, e.instance.props.message);
 	};
-	InternalBDFDB._processMessageContentEle = function (ele) {
+	InternalBDFDB._processMessageContentEle = function (ele, message) {
 		if (BDFDB.ReactUtils.isValidElement(ele)) {
 			if (typeof ele.props.render == "function" && BDFDB.ReactUtils.getValue(ele, "props.children.type.displayName") == "Mention") {
 				let userId = BDFDB.ReactUtils.getValue(ele.props.render(), "props.userId");
 				if (userId && !ele.props.children.props.userId) ele.props.children.props.userId = userId;
+				if (message && message.mentioned) ele.props.children.props.mentioned = true;
 			}
-			else if (BDFDB.ReactUtils.isValidElement(ele.props.children)) InternalBDFDB._processMessageContentEle(ele.props.children);
-			else if (BDFDB.ArrayUtils.is(ele.props.children)) for (let child of ele.props.children) InternalBDFDB._processMessageContentEle(child);
+			else if (BDFDB.ReactUtils.isValidElement(ele.props.children)) InternalBDFDB._processMessageContentEle(ele.props.children, message);
+			else if (BDFDB.ArrayUtils.is(ele.props.children)) for (let child of ele.props.children) InternalBDFDB._processMessageContentEle(child, message);
 		}
-		else if (BDFDB.ArrayUtils.is(ele)) for (let child of ele) InternalBDFDB._processMessageContentEle(child);
+		else if (BDFDB.ArrayUtils.is(ele)) for (let child of ele) InternalBDFDB._processMessageContentEle(child, message);
 	};
 	InternalBDFDB.processMention = function (e) {
 		delete e.returnvalue.props.userId;
