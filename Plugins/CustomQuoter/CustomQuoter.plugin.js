@@ -39,7 +39,7 @@ var CustomQuoter = (_ => {
 	return class CustomQuoter {
 		getName () {return "CustomQuoter";}
 
-		getVersion () {return "1.0.9";}
+		getVersion () {return "1.1.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -62,8 +62,6 @@ var CustomQuoter = (_ => {
 
 		getSettingsPanel (collapseStates = {}) {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-			let settings = BDFDB.DataUtils.get(this, "settings");
-			let formats = BDFDB.DataUtils.get(this, "formats");
 			let settingsPanel, settingsItems = [], innerItems = [];
 			
 			for (let key in settings) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
@@ -73,8 +71,8 @@ var CustomQuoter = (_ => {
 				keys: ["settings", key],
 				label: this.defaults.settings[key].description,
 				value: settings[key],
-				onChange: (e, instance) => {
-					BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_SettingsPanel", up:true}), {name:"BDFDB_Select", all:true, noCopies:true}));
+				onChange: (value, instance) => {
+					settings[key] = value;
 				}
 			}));
 			
@@ -94,7 +92,8 @@ var CustomQuoter = (_ => {
 				label: this.defaults.formats[key].description,
 				basis: "70%",
 				value: formats[key],
-				onChange: (e, instance) => {
+				onChange: (value, instance) => {
+					formats[key] = value;
 					BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key:"PREVIEW_MESSAGE"}));
 				}
 			}));

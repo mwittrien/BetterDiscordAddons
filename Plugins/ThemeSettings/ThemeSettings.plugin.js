@@ -53,7 +53,7 @@ var ThemeSettings = (_ => {
 				
 				let cardObserver = (new MutationObserver(changes => {changes.forEach(change => {if (change.addedNodes) {change.addedNodes.forEach(node => {
 					if (BDFDB.DOMUtils.containsClass(node, BDFDB.disCN._repocard)) this.appendSettingsButton(node);
-					for (let child of node.querySelectorAll(BDFDB.dotCN._repocard)) this.appendSettingsButton(child);
+					if (node.nodeType != Node.TEXT_NODE) for (let child of node.querySelectorAll(BDFDB.dotCN._repocard)) this.appendSettingsButton(child);
 				});}});}));
 				BDFDB.ObserverUtils.connect(this, document.querySelector("#user-settings"), {name:"cardObserver", instance:cardObserver}, {childList: true, subtree:true});
 				BDFDB.ObserverUtils.connect(this, BDFDB.dotCN.applayers, {name:"appLayerObserver", instance:(new MutationObserver(changes => {changes.forEach(change => {if (change.addedNodes) {change.addedNodes.forEach(node => {
