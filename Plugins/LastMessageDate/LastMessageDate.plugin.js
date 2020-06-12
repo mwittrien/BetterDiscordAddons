@@ -74,9 +74,6 @@ var LastMessageDate = (_ => {
 
 		getSettingsPanel (collapseStates = {}) {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-			let settings = BDFDB.DataUtils.get(this, "settings");
-			let choices = BDFDB.DataUtils.get(this, "choices");
-			let formats = BDFDB.DataUtils.get(this, "formats");
 			let settingsPanel, settingsItems = [], innerItems = [];
 			
 			for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
@@ -86,7 +83,8 @@ var LastMessageDate = (_ => {
 				keys: ["settings", key],
 				label: this.defaults.settings[key].description,
 				value: settings[key],
-				onChange: (e, instance) => {
+				onChange: (value, instance) => {
+					settings[key] = value;
 					BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_SettingsPanel", up:true}), {name:"BDFDB_Select", all:true, noCopies:true}));
 				}
 			}));
@@ -156,7 +154,8 @@ var LastMessageDate = (_ => {
 				label: this.defaults.formats[key].description,
 				basis: "70%",
 				value: formats[key],
-				onChange: (e, instance) => {
+				onChange: (value, instance) => {
+					formats[key] = value;
 					BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_SettingsPanel", up:true}), {name:"BDFDB_Select", all:true, noCopies:true}));
 				}
 			}));
