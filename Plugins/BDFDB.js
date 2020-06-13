@@ -236,22 +236,28 @@
 	};
 	BDFDB.PluginUtils.downloadUpdate = function (pluginName, url) {
 		if (!pluginName || !url) return;
-		LibraryRequires.request(url, (error, response, result) => {
+		LibraryRequires.request(url, (error, response, body) => {
 			if (error) return BDFDB.LogUtils.warn("Unable to get update for " + pluginName);
 			BDFDB.InternalData.creationTime = 0;
-			let newVersion = result.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
-			newVersion = newVersion.toString().replace(/['"]/g, "");
-			LibraryRequires.fs.writeFileSync(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), url.split("/").slice(-1)[0]), result);
-			BDFDB.NotificationUtils.toast(`${pluginName} v${window.PluginUpdates.plugins[url].version} has been replaced by ${pluginName} v${newVersion}.`, {nopointer:true, selector:"plugin-updated-toast"});
-			let updateNotice = document.querySelector("#pluginNotice");
-			if (updateNotice) {
-				if (updateNotice.querySelector(BDFDB.dotCN.noticebutton)) {
-					window.PluginUpdates.plugins[url].version = newVersion;
-					if (!window.PluginUpdates.downloaded) window.PluginUpdates.downloaded = [];
-					if (!window.PluginUpdates.downloaded.includes(pluginName)) window.PluginUpdates.downloaded.push(pluginName);
+			let wasEnabled = BDFDB.BDUtils.isPluginEnabled(pluginName);
+			let newName = url.split("/").slice(-1)[0].split(".")[0];
+			let newVersion = body.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i).toString().replace(/['"]/g, "");
+			LibraryRequires.fs.writeFile(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), newName + ".plugin.js"), body, _ => {
+				if (pluginName != newName) {
+					LibraryRequires.fs.unlink(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".plugin.js"), _ => {});
+					BDFDB.TimeUtils.timeout(_ => {if (wasEnabled && !BDFDB.BDUtils.isPluginEnabled(newName)) BDFDB.BDUtils.enablePlugin(newName);}, 3000);
 				}
-				BDFDB.PluginUtils.removeUpdateNotice(pluginName, updateNotice);
-			}
+				BDFDB.NotificationUtils.toast(`${pluginName} v${window.PluginUpdates.plugins[url].version} has been replaced by ${newName} v${newVersion}.`, {nopointer:true, selector:"plugin-updated-toast"});
+				let updateNotice = document.querySelector("#pluginNotice");
+				if (updateNotice) {
+					if (updateNotice.querySelector(BDFDB.dotCN.noticebutton)) {
+						window.PluginUpdates.plugins[url].version = newVersion;
+						if (!window.PluginUpdates.downloaded) window.PluginUpdates.downloaded = [];
+						if (!window.PluginUpdates.downloaded.includes(pluginName)) window.PluginUpdates.downloaded.push(pluginName);
+					}
+					BDFDB.PluginUtils.removeUpdateNotice(pluginName, updateNotice);
+				}
+			});
 		});
 	};
 	BDFDB.PluginUtils.checkChangeLog = function (plugin) {
@@ -4123,6 +4129,26 @@
 		themeUndefined: "theme-undefined",
 		voiceDraggable: "draggable-1KoBzC"
 	};
+	
+	/* LOADED ON RUNTIME, BAD DISCORD */
+	DiscordClassModules.ColorPicker = BDFDB.ModuleUtils.findByProperties("colorPickerCustom", "customColorPickerInput") || {
+		colorPickerCustom: "colorPickerCustom-2CWBn2",
+		colorPickerDropper: "colorPickerDropper-3c2mIf",
+		colorPickerDropperFg: "colorPickerDropperFg-3jYKWI",
+		colorPickerRow: "colorPickerRow-1LgLnl",
+		colorPickerSwatch: "colorPickerSwatch-5GX3Ve",
+		custom: "custom-2SJn4n",
+		customColorPickerInput: "customColorPickerInput-14pB0r",
+		default: "default-cS_caM",
+		disabled: "disabled-1C4eHl",
+		input: "input-GfazGc",
+		noColor: "noColor-1pdBDm"
+	};
+	DiscordClassModules.ColorPickerInner = BDFDB.ModuleUtils.findByProperties("saturation", "hue", "wrapper") || {
+		hue: "hue-13HAGb",
+		saturation: "saturation-1FDvtn",
+		wrapper: "wrapper-2AQieU"
+	};
 
 	DiscordClassModules.AccountDetails = BDFDB.ModuleUtils.findByProperties("usernameContainer", "container");
 	DiscordClassModules.AccountDetailsButtons = BDFDB.ModuleUtils.findByProperties("button", "enabled", "disabled");
@@ -4161,8 +4187,6 @@
 	DiscordClassModules.ChannelTextAreaSlate = BDFDB.ModuleUtils.findByProperties("slateContainer", "placeholder");
 	DiscordClassModules.ChatWindow = BDFDB.ModuleUtils.findByProperties("chat", "channelTextArea");
 	DiscordClassModules.Checkbox = BDFDB.ModuleUtils.findByProperties("checkboxWrapper", "round");
-	DiscordClassModules.ColorPicker = BDFDB.ModuleUtils.findByProperties("colorPickerCustom", "customColorPickerInput");
-	DiscordClassModules.ColorPickerInner = BDFDB.ModuleUtils.findByProperties("saturation", "hue", "wrapper");
 	DiscordClassModules.CtaVerification = BDFDB.ModuleUtils.findByProperties("attendeeCTA", "verificationNotice");
 	DiscordClassModules.Cursor = BDFDB.ModuleUtils.findByProperties("cursorDefault", "userSelectNone");
 	DiscordClassModules.CustomStatusIcon = BDFDB.ModuleUtils.findByProperties("textRuler", "emoji", "icon");
