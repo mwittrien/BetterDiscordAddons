@@ -240,14 +240,16 @@
 			if (error) return BDFDB.LogUtils.warn("Unable to get update for " + pluginName);
 			BDFDB.InternalData.creationTime = 0;
 			let wasEnabled = BDFDB.BDUtils.isPluginEnabled(pluginName);
-			let newName = url.split("/").slice(-1)[0].split(".")[0];
+			let newName = body.match(/"name"\s*:\s*"([^"]+)"/)[1];
 			let newVersion = body.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i).toString().replace(/['"]/g, "");
+			let oldVersion = window.PluginUpdates.plugins[url].version;
 			LibraryRequires.fs.writeFile(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), newName + ".plugin.js"), body, _ => {
 				if (pluginName != newName) {
+					url = url.replace(new RegExp(pluginName, "g"), newName);
 					LibraryRequires.fs.unlink(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".plugin.js"), _ => {});
 					BDFDB.TimeUtils.timeout(_ => {if (wasEnabled && !BDFDB.BDUtils.isPluginEnabled(newName)) BDFDB.BDUtils.enablePlugin(newName);}, 3000);
 				}
-				BDFDB.NotificationUtils.toast(`${pluginName} v${window.PluginUpdates.plugins[url].version} has been replaced by ${newName} v${newVersion}.`, {nopointer:true, selector:"plugin-updated-toast"});
+				BDFDB.NotificationUtils.toast(`${pluginName} v${oldVersion} has been replaced by ${newName} v${newVersion}.`, {nopointer:true, selector:"plugin-updated-toast"});
 				let updateNotice = document.querySelector("#pluginNotice");
 				if (updateNotice) {
 					if (updateNotice.querySelector(BDFDB.dotCN.noticebutton)) {
