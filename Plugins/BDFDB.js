@@ -1232,6 +1232,7 @@
 		Guild: "guildouter",
 		GuildFolder: "guildfolderwrapper",
 		GuildIcon: "avataricon",
+		GuildRoleSettings: "settingswindowcontent",
 		Guilds: "guildswrapper",
 		GuildSettings: "layer",
 		GuildSettingsBans: "guildsettingsbannedcard",
@@ -1265,7 +1266,7 @@
 		UserHook: "auditloguserhook",
 		UserPopout: "userpopout",
 		UserProfile: "userprofile",
-		V2C_ContentColumn: "contentcolumn"
+		V2C_ContentColumn: "settingswindowcontentcolumn"
 	};
 	WebModulesData.CodeFinder = {
 		EmojiPicker: ["allowManagedEmojis", "EMOJI_PICKER_TAB_PANEL_ID", "diversitySelector"],
@@ -4310,6 +4311,7 @@
 	DiscordClassModules.SettingsItems = BDFDB.ModuleUtils.findByProperties("dividerMini", "note");
 	DiscordClassModules.SettingsTable = BDFDB.ModuleUtils.findByProperties("headerOption", "headerName");
 	DiscordClassModules.SettingsWindow = BDFDB.ModuleUtils.findByProperties("contentRegion", "standardSidebarView");
+	DiscordClassModules.SettingsWindowScroller = BDFDB.ModuleUtils.findByProperties("sidebarScrollable", "content", "scroller");
 	DiscordClassModules.Slider = BDFDB.ModuleUtils.findByProperties("slider", "grabber");
 	DiscordClassModules.Spoiler = BDFDB.ModuleUtils.findByProperties("spoilerContainer", "hidden");
 	DiscordClassModules.SpoilerEmbed = BDFDB.ModuleUtils.findByProperties("hiddenSpoilers", "spoiler");
@@ -4746,8 +4748,6 @@
 		colorselectable: ["TextColor", "selectable"],
 		colorstandard: ["TextColor", "colorStandard"],
 		coloryellow: ["TextColor", "colorStatusYellow"],
-		contentcolumn: ["SettingsWindow", "contentColumn"],
-		contentregion: ["SettingsWindow", "contentRegion"],
 		cursordefault: ["Cursor", "cursorDefault"],
 		cursorpointer: ["Cursor", "cursorPointer"],
 		customstatusemoji: ["CustomStatusIcon", "emoji"],
@@ -5543,7 +5543,11 @@
 		settingstablecardconfigs: ["BDFDB", "settingsTableCardConfigs"],
 		settingstablecardlabel: ["BDFDB", "settingsTableCardLabel"],
 		settingstablelist: ["BDFDB", "settingsTableList"],
-		sidebarregion: ["SettingsWindow", "sidebarRegion"],
+		settingswindowcontent: ["SettingsWindowScroller", "content"],
+		settingswindowcontentcolumn: ["SettingsWindow", "contentColumn"],
+		settingswindowcontentregion: ["SettingsWindow", "contentRegion"],
+		settingswindowsidebarregion: ["SettingsWindow", "sidebarRegion"],
+		settingswindowstandardsidebarview: ["SettingsWindow", "standardSidebarView"],
 		size10: ["TextSize", "size10"],
 		size12: ["TextSize", "size12"],
 		size14: ["TextSize", "size14"],
@@ -5572,7 +5576,6 @@
 		spoilertext: ["Spoiler", "spoilerText"],
 		spoilerwarning: ["Spoiler", "spoilerWarning"],
 		splashbackground: ["NotFound", "splashBackground"],
-		standardsidebarview: ["SettingsWindow", "standardSidebarView"],
 		strikethrough: ["TextStyle", "strikeThrough"],
 		status: ["Avatar", "status"],
 		stopanimations: ["NotFound", "stopAnimations"],
