@@ -9664,7 +9664,7 @@
 	
 	InternalBDFDB.addContextListeners(BDFDB);
 	
-	BDFDB.ReactUtils.findParent = BDFDB.ReactUtils.findChildren;
+	BDFDB.ReactUtils.findChildren = BDFDB.ReactUtils.findParent;
 
 	if (BDFDB.UserUtils.me.id == myId) {
 		for (let module in DiscordClassModules) if (!DiscordClassModules[module]) BDFDB.LogUtils.warn(module + " not initialized in DiscordClassModules");
