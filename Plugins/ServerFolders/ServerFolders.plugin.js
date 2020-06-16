@@ -275,7 +275,7 @@ var ServerFolders = (_ => {
 	return class ServerFolders {
 		getName () {return "ServerFolders";}
 
-		getVersion () {return "6.7.8";}
+		getVersion () {return "6.7.9";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -570,7 +570,7 @@ var ServerFolders = (_ => {
 						action: state => {
 							data.muteFolder = state;
 							BDFDB.DataUtils.save(data, this, "folders", e.instance.props.folderId);
-							for (let guildid of folder.guildIds) if (BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildid) != state) BDFDB.LibraryModules.GuildSettingsUtils.updateNotificationSettings(guildid, {muted:state, suppress_everyone:state, suppress_roles:state});
+							for (let guildid of folder.guildIds) if (BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildid) != state) BDFDB.LibraryModules.GuildNotificationsUtils.updateNotificationSettings(guildid, {muted:state, suppress_everyone:state, suppress_roles:state});
 						}
 					})
 				}));
@@ -605,7 +605,7 @@ var ServerFolders = (_ => {
 			else BDFDB.DOMUtils.removeClassFromDOM(BDFDB.disCN._serverfoldersfoldercontentisopen);
 			
 			let data = this.getFolderConfig(e.instance.props.folderId);
-			if (data.muteFolder) for (let guildId of e.instance.props.guildIds) if (!BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildId)) BDFDB.LibraryModules.GuildSettingsUtils.updateNotificationSettings(guildId, {muted:true, suppress_everyone:true});
+			if (data.muteFolder) for (let guildId of e.instance.props.guildIds) if (!BDFDB.LibraryModules.MutedUtils.isGuildOrCategoryOrChannelMuted(guildId)) BDFDB.LibraryModules.GuildNotificationsUtils.updateNotificationSettings(guildId, {muted:true, suppress_everyone:true});
 			
 			let state = this.getState(e.instance);
 			if (folderStates[e.instance.props.folderId] && !BDFDB.equals(state, folderStates[e.instance.props.folderId])) {
