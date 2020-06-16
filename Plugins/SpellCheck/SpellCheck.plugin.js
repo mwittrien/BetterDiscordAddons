@@ -7,7 +7,7 @@ var SpellCheck = (_ => {
 	return class SpellCheck {
 		getName () {return "SpellCheck";}
 
-		getVersion () {return "1.5.1";}
+		getVersion () {return "1.5.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -15,8 +15,7 @@ var SpellCheck = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["'s & n't & n'","No longer marks words with extra suffix/prefix as incorrect"]],
-				"improved":[["Performance & Languages","Increased performance and variety of dictionaries"]]
+				"fixed":[["Fallback","Fixed primary language falling back to english on each start"]]
 			};
 			
 			this.patchedModules = {
@@ -158,7 +157,7 @@ var SpellCheck = (_ => {
 					this.forceUpdateAll();
 					
 					for (let key in choices) {
-						if (key == "dictionaryLanguage" && !languages[key]) {
+						if (key == "dictionaryLanguage" && !languages[choices[key]]) {
 							choices[key] = "en";
 							BDFDB.DataUtils.save(choices[key], this, "choices", key);
 						}

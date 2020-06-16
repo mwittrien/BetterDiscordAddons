@@ -572,17 +572,17 @@
 	};
 	BDFDB.ListenerUtils.copyEvent = function (e, ele) {
 		if (!e || !e.constructor || !e.type) return e;
-		let ecopy = new e.constructor(e.type, e);
-		Object.defineProperty(ecopy, "originalEvent", {value: e});
-		Object.defineProperty(ecopy, "which", {value: e.which});
-		Object.defineProperty(ecopy, "keyCode", {value: e.keyCode});
-		Object.defineProperty(ecopy, "path", {value: e.path});
-		Object.defineProperty(ecopy, "relatedTarget", {value: e.relatedTarget});
-		Object.defineProperty(ecopy, "srcElement", {value: e.srcElement});
-		Object.defineProperty(ecopy, "target", {value: e.target});
-		Object.defineProperty(ecopy, "toElement", {value: e.toElement});
-		if (ele) Object.defineProperty(ecopy, "currentTarget", {value: ele});
-		return ecopy;
+		let eCopy = new e.constructor(e.type, e);
+		Object.defineProperty(eCopy, "originalEvent", {value: e});
+		Object.defineProperty(eCopy, "which", {value: e.which});
+		Object.defineProperty(eCopy, "keyCode", {value: e.keyCode});
+		Object.defineProperty(eCopy, "path", {value: e.path});
+		Object.defineProperty(eCopy, "relatedTarget", {value: e.relatedTarget});
+		Object.defineProperty(eCopy, "srcElement", {value: e.srcElement});
+		Object.defineProperty(eCopy, "target", {value: e.target});
+		Object.defineProperty(eCopy, "toElement", {value: e.toElement});
+		if (ele) Object.defineProperty(eCopy, "currentTarget", {value: ele});
+		return eCopy;
 	};
 	BDFDB.ListenerUtils.stopEvent = function (e) {
 		if (BDFDB.ObjectUtils.is(e)) {
@@ -4133,7 +4133,7 @@
 	};
 	
 	/* LOADED ON RUNTIME, BAD DISCORD */
-	DiscordClassModules.ColorPicker = BDFDB.ModuleUtils.findByProperties("colorPickerCustom", "customColorPickerInput") || {
+	DiscordClassModules.ColorPicker = {
 		colorPickerCustom: "colorPickerCustom-2CWBn2",
 		colorPickerDropper: "colorPickerDropper-3c2mIf",
 		colorPickerDropperFg: "colorPickerDropperFg-3jYKWI",
@@ -4146,7 +4146,7 @@
 		input: "input-GfazGc",
 		noColor: "noColor-1pdBDm"
 	};
-	DiscordClassModules.ColorPickerInner = BDFDB.ModuleUtils.findByProperties("saturation", "hue", "wrapper") || {
+	DiscordClassModules.ColorPickerInner = {
 		hue: "hue-13HAGb",
 		saturation: "saturation-1FDvtn",
 		wrapper: "wrapper-2AQieU"
