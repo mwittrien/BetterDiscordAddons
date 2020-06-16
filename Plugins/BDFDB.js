@@ -1638,6 +1638,7 @@
 	LibraryModules.GuildChannelStore = BDFDB.ModuleUtils.findByProperties("getChannels", "getDefaultChannel");
 	LibraryModules.GuildEmojiStore = BDFDB.ModuleUtils.findByProperties("getGuildEmoji", "getDisambiguatedEmojiContext");
 	LibraryModules.GuildNotificationsUtils = BDFDB.ModuleUtils.findByProperties("updateChannelOverrideSettings", "updateNotificationSettings");
+	LibraryModules.GuildSettingsSectionUtils = BDFDB.ModuleUtils.findByProperties("getGuildSettingsSections");
 	LibraryModules.GuildSettingsUtils = BDFDB.ModuleUtils.findByProperties("open", "updateGuild");
 	LibraryModules.GuildStore = BDFDB.ModuleUtils.findByProperties("getGuild", "getGuilds");
 	LibraryModules.GuildUnavailableStore = BDFDB.ModuleUtils.findByProperties("isUnavailable", "totalUnavailableGuilds");
