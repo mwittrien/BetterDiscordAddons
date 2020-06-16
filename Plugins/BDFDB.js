@@ -1752,7 +1752,7 @@
 		};
 	};
 	BDFDB.ReactUtils.findChild = function (nodeOrInstance, config) {
-		if (!nodeOrInstance || !BDFDB.ObjectUtils.is(config) || !config.name && !config.key && !config.props && !config.filter) return null;
+		if (!nodeOrInstance || !BDFDB.ObjectUtils.is(config) || !config.name && !config.key && !config.props && !config.filter) return config.all ? [] : null;
 		let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
 		if (!BDFDB.ObjectUtils.is(instance) && !BDFDB.ArrayUtils.is(instance)) return null;
 		config.name = config.name && [config.name].flat().filter(n => n);
@@ -1763,12 +1763,28 @@
 		let start = performance.now();
 		let maxDepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
 		let maxTime = config.unlimited ? 999999999 : (config.time === undefined ? 150 : config.time);
-		return getChild(instance);
+		
+		let foundChildren = [];
+		let singleChild = getChild(instance);
+		if (config.all) {
+			for (let i in foundChildren) delete foundChildren[i].BDFDBreactSearch;
+			return foundChildren;
+		}
+		else return singleChild;
+		
 		function getChild (children) {
 			let result = null;
 			if (!children || depth >= maxDepth && performance.now() - start >= maxTime) return result;
 			if (!BDFDB.ArrayUtils.is(children)) {
-				if (check(children)) result = children;
+				if (check(children)) {
+					if (config.all === undefined || !config.all) result = children;
+					else if (config.all) {
+						if (!children.BDFDBreactSearch) {
+							children.BDFDBreactSearch = true;
+							foundChildren.push(children);
+						}
+					}
+				}
 				else if (children.props && children.props.children) {
 					depth++;
 					result = getChild(children.props.children);
@@ -1778,7 +1794,15 @@
 			else {
 				for (let child of children) if (child) {
 					if (BDFDB.ArrayUtils.is(child)) result = getChild(child);
-					else if (check(child)) result = child;
+					else if (check(child)) {
+						if (config.all === undefined || !config.all) result = child;
+						else if (config.all) {
+							if (!child.BDFDBreactSearch) {
+								child.BDFDBreactSearch = true;
+								foundChildren.push(child);
+							}
+						}
+					}
 					else if (child.props && child.props.children) {
 						depth++;
 						result = getChild(child.props.children);
@@ -1897,6 +1921,7 @@
 		let maxDepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
 		let maxTime = config.unlimited ? 999999999 : (config.time === undefined ? 150 : config.time);
 		let whitelist = config.up ? {return:true, sibling:true, default:true, _reactInternalFiber:true} : {child:true, sibling:true, default:true, _reactInternalFiber:true};
+		
 		let foundConstructors = config.group ? {} : [];
 		let singleConstructor = getConstructor(instance);
 		if (config.all) {
@@ -1960,6 +1985,7 @@
 		let maxDepth = config.unlimited ? 999999999 : (config.depth === undefined ? 30 : config.depth);
 		let maxTime = config.unlimited ? 999999999 : (config.time === undefined ? 150 : config.time);
 		let whitelist = config.up ? {return:true, sibling:true, _reactInternalFiber:true} : {child:true, sibling:true, _reactInternalFiber:true};
+		
 		let foundInstances = config.group ? {} : [];
 		let singleInstance = getOwner(instance);
 		if (config.all) {
