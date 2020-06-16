@@ -793,6 +793,10 @@
 	background-color: var(--background-modifier-selected);
 }
 
+.dot-2s_oHI {												/* settingsitems		dot									*/
+	background-color: rgb(var(--vaccentcolor));
+}
+
 .cardBrand-39zmMQ {											/* settingsitems		card								*/
 	background-color: rgb(var(--vaccentcolor));
 }
