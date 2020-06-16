@@ -4259,6 +4259,7 @@
 	DiscordClassModules.GuildSettingsEmoji = BDFDB.ModuleUtils.findByProperties("emojiRow", "emojiAliasPlaceholder");
 	DiscordClassModules.GuildSettingsInvite = BDFDB.ModuleUtils.findByProperties("countdownColumn", "inviteSettingsInviteRow");
 	DiscordClassModules.GuildSettingsMember = BDFDB.ModuleUtils.findByProperties("member", "membersFilterPopout");
+	DiscordClassModules.GuildSettingsRoles = BDFDB.ModuleUtils.findByProperties("buttonWrapper", "addRoleIcon");
 	DiscordClassModules.GuildServer = BDFDB.ModuleUtils.findByProperties("blobContainer", "pill");
 	DiscordClassModules.GuildsItems = BDFDB.ModuleUtils.findByProperties("guildSeparator", "guildsError");
 	DiscordClassModules.GuildsWrapper = BDFDB.ModuleUtils.findByProperties("scrollerWrap", "unreadMentionsBar", "wrapper");
@@ -4997,6 +4998,7 @@
 		guildsettingsmembercard: ["GuildSettingsMember", "member"],
 		guildsettingsmembername: ["GuildSettingsMember", "name"],
 		guildsettingsmembernametag: ["GuildSettingsMember", "nameTag"],
+		guildsettingsrolesbuttonwrapper: ["GuildSettingsRoles", "buttonWrapper"],
 		guildsscroller: ["GuildsWrapper", "scroller"],
 		guildsscrollerwrap: ["GuildsWrapper", "scrollerWrap"],
 		guildsvg: ["Guild", "svg"],
