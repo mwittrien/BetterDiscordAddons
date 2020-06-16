@@ -1233,6 +1233,7 @@
 		GuildFolder: "guildfolderwrapper",
 		GuildIcon: "avataricon",
 		Guilds: "guildswrapper",
+		GuildSettings: "layer",
 		GuildSettingsBans: "guildsettingsbannedcard",
 		GuildSettingsEmoji: "guildsettingsemojicard",
 		GuildSettingsMembers: "guildsettingsmembercard",
