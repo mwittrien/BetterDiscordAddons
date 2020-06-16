@@ -334,7 +334,7 @@ var ThemeRepo = (_ => {
 
 		onUserSettingsCogContextMenu (e) {
 			BDFDB.TimeUtils.timeout(_ => {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["label", "BandagedBD"]]});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["label", "BandagedBD"]]});
 				if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: "Theme Repo",
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "repo"),
@@ -348,7 +348,7 @@ var ThemeRepo = (_ => {
 		
 		processV2CContentColumn (e) {
 			if (typeof e.instance.props.title == "string" && e.instance.props.title.toUpperCase().indexOf("THEMES") == 0) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {key: "folder-button"});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {key: "folder-button"});
 				if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: "Open Theme Repo",
 					children: BDFDB.ReactUtils.createElement("button", {

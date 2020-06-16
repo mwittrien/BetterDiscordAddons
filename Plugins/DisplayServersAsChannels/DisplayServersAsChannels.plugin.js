@@ -131,7 +131,7 @@ var DisplayServersAsChannels = (_ => {
 		}
 		
 		processGuilds (e) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "FluxContainer(<Unknown>)"});
+			let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FluxContainer(<Unknown>)"});
 			if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Items.UnavailableGuildsButton, {
 				unavailableGuilds: BDFDB.LibraryModules.GuildUnavailableStore.totalUnavailableGuilds
 			});
@@ -211,12 +211,12 @@ var DisplayServersAsChannels = (_ => {
 		}
 		
 		removeTooltip (parent) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(parent, {name: ["Tooltip", "ListItemTooltip", "GuildTooltip", "BDFDB_TooltipContainer"]});
+			let [children, index] = BDFDB.ReactUtils.findParent(parent, {name: ["Tooltip", "ListItemTooltip", "GuildTooltip", "BDFDB_TooltipContainer"]});
 			if (index > -1) children[index] = children[index].props.children;
 		}
 		
 		removeMask (parent) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(parent, {name: "BlobMask"});
+			let [children, index] = BDFDB.ReactUtils.findParent(parent, {name: "BlobMask"});
 			if (index > -1) {
 				let badges = [];
 				for (let key of Object.keys(children[index].props)) if (key && key.endsWith("Badge") && BDFDB.ReactUtils.isValidElement(children[index].props[key])) badges.push(children[index].props[key]);
@@ -229,11 +229,11 @@ var DisplayServersAsChannels = (_ => {
 		}
 		
 		addElementName (parent, name, options = {}) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(parent, {name: ["NavItem", "Clickable"], props:[["className",BDFDB.disCN.guildserrorinner]]});
+			let [children, index] = BDFDB.ReactUtils.findParent(parent, {name: ["NavItem", "Clickable"], props:[["className",BDFDB.disCN.guildserrorinner]]});
 			if (index > -1) {
 				delete children[index].props.icon;
 				delete children[index].props.name;
-				let [children2, index2] = BDFDB.ReactUtils.findChildren(children[index].props.children, {name:"FolderIcon", props:[["className",BDFDB.disCN.guildfoldericonwrapper]]});
+				let [children2, index2] = BDFDB.ReactUtils.findParent(children[index].props.children, {name:"FolderIcon", props:[["className",BDFDB.disCN.guildfoldericonwrapper]]});
 				if (index2 > -1) children2.splice(index2, 1);
 				let childEles = [
 					BDFDB.ReactUtils.createElement("div", {

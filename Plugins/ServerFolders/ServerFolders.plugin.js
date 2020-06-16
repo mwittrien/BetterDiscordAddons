@@ -592,7 +592,7 @@ var ServerFolders = (_ => {
 
 		processAppView (e) {
 			if (settings.extraColumn) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: ["FluxContainer(Guilds)", "FluxContainer(NavigableGuilds)"]});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["FluxContainer(Guilds)", "FluxContainer(NavigableGuilds)"]});
 				if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(folderGuildContentComponent, {
 					themeOverride: children[index].props.themeOverride
 				}));
@@ -619,7 +619,7 @@ var ServerFolders = (_ => {
 			}
 			folderStates[e.instance.props.folderId] = state;
 			
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ListItemTooltip"});
+			let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ListItemTooltip"});
 			if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 				text: e.instance.props.folderName || BDFDB.FolderUtils.getDefaultName(e.instance.props.folderId),
 				tooltipConfig: {
@@ -635,7 +635,7 @@ var ServerFolders = (_ => {
 				let folderIcons = this.loadAllIcons(), icontype = e.instance.props.expanded ? "openicon" : "closedicon";
 				let icon = folderIcons[data.iconID] ? (!folderIcons[data.iconID].customID ? this.createBase64SVG(folderIcons[data.iconID][icontype], data.color1, data.color2) : folderIcons[data.iconID][icontype]) : null;
 				if (icon) {
-					[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "FolderIcon"});
+					[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FolderIcon"});
 					if (index > -1) children[index] = BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.guildfoldericonwrapper,
 						style: {background: `url(${icon}) center/cover no-repeat`}
@@ -643,7 +643,7 @@ var ServerFolders = (_ => {
 				}
 			}
 			if (settings.showCountBadge) {
-				[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"BlobMask"});
+				[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name:"BlobMask"});
 				if (index > -1) {
 					children[index].props.upperLeftBadgeWidth = BDFDB.LibraryComponents.Badges.getBadgeWidthForValue(e.instance.props.guildIds.length);
 					children[index].props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.NumberBadge, {
@@ -671,7 +671,7 @@ var ServerFolders = (_ => {
 				guildStates[e.instance.props.guild.id] = state;
 				if (e.returnvalue) {
 					let data = this.getFolderConfig(folder.folderId);
-					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: ["GuildTooltip", "BDFDB_TooltipContainer"]});
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["GuildTooltip", "BDFDB_TooltipContainer"]});
 					if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 						tooltipConfig: Object.assign({
 							type: "right",
@@ -702,7 +702,7 @@ var ServerFolders = (_ => {
 			if (e.returnvalue) {
 				let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(e.instance.props.folderId);
 				let data = this.getFolderConfig(e.instance.props.folderId);
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: ["ModalHeader", "Header"]});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["ModalHeader", "Header"]});
 				if (index > -1) {
 					children[index].props.className = BDFDB.DOMUtils.formatClassName(children[index].props.className, BDFDB.disCN.modalheaderhassibling),
 					children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
@@ -732,7 +732,7 @@ var ServerFolders = (_ => {
 						})
 					}));
 				}
-				[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "Content"});
+				[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "Content"});
 				if (index > -1) children[index].props.children = [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 						tab: this.labels.modal_tabheader1_text,
@@ -827,7 +827,7 @@ var ServerFolders = (_ => {
 						children: BDFDB.ReactUtils.createElement(folderIconCustomPreviewComponent, {})
 					})
 				];
-				[children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: ["ModalFooter", "Footer"]});
+				[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["ModalFooter", "Footer"]});
 				if (index > -1) children[index].props.children = [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 						children: BDFDB.LanguageUtils.LanguageStrings.SAVE,

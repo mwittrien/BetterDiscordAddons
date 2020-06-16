@@ -189,7 +189,7 @@ var OldTitleBar = (_ => {
 		}
 
 		processApp (e) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.instance, {props:[["type",["WINDOWS", "MACOS"]]]});
+			let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {props:[["type",["WINDOWS", "MACOS"]]]});
 			if (index > -1) children[index] = null;
 		}
 
@@ -201,7 +201,7 @@ var OldTitleBar = (_ => {
 			if (!settings.addOldBar) return;
 			let children = BDFDB.ReactUtils.getValue(e.returnvalue, "props.toolbar.props.children");
 			if (!children) {
-				let [oldToolbarParent, oldToolbarIndex] = BDFDB.ReactUtils.findChildren(e.returnvalue, {key: "OldTitleBar-toolbar"});
+				let [oldToolbarParent, oldToolbarIndex] = BDFDB.ReactUtils.findParent(e.returnvalue, {key: "OldTitleBar-toolbar"});
 				if (oldToolbarIndex > -1) oldToolbarParent.splice(oldToolbarIndex, 1);
 				let toolbar = BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCNS.channelheadertoolbar + BDFDB.disCN._oldtitlebartoolbar,

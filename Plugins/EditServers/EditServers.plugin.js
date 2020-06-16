@@ -198,7 +198,7 @@ var EditServers = (_ => {
 				if (e.returnvalue) {
 					let data = changedGuilds[e.instance.props.guild.id];
 					if (data && (data.color3 || data.color4)) {
-						let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: ["GuildTooltip", "BDFDB_TooltipContainer"]});
+						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["GuildTooltip", "BDFDB_TooltipContainer"]});
 						if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 							tooltipConfig: {
 								type: "right",
@@ -217,7 +217,7 @@ var EditServers = (_ => {
 
 		processBlobMask (e) {
 			if (settings.changeInGuildList) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "NavItem"});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "NavItem"});
 				if (index > -1 && children[index].props.to && children[index].props.to.pathname) {
 					let guild = BDFDB.LibraryModules.GuildStore.getGuild((children[index].props.to.pathname.split("/channels/")[1] || "").split("/")[0]);
 					if (guild) {
@@ -239,7 +239,7 @@ var EditServers = (_ => {
 					let renderChildren = e.returnvalue.props.children;
 					e.returnvalue.props.children = (...args) => {
 						let renderedChildren = renderChildren(...args);
-						let [children, index] = BDFDB.ReactUtils.findChildren(renderedChildren, {props:[["className", BDFDB.disCN.guildiconacronym]]});
+						let [children, index] = BDFDB.ReactUtils.findParent(renderedChildren, {props:[["className", BDFDB.disCN.guildiconacronym]]});
 						if (index > -1) {
 							let fontGradient = BDFDB.ObjectUtils.is(data.color2);
 							children[index].props.style = Object.assign({}, children[index].props.style, {
@@ -296,13 +296,13 @@ var EditServers = (_ => {
 		
 		processMessagesPopout (e) {
 			if (settings.changeInRecentMentions) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "VerticalScroller"});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "VerticalScroller"});
 				if (index > -1 && children[index].props.children && BDFDB.ArrayUtils.is(children[index].props.children[0])) for (let i in children[index].props.children[0]) {
 					let divider = children[index].props.children[0][i];
 					if (divider && divider.props && divider.props.className == BDFDB.disCN.messagespopoutchannelseparator) {
 						let channel = BDFDB.ReactUtils.findValue(children[index].props.children[0][parseInt(i)+1], "channel");
 						if (BDFDB.ChannelUtils.isTextChannel(channel)) {
-							let [children2, index2] = BDFDB.ReactUtils.findChildren(divider, {props:[["className", BDFDB.disCN.messagespopoutguildname]]});
+							let [children2, index2] = BDFDB.ReactUtils.findParent(divider, {props:[["className", BDFDB.disCN.messagespopoutguildname]]});
 							if (index2 > -1) children2[index2].props.children = this.getGuildData(channel.guild_id).name;
 						}
 					}

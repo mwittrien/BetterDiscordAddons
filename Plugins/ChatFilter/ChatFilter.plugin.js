@@ -266,7 +266,7 @@ var ChatFilter = (_ => {
 		}
 
 		processMessages (e) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: ["message", "channel"]});
+			let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: ["message", "channel"]});
 			if (index > -1) for (let ele of children) if (ele && ele.props && ele.props.message) {
 				let {blocked, censored, content} = this.parseContent(ele.props.message.content);
 				let oldContent = ele.props.message.content;

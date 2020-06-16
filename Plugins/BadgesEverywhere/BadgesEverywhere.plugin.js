@@ -341,14 +341,14 @@ var BadgesEverywhere = (_ => {
 
 		processMessageHeader (e) {
 			if (e.instance.props.message && settings.showInChat) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue.props.children.slice(1), {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue.props.children.slice(1), {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
 				if (index > -1) this.injectBadges(e.instance, children, e.instance.props.message.author, "chat");
 			}
 		}
 
 		processUserPopout (e) {
 			if (e.instance.props.user && settings.showInPopout) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "CustomStatus"});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "CustomStatus"});
 				if (index > -1) this.injectBadges(e.instance, children, e.instance.props.user, "popout", e.instance.props.activity && e.instance.props.activity.type != BDFDB.DiscordConstants.ActivityTypes.CUSTOM_STATUS);
 			}
 		}

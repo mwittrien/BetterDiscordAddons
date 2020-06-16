@@ -154,7 +154,7 @@ var ServerHider = (_ => {
 			let hiddenGuildIds = BDFDB.DataUtils.load(this, "hidden", "servers") || [];
 			let hiddenFolderIds = BDFDB.DataUtils.load(this, "hidden", "folders") || [];
 			if (hiddenGuildIds.length || hiddenFolderIds.length) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:["folderId", "guildId"], someProps:true});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props:["folderId", "guildId"], someProps:true});
 				if (index > -1) for (let i in children) {
 					let child = children[i];
 					if (child.props.folderId) {

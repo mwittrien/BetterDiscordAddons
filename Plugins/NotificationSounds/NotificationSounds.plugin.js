@@ -453,7 +453,7 @@ var NotificationSounds = (_ => {
 		}
 
 		processShakeable (e) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "IncomingCalls"});
+			let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "IncomingCalls"});
 			if (index > -1) {
 				if (repatchIncoming) {
 					children[index] = null;

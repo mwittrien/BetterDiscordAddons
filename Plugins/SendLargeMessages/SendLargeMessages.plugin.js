@@ -101,7 +101,7 @@ var SendLargeMessages = (_ => {
 		
 		processChannelTextAreaContainer (e) {
 			if (e.returnvalue.ref && e.returnvalue.ref.current && BDFDB.DOMUtils.getParent(BDFDB.dotCN.chatform, e.returnvalue.ref.current)) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "SlateCharacterCount"});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "SlateCharacterCount"});
 				if (index > -1) {
 					let text = BDFDB.LibraryModules.SlateSelectionUtils.serialize(children[index].props.document, "raw");
 					if (text.length > BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH) children[index] = BDFDB.ReactUtils.createElement("div", {

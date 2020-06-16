@@ -552,11 +552,11 @@ var PinDMs = (_ => {
 						BDFDB.ReactUtils.forceUpdate(e.instance);
 					}
 					if (draggedChannel) {
-						let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {filter: child => BDFDB.ReactUtils.getValue(child, "props.channel.id") == draggedChannel});
+						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: child => BDFDB.ReactUtils.getValue(child, "props.channel.id") == draggedChannel});
 						children.splice(index, 1);
 					}
 					if (this.hoveredChannel) {
-						let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {filter: child => BDFDB.ReactUtils.getValue(child, "props.channel.id") == this.hoveredChannel});
+						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: child => BDFDB.ReactUtils.getValue(child, "props.channel.id") == this.hoveredChannel});
 						children.splice(index + 1, 0, BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCNS.guildouter + BDFDB.disCN._pindmsrecentplaceholder,
 							children: BDFDB.ReactUtils.createElement("div", {
@@ -712,7 +712,7 @@ var PinDMs = (_ => {
 					BDFDB.ModuleUtils.forceAllUpdates(this, "PrivateChannelsList");
 				}
 				if (e.returnvalue && this.isPinned(e.instance.props.channel.id, "pinnedRecents") && BDFDB.DataUtils.get(this, "settings", "showPinIcon")) {
-					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"BlobMask"});
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name:"BlobMask"});
 					if (index > -1) children[index].props.upperLeftBadge = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.IconBadge, {
 						className: BDFDB.disCN.guildiconbadge,
 						disableColor: true,

@@ -243,13 +243,13 @@ var CompleteTimestamps = (_ => {
 
 		processMessage (e) {
 			if (BDFDB.ReactUtils.getValue(e, "instance.props.childrenHeader.type.type.displayName") == "MessageTimestamp" && settings.changeForChat) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: e.instance.props.childrenHeader.type});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: e.instance.props.childrenHeader.type});
 				if (index > -1) this.changeTimestamp(children, index, {child:false, tooltip:true});
 			}
 		}
 		
 		processMessageHeader (e) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "MessageTimestamp"});
+			let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "MessageTimestamp"});
 			if (index > -1) {
 				this.changeTimestamp(children, index, {child:settings.showInChat, tooltip:settings.changeForChat});
 				this.setMaxWidth(children[index], e.instance.props.compact);
@@ -258,21 +258,21 @@ var CompleteTimestamps = (_ => {
 		
 		processMessageContent (e) {
 			if (e.instance.props.message.editedTimestamp && settings.changeForEdit) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "SuffixEdited"});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "SuffixEdited"});
 				if (index > -1) this.changeTimestamp(children, index, {child:false, tooltip:true});
 			}
 		}
 
 		processEmbed (e) {
 			if (e.instance.props.embed.timestamp && settings.showInEmbed) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.embedfootertext]]});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props:[["className", BDFDB.disCN.embedfootertext]]});
 				if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children.splice(children[index].props.children.length - 1, 1, this.getTimestamp(languages[choices.creationDateLang].id, e.instance.props.embed.timestamp._i));
 			}
 		}
 
 		processSystemMessage (e) {
 			if (settings.showInChat) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "time"});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "time"});
 				if (index > -1) children[index].props.children = this.getTimestamp(languages[choices.creationDateLang].id, e.instance.props.timestamp._i);
 			}
 		}
@@ -283,7 +283,7 @@ var CompleteTimestamps = (_ => {
 			let stamp = type(parent[index].props), tooltipWrapper;
 			if (stamp.type.displayName == "Tooltip") tooltipWrapper = stamp;
 			else {
-				let [children, tooltipIndex] = BDFDB.ReactUtils.findChildren(stamp, {name: "Tooltip"});
+				let [children, tooltipIndex] = BDFDB.ReactUtils.findParent(stamp, {name: "Tooltip"});
 				if (tooltipIndex > -1) tooltipWrapper = children[tooltipIndex];
 			}
 			if (tooltipWrapper) {

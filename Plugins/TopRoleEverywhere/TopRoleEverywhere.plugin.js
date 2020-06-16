@@ -168,7 +168,7 @@ var TopRoleEverywhere = (_ => {
 
 		processMessageHeader (e) {
 			if (e.instance.props.message) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue.props.children.slice(1), {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue.props.children.slice(1), {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
 				if (index > -1) {
 					if (settings.showInChat) this.injectRoleTag(children, e.instance.props.message.author, "chat", {
 						tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,

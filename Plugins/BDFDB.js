@@ -1821,69 +1821,6 @@
 			return key != null && props[key] != null && value != null && (key == "className" ? (" " + props[key] + " ").indexOf(" " + value + " ") > -1 : BDFDB.equals(props[key], value));
 		}
 	};
-	BDFDB.ReactUtils.findChildren = function (nodeOrInstance, config) {
-		if (!nodeOrInstance || !BDFDB.ObjectUtils.is(config) || !config.name && !config.key && !config.props && !config.filter) return [null, -1];
-		let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
-		if (!BDFDB.ObjectUtils.is(instance) && !BDFDB.ArrayUtils.is(instance)) return [null, -1];
-		config.name = config.name && [config.name].flat().filter(n => n);
-		config.key = config.key && [config.key].flat().filter(n => n);
-		config.props = config.props && [config.props].flat().filter(n => n);
-		config.filter = typeof config.filter == "function" && config.filter;
-		let parent = firstArray = instance;
-		while (!BDFDB.ArrayUtils.is(firstArray) && firstArray.props && firstArray.props.children) firstArray = firstArray.props.children;
-		if (!BDFDB.ArrayUtils.is(firstArray)) {
-			if (parent && parent.props) {
-				parent.props.children = [parent.props.children];
-				firstArray = parent.props.children;
-			}
-			else firstArray = [];
-		}
-		return getChildren(instance);
-		function getChildren (children) {
-			let result = [firstArray, -1];
-			if (!children) return result;
-			if (!BDFDB.ArrayUtils.is(children)) {
-				if (check(children)) result = found(children);
-				else if (children.props && children.props.children) {
-					parent = children;
-					result = getChildren(children.props.children);
-				}
-			}
-			else {
-				for (let i = 0; result[1] == -1 && i < children.length; i++) if (children[i]) {
-					if (BDFDB.ArrayUtils.is(children[i])) {
-						parent = children;
-						result = getChildren(children[i]);
-					}
-					else if (check(children[i])) {
-						parent = children;
-						result = found(children[i]);
-					}
-					else if (children[i].props && children[i].props.children) {
-						parent = children[i];
-						result = getChildren(children[i].props.children);
-					}
-				}
-			}
-			return result;
-		}
-		function found (child) {
-			if (BDFDB.ArrayUtils.is(parent)) return [parent, parent.indexOf(child)];
-			else {
-				parent.props.children = [];
-				parent.props.children.push(child);
-				return [parent.props.children, 0];
-			}
-		}
-		function check (instance) {
-			if (!instance) return false;
-			let props = instance.stateNode ? instance.stateNode.props : instance.props;
-			return instance.type && config.name && config.name.some(name => InternalBDFDB.isInstanceCorrect(instance, name)) || config.key && config.key.some(key => instance.key == key) || props && config.props && config.props[config.someProps ? "some" : "every"](prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => propCheck(props, prop[0], checkvalue)) : propCheck(props, prop[0], prop[1])) : props[prop] !== undefined) || config.filter && config.filter(instance);
-		}
-		function propCheck (props, key, value) {
-			return key != null && props[key] != null && value != null && (key == "className" ? (" " + props[key] + " ").indexOf(" " + value + " ") > -1 : BDFDB.equals(props[key], value));
-		}
-	};
 	BDFDB.ReactUtils.setChild = function (parent, stringOrChild) {
 		if (!BDFDB.ReactUtils.isValidElement(parent) || (!BDFDB.ReactUtils.isValidElement(stringOrChild) && typeof stringOrChild != "string" && !BDFDB.ArrayUtils.is(stringOrChild))) return;
 		let set = false;
@@ -2033,6 +1970,69 @@
 			}
 			depth--;
 			return result;
+		}
+	};
+	BDFDB.ReactUtils.findParent = function (nodeOrInstance, config) {
+		if (!nodeOrInstance || !BDFDB.ObjectUtils.is(config) || !config.name && !config.key && !config.props && !config.filter) return [null, -1];
+		let instance = Node.prototype.isPrototypeOf(nodeOrInstance) ? BDFDB.ReactUtils.getInstance(nodeOrInstance) : nodeOrInstance;
+		if (!BDFDB.ObjectUtils.is(instance) && !BDFDB.ArrayUtils.is(instance)) return [null, -1];
+		config.name = config.name && [config.name].flat().filter(n => n);
+		config.key = config.key && [config.key].flat().filter(n => n);
+		config.props = config.props && [config.props].flat().filter(n => n);
+		config.filter = typeof config.filter == "function" && config.filter;
+		let parent = firstArray = instance;
+		while (!BDFDB.ArrayUtils.is(firstArray) && firstArray.props && firstArray.props.children) firstArray = firstArray.props.children;
+		if (!BDFDB.ArrayUtils.is(firstArray)) {
+			if (parent && parent.props) {
+				parent.props.children = [parent.props.children];
+				firstArray = parent.props.children;
+			}
+			else firstArray = [];
+		}
+		return getParent(instance);
+		function getParent (children) {
+			let result = [firstArray, -1];
+			if (!children) return result;
+			if (!BDFDB.ArrayUtils.is(children)) {
+				if (check(children)) result = found(children);
+				else if (children.props && children.props.children) {
+					parent = children;
+					result = getParent(children.props.children);
+				}
+			}
+			else {
+				for (let i = 0; result[1] == -1 && i < children.length; i++) if (children[i]) {
+					if (BDFDB.ArrayUtils.is(children[i])) {
+						parent = children;
+						result = getParent(children[i]);
+					}
+					else if (check(children[i])) {
+						parent = children;
+						result = found(children[i]);
+					}
+					else if (children[i].props && children[i].props.children) {
+						parent = children[i];
+						result = getParent(children[i].props.children);
+					}
+				}
+			}
+			return result;
+		}
+		function found (child) {
+			if (BDFDB.ArrayUtils.is(parent)) return [parent, parent.indexOf(child)];
+			else {
+				parent.props.children = [];
+				parent.props.children.push(child);
+				return [parent.props.children, 0];
+			}
+		}
+		function check (instance) {
+			if (!instance) return false;
+			let props = instance.stateNode ? instance.stateNode.props : instance.props;
+			return instance.type && config.name && config.name.some(name => InternalBDFDB.isInstanceCorrect(instance, name)) || config.key && config.key.some(key => instance.key == key) || props && config.props && config.props[config.someProps ? "some" : "every"](prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => propCheck(props, prop[0], checkvalue)) : propCheck(props, prop[0], prop[1])) : props[prop] !== undefined) || config.filter && config.filter(instance);
+		}
+		function propCheck (props, key, value) {
+			return key != null && props[key] != null && value != null && (key == "className" ? (" " + props[key] + " ").indexOf(" " + value + " ") > -1 : BDFDB.equals(props[key], value));
 		}
 	};
 	BDFDB.ReactUtils.findProps = function (nodeOrInstance, config) {
@@ -2220,7 +2220,7 @@
 			let MessagesPrototype = BDFDB.ReactUtils.getValue(MessagesIns, "_reactInternalFiber.type.prototype");
 			if (MessagesIns && MessagesPrototype) {
 				BDFDB.ModuleUtils.patch(BDFDB, MessagesPrototype, "render", {after: e => {
-					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnValue, {props: ["message", "channel"]});
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnValue, {props: ["message", "channel"]});
 					if (index > -1) for (let ele of children) if (ele.props.message) ele.props.message = new BDFDB.DiscordObjects.Message(ele.props.message);
 				}}, {once: true});
 				BDFDB.ReactUtils.forceUpdate(MessagesIns);
@@ -2390,7 +2390,7 @@
 			let GuildsPrototype = BDFDB.ReactUtils.getValue(GuildsIns, "_reactInternalFiber.type.prototype");
 			if (GuildsIns && GuildsPrototype) {
 				BDFDB.ModuleUtils.patch(BDFDB, GuildsPrototype, "render", {after: e => {
-					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnValue, {name: "ConnectedUnreadDMs"});
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnValue, {name: "ConnectedUnreadDMs"});
 					if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement("div", {}));
 					BDFDB.ReactUtils.forceUpdate(GuildsIns);
 				}}, {once: true});
@@ -9363,7 +9363,7 @@
 	
 	InternalBDFDB.processV2CContentColumn = function (e) {
 		if (window.PluginUpdates && window.PluginUpdates.plugins && typeof e.instance.props.title == "string" && e.instance.props.title.toUpperCase().indexOf("PLUGINS") == 0) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {key: "folder-button"});
+			let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {key: "folder-button"});
 			if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 				text: "Only checks for updates of plugins, which support the updatecheck. Rightclick for a list of supported plugins. (Listed ≠ Outdated)",
 				tooltipConfig: {
@@ -9494,7 +9494,7 @@
 				for (let type of newBadges) if (!e.thisObject.state[`${type}Mask`]) e.thisObject.state[`${type}Mask`] = new InternalComponents.LibraryComponents.Animations.Controller({spring: 0});
 			},
 			after: e => {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnValue, {name: "TransitionGroup"});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnValue, {name: "TransitionGroup"});
 				if (index > -1) {
 					children[index].props.children.push(!e.thisObject.props.lowerLeftBadge ? null : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.BadgeAnimationContainer, {
 						className: BDFDB.disCN.guildlowerleftbadge,
@@ -9509,7 +9509,7 @@
 						children: e.thisObject.props.upperLeftBadge
 					}));
 				}
-				[children, index] = BDFDB.ReactUtils.findChildren(e.returnValue, {name: "mask"});
+				[children, index] = BDFDB.ReactUtils.findParent(e.returnValue, {name: "mask"});
 				if (index > -1) {
 					children[index].props.children.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Animations.animated.rect, {
 						x: -4,
@@ -9663,6 +9663,8 @@
 	BDFDB.ModuleUtils.forceAllUpdates(BDFDB);
 	
 	InternalBDFDB.addContextListeners(BDFDB);
+	
+	BDFDB.ReactUtils.findParent = BDFDB.ReactUtils.findChildren;
 
 	if (BDFDB.UserUtils.me.id == myId) {
 		for (let module in DiscordClassModules) if (!DiscordClassModules[module]) BDFDB.LogUtils.warn(module + " not initialized in DiscordClassModules");
@@ -9818,8 +9820,4 @@
 			InternalBDFDB.reloadLib();
 		}
 	}, 10000);
-	
-	let seenWelcomeModal = BDFDB.DataUtils.load(BDFDB, "welcomeScreen", "seen"), inMyGuild = !!BDFDB.LibraryModules.GuildStore.getGuild(myGuildId);
-	if (seenWelcomeModal === null) BDFDB.DataUtils.save(inMyGuild, BDFDB, "welcomeScreen", "seen");
-	else if (!inMyGuild && seenWelcomeModal === true) BDFDB.DataUtils.save(false, BDFDB, "welcomeScreen", "seen");
 })();

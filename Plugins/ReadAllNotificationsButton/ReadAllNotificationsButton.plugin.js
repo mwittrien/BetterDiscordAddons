@@ -187,14 +187,14 @@ var ReadAllNotificationsButton = (_ => {
 
 		onUserContextMenu (e) {
 			if (e.instance.props.channel && e.type == "DMUserContextMenu") {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: BDFDB.LibraryComponents.MenuItems.MenuGroup});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: BDFDB.LibraryComponents.MenuItems.MenuGroup});
 				if (index > -1) this.injectItem(children, e.instance.props.channel.id);
 			}
 		}
 
 		onGroupDMContextMenu (e) {
 			if (e.instance.props.channel) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: BDFDB.LibraryComponents.MenuItems.MenuGroup});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: BDFDB.LibraryComponents.MenuItems.MenuGroup});
 				if (index > -1) this.injectItem(children, e.instance.props.channel.id);
 			}
 		}
@@ -214,7 +214,7 @@ var ReadAllNotificationsButton = (_ => {
 		}
 		
 		processGuilds (e) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ConnectedUnreadDMs"});
+			let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ConnectedUnreadDMs"});
 			if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.disCNS.guildouter + BDFDB.disCN._readallnotificationsbuttonframe,
 				style: {height: 20},

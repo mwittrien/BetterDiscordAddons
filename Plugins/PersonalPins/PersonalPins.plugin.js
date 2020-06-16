@@ -157,7 +157,7 @@ var PersonalPins = (_ => {
 		}
 
 		processHeaderBarContainer (e) {
-			let [children, index] = BDFDB.ReactUtils.findChildren(BDFDB.ReactUtils.getValue(e.returnvalue, "props.toolbar"), {name: "FluxContainer(Search)"});
+			let [children, index] = BDFDB.ReactUtils.findParent(BDFDB.ReactUtils.getValue(e.returnvalue, "props.toolbar"), {name: "FluxContainer(Search)"});
 			if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: this.labels.popout_note_text,

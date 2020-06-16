@@ -97,7 +97,7 @@ var EmojiStatistics = (_ => {
 
 		processEmojiPicker (e) {
 			this.loadEmojiList();
-			let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name:"DiversitySelector"});
+			let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name:"DiversitySelector"});
 			if (index > -1) children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 				text: "Emoji Statistics",
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {

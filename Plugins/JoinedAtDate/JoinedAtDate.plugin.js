@@ -245,7 +245,7 @@ var JoinedAtDate = (_ => {
 
 		processUserPopout (e) {
 			if (e.instance.props.user && settings.addInUserPopout) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "CustomStatus"});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "CustomStatus"});
 				if (index > -1) this.injectDate(e.instance, children, 2, e.instance.props.user);
 			}
 		}
@@ -255,7 +255,7 @@ var JoinedAtDate = (_ => {
 				let renderChildren = e.returnvalue.props.children;
 				e.returnvalue.props.children = (...args) => {
 					let renderedChildren = renderChildren(...args);
-					let [children, index] = BDFDB.ReactUtils.findChildren(renderedChildren, {name: ["DiscordTag", "ColoredFluxTag"]});
+					let [children, index] = BDFDB.ReactUtils.findParent(renderedChildren, {name: ["DiscordTag", "ColoredFluxTag"]});
 					if (index > -1) this.injectDate(e.instance, children, 1, children[index].props.user);
 					return renderedChildren;
 				};

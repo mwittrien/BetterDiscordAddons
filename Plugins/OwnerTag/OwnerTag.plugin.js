@@ -175,7 +175,7 @@ var OwnerTag = (_ => {
 			if (e.instance.props.message && settings.addInChatWindow) {
 				let userType = this.getUserType(e.instance.props.message.author);
 				if (userType) {
-					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue.props.children.slice(1), {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue.props.children.slice(1), {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
 					if (index > -1) this.injectOwnerTag(children, e.instance.props.message.author, userType, e.instance.props.compact ? 0 : 2, {
 						tagClass: e.instance.props.compact ? BDFDB.disCN.messagebottagcompact : BDFDB.disCN.messagebottagcozy,
 						useRem: true
@@ -212,7 +212,7 @@ var OwnerTag = (_ => {
 			if (e.instance.props.user && settings.addInUserPopout) {
 				let userType = this.getUserType(e.instance.props.user);
 				if (userType) {
-					let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadertagwithnickname]]});
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadertagwithnickname]]});
 					if (index > -1) this.injectOwnerTag(children, e.instance.props.user, userType, 2, {
 						tagClass: BDFDB.disCNS.userpopoutheaderbottagwithnickname + BDFDB.disCN.bottagnametag
 					});
@@ -223,7 +223,7 @@ var OwnerTag = (_ => {
 		injectOwnerTag (children, user, userType, insertIndex, config = {}) {
 			if (!BDFDB.ArrayUtils.is(children) || !user) return;
 			if (settings.useCrown || settings.hideNativeCrown) {
-				let [_, index] = BDFDB.ReactUtils.findChildren(children, {props: [["text",[BDFDB.LanguageUtils.LanguageStrings.GROUP_OWNER, BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER]]]});
+				let [_, index] = BDFDB.ReactUtils.findParent(children, {props: [["text",[BDFDB.LanguageUtils.LanguageStrings.GROUP_OWNER, BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER]]]});
 				if (index > -1) children[index] = null;
 			}
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());

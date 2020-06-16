@@ -511,7 +511,7 @@ var FriendNotifications = (_ => {
 		
 		processGuilds (e) {
 			if (settings.addOnlineCount) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {name: "ConnectedUnreadDMs"});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ConnectedUnreadDMs"});
 				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(FriendOnlineCounter, {
 					amount: BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount()
 				}));

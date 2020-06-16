@@ -72,9 +72,9 @@ var BetterNsfwTag = (_ => {
 
 		processChannelItem (e) {
 			if (e.instance.props.channel && e.instance.props.channel.nsfw) {
-				let [children, index] = BDFDB.ReactUtils.findChildren(e.returnvalue, {props:[["className", BDFDB.disCN.channelchildren]]});
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props:[["className", BDFDB.disCN.channelchildren]]});
 				if (index > -1 && children[index].props && children[index].props.children) {
-					let [oldTagParent, oldTagIndex] = BDFDB.ReactUtils.findChildren(children[index], {key: "NSFW-badge"});
+					let [oldTagParent, oldTagIndex] = BDFDB.ReactUtils.findParent(children[index], {key: "NSFW-badge"});
 					if (oldTagIndex > -1) oldTagParent.splice(oldTagIndex, 1);
 					children[index].props.children.push(BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCNS._betternsfwtagtag + BDFDB.disCN.channelchildiconbase,
