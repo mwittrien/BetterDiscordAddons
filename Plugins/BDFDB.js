@@ -2261,14 +2261,14 @@
 		return null;
 	};
 	BDFDB.UserUtils.getAvatar = function (id = BDFDB.UserUtils.me.id) {
-		var user = LibraryModules.UserStore.getUser(typeof id == "number" ? id.toFixed() : id);
+		let user = LibraryModules.UserStore.getUser(typeof id == "number" ? id.toFixed() : id);
 		if (!user) return window.location.origin + "/assets/322c936a8c8be1b803cd94861bdfa868.png";
 		else return ((user.avatar ? "" : window.location.origin) + LibraryModules.IconUtils.getUserAvatarURL(user)).split("?")[0];
 	};
-	BDFDB.UserUtils.can = function (permission, id = BDFDB.UserUtils.me.id, channelid = LibraryModules.LastChannelStore.getChannelId()) {
+	BDFDB.UserUtils.can = function (permission, id = BDFDB.UserUtils.me.id, channelId = LibraryModules.LastChannelStore.getChannelId()) {
 		if (!BDFDB.DiscordConstants.Permissions[permission]) BDFDB.LogUtils.warn(permission + " not found in Permissions");
 		else {
-			var channel = LibraryModules.ChannelStore.getChannel(channelid);
+			let channel = LibraryModules.ChannelStore.getChannel(channelId);
 			if (channel) return LibraryModules.PermissionUtils.canUser(id, BDFDB.DiscordConstants.Permissions[permission], channel);
 		}
 		return false;
@@ -4232,7 +4232,7 @@
 	DiscordClassModules.EmojiInput = BDFDB.ModuleUtils.findByProperties("inputContainer", "emojiButton");
 	DiscordClassModules.EmojiPicker = BDFDB.ModuleUtils.findByProperties("emojiPicker", "inspector");
 	DiscordClassModules.EmojiPickerDiversitySelector = BDFDB.ModuleUtils.findByProperties("diversityEmojiItemImage", "diversitySelectorPopout");
-	DiscordClassModules.EmojiPickerItem = BDFDB.ModuleUtils.findByProperties("emojiItemImage", "emojiItemImageLoading");
+	DiscordClassModules.EmojiPickerItem = BDFDB.ModuleUtils.findByProperties("emojiSpriteImage");
 	DiscordClassModules.EmojiPickerInspector = BDFDB.ModuleUtils.findByProperties("inspector", "glyphEmoji");
 	DiscordClassModules.ExpressionPicker = BDFDB.ModuleUtils.findByProperties("contentWrapper", "navButton", "navList");
 	DiscordClassModules.File = BDFDB.ModuleUtils.findByProperties("downloadButton", "fileNameLink");
@@ -4865,8 +4865,7 @@
 		emojipickerdiversityselector: ["EmojiPickerDiversitySelector", "diversitySelector"],
 		emojipickerdiversityselectorpopout: ["EmojiPickerDiversitySelector", "diversitySelectorPopout"],
 		emojipickerdiversityselectorwrapper: ["EmojiPicker", "diversitySelector"],
-		emojipickeremojiitemimage: ["EmojiPickerItem", "emojiItemImage"],
-		emojipickeremojiitemimageloading: ["EmojiPickerItem", "emojiItemImageLoading"],
+		emojipickeremojispriteimage: ["EmojiPickerItem", "emojiSpriteImage"],
 		emojipickerheader: ["EmojiPicker", "header"],
 		emojipickerinspector: ["EmojiPickerInspector", "inspector"],
 		emojipickerinspectoremoji: ["EmojiPickerInspector", "emoji"],
@@ -5182,11 +5181,9 @@
 		mentioninteractive: ["NotFound", "mentionInteractive"],
 		mentionwrapper: ["NotFound", "mentionWrapper"],
 		menu: ["Menu", "menu"],
-		menuaccommodatescrollbar: ["Menu", "accommodateScrollbar"],
 		menucaret: ["Menu", "caret"],
 		menucheck: ["Menu", "check"],
 		menucheckbox: ["Menu", "checkbox"],
-		menucheckboxempty: ["Menu", "checkboxEmpty"],
 		menucolorbrand: ["Menu", "colorBrand"],
 		menucolordanger: ["Menu", "colorDanger"],
 		menucolordefault: ["Menu", "colorDefault"],
@@ -5311,7 +5308,6 @@
 		messagesscrollerinner: ["MessagesWrap", "scrollerInner"],
 		messagesscrollerwrapper: ["MessagesWrap", "scrollerWrap"],
 		messageswrapper: ["MessagesWrap", "messagesWrapper"],
-		messageswrapperplaceholder: ["MessagesWrap", "placeholder"],
 		messagesystem: ["Message", "systemMessage"],
 		messagesystemaccessories: ["MessageBody", "systemMessageAccessories"],
 		messagesystemcontainer: ["MessageSystem", "container"],
@@ -5351,7 +5347,7 @@
 		modalclose: ["Modal", "close"],
 		modalchangelogmodal: ["BDFDB", "changeLogModal"],
 		modalconfirmmodal: ["BDFDB", "confirmModal"],
-		modalcontent: ["Modal", "content"],
+		modalcontent: [BDFDB.DiscordClassModules.LayerModal.content ? "LayerModal" : "Modal", "content"],
 		modalfooter: ["Modal", "footer"],
 		modalguildname: ["ModalItems", "guildName"],
 		modalheader: ["Modal", "header"],
@@ -5365,7 +5361,7 @@
 		modalsizemedium: ["Modal", "sizeMedium"],
 		modalsizesmall: ["Modal", "sizeSmall"],
 		modalsub: ["Modal", "modal"],
-		modalsubinner: ["Modal", "inner"],
+		modalsubinner: [BDFDB.DiscordClassModules.LayerModal.inner ? "LayerModal" : "Modal", "inner"],
 		modalsubinnerscrollerless: ["BDFDB", "modalInnerScrollerLess"],
 		modaltabcontent: ["BDFDB", "modalTabContent"],
 		modaltabcontentopen: ["BDFDB", "modalTabContentOpen"],
@@ -5461,16 +5457,8 @@
 		quickswitchresultnote: ["QuickSwitch", "note"],
 		quickswitchresultusername: ["QuickSwitch", "username"],
 		recentmentionsclosebutton: ["RecentMentions", "closeButton"],
-		recentmentionsfilterpopout: ["RecentMentions", "recentMentionsFilterPopout"],
-		recentmentionsheader: ["RecentMentions", "header"],
 		recentmentionsjumpbutton: ["RecentMentions", "jumpButton"],
-		recentmentionsmentionfilter: ["RecentMentions", "mentionFilter"],
-		recentmentionsmentionfilterlabel: ["RecentMentions", "label"],
-		recentmentionsmentionfiltervalue: ["RecentMentions", "value"],
 		recentmentionspopout: ["RecentMentions", "recentMentionsPopout"],
-		recentmentionstabbar: ["RecentMentions", "tabBar"],
-		recentmentionstabbaritem: ["RecentMentions", "tabBarItem"],
-		recentmentionstabbarwrapper: ["RecentMentions", "headerTabBarWrapper"],
 		scrollbar: ["Scrollbar", "scrollbar"],
 		scrollbardefault: ["Scrollbar", "scrollbarDefault"],
 		scrollbarghost: ["Scrollbar", "scrollbarGhost"],
@@ -5605,7 +5593,7 @@
 		spoilertext: ["Spoiler", "spoilerText"],
 		spoilerwarning: ["Spoiler", "spoilerWarning"],
 		splashbackground: ["NotFound", "splashBackground"],
-		strikethrough: ["TextStyle", "strikeThrough"],
+		strikethrough: ["TextStyle", "strikethrough"],
 		status: ["Avatar", "status"],
 		stopanimations: ["NotFound", "stopAnimations"],
 		subtext: ["NotFound", "subtext"],
@@ -5657,7 +5645,6 @@
 		textareafontsize18padding: ["ChannelTextArea", "fontSize18Padding"],
 		textareafontsize20padding: ["ChannelTextArea", "fontSize20Padding"],
 		textareafontsize24padding: ["ChannelTextArea", "fontSize24Padding"],
-		textareahasautocomplete: ["ChannelTextArea", "hasAutocomplete"],
 		textareaicon: ["ChannelTextAreaButton", "icon"],
 		textareaiconpulse: ["ChannelTextAreaButton", "pulseIcon"],
 		textareainner: ["ChannelTextArea", "inner"],
@@ -5758,7 +5745,6 @@
 		userpopoutavatarwrapper: ["UserPopout", "avatarWrapper"],
 		userpopoutavatarwrappernormal: ["UserPopout", "avatarWrapperNormal"],
 		userpopoutbody: ["UserPopout", "body"],
-		userpopoutbodyinner: ["UserPopout", "bodyInner"],
 		userpopoutbodytitle: ["UserPopout", "bodyTitle"],
 		userpopoutcustomstatus: ["UserPopout", "customStatus"],
 		userpopoutcustomstatusemoji: ["UserPopout", "customStatusEmoji"],
@@ -5819,7 +5805,6 @@
 		voicedetailschannel: ["VoiceDetails", "channel"],
 		voicedetailscustomstatuscontainer: ["VoiceDetails", "customStatusContainer"],
 		voicedetailshotspot: ["VoiceDetails", "hotspot"],
-		voicedetailsinactive: ["VoiceDetailsPing", "inactive"],
 		voicedetailsinner: ["VoiceDetails", "inner"],
 		voicedetailslabelwrapper: ["VoiceDetailsPing", "labelWrapper"],
 		voicedetailsping: ["VoiceDetailsPing", "ping"],

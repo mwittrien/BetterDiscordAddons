@@ -4577,11 +4577,7 @@ body:before {
 	cursor: no-drop;
 }
 .emojiItemDisabled-1FvFuF > * {
-	filter: grayscale(1);;
-}
-#app-mount .emojiItemImageLoading-1yEIxx {					/* picker				emoji loading						*/
-	border-radius: 10px;
-	background: rgba(var(--vtransparencycolor), 0.3);
+	filter: grayscale(1);
 }
 
 .premiumPromo-fVlLu- {										/* picker				premium warning						*/
