@@ -2824,11 +2824,13 @@ body:before {
 .root-1gCeng .modal-yWgWj-:before {
 	display: none;
 }
-#app-mount .footer-3rDWdC {									/* modal				footer							*/
+#app-mount .footer-3rDWdC,									/* modal				footer							*/
+#app-mount .footer-2gL1pp {									/* modal				footer							*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 	box-shadow: none;
 }
 #app-mount .closeButton-1tv5uR,								/* modal				closebutton						*/
+#app-mount .close-hZ94c6,
 #app-mount .close-1kwMUs {
 	color: rgb(var(--fontwhite1));
 }
