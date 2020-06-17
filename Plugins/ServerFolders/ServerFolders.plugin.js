@@ -195,6 +195,44 @@ var ServerFolders = (_ => {
 		componentWillUnmount() {
 			BDFDB.TimeUtils.clear(this._previewInterval);
 		}
+		checkImage(base64OrUrl, callback) {
+			if (base64OrUrl.indexOf("https://") == 0 || base64OrUrl.indexOf("http://") == 0) BDFDB.LibraryRequires.request(base64OrUrl.trim(), (error, response, body) => {
+				if (response && response.headers["content-type"] && response.headers["content-type"].indexOf("image") != -1 && response.headers["content-type"] != "image/gif") {
+					this.resizeImage("data:" + response.headers["content-type"] + ";base64," + (new Buffer(body).toString("base64")), callback);
+				}
+				else callback(base64OrUrl);
+			});
+			else this.resizeImage(base64OrUrl, callback);
+		}
+		resizeImage(base64, callback) {
+			let type = base64.split("data:").slice(1).join(" ").split(";")[0];
+			if (type == "image/gif") callback(base64);
+			else {
+				let img = new Image();
+				img.onload = function() {
+					let width = 0, height = 0;
+					if (this.width >= this.height) {
+						width = (128 / this.height) * this.width;
+						height = 128;
+					}
+					else {
+						width = 128;
+						height = (128 / this.width) * this.height;
+					}
+					let canvas = document.createElement("canvas");
+					let ctx = canvas.getContext("2d");
+					ctx.canvas.width = width;
+					ctx.canvas.height = height;
+					document.body.appendChild(canvas);
+					ctx.drawImage(img, 0, 0, width, height);
+					callback(canvas.toDataURL(type));
+				};
+				img.onerror = function() {
+					callback(base64);
+				};
+				img.src = base64;
+			}
+		}
 		render() {
 			return [
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
@@ -256,11 +294,15 @@ var ServerFolders = (_ => {
 								onClick: (e, instance) => {
 									let inputIns = BDFDB.ReactUtils.findOwner(this, {name: "BDFDB_TextInput", all:true, unlimited:true});
 									if (inputIns.length == 2 && inputIns[0].props.value && inputIns[1].props.value) {
-										BDFDB.DataUtils.save({openicon: inputIns[0].props.value, closedicon: inputIns[1].props.value}, _this, "customicons", _this.generateID("customicon"));
-										this.props.open = null;
-										this.props.closed = null;
-										BDFDB.ModuleUtils.forceAllUpdates(this, "GuildFolderSettingsModal");
-										BDFDB.NotificationUtils.toast("Custom Icon was added to selection", {type:"success"});
+										this.checkImage(inputIns[0].props.value, openIcon => {
+											this.checkImage(inputIns[1].props.value, closedIcon => {
+												BDFDB.DataUtils.save({openicon: openIcon, closedicon: closedIcon}, _this, "customicons", _this.generateID("customicon"));
+												this.props.open = null;
+												this.props.closed = null;
+												BDFDB.ModuleUtils.forceAllUpdates(_this, "GuildFolderSettingsModal");
+												BDFDB.NotificationUtils.toast("Custom Icon was added to selection", {type:"success"});
+											});
+										})
 									}
 									else BDFDB.NotificationUtils.toast("Add an image for the open and the closed icon", {type:"danger"});
 								}
@@ -275,7 +317,7 @@ var ServerFolders = (_ => {
 	return class ServerFolders {
 		getName () {return "ServerFolders";}
 
-		getVersion () {return "6.7.9";}
+		getVersion () {return "6.8.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -732,7 +774,7 @@ var ServerFolders = (_ => {
 						})
 					}));
 				}
-				[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "Content"});
+				[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["ModalContent", "Content"]});
 				if (index > -1) children[index].props.children = [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 						tab: this.labels.modal_tabheader1_text,
@@ -938,8 +980,8 @@ var ServerFolders = (_ => {
 			return `data:image/svg+xml;base64,${btoa(svg)}`;
 		}
 
-		openFolderCreationMenu (guilds, initguildid) {
-			let targetedGuildIds = [].concat(initguildid || []);
+		openFolderCreationMenu (guilds, initGuildId) {
+			let targetedGuildIds = [].concat(initGuildId || []);
 			
 			BDFDB.ModalUtils.open(this, {
 				size: "MEDIUM",
