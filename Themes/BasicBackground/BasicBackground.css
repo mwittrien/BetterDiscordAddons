@@ -172,6 +172,7 @@ body,														/* body														*/
 #app-mount .panels-j1Uci_ > *,								/* account/voice		inner								*/
 #app-mount .chat-3bRxxu,									/* chat					container							*/
 #app-mount .noChannel-Z1DQK7,								/* nochannel												*/
+#app-mount .members-1998pB,									/* members													*/
 #app-mount .content-MLh4nU,									/* unavailable												*/
 #app-mount .container-1D34oG,								/* peoples													*/
 #app-mount .applicationStore-1pNvnv,						/* nitro													*/
@@ -2549,6 +2550,10 @@ body:before {
 
 /* ~~~~		12.		GUILDSETTINGS					~~~~ */
 
+.scroller-305q3I {											/* rolesettings			sidebar								*/
+	background-color: transparent;
+}
+
 #app-mount .emojiAliasInput-1y-NBz .emojiInput-1aLNse {		/* emojisettings		nameinput							*/
 	background-color: rgba(var(--vtransparencycolor), 0.1);
 }
@@ -2824,18 +2829,16 @@ body:before {
 .root-1gCeng .modal-yWgWj-:before {
 	display: none;
 }
-#app-mount .footer-3rDWdC,									/* modal				footer							*/
 #app-mount .footer-2gL1pp {									/* modal				footer							*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 	box-shadow: none;
 }
 #app-mount .closeButton-1tv5uR,								/* modal				closebutton						*/
-#app-mount .close-hZ94c6,
-#app-mount .close-1kwMUs {
+#app-mount .close-hZ94c6 {
 	color: rgb(var(--fontwhite1));
 }
 #app-mount .closeButton-1tv5uR:hover,
-#app-mount .close-1kwMUs:hover {
+#app-mount .close-hZ94c6:hover {
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
 
