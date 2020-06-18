@@ -5361,7 +5361,7 @@
 		modalsizemedium: ["Modal", "sizeMedium"],
 		modalsizesmall: ["Modal", "sizeSmall"],
 		modalsub: ["Modal", "modal"],
-		modalsubinner: [DiscordClassModules.LayerModal.inner ? "LayerModal" : "Modal", "inner"],
+		modalsubinner: ["LayerModal", "inner"],
 		modalsubinnerscrollerless: ["BDFDB", "modalInnerScrollerLess"],
 		modaltabcontent: ["BDFDB", "modalTabContent"],
 		modaltabcontentopen: ["BDFDB", "modalTabContentOpen"],
