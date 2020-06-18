@@ -179,6 +179,7 @@ body,														/* body														*/
 #app-mount .pageWrapper-1PgVDX,								/* guilddiscovery											*/
 #app-mount .scroller-2FKFPG,								/* scroller													*/
 #app-mount .standardSidebarView-3F1I7i,						/* settings													*/
+#app-mount .scroller-305q3I,								/* settings				sidebar scroller					*/
 #app-mount .contentRegion-3nDuYy {							/* settings				content								*/
 	background: transparent;
 }
@@ -2549,10 +2550,6 @@ body:before {
 
 
 /* ~~~~		12.		GUILDSETTINGS					~~~~ */
-
-.scroller-305q3I {											/* rolesettings			sidebar								*/
-	background-color: transparent;
-}
 
 #app-mount .emojiAliasInput-1y-NBz .emojiInput-1aLNse {		/* emojisettings		nameinput							*/
 	background-color: rgba(var(--vtransparencycolor), 0.1);

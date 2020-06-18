@@ -5563,6 +5563,7 @@
 		settingswindowcontent: ["SettingsWindowScroller", "content"],
 		settingswindowcontentcolumn: ["SettingsWindow", "contentColumn"],
 		settingswindowcontentregion: ["SettingsWindow", "contentRegion"],
+		settingswindowscroller: ["SettingsWindowScroller", "scroller"],
 		settingswindowsidebarregion: ["SettingsWindow", "sidebarRegion"],
 		settingswindowstandardsidebarview: ["SettingsWindow", "standardSidebarView"],
 		size10: ["TextSize", "size10"],
