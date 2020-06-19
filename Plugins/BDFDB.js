@@ -8950,6 +8950,9 @@
 		${BDFDB.dotCN.modaltabcontent} {
 			margin-top: 10px;
 		}
+		${BDFDB.dotCN.scroller + BDFDB.dotCN.listscroller} {
+			height: unset;
+		}
 		${BDFDB.dotCNS.listscroller + BDFDB.dotCN.modaltabcontent} {
 			margin-top: 0;
 		}
