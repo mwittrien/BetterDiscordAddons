@@ -12,13 +12,13 @@ var PersonalPins = (_ => {
 
 		getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-		getVersion () {return "1.9.3";} 
+		getVersion () {return "1.9.4";} 
 
 		getAuthor () {return "DevilBro";}
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
+				"fixed":[["Crash Issue","Fixed a crash issue that occured on some rare occasions"]]
 			};
 
 			this.patchedModules = {
@@ -276,7 +276,7 @@ var PersonalPins = (_ => {
 				message.author = new BDFDB.DiscordObjects.User(message.author);
 				message.timestamp = new BDFDB.DiscordObjects.Timestamp(message.timestamp);
 				message.editedTimestamp = message.editedTimestamp && new BDFDB.DiscordObjects.Timestamp(message.editedTimestamp);
-				if (message.customRenderedContent && message.customRenderedContent.content.length) message.customRenderedContent.content = message.customRenderedContent.content.filter(n => n).map(n => typeof n == "string" ? n : (n.props && n.props.href ? BDFDB.ReactUtils.createElement("a", n.props) : null));
+				if (message.customRenderedContent && message.customRenderedContent.content.length) message.customRenderedContent.content = BDFDB.ReactUtils.objectToReact(message.customRenderedContent.content);
 				for (let embed of message.embeds) {
 					embed.color = typeof embed.color != "string" ? null : embed.color;
 					embed.timestamp = embed.timestamp && new BDFDB.DiscordObjects.Timestamp(embed.timestamp);

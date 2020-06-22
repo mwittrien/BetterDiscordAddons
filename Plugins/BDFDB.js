@@ -1718,6 +1718,15 @@
 		catch (err) {BDFDB.LogUtils.error("Could not create react element! " + err);}
 		return null;
 	};
+	BDFDB.ReactUtils.objectToReact = function (obj) {
+		if (!obj) return null;
+		else if (typeof obj == "string") return obj;
+		else if (BDFDB.ObjectUtils.is(obj)) return BDFDB.ReactUtils.createElement(obj.type || obj.props && obj.props.href && "a" || "div", !obj.props ?  {} : Object.assign({}, obj.props, {
+			children: obj.props.children ? BDFDB.ReactUtils.objectToReact(obj.props.children) : null
+		}));
+		else if (BDFDB.ArrayUtils.is(obj)) return obj.map(n => BDFDB.ReactUtils.objectToReact(n));
+		else return null;
+	};
 	BDFDB.ReactUtils.elementToReact = function (node, ref) {
 		if (BDFDB.ReactUtils.isValidElement(node)) return node;
 		else if (!Node.prototype.isPrototypeOf(node)) return null;
