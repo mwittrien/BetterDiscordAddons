@@ -7,7 +7,7 @@ var SpellCheck = (_ => {
 	return class SpellCheck {
 		getName () {return "SpellCheck";}
 
-		getVersion () {return "1.5.2";}
+		getVersion () {return "1.5.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -15,7 +15,7 @@ var SpellCheck = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Fallback","Fixed primary language falling back to english on each start"]]
+				"improved":[["Special Character / Symbols","If half or more of the characters in a word are symbols, the word will automatically be ignored by the dictionary check to avoid stuff like 'v1.2.3' being marked as incorrect"]]
 			};
 			
 			this.patchedModules = {
@@ -385,7 +385,7 @@ var SpellCheck = (_ => {
 		isWordNotInDictionary (unformatedWord) {
 			let wordLow = unformatedWord.toLowerCase();
 			let wordWithoutSymbols = wordLow.replace(/[0-9\µ\@\$\£\€\¥\¢\²\³\>\<\|\,\;\.\:\-\_\#\+\*\~\?\¿\\\´\`\}\=\]\)\[\(\{\/\&\%\§\"\!\¡\^\°\n\t\r]/g, "");
-			if (wordLow.indexOf("http://") != 0 && wordLow.indexOf("https://") != 0 && wordWithoutSymbols) {
+			if (wordLow.indexOf("http://") != 0 && wordLow.indexOf("https://") != 0 && wordWithoutSymbols && wordWithoutSymbols.length > wordLow.length/2) {
 				let wordStartingPos = /^.{1}'/.test(wordWithoutSymbols) ? wordWithoutSymbols.split("'")[1] : "";
 				let wordEndingPos = /'.{1}$/.test(wordWithoutSymbols) ? wordWithoutSymbols.split("'").reverse()[1] : "";
 				for (let key in dictionaries) for (let word of BDFDB.ArrayUtils.removeCopies([wordLow, wordWithoutSymbols, wordStartingPos, wordEndingPos].filter(n => n))) {
