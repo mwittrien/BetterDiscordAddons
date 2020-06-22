@@ -1,23 +1,19 @@
 //META{"name":"DisplayLargeMessages","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/DisplayLargeMessages","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/DisplayLargeMessages/DisplayLargeMessages.plugin.js"}*//
 
 var DisplayLargeMessages = (_ => {
-	var encodedMessages, requestedMessages, oldMessages, updateTimeout;
+	var encodedMessages, requestedMessages, pendingRequests, oldMessages, updateTimeout;
 	var settings = {}, amounts = {};
 	
 	return class DisplayLargeMessages {
 		getName () {return "DisplayLargeMessages";}
 
-		getVersion () {return "1.0.4";}
+		getVersion () {return "1.0.5";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Injects the contents of large messages that were sent by discord via 'message.txt'.";}
 
-		constructor () {
-			this.changelog = {
-				"added":[["Remove injection","You can now revert the on-demand injection after you clicked the inject button in the attachment, via clicking the newly loaded message and choosing 'unload'"]]
-			};
-			
+		constructor () {			
 			this.patchedModules = {
 				before: {
 					Messages: "render",
@@ -31,6 +27,7 @@ var DisplayLargeMessages = (_ => {
 		initConstructor () {
 			encodedMessages = {};
 			requestedMessages = [];
+			pendingRequests = [];
 			oldMessages = {};
 			
 			this.css = `
@@ -154,6 +151,7 @@ var DisplayLargeMessages = (_ => {
 				delete this.SettingsUpdated;
 				encodedMessages = {};
 				requestedMessages = [];
+				pendingRequests = [];
 				this.forceUpdateAll();
 			}
 		}
@@ -236,14 +234,18 @@ var DisplayLargeMessages = (_ => {
 						BDFDB.ListenerUtils.stopEvent(event);
 						let target = event.target;
 						let message = BDFDB.ReactUtils.findValue(target, "message", {up: true});
-						if (message) BDFDB.LibraryRequires.request(e.instance.props.url, (error, response, body) => {
-							oldMessages[message.id] = new BDFDB.DiscordObjects.Message(message);
-							encodedMessages[message.id] = {
-								content: message.content || "",
-								attachment: body || ""
-							};
-							BDFDB.ModuleUtils.forceAllUpdates(this, "Messages");
-						});
+						if (message) {
+							pendingRequests.push(message.id);
+							BDFDB.LibraryRequires.request(e.instance.props.url, (error, response, body) => {
+								BDFDB.ArrayUtils.remove(pendingRequests, message.id, true);
+								oldMessages[message.id] = new BDFDB.DiscordObjects.Message(message);
+								encodedMessages[message.id] = {
+									content: message.content || "",
+									attachment: body || ""
+								};
+								BDFDB.ModuleUtils.forceAllUpdates(this, "Messages");
+							});
+						}
 					}
 				})
 			}));
