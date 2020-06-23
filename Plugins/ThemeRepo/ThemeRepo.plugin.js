@@ -1,8 +1,7 @@
 //META{"name":"ThemeRepo","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ThemeRepo","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ThemeRepo/ThemeRepo.plugin.js"}*//
 
 var ThemeRepo = (_ => {
-	var _this;
-	
+	var _this;	
 	var loading, cachedThemes, grabbedThemes, foundThemes, loadedThemes, generatorThemes, updateInterval;
 	
 	const themeStates = {
@@ -85,7 +84,7 @@ var ThemeRepo = (_ => {
 					label: "Choose a Generator Theme",
 					basis: "70%",
 					value: this.props.options.currentGenerator || "-----",
-					options: ["-----"].concat(generatorThemes).map(url => {return {value:url, label:(loadedThemes[url] || {}).name || "-----"}}),
+					options: ["-----"].concat(generatorThemes).map(url => {return {value:url, label:(loadedThemes[url] || {}).name || "-----"}}).sort((x, y) => (x.label < y.label ? -1 : x.label > y.label ? 1 : 0)),
 					searchable: true,
 					onChange: (value, instance) => {
 						if (loadedThemes[value.value]) {

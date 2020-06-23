@@ -1042,7 +1042,7 @@
 		});
 	};
 	BDFDB.ArrayUtils.numSort = function (array) {
-		return array.sort((x, y) => {return x < y ? -1 : x > y ? 1 : 0;});
+		return array.sort((x, y) => (x < y ? -1 : x > y ? 1 : 0));
 	};
 	BDFDB.ArrayUtils.includes = function (array, ...values) {
 		if (!BDFDB.ArrayUtils.is(array)) return null;
