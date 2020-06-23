@@ -4311,6 +4311,7 @@
 	DiscordClassModules.MessagesPopout = BDFDB.ModuleUtils.findByProperties("messagesPopoutWrap", "jumpButton");
 	DiscordClassModules.MessagesPopoutButtons = BDFDB.ModuleUtils.findByProperties("secondary", "tertiary", "button");
 	DiscordClassModules.MessagesPopoutTabBar = BDFDB.ModuleUtils.findByProperties("header", "tabBar", "active");
+	DiscordClassModules.MessagesWelcome = BDFDB.ModuleUtils.findByProperties("emptyChannelIcon", "description", "header");
 	DiscordClassModules.MessagesWrap = BDFDB.ModuleUtils.findByProperties("messagesWrapper", "messageGroupBlocked");
 	DiscordClassModules.Modal = BDFDB.ModuleUtils.findByProperties("modal", "sizeLarge");
 	DiscordClassModules.ModalDivider = BDFDB.ModuleUtils.find(m => typeof m.divider == "string" && Object.keys(m).length == 1);
@@ -5316,6 +5317,13 @@
 		messagesscroller: ["MessagesWrap", "scroller"],
 		messagesscrollerinner: ["MessagesWrap", "scrollerInner"],
 		messagesscrollerwrapper: ["MessagesWrap", "scrollerWrap"],
+		messageswelcomebase: ["MessagesWelcome", "base"],
+		messageswelcomedefault: ["MessagesWelcome", "default"],
+		messageswelcomedescription: ["MessagesWelcome", "description"],
+		messageswelcomeeditchannelbutton: ["MessagesWrap", "editChannelButton"],
+		messageswelcomeemptychannelicon: ["MessagesWelcome", "emptyChannelIcon"],
+		messageswelcomeheader: ["MessagesWelcome", "header"],
+		messageswelcome: ["MessagesWelcome", "header"],
 		messageswrapper: ["MessagesWrap", "messagesWrapper"],
 		messagesystem: ["Message", "systemMessage"],
 		messagesystemaccessories: ["MessageBody", "systemMessageAccessories"],
@@ -5812,6 +5820,11 @@
 		voiceclickable: ["VoiceChannel", "clickable"],
 		voicecontent: ["VoiceChannel", "content"],
 		voicedetails: ["VoiceDetails", "container"],
+		voicedetailsactionbuttons: ["VoiceDetails", "actionButtons"],
+		voicedetailsbutton: ["VoiceDetails", "button"],
+		voicedetailsbuttonactive: ["VoiceDetails", "buttonActive"],
+		voicedetailsbuttoncolor: ["VoiceDetails", "buttonColor"],
+		voicedetailsbuttonicon: ["VoiceDetails", "buttonIcon"],
 		voicedetailschannel: ["VoiceDetails", "channel"],
 		voicedetailscustomstatuscontainer: ["VoiceDetails", "customStatusContainer"],
 		voicedetailshotspot: ["VoiceDetails", "hotspot"],
