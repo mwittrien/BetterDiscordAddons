@@ -1579,8 +1579,14 @@ body:before {
 .tile-2gi3tr {												/* call					user video						*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
-.gradientContainer-10lXLB {
+.gradientContainer-10lXLB {									/* call					gradientcontainer				*/
 	background: linear-gradient(rgb(var(--vtransparencycolor)), transparent 15%, transparent 85%, rgb(var(--vtransparencycolor)));
+}
+.participantsButton-KYW-IW {								/* call					participantsbutton				*/
+	background-color: rgba(0, 0, 0, 0.3);
+}
+.participantsButton-KYW-IW:hover {
+	background-color: rgba(0, 0, 0, 0.6);
 }
 .centerButton-3CaNcJ {
 	background-color: rgba(var(--vtransparencycolor), 0.5);
@@ -6332,10 +6338,12 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	color: rgb(var(--fontwhite1));
 }
+#app-mount .tooltipGrey-1hnvTt,
 #app-mount .tooltipBlack-PPG47z {
 	background-color: rgb(var(--vaccentcolor));
 	text-shadow: 1px 1px var(--vtextshadow);
 }
+#app-mount .tooltipGrey-1hnvTt .tooltipPointer-3ZfirK,
 #app-mount .tooltipBlack-PPG47z .tooltipPointer-3ZfirK {
 	border-top-color: rgb(var(--vaccentcolor));
 }
