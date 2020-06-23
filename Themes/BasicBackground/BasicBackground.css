@@ -671,6 +671,21 @@ body:before {
 .button-14-BFJ.enabled-2cQ-u7:hover svg {
 	filter: drop-shadow(1px 1px var(--vtextshadow));
 }
+.button-1YfofB.buttonColor-7qQbGO {
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.button-1YfofB.buttonColor-7qQbGO:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+.button-1YfofB.buttonColor-7qQbGO.buttonActive-3FrkXp,
+.button-1YfofB.buttonColor-7qQbGO.buttonActive-3FrkXp:hover {
+	background-color: rgb(var(--vaccentcolor));
+	text-shadow: 1px 1px var(--vtextshadow);
+}
+.button-1YfofB.buttonColor-7qQbGO.buttonActive-3FrkXp svg,
+.button-1YfofB.buttonColor-7qQbGO.buttonActive-3FrkXp:hover svg {
+	filter: drop-shadow(1px 1px var(--vtextshadow));
+}
 
 
 /* ~~~~		6.		CHAT							~~~~ */
