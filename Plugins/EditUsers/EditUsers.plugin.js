@@ -6,17 +6,13 @@ var EditUsers = (_ => {
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.8.5";}
+		getVersion () {return "3.8.6";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Allows you to change the icon, name, tag and color of users.";}
 
 		constructor () {
-			this.changelog = {
-				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
-			};
-
 			this.patchedModules = {
 				before: {
 					HeaderBarContainer: "render",
@@ -64,6 +60,7 @@ var EditUsers = (_ => {
 					InviteModalUserRow: "default",
 					TypingUsers: "render",
 					DirectMessage: "render",
+					RTCConnection: "render",
 					PrivateChannel: "render",
 					QuickSwitchUserResult: "render",
 					IncomingCall: "render"
@@ -752,7 +749,7 @@ var EditUsers = (_ => {
 				}
 			}
 		}
-
+		
 		processIncomingCall (e) {
 			if (e.instance.props.channelId && settings.changeInDmCalls) {
 				let user = BDFDB.LibraryModules.UserStore.getUser(e.instance.props.channelId);
@@ -773,9 +770,17 @@ var EditUsers = (_ => {
 			}
 		}
 
+		processRTCConnection (e) {
+			if (e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && settings.changeInRecentDms) {
+				let recipientId = e.instance.props.channel.getRecipientId();
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "PanelSubtext"});
+				if (index > -1) children[index].props.children = "@" + this.getUserData(recipientId).username;
+			}
+		}
+
 		processPrivateChannelCallParticipants (e) {
 			if (BDFDB.ArrayUtils.is(e.instance.props.participants) && settings.changeInDmCalls) {
-				for (let participant of e.instance.props.participants) if (participant && participant.user) participant.user = this.getUserData(participant.user.id);
+				for (let participant of e.instance.props.participants) if (participant && participant.user) participant.user = this.getUserData(participant.user.id, true, true);
 			}
 		}
 		
@@ -849,7 +854,7 @@ var EditUsers = (_ => {
 				newUserObject.tag = nativeObject.tag;
 				newUserObject.createdAt = nativeObject.createdAt;
 				newUserObject.username = !keepName && data.name || nativeObject.username;
-				newUserObject.usernameNormalized = !keepName &&data.name && data.name.toLowerCase() || nativeObject.usernameNormalized;
+				newUserObject.usernameNormalized = !keepName && data.name && data.name.toLowerCase() || nativeObject.usernameNormalized;
 				if (data.removeIcon) {
 					newUserObject.avatar = null;
 					newUserObject.avatarURL = null;
