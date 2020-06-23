@@ -5258,11 +5258,11 @@ body:before {
 .action-1lSjCi.create-3jownz .actionButton-2PeQbJ,
 .ui-button.brand.filled,
 .lookFilled-1Gx00P.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover,
-.lookFilled-1Gx00P.colorBrand-3pXr91:not([style*="background-color"]) {
+.lookFilled-1Gx00P.colorBrand-3pXr91:not(.buttonColor-7qQbGO):not([style*="background-color"]) {
 	text-shadow: 1px 1px var(--vtextshadow);
 }
 .lookFilled-1Gx00P.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover svg,
-.lookFilled-1Gx00P.colorBrand-3pXr91:not([style*="background-color"]) svg {
+.lookFilled-1Gx00P.colorBrand-3pXr91:not(.buttonColor-7qQbGO):not([style*="background-color"]) svg {
 	filter: drop-shadow(1px 1px var(--vtextshadow));
 }
 

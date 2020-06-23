@@ -1532,22 +1532,22 @@
 
 .lookInverted-2D7oAl.colorBrand-3pXr91 .spinnerItem-3GlVyU,
 .lookOutlined-3sRXeN.colorBrand-3pXr91 .spinnerItem-3GlVyU,
-.lookGhost-2Fn_0-.colorBlack-1jwPVL .spinnerItem-3GlVyU,
+.lookGhost-2Fn_0-.colorBrand-3pXr91 .spinnerItem-3GlVyU,
 .lookLink-9FtZy-.colorBrand-3pXr91 .spinnerItem-3GlVyU {
 	background-color: rgb(var(--vaccentcolor));
 }
 .btn-1PnLxm.btnPrimary-1jluZW:hover:not(:disabled),
-.lookFilled-1Gx00P.colorBrand-3pXr91:hover,
+.lookFilled-1Gx00P.colorBrand-3pXr91:not(.buttonColor-7qQbGO):hover,
 #app-mount .lookFilled-1Gx00P.hoverBrand-1_Fxlk.hasHover-3X1-zV:hover {
 	background: var(--vaccentcolor-hover);
 }
-.lookFilled-1Gx00P.colorBrand-3pXr91:active,
+.lookFilled-1Gx00P.colorBrand-3pXr91:not(.buttonColor-7qQbGO):active,
 #app-mount .lookFilled-1Gx00P.hoverBrand-1_Fxlk.hasHover-3X1-zV:active {
 	background: var(--vaccentcolor-active);
 }
 .btn-1PnLxm.btnPrimary-1jluZW,
-.lookFilled-1Gx00P.colorBrand-3pXr91,
-.lookFilled-1Gx00P.colorBrand-3pXr91:disabled {
+.lookFilled-1Gx00P.colorBrand-3pXr91:not(.buttonColor-7qQbGO),
+.lookFilled-1Gx00P.colorBrand-3pXr91:not(.buttonColor-7qQbGO):disabled {
 	background: rgb(var(--vaccentcolor));
 }
 .lookInverted-2D7oAl.colorBrand-3pXr91:hover,
