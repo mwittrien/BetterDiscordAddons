@@ -7568,10 +7568,12 @@
 	
 	InternalComponents.LibraryComponents.MenuItems.MenuIcon = InternalBDFDB.loadPatchedComp("MenuItems.MenuIcon") || reactInitialized && class BDFDB_MenuIcon extends LibraryModules.React.Component {
 		render() {
+			let isString = typeof this.props.icon == "string";
 			return !this.props.icon ? null : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
 				className: BDFDB.disCN.menuicon,
 				nativeClass: true,
-				iconSVG: this.props.icon
+				iconSVG: isString ? this.props.icon : null,
+				name: !isString ? this.props.icon : null
 			});
 		}
 	};
