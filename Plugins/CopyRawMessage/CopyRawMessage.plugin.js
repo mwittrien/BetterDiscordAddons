@@ -4,7 +4,7 @@ var CopyRawMessage = (_ => {
 	return class CopyRawMessage {
 		getName () {return "CopyRawMessage";}
 
-		getVersion () {return "1.0.8";}
+		getVersion () {return "1.0.9";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ var CopyRawMessage = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
+				"improved":[["Copy raw embed","Now copies the whole contents of an embed and not only the description part"]]
 			};
 		}
 
@@ -62,7 +62,8 @@ var CopyRawMessage = (_ => {
 		onMessageContextMenu (e) {
 			if (e.instance.props.message) {
 				let embed = BDFDB.DOMUtils.getParent(BDFDB.dotCN.embedwrapper, e.instance.props.target);
-				let embedIndex = embed ? Array.from(embed.parentElement.querySelectorAll(BDFDB.dotCN.embedwrapper)).indexOf(embed) : -1;
+				let embedData = e.instance.props.message.embeds[embed ? Array.from(embed.parentElement.querySelectorAll(BDFDB.dotCN.embedwrapper)).indexOf(embed) : -1];
+				let embedString = embedData && [embedData.rawDescription, BDFDB.ArrayUtils.is(embedData.fields) && embedData.fields.map(n => [n.rawName, n.rawValue]), BDFDB.ObjectUtils.is(embedData.footer) && embedData.footer.text].flat(10).filter(n => n).join("\n")
 				let hint = BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("Copy_Raw") : null;
 				let entries = [
 					e.instance.props.message.content && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
@@ -78,12 +79,12 @@ var CopyRawMessage = (_ => {
 							BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});
 						}
 					}),
-					embed && embed.querySelector(BDFDB.dotCN.embeddescription) && e.instance.props.message.embeds[embedIndex] && e.instance.props.message.embeds[embedIndex].rawDescription && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					embedString && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw Embed)",
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-embed"),
 						action: _ => {
 							BDFDB.ContextMenuUtils.close(e.instance);
-							BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.embeds[embedIndex].rawDescription});
+							BDFDB.LibraryRequires.electron.clipboard.write({text:embedString});
 						}
 					})
 				].filter(n => n);
