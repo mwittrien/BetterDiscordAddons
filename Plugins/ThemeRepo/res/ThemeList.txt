@@ -8,6 +8,7 @@ https://raw.githubusercontent.com/BeardDesign1/Ios-switches/themes/IOS_Switches.
 https://raw.githubusercontent.com/CapnKitten/Material-Discord/master/Material-Discord.theme.css
 https://raw.githubusercontent.com/CAtOSe/Neon-Space-BetterDiscord-Theme/master/neon-space.theme.css
 https://raw.githubusercontent.com/Chloesviel/Discord-Stuff/master/minifiedMemberlist/minifiedMemberlist.theme.css
+https://raw.githubusercontent.com/ClearVision/ClearVision-v6/master/ClearVision_v6.theme.css
 https://raw.githubusercontent.com/codedotspectra/themes/master/nocturnal/nocturnal.theme.css
 https://raw.githubusercontent.com/codedotspectra/themes/master/themes-files/neutron.theme.css
 https://raw.githubusercontent.com/CurimuChizu/CC-Themes/master/CC-Themes/Red.n.Black.theme.css
