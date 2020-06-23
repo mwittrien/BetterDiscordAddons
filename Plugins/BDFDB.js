@@ -1259,6 +1259,7 @@
 		QuickSwitchChannelResult: "quickswitchresult",
 		QuickSwitchGuildResult: "quickswitchresult",
 		QuickSwitchResult: "quickswitchresult",
+		RTCConnection: "voicedetails",
 		SearchResults: "searchresultswrap",
 		TypingUsers: "typing",
 		UnreadDMs: "guildsscroller",
