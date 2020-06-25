@@ -6,7 +6,7 @@ var EditUsers = (_ => {
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.8.6";}
+		getVersion () {return "3.8.7";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -39,8 +39,8 @@ var EditUsers = (_ => {
 					QuickSwitchUserResult: "render",
 					SearchPopoutComponent: "render",
 					IncomingCall: "render",
-					PrivateChannelCallParticipants: "render",
-					ChannelCall: "render",
+					PrivateChannelCallParticipants: "render2",
+					ChannelCall: "render2",
 					UserSummaryItem: "render"
 				},
 				after: {
@@ -60,7 +60,7 @@ var EditUsers = (_ => {
 					InviteModalUserRow: "default",
 					TypingUsers: "render",
 					DirectMessage: "render",
-					RTCConnection: "render",
+					RTCConnection: "render2",
 					PrivateChannel: "render",
 					QuickSwitchUserResult: "render",
 					IncomingCall: "render"
