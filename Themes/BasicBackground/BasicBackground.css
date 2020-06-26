@@ -4634,20 +4634,20 @@ body:before {
 /* ----		14.4.	PINS/MENTIONS					---- */
 
 .messagesPopoutWrap-1MQ1bW,								/* popout				wrapper								*/
-.container-PbeQka {										/* popout				wrapper	(inbox)						*/
+.container-enaOkj {										/* popout				wrapper	(inbox)						*/
 	background-color: transparent;
 	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	border: none;
 	overflow: hidden;
 }
 .messagesPopoutWrap-1MQ1bW > *,
-.container-PbeQka > * {
+.container-enaOkj > * {
 	z-index: 1000;
 }
 .messagesPopoutWrap-1MQ1bW:after,
 .messagesPopoutWrap-1MQ1bW:before,
-.container-PbeQka:after,
-.container-PbeQka:before {
+.container-enaOkj:after,
+.container-enaOkj:before {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -4660,11 +4660,11 @@ body:before {
 	z-index: -1;
 }
 .messagesPopoutWrap-1MQ1bW:after,
-.container-PbeQka:after {
+.container-enaOkj:after {
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
 }
 .messagesPopoutWrap-1MQ1bW:before,
-.container-PbeQka:before {
+.container-enaOkj:before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	filter: blur(var(--vpopoutblur));
 	background-attachment: fixed;
@@ -4699,7 +4699,6 @@ body:before {
 	color: rgb(var(--fontwhite1));
 }
 
-
 .messageGroupWrapper-o-Zw7G {
 	background-color: transparent;
 	border: none;
@@ -4721,14 +4720,20 @@ body:before {
 	top: 4px;
 	right: 14px;
 }
+.jumpButton-2dvRSC,											/* popout				jumpbutton (mentions)				*/
 .jumpButton-3DTcS_ {										/* popout				jumpbutton (pins)					*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 	color: rgb(var(--fontwhite2));
 }
+.jumpButton-2dvRSC:hover,
 .jumpButton-3DTcS_:hover {
 	background-color: rgb(var(--vaccentcolor));
+}
+.jumpButton-2dvRSC:hover .text-3KVtey,
+.jumpButton-3DTcS_:hover {
 	color: rgb(var(--fontwhite1));
 }
+.jumpButton-2dvRSC + .jumpButton-2dvRSC,
 .jumpButton-3DTcS_ + .jumpButton-3DTcS_ {
 	margin-left: 2px;
 }
