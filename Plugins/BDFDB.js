@@ -3980,6 +3980,7 @@
 		settingsTableHeaders: "settingsTableHeaders-WKzw9_",
 		settingsTableHeaderVertical: "headerVertical-4MNxqk",
 		settingsTableList: "settingsTableList-f6sW2y",
+		sliderBubble: "bubble-3we2di",
 		supporter: "supporter-Z3FfwL",
 		svgIcon: "icon-GhnIRB",
 		svgIconWrapper: "iconWrapper-g20jFn",
@@ -5601,6 +5602,7 @@
 		slider: ["Slider", "slider"],
 		sliderbar: ["Slider", "bar"],
 		sliderbarfill: ["Slider", "barFill"],
+		sliderbubble: ["BDFDB", "sliderBubble"],
 		sliderdisabled: ["Slider", "disabled"],
 		slidergrabber: ["Slider", "grabber"],
 		sliderinput: ["Slider", "input"],
@@ -6917,6 +6919,11 @@
 												children: [
 													BDFDB.ReactUtils.createElement("div", {
 														style: {marginTop: 1, width: 4, borderRadius: 1, height: 8, boxShadow: "rgba(0, 0, 0, 0.6) 0px 0px 2px", background: "rgb(255, 255, 255)", transform: "translateX(-2px)"}
+													}),
+													this.state.draggingAlphaCursor && BDFDB.ReactUtils.createElement("span", {
+														className: BDFDB.disCN.sliderbubble,
+														style: {opacity: 1, visibility: "visible", left: 2},
+														children: `${Math.floor(a * 100)}%`
 													})
 												].filter(n => n)
 											})
