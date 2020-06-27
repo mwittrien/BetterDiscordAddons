@@ -18,8 +18,10 @@ body,
 #app-mount REPLACE_CLASS_guilddiscovery,
 #app-mount REPLACE_CLASS_scroller,
 #app-mount REPLACE_CLASS_settingswindowstandardsidebarview,
-#app-mount REPLACE_CLASS_settingswindowscroller,
-#app-mount REPLACE_CLASS_settingswindowcontentregion {
+#app-mount REPLACE_CLASS_settingswindowsidebarregionscroller,
+#app-mount REPLACE_CLASS_settingswindowsubsidebarscroller,
+#app-mount REPLACE_CLASS_settingswindowcontentregion,
+#app-mount REPLACE_CLASS_settingswindowcontentregionscroller {
 	background-color: transparent;
 }
 #app-mount REPLACE_CLASS_channelheaderchildren:after {
@@ -29,7 +31,7 @@ body,
 	background-color: rgba(0, 0, 0, 0.3);
 }
 #app-mount REPLACE_CLASS_channelheaderheaderbarREPLACE_CLASS_channelheaderheaderbarthemed,
-#app-mount REPLACE_CLASS_sidebarregion,
+#app-mount REPLACE_CLASS_settingswindowsidebarregion,
 #app-mount REPLACE_CLASS_channels,
 #app-mount REPLACE_CLASS_channelpanels,
 #app-mount REPLACE_CLASS_memberswrap,

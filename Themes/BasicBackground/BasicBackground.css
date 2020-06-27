@@ -181,8 +181,10 @@ body,														/* body														*/
 #app-mount .pageWrapper-1PgVDX,								/* guilddiscovery											*/
 #app-mount .scroller-2FKFPG,								/* scroller													*/
 #app-mount .standardSidebarView-3F1I7i,						/* settings													*/
-#app-mount .scroller-305q3I,								/* settings				sidebar scroller					*/
-#app-mount .contentRegion-3nDuYy {							/* settings				content								*/
+#app-mount .sidebarRegionScroller-3MXcoP,					/* settings				sidebar scroller					*/
+#app-mount .scroller-305q3I,								/* settings				sub sidebar scroller				*/
+#app-mount .contentRegion-3nDuYy,							/* settings				content								*/
+#app-mount .contentRegionScroller-26nc1e {					/* settings				content scroller					*/
 	background: transparent;
 }
 
