@@ -6128,7 +6128,11 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 .scrollerThemed-2oenus.themeHidden-2yP93k .scroller-2FKFPG::-webkit-scrollbar-corner,
 .scrollerThemed-2oenus.themeHidden-2yP93k .scroller-2FKFPG::-webkit-scrollbar-thumb,
 .scrollerThemed-2oenus.themeHidden-2yP93k .scroller-2FKFPG::-webkit-scrollbar-track,
-.scrollerThemed-2oenus.themeHidden-2yP93k .scroller-2FKFPG::-webkit-scrollbar {
+.scrollerThemed-2oenus.themeHidden-2yP93k .scroller-2FKFPG::-webkit-scrollbar,
+.none-2Eo-qx::-webkit-scrollbar-corner,
+.none-2Eo-qx::-webkit-scrollbar-thumb,
+.none-2Eo-qx::-webkit-scrollbar-track,
+.none-2Eo-qx::-webkit-scrollbar {
 	display: none;
 }
 
