@@ -1185,6 +1185,7 @@
 	];
 	WebModulesData.NonRender = BDFDB.ArrayUtils.removeCopies([].concat(WebModulesData.MemoComponent, [
 		"Attachment",
+		"ChannelCallHeader",
 		"ConnectedPrivateChannelsList",
 		"DiscordTag",
 		"InviteModalUserRow",
