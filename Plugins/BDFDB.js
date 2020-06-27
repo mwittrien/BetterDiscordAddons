@@ -1198,9 +1198,11 @@
 		"NameTag",
 		"NowPlayingItem",
 		"PrivateChannelEmptyMessage",
+		"RecentsChannelHeader",
 		"RecentsHeader",
 		"SystemMessage",
 		"SimpleMessageAccessories",
+		"UnreadMessages",
 		"UserInfo"
 	]));
 	WebModulesData.LoadedInComponents = {
