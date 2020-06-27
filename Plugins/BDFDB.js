@@ -5477,7 +5477,7 @@
 		quickswitchresultmisccontainer: ["QuickSwitchWrap", "miscContainer"],
 		quickswitchresultname: ["QuickSwitch", "name"],
 		quickswitchresultnote: ["QuickSwitch", "note"],
-		quickswitchresultusername: ["QuickSwitch", "username"]
+		quickswitchresultusername: ["QuickSwitch", "username"],
 		recentmentionschannelname: ["RecentMentionsHeader", "channelName"],
 		recentmentionsclosebutton: ["RecentMentions", "closeButton"],
 		recentmentionsdmicon: ["RecentMentionsHeader", "dmIcon"],
