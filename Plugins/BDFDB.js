@@ -7819,10 +7819,10 @@
 		}
 	};
 	
-	let AdvancedScrollers = BDFDB.ModuleUtils.findByProperties("AdvancedScrollerThin", "AdvancedScrollerNone") || {};
-	InternalComponents.LibraryComponents.ScrollerAuto = AdvancedScrollers.AdvancedScrollerAuto;
-	InternalComponents.LibraryComponents.ScrollerNone = AdvancedScrollers.AdvancedScrollerNone;
-	InternalComponents.LibraryComponents.ScrollerThin = AdvancedScrollers.AdvancedScrollerThin;
+	let AdvancedScrollers = BDFDB.ModuleUtils.findByProperties("AdvancedScrollerThin", "AdvancedScrollerAuto") || {};
+	InternalComponents.LibraryComponents.ScrollerAuto = AdvancedScrollers.AdvancedScrollerAuto || AdvancedScrollers.default;
+	InternalComponents.LibraryComponents.ScrollerNone = AdvancedScrollers.AdvancedScrollerNone || AdvancedScrollers.default;
+	InternalComponents.LibraryComponents.ScrollerThin = AdvancedScrollers.AdvancedScrollerThin || AdvancedScrollers.default;
 	
 	InternalComponents.LibraryComponents.ScrollerHorizontal = BDFDB.ModuleUtils.findByName("HorizontalScroller");
 	
