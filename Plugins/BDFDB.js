@@ -1198,6 +1198,7 @@
 		"MessageTimestamp",
 		"NameTag",
 		"NowPlayingItem",
+		"PictureInPictureVideo",
 		"PrivateChannelEmptyMessage",
 		"RecentsChannelHeader",
 		"RecentsHeader",
