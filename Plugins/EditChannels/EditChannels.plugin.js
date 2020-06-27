@@ -338,7 +338,7 @@ var EditChannels = (_ => {
 		
 		processRecentsChannelHeader (e) {
 			if (settings.changeInRecentMentions && BDFDB.ArrayUtils.is(e.returnvalue.props.children)) {
-				for (let child of e.returnvalue.props.children) if (child && child.props && child.props.channel) {
+				for (let child of e.returnvalue.props.children) if (child && child.props && child.props.channel && child.type.displayName == "ChannelName") {
 					child.props.channel = this.getChannelData(child.props.channel.id);
 					let oldType = child.type;
 					child.type = (...args) => {

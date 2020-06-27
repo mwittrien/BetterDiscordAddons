@@ -6,7 +6,7 @@ var EditServers = (_ => {
 	return class EditServers {
 		getName () {return "EditServers";}
 
-		getVersion () {return "2.2.1";}
+		getVersion () {return "2.2.2";}
 		
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,7 @@ var EditServers = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
+				"fixed":[["Inbox update","Fixes for the inbox update"]]
 			};
 
 			this.patchedModules = {
@@ -22,14 +22,13 @@ var EditServers = (_ => {
 					Guild: "render",
 					GuildIconWrapper: "render",
 					MutualGuilds: "render",
-					FriendRow: "render",
 					QuickSwitcher: "render",
 					QuickSwitchChannelResult: "render",
 					GuildSidebar: "render",
 					GuildHeader: "render"
 				},
 				after: {
-					MessagesPopout: "render",
+					RecentsChannelHeader: "default",
 					Guild: "render",
 					BlobMask: "render",
 					GuildIconWrapper: "render",
@@ -280,10 +279,6 @@ var EditServers = (_ => {
 			if (settings.changeInMutualGuilds) for (let i in e.instance.props.mutualGuilds) e.instance.props.mutualGuilds[i].guild = this.getGuildData(e.instance.props.mutualGuilds[i].guild.id);
 		}
 
-		processFriendRow (e) {
-			if (settings.changeInMutualGuilds) for (let i in e.instance.props.mutualGuilds) e.instance.props.mutualGuilds[i] = this.getGuildData(e.instance.props.mutualGuilds[i].id);
-		}
-
 		processQuickSwitcher (e) {
 			if (settings.changeInQuickSwitcher) for (let i in e.instance.props.results) if (e.instance.props.results[i].type == "GUILD") e.instance.props.results[i].record = this.getGuildData(e.instance.props.results[i].record.id);
 		}
@@ -294,18 +289,17 @@ var EditServers = (_ => {
 			}
 		}
 		
-		processMessagesPopout (e) {
-			if (settings.changeInRecentMentions) {
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "VerticalScroller"});
-				if (index > -1 && children[index].props.children && BDFDB.ArrayUtils.is(children[index].props.children[0])) for (let i in children[index].props.children[0]) {
-					let divider = children[index].props.children[0][i];
-					if (divider && divider.props && divider.props.className == BDFDB.disCN.messagespopoutchannelseparator) {
-						let channel = BDFDB.ReactUtils.findValue(children[index].props.children[0][parseInt(i)+1], "channel");
-						if (BDFDB.ChannelUtils.isTextChannel(channel)) {
-							let [children2, index2] = BDFDB.ReactUtils.findParent(divider, {props:[["className", BDFDB.disCN.messagespopoutguildname]]});
-							if (index2 > -1) children2[index2].props.children = this.getGuildData(channel.guild_id).name;
-						}
-					}
+		processRecentsChannelHeader (e) {
+			if (settings.changeInRecentMentions && BDFDB.ArrayUtils.is(e.returnvalue.props.children)) {
+				for (let child of e.returnvalue.props.children) if (child && child.props && child.props.channel && child.type.displayName == "ChannelName") {
+					let oldType = child.type;
+					child.type = (...args) => {
+						let instance = oldType(...args);
+						let guildName = BDFDB.ReactUtils.findChild(instance, {props:[["className", BDFDB.disCN.recentmentionsguildname]]});
+						if (guildName) guildName.props.children = (this.getGuildData(e.instance.props.channel.guild_id) || {}).name || guildName.props.children;
+						return instance;
+					};
+					child.type.displayName = oldType.displayName;
 				}
 			}
 		}
