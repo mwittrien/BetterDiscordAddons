@@ -489,23 +489,23 @@
 		BDFDB.ListenerUtils.remove(plugin, ele, actions, selector);
 		for (let action of actions.split(" ")) {
 			action = action.split(".");
-			let eventname = action.shift().toLowerCase();
-			if (!eventname) return;
-			let origeventname = eventname;
-			eventname = eventname == "mouseenter" || eventname == "mouseleave" ? "mouseover" : eventname;
+			let eventName = action.shift().toLowerCase();
+			if (!eventName) return;
+			let origEventName = eventName;
+			eventName = eventName == "mouseenter" || eventName == "mouseleave" ? "mouseover" : eventName;
 			let namespace = (action.join(".") || "") + plugin.name;
 			if (!BDFDB.ArrayUtils.is(plugin.eventListeners)) plugin.eventListeners = [];
-			let eventcallback = null;
+			let eventCallback = null;
 			if (selector) {
-				if (origeventname == "mouseenter" || origeventname == "mouseleave") {
-					eventcallback = e => {
-						for (let child of e.path) if (typeof child.matches == "function" && child.matches(selector) && !child[namespace + "BDFDB" + origeventname]) {
-							child[namespace + "BDFDB" + origeventname] = true;
-							if (origeventname == "mouseenter") callback(BDFDB.ListenerUtils.copyEvent(e, child));
+				if (origEventName == "mouseenter" || origEventName == "mouseleave") {
+					eventCallback = e => {
+						for (let child of e.path) if (typeof child.matches == "function" && child.matches(selector) && !child[namespace + "BDFDB" + origEventName]) {
+							child[namespace + "BDFDB" + origEventName] = true;
+							if (origEventName == "mouseenter") callback(BDFDB.ListenerUtils.copyEvent(e, child));
 							let mouseout = e2 => {
 								if (e2.target.contains(child) || e2.target == child || !child.contains(e2.target)) {
-									if (origeventname == "mouseleave") callback(BDFDB.ListenerUtils.copyEvent(e, child));
-									delete child[namespace + "BDFDB" + origeventname];
+									if (origEventName == "mouseleave") callback(BDFDB.ListenerUtils.copyEvent(e, child));
+									delete child[namespace + "BDFDB" + origEventName];
 									document.removeEventListener("mouseout", mouseout);
 								}
 							};
@@ -515,7 +515,7 @@
 					};
 				}
 				else {
-					eventcallback = e => {
+					eventCallback = e => {
 						for (let child of e.path) if (typeof child.matches == "function" && child.matches(selector)) {
 							callback(BDFDB.ListenerUtils.copyEvent(e, child));
 							break;
@@ -523,10 +523,10 @@
 					};
 				}
 			}
-			else eventcallback = e => {callback(BDFDB.ListenerUtils.copyEvent(e, ele));};
+			else eventCallback = e => {callback(BDFDB.ListenerUtils.copyEvent(e, ele));};
 
-			plugin.eventListeners.push({ele, eventname, origeventname, namespace, selector, eventcallback});
-			ele.addEventListener(eventname, eventcallback, true);
+			plugin.eventListeners.push({ele, eventName, origEventName, namespace, selector, eventCallback});
+			ele.addEventListener(eventName, eventCallback, true);
 		}
 	};
 	BDFDB.ListenerUtils.remove = function (plugin, ele, actions = "", selector) {
@@ -535,18 +535,18 @@
 		if (!ele) {
 			while (plugin.eventListeners.length) {
 				let listener = plugin.eventListeners.pop();
-				listener.ele.removeEventListener(listener.eventname, listener.eventcallback, true);
+				listener.ele.removeEventListener(listener.eventName, listener.eventCallback, true);
 			}
 		}
 		else if (Node.prototype.isPrototypeOf(ele) || ele === window) {
 			for (let action of actions.split(" ")) {
 				action = action.split(".");
-				let eventname = action.shift().toLowerCase();
+				let eventName = action.shift().toLowerCase();
 				let namespace = (action.join(".") || "") + plugin.name;
 				for (let listener of plugin.eventListeners) {
 					let removedListeners = [];
-					if (listener.ele == ele && (!eventname || listener.origeventname == eventname) && listener.namespace == namespace && (selector === undefined || listener.selector == selector)) {
-						listener.ele.removeEventListener(listener.eventname, listener.eventcallback, true);
+					if (listener.ele == ele && (!eventName || listener.origEventName == eventName) && listener.namespace == namespace && (selector === undefined || listener.selector == selector)) {
+						listener.ele.removeEventListener(listener.eventName, listener.eventCallback, true);
 						removedListeners.push(listener);
 					}
 					if (removedListeners.length) plugin.eventListeners = plugin.eventListeners.filter(listener => !removedListeners.includes(listener));
@@ -565,9 +565,9 @@
 	BDFDB.ListenerUtils.addToChildren = function (node, actions, selector, callback) {
 		if (!Node.prototype.isPrototypeOf(node) || !actions || !selector || !selector.trim() || typeof callback != "function") return;
 		for (let action of actions.trim().split(" ").filter(n => n)) {
-			let eventcallback = callback;
-			if (action == "mouseenter" || action == "mouseleave") eventcallback = e => {if (e.target.matches(selector)) callback(e);};
-			node.querySelectorAll(selector.trim()).forEach(child => {child.addEventListener(action, eventcallback, true);});
+			let eventCallback = callback;
+			if (action == "mouseenter" || action == "mouseleave") eventCallback = e => {if (e.target.matches(selector)) callback(e);};
+			node.querySelectorAll(selector.trim()).forEach(child => {child.addEventListener(action, eventCallback, true);});
 		}
 	};
 	BDFDB.ListenerUtils.copyEvent = function (e, ele) {
@@ -865,8 +865,8 @@
 		
 		if (options.hide) BDFDB.DOMUtils.appendLocalStyle("BDFDBhideOtherTooltips" + id, `#app-mount ${BDFDB.dotCN.tooltip}:not([tooltip-id="${id}"]) {display: none !important;}`, itemLayerContainer);
 					
-		let mouseleave = _ => {BDFDB.DOMUtils.remove(itemLayer);};
-		anker.addEventListener("mouseleave", mouseleave);
+		let mouseLeave = _ => {BDFDB.DOMUtils.remove(itemLayer);};
+		anker.addEventListener("mouseleave", mouseLeave);
 		
 		let observer = new MutationObserver(changes => changes.forEach(change => {
 			let nodes = Array.from(change.removedNodes);
@@ -875,12 +875,12 @@
 				observer.disconnect();
 				BDFDB.DOMUtils.remove(itemLayer);
 				BDFDB.DOMUtils.removeLocalStyle("BDFDBhideOtherTooltips" + id, itemLayerContainer);
-				anker.removeEventListener("mouseleave", mouseleave);
+				anker.removeEventListener("mouseleave", mouseLeave);
 			}
 		}));
 		observer.observe(document.body, {subtree:true, childList:true});
 
-		(tooltip.update = _ => {
+		(tooltip.update = itemLayer.update = _ => {
 			let left, top, tRects = BDFDB.DOMUtils.getRects(anker), iRects = BDFDB.DOMUtils.getRects(itemLayer), aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount)), positionOffsets = {height: 10, width: 10}, offset = typeof options.offset == "number" ? options.offset : 0;
 			switch (type) {
 				case "top":
@@ -3785,13 +3785,13 @@
 		BDFDB.WindowUtils.removeListener(plugin, actions);
 		for (let action of actions.split(" ")) {
 			action = action.split(".");
-			let eventname = action.shift();
-			if (!eventname) return;
+			let eventName = action.shift();
+			if (!eventName) return;
 			let namespace = (action.join(".") || "") + plugin.name;
 			if (!BDFDB.ArrayUtils.is(plugin.ipcListeners)) plugin.ipcListeners = [];
 
-			plugin.ipcListeners.push({eventname, namespace, callback});
-			LibraryRequires.electron.ipcRenderer.on(eventname, callback);
+			plugin.ipcListeners.push({eventName, namespace, callback});
+			LibraryRequires.electron.ipcRenderer.on(eventName, callback);
 		}
 	};
 	BDFDB.WindowUtils.removeListener = function (plugin, actions = "") {
@@ -3800,12 +3800,12 @@
 		if (actions) {
 			for (let action of actions.split(" ")) {
 				action = action.split(".");
-				let eventname = action.shift();
+				let eventName = action.shift();
 				let namespace = (action.join(".") || "") + plugin.name;
 				for (let listener of plugin.ipcListeners) {
 					let removedListeners = [];
-					if (listener.eventname == eventname && listener.namespace == namespace) {
-						LibraryRequires.electron.ipcRenderer.off(listener.eventname, listener.callback);
+					if (listener.eventName == eventName && listener.namespace == namespace) {
+						LibraryRequires.electron.ipcRenderer.off(listener.eventName, listener.callback);
 						removedListeners.push(listener);
 					}
 					if (removedListeners.length) plugin.ipcListeners = plugin.ipcListeners.filter(listener => {return removedListeners.indexOf(listener) < 0;});
@@ -3813,7 +3813,7 @@
 			}
 		}
 		else {
-			for (let listener of plugin.ipcListeners) LibraryRequires.electron.ipcRenderer.off(listener.eventname, listener.callback);
+			for (let listener of plugin.ipcListeners) LibraryRequires.electron.ipcRenderer.off(listener.eventName, listener.callback);
 			plugin.ipcListeners = [];
 		}
 	};
@@ -5011,7 +5011,6 @@
 		guildsettingsmembernametag: ["GuildSettingsMember", "nameTag"],
 		guildsettingsrolesbuttonwrapper: ["GuildSettingsRoles", "buttonWrapper"],
 		guildsscroller: ["GuildsWrapper", "scroller"],
-		guildsscrollerwrap: ["GuildsWrapper", "scrollerWrap"],
 		guildsvg: ["Guild", "svg"],
 		guildswrapper: ["GuildsWrapper", "wrapper"],
 		guildswrapperunreadmentionsbar: ["GuildsWrapper", "unreadMentionsBar"],
@@ -5306,7 +5305,6 @@
 		messagespopoutloading: ["MessagesPopout", "loading"],
 		messagespopoutloadingmore: ["MessagesPopout", "loadingMore"],
 		messagespopoutloadingplaceholder: ["MessagesPopout", "loadingPlaceholder"],
-		messagespopoutscroller: ["MessagesPopout", "scroller"],
 		messagespopoutscrollingfooterwrap: ["MessagesPopout", "scrollingFooterWrap"],
 		messagespopoutspinner: ["MessagesPopout", "spinner"],
 		messagespopouttabbar: ["MessagesPopoutTabBar", "tabBar"],
@@ -5375,7 +5373,7 @@
 		modalmini: ["ModalMiniContent", "modal"],
 		modalminicontent: ["ModalMiniContent", "content"],
 		modalminitext: ["HeaderBarTopic", "content"],
-		modalseparator: ["Modal", "separator"],
+		modalseparator: ["LayerModal", "separator"],
 		modalsizelarge: ["Modal", "sizeLarge"],
 		modalsizemedium: ["Modal", "sizeMedium"],
 		modalsizesmall: ["Modal", "sizeSmall"],
@@ -5603,7 +5601,6 @@
 		slider: ["Slider", "slider"],
 		sliderbar: ["Slider", "bar"],
 		sliderbarfill: ["Slider", "barFill"],
-		sliderbubble: ["Slider", "bubble"],
 		sliderdisabled: ["Slider", "disabled"],
 		slidergrabber: ["Slider", "grabber"],
 		sliderinput: ["Slider", "input"],
