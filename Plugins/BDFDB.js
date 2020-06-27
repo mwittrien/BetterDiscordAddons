@@ -866,7 +866,7 @@
 		if (options.hide) BDFDB.DOMUtils.appendLocalStyle("BDFDBhideOtherTooltips" + id, `#app-mount ${BDFDB.dotCN.tooltip}:not([tooltip-id="${id}"]) {display: none !important;}`, itemLayerContainer);
 					
 		let mouseLeave = _ => {BDFDB.DOMUtils.remove(itemLayer);};
-		if (options.perssist) anker.addEventListener("mouseleave", mouseLeave);
+		if (!options.perssist) anker.addEventListener("mouseleave", mouseLeave);
 		
 		let observer = new MutationObserver(changes => changes.forEach(change => {
 			let nodes = Array.from(change.removedNodes);
