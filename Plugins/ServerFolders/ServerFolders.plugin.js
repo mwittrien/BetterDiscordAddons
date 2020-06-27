@@ -39,10 +39,8 @@ var ServerFolders = (_ => {
 			}, 300);
 			return BDFDB.ReactUtils.createElement("nav", {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.guildswrapper, BDFDB.disCN.guilds, this.props.themeOverride && BDFDB.disCN.themedark, BDFDB.disCN._serverfoldersfoldercontent, (!folders.length || closing) && BDFDB.disCN._serverfoldersfoldercontentclosed),
-				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ScrollerVertical, {
-					outerClassName: BDFDB.disCN.guildsscrollerwrap,
+				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ScrollerNone, {
 					className: BDFDB.disCN.guildsscroller,
-					theme: BDFDB.LibraryComponents.ScrollerVertical.Themes.GHOST_HAIRLINE,
 					children: this.props.folders.map(folderId => {
 						let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(folderId);
 						let data = _this.getFolderConfig(folderId);
@@ -317,7 +315,7 @@ var ServerFolders = (_ => {
 	return class ServerFolders {
 		getName () {return "ServerFolders";}
 
-		getVersion () {return "6.8.0";}
+		getVersion () {return "6.8.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -325,7 +323,7 @@ var ServerFolders = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
+				"fixed":[["New Scroller","Adjusted for the new scroller component"]]
 			};
 			
 			this.patchedModules = {
