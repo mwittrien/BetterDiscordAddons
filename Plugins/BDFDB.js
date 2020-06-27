@@ -4340,7 +4340,8 @@
 	DiscordClassModules.RecentMentions = BDFDB.ModuleUtils.findByProperties("recentMentionsPopout");
 	DiscordClassModules.Role = BDFDB.ModuleUtils.findByProperties("roleCircle", "roleName", "roleRemoveIcon");
 	DiscordClassModules.Scrollbar = BDFDB.ModuleUtils.findByProperties("scrollbar", "scrollbarGhost");
-	DiscordClassModules.Scroller = BDFDB.ModuleUtils.findByProperties("scrollerThemed", "scroller");
+	DiscordClassModules.Scroller = BDFDB.ModuleUtils.findByProperties("scrollerBase", "none", "fade");
+	DiscordClassModules.ScrollerOld = BDFDB.ModuleUtils.findByProperties("scrollerThemed", "scroller");
 	DiscordClassModules.SearchBar = BDFDB.ModuleUtils.findByProperties("clear", "container", "pointer");
 	DiscordClassModules.SearchPopout = BDFDB.ModuleUtils.findByProperties("datePicker", "searchResultChannelIconBackground");
 	DiscordClassModules.SearchPopoutWrap = BDFDB.ModuleUtils.findByProperties("container", "queryContainer");
@@ -5481,15 +5482,21 @@
 		scrollbardefault: ["Scrollbar", "scrollbarDefault"],
 		scrollbarghost: ["Scrollbar", "scrollbarGhost"],
 		scrollbarghosthairline: ["Scrollbar", "scrollbarGhostHairline"],
-		scroller: ["Scroller", "scroller"],
-		scrollerfade: ["Scroller", "scrollerFade"],
-		scrollersystempad: ["Scroller", "systemPad"],
-		scrollerthemed: ["Scroller", "scrollerThemed"],
-		scrollerthemedwithtrack: ["Scroller", "themedWithTrack"],
-		scrollerthemeghost: ["Scroller", "themeGhost"],
-		scrollerthemeghosthairline: ["Scroller", "themeGhostHairline"],
-		scrollerthemeghosthairlinechannels: ["Scroller", "themeGhostHairlineChannels"],
-		scrollerwrap: ["Scroller", "scrollerWrap"],
+		scroller: ["ScrollerOld", "scroller"],
+		scrollerbase: ["Scroller", "scrollerBase"],
+		scrollerbaseauto: ["Scroller", "auto"],
+		scrollerbasefade: ["Scroller", "fade"],
+		scrollerbasenone: ["Scroller", "none"],
+		scrollerbasescrolling: ["Scroller", "scrolling"],
+		scrollerbasethin: ["Scroller", "thin"],
+		scrollerfade: ["ScrollerOld", "scrollerFade"],
+		scrollersystempad: ["ScrollerOld", "systemPad"],
+		scrollerthemed: ["ScrollerOld", "scrollerThemed"],
+		scrollerthemedwithtrack: ["ScrollerOld", "themedWithTrack"],
+		scrollerthemeghost: ["ScrollerOld", "themeGhost"],
+		scrollerthemeghosthairline: ["ScrollerOld", "themeGhostHairline"],
+		scrollerthemeghosthairlinechannels: ["ScrollerOld", "themeGhostHairlineChannels"],
+		scrollerwrap: ["ScrollerOld", "scrollerWrap"],
 		searchbar: ["SearchBar", "container"],
 		searchbarclear: ["SearchBar", "clear"],
 		searchbarclose: ["SearchBar", "close"],
@@ -5634,7 +5641,6 @@
 		switchvalue: ["Switch", "value"],
 		switchvaluechecked: ["Switch", "valueChecked"],
 		switchvalueunchecked: ["Switch", "valueUnchecked"],
-		systempad: ["Scroller", "systemPad"],
 		tabbar: ["UserProfile", "tabBar"],
 		tabbarcontainer: ["UserProfile", "tabBarContainer"],
 		tabbaritem: ["UserProfile", "tabBarItem"],
@@ -5687,7 +5693,6 @@
 		textrow: ["PopoutActivity", "textRow"],
 		textscroller: ["BDFDB", "textScroller"],
 		themedark: ["NotFound", "themeDark"],
-		themeghosthairline: ["Scroller", "themeGhostHairline"],
 		themelight: ["NotFound", "themeLight"],
 		themeundefined: ["NotFound", "themeUndefined"],
 		tip: ["Tip", "tip"],
@@ -7813,6 +7818,11 @@
 			}));
 		}
 	};
+	
+	let AdvancedScrollers = BDFDB.ModuleUtils.findByProperties("AdvancedScrollerThin", "AdvancedScrollerNone") || {};
+	InternalComponents.LibraryComponents.ScrollerAuto = AdvancedScrollers.AdvancedScrollerAuto;
+	InternalComponents.LibraryComponents.ScrollerNone = AdvancedScrollers.AdvancedScrollerNone;
+	InternalComponents.LibraryComponents.ScrollerThin = AdvancedScrollers.AdvancedScrollerThin;
 	
 	InternalComponents.LibraryComponents.ScrollerHorizontal = BDFDB.ModuleUtils.findByName("HorizontalScroller");
 	
