@@ -1786,7 +1786,7 @@
 		
 		function getChild (children) {
 			let result = null;
-			if (!children || depth >= maxDepth && performance.now() - start >= maxTime) return result;
+			if (!children || depth >= maxDepth || performance.now() - start >= maxTime) return result;
 			if (!BDFDB.ArrayUtils.is(children)) {
 				if (check(children)) {
 					if (config.all === undefined || !config.all) result = children;
@@ -1820,6 +1820,7 @@
 						result = getChild(child.props.children);
 						depth--;
 					}
+					if (result) break;
 				}
 			}
 			return result;
@@ -1827,7 +1828,7 @@
 		function check (instance) {
 			if (!instance) return false;
 			let props = instance.stateNode ? instance.stateNode.props : instance.props;
-			return instance.type && config.name && config.name.some(name => InternalBDFDB.isInstanceCorrect(instance, name)) || config.key && config.key.some(key => instance.key == key) || props && config.props && config.props[config.someProps ? "some" : "every"](prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => propCheck(props, prop[0], checkvalue)) : propCheck(props, prop[0], prop[1])) : props[prop] !== undefined) || config.filter && config.filter(instance);
+			return instance.type && config.name && config.name.some(name => InternalBDFDB.isInstanceCorrect(instance, name)) || config.key && config.key.some(key => instance.key == key) || props && config.props && config.props[config.someProps ? "some" : "every"](prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkValue => propCheck(props, prop[0], checkValue)) : propCheck(props, prop[0], prop[1])) : props[prop] !== undefined) || config.filter && config.filter(instance);
 		}
 		function propCheck (props, key, value) {
 			return key != null && props[key] != null && value != null && (key == "className" ? (" " + props[key] + " ").indexOf(" " + value + " ") > -1 : BDFDB.equals(props[key], value));
@@ -1951,7 +1952,7 @@
 			let result = undefined;
 			if (instance && !Node.prototype.isPrototypeOf(instance) && !BDFDB.ReactUtils.getInstance(instance) && depth < maxDepth && performance.now() - start < maxTime) {
 				let props = instance.stateNode ? instance.stateNode.props : instance.props;
-				if (instance.stateNode && !Node.prototype.isPrototypeOf(instance.stateNode) && (instance.type && config.name && config.name.some(name => InternalBDFDB.isInstanceCorrect(instance, name.split(" _ _ ")[0])) || instance.type && config.type && config.type.some(type => BDFDB.ArrayUtils.is(type) ? instance.type === type[1] : instance.type === type) || instance.key && config.key && config.key.some(key => instance.key == key) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => BDFDB.equals(props[prop[0]], checkvalue)) : BDFDB.equals(props[prop[0]], prop[1])) : props[prop] !== undefined))) {
+				if (instance.stateNode && !Node.prototype.isPrototypeOf(instance.stateNode) && (instance.type && config.name && config.name.some(name => InternalBDFDB.isInstanceCorrect(instance, name.split(" _ _ ")[0])) || instance.type && config.type && config.type.some(type => BDFDB.ArrayUtils.is(type) ? instance.type === type[1] : instance.type === type) || instance.key && config.key && config.key.some(key => instance.key == key) || props && config.props && config.props.every(prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkValue => BDFDB.equals(props[prop[0]], checkValue)) : BDFDB.equals(props[prop[0]], prop[1])) : props[prop] !== undefined))) {
 					if (config.all === undefined || !config.all) result = instance.stateNode;
 					else if (config.all) {
 						if (!instance.stateNode.BDFDBreactSearch) {
@@ -2041,7 +2042,7 @@
 		function check (instance) {
 			if (!instance) return false;
 			let props = instance.stateNode ? instance.stateNode.props : instance.props;
-			return instance.type && config.name && config.name.some(name => InternalBDFDB.isInstanceCorrect(instance, name)) || config.key && config.key.some(key => instance.key == key) || props && config.props && config.props[config.someProps ? "some" : "every"](prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkvalue => propCheck(props, prop[0], checkvalue)) : propCheck(props, prop[0], prop[1])) : props[prop] !== undefined) || config.filter && config.filter(instance);
+			return instance.type && config.name && config.name.some(name => InternalBDFDB.isInstanceCorrect(instance, name)) || config.key && config.key.some(key => instance.key == key) || props && config.props && config.props[config.someProps ? "some" : "every"](prop => BDFDB.ArrayUtils.is(prop) ? (BDFDB.ArrayUtils.is(prop[1]) ? prop[1].some(checkValue => propCheck(props, prop[0], checkValue)) : propCheck(props, prop[0], prop[1])) : props[prop] !== undefined) || config.filter && config.filter(instance);
 		}
 		function propCheck (props, key, value) {
 			return key != null && props[key] != null && value != null && (key == "className" ? (" " + props[key] + " ").indexOf(" " + value + " ") > -1 : BDFDB.equals(props[key], value));
