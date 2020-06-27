@@ -6,7 +6,7 @@ var TimedLightDarkMode = (_ => {
 	return class TimedLightDarkMode {
 		getName () {return "TimedLightDarkMode";}
 
-		getVersion () {return "1.0.6";}
+		getVersion () {return "1.0.7";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,7 @@ var TimedLightDarkMode = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"fixed":[["Slider Bubble","Changed bubble to tooltip"]]
 			};
 
 			this.patchedModules = {
@@ -152,14 +152,8 @@ var TimedLightDarkMode = (_ => {
 			let currentTime = new Date();
 			let currentHours = currentTime.getHours();
 			let currentMinutes = currentTime.getMinutes();
-			let bubble = BDFDB.DOMUtils.create(`<span class="${BDFDB.disCN.sliderbubble}">${(currentHours > 9 ? currentHours : ("0" + currentHours)) + ":" + (currentMinutes > 9 ? currentMinutes : ("0" + currentMinutes))}</span>`);
-			grabber.appendChild(bubble);
 			grabber.style.setProperty("left", `${this.getPercent(currentTime)}%`);
-			let mouseleave = _ => {
-				BDFDB.DOMUtils.remove(bubble);
-				grabber.removeEventListener("mouseleave", mouseleave);
-			};
-			grabber.addEventListener("mouseleave", mouseleave);
+			BDFDB.TooltipUtils.create(grabber, (currentHours > 9 ? currentHours : ("0" + currentHours)) + ":" + (currentMinutes > 9 ? currentMinutes : ("0" + currentMinutes)), {color: "grey"});
 		}
 
 		dragSlider (grabber) {
@@ -171,19 +165,18 @@ var TimedLightDarkMode = (_ => {
 			BDFDB.DOMUtils.appendLocalStyle("disableTextSelection", `*{user-select: none !important;}`);
 
 			let value = values[timer];
-			let othervalue = timer == "timer1" ? values.timer2 : values.timer1;
 			let sY = 0;
 			let sHalfW = BDFDB.DOMUtils.getRects(grabber).width/2;
 			let sMinX = BDFDB.DOMUtils.getRects(track).left;
 			let sMaxX = sMinX + BDFDB.DOMUtils.getRects(track).width;
-			let bubble = BDFDB.DOMUtils.create(`<span class="${BDFDB.disCN.sliderbubble}">${this.getTime(value, true)}</span>`);
-			grabber.appendChild(bubble);
+			let tooltip = BDFDB.TooltipUtils.create(grabber, this.getTime(value, true), {color: "grey", perssist: true});
+			let tooltipContent = tooltip.querySelector(BDFDB.dotCN.tooltipcontent);
 			let mouseup = _ => {
 				document.removeEventListener("mouseup", mouseup);
 				document.removeEventListener("mousemove", mousemove);
-				BDFDB.DOMUtils.remove(bubble);
 				BDFDB.DOMUtils.removeLocalStyle("disableTextSelection");
 				BDFDB.DataUtils.save(value, this, "values", timer);
+				BDFDB.DOMUtils.remove(tooltip);
 				this.startInterval();
 			};
 			let mousemove = e => {
@@ -191,7 +184,8 @@ var TimedLightDarkMode = (_ => {
 				value = BDFDB.NumberUtils.mapRange([sMinX - sHalfW, sMaxX - sHalfW], [0, 100], sY);
 				input.value = value;
 				grabber.style.setProperty("left", value + "%");
-				bubble.innerText = this.getTime(value, true);
+				tooltipContent.innerText = this.getTime(value, true);
+				tooltip.update();
 				values[timer] = value;
 				this.updateSlider(track.parentNode, values);
 			};
