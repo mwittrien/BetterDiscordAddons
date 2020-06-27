@@ -1211,7 +1211,7 @@
 		QuickSwitchChannelResult: "LibraryComponents.QuickSwitchItems.Channel",
 		QuickSwitchGroupDMResult: "LibraryComponents.QuickSwitchItems.GroupDM",
 		QuickSwitchGuildResult: "LibraryComponents.QuickSwitchItems.Guild",
-		QuickSwitchUserResult: "LibraryComponents.QuickSwitchItems.User",
+		QuickSwitchUserResult: "LibraryComponents.QuickSwitchItems.User"
 	};
 	WebModulesData.SpecialFilter = {
 		V2C_ContentColumn: ins => ins && ins.return && ins.return.stateNode && ins.return.stateNode.props && typeof ins.return.stateNode.props.title == "string" && (ins.return.stateNode.props.title.toUpperCase().indexOf("PLUGINS") == 0 || ins.return.stateNode.props.title.toUpperCase().indexOf("THEMES") == 0) && ins.return.type,
@@ -5014,6 +5014,7 @@
 		guildsettingsmembernametag: ["GuildSettingsMember", "nameTag"],
 		guildsettingsrolesbuttonwrapper: ["GuildSettingsRoles", "buttonWrapper"],
 		guildsscroller: ["GuildsWrapper", "scroller"],
+		guildsscrollerwrap: ["GuildsWrapper", "scrollerWrap"],
 		guildsvg: ["Guild", "svg"],
 		guildswrapper: ["GuildsWrapper", "wrapper"],
 		guildswrapperunreadmentionsbar: ["GuildsWrapper", "unreadMentionsBar"],

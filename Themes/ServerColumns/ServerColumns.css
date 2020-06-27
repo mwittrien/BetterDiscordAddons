@@ -45,11 +45,11 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 .wrapper-1Rf91z .scrollerWrap-1IAIlv {
 	padding: 0 !important;
 }
-.wrapper-1Rf91z .scrollerWrap-1IAIlv .scroller-2TZvBN {
+.wrapper-1Rf91z .scroller-2TZvBN {
 	padding: 0 0 calc(10px * var(--vguildsize)/50) calc(10px * var(--vguildsize)/50) !important;
 }
-.wrapper-1Rf91z .scrollerWrap-1IAIlv .scroller-2TZvBN,
-.wrapper-1Rf91z .scrollerWrap-1IAIlv .scroller-2TZvBN > [role="tree"] {
+.wrapper-1Rf91z .scroller-2TZvBN,
+.wrapper-1Rf91z .scroller-2TZvBN > [role="tree"] {
 	margin: 0 !important;
 	display: flex !important;
 	flex-flow: row wrap !important;
