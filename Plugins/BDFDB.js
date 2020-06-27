@@ -4341,6 +4341,7 @@
 	DiscordClassModules.QuickSwitchWrap = BDFDB.ModuleUtils.findByProperties("container", "miscContainer");
 	DiscordClassModules.Reactions = BDFDB.ModuleUtils.findByProperties("reactionBtn", "reaction");
 	DiscordClassModules.RecentMentions = BDFDB.ModuleUtils.findByProperties("recentMentionsPopout");
+	DiscordClassModules.RecentMentionsHeader = BDFDB.ModuleUtils.findByProperties("channelName", "channelHeader", "dmIcon");
 	DiscordClassModules.Role = BDFDB.ModuleUtils.findByProperties("roleCircle", "roleName", "roleRemoveIcon");
 	DiscordClassModules.Scrollbar = BDFDB.ModuleUtils.findByProperties("scrollbar", "scrollbarGhost");
 	DiscordClassModules.Scroller = BDFDB.ModuleUtils.findByProperties("scrollerBase", "none", "fade");
@@ -5476,8 +5477,12 @@
 		quickswitchresultmisccontainer: ["QuickSwitchWrap", "miscContainer"],
 		quickswitchresultname: ["QuickSwitch", "name"],
 		quickswitchresultnote: ["QuickSwitch", "note"],
-		quickswitchresultusername: ["QuickSwitch", "username"],
+		quickswitchresultusername: ["QuickSwitch", "username"]
+		recentmentionschannelname: ["RecentMentionsHeader", "channelName"],
 		recentmentionsclosebutton: ["RecentMentions", "closeButton"],
+		recentmentionsdmicon: ["RecentMentionsHeader", "dmIcon"],
+		recentmentionsguildicon: ["RecentMentionsHeader", "guildIcon"],
+		recentmentionsguildname: ["RecentMentionsHeader", "guildName"],
 		recentmentionsjumpbutton: ["RecentMentions", "jumpButton"],
 		recentmentionspopout: ["RecentMentions", "recentMentionsPopout"],
 		scrollbar: ["Scrollbar", "scrollbar"],
