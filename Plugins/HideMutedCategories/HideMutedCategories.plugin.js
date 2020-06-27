@@ -4,7 +4,7 @@ var HideMutedCategories = (_ => {
 	return class HideMutedCategories {
 		getName () {return "HideMutedCategories";}
 
-		getVersion () {return "1.0.1";}
+		getVersion () {return "1.0.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,7 +12,7 @@ var HideMutedCategories = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Owner/Admin","Properly hides muted categories when you are owner/admin on a server"]]
+				"fixed":[["New Scroller","Adjusted for the new scroller component"]]
 			};
 			
 			this.patchPriority = 10;
@@ -85,7 +85,7 @@ var HideMutedCategories = (_ => {
 				for (let catId in e.instance.props.categories) if (BDFDB.LibraryModules.MutedUtils.isChannelMuted(e.instance.props.guild.id, catId)) e.instance.props.categories[catId] = [];
 			}
 			else {
-				let list = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "List"});
+				let list = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.channelsscroller]]});
 				if (list) {
 					let renderSection = list.props.renderSection;
 					list.props.renderSection = (...args) => {
