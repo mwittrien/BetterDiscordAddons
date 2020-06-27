@@ -4272,7 +4272,7 @@
 	DiscordClassModules.GuildSettingsRoles = BDFDB.ModuleUtils.findByProperties("buttonWrapper", "addRoleIcon");
 	DiscordClassModules.GuildServer = BDFDB.ModuleUtils.findByProperties("blobContainer", "pill");
 	DiscordClassModules.GuildsItems = BDFDB.ModuleUtils.findByProperties("guildSeparator", "guildsError");
-	DiscordClassModules.GuildsWrapper = BDFDB.ModuleUtils.findByProperties("scrollerWrap", "unreadMentionsBar", "wrapper");
+	DiscordClassModules.GuildsWrapper = BDFDB.ModuleUtils.findByProperties("scroller", "unreadMentionsBar", "wrapper");
 	DiscordClassModules.HeaderBar = BDFDB.ModuleUtils.findByProperties("container", "children", "toolbar");
 	DiscordClassModules.HeaderBarExtras = BDFDB.ModuleUtils.findByProperties("headerBarLoggedOut", "search");
 	DiscordClassModules.HeaderBarSearch = BDFDB.ModuleUtils.findByProperties("search", "searchBar", "open");
