@@ -111,6 +111,7 @@
 		13.	REACTIONSMODAL
 		14.	GUILDTEMPLATEMODAL
 		15.	GUILDWELCOMEMODAL
+		16.	SCREENSHAREMODAL
 	14.	POPOUTS
 		1.	CONTEXTMENU
 		2.	USERPOPOUT
@@ -3878,6 +3879,13 @@ body:before {
 }
 .optionContainer-15srkc:hover {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+
+/* ----		13.16.	SCREENSHAREMODAL				---- */
+
+#app-mount .tiles-2aXG_k {									/* modal				preview tiles						*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+	box-shadow: 0 2px 5px rgba(var(--vtransparencycolor), 0.2), 0 0 0 1px rgba(var(--vtransparencycolor), 0.6);
 }
 
 
