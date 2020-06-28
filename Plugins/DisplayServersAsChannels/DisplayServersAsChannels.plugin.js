@@ -1,12 +1,12 @@
 //META{"name":"DisplayServersAsChannels","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/DisplayServersAsChannels","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/DisplayServersAsChannels/DisplayServersAsChannels.plugin.js"}*//
 
 var DisplayServersAsChannels = (_ => {
-	var amounts = {};
+	var settings = {}, amounts = {};
 	
 	return class DisplayServersAsChannels {
 		getName () {return "DisplayServersAsChannels";}
 
-		getVersion () {return "1.3.5";}
+		getVersion () {return "1.3.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,7 @@ var DisplayServersAsChannels = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Silent updates? NANI!","Fixed for discords sneaky updates"]]
+				"improved":[["Server Icon","Added server icon to server entries, can be disabled"]]
 			};
 
 			this.patchPriority = 10;
@@ -34,6 +34,9 @@ var DisplayServersAsChannels = (_ => {
 
 		initConstructor () {
 			this.defaults = {
+				settings: {
+					showGuildIcon:					{value:true, 	description:"Show a icon for servers"},
+				},
 				amounts: {
 					serverListWidth:				{value:240, 	min:45,		description:"Server list width in px:"},
 					serverElementHeight:			{value:32, 		min:16,		description:"Server element height in px:"}
@@ -43,9 +46,18 @@ var DisplayServersAsChannels = (_ => {
 		
 		getSettingsPanel () {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+			let settings = BDFDB.DataUtils.get(this, "settings");
 			let amounts = BDFDB.DataUtils.get(this, "amounts");
 			let settingsPanel, settingsItems = [];
 			
+			for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+				className: BDFDB.disCN.marginbottom8,
+				type: "Switch",
+				plugin: this,
+				keys: ["settings", key],
+				label: this.defaults.settings[key].description,
+				value: settings[key]
+			}));
 			for (let key in amounts) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "TextInput",
@@ -150,9 +162,9 @@ var DisplayServersAsChannels = (_ => {
 				this.removeTooltip(e.returnvalue);
 				this.removeMask(e.returnvalue);
 				this.addElementName(e.returnvalue, text, {
-					badge: icon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatar, {
+					badges: icon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatar, {
 						src: icon,
-						size: BDFDB.LibraryComponents.Avatar.Sizes.SIZE_24,
+						size: BDFDB.LibraryComponents.Avatar.Sizes.SIZE_24
 					})
 				});
 			}
@@ -163,13 +175,19 @@ var DisplayServersAsChannels = (_ => {
 				this.removeTooltip(e.returnvalue);
 				this.removeMask(e.returnvalue);
 				this.addElementName(e.returnvalue, e.instance.props.guild.name, {
-					badge: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Badge, {
-						size: amounts.serverElementHeight * 0.5,
-						badgeColor: BDFDB.DiscordConstants.Colors.STATUS_GREY,
-						tooltipColor: BDFDB.LibraryComponents.TooltipContainer.Colors.BLACK,
-						tooltipPosition: BDFDB.LibraryComponents.TooltipContainer.Positions.RIGHT,
-						guild: e.instance.props.guild
-					})
+					badges: [
+						settings.showGuildIcon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Icon, {
+							guild: e.instance.props.guild,
+							size: BDFDB.LibraryComponents.GuildComponents.Icon.Sizes.SMALLER
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Badge, {
+							size: amounts.serverElementHeight * 0.5,
+							badgeColor: BDFDB.DiscordConstants.Colors.STATUS_GREY,
+							tooltipColor: BDFDB.LibraryComponents.TooltipContainer.Colors.BLACK,
+							tooltipPosition: BDFDB.LibraryComponents.TooltipContainer.Positions.RIGHT,
+							guild: e.instance.props.guild
+						})
+					]
 				});
 			}
 		}
@@ -183,7 +201,7 @@ var DisplayServersAsChannels = (_ => {
 				this.addElementName(e.returnvalue, e.instance.props.folderName || BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER, {
 					wrap: true,
 					backgroundColor: e.instance.props.expanded && BDFDB.ColorUtils.setAlpha(folderColor, 0.2),
-					badge: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+					badges: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 						color: folderColor,
 						width: folderSize,
 						height: folderSize,
@@ -236,10 +254,10 @@ var DisplayServersAsChannels = (_ => {
 				let [children2, index2] = BDFDB.ReactUtils.findParent(children[index].props.children, {name:"FolderIcon", props:[["className",BDFDB.disCN.guildfoldericonwrapper]]});
 				if (index2 > -1) children2.splice(index2, 1);
 				let childEles = [
-					BDFDB.ReactUtils.createElement("div", {
+					[options.badges].flat(10).filter(n => n).map(badge => BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN._displayserversaschannelsbadge,
-						children: options.badge
-					}),
+						children: badge
+					})),
 					BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN._displayserversaschannelsname,
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
@@ -258,6 +276,7 @@ var DisplayServersAsChannels = (_ => {
 		}
 		
 		forceUpdateAll() {
+			settings = BDFDB.DataUtils.get(this, "settings");
 			amounts = BDFDB.DataUtils.get(this, "amounts");
 			
 			BDFDB.ModuleUtils.forceAllUpdates(this);
@@ -285,8 +304,11 @@ var DisplayServersAsChannels = (_ => {
 					justify-content: flex-start;
 					margin-left: 8px;
 				}
+				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildsscroller} > div[style*="transform"][style*="height"] {
+					height: unset !important;
+				}
 				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildpillwrapper} {
-					top: -${(48 - amounts.serverElementHeight) / 2}px;
+					top: ${-1 * (48 - amounts.serverElementHeight) / 2}px;
 					left: -8px;
 					transform: scaleY(calc(${amounts.serverElementHeight}/48));
 				}
@@ -307,8 +329,25 @@ var DisplayServersAsChannels = (_ => {
 					display: flex;
 					margin-right: 4px;
 				}
+				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildiconchildwrapper + BDFDB.dotCNS._displayserversaschannelsbadge + BDFDB.dotCN.avataricon} {
+					width: ${amounts.serverElementHeight/32 * 24}px;
+					height: ${amounts.serverElementHeight/32 * 24}px;
+				}
 				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildiconchildwrapper + BDFDB.dotCN.badgebase} {
 					margin-left: 4px;
+					border-radius: ${amounts.serverElementHeight/32 * 8}px;
+					width: ${amounts.serverElementHeight/32 * 16}px;
+					height: ${amounts.serverElementHeight/32 * 16}px;
+					font-size: ${amounts.serverElementHeight/32 * 12}px;
+				}
+				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildiconchildwrapper + BDFDB.dotCN.badgebase}[style*="width: 16px;"] {
+					width: ${amounts.serverElementHeight/32 * 16}px !important;
+				}
+				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildiconchildwrapper + BDFDB.dotCN.badgebase}[style*="width: 22px;"] {
+					width: ${amounts.serverElementHeight/32 * 22}px !important;
+				}
+				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCNS.guildiconchildwrapper + BDFDB.dotCN.badgebase}[style*="width: 30px;"] {
+					width: ${amounts.serverElementHeight/32 * 30}px !important;
 				}
 
 				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.homebuttonicon} {

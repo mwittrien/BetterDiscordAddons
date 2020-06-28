@@ -1303,7 +1303,6 @@
 		methodNames = [methodNames].flat(10).filter(n => n);
 		let cancel = _ => {BDFDB.ModuleUtils.unpatch(plugin, module, methodNames);};
 		for (let methodName of methodNames) if (module[methodName] == null || typeof module[methodName] == "function") {
-			let i = 0;
 			if (!module.BDFDBpatch[methodName] || config.force && (!module[methodName] || !module[methodName].__isBDFDBpatched)) {
 				if (!module.BDFDBpatch[methodName]) {
 					module.BDFDBpatch[methodName] = {};
