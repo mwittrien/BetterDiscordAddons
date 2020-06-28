@@ -6,7 +6,7 @@ var EditUsers = (_ => {
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.8.7";}
+		getVersion () {return "3.8.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -39,11 +39,13 @@ var EditUsers = (_ => {
 					QuickSwitchUserResult: "render",
 					SearchPopoutComponent: "render",
 					IncomingCall: "render",
-					PrivateChannelCallParticipants: "render2",
-					ChannelCall: "render2",
+					PrivateChannelCallParticipants: "render",
+					ChannelCall: "render",
+					PictureInPictureVideo: "default",
 					UserSummaryItem: "render"
 				},
 				after: {
+					ChannelCallHeader: "default",
 					AutocompleteUserResult: "render",
 					NameTag: "default",
 					UserPopout: "render",
@@ -60,7 +62,7 @@ var EditUsers = (_ => {
 					InviteModalUserRow: "default",
 					TypingUsers: "render",
 					DirectMessage: "render",
-					RTCConnection: "render2",
+					RTCConnection: "render",
 					PrivateChannel: "render",
 					QuickSwitchUserResult: "render",
 					IncomingCall: "render"
@@ -70,7 +72,8 @@ var EditUsers = (_ => {
 
 		initConstructor () {
 			this.css = `
-				${BDFDB.dotCNS.chat + BDFDB.dotCN.messageusername}:hover > span[style*="color"] {
+				${BDFDB.dotCNS.chat + BDFDB.dotCN.messageusername}:hover > span[style*="color"],
+				${BDFDB.dotCN.voicedetailschannel}:hover > span[style*="color"] {
 					text-decoration: underline;
 				}
 				${BDFDB.dotCN.dmchannel}:hover ${BDFDB.dotCN.namecontainername} span[style*="color"] {
@@ -305,8 +308,8 @@ var EditUsers = (_ => {
 					if (data && data.name) e.instance.props.nick = data.name;
 				}
 				else {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props:[["className", BDFDB.disCN.marginleft8]]});
-					if (index > -1) this.changeUserColor(children[index], e.instance.props.user.id);
+					let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.marginleft8]]});
+					if (userName) this.changeUserColor(userName, e.instance.props.user.id);
 				}
 			}
 		}
@@ -314,11 +317,22 @@ var EditUsers = (_ => {
 		processHeaderBarContainer (e) {
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.channelId);
 			if (channel && channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && settings.changeInDmHeader) {
-				let [children, index] = BDFDB.ReactUtils.findParent(e.instance, {name: "Title"});
-				if (index > -1) {
+				let userName = BDFDB.ReactUtils.findChild(e.instance, {name: "Title"});
+				if (userName) {
 					let recipientId = channel.getRecipientId();
-					children[index].props.children = this.getUserData(recipientId).username;
-					this.changeUserColor(children[index], recipientId);
+					userName.props.children = this.getUserData(recipientId).username;
+					this.changeUserColor(userName, recipientId);
+				}
+			}
+		}
+
+		processChannelCallHeader (e) {
+			if (e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && settings.changeInDmHeader) {
+				let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Title"});
+				if (userName) {
+					let recipientId = e.instance.props.channel.getRecipientId();
+					userName.props.children = this.getUserData(recipientId).username;
+					this.changeUserColor(userName, recipientId);
 				}
 			}
 		}
@@ -350,8 +364,8 @@ var EditUsers = (_ => {
 						break;
 				}
 				if (change) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props:[["className", BDFDB.disCN.username]]});
-					if (index > -1) this.changeUserColor(children[index], e.instance.props.user.id, {
+					let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.username]]});
+					if (userName) this.changeUserColor(userName, e.instance.props.user.id, {
 						changeBackground: changeBackground
 					});
 					if (tagClass) this.injectBadge(e.returnvalue.props.children, e.instance.props.user.id, guildId, 2, {
@@ -421,8 +435,8 @@ var EditUsers = (_ => {
 					if (titleIsName) e.instance.props.title = e.instance.props.priorityUser.user.username;
 				}
 				else {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "Header"});
-					if (index > -1) this.changeUserColor(children[index], e.instance.props.priorityUser.user.id);
+					let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Header"});
+					if (userName) this.changeUserColor(userName, e.instance.props.priorityUser.user.id);
 				}
 			}
 		}
@@ -435,8 +449,8 @@ var EditUsers = (_ => {
 					if (data && data.name) e.instance.props.nick = data.name;
 				}
 				else {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.voicename]]});
-					if (index > -1) this.changeUserColor(children[index], e.instance.props.user.id, {modify: e.instance.props});
+					let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.voicename]]});
+					if (userName) this.changeUserColor(userName, e.instance.props.user.id, {modify: e.instance.props});
 				}
 			}
 		}
@@ -450,13 +464,13 @@ var EditUsers = (_ => {
 				}
 				else {
 					if (data && (data.color1 || data.color2)) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "Tooltip"});
-						if (index > -1 && typeof children[index].props.children == "function") {
-							let renderChildren = children[index].props.children;
-							children[index].props.children = (...args) => {
+						let tooltip = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "Tooltip"});
+						if (tooltip && typeof tooltip.props.children == "function") {
+							let renderChildren = tooltip.props.children;
+							tooltip.props.children = (...args) => {
 								let renderedChildren = renderChildren(...args);
-								let [children2, index2] = BDFDB.ReactUtils.findParent(renderedChildren, {name: "PanelTitle"});
-								if (index2 > -1) this.changeUserColor(children2[index2], e.instance.props.currentUser.id);
+								let userName = BDFDB.ReactUtils.findChild(renderedChildren, {name: "PanelTitle"});
+								if (userName) this.changeUserColor(userName, e.instance.props.currentUser.id);
 								return renderedChildren;
 							}
 						}
@@ -469,18 +483,17 @@ var EditUsers = (_ => {
 			if (e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && settings.changeInChatWindow) {
 				let recipientId = e.instance.props.channel.getRecipientId();
 				let name = this.getUserData(recipientId).username;
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue.props.children, {props:"src"});
-				if (index > -1) children[index].props.src = this.getUserAvatar(recipientId);
-				[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue.props.children, {name:"h1"});
-				if (index > -1) {
-					children[index].props.children = BDFDB.ReactUtils.createElement("span", {children: name});
-					this.changeUserColor(children[index].props.children, recipientId);
+				let avatar = BDFDB.ReactUtils.findChild(e.returnvalue.props.children, {props: "src"});
+				if (avatar) avatar.props.src = this.getUserAvatar(recipientId);
+				let userName = BDFDB.ReactUtils.findChild(e.returnvalue.props.children, {name: "h1"});
+				if (userName) {
+					userName.props.children = BDFDB.ReactUtils.createElement("span", {children: name});
+					this.changeUserColor(userName.props.children, recipientId);
 				}
-				if (index > -1) children[index].props.src = this.getUserAvatar(recipientId);
-				[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue.props.children, {name:"strong"});
-				if (index > -1) {
-					children[index].props.children = "@" + name;
-					this.changeUserColor(children[index], recipientId);
+				userName = BDFDB.ReactUtils.findChild(e.returnvalue.props.children, {name: "strong"});
+				if (userName) {
+					userName.props.children = "@" + name;
+					this.changeUserColor(userName, recipientId);
 				}
 			}
 		}
@@ -653,8 +666,8 @@ var EditUsers = (_ => {
 			if (e.instance.props.user && settings.changeInInviteList) {
 				if (!e.returnvalue) e.instance.props.user = this.getUserData(e.instance.props.user.id);
 				else {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.invitemodalinviterowname]]});
-					if (index > -1) this.changeUserColor(children[index], e.instance.props.user.id);
+					let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.invitemodalinviterowname]]});
+					if (userName) this.changeUserColor(userName, e.instance.props.user.id);
 				}
 			}
 		}
@@ -667,8 +680,8 @@ var EditUsers = (_ => {
 
 		processInviteModalUserRow (e) {
 			if (e.instance.props.user && settings.changeInInviteList) {
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.searchpopoutddmaddnickname]]});
-				if (index > -1) this.changeUserColor(children[index], e.instance.props.user.id);
+				let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.searchpopoutddmaddnickname]]});
+				if (userName) this.changeUserColor(userName, e.instance.props.user.id);
 			}
 		}
 
@@ -676,8 +689,8 @@ var EditUsers = (_ => {
 			if (BDFDB.ObjectUtils.is(e.instance.props.typingUsers) && Object.keys(e.instance.props.typingUsers).length && settings.changeInTyping) {
 				let users = Object.keys(e.instance.props.typingUsers).filter(id => id != BDFDB.UserUtils.me.id).filter(id => !BDFDB.LibraryModules.FriendUtils.isBlocked(id)).map(id => BDFDB.LibraryModules.UserStore.getUser(id)).filter(user => user);
 				if (users.length) {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.typingtext]]});
-					if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) for (let child of children[index].props.children) if (child.type == "strong") {
+					let typingtext = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.typingtext]]});
+					if (typingtext && BDFDB.ArrayUtils.is(typingtext.props.children)) for (let child of typingtext.props.children) if (child.type == "strong") {
 						let userId = (users.shift() || {}).id;
 						if (userId) {
 							let data = changedUsers[userId];
@@ -692,10 +705,10 @@ var EditUsers = (_ => {
 		processDirectMessage (e) {
 			if (e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && settings.changeInRecentDms) {
 				let recipientId = e.instance.props.channel.getRecipientId();
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ListItemTooltip"});
-				if (index > -1) children[index].props.text = this.getUserData(recipientId).username;
-				[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "NavItem"});
-				if (index > -1) children[index].props.icon = this.getUserAvatar(recipientId);
+				let tooltip = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "ListItemTooltip"});
+				if (tooltip) tooltip.props.text = this.getUserData(recipientId).username;
+				let avatar = BDFDB.ReactUtils.findChild(e.returnvalue, {name: "NavItem"});
+				if (avatar) avatar.props.icon = this.getUserAvatar(recipientId);
 			}
 		}
 
@@ -723,11 +736,11 @@ var EditUsers = (_ => {
 			if (e.instance.props.user && settings.changeInQuickSwitcher) {
 				if (!e.returnvalue) e.instance.props.user = this.getUserData(e.instance.props.user.id);
 				else {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props:[["className", BDFDB.disCN.quickswitchresultmatch]]});
-					if (index > -1) {
+					let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.quickswitchresultmatch]]});
+					if (userName) {
 						let data = changedUsers[e.instance.props.user.id];
-						if (data && data.name) children[index].props.children = data.name;
-						this.changeUserColor(children[index], e.instance.props.user.id, {modify: BDFDB.ObjectUtils.extract(e.instance.props, "focused", "unread", "mentions")});
+						if (data && data.name) userName.props.children = data.name;
+						this.changeUserColor(userName, e.instance.props.user.id, {modify: BDFDB.ObjectUtils.extract(e.instance.props, "focused", "unread", "mentions")});
 					}
 				}
 			}
@@ -741,11 +754,11 @@ var EditUsers = (_ => {
 
 		processSearchPopoutUserResult (e) {
 			if (e.instance.props.result && e.instance.props.result.user && settings.changeInSearchPopout) {
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props:[["className", BDFDB.disCN.searchpopoutdisplayednick]]});
-				if (index > -1) {
+				let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.searchpopoutdisplayednick]]});
+				if (userName) {
 					let data = changedUsers[e.instance.props.result.user.id];
-					if (data && data.name) children[index].props.children = data.name;
-					this.changeUserColor(children[index], e.instance.props.result.user.id);
+					if (data && data.name) userName.props.children = data.name;
+					this.changeUserColor(userName, e.instance.props.result.user.id);
 				}
 			}
 		}
@@ -763,18 +776,26 @@ var EditUsers = (_ => {
 						e.instance.props.avatarUrl = this.getUserAvatar(user.id);
 					}
 					else {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props:[["className", BDFDB.disCN.callmembers]]});
-						if (index > -1) this.changeUserColor(children[index], user.id);
+						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.callmembers]]});
+						if (userName) this.changeUserColor(userName, user.id);
 					}
 				}
 			}
 		}
-
+		
 		processRTCConnection (e) {
-			if (e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && settings.changeInRecentDms) {
+			if (e.instance.props.channel && e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM && settings.changeInRecentDms && typeof e.returnvalue.props.children == "function") {
 				let recipientId = e.instance.props.channel.getRecipientId();
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "PanelSubtext"});
-				if (index > -1) children[index].props.children = "@" + this.getUserData(recipientId).username;
+				let renderChildren = e.returnvalue.props.children;
+				e.returnvalue.props.children = (...args) => {
+					let renderedChildren = renderChildren(...args);
+					let userName = BDFDB.ReactUtils.findChild(renderedChildren, {name: "PanelSubtext"});
+					if (userName) {
+						userName.props.children = "@" + this.getUserData(recipientId).username;
+						this.changeUserColor(userName, recipientId);
+					}
+					return renderedChildren;
+				};
 			}
 		}
 
@@ -789,6 +810,17 @@ var EditUsers = (_ => {
 				for (let participant of e.instance.props.participants) if (participant && participant.user) participant.user = this.getUserData(participant.user.id);
 			}
 		}
+		
+		processPictureInPictureVideo (e) {
+			if (e.instance.props.backgroundKey) {
+				let user = BDFDB.LibraryModules.UserStore.getUser(e.instance.props.backgroundKey);
+				if (user) {
+					e.instance.props.title = this.getUserData(user.id).username;
+					let videoBackground = BDFDB.ReactUtils.findChild(e.instance.props.children, {name: "VideoBackground"});
+					if (videoBackground && videoBackground.props.src) videoBackground.props.src = this.getUserAvatar(user.id);
+				}
+			}
+		}
 
 		processUserSummaryItem (e) {
 			if (BDFDB.ArrayUtils.is(e.instance.props.users)) {
@@ -799,12 +831,9 @@ var EditUsers = (_ => {
 		changeAppTitle () {
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());
 			let title = document.head.querySelector("title");
-			if (title && channel && channel.type == 1) {
-				let info = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
-				if (info) {
-					let data = this.getUserData(info.id, title);
-					BDFDB.DOMUtils.setText(title, "@" + (data.name || info.username));
-				}
+			if (title && channel && channel.type == BDFDB.DiscordConstants.ChannelTypes.DM) {
+				let user = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
+				if (user) BDFDB.DOMUtils.setText(title, "@" + this.getUserData(user.id, settings.changeInAppTitle).username);
 			}
 		}
 		
