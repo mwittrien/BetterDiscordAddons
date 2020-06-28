@@ -6,7 +6,7 @@ var ChatAliases = (_ => {
 	return class ChatAliases {
 		getName () {return "ChatAliases";}
 
-		getVersion () {return "2.1.6";}
+		getVersion () {return "2.1.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,7 @@ var ChatAliases = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["Textarea Choices","You can now disable automatic alias replacement in the three different message textareas"]]
+				"added":[["Don't replace before send","Added an option to disable the process of aliases being inserted before a message is sent, turning the plugin into a WYSIWYG-esque stylt that only inserts aliases via the autocomplete menu"]]
 			};
 			
 			this.patchedModules = {
@@ -43,8 +43,9 @@ var ChatAliases = (_ => {
 					file: 				{value:false,		description:"Handle the replacevalue as a filepath"}
 				},
 				settings: {
-					addContextMenu:		{value:true, 		inner:false,	description:"Add a ContextMenu entry to faster add new Aliases:"},
-					addAutoComplete:	{value:true, 		inner:false,	description:"Add an Autocomplete-Menu for Non-RegExp Aliases:"},
+					replaceBeforeSend:	{value:true, 		inner:false,	description:"Replace words with your Aliases before a message is sent"},
+					addContextMenu:		{value:true, 		inner:false,	description:"Add a ContextMenu entry to faster add new Aliases"},
+					addAutoComplete:	{value:true, 		inner:false,	description:"Add an Autocomplete-Menu for Non-RegExp Aliases"},
 					triggerNormal:		{value:true, 		inner:true,		description:"Normal Message Textarea"},
 					triggerEdit:		{value:true, 		inner:true,		description:"Edit Message Textarea"},
 					triggerUpload:		{value:true, 		inner:true,		description:"Upload Message Prompt"}
@@ -400,7 +401,7 @@ var ChatAliases = (_ => {
 		}
 		
 		handleSubmit (e, e2, textIndex) {
-			if (BDFDB.LibraryModules.SlowmodeUtils.getSlowmodeCooldownGuess(e.instance.props.channel.id) > 0) return;
+			if (!settings.replaceBeforeSend || BDFDB.LibraryModules.SlowmodeUtils.getSlowmodeCooldownGuess(e.instance.props.channel.id) > 0) return;
 			let messageData = this.formatText(e2.methodArguments[textIndex]);
 			if (messageData) {
 				if (messageData.text != null) {
