@@ -8,7 +8,7 @@ var MessageUtilities = (_ => {
 	return class MessageUtilities {
 		getName () {return "MessageUtilities";}
 
-		getVersion () {return "1.7.3";}
+		getVersion () {return "1.7.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -16,7 +16,7 @@ var MessageUtilities = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
+				"improved":[["Context Menu Hints","Switches the order of the keybind hint to the more logicaly key+click order"]]
 			};
 			
 			this.patchedModules = {
@@ -204,7 +204,7 @@ var MessageUtilities = (_ => {
 				if (group && group.type == BDFDB.LibraryComponents.MenuItems.MenuGroup && BDFDB.ArrayUtils.is(group.props.children)) for (let item of group.props.children) {
 					if (item && item.props && item.props.id && !item.props.hint) {
 						let hint, action;
-						if (item.props.id == "mark-unread") hint = `${clickMap[0]}+${BDFDB.LibraryModules.KeyCodeUtils.getString(18)}`;
+						if (item.props.id == "mark-unread") hint = `${BDFDB.LibraryModules.KeyCodeUtils.getString(18)}+${clickMap[0]}`;
 						else {
 							switch (item.props.id) {
 								case "copy-link":
@@ -276,19 +276,18 @@ var MessageUtilities = (_ => {
 		}
 
 		checkIfBindingIsValid (binding, doneclick) {
-			let valid = true;
-			if (binding.click != doneclick) valid = false;
-			for (let key of binding.keycombo) if (!BDFDB.InternalData.pressedKeys.includes(key)) valid = false;
-			return valid;
+			if (binding.click != doneclick) return false;
+			for (let key of binding.keycombo) if (!BDFDB.InternalData.pressedKeys.includes(key)) return false;
+			return true;
 		}
 
 		hasDoubleClickOverwrite (binding) {
 			if (binding.click == 1) return false;
-			let dblbindings = BDFDB.ObjectUtils.filter(bindings, bndg => {return bndg.click == 1});
-			for (let dblaction in dblbindings) {
-				let dblbndg = dblbindings[dblaction];
+			let dblBindings = BDFDB.ObjectUtils.filter(bindings, bndg => {return bndg.click == 1});
+			for (let dblAction in dblBindings) {
+				let dblBinding = dblBindings[dblAction];
 				let overwrite = true;
-				if (BDFDB.equals(binding.keycombo, dblbndg.keycombo)) return true;
+				if (BDFDB.equals(binding.keycombo, dblBinding.keycombo)) return true;
 			}
 			return false;
 		}
@@ -397,12 +396,12 @@ var MessageUtilities = (_ => {
 
 		getActiveShortcutString (action) {
 			if (!action) return null;
-			let str = "";
+			let str = [];
 			if (settings.addHints && settings[action] && bindings[action]) {
-				str += clickMap[bindings[action].click];
-				if (bindings[action].keycombo.length) str += " + " + BDFDB.LibraryModules.KeyCodeUtils.getString(bindings[action].keycombo);
+				if (bindings[action].keycombo.length) str.push(BDFDB.LibraryModules.KeyCodeUtils.getString(bindings[action].keycombo));
+				str.push(clickMap[bindings[action].click]);
 			}
-			return str.replace(/ /g, "");
+			return str.join("+").replace(/ /g, "");
 		}
 
 		getMessageData (target) {
