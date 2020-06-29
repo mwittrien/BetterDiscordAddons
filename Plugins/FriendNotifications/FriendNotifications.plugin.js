@@ -26,13 +26,17 @@ var FriendNotifications = (_ => {
 	return class FriendNotifications {
 		getName () {return "FriendNotifications";}
 
-		getVersion () {return "1.4.3";}
+		getVersion () {return "1.4.4";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Notifies you when a Friend or a User your choose to observe changes their online status, can be configured individually in the settings.";}
 
 		constructor () {
+			this.changelog = {
+				"fixed":[["New strangers","You can add new users via their name#discriminator again"]]
+			};
+			
 			this.patchedModules = {
 				after: {
 					Guilds: "render"
@@ -310,10 +314,10 @@ var FriendNotifications = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 							onClick: _ => {
 								let userId = settingsPanel.querySelector(`.input-newstranger ` + BDFDB.dotCN.input).value.trim();
-								if (friendIds.includes(userId)) BDFDB.NotificationUtils.toast("User is already a friend of yours. Please use the 'Friend-List' area to configure him/her.", {type:"error"});
+								if (friendIds.includes(userId)) BDFDB.NotificationUtils.toast("User is already a friend of yours. Please use the 'Friend-List' area to configure them.", {type:"error"});
 								else if (Object.keys(nonFriends).includes(userId)) BDFDB.NotificationUtils.toast("User is already being observed as a 'Stranger'.", {type:"error"});
 								else {
-									let user = /.+#[0-9]{4}/.test(userId) ? BDFDB.LibraryModules.UserStore.findByTag(userId.split("#").slice(0, -1).join("#"), userId.split("#").prop()) : BDFDB.LibraryModules.UserStore.getUser(userId);
+									let user = /.+#[0-9]{4}/.test(userId) ? BDFDB.LibraryModules.UserStore.findByTag(userId.split("#").slice(0, -1).join("#"), userId.split("#").pop()) : BDFDB.LibraryModules.UserStore.getUser(userId);
 									if (user) {
 										BDFDB.DataUtils.save(this.createDefaultConfig(), this, "nonfriends", userId);
 										BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
