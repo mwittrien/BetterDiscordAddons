@@ -3554,6 +3554,9 @@ body:before {
 
 /* ----		13.11.	GUILDBOOSTMODAL					---- */
 
+#app-mount .perksModal-fSYqOq {								/* modal				wrapper								*/
+	background-color: transparent;
+}
 .carouselContainer-2-vIZS {									/* modal				scrollercontainer					*/
 	-webkit-mask: linear-gradient(to right, rgba(0,0,0,0) 0px, rgba(0,0,0,1) 60px, rgba(0,0,0,1) calc(100vw - 60px), rgba(0,0,0,0) 100vw);
 }
