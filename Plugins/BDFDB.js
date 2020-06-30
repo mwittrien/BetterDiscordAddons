@@ -4051,8 +4051,8 @@
 		censoredStamp: "censoredStamp-fb2cYb"
 	};
 	DiscordClassModules.CharCounter = {
-		charCounter: "charCounter-7fw40k charcounter",
-		counterAdded: "counterAdded-zz9O4t"
+		charCounter: "charCounter-7fw40k",
+		counterAdded: "charCounterAdded-zz9O4t"
 	};
 	DiscordClassModules.DisplayLargeMessages = {
 		injectButton: "injectButton-8eKqGu"
