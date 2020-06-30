@@ -1,10 +1,12 @@
 //META{"name":"SendLargeMessages","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SendLargeMessages","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/SendLargeMessages/SendLargeMessages.plugin.js"}*//
 
 var SendLargeMessages = (_ => {
+	var messageDelay = 1000; //changing at own risk, might result in bans or mutes
+	
 	return class SendLargeMessages {
 		getName () {return "SendLargeMessages";}
 
-		getVersion () {return "1.6.4";}
+		getVersion () {return "1.6.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -23,8 +25,6 @@ var SendLargeMessages = (_ => {
 		}
 
 		initConstructor () {
-			this.messageDelay = 1000; //changing at own risk, might result in bans or mutes
-
 			this.css = `
 				.${this.name}-modal textarea {
 					height: 50vh;
@@ -88,7 +88,7 @@ var SendLargeMessages = (_ => {
 						BDFDB.TimeUtils.timeout(_ => {
 							e2.originalMethod(message);
 							if (i >= messages.length-1) BDFDB.NotificationUtils.toast(this.labels.toast_allsent_text, {type:"success"});
-						}, this.messageDelay * i);
+						}, messageDelay * i);
 					});
 					return Promise.resolve({
 						shouldClear: true,
@@ -123,15 +123,15 @@ var SendLargeMessages = (_ => {
 
 		formatText (text) {
 			text = text.replace(/\t/g, "	");
-			let longwords = text.match(/[\S]{1800,}/gm);
-			if (longwords) for (let longword of longwords) {
+			let longWords = text.match(new RegExp(`[^ ]{${BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH * (19/20)},}`, "gm"));
+			if (longWords) for (let longWord of longWords) {
 				let count1 = 0;
-				let shortwords = [];
-				longword.split("").forEach(c => {
-					if (shortwords[count1] && shortwords[count1].length >= BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH * (19/20)) count1++;
-					shortwords[count1] = shortwords[count1] ? shortwords[count1] + c : c;
+				let shortWords = [];
+				longWord.split("").forEach(c => {
+					if (shortWords[count1] && (shortWords[count1].length >= BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH * (19/20) || (c == "\n" && shortWords[count1].length >= BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH * (19/20) - 100))) count1++;
+					shortWords[count1] = shortWords[count1] ? shortWords[count1] + c : c;
 				});
-				text = text.replace(longword, shortwords.join(" "));
+				text = text.replace(longWord, shortWords.join(" "));
 			}
 			let messages = [];
 			let count2 = 0;
@@ -163,7 +163,6 @@ var SendLargeMessages = (_ => {
 					messages[j] = messages[j] + insertCodeLine;
 				}
 			}
-
 			return messages;
 		}
 
