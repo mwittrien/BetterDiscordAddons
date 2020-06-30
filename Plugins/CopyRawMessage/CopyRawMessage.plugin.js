@@ -4,7 +4,7 @@ var CopyRawMessage = (_ => {
 	return class CopyRawMessage {
 		getName () {return "CopyRawMessage";}
 
-		getVersion () {return "1.0.9";}
+		getVersion () {return "1.1.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -61,12 +61,13 @@ var CopyRawMessage = (_ => {
 
 		onMessageContextMenu (e) {
 			if (e.instance.props.message) {
+				let messageString = [e.instance.props.message.content, BDFDB.ArrayUtils.is(e.instance.props.message.attachments) && e.instance.props.message.attachments.map(n => n.url)].flat(10).filter(n => n).join("\n");
 				let embed = BDFDB.DOMUtils.getParent(BDFDB.dotCN.embedwrapper, e.instance.props.target);
 				let embedData = e.instance.props.message.embeds[embed ? Array.from(embed.parentElement.querySelectorAll(BDFDB.dotCN.embedwrapper)).indexOf(embed) : -1];
-				let embedString = embedData && [embedData.rawTitle, embedData.rawDescription, BDFDB.ArrayUtils.is(embedData.fields) && embedData.fields.map(n => [n.rawName, n.rawValue]), BDFDB.ObjectUtils.is(embedData.footer) && embedData.footer.text].flat(10).filter(n => n).join("\n")
+				let embedString = embedData && [embedData.rawTitle, embedData.rawDescription, BDFDB.ArrayUtils.is(embedData.fields) && embedData.fields.map(n => [n.rawName, n.rawValue]), BDFDB.ObjectUtils.is(embedData.image) && embedData.image.url, BDFDB.ObjectUtils.is(embedData.footer) && embedData.footer.text].flat(10).filter(n => n).join("\n");
 				let hint = BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("Copy_Raw") : null;
 				let entries = [
-					e.instance.props.message.content && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					messageString && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw)",
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-message"),
 						hint: hint && (_ => {
@@ -76,7 +77,7 @@ var CopyRawMessage = (_ => {
 						}),
 						action: _ => {
 							BDFDB.ContextMenuUtils.close(e.instance);
-							BDFDB.LibraryRequires.electron.clipboard.write({text:e.instance.props.message.content});
+							BDFDB.LibraryRequires.electron.clipboard.write({text:messageString});
 						}
 					}),
 					embedString && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
