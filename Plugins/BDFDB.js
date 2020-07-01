@@ -4042,6 +4042,21 @@
 		switchItem: "ui-switch-item",
 		switchWrapper: "ui-switch-wrapper"
 	};
+	DiscordClassModules.BadgesEverywhere = {
+		badge: "badge-7CsdQq",
+		badges: "badges-XRnWAp",
+		badgesChat: "badgesChat-f_cbR8",
+		badgesList: "badgesList-Aw_p52",
+		badgesPopout: "badgesPopout-srZ8EX",
+		badgesSettings: "badgesSettings-ychoGn",
+		indicator: "indicator-cY1-b4",
+		indicatorInner: "inner-08W8Jl",
+		mini: "mini-g-JPgX",
+		size17: "size17-2GsONg",
+		size21: "size21-Y634b3",
+		size22: "size22-AJj9xV",
+		size24: "size24-NlR6be"
+	};
 	DiscordClassModules.BetterNsfwTag = {
 		nsfwTag: "nsfwTag-666omg"
 	};
@@ -4398,6 +4413,19 @@
 		_bdpillselected: ["BDrepo", "bdPillSelected"],
 		_bdpillunread: ["BDrepo", "bdPillUnread"],
 		_betternsfwtagtag: ["BetterNsfwTag", "nsfwTag"],
+		_badgeseverywherebadge: ["BadgesEverywhere", "badge"],
+		_badgeseverywherebadges: ["BadgesEverywhere", "badges"],
+		_badgeseverywherebadgeschat: ["BadgesEverywhere", "badgesChat"],
+		_badgeseverywherebadgeslist: ["BadgesEverywhere", "badgesList"],
+		_badgeseverywherebadgespopout: ["BadgesEverywhere", "badgesPopout"],
+		_badgeseverywherebadgessettings: ["BadgesEverywhere", "badgesSettings"],
+		_badgeseverywhereindicator: ["BadgesEverywhere", "indicator"],
+		_badgeseverywhereindicatorinner: ["BadgesEverywhere", "indicatorInner"],
+		_badgeseverywheremini: ["BadgesEverywhere", "mini"],
+		_badgeseverywheresize17: ["BadgesEverywhere", "size17"],
+		_badgeseverywheresize21: ["BadgesEverywhere", "size21"],
+		_badgeseverywheresize22: ["BadgesEverywhere", "size22"],
+		_badgeseverywheresize24: ["BadgesEverywhere", "size24"],
 		_chatfilterblocked: ["ChatFilter", "blocked"],
 		_chatfilterblockedstamp: ["ChatFilter", "blockedStamp"],
 		_chatfiltercensored: ["ChatFilter", "censored"],
