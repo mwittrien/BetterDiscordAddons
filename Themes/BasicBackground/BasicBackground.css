@@ -2857,6 +2857,9 @@ body:before {
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 	box-shadow: none;
 }
+#app-mount .footer-1lnhms {									/* modal				footer info						*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
 #app-mount .closeButton-1tv5uR,								/* modal				closebutton						*/
 #app-mount .close-hZ94c6 {
 	color: rgb(var(--fontwhite1));
