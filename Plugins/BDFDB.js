@@ -1698,6 +1698,7 @@
 	LibraryModules.UploadUtils = BDFDB.ModuleUtils.findByProperties("upload", "instantBatchUpload");
 	LibraryModules.UserFetchUtils = BDFDB.ModuleUtils.findByProperties("fetchCurrentUser", "getUser");
 	LibraryModules.UserNameUtils = BDFDB.ModuleUtils.findByProperties("getName", "getNickname");
+	LibraryModules.UserProfileUtils = BDFDB.ModuleUtils.findByProperties("open", "fetchProfile");
 	LibraryModules.UserStore = BDFDB.ModuleUtils.findByProperties("getUser", "getUsers");
 	LibraryModules.Utilities = BDFDB.ModuleUtils.findByProperties("flatMap", "cloneDeep");
 	LibraryModules.VoiceUtils = BDFDB.ModuleUtils.findByProperties("getAllVoiceStates", "getVoiceStatesForChannel");
