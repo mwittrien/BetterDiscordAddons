@@ -1,10 +1,12 @@
 //META{"name":"CopyRawMessage","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CopyRawMessage","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/CopyRawMessage/CopyRawMessage.plugin.js"}*// 
 
-var CopyRawMessage = (_ => {	
+var CopyRawMessage = (_ => {
+	var settings = {};
+	
 	return class CopyRawMessage {
 		getName () {return "CopyRawMessage";}
 
-		getVersion () {return "1.1.0";}
+		getVersion () {return "1.1.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -12,8 +14,33 @@ var CopyRawMessage = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Copy raw embed","Now copies the whole contents of an embed and not only the description part"]]
+				"improved":[["Only copy selection","Selecting a part of a message/embed and clicking copy raw will now only copy the selected part (including formating symbols like ~, _ and ` etc., can be disabled"]]
 			};
+		}
+
+		initConstructor () {
+			this.defaults = {
+				settings: {
+					copyOnlySelected:		{value:true, 				description:"Only copy selected text of a message"}
+				}
+			};
+		}
+
+		getSettingsPanel (collapseStates = {}) {
+			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+			let settings = BDFDB.DataUtils.get(this, "settings");
+			let settingsPanel, settingsItems = [];
+			
+			for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+				className: BDFDB.disCN.marginbottom8,
+				type: "Switch",
+				plugin: this,
+				keys: ["settings", key],
+				label: this.defaults.settings[key].description,
+				value: settings[key]
+			}));
+			
+			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
 		// Legacy
@@ -44,6 +71,8 @@ var CopyRawMessage = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
+
+				this.forceUpdateAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -59,12 +88,23 @@ var CopyRawMessage = (_ => {
 
 		// Begin of own functions
 
+		onSettingsClosed () {
+			if (this.SettingsUpdated) {
+				delete this.SettingsUpdated;
+				this.forceUpdateAll();
+			}
+		}
+
 		onMessageContextMenu (e) {
 			if (e.instance.props.message) {
+				let content = e.instance.props.message.content;
 				let messageString = [e.instance.props.message.content, BDFDB.ArrayUtils.is(e.instance.props.message.attachments) && e.instance.props.message.attachments.map(n => n.url)].flat(10).filter(n => n).join("\n");
+				let selectedText = settings.copyOnlySelected && document.getSelection().toString().trim();
+				if (selectedText) messageString = BDFDB.StringUtils.extractSelection(messageString, selectedText);
 				let embed = BDFDB.DOMUtils.getParent(BDFDB.dotCN.embedwrapper, e.instance.props.target);
 				let embedData = e.instance.props.message.embeds[embed ? Array.from(embed.parentElement.querySelectorAll(BDFDB.dotCN.embedwrapper)).indexOf(embed) : -1];
 				let embedString = embedData && [embedData.rawTitle, embedData.rawDescription, BDFDB.ArrayUtils.is(embedData.fields) && embedData.fields.map(n => [n.rawName, n.rawValue]), BDFDB.ObjectUtils.is(embedData.image) && embedData.image.url, BDFDB.ObjectUtils.is(embedData.footer) && embedData.footer.text].flat(10).filter(n => n).join("\n");
+				if (selectedText) embedString = BDFDB.StringUtils.extractSelection(embedString, selectedText);
 				let hint = BDFDB.BDUtils.isPluginEnabled("MessageUtilities") ? BDFDB.BDUtils.getPlugin("MessageUtilities").getActiveShortcutString("Copy_Raw") : null;
 				let entries = [
 					messageString && BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
@@ -115,6 +155,10 @@ var CopyRawMessage = (_ => {
 					}
 				}));
 			}
+		}
+		
+		forceUpdateAll () {
+			settings = BDFDB.DataUtils.get(this, "settings");
 		}
 	}
 })();
