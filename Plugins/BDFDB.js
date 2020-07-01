@@ -3506,6 +3506,51 @@
 		});
 		return string || original;
 	};
+	BDFDB.StringUtils.extractSelection = function (original, selection) {
+		if (!original) return "";
+		if (!selection) return original;
+		let s = [], f = [], wrong = 0, canceled = false, done = false;
+		for (let i of BDFDB.ArrayUtils.getAllIndexes(original, selection[0])) if (!done) {
+			while (i <= original.length && !done) {
+				let subSelection = selection.slice(s.filter(n => n != undefined).length);
+				if (!subSelection && s.length - 20 <= selection.length) done = true;
+				else for (let j in subSelection) if (!done && !canceled) {
+					if (original[i] == subSelection[j]) {
+						s[i] = subSelection[j];
+						f[i] = subSelection[j];
+						wrong = 0;
+						if (i == original.length) done = true;
+					}
+					else {
+						s[i] = null;
+						f[i] = original[i];
+						wrong++;
+						if (wrong > 4) {
+							s = [], f = [], wrong = 0, canceled = true;
+							break;
+						}
+					}
+					break;
+				}
+				canceled = false;
+				i++;
+			}
+		}
+		if (f.filter(n => n).length) {
+			let reverseS = [].concat(f).reverse(), i = 0, j = 0;
+			for (let k in f) {
+				if (f[k] == null) i = k;
+				else break;
+			}
+			for (let k in reverseS) {
+				if (reverseS[k] == null) j = k + 1;
+				else break;
+			}
+			f = f.slice(i, f.length - j);
+			return f.join("");
+		}
+		else return original;
+	}
 	
 	BDFDB.SlateUtils = {};
 	BDFDB.SlateUtils.isRichValue = function (richValue) {
