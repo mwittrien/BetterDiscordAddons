@@ -25,5 +25,5 @@
 	--backdropsize:					var(--backgroundsize);		/* default: cover				(sizefit of backdrop background - values: [cover/contain/auto])					*/
 	--backdropblur:					0px;						/* default: 0px					(only works when --backdrop is set to an image)									*/
 	
-	--version1_0_5:					none;						/* DO NOT CHANGE, USED TO HIDE UPDATE NOTICE																	*/
+	--version1_0_5:					none;						/* DO NOT CHANGE THIS VARIABLE , USED TO HIDE UPDATE NOTICE														*/
 }
