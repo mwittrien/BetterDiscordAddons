@@ -8910,7 +8910,9 @@
 			color: ${BDFDB.DiscordConstants.Colors.STATUS_RED};
 		}
 		
-		
+		${BDFDB.dotCN.hovercardwrapper} {
+			position: relative;
+		}
 		${BDFDB.dotCNC.hovercardwrapper + BDFDB.dotCN.hovercardinner} {
 			min-height: 28px;
 		}
