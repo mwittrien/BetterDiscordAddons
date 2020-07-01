@@ -8913,6 +8913,12 @@
 		${BDFDB.dotCN.hovercardwrapper} {
 			position: relative;
 		}
+		${BDFDB.dotCN.hovercardwrapper + BDFDB.dotCN.hovercard} {
+			padding: 0 10px;
+		}
+		${BDFDB.dotCN.hovercardwrapper + BDFDB.dotCN.hovercard} > * {
+			z-index: 1;
+		}
 		${BDFDB.dotCNC.hovercardwrapper + BDFDB.dotCN.hovercardinner} {
 			min-height: 28px;
 		}
