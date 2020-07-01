@@ -202,7 +202,7 @@ var MessageUtilities = (_ => {
 			let contextMenu = BDFDB.ReactUtils.findChild(e.instance, {props: "navId"});
 			if (contextMenu && BDFDB.ArrayUtils.is(contextMenu.props.children)) for (let group of contextMenu.props.children) {
 				if (group && group.type == BDFDB.LibraryComponents.MenuItems.MenuGroup && BDFDB.ArrayUtils.is(group.props.children)) for (let item of group.props.children) {
-					if (item && item.props && item.props.id && !item.props.hint && (!item.props.children || BDFDB.ArrayUtils.is(item.props.children) && !item.props.children.length)) {
+					if (item && item.props && item.props.id && !item.props.hint && !item.props.children) {
 						let hint, action;
 						if (item.props.id == "mark-unread") hint = `${BDFDB.LibraryModules.KeyCodeUtils.getString(18)}+${clickMap[0]}`;
 						else {
