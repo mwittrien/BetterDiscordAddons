@@ -415,7 +415,7 @@ var BadgesEverywhere = (_ => {
 					requestQueue.id = id;
 					BDFDB.TimeUtils.clear(requestQueue.timeout);
 					requestQueue.timeout = BDFDB.TimeUtils.timeout(_ => {
-						requestQueue.running = null;
+						requestQueue.id = null;
 						this.runQueue();
 					}, 30000);
 					BDFDB.LibraryModules.UserProfileUtils.fetchProfile(id);
