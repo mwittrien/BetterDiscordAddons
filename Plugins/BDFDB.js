@@ -8914,7 +8914,7 @@
 			position: relative;
 		}
 		${BDFDB.dotCN.hovercardwrapper + BDFDB.dotCN.hovercard} {
-			padding: 0 10px;
+			padding: 10px 0;
 		}
 		${BDFDB.dotCN.hovercardwrapper + BDFDB.dotCN.hovercard} > * {
 			z-index: 1;
