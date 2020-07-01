@@ -17,10 +17,6 @@ var BadgesEverywhere = (_ => {
 		getDescription () {return "Displays Badges (Nitro, HypeSquad, etc...) in the chat/memberlist/userpopout.";}
 
 		constructor () {
-			this.changelog = {
-				"improved":[["Direct API call","No longer calls the API directly and makes use of the internal fetchProfile"]]
-			};
-
 			this.patchedModules = {
 				after: {
 					MemberListItem: "render",
