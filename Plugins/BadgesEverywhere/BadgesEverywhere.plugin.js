@@ -10,7 +10,7 @@ var BadgesEverywhere = (_ => {
 	return class BadgesEverywhere {
 		getName () {return "BadgesEverywhere";} 
 
-		getVersion () {return "1.5.9";}
+		getVersion () {return "1.6.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -42,6 +42,7 @@ var BadgesEverywhere = (_ => {
 				}
 				${BDFDB.dotCNS.messagecompact + BDFDB.dotCN.messageusername} ~ ${BDFDB.dotCN._badgeseverywherebadges} {
 					margin-right: .25rem;
+					text-indent: 0;
 				}
 				
 				${BDFDB.dotCN._badgeseverywherebadgesinner} {
