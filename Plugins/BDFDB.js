@@ -1663,6 +1663,7 @@
 	LibraryModules.LoginUtils = BDFDB.ModuleUtils.findByProperties("login", "logout");
 	LibraryModules.MemberStore = BDFDB.ModuleUtils.findByProperties("getMember", "getMembers");
 	LibraryModules.MentionUtils = BDFDB.ModuleUtils.findByProperties("isRawMessageMentioned", "isMentioned");
+	LibraryModules.MessageManageUtils = BDFDB.ModuleUtils.findByProperties("copyLink", "quoteMessage");
 	LibraryModules.MessagePinUtils = BDFDB.ModuleUtils.findByProperties("pinMessage", "unpinMessage");
 	LibraryModules.MessageStore = BDFDB.ModuleUtils.findByProperties("getMessage", "getMessages");
 	LibraryModules.MessageUtils = BDFDB.ModuleUtils.findByProperties("receiveMessage", "editMessage");

@@ -345,7 +345,7 @@ var MessageUtilities = (_ => {
 		doCopyLink ({messageDiv, message}, action) {
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 			if (channel) {
-				BDFDB.LibraryRequires.electron.clipboard.write({text:`https://discordapp.com/channels/${channel.guild_id || BDFDB.DiscordConstants.ME}/${channel.id}/${message.id}`});
+				BDFDB.LibraryModules.MessageManageUtils.copyLink(channel, message);
 				if (toasts[action]) BDFDB.NotificationUtils.toast("Messagelink has been copied.", {type:"success"});
 			}
 		}
@@ -353,9 +353,7 @@ var MessageUtilities = (_ => {
 		doQuote ({messageDiv, message}, action) {
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 			if (channel && BDFDB.LibraryModules.QuoteUtils.canQuote(message, channel)) {
-				BDFDB.LibraryModules.DispatchUtils.ComponentDispatch.dispatch(BDFDB.DiscordConstants.ComponentActions.INSERT_QUOTE_TEXT, {
-					text: BDFDB.LibraryModules.QuoteUtils.createQuotedText(message, channel)
-				});
+				BDFDB.LibraryModules.MessageManageUtils.quoteMessage(channel, message);
 				if (toasts[action]) BDFDB.NotificationUtils.toast("Quote has been created.", {type:"success"});
 			}
 		}
