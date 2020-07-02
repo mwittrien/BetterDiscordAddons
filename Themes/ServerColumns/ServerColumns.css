@@ -22,7 +22,7 @@
 .wrapper-1Rf91z,
 .wrapper-1Rf91z .unreadMentionsIndicatorTop-gA6RCh,
 .wrapper-1Rf91z .unreadMentionsIndicatorBottom-BXS58x {
-	width: calc(1px * ((var(--vguildsize) + 12 * var(--vguildsize)/50) * var(--vcolumns) + 35 - 25)) !important;
+	width: calc(1px * (var(--vguildsize) * var(--vcolumns) + 20 * (var(--vguildsize)/50) + 14 * (var(--vguildsize)/50) * (var(--vcolumns) - 1))) !important;
 }
 .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 	padding-right: calc(1px * ((var(--vguildsize) + 12 * var(--vguildsize)/50) * var(--vcolumns) - 50)) !important;
@@ -38,11 +38,7 @@ body.foldercontentopened .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
 	margin-top: 0 !important;
 	margin-right: 0 !important;
 }
-.wrapper-1Rf91z .scrollerWrap-1IAIlv {
-	width: calc(1px * ((var(--vguildsize) + 12 * var(--vguildsize)/50) * var(--vcolumns) + (var(--vguildsize)/50) * 25 + 10)) !important;
-}
-.wrapper-1Rf91z,
-.wrapper-1Rf91z .scrollerWrap-1IAIlv {
+.wrapper-1Rf91z {
 	padding: 0 !important;
 }
 .wrapper-1Rf91z .scroller-2TZvBN {
