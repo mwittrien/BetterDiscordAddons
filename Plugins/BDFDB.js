@@ -3945,14 +3945,26 @@
 		}
 		return null;
 	};
+	BDFDB.BDUtils.toggleSettings = function (key, state) {
+		if (key) {
+			let currentState = BDFDB.BDUtils.getSettings(key);
+			if (state === true) {
+				if (currentState === false) BdApi.enableSetting(key);
+			}
+			else if (state === false) {
+				if (currentState === true) BdApi.disableSetting(key);
+			}
+			else if (currentState === true || currentState === false) BDFDB.BDUtils.toggleSettings(key, !currentState);
+		}
+	};
 	BDFDB.BDUtils.getSettings = function (key) {
 		if (key) return BdApi.isSettingEnabled(key);
 		else return BDFDB.ReactUtils.getValue(BdApi.getBDData("settings"), `${BDFDB.DiscordUtils.getBuilt()}.settings`);
 	};
 	BDFDB.BDUtils.isAutoLoadEnabled = function () {
-		return BDFDB.BDUtils.getSettings("fork-ps-5") === true || BDFDB.BDUtils.isPluginEnabled("Restart-No-More") || BDFDB.BDUtils.isPluginEnabled("Restart No More");
+		return BDFDB.BDUtils.getSettings(BdApi.settings["Automatic Loading"].id) === true;
 	};
-
+	
 	var DiscordClassModules = {};
 	DiscordClassModules.BDFDB = {
 		BDFDBundefined: "BDFDB_undefined",
@@ -9969,6 +9981,20 @@
 	for (let component in InternalComponents.LibraryComponents) if (!InternalComponents.LibraryComponents[component]) {
 		InternalComponents.LibraryComponents[component] = "div";
 		BDFDB.LibraryComponents[component] = "div";
+	}
+	
+	// REMOVE ONCE BD IS FIXED
+	if (BDFDB.BDUtils.getSettings(BdApi.settings["Public Servers"].id)) {
+		let failed = false;
+		try {BDFDB.BDUtils.toggleSettings(BdApi.settings["Public Servers"].id, false);}
+		catch (err) {
+			failed = true;
+			if (BDFDB.BDUtils.getSettings(BdApi.settings["Automatic Loading"].id)) {
+				BDFDB.BDUtils.toggleSettings(BdApi.settings["Automatic Loading"].id, false);
+				BDFDB.TimeUtils.timeout(_ => {BDFDB.BDUtils.toggleSettings(BdApi.settings["Automatic Loading"].id, true)}, 3000);
+			}
+		}
+		if (!failed) BDFDB.BDUtils.toggleSettings(BdApi.settings["Public Servers"].id, true);
 	}
 	
 	BDFDB.loaded = true;
