@@ -43,9 +43,9 @@ var ChatAliases = (_ => {
 					file: 				{value:false,		description:"Handle the replacevalue as a filepath"}
 				},
 				settings: {
-					replaceBeforeSend:	{value:true, 		inner:false,	description:"Replace words with your Aliases before a message is sent"},
-					addContextMenu:		{value:true, 		inner:false,	description:"Add a ContextMenu entry to faster add new Aliases"},
-					addAutoComplete:	{value:true, 		inner:false,	description:"Add an Autocomplete-Menu for Non-RegExp Aliases"},
+					replaceBeforeSend:	{value:true, 		inner:false,	description:"Replace words with your aliases before a message is sent"},
+					addContextMenu:		{value:true, 		inner:false,	description:"Add a contextMenu entry to faster add new aliases"},
+					addAutoComplete:	{value:true, 		inner:false,	description:"Add an autocomplete-menu for non-RegExp aliases"},
 					triggerNormal:		{value:true, 		inner:true,		description:"Normal Message Textarea"},
 					triggerEdit:		{value:true, 		inner:true,		description:"Edit Message Textarea"},
 					triggerUpload:		{value:true, 		inner:true,		description:"Upload Message Prompt"}
@@ -85,7 +85,7 @@ var ChatAliases = (_ => {
 				value: amounts[key]
 			}));
 			innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
-				title: "Automatically replace Aliases in:",
+				title: "Automatically replace aliases in:",
 				first: innerItems.length == 0,
 				last: true,
 				children: subInnerItems
@@ -97,13 +97,13 @@ var ChatAliases = (_ => {
 			}));
 			let values = {wordvalue:"", replacevalue:""};
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-				title: "Add new Alias",
+				title: "Add new alias",
 				collapseStates: collapseStates,
 				dividertop: true,
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 						type: "Button",
-						label: "Pick a Wordvalue and Replacevalue:",
+						label: "Pick a wordvalue and replacevalue:",
 						key: "ADDBUTTON",
 						disabled: !Object.keys(values).every(valuename => values[valuename]),
 						children: BDFDB.LanguageUtils.LanguageStrings.ADD,
@@ -116,7 +116,7 @@ var ChatAliases = (_ => {
 				].flat(10).filter(n => n)
 			}));
 			if (!BDFDB.ObjectUtils.isEmpty(aliases)) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-				title: "Added Aliases",
+				title: "Added aliases",
 				collapseStates: collapseStates,
 				dividertop: true,
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
@@ -171,9 +171,9 @@ var ChatAliases = (_ => {
 					type: "Button",
 					className: BDFDB.disCN.marginbottom8,
 					color: BDFDB.LibraryComponents.Button.Colors.RED,
-					label: "Remove all added Aliases",
+					label: "Remove all added aliases",
 					onClick: _ => {
-						BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all added Aliases?", _ => {
+						BDFDB.ModalUtils.confirm(this, "Are you sure you want to remove all added aliases?", _ => {
 							aliases = {};
 							BDFDB.DataUtils.remove(this, "words");
 							BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
@@ -503,28 +503,50 @@ var ChatAliases = (_ => {
 		}
 		
 		createInputs (values) {
-			return [{title:"Replace:", type:"", error:"Choose a Wordvalue", valuename:"wordvalue"}, {title:"With:", type:"file", error:"Choose a Replacevalue", valuename:"replacevalue"}].map(inputdata => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-				title: inputdata.title,
-				className: BDFDB.disCN.marginbottom8 + " input-" + inputdata.valuename,
-				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-					type: inputdata.type,
-					useFilePath: inputdata.type == "file",
-					value: values[inputdata.valuename],
-					placeholder: values[inputdata.valuename],
-					autoFocus: inputdata.valuename == "replacevalue",
-					errorMessage: !values[inputdata.valuename] && inputdata.error,
-					onChange: (value, instance) => {
-						values[inputdata.valuename] = value.trim();
-						if (values[inputdata.valuename]) delete instance.props.errorMessage;
-						else instance.props.errorMessage = inputdata.error;
-						let addButtonIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:["BDFDB_Modal", "BDFDB_SettingsPanel"], up:true}), {key:"ADDBUTTON"});
-						if (addButtonIns) {
-							addButtonIns.props.disabled = !Object.keys(values).every(valuename => values[valuename]);
-							BDFDB.ReactUtils.forceUpdate(addButtonIns);
+			return [
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+					title: "Replace:",
+					className: BDFDB.disCN.marginbottom8 + " input-wordvalue",
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+						value: values.wordvalue,
+						placeholder: values.wordvalue,
+						errorMessage: !values.wordvalue && "Choose a wordvalue" || aliases[values.wordvalue] && "Wordvalue already used, saving will overwrite old alias",
+						onChange: (value, instance) => {
+							values.wordvalue = value.trim();
+							if (!values.wordvalue) instance.props.errorMessage = "Choose a wordvalue";
+							else if (aliases[values.wordvalue]) instance.props.errorMessage = "Wordvalue already used, saving will overwrite old alias";
+							else delete instance.props.errorMessage;
+							let addButtonIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:["BDFDB_Modal", "BDFDB_SettingsPanel"], up:true}), {key:"ADDBUTTON"});
+							if (addButtonIns) {
+								addButtonIns.props.disabled = !Object.keys(values).every(valuename => values[valuename]);
+								BDFDB.ReactUtils.forceUpdate(addButtonIns);
+							}
 						}
-					}
+					})
+				}),
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+					title: "With:",
+					className: BDFDB.disCN.marginbottom8 + " input-replacevalue",
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+						type: "file",
+						useFilePath: true,
+						value: values.replacevalue,
+						placeholder: values.replacevalue,
+						autoFocus: true,
+						errorMessage: !values.replacevalue && "Choose a replacevalue",
+						onChange: (value, instance) => {
+							values.replacevalue = value.trim();
+							if (!values.replacevalue) instance.props.errorMessage = "Choose a replacevalue";
+							else delete instance.props.errorMessage;
+							let addButtonIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:["BDFDB_Modal", "BDFDB_SettingsPanel"], up:true}), {key:"ADDBUTTON"});
+							if (addButtonIns) {
+								addButtonIns.props.disabled = !Object.keys(values).every(valuename => values[valuename]);
+								BDFDB.ReactUtils.forceUpdate(addButtonIns);
+							}
+						}
+					})
 				})
-			}));
+			];
 		}
 
 		saveWord (wordvalue, replacevalue, fileselection, aliasConfigs = configs) {

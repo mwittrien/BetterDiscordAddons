@@ -41,12 +41,11 @@ var ChatFilter = (_ => {
 					exact: 		{value:true,		description:"Handle the wordvalue as an exact word and not as part of a word"}
 				},
 				replaces: {
-					blocked: 	{value:"~~BLOCKED~~",		description:"Default Replaceword for blocked Messages:"},
-					censored:	{value:"$!%&%!&",			description:"Default Replaceword for censored Messages:"}
+					blocked: 	{value:"~~BLOCKED~~",		description:"Default replaceword for blocked messages:"},
+					censored:	{value:"$!%&%!&",			description:"Default replaceword for censored messages:"}
 				},
 				settings: {
-					addContextMenu:			{value:true,	description:"Add a ContextMenu entry to faster add new blocked/censored Words:"},
-					showMessageOnClick: 	{value:true,	description:"Show original Message on Click:"},
+					addContextMenu:			{value:true,	description:"Add a contextmenu entry to faster add new blocked/censored words:"}
 				}
 			};
 		}
@@ -79,13 +78,13 @@ var ChatFilter = (_ => {
 			}));
 			let values = {wordvalue:"", replacevalue:"", choice:"blocked"};
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-				title: `Add new blocked/censored Word`,
+				title: `Add new blocked/censored word`,
 				collapseStates: collapseStates,
 				dividertop: true,
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 						type: "Button",
-						label: "Pick a Wordvalue and Replacevalue:",
+						label: "Pick a wordvalue and replacevalue:",
 						key: "ADDBUTTON",
 						disabled: !Object.keys(values).every(valuename => values[valuename]),
 						children: BDFDB.LanguageUtils.LanguageStrings.ADD,
@@ -98,7 +97,7 @@ var ChatFilter = (_ => {
 				].flat(10).filter(n => n)
 			}));
 			for (let rtype in replaces) if (!BDFDB.ObjectUtils.isEmpty(words[rtype])) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-				title: `Added ${rtype} Words`,
+				title: `Added ${rtype} words`,
 				collapseStates: collapseStates,
 				dividertop: true,
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
@@ -153,9 +152,9 @@ var ChatFilter = (_ => {
 					type: "Button",
 					className: BDFDB.disCN.marginbottom8,
 					color: BDFDB.LibraryComponents.Button.Colors.RED,
-					label: `Remove all ${rtype} Words`,
+					label: `Remove all ${rtype} words`,
 					onClick: _ => {
-						BDFDB.ModalUtils.confirm(this, `Are you sure you want to remove all ${rtype} Words?`, _ => {
+						BDFDB.ModalUtils.confirm(this, `Are you sure you want to remove all ${rtype} words?`, _ => {
 							words[rtype] = {};
 							BDFDB.DataUtils.remove(this, "words", rtype);
 							BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
@@ -393,31 +392,56 @@ var ChatFilter = (_ => {
 		}
 		
 		createInputs (values) {
-			return [{title:"Block/Censor:", error:"Choose a Wordvalue", valuename:"wordvalue"}, {title:"With:", valuename:"replacevalue"}].map(inputdata => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-				title: inputdata.title,
-				className: BDFDB.disCN.marginbottom8 + " input-" + inputdata.valuename,
-				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-					value: values[inputdata.valuename],
-					placeholder: values[inputdata.valuename],
-					autoFocus: inputdata.valuename == "replacevalue",
-					errorMessage: !values[inputdata.valuename] && inputdata.error,
+			return [
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+					title: "Block/Censor:",
+					className: BDFDB.disCN.marginbottom8 + " input-wordvalue",
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+						key: "WORDVALUE",
+						value: values.wordvalue,
+						placeholder: values.wordvalue,
+						errorMessage: !values.wordvalue && "Choose a wordvalue" || words[values.choice][values.wordvalue] && `Wordvalue already used, saving will overwrite old ${values.choice} word`,
+						onChange: (value, instance) => {
+							values.wordvalue = value.trim();
+							if (!values.wordvalue) instance.props.errorMessage = "Choose a wordvalue";
+							else if (words[values.choice][values.wordvalue]) instance.props.errorMessage = `Wordvalue already used, saving will overwrite old ${values.choice} word`;
+							else delete instance.props.errorMessage;
+							let addButtonIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:["BDFDB_Modal", "BDFDB_SettingsPanel"], up:true}), {key:"ADDBUTTON"});
+							if (addButtonIns) {
+								addButtonIns.props.disabled = !values.wordvalue;
+								BDFDB.ReactUtils.forceUpdate(addButtonIns);
+							}
+						}
+					})
+				}),
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+					title: "With:",
+					className: BDFDB.disCN.marginbottom8 + " input-replacevalue",
+					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+						value: values.replacevalue,
+						placeholder: values.replacevalue,
+						autoFocus: true,
+						onChange: (value, instance) => {
+							values.replacevalue = value.trim();
+						}
+					})
+				}),
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.RadioGroup, {
+					className: BDFDB.disCN.marginbottom8,
+					value: values.choice,
+					options: [{value:"blocked", name:"Block"}, {value:"censored", name:"Censor"}],
 					onChange: (value, instance) => {
-						values[inputdata.valuename] = value.trim();
-						if (values[inputdata.valuename]) delete instance.props.errorMessage;
-						else instance.props.errorMessage = inputdata.error;
-						let addbuttonins = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:["BDFDB_Modal", "BDFDB_SettingsPanel"], up:true}), {key:"ADDBUTTON"});
-						if (addbuttonins) {
-							addbuttonins.props.disabled = !values.wordvalue;
-							BDFDB.ReactUtils.forceUpdate(addbuttonins);
+						values.choice = value.value;
+						let wordvalueInputIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:["BDFDB_Modal", "BDFDB_SettingsPanel"], up:true}), {key:"WORDVALUE"});
+						if (wordvalueInputIns) {
+							if (!values.wordvalue) wordvalueInputIns.props.errorMessage = "Choose a wordvalue";
+							else if (words[values.choice][values.wordvalue]) wordvalueInputIns.props.errorMessage = `Wordvalue already used, saving will overwrite old ${values.choice} word`;
+							else delete wordvalueInputIns.props.errorMessage;
+							BDFDB.ReactUtils.forceUpdate(wordvalueInputIns);
 						}
 					}
 				})
-			})).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.RadioGroup, {
-				className: BDFDB.disCN.marginbottom8,
-				value: values.choice,
-				options: [{value:"blocked", name:"Block"}, {value:"censored", name:"Censor"}],
-				onChange: value => {values.choice = value.value;}
-			}));
+			];
 		}
 
 		saveWord (values, wordConfigs = configs) {
