@@ -1,23 +1,19 @@
 //META{"name":"ChatFilter","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ChatFilter","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ChatFilter/ChatFilter.plugin.js"}*//
 
 var ChatFilter = (_ => {
-	var blockedMessages, censoredMessages, words;
+	var oldBlockedMessages, oldCensoredMessages, words;
 	var settings = {}, replaces = {}, configs = {};
 	
 	return class ChatFilter {
 		getName () {return "ChatFilter";}
 
-		getVersion () {return "3.4.1";}
+		getVersion () {return "3.4.2";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
 		constructor () {
-			this.changelog = {
-				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
-			};
-
 			this.patchedModules = {
 				after: {
 					Messages: "render",
@@ -265,33 +261,53 @@ var ChatFilter = (_ => {
 		}
 
 		processMessages (e) {
-			let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: ["message", "channel"]});
-			if (index > -1) for (let ele of children) if (ele && ele.props && ele.props.message) {
-				let {blocked, censored, content} = this.parseContent(ele.props.message.content);
-				let oldContent = ele.props.message.content;
-				ele.props.message = new BDFDB.DiscordObjects.Message(Object.assign({}, ele.props.message, {content}));
-				if (blocked) {
-					ele.props.message.embeds = [];
-					blockedMessages[ele.props.message.id] = oldContent;
+			e.instance.props.channelStream = [].concat(e.instance.props.channelStream);
+			for (let i in e.instance.props.channelStream) {
+				let message = e.instance.props.channelStream[i].content;
+				if (message) {
+					if (BDFDB.ArrayUtils.is(message.attachments)) this.checkMessage(e.instance.props.channelStream[i], message);
+					else if (BDFDB.ArrayUtils.is(message)) for (let j in message) {
+						let childMessage = message[j].content;
+						if (childMessage && BDFDB.ArrayUtils.is(childMessage.attachments)) this.checkMessage(message[j], childMessage);
+					}
 				}
-				else delete blockedMessages[ele.props.message.id];
-				if (censored) censoredMessages[ele.props.message.id] = oldContent;
-				else delete censoredMessages[ele.props.message.id];
+			}
+		}
+		
+		checkMessage (stream, message) {
+			let {blocked, censored, content} = this.parseMessage(message);
+			if (blocked) {
+				if (!oldBlockedMessages[message.id]) oldBlockedMessages[message.id] = new BDFDB.DiscordObjects.Message(message);
+				stream.content.content = content;
+				stream.content.embeds = [];
+			}
+			else if (oldBlockedMessages[message.id] && Object.keys(message).some(key => !BDFDB.equals(oldBlockedMessages[message.id][key], message[key]))) {
+				stream.content.content = oldBlockedMessages[message.id].content;
+				stream.content.embeds = oldBlockedMessages[message.id].embeds;
+				delete oldBlockedMessages[message.id];
+			}
+			if (censored) {
+				if (!oldCensoredMessages[message.id]) oldCensoredMessages[message.id] = new BDFDB.DiscordObjects.Message(message);
+				stream.content.content = content;
+			}
+			else if (oldCensoredMessages[message.id] && Object.keys(message).some(key => !BDFDB.equals(oldCensoredMessages[message.id][key], message[key]))) {
+				stream.content.content = oldCensoredMessages[message.id].content;
+				delete oldCensoredMessages[message.id];
 			}
 		}
 
 		processMessage (e) {
 			let message = BDFDB.ReactUtils.getValue(e, "instance.props.childrenMessageContent.props.message");
 			if (message) {
-				if (blockedMessages[message.id]) e.returnvalue.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.className, BDFDB.disCN._chatfilterblocked);
-				else if (censoredMessages[message.id]) e.returnvalue.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.className, BDFDB.disCN._chatfiltercensored);
+				if (oldBlockedMessages[message.id]) e.returnvalue.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.className, BDFDB.disCN._chatfilterblocked);
+				else if (oldCensoredMessages[message.id]) e.returnvalue.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.className, BDFDB.disCN._chatfiltercensored);
 			}
 		}
 
 		processMessageContent (e) {
 			if (e.instance.props.message) {
-				if (blockedMessages[e.instance.props.message.id]) e.returnvalue.props.children.push(this.createStamp(blockedMessages[e.instance.props.message.id], "blocked"));
-				else if (censoredMessages[e.instance.props.message.id]) e.returnvalue.props.children.push(this.createStamp(censoredMessages[e.instance.props.message.id], "censored"));
+				if (oldBlockedMessages[e.instance.props.message.id]) e.returnvalue.props.children.push(this.createStamp(oldBlockedMessages[e.instance.props.message.id].content, "blocked"));
+				else if (oldCensoredMessages[e.instance.props.message.id]) e.returnvalue.props.children.push(this.createStamp(oldCensoredMessages[e.instance.props.message.id].content, "censored"));
 			}
 		}
 		
@@ -306,9 +322,9 @@ var ChatFilter = (_ => {
 			});
 		}
 
-		parseContent (content) {
-			let blocked = false, censored = false;
-			if (typeof content == "string") {
+		parseMessage (message) {			
+			let blocked = false, censored = false, content = (oldBlockedMessages[message.id] || oldCensoredMessages[message.id] || {}).content || message.content;
+			if (content && typeof content == "string") {
 				let blockedReplace;
 				for (let bWord in words.blocked) {
 					blockedReplace = words.blocked[bWord].empty ? "" : (words.blocked[bWord].replace || replaces.blocked);
@@ -464,8 +480,8 @@ var ChatFilter = (_ => {
 			replaces = BDFDB.DataUtils.get(this, "replaces");
 			configs = BDFDB.DataUtils.get(this, "configs");
 				
-			blockedMessages = {};
-			censoredMessages = {};
+			oldBlockedMessages = {};
+			oldCensoredMessages = {};
 			
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
