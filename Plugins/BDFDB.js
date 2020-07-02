@@ -3494,13 +3494,13 @@
 	};
 	BDFDB.StringUtils.highlight = function (string, searchstring, prefix = `<span class="${BDFDB.disCN.highlight}">`, suffix = `</span>`) {
 		if (typeof string != "string" || !searchstring || searchstring.length < 1) return string;
-		var offset = 0, original = string;
+		let offset = 0, original = string;
 		BDFDB.ArrayUtils.getAllIndexes(string.toUpperCase(), searchstring.toUpperCase()).forEach(index => {
-			var d1 = offset * (prefix.length + suffix.length);
+			let d1 = offset * (prefix.length + suffix.length);
 			index = index + d1;
-			var d2 = index + searchstring.length;
-			var d3 = [-1].concat(BDFDB.ArrayUtils.getAllIndexes(string.substring(0, index), "<"));
-			var d4 = [-1].concat(BDFDB.ArrayUtils.getAllIndexes(string.substring(0, index), ">"));
+			let d2 = index + searchstring.length;
+			let d3 = [-1].concat(BDFDB.ArrayUtils.getAllIndexes(string.substring(0, index), "<"));
+			let d4 = [-1].concat(BDFDB.ArrayUtils.getAllIndexes(string.substring(0, index), ">"));
 			if (d3[d3.length - 1] > d4[d4.length - 1]) return;
 			string = string.substring(0, index) + prefix + string.substring(index, d2) + suffix + string.substring(d2);
 			offset++;
@@ -3508,8 +3508,8 @@
 		return string || original;
 	};
 	BDFDB.StringUtils.extractSelection = function (original, selection) {
-		if (!original) return "";
-		if (!selection) return original;
+		if (typeof original != "string") return "";
+		if (typeof selection != "string") return original;
 		let s = [], f = [], wrong = 0, canceled = false, done = false;
 		for (let i of BDFDB.ArrayUtils.getAllIndexes(original, selection[0])) if (!done) {
 			while (i <= original.length && !done) {
@@ -3537,21 +3537,20 @@
 				i++;
 			}
 		}
-		if (f.filter(n => n).length) {
-			let reverseS = [].concat(f).reverse(), i = 0, j = 0;
-			for (let k in f) {
-				if (f[k] == null) i = k;
+		if (s.filter(n => n).length) {
+			let reverseS = [].concat(s).reverse(), i = 0, j = 0;
+			for (let k in s) {
+				if (s[k] == null) i = parseInt(k) + 1;
 				else break;
 			}
 			for (let k in reverseS) {
-				if (reverseS[k] == null) j = k + 1;
+				if (reverseS[k] == null) j = parseInt(k) + 1;
 				else break;
 			}
-			f = f.slice(i, f.length - j);
-			return f.join("");
+			return f.slice(i, f.length - j).join("");
 		}
 		else return original;
-	}
+	};
 	
 	BDFDB.SlateUtils = {};
 	BDFDB.SlateUtils.isRichValue = function (richValue) {
