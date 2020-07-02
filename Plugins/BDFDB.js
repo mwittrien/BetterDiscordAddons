@@ -7515,9 +7515,13 @@
 					children: guild
 				})
 			].filter(n => n);
-			return this.props.list ? InternalComponents.LibraryComponents.GuildComponents.Items.renderListItem(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
-				children: children
-			}), null != this.props.setRef ? this.setRef : null) : BDFDB.ReactUtils.createElement("div", {
+			return this.props.list ? BDFDB.ReactUtils.createElement("div", {
+				ref: null != this.props.setRef ? this.props.setRef : null,
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.guildouter, BDFDB.disCN._bdguild, this.props.unread && BDFDB.disCN._bdguildunread, this.props.selected && BDFDB.disCN._bdguildselected, this.props.unread && BDFDB.disCN._bdguildunread, this.props.audio && BDFDB.disCN._bdguildaudio, this.props.video && BDFDB.disCN._bdguildvideo),
+				children: BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
+					children: children
+				})
+			}) : BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.guild, this.props.className),
 				children: children
 			});
