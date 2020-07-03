@@ -4129,10 +4129,10 @@
 		chatCounter: "chatCounter-XOMPsh",
 		counterAdded: "charCounterAdded-zz9O4t",
 		editCounter: "editCounter-pNT1Xe",
-		formCounter: "formCounter-iEGQQk",
 		nickCounter: "nickCounter-tJrO_4",
 		popoutNoteCounter: "popoutNoteCounter-62U4Rh",
-		profileNoteCounter: "profileNoteCounter-p0fWA_"
+		profileNoteCounter: "profileNoteCounter-p0fWA_",
+		uploadCounter: "uploadCounter-iEGQQk"
 	};
 	DiscordClassModules.DisplayLargeMessages = {
 		injectButton: "injectButton-8eKqGu"
@@ -4499,10 +4499,10 @@
 		_charcounterchatcounter: ["CharCounter", "chatCounter"],
 		_charcountercounteradded: ["CharCounter", "counterAdded"],
 		_charcountereditcounter: ["CharCounter", "editCounter"],
-		_charcounterformcounter: ["CharCounter", "formCounter"],
 		_charcounternickcounter: ["CharCounter", "nickCounter"],
 		_charcounterpopoutnotecounter: ["CharCounter", "popoutNoteCounter"],
 		_charcounterprofilenotecounter: ["CharCounter", "profileNoteCounter"],
+		_charcounteruploadcounter: ["CharCounter", "uploadCounter"],
 		_displaylargemessagesinjectbutton: ["DisplayLargeMessages", "injectButton"],
 		_displayserversaschannelsbadge: ["DisplayServersAsChannels", "badge"],
 		_displayserversaschannelsname: ["DisplayServersAsChannels", "name"],
