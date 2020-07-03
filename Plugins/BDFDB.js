@@ -4126,7 +4126,13 @@
 	};
 	DiscordClassModules.CharCounter = {
 		charCounter: "charCounter-7fw40k",
-		counterAdded: "charCounterAdded-zz9O4t"
+		chatCounter: "chatCounter-XOMPsh",
+		counterAdded: "charCounterAdded-zz9O4t",
+		editCounter: "editCounter-pNT1Xe",
+		formCounter: "formCounter-iEGQQk",
+		nickCounter: "nickCounter-tJrO_4",
+		popoutNoteCounter: "popoutNoteCounter-62U4Rh",
+		profileNoteCounter: "profileNoteCounter-p0fWA_"
 	};
 	DiscordClassModules.DisplayLargeMessages = {
 		injectButton: "injectButton-8eKqGu"
@@ -4490,7 +4496,13 @@
 		_chatfiltercensored: ["ChatFilter", "censored"],
 		_chatfiltercensoredstamp: ["ChatFilter", "censoredStamp"],
 		_charcountercounter: ["CharCounter", "charCounter"],
+		_charcounterchatcounter: ["CharCounter", "chatCounter"],
 		_charcountercounteradded: ["CharCounter", "counterAdded"],
+		_charcountereditcounter: ["CharCounter", "editCounter"],
+		_charcounterformcounter: ["CharCounter", "formCounter"],
+		_charcounternickcounter: ["CharCounter", "nickCounter"],
+		_charcounterpopoutnotecounter: ["CharCounter", "popoutNoteCounter"],
+		_charcounterprofilenotecounter: ["CharCounter", "profileNoteCounter"],
 		_displaylargemessagesinjectbutton: ["DisplayLargeMessages", "injectButton"],
 		_displayserversaschannelsbadge: ["DisplayServersAsChannels", "badge"],
 		_displayserversaschannelsname: ["DisplayServersAsChannels", "name"],
@@ -9981,20 +9993,6 @@
 	for (let component in InternalComponents.LibraryComponents) if (!InternalComponents.LibraryComponents[component]) {
 		InternalComponents.LibraryComponents[component] = "div";
 		BDFDB.LibraryComponents[component] = "div";
-	}
-	
-	// REMOVE ONCE BD IS FIXED
-	if (BDFDB.BDUtils.getSettings(BdApi.settings["Public Servers"].id)) {
-		let failed = false;
-		try {BDFDB.BDUtils.toggleSettings(BdApi.settings["Public Servers"].id, false);}
-		catch (err) {
-			failed = true;
-			if (BDFDB.BDUtils.getSettings(BdApi.settings["Automatic Loading"].id)) {
-				BDFDB.BDUtils.toggleSettings(BdApi.settings["Automatic Loading"].id, false);
-				BDFDB.TimeUtils.timeout(_ => {BDFDB.BDUtils.toggleSettings(BdApi.settings["Automatic Loading"].id, true)}, 3000);
-			}
-		}
-		if (!failed) BDFDB.BDUtils.toggleSettings(BdApi.settings["Public Servers"].id, true);
 	}
 	
 	BDFDB.loaded = true;
