@@ -16,7 +16,7 @@ https://raw.githubusercontent.com/CurimuChizu/CC-Themes/master/CC-Themes/ReZero.
 https://raw.githubusercontent.com/Dddsasul/TeamKappa-theme/master/ClearDiscord.theme.css
 https://raw.githubusercontent.com/Dddsasul/TeamKappa-theme/master/JustBlack.theme.css
 https://raw.githubusercontent.com/denBot/Cyan-Firewatch/master/cyan-firewatch.theme.css
-https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/AkameNoKill.theme.css
+https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/AkameGaKill.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/BNHA.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/BubblesReturns.theme.css
 https://raw.githubusercontent.com/DevilsLynAvenged/DevilsLynAvenged/master/My_Theme_Collection/Calm_and_Peaceful_Street.theme.css
