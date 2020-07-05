@@ -1326,6 +1326,7 @@
 						for (let priority in module.BDFDBpatch[methodName].before) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[methodName].before[priority])) {
 							BDFDB.TimeUtils.suppress(module.BDFDBpatch[methodName].before[priority][id], `"before" callback of ${methodName} in ${module.constructor ? (module.constructor.displayName || module.constructor.name) : "module"}`, module.BDFDBpatch[methodName].before[priority][id].pluginName)(data);
 						}
+						
 						if (!module.BDFDBpatch || !module.BDFDBpatch[methodName]) return methodName == "render" && data.returnValue === undefined ? null : data.returnValue;
 						let hasInsteadPatches = BDFDB.ObjectUtils.toArray(module.BDFDBpatch[methodName].instead).some(priorityObj => !BDFDB.ObjectUtils.isEmpty(priorityObj));
 						if (hasInsteadPatches) for (let priority in module.BDFDBpatch[methodName].instead) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[methodName].instead[priority])) {
@@ -1333,6 +1334,7 @@
 							if (tempReturn !== undefined) data.returnValue = tempReturn;
 						}
 						if ((!hasInsteadPatches || callInstead) && !stopCall) BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${methodName} in ${module.constructor ? (module.constructor.displayName || module.constructor.name) : "module"}`)();
+						
 						if (!module.BDFDBpatch || !module.BDFDBpatch[methodName]) return methodName == "render" && data.returnValue === undefined ? null : data.returnValue;
 						for (let priority in module.BDFDBpatch[methodName].after) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[methodName].after[priority])) {
 							let tempReturn = BDFDB.TimeUtils.suppress(module.BDFDBpatch[methodName].after[priority][id], `"after" callback of ${methodName} in ${module.constructor ? (module.constructor.displayName || module.constructor.name) : "module"}`, module.BDFDBpatch[methodName].after[priority][id].pluginName)(data);
