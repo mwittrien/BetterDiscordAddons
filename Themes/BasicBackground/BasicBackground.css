@@ -3330,6 +3330,9 @@ body:before {
 	filter: blur(var(--vpopoutblur));
 	background-attachment: fixed;
 }
+.scroller-zPkAnE {
+	background-color: transparent;
+}
 #app-mount .input-2VB9rf {									/* modal				input								*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
