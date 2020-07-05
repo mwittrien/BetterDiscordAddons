@@ -4025,9 +4025,10 @@
 		quickSelectWrapper: "quickSelectWrapper-UCfTKz",
 		menuItemHint: "hint-BK71lM",
 		modalHeaderHasSibling: "hasSiblings-fRyjyl",
-		modalInnerScrollerLess: "inner-YgPpF3",
+		modalNoScroller: "noScroller-YgPpF3",
 		modalTabContent: "tabContent-nZ-1U5",
 		modalTabContentOpen: "open-yICTYu",
+		modalSubInner: "inner-t84Frz",
 		modalWrapper: "modal-6GHvdM",
 		noticeWrapper: "noticeWrapper-8z511t",
 		selectWrapper: "selectWrapper-yPjeij",
@@ -5483,13 +5484,13 @@
 		modalmini: ["ModalMiniContent", "modal"],
 		modalminicontent: ["ModalMiniContent", "content"],
 		modalminitext: ["HeaderBarTopic", "content"],
+		modalnoscroller: ["BDFDB", "modalNoScroller"],
 		modalseparator: ["LayerModal", "separator"],
 		modalsizelarge: ["Modal", "sizeLarge"],
 		modalsizemedium: ["Modal", "sizeMedium"],
 		modalsizesmall: ["Modal", "sizeSmall"],
 		modalsub: ["Modal", "modal"],
-		modalsubinner: ["LayerModal", "inner"],
-		modalsubinnerscrollerless: ["BDFDB", "modalInnerScrollerLess"],
+		modalsubinner: ["BDFDB", "modalSubInner"],
 		modaltabcontent: ["BDFDB", "modalTabContent"],
 		modaltabcontentopen: ["BDFDB", "modalTabContentOpen"],
 		modalwrapper: ["BDFDB", "modalWrapper"],
@@ -7740,22 +7741,15 @@
 	
 	InternalComponents.LibraryComponents.ModalComponents.ModalContent = InternalBDFDB.loadPatchedComp("ModalComponents.ModalContent") || reactInitialized && class BDFDB_ModalContent extends LibraryModules.React.Component {
 		render() {
-			return this.props.scroller ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ScrollerVertical, {
-				outerClassName: BDFDB.disCN.modalcontent,
-				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.modalsubinner, this.props.className),
-				theme: InternalComponents.LibraryComponents.ScrollerVertical.Themes.GHOST_HAIRLINE,
+			return this.props.scroller ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ScrollerThin, {
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.modalcontent, this.props.className),
 				ref: this.props.scrollerRef,
 				children: this.props.children
 			}) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-				className: BDFDB.disCN.modalcontent,
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.modalcontent, BDFDB.disCN.modalnoscroller, this.props.className),
 				direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
 				align: InternalComponents.LibraryComponents.Flex.Align.STRETCH,
-				children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.modalsubinner, BDFDB.disCN.modalsubinnerscrollerless, this.props.className),
-					direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
-					align: InternalComponents.LibraryComponents.Flex.Align.STRETCH,
-					children: this.props.children
-				})
+				children: this.props.children
 			});
 		}
 	};
@@ -7940,8 +7934,6 @@
 	InternalComponents.LibraryComponents.ScrollerAuto = AdvancedScrollers.AdvancedScrollerAuto || AdvancedScrollers.default;
 	InternalComponents.LibraryComponents.ScrollerNone = AdvancedScrollers.AdvancedScrollerNone || AdvancedScrollers.default;
 	InternalComponents.LibraryComponents.ScrollerThin = AdvancedScrollers.AdvancedScrollerThin || AdvancedScrollers.default;
-	
-	InternalComponents.LibraryComponents.ScrollerHorizontal = BDFDB.ModuleUtils.findByName("HorizontalScroller");
 	
 	InternalComponents.LibraryComponents.ScrollerVertical = BDFDB.ModuleUtils.findByName("VerticalScroller");
 	
@@ -8989,7 +8981,7 @@
 			position: absolute;
 			width: 100%;
 		}
-		${BDFDB.dotCNS.modalsubinner + BDFDB.dotCN.tablestickyheader}:first-child {
+		${BDFDB.dotCNS.modalsub + BDFDB.dotCN.tablestickyheader}:first-child {
 			padding-left: 20px;
 		}
 		${BDFDB.dotCN.tableheadercell} {
@@ -9158,15 +9150,16 @@
 			color: var(--interactive-active);
 		}
 		
-		${BDFDB.dotCN.modalsubinnerscrollerless} {
+		${BDFDB.dotCN.modalsubinner} {
+			padding-left: 16px;
+			padding-right: 8px;
+		}
+		${BDFDB.dotCN.modalnoscroller} {
 			padding-bottom: 10px;
 			overflow: visible;
 		}
 		${BDFDB.dotCN.modaltabcontent} {
 			margin-top: 10px;
-		}
-		${BDFDB.dotCN.scroller + BDFDB.dotCN.listscroller} {
-			height: unset;
 		}
 		${BDFDB.dotCNS.listscroller + BDFDB.dotCN.modaltabcontent} {
 			margin-top: 0;
