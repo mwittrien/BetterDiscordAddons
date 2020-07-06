@@ -26,7 +26,7 @@ var FriendNotifications = (_ => {
 	return class FriendNotifications {
 		getName () {return "FriendNotifications";}
 
-		getVersion () {return "1.4.4";}
+		getVersion () {return "1.4.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -34,7 +34,7 @@ var FriendNotifications = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["New strangers","You can add new users via their name#discriminator again"]]
+				"improved":[["Pagination","Added Pagination to the settings and timelog, to stop the plugin from freezing for ppl who feel like they need to have over 500 friends on discord"]]
 			};
 			
 			this.patchedModules = {
@@ -187,21 +187,25 @@ var FriendNotifications = (_ => {
 					title: "type",
 					settings: Object.keys(this.defaults.notificationstrings),
 					data: users,
+					pagination: {
+						alphabetKey: "username",
+						amount: 50
+					},
 					renderLabel: data => [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatar, {
 							className: BDFDB.DOMUtils.formatClassName("settings-avatar", data.disabled && "disabled", data.destop && "desktop"),
-							src: BDFDB.UserUtils.getAvatar(data.user.id),
-							status: BDFDB.UserUtils.getStatus(data.user.id),
+							src: BDFDB.UserUtils.getAvatar(data.id),
+							status: BDFDB.UserUtils.getStatus(data.id),
 							size: BDFDB.LibraryComponents.Avatar.Sizes.SIZE_40,
 							onClick: (e, instance) => {
-								changeNotificationType(type, data.user.id, false, !(data.disabled || data.desktop));
+								changeNotificationType(type, data.id, false, !(data.disabled || data.desktop));
 							},
 							onContextMenu: (e, instance) => {
-								changeNotificationType(type, data.user.id, true, !(data.disabled || !data.desktop));
+								changeNotificationType(type, data.id, true, !(data.disabled || !data.desktop));
 							}
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
-							children: data.user.username
+							children: data.username
 						})
 					],
 					onHeaderClick: (config, instance) => {
@@ -256,12 +260,12 @@ var FriendNotifications = (_ => {
 						nonFriendsData[id] = Object.assign({}, friendsData[id]);
 						delete friendsData[id];
 					}
-					else friends.push(Object.assign({}, friendsData[id], {key:id, user, className: friendsData[id].disabled ? "" : (friendsData[id].desktop ? BDFDB.disCN.cardsuccessoutline : BDFDB.disCN.cardbrandoutline)}));
+					else friends.push(Object.assign({}, friendsData[id], user, {key:id, className: friendsData[id].disabled ? "" : (friendsData[id].desktop ? BDFDB.disCN.cardsuccessoutline : BDFDB.disCN.cardbrandoutline)}));
 				}
 			}
 			for (let id in nonFriendsData) {
 				let user = BDFDB.LibraryModules.UserStore.getUser(id);
-				if (user) nonFriends.push(Object.assign({}, nonFriendsData[id], {key:id, user, className: nonFriendsData[id].disabled ? "" : (nonFriendsData[id].desktop ? BDFDB.disCN.cardsuccessoutline : BDFDB.disCN.cardbrandoutline)}));
+				if (user) nonFriends.push(Object.assign({}, nonFriendsData[id], user, {key:id, className: nonFriendsData[id].disabled ? "" : (nonFriendsData[id].desktop ? BDFDB.disCN.cardsuccessoutline : BDFDB.disCN.cardbrandoutline)}));
 			}
 
 			BDFDB.DataUtils.save(friendsData, this, "friends");
@@ -627,39 +631,46 @@ var FriendNotifications = (_ => {
 		}	
 
 		showTimeLog () {
-			if (!timeLog.slice(0).length) BDFDB.NotificationUtils.toast("No logs saved yet", {type: "error"});
+			if (!timeLog.length) BDFDB.NotificationUtils.toast("No logs saved yet", {type: "error"});
 			else BDFDB.ModalUtils.open(this, {
 				size: "MEDIUM",
 				header: "LogIn/-Out Timelog",
 				subheader: "",
 				className: `${this.name}-Log-modal`,
-				children: timeLog.slice(0).reverse().map((log, i) => [
-					i > 0 ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-						className: BDFDB.disCNS.margintop8 + BDFDB.disCN.marginbottom8
-					}) : null,
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-						align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-						children: [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-								className: "log-time",
-								children: `[${log.timestring}]`
-							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatar, {
-								className: "log-user",
-								src: log.avatar,
-								status: log.status,
-								size: BDFDB.LibraryComponents.Avatar.Sizes.SIZE_40
-							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
-								className: "log-content",
-								speed: 1,
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-									children: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(log.string))
-								})
+				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PaginatedList, {
+					items: timeLog.reverse(),
+					amount: 100,
+					copyToBottom: true,
+					renderItem: (log, i) => {
+						return [
+							i > 0 ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+							className: BDFDB.disCNS.margintop8 + BDFDB.disCN.marginbottom8
+							}) : null,
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+								align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+								children: [
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+										className: "log-time",
+										children: `[${log.timestring}]`
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatar, {
+										className: "log-user",
+										src: log.avatar,
+										status: log.status,
+										size: BDFDB.LibraryComponents.Avatar.Sizes.SIZE_40
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
+										className: "log-content",
+										speed: 1,
+										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+											children: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(log.string))
+										})
+									})
+								]
 							})
 						]
-					})
-				]).flat(10).filter(n => n)
+					}
+				})
 			});
 		}
 	}
