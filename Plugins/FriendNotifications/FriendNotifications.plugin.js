@@ -26,7 +26,7 @@ var FriendNotifications = (_ => {
 	return class FriendNotifications {
 		getName () {return "FriendNotifications";}
 
-		getVersion () {return "1.4.6";}
+		getVersion () {return "1.4.7";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -34,6 +34,7 @@ var FriendNotifications = (_ => {
 
 		constructor () {
 			this.changelog = {
+				"fixed":[["Order","Fixed the order of the time log swapping each time it's opened"]],
 				"improved":[["Pagination","Added Pagination to the settings and timelog, to stop the plugin from freezing for ppl who feel like they need to have over 500 friends on discord"]]
 			};
 			
@@ -638,7 +639,7 @@ var FriendNotifications = (_ => {
 				subheader: "",
 				className: `${this.name}-Log-modal`,
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PaginatedList, {
-					items: timeLog.reverse(),
+					items: [].concat(timeLog).reverse(),
 					amount: 100,
 					copyToBottom: true,
 					renderItem: (log, i) => {
