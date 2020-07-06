@@ -4021,6 +4021,12 @@
 		loadingIcon: "loadingIcon-cOYMPl",
 		loadingIconWrapper: "loadingIconWrapper-PsVJ9m",
 		overflowEllipsis: "ellipsis-qlo9sA",
+		paginationList: "list-PIKebU",
+		paginationListAlphabet: "alphabet-2ANo0x",
+		paginationListAlphabetChar: "alphabetChar-bq-8Go",
+		paginationListAlphabetCharDisabled: "disabled-XmhCq2",
+		paginationListContent: "listContent-aG3Fq8",
+		paginationListPagination: "pagination-ko4zZk",
 		popoutWrapper: "popout-xwjvsX",
 		quickSelectWrapper: "quickSelectWrapper-UCfTKz",
 		menuItemHint: "hint-BK71lM",
@@ -5543,6 +5549,12 @@
 		note: ["SettingsItems", "note"],
 		nowrap: ["Flex", "noWrap"],
 		overflowellipsis: ["BDFDB", "overflowEllipsis"],
+		paginationlist: ["BDFDB", "paginationList"],
+		paginationlistalphabet: ["BDFDB", "paginationListAlphabet"],
+		paginationlistalphabetchar: ["BDFDB", "paginationListAlphabetChar"],
+		paginationlistalphabetchardisabled: ["BDFDB", "paginationListAlphabetCharDisabled"],
+		paginationlistcontent: ["BDFDB", "paginationListContent"],
+		paginationlistpagination: ["BDFDB", "paginationListPagination"],
 		peoples: ["Peoples", "container"],
 		peoplesbadge: ["Peoples", "badge"],
 		peoplesnowplayingcolumn: ["Peoples", "nowPlayingColumn"],
@@ -7817,19 +7829,125 @@
 	InternalComponents.LibraryComponents.NavItem = BDFDB.ModuleUtils.findByName("NavItem");
 	
 	InternalComponents.LibraryComponents.PaginatedList = InternalBDFDB.loadPatchedComp("PaginatedList") || reactInitialized && class BDFDB_PaginatedList extends LibraryModules.React.Component {
+		jump(offset) {
+			if (offset > -1 && offset < Math.ceil(this.props.items.length/this.props.amount) && this.props.offset != offset) {
+				this.props.offset = offset;
+				BDFDB.ReactUtils.forceUpdate(this);
+			}
+		}
 		render() {
-			return typeof this.props.renderItem != "function" || !BDFDB.ArrayUtils.is(this.props.items) ? null : BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.popoutwrapper, BDFDB.disCN.popout, positionClass, this.props.invert && pos && pos != "bottom" && BDFDB.disCN.popoutinvert, arrowClass, !this.props.shadow && BDFDB.disCN.popoutnoshadow),
-				id: this.props.id,
-				onClick: e => {e.stopPropagation();},
-				style: Object.assign({}, this.props.style, {
-					position: this.props.isChild ? "relative" : "absolute"
-				}),
-				children: BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.DOMUtils.formatClassName(this.props.className, this.props.themed && BDFDB.disCN.popoutthemedpopout),
-					style: BDFDB.ObjectUtils.extract(this.props, "padding", "height", "maxHeight", "minHeight", "width", "maxWidth", "minWidth"),
-					children: this.props.children
-				})
+			let maxOffset = Math.floor(this.props.items.length/this.props.amount);
+			let items = [], alphabet = {};
+			if (BDFDB.ArrayUtils.is(this.props.items) && this.props.items.length) {
+				if (!this.props.alphabetKey) items = this.props.items;
+				else {
+					let unsortedItems = [].concat(this.props.items);
+					for (let key of ["0-9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]) {
+						let numbers = key == "0-9", alphaItems = [];
+						for (let item of unsortedItems) if (item && item[this.props.alphabetKey] && (numbers && !isNaN(parseInt(item[this.props.alphabetKey][0])) || item[this.props.alphabetKey].toUpperCase().indexOf(key) == 0)) alphaItems.push(item);
+						for (let sortedItem of alphaItems) BDFDB.ArrayUtils.remove(unsortedItems, sortedItem);
+						alphabet[key] = {items:BDFDB.ArrayUtils.keySort(alphaItems, this.props.alphabetKey), disabled:!alphaItems.length};
+					}
+					alphabet["?!"] = {items:BDFDB.ArrayUtils.keySort(unsortedItems, this.props.alphabetKey), disabled:!unsortedItems.length};
+					for (let key in alphabet) items.push(alphabet[key].items);
+					items = items.flat(10);
+				}
+			}
+			return typeof this.props.renderItem != "function" || !items.length ? null : BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.disCN.paginationlist,
+				children: [
+					items.length > this.props.amount && BDFDB.ReactUtils.createElement("nav", {
+						className: BDFDB.disCN.paginationlistpagination,
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								text: BDFDB.LanguageUtils.LibraryStrings.first,
+								"aria-label": BDFDB.LanguageUtils.LibraryStrings.first,
+								onClick: _ => {if (this.props.offset > 0) this.jump(0);},
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.props.offset <= 0 && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+										className: BDFDB.disCN.searchresultspaginationicon,
+										name: BDFDB.LibraryComponents.SvgIcon.Names.LEFT_DOUBLE_CARET
+									})
+								})
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								text: BDFDB.LanguageUtils.LanguageStrings.PAGINATION_PREVIOUS,
+								"aria-label": BDFDB.LanguageUtils.LanguageStrings.PAGINATION_PREVIOUS,
+								onClick: _ => {if (this.props.offset > 0) this.jump(this.props.offset - 1);},
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.props.offset <= 0 && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+										className: BDFDB.disCN.searchresultspaginationicon,
+										name: BDFDB.LibraryComponents.SvgIcon.Names.LEFT_CARET
+									})
+								})
+							}),
+							BDFDB.LanguageUtils.LanguageStringsFormat("PAGINATION_PAGE_OF", this.props.offset + 1, maxOffset + 1),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								text: BDFDB.LanguageUtils.LanguageStrings.PAGINATION_NEXT,
+								"aria-label": BDFDB.LanguageUtils.LanguageStrings.PAGINATION_NEXT,
+								onClick: _ => {if (this.props.offset < maxOffset) this.jump(this.props.offset + 1);},
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.props.offset >= maxOffset && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+										className: BDFDB.disCN.searchresultspaginationicon,
+										name: BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_CARET
+									})
+								})
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								text: BDFDB.LanguageUtils.LibraryStrings.last,
+								"aria-label": BDFDB.LanguageUtils.LibraryStrings.last,
+								onClick: _ => {if (this.props.offset < maxOffset) this.jump(maxOffset);},
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.props.offset >= maxOffset && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+										className: BDFDB.disCN.searchresultspaginationicon,
+										name: BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_DOUBLE_CARET
+									})
+								})
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+								key: "pagination-list-jumpinput",
+								type: "number",
+								size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
+								value: this.props.offset + 1,
+								min: 1,
+								max: maxOffset + 1,
+								onKeyDown: (event, instance) => {if (event.which == 13) this.jump(isNaN(parseInt(instance.props.value)) ? -1 : instance.props.value - 1);}
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								text: BDFDB.LanguageUtils.LanguageStrings.JUMP,
+								"aria-label": BDFDB.LanguageUtils.LanguageStrings.JUMP,
+								onClick: (event, instance) => {
+									let jumpInput = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key:"pagination-list-jumpinput"});
+									if (jumpInput) this.jump(isNaN(parseInt(jumpInput.props.value)) ? -1 : jumpInput.props.value - 1);
+								},
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+									className: BDFDB.disCN.searchresultspaginationbutton,
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+										className: BDFDB.disCN.searchresultspaginationicon,
+										style: {transform: "rotate(90deg"},
+										name: BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_CARET
+									})
+								})
+							})
+						]
+					}),
+					items.length > this.props.amount && this.props.alphabetKey && BDFDB.ReactUtils.createElement("nav", {
+						className: BDFDB.disCN.paginationlistalphabet,
+						children: Object.keys(alphabet).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.paginationlistalphabetchar, alphabet[key].disabled &&BDFDB.disCN.paginationlistalphabetchardisabled),
+							onClick: _ => {if (!alphabet[key].disabled) this.jump(Math.floor(items.indexOf(alphabet[key].items[0])/this.props.amount));},
+							children: key
+						}))
+					}),
+					BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.paginationlistcontent,
+						children: items.slice(this.props.offset * this.props.amount, (this.props.offset + 1) * this.props.amount).map(data => {return this.props.renderItem(data);})
+					})
+				].flat(10).filter(n => n)
 			});
 		}
 	};
@@ -8907,6 +9025,37 @@
 			filter: grayscale(100%) brightness(50%);
 		}
 		
+		${BDFDB.dotCN.paginationlistpagination} {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 16px;
+			line-height: 20px;
+			margin-top: 10px;
+			margin-bottom: 10px;
+			color: var(--text-normal);
+		}
+		${BDFDB.dotCN.paginationlistalphabet} {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 16px;
+			line-height: 20px;
+			margin-bottom: 10px;
+			color: var(--text-normal);
+		}
+		${BDFDB.dotCN.paginationlistalphabetchar} {
+			min-width: 12px;
+			text-align: center;
+			margin: 0 4px;
+		}
+		${BDFDB.dotCN.paginationlistalphabetchar + BDFDB.notCN.paginationlistalphabetchardisabled}:hover {
+			color: var(--header-primary);
+		}
+		${BDFDB.dotCN.paginationlistalphabetchar + BDFDB.dotCN.paginationlistalphabetchardisabled} {
+			color: var(--text-muted);
+		}
+		
 		${BDFDB.dotCN.overflowellipsis} {
 			overflow: hidden;
 			text-overflow: ellipsis;
@@ -9942,7 +10091,7 @@
 		for (let component in InternalComponents.LibraryComponents) if (!InternalComponents.LibraryComponents[component]) BDFDB.LogUtils.warn(component + " not initialized in LibraryComponents");
 
 		BDFDB.ModuleUtils.DevFuncs = {};
-		BDFDB.ModuleUtils.DevFuncs.generateClassId = function (index) {
+		BDFDB.ModuleUtils.DevFuncs.generateClassId = function () {
 			let id = "";
 			while (id.length < 6) id += BDFDB.ModuleUtils.DevFuncs.generateClassId.chars[Math.floor(Math.random() * BDFDB.ModuleUtils.DevFuncs.generateClassId.chars.length)];
 			return id;

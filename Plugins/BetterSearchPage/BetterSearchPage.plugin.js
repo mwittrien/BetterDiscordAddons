@@ -137,7 +137,6 @@ var BetterSearchPage = (_ => {
 								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, currentPage == 1 && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 									className: BDFDB.disCN.searchresultspaginationicon,
-									nativeClass: true,
 									name: BDFDB.LibraryComponents.SvgIcon.Names.LEFT_DOUBLE_CARET
 								})
 							})
@@ -151,7 +150,6 @@ var BetterSearchPage = (_ => {
 								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, currentPage >= maxPage && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 									className: BDFDB.disCN.searchresultspaginationicon,
-									nativeClass: true,
 									name: BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_DOUBLE_CARET
 								})
 							})
@@ -162,24 +160,22 @@ var BetterSearchPage = (_ => {
 							key: "BSP-pagination-jumpinput",
 							type: "number",
 							size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
-							suppress: true,
 							value: currentPage,
 							min: 1,
 							max: maxPage,
-							onKeyDown: (e, inputinstance) => {if (e.which == 13) doJump(inputinstance.props.value);}
+							onKeyDown: (event, instance) => {if (event.which == 13) doJump(instance.props.value);}
 						}));
 						pagination.props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 							text: BDFDB.LanguageUtils.LanguageStrings.JUMP,
 							"aria-label": BDFDB.LanguageUtils.LanguageStrings.JUMP,
-							onClick: (e, buttoninstance) => {
-								let jumpinput = BDFDB.ReactUtils.findOwner(buttoninstance._reactInternalFiber.return, {key:"BSP-pagination-jumpinput"});
-								if (jumpinput) doJump(jumpinput.props.value);
+							onClick: (event, instance) => {
+								let jumpInput = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key:"BSP-pagination-jumpinput"});
+								if (jumpInput) doJump(jumpInput.props.value);
 							},
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 								className: BDFDB.disCN.searchresultspaginationbutton,
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 									className: BDFDB.disCN.searchresultspaginationicon,
-									nativeClass: true,
 									style: {transform: "rotate(90deg"},
 									name: BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_CARET
 								})
