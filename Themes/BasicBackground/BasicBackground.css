@@ -3778,7 +3778,7 @@ body:before {
 
 /* ----		13.13.	REACTIONSMODAL					---- */
 
-#app-mount .sidebar-1-SQro {								/* modal				sidebar								*/
+#app-mount .scroller-1-nKid {								/* modal				sidebar								*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 }
 #app-mount .reactors-Blmlhw {								/* modal				list								*/
@@ -4150,10 +4150,10 @@ body:before {
 .separator-2I32lJ {												/* contextmenu			separator							*/
 	border-bottom-color: rgba(var(--fontwhite4), 0.3);
 }
-.button-1I8KM5 {												/* contextmenu			quick reaction button				*/
+.button-F9qN4n {												/* contextmenu			quick reaction button				*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
-.button-1I8KM5:hover {
+.button-F9qN4n:hover {
 	background-color: rgb(var(--vaccentcolor));
 }
 
