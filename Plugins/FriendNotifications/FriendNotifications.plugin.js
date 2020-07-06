@@ -26,7 +26,7 @@ var FriendNotifications = (_ => {
 	return class FriendNotifications {
 		getName () {return "FriendNotifications";}
 
-		getVersion () {return "1.4.5";}
+		getVersion () {return "1.4.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -260,12 +260,12 @@ var FriendNotifications = (_ => {
 						nonFriendsData[id] = Object.assign({}, friendsData[id]);
 						delete friendsData[id];
 					}
-					else friends.push(Object.assign({}, friendsData[id], user, {key:id, className: friendsData[id].disabled ? "" : (friendsData[id].desktop ? BDFDB.disCN.cardsuccessoutline : BDFDB.disCN.cardbrandoutline)}));
+					else if (id != BDFDB.UserUtils.me.id) friends.push(Object.assign({}, user, friendsData[id], {key:id, className: friendsData[id].disabled ? "" : (friendsData[id].desktop ? BDFDB.disCN.cardsuccessoutline : BDFDB.disCN.cardbrandoutline)}));
 				}
 			}
 			for (let id in nonFriendsData) {
 				let user = BDFDB.LibraryModules.UserStore.getUser(id);
-				if (user) nonFriends.push(Object.assign({}, nonFriendsData[id], user, {key:id, className: nonFriendsData[id].disabled ? "" : (nonFriendsData[id].desktop ? BDFDB.disCN.cardsuccessoutline : BDFDB.disCN.cardbrandoutline)}));
+				if (user && id != BDFDB.UserUtils.me.id) nonFriends.push(Object.assign({}, user, nonFriendsData[id], {key:id, className: nonFriendsData[id].disabled ? "" : (nonFriendsData[id].desktop ? BDFDB.disCN.cardsuccessoutline : BDFDB.disCN.cardbrandoutline)}));
 			}
 
 			BDFDB.DataUtils.save(friendsData, this, "friends");
@@ -318,7 +318,8 @@ var FriendNotifications = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 							onClick: _ => {
 								let userId = settingsPanel.querySelector(`.input-newstranger ` + BDFDB.dotCN.input).value.trim();
-								if (friendIds.includes(userId)) BDFDB.NotificationUtils.toast("User is already a friend of yours. Please use the 'Friend-List' area to configure them.", {type:"error"});
+								if (userId == BDFDB.UserUtils.me.id) BDFDB.NotificationUtils.toast("Are you seriously trying to stalk yourself?", {type:"error"});
+								else if (friendIds.includes(userId)) BDFDB.NotificationUtils.toast("User is already a friend of yours. Please use the 'Friend-List' area to configure them.", {type:"error"});
 								else if (Object.keys(nonFriends).includes(userId)) BDFDB.NotificationUtils.toast("User is already being observed as a 'Stranger'.", {type:"error"});
 								else {
 									let user = /.+#[0-9]{4}/.test(userId) ? BDFDB.LibraryModules.UserStore.findByTag(userId.split("#").slice(0, -1).join("#"), userId.split("#").pop()) : BDFDB.LibraryModules.UserStore.getUser(userId);
@@ -594,7 +595,6 @@ var FriendNotifications = (_ => {
 						});
 						
 						if (!(settings.muteOnDND && BDFDB.UserUtils.getStatus() == BDFDB.DiscordConstants.StatusTypes.DND) && (!lastTimes[user.id] || lastTimes[user.id] != timestring)) {
-						
 							lastTimes[user.id] = timestring;
 							
 							let openChannel = _ => {
