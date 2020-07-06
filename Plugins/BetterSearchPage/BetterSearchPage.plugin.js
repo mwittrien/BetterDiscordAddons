@@ -130,8 +130,8 @@ var BetterSearchPage = (_ => {
 					});
 					if (settings.addFirstLast) {
 						pagination.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: BDFDB.LanguageStrings.LibraryStrings.first,
-							"aria-label": BDFDB.LanguageStrings.LibraryStrings.first,
+							text: BDFDB.LanguageUtils.LibraryStrings.first,
+							"aria-label": BDFDB.LanguageUtils.LibraryStrings.first,
 							onClick: _ => {if (currentPage != 1) doJump(1);},
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, currentPage == 1 && BDFDB.disCN.searchresultspaginationdisabled),
@@ -143,9 +143,9 @@ var BetterSearchPage = (_ => {
 							})
 						}));
 						pagination.props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: currentPage >= maxPage ? "Max Page is 200" : BDFDB.LanguageStrings.LibraryStrings.last,
+							text: currentPage >= maxPage ? "Max Page is 200" : BDFDB.LanguageUtils.LibraryStrings.last,
 							tooltipConfig: {color: currentPage >= maxPage && BDFDB.LibraryComponents.TooltipContainer.Colors.RED},
-							"aria-label": BDFDB.LanguageStrings.LibraryStrings.last,
+							"aria-label": BDFDB.LanguageUtils.LibraryStrings.last,
 							onClick: _ => {if (currentPage != maxPage) doJump(maxPage);},
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, currentPage >= maxPage && BDFDB.disCN.searchresultspaginationdisabled),
