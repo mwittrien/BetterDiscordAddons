@@ -587,7 +587,7 @@ var FriendNotifications = (_ => {
 						
 						if (timeLog.length > 200) timeLog.shift();
 						
-						timeLog.push({
+						timeLog.unshift({
 							string: toaststring,
 							avatar,
 							name,
@@ -639,7 +639,7 @@ var FriendNotifications = (_ => {
 				subheader: "",
 				className: `${this.name}-Log-modal`,
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PaginatedList, {
-					items: [].concat(timeLog).reverse(),
+					items: timeLog,
 					amount: 100,
 					copyToBottom: true,
 					renderItem: (log, i) => {
