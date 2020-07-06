@@ -105,17 +105,17 @@ var BetterSearchPage = (_ => {
 			if (e.instance.props.search) {
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name:"SearchPagination"});
 				if (index > -1) {
-					let currentpage = parseInt(Math.floor(e.instance.props.search.offset / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE)) + 1;
-					let maxpage = e.instance.props.search.totalResults > 5000 ? parseInt(Math.ceil(5000 / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE)) : parseInt(Math.ceil(e.instance.props.search.totalResults / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE));
+					let currentPage = parseInt(Math.floor(e.instance.props.search.offset / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE)) + 1;
+					let maxPage = e.instance.props.search.totalResults > 5000 ? parseInt(Math.ceil(5000 / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE)) : parseInt(Math.ceil(e.instance.props.search.totalResults / BDFDB.DiscordConstants.SEARCH_PAGE_SIZE));
 					let doJump = page => {
-						page = page < 1 ? 1 : (page > maxpage ? maxpage : page);
-						if (page < currentpage) BDFDB.LibraryModules.SearchPageUtils.searchPreviousPage(e.instance.props.searchId, (currentpage - page) * BDFDB.DiscordConstants.SEARCH_PAGE_SIZE);
-						else if (page > currentpage) BDFDB.LibraryModules.SearchPageUtils.searchNextPage(e.instance.props.searchId, (page - currentpage) * BDFDB.DiscordConstants.SEARCH_PAGE_SIZE);
+						page = page < 1 ? 1 : (page > maxPage ? maxPage : page);
+						if (page < currentPage) BDFDB.LibraryModules.SearchPageUtils.searchPreviousPage(e.instance.props.searchId, (currentPage - page) * BDFDB.DiscordConstants.SEARCH_PAGE_SIZE);
+						else if (page > currentPage) BDFDB.LibraryModules.SearchPageUtils.searchNextPage(e.instance.props.searchId, (page - currentPage) * BDFDB.DiscordConstants.SEARCH_PAGE_SIZE);
 					};
 					let pagination = children[index].type(children[index].props);
 					if (!pagination) return;
 					
-					if (currentpage >= maxpage) {
+					if (currentPage >= maxPage) {
 						pagination.props.children[2].props.className = BDFDB.DOMUtils.formatClassName(pagination.props.children[2].props.className, BDFDB.disCN.searchresultspaginationdisabled);
 						pagination.props.children[2].props.onClick = _ => {};
 					}
@@ -124,17 +124,17 @@ var BetterSearchPage = (_ => {
 						children: pagination.props.children[0]
 					});
 					pagination.props.children[2] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-						text: currentpage >= maxpage ? "Max Page is 200" : "Next",
-						tooltipConfig: {color: currentpage >= maxpage && BDFDB.LibraryComponents.TooltipContainer.Colors.RED},
+						text: currentPage >= maxPage ? "Max Page is 200" : "Next",
+						tooltipConfig: {color: currentPage >= maxPage && BDFDB.LibraryComponents.TooltipContainer.Colors.RED},
 						children: pagination.props.children[2]
 					});
 					if (settings.addFirstLast) {
 						pagination.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 							text: BDFDB.LanguageStrings.LibraryStrings.first,
 							"aria-label": BDFDB.LanguageStrings.LibraryStrings.first,
-							onClick: _ => {if (currentpage != 1) doJump(1);},
+							onClick: _ => {if (currentPage != 1) doJump(1);},
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, currentpage == 1 && BDFDB.disCN.searchresultspaginationdisabled),
+								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, currentPage == 1 && BDFDB.disCN.searchresultspaginationdisabled),
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 									className: BDFDB.disCN.searchresultspaginationicon,
 									nativeClass: true,
@@ -143,12 +143,12 @@ var BetterSearchPage = (_ => {
 							})
 						}));
 						pagination.props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: currentpage >= maxpage ? "Max Page is 200" : BDFDB.LanguageStrings.LibraryStrings.last,
-							tooltipConfig: {color: currentpage >= maxpage && BDFDB.LibraryComponents.TooltipContainer.Colors.RED},
+							text: currentPage >= maxPage ? "Max Page is 200" : BDFDB.LanguageStrings.LibraryStrings.last,
+							tooltipConfig: {color: currentPage >= maxPage && BDFDB.LibraryComponents.TooltipContainer.Colors.RED},
 							"aria-label": BDFDB.LanguageStrings.LibraryStrings.last,
-							onClick: _ => {if (currentpage != maxpage) doJump(maxpage);},
+							onClick: _ => {if (currentPage != maxPage) doJump(maxPage);},
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, currentpage >= maxpage && BDFDB.disCN.searchresultspaginationdisabled),
+								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, currentPage >= maxPage && BDFDB.disCN.searchresultspaginationdisabled),
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 									className: BDFDB.disCN.searchresultspaginationicon,
 									nativeClass: true,
@@ -163,9 +163,9 @@ var BetterSearchPage = (_ => {
 							type: "number",
 							size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
 							suppress: true,
-							value: currentpage,
+							value: currentPage,
 							min: 1,
-							max: maxpage,
+							max: maxPage,
 							onKeyDown: (e, inputinstance) => {if (e.which == 13) doJump(inputinstance.props.value);}
 						}));
 						pagination.props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
