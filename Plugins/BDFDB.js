@@ -7835,8 +7835,89 @@
 				BDFDB.ReactUtils.forceUpdate(this);
 			}
 		}
+		renderPagination() {
+			let maxOffset = Math.ceil(this.props.items.length/this.props.amount) - 1;
+			return this.props.items.length > this.props.amount && BDFDB.ReactUtils.createElement("nav", {
+				className: BDFDB.disCN.paginationlistpagination,
+				children: [
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						text: BDFDB.LanguageUtils.LibraryStrings.first,
+						"aria-label": BDFDB.LanguageUtils.LibraryStrings.first,
+						onClick: _ => {if (this.props.offset > 0) this.jump(0);},
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.props.offset <= 0 && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.searchresultspaginationicon,
+								name: BDFDB.LibraryComponents.SvgIcon.Names.LEFT_DOUBLE_CARET
+							})
+						})
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						text: BDFDB.LanguageUtils.LanguageStrings.PAGINATION_PREVIOUS,
+						"aria-label": BDFDB.LanguageUtils.LanguageStrings.PAGINATION_PREVIOUS,
+						onClick: _ => {if (this.props.offset > 0) this.jump(this.props.offset - 1);},
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.props.offset <= 0 && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.searchresultspaginationicon,
+								name: BDFDB.LibraryComponents.SvgIcon.Names.LEFT_CARET
+							})
+						})
+					}),
+					BDFDB.LanguageUtils.LanguageStringsFormat("PAGINATION_PAGE_OF", this.props.offset + 1, maxOffset + 1),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						text: BDFDB.LanguageUtils.LanguageStrings.PAGINATION_NEXT,
+						"aria-label": BDFDB.LanguageUtils.LanguageStrings.PAGINATION_NEXT,
+						onClick: _ => {if (this.props.offset < maxOffset) this.jump(this.props.offset + 1);},
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.props.offset >= maxOffset && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.searchresultspaginationicon,
+								name: BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_CARET
+							})
+						})
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						text: BDFDB.LanguageUtils.LibraryStrings.last,
+						"aria-label": BDFDB.LanguageUtils.LibraryStrings.last,
+						onClick: _ => {if (this.props.offset < maxOffset) this.jump(maxOffset);},
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.props.offset >= maxOffset && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.searchresultspaginationicon,
+								name: BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_DOUBLE_CARET
+							})
+						})
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
+						key: "pagination-list-jumpinput",
+						type: "number",
+						size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
+						value: this.props.offset + 1,
+						min: 1,
+						max: maxOffset + 1,
+						onKeyDown: (event, instance) => {if (event.which == 13) this.jump(isNaN(parseInt(instance.props.value)) ? -1 : instance.props.value - 1);}
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						text: BDFDB.LanguageUtils.LanguageStrings.JUMP,
+						"aria-label": BDFDB.LanguageUtils.LanguageStrings.JUMP,
+						onClick: (event, instance) => {
+							let jumpInput = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key:"pagination-list-jumpinput"});
+							if (jumpInput) this.jump(isNaN(parseInt(jumpInput.props.value)) ? -1 : jumpInput.props.value - 1);
+						},
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
+							className: BDFDB.disCN.searchresultspaginationbutton,
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								className: BDFDB.disCN.searchresultspaginationicon,
+								style: {transform: "rotate(90deg"},
+								name: BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_CARET
+							})
+						})
+					})
+				]
+			});
+		}
 		render() {
-			let maxOffset = Math.floor(this.props.items.length/this.props.amount);
 			let items = [], alphabet = {};
 			if (BDFDB.ArrayUtils.is(this.props.items) && this.props.items.length) {
 				if (!this.props.alphabetKey) items = this.props.items;
@@ -7856,85 +7937,7 @@
 			return typeof this.props.renderItem != "function" || !items.length ? null : BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.disCN.paginationlist,
 				children: [
-					items.length > this.props.amount && BDFDB.ReactUtils.createElement("nav", {
-						className: BDFDB.disCN.paginationlistpagination,
-						children: [
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-								text: BDFDB.LanguageUtils.LibraryStrings.first,
-								"aria-label": BDFDB.LanguageUtils.LibraryStrings.first,
-								onClick: _ => {if (this.props.offset > 0) this.jump(0);},
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.props.offset <= 0 && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-										className: BDFDB.disCN.searchresultspaginationicon,
-										name: BDFDB.LibraryComponents.SvgIcon.Names.LEFT_DOUBLE_CARET
-									})
-								})
-							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-								text: BDFDB.LanguageUtils.LanguageStrings.PAGINATION_PREVIOUS,
-								"aria-label": BDFDB.LanguageUtils.LanguageStrings.PAGINATION_PREVIOUS,
-								onClick: _ => {if (this.props.offset > 0) this.jump(this.props.offset - 1);},
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.props.offset <= 0 && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-										className: BDFDB.disCN.searchresultspaginationicon,
-										name: BDFDB.LibraryComponents.SvgIcon.Names.LEFT_CARET
-									})
-								})
-							}),
-							BDFDB.LanguageUtils.LanguageStringsFormat("PAGINATION_PAGE_OF", this.props.offset + 1, maxOffset + 1),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-								text: BDFDB.LanguageUtils.LanguageStrings.PAGINATION_NEXT,
-								"aria-label": BDFDB.LanguageUtils.LanguageStrings.PAGINATION_NEXT,
-								onClick: _ => {if (this.props.offset < maxOffset) this.jump(this.props.offset + 1);},
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.props.offset >= maxOffset && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-										className: BDFDB.disCN.searchresultspaginationicon,
-										name: BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_CARET
-									})
-								})
-							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-								text: BDFDB.LanguageUtils.LibraryStrings.last,
-								"aria-label": BDFDB.LanguageUtils.LibraryStrings.last,
-								onClick: _ => {if (this.props.offset < maxOffset) this.jump(maxOffset);},
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, this.props.offset >= maxOffset && BDFDB.disCN.searchresultspaginationdisabled, BDFDB.disCN.focusable),
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-										className: BDFDB.disCN.searchresultspaginationicon,
-										name: BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_DOUBLE_CARET
-									})
-								})
-							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
-								key: "pagination-list-jumpinput",
-								type: "number",
-								size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
-								value: this.props.offset + 1,
-								min: 1,
-								max: maxOffset + 1,
-								onKeyDown: (event, instance) => {if (event.which == 13) this.jump(isNaN(parseInt(instance.props.value)) ? -1 : instance.props.value - 1);}
-							}),
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-								text: BDFDB.LanguageUtils.LanguageStrings.JUMP,
-								"aria-label": BDFDB.LanguageUtils.LanguageStrings.JUMP,
-								onClick: (event, instance) => {
-									let jumpInput = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key:"pagination-list-jumpinput"});
-									if (jumpInput) this.jump(isNaN(parseInt(jumpInput.props.value)) ? -1 : jumpInput.props.value - 1);
-								},
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
-									className: BDFDB.disCN.searchresultspaginationbutton,
-									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-										className: BDFDB.disCN.searchresultspaginationicon,
-										style: {transform: "rotate(90deg"},
-										name: BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_CARET
-									})
-								})
-							})
-						]
-					}),
+					this.renderPagination(),
 					items.length > this.props.amount && this.props.alphabetKey && BDFDB.ReactUtils.createElement("nav", {
 						className: BDFDB.disCN.paginationlistalphabet,
 						children: Object.keys(alphabet).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
@@ -7943,10 +7946,12 @@
 							children: key
 						}))
 					}),
+					this.props.header,
 					BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.paginationlistcontent,
-						children: items.slice(this.props.offset * this.props.amount, (this.props.offset + 1) * this.props.amount).map(data => {return this.props.renderItem(data);})
-					})
+						children: items.slice(this.props.offset * this.props.amount, (this.props.offset + 1) * this.props.amount).map((data, i) => {return this.props.renderItem(data, i);}).flat(10).filter(n => n)
+					}),
+					this.props.copyToBottom && this.renderPagination()
 				].flat(10).filter(n => n)
 			});
 		}
@@ -8408,34 +8413,37 @@
 					})
 				]
 			}), "title", "data", "settings", "renderLabel", "cardClassName", "cardStyle", "onCheckboxChange", "maxWidth", "fullWidth", "pagination"));
+			let header = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+				className: BDFDB.disCN.settingstableheaders,
+				align: InternalComponents.LibraryComponents.Flex.Align.STRETCH,
+				style: this.props.vertical && this.props.biggestWidth ? {
+					marginTop: this.props.biggestWidth - 15 || 0
+				} : {},
+				children: [].concat(this.props.title || "", this.props.settings).map((setting, i) => BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.DOMUtils.formatClassName(i == 0 ? BDFDB.disCN.settingstableheadername : BDFDB.disCN.settingstableheaderoption, i != 0 && this.props.vertical && BDFDB.disCN.settingstableheadervertical, BDFDB.disCN.colorbase, BDFDB.disCN.size10, isHeaderClickable && BDFDB.disCN.cursorpointer),
+					onClick: _ => {if (typeof this.props.onHeaderClick == "function") this.props.onHeaderClick(setting, this);},
+					onContextMenu: _ => {if (typeof this.props.onHeaderContextMenu == "function") this.props.onHeaderContextMenu(setting, this);},
+					style: i != 0 && this.props.maxWidth ? {
+						maxWidth: this.props.maxWidth,
+						width: this.props.maxWidth,
+						flex: `0 0 ${this.props.maxWidth}px`
+					} : {},
+					children: BDFDB.ReactUtils.createElement("span", {
+						children: setting
+					})
+				}))
+			});
+			let usePagination = BDFDB.ObjectUtils.is(this.props.pagination);
 			return !this.props.data.length ? null : BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.settingstablelist, this.props.className),
 				children: [
-					BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-						className: BDFDB.disCN.settingstableheaders,
-						align: InternalComponents.LibraryComponents.Flex.Align.STRETCH,
-						style: this.props.vertical && this.props.biggestWidth ? {
-							marginTop: this.props.biggestWidth - 15 || 0
-						} : {},
-						children: [].concat(this.props.title || "", this.props.settings).map((setting, i) => BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.DOMUtils.formatClassName(i == 0 ? BDFDB.disCN.settingstableheadername : BDFDB.disCN.settingstableheaderoption, i != 0 && this.props.vertical && BDFDB.disCN.settingstableheadervertical, BDFDB.disCN.colorbase, BDFDB.disCN.size10, isHeaderClickable && BDFDB.disCN.cursorpointer),
-							onClick: _ => {if (typeof this.props.onHeaderClick == "function") this.props.onHeaderClick(setting, this);},
-							onContextMenu: _ => {if (typeof this.props.onHeaderContextMenu == "function") this.props.onHeaderContextMenu(setting, this);},
-							style: i != 0 && this.props.maxWidth ? {
-								maxWidth: this.props.maxWidth,
-								width: this.props.maxWidth,
-								flex: `0 0 ${this.props.maxWidth}px`
-							} : {},
-							children: BDFDB.ReactUtils.createElement("span", {
-								children: setting
-							})
-						}))
-					}),
-					!BDFDB.ObjectUtils.is(this.props.pagination) ? this.props.data.map(renderItem) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.PaginatedList, Object.assign({}, this.props.pagination, {
+					!usePagination && header,
+					!usePagination ? this.props.data.map(renderItem) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.PaginatedList, Object.assign({}, this.props.pagination, {
+						header: header,
 						items: this.props.data,
 						renderItem: renderItem
 					}))
-				]
+				].filter(n => n)
 			});
 		}
 	};
