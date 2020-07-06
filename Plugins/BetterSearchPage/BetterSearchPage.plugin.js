@@ -130,29 +130,29 @@ var BetterSearchPage = (_ => {
 					});
 					if (settings.addFirstLast) {
 						pagination.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: "First",
-							"aria-label": "First",
+							text: BDFDB.LanguageStrings.LibraryStrings.first,
+							"aria-label": BDFDB.LanguageStrings.LibraryStrings.first,
 							onClick: _ => {if (currentpage != 1) doJump(1);},
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, currentpage == 1 && BDFDB.disCN.searchresultspaginationdisabled),
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 									className: BDFDB.disCN.searchresultspaginationicon,
 									nativeClass: true,
-									iconSVG: `<svg width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><polygon fill="currentColor" fill-rule="nonzero" points="12.35 4.35 10 2 0 12 10 22 12.35 19.65 4.717 12"></polygon><polygon fill="currentColor" fill-rule="nonzero" points="24.35 4.35 22 2 12 12 22 22 24.35 19.65 16.717 12"></polygon><polygon points="0 0 24 0 24 24 0 24"></polygon></g></svg>`
+									name: BDFDB.LibraryComponents.SvgIcon.Names.LEFT_DOUBLE_CARET
 								})
 							})
 						}));
 						pagination.props.children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: currentpage >= maxpage ? "Max Page is 200" : "Last",
+							text: currentpage >= maxpage ? "Max Page is 200" : BDFDB.LanguageStrings.LibraryStrings.last,
 							tooltipConfig: {color: currentpage >= maxpage && BDFDB.LibraryComponents.TooltipContainer.Colors.RED},
-							"aria-label": "Last",
+							"aria-label": BDFDB.LanguageStrings.LibraryStrings.last,
 							onClick: _ => {if (currentpage != maxpage) doJump(maxpage);},
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
 								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.searchresultspaginationbutton, currentpage >= maxpage && BDFDB.disCN.searchresultspaginationdisabled),
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 									className: BDFDB.disCN.searchresultspaginationicon,
 									nativeClass: true,
-									iconSVG: `<svg width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><polygon fill="currentColor" fill-rule="nonzero" points="2.47 2 0.12 4.35 7.753 12 0.12 19.65 2.47 22 12.47 12"></polygon><polygon fill="currentColor" fill-rule="nonzero" points="14.47 2 12.12 4.35 19.753 12 12.12 19.65 14.47 22 24.47 12"></polygon><polygon points="0 0 24 0 24 24 0 24"></polygon></g></svg>`
+									name: BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_DOUBLE_CARET
 								})
 							})
 						}));

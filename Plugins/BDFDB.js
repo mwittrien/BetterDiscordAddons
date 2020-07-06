@@ -6195,130 +6195,172 @@
 	};
 	InternalBDFDB.LibraryStrings = {
 		"hr": {
+			file_navigator_text: "Pregledajte datoteku",
+			first: "Prvi",
+			last: "Zadnji",
 			toast_plugin_started: "{{var0}} je započeo.",
 			toast_plugin_stopped: "{{var0}} zaustavljen.",
-			toast_plugin_translated: "prijevod na {{var0}}.",
-			file_navigator_text: "Pregledajte datoteku"
+			toast_plugin_translated: "prijevod na {{var0}}."
 		},
 		"da": {
+			file_navigator_text: "Gennemse fil",
+			first: "Første",
+			last: "Sidste",
 			toast_plugin_started: "{{var0}} er startet.",
 			toast_plugin_stopped: "{{var0}} er stoppet.",
-			toast_plugin_translated: "oversat til {{var0}}.",
-			file_navigator_text: "Gennemse fil"
+			toast_plugin_translated: "oversat til {{var0}}."
 		},
 		"de": {
+			file_navigator_text: "Datei durchsuchen",
+			first: "Erste",
+			last: "Letzte",
 			toast_plugin_started: "{{var0}} wurde gestartet.",
 			toast_plugin_stopped: "{{var0}} wurde gestoppt.",
-			toast_plugin_translated: "auf {{var0}} übersetzt.",
-			file_navigator_text: "Datei durchsuchen"
+			toast_plugin_translated: "auf {{var0}} übersetzt."
 		},
 		"es": {
+			file_navigator_text: "Buscar archivo",
+			first: "Primero",
+			last: "Último",
 			toast_plugin_started: "{{var0}} se guilddiv iniciado.",
 			toast_plugin_stopped: "{{var0}} se guilddiv detenido.",
-			toast_plugin_translated: "traducido a {{var0}}.",
-			file_navigator_text: "Buscar archivo"
+			toast_plugin_translated: "traducido a {{var0}}."
 		},
 		"fr": {
+			file_navigator_text: "Parcourir le fichier",
+			first: "Première",
+			last: "Dernier",
 			toast_plugin_started: "{{var0}} a été démarré.",
 			toast_plugin_stopped: "{{var0}} a été arrêté.",
-			toast_plugin_translated: "traduit en {{var0}}.",
-			file_navigator_text: "Parcourir le fichier"
+			toast_plugin_translated: "traduit en {{var0}}."
 		},
 		"it": {
+			file_navigator_text: "Sfoglia file",
+			first: "Primo",
+			last: "Ultimo",
 			toast_plugin_started: "{{var0}} è stato avviato.",
 			toast_plugin_stopped: "{{var0}} è stato interrotto.",
-			toast_plugin_translated: "tradotto in {{var0}}.",
-			file_navigator_text: "Sfoglia file"
+			toast_plugin_translated: "tradotto in {{var0}}."
 		},
 		"nl": {
+			file_navigator_text: "Bestand zoeken",
+			first: "Eerste",
+			last: "Laatste",
 			toast_plugin_started: "{{var0}} is gestart.",
 			toast_plugin_stopped: "{{var0}} is gestopt.",
-			toast_plugin_translated: "vertaald naar {{var0}}.",
-			file_navigator_text: "Bestand zoeken"
+			toast_plugin_translated: "vertaald naar {{var0}}."
 		},
 		"no": {
+			file_navigator_text: "Bla gjennom fil",
+			first: "Første",
+			last: "Siste",
 			toast_plugin_started: "{{var0}} er startet.",
 			toast_plugin_stopped: "{{var0}} er stoppet.",
-			toast_plugin_translated: "oversatt til {{var0}}.",
-			file_navigator_text: "Bla gjennom fil"
+			toast_plugin_translated: "oversatt til {{var0}}."
 		},
 		"pl": {
+			file_navigator_text: "Przeglądać plik",
+			first: "Pierwszy",
+			last: "Ostatni",
 			toast_plugin_started: "{{var0}} został uruchomiony.",
 			toast_plugin_stopped: "{{var0}} został zatrzymany.",
-			toast_plugin_translated: "przetłumaczono na {{var0}}.",
-			file_navigator_text: "Przeglądać plik"
+			toast_plugin_translated: "przetłumaczono na {{var0}}."
 		},
 		"pt-BR": {
+			file_navigator_text: "Procurar arquivo",
+			first: "Primeiro",
+			last: "Último",
 			toast_plugin_started: "{{var0}} foi iniciado.",
 			toast_plugin_stopped: "{{var0}} foi interrompido.",
-			toast_plugin_translated: "traduzido para {{var0}}.",
-			file_navigator_text: "Procurar arquivo"
+			toast_plugin_translated: "traduzido para {{var0}}."
 		},
 		"fi": {
+			file_navigator_text: "Selaa tiedostoa",
+			first: "Ensimmäinen",
+			last: "Viimeinen",
 			toast_plugin_started: "{{var0}} on käynnistetty.",
 			toast_plugin_stopped: "{{var0}} on pysäytetty.",
-			toast_plugin_translated: "käännetty osoitteeseen {{var0}}.",
-			file_navigator_text: "Selaa tiedostoa"
+			toast_plugin_translated: "käännetty osoitteeseen {{var0}}."
 		},
 		"sv": {
+			file_navigator_text: "Bläddra i fil",
+			first: "Första",
+			last: "Sista",
 			toast_plugin_started: "{{var0}} har startats.",
 			toast_plugin_stopped: "{{var0}} har blivit stoppad.",
-			toast_plugin_translated: "översatt till {{var0}}.",
-			file_navigator_text: "Bläddra i fil"
+			toast_plugin_translated: "översatt till {{var0}}."
 		},
 		"tr": {
+			file_navigator_text: "Dosyaya gözat",
+			first: "Ilk",
+			last: "Son",
 			toast_plugin_started: "{{var0}} başlatıldı.",
 			toast_plugin_stopped: "{{var0}} durduruldu.",
-			toast_plugin_translated: "{{var0}} olarak çevrildi.",
-			file_navigator_text: "Dosyaya gözat"
+			toast_plugin_translated: "{{var0}} olarak çevrildi."
 		},
 		"cs": {
+			file_navigator_text: "Procházet soubor",
+			first: "První",
+			last: "Poslední",
 			toast_plugin_started: "{{var0}} byl spuštěn.",
 			toast_plugin_stopped: "{{var0}} byl zastaven.",
-			toast_plugin_translated: "přeložen do {{var0}}.",
-			file_navigator_text: "Procházet soubor"
+			toast_plugin_translated: "přeložen do {{var0}}."
 		},
 		"bg": {
+			file_navigator_text: "Прегледайте файла",
+			first: "Първият",
+			last: "Последният",
 			toast_plugin_started: "{{var0}} е стартиран.",
 			toast_plugin_stopped: "{{var0}} е спрян.",
-			toast_plugin_translated: "преведена на {{var0}}.",
-			file_navigator_text: "Прегледайте файла"
+			toast_plugin_translated: "преведена на {{var0}}."
 		},
 		"ru": {
+			file_navigator_text: "Просмотр файла",
+			first: "Первый",
+			last: "Последний",
 			toast_plugin_started: "{{var0}} запущен.",
 			toast_plugin_stopped: "{{var0}} остановлен.",
-			toast_plugin_translated: "переведен на {{var0}}.",
-			file_navigator_text: "Просмотр файла"
+			toast_plugin_translated: "переведен на {{var0}}."
 		},
 		"uk": {
+			file_navigator_text: "Перегляньте файл",
+			first: "Перший",
+			last: "Останній",
 			toast_plugin_started: "{{var0}} було запущено.",
 			toast_plugin_stopped: "{{var0}} було зупинено.",
-			toast_plugin_translated: "перекладено {{var0}}.",
-			file_navigator_text: "Перегляньте файл"
+			toast_plugin_translated: "перекладено {{var0}}."
 		},
 		"ja": {
+			file_navigator_text: "ファイルを参照",
+			first: "最初",
+			last: "最後",
 			toast_plugin_started: "{{var0}}が開始されました.",
 			toast_plugin_stopped: "{{var0}}が停止しました.",
-			toast_plugin_translated: "は{{var0}}に翻訳されました.",
-			file_navigator_text: "ファイルを参照"
+			toast_plugin_translated: "は{{var0}}に翻訳されました."
 		},
 		"zh-TW": {
+			file_navigator_text: "瀏覽文件",
+			first: "首先",
+			last: "最後",
 			toast_plugin_started: "{{var0}}已經啟動.",
 			toast_plugin_stopped: "{{var0}}已停止.",
-			toast_plugin_translated: "翻譯為{{var0}}.",
-			file_navigator_text: "瀏覽文件"
+			toast_plugin_translated: "翻譯為{{var0}}."
 		},
 		"ko": {
+			file_navigator_text: "파일 찾아보기",
+			first: "첫번째",
+			last: "마지막",
 			toast_plugin_started: "{{var0}} 시작되었습니다.",
 			toast_plugin_stopped: "{{var0}} 중지되었습니다.",
-			toast_plugin_translated: "{{var0}} 로 번역되었습니다.",
-			file_navigator_text: "파일 찾아보기"
+			toast_plugin_translated: "{{var0}} 로 번역되었습니다."
 		},
 		"default": {
+			file_navigator_text: "Browse File",
+			first: "First",
+			last: "Last",
 			toast_plugin_started: "{{var0}} has been started.",
 			toast_plugin_stopped: "{{var0}} has been stopped.",
-			toast_plugin_translated: "translated to {{var0}}.",
-			file_navigator_text: "Browse File"
+			toast_plugin_translated: "translated to {{var0}}."
 		}
 	};
 	BDFDB.LanguageUtils.getLanguage = function () {
@@ -6383,8 +6425,8 @@
 	};
 	BDFDB.LanguageUtils.LibraryStrings = new Proxy(InternalBDFDB.LibraryStrings.default, {
 		get: function (list, item) {
-			let languageid = BDFDB.LanguageUtils.getLanguage().id;
-			if (InternalBDFDB.LibraryStrings[languageid] && InternalBDFDB.LibraryStrings[languageid][item]) return InternalBDFDB.LibraryStrings[languageid][item];
+			let languageId = BDFDB.LanguageUtils.getLanguage().id;
+			if (InternalBDFDB.LibraryStrings[languageId] && InternalBDFDB.LibraryStrings[languageId][item]) return InternalBDFDB.LibraryStrings[languageId][item];
 			else if (InternalBDFDB.LibraryStrings.default[item]) return InternalBDFDB.LibraryStrings.default[item];
 			else BDFDB.LogUtils.warn(item + " not found in BDFDB.LanguageUtils.LibraryStrings");
 			return "";
@@ -6397,8 +6439,8 @@
 	});
 	BDFDB.LanguageUtils.LibraryStringsFormat = function (item, ...values) {
 		if (item && values.length) {
-			let languageid = BDFDB.LanguageUtils.getLanguage().id, string = null;
-			if (InternalBDFDB.LibraryStrings[languageid] && InternalBDFDB.LibraryStrings[languageid][item]) string = InternalBDFDB.LibraryStrings[languageid][item];
+			let languageId = BDFDB.LanguageUtils.getLanguage().id, string = null;
+			if (InternalBDFDB.LibraryStrings[languageId] && InternalBDFDB.LibraryStrings[languageId][item]) string = InternalBDFDB.LibraryStrings[languageId][item];
 			else if (InternalBDFDB.LibraryStrings.default[item]) string = InternalBDFDB.LibraryStrings.default[item];
 			if (string) {
 				for (let i = 0; i < values.length; i++) if (typeof values[i] == "string") string = string.replace(new RegExp(`{{var${i}}}`, "g"), values[i]);
@@ -7771,6 +7813,24 @@
 	};
 	
 	InternalComponents.LibraryComponents.NavItem = BDFDB.ModuleUtils.findByName("NavItem");
+	
+	InternalComponents.LibraryComponents.PaginatedList = InternalBDFDB.loadPatchedComp("PaginatedList") || reactInitialized && class BDFDB_PaginatedList extends LibraryModules.React.Component {
+		render() {
+			return typeof this.props.renderItem != "function" || !BDFDB.ArrayUtils.is(this.props.items) ? null : BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.popoutwrapper, BDFDB.disCN.popout, positionClass, this.props.invert && pos && pos != "bottom" && BDFDB.disCN.popoutinvert, arrowClass, !this.props.shadow && BDFDB.disCN.popoutnoshadow),
+				id: this.props.id,
+				onClick: e => {e.stopPropagation();},
+				style: Object.assign({}, this.props.style, {
+					position: this.props.isChild ? "relative" : "absolute"
+				}),
+				children: BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.DOMUtils.formatClassName(this.props.className, this.props.themed && BDFDB.disCN.popoutthemedpopout),
+					style: BDFDB.ObjectUtils.extract(this.props, "padding", "height", "maxHeight", "minHeight", "width", "maxWidth", "minWidth"),
+					children: this.props.children
+				})
+			});
+		}
+	};
 	
 	InternalComponents.LibraryComponents.Popout = InternalBDFDB.loadPatchedComp("Popout") || reactInitialized && class BDFDB_Popout extends LibraryModules.React.Component {
 		componentWillUnmount() {
