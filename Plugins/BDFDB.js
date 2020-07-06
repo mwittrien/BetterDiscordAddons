@@ -4339,6 +4339,7 @@
 	DiscordClassModules.Flex = BDFDB.ModuleUtils.findByProperties("alignBaseline", "alignCenter");
 	DiscordClassModules.FlexChild = BDFDB.ModuleUtils.findByProperties("flexChild", "flex");
 	DiscordClassModules.FlowerStar = BDFDB.ModuleUtils.findByProperties("flowerStarContainer", "flowerStar");
+	DiscordClassModules.Focusable = BDFDB.ModuleUtils.findByProperties("focusable");
 	DiscordClassModules.FormText = BDFDB.ModuleUtils.findByProperties("description", "modeDefault");
 	DiscordClassModules.Game = BDFDB.ModuleUtils.findByProperties("game", "gameName");
 	DiscordClassModules.GameIcon = BDFDB.ModuleUtils.findByProperties("gameIcon", "small", "xsmall");
@@ -5016,6 +5017,7 @@
 		flowerstar: ["FlowerStar", "flowerStar"],
 		flowerstarchild: ["FlowerStar", "childContainer"],
 		flowerstarcontainer: ["FlowerStar", "flowerStarContainer"],
+		focusable: ["Focusable", "focusable"],
 		formtext: ["FormText", "formText"],
 		game: ["Game", "game"],
 		gameicon: ["GameIcon", "gameIcon"],
