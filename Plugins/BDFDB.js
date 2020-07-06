@@ -1264,6 +1264,7 @@
 		QuickSwitchGuildResult: "quickswitchresult",
 		QuickSwitchResult: "quickswitchresult",
 		Reaction: "messagereactionme",
+		Reactor: "messagereactionsmodalreactor",
 		RTCConnection: "voicedetails",
 		SearchResults: "searchresultswrap",
 		TypingUsers: "typing",
@@ -4406,6 +4407,7 @@
 	DiscordClassModules.MessageMarkup = BDFDB.ModuleUtils.findByProperties("markup");
 	DiscordClassModules.MessageOperations = BDFDB.ModuleUtils.find(m => typeof m.operations == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.MessageReactions = BDFDB.ModuleUtils.findByProperties("reactions", "reactionMe");
+	DiscordClassModules.MessageReactionsModal = BDFDB.ModuleUtils.findByProperties("reactor", "reactionSelected");
 	DiscordClassModules.MessageSystem = BDFDB.ModuleUtils.findByProperties("container", "actionAnchor");
 	DiscordClassModules.MessageToolbar = BDFDB.ModuleUtils.findByProperties("container", "icon", "isHeader");
 	DiscordClassModules.MessageToolbarItems = BDFDB.ModuleUtils.findByProperties("wrapper", "button", "separator");
@@ -5404,6 +5406,11 @@
 		messagereaction: ["MessageReactions", "reaction"],
 		messagereactionme: ["MessageReactions", "reactionMe"],
 		messagereactions: ["MessageReactions", "reactions"],
+		messagereactionsmodalemoji: ["MessageReactionsModal", "emoji"],
+		messagereactionsmodalname: ["MessageReactionsModal", "name"],
+		messagereactionsmodalnickname: ["MessageReactionsModal", "nickname"],
+		messagereactionsmodalreactor: ["MessageReactionsModal", "reactor"],
+		messagereactionsmodalusername: ["MessageReactionsModal", "username"],
 		messageselected: ["Message", "selected"],
 		messages: ["MessagesWrap", "messages"],
 		messagesdivider: ["MessagesWrap", "divider"],
