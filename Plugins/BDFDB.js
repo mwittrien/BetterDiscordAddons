@@ -6778,7 +6778,7 @@
 		handleMouseLeave(e) {if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);}
 		render() {
 			return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.Clickable, Object.assign({}, this.props, {
-				className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.cursorpointer),
+				className: BDFDB.DOMUtils.formatClassName(this.props.className, (this.props.className || "").toLowerCase().indexOf("disabled") == -1 && BDFDB.disCN.cursorpointer),
 				onClick: this.handleClick.bind(this),
 				onContextMenu: this.handleContextMenu.bind(this),
 				onMouseUp: this.handleMouseDown.bind(this),
