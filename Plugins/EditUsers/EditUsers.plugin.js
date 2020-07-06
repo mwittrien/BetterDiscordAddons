@@ -6,13 +6,17 @@ var EditUsers = (_ => {
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.8.8";}
+		getVersion () {return "3.8.9";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Allows you to change the icon, name, tag and color of users.";}
 
 		constructor () {
+			this.changelog = {
+				"improved":[["Reactions & ContextMenu","Plugin now changes the name in those areas too"]]
+			};
+			
 			this.patchedModules = {
 				before: {
 					HeaderBarContainer: "render",
@@ -27,6 +31,7 @@ var EditUsers = (_ => {
 					Account: "render",
 					Message: "default",
 					MessageContent: "type",
+					Reactor: "render",
 					MemberListItem: "render",
 					AuditLog: "render",
 					GuildSettingsEmoji: "render",
@@ -47,6 +52,7 @@ var EditUsers = (_ => {
 				after: {
 					ChannelCallHeader: "default",
 					AutocompleteUserResult: "render",
+					DiscordTag: "default",
 					NameTag: "default",
 					UserPopout: "render",
 					NowPlayingHeader: "Header",
@@ -55,8 +61,10 @@ var EditUsers = (_ => {
 					PrivateChannelEmptyMessage: "default",
 					MessageHeader: "default",
 					MessageContent: "type",
-					MemberListItem: "render",
+					Reaction: "render",
+					Reactor: "render",
 					Mention: "default",
+					MemberListItem: "render",
 					UserHook: "render",
 					InvitationCard: "render",
 					InviteModalUserRow: "default",
@@ -96,8 +104,10 @@ var EditUsers = (_ => {
 			
 			this.defaults = {
 				settings: {
+					changeInContextMenu:	{value:true, 	inner:true,		description:"User ContextMenu"},
 					changeInChatTextarea:	{value:true, 	inner:true,		description:"Chat Textarea"},
 					changeInChatWindow:		{value:true, 	inner:true,		description:"Messages"},
+					changeInReactions:		{value:true, 	inner:true,		description:"Reactions"},
 					changeInMentions:		{value:true, 	inner:true,		description:"Mentions"},
 					changeInVoiceChat:		{value:true, 	inner:true,		description:"Voice Channels"},
 					changeInMemberList:		{value:true, 	inner:true,		description:"Member List"},
@@ -235,6 +245,15 @@ var EditUsers = (_ => {
 		
 		onUserContextMenu (e) {
 			if (e.instance.props.user) {
+				let userName = this.getUserData(e.instance.props.user.id).username;
+				if (userName != e.instance.props.user.username && settings.changeInContextMenu) {
+					let [kickChilden, kickIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "kick"});
+					if (kickIndex > -1) kickChilden[kickIndex].props.label = BDFDB.LanguageUtils.LanguageStringsFormat("KICK_USER", userName);
+					let [banChilden, banIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "ban"});
+					if (banIndex > -1) banChilden[banIndex].props.label = BDFDB.LanguageUtils.LanguageStringsFormat("BAN_USER", userName);
+					let [muteChilden, muteIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "mute-channel"});
+					if (muteIndex > -1) muteChilden[muteIndex].props.label = Array.from(BDFDB.DOMUtils.create(BDFDB.LanguageUtils.LanguageStringsFormat("MUTE_CHANNEL", `@${userName}`)).childNodes).map(BDFDB.ReactUtils.elementToReact);
+				}
 				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: [
@@ -337,8 +356,12 @@ var EditUsers = (_ => {
 			}
 		}
 		
+		processDiscordTag (e) {
+			this.processNameTag(e);
+		}
+		
 		processNameTag (e) {
-			if (e.instance.props.user && e.instance.props.className) {
+			if (e.instance.props.user && (e.instance.props.className || e.instance.props.usernameClass)) {
 				let change = false, guildId = null;
 				let changeBackground = false;
 				let tagClass = "";
@@ -361,6 +384,11 @@ var EditUsers = (_ => {
 					case BDFDB.disCN.userinfodiscordtag:
 						change = settings.changeInFriendList;
 						tagClass = BDFDB.disCN.bottagnametag;
+						break;
+				}
+				switch (e.instance.props.usernameClass) {
+					case BDFDB.disCN.messagereactionsmodalusername:
+						change = settings.changeInReactions && !BDFDB.LibraryModules.MemberStore.getNick(BDFDB.LibraryModules.LastGuildStore.getGuildId(), e.instance.props.user.id);
 						break;
 				}
 				if (change) {
@@ -570,6 +598,45 @@ var EditUsers = (_ => {
 			}
 		}
 		
+		processReaction (e) {
+			if (!settings.changeInReactions) return;
+			if (e.instance.props.reactions) {
+				let channel = BDFDB.LibraryModules.ChannelStore.getChannel(e.instance.props.message.channel_id);
+				let guildId = null == channel || channel.isPrivate() ? null : channel.getGuildId();
+				let users = e.instance.props.reactions.filter(user => !BDFDB.LibraryModules.FriendUtils.isBlocked(user.id)).slice(0, 3).map(user => changedUsers[user.id] && changedUsers[user.id].name || guildId && BDFDB.LibraryModules.MemberStore.getNick(guildId, user.id) || user.username).filter(user => user);
+				if (users.length) {
+					let reaction = e.instance.props.message.getReaction(e.instance.props.emoji);
+					let others = Math.max(0, (reaction && reaction.count || 0) - users.length);
+					let emojiName = BDFDB.LibraryModules.ReactionEmojiUtils.getReactionEmojiName(e.instance.props.emoji);
+					e.returnvalue.props.text = 
+						users.length == 1 ? others > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_1_N", users[0], others, emojiName) :
+						BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_1", users[0], emojiName) :
+						users.length == 2 ? others > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_2_N", users[0], users[1], others, emojiName) :
+						BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_2", users[0], users[1], emojiName) :
+						users.length == 3 ? others > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_3_N", users[0], users[1], users[2], others, emojiName) :
+						BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_3", users[0], users[1], users[2], emojiName) :
+						BDFDB.LanguageUtils.LanguageStringsFormat("REACTION_TOOLTIP_N", others, emojiName);
+				}
+			}
+			else BDFDB.LibraryModules.ReactionUtils.getReactions(e.instance.props.message.channel_id, e.instance.props.message.id, e.instance.props.emoji).then(reactions => {
+				e.instance.props.reactions = reactions;
+				BDFDB.ReactUtils.forceUpdate(e.instance);
+			});
+		}
+		
+		processReactor (e) {
+			if (e.instance.props.user && settings.changeInReactions) {
+				if (!e.returnvalue) e.instance.props.user = this.getUserData(e.instance.props.user.id, true, !!BDFDB.LibraryModules.MemberStore.getNick(e.instance.props.guildId, e.instance.props.user.id));
+				else {
+					let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.messagereactionsmodalnickname]]});
+					if (userName) {
+						if (changedUsers[e.instance.props.user.id] && changedUsers[e.instance.props.user.id].name) userName.props.children = changedUsers[e.instance.props.user.id].name;
+						this.changeUserColor(userName, e.instance.props.user.id);
+					}
+				}
+			}
+		}
+		
 		processMention (e) {
 			if (e.instance.props.userId && settings.changeInMentions) {
 				let data = changedUsers[e.instance.props.userId];
@@ -689,8 +756,8 @@ var EditUsers = (_ => {
 			if (BDFDB.ObjectUtils.is(e.instance.props.typingUsers) && Object.keys(e.instance.props.typingUsers).length && settings.changeInTyping) {
 				let users = Object.keys(e.instance.props.typingUsers).filter(id => id != BDFDB.UserUtils.me.id).filter(id => !BDFDB.LibraryModules.FriendUtils.isBlocked(id)).map(id => BDFDB.LibraryModules.UserStore.getUser(id)).filter(user => user);
 				if (users.length) {
-					let typingtext = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.typingtext]]});
-					if (typingtext && BDFDB.ArrayUtils.is(typingtext.props.children)) for (let child of typingtext.props.children) if (child.type == "strong") {
+					let typingText = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.typingtext]]});
+					if (typingText && BDFDB.ArrayUtils.is(typingText.props.children)) for (let child of typingText.props.children) if (child.type == "strong") {
 						let userId = (users.shift() || {}).id;
 						if (userId) {
 							let data = changedUsers[userId];
