@@ -8403,6 +8403,9 @@
 		LEFT_CARET: {
 			icon: `<svg name="LeftCaret" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><polygon fill="%%color" fill-rule="nonzero" points="18.35 4.35 16 2 6 12 16 22 18.35 19.65 10.717 12"></polygon><polygon points="0 0 24 0 24 24 0 24"></polygon></g></svg>`
 		},
+		LEFT_DOUBLE_CARET: {
+			icon: `<svg name="LeftDoubleCaret" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><polygon fill="%%color" fill-rule="nonzero" points="12.35 4.35 10 2 0 12 10 22 12.35 19.65 4.717 12"></polygon><polygon fill="%%color" fill-rule="nonzero" points="24.35 4.35 22 2 12 12 22 22 24.35 19.65 16.717 12"></polygon><polygon points="0 0 24 0 24 24 0 24"></polygon></g></svg>`
+		},
 		LOCK_CLOSED: {
 			icon: `<svg name="LockClosed" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><path fill="%%color" d="M17 11V7C17 4.243 14.756 2 12 2C9.242 2 7 4.243 7 7V11C5.897 11 5 11.896 5 13V20C5 21.103 5.897 22 7 22H17C18.103 22 19 21.103 19 20V13C19 11.896 18.103 11 17 11ZM12 18C11.172 18 10.5 17.328 10.5 16.5C10.5 15.672 11.172 15 12 15C12.828 15 13.5 15.672 13.5 16.5C13.5 17.328 12.828 18 12 18ZM15 11H9V7C9 5.346 10.346 4 12 4C13.654 4 15 5.346 15 7V11Z"></path></svg>`
 		},
@@ -8434,6 +8437,9 @@
 		},
 		RIGHT_CARET: {
 			icon: `<svg name="RightCaret" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><polygon fill="%%color" fill-rule="nonzero" points="8.47 2 6.12 4.35 13.753 12 6.12 19.65 8.47 22 18.47 12"></polygon><polygon points="0 0 24 0 24 24 0 24"></polygon></g></svg>`
+		},
+		RIGHT_DOUBLE_CARET: {
+			icon: `<svg name="RightDoubleCaret" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><polygon fill="%%color" fill-rule="nonzero" points="2.47 2 0.12 4.35 7.753 12 0.12 19.65 2.47 22 12.47 12"></polygon><polygon fill="%%color" fill-rule="nonzero" points="14.47 2 12.12 4.35 19.753 12 12.12 19.65 14.47 22 24.47 12"></polygon><polygon points="0 0 24 0 24 24 0 24"></polygon></g></svg>`
 		},
 		SEARCH: {
 			defaultProps: {
