@@ -2,6 +2,7 @@
 
 var NotificationSounds = (_ => {
 	var audios, choices, firedEvents, repatchIncoming, callAudio;
+	const removeAllKey = "REMOVE_ALL_BDFDB_DEVILBRO_DO_NOT_COPY";
 			
 	const settingsAudio = new Audio();
 	
@@ -68,7 +69,7 @@ var NotificationSounds = (_ => {
 	return class NotificationSounds {
 		getName () {return "NotificationSounds";}
 
-		getVersion () {return "3.4.5";}
+		getVersion () {return "3.4.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -76,7 +77,7 @@ var NotificationSounds = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Mention Sound","No longer plays when the server/channel has message notifications completely disabled"]]
+				"improved":[["Song Deletion","You can now delete single songs, whole categories or all songs"]]
 			};
 
 			this.patchedModules = {
@@ -94,8 +95,121 @@ var NotificationSounds = (_ => {
 
 		getSettingsPanel (collapseStates = {}) {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-			let settingsPanel = {node: null}, settingsItems = [];
 			
+			let createSoundCard = type => {
+				return [
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+						className: BDFDB.disCN.marginbottom8,
+						align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+						direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
+								label: types[type].name
+							}),
+							types[type].focus != null ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+								type: "Switch",
+								mini: true,
+								grow: 0,
+								label: "Mute when Channel focused:",
+								value: choices[type].focus,
+								onChange: value => {
+									choices[type].focus = value;
+									this.saveChoice(type, false);
+								}
+							}) : null,
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+								type: "Switch",
+								mini: true,
+								grow: 0,
+								label: "Mute in DnD:",
+								value: choices[type].mute,
+								onChange: value => {
+									choices[type].mute = value;
+									this.saveChoice(type, false);
+								}
+							})
+						].filter(n => n)
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+						className: BDFDB.disCN.marginbottom8,
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+								grow: 0,
+								shrink: 0,
+								basis: "31%",
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+									title: "Category",
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
+										value: choices[type].category,
+										options: Object.keys(audios).map(name => ({value:name, label:name})),
+										searchable: true,
+										onChange: category => {
+											choices[type].category = category.value;
+											choices[type].song = Object.keys(audios[category.value] || {})[0];
+											choices[type].src = audios[choices[type].category][choices[type].song] || types[type].src;
+											this.saveChoice(type, true);
+											BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
+										}
+									})
+								})
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+								grow: 0,
+								shrink: 0,
+								basis: "31%",
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+									title: "Song",
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
+										value: choices[type].song,
+										options: Object.keys(audios[choices[type].category] || {}).map(name => ({value:name, label:name})),
+										searchable: true,
+										onChange: song => {
+											choices[type].song = song.value;
+											choices[type].src = audios[choices[type].category][choices[type].song] || types[type].src;
+											this.saveChoice(type, true);
+											BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
+										}
+									})
+								})
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+								grow: 0,
+								shrink: 0,
+								basis: "31%",
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
+									title: "Volume",
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Slider, {
+										defaultValue: choices[type].volume,
+										digits: 1,
+										onValueRender: value => {
+											return value + "%";
+										},
+										onValueChange: value => {
+											choices[type].volume = value;
+											this.saveChoice(type, true);
+										}
+									})
+								})
+							})
+						]
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+						className: BDFDB.disCN.marginbottom8
+					})
+				];
+			};
+
+			let successSavedAudio = data => {
+				BDFDB.NotificationUtils.toast(`Song ${data.song} was added to category ${data.category}.`, {type:"success"});
+				if (!audios[data.category]) audios[data.category] = {};
+				audios[data.category][data.song] = data.source;
+				BDFDB.DataUtils.save(audios, this, "audios");
+				BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
+				
+			};
+			
+			let settingsPanel, settingsItems = [];
+		
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Add new Song",
 				collapseStates: collapseStates,
@@ -145,20 +259,20 @@ var NotificationSounds = (_ => {
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 								style: {marginBottom: 1},
 								onClick: _ => {
-									for (let input of settingsPanel.node.querySelectorAll(".input-newsong " + BDFDB.dotCN.input)) if (!input.value || input.value.length == 0 || input.value.trim().length == 0) return BDFDB.NotificationUtils.toast("Fill out all fields to add a new song.", {type:"danger"});
-									let category = settingsPanel.node.querySelector(".input-category " + BDFDB.dotCN.input).value.trim();
-									let song = settingsPanel.node.querySelector(".input-song " + BDFDB.dotCN.input).value.trim();
-									let source = settingsPanel.node.querySelector(".input-source " + BDFDB.dotCN.input).value.trim();
+									for (let input of settingsPanel.querySelectorAll(".input-newsong " + BDFDB.dotCN.input)) if (!input.value || input.value.length == 0 || input.value.trim().length == 0) return BDFDB.NotificationUtils.toast("Fill out all fields to add a new song.", {type:"danger"});
+									let category = settingsPanel.querySelector(".input-category " + BDFDB.dotCN.input).value.trim();
+									let song = settingsPanel.querySelector(".input-song " + BDFDB.dotCN.input).value.trim();
+									let source = settingsPanel.querySelector(".input-source " + BDFDB.dotCN.input).value.trim();
 									if (source.indexOf("http") == 0) BDFDB.LibraryRequires.request(source, (error, response, result) => {
 										if (response) {
 											let type = response.headers["content-type"];
-											if (type && (type.indexOf("octet-stream") > -1 || type.indexOf("audio") > -1 || type.indexOf("video") > -1)) return this.successSavedAudio(settingsPanel.node, collapseStates, {category, song, source});
+											if (type && (type.indexOf("octet-stream") > -1 || type.indexOf("audio") > -1 || type.indexOf("video") > -1)) return successSavedAudio({category, song, source});
 										}
 										BDFDB.NotificationUtils.toast("Use a valid direct link to a video or audio source. They usually end on something like .mp3, .mp4 or .wav.", {type:"danger"});
 									});
 									else BDFDB.LibraryRequires.fs.readFile(source, (error, response) => {
 										if (error) BDFDB.NotificationUtils.toast("Could not fetch file. Please make sure the file exists.", {type:"danger"});
-										else return this.successSavedAudio(settingsPanel.node, collapseStates, {category, song, source:`data:audio/mpeg;base64,${response.toString("base64")}`});
+										else return successSavedAudio({category, song, source:`data:audio/mpeg;base64,${response.toString("base64")}`});
 									});
 								},
 								children: BDFDB.LanguageUtils.LanguageStrings.SAVE
@@ -171,92 +285,43 @@ var NotificationSounds = (_ => {
 				title: "Implemented Sounds",
 				collapseStates: collapseStates,
 				dividertop: true,
-				children: Object.keys(BDFDB.ObjectUtils.filter(types, typedata => typedata.implemented)).map(type => this.createSoundCard(type, settingsPanel, collapseStates)).flat(10).filter(n => n)
+				children: Object.keys(BDFDB.ObjectUtils.filter(types, typedata => typedata.implemented)).map(type => createSoundCard(type)).flat(10).filter(n => n)
 			}));
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Unimplemented Sounds",
 				collapseStates: collapseStates,
 				dividertop: true,
-				children: Object.keys(BDFDB.ObjectUtils.filter(types, typedata => !typedata.implemented)).map(type => this.createSoundCard(type, settingsPanel, collapseStates)).flat(10).filter(n => n)
+				children: Object.keys(BDFDB.ObjectUtils.filter(types, typedata => !typedata.implemented)).map(type => createSoundCard(type)).flat(10).filter(n => n)
 			}));
+			
+			let removeableAudios = [{value:removeAllKey, label:BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL}].concat(Object.keys(audios).filter(name => !defaultAudios[name]).map(name => ({value:name, label:name})));
+			let removeableSongs = {};
+			for (let audio of removeableAudios) removeableSongs[audio.value] = [{value:removeAllKey, label:BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL}].concat(Object.keys(audios[audio.value] || {}).map(name => ({value:name, label:name})));
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Remove Songs",
 				collapseStates: collapseStates,
 				dividertop: true,
-				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-					type: "Button",
-					className: BDFDB.disCN.marginbottom8,
-					color: BDFDB.LibraryComponents.Button.Colors.RED,
-					label: "Delete all added songs",
-					onClick: _ => {
-						BDFDB.ModalUtils.confirm(this, "Are you sure you want to delete all added songs?", _ => {
-							BDFDB.DataUtils.remove(this, "choices");
-							BDFDB.DataUtils.remove(this, "audios");
-							this.loadAudios();
-							this.loadChoices();
-							BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel.node, collapseStates);
-						});
-					},
-					children: BDFDB.LanguageUtils.LanguageStrings.DELETE
-				})
-			}));
-			
-			return settingsPanel.node = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
-		}
-		
-		createSoundCard (type, settingsPanel, collapseStates) {
-			return [
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-					className: BDFDB.disCN.marginbottom8,
-					align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-					direction: BDFDB.LibraryComponents.Flex.Direction.HORIZONTAL,
-					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsLabel, {
-							label: types[type].name
-						}),
-						types[type].focus != null ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-							type: "Switch",
-							mini: true,
-							grow: 0,
-							label: "Mute when Channel focused:",
-							value: choices[type].focus,
-							onChange: value => {
-								choices[type].focus = value;
-								this.saveChoice(type, false);
-							}
-						}) : null,
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-							type: "Switch",
-							mini: true,
-							grow: 0,
-							label: "Mute in DnD:",
-							value: choices[type].mute,
-							onChange: value => {
-								choices[type].mute = value;
-								this.saveChoice(type, false);
-							}
-						})
-					].filter(n => n)
-				}),
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-					className: BDFDB.disCN.marginbottom8,
+				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+					className: BDFDB.disCN.margintop4,
+					align: BDFDB.LibraryComponents.Flex.Align.END,
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 							grow: 0,
 							shrink: 0,
-							basis: "31%",
+							basis: "35%",
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 								title: "Category",
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
-									value: choices[type].category,
-									options: Object.keys(audios).map(name => {return {value:name, label:name}}),
+									key: "REMOVE_CATEGORY",
+									value: removeAllKey,
+									options: removeableAudios,
 									searchable: true,
-									onChange: category => {
-										choices[type].category = category.value;
-										choices[type].song = Object.keys(audios[category.value] || {})[0];
-										choices[type].src = audios[choices[type].category][choices[type].song] || types[type].src;
-										this.saveChoice(type, true);
-										BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel.node, collapseStates);
+									onChange: (category, instance) => {
+										let songSelectIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:["BDFDB_Modal", "BDFDB_SettingsPanel"], up:true}), {key:"REMOVE_SONG"});
+										if (songSelectIns && removeableSongs[category.value]) {
+											songSelectIns.props.options = removeableSongs[category.value];
+											BDFDB.ReactUtils.forceUpdate(songSelectIns);
+										}
 									}
 								})
 							})
@@ -264,47 +329,59 @@ var NotificationSounds = (_ => {
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 							grow: 0,
 							shrink: 0,
-							basis: "31%",
+							basis: "35%",
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 								title: "Song",
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
-									value: choices[type].song,
-									options: Object.keys(audios[choices[type].category] || {}).map(name => {return {value:name, label:name}}),
-									searchable: true,
-									onChange: song => {
-										choices[type].song = song.value;
-										choices[type].src = audios[choices[type].category][choices[type].song] || types[type].src;
-										this.saveChoice(type, true);
-										BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel.node, collapseStates);
-									}
+									key: "REMOVE_SONG",
+									value: removeAllKey,
+									options: removeableSongs[removeAllKey],
+									searchable: true
 								})
 							})
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 							grow: 0,
 							shrink: 0,
-							basis: "31%",
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
-								title: "Volume",
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Slider, {
-									defaultValue: choices[type].volume,
-									digits: 1,
-									onValueRender: value => {
-										return value + "%";
-									},
-									onValueChange: value => {
-										choices[type].volume = value;
-										this.saveChoice(type, true);
+							basis: "25%",
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+								style: {marginBottom: 1},
+								color: BDFDB.LibraryComponents.Button.Colors.RED,
+								onClick: (event, instance) => {
+									let wrapperIns = BDFDB.ReactUtils.findOwner(instance, {name:["BDFDB_Modal", "BDFDB_SettingsPanel"], up:true});
+									let categorySelectIns = BDFDB.ReactUtils.findOwner(wrapperIns, {key:"REMOVE_CATEGORY"});
+									let songSelectIns = BDFDB.ReactUtils.findOwner(wrapperIns, {key:"REMOVE_SONG"});
+									if (categorySelectIns && songSelectIns) {
+										let songAmount = 0;
+										let catAll = categorySelectIns.props.value == removeAllKey;
+										let songAll = songSelectIns.props.value == removeAllKey;
+										if (catAll) songAmount = BDFDB.ArrayUtils.sum(Object.keys(audios).filter(name => !defaultAudios[name]).map(category => Object.keys(audios[category] || {}).length));
+										else if (songAll) songAmount = Object.keys(audios[categorySelectIns.props.value] || {}).length;
+										else if (audios[categorySelectIns.props.value][songSelectIns.props.value]) songAmount = 1;
+										
+										if (songAmount) BDFDB.ModalUtils.confirm(this, `Are you sure you want to delete ${songAmount} added song${songAmount == 1 ? "" : "s"}?`, _ => {
+											if (catAll) BDFDB.DataUtils.remove(this, "audios");
+											else if (songAll) BDFDB.DataUtils.remove(this, "audios", categorySelectIns.props.value);
+											else {
+												delete audios[categorySelectIns.props.value][songSelectIns.props.value];
+												if (BDFDB.ObjectUtils.isEmpty(audios[categorySelectIns.props.value])) delete audios[categorySelectIns.props.value];
+												BDFDB.DataUtils.save(audios, this, "audios");
+											}
+											this.loadAudios();
+											this.loadChoices();
+											BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
+										});
+										else BDFDB.NotificationUtils.toast("No songs to delete.", {type:"danger"});
 									}
-								})
+								},
+								children: BDFDB.LanguageUtils.LanguageStrings.DELETE
 							})
 						})
 					]
-				}),
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-					className: BDFDB.disCN.marginbottom8
 				})
-			];
+			}));
+			
+			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
 		}
 
 		// Legacy
@@ -464,15 +541,6 @@ var NotificationSounds = (_ => {
 				}
 				else children[index] = BDFDB.ReactUtils.createElement(children[index].type, {});
 			}
-		}
-
-		successSavedAudio (settingsPanel, collapseStates, data) {
-			BDFDB.NotificationUtils.toast(`Song ${data.song} was added to category ${data.category}.`, {type:"success"});
-			if (!audios[data.category]) audios[data.category] = {};
-			audios[data.category][data.song] = data.source;
-			BDFDB.DataUtils.save(audios, this, "audios");
-			BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
-			
 		}
 		
 		forceUpdateAll () {
