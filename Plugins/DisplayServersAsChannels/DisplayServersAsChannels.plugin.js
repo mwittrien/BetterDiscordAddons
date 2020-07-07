@@ -6,7 +6,7 @@ var DisplayServersAsChannels = (_ => {
 	return class DisplayServersAsChannels {
 		getName () {return "DisplayServersAsChannels";}
 
-		getVersion () {return "1.3.6";}
+		getVersion () {return "1.3.7";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,7 @@ var DisplayServersAsChannels = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Server Icon","Added server icon to server entries, can be disabled"]]
+				"improved":[["Server Icon","Added server icon to server entries, can be disabled"],["Animated Icons","Server icons now animate on hover (if there is an animated icon)"]]
 			};
 
 			this.patchPriority = 10;
@@ -177,6 +177,7 @@ var DisplayServersAsChannels = (_ => {
 				this.addElementName(e.returnvalue, e.instance.props.guild.name, {
 					badges: [
 						settings.showGuildIcon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Icon, {
+							animate: e.instance.props.animatable && e.instance.state && e.instance.state.hovered,
 							guild: e.instance.props.guild,
 							size: BDFDB.LibraryComponents.GuildComponents.Icon.Sizes.SMALLER
 						}),
