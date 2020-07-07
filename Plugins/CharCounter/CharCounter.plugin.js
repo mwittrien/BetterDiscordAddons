@@ -2,9 +2,9 @@
 
 var CharCounter = (_ => {
 	const maxLenghts = {
-		chat: 2000,
+		normal: 2000,
 		edit: 2000,
-		upload: 2000,
+		form: 2000,
 		nick: 32,
 		popoutnote: 256,
 		profilenote: 256
@@ -17,7 +17,7 @@ var CharCounter = (_ => {
 	return class CharCounter {
 		getName () {return "CharCounter";}
 
-		getVersion () {return "1.4.7";}
+		getVersion () {return "1.4.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -147,10 +147,9 @@ var CharCounter = (_ => {
 		
 		injectCounter (parent, children, type, refClass, parsing) {
 			if (!children) return;
-			type = typeMap[type] || type;
 			parent.props.className = BDFDB.DOMUtils.formatClassName(parent.props.className, BDFDB.disCN._charcountercounteradded);
 			children.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CharCounter, {
-				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._charcountercounter, type && BDFDB.disCN[`_charcounter${type}counter`]),
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._charcountercounter, type && BDFDB.disCN[`_charcounter${typeMap[type] || type}counter`]),
 				refClass: refClass,
 				parsing: parsing,
 				max: maxLenghts[type],
