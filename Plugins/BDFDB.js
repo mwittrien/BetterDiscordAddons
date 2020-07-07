@@ -8160,7 +8160,7 @@
 	
 	InternalComponents.LibraryComponents.Select = InternalBDFDB.loadPatchedComp("Select") || reactInitialized && class BDFDB_Select extends LibraryModules.React.Component {
 		handleChange(value) {
-			this.props.value = value;
+			this.props.value = value.value || value;
 			if (typeof this.props.onChange == "function") this.props.onChange(value, this);
 			BDFDB.ReactUtils.forceUpdate(this);
 		}
