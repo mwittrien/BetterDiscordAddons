@@ -1697,6 +1697,12 @@
 .verified-1eC5dy {											/* verifiedbadge											*/
 	color: rgb(var(--vaccentcolor));
 }
+.partnered-3nJayh {											/* partneredbadge											*/
+	color: rgb(var(--vaccentcolor));
+}
+.partnered-3nJayh .flowerStar-1GeTsn {
+	filter: brightness(75%);
+}
 
 /* ----		12.5.	ICONS							---- */
 
