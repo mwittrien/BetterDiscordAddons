@@ -6,7 +6,7 @@ var EditChannels = (_ => {
 	return class EditChannels {
 		getName () {return "EditChannels";}
 
-		getVersion () {return "4.1.4";}
+		getVersion () {return "4.1.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,7 @@ var EditChannels = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Inbox update","Fixes for the inbox update"]]
+				"fixed":[["Colo","Fixed color not showing in some places"]]
 			};
 
 			this.patchedModules = {
@@ -415,18 +415,21 @@ var EditChannels = (_ => {
 		}
 		
 		changeChannelColor (child, channelId, modify) {
-			let color = this.getChannelDataColor(channelId);
-			if (color) {
-				color = modify ? this.chooseColor(color, modify) : BDFDB.ColorUtils.convert(color, "RGBA");
-				let fontGradient = BDFDB.ObjectUtils.is(color);
-				if (fontGradient) child.props.children = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
-					gradient: BDFDB.ColorUtils.createGradient(color),
-					children: child.props.children
-				});
-				else child.props.children = BDFDB.ReactUtils.createElement("span", {
-					style: {color: color},
-					children: child.props.children
-				});
+			if (BDFDB.ReactUtils.isValidElement(child)) {
+				let color = this.getChannelDataColor(channelId);
+				if (color) {
+					color = modify ? this.chooseColor(color, modify) : BDFDB.ColorUtils.convert(color, "RGBA");
+					let childProp = child.props.children ? "children" : "text";
+					let fontGradient = BDFDB.ObjectUtils.is(color);
+					if (fontGradient) child.props[childProp] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
+						gradient: BDFDB.ColorUtils.createGradient(color),
+						children: child.props[childProp]
+					});
+					else child.props[childProp] = BDFDB.ReactUtils.createElement("span", {
+						style: {color: color},
+						children: child.props[childProp]
+					});
+				}
 			}
 		}
 		

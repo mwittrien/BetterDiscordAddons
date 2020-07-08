@@ -904,26 +904,27 @@ var EditUsers = (_ => {
 			}
 		}
 		
-		changeUserColor (parent, userId, options = {}) {
-			if (BDFDB.ReactUtils.isValidElement(parent)) {
+		changeUserColor (child, userId, options = {}) {
+			if (BDFDB.ReactUtils.isValidElement(child)) {
 				let data = changedUsers[userId] || {};
 				if (data.color1 || (data.color2 && options.changeBackground)) {
+					let childProp = child.props.children ? "children" : "text";
 					let fontColor = options.modify ? this.chooseColor(data.color1, options.modify) : data.color1;
 					let backgroundColor = options.changeBackground && data.color2;
 					let fontGradient = BDFDB.ObjectUtils.is(fontColor);
-					if (BDFDB.ObjectUtils.is(parent.props.style)) {
-						delete parent.props.style.color;
-						delete parent.props.style.backgroundColor;
+					if (BDFDB.ObjectUtils.is(child.props.style)) {
+						delete child.props.style.color;
+						delete child.props.style.backgroundColor;
 					}
-					parent.props.children = BDFDB.ReactUtils.createElement("span", {
+					child.props[childProp] = BDFDB.ReactUtils.createElement("span", {
 						style: {
 							background: BDFDB.ObjectUtils.is(backgroundColor) ? BDFDB.ColorUtils.createGradient(backgroundColor) : BDFDB.ColorUtils.convert(backgroundColor, "RGBA"),
 							color: fontGradient ? BDFDB.ColorUtils.convert(fontColor[0], "RGBA") : BDFDB.ColorUtils.convert(fontColor, "RGBA")
 						},
 						children: fontGradient ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextGradientElement, {
 							gradient: BDFDB.ColorUtils.createGradient(fontColor),
-							children: parent.props.children
-						}) : parent.props.children
+							children: child.props[childProp]
+						}) : child.props[childProp]
 					});
 				}
 			}
