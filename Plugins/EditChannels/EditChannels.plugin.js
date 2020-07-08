@@ -14,7 +14,7 @@ var EditChannels = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Colo","Fixed color not showing in some places"]]
+				"fixed":[["Color","Fixed color not showing in some places"]]
 			};
 
 			this.patchedModules = {
