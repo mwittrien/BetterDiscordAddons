@@ -6,17 +6,13 @@ var EditUsers = (_ => {
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.8.9";}
+		getVersion () {return "3.9.0";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Allows you to change the icon, name, tag and color of users.";}
 
-		constructor () {
-			this.changelog = {
-				"improved":[["Reactions & ContextMenu","Plugin now changes the name in those areas too"]]
-			};
-			
+		constructor () {			
 			this.patchedModules = {
 				before: {
 					HeaderBarContainer: "render",
@@ -253,6 +249,8 @@ var EditUsers = (_ => {
 					if (banIndex > -1) banChilden[banIndex].props.label = BDFDB.LanguageUtils.LanguageStringsFormat("BAN_USER", userName);
 					let [muteChilden, muteIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "mute-channel"});
 					if (muteIndex > -1) muteChilden[muteIndex].props.label = Array.from(BDFDB.DOMUtils.create(BDFDB.LanguageUtils.LanguageStringsFormat("MUTE_CHANNEL", `@${userName}`)).childNodes).map(BDFDB.ReactUtils.elementToReact);
+					let [unmuteChilden, unmuteIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "unmute-channel"});
+					if (unmuteIndex > -1) unmuteChilden[unmuteIndex].props.label = Array.from(BDFDB.DOMUtils.create(BDFDB.LanguageUtils.LanguageStringsFormat("UNMUTE_CHANNEL", `@${userName}`)).childNodes).map(BDFDB.ReactUtils.elementToReact);
 				}
 				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
@@ -791,7 +789,7 @@ var EditUsers = (_ => {
 				}
 				else {
 					e.returnvalue.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getUserData(e.instance.props.user.id).username});
-					this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {changeBackground: true});
+					this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {changeBackground: true, modify: BDFDB.ObjectUtils.extract(e.instance.props, "selected", "hasUnreadMessages", "muted")});
 					e.returnvalue.props.name = [e.returnvalue.props.name];
 					e.returnvalue.props.avatar.props.src = this.getUserAvatar(e.instance.props.user.id);
 					this.injectBadge(e.returnvalue.props.name, e.instance.props.user.id, null, 1);
@@ -933,7 +931,7 @@ var EditUsers = (_ => {
 		chooseColor (color, config = {}) {
 			if (color) {
 				if (BDFDB.ObjectUtils.is(config)) {
-					if (config.mentions || config.focused || config.hovered || config.selected || config.unread || config.speaking) color = BDFDB.ColorUtils.change(color, 0.5);
+					if (config.mentions || config.focused || config.hovered || config.selected || config.unread || config.hasUnreadMessages || config.speaking) color = BDFDB.ColorUtils.change(color, 0.5);
 					else if (config.muted || config.locked) color = BDFDB.ColorUtils.change(color, -0.5);
 				}
 				return color;
