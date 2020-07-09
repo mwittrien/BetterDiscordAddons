@@ -9843,7 +9843,8 @@
 		"363785301195358221",
 		"443943393660239872",
 		"592471476192673814",
-		"106938698938978304"
+		"106938698938978304",
+		"329018006371827713"
 	];
 	InternalBDFDB._processAvatarRender = function (user, avatar) {
 		if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user)) {
