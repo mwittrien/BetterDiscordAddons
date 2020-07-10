@@ -26,7 +26,7 @@ var FriendNotifications = (_ => {
 	return class FriendNotifications {
 		getName () {return "FriendNotifications";}
 
-		getVersion () {return "1.4.7";}
+		getVersion () {return "1.4.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -34,7 +34,7 @@ var FriendNotifications = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Order","Fixed the order of the time log swapping each time it's opened"]],
+				"fixed":[["200 cap","No longer vaps timelog at 200 entries"]],
 				"improved":[["Pagination","Added Pagination to the settings and timelog, to stop the plugin from freezing for ppl who feel like they need to have over 500 friends on discord"]]
 			};
 			
@@ -584,8 +584,6 @@ var FriendNotifications = (_ => {
 						let string = notificationStrings[status.statusName] || "$user changed status to $status";
 						let toaststring = BDFDB.StringUtils.htmlEscape(string).replace(/'{0,1}\$user'{0,1}/g, `<strong>${BDFDB.StringUtils.htmlEscape(name)}</strong>`).replace(/'{0,1}\$status'{0,1}/g, `<strong>${libString}</strong>`);
 						if (status.isActivity) toaststring = toaststring.replace(/'{0,1}\$song'{0,1}|'{0,1}\$game'{0,1}/g, `<strong>${status.name || status.details}</strong>`).replace(/'{0,1}\$artist'{0,1}/g, `<strong>${status.state}</strong>`);
-						
-						if (timeLog.length > 200) timeLog.shift();
 						
 						timeLog.unshift({
 							string: toaststring,
