@@ -9,7 +9,7 @@ var PersonalPins = (_ => {
 	const pinIconDelete = pinIconGeneral.replace(`<extra/>`, `<path transform="translate(8, 8)" stroke="#f04747" stroke-width="2" fill="none" d="M 4 4 l 8.666 8.666 m 0 -8.667 l -8.667 8.666 Z"/>`).replace(`<mask/>`, pinIconMask);
 	const pinIconUpdate = pinIconGeneral.replace(`<extra/>`, `<path transform="translate(10, 10)" fill="#43b581" d="M 11.374, 4.978 V 0 l -1.672, 1.671 C 8.675, 0.64, 7.256, 0, 5.685, 0 C 2.542, 0, 0.003, 2.546, 0.003, 5.688 s 2.538, 5.688, 5.681, 5.688 c 2.648, 0, 4.867 -1.814, 5.496 -4.267 h -1.48 c -0.587, 1.656 -2.158, 2.844 -4.018, 2.844 c -2.358, 0 -4.267 -1.91 -4.267 -4.267 s 1.909 -4.267, 4.266 -4.267 c 1.176, 0, 2.232, 0.49, 3.004, 1.262 l -2.294, 2.293 H 11.374 z"/>`).replace(`<mask/>`, pinIconMask);
 	
-	const tabKeys = ["channel", "server", "all"], sortKeys = ["notetime", "messagetime"];
+	const filterKeys = ["channel", "server", "all"], sortKeys = ["notetime", "messagetime"];
 	
 	return class PersonalPins {
 		getName () {return "PersonalPins";}
@@ -35,8 +35,8 @@ var PersonalPins = (_ => {
 		initConstructor () {
 			this.defaults = {
 				choices: {
-					defaultTab:		{value:tabKeys[0], 		options:tabKeys,	type:"filter",	description:"Default choice tab"},
-					defaultSort:	{value:sortKeys[0], 	options:sortKeys,	type:"sort",	description:"Default sort order"}
+					defaultFilter:		{value:filterKeys[0], 	options:filterKeys,		type:"filter",	description:"Default choice tab"},
+					defaultSort:		{value:sortKeys[0], 	options:sortKeys,		type:"sort",	description:"Default sort order"}
 				}
 			};
 		}
@@ -219,7 +219,7 @@ var PersonalPins = (_ => {
 		}
 		
 		openNotesPopout (buttonInstance) {
-			buttonInstance.props.selectedFilter = buttonInstance.props.selectedFilter || this.getValue(choices.defaultTab || tabKeys[0], "filter");
+			buttonInstance.props.selectedFilter = buttonInstance.props.selectedFilter || this.getValue(choices.defaultFilter || filterKeys[0], "filter");
 			buttonInstance.props.selectedSort = buttonInstance.props.selectedSort || this.getValue(choices.defaultSort || sortKeys[0], "sort");
 			buttonInstance.props.searchKey = buttonInstance.props.searchKey || "";
 			let searchTimeout;
@@ -265,7 +265,7 @@ var PersonalPins = (_ => {
 										itemSelectedClassName: BDFDB.disCN.messagespopouttabbartabactive,
 										type: BDFDB.LibraryComponents.TabBar.Types.TOP_PILL,
 										selectedItem: buttonInstance.props.selectedFilter.value,
-										items: tabKeys.map(option => this.getValue(option, "filter")),
+										items: filterKeys.map(option => this.getValue(option, "filter")),
 										onItemSelect: option => {
 											buttonInstance.props.selectedFilter = this.getValue(option, "filter");
 											BDFDB.ReactUtils.forceUpdate(buttonInstance.popout._owner.stateNode);
