@@ -6,7 +6,7 @@ var DisplayServersAsChannels = (_ => {
 	return class DisplayServersAsChannels {
 		getName () {return "DisplayServersAsChannels";}
 
-		getVersion () {return "1.3.8";}
+		getVersion () {return "1.3.9";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -143,10 +143,14 @@ var DisplayServersAsChannels = (_ => {
 		}
 		
 		processGuilds (e) {
-			let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FluxContainer(<Unknown>)"});
-			if (index > -1) children[index] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Items.UnavailableGuildsButton, {
+			let [errorChildren, errorIndex] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "FluxContainer(<Unknown>)"});
+			if (errorIndex > -1) errorChildren[errorIndex] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Items.UnavailableGuildsButton, {
 				unavailableGuilds: BDFDB.LibraryModules.GuildUnavailableStore.totalUnavailableGuilds
 			});
+			let [scrollerChilden, scrollerIndex] = BDFDB.ReactUtils.findParent(e.returnvalue, {props:[["className", BDFDB.disCN.guildsscroller]]});
+			if (scrollerIndex > -1) scrollerChilden[scrollerIndex] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ScrollerThin, Object.assign({
+				fade: true
+			}, scrollerChilden[scrollerIndex].props));
 		}
 		
 		processDefaultHomeButton (e) {
@@ -378,12 +382,11 @@ var DisplayServersAsChannels = (_ => {
 				}
 				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderexpandedbackground} {
 					top: -2px;
+					right: 2px;
 					bottom: -2px;
 					left: 6px;
-					right: 2px;
 					width: auto;
 					border-radius: 4px;
-					margin-bottom: 10px;
 				}
 				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildfolderwrapper} [role="group"] {
 					height: auto !important;
