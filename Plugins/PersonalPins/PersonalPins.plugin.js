@@ -1,24 +1,28 @@
 //META{"name":"PersonalPins","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/PersonalPins","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/PersonalPins/PersonalPins.plugin.js"}*//
 
 var PersonalPins = (_ => {
+	var choices = {};
+	
 	const pinIconGeneral = `<svg name="Note" width="24" height="24" viewBox="-1 -1.5 23 23"><mask/><g mask="url(#pinIconMask)"><path fill="currentColor" d="M 4.618, 0 c -0.316, 0 -0.573, 0.256 -0.573, 0.573 v 1.145 c 0, 0.316, 0.256, 0.573, 0.573, 0.573 s 0.573 -0.256, 0.573 -0.573 V 0.573 C 5.191, 0.256, 4.935, 0, 4.618, 0 z"/><path fill="currentColor" d="M 8.053, 0 c -0.316, 0 -0.573, 0.256 -0.573, 0.573 v 1.145 c 0, 0.316, 0.256, 0.573, 0.573, 0.573 s 0.573 -0.256, 0.573 -0.573 V 0.573 C 8.626, 0.256, 8.37, 0, 8.053, 0 z"/><path fill="currentColor" d="M 11.489, 0 c -0.316, 0 -0.573, 0.256 -0.573, 0.573 v 1.145 c 0, 0.316, 0.256, 0.573, 0.573, 0.573 c 0.316, 0, 0.573 -0.256, 0.573 -0.573 V 0.573 C 12.061, 0.256, 11.805, 0, 11.489, 0 z "/><path fill="currentColor" d="M 14.924, 0 c -0.316, 0 -0.573, 0.256 -0.573, 0.573 v 1.145 c 0, 0.316, 0.256, 0.573, 0.573, 0.573 c 0.316, 0, 0.573 -0.256, 0.573 -0.573 V 0.573 C 15.496, 0.256, 15.24, 0, 14.924, 0 z"/><path fill="currentColor" d="M 16.641, 1.25 V 1.718 c 0, 0.947 -0.77, 1.718 -1.718, 1.718 c -0.947, 0 -1.718 -0.77 -1.718 -1.718 c 0, 0.947 -0.77, 1.718 -1.718, 1.718 c -0.947, 0 -1.718 -0.77 -1.718 -1.718 c 0, 0.947 -0.77, 1.718 -1.718, 1.718 c -0.947, 0 -1.718 -0.77 -1.718 -1.718 c 0, 0.947 -0.77, 1.718 -1.718, 1.718 c -0.947, 0 -1.718 -0.77 -1.718 -1.718 V 1.25 C 2.236, 1.488, 1.756, 2.117, 1.756, 2.863 v 14.962 c 0, 0.947, 0.77, 1.718, 1.718, 1.718 h 12.595 c 0.947, 0, 1.718 -0.77, 1.718 -1.718 V 2.863 C 17.786, 2.117, 17.306, 1.488, 16.641, 1.25 z M 14.924, 16.679 H 4.618 c -0.316, 0 -0.573 -0.256 -0.573 -0.573 c 0 -0.316, 0.256 -0.573, 0.573 -0.573 h 10.305 c 0.316, 0, 0.573, 0.256, 0.573, 0.573 C 15.496, 16.423, 15.24, 16.679, 14.924, 16.679 z M 14.924, 13.244 H 4.618 c -0.316, 0 -0.573 -0.256 -0.573 -0.573 c 0 -0.316, 0.256 -0.573, 0.573 -0.573 h 10.305 c 0.316, 0, 0.573, 0.256, 0.573, 0.573 C 15.496, 12.988, 15.24, 13.244, 14.924, 13.244 z M 14.924, 9.733 H 4.618 c -0.316, 0 -0.573 -0.256 -0.573 -0.573 s 0.256 -0.573, 0.573 -0.573 h 10.305 c 0.316, 0, 0.573, 0.256, 0.573, 0.573 S 15.24, 9.733, 14.924, 9.733 z M 14.924, 6.298 H 4.618 c -0.316, 0 -0.573 -0.256 -0.573 -0.573 s 0.256 -0.573, 0.573 -0.573 h 10.305 c 0.316, 0, 0.573, 0.256, 0.573, 0.573 S 15.24, 6.298, 14.924, 6.298 z"/></g><extra/></svg>`;
 	const pinIconMask = `<mask id="pinIconMask" fill="black"><path d="M 0 0 H 24 V 24 H 0 Z" fill="white"></path><path d="M24 12 H 12 V 24 H 24 Z" fill="black"></path></mask>`;
 	const pinIcon = pinIconGeneral.replace(`<extra/>`, ``).replace(`<mask/>`, ``).replace(` mask="url(#pinIconMask)"`, ``);
 	const pinIconDelete = pinIconGeneral.replace(`<extra/>`, `<path transform="translate(8, 8)" stroke="#f04747" stroke-width="2" fill="none" d="M 4 4 l 8.666 8.666 m 0 -8.667 l -8.667 8.666 Z"/>`).replace(`<mask/>`, pinIconMask);
 	const pinIconUpdate = pinIconGeneral.replace(`<extra/>`, `<path transform="translate(10, 10)" fill="#43b581" d="M 11.374, 4.978 V 0 l -1.672, 1.671 C 8.675, 0.64, 7.256, 0, 5.685, 0 C 2.542, 0, 0.003, 2.546, 0.003, 5.688 s 2.538, 5.688, 5.681, 5.688 c 2.648, 0, 4.867 -1.814, 5.496 -4.267 h -1.48 c -0.587, 1.656 -2.158, 2.844 -4.018, 2.844 c -2.358, 0 -4.267 -1.91 -4.267 -4.267 s 1.909 -4.267, 4.266 -4.267 c 1.176, 0, 2.232, 0.49, 3.004, 1.262 l -2.294, 2.293 H 11.374 z"/>`).replace(`<mask/>`, pinIconMask);
 	
+	const tabKeys = ["channel", "server", "all"], sortKeys = ["notetime", "messagetime"];
+	
 	return class PersonalPins {
 		getName () {return "PersonalPins";}
 
 		getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-		getVersion () {return "1.9.4";} 
+		getVersion () {return "1.9.5";} 
 
 		getAuthor () {return "DevilBro";}
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Crash Issue","Fixed a crash issue that occured on some rare occasions"]]
+				"added":[["Default settings","You can now change the default tab/sort order for the popout"]]
 			};
 
 			this.patchedModules = {
@@ -27,16 +31,37 @@ var PersonalPins = (_ => {
 				}
 			};
 		}
+		
+		initConstructor () {
+			this.defaults = {
+				choices: {
+					defaultTab:		{value:tabKeys[0], 		options:tabKeys,	type:"filter",	description:"Default choice tab"},
+					defaultSort:	{value:sortKeys[0], 	options:sortKeys,	type:"sort",	description:"Default sort order"}
+				}
+			};
+		}
 
 		getSettingsPanel () {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 			let settingsPanel, settingsItems = [];
 			
+			for (let key in choices) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+				className: BDFDB.disCN.marginbottom8,
+				type: "Select",
+				plugin: this,
+				keys: ["choices", key],
+				label: this.defaults.choices[key].description,
+				basis: "50%",
+				value: choices[key],
+				options: (this.defaults.choices[key].options || []).map(option => this.getValue(option, this.defaults.choices[key].type)),
+				searchable: true
+			}));
+			
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 				type: "Button",
 				className: BDFDB.disCN.marginbottom8,
 				color: BDFDB.LibraryComponents.Button.Colors.RED,
-				label: "Delete all Notes",
+				label: "Delete all notes",
 				onClick: _ => {
 					BDFDB.ModalUtils.confirm(this, "Are you sure you want to delete all pinned notes?", _ => {
 						BDFDB.DataUtils.remove(this, "notes");
@@ -77,7 +102,7 @@ var PersonalPins = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -87,7 +112,7 @@ var PersonalPins = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 				
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -95,6 +120,13 @@ var PersonalPins = (_ => {
 
 
 		// Begin of own functions
+
+		onSettingsClosed () {
+			if (this.SettingsUpdated) {
+				delete this.SettingsUpdated;
+				this.forceUpdateAll();
+			}
+		}
 
 		onMessageContextMenu (e) {
 			if (e.instance.props.message && e.instance.props.channel) {
@@ -181,15 +213,14 @@ var PersonalPins = (_ => {
 				},
 				renderPopout: instance => {
 					BDFDB.DOMUtils.addClass(instance.domElementRef.current, BDFDB.disCN.channelheadericonselected);
-					return this.createNotesPopout(instance);
+					return this.openNotesPopout(instance);
 				}
 			}));
 		}
 		
-		createNotesPopout (buttonInstance) {
-			const tabKeys = ["channel", "server", "all"], sortKeys = ["notetime", "messagetime"];
-			buttonInstance.props.selectedFilter = buttonInstance.props.selectedFilter || this.getValue(tabKeys[0], "filter");
-			buttonInstance.props.selectedSort = buttonInstance.props.selectedSort || this.getValue(sortKeys[0], "sort");
+		openNotesPopout (buttonInstance) {
+			buttonInstance.props.selectedFilter = buttonInstance.props.selectedFilter || this.getValue(choices.defaultTab || tabKeys[0], "filter");
+			buttonInstance.props.selectedSort = buttonInstance.props.selectedSort || this.getValue(choices.defaultSort || sortKeys[0], "sort");
 			buttonInstance.props.searchKey = buttonInstance.props.searchKey || "";
 			let searchTimeout;
 			return [
@@ -234,18 +265,18 @@ var PersonalPins = (_ => {
 										itemSelectedClassName: BDFDB.disCN.messagespopouttabbartabactive,
 										type: BDFDB.LibraryComponents.TabBar.Types.TOP_PILL,
 										selectedItem: buttonInstance.props.selectedFilter.value,
-										items: tabKeys.map(key => this.getValue(key, "filter")),
-										onItemSelect: key => {
-											buttonInstance.props.selectedFilter = this.getValue(key, "filter");
+										items: tabKeys.map(option => this.getValue(option, "filter")),
+										onItemSelect: option => {
+											buttonInstance.props.selectedFilter = this.getValue(option, "filter");
 											BDFDB.ReactUtils.forceUpdate(buttonInstance.popout._owner.stateNode);
 										}
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
 										label: this.labels.popout_sort_text + ":",
 										value: buttonInstance.props.selectedSort,
-										options: sortKeys.map(key => this.getValue(key, "sort")),
-										onChange: key => {
-											buttonInstance.props.selectedSort = this.getValue(key, "sort");
+										options: sortKeys.map(option => this.getValue(option, "sort")),
+										onChange: option => {
+											buttonInstance.props.selectedSort = this.getValue(option, "sort");
 											BDFDB.ReactUtils.forceUpdate(buttonInstance.popout._owner.stateNode);
 										}
 									})
@@ -488,6 +519,13 @@ var PersonalPins = (_ => {
 			BDFDB.DataUtils.save(notes, this, "notes");
 			BDFDB.NotificationUtils.toast(this.labels.toast_noteremove_text, {type: "danger"});
 		}
+		
+		forceUpdateAll() {
+			choices = BDFDB.DataUtils.get(this, "choices");
+			
+			BDFDB.ModuleUtils.forceAllUpdates(this);
+		}
+
 
 		setLabelsByLanguage () {
 			switch (BDFDB.LanguageUtils.getLanguage().id) {

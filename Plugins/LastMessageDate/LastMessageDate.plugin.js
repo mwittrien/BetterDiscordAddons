@@ -7,7 +7,7 @@ var LastMessageDate = (_ => {
 	return class LastMessageDate {
 		getName () {return "LastMessageDate";}
 
-		getVersion () {return "1.1.5";}
+		getVersion () {return "1.1.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -15,7 +15,7 @@ var LastMessageDate = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Days Ago","Now properly shows the amount of days relative to the date instead of calculated from the amount of passed hours"]]
+				"fixed":[["Settings changes","Fixed issue where settings changes would only apply after plugin was reloaded"]]
 			};
 
 			this.patchedModules = {
@@ -253,6 +253,13 @@ var LastMessageDate = (_ => {
 
 
 		// Begin of own functions
+
+		onSettingsClosed () {
+			if (this.SettingsUpdated) {
+				delete this.SettingsUpdated;
+				this.forceUpdateAll();
+			}
+		}
 
 		processUserPopout (e) {
 			if (e.instance.props.user && settings.addInUserPopout) {

@@ -7,7 +7,7 @@ var JoinedAtDate = (_ => {
 	return class JoinedAtDate {
 		getName () {return "JoinedAtDate";}
 
-		getVersion () {return "1.1.9";}
+		getVersion () {return "1.2.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -15,7 +15,7 @@ var JoinedAtDate = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Days Ago","Now properly shows the amount of days relative to the date instead of calculated from the amount of passed hours"]]
+				"fixed":[["Settings changes","Fixed issue where settings changes would only apply after plugin was reloaded"]]
 			};
 
 			this.patchedModules = {
@@ -242,6 +242,13 @@ var JoinedAtDate = (_ => {
 
 
 		// Begin of own functions
+
+		onSettingsClosed () {
+			if (this.SettingsUpdated) {
+				delete this.SettingsUpdated;
+				this.forceUpdateAll();
+			}
+		}
 
 		processUserPopout (e) {
 			if (e.instance.props.user && settings.addInUserPopout) {
