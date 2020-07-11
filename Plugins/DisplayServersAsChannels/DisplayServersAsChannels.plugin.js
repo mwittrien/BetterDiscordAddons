@@ -6,7 +6,7 @@ var DisplayServersAsChannels = (_ => {
 	return class DisplayServersAsChannels {
 		getName () {return "DisplayServersAsChannels";}
 
-		getVersion () {return "1.3.7";}
+		getVersion () {return "1.3.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,7 @@ var DisplayServersAsChannels = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Server Icon","Added server icon to server entries, can be disabled"],["Animated Icons","Server icons now animate on hover (if there is an animated icon)"]]
+				"improved":[["Server Search","Added support for the server search plugin"]]
 			};
 
 			this.patchPriority = 10;
@@ -462,6 +462,36 @@ var DisplayServersAsChannels = (_ => {
 					position: static !important;
 					contain: unset !important;
 					width: 100% !important;
+				}
+				
+				#server-search ${BDFDB.dotCN.guildinner} {
+					width: ${amounts.serverListWidth - 20}px;
+					height: ${amounts.serverElementHeight}px;
+					border-radius: 4px !important;
+				}
+				#server-search ${BDFDB.dotCN.guildinner}::before {
+					content: "Server Search";
+					color: var(--text-normal);
+					display: flex;
+					align-items: center;
+					height: ${amounts.serverElementHeight}px;
+					font-size: ${amounts.serverElementHeight / 2}px;
+					font-weight: 400;
+					padding-left: 8px;
+				}
+				#server-search ${BDFDB.dotCN.guildinner}::after {
+					content: "";
+					position: absolute;
+					top: ${amounts.serverElementHeight/32 * 6}px;
+					right: 7px;
+					width: ${amounts.serverElementHeight/32 * 20}px;
+					height: ${amounts.serverElementHeight/32 * 20}px;
+					background: var(--text-normal);
+					-webkit-mask: url('data:image/svg+xml;base64,PHN2ZyB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAxOCAxOCI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBmaWxsPSJ3aGl0ZSIgZD0iTTMuNjAwOTE0ODEsNy4yMDI5NzMxMyBDMy42MDA5MTQ4MSw1LjIwOTgzNDE5IDUuMjA5ODM0MTksMy42MDA5MTQ4MSA3LjIwMjk3MzEzLDMuNjAwOTE0ODEgQzkuMTk2MTEyMDYsMy42MDA5MTQ4MSAxMC44MDUwMzE0LDUuMjA5ODM0MTkgMTAuODA1MDMxNCw3LjIwMjk3MzEzIEMxMC44MDUwMzE0LDkuMTk2MTEyMDYgOS4xOTYxMTIwNiwxMC44MDUwMzE0IDcuMjAyOTczMTMsMTAuODA1MDMxNCBDNS4yMDk4MzQxOSwxMC44MDUwMzE0IDMuNjAwOTE0ODEsOS4xOTYxMTIwNiAzLjYwMDkxNDgxLDcuMjAyOTczMTMgWiBNMTIuMDA1NzE3NiwxMC44MDUwMzE0IEwxMS4zNzMzNTYyLDEwLjgwNTAzMTQgTDExLjE0OTIyODEsMTAuNTg4OTA3OSBDMTEuOTMzNjc2NCw5LjY3NjM4NjUxIDEyLjQwNTk0NjMsOC40OTE3MDk1NSAxMi40MDU5NDYzLDcuMjAyOTczMTMgQzEyLjQwNTk0NjMsNC4zMjkzMzEwNSAxMC4wNzY2MTUyLDIgNy4yMDI5NzMxMywyIEM0LjMyOTMzMTA1LDIgMiw0LjMyOTMzMTA1IDIsNy4yMDI5NzMxMyBDMiwxMC4wNzY2MTUyIDQuMzI5MzMxMDUsMTIuNDA1OTQ2MyA3LjIwMjk3MzEzLDEyLjQwNTk0NjMgQzguNDkxNzA5NTUsMTIuNDA1OTQ2MyA5LjY3NjM4NjUxLDExLjkzMzY3NjQgMTAuNTg4OTA3OSwxMS4xNDkyMjgxIEwxMC44MDUwMzE0LDExLjM3MzM1NjIgTDEwLjgwNTAzMTQsMTIuMDA1NzE3NiBMMTQuODA3MzE4NSwxNiBMMTYsMTQuODA3MzE4NSBMMTIuMjEwMjUzOCwxMS4wMDk5Nzc2IEwxMi4wMDU3MTc2LDEwLjgwNTAzMTQgWiI+PC9wYXRoPjwvZz48L3N2Zz4=') center/cover no-repeat;
+				}
+				#server-search ${BDFDB.dotCN.guildbuttonpill},
+				#server-search ${BDFDB.dotCN.guildsvg} {
+					display: none;
 				}`);
 		}
 	}

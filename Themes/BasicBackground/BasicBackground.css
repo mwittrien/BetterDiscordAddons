@@ -145,13 +145,11 @@
 		7.	CITADOR
 		8.	LINENUMBERS
 		9.	PERMISSIONVIEWER
-		10.	BETTERSEARCHPAGE
-		11.	REPOCONTROLS
-		12.	DIRECTDOWNLOAD
-		13.	BETTERFORMATINGREDUX
-		14.	PLUGIN/THEMEREPO
-		15.	CHANNELHISTORY
-		16.	DISPLAYLARGEMESSAGES
+		10.	DIRECTDOWNLOAD
+		11.	BETTERFORMATINGREDUX
+		12.	PLUGIN/THEMEREPO
+		13.	CHANNELHISTORY
+		14.	DISPLAYLARGEMESSAGES
 	18.	THEMESUPPORT
 		1.	THEMEDEVBADGE
 		2.	BETTERDOCSBLOCK
@@ -844,10 +842,10 @@ body:before {
 }
 .message-2qnXI6,											/* message				container							*/
 .message-2DieIs,											/* message				mention popout						*/
-.message-2g38UB,											/* message				inbox								*/
-.message-2qRu38 .wrapper-2a6GCs,
-.messageGroupCozy-2iY6cT,
-.messageGroupCozy-2Bj3ME {
+.message-2g38UB,											/* message				inbox popout						*/
+.message-2qRu38 .wrapper-2a6GCs,							/* message				settings preview					*/
+.messageGroupCozy-2iY6cT,									/* message				pin popout							*/
+.messageGroupCozy-2-Q370 {									/* message				searchpage							*/
 	background-color: rgba(var(--vtransparencycolor), var(--vmessagetransparency));
 }
 .message-2qnXI6.selected-2P5D_Z,
@@ -889,7 +887,7 @@ body:before {
 	left: 40px;
 }
 .messageGroupWrapper-o-Zw7G .messageGroupCozy-2iY6cT .header-23xsNx:after,
-.searchResult-2N9RV4 .messageGroupCozy-2Bj3ME .header-23xsNx:after {
+.searchResult-9tQ1uo .messageGroupCozy-2-Q370 .header-23xsNx:after {
 	top: 2px;
 }
 .cozy-3raOZG .timestamp-3ZCmNB.alt-1uNpEt {
@@ -952,7 +950,7 @@ body:before {
 .messages-3G3erD .wrapper-2a6GCs,
 .message-2qRu38 .wrapper-2a6GCs,
 .messageGroupWrapper-o-Zw7G .messageGroupCozy-2iY6cT,
-.searchResult-2N9RV4 .messageGroupCozy-2Bj3ME {
+.searchResult-9tQ1uo .messageGroupCozy-2-Q370 {
 	border-radius: 5px;
 	margin-left: calc(60px * var(--vusechatbubbles));
 	padding-left: calc(1px * (10 * var(--vusechatbubbles) + 72 * (1 - var(--vusechatbubbles))));
@@ -1466,41 +1464,41 @@ body:before {
 #app-mount .searchResultsWrap-3-pOjs {						/* searchpage			container							*/
 	background-color: transparent;
 }
-#app-mount .searchHeader-1EzJGH {							/* searchpage			header								*/
+#app-mount .searchHeader-2XoQg7 {							/* searchpage			header								*/
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vguildchanneltransparency) * 0.8));
 	box-shadow: 0 1px 0 rgba(var(--vtransparencycolor), 0.2);
 }
-#app-mount .searchHeader-1EzJGH .totalResults-1yK_Ym {		/* searchpage			results								*/
+#app-mount .searchHeader-2XoQg7 .totalResults--dyAxF {		/* searchpage			results								*/
 	color: rgb(var(--fontwhite3));
 	opacity: 1;
 }
-#app-mount .searchHeader-1EzJGH .tab-EiCZG6 {				/* searchpage			tab									*/
+#app-mount .searchHeader-2XoQg7 .tab-2j5AEF {				/* searchpage			tab									*/
 	color: rgb(var(--fontwhite3));
 	opacity: 1;
 }
-#app-mount .searchHeader-1EzJGH .tab-EiCZG6:hover {
+#app-mount .searchHeader-2XoQg7 .tab-2j5AEF:hover {
 	color: rgb(var(--fontwhite2));
 	border-bottom-color: rgb(var(--fontwhite2));
 }
-#app-mount .searchHeader-1EzJGH .tab-EiCZG6.selected-3gXBLQ {
+#app-mount .searchHeader-2XoQg7 .tab-2j5AEF.selected-2LAck8 {
 	color: rgb(var(--fontwhite1));
 	border-bottom-color: rgb(var(--fontwhite1));
 }
-#app-mount .searchHeader-1EzJGH + div {
+#app-mount .scroller-3GIiMh {
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vguildchanneltransparency) * 0.5));
 }
-#app-mount .channelSeparator-dTqJ4K {						/* searchpage			separator							*/
+#app-mount .channelSeparator-1DOiGt {						/* searchpage			separator							*/
 	overflow: hidden;
 	width: 390px;
 }
-#app-mount .channelSeparator-dTqJ4K:not(:empty):before {
+#app-mount .channelSeparator-1DOiGt:not(:empty):before {
 	display: none;
 }
-#app-mount .channelSeparator-dTqJ4K .channelName-wvgELL {	/* searchpage			channelname							*/
+#app-mount .channelSeparator-1DOiGt .channelName-1JRO3C {	/* searchpage			channelname							*/
 	background: transparent;
 	color: rgb(var(--fontwhite3));
 }
-#app-mount .channelSeparator-dTqJ4K .channelName-wvgELL:after {
+#app-mount .channelSeparator-1DOiGt .channelName-1JRO3C:after {
 	content: "";
 	border-bottom: 1px solid rgba(var(--fontwhite3), 0.5);
 	height: 1px;
@@ -1511,43 +1509,43 @@ body:before {
 	width: 100vw;
 	z-index: 0;
 }
-.searchResult-2N9RV4:before,								/* searchpage			result								*/
-.searchResult-2N9RV4:after {
+.searchResult-9tQ1uo:before,								/* searchpage			result								*/
+.searchResult-9tQ1uo:after {
 	display: none;
 }
-#app-mount .searchResult-2N9RV4 .hit-1CXhXT {
+#app-mount .searchResult-9tQ1uo .hit-1fVM9e {
 	background-color: rgba(var(--vtransparencycolor), 0.1);
 	border-color: rgba(var(--vtransparencycolor), 0.1);
 	box-shadow: none;
 }
-#app-mount .searchResult-2N9RV4.expanded-ovgtuV {
+#app-mount .searchResult-9tQ1uo.expanded-w_LCGl {
 	background-color: rgba(var(--vtransparencycolor), 0.1);
 	border-color: rgba(var(--vtransparencycolor), 0.1);
 }
-#app-mount .searchResult-2N9RV4:not(.expanded-ovgtuV) .before-2BfuiJ.sibling-1HG8JI {
+#app-mount .searchResult-9tQ1uo:not(.expanded-w_LCGl) .before-2RL1Gz.sibling-1eJVjd {
 	-webkit-mask: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 50%, rgba(0,0,0,0.1) 85%, rgba(0,0,0,0) 100%);
 }
-#app-mount .searchResult-2N9RV4:not(.expanded-ovgtuV) .after-1oc6Rt.sibling-1HG8JI {
+#app-mount .searchResult-9tQ1uo:not(.expanded-w_LCGl) .after-20SH8W.sibling-1eJVjd {
 	-webkit-mask: linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 30%, rgba(0,0,0,0.9) 50%, rgba(0,0,0,0.1) 85%, rgba(0,0,0,0) 100%);
 }
-#app-mount .searchResult-2N9RV4:not(.expanded-ovgtuV) .before-2BfuiJ:not(.sibling-1HG8JI),
-#app-mount .searchResult-2N9RV4:not(.expanded-ovgtuV) .after-1oc6Rt:not(.sibling-1HG8JI) {
+#app-mount .searchResult-9tQ1uo:not(.expanded-w_LCGl) .before-2RL1Gz:not(.sibling-1eJVjd),
+#app-mount .searchResult-9tQ1uo:not(.expanded-w_LCGl) .after-20SH8W:not(.sibling-1eJVjd) {
 	display: none;
 }
 
-.jumpButton-1ol35X {										/* message				jumpbutton							*/ 
+.jumpButton-JkYoYK {										/* message				jumpbutton							*/ 
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 	color: rgb(var(--fontwhite2));
 }
-.jumpButton-1ol35X:hover {
+.jumpButton-JkYoYK:hover {
 	background-color: rgb(var(--vaccentcolor));
 	color: rgb(var(--fontwhite1));
 }
-.jumpButton-1ol35X + .jumpButton-1ol35X {
+.jumpButton-JkYoYK + .jumpButton-JkYoYK {
 	margin-left: 2px;
 }
 
-#app-mount .pagination-1m6Ll- {
+#app-mount .pagination-2KMrRB {
 	color: rgb(var(--fontwhite3));
 }
 
@@ -7034,39 +7032,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	color: rgb(var(--fontwhite3));
 }
 
-/* ----		17.10.	BETTERSEARCHPAGE				---- */
-
-#app-mount .BSP-pagination-button {
-	background: transparent;
-	border-color: rgba(var(--fontwhite1), 0.5);
-	left: 0;
-	position: relative;
-	top: 0;
-}
-#app-mount .BSP-pagination-button:before {
-	content: "»";
-	color: rgb(var(--fontwhite1));
-	font-size: 20px;
-	font-weight: 500;
-	line-height: 15px;
-	margin-left: -1px;
-	position: absolute;
-	text-align: center;
-	width: 20px;
-}
-
-/* ----		17.11.	REPOCONTROLS					---- */
-
-#app-mount #bd-settingspane-container .editIcon,
-#app-mount #bd-settingspane-container .trashIcon {
-	color: rgb(var(--fontwhite2));
-}
-#app-mount #bd-settingspane-container .editIcon:hover,
-#app-mount #bd-settingspane-container .trashIcon:hover {
-	color: rgb(var(--fontwhite1));
-}
-
-/* ----		17.12.	DIRECTDOWNLOAD					---- */
+/* ----		17.10.	DIRECTDOWNLOAD					---- */
 
 #files_directDownload .file {
 	background-color: rgba(var(--vtransparencycolor), 0.4);
@@ -7087,7 +7053,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	background-color: rgb(var(--vaccentcolor));
 }
 
-/* ----		17.13.	BETTERFORMATINGREDUX			---- */
+/* ----		17.11.	BETTERFORMATINGREDUX			---- */
 
 .innerDisabled-2mc-iF ~ .bf-toolbar {
 	display: none;
@@ -7145,7 +7111,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	color: rgb(var(--fontwhite1));
 }
 
-/* ----		17.14	PLUGIN/THEMEREPO				---- */
+/* ----		17.12	PLUGIN/THEMEREPO				---- */
 
 #app-mount .pluginEntry svg[fill="currentColor"],
 #app-mount .pluginEntry .gifFavoriteButton-1gYkEU:not(.selected-2QpwIN),
@@ -7161,14 +7127,14 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 	color: rgb(var(--fontwhite1)) !important;
 }
 
-/* ----		17.15	CHANNELHISTORY					---- */
+/* ----		17.13	CHANNELHISTORY					---- */
 
 .channelHistoryButtons {
 	top: 4px;
 	left: 310px;
 }
 
-/* ----		17.16	DISPLAYLARGEMESSAGES			---- */
+/* ----		17.14	DISPLAYLARGEMESSAGES			---- */
 
 #app-mount .injectButton-8eKqGu {							/* attachment			injectbutton						*/
 	color: rgb(var(--fontwhite4));

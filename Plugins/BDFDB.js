@@ -4448,7 +4448,10 @@
 	DiscordClassModules.SearchBar = BDFDB.ModuleUtils.findByProperties("clear", "container", "pointer");
 	DiscordClassModules.SearchPopout = BDFDB.ModuleUtils.findByProperties("datePicker", "searchResultChannelIconBackground");
 	DiscordClassModules.SearchPopoutWrap = BDFDB.ModuleUtils.findByProperties("container", "queryContainer");
-	DiscordClassModules.SearchResults = BDFDB.ModuleUtils.findByProperties("messageGroupCozy", "searchResultsWrap");
+	DiscordClassModules.SearchResults = BDFDB.ModuleUtils.findByProperties("noResults", "searchResultsWrap");
+	DiscordClassModules.SearchResultsElements = BDFDB.ModuleUtils.findByProperties("resultsBlocked", "channelSeparator");
+	DiscordClassModules.SearchResultsPagination = BDFDB.ModuleUtils.findByProperties("paginationButton", "pagination");
+	DiscordClassModules.SearchResultsMessage = BDFDB.ModuleUtils.findByProperties("after", "messageGroupCozy");
 	DiscordClassModules.Select = BDFDB.ModuleUtils.findByProperties("select", "error", "errorMessage");
 	DiscordClassModules.SettingsCloseButton = BDFDB.ModuleUtils.findByProperties("closeButton", "keybind");
 	DiscordClassModules.SettingsItems = BDFDB.ModuleUtils.findByProperties("dividerMini", "note");
@@ -5681,19 +5684,19 @@
 		searchpopoutsearchresultchanneliconbackground: ["SearchPopout", "searchResultChannelIconBackground"],
 		searchpopoutselected: ["SearchPopout", "selected"],
 		searchpopoutuser: ["SearchPopout", "user"],
-		searchresultsafter: ["SearchResults", "after"],
+		searchresultsafter: ["SearchResultsMessage", "after"],
 		searchresultsalt: ["SearchResults", "alt"],
-		searchresultsbefore: ["SearchResults", "before"],
-		searchresultschannelname: ["SearchResults", "channelName"],
-		searchresultschannelSeparator: ["SearchResults", "channelSeparator"],
-		searchresultsexpanded: ["SearchResults", "expanded"],
-		searchresultsgroupcozy: ["SearchResults", "messageGroupCozy"],
-		searchresultshit: ["SearchResults", "hit"],
-		searchresultspagination: ["SearchResults", "pagination"],
-		searchresultspaginationbutton: ["SearchResults", "paginationButton"],
-		searchresultspaginationdisabled: ["SearchResults", "disabled"],
-		searchresultspaginationicon: ["SearchResults", "icon"],
-		searchresultssearchheader: ["SearchResults", "searchHeader"],
+		searchresultsbefore: ["SearchResultsMessage", "before"],
+		searchresultschannelname: ["SearchResultsElements", "channelName"],
+		searchresultschannelSeparator: ["SearchResultsElements", "channelSeparator"],
+		searchresultsexpanded: ["SearchResultsMessage", "expanded"],
+		searchresultsgroupcozy: ["SearchResultsMessage", "messageGroupCozy"],
+		searchresultshit: ["SearchResultsMessage", "hit"],
+		searchresultspagination: ["SearchResultsPagination", "pagination"],
+		searchresultspaginationbutton: ["SearchResultsPagination", "paginationButton"],
+		searchresultspaginationdisabled: ["SearchResultsPagination", "disabled"],
+		searchresultspaginationicon: ["SearchResultsPagination", "icon"],
+		searchresultssibling: ["SearchResultsMessage", "sibling"],
 		searchresultswrap: ["SearchResults", "searchResultsWrap"],
 		select: ["Select", "select"],
 		selectwrapper: ["BDFDB", "selectWrapper"],
