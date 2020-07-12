@@ -34,7 +34,7 @@ var FriendNotifications = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["200 cap","No longer vaps timelog at 200 entries"]],
+				"fixed":[["200 cap","No longer caps timelog at 200 entries"]],
 				"improved":[["Pagination","Added Pagination to the settings and timelog, to stop the plugin from freezing for ppl who feel like they need to have over 500 friends on discord"]]
 			};
 			
