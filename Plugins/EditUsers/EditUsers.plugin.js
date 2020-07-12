@@ -6,7 +6,7 @@ var EditUsers = (_ => {
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.9.0";}
+		getVersion () {return "3.9.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -79,9 +79,6 @@ var EditUsers = (_ => {
 				${BDFDB.dotCNS.chat + BDFDB.dotCN.messageusername}:hover > span[style*="color"],
 				${BDFDB.dotCN.voicedetailschannel}:hover > span[style*="color"] {
 					text-decoration: underline;
-				}
-				${BDFDB.dotCN.dmchannel}:hover ${BDFDB.dotCN.namecontainername} span[style*="color"] {
-					filter: brightness(150%);
 				}
 				${BDFDB.dotCNS.userpopoutheadernamewrapper + BDFDB.dotCN.bottag} {
 					position: relative;
@@ -238,6 +235,13 @@ var EditUsers = (_ => {
 
 
 		// Begin of own functions
+
+		onSettingsClosed () {
+			if (this.SettingsUpdated) {
+				delete this.SettingsUpdated;
+				this.forceUpdateAll();
+			}
+		}
 		
 		onUserContextMenu (e) {
 			if (e.instance.props.user) {
@@ -283,13 +287,6 @@ var EditUsers = (_ => {
 						})
 					]
 				}));
-			}
-		}
-
-		onSettingsClosed () {
-			if (this.SettingsUpdated) {
-				delete this.SettingsUpdated;
-				this.forceUpdateAll();
 			}
 		}
 		
@@ -681,7 +678,7 @@ var EditUsers = (_ => {
 					}
 				}
 				else {
-					this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {changeBackground: true});
+					this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {changeBackground: true, modify: BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "hovered", "selected")});
 					this.injectBadge(BDFDB.ReactUtils.getValue(e.returnvalue, "props.decorators.props.children"), e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
 						tagClass: BDFDB.disCN.bottagmember
 					});
@@ -789,7 +786,7 @@ var EditUsers = (_ => {
 				}
 				else {
 					e.returnvalue.props.name = BDFDB.ReactUtils.createElement("span", {children: this.getUserData(e.instance.props.user.id).username});
-					this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {changeBackground: true, modify: BDFDB.ObjectUtils.extract(e.instance.props, "selected", "hasUnreadMessages", "muted")});
+					this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {changeBackground: true, modify: BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "hovered", "selected", "hasUnreadMessages", "muted")});
 					e.returnvalue.props.name = [e.returnvalue.props.name];
 					e.returnvalue.props.avatar.props.src = this.getUserAvatar(e.instance.props.user.id);
 					this.injectBadge(e.returnvalue.props.name, e.instance.props.user.id, null, 1);
