@@ -6,17 +6,13 @@ var EditChannels = (_ => {
 	return class EditChannels {
 		getName () {return "EditChannels";}
 
-		getVersion () {return "4.1.5";}
+		getVersion () {return "4.1.6";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Allows you to rename and recolor channelnames.";}
 
 		constructor () {
-			this.changelog = {
-				"fixed":[["Color","Fixed color not showing in some places"]]
-			};
-
 			this.patchedModules = {
 				before: {
 					ChannelEditorContainer: "render",
@@ -47,12 +43,6 @@ var EditChannels = (_ => {
 				${BDFDB.dotCN.messagespopoutchannelname}:hover > span[style*="color"],
 				${BDFDB.dotCN.recentmentionschannelname}:hover > span[style*="color"] {
 					text-decoration: underline;
-				}
-				${BDFDB.dotCN.categorywrapper}:hover ${BDFDB.dotCN.categoryname} span[style*="color"],
-				${BDFDB.dotCN.categorywrapper}:hover ${BDFDB.dotCN.categoryicon}.EC-changed,
-				${BDFDB.dotCN.channelwrapper + BDFDB.notCN.channelmodeselected + BDFDB.notCN.channelmodeconnected}:hover ${BDFDB.dotCN.channelname} span[style*="color"],
-				${BDFDB.dotCN.channelwrapper + BDFDB.notCN.channelmodeselected + BDFDB.notCN.channelmodeconnected}:hover ${BDFDB.dotCN.channelicon}.EC-changed {
-					filter: brightness(150%);
 				}
 			`;
 
@@ -294,7 +284,11 @@ var EditChannels = (_ => {
 			if (e.instance.props.channel && settings.changeInChannelList) {
 				if (!e.returnvalue) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id);
 				else {
-					let modify = BDFDB.ObjectUtils.extract(e.instance.props, "muted", "locked", "selected", "unread", "connected");
+					let onMouseEnter = e.returnvalue.props.onMouseEnter || ( _ => {});
+					e.returnvalue.props.onMouseEnter = event => {e.instance.setState({hovered: true});};
+					let onMouseLeave = e.returnvalue.props.onMouseLeave || ( _ => {});
+					e.returnvalue.props.onMouseLeave = event => {e.instance.setState({hovered: false});};
+					let modify = BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "muted", "locked", "selected", "unread", "connected", "hovered");
 					let categoryName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.categoryname]]});
 					if (categoryName) this.changeChannelColor(categoryName, e.instance.props.channel.id, modify);
 					let categoryIcon = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.categoryicon]]});
@@ -307,7 +301,11 @@ var EditChannels = (_ => {
 			if (e.instance.props.channel && settings.changeInChannelList) {
 				if (!e.returnvalue) e.instance.props.channel = this.getChannelData(e.instance.props.channel.id);
 				else {
-					let modify = BDFDB.ObjectUtils.extract(e.instance.props, "muted", "locked", "selected", "unread", "connected");
+					let onMouseEnter = e.returnvalue.props.onMouseEnter || ( _ => {});
+					e.returnvalue.props.onMouseEnter = event => {e.instance.setState({hovered: true});};
+					let onMouseLeave = e.returnvalue.props.onMouseLeave || ( _ => {});
+					e.returnvalue.props.onMouseLeave = event => {e.instance.setState({hovered: false});};
+					let modify = BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "muted", "locked", "selected", "unread", "connected", "hovered");
 					let channelName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.channelname]]});
 					if (channelName) this.changeChannelColor(channelName, e.instance.props.channel.id, modify);
 					let channelIcon = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.channelicon]]});
@@ -438,10 +436,7 @@ var EditChannels = (_ => {
 			if (color && settings.changeChannelIcon) {
 				color = modify ? this.chooseColor(BDFDB.ObjectUtils.is(color) ? color[0] : color, modify) : BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(color) ? color[0] : color, "RGBA");
 				child.props.color = color || "currentColor";
-				if (color) {
-					child.props.foreground = null;
-					child.props.className = BDFDB.DOMUtils.formatClassName(child.props.className, "EC-changed");
-				}
+				if (color) child.props.foreground = null;
 			}
 		}
 
