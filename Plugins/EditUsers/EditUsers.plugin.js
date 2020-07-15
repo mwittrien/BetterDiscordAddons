@@ -420,7 +420,7 @@ var EditUsers = (_ => {
 							this.changeUserColor(children[index], e.instance.props.user.id, {changeBackground:true});
 							this.injectBadge(children, e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
 								tagClass: BDFDB.disCN.bottagnametag,
-								inverted: !!e.instance.props.activity
+								inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
 							});
 						}
 					}
@@ -1247,7 +1247,7 @@ var EditUsers = (_ => {
 					color: "BRAND",
 					close: true,
 					click: modal => {
-						let olddata = Object.assign({}, data);
+						let oldData = Object.assign({}, data);
 						
 						let userNameInput = modal.querySelector(".input-username " + BDFDB.dotCN.input);
 						let userTagInput = modal.querySelector(".input-usertag " + BDFDB.dotCN.input);
@@ -1275,7 +1275,7 @@ var EditUsers = (_ => {
 
 						let changed = false;
 						if (Object.keys(data).every(key => data[key] == null || data[key] == false) && (changed = true)) BDFDB.DataUtils.remove(this, "users", user.id);
-						else if (!BDFDB.equals(olddata, data) && (changed = true)) BDFDB.DataUtils.save(data, this, "users", user.id);
+						else if (!BDFDB.equals(oldData, data) && (changed = true)) BDFDB.DataUtils.save(data, this, "users", user.id);
 						if (changed) this.forceUpdateAll();
 					}
 				}]

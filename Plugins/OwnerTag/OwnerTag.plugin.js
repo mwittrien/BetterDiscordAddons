@@ -12,7 +12,7 @@ var OwnerTag = (_ => {
 	return class OwnerTag {
 		getName () {return "OwnerTag";}
 
-		getVersion () {return "1.2.9";}
+		getVersion () {return "1.3.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -20,7 +20,7 @@ var OwnerTag = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["Ignore bots","Added options to not add admin tag for bots with admin rights"]]
+				"fixed":[["BotTag","BotTag style is now properly inverted on the userpopout if the user is playing a game etc."]]
 			};
 
 			this.patchedModules = {
@@ -214,7 +214,8 @@ var OwnerTag = (_ => {
 				if (userType) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadertagwithnickname]]});
 					if (index > -1) this.injectOwnerTag(children, e.instance.props.user, userType, 2, {
-						tagClass: BDFDB.disCNS.userpopoutheaderbottagwithnickname + BDFDB.disCN.bottagnametag
+						tagClass: BDFDB.disCNS.userpopoutheaderbottagwithnickname + BDFDB.disCN.bottagnametag,
+						inverted: typeof e.instance.getMode == "function" && e.instance.getMode() !== "Normal"
 					});
 				}
 			}
