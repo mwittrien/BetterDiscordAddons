@@ -3,7 +3,7 @@
 var ServerFolders = (_ => {
 	var _this;
 	var folderStates, folderReads, guildStates;
-	var settings = {};
+	var folderConfigs = {}, customIcons = {}, settings = {};
 
 	const folderIcons = [
 		{openicon:`<path d="M 200,390 H 955 L 795,770 H 200 Z" fill="REPLACE_FILL2"/><path d="M 176.6,811 C 163.9,811 155.1,802.6 155,784.7 V 212.9 C 157.9,190.5 169,179.8 195.9,176 h 246 c 20.3,3.2 34.5,18.7 41,28.6 C 494.9,228.3 492.9,240.4 494,266 l 313.6,1.3 c 17.6,0.4 23.3,3.7 23.3,3.7 8.6,4.2 14.8,10.7 19,19.5 C 856.3,319.5 854,360 854,360 h 108.9 c 4.4,2.4 13.7,1.2 11.8,23.5 L 815.8,789.4 c -2.1,5.2 -12.5,13.6 -18.7,16.1 -6.8,2.7 -18.5,5.5 -23.9,5.5 z M 767,759 897,430 H 360 L 230,759 Z" fill="REPLACE_FILL1"/>`,
@@ -164,7 +164,8 @@ var ServerFolders = (_ => {
 							BDFDB.ReactUtils.forceUpdate(this);
 						},
 						onRemove: _ => {
-							BDFDB.DataUtils.remove(_this, "customicons", id);
+							delete customIcons[id];
+							BDFDB.DataUtils.save(customIcons, _this, "customicons");
 							BDFDB.ReactUtils.forceUpdate(this);
 						},
 						children: folderIcons[id].closedicon ? BDFDB.ReactUtils.createElement("div", {
@@ -294,7 +295,8 @@ var ServerFolders = (_ => {
 									if (inputIns.length == 2 && inputIns[0].props.value && inputIns[1].props.value) {
 										this.checkImage(inputIns[0].props.value, openIcon => {
 											this.checkImage(inputIns[1].props.value, closedIcon => {
-												BDFDB.DataUtils.save({openicon: openIcon, closedicon: closedIcon}, _this, "customicons", _this.generateID("customicon"));
+												customIcons[_this.generateId("customicon")] = {openicon: openIcon, closedicon: closedIcon};
+												BDFDB.DataUtils.save(customIcons, _this, "customicons");
 												this.props.open = null;
 												this.props.closed = null;
 												BDFDB.ModuleUtils.forceAllUpdates(_this, "GuildFolderSettingsModal");
@@ -330,6 +332,7 @@ var ServerFolders = (_ => {
 				after: {
 					AppView: "render",
 					GuildFolder: "type",
+					Guilds: "render",
 					Guild: ["componentDidMount", "render"],
 					GuildFolderSettingsModal: ["componentDidMount", "render"]
 				}
@@ -420,7 +423,6 @@ var ServerFolders = (_ => {
 
 		getSettingsPanel () {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-			let settings = BDFDB.DataUtils.get(this, "settings");
 			let settingsPanel, settingsItems = [];
 			
 			for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
@@ -636,6 +638,29 @@ var ServerFolders = (_ => {
 				if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(folderGuildContentComponent, {
 					themeOverride: children[index].props.themeOverride
 				}));
+			}
+		}
+
+		processGuilds (e) {
+			if (settings.extraColumn) {
+				let topBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.guildswrapperunreadmentionsbartop]]});
+				if (topBar) {
+					let topIsVisible = topBar.props.isVisible;
+					topBar.props.isVisible = (...args) => {
+						let ids = BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId).map(n => n.guildIds).flat(10);
+						args[2] = args[2].filter(n => !ids.includes(n));
+						return topIsVisible(...args);
+					};
+				}
+				let bottomBar = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.guildswrapperunreadmentionsbarbottom]]});
+				if (bottomBar) {
+					let bottomIsVisible = bottomBar.props.isVisible;
+					bottomBar.props.isVisible = (...args) => {
+						let ids = BDFDB.LibraryModules.FolderStore.guildFolders.filter(n => n.folderId).map(n => n.guildIds).flat(10);
+						args[2] = args[2].filter(n => !ids.includes(n));
+						return bottomIsVisible(...args);
+					};
+				}
 			}
 		}
 		
@@ -872,7 +897,7 @@ var ServerFolders = (_ => {
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 						children: BDFDB.LanguageUtils.LanguageStrings.SAVE,
 						onClick: event => {
-							let olddata = Object.assign({}, data);
+							let oldData = Object.assign({}, data);
 							
 							let root = BDFDB.ReactUtils.findDOMNode(e.instance).parentElement.querySelector(BDFDB.dotCN.layermodal);
 							
@@ -887,16 +912,15 @@ var ServerFolders = (_ => {
 							data.color3 = BDFDB.ColorUtils.getSwatchColor(root, 3);
 							data.color4 = BDFDB.ColorUtils.getSwatchColor(root, 4);
 							
-							let nativecolor = data.swapColors ? "color2" : "color1";
+							let nativeColor = data.swapColors ? "color2" : "color1";
 							this.updateFolder({
 								folderId: e.instance.props.folderId,
 								folderName: root.querySelector(".input-foldername").value,
-								folderColor: data[nativecolor] ? BDFDB.ColorUtils.convert(data[nativecolor] && BDFDB.ObjectUtils.is(data[nativecolor]) ? data[nativecolor][Object.keys(data[nativecolor])[0]] : data[nativecolor], "INT") : null
+								folderColor: data[nativeColor] ? BDFDB.ColorUtils.convert(data[nativeColor] && BDFDB.ObjectUtils.is(data[nativeColor]) ? data[nativeColor][Object.keys(data[nativeColor])[0]] : data[nativeColor], "INT") : null
 							});
-							if (!BDFDB.equals(olddata, data)) {
+							if (!BDFDB.equals(oldData, data)) {
 								BDFDB.DataUtils.save(data, this, "folders", e.instance.props.folderId);
-								BDFDB.GuildUtils.rerenderAll();
-								BDFDB.ReactUtils.forceUpdate(folderGuildContent);
+								this.forceUpdateAll();
 							}
 							e.instance.close();
 						}
@@ -907,21 +931,26 @@ var ServerFolders = (_ => {
 
 		loadAllIcons () {
 			let icons = {};
-			folderIcons.forEach((array,i) => {icons[i] = {"openicon":array.openicon,"closedicon":array.closedicon,"customID":null};});
-			let customicons = BDFDB.DataUtils.load(this, "customicons");
-			for (let id in customicons) icons[id] = Object.assign({customID: id}, customicons[id]);
+			folderIcons.forEach((array, i) => {
+				icons[i] = {
+					openicon: array.openicon,
+					closedicon: array.closedicon,
+					customID: null
+				};
+			});
+			for (let id in customIcons) icons[id] = Object.assign({customID: id}, customIcons[id]);
 			return icons;
 		}
 
-		generateID (prefix) {
+		generateId (prefix) {
 			if (prefix == "folder") {
 				let id = Math.floor(Math.random() * 4294967296);
-				return BDFDB.LibraryModules.FolderStore.guildFolders.every(n => !n.folderId || n.folderId != id) ? id : this.generateID(prefix);
+				return BDFDB.LibraryModules.FolderStore.guildFolders.every(n => !n.folderId || n.folderId != id) ? id : this.generateId(prefix);
 			}
 			else {
 				let data = BDFDB.DataUtils.load(this, prefix + "s");
 				let id = prefix + "_" + Math.round(Math.random()*10000000000000000);
-				return data[id] ? this.generateID(prefix) : id;
+				return data[id] ? this.generateId(prefix) : id;
 			}
 		}
 
@@ -936,7 +965,7 @@ var ServerFolders = (_ => {
 		
 		getFolderConfig (folderId) {
 			let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(folderId) || {};
-			let data = BDFDB.DataUtils.load(this, "folders", folderId) || {
+			let data = folderConfigs[folderId] || {
 				iconID: 			"-1",
 				muteFolder: 		false,
 				autoRead: 			false,
@@ -948,12 +977,13 @@ var ServerFolders = (_ => {
 				color3: 			null,
 				color4: 			null
 			};
-			let nativecolor = data.swapColors ? "color2" : "color1";
-			if (!data[nativecolor]) data[nativecolor] = BDFDB.ColorUtils.convert(folder.folderColor, "RGBCOMP");
-			else if (folder.folderColor && !BDFDB.ColorUtils.compare(folder.folderColor, BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data[nativecolor]) ? data[nativecolor][Object.keys(data[nativecolor])[0]] : data[nativecolor], "INT"))) {
-				data[nativecolor] = BDFDB.ColorUtils.convert(folder.folderColor, "RGBCOMP");
+			let nativeColor = data.swapColors ? "color2" : "color1";
+			if (!data[nativeColor]) data[nativeColor] = BDFDB.ColorUtils.convert(folder.folderColor, "RGBCOMP");
+			else if (folder.folderColor && !BDFDB.ColorUtils.compare(folder.folderColor, BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(data[nativeColor]) ? data[nativeColor][Object.keys(data[nativeColor])[0]] : data[nativeColor], "INT"))) {
+				data[nativeColor] = BDFDB.ColorUtils.convert(folder.folderColor, "RGBCOMP");
 				BDFDB.DataUtils.save(data, this, "folders", folderId);
 			}
+			folderConfigs[folderId] = data;
 			return data;
 		}
 
@@ -1043,7 +1073,7 @@ var ServerFolders = (_ => {
 						added = true;
 						guildFolders.push({
 							guildIds: guildIds,
-							folderId: this.generateID("folder")
+							folderId: this.generateId("folder")
 						});
 					}
 				}
@@ -1117,7 +1147,10 @@ var ServerFolders = (_ => {
 		
 		forceUpdateAll() {
 			settings = BDFDB.DataUtils.get(this, "settings");
+			folderConfigs = BDFDB.DataUtils.load(this, "folders");
+			customIcons = BDFDB.DataUtils.load(this, "customicons");
 			
+			BDFDB.ReactUtils.forceUpdate(folderGuildContent);
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 			BDFDB.GuildUtils.rerenderAll();
 		}
