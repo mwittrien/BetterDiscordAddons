@@ -1901,7 +1901,7 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 }
 
 .bd-addon-list .bd-footer a {
-	color: rgb(var(--bd-blue));
+	color: var(--bd-blue);
 }
 
 .bd-addon-list .bd-card-footer button {
