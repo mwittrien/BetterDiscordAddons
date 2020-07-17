@@ -4087,7 +4087,7 @@
 		tooltipCustom: "tooltipCustom-hH39_Z"
 	};
 	DiscordClassModules.BDrepo = {
-		bdAddonCard: "bd-card bd-addon-card",
+		bdAddonCard: "bd-addon-card",
 		bdButton: "bd-button",
 		bdaAuthor: "bd-author author bda-author",
 		bdaControls: "bd-controls bd-addon-controls bda-controls",
