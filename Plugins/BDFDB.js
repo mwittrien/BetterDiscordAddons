@@ -3978,7 +3978,7 @@
 		automaticLoading: "fork-ps-5",
 		coloredText: "bda-gs-7",
 		normalizedClasses: "fork-ps-4",
-		showToasts: BDFDB.BDUtils.settingsIds.showToasts
+		showToasts: "fork-ps-2"
 	} : {
 		automaticLoading: "settings.addons.autoReload",
 		coloredText: "settings.appearance.coloredText",
@@ -8714,6 +8714,8 @@
 			}), "itemClassName", "items"));
 		}
 	};
+	
+	InternalComponents.NativeSubComponents.TabBar = BDFDB.ModuleUtils.findByName("TabBar");
 	
 	InternalComponents.LibraryComponents.Table = InternalBDFDB.loadPatchedComp("Table") || reactInitialized && class BDFDB_Table extends LibraryModules.React.Component {
 		render() {
