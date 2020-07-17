@@ -291,7 +291,7 @@ var PluginRepo = (_ => {
 				let search = oldSettings ? n => n.section == BDFDB.DiscordConstants.UserSettingsSections.DEVELOPER_OPTIONS : n => n.section == BDFDB.DiscordConstants.UserSettingsSections.CHANGE_LOG || n.section == "changelog"
 				let index = e.instance.props.sections.indexOf(e.instance.props.sections.find(search));
 				if (index > -1) {
-					e.instance.props.sections.splice(index + 1, 0, {
+					e.instance.props.sections.splice(oldSettings ? index + 1 : index - 1, 0, {
 						label: "Plugin Repo",
 						section: "pluginrepo",
 						onClick: _ => {this.openPluginRepoModal();}
