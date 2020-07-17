@@ -247,6 +247,10 @@
 				if (pluginName != newName) {
 					url = url.replace(new RegExp(pluginName, "g"), newName);
 					LibraryRequires.fs.unlink(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".plugin.js"), _ => {});
+					let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".config.json");
+					LibraryRequires.fs.exists(configPath, exists => {
+						if (exists) LibraryRequires.fs.rename(configPath, LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), newName + ".config.json"), _ => {});
+					});
 					BDFDB.TimeUtils.timeout(_ => {if (wasEnabled && !BDFDB.BDUtils.isPluginEnabled(newName)) BDFDB.BDUtils.enablePlugin(newName);}, 3000);
 				}
 				BDFDB.NotificationUtils.toast(`${pluginName} v${oldVersion} has been replaced by ${newName} v${newVersion}.`, {nopointer:true, selector:"plugin-updated-toast"});
@@ -1253,7 +1257,7 @@
 		ModalLayer: "layermodal",
 		MutualGuilds: "userprofilebody",
 		MutualFriends: "userprofilebody",
-		Note: "usernote",
+		Note: ["usernotepopout", "usernoteprofile"],
 		PopoutContainer: "popout",
 		Popouts: "popouts",
 		PrivateChannelCall: "callcurrentcontainer",
@@ -1412,10 +1416,10 @@
 					let methodNames = [plugin.patchedModules[patchType][type]].flat(10).filter(n => n);
 					if (BDFDB.ArrayUtils.includes(methodNames, "componentDidMount", "componentDidUpdate", "render", false) && (!selectedTypes.length || selectedTypes.includes(type))) {
 						let unmappedType = type.split(" _ _ ")[1] || type;
-						let className = WebModulesData.PatchFinder[unmappedType];
+						let classNames = [WebModulesData.PatchFinder[unmappedType]].flat(10).filter(n => DiscordClasses[n]);
 						let filter = WebModulesData.SpecialFilter[unmappedType];
-						if (className && DiscordClasses[className] && typeof filter == "function") {
-							for (let ele of document.querySelectorAll(BDFDB.dotCN[className])) {
+						if (classNames.length && typeof filter == "function") {
+							for (let ele of document.querySelectorAll(classNames.map(n => BDFDB.dotCN[n]).join(", "))) {
 								let constro = filter(BDFDB.ReactUtils.getInstance(ele));
 								if (constro) {
 									specialModules.push([type, constro]);
@@ -1488,6 +1492,7 @@
 			if (component) patchInstance(WebModulesData.NonRender.includes(unmappedType) ? (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports : component, type, patchType);
 			else {
 				let className = WebModulesData.PatchFinder[unmappedType];
+				let classNames = [WebModulesData.PatchFinder[unmappedType]].flat(10).filter(n => DiscordClasses[n]);
 				let codeFind = WebModulesData.CodeFinder[unmappedType];
 				let propertyFind = WebModulesData.PropsFinder[unmappedType];
 				let mapped = WebModulesData.PatchMap[type];
@@ -1497,7 +1502,7 @@
 					plugin.patchedModules[patchType][mappedType] = plugin.patchedModules[patchType][type];
 					delete plugin.patchedModules[patchType][type];
 				}
-				if (className && DiscordClasses[className]) checkForInstance(className, mappedType, patchType, WebModulesData.ForceObserve.includes(unmappedType));
+				if (classNames.length) checkForInstance(classNames, mappedType, patchType, WebModulesData.ForceObserve.includes(unmappedType));
 				else if (codeFind) {
 					let exports = (BDFDB.ModuleUtils.findByString(codeFind, false) || {}).exports;
 					patchInstance(exports && WebModulesData.MemoComponent.includes(unmappedType) ? exports.default : exports, mappedType, patchType, true);
@@ -1556,7 +1561,7 @@
 			}
 			return false;
 		}
-		function checkForInstance(className, type, patchType, forceObserve) {
+		function checkForInstance(classNames, type, patchType, forceObserve) {
 			const app = document.querySelector(BDFDB.dotCN.app), bdSettings = document.querySelector("#bd-settingspane-container " + BDFDB.dotCN.scrollerwrap);
 			let instanceFound = false;
 			if (!forceObserve) {
@@ -1570,8 +1575,8 @@
 				}
 			}
 			if (!instanceFound) {
-				let found = false, disClass = BDFDB.disCN[className], dotClass = BDFDB.dotCN[className];
-				for (let ele of document.querySelectorAll(dotClass)) {
+				let found = false, classes = classNames.map(n => BDFDB.disCN[n]), selector = classNames.map(n => BDFDB.dotCN[n]).join(", ");
+				for (let ele of document.querySelectorAll(selector)) {
 					found = checkEle(ele, type, patchType);
 					if (found) break;
 				}
@@ -1579,7 +1584,7 @@
 					let instanceObserver = new MutationObserver(cs => {cs.forEach(c => {c.addedNodes.forEach(n => {
 						if (found || !n || !n.tagName) return;
 						let ele = null;
-						if ((ele = BDFDB.DOMUtils.containsClass(n, disClass) ? n : n.querySelector(dotClass)) != null) {
+						if ((ele = BDFDB.DOMUtils.containsClass(n, classes) ? n : n.querySelector(selector)) != null) {
 							found = checkEle(ele, type, patchType);
 							if (found) instanceObserver.disconnect();
 						}
@@ -1647,7 +1652,7 @@
 	LibraryModules.GuildBoostUtils = BDFDB.ModuleUtils.findByProperties("getTierName", "getUserLevel");
 	LibraryModules.GuildChannelStore = BDFDB.ModuleUtils.findByProperties("getChannels", "getDefaultChannel");
 	LibraryModules.GuildEmojiStore = BDFDB.ModuleUtils.findByProperties("getGuildEmoji", "getDisambiguatedEmojiContext");
-	LibraryModules.GuildNotificationsUtils = BDFDB.ModuleUtils.findByProperties("updateChannelOverrideSettings", "updateNotificationSettings");
+	LibraryModules.GuildNotificationsUtils = BDFDB.ModuleUtils.findByProperties("updateChannelOverrideSettings", "updateGuildNotificationSettings");
 	LibraryModules.GuildSettingsSectionUtils = BDFDB.ModuleUtils.findByProperties("getGuildSettingsSections");
 	LibraryModules.GuildSettingsUtils = BDFDB.ModuleUtils.findByProperties("open", "updateGuild");
 	LibraryModules.GuildStore = BDFDB.ModuleUtils.findByProperties("getGuild", "getGuilds");
@@ -4424,7 +4429,6 @@
 	DiscordClassModules.NameContainer = BDFDB.ModuleUtils.findByProperties("nameAndDecorators", "name");
 	DiscordClassModules.NameTag = BDFDB.ModuleUtils.findByProperties("bot", "nameTag");
 	DiscordClassModules.NitroStore = BDFDB.ModuleUtils.findByProperties("applicationStore", "marketingHeader");
-	DiscordClassModules.Note = BDFDB.ModuleUtils.find(m => typeof m.note == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.Notice = BDFDB.ModuleUtils.findByProperties("notice", "noticeFacebook");
 	DiscordClassModules.Peoples = BDFDB.ModuleUtils.findByProperties("peopleColumn", "tabBar");
 	DiscordClassModules.PictureInPicture = BDFDB.ModuleUtils.findByProperties("pictureInPicture", "pictureInPictureWindow");
@@ -4434,7 +4438,7 @@
 	DiscordClassModules.PrivateChannelListScroller = BDFDB.ModuleUtils.findByProperties("scroller", "empty");
 	DiscordClassModules.Popout = BDFDB.ModuleUtils.findByProperties("popout", "arrowAlignmentTop");
 	DiscordClassModules.PopoutActivity = BDFDB.ModuleUtils.findByProperties("ellipsis", "activityActivityFeed");
-	DiscordClassModules.QuickMessage = BDFDB.ModuleUtils.findByProperties("quickMessage", "isBlocked");
+	DiscordClassModules.QuickMessage = BDFDB.ModuleUtils.find(m => typeof m.input == "string" && Object.keys(m).length == 1);;
 	DiscordClassModules.QuickSelect = BDFDB.ModuleUtils.findByProperties("quickSelectArrow", "selected");
 	DiscordClassModules.QuickSwitch = BDFDB.ModuleUtils.findByProperties("resultFocused", "guildIconContainer");
 	DiscordClassModules.QuickSwitchWrap = BDFDB.ModuleUtils.findByProperties("container", "miscContainer");
@@ -5595,8 +5599,7 @@
 		popouttopleft: ["Popout", "popoutTopLeft"],
 		popouttopright: ["Popout", "popoutTopRight"],
 		popoutwrapper: ["BDFDB", "popoutWrapper"],
-		quickmessage: ["QuickMessage", "quickMessage"],
-		quickmessagepopout: ["UserPopout", "quickMessage"],
+		quickmessage: ["QuickMessage", "input"],
 		quickselect: ["QuickSelect", "quickSelect"],
 		quickselectarrow: ["QuickSelect", "quickSelectArrow"],
 		quickselectclick: ["QuickSelect", "quickSelectClick"],
@@ -5960,7 +5963,6 @@
 		userprofiletopsectionxbox: ["UserProfile", "topSectionXbox"],
 		userprofileusername: ["UserProfile", "username"],
 		username: ["NameTag", "username"],
-		usernote: ["Note", "note"],
 		usernotepopout: ["UserPopout", "note"],
 		usernoteprofile: ["UserProfile", "note"],
 		vertical: ["Flex", "vertical"],
