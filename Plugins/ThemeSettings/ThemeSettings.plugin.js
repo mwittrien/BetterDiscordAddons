@@ -6,7 +6,7 @@ var ThemeSettings = (_ => {
 	return class ThemeSettings {
 		getName () {return "ThemeSettings";}
 
-		getVersion () {return "1.1.9";}
+		getVersion () {return "1.2.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -55,9 +55,9 @@ var ThemeSettings = (_ => {
 					if (BDFDB.DOMUtils.containsClass(node, BDFDB.disCN._repocard)) this.appendSettingsButton(node);
 					if (node.nodeType != Node.TEXT_NODE) for (let child of node.querySelectorAll(BDFDB.dotCN._repocard)) this.appendSettingsButton(child);
 				});}});}));
-				BDFDB.ObserverUtils.connect(this, document.querySelector("#user-settings"), {name:"cardObserver", instance:cardObserver}, {childList: true, subtree:true});
+				BDFDB.ObserverUtils.connect(this, document.querySelector(`${BDFDB.dotCN.layer}[aria-label="${BDFDB.DiscordConstants.Layers.USER_SETTINGS}"]`), {name:"cardObserver", instance:cardObserver}, {childList: true, subtree:true});
 				BDFDB.ObserverUtils.connect(this, BDFDB.dotCN.applayers, {name:"appLayerObserver", instance:(new MutationObserver(changes => {changes.forEach(change => {if (change.addedNodes) {change.addedNodes.forEach(node => {
-					if (node.id == "user-settings") BDFDB.ObserverUtils.connect(this, node, {name:"cardObserver", instance:cardObserver}, {childList: true, subtree:true});
+					if (node.nodeType != Node.TEXT_NODE && node.getAttribute("aria-label") == BDFDB.DiscordConstants.Layers.USER_SETTINGS) BDFDB.ObserverUtils.connect(this, node, {name:"cardObserver", instance:cardObserver}, {childList: true, subtree:true});
 				});}});}))}, {childList: true});
 				for (let child of document.querySelectorAll(BDFDB.dotCN._repocard)) this.appendSettingsButton(child);
 			}
@@ -83,10 +83,13 @@ var ThemeSettings = (_ => {
 			if (addon && !addon.plugin) {
 				let vars = this.getThemeVars(addon.css);
 				if (vars.length) {
-					let footer = card.querySelector(BDFDB.dotCN._repofooter);
+					let footer = card.querySelector("." + BDFDB.dotCN._repofooter.split(".").filter(n => n).join(",."));
 					if (!footer) {
 						footer = document.createElement("div");
 						footer.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repofooter);
+						let links = document.createElement("span");
+						links.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repolinks);
+						footer.appendChild(links);
 						card.appendChild(footer);
 					}
 					let settingsButton = document.createElement("button");
@@ -203,7 +206,7 @@ var ThemeSettings = (_ => {
 				}
 			}
 			
-			wrapper.appendChild(BDFDB.PluginUtils.createSettingsPanel(theme, settingsItems));
+			wrapper.appendChild(BDFDB.PluginUtils.createSettingsPanel(Object.assign({}, theme, {noLibrary: true}), settingsItems));
 		}
 	}
 })();

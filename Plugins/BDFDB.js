@@ -325,7 +325,7 @@
 						})
 					})
 				}),
-				plugin != BDFDB && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Button, {
+				plugin != BDFDB && !plugin.noLibrary && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Button, {
 					size: InternalComponents.LibraryComponents.Button.Sizes.MIN,
 					children: "Library Settings",
 					onClick: event => {
@@ -4100,7 +4100,7 @@
 		bdaLink: "bd-link bda-link",
 		bdaLinks: "bd-links bd-addon-links bda-links",
 		bdaName: "bd-name name bda-name",
-		bdaSettingsButton: "bd-settings-button bda-settings-button",
+		bdaSettingsButton: "bd-button bd-button-addon-settings bd-settings-button bda-settings-button",
 		bdaSlist: "bda-slist bd-addon-list",
 		bdaVersion: "bd-version version bda-version",
 		bdGuild: "bd-guild",
