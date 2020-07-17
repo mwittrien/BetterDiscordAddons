@@ -126,7 +126,7 @@ var ThemeRepo = (_ => {
 	return class ThemeRepo {
 		getName () {return "ThemeRepo";}
 
-		getVersion () {return "1.9.8";}
+		getVersion () {return "1.9.9";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -134,12 +134,12 @@ var ThemeRepo = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
+				"fixed":[["Moved repo button","Repo button is now an item in the settings sidebar instead of an extra button in the themes page"]]
 			};
 			
 			this.patchedModules = {
-				after: {
-					V2C_ContentColumn: "render"
+				before: {
+					SettingsView: "render"
 				}
 			};
 		}
@@ -345,17 +345,14 @@ var ThemeRepo = (_ => {
 			});
 		}
 		
-		processV2CContentColumn (e) {
-			if (typeof e.instance.props.title == "string" && e.instance.props.title.toUpperCase().indexOf("THEMES") == 0) {
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {key: "folder-button"});
-				if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-					text: "Open Theme Repo",
-					children: BDFDB.ReactUtils.createElement("button", {
-						className: `${BDFDB.disCNS._repobutton + BDFDB.disCN._repofolderbutton} bd-themerepobutton`,
-						onClick: _ => {this.openThemeRepoModal();},
-						children: "ThemeRepo"
-					})
-				}));
+		processSettingsView (e) {
+			if (BDFDB.ArrayUtils.is(e.instance.props.sections) && e.instance.props.sections[0] && e.instance.props.sections[0].label == BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS) {
+				let index = e.instance.props.sections.indexOf(e.instance.props.sections.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.CHANGE_LOG || n.section == "changelog"));
+				if (index > -1) e.instance.props.sections.splice(index - 1, 0, {
+					label: "Theme Repo",
+					section: "themerepo",
+					onClick: _ => {this.openThemeRepoModal();}
+				})
 			}
 		}
 		
