@@ -1257,7 +1257,7 @@
 		ModalLayer: "layermodal",
 		MutualGuilds: "userprofilebody",
 		MutualFriends: "userprofilebody",
-		Note: ["usernotepopout", "usernoteprofile"],
+		Note: "usernotetextarea",
 		PopoutContainer: "popout",
 		Popouts: "popouts",
 		PrivateChannelCall: "callcurrentcontainer",
@@ -1491,7 +1491,6 @@
 			let component = WebModulesData.LoadedInComponents[type] && BDFDB.ReactUtils.getValue(InternalComponents, WebModulesData.LoadedInComponents[type]);
 			if (component) patchInstance(WebModulesData.NonRender.includes(unmappedType) ? (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports : component, type, patchType);
 			else {
-				let className = WebModulesData.PatchFinder[unmappedType];
 				let classNames = [WebModulesData.PatchFinder[unmappedType]].flat(10).filter(n => DiscordClasses[n]);
 				let codeFind = WebModulesData.CodeFinder[unmappedType];
 				let propertyFind = WebModulesData.PropsFinder[unmappedType];
@@ -4429,6 +4428,7 @@
 	DiscordClassModules.NameContainer = BDFDB.ModuleUtils.findByProperties("nameAndDecorators", "name");
 	DiscordClassModules.NameTag = BDFDB.ModuleUtils.findByProperties("bot", "nameTag");
 	DiscordClassModules.NitroStore = BDFDB.ModuleUtils.findByProperties("applicationStore", "marketingHeader");
+	DiscordClassModules.NoteTextarea = BDFDB.ModuleUtils.find(m => typeof m.textarea == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.Notice = BDFDB.ModuleUtils.findByProperties("notice", "noticeFacebook");
 	DiscordClassModules.Peoples = BDFDB.ModuleUtils.findByProperties("peopleColumn", "tabBar");
 	DiscordClassModules.PictureInPicture = BDFDB.ModuleUtils.findByProperties("pictureInPicture", "pictureInPictureWindow");
@@ -4438,7 +4438,7 @@
 	DiscordClassModules.PrivateChannelListScroller = BDFDB.ModuleUtils.findByProperties("scroller", "empty");
 	DiscordClassModules.Popout = BDFDB.ModuleUtils.findByProperties("popout", "arrowAlignmentTop");
 	DiscordClassModules.PopoutActivity = BDFDB.ModuleUtils.findByProperties("ellipsis", "activityActivityFeed");
-	DiscordClassModules.QuickMessage = BDFDB.ModuleUtils.find(m => typeof m.input == "string" && Object.keys(m).length == 1);;
+	DiscordClassModules.QuickMessage = BDFDB.ModuleUtils.find(m => typeof m.input == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.QuickSelect = BDFDB.ModuleUtils.findByProperties("quickSelectArrow", "selected");
 	DiscordClassModules.QuickSwitch = BDFDB.ModuleUtils.findByProperties("resultFocused", "guildIconContainer");
 	DiscordClassModules.QuickSwitchWrap = BDFDB.ModuleUtils.findByProperties("container", "miscContainer");
@@ -5965,6 +5965,7 @@
 		username: ["NameTag", "username"],
 		usernotepopout: ["UserPopout", "note"],
 		usernoteprofile: ["UserProfile", "note"],
+		usernotetextarea: ["NoteTextarea", "textarea"],
 		vertical: ["Flex", "vertical"],
 		voiceavatar: ["VoiceChannel", "avatar"],
 		voiceavatarcontainer: ["VoiceChannel", "avatarContainer"],

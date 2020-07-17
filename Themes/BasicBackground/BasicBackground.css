@@ -4294,13 +4294,10 @@ body:before {
 	cursor: pointer;
 }
 
-.note-3kmerW textarea {										/* body					note								*/
-	color: rgba(var(--fontwhite2));
-}
-.note-3kmerW textarea:focus {
+.textarea-2r0oV8:focus {									/* body					note 								*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
-.note-3kmerW textarea::placeholder {
+.textarea-2r0oV8::placeholder {
 	color: rgba(var(--fontwhite4));
 }
 

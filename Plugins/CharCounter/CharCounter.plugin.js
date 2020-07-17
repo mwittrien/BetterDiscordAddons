@@ -17,7 +17,7 @@ var CharCounter = (_ => {
 	return class CharCounter {
 		getName () {return "CharCounter";}
 
-		getVersion () {return "1.4.8";}
+		getVersion () {return "1.4.9";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -71,7 +71,7 @@ var CharCounter = (_ => {
 					bottom: -10px !important;
 					font-size: 12px !important;
 				}
-				${BDFDB.dotCN.usernote} textarea:not(:focus) + ${BDFDB.dotCN._charcountercounter} {
+				${BDFDB.dotCN.usernotetextarea}:not(:focus) ~ ${BDFDB.dotCN._charcountercounter} {
 					display: none;
 				}`;
 		}
