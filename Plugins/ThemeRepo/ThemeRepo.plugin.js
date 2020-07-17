@@ -346,13 +346,20 @@ var ThemeRepo = (_ => {
 		}
 		
 		processSettingsView (e) {
-			if (BDFDB.ArrayUtils.is(e.instance.props.sections) && e.instance.props.sections[0] && e.instance.props.sections[0].label == BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS) {
-				let index = e.instance.props.sections.indexOf(e.instance.props.sections.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.CHANGE_LOG || n.section == "changelog"));
-				if (index > -1 && !e.instance.props.sections.find(n => n.section == "themerepo")) e.instance.props.sections.splice(index - 1, 0, {
-					label: "Theme Repo",
-					section: "themerepo",
-					onClick: _ => {this.openThemeRepoModal();}
-				})
+			if (BDFDB.ArrayUtils.is(e.instance.props.sections) && e.instance.props.sections[0] && e.instance.props.sections[0].label == BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS && !e.instance.props.sections.find(n => n.section == "themerepo")) {
+				let oldSettings = !e.instance.props.sections.find(n => n.section == "themes");
+				let isPRinjected = oldSettings && e.instance.props.sections.find(n => n.section == "pluginrepo");
+				console.log(isPRinjected);
+				let search = oldSettings ? (isPRinjected ? n => n.section == "pluginrepo" : n => n.section == BDFDB.DiscordConstants.UserSettingsSections.DEVELOPER_OPTIONS) : n => n.section == BDFDB.DiscordConstants.UserSettingsSections.CHANGE_LOG || n.section == "changelog"
+				let index = e.instance.props.sections.indexOf(e.instance.props.sections.find(search));
+				if (index > -1) {
+					e.instance.props.sections.splice(index + 1, 0, {
+						label: "Theme Repo",
+						section: "themerepo",
+						onClick: _ => {this.openThemeRepoModal();}
+					});
+					if (oldSettings && !isPRinjected) e.instance.props.sections.splice(index + 1, 0, {section: "DIVIDER"});
+				}
 			}
 		}
 		
