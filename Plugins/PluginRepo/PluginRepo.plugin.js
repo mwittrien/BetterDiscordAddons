@@ -308,7 +308,7 @@ var PluginRepo = (_ => {
 			if (loading.is) BDFDB.NotificationUtils.toast(`Plugins are still being fetched. Try again in some seconds.`, {type:"danger"});
 			else {
 				let modalSettings = BDFDB.DataUtils.get(this, "modalSettings");
-				let searchTimeout, automaticLoading = BDFDB.BDUtils.isAutoLoadEnabled();
+				let searchTimeout, automaticLoading = BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.automaticLoading);
 				options = Object.assign(options, modalSettings);
 				options.updated = options.updated && !options.showOnlyOutdated;
 				options.outdated = options.updated || options.showOnlyOutdated;

@@ -369,7 +369,7 @@ var ThemeRepo = (_ => {
 			if (loading.is) BDFDB.NotificationUtils.toast(`Themes are still being fetched. Try again in some seconds.`, {type:"danger"});
 			else {				
 				let modalSettings = BDFDB.DataUtils.get(this, "modalSettings");
-				let searchTimeout, automaticLoading = BDFDB.BDUtils.isAutoLoadEnabled();
+				let searchTimeout, automaticLoading = BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.automaticLoading);
 				options = Object.assign(options, modalSettings);
 				options.updated = options.updated && !options.showOnlyOutdated;
 				options.outdated = options.updated || options.showOnlyOutdated;
@@ -516,7 +516,7 @@ var ThemeRepo = (_ => {
 									className: BDFDB.disCN.marginbottom20,
 									type: "Switch",
 									label: "Preview with normalized classes",
-									value: BDFDB.BDUtils.getSettings("fork-ps-4"),
+									value: BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.normalizedClasses),
 									onChange: (value, instance) => {
 										options.preview.executeJavaScriptSafe(`window.onmessage({
 											origin: "ThemeRepo",

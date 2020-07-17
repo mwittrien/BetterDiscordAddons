@@ -1867,11 +1867,11 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 	background: var(--vaccentcolor-active);
 }
 .bd-server-card.bd-server-card-pinned:after {
-	background: rgb(var(--bd-blue));
+	background: var(--bd-blue);
 }
 
 .bd-modal-wrapper .footer button {
-	background: rgb(var(--bd-blue));
+	background: var(--bd-blue);
 }
 .bd-modal-wrapper .footer button:hover {
 	background: var(--vaccentcolor-hover);
@@ -1881,7 +1881,7 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 }
 
 .bd-pfbtn {
-	background: rgb(var(--bd-blue));
+	background: var(--bd-blue);
 }
 .bd-pfbtn:hover {
 	background: var(--vaccentcolor-hover);
@@ -1891,7 +1891,7 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 }
 
 .bd-button {
-	background: rgb(var(--bd-blue));
+	background: var(--bd-blue);
 }
 .bd-button:hover {
 	background: var(--vaccentcolor-hover);
@@ -1905,7 +1905,7 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 }
 
 .bd-addon-list .bd-card-footer button {
-	background: rgb(var(--bd-blue));
+	background: var(--bd-blue);
 }
 .bd-addon-list .bd-card-footer button:hover {
 	background: var(--vaccentcolor-hover);

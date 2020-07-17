@@ -6,7 +6,7 @@ var EditUsers = (_ => {
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.9.1";}
+		getVersion () {return "3.9.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -536,7 +536,7 @@ var EditUsers = (_ => {
 				let content = e.instance.props.childrenMessageContent;
 				if (content && content.type && content.type.type) {
 					let data = changedUsers[content.props.message.author.id];
-					let messageColor = data && (data.color5 || (BDFDB.BDUtils.getSettings("bda-gs-7") && data.color1));
+					let messageColor = data && (data.color5 || (BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.coloredText) && data.color1));
 					if (messageColor) {
 						let message = new BDFDB.DiscordObjects.Message(Object.assign({}, content.props.message, {author: this.getUserData(content.props.message.author.id)}));
 						if (data.name) message.nick = data.name;
@@ -587,7 +587,7 @@ var EditUsers = (_ => {
 				}
 				else {
 					let data = changedUsers[e.instance.props.message.author.id];
-					let messageColor = data && (data.color5 || (BDFDB.BDUtils.getSettings("bda-gs-7") && data.color1));
+					let messageColor = data && (data.color5 || (BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.coloredText) && data.color1));
 					if (messageColor) e.returnvalue.props.style = Object.assign({}, e.returnvalue.props.style, {color: BDFDB.ColorUtils.convert(BDFDB.ObjectUtils.is(messageColor) ? messageColor[0] : messageColor, "RGBA")});
 				}
 			}
