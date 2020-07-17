@@ -348,7 +348,7 @@ var ThemeRepo = (_ => {
 		processSettingsView (e) {
 			if (BDFDB.ArrayUtils.is(e.instance.props.sections) && e.instance.props.sections[0] && e.instance.props.sections[0].label == BDFDB.LanguageUtils.LanguageStrings.USER_SETTINGS) {
 				let index = e.instance.props.sections.indexOf(e.instance.props.sections.find(n => n.section == BDFDB.DiscordConstants.UserSettingsSections.CHANGE_LOG || n.section == "changelog"));
-				if (index > -1) e.instance.props.sections.splice(index - 1, 0, {
+				if (index > -1 && !e.instance.props.sections.find(n => n.section == "themerepo")) e.instance.props.sections.splice(index - 1, 0, {
 					label: "Theme Repo",
 					section: "themerepo",
 					onClick: _ => {this.openThemeRepoModal();}
