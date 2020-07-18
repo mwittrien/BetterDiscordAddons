@@ -410,7 +410,7 @@ var CreationDate = (_ => {
 					};
 				case "ja":		//japanese
 					return {
-						createdat_text:				"{{time}} 作成日"
+						createdat_text:				"{{time}} に登録"
 					};
 				case "zh-TW":	//chinese (traditional)
 					return {
