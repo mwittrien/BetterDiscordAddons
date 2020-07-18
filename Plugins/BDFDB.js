@@ -3956,6 +3956,18 @@
 		}
 		return null;
 	};
+	let oldSettings = !BDFDB.ArrayUtils.is(BdApi.settings);
+	BDFDB.BDUtils.settingsIds = oldSettings ? {
+		automaticLoading: "fork-ps-5",
+		coloredText: "bda-gs-7",
+		normalizedClasses: "fork-ps-4",
+		showToasts: "fork-ps-2"
+	} : {
+		automaticLoading: "settings.addons.autoReload",
+		coloredText: "settings.appearance.coloredText",
+		normalizedClasses: "settings.general.classNormalizer",
+		showToasts: "settings.general.showToasts"
+	};
 	BDFDB.BDUtils.toggleSettings = function (key, state) {
 		if (typeof key == "string") {
 			let path = key.split(".");
@@ -3970,20 +3982,8 @@
 		}
 	};
 	BDFDB.BDUtils.getSettings = function (key) {
-		if (typeof key == "string") return BdApi.isSettingEnabled(key.split("."));
-		else return BDFDB.ReactUtils.getValue(BdApi.getBDData("settings"), `${BDFDB.DiscordUtils.getBuilt()}.settings`);
-	};
-	let oldSettings = !BDFDB.ArrayUtils.is(BdApi.settings);
-	BDFDB.BDUtils.settingsIds = oldSettings ? {
-		automaticLoading: "fork-ps-5",
-		coloredText: "bda-gs-7",
-		normalizedClasses: "fork-ps-4",
-		showToasts: "fork-ps-2"
-	} : {
-		automaticLoading: "settings.addons.autoReload",
-		coloredText: "settings.appearance.coloredText",
-		normalizedClasses: "settings.general.classNormalizer",
-		showToasts: "settings.general.showToasts"
+		if (typeof key == "string") return BdApi.isSettingEnabled(...key.split("."));
+		else return oldSettings ? BDFDB.ReactUtils.getValue(BdApi.getBDData("settings"), `${BDFDB.DiscordUtils.getBuilt()}.settings`) : BdApi.settings.map(n => n.settings.map(m => m.settings.map(l => ({id: [n.id, m.id, l.id].join("."), value:l.value})))).flat(10).reduce((newObj, setting) => (newObj[setting.id] = setting.value, newObj), {});
 	};
 	
 	var DiscordClassModules = {};
