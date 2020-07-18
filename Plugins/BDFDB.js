@@ -4084,7 +4084,8 @@
 		tableStickyHeader: "stickyHeader-JabwjW header-g67q9_",
 		textScroller: "textScroller-dc9_kz",
 		themedPopout: "themedPopout-1TrfdI",
-		tooltipCustom: "tooltipCustom-hH39_Z"
+		tooltipCustom: "tooltipCustom-hH39_Z",
+		userInfoDate: "date-YN6TCS"
 	};
 	DiscordClassModules.BDrepo = {
 		bdAddonCard: "bd-addon-card",
@@ -4162,6 +4163,9 @@
 		profileNoteCounter: "profileNoteCounter-p0fWA_",
 		uploadCounter: "uploadCounter-iEGQQk"
 	};
+	DiscordClassModules.CreationDate = {
+		date: "creationDate-CJwdKT"
+	};
 	DiscordClassModules.DisplayLargeMessages = {
 		injectButton: "injectButton-8eKqGu"
 	};
@@ -4200,6 +4204,12 @@
 		lense: "zoomLense-uOK8xV",
 		modal: "imageModal-8J0ttB",
 		operations: "operations-3V47CY"
+	};
+	DiscordClassModules.JoinedAtDate = {
+		date: "joinedAtDate-IawR02"
+	};
+	DiscordClassModules.LastMessageDate = {
+		date: "lastMessageDate-ocEw13"
 	};
 	DiscordClassModules.OldTitleBar = {
 		oldTitleBarEnabled: "oldTitleBarEnabled-D8ppJQ",
@@ -4537,6 +4547,7 @@
 		_charcounterpopoutnotecounter: ["CharCounter", "popoutNoteCounter"],
 		_charcounterprofilenotecounter: ["CharCounter", "profileNoteCounter"],
 		_charcounteruploadcounter: ["CharCounter", "uploadCounter"],
+		_creationdatedate: ["CreationDate", "date"],
 		_displaylargemessagesinjectbutton: ["DisplayLargeMessages", "injectButton"],
 		_displayserversaschannelsbadge: ["DisplayServersAsChannels", "badge"],
 		_displayserversaschannelsname: ["DisplayServersAsChannels", "name"],
@@ -4545,6 +4556,7 @@
 		_emojistatisticsamountcell: ["EmojiStatistics", "amountCell"],
 		_emojistatisticsiconcell: ["EmojiStatistics", "iconCell"],
 		_emojistatisticsnamecell: ["EmojiStatistics", "nameCell"],
+		_friendnotificationsfriendsonline: ["FriendNotifications", "friendsOnline"],
 		_imagegallerydetails: ["ImageGallery", "details"],
 		_imagegallerydetailslabel: ["ImageGallery", "detailsLabel"],
 		_imagegallerydetailswrapper: ["ImageGallery", "detailsWrapper"],
@@ -4557,7 +4569,8 @@
 		_imagezoomimagemodal: ["ImageZoom", "modal"],
 		_imagezoomlense: ["ImageZoom", "lense"],
 		_imagezoomoperations: ["ImageZoom", "operations"],
-		_friendnotificationsfriendsonline: ["FriendNotifications", "friendsOnline"],
+		_joinedatdatedate: ["JoinedAtDate", "date"],
+		_lastmessagedatedate: ["LastMessageDate", "date"],
 		_googletranslateoptionreversebutton: ["GoogleTranslateOption", "reverseButton"],
 		_googletranslateoptiontranslatebutton: ["GoogleTranslateOption", "translateButton"],
 		_googletranslateoptiontranslated: ["GoogleTranslateOption", "translated"],
@@ -5916,6 +5929,7 @@
 		uploadmodal: ["UploadModal", "uploadModal"],
 		userinfo: ["UserInfo", "userInfo"],
 		userinfoavatar: ["UserInfo", "avatar"],
+		userinfodate: ["BDFDB", "userInfoDate"],
 		userinfodiscordtag: ["UserInfo", "discordTag"],
 		userinfodiscriminator: ["UserInfo", "discriminator"],
 		userinfohovered: ["UserInfo", "hovered"],
@@ -9104,6 +9118,28 @@
 		${BDFDB.dotCN.overflowellipsis} {
 			overflow: hidden;
 			text-overflow: ellipsis;
+		}
+		
+		${BDFDB.dotCNS.userpopout + BDFDB.dotCN.userpopoutheadertext} + ${BDFDB.dotCN.userinfodate},
+		${BDFDB.dotCNS.userprofile + BDFDB.dotCN.userprofilenametag} + ${BDFDB.dotCN.userinfodate} {
+			margin-top: 8px;
+		}
+		${BDFDB.dotCN.userinfodate} + ${BDFDB.dotCN.userpopoutcustomstatus} {
+			margin-top: 4px;
+		}
+		${BDFDB.dotCNS.themelight + BDFDB.dotCNS.userpopoutheadernormal + BDFDB.dotCN.userinfodate} {
+			color: #b9bbbe;
+		}
+		${BDFDB.dotCNS.themelight + BDFDB.dotCN.userpopoutheader + BDFDB.notCNS.userpopoutheadernormal + BDFDB.dotCN.userinfodate},
+		${BDFDB.dotCNS.themedark + BDFDB.dotCNS.userpopoutheader + BDFDB.dotCN.userinfodate} {
+			color: hsla(0,0%,100%,.6);
+		}
+		${BDFDB.dotCNS.themelight + BDFDB.dotCNS.userprofiletopsectionnormal + BDFDB.dotCN.userinfodate} {
+			color: hsla(216,4%,74%,.6);
+		}
+		${BDFDB.dotCN.themelight} [class*='topSection']${BDFDB.notCNS.userprofiletopsectionnormal + BDFDB.dotCN.userinfodate},
+		${BDFDB.dotCN.themedark} [class*='topSection'] ${BDFDB.dotCN.userinfodate} {
+			color: hsla(0,0%,100%,.6);
 		}
 		
 		${BDFDB.dotCN.messageavatar + BDFDB.dotCN.bdfdbbadge} {
