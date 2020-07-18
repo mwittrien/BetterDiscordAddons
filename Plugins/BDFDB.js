@@ -1583,7 +1583,7 @@
 					let instanceObserver = new MutationObserver(cs => {cs.forEach(c => {c.addedNodes.forEach(n => {
 						if (found || !n || !n.tagName) return;
 						let ele = null;
-						if ((ele = BDFDB.DOMUtils.containsClass(n, classes) ? n : n.querySelector(selector)) != null) {
+						if ((ele = BDFDB.DOMUtils.containsClass(n, ...classes) ? n : n.querySelector(selector)) != null) {
 							found = checkEle(ele, type, patchType);
 							if (found) instanceObserver.disconnect();
 						}
@@ -3012,13 +3012,13 @@
 	};
 	BDFDB.DOMUtils.containsClass = function (eles, ...classes) {
 		if (!eles || !classes) return;
-		var all = classes.pop();
+		let all = classes.pop();
 		if (typeof all != "boolean") {
 			classes.push(all);
 			all = true;
 		}
 		if (!classes.length) return;
-		var contained = undefined;
+		let contained = undefined;
 		for (let ele of BDFDB.ArrayUtils.is(eles) ? eles : Array.of(eles)) {
 			if (!ele) {}
 			else if (Node.prototype.isPrototypeOf(ele)) contains(ele);
