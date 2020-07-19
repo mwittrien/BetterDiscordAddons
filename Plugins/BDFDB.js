@@ -1625,6 +1625,7 @@
 	
 	var LibraryModules = {};
 	LibraryModules.AckUtils = BDFDB.ModuleUtils.findByProperties("localAck", "bulkAck");
+	LibraryModules.ActivityUtils = BDFDB.ModuleUtils.findByProperties("sendActivityInvite", "updateActivity");
 	LibraryModules.APIUtils = BDFDB.ModuleUtils.findByProperties("getAPIBaseURL");
 	LibraryModules.AnalyticsUtils = BDFDB.ModuleUtils.findByProperties("isThrottled", "track");
 	LibraryModules.AnimationUtils = BDFDB.ModuleUtils.findByProperties("spring", "decay");

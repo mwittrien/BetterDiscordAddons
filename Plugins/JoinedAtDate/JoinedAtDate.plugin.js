@@ -272,7 +272,7 @@ var JoinedAtDate = (_ => {
 		}
 
 		processAnalyticsContext (e) {
-			if (typeof e.returnvalue.props.children == "function" && e.instance.props.section == "Profile Modal" && settings.addInUserProfil) {
+			if (typeof e.returnvalue.props.children == "function" && e.instance.props.section == BDFDB.DiscordConstants.AnalyticsSections.PROFILE_MODAL && settings.addInUserProfil) {
 				let renderChildren = e.returnvalue.props.children;
 				e.returnvalue.props.children = (...args) => {
 					let renderedChildren = renderChildren(...args);
