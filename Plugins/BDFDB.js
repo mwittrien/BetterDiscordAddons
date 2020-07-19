@@ -4258,6 +4258,18 @@
 		error: "error-k9z2IV",
 		overlay: "spellCheckOverlay-cNSap5"
 	};
+	DiscordClassModules.SpotifyControls = {
+		bar: "bar-g2ZMIm",
+		barContainer: "barContainer-UWmgAx",
+		barFill: "barFill-Dhkah7",
+		barText: "barText-lmqc5O",
+		container: "container-6sXIoE",
+		containerInner: "inner-WRV6k5",
+		cover: "cover-SwJ-ck",
+		details: "details-ntX2k5",
+		interpret: "interpret-F93iqP",
+		song: "song-tIdBpF",
+	};
 	DiscordClassModules.TimedLightDarkMode = {
 		dateGrabber: "dateGrabber-QrRkIX",
 		timerGrabber: "timerGrabber-zpRAIk",
@@ -4609,6 +4621,16 @@
 		_showimagedetailsdetails: ["ShowImageDetails", "details"],
 		_spellcheckerror: ["SpellCheck", "error"],
 		_spellcheckoverlay: ["SpellCheck", "overlay"],
+		_spotifycontrolsbar: ["SpotifyControls", "bar"],
+		_spotifycontrolsbarcontainer: ["SpotifyControls", "barContainer"],
+		_spotifycontrolsbarfill: ["SpotifyControls", "barFill"],
+		_spotifycontrolsbartext: ["SpotifyControls", "barText"],
+		_spotifycontrolscontainer: ["SpotifyControls", "container"],
+		_spotifycontrolscontainerinner: ["SpotifyControls", "containerInner"],
+		_spotifycontrolscover: ["SpotifyControls", "cover"],
+		_spotifycontrolsdetails: ["SpotifyControls", "details"],
+		_spotifycontrolsinterpret: ["SpotifyControls", "interpret"],
+		_spotifycontrolssong: ["SpotifyControls", "song"],
 		_timedlightdarkmodedategrabber: ["TimedLightDarkMode", "dateGrabber"],
 		_timedlightdarkmodetimergrabber: ["TimedLightDarkMode", "timerGrabber"],
 		_timedlightdarkmodetimersettings: ["TimedLightDarkMode", "timerSettings"],
@@ -6451,7 +6473,7 @@
 	});
 	let parseLanguageStringObj = obj => {
 		let string = "";
-		if (typeof obj == "string") string += BDFDB.StringUtils.htmlEscape(obj);
+		if (typeof obj == "string") string += obj;
 		else if (BDFDB.ObjectUtils.is(obj)) {
 			if (obj.props) string += parseLanguageStringObj(obj.props);
 			else if (obj.type) {
