@@ -1,7 +1,7 @@
 //META{"name":"SpotifyControls","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpotifyControls","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/SpotifyControls/SpotifyControls.plugin.js"}*//
 
 var SpotifyControls = (_ => {
-	var controls, lastSong, updateInterval;
+	var controls, lastSong, stopTime, updateInterval;
 	
 	const SpotifyControlsComponent = class SpotifyControls extends BdApi.React.Component {
 		componentDidMount() {
@@ -34,7 +34,11 @@ var SpotifyControls = (_ => {
 		}
 		render() {
 			let socketDevice = BDFDB.LibraryModules.SpotifyTrackUtils.getActiveSocketAndDevice();
-			if (this.props.song) lastSong = this.props.song;
+			if (this.props.song) {
+				lastSong = this.props.song;
+				stopTime = null;
+			}
+			else if (!stopTime && lastSong) stopTime = new Date();
 			return !socketDevice || !lastSong ? null : BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.disCN._spotifycontrolscontainer,
 				children: [
@@ -134,7 +138,7 @@ var SpotifyControls = (_ => {
 		}
 		render() {
 			let maxTime = this.props.song.timestamps.end - this.props.song.timestamps.start;
-			let currentTime = new Date() - this.props.song.timestamps.start;
+			let currentTime = (!this.props.running && stopTime ? stopTime : new Date()) - this.props.song.timestamps.start;
 			currentTime = currentTime > maxTime ? maxTime : currentTime;
 			return BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.disCN._spotifycontrolsbarcontainer,
