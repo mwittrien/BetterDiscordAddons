@@ -107,7 +107,8 @@ var SpotifyControls = (_ => {
 						]
 					}),
 					BDFDB.ReactUtils.createElement(SpotifyControlsTimelineComponent, {
-						song: lastSong
+						song: lastSong,
+						running: !!this.props.song
 					})
 				]
 			});
@@ -118,10 +119,10 @@ var SpotifyControls = (_ => {
 			BDFDB.TimeUtils.clear(updateInterval);
 			updateInterval = BDFDB.TimeUtils.interval(_ => {
 				if (!this.updater || typeof this.updater.isMounted != "function" || !this.updater.isMounted(this)) BDFDB.TimeUtils.clear(updateInterval);
-				else {
+				else if (this.props.running) {
 					let song = BDFDB.LibraryModules.SpotifyTrackUtils.getActivity();
 					if (!song) BDFDB.ReactUtils.forceUpdate(controls);
-					else BDFDB.ReactUtils.forceUpdate(this);
+					else if (this.props.running) BDFDB.ReactUtils.forceUpdate(this);
 				}
 			}, 1000);
 		}
@@ -168,7 +169,7 @@ var SpotifyControls = (_ => {
 	return class SpotifyControls {
 		getName () {return "SpotifyControls";}
 
-		getVersion () {return "1.0.1";}
+		getVersion () {return "1.0.2";}
 
 		getAuthor () {return "DevilBro";}
 
