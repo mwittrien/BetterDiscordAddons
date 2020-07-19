@@ -171,7 +171,7 @@ var SpotifyControls = (_ => {
 	return class SpotifyControls {
 		getName () {return "SpotifyControls";}
 
-		getVersion () {return "1.0.4";}
+		getVersion () {return "1.0.3";}
 
 		getAuthor () {return "DevilBro";}
 
