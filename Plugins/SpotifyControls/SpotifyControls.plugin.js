@@ -18,7 +18,7 @@ var SpotifyControls = (_ => {
 					},
 					body: JSON.stringify(Object.assign({}, data))
 				}, (error, response, result) => {
-					if (error && reponse.statusCode == 401) {
+					if (response.statusCode == 401) {
 						BDFDB.LibraryModules.SpotifyUtils.getAccessToken(socket.accountId).then(promiseResult => {
 							let newSocketDevice = BDFDB.LibraryModules.SpotifyTrackUtils.getActiveSocketAndDevice();
 							this.request(newSocketDevice.socket, newSocketDevice.device, type, song, data).then(_ => {
@@ -171,7 +171,7 @@ var SpotifyControls = (_ => {
 	return class SpotifyControls {
 		getName () {return "SpotifyControls";}
 
-		getVersion () {return "1.0.3";}
+		getVersion () {return "1.0.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -179,7 +179,7 @@ var SpotifyControls = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Resume","Playlists should no longer restart, when you resume a song"]]
+				"fixed":[["Controls","Fixed an issue where the controls would stop working after some time"],["Resume","Playlists should no longer restart, when you resume a song"]]
 			};
 			
 			this.patchedModules = {
