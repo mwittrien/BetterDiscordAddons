@@ -1694,12 +1694,13 @@
 	LibraryModules.SearchPageUtils = BDFDB.ModuleUtils.findByProperties("searchNextPage", "searchPreviousPage");
 	LibraryModules.SelectChannelUtils = BDFDB.ModuleUtils.findByProperties("selectChannel", "selectPrivateChannel");
 	LibraryModules.SettingsUtils = BDFDB.ModuleUtils.findByProperties("updateRemoteSettings", "updateLocalSettings");
-	LibraryModules.SoundStateUtils = BDFDB.ModuleUtils.findByProperties("isSoundDisabled", "getDisabledSounds");
-	LibraryModules.SoundUtils = BDFDB.ModuleUtils.findByProperties("playSound", "createSound");
-	LibraryModules.SpellCheckUtils = BDFDB.ModuleUtils.findByProperties("learnWord", "toggleSpellcheck");
 	LibraryModules.SlateUtils = BDFDB.ModuleUtils.findByProperties("serialize", "deserialize");
 	LibraryModules.SlateSelectionUtils = BDFDB.ModuleUtils.findByProperties("serialize", "serializeSelection");
 	LibraryModules.SlowmodeUtils = BDFDB.ModuleUtils.findByProperties("getSlowmodeCooldownGuess");
+	LibraryModules.SoundStateUtils = BDFDB.ModuleUtils.findByProperties("isSoundDisabled", "getDisabledSounds");
+	LibraryModules.SoundUtils = BDFDB.ModuleUtils.findByProperties("playSound", "createSound");
+	LibraryModules.SpellCheckUtils = BDFDB.ModuleUtils.findByProperties("learnWord", "toggleSpellcheck");
+	LibraryModules.SpotifyUtils = BDFDB.ModuleUtils.findByProperties("setActiveDevice", "pause");
 	LibraryModules.StateStoreUtils = BDFDB.ModuleUtils.findByProperties("useStateFromStores", "useStateFromStoresArray");
 	LibraryModules.StatusMetaUtils = BDFDB.ModuleUtils.findByProperties("getApplicationActivity", "getStatus");
 	LibraryModules.StoreChangeUtils = BDFDB.ModuleUtils.findByProperties("get", "set", "clear", "remove");
