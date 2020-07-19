@@ -1629,6 +1629,7 @@
 	LibraryModules.APIUtils = BDFDB.ModuleUtils.findByProperties("getAPIBaseURL");
 	LibraryModules.AnalyticsUtils = BDFDB.ModuleUtils.findByProperties("isThrottled", "track");
 	LibraryModules.AnimationUtils = BDFDB.ModuleUtils.findByProperties("spring", "decay");
+	LibraryModules.AssetUtils = BDFDB.ModuleUtils.findByProperties("getAssetImage", "getAssetIds");
 	LibraryModules.BadgeUtils = BDFDB.ModuleUtils.findByProperties("getBadgeCountString", "getBadgeWidthForValue");
 	LibraryModules.CallUtils = BDFDB.ModuleUtils.findByProperties("getCalls", "isCallActive");
 	LibraryModules.CategoryCollapseStore = BDFDB.ModuleUtils.findByProperties("getCollapsedCategories", "isCollapsed");
