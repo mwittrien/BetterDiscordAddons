@@ -247,7 +247,7 @@ var SpotifyControls = (_ => {
 					font-weight: 300;
 				}
 				${BDFDB.dotCNS._spotifycontrolscontainer + BDFDB.dotCN.accountinfobuttondisabled}{
-					pointer: no-drop;
+					cursor: no-drop;
 				}
 			`;
 		}
