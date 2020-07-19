@@ -6,7 +6,7 @@ var DisplayServersAsChannels = (_ => {
 	return class DisplayServersAsChannels {
 		getName () {return "DisplayServersAsChannels";}
 
-		getVersion () {return "1.3.9";}
+		getVersion () {return "1.4.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,7 @@ var DisplayServersAsChannels = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Server Search","Added support for the server search plugin"]]
+				"fixed":[["New Mention","Fixed new mention bars being always visible once at least one mention is shown"]]
 			};
 
 			this.patchPriority = 10;
@@ -147,10 +147,11 @@ var DisplayServersAsChannels = (_ => {
 			if (errorIndex > -1) errorChildren[errorIndex] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Items.UnavailableGuildsButton, {
 				unavailableGuilds: BDFDB.LibraryModules.GuildUnavailableStore.totalUnavailableGuilds
 			});
-			let [scrollerChilden, scrollerIndex] = BDFDB.ReactUtils.findParent(e.returnvalue, {props:[["className", BDFDB.disCN.guildsscroller]]});
-			if (scrollerIndex > -1) scrollerChilden[scrollerIndex] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ScrollerThin, Object.assign({
-				fade: true
-			}, scrollerChilden[scrollerIndex].props));
+			let scroller = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.guildsscroller]]});
+			if (scroller) {
+				scroller.props.fade = true;
+				scroller.type = BDFDB.LibraryComponents.ScrollerThin;
+			}
 		}
 		
 		processDefaultHomeButton (e) {
