@@ -1700,6 +1700,7 @@
 	LibraryModules.SoundStateUtils = BDFDB.ModuleUtils.findByProperties("isSoundDisabled", "getDisabledSounds");
 	LibraryModules.SoundUtils = BDFDB.ModuleUtils.findByProperties("playSound", "createSound");
 	LibraryModules.SpellCheckUtils = BDFDB.ModuleUtils.findByProperties("learnWord", "toggleSpellcheck");
+	LibraryModules.SpotifyTrackUtils = BDFDB.ModuleUtils.findByProperties("hasConnectedAccount", "getLastPlayedTrackId");
 	LibraryModules.SpotifyUtils = BDFDB.ModuleUtils.findByProperties("setActiveDevice", "pause");
 	LibraryModules.StateStoreUtils = BDFDB.ModuleUtils.findByProperties("useStateFromStores", "useStateFromStoresArray");
 	LibraryModules.StatusMetaUtils = BDFDB.ModuleUtils.findByProperties("getApplicationActivity", "getStatus");
