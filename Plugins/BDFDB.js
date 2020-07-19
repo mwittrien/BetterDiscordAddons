@@ -6449,31 +6449,37 @@
 			return !!LibraryModules.LanguageStore.Messages[item];
 		}
 	});
+	let parseLanguageStringObj = obj => {
+		let string = "";
+		if (typeof obj == "string") string += BDFDB.StringUtils.htmlEscape(obj);
+		else if (BDFDB.ObjectUtils.is(obj)) {
+			if (obj.props) string += parseLanguageStringObj(obj.props);
+			else if (obj.type) {
+				let text = obj.content || obj.children && obj.children[0] && obj.children[0].toString() || "";
+				if (text) {
+					if (obj.type == "text" || obj.content) string = parseLanguageStringObj(text);
+					else string += `<${obj.type}>${parseLanguageStringObj(text)}</${obj.type}>`;
+				}
+			}
+		}
+		else if (BDFDB.ArrayUtils.is(obj)) for (let ele of obj) string += parseLanguageStringObj(ele);
+		return string;
+	};
 	BDFDB.LanguageUtils.LanguageStringsFormat = function (item, ...values) {
 		if (item) {
 			let stringObj = LibraryModules.LanguageStore.Messages[item];
 			if (stringObj && typeof stringObj == "object" && typeof stringObj.format == "function") {
-				let i = 0, returnvalue, formatvars = {};
+				let i = 0, returnvalue, formatVars = {};
 				while (!returnvalue && i < 10) {
 					i++;
-					try {returnvalue = stringObj.format(formatvars);}
+					try {returnvalue = stringObj.format(formatVars, false);}
 					catch (err) {
 						returnvalue = null;
 						let value = values.shift();
-						formatvars[err.toString().split("for: ")[1]] = value != null ? (value === 0 ? "0" : value) : "undefined";
+						formatVars[err.toString().split("for: ")[1]] = value != null ? (value === 0 ? "0" : value) : "undefined";
 					}
 				}
-				if (returnvalue) {
-					if (BDFDB.ArrayUtils.is(returnvalue)) {
-						let newstring = "";
-						for (let ele of returnvalue) {
-							if (typeof ele == "string") newstring += BDFDB.StringUtils.htmlEscape(ele);
-							else if (BDFDB.ObjectUtils.is(ele) && ele.props) newstring += `<${ele.type}>${BDFDB.StringUtils.htmlEscape(ele.props.children[0].toString())}</${ele.type}>`
-						}
-						return newstring;
-					}
-					return returnvalue;
-				}
+				if (returnvalue) return parseLanguageStringObj(returnvalue);
 				else {
 					BDFDB.LogUtils.warn(item + " failed to format string in BDFDB.LanguageUtils.LanguageStrings");
 					return "";
