@@ -7,7 +7,7 @@ var LastMessageDate = (_ => {
 	return class LastMessageDate {
 		getName () {return "LastMessageDate";}
 
-		getVersion () {return "1.1.7";}
+		getVersion () {return "1.1.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -362,7 +362,7 @@ var LastMessageDate = (_ => {
 					.replace(/\$weekdayS/g, timeObj.toLocaleDateString(languageId, {weekday: "short"}))
 					.replace(/\$monthnameL/g, timeObj.toLocaleDateString(languageId, {month: "long"}))
 					.replace(/\$monthnameS/g, timeObj.toLocaleDateString(languageId, {month: "short"}))
-					.replace(/\$daysago/g, amounts.maxDaysAgo == 0 || amounts.maxDaysAgo <= daysago ? (daysago > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("ACTIVITY_FEED_USER_PLAYED_DAYS_AGO", daysago) : BDFDB.LanguageUtils.LanguageStrings.SEARCH_SHORTCUT_TODAY) : "")
+					.replace(/\$daysago/g, amounts.maxDaysAgo == 0 || amounts.maxDaysAgo >= daysago ? (daysago > 0 ? BDFDB.LanguageUtils.LanguageStringsFormat("ACTIVITY_FEED_USER_PLAYED_DAYS_AGO", daysago) : BDFDB.LanguageUtils.LanguageStrings.SEARCH_SHORTCUT_TODAY) : "")
 					.replace(/\$day/g, settings.forceZeros && day < 10 ? "0" + day : day)
 					.replace(/\$month/g, settings.forceZeros && month < 10 ? "0" + month : month)
 					.replace(/\$yearS/g, parseInt(timeObj.getFullYear().toString().slice(-2)))
