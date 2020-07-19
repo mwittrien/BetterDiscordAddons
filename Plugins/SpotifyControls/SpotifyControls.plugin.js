@@ -118,7 +118,11 @@ var SpotifyControls = (_ => {
 			BDFDB.TimeUtils.clear(updateInterval);
 			updateInterval = BDFDB.TimeUtils.interval(_ => {
 				if (!this.updater || typeof this.updater.isMounted != "function" || !this.updater.isMounted(this)) BDFDB.TimeUtils.clear(updateInterval);
-				else BDFDB.ReactUtils.forceUpdate(this);
+				else {
+					let song = BDFDB.LibraryModules.SpotifyTrackUtils.getActivity();
+					if (!song) BDFDB.ReactUtils.forceUpdate(controls);
+					else BDFDB.ReactUtils.forceUpdate(this);
+				}
 			}, 1000);
 		}
 		formatTime(time) {
@@ -128,8 +132,9 @@ var SpotifyControls = (_ => {
 			return `${hours > 0 ? hours + ":" : ""}${hours > 0 && minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`
 		}
 		render() {
-			let currentTime = new Date() - this.props.song.timestamps.start;
 			let maxTime = this.props.song.timestamps.end - this.props.song.timestamps.start;
+			let currentTime = new Date() - this.props.song.timestamps.start;
+			currentTime = currentTime > maxTime ? maxTime : currentTime;
 			return BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.disCN._spotifycontrolsbarcontainer,
 				children: [
@@ -163,7 +168,7 @@ var SpotifyControls = (_ => {
 	return class SpotifyControls {
 		getName () {return "SpotifyControls";}
 
-		getVersion () {return "1.0.0";}
+		getVersion () {return "1.0.1";}
 
 		getAuthor () {return "DevilBro";}
 
