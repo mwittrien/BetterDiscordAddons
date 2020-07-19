@@ -16,9 +16,7 @@ var SpotifyControls = (_ => {
 					headers: {
 						authorization: `Bearer ${socket.accessToken}`
 					},
-					body: JSON.stringify(Object.assign({
-						context_uri: song && song.metadata.context_uri || null
-					}, data))
+					body: JSON.stringify(Object.assign({}, data))
 				}, (error, response, result) => {
 					if (error && reponse.statusCode == 401) {
 						BDFDB.LibraryModules.SpotifyUtils.getAccessToken(socket.accountId).then(promiseResult => {
@@ -173,13 +171,17 @@ var SpotifyControls = (_ => {
 	return class SpotifyControls {
 		getName () {return "SpotifyControls";}
 
-		getVersion () {return "1.0.3";}
+		getVersion () {return "1.0.4";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Adds a control panel to discord when listening to spotify.";}
 
 		constructor () {
+			this.changelog = {
+				"fixed":[["Resume","Playlists should no longer restart, when you resume a song"]]
+			};
+			
 			this.patchedModules = {
 				after: {
 					AnalyticsContext: "render"
