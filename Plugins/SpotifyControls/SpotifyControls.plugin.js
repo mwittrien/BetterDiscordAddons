@@ -173,7 +173,7 @@ var SpotifyControls = (_ => {
 	return class SpotifyControls {
 		getName () {return "SpotifyControls";}
 
-		getVersion () {return "1.0.2";}
+		getVersion () {return "1.0.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -185,7 +185,9 @@ var SpotifyControls = (_ => {
 					AnalyticsContext: "render"
 				}
 			};
-			
+		}
+		
+		initConstructor () {
 			this.css = `
 				@font-face {
 					font-family: glue1-spoticon;
@@ -249,8 +251,6 @@ var SpotifyControls = (_ => {
 				}
 			`;
 		}
-		
-		initConstructor () {}
 
 		getSettingsPanel () {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
