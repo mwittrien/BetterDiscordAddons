@@ -418,7 +418,7 @@ var CreationDate = (_ => {
 					};
 				case "ru":		//russian
 					return {
-						createdat_text:				"Создано {{time}}"
+						createdat_text:				"Создан {{time}}"
 					};
 				case "uk":		//ukrainian
 					return {
