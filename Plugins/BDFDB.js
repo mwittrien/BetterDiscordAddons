@@ -4083,6 +4083,7 @@
 		supporterCustom: "customSupporter-thxL4U",
 		svgIcon: "icon-GhnIRB",
 		svgIconWrapper: "iconWrapper-g20jFn",
+		tabBarContainerBottom: "bottom-b8sdfs",
 		table: "table-moqjM0",
 		tableBodyCell: "bodyCell-dQam9V",
 		tableHeader: "header-g67q9_",
@@ -5846,6 +5847,7 @@
 		switchvalueunchecked: ["Switch", "valueUnchecked"],
 		tabbar: ["UserProfile", "tabBar"],
 		tabbarcontainer: ["UserProfile", "tabBarContainer"],
+		tabbarcontainerbottom: ["BDFDB", "tabBarContainerBottom"],
 		tabbaritem: ["UserProfile", "tabBarItem"],
 		tabbartop: ["Item", "top"],
 		table: ["BDFDB", "table"],
@@ -7897,13 +7899,9 @@
 	
 	InternalComponents.LibraryComponents.ModalComponents.ModalTabContent = InternalBDFDB.loadPatchedComp("ModalComponents.ModalTabContent") || reactInitialized && class BDFDB_ModalTabContent extends LibraryModules.React.Component {
 		render() {
-			let childprops = Object.assign({}, this.props);
-			BDFDB.ObjectUtils.delete(childprops, "open");
-			return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, Object.assign({tab:"unnamed"}, childprops, {
+			return BDFDB.ReactUtils.createElement(this.props.scroller ? InternalComponents.LibraryComponents.ScrollerThin : "div", Object.assign({tab:"unnamed"}, BDFDB.ObjectUtils.exclude(this.props, "scroller", "open"), {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.modaltabcontent, this.props.open && BDFDB.disCN.modaltabcontentopen, this.props.className),
-				direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
-				align: InternalComponents.LibraryComponents.Flex.Align.STRETCH,
-				style: Object.assign({}, childprops.style, {
+				style: Object.assign({}, this.props.style, {
 					display: this.props.open ? null : "none"
 				})
 			}));
@@ -9505,6 +9503,10 @@
 		}
 		${BDFDB.dotCNS.modalwrapper + BDFDB.dotCN.modalheader + BDFDB.dotCN.modalheaderhassibling} {
 			padding-bottom: 10px;
+		}
+		${BDFDB.dotCNS.tabbarcontainer + BDFDB.dotCN.tabbarcontainerbottom} {
+			border-top: unset;
+			border-bottom: 1px solid hsla(0,0%,100%,.1);
 		}
 		${BDFDB.dotCNS.modalwrapper + BDFDB.dotCN.tabbarcontainer} {
 			background: rgba(0, 0, 0, 0.1);
