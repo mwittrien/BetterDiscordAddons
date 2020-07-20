@@ -10076,6 +10076,8 @@
 			for (let plugin of BDFDB.InternalData.componentPatchQueries[type].query) if(typeof plugin[`on${type}`] === "function") plugin[`on${type}`](e);
 		}
 	};
+
+	InternalBDFDB.patchPlugin(BDFDB);
 	
 	for (let type of QueuedComponents) if (!BDFDB.InternalData.componentPatchQueries[type]) BDFDB.InternalData.componentPatchQueries[type] = {query:[], modules:[]};
 	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.ContextMenuUtils, "openContextMenu", {before: e => {
@@ -10126,8 +10128,7 @@
 		BDFDB.MessageUtils.rerenderAll();
 		BDFDB.ModuleUtils.forceAllUpdates(BDFDB);
 	};
-
-	InternalBDFDB.patchPlugin(BDFDB);
+	
 	InternalBDFDB.addSpecialListeners(BDFDB);
 
 	let BasePopout = BDFDB.ModuleUtils.findByName("BasePopout"), ReferencePositionLayer = BDFDB.ModuleUtils.findByName("ReferencePositionLayer");
