@@ -9893,6 +9893,7 @@
 			Message: "default",
 			MessageHeader: "default",
 			MemberListItem: ["componentDidMount", "componentDidUpdate"],
+			PrivateChannel: ["componentDidMount", "componentDidUpdate"],
 			UserPopout: ["componentDidMount", "componentDidUpdate"],
 			UserProfile: ["componentDidMount", "componentDidUpdate"],
 			V2C_ContentColumn: "render"
@@ -9943,7 +9944,7 @@
 		"329018006371827713",	// FUSL
 		"562008872467038230"	// BEAUDEN
 	];
-	InternalBDFDB._processAvatarRender = function (user, avatar, position = "top") {
+	InternalBDFDB._processAvatarRender = function (user, avatar) {
 		if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user)) {
 			avatar.props["user_by_BDFDB"] = user.id;
 			let role = "", className = BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, ""));
@@ -9971,7 +9972,6 @@
 				});
 				if (settings.showSupportBadges) avatar.props.children.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 					text: role,
-					tooltipConfig: {position},
 					children: BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.bdfdbbadge
 					})
@@ -10026,11 +10026,14 @@
 	InternalBDFDB.processMemberListItem = function (e) {
 		InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper));
 	};
+	InternalBDFDB.processPrivateChannel = function (e) {
+		InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper));
+	};
 	InternalBDFDB.processUserPopout = function (e) {
 		InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.userpopoutavatarwrapper));
 	};
 	InternalBDFDB.processUserProfile = function (e) {
-		InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper), "right");
+		InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper));
 	};
 	InternalBDFDB.processDiscordTag = function (e) {
 		if (e.instance && e.instance.props && e.instance.props.user && e.returnvalue) e.returnvalue.props.user = e.instance.props.user;
