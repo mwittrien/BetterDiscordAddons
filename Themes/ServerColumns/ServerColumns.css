@@ -1,3 +1,6 @@
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/res/BetterDocsBlock.css);
+@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/res/ThemeDevBadge.css);
+
 :root {
 	--vcolumns: var(--columns, 3);
 	--vguildsize: var(--guildsize, 50);

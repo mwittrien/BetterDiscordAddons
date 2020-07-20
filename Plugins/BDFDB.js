@@ -9050,7 +9050,7 @@
 	BDFDB.LibraryComponents = Object.assign({}, InternalComponents.LibraryComponents);
 
 	BDFDB.DOMUtils.appendLocalStyle("BDFDB", `
-		@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/SupporterBadge.css);
+		@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/res/SupporterBadge.css);
 		
 		img:not([src]), img[src=""], img[src="null"] {
 			opacity: 0;
@@ -9892,9 +9892,9 @@
 			Mention: "default",
 			Message: "default",
 			MessageHeader: "default",
-			MemberListItem: "componentDidMount",
-			UserPopout: "componentDidMount",
-			UserProfile: "componentDidMount",
+			MemberListItem: ["componentDidMount", "componentDidUpdate"],
+			UserPopout: ["componentDidMount", "componentDidUpdate"],
+			UserProfile: ["componentDidMount", "componentDidUpdate"],
 			V2C_ContentColumn: "render"
 		}
 	};
