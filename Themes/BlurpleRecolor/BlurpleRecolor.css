@@ -1969,12 +1969,10 @@ img[src*="/assets/0f4d1ff76624bb45a3fee4189279ee92.svg"] + * + *:before {
 
 /* ----		15.1.	THEMEDEVBADGE					---- */
 
-#app-mount .root-SR8cQa .wrapper-3t9DeA.dev-A7f2Rx:after,
-#app-mount .userPopout-3XzG_A .avatarWrapper-3H_478.dev-A7f2Rx:after,
-#app-mount .wrapper-3t9DeA.dev-A7f2Rx:after {
+#app-mount .dev-A7f2Rx.hasBadge-4rT8_u:after {
 	background: rgb(var(--vaccentcolor)) !important;
 }
-#app-mount .root-SR8cQa .topSectionPlaying-1J5E4n .wrapper-3t9DeA.dev-A7f2Rx:before,
-#app-mount .userPopout-3XzG_A .headerPlaying-j0WQBV .avatarWrapper-3H_478.dev-A7f2Rx:before {
+#app-mount .topSectionPlaying-1J5E4n .dev-A7f2Rx.hasBadge-4rT8_u:before,
+#app-mount .headerPlaying-j0WQBV .dev-A7f2Rx.hasBadge-4rT8_u:before {
 	background: rgb(var(--vaccentcolor)) !important;
 }
