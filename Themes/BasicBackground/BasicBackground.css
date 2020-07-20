@@ -151,8 +151,7 @@
 		13.	CHANNELHISTORY
 		14.	DISPLAYLARGEMESSAGES
 	18.	THEMESUPPORT
-		1.	THEMEDEVBADGE
-		2.	BETTERDOCSBLOCK
+		1.	BETTERDOCSBLOCK
 	19.	UPDATENOTICE
 	20.	WATERMARK
 */
@@ -7146,26 +7145,7 @@ body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2M
 
 /* ~~~~		18.		THEMESUPPORT					~~~~ */
 
-/* ----		18.1.	THEMEDEVBADGE					---- */
-
-#app-mount .root-SR8cQa .wrapper-3t9DeA.dev-A7f2Rx:not(.statusHovered-gF2976):hover + .headerInfo-30uryT:before,
-#app-mount .userPopout-3XzG_A .avatarWrapper-3H_478.dev-A7f2Rx:not(.statusHovered-gF2976):hover .wrapper-3t9DeA:before,
-#app-mount .root-SR8cQa .wrapper-3t9DeA.supporter-Z3FfwL:not(.statusHovered-gF2976):hover + .headerInfo-30uryT:before,
-#app-mount .userPopout-3XzG_A .avatarWrapper-3H_478.supporter-Z3FfwL:not(.statusHovered-gF2976):hover .wrapper-3t9DeA:before {
-	background-color: rgb(var(--vaccentcolor)) !important;
-	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3) !important;
-	color: rgb(var(--fontwhite1)) !important;
-}
-#app-mount .root-SR8cQa .wrapper-3t9DeA.dev-A7f2Rx:not(.statusHovered-gF2976):hover + .headerInfo-30uryT:after,
-#app-mount .root-SR8cQa .wrapper-3t9DeA.supporter-Z3FfwL:not(.statusHovered-gF2976):hover + .headerInfo-30uryT:after {
-	border-right-color: rgb(var(--vaccentcolor)) !important;
-}
-#app-mount .userPopout-3XzG_A .avatarWrapper-3H_478.dev-A7f2Rx:not(.statusHovered-gF2976):hover .wrapper-3t9DeA:after,
-#app-mount .userPopout-3XzG_A .avatarWrapper-3H_478.supporter-Z3FfwL:not(.statusHovered-gF2976):hover .wrapper-3t9DeA:after {
-	border-top-color: rgb(var(--vaccentcolor)) !important;
-}
-
-/* ----		18.2.	BETTERDOCSBLOCK					---- */
+/* ----		18.1.	BETTERDOCSBLOCK					---- */
 
 html.theme-dark body #app-mount .wrapper-35wsBm .icon-3o6xvg[style*="/icons/153708594091655168" i]::before,
 html.theme-dark body #app-mount .embed-IeVjo6 .embedLink-1G1K1D[href*="www.discordsource." i]::before,
