@@ -30,6 +30,8 @@
 	const loadId = Math.round(Math.random() * 10000000000000000), myId = "278543574059057154", myGuildId = "410787888507256842";
 	BDFDB.InternalData.loadId = loadId;
 	
+	var settings = {};
+	
 	if (typeof Array.prototype.flat != "function") Array.prototype.flat = function () {return this;}
 
 	InternalBDFDB.defaults = {
@@ -373,7 +375,7 @@
 		for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsSaveItem, {
 			className: BDFDB.disCN.marginbottom8,
 			type: "Switch",
-			plugin: BDFDB,
+			plugin: InternalBDFDB,
 			disabled: key == "showToasts" && bdToastSetting,
 			keys: ["settings", key],
 			label: InternalBDFDB.defaults.settings[key].description,
@@ -4076,6 +4078,7 @@
 		settingsTableList: "settingsTableList-f6sW2y",
 		sliderBubble: "bubble-3we2di",
 		supporter: "supporter-Z3FfwL",
+		supporterCustom: "customSupporter-thxL4U",
 		svgIcon: "icon-GhnIRB",
 		svgIconWrapper: "iconWrapper-g20jFn",
 		table: "table-moqjM0",
@@ -4749,6 +4752,7 @@
 		bdfdbbadge: ["BDFDB", "badge"],
 		bdfdbdev: ["BDFDB", "dev"],
 		bdfdbsupporter: ["BDFDB", "supporter"],
+		bdfdbsupportercustom: ["BDFDB", "supporterCustom"],
 		bold: ["TextStyle", "bold"],
 		bottag: ["BotTag", "botTag"],
 		bottaginvert: ["BotTag", "botTagInvert"],
@@ -9925,12 +9929,14 @@
 		}
 	};
 
-	const BDFDB_Patrons = [
-		"363785301195358221",
-		"443943393660239872",
-		"592471476192673814",
-		"106938698938978304",
-		"329018006371827713"
+	const BDFDB_Patrons_T2 = [
+		"363785301195358221",	// TRENT
+		"106938698938978304"	// GABRIEL
+	];
+	const BDFDB_Patrons_T3 = [
+		"443943393660239872",	// SARGE (PaSh)
+		"329018006371827713",	// FUSL
+		"562008872467038230"	// BEAUDEN
 	];
 	InternalBDFDB._processAvatarRender = function (user, avatar) {
 		if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user)) {
@@ -9940,9 +9946,13 @@
 				size: InternalComponents.LibraryComponents.Avatar.Sizes.SIZE_40
 			}));
 			avatar.props["user_by_BDFDB"] = user.id;
-			if (BDFDB_Patrons.includes(user.id)) {
+			if (BDFDB_Patrons_T2.includes(user.id)) {
 				changed = true;
 				avatar.props.className = BDFDB.DOMUtils.formatClassName(avatar.props.className, BDFDB.disCN.bdfdbbadge, BDFDB.disCN.bdfdbsupporter);
+			}
+			if (BDFDB_Patrons_T3.includes(user.id)) {
+				changed = true;
+				avatar.props.className = BDFDB.DOMUtils.formatClassName(avatar.props.className, BDFDB.disCN.bdfdbbadge, BDFDB.disCN.bdfdbsupporter, BDFDB.disCN.bdfdbsupportercustom);
 			}
 			if (user.id == myId) {
 				changed = true;
@@ -9954,7 +9964,8 @@
 	InternalBDFDB._processAvatarMount = function (user, avatar) {
 		if (Node.prototype.isPrototypeOf(avatar) && BDFDB.ObjectUtils.is(user)) {
 			avatar.setAttribute("user_by_BDFDB", user.id);
-			if (BDFDB_Patrons.includes(user.id) && BDFDB.DataUtils.get(BDFDB, "settings", "showSupportBadges")) BDFDB.DOMUtils.addClass(avatar, BDFDB.disCN.bdfdbbadge, BDFDB.disCN.bdfdbsupporter);
+			if (BDFDB_Patrons_T2.includes(user.id) && BDFDB.DataUtils.get(BDFDB, "settings", "showSupportBadges")) BDFDB.DOMUtils.addClass(avatar, BDFDB.disCN.bdfdbbadge, BDFDB.disCN.bdfdbsupporter);
+			if (BDFDB_Patrons_T3.includes(user.id) && BDFDB.DataUtils.get(BDFDB, "settings", "showSupportBadges")) BDFDB.DOMUtils.addClass(avatar, BDFDB.disCN.bdfdbbadge, BDFDB.disCN.bdfdbsupporter, BDFDB.disCN.bdfdbsupportercustom);
 			if (user.id == myId) BDFDB.DOMUtils.addClass(avatar, BDFDB.disCN.bdfdbbadge, BDFDB.disCN.bdfdbdev);
 			let status = avatar.querySelector(BDFDB.dotCN.avatarpointerevents);
 			if (status) {
@@ -10189,10 +10200,23 @@
 			}
 		}}, {once: true});
 	}});
-
-	BDFDB.ModuleUtils.forceAllUpdates(BDFDB);
+	
+	InternalBDFDB.onSettingsClosed = function () {
+		if (InternalBDFDB.SettingsUpdated) {
+			delete InternalBDFDB.SettingsUpdated;
+			InternalBDFDB.forceUpdateAll();
+		}
+	};
+	
+	InternalBDFDB.forceUpdateAll = function () {
+		settings = BDFDB.DataUtils.get(this, "settings");
+		
+		BDFDB.ModuleUtils.forceAllUpdates(BDFDB);
+	};
 	
 	InternalBDFDB.addContextListeners(BDFDB);
+	
+	InternalBDFDB.forceUpdateAll();
 	
 	BDFDB.ReactUtils.findChildren = BDFDB.ReactUtils.findParent;
 
