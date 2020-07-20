@@ -392,6 +392,7 @@
 		delete plugin.libLoadTimeout;
 	};
 	InternalBDFDB.addSpecialListeners = function (plugin) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (BDFDB.ObjectUtils.is(plugin)) {
 			if (typeof plugin.onSettingsClosed === "function") {
 				let SettingsLayer = BDFDB.ModuleUtils.findByName("StandardSidebarView");
@@ -9944,31 +9945,31 @@
 	];
 	InternalBDFDB._processAvatarRender = function (user, avatar, position = "top") {
 		if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user)) {
-			let role = "", className = avatar.props.className;
-			if (avatar.type == "img") avatar = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.AvatarComponents.default, Object.assign({}, avatar.props, {
-				size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40
-			}));
-			delete avatar.props.className;
-			avatar = BDFDB.ReactUtils.createElement("div", {
-				className: className,
-				style: {borderRadius: 0},
-				children: [avatar]
-			});
 			avatar.props["user_by_BDFDB"] = user.id;
-			if (BDFDB_Patrons_T2.includes(user.id) && settings.showSupportBadges) {
+			let role = "", className = BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, ""));
+			if (BDFDB_Patrons_T2.includes(user.id)) {
 				role = "BDFDB Patron";
-				avatar.props.className = BDFDB.DOMUtils.formatClassName(avatar.props.className, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbsupporter);
+				className = BDFDB.DOMUtils.formatClassName(className, settings.showSupportBadges && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbsupporter);
 			}
-			if (BDFDB_Patrons_T3.includes(user.id) && settings.showSupportBadges) {
+			if (BDFDB_Patrons_T3.includes(user.id)) {
 				role = "BDFDB Patron Level 2";
-				avatar.props.className = BDFDB.DOMUtils.formatClassName(avatar.props.className, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbsupporter, BDFDB.disCN.bdfdbsupportercustom);
+				className = BDFDB.DOMUtils.formatClassName(className, settings.showSupportBadges && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbsupporter, BDFDB.disCN.bdfdbsupportercustom);
 			}
 			if (user.id == myId) {
 				role = "Theme Developer";
-				avatar.props.className = BDFDB.DOMUtils.formatClassName(avatar.props.className, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbdev);
+				className = BDFDB.DOMUtils.formatClassName(className, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbdev);
 			}
 			if (role) {
-				avatar.props.children.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
+				if (avatar.type == "img") avatar = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.AvatarComponents.default, Object.assign({}, avatar.props, {
+					size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40
+				}));
+				delete avatar.props.className;
+				avatar = BDFDB.ReactUtils.createElement("div", {
+					className: className,
+					style: {borderRadius: 0, overflow: "visible"},
+					children: [avatar]
+				});
+				if (settings.showSupportBadges) avatar.props.children.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 					text: role,
 					tooltipConfig: {position},
 					children: BDFDB.ReactUtils.createElement("div", {
@@ -9985,22 +9986,27 @@
 			let role = "";
 			if (BDFDB_Patrons_T2.includes(user.id) && settings.showSupportBadges) {
 				role = "BDFDB Patron";
-				BDFDB.DOMUtils.addClass(avatar, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbsupporter);
+				avatar.className = BDFDB.DOMUtils.formatClassName(avatar.className, settings.showSupportBadges && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbsupporter);
 			}
 			else if (BDFDB_Patrons_T3.includes(user.id) && settings.showSupportBadges) {
 				role = "BDFDB Patron Level 2";
-				BDFDB.DOMUtils.addClass(avatar, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbsupporter, BDFDB.disCN.bdfdbsupportercustom);
+				avatar.className = BDFDB.DOMUtils.formatClassName(avatar.className, settings.showSupportBadges && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbsupporter, BDFDB.disCN.bdfdbsupportercustom);
+				
 			}
 			else if (user.id == myId) {
 				role = "Theme Developer";
-				BDFDB.DOMUtils.addClass(avatar, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbdev);
+				avatar.className = BDFDB.DOMUtils.formatClassName(avatar.className, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbdev);
 			}
 			if (role && !avatar.querySelector(BDFDB.dotCN.bdfdbbadge)) {
-				let badge = document.createElement("div");
-				badge.className = BDFDB.disCN.bdfdbbadge;
-				badge.addEventListener("mouseenter", _ => {BDFDB.TooltipUtils.create(badge, role, {position});});
-				avatar.style.setProperty("position", "relative");
-				avatar.appendChild(badge);
+				if (settings.showSupportBadges) {
+					let badge = document.createElement("div");
+					badge.className = BDFDB.disCN.bdfdbbadge;
+					badge.addEventListener("mouseenter", _ => {BDFDB.TooltipUtils.create(badge, role, {position});});
+					avatar.style.setProperty("position", "relative");
+					avatar.style.setProperty("overflow", "visible");
+					avatar.style.setProperty("border-radius", 0);
+					avatar.appendChild(badge);
+				}
 			}
 		}
 	};
@@ -10047,8 +10053,82 @@
 	InternalBDFDB.processMention = function (e) {
 		delete e.returnvalue.props.userId;
 	};
+	
+	const ContextMenuTypes = ["UserSettingsCog", "User", "Developer", "Slate", "GuildFolder", "GroupDM", "SystemMessage", "Message", "Native", "Channel", "Guild"];
+	const QueuedComponents = BDFDB.ArrayUtils.removeCopies([].concat(ContextMenuTypes.map(n => n + "ContextMenu"), ["MessageOptionContextMenu", "MessageOptionToolbar"]));	
+	InternalBDFDB.addContextListeners = function (plugin) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
+		for (let type of QueuedComponents) if (typeof plugin[`on${type}`] === "function") {
+			BDFDB.InternalData.componentPatchQueries[type].query.push(plugin);
+			BDFDB.InternalData.componentPatchQueries[type].query = BDFDB.ArrayUtils.removeCopies(BDFDB.InternalData.componentPatchQueries[type].query);
+			BDFDB.InternalData.componentPatchQueries[type].query.sort((x, y) => {return x.name < y.name ? -1 : x.name > y.name ? 1 : 0;});
+			for (let module of BDFDB.InternalData.componentPatchQueries[type].modules) InternalBDFDB.patchContextMenuForPlugin(plugin, type, module);
+		}
+	};
+	InternalBDFDB.patchContextMenuForPlugin = function (plugin, type, module) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
+		if (module && module.exports && module.exports.default) BDFDB.ModuleUtils.patch(plugin, module.exports, "default", {after: e => {
+			if (e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:{props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:"default", type:module.exports.default.displayName});
+		}});
+	};
+	InternalBDFDB.executeExtraPatchedPatches = function (type, e) {
+		if (e.returnvalue && BDFDB.ObjectUtils.is(BDFDB.InternalData.componentPatchQueries[type]) && BDFDB.ArrayUtils.is(BDFDB.InternalData.componentPatchQueries[type].query)) {
+			for (let plugin of BDFDB.InternalData.componentPatchQueries[type].query) if(typeof plugin[`on${type}`] === "function") plugin[`on${type}`](e);
+		}
+	};
+	
+	for (let type of QueuedComponents) if (!BDFDB.InternalData.componentPatchQueries[type]) BDFDB.InternalData.componentPatchQueries[type] = {query:[], modules:[]};
+	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.ContextMenuUtils, "openContextMenu", {before: e => {
+		let menu = e.methodArguments[1]();
+		if (BDFDB.ObjectUtils.is(menu) && menu.type && menu.type.displayName) {
+			for (let type of ContextMenuTypes) if (menu.type.displayName.indexOf(type) > -1) {
+				let patchType = type + "ContextMenu";
+				let module = BDFDB.ModuleUtils.find(m => m == menu.type, false);
+				if (module && module.exports && module.exports.default && BDFDB.InternalData.componentPatchQueries[patchType]) {
+					BDFDB.InternalData.componentPatchQueries[patchType].modules.push(module);
+					BDFDB.InternalData.componentPatchQueries[patchType].modules = BDFDB.ArrayUtils.removeCopies(BDFDB.InternalData.componentPatchQueries[patchType].modules);
+					for (let plugin of BDFDB.InternalData.componentPatchQueries[patchType].query) InternalBDFDB.patchContextMenuForPlugin(plugin, patchType, module);
+				}
+				break;
+			}
+		}
+	}});
+	
+	BDFDB.ModuleUtils.patch(BDFDB, BDFDB.ReactUtils.getValue(BDFDB.ModuleUtils.findByString("renderReactions", "canAddNewReactions", "showMoreUtilities", false), "exports.default"), "type", {after: e => {
+		if (document.querySelector(BDFDB.dotCN.emojipicker) || !BDFDB.ObjectUtils.toArray(BDFDB.myPlugins).some(p => p.onMessageOptionContextMenu || p.onMessageOptionToolbar)) return;
+		let toolbar = BDFDB.ReactUtils.findChild(e.returnValue, {filter: c => c && c.props && c.props.showMoreUtilities != undefined && c.props.showEmojiPicker != undefined && c.props.setPopout != undefined});
+		if (toolbar) BDFDB.ModuleUtils.patch(BDFDB, toolbar, "type", {after: e2 => {
+			let menu = BDFDB.ReactUtils.findChild(e2.returnValue, {filter: c => c && c.props && typeof c.props.onRequestClose == "function" && c.props.onRequestClose.toString().indexOf("moreUtilities") > -1});
+			InternalBDFDB.executeExtraPatchedPatches("MessageOptionToolbar", {instance:{props:e2.methodArguments[0]}, returnvalue:e2.returnValue, methodname:"default"});
+			if (menu && typeof menu.props.renderPopout == "function") {
+				let renderPopout = menu.props.renderPopout;
+				menu.props.renderPopout = (...args) => {
+					let renderedPopout = renderPopout(...args);
+					BDFDB.ModuleUtils.patch(BDFDB, renderedPopout, "type", {after: e3 => {
+						InternalBDFDB.executeExtraPatchedPatches("MessageOptionContextMenu", {instance:{props:e3.methodArguments[0]}, returnvalue:e3.returnValue, methodname:"default"});
+					}}, {noCache: true});
+					return renderedPopout;
+				}
+			}
+		}}, {once: true});
+	}});
+	
+	InternalBDFDB.onSettingsClosed = function () {
+		if (InternalBDFDB.SettingsUpdated) {
+			delete InternalBDFDB.SettingsUpdated;
+			InternalBDFDB.forceUpdateAll();
+		}
+	};
+	
+	InternalBDFDB.forceUpdateAll = function () {
+		settings = BDFDB.DataUtils.get(this, "settings");
+		
+		BDFDB.MessageUtils.rerenderAll();
+		BDFDB.ModuleUtils.forceAllUpdates(BDFDB);
+	};
 
 	InternalBDFDB.patchPlugin(BDFDB);
+	InternalBDFDB.addSpecialListeners(BDFDB);
 
 	let BasePopout = BDFDB.ModuleUtils.findByName("BasePopout"), ReferencePositionLayer = BDFDB.ModuleUtils.findByName("ReferencePositionLayer");
 	if (BasePopout && ReferencePositionLayer) BDFDB.ModuleUtils.patch(BDFDB, BasePopout.prototype, "renderLayer", {after: e => {
@@ -10171,80 +10251,6 @@
 	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.IconUtils, "getGuildBannerURL", {instead: e => {
 		return e.methodArguments[0].id == myGuildId ? e.methodArguments[0].banner : e.callOriginalMethod();
 	}});
-	
-	const ContextMenuTypes = ["UserSettingsCog", "User", "Developer", "Slate", "GuildFolder", "GroupDM", "SystemMessage", "Message", "Native", "Channel", "Guild"];
-	const QueuedComponents = BDFDB.ArrayUtils.removeCopies([].concat(ContextMenuTypes.map(n => n + "ContextMenu"), ["MessageOptionContextMenu", "MessageOptionToolbar"]));	
-	InternalBDFDB.addContextListeners = function (plugin) {
-		plugin = plugin == BDFDB && InternalBDFDB || plugin;
-		for (let type of QueuedComponents) if (typeof plugin[`on${type}`] === "function") {
-			BDFDB.InternalData.componentPatchQueries[type].query.push(plugin);
-			BDFDB.InternalData.componentPatchQueries[type].query = BDFDB.ArrayUtils.removeCopies(BDFDB.InternalData.componentPatchQueries[type].query);
-			BDFDB.InternalData.componentPatchQueries[type].query.sort((x, y) => {return x.name < y.name ? -1 : x.name > y.name ? 1 : 0;});
-			for (let module of BDFDB.InternalData.componentPatchQueries[type].modules) InternalBDFDB.patchContextMenuForPlugin(plugin, type, module);
-		}
-	};
-	InternalBDFDB.patchContextMenuForPlugin = function (plugin, type, module) {
-		plugin = plugin == BDFDB && InternalBDFDB || plugin;
-		if (module && module.exports && module.exports.default) BDFDB.ModuleUtils.patch(plugin, module.exports, "default", {after: e => {
-			if (e.returnValue && typeof plugin[`on${type}`] === "function") plugin[`on${type}`]({instance:{props:e.methodArguments[0]}, returnvalue:e.returnValue, methodname:"default", type:module.exports.default.displayName});
-		}});
-	};
-	InternalBDFDB.executeExtraPatchedPatches = function (type, e) {
-		if (e.returnvalue && BDFDB.ObjectUtils.is(BDFDB.InternalData.componentPatchQueries[type]) && BDFDB.ArrayUtils.is(BDFDB.InternalData.componentPatchQueries[type].query)) {
-			for (let plugin of BDFDB.InternalData.componentPatchQueries[type].query) if(typeof plugin[`on${type}`] === "function") plugin[`on${type}`](e);
-		}
-	};
-	
-	for (let type of QueuedComponents) if (!BDFDB.InternalData.componentPatchQueries[type]) BDFDB.InternalData.componentPatchQueries[type] = {query:[], modules:[]};
-	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.ContextMenuUtils, "openContextMenu", {before: e => {
-		let menu = e.methodArguments[1]();
-		if (BDFDB.ObjectUtils.is(menu) && menu.type && menu.type.displayName) {
-			for (let type of ContextMenuTypes) if (menu.type.displayName.indexOf(type) > -1) {
-				let patchType = type + "ContextMenu";
-				let module = BDFDB.ModuleUtils.find(m => m == menu.type, false);
-				if (module && module.exports && module.exports.default && BDFDB.InternalData.componentPatchQueries[patchType]) {
-					BDFDB.InternalData.componentPatchQueries[patchType].modules.push(module);
-					BDFDB.InternalData.componentPatchQueries[patchType].modules = BDFDB.ArrayUtils.removeCopies(BDFDB.InternalData.componentPatchQueries[patchType].modules);
-					for (let plugin of BDFDB.InternalData.componentPatchQueries[patchType].query) InternalBDFDB.patchContextMenuForPlugin(plugin, patchType, module);
-				}
-				break;
-			}
-		}
-	}});
-	
-	BDFDB.ModuleUtils.patch(BDFDB, BDFDB.ReactUtils.getValue(BDFDB.ModuleUtils.findByString("renderReactions", "canAddNewReactions", "showMoreUtilities", false), "exports.default"), "type", {after: e => {
-		if (document.querySelector(BDFDB.dotCN.emojipicker) || !BDFDB.ObjectUtils.toArray(BDFDB.myPlugins).some(p => p.onMessageOptionContextMenu || p.onMessageOptionToolbar)) return;
-		let toolbar = BDFDB.ReactUtils.findChild(e.returnValue, {filter: c => c && c.props && c.props.showMoreUtilities != undefined && c.props.showEmojiPicker != undefined && c.props.setPopout != undefined});
-		if (toolbar) BDFDB.ModuleUtils.patch(BDFDB, toolbar, "type", {after: e2 => {
-			let menu = BDFDB.ReactUtils.findChild(e2.returnValue, {filter: c => c && c.props && typeof c.props.onRequestClose == "function" && c.props.onRequestClose.toString().indexOf("moreUtilities") > -1});
-			InternalBDFDB.executeExtraPatchedPatches("MessageOptionToolbar", {instance:{props:e2.methodArguments[0]}, returnvalue:e2.returnValue, methodname:"default"});
-			if (menu && typeof menu.props.renderPopout == "function") {
-				let renderPopout = menu.props.renderPopout;
-				menu.props.renderPopout = (...args) => {
-					let renderedPopout = renderPopout(...args);
-					BDFDB.ModuleUtils.patch(BDFDB, renderedPopout, "type", {after: e3 => {
-						InternalBDFDB.executeExtraPatchedPatches("MessageOptionContextMenu", {instance:{props:e3.methodArguments[0]}, returnvalue:e3.returnValue, methodname:"default"});
-					}}, {noCache: true});
-					return renderedPopout;
-				}
-			}
-		}}, {once: true});
-	}});
-	
-	InternalBDFDB.onSettingsClosed = function () {
-		if (InternalBDFDB.SettingsUpdated) {
-			delete InternalBDFDB.SettingsUpdated;
-			InternalBDFDB.forceUpdateAll();
-		}
-	};
-	
-	InternalBDFDB.forceUpdateAll = function () {
-		settings = BDFDB.DataUtils.get(this, "settings");
-		
-		BDFDB.ModuleUtils.forceAllUpdates(BDFDB);
-	};
-	
-	InternalBDFDB.addContextListeners(BDFDB);
 	
 	InternalBDFDB.forceUpdateAll();
 	
