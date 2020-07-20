@@ -37,11 +37,11 @@ var ShowHiddenChannels = (_ => {
 		}
 		render() {
 			return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ListRow, {
-				prefix: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatar, {
+				prefix: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
 					className: BDFDB.disCN.listavatar,
 					src: BDFDB.UserUtils.getAvatar(this.props.user.id),
 					status: BDFDB.UserUtils.getStatus(this.props.user.id),
-					size: BDFDB.LibraryComponents.Avatar.Sizes.SIZE_40
+					size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40
 				}),
 				label: [
 					BDFDB.ReactUtils.createElement("span", {

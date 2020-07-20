@@ -167,9 +167,9 @@ var DisplayServersAsChannels = (_ => {
 				this.removeTooltip(e.returnvalue);
 				this.removeMask(e.returnvalue);
 				this.addElementName(e.returnvalue, text, {
-					badges: icon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatar, {
+					badges: icon && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
 						src: icon,
-						size: BDFDB.LibraryComponents.Avatar.Sizes.SIZE_24
+						size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_24
 					})
 				});
 			}

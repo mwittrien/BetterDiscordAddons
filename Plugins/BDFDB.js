@@ -6647,7 +6647,9 @@
 	
 	InternalComponents.LibraryComponents.AutocompleteMenu = BDFDB.ModuleUtils.findByName("Autocomplete");
 	
-	InternalComponents.LibraryComponents.Avatar = (BDFDB.ModuleUtils.findByProperties("AnimatedAvatar") || {}).default;
+	let AvatarComponents = BDFDB.ModuleUtils.findByProperties("AnimatedAvatar") || {};
+	InternalComponents.LibraryComponents.Avatar = AvatarComponents.default;
+	InternalComponents.LibraryComponents.AvatarComponents = AvatarComponents;
 	
 	InternalComponents.LibraryComponents.BadgeAnimationContainer = InternalBDFDB.loadPatchedComp("BadgeAnimationContainer") || reactInitialized && class BDFDB_BadgeAnimationContainer extends LibraryModules.React.Component {
 		componentDidMount() {BDFDB.ReactUtils.forceUpdate(this);}
@@ -9941,9 +9943,9 @@
 	InternalBDFDB._processAvatarRender = function (user, avatar) {
 		if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user)) {
 			let changed = false;
-			if (avatar.type == "img") avatar = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Avatar, Object.assign({}, avatar.props, {
+			if (avatar.type == "img") avatar = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.AvatarComponents.default, Object.assign({}, avatar.props, {
 				className: BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, "")),
-				size: InternalComponents.LibraryComponents.Avatar.Sizes.SIZE_40
+				size: InternalComponents.LibraryComponents.AvatarComponents.Sizes.SIZE_40
 			}));
 			avatar.props["user_by_BDFDB"] = user.id;
 			if (BDFDB_Patrons_T2.includes(user.id)) {

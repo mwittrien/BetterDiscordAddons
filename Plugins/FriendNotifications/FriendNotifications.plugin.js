@@ -193,11 +193,11 @@ var FriendNotifications = (_ => {
 						amount: 50
 					},
 					renderLabel: data => [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatar, {
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
 							className: BDFDB.DOMUtils.formatClassName("settings-avatar", data.disabled && "disabled", data.destop && "desktop"),
 							src: BDFDB.UserUtils.getAvatar(data.id),
 							status: BDFDB.UserUtils.getStatus(data.id),
-							size: BDFDB.LibraryComponents.Avatar.Sizes.SIZE_40,
+							size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40,
 							onClick: (e, instance) => {
 								changeNotificationType(type, data.id, false, !(data.disabled || data.desktop));
 							},
@@ -652,11 +652,11 @@ var FriendNotifications = (_ => {
 										className: "log-time",
 										children: `[${log.timestring}]`
 									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Avatar, {
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
 										className: "log-user",
 										src: log.avatar,
 										status: log.status,
-										size: BDFDB.LibraryComponents.Avatar.Sizes.SIZE_40
+										size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
 										className: "log-content",
