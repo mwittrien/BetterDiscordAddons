@@ -9946,9 +9946,9 @@
 		if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user)) {
 			let role = "", className = avatar.props.className;
 			if (avatar.type == "img") avatar = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.AvatarComponents.default, Object.assign({}, avatar.props, {
-				className: "",
 				size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40
 			}));
+			delete avatar.props.className;
 			avatar = BDFDB.ReactUtils.createElement("div", {
 				className: className,
 				style: {borderRadius: 0},
