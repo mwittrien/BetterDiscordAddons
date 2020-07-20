@@ -65,7 +65,7 @@
 
 		let loadMessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
 		BDFDB.LogUtils.log(loadMessage, plugin.name);
-		if (!BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts) && BDFDB.DataUtils.get(BDFDB, "settings", "showToasts")) BDFDB.NotificationUtils.toast(plugin.name + " " + loadMessage, {nopointer: true, selector: "plugin-started-toast"});
+		if (!BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts) && settings.showToasts) BDFDB.NotificationUtils.toast(plugin.name + " " + loadMessage, {nopointer: true, selector: "plugin-started-toast"});
 
 		let url = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 		BDFDB.PluginUtils.checkUpdate(plugin.name, url);
@@ -97,7 +97,7 @@
 
 		let unloadMessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", "v" + plugin.version);
 		BDFDB.LogUtils.log(unloadMessage, plugin.name);
-		if (!BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts) && BDFDB.DataUtils.get(BDFDB, "settings", "showToasts")) BDFDB.NotificationUtils.toast(plugin.name + " " + unloadMessage, {nopointer: true, selector: "plugin-stopped-toast"});
+		if (!BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts) && settings.showToasts) BDFDB.NotificationUtils.toast(plugin.name + " " + unloadMessage, {nopointer: true, selector: "plugin-stopped-toast"});
 
 		let url = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 
@@ -368,7 +368,6 @@
 	};
 	InternalBDFDB.createLibrarySettings = function () {
 		if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded) return;
-		let settings = BDFDB.DataUtils.get(BDFDB, "settings");
 		let settingsPanel, settingsItems = [];
 		
 		let bdToastSetting = BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts);
@@ -1286,6 +1285,7 @@
 		SearchResultsInner: ["SEARCH_HIDE_BLOCKED_MESSAGES", "totalResults", "SEARCH_PAGE_SIZE"]
 	};
 	WebModulesData.PropsFinder = {
+		Avatar: "AnimatedAvatar",
 		MessageHeader: "MessageTimestamp",
 		UnavailableGuildsButton: "UnavailableGuildsButton"
 	};
@@ -3996,7 +3996,7 @@
 	DiscordClassModules.BDFDB = {
 		BDFDBundefined: "BDFDB_undefined",
 		avatarStatusHovered: "statusHovered-gF2976",
-		badge: "badge-7R_W4s",
+		badge: "badge-7R_W3s",
 		bdaRepoEntry: "entry-9JnAPs",
 		cardInner: "inner-OP_8zd",
 		cardWrapper: "card-rT4Wbb",
@@ -4032,6 +4032,7 @@
 		guild: "guild-r3yAE_",
 		guildLowerLeftBadge: "lowerLeftBadge-zr4T_9",
 		guildUpperLeftBadge: "upperLeftBadge-e35IpL",
+		hasBadge: "hasBadge-4rT8_u",
 		hotkeyResetButton: "resetButton-hI9Ax7",
 		hotkeyWrapper: "recorder-can0vx",
 		inputNumberButton: "button-J9muv5",
@@ -4751,6 +4752,7 @@
 		badgewrapper: ["NotFound", "badgeWrapper"],
 		bdfdbbadge: ["BDFDB", "badge"],
 		bdfdbdev: ["BDFDB", "dev"],
+		bdfdbhasbadge: ["BDFDB", "hasBadge"],
 		bdfdbsupporter: ["BDFDB", "supporter"],
 		bdfdbsupportercustom: ["BDFDB", "supporterCustom"],
 		bold: ["TextStyle", "bold"],
@@ -9940,39 +9942,65 @@
 		"329018006371827713",	// FUSL
 		"562008872467038230"	// BEAUDEN
 	];
-	InternalBDFDB._processAvatarRender = function (user, avatar) {
+	InternalBDFDB._processAvatarRender = function (user, avatar, position = "top") {
 		if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user)) {
-			let changed = false;
+			let role = "", className = avatar.props.className;
 			if (avatar.type == "img") avatar = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.AvatarComponents.default, Object.assign({}, avatar.props, {
-				className: BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, "")),
-				size: InternalComponents.LibraryComponents.AvatarComponents.Sizes.SIZE_40
+				className: "",
+				size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40
 			}));
+			avatar = BDFDB.ReactUtils.createElement("div", {
+				className: className,
+				style: {borderRadius: 0},
+				children: [avatar]
+			});
 			avatar.props["user_by_BDFDB"] = user.id;
-			if (BDFDB_Patrons_T2.includes(user.id)) {
-				changed = true;
-				avatar.props.className = BDFDB.DOMUtils.formatClassName(avatar.props.className, BDFDB.disCN.bdfdbbadge, BDFDB.disCN.bdfdbsupporter);
+			if (BDFDB_Patrons_T2.includes(user.id) && settings.showSupportBadges) {
+				role = "BDFDB Patron";
+				avatar.props.className = BDFDB.DOMUtils.formatClassName(avatar.props.className, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbsupporter);
 			}
-			if (BDFDB_Patrons_T3.includes(user.id)) {
-				changed = true;
-				avatar.props.className = BDFDB.DOMUtils.formatClassName(avatar.props.className, BDFDB.disCN.bdfdbbadge, BDFDB.disCN.bdfdbsupporter, BDFDB.disCN.bdfdbsupportercustom);
+			if (BDFDB_Patrons_T3.includes(user.id) && settings.showSupportBadges) {
+				role = "BDFDB Patron Level 2";
+				avatar.props.className = BDFDB.DOMUtils.formatClassName(avatar.props.className, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbsupporter, BDFDB.disCN.bdfdbsupportercustom);
 			}
 			if (user.id == myId) {
-				changed = true;
-				avatar.props.className = BDFDB.DOMUtils.formatClassName(avatar.props.className, BDFDB.disCN.bdfdbbadge, BDFDB.disCN.bdfdbdev);
+				role = "Theme Developer";
+				avatar.props.className = BDFDB.DOMUtils.formatClassName(avatar.props.className, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbdev);
 			}
-			if (changed && BDFDB.DataUtils.get(BDFDB, "settings", "showSupportBadges")) return avatar;
+			if (role) {
+				avatar.props.children.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
+					text: role,
+					tooltipConfig: {position},
+					children: BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.bdfdbbadge
+					})
+				}));
+				return avatar;
+			}
 		}
 	};
-	InternalBDFDB._processAvatarMount = function (user, avatar) {
+	InternalBDFDB._processAvatarMount = function (user, avatar, position = "top") {
 		if (Node.prototype.isPrototypeOf(avatar) && BDFDB.ObjectUtils.is(user)) {
 			avatar.setAttribute("user_by_BDFDB", user.id);
-			if (BDFDB_Patrons_T2.includes(user.id) && BDFDB.DataUtils.get(BDFDB, "settings", "showSupportBadges")) BDFDB.DOMUtils.addClass(avatar, BDFDB.disCN.bdfdbbadge, BDFDB.disCN.bdfdbsupporter);
-			if (BDFDB_Patrons_T3.includes(user.id) && BDFDB.DataUtils.get(BDFDB, "settings", "showSupportBadges")) BDFDB.DOMUtils.addClass(avatar, BDFDB.disCN.bdfdbbadge, BDFDB.disCN.bdfdbsupporter, BDFDB.disCN.bdfdbsupportercustom);
-			if (user.id == myId) BDFDB.DOMUtils.addClass(avatar, BDFDB.disCN.bdfdbbadge, BDFDB.disCN.bdfdbdev);
-			let status = avatar.querySelector(BDFDB.dotCN.avatarpointerevents);
-			if (status) {
-				status.addEventListener("mouseenter", _ => {BDFDB.DOMUtils.addClass(avatar, BDFDB.disCN.avatarstatushovered)});
-				status.addEventListener("mouseleave", _ => {BDFDB.DOMUtils.removeClass(avatar, BDFDB.disCN.avatarstatushovered)});
+			let role = "";
+			if (BDFDB_Patrons_T2.includes(user.id) && settings.showSupportBadges) {
+				role = "BDFDB Patron";
+				BDFDB.DOMUtils.addClass(avatar, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbsupporter);
+			}
+			else if (BDFDB_Patrons_T3.includes(user.id) && settings.showSupportBadges) {
+				role = "BDFDB Patron Level 2";
+				BDFDB.DOMUtils.addClass(avatar, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbsupporter, BDFDB.disCN.bdfdbsupportercustom);
+			}
+			else if (user.id == myId) {
+				role = "Theme Developer";
+				BDFDB.DOMUtils.addClass(avatar, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbdev);
+			}
+			if (role && !avatar.querySelector(BDFDB.dotCN.bdfdbbadge)) {
+				let badge = document.createElement("div");
+				badge.className = BDFDB.disCN.bdfdbbadge;
+				badge.addEventListener("mouseenter", _ => {BDFDB.TooltipUtils.create(badge, role, {position});});
+				avatar.style.setProperty("position", "relative");
+				avatar.appendChild(badge);
 			}
 		}
 	};
@@ -9993,10 +10021,10 @@
 		InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper));
 	};
 	InternalBDFDB.processUserPopout = function (e) {
-		InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.userpopoutavatarwrapper));
+		InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper));
 	};
 	InternalBDFDB.processUserProfile = function (e) {
-		InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper));
+		InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper), "right");
 	};
 	InternalBDFDB.processDiscordTag = function (e) {
 		if (e.instance && e.instance.props && e.instance.props.user && e.returnvalue) e.returnvalue.props.user = e.instance.props.user;
