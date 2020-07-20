@@ -30,7 +30,7 @@ var ServerFolders = (_ => {
 		render() {
 			let closing = this.props.closing;
 			delete this.props.closing;
-			let folders = Array.from(BDFDB.LibraryModules.FolderUtils.getExpandedFolders());
+			let folders = Array.from(BDFDB.LibraryModules.FolderUtils.getExpandedFolders()).map(folderId => BDFDB.LibraryModules.FolderStore.getGuildFolderById(folderId)).filter(folder => folder && folder.guildIds);
 			this.props.folders = folders.length || closing ? folders : (this.props.folders || []);
 			BDFDB.TimeUtils.clear(this._rerenderTimeout);
 			if (!folders.length && this.props.folders.length && !closing) this._rerenderTimeout = BDFDB.TimeUtils.timeout(_ => {
@@ -41,10 +41,9 @@ var ServerFolders = (_ => {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.guildswrapper, BDFDB.disCN.guilds, this.props.themeOverride && BDFDB.disCN.themedark, BDFDB.disCN._serverfoldersfoldercontent, (!folders.length || closing) && BDFDB.disCN._serverfoldersfoldercontentclosed),
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ScrollerNone, {
 					className: BDFDB.disCN.guildsscroller,
-					children: this.props.folders.map(folderId => {
-						let folder = BDFDB.LibraryModules.FolderStore.getGuildFolderById(folderId);
-						let data = _this.getFolderConfig(folderId);
-						return folder ? folder.guildIds.map(guildId => {
+					children: this.props.folders.map(folder => {
+						let data = _this.getFolderConfig(folder.folderId);
+						return folder.guildIds.map(guildId => {
 							return [
 								this.draggedGuild == guildId ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Guild, {
 									guild: BDFDB.LibraryModules.GuildStore.getGuild(guildId),
@@ -126,7 +125,7 @@ var ServerFolders = (_ => {
 									})
 								})
 							]
-						}) : null;
+						});
 					}).filter(n => n).reduce((r, a) => r.concat(a, settings.addSeparators ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildComponents.Items.Separator, {}) : null), [0]).slice(1, -1).flat(10).filter(n => n)
 				})
 			});
@@ -317,13 +316,17 @@ var ServerFolders = (_ => {
 	return class ServerFolders {
 		getName () {return "ServerFolders";}
 
-		getVersion () {return "6.8.2";}
+		getVersion () {return "6.8.3";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Patches Discords native Folders in a way to open Servers within a Folder in a new bar to the right. Also adds a bunch of new features to more easily organize, customize and manage your Folders.";}
 
-		constructor () {			
+		constructor () {
+			this.changelog = {
+				"fixed":[["Empty invisible folders","Fixed an issue where a open empty invisible folder would force the extra column to stay open forever, why the fuck discord are the empty invisible folders"]]
+			};
+			
 			this.patchedModules = {
 				after: {
 					AppView: "render",
