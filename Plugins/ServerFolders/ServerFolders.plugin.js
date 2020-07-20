@@ -324,7 +324,7 @@ var ServerFolders = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Empty invisible folders","Fixed an issue where a open empty invisible folder would force the extra column to stay open forever, why the fuck discord are the empty invisible folders"]]
+				"fixed":[["Empty invisible folders","Fixed an issue where an open empty invisible folder would force the extra column to stay open forever, why the fuck discord are there empty invisible folders"]]
 			};
 			
 			this.patchedModules = {
