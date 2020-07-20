@@ -1,33 +1,57 @@
 ﻿:root {
 	--themedevbadge: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 508.52 508.52" style="enable-background:new 0 0 508.52 508.52;" xml:space="preserve"><path fill="black" d="M63.565, 476.737c0, 12.84, 7.755, 24.473, 19.61, 29.367c3.941, 1.621, 8.073, 2.415, 12.173, 2.415c8.263, 0, 16.4-3.242, 22.47-9.312L254.26, 362.765l136.442, 136.442c6.07, 6.07, 14.207, 9.312, 22.47, 9.312c4.1, 0, 8.232-0.795, 12.141-2.415c11.887-4.894, 19.642-16.527, 19.642-29.367V165.347H63.565V476.737z"/><path fill="black" d="M413.172, 0H95.347C77.804, 0, 63.565, 14.239, 63.565, 31.782v61.782h381.39V31.782C444.955, 14.239, 430.716, 0, 413.172, 0z"/></svg>') !important;
 }
-.root-SR8cQa .wrapper-3t9DeA.dev-A7f2Rx.hasBadge-4rT8_u:after,
-.userPopout-3XzG_A .wrapper-3t9DeA.dev-A7f2Rx.hasBadge-4rT8_u:after {
+
+.dev-A7f2Rx.hasBadge-4rT8_u:after {
 	content: "" !important;
 	-webkit-mask: var(--themedevbadge) center/cover no-repeat !important;
 	background: #7289DA !important;
 	position: absolute !important;
+	z-index: 2 !important;
+	width: 14px !important;
+	height: 14px !important;
+	left: -2px !important;
+	bottom: -3px !important;
+	pointer-events: none !important;
+}
+.root-SR8cQa .dev-A7f2Rx.hasBadge-4rT8_u:after,
+.userPopout-3XzG_A .dev-A7f2Rx.hasBadge-4rT8_u:after {
     z-index: 1002 !important;
 	width: 22px !important;
 	height: 22px !important;
 	left: 0px !important;
 	bottom: -2px !important;
-	pointer-events: none !important;
 }
-.root-SR8cQa .topSectionPlaying-1J5E4n .wrapper-3t9DeA.dev-A7f2Rx.hasBadge-4rT8_u:after,
-.userPopout-3XzG_A .headerPlaying-j0WQBV .wrapper-3t9DeA.dev-A7f2Rx.hasBadge-4rT8_u:after {
+.root-SR8cQa .topSectionPlaying-1J5E4n .dev-A7f2Rx.hasBadge-4rT8_u:after,
+.userPopout-3XzG_A .headerPlaying-j0WQBV .dev-A7f2Rx.hasBadge-4rT8_u:after {
 	filter: brightness(80%) !important;
 }
-.root-SR8cQa .wrapper-3t9DeA.dev-A7f2Rx.hasBadge-4rT8_u [mask="url(#svg-mask-avatar-status-round-80)"],
-.userPopout-3XzG_A .wrapper-3t9DeA.dev-A7f2Rx.hasBadge-4rT8_u [mask="url(#svg-mask-avatar-status-round-80)"] {
+.member-3-YXUe .dev-A7f2Rx.hasBadge-4rT8_u:after {
+	width: 10px !important;
+	height: 10px !important;
+	left: -1px !important;
+	bottom: -1px !important;
+}
+.dev-A7f2Rx.hasBadge-4rT8_u [mask="url(#svg-mask-avatar-default)"] {
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 1 1"><circle fill="white" cx="0.5" cy="0.5" r="0.5"></circle><rect fill="black" x="-0.15" y="0.6375" width="0.5" height="0.5" rx="0.13125" ry="0.13125"></rect></svg>');
+}
+.dev-A7f2Rx.hasBadge-4rT8_u [mask="url(#svg-mask-avatar-status-round-32)"] {
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 1 1"><circle fill="white" cx="0.5" cy="0.5" r="0.5"></circle><circle fill="black" cx="0.84375" cy="0.84375" r="0.25"></circle><rect fill="black" x="-0.15" y="0.6375" width="0.5" height="0.5" rx="0.13125" ry="0.13125"></rect></svg>');
+}
+.dev-A7f2Rx.hasBadge-4rT8_u [mask="url(#svg-mask-avatar-status-mobile-32)"] {
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 1 1"><circle fill="white" cx="0.5" cy="0.5" r="0.5"></circle><rect fill="black" x="0.59375" y="0.4375" width="0.5" height="0.65625" rx="0.13125" ry="0.13125"></rect><rect fill="black" x="-0.15" y="0.6375" width="0.5" height="0.5" rx="0.13125" ry="0.13125"></rect></svg>');
+}
+.dev-A7f2Rx.hasBadge-4rT8_u [mask="url(#svg-mask-avatar-status-round-40)"] {
+	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 1 1"><circle fill="white" cx="0.5" cy="0.5" r="0.5"></circle><circle fill="black" cx="0.85" cy="0.85" r="0.25"></circle><rect fill="black" x="-0.15" y="0.6375" width="0.5" height="0.5" rx="0.13125" ry="0.13125"></rect></svg>');
+}
+.dev-A7f2Rx.hasBadge-4rT8_u [mask="url(#svg-mask-avatar-status-round-80)"] {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 1 1"><circle fill="white" cx="0.5" cy="0.5" r="0.5"/><circle xmlns="http://www.w3.org/2000/svg" fill="black" cx="0.85" cy="0.85" r="0.175"/><rect fill="black" x="-0.025" y="0.675" width="0.35" height="0.5" rx="0.09" ry="0.09"/></svg>');
 }
-.root-SR8cQa .wrapper-3t9DeA.dev-A7f2Rx.hasBadge-4rT8_u [mask="url(#svg-mask-avatar-status-mobile-80)"],
-.userPopout-3XzG_A .wrapper-3t9DeA.dev-A7f2Rx.hasBadge-4rT8_u [mask="url(#svg-mask-avatar-status-mobile-80)"] {
+.dev-A7f2Rx.hasBadge-4rT8_u [mask="url(#svg-mask-avatar-status-mobile-80)"] {
 	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 1 1"><circle fill="white" cx="0.5" cy="0.5" r="0.5"/><rect fill="black" x="0.675" y="0.575" width="0.35" height="0.45" rx="0.09" ry="0.09"/><rect fill="black" x="-0.025" y="0.675" width="0.35" height="0.5" rx="0.09" ry="0.09"/></svg>');
 }
-.root-SR8cQa .wrapper-3t9DeA.dev-A7f2Rx.hasBadge-4rT8_u:not(.statusHovered-gF2976):hover + .headerInfo-30uryT:before,
-.userPopout-3XzG_A .wrapper-3t9DeA.dev-A7f2Rx.hasBadge-4rT8_u:not(.statusHovered-gF2976):hover .wrapper-3t9DeA:before {
+.root-SR8cQa .dev-A7f2Rx.hasBadge-4rT8_u:not(.statusHovered-gF2976):hover + .headerInfo-30uryT:before,
+.userPopout-3XzG_A .dev-A7f2Rx.hasBadge-4rT8_u:not(.statusHovered-gF2976):hover .wrapper-3t9DeA:before {
 	content: "Theme Developer" !important;
 	white-space: nowrap !important;
     background-color: #000 !important;
@@ -43,59 +67,29 @@
     z-index: 1002 !important;
 	pointer-events: none !important;
 }
-.root-SR8cQa .wrapper-3t9DeA.dev-A7f2Rx.hasBadge-4rT8_u:not(.statusHovered-gF2976):hover + .headerInfo-30uryT:after,
-.userPopout-3XzG_A .wrapper-3t9DeA.dev-A7f2Rx.hasBadge-4rT8_u:not(.statusHovered-gF2976):hover .wrapper-3t9DeA:after {
+.root-SR8cQa .dev-A7f2Rx.hasBadge-4rT8_u:not(.statusHovered-gF2976):hover + .headerInfo-30uryT:after,
+.userPopout-3XzG_A .dev-A7f2Rx.hasBadge-4rT8_u:not(.statusHovered-gF2976):hover .wrapper-3t9DeA:after {
 	content: "" !important;
     position: absolute !important;
     z-index: 1002 !important;
 	border: 5px solid transparent !important;
 	pointer-events: none !important;
 }
-.root-SR8cQa .wrapper-3t9DeA.dev-A7f2Rx.hasBadge-4rT8_u:not(.statusHovered-gF2976):hover + .headerInfo-30uryT:before {
+.root-SR8cQa .dev-A7f2Rx.hasBadge-4rT8_u:not(.statusHovered-gF2976):hover + .headerInfo-30uryT:before {
 	left: 52px !important;
 	top: 87px !important;
 }
-.root-SR8cQa .wrapper-3t9DeA.dev-A7f2Rx.hasBadge-4rT8_u:not(.statusHovered-gF2976):hover + .headerInfo-30uryT:after {
+.root-SR8cQa .dev-A7f2Rx.hasBadge-4rT8_u:not(.statusHovered-gF2976):hover + .headerInfo-30uryT:after {
 	border-right-color: #000 !important;
 	left: 42px !important;
 	top: 98px !important;
 }
-.userPopout-3XzG_A .wrapper-3t9DeA.dev-A7f2Rx.hasBadge-4rT8_u:not(.statusHovered-gF2976):hover .wrapper-3t9DeA:before {
+.userPopout-3XzG_A .dev-A7f2Rx.hasBadge-4rT8_u:not(.statusHovered-gF2976):hover .wrapper-3t9DeA:before {
 	top: 14px !important;
 	left: -53px !important;
 }
-.userPopout-3XzG_A .wrapper-3t9DeA.dev-A7f2Rx.hasBadge-4rT8_u:not(.statusHovered-gF2976):hover .wrapper-3t9DeA:after {
+.userPopout-3XzG_A .dev-A7f2Rx.hasBadge-4rT8_u:not(.statusHovered-gF2976):hover .wrapper-3t9DeA:after {
 	border-top-color: #000 !important;
 	top: 45px !important;
 	left: 7px !important;
-}
-
-.wrapper-3t9DeA.dev-A7f2Rx.hasBadge-4rT8_u:after {
-	content: "" !important;
-	-webkit-mask: var(--themedevbadge) center/cover no-repeat !important;
-	background: #7289DA !important;
-	position: absolute !important;
-	z-index: 2 !important;
-	width: 14px !important;
-	height: 14px !important;
-	left: -2px !important;
-	bottom: -3px !important;
-}
-.member-3-YXUe .wrapper-3t9DeA.dev-A7f2Rx.hasBadge-4rT8_u:after {
-	width: 10px !important;
-	height: 10px !important;
-	left: -1px !important;
-	bottom: -1px !important;
-}
-.wrapper-3t9DeA.dev-A7f2Rx.hasBadge-4rT8_u [mask="url(#svg-mask-avatar-default)"] {
-	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 1 1"><circle fill="white" cx="0.5" cy="0.5" r="0.5"></circle><rect fill="black" x="-0.15" y="0.6375" width="0.5" height="0.5" rx="0.13125" ry="0.13125"></rect></svg>');
-}
-.wrapper-3t9DeA.dev-A7f2Rx.hasBadge-4rT8_u [mask="url(#svg-mask-avatar-status-round-32)"] {
-	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 1 1"><circle fill="white" cx="0.5" cy="0.5" r="0.5"></circle><circle fill="black" cx="0.84375" cy="0.84375" r="0.25"></circle><rect fill="black" x="-0.15" y="0.6375" width="0.5" height="0.5" rx="0.13125" ry="0.13125"></rect></svg>');
-}
-.wrapper-3t9DeA.dev-A7f2Rx.hasBadge-4rT8_u [mask="url(#svg-mask-avatar-status-mobile-32)"] {
-	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 1 1"><circle fill="white" cx="0.5" cy="0.5" r="0.5"></circle><rect fill="black" x="0.59375" y="0.4375" width="0.5" height="0.65625" rx="0.13125" ry="0.13125"></rect><rect fill="black" x="-0.15" y="0.6375" width="0.5" height="0.5" rx="0.13125" ry="0.13125"></rect></svg>');
-}
-.wrapper-3t9DeA.dev-A7f2Rx.hasBadge-4rT8_u [mask="url(#svg-mask-avatar-status-round-40)"] {
-	-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 1 1"><circle fill="white" cx="0.5" cy="0.5" r="0.5"></circle><circle fill="black" cx="0.85" cy="0.85" r="0.25"></circle><rect fill="black" x="-0.15" y="0.6375" width="0.5" height="0.5" rx="0.13125" ry="0.13125"></rect></svg>');
 }
