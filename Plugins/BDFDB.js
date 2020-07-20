@@ -9504,7 +9504,7 @@
 		${BDFDB.dotCNS.modalwrapper + BDFDB.dotCN.modalheader + BDFDB.dotCN.modalheaderhassibling} {
 			padding-bottom: 10px;
 		}
-		${BDFDB.dotCNS.tabbarcontainer + BDFDB.dotCN.tabbarcontainerbottom} {
+		${BDFDB.dotCN.tabbarcontainer + BDFDB.dotCN.tabbarcontainerbottom} {
 			border-top: unset;
 			border-bottom: 1px solid hsla(0,0%,100%,.1);
 		}
