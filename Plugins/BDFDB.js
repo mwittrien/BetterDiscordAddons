@@ -4266,7 +4266,6 @@
 	};
 	DiscordClassModules.SpotifyControls = {
 		bar: "bar-g2ZMIm",
-		barContainer: "barContainer-UWmgAx",
 		barFill: "barFill-Dhkah7",
 		barText: "barText-lmqc5O",
 		container: "container-6sXIoE",
@@ -4276,6 +4275,7 @@
 		details: "details-ntX2k5",
 		interpret: "interpret-F93iqP",
 		song: "song-tIdBpF",
+		timeline: "timeline-UWmgAx"
 	};
 	DiscordClassModules.TimedLightDarkMode = {
 		dateGrabber: "dateGrabber-QrRkIX",
@@ -4629,7 +4629,7 @@
 		_spellcheckerror: ["SpellCheck", "error"],
 		_spellcheckoverlay: ["SpellCheck", "overlay"],
 		_spotifycontrolsbar: ["SpotifyControls", "bar"],
-		_spotifycontrolsbarcontainer: ["SpotifyControls", "barContainer"],
+		_spotifycontrolsbarcontainer: ["SpotifyControls", "timeline"],
 		_spotifycontrolsbarfill: ["SpotifyControls", "barFill"],
 		_spotifycontrolsbartext: ["SpotifyControls", "barText"],
 		_spotifycontrolscontainer: ["SpotifyControls", "container"],
@@ -4639,6 +4639,7 @@
 		_spotifycontrolsdetails: ["SpotifyControls", "details"],
 		_spotifycontrolsinterpret: ["SpotifyControls", "interpret"],
 		_spotifycontrolssong: ["SpotifyControls", "song"],
+		_spotifycontrolstimeline: ["SpotifyControls", "timeline"],
 		_timedlightdarkmodedategrabber: ["TimedLightDarkMode", "dateGrabber"],
 		_timedlightdarkmodetimergrabber: ["TimedLightDarkMode", "timerGrabber"],
 		_timedlightdarkmodetimersettings: ["TimedLightDarkMode", "timerSettings"],

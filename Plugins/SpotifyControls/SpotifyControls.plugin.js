@@ -141,7 +141,7 @@ var SpotifyControls = (_ => {
 			let currentTime = (!this.props.running && stopTime ? stopTime : new Date()) - this.props.song.timestamps.start;
 			currentTime = currentTime > maxTime ? maxTime : currentTime;
 			return BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.disCN._spotifycontrolsbarcontainer,
+				className: BDFDB.disCN._spotifycontrolstimeline,
 				children: [
 					BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN._spotifycontrolsbar,
@@ -223,7 +223,7 @@ var SpotifyControls = (_ => {
 					align-items: center;
 					font-size: 14px;
 				}
-				${BDFDB.dotCN._spotifycontrolsbarcontainer} {
+				${BDFDB.dotCN._spotifycontrolstimeline} {
 					margin: 4px 0;
 				}
 				${BDFDB.dotCN._spotifycontrolsbar} {
