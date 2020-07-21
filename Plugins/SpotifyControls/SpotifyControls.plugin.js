@@ -124,7 +124,7 @@ var SpotifyControls = (_ => {
 			updateInterval = BDFDB.TimeUtils.interval(_ => {
 				if (!this.updater || typeof this.updater.isMounted != "function" || !this.updater.isMounted(this)) BDFDB.TimeUtils.clear(updateInterval);
 				else if (this.props.running) {
-					let song = BDFDB.LibraryModules.SpotifyTrackUtils.getActivity();
+					let song = BDFDB.LibraryModules.SpotifyTrackUtils.getActivity(false);
 					if (!song) BDFDB.ReactUtils.forceUpdate(controls);
 					else if (this.props.running) BDFDB.ReactUtils.forceUpdate(this);
 				}
@@ -300,8 +300,10 @@ var SpotifyControls = (_ => {
 				BDFDB.PluginUtils.init(this);
 
 				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.SpotifyTrackUtils, "getActivity", {after: e => {
-					if (e.returnValue && e.returnValue.name == "Spotify") this.updatePlayer(e.returnValue);
-					else if (!e.returnValue) this.updatePlayer(null);
+					if (e.methodArguments[0] !== false) {
+						if (e.returnValue && e.returnValue.name == "Spotify") this.updatePlayer(e.returnValue);
+						else if (!e.returnValue) this.updatePlayer(null);
+					}
 				}});
 
 				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.SpotifyTrackUtils, "wasAutoPaused", {instead: e => {
