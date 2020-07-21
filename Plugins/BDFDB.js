@@ -4629,7 +4629,7 @@
 		_spellcheckerror: ["SpellCheck", "error"],
 		_spellcheckoverlay: ["SpellCheck", "overlay"],
 		_spotifycontrolsbar: ["SpotifyControls", "bar"],
-		_spotifycontrolsbarcontainer: ["SpotifyControls", "timeline"],
+		_spotifycontrolsbarcontainer: ["SpotifyControls", "timeline"], // REMOVE
 		_spotifycontrolsbarfill: ["SpotifyControls", "barFill"],
 		_spotifycontrolsbartext: ["SpotifyControls", "barText"],
 		_spotifycontrolscontainer: ["SpotifyControls", "container"],

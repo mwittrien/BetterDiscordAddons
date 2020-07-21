@@ -237,7 +237,7 @@ var SpotifyControls = (_ => {
 					height: 100%;
 					min-width: 4px;
 					border-radius: 2px;
-					background: var(--header-primary);
+					background: var(--text-normal);
 				}
 				${BDFDB.dotCN._spotifycontrolsbartext} {
 					display: flex;
