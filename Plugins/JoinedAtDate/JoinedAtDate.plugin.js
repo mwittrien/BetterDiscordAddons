@@ -7,7 +7,7 @@ var JoinedAtDate = (_ => {
 	return class JoinedAtDate {
 		getName () {return "JoinedAtDate";}
 
-		getVersion () {return "1.2.2";}
+		getVersion () {return "1.2.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -15,7 +15,7 @@ var JoinedAtDate = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["Settings","Added upper limit for $daysago, option to hide the default timestamp text and new year short form placeholder"]]
+				"fixed":[["No member","no longer tries to fetch join date of no members"]]
 			};
 
 			this.patchedModules = {
@@ -286,7 +286,7 @@ var JoinedAtDate = (_ => {
 		injectDate (instance, children, index, user) {
 			if (!BDFDB.ArrayUtils.is(children) || !user || user.discriminator == "0000") return;
 			let guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
-			if (!guildId) return;
+			if (!guildId || !BDFDB.LibraryModules.MemberStore.getMember(guildId, user.id)) return;
 			if (!loadedUsers[guildId]) loadedUsers[guildId] = {};
 			if (!requestedUsers[guildId]) requestedUsers[guildId] = {};
 			if (!BDFDB.ArrayUtils.is(requestedUsers[guildId][user.id])) {
