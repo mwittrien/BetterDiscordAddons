@@ -58,13 +58,13 @@ var ServerFolders = (_ => {
 									onClick: event => {
 										if (BDFDB.InternalData.pressedKeys.includes(46)) {
 											BDFDB.ListenerUtils.stopEvent(event);
-											_this.removeGuildFromFolder(folderId, guildId);
+											_this.removeGuildFromFolder(folder.folderId, guildId);
 										}
 										else {
 											if (settings.closeAllFolders) {
-												for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (openFolderId != folderId || !settings.forceOpenFolder) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
+												for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (openFolderId != folder.folderId || !settings.forceOpenFolder) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
 											}
-											else if (settings.closeTheFolder && !settings.forceOpenFolder && BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folderId)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folderId);
+											else if (settings.closeTheFolder && !settings.forceOpenFolder && BDFDB.LibraryModules.FolderUtils.isFolderExpanded(folder.folderId)) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(folder.folderId);
 											else BDFDB.ReactUtils.forceUpdate(this);
 										}
 									},
@@ -316,7 +316,7 @@ var ServerFolders = (_ => {
 	return class ServerFolders {
 		getName () {return "ServerFolders";}
 
-		getVersion () {return "6.8.3";}
+		getVersion () {return "6.8.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -324,7 +324,7 @@ var ServerFolders = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Empty invisible folders","Fixed an issue where an open empty invisible folder would force the extra column to stay open forever, why the fuck discord are there empty invisible folders"]]
+				"fixed":[["Empty invisible folders","Fixed an issue where an open empty invisible folder would force the extra column to stay open forever, why the fuck discord are there empty invisible folders"], ["Switching", "Clicking a server in a folder opens the server again"]]
 			};
 			
 			this.patchedModules = {
