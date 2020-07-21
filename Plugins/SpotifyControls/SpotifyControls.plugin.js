@@ -3,6 +3,8 @@
 var SpotifyControls = (_ => {
 	var controls, lastSong, stopTime, updateInterval;
 	
+	var settings = {};
+	
 	const SpotifyControlsComponent = class SpotifyControls extends BdApi.React.Component {
 		componentDidMount() {
 			controls = this;
@@ -38,7 +40,7 @@ var SpotifyControls = (_ => {
 			}
 			else if (!stopTime && lastSong) stopTime = new Date();
 			return !socketDevice || !lastSong ? null : BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.disCN._spotifycontrolscontainer,
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._spotifycontrolscontainer, settings.addTimeline && BDFDB.disCN._spotifycontrolscontainerwithtimeline),
 				children: [
 					BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN._spotifycontrolscontainerinner,
@@ -108,11 +110,11 @@ var SpotifyControls = (_ => {
 							})
 						]
 					}),
-					BDFDB.ReactUtils.createElement(SpotifyControlsTimelineComponent, {
+					settings.addTimeline && BDFDB.ReactUtils.createElement(SpotifyControlsTimelineComponent, {
 						song: lastSong,
 						running: !!this.props.song
 					})
-				]
+				].filter(n => n)
 			});
 		}
 	};
@@ -190,6 +192,12 @@ var SpotifyControls = (_ => {
 		}
 		
 		initConstructor () {
+			this.defaults = {
+				settings: {
+					addTimeline: 		{value:true,	description:"Show the song timeline in the controls"}
+				}
+			};
+			
 			this.css = `
 				@font-face {
 					font-family: glue1-spoticon;
@@ -198,9 +206,17 @@ var SpotifyControls = (_ => {
 					font-style: normal
 				}
 				${BDFDB.dotCN._spotifycontrolscontainer} {
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					min-height: 52px;
 					margin-bottom: 1px;
 					border-bottom: 1px solid var(--background-modifier-accent);
-					padding: 8px 8px 0 8px;
+					padding: 0 8px;
+					box-sizing: border-box;
+				}
+				${BDFDB.dotCN._spotifycontrolscontainer + BDFDB.dotCN._spotifycontrolscontainerwithtimeline} {
+					padding-top: 8px;
 				}
 				${BDFDB.dotCN._spotifycontrolscontainerinner} {
 					display: flex;
@@ -254,10 +270,6 @@ var SpotifyControls = (_ => {
 			`;
 		}
 
-		getSettingsPanel () {
-			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-		}
-
 		// Legacy
 		load () {}
 
@@ -300,7 +312,7 @@ var SpotifyControls = (_ => {
 					return false;
 				}});
 				
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 			}
 			else {
 				console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
@@ -311,7 +323,7 @@ var SpotifyControls = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
 				
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -319,6 +331,13 @@ var SpotifyControls = (_ => {
 
 		
 		// Begin of own functions
+
+		onSettingsClosed () {
+			if (this.SettingsUpdated) {
+				delete this.SettingsUpdated;
+				this.forceUpdateAll();
+			}
+		}
 
 		processAnalyticsContext (e) {
 			if (typeof e.returnvalue.props.children == "function" && e.instance.props.section == BDFDB.DiscordConstants.AnalyticsSections.ACCOUNT_PANEL) {
@@ -339,6 +358,12 @@ var SpotifyControls = (_ => {
 				controls.props.song = song;
 				BDFDB.ReactUtils.forceUpdate(controls);
 			}
+		}
+		
+		forceUpdateAll() {
+			settings = BDFDB.DataUtils.get(this, "settings");
+			
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 	}
 })();
