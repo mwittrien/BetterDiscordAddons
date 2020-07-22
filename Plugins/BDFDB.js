@@ -4268,6 +4268,7 @@
 		bar: "bar-g2ZMIm",
 		barFill: "barFill-Dhkah7",
 		barText: "barText-lmqc5O",
+		buttonActive: "active-6TsW-_",
 		container: "container-6sXIoE",
 		containerInner: "inner-WRV6k5",
 		containerInnerWrapper: "wrapper-h2Uf-2",
@@ -4636,6 +4637,7 @@
 		_spotifycontrolsbarcontainer: ["SpotifyControls", "timeline"], // REMOVE
 		_spotifycontrolsbarfill: ["SpotifyControls", "barFill"],
 		_spotifycontrolsbartext: ["SpotifyControls", "barText"],
+		_spotifycontrolsbuttonactive: ["SpotifyControls", "buttonActive"],
 		_spotifycontrolscontainer: ["SpotifyControls", "container"],
 		_spotifycontrolscontainerinner: ["SpotifyControls", "containerInner"],
 		_spotifycontrolscontainerinnerwrapper: ["SpotifyControls", "containerInnerWrapper"],
