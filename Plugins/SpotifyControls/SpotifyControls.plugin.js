@@ -58,7 +58,7 @@ var SpotifyControls = (_ => {
 			if (!socketDevice) return null;
 			if (this.props.song) {
 				playbackState.is_playing = true;
-				let fetchState = this.props.maximized && lastSong && !BDFDB.equals(this.props.song, lastSong);
+				let fetchState = this.props.maximized && !BDFDB.equals(this.props.song, lastSong);
 				lastSong = this.props.song;
 				stopTime = null;
 				if (fetchState) {
@@ -128,6 +128,17 @@ var SpotifyControls = (_ => {
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 									grow: 0,
 									children: [
+										this.props.maximized && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+											className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.accountinfobutton, BDFDB.disCN.accountinfobuttonenabled),
+											style: {marginRight: 4},
+											look: BDFDB.LibraryComponents.Button.Looks.BLANK,
+											size: BDFDB.LibraryComponents.Button.Sizes.NONE,
+											children: "",
+											onClick: _ => {
+												BDFDB.LibraryRequires.electron.clipboard.write({text:playbackState.item.external_urls.spotify});
+												BDFDB.NotificationUtils.toast("Song URL was copied to clipboard.", {type: "success"});
+											}
+										}),
 										this.props.maximized && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 											className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.accountinfobutton, !socketDevice.device.is_restricted ? BDFDB.disCN.accountinfobuttonenabled : BDFDB.disCN.accountinfobuttondisabled, playbackState.shuffle_state && BDFDB.disCN._spotifycontrolsbuttonactive),
 											look: BDFDB.LibraryComponents.Button.Looks.BLANK,
@@ -203,7 +214,7 @@ var SpotifyControls = (_ => {
 										this.props.maximized && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
 											children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
 												className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.accountinfobutton, !socketDevice.device.is_restricted ? BDFDB.disCN.accountinfobuttonenabled : BDFDB.disCN.accountinfobuttondisabled),
-												style: {marginLeft: 16},
+												style: {marginLeft: 4},
 												look: BDFDB.LibraryComponents.Button.Looks.BLANK,
 												size: BDFDB.LibraryComponents.Button.Sizes.NONE,
 												children: currentVolume == 0 ? "" : ["", "", ""][Math.floor(currentVolume/34)],
