@@ -4266,6 +4266,7 @@
 	};
 	DiscordClassModules.SpotifyControls = {
 		bar: "bar-g2ZMIm",
+		barGabber: "grabber-7sd5f5",
 		barFill: "barFill-Dhkah7",
 		barText: "barText-lmqc5O",
 		buttonActive: "active-6TsW-_",
@@ -4635,6 +4636,7 @@
 		_spellcheckoverlay: ["SpellCheck", "overlay"],
 		_spotifycontrolsbar: ["SpotifyControls", "bar"],
 		_spotifycontrolsbarfill: ["SpotifyControls", "barFill"],
+		_spotifycontrolsbargrabber: ["SpotifyControls", "barGabber"],
 		_spotifycontrolsbartext: ["SpotifyControls", "barText"],
 		_spotifycontrolsbuttonactive: ["SpotifyControls", "buttonActive"],
 		_spotifycontrolscontainer: ["SpotifyControls", "container"],
