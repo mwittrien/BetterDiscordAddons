@@ -4279,7 +4279,8 @@
 		details: "details-ntX2k5",
 		interpret: "interpret-F93iqP",
 		song: "song-tIdBpF",
-		timeline: "timeline-UWmgAx"
+		timeline: "timeline-UWmgAx",
+		volumeSlider: "volumeSlider-sR5g00"
 	};
 	DiscordClassModules.TimedLightDarkMode = {
 		dateGrabber: "dateGrabber-QrRkIX",
@@ -4633,7 +4634,6 @@
 		_spellcheckerror: ["SpellCheck", "error"],
 		_spellcheckoverlay: ["SpellCheck", "overlay"],
 		_spotifycontrolsbar: ["SpotifyControls", "bar"],
-		_spotifycontrolsbarcontainer: ["SpotifyControls", "timeline"], // REMOVE
 		_spotifycontrolsbarfill: ["SpotifyControls", "barFill"],
 		_spotifycontrolsbartext: ["SpotifyControls", "barText"],
 		_spotifycontrolsbuttonactive: ["SpotifyControls", "buttonActive"],
@@ -4648,6 +4648,7 @@
 		_spotifycontrolsinterpret: ["SpotifyControls", "interpret"],
 		_spotifycontrolssong: ["SpotifyControls", "song"],
 		_spotifycontrolstimeline: ["SpotifyControls", "timeline"],
+		_spotifycontrolsvolumeslider: ["SpotifyControls", "volumeSlider"],
 		_timedlightdarkmodedategrabber: ["TimedLightDarkMode", "dateGrabber"],
 		_timedlightdarkmodetimergrabber: ["TimedLightDarkMode", "timerGrabber"],
 		_timedlightdarkmodetimersettings: ["TimedLightDarkMode", "timerSettings"],
@@ -4859,7 +4860,7 @@
 		changelogcontainer: ["ChangeLog", "container"],
 		changelogfixed: ["ChangeLog", "fixed"],
 		changelogimproved: ["ChangeLog", "improved"],
-		changelogprogress: ["ChangeLog", "added"],
+		changelogprogress: ["ChangeLog", "progress"],
 		changelogtitle: ["ChangeLog", "title"],
 		channelactionicon: ["ChannelContainer", "actionIcon"],
 		channelchildicon: ["ChannelContainer", "iconItem"],
@@ -9570,6 +9571,10 @@
 			border: 1px solid rgba(28,36,43,.6);
 			-webkit-box-shadow: 0 2px 10px 0 rgba(0,0,0,20%);
 			box-shadow: 0 2px 10px 0 rgba(0,0,0,.2);
+		}
+		${BDFDB.dotCN.popoutwrapper + BDFDB.dotCNS.popoutarrowalignmentmiddle + BDFDB.dotCN.popoutthemedpopout},
+		${BDFDB.dotCN.popoutwrapper + BDFDB.dotCNS.popoutarrowalignmenttop + BDFDB.dotCN.popoutthemedpopout} {
+			border-color: transparent;
 		}
 
 		#bd-settingspane-container .ui-form-title {
