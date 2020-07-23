@@ -29,7 +29,6 @@ var SpotifyControls = (_ => {
 						method = "GET";
 						break;
 				};
-				if (type == "get") type = "";
 				BDFDB.LibraryRequires.request({
 					url: `https://api.spotify.com/v1/me/player${type ? "/" + type : ""}${Object.entries(Object.assign({}, data)).map(n => `?${n[0]}=${n[1]}`).join("")}`,
 					method: method,
@@ -61,13 +60,10 @@ var SpotifyControls = (_ => {
 				let fetchState = this.props.maximized && !BDFDB.equals(this.props.song, lastSong);
 				lastSong = this.props.song;
 				stopTime = null;
-				if (fetchState) {
-					this.request(socketDevice.socket, socketDevice.device, "get").then(response => {
-						playbackState = Object.assign({}, response);
-						BDFDB.ReactUtils.forceUpdate(this);
-					});
-					return null;
-				}
+				if (fetchState) this.request(socketDevice.socket, socketDevice.device, "get").then(response => {
+					playbackState = Object.assign({}, response);
+					BDFDB.ReactUtils.forceUpdate(this);
+				});
 			}
 			else if (!stopTime && lastSong) {
 				playbackState.is_playing = false;
@@ -135,8 +131,12 @@ var SpotifyControls = (_ => {
 											size: BDFDB.LibraryComponents.Button.Sizes.NONE,
 											children: "",
 											onClick: _ => {
-												BDFDB.LibraryRequires.electron.clipboard.write({text:playbackState.item.external_urls.spotify});
-												BDFDB.NotificationUtils.toast("Song URL was copied to clipboard.", {type: "success"});
+												let url = BDFDB.ReactUtils.getValue(playbackState, "item.external_urls.spotify") || BDFDB.ReactUtils.getValue(playbackState, "context.external_urls.spotify");
+												if (url) {
+													BDFDB.LibraryRequires.electron.clipboard.write({text:url});
+													BDFDB.NotificationUtils.toast("Song URL was copied to clipboard.", {type: "success"});
+												}
+												else BDFDB.NotificationUtils.toast("Could not copy song URL to clipboard.", {type: "error"});
 											}
 										}),
 										this.props.maximized && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
@@ -238,7 +238,7 @@ var SpotifyControls = (_ => {
 											arrow: true,
 											shadow: true,
 											renderPopout: instance => {
-												return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Slider, {
+												return socketDevice.device.is_restricted ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Slider, {
 													className: BDFDB.disCN._spotifycontrolsvolumeslider,
 													defaultValue: currentVolume,
 													digits: 0,
@@ -338,7 +338,7 @@ var SpotifyControls = (_ => {
 	return class SpotifyControls {
 		getName () {return "SpotifyControls";}
 
-		getVersion () {return "1.0.6";}
+		getVersion () {return "1.0.7";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -346,7 +346,8 @@ var SpotifyControls = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["Maximized Mode","Similar as in spotify you can now click the song cover to maximize the player controls, this will display the cover in a bigger size and will allow you to control more stuff like shuffle, repeat and volume (right click the volume button to mute, left click to change volume)"]],
+				"progress":[["Final update","This will be the final update for now, if something still doesn't work please let me know"]],
+				"added":[["Maximized Mode","Similar as in spotify you can now click the song cover to maximize the player controls, this will display the cover in a bigger size and will allow you to control more stuff like share button, shuffle, repeat and volume (right click the volume button to mute, left click to change volume)"]],
 				"improved":[["Previous","The previous button will now restart the current song on a single click and jump to the previous song on a double click"], ["Timeline","You can now hide the timeline in the settings and can now be used to jump to a certain part of a song"]],
 				"fixed":[["Theme Issue with Buttons","Fixed issue where some themes would fuck with the icons of the buttons and would display them as squares, if this still happens to you, then you should seriously switch to another one because your theme is written extremely poorly"]]
 			};
@@ -531,7 +532,7 @@ var SpotifyControls = (_ => {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 			let settingsPanel, settingsItems = [];
 			
-			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+			for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 				className: BDFDB.disCN.marginbottom8,
 				type: "Switch",
 				plugin: this,
