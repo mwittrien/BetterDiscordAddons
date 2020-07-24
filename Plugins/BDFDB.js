@@ -1699,6 +1699,7 @@
 	LibraryModules.SelectChannelUtils = BDFDB.ModuleUtils.findByProperties("selectChannel", "selectPrivateChannel");
 	LibraryModules.SettingsUtils = BDFDB.ModuleUtils.findByProperties("updateRemoteSettings", "updateLocalSettings");
 	LibraryModules.SlateUtils = BDFDB.ModuleUtils.findByProperties("serialize", "deserialize");
+	LibraryModules.SlateUtils = BDFDB.ModuleUtils.find(m => typeof m.serialize == "function" && typeof m.deserialize == "function" && typeof m.deserialize == "function" && typeof m.getFlag != "function");
 	LibraryModules.SlateSelectionUtils = BDFDB.ModuleUtils.findByProperties("serialize", "serializeSelection");
 	LibraryModules.SlowmodeUtils = BDFDB.ModuleUtils.findByProperties("getSlowmodeCooldownGuess");
 	LibraryModules.SoundStateUtils = BDFDB.ModuleUtils.findByProperties("isSoundDisabled", "getDisabledSounds");
