@@ -5,10 +5,8 @@ body,
 #app-mount REPLACE_CLASS_loadingscreen,
 #app-mount REPLACE_CLASS_layersbg,
 #app-mount REPLACE_CLASS_layer,
-#app-mount REPLACE_CLASS_guildsscroller,
 #app-mount REPLACE_CLASS_guildchannels,
 #app-mount REPLACE_CLASS_dmchannels,
-#app-mount REPLACE_CLASS_dmchannelsscroller,
 #app-mount REPLACE_CLASS_channelpanels > *,
 #app-mount REPLACE_CLASS_chat,
 #app-mount REPLACE_CLASS_nochannel,
@@ -18,11 +16,9 @@ body,
 #app-mount REPLACE_CLASS_nitrostore,
 #app-mount REPLACE_CLASS_guilddiscovery,
 #app-mount REPLACE_CLASS_scroller,
+#app-mount REPLACE_CLASS_scrollerbase,
 #app-mount REPLACE_CLASS_settingswindowstandardsidebarview,
-#app-mount REPLACE_CLASS_settingswindowsidebarregionscroller,
-#app-mount REPLACE_CLASS_settingswindowsubsidebarscroller,
-#app-mount REPLACE_CLASS_settingswindowcontentregion,
-#app-mount REPLACE_CLASS_settingswindowcontentregionscroller {
+#app-mount REPLACE_CLASS_settingswindowcontentregion {
 	background-color: transparent;
 }
 #app-mount REPLACE_CLASS_channelheaderchildren:after {

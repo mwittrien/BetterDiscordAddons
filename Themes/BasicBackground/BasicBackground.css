@@ -165,10 +165,8 @@ body,														/* body														*/
 #app-mount .container-16j22k,								/* app					loadingscreen						*/
 #app-mount .bg-h5JY_x,										/* app					background							*/
 #app-mount .layer-3QrUeG,									/* layer				container							*/
-#app-mount .scroller-2TZvBN,								/* guilds				scroller							*/
 #app-mount .container-PNkimc,								/* channels				inner								*/
 #app-mount .privateChannels-1nO12o,							/* dmchannels												*/
-#app-mount .scroller-1JbKMe,								/* dmchannels			scroller							*/
 #app-mount .panels-j1Uci_ > *,								/* account/voice		inner								*/
 #app-mount .chat-3bRxxu,									/* chat					container							*/
 #app-mount .noChannel-Z1DQK7,								/* nochannel												*/
@@ -179,11 +177,9 @@ body,														/* body														*/
 #app-mount .applicationStore-1pNvnv,						/* nitro													*/
 #app-mount .pageWrapper-1PgVDX,								/* guilddiscovery											*/
 #app-mount .scroller-2FKFPG,								/* scroller													*/
+#app-mount .scrollerBase-289Jih,							/* advanced scroller										*/
 #app-mount .standardSidebarView-3F1I7i,						/* settings													*/
-#app-mount .sidebarRegionScroller-3MXcoP,					/* settings				sidebar scroller					*/
-#app-mount .scroller-305q3I,								/* settings				sub sidebar scroller				*/
-#app-mount .contentRegion-3nDuYy,							/* settings				content								*/
-#app-mount .contentRegionScroller-26nc1e {					/* settings				content scroller					*/
+#app-mount .contentRegion-3nDuYy {							/* settings				content								*/
 	background: transparent;
 }
 
