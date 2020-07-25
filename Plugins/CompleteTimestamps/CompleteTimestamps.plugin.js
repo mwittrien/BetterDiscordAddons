@@ -7,7 +7,7 @@ var CompleteTimestamps = (_ => {
 	return class CompleteTimestamps {
 		getName () {return "CompleteTimestamps";}
 
-		getVersion () {return "1.4.7";}
+		getVersion () {return "1.4.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -15,7 +15,7 @@ var CompleteTimestamps = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["Settings","Added upper limit for $daysago and new year short form placeholder"]]
+				"fixed":[["Compact","Fixed some issues with the timestamp in compact mode"]]
 			};
 			
 			this.patchedModules = {
@@ -404,7 +404,7 @@ var CompleteTimestamps = (_ => {
 		setMaxWidth (timestamp, compact) {
 			if (currentMode != compact) {
 				currentMode = compact;
-				if (compact && timestamp.props.className && typeof timestamp.type == "string") {
+				if (timestamp.props.className && typeof timestamp.type == "string") {
 					let tempTimestamp = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN.messagecompact}"><${timestamp.type} class="${timestamp.props.className}" style="width: auto !important;">${this.getTimestamp(languages[choices.timestampLang].id, new Date(253402124399995))}</${timestamp.type}></div>`);
 					document.body.appendChild(tempTimestamp);
 					let width = BDFDB.DOMUtils.getRects(tempTimestamp.firstElementChild).width + 10;
@@ -423,7 +423,7 @@ var CompleteTimestamps = (_ => {
 						}
 					`);
 				}
-				else BDFDB.DOMUtils.removeLocalStyle(this.name + "CompactCorrection");
+				 
 			}
 		}
 		
