@@ -1719,6 +1719,7 @@
 	LibraryModules.UserFetchUtils = BDFDB.ModuleUtils.findByProperties("fetchCurrentUser", "getUser");
 	LibraryModules.UserNameUtils = BDFDB.ModuleUtils.findByProperties("getName", "getNickname");
 	LibraryModules.UserProfileUtils = BDFDB.ModuleUtils.findByProperties("open", "fetchProfile");
+	LibraryModules.UserSettingsUtils = BDFDB.ModuleUtils.findByProperties("open", "updateAccount");
 	LibraryModules.UserStore = BDFDB.ModuleUtils.findByProperties("getUser", "getUsers");
 	LibraryModules.Utilities = BDFDB.ModuleUtils.findByProperties("flatMap", "cloneDeep");
 	LibraryModules.VoiceUtils = BDFDB.ModuleUtils.findByProperties("getAllVoiceStates", "getVoiceStatesForChannel");
