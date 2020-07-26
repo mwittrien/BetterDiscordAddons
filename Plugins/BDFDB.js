@@ -1175,8 +1175,7 @@
 		MemberCard: "Member",
 		PopoutContainer: "Popout",
 		QuickSwitchResult: "Result",
-		UserProfile: "UserProfileBody",
-		WebhookCard: "Webhook"
+		UserProfile: "UserProfileBody"
 	};
 	WebModulesData.ForceObserve = [
 		"DirectMessage",
@@ -1211,7 +1210,8 @@
 		"SystemMessage",
 		"SimpleMessageAccessories",
 		"UnreadMessages",
-		"UserInfo"
+		"UserInfo",
+		"WebhookCard"
 	]));
 	WebModulesData.LoadedInComponents = {
 		AutocompleteChannelResult: "LibraryComponents.AutocompleteItems.Channel",
@@ -4538,6 +4538,7 @@
 	DiscordClassModules.VoiceChannelList = BDFDB.ModuleUtils.findByProperties("list", "collapsed");
 	DiscordClassModules.VoiceDetails = BDFDB.ModuleUtils.findByProperties("container", "customStatusContainer");
 	DiscordClassModules.VoiceDetailsPing = BDFDB.ModuleUtils.findByProperties("rtcConnectionQualityBad", "rtcConnectionQualityFine");
+	DiscordClassModules.WebhookCard = BDFDB.ModuleUtils.findByProperties("pulseBorder", "copyButton");
 	BDFDB.DiscordClassModules = Object.assign({}, DiscordClassModules);
 	
 	var DiscordClasses = {
@@ -6087,6 +6088,10 @@
 		voiceuser: ["VoiceChannel", "voiceUser"],
 		voiceuserlarge: ["VoiceChannel", "userLarge"],
 		voiceusersmall: ["VoiceChannel", "userSmall"],
+		webhookcard: ["WebhookCard", "card"],
+		webhookcardbody: ["WebhookCard", "body"],
+		webhookcardcopybutton: ["WebhookCard", "copyButton"],
+		webhookcardheader: ["WebhookCard", "header"],
 		wrap: ["Flex", "wrap"],
 		wrapreverse: ["Flex", "wrapReverse"]
 	};
