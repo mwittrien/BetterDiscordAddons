@@ -5817,7 +5817,7 @@
 		settingswindowstandardsidebarview: ["SettingsWindow", "standardSidebarView"],
 		settingswindowsubsidebarcontent: ["SettingsWindowScroller", "content"],
 		settingswindowsubsidebarscroller: ["SettingsWindowScroller", "scroller"],
-		settingswindowtoolscontainer: ["SettingsWindowScroller", "toolsContainer"],
+		settingswindowtoolscontainer: ["SettingsWindow", "toolsContainer"],
 		size10: ["TextSize", "size10"],
 		size12: ["TextSize", "size12"],
 		size14: ["TextSize", "size14"],
