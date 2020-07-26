@@ -2680,6 +2680,10 @@ body:before {
 	-webkit-mask: url(https://discordapp.com/assets/da8463a04b4a289801d2516f50eb4c19.svg);
 }
 
+#app-mount .card-3IImnr {									/* integrationsettings	card								*/
+	border-color: rgba(var(--vtransparencycolor), 0.1)
+}
+
 .addRoleIcon-3YjErH {										/* rolesettings			addrolebutton						*/
 	-webkit-mask: url(https://discordapp.com/assets/cef02719c12d8aaf38894c16dca7fbe6.svg);
 	background: rgb(var(--fontwhite3));
@@ -2695,7 +2699,7 @@ body:before {
 	stroke: rgb(var(--fontwhite1));
 }
 
-.descriptionBox-1EKQKL {									/* templatesettings		descriptionbox					*/
+.descriptionBox-1EKQKL {									/* templatesettings		descriptionbox						*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
 
