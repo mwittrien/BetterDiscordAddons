@@ -5817,6 +5817,7 @@
 		settingswindowstandardsidebarview: ["SettingsWindow", "standardSidebarView"],
 		settingswindowsubsidebarcontent: ["SettingsWindowScroller", "content"],
 		settingswindowsubsidebarscroller: ["SettingsWindowScroller", "scroller"],
+		settingswindowtoolscontainer: ["SettingsWindowScroller", "toolsContainer"],
 		size10: ["TextSize", "size10"],
 		size12: ["TextSize", "size12"],
 		size14: ["TextSize", "size14"],
@@ -9602,13 +9603,32 @@
 		#bd-settingspane-container ${BDFDB.dotCN._repoupdatebutton}[style] {
 			display: none !important;
 		}
-		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repoentry + BDFDB.dotCN._repocontrols} > * {
+		
+		${BDFDB.dotCNS._repolistwrapper + BDFDB.dotCN.headertitle} {
+			padding-top: 60px;
+			padding-left: 40px;
+		}
+		${BDFDB.dotCNS._repolistwrapper + BDFDB.dotCN.tabbarcontainer} {
+			max-width: 730px;
+			min-width: 460px;
+			padding-left: 40px;
+		}
+		${BDFDB.dotCNS._repolistwrapper + BDFDB.dotCN.settingswindowtoolscontainer} {
+			margin-top: -140px;
+		}
+		${BDFDB.dotCNS._repolistwrapper + BDFDB.dotCN.settingswindowcontentregionscroller} {
+			height: calc(100% - 140px);
+		}
+		${BDFDB.dotCNS._repolistwrapper + BDFDB.dotCN.settingswindowcontentcolumn} {
+			padding-top: 20px;
+		}
+		${BDFDB.dotCNS._repolistwrapper + BDFDB.dotCNS._repoentry + BDFDB.dotCN._repocontrols} > * {
 			margin-left: 10px;
 		}
-		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repoentry + BDFDB.dotCN._repofooter} > * {
+		${BDFDB.dotCNS._repolistwrapper + BDFDB.dotCNS._repoentry + BDFDB.dotCN._repofooter} > * {
 			margin-left: 10px;
 		}
-		${BDFDB.dotCNS._repolist + BDFDB.dotCNS._repoentry + BDFDB.dotCN._repofooter} > *:first-child {
+		${BDFDB.dotCNS._repolistwrapper + BDFDB.dotCNS._repoentry + BDFDB.dotCN._repofooter} > *:first-child {
 			margin-left: auto;
 		}
 		
