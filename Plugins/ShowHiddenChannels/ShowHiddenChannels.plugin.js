@@ -632,3 +632,5 @@ var ShowHiddenChannels = (_ => {
 		}
 	}
 })();
+
+module.exports = ShowHiddenChannels;

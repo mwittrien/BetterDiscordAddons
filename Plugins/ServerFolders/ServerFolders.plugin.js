@@ -1685,3 +1685,5 @@ var ServerFolders = (_ => {
 		}
 	}
 })();
+
+module.exports = ServerFolders;

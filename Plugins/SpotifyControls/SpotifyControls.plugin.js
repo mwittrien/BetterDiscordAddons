@@ -645,3 +645,5 @@ var SpotifyControls = (_ => {
 		}
 	}
 })();
+
+module.exports = SpotifyControls;

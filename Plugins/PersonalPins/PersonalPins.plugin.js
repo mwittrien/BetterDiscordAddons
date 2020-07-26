@@ -890,3 +890,5 @@ var PersonalPins = (_ => {
 		}
 	}
 })();
+
+module.exports = PersonalPins;

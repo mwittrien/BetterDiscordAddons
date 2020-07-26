@@ -1048,3 +1048,5 @@ var ThemeRepo = (_ => {
 		}
 	}
 })();
+
+module.exports = ThemeRepo;

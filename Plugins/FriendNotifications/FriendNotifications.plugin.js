@@ -674,3 +674,5 @@ var FriendNotifications = (_ => {
 		}
 	}
 })();
+
+module.exports = FriendNotifications;

@@ -612,3 +612,5 @@ var NotificationSounds = (_ => {
 		}
 	}
 })();
+
+module.exports = NotificationSounds;

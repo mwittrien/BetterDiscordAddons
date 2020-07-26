@@ -590,3 +590,5 @@ var SpellCheck = (_ => {
 		}
 	}
 })();
+
+module.exports = SpellCheck;

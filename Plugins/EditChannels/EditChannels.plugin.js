@@ -768,3 +768,5 @@ var EditChannels = (_ => {
 		}
 	}
 })();
+
+module.exports = EditChannels;

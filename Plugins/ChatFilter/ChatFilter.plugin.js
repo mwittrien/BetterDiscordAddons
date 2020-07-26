@@ -487,3 +487,5 @@ var ChatFilter = (_ => {
 		}
 	}
 })();
+
+module.exports = ChatFilter;

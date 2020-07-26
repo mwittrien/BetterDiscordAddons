@@ -1089,3 +1089,5 @@ var GoogleTranslateOption = (_ => {
 		}
 	}
 })();
+
+module.exports = GoogleTranslateOption;

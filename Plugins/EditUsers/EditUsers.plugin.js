@@ -1752,3 +1752,5 @@ var EditUsers = (_ => {
 		}
 	}
 })();
+
+module.exports = EditUsers;

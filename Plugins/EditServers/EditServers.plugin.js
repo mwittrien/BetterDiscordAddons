@@ -1077,3 +1077,5 @@ var EditServers = (_ => {
 		}
 	}
 })();
+
+module.exports = EditServers;

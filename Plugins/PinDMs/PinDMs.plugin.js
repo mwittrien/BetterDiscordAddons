@@ -1144,3 +1144,5 @@ var PinDMs = (_ => {
 		}
 	}
 })();
+
+module.exports = PinDMs;
