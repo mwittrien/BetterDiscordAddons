@@ -132,3 +132,5 @@ var UserNotes = (_ => {
 		}
 	}
 })();
+
+module.exports = UserNotes;

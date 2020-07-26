@@ -119,3 +119,5 @@ var BetterFriendCount = (_ => {
 		}
 	}
 })();
+
+module.exports = BetterFriendCount;

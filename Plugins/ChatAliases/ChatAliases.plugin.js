@@ -572,3 +572,5 @@ var ChatAliases = (_ => {
 		}
 	}
 })();
+
+module.exports = ChatAliases;

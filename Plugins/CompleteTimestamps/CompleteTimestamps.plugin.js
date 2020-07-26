@@ -438,3 +438,5 @@ var CompleteTimestamps = (_ => {
 		}
 	}
 })();
+
+module.exports = CompleteTimestamps;

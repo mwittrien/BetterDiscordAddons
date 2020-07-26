@@ -500,3 +500,5 @@ var DisplayServersAsChannels = (_ => {
 		}
 	}
 })();
+
+module.exports = DisplayServersAsChannels;

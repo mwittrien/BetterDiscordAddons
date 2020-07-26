@@ -89,3 +89,5 @@ var BetterNsfwTag = (_ => {
 		}
 	}
 })();
+
+module.exports = BetterNsfwTag;

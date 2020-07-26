@@ -411,3 +411,5 @@ var MessageUtilities = (_ => {
 		}
 	}
 })();
+
+module.exports = MessageUtilities;

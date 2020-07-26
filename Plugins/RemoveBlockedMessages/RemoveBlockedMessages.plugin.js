@@ -79,3 +79,5 @@ var RemoveBlockedMessages = (_ => {
 		}
 	}
 })();
+
+module.exports = RemoveBlockedMessages;

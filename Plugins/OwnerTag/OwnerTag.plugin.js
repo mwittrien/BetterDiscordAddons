@@ -279,3 +279,5 @@ var OwnerTag = (_ => {
 		}
 	}
 })();
+
+module.exports = OwnerTag;

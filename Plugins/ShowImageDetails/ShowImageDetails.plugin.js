@@ -232,3 +232,6 @@ var ShowImageDetails = (_ => {
 		}
 	}
 })();
+
+
+module.exports = ShowImageDetails;

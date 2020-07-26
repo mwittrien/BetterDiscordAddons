@@ -526,3 +526,5 @@ var ReadAllNotificationsButton = (_ => {
 		}
 	}
 })();
+
+module.exports = ReadAllNotificationsButton;

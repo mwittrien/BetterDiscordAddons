@@ -110,3 +110,5 @@ var SteamProfileLink = (_ => {
 		}
 	}
 })();
+
+module.exports = SteamProfileLink;

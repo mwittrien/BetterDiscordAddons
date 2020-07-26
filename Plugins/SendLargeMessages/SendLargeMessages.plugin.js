@@ -256,3 +256,5 @@ var SendLargeMessages = (_ => {
 		}
 	}
 })();
+
+module.exports = SendLargeMessages;

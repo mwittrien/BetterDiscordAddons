@@ -326,3 +326,5 @@ var ImageGallery = (_ => {
 		}
 	}
 })();
+
+module.exports = ImageGallery;

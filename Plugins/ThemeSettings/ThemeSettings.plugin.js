@@ -210,3 +210,5 @@ var ThemeSettings = (_ => {
 		}
 	}
 })();
+
+module.exports = ThemeSettings;

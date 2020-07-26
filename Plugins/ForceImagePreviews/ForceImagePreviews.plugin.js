@@ -153,3 +153,5 @@ var ForceImagePreviews = (_ => {
 		}
 	}
 })();
+
+module.exports = ForceImagePreviews;

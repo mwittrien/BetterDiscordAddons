@@ -229,3 +229,5 @@ var TimedLightDarkMode = (_ => {
 		}
 	}
 })();
+
+module.exports = TimedLightDarkMode;

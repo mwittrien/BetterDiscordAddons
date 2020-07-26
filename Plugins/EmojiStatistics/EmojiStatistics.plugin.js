@@ -391,3 +391,5 @@ var EmojiStatistics = (_ => {
 		}
 	}
 })();
+
+module.exports = EmojiStatistics;

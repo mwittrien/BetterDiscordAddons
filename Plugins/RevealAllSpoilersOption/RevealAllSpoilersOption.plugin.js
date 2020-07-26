@@ -91,3 +91,5 @@ var RevealAllSpoilersOption = (_ => {
 		}
 	}
 })();
+
+module.exports = RevealAllSpoilersOption;

@@ -301,3 +301,5 @@ var OldTitleBar = (_ => {
 		}
 	}
 })();
+
+module.exports = OldTitleBar;

@@ -485,3 +485,5 @@ var LastMessageDate = (_ => {
 		}
 	}
 })();
+
+module.exports = LastMessageDate;

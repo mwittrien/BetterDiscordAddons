@@ -195,3 +195,5 @@ var BetterSearchPage = (_ => {
 		}
 	}
 })();
+
+module.exports = BetterSearchPage;

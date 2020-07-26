@@ -162,3 +162,5 @@ var CopyRawMessage = (_ => {
 		}
 	}
 })();
+
+module.exports = CopyRawMessage;

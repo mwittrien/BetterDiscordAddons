@@ -275,3 +275,5 @@ var ImageZoom = (_ => {
 		}
 	}
 })();
+
+module.exports = ImageZoom;

@@ -98,3 +98,5 @@ var HideMutedCategories = (_ => {
 		}
 	}
 })();
+
+module.exports = HideMutedCategories;

@@ -444,3 +444,5 @@ var CreationDate = (_ => {
 		}
 	}
 })();
+
+module.exports = CreationDate;

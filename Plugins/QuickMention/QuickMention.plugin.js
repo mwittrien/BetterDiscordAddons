@@ -76,3 +76,5 @@ var QuickMention = (_ => {
 		}
 	}
 })();
+
+module.exports = QuickMention;

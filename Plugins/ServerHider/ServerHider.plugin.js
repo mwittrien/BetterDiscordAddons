@@ -451,3 +451,5 @@ var ServerHider = (_ => {
 		}
 	}
 })();
+
+module.exports = ServerHider;

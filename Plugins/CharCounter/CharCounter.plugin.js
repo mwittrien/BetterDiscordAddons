@@ -165,3 +165,5 @@ var CharCounter = (_ => {
 		}
 	}
 })();
+
+module.exports = CharCounter;

@@ -244,3 +244,5 @@ var TopRoleEverywhere = (_ => {
 		}
 	}
 })();
+
+module.exports = TopRoleEverywhere;

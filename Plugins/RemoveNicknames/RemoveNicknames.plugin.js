@@ -202,3 +202,5 @@ var RemoveNicknames = (_ => {
 		}
 	}
 })();
+
+module.exports = RemoveNicknames;

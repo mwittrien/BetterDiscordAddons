@@ -462,3 +462,5 @@ var JoinedAtDate = (_ => {
 		}
 	}
 })();
+
+module.exports = JoinedAtDate;

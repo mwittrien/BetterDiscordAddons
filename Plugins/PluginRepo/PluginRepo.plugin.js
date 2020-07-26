@@ -892,3 +892,5 @@ var PluginRepo = (_ => {
 		}
 	}
 })();
+
+module.exports = PluginRepo;

@@ -330,3 +330,5 @@ var ReverseImageSearch = (_ => {
 		}
 	}
 })();
+
+module.exports = ReverseImageSearch;

@@ -73,3 +73,5 @@ var MoveablePopups = (_ => {
 		// Begin of own functions
 	}
 })();
+
+module.exports = MoveablePopups;

@@ -496,3 +496,5 @@ var BadgesEverywhere = (_ => {
 		}
 	}
 })();
+
+module.exports = BadgesEverywhere;

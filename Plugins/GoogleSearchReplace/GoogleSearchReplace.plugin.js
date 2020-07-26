@@ -295,3 +295,5 @@ var GoogleSearchReplace = (_ => {
 		}
 	}
 })();
+
+module.exports = GoogleSearchReplace;

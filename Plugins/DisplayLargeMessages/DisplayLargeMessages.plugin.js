@@ -372,3 +372,5 @@ var DisplayLargeMessages = (_ => {
 		}
 	}
 })();
+
+module.exports = DisplayLargeMessages;

@@ -381,3 +381,5 @@ var CustomQuoter = (_ => {
 		}
 	}
 })();
+
+module.exports = CustomQuoter;
