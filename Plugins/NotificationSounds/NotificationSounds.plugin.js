@@ -284,13 +284,11 @@ var NotificationSounds = (_ => {
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Implemented Sounds",
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: Object.keys(BDFDB.ObjectUtils.filter(types, typedata => typedata.implemented)).map(type => createSoundCard(type)).flat(10).filter(n => n)
 			}));
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Unimplemented Sounds",
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: Object.keys(BDFDB.ObjectUtils.filter(types, typedata => !typedata.implemented)).map(type => createSoundCard(type)).flat(10).filter(n => n)
 			}));
 			
@@ -300,7 +298,6 @@ var NotificationSounds = (_ => {
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Remove Songs",
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 					className: BDFDB.disCN.margintop4,
 					align: BDFDB.LibraryComponents.Flex.Align.END,

@@ -200,7 +200,6 @@ var ThemeRepo = (_ => {
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Custom Themes",
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 						title: "Add Theme:",
@@ -259,7 +258,6 @@ var ThemeRepo = (_ => {
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Refetch All",
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 					type: "Button",
 					label: "Force all Themes to be fetched again",

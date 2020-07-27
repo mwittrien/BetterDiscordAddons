@@ -94,7 +94,7 @@ var ThemeSettings = (_ => {
 					}
 					let settingsButton = document.createElement("button");
 					settingsButton.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._reposettingsbutton, "theme-settings-button");
-					settingsButton.innerText = "Settings";
+					settingsButton.innerText = BDFDB.LanguageUtils.LanguageStrings.SETTINGS;
 					footer.appendChild(settingsButton);
 					settingsButton.addEventListener("click", _ => {
 						BDFDB.DOMUtils.addClass(card, BDFDB.disCN._reposettingsopen);

@@ -181,10 +181,12 @@ var PluginRepo = (_ => {
 			if (!this.props.tab) this.props.tab = "Plugins";
 			this.props.entries = (!loading.is && !BDFDB.ObjectUtils.isEmpty(loadedPlugins) ? this.filterPlugins() : []).map(plugin => this.renderCard(plugin)).filter(n => n);
 			
-			if (header) {
-				header.props.amount = this.props.entries.length;
-				BDFDB.ReactUtils.forceUpdate(header);
-			}
+			BDFDB.TimeUtils.timeout(_ => {
+				if (!loading.is && header && this.props.entries.length != header.props.amount) {
+					header.props.amount = this.props.entries.length;
+					BDFDB.ReactUtils.forceUpdate(header);
+				}
+			});
 			
 			return [
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
@@ -399,7 +401,6 @@ var PluginRepo = (_ => {
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Custom Plugins",
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormItem, {
 						title: "Add Plugin:",
@@ -459,7 +460,6 @@ var PluginRepo = (_ => {
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Refetch All",
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 					type: "Button",
 					label: "Force all Plugins to be fetched again",

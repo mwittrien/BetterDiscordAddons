@@ -6965,11 +6965,8 @@
 				className: BDFDB.DOMUtils.formatClassName(this.props.collapsed && BDFDB.disCN.collapsecontainercollapsed, this.props.mini ? BDFDB.disCN.collapsecontainermini : BDFDB.disCN.collapsecontainer, this.props.className),
 				id: this.props.id,
 				children: [
-					this.props.dividertop ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormDivider, {
-						className: this.props.mini ? BDFDB.disCN.marginbottom8 : BDFDB.disCN.marginbottom20
-					}) : null,
 					BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-						className: BDFDB.disCNS.collapsecontainerheader + BDFDB.disCN.cursorpointer,
+						className: BDFDB.disCN.collapsecontainerheader,
 						align: InternalComponents.LibraryComponents.Flex.Align.CENTER,
 						onClick: e => {
 							this.props.collapsed = !this.props.collapsed;
@@ -6977,23 +6974,15 @@
 							if (typeof this.props.onClick == "function") this.props.onClick(this.props.collapsed, this);
 							BDFDB.ReactUtils.forceUpdate(this);
 						},
-						children: [
-							BDFDB.ReactUtils.createElement("div", {
-								className: BDFDB.disCN.collapsecontainerarrow
-							}),
-							BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormTitle, {
-								tag: InternalComponents.LibraryComponents.FormComponents.FormTitle.Tags.H2,
-								className: BDFDB.disCNS.collapsecontainertitle + BDFDB.disCN.cursorpointer,
-								children: this.props.title
-							})
-						]
+						children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormTitle, {
+							tag: InternalComponents.LibraryComponents.FormComponents.FormTitle.Tags.H5,
+							className: BDFDB.disCN.collapsecontainertitle,
+							children: this.props.title
+						})
 					}),
 					!this.props.collapsed ? BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.collapsecontainerinner,
 						children: this.props.children
-					}) : null,
-					this.props.dividerbottom ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormDivider, {
-						className: this.props.mini ? BDFDB.disCN.margintop8 : BDFDB.disCN.margintop20
 					}) : null
 				]
 			});
@@ -9118,21 +9107,46 @@
 		${BDFDB.dotCN.collapsecontainermini} {
 			margin-bottom: 8px;
 		}
-		${BDFDB.dotCN.collapsecontainerinner} {
-			padding-left: 15px;
+		${BDFDB.dotCN.collapsecontainerheader} {
+			margin-bottom: 4px;
 		}
-		${BDFDB.dotCNS.settingspanelinner + BDFDB.dotCN.collapsecontainerheader} {
-			margin-left: -16px;
+		${BDFDB.dotCNS.collapsecontainercollapsed + BDFDB.dotCN.collapsecontainertitle} {
+			margin-bottom: 0;
 		}
-		${BDFDB.dotCN.collapsecontainerarrow} {
-			background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxOS4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iQ2FscXVlXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSItOTUwIDUzMiAxOCAxOCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAtOTUwIDUzMiAxOCAxODsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4NCgkuc3Qwe2ZpbGw6bm9uZTt9DQoJLnN0MXtmaWxsOm5vbmU7c3Ryb2tlOiNGRkZGRkY7c3Ryb2tlLXdpZHRoOjEuNTtzdHJva2UtbWl0ZXJsaW1pdDoxMDt9DQo8L3N0eWxlPg0KPHBhdGggY2xhc3M9InN0MCIgZD0iTS05MzIsNTMydjE4aC0xOHYtMThILTkzMnoiLz4NCjxwb2x5bGluZSBjbGFzcz0ic3QxIiBwb2ludHM9Ii05MzYuNiw1MzguOCAtOTQxLDU0My4yIC05NDUuNCw1MzguOCAiLz4NCjwvc3ZnPg0K) center/cover no-repeat;
-			height: 16px;
-			width: 16px;
+		${BDFDB.dotCN.collapsecontainertitle} {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			cursor: pointer;
+			order: 1;
+		}
+		${BDFDB.dotCN.collapsecontainertitle}:hover {
+			color: var(--text-normal);
+		}
+		${BDFDB.dotCN.collapsecontainertitle}::before {
+			content: "";
+			flex: 1 1 auto;
+			background-color: currentColor;
+			height: 2px;
+			margin: 0 10px 0 15px;
+			opacity: 0.2;
+			order: 2;
+		}
+		${BDFDB.dotCN.collapsecontainertitle}::after {
+			content: "";
+			-webkit-mask: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxOS4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iQ2FscXVlXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSItOTUwIDUzMiAxOCAxOCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAtOTUwIDUzMiAxOCAxODsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4NCgkuc3Qwe2ZpbGw6bm9uZTt9DQoJLnN0MXtmaWxsOm5vbmU7c3Ryb2tlOiNGRkZGRkY7c3Ryb2tlLXdpZHRoOjEuNTtzdHJva2UtbWl0ZXJsaW1pdDoxMDt9DQo8L3N0eWxlPg0KPHBhdGggY2xhc3M9InN0MCIgZD0iTS05MzIsNTMydjE4aC0xOHYtMThILTkzMnoiLz4NCjxwb2x5bGluZSBjbGFzcz0ic3QxIiBwb2ludHM9Ii05MzYuNiw1MzguOCAtOTQxLDU0My4yIC05NDUuNCw1MzguOCAiLz4NCjwvc3ZnPg0K) center/cover no-repeat;
+			background-color: currentColor;
+			width: 20px;
+			height: 20px;
+			order: 3;
 			transition: transform .3s ease;
 			transform: rotate(0);
 		}
-		${BDFDB.dotCNS.collapsecontainercollapsed + BDFDB.dotCN.collapsecontainerarrow} {
-			transform: rotate(-90deg);
+		${BDFDB.dotCNS.collapsecontainercollapsed + BDFDB.dotCN.collapsecontainertitle}::after {
+			transform: rotate(90deg)
+		}
+		${BDFDB.dotCN.collapsecontainerinner} {
+			padding-left: 15px;
 		}
 		
 		${BDFDB.dotCN.settingsguild} {

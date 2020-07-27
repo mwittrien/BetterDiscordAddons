@@ -76,7 +76,6 @@ var ChatFilter = (_ => {
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: `Add new blocked/censored word`,
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 						type: "Button",
@@ -95,7 +94,6 @@ var ChatFilter = (_ => {
 			for (let rtype in replaces) if (!BDFDB.ObjectUtils.isEmpty(words[rtype])) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: `Added ${rtype} words`,
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
 					settings: Object.keys(this.defaults.configs),
 					data: Object.keys(words[rtype]).map((wordvalue, i) => Object.assign({}, words[rtype][wordvalue], {
@@ -143,7 +141,6 @@ var ChatFilter = (_ => {
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Remove All",
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: Object.keys(replaces).map(rtype => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 					type: "Button",
 					className: BDFDB.disCN.marginbottom8,
@@ -162,7 +159,6 @@ var ChatFilter = (_ => {
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Config Guide",
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: ["Case: Will block/censor words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe", "Not Case: Will block/censor words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe", "Exact: Will block/censor words that are exactly the selected word. apple => apple, not applepie or pineapple", "Not Exact: Will block/censor all words containing the selected word. apple => apple, applepie and pineapple", "Empty: Ignores the default and set replace word and removes the word/message instead."].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
 					type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
 					children: string

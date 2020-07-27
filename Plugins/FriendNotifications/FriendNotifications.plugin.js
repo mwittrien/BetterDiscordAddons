@@ -304,7 +304,6 @@ var FriendNotifications = (_ => {
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Add new Stranger",
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 					className: BDFDB.disCN.margintop8,
 					align: BDFDB.LibraryComponents.Flex.Align.CENTER,
@@ -342,7 +341,6 @@ var FriendNotifications = (_ => {
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "LogIn/-Out Timelog",
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 					type: "Button",
 					className: BDFDB.disCN.marginbottom8,
@@ -354,7 +352,6 @@ var FriendNotifications = (_ => {
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Notification Messages",
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 					className: BDFDB.disCN.marginbottom8,
 					children: BDFDB.ReactUtils.createElement("div", {
@@ -387,7 +384,6 @@ var FriendNotifications = (_ => {
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Notification Sounds",
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: Object.keys(notificationSounds).map((key, i) => (key.indexOf("desktop") == -1 || "Notification" in window) && [
 					i != 0 && key.indexOf("toast") == 0 && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 						className: BDFDB.disCN.marginbottom8

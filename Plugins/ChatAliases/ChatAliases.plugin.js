@@ -99,7 +99,6 @@ var ChatAliases = (_ => {
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Add new alias",
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 						type: "Button",
@@ -118,7 +117,6 @@ var ChatAliases = (_ => {
 			if (!BDFDB.ObjectUtils.isEmpty(aliases)) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Added aliases",
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
 					settings: Object.keys(this.defaults.configs),
 					data: Object.keys(aliases).map((wordvalue, i) => Object.assign({}, aliases[wordvalue], {
@@ -166,7 +164,6 @@ var ChatAliases = (_ => {
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Remove All",
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 					type: "Button",
 					className: BDFDB.disCN.marginbottom8,
@@ -185,7 +182,6 @@ var ChatAliases = (_ => {
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Config Guide",
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: ["Case: Will replace words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe", "Not Case: Will replace words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe", "Exact: Will replace words that are exactly the replaceword. apple to pear => applepie stays applepie", "Not Exact: Will replace words anywhere they appear. apple to pear => applepieapple to pearpiepear", "Autoc: Will appear in the Autocomplete Menu (if enabled).", ["Regex: Will treat the entered wordvalue as a regular expression. ", BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {href: "https://regexr.com/", children: BDFDB.LanguageUtils.LanguageStrings.HELP + "?"})] , "File: If the replacevalue is a filepath it will try to upload the file located at the filepath."].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
 					type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
 					children: string

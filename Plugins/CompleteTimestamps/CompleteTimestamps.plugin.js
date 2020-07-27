@@ -169,14 +169,12 @@ var CompleteTimestamps = (_ => {
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Format",
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: innerItems
 			}));
 			
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Placeholder Guide",
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: [
 					"$hour will be replaced with the hour of the date",
 					"$minute will be replaced with the minutes of the date",

@@ -165,7 +165,6 @@ var CreationDate = (_ => {
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Format",
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: innerItems
 			}));
 			

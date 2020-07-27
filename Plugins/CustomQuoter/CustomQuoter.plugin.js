@@ -168,14 +168,12 @@ var CustomQuoter = (_ => {
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Formats",
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: innerItems
 			}));
 			
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Placeholder Guide",
 				collapseStates: collapseStates,
-				dividertop: true,
 				children: [
 					"$quote will be replaced with the quoted message content",
 					"$mention will be replaced with a mention of the message author",
