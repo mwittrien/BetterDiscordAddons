@@ -6,7 +6,7 @@ var EditUsers = (_ => {
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.9.2";}
+		getVersion () {return "3.9.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -252,9 +252,9 @@ var EditUsers = (_ => {
 					let [banChilden, banIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "ban"});
 					if (banIndex > -1) banChilden[banIndex].props.label = BDFDB.LanguageUtils.LanguageStringsFormat("BAN_USER", userName);
 					let [muteChilden, muteIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "mute-channel"});
-					if (muteIndex > -1) muteChilden[muteIndex].props.label = Array.from(BDFDB.DOMUtils.create(BDFDB.LanguageUtils.LanguageStringsFormat("MUTE_CHANNEL", `@${userName}`)).childNodes).map(BDFDB.ReactUtils.elementToReact);
+					if (muteIndex > -1) muteChilden[muteIndex].props.label = BDFDB.LanguageUtils.LanguageStringsFormat("MUTE_CHANNEL", `@${userName}`);
 					let [unmuteChilden, unmuteIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "unmute-channel"});
-					if (unmuteIndex > -1) unmuteChilden[unmuteIndex].props.label = Array.from(BDFDB.DOMUtils.create(BDFDB.LanguageUtils.LanguageStringsFormat("UNMUTE_CHANNEL", `@${userName}`)).childNodes).map(BDFDB.ReactUtils.elementToReact);
+					if (unmuteIndex > -1) unmuteChilden[unmuteIndex].props.label = BDFDB.LanguageUtils.LanguageStringsFormat("UNMUTE_CHANNEL", `@${userName}`);
 				}
 				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
