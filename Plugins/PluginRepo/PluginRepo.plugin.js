@@ -563,7 +563,7 @@ var PluginRepo = (_ => {
 					label: "Plugin Repo",
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "repo"),
 					action: _ => {
-						if (!loading.is) BDFDB.ContextMenuUtils.close(e.instance);
+						BDFDB.ContextMenuUtils.close(e.instance);
 						BDFDB.LibraryModules.UserSettingsUtils.open("pluginrepo");
 					}
 				}));
@@ -583,7 +583,7 @@ var PluginRepo = (_ => {
 						element: _ => {
 							let options = Object.assign({}, modalSettings);
 							options.updated = options.updated && !showOnlyOutdated;
-							options.outdated = options.updated || showOnlyOutdated;
+							options.outdated = options.outdated || showOnlyOutdated;
 							options.downloadable = options.downloadable && !showOnlyOutdated;
 							options.searchString = "";
 							options.sortKey = forcedSort || Object.keys(sortKeys)[0];
