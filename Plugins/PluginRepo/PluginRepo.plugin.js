@@ -179,7 +179,7 @@ var PluginRepo = (_ => {
 		render() {
 			let automaticLoading = BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.automaticLoading);
 			if (!this.props.tab) this.props.tab = "Plugins";
-			this.props.entries = (!loading.is && !BDFDB.ObjectUtils.isEmpty(loadedPlugins) ? this.filterPlugins() : []).map(plugin => this.renderCard(plugin)).filter(n => n);
+			this.props.entries = (!loading.is && !BDFDB.ObjectUtils.isEmpty(loadedPlugins) ? this.filterPlugins() : []).map(this.renderCard).filter(n => n);
 			
 			BDFDB.TimeUtils.timeout(_ => {
 				if (!loading.is && header && this.props.entries.length != header.props.amount) {
