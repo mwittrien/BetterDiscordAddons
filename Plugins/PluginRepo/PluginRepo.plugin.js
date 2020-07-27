@@ -335,7 +335,7 @@ var PluginRepo = (_ => {
 	return class PluginRepo {
 		getName () {return "PluginRepo";} 
 
-		getVersion () {return "2.0.0";}
+		getVersion () {return "2.0.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -502,6 +502,13 @@ var PluginRepo = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
+				
+				let oldfavorites = BDFDB.DataUtils.load(this, "favorites"); // REMOVE 26.07.2020
+				if (BDFDB.ObjectUtils.is(oldfavorites) && Object.keys(oldfavorites).length) {
+					let newfavorites = [];
+					for (let url of oldfavorites) if (oldfavorites[url]) newfavorites.push(url);
+					BDFDB.DataUtils.save(newfavorites, this, "favorites");
+				}
 
 				this.forceUpdateAll();
 
@@ -519,13 +526,6 @@ var PluginRepo = (_ => {
 
 				BDFDB.TimeUtils.clear(updateInterval);
 				BDFDB.TimeUtils.clear(loading.timeout);
-				
-				let oldfavorites = BDFDB.DataUtils.load(this, "favorites"); // REMOVE 26.07.2020
-				if (BDFDB.ObjectUtils.is(oldfavorites) && Object.keys(oldfavorites).length) {
-					let newfavorites = [];
-					for (let url of oldfavorites) if (oldfavorites[url]) newfavorites.push(url);
-					BDFDB.DataUtils.save(newfavorites, this, "favorites");
-				}
 
 				this.forceUpdateAll();
 
