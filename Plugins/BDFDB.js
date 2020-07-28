@@ -3835,7 +3835,7 @@
 		if (!config.show && config.showOnReady) browserWindow.once("ready-to-show", browserWindow.show);
 		if (config.devTools) browserWindow.openDevTools();
 		if (typeof config.onLoad == "function") browserWindow.webContents.on("did-finish-load", (...args) => {config.onLoad(...args);});
-		if (typeof config.onClose == "function") browserWindow.webContents.on("closed", (...args) => {config.onClose(...args);});
+		if (typeof config.onClose == "function") browserWindow.once("closed", (...args) => {config.onClose(...args);});
 		
 		if (typeof browserWindow.removeMenu == "function") browserWindow.removeMenu();
 		else browserWindow.setMenu(null);
