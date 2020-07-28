@@ -4003,7 +4003,8 @@
 		avatarStatusHovered: "statusHovered-gF2976",
 		badge: "badge-7R_W3s",
 		bdaRepoEntry: "entry-9JnAPs",
-		bdaRepoList: "repoList-9JnAPs",
+		bdaRepoListHeader: "repoHeader-2KfNgH",
+		bdaRepoListWrapper: "repoList-9JnAPs",
 		cardInner: "inner-OP_8zd",
 		cardWrapper: "card-rT4Wbb",
 		charCounter: "counter-uAzbKp",
@@ -4685,7 +4686,8 @@
 		_repoheadertitle: ["BDrepo", "bdaHeaderTitle"],
 		_repoicon: ["BDrepo", "bdIcon"],
 		_repolist: ["BDrepo", "bdaSlist"],
-		_repolistwrapper: ["BDFDB", "bdaRepoList"],
+		_repolistheader: ["BDFDB", "bdaRepoListHeader"],
+		_repolistwrapper: ["BDFDB", "bdaRepoListWrapper"],
 		_repolink: ["BDrepo", "bdaLink"],
 		_repolinks: ["BDrepo", "bdaLinks"],
 		_reponame: ["BDrepo", "bdaName"],
@@ -9637,9 +9639,11 @@
 			display: none !important;
 		}
 		
-		${BDFDB.dotCNS._repolistwrapper + BDFDB.dotCN.headertitle} {
+		${BDFDB.dotCNS._repolistwrapper + BDFDB.dotCN._repolistheader} {
 			padding-top: 60px;
 			padding-left: 40px;
+			max-width: 730px;
+			min-width: 460px;
 		}
 		${BDFDB.dotCNS._repolistwrapper + BDFDB.dotCN.tabbarcontainer} {
 			max-width: 730px;
