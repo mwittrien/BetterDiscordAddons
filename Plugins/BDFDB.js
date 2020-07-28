@@ -6348,7 +6348,7 @@
 			first: "Erste",
 			last: "Letzte",
 			order: "Reihenfolge",
-			sort_by: "Sortiere nach",
+			sort_by: "Sortieren nach",
 			toast_plugin_started: "{{var0}} wurde gestartet.",
 			toast_plugin_stopped: "{{var0}} wurde gestoppt.",
 			toast_plugin_translated: "auf {{var0}} übersetzt."
