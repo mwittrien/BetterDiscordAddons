@@ -192,6 +192,7 @@ var PluginRepo = (_ => {
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 					tab: "Plugins",
 					open: this.props.tab == "Plugins",
+					render: false,
 					children: loading.is ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 						direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
 						justify: BDFDB.LibraryComponents.Flex.Justify.CENTER,
@@ -220,6 +221,7 @@ var PluginRepo = (_ => {
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 					tab: BDFDB.LanguageUtils.LanguageStrings.SETTINGS,
 					open: this.props.tab == BDFDB.LanguageUtils.LanguageStrings.SETTINGS,
+					render: false,
 					children: [
 						!automaticLoading && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 							className: BDFDB.disCN.marginbottom20,
