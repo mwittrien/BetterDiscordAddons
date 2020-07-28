@@ -242,7 +242,7 @@
 			if (error) return BDFDB.LogUtils.warn("Unable to get update for " + pluginName);
 			BDFDB.InternalData.creationTime = 0;
 			let wasEnabled = BDFDB.BDUtils.isPluginEnabled(pluginName);
-			let newName = body.match(/"name"\s*:\s*"([^"]+)"/)[1];
+			let newName = (body.match(/"name"\s*:\s*"([^"]+)"/) || [])[1] || pluginName;
 			let newVersion = body.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i).toString().replace(/['"]/g, "");
 			let oldVersion = window.PluginUpdates.plugins[url].version;
 			LibraryRequires.fs.writeFile(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), newName + ".plugin.js"), body, _ => {
