@@ -380,7 +380,7 @@ var PluginRepo = (_ => {
 				settings: {
 					useChromium: 		{value:false,	description:"Use an inbuilt browser window instead of opening your default browser"},
 					notifyOutdated:		{value:true, 	description:"Notifies you when one of your Plugins is outdated"},
-					notifyNewentries:	{value:true, 	description:"Notifies you when there are new entries in the Repo"}
+					notifyNewEntries:	{value:true, 	description:"Notifies you when there are new entries in the Repo"}
 				},
 				modalSettings: {
 					updated: 			{value:true,	modify:true,	description:"Show updated Plugins",},
@@ -697,7 +697,7 @@ var PluginRepo = (_ => {
 										});
 									}
 									
-									if ((settings.notifyNewentries || settings.notifyNewentries == undefined) && newentries > 0) {
+									if ((settings.notifyNewEntries || settings.notifyNewEntries == undefined) && newentries > 0) {
 										let oldbarbutton = document.querySelector(".pluginrepo-newentries-notice " + BDFDB.dotCN.noticedismiss);
 										if (oldbarbutton) oldbarbutton.click();
 										let single = newentries == 1;

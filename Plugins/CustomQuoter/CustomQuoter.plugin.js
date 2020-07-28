@@ -39,7 +39,7 @@ var CustomQuoter = (_ => {
 	return class CustomQuoter {
 		getName () {return "CustomQuoter";}
 
-		getVersion () {return "1.1.1";}
+		getVersion () {return "1.1.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -47,8 +47,8 @@ var CustomQuoter = (_ => {
 		
 		constructor () {
 			this.changelog = {
-				"added":[["More Choices","You can now add more formats, which you can choose from in the context submenu (clicking the main item will use first 'standard' format"],["Clipboard","You can now quote in channels that you got no writting permissions in, meaning quoting a message in such a channel will copy the quote to the clipboard instead of the channel textarea"]],
-				"improved":[["Quote selected text","Works more smoothly with formating symbols like (~, _, `, etc.)"]]
+				"fixed":[["Quote in DMs","Fixed an issue that would break quoting in DMs in some cases"]],
+				"improved":[["Copy to clipboard","Holding Shift and clicking quote now copies the quote to the clipboard"]]
 			};
 		}
 
@@ -270,9 +270,9 @@ var CustomQuoter = (_ => {
 
 		onMessageContextMenu (e) {
 			if (e.instance.props.message && e.instance.props.channel) {
-				let item = null, action = choice => {
+				let item = null, action = (choice, copy) => {
 					format = choice;
-					if (!BDFDB.LibraryModules.QuoteUtils.canQuote(e.instance.props.message, e.instance.props.channel)) {
+					if (copy || !BDFDB.LibraryModules.QuoteUtils.canQuote(e.instance.props.message, e.instance.props.channel)) {
 						BDFDB.LibraryRequires.electron.clipboard.write({text:this.parseQuote(e.instance.props.message, e.instance.props.channel)});
 						BDFDB.NotificationUtils.toast("Quote has been copied to clipboard.", {type:"success"});
 					}
@@ -280,12 +280,15 @@ var CustomQuoter = (_ => {
 					format = null;
 				};
 				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "quote"});
-				if (index > -1) item = children[index];
+				if (index > -1) {
+					item = children[index];
+					item.props.action = event => {action(null, event.shiftKey);};
+				}
 				else {
 					item = BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: BDFDB.LanguageUtils.LanguageStrings.QUOTE,
 						id: "quote",
-						action: _ => {action(null);}
+						action: _ => {action(null, event.shiftKey);}
 					});
 					let [unreadChildren, unreadIndex] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "mark-unread"});
 					unreadChildren.splice(unreadIndex > -1 ? unreadIndex - 1 : unreadChildren.length, 0, item);
@@ -295,7 +298,7 @@ var CustomQuoter = (_ => {
 					children: Object.keys(addedFormats).map(key => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: key,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "added-quote", key),
-						action: _ => {action(key);}
+						action: event => {action(key, event.shiftKey);}
 					}))
 				});
 			}
@@ -327,10 +330,10 @@ var CustomQuoter = (_ => {
 				quotedLines = quotedLines.replace(/<@[!&]{0,1}([0-9]{10,})>/g, (string, match) => {
 					let user = BDFDB.LibraryModules.UserStore.getUser(match);
 					if (user) {
-						let userMember = guild && BDFDB.LibraryModules.MemberStore.getMember(guild.id, match);
+						let userMember = channel.guild_id && BDFDB.LibraryModules.MemberStore.getMember(guild.id, match);
 						return `\`@${userMember && userMember.nick || user.username}\``;
 					}
-					else if (guild && guild.roles[match] && guild.roles[match].name) return `\`${guild.roles[match].name.indexOf("@") == 0 ? "" : "@"}${guild.roles[match].name}\``;
+					else if (channel.guild_id && guild.roles[match] && guild.roles[match].name) return `\`${guild.roles[match].name.indexOf("@") == 0 ? "" : "@"}${guild.roles[match].name}\``;
 					return string;
 				});
 			}
