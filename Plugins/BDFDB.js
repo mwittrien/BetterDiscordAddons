@@ -6317,7 +6317,7 @@
 		"zu":			{name:"Zulu",						id:"zu",		ownlang:"Zulu"}
 	};
 	InternalBDFDB.LibraryStrings = {
-		"hr": {
+		"hr": {			//croatian
 			file_navigator_text: "Pregledajte datoteku",
 			first: "Prvi",
 			last: "Zadnji",
@@ -6325,7 +6325,7 @@
 			toast_plugin_stopped: "{{var0}} zaustavljen.",
 			toast_plugin_translated: "prijevod na {{var0}}."
 		},
-		"da": {
+		"da": {			//danish
 			file_navigator_text: "Gennemse fil",
 			first: "Første",
 			last: "Sidste",
@@ -6333,7 +6333,7 @@
 			toast_plugin_stopped: "{{var0}} er stoppet.",
 			toast_plugin_translated: "oversat til {{var0}}."
 		},
-		"de": {
+		"de": {			//german
 			file_navigator_text: "Datei durchsuchen",
 			first: "Erste",
 			last: "Letzte",
@@ -6341,7 +6341,7 @@
 			toast_plugin_stopped: "{{var0}} wurde gestoppt.",
 			toast_plugin_translated: "auf {{var0}} übersetzt."
 		},
-		"es": {
+		"es": {			//spanish
 			file_navigator_text: "Buscar archivo",
 			first: "Primero",
 			last: "Último",
@@ -6349,7 +6349,7 @@
 			toast_plugin_stopped: "{{var0}} se guilddiv detenido.",
 			toast_plugin_translated: "traducido a {{var0}}."
 		},
-		"fr": {
+		"fr": {			//french
 			file_navigator_text: "Parcourir le fichier",
 			first: "Première",
 			last: "Dernier",
@@ -6357,7 +6357,7 @@
 			toast_plugin_stopped: "{{var0}} a été arrêté.",
 			toast_plugin_translated: "traduit en {{var0}}."
 		},
-		"it": {
+		"it": {			//italian
 			file_navigator_text: "Sfoglia file",
 			first: "Primo",
 			last: "Ultimo",
@@ -6365,7 +6365,7 @@
 			toast_plugin_stopped: "{{var0}} è stato interrotto.",
 			toast_plugin_translated: "tradotto in {{var0}}."
 		},
-		"nl": {
+		"nl": {			//dutch
 			file_navigator_text: "Bestand zoeken",
 			first: "Eerste",
 			last: "Laatste",
@@ -6373,7 +6373,7 @@
 			toast_plugin_stopped: "{{var0}} is gestopt.",
 			toast_plugin_translated: "vertaald naar {{var0}}."
 		},
-		"no": {
+		"no": {			//norwegian
 			file_navigator_text: "Bla gjennom fil",
 			first: "Første",
 			last: "Siste",
@@ -6381,7 +6381,7 @@
 			toast_plugin_stopped: "{{var0}} er stoppet.",
 			toast_plugin_translated: "oversatt til {{var0}}."
 		},
-		"pl": {
+		"pl": {			//polish
 			file_navigator_text: "Przeglądać plik",
 			first: "Pierwszy",
 			last: "Ostatni",
@@ -6389,7 +6389,7 @@
 			toast_plugin_stopped: "{{var0}} został zatrzymany.",
 			toast_plugin_translated: "przetłumaczono na {{var0}}."
 		},
-		"pt-BR": {
+		"pt-BR": {		//portuguese (brazil)
 			file_navigator_text: "Procurar arquivo",
 			first: "Primeiro",
 			last: "Último",
@@ -6397,7 +6397,7 @@
 			toast_plugin_stopped: "{{var0}} foi interrompido.",
 			toast_plugin_translated: "traduzido para {{var0}}."
 		},
-		"fi": {
+		"fi": {			//finnish
 			file_navigator_text: "Selaa tiedostoa",
 			first: "Ensimmäinen",
 			last: "Viimeinen",
@@ -6405,7 +6405,7 @@
 			toast_plugin_stopped: "{{var0}} on pysäytetty.",
 			toast_plugin_translated: "käännetty osoitteeseen {{var0}}."
 		},
-		"sv": {
+		"sv": {			//swedish
 			file_navigator_text: "Bläddra i fil",
 			first: "Första",
 			last: "Sista",
@@ -6413,7 +6413,7 @@
 			toast_plugin_stopped: "{{var0}} har blivit stoppad.",
 			toast_plugin_translated: "översatt till {{var0}}."
 		},
-		"tr": {
+		"tr": {			//turkish
 			file_navigator_text: "Dosyaya gözat",
 			first: "Ilk",
 			last: "Son",
@@ -6421,7 +6421,7 @@
 			toast_plugin_stopped: "{{var0}} durduruldu.",
 			toast_plugin_translated: "{{var0}} olarak çevrildi."
 		},
-		"cs": {
+		"cs": {			//czech
 			file_navigator_text: "Procházet soubor",
 			first: "První",
 			last: "Poslední",
@@ -6429,7 +6429,7 @@
 			toast_plugin_stopped: "{{var0}} byl zastaven.",
 			toast_plugin_translated: "přeložen do {{var0}}."
 		},
-		"bg": {
+		"bg": {			//bulgarian
 			file_navigator_text: "Прегледайте файла",
 			first: "Първият",
 			last: "Последният",
@@ -6437,7 +6437,7 @@
 			toast_plugin_stopped: "{{var0}} е спрян.",
 			toast_plugin_translated: "преведена на {{var0}}."
 		},
-		"ru": {
+		"ru": {			//russian
 			file_navigator_text: "Просмотр файла",
 			first: "Первый",
 			last: "Последний",
@@ -6445,7 +6445,7 @@
 			toast_plugin_stopped: "{{var0}} остановлен.",
 			toast_plugin_translated: "переведен на {{var0}}."
 		},
-		"uk": {
+		"uk": {			//ukrainian
 			file_navigator_text: "Перегляньте файл",
 			first: "Перший",
 			last: "Останній",
@@ -6453,7 +6453,7 @@
 			toast_plugin_stopped: "{{var0}} було зупинено.",
 			toast_plugin_translated: "перекладено {{var0}}."
 		},
-		"ja": {
+		"ja": {			//japanese
 			file_navigator_text: "ファイルを参照",
 			first: "最初",
 			last: "最後",
@@ -6461,7 +6461,7 @@
 			toast_plugin_stopped: "{{var0}}が停止しました.",
 			toast_plugin_translated: "は{{var0}}に翻訳されました."
 		},
-		"zh-TW": {
+		"zh-TW": {		//chinese (traditional)
 			file_navigator_text: "瀏覽文件",
 			first: "首先",
 			last: "最後",
@@ -6469,7 +6469,7 @@
 			toast_plugin_stopped: "{{var0}}已停止.",
 			toast_plugin_translated: "翻譯為{{var0}}."
 		},
-		"ko": {
+		"ko": {			//korean
 			file_navigator_text: "파일 찾아보기",
 			first: "첫번째",
 			last: "마지막",
@@ -6477,10 +6477,14 @@
 			toast_plugin_stopped: "{{var0}} 중지되었습니다.",
 			toast_plugin_translated: "{{var0}} 로 번역되었습니다."
 		},
-		"default": {
+		"default": {	//default: english
+			ascending: "Ascending",
+			descending: "Descending",
 			file_navigator_text: "Browse File",
 			first: "First",
 			last: "Last",
+			order: "Order",
+			sort_by: "Sort by",
 			toast_plugin_started: "{{var0}} has been started.",
 			toast_plugin_stopped: "{{var0}} has been stopped.",
 			toast_plugin_translated: "translated to {{var0}}."
@@ -9642,11 +9646,11 @@
 		${BDFDB.dotCNS._repolistwrapper + BDFDB.dotCN._repolistheader} {
 			padding-top: 60px;
 			padding-left: 40px;
-			max-width: 730px;
+			max-width: 720px;
 			min-width: 460px;
 		}
 		${BDFDB.dotCNS._repolistwrapper + BDFDB.dotCN.tabbarcontainer} {
-			max-width: 730px;
+			max-width: 720px;
 			min-width: 460px;
 			padding-left: 40px;
 		}
