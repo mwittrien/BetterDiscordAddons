@@ -46,8 +46,8 @@ var PluginRepo = (_ => {
 		NEW:			"New Plugins"
 	};
 	const orderKeys = {
-		ASC:			"Ascending",
-		DESC:			"Descending"
+		ASC:			"ascending",
+		DESC:			"descending"
 	};
 	
 	const pluginRepoIcon = `<svg width="34" height="31" viewBox="0 0 400 382"><path d="M0.000 183.023 L 0.000 366.046 46.377 366.046 L 92.754 366.046 92.754 312.629 L 92.754 259.213 127.223 259.213 C 174.433 259.213,187.432 257.146,210.766 245.926 C 311.105 197.681,301.344 41.358,195.859 7.193 C 173.603 -0.015,173.838 0.000,80.846 0.000 L 0.000 0.000 0.000 183.023 M157.615 88.195 C 193.007 97.413,198.827 152.678,166.407 171.674 C 158.993 176.019,155.494 176.398,122.807 176.398 L 92.754 176.398 92.754 131.677 L 92.754 86.957 122.807 86.957 C 146.807 86.957,153.819 87.206,157.615 88.195" stroke="none" fill="#7289da" fill-rule="evenodd"></path><path d="M226.647 3.824 C 258.085 21.580,282.721 54.248,291.095 89.281 C 292.183 93.834,293.041 95.659,294.560 96.655 C 310.880 107.348,312.400 140.701,297.286 156.464 C 293.685 160.221,293.134 161.348,291.162 169.006 C 282.026 204.468,259.916 235.185,230.701 253.002 C 229.548 253.705,235.510 262.261,270.237 309.731 L 311.131 365.631 355.565 365.846 L 400.000 366.060 400.000 348.309 L 400.000 330.557 364.338 285.630 L 328.676 240.703 333.494 238.892 C 373.356 223.907,395.248 189.691,399.313 136.020 C 404.504 67.495,372.510 19.710,311.375 4.675 C 294.592 0.548,287.694 -0.000,252.482 0.000 L 219.876 0.000 226.647 3.824 M202.899 265.964 C 183.869 272.635,168.536 274.960,139.752 275.540 L 116.770 276.003 116.770 321.024 L 116.770 366.046 163.975 366.046 L 211.180 366.046 211.180 314.700 C 211.180 286.460,210.901 263.386,210.559 263.425 C 210.217 263.464,206.770 264.607,202.899 265.964" stroke="none" fill="#7f8186" fill-rule="evenodd"></path></svg>`;
@@ -257,25 +257,14 @@ var PluginRepo = (_ => {
 		render() {
 			if (!this.props.tab) this.props.tab = "Plugins";
 			return [
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
-					tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H2,
-					className: BDFDB.disCN.marginbottom4,
-					children: `Plugin Repo — ${loading.is ? 0 : this.props.amount || 0}/${loading.is ? 0 : Object.keys(loadedPlugins).length} Plugins`
-				}),
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-					className: BDFDB.disCNS.tabbarcontainer + BDFDB.disCN.tabbarcontainerbottom,
+					className: BDFDB.disCNS._repolistheader + BDFDB.disCN.marginbottom4,
 					align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar, {
-							className: BDFDB.disCN.tabbar,
-							itemClassName: BDFDB.disCN.tabbaritem,
-							type: BDFDB.LibraryComponents.TabBar.Types.TOP,
-							selectedItem: this.props.tab,
-							items: [{value:"Plugins"}, {value:BDFDB.LanguageUtils.LanguageStrings.SETTINGS}],
-							onItemSelect: (value, instance) => {
-								this.props.tab = list.props.tab = value;
-								BDFDB.ReactUtils.forceUpdate(list);
-							}
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+							tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H2,
+							className: BDFDB.disCN.marginreset,
+							children: `Plugin Repo — ${loading.is ? 0 : this.props.amount || 0}/${loading.is ? 0 : Object.keys(loadedPlugins).length}`
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
@@ -293,10 +282,29 @@ var PluginRepo = (_ => {
 									BDFDB.ReactUtils.forceUpdate(this, list);
 								}
 							})
+						})
+					]
+				}),
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+					className: BDFDB.disCNS.tabbarcontainer + BDFDB.disCN.tabbarcontainerbottom,
+					align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+					children: [
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar, {
+								className: BDFDB.disCN.tabbar,
+								itemClassName: BDFDB.disCN.tabbaritem,
+								type: BDFDB.LibraryComponents.TabBar.Types.TOP,
+								selectedItem: this.props.tab,
+								items: [{value:"Plugins"}, {value:BDFDB.LanguageUtils.LanguageStrings.SETTINGS}],
+								onItemSelect: (value, instance) => {
+									this.props.tab = list.props.tab = value;
+									BDFDB.ReactUtils.forceUpdate(list);
+								}
+							})
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
-								label: "Sort by:",
+								label: BDFDB.LanguageUtils.LibraryStrings.sort_by + ":",
 								value: {
 									label: sortKeys[this.props.sortKey],
 									value: this.props.sortKey
@@ -313,13 +321,13 @@ var PluginRepo = (_ => {
 						}),
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
-								label: "Order:",
+								label: BDFDB.LanguageUtils.LibraryStrings.order + ":",
 								value: {
-									label: orderKeys[this.props.orderKey],
+									label: BDFDB.LanguageUtils.LibraryStrings[orderKeys[this.props.orderKey]],
 									value: this.props.orderKey
 								},
 								options: Object.keys(orderKeys).map(key => ({
-									label: orderKeys[key],
+									label: BDFDB.LanguageUtils.LibraryStrings[orderKeys[key]],
 									value: key
 								})),
 								onChange: (key, instance) => {
@@ -337,7 +345,7 @@ var PluginRepo = (_ => {
 	return class PluginRepo {
 		getName () {return "PluginRepo";} 
 
-		getVersion () {return "2.0.1";}
+		getVersion () {return "2.0.2";}
 
 		getAuthor () {return "DevilBro";}
 

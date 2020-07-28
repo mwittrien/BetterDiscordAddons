@@ -3,6 +3,8 @@
 var ThemeRepo = (_ => {
 	var _this;	
 	var loading, cachedThemes, grabbedThemes, foundThemes, loadedThemes, generatorThemes, updateInterval;
+	var list, header, preview, searchTimeout, updateGeneratorTimeout, forceRerenderGenerator, forcedSort, forcedOrder, showOnlyOutdated;
+	var settings = {}, modalSettings = {}, favorites = [], customList = [];
 	
 	const themeStates = {
 		UPDATED: 0,
@@ -44,89 +46,583 @@ var ThemeRepo = (_ => {
 		NEW:			"New Themes"
 	};
 	const orderKeys = {
-		ASC:			"Ascending",
-		DESC:			"Descending"
+		ASC:			"ascending",
+		DESC:			"descending"
 	};
 	
 	const themeRepoIcon = `<svg width="36" height="31" viewBox="20 0 400 332"><path d="M0.000 39.479 L 0.000 78.957 43.575 78.957 L 87.151 78.957 87.151 204.097 L 87.151 329.236 129.609 329.236 L 172.067 329.236 172.067 204.097 L 172.067 78.957 215.642 78.957 L 259.218 78.957 259.218 39.479 L 259.218 0.000 129.609 0.000 L 0.000 0.000 0.000 39.479" stroke="none" fill="#7289da" fill-rule="evenodd"></path><path d="M274.115 38.624 L 274.115 77.248 280.261 77.734 C 309.962 80.083,325.986 106.575,313.378 132.486 C 305.279 149.131,295.114 152.700,255.800 152.700 L 230.168 152.700 230.168 123.277 L 230.168 93.855 208.566 93.855 L 186.965 93.855 186.965 211.546 L 186.965 329.236 208.566 329.236 L 230.168 329.236 230.168 277.068 L 230.168 224.899 237.268 225.113 L 244.368 225.326 282.215 277.095 L 320.062 328.864 360.031 329.057 L 400.000 329.249 400.000 313.283 L 400.000 297.317 367.924 256.908 L 335.848 216.499 340.182 214.869 C 376.035 201.391,395.726 170.616,399.382 122.342 C 405.008 48.071,360.214 0.000,285.379 0.000 L 274.115 0.000 274.115 38.624" stroke="none" fill="#7f8186" fill-rule="evenodd"></path></svg>`;
 	
-	const repoListComponent = class ThemeList extends BdApi.React.Component {
-		render() {
-			let list = BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.disCN._repolist,
-				style: {
-					display: "flex",
-					flexDirection: "column",
-					margin: "unset",
-					width: "unset"
-				},
-				children: [].concat(this.props.entries).filter(n => n).map(entry => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AddonCard, entry))
+	const RepoListComponent = class ThemeList extends BdApi.React.Component {
+		componentDidMount() {
+			list = this;
+			BDFDB.TimeUtils.timeout(_ => {
+				forcedSort = null;
+				forcedOrder = null;
+				showOnlyOutdated = false;
+			}, 5000);
+		}
+		filterThemes() {
+			let themes = Object.keys(loadedThemes).map(url => {
+				let theme = loadedThemes[url];
+				let instTheme = BDFDB.BDUtils.getTheme(theme.name);
+				if (instTheme && instTheme.author.toUpperCase() == theme.author.toUpperCase()) theme.state = instTheme.version != theme.version ? themeStates.OUTDATED : themeStates.UPDATED;
+				else theme.state = themeStates.DOWNLOADABLE;
+				return {
+					url: theme.url,
+					requesturl: theme.requesturl,
+					search: (theme.name + " " + theme.version + " " + theme.author + " " + theme.description).toUpperCase(),
+					name: theme.name,
+					version: theme.version,
+					author: theme.author,
+					description: theme.description || "No Description found.",
+					fav: favorites.includes(url) ? favStates.FAVORIZED : favStates.NOT_FAVORIZED,
+					new: !cachedThemes.includes(url) ? newStates.NEW : newStates.NOT_NEW,
+					state: theme.state,
+					css: theme.css,
+					fullcss: theme.fullcss
+				};
 			});
-			BDFDB.ReactUtils.forceStyle(list, ["display", "flex-direction", "margin", "width"]);
-			return list;
+			if (!this.props.updated)		themes = themes.filter(theme => theme.state != themeStates.UPDATED);
+			if (!this.props.outdated)		themes = themes.filter(theme => theme.state != themeStates.OUTDATED);
+			if (!this.props.downloadable)	themes = themes.filter(theme => theme.state != themeStates.DOWNLOADABLE);
+			if (this.props.searchString) 	{
+				let searchString = this.props.searchString.toUpperCase();
+				themes = themes.filter(theme => theme.search.indexOf(searchString) > -1).map(theme => Object.assign({}, theme, {
+					name: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(theme.name, searchString))) || theme.name,
+					version: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(theme.version, searchString))) || theme.version,
+					author: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(theme.author, searchString))) || theme.author,
+					description: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(theme.description, searchString))) || theme.description
+				}));
+			}
+
+			BDFDB.ArrayUtils.keySort(themes, (!this.props.sortKey || this.props.sortKey == "NEW" && !themes.some(theme => theme.new == newStates.NEW) ? Object.keys(sortKeys)[0] : this.props.sortKey).toLowerCase());
+			if (this.props.orderKey == "DESC") themes.reverse();
+			return themes;
+		}
+		openPreview() {
+			preview = BDFDB.WindowUtils.open(this, "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/DiscordPreview.html", {
+				alwaysOnTop: settings.keepOnTop,
+				showOnReady: true,
+				frame: false,
+				onLoad: _ => {
+					let nativeCSS = document.querySelector("head link[rel='stylesheet'][integrity]");
+					let titleBar = document.querySelector(BDFDB.dotCN.titlebar);
+					preview.executeJavaScriptSafe(`window.onmessage({
+						origin: "ThemeRepo",
+						reason: "OnLoad",
+						username: ${JSON.stringify(BDFDB.UserUtils.me.username || "")},
+						id: ${JSON.stringify(BDFDB.UserUtils.me.id || "")},
+						discriminator: ${JSON.stringify(BDFDB.UserUtils.me.discriminator || "")},
+						avatar: ${JSON.stringify(BDFDB.UserUtils.getAvatar() || "")},
+						classes: ${JSON.stringify(JSON.stringify(BDFDB.DiscordClasses))},
+						classModules: ${JSON.stringify(JSON.stringify(BDFDB.DiscordClassModules))},
+						nativeCSS: ${JSON.stringify(nativeCSS && nativeCSS.href || "")},
+						htmlClassName: ${JSON.stringify(document.documentElement.className || "")},
+						titleBar: ${JSON.stringify(titleBar && titleBar.outerHTML || "")}
+					})`);
+					if (this.props.currentTheme) preview.executeJavaScriptSafe(`window.onmessage({
+						origin: "ThemeRepo",
+						reason: "NewTheme",
+						checked: true,
+						css: ${JSON.stringify(this.props.currentTheme.css || "")}
+					})`);
+					if (this.props.currentGenerator) preview.executeJavaScriptSafe(`window.onmessage({
+						origin: "ThemeRepo",
+						reason: "NewTheme",
+						checked: true,
+						css: ${JSON.stringify((loadedThemes[this.props.currentGenerator] || {}).fullcss || "")}
+					})`);
+					if (this.props.useLightMode) preview.executeJavaScriptSafe(`window.onmessage({
+						origin: "ThemeRepo",
+						reason: "DarkLight",
+						checked: true
+					})`);
+					if (this.props.useNormalizer) preview.executeJavaScriptSafe(`window.onmessage({
+						origin: "ThemeRepo",
+						reason: "Normalize",
+						checked: true
+					})`);
+					if (this.props.useCustomCSS) preview.executeJavaScriptSafe(`window.onmessage({
+						origin: "ThemeRepo",
+						reason: "CustomCSS",
+						checked: true
+					})`);
+					if (this.props.useThemeFixer) preview.executeJavaScriptSafe(`window.onmessage({
+						origin: "ThemeRepo",
+						reason: "ThemeFixer",
+						checked: true
+					})`);
+				},
+				onClose: _ => {
+					preview = null;
+				}
+			});
+		}
+		renderCard(theme) {
+			let buttonConfig = buttonData[(Object.entries(themeStates).find(n => n[1] == theme.state) || [])[0]];
+			return buttonConfig && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AddonCard, {
+				data: theme,
+				controls: [
+					theme.new == newStates.NEW && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
+						style: {
+							borderRadius: 3,
+							textTransform: "uppercase",
+							background: BDFDB.DiscordConstants.Colors.STATUS_YELLOW
+						},
+						text: BDFDB.LanguageUtils.LanguageStrings.NEW
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FavButton, {
+						className: BDFDB.disCN._repocontrolsbutton,
+						isFavorite: theme.fav == favStates.FAVORIZED,
+						onClick: value => {
+							theme.fav = value ? favStates.FAVORIZED : favStates.NOT_FAVORIZED;
+							if (value) favorites.push(theme.url);
+							else BDFDB.ArrayUtils.remove(favorites, theme.url, true);
+							BDFDB.DataUtils.save(favorites, _this, "favorites");
+						}
+					}),
+					BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN._repocontrolsbutton,
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+							text: "Go to Source",
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								name: BDFDB.LibraryComponents.SvgIcon.Names.GITHUB,
+								className: BDFDB.disCN._repoicon,
+								onClick: _ => {
+									let gitUrl = null;
+									if (theme.url.indexOf("https://raw.githubusercontent.com") == 0) {
+										let temp = theme.url.replace("//raw.githubusercontent", "//github").split("/");
+										temp.splice(5, 0, "blob");
+										gitUrl = temp.join("/");
+									}
+									else if (theme.url.indexOf("https://gist.githubusercontent.com/") == 0) {
+										gitUrl = theme.url.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
+									}
+									if (gitUrl) BDFDB.DiscordUtils.openLink(gitUrl, settings.useChromium);
+								}
+							})
+						})
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Switch, {
+						value: this.props.currentTheme && this.props.currentTheme.url == theme.url,
+						onChange: (value, instance) => {
+							if (value) this.props.currentTheme = theme;
+							else delete this.props.currentTheme;
+							delete this.props.currentGenerator;
+							delete this.props.generatorValues;
+							if (preview) preview.executeJavaScriptSafe(`window.onmessage({
+								origin: "ThemeRepo",
+								reason: "NewTheme",
+								checked: ${value},
+								css: ${JSON.stringify(theme.css || "")}
+							})`);
+							else this.openPreview();
+							BDFDB.ReactUtils.forceUpdate(this);
+						}
+					})
+				],
+				buttons: [
+					theme.state != themeStates.DOWNLOADABLE && BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN._repocontrolsbutton,
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+							text: "Delete Themefile",
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								name: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_TRASH,
+								className: BDFDB.disCN._repoicon,
+								onClick: (e, instance) => {
+									_this.removeTheme(theme);
+									_this.deleteThemeFile(theme);
+									BDFDB.TimeUtils.timeout(_ => {
+										BDFDB.ReactUtils.forceUpdate(this);
+									}, 3000);
+								}
+							})
+						})
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+						size: BDFDB.LibraryComponents.Button.Sizes.MIN,
+						color: BDFDB.LibraryComponents.Button.Colors[buttonConfig.colorClass],
+						style: {backgroundColor: BDFDB.DiscordConstants.Colors[buttonConfig.backgroundColor]},
+						children: buttonConfig.text,
+						onClick: (e, instance) => {
+							_this.downloadTheme(theme);
+							BDFDB.TimeUtils.timeout(_ => {
+								BDFDB.ReactUtils.forceUpdate(this);
+								if (this.props.rnmStart) _this.applyTheme(theme);
+							}, 3000);
+						}
+					})
+				]
+			});
+		}
+		render() {
+			let automaticLoading = BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.automaticLoading);
+			if (!this.props.tab) this.props.tab = "Themes";
+			this.props.entries = (!loading.is && !BDFDB.ObjectUtils.isEmpty(loadedThemes) ? this.filterThemes() : []).map(theme => this.renderCard(theme)).filter(n => n);
+			
+			BDFDB.TimeUtils.timeout(_ => {
+				if (!loading.is && header && this.props.entries.length != header.props.amount) {
+					header.props.amount = this.props.entries.length;
+					BDFDB.ReactUtils.forceUpdate(header);
+				}
+			});
+			
+			if (forceRerenderGenerator && this.props.tab == "Generator") BDFDB.TimeUtils.timeout(_ => {
+				forceRerenderGenerator = false;
+				BDFDB.ReactUtils.forceUpdate(this);
+			});
+			
+			return [
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+					tab: "Themes",
+					open: this.props.tab == "Themes",
+					render: false,
+					children: loading.is ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+						direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+						justify: BDFDB.LibraryComponents.Flex.Justify.CENTER,
+						style: {marginTop: "50%"},
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Spinner, {
+								type: BDFDB.LibraryComponents.Spinner.Type.WANDERING_CUBES
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+								className: BDFDB.disCN.margintop20,
+								style: {textAlign: "center"},
+								children: "Themes are still being fetched. Please wait a moment."
+							})
+						]
+					}) : BDFDB.ReactUtils.forceStyle(BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN._repolist,
+						style: {
+							display: "flex",
+							flexDirection: "column",
+							margin: "unset",
+							width: "unset"
+						},
+						children: this.props.entries
+					}), ["display", "flex-direction", "margin", "width"])
+				}),
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+					tab: "Generator",
+					open: this.props.tab == "Generator",
+					render: false,
+					children: [
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+							className: BDFDB.disCN.marginbottom20,
+							type: "Select",
+							label: "Choose a Generator Theme",
+							basis: "60%",
+							value: this.props.currentGenerator || "-----",
+							options: ["-----"].concat(generatorThemes).map(url => ({value:url, label:(loadedThemes[url] || {}).name || "-----"})).sort((x, y) => (x.label < y.label ? -1 : x.label > y.label ? 1 : 0)),
+							searchable: true,
+							onChange: (value, instance) => {
+								if (loadedThemes[value.value]) {
+									if (this.props.currentGenerator) forceRerenderGenerator = true;
+									this.props.currentGenerator = value.value;
+									this.props.generatorValues = {};
+								}
+								else {
+									delete this.props.currentGenerator;
+									delete this.props.generatorValues;
+								}
+								delete this.props.currentTheme;
+								if (preview) preview.executeJavaScriptSafe(`window.onmessage({
+									origin: "ThemeRepo",
+									reason: "NewTheme",
+									checked: true,
+									css: ${JSON.stringify((loadedThemes[value.value] || {}).fullcss || "")}
+								})`);
+								else this.openPreview();
+								BDFDB.ReactUtils.forceUpdate(this);
+							}
+						}),
+						!this.props.currentGenerator ? null : (forceRerenderGenerator ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+							direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
+							justify: BDFDB.LibraryComponents.Flex.Justify.CENTER,
+							style: {marginTop: "50%"},
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Spinner, {
+								type: BDFDB.LibraryComponents.Spinner.Type.WANDERING_CUBES
+							})
+						}) : [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+								className: BDFDB.disCN.marginbottom20,
+								type: "Button",
+								label: "Download generated Theme",
+								children: "Download",
+								onClick: _ => {
+									_this.createThemeFile(this.props.currentGenerator.name + ".theme.css", _this.generateTheme(this.props.currentGenerator, this.props.generatorValues));
+								}
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+								className: BDFDB.disCN.marginbottom20
+							}),
+							(_ => {
+								let vars = loadedThemes[this.props.currentGenerator].fullcss.split(":root");
+								if (vars.length < 2) return null;
+								vars = vars[1].replace(/\t\(/g, " (").replace(/\r|\t| {2,}/g, "").replace(/\/\*\n*((?!\/\*|\*\/).|\n)*\n+((?!\/\*|\*\/).|\n)*\n*\*\//g, "").replace(/\n\/\*.*?\*\//g, "").replace(/\n/g, "");
+								vars = vars.split("{");
+								vars.shift();
+								vars = vars.join("{").replace(/\s*(:|;|--|\*)\s*/g, "$1");
+								vars = vars.split("}")[0];
+								vars = vars.slice(2).split(/;--|\*\/--/);
+								let inputRefs = [];
+								for (let varStr of vars) {
+									varStr = varStr.split(":");
+									let varName = varStr.shift().trim();
+									varStr = varStr.join(":").split(/;[^A-z0-9]|\/\*/);
+									let oldValue = varStr.shift().trim();
+									if (oldValue) {
+										let childType = "text", childMode = "";
+										let isColor = BDFDB.ColorUtils.getType(oldValue);
+										let isComp = !isColor && /[0-9 ]+,[0-9 ]+,[0-9 ]+/g.test(oldValue);
+										if (isColor || isComp) {
+											childType = "color";
+											childMode = isComp && "comp";
+										}
+										else {
+											let isUrlFile = /url\(.+\)/gi.test(oldValue);
+											let isFile = !isUrlFile && /(http(s)?):\/\/[(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(oldValue);
+											if (isFile || isUrlFile) {
+												childType = "file";
+												childMode = isUrlFile && "url";
+											}
+										}
+										let varDescription = varStr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
+										this.props.generatorValues[varName] = {value:oldValue, oldValue};
+										inputRefs.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+											className: BDFDB.disCN.marginbottom20,
+											dividerbottom: vars[vars.length-1] != varStr,
+											type: "TextInput",
+											childProps: {
+												type: childType,
+												mode: childMode,
+												filter: childType == "file" && "image"
+											},
+											label: varName[0].toUpperCase() + varName.slice(1),
+											note: varDescription && varDescription.indexOf("*") == 0 ? varDescription.slice(1) : varDescription,
+											basis: "70%",
+											value: oldValue,
+											placeholder: oldValue,
+											onChange: value => {
+												BDFDB.TimeUtils.clear(updateGeneratorTimeout);
+												updateGeneratorTimeout = BDFDB.TimeUtils.timeout(_ => {
+													this.props.generatorValues[varName] = {value, oldValue};
+													if (preview) preview.executeJavaScriptSafe(`window.onmessage({
+														origin: "ThemeRepo",
+														reason: "NewTheme",
+														checked: true,
+														css: ${JSON.stringify(_this.generateTheme(loadedThemes[this.props.currentGenerator], this.props.generatorValues) || "")}
+													})`);
+												}, 1000);
+											}
+										}));
+									}
+								}
+								return inputRefs;
+							})()
+						])
+					].flat(10).filter(n => n)
+				}),
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
+					tab: BDFDB.LanguageUtils.LanguageStrings.SETTINGS,
+					open: this.props.tab == BDFDB.LanguageUtils.LanguageStrings.SETTINGS,
+					render: false,
+					children: [
+						!automaticLoading && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+							className: BDFDB.disCN.marginbottom20,
+							children: BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCNS.titledefault + BDFDB.disCN.cursordefault,
+								children: "To experience ThemeRepo in the best way. I would recommend you to enable BD intern reload function, that way all downloaded files are loaded into Discord without the need to reload."
+							})
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+							className: BDFDB.disCN.marginbottom20,
+							type: "Switch",
+							label: "Preview in light mode",
+							value: this.props.useLightMode,
+							onChange: (value, instance) => {
+								this.props.useLightMode = value;
+								if (preview) preview.executeJavaScriptSafe(`window.onmessage({
+									origin: "ThemeRepo",
+									reason: "DarkLight",
+									checked: ${this.props.useLightMode}
+								})`);
+							}
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+							className: BDFDB.disCN.marginbottom20,
+							type: "Switch",
+							label: "Preview with useNormalizer classes",
+							value: this.props.useNormalizer,
+							onChange: (value, instance) => {
+								this.props.useNormalizer = value;
+								if (preview) preview.executeJavaScriptSafe(`window.onmessage({
+									origin: "ThemeRepo",
+									reason: "Normalize",
+									checked: ${this.props.useNormalizer}
+								})`);
+							}
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+							className: BDFDB.disCN.marginbottom20,
+							type: "Switch",
+							label: "Include Custom CSS in Preview",
+							value: this.props.useCustomCSS,
+							onChange: (value, instance) => {
+								this.props.useCustomCSS = value;
+								let customCSS = document.querySelector("style#customcss");
+								if (preview && customCSS && customCSS.innerText.length > 0) preview.executeJavaScriptSafe(`window.onmessage({
+									origin: "ThemeRepo",
+									reason: "CustomCSS",
+									checked: ${this.props.useCustomCSS},
+									css: ${JSON.stringify(customCSS.innerText || "")}
+								})`);
+							}
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+							className: BDFDB.disCN.marginbottom20,
+							type: "Switch",
+							label: "Include ThemeFixer CSS in Preview",
+							value: this.props.useThemeFixer,
+							onChange: (value, instance) => {
+								this.props.useThemeFixer  = value;
+								BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeFixer.css", (error, response, body) => {
+									if (preview) preview.executeJavaScriptSafe(`window.onmessage({
+										origin: "ThemeRepo",
+										reason: "ThemeFixer",
+										checked: ${this.props.useThemeFixer},
+										css: ${JSON.stringify(_this.createFixerCSS(body) || "")}
+									})`);
+								});
+							}
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+							className: BDFDB.disCN.marginbottom20,
+							type: "Button",
+							label: "Download ThemeFixer",
+							children: "Download",
+							onClick: _ => {
+								BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeFixer.css", (error, response, body) => {
+									_this.createThemeFile("ThemeFixer.theme.css", `//META{"name":"ThemeFixer","description":"ThemeFixerCSS for transparent themes","author":"DevilBro","version":"1.0.3","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien"}*//\n\n` + _this.createFixerCSS(body));
+								});
+							}
+						}),
+						Object.keys(modalSettings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+							className: BDFDB.disCN.marginbottom20,
+							type: "Switch",
+							plugin: _this,
+							keys: ["modalSettings", key],
+							label: _this.defaults.modalSettings[key].description,
+							note: key == "rnmStart" && !automaticLoading && "Automatic Loading has to be enabled",
+							disabled: key == "rnmStart" && !automaticLoading,
+							value: this.props[key],
+							onChange: (value, instance) => {
+								this.props[key] = value;
+								BDFDB.ReactUtils.forceUpdate(this);
+							}
+						}))
+					].flat(10).filter(n => n)
+				})
+			];
 		}
 	};
 	
-	let forceRerenderGenerator;
-	const generatorComponent = class ThemeGenerator extends BdApi.React.Component {
+	const RepoListHeaderComponent = class ThemeListHeader extends BdApi.React.Component {
+		componentDidMount() {
+			header = this;
+		}
 		render() {
-			if (forceRerenderGenerator) {
-				BDFDB.TimeUtils.timeout(_ => {
-					forceRerenderGenerator = false;
-					BDFDB.ReactUtils.forceUpdate(this);
-				}, 500);
-			}
-			let theme = this.props.options && loadedThemes[this.props.options.currentGenerator];
-			return !this.props.options || !this.props.options.preview ? null : [
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-					className: BDFDB.disCN.marginbottom20,
-					type: "Select",
-					label: "Choose a Generator Theme",
-					basis: "70%",
-					value: this.props.options.currentGenerator || "-----",
-					options: ["-----"].concat(generatorThemes).map(url => {return {value:url, label:(loadedThemes[url] || {}).name || "-----"}}).sort((x, y) => (x.label < y.label ? -1 : x.label > y.label ? 1 : 0)),
-					searchable: true,
-					onChange: (value, instance) => {
-						if (loadedThemes[value.value]) {
-							if (this.props.options.currentGenerator) forceRerenderGenerator = true;
-							this.props.options.currentGenerator = value.value;
-							this.props.options.generatorValues = {};
-						}
-						else {
-							delete this.props.options.currentGenerator;
-							delete this.props.options.generatorValues;
-						}
-						delete this.props.options.currentTheme;
-						_this.updateList(instance, this.props.options);
-						this.props.options.preview.executeJavaScriptSafe(`window.onmessage({
-							origin: "ThemeRepo",
-							reason: "NewTheme",
-							checked: true,
-							css: ${JSON.stringify((loadedThemes[value.value] || {}).fullcss || "")}
-						})`);
-					}
+			if (!this.props.tab) this.props.tab = "Themes";
+			return [
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+					className: BDFDB.disCNS._repolistheader + BDFDB.disCN.marginbottom4,
+					align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+					children: [
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+							tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H2,
+							className: BDFDB.disCN.marginreset,
+							children: `Theme Repo — ${loading.is ? 0 : this.props.amount || 0}/${loading.is ? 0 : Object.keys(loadedThemes).length}`
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
+								autoFocus: true,
+								query: this.props.searchString,
+								onChange: (value, instance) => {
+									BDFDB.TimeUtils.clear(searchTimeout);
+									searchTimeout = BDFDB.TimeUtils.timeout(_ => {
+										this.props.searchString = list.props.searchString = value.replace(/[<|>]/g, "");
+										BDFDB.ReactUtils.forceUpdate(this, list);
+									}, 1000);
+								},
+								onClear: instance => {
+									this.props.searchString = list.props.searchString = "";
+									BDFDB.ReactUtils.forceUpdate(this, list);
+								}
+							})
+						})
+					]
 				}),
-				theme && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-					className: BDFDB.disCN.marginbottom20,
-					type: "Button",
-					label: "Download generated Theme",
-					children: "Download",
-					onClick: _ => {
-						_this.createThemeFile(theme.name + ".theme.css", _this.generateTheme(theme, this.props.options));
-					}
-				}),
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-					className: BDFDB.disCN.marginbottom20
-				}),
-				theme && !forceRerenderGenerator && _this.createGeneratorInputs(theme, this.props.options)
-			].flat(10).filter(n => n)
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+					className: BDFDB.disCNS.tabbarcontainer + BDFDB.disCN.tabbarcontainerbottom,
+					align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+					children: [
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar, {
+								className: BDFDB.disCN.tabbar,
+								itemClassName: BDFDB.disCN.tabbaritem,
+								type: BDFDB.LibraryComponents.TabBar.Types.TOP,
+								selectedItem: this.props.tab,
+								items: [{value:"Themes"}, {value:"Generator"}, {value:BDFDB.LanguageUtils.LanguageStrings.SETTINGS}],
+								onItemSelect: (value, instance) => {
+									this.props.tab = list.props.tab = value;
+									BDFDB.ReactUtils.forceUpdate(list);
+								}
+							})
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
+								label: BDFDB.LanguageUtils.LibraryStrings.sort_by + ":",
+								value: {
+									label: sortKeys[this.props.sortKey],
+									value: this.props.sortKey
+								},
+								options: Object.keys(sortKeys).filter(n => n != "NEW" || Object.keys(loadedThemes).some(p => !cachedThemes.includes(p))).map(key => ({
+									label: sortKeys[key],
+									value: key
+								})),
+								onChange: (key, instance) => {
+									this.props.sortKey = list.props.sortKey = key;
+									BDFDB.ReactUtils.forceUpdate(this, list);
+								}
+							})
+						}),
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
+								label: BDFDB.LanguageUtils.LibraryStrings.order + ":",
+								value: {
+									label: BDFDB.LanguageUtils.LibraryStrings[orderKeys[this.props.orderKey]],
+									value: this.props.orderKey
+								},
+								options: Object.keys(orderKeys).map(key => ({
+									label: BDFDB.LanguageUtils.LibraryStrings[orderKeys[key]],
+									value: key
+								})),
+								onChange: (key, instance) => {
+									this.props.orderKey = list.props.orderKey = key;
+									BDFDB.ReactUtils.forceUpdate(this, list);
+								}
+							})
+						})
+					]
+				})
+			]
 		}
 	};
 	
 	return class ThemeRepo {
 		getName () {return "ThemeRepo";}
 
-		getVersion () {return "1.9.9";}
+		getVersion () {return "2.0.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -134,12 +630,15 @@ var ThemeRepo = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Moved repo button","Repo button is now an item in the settings sidebar instead of an extra button in the themes page"]]
+				"improved":[["Inbuilt Repo","The plugin repo no longer opens a modal to display the repo, instead the list is rendered in the settings window"]]
 			};
 			
 			this.patchedModules = {
 				before: {
 					SettingsView: "render"
+				},
+				after: {
+					StandardSidebarView: "render"
 				}
 			};
 		}
@@ -181,8 +680,7 @@ var ThemeRepo = (_ => {
 
 		getSettingsPanel (collapseStates = {}) {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-			let settings = BDFDB.DataUtils.get(this, "settings");
-			let customList = this.getCustomList(), customUrl = "";
+			let customUrl = "";
 			let settingsPanel, settingsItems = [];
 			
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
@@ -300,12 +798,19 @@ var ThemeRepo = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
+				
+				let oldfavorites = BDFDB.DataUtils.load(this, "favorites"); // REMOVE 26.07.2020
+				if (BDFDB.ObjectUtils.is(oldfavorites) && Object.keys(oldfavorites).length) {
+					let newfavorites = [];
+					for (let url of oldfavorites) if (oldfavorites[url]) newfavorites.push(url);
+					BDFDB.DataUtils.save(newfavorites, this, "favorites");
+				}
+
+				this.forceUpdateAll();
 
 				this.loadThemes();
 
 				updateInterval = BDFDB.TimeUtils.interval(_ => {this.checkForNewThemes();}, 1000*60*30);
-
-				BDFDB.ModuleUtils.forceAllUpdates(this);
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -318,7 +823,7 @@ var ThemeRepo = (_ => {
 				BDFDB.TimeUtils.clear(updateInterval);
 				BDFDB.TimeUtils.clear(loading.timeout);
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 
 				BDFDB.DOMUtils.remove(".bd-themerepobutton", ".themerepo-notice", ".themerepo-loadingicon");
 
@@ -328,6 +833,24 @@ var ThemeRepo = (_ => {
 
 
 		// Begin of own functions
+		
+		forceUpdateAll () {
+			settings = BDFDB.DataUtils.get(this, "settings");
+			modalSettings = BDFDB.DataUtils.get(this, "modalSettings");
+			favorites = BDFDB.DataUtils.load(this, "favorites");
+			favorites = BDFDB.ArrayUtils.is(favorites) ? favorites : [];
+			customList = BDFDB.DataUtils.load(this, "custom");
+			customList = BDFDB.ArrayUtils.is(customList) ? customList : [];
+			
+			BDFDB.ModuleUtils.forceAllUpdates(this);
+		}
+
+		onSettingsClosed () {
+			if (this.SettingsUpdated) {
+				delete this.SettingsUpdated;
+				this.forceUpdateAll();
+			}
+		}
 
 		onUserSettingsCogContextMenu (e) {
 			BDFDB.TimeUtils.timeout(_ => {
@@ -336,8 +859,8 @@ var ThemeRepo = (_ => {
 					label: "Theme Repo",
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "repo"),
 					action: _ => {
-						if (!loading.is) BDFDB.ContextMenuUtils.close(e.instance);
-						this.openThemeRepoModal();
+						BDFDB.ContextMenuUtils.close(e.instance);
+						BDFDB.LibraryModules.UserSettingsUtils.open("themerepo");
 					}
 				}));
 			});
@@ -353,389 +876,43 @@ var ThemeRepo = (_ => {
 					e.instance.props.sections.splice(oldSettings ? index + 1 : index - 1, 0, {
 						label: "Theme Repo",
 						section: "themerepo",
-						onClick: _ => {this.openThemeRepoModal();}
+						element: _ => {
+							let options = Object.assign({}, modalSettings);
+							options.updated = options.updated && !showOnlyOutdated;
+							options.outdated = options.outdated || showOnlyOutdated;
+							options.downloadable = options.downloadable && !showOnlyOutdated;
+							options.searchString = "";
+							options.sortKey = forcedSort || Object.keys(sortKeys)[0];
+							options.orderKey = forcedOrder || Object.keys(orderKeys)[0];
+							options.useLightMode = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
+							options.useNormalizer = BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.normalizedClasses);
+							options.useThemeFixer = false;
+							options.useCustomCSS = false;
+							
+							return BDFDB.ReactUtils.createElement(RepoListComponent, options);
+						}
 					});
 					if (oldSettings && !isPRinjected) e.instance.props.sections.splice(index + 1, 0, {section: "DIVIDER"});
 				}
 			}
 		}
 		
-		getCustomList () {
-			let customList = BDFDB.DataUtils.load(this, "custom");
-			return BDFDB.ArrayUtils.is(customList) ? customList : [];
-		}
-
-
-		openThemeRepoModal (options = {}) {
-			if (loading.is) BDFDB.NotificationUtils.toast(`Themes are still being fetched. Try again in some seconds.`, {type:"danger"});
-			else {				
-				let modalSettings = BDFDB.DataUtils.get(this, "modalSettings");
-				let searchTimeout, automaticLoading = BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.automaticLoading);
-				options = Object.assign(options, modalSettings);
-				options.updated = options.updated && !options.showOnlyOutdated;
-				options.outdated = options.updated || options.showOnlyOutdated;
-				options.downloadable = options.downloadable && !options.showOnlyOutdated;
-				options.searchString = "";
-				options.sortKey = options.forcedSort || Object.keys(sortKeys)[0];
-				options.orderKey = options.forcedOrder || Object.keys(orderKeys)[0];
-				
-				options.preview = BDFDB.WindowUtils.open(this, "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/DiscordPreview.html", {
-					alwaysOnTop: BDFDB.DataUtils.get(this, "settings", "keepOnTop"),
-					showOnReady: true,
-					frame: false,
-					onLoad: _ => {
-						let nativeCSS = document.querySelector("head link[rel='stylesheet'][integrity]");
-						let titleBar = document.querySelector(BDFDB.dotCN.titlebar);
-						options.preview.executeJavaScriptSafe(`window.onmessage({
-							origin: "ThemeRepo",
-							reason: "OnLoad",
-							username: ${JSON.stringify(BDFDB.UserUtils.me.username || "")},
-							id: ${JSON.stringify(BDFDB.UserUtils.me.id || "")},
-							discriminator: ${JSON.stringify(BDFDB.UserUtils.me.discriminator || "")},
-							avatar: ${JSON.stringify(BDFDB.UserUtils.getAvatar() || "")},
-							classes: ${JSON.stringify(JSON.stringify(BDFDB.DiscordClasses))},
-							classModules: ${JSON.stringify(JSON.stringify(BDFDB.DiscordClassModules))},
-							nativeCSS: ${JSON.stringify(nativeCSS && nativeCSS.href || "")},
-							htmlClassName: ${JSON.stringify(document.documentElement.className || "")},
-							titleBar: ${JSON.stringify(titleBar && titleBar.outerHTML || "")}
-						})`);
-						options.preview.executeJavaScriptSafe(`window.onmessage({
-							origin: "ThemeRepo",
-							reason: "DarkLight",
-							checked: ${BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight}
-						})`);
-					}
-				});
-				
-				let entries = this.createEntries(options);
-				BDFDB.ModalUtils.open(this, {
-					className: "repo-modal",
-					size: "LARGE",
-					header: "Theme Repository",
-					subheader: BDFDB.ReactUtils.createElement(class RepoAmount extends BDFDB.ReactUtils.Component {
-						render () {return `${this.props.entries.length}/${Object.keys(loadedThemes).length} Themes`}
-					}, {entries}),
-					tabBarChildren: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
-								autoFocus: true,
-								query: options.searchString,
-								onChange: (value, instance) => {
-									BDFDB.TimeUtils.clear(searchTimeout);
-									searchTimeout = BDFDB.TimeUtils.timeout(_ => {
-										options.searchString = value.replace(/[<|>]/g, "").toUpperCase();
-										this.updateList(instance, options);
-									}, 1000);
-								},
-								onClear: instance => {
-									options.searchString = "";
-									this.updateList(instance, options);
-								}
-							})
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
-								label: "Sort by:",
-								value: {
-									label: sortKeys[options.sortKey],
-									value: options.sortKey
-								},
-								options: Object.keys(sortKeys).filter(n => n != "NEW" || Object.keys(loadedThemes).some(t => !cachedThemes.includes(t))).map(key => ({
-									label: sortKeys[key],
-									value: key
-								})),
-								onChange: (key, instance) => {
-									options.sortKey = key;
-									this.updateList(instance, options);
-								}
-							})
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
-								label: "Order:",
-								value: {
-									label: orderKeys[options.orderKey],
-									value: options.orderKey
-								},
-								options: Object.keys(orderKeys).map(key => ({
-									label: orderKeys[key],
-									value: key
-								})),
-								onChange: (key, instance) => {
-									options.orderKey = key;
-									this.updateList(instance, options);
-								}
-							})
-						})
-					],
-					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-							tab: "Themes",
-							children: BDFDB.ReactUtils.createElement(repoListComponent, {
-								entries: entries
-							})
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-							tab: "Generator",
-							children: BDFDB.ReactUtils.createElement(generatorComponent, {
-								options: options
-							})
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
-							tab: BDFDB.LanguageUtils.LanguageStrings.SETTINGS,
-							children: [
-								!automaticLoading && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-									className: BDFDB.disCN.marginbottom8,
-									children: BDFDB.ReactUtils.createElement("div", {
-										className: BDFDB.disCNS.titledefault + BDFDB.disCN.cursordefault,
-										style: {maxWidth: 760},
-										children: "To experience ThemeRepo in the best way. I would recommend you to enable BD intern reload function, that way all downloaded files are loaded into Discord without the need to reload."
-									})
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-									className: BDFDB.disCN.marginbottom20,
-									children: BDFDB.ReactUtils.createElement("div", {
-										className: BDFDB.disCNS.titledefault + BDFDB.disCN.cursordefault,
-										style: {maxWidth: 760},
-										children: "You can toggle this menu with the 'Ctrl' key to take a better look at the preview."
-									})
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-									className: BDFDB.disCN.marginbottom20,
-									type: "Switch",
-									label: "Preview in light mode",
-									value: BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight,
-									onChange: (value, instance) => {
-										options.preview.executeJavaScriptSafe(`window.onmessage({
-											origin: "ThemeRepo",
-											reason: "DarkLight",
-											checked: ${value}
-										})`);
-									}
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-									className: BDFDB.disCN.marginbottom20,
-									type: "Switch",
-									label: "Preview with normalized classes",
-									value: BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.normalizedClasses),
-									onChange: (value, instance) => {
-										options.preview.executeJavaScriptSafe(`window.onmessage({
-											origin: "ThemeRepo",
-											reason: "Normalize",
-											checked: ${value}
-										})`);
-									}
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-									className: BDFDB.disCN.marginbottom20,
-									type: "Switch",
-									label: "Include Custom CSS in Preview",
-									value: false,
-									onChange: (value, instance) => {
-										let customCSS = document.querySelector("style#customcss");
-										if (customCSS && customCSS.innerText.length > 0) options.preview.executeJavaScriptSafe(`window.onmessage({
-											origin: "ThemeRepo",
-											reason: "CustomCSS",
-											checked: ${value},
-											css: ${JSON.stringify(customCSS.innerText || "")}
-										})`);
-									}
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-									className: BDFDB.disCN.marginbottom20,
-									type: "Switch",
-									label: "Include ThemeFixer CSS in Preview",
-									value: false,
-									onChange: (value, instance) => {
-										BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeFixer.css", (error, response, body) => {
-											options.preview.executeJavaScriptSafe(`window.onmessage({
-												origin: "ThemeRepo",
-												reason: "ThemeFixer",
-												checked: ${value},
-												css: ${JSON.stringify(this.createFixerCSS(body) || "")}
-											})`);
-										});
-									}
-								}),
-								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-									className: BDFDB.disCN.marginbottom20,
-									type: "Button",
-									label: "Download ThemeFixer",
-									children: "Download",
-									onClick: _ => {
-										BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeFixer.css", (error, response, body) => {
-											this.createThemeFile("ThemeFixer.theme.css", `//META{"name":"ThemeFixer","description":"ThemeFixerCSS for transparent themes","author":"DevilBro","version":"1.0.3","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien"}*//\n\n` + this.createFixerCSS(body));
-										});
-									}
-								}),
-								Object.keys(modalSettings).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-									className: BDFDB.disCN.marginbottom20,
-									type: "Switch",
-									plugin: this,
-									keys: ["modalSettings", key],
-									label: this.defaults.modalSettings[key].description,
-									note: key == "rnmStart" && !automaticLoading && "Automatic Loading has to be enabled",
-									disabled: key == "rnmStart" && !automaticLoading,
-									value: options[key],
-									onChange: (value, instance) => {
-										options[key] = value;
-										this.updateList(instance, options);
-									}
-								}))
-							].flat(10).filter(n => n)
-						})
-					],
-					onClose: (modal, instance) => {
-						BDFDB.WindowUtils.close(options.preview);
-					}
-				});
-			}
-		}
-		
-		updateList (instance, options = {}) {
-			let modalIns = BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_Modal", up:true});
-			if (modalIns) {
-				let amountIns = BDFDB.ReactUtils.findOwner(modalIns, {name:"RepoAmount"});
-				let listIns = BDFDB.ReactUtils.findOwner(modalIns, {name:"ThemeList"});
-				let genIns = BDFDB.ReactUtils.findOwner(modalIns, {name:"ThemeGenerator"});
-				if (amountIns && listIns && genIns) {
-					let entries = this.createEntries(options);
-					amountIns.props.entries = entries;
-					listIns.props.entries = entries;
-					BDFDB.ReactUtils.forceUpdate(amountIns, listIns, genIns);
+		processStandardSidebarView (e) {
+			if (BDFDB.ReactUtils.getValue(e, "instance.props.content.props.section") == "themerepo") {
+				let content = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.settingswindowcontentregion]]});
+				if (content) content.props.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repolistwrapper, content.props.className);
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.settingswindowcontentregionscroller]]});
+				if (index > -1) {
+					let options = {};
+					options.searchString = "";
+					options.sortKey = forcedSort || Object.keys(sortKeys)[0];
+					options.orderKey = forcedOrder || Object.keys(orderKeys)[0];
+					children[index] = [
+						BDFDB.ReactUtils.createElement(RepoListHeaderComponent, options),
+						children[index]
+					];
 				}
 			}
-		}
-
-		createEntries (options = {}) {
-			let favorites = BDFDB.DataUtils.load(this, "favorites");
-			let themes = Object.keys(loadedThemes).map(url => {
-				let theme = loadedThemes[url];
-				let instTheme = BDFDB.BDUtils.getTheme(theme.name);
-				if (instTheme && instTheme.author.toUpperCase() == theme.author.toUpperCase()) theme.state = instTheme.version != theme.version ? themeStates.OUTDATED : themeStates.UPDATED;
-				else theme.state = themeStates.DOWNLOADABLE;
-				return {
-					url: theme.url,
-					requesturl: theme.requesturl,
-					search: (theme.name + " " + theme.version + " " + theme.author + " " + theme.description).toUpperCase(),
-					name: theme.name,
-					version: theme.version,
-					author: theme.author,
-					description: theme.description || "No Description found.",
-					fav: favorites[url] ? favStates.FAVORIZED : favStates.NOT_FAVORIZED,
-					new: !cachedThemes.includes(url) ? newStates.NEW : newStates.NOT_NEW,
-					state: theme.state,
-					css: theme.css,
-					fullcss: theme.fullcss
-				};
-			});
-			if (!options.updated)		themes = themes.filter(theme => theme.state != themeStates.UPDATED);
-			if (!options.outdated)		themes = themes.filter(theme => theme.state != themeStates.OUTDATED);
-			if (!options.downloadable)	themes = themes.filter(theme => theme.state != themeStates.DOWNLOADABLE);
-			if (options.searchString) 	themes = themes.filter(theme => theme.search.indexOf(options.searchString) > -1).map(theme => Object.assign({}, theme, {
-				name: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(theme.name, options.searchString))) || theme.name,
-				version: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(theme.version, options.searchString))) || theme.version,
-				author: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(theme.author, options.searchString))) || theme.author,
-				description: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(BDFDB.StringUtils.highlight(theme.description, options.searchString))) || theme.description
-			}));
-
-			BDFDB.ArrayUtils.keySort(themes, (options.sortKey == "NEW" && !themes.some(theme => theme.new == newStates.NEW) ? Object.keys(sortKeys)[0] : options.sortKey).toLowerCase());
-			if (options.orderKey == "DESC") themes.reverse();
-			return themes.map(theme => {
-				let buttonConfig = buttonData[(Object.entries(themeStates).find(n => n[1] == theme.state) || [])[0]]
-				return buttonConfig && {
-					data: theme,
-					controls: [
-						theme.new == newStates.NEW && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
-							style: {
-								borderRadius: 3,
-								textTransform: "uppercase",
-								background: BDFDB.DiscordConstants.Colors.STATUS_YELLOW
-							},
-							text: BDFDB.LanguageUtils.LanguageStrings.NEW
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FavButton, {
-							className: BDFDB.disCN._repocontrolsbutton,
-							isFavorite: theme.fav == favStates.FAVORIZED,
-							onClick: value => {
-								theme.fav = value ? favStates.FAVORIZED : favStates.NOT_FAVORIZED;
-								if (value) BDFDB.DataUtils.save(true, this, "favorites", theme.url);
-								else BDFDB.DataUtils.remove(this, "favorites", theme.url);
-							}
-						}),
-						BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN._repocontrolsbutton,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-								text: "Go to Source",
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-									name: BDFDB.LibraryComponents.SvgIcon.Names.GITHUB,
-									className: BDFDB.disCN._repoicon,
-									onClick: _ => {
-										let gitUrl = null;
-										if (theme.requesturl.indexOf("https://raw.githubusercontent.com") == 0) {
-											let temp = theme.requesturl.replace("//raw.githubusercontent", "//github").split("/");
-											temp.splice(5, 0, "blob");
-											gitUrl = temp.join("/");
-										}
-										else if (theme.requesturl.indexOf("https://gist.githubusercontent.com/") == 0) {
-											gitUrl = theme.requesturl.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
-										}
-										if (gitUrl) BDFDB.DiscordUtils.openLink(gitUrl, BDFDB.DataUtils.get(this, "settings", "useChromium"));
-									}
-								})
-							})
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Switch, {
-							value: options.currentTheme == theme.url,
-							onChange: (value, instance) => {
-								if (value) options.currentTheme = theme.url;
-								else delete options.currentTheme;
-								delete options.currentGenerator;
-								delete options.generatorValues;
-								this.updateList(instance, options);
-								options.preview.executeJavaScriptSafe(`window.onmessage({
-									origin: "ThemeRepo",
-									reason: "NewTheme",
-									checked: ${value},
-									css: ${JSON.stringify(theme.css || "")}
-								})`);
-							}
-						})
-					],
-					buttons: [
-						theme.state != themeStates.DOWNLOADABLE && BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN._repocontrolsbutton,
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-								text: "Delete Themefile",
-								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-									name: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_TRASH,
-									className: BDFDB.disCN._repoicon,
-									onClick: (e, instance) => {
-										this.deleteThemeFile(theme);
-										BDFDB.TimeUtils.timeout(_ => {
-											this.updateList(instance, options);
-											this.removeTheme(theme);
-										}, 3000);
-									}
-								})
-							})
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-							size: BDFDB.LibraryComponents.Button.Sizes.MIN,
-							color: BDFDB.LibraryComponents.Button.Colors[buttonConfig.colorClass],
-							style: {backgroundColor: BDFDB.DiscordConstants.Colors[buttonConfig.backgroundColor]},
-							children: buttonConfig.text,
-							onClick: (e, instance) => {
-								this.downloadTheme(theme);
-								BDFDB.TimeUtils.timeout(_ => {
-									this.updateList(instance, options);
-									if (options.rnmStart) this.applyTheme(theme);
-								}, 3000);
-							}
-						})
-					]
-				};
-			}).filter(n => n);
 		}
 		
 		createFixerCSS (body) {
@@ -748,86 +925,24 @@ var ThemeRepo = (_ => {
 			return newcss.replace(/\\n/g, "\n").replace(/\\t/g, "\t").replace(/\\r/g, "\r");
 		}
 		
-		createGeneratorInputs (theme, options = {}) {
-			if (!options.preview || !BDFDB.ObjectUtils.is(options.generatorValues) || !BDFDB.ObjectUtils.is(theme) || !theme.fullcss) return null;
-			let vars = theme.fullcss.split(":root");
-			if (vars.length < 2) return null;
-			vars = vars[1].replace(/\t\(/g, " (").replace(/\r|\t| {2,}/g, "").replace(/\/\*\n*((?!\/\*|\*\/).|\n)*\n+((?!\/\*|\*\/).|\n)*\n*\*\//g, "").replace(/\n\/\*.*?\*\//g, "").replace(/\n/g, "");
-			vars = vars.split("{");
-			vars.shift();
-			vars = vars.join("{").replace(/\s*(:|;|--|\*)\s*/g, "$1");
-			vars = vars.split("}")[0];
-			vars = vars.slice(2).split(/;--|\*\/--/);
-			let inputRefs = [], updateTimeout;
-			for (let varStr of vars) {
-				varStr = varStr.split(":");
-				let varName = varStr.shift().trim();
-				varStr = varStr.join(":").split(/;[^A-z0-9]|\/\*/);
-				let oldValue = varStr.shift().trim();
-				if (oldValue) {
-					let childType = "text", childMode = "";
-					let isColor = BDFDB.ColorUtils.getType(oldValue);
-					let isComp = !isColor && /[0-9 ]+,[0-9 ]+,[0-9 ]+/g.test(oldValue);
-					if (isColor || isComp) {
-						childType = "color";
-						childMode = isComp && "comp";
-					}
-					else {
-						let isUrlFile = /url\(.+\)/gi.test(oldValue);
-						let isFile = !isUrlFile && /(http(s)?):\/\/[(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(oldValue);
-						if (isFile || isUrlFile) {
-							childType = "file";
-							childMode = isUrlFile && "url";
-						}
-					}
-					let varDescription = varStr.join("").replace(/\*\/|\/\*/g, "").replace(/:/g, ": ").replace(/: \//g, ":/").replace(/--/g, " --").replace(/\( --/g, "(--").trim();
-					options.generatorValues[varName] = {value:oldValue, oldValue};
-					inputRefs.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
-						className: BDFDB.disCN.marginbottom20,
-						dividerbottom: vars[vars.length-1] != varStr,
-						type: "TextInput",
-						childProps: {
-							type: childType,
-							mode: childMode,
-							filter: childType == "file" && "image"
-						},
-						label: varName[0].toUpperCase() + varName.slice(1),
-						note: varDescription && varDescription.indexOf("*") == 0 ? varDescription.slice(1) : varDescription,
-						basis: "70%",
-						value: oldValue,
-						placeholder: oldValue,
-						onChange: value => {
-							BDFDB.TimeUtils.clear(updateTimeout);
-							updateTimeout = BDFDB.TimeUtils.timeout(_ => {
-								options.generatorValues[varName] = {value, oldValue};
-								options.preview.executeJavaScriptSafe(`window.onmessage({
-									origin: "ThemeRepo",
-									reason: "NewTheme",
-									checked: true,
-									css: ${JSON.stringify(this.generateTheme(theme, options) || "")}
-								})`);
-							}, 1000);
-						}
-					}));
-				}
-			}
+		createGeneratorInputs (theme, generatorValues) {
+			if (!BDFDB.ObjectUtils.is(theme) || !BDFDB.ObjectUtils.is(generatorValues) || !theme.fullcss) return null;
 			return inputRefs;
 		}
 		
-		generateTheme (theme, options = {}) {
-			if (!BDFDB.ObjectUtils.is(theme) || !BDFDB.ObjectUtils.is(options) || !BDFDB.ObjectUtils.is(options.generatorValues)) return "";
+		generateTheme (theme, generatorValues) {
+			if (!BDFDB.ObjectUtils.is(theme) || !BDFDB.ObjectUtils.is(generatorValues)) return "";
 			let css = theme.fullcss;
-			for (let inputId in options.generatorValues) if (options.generatorValues[inputId].value && options.generatorValues[inputId].value.trim() && options.generatorValues[inputId].value != options.generatorValues[inputId].oldValue) css = css.replace(new RegExp(`--${BDFDB.StringUtils.regEscape(inputId)}(\\s*):(\\s*)${BDFDB.StringUtils.regEscape(options.generatorValues[inputId].oldValue)}`,"g"),`--${inputId}$1:$2${options.generatorValues[inputId].value}`);
+			for (let inputId in generatorValues) if (generatorValues[inputId].value && generatorValues[inputId].value.trim() && generatorValues[inputId].value != generatorValues[inputId].oldValue) css = css.replace(new RegExp(`--${BDFDB.StringUtils.regEscape(inputId)}(\\s*):(\\s*)${BDFDB.StringUtils.regEscape(generatorValues[inputId].oldValue)}`,"g"),`--${inputId}$1:$2${generatorValues[inputId].value}`);
 			return css;
 		}
 
 		loadThemes () {
 			BDFDB.DOMUtils.remove(".themerepo-loadingicon");
-			let settings = BDFDB.DataUtils.load(this, "settings");
-			let getThemeInfo, outdated = 0, newentries = 0, i = 0, NFLDreplace = null;
+			let getThemeInfo, outdated = 0, newEntries = 0, i = 0, NFLDreplace = null;
 			let tags = ["name","description","author","version"];
-			let newentriesdata = BDFDB.DataUtils.load(this, "newentriesdata"), customList = this.getCustomList();
-			cachedThemes = (newentriesdata.urlbase64 ? atob(newentriesdata.urlbase64).split("\n") : []).concat(customList);
+			let newEntriesData = BDFDB.DataUtils.load(this, "newentriesdata");
+			cachedThemes = (newEntriesData.urlbase64 ? atob(newEntriesData.urlbase64).split("\n") : []).concat(customList);
 			BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeList.txt", (error, response, body) => {
 				if (!error && body) {
 					body = body.replace(/[\r\t]/g, "");
@@ -871,7 +986,7 @@ var ThemeRepo = (_ => {
 							loading = {is:false, timeout:null, amount:loading.amount};
 							
 							BDFDB.LogUtils.log("Finished fetching Themes.", this.name);
-							if (document.querySelector(".bd-themerepobutton")) BDFDB.NotificationUtils.toast(`Finished fetching Themes.`, {type:"success"});
+							if (list) BDFDB.ReactUtils.forceUpdate(list);
 							
 							if ((settings.notifyOutdated || settings.notifyOutdated == undefined) && outdated > 0) {
 								let oldbarbutton = document.querySelector(".themerepo-outdate-notice " + BDFDB.dotCN.noticedismiss);
@@ -883,15 +998,16 @@ var ThemeRepo = (_ => {
 									customicon: themeRepoIcon.replace(/#7289da/gi, "#FFF").replace(/#7f8186/gi, "#B9BBBE")
 								});
 								bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", _ => {
-									this.openThemeRepoModal({showOnlyOutdated:true});
+									showOnlyOutdated = true;
+									BDFDB.LibraryModules.UserSettingsUtils.open("themerepo");
 									bar.querySelector(BDFDB.dotCN.noticedismiss).click();
 								});
 							}
 							
-							if ((settings.notifyNewentries || settings.notifyNewentries == undefined) && newentries > 0) {
+							if (settings.notifyNewEntries && newEntries > 0) {
 								let oldbarbutton = document.querySelector(".themerepo-newentries-notice " + BDFDB.dotCN.noticedismiss);
 								if (oldbarbutton) oldbarbutton.click();
-								let single = newentries == 1;
+								let single = newEntries == 1;
 								let bar = BDFDB.NotificationUtils.notice(`There ${single ? "is" : "are"} ${newentries} new Theme${single ? "" : "s"} in the Repo. Check:`, {
 									type: "success",
 									btn: "ThemeRepo",
@@ -899,7 +1015,9 @@ var ThemeRepo = (_ => {
 									customicon: themeRepoIcon.replace(/#7289da/gi, "#FFF").replace(/#7f8186/gi, "#B9BBBE")
 								});
 								bar.querySelector(BDFDB.dotCN.noticebutton).addEventListener("click", _ => {
-									this.openThemeRepoModal({forcedSort:"new",forcedOrder:"asc"});
+									forcedSort = "NEW";
+									forcedOrder = "ASC";
+									BDFDB.LibraryModules.UserSettingsUtils.open("themerepo");
 									bar.querySelector(BDFDB.dotCN.noticedismiss).click();
 								});
 							}
@@ -1019,7 +1137,7 @@ var ThemeRepo = (_ => {
 		}
 
 		applyTheme (data) {
-			if (BDFDB.BDUtils.isThemeEnabled(data.name) == false) {
+			if (data.name && BDFDB.BDUtils.isThemeEnabled(data.name) == false) {
 				let id = data.name.replace(/^[^a-z]+|[^\w-]+/gi, "-");
 				BDFDB.DOMUtils.remove(`style#${id}`);
 				document.head.appendChild(BDFDB.DOMUtils.create(`<style id=${id}>${data.css}</style>`));
@@ -1037,7 +1155,7 @@ var ThemeRepo = (_ => {
 		}
 
 		removeTheme (data) {
-			if (BDFDB.BDUtils.isThemeEnabled(data.name) == true) {
+			if (data.name && BDFDB.BDUtils.isThemeEnabled(data.name) == true) {
 				let id = data.name.replace(/^[^a-z]+|[^\w-]+/gi, "-");
 				BDFDB.DOMUtils.remove(`style#${id}`);
 				BDFDB.BDUtils.disableTheme(data.name, false);
