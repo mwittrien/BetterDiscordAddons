@@ -6,7 +6,7 @@ var ImageZoom = (_ => {
 	return class ImageZoom {
 		getName () {return "ImageZoom";}
 
-		getVersion () {return "1.1.3";}
+		getVersion () {return "1.1.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,7 @@ var ImageZoom = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Context Menu Update","Fixes for the context menu update, yaaaaaay"]]
+				"fixed":[["Context Menu","Fixed sliders"]]
 			};
 
 			this.patchedModules = {
@@ -108,7 +108,10 @@ var ImageZoom = (_ => {
 								renderLabel: value => {
 									return (this.labels[this.defaults.settings[type].label] || BDFDB.LanguageUtils.LanguageStrings[this.defaults.settings[type].label]) + ": " + value + this.defaults.settings[type].unit;
 								},
-								onChange: value => {
+								onValueRender: value => {
+									return value + this.defaults.settings[type].unit;
+								},
+								onValueChange: value => {
 									settings[type] = value;
 									BDFDB.DataUtils.save(settings, this, "settings");
 								}

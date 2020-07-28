@@ -4451,6 +4451,7 @@
 	DiscordClassModules.Margins = BDFDB.ModuleUtils.findByProperties("marginBottom4", "marginCenterHorz");
 	DiscordClassModules.Menu = BDFDB.ModuleUtils.findByProperties("menu", "styleFlexible", "item");
 	DiscordClassModules.MenuReactButton = BDFDB.ModuleUtils.findByProperties("wrapper", "icon", "focused");
+	DiscordClassModules.MenuSlider = BDFDB.ModuleUtils.findByProperties("slider", "sliderContainer");
 	DiscordClassModules.Member = BDFDB.ModuleUtils.findByProperties("member", "ownerIcon");
 	DiscordClassModules.MembersWrap = BDFDB.ModuleUtils.findByProperties("membersWrap", "membersGroup");
 	DiscordClassModules.Message = BDFDB.ModuleUtils.findByProperties("message", "mentioned");
@@ -5426,6 +5427,8 @@
 		menureactbuttons: ["MenuReactButton", "wrapper"],
 		menuscroller: ["Menu", "scroller"],
 		menuseparator: ["Menu", "separator"],
+		menuslider: ["MenuSlider", "slider"],
+		menuslidercontainer: ["MenuSlider", "sliderContainer"],
 		menustylefixed: ["Menu", "styleFixed"],
 		menustyleflexible: ["Menu", "styleFlexible"],
 		menusubmenu: ["Menu", "submenu"],
@@ -6594,7 +6597,6 @@
 	InternalComponents.NativeSubComponents.MenuCheckboxItem = BDFDB.ModuleUtils.findByName("MenuCheckboxItem");
 	InternalComponents.NativeSubComponents.MenuControlItem = BDFDB.ModuleUtils.findByName("MenuControlItem");
 	InternalComponents.NativeSubComponents.MenuItem = BDFDB.ModuleUtils.findByName("MenuItem");
-	InternalComponents.NativeSubComponents.MenuSlider = BDFDB.ModuleUtils.findByString("minValue", "maxValue", "sliderContainer");
 	InternalComponents.NativeSubComponents.PopoutContainer = BDFDB.ModuleUtils.findByName("Popout");
 	InternalComponents.NativeSubComponents.QuickSelect = BDFDB.ModuleUtils.findByName("QuickSelectWrapper");
 	InternalComponents.NativeSubComponents.RadioGroup = BDFDB.ModuleUtils.findByName("RadioGroup");
@@ -7866,23 +7868,37 @@
 	};
 	
 	InternalComponents.LibraryComponents.MenuItems.MenuSliderItem = InternalBDFDB.loadPatchedComp("MenuItems.MenuSliderItem") || reactInitialized && class BDFDB_MenuSliderItem extends LibraryModules.React.Component {
-		handleChange(value) {
+		handleValueChange(value) {
 			if (this.props.state) {
 				this.props.state.value = Math.round(BDFDB.NumberUtils.mapRange([0, 100], [this.props.minValue, this.props.maxValue], value) * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
-				if (typeof this.props.onChange == "function") this.props.onChange(this.props.state.value, this);
+				if (typeof this.props.onValueChange == "function") this.props.onValueChange(this.props.state.value, this);
 			}
 			BDFDB.ReactUtils.forceUpdate(this);
+		}
+		handleValueRender(value) {
+			let newValue = Math.round(BDFDB.NumberUtils.mapRange([0, 100], [this.props.minValue, this.props.maxValue], value) * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
+			if (typeof this.props.onValueRender == "function") {
+				let tempReturn = this.props.onValueRender(newValue, this);
+				if (tempReturn != undefined) newValue = tempReturn;
+			}
+			return newValue;
 		}
 		render() {
 			let value = this.props.state && this.props.state.value || 0;
 			return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.MenuControlItem, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				label: typeof this.props.renderLabel == "function" ? this.props.renderLabel(Math.round(value * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits)) : this.props.label,
 				control: (menuItemProps, ref) => {
-					return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.MenuSlider, Object.assign({}, menuItemProps, {
-						ref: ref,
-						value: Math.round(BDFDB.NumberUtils.mapRange([this.props.minValue, this.props.maxValue], [0, 100], value) * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits),
-						onChange: this.handleChange.bind(this)
-					}));
+					return BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.menuslidercontainer,
+						children: BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.Slider, Object.assign({}, menuItemProps, {
+							ref: ref,
+							className: BDFDB.disCN.menuslider,
+							mini: true,
+							initialValue: Math.round(BDFDB.NumberUtils.mapRange([this.props.minValue, this.props.maxValue], [0, 100], value) * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits),
+							onValueChange: this.handleValueChange.bind(this),
+							onValueRender: this.handleValueRender.bind(this)
+						}))
+					});
 				}
 			}), "digits", "renderLabel"));
 		}
