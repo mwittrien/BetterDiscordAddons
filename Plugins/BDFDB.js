@@ -7929,13 +7929,13 @@
 	
 	InternalComponents.LibraryComponents.ModalComponents.ModalTabContent = InternalBDFDB.loadPatchedComp("ModalComponents.ModalTabContent") || reactInitialized && class BDFDB_ModalTabContent extends LibraryModules.React.Component {
 		render() {
-			return BDFDB.ReactUtils.createElement(this.props.scroller ? InternalComponents.LibraryComponents.ScrollerThin : "div", Object.assign(BDFDB.ObjectUtils.exclude(this.props, "scroller", "open", "render"), {
+			return BDFDB.ReactUtils.forceStyle(BDFDB.ReactUtils.createElement(this.props.scroller ? InternalComponents.LibraryComponents.ScrollerThin : "div", Object.assign(BDFDB.ObjectUtils.exclude(this.props, "scroller", "open", "render"), {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.modaltabcontent, this.props.open && BDFDB.disCN.modaltabcontentopen, this.props.className),
 				style: Object.assign({}, this.props.style, {
 					display: this.props.open ? null : "none"
 				}),
 				children: !this.props.open && !this.props.render ? null : this.props.children
-			}));
+			})), ["display"]);
 		}
 	};
 	InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.PaginatedList, {tab:"unnamed", render:true});
