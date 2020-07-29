@@ -9829,15 +9829,16 @@
 		}
 		
 		${BDFDB.dotCNS._repolistwrapper + BDFDB.dotCN._repolistheader} {
+			display: flex;
+			flex-direction: column;
+			max-width: 740px;
+			min-width: 460px;
 			padding-top: 60px;
-			padding-left: 40px;
-			max-width: 720px;
-			min-width: 460px;
+			padding-right: 20px;
 		}
-		${BDFDB.dotCNS._repolistwrapper + BDFDB.dotCN.tabbarcontainer} {
-			max-width: 720px;
-			min-width: 460px;
+		${BDFDB.dotCNS._repolistwrapper + BDFDB.dotCN._repolistheader} > * {
 			padding-left: 40px;
+			width: 100%;
 		}
 		${BDFDB.dotCNS._repolistwrapper + BDFDB.dotCN.settingswindowtoolscontainer} {
 			margin-top: -140px;
