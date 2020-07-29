@@ -32,6 +32,7 @@ body,
 #app-mount REPLACE_CLASS_channels,
 #app-mount REPLACE_CLASS_channelpanels,
 #app-mount REPLACE_CLASS_memberswrap,
+#app-mount REPLACE_CLASS_memberstabbar,
 #app-mount REPLACE_CLASS_peoplesnowplayingcolumn {
 	background-color: rgba(0, 0, 0, 0.2);
 }

@@ -205,6 +205,9 @@ body,														/* body														*/
 #app-mount .membersWrap-2h-GB4 {							/* members				container							*/
 	background-color: rgba(var(--vtransparencycolor), var(--vmemberlisttransparency));
 }
+#app-mount .tabBar-fg4VK9 {									/* members				tabbar								*/
+	background-color: rgba(var(--vtransparencycolor), var(--vmemberlisttransparency));
+}
 #app-mount .nowPlayingColumn-2sl4cE {						/* peoples				now playing							*/
 	background-color: rgba(var(--vtransparencycolor), var(--vmemberlisttransparency));
 }
