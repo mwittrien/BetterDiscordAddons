@@ -255,7 +255,7 @@
 					});
 					BDFDB.TimeUtils.timeout(_ => {if (wasEnabled && !BDFDB.BDUtils.isPluginEnabled(newName)) BDFDB.BDUtils.enablePlugin(newName);}, 3000);
 				}
-				BDFDB.NotificationUtils.toast(`${pluginName} v${oldVersion} has been replaced by ${newName} v${newVersion}.`, {nopointer:true, selector:"plugin-updated-toast"});
+				BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_updated", pluginName, "v" + oldVersion, newName, "v" + newVersion), {nopointer:true, selector:"plugin-updated-toast"});
 				let updateNotice = document.querySelector("#pluginNotice");
 				if (updateNotice) {
 					if (updateNotice.querySelector(BDFDB.dotCN.noticebutton)) {
@@ -6329,6 +6329,7 @@
 			toast_plugin_started: "{{var0}} je započeo.",
 			toast_plugin_stopped: "{{var0}} zaustavljen.",
 			toast_plugin_translated: "prijevod na {{var0}}.",
+			toast_plugin_updated: "{{var0}} {{var1}} zamijenjen je s {{var2}} {{var3}}.",
 			update_notice_click: "Kliknite za ažuriranje!",
 			update_notice_reload: "Za završetak ažuriranja potrebno je ponovo učitati.",
 			update_notice_update: "Sljedeće dodatke treba ažurirati:"
@@ -6345,6 +6346,7 @@
 			toast_plugin_started: "{{var0}} er startet.",
 			toast_plugin_stopped: "{{var0}} er stoppet.",
 			toast_plugin_translated: "oversat til {{var0}}.",
+			toast_plugin_updated: "{{var0}} {{var1}} blev erstattet af {{var2}} {{var3}}.",
 			update_notice_click: "Klik for at opdatere!",
 			update_notice_reload: "For at afslutte opdateringen skal du genindlæse.",
 			update_notice_update: "Følgende plugins skal opdateres:"
@@ -6361,6 +6363,7 @@
 			toast_plugin_started: "{{var0}} wurde gestartet.",
 			toast_plugin_stopped: "{{var0}} wurde gestoppt.",
 			toast_plugin_translated: "auf {{var0}} übersetzt.",
+			toast_plugin_updated: "{{var0}} {{var1}} wurde durch {{var2}} {{var3}} ersetzt.",
 			update_notice_click: "Zum Aktualisieren klicken!",
 			update_notice_reload: "Lade neu, die Aktualisierung abzuschließen.",
 			update_notice_update: "Die folgenden Plugins müssen aktualisiert werden:"
@@ -6377,6 +6380,7 @@
 			toast_plugin_started: "{{var0}} se guilddiv iniciado.",
 			toast_plugin_stopped: "{{var0}} se guilddiv detenido.",
 			toast_plugin_translated: "traducido a {{var0}}.",
+			toast_plugin_updated: "{{var0}} {{var1}} ha sido reemplazado por {{var2}} {{var3}}.",
 			update_notice_click: "Haga clic para actualizar!",
 			update_notice_reload: "Para finalizar la actualización, debe volver a cargar.",
 			update_notice_update: "Los siguientes complementos deben actualizarse:"
@@ -6393,6 +6397,7 @@
 			toast_plugin_started: "{{var0}} a été démarré.",
 			toast_plugin_stopped: "{{var0}} a été arrêté.",
 			toast_plugin_translated: "traduit en {{var0}}.",
+			toast_plugin_updated: "{{var0}} {{var1}} a été remplacé par {{var2}} {{var3}}.",
 			update_notice_click: "Cliquez pour mettre à jour!",
 			update_notice_reload: "Pour terminer la mise à jour, vous devez recharger.",
 			update_notice_update: "Les plugins suivants doivent être mis à jour:"
@@ -6409,6 +6414,7 @@
 			toast_plugin_started: "{{var0}} è stato avviato.",
 			toast_plugin_stopped: "{{var0}} è stato interrotto.",
 			toast_plugin_translated: "tradotto in {{var0}}.",
+			toast_plugin_updated: "{{var0}} {{var1}} è stato sostituito da {{var2}} {{var3}}.",
 			update_notice_click: "Clicca per aggiornare!",
 			update_notice_reload: "Per terminare l'aggiornamento è necessario ricaricare.",
 			update_notice_update: "I seguenti plugin devono essere aggiornati:"
@@ -6425,6 +6431,7 @@
 			toast_plugin_started: "{{var0}} is gestart.",
 			toast_plugin_stopped: "{{var0}} is gestopt.",
 			toast_plugin_translated: "vertaald naar {{var0}}.",
+			toast_plugin_updated: "{{var0}} {{var1}} is vervangen door {{var2}} {{var3}}.",
 			update_notice_click: "Klik om te updaten!",
 			update_notice_reload: "Om de update te voltooien, moet u opnieuw laden.",
 			update_notice_update: "De volgende plug-ins moeten worden bijgewerkt:"
@@ -6441,6 +6448,7 @@
 			toast_plugin_started: "{{var0}} er startet.",
 			toast_plugin_stopped: "{{var0}} er stoppet.",
 			toast_plugin_translated: "oversatt til {{var0}}.",
+			toast_plugin_updated: "{{var0}} {{var1}} er erstattet av {{var2}} {{var3}}.",
 			update_notice_click: "Klikk for å oppdatere!",
 			update_notice_reload: "For å fullføre oppdateringen må du laste inn på nytt.",
 			update_notice_update: "Følgende plugins må oppdateres:"
@@ -6457,6 +6465,7 @@
 			toast_plugin_started: "{{var0}} został uruchomiony.",
 			toast_plugin_stopped: "{{var0}} został zatrzymany.",
 			toast_plugin_translated: "przetłumaczono na {{var0}}.",
+			toast_plugin_updated: "{{var0}} {{var1}} został zastąpiony przez {{var2}} {{var3}}.",
 			update_notice_click: "Kliknij, aby zaktualizować!",
 			update_notice_reload: "Aby zakończyć aktualizację, musisz ponownie załadować.",
 			update_notice_update: "Należy zaktualizować następujące wtyczki:"
@@ -6473,6 +6482,7 @@
 			toast_plugin_started: "{{var0}} foi iniciado.",
 			toast_plugin_stopped: "{{var0}} foi interrompido.",
 			toast_plugin_translated: "traduzido para {{var0}}.",
+			toast_plugin_updated: "{{var0}} {{var1}} foi substituído por {{var2}} {{var3}}.",
 			update_notice_click: "Clique para atualizar!",
 			update_notice_reload: "Para concluir a atualização, você precisa recarregar.",
 			update_notice_update: "Os seguintes plugins precisam ser atualizados:"
@@ -6489,6 +6499,7 @@
 			toast_plugin_started: "{{var0}} on käynnistetty.",
 			toast_plugin_stopped: "{{var0}} on pysäytetty.",
 			toast_plugin_translated: "käännetty osoitteeseen {{var0}}.",
+			toast_plugin_updated: "{{var0}} {{var1}} on korvattu {{var2}} {{var3}}.",
 			update_notice_click: "Napsauta päivittääksesi!",
 			update_notice_reload: "Päivittäminen on suoritettava uudelleen.",
 			update_notice_update: "Seuraavat laajennukset on päivitettävä:"
@@ -6505,6 +6516,7 @@
 			toast_plugin_started: "{{var0}} har startats.",
 			toast_plugin_stopped: "{{var0}} har blivit stoppad.",
 			toast_plugin_translated: "översatt till {{var0}}.",
+			toast_plugin_updated: "{{var0}} {{var1}} har ersatts av {{var2}} {{var3}}.",
 			update_notice_click: "Klicka för att uppdatera!",
 			update_notice_reload: "För att avsluta uppdateringen måste du ladda om.",
 			update_notice_update: "Följande plugins måste uppdateras:"
@@ -6521,6 +6533,7 @@
 			toast_plugin_started: "{{var0}} başlatıldı.",
 			toast_plugin_stopped: "{{var0}} durduruldu.",
 			toast_plugin_translated: "{{var0}} olarak çevrildi.",
+			toast_plugin_updated: "{{var0}} {{var1}}, {{var2}} {{var3}} ile değiştirildi.",
 			update_notice_click: "Güncellemek için tıklayın!",
 			update_notice_reload: "Güncellemeyi tamamlamak için yeniden yüklemeniz gerekir.",
 			update_notice_update: "Aşağıdaki eklentilerin güncellenmesi gerekir:"
@@ -6537,6 +6550,7 @@
 			toast_plugin_started: "{{var0}} byl spuštěn.",
 			toast_plugin_stopped: "{{var0}} byl zastaven.",
 			toast_plugin_translated: "přeložen do {{var0}}.",
+			toast_plugin_updated: "{{var0}} {{var1}} byl nahrazen {{var2}} {{var3}}.",
 			update_notice_click: "Klepnutím aktualizujte!",
 			update_notice_reload: "Pro dokončení aktualizace je třeba znovu načíst.",
 			update_notice_update: "Následující doplňky je třeba aktualizovat:"
@@ -6553,6 +6567,7 @@
 			toast_plugin_started: "{{var0}} е стартиран.",
 			toast_plugin_stopped: "{{var0}} е спрян.",
 			toast_plugin_translated: "преведена на {{var0}}.",
+			toast_plugin_updated: "{{var0}} {{var1}} е заменен с {{var2}} {{var3}}.",
 			update_notice_click: "Кликнете, за да актуализирате!",
 			update_notice_reload: "За да завършите актуализацията, трябва да презаредите.",
 			update_notice_update: "Следните приставки трябва да бъдат актуализирани:"
@@ -6569,6 +6584,7 @@
 			toast_plugin_started: "{{var0}} запущен.",
 			toast_plugin_stopped: "{{var0}} остановлен.",
 			toast_plugin_translated: "переведен на {{var0}}.",
+			toast_plugin_updated: "{{var0}} {{var1}} был заменен {{var2}} {{var3}}.",
 			update_notice_click: "Нажмите, чтобы обновить!",
 			update_notice_reload: "Для завершения обновления необходимо перезагрузить.",
 			update_notice_update: "Следующие плагины должны быть обновлены:"
@@ -6585,6 +6601,7 @@
 			toast_plugin_started: "{{var0}} було запущено.",
 			toast_plugin_stopped: "{{var0}} було зупинено.",
 			toast_plugin_translated: "перекладено {{var0}}.",
+			toast_plugin_updated: "{{var0}} {{var1}} було замінено на {{var2}} {{var3}}.",
 			update_notice_click: "Натисніть, щоб оновити!",
 			update_notice_reload: "Щоб закінчити оновлення, вам потрібно перезавантажити.",
 			update_notice_update: "Необхідно оновити наступні плагіни:"
@@ -6601,6 +6618,7 @@
 			toast_plugin_started: "{{var0}}が開始されました.",
 			toast_plugin_stopped: "{{var0}}が停止しました.",
 			toast_plugin_translated: "は{{var0}}に翻訳されました.",
+			toast_plugin_updated: "{{var0}} {{var1}}は{{var2}} {{var3}}に置き換えられました.",
 			update_notice_click: "クリックして更新!",
 			update_notice_reload: "更新を完了するには、リロードする必要があります.",
 			update_notice_update: "次のプラグインを更新する必要があります:"
@@ -6617,6 +6635,7 @@
 			toast_plugin_started: "{{var0}}已經啟動.",
 			toast_plugin_stopped: "{{var0}}已停止.",
 			toast_plugin_translated: "翻譯為{{var0}}.",
+			toast_plugin_updated: "{{var0}} {{var1}}已由{{var2}} {{var3}}取代.",
 			update_notice_click: "點擊更新!",
 			update_notice_reload: "要完成更新,您需要重新加載.",
 			update_notice_update: "以下插件需要更新:"
@@ -6633,6 +6652,7 @@
 			toast_plugin_started: "{{var0}} 시작되었습니다.",
 			toast_plugin_stopped: "{{var0}} 중지되었습니다.",
 			toast_plugin_translated: "{{var0}} 로 번역되었습니다.",
+			toast_plugin_updated: "{{var0}} {{var1}}이 (가) {{var2}} {{var3}} (으)로 대체되었습니다.",
 			update_notice_click: "업데이트하려면 클릭하십시오!",
 			update_notice_reload: "업데이트를 마치려면 다시로드해야합니다.",
 			update_notice_update: "다음 플러그인을 업데이트해야합니다:"
@@ -6649,6 +6669,7 @@
 			toast_plugin_started: "{{var0}} has been started.",
 			toast_plugin_stopped: "{{var0}} has been stopped.",
 			toast_plugin_translated: "translated to {{var0}}.",
+			toast_plugin_updated: "{{var0}} {{var1}} has been replaced by {{var2}} {{var3}}.",
 			update_notice_click: "Click to update!",
 			update_notice_reload: "To finish updating you need to reload.",
 			update_notice_update: "The following plugins need to be updated:"
