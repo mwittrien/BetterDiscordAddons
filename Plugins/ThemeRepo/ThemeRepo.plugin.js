@@ -622,7 +622,7 @@ var ThemeRepo = (_ => {
 	return class ThemeRepo {
 		getName () {return "ThemeRepo";}
 
-		getVersion () {return "2.0.2";}
+		getVersion () {return "2.0.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -802,7 +802,7 @@ var ThemeRepo = (_ => {
 				let oldfavorites = BDFDB.DataUtils.load(this, "favorites"); // REMOVE 26.07.2020
 				if (BDFDB.ObjectUtils.is(oldfavorites) && Object.keys(oldfavorites).length) {
 					let newfavorites = [];
-					for (let url of oldfavorites) if (oldfavorites[url]) newfavorites.push(url);
+					for (let url in oldfavorites) if (oldfavorites[url]) newfavorites.push(url);
 					BDFDB.DataUtils.save(newfavorites, this, "favorites");
 				}
 
