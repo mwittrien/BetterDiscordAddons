@@ -8025,7 +8025,7 @@
 			})), ["display"]);
 		}
 	};
-	InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.PaginatedList, {tab:"unnamed", render:true});
+	InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.ModalComponents.ModalTabContent, {tab:"unnamed", render:true});
 	
 	InternalComponents.LibraryComponents.NavItem = BDFDB.ModuleUtils.findByName("NavItem");
 	
