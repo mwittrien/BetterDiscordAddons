@@ -256,96 +256,99 @@ var PluginRepo = (_ => {
 		}
 		render() {
 			if (!this.props.tab) this.props.tab = "Plugins";
-			return [
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-					className: BDFDB.disCNS._repolistheader + BDFDB.disCN.marginbottom4,
-					align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
-							tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H2,
-							className: BDFDB.disCN.marginreset,
-							children: `Plugin Repo — ${loading.is ? 0 : this.props.amount || 0}/${loading.is ? 0 : Object.keys(loadedPlugins).length}`
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
-								autoFocus: true,
-								query: this.props.searchString,
-								onChange: (value, instance) => {
-									BDFDB.TimeUtils.clear(searchTimeout);
-									searchTimeout = BDFDB.TimeUtils.timeout(_ => {
-										this.props.searchString = list.props.searchString = value.replace(/[<|>]/g, "");
+			return BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.disCN._repolistheader,
+				children: [
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+						className: BDFDB.disCN.marginbottom4,
+						align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+								tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H2,
+								className: BDFDB.disCN.marginreset,
+								children: `Plugin Repo — ${loading.is ? 0 : this.props.amount || 0}/${loading.is ? 0 : Object.keys(loadedPlugins).length}`
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
+									autoFocus: true,
+									query: this.props.searchString,
+									onChange: (value, instance) => {
+										BDFDB.TimeUtils.clear(searchTimeout);
+										searchTimeout = BDFDB.TimeUtils.timeout(_ => {
+											this.props.searchString = list.props.searchString = value.replace(/[<|>]/g, "");
+											BDFDB.ReactUtils.forceUpdate(this, list);
+										}, 1000);
+									},
+									onClear: instance => {
+										this.props.searchString = list.props.searchString = "";
 										BDFDB.ReactUtils.forceUpdate(this, list);
-									}, 1000);
-								},
-								onClear: instance => {
-									this.props.searchString = list.props.searchString = "";
-									BDFDB.ReactUtils.forceUpdate(this, list);
-								}
+									}
+								})
 							})
-						})
-					]
-				}),
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-					className: BDFDB.disCNS.tabbarcontainer + BDFDB.disCN.tabbarcontainerbottom,
-					align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-					children: [
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar, {
-								className: BDFDB.disCN.tabbar,
-								itemClassName: BDFDB.disCN.tabbaritem,
-								type: BDFDB.LibraryComponents.TabBar.Types.TOP,
-								selectedItem: this.props.tab,
-								items: [{value:"Plugins"}, {value:BDFDB.LanguageUtils.LanguageStrings.SETTINGS}],
-								onItemSelect: (value, instance) => {
-									this.props.tab = list.props.tab = value;
-									BDFDB.ReactUtils.forceUpdate(list);
-								}
+						]
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+						className: BDFDB.disCNS.tabbarcontainer + BDFDB.disCN.tabbarcontainerbottom,
+						align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+						children: [
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TabBar, {
+									className: BDFDB.disCN.tabbar,
+									itemClassName: BDFDB.disCN.tabbaritem,
+									type: BDFDB.LibraryComponents.TabBar.Types.TOP,
+									selectedItem: this.props.tab,
+									items: [{value:"Plugins"}, {value:BDFDB.LanguageUtils.LanguageStrings.SETTINGS}],
+									onItemSelect: (value, instance) => {
+										this.props.tab = list.props.tab = value;
+										BDFDB.ReactUtils.forceUpdate(list);
+									}
+								})
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
+									label: BDFDB.LanguageUtils.LibraryStrings.sort_by + ":",
+									value: {
+										label: sortKeys[this.props.sortKey],
+										value: this.props.sortKey
+									},
+									options: Object.keys(sortKeys).filter(n => n != "NEW" || Object.keys(loadedPlugins).some(p => !cachedPlugins.includes(p))).map(key => ({
+										label: sortKeys[key],
+										value: key
+									})),
+									onChange: (key, instance) => {
+										this.props.sortKey = list.props.sortKey = key;
+										BDFDB.ReactUtils.forceUpdate(this, list);
+									}
+								})
+							}),
+							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
+									label: BDFDB.LanguageUtils.LibraryStrings.order + ":",
+									value: {
+										label: BDFDB.LanguageUtils.LibraryStrings[orderKeys[this.props.orderKey]],
+										value: this.props.orderKey
+									},
+									options: Object.keys(orderKeys).map(key => ({
+										label: BDFDB.LanguageUtils.LibraryStrings[orderKeys[key]],
+										value: key
+									})),
+									onChange: (key, instance) => {
+										this.props.orderKey = list.props.orderKey = key;
+										BDFDB.ReactUtils.forceUpdate(this, list);
+									}
+								})
 							})
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
-								label: BDFDB.LanguageUtils.LibraryStrings.sort_by + ":",
-								value: {
-									label: sortKeys[this.props.sortKey],
-									value: this.props.sortKey
-								},
-								options: Object.keys(sortKeys).filter(n => n != "NEW" || Object.keys(loadedPlugins).some(p => !cachedPlugins.includes(p))).map(key => ({
-									label: sortKeys[key],
-									value: key
-								})),
-								onChange: (key, instance) => {
-									this.props.sortKey = list.props.sortKey = key;
-									BDFDB.ReactUtils.forceUpdate(this, list);
-								}
-							})
-						}),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
-								label: BDFDB.LanguageUtils.LibraryStrings.order + ":",
-								value: {
-									label: BDFDB.LanguageUtils.LibraryStrings[orderKeys[this.props.orderKey]],
-									value: this.props.orderKey
-								},
-								options: Object.keys(orderKeys).map(key => ({
-									label: BDFDB.LanguageUtils.LibraryStrings[orderKeys[key]],
-									value: key
-								})),
-								onChange: (key, instance) => {
-									this.props.orderKey = list.props.orderKey = key;
-									BDFDB.ReactUtils.forceUpdate(this, list);
-								}
-							})
-						})
-					]
-				})
-			]
+						]
+					})
+				]
+			});
 		}
 	};
 	
 	return class PluginRepo {
 		getName () {return "PluginRepo";} 
 
-		getVersion () {return "2.0.3";}
+		getVersion () {return "2.0.4";}
 
 		getAuthor () {return "DevilBro";}
 

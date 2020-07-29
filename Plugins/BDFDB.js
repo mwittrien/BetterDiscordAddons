@@ -9831,14 +9831,14 @@
 		${BDFDB.dotCNS._repolistwrapper + BDFDB.dotCN._repolistheader} {
 			display: flex;
 			flex-direction: column;
-			max-width: 740px;
-			min-width: 460px;
 			padding-top: 60px;
-			padding-right: 20px;
+			padding-right: 70px;
 		}
 		${BDFDB.dotCNS._repolistwrapper + BDFDB.dotCN._repolistheader} > * {
+			max-width: 740px;
+			min-width: 460px;
 			padding-left: 40px;
-			width: 100%;
+			padding-right: 40px;
 		}
 		${BDFDB.dotCNS._repolistwrapper + BDFDB.dotCN.settingswindowtoolscontainer} {
 			margin-top: -140px;
