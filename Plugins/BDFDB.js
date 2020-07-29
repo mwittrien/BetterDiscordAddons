@@ -185,7 +185,7 @@
 		if (!pluginName || !url) return;
 		let updateNotice = document.querySelector("#pluginNotice");
 		if (!updateNotice) {
-			updateNotice = BDFDB.NotificationUtils.notice(`The following plugins need to be updated:&nbsp;&nbsp;<strong id="outdatedPlugins"></strong>`, {html:true, id:"pluginNotice", type:"info", btn:!BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.automaticLoading) ? "Reload" : "", customicon:`<svg height="100%" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="100%" version="1.1" viewBox="0 0 2000 2000"><metadata /><defs><filter id="shadow1"><feDropShadow dx="20" dy="0" stdDeviation="20" flood-color="rgba(0,0,0,0.35)"/></filter><filter id="shadow2"><feDropShadow dx="15" dy="0" stdDeviation="20" flood-color="rgba(255,255,255,0.15)"/></filter><filter id="shadow3"><feDropShadow dx="10" dy="0" stdDeviation="20" flood-color="rgba(0,0,0,0.35)"/></filter></defs><g><path style="filter: url(#shadow3)" d="M1195.44+135.442L1195.44+135.442L997.6+136.442C1024.2+149.742+1170.34+163.542+1193.64+179.742C1264.34+228.842+1319.74+291.242+1358.24+365.042C1398.14+441.642+1419.74+530.642+1422.54+629.642L1422.54+630.842L1422.54+632.042C1422.54+773.142+1422.54+1228.14+1422.54+1369.14L1422.54+1370.34L1422.54+1371.54C1419.84+1470.54+1398.24+1559.54+1358.24+1636.14C1319.74+1709.94+1264.44+1772.34+1193.64+1821.44C1171.04+1837.14+1025.7+1850.54+1000+1863.54L1193.54+1864.54C1539.74+1866.44+1864.54+1693.34+1864.54+1296.64L1864.54+716.942C1866.44+312.442+1541.64+135.442+1195.44+135.442Z" fill="#171717" opacity="1"/><path style="filter: url(#shadow2)" d="M1695.54+631.442C1685.84+278.042+1409.34+135.442+1052.94+135.442L361.74+136.442L803.74+490.442L1060.74+490.442C1335.24+490.442+1335.24+835.342+1060.74+835.342L1060.74+1164.84C1150.22+1164.84+1210.53+1201.48+1241.68+1250.87C1306.07+1353+1245.76+1509.64+1060.74+1509.64L361.74+1863.54L1052.94+1864.54C1409.24+1864.54+1685.74+1721.94+1695.54+1368.54C1695.54+1205.94+1651.04+1084.44+1572.64+999.942C1651.04+915.542+1695.54+794.042+1695.54+631.442Z" fill="#3E82E5" opacity="1"/><path style="filter: url(#shadow1)" d="M1469.25+631.442C1459.55+278.042+1183.05+135.442+826.65+135.442L135.45+135.442L135.45+1004C135.45+1004+135.427+1255.21+355.626+1255.21C575.825+1255.21+575.848+1004+575.848+1004L577.45+490.442L834.45+490.442C1108.95+490.442+1108.95+835.342+834.45+835.342L664.65+835.342L664.65+1164.84L834.45+1164.84C923.932+1164.84+984.244+1201.48+1015.39+1250.87C1079.78+1353+1019.47+1509.64+834.45+1509.64L135.45+1509.64L135.45+1864.54L826.65+1864.54C1182.95+1864.54+1459.45+1721.94+1469.25+1368.54C1469.25+1205.94+1424.75+1084.44+1346.35+999.942C1424.75+915.542+1469.25+794.042+1469.25+631.442Z" fill="#FFFFFF" opacity="1"/></g></svg>`});
+			updateNotice = BDFDB.NotificationUtils.notice(`${BDFDB.LanguageUtils.LibraryStrings.update_notice_update}&nbsp;&nbsp;<strong id="outdatedPlugins"></strong>`, {html:true, id:"pluginNotice", type:"info", btn:!BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.automaticLoading) ? BDFDB.LanguageUtils.LanguageStrings.ERRORS_RELOAD : "", customicon:`<svg height="100%" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="100%" version="1.1" viewBox="0 0 2000 2000"><metadata /><defs><filter id="shadow1"><feDropShadow dx="20" dy="0" stdDeviation="20" flood-color="rgba(0,0,0,0.35)"/></filter><filter id="shadow2"><feDropShadow dx="15" dy="0" stdDeviation="20" flood-color="rgba(255,255,255,0.15)"/></filter><filter id="shadow3"><feDropShadow dx="10" dy="0" stdDeviation="20" flood-color="rgba(0,0,0,0.35)"/></filter></defs><g><path style="filter: url(#shadow3)" d="M1195.44+135.442L1195.44+135.442L997.6+136.442C1024.2+149.742+1170.34+163.542+1193.64+179.742C1264.34+228.842+1319.74+291.242+1358.24+365.042C1398.14+441.642+1419.74+530.642+1422.54+629.642L1422.54+630.842L1422.54+632.042C1422.54+773.142+1422.54+1228.14+1422.54+1369.14L1422.54+1370.34L1422.54+1371.54C1419.84+1470.54+1398.24+1559.54+1358.24+1636.14C1319.74+1709.94+1264.44+1772.34+1193.64+1821.44C1171.04+1837.14+1025.7+1850.54+1000+1863.54L1193.54+1864.54C1539.74+1866.44+1864.54+1693.34+1864.54+1296.64L1864.54+716.942C1866.44+312.442+1541.64+135.442+1195.44+135.442Z" fill="#171717" opacity="1"/><path style="filter: url(#shadow2)" d="M1695.54+631.442C1685.84+278.042+1409.34+135.442+1052.94+135.442L361.74+136.442L803.74+490.442L1060.74+490.442C1335.24+490.442+1335.24+835.342+1060.74+835.342L1060.74+1164.84C1150.22+1164.84+1210.53+1201.48+1241.68+1250.87C1306.07+1353+1245.76+1509.64+1060.74+1509.64L361.74+1863.54L1052.94+1864.54C1409.24+1864.54+1685.74+1721.94+1695.54+1368.54C1695.54+1205.94+1651.04+1084.44+1572.64+999.942C1651.04+915.542+1695.54+794.042+1695.54+631.442Z" fill="#3E82E5" opacity="1"/><path style="filter: url(#shadow1)" d="M1469.25+631.442C1459.55+278.042+1183.05+135.442+826.65+135.442L135.45+135.442L135.45+1004C135.45+1004+135.427+1255.21+355.626+1255.21C575.825+1255.21+575.848+1004+575.848+1004L577.45+490.442L834.45+490.442C1108.95+490.442+1108.95+835.342+834.45+835.342L664.65+835.342L664.65+1164.84L834.45+1164.84C923.932+1164.84+984.244+1201.48+1015.39+1250.87C1079.78+1353+1019.47+1509.64+834.45+1509.64L135.45+1509.64L135.45+1864.54L826.65+1864.54C1182.95+1864.54+1459.45+1721.94+1469.25+1368.54C1469.25+1205.94+1424.75+1084.44+1346.35+999.942C1424.75+915.542+1469.25+794.042+1469.25+631.442Z" fill="#FFFFFF" opacity="1"/></g></svg>`});
 			updateNotice.style.setProperty("display", "block", "important");
 			updateNotice.style.setProperty("visibility", "visible", "important");
 			updateNotice.style.setProperty("opacity", "1", "important");
@@ -210,7 +210,7 @@
 				let updateEntry = BDFDB.DOMUtils.create(`<span id="${pluginName}-notice">${pluginName}</span>`);
 				updateEntry.addEventListener("click", _ => {BDFDB.PluginUtils.downloadUpdate(pluginName, url);});
 				updateNoticeList.appendChild(updateEntry);
-				if (!document.querySelector(".update-clickme-tooltip")) BDFDB.TooltipUtils.create(updateNoticeList, "Click us!", {type:"bottom", selector:"update-clickme-tooltip", delay:500});
+				if (!document.querySelector(".update-clickme-tooltip")) BDFDB.TooltipUtils.create(updateNoticeList, BDFDB.LanguageUtils.LibraryStrings.update_notice_click, {type:"bottom", selector:"update-clickme-tooltip", delay:500});
 			}
 		}
 	};
@@ -229,7 +229,7 @@
 			if (!updateNoticeList.querySelector("span")) {
 				let reloadButton = updateNotice.querySelector(BDFDB.dotCN.noticebutton);
 				if (reloadButton) {
-					updateNotice.querySelector(".notice-message").innerText = "To finish updating you need to reload.";
+					updateNotice.querySelector(".notice-message").innerText = BDFDB.LanguageUtils.LibraryStrings.update_notice_reload;
 					BDFDB.DOMUtils.toggle(reloadButton, false);
 				}
 				else updateNotice.querySelector(BDFDB.dotCN.noticedismiss).click();
@@ -329,7 +329,7 @@
 				}),
 				plugin != BDFDB && !plugin.noLibrary && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Button, {
 					size: InternalComponents.LibraryComponents.Button.Sizes.MIN,
-					children: "Library Settings",
+					children: BDFDB.LanguageUtils.LibraryStrings.library_settings,
 					onClick: event => {
 						let wrapper = BDFDB.DOMUtils.getParent(BDFDB.dotCN._repocard, event.currentTarget);
 						if (wrapper) {
@@ -6323,11 +6323,15 @@
 			file_navigator_text: "Pregledajte datoteku",
 			first: "Prvi",
 			last: "Zadnji",
+			library_settings: "Postavke biblioteke",
 			order: "Slijed",
 			sort_by: "Poredaj po",
 			toast_plugin_started: "{{var0}} je započeo.",
 			toast_plugin_stopped: "{{var0}} zaustavljen.",
-			toast_plugin_translated: "prijevod na {{var0}}."
+			toast_plugin_translated: "prijevod na {{var0}}.",
+			update_notice_click: "Kliknite za ažuriranje!",
+			update_notice_reload: "Za završetak ažuriranja potrebno je ponovo učitati.",
+			update_notice_update: "Sljedeće dodatke treba ažurirati:"
 		},
 		"da": {			//danish
 			ascending: "Stigende",
@@ -6335,11 +6339,15 @@
 			file_navigator_text: "Gennemse fil",
 			first: "Første",
 			last: "Sidste",
+			library_settings: "Biblioteksindstillinger",
 			order: "Sekvens",
 			sort_by: "Sorter efter",
 			toast_plugin_started: "{{var0}} er startet.",
 			toast_plugin_stopped: "{{var0}} er stoppet.",
-			toast_plugin_translated: "oversat til {{var0}}."
+			toast_plugin_translated: "oversat til {{var0}}.",
+			update_notice_click: "Klik for at opdatere!",
+			update_notice_reload: "For at afslutte opdateringen skal du genindlæse.",
+			update_notice_update: "Følgende plugins skal opdateres:"
 		},
 		"de": {			//german
 			ascending: "Aufsteigend",
@@ -6347,11 +6355,15 @@
 			file_navigator_text: "Datei durchsuchen",
 			first: "Erste",
 			last: "Letzte",
+			library_settings: "Bibliothekseinstellungen",
 			order: "Reihenfolge",
 			sort_by: "Sortieren nach",
 			toast_plugin_started: "{{var0}} wurde gestartet.",
 			toast_plugin_stopped: "{{var0}} wurde gestoppt.",
-			toast_plugin_translated: "auf {{var0}} übersetzt."
+			toast_plugin_translated: "auf {{var0}} übersetzt.",
+			update_notice_click: "Zum Aktualisieren klicken!",
+			update_notice_reload: "Lade neu, die Aktualisierung abzuschließen.",
+			update_notice_update: "Die folgenden Plugins müssen aktualisiert werden:"
 		},
 		"es": {			//spanish
 			ascending: "Ascendente",
@@ -6359,11 +6371,15 @@
 			file_navigator_text: "Buscar archivo",
 			first: "Primero",
 			last: "Último",
+			library_settings: "Configuraciones de biblioteca",
 			order: "Secuencia",
 			sort_by: "Ordenar por",
 			toast_plugin_started: "{{var0}} se guilddiv iniciado.",
 			toast_plugin_stopped: "{{var0}} se guilddiv detenido.",
-			toast_plugin_translated: "traducido a {{var0}}."
+			toast_plugin_translated: "traducido a {{var0}}.",
+			update_notice_click: "Haga clic para actualizar!",
+			update_notice_reload: "Para finalizar la actualización, debe volver a cargar.",
+			update_notice_update: "Los siguientes complementos deben actualizarse:"
 		},
 		"fr": {			//french
 			ascending: "Ascendant",
@@ -6371,11 +6387,15 @@
 			file_navigator_text: "Parcourir le fichier",
 			first: "Première",
 			last: "Dernier",
+			library_settings: "Paramètres de la bibliothèque",
 			order: "Séquence",
 			sort_by: "Trier par",
 			toast_plugin_started: "{{var0}} a été démarré.",
 			toast_plugin_stopped: "{{var0}} a été arrêté.",
-			toast_plugin_translated: "traduit en {{var0}}."
+			toast_plugin_translated: "traduit en {{var0}}.",
+			update_notice_click: "Cliquez pour mettre à jour!",
+			update_notice_reload: "Pour terminer la mise à jour, vous devez recharger.",
+			update_notice_update: "Les plugins suivants doivent être mis à jour:"
 		},
 		"it": {			//italian
 			ascending: "Ascendente",
@@ -6383,11 +6403,15 @@
 			file_navigator_text: "Sfoglia file",
 			first: "Primo",
 			last: "Ultimo",
+			library_settings: "Impostazioni della libreria",
 			order: "Sequenza",
 			sort_by: "Ordina per",
 			toast_plugin_started: "{{var0}} è stato avviato.",
 			toast_plugin_stopped: "{{var0}} è stato interrotto.",
-			toast_plugin_translated: "tradotto in {{var0}}."
+			toast_plugin_translated: "tradotto in {{var0}}.",
+			update_notice_click: "Clicca per aggiornare!",
+			update_notice_reload: "Per terminare l'aggiornamento è necessario ricaricare.",
+			update_notice_update: "I seguenti plugin devono essere aggiornati:"
 		},
 		"nl": {			//dutch
 			ascending: "Oplopend",
@@ -6395,11 +6419,15 @@
 			file_navigator_text: "Bestand zoeken",
 			first: "Eerste",
 			last: "Laatste",
+			library_settings: "Bibliotheekinstellingen",
 			order: "Volgorde",
 			sort_by: "Sorteer op",
 			toast_plugin_started: "{{var0}} is gestart.",
 			toast_plugin_stopped: "{{var0}} is gestopt.",
-			toast_plugin_translated: "vertaald naar {{var0}}."
+			toast_plugin_translated: "vertaald naar {{var0}}.",
+			update_notice_click: "Klik om te updaten!",
+			update_notice_reload: "Om de update te voltooien, moet u opnieuw laden.",
+			update_notice_update: "De volgende plug-ins moeten worden bijgewerkt:"
 		},
 		"no": {			//norwegian
 			ascending: "Stigende",
@@ -6407,11 +6435,15 @@
 			file_navigator_text: "Bla gjennom fil",
 			first: "Første",
 			last: "Siste",
+			library_settings: "Bibliotekinnstillinger",
 			order: "Sekvens",
 			sort_by: "Sorter etter",
 			toast_plugin_started: "{{var0}} er startet.",
 			toast_plugin_stopped: "{{var0}} er stoppet.",
-			toast_plugin_translated: "oversatt til {{var0}}."
+			toast_plugin_translated: "oversatt til {{var0}}.",
+			update_notice_click: "Klikk for å oppdatere!",
+			update_notice_reload: "For å fullføre oppdateringen må du laste inn på nytt.",
+			update_notice_update: "Følgende plugins må oppdateres:"
 		},
 		"pl": {			//polish
 			ascending: "Rosnąco",
@@ -6419,11 +6451,15 @@
 			file_navigator_text: "Przeglądać plik",
 			first: "Pierwszy",
 			last: "Ostatni",
+			library_settings: "Ustawienia biblioteki",
 			order: "Sekwencja",
 			sort_by: "Sortuj według",
 			toast_plugin_started: "{{var0}} został uruchomiony.",
 			toast_plugin_stopped: "{{var0}} został zatrzymany.",
-			toast_plugin_translated: "przetłumaczono na {{var0}}."
+			toast_plugin_translated: "przetłumaczono na {{var0}}.",
+			update_notice_click: "Kliknij, aby zaktualizować!",
+			update_notice_reload: "Aby zakończyć aktualizację, musisz ponownie załadować.",
+			update_notice_update: "Należy zaktualizować następujące wtyczki:"
 		},
 		"pt-BR": {		//portuguese (brazil)
 			ascending: "Crescente",
@@ -6431,11 +6467,15 @@
 			file_navigator_text: "Procurar arquivo",
 			first: "Primeiro",
 			last: "Último",
+			library_settings: "Configurações da biblioteca",
 			order: "Seqüência",
 			sort_by: "Ordenar por",
 			toast_plugin_started: "{{var0}} foi iniciado.",
 			toast_plugin_stopped: "{{var0}} foi interrompido.",
-			toast_plugin_translated: "traduzido para {{var0}}."
+			toast_plugin_translated: "traduzido para {{var0}}.",
+			update_notice_click: "Clique para atualizar!",
+			update_notice_reload: "Para concluir a atualização, você precisa recarregar.",
+			update_notice_update: "Os seguintes plugins precisam ser atualizados:"
 		},
 		"fi": {			//finnish
 			ascending: "Nouseva",
@@ -6443,11 +6483,15 @@
 			file_navigator_text: "Selaa tiedostoa",
 			first: "Ensimmäinen",
 			last: "Viimeinen",
+			library_settings: "Kirjastoasetukset",
 			order: "Jakso",
 			sort_by: "Järjestä",
 			toast_plugin_started: "{{var0}} on käynnistetty.",
 			toast_plugin_stopped: "{{var0}} on pysäytetty.",
-			toast_plugin_translated: "käännetty osoitteeseen {{var0}}."
+			toast_plugin_translated: "käännetty osoitteeseen {{var0}}.",
+			update_notice_click: "Napsauta päivittääksesi!",
+			update_notice_reload: "Päivittäminen on suoritettava uudelleen.",
+			update_notice_update: "Seuraavat laajennukset on päivitettävä:"
 		},
 		"sv": {			//swedish
 			ascending: "Stigande",
@@ -6455,11 +6499,15 @@
 			file_navigator_text: "Bläddra i fil",
 			first: "Första",
 			last: "Sista",
+			library_settings: "Biblioteksinställningar",
 			order: "Sekvens",
 			sort_by: "Sortera efter",
 			toast_plugin_started: "{{var0}} har startats.",
 			toast_plugin_stopped: "{{var0}} har blivit stoppad.",
-			toast_plugin_translated: "översatt till {{var0}}."
+			toast_plugin_translated: "översatt till {{var0}}.",
+			update_notice_click: "Klicka för att uppdatera!",
+			update_notice_reload: "För att avsluta uppdateringen måste du ladda om.",
+			update_notice_update: "Följande plugins måste uppdateras:"
 		},
 		"tr": {			//turkish
 			ascending: "Yükselen",
@@ -6467,11 +6515,15 @@
 			file_navigator_text: "Dosyaya gözat",
 			first: "Ilk",
 			last: "Son",
+			library_settings: "Kütüphane Ayarları",
 			order: "Sıra",
 			sort_by: "Göre sırala",
 			toast_plugin_started: "{{var0}} başlatıldı.",
 			toast_plugin_stopped: "{{var0}} durduruldu.",
-			toast_plugin_translated: "{{var0}} olarak çevrildi."
+			toast_plugin_translated: "{{var0}} olarak çevrildi.",
+			update_notice_click: "Güncellemek için tıklayın!",
+			update_notice_reload: "Güncellemeyi tamamlamak için yeniden yüklemeniz gerekir.",
+			update_notice_update: "Aşağıdaki eklentilerin güncellenmesi gerekir:"
 		},
 		"cs": {			//czech
 			ascending: "Vzestupně",
@@ -6479,11 +6531,15 @@
 			file_navigator_text: "Procházet soubor",
 			first: "První",
 			last: "Poslední",
+			library_settings: "Nastavení knihovny",
 			order: "Sekvence",
 			sort_by: "Seřazeno podle",
 			toast_plugin_started: "{{var0}} byl spuštěn.",
 			toast_plugin_stopped: "{{var0}} byl zastaven.",
-			toast_plugin_translated: "přeložen do {{var0}}."
+			toast_plugin_translated: "přeložen do {{var0}}.",
+			update_notice_click: "Klepnutím aktualizujte!",
+			update_notice_reload: "Pro dokončení aktualizace je třeba znovu načíst.",
+			update_notice_update: "Následující doplňky je třeba aktualizovat:"
 		},
 		"bg": {			//bulgarian
 			ascending: "Възходящ",
@@ -6491,11 +6547,15 @@
 			file_navigator_text: "Прегледайте файла",
 			first: "Първият",
 			last: "Последният",
+			library_settings: "Настройки на библиотеката",
 			order: "Последователност",
 			sort_by: "Сортиране по",
 			toast_plugin_started: "{{var0}} е стартиран.",
 			toast_plugin_stopped: "{{var0}} е спрян.",
-			toast_plugin_translated: "преведена на {{var0}}."
+			toast_plugin_translated: "преведена на {{var0}}.",
+			update_notice_click: "Кликнете, за да актуализирате!",
+			update_notice_reload: "За да завършите актуализацията, трябва да презаредите.",
+			update_notice_update: "Следните приставки трябва да бъдат актуализирани:"
 		},
 		"ru": {			//russian
 			ascending: "По возрастанию",
@@ -6503,11 +6563,15 @@
 			file_navigator_text: "Просмотр файла",
 			first: "Первый",
 			last: "Последний",
+			library_settings: "Настройки библиотеки",
 			order: "Последовательность",
 			sort_by: "Сортировать по",
 			toast_plugin_started: "{{var0}} запущен.",
 			toast_plugin_stopped: "{{var0}} остановлен.",
-			toast_plugin_translated: "переведен на {{var0}}."
+			toast_plugin_translated: "переведен на {{var0}}.",
+			update_notice_click: "Нажмите, чтобы обновить!",
+			update_notice_reload: "Для завершения обновления необходимо перезагрузить.",
+			update_notice_update: "Следующие плагины должны быть обновлены:"
 		},
 		"uk": {			//ukrainian
 			ascending: "Зростання",
@@ -6515,11 +6579,15 @@
 			file_navigator_text: "Перегляньте файл",
 			first: "Перший",
 			last: "Останній",
+			library_settings: "Налаштування бібліотеки",
 			order: "Послідовність",
 			sort_by: "Сортувати за",
 			toast_plugin_started: "{{var0}} було запущено.",
 			toast_plugin_stopped: "{{var0}} було зупинено.",
-			toast_plugin_translated: "перекладено {{var0}}."
+			toast_plugin_translated: "перекладено {{var0}}.",
+			update_notice_click: "Натисніть, щоб оновити!",
+			update_notice_reload: "Щоб закінчити оновлення, вам потрібно перезавантажити.",
+			update_notice_update: "Необхідно оновити наступні плагіни:"
 		},
 		"ja": {			//japanese
 			ascending: "上昇",
@@ -6527,11 +6595,15 @@
 			file_navigator_text: "ファイルを参照",
 			first: "最初",
 			last: "最後",
+			library_settings: "ライブラリ設定",
 			order: "ソート順",
 			sort_by: "並び替え",
 			toast_plugin_started: "{{var0}}が開始されました.",
 			toast_plugin_stopped: "{{var0}}が停止しました.",
-			toast_plugin_translated: "は{{var0}}に翻訳されました."
+			toast_plugin_translated: "は{{var0}}に翻訳されました.",
+			update_notice_click: "クリックして更新!",
+			update_notice_reload: "更新を完了するには、リロードする必要があります.",
+			update_notice_update: "次のプラグインを更新する必要があります:"
 		},
 		"zh-TW": {		//chinese (traditional)
 			ascending: "上升",
@@ -6539,11 +6611,15 @@
 			file_navigator_text: "瀏覽文件",
 			first: "首先",
 			last: "最後",
+			library_settings: "庫設置",
 			order: "排序",
 			sort_by: "排序方式",
 			toast_plugin_started: "{{var0}}已經啟動.",
 			toast_plugin_stopped: "{{var0}}已停止.",
-			toast_plugin_translated: "翻譯為{{var0}}."
+			toast_plugin_translated: "翻譯為{{var0}}.",
+			update_notice_click: "點擊更新!",
+			update_notice_reload: "要完成更新,您需要重新加載.",
+			update_notice_update: "以下插件需要更新:"
 		},
 		"ko": {			//korean
 			ascending: "오름차순",
@@ -6551,11 +6627,15 @@
 			file_navigator_text: "파일 찾아보기",
 			first: "첫번째",
 			last: "마지막",
+			library_settings: "라이브러리 설정",
 			order: "정렬 순서",
 			sort_by: "정렬 기준",
 			toast_plugin_started: "{{var0}} 시작되었습니다.",
 			toast_plugin_stopped: "{{var0}} 중지되었습니다.",
-			toast_plugin_translated: "{{var0}} 로 번역되었습니다."
+			toast_plugin_translated: "{{var0}} 로 번역되었습니다.",
+			update_notice_click: "업데이트하려면 클릭하십시오!",
+			update_notice_reload: "업데이트를 마치려면 다시로드해야합니다.",
+			update_notice_update: "다음 플러그인을 업데이트해야합니다:"
 		},
 		"default": {	//default: english
 			ascending: "Ascending",
@@ -6563,11 +6643,15 @@
 			file_navigator_text: "Browse File",
 			first: "First",
 			last: "Last",
+			library_settings: "Library Settings",
 			order: "Order",
 			sort_by: "Sort by",
 			toast_plugin_started: "{{var0}} has been started.",
 			toast_plugin_stopped: "{{var0}} has been stopped.",
-			toast_plugin_translated: "translated to {{var0}}."
+			toast_plugin_translated: "translated to {{var0}}.",
+			update_notice_click: "Click to update!",
+			update_notice_reload: "To finish updating you need to reload.",
+			update_notice_update: "The following plugins need to be updated:"
 		}
 	};
 	BDFDB.LanguageUtils.getLanguage = function () {
