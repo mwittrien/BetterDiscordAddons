@@ -1549,12 +1549,15 @@ body:before {
 
 /* ----		6.7.	CALL							---- */
 
-#app-mount .incomingCallInner-2VmFiR {						/* popout				inner								*/
+#app-mount .incomingCallInner-2VmFiR,
+#app-mount .root-3JVdIJ {									/* popout				inner								*/
 	background: transparent;
 	border: none;
 }
 .incomingCallInner-2VmFiR:after,
-.incomingCallInner-2VmFiR:before {
+.incomingCallInner-2VmFiR:before,
+.root-3JVdIJ:after,
+.root-3JVdIJ:before {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -1566,10 +1569,12 @@ body:before {
 	pointer-events: none;
 	z-index: -1;
 }
-.incomingCallInner-2VmFiR:after {
+.incomingCallInner-2VmFiR:after,
+.root-3JVdIJ:after {
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
 }
-.incomingCallInner-2VmFiR:before {
+.incomingCallInner-2VmFiR:before,
+.root-3JVdIJ:before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	filter: blur(var(--vpopoutblur));
 	background-attachment: fixed;

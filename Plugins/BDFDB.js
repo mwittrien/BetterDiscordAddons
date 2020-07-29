@@ -1193,6 +1193,7 @@
 		"ChannelCallHeader",
 		"ConnectedPrivateChannelsList",
 		"DiscordTag",
+		"IncomingCallModal",
 		"InviteModalUserRow",
 		"Mention",
 		"Menu",
@@ -4367,7 +4368,7 @@
 	DiscordClassModules.Button = BDFDB.ModuleUtils.findByProperties("colorBlack", "button");
 	DiscordClassModules.CallCurrent = BDFDB.ModuleUtils.findByProperties("wrapper", "fullScreen");
 	DiscordClassModules.CallDetails = BDFDB.ModuleUtils.findByProperties("container", "hotspot");
-	DiscordClassModules.CallIncoming = BDFDB.ModuleUtils.findByProperties("incomingCall", "container");
+	DiscordClassModules.CallIncoming = BDFDB.ModuleUtils.findByProperties("incomingCall", "container") || BDFDB.ModuleUtils.findByProperties("wrapper", "mainChannelInfo");
 	DiscordClassModules.CallIncomingInner = BDFDB.ModuleUtils.findByProperties("incomingCallInner", "members");
 	DiscordClassModules.Card = BDFDB.ModuleUtils.findByProperties("card", "cardBrand");
 	DiscordClassModules.CardStatus = BDFDB.ModuleUtils.findByProperties("reset", "error", "card");
@@ -4839,6 +4840,9 @@
 		callincomingcontainer: ["CallIncoming", "container"],
 		callincominginner: ["CallIncomingInner", "incomingCallInner"],
 		callmembers: ["CallIncomingInner", "members"],
+		callincomingroot: ["CallIncoming", "root"],
+		callincomingtitle: ["CallIncoming", "title"],
+		callincomingwrapper: ["CallIncoming", "wrapper"],
 		card: ["Card", "card"],
 		cardbrand: ["Card", "cardBrand"],
 		cardbrandoutline: ["Card", "cardBrandOutline"],
@@ -10248,6 +10252,7 @@
 	];
 	InternalBDFDB._processAvatarRender = function (user, avatar) {
 		if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user)) {
+			avatar.props["user_by_BDFDB"] = user.id;
 			let role = "", className = BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, ""));
 			if (BDFDB_Patrons_T2.includes(user.id)) {
 				role = "BDFDB Patron";
@@ -10262,6 +10267,7 @@
 				className = BDFDB.DOMUtils.formatClassName(className, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbdev);
 			}
 			if (role) {
+				delete avatar.props["user_by_BDFDB"];
 				if (avatar.type == "img") avatar = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.AvatarComponents.default, Object.assign({}, avatar.props, {
 					size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40
 				}));
@@ -10269,7 +10275,8 @@
 				avatar = BDFDB.ReactUtils.createElement("div", {
 					className: className,
 					style: {borderRadius: 0, overflow: "visible"},
-					"custom-badge-id": BDFDB_Patrons_T3_hasBadge.includes(user.id) ? user.id : null,
+					"custombadge_id": BDFDB_Patrons_T3_hasBadge.includes(user.id) ? user.id : null,
+					"user_by_BDFDB": user.id,
 					children: [avatar]
 				});
 				if (settings.showSupportBadges) avatar.props.children.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
@@ -10284,6 +10291,7 @@
 	};
 	InternalBDFDB._processAvatarMount = function (user, avatar, position = "top") {
 		if (Node.prototype.isPrototypeOf(avatar) && BDFDB.ObjectUtils.is(user)) {
+			avatar.setAttribute("user_by_BDFDB", user.id);
 			let role = "";
 			if (BDFDB_Patrons_T2.includes(user.id) && settings.showSupportBadges) {
 				role = "BDFDB Patron";
