@@ -1569,7 +1569,7 @@
 			if (instance) {
 				instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
 				let toBePatched = WebModulesData.NonPrototype.includes(name) ? instance : instance.prototype;
-				for (let pluginData of pluginDataObjs) for (let patchType in pluginData.patchTypes) if (pluginData.patchTypes[patchType][type]) {
+				for (let pluginData of pluginDataObjs) for (let patchType in pluginData.patchTypes) {
 					let patchMethods = {};
 					patchMethods[patchType] = e => {
 						return InternalBDFDB.initiateProcess(pluginData.plugin, type, {
@@ -1579,7 +1579,7 @@
 							patchtypes: [patchType]
 						});
 					};
-					BDFDB.ModuleUtils.patch(pluginData.plugin, toBePatched, pluginData.patchTypes[patchType][type], patchMethods);
+					BDFDB.ModuleUtils.patch(pluginData.plugin, toBePatched, pluginData.patchTypes[patchType], patchMethods);
 				}
 			}
 		}
@@ -1636,6 +1636,7 @@
 							for (let type in BDFDB.InternalData.patchObserverData.data) if (!BDFDB.InternalData.patchObserverData.data[type].found) {
 								let ele = null;
 								if ((ele = BDFDB.DOMUtils.containsClass(n, ...BDFDB.InternalData.patchObserverData.data[type].classes) ? n : n.querySelector(BDFDB.InternalData.patchObserverData.data[type].selector)) != null) {
+									console.log(type, ele);
 									BDFDB.InternalData.patchObserverData.data[type].found = InternalBDFDB.patch_CheckEle(BDFDB.InternalData.patchObserverData.data[type].plugins, ele, type);
 									if (BDFDB.InternalData.patchObserverData.data[type].found) {
 										delete BDFDB.InternalData.patchObserverData.data[type];
