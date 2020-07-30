@@ -4047,10 +4047,9 @@
 	var DiscordClassModules = {};
 	DiscordClassModules.BDFDB = {
 		BDFDBundefined: "BDFDB_undefined",
-		avatarStatusHovered: "statusHovered-gF2976",
 		badge: "badge-7R_W3s",
 		bdaRepoEntry: "entry-9JnAPs",
-		bdaRepoListHeader: "repoHeader-2KfNgH",
+		bdaRepoListHeader: "repoHeader-2KfNmH",
 		bdaRepoListWrapper: "repoList-9JnAPs",
 		cardInner: "inner-OP_8zd",
 		cardWrapper: "card-rT4Wbb",
@@ -4814,7 +4813,6 @@
 		avatarnoicon: ["AvatarIcon", "noIcon"],
 		avatarpointer: ["Avatar", "pointer"],
 		avatarpointerevents: ["Avatar", "pointerEvents"],
-		avatarstatushovered: ["BDFDB", "avatarStatusHovered"],
 		avatarwrapper: ["Avatar", "wrapper"],
 		backdrop: ["Backdrop", "backdrop"],
 		backdropwithlayer: ["Backdrop", "backdropWithLayer"],
