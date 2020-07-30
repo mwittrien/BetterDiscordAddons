@@ -1636,7 +1636,6 @@
 							for (let type in BDFDB.InternalData.patchObserverData.data) if (!BDFDB.InternalData.patchObserverData.data[type].found) {
 								let ele = null;
 								if ((ele = BDFDB.DOMUtils.containsClass(n, ...BDFDB.InternalData.patchObserverData.data[type].classes) ? n : n.querySelector(BDFDB.InternalData.patchObserverData.data[type].selector)) != null) {
-									console.log(type, ele);
 									BDFDB.InternalData.patchObserverData.data[type].found = InternalBDFDB.patch_CheckEle(BDFDB.InternalData.patchObserverData.data[type].plugins, ele, type);
 									if (BDFDB.InternalData.patchObserverData.data[type].found) {
 										delete BDFDB.InternalData.patchObserverData.data[type];
