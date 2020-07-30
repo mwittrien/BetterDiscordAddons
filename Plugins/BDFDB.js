@@ -1624,7 +1624,7 @@
 						if (appmount) {
 							BDFDB.InternalData.patchObserverData.observer = new MutationObserver(cs => {cs.forEach(c => {c.addedNodes.forEach(n => {
 								if (!n || !n.tagName) return;
-								for (let type in BDFDB.InternalData.patchObserverData.data) if (BDFDB.InternalData.patchObserverData.data[type].found) {
+								for (let type in BDFDB.InternalData.patchObserverData.data) if (!BDFDB.InternalData.patchObserverData.data[type].found) {
 									let ele = null;
 									if ((ele = BDFDB.DOMUtils.containsClass(n, ...BDFDB.InternalData.patchObserverData.data[type].classes) ? n : n.querySelector(BDFDB.InternalData.patchObserverData.data[type].selector)) != null) {
 										BDFDB.InternalData.patchObserverData.data[type].found = checkEle(BDFDB.InternalData.patchObserverData.data[type].plugins, ele, type, patchType);
