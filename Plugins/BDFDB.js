@@ -1451,20 +1451,14 @@
 					try {
 						let filteredModules = BDFDB.ArrayUtils.removeCopies(updateDataArray.map(n => n.filteredModules).flat(10));
 						let specialModules = BDFDB.ArrayUtils.removeCopies(updateDataArray.map(n => n.specialModules).flat(10));
-						console.log(filteredModules);
-						console.log(specialModules);
 						const appInsDown = BDFDB.ReactUtils.findOwner(app, {name:filteredModules, type:specialModules, all:true, group:true, unlimited:true});
 						const appInsUp = BDFDB.ReactUtils.findOwner(app, {name:filteredModules, type:specialModules, all:true, group:true, unlimited:true, up:true});
-						console.log(appInsDown);
-						console.log(appInsUp);
 						for (let type in appInsDown) {
 							let filteredPlugins = plugins.filter(n => updateData[n.name].filteredModules.includes(type) || updateData[n.name].specialModuleTypes.includes(type)).map(n => ({plugin:n, patchTypes:updateData[n.name].patchTypes}));
-							console.log(filteredPlugins);
 							for (let ins of appInsDown[type]) InternalBDFDB.forceInitiateProcess(filteredPlugins, ins, type);
 						}
 						for (let type in appInsUp) {
 							let filteredPlugins = plugins.filter(n => updateData[n.name].filteredModules.includes(type) || updateData[n.name].specialModuleTypes.includes(type)).map(n => ({plugin:n, patchTypes:updateData[n.name].patchTypes}));
-							console.log(filteredPlugins);
 							for (let ins of appInsUp[type]) InternalBDFDB.forceInitiateProcess(filteredPlugins, ins, type);
 						}
 						if (bdSettings) {
