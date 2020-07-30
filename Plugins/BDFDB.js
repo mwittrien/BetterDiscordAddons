@@ -1485,13 +1485,13 @@
 				if (methodNames.includes("componentDidMount")) InternalBDFDB.initiateProcess(plugin, type, {
 					instance: instance,
 					methodname: "componentDidMount",
-					patchtypes: pluginData.patchTypes
+					patchtypes: Object.keys(pluginData.patchTypes)
 				});
 				if (methodNames.includes("render")) forceRender = true;
 				else if (!forceRender && methodNames.includes("componentDidUpdate")) InternalBDFDB.initiateProcess(plugin, type, {
 					instance: instance,
 					methodname: "componentDidUpdate",
-					patchtypes: pluginData.patchTypes
+					patchtypes: Object.keys(pluginData.patchTypes)
 				});
 			}
 			if (forceRender) BDFDB.ReactUtils.forceUpdate(instance);
