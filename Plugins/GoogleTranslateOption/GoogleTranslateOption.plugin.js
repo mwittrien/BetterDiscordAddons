@@ -288,7 +288,7 @@ var GoogleTranslateOption = (_ => {
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ChannelTextAreaButton, {
 							key: "translate-button",
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._googletranslateoptiontranslatebutton, translating && BDFDB.disCN._googletranslateoptiontranslating, BDFDB.disCN.textareapickerbutton),
-							iconClassName: BDFDB.disCN.textareaicon,
+							nativeClass: true,
 							iconSVG: translateIconGeneral
 						}),
 						width: 400,

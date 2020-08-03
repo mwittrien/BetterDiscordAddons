@@ -7031,7 +7031,7 @@
 				onMouseDown: !this.props.disabled && this.handleMouseUp.bind(this),
 				onMouseEnter: this.handleMouseEnter.bind(this),
 				onMouseLeave: this.handleMouseLeave.bind(this),
-				type: this.props.type === "undefined" ? "button" : this.props.type,
+				type: !this.props.type ? "button" : this.props.type,
 				disabled: this.props.disabled,
 				style: this.props.style,
 				rel: this.props.rel,
@@ -7104,11 +7104,13 @@
 				children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
 					name: this.props.iconName,
 					iconSVG: this.props.iconSVG,
-					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.textareaicon, this.props.iconClassName, this.props.pulse && BDFDB.disCN.textareaiconpulse)
+					className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.textareaicon, this.props.iconClassName, this.props.pulse && BDFDB.disCN.textareaiconpulse),
+					nativeClass: this.props.nativeClass
 				})
 			});
 		}
 	};
+	InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.ChannelTextAreaButton, {tabIndex:0});
 	
 	InternalComponents.LibraryComponents.CharCounter = InternalBDFDB.loadPatchedComp("CharCounter") || reactInitialized && class BDFDB_CharCounter extends LibraryModules.React.Component {
 		getCounterString() {
