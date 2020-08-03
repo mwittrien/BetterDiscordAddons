@@ -2795,6 +2795,15 @@ body:before {
 .optionContainer-1FtykV {									/* communitysettings	welcome		exampleoption			*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
+.enableContainer-6E-puu {									/* communitysettings	welcome		previewheader			*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+.previewContainer-1SS3uO {									/* communitysettings	welcome		previewcontainer		*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.welcomeChannel-1rFrIO {									/* communitysettings	welcome		welcomechannel			*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
 
 .addRoleIcon-3YjErH {										/* rolesettings			addrolebutton						*/
 	-webkit-mask: url(https://discordapp.com/assets/cef02719c12d8aaf38894c16dca7fbe6.svg);
@@ -2932,6 +2941,10 @@ body:before {
 	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
 	position: relative;
 	border-radius: 5px;
+}
+.root-1gCeng > *,
+.modal-yWgWj- > * {
+	z-index: 1;
 }
 .root-1gCeng:after,
 .root-1gCeng:before,
@@ -4433,7 +4446,8 @@ body:before {
 
 /* ----		14.3.	EMOJIPICKER						---- */
 
-.contentWrapper-SvZHNd,										/* picker				wrapper								*/
+.contentWrapper-SvZHNd,										/* picker				expression wrapper					*/
+.emojiPicker-3PwZFl,										/* picker				inner								*/
 .diversitySelectorPopout-3FiGaM {							/* picker				diversityselector					*/
 	background-color: transparent;
 	box-shadow: 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
@@ -4442,6 +4456,8 @@ body:before {
 }
 .contentWrapper-SvZHNd:after,
 .contentWrapper-SvZHNd:before,
+.emojiPicker-3PwZFl:after,
+.emojiPicker-3PwZFl:before,
 .diversitySelectorPopout-3FiGaM:after,
 .diversitySelectorPopout-3FiGaM:before {
 	content: "";
@@ -4456,10 +4472,12 @@ body:before {
 	z-index: -1;
 }
 .contentWrapper-SvZHNd:after,
+.emojiPicker-3PwZFl:after,
 .diversitySelectorPopout-3FiGaM:after {
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.25));
 }
 .contentWrapper-SvZHNd:before,
+.emojiPicker-3PwZFl:before,
 .diversitySelectorPopout-3FiGaM:before {
 	background: var(--vpopout) center/var(--vpopoutsize);
 	filter: blur(var(--vpopoutblur));
@@ -4468,6 +4486,13 @@ body:before {
 .diversitySelectorPopout-3FiGaM:after,
 .diversitySelectorPopout-3FiGaM:before {
 	border-radius: 5px;
+}
+.emojiPickerInExpressionPicker-3IzIcv .emojiPicker-3PwZFl {
+	box-shadow: unset;
+}
+.emojiPickerInExpressionPicker-3IzIcv .emojiPicker-3PwZFl:after,
+.emojiPickerInExpressionPicker-3IzIcv .emojiPicker-3PwZFl:before {
+	display: none;
 }
 
 .diversityEmojiItem-L6_IXw:hover {							/* picker				diversityemoji						*/
