@@ -766,13 +766,7 @@ body:before {
 
 /* ----		6.2.	MESSAGES						---- */
 
-.base-19D3Qq {												/* welcomemessage											*/
-	padding-bottom: 0;
-}
-.base-34jWEe h1 {											/* welcomemessage		dmchannel							*/
-	color: rgb(var(--fontwhite1));
-}
-.emptyChannelIcon-3IXV5M {									/* welcomemessage		empty channelicon					*/
+.emptyChannelIcon-cc932w {									/* welcomemessage		empty channelicon					*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 }
 .card-1yV8cG {												/* welcomemessage		first steps card					*/
@@ -781,6 +775,7 @@ body:before {
 .card-1yV8cG:hover {
 	background-color: rgba(var(--vtransparencycolor), 0.5);
 }
+
 .divider-JfaTT5:not(.isUnread-3Ef-o9) {						/* divider				time								*/
 	border-color: rgba(var(--fontwhite1), 0.2);
 }
@@ -1592,17 +1587,18 @@ body:before {
 #app-mount .root-217Brm {									/* call					root							*/
 	color: rgb(var(--fontwhite1));
 }
-.videoWrapper-2v09vt	{									/* call					video wrapper					*/
+.videoWrapper-2v09vt {										/* call					video wrapper					*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
 .video-1FfuMD {												/* call					video							*/
 	background-color: transparent;
 }
-.tile-2gi3tr {												/* call					user video						*/
+.tile-2naSqK,												/* call					user video voicechannel			*/
+.tile-2gi3tr {												/* call					user video dm					*/
 	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
 .gradientContainer-10lXLB {									/* call					gradientcontainer				*/
-	background: linear-gradient(rgb(var(--vtransparencycolor)), transparent 15%, transparent 85%, rgb(var(--vtransparencycolor)));
+	display: none;
 }
 .participantsButton-KYW-IW {								/* call					participantsbutton				*/
 	background-color: rgba(0, 0, 0, 0.3);
@@ -1610,11 +1606,20 @@ body:before {
 .participantsButton-KYW-IW:hover {
 	background-color: rgba(0, 0, 0, 0.6);
 }
-.centerButton-3CaNcJ {
+.centerButton-3CaNcJ,
+.colorable-1bkp8v.primaryDark-3mSFDl {
 	background-color: rgba(var(--vtransparencycolor), 0.5);
 }
-.centerButton-3CaNcJ:hover {
+.centerButton-3CaNcJ:hover,
+.colorable-1bkp8v.primaryDark-3mSFDl:hover {
 	background-color: rgb(var(--vaccentcolor));
+}
+.button-3HqqDX {
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+	color: rgb(var(--fontwhite1));
+}
+.button-3HqqDX:hover {
+	background-color: rgba(var(--vtransparencycolor), 0.6);
 }
 .controlButton-2MhVEL.leaveButton-2YnTyt {
 	background-color: rgba(240, 71, 71, 0.5);
