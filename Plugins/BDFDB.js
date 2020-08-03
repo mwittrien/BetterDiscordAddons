@@ -1796,9 +1796,13 @@
 		}
 		return parent.props.children;
 	}
-	BDFDB.ReactUtils.createElement = function (component, props = {}) {
+	BDFDB.ReactUtils.createElement = function (component, props = {}, errorWrap = false) {
 		if (component && component.defaultProps) for (let key in component.defaultProps) if (props[key] == null) props[key] = component.defaultProps[key];
-		try {return LibraryModules.React.createElement(component || "div", props) || null;}
+		try {
+			let child = LibraryModules.React.createElement(component || "div", props) || null;
+			if (errorWrap) return LibraryModules.React.createElement(InternalComponents.ErrorBoundary, {}, child) || null;
+			else return child;
+		}
 		catch (err) {BDFDB.LogUtils.error("Could not create react element! " + err);}
 		return null;
 	};
@@ -6837,6 +6841,36 @@
 	}, 100);
 	
 	var InternalComponents = {NativeSubComponents: {}, LibraryComponents: {}}, reactInitialized = LibraryModules.React && LibraryModules.React.Component;
+	
+	InternalComponents.ErrorBoundary = reactInitialized && class BDFDB_ErrorBoundary extends LibraryModules.React.PureComponent {
+		constructor(props) {
+			super(props);
+			this.state = {hasError: false};
+		}
+		static getDerivedStateFromError(error) {
+			return {hasError: true};
+		}
+		componentDidCatch(error, info) {
+			BDFDB.LogUtils.error("Could not create react element! " + error);
+		}
+		render() {
+			if (this.state.hasError) return LibraryModules.React.createElement("span", {
+				style: {
+					background: BDFDB.DiscordConstants && BDFDB.DiscordConstants.Colors && BDFDB.DiscordConstants.Colors.PRIMARY_DARK,
+					borderRadius: 5,
+					color: BDFDB.DiscordConstants && BDFDB.DiscordConstants.Colors && BDFDB.DiscordConstants.Colors.STATUS_RED,
+					fontSize: 12,
+					fontWeight: 600,
+					padding: 6,
+					textAlign: "center",
+					verticalAlign: "center"
+				},
+				children: "React Component Error"
+			});
+			return this.props.children;
+		}
+	};
+
 	InternalComponents.NativeSubComponents.Button = BDFDB.ModuleUtils.findByProperties("Colors", "Hovers", "Looks");
 	InternalComponents.NativeSubComponents.Checkbox = BDFDB.ModuleUtils.findByName("Checkbox");
 	InternalComponents.NativeSubComponents.Clickable = BDFDB.ModuleUtils.findByName("Clickable");
@@ -9049,8 +9083,6 @@
 			}), "itemClassName", "items"));
 		}
 	};
-	
-	InternalComponents.NativeSubComponents.TabBar = BDFDB.ModuleUtils.findByName("TabBar");
 	
 	InternalComponents.LibraryComponents.Table = InternalBDFDB.loadPatchedComp("Table") || reactInitialized && class BDFDB_Table extends LibraryModules.React.Component {
 		render() {

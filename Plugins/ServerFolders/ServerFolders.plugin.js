@@ -528,7 +528,7 @@ var ServerFolders = (_ => {
 		onSettingsClosed () {
 			if (this.SettingsUpdated) {
 				delete this.SettingsUpdated;
-				folderStates = {};			
+				folderStates = {};
 				this.forceUpdateAll();
 			}
 		}
@@ -636,7 +636,7 @@ var ServerFolders = (_ => {
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["FluxContainer(Guilds)", "FluxContainer(NavigableGuilds)"]});
 				if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(folderGuildContentComponent, {
 					themeOverride: children[index].props.themeOverride
-				}));
+				}, true));
 			}
 		}
 
@@ -817,7 +817,7 @@ var ServerFolders = (_ => {
 								className: BDFDB.disCN.marginbottom20,
 								children: BDFDB.ReactUtils.createElement(folderIconPickerComponent, {
 									selectedIcon: data.iconID
-								})
+								}, true)
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 								type: "Switch",
@@ -888,7 +888,7 @@ var ServerFolders = (_ => {
 					}),
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalTabContent, {
 						tab: this.labels.modal_tabheader4_text,
-						children: BDFDB.ReactUtils.createElement(folderIconCustomPreviewComponent, {})
+						children: BDFDB.ReactUtils.createElement(folderIconCustomPreviewComponent, {}, true)
 					})
 				];
 				[children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: ["ModalFooter", "Footer"]});

@@ -892,7 +892,7 @@ var ThemeRepo = (_ => {
 							options.useThemeFixer = false;
 							options.useCustomCSS = false;
 							
-							return BDFDB.ReactUtils.createElement(RepoListComponent, options);
+							return BDFDB.ReactUtils.createElement(RepoListComponent, options, true);
 						}
 					});
 					if (oldSettings && !isPRinjected) e.instance.props.sections.splice(index + 1, 0, {section: "DIVIDER"});
@@ -911,7 +911,7 @@ var ThemeRepo = (_ => {
 					options.sortKey = forcedSort || Object.keys(sortKeys)[0];
 					options.orderKey = forcedOrder || Object.keys(orderKeys)[0];
 					children[index] = [
-						BDFDB.ReactUtils.createElement(RepoListHeaderComponent, options),
+						BDFDB.ReactUtils.createElement(RepoListHeaderComponent, options, true),
 						children[index]
 					];
 				}
