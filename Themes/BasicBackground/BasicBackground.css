@@ -2580,6 +2580,33 @@ body:before {
 
 /* ~~~~		12.		GUILDSETTINGS					~~~~ */
 
+
+.container-2VW0UT {											/* settings				confirmnotice						*/
+	position: relative;
+}
+.container-2VW0UT[style*="background-color: rgba(32, 34, 37"] {
+	background-color: transparent !important;	
+}
+.container-2VW0UT:after,
+.container-2VW0UT:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	pointer-events: none;
+	z-index: -1;
+}
+.container-2VW0UT:after {
+	background-color: rgba(var(--vtransparencycolor), 0.7);
+}
+.container-2VW0UT:before {
+	background: var(--vbackground) center/var(--vbackgroundsize);
+	filter: blur(var(--vbackgroundblur));
+	background-attachment: fixed;
+}
+
 #app-mount .emojiAliasInput-1y-NBz .emojiInput-1aLNse {		/* emojisettings		nameinput							*/
 	background-color: rgba(var(--vtransparencycolor), 0.1);
 }
@@ -2688,8 +2715,85 @@ body:before {
 	-webkit-mask: url(https://discordapp.com/assets/da8463a04b4a289801d2516f50eb4c19.svg);
 }
 
-#app-mount .card-3IImnr {									/* integrationsettings	card								*/
+#app-mount .card-o7rAq- {									/* integrationsettings	card								*/
 	border-color: rgba(var(--vtransparencycolor), 0.1)
+}
+.iconWrapper-lS1uig {										/* integrationsettings	icon								*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+
+.guildDetails-2p1NmK {										/* communitysettings	intro		details					*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+.featureCard-1RR4Tl {										/* communitysettings	intro		featurecard				*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+
+.upsellContainer-L9xv7w {									/* communitysettings	general		upsellcontainer			*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.upsellFooter-ZYsio_ {										/* communitysettings	general		upsellfooter			*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+
+.developerPortalCtaWrapper-2XNafh {							/* communitysettings	analytics	info					*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+.analyticsCard-qckucw {										/* communitysettings	analytics	card					*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+
+#app-mount .card-3_CqkU {									/* communitysettings	discovery	card					*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+#app-mount .iconMask-30Tvqs {								/* communitysettings	discovery	icon					*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
+.perkArt-1SGWbA {											/* communitysettings	discovery	perk					*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+.container-2w0lh0 {											/* communitysettings	discovery	checklist				*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+.header-2Y0-A- {											/* communitysettings	discovery	checklist header		*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+
+.exampleContainer-25sB-A {									/* communitysettings	welcome		examplecontainer		*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
+}
+#app-mount .exampleModal-2X2Vf8 {							/* communitysettings	welcome		examplemodal			*/
+	background-color: transparent;
+	box-shadow: 0 0 0 1px rgba(var(--vtransparencycolor), 0.3), 0 2px 10px 0 rgba(var(--vtransparencycolor), 0.3);
+	position: relative;
+	border-radius: 5px;
+}
+.exampleModal-2X2Vf8 > *{
+	z-index: 1;
+}
+.exampleModal-2X2Vf8:after,
+.exampleModal-2X2Vf8:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: unset;
+	height: unset;
+	border-radius: 5px;
+	pointer-events: none;
+}
+.exampleModal-2X2Vf8:after {
+	background-color: rgba(var(--vtransparencycolor), calc(var(--vtransparencyalpha) + 0.2));
+}
+.exampleModal-2X2Vf8:before {
+	background: var(--vpopout) center/var(--vpopoutsize);
+	filter: blur(var(--vpopoutblur));
+	background-attachment: fixed;
+}
+.optionContainer-1FtykV {									/* communitysettings	welcome		exampleoption			*/
+	background-color: rgba(var(--vtransparencycolor), 0.3);
 }
 
 .addRoleIcon-3YjErH {										/* rolesettings			addrolebutton						*/

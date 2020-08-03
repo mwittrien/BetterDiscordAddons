@@ -6847,7 +6847,7 @@
 	InternalComponents.NativeSubComponents.PopoutContainer = BDFDB.ModuleUtils.findByName("Popout");
 	InternalComponents.NativeSubComponents.QuickSelect = BDFDB.ModuleUtils.findByName("QuickSelectWrapper");
 	InternalComponents.NativeSubComponents.RadioGroup = BDFDB.ModuleUtils.findByName("RadioGroup");
-	InternalComponents.NativeSubComponents.SearchBar = BDFDB.ModuleUtils.find(m => m && m.displayName == "SearchBar" && m.defaultProps.placeholder == BDFDB.LanguageUtils.LanguageStrings.SEARCH);
+	InternalComponents.NativeSubComponents.SearchBar = BDFDB.ModuleUtils.find(m => m && m.displayName == "SearchBar" && m.prototype.focus);
 	InternalComponents.NativeSubComponents.Select = BDFDB.ModuleUtils.findByName("SelectTempWrapper");
 	InternalComponents.NativeSubComponents.Slider = BDFDB.ModuleUtils.findByName("Slider");
 	InternalComponents.NativeSubComponents.Switch = BDFDB.ModuleUtils.findByName("Switch");
