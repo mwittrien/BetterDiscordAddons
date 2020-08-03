@@ -1435,11 +1435,13 @@
 	color: rgb(var(--vaccentcolor));
 }
 .colorDefault-2K3EoJ.focused-3afm-j,
-.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O) {
+.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O),
+.colorDefault-2K3EoJ:active:not(.hideInteraction-1iHO1O) {
 	background-color: rgb(var(--vaccentcolor));
 }
 .colorDanger-2qLCe1.focused-3afm-j,
-.colorDanger-2qLCe1:hover:not(.hideInteraction-1iHO1O) {
+.colorDanger-2qLCe1:hover:not(.hideInteraction-1iHO1O),
+.colorDanger-2qLCe1:active:not(.hideInteraction-1iHO1O) {
 	background-color: #F04747;
 }
 .colorDefault-2K3EoJ .radioSelection-1HmrQS {				/* contextmenu			radioselection						*/
@@ -1455,11 +1457,13 @@
 	color: #F04747;
 }
 .colorDefault-2K3EoJ.focused-3afm-j .check-1JyqgN,			/* contextmenu			checkmark							*/
-.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O) .check-1JyqgN {
+.colorDefault-2K3EoJ:hover:not(.hideInteraction-1iHO1O) .check-1JyqgN,
+.colorDefault-2K3EoJ:active:not(.hideInteraction-1iHO1O) .check-1JyqgN {
 	color: rgb(var(--vaccentcolor));
 }
 .colorDanger-2qLCe1.focused-3afm-j .check-1JyqgN,			/* contextmenu			checkmark							*/
-.colorDanger-2qLCe1:hover:not(.hideInteraction-1iHO1O) .check-1JyqgN {
+.colorDanger-2qLCe1:hover:not(.hideInteraction-1iHO1O) .check-1JyqgN,
+.colorDanger-2qLCe1:active:not(.hideInteraction-1iHO1O) .check-1JyqgN {
 	color: #F04747;
 }
 .colorPremium-p4p7qO .icon-LYJorE {							/* contextmenu			premiumicon							*/

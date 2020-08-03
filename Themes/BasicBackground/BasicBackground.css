@@ -1175,33 +1175,11 @@ body:before {
 /* ----		6.3.	TEXTAREA						---- */
 
 .form-2fGMdU {												/* textarea				form								*/
-	position: relative;
-	padding-top: 10px;
+	padding-top: 0;
+	margin-top: 0;
 }
-.form-2fGMdU > *,
-.channelTextArea-rNsIhG {
-	z-index: 1;
-}
-#app-mount .form-2fGMdU:after,
-#app-mount .form-2fGMdU:before {
-	display: flex;
-	content: "";
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	right: 8px;
-	left: 0;
-	height: unset;
-	width: unset;
-	pointer-events: none;
-}
-#app-mount .form-2fGMdU:after {
-	background-color: rgba(var(--vtransparencycolor), var(--vtransparencyalpha));
-}
-#app-mount .form-2fGMdU:before {
-	background: var(--vbackground) center/var(--vbackgroundsize);
-	filter: blur(var(--vbackgroundblur));
-	background-attachment: fixed;
+.form-2fGMdU:before {
+	display: none;
 }
 
 .channelTextArea-rNsIhG {									/* textarea				channeltextarea						*/
