@@ -210,7 +210,14 @@
 				let updateEntry = BDFDB.DOMUtils.create(`<span id="${pluginName}-notice">${pluginName}</span>`);
 				updateEntry.addEventListener("click", _ => {BDFDB.PluginUtils.downloadUpdate(pluginName, url);});
 				updateNoticeList.appendChild(updateEntry);
-				if (!document.querySelector(".update-clickme-tooltip")) BDFDB.TooltipUtils.create(updateNoticeList, BDFDB.LanguageUtils.LibraryStrings.update_notice_click, {type:"bottom", selector:"update-clickme-tooltip", delay:500});
+				if (!updateNoticeList.hasTooltip) {
+					updateNoticeList.hasTooltip = true;
+					BDFDB.TooltipUtils.create(updateNoticeList, BDFDB.LanguageUtils.LibraryStrings.update_notice_click, {
+						type: "bottom",
+						delay: 500,
+						onRemove: _ => {updateNoticeList.hasTooltip = false;}
+					});
+				}
 			}
 		}
 	};
@@ -870,7 +877,7 @@
 		}
 		
 		if (options.hide) BDFDB.DOMUtils.appendLocalStyle("BDFDBhideOtherTooltips" + id, `#app-mount ${BDFDB.dotCN.tooltip}:not([tooltip-id="${id}"]) {display: none !important;}`, itemLayerContainer);
-					
+			
 		let mouseLeave = _ => {BDFDB.DOMUtils.remove(itemLayer);};
 		if (!options.perssist) anker.addEventListener("mouseleave", mouseLeave);
 		
@@ -882,6 +889,7 @@
 				BDFDB.DOMUtils.remove(itemLayer);
 				BDFDB.DOMUtils.removeLocalStyle("BDFDBhideOtherTooltips" + id, itemLayerContainer);
 				anker.removeEventListener("mouseleave", mouseLeave);
+				if (typeof options.onHide == "function") options.onHide(itemLayer, anker);
 			}
 		}));
 		observer.observe(document.body, {subtree:true, childList:true});
@@ -942,7 +950,13 @@
 		
 		if (options.delay) {
 			BDFDB.DOMUtils.toggle(itemLayer);
-			BDFDB.TimeUtils.timeout(_ => {BDFDB.DOMUtils.toggle(itemLayer);}, options.delay);
+			BDFDB.TimeUtils.timeout(_ => {
+				BDFDB.DOMUtils.toggle(itemLayer);
+				if (typeof options.onShow == "function") options.onShow(itemLayer, anker);
+			}, options.delay);
+		}
+		else {
+			if (typeof options.onShow == "function") options.onShow(itemLayer, anker);
 		}
 		return itemLayer;
 	};
