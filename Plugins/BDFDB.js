@@ -214,6 +214,7 @@
 					updateNoticeList.hasTooltip = true;
 					BDFDB.TooltipUtils.create(updateNoticeList, BDFDB.LanguageUtils.LibraryStrings.update_notice_click, {
 						type: "bottom",
+						unhideable: true,
 						delay: 500,
 						onHide: _ => {updateNoticeList.hasTooltip = false;}
 					});
@@ -754,11 +755,11 @@
 		notice.style.setProperty("left", "unset", "important");
 		notice.style.setProperty("right", "unset", "important");
 		let sideMargin = ((BDFDB.DOMUtils.getWidth(document.body.firstElementChild) - BDFDB.DOMUtils.getWidth(notice))/2);
-		notice.style.setProperty("left", sideMargin + "px", "important");
-		notice.style.setProperty("right", sideMargin + "px", "important");
+		notice.style.setProperty("left", `${sideMargin}px`, "important");
+		notice.style.setProperty("right", `${sideMargin}px`, "important");
 		notice.style.setProperty("min-width", "unset", "important");
 		notice.style.setProperty("width", "unset", "important");
-		notice.style.setProperty("max-width", "calc(100vw - " + (sideMargin*2) + "px)", "important");
+		notice.style.setProperty("max-width", `calc(100vw - ${sideMargin*2}px)`, "important");
 		notice.querySelector(BDFDB.dotCN.noticedismiss).addEventListener("click", _ => {
 			notice.style.setProperty("overflow", "hidden", "important");
 			notice.style.setProperty("height", "0px", "important");
@@ -807,11 +808,12 @@
 			style = (style ? (style + " ") : "") + `background: ${backgroundColor} !important; border-color: ${backgroundColorIsGradient ? BDFDB.ColorUtils.convert(options.backgroundColor[type == "left" ? 100 : 0], "RGBA") : backgroundColor} !important;`;
 		}
 		if (style) tooltip.style = style;
-		if (typeof options.zIndex == "number") {
-			itemLayer.style.setProperty("z-index", options.zIndex, "important");
-			tooltip.style.setProperty("z-index", options.zIndex, "important");
+		if (typeof options.zIndex == "number" || options.unhideable) {
+			itemLayer.style.setProperty("z-index", options.zIndex || 1002, "important");
+			tooltip.style.setProperty("z-index", options.zIndex || 1002, "important");
+			tooltipContent.style.setProperty("z-index", options.zIndex || 1002, "important");
 		}
-		if (customBackgroundColor) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltipcustom);
+		if (customBackgroundColor || options.unhideable) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltipcustom);
 		else if (options.color && BDFDB.disCN["tooltip" + options.color.toLowerCase()]) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN["tooltip" + options.color.toLowerCase()]);
 		else BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltipblack);
 		
@@ -875,9 +877,7 @@
 			else if (options.html === true) tooltipContent.innerHTML = text;
 			else tooltipContent.innerText = text;
 		}
-		
-		if (options.hide) BDFDB.DOMUtils.appendLocalStyle("BDFDBhideOtherTooltips" + id, `#app-mount ${BDFDB.dotCN.tooltip}:not([tooltip-id="${id}"]) {display: none !important;}`, itemLayerContainer);
-			
+
 		let mouseLeave = _ => {BDFDB.DOMUtils.remove(itemLayer);};
 		if (!options.perssist) anker.addEventListener("mouseleave", mouseLeave);
 		
@@ -893,7 +893,7 @@
 			}
 		}));
 		observer.observe(document.body, {subtree:true, childList:true});
-
+		
 		(tooltip.update = itemLayer.update = _ => {
 			let left, top, tRects = BDFDB.DOMUtils.getRects(anker), iRects = BDFDB.DOMUtils.getRects(itemLayer), aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount)), positionOffsets = {height: 10, width: 10}, offset = typeof options.offset == "number" ? options.offset : 0;
 			switch (type) {
@@ -915,36 +915,62 @@
 					break;
 				}
 				
-			itemLayer.style.setProperty("top", top + "px");
-			itemLayer.style.setProperty("left", left + "px");
+			itemLayer.style.setProperty("top", `${top}px`, "important");
+			itemLayer.style.setProperty("left", `${left}px`, "important");
 			
 			tooltipPointer.style.removeProperty("margin-left");
 			tooltipPointer.style.removeProperty("margin-top");
 			if (type == "top" || type == "bottom") {
 				if (left < 0) {
-					itemLayer.style.setProperty("left", "5px");
-					tooltipPointer.style.setProperty("margin-left", `${left - 10}px`);
+					itemLayer.style.setProperty("left", "5px", "important");
+					tooltipPointer.style.setProperty("margin-left", `${left - 10}px`, "important");
 				}
 				else {
 					let rightMargin = aRects.width - (left + iRects.width);
 					if (rightMargin < 0) {
-						itemLayer.style.setProperty("left", (aRects.width - iRects.width - 5) + "px");
-						tooltipPointer.style.setProperty("margin-left", `${-1*rightMargin}px`);
+						itemLayer.style.setProperty("left", `${aRects.width - iRects.width - 5}px`, "important");
+						tooltipPointer.style.setProperty("margin-left", `${-1*rightMargin}px`, "important");
 					}
 				}
 			}
 			else if (type == "left" || type == "right") {
 				if (top < 0) {
 					itemLayer.style.setProperty("top", "5px");
-					tooltipPointer.style.setProperty("margin-top", `${top - 10}px`);
+					tooltipPointer.style.setProperty("margin-top", `${top - 10}px`, "important");
 				}
 				else {
 					let bottomMargin = aRects.height - (top + iRects.height);
 					if (bottomMargin < 0) {
-						itemLayer.style.setProperty("top", aRects.height - iRects.height - 5 + "px");
-						tooltipPointer.style.setProperty("margin-top", `${-1*bottomMargin}px`);
+						itemLayer.style.setProperty("top", `${aRects.height - iRects.height - 5}px`, "important");
+						tooltipPointer.style.setProperty("margin-top", `${-1*bottomMargin}px`, "important");
 					}
 				}
+			}
+			if (options.unhideable) {
+				for (let node of [itemLayer, tooltip, tooltipContent]) {
+					node.style.setProperty("position", "absolute", "important");
+					node.style.setProperty("right", "unset", "important");
+					node.style.setProperty("bottom", "unset", "important");
+					node.style.setProperty("display", "block", "important");
+					node.style.setProperty("opacity", "1", "important");
+					node.style.setProperty("visibility", "visible", "important");
+					node.style.setProperty("max-width", "unset", "important");
+					node.style.setProperty("min-width", "50px", "important");
+					node.style.setProperty("width", "unset", "important");
+					node.style.setProperty("max-height", "unset", "important");
+					node.style.setProperty("min-height", "14px", "important");
+					node.style.setProperty("height", "unset", "important");
+					node.style.setProperty("animation", "unset", "important");
+					node.style.setProperty("transform", "unset", "important");
+				}
+				for (let node of [tooltip, tooltipContent]) {
+					node.style.setProperty("position", "static", "important");
+					node.style.setProperty("top", "unset", "important");
+					node.style.setProperty("left", "unset", "important");
+				}
+				tooltip.style.setProperty("background", "#000", "important");
+				tooltipContent.style.setProperty("color", "#dcddde", "important");
+				tooltipPointer.style.setProperty(`border-top-color`, "#000", "important");
 			}
 		})();
 		
@@ -3145,7 +3171,7 @@
 	};
 	BDFDB.DOMUtils.toggle = function (...eles) {
 		if (!eles) return;
-		var force = eles.pop();
+		let force = eles.pop();
 		if (typeof force != "boolean") {
 			eles.push(force);
 			force = undefined;
@@ -3158,9 +3184,22 @@
 		}
 		function toggle(node) {
 			if (!node || !Node.prototype.isPrototypeOf(node)) return;
-			var hidden = force === undefined ? !BDFDB.DOMUtils.isHidden(node) : !force;
-			if (hidden) node.style.setProperty("display", "none", "important");
-			else node.style.removeProperty("display");
+			let hidden = force === undefined ? !BDFDB.DOMUtils.isHidden(node) : !force;
+			if (hidden) {
+				let display = node.style.getPropertyValue("display");
+				if (display && display != "none") node.BDFDBhideDisplayState = {
+					display: display,
+					important: (` ${node.style.cssText} `.split(` display: ${display}`)[1] || "").trim().indexOf("!important") == 0
+				};
+				node.style.setProperty("display", "none", "important");
+			}
+			else {
+				if (node.BDFDBhideDisplayState) {
+					node.style.setProperty("display", node.BDFDBhideDisplayState.display, node.BDFDBhideDisplayState.important ? "important" : "");
+					delete node.BDFDBhideDisplayState;
+				}
+				else node.style.removeProperty("display");
+			}
 		}
 	};
 	BDFDB.DOMUtils.isHidden = function (node) {
@@ -7634,8 +7673,8 @@
 								let mousemove = e2 => {
 									left = left - (oldX - e2.pageX), top = top - (oldY - e2.pageY);
 									oldX = e2.pageX, oldY = e2.pageY;
-									this.domElementRef.current.style.setProperty("left", left + "px", "important");
-									this.domElementRef.current.style.setProperty("top", top + "px", "important");
+									this.domElementRef.current.style.setProperty("left", `${left}px`, "important");
+									this.domElementRef.current.style.setProperty("top", `${top}px`, "important");
 								};
 								document.addEventListener("mouseup", mouseup);
 								document.addEventListener("mousemove", mousemove);
@@ -9298,7 +9337,7 @@
 						let Animation = new LibraryModules.AnimationUtils.Value(0);
 						Animation
 							.interpolate({inputRange:[0, 1], outputRange:[0, (BDFDB.DOMUtils.getRects(ele.firstElementChild).width - BDFDB.DOMUtils.getRects(ele).width) * -1]})
-							.addListener(v => {ele.firstElementChild.style.setProperty("left", v.value + "px", "important");});
+							.addListener(v => {ele.firstElementChild.style.setProperty("left", `${v.value}px`, "important");});
 						this.scroll = p => {
 							let w = p + parseFloat(ele.firstElementChild.style.getPropertyValue("left")) / (BDFDB.DOMUtils.getRects(ele.firstElementChild).width - BDFDB.DOMUtils.getRects(ele).width);
 							w = isNaN(w) || !isFinite(w) ? p : w;
