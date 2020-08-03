@@ -2626,7 +2626,7 @@
 	BDFDB.ChannelUtils.getAll = function () {
 		let found = [];
 		for (let ins of BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.channels), {name: ["ChannelCategoryItem", "ChannelItem", "PrivateChannel"], all:true, unlimited:true})) if (ins.props && !ins.props.ispin && ins.props.channel && ins._reactInternalFiber.return) {
-			var div = BDFDB.ReactUtils.findDOMNode(ins);
+			let div = BDFDB.ReactUtils.findDOMNode(ins);
 			div = div && BDFDB.DOMUtils.containsClass(div.parentElement, BDFDB.disCN.categorycontainerdefault, BDFDB.disCN.channelcontainerdefault, false) ? div.parentElement : div;
 			found.push(Object.assign(new ins.props.channel.constructor(ins.props.channel), {div, instance:ins}));
 		}
@@ -6245,7 +6245,10 @@
 				className = className.split(" ").filter(n => n.indexOf("da-") != 0).join(selector ? "." : " ");
 				className = className || DiscordClassModules.BDFDB.BDFDBundefined;
 			}
-			return className;
+			else {
+				if (BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.normalizedClasses)) className = className.split(" ").filter(n => n.indexOf("da-") != 0).map(n => n.replace(/^([A-z0-9]+?)-([A-z0-9_-]{6})$/g, "$1-$2 da-$1")).join(" ");
+			}
+			return BDFDB.ArrayUtils.removeCopies(className.split(" ")).join(" ");
 		}	
 	};
 	BDFDB.disCN = new Proxy(DiscordClasses, {
