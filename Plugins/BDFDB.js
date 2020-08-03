@@ -7708,7 +7708,7 @@
 										customSelected: true
 									});
 								}
-							}, props.pickerConfig));
+							}, props.pickerConfig), true);
 						}
 					});
 					return swatch;
