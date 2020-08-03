@@ -3439,7 +3439,7 @@
 							config.onClose(modal, this);
 						}
 					}
-				}, props);
+				}, props, true);
 			}, {
 				onCloseRequest: closeModal
 			});
@@ -3461,7 +3461,7 @@
 				navId: "bdfdb-context",
 				onClose: BDFDB.LibraryModules.ContextMenuUtils.closeContextMenu,
 				children: children
-			});
+			}, true);
 		});
 	};
 	BDFDB.ContextMenuUtils.close = function (nodeOrInstance) {
