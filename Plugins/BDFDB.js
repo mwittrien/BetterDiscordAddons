@@ -813,7 +813,7 @@
 		if (options.selector) BDFDB.DOMUtils.addClass(tooltip, options.selector);
 		
 		if (BDFDB.ObjectUtils.is(options.guild)) {
-			let streamOwnerIds = LibraryModules.StreamUtils.getAllApplicationStreams().filter(app => app.guildId === options.guild.id).map(app => app.ownerId);
+			let streamOwnerIds = LibraryModules.StreamUtils && LibraryModules.StreamUtils.getAllApplicationStreams && LibraryModules.StreamUtils.getAllApplicationStreams().filter(app => app.guildId === options.guild.id).map(app => app.ownerId) || [];
 			let streamOwners = streamOwnerIds.map(ownerId => LibraryModules.UserStore.getUser(ownerId)).filter(n => n);
 			let connectedUsers = Object.keys(LibraryModules.VoiceUtils.getVoiceStates(options.guild.id)).map(userId => !streamOwnerIds.includes(userId) && BDFDB.LibraryModules.UserStore.getUser(userId)).filter(n => n);
 			let tooltipText = text || options.guild.toString();
@@ -1769,7 +1769,7 @@
 	LibraryModules.StatusMetaUtils = BDFDB.ModuleUtils.findByProperties("getApplicationActivity", "getStatus");
 	LibraryModules.StoreChangeUtils = BDFDB.ModuleUtils.findByProperties("get", "set", "clear", "remove");
 	LibraryModules.StreamerModeStore = BDFDB.ModuleUtils.findByProperties("disableSounds", "hidePersonalInformation");
-	LibraryModules.StreamUtils = BDFDB.ModuleUtils.findByProperties("getStreamForUser", "getActiveStream");
+	LibraryModules.StreamUtils = BDFDB.ModuleUtils.findByProperties("getActiveStream", "getAllApplicationStreams");
 	LibraryModules.StringUtils = BDFDB.ModuleUtils.findByProperties("cssValueToNumber", "upperCaseFirstChar");
 	LibraryModules.UnreadGuildUtils = BDFDB.ModuleUtils.findByProperties("hasUnread", "getUnreadGuilds");
 	LibraryModules.UnreadChannelUtils = BDFDB.ModuleUtils.findByProperties("getUnreadCount", "getOldestUnreadMessageId");
@@ -4424,8 +4424,7 @@
 	DiscordClassModules.Button = BDFDB.ModuleUtils.findByProperties("colorBlack", "button");
 	DiscordClassModules.CallCurrent = BDFDB.ModuleUtils.findByProperties("wrapper", "fullScreen");
 	DiscordClassModules.CallDetails = BDFDB.ModuleUtils.findByProperties("container", "hotspot");
-	DiscordClassModules.CallIncoming = BDFDB.ModuleUtils.findByProperties("incomingCall", "container") || BDFDB.ModuleUtils.findByProperties("wrapper", "mainChannelInfo");
-	DiscordClassModules.CallIncomingInner = BDFDB.ModuleUtils.findByProperties("incomingCallInner", "members");
+	DiscordClassModules.CallIncoming = BDFDB.ModuleUtils.findByProperties("wrapper", "mainChannelInfo");
 	DiscordClassModules.Card = BDFDB.ModuleUtils.findByProperties("card", "cardBrand");
 	DiscordClassModules.CardStatus = BDFDB.ModuleUtils.findByProperties("reset", "error", "card");
 	DiscordClassModules.Category = BDFDB.ModuleUtils.findByProperties("wrapper", "children", "muted");
@@ -4891,10 +4890,7 @@
 		callcurrentcontainer: ["CallCurrent", "wrapper"],
 		callcurrentdetails: ["CallDetails", "container"],
 		callcurrentvideo: ["Video", "video"],
-		callincoming: ["CallIncoming", "incomingCall"],
 		callincomingcontainer: ["CallIncoming", "container"],
-		callincominginner: ["CallIncomingInner", "incomingCallInner"],
-		callmembers: ["CallIncomingInner", "members"],
 		callincomingroot: ["CallIncoming", "root"],
 		callincomingtitle: ["CallIncoming", "title"],
 		callincomingwrapper: ["CallIncoming", "wrapper"],
@@ -7900,8 +7896,8 @@
 			this.props.unread = this.props.state ? LibraryModules.UnreadGuildUtils.hasUnread(this.props.guild.id) : false;
 			this.props.badge = this.props.state ? LibraryModules.UnreadGuildUtils.getMentionCount(this.props.guild.id) : 0;
 			this.props.audio = this.props.state ? (LibraryModules.ChannelStore.getChannel(LibraryModules.LastChannelStore.getVoiceChannelId()) || {}).guild_id == this.props.guild.id : false;
-			this.props.video = this.props.state ? (LibraryModules.StreamUtils.getActiveStream() || {}).guildId == this.props.guild.id : false;
-			this.props.screenshare = this.props.state ? !!LibraryModules.StreamUtils.getAllApplicationStreams().filter(stream => stream.guildId == this.props.guild.id)[0] : false;
+			this.props.video = this.props.state ? (LibraryModules.StreamUtils && LibraryModules.StreamUtils.getActiveStream && LibraryModules.StreamUtils.getActiveStream() || {}).guildId == this.props.guild.id : false;
+			this.props.screenshare = this.props.state ? !!LibraryModules.StreamUtils && LibraryModules.StreamUtils.getAllApplicationStreams && LibraryModules.StreamUtils.getAllApplicationStreams().filter(stream => stream.guildId == this.props.guild.id)[0] : false;
 			this.props.isCurrentUserInThisGuildVoice = this.props.state ? LibraryModules.CurrentVoiceUtils.getGuildId() == this.props.guild.id : false;
 			this.props.animatable = this.props.state ? LibraryModules.IconUtils.hasAnimatedGuildIcon(this.props.guild) : false;
 			this.props.unavailable = this.props.state ? LibraryModules.GuildUnavailableStore.unavailableGuilds.includes(this.props.guild.id) : false;
