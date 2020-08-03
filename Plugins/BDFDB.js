@@ -215,7 +215,7 @@
 					BDFDB.TooltipUtils.create(updateNoticeList, BDFDB.LanguageUtils.LibraryStrings.update_notice_click, {
 						type: "bottom",
 						delay: 500,
-						onRemove: _ => {updateNoticeList.hasTooltip = false;}
+						onHide: _ => {updateNoticeList.hasTooltip = false;}
 					});
 				}
 			}
