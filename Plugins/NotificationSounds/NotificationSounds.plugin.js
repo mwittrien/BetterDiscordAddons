@@ -69,7 +69,7 @@ var NotificationSounds = (_ => {
 	return class NotificationSounds {
 		getName () {return "NotificationSounds";}
 
-		getVersion () {return "3.4.6";}
+		getVersion () {return "3.4.7";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -77,7 +77,7 @@ var NotificationSounds = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Song Deletion","You can now delete single songs, whole categories or all songs"]]
+				"improved":[["Incoming","Works again"]]
 			};
 
 			this.patchedModules = {
@@ -525,18 +525,24 @@ var NotificationSounds = (_ => {
 				this.forceUpdateAll();
 			}
 		}
-
+		
 		processShakeable (e) {
-			let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "IncomingCalls"});
-			if (index > -1) {
-				if (repatchIncoming) {
-					children[index] = null;
-					BDFDB.TimeUtils.timeout(_ => {
-						repatchIncoming = false;
-						BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"App", up:true}))
-					});
+			if (e.returnvalue && BDFDB.ArrayUtils.is(e.returnvalue.props.children)) {
+				let child = e.returnvalue.props.children.find(n => {
+					let string = n && n.type && n.type.toString();
+					return string && string.indexOf("call_ringing_beat") > -1 && string.indexOf("call_ringing") > -1 && string.indexOf("hasIncomingCalls") > -1;
+				});
+				if (child) {
+					let index = e.returnvalue.props.children.indexOf(child);
+					if (repatchIncoming) {
+						e.returnvalue.props.children[index] = null;
+						BDFDB.TimeUtils.timeout(_ => {
+							repatchIncoming = false;
+							BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"App", up:true}))
+						});
+					}
+					else e.returnvalue.props.children[index] = BDFDB.ReactUtils.createElement(e.returnvalue.props.children[index].type, {});
 				}
-				else children[index] = BDFDB.ReactUtils.createElement(children[index].type, {});
 			}
 		}
 		

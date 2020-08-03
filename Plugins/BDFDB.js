@@ -4891,6 +4891,7 @@
 		callcurrentcontainer: ["CallCurrent", "wrapper"],
 		callcurrentdetails: ["CallDetails", "container"],
 		callcurrentvideo: ["Video", "video"],
+		callincomingicon: ["CallIncoming", "icon"],
 		callincomingroot: ["CallIncoming", "root"],
 		callincomingtitle: ["CallIncoming", "title"],
 		callincomingwrapper: ["CallIncoming", "wrapper"],
