@@ -4116,6 +4116,7 @@
 	DiscordClassModules.BDFDB = {
 		BDFDBundefined: "BDFDB_undefined",
 		badge: "badge-7R_W3s",
+		badgeAvatar: "avatar-hF52Er",
 		bdaRepoEntry: "entry-9JnAPs",
 		bdaRepoListHeader: "repoHeader-2KfNvH",
 		bdaRepoListWrapper: "repoList-9JnAPs",
@@ -4899,6 +4900,7 @@
 		badgetextbadge: ["Badge", "textBadge"],
 		badgewrapper: ["NotFound", "badgeWrapper"],
 		bdfdbbadge: ["BDFDB", "badge"],
+		bdfdbbadgeavatar: ["BDFDB", "badgeAvatar"],
 		bdfdbdev: ["BDFDB", "dev"],
 		bdfdbhasbadge: ["BDFDB", "hasBadge"],
 		bdfdbsupporter: ["BDFDB", "supporter"],
@@ -9702,10 +9704,9 @@
 			color: hsla(0,0%,100%,.6);
 		}
 		
-		${BDFDB.dotCN.messageavatar + BDFDB.dotCN.bdfdbbadge} {
-			position: absolute;
-			overflow: visible;
-			border-radius: 0;
+		${BDFDB.dotCN.messageavatar + BDFDB.dotCNS.bdfdbbadgeavatar + BDFDB.dotCN.avatarwrapper} {
+			width: inherit !important;
+			height: inherit !important;
 		}
 
 		${BDFDB.dotCN.favbuttoncontainer} {
@@ -10551,18 +10552,19 @@
 	InternalBDFDB._processAvatarRender = function (user, avatar) {
 		if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user)) {
 			avatar.props["user_by_BDFDB"] = user.id;
-			let role = "", className = BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, ""));
+			let role = "", className = BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, "")), addBadge = settings.showSupportBadges;
 			if (BDFDB_Patrons_T2.includes(user.id)) {
 				role = "BDFDB Patron";
-				className = BDFDB.DOMUtils.formatClassName(className, settings.showSupportBadges && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbsupporter);
+				className = BDFDB.DOMUtils.formatClassName(className, addBadge && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbsupporter);
 			}
 			if (BDFDB_Patrons_T3.includes(user.id)) {
 				role = "BDFDB Patron Level 2";
-				className = BDFDB.DOMUtils.formatClassName(className, settings.showSupportBadges && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbsupporter, settings.showSupportBadges && BDFDB_Patrons_T3_hasBadge.includes(user.id) && BDFDB.disCN.bdfdbsupportercustom);
+				className = BDFDB.DOMUtils.formatClassName(className, addBadge && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbsupporter, addBadge && BDFDB_Patrons_T3_hasBadge.includes(user.id) && BDFDB.disCN.bdfdbsupportercustom);
 			}
 			if (user.id == myId) {
+				addBadge = true;
 				role = "Theme Developer";
-				className = BDFDB.DOMUtils.formatClassName(className, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbdev);
+				className = BDFDB.DOMUtils.formatClassName(className, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbdev);
 			}
 			if (role) {
 				delete avatar.props["user_by_BDFDB"];
@@ -10577,7 +10579,7 @@
 					"user_by_BDFDB": user.id,
 					children: [avatar]
 				});
-				if (settings.showSupportBadges) avatar.props.children.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
+				if (addBadge) avatar.props.children.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 					text: role,
 					children: BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.bdfdbbadge,
@@ -10590,22 +10592,23 @@
 	InternalBDFDB._processAvatarMount = function (user, avatar, position = "top") {
 		if (Node.prototype.isPrototypeOf(avatar) && BDFDB.ObjectUtils.is(user)) {
 			avatar.setAttribute("user_by_BDFDB", user.id);
-			let role = "";
-			if (BDFDB_Patrons_T2.includes(user.id) && settings.showSupportBadges) {
+			let role = "", addBadge = settings.showSupportBadges;;
+			if (BDFDB_Patrons_T2.includes(user.id) && addBadge) {
 				role = "BDFDB Patron";
-				avatar.className = BDFDB.DOMUtils.formatClassName(avatar.className, settings.showSupportBadges && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbsupporter);
+				avatar.className = BDFDB.DOMUtils.formatClassName(avatar.className, addBadge && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbsupporter);
 			}
-			else if (BDFDB_Patrons_T3.includes(user.id) && settings.showSupportBadges) {
+			else if (BDFDB_Patrons_T3.includes(user.id) && addBadge) {
 				role = "BDFDB Patron Level 2";
-				avatar.className = BDFDB.DOMUtils.formatClassName(avatar.className, settings.showSupportBadges && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbsupporter, settings.showSupportBadges && BDFDB_Patrons_T3_hasBadge.includes(user.id) && BDFDB.disCN.bdfdbsupportercustom);
+				avatar.className = BDFDB.DOMUtils.formatClassName(avatar.className, addBadge && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbsupporter, addBadge && BDFDB_Patrons_T3_hasBadge.includes(user.id) && BDFDB.disCN.bdfdbsupportercustom);
 				
 			}
 			else if (user.id == myId) {
+				addBadge = true;
 				role = "Theme Developer";
-				avatar.className = BDFDB.DOMUtils.formatClassName(avatar.className, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbdev);
+				avatar.className = BDFDB.DOMUtils.formatClassName(avatar.className, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbdev);
 			}
 			if (role && !avatar.querySelector(BDFDB.dotCN.bdfdbbadge)) {
-				if (settings.showSupportBadges) {
+				if (addBadge) {
 					if (BDFDB_Patrons_T3_hasBadge.includes(user.id)) avatar.setAttribute("custombadge_id", user.id);
 					let badge = document.createElement("div");
 					badge.className = BDFDB.disCN.bdfdbbadge;
