@@ -3470,6 +3470,8 @@
 								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ModalComponents.ModalContent, {
 									className: config.contentClassName,
 									scroller: config.scroller,
+									direction: config.direction,
+									content: config.content,
 									children: contentChildren
 								}),
 								footerChildren.length ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ModalComponents.ModalFooter, {
@@ -5696,10 +5698,10 @@
 		messagewrapper: ["MessageBody", "wrapper"],
 		messagezalgo: ["MessageBody", "zalgo"],
 		modal: ["ModalWrap", "modal"],
-		modalclose: [DiscordClassModules.LayerModal.close ? "LayerModal" : "Modal", "close"],
+		modalclose: ["LayerModal", "close"],
 		modalchangelogmodal: ["BDFDB", "changeLogModal"],
 		modalconfirmmodal: ["BDFDB", "confirmModal"],
-		modalcontent: [DiscordClassModules.LayerModal.content ? "LayerModal" : "Modal", "content"],
+		modalcontent: ["LayerModal", "content"],
 		modalfooter: ["Modal", "footer"],
 		modalguildname: ["ModalItems", "guildName"],
 		modalheader: ["Modal", "header"],
@@ -6249,7 +6251,7 @@
 				if (BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.normalizedClasses)) className = className.split(" ").filter(n => n.indexOf("da-") != 0).map(n => n.replace(/^([A-z0-9]+?)-([A-z0-9_-]{6})$/g, "$1-$2 da-$1")).join(" ");
 			}
 			return BDFDB.ArrayUtils.removeCopies(className.split(" ")).join(" ");
-		}	
+		}
 	};
 	BDFDB.disCN = new Proxy(DiscordClasses, {
 		get: function (list, item) {
@@ -8260,14 +8262,14 @@
 				ref: this.props.scrollerRef,
 				children: this.props.children
 			}) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
-				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.modalcontent, BDFDB.disCN.modalnoscroller, this.props.className),
-				direction: InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
+				className: BDFDB.DOMUtils.formatClassName(this.props.content && BDFDB.disCN.modalcontent, BDFDB.disCN.modalnoscroller, this.props.className),
+				direction: this.props.direction || InternalComponents.LibraryComponents.Flex.Direction.VERTICAL,
 				align: InternalComponents.LibraryComponents.Flex.Align.STRETCH,
 				children: this.props.children
 			});
 		}
 	};
-	InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.ModalComponents.ModalContent, {scroller:true});
+	InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.ModalComponents.ModalContent, {scroller:true, content:true});
 	
 	InternalComponents.LibraryComponents.ModalComponents.ModalTabContent = InternalBDFDB.loadPatchedComp("ModalComponents.ModalTabContent") || reactInitialized && class BDFDB_ModalTabContent extends LibraryModules.React.Component {
 		render() {
@@ -9889,8 +9891,10 @@
 			padding-right: 8px;
 		}
 		${BDFDB.dotCN.modalnoscroller} {
-			padding-bottom: 10px;
 			overflow: visible;
+		}
+		${BDFDB.dotCN.modalcontent + BDFDB.dotCN.modalnoscroller} {
+			padding-bottom: 10px;
 		}
 		${BDFDB.dotCN.modaltabcontent} {
 			margin-top: 10px;
