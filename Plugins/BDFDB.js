@@ -3528,7 +3528,7 @@
 	BDFDB.ContextMenuUtils.createItem = function (component, props = {}) {
 		if (!component) return null;
 		else {
-			if (props.persisting || (typeof props.color == "string" && !BDFDB.DiscordClasses[`menu${props.color.toLowerCase()}`])) component = InternalComponents.MenuItem;
+			if (props.persisting || BDFDB.ObjectUtils.is(props.popoutProps) || (typeof props.color == "string" && !BDFDB.DiscordClasses[`menu${props.color.toLowerCase()}`])) component = InternalComponents.MenuItem;
 			if (BDFDB.ObjectUtils.toArray(RealMenuItems).some(c => c == component)) return BDFDB.ReactUtils.createElement(component, props);
 			else return BDFDB.ReactUtils.createElement(RealMenuItems.MenuItem, {
 				id: props.id,
@@ -6921,7 +6921,15 @@
 	
 	var InternalComponents = {NativeSubComponents: {}, LibraryComponents: {}}, reactInitialized = LibraryModules.React && LibraryModules.React.Component;
 	
+	let openedItem;
 	InternalComponents.MenuItem = reactInitialized && class BDFDB_MenuItem extends LibraryModules.React.Component {
+		constructor(props) {
+			super(props);
+			this.state = {hovered: false};
+		}
+		componentWillUnmount() {
+			if (openedItem == this.props.id) openedItem = null;
+		}
 		render() {
 			let color = (typeof this.props.color == "string" ? this.props.color : InternalComponents.LibraryComponents.MenuItems.Colors.DEFAULT).toLowerCase();
 			let isCustomColor = false;
@@ -6932,16 +6940,35 @@
 				}
 				else color = (InternalComponents.LibraryComponents.MenuItems.Colors.DEFAULT || "").toLowerCase();
 			}
-			return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, Object.assign({
-				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.menuitem, BDFDB.disCN.menulabelcontainer, color && (isCustomColor ? BDFDB.disCN.menucolorcustom : BDFDB.disCN[`menu${color}`]), this.props.disabled && BDFDB.disCN.menudisabled, this.props.isFocused && BDFDB.disCN.menufocused),
+			let renderPopout, onClose, hasPopout = BDFDB.ObjectUtils.is(this.props.popoutProps);
+			if (hasPopout) {
+				renderPopout = instance => {
+					openedItem = this.props.id;
+					return typeof this.props.popoutProps.renderPopout == "function" && this.props.popoutProps.renderPopout(instance);
+				};
+				onClose = instance => {
+					openedItem = null;
+					typeof this.props.popoutProps.onClose == "function" && this.props.popoutProps.onClose(instance);
+				};
+			}
+			let focused = !openedItem ? this.props.isFocused : openedItem == this.props.id;
+			let themeDark = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themedark;
+			let item = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, Object.assign({
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.menuitem, BDFDB.disCN.menulabelcontainer, color && (isCustomColor ? BDFDB.disCN.menucolorcustom : BDFDB.disCN[`menu${color}`]), this.props.disabled && BDFDB.disCN.menudisabled, focused && BDFDB.disCN.menufocused),
 				style: {
-					color: isCustomColor && (!this.props.isFocused ? color : (BDFDB.ColorUtils.isBright(color) ? "#000" : "#FFF")),
-					background: isCustomColor && this.props.isFocused && color
+					color: isCustomColor ? ((focused || this.state.hovered) ? (BDFDB.ColorUtils.isBright(color) ? "#000000" : "#ffffff") : color) : (this.state.hovered ? "#ffffff" : null),
+					background: isCustomColor && (focused || this.state.hovered) && color
 				},
 				onClick: this.props.disabled ? null : e => {
 					if (!this.props.action) return false;
-					!this.props.persisting && this.props.onClose();
+					!this.props.persisting && !hasPopout && this.props.onClose();
 					this.props.action(e, this);
+				},
+				onMouseEnter: this.props.disabled ? null : e => {
+					this.setState({hovered: true});
+				},
+				onMouseLeave: this.props.disabled ? null : e => {
+					this.setState({hovered: false});
 				},
 				"aria-disabled": this.props.disabled,
 				children: [
@@ -6972,16 +6999,14 @@
 							src: typeof this.props.imageUrl == "function" ? this.props.imageUrl(this) : this.props.imageUrl,
 							alt: ""
 						})
-					}),
-					this.props.hasSubmenu && BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.menuiconcontainer,
-						children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
-							className: BDFDB.disCN.menucaret,
-							name: InternalComponents.LibraryComponents.SvgIcon.Names.MENU_CARET
-						})
 					})
 				].filter(n => n)
-			}, this.props.menuItemProps));
+			}, this.props.menuItemProps, {isFocused: focused}));
+			return hasPopout ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.PopoutContainer, Object.assign({}, this.props.popoutProps, {
+				children: item,
+				renderPopout: renderPopout,
+				onClose: onClose
+			})) : item;
 		}
 	};
 	InternalComponents.ErrorBoundary = reactInitialized && class BDFDB_ErrorBoundary extends LibraryModules.React.PureComponent {
