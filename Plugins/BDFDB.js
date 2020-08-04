@@ -8963,7 +8963,7 @@
 						children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TabBar, {
 							itemClassName: this.props.itemClassName,
 							type: InternalComponents.LibraryComponents.TabBar.Types.SIDE,
-							items: items.map(data => ({value: data.value})),
+							items: items,
 							selectedItem: selectedItem,
 							renderItem: this.props.renderItem,
 							onItemSelect: this.handleItemSelect.bind(this)
@@ -9174,7 +9174,7 @@
 		render() {
 			let items = (BDFDB.ArrayUtils.is(this.props.items) ? this.props.items : [{}]).filter(n => n);
 			let selectedItem = this.props.selectedItem || (items[0] || {}).value;
-			let renderItem = typeof this.props.renderItem == "function" ? this.props.renderElement : (data => data.label || data.value);
+			let renderItem = typeof this.props.renderItem == "function" ? this.props.renderItem : (data => data.label || data.value);
 			return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.TabBar, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				selectedItem: selectedItem,
 				onItemSelect: this.handleItemSelect.bind(this),
@@ -9943,6 +9943,7 @@
 			flex: 0 1 auto;
 		}
 		${BDFDB.dotCN.sidebarcontent} {
+			padding: 8px 0;
 			flex: 1 1 auto;
 		}
 		
