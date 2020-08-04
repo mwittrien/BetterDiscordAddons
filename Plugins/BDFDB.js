@@ -4162,6 +4162,7 @@
 		inputNumberWrapper: "numberInputWrapper-j4svZS",
 		inputNumberWrapperDefault: "numberInputWrapperDefault-gRxcuK numberInputWrapper-j4svZS",
 		inputNumberWrapperMini: "numberInputWrapperMini-wtUU31 numberInputWrapper-j4svZS",
+		listRow: "listRow-7SfZww",
 		loadingIcon: "loadingIcon-cOYMPl",
 		loadingIconWrapper: "loadingIconWrapper-PsVJ9m",
 		overflowEllipsis: "ellipsis-qlo9sA",
@@ -5485,6 +5486,7 @@
 		listname: ["UserProfile", "listName"],
 		listrow: ["UserProfile", "listRow"],
 		listrowcontent: ["UserProfile", "listRowContent"],
+		listrowwrapper: ["BDFDB", "listRow"],
 		listscroller: ["UserProfile", "listScroller"],
 		livetag: ["LiveTag", "live"],
 		livetaggrey: ["LiveTag", "grey"],
@@ -8122,7 +8124,7 @@
 	InternalComponents.LibraryComponents.ListRow = InternalBDFDB.loadPatchedComp("ListRow") || reactInitialized && class BDFDB_ListRow extends LibraryModules.React.Component {
 		render () {
 			return BDFDB.ReactUtils.createElement("div", {
-				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.listrow, this.props.className),
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.listrowwrapper, this.props.className, BDFDB.disCN.listrow),
 				children: [
 					this.props.prefix,
 					BDFDB.ReactUtils.createElement("div", {
@@ -8300,6 +8302,7 @@
 		jump(offset) {
 			if (offset > -1 && offset < Math.ceil(this.props.items.length/this.props.amount) && this.props.offset != offset) {
 				this.props.offset = offset;
+				if (typeof this.props.onJump == "function") this.props.onJump(offset, this);
 				BDFDB.ReactUtils.forceUpdate(this);
 			}
 		}
@@ -8909,7 +8912,11 @@
 					!usePagination ? this.props.data.map(renderItem) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.PaginatedList, Object.assign({}, this.props.pagination, {
 						header: header,
 						items: this.props.data,
-						renderItem: renderItem
+						renderItem: renderItem,
+						onJump: (offset, instance) => {
+							this.props.pagination.offset = offset;
+							if (typeof this.props.pagination.onJump == "function") this.props.pagination.onJump(offset, this, instance);
+						}
 					}))
 				].filter(n => n)
 			});
@@ -9931,6 +9938,12 @@
 		}
 		${BDFDB.dotCN.svgicon}:active {
 			color: var(--interactive-active);
+		}
+		
+		${BDFDB.dotCNS.listrowwrapper + BDFDB.dotCN.listavatar} {
+			display: flex;
+			justify-content: center;
+			align-items: center;
 		}
 		
 		${BDFDB.dotCN.sidebarlist} {

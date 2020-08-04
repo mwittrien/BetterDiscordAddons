@@ -2,10 +2,10 @@
 
 var FriendNotifications = (_ => {
 	var _this;
-	var userStatusStore, timeLog, lastTimes, friendCounter, checkInterval;
+	var userStatusStore, timeLog, lastTimes, friendCounter, checkInterval, paginationOffset = {};
 	var settings = {}, amounts = {}, notificationStrings = {}, notificationSounds = {}, observedUsers = {};
 	
-	const FriendOnlineCounter = class FriendOnlineCounter extends BdApi.React.Component {
+	const FriendOnlineCounterComponent = class FriendOnlineCounter extends BdApi.React.Component {
 		componentDidMount() {
 			friendCounter = this;
 		}
@@ -26,7 +26,7 @@ var FriendNotifications = (_ => {
 	return class FriendNotifications {
 		getName () {return "FriendNotifications";}
 
-		getVersion () {return "1.4.8";}
+		getVersion () {return "1.4.9";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -34,8 +34,7 @@ var FriendNotifications = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["200 cap","No longer caps timelog at 200 entries"]],
-				"improved":[["Pagination","Added Pagination to the settings and timelog, to stop the plugin from freezing for ppl who feel like they need to have over 500 friends on discord"]]
+				"fixed":[["Settings Page Reset","Enabling/Disabling notifications for a user no longer jumps back the settings list to page 1"]]
 			};
 			
 			this.patchedModules = {
@@ -190,7 +189,9 @@ var FriendNotifications = (_ => {
 					data: users,
 					pagination: {
 						alphabetKey: "username",
-						amount: 50
+						amount: 50,
+						offset: paginationOffset[title] || 0,
+						onJump: offset => {paginationOffset[title] = offset;}
 					},
 					renderLabel: data => [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
@@ -518,7 +519,7 @@ var FriendNotifications = (_ => {
 		processGuilds (e) {
 			if (settings.addOnlineCount) {
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ConnectedUnreadDMs"});
-				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(FriendOnlineCounter, {
+				if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(FriendOnlineCounterComponent, {
 					amount: BDFDB.LibraryModules.StatusMetaUtils.getOnlineFriendCount()
 				}));
 			}
