@@ -287,7 +287,6 @@ var ShowHiddenChannels = (_ => {
 							label: BDFDB.LanguageUtils.LanguageStrings.CHANNEL + " " + BDFDB.LanguageUtils.LanguageStrings.ACCESSIBILITY,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "permissions"),
 							action: _ => {
-								BDFDB.ContextMenuUtils.close(e.instance);
 								this.showAccessModal(e.instance.props.channel, !isHidden);
 							}
 						})

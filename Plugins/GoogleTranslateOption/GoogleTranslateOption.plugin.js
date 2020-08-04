@@ -183,7 +183,6 @@ var GoogleTranslateOption = (_ => {
 					}),
 					disabled: !translated && isTranslating,
 					action: _ => {
-						BDFDB.ContextMenuUtils.close(e.instance);
 						this.translateMessage(e.instance.props.message, e.instance.props.channel);
 					}
 				}));
@@ -217,7 +216,6 @@ var GoogleTranslateOption = (_ => {
 								};
 								if (foundTranslation && foundInput && foundOutput) {
 									if (document.querySelector(".googletranslate-tooltip")) {
-										BDFDB.ContextMenuUtils.close(e.instance);
 										BDFDB.DiscordUtils.openLink(this.getGoogleTranslatePageURL(foundInput.id, foundOutput.id, text), settings.useChromium);
 									}
 									else createTooltip();

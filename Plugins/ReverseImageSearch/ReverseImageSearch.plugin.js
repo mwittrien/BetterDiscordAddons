@@ -171,6 +171,7 @@ var ReverseImageSearch = (_ => {
 					children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.labels.context_reverseimagesearch_text.replace("...", this.defaults.engines[engineKeys[0]].name),
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "single-search"),
+						persisting: true,
 						action: event => {
 							if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
 							BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(imgUrlReplaceString, encodeURIComponent(url)), settings.useChromium, event.shiftKey);
@@ -183,6 +184,7 @@ var ReverseImageSearch = (_ => {
 						label: this.defaults.engines[key].name,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "search", key),
 						color: key == "_all" ? BDFDB.LibraryComponents.MenuItems.Colors.DANGER : BDFDB.LibraryComponents.MenuItems.Colors.DEFAULT,
+						persisting: true,
 						action: event => {
 							if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
 							if (key == "_all") {

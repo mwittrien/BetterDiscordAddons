@@ -211,7 +211,6 @@ var SpellCheck = (_ => {
 									});
 								},
 								action: _ => {
-									BDFDB.ContextMenuUtils.close(e.instance);
 									this.addToOwnDictionary(word);
 								}
 							}),
@@ -224,7 +223,6 @@ var SpellCheck = (_ => {
 								label: suggestion,
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, "suggestion", suggestion),
 								action: _ => {
-									BDFDB.ContextMenuUtils.close(e.instance);
 									this.replaceWord(e.instance.props.editor, word, suggestion);
 								}
 							}))

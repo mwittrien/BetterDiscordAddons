@@ -170,7 +170,6 @@ var EditServers = (_ => {
 									label: this.labels.submenu_serversettings_text,
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-change"),
 									action: _ => {
-										BDFDB.ContextMenuUtils.close(e.instance);
 										this.openGuildSettingsModal(e.instance.props.guild.id);
 									}
 								}),
@@ -179,7 +178,6 @@ var EditServers = (_ => {
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-reset"),
 									disabled: !changedGuilds[e.instance.props.guild.id],
 									action: _ => {
-										BDFDB.ContextMenuUtils.close(e.instance);
 										BDFDB.DataUtils.remove(this, "servers", e.instance.props.guild.id);
 										this.forceUpdateAll();
 									}

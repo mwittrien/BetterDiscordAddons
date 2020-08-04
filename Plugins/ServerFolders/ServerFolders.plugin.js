@@ -550,7 +550,6 @@ var ServerFolders = (_ => {
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, "remove-from-folder"),
 								color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
 								action: _ => {
-									BDFDB.ContextMenuUtils.close(e.instance);
 									this.removeGuildFromFolder(folder.folderId, e.instance.props.guild.id);
 								}
 							})
@@ -560,7 +559,6 @@ var ServerFolders = (_ => {
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, "create-folder"),
 								disabled: !unfolderedGuilds.length,
 								action: _ => {
-									BDFDB.ContextMenuUtils.close(e.instance);
 									this.openFolderCreationMenu(unfolderedGuilds, e.instance.props.guild.id);
 								}
 							}),
@@ -572,7 +570,6 @@ var ServerFolders = (_ => {
 									label: folder.folderName || `${BDFDB.LanguageUtils.LanguageStrings.SERVER_FOLDER_PLACEHOLDER} #${i + 1}`,
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "add-to-folder", i + 1),
 									action: _ => {
-										BDFDB.ContextMenuUtils.close(e.instance);
 										this.addGuildToFolder(folder.folderId, e.instance.props.guild.id);
 									}
 								}))
@@ -621,7 +618,6 @@ var ServerFolders = (_ => {
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "remove-folder"),
 						color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
 						action: event => {
-							BDFDB.ContextMenuUtils.close(event.target);
 							BDFDB.ModalUtils.confirm(this, `Are you sure you want to remove the folder${folder.folderName ? ` '${folder.folderName}'` : ""}?`, _ => {
 								this.removeFolder(e.instance.props.folderId);
 							});

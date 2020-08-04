@@ -3528,13 +3528,14 @@
 	BDFDB.ContextMenuUtils.createItem = function (component, props = {}) {
 		if (!component) return null;
 		else {
+			if (props.persisting || (typeof props.color == "string" && !BDFDB.DiscordClasses[`menu${props.color.toLowerCase()}`])) component = InternalComponents.MenuItem;
 			if (BDFDB.ObjectUtils.toArray(RealMenuItems).some(c => c == component)) return BDFDB.ReactUtils.createElement(component, props);
 			else return BDFDB.ReactUtils.createElement(RealMenuItems.MenuItem, {
 				id: props.id,
 				disabled: props.disabled,
 				render: menuItemProps => {
 					if (!props.state) props.state = BDFDB.ObjectUtils.extract(props, "checked", "value");
-					return BDFDB.ReactUtils.createElement(component, Object.assign(props, menuItemProps));
+					return BDFDB.ReactUtils.createElement(component, Object.assign(props, menuItemProps, {color: props.color}));
 				}
 			});
 		}
@@ -4174,6 +4175,7 @@
 		paginationListPagination: "pagination-ko4zZk",
 		popoutWrapper: "popout-xwjvsX",
 		quickSelectWrapper: "quickSelectWrapper-UCfTKz",
+		menuColorCustom: "colorCustom-44asd2",
 		menuItemHint: "hint-BK71lM",
 		modalHeaderShade: "shade-h6F4sT",
 		modalHeaderHasSibling: "hasSiblings-fRyjyl",
@@ -4571,6 +4573,7 @@
 	DiscordClassModules.LoadingScreen = BDFDB.ModuleUtils.findByProperties("container", "problemsText", "problems");
 	DiscordClassModules.Margins = BDFDB.ModuleUtils.findByProperties("marginBottom4", "marginCenterHorz");
 	DiscordClassModules.Menu = BDFDB.ModuleUtils.findByProperties("menu", "styleFlexible", "item");
+	DiscordClassModules.MenuCaret = BDFDB.ModuleUtils.findByProperties("arrow", "open");
 	DiscordClassModules.MenuReactButton = BDFDB.ModuleUtils.findByProperties("wrapper", "icon", "focused");
 	DiscordClassModules.MenuSlider = BDFDB.ModuleUtils.findByProperties("slider", "sliderContainer");
 	DiscordClassModules.Member = BDFDB.ModuleUtils.findByProperties("member", "ownerIcon");
@@ -5527,9 +5530,12 @@
 		mentionwrapper: ["NotFound", "mentionWrapper"],
 		menu: ["Menu", "menu"],
 		menucaret: ["Menu", "caret"],
+		menucaretarrow: ["MenuCaret", "arrow"],
+		menucaretopen: ["MenuCaret", "open"],
 		menucheck: ["Menu", "check"],
 		menucheckbox: ["Menu", "checkbox"],
 		menucolorbrand: ["Menu", "colorBrand"],
+		menucolorcustom: ["BDFDB", "menuColorCustom"],
 		menucolordanger: ["Menu", "colorDanger"],
 		menucolordefault: ["Menu", "colorDefault"],
 		menucolorpremium: ["Menu", "colorPremium"],
@@ -6912,6 +6918,69 @@
 	
 	var InternalComponents = {NativeSubComponents: {}, LibraryComponents: {}}, reactInitialized = LibraryModules.React && LibraryModules.React.Component;
 	
+	InternalComponents.MenuItem = reactInitialized && class BDFDB_MenuItem extends LibraryModules.React.Component {
+		render() {
+			let color = (typeof this.props.color == "string" ? this.props.color : InternalComponents.LibraryComponents.MenuItems.Colors.DEFAULT).toLowerCase();
+			let isCustomColor = false;
+			if (color) {
+				if (!BDFDB.DiscordClasses[`menu${color}`] && BDFDB.ColorUtils.getType(color)) {
+					isCustomColor = true;
+					color = BDFDB.ColorUtils.convert(color, "RGBA");
+				}
+				else color = (InternalComponents.LibraryComponents.MenuItems.Colors.DEFAULT || "").toLowerCase();
+			}
+			return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, Object.assign({
+				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.menuitem, BDFDB.disCN.menulabelcontainer, color && (isCustomColor ? BDFDB.disCN.menucolorcustom : BDFDB.disCN[`menu${color}`]), this.props.disabled && BDFDB.disCN.menudisabled, this.props.isFocused && BDFDB.disCN.menufocused),
+				style: {
+					color: isCustomColor && (!this.props.isFocused ? color : (BDFDB.ColorUtils.isBright(color) ? "#000" : "#FFF")),
+					background: isCustomColor && this.props.isFocused && color
+				},
+				onClick: this.props.disabled ? null : e => {
+					if (!this.props.action) return false;
+					!this.props.persisting && this.props.onClose();
+					this.props.action(e, this);
+				},
+				"aria-disabled": this.props.disabled,
+				children: [
+					BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.menulabel,
+						children: [
+							typeof this.props.label == "function" ? this.props.label(this) : this.props.label,
+							this.props.subtext && BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN.menusubtext,
+								children: typeof this.props.subtext == "function" ? this.props.subtext(this) : this.props.subtext
+							})
+						].filter(n => n)
+					}),
+					this.props.hint && BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.menuhintcontainer,
+						children: typeof this.props.hint == "function" ? this.props.hint(this) : this.props.hint
+					}),
+					this.props.icon && BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.menuiconcontainer,
+						children: BDFDB.ReactUtils.createElement(this.props.icon, {
+							className: BDFDB.disCN.menuicon,
+						})
+					}),
+					this.props.imageUrl && BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.menuimagecontainer,
+						children: BDFDB.ReactUtils.createElement("img", {
+							className: BDFDB.disCN.menuimage,
+							src: typeof this.props.imageUrl == "function" ? this.props.imageUrl(this) : this.props.imageUrl,
+							alt: ""
+						})
+					}),
+					this.props.hasSubmenu && BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.menuiconcontainer,
+						children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+							className: BDFDB.disCN.menucaret,
+							name: InternalComponents.LibraryComponents.SvgIcon.Names.MENU_CARET
+						})
+					})
+				].filter(n => n)
+			}, this.props.menuItemProps));
+		}
+	};
 	InternalComponents.ErrorBoundary = reactInitialized && class BDFDB_ErrorBoundary extends LibraryModules.React.PureComponent {
 		constructor(props) {
 			super(props);
@@ -8217,12 +8286,6 @@
 		}
 	};
 	
-	InternalComponents.LibraryComponents.MenuItems.MenuPersistingItem = InternalBDFDB.loadPatchedComp("MenuItems.MenuPersistingItem") || reactInitialized && class BDFDB_MenuPersistingItem extends LibraryModules.React.Component {
-		render() {
-			return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.MenuItem, Object.assign({}, this.props, {onClose: _ => {}}));
-		}
-	};
-	
 	InternalComponents.LibraryComponents.MenuItems.MenuSliderItem = InternalBDFDB.loadPatchedComp("MenuItems.MenuSliderItem") || reactInitialized && class BDFDB_MenuSliderItem extends LibraryModules.React.Component {
 		handleValueChange(value) {
 			if (this.props.state) {
@@ -8394,7 +8457,7 @@
 				if (!this.props.alphabetKey) items = this.props.items;
 				else {
 					let unsortedItems = [].concat(this.props.items);
-					for (let key of ["0-9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]) {
+					for (let key of ["0-9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]) {
 						let numbers = key == "0-9", alphaItems = [];
 						for (let item of unsortedItems) if (item && item[this.props.alphabetKey] && (numbers && !isNaN(parseInt(item[this.props.alphabetKey][0])) || item[this.props.alphabetKey].toUpperCase().indexOf(key) == 0)) alphaItems.push(item);
 						for (let sortedItem of alphaItems) BDFDB.ArrayUtils.remove(unsortedItems, sortedItem);
@@ -8545,7 +8608,6 @@
 													label: option.label,
 													id: BDFDB.ContextMenuUtils.createItemId("option", option.key || option.value || i),
 													action: selected ? null : event2 => {
-														BDFDB.ContextMenuUtils.close(event2._targetInst);
 														this.handleChange.bind(this)(option)
 													}
 												})
@@ -9025,7 +9087,9 @@
 					width: 24,
 					height: 24,
 					color: "currentColor"
-				}, this.props.name.defaultProps, this.props);
+				}, this.props.name.defaultProps, this.props, {
+					className: BDFDB.DOMUtils.formatClassName(typeof this.props.name.getClassName == "function" && this.props.name.getClassName(this.props), this.props.className)
+				});
 				for (let key in props) this.props.iconSVG = this.props.iconSVG.replace(new RegExp(`%%${key}`, "g"), props[key]);
 			}
 			if (this.props.iconSVG) {
@@ -9113,6 +9177,10 @@
 		},
 		LOCK_CLOSED: {
 			icon: `<svg name="LockClosed" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><path fill="%%color" d="M17 11V7C17 4.243 14.756 2 12 2C9.242 2 7 4.243 7 7V11C5.897 11 5 11.896 5 13V20C5 21.103 5.897 22 7 22H17C18.103 22 19 21.103 19 20V13C19 11.896 18.103 11 17 11ZM12 18C11.172 18 10.5 17.328 10.5 16.5C10.5 15.672 11.172 15 12 15C12.828 15 13.5 15.672 13.5 16.5C13.5 17.328 12.828 18 12 18ZM15 11H9V7C9 5.346 10.346 4 12 4C13.654 4 15 5.346 15 7V11Z"></path></svg>`
+		},
+		MENU_CARET: {
+			getClassName: props => BDFDB.DOMUtils.formatClassName(BDFDB.disCN.menucaretarrow, props.open && BDFDB.disCN.menucaretopen),
+			icon: `<svg name="MenuCaret" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd" aria-hidden="true"><path fill="%%color" d="M16.59 8.59004L12 13.17L7.41 8.59004L6 10L12 16L18 10L16.59 8.59004Z"></path></g></svg>`
 		},
 		NOVA_AT: {
 			icon: `<svg name="Nova_At" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><path fill="%%color" d="M12 2C6.486 2 2 6.486 2 12C2 17.515 6.486 22 12 22C14.039 22 15.993 21.398 17.652 20.259L16.521 18.611C15.195 19.519 13.633 20 12 20C7.589 20 4 16.411 4 12C4 7.589 7.589 4 12 4C16.411 4 20 7.589 20 12V12.782C20 14.17 19.402 15 18.4 15L18.398 15.018C18.338 15.005 18.273 15 18.209 15H18C17.437 15 16.6 14.182 16.6 13.631V12C16.6 9.464 14.537 7.4 12 7.4C9.463 7.4 7.4 9.463 7.4 12C7.4 14.537 9.463 16.6 12 16.6C13.234 16.6 14.35 16.106 15.177 15.313C15.826 16.269 16.93 17 18 17L18.002 16.981C18.064 16.994 18.129 17 18.195 17H18.4C20.552 17 22 15.306 22 12.782V12C22 6.486 17.514 2 12 2ZM12 14.599C10.566 14.599 9.4 13.433 9.4 11.999C9.4 10.565 10.566 9.399 12 9.399C13.434 9.399 14.6 10.565 14.6 11.999C14.6 13.433 13.434 14.599 12 14.599Z"></path></svg>`

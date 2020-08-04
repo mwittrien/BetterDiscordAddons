@@ -238,7 +238,6 @@ var PinDMs = (_ => {
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "unpin-channellist"),
 									color: BDFDB.LibraryComponents.MenuItems.Colors.DANGER,
 									action: _ => {
-										BDFDB.ContextMenuUtils.close(instance);
 										this.removeFromCategory(id, currentCategory, "dmCategories");
 									}
 								}) : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
@@ -246,7 +245,6 @@ var PinDMs = (_ => {
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "new-channellist"),
 									color: BDFDB.LibraryComponents.MenuItems.Colors.BRAND,
 									action: _ => {
-										BDFDB.ContextMenuUtils.close(instance);
 										this.openCategorySettingsModal({
 											id: this.generateID("dmCategories").toString(),
 											name: `${this.labels.header_pinneddms_text} #${categories.length + 1}`,
@@ -263,7 +261,6 @@ var PinDMs = (_ => {
 									label: category.name || this.labels.header_pinneddms_text,
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "pin-channellist", category.id),
 									action: _ => {
-										BDFDB.ContextMenuUtils.close(instance);
 										if (currentCategory) this.removeFromCategory(id, currentCategory, "dmCategories");
 										this.addToCategory(id, category, "dmCategories");
 									}
@@ -276,7 +273,6 @@ var PinDMs = (_ => {
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, pinnedInGuild ? "unpin-serverlist" : "pin-serverlist"),
 						danger: pinnedInGuild,
 						action: _ => {
-							BDFDB.ContextMenuUtils.close(instance);
 							if (!pinnedInGuild) this.addPin(id, "pinnedRecents");
 							else this.removePin(id, "pinnedRecents");
 						}

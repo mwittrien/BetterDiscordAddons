@@ -249,7 +249,6 @@ var ChatFilter = (_ => {
 					label: "Add to ChatFilter",
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "add-filter"),
 					action: _ => {
-						BDFDB.ContextMenuUtils.close(e.instance);
 						this.openAddModal(text.replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t"));
 					}
 				})

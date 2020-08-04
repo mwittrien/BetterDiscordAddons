@@ -95,7 +95,6 @@ var UserNotes = (_ => {
 						label: BDFDB.LanguageUtils.LanguageStrings.USERS + " " + BDFDB.LanguageUtils.LanguageStrings.NOTE,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "user-note"),
 						action: _ => {
-							BDFDB.ContextMenuUtils.close(e.instance);
 							this.openNotesModal(e.instance.props.user);
 						}
 					})

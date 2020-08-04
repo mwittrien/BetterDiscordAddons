@@ -130,7 +130,6 @@ var ServerHider = (_ => {
 									label: this.labels.submenu_openhidemenu_text,
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "openmenu"),
 									action: _ => {
-										BDFDB.ContextMenuUtils.close(instance);
 										this.showHideModal();
 									}
 								}),
@@ -138,7 +137,6 @@ var ServerHider = (_ => {
 									label: instance.props.guild ? this.labels.submenu_hideserver_text : this.labels.submenu_hidefolder_text,
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "hide"),
 									action: _ => {
-										BDFDB.ContextMenuUtils.close(instance);
 										if (instance.props.guild) this.toggleItem(BDFDB.DataUtils.load(this, "hidden", "servers") || [], instance.props.guild.id, "servers");
 										else this.toggleItem(BDFDB.DataUtils.load(this, "hidden", "folders") || [], instance.props.folderId, "folders");
 									}

@@ -575,8 +575,7 @@ var PluginRepo = (_ => {
 				if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: "Plugin Repo",
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "repo"),
-					action: _ => {
-						BDFDB.ContextMenuUtils.close(e.instance);
+					action: _ => {
 						BDFDB.LibraryModules.UserSettingsUtils.open("pluginrepo");
 					}
 				}));

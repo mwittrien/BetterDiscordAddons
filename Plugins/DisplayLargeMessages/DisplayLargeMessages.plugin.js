@@ -166,7 +166,6 @@ var DisplayLargeMessages = (_ => {
 							label: this.labels.context_uninjectattchment_text,
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "uninject-attachment"),
 							action: _ => {
-								BDFDB.ContextMenuUtils.close(e.instance);
 								delete encodedMessages[e.instance.props.message.id];
 								BDFDB.ModuleUtils.forceAllUpdates(this, ["Messages", "Attachment"]);
 							}

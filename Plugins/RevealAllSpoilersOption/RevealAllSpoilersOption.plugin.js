@@ -76,7 +76,6 @@ var RevealAllSpoilersOption = (_ => {
 							});
 						}),
 						action: _ => {
-							BDFDB.ContextMenuUtils.close(e.instance);
 							this.revealAllSpoilers(messageDiv);
 						}
 					})

@@ -268,7 +268,6 @@ var EditUsers = (_ => {
 										label: this.labels.submenu_usersettings_text,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-change"),
 										action: _ => {
-											BDFDB.ContextMenuUtils.close(e.instance);
 											this.openUserSettingsModal(e.instance.props.user);
 										}
 									}),
@@ -277,7 +276,6 @@ var EditUsers = (_ => {
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-reset"),
 										disabled: !changedUsers[e.instance.props.user.id],
 										action: _ => {
-											BDFDB.ContextMenuUtils.close(e.instance);
 											BDFDB.DataUtils.remove(this, "users", e.instance.props.user.id);
 											this.forceUpdateAll();
 										}

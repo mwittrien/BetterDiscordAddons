@@ -142,7 +142,6 @@ var PersonalPins = (_ => {
 						});
 					}),
 					action: _ => {
-						BDFDB.ContextMenuUtils.close(e.instance);
 						this.addMessageToNotes(e.instance.props.message, e.instance.props.channel);
 					}
 				}));
@@ -150,7 +149,6 @@ var PersonalPins = (_ => {
 					label: this.labels.context_updateoption_text,
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "update-note"),
 					action: _ => {
-						BDFDB.ContextMenuUtils.close(e.instance);
 						this.updateNoteData(note, e.instance.props.message);
 					}
 				}));

@@ -206,7 +206,6 @@ var ReadAllNotificationsButton = (_ => {
 					id: "mark-dm-read",
 					disabled: !BDFDB.LibraryModules.DirectMessageUnreadStore.getUnreadPrivateChannelIds().includes(channelId),
 					action: event => {
-						BDFDB.ContextMenuUtils.close(event.target);
 						BDFDB.DMUtils.markAsRead(channelId);
 					}
 				})
@@ -240,7 +239,6 @@ var ReadAllNotificationsButton = (_ => {
 										label: this.labels.context_unreadguilds_text,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "mark-unread-read"),
 										action: event2 => {
-											BDFDB.ContextMenuUtils.close(event2._targetInst);
 											this.markGuildsAsRead(BDFDB.GuildUtils.getUnread());
 										}
 									}),
@@ -248,7 +246,6 @@ var ReadAllNotificationsButton = (_ => {
 										label: this.labels.context_pingedguilds_text,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "mark-pinged-read"),
 										action: event2 => {
-											BDFDB.ContextMenuUtils.close(event2._targetInst);
 											this.markGuildsAsRead(BDFDB.GuildUtils.getPinged());
 										}
 									}),
@@ -256,7 +253,6 @@ var ReadAllNotificationsButton = (_ => {
 										label: this.labels.context_mutedguilds_text,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "mark-muted-read"),
 										action: event2 => {
-											BDFDB.ContextMenuUtils.close(event2._targetInst);
 											this.markGuildsAsRead(BDFDB.GuildUtils.getMuted());
 										}
 									}),
@@ -264,7 +260,6 @@ var ReadAllNotificationsButton = (_ => {
 										label: this.labels.context_guilds_text,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "mark-all-read"),
 										action: event2 => {
-											BDFDB.ContextMenuUtils.close(event2._targetInst);
 											this.addPinnedRecent(instance.props.channel.id);
 											this.markGuildsAsRead(BDFDB.GuildUtils.getAll());
 										}
@@ -273,7 +268,6 @@ var ReadAllNotificationsButton = (_ => {
 										label: this.labels.context_dms_text,
 										id: BDFDB.ContextMenuUtils.createItemId(this.name, "mark-dms-read"),
 										action: event2 => {
-											BDFDB.ContextMenuUtils.close(event2._targetInst);
 											BDFDB.DMUtils.markAsRead(BDFDB.DMUtils.getAll());
 										}
 									})

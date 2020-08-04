@@ -138,9 +138,10 @@ var GoogleSearchReplace = (_ => {
 					children.splice(index, 1, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: this.labels.context_googlesearchreplace_text.replace("...", this.defaults.engines[engineKeys[0]].name),
 						id: children[index].props.id,
+						persisting: true,
 						action: event => {
 							if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
-							BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(textUrlReplaceString, encodeURIComponent(text)), settings.useChromium, event.shiftKey);
+							BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(textUrlReplaceString, encodeURIComponent(text)), !settings.useChromium, event.shiftKey);
 						}
 					}));
 				}
@@ -150,6 +151,7 @@ var GoogleSearchReplace = (_ => {
 						label: this.defaults.engines[key].name,
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "search", key),
 						color: key == "_all" ? BDFDB.LibraryComponents.MenuItems.Colors.DANGER : BDFDB.LibraryComponents.MenuItems.Colors.DEFAULT,
+						persisting: true,
 						action: event => {
 							if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
 							if (key == "_all") {

@@ -116,7 +116,6 @@ var CopyRawMessage = (_ => {
 							});
 						}),
 						action: _ => {
-							BDFDB.ContextMenuUtils.close(e.instance);
 							BDFDB.LibraryRequires.electron.clipboard.write({text:messageString});
 						}
 					}),
@@ -124,7 +123,6 @@ var CopyRawMessage = (_ => {
 						label: BDFDB.LanguageUtils.LanguageStrings.COPY_TEXT + " (Raw Embed)",
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-embed"),
 						action: _ => {
-							BDFDB.ContextMenuUtils.close(e.instance);
 							BDFDB.LibraryRequires.electron.clipboard.write({text:embedString});
 						}
 					})

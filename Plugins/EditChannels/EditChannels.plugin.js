@@ -160,7 +160,6 @@ var EditChannels = (_ => {
 									label: this.labels.submenu_channelsettings_text,
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-change"),
 									action: _ => {
-										BDFDB.ContextMenuUtils.close(e.instance);
 										this.openChannelSettingsModal(e.instance.props.channel);
 									}
 								}),
@@ -169,7 +168,6 @@ var EditChannels = (_ => {
 									id: BDFDB.ContextMenuUtils.createItemId(this.name, "settings-reset"),
 									disabled: !changedChannels[e.instance.props.channel.id],
 									action: _ => {
-										BDFDB.ContextMenuUtils.close(e.instance);
 										BDFDB.DataUtils.remove(this, "channels", e.instance.props.channel.id);
 										this.forceUpdateAll();
 									}
