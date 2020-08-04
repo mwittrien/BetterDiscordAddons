@@ -3535,7 +3535,7 @@
 				disabled: props.disabled,
 				render: menuItemProps => {
 					if (!props.state) props.state = BDFDB.ObjectUtils.extract(props, "checked", "value");
-					return BDFDB.ReactUtils.createElement(component, Object.assign(props, menuItemProps, {color: props.color}));
+					return BDFDB.ReactUtils.createElement(component, Object.assign(props, menuItemProps, {color: props.color}), true);
 				}
 			});
 		}
