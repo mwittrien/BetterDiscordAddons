@@ -9952,7 +9952,7 @@
 			padding-right: 8px;
 		}
 		${BDFDB.dotCN.modalnoscroller} {
-			overflow: visible;
+			overflow: hidden;
 		}
 		${BDFDB.dotCN.modalcontent + BDFDB.dotCN.modalnoscroller} {
 			padding-bottom: 10px;

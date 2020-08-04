@@ -186,6 +186,9 @@ body,														/* body														*/
 #app-mount .sidebarRegion-VFTUkN {							/* settings				sidebar								*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
+#app-mount .sidebar-_0OpfR {								/* sidebarlist			sidebar								*/
+	background-color: rgba(var(--vtransparencycolor), 0.2);
+}
 
 #app-mount {												/* app-mount												*/
 	background-color: rgba(var(--vtransparencycolor), var(--vtransparencyalpha));
@@ -2252,7 +2255,7 @@ body:before {
 	color: rgb(var(--fontwhite1));
 }
 .divider-3573oO {											/* settingsitems		settingstitle						*/
-	background-color: rgba(var(--fontwhite1), 0.3);
+	border-color: rgba(var(--fontwhite1), 0.1);
 }
 
 #app-mount .userSettingsAccount-2eMFVR .viewBody-2Qz-jg {	/* myaccount			info								*/
