@@ -2973,10 +2973,6 @@ body:before {
 #app-mount .close-hZ94c6 {
 	color: rgb(var(--fontwhite1));
 }
-#app-mount .closeButton-1tv5uR:hover,
-#app-mount .close-hZ94c6:hover {
-	background-color: rgba(var(--vtransparencycolor), 0.3);
-}
 
 #app-mount .guildName-3WI6ml,								/* modal				guildname						*/
 #app-mount .date-2WJGyu,
