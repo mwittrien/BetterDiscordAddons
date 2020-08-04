@@ -4199,6 +4199,9 @@
 		settingsTableHeaders: "settingsTableHeaders-WKzw9_",
 		settingsTableHeaderVertical: "headerVertical-4MNxqk",
 		settingsTableList: "settingsTableList-f6sW2y",
+		sidebar: "sidebar-frSZx3",
+		sidebarContent: "content-1SbgDG",
+		sidebarList: "list-VCoBc2",
 		sliderBubble: "bubble-3we2di",
 		supporter: "supporter-Z3FfwL",
 		supporterCustom: "customSupporter-thxL4U",
@@ -5943,6 +5946,9 @@
 		settingswindowsubsidebarcontent: ["SettingsWindowScroller", "content"],
 		settingswindowsubsidebarscroller: ["SettingsWindowScroller", "scroller"],
 		settingswindowtoolscontainer: ["SettingsWindow", "toolsContainer"],
+		sidebar: ["BDFDB", "sidebar"],
+		sidebarcontent: ["BDFDB", "sidebarContent"],
+		sidebarlist: ["BDFDB", "sidebarList"],
 		size10: ["TextSize", "size10"],
 		size12: ["TextSize", "size12"],
 		size14: ["TextSize", "size14"],
@@ -8937,6 +8943,42 @@
 		}
 	};
 	
+	InternalComponents.LibraryComponents.SidebarList = InternalBDFDB.loadPatchedComp("SidebarList") || reactInitialized && class BDFDB_SidebarList extends LibraryModules.React.Component {
+		handleItemSelect(item) {
+			this.props.selectedItem = item;
+			if (typeof this.props.onItemSelect == "function") this.props.onItemSelect(item, this);
+			BDFDB.ReactUtils.forceUpdate(this);
+		}
+		render() {
+			let items = (BDFDB.ArrayUtils.is(this.props.items) ? this.props.items : [{}]).filter(n => n);
+			let selectedItem = this.props.selectedItem || (items[0] || {}).value;
+			let selectedElements = (items.find(n => n.value == selectedItem) || {}).elements;
+			let renderElement = typeof this.props.renderElement == "function" ? this.props.renderElement : (_ => {});
+			return BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.sidebarlist),
+				children: [
+					BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ScrollerThin, {
+						className: BDFDB.DOMUtils.formatClassName(this.props.sidebarClassName, BDFDB.disCN.sidebar),
+						fade: true,
+						children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TabBar, {
+							itemClassName: this.props.itemClassName,
+							type: InternalComponents.LibraryComponents.TabBar.Types.SIDE,
+							items: items.map(data => ({value: data.value})),
+							selectedItem: selectedItem,
+							renderItem: this.props.renderItem,
+							onItemSelect: this.handleItemSelect.bind(this)
+						})
+					}),
+					BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ScrollerThin, {
+						className: BDFDB.DOMUtils.formatClassName(this.props.contentClassName, BDFDB.disCN.sidebarcontent),
+						fade: true,
+						children: [selectedElements].flat(10).filter(n => n).map(data => renderElement(data))
+					})
+				]
+			});
+		}
+	};
+	
 	InternalComponents.LibraryComponents.Slider = InternalBDFDB.loadPatchedComp("Slider") || reactInitialized && class BDFDB_Slider extends LibraryModules.React.Component {
 		handleValueChange(value) {
 			let newValue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value) : value;
@@ -9132,6 +9174,7 @@
 		render() {
 			let items = (BDFDB.ArrayUtils.is(this.props.items) ? this.props.items : [{}]).filter(n => n);
 			let selectedItem = this.props.selectedItem || (items[0] || {}).value;
+			let renderItem = typeof this.props.renderItem == "function" ? this.props.renderElement : (data => data.label || data.value);
 			return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.TabBar, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				selectedItem: selectedItem,
 				onItemSelect: this.handleItemSelect.bind(this),
@@ -9140,11 +9183,11 @@
 						className: BDFDB.DOMUtils.formatClassName(this.props.itemClassName, selectedItem == data.value && this.props.itemSelectedClassName),
 						itemType: this.props.type,
 						id: data.value,
-						children: data.label || data.value,
+						children: renderItem(data),
 						"aria-label": data.label || data.value
 					})
 				})
-			}), "itemClassName", "items"));
+			}), "itemClassName", "items", "renderItem"));
 		}
 	};
 	
@@ -9890,6 +9933,19 @@
 			color: var(--interactive-active);
 		}
 		
+		${BDFDB.dotCN.sidebarlist} {
+			display: flex;
+			flex-direction: row;
+			flex: 1 1 auto;
+		}
+		${BDFDB.dotCN.sidebar} {
+			padding: 8px;
+			flex: 0 1 auto;
+		}
+		${BDFDB.dotCN.sidebarcontent} {
+			flex: 1 1 auto;
+		}
+		
 		${BDFDB.dotCN.modalsubinner} {
 			padding-left: 16px;
 			padding-right: 8px;
@@ -9916,9 +9972,6 @@
 		${BDFDB.dotCNS.themedark + BDFDB.dotCN.modalheadershade},
 		${BDFDB.dotCNS.themedark + BDFDB.dotCN.modalsidebar} {
 			background: rgba(0, 0, 0, 0.2);
-		}
-		${BDFDB.dotCN.modalsidebar} {
-			padding: 8px;
 		}
 		${BDFDB.dotCN.tabbarcontainer + BDFDB.dotCN.tabbarcontainerbottom} {
 			border-top: unset;
