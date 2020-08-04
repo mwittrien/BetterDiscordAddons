@@ -3442,7 +3442,7 @@
 							transitionState: props.transitionState,
 							children: [
 								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ModalComponents.ModalHeader, {
-									className: BDFDB.DOMUtils.formatClassName(config.headerClassName, headerChildren.length && BDFDB.disCN.modalheaderhassibling),
+									className: BDFDB.DOMUtils.formatClassName(config.headerClassName, config.shade && BDFDB.disCN.modalheadershade, headerChildren.length && BDFDB.disCN.modalheaderhassibling),
 									separator: config.headerSeparator || false,
 									children: [
 										BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
@@ -4174,8 +4174,10 @@
 		popoutWrapper: "popout-xwjvsX",
 		quickSelectWrapper: "quickSelectWrapper-UCfTKz",
 		menuItemHint: "hint-BK71lM",
+		modalHeaderShade: "shade-h6F4sT",
 		modalHeaderHasSibling: "hasSiblings-fRyjyl",
 		modalNoScroller: "noScroller-YgPpF3",
+		modalSideBar: "sideBar-_0OpfR",
 		modalTabContent: "tabContent-nZ-1U5",
 		modalTabContentOpen: "open-yICTYu",
 		modalSubInner: "inner-t84Frz",
@@ -5706,12 +5708,14 @@
 		modalguildname: ["ModalItems", "guildName"],
 		modalheader: ["Modal", "header"],
 		modalheaderhassibling: ["BDFDB", "modalHeaderHasSibling"],
+		modalheadershade: ["BDFDB", "modalHeaderShade"],
 		modalinner: ["ModalWrap", "inner"],
 		modalmini: ["ModalMiniContent", "modal"],
 		modalminicontent: ["ModalMiniContent", "content"],
 		modalminitext: ["HeaderBarTopic", "content"],
 		modalnoscroller: ["BDFDB", "modalNoScroller"],
 		modalseparator: ["LayerModal", "separator"],
+		modalsidebar: ["BDFDB", "modalSideBar"],
 		modalsizelarge: ["Modal", "sizeLarge"],
 		modalsizemedium: ["Modal", "sizeMedium"],
 		modalsizesmall: ["Modal", "sizeSmall"],
@@ -9902,8 +9906,19 @@
 		${BDFDB.dotCNS.listscroller + BDFDB.dotCN.modaltabcontent} {
 			margin-top: 0;
 		}
-		${BDFDB.dotCNS.modalwrapper + BDFDB.dotCN.modalheader + BDFDB.dotCN.modalheaderhassibling} {
+		${BDFDB.dotCN.modalheaderhassibling} {
 			padding-bottom: 10px;
+		}
+		${BDFDB.dotCN.modalheadershade},
+		${BDFDB.dotCN.modalsidebar} {
+			background: rgba(0, 0, 0, 0.1);
+		}
+		${BDFDB.dotCNS.themedark + BDFDB.dotCN.modalheadershade},
+		${BDFDB.dotCNS.themedark + BDFDB.dotCN.modalsidebar} {
+			background: rgba(0, 0, 0, 0.2);
+		}
+		${BDFDB.dotCN.modalsidebar} {
+			padding: 8px;
 		}
 		${BDFDB.dotCN.tabbarcontainer + BDFDB.dotCN.tabbarcontainerbottom} {
 			border-top: unset;
