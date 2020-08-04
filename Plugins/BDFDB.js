@@ -6139,6 +6139,7 @@
 		userpopoutavatarwrapper: ["UserPopout", "avatarWrapper"],
 		userpopoutavatarwrappernormal: ["UserPopout", "avatarWrapperNormal"],
 		userpopoutbody: ["UserPopout", "body"],
+		userpopoutbodyinnerwrapper: ["UserPopout", "bodyInnerWrapper"],
 		userpopoutbodytitle: ["UserPopout", "bodyTitle"],
 		userpopoutcustomstatus: ["UserPopout", "customStatus"],
 		userpopoutcustomstatusemoji: ["UserPopout", "customStatusEmoji"],
@@ -9183,6 +9184,9 @@
 		MENU_CARET: {
 			getClassName: props => BDFDB.DOMUtils.formatClassName(BDFDB.disCN.menucaretarrow, props.open && BDFDB.disCN.menucaretopen),
 			icon: `<svg name="MenuCaret" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd" aria-hidden="true"><path fill="%%color" d="M16.59 8.59004L12 13.17L7.41 8.59004L6 10L12 16L18 10L16.59 8.59004Z"></path></g></svg>`
+		},
+		MORE: {
+			icon: `<svg name="More" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd" aria-hidden="true"><path fill="%%color" d="M7 12.001C7 10.8964 6.10457 10.001 5 10.001C3.89543 10.001 3 10.8964 3 12.001C3 13.1055 3.89543 14.001 5 14.001C6.10457 14.001 7 13.1055 7 12.001ZM14 12.001C14 10.8964 13.1046 10.001 12 10.001C10.8954 10.001 10 10.8964 10 12.001C10 13.1055 10.8954 14.001 12 14.001C13.1046 14.001 14 13.1055 14 12.001ZM19 10.001C20.1046 10.001 21 10.8964 21 12.001C21 13.1055 20.1046 14.001 19 14.001C17.8954 14.001 17 13.1055 17 12.001C17 10.8964 17.8954 10.001 19 10.001Z"></path></g></svg>`
 		},
 		NOVA_AT: {
 			icon: `<svg name="Nova_At" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><path fill="%%color" d="M12 2C6.486 2 2 6.486 2 12C2 17.515 6.486 22 12 22C14.039 22 15.993 21.398 17.652 20.259L16.521 18.611C15.195 19.519 13.633 20 12 20C7.589 20 4 16.411 4 12C4 7.589 7.589 4 12 4C16.411 4 20 7.589 20 12V12.782C20 14.17 19.402 15 18.4 15L18.398 15.018C18.338 15.005 18.273 15 18.209 15H18C17.437 15 16.6 14.182 16.6 13.631V12C16.6 9.464 14.537 7.4 12 7.4C9.463 7.4 7.4 9.463 7.4 12C7.4 14.537 9.463 16.6 12 16.6C13.234 16.6 14.35 16.106 15.177 15.313C15.826 16.269 16.93 17 18 17L18.002 16.981C18.064 16.994 18.129 17 18.195 17H18.4C20.552 17 22 15.306 22 12.782V12C22 6.486 17.514 2 12 2ZM12 14.599C10.566 14.599 9.4 13.433 9.4 11.999C9.4 10.565 10.566 9.399 12 9.399C13.434 9.399 14.6 10.565 14.6 11.999C14.6 13.433 13.434 14.599 12 14.599Z"></path></svg>`
