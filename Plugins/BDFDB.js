@@ -7979,7 +7979,7 @@
 						allowManagedEmojis: false
 					});
 				}
-			})
+			});
 		}
 	};
 	
@@ -8223,7 +8223,7 @@
 	
 	InternalComponents.LibraryComponents.ListRow = InternalBDFDB.loadPatchedComp("ListRow") || reactInitialized && class BDFDB_ListRow extends LibraryModules.React.Component {
 		render () {
-			return BDFDB.ReactUtils.createElement("div", {
+			return BDFDB.ReactUtils.createElement("div", BDFDB.ObjectUtils.exclude(Object.assign({
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.listrowwrapper, this.props.className, BDFDB.disCN.listrow),
 				children: [
 					this.props.prefix,
@@ -8244,7 +8244,7 @@
 					}),
 					this.props.suffix
 				].filter(n => n)
-			});
+			}, this.props), "label", "note", "suffix", "prefix", "labelClassName"));
 		}
 	};
 	
@@ -9570,6 +9570,20 @@
 	};
 	
 	InternalComponents.LibraryComponents.UserSummaryItem = BDFDB.ModuleUtils.findByName("UserSummaryItem");
+	
+	InternalComponents.LibraryComponents.UserPopoutContainer = InternalBDFDB.loadPatchedComp("UserPopoutContainer") || reactInitialized && class BDFDB_UserPopoutContainer extends LibraryModules.React.Component {
+		render() {
+			return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.PopoutContainer, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+				renderPopout: instance => {
+					return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("FluxContainer(ForwardRef(SubscribeGuildMembersContainer(UserPopout)))"), {
+						userId: this.props.userId,
+						guildId: this.props.guildId,
+						channelId: this.props.channelId
+					});
+				}
+			}), "userId", "guildId", "channelId"));
+		}
+	};
 	
 	for (let type in InternalComponents.NativeSubComponents) if (InternalComponents.LibraryComponents[type]) for (let key in InternalComponents.NativeSubComponents[type]) if (key != "displayName" && key != "name" && (typeof InternalComponents.NativeSubComponents[type][key] != "function" || key.charAt(0) == key.charAt(0).toUpperCase())) {
 		if (key == "defaultProps") InternalComponents.LibraryComponents[type][key] = Object.assign({}, InternalComponents.LibraryComponents[type][key], InternalComponents.NativeSubComponents[type][key]);
