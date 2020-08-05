@@ -7,17 +7,13 @@ var JoinedAtDate = (_ => {
 	return class JoinedAtDate {
 		getName () {return "JoinedAtDate";}
 
-		getVersion () {return "1.2.3";}
+		getVersion () {return "1.2.4";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Displays the Joined At Date of the current Server for a Member in the UserPopout and UserModal.";}
 
 		constructor () {
-			this.changelog = {
-				"fixed":[["No member","no longer tries to fetch join date of no members"]]
-			};
-
 			this.patchedModules = {
 				after: {
 					UserPopout: "render",
@@ -264,9 +260,9 @@ var JoinedAtDate = (_ => {
 		}
 
 		processUserPopout (e) {
-			if (e.instance.props.user && settings.addInUserPopout) {
+			if (e.instance.props.user && e.instance.props.guild && settings.addInUserPopout) {
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "CustomStatus"});
-				if (index > -1) this.injectDate(e.instance, children, 2, e.instance.props.user);
+				if (index > -1) this.injectDate(e.instance, children, 2, e.instance.props.user, e.instance.props.guild.id);
 			}
 		}
 
@@ -276,16 +272,15 @@ var JoinedAtDate = (_ => {
 				e.returnvalue.props.children = (...args) => {
 					let renderedChildren = renderChildren(...args);
 					let [children, index] = BDFDB.ReactUtils.findParent(renderedChildren, {name: ["DiscordTag", "ColoredFluxTag"]});
-					if (index > -1) this.injectDate(e.instance, children, 1, children[index].props.user);
+					if (index > -1) this.injectDate(e.instance, children, 1, children[index].props.user, BDFDB.ReactUtils.findValue(e.instance, "guildId", {up: true}));
 					return renderedChildren;
 				};
 			}
 		}
 
-		injectDate (instance, children, index, user) {
-			if (!BDFDB.ArrayUtils.is(children) || !user || user.discriminator == "0000") return;
-			let guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
-			if (!guildId || !BDFDB.LibraryModules.MemberStore.getMember(guildId, user.id)) return;
+		injectDate (instance, children, index, user, guildId) {
+			if (!guildId) guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
+			if (!BDFDB.ArrayUtils.is(children) || !user || !guildId || user.discriminator == "0000" || !BDFDB.LibraryModules.MemberStore.getMember(guildId, user.id)) return;
 			if (!loadedUsers[guildId]) loadedUsers[guildId] = {};
 			if (!requestedUsers[guildId]) requestedUsers[guildId] = {};
 			if (!BDFDB.ArrayUtils.is(requestedUsers[guildId][user.id])) {

@@ -7,17 +7,13 @@ var LastMessageDate = (_ => {
 	return class LastMessageDate {
 		getName () {return "LastMessageDate";}
 
-		getVersion () {return "1.1.8";}
+		getVersion () {return "1.1.9";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Displays the Date of the last sent Message of a Member for the current Server/DM in the UserPopout and UserModal.";}
 
 		constructor () {
-			this.changelog = {
-				"added":[["Settings","Added upper limit for $daysago, option to hide the default timestamp text and new year short form placeholder"]]
-			};
-
 			this.patchedModules = {
 				after: {
 					UserPopout: "render",
@@ -276,7 +272,7 @@ var LastMessageDate = (_ => {
 		processUserPopout (e) {
 			if (e.instance.props.user && settings.addInUserPopout) {
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "CustomStatus"});
-				if (index > -1) this.injectDate(e.instance, children, 2, e.instance.props.user);
+				if (index > -1) this.injectDate(e.instance, children, 2, e.instance.props.user, e.instance.props.guild && e.instance.props.guild.id);
 			}
 		}
 
@@ -286,17 +282,17 @@ var LastMessageDate = (_ => {
 				e.returnvalue.props.children = (...args) => {
 					let renderedChildren = renderChildren(...args);
 					let [children, index] = BDFDB.ReactUtils.findParent(renderedChildren, {name: ["DiscordTag", "ColoredFluxTag"]});
-					if (index > -1) this.injectDate(e.instance, children, 1, children[index].props.user);
+					if (index > -1) this.injectDate(e.instance, children, 1, children[index].props.user, BDFDB.ReactUtils.findValue(e.instance, "guildId", {up: true}));
 					return renderedChildren;
 				};
 			}
 		}
 
-		injectDate (instance, children, index, user) {
+		injectDate (instance, children, index, user, guildId) {
+			if (!guildId) guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
 			if (!BDFDB.ArrayUtils.is(children) || !user || user.discriminator == "0000") return;
-			let guildId = BDFDB.LibraryModules.LastGuildStore.getGuildId();
-			let isGuild = !!guildId;
-			guildId = guildId || BDFDB.LibraryModules.LastChannelStore.getChannelId();
+			let isGuild = guildId && guildId != BDFDB.DiscordConstants.ME;
+			guildId = isGuild ? guildId : BDFDB.LibraryModules.LastChannelStore.getChannelId();
 			if (!guildId) return;
 			if (!loadedUsers[guildId]) loadedUsers[guildId] = {};
 			if (!requestedUsers[guildId]) requestedUsers[guildId] = {};

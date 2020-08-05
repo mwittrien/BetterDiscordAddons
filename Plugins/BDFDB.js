@@ -2414,6 +2414,16 @@
 		}
 		return false;
 	};
+	BDFDB.UserUtils.openMenu = function (id, guildId, e = BDFDB.InternalData.mousePosition) {
+		if (!id || !guildId) return;
+		let user = LibraryModules.UserStore.getUser(id);
+		if (user) LibraryModules.ContextMenuUtils.openContextMenu(e, function (e) {
+			return BDFDB.ReactUtils.createElement((BDFDB.ModuleUtils.findByName("GuildChannelUserContextMenu", false) || {exports:{}}).exports.default, Object.assign({}, e, {
+				user: user,
+				guildId: guildId
+			}));
+		});
+	};
 
 	let GuildsRerenderTimeout;
 	BDFDB.GuildUtils = {};
