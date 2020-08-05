@@ -2,13 +2,13 @@
 
 var MessageUtilities = (_ => {
 	var firedEvents = [];
-	var clickMap = ["CLICK", "DBLCLICK"];
+	const clickMap = ["CLICK", "DBLCLICK"];
 	var settings = {}, bindings = {}, toasts = {};
 	
 	return class MessageUtilities {
 		getName () {return "MessageUtilities";}
 
-		getVersion () {return "1.7.5";}
+		getVersion () {return "1.7.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -16,7 +16,7 @@ var MessageUtilities = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Context Menu Hints","No longer adds hints on submenu items"]]
+				"improved":[["Search Results","Now works in search results"]]
 			};
 			
 			this.patchedModules = {
@@ -172,10 +172,10 @@ var MessageUtilities = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 				
-				BDFDB.ListenerUtils.add(this, document, "click", BDFDB.dotCN.message, e => {
+				BDFDB.ListenerUtils.add(this, document, "click", BDFDB.dotCNC.message + BDFDB.dotCN.searchresultsgroupcozy, e => {
 					this.onClick(e, 0, "onSglClick");
 				});
-				BDFDB.ListenerUtils.add(this, document, "dblclick", BDFDB.dotCN.message, e => {
+				BDFDB.ListenerUtils.add(this, document, "dblclick", BDFDB.dotCNC.message + BDFDB.dotCN.searchresultsgroupcozy, e => {
 					this.onClick(e, 1, "onDblClick");
 				});
 				BDFDB.ListenerUtils.add(this, document, "keydown", e => {
@@ -250,6 +250,7 @@ var MessageUtilities = (_ => {
 		}
 
 		onClick (e, click, name) {
+					console.log(e);
 			if (!firedEvents.includes(name)) {
 				firedEvents.push(name);
 				let priorityAction = null;
@@ -403,7 +404,7 @@ var MessageUtilities = (_ => {
 		}
 
 		getMessageData (target) {
-			let messageDiv = BDFDB.DOMUtils.getParent(BDFDB.dotCN.message, target);
+			let messageDiv = BDFDB.DOMUtils.getParent(BDFDB.dotCNC.message + BDFDB.dotCN.searchresultsgroupcozy, target);
 			if (messageDiv && messageDiv.querySelector(BDFDB.dotCN.textarea)) return {messageDiv: null, message: null};
 			let instance = BDFDB.ReactUtils.getInstance(messageDiv);
 			let message = instance && BDFDB.ReactUtils.findValue(instance, "message");
