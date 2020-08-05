@@ -8223,7 +8223,7 @@
 	
 	InternalComponents.LibraryComponents.ListRow = InternalBDFDB.loadPatchedComp("ListRow") || reactInitialized && class BDFDB_ListRow extends LibraryModules.React.Component {
 		render () {
-			return BDFDB.ReactUtils.createElement("div", BDFDB.ObjectUtils.exclude(Object.assign({
+			return BDFDB.ReactUtils.createElement("div", BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.listrowwrapper, this.props.className, BDFDB.disCN.listrow),
 				children: [
 					this.props.prefix,
@@ -8244,7 +8244,7 @@
 					}),
 					this.props.suffix
 				].filter(n => n)
-			}, this.props), "label", "note", "suffix", "prefix", "labelClassName"));
+			}), "label", "note", "suffix", "prefix", "labelClassName"));
 		}
 	};
 	
@@ -9574,6 +9574,8 @@
 	InternalComponents.LibraryComponents.UserPopoutContainer = InternalBDFDB.loadPatchedComp("UserPopoutContainer") || reactInitialized && class BDFDB_UserPopoutContainer extends LibraryModules.React.Component {
 		render() {
 			return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.PopoutContainer, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+				wrap: false,
+				children: this.props.children,
 				renderPopout: instance => {
 					return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("FluxContainer(ForwardRef(SubscribeGuildMembersContainer(UserPopout)))"), {
 						userId: this.props.userId,
