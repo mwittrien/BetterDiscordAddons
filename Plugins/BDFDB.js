@@ -4187,6 +4187,7 @@
 		modalSubInner: "inner-t84Frz",
 		modalWrapper: "modal-6GHvdM",
 		noticeWrapper: "noticeWrapper-8z511t",
+		searchBarWrapper: "searchBarWrapper-1GpKvB",
 		selectWrapper: "selectWrapper-yPjeij",
 		settingsGuild: "guild-J3Egt5",
 		settingsGuildDisabled: "disabled-b2o83O",
@@ -4578,7 +4579,6 @@
 	DiscordClassModules.MenuReactButton = BDFDB.ModuleUtils.findByProperties("wrapper", "icon", "focused");
 	DiscordClassModules.MenuSlider = BDFDB.ModuleUtils.findByProperties("slider", "sliderContainer");
 	DiscordClassModules.Member = BDFDB.ModuleUtils.findByProperties("member", "ownerIcon");
-	DiscordClassModules.MembersThreads = BDFDB.ModuleUtils.findByProperties("tabBar", "thread");
 	DiscordClassModules.MembersWrap = BDFDB.ModuleUtils.findByProperties("membersWrap", "membersGroup");
 	DiscordClassModules.Message = BDFDB.ModuleUtils.findByProperties("message", "mentioned");
 	DiscordClassModules.MessageAccessory = BDFDB.ModuleUtils.findByProperties("embedWrapper", "gifFavoriteButton");
@@ -5872,6 +5872,7 @@
 		searchbarsmall: ["SearchBar", "small"],
 		searchbartag: ["SearchBar", "tag"],
 		searchbarvisible: ["SearchBar", "visible"],
+		searchbarwrapper: ["BDFDB", "searchBarWrapper"],
 		searchpopout: ["SearchPopoutWrap", "container"],
 		searchpopoutanswer: ["SearchPopout", "answer"],
 		searchpopoutdatepicker: ["SearchPopout", "datePicker"],
@@ -9673,6 +9674,10 @@
 		${BDFDB.dotCN.settingsguilddisabled} {
 			border-color: ${BDFDB.DiscordConstants.Colors.STATUS_GREY};
 			filter: grayscale(100%) brightness(50%);
+		}
+		
+		${BDFDB.dotCN.searchbarwrapper} {
+			padding: 10px
 		}
 		
 		${BDFDB.dotCN.paginationlistpagination} {
