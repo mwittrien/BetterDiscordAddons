@@ -1775,6 +1775,7 @@
 	LibraryModules.LastChannelStore = BDFDB.ModuleUtils.findByProperties("getLastSelectedChannelId");
 	LibraryModules.LastGuildStore = BDFDB.ModuleUtils.findByProperties("getLastSelectedGuildId");
 	LibraryModules.LoginUtils = BDFDB.ModuleUtils.findByProperties("login", "logout");
+	LibraryModules.MemberCountUtils = BDFDB.ModuleUtils.findByProperties("getMemberCount", "getMemberCounts");
 	LibraryModules.MemberStore = BDFDB.ModuleUtils.findByProperties("getMember", "getMembers");
 	LibraryModules.MentionUtils = BDFDB.ModuleUtils.findByProperties("isRawMessageMentioned", "isMentioned");
 	LibraryModules.MessageManageUtils = BDFDB.ModuleUtils.findByProperties("copyLink", "quoteMessage");
@@ -1790,7 +1791,7 @@
 	LibraryModules.PlatformUtils = BDFDB.ModuleUtils.findByProperties("isWindows", "isLinux");
 	LibraryModules.PermissionUtils = BDFDB.ModuleUtils.findByProperties("getChannelPermissions", "canUser");
 	LibraryModules.PermissionRoleUtils = BDFDB.ModuleUtils.findByProperties("getHighestRole", "can");
-	LibraryModules.QueryUtils = BDFDB.ModuleUtils.findByProperties("mapUserResult", "AutocompleterResultTypes");
+	LibraryModules.QueryUtils = BDFDB.ModuleUtils.findByProperties("AutocompleterQuerySymbols", "AutocompleterResultTypes");
 	LibraryModules.QuoteUtils = BDFDB.ModuleUtils.findByProperties("canQuote", "createQuotedText");
 	LibraryModules.ReactionEmojiUtils = BDFDB.ModuleUtils.findByProperties("getReactionEmojiName", "getReactionEmojiName");
 	LibraryModules.ReactionUtils = BDFDB.ModuleUtils.findByProperties("addReaction", "removeReaction");
