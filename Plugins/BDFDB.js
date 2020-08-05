@@ -1789,6 +1789,7 @@
 	LibraryModules.PlatformUtils = BDFDB.ModuleUtils.findByProperties("isWindows", "isLinux");
 	LibraryModules.PermissionUtils = BDFDB.ModuleUtils.findByProperties("getChannelPermissions", "canUser");
 	LibraryModules.PermissionRoleUtils = BDFDB.ModuleUtils.findByProperties("getHighestRole", "can");
+	LibraryModules.QueryUtils = BDFDB.ModuleUtils.findByProperties("mapUserResult", "AutocompleterResultTypes");
 	LibraryModules.QuoteUtils = BDFDB.ModuleUtils.findByProperties("canQuote", "createQuotedText");
 	LibraryModules.ReactionEmojiUtils = BDFDB.ModuleUtils.findByProperties("getReactionEmojiName", "getReactionEmojiName");
 	LibraryModules.ReactionUtils = BDFDB.ModuleUtils.findByProperties("addReaction", "removeReaction");
@@ -1796,7 +1797,6 @@
 	LibraryModules.SearchPageUtils = BDFDB.ModuleUtils.findByProperties("searchNextPage", "searchPreviousPage");
 	LibraryModules.SelectChannelUtils = BDFDB.ModuleUtils.findByProperties("selectChannel", "selectPrivateChannel");
 	LibraryModules.SettingsUtils = BDFDB.ModuleUtils.findByProperties("updateRemoteSettings", "updateLocalSettings");
-	LibraryModules.SlateUtils = BDFDB.ModuleUtils.findByProperties("serialize", "deserialize");
 	LibraryModules.SlateUtils = BDFDB.ModuleUtils.find(m => typeof m.serialize == "function" && typeof m.deserialize == "function" && typeof m.deserialize == "function" && typeof m.getFlag != "function");
 	LibraryModules.SlateSelectionUtils = BDFDB.ModuleUtils.findByProperties("serialize", "serializeSelection");
 	LibraryModules.SlowmodeUtils = BDFDB.ModuleUtils.findByProperties("getSlowmodeCooldownGuess");
