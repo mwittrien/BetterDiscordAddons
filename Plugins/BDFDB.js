@@ -9575,7 +9575,6 @@
 		render() {
 			return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.PopoutContainer, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				wrap: false,
-				children: this.props.children,
 				renderPopout: instance => {
 					return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByName("FluxContainer(ForwardRef(SubscribeGuildMembersContainer(UserPopout)))"), {
 						userId: this.props.userId,
