@@ -4,11 +4,17 @@ var QuickMention = (_ => {
 	return class QuickMention {
 		getName () {return "QuickMention";}
 
-		getVersion () {return "1.0.0";}
+		getVersion () {return "1.0.1";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Adds a mention entry to the message option toolbar.";}
+
+		constructor () {
+			this.changelog = {
+				"fixed":[["DMs","Works again in DMs"]]
+			};
+		}
 
 		// Legacy
 		load () {}
@@ -56,7 +62,7 @@ var QuickMention = (_ => {
 		// Begin of own functions
 		
 		onMessageOptionToolbar (e) {
-			if (e.instance.props.message.author.id != BDFDB.UserUtils.me.id && e.instance.props.message.type == BDFDB.DiscordConstants.MessageTypes.DEFAULT && BDFDB.UserUtils.can("SEND_MESSAGES")) e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+			if (e.instance.props.message.author.id != BDFDB.UserUtils.me.id && e.instance.props.message.type == BDFDB.DiscordConstants.MessageTypes.DEFAULT && (BDFDB.UserUtils.can("SEND_MESSAGES") || e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.DM || e.instance.props.channel.type == BDFDB.DiscordConstants.ChannelTypes.GROUP_DM)) e.returnvalue.props.children.unshift(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 				key: "mention",
 				text: BDFDB.LanguageUtils.LanguageStrings.MENTION,
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Clickable, {
