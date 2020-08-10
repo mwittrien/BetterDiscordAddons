@@ -163,7 +163,7 @@ var OwnerTag = (_ => {
 		}
 
 		processMemberListItem (e) {
-			let userType = this.getUserType(e.instance.props.user);
+			let userType = this.getUserType(e.instance.props.user, e.instance.props.channel.id);
 			if (userType && settings.addInMemberList) {
 				this.injectOwnerTag(BDFDB.ReactUtils.getValue(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, userType, 1, {
 					tagClass: BDFDB.disCN.bottagmember
@@ -173,7 +173,7 @@ var OwnerTag = (_ => {
 
 		processMessageHeader (e) {
 			if (e.instance.props.message && settings.addInChatWindow) {
-				let userType = this.getUserType(e.instance.props.message.author);
+				let userType = this.getUserType(e.instance.props.message.author, e.instance.props.message.channel_id);
 				if (userType) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue.props.children.slice(1), {name: "Popout", props: [["className", BDFDB.disCN.messageusername]]});
 					if (index > -1) this.injectOwnerTag(children, e.instance.props.message.author, userType, e.instance.props.compact ? 0 : 2, {
@@ -210,7 +210,7 @@ var OwnerTag = (_ => {
 
 		processUserPopout (e) {
 			if (e.instance.props.user && settings.addInUserPopout) {
-				let userType = this.getUserType(e.instance.props.user);
+				let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
 				if (userType) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.userpopoutheadertagwithnickname]]});
 					if (index > -1) this.injectOwnerTag(children, e.instance.props.user, userType, 2, {
@@ -260,9 +260,9 @@ var OwnerTag = (_ => {
 			children.splice(insertIndex, 0, tag);
 		}
 		
-		getUserType (user) {
+		getUserType (user, channelId) {
 			if (!user) return userTypes.NONE;
-			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());
+			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(channelId || BDFDB.LibraryModules.LastChannelStore.getChannelId());
 			if (!channel) return userTypes.NONE;
 			let guild = BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id);
 			let isOwner = channel.ownerId == user.id || guild && guild.ownerId == user.id;
