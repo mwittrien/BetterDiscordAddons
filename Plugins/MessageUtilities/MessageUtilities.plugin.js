@@ -250,7 +250,6 @@ var MessageUtilities = (_ => {
 		}
 
 		onClick (e, click, name) {
-					console.log(e);
 			if (!firedEvents.includes(name)) {
 				firedEvents.push(name);
 				let priorityAction = null;

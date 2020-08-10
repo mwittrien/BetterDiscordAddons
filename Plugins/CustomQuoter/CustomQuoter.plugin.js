@@ -340,7 +340,7 @@ var CustomQuoter = (_ => {
 			
 			return BDFDB.StringUtils.insertNRST(quoteFormat)
 				.replace("$mention", settings.ignoreMentionInDM && channel.isDM() ? "" : `<@!${message.author.id}>`)
-				.replace("$link", `https://discordapp.com/channels/${guild.id}/${channel.id}/${message.id}`)
+				.replace("$link", `<https://discordapp.com/channels/${guild.id}/${channel.id}/${message.id}>`)
 				.replace("$authorName", member && member.nick || message.author.username || "")
 				.replace("$authorAccount", `${message.author.username}#${message.author.discriminator}`)
 				.replace("$authorId", message.author.id || "")
