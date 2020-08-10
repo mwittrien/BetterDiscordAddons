@@ -1742,7 +1742,7 @@
 	LibraryModules.CopyLinkUtils = BDFDB.ModuleUtils.findByProperties("SUPPORTS_COPY", "copy");
 	LibraryModules.CurrentUserStore = BDFDB.ModuleUtils.findByProperties("getCurrentUser");
 	LibraryModules.CurrentVoiceUtils = BDFDB.ModuleUtils.findByProperties("getAveragePing", "isConnected");
-	LibraryModules.DirectMessageStore = BDFDB.ModuleUtils.findByProperties("getPrivateChannelIds", "getPrivateChannelTimestamps");
+	LibraryModules.DirectMessageStore = BDFDB.ModuleUtils.findByProperties("getPrivateChannelIds");
 	LibraryModules.DirectMessageUnreadStore = BDFDB.ModuleUtils.findByProperties("getUnreadPrivateChannelIds");
 	LibraryModules.DispatchApiUtils = BDFDB.ModuleUtils.findByProperties("dirtyDispatch", "isDispatching");
 	LibraryModules.DispatchUtils = BDFDB.ModuleUtils.findByProperties("ComponentDispatch");
@@ -10755,7 +10755,7 @@
 		InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper));
 	};
 	InternalBDFDB.processDiscordTag = function (e) {
-		if (e.instance && e.instance.props && e.instance.props.user && e.returnvalue) e.returnvalue.props.user = e.instance.props.user;
+		if (e.instance && e.instance.props && e.returnvalue && e.instance.props.user) e.returnvalue.props.user = e.instance.props.user;
 	};
 	InternalBDFDB.processMessageContent = function (e) {
 		if (BDFDB.ArrayUtils.is(e.instance.props.content)) for (let ele of e.instance.props.content) InternalBDFDB._processMessageContentEle(ele, e.instance.props.message);

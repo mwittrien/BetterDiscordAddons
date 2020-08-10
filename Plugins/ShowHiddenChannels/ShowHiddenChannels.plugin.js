@@ -2,6 +2,7 @@
 
 var ShowHiddenChannels = (_ => {
 	var blacklist = [], hiddenCategory;
+	var settings = {};
 			
 	const settingsMap = {
 		GUILD_TEXT: "showText",
@@ -247,7 +248,7 @@ var ShowHiddenChannels = (_ => {
 					for (let channel_id in all) if (all[channel_id].guild_id == e.methodArguments[0] && !e.returnValue[channel_id] && (all[channel_id].type != BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY && all[channel_id].type != BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE)) e.returnValue[channel_id] = {id: channel_id, name: all[channel_id].name};
 				}});
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -256,7 +257,7 @@ var ShowHiddenChannels = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 				
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -280,7 +281,7 @@ var ShowHiddenChannels = (_ => {
 					if (index > -1) children.splice(index, 1);
 				}
 				let isHidden = this.isChannelHidden(e.instance.props.channel.id);
-				if (isHidden || BDFDB.DataUtils.get(this, "settings", "showForNormal")) {
+				if (isHidden || settings.showForNormal) {
 					let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 					children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 						children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
@@ -310,7 +311,7 @@ var ShowHiddenChannels = (_ => {
 				e.instance.props.categories._categories = e.instance.props.categories._categories.filter(n => n.channel.id != hiddenId);
 				e.instance.props.channels[BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY] = e.instance.props.channels[BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY].filter(n => n.channel.id != hiddenId);
 				
-				let settings = BDFDB.DataUtils.get(this, "settings"), index = -1;
+				let index = -1;
 				for (let catId in e.instance.props.categories) {
 					if (catId != "_categories") e.instance.props.categories[catId] = e.instance.props.categories[catId].filter(n => !this.isChannelHidden(n.channel.id));
 					for (let channelObj of e.instance.props.categories[catId]) if (channelObj.index > index) index = parseInt(channelObj.index);
@@ -404,7 +405,6 @@ var ShowHiddenChannels = (_ => {
 		
 		getHiddenChannels (guild) {
 			if (!guild) return [{}, 0];
-			let settings = BDFDB.DataUtils.get(this, "settings");
 			let all = BDFDB.LibraryModules.ChannelStore.getChannels(), hidden = {}, amount = 0;
 			for (let type in BDFDB.DiscordConstants.ChannelTypes) hidden[BDFDB.DiscordConstants.ChannelTypes[type]] = [];
 			for (let channel_id in all) {
@@ -518,6 +518,12 @@ var ShowHiddenChannels = (_ => {
 					]
 				});
 			}
+		}
+		
+		forceUpdateAll() {
+			settings = BDFDB.DataUtils.get(this, "settings");
+			
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 
 		setLabelsByLanguage () {

@@ -329,7 +329,7 @@ var LastMessageDate = (_ => {
 			if (typeof time == "string") timeObj = new Date(time);
 			if (timeObj.toString() == "Invalid Date") timeObj = new Date(parseInt(time));
 			if (timeObj.toString() == "Invalid Date") return;
-			let settings = BDFDB.DataUtils.get(this, "settings"), timeString = "";
+			let timeString = "";
 			if (languageId != "own") {
 				let timestamp = [];
 				if (settings.displayDate) 	timestamp.push(timeObj.toLocaleDateString(languageId));
