@@ -1,3 +1,5 @@
+https://raw.githubusercontent.com/An00nymushun/DiscordFreeEmojis/master/DiscordFreeEmojis.plugin.js
+https://raw.githubusercontent.com/An00nymushun/DiscordMyTyping/master/MyTyping.plugin.js
 https://raw.githubusercontent.com/Arashiryuu/crap/master/Miscellanious/jsMaterialThemeCodeblocks.plugin.js
 https://raw.githubusercontent.com/Arashiryuu/crap/master/ToastIntegrated/ChatUserIDsRedux/ChatUserIDsRedux.plugin.js
 https://raw.githubusercontent.com/Arashiryuu/crap/master/ToastIntegrated/HideServersChannelsRedux/HideServersChannelsRedux.plugin.js
