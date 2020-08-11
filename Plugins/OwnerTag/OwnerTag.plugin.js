@@ -163,7 +163,7 @@ var OwnerTag = (_ => {
 		}
 
 		processMemberListItem (e) {
-			let userType = this.getUserType(e.instance.props.user, e.instance.props.channel.id);
+			let userType = this.getUserType(e.instance.props.user, e.instance.props.channel && e.instance.props.channel.id);
 			if (userType && settings.addInMemberList) {
 				this.injectOwnerTag(BDFDB.ReactUtils.getValue(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, userType, 1, {
 					tagClass: BDFDB.disCN.bottagmember
