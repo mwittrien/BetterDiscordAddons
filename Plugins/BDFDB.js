@@ -7951,7 +7951,7 @@
 	
 	InternalComponents.LibraryComponents.DiscordTag = BDFDB.ModuleUtils.findByName("DiscordTag");
 	
-	InternalComponents.LibraryComponents.Emoji = BDFDB.ModuleUtils.findByName("Emoji");
+	InternalComponents.LibraryComponents.Emoji = (BDFDB.ModuleUtils.findByString("emojiName", "shouldAnimate", "jumboable") || {}).default;
 	
 	InternalComponents.LibraryComponents.EmojiButton = BDFDB.ModuleUtils.findByName("EmojiButton");
 	
@@ -7977,7 +7977,8 @@
 					className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.emojiinputbutton),
 					renderButtonContents: this.props.emoji ? _ => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Emoji, {
 						className: BDFDB.disCN.emoji,
-						emoji: this.props.emoji
+						emojiId: this.props.emoji.id,
+						emojiName: this.props.emoji.name
 					}) : null
 				}),
 				wrap: false,
@@ -7988,12 +7989,13 @@
 					return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByString("allowManagedEmojis", "EMOJI_PICKER_TAB_PANEL_ID", "diversitySelector"), {
 						closePopout: instance.close,
 						onSelectEmoji: this.handleEmojiChange.bind(this),
-						allowManagedEmojis: false
+						allowManagedEmojis: this.props.allowManagedEmojis
 					});
 				}
 			});
 		}
 	};
+	InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.EmojiPickerButton, {allowManagedEmojis:false});
 	
 	InternalComponents.LibraryComponents.FavButton = InternalBDFDB.loadPatchedComp("FavButton") || reactInitialized && class BDFDB_FavButton extends LibraryModules.React.Component {
 		handleClick() {

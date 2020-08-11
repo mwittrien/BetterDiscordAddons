@@ -6,13 +6,17 @@ var EditUsers = (_ => {
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.9.3";}
+		getVersion () {return "3.9.4";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Allows you to change the icon, name, tag and color of users.";}
 
-		constructor () {			
+		constructor () {
+			this.changelog = {
+				"improved":[["Local custom status","You can now also use custom emojis for local custom statuses"]]
+			};
+			
 			this.patchedModules = {
 				before: {
 					HeaderBarContainer: "render",
@@ -39,7 +43,6 @@ var EditUsers = (_ => {
 					PrivateChannelRecipientsInvitePopout: "render",
 					QuickSwitchUserResult: "render",
 					SearchPopoutComponent: "render",
-					IncomingCall: "render",
 					PrivateChannelCallParticipants: "render",
 					ChannelCall: "render",
 					PictureInPictureVideo: "default",
@@ -69,7 +72,7 @@ var EditUsers = (_ => {
 					RTCConnection: "render",
 					PrivateChannel: "render",
 					QuickSwitchUserResult: "render",
-					IncomingCall: "render"
+					IncomingCallModal: "default"
 				}
 			};
 		}
@@ -823,7 +826,8 @@ var EditUsers = (_ => {
 			}
 		}
 		
-		processIncomingCall (e) {
+		processIncomingCallModal (e) {
+			console.log(e);
 			if (e.instance.props.channelId && settings.changeInDmCalls) {
 				let user = BDFDB.LibraryModules.UserStore.getUser(e.instance.props.channelId);
 				if (!user) {
@@ -831,14 +835,14 @@ var EditUsers = (_ => {
 					if (channel && channel.type == BDFDB.DiscordConstants.ChannelTypes.DM) user = BDFDB.LibraryModules.UserStore.getUser(channel.recipients[0]);
 				}
 				if (user) {
-					if (!e.returnvalue) {
-						e.instance.props.channelName = this.getUserData(user.id).username;
-						e.instance.props.avatarUrl = this.getUserAvatar(user.id);
+					let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.callincomingtitle]]});
+					if (userName) {
+						let data = changedUsers[user.id];
+						if (data && data.name) userName.props.children = data.name;
+						this.changeUserColor(userName, user.id);
 					}
-					else {
-						let userName = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.callmembers]]});
-						if (userName) this.changeUserColor(userName, user.id);
-					}
+					let avatar = BDFDB.ReactUtils.findChild(e.returnvalue, {props:[["className", BDFDB.disCN.callincomingicon]]});
+					if (avatar) avatar.props.src = this.getUserAvatar(user.id);
 				}
 			}
 		}
@@ -1132,7 +1136,8 @@ var EditUsers = (_ => {
 												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.EmojiPickerButton, {
 													className: "input-useremojistatus",
 													key: "USERSTATUSEMOJI",
-													emoji: data.statusEmoji
+													emoji: data.statusEmoji,
+													allowManagedEmojis: true
 												})
 											}),
 											BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextInput, {
