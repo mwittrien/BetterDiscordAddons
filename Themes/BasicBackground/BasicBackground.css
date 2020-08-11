@@ -4797,6 +4797,14 @@ body:before {
 	border-radius: 0 0 5px 5px;
 }
 
+.tutorial-3w5I9h {											/* popout				tutorial (inbox)					*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+}
+.tutorialIcon-3f1miQ {										/* popout				tutorial (inbox)					*/
+	background-color: rgba(var(--vtransparencycolor), 0.4);
+	color: rgb(var(--fontwhite2));
+}
+
 .emptyStateIcon-3VCpT2 {									/* popout				no messages (inbox)					*/
 	background-color: rgba(var(--vtransparencycolor), 0.4);
 	color: rgb(var(--fontwhite2));
