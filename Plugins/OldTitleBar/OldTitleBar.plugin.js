@@ -7,7 +7,7 @@ var OldTitleBar = (_ => {
 	return class OldTitleBar {
 		getName () {return "OldTitleBar";}
 
-		getVersion () {return "1.6.6";}
+		getVersion () {return "1.6.7";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -36,12 +36,12 @@ var OldTitleBar = (_ => {
 					display: none !important;
 				}
 				
-				.platform-osx${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.guildswrapper} {
+				.platform-osx ${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.guildswrapper} {
 					margin-top: 0;
 				}
 
-				.platform-osx${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.guildsscroller} {
-					padding-top: 10px;
+				.platform-osx ${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.guildsscroller} {
+					padding-top: 4px;
 				}
 				
 				${BDFDB.dotCN._oldtitlebartoolbar} {
