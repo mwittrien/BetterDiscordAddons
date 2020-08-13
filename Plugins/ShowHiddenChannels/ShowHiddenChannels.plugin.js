@@ -1,7 +1,7 @@
 //META{"name":"ShowHiddenChannels","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowHiddenChannels","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ShowHiddenChannels/ShowHiddenChannels.plugin.js"}*//
 
 var ShowHiddenChannels = (_ => {
-	var blacklist = [], hiddenCategory, overrideTypes = [];
+	var blacklist = [], collapselist = [], hiddenCategory, overrideTypes = [];
 	
 	const settingsMap = {
 		GUILD_TEXT: "showText",
@@ -151,7 +151,7 @@ var ShowHiddenChannels = (_ => {
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsGuildList, {
 						className: BDFDB.disCN.marginbottom20,
-						disabled: BDFDB.DataUtils.load(this, "blacklist"),
+						disabled: blacklist,
 						onClick: disabledGuilds => {
 							this.saveBlacklist(disabledGuilds);
 						}
@@ -214,6 +214,9 @@ var ShowHiddenChannels = (_ => {
 				let loadedBlacklist = BDFDB.DataUtils.load(this, "blacklist");
 				this.saveBlacklist(!BDFDB.ArrayUtils.is(loadedBlacklist) ? [] : loadedBlacklist);
 				
+				let loadedCollapselist = BDFDB.DataUtils.load(this, "categorydata");
+				this.saveCollapselist(!BDFDB.ArrayUtils.is(loadedCollapselist) ? [] : loadedCollapselist);
+				
 				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.UnreadChannelUtils, "hasUnread", {after: e => {
 					return e.returnValue && !this.isChannelHidden(e.methodArguments[0]);
 				}});
@@ -223,25 +226,23 @@ var ShowHiddenChannels = (_ => {
 				}});
 				
 				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.CategoryCollapseStore, "isCollapsed", {after: e => {
-					if (e.methodArguments[0] && e.methodArguments[0].endsWith("hidden")) return (BDFDB.DataUtils.load(this, "categorydata", "collapsed") || []).includes(e.methodArguments[0]);
+					if (e.methodArguments[0] && e.methodArguments[0].endsWith("hidden")) return collapselist.includes(e.methodArguments[0]);
 				}});
 				
 				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.CategoryCollapseUtils, "categoryCollapse", {before: e => {
 					if (e.methodArguments[0] && e.methodArguments[0].endsWith("hidden")) {
-						let collapsed = BDFDB.DataUtils.load(this, "categorydata", "collapsed") || [];
-						if (!collapsed.includes(e.methodArguments[0])) {
-							collapsed.push(e.methodArguments[0]);
-							BDFDB.DataUtils.save(collapsed, this, "categorydata", "collapsed");
+						if (!collapselist.includes(e.methodArguments[0])) {
+							collapselist.push(e.methodArguments[0]);
+							this.saveCollapselist(BDFDB.ArrayUtils.removeCopies(collapselist));
 						}
 					}
 				}});
 				
 				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.CategoryCollapseUtils, "categoryExpand", {before: e => {
 					if (e.methodArguments[0] && e.methodArguments[0].endsWith("hidden")) {
-						let collapsed = BDFDB.DataUtils.load(this, "categorydata", "collapsed") || [];
-						if (collapsed.includes(e.methodArguments[0])) {
-							BDFDB.ArrayUtils.remove(collapsed, e.methodArguments[0], true);
-							BDFDB.DataUtils.save(collapsed, this, "categorydata", "collapsed");
+						if (collapselist.includes(e.methodArguments[0])) {
+							BDFDB.ArrayUtils.remove(collapselist, e.methodArguments[0], true);
+							this.saveCollapselist(BDFDB.ArrayUtils.removeCopies(collapselist));
 						}
 					}
 				}});
@@ -455,6 +456,11 @@ var ShowHiddenChannels = (_ => {
 		saveBlacklist (savedBlacklist) {
 			blacklist = savedBlacklist;
 			BDFDB.DataUtils.save(savedBlacklist, this, "blacklist");
+		}
+		
+		saveCollapselist (savedCollapselist) {
+			collapselist = savedCollapselist;
+			BDFDB.DataUtils.save(savedCollapselist, this, "categorydata");
 		}
 		
 		showAccessModal (channel, allowed) {
