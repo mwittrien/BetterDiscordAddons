@@ -3547,7 +3547,11 @@
 				disabled: props.disabled,
 				render: menuItemProps => {
 					if (!props.state) props.state = BDFDB.ObjectUtils.extract(props, "checked", "value");
-					return BDFDB.ReactUtils.createElement(component, Object.assign(props, menuItemProps, {color: props.color}), true);
+					return BDFDB.ReactUtils.createElement(InternalComponents.CustomMenuItemWrapper, {
+						disabled: props.disabled,
+						childProps: Object.assign({}, props, menuItemProps, {color: props.color}),
+						children: component
+					}, true);
 				}
 			});
 		}
@@ -7022,6 +7026,23 @@
 				renderPopout: renderPopout,
 				onClose: onClose
 			})) : item;
+		}
+	};
+	InternalComponents.CustomMenuItemWrapper = reactInitialized && class BDFDB_CustomMenuItemWrapper extends LibraryModules.React.Component {
+		constructor(props) {
+			super(props);
+			this.state = {hovered: false};
+		}
+		render() {
+			return BDFDB.ReactUtils.createElement("div", {
+				onMouseEnter: e => {
+					this.setState({hovered: true});
+				},
+				onMouseLeave: e => {
+					this.setState({hovered: false});
+				},
+				children: BDFDB.ReactUtils.createElement(this.props.children, Object.assign({}, this.props.childProps, {isFocused:this.state.hovered && !this.props.disabled}))
+			});
 		}
 	};
 	InternalComponents.ErrorBoundary = reactInitialized && class BDFDB_ErrorBoundary extends LibraryModules.React.PureComponent {
@@ -10779,7 +10800,7 @@
 	};
 	
 	const ContextMenuTypes = ["UserSettingsCog", "User", "Developer", "Slate", "GuildFolder", "GroupDM", "SystemMessage", "Message", "Native", "Guild", "Channel"];
-	const QueuedComponents = BDFDB.ArrayUtils.removeCopies([].concat(ContextMenuTypes.map(n => n + "ContextMenu"), ["MessageOptionContextMenu", "MessageOptionToolbar"]));	
+	const QueuedComponents = BDFDB.ArrayUtils.removeCopies([].concat(ContextMenuTypes.map(n => n + "ContextMenu"), ["GuildHeaderContextMenu", "MessageOptionContextMenu", "MessageOptionToolbar"]));	
 	InternalBDFDB.addContextListeners = function (plugin) {
 		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		for (let type of QueuedComponents) if (typeof plugin[`on${type}`] === "function") {
@@ -10837,6 +10858,12 @@
 				}
 			}
 		}}, {once: true});
+	}});
+	
+	BDFDB.ModuleUtils.patch(BDFDB, BDFDB.ReactUtils.getValue(BDFDB.ModuleUtils.findByString("guild-header-popout", false), "exports.default.prototype"), "render", {after: e => {
+		BDFDB.ModuleUtils.patch(BDFDB, e.returnValue.type, "type", {after: e2 => {
+			InternalBDFDB.executeExtraPatchedPatches("GuildHeaderContextMenu", {instance:{props:e2.methodArguments[0]}, returnvalue:e2.returnValue, methodname:"type"});
+		}}, {noCache: true});
 	}});
 	
 	InternalBDFDB.onSettingsClosed = function () {
