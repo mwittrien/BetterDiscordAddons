@@ -688,7 +688,7 @@ var ImageUtilities = (_ => {
 		
 		getDownloadLocation () {
 			if (BDFDB.LibraryRequires.fs.existsSync(inputs.downloadLocation)) return inputs.downloadLocation;
-			let downloadPath = BDFDB.LibraryRequires.process.env.USERPROFILE && BDFDB.LibraryRequires.path.join(BDFDB.LibraryRequires.process.env.USERPROFILE, "downloads");
+			let downloadPath = BDFDB.LibraryRequires.path.join(BDFDB.LibraryRequires.process.env.USERPROFILE || BDFDB.LibraryRequires.process.env.HOME, "Downloads");
 			if (downloadPath && BDFDB.LibraryRequires.fs.existsSync(downloadPath)) return downloadPath;
 			return BDFDB.BDUtils.getPluginsFolder();
 		}
