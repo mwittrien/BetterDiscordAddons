@@ -8,7 +8,7 @@ var ImageUtilities = (_ => {
 	return class ImageUtilities {
 		getName () {return "ImageUtilities";}
 
-		getVersion () {return "4.0.0";}
+		getVersion () {return "4.0.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -278,7 +278,7 @@ var ImageUtilities = (_ => {
 
 		injectItem (e, url) {
 			if (url && url.indexOf("discordapp.com/assets/") == -1 && !url.endsWith(".mp4")) {
-				url = url.replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096");
+				url = url.replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096").replace(/[\?\&](height|width)=\d+/g, "");
 				if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1) {
 					if (url.split("/https/").length != 1) url = "https://" + url.split("/https/")[url.split("/https/").length-1];
 					else if (url.split("/http/").length != 1) url = "http://" + url.split("/http/")[url.split("/http/").length-1];
