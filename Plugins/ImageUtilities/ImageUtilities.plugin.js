@@ -3,12 +3,54 @@
 var ImageUtilities = (_ => {
 	const imgUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
 	var eventFired, clickedImage;
-	var settings = {}, inputs = {}, zoomSettings = {}, engines = {}, enabledEngines = {};
+	var settings = {}, inputs = {}, amounts = {}, zoomSettings = {}, engines = {}, enabledEngines = {};
+	
+	const ImageDetails = class ImageDetails extends BdApi.React.Component {
+		componentDidMount() {
+			this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ReactUtils.getValue(this, "_reactInternalFiber.return"), "attachment", {up: true});
+			BDFDB.ReactUtils.forceUpdate(this);
+		}
+		componentDidUpdate() {
+			if ((!this.props.attachment || !this.props.attachment.size) && !this.props.loaded) {
+				this.props.loaded = true;
+				this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ReactUtils.getValue(this, "_reactInternalFiber.return"), "attachment", {up: true});
+				BDFDB.ReactUtils.forceUpdate(this);
+			}
+		}
+		render() {
+			return !this.props.attachment ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+				className: BDFDB.disCN._showimagedetailsdetails,
+				children: [
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
+							title: this.props.original,
+							href: this.props.original,
+							children: this.props.attachment.filename,
+							onClick: event => {
+								BDFDB.ListenerUtils.stopEvent(event);
+								BDFDB.DiscordUtils.openLink(this.props.original);
+							}
+						})
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+							children: BDFDB.NumberUtils.formatBytes(this.props.attachment.size)
+						})
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+							children: `${this.props.attachment.width}x${this.props.attachment.height}px`
+						})
+					})
+				]
+			});
+		}
+	};
 	
 	return class ImageUtilities {
 		getName () {return "ImageUtilities";}
 
-		getVersion () {return "4.0.1";}
+		getVersion () {return "4.0.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -33,9 +75,13 @@ var ImageUtilities = (_ => {
 					enableZoom: 			{value:true,	inner:false,	description:"Creates a zoom lense if you press down on an image in the Image Modal"},
 					enableCopyImg: 			{value:true,	inner:false,	description:"Add a copy image option in the Image Modal"},
 					useChromium: 			{value:false, 	inner:false,	description:"Use an inbuilt browser window instead of opening your default browser"},
+					showOnHover:			{value:false, 	inner:false,	description:"Show image details as Tooltip instead of the header"},
 					addUserAvatarEntry: 	{value:true, 	inner:true,		description:"User Avatars"},
 					addGuildIconEntry: 		{value:true, 	inner:true,		description:"Server Icons"},
 					addEmojiEntry: 			{value:true, 	inner:true,		description:"Custom Emojis/Emotes"}
+				},
+				amounts: {
+					hoverDelay:				{value:0, 		min:0,			description:"Image Tooltip delay in millisec:"}
 				},
 				inputs: {
 					downloadLocation:		{value:"",		childProps:{type: "file", searchFolders:true},		description:"Download Location"},
@@ -141,7 +187,18 @@ var ImageUtilities = (_ => {
 					keys: ["settings", key],
 					label: this.defaults.settings[key].description,
 					value: settings[key]
-				})).concat(Object.keys(inputs).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+				})).concat(Object.keys(amounts).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+					className: BDFDB.disCN.marginbottom8,
+					type: "TextInput",
+					plugin: this,
+					keys: ["amounts", key],
+					label: this.defaults.amounts[key].description,
+					basis: "50%",
+					childProps: {type: "number"},
+					min: this.defaults.amounts[key].min,
+					max: this.defaults.amounts[key].max,
+					value: amounts[key]
+				}))).concat(Object.keys(inputs).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 					className: BDFDB.disCN.marginbottom8,
 					type: "TextInput",
 					plugin: this,
