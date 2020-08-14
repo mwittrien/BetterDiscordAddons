@@ -421,7 +421,7 @@ var ImageUtilities = (_ => {
 								}),
 								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
 									className: BDFDB.disCN.downloadlink, 
-									children: `Copy Original`,
+									children: this.labels.context_copyimage_text,
 									onClick: event => {
 										BDFDB.ListenerUtils.stopEvent(event);
 										this.copyImage(src);
