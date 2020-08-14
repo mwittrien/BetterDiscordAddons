@@ -114,7 +114,7 @@ var ImageUtilities = (_ => {
 					visibility: hidden;
 					max-width: 1px;
 				}
-				${BDFDB.dotCN._imageutilitiesgallery}:not([style*="opacity: 0;"]) {
+				${BDFDB.dotCN.imagemodal}:not([style*="opacity: 0;"]) {
 					transform: unset !important;
 				}
 				${BDFDB.dotCN._imageutilitiessibling} {
