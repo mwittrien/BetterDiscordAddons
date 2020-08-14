@@ -513,9 +513,10 @@ var ImageUtilities = (_ => {
 						].flat(10).filter(n => n)
 					});
 				}
+				let index = 0;
 				if (messages.length) {
 					let images = messages.map(n => Array.from(n.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img"))).flat().filter(img => !BDFDB.DOMUtils.getParent(BDFDB.dotCN.spoilerhidden, img));
-					let next, previous, index = 0, amount = images.length;
+					let next, previous, amount = images.length;
 					for (let i = 0; i < amount; i++) if (this.isSameImage(src, images[i])) {
 						index = i;
 						previous = images[i-1];
@@ -530,24 +531,24 @@ var ImageUtilities = (_ => {
 						if (e.instance.nextRef) e.returnvalue.props.children.splice(1, 0, this.createImageWrapper(e.instance, e.instance.nextRef, "next", BDFDB.LibraryComponents.SvgIcon.Names.RIGHT_CARET));
 						else this.loadImage(e.instance, next, "next");
 					}
-					if (settings.addDetails) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN._imageutilitiesdetailswrapper,
-						children: [
-							{label: "Source", text: e.instance.props.src},
-							{label: "Size", text: `${e.instance.props.width} x ${e.instance.props.height}px`},
-							{label: "Image", text: `${index + 1} of ${amount}`}
-						].map(data => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-							className: BDFDB.disCN._imageutilitiesdetails,
-							children: [
-								BDFDB.ReactUtils.createElement("div", {
-									className: BDFDB.disCN._imageutilitiesdetailslabel,
-									children: data.label + ":"
-								}),
-								data.text
-							]
-						}))
-					}));
 				}
+				if (settings.addDetails) e.returnvalue.props.children.push(BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.disCN._imageutilitiesdetailswrapper,
+					children: [
+						{label: "Source", text: e.instance.props.src},
+						{label: "Size", text: `${e.instance.props.width} x ${e.instance.props.height}px`},
+						{label: "Image", text: `${index + 1} of ${amount}`}
+					].map(data => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+						className: BDFDB.disCN._imageutilitiesdetails,
+						children: [
+							BDFDB.ReactUtils.createElement("div", {
+								className: BDFDB.disCN._imageutilitiesdetailslabel,
+								children: data.label + ":"
+							}),
+							data.text
+						]
+					}))
+				}));
 			}
 			if (e.node) {
 				let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCNC.modal + BDFDB.dotCN.layermodal, e.node);
@@ -789,6 +790,7 @@ var ImageUtilities = (_ => {
 			enabledEngines = BDFDB.ObjectUtils.filter(engines, n => n);
 			
 			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.MessageUtils.rerenderAll();
 		}
 
 		setLabelsByLanguage () {
