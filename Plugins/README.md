@@ -28,8 +28,7 @@
  - [Google Search Replace](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleSearchReplace) - Replaces the default Google Text Search with a selection menu of several search engines.
  - [Google Translate Option](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/GoogleTranslateOption) - Adds a Google Translate option to your context menu, which will open the selected text in Google Translate.
  - [Hide Muted Categories](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/HideMutedCategories) - Hides muted categories the same way muted channels are hidden, when the server is set to hide muted channels.
- - [Image Gallery](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ImageGallery) - Allows the user to browse through images sent inside the same message.
- - [Image Zoom](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ImageZoom) - Allows you to zoom in opened Images by holding left clicking on them in the Image Modal.
+ - [Image Utilities](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ImageUtilities) - Adds a handful of options for images/emotes/avatars (direct download, reverse image search, zoom, copy image link, copy image to clipboard, gallery mode).
  - [Joined At Date](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/JoinedAtDate) - Displays the Joined At Date of a Member in the UserPopout and UserModal.
  - [Last Message Date](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/LastMessageDate) - Displays the Date of the last sent Message of a Member for the current Server/DM in the UserPopout and UserModal.
  - [Message Utilities](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/MessageUtilities) - Offers a number of useful message options.
@@ -44,7 +43,6 @@
  - [Remove Blocked Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveBlockedMessages) - Removes blocked messages completely.
  - [Remove Nicknames](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RemoveNicknames) - Replace all nicknames with the actual accountnames.
  - [Reveal All Spoilers Option](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/RevealAllSpoilersOption) - Adds an entry to the message contextmenu to reveal all spoilers within a messageblock.
- - [Reverse Image Search](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ReverseImageSearch) - Adds the option to reverse image search images in discord via several engines.
  - [Send Large Messages](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SendLargeMessages) - Opens a popout when your message is too large, which allows you to automatically send the message in several smaller messages.
  - [Server Hider](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerHider) - Adds two options on your server context menu to hide servers in your server list.
  - [Server Folders](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerFolders) - Patches Discords native Folders in a way to open Servers within a Folder in a new bar to the right. Also adds a bunch of new features to more easily organize, customize and manage your Folders.

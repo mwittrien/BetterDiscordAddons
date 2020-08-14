@@ -161,7 +161,7 @@ var GoogleTranslateOption = (_ => {
 
 		// Begin of own functions
 		
-		onSettingsClosed (instance, wrapper, returnvalue) {
+		onSettingsClosed () {
 			if (this.SettingsUpdated) {
 				delete this.SettingsUpdated;
 				this.forceUpdateAll();
