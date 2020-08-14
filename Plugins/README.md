@@ -47,7 +47,6 @@
  - [Server Hider](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerHider) - Adds two options on your server context menu to hide servers in your server list.
  - [Server Folders](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ServerFolders) - Patches Discords native Folders in a way to open Servers within a Folder in a new bar to the right. Also adds a bunch of new features to more easily organize, customize and manage your Folders.
  - [Show Hidden Channels](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowHiddenChannels) - Displays all hidden channels that can't be accessed due to role restrictions in a new category.
- - [Show Image Details](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowImageDetails) - Display the name, size and dimensions of uploaded images (does not include embed images) in the chat as an header or as a tooltip.
  - [Spell Check](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpellCheck) - Adds a spellcheck to all textareas.
  - [Spotify Controls](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpotifyControls) - Adds a control panel to discord when listening to spotify.
  - [Steam Profile Link](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SteamProfileLink) - Opens a steam profile in steam instead of a browser when clicking the steamlink in a userprofile. With the help of square.
