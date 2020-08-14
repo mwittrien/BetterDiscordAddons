@@ -9,4 +9,4 @@
 [patreon-badge]: https://img.shields.io/badge/Patreon-Support!-%23F96854.svg?logo=patreon&style=flat
 [patreon-link]: https://patreon.com/MircoWittrien
 
-Display the name, size and dimensions of uploaded images (does not include embed images) in the chat as an header or as a tooltip.
+DISCONTINUED
