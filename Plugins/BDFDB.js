@@ -4344,8 +4344,8 @@
 		translating: "translating-Yi-YxC"
 	};
 	DiscordClassModules.ImageUtilities = {
-		operations: "operations-3V47CY",
 		details: "details-9dkFPc",
+		detailsAdded: "detailsAdded-fHiJlm",
 		detailsLabel: "label-mrlccN",
 		detailsWrapper: "detailsWrapper-TE1mu5",
 		gallery: "gallery-JViwKR",
@@ -4353,6 +4353,7 @@
 		lense: "zoomLense-uOK8xV",
 		lenseBackdrop: "lenseBackdrop-yEm7Om",
 		next: "next-SHEZrz",
+		operations: "operations-3V47CY",
 		previous: "previous-xsNq6B",
 		sibling: "sibling-6vI7Pu",
 		switchIcon: "switchIcon-QY6cR4"
@@ -4729,6 +4730,7 @@
 		_emojistatisticsnamecell: ["EmojiStatistics", "nameCell"],
 		_friendnotificationsfriendsonline: ["FriendNotifications", "friendsOnline"],
 		_imageutilitiesdetails: ["ImageUtilities", "details"],
+		_imageutilitiesdetailsadded: ["ImageUtilities", "detailsAdded"],
 		_imageutilitiesdetailslabel: ["ImageUtilities", "detailsLabel"],
 		_imageutilitiesdetailswrapper: ["ImageUtilities", "detailsWrapper"],
 		_imageutilitiesgallery: ["ImageUtilities", "gallery"],

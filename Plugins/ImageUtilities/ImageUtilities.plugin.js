@@ -121,7 +121,7 @@ var ImageUtilities = (_ => {
 					visibility: hidden;
 					max-width: 1px;
 				}
-				${BDFDB.dotCN.imagemodal}:not([style*="opacity: 0;"]) {
+				${BDFDB.dotCN._imageutilitiesdetailsadded}:not([style*="opacity: 0;"]) {
 					transform: unset !important;
 				}
 				${BDFDB.dotCN._imageutilitiessibling} {
@@ -561,7 +561,7 @@ var ImageUtilities = (_ => {
 			if (e.node) {
 				let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCNC.modal + BDFDB.dotCN.layermodal, e.node);
 				if (modal) {
-					modal.className = BDFDB.DOMUtils.formatClassName(modal.className, messages.length && BDFDB.disCN._imageutilitiesgallery);
+					modal.className = BDFDB.DOMUtils.formatClassName(modal.className, messages.length && BDFDB.disCN._imageutilitiesgallery, settings.addDetails && BDFDB.disCN._imageutilitiesdetailsadded);
 					this.cleanUpListeners();
 					if (messages.length) {
 						document.keydownImageUtilitiesListener = event => {
