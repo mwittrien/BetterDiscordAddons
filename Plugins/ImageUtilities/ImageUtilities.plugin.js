@@ -513,12 +513,12 @@ var ImageUtilities = (_ => {
 						].flat(10).filter(n => n)
 					});
 				}
-				let index = 0;
+				let imageIndex = 0;
 				if (messages.length) {
 					let images = messages.map(n => Array.from(n.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img"))).flat().filter(img => !BDFDB.DOMUtils.getParent(BDFDB.dotCN.spoilerhidden, img));
 					let next, previous, amount = images.length;
 					for (let i = 0; i < amount; i++) if (this.isSameImage(src, images[i])) {
-						index = i;
+						imageIndex = i;
 						previous = images[i-1];
 						next = images[i+1];
 						break;
@@ -537,7 +537,7 @@ var ImageUtilities = (_ => {
 					children: [
 						{label: "Source", text: e.instance.props.src},
 						{label: "Size", text: `${e.instance.props.width} x ${e.instance.props.height}px`},
-						{label: "Image", text: `${index + 1} of ${amount}`}
+						{label: "Image", text: `${imageIndex + 1} of ${amount}`}
 					].map(data => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
 						className: BDFDB.disCN._imageutilitiesdetails,
 						children: [
