@@ -64,7 +64,7 @@
 		BDFDB.LogUtils.log(loadMessage, plugin.name);
 		if (!BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts) && settings.showToasts) BDFDB.NotificationUtils.toast(plugin.name + " " + loadMessage, {nopointer: true, selector: "plugin-started-toast"});
 
-		let url = ["ImageZoom", "ImageGallery", "ReverseImageSearch"].includes(plugin.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ImageUtilities/ImageUtilities.plugin.js" : typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
+		let url = ["ImageZoom", "ImageGallery", "ReverseImageSearch", "ShowImageDetails"].includes(plugin.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ImageUtilities/ImageUtilities.plugin.js" : typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 		BDFDB.PluginUtils.checkUpdate(plugin.name, url);
 
 		if (typeof plugin.initConstructor === "function") BDFDB.TimeUtils.suppress(plugin.initConstructor.bind(plugin), "Could not initiate constructor!", plugin.name)();
@@ -4349,6 +4349,7 @@
 		detailsLabel: "label-mrlccN",
 		detailsWrapper: "detailsWrapper-TE1mu5",
 		gallery: "gallery-JViwKR",
+		imageDetails: "imageDetails-1t6Zms",
 		lense: "zoomLense-uOK8xV",
 		lenseBackdrop: "lenseBackdrop-yEm7Om",
 		next: "next-SHEZrz",
@@ -4396,10 +4397,6 @@
 		iconSwatchInner: "iconInner-aOY-qk",
 		iconSwatchPreview: "preview-Bbg_24",
 		iconSwatchSelected: "selected-P5oePO"
-	};
-	DiscordClassModules.ShowImageDetails = {
-		details: "details-1t6Zms",
-		detailsAdded: "detailsAdded-SAy48f"
 	};
 	DiscordClassModules.SpellCheck = {
 		error: "error-k9z2IV",
@@ -4735,6 +4732,7 @@
 		_imageutilitiesdetailslabel: ["ImageUtilities", "detailsLabel"],
 		_imageutilitiesdetailswrapper: ["ImageUtilities", "detailsWrapper"],
 		_imageutilitiesgallery: ["ImageUtilities", "gallery"],
+		_imageutilitiesimagedetails: ["ImageUtilities", "imageDetails"],
 		_imageutilitieslense: ["ImageUtilities", "lense"],
 		_imageutilitieslensebackdrop: ["ImageUtilities", "lenseBackdrop"],
 		_imageutilitiesnext: ["ImageUtilities", "next"],
@@ -4775,7 +4773,6 @@
 		_serverfoldersiconswatchinner: ["ServerFolders", "iconSwatchInner"],
 		_serverfoldersiconswatchpreview: ["ServerFolders", "iconSwatchPreview"],
 		_serverfoldersiconswatchselected: ["ServerFolders", "iconSwatchSelected"],
-		_showimagedetailsdetails: ["ShowImageDetails", "details"],
 		_spellcheckerror: ["SpellCheck", "error"],
 		_spellcheckoverlay: ["SpellCheck", "overlay"],
 		_spotifycontrolsbar: ["SpotifyControls", "bar"],

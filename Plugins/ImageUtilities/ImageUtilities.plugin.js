@@ -19,7 +19,7 @@ var ImageUtilities = (_ => {
 		}
 		render() {
 			return !this.props.attachment ? null : BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-				className: BDFDB.disCN._showimagedetailsdetails,
+				className: BDFDB.disCN._imageutilitiesimagedetails,
 				children: [
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
@@ -50,7 +50,7 @@ var ImageUtilities = (_ => {
 	return class ImageUtilities {
 		getName () {return "ImageUtilities";}
 
-		getVersion () {return "4.0.0";}
+		getVersion () {return "4.0.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -60,7 +60,7 @@ var ImageUtilities = (_ => {
 			this.patchedModules = {
 				after: {
 					ImageModal: ["render", "componentDidMount"],
-					LazyImage: "componentDidMount"
+					LazyImage: ["render", "componentDidMount"]
 				}
 			};
 		}
@@ -72,10 +72,11 @@ var ImageUtilities = (_ => {
 			this.defaults = {
 				settings: {
 					addDetails: 			{value:true,	inner:false,	description:"Add image details (name, size, amount) in the Image Modal"},
+					showAsHeaader:			{value:true, 	inner:false,	description:"Show Image details as a details header above the Image in the chat"},
+					showOnHover:			{value:false, 	inner:false,	description:"Show Image details as Tooltip in the chat"},
 					enableZoom: 			{value:true,	inner:false,	description:"Creates a zoom lense if you press down on an image in the Image Modal"},
 					enableCopyImg: 			{value:true,	inner:false,	description:"Add a copy image option in the Image Modal"},
 					useChromium: 			{value:false, 	inner:false,	description:"Use an inbuilt browser window instead of opening your default browser"},
-					showOnHover:			{value:false, 	inner:false,	description:"Show image details as Tooltip instead of the header"},
 					addUserAvatarEntry: 	{value:true, 	inner:true,		description:"User Avatars"},
 					addGuildIconEntry: 		{value:true, 	inner:true,		description:"Server Icons"},
 					addEmojiEntry: 			{value:true, 	inner:true,		description:"Custom Emojis/Emotes"}
@@ -106,6 +107,13 @@ var ImageUtilities = (_ => {
 			};
 			
 			this.css = `
+				${BDFDB.dotCN._imageutilitiesimagedetails} {
+					margin: 5px 0;
+				}
+				${BDFDB.dotCNS.spoilerhidden + BDFDB.dotCN._imageutilitiesimagedetails} {
+					visibility: hidden;
+					max-width: 1px;
+				}
 				${BDFDB.dotCN._imageutilitiesgallery}:not([style*="opacity: 0;"]) {
 					transform: unset !important;
 				}
@@ -274,6 +282,10 @@ var ImageUtilities = (_ => {
 					clickedImage = e.target;
 					BDFDB.TimeUtils.timeout(_ => {clickedImage = null;});
 				});
+				
+				BDFDB.ModuleUtils.patch(this, (BDFDB.ModuleUtils.findByName("renderImageComponent", false).exports || {}), "renderImageComponent", {after: e => {
+					if (e.returnValue && e.returnValue.type && (e.returnValue.type.displayName == "LazyImageZoomable" || e.returnValue.type.displayName == "LazyImage") && e.methodArguments[0].original && e.methodArguments[0].src.indexOf("https://media.discordapp.net/attachments") == 0) return this.injectImageDetails(e.methodArguments[0], e.returnValue);
+				}});
 
 				this.forceUpdateAll();
 			}
@@ -563,47 +575,88 @@ var ImageUtilities = (_ => {
 		}
 
 		processLazyImage (e) {
-			if (settings.enableZoom && !BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imageutilitiessibling) && BDFDB.ReactUtils.findOwner(BDFDB.DOMUtils.getParent(BDFDB.dotCNC.modal + BDFDB.dotCN.layermodal, e.node), {name: "ImageModal"})) {
-				e.node.addEventListener("mousedown", event => {
-					BDFDB.ListenerUtils.stopEvent(event);
+			if (e.node) {
+				if (settings.enableZoom && !BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imageutilitiessibling) && BDFDB.ReactUtils.findOwner(BDFDB.DOMUtils.getParent(BDFDB.dotCNC.modal + BDFDB.dotCN.layermodal, e.node), {name: "ImageModal"})) {
+					e.node.addEventListener("mousedown", event => {
+						BDFDB.ListenerUtils.stopEvent(event);
 
-					let imgRects = BDFDB.DOMUtils.getRects(e.node.firstElementChild);
+						let imgRects = BDFDB.DOMUtils.getRects(e.node.firstElementChild);
 
-					let lense = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslense}" style="clip-path: circle(${(zoomSettings.lensesize/2) + 2}px at center) !important; border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${zoomSettings.lensesize}px !important; height: ${zoomSettings.lensesize}px !important; position: fixed !important;"><div style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; clip-path: circle(${zoomSettings.lensesize/2}px at center) !important;"><${e.node.firstElementChild.tagName} src="${e.instance.props.src}" style="width: ${imgRects.width * zoomSettings.zoomlevel}px; height: ${imgRects.height * zoomSettings.zoomlevel}px; position: fixed !important;"${e.node.firstElementChild.tagName == "VIDEO" ? " loop autoplay" : ""}></${e.node.firstElementChild.tagName}></div></div>`);
-					let pane = lense.firstElementChild.firstElementChild;
-					let backdrop = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslensebackdrop}" style="background: rgba(0, 0, 0, 0.3) !important; position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; pointer-events: none !important; z-index: 8000 !important;"></div>`);
-					let appMount = document.querySelector(BDFDB.dotCN.appmount);
-					appMount.appendChild(lense);
-					appMount.appendChild(backdrop);
+						let lense = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslense}" style="clip-path: circle(${(zoomSettings.lensesize/2) + 2}px at center) !important; border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${zoomSettings.lensesize}px !important; height: ${zoomSettings.lensesize}px !important; position: fixed !important;"><div style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; clip-path: circle(${zoomSettings.lensesize/2}px at center) !important;"><${e.node.firstElementChild.tagName} src="${e.instance.props.src}" style="width: ${imgRects.width * zoomSettings.zoomlevel}px; height: ${imgRects.height * zoomSettings.zoomlevel}px; position: fixed !important;"${e.node.firstElementChild.tagName == "VIDEO" ? " loop autoplay" : ""}></${e.node.firstElementChild.tagName}></div></div>`);
+						let pane = lense.firstElementChild.firstElementChild;
+						let backdrop = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslensebackdrop}" style="background: rgba(0, 0, 0, 0.3) !important; position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; pointer-events: none !important; z-index: 8000 !important;"></div>`);
+						let appMount = document.querySelector(BDFDB.dotCN.appmount);
+						appMount.appendChild(lense);
+						appMount.appendChild(backdrop);
 
-					let lenseRects = BDFDB.DOMUtils.getRects(lense);
-					
-					let halfW = lenseRects.width / 2, halfH = lenseRects.height / 2;
-					let minX = imgRects.left, maxX = minX + imgRects.width;
-					let minY = imgRects.top, maxY = minY + imgRects.height;
-					
-					lense.style.setProperty("left", event.clientX - halfW + "px", "important");
-					lense.style.setProperty("top", event.clientY - halfH + "px", "important");
-					pane.style.setProperty("left", imgRects.left + ((zoomSettings.zoomlevel - 1) * (imgRects.left - event.clientX)) + "px", "important");
-					pane.style.setProperty("top", imgRects.top + ((zoomSettings.zoomlevel - 1) * (imgRects.top - event.clientY)) + "px", "important");
+						let lenseRects = BDFDB.DOMUtils.getRects(lense);
+						
+						let halfW = lenseRects.width / 2, halfH = lenseRects.height / 2;
+						let minX = imgRects.left, maxX = minX + imgRects.width;
+						let minY = imgRects.top, maxY = minY + imgRects.height;
+						
+						lense.style.setProperty("left", event.clientX - halfW + "px", "important");
+						lense.style.setProperty("top", event.clientY - halfH + "px", "important");
+						pane.style.setProperty("left", imgRects.left + ((zoomSettings.zoomlevel - 1) * (imgRects.left - event.clientX)) + "px", "important");
+						pane.style.setProperty("top", imgRects.top + ((zoomSettings.zoomlevel - 1) * (imgRects.top - event.clientY)) + "px", "important");
 
-					let dragging = event2 => {
-						let x = event2.clientX > maxX ? maxX - halfW : event2.clientX < minX ? minX - halfW : event2.clientX - halfW;
-						let y = event2.clientY > maxY ? maxY - halfH : event2.clientY < minY ? minY - halfH : event2.clientY - halfH;
-						lense.style.setProperty("left", x + "px", "important");
-						lense.style.setProperty("top", y + "px", "important");
-						pane.style.setProperty("left", imgRects.left + ((zoomSettings.zoomlevel - 1) * (imgRects.left - x - halfW)) + "px", "important");
-						pane.style.setProperty("top", imgRects.top + ((zoomSettings.zoomlevel - 1) * (imgRects.top - y - halfH)) + "px", "important");
-					};
-					let releasing = _ => {
-						document.removeEventListener("mousemove", dragging);
-						document.removeEventListener("mouseup", releasing);
-						BDFDB.DOMUtils.remove(lense, backdrop);
-					};
-					document.addEventListener("mousemove", dragging);
-					document.addEventListener("mouseup", releasing);
+						let dragging = event2 => {
+							let x = event2.clientX > maxX ? maxX - halfW : event2.clientX < minX ? minX - halfW : event2.clientX - halfW;
+							let y = event2.clientY > maxY ? maxY - halfH : event2.clientY < minY ? minY - halfH : event2.clientY - halfH;
+							lense.style.setProperty("left", x + "px", "important");
+							lense.style.setProperty("top", y + "px", "important");
+							pane.style.setProperty("left", imgRects.left + ((zoomSettings.zoomlevel - 1) * (imgRects.left - x - halfW)) + "px", "important");
+							pane.style.setProperty("top", imgRects.top + ((zoomSettings.zoomlevel - 1) * (imgRects.top - y - halfH)) + "px", "important");
+						};
+						let releasing = _ => {
+							document.removeEventListener("mousemove", dragging);
+							document.removeEventListener("mouseup", releasing);
+							BDFDB.DOMUtils.remove(lense, backdrop);
+						};
+						document.addEventListener("mousemove", dragging);
+						document.addEventListener("mouseup", releasing);
+					});
+				}
+			}
+			else if (e.returnvalue) {
+				if (settings.showOnHover && e.instance.props.original && e.instance.props.src.indexOf("https://media.discordapp.net/attachments") == 0 && typeof e.returnvalue.props.children == "function") {
+					let attachment = BDFDB.ReactUtils.findValue(e.instance, "attachment", {up:true});
+					if (attachment) {
+						let renderChildren = e.returnvalue.props.children;
+						e.returnvalue.props.children = (...args) => {
+							return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+								text: `${attachment.filename}\n${BDFDB.NumberUtils.formatBytes(attachment.size)}\n${attachment.width}x${attachment.height}px`,
+								tooltipConfig: {
+									type: "right",
+									delay: amounts.hoverDelay
+								},
+								children: renderChildren(...args)
+							});
+						};
+					}
+				}
+			}
+		}
+		
+		injectImageDetails (props, child) {
+			if (settings.showAsHeaader) {
+				props.detailsAdded = true;
+				return BDFDB.ReactUtils.createElement("div", {
+					className: BDFDB.disCN.embedwrapper,
+					children: [
+						BDFDB.ReactUtils.createElement(ImageDetails, {
+							original: props.original,
+							attachment: {
+								height: 0,
+								width: 0,
+								filename: "unknown.png"
+							}
+						}),
+						child
+					]
 				});
 			}
+			return child;
 		}
 		
 		copyImage (src) {
@@ -729,6 +782,7 @@ var ImageUtilities = (_ => {
 		
 		forceUpdateAll () {
 			settings = BDFDB.DataUtils.get(this, "settings");
+			amounts = BDFDB.DataUtils.get(this, "amounts");
 			inputs = BDFDB.DataUtils.get(this, "inputs");
 			zoomSettings = BDFDB.DataUtils.get(this, "zoomSettings");
 			engines = BDFDB.DataUtils.get(this, "engines");
