@@ -64,7 +64,7 @@
 		BDFDB.LogUtils.log(loadMessage, plugin.name);
 		if (!BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts) && settings.showToasts) BDFDB.NotificationUtils.toast(plugin.name + " " + loadMessage, {nopointer: true, selector: "plugin-started-toast"});
 
-		let url = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
+		let url = ["ImageZoom", "ImageGallery", "ReverseImageSearch"].includes(plugin.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ImageUtilities/ImageUtilities.plugin.js" : typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 		BDFDB.PluginUtils.checkUpdate(plugin.name, url);
 
 		if (typeof plugin.initConstructor === "function") BDFDB.TimeUtils.suppress(plugin.initConstructor.bind(plugin), "Could not initiate constructor!", plugin.name)();
@@ -143,15 +143,15 @@
 	};
 	BDFDB.PluginUtils.checkUpdate = function (pluginName, url) {
 		if (pluginName && url) return new Promise(callback => {
-			LibraryRequires.request(url, (error, response, result) => {
+			LibraryRequires.request(url, (error, response, body) => {
 				if (error) return callback(null);
-				let newVersion = result.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
+				let newName = (body.match(/"name"\s*:\s*"([^"]+)"/) || [])[1] || pluginName;
+				let newVersion = body.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
 				if (!newVersion) return callback(null);
-				if (BDFDB.NumberUtils.getVersionDifference(newVersion[0], window.PluginUpdates.plugins[url].version) > 0.2) {
+				if (pluginName == newName && BDFDB.NumberUtils.getVersionDifference(newVersion[0], window.PluginUpdates.plugins[url].version) > 0.2) {
 					BDFDB.NotificationUtils.toast(`${pluginName} will be force updated, because your version is heavily outdated.`, {
 						type: "warn",
-						nopointer: true,
-						selector: "plugin-forceupdate-toast"
+						nopointer: true
 					});
 					BDFDB.PluginUtils.downloadUpdate(pluginName, url);
 					return callback(2);
@@ -246,8 +246,7 @@
 		}
 	};
 	BDFDB.PluginUtils.downloadUpdate = function (pluginName, url) {
-		if (!pluginName || !url) return;
-		LibraryRequires.request(url, (error, response, body) => {
+		if (pluginName && url) LibraryRequires.request(url, (error, response, body) => {
 			if (error) return BDFDB.LogUtils.warn("Unable to get update for " + pluginName);
 			BDFDB.InternalData.creationTime = 0;
 			let wasEnabled = BDFDB.BDUtils.isPluginEnabled(pluginName);
@@ -1526,13 +1525,13 @@
 				if (methodNames.includes("componentDidMount")) InternalBDFDB.initiateProcess(plugin, type, {
 					instance: instance,
 					methodname: "componentDidMount",
-					patchtypes: Object.keys(pluginData.patchTypes)
+					patchtypes: pluginData.patchTypes[type]
 				});
 				if (methodNames.includes("render")) forceRender = true;
 				else if (!forceRender && methodNames.includes("componentDidUpdate")) InternalBDFDB.initiateProcess(plugin, type, {
 					instance: instance,
 					methodname: "componentDidUpdate",
-					patchtypes: Object.keys(pluginData.patchTypes)
+					patchtypes: pluginData.patchTypes[type]
 				});
 			}
 			if (forceRender) BDFDB.ReactUtils.forceUpdate(instance);
@@ -4346,21 +4345,18 @@
 		translated: "translated-5YO8i3",
 		translating: "translating-Yi-YxC"
 	};
-	DiscordClassModules.ImageGallery = {
+	DiscordClassModules.ImageUtilities = {
+		operations: "operations-3V47CY",
 		details: "details-9dkFPc",
 		detailsLabel: "label-mrlccN",
 		detailsWrapper: "detailsWrapper-TE1mu5",
 		gallery: "gallery-JViwKR",
-		icon: "icon-QY6cR4",
+		lense: "zoomLense-uOK8xV",
+		lenseBackdrop: "lenseBackdrop-yEm7Om",
 		next: "next-SHEZrz",
 		previous: "previous-xsNq6B",
-		sibling: "sibling-6vI7Pu"
-	};
-	DiscordClassModules.ImageZoom = {
-		backdrop: "lenseBackdrop-yEm7Om",
-		lense: "zoomLense-uOK8xV",
-		modal: "imageModal-8J0ttB",
-		operations: "operations-3V47CY"
+		sibling: "sibling-6vI7Pu",
+		switchIcon: "switchIcon-QY6cR4"
 	};
 	DiscordClassModules.JoinedAtDate = {
 		date: "joinedAtDate-IawR02"
@@ -4581,12 +4577,13 @@
 	DiscordClassModules.HotKeyRecorder = BDFDB.ModuleUtils.findByProperties("editIcon", "recording");
 	DiscordClassModules.HoverCard = BDFDB.ModuleUtils.findByProperties("card", "active");
 	DiscordClassModules.IconDirection = BDFDB.ModuleUtils.findByProperties("directionDown", "directionUp");
+	DiscordClassModules.ImageModal = BDFDB.ModuleUtils.find(m => typeof m.image == "string" && typeof m.modal == "string" && Object.keys(m).length < 4);
 	DiscordClassModules.ImageWrapper = BDFDB.ModuleUtils.findByProperties("clickable", "imageWrapperBackground");
+	DiscordClassModules.Input = BDFDB.ModuleUtils.findByProperties("inputMini", "inputDefault");
 	DiscordClassModules.InviteModal = BDFDB.ModuleUtils.findByProperties("inviteRow", "modal");
 	DiscordClassModules.Item = BDFDB.ModuleUtils.findByProperties("item", "side", "header");
 	DiscordClassModules.ItemRole = BDFDB.ModuleUtils.findByProperties("role", "dragged");
 	DiscordClassModules.ItemLayerContainer = BDFDB.ModuleUtils.findByProperties("layer", "layerContainer");
-	DiscordClassModules.Input = BDFDB.ModuleUtils.findByProperties("inputMini", "inputDefault");
 	DiscordClassModules.LayerModal = BDFDB.ModuleUtils.findByProperties("root", "small", "medium");
 	DiscordClassModules.Layers = BDFDB.ModuleUtils.findByProperties("layer", "layers");
 	DiscordClassModules.LiveTag = BDFDB.ModuleUtils.findByProperties("liveLarge", "live");
@@ -4736,18 +4733,17 @@
 		_emojistatisticsiconcell: ["EmojiStatistics", "iconCell"],
 		_emojistatisticsnamecell: ["EmojiStatistics", "nameCell"],
 		_friendnotificationsfriendsonline: ["FriendNotifications", "friendsOnline"],
-		_imagegallerydetails: ["ImageGallery", "details"],
-		_imagegallerydetailslabel: ["ImageGallery", "detailsLabel"],
-		_imagegallerydetailswrapper: ["ImageGallery", "detailsWrapper"],
-		_imagegallerygallery: ["ImageGallery", "gallery"],
-		_imagegalleryicon: ["ImageGallery", "icon"],
-		_imagegallerynext: ["ImageGallery", "next"],
-		_imagegalleryprevious: ["ImageGallery", "previous"],
-		_imagegallerysibling: ["ImageGallery", "sibling"],
-		_imagezoombackdrop: ["ImageZoom", "backdrop"],
-		_imagezoomimagemodal: ["ImageZoom", "modal"],
-		_imagezoomlense: ["ImageZoom", "lense"],
-		_imagezoomoperations: ["ImageZoom", "operations"],
+		_imageutilitiesdetails: ["ImageUtilities", "details"],
+		_imageutilitiesdetailslabel: ["ImageUtilities", "detailsLabel"],
+		_imageutilitiesdetailswrapper: ["ImageUtilities", "detailsWrapper"],
+		_imageutilitiesgallery: ["ImageUtilities", "gallery"],
+		_imageutilitieslense: ["ImageUtilities", "lense"],
+		_imageutilitieslensebackdrop: ["ImageUtilities", "lenseBackdrop"],
+		_imageutilitiesnext: ["ImageUtilities", "next"],
+		_imageutilitiesoperations: ["ImageUtilities", "operations"],
+		_imageutilitiesprevious: ["ImageUtilities", "previous"],
+		_imageutilitiessibling: ["ImageUtilities", "sibling"],
+		_imageutilitiesswitchicon: ["ImageUtilities", "switchIcon"],
 		_joinedatdatedate: ["JoinedAtDate", "date"],
 		_lastmessagedatedate: ["LastMessageDate", "date"],
 		_googletranslateoptionreversebutton: ["GoogleTranslateOption", "reverseButton"],
@@ -5429,6 +5425,8 @@
 		imageerror: ["ImageWrapper", "imageError"],
 		imageplaceholder: ["ImageWrapper", "imagePlaceholder"],
 		imageplaceholderoverlay: ["ImageWrapper", "imagePlaceholderOverlay"],
+		imagemodal: ["ImageModal", "modal"],
+		imagemodalimage: ["ImageModal", "image"],
 		imagewrapper: ["ImageWrapper", "imageWrapper"],
 		imagewrapperbackground: ["ImageWrapper", "imageWrapperBackground"],
 		imagewrapperinner: ["ImageWrapper", "imageWrapperInner"],
@@ -6954,7 +6952,8 @@
 			let color = (typeof this.props.color == "string" ? this.props.color : InternalComponents.LibraryComponents.MenuItems.Colors.DEFAULT).toLowerCase();
 			let isCustomColor = false;
 			if (color) {
-				if (!BDFDB.DiscordClasses[`menu${color}`] && BDFDB.ColorUtils.getType(color)) {
+				if (BDFDB.DiscordClasses[`menu${color}`]) color = color;
+				else if (BDFDB.ColorUtils.getType(color)) {
 					isCustomColor = true;
 					color = BDFDB.ColorUtils.convert(color, "RGBA");
 				}
@@ -8034,6 +8033,15 @@
 	};
 	
 	InternalComponents.LibraryComponents.FileButton = InternalBDFDB.loadPatchedComp("FileButton") || reactInitialized && class BDFDB_FileButton extends LibraryModules.React.Component {
+		componentDidMount() {
+			if (this.props.searchFolders) {
+				let node = BDFDB.ReactUtils.findDOMNode(this);
+				if (node && (node = node.querySelector("input[type='file']")) != null) {
+					node.setAttribute("directory", "");
+					node.setAttribute("webkitdirectory", "");
+				}
+			}
+		}
 		render() {
 			let filter = this.props.filter && [this.props.filter].flat(10).filter(n => typeof n == "string") || [];
 			return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Button, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
@@ -8047,14 +8055,14 @@
 						onChange: e => {
 							let file = e.currentTarget.files[0];
 							if (this.refInput && file && (!filter.length || filter.some(n => file.type.indexOf(n) == 0))) {
-								this.refInput.props.value = `${this.props.mode == "url" ? "url('" : ""}${(this.props.useFilePath || this.props.useFilepath) ? file.path : `data:${file.type};base64,${BDFDB.LibraryRequires.fs.readFileSync(file.path).toString("base64")}`}${this.props.mode ? "')" : ""}`;
+								this.refInput.props.value = this.props.searchFolders ? file.path.split(file.name).slice(0, -1).join(file.name) : `${this.props.mode == "url" ? "url('" : ""}${(this.props.useFilePath) ? file.path : `data:${file.type};base64,${BDFDB.LibraryRequires.fs.readFileSync(file.path).toString("base64")}`}${this.props.mode ? "')" : ""}`;
 								BDFDB.ReactUtils.forceUpdate(this.refInput);
 								this.refInput.handleChange(this.refInput.props.value);
 							}
 						}
 					})
 				]
-			}), "filter", "mode", "useFilePath", "useFilepath"));
+			}), "filter", "mode", "useFilePath", "searchFolders"));
 		}
 	};
 	
@@ -8252,6 +8260,8 @@
 			});
 		}
 	};
+	
+	InternalComponents.LibraryComponents.ImageModal = BDFDB.ModuleUtils.findByName("ImageModal");
 	
 	InternalComponents.LibraryComponents.LazyImage = BDFDB.ModuleUtils.findByName("LazyImage");
 	
@@ -9460,7 +9470,7 @@
 					onMouseLeave: this.handleMouseLeave.bind(this),
 					maxLength: this.props.type == "file" ? false : this.props.maxLength,
 					ref: this.props.inputRef
-				}), "errorMessage", "focused", "error", "success", "inputClassName", "inputChildren", "valuePrefix", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "filter", "useFilePath", "useFilepath")),
+				}), "errorMessage", "focused", "error", "success", "inputClassName", "inputChildren", "valuePrefix", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "filter", "useFilePath", "searchFolders")),
 				this.props.inputChildren,
 				this.props.type == "color" ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
 					wrap: true,
@@ -9476,7 +9486,8 @@
 				this.props.type == "file" ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FileButton, {
 					filter: this.props.filter,
 					mode: this.props.mode,
-					useFilePath: this.props.useFilePath || this.props.useFilepath,
+					useFilePath: this.props.useFilePath,
+					searchFolders: this.props.searchFolders
 				}) : null
 			].flat(10).filter(n => n);
 			
@@ -9647,6 +9658,10 @@
 		
 		img:not([src]), img[src=""], img[src="null"] {
 			opacity: 0;
+		}
+		
+		${BDFDB.dotCNS.menu + BDFDB.dotCN.itemlayer} {
+			z-index: 1003;
 		}
 		
 		${BDFDB.dotCN.loadingiconwrapper} {

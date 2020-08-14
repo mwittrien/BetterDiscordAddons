@@ -2702,7 +2702,10 @@ body:before {
 	-webkit-mask: url(https://discordapp.com/assets/da8463a04b4a289801d2516f50eb4c19.svg);
 }
 
-#app-mount .card-o7rAq- {									/* integrationsettings	card								*/
+#app-mount .card-3IImnr {									/* integrationsettings	webhook card						*/
+	border-color: rgba(var(--vtransparencycolor), 0.1)
+}
+#app-mount .card-1o0mns {									/* integrationsettings	apps card							*/
 	border-color: rgba(var(--vtransparencycolor), 0.1)
 }
 .iconWrapper-lS1uig {										/* integrationsettings	icon								*/
