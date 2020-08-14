@@ -57,6 +57,10 @@ var ImageUtilities = (_ => {
 		getDescription () {return "Adds a handful of options for images/emotes/avatars (direct download, reverse image search, zoom, copy image link, copy image to clipboard, gallery mode)";}
 
 		constructor () {
+			this.changelog = {
+				"progress":[["Welcome","This is the successor of ImageZoom, ImageGallery, ReverseImageSearch and ShowImageDetails. All of these plugins are now combined in one with even more useful features. Check out the plugin settings to configure the plugin the way you want it to work."]]
+			};
+			
 			this.patchedModules = {
 				after: {
 					ImageModal: ["render", "componentDidMount"],
