@@ -50,7 +50,7 @@ var ImageUtilities = (_ => {
 	return class ImageUtilities {
 		getName () {return "ImageUtilities";}
 
-		getVersion () {return "4.0.2";}
+		getVersion () {return "4.0.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -58,7 +58,9 @@ var ImageUtilities = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"progress":[["Welcome","This is the successor of ImageZoom, ImageGallery, ReverseImageSearch and ShowImageDetails. All of these plugins are now combined in one with even more useful features. Check out the plugin settings to configure the plugin the way you want it to work."]]
+				"progress":[["Welcome","This is the successor of ImageZoom, ImageGallery, ReverseImageSearch and ShowImageDetails. All of these plugins are now combined in one with even more useful features. Check out the plugin settings to configure the plugin the way you want it to work."]],
+				"added":[["Gallery Setting","You can now disable the gallery mode"]],
+				"fixed":[["Linux","Downloading now also works on Linux"]]
 			};
 			
 			this.patchedModules = {
@@ -75,11 +77,12 @@ var ImageUtilities = (_ => {
 				
 			this.defaults = {
 				settings: {
-					addDetails: 			{value:true,	inner:false,	description:"Add image details (name, size, amount) in the Image Modal"},
+					addDetails: 			{value:true,	inner:false,	description:"Add Image details (name, size, amount) in the Image Modal"},
 					showAsHeaader:			{value:true, 	inner:false,	description:"Show Image details as a details header above the Image in the chat"},
 					showOnHover:			{value:false, 	inner:false,	description:"Show Image details as Tooltip in the chat"},
-					enableZoom: 			{value:true,	inner:false,	description:"Creates a zoom lense if you press down on an image in the Image Modal"},
-					enableCopyImg: 			{value:true,	inner:false,	description:"Add a copy image option in the Image Modal"},
+					enableGallery: 			{value:true,	inner:false,	description:"Displays previous/next Images in the same message in the Image Modal"},
+					enableZoom: 			{value:true,	inner:false,	description:"Creates a zoom lense if you press down on an Image in the Image Modal"},
+					enableCopyImg: 			{value:true,	inner:false,	description:"Add a copy Image option in the Image Modal"},
 					useChromium: 			{value:false, 	inner:false,	description:"Use an inbuilt browser window instead of opening your default browser"},
 					addUserAvatarEntry: 	{value:true, 	inner:true,		description:"User Avatars"},
 					addGuildIconEntry: 		{value:true, 	inner:true,		description:"Server Icons"},
@@ -685,8 +688,8 @@ var ImageUtilities = (_ => {
 		
 		getDownloadLocation () {
 			if (BDFDB.LibraryRequires.fs.existsSync(inputs.downloadLocation)) return inputs.downloadLocation;
-			let downloadPath = BDFDB.LibraryRequires.path.join(BDFDB.LibraryRequires.process.env.HOMEPATH, "downloads");
-			if (BDFDB.LibraryRequires.fs.existsSync(downloadPath)) return downloadPath;
+			let downloadPath = BDFDB.LibraryRequires.process.env.USERPROFILE && BDFDB.LibraryRequires.path.join(BDFDB.LibraryRequires.process.env.USERPROFILE, "downloads");
+			if (downloadPath && BDFDB.LibraryRequires.fs.existsSync(downloadPath)) return downloadPath;
 			return BDFDB.BDUtils.getPluginsFolder();
 		}
 		
@@ -697,7 +700,7 @@ var ImageUtilities = (_ => {
 		}
 
 		getMessageGroupOfImage (src) {
-			if (src) for (let message of document.querySelectorAll(BDFDB.dotCN.message)) for (let img of message.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img")) if (this.isSameImage(src, img)) {
+			if (src && settings.enableGallery) for (let message of document.querySelectorAll(BDFDB.dotCN.message)) for (let img of message.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img")) if (this.isSameImage(src, img)) {
 				let previousSiblings = [], nextSiblings = [];
 				let previousSibling = message.previousSibling, nextSibling = message.nextSibling;
 				if (!BDFDB.DOMUtils.containsClass(message, BDFDB.disCN.messagegroupstart)) while (previousSibling) {
