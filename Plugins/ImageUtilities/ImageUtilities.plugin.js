@@ -513,10 +513,11 @@ var ImageUtilities = (_ => {
 						].flat(10).filter(n => n)
 					});
 				}
-				let imageIndex = 0;
+				let imageIndex = 0, amount = 1;
 				if (messages.length) {
 					let images = messages.map(n => Array.from(n.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img"))).flat().filter(img => !BDFDB.DOMUtils.getParent(BDFDB.dotCN.spoilerhidden, img));
-					let next, previous, amount = images.length;
+					amount = images.length;
+					let next, previous;
 					for (let i = 0; i < amount; i++) if (this.isSameImage(src, images[i])) {
 						imageIndex = i;
 						previous = images[i-1];
