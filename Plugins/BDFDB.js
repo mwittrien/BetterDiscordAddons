@@ -190,9 +190,6 @@
 			updateNotice.style.setProperty("display", "block", "important");
 			updateNotice.style.setProperty("visibility", "visible", "important");
 			updateNotice.style.setProperty("opacity", "1", "important");
-			updateNotice.querySelector(BDFDB.dotCN.noticedismiss).addEventListener("click", _ => {
-				BDFDB.DOMUtils.remove(".update-clickme-tooltip");
-			});
 			let reloadButton = updateNotice.querySelector(BDFDB.dotCN.noticebutton);
 			if (reloadButton) {
 				BDFDB.DOMUtils.toggle(reloadButton, true);
@@ -216,6 +213,7 @@
 					BDFDB.TooltipUtils.create(updateNoticeList, BDFDB.LanguageUtils.LibraryStrings.update_notice_click, {
 						type: "bottom",
 						unhideable: true,
+						zIndex: 100001,
 						delay: 500,
 						onHide: _ => {updateNoticeList.hasTooltip = false;}
 					});
