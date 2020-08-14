@@ -2276,6 +2276,9 @@ body:before {
 .connection-1fbD7X[style*="background-color: rgb(89, 54, 149)"] {
 	background-color: rgba(89, 54, 149, 0.8) !important;
 }
+.connection-1fbD7X[style*="background-color: rgb(25, 23, 23)"] {
+	background-color: rgba(25, 23, 23, 0.8) !important;
+}
 .connection-1fbD7X[style*="background-color: rgb(203, 33, 32)"] {
 	background-color: rgba(203, 33, 32, 0.8) !important;
 }
