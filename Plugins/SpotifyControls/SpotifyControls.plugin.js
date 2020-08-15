@@ -1,7 +1,7 @@
 //META{"name":"SpotifyControls","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/SpotifyControls","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/SpotifyControls/SpotifyControls.plugin.js"}*//
 
 var SpotifyControls = (_ => {
-	var _this;
+	var _this, insertPatchCancel;
 	var controls, lastSong, currentVolume, lastVolume, stopTime, previousIsClicked, previousDoubleTimeout, timelineTimeout, timelineDragging, updateInterval;
 	var playbackState = {};
 	var settings = {};
@@ -353,8 +353,8 @@ var SpotifyControls = (_ => {
 			};
 			
 			this.patchedModules = {
-				after: {
-					AnalyticsContext: "render"
+				before: {
+					AppView: "render"
 				}
 			};
 		}
@@ -615,6 +615,8 @@ var SpotifyControls = (_ => {
 				this.stopping = true;
 				
 				this.forceUpdateAll();
+				
+				if (typeof insertPatchCancel == "function") insertPatchCancel();
 
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -630,20 +632,16 @@ var SpotifyControls = (_ => {
 			}
 		}
 
-		processAnalyticsContext (e) {
-			if (typeof e.returnvalue.props.children == "function" && e.instance.props.section == BDFDB.DiscordConstants.AnalyticsSections.ACCOUNT_PANEL) {
-				let renderChildren = e.returnvalue.props.children;
-				e.returnvalue.props.children = (...args) => {
-					return [
-						BDFDB.ReactUtils.createElement(SpotifyControlsComponent, {
-							song: BDFDB.LibraryModules.SpotifyTrackUtils.getActivity(false),
-							maximized: BDFDB.DataUtils.load(this, "playerState", "maximized"),
-							timeline: settings.addTimeline
-						}),
-						renderChildren(...args)
-					];
-				};
-			}
+		processAppView (e) {
+			if (typeof insertPatchCancel == "function") insertPatchCancel();
+			insertPatchCancel = BDFDB.ModuleUtils.patch(this, e.instance, "renderChannelSidebar", {after: e2 => {
+				let [children, index] = BDFDB.ReactUtils.findParent(e2.returnValue, {props: [["section", BDFDB.DiscordConstants.AnalyticsSections.ACCOUNT_PANEL]]});
+				if (index > -1) children.splice(index - 1, 0, BDFDB.ReactUtils.createElement(SpotifyControlsComponent, {
+					song: BDFDB.LibraryModules.SpotifyTrackUtils.getActivity(false),
+					maximized: BDFDB.DataUtils.load(this, "playerState", "maximized"),
+					timeline: settings.addTimeline
+				}));
+			}}, {force: true, noCache: true});
 		}
 		
 		updatePlayer (song) {
