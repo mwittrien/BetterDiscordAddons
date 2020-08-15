@@ -4443,6 +4443,7 @@
 		highlight: "highlight",
 		hoverCardButton: "button-2CgfFz",
 		loginScreen: "wrapper-3Q5DdO",
+		messagesLoadingWrapper: "wrapper-3vR61M",
 		messagesWelcomeButton: "button-2OOM0p",
 		mention: "mention",
 		mentionInteractive: "interactive",
@@ -4609,6 +4610,7 @@
 	DiscordClassModules.MessagesPopout = BDFDB.ModuleUtils.findByProperties("messagesPopoutWrap", "jumpButton");
 	DiscordClassModules.MessagesPopoutButtons = BDFDB.ModuleUtils.findByProperties("secondary", "tertiary", "button");
 	DiscordClassModules.MessagesPopoutTabBar = BDFDB.ModuleUtils.findByProperties("header", "tabBar", "active");
+	DiscordClassModules.MessagesLoading = BDFDB.ModuleUtils.findByProperties("attachment", "blob", "cozy");
 	DiscordClassModules.MessagesWelcome = BDFDB.ModuleUtils.findByProperties("emptyChannelIcon", "description", "header");
 	DiscordClassModules.MessagesWrap = BDFDB.ModuleUtils.findByProperties("messagesWrapper", "messageGroupBlocked");
 	DiscordClassModules.Modal = BDFDB.ModuleUtils.findByProperties("modal", "sizeLarge");
@@ -5646,6 +5648,11 @@
 		messageselected: ["Message", "selected"],
 		messages: ["MessagesWrap", "messages"],
 		messagesdivider: ["MessagesWrap", "divider"],
+		messagesloadingavatar: ["MessagesLoading", "avatar"],
+		messagesloadingcompact: ["MessagesLoading", "compact"],
+		messagesloadingcozy: ["MessagesLoading", "cozy"],
+		messagesloadingmessage: ["MessagesLoading", "wrapper"],
+		messagesloadingwrapper: ["NotFound", "messagesLoadingWrapper"],
 		messagespopout: ["MessagesPopout", "messagesPopout"],
 		messagespopoutactionbuttons: ["MessagesPopout", "actionButtons"],
 		messagespopoutbody: ["MessagesPopout", "body"],

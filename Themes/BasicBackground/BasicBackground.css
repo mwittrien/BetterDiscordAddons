@@ -164,6 +164,7 @@ body,														/* body														*/
 #app-mount .app-1q1i1E,										/* app					container							*/
 #app-mount .app-2rEoOp,										/* app					inner								*/
 #app-mount .container-16j22k,								/* app					loadingscreen						*/
+#app-mount .wrapper-1prNyd,									/* app					errorscreen							*/
 #app-mount .bg-h5JY_x,										/* app					background							*/
 #app-mount .layer-3QrUeG,									/* layer				container							*/
 #app-mount .container-PNkimc,								/* channels				inner								*/
@@ -216,14 +217,7 @@ body,														/* body														*/
 	background-color: rgba(var(--vtransparencycolor), var(--vmemberlisttransparency));
 }
 
-.themeDark-3Ap_7i, .themeLight-2aS1dz {						/* errorscreen												*/
-	background-color: transparent;
-	color: rgb(var(--fontwhite1));
-}
-#app-mount .note-450gs3 {
-	color: rgb(var(--fontwhite2));
-}
-#app-mount .image-3zK3Wt {
+#app-mount .image-3zK3Wt {									/* app					errorscreen image					*/
 	background-image: url(https://discordapp.com/assets/e9baf4b505eb54129f832556ea16538e.svg);
 	opacity: 0.6;
 }
