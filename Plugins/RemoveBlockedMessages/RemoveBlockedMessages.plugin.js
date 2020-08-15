@@ -4,7 +4,7 @@ var RemoveBlockedMessages = (_ => {
 	return class RemoveBlockedMessages {
 		getName () {return "RemoveBlockedMessages";}
 
-		getVersion () {return "1.0.3";}
+		getVersion () {return "1.0.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -72,13 +72,14 @@ var RemoveBlockedMessages = (_ => {
 		// Begin of own functions
 		
 		processMessages (e) {
-			if (BDFDB.ArrayUtils.is(e.returnvalue.props.children.props.channelStream)) e.returnvalue.props.children.props.channelStream = [].concat(e.returnvalue.props.children.props.channelStream.filter(n => n.type != "MESSAGE_GROUP_BLOCKED"));
-			if (BDFDB.ObjectUtils.is(e.instance.props.messages) && BDFDB.ArrayUtils.is(e.instance.props.messages._array)) {
-				let messages = e.instance.props.messages;
-				e.instance.props.messages = new BDFDB.DiscordObjects.Messages(messages);
-				for (let key in messages) e.instance.props.messages[key] = messages[key];
-				e.instance.props.messages._array = [].concat(e.instance.props.messages._array.filter(n => n.author && !BDFDB.LibraryModules.FriendUtils.isBlocked(n.author.id)));
-				if (e.instance.props.oldestUnreadMessageId && e.instance.props.messages._array.every(n => n.id != e.instance.props.oldestUnreadMessageId)) e.instance.props.oldestUnreadMessageId = null;
+			let messagesIns = e.returnvalue.props.children;
+			if (BDFDB.ArrayUtils.is(messagesIns.props.channelStream)) messagesIns.props.channelStream = [].concat(messagesIns.props.channelStream.filter(n => n.type != "MESSAGE_GROUP_BLOCKED"));
+			if (BDFDB.ObjectUtils.is(messagesIns.props.messages) && BDFDB.ArrayUtils.is(messagesIns.props.messages._array)) {
+				let messages = messagesIns.props.messages;
+				messagesIns.props.messages = new BDFDB.DiscordObjects.Messages(messages);
+				for (let key in messages) messagesIns.props.messages[key] = messages[key];
+				messagesIns.props.messages._array = [].concat(messagesIns.props.messages._array.filter(n => n.author && !BDFDB.LibraryModules.FriendUtils.isBlocked(n.author.id)));
+				if (messagesIns.props.oldestUnreadMessageId && messagesIns.props.messages._array.every(n => n.id != messagesIns.props.oldestUnreadMessageId)) messagesIns.props.oldestUnreadMessageId = null;
 			}
 		}
 	}
