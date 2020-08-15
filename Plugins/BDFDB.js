@@ -4536,6 +4536,7 @@
 	DiscordClassModules.EmojiPickerDiversitySelector = BDFDB.ModuleUtils.findByProperties("diversityEmojiItemImage", "diversitySelectorPopout");
 	DiscordClassModules.EmojiPickerItem = BDFDB.ModuleUtils.findByProperties("emojiSpriteImage");
 	DiscordClassModules.EmojiPickerInspector = BDFDB.ModuleUtils.findByProperties("inspector", "glyphEmoji");
+	DiscordClassModules.ErrorScreen = BDFDB.ModuleUtils.findByProperties("wrapper", "flexWrapper", "note");
 	DiscordClassModules.ExpressionPicker = BDFDB.ModuleUtils.findByProperties("contentWrapper", "navButton", "navList");
 	DiscordClassModules.File = BDFDB.ModuleUtils.findByProperties("downloadButton", "fileNameLink");
 	DiscordClassModules.Flex = BDFDB.ModuleUtils.findByProperties("alignBaseline", "alignCenter");
@@ -5228,6 +5229,7 @@
 		emojipickerheader: ["EmojiPicker", "header"],
 		emojipickerinspector: ["EmojiPickerInspector", "inspector"],
 		emojipickerinspectoremoji: ["EmojiPickerInspector", "emoji"],
+		errorscreen: ["ErrorScreen", "wrapper"],
 		expressionpicker: ["ExpressionPicker", "contentWrapper"],
 		expressionpickernav: ["ExpressionPicker", "nav"],
 		expressionpickernavbutton: ["ExpressionPicker", "navButton"],
