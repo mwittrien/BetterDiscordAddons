@@ -4,16 +4,20 @@ var RemoveBlockedMessages = (_ => {
 	return class RemoveBlockedMessages {
 		getName () {return "RemoveBlockedMessages";}
 
-		getVersion () {return "1.0.2";}
+		getVersion () {return "1.0.3";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Removes blocked messages completely.";}
 		
-		constructor () {			
+		constructor () {		
+			this.changelog = {
+				"fixed":[["Message Update","Fixed for yet another message update provided by our best friend discord"]]
+			};
+			
 			this.patchedModules = {
-				before: {
-					Messages: "render"
+				after: {
+					Messages: "type"
 				}
 			};
 		}
@@ -47,7 +51,7 @@ var RemoveBlockedMessages = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 				
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				BDFDB.MessageUtils.rerenderAll();
 			}
 			else {
 				console.error(`%c[${this.getName()}]%c`, 'color: #3a71c1; font-weight: 700;', '', 'Fatal Error: Could not load BD functions!');
@@ -58,7 +62,7 @@ var RemoveBlockedMessages = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
 				
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				BDFDB.MessageUtils.rerenderAll();
 
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -68,7 +72,7 @@ var RemoveBlockedMessages = (_ => {
 		// Begin of own functions
 		
 		processMessages (e) {
-			if (BDFDB.ArrayUtils.is(e.instance.props.channelStream)) e.instance.props.channelStream = [].concat(e.instance.props.channelStream.filter(n => n.type != "MESSAGE_GROUP_BLOCKED"));
+			if (BDFDB.ArrayUtils.is(e.returnvalue.props.children.props.channelStream)) e.returnvalue.props.children.props.channelStream = [].concat(e.returnvalue.props.children.props.channelStream.filter(n => n.type != "MESSAGE_GROUP_BLOCKED"));
 			if (BDFDB.ObjectUtils.is(e.instance.props.messages) && BDFDB.ArrayUtils.is(e.instance.props.messages._array)) {
 				let messages = e.instance.props.messages;
 				e.instance.props.messages = new BDFDB.DiscordObjects.Messages(messages);

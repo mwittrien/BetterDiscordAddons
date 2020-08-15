@@ -7,18 +7,20 @@ var DisplayLargeMessages = (_ => {
 	return class DisplayLargeMessages {
 		getName () {return "DisplayLargeMessages";}
 
-		getVersion () {return "1.0.5";}
+		getVersion () {return "1.0.6";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Injects the contents of large messages that were sent by discord via 'message.txt'.";}
 
-		constructor () {			
+		constructor () {
+			this.changelog = {
+				"fixed":[["Message Update","Fixed for yet another message update provided by our best friend discord"]]
+			};
+			
 			this.patchedModules = {
-				before: {
-					Messages: "render",
-				},
 				after: {
+					Messages: "type",
 					Attachment: "default"
 				}
 			};
@@ -38,7 +40,8 @@ var DisplayLargeMessages = (_ => {
 				}
 				${BDFDB.dotCN._displaylargemessagesinjectbutton}:hover {
 					color: var(--interactive-hover);
-				}`;
+				}
+			`;
 
 			this.defaults = {
 				settings: {
@@ -167,7 +170,7 @@ var DisplayLargeMessages = (_ => {
 							id: BDFDB.ContextMenuUtils.createItemId(this.name, "uninject-attachment"),
 							action: _ => {
 								delete encodedMessages[e.instance.props.message.id];
-								BDFDB.ModuleUtils.forceAllUpdates(this, ["Messages", "Attachment"]);
+								BDFDB.MessageUtils.rerenderAll(true);
 							}
 						})
 					}));
@@ -176,11 +179,11 @@ var DisplayLargeMessages = (_ => {
 		}
 
 		processMessages (e) {
-			e.instance.props.channelStream = [].concat(e.instance.props.channelStream);
-			for (let i in e.instance.props.channelStream) {
-				let message = e.instance.props.channelStream[i].content;
+			e.returnvalue.props.children.props.channelStream = [].concat(e.returnvalue.props.children.props.channelStream);
+			for (let i in e.returnvalue.props.children.props.channelStream) {
+				let message = e.returnvalue.props.children.props.channelStream[i].content;
 				if (message) {
-					if (BDFDB.ArrayUtils.is(message.attachments)) this.checkMessage(e.instance, e.instance.props.channelStream[i], message);
+					if (BDFDB.ArrayUtils.is(message.attachments)) this.checkMessage(e.instance, e.returnvalue.props.children.props.channelStream[i], message);
 					else if (BDFDB.ArrayUtils.is(message)) for (let j in message) {
 						let childMessage = message[j].content;
 						if (childMessage && BDFDB.ArrayUtils.is(childMessage.attachments)) this.checkMessage(e.instance, message[j], childMessage);
@@ -243,7 +246,7 @@ var DisplayLargeMessages = (_ => {
 										content: message.content || "",
 										attachment: body || ""
 									};
-									BDFDB.ModuleUtils.forceAllUpdates(this, "Messages");
+									BDFDB.MessageUtils.rerenderAll(true);
 								});
 							}
 						}

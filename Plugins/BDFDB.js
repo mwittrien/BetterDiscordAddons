@@ -1234,6 +1234,7 @@
 		"EmojiPicker",
 		"ExpressionPicker",
 		"GuildFolder",
+		"Messages",
 		"MessageContent",
 		"NowPlayingHeader"
 	];
@@ -1304,7 +1305,6 @@
 		InvitationCard: "invitemodalinviterow",
 		InviteCard: "guildsettingsinvitecard",
 		MemberCard: "guildsettingsmembercard",
-		Messages: "messages",
 		MessagesPopout: "messagespopout",
 		ModalLayer: "layermodal",
 		MutualGuilds: "userprofilebody",
@@ -1333,6 +1333,7 @@
 	};
 	WebModulesData.CodeFinder = {
 		EmojiPicker: ["allowManagedEmojis", "EMOJI_PICKER_TAB_PANEL_ID", "diversitySelector"],
+		Messages: ["group-spacing-", "canManageMessages"],
 		SearchResultsInner: ["SEARCH_HIDE_BLOCKED_MESSAGES", "totalResults", "SEARCH_PAGE_SIZE"]
 	};
 	WebModulesData.PropsFinder = {
@@ -1622,7 +1623,7 @@
 					let patchMethods = {};
 					patchMethods[patchType] = e => {
 						return InternalBDFDB.initiateProcess(pluginData.plugin, type, {
-							instance: window != e.thisObject ? e.thisObject : {props:e.methodArguments[0]},
+							instance: e.thisObject && window != e.thisObject ? e.thisObject : {props:e.methodArguments[0]},
 							returnvalue: e.returnValue,
 							methodname: e.originalMethodName,
 							patchtypes: [patchType]
@@ -2363,19 +2364,18 @@
 
 	let MessageRerenderTimeout;
 	BDFDB.MessageUtils = {};
-	BDFDB.MessageUtils.rerenderAll = function () {
+	BDFDB.MessageUtils.rerenderAll = function (instant) {
 		BDFDB.TimeUtils.clear(MessageRerenderTimeout);
 		MessageRerenderTimeout = BDFDB.TimeUtils.timeout(_ => {
-			let MessagesIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"Messages", unlimited:true});
-			let MessagesPrototype = BDFDB.ReactUtils.getValue(MessagesIns, "_reactInternalFiber.type.prototype");
-			if (MessagesIns && MessagesPrototype) {
-				BDFDB.ModuleUtils.patch(BDFDB, MessagesPrototype, "render", {after: e => {
-					let [children, index] = BDFDB.ReactUtils.findParent(e.returnValue, {props: ["message", "channel"]});
-					if (index > -1) for (let ele of children) if (ele.props.message) ele.props.message = new BDFDB.DiscordObjects.Message(ele.props.message);
+			let LayerProviderIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.messageswrapper), {name:"LayerProvider", unlimited:true, up:true});
+			let LayerProviderPrototype = BDFDB.ReactUtils.getValue(LayerProviderIns, "_reactInternalFiber.type.prototype");
+			if (LayerProviderIns && LayerProviderPrototype) {
+				BDFDB.ModuleUtils.patch(BDFDB, LayerProviderPrototype, "render", {after: e => {
+					e.returnValue.props.children = [];
 				}}, {once: true});
-				BDFDB.ReactUtils.forceUpdate(MessagesIns);
+				BDFDB.ReactUtils.forceUpdate(LayerProviderIns);
 			}
-		}, 1000);
+		}, instant ? 0 : 1000);
 	};
 		
 	BDFDB.UserUtils = {};
@@ -2543,7 +2543,7 @@
 		}
 		if (unreadChannels.length) BDFDB.ChannelUtils.markAsRead(unreadChannels);
 	};
-	BDFDB.GuildUtils.rerenderAll = function () {
+	BDFDB.GuildUtils.rerenderAll = function (instant) {
 		BDFDB.TimeUtils.clear(GuildsRerenderTimeout);
 		GuildsRerenderTimeout = BDFDB.TimeUtils.timeout(_ => {
 			let GuildsIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"Guilds", unlimited:true});
@@ -2556,7 +2556,7 @@
 				}}, {once: true});
 				BDFDB.ReactUtils.forceUpdate(GuildsIns);
 			}
-		}, 1000);
+		}, instant ? 0 : 1000);
 	};
 
 	BDFDB.FolderUtils = {};

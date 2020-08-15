@@ -7,16 +7,20 @@ var ChatFilter = (_ => {
 	return class ChatFilter {
 		getName () {return "ChatFilter";}
 
-		getVersion () {return "3.4.2";}
+		getVersion () {return "3.4.3";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Allows the user to censor words or block complete messages based on words in the chatwindow.";}
 
 		constructor () {
+			this.changelog = {
+				"fixed":[["Message Update","Fixed for yet another message update provided by our best friend discord"]]
+			};
+			
 			this.patchedModules = {
 				after: {
-					Messages: "render",
+					Messages: "type",
 					Message: "default",
 					MessageContent: "type"
 				}
@@ -256,11 +260,11 @@ var ChatFilter = (_ => {
 		}
 
 		processMessages (e) {
-			e.instance.props.channelStream = [].concat(e.instance.props.channelStream);
-			for (let i in e.instance.props.channelStream) {
-				let message = e.instance.props.channelStream[i].content;
+			e.returnvalue.props.children.props.channelStream = [].concat(e.returnvalue.props.children.props.channelStream);
+			for (let i in e.returnvalue.props.children.props.channelStream) {
+				let message = e.returnvalue.props.children.props.channelStream[i].content;
 				if (message) {
-					if (BDFDB.ArrayUtils.is(message.attachments)) this.checkMessage(e.instance.props.channelStream[i], message);
+					if (BDFDB.ArrayUtils.is(message.attachments)) this.checkMessage(e.returnvalue.props.children.props.channelStream[i], message);
 					else if (BDFDB.ArrayUtils.is(message)) for (let j in message) {
 						let childMessage = message[j].content;
 						if (childMessage && BDFDB.ArrayUtils.is(childMessage.attachments)) this.checkMessage(message[j], childMessage);
@@ -479,6 +483,7 @@ var ChatFilter = (_ => {
 			oldCensoredMessages = {};
 			
 			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.MessageUtils.rerenderAll();
 		}
 	}
 })();
