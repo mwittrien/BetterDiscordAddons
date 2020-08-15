@@ -170,6 +170,7 @@ body,														/* body														*/
 #app-mount .privateChannels-1nO12o,							/* dmchannels												*/
 #app-mount .panels-j1Uci_ > *,								/* account/voice		inner								*/
 #app-mount .chat-3bRxxu,									/* chat					container							*/
+#app-mount .wrapper-3vR61M,									/* chat					messages laoding					*/
 #app-mount .noChannel-Z1DQK7,								/* nochannel												*/
 #app-mount .members-1998pB,									/* members													*/
 #app-mount .members-1998pB > div,							/* members				content								*/
@@ -831,22 +832,25 @@ body:before {
 
 /* ====		6.2.1.	MESSAGE							==== */
 
-
 #app-mount .message-2qRu38 {								/* message				confirm modal						*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 	box-shadow: none;
 }
 .message-2qnXI6,											/* message				container							*/
+.wrapper-1F5TKx,											/* message				loading 							*/
 .message-2DieIs,											/* message				mention popout						*/
 .message-2g38UB,											/* message				inbox popout						*/
 .message-2qRu38 .wrapper-2a6GCs,							/* message				settings preview					*/
 .messageGroupCozy-2iY6cT,									/* message				pin popout							*/
 .messageGroupCozy-2-Q370 {									/* message				searchpage							*/
 	background-color: rgba(var(--vtransparencycolor), var(--vmessagetransparency));
+	contain: unset;
 }
 .message-2qnXI6.selected-2P5D_Z,
 .mouse-mode .message-2qnXI6:hover,
-.mouse-mode.full-motion .message-2qnXI6:hover {
+.mouse-mode.full-motion .message-2qnXI6:hover,
+.mouse-mode .wrapper-1F5TKx:hover,
+.mouse-mode.full-motion .wrapper-1F5TKx:hover {
 	background-color: rgba(var(--vtransparencycolor), calc(var(--vmessagetransparency) * 1.2 * var(--vusechatbubbles) + 0.3 * (1 - var(--vusechatbubbles))));
 }
 .message-2qnXI6.localBot-GrCgVt {							/* message				localbot							*/
@@ -863,7 +867,8 @@ body:before {
 	border-radius: 3px;
 	background-color: rgba(var(--vaccentcolor), calc(0.3 * var(--vusechatbubbles)));
 }
-#app-mount .avatar-1BDn8e {
+#app-mount .avatar-1BDn8e,									/* message				container avatar					*/
+#app-mount .avatar-2daVqv {									/* message				loading avatar						*/
 	position: absolute;
 	top: 4px;
 	left: calc(-70px * var(--vusechatbubbles) + 16px);
@@ -871,7 +876,8 @@ body:before {
 .container-3FojY8 .avatar-1BDn8e {
 	left: calc(-10px * var(--vusechatbubbles));
 }
-.cozy-3raOZG .header-23xsNx:after {
+.cozy-3raOZG .header-23xsNx:after,							/* message				container header					*/
+.cozy-12kSNU .header-1oLBbW:after {							/* message				loading header						*/
 	content: "";
 	position: absolute;
 	top: 12px;
@@ -914,6 +920,8 @@ body:before {
 .selected-2P5D_Z.message-2qnXI6.cozy-3raOZG .header-23xsNx:after, 
 .mouse-mode .message-2qnXI6.cozy-3raOZG:hover .header-23xsNx:after,
 .mouse-mode.full-motion .message-2qnXI6.cozy-3raOZG:hover .header-23xsNx:after,
+.mouse-mode .wrapper-1F5TKx.cozy-12kSNU:hover .header-1oLBbW:after,
+.mouse-mode.full-motion .wrapper-1F5TKx.cozy-12kSNU:hover .header-1oLBbW:after
 .selected-2P5D_Z.message-2qnXI6.cozy-3raOZG .iconContainer-3GkGRf:after,
 .mouse-mode .message-2qnXI6.cozy-3raOZG:hover .iconContainer-3GkGRf:after,
 .mouse-mode.full-motion .message-2qnXI6.cozy-3raOZG:hover .iconContainer-3GkGRf:after {
@@ -926,19 +934,23 @@ body:before {
 .message-2DieIs,
 .message-2g38UB,
 .zalgo-jN1Ica .messageContent-2qWWxC,
-.zalgo-jN1Ica.cozy-3raOZG .header-23xsNx {
+.zalgo-jN1Ica.cozy-3raOZG .header-23xsNx,
+.wrapper-1F5TKx,
+.cozy-12kSNU .header-1oLBbW {
 	overflow: visible;
 }
 .container-3FojY8 {
 	padding: 0;
 	overflow: visible;
 }
-#app-mount .cozyMessage-3V1Y8y {
+#app-mount .cozyMessage-3V1Y8y,
+#app-mount .cozy-12kSNU {
 	margin-left: calc(80px * var(--vusechatbubbles));
 	padding-left: calc(1px * (10 * var(--vusechatbubbles) + 72 * (1 - var(--vusechatbubbles))));
 }
 #app-mount .cozy-3raOZG .header-23xsNx,
-#app-mount .cozy-3raOZG .messageContent-2qWWxC {
+#app-mount .cozy-3raOZG .messageContent-2qWWxC,
+#app-mount .cozy-12kSNU .header-1oLBbW {
 	margin-left: 0;
 	padding-left: 0;
 }
@@ -953,6 +965,15 @@ body:before {
 }
 .messages-3G3erD .wrapper-2a6GCs {
 	border-radius: 0;
+}
+
+.avatar-2daVqv {											/* message				loading avatar						*/
+	background: rgba(var(--vtransparencycolor), 0.4);
+	opacity: 1 !important;
+}
+.attachment-2p5mHK,											/* message				loading attachment					*/
+.blob-2w7iIK {												/* message				loading blob						*/
+	background: rgb(var(--vaccentcolor));
 }
 
 .expanded-13sWhZ {											/* message				expanded blocked					*/
