@@ -1448,7 +1448,7 @@ body:before {
 .memberGroupsPlaceholder-3mwPub,							/* loadingplaceholders										*/
 .placeholderAvatar-damqh6,
 .placeholderUsername-2B_OA9 {
-	background-color: rgb(var(--vaccentcolor));
+	background-color: rgba(var(--vtransparencycolor), 0.4)
 }
 
 /* ----		6.6.	SEARCHPAGE						---- */
