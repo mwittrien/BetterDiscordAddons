@@ -2,7 +2,7 @@
 
 var ImageUtilities = (_ => {
 	const imgUrlReplaceString = "DEVILBRO_BD_REVERSEIMAGESEARCH_REPLACE_IMAGEURL";
-	var eventFired, clickedImage;
+	var firedEvents = [], clickedImage;
 	var settings = {}, inputs = {}, amounts = {}, zoomSettings = {}, engines = {}, enabledEngines = {};
 	
 	const ImageDetails = class ImageDetails extends BdApi.React.Component {
@@ -50,7 +50,7 @@ var ImageUtilities = (_ => {
 	return class ImageUtilities {
 		getName () {return "ImageUtilities";}
 
-		getVersion () {return "4.0.3";}
+		getVersion () {return "4.0.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -60,7 +60,8 @@ var ImageUtilities = (_ => {
 			this.changelog = {
 				"progress":[["Welcome","This is the successor of ImageZoom, ImageGallery, ReverseImageSearch and ShowImageDetails. All of these plugins are now combined in one with even more useful features. Check out the plugin settings to configure the plugin the way you want it to work."]],
 				"added":[["Gallery Setting","You can now disable the gallery mode"]],
-				"fixed":[["Linux","Downloading now also works on Linux"]]
+				"improved":[["Zoom Controls","You can now zoom in/out with the +/- keys and the mousewheel while the zoomlense is present"]],
+				"fixed":[["Linux/Mac","Downloading now also works on Linux/Mac and the default folder is downloads folder now"]]
 			};
 			
 			this.patchedModules = {
@@ -72,7 +73,7 @@ var ImageUtilities = (_ => {
 		}
 
 		initConstructor () {
-			eventFired = false;
+			firedEvents = [];
 			clickedImage = null;
 				
 			this.defaults = {
@@ -95,8 +96,8 @@ var ImageUtilities = (_ => {
 					downloadLocation:		{value:"",		childProps:{type: "file", searchFolders:true},		description:"Download Location"},
 				},
 				zoomSettings: {
-					zoomlevel:				{value:2,		digits:1,		minValue: 1,	maxValue: 10,		unit:"x",	label:"ACCESSIBILITY_ZOOM_LEVEL_LABEL"},
-					lensesize:				{value:200,		digits:0,		minValue: 50, 	maxValue: 1000,		unit:"px",	label:"context_lensesize_text"}
+					zoomlevel:				{value:2,		digits:1,		minValue: 1,	maxValue: 20,		unit:"x",	label:"ACCESSIBILITY_ZOOM_LEVEL_LABEL"},
+					lensesize:				{value:200,		digits:0,		minValue: 50, 	maxValue: 5000,		unit:"px",	label:"context_lensesize_text"}
 				},
 				engines: {
 					_all: 		{value:true, 	name:BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL, 	url:null},
@@ -302,6 +303,9 @@ var ImageUtilities = (_ => {
 		stop () {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
+				
+				this.cleanupListeners("Gallery");
+				this.cleanupListeners("Zoom");
 
 				this.forceUpdateAll();
 
@@ -562,22 +566,22 @@ var ImageUtilities = (_ => {
 				let modal = BDFDB.DOMUtils.getParent(BDFDB.dotCNC.modal + BDFDB.dotCN.layermodal, e.node);
 				if (modal) {
 					modal.className = BDFDB.DOMUtils.formatClassName(modal.className, messages.length && BDFDB.disCN._imageutilitiesgallery, settings.addDetails && BDFDB.disCN._imageutilitiesdetailsadded);
-					this.cleanUpListeners();
+					this.cleanupListeners("Gallery");
 					if (messages.length) {
-						document.keydownImageUtilitiesListener = event => {
-							if (!document.contains(e.node)) this.cleanUpListeners();
-							else if (!eventFired) {
-								eventFired = true;
+						document.keydownImageUtilitiesGalleryListener = event => {
+							if (!document.contains(e.node)) this.cleanupListeners("Gallery");
+							else if (!firedEvents.includes("Gallery")) {
+								firedEvents.push("Gallery");
 								if (event.keyCode == 37) this.switchImages(e.instance, "previous");
 								else if (event.keyCode == 39) this.switchImages(e.instance, "next");
 							}
 						};
-						document.keyupImageUtilitiesListener = _ => {
-							eventFired = false;
-							if (!document.contains(e.node)) this.cleanUpListeners();
+						document.keyupImageUtilitiesGalleryListener = _ => {
+							BDFDB.ArrayUtils.remove(firedEvents, "Gallery", true);
+							if (!document.contains(e.node)) this.cleanupListeners("Gallery");
 						};
-						document.addEventListener("keydown", document.keydownImageUtilitiesListener);
-						document.addEventListener("keyup", document.keyupImageUtilitiesListener);
+						document.addEventListener("keydown", document.keydownImageUtilitiesGalleryListener);
+						document.addEventListener("keyup", document.keyupImageUtilitiesGalleryListener);
 					}
 				}
 			}
@@ -591,7 +595,7 @@ var ImageUtilities = (_ => {
 
 						let imgRects = BDFDB.DOMUtils.getRects(e.node.firstElementChild);
 
-						let lense = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslense}" style="clip-path: circle(${(zoomSettings.lensesize/2) + 2}px at center) !important; border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${zoomSettings.lensesize}px !important; height: ${zoomSettings.lensesize}px !important; position: fixed !important;"><div style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; clip-path: circle(${zoomSettings.lensesize/2}px at center) !important;"><${e.node.firstElementChild.tagName} src="${e.instance.props.src}" style="width: ${imgRects.width * zoomSettings.zoomlevel}px; height: ${imgRects.height * zoomSettings.zoomlevel}px; position: fixed !important;"${e.node.firstElementChild.tagName == "VIDEO" ? " loop autoplay" : ""}></${e.node.firstElementChild.tagName}></div></div>`);
+						let lense = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslense}" style="border-radius: 50% !important; pointer-events: none !important; z-index: 10000 !important; width: ${zoomSettings.lensesize}px !important; height: ${zoomSettings.lensesize}px !important; position: fixed !important;"><div style="position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important;"><${e.node.firstElementChild.tagName} src="${e.instance.props.src}" style="width: ${imgRects.width * zoomSettings.zoomlevel}px; height: ${imgRects.height * zoomSettings.zoomlevel}px; position: fixed !important;"${e.node.firstElementChild.tagName == "VIDEO" ? " loop autoplay" : ""}></${e.node.firstElementChild.tagName}></div></div>`);
 						let pane = lense.firstElementChild.firstElementChild;
 						let backdrop = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCN._imageutilitieslensebackdrop}" style="background: rgba(0, 0, 0, 0.3) !important; position: absolute !important; top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; pointer-events: none !important; z-index: 8000 !important;"></div>`);
 						let appMount = document.querySelector(BDFDB.dotCN.appmount);
@@ -604,26 +608,71 @@ var ImageUtilities = (_ => {
 						let minX = imgRects.left, maxX = minX + imgRects.width;
 						let minY = imgRects.top, maxY = minY + imgRects.height;
 						
-						lense.style.setProperty("left", event.clientX - halfW + "px", "important");
-						lense.style.setProperty("top", event.clientY - halfH + "px", "important");
-						pane.style.setProperty("left", imgRects.left + ((zoomSettings.zoomlevel - 1) * (imgRects.left - event.clientX)) + "px", "important");
-						pane.style.setProperty("top", imgRects.top + ((zoomSettings.zoomlevel - 1) * (imgRects.top - event.clientY)) + "px", "important");
-
-						let dragging = event2 => {
-							let x = event2.clientX > maxX ? maxX - halfW : event2.clientX < minX ? minX - halfW : event2.clientX - halfW;
-							let y = event2.clientY > maxY ? maxY - halfH : event2.clientY < minY ? minY - halfH : event2.clientY - halfH;
+						lense.update = _ => {
+							let x = event.clientX > maxX ? maxX - halfW : event.clientX < minX ? minX - halfW : event.clientX - halfW;
+							let y = event.clientY > maxY ? maxY - halfH : event.clientY < minY ? minY - halfH : event.clientY - halfH;
 							lense.style.setProperty("left", x + "px", "important");
 							lense.style.setProperty("top", y + "px", "important");
+							lense.style.setProperty("width", zoomSettings.lensesize + "px", "important");
+							lense.style.setProperty("height", zoomSettings.lensesize + "px", "important");
+							lense.style.setProperty("clip-path", `circle(${(zoomSettings.lensesize/2) + 2}px at center)`, "important");
+							lense.firstElementChild.style.setProperty("clip-path", `circle(${zoomSettings.lensesize/2}px at center)`, "important");
 							pane.style.setProperty("left", imgRects.left + ((zoomSettings.zoomlevel - 1) * (imgRects.left - x - halfW)) + "px", "important");
 							pane.style.setProperty("top", imgRects.top + ((zoomSettings.zoomlevel - 1) * (imgRects.top - y - halfH)) + "px", "important");
+							pane.style.setProperty("width", imgRects.width * zoomSettings.zoomlevel + "px", "important");
+							pane.style.setProperty("height", imgRects.height * zoomSettings.zoomlevel + "px", "important");
+						};
+						lense.update();
+
+						let dragging = event2 => {
+							event = event2;
+							lense.update();
 						};
 						let releasing = _ => {
+							this.cleanupListeners("Zoom");
 							document.removeEventListener("mousemove", dragging);
 							document.removeEventListener("mouseup", releasing);
 							BDFDB.DOMUtils.remove(lense, backdrop);
+							BDFDB.DataUtils.save(zoomSettings, this, "zoomSettings");
 						};
 						document.addEventListener("mousemove", dragging);
 						document.addEventListener("mouseup", releasing);
+						
+						this.cleanupListeners("Zoom");
+						document.wheelImageUtilitiesZoomListener = event2 => {
+							if (!document.contains(e.node)) this.cleanupListeners("Zoom");
+							else {
+								if (event2.deltaY < 0 && (zoomSettings.zoomlevel + 0.1) <= this.defaults.zoomSettings.zoomlevel.maxValue) {
+									zoomSettings.zoomlevel += 0.1;
+									lense.update();
+								}
+								else if (event2.deltaY > 0 && (zoomSettings.zoomlevel - 0.1) >= this.defaults.zoomSettings.zoomlevel.minValue) {
+									zoomSettings.zoomlevel -= 0.1;
+									lense.update();
+								}
+							}
+						};
+						document.keydownImageUtilitiesZoomListener = event2 => {
+							if (!document.contains(e.node)) this.cleanupListeners("Zoom");
+							else if (!firedEvents.includes("Zoom")) {
+								firedEvents.push("Zoom");
+								if (event2.keyCode == 187 && (zoomSettings.zoomlevel + 0.5) <= this.defaults.zoomSettings.zoomlevel.maxValue) {
+									zoomSettings.zoomlevel += 0.5;
+									lense.update();
+								}
+								else if (event2.keyCode == 189 && (zoomSettings.zoomlevel - 0.5) >= this.defaults.zoomSettings.zoomlevel.minValue) {
+									zoomSettings.zoomlevel -= 0.5;
+									lense.update();
+								}
+							}
+						};
+						document.keyupImageUtilitiesZoomListener = _ => {
+							BDFDB.ArrayUtils.remove(firedEvents, "Zoom", true);
+							if (!document.contains(e.node)) this.cleanupListeners("Zoom");
+						};
+						document.addEventListener("wheel", document.wheelImageUtilitiesZoomListener);
+						document.addEventListener("keydown", document.keydownImageUtilitiesZoomListener);
+						document.addEventListener("keyup", document.keyupImageUtilitiesZoomListener);
 					});
 				}
 			}
@@ -783,11 +832,12 @@ var ImageUtilities = (_ => {
 			BDFDB.ReactUtils.forceUpdate(instance);
 		}
 		
-		cleanUpListeners () {
-			document.removeEventListener("keydown", document.keydownImageUtilitiesListener);
-			document.removeEventListener("keyup", document.keyupImageUtilitiesListener);
-			delete document.keydownImageUtilitiesListener;
-			delete document.keyupImageUtilitiesListener;
+		cleanupListeners (type) {
+			if (!type) return;
+			for (let eventType of ["wheel", "keydown", "keyup"]) {
+				document.removeEventListener("wheel", document[`${eventType}ImageUtilities${type}Listener`]);
+				delete document[`${eventType}ImageUtilities${type}Listener`];
+			}
 		}
 		
 		forceUpdateAll () {
