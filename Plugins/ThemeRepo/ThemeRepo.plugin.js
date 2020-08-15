@@ -61,6 +61,12 @@ var ThemeRepo = (_ => {
 				showOnlyOutdated = false;
 			}, 5000);
 		}
+		componentWillUnmount() {
+			if (preview) {
+				BDFDB.WindowUtils.close(preview);
+				preview = null;
+			}
+		}
 		filterThemes() {
 			let themes = Object.keys(loadedThemes).map(url => {
 				let theme = loadedThemes[url];
@@ -861,7 +867,7 @@ var ThemeRepo = (_ => {
 				if (index > -1 && BDFDB.ArrayUtils.is(children[index].props.children)) children[index].props.children.push(BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: "Theme Repo",
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "repo"),
-					action: _ => {
+					action: _ => {
 						BDFDB.LibraryModules.UserSettingsUtils.open("themerepo");
 					}
 				}));
@@ -891,7 +897,7 @@ var ThemeRepo = (_ => {
 							options.useThemeFixer = false;
 							options.useCustomCSS = false;
 							
-							return BDFDB.ReactUtils.createElement(RepoListComponent, options, true);
+							return BDFDB.ReactUtils.createElement(RepoListComponent, options);
 						}
 					});
 					if (oldSettings && !isPRinjected) e.instance.props.sections.splice(index + 1, 0, {section: "DIVIDER"});
@@ -910,7 +916,7 @@ var ThemeRepo = (_ => {
 					options.sortKey = forcedSort || Object.keys(sortKeys)[0];
 					options.orderKey = forcedOrder || Object.keys(orderKeys)[0];
 					children[index] = [
-						BDFDB.ReactUtils.createElement(RepoListHeaderComponent, options, true),
+						BDFDB.ReactUtils.createElement(RepoListHeaderComponent, options),
 						children[index]
 					];
 				}

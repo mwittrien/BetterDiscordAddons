@@ -206,7 +206,12 @@
 			if (updateNoticeList && !updateNoticeList.querySelector(`#${pluginName}-notice`)) {
 				if (updateNoticeList.querySelector("span")) updateNoticeList.appendChild(BDFDB.DOMUtils.create(`<span class="separator">, </span>`));
 				let updateEntry = BDFDB.DOMUtils.create(`<span id="${pluginName}-notice">${pluginName}</span>`);
-				updateEntry.addEventListener("click", _ => {BDFDB.PluginUtils.downloadUpdate(pluginName, url);});
+				updateEntry.addEventListener("click", _ => {
+					if (!updateEntry.wasClicked) {
+						updateEntry.wasClicked = true;
+						BDFDB.PluginUtils.downloadUpdate(pluginName, url);
+					}
+				});
 				updateNoticeList.appendChild(updateEntry);
 				if (!updateNoticeList.hasTooltip) {
 					updateNoticeList.hasTooltip = true;
@@ -245,33 +250,39 @@
 	};
 	BDFDB.PluginUtils.downloadUpdate = function (pluginName, url) {
 		if (pluginName && url) LibraryRequires.request(url, (error, response, body) => {
-			if (error) return BDFDB.LogUtils.warn("Unable to get update for " + pluginName);
-			BDFDB.InternalData.creationTime = 0;
-			let wasEnabled = BDFDB.BDUtils.isPluginEnabled(pluginName);
-			let newName = (body.match(/"name"\s*:\s*"([^"]+)"/) || [])[1] || pluginName;
-			let newVersion = body.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i).toString().replace(/['"]/g, "");
-			let oldVersion = window.PluginUpdates.plugins[url].version;
-			LibraryRequires.fs.writeFile(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), newName + ".plugin.js"), body, _ => {
-				if (pluginName != newName) {
-					url = url.replace(new RegExp(pluginName, "g"), newName);
-					LibraryRequires.fs.unlink(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".plugin.js"), _ => {});
-					let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".config.json");
-					LibraryRequires.fs.exists(configPath, exists => {
-						if (exists) LibraryRequires.fs.rename(configPath, LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), newName + ".config.json"), _ => {});
-					});
-					BDFDB.TimeUtils.timeout(_ => {if (wasEnabled && !BDFDB.BDUtils.isPluginEnabled(newName)) BDFDB.BDUtils.enablePlugin(newName);}, 3000);
-				}
-				BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_updated", pluginName, "v" + oldVersion, newName, "v" + newVersion), {nopointer:true, selector:"plugin-updated-toast"});
+			if (error) {
 				let updateNotice = document.querySelector("#pluginNotice");
-				if (updateNotice) {
-					if (updateNotice.querySelector(BDFDB.dotCN.noticebutton)) {
-						window.PluginUpdates.plugins[url].version = newVersion;
-						if (!window.PluginUpdates.downloaded) window.PluginUpdates.downloaded = [];
-						if (!window.PluginUpdates.downloaded.includes(pluginName)) window.PluginUpdates.downloaded.push(pluginName);
+				if (updateNotice) BDFDB.PluginUtils.removeUpdateNotice(pluginName, updateNotice);
+				BDFDB.LogUtils.warn("Unable to get update for " + pluginName);
+			}
+			else {
+				BDFDB.InternalData.creationTime = 0;
+				let wasEnabled = BDFDB.BDUtils.isPluginEnabled(pluginName);
+				let newName = (body.match(/"name"\s*:\s*"([^"]+)"/) || [])[1] || pluginName;
+				let newVersion = body.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i).toString().replace(/['"]/g, "");
+				let oldVersion = window.PluginUpdates.plugins[url].version;
+				LibraryRequires.fs.writeFile(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), newName + ".plugin.js"), body, _ => {
+					if (pluginName != newName) {
+						url = url.replace(new RegExp(pluginName, "g"), newName);
+						LibraryRequires.fs.unlink(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".plugin.js"), _ => {});
+						let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".config.json");
+						LibraryRequires.fs.exists(configPath, exists => {
+							if (exists) LibraryRequires.fs.rename(configPath, LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), newName + ".config.json"), _ => {});
+						});
+						BDFDB.TimeUtils.timeout(_ => {if (wasEnabled && !BDFDB.BDUtils.isPluginEnabled(newName)) BDFDB.BDUtils.enablePlugin(newName);}, 3000);
 					}
-					BDFDB.PluginUtils.removeUpdateNotice(pluginName, updateNotice);
-				}
-			});
+					BDFDB.NotificationUtils.toast(BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_updated", pluginName, "v" + oldVersion, newName, "v" + newVersion), {nopointer:true, selector:"plugin-updated-toast"});
+					let updateNotice = document.querySelector("#pluginNotice");
+					if (updateNotice) {
+						if (updateNotice.querySelector(BDFDB.dotCN.noticebutton)) {
+							window.PluginUpdates.plugins[url].version = newVersion;
+							if (!window.PluginUpdates.downloaded) window.PluginUpdates.downloaded = [];
+							if (!window.PluginUpdates.downloaded.includes(pluginName)) window.PluginUpdates.downloaded.push(pluginName);
+						}
+						BDFDB.PluginUtils.removeUpdateNotice(pluginName, updateNotice);
+					}
+				});
+			}
 		});
 	};
 	BDFDB.PluginUtils.checkChangeLog = function (plugin) {
@@ -5539,8 +5550,6 @@
 		memberpremiumicon: ["Member", "premiumIcon"],
 		members: ["MembersWrap", "members"],
 		membersgroup: ["MembersWrap", "membersGroup"],
-		memberstabbar: ["MembersThreads", "tabBar"],
-		membersthread: ["MembersThreads", "thread"],
 		memberswrap: ["MembersWrap", "membersWrap"],
 		memberusername: ["Member", "roleColor"],
 		mention: ["NotFound", "mention"],
@@ -5688,6 +5697,7 @@
 		messagespopoutvisible: ["MessagesPopout", "visible"],
 		messagespopoutwrap: ["MessagesPopout", "messagesPopoutWrap"],
 		messagesscroller: ["MessagesWrap", "scroller"],
+		messagesscrollercontent: ["MessagesWrap", "scrollerContent"],
 		messagesscrollerinner: ["MessagesWrap", "scrollerInner"],
 		messagesscrollerwrapper: ["MessagesWrap", "scrollerWrap"],
 		messageswelcome: ["MessagesWelcome", "container"],
@@ -5696,7 +5706,7 @@
 		messageswelcomeemptychannelicon: ["MessagesWelcome", "emptyChannelIcon"],
 		messageswelcomehasdivider: ["MessagesWelcome", "hasDivider"],
 		messageswelcomeheader: ["MessagesWelcome", "header"],
-		messageswelcomelocked: ["MessagesWelcome", "lcoked"],
+		messageswelcomelocked: ["MessagesWelcome", "locked"],
 		messageswrapper: ["MessagesWrap", "messagesWrapper"],
 		messagesystem: ["Message", "systemMessage"],
 		messagesystemaccessories: ["MessageBody", "systemMessageAccessories"],
@@ -5865,13 +5875,14 @@
 		scrollbardefault: ["Scrollbar", "scrollbarDefault"],
 		scrollbarghost: ["Scrollbar", "scrollbarGhost"],
 		scrollbarghosthairline: ["Scrollbar", "scrollbarGhostHairline"],
-		scrollerbase: ["Scroller", "scrollerBase"],
-		scrollerbaseauto: ["Scroller", "auto"],
-		scrollerbasefade: ["Scroller", "fade"],
-		scrollerbaselistcontent: ["Scroller", "listContent"],
-		scrollerbasenone: ["Scroller", "none"],
-		scrollerbasescrolling: ["Scroller", "scrolling"],
-		scrollerbasethin: ["Scroller", "thin"],
+		scroller: ["Scroller", "scrollerBase"],
+		scrollerauto: ["Scroller", "auto"],
+		scrollercontent: ["Scroller", "content"],
+		scrollerdisablescrollanchor: ["Scroller", "disableScrollAnchor"],
+		scrollerfade: ["Scroller", "fade"],
+		scrollernone: ["Scroller", "none"],
+		scrollerscrolling: ["Scroller", "scrolling"],
+		scrollerthin: ["Scroller", "thin"],
 		searchbar: ["SearchBar", "container"],
 		searchbarclear: ["SearchBar", "clear"],
 		searchbarclose: ["SearchBar", "close"],
