@@ -177,8 +177,7 @@ body,														/* body														*/
 #app-mount .container-1D34oG,								/* peoples													*/
 #app-mount .applicationStore-1pNvnv,						/* nitro													*/
 #app-mount .pageWrapper-1PgVDX,								/* guilddiscovery											*/
-#app-mount .scroller-2FKFPG,								/* scroller													*/
-#app-mount .scrollerBase-289Jih,							/* advanced scroller										*/
+#app-mount .scrollerBase-289Jih,							/* scroller													*/
 #app-mount .standardSidebarView-3F1I7i,						/* settings													*/
 #app-mount .contentRegion-3nDuYy {							/* settings				content								*/
 	background: transparent;
@@ -6267,9 +6266,7 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 	width: 8px;
 	height: 8px;
 }
-#app-mount .scroller-3vODG7::-webkit-scrollbar,
-#app-mount #bda-qem-twitch-container .scroller-2FKFPG::-webkit-scrollbar,
-#app-mount #bda-qem-favourite-container .scroller-2FKFPG::-webkit-scrollbar {
+#app-mount .scroller-3vODG7::-webkit-scrollbar {
 	width: 6px;
 	height: 6px;
 }
@@ -6298,10 +6295,6 @@ img[src="/assets/e8b66317ab0dc9ba3bf8d41a4f3ec914.png"] {	/* videosettings		opus
 #app-mount ::-webkit-scrollbar-corner {
 	visibility: hidden;
 }
-.scrollerThemed-2oenus.themeHidden-2yP93k .scroller-2FKFPG::-webkit-scrollbar-corner,
-.scrollerThemed-2oenus.themeHidden-2yP93k .scroller-2FKFPG::-webkit-scrollbar-thumb,
-.scrollerThemed-2oenus.themeHidden-2yP93k .scroller-2FKFPG::-webkit-scrollbar-track,
-.scrollerThemed-2oenus.themeHidden-2yP93k .scroller-2FKFPG::-webkit-scrollbar,
 .none-2Eo-qx::-webkit-scrollbar-corner,
 .none-2Eo-qx::-webkit-scrollbar-thumb,
 .none-2Eo-qx::-webkit-scrollbar-track,

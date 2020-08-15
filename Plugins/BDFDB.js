@@ -1647,7 +1647,7 @@
 		return false;
 	};
 	InternalBDFDB.patch_CheckForInstance = function (pluginData, classNames, type, forceObserve) {
-		const app = document.querySelector(BDFDB.dotCN.app), bdSettings = document.querySelector("#bd-settingspane-container " + BDFDB.dotCN.scrollerwrap);
+		const app = document.querySelector(BDFDB.dotCN.app), bdSettings = document.querySelector("#bd-settingspane-container .scroller");
 		let instanceFound = false;
 		if (!forceObserve) {
 			if (app) {
@@ -4247,8 +4247,8 @@
 		bdaAuthor: "bd-author author bda-author",
 		bdaControls: "bd-controls bd-addon-controls bda-controls",
 		bdaControlsButton: "bd-addon-button",
-		bdaDescription: "bd-description bd-addon-description bda-description",
-		bdaDescriptionWrap: "bd-description-wrap bda-description-wrap",
+		bdaDescription: "bd-scroller bd-description bd-addon-description bda-description scroller",
+		bdaDescriptionWrap: "bd-scroller-wrap bd-description-wrap bda-description-wrap scroller-wrap fade",
 		bdaFooter: "bd-footer bd-card-footer bda-footer",
 		bdaHeader: "bd-addon-header bda-header",
 		bdaHeaderTitle: "bd-title bd-card-title bda-header-title",
@@ -4639,7 +4639,6 @@
 	DiscordClassModules.Role = BDFDB.ModuleUtils.findByProperties("roleCircle", "roleName", "roleRemoveIcon");
 	DiscordClassModules.Scrollbar = BDFDB.ModuleUtils.findByProperties("scrollbar", "scrollbarGhost");
 	DiscordClassModules.Scroller = BDFDB.ModuleUtils.findByProperties("scrollerBase", "none", "fade");
-	DiscordClassModules.ScrollerOld = BDFDB.ModuleUtils.findByProperties("scrollerThemed", "scroller");
 	DiscordClassModules.SearchBar = BDFDB.ModuleUtils.findByProperties("clear", "container", "pointer");
 	DiscordClassModules.SearchPopout = BDFDB.ModuleUtils.findByProperties("datePicker", "searchResultChannelIconBackground");
 	DiscordClassModules.SearchPopoutWrap = BDFDB.ModuleUtils.findByProperties("container", "queryContainer");
@@ -5857,7 +5856,6 @@
 		scrollbardefault: ["Scrollbar", "scrollbarDefault"],
 		scrollbarghost: ["Scrollbar", "scrollbarGhost"],
 		scrollbarghosthairline: ["Scrollbar", "scrollbarGhostHairline"],
-		scroller: ["ScrollerOld", "scroller"],
 		scrollerbase: ["Scroller", "scrollerBase"],
 		scrollerbaseauto: ["Scroller", "auto"],
 		scrollerbasefade: ["Scroller", "fade"],
@@ -5865,14 +5863,6 @@
 		scrollerbasenone: ["Scroller", "none"],
 		scrollerbasescrolling: ["Scroller", "scrolling"],
 		scrollerbasethin: ["Scroller", "thin"],
-		scrollerfade: ["ScrollerOld", "scrollerFade"],
-		scrollersystempad: ["ScrollerOld", "systemPad"],
-		scrollerthemed: ["ScrollerOld", "scrollerThemed"],
-		scrollerthemedwithtrack: ["ScrollerOld", "themedWithTrack"],
-		scrollerthemeghost: ["ScrollerOld", "themeGhost"],
-		scrollerthemeghosthairline: ["ScrollerOld", "themeGhostHairline"],
-		scrollerthemeghosthairlinechannels: ["ScrollerOld", "themeGhostHairlineChannels"],
-		scrollerwrap: ["ScrollerOld", "scrollerWrap"],
 		searchbar: ["SearchBar", "container"],
 		searchbarclear: ["SearchBar", "clear"],
 		searchbarclose: ["SearchBar", "close"],
@@ -7126,10 +7116,12 @@
 							})
 						]
 					}),
-					BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ScrollerVertical, {
-						outerClassName: BDFDB.disCN._repodescriptionwrap,
-						className: BDFDB.disCN._repodescription,
-						children: this.props.data.description
+					BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN._repodescription + " scroller",
+						children: BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN._repodescription + " scroller",
+							children: this.props.data.description
+						})
 					}),
 					BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN._repofooter,
@@ -8741,8 +8733,6 @@
 	InternalComponents.LibraryComponents.ScrollerAuto = AdvancedScrollers.AdvancedScrollerAuto || AdvancedScrollers.default;
 	InternalComponents.LibraryComponents.ScrollerNone = AdvancedScrollers.AdvancedScrollerNone || AdvancedScrollers.default;
 	InternalComponents.LibraryComponents.ScrollerThin = AdvancedScrollers.AdvancedScrollerThin || AdvancedScrollers.default;
-	
-	InternalComponents.LibraryComponents.ScrollerVertical = BDFDB.ModuleUtils.findByName("VerticalScroller");
 	
 	InternalComponents.LibraryComponents.SearchBar = InternalBDFDB.loadPatchedComp("SearchBar") || reactInitialized && class BDFDB_SearchBar extends LibraryModules.React.Component {
 		handleChange(query) {
