@@ -16,15 +16,11 @@ var PersonalPins = (_ => {
 
 		getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-		getVersion () {return "1.9.5";} 
+		getVersion () {return "1.9.6";} 
 
 		getAuthor () {return "DevilBro";}
 
 		constructor () {
-			this.changelog = {
-				"added":[["Default settings","You can now change the default tab/sort order for the popout"]]
-			};
-
 			this.patchedModules = {
 				after: {
 					HeaderBarContainer: "render"
@@ -284,7 +280,7 @@ var PersonalPins = (_ => {
 						]
 					})
 				}),
-				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ScrollerVertical, {
+				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ScrollerThin, {
 					className: BDFDB.disCN.messagespopout,
 					children: this.filterMessages(buttonInstance, buttonInstance.props.selectedFilter.value, buttonInstance.props.selectedSort.value, buttonInstance.props.searchKey.toUpperCase())
 				})
