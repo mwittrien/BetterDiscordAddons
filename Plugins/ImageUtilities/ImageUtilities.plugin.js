@@ -50,7 +50,7 @@ var ImageUtilities = (_ => {
 	return class ImageUtilities {
 		getName () {return "ImageUtilities";}
 
-		getVersion () {return "4.0.5";}
+		getVersion () {return "4.0.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -351,13 +351,17 @@ var ImageUtilities = (_ => {
 				else if (e.instance.props.target.tagName == "IMG") {
 					if (BDFDB.DOMUtils.containsClass(e.instance.props.target.parentElement, BDFDB.disCN.imagewrapper)) this.injectItem(e, e.instance.props.target.src);
 					else if (BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.embedauthoricon) && settings.addUserAvatarEntry) this.injectItem(e, e.instance.props.target.src);
-					else if (BDFDB.DOMUtils.containsClass(e.instance.props.target, "emoji", "emote", false) && settings.addEmojiEntry) this.injectItem(e, e.instance.props.target.src);
+					else if (BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.emojiold, "emote", false) && settings.addEmojiEntry) this.injectItem(e, e.instance.props.target.src);
+				}
+				else {
+					let reaction = BDFDB.DOMUtils.getParent(BDFDB.dotCN.messagereaction, e.instance.props.target);
+					if (reaction && settings.addEmojiEntry) this.injectItem(e, reaction.querySelector(BDFDB.dotCN.emojiold).src);
 				}
 			}
 		}
 
 		injectItem (e, url) {
-			if (url && url.indexOf("discordapp.com/assets/") == -1 && !url.endsWith(".mp4")) {
+			if (url && !url.endsWith(".mp4")) {
 				url = url.replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096").replace(/[\?\&](height|width)=\d+/g, "");
 				if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1) {
 					if (url.split("/https/").length != 1) url = "https://" + url.split("/https/")[url.split("/https/").length-1];
@@ -365,6 +369,7 @@ var ImageUtilities = (_ => {
 				}
 				let enginesWithoutAll = BDFDB.ObjectUtils.filter(enabledEngines, n => n != "_all", true);
 				let engineKeys = Object.keys(enginesWithoutAll);
+				let valid = url.indexOf("discordapp.com/assets/") == -1;
 				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
@@ -406,7 +411,7 @@ var ImageUtilities = (_ => {
 										let path = this.getDownloadLocation();
 										if (error) BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_failed.replace("{{path}}", path), {type:"error"});
 										else {
-											BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, url.split("/").pop().split(".").slice(0, -1).join("."), response.headers["content-type"].split("/").pop(), 0), body, error => {
+											BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, url.split("/").pop().split(".").slice(0, -1).join("."), response.headers["content-type"].split("/").pop().split("+")[0], 0), body, error => {
 												if (error) BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_failed.replace("{{path}}", path), {type:"error"});
 												else BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_success.replace("{{path}}", path), {type:"success"});
 											});
@@ -414,7 +419,7 @@ var ImageUtilities = (_ => {
 									});
 								}
 							}),
-							BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							!valid ? null : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 								label: this.labels.context_copyimage_text,
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-image"),
 								action: _ => {
@@ -429,7 +434,7 @@ var ImageUtilities = (_ => {
 									BDFDB.NotificationUtils.toast(this.labels.toast_copyimagelink_success, {type: "success"});
 								}
 							}),
-							engineKeys.length == 1 ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							!valid ? null : engineKeys.length == 1 ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 								label: this.labels.context_reverseimagesearch_text.replace("...", this.defaults.engines[engineKeys[0]].name),
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, "single-search"),
 								persisting: true,
@@ -458,7 +463,7 @@ var ImageUtilities = (_ => {
 									}
 								}))
 							})
-						]
+						].filter(n => n)
 					})
 				}));
 			}
@@ -493,7 +498,7 @@ var ImageUtilities = (_ => {
 						className: BDFDB.disCN._imageutilitiesoperations,
 						children: [
 							children[index],
-							settings.enableCopyImg && [
+							settings.enableCopyImg && src.indexOf("discordapp.com/assets/") == -1 && [
 								BDFDB.ReactUtils.createElement("span", {
 									className: BDFDB.disCN.downloadlink,
 									children: "|",
