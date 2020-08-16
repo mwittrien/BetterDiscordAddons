@@ -472,6 +472,7 @@ var ImageUtilities = (_ => {
 		processImageModal (e) {
 			if (clickedImage) e.instance.props.cachedImage = clickedImage;
 			let src = e.instance.props.cachedImage && e.instance.props.cachedImage.src ? e.instance.props.cachedImage : e.instance.props.src;
+			src = src.src || src;
 			let messages = this.getMessageGroupOfImage(src);
 			if (e.returnvalue) {
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.downloadlink]]});
