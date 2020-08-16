@@ -50,7 +50,7 @@ var ImageUtilities = (_ => {
 	return class ImageUtilities {
 		getName () {return "ImageUtilities";}
 
-		getVersion () {return "4.0.4";}
+		getVersion () {return "4.0.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -591,6 +591,7 @@ var ImageUtilities = (_ => {
 			if (e.node) {
 				if (settings.enableZoom && !BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imageutilitiessibling) && BDFDB.ReactUtils.findOwner(BDFDB.DOMUtils.getParent(BDFDB.dotCNC.modal + BDFDB.dotCN.layermodal, e.node), {name: "ImageModal"})) {
 					e.node.addEventListener("mousedown", event => {
+						if (event.which != 1) return;
 						BDFDB.ListenerUtils.stopEvent(event);
 
 						let imgRects = BDFDB.DOMUtils.getRects(e.node.firstElementChild);
@@ -786,7 +787,7 @@ var ImageUtilities = (_ => {
 				children: [
 					imgRef,
 					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-						className: BDFDB.disCNS._imageutilitiesicon + BDFDB.disCN.svgicon,
+						className: BDFDB.disCNS._imageutilitiesswitchicon + BDFDB.disCN.svgicon,
 						name: svgIcon
 					})
 				]
