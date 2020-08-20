@@ -4,7 +4,7 @@ var CustomQuoter = (_ => {
 	var _this;
 	var settings = {}, formats = {}, format = null;
 	
-	const PreviewMessage = class PreviewMessage extends BdApi.React.Component {
+	const PreviewMessageComponent = class PreviewMessage extends BdApi.React.Component {
 		render() {
 			let spoofChannel = new BDFDB.DiscordObjects.Channel({
 				id: "126223823845647771",
@@ -39,7 +39,7 @@ var CustomQuoter = (_ => {
 	return class CustomQuoter {
 		getName () {return "CustomQuoter";}
 
-		getVersion () {return "1.1.2";}
+		getVersion () {return "1.1.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -47,8 +47,7 @@ var CustomQuoter = (_ => {
 		
 		constructor () {
 			this.changelog = {
-				"fixed":[["Quote in DMs","Fixed an issue that would break quoting in DMs in some cases"]],
-				"improved":[["Copy to clipboard","Holding Shift and clicking quote now copies the quote to the clipboard"]]
+				"added":[["$rawQuote","Ability to insert the raw text of the quoted message"]]
 			};
 		}
 
@@ -142,7 +141,8 @@ var CustomQuoter = (_ => {
 					BDFDB.DataUtils.save(formats, this, "formats");
 					BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 				},
-				children: BDFDB.ReactUtils.createElement("div", {
+				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+					direction: BDFDB.LibraryComponents.Flex.Direction.VERTICAL,
 					children: [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 							className: BDFDB.disCN.marginbottom8,
@@ -157,7 +157,7 @@ var CustomQuoter = (_ => {
 								BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key: "PREVIEW_MESSAGE_" + key.replace(/\s/g, "_")}));
 							}
 						}),
-						BDFDB.ReactUtils.createElement(PreviewMessage, {
+						BDFDB.ReactUtils.createElement(PreviewMessageComponent, {
 							key: "PREVIEW_MESSAGE_" + key.replace(/\s/g, "_"),
 							format: key
 						})
@@ -176,6 +176,7 @@ var CustomQuoter = (_ => {
 				collapseStates: collapseStates,
 				children: [
 					"$quote will be replaced with the quoted message content",
+					"$rawQuote will be replaced with the raw quoted message content",
 					"$mention will be replaced with a mention of the message author",
 					"$link will be replaced with a discord direct link pointing to the message",
 					"$authorId will be replaced with the ID of the message author",
@@ -323,11 +324,9 @@ var CustomQuoter = (_ => {
 			let content = message.content;
 			let selectedText = settings.quoteOnlySelected && document.getSelection().toString().trim();
 			if (selectedText) content = BDFDB.StringUtils.extractSelection(content, selectedText);
-			let unquotedLines = content.split("\n").filter(line => !line.startsWith("> "));
-			let quotedLines = unquotedLines.slice(unquotedLines.findIndex(line => line.trim().length > 0)).map(line => "> " + line + "\n").join("");
-			if (quotedLines) {
-				quotedLines = quotedLines.replace(/(@everyone|@here)/g, "`$1`").replace(/``(@everyone|@here)``/g, "`$1`");
-				quotedLines = quotedLines.replace(/<@[!&]{0,1}([0-9]{10,})>/g, (string, match) => {
+			if (content) {
+				content = content.replace(/(@everyone|@here)/g, "`$1`").replace(/``(@everyone|@here)``/g, "`$1`");
+				content = content.replace(/<@[!&]{0,1}([0-9]{10,})>/g, (string, match) => {
 					let user = BDFDB.LibraryModules.UserStore.getUser(match);
 					if (user) {
 						let userMember = channel.guild_id && BDFDB.LibraryModules.MemberStore.getMember(guild.id, match);
@@ -337,6 +336,8 @@ var CustomQuoter = (_ => {
 					return string;
 				});
 			}
+			let unquotedLines = content.split("\n").filter(line => !line.startsWith("> "));
+			let quotedLines = unquotedLines.slice(unquotedLines.findIndex(line => line.trim().length > 0)).map(line => "> " + line + "\n").join("");
 			
 			return BDFDB.StringUtils.insertNRST(quoteFormat)
 				.replace("$mention", settings.ignoreMentionInDM && channel.isDM() ? "" : `<@!${message.author.id}>`)
@@ -362,6 +363,7 @@ var CustomQuoter = (_ => {
 				.replace("$month", settings.forceZeros && month < 10 ? "0" + month : month)
 				.replace("$year", timestamp.getFullYear())
 				.replace("$quote", quotedLines || "")
+				.replace("$rawQuote", unquotedLines.join("\n") || "")
 				.split(" ").filter(n => n).join(" ");
 		}
 
