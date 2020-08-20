@@ -8660,7 +8660,6 @@
 				}
 				else e.stopPropagation();
 			};
-			console.log("b", this);
 			return BDFDB.ReactUtils.createElement(LibraryModules.React.Fragment, {
 				children: BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.PopoutContainer, Object.assign({}, this.props, {
 					children: _ => {return child;},
