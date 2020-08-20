@@ -34,11 +34,16 @@ https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/AdjustableSe
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/FrostedGlass/FrostedGlass.theme.css
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/HorizontalServerlist/HorizontalServerlist.theme.css
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/SimplyDark/SimplyDark.theme.css
+https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/Slate/Slate.theme.css
 https://raw.githubusercontent.com/GibbuBDStuff/RadialStatus/master/RadialStatus.theme.css
 https://raw.githubusercontent.com/GoldenLys/BetterDiscord-Elysia/master/ELYSIA.theme.css
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/Glossy-Cyan/Glossy-Cyan.H.theme.css
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/HansAnonymousAdditions/HAA.theme.css
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/Patriotic/Patriotic.theme.css
+https://raw.githubusercontent.com/hellbound1337/dark-discord/master/DarkDiscord.theme.css
+https://raw.githubusercontent.com/hellbound1337/discord-revamp/master/DiscordRevamp.theme.css
+https://raw.githubusercontent.com/hellbound1337/gamesense/master/Gamesense.theme.css
+https://raw.githubusercontent.com/hellbound1337/modern-indicators/master/ModernIndicators.theme.css
 https://raw.githubusercontent.com/HighGuard/discord-popout-overhaul-theme/master/popoutOverhaul.theme.css
 https://raw.githubusercontent.com/ImBastion/BD-Themes/master/Theme/DARLINGintheFRANXX.theme.css
 https://raw.githubusercontent.com/ImBastion/BD-Themes/master/Theme/NieRDance.theme.css
@@ -139,4 +144,3 @@ https://raw.githubusercontent.com/XYZenix/XYZenixThemes/master/DTM-16.theme.css
 https://raw.githubusercontent.com/YuraBrm/BetterDiscordThemes/master/Avis/Avis.theme.css
 https://raw.githubusercontent.com/Zerthox/Discord-Color-Accent/master/CustomColorAccent.theme.css
 https://raw.githubusercontent.com/Zerthox/Material-Icon-Theme/master/Material_Icon.theme.css
-https://raw.githubusercontent.com/zzzmario/dark-discord/master/DarkDiscord.theme.css
