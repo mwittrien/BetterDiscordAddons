@@ -8622,7 +8622,7 @@
 	InternalComponents.LibraryComponents.PopoutContainer = InternalBDFDB.loadPatchedComp("PopoutContainer") || reactInitialized && class BDFDB_PopoutContainer extends LibraryModules.React.Component {
 		handleRender(e) {
 			let children = typeof this.props.renderPopout == "function" ? this.props.renderPopout(this) : null;
-			return this.popout = !children ? null : (!this.props.wrap ? children : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Popout, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
+			return this.context.popout = !children ? null : (!this.props.wrap ? children : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Popout, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				className: this.props.popoutClassName,
 				containerInstance: this,
 				isChild: true,
@@ -8633,12 +8633,12 @@
 			}), "popoutStyle", "popoutClassName")));
 		}
 		componentDidMount() {
-			let basepopout = BDFDB.ReactUtils.findOwner(this, {name:"BasePopout"});
-			if (!basepopout || !basepopout.handleClick) return;
-			basepopout.isBDFDBpopout = true;
-			this.handleClick = e => {return basepopout.handleClick(BDFDB.ObjectUtils.is(e) ? e : (new MouseEvent({})));};
-			this.close = basepopout.close;
-			this.domElementRef = basepopout.domElementRef;
+			let basePopout = BDFDB.ReactUtils.findOwner(this, {name:"BasePopout"});
+			if (!basePopout || !basePopout.handleClick) return;
+			basePopout.isBDFDBpopout = true;
+			this.handleClick = e => {return basePopout.handleClick(BDFDB.ObjectUtils.is(e) ? e : (new MouseEvent({})));};
+			this.close = basePopout.close;
+			this.domElementRef = basePopout.domElementRef;
 		}
 		render() {
 			let child = (BDFDB.ArrayUtils.is(this.props.children) ? this.props.children[0] : this.props.children) || BDFDB.ReactUtils.createElement("div", {style: {height: "100%", width: "100%"}});
@@ -8660,6 +8660,7 @@
 				}
 				else e.stopPropagation();
 			};
+			console.log("b", this);
 			return BDFDB.ReactUtils.createElement(LibraryModules.React.Fragment, {
 				children: BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.PopoutContainer, Object.assign({}, this.props, {
 					children: _ => {return child;},
@@ -8711,7 +8712,7 @@
 													action: selected ? null : event2 => {
 														this.handleChange.bind(this)(option)
 													}
-												})
+												});
 											})
 										})
 									});

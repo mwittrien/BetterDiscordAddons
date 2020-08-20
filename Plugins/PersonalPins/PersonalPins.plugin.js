@@ -9,18 +9,24 @@ var PersonalPins = (_ => {
 	const pinIconDelete = pinIconGeneral.replace(`<extra/>`, `<path transform="translate(8, 8)" stroke="#f04747" stroke-width="2" fill="none" d="M 4 4 l 8.666 8.666 m 0 -8.667 l -8.667 8.666 Z"/>`).replace(`<mask/>`, pinIconMask);
 	const pinIconUpdate = pinIconGeneral.replace(`<extra/>`, `<path transform="translate(10, 10)" fill="#43b581" d="M 11.374, 4.978 V 0 l -1.672, 1.671 C 8.675, 0.64, 7.256, 0, 5.685, 0 C 2.542, 0, 0.003, 2.546, 0.003, 5.688 s 2.538, 5.688, 5.681, 5.688 c 2.648, 0, 4.867 -1.814, 5.496 -4.267 h -1.48 c -0.587, 1.656 -2.158, 2.844 -4.018, 2.844 c -2.358, 0 -4.267 -1.91 -4.267 -4.267 s 1.909 -4.267, 4.266 -4.267 c 1.176, 0, 2.232, 0.49, 3.004, 1.262 l -2.294, 2.293 H 11.374 z"/>`).replace(`<mask/>`, pinIconMask);
 	
-	const filterKeys = ["channel", "server", "all"], sortKeys = ["notetime", "messagetime"];
+	const filterKeys = ["channel", "server", "all"];
+	const sortKeys = ["notetime", "messagetime"];
+	const orderKeys = ["ascending", "descending"];
 	
 	return class PersonalPins {
 		getName () {return "PersonalPins";}
 
 		getDescription () {return "Similar to normal pins. Lets you save messages as notes for yourself.";}
 
-		getVersion () {return "1.9.6";} 
+		getVersion () {return "1.9.7";} 
 
 		getAuthor () {return "DevilBro";}
 
 		constructor () {
+			this.changelog = {
+				"added":[["Order","Added ascending/descending order for popout"]]
+			};
+			
 			this.patchedModules = {
 				after: {
 					HeaderBarContainer: "render"
@@ -31,8 +37,9 @@ var PersonalPins = (_ => {
 		initConstructor () {
 			this.defaults = {
 				choices: {
-					defaultFilter:		{value:filterKeys[0], 	options:filterKeys,		type:"filter",	description:"Default choice tab"},
-					defaultSort:		{value:sortKeys[0], 	options:sortKeys,		type:"sort",	description:"Default sort order"}
+					defaultFilter:		{value:filterKeys[0], 		options:filterKeys,		type:"filter",		description:"Default choice tab"},
+					defaultSort:		{value:sortKeys[0], 		options:sortKeys,		type:"sort",		description:"Default sort choice"},
+					defaultOrder:		{value:orderKeys[0], 		options:orderKeys,		type:"order",		description:"Default order choice"},
 				}
 			};
 		}
@@ -201,7 +208,7 @@ var PersonalPins = (_ => {
 				animation: BDFDB.LibraryComponents.PopoutContainer.Animation.SCALE,
 				position: BDFDB.LibraryComponents.PopoutContainer.Positions.BOTTOM,
 				align: BDFDB.LibraryComponents.PopoutContainer.Align.RIGHT,
-				width: 500,
+				width: 650,
 				maxHeight: "calc(100vh - 100px)",
 				onClose: instance => {
 					BDFDB.DOMUtils.removeClass(instance.domElementRef.current, BDFDB.disCN.channelheadericonselected);
@@ -216,6 +223,7 @@ var PersonalPins = (_ => {
 		openNotesPopout (buttonInstance) {
 			buttonInstance.props.selectedFilter = buttonInstance.props.selectedFilter || this.getValue(choices.defaultFilter || filterKeys[0], "filter");
 			buttonInstance.props.selectedSort = buttonInstance.props.selectedSort || this.getValue(choices.defaultSort || sortKeys[0], "sort");
+			buttonInstance.props.selectedOrder = buttonInstance.props.selectedOrder || this.getValue(choices.defaultOrder || orderKeys[0], "order");
 			buttonInstance.props.searchKey = buttonInstance.props.searchKey || "";
 			let searchTimeout;
 			return [
@@ -241,12 +249,12 @@ var PersonalPins = (_ => {
 											BDFDB.TimeUtils.clear(searchTimeout);
 											searchTimeout = BDFDB.TimeUtils.timeout(_ => {
 												buttonInstance.props.searchKey = value;
-												BDFDB.ReactUtils.forceUpdate(buttonInstance.popout._owner.stateNode);
+												BDFDB.ReactUtils.forceUpdate(buttonInstance.context.popout._owner.stateNode);
 											}, 1000);
 										},
 										onClear: _ => {
 											buttonInstance.props.searchKey = "";
-											BDFDB.ReactUtils.forceUpdate(buttonInstance.popout._owner.stateNode);
+											BDFDB.ReactUtils.forceUpdate(buttonInstance.context.popout._owner.stateNode);
 										}
 									})
 								]
@@ -263,16 +271,26 @@ var PersonalPins = (_ => {
 										items: filterKeys.map(option => this.getValue(option, "filter")),
 										onItemSelect: option => {
 											buttonInstance.props.selectedFilter = this.getValue(option, "filter");
-											BDFDB.ReactUtils.forceUpdate(buttonInstance.popout._owner.stateNode);
+											BDFDB.ReactUtils.forceUpdate(buttonInstance.context.popout._owner.stateNode);
 										}
 									}),
 									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
-										label: this.labels.popout_sort_text + ":",
+										label: BDFDB.LanguageUtils.LibraryStrings.sort_by + ":",
 										value: buttonInstance.props.selectedSort,
 										options: sortKeys.map(option => this.getValue(option, "sort")),
 										onChange: option => {
+											console.log(buttonInstance);
 											buttonInstance.props.selectedSort = this.getValue(option, "sort");
-											BDFDB.ReactUtils.forceUpdate(buttonInstance.popout._owner.stateNode);
+											BDFDB.ReactUtils.forceUpdate(buttonInstance.context.popout._owner.stateNode);
+										}
+									}),
+									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.QuickSelect, {
+										label: BDFDB.LanguageUtils.LibraryStrings.order + ":",
+										value: buttonInstance.props.selectedOrder,
+										options: orderKeys.map(option => this.getValue(option, "order")),
+										onChange: option => {
+											buttonInstance.props.selectedOrder = this.getValue(option, "order");
+											BDFDB.ReactUtils.forceUpdate(buttonInstance.context.popout._owner.stateNode);
 										}
 									})
 								]
@@ -282,21 +300,21 @@ var PersonalPins = (_ => {
 				}),
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ScrollerThin, {
 					className: BDFDB.disCN.messagespopout,
-					children: this.filterMessages(buttonInstance, buttonInstance.props.selectedFilter.value, buttonInstance.props.selectedSort.value, buttonInstance.props.searchKey.toUpperCase())
+					children: this.filterMessages(buttonInstance, buttonInstance.props.selectedFilter.value, buttonInstance.props.selectedSort.value, buttonInstance.props.selectedOrder.value == "descending", buttonInstance.props.searchKey.toUpperCase())
 				})
 			];
 		}
 		
 		getValue (key, type) {
 			return {
-				label: this.labels[`popout_${type}_${key}_text`],
+				label: type == "order" ? BDFDB.LanguageUtils.LibraryStrings[key] : this.labels[`popout_${type}_${key}_text`],
 				value: key
-			}
+			};
 		}
 		
-		filterMessages (buttonInstance, filter, sort, searchkey) {
-			let lighttheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
-			let messages = [], notes = BDFDB.DataUtils.load(this, "notes"), updatedata = false;
+		filterMessages (buttonInstance, filter, sort, reverse, searchkey) {
+			let lightTheme = BDFDB.DiscordUtils.getTheme() == BDFDB.disCN.themelight;
+			let messages = [], notes = BDFDB.DataUtils.load(this, "notes"), updateData = false;
 			for (let guild_id in notes) for (let channel_id in notes[guild_id]) for (let message_idPOS in notes[guild_id][channel_id]) {
 				let message = JSON.parse(notes[guild_id][channel_id][message_idPOS].message);
 				message.author = new BDFDB.DiscordObjects.User(message.author);
@@ -314,7 +332,7 @@ var PersonalPins = (_ => {
 				if (!channel) {
 					channel = BDFDB.LibraryModules.ChannelStore.getChannel(message.channel_id);
 					if (channel) {
-						updatedata = true;
+						updateData = true;
 						notes[guild_id][channel_id][message_idPOS].channel = JSON.stringify(channel);
 					}
 				}
@@ -328,30 +346,30 @@ var PersonalPins = (_ => {
 					notetime: notes[guild_id][channel_id][message_idPOS].addedat
 				});
 			}
-			if (updatedata) BDFDB.DataUtils.save(notes, this, "notes");
-			let currentchannel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId()) || {};
+			if (updateData) BDFDB.DataUtils.save(notes, this, "notes");
+			let currentChannel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId()) || {};
 			switch (filter) {
 				case "channel":
-					messages = messages.filter(messageData => messageData.channel_id == currentchannel.id);
+					messages = messages.filter(messageData => messageData.channel_id == currentChannel.id);
 					break;
 				case "server":
-					messages = messages.filter(messageData => messageData.guild_id == (currentchannel.guild_id || BDFDB.DiscordConstants.ME));
+					messages = messages.filter(messageData => messageData.guild_id == (currentChannel.guild_id || BDFDB.DiscordConstants.ME));
 					break;
 				case "allservers":
 					messages = messages;
 					break;
 			}
 			if (searchkey) {
-				let searchvalues = ["content", "author.username", "rawDescription", "author.name"];
-				messages = messages.filter(messageData => searchvalues.some(key => this.containsSearchkey(messageData.message, key, searchkey) || messageData.message.embeds.some(embed => this.containsSearchkey(embed, key, searchkey))));
+				let searchValues = ["content", "author.username", "rawDescription", "author.name"];
+				messages = messages.filter(messageData => searchValues.some(key => this.containsSearchkey(messageData.message, key, searchkey) || messageData.message.embeds.some(embed => this.containsSearchkey(embed, key, searchkey))));
 			}
 			BDFDB.ArrayUtils.keySort(messages, sort);
-			messages.reverse();
+			if (!reverse) messages.reverse();
 			return Object.keys(messages).length ? 
 				messages.map(messageData => this.renderMessage(buttonInstance, messageData.note, messageData.message, messageData.channel, filter)).flat(10).filter(n => n) :
 				BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.MessagesPopoutComponents.EmptyStateCenter, {
 					msg: BDFDB.LanguageUtils.LanguageStrings.AUTOCOMPLETE_NO_RESULTS_HEADER,
-					image: lighttheme ? "/assets/03c7541028afafafd1a9f6a81cb7f149.svg" : "/assets/6793e022dc1b065b21f12d6df02f91bd.svg"
+					image: lightTheme ? "/assets/03c7541028afafafd1a9f6a81cb7f149.svg" : "/assets/6793e022dc1b065b21f12d6df02f91bd.svg"
 				});
 		}
 		
@@ -442,7 +460,7 @@ var PersonalPins = (_ => {
 								size: BDFDB.LibraryComponents.Button.Sizes.NONE,
 								onClick: (e, instance) => {
 									this.removeNoteData(note);
-									BDFDB.ReactUtils.forceUpdate(buttonInstance.popout._owner.stateNode);
+									BDFDB.ReactUtils.forceUpdate(buttonInstance.context.popout._owner.stateNode);
 								},
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
 									className: BDFDB.disCN.messagespopoutclosebutton,
@@ -530,7 +548,6 @@ var PersonalPins = (_ => {
 						popout_filter_channel_text:		"Kanal",
 						popout_filter_server_text:		"Poslužavnik",
 						popout_filter_all_text:			"Svi poslužitelji",
-						popout_sort_text:				"Poredaj po",
 						popout_sort_messagetime_text:	"Vijesti-Datum",
 						popout_sort_notetime_text:		"Bilješka-Datum",
 						context_pinoption_text:			"Napominjemo poruku",
@@ -547,7 +564,6 @@ var PersonalPins = (_ => {
 						popout_filter_channel_text:		"Kanal",
 						popout_filter_server_text:		"Server",
 						popout_filter_all_text:			"Alle servere",
-						popout_sort_text:				"Sorter efter",
 						popout_sort_messagetime_text:	"Meddelelse-Dato",
 						popout_sort_notetime_text:		"Note-Dato",
 						context_pinoption_text:			"Noter besked",
@@ -564,7 +580,6 @@ var PersonalPins = (_ => {
 						popout_filter_channel_text:		"Kanal",
 						popout_filter_server_text:		"Server",
 						popout_filter_all_text:			"Alle Server",
-						popout_sort_text:				"Sortieren nach",
 						popout_sort_messagetime_text:	"Nachrichten-Datum",
 						popout_sort_notetime_text:		"Notiz-Datum",
 						context_pinoption_text:			"Nachricht notieren",
@@ -581,7 +596,6 @@ var PersonalPins = (_ => {
 						popout_filter_channel_text:		"Canal",
 						popout_filter_server_text:		"Servidor",
 						popout_filter_all_text:			"Todos los servidores",
-						popout_sort_text:				"Ordenar por",
 						popout_sort_messagetime_text:	"Mensaje-Fecha",
 						popout_sort_notetime_text:		"Nota-Fecha",
 						context_pinoption_text:			"Anotar mensaje",
@@ -598,7 +612,6 @@ var PersonalPins = (_ => {
 						popout_filter_channel_text:		"Canal",
 						popout_filter_server_text:		"Serveur",
 						popout_filter_all_text:			"Tous les serveurs",
-						popout_sort_text:				"Trier par",
 						popout_sort_messagetime_text:	"Message-Date",
 						popout_sort_notetime_text:		"Note-Date",
 						context_pinoption_text:			"Noter le message",
@@ -615,7 +628,6 @@ var PersonalPins = (_ => {
 						popout_filter_channel_text:		"Canale",
 						popout_filter_server_text:		"Server",
 						popout_filter_all_text:			"Tutti i server",
-						popout_sort_text:				"Ordina per",
 						popout_sort_messagetime_text:	"Messaggio-Data",
 						popout_sort_notetime_text:		"Nota-Data",
 						context_pinoption_text:			"Annotare il messaggio",
@@ -632,7 +644,6 @@ var PersonalPins = (_ => {
 						popout_filter_channel_text:		"Kanaal",
 						popout_filter_server_text:		"Server",
 						popout_filter_all_text:			"Alle servers",
-						popout_sort_text:				"Sorteer op",
 						popout_sort_messagetime_text:	"Bericht-Datum",
 						popout_sort_notetime_text:		"Notitie-Datum",
 						context_pinoption_text:			"Noteer bericht",
@@ -649,7 +660,6 @@ var PersonalPins = (_ => {
 						popout_filter_channel_text:		"Kanal",
 						popout_filter_server_text:		"Server",
 						popout_filter_all_text:			"Alle servere",
-						popout_sort_text:				"Sorter etter",
 						popout_sort_messagetime_text:	"Melding-Dato",
 						popout_sort_notetime_text:		"Merknad-Dato",
 						context_pinoption_text:			"Notat ned meldingen",
@@ -666,7 +676,6 @@ var PersonalPins = (_ => {
 						popout_filter_channel_text:		"Kanał",
 						popout_filter_server_text:		"Serwer",
 						popout_filter_all_text:			"Wszystkie serwery",
-						popout_sort_text:				"Sortuj według",
 						popout_sort_messagetime_text:	"Wiadomość-Data",
 						popout_sort_notetime_text:		"Notatka-Data",
 						context_pinoption_text:			"Notuj wiadomość",
@@ -683,7 +692,6 @@ var PersonalPins = (_ => {
 						popout_filter_channel_text:		"Canal",
 						popout_filter_server_text:		"Servidor",
 						popout_filter_all_text:			"Todos os servidores",
-						popout_sort_text:				"Ordenar por",
 						popout_sort_messagetime_text:	"Mensagem-Data",
 						popout_sort_notetime_text:		"Nota-Data",
 						context_pinoption_text:			"Anote a mensagem",
@@ -700,7 +708,6 @@ var PersonalPins = (_ => {
 						popout_filter_channel_text:		"Kanava",
 						popout_filter_server_text:		"Palvelin",
 						popout_filter_all_text:			"Kaikki palvelimet",
-						popout_sort_text:				"Järjestä",
 						popout_sort_messagetime_text:	"Viesti-Päivämäärä",
 						popout_sort_notetime_text:		"Huomaa-Päivämäärä",
 						context_pinoption_text:			"Huomaa viesti",
@@ -717,7 +724,6 @@ var PersonalPins = (_ => {
 						popout_filter_channel_text:		"Kanal",
 						popout_filter_server_text:		"Server",
 						popout_filter_all_text:			"Alla servrar",
-						popout_sort_text:				"Sortera efter",
 						popout_sort_messagetime_text:	"Meddelande-Datum",
 						popout_sort_notetime_text:		"Anteckningen-Datum",
 						context_pinoption_text:			"Anteckna meddelande",
@@ -734,7 +740,6 @@ var PersonalPins = (_ => {
 						popout_filter_channel_text:		"Kanal",
 						popout_filter_server_text:		"Sunucu",
 						popout_filter_all_text:			"Tüm Sunucular",
-						popout_sort_text:				"Göre sırala",
 						popout_sort_messagetime_text:	"Mesaj-Tarih",
 						popout_sort_notetime_text:		"Not-Tarih",
 						context_pinoption_text:			"Mesajı not alın",
@@ -751,7 +756,6 @@ var PersonalPins = (_ => {
 						popout_filter_channel_text:		"Kanál",
 						popout_filter_server_text:		"Server",
 						popout_filter_all_text:			"Všechny servery",
-						popout_sort_text:				"Seřazeno podle",
 						popout_sort_messagetime_text:	"Zpráva-datum",
 						popout_sort_notetime_text:		"Poznámka-datum",
 						context_pinoption_text:			"Poznámka dolů zprávu",
@@ -768,7 +772,6 @@ var PersonalPins = (_ => {
 						popout_filter_channel_text:		"Канал",
 						popout_filter_server_text:		"Сървър",
 						popout_filter_all_text:			"Всички сървъри",
-						popout_sort_text:				"Сортиране по",
 						popout_sort_messagetime_text:	"Съобщение-Дата",
 						popout_sort_notetime_text:		"Забележка-Дата",
 						context_pinoption_text:			"Oтбележете съобщението",
@@ -785,7 +788,6 @@ var PersonalPins = (_ => {
 						popout_filter_channel_text:		"Канал",
 						popout_filter_server_text:		"Cервер",
 						popout_filter_all_text:			"Все серверы",
-						popout_sort_text:				"Сортировать по",
 						popout_sort_messagetime_text:	"Сообщение-дата",
 						popout_sort_notetime_text:		"Заметки-Дата",
 						context_pinoption_text:			"Записывать вниз",
@@ -802,7 +804,6 @@ var PersonalPins = (_ => {
 						popout_filter_channel_text:		"Канал",
 						popout_filter_server_text:		"Сервер",
 						popout_filter_all_text:			"Всі сервери",
-						popout_sort_text:				"Сортувати за",
 						popout_sort_messagetime_text:	"Повідомлення-дата",
 						popout_sort_notetime_text:		"Примітка-дата",
 						context_pinoption_text:			"Зверніть увагу на повідомлення",
@@ -819,7 +820,6 @@ var PersonalPins = (_ => {
 						popout_filter_channel_text:		"チャネル",
 						popout_filter_server_text:		"サーバ",
 						popout_filter_all_text:			"すべてのサーバー",
-						popout_sort_text:				"並び替え",
 						popout_sort_messagetime_text:	"メッセージ-日付",
 						popout_sort_notetime_text:		"注-日付",
 						context_pinoption_text:			"ノートダウンメッセージ",
@@ -836,7 +836,6 @@ var PersonalPins = (_ => {
 						popout_filter_channel_text:		"渠道",
 						popout_filter_server_text:		"服務器",
 						popout_filter_all_text:			"所有服務器",
-						popout_sort_text:				"排序方式",
 						popout_sort_messagetime_text:	"消息-日期",
 						popout_sort_notetime_text:		"注-日期",
 						context_pinoption_text:			"記下下來的消息",
@@ -853,7 +852,6 @@ var PersonalPins = (_ => {
 						popout_filter_channel_text:		"채널",
 						popout_filter_server_text:		"섬기는 사람",
 						popout_filter_all_text:			"모든 서버",
-						popout_sort_text:				"정렬 기준",
 						popout_sort_messagetime_text:	"메시지-날짜",
 						popout_sort_notetime_text:		"주-날짜",
 						context_pinoption_text:			"메모 다운 메시지",
@@ -870,7 +868,6 @@ var PersonalPins = (_ => {
 						popout_filter_channel_text:		"Channel",
 						popout_filter_server_text:		"Server",
 						popout_filter_all_text:			"All Servers",
-						popout_sort_text:				"Sort by",
 						popout_sort_messagetime_text:	"Message-Date",
 						popout_sort_notetime_text:		"Note-Date",
 						context_pinoption_text:			"Note Message",
