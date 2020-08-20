@@ -50,7 +50,7 @@ var ImageUtilities = (_ => {
 	return class ImageUtilities {
 		getName () {return "ImageUtilities";}
 
-		getVersion () {return "4.0.6";}
+		getVersion () {return "4.0.7";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -59,9 +59,7 @@ var ImageUtilities = (_ => {
 		constructor () {
 			this.changelog = {
 				"progress":[["Welcome","This is the successor of ImageZoom, ImageGallery, ReverseImageSearch and ShowImageDetails. All of these plugins are now combined in one with even more useful features. Check out the plugin settings to configure the plugin the way you want it to work."]],
-				"added":[["Gallery Setting","You can now disable the gallery mode"]],
-				"improved":[["Zoom Controls","You can now zoom in/out with the +/- keys and the mousewheel while the zoomlense is present"]],
-				"fixed":[["Linux/Mac","Downloading now also works on Linux/Mac and the default folder is downloads folder now"]]
+				"fixed":[["Image Formats","Fixed some issues with some image formats, like copy option not showing for gifs since gifs can't be copied in the clipboard"]]
 			};
 			
 			this.patchedModules = {
@@ -79,7 +77,7 @@ var ImageUtilities = (_ => {
 			this.defaults = {
 				settings: {
 					addDetails: 			{value:true,	inner:false,	description:"Add Image details (name, size, amount) in the Image Modal"},
-					showAsHeaader:			{value:true, 	inner:false,	description:"Show Image details as a details header above the Image in the chat"},
+					showAsHeader:			{value:true, 	inner:false,	description:"Show Image details as a details header above the Image in the chat"},
 					showOnHover:			{value:false, 	inner:false,	description:"Show Image details as Tooltip in the chat"},
 					enableGallery: 			{value:true,	inner:false,	description:"Displays previous/next Images in the same message in the Image Modal"},
 					enableZoom: 			{value:true,	inner:false,	description:"Creates a zoom lense if you press down on an Image in the Image Modal"},
@@ -325,17 +323,11 @@ var ImageUtilities = (_ => {
 		}
 
 		onGuildContextMenu (e) {
-			if (e.instance.props.guild && e.instance.props.target) {
-				let guildIcon = BDFDB.DOMUtils.containsClass(e.instance.props.target, BDFDB.disCN.avataricon) ? e.instance.props.target : e.instance.props.target.querySelector(BDFDB.dotCN.guildicon);
-				if (guildIcon && settings.addGuildIconEntry) this.injectItem(e, guildIcon.tagName == "IMG" ? guildIcon.getAttribute("src") :  guildIcon.style.getPropertyValue("background-image"));
-			}
+			if (e.instance.props.guild && settings.addGuildIconEntry) this.injectItem(e, BDFDB.LibraryModules.IconUtils.getGuildIconURL(e.instance.props.guild));
 		}
 
 		onUserContextMenu (e) {
-			if (e.instance.props.user && e.instance.props.target) {
-				let avatar = BDFDB.DOMUtils.getParent(BDFDB.dotCN.avatarwrapper, e.instance.props.target) && e.instance.props.target.querySelector(BDFDB.dotCN.avatar) || e.instance.props.target;
-				if (avatar && settings.addUserAvatarEntry) this.injectItem(e, avatar.tagName == "IMG" ? avatar.getAttribute("src") : avatar.style.getPropertyValue("background-image"));
-			}
+			if (e.instance.props.user && settings.addUserAvatarEntry) this.injectItem(e, BDFDB.LibraryModules.IconUtils.getUserAvatarURL(e.instance.props.user));
 		}
 
 		onNativeContextMenu (e) {
@@ -361,7 +353,7 @@ var ImageUtilities = (_ => {
 		}
 
 		injectItem (e, url) {
-			if (url && !url.endsWith(".mp4")) {
+			if (this.isValidImg(url)) {
 				url = url.replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096").replace(/[\?\&](height|width)=\d+/g, "");
 				if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1) {
 					if (url.split("/https/").length != 1) url = "https://" + url.split("/https/")[url.split("/https/").length-1];
@@ -369,7 +361,6 @@ var ImageUtilities = (_ => {
 				}
 				let enginesWithoutAll = BDFDB.ObjectUtils.filter(enabledEngines, n => n != "_all", true);
 				let engineKeys = Object.keys(enginesWithoutAll);
-				let valid = url.indexOf("discordapp.com/assets/") == -1;
 				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
 				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
@@ -419,7 +410,7 @@ var ImageUtilities = (_ => {
 									});
 								}
 							}),
-							!valid ? null : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							!this.isCopyable(url) ? null : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 								label: this.labels.context_copyimage_text,
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-image"),
 								action: _ => {
@@ -434,7 +425,7 @@ var ImageUtilities = (_ => {
 									BDFDB.NotificationUtils.toast(this.labels.toast_copyimagelink_success, {type: "success"});
 								}
 							}),
-							!valid ? null : engineKeys.length == 1 ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+							!this.isSearchable(url) ? null : engineKeys.length == 1 ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 								label: this.labels.context_reverseimagesearch_text.replace("...", this.defaults.engines[engineKeys[0]].name),
 								id: BDFDB.ContextMenuUtils.createItemId(this.name, "single-search"),
 								persisting: true,
@@ -471,9 +462,9 @@ var ImageUtilities = (_ => {
 
 		processImageModal (e) {
 			if (clickedImage) e.instance.props.cachedImage = clickedImage;
-			let src = e.instance.props.cachedImage && e.instance.props.cachedImage.src ? e.instance.props.cachedImage : e.instance.props.src;
-			src = src.src || src;
-			let messages = this.getMessageGroupOfImage(src);
+			let url = e.instance.props.cachedImage && e.instance.props.cachedImage.src ? e.instance.props.cachedImage : e.instance.props.src;
+			url = url.src || url;
+			let messages = this.getMessageGroupOfImage(url);
 			if (e.returnvalue) {
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.downloadlink]]});
 				if (index > -1) {
@@ -495,11 +486,12 @@ var ImageUtilities = (_ => {
 							}, BDFDB.ObjectUtils.extract(this.defaults.zoomSettings[type], "digits", "minValue", "maxValue"))))
 						}));
 					};
+					let isVideo = (typeof e.instance.props.children == "function" && e.instance.props.children(Object.assign({}, e.instance.props, {size: e.instance.props})) || {type:{}}).type.displayName == "Video";
 					children[index] = BDFDB.ReactUtils.createElement("span", {
 						className: BDFDB.disCN._imageutilitiesoperations,
 						children: [
 							children[index],
-							settings.enableCopyImg && src.indexOf("discordapp.com/assets/") == -1 && [
+							settings.enableCopyImg && this.isCopyable(url) && !isVideo && [
 								BDFDB.ReactUtils.createElement("span", {
 									className: BDFDB.disCN.downloadlink,
 									children: "|",
@@ -510,11 +502,11 @@ var ImageUtilities = (_ => {
 									children: this.labels.context_copyimage_text,
 									onClick: event => {
 										BDFDB.ListenerUtils.stopEvent(event);
-										this.copyImage(src);
+										this.copyImage(url);
 									}
 								})
 							],
-							settings.enableZoom && [
+							settings.enableZoom && !isVideo && [
 								BDFDB.ReactUtils.createElement("span", {
 									className: BDFDB.disCN.downloadlink,
 									children: "|",
@@ -535,7 +527,7 @@ var ImageUtilities = (_ => {
 					let images = messages.map(n => Array.from(n.querySelectorAll(BDFDB.dotCNS.imagewrapper + "img"))).flat().filter(img => !BDFDB.DOMUtils.getParent(BDFDB.dotCN.spoilerhidden, img));
 					amount = images.length;
 					let next, previous;
-					for (let i = 0; i < amount; i++) if (this.isSameImage(src, images[i])) {
+					for (let i = 0; i < amount; i++) if (this.isSameImage(url, images[i])) {
 						imageIndex = i;
 						previous = images[i-1];
 						next = images[i+1];
@@ -595,7 +587,7 @@ var ImageUtilities = (_ => {
 
 		processLazyImage (e) {
 			if (e.node) {
-				if (settings.enableZoom && !BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imageutilitiessibling) && BDFDB.ReactUtils.findOwner(BDFDB.DOMUtils.getParent(BDFDB.dotCNC.modal + BDFDB.dotCN.layermodal, e.node), {name: "ImageModal"})) {
+				if (settings.enableZoom && !e.node.querySelector("video") && !BDFDB.DOMUtils.containsClass(e.node.parentElement, BDFDB.disCN._imageutilitiessibling) && BDFDB.ReactUtils.findOwner(BDFDB.DOMUtils.getParent(BDFDB.dotCNC.modal + BDFDB.dotCN.layermodal, e.node), {name: "ImageModal"})) {
 					e.node.addEventListener("mousedown", event => {
 						if (event.which != 1) return;
 						BDFDB.ListenerUtils.stopEvent(event);
@@ -704,7 +696,7 @@ var ImageUtilities = (_ => {
 		}
 		
 		injectImageDetails (props, child) {
-			if (settings.showAsHeaader) {
+			if (settings.showAsHeader) {
 				props.detailsAdded = true;
 				return BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCN.embedwrapper,
@@ -722,6 +714,21 @@ var ImageUtilities = (_ => {
 				});
 			}
 			return child;
+		}
+		
+		isValidImg (url) {
+            const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").toLowerCase();
+            return file && (file.endsWith(".jpg") || file.endsWith(".jpeg") || file.endsWith(".png") || file.endsWith(".gif") || file.endsWith(".apng") || file.endsWith(".webp") || file.endsWith(".svg"));
+		}
+		
+		isCopyable (url) {
+            const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").toLowerCase();
+            return file.endsWith(".jpg") || file.endsWith(".jpeg") || file.endsWith(".png");
+		}
+		
+		isSearchable (url) {
+            const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").toLowerCase();
+            return file && (file.endsWith(".jpg") || file.endsWith(".jpeg") || file.endsWith(".png") || file.endsWith(".gif") || file.endsWith(".apng") || file.endsWith(".webp"));
 		}
 		
 		copyImage (src) {
