@@ -60,17 +60,16 @@
 		
 		if (typeof plugin.getSettingsPanel != "function") plugin.getSettingsPanel = _ => {return plugin.started && BDFDB.PluginUtils.createSettingsPanel(plugin, []);};
 		
-		BDFDB.TimeUtils.clear(plugin.updateCheckTimeout);
-		plugin.updateCheckTimeout = BDFDB.TimeUtils.timeout(_ => {
-			delete plugin.updateCheckTimeout;
-
+		if (!plugin.updateChecked) {
+			plugin.updateChecked = true;
 			let url = ["ImageZoom", "ImageGallery", "ReverseImageSearch", "ShowImageDetails"].includes(plugin.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ImageUtilities/ImageUtilities.plugin.js" : typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 			BDFDB.PluginUtils.checkUpdate(plugin.name, url);
 
 			if (!window.PluginUpdates || typeof window.PluginUpdates !== "object") window.PluginUpdates = {plugins: {} };
 			window.PluginUpdates.plugins[url] = {name: plugin.name, raw: url, version: plugin.version};
 			if (typeof window.PluginUpdates.interval === "undefined") window.PluginUpdates.interval = BDFDB.TimeUtils.interval(_ => {BDFDB.PluginUtils.checkAllUpdates();}, 1000*60*60*2);
-		}, 30000);
+			BDFDB.TimeUtils.timeout(_ => {delete plugin.updateChecked;}, 30000);
+		}
 	};
 	BDFDB.PluginUtils.init = BDFDB.loadMessage = function (plugin) {
 		BDFDB.PluginUtils.load(plugin);
@@ -223,7 +222,7 @@
 				updateNoticeList.appendChild(updateEntry);
 				if (!updateNoticeList.hasTooltip) {
 					updateNoticeList.hasTooltip = true;
-					BDFDB.TooltipUtils.create(updateNoticeList, BDFDB.LanguageUtils.LibraryStrings.update_notice_click, {
+					updateNotice.tooltip = BDFDB.TooltipUtils.create(updateNoticeList, BDFDB.LanguageUtils.LibraryStrings.update_notice_click, {
 						type: "bottom",
 						unhideable: true,
 						zIndex: 100001,
@@ -780,11 +779,12 @@
 		notice.querySelector(BDFDB.dotCN.noticedismiss).addEventListener("click", _ => {
 			notice.style.setProperty("overflow", "hidden", "important");
 			notice.style.setProperty("height", "0px", "important");
+			if (notice.tooltip && typeof notice.tooltip.removeTooltip == "function") notice.tooltip.removeTooltip();
 			BDFDB.TimeUtils.timeout(_ => {
 				BDFDB.ArrayUtils.remove(NotificationBars, id);
 				BDFDB.DOMUtils.removeLocalStyle("BDFDBcustomNotificationBar" + id);
 				BDFDB.DOMUtils.removeLocalStyle("BDFDBcustomNotificationBarColorCorrection" + id);
-				notice.remove();
+				BDFDB.DOMUtils.remove(notice);
 			}, 500);
 		});
 		return notice;
@@ -799,7 +799,14 @@
 		let itemLayerContainer = document.querySelector(BDFDB.dotCN.appmount +  " > " + BDFDB.dotCN.itemlayercontainer);
 		if (!itemLayerContainer || (typeof text != "string" && !BDFDB.ObjectUtils.is(options.guild)) || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
 		let id = BDFDB.NumberUtils.generateId(Tooltips);
+		let zIndexed = typeof options.zIndex == "number" || options.unhideable;
 		let itemLayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"><div class="${BDFDB.disCN.tooltippointer}"></div><div class="${BDFDB.disCN.tooltipcontent}"></div></div></div>`);
+		if (zIndexed) {
+			let itemLayerContainerClone = itemLayerContainer.cloneNode();
+			itemLayerContainerClone.style.setProperty("z-index", options.zIndex || 1002, "important");
+			itemLayerContainer.parentElement.insertBefore(itemLayerContainerClone, itemLayerContainer.nextElementChild);
+			itemLayerContainer = itemLayerContainerClone;
+		}
 		itemLayerContainer.appendChild(itemLayer);
 		
 		let tooltip = itemLayer.firstElementChild;
@@ -825,7 +832,7 @@
 			style = (style ? (style + " ") : "") + `background: ${backgroundColor} !important; border-color: ${backgroundColorIsGradient ? BDFDB.ColorUtils.convert(options.backgroundColor[type == "left" ? 100 : 0], "RGBA") : backgroundColor} !important;`;
 		}
 		if (style) tooltip.style = style;
-		if (typeof options.zIndex == "number" || options.unhideable) {
+		if (zIndexed) {
 			itemLayer.style.setProperty("z-index", options.zIndex || 1002, "important");
 			tooltip.style.setProperty("z-index", options.zIndex || 1002, "important");
 			tooltipContent.style.setProperty("z-index", options.zIndex || 1002, "important");
@@ -895,7 +902,7 @@
 			else tooltipContent.innerText = text;
 		}
 
-		let mouseLeave = _ => {BDFDB.DOMUtils.remove(itemLayer);};
+		let mouseLeave = _ => {itemLayer.removeTooltip();};
 		if (!options.perssist) anker.addEventListener("mouseleave", mouseLeave);
 		
 		let observer = new MutationObserver(changes => changes.forEach(change => {
@@ -903,14 +910,18 @@
 			if (nodes.indexOf(itemLayer) > -1 || nodes.indexOf(anker) > -1 || nodes.some(n => n.contains(anker))) {
 				BDFDB.ArrayUtils.remove(Tooltips, id);
 				observer.disconnect();
-				BDFDB.DOMUtils.remove(itemLayer);
 				BDFDB.DOMUtils.removeLocalStyle("BDFDBhideOtherTooltips" + id, itemLayerContainer);
+				itemLayer.removeTooltip();
 				anker.removeEventListener("mouseleave", mouseLeave);
 				if (typeof options.onHide == "function") options.onHide(itemLayer, anker);
 			}
 		}));
 		observer.observe(document.body, {subtree:true, childList:true});
 		
+		(tooltip.removeTooltip = itemLayer.removeTooltip = _ => {
+			BDFDB.DOMUtils.remove(itemLayer);
+			if (zIndexed) BDFDB.DOMUtils.remove(itemLayerContainer);
+		});
 		(tooltip.update = itemLayer.update = _ => {
 			let left, top, tRects = BDFDB.DOMUtils.getRects(anker), iRects = BDFDB.DOMUtils.getRects(itemLayer), aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount)), positionOffsets = {height: 10, width: 10}, offset = typeof options.offset == "number" ? options.offset : 0;
 			switch (type) {
