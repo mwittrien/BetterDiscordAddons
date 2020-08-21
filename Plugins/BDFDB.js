@@ -59,12 +59,17 @@
 		plugin.description = plugin.description || (typeof plugin.getDescription == "function" ? plugin.getDescription() : null);
 		
 		if (typeof plugin.getSettingsPanel != "function") plugin.getSettingsPanel = _ => {return plugin.started && BDFDB.PluginUtils.createSettingsPanel(plugin, []);};
-
-		let url = ["ImageZoom", "ImageGallery", "ReverseImageSearch", "ShowImageDetails"].includes(plugin.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ImageUtilities/ImageUtilities.plugin.js" : typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
+		
 		BDFDB.TimeUtils.clear(plugin.updateCheckTimeout);
 		plugin.updateCheckTimeout = BDFDB.TimeUtils.timeout(_ => {
 			delete plugin.updateCheckTimeout;
+
+			let url = ["ImageZoom", "ImageGallery", "ReverseImageSearch", "ShowImageDetails"].includes(plugin.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ImageUtilities/ImageUtilities.plugin.js" : typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 			BDFDB.PluginUtils.checkUpdate(plugin.name, url);
+
+			if (!window.PluginUpdates || typeof window.PluginUpdates !== "object") window.PluginUpdates = {plugins: {} };
+			window.PluginUpdates.plugins[url] = {name: plugin.name, raw: url, version: plugin.version};
+			if (typeof window.PluginUpdates.interval === "undefined") window.PluginUpdates.interval = BDFDB.TimeUtils.interval(_ => {BDFDB.PluginUtils.checkAllUpdates();}, 1000*60*60*2);
 		}, 30000);
 	};
 	BDFDB.PluginUtils.init = BDFDB.loadMessage = function (plugin) {
@@ -83,10 +88,6 @@
 		BDFDB.PluginUtils.translate(plugin);
 
 		BDFDB.PluginUtils.checkChangeLog(plugin);
-
-		if (!window.PluginUpdates || typeof window.PluginUpdates !== "object") window.PluginUpdates = {plugins: {} };
-		window.PluginUpdates.plugins[url] = {name: plugin.name, raw: url, version: plugin.version};
-		if (typeof window.PluginUpdates.interval === "undefined") window.PluginUpdates.interval = BDFDB.TimeUtils.interval(_ => {BDFDB.PluginUtils.checkAllUpdates();}, 1000*60*60*2);
 
 		plugin.started = true;
 		delete plugin.stopping;
