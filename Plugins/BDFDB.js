@@ -1808,7 +1808,7 @@
 	LibraryModules.NotificationUtils = BDFDB.ModuleUtils.findByProperties("makeTextChatNotification", "shouldNotify");
 	LibraryModules.PlatformUtils = BDFDB.ModuleUtils.findByProperties("isWindows", "isLinux");
 	LibraryModules.PermissionUtils = BDFDB.ModuleUtils.findByProperties("getChannelPermissions", "can");
-	LibraryModules.PermissionRoleUtils = BDFDB.ModuleUtils.findByProperties("getHighestRole", "can");
+	LibraryModules.PermissionRoleUtils = BDFDB.ModuleUtils.findByProperties("canEveryone", "can");
 	LibraryModules.QueryUtils = BDFDB.ModuleUtils.findByProperties("AutocompleterQuerySymbols", "AutocompleterResultTypes");
 	LibraryModules.QuoteUtils = BDFDB.ModuleUtils.findByProperties("canQuote", "createQuotedText");
 	LibraryModules.ReactionEmojiUtils = BDFDB.ModuleUtils.findByProperties("getReactionEmojiName", "getReactionEmojiName");
