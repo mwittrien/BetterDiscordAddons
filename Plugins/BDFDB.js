@@ -52,7 +52,7 @@
 	BDFDB.cleanUp =
 	
 	BDFDB.PluginUtils = {};
-	BDFDB.PluginUtils.init = BDFDB.loadMessage = function (plugin) {
+	BDFDB.PluginUtils.load = function (plugin) {
 		plugin.name = plugin.name || (typeof plugin.getName == "function" ? plugin.getName() : null);
 		plugin.version = plugin.version || (typeof plugin.getVersion == "function" ? plugin.getVersion() : null);
 		plugin.author = plugin.author || (typeof plugin.getAuthor == "function" ? plugin.getAuthor() : null);
@@ -60,12 +60,19 @@
 		
 		if (typeof plugin.getSettingsPanel != "function") plugin.getSettingsPanel = _ => {return plugin.started && BDFDB.PluginUtils.createSettingsPanel(plugin, []);};
 
-		let loadMessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
-		BDFDB.LogUtils.log(loadMessage, plugin.name);
-		if (!BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts) && settings.showToasts) BDFDB.NotificationUtils.toast(plugin.name + " " + loadMessage, {nopointer: true, selector: "plugin-started-toast"});
-
 		let url = ["ImageZoom", "ImageGallery", "ReverseImageSearch", "ShowImageDetails"].includes(plugin.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ImageUtilities/ImageUtilities.plugin.js" : typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
-		BDFDB.PluginUtils.checkUpdate(plugin.name, url);
+		BDFDB.TimeUtils.clear(plugin.updateCheckTimeout);
+		plugin.updateCheckTimeout = BDFDB.TimeUtils.timeout(_ => {
+			delete plugin.updateCheckTimeout;
+			BDFDB.PluginUtils.checkUpdate(plugin.name, url);
+		}, 30000);
+	};
+	BDFDB.PluginUtils.init = BDFDB.loadMessage = function (plugin) {
+		BDFDB.PluginUtils.load(plugin);
+		
+		let startMsg = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
+		BDFDB.LogUtils.log(startMsg, plugin.name);
+		if (settings.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(`${plugin.name} ${startMsg}`, {nopointer: true});
 
 		if (typeof plugin.initConstructor === "function") BDFDB.TimeUtils.suppress(plugin.initConstructor.bind(plugin), "Could not initiate constructor!", plugin.name)();
 		if (typeof plugin.css === "string") BDFDB.DOMUtils.appendLocalStyle(plugin.name, plugin.css);
@@ -92,9 +99,9 @@
 
 		delete BDFDB.myPlugins[plugin.name];
 
-		let unloadMessage = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", "v" + plugin.version);
-		BDFDB.LogUtils.log(unloadMessage, plugin.name);
-		if (!BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts) && settings.showToasts) BDFDB.NotificationUtils.toast(plugin.name + " " + unloadMessage, {nopointer: true, selector: "plugin-stopped-toast"});
+		let stopMsg = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", "v" + plugin.version);
+		BDFDB.LogUtils.log(stopMsg, plugin.name);
+		if (settings.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(`${plugin.name} ${stopMsg}`, {nopointer: true});
 
 		let url = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 
