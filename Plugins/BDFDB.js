@@ -49,8 +49,6 @@
 	
 	BDFDB.LogUtils.log("Loading library.");
 	
-	BDFDB.cleanUp =
-	
 	BDFDB.PluginUtils = {};
 	BDFDB.PluginUtils.load = function (plugin) {
 		plugin.name = plugin.name || (typeof plugin.getName == "function" ? plugin.getName() : null);
