@@ -1,12 +1,13 @@
 //META{"name":"TimedLightDarkMode","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/TimedLightDarkMode","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/TimedLightDarkMode/TimedLightDarkMode.plugin.js"}*//
 
 var TimedLightDarkMode = (_ => {
+	var checkInterval, changeTimeout, disableChanging;
 	var settings = {}, values = {};
 	
 	return class TimedLightDarkMode {
 		getName () {return "TimedLightDarkMode";}
 
-		getVersion () {return "1.0.7";}
+		getVersion () {return "1.0.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +15,7 @@ var TimedLightDarkMode = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Slider Bubble","Changed bubble to tooltip"]]
+				"improved":[["Disabled Changing Time","Changing the discord native theme mode will now disable the automatic timed mode change triggered by this plugin for 10 minutes, to allow people to use the opposite theme mode for a short amount of time"]]
 			};
 
 			this.patchedModules = {
@@ -66,6 +67,16 @@ var TimedLightDarkMode = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
+				
+				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.SettingsUtils, "updateLocalSettings", {after: e => {
+					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].theme) {
+						BDFDB.TimeUtils.clear(changeTimeout);
+						disableChanging = true;
+						changeTimeout = BDFDB.TimeUtils.timeout(_ => {
+							disableChanging = false;
+						}, 1000*60*10);
+					}
+				}});
 
 				this.startInterval();
 
@@ -78,7 +89,7 @@ var TimedLightDarkMode = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
 
-				BDFDB.TimeUtils.clear(this.checkInterval);
+				BDFDB.TimeUtils.clear(checkInterval);
 
 				BDFDB.DOMUtils.remove(BDFDB.dotCN._timedlightdarkmodetimersettings);
 
@@ -121,7 +132,7 @@ var TimedLightDarkMode = (_ => {
 		}
 
 		startInterval () {
-			BDFDB.TimeUtils.clear(this.checkInterval);
+			BDFDB.TimeUtils.clear(checkInterval);
 			settings = BDFDB.DataUtils.get(this, "settings");
 			values = BDFDB.DataUtils.get(this, "values");
 			if (settings.running) {
@@ -129,6 +140,7 @@ var TimedLightDarkMode = (_ => {
 				let timer1LOW = this.getTime(values.timer1), timer2LOW = this.getTime(values.timer2);
 				let timer1HIGH = this.getHighTime(timer2LOW), timer2HIGH = this.getHighTime(timer1LOW);
 				let check = _ => {
+					if (disableChanging) return;
 					let currentTime = new Date();
 					let currentHours = currentTime.getHours();
 					let currentMinutes = currentTime.getMinutes();
@@ -136,7 +148,7 @@ var TimedLightDarkMode = (_ => {
 					else this.changeTheme(this.checkTime(timer2LOW, timer2HIGH, [currentHours, currentMinutes]));
 				};
 				check();
-				this.checkInterval = BDFDB.TimeUtils.interval(_ => {check();}, 60000);
+				checkInterval = BDFDB.TimeUtils.interval(_ => {check();}, 1000*60*1);
 			}
 		}
 
