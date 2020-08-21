@@ -144,7 +144,9 @@ var MessageUtilities = (_ => {
 		}
 
 		// Legacy
-		load () {}
+		load () {
+			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) BDFDB.PluginUtils.load(this);
+		}
 
 		start () {
 			if (!window.BDFDB) window.BDFDB = {myPlugins:{}};
