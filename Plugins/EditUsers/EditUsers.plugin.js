@@ -6,7 +6,7 @@ var EditUsers = (_ => {
 	return class EditUsers {
 		getName () {return "EditUsers";}
 
-		getVersion () {return "3.9.4";}
+		getVersion () {return "3.9.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,7 @@ var EditUsers = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Local custom status","You can now also use custom emojis for local custom statuses"]]
+				"fixed":[["UserPopout for non members","Fixed an issue where you could not open the user popout for someone who is no longer a member of the current server"]]
 			};
 			
 			this.patchedModules = {
@@ -411,7 +411,7 @@ var EditUsers = (_ => {
 					if (data) {
 						if (data.name) {
 							e.instance.props.nickname = data.name;
-							e.instance.props.guildMember = Object.assign({}, e.instance.props.guildMember, {nick: data.name});
+							if (e.instance.props.guildMember) e.instance.props.guildMember = Object.assign({}, e.instance.props.guildMember, {nick: data.name});
 						}
 						if (data.removeStatus || data.status || data.statusEmoji) e.instance.props.customStatusActivity = this.createCustomStatus(data);
 					}
