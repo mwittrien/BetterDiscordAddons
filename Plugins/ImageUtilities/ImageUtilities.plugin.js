@@ -50,7 +50,7 @@ var ImageUtilities = (_ => {
 	return class ImageUtilities {
 		getName () {return "ImageUtilities";}
 
-		getVersion () {return "4.0.8";}
+		getVersion () {return "4.0.9";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -373,16 +373,16 @@ var ImageUtilities = (_ => {
 				children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 					label: "Image Utilities",
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "main-subitem"),
-					children: validUrls.length == 1 ? this.createUrlMenus(validUrls[0].url) : validUrls.map((urlData, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					children: validUrls.length == 1 ? this.createUrlMenu(e, validUrls[0].url) : validUrls.map((urlData, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
 						label: urlData.type.toUpperCase(),
 						id: BDFDB.ContextMenuUtils.createItemId(this.name, "subitem", i),
-						children: this.createUrlMenus(urlData.url)
+						children: this.createUrlMenu(e, urlData.url)
 					}))
 				})
 			}));
 		}
 		
-		createUrlMenus (url) {
+		createUrlMenu (e, url) {
 			let enginesWithoutAll = BDFDB.ObjectUtils.filter(enabledEngines, n => n != "_all", true);
 			let engineKeys = Object.keys(enginesWithoutAll);
 			return [
