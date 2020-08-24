@@ -50,7 +50,7 @@ var ImageUtilities = (_ => {
 	return class ImageUtilities {
 		getName () {return "ImageUtilities";}
 
-		getVersion () {return "4.0.7";}
+		getVersion () {return "4.0.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -59,6 +59,7 @@ var ImageUtilities = (_ => {
 		constructor () {
 			this.changelog = {
 				"progress":[["Welcome","This is the successor of ImageZoom, ImageGallery, ReverseImageSearch and ShowImageDetails. All of these plugins are now combined in one with even more useful features. Check out the plugin settings to configure the plugin the way you want it to work."]],
+				"improved":[["Animated Icons/Avatars","Right clicking a server/user with an animated icon will now give the option to either choose the .png or .gif"]],
 				"fixed":[["Image Formats","Fixed some issues with some image formats, like copy option not showing for gifs since gifs can't be copied in the clipboard"]]
 			};
 			
@@ -325,11 +326,11 @@ var ImageUtilities = (_ => {
 		}
 
 		onGuildContextMenu (e) {
-			if (e.instance.props.guild && settings.addGuildIconEntry) this.injectItem(e, BDFDB.LibraryModules.IconUtils.getGuildIconURL(e.instance.props.guild));
+			if (e.instance.props.guild && !settings.addGuildIconEntry) this.injectItem(e, e.instance.props.guild.getIconURL("png"), BDFDB.LibraryModules.IconUtils.hasAnimatedGuildIcon(e.instance.props.guild) && e.instance.props.guild.getIconURL("gif"));
 		}
 
 		onUserContextMenu (e) {
-			if (e.instance.props.user && settings.addUserAvatarEntry) this.injectItem(e, BDFDB.LibraryModules.IconUtils.getUserAvatarURL(e.instance.props.user));
+			if (e.instance.props.user && settings.addUserAvatarEntry) this.injectItem(e, e.instance.props.user.getAvatarURL("png"), BDFDB.LibraryModules.IconUtils.hasAnimatedAvatar(e.instance.props.user) && e.instance.props.user.getAvatarURL("gif"))
 		}
 
 		onNativeContextMenu (e) {
@@ -354,112 +355,125 @@ var ImageUtilities = (_ => {
 			}
 		}
 
-		injectItem (e, url) {
-			if (this.isValidImg(url)) {
-				url = url.replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096").replace(/[\?\&](height|width)=\d+/g, "");
+		injectItem (e, ...urls) {
+			let types = [];
+			let validUrls = urls.filter(n => this.isValidImg(n)).map(n => {
+				let url = n.replace(/^url\(|\)$|"|'/g, "").replace(/\?size\=\d+$/, "?size=4096").replace(/[\?\&](height|width)=\d+/g, "");
 				if (url.indexOf("https://images-ext-1.discordapp.net/external/") > -1) {
-					if (url.split("/https/").length != 1) url = "https://" + url.split("/https/")[url.split("/https/").length-1];
-					else if (url.split("/http/").length != 1) url = "http://" + url.split("/http/")[url.split("/http/").length-1];
+					if (url.split("/https/").length > 1) url = "https://" + url.split("/https/").pop();
+					else if (url.split("/http/").length > 1) url = "http://" + url.split("/http/").pop();
 				}
-				let enginesWithoutAll = BDFDB.ObjectUtils.filter(enabledEngines, n => n != "_all", true);
-				let engineKeys = Object.keys(enginesWithoutAll);
-				let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
-				children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
-					children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-						label: "Image Utilities",
-						id: BDFDB.ContextMenuUtils.createItemId(this.name, "main-item"),
-						children: [
-							BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-								label: this.labels.context_viewimage_text,
-								id: BDFDB.ContextMenuUtils.createItemId(this.name, "view-image"),
-								action: _ => {
-									let img = new Image();
-									img.onload = function() {
-										BDFDB.LibraryModules.ModalUtils.openModal(modalData => {
-											return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalRoot, Object.assign({
-												className: BDFDB.disCN.imagemodal
-											}, modalData, {
-												size: BDFDB.LibraryComponents.ModalComponents.ModalSize.DYNAMIC,
-												"aria-label": BDFDB.LanguageUtils.LanguageStrings.IMAGE,
-												children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModal, {
-													src: url,
-													original: url,
-													width: this.width,
-													height: this.height,
-													className: BDFDB.disCN.imagemodalimage,
-													shouldAnimate: true,
-													renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props)
-												})
-											}), true);
-										});
-									};
-									img.src = url;
-								}
-							}),
-							BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-								label: this.labels.context_saveimage_text,
-								id: BDFDB.ContextMenuUtils.createItemId(this.name, "download-image"),
-								action: _ => {
-									BDFDB.LibraryRequires.request(url, {encoding: null}, (error, response, body) => {
-										let path = this.getDownloadLocation();
-										if (error) BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_failed.replace("{{path}}", path), {type:"error"});
-										else {
-											BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, url.split("/").pop().split(".").slice(0, -1).join("."), response.headers["content-type"].split("/").pop().split("+")[0], 0), body, error => {
-												if (error) BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_failed.replace("{{path}}", path), {type:"error"});
-												else BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_success.replace("{{path}}", path), {type:"success"});
-											});
-										}
-									});
-								}
-							}),
-							!this.isCopyable(url) ? null : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-								label: this.labels.context_copyimage_text,
-								id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-image"),
-								action: _ => {
-									this.copyImage(url);
-								}
-							}),
-							BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-								label: this.labels.context_copyimagelink_text,
-								id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-src"),
-								action: _ => {
-									BDFDB.LibraryRequires.electron.clipboard.write({text: url});
-									BDFDB.NotificationUtils.toast(this.labels.toast_copyimagelink_success, {type: "success"});
-								}
-							}),
-							!this.isSearchable(url) ? null : engineKeys.length == 1 ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-								label: this.labels.context_reverseimagesearch_text.replace("...", this.defaults.engines[engineKeys[0]].name),
-								id: BDFDB.ContextMenuUtils.createItemId(this.name, "single-search"),
-								persisting: true,
-								action: event => {
-									if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
-									BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(imgUrlReplaceString, encodeURIComponent(url)), settings.useChromium, event.shiftKey);
-								}
-							}) : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-								label: this.labels.context_reverseimagesearch_text,
-								id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-search"),
-								children: !engineKeys.length ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-									label: this.labels.submenu_disabled_text,
-									id: BDFDB.ContextMenuUtils.createItemId(this.name, "disabled"),
-									disabled: true
-								}) : Object.keys(enabledEngines).map(key => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
-									label: this.defaults.engines[key].name,
-									id: BDFDB.ContextMenuUtils.createItemId(this.name, "search", key),
-									color: key == "_all" ? BDFDB.LibraryComponents.MenuItems.Colors.DANGER : BDFDB.LibraryComponents.MenuItems.Colors.DEFAULT,
-									persisting: true,
-									action: event => {
-										if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
-										if (key == "_all") {
-											for (let key2 in enginesWithoutAll) BDFDB.DiscordUtils.openLink(this.defaults.engines[key2].url.replace(imgUrlReplaceString, encodeURIComponent(url)), settings.useChromium, event.shiftKey);
-										}
-										else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(imgUrlReplaceString, encodeURIComponent(url)), settings.useChromium, event.shiftKey);
-									}
-								}))
-							})
-						].filter(n => n)
-					})
-				}));
-			}
+				const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").toLowerCase();
+				const type = file && file.split(".").pop();
+				return url && type && !types.includes(type) && types.push(type) && {url, type};
+			}).filter(n => n);
+			if (!validUrls.length) return;
+			let [children, index] = BDFDB.ContextMenuUtils.findItem(e.returnvalue, {id: "devmode-copy-id", group: true});
+			children.splice(index > -1 ? index : children.length, 0, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
+				children: BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					label: "Image Utilities",
+					id: BDFDB.ContextMenuUtils.createItemId(this.name, "main-subitem"),
+					children: validUrls.length == 1 ? this.createUrlMenus(validUrls[0].url) : validUrls.map((urlData, i) => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						label: urlData.type.toUpperCase(),
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "subitem", i),
+						children: this.createUrlMenus(urlData.url)
+					}))
+				})
+			}));
+		}
+		
+		createUrlMenus (url) {
+			let enginesWithoutAll = BDFDB.ObjectUtils.filter(enabledEngines, n => n != "_all", true);
+			let engineKeys = Object.keys(enginesWithoutAll);
+			return [
+				BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					label: this.labels.context_viewimage_text,
+					id: BDFDB.ContextMenuUtils.createItemId(this.name, "view-image"),
+					action: _ => {
+						let img = new Image();
+						img.onload = function() {
+							BDFDB.LibraryModules.ModalUtils.openModal(modalData => {
+								return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ModalComponents.ModalRoot, Object.assign({
+									className: BDFDB.disCN.imagemodal
+								}, modalData, {
+									size: BDFDB.LibraryComponents.ModalComponents.ModalSize.DYNAMIC,
+									"aria-label": BDFDB.LanguageUtils.LanguageStrings.IMAGE,
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.ImageModal, {
+										src: url,
+										original: url,
+										width: this.width,
+										height: this.height,
+										className: BDFDB.disCN.imagemodalimage,
+										shouldAnimate: true,
+										renderLinkComponent: props => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, props)
+									})
+								}), true);
+							});
+						};
+						img.src = url;
+					}
+				}),
+				BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					label: this.labels.context_saveimage_text,
+					id: BDFDB.ContextMenuUtils.createItemId(this.name, "download-image"),
+					action: _ => {
+						BDFDB.LibraryRequires.request(url, {encoding: null}, (error, response, body) => {
+							let path = this.getDownloadLocation();
+							if (error) BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_failed.replace("{{path}}", path), {type:"error"});
+							else {
+								BDFDB.LibraryRequires.fs.writeFile(this.getFileName(path, url.split("/").pop().split(".").slice(0, -1).join("."), response.headers["content-type"].split("/").pop().split("+")[0], 0), body, error => {
+									if (error) BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_failed.replace("{{path}}", path), {type:"error"});
+									else BDFDB.NotificationUtils.toast(this.labels.toast_saveimage_success.replace("{{path}}", path), {type:"success"});
+								});
+							}
+						});
+					}
+				}),
+				!this.isCopyable(url) ? null : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					label: this.labels.context_copyimage_text,
+					id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-image"),
+					action: _ => {
+						this.copyImage(url);
+					}
+				}),
+				BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					label: this.labels.context_copyimagelink_text,
+					id: BDFDB.ContextMenuUtils.createItemId(this.name, "copy-src"),
+					action: _ => {
+						BDFDB.LibraryRequires.electron.clipboard.write({text: url});
+						BDFDB.NotificationUtils.toast(this.labels.toast_copyimagelink_success, {type: "success"});
+					}
+				}),
+				!this.isSearchable(url) ? null : engineKeys.length == 1 ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					label: this.labels.context_reverseimagesearch_text.replace("...", this.defaults.engines[engineKeys[0]].name),
+					id: BDFDB.ContextMenuUtils.createItemId(this.name, "single-search"),
+					persisting: true,
+					action: event => {
+						if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
+						BDFDB.DiscordUtils.openLink(this.defaults.engines[engineKeys[0]].url.replace(imgUrlReplaceString, encodeURIComponent(url)), settings.useChromium, event.shiftKey);
+					}
+				}) : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+					label: this.labels.context_reverseimagesearch_text,
+					id: BDFDB.ContextMenuUtils.createItemId(this.name, "submenu-search"),
+					children: !engineKeys.length ? BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						label: this.labels.submenu_disabled_text,
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "disabled"),
+						disabled: true
+					}) : Object.keys(enabledEngines).map(key => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
+						label: this.defaults.engines[key].name,
+						id: BDFDB.ContextMenuUtils.createItemId(this.name, "search", key),
+						color: key == "_all" ? BDFDB.LibraryComponents.MenuItems.Colors.DANGER : BDFDB.LibraryComponents.MenuItems.Colors.DEFAULT,
+						persisting: true,
+						action: event => {
+							if (!event.shiftKey) BDFDB.ContextMenuUtils.close(e.instance);
+							if (key == "_all") {
+								for (let key2 in enginesWithoutAll) BDFDB.DiscordUtils.openLink(this.defaults.engines[key2].url.replace(imgUrlReplaceString, encodeURIComponent(url)), settings.useChromium, event.shiftKey);
+							}
+							else BDFDB.DiscordUtils.openLink(this.defaults.engines[key].url.replace(imgUrlReplaceString, encodeURIComponent(url)), settings.useChromium, event.shiftKey);
+						}
+					}))
+				})
+			].filter(n => n);
 		}
 
 		processImageModal (e) {
