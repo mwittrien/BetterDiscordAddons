@@ -636,7 +636,7 @@ body:before {
 }
 
 .empty-388osJ {												/* loadingplaceholders										*/
-	fill: rgb(var(--vaccentcolor));
+	fill: rgba(var(--vtransparencycolor), 0.4);
 }
 
 /* ----		5.4.	ACCOUNT/VOICE/GOLIVE			---- */
@@ -1635,7 +1635,7 @@ body:before {
 .category-2haXBH,											/* loadingplaceholders										*/
 .channelIcon-1TvDoP,
 .channelName-2wrHHc {
-	background-color: rgb(var(--vaccentcolor));
+	background: rgba(var(--vtransparencycolor), 0.4);
 }
 .splashImage-13vBzp {										/* screen				image								*/
 	opacity: 0.7;
