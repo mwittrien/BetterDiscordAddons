@@ -9,7 +9,7 @@ var PinDMs = (_ => {
 	return class PinDMs {
 		getName () {return "PinDMs";}
 
-		getVersion () {return "1.7.4";}
+		getVersion () {return "1.7.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -17,7 +17,7 @@ var PinDMs = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Sort by recent","Works again"]]
+				"fixed":[["All pinned","No longer acts weird if all DMs are pinned in a category"]]
 			};
 			
 			this.patchedModules = {
@@ -355,6 +355,12 @@ var PinDMs = (_ => {
 							if (category && (category.collapsed || category.id == draggedCategory)) return 0;
 						}
 						return rowHeightFunc(...args);
+					};
+					
+					let renderRow = e.returnvalue.props.renderRow;
+					e.returnvalue.props.renderRow = (...args) => {
+						let row = renderRow(...args);
+						return row && row.key == "no-private-channels" ? null : row;
 					};
 					
 					let renderSection = e.returnvalue.props.renderSection;
