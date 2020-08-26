@@ -4260,12 +4260,7 @@
 		tabBarContainerBottom: "bottom-b8sdfs",
 		table: "table-moqjM0",
 		tableBodyCell: "bodyCell-dQam9V",
-		tableHeader: "header-g67q9_",
 		tableHeaderCell: "headerCell-T6Fo3K",
-		tableHeaderCellSorted: "headerCellSorted-FMjMWK",
-		tableHeaderSortIcon: "sortIcon-WZjMja",
-		tableRow: "row-_9Ehcp",
-		tableStickyHeader: "stickyHeader-JabwjW header-g67q9_",
 		textScroller: "textScroller-dc9_kz",
 		themedPopout: "themedPopout-1TrfdI",
 		tooltipCustom: "tooltipCustom-hH39_Z",
@@ -6058,12 +6053,15 @@
 		tabbartop: ["Item", "top"],
 		table: ["BDFDB", "table"],
 		tablebodycell: ["BDFDB", "tableBodyCell"],
-		tableheader: ["BDFDB", "tableHeader"],
-		tableheadercell: ["BDFDB", "tableHeaderCellSorted"],
-		tableheadercellsorted: ["BDFDB", "tableHeaderCell"],
-		tableheadersorticon: ["BDFDB", "tableHeaderSortIcon"],
-		tablerow: ["BDFDB", "tableRow"],
-		tablestickyheader: ["BDFDB", "tableStickyHeader"],
+		tableheadercell: ["BDFDB", "tableHeaderCell"],
+		tableheadercellclickable: ["Table", "clickable"],
+		tableheadercellcontent: ["Table", "headerCellContent"],
+		tableheadercellsorted: ["Table", "headerCellSorted"],
+		tableheadercellwrapper: ["Table", "headerCell"],
+		tableheadersorticon: ["Table", "sortIcon"],
+		tablerow: ["Table", "row"],
+		tablespacerheader: ["Table", "spacerHeader"],
+		tablestickyheader: ["Table", "stickyHeader"],
 		textarea: ["ChannelTextArea", "textArea"],
 		textareaattachbutton: ["ChannelTextAreaAttachButton", "attachButton"],
 		textareaattachbuttoninner: ["ChannelTextAreaAttachButton", "attachButtonInner"],
@@ -9222,15 +9220,29 @@
 		}
 	};
 	InternalComponents.LibraryComponents.SvgIcon.Names = {
+		ARROW_DOWN: {
+			defaultProps: {
+				width: 18,
+				height: 18
+			},
+			icon: `<svg name="ArrowDown" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 18 18"><path fill="%%color" d="M4 7l5 5 5-5H4z"></path></svg>`
+		},
+		ARROW_UP: {
+			defaultProps: {
+				width: 18,
+				height: 18
+			},
+			icon: `<svg name="ArrowUp" aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 18 18"><path fill="%%color" d="M4 11l5-5 5 5H4z"></path></svg>`
+		},
 		CHANGELOG: {
-			icon: `<svg name="ChangeLog" viewBox="0 0 24 24" fill="%%color" width="%%width" height="%%height"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"></path></svg>`
+			icon: `<svg name="ChangeLog" fill="%%color" width="%%width" height="%%height" viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"></path></svg>`
 		},
 		CHECKBOX: {
 			defaultProps: {
 				background: "",
 				foreground: ""
 			},
-			icon: `<svg aria-hidden="false" width="24" height="24" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.37499 3H18.625C19.9197 3 21.0056 4.08803 21 5.375V18.625C21 19.936 19.9359 21 18.625 21H5.37499C4.06518 21 3 19.936 3 18.625V5.375C3 4.06519 4.06518 3 5.37499 3Z" class="%%background" fill="%%color"></path><path d="M9.58473 14.8636L6.04944 11.4051L4.50003 12.9978L9.58473 18L19.5 8.26174L17.9656 6.64795L9.58473 14.8636Z" class="%%foreground" fill="%%color"></path></svg>`
+			icon: `<svg aria-hidden="false" width="%%width" height="%%height" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.37499 3H18.625C19.9197 3 21.0056 4.08803 21 5.375V18.625C21 19.936 19.9359 21 18.625 21H5.37499C4.06518 21 3 19.936 3 18.625V5.375C3 4.06519 4.06518 3 5.37499 3Z" class="%%background" fill="%%color"></path><path d="M9.58473 14.8636L6.04944 11.4051L4.50003 12.9978L9.58473 18L19.5 8.26174L17.9656 6.64795L9.58473 14.8636Z" class="%%foreground" fill="%%color"></path></svg>`
 		},
 		CHECKBOX_EMPTY: {
 			defaultProps: {
@@ -9373,15 +9385,13 @@
 			return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.TabBar, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				selectedItem: selectedItem,
 				onItemSelect: this.handleItemSelect.bind(this),
-				children: items.map(data => {
-					return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TabBar.Item, {
-						className: BDFDB.DOMUtils.formatClassName(this.props.itemClassName, selectedItem == data.value && this.props.itemSelectedClassName),
-						itemType: this.props.type,
-						id: data.value,
-						children: renderItem(data),
-						"aria-label": data.label || data.value
-					})
-				})
+				children: items.map(data => BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TabBar.Item, {
+					className: BDFDB.DOMUtils.formatClassName(this.props.itemClassName, selectedItem == data.value && this.props.itemSelectedClassName),
+					itemType: this.props.type,
+					id: data.value,
+					children: renderItem(data),
+					"aria-label": data.label || data.value
+				}))
 			}), "itemClassName", "items", "renderItem"));
 		}
 	};
@@ -9390,11 +9400,9 @@
 		render() {
 			return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.Table, Object.assign({}, this.props, {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.table, this.props.className),
-				headerClassName: BDFDB.DOMUtils.formatClassName(this.props.stickyHeader ? BDFDB.disCN.tablestickyheader : BDFDB.disCN.tableheader, this.props.headerClassName),
 				headerCellClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tableheadercell, this.props.headerCellClassName),
 				sortedHeaderCellClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tableheadercellsorted, this.props.sortedHeaderCellClassName),
 				bodyCellClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tablebodycell, this.props.bodyCellClassName),
-				rowClassName: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tablerow, this.props.rowClassName),
 				onSort: (sortKey, sortDirection) => {
 					this.props.sortDirection = this.props.sortKey != sortKey && sortDirection == InternalComponents.LibraryComponents.Table.SortDirection.ASCENDING && this.props.columns.filter(n => n.key == sortKey)[0].reverse ? InternalComponents.LibraryComponents.Table.SortDirection.DESCENDING : sortDirection;
 					this.props.sortKey = sortKey;
@@ -9998,27 +10006,29 @@
 		}
 		
 		${BDFDB.dotCN.table} {
+			position: relative;
 			width: 100%;
 		}
-		${BDFDB.dotCN.tableheader} {
+		${BDFDB.dotCNS.table + BDFDB.dotCN.tablespacerheader},
+		${BDFDB.dotCNS.table + BDFDB.dotCN.tablestickyheader} {
 			padding: 0px 12px 8px 0;
 			margin-bottom: 5px;
-			font-size: 12px;
-			font-weight: 600;
 			box-sizing: border-box;
 			background-color: var(--background-primary);
 			border-bottom: 1px solid var(--background-modifier-accent);
 		}
-		${BDFDB.dotCN.tablestickyheader}:first-child {
+		${BDFDB.dotCNS.table + BDFDB.dotCN.tablestickyheader}:first-child {
 			position: absolute;
 			width: 100%;
 		}
-		${BDFDB.dotCNS.modalsub + BDFDB.dotCN.tablestickyheader}:first-child {
+		${BDFDB.dotCNS.modalsub + BDFDB.dotCNS.table + BDFDB.dotCN.tablestickyheader}:first-child {
 			padding-left: 20px;
 		}
 		${BDFDB.dotCN.tableheadercell} {
-			text-transform: uppercase;
 			color: var(--interactive-normal);
+			font-size: 12px;
+			font-weight: 600;
+			text-transform: uppercase;
 		}
 		${BDFDB.dotCN.tableheadercell},
 		${BDFDB.dotCN.tablebodycell} {
@@ -10031,16 +10041,7 @@
 			border-left: none;
 			padding-left: 0;
 		}
-		${BDFDB.dotCN.tableheadercellsorted},
-		${BDFDB.dotCN.tableheadercellsorted}:hover {
-			color: var(--interactive-active);
-		}
-		${BDFDB.dotCN.tableheadersorticon} {
-			width: 18px;
-			height: 18px;
-			margin-left: 4px;
-		}
-		${BDFDB.dotCN.tablerow} {
+		${BDFDB.dotCNS.table + BDFDB.dotCN.tablerow} {
 			position: relative;
 			display: flex;
 			margin-bottom: 5px;
