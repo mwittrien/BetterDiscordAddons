@@ -50,7 +50,7 @@ var ImageUtilities = (_ => {
 	return class ImageUtilities {
 		getName () {return "ImageUtilities";}
 
-		getVersion () {return "4.0.9";}
+		getVersion () {return "4.1.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -326,7 +326,7 @@ var ImageUtilities = (_ => {
 		}
 
 		onGuildContextMenu (e) {
-			if (e.instance.props.guild && !settings.addGuildIconEntry) this.injectItem(e, e.instance.props.guild.getIconURL("png"), BDFDB.LibraryModules.IconUtils.hasAnimatedGuildIcon(e.instance.props.guild) && e.instance.props.guild.getIconURL("gif"));
+			if (e.instance.props.guild && settings.addGuildIconEntry) this.injectItem(e, e.instance.props.guild.getIconURL("png"), BDFDB.LibraryModules.IconUtils.hasAnimatedGuildIcon(e.instance.props.guild) && e.instance.props.guild.getIconURL("gif"));
 		}
 
 		onUserContextMenu (e) {
