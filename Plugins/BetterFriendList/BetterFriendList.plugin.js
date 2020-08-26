@@ -38,7 +38,7 @@ var BetterFriendList = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["New Library Structure & React","Restructured my Library and switched to React rendering instead of DOM manipulation"]]
+				"improved":[["New Features & Name","Name was changed from BetterFriendCount to BetterFriendList and new features were added"]]
 			};
 
 			this.patchedModules = {
