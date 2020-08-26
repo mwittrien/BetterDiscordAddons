@@ -1271,6 +1271,7 @@
 		"MessageTimestamp",
 		"NameTag",
 		"NowPlayingItem",
+		"PeopleListSectionedLazy",
 		"PictureInPictureVideo",
 		"PrivateChannelEmptyMessage",
 		"RecentsChannelHeader",
