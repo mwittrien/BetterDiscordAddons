@@ -10769,8 +10769,9 @@
 			}
 		}
 	};
-	InternalBDFDB._processAvatarMount = function (user, avatar, position = "top") {
+	InternalBDFDB._processAvatarMount = function (user, avatar, wrapper) {
 		if (Node.prototype.isPrototypeOf(avatar) && BDFDB.ObjectUtils.is(user)) {
+			if (wrapper) wrapper.setAttribute("user_by_BDFDB", user.id);
 			avatar.setAttribute("user_by_BDFDB", user.id);
 			let role = "", addBadge = settings.showSupportBadges;;
 			if (BDFDB_Patrons_T2.includes(user.id) && addBadge) {
@@ -10792,7 +10793,7 @@
 					if (BDFDB_Patrons_T3_hasBadge.includes(user.id)) avatar.setAttribute("custombadge_id", user.id);
 					let badge = document.createElement("div");
 					badge.className = BDFDB.disCN.bdfdbbadge;
-					badge.addEventListener("mouseenter", _ => {BDFDB.TooltipUtils.create(badge, role, {position});});
+					badge.addEventListener("mouseenter", _ => {BDFDB.TooltipUtils.create(badge, role, {position: "top"});});
 					avatar.style.setProperty("position", "relative");
 					avatar.style.setProperty("overflow", "visible");
 					avatar.style.setProperty("border-radius", 0);
@@ -10821,10 +10822,10 @@
 		InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper));
 	};
 	InternalBDFDB.processUserPopout = function (e) {
-		InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.userpopoutavatarwrapper));
+		InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.userpopoutavatarwrapper), e.node);
 	};
 	InternalBDFDB.processUserProfile = function (e) {
-		InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper));
+		InternalBDFDB._processAvatarMount(e.instance.props.user, e.node.querySelector(BDFDB.dotCN.avatarwrapper), e.node);
 	};
 	InternalBDFDB.processDiscordTag = function (e) {
 		if (e.instance && e.instance.props && e.returnvalue && e.instance.props.user) e.returnvalue.props.user = e.instance.props.user;
