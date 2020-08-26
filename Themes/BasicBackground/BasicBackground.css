@@ -6979,13 +6979,6 @@ body #ace_settingsmenu input[type="checkbox"]:checked:after {
 
 /* ----		17.2.	SERVERFOLDERS					---- */
 
-body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP,
-body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
-	width: 144px;
-}
-body.folderContentIsOpen-zz6FgW .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
-	padding-right: 82px;
-}
 .base-PmTxvP[style*="background-color: rgb(114, 137, 218)"] {
 	text-shadow: 1px 1px var(--vtextshadow);
 }
