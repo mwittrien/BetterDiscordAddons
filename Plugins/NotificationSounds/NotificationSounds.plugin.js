@@ -69,7 +69,7 @@ var NotificationSounds = (_ => {
 	return class NotificationSounds {
 		getName () {return "NotificationSounds";}
 
-		getVersion () {return "3.4.7";}
+		getVersion () {return "3.4.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -77,7 +77,7 @@ var NotificationSounds = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Incoming","Works again"]]
+				"improved":[["Remove Songs","You can now remove songs that you added to the default categories"]]
 			};
 
 			this.patchedModules = {
@@ -292,9 +292,9 @@ var NotificationSounds = (_ => {
 				children: Object.keys(BDFDB.ObjectUtils.filter(types, typedata => !typedata.implemented)).map(type => createSoundCard(type)).flat(10).filter(n => n)
 			}));
 			
-			let removeableAudios = [{value:removeAllKey, label:BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL}].concat(Object.keys(audios).filter(name => !defaultAudios[name]).map(name => ({value:name, label:name})));
+			let removeableCategories = [{value:removeAllKey, label:BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL}].concat(Object.keys(audios).filter(category => !(defaultAudios[category] && !Object.keys(audios[category] || {}).filter(song => defaultAudios[category][song] === undefined).length)).map(name => ({value:name, label:name})));
 			let removeableSongs = {};
-			for (let audio of removeableAudios) removeableSongs[audio.value] = [{value:removeAllKey, label:BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL}].concat(Object.keys(audios[audio.value] || {}).map(name => ({value:name, label:name})));
+			for (let category of removeableCategories) removeableSongs[category.value] = [{value:removeAllKey, label:BDFDB.LanguageUtils.LanguageStrings.FORM_LABEL_ALL}].concat(Object.keys(audios[category.value] || {}).filter(song => !(defaultAudios[category.value] && defaultAudios[category.value][song] !== undefined)).map(name => ({value:name, label:name})));
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Remove Songs",
 				collapseStates: collapseStates,
@@ -311,12 +311,13 @@ var NotificationSounds = (_ => {
 								children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Select, {
 									key: "REMOVE_CATEGORY",
 									value: removeAllKey,
-									options: removeableAudios,
+									options: removeableCategories,
 									searchable: true,
 									onChange: (category, instance) => {
 										let songSelectIns = BDFDB.ReactUtils.findOwner(BDFDB.ReactUtils.findOwner(instance, {name:["BDFDB_Modal", "BDFDB_SettingsPanel"], up:true}), {key:"REMOVE_SONG"});
 										if (songSelectIns && removeableSongs[category.value]) {
 											songSelectIns.props.options = removeableSongs[category.value];
+											songSelectIns.props.value = removeAllKey;
 											BDFDB.ReactUtils.forceUpdate(songSelectIns);
 										}
 									}
@@ -352,8 +353,8 @@ var NotificationSounds = (_ => {
 										let songAmount = 0;
 										let catAll = categorySelectIns.props.value == removeAllKey;
 										let songAll = songSelectIns.props.value == removeAllKey;
-										if (catAll) songAmount = BDFDB.ArrayUtils.sum(Object.keys(audios).filter(name => !defaultAudios[name]).map(category => Object.keys(audios[category] || {}).length));
-										else if (songAll) songAmount = Object.keys(audios[categorySelectIns.props.value] || {}).length;
+										if (catAll) songAmount = BDFDB.ArrayUtils.sum(Object.keys(audios).map(category => Object.keys(audios[category] || {}).filter(song => !(defaultAudios[category] && defaultAudios[category][song] !== undefined)).length));
+										else if (songAll) songAmount = Object.keys(audios[categorySelectIns.props.value] || {}).filter(song => !(defaultAudios[categorySelectIns.props.value] && defaultAudios[categorySelectIns.props.value][song] !== undefined)).length;
 										else if (audios[categorySelectIns.props.value][songSelectIns.props.value]) songAmount = 1;
 										
 										if (songAmount) BDFDB.ModalUtils.confirm(this, `Are you sure you want to delete ${songAmount} added song${songAmount == 1 ? "" : "s"}?`, _ => {
