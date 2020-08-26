@@ -185,19 +185,21 @@ var BetterFriendList = (_ => {
 								this.rerenderList();
 							}
 						})),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
-							query: searchQuery,
-							onChange: value => {
-								BDFDB.TimeUtils.clear(searchTimeout);
-								searchTimeout = BDFDB.TimeUtils.timeout(_ => {
-									searchQuery = value;
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
+								query: searchQuery,
+								onChange: value => {
+									BDFDB.TimeUtils.clear(searchTimeout);
+									searchTimeout = BDFDB.TimeUtils.timeout(_ => {
+										searchQuery = value;
+										this.rerenderList();
+									}, 1000);
+								},
+								onClear: _ => {
+									searchQuery = "";
 									this.rerenderList();
-								}, 1000);
-							},
-							onClear: _ => {
-								searchQuery = "";
-								this.rerenderList();
-							}
+								}
+							})
 						})
 					].flat(10).filter(n => n)
 				});
