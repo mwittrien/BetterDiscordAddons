@@ -38,7 +38,7 @@ var BetterFriendList = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["New Features & Name","Name was changed from BetterFriendCount to BetterFriendList and new features were added"]]
+				"progress":[["New Features & Name","Name was changed from BetterFriendCount to BetterFriendList and new features were added"]]
 			};
 
 			this.patchedModules = {
