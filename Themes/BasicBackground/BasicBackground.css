@@ -253,7 +253,7 @@ body:before {
 /* ~~~~		3.		TITLEBAR						~~~~ */
 
 .titleBar-AC4pGV {
-	z-index: 1;
+	z-index: 5001;
 }
 .titleBar-AC4pGV:after {
 	content: "";
@@ -269,7 +269,10 @@ body:before {
 	height: 22px;
 }
 .titleBar-AC4pGV.typeMacOS-3EmCyP:after {
-	height: 32px;
+	height: 28px;
+	width: calc(100% - 4px);
+	margin: 2px;
+	border-radius: 5px;
 }
 .titleBar-AC4pGV.typeMacOS-3EmCyP,
 .titleBar-AC4pGV.typeMacOS-3EmCyP .macButtons-2MuSAC {
@@ -278,6 +281,13 @@ body:before {
 .titleBar-AC4pGV.typeMacOS-3EmCyP.typeMacOSWithFrame-3R_i5S .macButtons-2MuSAC {
 	margin-top: 0;
 	margin-right: 0;
+}
+.platform-osx .wrapper-1Rf91z {
+	margin-top: 0;
+	padding-top: 32px;
+}
+.platform-osx .standardSidebarView-3F1I7i:before {
+	left: 72px;
 }
 .winButton-iRh8-Z {
 	color: rgb(var(--fontwhite3));
@@ -2723,6 +2733,9 @@ body:before {
 	-webkit-mask: url(https://discordapp.com/assets/da8463a04b4a289801d2516f50eb4c19.svg);
 }
 
+#app-mount .card-o7rAq- {									/* integrationsettings	card								*/
+	border-color: rgba(var(--vtransparencycolor), 0.1)
+}
 #app-mount .card-3IImnr {									/* integrationsettings	webhook card						*/
 	border-color: rgba(var(--vtransparencycolor), 0.1)
 }

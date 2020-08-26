@@ -38,6 +38,7 @@ var OldTitleBar = (_ => {
 				
 				.platform-osx ${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.guildswrapper} {
 					margin-top: 0;
+					padding-top: 0;
 				}
 
 				.platform-osx ${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.guildsscroller} {
