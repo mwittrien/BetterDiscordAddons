@@ -44,6 +44,10 @@ var OldTitleBar = (_ => {
 					padding-top: 4px;
 				}
 				
+				.platform-osx ${BDFDB.dotCNS._oldtitlebarenabled + BDFDB.dotCN.settingswindowstandardsidebarview}:before {
+					display: none;
+				}
+				
 				${BDFDB.dotCN._oldtitlebartoolbar} {
 					flex: 1 1 auto;
 					justify-content: flex-end;
