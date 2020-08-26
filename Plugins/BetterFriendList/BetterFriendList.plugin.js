@@ -16,7 +16,7 @@ var BetterFriendList = (_ => {
 	return class BetterFriendList {
 		getName () {return "BetterFriendList";}
 
-		getVersion () {return "1.2.6";}
+		getVersion () {return "1.2.7";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -61,6 +61,23 @@ var BetterFriendList = (_ => {
 				}
 			};
 		}
+
+		getSettingsPanel () {
+			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+			let settingsPanel, settingsItems = [];
+			
+			for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+				className: BDFDB.disCN.marginbottom8,
+				type: "Switch",
+				plugin: this,
+				keys: ["settings", key],
+				label: this.defaults.settings[key].description,
+				value: settings[key]
+			}));
+			
+			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
+		}
+		
 		// Legacy
 		load () {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) BDFDB.PluginUtils.load(this);
