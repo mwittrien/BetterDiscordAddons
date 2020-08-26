@@ -7,7 +7,7 @@
 [patreon-link]: https://patreon.com/MircoWittrien
 
  - [Badges Everywhere](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BadgesEverywhere) - Displays Badges (Nitro, Hypesquad, etc...) in the chat/memberlist/userpopout. Thanks for Zerebos' help.
- - [Better Friend Count](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterFriendCount) - Shows the amount of total and online friends and blocked users in the friends tab.
+ - [Better Friend List](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterFriendList) - Adds extra controls to the friends page, like sort by name/status, search and all/request/blocked amount.
  - [Better NSFW Tag](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterNsfwTag) - Adds a more noticeable tag to NSFW channels.
  - [Better Search Page](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/BetterSearchPage) - Adds some extra controls to the search results page.
  - [Char Counter](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/CharCounter) - Adds a character counter to the chat.
