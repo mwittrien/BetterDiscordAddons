@@ -4323,6 +4323,10 @@
 		size22: "size22-AJj9xV",
 		size24: "size24-NlR6be"
 	};
+	DiscordClassModules.BetterFriendList = {
+		nameCell: "nameCell-7F4sRs",
+		title: "title-3aDrFs"
+	},
 	DiscordClassModules.BetterNsfwTag = {
 		nsfwTag: "nsfwTag-666omg"
 	};
@@ -4719,7 +4723,6 @@
 		_bdguildvideo: ["BDrepo", "bdGuildVideo"],
 		_bdpillselected: ["BDrepo", "bdPillSelected"],
 		_bdpillunread: ["BDrepo", "bdPillUnread"],
-		_betternsfwtagtag: ["BetterNsfwTag", "nsfwTag"],
 		_badgeseverywherebadge: ["BadgesEverywhere", "badge"],
 		_badgeseverywherebadges: ["BadgesEverywhere", "badges"],
 		_badgeseverywherebadgeschat: ["BadgesEverywhere", "badgesChat"],
@@ -4734,6 +4737,9 @@
 		_badgeseverywheresize21: ["BadgesEverywhere", "size21"],
 		_badgeseverywheresize22: ["BadgesEverywhere", "size22"],
 		_badgeseverywheresize24: ["BadgesEverywhere", "size24"],
+		_betterfriendlistnamecell: ["BetterFriendList", "nameCell"],
+		_betterfriendlisttitle: ["BetterFriendList", "title"],
+		_betternsfwtagtag: ["BetterNsfwTag", "nsfwTag"],
 		_chatfilterblocked: ["ChatFilter", "blocked"],
 		_chatfilterblockedstamp: ["ChatFilter", "blockedStamp"],
 		_chatfiltercensored: ["ChatFilter", "censored"],
