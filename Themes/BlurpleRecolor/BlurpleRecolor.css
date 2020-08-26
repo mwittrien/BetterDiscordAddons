@@ -1379,6 +1379,9 @@
 
 /* ----		10.12.	CHANGELOGMODAL					---- */
 
+.content-s2SEQO a {											/* modal				link								*/
+	color: var(--text-link);
+}
 .improved-1NJK-y {											/* modal				improved category					*/
 	color: rgb(var(--vaccentcolor));
 }
