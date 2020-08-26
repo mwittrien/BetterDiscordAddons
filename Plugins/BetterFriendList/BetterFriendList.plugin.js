@@ -2,6 +2,7 @@
 
 var BetterFriendList = (_ => {
 	var rerenderTimeout, sortKey, sortReversed, searchQuery, searchTimeout;
+	var settings = {};
 	const statusSortOrder = {
 		online: 0,
 		streaming: 1,
@@ -15,7 +16,7 @@ var BetterFriendList = (_ => {
 	return class BetterFriendList {
 		getName () {return "BetterFriendList";}
 
-		getVersion () {return "1.2.5";}
+		getVersion () {return "1.2.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -34,11 +35,20 @@ var BetterFriendList = (_ => {
 					width: 150px;
 				}
 			`;
+
+			this.defaults = {
+				settings: {
+					addTotalAmount:		{value:true, 	description:"Add total amount for all/requested/blocked"},
+					addSortOptions:		{value:true, 	description:"Add sort options"},
+					addSearchbar:		{value:true, 	description:"Add searchbar"}
+				}
+			};
 		}
 
 		constructor () {
 			this.changelog = {
-				"progress":[["New Features & Name","Name was changed from BetterFriendCount to BetterFriendList and new features were added"]]
+				"progress":[["New Features & Name","Name was changed from BetterFriendCount to BetterFriendList and new features were added"]],
+				"added":[["Settings","You can now disable the single features of this plugin"]]
 			};
 
 			this.patchedModules = {
@@ -82,9 +92,7 @@ var BetterFriendList = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 
-				BDFDB.ModuleUtils.forceAllUpdates(this, "TabBar");
-				
-				this.rerenderList();
+				this.forceUpdateAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -93,9 +101,7 @@ var BetterFriendList = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
 
-				BDFDB.ModuleUtils.forceAllUpdates(this, "TabBar");
-				
-				this.rerenderList();
+				this.forceUpdateAll();
 				
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -104,8 +110,15 @@ var BetterFriendList = (_ => {
 
 		// Begin of own functions
 
+		onSettingsClosed () {
+			if (this.SettingsUpdated) {
+				delete this.SettingsUpdated;
+				this.forceUpdateAll();
+			}
+		}
+
 		processTabBar (e) {
-			if (e.returnvalue.props.children) for (let checkChild of e.returnvalue.props.children) if (checkChild && checkChild.props.id == "ADD_FRIEND") {
+			if (settings.addTotalAmount && e.returnvalue.props.children) for (let checkChild of e.returnvalue.props.children) if (checkChild && checkChild.props.id == "ADD_FRIEND") {
 				let relationships = BDFDB.LibraryModules.FriendUtils.getRelationships(), relationshipCount = {};
 				for (let type in BDFDB.DiscordConstants.RelationshipTypes) relationshipCount[type] = 0;
 				for (let id in relationships) relationshipCount[relationships[id]]++;
@@ -128,6 +141,7 @@ var BetterFriendList = (_ => {
 					}
 					child.props.children = newChildren;
 				}
+				break;
 			}
 		}
 
@@ -155,7 +169,7 @@ var BetterFriendList = (_ => {
 							className: BDFDB.disCN._betterfriendlisttitle,
 							children: getSectionTitle(...args)
 						}),
-						[
+						settings.addSortOptions && [
 							{key: "usernameLower", label: BDFDB.LanguageUtils.LanguageStrings.FRIENDS_COLUMN_NAME},
 							{key: "statusIndex", label: BDFDB.LanguageUtils.LanguageStrings.FRIENDS_COLUMN_STATUS}
 						].filter(n => n).map(data => BDFDB.ReactUtils.createElement("div", {
@@ -185,7 +199,7 @@ var BetterFriendList = (_ => {
 								this.rerenderList();
 							}
 						})),
-						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
+						settings.addSearchbar && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex.Child, {
 							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SearchBar, {
 								query: searchQuery,
 								onChange: value => {
@@ -222,6 +236,13 @@ var BetterFriendList = (_ => {
 		rerenderList () {
 			let selectedButton = document.querySelector(BDFDB.dotCNS.peoplestabbar + BDFDB.dotCN.settingsitemselected);
 			if (selectedButton) selectedButton.click();
+		}
+		
+		forceUpdateAll() {
+			settings = BDFDB.DataUtils.get(this, "settings");
+
+			BDFDB.ModuleUtils.forceAllUpdates(this, "TabBar");
+			this.rerenderList();
 		}
 	}
 })();
