@@ -4198,6 +4198,14 @@
 		favButtonContainer: "favbutton-8Fzu45",
 		guild: "guild-r3yAE_",
 		guildLowerLeftBadge: "lowerLeftBadge-zr4T_9",
+		guildSummaryClickableIcon: "clickableIcon-7I6aVc",
+		guildSummaryContainer: "container-5VyO4t",
+		guildSummaryEmptyGuild: "emptyGuild-Am9XfC",
+		guildSummaryIcon: "icon-r6DlKo",
+		guildSummaryIconContainer: "iconContainer-IBAtWs",
+		guildSummaryIconContainerMasked: "iconContainerMasked-G-akdf iconContainer-IBAtWs",
+		guildSummaryMoreGuilds: "moreGuilds-c5JVlC",
+		guildSummarySvgIcon: "icon-5TsFrr",
 		guildUpperLeftBadge: "upperLeftBadge-e35IpL",
 		hasBadge: "hasBadge-4rT8_u",
 		hotkeyResetButton: "resetButton-hI9Ax7",
@@ -4655,6 +4663,8 @@
 	DiscordClassModules.NitroStore = BDFDB.ModuleUtils.findByProperties("applicationStore", "marketingHeader");
 	DiscordClassModules.NoteTextarea = BDFDB.ModuleUtils.find(m => typeof m.textarea == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.Notice = BDFDB.ModuleUtils.findByProperties("notice", "noticeFacebook");
+	DiscordClassModules.PeopleItem = BDFDB.ModuleUtils.findByProperties("peopleListItem", "active");
+	DiscordClassModules.PeopleItemInfo = BDFDB.ModuleUtils.findByProperties("actions", "mutualGuilds", "userInfo");
 	DiscordClassModules.Peoples = BDFDB.ModuleUtils.findByProperties("peopleColumn", "tabBar");
 	DiscordClassModules.PictureInPicture = BDFDB.ModuleUtils.findByProperties("pictureInPicture", "pictureInPictureWindow");
 	DiscordClassModules.PillWrapper = BDFDB.ModuleUtils.find(m => typeof m.item == "string" && typeof m.wrapper == "string" && Object.keys(m).length == 2);
@@ -4707,6 +4717,7 @@
 	DiscordClassModules.UserInfo = BDFDB.ModuleUtils.findByProperties("userInfo", "discordTag");
 	DiscordClassModules.UserPopout = BDFDB.ModuleUtils.findByProperties("userPopout", "headerPlaying");
 	DiscordClassModules.UserProfile = BDFDB.ModuleUtils.findByProperties("topSectionNormal", "tabBarContainer");
+	DiscordClassModules.UserSummaryItem = BDFDB.ModuleUtils.findByProperties("avatarContainerMasked", "container");
 	DiscordClassModules.Video = BDFDB.ModuleUtils.findByProperties("video", "fullScreen");
 	DiscordClassModules.VoiceChannel = BDFDB.ModuleUtils.findByProperties("avatarSpeaking", "voiceUser");
 	DiscordClassModules.VoiceChannelList = BDFDB.ModuleUtils.findByProperties("list", "collapsed");
@@ -5396,6 +5407,14 @@
 		guildsettingsmembernametag: ["GuildSettingsMember", "nameTag"],
 		guildsettingsrolesbuttonwrapper: ["GuildSettingsRoles", "buttonWrapper"],
 		guildsscroller: ["GuildsWrapper", "scroller"],
+		guildsummaryclickableicon: ["BDFDB", "guildSummaryClickableIcon"],
+		guildsummarycontainer: ["BDFDB", "guildSummaryContainer"],
+		guildsummaryemptyguild: ["BDFDB", "guildSummaryEmptyGuild"],
+		guildsummaryicon: ["BDFDB", "guildSummaryIcon"],
+		guildsummaryiconcontainer: ["BDFDB", "guildSummaryIconContainer"],
+		guildsummaryiconcontainermasked: ["BDFDB", "guildSummaryIconContainerMasked"],
+		guildsummarymoreguilds: ["BDFDB", "guildSummaryMoreGuilds"],
+		guildsummarysvgicon: ["BDFDB", "guildSummarySvgIcon"],
 		guildsvg: ["Guild", "svg"],
 		guildswrapper: ["GuildsWrapper", "wrapper"],
 		guildswrapperunreadmentionsbar: ["GuildsWrapper", "unreadMentionsBar"],
@@ -5846,11 +5865,14 @@
 		paginationlistcontent: ["BDFDB", "paginationListContent"],
 		paginationlistmini: ["BDFDB", "paginationListMini"],
 		paginationlistpagination: ["BDFDB", "paginationListPagination"],
+		peopleactions: ["PeopleItemInfo", "actions"],
+		peoplemutualguilds: ["PeopleItemInfo", "mutualGuilds"],
 		peoples: ["Peoples", "container"],
 		peoplesbadge: ["Peoples", "badge"],
 		peoplesnowplayingcolumn: ["Peoples", "nowPlayingColumn"],
 		peoplespeoplecolumn: ["Peoples", "peopleColumn"],
 		peoplestabbar: ["Peoples", "tabBar"],
+		peoplewrapper: ["PeopleItem", "peopleListItem"],
 		pictureinpicture: ["PictureInPicture", "pictureInPicture"],
 		pictureinpicturewindow: ["PictureInPicture", "pictureInPictureWindow"],
 		popout: ["Popout", "popout"],
@@ -6240,6 +6262,14 @@
 		usernotepopout: ["UserPopout", "note"],
 		usernoteprofile: ["UserProfile", "note"],
 		usernotetextarea: ["NoteTextarea", "textarea"],
+		usersummaryavatar: ["UserSummaryItem", "avatar"],
+		usersummaryavatarcontainer: ["UserSummaryItem", "avatarContainer"],
+		usersummaryavatarcontainermasked: ["UserSummaryItem", "avatarContainerMasked"],
+		usersummaryclickableavatar: ["UserSummaryItem", "clickableAvatar"],
+		usersummarycontainer: ["UserSummaryItem", "container"],
+		usersummaryemptyuser: ["UserSummaryItem", "emptyUser"],
+		usersummaryicon: ["UserSummaryItem", "icon"],
+		usersummarymoreUsers: ["UserSummaryItem", "moreUsers"],
 		vertical: ["Flex", "vertical"],
 		voiceavatar: ["VoiceChannel", "avatar"],
 		voiceavatarcontainer: ["VoiceChannel", "avatarContainer"],
@@ -8258,6 +8288,65 @@
 	
 	InternalComponents.LibraryComponents.GuildComponents.Pill = BDFDB.ModuleUtils.findByString("opacity:1,height:", "20:8", "default.item");
 	
+	InternalComponents.LibraryComponents.GuildSummaryItem = InternalBDFDB.loadPatchedComp("GuildSummaryItem") || reactInitialized && class BDFDB_GuildSummaryItem extends LibraryModules.React.Component {
+		defaultRenderGuild(guild, isLast) {
+			if (!guild) return BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.disCN.guildsummaryemptyguild
+			});
+			let icon = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.Icon, {
+				className: BDFDB.disCN.guildsummaryicon,
+				guild: guild,
+				size: InternalComponents.LibraryComponents.GuildComponents.Icon.Sizes.SMALLER
+			});
+			return this.props.switchOnClick ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
+				className: BDFDB.disCN.guildsummaryclickableicon,
+				onClick: _ => {LibraryModules.SelectChannelUtils.selectChannel(guild.id, LibraryModules.LastChannelStore.getChannelId(guild.id));},
+				key: guild.id,
+				tabIndex: -1,
+				children: icon
+			}) : icon;
+		}
+        renderGuilds() {
+			let elements = [];
+			let renderGuild = typeof this.props.renderGuild != "function" ? this.defaultRenderGuild : this.props.renderGuild;
+			let loaded = 0, max = this.props.guilds.length === this.props.max ? this.props.guilds.length : this.props.max - 1;
+            while (loaded < max && loaded < this.props.guilds.length) {
+                let isLast = loaded === this.props.guilds.length - 1;
+                let guild = renderGuild.apply(this, [this.props.guilds[loaded], isLast]);
+                elements.push(BDFDB.ReactUtils.createElement("div", {
+					className: isLast ? BDFDB.disCN.guildsummaryiconcontainer : BDFDB.disCN.guildsummaryiconcontainermasked,
+					children: guild
+				}));
+                loaded++;
+            }
+            if (loaded < this.props.guilds.length) {
+                let rest = Math.min(this.props.guilds.length - loaded, 99);
+                elements.push(BDFDB.ReactUtils.createElement(LibraryModules.React.Fragment, {
+					key: "more-guilds",
+					children: this.props.renderMoreGuilds("+" + rest, rest)
+				}));
+            }
+            return elements;
+        }
+        renderIcon() {
+            return this.props.renderIcon ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+				name: InternalComponents.LibraryComponents.SvgIcon.Names.WHATISTHIS,
+                className: BDFDB.disCN.guildsummarysvgicon
+            }) : null;
+        }
+        render() {
+            return BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.guildsummarycontainer),
+				ref: this.props._ref,
+				children: [
+					this.renderIcon.apply(this),
+					this.renderGuilds.apply(this)
+				].flat(10).filter(n => n)
+			});
+        }
+    }
+	InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.GuildSummaryItem, {max:10, renderMoreGuilds:count => BDFDB.ReactUtils.createElement("div", {className: BDFDB.disCN.guildsummarymoreguilds, children: count}), renderIcon:false});
+	
 	InternalComponents.LibraryComponents.HeaderBarComponents = BDFDB.ModuleUtils.findByName("HeaderBarContainer");
 	
 	InternalComponents.LibraryComponents.KeybindRecorder = InternalBDFDB.loadPatchedComp("KeybindRecorder") || reactInitialized && class BDFDB_KeybindRecorder extends LibraryModules.React.Component {
@@ -8330,6 +8419,8 @@
 		}
 	};
 	
+	InternalComponents.LibraryComponents.Mask = BDFDB.ModuleUtils.findByName("Mask");
+	
 	InternalComponents.LibraryComponents.MemberRole = InternalBDFDB.loadPatchedComp("MemberRole") || reactInitialized && class BDFDB_MemberRole extends LibraryModules.React.Component {
 		handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}
 		handleContextMenu(e) {if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);}
@@ -8392,7 +8483,6 @@
 			let isString = typeof this.props.icon == "string";
 			return !this.props.icon ? null : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
 				className: BDFDB.disCN.menuicon,
-				nativeClass: true,
 				iconSVG: isString ? this.props.icon : null,
 				name: !isString ? this.props.icon : null
 			});
@@ -9247,6 +9337,9 @@
 		CHANGELOG: {
 			icon: `<svg name="ChangeLog" fill="%%color" width="%%width" height="%%height" viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"></path></svg>`
 		},
+		WHATISTHIS: {
+			icon: `<svg name="ChangeLog" width="%%width" height="%%height" viewBox="0 0 24 24"><path fill="%%color" fill-rule="evenodd" clip-rule="evenodd" d="M11.383 3.07904C11.009 2.92504 10.579 3.01004 10.293 3.29604L6 8.00204H3C2.45 8.00204 2 8.45304 2 9.00204V15.002C2 15.552 2.45 16.002 3 16.002H6L10.293 20.71C10.579 20.996 11.009 21.082 11.383 20.927C11.757 20.772 12 20.407 12 20.002V4.00204C12 3.59904 11.757 3.23204 11.383 3.07904ZM14 5.00195V7.00195C16.757 7.00195 19 9.24595 19 12.002C19 14.759 16.757 17.002 14 17.002V19.002C17.86 19.002 21 15.863 21 12.002C21 8.14295 17.86 5.00195 14 5.00195ZM14 9.00195C15.654 9.00195 17 10.349 17 12.002C17 13.657 15.654 15.002 14 15.002V13.002C14.551 13.002 15 12.553 15 12.002C15 11.451 14.551 11.002 14 11.002V9.00195Z"></path></svg>`
+		},
 		CHECKBOX: {
 			defaultProps: {
 				background: "",
@@ -10013,6 +10106,59 @@
 		}
 		${BDFDB.dotCN.hovercardwrapper}:hover ${BDFDB.dotCN.hovercardbutton} {
 			opacity: 1;
+		}
+		
+		${BDFDB.dotCN.guildsummarycontainer} {
+			display: -webkit-box;
+			display: -ms-flexbox;
+			display: flex;
+			-webkit-box-align: center;
+			-ms-flex-align: center;
+			align-items: center;
+		}
+		${BDFDB.dotCN.guildsummarysvgicon} {
+			-webkit-box-flex: 0;
+			-ms-flex: 0 0 auto;
+			flex: 0 0 auto;
+			color: var(--text-muted);
+			width: 20px;
+			height: 20px;
+			margin-right: 8px;
+		}
+		${BDFDB.dotCN.guildsummaryiconcontainer} {
+			width: 24px;
+			height: 24px;
+		}
+		${BDFDB.dotCN.guildsummaryiconcontainermasked} {
+			margin-right: -4px;
+			-webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 1 1"><path fill="white" d="M 0 0 L 0 1 L 1 1 L 1 0.99804688 A 0.54166669 0.54166669 0 0 1 0.66601562 0.5 A 0.54166669 0.54166669 0 0 1 1 0.001953125 L 1 0 L 0 0 z"/></svg>') center/cover no-repeat;
+		}
+		${BDFDB.dotCN.guildsummaryclickableicon} {
+			cursor: pointer;
+		}
+		${BDFDB.dotCN.guildsummaryicon},
+		${BDFDB.dotCN.guildsummaryclickableicon},
+		${BDFDB.dotCN.guildsummaryemptyguild} {
+			width: 24px;
+			height: 24px;
+			border-radius: 50%;
+		}
+		${BDFDB.dotCN.guildsummaryemptyguild} {
+			background: var(--background-accent);
+		}
+		${BDFDB.dotCN.guildsummarymoreguilds} {
+			-webkit-box-sizing: border-box;
+			box-sizing: border-box;
+			background-color: var(--background-tertiary);
+			font-size: 12px;
+			line-height: 24px;
+			font-weight: 500;
+			text-align: center;
+			color: var(--text-normal);
+			height: 24px;
+			min-width: 24px;
+			border-radius: 12px;
+			padding: 0 8px;
 		}
 		
 		${BDFDB.dotCN.table} {
