@@ -1271,6 +1271,7 @@
 		"MessageTimestamp",
 		"NameTag",
 		"NowPlayingItem",
+		"PendingRow",
 		"PeopleListSectionedLazy",
 		"PictureInPictureVideo",
 		"PrivateChannelEmptyMessage",
@@ -4333,6 +4334,7 @@
 		size24: "size24-NlR6be"
 	};
 	DiscordClassModules.BetterFriendList = {
+		mutualGuilds: "mutualGuilds-s7F2aa",
 		nameCell: "nameCell-7F4sRs",
 		title: "title-3aDrFs"
 	},
@@ -4664,7 +4666,7 @@
 	DiscordClassModules.NoteTextarea = BDFDB.ModuleUtils.find(m => typeof m.textarea == "string" && Object.keys(m).length == 1);
 	DiscordClassModules.Notice = BDFDB.ModuleUtils.findByProperties("notice", "noticeFacebook");
 	DiscordClassModules.PeopleItem = BDFDB.ModuleUtils.findByProperties("peopleListItem", "active");
-	DiscordClassModules.PeopleItemInfo = BDFDB.ModuleUtils.findByProperties("actions", "mutualGuilds", "userInfo");
+	DiscordClassModules.PeopleItemInfo = BDFDB.ModuleUtils.find(m => typeof m.listItemContents == "string" && typeof m.actions == "string" && Object.keys(m).length == 2);
 	DiscordClassModules.Peoples = BDFDB.ModuleUtils.findByProperties("peopleColumn", "tabBar");
 	DiscordClassModules.PictureInPicture = BDFDB.ModuleUtils.findByProperties("pictureInPicture", "pictureInPictureWindow");
 	DiscordClassModules.PillWrapper = BDFDB.ModuleUtils.find(m => typeof m.item == "string" && typeof m.wrapper == "string" && Object.keys(m).length == 2);
@@ -4750,6 +4752,7 @@
 		_badgeseverywheresize21: ["BadgesEverywhere", "size21"],
 		_badgeseverywheresize22: ["BadgesEverywhere", "size22"],
 		_badgeseverywheresize24: ["BadgesEverywhere", "size24"],
+		_betterfriendlistmutualguilds: ["BetterFriendList", "mutualGuilds"],
 		_betterfriendlistnamecell: ["BetterFriendList", "nameCell"],
 		_betterfriendlisttitle: ["BetterFriendList", "title"],
 		_betternsfwtagtag: ["BetterNsfwTag", "nsfwTag"],
@@ -5866,9 +5869,7 @@
 		paginationlistmini: ["BDFDB", "paginationListMini"],
 		paginationlistpagination: ["BDFDB", "paginationListPagination"],
 		peopleactions: ["PeopleItemInfo", "actions"],
-		peopleinfo: ["PeopleItemInfo", "userInfo"],
 		peopleinner: ["PeopleItemInfo", "listItemContents"],
-		peoplemutualguilds: ["PeopleItemInfo", "mutualGuilds"],
 		peoples: ["Peoples", "container"],
 		peoplesbadge: ["Peoples", "badge"],
 		peoplesnowplayingcolumn: ["Peoples", "nowPlayingColumn"],

@@ -16,7 +16,7 @@ var BetterFriendList = (_ => {
 	return class BetterFriendList {
 		getName () {return "BetterFriendList";}
 
-		getVersion () {return "1.2.7";}
+		getVersion () {return "1.2.8";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -28,6 +28,16 @@ var BetterFriendList = (_ => {
 			searchQuery = "";
 			
 			this.css = `
+				${BDFDB.dotCN.peoplewrapper} > * {
+					justify-content: unset;
+				}
+				${BDFDB.dotCNS.peoplewrapper + BDFDB.dotCN.userinfo} {
+					flex: 1 1 auto;
+				}
+				${BDFDB.dotCN._betterfriendlistmutualguilds} {
+					margin-left: 13px;
+					width: 200px;
+				}
 				${BDFDB.dotCN._betterfriendlisttitle} {
 					width: 200px;
 				}
@@ -40,7 +50,8 @@ var BetterFriendList = (_ => {
 				settings: {
 					addTotalAmount:		{value:true, 	description:"Add total amount for all/requested/blocked"},
 					addSortOptions:		{value:true, 	description:"Add sort options"},
-					addSearchbar:		{value:true, 	description:"Add searchbar"}
+					addSearchbar:		{value:true, 	description:"Add searchbar"},
+					addMutualGuild:		{value:true, 	description:"Add mutual servers in friend list"}
 				}
 			};
 		}
@@ -48,16 +59,20 @@ var BetterFriendList = (_ => {
 		constructor () {
 			this.changelog = {
 				"progress":[["New Features & Name","Name was changed from BetterFriendCount to BetterFriendList and new features were added"]],
-				"added":[["Settings","You can now disable the single features of this plugin"]]
+				"improved":[["Settings","You can now disable the single features of this plugin"]],
+				"added":[["Mutual Servers","Mutual servers are now displayed in the friend list again"]]
 			};
 
 			this.patchedModules = {
 				before: {
-					PeopleListSectionedLazy: "default"
+					PeopleListSectionedLazy: "default",
 				},
 				after: {
 					TabBar: "render",
-					PeopleListItem: ["componentWillMount","componentWillUnmount"]
+					FriendRow: "render",
+					PendingRow: "default",
+					BlockedRow: "render",
+					PeopleListItem: ["render", "componentWillMount","componentWillUnmount"]
 				}
 			};
 		}
@@ -237,9 +252,32 @@ var BetterFriendList = (_ => {
 			};
 		}
 		
+		processFriendRow (e) {
+			e.returnvalue.props.mutualGuilds = e.instance.props.mutualGuilds;
+		}
+		
+		processPendingRow (e) {
+			this.processFriendRow(e);
+		}
+		
+		processBlockedRow (e) {
+			this.processFriendRow(e);
+		}
+		
 		processPeopleListItem (e) {
-			BDFDB.TimeUtils.clear(rerenderTimeout);
-			rerenderTimeout = BDFDB.TimeUtils.timeout(_ => {BDFDB.ModuleUtils.forceAllUpdates(this, "TabBar");}, 1000);
+			if (e.node) {
+				BDFDB.TimeUtils.clear(rerenderTimeout);
+				rerenderTimeout = BDFDB.TimeUtils.timeout(_ => {BDFDB.ModuleUtils.forceAllUpdates(this, "TabBar");}, 1000);
+			}
+			else if (settings.addMutualGuild && e.instance.props.mutualGuilds && e.instance.props.mutualGuilds.length) {
+				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "UserInfo"});
+				if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildSummaryItem, {
+					className: BDFDB.disCN._betterfriendlistmutualguilds,
+					guilds: e.instance.props.mutualGuilds,
+					tooltip: true,
+					max: 10
+				}, true));
+			}
 		}
 		
 		createBadge (amount) {
@@ -258,7 +296,7 @@ var BetterFriendList = (_ => {
 		forceUpdateAll() {
 			settings = BDFDB.DataUtils.get(this, "settings");
 
-			BDFDB.ModuleUtils.forceAllUpdates(this, "TabBar");
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 			this.rerenderList();
 		}
 	}
