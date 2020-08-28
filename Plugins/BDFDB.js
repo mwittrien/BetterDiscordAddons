@@ -5866,6 +5866,8 @@
 		paginationlistmini: ["BDFDB", "paginationListMini"],
 		paginationlistpagination: ["BDFDB", "paginationListPagination"],
 		peopleactions: ["PeopleItemInfo", "actions"],
+		peopleinfo: ["PeopleItemInfo", "userInfo"],
+		peopleinner: ["PeopleItemInfo", "listItemContents"],
 		peoplemutualguilds: ["PeopleItemInfo", "mutualGuilds"],
 		peoples: ["Peoples", "container"],
 		peoplesbadge: ["Peoples", "badge"],
@@ -8298,6 +8300,10 @@
 				guild: guild,
 				size: InternalComponents.LibraryComponents.GuildComponents.Icon.Sizes.SMALLER
 			});
+			icon = this.props.tooltip ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
+				text: guild.name,
+				children: icon
+			}) : icon;
 			return this.props.switchOnClick ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
 				className: BDFDB.disCN.guildsummaryclickableicon,
 				onClick: _ => {LibraryModules.SelectChannelUtils.selectChannel(guild.id, LibraryModules.LastChannelStore.getChannelId(guild.id));},
@@ -8323,7 +8329,7 @@
                 let rest = Math.min(this.props.guilds.length - loaded, 99);
                 elements.push(BDFDB.ReactUtils.createElement(LibraryModules.React.Fragment, {
 					key: "more-guilds",
-					children: this.props.renderMoreGuilds("+" + rest, rest)
+					children: this.props.renderMoreGuilds("+" + rest, rest, this.props.guilds.slice(loaded), this.props)
 				}));
             }
             return elements;
@@ -8345,7 +8351,13 @@
 			});
         }
     }
-	InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.GuildSummaryItem, {max:10, renderMoreGuilds:count => BDFDB.ReactUtils.createElement("div", {className: BDFDB.disCN.guildsummarymoreguilds, children: count}), renderIcon:false});
+	InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.GuildSummaryItem, {max:10, renderMoreGuilds: (count, amount, restGuilds, props) => {
+		let icon = BDFDB.ReactUtils.createElement("div", {className: BDFDB.disCN.guildsummarymoreguilds, children: count});
+		return props.tooltip ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
+			text: restGuilds.map(guild => guild.name).join(", "),
+			children: icon
+		}) : icon;
+	}, renderIcon:false});
 	
 	InternalComponents.LibraryComponents.HeaderBarComponents = BDFDB.ModuleUtils.findByName("HeaderBarContainer");
 	
