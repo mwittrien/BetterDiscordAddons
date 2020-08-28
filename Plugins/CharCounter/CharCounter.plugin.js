@@ -6,6 +6,7 @@ var CharCounter = (_ => {
 		edit: 2000,
 		form: 2000,
 		nick: 32,
+		customstatus: 128,
 		popoutnote: 256,
 		profilenote: 256
 	};
@@ -24,11 +25,16 @@ var CharCounter = (_ => {
 		getDescription () {return "Adds a charcounter in the chat.";}
 
 		constructor () {
+			this.changelog = {
+				"added":[["Custom Status","Added counter to custom status input"]]
+			};
+			
 			this.patchedModules = {
 				after: {
 					ChannelTextAreaContainer: "render",
 					Note: "render",
-					ChangeNickname: "render"
+					ChangeNickname: "render",
+					CustomStatusModal: "render"
 				}
 			};
 		}
@@ -60,6 +66,10 @@ var CharCounter = (_ => {
 				${BDFDB.dotCN._charcounternickcounter} {
 					right: 0 !important;
 					top: 0 !important;
+				}
+				${BDFDB.dotCN._charcountercustomstatuscounter} {
+					right: 0 !important;
+					top: -1.5em;
 				}
 				${BDFDB.dotCN._charcounterpopoutnotecounter} {
 					right: 3px !important;
@@ -145,6 +155,11 @@ var CharCounter = (_ => {
 				let [children, index] = BDFDB.ReactUtils.findParent(formItem, {name: "TextInput"});
 				if (index > -1) this.injectCounter(formItem, children, "nick", BDFDB.dotCN.input);
 			}
+		}
+
+		processCustomStatusModal (e) {
+			let formItem = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.emojiinputcontainer]]});
+			if (formItem) this.injectCounter(formItem, formItem.props.children, "customstatus", BDFDB.dotCN.input);
 		}
 		
 		injectCounter (parent, children, type, refClass, parsing) {

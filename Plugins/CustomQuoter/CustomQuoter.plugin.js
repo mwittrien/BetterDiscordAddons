@@ -39,18 +39,11 @@ var CustomQuoter = (_ => {
 	return class CustomQuoter {
 		getName () {return "CustomQuoter";}
 
-		getVersion () {return "1.1.4";}
+		getVersion () {return "1.1.5";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Let's you customize the output of the native quote feature of Discord.";}
-		
-		constructor () {
-			this.changelog = {
-				"fixed":[["Multi Spaces","No longer removes multi spaces from quotes"]],
-				"added":[["$rawQuote","Ability to insert the raw text of the quoted message"]]
-			};
-		}
 
 		initConstructor () {
 			_this = this;
@@ -366,7 +359,8 @@ var CustomQuoter = (_ => {
 				.replace("$month", settings.forceZeros && month < 10 ? "0" + month : month)
 				.replace("$year", timestamp.getFullYear())
 				.replace("$quote", quotedLines || "")
-				.replace("$rawQuote", unquotedLines.join("\n") || "");
+				.replace("$rawQuote", unquotedLines.join("\n") || "")
+				.replace(/\$/g, "$$$$");
 		}
 
 		addLeadingZeros (timestring) {
