@@ -13,7 +13,7 @@ var OwnerTag = (_ => {
 	return class OwnerTag {
 		getName () {return "OwnerTag";}
 
-		getVersion () {return "1.3.1";}
+		getVersion () {return "1.3.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -73,7 +73,7 @@ var OwnerTag = (_ => {
 				inputs: {
 					ownTagName:				{value:"Owner", 		description:"Tag Text for Owners"},
 					ownAdminTagName:		{value:"Admin", 		description:"Tag Text for Admins"},
-					ownModeratorTagName:	{value:"Management", 	description:"Tag Text for Management"}
+					ownManagementTagName:	{value:"Management", 	description:"Tag Text for Management"}
 				}
 			};
 		}
@@ -277,6 +277,18 @@ var OwnerTag = (_ => {
 				});
 			}
 			else {
+				let input;
+				switch (userType) {
+					case userTypes.OWNER:
+						input = "ownTagName";
+						break;
+					case userTypes.ADMIN:
+						input = "ownAdminTagName";
+						break;
+					case userTypes.MANAGEMENT:
+						input = "ownManagementTagName";
+						break;
+				}
 				let tagColor = BDFDB.ColorUtils.convert(member.colorString, "RGBA");
 				let isBright = BDFDB.ColorUtils.isBright(tagColor);
 				tagColor = isBright ? (settings.useBlackFont ? tagColor : BDFDB.ColorUtils.change(tagColor, -0.3)) : tagColor;
@@ -288,7 +300,7 @@ var OwnerTag = (_ => {
 						backgroundColor: config.inverted ? (isBright && settings.useBlackFont ? "black" : null) : tagColor,
 						color: !config.inverted ? (isBright && settings.useBlackFont ? "black" : null) : tagColor
 					},
-					tag: inputs[isOwner ? "ownTagName" : "ownAdminTagName"]
+					tag: inputs[input]
 				});
 			}
 			children.splice(insertIndex, 0, tag);
