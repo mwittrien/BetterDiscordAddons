@@ -4,7 +4,7 @@ var ServerCounter = (_ => {
 	return class ServerCounter {
 		getName () {return "ServerCounter";}
 
-		getVersion () {return "1.0.0";}
+		getVersion () {return "1.0.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -75,7 +75,7 @@ var ServerCounter = (_ => {
 				className: BDFDB.disCN.guildouter,
 				children: BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCNS.guildslabel + BDFDB.disCN._servercounterservercount,
-					children: `servers - ${BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds().length}`
+					children: `${BDFDB.LanguageUtils.LanguageStrings.SERVERS} - ${BDFDB.LibraryModules.FolderStore.getFlattenedGuildIds().length}`
 				})
 			}));
 		}
