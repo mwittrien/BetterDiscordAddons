@@ -6,17 +6,13 @@ var DisplayServersAsChannels = (_ => {
 	return class DisplayServersAsChannels {
 		getName () {return "DisplayServersAsChannels";}
 
-		getVersion () {return "1.4.0";}
+		getVersion () {return "1.4.1";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Display servers in a similar way as channels.";}
 
 		constructor () {
-			this.changelog = {
-				"fixed":[["New Mention","Fixed new mention bars being always visible once at least one mention is shown"]]
-			};
-
 			this.patchPriority = 10;
 
 			this.patchedModules = {
@@ -432,12 +428,14 @@ var DisplayServersAsChannels = (_ => {
 					height: ${amounts.serverElementHeight}px !important;
 					width: ${amounts.serverListWidth - 20}px;
 				}
-				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN._friendnotificationsfriendsonline} {
+				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN._friendnotificationsfriendsonline},
+				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildslabel} {
 					height: ${amounts.serverElementHeight * 0.6}px !important;
 					width: ${amounts.serverListWidth - 20}px;
 				}
 				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN._readallnotificationsbuttonbutton},
 				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN._friendnotificationsfriendsonline},
+				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCNS.guildswrapper + BDFDB.dotCN.guildslabel},
 				${BDFDB.dotCNS._displayserversaschannelsstyled + BDFDB.dotCN.guildswrapper} #bd-pub-button {
 					display: flex;
 					justify-content: flex-start;
