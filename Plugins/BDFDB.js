@@ -4201,6 +4201,7 @@
 		favButtonContainer: "favbutton-8Fzu45",
 		guild: "guild-r3yAE_",
 		guildLowerLeftBadge: "lowerLeftBadge-zr4T_9",
+		guildsLabel: "label-2wRs_g",
 		guildSummaryClickableIcon: "clickableIcon-7I6aVc",
 		guildSummaryContainer: "container-5VyO4t",
 		guildSummaryEmptyGuild: "emptyGuild-Am9XfC",
@@ -4434,6 +4435,9 @@
 		button: "button-Jt-tIg",
 		frame: "frame-oXWS21",
 		innerFrame: "innerFrame-8Hg64E"
+	};
+	DiscordClassModules.ServerCounter = {
+		serverCount: "serverCount-FsTTs1"
 	};
 	DiscordClassModules.ServerFolders = {
 		dragPreview: "dragPreview-nXiByA",
@@ -4826,6 +4830,7 @@
 		_readallnotificationsbuttonbutton: ["ReadAllNotificationsButton", "button"],
 		_readallnotificationsbuttonframe: ["ReadAllNotificationsButton", "frame"],
 		_readallnotificationsbuttoninner: ["ReadAllNotificationsButton", "innerFrame"],
+		_servercounterservercount: ["ServerCounter", "ServerCounter"],
 		_serverfoldersdragpreview: ["ServerFolders", "dragPreview"],
 		_serverfoldersfoldercontent: ["ServerFolders", "folderContent"],
 		_serverfoldersfoldercontentclosed: ["ServerFolders", "folderContentClosed"],
@@ -5420,6 +5425,7 @@
 		guildsettingsmembername: ["GuildSettingsMember", "name"],
 		guildsettingsmembernametag: ["GuildSettingsMember", "nameTag"],
 		guildsettingsrolesbuttonwrapper: ["GuildSettingsRoles", "buttonWrapper"],
+		guildslabel: ["BDFDB", "guildsLabel"],
 		guildsscroller: ["GuildsWrapper", "scroller"],
 		guildsummaryclickableicon: ["BDFDB", "guildSummaryClickableIcon"],
 		guildsummarycontainer: ["BDFDB", "guildSummaryContainer"],
@@ -9917,6 +9923,25 @@
 		${BDFDB.dotCN.settingsguilddisabled} {
 			border-color: ${BDFDB.DiscordConstants.Colors.STATUS_GREY};
 			filter: grayscale(100%) brightness(50%);
+		}
+		
+		${BDFDB.dotCN.guildslabel} {
+			color: var(--text-muted);
+			text-align: center;
+			text-transform: uppercase;
+			font-size: 10px;
+			font-weight: 500;
+			line-height: 1.3;
+			width: 70px;
+			word-wrap: normal;
+			white-space: nowrap;
+			cursor: pointer;
+		}
+		${BDFDB.dotCN.guildslabel}:hover {
+			color: var(--header-secondary);
+		}
+		${BDFDB.dotCN.guildslabel}:active {
+			color: var(--header-primary);
 		}
 		
 		${BDFDB.dotCN.searchbarwrapper} {

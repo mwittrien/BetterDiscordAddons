@@ -13,7 +13,7 @@ var FriendNotifications = (_ => {
 			return BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.disCN.guildouter,
 				children: BDFDB.ReactUtils.createElement("div", {
-					className: BDFDB.disCN._friendnotificationsfriendsonline,
+					className: BDFDB.disCNS.guildslabel + BDFDB.disCN._friendnotificationsfriendsonline,
 					children: BDFDB.LanguageUtils.LanguageStringsFormat("FRIENDS_ONLINE_HEADER", this.props.amount),
 					onClick: _ => {
 						_this.showTimeLog();
@@ -53,37 +53,19 @@ var FriendNotifications = (_ => {
 			friendCounter = null;
 		
 			this.css = `
-				.${this.name}-Log-modal ${BDFDB.dotCN._friendnotificationslogtime} {
+				${BDFDB.dotCN._friendnotificationslogtime} {
 					width: 160px;
 				}	
-				.${this.name}-Log-modal ${BDFDB.dotCN._friendnotificationslogavatar} {
+				${BDFDB.dotCN._friendnotificationslogavatar} {
 					margin: 0 10px;
 				}
-				.${this.name}-Log-modal ${BDFDB.dotCN._friendnotificationslogcontent} {
+				${BDFDB.dotCN._friendnotificationslogcontent} {
 					max-width: 600px;
 				}
-				.${this.name}-settings ${BDFDB.dotCN._friendnotificationstypelabel} {
+				${BDFDB.dotCN._friendnotificationstypelabel} {
 					border-radius: 3px;
 					padding: 0 3px;
 					margin: 0 6px;
-				}
-				${BDFDB.dotCN._friendnotificationsfriendsonline} {
-					color: var(--text-muted);
-					text-align: center;
-					text-transform: uppercase;
-					font-size: 10px;
-					font-weight: 500;
-					line-height: 1.3;
-					width: 70px;
-					word-wrap: normal;
-					white-space: nowrap;
-					cursor: pointer;
-				}
-				${BDFDB.dotCN._friendnotificationsfriendsonline}:hover {
-					color: var(--header-secondary);
-				}
-				${BDFDB.dotCN._friendnotificationsfriendsonline}:active {
-					color: var(--header-primary);
 				}
 			`;
 
