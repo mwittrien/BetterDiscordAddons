@@ -3,6 +3,9 @@
 var BetterFriendList = (_ => {
 	var rerenderTimeout, sortKey, sortReversed, searchQuery, searchTimeout;
 	var settings = {};
+	
+	const placeHolderId = "PLACEHOLDER_BETTERFRIENDLIST";
+	
 	const statusSortOrder = {
 		online: 0,
 		streaming: 1,
@@ -16,7 +19,7 @@ var BetterFriendList = (_ => {
 	return class BetterFriendList {
 		getName () {return "BetterFriendList";}
 
-		getVersion () {return "1.2.8";}
+		getVersion () {return "1.2.9";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -59,6 +62,7 @@ var BetterFriendList = (_ => {
 		constructor () {
 			this.changelog = {
 				"progress":[["New Features & Name","Name was changed from BetterFriendCount to BetterFriendList and new features were added"]],
+				"fixed":[["Empty Search","Empty search no longer stops the friend list from being displayed"]],
 				"improved":[["Settings","You can now disable the single features of this plugin"]],
 				"added":[["Mutual Servers","Mutual servers are now displayed in the friend list again"]]
 			};
@@ -69,6 +73,7 @@ var BetterFriendList = (_ => {
 				},
 				after: {
 					TabBar: "render",
+					PeopleListSectionedLazy: "default",
 					FriendRow: "render",
 					PendingRow: "default",
 					BlockedRow: "render",
@@ -189,17 +194,36 @@ var BetterFriendList = (_ => {
 						newSection = BDFDB.ArrayUtils.keySort(newSection.map(user => Object.assign({}, user, {statusIndex: statusSortOrder[user.status]})), sortKey);
 						if (sortReversed) newSection.reverse();
 					}
+					if (!newSection.length) {
+						let placeholder = new BDFDB.DiscordObjects.User({
+							id: placeHolderId,
+							username: placeHolderId
+						});
+						if (placeholder) newSection.push(new BDFDB.DiscordObjects.Relationship({
+							activities: [],
+							applicationStream: null,
+							isMobile: false,
+							key: placeHolderId,
+							mutualGuilds: [],
+							mutualGuildsLength: 0,
+							status: "offline",
+							type: BDFDB.DiscordConstants.RelationshipTypes.NONE,
+							user: placeholder,
+							usernameLower: placeholder.usernameNormalized
+						}));
+					}
 					return newSection;
 				});
 			}
 			let getSectionTitle = e.instance.props.getSectionTitle;
 			e.instance.props.getSectionTitle = (...args) => {
+				let users = e.instance.props.statusSections.flat(10);
 				return BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
 					align: BDFDB.LibraryComponents.Flex.Align.CENTER,
 					children: [
 						BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCN._betterfriendlisttitle,
-							children: getSectionTitle(...args)
+							children: getSectionTitle(...args).replace(users.length, users.filter(u => u && u.key != placeHolderId).length)
 						}),
 						settings.addSortOptions && [
 							{key: "usernameLower", label: BDFDB.LanguageUtils.LanguageStrings.FRIENDS_COLUMN_NAME},
@@ -269,14 +293,17 @@ var BetterFriendList = (_ => {
 				BDFDB.TimeUtils.clear(rerenderTimeout);
 				rerenderTimeout = BDFDB.TimeUtils.timeout(_ => {BDFDB.ModuleUtils.forceAllUpdates(this, "TabBar");}, 1000);
 			}
-			else if (settings.addMutualGuild && e.instance.props.mutualGuilds && e.instance.props.mutualGuilds.length) {
-				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "UserInfo"});
-				if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildSummaryItem, {
-					className: BDFDB.disCN._betterfriendlistmutualguilds,
-					guilds: e.instance.props.mutualGuilds,
-					tooltip: true,
-					max: 10
-				}, true));
+			else {
+				if (e.instance.props.user.id == placeHolderId) return null;
+				else if (settings.addMutualGuild && e.instance.props.mutualGuilds && e.instance.props.mutualGuilds.length) {
+					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "UserInfo"});
+					if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildSummaryItem, {
+						className: BDFDB.disCN._betterfriendlistmutualguilds,
+						guilds: e.instance.props.mutualGuilds,
+						tooltip: true,
+						max: 10
+					}, true));
+				}
 			}
 		}
 		

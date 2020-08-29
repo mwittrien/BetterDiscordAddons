@@ -1744,6 +1744,7 @@
 	DiscordObjects.Invite = BDFDB.ModuleUtils.findByPrototypes("getExpiresAt", "isExpired");
 	DiscordObjects.Message = BDFDB.ModuleUtils.findByPrototypes("getReaction", "getAuthorName", "getChannelId");
 	DiscordObjects.Messages = BDFDB.ModuleUtils.findByPrototypes("jumpToMessage", "hasAfterCached", "forEach");
+	DiscordObjects.Relationship = BDFDB.ModuleUtils.find(m => m.prototype && m.prototype.comparator && Array.isArray(m.prototype.comparator));
 	DiscordObjects.Timestamp = BDFDB.ModuleUtils.findByPrototypes("add", "dayOfYear", "hasAlignedHourOffset");
 	DiscordObjects.User = BDFDB.ModuleUtils.findByPrototypes("hasFlag", "isLocalBot", "isClaimed");
 	BDFDB.DiscordObjects = Object.assign({}, DiscordObjects);
