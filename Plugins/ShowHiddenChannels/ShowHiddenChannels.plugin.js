@@ -1,7 +1,8 @@
 //META{"name":"ShowHiddenChannels","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien","website":"https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/ShowHiddenChannels","source":"https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ShowHiddenChannels/ShowHiddenChannels.plugin.js"}*//
 
 var ShowHiddenChannels = (_ => {
-	var blacklist = [], collapselist = [], hiddenCategory, overrideTypes = [];
+	var blacklist = [], collapselist = [], hiddenCategory, cachedHiddenChannels, overrideTypes = [];
+	var settings = {};
 	
 	const settingsMap = {
 		GUILD_TEXT: "showText",
@@ -89,7 +90,7 @@ var ShowHiddenChannels = (_ => {
 	return class ShowHiddenChannels {
 		getName () {return "ShowHiddenChannels";}
 
-		getVersion () {return "2.7.9";}
+		getVersion () {return "2.8.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -97,8 +98,7 @@ var ShowHiddenChannels = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Access Modal","Shows roles/users again"]],
-				"improved":[["Hide locked channels toggle","Added toggle option similar to hide muted channels to server contextmenu"]]
+				"improved":[["Performance","Increased performance via caching"]]
 			};
 			
 			this.patchedModules = {
@@ -129,7 +129,6 @@ var ShowHiddenChannels = (_ => {
 
 		getSettingsPanel (collapseStates = {}) {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-			let settings = BDFDB.DataUtils.get(this, "settings");
 			let settingsPanel, settingsItems = [];
 			
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
@@ -254,7 +253,7 @@ var ShowHiddenChannels = (_ => {
 					for (let channel_id in all) if (all[channel_id].guild_id == e.methodArguments[0] && !e.returnValue[channel_id] && (all[channel_id].type != BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY && all[channel_id].type != BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE)) e.returnValue[channel_id] = {id: channel_id, name: all[channel_id].name};
 				}});
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -263,7 +262,7 @@ var ShowHiddenChannels = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 				
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -276,7 +275,7 @@ var ShowHiddenChannels = (_ => {
 			if (this.SettingsUpdated) {
 				delete this.SettingsUpdated;
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				this.forceUpdateAll();
 			}
 		}
 		
@@ -314,7 +313,7 @@ var ShowHiddenChannels = (_ => {
 						else BDFDB.ArrayUtils.remove(blacklist, e.instance.props.guild.id, true);
 						this.saveBlacklist(BDFDB.ArrayUtils.removeCopies(blacklist));
 
-						BDFDB.ModuleUtils.forceAllUpdates(this, "Channels");
+						BDFDB.ModuleUtils.forceAllUpdates(this);
 					}
 				}));
 			}
@@ -339,7 +338,7 @@ var ShowHiddenChannels = (_ => {
 				e.instance.props.categories._categories = e.instance.props.categories._categories.filter(n => n.channel.id != hiddenId);
 				e.instance.props.channels[BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY] = e.instance.props.channels[BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY].filter(n => n.channel.id != hiddenId);
 				
-				let settings = BDFDB.DataUtils.get(this, "settings"), index = -1;
+				let index = -1;
 				for (let catId in e.instance.props.categories) {
 					if (catId != "_categories") e.instance.props.categories[catId] = e.instance.props.categories[catId].filter(n => !this.isChannelHidden(n.channel.id));
 					for (let channelObj of e.instance.props.categories[catId]) if (channelObj.index > index) index = parseInt(channelObj.index);
@@ -433,17 +432,20 @@ var ShowHiddenChannels = (_ => {
 		
 		getHiddenChannels (guild) {
 			if (!guild) return [{}, 0];
-			let settings = BDFDB.DataUtils.get(this, "settings");
-			let all = BDFDB.LibraryModules.ChannelStore.getChannels(), hidden = {}, amount = 0;
-			for (let type in BDFDB.DiscordConstants.ChannelTypes) hidden[BDFDB.DiscordConstants.ChannelTypes[type]] = [];
-			for (let channel_id in all) {
-				let channel = all[channel_id];
-				if (channel.guild_id == guild.id && channel.type != BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY && (settings[settingsMap[BDFDB.DiscordConstants.ChannelTypes[channel.type]]] || settings[settingsMap[BDFDB.DiscordConstants.ChannelTypes[channel.type]]] === undefined) && this.isChannelHidden(channel.id)) {
-					amount++;
-					hidden[channel.type].push(channel);
+			if (cachedHiddenChannels && cachedHiddenChannels.id == guild.id) return [cachedHiddenChannels.hidden, cachedHiddenChannels.amount];
+			else {
+				let all = BDFDB.LibraryModules.ChannelStore.getChannels(), hidden = {}, amount = 0;
+				for (let type in BDFDB.DiscordConstants.ChannelTypes) hidden[BDFDB.DiscordConstants.ChannelTypes[type]] = [];
+				for (let channel_id in all) {
+					let channel = all[channel_id];
+					if (channel.guild_id == guild.id && channel.type != BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY && (settings[settingsMap[BDFDB.DiscordConstants.ChannelTypes[channel.type]]] || settings[settingsMap[BDFDB.DiscordConstants.ChannelTypes[channel.type]]] === undefined) && this.isChannelHidden(channel.id)) {
+						amount++;
+						hidden[channel.type].push(channel);
+					}
 				}
+				cachedHiddenChannels = {id: guild.id, hidden, amount};
+				return [hidden, amount];
 			}
-			return [hidden, amount];
 		}
 		
 		batchSetGuilds (settingsPanel, collapseStates, value) {
@@ -463,6 +465,12 @@ var ShowHiddenChannels = (_ => {
 		saveCollapselist (savedCollapselist) {
 			collapselist = savedCollapselist;
 			BDFDB.DataUtils.save(savedCollapselist, this, "categorydata");
+		}
+		
+		forceUpdateAll() {
+			settings = BDFDB.DataUtils.get(this, "settings");
+
+			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
 		
 		showAccessModal (channel, allowed) {
