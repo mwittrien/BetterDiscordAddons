@@ -3,8 +3,9 @@
 var OwnerTag = (_ => {
 	const userTypes = {
 		NONE: 0,
-		ADMIN: 1,
-		OWNER: 2
+		MANAGEMENT: 1,
+		ADMIN: 2,
+		OWNER: 3
 	};
 	
 	var settings = {}, inputs = {};
@@ -12,7 +13,7 @@ var OwnerTag = (_ => {
 	return class OwnerTag {
 		getName () {return "OwnerTag";}
 
-		getVersion () {return "1.3.0";}
+		getVersion () {return "1.3.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -20,7 +21,7 @@ var OwnerTag = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["BotTag","BotTag style is now properly inverted on the userpopout if the user is playing a game etc."]]
+				"added":[["Management Crown/Tag","Added a third tag for people with the server management permission"]]
 			};
 
 			this.patchedModules = {
@@ -35,8 +36,11 @@ var OwnerTag = (_ => {
 
 		initConstructor () {
 			this.css = `
-				${BDFDB.dotCN.memberownericon}.admin-crown {
-					color: #b3b3b3;
+				${BDFDB.dotCN.memberownericon + BDFDB.dotCN._ownertagadminicon} {
+					color: #c0c0c0;
+				}
+				${BDFDB.dotCN.memberownericon + BDFDB.dotCN._ownertagmanagementicon} {
+					color: #ef7f32;
 				}
 				${BDFDB.dotCNS.message + BDFDB.dotCN.memberownericon} {
 					top: 2px;
@@ -58,51 +62,66 @@ var OwnerTag = (_ => {
 					addInMemberList:		{value:true, 	inner:true,		description:"Member List"},
 					addInUserPopout:		{value:true, 	inner:true,		description:"User Popouts"},
 					addInUserProfile:		{value:true, 	inner:true,		description:"User Profile Modal"},
-					useRoleColor:			{value:true, 	inner:false,	description:"Use the Rolecolor instead of the default blue."},
-					useBlackFont:			{value:false, 	inner:false,	description:"Instead of darkening the Rolecolor on bright colors use black font."},
-					useCrown:				{value:false, 	inner:false,	description:"Use the Crown Icon instead of the OwnerTag."},
-					hideNativeCrown:		{value:true, 	inner:false,	description:"Hide the native Crown Icon (not the Plugin one)."},
-					addForAdmins:			{value:false, 	inner:false,	description:"Also add an Admin Tag for any user with Admin rights."},
-					ignoreBotAdmins:		{value:false, 	inner:false,	description:"Do not add the Admin tag for bots with Admin rights."}
+					useRoleColor:			{value:true, 	inner:false,	description:"Use the Rolecolor instead of the default blue"},
+					useBlackFont:			{value:false, 	inner:false,	description:"Instead of darkening the Rolecolor on bright colors use black font"},
+					useCrown:				{value:false, 	inner:false,	description:"Use the Crown Icon instead of the OwnerTag"},
+					hideNativeCrown:		{value:true, 	inner:false,	description:"Hide the native Crown Icon (not the Plugin one)"},
+					addForAdmins:			{value:false, 	inner:false,	description:"Also add an Admin Tag for any user with admin permissions"},
+					addForManagement:		{value:false, 	inner:false,	description:"Also add a Management Tag for any user with server manage permissions"},
+					ignoreBotAdmins:		{value:false, 	inner:false,	description:"Do not add the Admin/Management tag for bots"}
 				},
 				inputs: {
-					ownTagName:				{value:"Owner", 	description:"Owner Tag Text for Owners"},
-					ownAdminTagName:		{value:"Admin", 	description:"Owner Tag Text for Admins"}
+					ownTagName:				{value:"Owner", 		description:"Tag Text for Owners"},
+					ownAdminTagName:		{value:"Admin", 		description:"Tag Text for Admins"},
+					ownModeratorTagName:	{value:"Management", 	description:"Tag Text for Management"}
 				}
 			};
 		}
 
-		getSettingsPanel () {
+		getSettingsPanel (collapseStates = {}) {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-			let settings = BDFDB.DataUtils.get(this, "settings");
-			let inputs = BDFDB.DataUtils.get(this, "inputs");
 			let settingsPanel, settingsItems = [], innerItems = [];
 			
-			for (let key in inputs) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-				className: BDFDB.disCN.marginbottom8,
-				type: "TextInput",
-				plugin: this,
-				keys: ["inputs", key],
-				label: this.defaults.inputs[key].description,
-				basis: "50%",
-				value: inputs[key]
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+				title: "Settings",
+				collapseStates: collapseStates,
+				children: Object.keys(settings).map(key => !this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+					className: BDFDB.disCN.marginbottom8,
+					type: "Switch",
+					plugin: this,
+					keys: ["settings", key],
+					label: this.defaults.settings[key].description,
+					value: settings[key]
+				}))
 			}));
-			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-				className: BDFDB.disCN.marginbottom8
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+				title: "Tag Settings",
+				collapseStates: collapseStates,
+				children: [BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormTitle, {
+					className: BDFDB.disCN.marginbottom4,
+					tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H3,
+					children: "Add Tags in:"
+				})].concat(Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+					className: BDFDB.disCN.marginbottom8,
+					type: "Switch",
+					plugin: this,
+					keys: ["settings", key],
+					label: this.defaults.settings[key].description,
+					value: settings[key]
+				})))
 			}));
-			for (let key in settings) (!this.defaults.settings[key].inner ? settingsItems : innerItems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
-				className: BDFDB.disCN.marginbottom8,
-				type: "Switch",
-				plugin: this,
-				keys: ["settings", key],
-				label: this.defaults.settings[key].description,
-				value: settings[key]
-			}));
-			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsPanelInner, {
-				title: "Add Owner Tag in:",
-				first: settingsItems.length == 0,
-				last: true,
-				children: innerItems
+			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+				title: "Tag Text Settings",
+				collapseStates: collapseStates,
+				children: Object.keys(inputs).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+					className: BDFDB.disCN.marginbottom8,
+					type: "TextInput",
+					plugin: this,
+					keys: ["inputs", key],
+					label: this.defaults.inputs[key].description,
+					basis: "50%",
+					value: inputs[key]
+				}))
 			}));
 			
 			return settingsPanel = BDFDB.PluginUtils.createSettingsPanel(this, settingsItems);
@@ -231,14 +250,27 @@ var OwnerTag = (_ => {
 			}
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());
 			let member = settings.useRoleColor ? (BDFDB.LibraryModules.MemberStore.getMember(channel.guild_id, user.id) || {}) : {};
-			let isOwner = userType == userTypes.OWNER;
 			let tag = null;
 			if (settings.useCrown) {
-				let label = isOwner ? (channel.type == BDFDB.DiscordConstants.ChannelTypes.GROUP_DM ? BDFDB.LanguageUtils.LanguageStrings.GROUP_OWNER : BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER) : BDFDB.LanguageUtils.LanguageStrings.ADMINISTRATOR;
+				let label, className;
+				switch (userType) {
+					case userTypes.OWNER:
+						label = channel.type == BDFDB.DiscordConstants.ChannelTypes.GROUP_DM ? BDFDB.LanguageUtils.LanguageStrings.GROUP_OWNER : BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER;
+						className = BDFDB.disCN._ownertagownericon;
+						break;
+					case userTypes.ADMIN:
+						label = BDFDB.LanguageUtils.LanguageStrings.ADMINISTRATOR;
+						className = BDFDB.disCN._ownertagadminicon;
+						break;
+					case userTypes.MANAGEMENT:
+						label = BDFDB.LanguageUtils.LanguageStrings.MODERATION;
+						className = BDFDB.disCN._ownertagmanagementicon;
+						break;
+				}
 				tag = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: label,
 					children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-						className: BDFDB.disCNS.memberownericon + (isOwner ? "owner-crown" : "admin-crown"),
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.memberownericon, className),
 						name: BDFDB.LibraryComponents.SvgIcon.Names.CROWN,
 						"aria-label": label
 					})
@@ -268,8 +300,10 @@ var OwnerTag = (_ => {
 			if (!channel) return userTypes.NONE;
 			let guild = BDFDB.LibraryModules.GuildStore.getGuild(channel.guild_id);
 			let isOwner = channel.ownerId == user.id || guild && guild.ownerId == user.id;
-			if (!(isOwner || (settings.addForAdmins && BDFDB.UserUtils.can("ADMINISTRATOR", user.id) && !(settings.ignoreBotAdmins && user.bot)))) return userTypes.NONE;
-			return isOwner ? userTypes.OWNER : userTypes.ADMIN;
+			if (isOwner) return userTypes.OWNER;
+			else if (settings.addForAdmins && BDFDB.UserUtils.can("ADMINISTRATOR", user.id) && !(settings.ignoreBotAdmins && user.bot)) return userTypes.ADMIN;
+			else if (settings.addForManagement && BDFDB.UserUtils.can("MANAGE_GUILD", user.id) && !(settings.ignoreBotAdmins && user.bot)) return userTypes.MANAGEMENT;
+			return userTypes.NONE;
 		}
 	
 		forceUpdateAll () {

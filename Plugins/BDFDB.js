@@ -4417,6 +4417,11 @@
 		settingsToolbar: "settingsToolbar-wu4yfQ",
 		toolbar: "toolbar-hRzFw-"
 	};
+	DiscordClassModules.OwnerTag = {
+		adminIcon: "admin-Kv1Hp_",
+		managementIcon: "management-3fF_o8",
+		ownerIcon: "owner-FfFh3B-"
+	};
 	DiscordClassModules.PinDMs = {
 		dragPreview: "dragPreview-nXiByA",
 		dmChannelPinned: "pinned-0lM4wD",
@@ -4431,7 +4436,7 @@
 		unpinButton: "unpinButton-z3-UVO",
 		unpinIcon: "unpinIcon-79ZnEr"
 	};
-	DiscordClassModules.ReadAllNotificationsButton	= {
+	DiscordClassModules.ReadAllNotificationsButton= {
 		button: "button-Jt-tIg",
 		frame: "frame-oXWS21",
 		innerFrame: "innerFrame-8Hg64E"
@@ -4815,6 +4820,9 @@
 		_oldtitlebarenabled: ["OldTitleBar", "oldTitleBarEnabled"],
 		_oldtitlebarsettingstoolbar: ["OldTitleBar", "settingsToolbar"],
 		_oldtitlebartoolbar: ["OldTitleBar", "toolbar"],
+		_ownertagadminicon: ["OwnerTag", "adminIcon"],
+		_ownertagmanagementicon: ["OwnerTag", "managementIcon"],
+		_ownertagownericon: ["OwnerTag", "ownerIcon"],
 		_pindmsdragpreview: ["PinDMs", "dragPreview"],
 		_pindmsdmchannelpinned: ["PinDMs", "dmChannelPinned"],
 		_pindmsdmchannelplaceholder: ["PinDMs", "dmChannelPlaceholder"],
@@ -11052,7 +11060,7 @@
 		delete e.returnvalue.props.userId;
 	};
 	
-	const ContextMenuTypes = ["UserSettingsCog", "User", "Developer", "Slate", "GuildFolder", "GroupDM", "SystemMessage", "Message", "Native", "Guild", "Channel"];
+	const ContextMenuTypes = ["UserSettingsCog", "User", "Developer", "Slate", "GuildFolder", "GroupDM", "SystemMessage", "Message", "Native", "Role", "Guild", "Channel"];
 	const QueuedComponents = BDFDB.ArrayUtils.removeCopies([].concat(ContextMenuTypes.map(n => n + "ContextMenu"), ["GuildHeaderContextMenu", "MessageOptionContextMenu", "MessageOptionToolbar"]));	
 	InternalBDFDB.addContextListeners = function (plugin) {
 		plugin = plugin == BDFDB && InternalBDFDB || plugin;
