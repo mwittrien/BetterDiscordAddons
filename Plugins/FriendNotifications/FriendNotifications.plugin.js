@@ -26,7 +26,7 @@ var FriendNotifications = (_ => {
 	return class FriendNotifications {
 		getName () {return "FriendNotifications";}
 
-		getVersion () {return "1.4.9";}
+		getVersion () {return "1.5.0";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -34,7 +34,7 @@ var FriendNotifications = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Settings Page Reset","Enabling/Disabling notifications for a user no longer jumps back the settings list to page 1"]]
+				"added":[["Discriminator","Added option to show discriminator in notifications"]]
 			};
 			
 			this.patchedModules = {
@@ -53,27 +53,20 @@ var FriendNotifications = (_ => {
 			friendCounter = null;
 		
 			this.css = `
-				.${this.name}-Log-modal .log-time {
+				.${this.name}-Log-modal ${BDFDB.dotCN._friendnotificationslogtime} {
 					width: 160px;
 				}	
-				.${this.name}-Log-modal .log-user {
+				.${this.name}-Log-modal ${BDFDB.dotCN._friendnotificationslogavatar} {
 					margin: 0 10px;
 				}
-				.${this.name}-Log-modal .log-content {
+				.${this.name}-Log-modal ${BDFDB.dotCN._friendnotificationslogcontent} {
 					max-width: 600px;
 				}
-				.${this.name}-settings .type-label {
+				.${this.name}-settings ${BDFDB.dotCN._friendnotificationstypelabel} {
 					border-radius: 3px;
 					padding: 0 3px;
 					margin: 0 6px;
 				}
-				.${this.name}-settings .settings-avatar {
-					margin-right: 15px;
-				}
-				.${this.name}-settings .settings-avatar.disabled {
-					filter: grayscale(100%) brightness(50%);
-				}
-				
 				${BDFDB.dotCN._friendnotificationsfriendsonline} {
 					color: var(--text-muted);
 					text-align: center;
@@ -97,6 +90,7 @@ var FriendNotifications = (_ => {
 			this.defaults = {
 				settings: {
 					addOnlineCount:		{value:true, 	description:"Adds an online friend counter to the server list (click to open logs)"},
+					showDiscriminator:	{value:false, 	description:"Adds the user discriminator"},
 					disableForNew:		{value:false, 	description:"Disable Notifications for newly added Friends:"},
 					muteOnDND:			{value:false, 	description:"Do not notify me when I am DnD"},
 					openOnClick:		{value:false, 	description:"Open the DM when you click a Notification"}
@@ -163,7 +157,7 @@ var FriendNotifications = (_ => {
 					children: [
 						"Click on an Icon to toggle",
 						BDFDB.ReactUtils.createElement("span", {
-							className: "type-label",
+							className: BDFDB.disCN._friendnotificationstypelabel,
 							style: {backgroundColor: BDFDB.DiscordConstants.Colors.BRAND},
 							children: "Toast"
 						}),
@@ -175,7 +169,7 @@ var FriendNotifications = (_ => {
 					children: [
 						"Right-Click on an Icon to toggle",
 						BDFDB.ReactUtils.createElement("span", {
-							className: "type-label",
+							className: BDFDB.disCN._friendnotificationstypelabel,
 							style: {backgroundColor: BDFDB.DiscordConstants.Colors.STATUS_GREEN},
 							children: "Desktop"
 						}),
@@ -195,7 +189,7 @@ var FriendNotifications = (_ => {
 					},
 					renderLabel: data => [
 						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
-							className: BDFDB.DOMUtils.formatClassName("settings-avatar", data.disabled && "disabled", data.destop && "desktop"),
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.listavatar, data.disabled && BDFDB.disCN.avatardisabled),
 							src: BDFDB.UserUtils.getAvatar(data.id),
 							status: BDFDB.UserUtils.getStatus(data.id),
 							size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40,
@@ -577,23 +571,23 @@ var FriendNotifications = (_ => {
 						let EUdata = BDFDB.BDUtils.isPluginEnabled("EditUsers") && BDFDB.DataUtils.load("EditUsers", "users", user.id) || {};
 						let name = EUdata.name || user.username;
 						let avatar = EUdata.removeIcon ? "" : (EUdata.url || BDFDB.UserUtils.getAvatar(user.id));
-						let timestring = (new Date()).toLocaleString();
+						let timeString = (new Date()).toLocaleString();
 						
 						let libString = (this.defaults.notificationstrings[status.statusName].libString ? BDFDB.LanguageUtils.LanguageStrings[this.defaults.notificationstrings[status.statusName].libString] : (this.defaults.notificationstrings[status.statusName].statusName || "")).toLowerCase();
 						let string = notificationStrings[status.statusName] || "$user changed status to $status";
-						let toaststring = BDFDB.StringUtils.htmlEscape(string).replace(/'{0,1}\$user'{0,1}/g, `<strong>${BDFDB.StringUtils.htmlEscape(name)}</strong>`).replace(/'{0,1}\$status'{0,1}/g, `<strong>${libString}</strong>`);
-						if (status.isActivity) toaststring = toaststring.replace(/'{0,1}\$song'{0,1}|'{0,1}\$game'{0,1}/g, `<strong>${status.name || status.details}</strong>`).replace(/'{0,1}\$artist'{0,1}/g, `<strong>${status.state}</strong>`);
+						let toastString = BDFDB.StringUtils.htmlEscape(string).replace(/'{0,1}\$user'{0,1}/g, `<strong>${BDFDB.StringUtils.htmlEscape(name)}</strong>${settings.showDiscriminator ? ("#" + user.discriminator) : ""}`).replace(/'{0,1}\$status'{0,1}/g, `<strong>${libString}</strong>`);
+						if (status.isActivity) toastString = toastString.replace(/'{0,1}\$song'{0,1}|'{0,1}\$game'{0,1}/g, `<strong>${status.name || status.details}</strong>`).replace(/'{0,1}\$artist'{0,1}/g, `<strong>${status.state}</strong>`);
 						
 						timeLog.unshift({
-							string: toaststring,
-							avatar,
-							name,
+							string: toastString,
+							avatar: avatar,
+							name: name,
 							status: BDFDB.UserUtils.getStatus(user.id),
-							timestring
+							timeString: timeString
 						});
 						
-						if (!(settings.muteOnDND && BDFDB.UserUtils.getStatus() == BDFDB.DiscordConstants.StatusTypes.DND) && (!lastTimes[user.id] || lastTimes[user.id] != timestring)) {
-							lastTimes[user.id] = timestring;
+						if (!(settings.muteOnDND && BDFDB.UserUtils.getStatus() == BDFDB.DiscordConstants.StatusTypes.DND) && (!lastTimes[user.id] || lastTimes[user.id] != timeString)) {
+							lastTimes[user.id] = timeString;
 							
 							let openChannel = _ => {
 								if (settings.openOnClick) {
@@ -605,7 +599,7 @@ var FriendNotifications = (_ => {
 							};
 							if (!observedUsers[id].desktop) {
 								if (!document.querySelector(`.friendnotifications-${id}-toast`)) {
-									let toast = BDFDB.NotificationUtils.toast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${toaststring}</div></div>`, {html:true, timeout:toastTime, color:BDFDB.UserUtils.getStatusColor(status.statusName), icon:false, selector:`friendnotifications-${status.statusName}-toast friendnotifications-${id}-toast`});
+									let toast = BDFDB.NotificationUtils.toast(`<div class="toast-inner"><div class="toast-avatar" style="background-image:url(${avatar});"></div><div>${toastString}</div></div>`, {html:true, timeout:toastTime, color:BDFDB.UserUtils.getStatusColor(status.statusName), icon:false, selector:`friendnotifications-${status.statusName}-toast friendnotifications-${id}-toast`});
 									toast.addEventListener("click", openChannel);
 									let notificationsound = notificationSounds["toast" + status.statusName] || {};
 									if (!notificationsound.mute && notificationsound.song) {
@@ -616,7 +610,7 @@ var FriendNotifications = (_ => {
 								}
 							}
 							else {
-								let desktopString = string.replace(/\$user/g, name).replace(/\$status/g, libString);
+								let desktopString = string.replace(/\$user/g, `${name}${settings.showDiscriminator ? ("#" + user.discriminator) : ""}`).replace(/\$status/g, libString);
 								if (status.isActivity) desktopString = desktopString.replace(/\$song|\$game/g, status.name || status.details).replace(/\$artist/g, status.state);
 								let notificationsound = notificationSounds["desktop" + status.statusName] || {};
 								BDFDB.NotificationUtils.desktop(desktopString, {icon:avatar, timeout:desktopTime, click:openChannel, silent:notificationsound.mute, sound:notificationsound.song});
@@ -639,35 +633,33 @@ var FriendNotifications = (_ => {
 					items: timeLog,
 					amount: 100,
 					copyToBottom: true,
-					renderItem: (log, i) => {
-						return [
-							i > 0 ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
-							className: BDFDB.disCNS.margintop8 + BDFDB.disCN.marginbottom8
-							}) : null,
-							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
-								align: BDFDB.LibraryComponents.Flex.Align.CENTER,
-								children: [
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-										className: "log-time",
-										children: `[${log.timestring}]`
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
-										className: "log-user",
-										src: log.avatar,
-										status: log.status,
-										size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40
-									}),
-									BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
-										className: "log-content",
-										speed: 1,
-										children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
-											children: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(log.string))
-										})
+					renderItem: (log, i) => [
+						i > 0 ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+						className: BDFDB.disCNS.margintop8 + BDFDB.disCN.marginbottom8
+						}) : null,
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Flex, {
+							align: BDFDB.LibraryComponents.Flex.Align.CENTER,
+							children: [
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+									className: BDFDB.disCN._friendnotificationslogtime,
+									children: `[${log.timeString}]`
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AvatarComponents.default, {
+									className: BDFDB.disCN._friendnotificationslogavatar,
+									src: log.avatar,
+									status: log.status,
+									size: BDFDB.LibraryComponents.AvatarComponents.Sizes.SIZE_40
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextScroller, {
+									className: BDFDB.disCN._friendnotificationslogcontent,
+									speed: 1,
+									children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TextElement, {
+										children: BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(log.string))
 									})
-								]
-							})
-						]
-					}
+								})
+							]
+						})
+					]
 				})
 			});
 		}

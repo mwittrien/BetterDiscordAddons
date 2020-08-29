@@ -4162,6 +4162,7 @@
 	var DiscordClassModules = {};
 	DiscordClassModules.BDFDB = {
 		BDFDBundefined: "BDFDB_undefined",
+		avatarDisabled: "disabled-6G33EE",
 		badge: "badge-7R_W3s",
 		badgeAvatar: "avatar-hF52Er",
 		bdaRepoEntry: "entry-9JnAPs",
@@ -4377,7 +4378,11 @@
 		nameCell: "nameCell-xyXENZ"
 	};
 	DiscordClassModules.FriendNotifications = {
-		friendsOnline: "friendsOnline-2JkivW"
+		logAvatar: "avatar-GgGssS",
+		logContent: "content-_3_FFs",
+		logTime: "time-00Fs44",
+		friendsOnline: "friendsOnline-2JkivW",
+		typeLabel: "label-9FgsSa"
 	};
 	DiscordClassModules.GoogleTranslateOption = {
 		reverseButton: "reverseButton-5S47qV",
@@ -4779,7 +4784,11 @@
 		_emojistatisticsamountcell: ["EmojiStatistics", "amountCell"],
 		_emojistatisticsiconcell: ["EmojiStatistics", "iconCell"],
 		_emojistatisticsnamecell: ["EmojiStatistics", "nameCell"],
+		_friendnotificationslogavatar: ["FriendNotifications", "logAvatar"],
+		_friendnotificationslogcontent: ["FriendNotifications", "logContent"],
+		_friendnotificationslogtime: ["FriendNotifications", "logTime"],
 		_friendnotificationsfriendsonline: ["FriendNotifications", "friendsOnline"],
+		_friendnotificationstypelabel: ["FriendNotifications", "typeLabel"],
 		_imageutilitiesdetails: ["ImageUtilities", "details"],
 		_imageutilitiesdetailsadded: ["ImageUtilities", "detailsAdded"],
 		_imageutilitiesdetailslabel: ["ImageUtilities", "detailsLabel"],
@@ -4935,6 +4944,7 @@
 		autocompleteselector: ["Autocomplete", "selector"],
 		avatar: ["Avatar", "avatar"],
 		avatarcursordefault: ["Avatar", "cursorDefault"],
+		avatardisabled: ["BDFDB", "avatarDisabled"],
 		avataricon: ["AvatarIcon", "icon"],
 		avatariconactivelarge: ["AvatarIcon", "iconActiveLarge"],
 		avatariconactivemedium: ["AvatarIcon", "iconActiveMedium"],
@@ -9174,7 +9184,7 @@
 						})).flat(10).filter(n => n)
 					})
 				]
-			}), "title", "data", "settings", "renderLabel", "cardClassName", "cardStyle", "onCheckboxChange", "maxWidth", "fullWidth", "pagination"));
+			}), "title", "data", "settings", "renderLabel", "cardClassName", "cardStyle", "onCheckboxChange", "maxWidth", "fullWidth", "biggestWidth", "pagination"));
 			let header = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 				className: BDFDB.disCN.settingstableheaders,
 				align: InternalComponents.LibraryComponents.Flex.Align.STRETCH,
@@ -10002,6 +10012,10 @@
 			color: hsla(0,0%,100%,.6);
 		}
 		
+		${BDFDB.dotCN.avatardisabled} {
+			filter: grayscale(100%) brightness(50%);
+		}
+		
 		${BDFDB.dotCN.messageavatar + BDFDB.dotCNS.bdfdbbadgeavatar + BDFDB.dotCN.avatarwrapper} {
 			width: inherit !important;
 			height: inherit !important;
@@ -10256,6 +10270,7 @@
 		}
 		${BDFDB.dotCN.settingstableheaders} {
 			margin-right: 10px;
+			margin-left: 10px;
 		}
 		
 		${BDFDB.dotCNS.popoutwrapper + BDFDB.dotCN.messagespopouttabbarheader} {
