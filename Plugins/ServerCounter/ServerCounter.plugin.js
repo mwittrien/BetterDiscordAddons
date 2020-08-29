@@ -71,7 +71,7 @@ var ServerCounter = (_ => {
 		
 		processGuilds (e) {
 			let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: "ConnectedUnreadDMs"});
-			if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement("div", {
+			if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.disCN.guildouter,
 				children: BDFDB.ReactUtils.createElement("div", {
 					className: BDFDB.disCNS.guildslabel + BDFDB.disCN._servercounterservercount,
