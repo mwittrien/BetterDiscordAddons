@@ -4830,7 +4830,7 @@
 		_readallnotificationsbuttonbutton: ["ReadAllNotificationsButton", "button"],
 		_readallnotificationsbuttonframe: ["ReadAllNotificationsButton", "frame"],
 		_readallnotificationsbuttoninner: ["ReadAllNotificationsButton", "innerFrame"],
-		_servercounterservercount: ["ServerCounter", "ServerCounter"],
+		_servercounterservercount: ["ServerCounter", "serverCount"],
 		_serverfoldersdragpreview: ["ServerFolders", "dragPreview"],
 		_serverfoldersfoldercontent: ["ServerFolders", "folderContent"],
 		_serverfoldersfoldercontentclosed: ["ServerFolders", "folderContentClosed"],
@@ -9935,7 +9935,6 @@
 			width: 70px;
 			word-wrap: normal;
 			white-space: nowrap;
-			cursor: pointer;
 		}
 		${BDFDB.dotCN.guildslabel}:hover {
 			color: var(--header-secondary);

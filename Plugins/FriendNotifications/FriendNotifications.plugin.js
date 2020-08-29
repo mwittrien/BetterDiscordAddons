@@ -67,6 +67,9 @@ var FriendNotifications = (_ => {
 					padding: 0 3px;
 					margin: 0 6px;
 				}
+				${BDFDB.dotCN._friendnotificationsfriendsonline} {
+					cursor: pointer;
+				}
 			`;
 
 			this.defaults = {
