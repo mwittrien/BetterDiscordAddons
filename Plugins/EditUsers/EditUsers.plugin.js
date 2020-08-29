@@ -829,7 +829,6 @@ var EditUsers = (_ => {
 		}
 		
 		processIncomingCallModal (e) {
-			console.log(e);
 			if (e.instance.props.channelId && settings.changeInDmCalls) {
 				let user = BDFDB.LibraryModules.UserStore.getUser(e.instance.props.channelId);
 				if (!user) {

@@ -7,7 +7,7 @@ var ChatFilter = (_ => {
 	return class ChatFilter {
 		getName () {return "ChatFilter";}
 
-		getVersion () {return "3.4.3";}
+		getVersion () {return "3.4.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -15,7 +15,7 @@ var ChatFilter = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Message Update","Fixed for yet another message update provided by our best friend discord"]]
+				"improved":[["Spaces and RegExp","Now supports spaces and regexp"]]
 			};
 			
 			this.patchedModules = {
@@ -38,7 +38,8 @@ var ChatFilter = (_ => {
 				configs: {
 					empty: 		{value:false,		description:"Allows the replacevalue to be empty (ignoring the default)"},
 					case: 		{value:false,		description:"Handle the wordvalue case sensitive"},
-					exact: 		{value:true,		description:"Handle the wordvalue as an exact word and not as part of a word"}
+					exact: 		{value:true,		description:"Handle the wordvalue as an exact word and not as part of a word"},
+					regex: 		{value:false,		description:"Handle the wordvalue as a RegExp string"}
 				},
 				replaces: {
 					blocked: 	{value:"~~BLOCKED~~",		description:"Default replaceword for blocked messages:"},
@@ -52,8 +53,6 @@ var ChatFilter = (_ => {
 
 		getSettingsPanel (collapseStates = {}) {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-			let settings = BDFDB.DataUtils.get(this, "settings");
-			let replaces = BDFDB.DataUtils.get(this, "replaces");
 			let settingsPanel, settingsItems = [];
 			
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
@@ -66,14 +65,14 @@ var ChatFilter = (_ => {
 					keys: ["settings", key],
 					label: this.defaults.settings[key].description,
 					value: settings[key]
-				})).concat(Object.keys(replaces).map(rtype => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+				})).concat(Object.keys(replaces).map(rType => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 					className: BDFDB.disCN.marginbottom8,
 					type: "TextInput",
 					plugin: this,
-					keys: ["replaces", rtype],
-					label: this.defaults.replaces[rtype].description,
-					value: replaces[rtype],
-					placeholder: this.defaults.replaces[rtype].value
+					keys: ["replaces", rType],
+					label: this.defaults.replaces[rType].description,
+					value: replaces[rType],
+					placeholder: this.defaults.replaces[rType].value
 				})))
 			}));
 			let values = {wordvalue:"", replacevalue:"", choice:"blocked"};
@@ -95,12 +94,12 @@ var ChatFilter = (_ => {
 					this.createInputs(values)
 				].flat(10).filter(n => n)
 			}));
-			for (let rtype in replaces) if (!BDFDB.ObjectUtils.isEmpty(words[rtype])) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
-				title: `Added ${rtype} words`,
+			for (let rType in replaces) if (!BDFDB.ObjectUtils.isEmpty(words[rType])) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
+				title: `Added ${rType} words`,
 				collapseStates: collapseStates,
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsList, {
 					settings: Object.keys(this.defaults.configs),
-					data: Object.keys(words[rtype]).map((wordvalue, i) => Object.assign({}, words[rtype][wordvalue], {
+					data: Object.keys(words[rType]).map((wordvalue, i) => Object.assign({}, words[rType][wordvalue], {
 						key: wordvalue,
 						label: wordvalue
 					})),
@@ -113,8 +112,8 @@ var ChatFilter = (_ => {
 								size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
 								maxLength: 100000000000000000000,
 								onChange: value => {
-									words[rtype][value] = words[rtype][data.label];
-									delete words[rtype][data.label];
+									words[rType][value] = words[rType][data.label];
+									delete words[rType][data.label];
 									data.label = value;
 									BDFDB.DataUtils.save(words, this, "words");
 								}
@@ -125,18 +124,18 @@ var ChatFilter = (_ => {
 								size: BDFDB.LibraryComponents.TextInput.Sizes.MINI,
 								maxLength: 100000000000000000000,
 								onChange: value => {
-									words[rtype][data.label].replace = value;
+									words[rType][data.label].replace = value;
 									BDFDB.DataUtils.save(words, this, "words");
 								}
 							})
 						]
 					}),
 					onCheckboxChange: (value, instance) => {
-						words[rtype][instance.props.cardId][instance.props.settingId] = value;
+						words[rType][instance.props.cardId][instance.props.settingId] = value;
 						BDFDB.DataUtils.save(words, this, "words");
 					},
 					onRemove: (e, instance) => {
-						delete words[rtype][instance.props.cardId];
+						delete words[rType][instance.props.cardId];
 						BDFDB.DataUtils.save(words, this, "words");
 						BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 					}
@@ -145,15 +144,15 @@ var ChatFilter = (_ => {
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Remove All",
 				collapseStates: collapseStates,
-				children: Object.keys(replaces).map(rtype => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
+				children: Object.keys(replaces).map(rType => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsItem, {
 					type: "Button",
 					className: BDFDB.disCN.marginbottom8,
 					color: BDFDB.LibraryComponents.Button.Colors.RED,
-					label: `Remove all ${rtype} words`,
+					label: `Remove all ${rType} words`,
 					onClick: _ => {
-						BDFDB.ModalUtils.confirm(this, `Are you sure you want to remove all ${rtype} words?`, _ => {
-							words[rtype] = {};
-							BDFDB.DataUtils.remove(this, "words", rtype);
+						BDFDB.ModalUtils.confirm(this, `Are you sure you want to remove all ${rType} words?`, _ => {
+							words[rType] = {};
+							BDFDB.DataUtils.remove(this, "words", rType);
 							BDFDB.PluginUtils.refreshSettingsPanel(this, settingsPanel, collapseStates);
 						});
 					},
@@ -163,7 +162,17 @@ var ChatFilter = (_ => {
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Config Guide",
 				collapseStates: collapseStates,
-				children: ["Case: Will block/censor words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe", "Not Case: Will block/censor words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe", "Exact: Will block/censor words that are exactly the selected word. apple => apple, not applepie or pineapple", "Not Exact: Will block/censor all words containing the selected word. apple => apple, applepie and pineapple", "Empty: Ignores the default and set replace word and removes the word/message instead."].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
+				children: [
+					"Case: Will block/censor words while comparing lowercase/uppercase. apple => apple, not APPLE or AppLe",
+					"Not Case: Will block/censor words while ignoring lowercase/uppercase. apple => apple, APPLE and AppLe",
+					"Exact: Will block/censor words that are exactly the selected word. apple => apple, not applepie or pineapple",
+					"Not Exact: Will block/censor all words containing the selected word. apple => apple, applepie and pineapple",
+					"Empty: Ignores the default and set replace word and removes the word/message instead.",
+					[
+						"Regex: Will treat the entered wordvalue as a regular expression. ",
+						BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {href: "https://regexr.com/", children: BDFDB.LanguageUtils.LanguageStrings.HELP + "?"})
+					],
+				].map(string => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormText, {
 					type: BDFDB.LibraryComponents.FormComponents.FormTextTypes.DESCRIPTION,
 					children: string
 				}))
@@ -204,7 +213,7 @@ var ChatFilter = (_ => {
 				BDFDB.PluginUtils.init(this);
 
 				words = BDFDB.DataUtils.load(this, "words");
-				for (let rtype in this.defaults.replaces) if (!BDFDB.ObjectUtils.is(words[rtype])) words[rtype] = {};
+				for (let rType in this.defaults.replaces) if (!BDFDB.ObjectUtils.is(words[rType])) words[rType] = {};
 				
 				this.forceUpdateAll();
 			}
@@ -330,27 +339,41 @@ var ChatFilter = (_ => {
 				for (let bWord in words.blocked) {
 					blockedReplace = words.blocked[bWord].empty ? "" : (words.blocked[bWord].replace || replaces.blocked);
 					let reg = this.createReg(bWord, words.blocked[bWord]);
-					content.replace(/\n/g, " \n ").split(" ").forEach(word => {
-						if (this.testWord(word, reg)) blocked = true;
-					});
+					if (words.blocked[bWord].regex || bWord.indexOf(" ") > -1) {
+						if (this.testWord(content, reg)) blocked = true;
+					}
+					else for (let word of content.replace(/([\n\t\r])/g, " $1 ").split(" ")) {
+						if (this.testWord(word, reg)) {
+							blocked = true;
+							break;
+						}
+					}
 					if (blocked) break;
 				}
 				if (blocked) return {blocked, censored, content:blockedReplace};
 				else {
-					let newContent = [];
+					content = content.replace(/([\n\t\r])/g, " $1 ");
 					for (let cWord in words.censored) {
 						let censoredReplace = words.censored[cWord].empty ? "" : (words.censored[cWord].replace || replaces.censored);
 						let reg = this.createReg(cWord, words.censored[cWord]);
-						let newstring = [];
-						content.replace(/\n/g, " \n ").split(" ").forEach(word => {
+						let newString = [];
+						if (words.censored[cWord].regex || cWord.indexOf(" ") > -1) {
+							if (this.testWord(content, reg)) {
+								censored = true;
+								newString = [content.replace(reg, censoredReplace)];
+							}
+							else newString = [content];
+						}
+						else for (let word of content.split(" ")) {
 							if (this.testWord(word, reg)) {
 								censored = true;
-								newstring.push(censoredReplace);
+								newString.push(censoredReplace);
 							}
-							else newstring.push(word);
-						});
-						content = newstring.join(" ").replace(/ \n /g, "\n");
+							else newString.push(word);
+						}
+						content = newString.join(" ");
 					}
+					content = content.replace(/ ([\n\t\r]) /g, "$1");
 				}
 			}
 			return {blocked, censored, content};
@@ -372,7 +395,8 @@ var ChatFilter = (_ => {
 		}
 
 		createReg (word, config) {
-			return new RegExp(BDFDB.StringUtils.htmlEscape(config.exact ? "^" + BDFDB.StringUtils.regEscape(word) + "$" : BDFDB.StringUtils.regEscape(word)), config.case ? "" : "i");
+			let escapedWord = config.regex ? word : BDFDB.StringUtils.regEscape(word);
+			return new RegExp(BDFDB.StringUtils.htmlEscape(config.exact ? "^" + escapedWord + "$" : escapedWord), `${config.case ? "" : "i"}${config.exact ? "" : "g"}`);
 		}
 
 		openAddModal (wordvalue) {

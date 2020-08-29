@@ -281,7 +281,6 @@ var PersonalPins = (_ => {
 										value: buttonInstance.props.selectedSort,
 										options: sortKeys.map(option => this.getValue(option, "sort")),
 										onChange: option => {
-											console.log(buttonInstance);
 											buttonInstance.props.selectedSort = this.getValue(option, "sort");
 											BDFDB.ReactUtils.forceUpdate(buttonInstance.context.popout._owner.stateNode);
 										}
