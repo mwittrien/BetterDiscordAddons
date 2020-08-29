@@ -7214,9 +7214,9 @@
 						]
 					}),
 					BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN._repodescription + " scroller",
+						className: BDFDB.disCN._repodescriptionwrap,
 						children: BDFDB.ReactUtils.createElement("div", {
-							className: BDFDB.disCN._repodescription + " scroller",
+							className: BDFDB.disCN._repodescription,
 							children: this.props.data.description
 						})
 					}),
