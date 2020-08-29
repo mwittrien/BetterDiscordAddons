@@ -356,7 +356,7 @@ var ThemeRepo = (_ => {
 								label: "Download generated Theme",
 								children: "Download",
 								onClick: _ => {
-									_this.createThemeFile(this.props.currentGenerator.name + ".theme.css", _this.generateTheme(this.props.currentGenerator, this.props.generatorValues));
+									if (loadedThemes[this.props.currentGenerator]) _this.createThemeFile(loadedThemes[this.props.currentGenerator].name + ".theme.css", _this.generateTheme(loadedThemes[this.props.currentGenerator], this.props.generatorValues));
 								}
 							}),
 							BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
@@ -631,7 +631,7 @@ var ThemeRepo = (_ => {
 	return class ThemeRepo {
 		getName () {return "ThemeRepo";}
 
-		getVersion () {return "2.0.4";}
+		getVersion () {return "2.0.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -639,7 +639,7 @@ var ThemeRepo = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Inbuilt Repo","The theme repo no longer opens a modal to display the repo, instead the list is rendered in the settings window"]]
+				"fixed":[["Generator","Theme Generator works again"]]
 			};
 			
 			this.patchedModules = {
