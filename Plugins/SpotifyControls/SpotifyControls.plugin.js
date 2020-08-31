@@ -272,7 +272,7 @@ var SpotifyControls = (_ => {
 				children: _this.defaults.buttonConfigs[this.props.type] && _this.defaults.buttonConfigs[this.props.type].icons ? (_this.defaults.buttonConfigs[this.props.type].icons[this.props.icon] || _this.defaults.buttonConfigs[this.props.type].icons[0]) : "?",
 				onClick: this.props.disabled ? _ => {} : this.props.onClick,
 				onContextMenu: this.props.disabled ? _ => {} : this.props.onContextMenu,
-			}), "active", "disabled", "renderPopout", "icon", "type"));
+			}), "active", "disabled", "renderPopout", "icon", "type", "playerSize"));
 			return !this.props.disabled && typeof this.props.renderPopout == "function" ? BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
 				children: button,
 				animation: BDFDB.LibraryComponents.PopoutContainer.Animation.SCALE,
