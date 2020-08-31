@@ -6578,6 +6578,7 @@
 			last: "Zadnji",
 			library_settings: "Postavke biblioteke",
 			order: "Slijed",
+			server: "Server",
 			sort_by: "Poredaj po",
 			toast_plugin_started: "{{var0}} je započeo.",
 			toast_plugin_stopped: "{{var0}} zaustavljen.",
@@ -6595,6 +6596,7 @@
 			last: "Sidste",
 			library_settings: "Biblioteksindstillinger",
 			order: "Sekvens",
+			server: "Server",
 			sort_by: "Sorter efter",
 			toast_plugin_started: "{{var0}} er startet.",
 			toast_plugin_stopped: "{{var0}} er stoppet.",
@@ -6612,6 +6614,7 @@
 			last: "Letzte",
 			library_settings: "Bibliothekseinstellungen",
 			order: "Reihenfolge",
+			server: "Server",
 			sort_by: "Sortieren nach",
 			toast_plugin_started: "{{var0}} wurde gestartet.",
 			toast_plugin_stopped: "{{var0}} wurde gestoppt.",
@@ -6629,6 +6632,7 @@
 			last: "Último",
 			library_settings: "Configuraciones de biblioteca",
 			order: "Secuencia",
+			server: "Servidor",
 			sort_by: "Ordenar por",
 			toast_plugin_started: "{{var0}} se guilddiv iniciado.",
 			toast_plugin_stopped: "{{var0}} se guilddiv detenido.",
@@ -6646,6 +6650,7 @@
 			last: "Dernier",
 			library_settings: "Paramètres de la bibliothèque",
 			order: "Séquence",
+			server: "Serveur",
 			sort_by: "Trier par",
 			toast_plugin_started: "{{var0}} a été démarré.",
 			toast_plugin_stopped: "{{var0}} a été arrêté.",
@@ -6663,6 +6668,7 @@
 			last: "Ultimo",
 			library_settings: "Impostazioni della libreria",
 			order: "Sequenza",
+			server: "Server",
 			sort_by: "Ordina per",
 			toast_plugin_started: "{{var0}} è stato avviato.",
 			toast_plugin_stopped: "{{var0}} è stato interrotto.",
@@ -6680,6 +6686,7 @@
 			last: "Laatste",
 			library_settings: "Bibliotheekinstellingen",
 			order: "Volgorde",
+			server: "Server",
 			sort_by: "Sorteer op",
 			toast_plugin_started: "{{var0}} is gestart.",
 			toast_plugin_stopped: "{{var0}} is gestopt.",
@@ -6697,6 +6704,7 @@
 			last: "Siste",
 			library_settings: "Bibliotekinnstillinger",
 			order: "Sekvens",
+			server: "Server",
 			sort_by: "Sorter etter",
 			toast_plugin_started: "{{var0}} er startet.",
 			toast_plugin_stopped: "{{var0}} er stoppet.",
@@ -6714,6 +6722,7 @@
 			last: "Ostatni",
 			library_settings: "Ustawienia biblioteki",
 			order: "Sekwencja",
+			server: "Serwer",
 			sort_by: "Sortuj według",
 			toast_plugin_started: "{{var0}} został uruchomiony.",
 			toast_plugin_stopped: "{{var0}} został zatrzymany.",
@@ -6731,6 +6740,7 @@
 			last: "Último",
 			library_settings: "Configurações da biblioteca",
 			order: "Seqüência",
+			server: "Servidor",
 			sort_by: "Ordenar por",
 			toast_plugin_started: "{{var0}} foi iniciado.",
 			toast_plugin_stopped: "{{var0}} foi interrompido.",
@@ -6748,6 +6758,7 @@
 			last: "Viimeinen",
 			library_settings: "Kirjastoasetukset",
 			order: "Jakso",
+			server: "Palvelin",
 			sort_by: "Järjestä",
 			toast_plugin_started: "{{var0}} on käynnistetty.",
 			toast_plugin_stopped: "{{var0}} on pysäytetty.",
@@ -6765,6 +6776,7 @@
 			last: "Sista",
 			library_settings: "Biblioteksinställningar",
 			order: "Sekvens",
+			server: "Server",
 			sort_by: "Sortera efter",
 			toast_plugin_started: "{{var0}} har startats.",
 			toast_plugin_stopped: "{{var0}} har blivit stoppad.",
@@ -6782,6 +6794,7 @@
 			last: "Son",
 			library_settings: "Kütüphane Ayarları",
 			order: "Sıra",
+			server: "Sunucu",
 			sort_by: "Göre sırala",
 			toast_plugin_started: "{{var0}} başlatıldı.",
 			toast_plugin_stopped: "{{var0}} durduruldu.",
@@ -6799,6 +6812,7 @@
 			last: "Poslední",
 			library_settings: "Nastavení knihovny",
 			order: "Sekvence",
+			server: "Server",
 			sort_by: "Seřazeno podle",
 			toast_plugin_started: "{{var0}} byl spuštěn.",
 			toast_plugin_stopped: "{{var0}} byl zastaven.",
@@ -6816,6 +6830,7 @@
 			last: "Последният",
 			library_settings: "Настройки на библиотеката",
 			order: "Последователност",
+			server: "Сървър",
 			sort_by: "Сортиране по",
 			toast_plugin_started: "{{var0}} е стартиран.",
 			toast_plugin_stopped: "{{var0}} е спрян.",
@@ -6833,6 +6848,7 @@
 			last: "Последний",
 			library_settings: "Настройки библиотеки",
 			order: "Последовательность",
+			server: "Сервер",
 			sort_by: "Сортировать по",
 			toast_plugin_started: "{{var0}} запущен.",
 			toast_plugin_stopped: "{{var0}} остановлен.",
@@ -6850,6 +6866,7 @@
 			last: "Останній",
 			library_settings: "Налаштування бібліотеки",
 			order: "Послідовність",
+			server: "Сервер",
 			sort_by: "Сортувати за",
 			toast_plugin_started: "{{var0}} було запущено.",
 			toast_plugin_stopped: "{{var0}} було зупинено.",
@@ -6867,6 +6884,7 @@
 			last: "最後",
 			library_settings: "ライブラリ設定",
 			order: "ソート順",
+			server: "サーバー",
 			sort_by: "並び替え",
 			toast_plugin_started: "{{var0}}が開始されました.",
 			toast_plugin_stopped: "{{var0}}が停止しました.",
@@ -6884,6 +6902,7 @@
 			last: "最後",
 			library_settings: "庫設置",
 			order: "排序",
+			server: "伺服器",
 			sort_by: "排序方式",
 			toast_plugin_started: "{{var0}}已經啟動.",
 			toast_plugin_stopped: "{{var0}}已停止.",
@@ -6901,6 +6920,7 @@
 			last: "마지막",
 			library_settings: "라이브러리 설정",
 			order: "정렬 순서",
+			server: "서버",
 			sort_by: "정렬 기준",
 			toast_plugin_started: "{{var0}} 시작되었습니다.",
 			toast_plugin_stopped: "{{var0}} 중지되었습니다.",
@@ -6918,6 +6938,7 @@
 			last: "Last",
 			library_settings: "Library Settings",
 			order: "Order",
+			server: "Server",
 			sort_by: "Sort by",
 			toast_plugin_started: "{{var0}} has been started.",
 			toast_plugin_stopped: "{{var0}} has been stopped.",
@@ -9057,9 +9078,9 @@
 		}
 		render() {
 			if (typeof this.props.type != "string" || !["BUTTON", "SELECT", "SWITCH", "TEXTINPUT"].includes(this.props.type.toUpperCase())) return null;
-			let childcomponent = InternalComponents.LibraryComponents[this.props.type];
-			if (!childcomponent) return null;
-			if (this.props.mini && childcomponent.Sizes) this.props.size = childcomponent.Sizes.MINI || childcomponent.Sizes.MIN;
+			let childComponent = InternalComponents.LibraryComponents[this.props.type];
+			if (!childComponent) return null;
+			if (this.props.mini && childComponent.Sizes) this.props.size = childComponent.Sizes.MINI || childComponent.Sizes.MIN;
 			return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 				className: BDFDB.DOMUtils.formatClassName(this.props.className, this.props.disabled && BDFDB.disCN.disabled),
 				id: this.props.id,
@@ -9091,7 +9112,7 @@
 								shrink: this.props.basis ? 0 : 1,
 								basis: this.props.basis,
 								wrap: true,
-								children: BDFDB.ReactUtils.createElement(childcomponent, BDFDB.ObjectUtils.exclude(Object.assign(BDFDB.ObjectUtils.exclude(this.props, "className", "id", "type"), this.props.childProps, {onChange: this.handleChange.bind(this)}), "grow", "stretch", "basis", "dividerbottom", "dividertop", "label", "labelClassName", "labelchildren", "tag", "mini", "note", "childProps"))
+								children: BDFDB.ReactUtils.createElement(childComponent, BDFDB.ObjectUtils.exclude(Object.assign(BDFDB.ObjectUtils.exclude(this.props, "className", "id", "type"), this.props.childProps, {onChange: this.handleChange.bind(this)}), "grow", "stretch", "basis", "dividerbottom", "dividertop", "label", "labelClassName", "labelchildren", "tag", "mini", "note", "childProps"))
 							})
 						].flat(10).filter(n => n)
 					}),
@@ -9249,14 +9270,14 @@
 			let option = keys.shift();
 			if (BDFDB.ObjectUtils.is(this.props.plugin) && option) {
 				let data = BDFDB.DataUtils.load(this.props.plugin, option);
-				let newdata = "";
-				for (let key of keys) newdata += `{"${key}":`;
+				let newData = "";
+				for (let key of keys) newData += `{"${key}":`;
 				value = value != null && value.value != null ? value.value : value;
 				let isString = typeof value == "string";
 				let marker = isString ? `"` : ``;
-				newdata += (marker + (isString ? value.replace(/\\/g, "\\\\") : value) + marker) + "}".repeat(keys.length);
-				newdata = JSON.parse(newdata);
-				BDFDB.DataUtils.save(BDFDB.ObjectUtils.is(newdata) ? BDFDB.ObjectUtils.deepAssign({}, data, newdata) : newdata, this.props.plugin, option);
+				newData += (marker + (isString ? value.replace(/\\/g, "\\\\") : value) + marker) + "}".repeat(keys.length);
+				newData = JSON.parse(newData);
+				BDFDB.DataUtils.save(BDFDB.ObjectUtils.is(newData) ? BDFDB.ObjectUtils.deepAssign({}, data, newData) : newData, this.props.plugin, option);
 				this.props.plugin.SettingsUpdated = true;
 			}
 			if (typeof this.props.onChange == "function") this.props.onChange(value, this);
@@ -9265,7 +9286,7 @@
 			if (typeof this.props.type != "string" || !["SELECT", "SWITCH", "TEXTINPUT"].includes(this.props.type.toUpperCase())) return null;
 			return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsItem, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				onChange: this.saveSettings.bind(this)
-			}), "keys", "plugin"));
+			}), "keys", "key", "plugin"));
 		}
 	};
 	

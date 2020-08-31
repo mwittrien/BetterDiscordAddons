@@ -75,12 +75,13 @@ var ImageUtilities = (_ => {
 				
 			this.defaults = {
 				settings: {
-					addDetails: 			{value:true,	inner:false,	description:"Add Image details (name, size, amount) in the Image Modal"},
-					showAsHeader:			{value:true, 	inner:false,	description:"Show Image details as a details header above the Image in the chat"},
-					showOnHover:			{value:false, 	inner:false,	description:"Show Image details as Tooltip in the chat"},
-					enableGallery: 			{value:true,	inner:false,	description:"Displays previous/next Images in the same message in the Image Modal"},
-					enableZoom: 			{value:true,	inner:false,	description:"Creates a zoom lense if you press down on an Image in the Image Modal"},
-					enableCopyImg: 			{value:true,	inner:false,	description:"Add a copy Image option in the Image Modal"},
+					addDetails: 			{value:true,	inner:false,	description:"Add image details (name, size, amount) in the image modal"},
+					showAsHeader:			{value:true, 	inner:false,	description:"Show image details as a details header above the image in the chat"},
+					showOnHover:			{value:false, 	inner:false,	description:"Show image details as Tooltip in the chat"},
+					enableGallery: 			{value:true,	inner:false,	description:"Displays previous/next Images in the same message in the image modal"},
+					enableZoom: 			{value:true,	inner:false,	description:"Creates a zoom lense if you press down on an image in the image modal"},
+					enableCopyImg: 			{value:true,	inner:false,	description:"Add a copy image option in the image modal"},
+					enableSaveImg: 			{value:true,	inner:false,	description:"Add a save image as option in the image modal"},
 					useChromium: 			{value:false, 	inner:false,	description:"Use an inbuilt browser window instead of opening your default browser"},
 					addUserAvatarEntry: 	{value:true, 	inner:true,		description:"User Avatars"},
 					addGuildIconEntry: 		{value:true, 	inner:true,		description:"Server Icons"},
@@ -431,15 +432,7 @@ var ImageUtilities = (_ => {
 					label: this.labels.context_saveimageas_text,
 					id: BDFDB.ContextMenuUtils.createItemId(this.name, "download-image-as"),
 					action: _ => {
-						BDFDB.LibraryRequires.request(url, {encoding: null}, (error, response, body) => {
-							let fileName = `${url.split("/").pop().split(".").slice(0, -1).join(".")}.${response.headers["content-type"].split("/").pop().split("+")[0]}`;
-							let hrefURL = window.URL.createObjectURL(new Blob([body]));
-							let tempLink = document.createElement("a");
-							tempLink.href = hrefURL;
-							tempLink.download = fileName;
-							tempLink.click();
-							window.URL.revokeObjectURL(hrefURL);
-						});
+						this.downloadImage(url);
 					}
 				}),
 				!this.isCopyable(url) ? null : BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuItem, {
@@ -520,6 +513,21 @@ var ImageUtilities = (_ => {
 						className: BDFDB.disCN._imageutilitiesoperations,
 						children: [
 							children[index],
+							settings.enableSaveImg && !isVideo && [
+								BDFDB.ReactUtils.createElement("span", {
+									className: BDFDB.disCN.downloadlink,
+									children: "|",
+									style: {margin: "0 5px"}
+								}),
+								BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Anchor, {
+									className: BDFDB.disCN.downloadlink, 
+									children: this.labels.context_saveimageas_text,
+									onClick: event => {
+										BDFDB.ListenerUtils.stopEvent(event);
+										this.downloadImage(url);
+									}
+								})
+							],
 							settings.enableCopyImg && this.isCopyable(url) && !isVideo && [
 								BDFDB.ReactUtils.createElement("span", {
 									className: BDFDB.disCN.downloadlink,
@@ -760,8 +768,19 @@ var ImageUtilities = (_ => {
             return file && (file.endsWith(".jpg") || file.endsWith(".jpeg") || file.endsWith(".png") || file.endsWith(".gif") || file.endsWith(".apng") || file.endsWith(".webp"));
 		}
 		
-		copyImage (src) {
-            BDFDB.LibraryRequires.request(src, {encoding: null}, (error, response, buffer) => {
+		downloadImage (url) {
+			BDFDB.LibraryRequires.request(url, {encoding: null}, (error, response, body) => {
+				let hrefURL = window.URL.createObjectURL(new Blob([body]));
+				let tempLink = document.createElement("a");
+				tempLink.href = hrefURL;
+				tempLink.download = `${url.split("/").pop().split(".").slice(0, -1).join(".")}.${response.headers["content-type"].split("/").pop().split("+")[0]}`;
+				tempLink.click();
+				window.URL.revokeObjectURL(hrefURL);
+			});
+		}
+		
+		copyImage (url) {
+            BDFDB.LibraryRequires.request(url, {encoding: null}, (error, response, buffer) => {
 				if (error) BDFDB.NotificationUtils.toast(this.labels.toast_copyimage_failed, {type: "error"});
 				else if (buffer) {
 					if (BDFDB.LibraryRequires.process.platform === "win32" || BDFDB.LibraryRequires.process.platform === "darwin") {

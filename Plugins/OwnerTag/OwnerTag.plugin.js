@@ -13,15 +13,16 @@ var OwnerTag = (_ => {
 	return class OwnerTag {
 		getName () {return "OwnerTag";}
 
-		getVersion () {return "1.3.2";}
+		getVersion () {return "1.3.3";}
 
 		getAuthor () {return "DevilBro";}
 
-		getDescription () {return "Adds a Tag like Bottags to the Serverowner.";}
+		getDescription () {return "Adds a tag or crown to the server owner (or admins/management).";}
 
 		constructor () {
 			this.changelog = {
-				"added":[["Management Crown/Tag","Added a third tag for people with the server management permission"]]
+				"added":[["Management Crown/Tag","Added a third tag for people with the server/channel/role management permission"]],
+				"improved":[["Management Tag","Tag now shows for all kinds of management perms and the type of management is displayed in the tooltip"]]
 			};
 
 			this.patchedModules = {
@@ -64,10 +65,10 @@ var OwnerTag = (_ => {
 					addInUserProfile:		{value:true, 	inner:true,		description:"User Profile Modal"},
 					useRoleColor:			{value:true, 	inner:false,	description:"Use the Rolecolor instead of the default blue"},
 					useBlackFont:			{value:false, 	inner:false,	description:"Instead of darkening the Rolecolor on bright colors use black font"},
-					useCrown:				{value:false, 	inner:false,	description:"Use the Crown Icon instead of the OwnerTag"},
+					useCrown:				{value:false, 	inner:false,	description:"Use the Crown Icon instead of the Bot Tag Style"},
 					hideNativeCrown:		{value:true, 	inner:false,	description:"Hide the native Crown Icon (not the Plugin one)"},
-					addForAdmins:			{value:false, 	inner:false,	description:"Also add an Admin Tag for any user with admin permissions"},
-					addForManagement:		{value:false, 	inner:false,	description:"Also add a Management Tag for any user with server manage permissions"},
+					addForAdmins:			{value:false, 	inner:false,	description:"Add an Admin Tag for users with admin permissions"},
+					addForManagement:		{value:false, 	inner:false,	description:"Add a Management Tag for users with management permissions"},
 					ignoreBotAdmins:		{value:false, 	inner:false,	description:"Do not add the Admin/Management tag for bots"}
 				},
 				inputs: {
@@ -89,9 +90,18 @@ var OwnerTag = (_ => {
 					className: BDFDB.disCN.marginbottom8,
 					type: "Switch",
 					plugin: this,
+					key: key,
+					disabled: key == "hideNativeCrown" && settings.useCrown,
 					keys: ["settings", key],
 					label: this.defaults.settings[key].description,
-					value: settings[key]
+					value: settings[key],
+					onChange: key == "useCrown" ? (value, instance) => {
+						let hideNativeCrownInstance = BDFDB.ReactUtils.findOwner(instance._reactInternalFiber.return, {key: "hideNativeCrown"});
+						if (hideNativeCrownInstance) {
+							hideNativeCrownInstance.props.disabled = value;
+							BDFDB.ReactUtils.forceUpdate(hideNativeCrownInstance);
+						}
+					} : null
 				}))
 			}));
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
@@ -263,7 +273,7 @@ var OwnerTag = (_ => {
 						className = BDFDB.disCN._ownertagadminicon;
 						break;
 					case userTypes.MANAGEMENT:
-						label = BDFDB.LanguageUtils.LanguageStrings.MODERATION;
+						label = `${this.labels.management_text} (${[BDFDB.UserUtils.can("MANAGE_GUILD", user.id) && BDFDB.LanguageUtils.LibraryStrings.server, BDFDB.UserUtils.can("MANAGE_CHANNELS", user.id) && BDFDB.LanguageUtils.LanguageStrings.CHANNELS, BDFDB.UserUtils.can("MANAGE_ROLES", user.id) && BDFDB.LanguageUtils.LanguageStrings.ROLES].filter(n => n).join(", ")})`;
 						className = BDFDB.disCN._ownertagmanagementicon;
 						break;
 				}
@@ -314,7 +324,7 @@ var OwnerTag = (_ => {
 			let isOwner = channel.ownerId == user.id || guild && guild.ownerId == user.id;
 			if (isOwner) return userTypes.OWNER;
 			else if (settings.addForAdmins && BDFDB.UserUtils.can("ADMINISTRATOR", user.id) && !(settings.ignoreBotAdmins && user.bot)) return userTypes.ADMIN;
-			else if (settings.addForManagement && BDFDB.UserUtils.can("MANAGE_GUILD", user.id) && !(settings.ignoreBotAdmins && user.bot)) return userTypes.MANAGEMENT;
+			else if (settings.addForManagement && (BDFDB.UserUtils.can("MANAGE_GUILD", user.id) || BDFDB.UserUtils.can("MANAGE_CHANNELS", user.id) || BDFDB.UserUtils.can("MANAGE_ROLES", user.id)) && !(settings.ignoreBotAdmins && user.bot)) return userTypes.MANAGEMENT;
 			return userTypes.NONE;
 		}
 	
@@ -324,6 +334,95 @@ var OwnerTag = (_ => {
 			
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 			BDFDB.MessageUtils.rerenderAll();
+		}
+
+		setLabelsByLanguage () {
+			switch (BDFDB.LanguageUtils.getLanguage().id) {
+				case "hr":		//croatian
+					return {
+						management_text:					"Upravljanje"
+					};
+				case "da":		//danish
+					return {
+						management_text:					"Ledelse"
+					};
+				case "de":		//german
+					return {
+						management_text:					"Verwaltung"
+					};
+				case "es":		//spanish
+					return {
+						management_text:					"Administración"
+					};
+				case "fr":		//french
+					return {
+						management_text:					"Gestion"
+					};
+				case "it":		//italian
+					return {
+						management_text:					"Gestione"
+					};
+				case "nl":		//dutch
+					return {
+						management_text:					"Beheer"
+					};
+				case "no":		//norwegian
+					return {
+						management_text:					"Ledelse"
+					};
+				case "pl":		//polish
+					return {
+						management_text:					"Zarządzanie"
+					};
+				case "pt-BR":	//portuguese (brazil)
+					return {
+						management_text:					"Gestão"
+					};
+				case "fi":		//finnish
+					return {
+						management_text:					"Johto"
+					};
+				case "sv":		//swedish
+					return {
+						management_text:					"Förvaltning"
+					};
+				case "tr":		//turkish
+					return {
+						management_text:					"Yönetim"
+					};
+				case "cs":		//czech
+					return {
+						management_text:					"Řízení"
+					};
+				case "bg":		//bulgarian
+					return {
+						management_text:					"Управление"
+					};
+				case "ru":		//russian
+					return {
+						management_text:					"Управление"
+					};
+				case "uk":		//ukrainian
+					return {
+						management_text:					"Управління"
+					};
+				case "ja":		//japanese
+					return {
+						management_text:					"管理"
+					};
+				case "zh-TW":	//chinese (traditional)
+					return {
+						management_text:					"管理"
+					};
+				case "ko":		//korean
+					return {
+						management_text:					"관리"
+					};
+				default:		//default: english
+					return {
+						management_text:					"Management"
+					};
+			}
 		}
 	}
 })();
