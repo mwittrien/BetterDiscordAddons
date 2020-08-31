@@ -4474,6 +4474,7 @@
 		coverWrapper: "coverWrapper-YAplwJ",
 		details: "details-ntX2k5",
 		interpret: "interpret-F93iqP",
+		settingsIcon: "icon-F4SSra",
 		song: "song-tIdBpF",
 		timeline: "timeline-UWmgAx",
 		volumeSlider: "volumeSlider-sR5g00"
@@ -4864,6 +4865,7 @@
 		_spotifycontrolscoverwrapper: ["SpotifyControls", "coverWrapper"],
 		_spotifycontrolsdetails: ["SpotifyControls", "details"],
 		_spotifycontrolsinterpret: ["SpotifyControls", "interpret"],
+		_spotifycontrolssettingsicon: ["SpotifyControls", "settingsIcon"],
 		_spotifycontrolssong: ["SpotifyControls", "song"],
 		_spotifycontrolstimeline: ["SpotifyControls", "timeline"],
 		_spotifycontrolsvolumeslider: ["SpotifyControls", "volumeSlider"],

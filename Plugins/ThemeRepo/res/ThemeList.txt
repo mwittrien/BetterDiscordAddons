@@ -32,9 +32,9 @@ https://raw.githubusercontent.com/fluffingtons/revert-discord/master/revert.them
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/AdjustableServerWidth/AdjustableServerWidth.theme.css
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/FrostedGlass/FrostedGlass.theme.css
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/HorizontalServerlist/HorizontalServerlist.theme.css
+https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/RadialStatus/RadialStatus.theme.css
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/SimplyDark/SimplyDark.theme.css
 https://raw.githubusercontent.com/Gibbu/BetterDiscord-Themes/master/Slate/Slate.theme.css
-https://raw.githubusercontent.com/GibbuBDStuff/RadialStatus/master/RadialStatus.theme.css
 https://raw.githubusercontent.com/GoldenLys/BetterDiscord-Elysia/master/ELYSIA.theme.css
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/Glossy-Cyan/Glossy-Cyan.H.theme.css
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/HansAnonymousAdditions/HAA.theme.css
