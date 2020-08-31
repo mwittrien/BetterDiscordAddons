@@ -71,6 +71,7 @@ var SpotifyControls = (_ => {
 			}
 			if (!lastSong) return null;
 			currentVolume = socketDevice.device.volume_percent;
+			let playerSize = this.props.maximized ? "big" : "small";
 			return BDFDB.ReactUtils.createElement("div", {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN._spotifycontrolscontainer, this.props.maximized && BDFDB.disCN._spotifycontrolscontainermaximized, this.props.timeline && BDFDB.disCN._spotifycontrolscontainerwithtimeline),
 				children: [
@@ -126,7 +127,7 @@ var SpotifyControls = (_ => {
 									children: [
 										BDFDB.ReactUtils.createElement(SpotifyControlsButtonComponent, {
 											type: "share",
-											playerSize: this.props.maximized ? "big" : "small",
+											playerSize: playerSize,
 											style: this.props.maximized ? {marginRight: 4} : {},
 											onClick: _ => {
 												let url = BDFDB.ReactUtils.getValue(playbackState, "item.external_urls.spotify") || BDFDB.ReactUtils.getValue(playbackState, "context.external_urls.spotify");
@@ -139,7 +140,7 @@ var SpotifyControls = (_ => {
 										}),
 										BDFDB.ReactUtils.createElement(SpotifyControlsButtonComponent, {
 											type: "shuffle",
-											playerSize: this.props.maximized ? "big" : "small",
+											playerSize: playerSize,
 											active: playbackState.shuffle_state,
 											disabled: socketDevice.device.is_restricted,
 											onClick: _ => {
@@ -152,7 +153,7 @@ var SpotifyControls = (_ => {
 										}),
 										BDFDB.ReactUtils.createElement(SpotifyControlsButtonComponent, {
 											type: "previous",
-											playerSize: this.props.maximized ? "big" : "small",
+											playerSize: playerSize,
 											disabled: socketDevice.device.is_restricted,
 											onClick: _ => {
 												if (previousIsClicked) {
@@ -172,7 +173,7 @@ var SpotifyControls = (_ => {
 										}),
 										BDFDB.ReactUtils.createElement(SpotifyControlsButtonComponent, {
 											type: "pauseplay",
-											playerSize: this.props.maximized ? "big" : "small",
+											playerSize: playerSize,
 											icon: this.props.song ? 0 : 1,
 											disabled: socketDevice.device.is_restricted,
 											onClick: _ => {
@@ -188,7 +189,7 @@ var SpotifyControls = (_ => {
 										}),
 										BDFDB.ReactUtils.createElement(SpotifyControlsButtonComponent, {
 											type: "next",
-											playerSize: this.props.maximized ? "big" : "small",
+											playerSize: playerSize,
 											disabled: socketDevice.device.is_restricted,
 											onClick: _ => {
 												this.request(socketDevice.socket, socketDevice.device, "next");
@@ -196,7 +197,7 @@ var SpotifyControls = (_ => {
 										}),
 										BDFDB.ReactUtils.createElement(SpotifyControlsButtonComponent, {
 											type: "repeat",
-											playerSize: this.props.maximized ? "big" : "small",
+											playerSize: playerSize,
 											icon: playbackState.repeat_state != repeatStates[2] ? 0 : 1,
 											active: playbackState.repeat_state != repeatStates[0],
 											disabled: socketDevice.device.is_restricted,
@@ -210,7 +211,7 @@ var SpotifyControls = (_ => {
 										}),
 										BDFDB.ReactUtils.createElement(SpotifyControlsButtonComponent, {
 											type: "volume",
-											playerSize: this.props.maximized ? "big" : "small",
+											playerSize: playerSize,
 											icon: Math.ceil(currentVolume/34),
 											disabled: socketDevice.device.is_restricted,
 											style: this.props.maximized ? {marginLeft: 4} : {},
