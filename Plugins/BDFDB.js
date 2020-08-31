@@ -4475,6 +4475,7 @@
 		details: "details-ntX2k5",
 		interpret: "interpret-F93iqP",
 		settingsIcon: "icon-F4SSra",
+		settingsLabel: "label-3f00Sr",
 		song: "song-tIdBpF",
 		timeline: "timeline-UWmgAx",
 		volumeSlider: "volumeSlider-sR5g00"
@@ -4866,6 +4867,7 @@
 		_spotifycontrolsdetails: ["SpotifyControls", "details"],
 		_spotifycontrolsinterpret: ["SpotifyControls", "interpret"],
 		_spotifycontrolssettingsicon: ["SpotifyControls", "settingsIcon"],
+		_spotifycontrolssettingslabel: ["SpotifyControls", "settingsLabel"],
 		_spotifycontrolssong: ["SpotifyControls", "song"],
 		_spotifycontrolstimeline: ["SpotifyControls", "timeline"],
 		_spotifycontrolsvolumeslider: ["SpotifyControls", "volumeSlider"],
