@@ -835,6 +835,7 @@
 			tooltip.style.setProperty("z-index", options.zIndex || 1002, "important");
 			tooltipContent.style.setProperty("z-index", options.zIndex || 1002, "important");
 		}
+		if (typeof options.width == "number" && options.width > 196) tooltip.style.setProperty("max-width", `${options.width}px`, "important");
 		if (customBackgroundColor || options.unhideable) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltipcustom);
 		else if (options.color && BDFDB.disCN["tooltip" + options.color.toLowerCase()]) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN["tooltip" + options.color.toLowerCase()]);
 		else BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltipblack);
