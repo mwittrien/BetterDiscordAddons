@@ -815,7 +815,7 @@
 		
 		if (typeof options.type != "string" || !BDFDB.disCN["tooltip" + options.type.toLowerCase()]) options.type = "top";
 		let type = options.type.toLowerCase();
-		BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN["tooltip" + type]);
+		BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN["tooltip" + type], options.className, options.selector);
 		
 		let fontColorIsGradient = false, customBackgroundColor = false, style = "";
 		if (options.style) style += options.style;
@@ -841,8 +841,6 @@
 		else BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltipblack);
 		
 		if (options.list || BDFDB.ObjectUtils.is(options.guild)) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltiplistitem);
-		
-		if (options.selector) BDFDB.DOMUtils.addClass(tooltip, options.selector);
 		
 		if (BDFDB.ObjectUtils.is(options.guild)) {
 			let streamOwnerIds = LibraryModules.StreamUtils.getAllApplicationStreams().filter(app => app.guildId === options.guild.id).map(app => app.ownerId) || [];
