@@ -835,7 +835,13 @@
 			tooltip.style.setProperty("z-index", options.zIndex || 1002, "important");
 			tooltipContent.style.setProperty("z-index", options.zIndex || 1002, "important");
 		}
-		if (typeof options.width == "number" && options.width > 196) tooltip.style.setProperty("max-width", `${options.width}px`, "important");
+		if (typeof options.width == "number" && options.width > 196) {
+			tooltip.style.setProperty("width", `${options.width}px`, "important");
+			tooltip.style.setProperty("max-width", `${options.width}px`, "important");
+		}
+		if (typeof options.maxWidth == "number" && options.maxWidth > 196) {
+			tooltip.style.setProperty("max-width", `${options.maxWidth}px`, "important");
+		}
 		if (customBackgroundColor || options.unhideable) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltipcustom);
 		else if (options.color && BDFDB.disCN["tooltip" + options.color.toLowerCase()]) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN["tooltip" + options.color.toLowerCase()]);
 		else BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltipblack);
@@ -4446,6 +4452,7 @@
 		serverCount: "serverCount-FsTTs1"
 	};
 	DiscordClassModules.ServerDetails = {
+		icon: "icon-hSL42R",
 		tooltip: "detailsTooltip-G9hSSa"
 	};
 	DiscordClassModules.ServerFolders = {
@@ -4845,6 +4852,7 @@
 		_readallnotificationsbuttonframe: ["ReadAllNotificationsButton", "frame"],
 		_readallnotificationsbuttoninner: ["ReadAllNotificationsButton", "innerFrame"],
 		_servercounterservercount: ["ServerCounter", "serverCount"],
+		_serverdetailsicon: ["ServerDetails", "icon"],
 		_serverdetailstooltip: ["ServerDetails", "tooltip"],
 		_serverfoldersdragpreview: ["ServerFolders", "dragPreview"],
 		_serverfoldersfoldercontent: ["ServerFolders", "folderContent"],
@@ -8310,7 +8318,7 @@
 						onMouseUp: this.handleMouseUp.bind(this),
 						onClick: this.handleClick.bind(this),
 						onContextMenu: this.handleContextMenu.bind(this),
-						icon: this.props.guild.getIconURL(this.state.hovered && this.props.animatable ? "gif" : "jpg"),
+						icon: this.props.guild.getIconURL(this.state.hovered && this.props.animatable ? "gif" : "png"),
 						selected: this.props.selected || this.state.hovered
 					})
 				})
@@ -8358,12 +8366,10 @@
 			let icon = BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.Icon, {
 				className: BDFDB.disCN.guildsummaryicon,
 				guild: guild,
+				showTooltip: this.props.showTooltip,
+				tooltipPosition: "top",
 				size: InternalComponents.LibraryComponents.GuildComponents.Icon.Sizes.SMALLER
 			});
-			icon = this.props.tooltip ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
-				text: guild.name,
-				children: icon
-			}) : icon;
 			return this.props.switchOnClick ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
 				className: BDFDB.disCN.guildsummaryclickableicon,
 				onClick: _ => {LibraryModules.SelectChannelUtils.selectChannel(guild.id, LibraryModules.LastChannelStore.getChannelId(guild.id));},
@@ -8413,7 +8419,7 @@
     }
 	InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.GuildSummaryItem, {max:10, renderMoreGuilds: (count, amount, restGuilds, props) => {
 		let icon = BDFDB.ReactUtils.createElement("div", {className: BDFDB.disCN.guildsummarymoreguilds, children: count});
-		return props.tooltip ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
+		return props.showTooltip ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 			text: restGuilds.map(guild => guild.name).join(", "),
 			children: icon
 		}) : icon;

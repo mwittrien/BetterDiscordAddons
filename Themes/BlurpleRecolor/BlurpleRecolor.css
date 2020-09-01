@@ -351,6 +351,9 @@
 /* ~~~~		3.		CHANNELLIST						~~~~ */
 
 
+.background-2uufRq {										/* guildheader			partnerbadge						*/
+	color: rgb(var(--vaccentcolor));
+}
 .iconTierThree-3vLwdG {										/* guildheader			icontier3							*/
 	color: rgb(var(--vaccentcolor));
 }

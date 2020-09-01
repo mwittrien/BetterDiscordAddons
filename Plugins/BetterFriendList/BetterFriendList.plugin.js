@@ -300,7 +300,7 @@ var BetterFriendList = (_ => {
 					if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.GuildSummaryItem, {
 						className: BDFDB.disCN._betterfriendlistmutualguilds,
 						guilds: e.instance.props.mutualGuilds,
-						tooltip: true,
+						showTooltip: true,
 						max: 10
 					}, true));
 				}
