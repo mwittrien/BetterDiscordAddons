@@ -254,14 +254,14 @@ var OwnerTag = (_ => {
 
 		injectOwnerTag (children, user, userType, insertIndex, config = {}) {
 			if (!BDFDB.ArrayUtils.is(children) || !user) return;
-			if (!settings.useCrown || settings.hideNativeCrown) {
+			if (settings.useCrown || settings.hideNativeCrown) {
 				let [_, index] = BDFDB.ReactUtils.findParent(children, {props: [["text",[BDFDB.LanguageUtils.LanguageStrings.GROUP_OWNER, BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER]]]});
 				if (index > -1) children[index] = null;
 			}
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());
 			let member = settings.useRoleColor ? (BDFDB.LibraryModules.MemberStore.getMember(channel.guild_id, user.id) || {}) : {};
 			let tag = null;
-			if (!settings.useCrown) {
+			if (settings.useCrown) {
 				let label, className;
 				switch (userType) {
 					case userTypes.OWNER:
