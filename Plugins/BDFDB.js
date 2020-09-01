@@ -4445,6 +4445,9 @@
 	DiscordClassModules.ServerCounter = {
 		serverCount: "serverCount-FsTTs1"
 	};
+	DiscordClassModules.ServerDetails = {
+		tooltip: "detailsTooltip-G9hSSa"
+	};
 	DiscordClassModules.ServerFolders = {
 		dragPreview: "dragPreview-nXiByA",
 		guildPlaceholder: "placeholder-7bhR5s",
@@ -4842,6 +4845,7 @@
 		_readallnotificationsbuttonframe: ["ReadAllNotificationsButton", "frame"],
 		_readallnotificationsbuttoninner: ["ReadAllNotificationsButton", "innerFrame"],
 		_servercounterservercount: ["ServerCounter", "serverCount"],
+		_serverdetailstooltip: ["ServerDetails", "tooltip"],
 		_serverfoldersdragpreview: ["ServerFolders", "dragPreview"],
 		_serverfoldersfoldercontent: ["ServerFolders", "folderContent"],
 		_serverfoldersfoldercontentclosed: ["ServerFolders", "folderContentClosed"],
