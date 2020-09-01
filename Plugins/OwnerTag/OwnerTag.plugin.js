@@ -254,14 +254,14 @@ var OwnerTag = (_ => {
 
 		injectOwnerTag (children, user, userType, insertIndex, config = {}) {
 			if (!BDFDB.ArrayUtils.is(children) || !user) return;
-			if (settings.useCrown || settings.hideNativeCrown) {
+			if (!settings.useCrown || settings.hideNativeCrown) {
 				let [_, index] = BDFDB.ReactUtils.findParent(children, {props: [["text",[BDFDB.LanguageUtils.LanguageStrings.GROUP_OWNER, BDFDB.LanguageUtils.LanguageStrings.GUILD_OWNER]]]});
 				if (index > -1) children[index] = null;
 			}
 			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());
 			let member = settings.useRoleColor ? (BDFDB.LibraryModules.MemberStore.getMember(channel.guild_id, user.id) || {}) : {};
 			let tag = null;
-			if (settings.useCrown) {
+			if (!settings.useCrown) {
 				let label, className;
 				switch (userType) {
 					case userTypes.OWNER:
@@ -287,7 +287,7 @@ var OwnerTag = (_ => {
 				});
 			}
 			else {
-				let input;
+				let input, label;
 				switch (userType) {
 					case userTypes.OWNER:
 						input = "ownTagName";
@@ -297,6 +297,7 @@ var OwnerTag = (_ => {
 						break;
 					case userTypes.MANAGEMENT:
 						input = "ownManagementTagName";
+						label = [BDFDB.UserUtils.can("MANAGE_GUILD", user.id) && BDFDB.LanguageUtils.LibraryStrings.server, BDFDB.UserUtils.can("MANAGE_CHANNELS", user.id) && BDFDB.LanguageUtils.LanguageStrings.CHANNELS, BDFDB.UserUtils.can("MANAGE_ROLES", user.id) && BDFDB.LanguageUtils.LanguageStrings.ROLES].filter(n => n).join(", ");
 						break;
 				}
 				let tagColor = BDFDB.ColorUtils.convert(member.colorString, "RGBA");
@@ -311,6 +312,10 @@ var OwnerTag = (_ => {
 						color: !config.inverted ? (isBright && settings.useBlackFont ? "black" : null) : tagColor
 					},
 					tag: inputs[input]
+				});
+				if (label) tag = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+					text: label,
+					children: tag
 				});
 			}
 			children.splice(insertIndex, 0, tag);

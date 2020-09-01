@@ -7322,12 +7322,16 @@
 	InternalComponents.LibraryComponents.BotTag = InternalBDFDB.loadPatchedComp("BotTag") || reactInitialized && class BDFDB_BotTag extends LibraryModules.React.Component {
 		handleClick(e) {if (typeof this.props.onClick == "function") this.props.onClick(e, this);}
 		handleContextMenu(e) {if (typeof this.props.onContextMenu == "function") this.props.onContextMenu(e, this);}
+		handleMouseEnter(e) {if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);}
+		handleMouseLeave(e) {if (typeof this.props.onMouseLeave == "function") this.props.onMouseLeave(e, this);}
 		render() {
 			return BDFDB.ReactUtils.createElement("span", {
 				className: BDFDB.DOMUtils.formatClassName(this.props.className, this.props.invertColor ? BDFDB.disCN.bottaginvert : BDFDB.disCN.bottagregular, this.props.useRemSizes ? BDFDB.disCN.bottagrem : BDFDB.disCN.bottagpx),
 				style: this.props.style,
 				onClick: this.handleClick.bind(this),
 				onContextMenu: this.handleContextMenu.bind(this),
+				onMouseEnter: this.handleMouseEnter.bind(this),
+				onMouseLeave: this.handleMouseLeave.bind(this),
 				children: BDFDB.ReactUtils.createElement("span", {
 					className: BDFDB.disCN.bottagtext,
 					children: this.props.tag || BDFDB.LanguageUtils.LanguageStrings.BOT_TAG_BOT
