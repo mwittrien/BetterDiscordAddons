@@ -1845,6 +1845,7 @@
 	LibraryModules.StreamerModeStore = BDFDB.ModuleUtils.findByProperties("disableSounds", "hidePersonalInformation");
 	LibraryModules.StreamUtils = BDFDB.ModuleUtils.findByProperties("getActiveStreamForUser", "getAllApplicationStreams");
 	LibraryModules.StringUtils = BDFDB.ModuleUtils.findByProperties("cssValueToNumber", "upperCaseFirstChar");
+	LibraryModules.TimestampUtils = BDFDB.ModuleUtils.findByProperties("fromTimestamp", "extractTimestamp");
 	LibraryModules.UnreadGuildUtils = BDFDB.ModuleUtils.findByProperties("hasUnread", "getUnreadGuilds");
 	LibraryModules.UnreadChannelUtils = BDFDB.ModuleUtils.findByProperties("getUnreadCount", "getOldestUnreadMessageId");
 	LibraryModules.UploadUtils = BDFDB.ModuleUtils.findByProperties("upload", "instantBatchUpload");
