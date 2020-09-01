@@ -852,7 +852,7 @@
 			let streamOwnerIds = LibraryModules.StreamUtils.getAllApplicationStreams().filter(app => app.guildId === options.guild.id).map(app => app.ownerId) || [];
 			let streamOwners = streamOwnerIds.map(ownerId => LibraryModules.UserStore.getUser(ownerId)).filter(n => n);
 			let connectedUsers = Object.keys(LibraryModules.VoiceUtils.getVoiceStates(options.guild.id)).map(userId => !streamOwnerIds.includes(userId) && BDFDB.LibraryModules.UserStore.getUser(userId)).filter(n => n);
-			let tooltipText = text || options.guild.toString();
+			let tooltipText = options.guild.toString();
 			if (fontColorIsGradient) tooltipText = `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(options.fontColor)} !important;">${BDFDB.StringUtils.htmlEscape(tooltipText)}</span>`;
 			BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
 				children: [
@@ -867,10 +867,14 @@
 							BDFDB.ReactUtils.createElement("span", {
 								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipguildnametext, (connectedUsers.length || streamOwners.length) && BDFDB.disCN.tooltipguildnametextlimitedsize),
 								children: fontColorIsGradient || options.html ? BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(tooltipText)) : tooltipText
-							})
+							}),
 						]
 					}),
-					connectedUsers.length ? BDFDB.ReactUtils.createElement("div", {
+					text && BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN.tooltiprow,
+						children: text
+					}),
+					connectedUsers.length && BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.tooltiprow,
 						children: [
 							BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
@@ -882,8 +886,8 @@
 								max: 6
 							})
 						]
-					}) : null,
-					streamOwners.length ? BDFDB.ReactUtils.createElement("div", {
+					}),
+					streamOwners.length && BDFDB.ReactUtils.createElement("div", {
 						className: BDFDB.disCN.tooltiprow,
 						children: [
 							BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
@@ -895,7 +899,7 @@
 								max: 6
 							})
 						]
-					}) : null
+					})
 				].filter(n => n)
 			}), tooltipContent);
 		}
