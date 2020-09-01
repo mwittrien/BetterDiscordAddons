@@ -50,7 +50,7 @@ var ImageUtilities = (_ => {
 	return class ImageUtilities {
 		getName () {return "ImageUtilities";}
 
-		getVersion () {return "4.1.1";}
+		getVersion () {return "4.1.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -58,7 +58,9 @@ var ImageUtilities = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["Save Image as...","Added new option to open a save as prompt, where you can choose the filename and path"]]
+				"added":[["Save Image as...","Added new option to open a save as prompt to the contextmenu and image modal, where you can choose the filename and path"]],
+				"improved":[["Open Original","Holding shift while pressing open original in the image modal will skip the trust modal"]],
+				"fixed":[["Trust Modal","No longer zooms into the image below the trust modal if you click the backdrop"]]
 			};
 			
 			this.patchedModules = {
@@ -119,6 +121,9 @@ var ImageUtilities = (_ => {
 				${BDFDB.dotCNS.spoilerhidden + BDFDB.dotCN._imageutilitiesimagedetails} {
 					visibility: hidden;
 					max-width: 1px;
+				}
+				${BDFDB.dotCN.imagemodal}[style*="opacity: 0;"] > * {
+					display: none !important;
 				}
 				${BDFDB.dotCN._imageutilitiesdetailsadded}:not([style*="opacity: 0;"]) {
 					transform: unset !important;
@@ -490,6 +495,9 @@ var ImageUtilities = (_ => {
 			if (e.returnvalue) {
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.downloadlink]]});
 				if (index > -1) {
+					children[index].props.onClick = event => {
+						return event.shiftKey;
+					};
 					let openContext = event => {
 						BDFDB.ContextMenuUtils.open(this, event, BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuGroup, {
 							children: Object.keys(zoomSettings).map(type => BDFDB.ContextMenuUtils.createItem(BDFDB.LibraryComponents.MenuItems.MenuSliderItem, Object.assign({
@@ -755,17 +763,17 @@ var ImageUtilities = (_ => {
 		
 		isValidImg (url) {
             const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").toLowerCase();
-            return file && (file.endsWith(".jpg") || file.endsWith(".jpeg") || file.endsWith(".png") || file.endsWith(".gif") || file.endsWith(".apng") || file.endsWith(".webp") || file.endsWith(".svg"));
+            return file && (url.startsWith("https://images-ext-2.discordapp.net/") || file.endsWith(".jpg") || file.endsWith(".jpeg") || file.endsWith(".png") || file.endsWith(".gif") || file.endsWith(".apng") || file.endsWith(".webp") || file.endsWith(".svg"));
 		}
 		
 		isCopyable (url) {
             const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").toLowerCase();
-            return file.endsWith(".jpg") || file.endsWith(".jpeg") || file.endsWith(".png");
+            return file && (url.startsWith("https://images-ext-2.discordapp.net/") || file.endsWith(".jpg") || file.endsWith(".jpeg") || file.endsWith(".png"));
 		}
 		
 		isSearchable (url) {
             const file = url && (BDFDB.LibraryModules.URLParser.parse(url).pathname || "").toLowerCase();
-            return file && (file.endsWith(".jpg") || file.endsWith(".jpeg") || file.endsWith(".png") || file.endsWith(".gif") || file.endsWith(".apng") || file.endsWith(".webp"));
+            return file && (url.startsWith("https://images-ext-2.discordapp.net/") || file.endsWith(".jpg") || file.endsWith(".jpeg") || file.endsWith(".png") || file.endsWith(".gif") || file.endsWith(".apng") || file.endsWith(".webp"));
 		}
 		
 		downloadImage (url) {

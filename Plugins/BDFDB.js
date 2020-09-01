@@ -1805,6 +1805,7 @@
 	LibraryModules.LanguageStore = BDFDB.ModuleUtils.findByProperties("getLanguages", "Messages");
 	LibraryModules.LastChannelStore = BDFDB.ModuleUtils.findByProperties("getLastSelectedChannelId");
 	LibraryModules.LastGuildStore = BDFDB.ModuleUtils.findByProperties("getLastSelectedGuildId");
+	LibraryModules.LinkUtils = BDFDB.ModuleUtils.findByProperties("handleClick", "isLinkTrusted");
 	LibraryModules.LoginUtils = BDFDB.ModuleUtils.findByProperties("login", "logout");
 	LibraryModules.MemberCountUtils = BDFDB.ModuleUtils.findByProperties("getMemberCount", "getMemberCounts");
 	LibraryModules.MemberStore = BDFDB.ModuleUtils.findByProperties("getMember", "getMembers");
