@@ -235,6 +235,7 @@ var ServerDetails = (_ => {
 					basis: "20%",
 					min: this.defaults.amounts[key].min,
 					max: this.defaults.amounts[key].max,
+					childProps: {type: "number"},
 					value: amounts[key]
 				}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 					className: BDFDB.disCN.marginbottom8
