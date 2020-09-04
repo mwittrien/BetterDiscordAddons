@@ -13,7 +13,7 @@ var ServerDetails = (_ => {
 		}
 		componentDidUpdate() {
 			if (amounts.hoverDelay && this.state.delayed && !this.state.repositioned) {
-				this.state.delayed = true;
+				this.state.repositioned = true;
 				let tooltip = BDFDB.DOMUtils.getParent(BDFDB.dotCN.tooltip, BDFDB.ReactUtils.getValue(this, "_reactInternalFiber.return.return.stateNode.containerInfo"));
 				if (tooltip) tooltip.update();
 			}
