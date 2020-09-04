@@ -86,6 +86,7 @@ https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/R
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/RevealAllSpoilersOption/RevealAllSpoilersOption.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/SendLargeMessages/SendLargeMessages.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ServerCounter/ServerCounter.plugin.js
+https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ServerDetails/ServerDetails.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ServerFolders/ServerFolders.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ServerHider/ServerHider.plugin.js
 https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/ShowHiddenChannels/ShowHiddenChannels.plugin.js
