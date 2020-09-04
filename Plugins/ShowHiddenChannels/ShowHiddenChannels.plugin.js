@@ -90,7 +90,7 @@ var ShowHiddenChannels = (_ => {
 	return class ShowHiddenChannels {
 		getName () {return "ShowHiddenChannels";}
 
-		getVersion () {return "2.8.0";}
+		getVersion () {return "2.8.1";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -98,7 +98,8 @@ var ShowHiddenChannels = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Performance","Increased performance via caching"]]
+				"improved":[["Performance","Increased performance via caching"]],
+				"fixed":[["Duplicates","Gaining access to a channel via gaining a role no longer creates duplicates of channels"]]
 			};
 			
 			this.patchedModules = {
@@ -433,8 +434,10 @@ var ShowHiddenChannels = (_ => {
 		
 		getHiddenChannels (guild) {
 			if (!guild) return [{}, 0];
-			if (cachedHiddenChannels && cachedHiddenChannels.id == guild.id) return [cachedHiddenChannels.hidden, cachedHiddenChannels.amount];
+			let roles = (BDFDB.LibraryModules.MemberStore.getMember(guild.id, BDFDB.UserUtils.me.id) || {roles:[]}).roles.length;
+			if (cachedHiddenChannels && cachedHiddenChannels.id == guild.id && cachedHiddenChannels.roles == roles) return [cachedHiddenChannels.hidden, cachedHiddenChannels.amount];
 			else {
+				console.log(guild);
 				let all = BDFDB.LibraryModules.ChannelStore.getChannels(), hidden = {}, amount = 0;
 				for (let type in BDFDB.DiscordConstants.ChannelTypes) hidden[BDFDB.DiscordConstants.ChannelTypes[type]] = [];
 				for (let channel_id in all) {
@@ -444,7 +447,7 @@ var ShowHiddenChannels = (_ => {
 						hidden[channel.type].push(channel);
 					}
 				}
-				cachedHiddenChannels = {id: guild.id, hidden, amount};
+				cachedHiddenChannels = {id: guild.id, hidden, amount, roles};
 				return [hidden, amount];
 			}
 		}
