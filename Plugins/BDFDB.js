@@ -873,7 +873,7 @@
 						]
 					}),
 					text && BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.tooltiprow,
+						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltiprow, BDFDB.disCN.tooltiprowextra),
 						children: text
 					}),
 					connectedUsers.length && BDFDB.ReactUtils.createElement("div", {
@@ -4290,6 +4290,7 @@
 		textScroller: "textScroller-dc9_kz",
 		themedPopout: "themedPopout-1TrfdI",
 		tooltipCustom: "tooltipCustom-hH39_Z",
+		tooltipRowExtra: "extraRow-6F2Dss",
 		userInfoDate: "date-YN6TCS"
 	};
 	DiscordClassModules.BDrepo = {
@@ -4458,6 +4459,7 @@
 		serverCount: "serverCount-FsTTs1"
 	};
 	DiscordClassModules.ServerDetails = {
+		details: "details-08FrsT",
 		icon: "icon-hSL42R",
 		tooltip: "detailsTooltip-G9hSSa"
 	};
@@ -4858,6 +4860,7 @@
 		_readallnotificationsbuttonframe: ["ReadAllNotificationsButton", "frame"],
 		_readallnotificationsbuttoninner: ["ReadAllNotificationsButton", "innerFrame"],
 		_servercounterservercount: ["ServerCounter", "serverCount"],
+		_serverdetailsdetails: ["ServerDetails", "details"],
 		_serverdetailsicon: ["ServerDetails", "icon"],
 		_serverdetailstooltip: ["ServerDetails", "tooltip"],
 		_serverfoldersdragpreview: ["ServerFolders", "dragPreview"],
@@ -6233,6 +6236,7 @@
 		tooltipred: ["Tooltip", "tooltipRed"],
 		tooltipright: ["Tooltip", "tooltipRight"],
 		tooltiprow: ["TooltipGuild", "row"],
+		tooltiprowextra: ["BDFDB", "tooltipRowExtra"],
 		tooltiprowguildname: ["TooltipGuild", "rowGuildName"],
 		tooltiprowicon: ["TooltipGuild", "rowIcon"],
 		tooltiptop: ["Tooltip", "tooltipTop"],
@@ -10614,6 +10618,10 @@
 		
 		${BDFDB.dotCN.tooltip + BDFDB.dotCNS.tooltipcustom + BDFDB.dotCN.tooltippointer} {
 			border-top-color: inherit !important;
+		}
+		
+		${BDFDB.dotCN.tooltiprowextra}:empty {
+			display: none;
 		}
 		
 		${BDFDB.dotCN.colorpickerswatchsingle} {

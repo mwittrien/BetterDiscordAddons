@@ -4,12 +4,30 @@ var ServerDetails = (_ => {
 	var _this, languages;
 	var settings = {}, colors = {}, choices = {}, formats = {}, amounts = {};
 	
+	const tooltipWidth = 300;
+	
 	const GuildDetailsComponent = class GuildDetails extends BdApi.React.Component {
 		constructor(props) {
 			super(props);
-			this.state = {fetchedOwner: false};
+			this.state = {fetchedOwner: false, delayed: false, repositioned: false};
+		}
+		componentDidUpdate() {
+			if (amounts.hoverDelay && this.state.delayed && !this.state.repositioned) {
+				this.state.delayed = true;
+				let tooltip = BDFDB.DOMUtils.getParent(BDFDB.dotCN.tooltip, BDFDB.ReactUtils.getValue(this, "_reactInternalFiber.return.return.stateNode.containerInfo"));
+				if (tooltip) tooltip.update();
+			}
 		}
 		render() {
+			if (amounts.hoverDelay && !this.state.delayed) {
+				BDFDB.TimeUtils.timeout(_ => {
+					this.state.delayed = true;
+					let tooltip = BDFDB.DOMUtils.getParent(BDFDB.dotCN.tooltip, BDFDB.ReactUtils.getValue(this, "_reactInternalFiber.return.return.stateNode.containerInfo"));
+					if (tooltip) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN._serverdetailstooltip);
+					BDFDB.ReactUtils.forceUpdate(this);
+				}, amounts.hoverDelay);
+				return null;
+			}
 			let owner = BDFDB.LibraryModules.UserStore.getUser(this.props.guild.ownerId);
 			if (!owner && !this.state.fetchedOwner) {
 				this.state.fetchedOwner = true;
@@ -83,13 +101,17 @@ var ServerDetails = (_ => {
 	return class ServerDetails {
 		getName () {return "ServerDetails";}
 
-		getVersion () {return "1.0.0";}
+		getVersion () {return "1.0.1";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Shows details of a server when you hover over the icon in the server list.";}
 
 		constructor () {
+			this.changelog = {
+				"added":[["Delay","Added hover delay"]]
+			};
+			
 			this.patchedModules = {
 				after: {
 					Guild: "render"
@@ -104,34 +126,39 @@ var ServerDetails = (_ => {
 			
 			this.defaults = {
 				settings: {
-					cutSeconds:				{value:false, 			inner:false,	description:"Cut off seconds of the time"},
-					forceZeros:				{value:false, 			inner:false,	description:"Force leading zeros"},
-					otherOrder:				{value:false, 			inner:false,	description:"Show the time before the date"},
-					addIcon:				{value:true, 			inner:true,		description:"GUILD_CREATE_UPLOAD_ICON_LABEL"},
-					addOwner:				{value:true, 			inner:true,		description:"GUILD_OWNER"},
-					addCreation:			{value:true, 			inner:true,		description:"creationdate_text"},
-					addJoin:				{value:true, 			inner:true,		description:"joindate_text"},
-					addMembers:				{value:true, 			inner:true,		description:"MEMBERS"},
-					addChannels:			{value:true, 			inner:true,		description:"CHANNELS"},
-					addRoles:				{value:true, 			inner:true,		description:"ROLES"},
-					addBoosters:			{value:true, 			inner:true,		description:"SUBSCRIPTIONS_TITLE"},
-					addRegion:				{value:true, 			inner:true,		description:"REGION"}
+					cutSeconds:				{value:false, 		cat:"settings",	description:"Cut off seconds of the time"},
+					forceZeros:				{value:false, 		cat:"settings",	description:"Force leading zeros"},
+					otherOrder:				{value:false, 		cat:"settings",	description:"Show the time before the date"},
+					addIcon:				{value:true, 		cat:"tooltip",	description:"GUILD_CREATE_UPLOAD_ICON_LABEL"},
+					addOwner:				{value:true, 		cat:"tooltip",	description:"GUILD_OWNER"},
+					addCreation:			{value:true, 		cat:"tooltip",	description:"creationdate_text"},
+					addJoin:				{value:true, 		cat:"tooltip",	description:"joindate_text"},
+					addMembers:				{value:true, 		cat:"tooltip",	description:"MEMBERS"},
+					addChannels:			{value:true, 		cat:"tooltip",	description:"CHANNELS"},
+					addRoles:				{value:true, 		cat:"tooltip",	description:"ROLES"},
+					addBoosters:			{value:true, 		cat:"tooltip",	description:"SUBSCRIPTIONS_TITLE"},
+					addRegion:				{value:true, 		cat:"tooltip",	description:"REGION"}
 				},
 				colors: {
-					tooltipColor:			{value:"", 				description:"Tooltip Color"}
+					tooltipColor:			{value:"", 					description:"Tooltip Color"}
 				},
 				choices: {
-					timeLang:				{value:"$discord", 		description:"Date Format"}
+					timeLang:				{value:"$discord", 			description:"Date Format"}
 				},
 				formats: {
 					ownFormat:				{value:"$hour:$minute:$second, $day.$month.$year", 	description:"Own Format"}
 				},
 				amounts: {
-					maxDaysAgo:				{value:0, 	min:0,		description:"Maximum count of days displayed in the $daysago placeholder",	note:"0 equals no limit"}
+					hoverDelay:				{value:0, 	min:0,	cat:"tooltip",	description:"Additonal information delay (in millisec)"},
+					maxDaysAgo:				{value:0, 	min:0,	cat:"format",	description:"Maximum count of days displayed in the $daysago placeholder",	note:"0 equals no limit"}
 				}
 			};
 			
 			this.css = `
+				${BDFDB.dotCN._serverdetailstooltip} {
+					width: ${tooltipWidth}px !important;
+					max-width: unset !important;
+				}
 				${BDFDB.dotCNS._serverdetailstooltip + BDFDB.dotCN.tooltipcontent} {
 					display: flex;
 					flex-direction: column;
@@ -144,8 +171,8 @@ var ServerDetails = (_ => {
 					align-items: center;
 					margin-bottom: 5px;
 					border-radius: 10px;
-					width: 220px;
-					height: 220px;
+					width: ${tooltipWidth - 80 > 0 ? (tooltipWidth - 80) : 30}px;
+					height: ${tooltipWidth - 80 > 0 ? (tooltipWidth - 80) : 30}px;
 					overflow: hidden;
 				}
 				${BDFDB.dotCN._serverdetailstooltip} div${BDFDB.dotCN._serverdetailsicon} {
@@ -168,7 +195,7 @@ var ServerDetails = (_ => {
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Settings",
 				collapseStates: collapseStates,
-				children: Object.keys(settings).map(key => !this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+				children: Object.keys(settings).map(key => this.defaults.settings[key].cat == "settings" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 					className: BDFDB.disCN.marginbottom8,
 					type: "Switch",
 					plugin: this,
@@ -189,7 +216,7 @@ var ServerDetails = (_ => {
 					className: BDFDB.disCN.marginbottom4,
 					tag: BDFDB.LibraryComponents.FormComponents.FormTitle.Tags.H3,
 					children: "Add additional details in the server tooltip for:"
-				})].concat(Object.keys(settings).map(key => this.defaults.settings[key].inner && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+				})].concat(Object.keys(settings).map(key => this.defaults.settings[key].cat == "tooltip" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 					className: BDFDB.disCN.marginbottom8,
 					type: "Switch",
 					plugin: this,
@@ -198,18 +225,31 @@ var ServerDetails = (_ => {
 					value: settings[key]
 				}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 					className: BDFDB.disCN.marginbottom8
+				})).concat(Object.keys(amounts).map(key => this.defaults.amounts[key].cat == "tooltip" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+					className: BDFDB.disCN.marginbottom8,
+					type: "TextInput",
+					plugin: this,
+					keys: ["amounts", key],
+					label: this.defaults.amounts[key].description,
+					note: this.defaults.amounts[key].note,
+					basis: "20%",
+					min: this.defaults.amounts[key].min,
+					max: this.defaults.amounts[key].max,
+					value: amounts[key]
+				}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
+					className: BDFDB.disCN.marginbottom8
 				})).concat(Object.keys(colors).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 					className: BDFDB.disCN.marginbottom8,
 					type: "TextInput",
 					plugin: this,
 					keys: ["colors", key],
+					basis: "70%",
+					label: this.defaults.colors[key].description,
+					value: colors[key],
 					childProps: {
 						type: "color",
 						noAlpha: true
 					},
-					basis: "70%",
-					label: this.defaults.colors[key].description,
-					value: colors[key],
 					placeholder: colors[key]
 				})))
 			}));
@@ -280,12 +320,9 @@ var ServerDetails = (_ => {
 					}
 				}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
 					className: BDFDB.disCN.marginbottom8
-				})).concat(Object.keys(amounts).map(key => BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
+				})).concat(Object.keys(amounts).map(key => this.defaults.amounts[key].cat == "format" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 					className: BDFDB.disCN.marginbottom8,
 					type: "TextInput",
-					childProps: {
-						type: "number"
-					},
 					plugin: this,
 					keys: ["amounts", key],
 					label: this.defaults.amounts[key].description,
@@ -293,6 +330,7 @@ var ServerDetails = (_ => {
 					basis: "20%",
 					min: this.defaults.amounts[key].min,
 					max: this.defaults.amounts[key].max,
+					childProps: {type: "number"},
 					value: amounts[key]
 				}))).filter(n => n)
 			}));
@@ -403,12 +441,11 @@ var ServerDetails = (_ => {
 					tooltipConfig:  Object.assign({
 						backgroundColor: colors.tooltipColor
 					}, children[index].props.tooltipConfig, {
-						className: BDFDB.disCN._serverdetailstooltip,
+						className: !amounts.hoverDelay && BDFDB.disCN._serverdetailstooltip,
 						type: "right",
 						guild: e.instance.props.guild,
 						list: true,
-						offset: 12,
-						width: 300
+						offset: 12
 					}),
 					text: _ => BDFDB.ReactUtils.createElement(GuildDetailsComponent, {
 						guild: e.instance.props.guild
@@ -474,7 +511,7 @@ var ServerDetails = (_ => {
 			return charArray.join("");
 		}
 		
-		forceUpdateAll() {
+		forceUpdateAll () {
 			settings = BDFDB.DataUtils.get(this, "settings");
 			colors = BDFDB.DataUtils.get(this, "colors");
 			choices = BDFDB.DataUtils.get(this, "choices");
