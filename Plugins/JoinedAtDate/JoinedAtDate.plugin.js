@@ -51,6 +51,10 @@ var JoinedAtDate = (_ => {
 
 		getSettingsPanel (collapseStates = {}) {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+			settings = BDFDB.DataUtils.get(this, "settings");
+			choices = BDFDB.DataUtils.get(this, "choices");
+			formats = BDFDB.DataUtils.get(this, "formats");
+			amounts = BDFDB.DataUtils.get(this, "amounts");
 			let settingsPanel, settingsItems = [], innerItems = [];
 			
 			for (let key in settings) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {

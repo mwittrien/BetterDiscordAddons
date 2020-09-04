@@ -194,6 +194,11 @@ var ImageUtilities = (_ => {
 
 		getSettingsPanel (collapseStates = {}) {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+			settings = BDFDB.DataUtils.get(this, "settings");
+			amounts = BDFDB.DataUtils.get(this, "amounts");
+			inputs = BDFDB.DataUtils.get(this, "inputs");
+			zoomSettings = BDFDB.DataUtils.get(this, "zoomSettings");
+			engines = BDFDB.DataUtils.get(this, "engines");
 			let settingsPanel, settingsItems = [];
 			
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {

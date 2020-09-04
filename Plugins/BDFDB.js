@@ -9691,7 +9691,7 @@
 					onMouseLeave: this.handleMouseLeave.bind(this),
 					maxLength: this.props.type == "file" ? false : this.props.maxLength,
 					ref: this.props.inputRef
-				}), "errorMessage", "focused", "error", "success", "inputClassName", "inputChildren", "valuePrefix", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "filter", "useFilePath", "searchFolders")),
+				}), "errorMessage", "focused", "error", "success", "inputClassName", "inputChildren", "valuePrefix", "inputPrefix", "size", "editable", "inputRef", "style", "mode", "noAlpha", "filter", "useFilePath", "searchFolders")),
 				this.props.inputChildren,
 				this.props.type == "color" ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex.Child, {
 					wrap: true,
@@ -9701,7 +9701,7 @@
 						onColorChange: color => {
 							this.handleChange(!color ? "" : (this.props.mode == "comp" ? BDFDB.ColorUtils.convert(color, "RGBCOMP").slice(0, 3).join(",") : color));
 						},
-						pickerConfig: {gradient:false, alpha:this.props.mode != "comp"}
+						pickerConfig: {gradient:false, alpha:this.props.mode != "comp" && !this.props.noAlpha}
 					})
 				}) : null,
 				this.props.type == "file" ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FileButton, {

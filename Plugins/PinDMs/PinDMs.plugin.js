@@ -112,6 +112,7 @@ var PinDMs = (_ => {
 
 		getSettingsPanel (collapseStates = {}) {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+			settings = BDFDB.DataUtils.get(this, "settings");
 			let settingsPanel, settingsItems = [], innerItems = [];
 			
 			for (let key in settings) (!this.defaults.settings[key].inner ? settingsItems : innerItems).push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {

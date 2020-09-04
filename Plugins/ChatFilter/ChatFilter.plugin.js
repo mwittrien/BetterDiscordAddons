@@ -53,6 +53,9 @@ var ChatFilter = (_ => {
 
 		getSettingsPanel (collapseStates = {}) {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+			settings = BDFDB.DataUtils.get(this, "settings");
+			replaces = BDFDB.DataUtils.get(this, "replaces");
+			configs = BDFDB.DataUtils.get(this, "configs");
 			let settingsPanel, settingsItems = [];
 			
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {

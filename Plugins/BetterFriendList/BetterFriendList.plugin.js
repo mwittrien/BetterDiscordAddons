@@ -84,6 +84,7 @@ var BetterFriendList = (_ => {
 
 		getSettingsPanel (collapseStates = {}) {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+			settings = BDFDB.DataUtils.get(this, "settings");
 			let settingsPanel, settingsItems = [];
 			
 			for (let key in settings) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {

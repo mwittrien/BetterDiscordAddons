@@ -557,6 +557,8 @@ var SpotifyControls = (_ => {
 
 		getSettingsPanel (collapseStates = {}) {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+			settings = BDFDB.DataUtils.get(this, "settings");
+			buttonConfigs = BDFDB.DataUtils.get(this, "buttonConfigs");
 			let settingsPanel, settingsItems = [];
 			
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {

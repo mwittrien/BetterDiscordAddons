@@ -59,6 +59,8 @@ var CustomQuoter = (_ => {
 
 		getSettingsPanel (collapseStates = {}) {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+			settings = BDFDB.DataUtils.get(this, "settings");
+			formats = Object.assign({"Standard": "$quote $mention"}, BDFDB.DataUtils.load(this, "formats"));
 			let settingsPanel, settingsItems = [], innerItems = [];
 			
 			for (let key in settings) innerItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {

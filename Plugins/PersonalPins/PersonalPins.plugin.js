@@ -46,6 +46,7 @@ var PersonalPins = (_ => {
 
 		getSettingsPanel (collapseStates = {}) {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
+			choices = BDFDB.DataUtils.get(this, "choices");
 			let settingsPanel, settingsItems = [];
 			
 			for (let key in choices) settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {

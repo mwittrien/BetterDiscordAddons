@@ -81,7 +81,9 @@ var OwnerTag = (_ => {
 
 		getSettingsPanel (collapseStates = {}) {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
-			let settingsPanel, settingsItems = [], innerItems = [];
+			settings = BDFDB.DataUtils.get(this, "settings");
+			inputs = BDFDB.DataUtils.get(this, "inputs");
+			let settingsPanel, settingsItems = [];
 			
 			settingsItems.push(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.CollapseContainer, {
 				title: "Settings",
