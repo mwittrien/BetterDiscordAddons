@@ -795,7 +795,9 @@
 	BDFDB.TooltipUtils = {};
 	BDFDB.TooltipUtils.create = function (anker, text, options = {}) {
 		let itemLayerContainer = document.querySelector(BDFDB.dotCN.appmount +  " > " + BDFDB.dotCN.itemlayercontainer);
-		if (!itemLayerContainer || (typeof text != "string" && !BDFDB.ObjectUtils.is(options.guild)) || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
+		if (!itemLayerContainer || !Node.prototype.isPrototypeOf(anker) || !document.contains(anker)) return null;
+		text = typeof text == "function" ? text() : text;
+		if (typeof text != "string" && !BDFDB.ReactUtils.isValidElement(text) && !BDFDB.ObjectUtils.is(options.guild)) return null;
 		let id = BDFDB.NumberUtils.generateId(Tooltips);
 		let zIndexed = typeof options.zIndex == "number" || options.unhideable;
 		let itemLayer = BDFDB.DOMUtils.create(`<div class="${BDFDB.disCNS.itemlayer + BDFDB.disCN.itemlayerdisabledpointerevents}"><div class="${BDFDB.disCN.tooltip}" tooltip-id="${id}"><div class="${BDFDB.disCN.tooltippointer}"></div><div class="${BDFDB.disCN.tooltipcontent}"></div></div></div>`);
@@ -11274,12 +11276,12 @@
 			}
 		});
 		InternalComponents.LibraryComponents.GuildComponents.BlobMask.prototype.getLeftBadgePositionInterpolation = function (e, t) {
-			return void 0 === t && (t = 1), e.animated.spring.to([0, 1], [20, 0]).to(function (e) {
+			return void 0 === t && (t = 1), e.springs.spring.to([0, 1], [20, 0]).to(function (e) {
 				return "translate(" + e * -1 + " " + e * t + ")";
 			});
 		};
 		InternalComponents.LibraryComponents.GuildComponents.BlobMask.prototype.getLowerLeftBadgeStyles = function () {
-			var e = this.state.lowerLeftBadgeMask.animated.spring;
+			var e = this.state.lowerLeftBadgeMask.springs.spring;
 			return {
 				opacity: e.to([0, .5, 1], [0, 0, 1]),
 				transform: e.to(function (e) {
@@ -11288,7 +11290,7 @@
 			};
 		};
 		InternalComponents.LibraryComponents.GuildComponents.BlobMask.prototype.getUpperLeftBadgeStyles = function () {
-			var e = this.state.upperLeftBadgeMask.animated.spring;
+			var e = this.state.upperLeftBadgeMask.springs.spring;
 			return {
 				opacity: e.to([0, .5, 1], [0, 0, 1]),
 				transform: e.to(function (e) {
