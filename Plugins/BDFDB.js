@@ -3655,8 +3655,9 @@
 		}
 	};
 	BDFDB.TimeUtils.timeout = function (callback, delay, ...args) {
+		delay = parseFloat(delay);
 		if (typeof callback != "function") return;
-		else if (typeof delay != "number" || delay < 1) {
+		else if (isNaN(delay) || typeof delay != "number" || delay < 1) {
 			let immediate = setImmediate(_ => {BDFDB.TimeUtils.suppress(callback, "Immediate")(...[immediate, args].flat());});
 			return immediate;
 		}
