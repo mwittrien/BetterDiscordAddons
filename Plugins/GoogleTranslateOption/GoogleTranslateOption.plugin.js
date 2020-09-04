@@ -93,7 +93,7 @@ var GoogleTranslateOption = (_ => {
 				}`;
 		}
 
-		getSettingsPanel () {
+		getSettingsPanel (collapseStates = {}) {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let settingsPanel, settingsItems = [];

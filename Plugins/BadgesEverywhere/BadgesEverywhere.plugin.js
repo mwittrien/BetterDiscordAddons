@@ -239,7 +239,7 @@ var BadgesEverywhere = (_ => {
 			for (let flag in this.defaults.badges) if (!this.defaults.badges[flag].icon || isNaN(parseInt(flag))) delete this.defaults.badges[flag];
 		}
 
-		getSettingsPanel () {
+		getSettingsPanel (collapseStates = {}) {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let badges = BDFDB.DataUtils.get(this, "badges");

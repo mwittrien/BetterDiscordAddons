@@ -44,7 +44,7 @@ var PersonalPins = (_ => {
 			};
 		}
 
-		getSettingsPanel () {
+		getSettingsPanel (collapseStates = {}) {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 			let settingsPanel, settingsItems = [];
 			

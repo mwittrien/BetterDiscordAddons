@@ -44,7 +44,7 @@ var GoogleSearchReplace = (_ => {
 			};
 		}
 
-		getSettingsPanel () {
+		getSettingsPanel (collapseStates = {}) {
 			if (!window.BDFDB || typeof BDFDB != "object" || !BDFDB.loaded || !this.started) return;
 			let settings = BDFDB.DataUtils.get(this, "settings");
 			let engines = BDFDB.DataUtils.get(this, "engines");
