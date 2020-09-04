@@ -232,7 +232,7 @@ var LastMessageDate = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 
-				languages = Object.assign({
+				languages = BDFDB.ObjectUtils.deepAssign({
 					own: {
 						name: "Own",
 						id: "own"

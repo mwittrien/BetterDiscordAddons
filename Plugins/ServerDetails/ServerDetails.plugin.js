@@ -401,7 +401,7 @@ var ServerDetails = (_ => {
 					this.processGuild({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});
 				}});
 
-				languages = Object.assign({
+				languages = BDFDB.ObjectUtils.deepAssign({
 					own: {
 						name: "Own",
 						id: "own"

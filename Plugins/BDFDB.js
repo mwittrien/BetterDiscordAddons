@@ -849,67 +849,6 @@
 		else BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltipblack);
 		
 		if (options.list || BDFDB.ObjectUtils.is(options.guild)) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN.tooltiplistitem);
-		
-		if (BDFDB.ObjectUtils.is(options.guild)) {
-			let streamOwnerIds = LibraryModules.StreamUtils.getAllApplicationStreams().filter(app => app.guildId === options.guild.id).map(app => app.ownerId) || [];
-			let streamOwners = streamOwnerIds.map(ownerId => LibraryModules.UserStore.getUser(ownerId)).filter(n => n);
-			let connectedUsers = Object.keys(LibraryModules.VoiceUtils.getVoiceStates(options.guild.id)).map(userId => !streamOwnerIds.includes(userId) && BDFDB.LibraryModules.UserStore.getUser(userId)).filter(n => n);
-			let tooltipText = options.guild.toString();
-			if (fontColorIsGradient) tooltipText = `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(options.fontColor)} !important;">${BDFDB.StringUtils.htmlEscape(tooltipText)}</span>`;
-			BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
-				children: [
-					BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltiprow, BDFDB.disCN.tooltiprowguildname),
-						children: [
-							BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.Badge, {
-								guild: options.guild,
-								size: LibraryModules.StringUtils.cssValueToNumber(DiscordClassModules.TooltipGuild.iconSize),
-								className: BDFDB.disCN.tooltiprowicon
-							}),
-							BDFDB.ReactUtils.createElement("span", {
-								className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipguildnametext, (connectedUsers.length || streamOwners.length) && BDFDB.disCN.tooltipguildnametextlimitedsize),
-								children: fontColorIsGradient || options.html ? BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(tooltipText)) : tooltipText
-							}),
-						]
-					}),
-					text && BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltiprow, BDFDB.disCN.tooltiprowextra),
-						children: text
-					}),
-					connectedUsers.length && BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.tooltiprow,
-						children: [
-							BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
-								name: InternalComponents.LibraryComponents.SvgIcon.Names.SPEAKER,
-								className: BDFDB.disCN.tooltipactivityicon
-							}),
-							BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.UserSummaryItem, {
-								users: connectedUsers,
-								max: 6
-							})
-						]
-					}),
-					streamOwners.length && BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.tooltiprow,
-						children: [
-							BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
-								name: InternalComponents.LibraryComponents.SvgIcon.Names.STREAM,
-								className: BDFDB.disCN.tooltipactivityicon
-							}),
-							BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.UserSummaryItem, {
-								users: streamOwners,
-								max: 6
-							})
-						]
-					})
-				].filter(n => n)
-			}), tooltipContent);
-		}
-		else {
-			if (fontColorIsGradient) tooltipContent.innerHTML = `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(options.fontColor)} !important;">${BDFDB.StringUtils.htmlEscape(text)}</span>`;
-			else if (options.html === true) tooltipContent.innerHTML = text;
-			else tooltipContent.innerText = text;
-		}
 
 		let mouseLeave = _ => {itemLayer.removeTooltip();};
 		if (!options.perssist) anker.addEventListener("mouseleave", mouseLeave);
@@ -927,11 +866,74 @@
 		}));
 		observer.observe(document.body, {subtree:true, childList:true});
 		
+		(tooltip.setText = itemLayer.setText = newText => {
+			if (BDFDB.ObjectUtils.is(options.guild)) {
+				let streamOwnerIds = LibraryModules.StreamUtils.getAllApplicationStreams().filter(app => app.guildId === options.guild.id).map(app => app.ownerId) || [];
+				let streamOwners = streamOwnerIds.map(ownerId => LibraryModules.UserStore.getUser(ownerId)).filter(n => n);
+				let connectedUsers = Object.keys(LibraryModules.VoiceUtils.getVoiceStates(options.guild.id)).map(userId => !streamOwnerIds.includes(userId) && BDFDB.LibraryModules.UserStore.getUser(userId)).filter(n => n);
+				let tooltipText = options.guild.toString();
+				if (fontColorIsGradient) tooltipText = `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(options.fontColor)} !important;">${BDFDB.StringUtils.htmlEscape(tooltipText)}</span>`;
+				BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(BDFDB.ReactUtils.Fragment, {
+					children: [
+						BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltiprow, BDFDB.disCN.tooltiprowguildname),
+							children: [
+								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.GuildComponents.Badge, {
+									guild: options.guild,
+									size: LibraryModules.StringUtils.cssValueToNumber(DiscordClassModules.TooltipGuild.iconSize),
+									className: BDFDB.disCN.tooltiprowicon
+								}),
+								BDFDB.ReactUtils.createElement("span", {
+									className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltipguildnametext, (connectedUsers.length || streamOwners.length) && BDFDB.disCN.tooltipguildnametextlimitedsize),
+									children: fontColorIsGradient || options.html ? BDFDB.ReactUtils.elementToReact(BDFDB.DOMUtils.create(tooltipText)) : tooltipText
+								}),
+							]
+						}),
+						newText && BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.tooltiprow, BDFDB.disCN.tooltiprowextra),
+							children: newText
+						}),
+						connectedUsers.length && BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.tooltiprow,
+							children: [
+								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+									name: InternalComponents.LibraryComponents.SvgIcon.Names.SPEAKER,
+									className: BDFDB.disCN.tooltipactivityicon
+								}),
+								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.UserSummaryItem, {
+									users: connectedUsers,
+									max: 6
+								})
+							]
+						}),
+						streamOwners.length && BDFDB.ReactUtils.createElement("div", {
+							className: BDFDB.disCN.tooltiprow,
+							children: [
+								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SvgIcon, {
+									name: InternalComponents.LibraryComponents.SvgIcon.Names.STREAM,
+									className: BDFDB.disCN.tooltipactivityicon
+								}),
+								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.UserSummaryItem, {
+									users: streamOwners,
+									max: 6
+								})
+							]
+						})
+					].filter(n => n)
+				}), tooltipContent);
+			}
+			else {
+				if (fontColorIsGradient) tooltipContent.innerHTML = `<span style="pointer-events: none; -webkit-background-clip: text !important; color: transparent !important; background-image: ${BDFDB.ColorUtils.createGradient(options.fontColor)} !important;">${BDFDB.StringUtils.htmlEscape(newText)}</span>`;
+				else if (options.html === true) tooltipContent.innerHTML = newText;
+				else tooltipContent.innerText = newText;
+			}
+		})(text);
 		(tooltip.removeTooltip = itemLayer.removeTooltip = _ => {
 			BDFDB.DOMUtils.remove(itemLayer);
 			if (zIndexed) BDFDB.DOMUtils.remove(itemLayerContainer);
 		});
-		(tooltip.update = itemLayer.update = _ => {
+		(tooltip.update = itemLayer.update = newText => {
+			if (newText) tooltip.setText(newText);
 			let left, top, tRects = BDFDB.DOMUtils.getRects(anker), iRects = BDFDB.DOMUtils.getRects(itemLayer), aRects = BDFDB.DOMUtils.getRects(document.querySelector(BDFDB.dotCN.appmount)), positionOffsets = {height: 10, width: 10}, offset = typeof options.offset == "number" ? options.offset : 0;
 			switch (type) {
 				case "top":
@@ -9824,6 +9826,9 @@
 		}
 	};
 	InternalComponents.LibraryComponents.TooltipContainer = InternalBDFDB.loadPatchedComp("TooltipContainer") || reactInitialized && class BDFDB_TooltipContainer extends LibraryModules.React.Component {
+		updateTooltip(text) {
+			if (this.tooltip) this.tooltip.update(text);
+		}
 		render() {
 			let child = (BDFDB.ArrayUtils.is(this.props.children) ? this.props.children[0] : this.props.children) || BDFDB.ReactUtils.createElement("div", {});
 			child.props.className = BDFDB.DOMUtils.formatClassName(child.props.className, this.props.className);
@@ -9832,7 +9837,7 @@
 			child.props.onMouseEnter = (e, childThis) => {
 				if (!shown) {
 					shown = true;
-					BDFDB.TooltipUtils.create(e.currentTarget, this.props.text, Object.assign({delay: this.props.delay}, this.props.tooltipConfig));
+					this.tooltip = BDFDB.TooltipUtils.create(e.currentTarget, typeof this.props.text == "function" ? this.props.text(this) : this.props.text, Object.assign({delay: this.props.delay}, this.props.tooltipConfig));
 					if (typeof this.props.onMouseEnter == "function") this.props.onMouseEnter(e, this);
 					if (typeof childMouseEnter == "function") childMouseEnter(e, childThis);
 				}
@@ -10953,8 +10958,11 @@
 			if (index > -1) children.splice(index + 1, 0, BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 				text: "Only checks for updates of plugins, which support the updatecheck. Rightclick for a list of supported plugins. (Listed ≠ Outdated)",
 				tooltipConfig: {
-					selector: "update-button-tooltip",
-					style: "max-width: 420px"
+					type: "bottom",
+					maxWidth: 420
+				},
+				onContextMenu: (event, instance) => {
+					instance.updateTooltip(BDFDB.ObjectUtils.toArray(window.PluginUpdates.plugins).map(p => p.name).filter(n => n).sort().join(", "));
 				},
 				children: BDFDB.ReactUtils.createElement("button", {
 					className: `${BDFDB.disCNS._repobutton + BDFDB.disCN._repofolderbutton} bd-updatebtn`,
@@ -10965,9 +10973,6 @@
 							if (outdated > 0) BDFDB.NotificationUtils.toast(`Plugin update check complete. ${outdated} outdated!`, {type: "error"});
 							else BDFDB.NotificationUtils.toast(`Plugin update check complete.`, {type: "success"});
 						});
-					},
-					onContextMenu: e => {
-						if (window.PluginUpdates && window.PluginUpdates.plugins && !document.querySelector(".update-list-tooltip")) BDFDB.TooltipUtils.create(e.currentTarget, BDFDB.ObjectUtils.toArray(window.PluginUpdates.plugins).map(p => p.name).filter(n => n).sort().join(", "), {type: "bottom", selector: "update-list-tooltip", style: "max-width: 420px"});
 					},
 					children: "Check for Updates"
 				})

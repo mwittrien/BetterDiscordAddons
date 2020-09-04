@@ -1109,10 +1109,7 @@ var ThemeRepo = (_ => {
 					i++;
 					
 					let loadingTooltip = document.querySelector(".themerepo-loading-tooltip");
-					if (loadingTooltip) {
-						BDFDB.DOMUtils.setText(loadingTooltip.querySelector(BDFDB.dotCN.tooltipcontent), this.getLoadingTooltipText());
-						loadingTooltip.update();
-					}
+					if (loadingTooltip) loadingTooltip.update(this.getLoadingTooltipText());
 					
 					getThemeInfo(callback);
 				});

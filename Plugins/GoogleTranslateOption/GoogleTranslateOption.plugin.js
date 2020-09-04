@@ -511,7 +511,7 @@ var GoogleTranslateOption = (_ => {
 		setLanguages () {
 			let engine = translationEngines[engines.translator] || {};
 			let languageIds = engine.languages || [];
-			languages = Object.assign(
+			languages = BDFDB.ObjectUtils.deepAssign(
 				!engine.auto ? {} : {
 					auto: {
 						name: "Auto",
