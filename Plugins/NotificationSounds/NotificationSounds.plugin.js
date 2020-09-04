@@ -69,7 +69,7 @@ var NotificationSounds = (_ => {
 	return class NotificationSounds {
 		getName () {return "NotificationSounds";}
 
-		getVersion () {return "3.4.8";}
+		getVersion () {return "3.4.9";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -77,7 +77,7 @@ var NotificationSounds = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Remove Songs","You can now remove songs that you added to the default categories"]]
+				"improved":[["Start Over","When someone calls you again the call sound now starts over instead of continuing from the last time"]]
 			};
 
 			this.patchedModules = {
@@ -476,11 +476,13 @@ var NotificationSounds = (_ => {
 					audio.volume = choices[type].volume/100;
 					e.returnValue.play = _ => {
 						if (!audio.paused || this.dontPlayAudio(type)) return;
+						audio.currentTime = 0;
 						audio.loop = false;
 						audio.play();
 					};
 					e.returnValue.loop = _ => {
 						if (!audio.paused || this.dontPlayAudio(type)) return;
+						audio.currentTime = 0;
 						audio.loop = true;
 						audio.play();
 					};
