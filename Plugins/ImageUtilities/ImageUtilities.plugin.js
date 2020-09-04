@@ -50,7 +50,7 @@ var ImageUtilities = (_ => {
 	return class ImageUtilities {
 		getName () {return "ImageUtilities";}
 
-		getVersion () {return "4.1.2";}
+		getVersion () {return "4.1.3";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -58,9 +58,7 @@ var ImageUtilities = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["Save Image as...","Added new option to open a save as prompt to the contextmenu and image modal, where you can choose the filename and path"]],
-				"improved":[["Open Original","Holding shift while pressing open original in the image modal will skip the trust modal"]],
-				"fixed":[["Trust Modal","No longer zooms into the image below the trust modal if you click the backdrop"]]
+				"fixed":[["Embeded thumbnails","No longer screws up thumbnails of bot embeds"]]
 			};
 			
 			this.patchedModules = {
@@ -90,7 +88,7 @@ var ImageUtilities = (_ => {
 					addEmojiEntry: 			{value:true, 	inner:true,		description:"Custom Emojis/Emotes"}
 				},
 				amounts: {
-					hoverDelay:				{value:0, 		min:0,			description:"Image Tooltip delay in millisec:"}
+					hoverDelay:				{value:0, 		min:0,			description:"Image Tooltip delay (in millisec)"}
 				},
 				inputs: {
 					downloadLocation:		{value:"",		childProps:{type: "file", searchFolders:true},		description:"Download Location"},
@@ -302,7 +300,7 @@ var ImageUtilities = (_ => {
 				});
 				
 				BDFDB.ModuleUtils.patch(this, (BDFDB.ModuleUtils.findByName("renderImageComponent", false).exports || {}), "renderImageComponent", {after: e => {
-					if (e.returnValue && e.returnValue.type && (e.returnValue.type.displayName == "LazyImageZoomable" || e.returnValue.type.displayName == "LazyImage") && e.methodArguments[0].original && e.methodArguments[0].src.indexOf("https://media.discordapp.net/attachments") == 0) return this.injectImageDetails(e.methodArguments[0], e.returnValue);
+					if (e.returnValue && e.returnValue.type && (e.returnValue.type.displayName == "LazyImageZoomable" || e.returnValue.type.displayName == "LazyImage") && e.methodArguments[0].original && e.methodArguments[0].src.indexOf("https://media.discordapp.net/attachments") == 0 && (e.methodArguments[0].className || "").indexOf(BDFDB.disCN.embedthumbnail) == -1) return this.injectImageDetails(e.methodArguments[0], e.returnValue);
 				}});
 
 				this.forceUpdateAll();
