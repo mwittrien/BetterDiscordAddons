@@ -437,7 +437,6 @@ var ShowHiddenChannels = (_ => {
 			let roles = (BDFDB.LibraryModules.MemberStore.getMember(guild.id, BDFDB.UserUtils.me.id) || {roles:[]}).roles.length;
 			if (cachedHiddenChannels && cachedHiddenChannels.id == guild.id && cachedHiddenChannels.roles == roles) return [cachedHiddenChannels.hidden, cachedHiddenChannels.amount];
 			else {
-				console.log(guild);
 				let all = BDFDB.LibraryModules.ChannelStore.getChannels(), hidden = {}, amount = 0;
 				for (let type in BDFDB.DiscordConstants.ChannelTypes) hidden[BDFDB.DiscordConstants.ChannelTypes[type]] = [];
 				for (let channel_id in all) {
