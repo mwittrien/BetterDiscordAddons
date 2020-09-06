@@ -10987,30 +10987,22 @@
 		}
 	};
 
-	const BDFDB_Patrons_T2 = [
-		"363785301195358221",	// TRENT
-		"106938698938978304",	// GABRIEL
-		"174868361040232448"	// GIBBU
-	];
-	const BDFDB_Patrons_T3 = [
-		"443943393660239872",	// SARGE (PaSh)
-		"329018006371827713",	// FUSL
-		"562008872467038230"	// BEAUDEN
-	];
-	const BDFDB_Patrons_T3_hasBadge = [
-		"562008872467038230"	// BEAUDEN
-	];
+	const BDFDB_Patrons = {
+		"363785301195358221": {active:true,		t3:false,	custom:false},	// TRENT
+		"106938698938978304": {active:true,		t3:false,	custom:false},	// GABRIEL
+		"174868361040232448": {active:false,	t3:false,	custom:false},	// GIBBU
+		"443943393660239872": {active:true,		t3:true,	custom:false},	// SARGE (PaSh)
+		"329018006371827713": {active:true,		t3:true,	custom:false},	// FUSL
+		"562008872467038230": {active:false,	t3:true,	custom:true}	// BEAUDEN
+	};
 	InternalBDFDB._processAvatarRender = function (user, avatar) {
 		if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user)) {
 			avatar.props["user_by_BDFDB"] = user.id;
-			let role = "", className = BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, "")), addBadge = settings.showSupportBadges;
-			if (BDFDB_Patrons_T2.includes(user.id)) {
-				role = "BDFDB Patron";
-				className = BDFDB.DOMUtils.formatClassName(className, addBadge && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbsupporter);
-			}
-			if (BDFDB_Patrons_T3.includes(user.id)) {
-				role = "BDFDB Patron Level 2";
-				className = BDFDB.DOMUtils.formatClassName(className, addBadge && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbsupporter, addBadge && BDFDB_Patrons_T3_hasBadge.includes(user.id) && BDFDB.disCN.bdfdbsupportercustom);
+			let role = "", className = BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, "")), addBadge = settings.showSupportBadges, customBadge = false;
+			if (BDFDB_Patrons[user.id] && BDFDB_Patrons[user.id].active) {
+				role = BDFDB_Patrons[user.id].t3 ? "BDFDB Patron Level 2" : "BDFDB Patron";
+				customBadge = addBadge && BDFDB_Patrons[user.id].t3 && BDFDB_Patrons[user.id].custom;
+				className = BDFDB.DOMUtils.formatClassName(className, addBadge && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbsupporter, customBadge && BDFDB.disCN.bdfdbsupportercustom);
 			}
 			if (user.id == myId) {
 				addBadge = true;
@@ -11026,14 +11018,14 @@
 				avatar = BDFDB.ReactUtils.createElement("div", {
 					className: className,
 					style: {borderRadius: 0, overflow: "visible"},
-					"custombadge_id": BDFDB_Patrons_T3_hasBadge.includes(user.id) ? user.id : null,
+					"custombadge_id": customBadge ? user.id : null,
 					"user_by_BDFDB": user.id,
 					children: [avatar]
 				});
 				if (addBadge) avatar.props.children.push(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TooltipContainer, {
 					text: role,
 					children: BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN.bdfdbbadge,
+						className: BDFDB.disCN.bdfdbbadge
 					})
 				}));
 				return avatar;
@@ -11044,15 +11036,11 @@
 		if (Node.prototype.isPrototypeOf(avatar) && BDFDB.ObjectUtils.is(user)) {
 			if (wrapper) wrapper.setAttribute("user_by_BDFDB", user.id);
 			avatar.setAttribute("user_by_BDFDB", user.id);
-			let role = "", addBadge = settings.showSupportBadges;;
-			if (BDFDB_Patrons_T2.includes(user.id) && addBadge) {
-				role = "BDFDB Patron";
-				avatar.className = BDFDB.DOMUtils.formatClassName(avatar.className, addBadge && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbsupporter);
-			}
-			else if (BDFDB_Patrons_T3.includes(user.id) && addBadge) {
-				role = "BDFDB Patron Level 2";
-				avatar.className = BDFDB.DOMUtils.formatClassName(avatar.className, addBadge && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbsupporter, addBadge && BDFDB_Patrons_T3_hasBadge.includes(user.id) && BDFDB.disCN.bdfdbsupportercustom);
-				
+			let role = "", addBadge = settings.showSupportBadges, customBadge = false;
+			if (BDFDB_Patrons[user.id] && BDFDB_Patrons[user.id].active) {
+				role = BDFDB_Patrons[user.id].t3 ? "BDFDB Patron Level 2" : "BDFDB Patron";
+				customBadge = addBadge && BDFDB_Patrons[user.id].t3 && BDFDB_Patrons[user.id].custom;
+				avatar.className = BDFDB.DOMUtils.formatClassName(avatar.className, addBadge && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbsupporter, customBadge && BDFDB.disCN.bdfdbsupportercustom);
 			}
 			else if (user.id == myId) {
 				addBadge = true;
@@ -11061,7 +11049,7 @@
 			}
 			if (role && !avatar.querySelector(BDFDB.dotCN.bdfdbbadge)) {
 				if (addBadge) {
-					if (BDFDB_Patrons_T3_hasBadge.includes(user.id)) avatar.setAttribute("custombadge_id", user.id);
+					if (customBadge) avatar.setAttribute("custombadge_id", user.id);
 					let badge = document.createElement("div");
 					badge.className = BDFDB.disCN.bdfdbbadge;
 					badge.addEventListener("mouseenter", _ => {BDFDB.TooltipUtils.create(badge, role, {position: "top"});});

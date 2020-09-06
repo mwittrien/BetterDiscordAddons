@@ -164,107 +164,12 @@ var ThemeRepo = (_ => {
 				}
 			});
 		}
-		renderCard(theme) {
-			let buttonConfig = buttonData[(Object.entries(themeStates).find(n => n[1] == theme.state) || [])[0]];
-			return buttonConfig && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AddonCard, {
-				data: theme,
-				controls: [
-					theme.new == newStates.NEW && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
-						style: {
-							borderRadius: 3,
-							textTransform: "uppercase",
-							background: BDFDB.DiscordConstants.Colors.STATUS_YELLOW
-						},
-						text: BDFDB.LanguageUtils.LanguageStrings.NEW
-					}),
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FavButton, {
-						className: BDFDB.disCN._repocontrolsbutton,
-						isFavorite: theme.fav == favStates.FAVORIZED,
-						onClick: value => {
-							theme.fav = value ? favStates.FAVORIZED : favStates.NOT_FAVORIZED;
-							if (value) favorites.push(theme.url);
-							else BDFDB.ArrayUtils.remove(favorites, theme.url, true);
-							BDFDB.DataUtils.save(favorites, _this, "favorites");
-						}
-					}),
-					BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN._repocontrolsbutton,
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: "Go to Source",
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-								name: BDFDB.LibraryComponents.SvgIcon.Names.GITHUB,
-								className: BDFDB.disCN._repoicon,
-								onClick: _ => {
-									let gitUrl = null;
-									if (theme.url.indexOf("https://raw.githubusercontent.com") == 0) {
-										let temp = theme.url.replace("//raw.githubusercontent", "//github").split("/");
-										temp.splice(5, 0, "blob");
-										gitUrl = temp.join("/");
-									}
-									else if (theme.url.indexOf("https://gist.githubusercontent.com/") == 0) {
-										gitUrl = theme.url.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
-									}
-									if (gitUrl) BDFDB.DiscordUtils.openLink(gitUrl, settings.useChromium);
-								}
-							})
-						})
-					}),
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Switch, {
-						value: this.props.currentTheme && this.props.currentTheme.url == theme.url,
-						onChange: (value, instance) => {
-							if (value) this.props.currentTheme = theme;
-							else delete this.props.currentTheme;
-							delete this.props.currentGenerator;
-							delete this.props.generatorValues;
-							if (preview) preview.executeJavaScriptSafe(`window.onmessage({
-								origin: "ThemeRepo",
-								reason: "NewTheme",
-								checked: ${value},
-								css: ${JSON.stringify(theme.css || "")}
-							})`);
-							else this.openPreview();
-							BDFDB.ReactUtils.forceUpdate(this);
-						}
-					})
-				],
-				buttons: [
-					theme.state != themeStates.DOWNLOADABLE && BDFDB.ReactUtils.createElement("div", {
-						className: BDFDB.disCN._repocontrolsbutton,
-						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: "Delete Themefile",
-							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
-								name: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_TRASH,
-								className: BDFDB.disCN._repoicon,
-								onClick: (e, instance) => {
-									_this.removeTheme(theme);
-									_this.deleteThemeFile(theme);
-									BDFDB.TimeUtils.timeout(_ => {
-										BDFDB.ReactUtils.forceUpdate(this);
-									}, 3000);
-								}
-							})
-						})
-					}),
-					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
-						size: BDFDB.LibraryComponents.Button.Sizes.MIN,
-						color: BDFDB.LibraryComponents.Button.Colors[buttonConfig.colorClass],
-						style: {backgroundColor: BDFDB.DiscordConstants.Colors[buttonConfig.backgroundColor]},
-						children: buttonConfig.text,
-						onClick: (e, instance) => {
-							_this.downloadTheme(theme);
-							BDFDB.TimeUtils.timeout(_ => {
-								BDFDB.ReactUtils.forceUpdate(this);
-								if (this.props.rnmStart) _this.applyTheme(theme);
-							}, 3000);
-						}
-					})
-				]
-			});
-		}
 		render() {
 			let automaticLoading = BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.automaticLoading);
 			if (!this.props.tab) this.props.tab = "Themes";
-			this.props.entries = (!loading.is && !BDFDB.ObjectUtils.isEmpty(loadedThemes) ? this.filterThemes() : []).map(theme => this.renderCard(theme)).filter(n => n);
+			this.props.entries = (!loading.is && !BDFDB.ObjectUtils.isEmpty(loadedThemes) ? this.filterThemes() : []).map(theme => BDFDB.ReactUtils.createElement(RepoCardComponent, {
+				theme: theme
+			})).filter(n => n);
 			
 			BDFDB.TimeUtils.timeout(_ => {
 				if (!loading.is && header && this.props.entries.length != header.props.amount) {
@@ -533,6 +438,107 @@ var ThemeRepo = (_ => {
 		}
 	};
 	
+	const RepoCardComponent = class ThemeCard extends BdApi.React.Component {
+		render() {
+			let buttonConfig = buttonData[(Object.entries(themeStates).find(n => n[1] == this.props.theme.state) || [])[0]];
+			return buttonConfig && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.AddonCard, {
+				data: this.props.theme,
+				controls: [
+					this.props.theme.new == newStates.NEW && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Badges.TextBadge, {
+						style: {
+							borderRadius: 3,
+							textTransform: "uppercase",
+							background: BDFDB.DiscordConstants.Colors.STATUS_YELLOW
+						},
+						text: BDFDB.LanguageUtils.LanguageStrings.NEW
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FavButton, {
+						className: BDFDB.disCN._repocontrolsbutton,
+						isFavorite: this.props.theme.fav == favStates.FAVORIZED,
+						onClick: value => {
+							this.props.theme.fav = value ? favStates.FAVORIZED : favStates.NOT_FAVORIZED;
+							if (value) favorites.push(this.props.theme.url);
+							else BDFDB.ArrayUtils.remove(favorites, this.props.theme.url, true);
+							BDFDB.DataUtils.save(favorites, _this, "favorites");
+						}
+					}),
+					BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN._repocontrolsbutton,
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+							text: "Go to Source",
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								name: BDFDB.LibraryComponents.SvgIcon.Names.GITHUB,
+								className: BDFDB.disCN._repoicon,
+								onClick: _ => {
+									let gitUrl = null;
+									if (this.props.theme.url.indexOf("https://raw.githubusercontent.com") == 0) {
+										let temp = this.props.theme.url.replace("//raw.githubusercontent", "//github").split("/");
+										temp.splice(5, 0, "blob");
+										gitUrl = temp.join("/");
+									}
+									else if (this.props.theme.url.indexOf("https://gist.githubusercontent.com/") == 0) {
+										gitUrl = this.props.theme.url.replace("//gist.githubusercontent", "//gist.github").split("/raw/")[0];
+									}
+									if (gitUrl) BDFDB.DiscordUtils.openLink(gitUrl, settings.useChromium);
+								}
+							})
+						})
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Switch, {
+						value: list && list.props.currentTheme && list.props.currentTheme.url == this.props.theme.url,
+						onChange: (value, instance) => {
+							if (!list) return;
+							if (value) list.props.currentTheme = this.props.theme;
+							else delete list.props.currentTheme;
+							delete list.props.currentGenerator;
+							delete list.props.generatorValues;
+							if (preview) preview.executeJavaScriptSafe(`window.onmessage({
+								origin: "ThemeRepo",
+								reason: "NewTheme",
+								checked: ${value},
+								css: ${JSON.stringify(this.props.theme.css || "")}
+							})`);
+							else list.openPreview();
+							BDFDB.ReactUtils.forceUpdate(this);
+						}
+					})
+				],
+				buttons: [
+					this.props.theme.state != themeStates.DOWNLOADABLE && BDFDB.ReactUtils.createElement("div", {
+						className: BDFDB.disCN._repocontrolsbutton,
+						children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+							text: "Delete Themefile",
+							children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SvgIcon, {
+								name: BDFDB.LibraryComponents.SvgIcon.Names.NOVA_TRASH,
+								className: BDFDB.disCN._repoicon,
+								onClick: (e, instance) => {
+									_this.removeTheme(this.props.theme);
+									_this.deleteThemeFile(this.props.theme);
+									this.props.theme.state = themeStates.DOWNLOADABLE;
+									BDFDB.ReactUtils.forceUpdate(this);
+								}
+							})
+						})
+					}),
+					BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.Button, {
+						size: BDFDB.LibraryComponents.Button.Sizes.MIN,
+						color: BDFDB.LibraryComponents.Button.Colors[buttonConfig.colorClass],
+						style: {backgroundColor: BDFDB.DiscordConstants.Colors[buttonConfig.backgroundColor]},
+						children: buttonConfig.text,
+						onClick: (e, instance) => {
+							_this.downloadTheme(this.props.theme);
+							if (list && list.props.rnmStart) BDFDB.TimeUtils.timeout(_ => {
+								if (this.props.theme.state == themeStates.UPDATED) _this.applyTheme(this.props.theme);
+							}, 3000);
+							this.props.theme.state = themeStates.UPDATED;
+							BDFDB.ReactUtils.forceUpdate(this);
+						}
+					})
+				]
+			});
+		}
+	};
+	
 	const RepoListHeaderComponent = class ThemeListHeader extends BdApi.React.Component {
 		componentDidMount() {
 			header = this;
@@ -631,7 +637,7 @@ var ThemeRepo = (_ => {
 	return class ThemeRepo {
 		getName () {return "ThemeRepo";}
 
-		getVersion () {return "2.0.5";}
+		getVersion () {return "2.0.6";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -639,7 +645,7 @@ var ThemeRepo = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Generator","Theme Generator works again"]]
+				"fixed":[["Auto Enable","No longer adds two copies of the theme"]]
 			};
 			
 			this.patchedModules = {
@@ -1147,7 +1153,6 @@ var ThemeRepo = (_ => {
 			if (data.name && BDFDB.BDUtils.isThemeEnabled(data.name) == false) {
 				let id = data.name.replace(/^[^a-z]+|[^\w-]+/gi, "-");
 				BDFDB.DOMUtils.remove(`style#${id}`);
-				document.head.appendChild(BDFDB.DOMUtils.create(`<style id=${id}>${data.css}</style>`));
 				BDFDB.BDUtils.enableTheme(data.name, false);
 				BDFDB.LogUtils.log(`Applied Theme ${data.name}.`, this.name);
 			}
