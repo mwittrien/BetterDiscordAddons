@@ -242,20 +242,6 @@ var CompleteTimestamps = (_ => {
 					}
 				}, BDFDB.LanguageUtils.languages);
 				
-				// REMOVE 19.07.2020
-				let oldChoices = BDFDB.DataUtils.load(this, "choices");
-				if (oldChoices.creationDateLang) {
-					oldChoices.timestampLang = oldChoices.creationDateLang;
-					delete oldChoices.creationDateLang;
-					BDFDB.DataUtils.save(oldChoices, this, "choices");
-				}
-				let oldFormats = BDFDB.DataUtils.load(this, "formats");
-				if (oldFormats.ownformat) {
-					oldFormats.ownFormat = oldFormats.ownformat;
-					delete oldFormats.ownformat;
-					BDFDB.DataUtils.save(oldFormats, this, "formats");
-				}
-				
 				this.forceUpdateAll();
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
@@ -267,6 +253,8 @@ var CompleteTimestamps = (_ => {
 				this.stopping = true;
 
 				this.forceUpdateAll();
+				
+				BDFDB.DOMUtils.removeLocalStyle(this.name + "CompactCorrection");
 
 				BDFDB.PluginUtils.clear(this);
 			}

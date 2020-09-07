@@ -337,6 +337,7 @@
 		let settingsPanel = BDFDB.DOMUtils.create(`<div class="${plugin.name}-settings ${BDFDB.disCN.settingsPanel}"></div>`);
 		BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsPanel, {
 			key: `${plugin.name}-settingsPanel`,
+			plugin: plugin,
 			title: plugin.name,
 			controls: [
 				plugin.changelog && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Clickable, {
@@ -416,12 +417,6 @@
 	InternalBDFDB.addSpecialListeners = function (plugin) {
 		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (BDFDB.ObjectUtils.is(plugin)) {
-			if (typeof plugin.onSettingsClosed === "function") {
-				let SettingsLayer = BDFDB.ModuleUtils.findByName("StandardSidebarView");
-				if (SettingsLayer) BDFDB.ModuleUtils.patch(plugin, SettingsLayer.prototype, "componentWillUnmount", {after: e => {
-					plugin.onSettingsClosed();
-				}});
-			}
 			if (typeof plugin.onSwitch === "function") {
 				let spacer = document.querySelector(`${BDFDB.dotCN.guildswrapper} ~ * > ${BDFDB.dotCN.chatspacer}`);
 				if (spacer) {
@@ -9030,6 +9025,9 @@
 	};
 	
 	InternalComponents.LibraryComponents.SettingsPanel = InternalBDFDB.loadPatchedComp("SettingsPanel") || reactInitialized && class BDFDB_SettingsPanel extends LibraryModules.React.Component {
+		componentWillUnmount() {
+			if (BDFDB.ObjectUtils.is(this.props.plugin) && typeof this.props.plugin.onSettingsClosed == "function") this.props.plugin.onSettingsClosed();
+		}
 		render() {
 			let headerItems = [
 				this.props.title && BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.FormComponents.FormTitle, {
@@ -9105,7 +9103,7 @@
 			if (typeof this.props.onChange == "function") this.props.onChange(value, this);
 		}
 		render() {
-			if (typeof this.props.type != "string" || !["BUTTON", "SELECT", "SWITCH", "TEXTINPUT"].includes(this.props.type.toUpperCase())) return null;
+			if (typeof this.props.type != "string" || !["BUTTON", "SELECT", "SLIDER", "SWITCH", "TEXTINPUT"].includes(this.props.type.toUpperCase())) return null;
 			let childComponent = InternalComponents.LibraryComponents[this.props.type];
 			if (!childComponent) return null;
 			if (this.props.mini && childComponent.Sizes) this.props.size = childComponent.Sizes.MINI || childComponent.Sizes.MIN;
@@ -9311,7 +9309,7 @@
 			if (typeof this.props.onChange == "function") this.props.onChange(value, this);
 		}
 		render() {
-			if (typeof this.props.type != "string" || !["SELECT", "SWITCH", "TEXTINPUT"].includes(this.props.type.toUpperCase())) return null;
+			if (typeof this.props.type != "string" || !["SELECT", "SLIDER", "SWITCH", "TEXTINPUT"].includes(this.props.type.toUpperCase())) return null;
 			return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsItem, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				onChange: this.saveSettings.bind(this)
 			}), "keys", "key", "plugin"));

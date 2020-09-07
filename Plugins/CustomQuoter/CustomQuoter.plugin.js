@@ -236,9 +236,6 @@ var CustomQuoter = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 				
-				let customQuote = BDFDB.DataUtils.load(this, "formats", "customQuote"); // REMOVE 01.07.2020
-				if (typeof customQuote == "string") BDFDB.DataUtils.save(customQuote, this, "formats", "Standard");
-				
 				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.QuoteUtils, "createQuotedText", {instead: e => {
 					return this.parseQuote(e.methodArguments[0], e.methodArguments[1]);
 				}});

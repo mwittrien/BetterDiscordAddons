@@ -815,13 +815,6 @@ var ThemeRepo = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
-				
-				let oldfavorites = BDFDB.DataUtils.load(this, "favorites"); // REMOVE 26.07.2020
-				if (BDFDB.ObjectUtils.is(oldfavorites) && Object.keys(oldfavorites).length) {
-					let newfavorites = [];
-					for (let url in oldfavorites) if (oldfavorites[url]) newfavorites.push(url);
-					BDFDB.DataUtils.save(newfavorites, this, "favorites");
-				}
 
 				this.forceUpdateAll();
 
