@@ -4,28 +4,26 @@ var ServerDetails = (_ => {
 	var _this, languages;
 	var settings = {}, colors = {}, choices = {}, formats = {}, amounts = {};
 	
-	const tooltipWidth = 300;
-	
 	const GuildDetailsComponent = class GuildDetails extends BdApi.React.Component {
 		constructor(props) {
 			super(props);
 			this.state = {fetchedOwner: false, delayed: false, repositioned: false};
 		}
 		componentDidUpdate() {
-			if (amounts.hoverDelay && this.state.delayed && !this.state.repositioned) {
+			if (amounts.tooltipDelay && this.state.delayed && !this.state.repositioned) {
 				this.state.repositioned = true;
 				let tooltip = BDFDB.DOMUtils.getParent(BDFDB.dotCN.tooltip, BDFDB.ReactUtils.getValue(this, "_reactInternalFiber.return.return.stateNode.containerInfo"));
 				if (tooltip) tooltip.update();
 			}
 		}
 		render() {
-			if (amounts.hoverDelay && !this.state.delayed) {
+			if (amounts.tooltipDelay && !this.state.delayed) {
 				BDFDB.TimeUtils.timeout(_ => {
 					this.state.delayed = true;
 					let tooltip = BDFDB.DOMUtils.getParent(BDFDB.dotCN.tooltip, BDFDB.ReactUtils.getValue(this, "_reactInternalFiber.return.return.stateNode.containerInfo"));
 					if (tooltip) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN._serverdetailstooltip);
 					BDFDB.ReactUtils.forceUpdate(this);
-				}, amounts.hoverDelay);
+				}, amounts.tooltipDelay * 1000);
 				return null;
 			}
 			let owner = BDFDB.LibraryModules.UserStore.getUser(this.props.guild.ownerId);
@@ -85,7 +83,7 @@ var ServerDetails = (_ => {
 	
 	const GuildDetailsRowComponent = class GuildDetailsRow extends BdApi.React.Component {
 		render() {
-			return (this.props.prefix.length + this.props.string.length) > 34 ? [
+			return (this.props.prefix.length + this.props.string.length) > Math.round(34 * (amounts.tooltipWidth/300)) ? [
 				BDFDB.ReactUtils.createElement("div", {
 					children: `${this.props.prefix}:`
 				}),
@@ -101,7 +99,7 @@ var ServerDetails = (_ => {
 	return class ServerDetails {
 		getName () {return "ServerDetails";}
 
-		getVersion () {return "1.0.1";}
+		getVersion () {return "1.0.2";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -109,7 +107,8 @@ var ServerDetails = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"added":[["Delay","Added hover delay"]]
+				"added":[["Tooltip Width","You can now set a tooltip width in the settings, that will automatically scale the icon too"]],
+				"improved":[["Tooltip Color","Color option now allows an alpha value, to allow semi transparent tooltips"]]
 			};
 			
 			this.patchedModules = {
@@ -126,39 +125,36 @@ var ServerDetails = (_ => {
 			
 			this.defaults = {
 				settings: {
-					cutSeconds:				{value:false, 		cat:"settings",	description:"Cut off seconds of the time"},
-					forceZeros:				{value:false, 		cat:"settings",	description:"Force leading zeros"},
-					otherOrder:				{value:false, 		cat:"settings",	description:"Show the time before the date"},
-					addIcon:				{value:true, 		cat:"tooltip",	description:"GUILD_CREATE_UPLOAD_ICON_LABEL"},
-					addOwner:				{value:true, 		cat:"tooltip",	description:"GUILD_OWNER"},
-					addCreation:			{value:true, 		cat:"tooltip",	description:"creationdate_text"},
-					addJoin:				{value:true, 		cat:"tooltip",	description:"joindate_text"},
-					addMembers:				{value:true, 		cat:"tooltip",	description:"MEMBERS"},
-					addChannels:			{value:true, 		cat:"tooltip",	description:"CHANNELS"},
-					addRoles:				{value:true, 		cat:"tooltip",	description:"ROLES"},
-					addBoosters:			{value:true, 		cat:"tooltip",	description:"SUBSCRIPTIONS_TITLE"},
-					addRegion:				{value:true, 		cat:"tooltip",	description:"REGION"}
+					cutSeconds:			{value:false, 		cat:"settings",	description:"Cut off seconds of the time"},
+					forceZeros:			{value:false, 		cat:"settings",	description:"Force leading zeros"},
+					otherOrder:			{value:false, 		cat:"settings",	description:"Show the time before the date"},
+					addIcon:			{value:true, 		cat:"tooltip",	description:"GUILD_CREATE_UPLOAD_ICON_LABEL"},
+					addOwner:			{value:true, 		cat:"tooltip",	description:"GUILD_OWNER"},
+					addCreation:		{value:true, 		cat:"tooltip",	description:"creationdate_text"},
+					addJoin:			{value:true, 		cat:"tooltip",	description:"joindate_text"},
+					addMembers:			{value:true, 		cat:"tooltip",	description:"MEMBERS"},
+					addChannels:		{value:true, 		cat:"tooltip",	description:"CHANNELS"},
+					addRoles:			{value:true, 		cat:"tooltip",	description:"ROLES"},
+					addBoosters:		{value:true, 		cat:"tooltip",	description:"SUBSCRIPTIONS_TITLE"},
+					addRegion:			{value:true, 		cat:"tooltip",	description:"REGION"}
 				},
 				colors: {
-					tooltipColor:			{value:"", 					description:"Tooltip Color"}
+					tooltipColor:		{value:"", 					description:"Tooltip Color"}
 				},
 				choices: {
-					timeLang:				{value:"$discord", 			description:"Date Format"}
+					timeLang:			{value:"$discord", 			description:"Date Format"}
 				},
 				formats: {
-					ownFormat:				{value:"$hour:$minute:$second, $day.$month.$year", 	description:"Own Format"}
+					ownFormat:			{value:"$hour:$minute:$second, $day.$month.$year", 	description:"Own Format"}
 				},
 				amounts: {
-					hoverDelay:				{value:0, 	min:0,	cat:"tooltip",	description:"Additonal information delay (in millisec)"},
-					maxDaysAgo:				{value:0, 	min:0,	cat:"format",	description:"Maximum count of days displayed in the $daysago placeholder",	note:"0 equals no limit"}
+					tooltipDelay:		{value:0,	cat:"tooltip",	 min:0,		max:10,		digits:1,	unit:"s",	description:"Details Tooltip Delay"},
+					tooltipWidth:		{value:300,	cat:"tooltip",	 min:200,	max:600,	digits:0,	unit:"px",	description:"Details Tooltip Width"},
+					maxDaysAgo:			{value:0,	cat:"format",	 min:0,		description:"Maximum count of days displayed in the $daysago placeholder",	note:"0 equals no limit"}
 				}
 			};
 			
 			this.css = `
-				${BDFDB.dotCN._serverdetailstooltip} {
-					width: ${tooltipWidth}px !important;
-					max-width: unset !important;
-				}
 				${BDFDB.dotCNS._serverdetailstooltip + BDFDB.dotCN.tooltipcontent} {
 					display: flex;
 					flex-direction: column;
@@ -171,8 +167,6 @@ var ServerDetails = (_ => {
 					align-items: center;
 					margin-bottom: 5px;
 					border-radius: 10px;
-					width: ${tooltipWidth - 80 > 0 ? (tooltipWidth - 80) : 30}px;
-					height: ${tooltipWidth - 80 > 0 ? (tooltipWidth - 80) : 30}px;
 					overflow: hidden;
 				}
 				${BDFDB.dotCN._serverdetailstooltip} div${BDFDB.dotCN._serverdetailsicon} {
@@ -227,14 +221,16 @@ var ServerDetails = (_ => {
 					className: BDFDB.disCN.marginbottom8
 				})).concat(Object.keys(amounts).map(key => this.defaults.amounts[key].cat == "tooltip" && BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.SettingsSaveItem, {
 					className: BDFDB.disCN.marginbottom8,
-					type: "TextInput",
+					type: "Slider",
 					plugin: this,
 					keys: ["amounts", key],
 					label: this.defaults.amounts[key].description,
-					note: this.defaults.amounts[key].note,
-					basis: "20%",
+					basis: "70%",
 					min: this.defaults.amounts[key].min,
 					max: this.defaults.amounts[key].max,
+					digits: this.defaults.amounts[key].digits,
+					markerAmount: 11,
+					onValueRender: value => value + this.defaults.amounts[key].unit,
 					childProps: {type: "number"},
 					value: amounts[key]
 				}))).concat(BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.FormComponents.FormDivider, {
@@ -247,10 +243,7 @@ var ServerDetails = (_ => {
 					basis: "70%",
 					label: this.defaults.colors[key].description,
 					value: colors[key],
-					childProps: {
-						type: "color",
-						noAlpha: true
-					},
+					childProps: {type: "color"},
 					placeholder: colors[key]
 				})))
 			}));
@@ -407,6 +400,13 @@ var ServerDetails = (_ => {
 						id: "own"
 					}
 				}, BDFDB.LanguageUtils.languages);
+				
+				let amounts = BDFDB.DataUtils.load(this, "amounts"); // REMOVE 07.09.2020
+				if (amounts && amounts.hoverDelay !== undefined) {
+					amounts.tooltipDelay = parseFloat(amounts.hoverDelay)/1000;
+					delete amounts.hoverDelay;
+					BDFDB.DataUtils.save(amounts, this, "amounts");
+				}
 
 				this.forceUpdateAll();
 			}
@@ -420,6 +420,8 @@ var ServerDetails = (_ => {
 				this.stopping = true;
 
 				this.forceUpdateAll();
+				
+				BDFDB.DOMUtils.removeLocalStyle(this.name + "TooltipWidth");
 
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -442,7 +444,7 @@ var ServerDetails = (_ => {
 					tooltipConfig:  Object.assign({
 						backgroundColor: colors.tooltipColor
 					}, children[index].props.tooltipConfig, {
-						className: !amounts.hoverDelay && BDFDB.disCN._serverdetailstooltip,
+						className: !amounts.tooltipDelay && BDFDB.disCN._serverdetailstooltip,
 						type: "right",
 						guild: e.instance.props.guild,
 						list: true,
@@ -518,6 +520,18 @@ var ServerDetails = (_ => {
 			choices = BDFDB.DataUtils.get(this, "choices");
 			formats = BDFDB.DataUtils.get(this, "formats");
 			amounts = BDFDB.DataUtils.get(this, "amounts");
+			
+			let iconSize = amounts.tooltipWidth - 80;
+			BDFDB.DOMUtils.appendLocalStyle(this.name + "TooltipWidth", `
+				${BDFDB.dotCN._serverdetailstooltip} {
+					width: ${amounts.tooltipWidth}px !important;
+					max-width: unset !important;
+				}
+				${BDFDB.dotCNS._serverdetailstooltip + BDFDB.dotCN._serverdetailsicon} {
+					width: ${iconSize > 0 ? iconSize : 30}px;
+					height: ${iconSize > 0 ? iconSize : 30}px;
+				}
+			`);
 			
 			BDFDB.ModuleUtils.forceAllUpdates(this);
 		}
