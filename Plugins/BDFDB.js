@@ -9356,6 +9356,11 @@
 	};
 	
 	InternalComponents.LibraryComponents.Slider = InternalBDFDB.loadPatchedComp("Slider") || reactInitialized && class BDFDB_Slider extends LibraryModules.React.Component {
+		handleMarkerRender(marker) {
+			let newMarker = BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, marker);
+			if (typeof this.props.digits == "number") newMarker = Math.round(newMarker * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
+			return newMarker;
+		}
 		handleValueChange(value) {
 			let newValue = BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value);
 			if (typeof this.props.digits == "number") newValue = Math.round(newValue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
@@ -9375,13 +9380,17 @@
 		render() {
 			let value = this.props.value || this.props.defaultValue || 0;
 			if (!BDFDB.ArrayUtils.is(this.props.edges) || this.props.edges.length != 2) this.props.edges = [this.props.min || this.props.minValue || 0, this.props.max || this.props.maxValue || 100];
+			this.props.minValue = 0;
+			this.props.maxValue = 100;
 			let defaultValue = BDFDB.NumberUtils.mapRange(this.props.edges, [0, 100], value);
 			if (typeof this.props.digits == "number") defaultValue = Math.round(defaultValue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
 			return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.Slider, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				initialValue: defaultValue,
+				markers: typeof this.props.markerAmount == "number" ? Array.from(Array(this.props.markerAmount).keys()).map((_, i) => i * (this.props.maxValue - this.props.minValue)/10) : undefined,
+				onMarkerRender: this.handleMarkerRender.bind(this),
 				onValueChange: this.handleValueChange.bind(this),
 				onValueRender: this.handleValueRender.bind(this)
-			}), "digits", "edges", "max", "maxValue", "min", "minValue"));
+			}), "digits", "edges", "max", "min", "markerAmount"));
 		}
 	};
 	InternalBDFDB.setDefaultProps(InternalComponents.LibraryComponents.Slider, {hideBubble:false});
