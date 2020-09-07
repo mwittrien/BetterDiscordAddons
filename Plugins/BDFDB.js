@@ -9138,7 +9138,10 @@
 								shrink: this.props.basis ? 0 : 1,
 								basis: this.props.basis,
 								wrap: true,
-								children: BDFDB.ReactUtils.createElement(childComponent, BDFDB.ObjectUtils.exclude(Object.assign(BDFDB.ObjectUtils.exclude(this.props, "className", "id", "type"), this.props.childProps, {onChange: this.handleChange.bind(this)}), "grow", "stretch", "basis", "dividerbottom", "dividertop", "label", "labelClassName", "labelchildren", "tag", "mini", "note", "childProps"))
+								children: BDFDB.ReactUtils.createElement(childComponent, BDFDB.ObjectUtils.exclude(Object.assign(BDFDB.ObjectUtils.exclude(this.props, "className", "id", "type"), this.props.childProps, {
+									onChange: this.handleChange.bind(this),
+									onValueChange: this.handleChange.bind(this)
+								}), "grow", "stretch", "basis", "dividerbottom", "dividertop", "label", "labelClassName", "labelchildren", "tag", "mini", "note", "childProps"))
 							})
 						].flat(10).filter(n => n)
 					}),
@@ -9354,14 +9357,15 @@
 	
 	InternalComponents.LibraryComponents.Slider = InternalBDFDB.loadPatchedComp("Slider") || reactInitialized && class BDFDB_Slider extends LibraryModules.React.Component {
 		handleValueChange(value) {
-			let newValue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value) : value;
+			let newValue = BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value);
+			console.log(this.props, value, newValue);
 			if (typeof this.props.digits == "number") newValue = Math.round(newValue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
 			this.props.defaultValue = this.props.value = newValue;
 			if (typeof this.props.onValueChange == "function") this.props.onValueChange(newValue, this);
 			BDFDB.ReactUtils.forceUpdate(this);
 		}
 		handleValueRender(value) {
-			let newValue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value) : value;
+			let newValue = BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value);
 			if (typeof this.props.digits == "number") newValue = Math.round(newValue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
 			if (typeof this.props.onValueRender == "function") {
 				let tempReturn = this.props.onValueRender(newValue, this);
@@ -9371,13 +9375,16 @@
 		}
 		render() {
 			let value = this.props.value || this.props.defaultValue || 0;
-			let defaultValue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange(this.props.edges, [0, 100], value) : value;
+			let min = this.props.min || this.props.minValue || 0;
+			let max = this.props.max || this.props.maxValue || 100;
+			if (!BDFDB.ArrayUtils.is(this.props.edges) || this.props.edges.length != 2) this.props.edges = [min, max];
+			let defaultValue = BDFDB.NumberUtils.mapRange(this.props.edges, [0, 100], value);
 			if (typeof this.props.digits == "number") defaultValue = Math.round(defaultValue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
 			return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.Slider, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				initialValue: defaultValue,
 				onValueChange: this.handleValueChange.bind(this),
 				onValueRender: this.handleValueRender.bind(this)
-			}), "digits", "edges"));
+			}), "digits", "edges", "max", "maxValue", "min", "minValue"));
 		}
 	};
 	
