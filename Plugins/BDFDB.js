@@ -9356,7 +9356,7 @@
 		handleValueChange(value) {
 			let newValue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange([0, 100], this.props.edges, value) : value;
 			if (typeof this.props.digits == "number") newValue = Math.round(newValue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
-			this.props.defaultValue = newValue;
+			this.props.defaultValue = this.props.value = newValue;
 			if (typeof this.props.onValueChange == "function") this.props.onValueChange(newValue, this);
 			BDFDB.ReactUtils.forceUpdate(this);
 		}
@@ -9370,7 +9370,8 @@
 			return newValue;
 		}
 		render() {
-			let defaultValue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange(this.props.edges, [0, 100], this.props.defaultValue) : this.props.defaultValue;
+			let value = this.props.value || this.props.defaultValue || 0;
+			let defaultValue = BDFDB.ArrayUtils.is(this.props.edges) && this.props.edges.length == 2 ? BDFDB.NumberUtils.mapRange(this.props.edges, [0, 100], value) : value;
 			if (typeof this.props.digits == "number") defaultValue = Math.round(defaultValue * Math.pow(10, this.props.digits)) / Math.pow(10, this.props.digits);
 			return BDFDB.ReactUtils.createElement(InternalComponents.NativeSubComponents.Slider, BDFDB.ObjectUtils.exclude(Object.assign({}, this.props, {
 				initialValue: defaultValue,
