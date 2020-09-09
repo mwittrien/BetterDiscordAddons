@@ -207,11 +207,11 @@
 		return parent;
 	};
 	
-	if (typeof window.require != "function") window.require = function () {
+	window.require = function () {
 		return _ => {};
 	};
 	
-	if (typeof window.getString != "function") window.getString = function (obj) {
+	window.getString = function (obj) {
 		let string = "";
 		if (typeof obj == "string") string = obj;
 		else if (obj && obj.props) {
@@ -220,8 +220,8 @@
 		}
 		return string;
 	};
-	
-	if (typeof window.webpackJsonp != "function") window.webpackJsonp = function () {
+
+	window.webpackJsonp = function () {
 		return {
 			default: {
 				m: {},
@@ -256,24 +256,21 @@
 		return WebModulesFind(module => module.displayName === name) || "";
 	};
 	
-	if (!window.BDV2) {
-		window.BDV2 = {};
-		window.BDV2.react = window.React;
-		window.BDV2.reactDom = window.ReactDOM;
-		window.BDV2.WebpackModules = {};
-		window.BDV2.WebpackModules.find = WebModulesFind;
-		window.BDV2.WebpackModules.findByUniqueProperties = WebModulesFindByProperties;
-		window.BDV2.WebpackModules.findByDisplayName = WebModulesFindByName;
-	}
-	if (!window.BdApi) {
-		window.BdApi = {};
-		window.BdApi.getData = _ => {return {};};
-		window.BdApi.loadData = _ => {return {};};
-		window.BdApi.saveData = _ => {};
-		window.BdApi.React = window.React;
-		window.BdApi.ReactDOM = window.ReactDOM;
-		window.BdApi.findModule = WebModulesFind;
-		window.BdApi.findModuleByProps = WebModulesFindByProperties;
-		window.BdApi.findModuleByDisplayName = WebModulesFindByName;
-	}
+	window.BDV2 = {};
+	window.BDV2.react = window.React;
+	window.BDV2.reactDom = window.ReactDOM;
+	window.BDV2.WebpackModules = {};
+	window.BDV2.WebpackModules.find = WebModulesFind;
+	window.BDV2.WebpackModules.findByUniqueProperties = WebModulesFindByProperties;
+	window.BDV2.WebpackModules.findByDisplayName = WebModulesFindByName;
+
+	window.BdApi = {};
+	window.BdApi.getData = _ => {return {};};
+	window.BdApi.loadData = _ => {return {};};
+	window.BdApi.saveData = _ => {};
+	window.BdApi.React = window.React;
+	window.BdApi.ReactDOM = window.ReactDOM;
+	window.BdApi.findModule = WebModulesFind;
+	window.BdApi.findModuleByProps = WebModulesFindByProperties;
+	window.BdApi.findModuleByDisplayName = WebModulesFindByName;
 })();
