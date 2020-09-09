@@ -230,6 +230,16 @@
 		};
 	};
 	
+	window.fetch = function () {
+		return new Promise(_ => {});
+	};
+	
+	let XMLHttpRequestProto = XMLHttpRequest.prototype;
+	window.XMLHttpRequest = class {};
+	for (let key of Object.keys(XMLHttpRequestProto)) try {
+		if (typeof XMLHttpRequestProto[key] == "function") window.XMLHttpRequest.prototype[key] = _ => {return new Promise(_ => {});};
+	} catch(err) {}
+	
 	let WebModulesFind = function (filter) {
 		const id = "PluginRepo-WebModules";
 		const req = typeof(window.webpackJsonp) == "function" ? window.webpackJsonp([], {[id]: (module, exports, req) => exports.default = req}, [id]).default : window.webpackJsonp.push([[], {[id]: (module, exports, req) => module.exports = req}, [[id]]]);
