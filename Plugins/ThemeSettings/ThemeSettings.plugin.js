@@ -175,7 +175,7 @@ var ThemeSettings = (_ => {
 				if (varValue) {
 					let childType = "text", childMode = "";
 					let isColor = BDFDB.ColorUtils.getType(varValue);
-					let isComp = !isColor && /[0-9 ]+,[0-9 ]+,[0-9 ]+/g.test(varValue);
+					let isComp = !isColor && /^[0-9 ]+,[0-9 ]+,[0-9 ]+$/g.test(varValue);
 					if (isColor || isComp) {
 						childType = "color";
 						childMode = isComp && "comp";

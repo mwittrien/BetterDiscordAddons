@@ -684,8 +684,8 @@ var PluginRepo = (_ => {
 									if (list) BDFDB.ReactUtils.forceUpdate(list);
 									
 									if ((settings.notifyOutdated || settings.notifyOutdated == undefined) && outdated > 0) {
-										let oldbarbutton = document.querySelector(".pluginrepo-outdate-notice " + BDFDB.dotCN.noticedismiss);
-										if (oldbarbutton) oldbarbutton.click();
+										let oldBarButton = document.querySelector(".pluginrepo-outdate-notice " + BDFDB.dotCN.noticedismiss);
+										if (oldBarButton) oldBarButton.click();
 										let bar = BDFDB.NotificationUtils.notice(`${outdated} of your Plugins ${outdated == 1 ? "is" : "are"} outdated. Check:`, {
 											type: "danger",
 											btn: "PluginRepo",
@@ -700,8 +700,8 @@ var PluginRepo = (_ => {
 									}
 									
 									if ((settings.notifyNewEntries || settings.notifyNewEntries == undefined) && newentries > 0) {
-										let oldbarbutton = document.querySelector(".pluginrepo-newentries-notice " + BDFDB.dotCN.noticedismiss);
-										if (oldbarbutton) oldbarbutton.click();
+										let oldBarButton = document.querySelector(".pluginrepo-newentries-notice " + BDFDB.dotCN.noticedismiss);
+										if (oldBarButton) oldBarButton.click();
 										let single = newentries == 1;
 										let bar = BDFDB.NotificationUtils.notice(`There ${single ? "is" : "are"} ${newentries} new Plugin${single ? "" : "s"} in the Repo. Check:`, {
 											type: "success",

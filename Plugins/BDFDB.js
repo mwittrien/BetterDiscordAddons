@@ -4205,8 +4205,9 @@
 		colorPickerGradientButtonEnabled: "enabled-MypHME",
 		colorPickerSwatches: "swatches-QxZw_N",
 		colorPickerSwatchesDisabled: "disabled-2JgNxl",
-		colorPickerSwatchSingle: "single-Fbb1wB",
 		colorPickerSwatchSelected: "selected-f5IVXN",
+		colorPickerSwatchSingle: "single-Fbb1wB",
+		colorPickerSwatchSingleWrapper: "swatch-7FsRaa",
 		confirmModal: "confirmModal-t-WDWJ",
 		dev: "dev-A7f2Rx",
 		favButtonContainer: "favbutton-8Fzu45",
@@ -5225,6 +5226,7 @@
 		colorpickerswatchnocolor: ["ColorPicker", "noColor"],
 		colorpickerswatchselected: ["BDFDB", "colorPickerSwatchSelected"],
 		colorpickerswatchsingle: ["BDFDB", "colorPickerSwatchSingle"],
+		colorpickerswatchsinglewrapper: ["BDFDB", "colorPickerSwatchSingleWrapper"],
 		colorpickerwrapper: ["BDFDB", "colorPicker"],
 		colorprimary: ["TextColor", "colorHeaderPrimary"],
 		colorred: ["TextColor", "colorStatusRed"],
@@ -8088,7 +8090,10 @@
 				isDisabled: this.state.disabled,
 				style: {margin: 0}
 			});
-			return !this.state.colors.length ? customSwatch : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
+			return !this.state.colors.length ? BDFDB.ReactUtils.createElement("div", {
+				className: BDFDB.disCN.colorpickerswatchsinglewrapper,
+				children: customSwatch
+			}) : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Flex, {
 				className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.colorpickerswatches, this.state.disabled && BDFDB.disCN.colorpickerswatchesdisabled),
 				number: this.props.number != null ? this.props.number : 0,
 				children: [
@@ -10643,6 +10648,10 @@
 			display: none;
 		}
 		
+		${BDFDB.dotCN.colorpickerswatchsinglewrapper} {
+			position: relative;
+			z-index: 1;
+		}
 		${BDFDB.dotCN.colorpickerswatchsingle} {
 			height: 30px;
 			width: 30px;
@@ -10654,15 +10663,6 @@
 		${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault + BDFDB.notCN.colorpickerswatchdisabled} {
 			overflow: hidden;
 		}
-		${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault + BDFDB.notCN.colorpickerswatchdisabled}:after {
-			content: "";
-			position: absolute;
-			top: 0;
-			right: 0;
-			bottom: 0;
-			left: 0;
-			z-index: -1;
-		}
 		${BDFDB.dotCN.colorpickerswatch + BDFDB.dotCN.colorpickerswatchcustom}[style*="background"] {
 			border: none;
 		}
@@ -10673,7 +10673,14 @@
 			border-radius: 5px;
 		}
 		${BDFDB.dotCN.colorpickerswatch + BDFDB.notCN.colorpickerswatchnocolor + BDFDB.notCN.colorpickerswatchdefault + BDFDB.notCN.colorpickerswatchdisabled}:after {
+			content: "";
 			background: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect x="0" y="0" width="4" height="4" fill="black"></rect><rect x="0" y="4" width="4" height="4" fill="white"></rect><rect x="4" y="0" width="4" height="4" fill="white"></rect><rect x="4" y="4" width="4" height="4" fill="black"></rect></svg>') center repeat;
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			z-index: -1;
 		}
 		
 		${BDFDB.dotCN.colorpickeralpha} {
