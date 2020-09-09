@@ -3,10 +3,12 @@
 	
 	window.global = window;
 	
+	let nativeRequire = window.require || (_ => {});
+	
 	window.respondToParent = function (data = {}) {
 		if (window.parent && typeof window.parent.postMessage == "function") window.parent.postMessage(data, "*");
 		if (data.hostId != null && data.hostName != null) {
-			let ipcRenderer = (require("electron") || {}).ipcRenderer;
+			let ipcRenderer = (nativeRequire("electron") || {}).ipcRenderer;
 			if (ipcRenderer && typeof ipcRenderer.sendTo == "function") ipcRenderer.sendTo(data.hostId, data.hostName, data);
 		}
 	};
@@ -70,7 +72,7 @@
 					
 					document.body.firstElementChild.style.removeProperty("display");
 	
-					let electron = require("electron");
+					let electron = nativeRequire("electron");
 					if (electron && electron.remote) {
 						let browserWindow = electron.remote.getCurrentWindow();
 						if (browserWindow) document.addEventListener("click", event => {
@@ -275,8 +277,8 @@
 	window.BDV2.WebpackModules.findByDisplayName = WebModulesFindByName;
 
 	window.BdApi = {};
-	window.BdApi.getData = _ => {return {};};
-	window.BdApi.loadData = _ => {return {};};
+	window.BdApi.getData = _ => ({});
+	window.BdApi.loadData = _ => ({});
 	window.BdApi.saveData = _ => {};
 	window.BdApi.React = window.React;
 	window.BdApi.ReactDOM = window.ReactDOM;
