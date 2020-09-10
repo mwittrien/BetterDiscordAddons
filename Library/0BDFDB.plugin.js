@@ -5,7 +5,8 @@ module.exports = (_ => {
 		name: "BDFDB",
 		author: "DevilBro",
 		version: "1.0.0",
-		description: "Gives other plugins utility functions."
+		description: "Gives other plugins utility functions.",
+		rawUrl: "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
 	};
 	
 	const DiscordObjects = {};
@@ -33,7 +34,14 @@ module.exports = (_ => {
 		},
 	});
 	
-	const delayedLoads = [], delayedStarts = [];
+	const PluginStores = {
+		started: [],
+		delayedLoad: [],
+		delayedStart: [],
+		updateTimeout: [],
+		patchQueues: {}
+	}
+	const PluginStores.delayedLoad = [], PluginStores.delayedStart = [];
 	const Plugin = function(config) {
 		return class Plugin {
 			getName() {return config.name;}
@@ -41,7 +49,7 @@ module.exports = (_ => {
 			getVersion() {return config.version;}
 			getDescription() {return config.description;}
 			load() {
-				if (window.BDFDB.loading) delayedLoads.push(this);
+				if (window.BDFDB.loading) PluginStores.delayedLoad.push(this);
 				else {
 					Object.assign(this, BDFDB.ObjectUtils.extract(config, "name", "author", "version", "description", "changeLog", "patchedModules", "rawUrl"));
 					BDFDB.PluginUtils.load(this);
@@ -49,7 +57,7 @@ module.exports = (_ => {
 				}
 			}
 			start() {
-				if (window.BDFDB.loading) delayedStarts.push(this);
+				if (window.BDFDB.loading) PluginStores.delayedStart.push(this);
 				else {
 					if (this.started) return;
 					BDFDB.PluginUtils.init(this);
@@ -124,15 +132,14 @@ module.exports = (_ => {
 			return result;
 		}
 	};
-
-	const updateTimeouts = [], componentPatchQueries = {}, startedPlugins = [];
+	
 	BDFDB.PluginUtils = {};
 	BDFDB.PluginUtils.buildPlugin = function (config) {
 		return [Plugin(config), Object.assign({}, BDFDB)];
 	};
 	BDFDB.PluginUtils.load = function (plugin) {		
-		if (!updateTimeouts.includes(plugin.name)) {
-			updateTimeouts.push(plugin.name);
+		if (!PluginStores.updateTimeouts.includes(plugin.name)) {
+			PluginStores.updateTimeouts.push(plugin.name);
 			let url = ["ImageZoom", "ImageGallery", "ReverseImageSearch", "ShowImageDetails"].includes(plugin.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ImageUtilities/ImageUtilities.plugin.js" : ["BetterFriendCount"].includes(plugin.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BetterFriendList/BetterFriendList.plugin.js" : (plugin.rawUrl ||`https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`);
 
 			if (!window.PluginUpdates || typeof window.PluginUpdates !== "object") window.PluginUpdates = {plugins:{}};
@@ -144,12 +151,12 @@ module.exports = (_ => {
 				BDFDB.PluginUtils.checkAllUpdates();
 			}, 1000*60*60*2);
 			
-			BDFDB.TimeUtils.timeout(_ => {BDFDB.ArrayUtils.remove(updateTimeouts, plugin.name, true);}, 30000);
+			BDFDB.TimeUtils.timeout(_ => {BDFDB.ArrayUtils.remove(PluginStores.updateTimeouts, plugin.name, true);}, 30000);
 		}
 	};
 	BDFDB.PluginUtils.init = function (plugin) {
 		BDFDB.PluginUtils.load(plugin);
-		if (!startedPlugins.includes(plugin.name)) startedPlugins.push(plugin.name);
+		if (!PluginStores.started.includes(plugin.name)) PluginStores.started.push(plugin.name);
 		
 		let startMsg = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
 		BDFDB.LogUtils.log(startMsg, plugin.name);
@@ -174,14 +181,14 @@ module.exports = (_ => {
 
 		BDFDB.PluginUtils.cleanUp(plugin);
 		
-		for (let type in componentPatchQueries) BDFDB.ArrayUtils.remove(componentPatchQueries[type].query, plugin, true);
+		for (let type in PluginStores.patchQueues) BDFDB.ArrayUtils.remove(PluginStores.patchQueues[type].query, plugin, true);
 		
 		for (let modal of document.querySelectorAll(`.${plugin.name}-modal, .${plugin.name.toLowerCase()}-modal, .${plugin.name}-settingsmodal, .${plugin.name.toLowerCase()}-settingsmodal`)) {
 			let closeButton = modal.querySelector(BDFDB.dotCN.modalclose);
 			if (closeButton) closeButton.click();
 		}
 		
-		BDFDB.ArrayUtils.remove(startedPlugins, plugin.name, true);
+		BDFDB.ArrayUtils.remove(PluginStores.started, plugin.name, true);
 		delete Cache.data[plugin.name]
 		delete window.PluginUpdates.plugins[url];
 	};
@@ -209,7 +216,7 @@ module.exports = (_ => {
 			delete window.BDFDB.loaded;
 			BDFDB.TimeUtils.interval((interval, count) => {
 				if (count > 60 || window.BDFDB.loaded) BDFDB.TimeUtils.clear(interval);
-				if (window.BDFDB.loaded) for (let pluginName of startedPlugins) BDFDB.BDUtils.reloadPlugin(pluginName);
+				if (window.BDFDB.loaded) for (let pluginName of PluginStores.started) BDFDB.BDUtils.reloadPlugin(pluginName);
 			}, 1000);
 		}
 		BDFDB.DOMUtils.removeLocalStyle(plugin.name);
@@ -7072,10 +7079,10 @@ module.exports = (_ => {
 		InternalBDFDB.addContextListeners = function (plugin) {
 			plugin = plugin == BDFDB && InternalBDFDB || plugin;
 			for (let type of QueuedComponents) if (typeof plugin[`on${type}`] === "function") {
-				componentPatchQueries[type].query.push(plugin);
-				componentPatchQueries[type].query = BDFDB.ArrayUtils.removeCopies(componentPatchQueries[type].query);
-				componentPatchQueries[type].query.sort((x, y) => {return x.name < y.name ? -1 : x.name > y.name ? 1 : 0;});
-				for (let module of componentPatchQueries[type].modules) InternalBDFDB.patchContextMenuForPlugin(plugin, type, module);
+				PluginStores.patchQueues[type].query.push(plugin);
+				PluginStores.patchQueues[type].query = BDFDB.ArrayUtils.removeCopies(PluginStores.patchQueues[type].query);
+				PluginStores.patchQueues[type].query.sort((x, y) => {return x.name < y.name ? -1 : x.name > y.name ? 1 : 0;});
+				for (let module of PluginStores.patchQueues[type].modules) InternalBDFDB.patchContextMenuForPlugin(plugin, type, module);
 			}
 		};
 		InternalBDFDB.patchContextMenuForPlugin = function (plugin, type, module) {
@@ -7085,24 +7092,24 @@ module.exports = (_ => {
 			}});
 		};
 		InternalBDFDB.executeExtraPatchedPatches = function (type, e) {
-			if (e.returnvalue && BDFDB.ObjectUtils.is(componentPatchQueries[type]) && BDFDB.ArrayUtils.is(componentPatchQueries[type].query)) {
-				for (let plugin of componentPatchQueries[type].query) if(typeof plugin[`on${type}`] === "function") plugin[`on${type}`](e);
+			if (e.returnvalue && BDFDB.ObjectUtils.is(PluginStores.patchQueues[type]) && BDFDB.ArrayUtils.is(PluginStores.patchQueues[type].query)) {
+				for (let plugin of PluginStores.patchQueues[type].query) if(typeof plugin[`on${type}`] === "function") plugin[`on${type}`](e);
 			}
 		};
 
 		InternalBDFDB.patchPlugin(BDFDB);
 		
-		for (let type of QueuedComponents) if (!componentPatchQueries[type]) componentPatchQueries[type] = {query:[], modules:[]};
+		for (let type of QueuedComponents) if (!PluginStores.patchQueues[type]) PluginStores.patchQueues[type] = {query:[], modules:[]};
 		BDFDB.PatchUtils.patch(BDFDB, LibraryModules.ContextMenuUtils, "openContextMenu", {before: e => {
 			let menu = e.methodArguments[1]();
 			if (BDFDB.ObjectUtils.is(menu) && menu.type && menu.type.displayName) {
 				for (let type of ContextMenuTypes) if (menu.type.displayName.indexOf(type) > -1) {
 					let patchType = type + "ContextMenu";
 					let module = BDFDB.ModuleUtils.find(m => m == menu.type, false);
-					if (module && module.exports && module.exports.default && componentPatchQueries[patchType]) {
-						componentPatchQueries[patchType].modules.push(module);
-						componentPatchQueries[patchType].modules = BDFDB.ArrayUtils.removeCopies(componentPatchQueries[patchType].modules);
-						for (let plugin of componentPatchQueries[patchType].query) InternalBDFDB.patchContextMenuForPlugin(plugin, patchType, module);
+					if (module && module.exports && module.exports.default && PluginStores.patchQueues[patchType]) {
+						PluginStores.patchQueues[patchType].modules.push(module);
+						PluginStores.patchQueues[patchType].modules = BDFDB.ArrayUtils.removeCopies(PluginStores.patchQueues[patchType].modules);
+						for (let plugin of PluginStores.patchQueues[patchType].query) InternalBDFDB.patchContextMenuForPlugin(plugin, patchType, module);
 					}
 					break;
 				}
@@ -7421,8 +7428,8 @@ module.exports = (_ => {
 	
 		BDFDB.LogUtils.log("Finished loading library.");
 		
-		while (delayedLoads.length) delayedLoads.shift().load();
-		while (delayedStarts.length) delayedStarts.shift().start();
+		while (PluginStores.delayedLoad.length) PluginStores.delayedLoad.shift().load();
+		while (PluginStores.delayedStart.length) PluginStores.delayedStart.shift().start();
 		while (pluginQueue.length) BDFDB.BDUtils.reloadPlugin(pluginQueue.shift());
 	});
 	
