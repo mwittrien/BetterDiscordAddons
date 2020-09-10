@@ -15,7 +15,6 @@ module.exports = (_ => {
 	const InternalComponents = {NativeSubComponents: {}, LibraryComponents: {}};
 	const Cache = {data: {}, modules: {}};
 	
-	const myId = "278543574059057154", myGuildId = "410787888507256842";
 	var settings = {};
 	
 	if (window.BDFDB && window.BDFDB.PluginUtils && typeof window.BDFDB.PluginUtils.cleanUp == "function") window.BDFDB.PluginUtils.cleanUp(window.BDFDB);
@@ -134,9 +133,9 @@ module.exports = (_ => {
 	
 	BDFDB.PluginUtils = {};
 	BDFDB.PluginUtils.buildPlugin = function (config) {
-		return [Plugin(config), Object.assign({}, BDFDB)];
+		return [Plugin(config), BDFDB];
 	};
-	BDFDB.PluginUtils.load = function (plugin) {		
+	BDFDB.PluginUtils.load = function (plugin) {
 		if (!PluginStores.updateTimeout.includes(plugin.name)) {
 			PluginStores.updateTimeout.push(plugin.name);
 			let url = ["ImageZoom", "ImageGallery", "ReverseImageSearch", "ShowImageDetails"].includes(plugin.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ImageUtilities/ImageUtilities.plugin.js" : ["BetterFriendCount"].includes(plugin.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BetterFriendList/BetterFriendList.plugin.js" : (plugin.rawUrl ||`https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`);
@@ -165,7 +164,7 @@ module.exports = (_ => {
 		if (typeof plugin.css === "string") BDFDB.DOMUtils.appendLocalStyle(plugin.name, plugin.css);
 
 		InternalBDFDB.patchPlugin(plugin);
-		addSpecialListeners(plugin);
+		InternalBDFDB.addSpecialListeners(plugin);
 
 		BDFDB.PluginUtils.translate(plugin);
 
@@ -412,6 +411,7 @@ module.exports = (_ => {
 		loadingIconWrapper.appendChild(icon);
 	};
 	BDFDB.PluginUtils.createSettingsPanel = function (plugin, children) {
+		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (!BDFDB.ObjectUtils.is(plugin) || !children || (!BDFDB.ReactUtils.isValidElement(children) && !BDFDB.ArrayUtils.is(children))) return;
 		let settingsPanel = BDFDB.DOMUtils.create(`<div class="${plugin.name}-settings ${BDFDB.disCN.settingsPanel}"></div>`);
 		BDFDB.ReactUtils.render(BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.SettingsPanel, {
@@ -439,7 +439,7 @@ module.exports = (_ => {
 		settingsPanel.parentElement.appendChild(plugin.getSettingsPanel(...args));
 		settingsPanel.remove();
 	};
-	const addSpecialListeners = function (plugin) {
+	InternalBDFDB.addSpecialListeners = function (plugin) {
 		plugin = plugin == BDFDB && InternalBDFDB || plugin;
 		if (BDFDB.ObjectUtils.is(plugin)) {
 			if (typeof plugin.onSwitch === "function") {
@@ -6969,7 +6969,7 @@ module.exports = (_ => {
 					customBadge = addBadge && BDFDB_Patrons[user.id].t3 && BDFDB_Patrons[user.id].custom;
 					className = BDFDB.DOMUtils.formatClassName(className, addBadge && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbsupporter, customBadge && BDFDB.disCN.bdfdbsupportercustom);
 				}
-				if (user.id == myId) {
+				if (user.id == InternalData.myId) {
 					addBadge = true;
 					role = "Theme Developer";
 					className = BDFDB.DOMUtils.formatClassName(className, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbdev);
@@ -7007,7 +7007,7 @@ module.exports = (_ => {
 					customBadge = addBadge && BDFDB_Patrons[user.id].t3 && BDFDB_Patrons[user.id].custom;
 					avatar.className = BDFDB.DOMUtils.formatClassName(avatar.className, addBadge && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbsupporter, customBadge && BDFDB.disCN.bdfdbsupportercustom);
 				}
-				else if (user.id == myId) {
+				else if (user.id == InternalData.myId) {
 					addBadge = true;
 					role = "Theme Developer";
 					avatar.className = BDFDB.DOMUtils.formatClassName(avatar.className, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbdev);
@@ -7154,7 +7154,7 @@ module.exports = (_ => {
 			BDFDB.PatchUtils.forceAllUpdates(BDFDB);
 		};
 		
-		addSpecialListeners(BDFDB);
+		InternalBDFDB.addSpecialListeners(BDFDB);
 
 		let BasePopout = BDFDB.ModuleUtils.findByName("BasePopout"), ReferencePositionLayer = BDFDB.ModuleUtils.findByName("ReferencePositionLayer");
 		if (BasePopout && ReferencePositionLayer) BDFDB.PatchUtils.patch(BDFDB, BasePopout.prototype, "renderLayer", {after: e => {
@@ -7271,11 +7271,11 @@ module.exports = (_ => {
 		}
 		
 		BDFDB.PatchUtils.patch(BDFDB, LibraryModules.GuildStore, "getGuild", {after: e => {
-			if (e.returnValue && e.methodArguments[0] == myGuildId) e.returnValue.banner = "https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.banner.png";
+			if (e.returnValue && e.methodArguments[0] == InternalData.myGuildId) e.returnValue.banner = "https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.banner.png";
 		}});
 
 		BDFDB.PatchUtils.patch(BDFDB, LibraryModules.IconUtils, "getGuildBannerURL", {instead: e => {
-			return e.methodArguments[0].id == myGuildId ? e.methodArguments[0].banner : e.callOriginalMethod();
+			return e.methodArguments[0].id == InternalData.myGuildId ? e.methodArguments[0].banner : e.callOriginalMethod();
 		}});
 		
 		InternalBDFDB.forceUpdateAll();
@@ -7407,6 +7407,7 @@ module.exports = (_ => {
 					cleanUp: BDFDB.PluginUtils.cleanUp
 				}
 			}, config);
+			Object.freeze(BDFDB);
 		}
 		for (let obj in DiscordObjects) if (!DiscordObjects[obj]) {
 			DiscordObjects[obj] = function () {};

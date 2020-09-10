@@ -2492,6 +2492,8 @@
 		"wrap": ["Flex", "wrap"],
 		"wrapreverse": ["Flex", "wrapReverse"]
 	},
+	"myId": "278543574059057154",
+	"myGuildId": "410787888507256842",
 	"Languages": {
 		"$discord": 	{"name":"Discord (English))",			"id":"en",		"ownlang":"English"},
 		"af":			{"name":"Afrikaans",					"id":"af",		"ownlang":"Afrikaans"},
