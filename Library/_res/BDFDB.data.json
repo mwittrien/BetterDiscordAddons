@@ -1,4 +1,15 @@
 {
+	"requires": ["child_process", "electron", "fs", "path", "process", "request"],
+	"DiscordObjects": {
+		"Channel": {"props": ["getRecipientId", "isManaged", "getGuildId"]},
+		"Guild": {"props": ["getIconURL", "getMaxEmojiSlots", "getRole"]},
+		"Invite": {"props": ["getExpiresAt", "isExpired"]},
+		"Message": {"props": ["getReaction", "getAuthorName", "getChannelId"]},
+		"Messages": {"props": ["jumpToMessage", "hasAfterCached", "forEach"]},
+		"Relationship": {"protos": ["comparator"], "array": true},
+		"Timestamp": {"props": ["add", "dayOfYear", "hasAlignedHourOffset"]},
+		"User": {"props": ["hasFlag", "isLocalBot", "isClaimed"]},
+	},
 	"ModuleUtilsConfig": {
 		"PatchTypes": [
 			"before",

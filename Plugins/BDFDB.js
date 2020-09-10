@@ -2328,13 +2328,6 @@
 		}
 		catch (err) {BDFDB.LogUtils.error("Could not render react element! " + err);}
 	};
-	InternalBDFDB.setDefaultProps = function (component, defaultProps) {
-		if (BDFDB.ObjectUtils.is(component)) component.defaultProps = Object.assign({}, component.defaultProps, defaultProps);
-	};
-	InternalBDFDB.loadPatchedComp = function (path) {
-		let comp = BDFDB.ReactUtils.getValue(window.BDFDB, `LibraryComponents.${path}`);
-		if (comp && comp.prototype && comp.prototype.BDFDBpatch) return comp;
-	};
 
 	BDFDB.sameProto = function (a, b) {
 		if (a != null && typeof a == "object") return a.constructor && a.constructor.prototype && typeof a.constructor.prototype.isPrototypeOf == "function" && a.constructor.prototype.isPrototypeOf(b);
@@ -7058,6 +7051,14 @@
 			BDFDB.LanguageUtils.languages.$discord.ownlang = language.ownlang;
 		}
 	}, 100);
+	
+	InternalBDFDB.setDefaultProps = function (component, defaultProps) {
+		if (BDFDB.ObjectUtils.is(component)) component.defaultProps = Object.assign({}, component.defaultProps, defaultProps);
+	};
+	InternalBDFDB.loadPatchedComp = function (path) {
+		let comp = BDFDB.ReactUtils.getValue(window.BDFDB, `LibraryComponents.${path}`);
+		if (comp && comp.prototype && comp.prototype.BDFDBpatch) return comp;
+	};
 	
 	var InternalComponents = {NativeSubComponents: {}, LibraryComponents: {}}, reactInitialized = LibraryModules.React && LibraryModules.React.Component;
 	
