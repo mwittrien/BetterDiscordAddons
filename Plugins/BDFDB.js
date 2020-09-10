@@ -1579,7 +1579,7 @@
 		for (let type in patchedModules) {
 			let pluginData = {plugin: plugin, patchTypes: patchedModules[type]};
 			let unmappedType = type.split(" _ _ ")[1] || type;
-			let nonRender = [pluginData.patchTypes].flat(10).filter(n => n && !WebModulesData.InstanceFunctions.includes(n)).length > 0;
+			let nonRender = BDFDB.ObjectUtils.toArray(pluginData.patchTypes).flat(10).filter(n => n && !WebModulesData.InstanceFunctions.includes(n)).length > 0;
 			let component = WebModulesData.LoadedInComponents[type] && BDFDB.ReactUtils.getValue(InternalComponents, WebModulesData.LoadedInComponents[type]);
 			if (component) InternalBDFDB.patch_PatchInstance(pluginData, nonRender ? (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports : component, type);
 			else {
