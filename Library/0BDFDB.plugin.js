@@ -564,7 +564,7 @@ var BDFDB = (_ => {
 		return [...new Set(array)];
 	};
 	
-	if (window.BDFDB && BDFDB.ArrayUtils.is(window.BDFDB.pluginQueue)) for (let config of window.BDFDB.pluginQueue) BdApi.Plugins.reload(config.name);
+	let pluginQueue = window.BDFDB && BDFDB.ArrayUtils.is(window.BDFDB.pluginQueue) ? window.BDFDB.pluginQueue : null;
 	
 	window.BDFDB = {
 		name: "BDFDB",
@@ -574,7 +574,9 @@ var BDFDB = (_ => {
 			cleanUp: BDFDB.PluginUtils.cleanUp
 		}
 	};
-			
+	
+	if (pluginQueue) for (let config of pluginQueue) BdApi.Plugins.reload(config.name);
+	
 	return class BDFDB {
 		getName () {return "BDFDB";}
 
