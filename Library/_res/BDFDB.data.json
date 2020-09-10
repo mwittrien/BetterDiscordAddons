@@ -231,7 +231,7 @@
 		"PopoutContainer": {"name": "Popout"},
 		"QuickSelect": {"name": "QuickSelectWrapper"},
 		"RadioGroup": {"name": "RadioGroup"},
-		"SearchBar": {"name": "SearchBar", "prototype": ["focus"]},
+		"SearchBar": {"name": "SearchBar", "protos": ["focus"]},
 		"Select": {"name": "SelectTempWrapper"},
 		"Slider": {"name": "Slider"},
 		"Switch": {"name": "Switch"},
