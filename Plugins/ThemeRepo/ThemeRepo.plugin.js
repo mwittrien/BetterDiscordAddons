@@ -106,7 +106,7 @@ var ThemeRepo = (_ => {
 			return themes;
 		}
 		openPreview() {
-			preview = BDFDB.WindowUtils.open(this, "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/DiscordPreview.html", {
+			preview = BDFDB.WindowUtils.open(this, "https://mwittrien.github.io/BetterDiscordAddons/Plugins/.res/DiscordPreview.html", {
 				alwaysOnTop: settings.keepOnTop,
 				showOnReady: true,
 				frame: false,

@@ -15,6 +15,7 @@
 	--bd-blue: rgb(var(--vaccentcolor));
 	--bd-blue-hover: var(--vaccentcolor-hover);
 	--bd-blue-active: var(--vaccentcolor-active);
+	--blurple: rgb(var(--vaccentcolor));
 }
 .theme-dark, .theme-light {
 	--text-link: rgb(var(--vlinkcolor));

@@ -837,7 +837,7 @@ var PluginRepo = (_ => {
 					let loadTimeout = BDFDB.TimeUtils.timeout(_ => {
 						callback();
 					}, 600000);
-					sandbox = BDFDB.WindowUtils.open(this, "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/DiscordPreview.html", {
+					sandbox = BDFDB.WindowUtils.open(this, "https://mwittrien.github.io/BetterDiscordAddons/Plugins/.res/DiscordPreview.html", {
 						onLoad: _ => {
 							BDFDB.TimeUtils.clear(loadTimeout);
 							sandbox.executeJavaScriptSafe(`window.onmessage({
