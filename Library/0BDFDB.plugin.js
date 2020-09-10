@@ -40,8 +40,7 @@ module.exports = (_ => {
 		delayedStart: [],
 		updateTimeout: [],
 		patchQueues: {}
-	}
-	const PluginStores.delayedLoad = [], PluginStores.delayedStart = [];
+	};
 	const Plugin = function(config) {
 		return class Plugin {
 			getName() {return config.name;}
