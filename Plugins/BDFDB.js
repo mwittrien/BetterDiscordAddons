@@ -8125,6 +8125,8 @@
 	
 	InternalComponents.LibraryComponents.EmojiButton = BDFDB.ModuleUtils.findByName("EmojiButton");
 	
+	InternalComponents.LibraryComponents.EmojiPicker = BDFDB.ModuleUtils.findByString("allowManagedEmojis", "EMOJI_PICKER_TAB_PANEL_ID", "diversitySelector");
+	
 	InternalComponents.LibraryComponents.EmojiPickerButton = InternalBDFDB.loadPatchedComp("EmojiPickerButton") || reactInitialized && class BDFDB_EmojiPickerButton extends LibraryModules.React.Component {
 		handleEmojiChange(emoji) {
 			if (emoji != null) {
@@ -8156,7 +8158,7 @@
 				position: InternalComponents.LibraryComponents.PopoutContainer.Positions.TOP,
 				align: InternalComponents.LibraryComponents.PopoutContainer.Align.LEFT,
 				renderPopout: instance => {
-					return BDFDB.ReactUtils.createElement(BDFDB.ModuleUtils.findByString("allowManagedEmojis", "EMOJI_PICKER_TAB_PANEL_ID", "diversitySelector"), {
+					return BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.EmojiPicker, {
 						closePopout: instance.close,
 						onSelectEmoji: this.handleEmojiChange.bind(this),
 						allowManagedEmojis: this.props.allowManagedEmojis
