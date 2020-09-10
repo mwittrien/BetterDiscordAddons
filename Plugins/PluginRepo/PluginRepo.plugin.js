@@ -631,7 +631,7 @@ var PluginRepo = (_ => {
 			BDFDB.DOMUtils.remove(".pluginrepo-loadingicon");
 			let settings = BDFDB.DataUtils.load(this, "settings");
 			let getPluginInfo, extractConfigInfo, createSandbox, runInSandbox;
-			let sandbox, sandboxRunning = false, sandboxQueue = [], outdated = 0, newentries = 0, i = 0;
+			let sandbox, sandboxRunning = false, sandboxQueue = [], outdated = 0, newEntries = 0, i = 0;
 			let tags = ["getName", "getVersion", "getAuthor", "getDescription"];
 			let seps = ["\"", "\'", "\`"];
 			let newEntriesData = BDFDB.DataUtils.load(this, "newentriesdata");
@@ -699,11 +699,11 @@ var PluginRepo = (_ => {
 										});
 									}
 									
-									if ((settings.notifyNewEntries || settings.notifyNewEntries == undefined) && newentries > 0) {
+									if ((settings.notifyNewEntries || settings.notifyNewEntries == undefined) && newEntries > 0) {
 										let oldBarButton = document.querySelector(".pluginrepo-newentries-notice " + BDFDB.dotCN.noticedismiss);
 										if (oldBarButton) oldBarButton.click();
-										let single = newentries == 1;
-										let bar = BDFDB.NotificationUtils.notice(`There ${single ? "is" : "are"} ${newentries} new Plugin${single ? "" : "s"} in the Repo. Check:`, {
+										let single = newEntries == 1;
+										let bar = BDFDB.NotificationUtils.notice(`There ${single ? "is" : "are"} ${newEntries} new Plugin${single ? "" : "s"} in the Repo. Check:`, {
 											type: "success",
 											btn: "PluginRepo",
 											selector: "pluginrepo-notice pluginrepo-newentries-notice",
@@ -804,7 +804,7 @@ var PluginRepo = (_ => {
 							plugin.url = url;
 							loadedPlugins[url] = plugin;
 							if (this.isPluginOutdated(plugin, url)) outdated++;
-							if (!cachedPlugins.includes(url)) newentries++;
+							if (!cachedPlugins.includes(url)) newEntries++;
 						}
 						else if (sandbox) {
 							sandboxQueue.push({body, url});
@@ -868,7 +868,7 @@ var PluginRepo = (_ => {
 							messageData.plugin.url = url;
 							loadedPlugins[url] = messageData.plugin;
 							if (this.isPluginOutdated(messageData.plugin, url)) outdated++;
-							if (!cachedPlugins.includes(url)) newentries++;
+							if (!cachedPlugins.includes(url)) newEntries++;
 						}
 						sandboxRunning = false;
 						runInSandbox();

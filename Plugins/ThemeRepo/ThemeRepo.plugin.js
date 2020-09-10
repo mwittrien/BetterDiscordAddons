@@ -1021,7 +1021,7 @@ var ThemeRepo = (_ => {
 								let oldBarButton = document.querySelector(".themerepo-newentries-notice " + BDFDB.dotCN.noticedismiss);
 								if (oldBarButton) oldBarButton.click();
 								let single = newEntries == 1;
-								let bar = BDFDB.NotificationUtils.notice(`There ${single ? "is" : "are"} ${newentries} new Theme${single ? "" : "s"} in the Repo. Check:`, {
+								let bar = BDFDB.NotificationUtils.notice(`There ${single ? "is" : "are"} ${newEntries} new Theme${single ? "" : "s"} in the Repo. Check:`, {
 									type: "success",
 									btn: "ThemeRepo",
 									selector: "themerepo-notice themerepo-newentries-notice",
@@ -1114,7 +1114,7 @@ var ThemeRepo = (_ => {
 								loadedThemes[url] = theme;
 								let instTheme = BDFDB.BDUtils.getTheme(theme.name);
 								if (instTheme && instTheme.author.toUpperCase() == theme.author.toUpperCase() && instTheme.version != theme.version) outdated++;
-								if (!cachedThemes.includes(url)) newentries++;
+								if (!cachedThemes.includes(url)) newEntries++;
 							}
 						}
 					}
