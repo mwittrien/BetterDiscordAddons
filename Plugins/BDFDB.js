@@ -1241,6 +1241,7 @@
 	
 	var WebModulesData = {};
 	WebModulesData.PatchTypes = ["before", "instead", "after"];
+	WebModulesData.InstanceFunctions = ["render", "componentDidMount", "componentDidUpdate", "componentWillUnmount"];
 	WebModulesData.PatchMap = {
 		BannedCard: "BannedUser",
 		ChannelWindow: "Channel",
@@ -1263,34 +1264,6 @@
 		"MessageContent",
 		"NowPlayingHeader"
 	];
-	WebModulesData.NonRender = BDFDB.ArrayUtils.removeCopies([].concat(WebModulesData.MemoComponent, [
-		"Attachment",
-		"ChannelCallHeader",
-		"ConnectedPrivateChannelsList",
-		"DiscordTag",
-		"IncomingCallModal",
-		"InviteModalUserRow",
-		"Mention",
-		"Menu",
-		"MenuCheckboxItem",
-		"MenuControlItem",
-		"MenuItem",
-		"Message",
-		"MessageTimestamp",
-		"NameTag",
-		"NowPlayingItem",
-		"PendingRow",
-		"PeopleListSectionedLazy",
-		"PictureInPictureVideo",
-		"PrivateChannelEmptyMessage",
-		"RecentsChannelHeader",
-		"RecentsHeader",
-		"SystemMessage",
-		"SimpleMessageAccessories",
-		"UnreadMessages",
-		"UserInfo",
-		"WebhookCard"
-	]));
 	WebModulesData.LoadedInComponents = {
 		AutocompleteChannelResult: "LibraryComponents.AutocompleteItems.Channel",
 		AutocompleteUserResult: "LibraryComponents.AutocompleteItems.User",
@@ -1369,7 +1342,7 @@
 		MessageHeader: "MessageTimestamp",
 		UnavailableGuildsButton: "UnavailableGuildsButton"
 	};
-	WebModulesData.NonPrototype = BDFDB.ArrayUtils.removeCopies([].concat(WebModulesData.NonRender, Object.keys(WebModulesData.CodeFinder), Object.keys(WebModulesData.PropsFinder), [
+	WebModulesData.NonPrototype = BDFDB.ArrayUtils.removeCopies([].concat(Object.keys(WebModulesData.CodeFinder), Object.keys(WebModulesData.PropsFinder), [
 		"ChannelTextAreaContainer"
 	]));
 	
@@ -1606,31 +1579,36 @@
 		for (let type in patchedModules) {
 			let pluginData = {plugin: plugin, patchTypes: patchedModules[type]};
 			let unmappedType = type.split(" _ _ ")[1] || type;
+			let nonRender = [pluginData.patchTypes].flat(10).filter(n => n && !WebModulesData.InstanceFunctions.includes(n)).length > 0;
 			let component = WebModulesData.LoadedInComponents[type] && BDFDB.ReactUtils.getValue(InternalComponents, WebModulesData.LoadedInComponents[type]);
-			if (component) InternalBDFDB.patch_PatchInstance(pluginData, WebModulesData.NonRender.includes(unmappedType) ? (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports : component, type);
+			if (component) InternalBDFDB.patch_PatchInstance(pluginData, nonRender ? (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports : component, type);
 			else {
-				let classNames = [WebModulesData.PatchFinder[unmappedType]].flat(10).filter(n => DiscordClasses[n]);
-				let codeFind = WebModulesData.CodeFinder[unmappedType];
-				let propertyFind = WebModulesData.PropsFinder[unmappedType];
-				let mapped = WebModulesData.PatchMap[type];
-				let mappedType = mapped ? mapped + " _ _ " + type : type;
+				let config = {
+					classNames: [WebModulesData.PatchFinder[unmappedType]].flat(10).filter(n => DiscordClasses[n]),
+					codeFind: WebModulesData.CodeFinder[unmappedType],
+					propertyFind: WebModulesData.PropsFinder[unmappedType],
+					forceObserve: WebModulesData.ForceObserve.includes(unmappedType),
+					nonRender: nonRender,
+					mapped: WebModulesData.PatchMap[type]
+				};
+				let mappedType = config.mapped ? config.mapped + " _ _ " + type : type;
 				let name = mappedType.split(" _ _ ")[0];
-				if (mapped) {
+				if (config.mapped) {
 					for (let patchType in plugin.patchedModules) if (plugin.patchedModules[patchType][type]) {
 						plugin.patchedModules[patchType][mappedType] = plugin.patchedModules[patchType][type];
 						delete plugin.patchedModules[patchType][type];
 					}
 				}
-				if (classNames.length) InternalBDFDB.patch_CheckForInstance(pluginData, classNames, mappedType, WebModulesData.ForceObserve.includes(unmappedType));
-				else if (codeFind) {
-					let exports = (BDFDB.ModuleUtils.findByString(codeFind, false) || {}).exports;
+				if (config.classNames.length) InternalBDFDB.patch_CheckForInstance(pluginData, mappedType, config);
+				else if (config.codeFind) {
+					let exports = (BDFDB.ModuleUtils.findByString(config.codeFind, false) || {}).exports;
 					InternalBDFDB.patch_PatchInstance(pluginData, exports && WebModulesData.MemoComponent.includes(unmappedType) ? exports.default : exports, mappedType, true);
 				}
-				else if (propertyFind) {
-					let exports = (BDFDB.ModuleUtils.findByProperties(propertyFind, false) || {}).exports;
+				else if (config.propertyFind) {
+					let exports = (BDFDB.ModuleUtils.findByProperties(config.propertyFind, false) || {}).exports;
 					InternalBDFDB.patch_PatchInstance(pluginData, exports && WebModulesData.MemoComponent.includes(unmappedType) ? exports.default : exports, mappedType, true);
 				}
-				else if (WebModulesData.NonRender.includes(unmappedType)) {
+				else if (config.nonRender) {
 					let exports = (BDFDB.ModuleUtils.findByName(name, false) || {}).exports;
 					InternalBDFDB.patch_PatchInstance(pluginData, exports && WebModulesData.MemoComponent.includes(unmappedType) ? exports.default : exports, mappedType, true);
 				}
@@ -1662,7 +1640,7 @@
 			}
 		}
 	};
-	InternalBDFDB.patch_CheckEle = function (pluginDataObjs, ele, type) {
+	InternalBDFDB.patch_CheckEle = function (pluginDataObjs, ele, type, config) {
 		pluginDataObjs = [pluginDataObjs].flat(10).filter(n => n);
 		let unmappedType = type.split(" _ _ ")[1] || type;
 		let ins = BDFDB.ReactUtils.getInstance(ele);
@@ -1670,7 +1648,7 @@
 		if (typeof filter == "function") {
 			let component = filter(ins);
 			if (component) {
-				if (WebModulesData.NonRender.includes(unmappedType)) {
+				if (config.nonRender) {
 					let exports = (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports;
 					InternalBDFDB.patch_PatchInstance(pluginDataObjs, exports && WebModulesData.MemoComponent.includes(unmappedType) ? exports.default : exports, type, true);
 				}
@@ -1686,10 +1664,10 @@
 		}
 		return false;
 	};
-	InternalBDFDB.patch_CheckForInstance = function (pluginData, classNames, type, forceObserve) {
+	InternalBDFDB.patch_CheckForInstance = function (pluginData, type, config) {
 		const app = document.querySelector(BDFDB.dotCN.app), bdSettings = document.querySelector("#bd-settingspane-container .scroller");
 		let instanceFound = false;
-		if (!forceObserve) {
+		if (!config.forceObserve) {
 			if (app) {
 				let appIns = BDFDB.ReactUtils.findConstructor(app, type, {unlimited:true}) || BDFDB.ReactUtils.findConstructor(app, type, {unlimited:true, up:true});
 				if (appIns && (instanceFound = true)) InternalBDFDB.patch_PatchInstance(pluginData, appIns, type);
@@ -1700,9 +1678,9 @@
 			}
 		}
 		if (!instanceFound) {
-			let elementFound = false, classes = classNames.map(n => BDFDB.disCN[n]), selector = classNames.map(n => BDFDB.dotCN[n]).join(", ");
+			let elementFound = false, classes = config.classNames.map(n => BDFDB.disCN[n]), selector = config.classNames.map(n => BDFDB.dotCN[n]).join(", ");
 			for (let ele of document.querySelectorAll(selector)) {
-				elementFound = InternalBDFDB.patch_CheckEle(pluginData, ele, type);
+				elementFound = InternalBDFDB.patch_CheckEle(pluginData, ele, type, config);
 				if (elementFound) break;
 			}
 			if (!elementFound) {
@@ -1714,7 +1692,7 @@
 							for (let type in BDFDB.InternalData.patchObserverData.data) if (!BDFDB.InternalData.patchObserverData.data[type].found) {
 								let ele = null;
 								if ((ele = BDFDB.DOMUtils.containsClass(n, ...BDFDB.InternalData.patchObserverData.data[type].classes) ? n : n.querySelector(BDFDB.InternalData.patchObserverData.data[type].selector)) != null) {
-									BDFDB.InternalData.patchObserverData.data[type].found = InternalBDFDB.patch_CheckEle(BDFDB.InternalData.patchObserverData.data[type].plugins, ele, type);
+									BDFDB.InternalData.patchObserverData.data[type].found = InternalBDFDB.patch_CheckEle(BDFDB.InternalData.patchObserverData.data[type].plugins, ele, type, config);
 									if (BDFDB.InternalData.patchObserverData.data[type].found) {
 										delete BDFDB.InternalData.patchObserverData.data[type];
 										if (BDFDB.ObjectUtils.isEmpty(BDFDB.InternalData.patchObserverData.data)) {
@@ -11328,7 +11306,7 @@
 	}
 	
 	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.GuildStore, "getGuild", {after: e => {
-		if (e.returnValue && e.methodArguments[0] == myGuildId) e.returnValue.banner = "https://mwittrien.github.io/BetterDiscordAddons/Library/.res/BDFDB_banner.png";
+		if (e.returnValue && e.methodArguments[0] == myGuildId) e.returnValue.banner = "https://mwittrien.github.io/BetterDiscordAddons/Library/.res/BDFDB.banner.png";
 	}});
 
 	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.IconUtils, "getGuildBannerURL", {instead: e => {
