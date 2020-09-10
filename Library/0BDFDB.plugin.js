@@ -20,129 +20,48 @@ var BDFDB = (_ => {
 			getDescription() {return config.description;}
 			load() {
 				Object.assign(this, BDFDB.ObjectUtils.extract(config, "name", "author", "version", "description"));
-				BDFDB.PluginUtils.load(this);
+				BDFDB.PluginUtils.load(this, config);
 				if (typeof this.onLoad == "function") this.onLoad();
 			}
 			start() {
-				BDFDB.PluginUtils.init(this);
+				BDFDB.PluginUtils.init(this, config);
 				if (typeof this.onStart == "function") this.onStart();
 			}
 			stop() {
 				if (typeof this.onStop == "function") this.onStop();
-				BDFDB.PluginUtils.clear(this);
+				BDFDB.PluginUtils.clear(this, config);
 			}
 		};
 	};
-
-	BDFDB.ObjectUtils = {};
-	BDFDB.ObjectUtils.is = function (obj) {
-		return obj && Object.prototype.isPrototypeOf(obj) && !Array.prototype.isPrototypeOf(obj);
-	};
-	BDFDB.ObjectUtils.extract = function (obj, ...keys) {
-		let newObj = {};
-		if (BDFDB.ObjectUtils.is(obj)) for (let key of keys.flat(10).filter(n => n)) if (obj[key]) newObj[key] = obj[key];
-		return newObj;
-	};
-	BDFDB.ObjectUtils.exclude = function (obj, ...keys) {
-		let newObj = Object.assign({}, obj);
-		BDFDB.ObjectUtils.delete(newObj, ...keys)
-		return newObj;
-	};
-	BDFDB.ObjectUtils.delete = function (obj, ...keys) {
-		if (BDFDB.ObjectUtils.is(obj)) for (let key of keys.flat(10).filter(n => n)) delete obj[key];
-	};
-	BDFDB.ObjectUtils.sort = function (obj, sort, except) {
-		if (!BDFDB.ObjectUtils.is(obj)) return {};
-		let newObj = {};
-		if (sort === undefined || !sort) for (let key of Object.keys(obj).sort()) newObj[key] = obj[key];
-		else {
-			let values = [];
-			for (let key in obj) values.push(obj[key]);
-			values = BDFDB.ArrayUtils.keySort(values, sort, except);
-			for (let value of values) for (let key in obj) if (BDFDB.equals(value, obj[key])) {
-				newObj[key] = value;
-				break;
-			}
-		}
-		return newObj;
-	};
-	BDFDB.ObjectUtils.reverse = function (obj, sort) {
-		if (!BDFDB.ObjectUtils.is(obj)) return {};
-		let newObj = {};
-		for (let key of (sort === undefined || !sort) ? Object.keys(obj).reverse() : Object.keys(obj).sort().reverse()) newObj[key] = obj[key];
-		return newObj;
-	};
-	BDFDB.ObjectUtils.filter = function (obj, filter, byKey = false) {
-		if (!BDFDB.ObjectUtils.is(obj)) return {};
-		if (typeof filter != "function") return obj;
-		return Object.keys(obj).filter(key => filter(byKey ? key : obj[key])).reduce((newObj, key) => (newObj[key] = obj[key], newObj), {});
-	};
-	BDFDB.ObjectUtils.push = function (obj, value) {
-		if (BDFDB.ObjectUtils.is(obj)) obj[Object.keys(obj).length] = value;
-	};
-	BDFDB.ObjectUtils.pop = function (obj, value) {
-		if (BDFDB.ObjectUtils.is(obj)) {
-			let keys = Object.keys(obj);
-			if (!keys.length) return;
-			let value = obj[keys[keys.length-1]];
-			delete obj[keys[keys.length-1]];
-			return value;
-		}
-	};
-	BDFDB.ObjectUtils.map = function (obj, mapfunc) {
-		if (!BDFDB.ObjectUtils.is(obj)) return {};
-		if (typeof mapfunc != "string" && typeof mapfunc != "function") return obj;
-		let newObj = {};
-		for (let key in obj) if (BDFDB.ObjectUtils.is(obj[key])) newObj[key] = typeof mapfunc == "string" ? obj[key][mapfunc] : mapfunc(obj[key], key);
-		return newObj;
-	};
-	BDFDB.ObjectUtils.toArray = function (obj) {
-		if (!BDFDB.ObjectUtils.is(obj)) return [];
-		return Object.entries(obj).map(n => n[1]);
-	};
-	BDFDB.ObjectUtils.deepAssign = function (obj, ...objs) {
-		if (!objs.length) return obj;
-		let nextObj = objs.shift();
-		if (BDFDB.ObjectUtils.is(obj) && BDFDB.ObjectUtils.is(nextObj)) {
-			for (let key in nextObj) {
-				if (BDFDB.ObjectUtils.is(nextObj[key])) {
-					if (!obj[key]) Object.assign(obj, {[key]:{}});
-					BDFDB.ObjectUtils.deepAssign(obj[key], nextObj[key]);
-				}
-				else Object.assign(obj, {[key]:nextObj[key]});
-			}
-		}
-		return BDFDB.ObjectUtils.deepAssign(obj, ...objs);
-	};
-	BDFDB.ObjectUtils.isEmpty = function (obj) {
-		return !BDFDB.ObjectUtils.is(obj) || Object.getOwnPropertyNames(obj).length == 0;
-	};
 	
+	const updateTimeouts = [];
 	BDFDB.PluginUtils = {};
 	BDFDB.PluginUtils.buildPlugin = function (plugin, config) {
 		return [Plugin(config), Object.assign({}, BDFDB)];
 	};
-	BDFDB.PluginUtils.load = function (plugin) {		
-		if (!plugin.updateChecked) {
-			plugin.updateChecked = true;
-			let url = ["ImageZoom", "ImageGallery", "ReverseImageSearch", "ShowImageDetails"].includes(plugin.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ImageUtilities/ImageUtilities.plugin.js" : ["BetterFriendCount"].includes(plugin.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BetterFriendList/BetterFriendList.plugin.js" : (typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`);
-			BDFDB.PluginUtils.checkUpdate(plugin.name, url);
+	BDFDB.PluginUtils.load = function (plugin, config) {		
+		if (!updateTimeouts.includes(config.name)) {
+			updateTimeouts.push(config.name);
+			let url = ["ImageZoom", "ImageGallery", "ReverseImageSearch", "ShowImageDetails"].includes(config.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ImageUtilities/ImageUtilities.plugin.js" : ["BetterFriendCount"].includes(config.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BetterFriendList/BetterFriendList.plugin.js" : (config.rawUrl ||`https://mwittrien.github.io/BetterDiscordAddons/Plugins/${config.name}/${config.name}.plugin.js`);
+			BDFDB.PluginUtils.checkUpdate(config.name, url);
 
 			if (!window.PluginUpdates || typeof window.PluginUpdates !== "object") window.PluginUpdates = {plugins: {} };
-			window.PluginUpdates.plugins[url] = {name: plugin.name, raw: url, version: plugin.version};
-			if (typeof window.PluginUpdates.interval === "undefined") window.PluginUpdates.interval = BDFDB.TimeUtils.interval(_ => {BDFDB.PluginUtils.checkAllUpdates();}, 1000*60*60*2);
-			BDFDB.TimeUtils.timeout(_ => {delete plugin.updateChecked;}, 30000);
+			window.PluginUpdates.plugins[url] = {name: config.name, raw: url, version: config.version};
+			if (typeof window.PluginUpdates.interval === "undefined") window.PluginUpdates.interval = BDFDB.TimeUtils.interval(_ => {
+				BDFDB.PluginUtils.checkAllUpdates();
+			}, 1000*60*60*2);
+			BDFDB.TimeUtils.timeout(_ => {BDFDB.ArrayUtils.remove(updateTimeouts, config.name, true);}, 30000);
 		}
 	};
-	BDFDB.PluginUtils.init = BDFDB.loadMessage = function (plugin) {
-		BDFDB.PluginUtils.load(plugin);
+	BDFDB.PluginUtils.init = BDFDB.loadMessage = function (plugin, config) {
+		BDFDB.PluginUtils.load(plugin, config);
 		
-		let startMsg = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
-		BDFDB.LogUtils.log(startMsg, plugin.name);
-		if (settings.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(`${plugin.name} ${startMsg}`, {nopointer: true});
+		let startMsg = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + config.version);
+		BDFDB.LogUtils.log(startMsg, config.name);
+		if (settings.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(`${config.name} ${startMsg}`, {nopointer: true});
 
-		if (typeof plugin.initConstructor === "function") BDFDB.TimeUtils.suppress(plugin.initConstructor.bind(plugin), "Could not initiate constructor!", plugin.name)();
-		if (typeof plugin.css === "string") BDFDB.DOMUtils.appendLocalStyle(plugin.name, plugin.css);
+		if (typeof plugin.initConstructor === "function") BDFDB.TimeUtils.suppress(plugin.initConstructor.bind(plugin), "Could not initiate constructor!", config.name)();
+		if (typeof plugin.css === "string") BDFDB.DOMUtils.appendLocalStyle(config.name, plugin.css);
 
 		InternalBDFDB.patchPlugin(plugin);
 		InternalBDFDB.addSpecialListeners(plugin);
@@ -153,20 +72,15 @@ var BDFDB = (_ => {
 
 		plugin.started = true;
 		delete plugin.stopping;
-		
-		let startAmount = 1;
-		for (let name in BDFDB.myPlugins) if (!BDFDB.myPlugins[name].started && typeof BDFDB.myPlugins[name].initialize == "function") setTimeout(_ => {BDFDB.TimeUtils.suppress(BDFDB.myPlugins[name].initialize.bind(BDFDB.myPlugins[name]), "Could not initiate plugin!", name)();}, 100 * (startAmount++));
 	};
-	BDFDB.PluginUtils.clear = BDFDB.unloadMessage = function (plugin) {
+	BDFDB.PluginUtils.clear = BDFDB.unloadMessage = function (plugin, config) {
 		InternalBDFDB.clearStartTimeout(plugin);
 
-		delete BDFDB.myPlugins[plugin.name];
+		let stopMsg = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", "v" + config.version);
+		BDFDB.LogUtils.log(stopMsg, config.name);
+		if (settings.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(`${config.name} ${stopMsg}`, {nopointer: true});
 
-		let stopMsg = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_stopped", "v" + plugin.version);
-		BDFDB.LogUtils.log(stopMsg, plugin.name);
-		if (settings.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(`${plugin.name} ${stopMsg}`, {nopointer: true});
-
-		let url = typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
+		let url = ["ImageZoom", "ImageGallery", "ReverseImageSearch", "ShowImageDetails"].includes(config.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ImageUtilities/ImageUtilities.plugin.js" : ["BetterFriendCount"].includes(config.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BetterFriendList/BetterFriendList.plugin.js" : (config.rawUrl ||`https://mwittrien.github.io/BetterDiscordAddons/Plugins/${config.name}/${config.name}.plugin.js`);
 
 		if (typeof plugin.css === "string") BDFDB.DOMUtils.removeLocalStyle(plugin.name);
 
@@ -174,12 +88,12 @@ var BDFDB = (_ => {
 		
 		for (let type in BDFDB.InternalData.componentPatchQueries) BDFDB.ArrayUtils.remove(BDFDB.InternalData.componentPatchQueries[type].query, plugin, true);
 		
-		for (let modal of document.querySelectorAll(`.${plugin.name}-modal, .${plugin.name.toLowerCase()}-modal, .${plugin.name}-settingsmodal, .${plugin.name.toLowerCase()}-settingsmodal`)) {
+		for (let modal of document.querySelectorAll(`.${config.name}-modal, .${config.name.toLowerCase()}-modal, .${config.name}-settingsmodal, .${plugin.name.toLowerCase()}-settingsmodal`)) {
 			let closeButton = modal.querySelector(BDFDB.dotCN.modalclose);
 			if (closeButton) closeButton.click();
 		}
 		
-		delete BDFDB.DataUtils.cached[plugin.name]
+		delete BDFDB.DataUtils.cached[config.name]
 		delete window.PluginUpdates.plugins[url];
 
 		delete plugin.started;
@@ -503,6 +417,145 @@ var BDFDB = (_ => {
 			InternalBDFDB.addContextListeners(plugin);
 		}
 	};
+
+	BDFDB.ObjectUtils = {};
+	BDFDB.ObjectUtils.is = function (obj) {
+		return obj && Object.prototype.isPrototypeOf(obj) && !Array.prototype.isPrototypeOf(obj);
+	};
+	BDFDB.ObjectUtils.extract = function (obj, ...keys) {
+		let newObj = {};
+		if (BDFDB.ObjectUtils.is(obj)) for (let key of keys.flat(10).filter(n => n)) if (obj[key]) newObj[key] = obj[key];
+		return newObj;
+	};
+	BDFDB.ObjectUtils.exclude = function (obj, ...keys) {
+		let newObj = Object.assign({}, obj);
+		BDFDB.ObjectUtils.delete(newObj, ...keys)
+		return newObj;
+	};
+	BDFDB.ObjectUtils.delete = function (obj, ...keys) {
+		if (BDFDB.ObjectUtils.is(obj)) for (let key of keys.flat(10).filter(n => n)) delete obj[key];
+	};
+	BDFDB.ObjectUtils.sort = function (obj, sort, except) {
+		if (!BDFDB.ObjectUtils.is(obj)) return {};
+		let newObj = {};
+		if (sort === undefined || !sort) for (let key of Object.keys(obj).sort()) newObj[key] = obj[key];
+		else {
+			let values = [];
+			for (let key in obj) values.push(obj[key]);
+			values = BDFDB.ArrayUtils.keySort(values, sort, except);
+			for (let value of values) for (let key in obj) if (BDFDB.equals(value, obj[key])) {
+				newObj[key] = value;
+				break;
+			}
+		}
+		return newObj;
+	};
+	BDFDB.ObjectUtils.reverse = function (obj, sort) {
+		if (!BDFDB.ObjectUtils.is(obj)) return {};
+		let newObj = {};
+		for (let key of (sort === undefined || !sort) ? Object.keys(obj).reverse() : Object.keys(obj).sort().reverse()) newObj[key] = obj[key];
+		return newObj;
+	};
+	BDFDB.ObjectUtils.filter = function (obj, filter, byKey = false) {
+		if (!BDFDB.ObjectUtils.is(obj)) return {};
+		if (typeof filter != "function") return obj;
+		return Object.keys(obj).filter(key => filter(byKey ? key : obj[key])).reduce((newObj, key) => (newObj[key] = obj[key], newObj), {});
+	};
+	BDFDB.ObjectUtils.push = function (obj, value) {
+		if (BDFDB.ObjectUtils.is(obj)) obj[Object.keys(obj).length] = value;
+	};
+	BDFDB.ObjectUtils.pop = function (obj, value) {
+		if (BDFDB.ObjectUtils.is(obj)) {
+			let keys = Object.keys(obj);
+			if (!keys.length) return;
+			let value = obj[keys[keys.length-1]];
+			delete obj[keys[keys.length-1]];
+			return value;
+		}
+	};
+	BDFDB.ObjectUtils.map = function (obj, mapfunc) {
+		if (!BDFDB.ObjectUtils.is(obj)) return {};
+		if (typeof mapfunc != "string" && typeof mapfunc != "function") return obj;
+		let newObj = {};
+		for (let key in obj) if (BDFDB.ObjectUtils.is(obj[key])) newObj[key] = typeof mapfunc == "string" ? obj[key][mapfunc] : mapfunc(obj[key], key);
+		return newObj;
+	};
+	BDFDB.ObjectUtils.toArray = function (obj) {
+		if (!BDFDB.ObjectUtils.is(obj)) return [];
+		return Object.entries(obj).map(n => n[1]);
+	};
+	BDFDB.ObjectUtils.deepAssign = function (obj, ...objs) {
+		if (!objs.length) return obj;
+		let nextObj = objs.shift();
+		if (BDFDB.ObjectUtils.is(obj) && BDFDB.ObjectUtils.is(nextObj)) {
+			for (let key in nextObj) {
+				if (BDFDB.ObjectUtils.is(nextObj[key])) {
+					if (!obj[key]) Object.assign(obj, {[key]:{}});
+					BDFDB.ObjectUtils.deepAssign(obj[key], nextObj[key]);
+				}
+				else Object.assign(obj, {[key]:nextObj[key]});
+			}
+		}
+		return BDFDB.ObjectUtils.deepAssign(obj, ...objs);
+	};
+	BDFDB.ObjectUtils.isEmpty = function (obj) {
+		return !BDFDB.ObjectUtils.is(obj) || Object.getOwnPropertyNames(obj).length == 0;
+	};
+
+	BDFDB.ArrayUtils = {};
+	BDFDB.ArrayUtils.is = function (array) {
+		return array && Array.isArray(array);
+	};
+	BDFDB.ArrayUtils.sum = function (array) {
+		return Array.isArray(array) ? array.reduce((total, num) => total + Math.round(num), 0) : 0;
+	};
+	BDFDB.ArrayUtils.keySort = function (array, key, except) {
+		if (!BDFDB.ArrayUtils.is(array)) return [];
+		if (key == null) return array;
+		if (except === undefined) except = null;
+		return array.sort((x, y) => {
+			let xValue = x[key], yValue = y[key];
+			if (xValue !== except) return xValue < yValue ? -1 : xValue > yValue ? 1 : 0;
+		});
+	};
+	BDFDB.ArrayUtils.numSort = function (array) {
+		return array.sort((x, y) => (x < y ? -1 : x > y ? 1 : 0));
+	};
+	BDFDB.ArrayUtils.includes = function (array, ...values) {
+		if (!BDFDB.ArrayUtils.is(array)) return null;
+		if (!array.length) return false;
+		let all = values.pop();
+		if (typeof all != "boolean") {
+			values.push(all);
+			all = true;
+		}
+		if (!values.length) return false;
+		let contained = undefined;
+		for (let v of values) {
+			if (contained === undefined) contained = all;
+			if (all && !array.includes(v)) contained = false;
+			if (!all && array.includes(v)) contained = true;
+		}
+		return contained;
+	};
+	BDFDB.ArrayUtils.remove = function (array, value, all = false) {
+		if (!BDFDB.ArrayUtils.is(array)) return [];
+		if (!array.includes(value)) return array;
+		if (!all) array.splice(array.indexOf(value), 1);
+		else while (array.indexOf(value) > -1) array.splice(array.indexOf(value), 1);
+		return array;
+	};
+	BDFDB.ArrayUtils.getAllIndexes = function (array, value) {
+		if (!BDFDB.ArrayUtils.is(array) && typeof array != "string") return [];
+		var indexes = [], index = -1;
+		while ((index = array.indexOf(value, index + 1)) !== -1) indexes.push(index);
+		return indexes;
+	};
+	BDFDB.ArrayUtils.removeCopies = function (array) {
+		if (!BDFDB.ArrayUtils.is(array)) return [];
+		return [...new Set(array)];
+	};
+	
 	window.BDFDB = {
 		name: "BDFDB",
 		PluginUtils: {
