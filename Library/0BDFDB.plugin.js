@@ -575,7 +575,7 @@ var BDFDB = (_ => {
 		}
 	};
 	
-	if (pluginQueue) for (let config of pluginQueue) BdApi.Plugins.reload(config.name);
+	if (pluginQueue) for (let pluginName of pluginQueue) BdApi.Plugins.reload(pluginName);
 	
 	return class BDFDB {
 		getName () {return "BDFDB";}
