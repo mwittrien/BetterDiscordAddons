@@ -568,6 +568,7 @@ var BDFDB = (_ => {
 	
 	window.BDFDB = {
 		name: "BDFDB",
+		loaded: true,
 		PluginUtils: {
 			buildPlugin: BDFDB.PluginUtils.buildPlugin,
 			cleanUp: BDFDB.PluginUtils.cleanUp
