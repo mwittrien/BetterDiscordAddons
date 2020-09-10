@@ -63,7 +63,7 @@
 			let url = ["ImageZoom", "ImageGallery", "ReverseImageSearch", "ShowImageDetails"].includes(plugin.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ImageUtilities/ImageUtilities.plugin.js" : ["BetterFriendCount"].includes(plugin.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BetterFriendList/BetterFriendList.plugin.js" : (typeof plugin.getRawUrl == "function" && typeof plugin.getRawUrl() == "string" ? plugin.getRawUrl() : `https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`);
 			BDFDB.PluginUtils.checkUpdate(plugin.name, url);
 
-			if (!window.PluginUpdates || typeof window.PluginUpdates !== "object") window.PluginUpdates = {plugins: {} };
+			if (!BDFDB.ObjectUtils.is(window.PluginUpdates) || !BDFDB.ObjectUtils.is(window.PluginUpdates.plugins)) window.PluginUpdates = {plugins: {}};
 			window.PluginUpdates.plugins[url] = {name: plugin.name, raw: url, version: plugin.version};
 			if (typeof window.PluginUpdates.interval === "undefined") window.PluginUpdates.interval = BDFDB.TimeUtils.interval(_ => {BDFDB.PluginUtils.checkAllUpdates();}, 1000*60*60*2);
 			BDFDB.TimeUtils.timeout(_ => {delete plugin.updateChecked;}, 30000);
@@ -114,8 +114,8 @@
 			if (closeButton) closeButton.click();
 		}
 		
-		delete BDFDB.DataUtils.cached[plugin.name]
-		delete window.PluginUpdates.plugins[url];
+		delete BDFDB.DataUtils.cached[plugin.name];
+		if (BDFDB.ObjectUtils.is(window.PluginUpdates) && BDFDB.ObjectUtils.is(window.PluginUpdates.plugins)) delete window.PluginUpdates.plugins[url];
 
 		delete plugin.started;
 		BDFDB.TimeUtils.timeout(_ => {delete plugin.stopping;});
