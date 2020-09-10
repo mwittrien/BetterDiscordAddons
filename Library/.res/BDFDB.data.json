@@ -5,6 +5,12 @@
 			"instead",
 			"after"
 		],
+		"InstanceFunctions": [
+			"render",
+			"componentDidMount",
+			"componentDidUpdate",
+			"componentWillUnmount"
+		],
 		"PatchMap": {
 			"BannedCard": "BannedUser",
 			"ChannelWindow": "Channel",
