@@ -2492,7 +2492,7 @@
 		"wrap": ["Flex", "wrap"],
 		"wrapreverse": ["Flex", "wrapReverse"]
 	},
-	"languages": {
+	"Languages": {
 		"$discord": 	{"name":"Discord (English))",			"id":"en",		"ownlang":"English"},
 		"af":			{"name":"Afrikaans",					"id":"af",		"ownlang":"Afrikaans"},
 		"sq":			{"name":"Albanian",						"id":"sq",		"ownlang":"Shqiptar"},
@@ -2622,7 +2622,7 @@
 		"yo":			{"name":"Yoruba",						"id":"yo",		"ownlang":"Èdè Yorùbá"},
 		"zu":			{"name":"Zulu",							"id":"zu",		"ownlang":"Zulu"}
 	},
-	"libraryStrings": {
+	"LibraryStrings": {
 		"hr": {
 			"ascending": "Uzlazni",
 			"descending": "Silazni",
