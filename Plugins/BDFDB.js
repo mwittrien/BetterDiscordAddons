@@ -11306,7 +11306,7 @@
 	}
 	
 	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.GuildStore, "getGuild", {after: e => {
-		if (e.returnValue && e.methodArguments[0] == myGuildId) e.returnValue.banner = "https://mwittrien.github.io/BetterDiscordAddons/Library/.res/BDFDB.banner.png";
+		if (e.returnValue && e.methodArguments[0] == myGuildId) e.returnValue.banner = "https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.banner.png";
 	}});
 
 	BDFDB.ModuleUtils.patch(BDFDB, LibraryModules.IconUtils, "getGuildBannerURL", {instead: e => {
