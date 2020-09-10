@@ -402,7 +402,7 @@ var ThemeRepo = (_ => {
 							value: this.props.useThemeFixer,
 							onChange: (value, instance) => {
 								this.props.useThemeFixer  = value;
-								BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeFixer.css", (error, response, body) => {
+								BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/.res/ThemeFixer.css", (error, response, body) => {
 									if (preview) preview.executeJavaScriptSafe(`window.onmessage({
 										origin: "ThemeRepo",
 										reason: "ThemeFixer",
@@ -418,7 +418,7 @@ var ThemeRepo = (_ => {
 							label: "Download ThemeFixer",
 							children: "Download",
 							onClick: _ => {
-								BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeFixer.css", (error, response, body) => {
+								BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/.res/ThemeFixer.css", (error, response, body) => {
 									_this.createThemeFile("ThemeFixer.theme.css", `//META{"name":"ThemeFixer","description":"ThemeFixerCSS for transparent themes","author":"DevilBro","version":"1.0.3","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien"}*//\n\n` + _this.createFixerCSS(body));
 								});
 							}
@@ -956,7 +956,7 @@ var ThemeRepo = (_ => {
 			let tags = ["name","description","author","version"];
 			let newEntriesData = BDFDB.DataUtils.load(this, "newentriesdata");
 			cachedThemes = (newEntriesData.urlbase64 ? atob(newEntriesData.urlbase64).split("\n") : []).concat(customList);
-			BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeList.txt", (error, response, body) => {
+			BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/.res/ThemeList.txt", (error, response, body) => {
 				if (!error && body) {
 					body = body.replace(/[\r\t]/g, "");
 					BDFDB.DataUtils.save(btoa(body), this, "newentriesdata", "urlbase64");
@@ -1053,7 +1053,7 @@ var ThemeRepo = (_ => {
 								}
 							}
 							
-							BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/GeneratorList.txt", (error3, response3, body3) => {
+							BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/.res/GeneratorList.txt", (error3, response3, body3) => {
 								if (!error3 && body3) for (let url of body3.replace(/[\r\t]/g, "").split("\n").filter(n => n)) if (loadedThemes[url]) generatorThemes.push(url);
 							});
 							
@@ -1133,7 +1133,7 @@ var ThemeRepo = (_ => {
 		}
 
 		checkForNewThemes () {
-			BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/res/ThemeList.txt", (error, response, result) => {
+			BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/ThemeRepo/.res/ThemeList.txt", (error, response, result) => {
 				if (response && !BDFDB.equals(result.replace(/\t|\r/g, "").split("\n").filter(n => n), grabbedThemes)) {
 					loading = {is:false, timeout:null, amount:0};
 					this.loadThemes();

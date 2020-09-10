@@ -636,7 +636,7 @@ var PluginRepo = (_ => {
 			let seps = ["\"", "\'", "\`"];
 			let newEntriesData = BDFDB.DataUtils.load(this, "newentriesdata");
 			cachedPlugins = (newEntriesData.urlbase64 ? atob(newEntriesData.urlbase64).split("\n") : []).concat(customList);
-			BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/PluginRepo/res/PluginList.txt", (error, response, result) => {
+			BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/PluginRepo/.res/PluginList.txt", (error, response, result) => {
 				if (!error && result) {
 					result = result.replace(/[\r\t]/g, "");
 					BDFDB.DataUtils.save(btoa(result), this, "newentriesdata", "urlbase64");
@@ -928,7 +928,7 @@ var PluginRepo = (_ => {
 		}
 
 		checkForNewPlugins () {
-			BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/PluginRepo/res/PluginList.txt", (error, response, result) => {
+			BDFDB.LibraryRequires.request("https://mwittrien.github.io/BetterDiscordAddons/Plugins/PluginRepo/.res/PluginList.txt", (error, response, result) => {
 				if (response && !BDFDB.equals(result.replace(/\t|\r/g, "").split("\n").filter(n => n), grabbedPlugins)) {
 					loading = {is:false, timeout:null, amount:0};
 					this.loadPlugins();
