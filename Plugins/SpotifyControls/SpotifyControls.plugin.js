@@ -390,7 +390,7 @@ var SpotifyControls = (_ => {
 			this.css = `
 				@font-face {
 					font-family: glue1-spoticon;
-					src: url("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpotifyControls/res/spoticon.ttf") format("truetype");
+					src: url("https://mwittrien.github.io/BetterDiscordAddons/Plugins/SpotifyControls/_res/spoticon.ttf") format("truetype");
 					font-weight: 400;
 					font-style: normal
 				}

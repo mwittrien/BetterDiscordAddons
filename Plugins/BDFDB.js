@@ -9887,7 +9887,7 @@
 	BDFDB.LibraryComponents = Object.assign({}, InternalComponents.LibraryComponents);
 
 	BDFDB.DOMUtils.appendLocalStyle("BDFDB", `
-		@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/res/SupporterBadge.css);
+		@import url(https://mwittrien.github.io/BetterDiscordAddons/Themes/_res/SupporterBadge.css);
 		
 		img:not([src]), img[src=""], img[src="null"] {
 			opacity: 0;
