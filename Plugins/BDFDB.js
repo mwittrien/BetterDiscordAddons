@@ -1264,6 +1264,9 @@
 		"MessageContent",
 		"NowPlayingHeader"
 	];
+	WebModulesData.NonPrototype = [
+		"ChannelTextAreaContainer"
+	];
 	WebModulesData.LoadedInComponents = {
 		AutocompleteChannelResult: "LibraryComponents.AutocompleteItems.Channel",
 		AutocompleteUserResult: "LibraryComponents.AutocompleteItems.User",
@@ -1342,9 +1345,6 @@
 		MessageHeader: "MessageTimestamp",
 		UnavailableGuildsButton: "UnavailableGuildsButton"
 	};
-	WebModulesData.NonPrototype = BDFDB.ArrayUtils.removeCopies([].concat(Object.keys(WebModulesData.CodeFinder), Object.keys(WebModulesData.PropsFinder), [
-		"ChannelTextAreaContainer"
-	]));
 	
 	BDFDB.ModuleUtils.isPatched = function (plugin, module, methodName) {
 		plugin = plugin == BDFDB && InternalBDFDB || plugin;
@@ -1579,18 +1579,22 @@
 		for (let type in patchedModules) {
 			let pluginData = {plugin: plugin, patchTypes: patchedModules[type]};
 			let unmappedType = type.split(" _ _ ")[1] || type;
-			let nonRender = BDFDB.ObjectUtils.toArray(pluginData.patchTypes).flat(10).filter(n => n && !WebModulesData.InstanceFunctions.includes(n)).length > 0;
+			
+			let config = {
+				classNames: [WebModulesData.PatchFinder[unmappedType]].flat(10).filter(n => DiscordClasses[n]),
+				codeFind: WebModulesData.CodeFinder[unmappedType],
+				propertyFind: WebModulesData.PropsFinder[unmappedType],
+				memoComponent: WebModulesData.MemoComponent.includes(unmappedType),
+				forceObserve: WebModulesData.ForceObserve.includes(unmappedType),
+				nonRender: BDFDB.ObjectUtils.toArray(pluginData.patchTypes).flat(10).filter(n => n && !WebModulesData.InstanceFunctions.includes(n)).length > 0,
+				mapped: WebModulesData.PatchMap[type]
+			};
+			config.ignoreCheck = !!(config.codeFind || config.propertyFind || config.nonRender);
+			config.nonPrototype = WebModulesData.NonPrototype.includes(unmappedType) || config.ignoreCheck;
+			
 			let component = WebModulesData.LoadedInComponents[type] && BDFDB.ReactUtils.getValue(InternalComponents, WebModulesData.LoadedInComponents[type]);
-			if (component) InternalBDFDB.patch_PatchInstance(pluginData, nonRender ? (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports : component, type);
+			if (component) InternalBDFDB.patch_PatchInstance(pluginData, config.nonRender ? (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports : component, type, config);
 			else {
-				let config = {
-					classNames: [WebModulesData.PatchFinder[unmappedType]].flat(10).filter(n => DiscordClasses[n]),
-					codeFind: WebModulesData.CodeFinder[unmappedType],
-					propertyFind: WebModulesData.PropsFinder[unmappedType],
-					forceObserve: WebModulesData.ForceObserve.includes(unmappedType),
-					nonRender: nonRender,
-					mapped: WebModulesData.PatchMap[type]
-				};
 				let mappedType = config.mapped ? config.mapped + " _ _ " + type : type;
 				let name = mappedType.split(" _ _ ")[0];
 				if (config.mapped) {
@@ -1602,29 +1606,29 @@
 				if (config.classNames.length) InternalBDFDB.patch_CheckForInstance(pluginData, mappedType, config);
 				else if (config.codeFind) {
 					let exports = (BDFDB.ModuleUtils.findByString(config.codeFind, false) || {}).exports;
-					InternalBDFDB.patch_PatchInstance(pluginData, exports && WebModulesData.MemoComponent.includes(unmappedType) ? exports.default : exports, mappedType, true);
+					InternalBDFDB.patch_PatchInstance(pluginData, exports && config.memoComponent ? exports.default : exports, mappedType, config);
 				}
 				else if (config.propertyFind) {
 					let exports = (BDFDB.ModuleUtils.findByProperties(config.propertyFind, false) || {}).exports;
-					InternalBDFDB.patch_PatchInstance(pluginData, exports && WebModulesData.MemoComponent.includes(unmappedType) ? exports.default : exports, mappedType, true);
+					InternalBDFDB.patch_PatchInstance(pluginData, exports && config.memoComponent ? exports.default : exports, mappedType, config);
 				}
 				else if (config.nonRender) {
 					let exports = (BDFDB.ModuleUtils.findByName(name, false) || {}).exports;
-					InternalBDFDB.patch_PatchInstance(pluginData, exports && WebModulesData.MemoComponent.includes(unmappedType) ? exports.default : exports, mappedType, true);
+					InternalBDFDB.patch_PatchInstance(pluginData, exports && config.memoComponent ? exports.default : exports, mappedType, config);
 				}
-				else InternalBDFDB.patch_PatchInstance(pluginData, BDFDB.ModuleUtils.findByName(name), mappedType);
+				else InternalBDFDB.patch_PatchInstance(pluginData, BDFDB.ModuleUtils.findByName(name), mappedType, config);
 			}
 		}
 	};
-	InternalBDFDB.patch_PatchInstance = function (pluginDataObjs, instance, type, ignoreCheck) {
+	InternalBDFDB.patch_PatchInstance = function (pluginDataObjs, instance, type, config) {
 		pluginDataObjs = [pluginDataObjs].flat(10).filter(n => n);
 		if (pluginDataObjs.length && instance) {
 			let name = type.split(" _ _ ")[0];
 			instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
-			instance = ignoreCheck || InternalBDFDB.isInstanceCorrect(instance, name) || WebModulesData.LoadedInComponents[type] ? instance : (BDFDB.ReactUtils.findConstructor(instance, name) || BDFDB.ReactUtils.findConstructor(instance, name, {up:true}));
+			instance = config.ignoreCheck || InternalBDFDB.isInstanceCorrect(instance, name) || WebModulesData.LoadedInComponents[type] ? instance : (BDFDB.ReactUtils.findConstructor(instance, name) || BDFDB.ReactUtils.findConstructor(instance, name, {up:true}));
 			if (instance) {
 				instance = instance._reactInternalFiber && instance._reactInternalFiber.type ? instance._reactInternalFiber.type : instance;
-				let toBePatched = WebModulesData.NonPrototype.includes(name) ? instance : instance.prototype;
+				let toBePatched = config.nonPrototype ? instance : instance.prototype;
 				for (let pluginData of pluginDataObjs) for (let patchType in pluginData.patchTypes) {
 					let patchMethods = {};
 					patchMethods[patchType] = e => {
@@ -1650,15 +1654,15 @@
 			if (component) {
 				if (config.nonRender) {
 					let exports = (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports;
-					InternalBDFDB.patch_PatchInstance(pluginDataObjs, exports && WebModulesData.MemoComponent.includes(unmappedType) ? exports.default : exports, type, true);
+					InternalBDFDB.patch_PatchInstance(pluginDataObjs, exports && config.memoComponent ? exports.default : exports, type, config);
 				}
-				else InternalBDFDB.patch_PatchInstance(pluginDataObjs, component, type, true);
+				else InternalBDFDB.patch_PatchInstance(pluginDataObjs, component, type, config);
 				BDFDB.ModuleUtils.forceAllUpdates(pluginDataObjs.map(n => n.plugin), type);
 				return true;
 			}
 		}
 		else if (InternalBDFDB.patch_IsCorrectInstance(ins, type)) {
-			InternalBDFDB.patch_PatchInstance(pluginDataObjs, ins, type);
+			InternalBDFDB.patch_PatchInstance(pluginDataObjs, ins, type, config);
 			BDFDB.ModuleUtils.forceAllUpdates(pluginDataObjs.map(n => n.plugin), type);
 			return true;
 		}
@@ -1670,11 +1674,11 @@
 		if (!config.forceObserve) {
 			if (app) {
 				let appIns = BDFDB.ReactUtils.findConstructor(app, type, {unlimited:true}) || BDFDB.ReactUtils.findConstructor(app, type, {unlimited:true, up:true});
-				if (appIns && (instanceFound = true)) InternalBDFDB.patch_PatchInstance(pluginData, appIns, type);
+				if (appIns && (instanceFound = true)) InternalBDFDB.patch_PatchInstance(pluginData, appIns, type, config);
 			}
 			if (!instanceFound && bdSettings) {
 				let bdSettingsIns = BDFDB.ReactUtils.findConstructor(bdSettings, type, {unlimited:true});
-				if (bdSettingsIns && (instanceFound = true)) InternalBDFDB.patch_PatchInstance(pluginData, bdSettingsIns, type);
+				if (bdSettingsIns && (instanceFound = true)) InternalBDFDB.patch_PatchInstance(pluginData, bdSettingsIns, type, config);
 			}
 		}
 		if (!instanceFound) {
