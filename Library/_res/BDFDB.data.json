@@ -282,7 +282,7 @@
 		"Scrollers Thin": {"props": ["AdvancedScrollerThin", "AdvancedScrollerAuto"], "value": "AdvancedScrollerThin"},
 		"Spinner": {"name": "Spinner"},
 		"TextElement": {"name": "Text"},
-		"UserPopout": {"name": "FluxContainer(ForwardRef(SubscribeGuildMembersContainer(UserPopout)))"},
+		"UserPopout": {"name": "UserPopout"},
 		"UserSummaryItem": {"name": "UserSummaryItem"}
 	},
 	"CustomClassModules": {
