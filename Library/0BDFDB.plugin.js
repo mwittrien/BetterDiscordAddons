@@ -24,19 +24,30 @@ var BDFDB = (_ => {
 				if (typeof this.onLoad == "function") this.onLoad();
 			}
 			start() {
+				if (this.started) return;
+				
 				BDFDB.PluginUtils.init(this, config);
 				if (typeof this.onStart == "function") this.onStart();
+				
+				this.started = true;
+				delete this.stopping;
 			}
 			stop() {
+				if (this.stopping) return;
+				this.stopping = true;
+				BDFDB.TimeUtils.timeout(_ => {delete this.stopping;});
+				
 				if (typeof this.onStop == "function") this.onStop();
 				BDFDB.PluginUtils.clear(this, config);
+
+				delete this.started;
 			}
 		};
 	};
 	
-	const updateTimeouts = [];
+	const updateTimeouts = [], plugins = [];
 	BDFDB.PluginUtils = {};
-	BDFDB.PluginUtils.buildPlugin = function (plugin, config) {
+	BDFDB.PluginUtils.buildPlugin = function (config) {
 		return [Plugin(config), Object.assign({}, BDFDB)];
 	};
 	BDFDB.PluginUtils.load = function (plugin, config) {		
@@ -55,6 +66,7 @@ var BDFDB = (_ => {
 	};
 	BDFDB.PluginUtils.init = BDFDB.loadMessage = function (plugin, config) {
 		BDFDB.PluginUtils.load(plugin, config);
+		if (!plugins.includes(plugin)) plugins.push(plugin);
 		
 		let startMsg = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + config.version);
 		BDFDB.LogUtils.log(startMsg, config.name);
@@ -69,9 +81,6 @@ var BDFDB = (_ => {
 		BDFDB.PluginUtils.translate(plugin);
 
 		BDFDB.PluginUtils.checkChangeLog(plugin);
-
-		plugin.started = true;
-		delete plugin.stopping;
 	};
 	BDFDB.PluginUtils.clear = BDFDB.unloadMessage = function (plugin, config) {
 		InternalBDFDB.clearStartTimeout(plugin);
@@ -95,9 +104,6 @@ var BDFDB = (_ => {
 		
 		delete BDFDB.DataUtils.cached[config.name]
 		delete window.PluginUpdates.plugins[url];
-
-		delete plugin.started;
-		BDFDB.TimeUtils.timeout(_ => {delete plugin.stopping;});
 	};
 	BDFDB.PluginUtils.translate = function (plugin) {
 		plugin.labels = {};
@@ -120,7 +126,9 @@ var BDFDB = (_ => {
 	BDFDB.PluginUtils.cleanUp = function (plugin) {
 		return;
 		if (!BDFDB.ObjectUtils.is(plugin)) return;
-		if (plugin.name == "BDFDB") plugin = BDFDB;
+		if (plugin.name == "BDFDB") {
+			plugin = BDFDB;
+		}
 		BDFDB.ListenerUtils.remove(plugin);
 		BDFDB.StoreChangeUtils.remove(plugin);
 		BDFDB.ObserverUtils.disconnect(plugin);
@@ -555,6 +563,8 @@ var BDFDB = (_ => {
 		if (!BDFDB.ArrayUtils.is(array)) return [];
 		return [...new Set(array)];
 	};
+	
+	if (window.BDFDB && BDFDB.ArrayUtils.is(window.BDFDB.pluginQueue)) for (let config of window.BDFDB.pluginQueue) BdApi.Plugins.reload(config.name);
 	
 	window.BDFDB = {
 		name: "BDFDB",
