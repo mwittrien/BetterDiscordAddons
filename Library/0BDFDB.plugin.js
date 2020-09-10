@@ -137,8 +137,8 @@ module.exports = (_ => {
 		return [Plugin(config), Object.assign({}, BDFDB)];
 	};
 	BDFDB.PluginUtils.load = function (plugin) {		
-		if (!PluginStores.updateTimeouts.includes(plugin.name)) {
-			PluginStores.updateTimeouts.push(plugin.name);
+		if (!PluginStores.updateTimeout.includes(plugin.name)) {
+			PluginStores.updateTimeout.push(plugin.name);
 			let url = ["ImageZoom", "ImageGallery", "ReverseImageSearch", "ShowImageDetails"].includes(plugin.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ImageUtilities/ImageUtilities.plugin.js" : ["BetterFriendCount"].includes(plugin.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BetterFriendList/BetterFriendList.plugin.js" : (plugin.rawUrl ||`https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`);
 
 			if (!window.PluginUpdates || typeof window.PluginUpdates !== "object") window.PluginUpdates = {plugins:{}};
@@ -150,7 +150,7 @@ module.exports = (_ => {
 				BDFDB.PluginUtils.checkAllUpdates();
 			}, 1000*60*60*2);
 			
-			BDFDB.TimeUtils.timeout(_ => {BDFDB.ArrayUtils.remove(PluginStores.updateTimeouts, plugin.name, true);}, 30000);
+			BDFDB.TimeUtils.timeout(_ => {BDFDB.ArrayUtils.remove(PluginStores.updateTimeout, plugin.name, true);}, 30000);
 		}
 	};
 	BDFDB.PluginUtils.init = function (plugin) {
