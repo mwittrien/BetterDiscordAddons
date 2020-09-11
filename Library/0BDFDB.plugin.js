@@ -60,6 +60,7 @@ module.exports = (_ => {
 				if (window.BDFDB_Global.loading) PluginStores.delayedStart.push(this);
 				else {
 					if (this.started) return;
+					BDFDB.DOMUtils.appendLocalStyle(config.name, BDFDB.DOMUtils.formatCSS(config.css));
 					BDFDB.PluginUtils.init(this);
 					if (typeof this.onStart == "function") this.onStart();
 					
@@ -195,9 +196,6 @@ module.exports = (_ => {
 		let startMsg = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
 		BDFDB.LogUtils.log(startMsg, plugin.name);
 		if (settings.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(`${plugin.name} ${startMsg}`, {nopointer: true});
-
-		if (typeof plugin.initConstructor === "function") BDFDB.TimeUtils.suppress(plugin.initConstructor.bind(plugin), "Could not initiate constructor!", plugin.name)();
-		if (typeof plugin.css === "string") BDFDB.DOMUtils.appendLocalStyle(plugin.name, plugin.css);
 
 		InternalBDFDB.patchPlugin(plugin);
 		InternalBDFDB.addSpecialListeners(plugin);
@@ -509,7 +507,7 @@ module.exports = (_ => {
 	}, config, window.BDFDB_Global);
 	
 	require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.data.json", (error, response, body) => {
-		const InternalData = JSON.parse(body);
+		const InternalData = !error && body ? JSON.parse(body) : {};
 	
 		BDFDB.ObserverUtils = {};
 		BDFDB.ObserverUtils.connect = function (plugin, eleOrSelec, observer, config = {childList: true}) {
@@ -3187,6 +3185,7 @@ module.exports = (_ => {
 			return 0;
 		};
 		BDFDB.DOMUtils.appendWebScript = function (url, container) {
+			if (typeof url != "string") return;
 			if (!container && !document.head.querySelector("bd-head bd-scripts")) document.head.appendChild(BDFDB.DOMUtils.create(`<bd-head><bd-scripts></bd-scripts></bd-head>`));
 			container = container || document.head.querySelector("bd-head bd-scripts") || document.head;
 			container = Node.prototype.isPrototypeOf(container) ? container : document.head;
@@ -3196,11 +3195,13 @@ module.exports = (_ => {
 			container.appendChild(script);
 		};
 		BDFDB.DOMUtils.removeWebScript = function (url, container) {
+			if (typeof url != "string") return;
 			container = container || document.head.querySelector("bd-head bd-scripts") || document.head;
 			container = Node.prototype.isPrototypeOf(container) ? container : document.head;
 			BDFDB.DOMUtils.remove(container.querySelectorAll(`script[src="${url}"]`));
 		};
 		BDFDB.DOMUtils.appendWebStyle = function (url, container) {
+			if (typeof url != "string") return;
 			if (!container && !document.head.querySelector("bd-head bd-styles")) document.head.appendChild(BDFDB.DOMUtils.create(`<bd-head><bd-styles></bd-styles></bd-head>`));
 			container = container || document.head.querySelector("bd-head bd-styles") || document.head;
 			container = Node.prototype.isPrototypeOf(container) ? container : document.head;
@@ -3208,11 +3209,13 @@ module.exports = (_ => {
 			container.appendChild(BDFDB.DOMUtils.create(`<link type="text/css" rel="Stylesheet" href="${url}"></link>`));
 		};
 		BDFDB.DOMUtils.removeWebStyle = function (url, container) {
+			if (typeof url != "string") return;
 			container = container || document.head.querySelector("bd-head bd-styles") || document.head;
 			container = Node.prototype.isPrototypeOf(container) ? container : document.head;
 			BDFDB.DOMUtils.remove(container.querySelectorAll(`link[href="${url}"]`));
 		};
 		BDFDB.DOMUtils.appendLocalStyle = function (id, css, container) {
+			if (typeof id != "string" || typeof css != "string") return;
 			if (!container && !document.head.querySelector("bd-head bd-styles")) document.head.appendChild(BDFDB.DOMUtils.create(`<bd-head><bd-styles></bd-styles></bd-head>`));
 			container = container || document.head.querySelector("bd-head bd-styles") || document.head;
 			container = Node.prototype.isPrototypeOf(container) ? container : document.head;
@@ -3220,9 +3223,14 @@ module.exports = (_ => {
 			container.appendChild(BDFDB.DOMUtils.create(`<style id="${id}CSS">${css.replace(/\t|\r|\n/g,"")}</style>`));
 		};
 		BDFDB.DOMUtils.removeLocalStyle = function (id, container) {
+			if (typeof id != "string") return;
 			container = container || document.head.querySelector("bd-head bd-styles") || document.head;
 			container = Node.prototype.isPrototypeOf(container) ? container : document.head;
 			BDFDB.DOMUtils.remove(container.querySelectorAll(`style[id="${id}CSS"]`));
+		};
+		BDFDB.DOMUtils.formatCSS = function (css) {
+			if (typeof css != "string") return "";
+			return css.replace(/[\n\t\r]/g, "").replace(/\[REPLACE_CLASS_([A-z0-9_]+?)\]/g, function(a, b) {return BDFDB.dotCN[b];});
 		};
 		
 		BDFDB.ModalUtils = {};
@@ -7286,7 +7294,7 @@ module.exports = (_ => {
 	
 		const pluginQueue = window.BDFDB_Global && BDFDB.ArrayUtils.is(window.BDFDB_Global.pluginQueue) ? window.BDFDB_Global.pluginQueue : [];
 
-		if (BDFDB.UserUtils.me.id == myId) {
+		if (BDFDB.UserUtils.me.id == InternalData.myId) {
 			for (let module in DiscordClassModules) if (!DiscordClassModules[module]) BDFDB.LogUtils.warn(module + " not initialized in DiscordClassModules");
 			for (let obj in DiscordObjects) if (!DiscordObjects[obj]) BDFDB.LogUtils.warn(obj + " not initialized in DiscordObjects");
 			for (let require in LibraryRequires) if (!LibraryRequires[require]) BDFDB.LogUtils.warn(require + " not initialized in LibraryRequires");
@@ -7424,7 +7432,7 @@ module.exports = (_ => {
 		}
 		
 		require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.raw.css", (error, response, body) => {
-			BDFDB.DOMUtils.appendLocalStyle("BDFDB", body.replace(/[\n\t\r]/g, "").replace(/\[REPLACE_CLASS_([A-z0-9_]+?)\]/g, function(a, b) {return BDFDB.dotCN[b];}));
+			if (!error && body) BDFDB.DOMUtils.appendLocalStyle("BDFDB", BDFDB.DOMUtils.formatCSS(body));
 		});
 		
 		window.BDFDB_Global.loaded = true;
