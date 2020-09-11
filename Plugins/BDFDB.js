@@ -11001,7 +11001,7 @@
 		"562008872467038230": {active:false,	t3:true,	custom:true}	// BEAUDEN
 	};
 	InternalBDFDB._processAvatarRender = function (user, avatar) {
-		if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user)) {
+		if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user) && (avatar.props.className || "").indexOf(BDFDB.disCN.bdfdbbadgeavatar) > -1) {
 			avatar.props["user_by_BDFDB"] = user.id;
 			let role = "", className = BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, "")), addBadge = settings.showSupportBadges, customBadge = false;
 			if (BDFDB_Patrons[user.id] && BDFDB_Patrons[user.id].active) {
@@ -11038,7 +11038,7 @@
 		}
 	};
 	InternalBDFDB._processAvatarMount = function (user, avatar, wrapper) {
-		if (Node.prototype.isPrototypeOf(avatar) && BDFDB.ObjectUtils.is(user)) {
+		if (Node.prototype.isPrototypeOf(avatar) && BDFDB.ObjectUtils.is(user) && (avatar.className || "").indexOf(BDFDB.disCN.bdfdbbadgeavatar) > -1) {
 			if (wrapper) wrapper.setAttribute("user_by_BDFDB", user.id);
 			avatar.setAttribute("user_by_BDFDB", user.id);
 			let role = "", addBadge = settings.showSupportBadges, customBadge = false;

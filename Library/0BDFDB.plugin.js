@@ -6978,7 +6978,7 @@ module.exports = (_ => {
 
 			const BDFDB_Patrons = Object.assign({}, InternalData.BDFDB_Patrons);
 			InternalBDFDB._processAvatarRender = function (user, avatar) {
-				if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user)) {
+				if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user) && (avatar.props.className || "").indexOf(BDFDB.disCN.bdfdbbadgeavatar) > -1) {
 					avatar.props["user_by_BDFDB"] = user.id;
 					let role = "", className = BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, "")), addBadge = settings.showSupportBadges, customBadge = false;
 					if (BDFDB_Patrons[user.id] && BDFDB_Patrons[user.id].active) {
@@ -7015,7 +7015,7 @@ module.exports = (_ => {
 				}
 			};
 			InternalBDFDB._processAvatarMount = function (user, avatar, wrapper) {
-				if (Node.prototype.isPrototypeOf(avatar) && BDFDB.ObjectUtils.is(user)) {
+				if (Node.prototype.isPrototypeOf(avatar) && BDFDB.ObjectUtils.is(user) && (avatar.className || "").indexOf(BDFDB.disCN.bdfdbbadgeavatar) > -1) {
 					if (wrapper) wrapper.setAttribute("user_by_BDFDB", user.id);
 					avatar.setAttribute("user_by_BDFDB", user.id);
 					let role = "", addBadge = settings.showSupportBadges, customBadge = false;
@@ -7027,7 +7027,7 @@ module.exports = (_ => {
 					else if (user.id == InternalData.myId) {
 						addBadge = true;
 						role = "Theme Developer";
-						avatar.className = BDFDB.DOMUtils.formatClassName(avatar.className, BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbdev);
+						avatar.className = BDFDB.DOMUtils.formatClassName(avatar.className, addBadge && BDFDB.disCN.bdfdbhasbadge, BDFDB.disCN.bdfdbbadgeavatar, BDFDB.disCN.bdfdbdev);
 					}
 					if (role && !avatar.querySelector(BDFDB.dotCN.bdfdbbadge)) {
 						if (addBadge) {
