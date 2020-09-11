@@ -17,7 +17,9 @@ module.exports = (_ => {
 	
 	var settings = {};
 	
-	if (window.BDFDB && window.BDFDB.PluginUtils && typeof window.BDFDB.PluginUtils.cleanUp == "function") window.BDFDB.PluginUtils.cleanUp(window.BDFDB);
+	if (window.BDFDB_Global && window.BDFDB_Global.PluginUtils && typeof window.BDFDB_Global.PluginUtils.cleanUp == "function") {
+		window.BDFDB_Global.PluginUtils.cleanUp(window.BDFDB_Global);
+	}
 	
 	const BDFDB = Object.assign({
 		started: true
@@ -47,7 +49,7 @@ module.exports = (_ => {
 			getVersion() {return config.version;}
 			getDescription() {return config.description;}
 			load() {
-				if (window.BDFDB.loading) PluginStores.delayedLoad.push(this);
+				if (window.BDFDB_Global.loading) PluginStores.delayedLoad.push(this);
 				else {
 					Object.assign(this, BDFDB.ObjectUtils.extract(config, "name", "author", "version", "description", "changeLog", "patchedModules", "rawUrl"));
 					BDFDB.PluginUtils.load(this);
@@ -55,7 +57,7 @@ module.exports = (_ => {
 				}
 			}
 			start() {
-				if (window.BDFDB.loading) PluginStores.delayedStart.push(this);
+				if (window.BDFDB_Global.loading) PluginStores.delayedStart.push(this);
 				else {
 					if (this.started) return;
 					BDFDB.PluginUtils.init(this);
@@ -88,6 +90,40 @@ module.exports = (_ => {
 	BDFDB.LogUtils.error = function (string, name) {
 		console.error(`%c[${typeof name == "string" && name || "BDFDB"}]`, "color: #3a71c1; font-weight: 700;", "Fatal Error: " + (typeof string == "string" && string || "").trim());
 	};
+
+	BDFDB.TimeUtils = {};
+	BDFDB.TimeUtils.interval = function (callback, delay, ...args) {
+		if (typeof callback != "function" || typeof delay != "number" || delay < 1) return;
+		else {
+			let count = 0, interval = setInterval(_ => {BDFDB.TimeUtils.suppress(callback, "Interval")(...[interval, count++, args].flat());}, delay);
+			return interval;
+		}
+	};
+	BDFDB.TimeUtils.timeout = function (callback, delay, ...args) {
+		delay = parseFloat(delay);
+		if (typeof callback != "function") return;
+		else if (isNaN(delay) || typeof delay != "number" || delay < 1) {
+			let immediate = setImmediate(_ => {BDFDB.TimeUtils.suppress(callback, "Immediate")(...[immediate, args].flat());});
+			return immediate;
+		}
+		else {
+			let timeout = setTimeout(_ => {BDFDB.TimeUtils.suppress(callback, "Timeout")(...[timeout, args].flat());}, delay);
+			return timeout;
+		}
+	};
+	BDFDB.TimeUtils.clear = function (...timeObjects) {
+		for (let t of timeObjects.flat(10).filter(n => n)) {
+			if (typeof t == "number") {
+				clearInterval(t);
+				clearTimeout(t);
+			}
+			else if (typeof t == "object") clearImmediate(t);
+		}
+	};
+	BDFDB.TimeUtils.suppress = function (callback, string, name) {return function (...args) {
+		try {return callback(...args);}
+		catch (err) {BDFDB.LogUtils.error((typeof string == "string" && string || "") + " " + err, name);}
+	}};
 
 	BDFDB.LogUtils.log("Loading library.");
 
@@ -209,21 +245,23 @@ module.exports = (_ => {
 		}
 	};
 	BDFDB.PluginUtils.cleanUp = function (plugin) {
-		if (!BDFDB.ObjectUtils.is(plugin)) return;
-		if (plugin == BDFDB) {
-			delete window.BDFDB.loaded;
-			BDFDB.TimeUtils.interval((interval, count) => {
-				if (count > 60 || window.BDFDB.loaded) BDFDB.TimeUtils.clear(interval);
-				if (window.BDFDB.loaded) for (let pluginName of PluginStores.started) BDFDB.BDUtils.reloadPlugin(pluginName);
-			}, 1000);
-		}
-		BDFDB.DOMUtils.removeLocalStyle(plugin.name);
-		BDFDB.ListenerUtils.remove(plugin);
-		BDFDB.StoreChangeUtils.remove(plugin);
-		BDFDB.ObserverUtils.disconnect(plugin);
-		BDFDB.PatchUtils.unpatch(plugin);
-		BDFDB.WindowUtils.closeAll(plugin);
-		BDFDB.WindowUtils.removeListener(plugin);
+		BDFDB.TimeUtils.suppress(_ => {
+			if (!BDFDB.ObjectUtils.is(plugin)) return;
+			if (plugin == BDFDB) {
+				delete window.BDFDB_Global.loaded;
+				BDFDB.TimeUtils.interval((interval, count) => {
+					if (count > 60 || window.BDFDB_Global.loaded) BDFDB.TimeUtils.clear(interval);
+					if (window.BDFDB_Global.loaded) for (let pluginName of PluginStores.started) BDFDB.BDUtils.reloadPlugin(pluginName);
+				}, 1000);
+			}
+			BDFDB.DOMUtils.removeLocalStyle(plugin.name);
+			BDFDB.ListenerUtils.remove(plugin);
+			BDFDB.StoreChangeUtils.remove(plugin);
+			BDFDB.ObserverUtils.disconnect(plugin);
+			BDFDB.PatchUtils.unpatch(plugin);
+			BDFDB.WindowUtils.closeAll(plugin);
+			BDFDB.WindowUtils.removeListener(plugin);
+		}, "Failed to clean up plugin!", plugin.name)();
 	};
 	BDFDB.PluginUtils.checkUpdate = function (pluginName, url) {
 		if (pluginName && url && window.PluginUpdates.plugins[url]) return new Promise(callback => {
@@ -461,14 +499,14 @@ module.exports = (_ => {
 		}
 	};
 
-	window.BDFDB = Object.assign({
+	window.BDFDB_Global = Object.assign({
 		started: true,
 		loading: true,
 		PluginUtils: {
 			buildPlugin: BDFDB.PluginUtils.buildPlugin,
 			cleanUp: BDFDB.PluginUtils.cleanUp
 		}
-	}, config, window.BDFDB);
+	}, config, window.BDFDB_Global);
 	
 	require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.data.json", (error, response, body) => {
 		const InternalData = JSON.parse(body);
@@ -3418,40 +3456,6 @@ module.exports = (_ => {
 				return config.id && config.id.some(key => props.id == key) || config.label && config.label.some(key => props.label == key);
 			}
 		};
-
-		BDFDB.TimeUtils = {};
-		BDFDB.TimeUtils.interval = function (callback, delay, ...args) {
-			if (typeof callback != "function" || typeof delay != "number" || delay < 1) return;
-			else {
-				let count = 0, interval = setInterval(_ => {BDFDB.TimeUtils.suppress(callback, "Interval")(...[interval, count++, args].flat());}, delay);
-				return interval;
-			}
-		};
-		BDFDB.TimeUtils.timeout = function (callback, delay, ...args) {
-			delay = parseFloat(delay);
-			if (typeof callback != "function") return;
-			else if (isNaN(delay) || typeof delay != "number" || delay < 1) {
-				let immediate = setImmediate(_ => {BDFDB.TimeUtils.suppress(callback, "Immediate")(...[immediate, args].flat());});
-				return immediate;
-			}
-			else {
-				let timeout = setTimeout(_ => {BDFDB.TimeUtils.suppress(callback, "Timeout")(...[timeout, args].flat());}, delay);
-				return timeout;
-			}
-		};
-		BDFDB.TimeUtils.clear = function (...timeObjects) {
-			for (let t of timeObjects.flat(10).filter(n => n)) {
-				if (typeof t == "number") {
-					clearInterval(t);
-					clearTimeout(t);
-				}
-				else if (typeof t == "object") clearImmediate(t);
-			}
-		};
-		BDFDB.TimeUtils.suppress = function (callback, string, name) {return function (...args) {
-			try {return callback(...args);}
-			catch (err) {BDFDB.LogUtils.error((typeof string == "string" && string || "") + " " + err, name);}
-		}};
 
 		BDFDB.StringUtils = {};
 		BDFDB.StringUtils.htmlEscape = function (string) {
@@ -7280,7 +7284,7 @@ module.exports = (_ => {
 		
 		InternalBDFDB.forceUpdateAll();
 	
-		const pluginQueue = window.BDFDB && BDFDB.ArrayUtils.is(window.BDFDB.pluginQueue) ? window.BDFDB.pluginQueue : [];
+		const pluginQueue = window.BDFDB_Global && BDFDB.ArrayUtils.is(window.BDFDB_Global.pluginQueue) ? window.BDFDB_Global.pluginQueue : [];
 
 		if (BDFDB.UserUtils.me.id == myId) {
 			for (let module in DiscordClassModules) if (!DiscordClassModules[module]) BDFDB.LogUtils.warn(module + " not initialized in DiscordClassModules");
@@ -7398,10 +7402,10 @@ module.exports = (_ => {
 			};
 			BDFDB.DevUtils.req = InternalBDFDB.getWebModuleReq();
 			
-			window.BDFDB = BDFDB;
+			window.BDFDB_Global = BDFDB;
 		}
 		else {
-			window.BDFDB = Object.assign({
+			window.BDFDB_Global = Object.assign({
 				PluginUtils: {
 					buildPlugin: BDFDB.PluginUtils.buildPlugin,
 					cleanUp: BDFDB.PluginUtils.cleanUp
@@ -7423,8 +7427,8 @@ module.exports = (_ => {
 			BDFDB.DOMUtils.appendLocalStyle("BDFDB", body.replace(/[\n\t\r]/g, "").replace(/\[REPLACE_CLASS_([A-z0-9_]+?)\]/g, function(a, b) {return BDFDB.dotCN[b];}));
 		});
 		
-		window.BDFDB.loaded = true;
-		delete window.BDFDB.loading;
+		window.BDFDB_Global.loaded = true;
+		delete window.BDFDB_Global.loading;
 	
 		BDFDB.LogUtils.log("Finished loading library.");
 		
