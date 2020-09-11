@@ -7,13 +7,13 @@ var ImageUtilities = (_ => {
 	
 	const ImageDetails = class ImageDetails extends BdApi.React.Component {
 		componentDidMount() {
-			this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ReactUtils.getValue(this, "_reactInternalFiber.return"), "attachment", {up: true});
+			this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, "_reactInternalFiber.return"), "attachment", {up: true});
 			BDFDB.ReactUtils.forceUpdate(this);
 		}
 		componentDidUpdate() {
 			if ((!this.props.attachment || !this.props.attachment.size) && !this.props.loaded) {
 				this.props.loaded = true;
-				this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ReactUtils.getValue(this, "_reactInternalFiber.return"), "attachment", {up: true});
+				this.props.attachment = BDFDB.ReactUtils.findValue(BDFDB.ObjectUtils.get(this, "_reactInternalFiber.return"), "attachment", {up: true});
 				BDFDB.ReactUtils.forceUpdate(this);
 			}
 		}
@@ -299,7 +299,7 @@ var ImageUtilities = (_ => {
 					BDFDB.TimeUtils.timeout(_ => {clickedImage = null;});
 				});
 				
-				BDFDB.ModuleUtils.patch(this, (BDFDB.ModuleUtils.findByName("renderImageComponent", false).exports || {}), "renderImageComponent", {after: e => {
+				BDFDB.PatchUtils.patch(this, (BDFDB.ModuleUtils.findByName("renderImageComponent", false).exports || {}), "renderImageComponent", {after: e => {
 					if (e.returnValue && e.returnValue.type && (e.returnValue.type.displayName == "LazyImageZoomable" || e.returnValue.type.displayName == "LazyImage") && e.methodArguments[0].original && e.methodArguments[0].src.indexOf("https://media.discordapp.net/attachments") == 0 && (e.methodArguments[0].className || "").indexOf(BDFDB.disCN.embedthumbnail) == -1) return this.injectImageDetails(e.methodArguments[0], e.returnValue);
 				}});
 
@@ -921,7 +921,7 @@ var ImageUtilities = (_ => {
 			engines = BDFDB.DataUtils.get(this, "engines");
 			enabledEngines = BDFDB.ObjectUtils.filter(engines, n => n);
 			
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 			BDFDB.MessageUtils.rerenderAll();
 		}
 

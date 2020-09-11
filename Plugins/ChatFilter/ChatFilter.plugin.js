@@ -310,7 +310,7 @@ var ChatFilter = (_ => {
 		}
 
 		processMessage (e) {
-			let message = BDFDB.ReactUtils.getValue(e, "instance.props.childrenMessageContent.props.message");
+			let message = BDFDB.ObjectUtils.get(e, "instance.props.childrenMessageContent.props.message");
 			if (message) {
 				if (oldBlockedMessages[message.id]) e.returnvalue.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.className, BDFDB.disCN._chatfilterblocked);
 				else if (oldCensoredMessages[message.id]) e.returnvalue.props.className = BDFDB.DOMUtils.formatClassName(e.returnvalue.props.className, BDFDB.disCN._chatfiltercensored);
@@ -511,7 +511,7 @@ var ChatFilter = (_ => {
 			oldBlockedMessages = {};
 			oldCensoredMessages = {};
 			
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 			BDFDB.MessageUtils.rerenderAll();
 		}
 	}

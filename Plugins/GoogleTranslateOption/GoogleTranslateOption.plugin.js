@@ -262,7 +262,7 @@ var GoogleTranslateOption = (_ => {
 		}
 		
 		processChannelTextAreaForm (e) {
-			BDFDB.ModuleUtils.patch(this, e.instance, "handleSendMessage", {instead: e2 => {
+			BDFDB.PatchUtils.patch(this, e.instance, "handleSendMessage", {instead: e2 => {
 				if (translating) {
 					e2.stopOriginalMethodCall();
 					this.translateText(e2.methodArguments[0], "message", (translation, input, output) => {
@@ -894,7 +894,7 @@ var GoogleTranslateOption = (_ => {
 			favorites = BDFDB.DataUtils.load(this, "favorites");
 			
 			this.setLanguages();
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 			BDFDB.MessageUtils.rerenderAll();
 		}
 

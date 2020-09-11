@@ -194,7 +194,7 @@ var PersonalPins = (_ => {
 		}
 
 		processHeaderBarContainer (e) {
-			let [children, index] = BDFDB.ReactUtils.findParent(BDFDB.ReactUtils.getValue(e.returnvalue, "props.toolbar"), {name: "FluxContainer(Search)"});
+			let [children, index] = BDFDB.ReactUtils.findParent(BDFDB.ObjectUtils.get(e.returnvalue, "props.toolbar"), {name: "FluxContainer(Search)"});
 			if (index > -1) children.splice(index, 0, BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.PopoutContainer, {
 				children: BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
 					text: this.labels.popout_note_text,
@@ -376,7 +376,7 @@ var PersonalPins = (_ => {
 		}
 		
 		containsSearchkey (data, key, searchkey) {
-			let value = BDFDB.ReactUtils.getValue(data, key);
+			let value = BDFDB.ObjectUtils.get(data, key);
 			return value && value.toUpperCase().indexOf(searchkey) > -1
 		}
 		
@@ -538,7 +538,7 @@ var PersonalPins = (_ => {
 		forceUpdateAll() {
 			choices = BDFDB.DataUtils.get(this, "choices");
 			
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 		}
 
 

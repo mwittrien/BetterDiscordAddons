@@ -413,7 +413,7 @@ var NotificationSounds = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 				
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dirtyDispatch", {before: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dirtyDispatch", {before: e => {
 					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.MESSAGE_CREATE && e.methodArguments[0].message) {
 						let message = e.methodArguments[0].message;
 						let guildId = message.guild_id || null;
@@ -454,7 +454,7 @@ var NotificationSounds = (_ => {
 					}
 				}});
 
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "playSound", {instead: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "playSound", {instead: e => {
 					let type = e.methodArguments[0];
 					if (choices[type]) BDFDB.TimeUtils.timeout(_ => {
 						if (type == "message1") {
@@ -469,7 +469,7 @@ var NotificationSounds = (_ => {
 					});
 					else e.callOriginalMethod();
 				}});
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "createSound", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SoundUtils, "createSound", {after: e => {
 					let type = e.methodArguments[0];
 					let audio = new Audio();
 					audio.src = choices[type].src;
@@ -498,7 +498,7 @@ var NotificationSounds = (_ => {
 				let callListenerModule = BDFDB.ModuleUtils.findByProperties("handleRingUpdate");
 				if (callListenerModule) {
 					callListenerModule.terminate();
-					BDFDB.ModuleUtils.patch(this, callListenerModule, "handleRingUpdate", {instead: e => {
+					BDFDB.PatchUtils.patch(this, callListenerModule, "handleRingUpdate", {instead: e => {
 						BDFDB.LibraryModules.CallUtils.getCalls().filter(call => call.ringing.length > 0 && BDFDB.LibraryModules.VoiceUtils.getCurrentClientVoiceChannelId() === call.channelId).length > 0 && !BDFDB.LibraryModules.SoundStateUtils.isSoundDisabled("call_calling") && !BDFDB.LibraryModules.StreamerModeStore.disableSounds ? callAudio.loop() : callAudio.stop();
 					}});
 					callListenerModule.initialize();
@@ -555,7 +555,7 @@ var NotificationSounds = (_ => {
 			repatchIncoming = true;
 			callAudio = BDFDB.LibraryModules.SoundUtils.createSound("call_calling");
 			
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 		}
 		
 		loadAudios () {

@@ -121,12 +121,12 @@ var DisplayLargeMessages = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 				
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.MessageUtils, "startEditMessage", {before: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageUtils, "startEditMessage", {before: e => {
 					let encodedContent = encodedMessages[e.methodArguments[1]];
 					if (encodedContent != null) e.methodArguments[2] = encodedContent.content;
 				}});
 				
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.MessageUtils, "editMessage", {before: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.MessageUtils, "editMessage", {before: e => {
 					let encodedContent = encodedMessages[e.methodArguments[1]];
 					let oldMessage = oldMessages[e.methodArguments[1]];
 					if (encodedContent != null) encodedContent.content = e.methodArguments[2].content;
@@ -261,7 +261,7 @@ var DisplayLargeMessages = (_ => {
 			settings = BDFDB.DataUtils.get(this, "settings");
 			amounts = BDFDB.DataUtils.get(this, "amounts");
 			
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 			BDFDB.MessageUtils.rerenderAll();
 		}
 

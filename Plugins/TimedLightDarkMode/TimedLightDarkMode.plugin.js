@@ -68,7 +68,7 @@ var TimedLightDarkMode = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 				
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.SettingsUtils, "updateLocalSettings", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SettingsUtils, "updateLocalSettings", {after: e => {
 					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].theme) {
 						BDFDB.TimeUtils.clear(changeTimeout);
 						disableChanging = true;
@@ -80,7 +80,7 @@ var TimedLightDarkMode = (_ => {
 
 				this.startInterval();
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}

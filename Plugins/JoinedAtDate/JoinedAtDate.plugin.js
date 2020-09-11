@@ -369,7 +369,7 @@ var JoinedAtDate = (_ => {
 			formats = BDFDB.DataUtils.get(this, "formats");
 			amounts = BDFDB.DataUtils.get(this, "amounts");
 			
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 		}
 
 		setLabelsByLanguage () {

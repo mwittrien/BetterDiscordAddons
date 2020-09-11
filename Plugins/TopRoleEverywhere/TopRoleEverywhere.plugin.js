@@ -162,7 +162,7 @@ var TopRoleEverywhere = (_ => {
 
 		processMemberListItem (e) {
 			if (e.instance.props.user && settings.showInMemberList) {
-				this.injectRoleTag(BDFDB.ReactUtils.getValue(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, "member", {
+				this.injectRoleTag(BDFDB.ObjectUtils.get(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, "member", {
 					tagClass: BDFDB.disCN.bottagmember
 				});
 			}
@@ -241,7 +241,7 @@ var TopRoleEverywhere = (_ => {
 		forceUpdateAll () {
 			settings = BDFDB.DataUtils.get(this, "settings");
 			
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 			BDFDB.MessageUtils.rerenderAll();
 		}
 	}

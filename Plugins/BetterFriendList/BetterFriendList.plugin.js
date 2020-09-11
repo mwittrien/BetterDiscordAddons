@@ -161,7 +161,7 @@ var BetterFriendList = (_ => {
 				for (let type in BDFDB.DiscordConstants.RelationshipTypes) relationshipCount[type] = 0;
 				for (let id in relationships) relationshipCount[relationships[id]]++;
 				for (let child of e.returnvalue.props.children) if (child && child.props.id != "ADD_FRIEND") {
-					let newChildren = [child.props.children].flat().filter(child => BDFDB.ReactUtils.getValue(child, "type.displayName") != "NumberBadge");
+					let newChildren = [child.props.children].flat().filter(child => BDFDB.ObjectUtils.get(child, "type.displayName") != "NumberBadge");
 					switch (child.props.id) {
 						case "ALL":
 							newChildren.push(this.createBadge(relationshipCount[BDFDB.DiscordConstants.RelationshipTypes.FRIEND]));
@@ -292,7 +292,7 @@ var BetterFriendList = (_ => {
 		processPeopleListItem (e) {
 			if (e.node) {
 				BDFDB.TimeUtils.clear(rerenderTimeout);
-				rerenderTimeout = BDFDB.TimeUtils.timeout(_ => {BDFDB.ModuleUtils.forceAllUpdates(this, "TabBar");}, 1000);
+				rerenderTimeout = BDFDB.TimeUtils.timeout(_ => {BDFDB.PatchUtils.forceAllUpdates(this, "TabBar");}, 1000);
 			}
 			else {
 				if (e.instance.props.user.id == placeHolderId) return null;
@@ -324,7 +324,7 @@ var BetterFriendList = (_ => {
 		forceUpdateAll() {
 			settings = BDFDB.DataUtils.get(this, "settings");
 
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 			this.rerenderList();
 		}
 	}

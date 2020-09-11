@@ -493,8 +493,8 @@ var PinDMs = (_ => {
 				}
 				
 				let pinnedIds = BDFDB.ObjectUtils.toArray(e.instance.props.pinnedChannelIds).reverse();
-				BDFDB.ModuleUtils.unpatch(this, e.instance, "renderDM");
-				BDFDB.ModuleUtils.patch(this, e.instance, "renderDM", {before: e2 => {
+				BDFDB.PatchUtils.unpatch(this, e.instance, "renderDM");
+				BDFDB.PatchUtils.patch(this, e.instance, "renderDM", {before: e2 => {
 					if (e2.methodArguments[0] != 0) e2.methodArguments[1] += pinnedIds.slice(0, e2.methodArguments[0] - 1).flat().length;
 				}, after: e2 => {
 					if (e2.methodArguments[0] != 0) {
@@ -556,11 +556,11 @@ var PinDMs = (_ => {
 						BDFDB.ReactUtils.forceUpdate(e.instance);
 					}
 					if (draggedChannel) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: child => BDFDB.ReactUtils.getValue(child, "props.channel.id") == draggedChannel});
+						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: child => BDFDB.ObjectUtils.get(child, "props.channel.id") == draggedChannel});
 						children.splice(index, 1);
 					}
 					if (this.hoveredChannel) {
-						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: child => BDFDB.ReactUtils.getValue(child, "props.channel.id") == this.hoveredChannel});
+						let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {filter: child => BDFDB.ObjectUtils.get(child, "props.channel.id") == this.hoveredChannel});
 						children.splice(index + 1, 0, BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.disCNS.guildouter + BDFDB.disCN._pindmsrecentplaceholder,
 							children: BDFDB.ReactUtils.createElement("div", {
@@ -675,7 +675,7 @@ var PinDMs = (_ => {
 									if (Math.sqrt((event.pageX - event2.pageX)**2) > 20 || Math.sqrt((event.pageY - event2.pageY)**2) > 20) {
 										BDFDB.ListenerUtils.stopEvent(event);
 										draggedChannel = e.instance.props.channel.id;
-										BDFDB.ModuleUtils.forceAllUpdates(this, "UnreadDMs");
+										BDFDB.PatchUtils.forceAllUpdates(this, "UnreadDMs");
 										let dragPreview = this.createDragPreview(e.node, event2);
 										document.removeEventListener("mousemove", mousemove);
 										document.removeEventListener("mouseup", mouseup);
@@ -686,14 +686,14 @@ var PinDMs = (_ => {
 											let update = maybeHoveredChannel != hoveredChannel;
 											if (maybeHoveredChannel) hoveredChannel = maybeHoveredChannel;
 											else hoveredChannel = null; 
-											if (update) BDFDB.ModuleUtils.forceAllUpdates(this, "UnreadDMs");
+											if (update) BDFDB.PatchUtils.forceAllUpdates(this, "UnreadDMs");
 										};
 										let releasing = event3 => {
 											BDFDB.DOMUtils.remove(dragPreview);
 											if (hoveredChannel) releasedChannel = hoveredChannel;
 											else draggedChannel = null;
 											hoveredChannel = null;
-											BDFDB.ModuleUtils.forceAllUpdates(this, "UnreadDMs");
+											BDFDB.PatchUtils.forceAllUpdates(this, "UnreadDMs");
 											document.removeEventListener("mousemove", dragging);
 											document.removeEventListener("mouseup", releasing);
 										};
@@ -713,7 +713,7 @@ var PinDMs = (_ => {
 					}
 				}
 				if (e.node && e.methodname == "componentWillUnmount") {
-					BDFDB.ModuleUtils.forceAllUpdates(this, "PrivateChannelsList");
+					BDFDB.PatchUtils.forceAllUpdates(this, "PrivateChannelsList");
 				}
 				if (e.returnvalue && this.isPinned(e.instance.props.channel.id, "pinnedRecents") && settings.showPinIcon) {
 					let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name:"BlobMask"});
@@ -861,10 +861,10 @@ var PinDMs = (_ => {
 		updateContainer (type) {
 			switch (type) {
 				case "dmCategories": 
-					BDFDB.ModuleUtils.forceAllUpdates(this, "PrivateChannelsList");
+					BDFDB.PatchUtils.forceAllUpdates(this, "PrivateChannelsList");
 					break;
 				case "pinnedRecents": 
-					BDFDB.ModuleUtils.forceAllUpdates(this, "UnreadDMs");
+					BDFDB.PatchUtils.forceAllUpdates(this, "UnreadDMs");
 					break;
 			}
 		}
@@ -891,7 +891,7 @@ var PinDMs = (_ => {
 			settings = BDFDB.DataUtils.get(this, "settings");
 			
 			BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"FluxContainer(PrivateChannels)", all:true, unlimited:true}));
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 		}
 
 		createDragPreview (div, event) {

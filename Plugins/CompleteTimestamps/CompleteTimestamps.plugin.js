@@ -272,7 +272,7 @@ var CompleteTimestamps = (_ => {
 		}
 
 		processMessage (e) {
-			if (BDFDB.ReactUtils.getValue(e, "instance.props.childrenHeader.type.type.displayName") == "MessageTimestamp" && settings.changeForChat) {
+			if (BDFDB.ObjectUtils.get(e, "instance.props.childrenHeader.type.type.displayName") == "MessageTimestamp" && settings.changeForChat) {
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {name: e.instance.props.childrenHeader.type});
 				if (index > -1) this.changeTimestamp(children, index, {child:false, tooltip:true});
 			}
@@ -425,7 +425,7 @@ var CompleteTimestamps = (_ => {
 			formats = BDFDB.DataUtils.get(this, "formats");
 			amounts = BDFDB.DataUtils.get(this, "amounts");
 			
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 			BDFDB.MessageUtils.rerenderAll();
 		}
 	}

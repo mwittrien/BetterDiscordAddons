@@ -193,7 +193,7 @@ var BetterSearchPage = (_ => {
 		forceUpdateAll () {
 			settings = BDFDB.DataUtils.get(this, "settings");
 			
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 		}
 	}
 })();

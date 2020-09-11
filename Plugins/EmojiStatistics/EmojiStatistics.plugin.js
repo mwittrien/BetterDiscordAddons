@@ -79,7 +79,7 @@ var EmojiStatistics = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 				
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -88,7 +88,7 @@ var EmojiStatistics = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				BDFDB.PatchUtils.forceAllUpdates(this);
 				
 				BDFDB.PluginUtils.clear(this);
 			}

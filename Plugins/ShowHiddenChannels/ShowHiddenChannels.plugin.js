@@ -220,19 +220,19 @@ var ShowHiddenChannels = (_ => {
 				let loadedCollapselist = BDFDB.DataUtils.load(this, "categorydata");
 				this.saveCollapselist(!BDFDB.ArrayUtils.is(loadedCollapselist) ? [] : loadedCollapselist);
 				
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.UnreadChannelUtils, "hasUnread", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UnreadChannelUtils, "hasUnread", {after: e => {
 					return e.returnValue && !this.isChannelHidden(e.methodArguments[0]);
 				}});
 				
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.UnreadChannelUtils, "getMentionCount", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.UnreadChannelUtils, "getMentionCount", {after: e => {
 					return this.isChannelHidden(e.methodArguments[0]) ? 0 : e.returnValue;
 				}});
 				
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.CategoryCollapseStore, "isCollapsed", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.CategoryCollapseStore, "isCollapsed", {after: e => {
 					if (e.methodArguments[0] && e.methodArguments[0].endsWith("hidden")) return collapselist.includes(e.methodArguments[0]);
 				}});
 				
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.CategoryCollapseUtils, "categoryCollapse", {before: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.CategoryCollapseUtils, "categoryCollapse", {before: e => {
 					if (e.methodArguments[0] && e.methodArguments[0].endsWith("hidden")) {
 						if (!collapselist.includes(e.methodArguments[0])) {
 							collapselist.push(e.methodArguments[0]);
@@ -241,7 +241,7 @@ var ShowHiddenChannels = (_ => {
 					}
 				}});
 				
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.CategoryCollapseUtils, "categoryExpand", {before: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.CategoryCollapseUtils, "categoryExpand", {before: e => {
 					if (e.methodArguments[0] && e.methodArguments[0].endsWith("hidden")) {
 						if (collapselist.includes(e.methodArguments[0])) {
 							BDFDB.ArrayUtils.remove(collapselist, e.methodArguments[0], true);
@@ -250,7 +250,7 @@ var ShowHiddenChannels = (_ => {
 					}
 				}});
 				
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.GuildChannelStore, "getTextChannelNameDisambiguations", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.GuildChannelStore, "getTextChannelNameDisambiguations", {after: e => {
 					let all = BDFDB.LibraryModules.ChannelStore.getChannels();
 					for (let channel_id in all) if (all[channel_id].guild_id == e.methodArguments[0] && !e.returnValue[channel_id] && (all[channel_id].type != BDFDB.DiscordConstants.ChannelTypes.GUILD_CATEGORY && all[channel_id].type != BDFDB.DiscordConstants.ChannelTypes.GUILD_VOICE)) e.returnValue[channel_id] = {id: channel_id, name: all[channel_id].name};
 				}});
@@ -315,7 +315,7 @@ var ShowHiddenChannels = (_ => {
 						else BDFDB.ArrayUtils.remove(blacklist, e.instance.props.guild.id, true);
 						this.saveBlacklist(BDFDB.ArrayUtils.removeCopies(blacklist));
 
-						BDFDB.ModuleUtils.forceAllUpdates(this);
+						BDFDB.PatchUtils.forceAllUpdates(this);
 					}
 				}));
 			}
@@ -473,7 +473,7 @@ var ShowHiddenChannels = (_ => {
 		forceUpdateAll() {
 			settings = BDFDB.DataUtils.get(this, "settings");
 
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 		}
 		
 		showAccessModal (channel, allowed) {

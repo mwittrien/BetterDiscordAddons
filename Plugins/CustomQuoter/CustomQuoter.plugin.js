@@ -236,7 +236,7 @@ var CustomQuoter = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 				
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.QuoteUtils, "createQuotedText", {instead: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.QuoteUtils, "createQuotedText", {instead: e => {
 					return this.parseQuote(e.methodArguments[0], e.methodArguments[1]);
 				}});
 				
@@ -374,7 +374,7 @@ var CustomQuoter = (_ => {
 			settings = BDFDB.DataUtils.get(this, "settings");
 			formats = Object.assign({"Standard": "$quote $mention"}, BDFDB.DataUtils.load(this, "formats"));
 			
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 			BDFDB.MessageUtils.rerenderAll();
 		}
 	}

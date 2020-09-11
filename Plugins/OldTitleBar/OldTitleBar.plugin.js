@@ -157,7 +157,7 @@ var OldTitleBar = (_ => {
 				BDFDB.PluginUtils.init(this);
 
 				BDFDB.ListenerUtils.add(this, window, "resize", e => {
-					BDFDB.ModuleUtils.forceAllUpdates(this, ["HeaderBarContainer", "StandardSidebarView"]);
+					BDFDB.PatchUtils.forceAllUpdates(this, ["HeaderBarContainer", "StandardSidebarView"]);
 				});
 
 				BDFDB.DOMUtils.addClass(document.body, BDFDB.disCN._oldtitlebarenabled);
@@ -206,7 +206,7 @@ var OldTitleBar = (_ => {
 
 		processHeaderBarContainer (e) {
 			if (!settings.addOldBar) return;
-			let children = BDFDB.ReactUtils.getValue(e.returnvalue, "props.toolbar.props.children");
+			let children = BDFDB.ObjectUtils.get(e.returnvalue, "props.toolbar.props.children");
 			if (!children) {
 				let [oldToolbarParent, oldToolbarIndex] = BDFDB.ReactUtils.findParent(e.returnvalue, {key: "OldTitleBar-toolbar"});
 				if (oldToolbarIndex > -1) oldToolbarParent.splice(oldToolbarIndex, 1);
@@ -304,7 +304,7 @@ var OldTitleBar = (_ => {
 		forceUpdateAll () {
 			settings = BDFDB.DataUtils.get(this, "settings");
 			
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 		}
 	}
 })();

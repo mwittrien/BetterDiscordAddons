@@ -62,7 +62,7 @@ var SendLargeMessages = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 				
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -72,7 +72,7 @@ var SendLargeMessages = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				BDFDB.PatchUtils.forceAllUpdates(this);
 
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -82,7 +82,7 @@ var SendLargeMessages = (_ => {
 		// Begin of own functions
 
 		processChannelTextAreaForm (e) {
-			if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "handleSendMessage")) BDFDB.ModuleUtils.patch(this, e.instance, "handleSendMessage", {instead: e2 => {
+			if (!BDFDB.PatchUtils.isPatched(this, e.instance, "handleSendMessage")) BDFDB.PatchUtils.patch(this, e.instance, "handleSendMessage", {instead: e2 => {
 				if (e2.methodArguments[0].length > BDFDB.DiscordConstants.MAX_MESSAGE_LENGTH) {
 					e2.stopOriginalMethodCall();
 					let messages = this.formatText(e2.methodArguments[0]);

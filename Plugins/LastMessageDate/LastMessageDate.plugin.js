@@ -239,7 +239,7 @@ var LastMessageDate = (_ => {
 					}
 				}, BDFDB.LanguageUtils.languages);
 
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dirtyDispatch", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dirtyDispatch", {after: e => {
 					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.MESSAGE_CREATE && e.methodArguments[0].message) {
 						let message = e.methodArguments[0].message;
 						let guildId = message.guild_id || message.channel_id;
@@ -393,7 +393,7 @@ var LastMessageDate = (_ => {
 			formats = BDFDB.DataUtils.get(this, "formats");
 			amounts = BDFDB.DataUtils.get(this, "amounts");
 			
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 		}
 
 		setLabelsByLanguage () {

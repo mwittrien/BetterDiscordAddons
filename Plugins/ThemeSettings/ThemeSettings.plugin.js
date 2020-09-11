@@ -81,7 +81,7 @@ var ThemeSettings = (_ => {
 		
 		appendSettingsButton (card) {
 			if (card.querySelector(".theme-settings-button")) return;
-			let addon = BDFDB.ReactUtils.getValue(BDFDB.ReactUtils.getInstance(card), "return.stateNode.props.addon");
+			let addon = BDFDB.ObjectUtils.get(BDFDB.ReactUtils.getInstance(card), "return.stateNode.props.addon");
 			if (addon && !addon.plugin) {
 				let vars = this.getThemeVars(addon.css);
 				if (vars.length) {

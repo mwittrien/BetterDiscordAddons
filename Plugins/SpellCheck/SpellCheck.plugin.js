@@ -455,7 +455,7 @@ var SpellCheck = (_ => {
 			choices = BDFDB.DataUtils.get(this, "choices");
 			amounts = BDFDB.DataUtils.get(this, "amounts");
 			
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 		}
 
 		setLabelsByLanguage () {

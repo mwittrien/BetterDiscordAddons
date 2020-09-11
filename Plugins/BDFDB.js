@@ -11195,13 +11195,6 @@
 	};
 	
 	InternalBDFDB.addSpecialListeners(BDFDB);
-
-	let BasePopout = BDFDB.ModuleUtils.findByName("BasePopout"), ReferencePositionLayer = BDFDB.ModuleUtils.findByName("ReferencePositionLayer");
-	if (BasePopout && ReferencePositionLayer) BDFDB.ModuleUtils.patch(BDFDB, BasePopout.prototype, "renderLayer", {after: e => {
-		if (e.returnValue && e.thisObject.isBDFDBpopout) {
-			e.returnValue = BDFDB.ReactUtils.createPortal(BDFDB.ReactUtils.createElement(ReferencePositionLayer, e.returnValue.props), document.querySelector(BDFDB.dotCN.appmount +  " > " + BDFDB.dotCN.itemlayercontainer));
-		}
-	}});
 	
 	if (InternalComponents.LibraryComponents.GuildComponents.BlobMask) {
 		let newBadges = ["lowerLeftBadge", "upperLeftBadge"];
@@ -11321,6 +11314,10 @@
 	InternalBDFDB.forceUpdateAll();
 	
 	BDFDB.ReactUtils.findChildren = BDFDB.ReactUtils.findParent;
+	
+	BDFDB.ObjectUtils.get = BDFDB.ReactUtils.getValue;
+	
+	BDFDB.PatchUtils = BDFDB.ModuleUtils;
 
 	if (BDFDB.UserUtils.me.id == myId) {
 		for (let module in DiscordClassModules) if (!DiscordClassModules[module]) BDFDB.LogUtils.warn(module + " not initialized in DiscordClassModules");

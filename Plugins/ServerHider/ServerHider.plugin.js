@@ -34,7 +34,7 @@ var ServerHider = (_ => {
 				onClick: _ => {
 					BDFDB.ModalUtils.confirm(this, "Are you sure you want to unhide all servers and folders?", _ => {
 						BDFDB.DataUtils.save([], this, "hidden");
-						BDFDB.ModuleUtils.forceAllUpdates(this);
+						BDFDB.PatchUtils.forceAllUpdates(this);
 					});
 				},
 				children: BDFDB.LanguageUtils.LanguageStrings.RESET
@@ -74,7 +74,7 @@ var ServerHider = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 				
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.FolderStore, "getGuildFolderById", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.FolderStore, "getGuildFolderById", {after: e => {
 					let hiddenGuildIds = BDFDB.DataUtils.load(this, "hidden", "servers") || [];
 					if (e.returnValue && hiddenGuildIds.length) {
 						let folder = Object.assign({}, e.returnValue);
@@ -84,7 +84,7 @@ var ServerHider = (_ => {
 					}
 				}});
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -93,7 +93,7 @@ var ServerHider = (_ => {
 			if (window.BDFDB && typeof BDFDB === "object" && BDFDB.loaded) {
 				this.stopping = true;
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				BDFDB.PatchUtils.forceAllUpdates(this);
 
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -263,7 +263,7 @@ var ServerHider = (_ => {
 						let switchInstances = BDFDB.ReactUtils.findOwner(instance, {name:"BDFDB_Switch", all:true, unlimited:true});
 						for (let switchIns of switchInstances) switchIns.props.value = enabled;
 						BDFDB.ReactUtils.forceUpdate(switchInstances);
-						BDFDB.ModuleUtils.forceAllUpdates(this);
+						BDFDB.PatchUtils.forceAllUpdates(this);
 					}
 				}]
 			});
@@ -274,7 +274,7 @@ var ServerHider = (_ => {
 			if (force || (force === undefined && array.includes(id))) BDFDB.ArrayUtils.remove(array, id, true);
 			else array.push(id);
 			BDFDB.DataUtils.save(array, this, "hidden", type);
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 		}
 
 		setLabelsByLanguage () {

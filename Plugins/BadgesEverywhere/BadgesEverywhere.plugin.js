@@ -328,7 +328,7 @@ var BadgesEverywhere = (_ => {
 					BDFDB.DataUtils.save(badgeCache, this, "badgeCache");
 				}
 				
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.DispatchApiUtils, "dispatch", {after: e => {
 					if (BDFDB.ObjectUtils.is(e.methodArguments[0]) && e.methodArguments[0].type == BDFDB.DiscordConstants.ActionTypes.USER_PROFILE_MODAL_FETCH_SUCCESS && e.methodArguments[0].user) {
 						let userCopy = Object.assign({}, e.methodArguments[0].user);
 						if (e.methodArguments[0].premium_since) userCopy.flags += nitroflag;
@@ -378,7 +378,7 @@ var BadgesEverywhere = (_ => {
 
 		processMemberListItem (e) {
 			if (e.instance.props.user && settings.showInMemberList) {
-				this.injectBadges(e.instance, BDFDB.ReactUtils.getValue(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, "list");
+				this.injectBadges(e.instance, BDFDB.ObjectUtils.get(e.returnvalue, "props.decorators.props.children"), e.instance.props.user, "list");
 			}
 		}
 
@@ -493,7 +493,7 @@ var BadgesEverywhere = (_ => {
 			badges = BDFDB.DataUtils.get(this, "badges");
 			indicators = BDFDB.DataUtils.get(this, "indicators");
 			
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 			BDFDB.MessageUtils.rerenderAll();
 		}
 	}

@@ -119,7 +119,7 @@ var EditServers = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.IconUtils, "getGuildBannerURL", {instead:e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.IconUtils, "getGuildBannerURL", {instead:e => {
 					let guild = BDFDB.LibraryModules.GuildStore.getGuild(e.methodArguments[0].id);
 					if (guild) {
 						if (e.methodArguments[0].id == "410787888507256842") return guild.banner;
@@ -129,12 +129,12 @@ var EditServers = (_ => {
 					return e.callOriginalMethod();
 				}});
 
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryComponents.GuildComponents.Guild.prototype, "render", {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryComponents.GuildComponents.Guild.prototype, "render", {
 					before: e => {this.processGuild({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});},
 					after: e => {this.processGuild({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});}
 				});
 
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryComponents.Connectors.Link.prototype, "render", {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryComponents.Connectors.Link.prototype, "render", {
 					after: e => {
 						if (e.thisObject.props.className && e.thisObject.props.className.indexOf(BDFDB.disCN.guildiconwrapper) > -1) this.processGuildAcronym({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});
 					}
@@ -232,7 +232,7 @@ var EditServers = (_ => {
 
 		processGuildAcronym (e) {
 			if (typeof e.returnvalue.props.children == "function" && settings.changeInGuildList) {
-				let pathname = BDFDB.ReactUtils.getValue(e.instance, "props.to.pathname");
+				let pathname = BDFDB.ObjectUtils.get(e.instance, "props.to.pathname");
 				let data = pathname && changedGuilds[(pathname.split("/channels/")[1] || "").split("/")[0]];
 				if (data) {
 					let renderChildren = e.returnvalue.props.children;
@@ -372,7 +372,7 @@ var EditServers = (_ => {
 			changedGuilds = BDFDB.DataUtils.load(this, "servers");
 			settings = BDFDB.DataUtils.get(this, "settings");
 			
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 		}
 
 		openGuildSettingsModal (guildId) {

@@ -12,7 +12,7 @@ var ServerDetails = (_ => {
 		componentDidUpdate() {
 			if (amounts.tooltipDelay && this.state.delayed && !this.state.repositioned) {
 				this.state.repositioned = true;
-				let tooltip = BDFDB.DOMUtils.getParent(BDFDB.dotCN.tooltip, BDFDB.ReactUtils.getValue(this, "_reactInternalFiber.return.return.stateNode.containerInfo"));
+				let tooltip = BDFDB.DOMUtils.getParent(BDFDB.dotCN.tooltip, BDFDB.ObjectUtils.get(this, "_reactInternalFiber.return.return.stateNode.containerInfo"));
 				if (tooltip) tooltip.update();
 			}
 		}
@@ -20,7 +20,7 @@ var ServerDetails = (_ => {
 			if (amounts.tooltipDelay && !this.state.delayed) {
 				BDFDB.TimeUtils.timeout(_ => {
 					this.state.delayed = true;
-					let tooltip = BDFDB.DOMUtils.getParent(BDFDB.dotCN.tooltip, BDFDB.ReactUtils.getValue(this, "_reactInternalFiber.return.return.stateNode.containerInfo"));
+					let tooltip = BDFDB.DOMUtils.getParent(BDFDB.dotCN.tooltip, BDFDB.ObjectUtils.get(this, "_reactInternalFiber.return.return.stateNode.containerInfo"));
 					if (tooltip) BDFDB.DOMUtils.addClass(tooltip, BDFDB.disCN._serverdetailstooltip);
 					BDFDB.ReactUtils.forceUpdate(this);
 				}, amounts.tooltipDelay * 1000);
@@ -390,7 +390,7 @@ var ServerDetails = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryComponents.GuildComponents.Guild.prototype, "render", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryComponents.GuildComponents.Guild.prototype, "render", {after: e => {
 					this.processGuild({instance:e.thisObject, returnvalue:e.returnValue, methodname:"render"});
 				}});
 
@@ -533,7 +533,7 @@ var ServerDetails = (_ => {
 				}
 			`);
 			
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 		}
 
 		setLabelsByLanguage () {

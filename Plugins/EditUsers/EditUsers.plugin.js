@@ -198,9 +198,9 @@ var EditUsers = (_ => {
 				let observer = new MutationObserver(_ => {this.changeAppTitle();});
 				BDFDB.ObserverUtils.connect(this, document.head.querySelector("title"), {name:"appTitleObserver", instance:observer}, {childList:true});
 				
-				let searchGroupData = BDFDB.ReactUtils.getValue(BDFDB.ModuleUtils.findByName("SearchPopoutComponent", false), "exports.GroupData");
+				let searchGroupData = BDFDB.ObjectUtils.get(BDFDB.ModuleUtils.findByName("SearchPopoutComponent", false), "exports.GroupData");
 				if (BDFDB.ObjectUtils.is(searchGroupData)) {
-					BDFDB.ModuleUtils.patch(this, searchGroupData.FILTER_FROM, "component", {after: e => {
+					BDFDB.PatchUtils.patch(this, searchGroupData.FILTER_FROM, "component", {after: e => {
 						if (typeof e.returnValue.props.renderResult == "function") {
 							let renderResult = e.returnValue.props.renderResult;
 							e.returnValue.props.renderResult = (...args) => {
@@ -210,7 +210,7 @@ var EditUsers = (_ => {
 							}
 						}
 					}});
-					BDFDB.ModuleUtils.patch(this, searchGroupData.FILTER_MENTIONS, "component", {after: e => {
+					BDFDB.PatchUtils.patch(this, searchGroupData.FILTER_MENTIONS, "component", {after: e => {
 						if (typeof e.returnValue.props.renderResult == "function") {
 							let renderResult = e.returnValue.props.renderResult;
 							e.returnValue.props.renderResult = (...args) => {
@@ -682,7 +682,7 @@ var EditUsers = (_ => {
 				}
 				else {
 					this.changeUserColor(e.returnvalue.props.name, e.instance.props.user.id, {changeBackground: true, modify: BDFDB.ObjectUtils.extract(Object.assign({}, e.instance.props, e.instance.state), "hovered", "selected")});
-					this.injectBadge(BDFDB.ReactUtils.getValue(e.returnvalue, "props.decorators.props.children"), e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
+					this.injectBadge(BDFDB.ObjectUtils.get(e.returnvalue, "props.decorators.props.children"), e.instance.props.user.id, BDFDB.LibraryModules.LastGuildStore.getGuildId(), 2, {
 						tagClass: BDFDB.disCN.bottagmember
 					});
 				}
@@ -812,7 +812,7 @@ var EditUsers = (_ => {
 		}
 
 		processSearchPopoutComponent (e) {
-			if (BDFDB.ArrayUtils.is(BDFDB.ReactUtils.getValue(e, "instance.props.resultsState.autocompletes")) && settings.changeInSearchPopout) {
+			if (BDFDB.ArrayUtils.is(BDFDB.ObjectUtils.get(e, "instance.props.resultsState.autocompletes")) && settings.changeInSearchPopout) {
 				for (let autocomplete of e.instance.props.resultsState.autocompletes) if (autocomplete && BDFDB.ArrayUtils.is(autocomplete.results)) for (let result of autocomplete.results) if (result.user) result.user = this.getUserData(result.user.id);
 			}
 		}
@@ -1016,7 +1016,7 @@ var EditUsers = (_ => {
 			settings = BDFDB.DataUtils.get(this, "settings");
 				
 			this.changeAppTitle();
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 			BDFDB.MessageUtils.rerenderAll();
 		}
 

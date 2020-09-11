@@ -64,7 +64,6 @@ module.exports = (_ => {
 					if (this.started) return;
 					this.started = true;
 					BDFDB.TimeUtils.suppress(_ => {
-						BDFDB.DOMUtils.appendLocalStyle(config.name, BDFDB.DOMUtils.formatCSS(config.css));
 						BDFDB.PluginUtils.init(this);
 						if (typeof this.onStart == "function") this.onStart();
 					}, "Failed to start plugin!", config.name)();
@@ -201,7 +200,9 @@ module.exports = (_ => {
 		let startMsg = BDFDB.LanguageUtils.LibraryStringsFormat("toast_plugin_started", "v" + plugin.version);
 		BDFDB.LogUtils.log(startMsg, plugin.name);
 		if (settings.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(`${plugin.name} ${startMsg}`, {nopointer: true});
-
+		
+		if (plugin.css) BDFDB.DOMUtils.appendLocalStyle(plugin.name, plugin.css);
+		
 		InternalBDFDB.patchPlugin(plugin);
 		InternalBDFDB.addSpecialListeners(plugin);
 
@@ -3235,10 +3236,6 @@ module.exports = (_ => {
 				container = container || document.head.querySelector("bd-head bd-styles") || document.head;
 				container = Node.prototype.isPrototypeOf(container) ? container : document.head;
 				BDFDB.DOMUtils.remove(container.querySelectorAll(`style[id="${id}CSS"]`));
-			};
-			BDFDB.DOMUtils.formatCSS = function (css) {
-				if (typeof css != "string") return "";
-				return css.replace(/[\n\t\r]/g, "").replace(/\[REPLACE_CLASS_([A-z0-9_]+?)\]/g, function(a, b) {return BDFDB.dotCN[b];});
 			};
 			
 			BDFDB.ModalUtils = {};
@@ -7175,13 +7172,6 @@ module.exports = (_ => {
 			};
 			
 			InternalBDFDB.addSpecialListeners(BDFDB);
-
-			let BasePopout = BDFDB.ModuleUtils.findByName("BasePopout"), ReferencePositionLayer = BDFDB.ModuleUtils.findByName("ReferencePositionLayer");
-			if (BasePopout && ReferencePositionLayer) BDFDB.PatchUtils.patch(BDFDB, BasePopout.prototype, "renderLayer", {after: e => {
-				if (e.returnValue && e.thisObject.isBDFDBpopout) {
-					e.returnValue = BDFDB.ReactUtils.createPortal(BDFDB.ReactUtils.createElement(ReferencePositionLayer, e.returnValue.props), document.querySelector(BDFDB.dotCN.appmount +  " > " + BDFDB.dotCN.itemlayercontainer));
-				}
-			}});
 			
 			if (InternalComponents.LibraryComponents.GuildComponents.BlobMask) {
 				let newBadges = ["lowerLeftBadge", "upperLeftBadge"];
@@ -7440,7 +7430,7 @@ module.exports = (_ => {
 			}
 			
 			require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.raw.css", (error, response, body) => {
-				if (!error && body) BDFDB.DOMUtils.appendLocalStyle("BDFDB", BDFDB.DOMUtils.formatCSS(body));
+				if (!error && body) BDFDB.DOMUtils.appendLocalStyle("BDFDB", body.replace(/[\n\t\r]/g, "").replace(/\[REPLACE_CLASS_([A-z0-9_]+?)\]/g, function(a, b) {return BDFDB.dotCN[b];}));
 			});
 			
 			window.BDFDB_Global.loaded = true;

@@ -237,7 +237,7 @@ var EditChannels = (_ => {
 		}
 
 		processAuditLog (e) {
-			let channel = BDFDB.ReactUtils.getValue(e.instance, "props.log.options.channel");
+			let channel = BDFDB.ObjectUtils.get(e.instance, "props.log.options.channel");
 			if (channel && settings.changeInAuditLog) {
 				if (!e.returnvalue) e.instance.props.log.options.channel = this.getChannelData(channel.id);
 				else {
@@ -481,7 +481,7 @@ var EditChannels = (_ => {
 			settings = BDFDB.DataUtils.get(this, "settings");
 			
 			this.changeAppTitle();
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 			BDFDB.ReactUtils.forceUpdate(BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.app), {name:"Channel", unlimited:true}));
 		}
 

@@ -173,7 +173,7 @@ var RemoveNicknames = (_ => {
 		processMessageContent (e) {
 			if (BDFDB.ArrayUtils.is(e.instance.props.content) && settings.changeInMentions) for (let ele of e.instance.props.content) {
 				if (BDFDB.ReactUtils.isValidElement(ele) && ele.type && (ele.type.displayName || "").toLowerCase().indexOf("popout") > -1 && typeof ele.props.render == "function") {
-					if (BDFDB.ReactUtils.getValue(ele, "props.children.type.displayName") == "Mention") {
+					if (BDFDB.ObjectUtils.get(ele, "props.children.type.displayName") == "Mention") {
 						let newName = this.getNewName(BDFDB.LibraryModules.UserStore.getUser(ele.props.render().props.userId));
 						if (newName) ele.props.children.props.children[0] = "@" + newName;
 					}
@@ -199,7 +199,7 @@ var RemoveNicknames = (_ => {
 		forceUpdateAll () {
 			settings = BDFDB.DataUtils.get(this, "settings");
 			
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 			BDFDB.MessageUtils.rerenderAll();
 		}
 	}

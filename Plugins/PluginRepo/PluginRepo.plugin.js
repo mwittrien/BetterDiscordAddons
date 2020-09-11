@@ -559,7 +559,7 @@ var PluginRepo = (_ => {
 			customList = BDFDB.DataUtils.load(this, "custom");
 			customList = BDFDB.ArrayUtils.is(customList) ? customList : [];
 			
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 		}
 
 		onSettingsClosed () {
@@ -610,7 +610,7 @@ var PluginRepo = (_ => {
 		}
 		
 		processStandardSidebarView (e) {
-			if (BDFDB.ReactUtils.getValue(e, "instance.props.content.props.section") == "pluginrepo") {
+			if (BDFDB.ObjectUtils.get(e, "instance.props.content.props.section") == "pluginrepo") {
 				let content = BDFDB.ReactUtils.findChild(e.returnvalue, {props: [["className", BDFDB.disCN.settingswindowcontentregion]]});
 				if (content) content.props.className = BDFDB.DOMUtils.formatClassName(BDFDB.disCN._repolistwrapper, content.props.className);
 				let [children, index] = BDFDB.ReactUtils.findParent(e.returnvalue, {props: [["className", BDFDB.disCN.settingswindowcontentregionscroller]]});

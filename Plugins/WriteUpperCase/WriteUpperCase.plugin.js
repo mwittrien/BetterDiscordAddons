@@ -54,7 +54,7 @@ var WriteUpperCase = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}

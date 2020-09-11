@@ -130,7 +130,7 @@ var SpotifyControls = (_ => {
 											playerSize: playerSize,
 											style: this.props.maximized ? {marginRight: 4} : {},
 											onClick: _ => {
-												let url = BDFDB.ReactUtils.getValue(playbackState, "item.external_urls.spotify") || BDFDB.ReactUtils.getValue(playbackState, "context.external_urls.spotify");
+												let url = BDFDB.ObjectUtils.get(playbackState, "item.external_urls.spotify") || BDFDB.ObjectUtils.get(playbackState, "context.external_urls.spotify");
 												if (url) {
 													BDFDB.LibraryRequires.electron.clipboard.write({text:url});
 													BDFDB.NotificationUtils.toast("Song URL was copied to clipboard.", {type: "success"});
@@ -650,18 +650,18 @@ var SpotifyControls = (_ => {
 				if (this.started) return;
 				BDFDB.PluginUtils.init(this);
 
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.SpotifyTrackUtils, "getActivity", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SpotifyTrackUtils, "getActivity", {after: e => {
 					if (e.methodArguments[0] !== false) {
 						if (e.returnValue && e.returnValue.name == "Spotify") this.updatePlayer(e.returnValue);
 						else if (!e.returnValue) this.updatePlayer(null);
 					}
 				}});
 
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.SpotifyTrackUtils, "wasAutoPaused", {instead: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SpotifyTrackUtils, "wasAutoPaused", {instead: e => {
 					return false;
 				}});
 
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.SpotifyUtils, "pause", {instead: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.SpotifyUtils, "pause", {instead: e => {
 					return false;
 				}});
 				
@@ -711,7 +711,7 @@ var SpotifyControls = (_ => {
 
 		processAppView (e) {
 			if (typeof insertPatchCancel == "function") insertPatchCancel();
-			insertPatchCancel = BDFDB.ModuleUtils.patch(this, e.instance, "renderChannelSidebar", {after: e2 => {
+			insertPatchCancel = BDFDB.PatchUtils.patch(this, e.instance, "renderChannelSidebar", {after: e2 => {
 				let [children, index] = BDFDB.ReactUtils.findParent(e2.returnValue, {props: [["section", BDFDB.DiscordConstants.AnalyticsSections.ACCOUNT_PANEL]]});
 				if (index > -1) children.splice(index - 1, 0, BDFDB.ReactUtils.createElement(SpotifyControlsComponent, {
 					song: BDFDB.LibraryModules.SpotifyTrackUtils.getActivity(false),
@@ -732,7 +732,7 @@ var SpotifyControls = (_ => {
 			settings = BDFDB.DataUtils.get(this, "settings");
 			buttonConfigs = BDFDB.DataUtils.get(this, "buttonConfigs");
 			
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 		}
 	}
 })();

@@ -298,7 +298,7 @@ var ServerFolders = (_ => {
 												BDFDB.DataUtils.save(customIcons, _this, "customicons");
 												this.props.open = null;
 												this.props.closed = null;
-												BDFDB.ModuleUtils.forceAllUpdates(_this, "GuildFolderSettingsModal");
+												BDFDB.PatchUtils.forceAllUpdates(_this, "GuildFolderSettingsModal");
 												BDFDB.NotificationUtils.toast("Custom Icon was added to selection", {type:"success"});
 											});
 										})
@@ -493,7 +493,7 @@ var ServerFolders = (_ => {
 				BDFDB.PluginUtils.init(this);
 				
 				let forceClosing = false;
-				BDFDB.ModuleUtils.patch(this, BDFDB.LibraryModules.GuildUtils, "toggleGuildFolderExpand", {after: e => {
+				BDFDB.PatchUtils.patch(this, BDFDB.LibraryModules.GuildUtils, "toggleGuildFolderExpand", {after: e => {
 					if (settings.closeOtherFolders && !forceClosing) {
 						forceClosing = true;
 						for (let openFolderId of BDFDB.LibraryModules.FolderUtils.getExpandedFolders()) if (openFolderId != e.methodArguments[0]) BDFDB.LibraryModules.GuildUtils.toggleGuildFolderExpand(openFolderId);
@@ -1149,7 +1149,7 @@ var ServerFolders = (_ => {
 			customIcons = BDFDB.DataUtils.load(this, "customicons");
 			
 			BDFDB.ReactUtils.forceUpdate(folderGuildContent);
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 			BDFDB.GuildUtils.rerenderAll();
 		}
 

@@ -468,7 +468,7 @@ var FriendNotifications = (_ => {
 
 				this.startInterval();
 
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 			else console.error(`%c[${this.getName()}]%c`, "color: #3a71c1; font-weight: 700;", "", "Fatal Error: Could not load BD functions!");
 		}
@@ -479,7 +479,7 @@ var FriendNotifications = (_ => {
 
 				BDFDB.TimeUtils.clear(checkInterval);
 				
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				BDFDB.PatchUtils.forceAllUpdates(this);
 				
 				BDFDB.PluginUtils.clear(this);
 			}
@@ -493,7 +493,7 @@ var FriendNotifications = (_ => {
 				delete this.SettingsUpdated;
 				
 				this.startInterval();
-				BDFDB.ModuleUtils.forceAllUpdates(this);
+				BDFDB.PatchUtils.forceAllUpdates(this);
 			}
 		}
 		

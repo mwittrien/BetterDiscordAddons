@@ -372,19 +372,19 @@ var ChatAliases = (_ => {
 		}
 		
 		processChannelTextAreaForm (e) {
-			if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "handleSendMessage")) BDFDB.ModuleUtils.patch(this, e.instance, "handleSendMessage", {before: e2 => {
+			if (!BDFDB.PatchUtils.isPatched(this, e.instance, "handleSendMessage")) BDFDB.PatchUtils.patch(this, e.instance, "handleSendMessage", {before: e2 => {
 				if (settings.triggerNormal) this.handleSubmit(e, e2, 0);
 			}}, {force: true, noCache: true});
 		}
 		
 		processMessageEditor (e) {
-			if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "onSubmit")) BDFDB.ModuleUtils.patch(this, e.instance, "onSubmit", {before: e2 => {
+			if (!BDFDB.PatchUtils.isPatched(this, e.instance, "onSubmit")) BDFDB.PatchUtils.patch(this, e.instance, "onSubmit", {before: e2 => {
 				if (settings.triggerEdit) this.handleSubmit(e, e2, 0);
 			}}, {force: true, noCache: true});
 		}
 		
 		processUpload (e) {
-			if (!BDFDB.ModuleUtils.isPatched(this, e.instance, "submitUpload")) BDFDB.ModuleUtils.patch(this, e.instance, "submitUpload", {before: e2 => {
+			if (!BDFDB.PatchUtils.isPatched(this, e.instance, "submitUpload")) BDFDB.PatchUtils.patch(this, e.instance, "submitUpload", {before: e2 => {
 				if (settings.triggerUpload) this.handleSubmit(e, e2, 1);
 			}}, {force: true, noCache: true});
 		}
@@ -394,7 +394,7 @@ var ChatAliases = (_ => {
 			amounts = BDFDB.DataUtils.get(this, "amounts");
 			configs = BDFDB.DataUtils.get(this, "configs");
 			
-			BDFDB.ModuleUtils.forceAllUpdates(this);
+			BDFDB.PatchUtils.forceAllUpdates(this);
 		}
 		
 		handleSubmit (e, e2, textIndex) {
