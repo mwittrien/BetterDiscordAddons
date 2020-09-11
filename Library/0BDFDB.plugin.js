@@ -51,20 +51,23 @@ module.exports = (_ => {
 			load() {
 				if (window.BDFDB_Global.loading) PluginStores.delayedLoad.push(this);
 				else {
-					Object.assign(this, BDFDB.ObjectUtils.extract(config, "name", "author", "version", "description", "changeLog", "patchedModules", "rawUrl"));
-					BDFDB.PluginUtils.load(this);
-					if (typeof this.onLoad == "function") this.onLoad();
+					Object.assign(this, config);
+					BDFDB.TimeUtils.suppress(_ => {
+						BDFDB.PluginUtils.load(this);
+						if (typeof this.onLoad == "function") this.onLoad();
+					}, "Failed to load plugin!", config.name)();
 				}
 			}
 			start() {
 				if (window.BDFDB_Global.loading) PluginStores.delayedStart.push(this);
 				else {
 					if (this.started) return;
-					BDFDB.DOMUtils.appendLocalStyle(config.name, BDFDB.DOMUtils.formatCSS(config.css));
-					BDFDB.PluginUtils.init(this);
-					if (typeof this.onStart == "function") this.onStart();
-					
 					this.started = true;
+					BDFDB.TimeUtils.suppress(_ => {
+						BDFDB.DOMUtils.appendLocalStyle(config.name, BDFDB.DOMUtils.formatCSS(config.css));
+						BDFDB.PluginUtils.init(this);
+						if (typeof this.onStart == "function") this.onStart();
+					}, "Failed to start plugin!", config.name)();
 					delete this.stopping;
 				}
 			}
@@ -73,8 +76,10 @@ module.exports = (_ => {
 				this.stopping = true;
 				BDFDB.TimeUtils.timeout(_ => {delete this.stopping;});
 				
-				if (typeof this.onStop == "function") this.onStop();
-				BDFDB.PluginUtils.clear(this);
+				BDFDB.TimeUtils.suppress(_ => {
+					if (typeof this.onStop == "function") this.onStop();
+					BDFDB.PluginUtils.clear(this);
+				}, "Failed to stop plugin!", config.name)();
 
 				delete this.started;
 			}
@@ -249,7 +254,7 @@ module.exports = (_ => {
 				delete window.BDFDB_Global.loaded;
 				BDFDB.TimeUtils.interval((interval, count) => {
 					if (count > 60 || window.BDFDB_Global.loaded) BDFDB.TimeUtils.clear(interval);
-					if (window.BDFDB_Global.loaded) for (let pluginName of PluginStores.started) BDFDB.BDUtils.reloadPlugin(pluginName);
+					if (window.BDFDB_Global.loaded) for (let pluginName of [].concat(PluginStores.started).sort()) BDFDB.BDUtils.reloadPlugin(pluginName);
 				}, 1000);
 			}
 			BDFDB.DOMUtils.removeLocalStyle(plugin.name);
@@ -506,8 +511,8 @@ module.exports = (_ => {
 		}
 	}, config, window.BDFDB_Global);
 	
-	require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.data.json", (error, response, body) => {
-		const InternalData = !error && body ? JSON.parse(body) : {};
+	require("request").get("https://mwittrien.github.io/BetterDiscordAddons/Library/_res/BDFDB.data.json", BDFDB.TimeUtils.suppress((error, response, body) => {
+		const InternalData = JSON.parse(body);
 	
 		BDFDB.ObserverUtils = {};
 		BDFDB.ObserverUtils.connect = function (plugin, eleOrSelec, observer, config = {childList: true}) {
@@ -1532,9 +1537,9 @@ module.exports = (_ => {
 		BDFDB.PatchUtils = {};
 		BDFDB.PatchUtils.isPatched = function (plugin, module, methodName) {
 			plugin = plugin == BDFDB && InternalBDFDB || plugin;
-			if (!plugin || !BDFDB.ObjectUtils.is(module) || !module.BDFDBpatch || !methodName) return false;
+			if (!plugin || !BDFDB.ObjectUtils.is(module) || !module.BDFDB_patches || !methodName) return false;
 			const pluginId = (typeof plugin === "string" ? plugin : plugin.name).toLowerCase();
-			return pluginId && module[methodName] && module[methodName].__isBDFDBpatched && module.BDFDBpatch[methodName] && BDFDB.ObjectUtils.toArray(module.BDFDBpatch[methodName]).some(patchObj => BDFDB.ObjectUtils.toArray(patchObj).some(priorityObj => Object.keys(priorityObj).includes(pluginId)));
+			return pluginId && module[methodName] && module[methodName].__is_BDFDB_patched && module.BDFDB_patches[methodName] && BDFDB.ObjectUtils.toArray(module.BDFDB_patches[methodName]).some(patchObj => BDFDB.ObjectUtils.toArray(patchObj).some(priorityObj => Object.keys(priorityObj).includes(pluginId)));
 		};
 		BDFDB.PatchUtils.patch = function (plugin, module, methodNames, patchMethods, config = {}) {
 			plugin = plugin == BDFDB && InternalBDFDB || plugin;
@@ -1544,18 +1549,18 @@ module.exports = (_ => {
 			const pluginName = typeof plugin === "string" ? plugin : plugin.name;
 			const pluginId = pluginName.toLowerCase();
 			const patchPriority = BDFDB.ObjectUtils.is(plugin) && !isNaN(plugin.patchPriority) ? (plugin.patchPriority < 0 ? 0 : (plugin.patchPriority > 10 ? 10 : Math.round(plugin.patchPriority))) : 5;
-			if (!BDFDB.ObjectUtils.is(module.BDFDBpatch)) module.BDFDBpatch = {};
+			if (!BDFDB.ObjectUtils.is(module.BDFDB_patches)) module.BDFDB_patches = {};
 			methodNames = [methodNames].flat(10).filter(n => n);
 			let cancel = _ => {BDFDB.PatchUtils.unpatch(plugin, module, methodNames);};
 			for (let methodName of methodNames) if (module[methodName] == null || typeof module[methodName] == "function") {
-				if (!module.BDFDBpatch[methodName] || config.force && (!module[methodName] || !module[methodName].__isBDFDBpatched)) {
-					if (!module.BDFDBpatch[methodName]) {
-						module.BDFDBpatch[methodName] = {};
-						for (let type of InternalData.ModuleUtilsConfig.PatchTypes) module.BDFDBpatch[methodName][type] = {};
+				if (!module.BDFDB_patches[methodName] || config.force && (!module[methodName] || !module[methodName].__is_BDFDB_patched)) {
+					if (!module.BDFDB_patches[methodName]) {
+						module.BDFDB_patches[methodName] = {};
+						for (let type of InternalData.ModuleUtilsConfig.PatchTypes) module.BDFDB_patches[methodName][type] = {};
 					}
 					if (!module[methodName]) module[methodName] = (_ => {});
 					const originalMethod = module[methodName];
-					module.BDFDBpatch[methodName].originalMethod = originalMethod;
+					module.BDFDB_patches[methodName].originalMethod = originalMethod;
 					module[methodName] = function () {
 						let callInstead = false, stopCall = false;
 						const data = {
@@ -1567,22 +1572,22 @@ module.exports = (_ => {
 							callOriginalMethodAfterwards: _ => {callInstead = true;},
 							stopOriginalMethodCall: _ => {stopCall = true;}
 						};
-						if (module.BDFDBpatch && module.BDFDBpatch[methodName]) {
-							for (let priority in module.BDFDBpatch[methodName].before) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[methodName].before[priority])) {
-								BDFDB.TimeUtils.suppress(module.BDFDBpatch[methodName].before[priority][id], `"before" callback of ${methodName} in ${module.constructor ? (module.constructor.displayName || module.constructor.name) : "module"}`, module.BDFDBpatch[methodName].before[priority][id].pluginName)(data);
+						if (module.BDFDB_patches && module.BDFDB_patches[methodName]) {
+							for (let priority in module.BDFDB_patches[methodName].before) for (let id in BDFDB.ObjectUtils.sort(module.BDFDB_patches[methodName].before[priority])) {
+								BDFDB.TimeUtils.suppress(module.BDFDB_patches[methodName].before[priority][id], `"before" callback of ${methodName} in ${module.constructor ? (module.constructor.displayName || module.constructor.name) : "module"}`, module.BDFDB_patches[methodName].before[priority][id].pluginName)(data);
 							}
 							
-							if (!module.BDFDBpatch || !module.BDFDBpatch[methodName]) return methodName == "render" && data.returnValue === undefined ? null : data.returnValue;
-							let hasInsteadPatches = BDFDB.ObjectUtils.toArray(module.BDFDBpatch[methodName].instead).some(priorityObj => !BDFDB.ObjectUtils.isEmpty(priorityObj));
-							if (hasInsteadPatches) for (let priority in module.BDFDBpatch[methodName].instead) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[methodName].instead[priority])) {
-								let tempReturn = BDFDB.TimeUtils.suppress(module.BDFDBpatch[methodName].instead[priority][id], `"instead" callback of ${methodName} in ${module.constructor ? (module.constructor.displayName || module.constructor.name) : "module"}`, module.BDFDBpatch[methodName].instead[priority][id].pluginName)(data);
+							if (!module.BDFDB_patches || !module.BDFDB_patches[methodName]) return methodName == "render" && data.returnValue === undefined ? null : data.returnValue;
+							let hasInsteadPatches = BDFDB.ObjectUtils.toArray(module.BDFDB_patches[methodName].instead).some(priorityObj => !BDFDB.ObjectUtils.isEmpty(priorityObj));
+							if (hasInsteadPatches) for (let priority in module.BDFDB_patches[methodName].instead) for (let id in BDFDB.ObjectUtils.sort(module.BDFDB_patches[methodName].instead[priority])) {
+								let tempReturn = BDFDB.TimeUtils.suppress(module.BDFDB_patches[methodName].instead[priority][id], `"instead" callback of ${methodName} in ${module.constructor ? (module.constructor.displayName || module.constructor.name) : "module"}`, module.BDFDB_patches[methodName].instead[priority][id].pluginName)(data);
 								if (tempReturn !== undefined) data.returnValue = tempReturn;
 							}
 							if ((!hasInsteadPatches || callInstead) && !stopCall) BDFDB.TimeUtils.suppress(data.callOriginalMethod, `originalMethod of ${methodName} in ${module.constructor ? (module.constructor.displayName || module.constructor.name) : "module"}`)();
 							
-							if (!module.BDFDBpatch || !module.BDFDBpatch[methodName]) return methodName == "render" && data.returnValue === undefined ? null : data.returnValue;
-							for (let priority in module.BDFDBpatch[methodName].after) for (let id in BDFDB.ObjectUtils.sort(module.BDFDBpatch[methodName].after[priority])) {
-								let tempReturn = BDFDB.TimeUtils.suppress(module.BDFDBpatch[methodName].after[priority][id], `"after" callback of ${methodName} in ${module.constructor ? (module.constructor.displayName || module.constructor.name) : "module"}`, module.BDFDBpatch[methodName].after[priority][id].pluginName)(data);
+							if (!module.BDFDB_patches || !module.BDFDB_patches[methodName]) return methodName == "render" && data.returnValue === undefined ? null : data.returnValue;
+							for (let priority in module.BDFDB_patches[methodName].after) for (let id in BDFDB.ObjectUtils.sort(module.BDFDB_patches[methodName].after[priority])) {
+								let tempReturn = BDFDB.TimeUtils.suppress(module.BDFDB_patches[methodName].after[priority][id], `"after" callback of ${methodName} in ${module.constructor ? (module.constructor.displayName || module.constructor.name) : "module"}`, module.BDFDB_patches[methodName].after[priority][id].pluginName)(data);
 								if (tempReturn !== undefined) data.returnValue = tempReturn;
 							}
 						}
@@ -1598,15 +1603,15 @@ module.exports = (_ => {
 							module[methodName].toString = _ => realOriginalMethod.toString();
 						}
 					}
-					module[methodName].__isBDFDBpatched = true;
+					module[methodName].__is_BDFDB_patched = true;
 				}
 				for (let type in patchMethods) if (typeof patchMethods[type] == "function") {
-					if (!BDFDB.ObjectUtils.is(module.BDFDBpatch[methodName][type][patchPriority])) module.BDFDBpatch[methodName][type][patchPriority] = {};
-					module.BDFDBpatch[methodName][type][patchPriority][pluginId] = (...args) => {
+					if (!BDFDB.ObjectUtils.is(module.BDFDB_patches[methodName][type][patchPriority])) module.BDFDB_patches[methodName][type][patchPriority] = {};
+					module.BDFDB_patches[methodName][type][patchPriority][pluginId] = (...args) => {
 						if (config.once || !plugin.started) cancel();
 						return patchMethods[type](...args);
 					};
-					module.BDFDBpatch[methodName][type][patchPriority][pluginId].pluginName = pluginName;
+					module.BDFDB_patches[methodName][type][patchPriority][pluginId].pluginName = pluginName;
 				}
 			}
 			if (BDFDB.ObjectUtils.is(plugin) && !config.once && !config.noCache) {
@@ -1621,25 +1626,25 @@ module.exports = (_ => {
 				if (BDFDB.ObjectUtils.is(plugin) && BDFDB.ArrayUtils.is(plugin.patchCancels)) while (plugin.patchCancels.length) (plugin.patchCancels.pop())();
 			}
 			else {
-				if (!BDFDB.ObjectUtils.is(module) || !module.BDFDBpatch) return;
+				if (!BDFDB.ObjectUtils.is(module) || !module.BDFDB_patches) return;
 				const pluginId = !plugin ? null : (typeof plugin === "string" ? plugin : plugin.name).toLowerCase();
 				if (methodNames) {
-					for (let methodName of [methodNames].flat(10).filter(n => n)) if (module[methodName] && module.BDFDBpatch[methodName]) unpatch(methodName, pluginId);
+					for (let methodName of [methodNames].flat(10).filter(n => n)) if (module[methodName] && module.BDFDB_patches[methodName]) unpatch(methodName, pluginId);
 				}
-				else for (let patchedMethod of module.BDFDBpatch) unpatch(patchedMethod, pluginId);
+				else for (let patchedMethod of module.BDFDB_patches) unpatch(patchedMethod, pluginId);
 			}
 			function unpatch (funcName, pluginId) {
 				for (let type of InternalData.ModuleUtilsConfig.PatchTypes) {
-					if (pluginId) for (let priority in module.BDFDBpatch[funcName][type]) {
-						delete module.BDFDBpatch[funcName][type][priority][pluginId];
-						if (BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[funcName][type][priority])) delete module.BDFDBpatch[funcName][type][priority];
+					if (pluginId) for (let priority in module.BDFDB_patches[funcName][type]) {
+						delete module.BDFDB_patches[funcName][type][priority][pluginId];
+						if (BDFDB.ObjectUtils.isEmpty(module.BDFDB_patches[funcName][type][priority])) delete module.BDFDB_patches[funcName][type][priority];
 					}
-					else delete module.BDFDBpatch[funcName][type];
+					else delete module.BDFDB_patches[funcName][type];
 				}
-				if (BDFDB.ObjectUtils.isEmpty(BDFDB.ObjectUtils.filter(module.BDFDBpatch[funcName], key => InternalData.ModuleUtilsConfig.PatchTypes.includes(key) && !BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch[funcName][key]), true))) {
-					module[funcName] = module.BDFDBpatch[funcName].originalMethod;
-					delete module.BDFDBpatch[funcName];
-					if (BDFDB.ObjectUtils.isEmpty(module.BDFDBpatch)) delete module.BDFDBpatch;
+				if (BDFDB.ObjectUtils.isEmpty(BDFDB.ObjectUtils.filter(module.BDFDB_patches[funcName], key => InternalData.ModuleUtilsConfig.PatchTypes.includes(key) && !BDFDB.ObjectUtils.isEmpty(module.BDFDB_patches[funcName][key]), true))) {
+					module[funcName] = module.BDFDB_patches[funcName].originalMethod;
+					delete module.BDFDB_patches[funcName];
+					if (BDFDB.ObjectUtils.isEmpty(module.BDFDB_patches)) delete module.BDFDB_patches;
 				}
 			}
 		};
@@ -7443,7 +7448,7 @@ module.exports = (_ => {
 		while (PluginStores.delayedLoad.length) PluginStores.delayedLoad.shift().load();
 		while (PluginStores.delayedStart.length) PluginStores.delayedStart.shift().start();
 		while (pluginQueue.length) BDFDB.BDUtils.reloadPlugin(pluginQueue.shift());
-	});
+	}, "Could not initiate library!", config.name));
 	
 	return class BDFDB_Frame {
 		getName () {return config.name;}
