@@ -166,7 +166,7 @@
 			"DirectMessage": {"class": "guildouter"},
 			"EmojiPicker": {"strings": ["allowManagedEmojis", "EMOJI_PICKER_TAB_PANEL_ID", "diversitySelector"]},
 			"Guild": {"class": "guildouter"},
-			"GuildFolder": {"class": "guildfolderwrapper"},
+			"GuildFolder": {"class": "guildfolderwrapper", "special": [{"path": "return.memoizedProps.folderId"}, {"path": "return.memoizedProps.guildIds"}]},
 			"GuildIcon": {"class": "avataricon"},
 			"GuildRoleSettings": {"class": "settingswindowcontent"},
 			"Guilds": {"class": "guildswrapper"},
@@ -208,7 +208,7 @@
 			"UserHook": {"class": "auditloguserhook"},
 			"UserPopout": {"class": "userpopout"},
 			"UserProfile": {"class": "userprofile"},
-			"V2C_ContentColumn": {"class": "settingswindowcontentcolumn"}
+			"V2C_ContentColumn": {"class": "settingswindowcontentcolumn", "special": [{"path": "return.stateNode.props.title", "value": ["PLUGINS", "THEMES"]}]}
 		},
 		"LoadedInComponents": {
 			"AutocompleteChannelResult": "LibraryComponents.AutocompleteItems.Channel",
@@ -725,7 +725,8 @@
 		"EmojiPicker": {"props": ["emojiPicker", "inspector"]},
 		"EmojiPickerDiversitySelector": {"props": ["diversityEmojiItemImage", "diversitySelectorPopout"]},
 		"EmojiPickerItem": {"props": ["emojiSpriteImage"]},
-		"EmojiPickerInspector": {"props": ["inspector", "glyphEmoji"]},
+		"EmojiPickerInspector": {"props": ["inspector", "graphicPrimary"]},
+		"EmojiPickerInspectorEmoji": {"props": ["emoji", "glyphEmoji"]},
 		"ErrorScreen": {"props": ["wrapper", "flexWrapper", "note"]},
 		"ExpressionPicker": {"props": ["contentWrapper", "navButton", "navList"]},
 		"File": {"props": ["downloadButton", "fileNameLink"]},
@@ -1440,7 +1441,7 @@
 		"emojipickeremojispriteimage": ["EmojiPickerItem", "emojiSpriteImage"],
 		"emojipickerheader": ["EmojiPicker", "header"],
 		"emojipickerinspector": ["EmojiPickerInspector", "inspector"],
-		"emojipickerinspectoremoji": ["EmojiPickerInspector", "emoji"],
+		"emojipickerinspectoremoji": ["EmojiPickerInspectorEmoji", "emoji"],
 		"errorscreen": ["ErrorScreen", "wrapper"],
 		"expressionpicker": ["ExpressionPicker", "contentWrapper"],
 		"expressionpickernav": ["ExpressionPicker", "nav"],

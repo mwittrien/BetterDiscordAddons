@@ -1584,13 +1584,14 @@
 				classNames: [WebModulesData.PatchFinder[unmappedType]].flat(10).filter(n => DiscordClasses[n]),
 				codeFind: WebModulesData.CodeFinder[unmappedType],
 				propertyFind: WebModulesData.PropsFinder[unmappedType],
+				specialFilter: WebModulesData.SpecialFilter[unmappedType],
 				memoComponent: WebModulesData.MemoComponent.includes(unmappedType),
 				forceObserve: WebModulesData.ForceObserve.includes(unmappedType),
 				nonRender: BDFDB.ObjectUtils.toArray(pluginData.patchTypes).flat(10).filter(n => n && !WebModulesData.InstanceFunctions.includes(n)).length > 0,
 				mapped: WebModulesData.PatchMap[type]
 			};
-			config.ignoreCheck = !!(config.codeFind || config.propertyFind || config.nonRender);
-			config.nonPrototype = WebModulesData.NonPrototype.includes(unmappedType) || config.ignoreCheck;
+			config.ignoreCheck = !!(config.codeFind || config.propertyFind || config.specialFilter || config.nonRender);
+			config.nonPrototype = WebModulesData.NonPrototype.includes(unmappedType) || !!(config.codeFind || config.propertyFind || config.nonRender);
 			
 			let component = WebModulesData.LoadedInComponents[type] && BDFDB.ReactUtils.getValue(InternalComponents, WebModulesData.LoadedInComponents[type]);
 			if (component) InternalBDFDB.patch_PatchInstance(pluginData, config.nonRender ? (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports : component, type, config);
@@ -1648,9 +1649,8 @@
 		pluginDataObjs = [pluginDataObjs].flat(10).filter(n => n);
 		let unmappedType = type.split(" _ _ ")[1] || type;
 		let ins = BDFDB.ReactUtils.getInstance(ele);
-		let filter = WebModulesData.SpecialFilter[unmappedType];
-		if (typeof filter == "function") {
-			let component = filter(ins);
+		if (typeof config.specialFilter == "function") {
+			let component = config.specialFilter(ins);
 			if (component) {
 				if (config.nonRender) {
 					let exports = (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports;
@@ -4586,7 +4586,8 @@
 	DiscordClassModules.EmojiPicker = BDFDB.ModuleUtils.findByProperties("emojiPicker", "inspector");
 	DiscordClassModules.EmojiPickerDiversitySelector = BDFDB.ModuleUtils.findByProperties("diversityEmojiItemImage", "diversitySelectorPopout");
 	DiscordClassModules.EmojiPickerItem = BDFDB.ModuleUtils.findByProperties("emojiSpriteImage");
-	DiscordClassModules.EmojiPickerInspector = BDFDB.ModuleUtils.findByProperties("inspector", "glyphEmoji");
+	DiscordClassModules.EmojiPickerInspector = BDFDB.ModuleUtils.findByProperties("inspector", "graphicPrimary");
+	DiscordClassModules.EmojiPickerInspectorEmoji = BDFDB.ModuleUtils.findByProperties("emoji", "glyphEmoji");
 	DiscordClassModules.ErrorScreen = BDFDB.ModuleUtils.findByProperties("wrapper", "flexWrapper", "note");
 	DiscordClassModules.ExpressionPicker = BDFDB.ModuleUtils.findByProperties("contentWrapper", "navButton", "navList");
 	DiscordClassModules.File = BDFDB.ModuleUtils.findByProperties("downloadButton", "fileNameLink");
@@ -5302,7 +5303,7 @@
 		emojipickeremojispriteimage: ["EmojiPickerItem", "emojiSpriteImage"],
 		emojipickerheader: ["EmojiPicker", "header"],
 		emojipickerinspector: ["EmojiPickerInspector", "inspector"],
-		emojipickerinspectoremoji: ["EmojiPickerInspector", "emoji"],
+		emojipickerinspectoremoji: ["EmojiPickerInspectorEmoi", "emoji"],
 		errorscreen: ["ErrorScreen", "wrapper"],
 		expressionpicker: ["ExpressionPicker", "contentWrapper"],
 		expressionpickernav: ["ExpressionPicker", "nav"],

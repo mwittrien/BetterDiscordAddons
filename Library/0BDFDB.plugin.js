@@ -1398,13 +1398,14 @@ module.exports = (_ => {
 						classNames: [InternalData.ModuleUtilsConfig.Finder[unmappedType] && InternalData.ModuleUtilsConfig.Finder[unmappedType].class].flat(10).filter(n => DiscordClasses[n]),
 						stringFind: InternalData.ModuleUtilsConfig.Finder[unmappedType] && InternalData.ModuleUtilsConfig.Finder[unmappedType].strings,
 						propertyFind: InternalData.ModuleUtilsConfig.Finder[unmappedType] && InternalData.ModuleUtilsConfig.Finder[unmappedType].props,
+						specialFilter: InternalData.ModuleUtilsConfig.Finder[unmappedType] && InternalData.ModuleUtilsConfig.Finder[unmappedType].special && InternalBDFDB.createFilter(InternalData.ModuleUtilsConfig.Finder[unmappedType].special),
 						memoComponent: InternalData.ModuleUtilsConfig.MemoComponent.includes(unmappedType),
 						forceObserve: InternalData.ModuleUtilsConfig.ForceObserve.includes(unmappedType),
 						nonRender: BDFDB.ObjectUtils.toArray(pluginData.patchTypes).flat(10).filter(n => n && !InternalData.ModuleUtilsConfig.InstanceFunctions.includes(n)).length > 0,
 						mapped: InternalData.ModuleUtilsConfig.PatchMap[type]
 					};
-					config.ignoreCheck = !!(config.stringFind || config.propertyFind || config.nonRender);
-					config.nonPrototype = InternalData.ModuleUtilsConfig.NonPrototype.includes(unmappedType) || config.ignoreCheck;
+					config.ignoreCheck = !!(config.codeFind || config.propertyFind || config.specialFilter || config.nonRender);
+					config.nonPrototype = InternalData.ModuleUtilsConfig.NonPrototype.includes(unmappedType) || !!(config.codeFind || config.propertyFind || config.nonRender);
 					
 					let component = InternalData.ModuleUtilsConfig.LoadedInComponents[type] && BDFDB.ObjectUtils.get(InternalComponents, InternalData.ModuleUtilsConfig.LoadedInComponents[type]);
 					if (component) InternalBDFDB.patchInstance(pluginData, config.nonRender ? (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports : component, type, config);
@@ -1458,14 +1459,18 @@ module.exports = (_ => {
 					}
 				}
 			};
+			InternalBDFDB.createFilter = function (config) {
+				return ins => ins && config.every(prop => {
+					let value = BDFDB.ObjectUtils.get(ins, prop.path);
+					return value && (!prop.value || [prop.value].flat(10).filter(n => typeof n == "string").some(n => value.toUpperCase().indexOf(n.toUpperCase()) == 0));
+				}) && ins.return.type;
+			};
 			InternalBDFDB.checkEle = function (pluginDataObjs, ele, type, config) {
 				pluginDataObjs = [pluginDataObjs].flat(10).filter(n => n);
 				let unmappedType = type.split(" _ _ ")[1] || type;
 				let ins = BDFDB.ReactUtils.getInstance(ele);
-				// FIX SpecialFilter
-				let filter = false && InternalData.ModuleUtilsConfig.SpecialFilter[unmappedType];
-				if (typeof filter == "function") {
-					let component = filter(ins);
+				if (typeof config.specialFilter == "function") {
+					let component = config.specialFilter(ins);
 					if (component) {
 						if (config.nonRender) {
 							let exports = (BDFDB.ModuleUtils.find(m => m == component, false) || {}).exports;
@@ -1671,12 +1676,11 @@ module.exports = (_ => {
 								let methodNames = [plugin.patchedModules[patchType][type]].flat(10).filter(n => n);
 								if (BDFDB.ArrayUtils.includes(methodNames, "componentDidMount", "componentDidUpdate", "render", false) && (!selectedTypes.length || selectedTypes.includes(type))) {
 									let unmappedType = type.split(" _ _ ")[1] || type;
-									// FIX SpecialFilter
-									let filter = false && InternalData.ModuleUtilsConfig.SpecialFilter[unmappedType];
 									let selector = [InternalData.ModuleUtilsConfig.Finder[unmappedType]].flat(10).filter(n => DiscordClasses[n]).map(n => BDFDB.dotCN[n]).join(", ");
-									if (selector && typeof filter == "function") {
+									let specialFilter = InternalData.ModuleUtilsConfig.Finder[unmappedType] && InternalData.ModuleUtilsConfig.Finder[unmappedType].special && InternalBDFDB.createFilter(InternalData.ModuleUtilsConfig.Finder[unmappedType].special);
+									if (selector && typeof specialFilter == "function") {
 										for (let ele of document.querySelectorAll(selector)) {
-											let constro = filter(BDFDB.ReactUtils.getInstance(ele));
+											let constro = specialFilter(BDFDB.ReactUtils.getInstance(ele));
 											if (constro) {
 												updateData[plugin.name].specialModules.push([type, constro]);
 												updateData[plugin.name].specialModuleTypes.push(type);
@@ -6978,7 +6982,7 @@ module.exports = (_ => {
 
 			const BDFDB_Patrons = Object.assign({}, InternalData.BDFDB_Patrons);
 			InternalBDFDB._processAvatarRender = function (user, avatar) {
-				if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user) && (avatar.props.className || "").indexOf(BDFDB.disCN.bdfdbbadgeavatar) > -1) {
+				if (BDFDB.ReactUtils.isValidElement(avatar) && BDFDB.ObjectUtils.is(user) && (avatar.props.className || "").indexOf(BDFDB.disCN.bdfdbbadgeavatar) == -1) {
 					avatar.props["user_by_BDFDB"] = user.id;
 					let role = "", className = BDFDB.DOMUtils.formatClassName((avatar.props.className || "").replace(BDFDB.disCN.avatar, "")), addBadge = settings.showSupportBadges, customBadge = false;
 					if (BDFDB_Patrons[user.id] && BDFDB_Patrons[user.id].active) {
@@ -7015,7 +7019,7 @@ module.exports = (_ => {
 				}
 			};
 			InternalBDFDB._processAvatarMount = function (user, avatar, wrapper) {
-				if (Node.prototype.isPrototypeOf(avatar) && BDFDB.ObjectUtils.is(user) && (avatar.className || "").indexOf(BDFDB.disCN.bdfdbbadgeavatar) > -1) {
+				if (Node.prototype.isPrototypeOf(avatar) && BDFDB.ObjectUtils.is(user) && (avatar.className || "").indexOf(BDFDB.disCN.bdfdbbadgeavatar) == -1) {
 					if (wrapper) wrapper.setAttribute("user_by_BDFDB", user.id);
 					avatar.setAttribute("user_by_BDFDB", user.id);
 					let role = "", addBadge = settings.showSupportBadges, customBadge = false;
