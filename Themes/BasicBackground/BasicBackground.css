@@ -4608,11 +4608,11 @@ body:before {
 	background-attachment: fixed;
 }
 
-.inspector-sdLnLS {											/* picker				emojiinfowrapper					*/
+.inspector-S2gM3e {											/* picker				emojiinfowrapper					*/
 	background-color: rgba(var(--vtransparencycolor), 0.2);
 }
 
-.wrapper-1-Fsb8 {											/* picker				categoryheader						*/
+#app-mount .wrapper-1-Fsb8 {								/* picker				categoryheader						*/
 	background: transparent;
 	position: static;
 }
