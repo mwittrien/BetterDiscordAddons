@@ -8,7 +8,7 @@ var MessageUtilities = (_ => {
 	return class MessageUtilities {
 		getName () {return "MessageUtilities";}
 
-		getVersion () {return "1.7.6";}
+		getVersion () {return "1.7.7";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -16,7 +16,7 @@ var MessageUtilities = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Search Results","Now works in search results"]]
+				"fixed":[["Mark as Unread","No longer shows key combo hint even if setting is disabled"]]
 			};
 			
 			this.patchedModules = {
@@ -206,7 +206,7 @@ var MessageUtilities = (_ => {
 				if (group && group.type == BDFDB.LibraryComponents.MenuItems.MenuGroup && BDFDB.ArrayUtils.is(group.props.children)) for (let item of group.props.children) {
 					if (item && item.props && item.props.id && !item.props.hint && !item.props.children) {
 						let hint, action;
-						if (item.props.id == "mark-unread") hint = `${BDFDB.LibraryModules.KeyCodeUtils.getString(18)}+${clickMap[0]}`;
+						if (item.props.id == "mark-unread") hint = settings.addHints && `${BDFDB.LibraryModules.KeyCodeUtils.getString(18)}+${clickMap[0]}`;
 						else {
 							switch (item.props.id) {
 								case "copy-link":

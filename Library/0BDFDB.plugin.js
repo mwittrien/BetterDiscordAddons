@@ -2224,6 +2224,7 @@ module.exports = (_ => {
 			BDFDB.MessageUtils.rerenderAll = function (instant) {
 				BDFDB.TimeUtils.clear(MessageRerenderTimeout);
 				MessageRerenderTimeout = BDFDB.TimeUtils.timeout(_ => {
+					BDFDB.ChannelUtils.markAsRead(BDFDB.LibraryModules.LastChannelStore.getChannelId());
 					let LayerProviderIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.messageswrapper), {name:"LayerProvider", unlimited:true, up:true});
 					let LayerProviderPrototype = BDFDB.ObjectUtils.get(LayerProviderIns, "_reactInternalFiber.type.prototype");
 					if (LayerProviderIns && LayerProviderPrototype) {
