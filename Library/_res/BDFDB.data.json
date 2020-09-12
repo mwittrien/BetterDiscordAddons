@@ -238,6 +238,7 @@
 		"TabBar": {"name": "TabBar"},
 		"Table": {"name": "Table"},
 		"TextArea": {"name": "TextArea"},
+		"TextInput": {"name": "TextInput"},
 		"TooltipContainer": {"name": "Tooltip"}
 	},
 	"LibraryComponents": {
