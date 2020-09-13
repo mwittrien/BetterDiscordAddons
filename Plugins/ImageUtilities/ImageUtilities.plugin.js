@@ -50,7 +50,7 @@ var ImageUtilities = (_ => {
 	return class ImageUtilities {
 		getName () {return "ImageUtilities";}
 
-		getVersion () {return "4.1.3";}
+		getVersion () {return "4.1.4";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -58,7 +58,8 @@ var ImageUtilities = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Embeded thumbnails","No longer screws up thumbnails of bot embeds"]]
+				"improved":[["Right Click Channel List","No longer adds imageutils entry for server icon when right clicking the channel list"]],
+				"added":[["Right Click Banner","Adds imageutils entry for server banner if server has a banner"]]
 			};
 			
 			this.patchedModules = {
@@ -333,7 +334,13 @@ var ImageUtilities = (_ => {
 		}
 
 		onGuildContextMenu (e) {
-			if (e.instance.props.guild && settings.addGuildIconEntry) this.injectItem(e, e.instance.props.guild.getIconURL("png"), BDFDB.LibraryModules.IconUtils.hasAnimatedGuildIcon(e.instance.props.guild) && e.instance.props.guild.getIconURL("gif"));
+			if (e.instance.props.guild && settings.addGuildIconEntry) {
+				let banner = BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildheader, e.instance.props.target) || BDFDB.DOMUtils.getParent(BDFDB.dotCN.guildchannels, e.instance.props.target) && !e.instance.props.target.className && e.instance.props.target.parentElement.firstElementChild == e.instance.props.target;
+				if (banner) {
+					if (e.instance.props.guild.banner) this.injectItem(e, e.instance.props.guild.banner);
+				}
+				else if (e.type != "GuildChannelListContextMenu") this.injectItem(e, e.instance.props.guild.getIconURL("png"), BDFDB.LibraryModules.IconUtils.hasAnimatedGuildIcon(e.instance.props.guild) && e.instance.props.guild.getIconURL("gif"));
+			}
 		}
 
 		onUserContextMenu (e) {
