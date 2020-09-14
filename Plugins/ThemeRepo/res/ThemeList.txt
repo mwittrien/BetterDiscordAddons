@@ -39,10 +39,6 @@ https://raw.githubusercontent.com/GoldenLys/BetterDiscord-Elysia/master/ELYSIA.t
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/Glossy-Cyan/Glossy-Cyan.H.theme.css
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/HansAnonymousAdditions/HAA.theme.css
 https://raw.githubusercontent.com/HansAnonymous/BD-Themes-and-Plugins/master/Themes/Patriotic/Patriotic.theme.css
-https://raw.githubusercontent.com/hellbound1337/dark-discord/master/DarkDiscord.theme.css
-https://raw.githubusercontent.com/hellbound1337/discord-revamp/master/DiscordRevamp.theme.css
-https://raw.githubusercontent.com/hellbound1337/gamesense/master/Gamesense.theme.css
-https://raw.githubusercontent.com/hellbound1337/modern-indicators/master/ModernIndicators.theme.css
 https://raw.githubusercontent.com/HighGuard/discord-popout-overhaul-theme/master/popoutOverhaul.theme.css
 https://raw.githubusercontent.com/ImBastion/BD-Themes/master/Theme/DARLINGintheFRANXX.theme.css
 https://raw.githubusercontent.com/ImBastion/BD-Themes/master/Theme/NieRDance.theme.css
