@@ -2227,7 +2227,11 @@ module.exports = (_ => {
 				BDFDB.MessageUtils.rerenderAll = function (instant) {
 					BDFDB.TimeUtils.clear(MessageRerenderTimeout);
 					MessageRerenderTimeout = BDFDB.TimeUtils.timeout(_ => {
-						BDFDB.ChannelUtils.markAsRead(BDFDB.LibraryModules.LastChannelStore.getChannelId());
+						let channel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());
+						if (channel) {
+							if (BDFDB.DMUtils.isDMChannel(channel)) BDFDB.DMUtils.markAsRead(channel);
+							else BDFDB.ChannelUtils.markAsRead(channel);
+						}
 						let LayerProviderIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.messageswrapper), {name:"LayerProvider", unlimited:true, up:true});
 						let LayerProviderPrototype = BDFDB.ObjectUtils.get(LayerProviderIns, "_reactInternalFiber.type.prototype");
 						if (LayerProviderIns && LayerProviderPrototype) {
@@ -5312,6 +5316,8 @@ module.exports = (_ => {
 					}
 				};
 				
+				InternalComponents.LibraryComponents.GuildComponents = Object.assign({}, InternalComponents.LibraryComponents.GuildComponents);
+				
 				InternalComponents.LibraryComponents.GuildComponents.Guild = reactInitialized && class BDFDB_Guild extends LibraryModules.React.Component {
 					constructor(props) {
 						super(props);
@@ -5656,7 +5662,7 @@ module.exports = (_ => {
 				
 				InternalComponents.LibraryComponents.ModalComponents.ModalContent = reactInitialized && class BDFDB_ModalContent extends LibraryModules.React.Component {
 					render() {
-						return this.props.scroller ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ScrollerThin, {
+						return this.props.scroller ? BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Scrollers.Thin, {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.modalcontent, this.props.className),
 							ref: this.props.scrollerRef,
 							children: this.props.children
@@ -5672,7 +5678,7 @@ module.exports = (_ => {
 				
 				InternalComponents.LibraryComponents.ModalComponents.ModalTabContent = reactInitialized && class BDFDB_ModalTabContent extends LibraryModules.React.Component {
 					render() {
-						return BDFDB.ReactUtils.forceStyle(BDFDB.ReactUtils.createElement(this.props.scroller ? InternalComponents.LibraryComponents.ScrollerThin : "div", Object.assign(BDFDB.ObjectUtils.exclude(this.props, "scroller", "open", "render"), {
+						return BDFDB.ReactUtils.forceStyle(BDFDB.ReactUtils.createElement(this.props.scroller ? InternalComponents.LibraryComponents.Scrollers.Thin : "div", Object.assign(BDFDB.ObjectUtils.exclude(this.props, "scroller", "open", "render"), {
 							className: BDFDB.DOMUtils.formatClassName(BDFDB.disCN.modaltabcontent, this.props.open && BDFDB.disCN.modaltabcontentopen, this.props.className),
 							style: Object.assign({}, this.props.style, {
 								display: this.props.open ? null : "none"
@@ -5803,7 +5809,7 @@ module.exports = (_ => {
 								items = items.flat(10);
 							}
 						}
-						return typeof this.props.renderItem != "function" || !items.length ? null : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ScrollerThin, {
+						return typeof this.props.renderItem != "function" || !items.length ? null : BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Scrollers.Thin, {
 							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.paginationlist, this.props.mini, BDFDB.disCN.paginationlistmini),
 							fade: this.props.fade,
 							children: [
@@ -6353,7 +6359,7 @@ module.exports = (_ => {
 						return BDFDB.ReactUtils.createElement("div", {
 							className: BDFDB.DOMUtils.formatClassName(this.props.className, BDFDB.disCN.sidebarlist),
 							children: [
-								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ScrollerThin, {
+								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Scrollers.Thin, {
 									className: BDFDB.DOMUtils.formatClassName(this.props.sidebarClassName, BDFDB.disCN.sidebar),
 									fade: true,
 									children: BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.TabBar, {
@@ -6365,7 +6371,7 @@ module.exports = (_ => {
 										onItemSelect: this.handleItemSelect.bind(this)
 									})
 								}),
-								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.ScrollerThin, {
+								BDFDB.ReactUtils.createElement(InternalComponents.LibraryComponents.Scrollers.Thin, {
 									className: BDFDB.DOMUtils.formatClassName(this.props.contentClassName, BDFDB.disCN.sidebarcontent),
 									fade: true,
 									children: [selectedElements].flat(10).filter(n => n).map(data => renderElement(data))

@@ -2374,7 +2374,11 @@
 	BDFDB.MessageUtils.rerenderAll = function (instant) {
 		BDFDB.TimeUtils.clear(MessageRerenderTimeout);
 		MessageRerenderTimeout = BDFDB.TimeUtils.timeout(_ => {
-			BDFDB.ChannelUtils.markAsRead(BDFDB.LibraryModules.LastChannelStore.getChannelId());
+			let channel = BDFDB.LibraryModules.ChannelStore.getChannel(BDFDB.LibraryModules.LastChannelStore.getChannelId());
+			if (channel) {
+				if (BDFDB.DMUtils.isDMChannel(channel)) BDFDB.DMUtils.markAsRead(channel);
+				else BDFDB.ChannelUtils.markAsRead(channel);
+			}
 			let LayerProviderIns = BDFDB.ReactUtils.findOwner(document.querySelector(BDFDB.dotCN.messageswrapper), {name:"LayerProvider", unlimited:true, up:true});
 			let LayerProviderPrototype = BDFDB.ReactUtils.getValue(LayerProviderIns, "_reactInternalFiber.type.prototype");
 			if (LayerProviderIns && LayerProviderPrototype) {
@@ -2715,7 +2719,7 @@
 	};
 	BDFDB.DMUtils.getData = function (eleOrInfoOrId) {
 		if (!eleOrInfoOrId) return null;
-		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.BDFDB.DMUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
+		let id = Node.prototype.isPrototypeOf(eleOrInfoOrId) ? BDFDB.DMUtils.getId(eleOrInfoOrId) : (typeof eleOrInfoOrId == "object" ? eleOrInfoOrId.id : eleOrInfoOrId);
 		id = typeof id == "number" ? id.toFixed() : id;
 		for (let info of BDFDB.DMUtils.getAll()) if (info && info.id == id) return info;
 		return null;
@@ -2751,7 +2755,7 @@
 		if (!dms) return;
 		let unreadChannels = [];
 		for (let dm of dms = BDFDB.ArrayUtils.is(dms) ? dms : (typeof dms == "string" || typeof dms == "number" ? Array.of(dms) : Array.from(dms))) {
-			let id = Node.prototype.isPrototypeOf(dm) ? BDFDB.BDFDB.DMUtils.getId(dm) : (dm && typeof dm == "object" ? dm.id : dm);
+			let id = Node.prototype.isPrototypeOf(dm) ? BDFDB.DMUtils.getId(dm) : (dm && typeof dm == "object" ? dm.id : dm);
 			if (id) unreadChannels.push(id);
 		}
 		for (let i in unreadChannels) BDFDB.TimeUtils.timeout(_ => {LibraryModules.AckUtils.ack(unreadChannels[i]);}, i * 1000);
