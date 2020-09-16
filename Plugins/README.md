@@ -57,4 +57,4 @@
  - [Timed Light Dark Mode](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/TimedLightDarkMode) - Allows you to automatically change light/dark mode depending on the time of date. Slider is added to the 'Appearance' settings.
  - [Top Role Everywhere](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/TopRoleEverywhere) - Adds the highest role of a user as a tag.
  - [User Notes](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/UserNotes) - Allows you to write your own user notes wihtout a character limit.
- - [Write UpperCase](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/WriteUpperCase) - Changes message input to uppercase.
+ - [Write UpperCase](https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/WriteUpperCase) - Changes first letter in message input to uppercase.

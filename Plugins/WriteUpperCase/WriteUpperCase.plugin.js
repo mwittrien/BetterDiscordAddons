@@ -8,7 +8,7 @@ var WriteUpperCase = (_ => {
 
 		getAuthor () {return "DevilBro";}
 
-		getDescription () {return "Changes message input to uppercase.";}
+		getDescription () {return "Changes first letter in message input to uppercase.";}
 
 		constructor () {
 			this.changelog = {
