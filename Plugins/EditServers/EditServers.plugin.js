@@ -6,7 +6,7 @@ var EditServers = (_ => {
 	return class EditServers {
 		getName () {return "EditServers";}
 
-		getVersion () {return "2.2.2";}
+		getVersion () {return "2.2.3";}
 		
 		getAuthor () {return "DevilBro";}
 
@@ -14,7 +14,7 @@ var EditServers = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"fixed":[["Inbox update","Fixes for the inbox update"]]
+				"improved":[["Invites","Also changes servers in invites now"]]
 			};
 
 			this.patchedModules = {
@@ -25,7 +25,8 @@ var EditServers = (_ => {
 					QuickSwitcher: "render",
 					QuickSwitchChannelResult: "render",
 					GuildSidebar: "render",
-					GuildHeader: "render"
+					GuildHeader: "render",
+					InviteGuildName: "GuildName"
 				},
 				after: {
 					RecentsChannelHeader: "default",
@@ -46,6 +47,7 @@ var EditServers = (_ => {
 					addOriginalTooltip:		{value:true, 	inner:false,	description:"Hovering over a changed Server Header shows the original Name as Tooltip"},
 					changeInGuildList:		{value:true, 	inner:true,		description:"Server List"},
 					changeInGuildHeader:	{value:true, 	inner:true,		description:"Server Header"},
+					changeInGuildInvites:	{value:true, 	inner:true,		description:"Server Invites"},
 					changeInMutualGuilds:	{value:true, 	inner:true,		description:"Mutual Servers"},
 					changeInRecentMentions:	{value:true, 	inner:true,		description:"Recent Mentions Popout"},
 					changeInQuickSwitcher:	{value:true, 	inner:true,		description:"Quick Switcher"}
@@ -315,18 +317,22 @@ var EditServers = (_ => {
 		}
 		
 		processGuildHeader (e) {
-			if (e.instance.props.guild) {
-				if (settings.changeInGuildHeader) {
-					e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
-					let oldName = (BDFDB.LibraryModules.GuildStore.getGuild(e.instance.props.guild.id) || {}).name;
-					if (e.returnvalue && settings.addOriginalTooltip && oldName != e.instance.props.guild.name) {
-						e.returnvalue.props.children[0] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
-							text: oldName,
-							children: e.returnvalue.props.children[0],
-							tooltipConfig: {type: "right"}
-						});
-					}
+			if (e.instance.props.guild && settings.changeInGuildHeader) {
+				e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
+				let oldName = (BDFDB.LibraryModules.GuildStore.getGuild(e.instance.props.guild.id) || {}).name;
+				if (e.returnvalue && settings.addOriginalTooltip && oldName != e.instance.props.guild.name) {
+					e.returnvalue.props.children[0] = BDFDB.ReactUtils.createElement(BDFDB.LibraryComponents.TooltipContainer, {
+						text: oldName,
+						children: e.returnvalue.props.children[0],
+						tooltipConfig: {type: "right"}
+					});
 				}
+			}
+		}
+		
+		processInviteGuildName (e) {
+			if (e.instance.props.guild && settings.changeInGuildInvites) {
+				e.instance.props.guild = this.getGuildData(e.instance.props.guild.id);
 			}
 		}
 		
@@ -588,7 +594,7 @@ var EditServers = (_ => {
 					color: "BRAND",
 					close: true,
 					click: modal => {
-						let olddata = Object.assign({}, data);
+						let oldData = Object.assign({}, data);
 						
 						let guildnameinput = modal.querySelector(".input-guildname " + BDFDB.dotCN.input);
 						let guildacronyminput = modal.querySelector(".input-guildacronym " + BDFDB.dotCN.input);
@@ -613,7 +619,7 @@ var EditServers = (_ => {
 
 						let changed = false;
 						if (Object.keys(data).every(key => !data[key]) && (changed = true)) BDFDB.DataUtils.remove(this, "servers", guild.id);
-						else if (!BDFDB.equals(olddata, data) && (changed = true)) BDFDB.DataUtils.save(data, this, "servers", guild.id);
+						else if (!BDFDB.equals(oldData, data) && (changed = true)) BDFDB.DataUtils.save(data, this, "servers", guild.id);
 						if (changed) this.forceUpdateAll();;
 					}
 				}]

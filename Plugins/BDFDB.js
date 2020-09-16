@@ -1259,6 +1259,7 @@
 	WebModulesData.MemoComponent = [
 		"EmojiPicker",
 		"ExpressionPicker",
+		"InviteGuildName",
 		"GuildFolder",
 		"Messages",
 		"MessageContent",
@@ -1342,6 +1343,7 @@
 	};
 	WebModulesData.PropsFinder = {
 		Avatar: "AnimatedAvatar",
+		InviteGuildName: ["GuildName", "GuildTemplateName"],
 		MessageHeader: "MessageTimestamp",
 		UnavailableGuildsButton: "UnavailableGuildsButton"
 	};

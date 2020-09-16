@@ -140,6 +140,7 @@
 		"MemoComponent": [
 			"EmojiPicker",
 			"ExpressionPicker",
+			"InviteGuildName",
 			"GuildFolder",
 			"Messages",
 			"MessageContent",
@@ -178,6 +179,7 @@
 			"I18nLoaderWrapper": {"class": "app"},
 			"InstantInviteModal": {"class": "invitemodalwrapper"},
 			"InvitationCard": {"class": "invitemodalinviterow"},
+			"InviteGuildName": {"props": ["GuildName", "GuildTemplateName"]},
 			"InviteCard": {"class": "guildsettingsinvitecard"},
 			"MemberCard": {"class": "guildsettingsmembercard"},
 			"MessageHeader": {"props": ["MessageTimestamp"]},
