@@ -4,15 +4,15 @@ var RemoveBlockedMessages = (_ => {
 	return class RemoveBlockedMessages {
 		getName () {return "RemoveBlockedMessages";}
 
-		getVersion () {return "1.0.4";}
+		getVersion () {return "1.0.5";}
 
 		getAuthor () {return "DevilBro";}
 
-		getDescription () {return "Removes blocked messages completely.";}
+		getDescription () {return "Completely removes blocked messages.";}
 		
 		constructor () {		
 			this.changelog = {
-				"fixed":[["Message Update","Fixed for yet another message update provided by our best friend discord"]]
+				"fixed":[["Date Deviders","No longer shows date deviders of blocked messages"]]
 			};
 			
 			this.patchedModules = {
@@ -75,7 +75,14 @@ var RemoveBlockedMessages = (_ => {
 		
 		processMessages (e) {
 			let messagesIns = e.returnvalue.props.children;
-			if (BDFDB.ArrayUtils.is(messagesIns.props.channelStream)) messagesIns.props.channelStream = [].concat(messagesIns.props.channelStream.filter(n => n.type != "MESSAGE_GROUP_BLOCKED"));
+			if (BDFDB.ArrayUtils.is(messagesIns.props.channelStream)) {
+				let oldStream = messagesIns.props.channelStream.filter(n => n.type != "MESSAGE_GROUP_BLOCKED"), newChannelStream = [];
+				for (let i in oldStream) {
+					let next = parseInt(i)+1;
+					if (oldStream[i].type != "DIVIDER" || (oldStream[next] && oldStream[i].type == "DIVIDER" && oldStream[next].type != "DIVIDER" && oldStream.slice(next).some(nextStream => nextStream.type != "DIVIDER"))) newChannelStream.push(oldStream[i]);
+				}
+				messagesIns.props.channelStream = newChannelStream;
+			}
 			if (BDFDB.ObjectUtils.is(messagesIns.props.messages) && BDFDB.ArrayUtils.is(messagesIns.props.messages._array)) {
 				let messages = messagesIns.props.messages;
 				messagesIns.props.messages = new BDFDB.DiscordObjects.Messages(messages);
