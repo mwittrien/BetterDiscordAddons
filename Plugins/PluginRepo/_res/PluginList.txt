@@ -129,6 +129,7 @@ https://raw.githubusercontent.com/rauenzi/BetterDiscordAddons/master/Plugins/Sta
 https://raw.githubusercontent.com/Strencher/BetterDiscordStuff/master/LinkChannels/LinkChannels.plugin.js
 https://raw.githubusercontent.com/Strencher/BetterDiscordStuff/master/OpenSpotifylinksInSpotify/OpenSpotifylinksInSpotify.plugin.js
 https://raw.githubusercontent.com/Strencher/BetterDiscordStuff/master/QuickMuteChannels/QuickMuteChannels.plugin.js
+https://raw.githubusercontent.com/Strencher/BetterDiscordStuff/master/ShowAllActivities/ShowAllActivities.plugin.js
 https://raw.githubusercontent.com/Strencher/BetterDiscordStuff/master/VoiceUsersCounter/VoiceUsersCounter.plugin.js
 https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/v1/BetterFolders.plugin.js
 https://raw.githubusercontent.com/Zerthox/BetterDiscord-Plugins/master/v1/BetterReplyer.plugin.js
