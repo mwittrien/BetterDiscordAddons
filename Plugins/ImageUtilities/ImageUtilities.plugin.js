@@ -50,7 +50,7 @@ var ImageUtilities = (_ => {
 	return class ImageUtilities {
 		getName () {return "ImageUtilities";}
 
-		getVersion () {return "4.1.4";}
+		getVersion () {return "4.1.5";}
 
 		getAuthor () {return "DevilBro";}
 
@@ -58,8 +58,7 @@ var ImageUtilities = (_ => {
 
 		constructor () {
 			this.changelog = {
-				"improved":[["Right Click Channel List","No longer adds imageutils entry for server icon when right clicking the channel list"]],
-				"added":[["Right Click Banner","Adds imageutils entry for server banner if server has a banner"]]
+				"fixed":[["Gallery Mode Overlap","Fixed Images overlapping in gallery mode if image details is disabled"]]
 			};
 			
 			this.patchedModules = {
@@ -124,6 +123,7 @@ var ImageUtilities = (_ => {
 				${BDFDB.dotCN.imagemodal}[style*="opacity: 0;"] > * {
 					display: none !important;
 				}
+				${BDFDB.dotCN._imageutilitiesgallery}:not([style*="opacity: 0;"]),
 				${BDFDB.dotCN._imageutilitiesdetailsadded}:not([style*="opacity: 0;"]) {
 					transform: unset !important;
 				}
