@@ -49,7 +49,9 @@ module.exports = (_ => {
 			getVersion() {return config.version;}
 			getDescription() {return config.description;}
 			load() {
-				if (window.BDFDB_Global.loading) PluginStores.delayedLoad.push(this);
+				if (window.BDFDB_Global.loading) {
+					if (!PluginStores.delayedLoad.includes(this)) PluginStores.delayedLoad.push(this);
+				}
 				else {
 					Object.assign(this, config);
 					BDFDB.TimeUtils.suppress(_ => {
@@ -59,7 +61,9 @@ module.exports = (_ => {
 				}
 			}
 			start() {
-				if (window.BDFDB_Global.loading) PluginStores.delayedStart.push(this);
+				if (window.BDFDB_Global.loading) {
+					if (!PluginStores.delayedStart.includes(this)) PluginStores.delayedStart.push(this);
+				}
 				else {
 					if (this.started) return;
 					this.started = true;
@@ -172,6 +176,112 @@ module.exports = (_ => {
 		}
 	};
 	
+
+	BDFDB.BDUtils = {};
+	BDFDB.BDUtils.getPluginsFolder = function () {
+		if (window.BdApi && BdApi.Plugins.folder && typeof BdApi.Plugins.folder == "string") return BdApi.Plugins.folder;
+		else if (LibraryRequires.process.env.injDir) return LibraryRequires.path.resolve(LibraryRequires.process.env.injDir, "plugins/");
+		else switch (LibraryRequires.process.platform) {
+			case "win32":
+				return LibraryRequires.path.resolve(LibraryRequires.process.env.appdata, "BetterDiscord/plugins/");
+			case "darwin":
+				return LibraryRequires.path.resolve(LibraryRequires.process.env.HOME, "Library/Preferences/BetterDiscord/plugins/");
+			default:
+				if (LibraryRequires.process.env.XDG_CONFIG_HOME) return LibraryRequires.path.resolve(LibraryRequires.process.env.XDG_CONFIG_HOME, "BetterDiscord/plugins/");
+				else return LibraryRequires.path.resolve(LibraryRequires.process.env.HOME, ".config/BetterDiscord/plugins/");
+			}
+	};
+	BDFDB.BDUtils.getThemesFolder = function () {
+		if (window.BdApi && BdApi.Themes.folder && typeof BdApi.Themes.folder == "string") return BdApi.Themes.folder;
+		else if (LibraryRequires.process.env.injDir) return LibraryRequires.path.resolve(LibraryRequires.process.env.injDir, "plugins/");
+		else switch (LibraryRequires.process.platform) {
+			case "win32": 
+				return LibraryRequires.path.resolve(LibraryRequires.process.env.appdata, "BetterDiscord/themes/");
+			case "darwin": 
+				return LibraryRequires.path.resolve(LibraryRequires.process.env.HOME, "Library/Preferences/BetterDiscord/themes/");
+			default:
+				if (LibraryRequires.process.env.XDG_CONFIG_HOME) return LibraryRequires.path.resolve(LibraryRequires.process.env.XDG_CONFIG_HOME, "BetterDiscord/themes/");
+				else return LibraryRequires.path.resolve(LibraryRequires.process.env.HOME, ".config/BetterDiscord/themes/");
+			}
+	};
+	BDFDB.BDUtils.isPluginEnabled = function (pluginName) {
+		if (!window.BdApi) return null;
+		else if (BdApi.Plugins && typeof BdApi.Plugins.isEnabled == "function") return BdApi.Plugins.isEnabled(pluginName);
+		else if (typeof BdApi.isPluginEnabled == "function") return BdApi.isPluginEnabled(pluginName);
+	};
+	BDFDB.BDUtils.reloadPlugin = function (pluginName) {
+		if (!window.BdApi) return;
+		else if (BdApi.Plugins && typeof BdApi.Plugins.reload == "function") BdApi.Plugins.reload(pluginName);
+		else if (window.pluginModule) window.pluginModule.reloadPlugin(pluginName);
+	};
+	BDFDB.BDUtils.enablePlugin = function (pluginName) {
+		if (!window.BdApi) return;
+		else if (BdApi.Plugins && typeof BdApi.Plugins.enable == "function") BdApi.Plugins.enable(pluginName);
+		else if (window.pluginModule) window.pluginModule.startPlugin(pluginName);
+	};
+	BDFDB.BDUtils.disablePlugin = function (pluginName) {
+		if (!window.BdApi) return;
+		else if (BdApi.Plugins && typeof BdApi.Plugins.disable == "function") BdApi.Plugins.disable(pluginName);
+		else if (window.pluginModule) window.pluginModule.stopPlugin(pluginName);
+	};
+	BDFDB.BDUtils.getPlugin = function (pluginName, hasToBeEnabled = false, overHead = false) {
+		if (window.BdApi && !hasToBeEnabled || BDFDB.BDUtils.isPluginEnabled(pluginName)) {	
+			if (BdApi.Plugins.get && typeof BdApi.Plugins.get == "function") {
+				let plugin = BdApi.Plugins.get(pluginName);
+				if (overHead) return plugin ? {filename: LibraryRequires.fs.existsSync(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), `${pluginName}.plugin.js`)) ? `${pluginName}.plugin.js` : null, id: pluginName, name: pluginName, plugin: plugin} : null;
+				else return plugin;
+			}
+			else if (window.bdplugins) overHead ? window.bdplugins[pluginName] : (window.bdplugins[pluginName] || {}).plugin;
+		}
+		return null;
+	};
+	BDFDB.BDUtils.isThemeEnabled = function (themeName) {
+		if (!window.BdApi) return null;
+		else if (BdApi.Themes && typeof BdApi.Themes.isEnabled == "function") return BdApi.Themes.isEnabled(themeName);
+		else if (typeof BdApi.isThemeEnabled == "function") return BdApi.isThemeEnabled(themeName);
+	};
+	BDFDB.BDUtils.enableTheme = function (themeName) {
+		if (!window.BdApi) return;
+		else if (BdApi.Themes && typeof BdApi.Themes.enable == "function") BdApi.Themes.enable(themeName);
+		else if (window.themeModule) window.themeModule.enableTheme(themeName);
+	};
+	BDFDB.BDUtils.disableTheme = function (themeName) {
+		if (!window.BdApi) return;
+		else if (BdApi.Themes && typeof BdApi.Themes.disable == "function") BdApi.Themes.disable(themeName);
+		else if (window.themeModule) window.themeModule.disableTheme(themeName);
+	};
+	BDFDB.BDUtils.getTheme = function (themeName, hasToBeEnabled = false) {
+		if (window.BdApi && !hasToBeEnabled || BDFDB.BDUtils.isThemeEnabled(themeName)) {
+			if (BdApi.Themes && typeof BdApi.Themes.get == "function") return BdApi.Themes.get(themeName);
+			else if (window.bdthemes) window.bdthemes[themeName];
+		}
+		return null;
+	};
+	BDFDB.BDUtils.settingsIds = {
+		automaticLoading: "settings.addons.autoReload",
+		coloredText: "settings.appearance.coloredText",
+		normalizedClasses: "settings.general.classNormalizer",
+		showToasts: "settings.general.showToasts"
+	};
+	BDFDB.BDUtils.toggleSettings = function (key, state) {
+		if (window.BdApi && typeof key == "string") {
+			let path = key.split(".");
+			let currentState = BDFDB.BDUtils.getSettings(key);
+			if (state === true) {
+				if (currentState === false) BdApi.enableSetting(...path);
+			}
+			else if (state === false) {
+				if (currentState === true) BdApi.disableSetting(...path);
+			}
+			else if (currentState === true || currentState === false) BDFDB.BDUtils.toggleSettings(key, !currentState);
+		}
+	};
+	BDFDB.BDUtils.getSettings = function (key) {
+		if (!window.BdApi) return {};
+		if (typeof key == "string") return BdApi.isSettingEnabled(...key.split("."));
+		else return BdApi.settings.map(n => n.settings.map(m => m.settings.map(l => ({id: [n.id, m.id, l.id].join("."), value:l.value})))).flat(10).reduce((newObj, setting) => (newObj[setting.id] = setting.value, newObj), {});
+	};
+				
 	BDFDB.PluginUtils = {};
 	BDFDB.PluginUtils.buildPlugin = function (config) {
 		return [Plugin(config), BDFDB];
@@ -2401,7 +2511,7 @@ module.exports = (_ => {
 				BDFDB.GuildUtils.markAsRead = function (guilds) {
 					if (!guilds) return;
 					let unreadChannels = [];
-					for (let guild of BDFDB.ArrayUtils.is(guilds) ? guilds : (typeof guilds == "string" || typeof guilds == "number" ? Array.of(guilds) : Array.from(guilds))) {
+					for (let guild of [guilds].map(n => NodeList.prototype.isPrototypeOf(n) ? Array.from(n) : n).flat(10).filter(n => n)) {
 						let id = Node.prototype.isPrototypeOf(guild) ? BDFDB.GuildUtils.getId(guild) : (guild && typeof guild == "object" ? guild.id : guild);
 						let channels = id && LibraryModules.GuildChannelStore.getChannels(id);
 						if (channels) for (let type in channels) if (BDFDB.ArrayUtils.is(channels[type])) for (let channelObj of channels[type]) unreadChannels.push(channelObj.channel.id);
@@ -2526,7 +2636,7 @@ module.exports = (_ => {
 				BDFDB.ChannelUtils.markAsRead = function (channels) {
 					if (!channels) return;
 					let unreadChannels = [];
-					for (let channel of channels = BDFDB.ArrayUtils.is(channels) ? channels : (typeof channels == "string" || typeof channels == "number" ? Array.of(channels) : Array.from(channels))) {
+					for (let channel of [channels].map(n => NodeList.prototype.isPrototypeOf(n) ? Array.from(n) : n).flat(10).filter(n => n)) {
 						let id = Node.prototype.isPrototypeOf(channel) ? BDFDB.ChannelUtils.getId(channel) : (channel && typeof channel == "object" ? channel.id : channel);
 						if (id && BDFDB.ChannelUtils.isTextChannel(id)) unreadChannels.push({
 							channelId: id,
@@ -2607,7 +2717,7 @@ module.exports = (_ => {
 				BDFDB.DMUtils.markAsRead = function (dms) {
 					if (!dms) return;
 					let unreadChannels = [];
-					for (let dm of dms = BDFDB.ArrayUtils.is(dms) ? dms : (typeof dms == "string" || typeof dms == "number" ? Array.of(dms) : Array.from(dms))) {
+					for (let dm of [dms].map(n => NodeList.prototype.isPrototypeOf(n) ? Array.from(n) : n).flat(10).filter(n => n)) {
 						let id = Node.prototype.isPrototypeOf(dm) ? BDFDB.BDFDB.DMUtils.getId(dm) : (dm && typeof dm == "object" ? dm.id : dm);
 						if (id) unreadChannels.push(id);
 					}
@@ -2970,7 +3080,7 @@ module.exports = (_ => {
 				};
 				BDFDB.DOMUtils.addClass = function (eles, ...classes) {
 					if (!eles || !classes) return;
-					for (let ele of [eles].flat(10).filter(n => n)) {
+					for (let ele of [eles].map(n => NodeList.prototype.isPrototypeOf(n) ? Array.from(n) : n).flat(10).filter(n => n)) {
 						if (Node.prototype.isPrototypeOf(ele)) add(ele);
 						else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) add(e);
 						else if (typeof ele == "string") for (let e of ele.split(",")) if (e && (e = e.trim())) for (let n of document.querySelectorAll(e)) add(n);
@@ -2981,7 +3091,7 @@ module.exports = (_ => {
 				};
 				BDFDB.DOMUtils.removeClass = function (eles, ...classes) {
 					if (!eles || !classes) return;
-					for (let ele of [eles].flat(10).filter(n => n)) {
+					for (let ele of [eles].map(n => NodeList.prototype.isPrototypeOf(n) ? Array.from(n) : n).flat(10).filter(n => n)) {
 						if (Node.prototype.isPrototypeOf(ele)) remove(ele);
 						else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) remove(e);
 						else if (typeof ele == "string") for (let e of ele.split(",")) if (e && (e = e.trim())) for (let n of document.querySelectorAll(e)) remove(n);
@@ -2998,9 +3108,8 @@ module.exports = (_ => {
 						force = undefined;
 					}
 					if (!classes.length) return;
-					for (let ele of [eles].flat(10).filter(n => n)) {
-						if (!ele) {}
-						else if (Node.prototype.isPrototypeOf(ele)) toggle(ele);
+					for (let ele of [eles].map(n => NodeList.prototype.isPrototypeOf(n) ? Array.from(n) : n).flat(10).filter(n => n)) {
+						if (Node.prototype.isPrototypeOf(ele)) toggle(ele);
 						else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) toggle(e);
 						else if (typeof ele == "string") for (let e of ele.split(",")) if (e && (e = e.trim())) for (let n of document.querySelectorAll(e)) toggle(n);
 					}
@@ -3017,9 +3126,8 @@ module.exports = (_ => {
 					}
 					if (!classes.length) return;
 					let contained = undefined;
-					for (let ele of BDFDB.ArrayUtils.is(eles) ? eles : Array.of(eles)) {
-						if (!ele) {}
-						else if (Node.prototype.isPrototypeOf(ele)) contains(ele);
+					for (let ele of [eles].map(n => NodeList.prototype.isPrototypeOf(n) ? Array.from(n) : n).flat(10).filter(n => n)) {
+						if (Node.prototype.isPrototypeOf(ele)) contains(ele);
 						else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) contains(e);
 						else if (typeof ele == "string") for (let c of ele.split(",")) if (c && (c = c.trim())) for (let n of document.querySelectorAll(c)) contains(n);
 					}
@@ -3034,7 +3142,7 @@ module.exports = (_ => {
 				};
 				BDFDB.DOMUtils.replaceClass = function (eles, oldclass, newclass) {
 					if (!eles || typeof oldclass != "string" || typeof newclass != "string") return;
-					for (let ele of [eles].flat(10).filter(n => n)) {
+					for (let ele of [eles].map(n => NodeList.prototype.isPrototypeOf(n) ? Array.from(n) : n).flat(10).filter(n => n)) {
 						if (Node.prototype.isPrototypeOf(ele)) replace(ele);
 						else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) replace(e);
 						else if (typeof ele == "string") for (let e of ele.split(",")) if (e && (e = e.trim())) for (let n of document.querySelectorAll(e)) replace(n);
@@ -3870,109 +3978,6 @@ module.exports = (_ => {
 						for (let listener of plugin.ipcListeners) LibraryRequires.electron.ipcRenderer.off(listener.eventName, listener.callback);
 						plugin.ipcListeners = [];
 					}
-				};
-
-				BDFDB.BDUtils = {};
-				BDFDB.BDUtils.getPluginsFolder = function () {
-					if (LibraryRequires.process.env.injDir) return LibraryRequires.path.resolve(LibraryRequires.process.env.injDir, "plugins/");
-					else switch (LibraryRequires.process.platform) {
-						case "win32":
-							return LibraryRequires.path.resolve(LibraryRequires.process.env.appdata, "BetterDiscord/plugins/");
-						case "darwin":
-							return LibraryRequires.path.resolve(LibraryRequires.process.env.HOME, "Library/Preferences/BetterDiscord/plugins/");
-						default:
-							if (LibraryRequires.process.env.XDG_CONFIG_HOME) return LibraryRequires.path.resolve(LibraryRequires.process.env.XDG_CONFIG_HOME, "BetterDiscord/plugins/");
-							else return LibraryRequires.path.resolve(LibraryRequires.process.env.HOME, ".config/BetterDiscord/plugins/");
-						}
-				};
-				BDFDB.BDUtils.getThemesFolder = function () {
-					if (LibraryRequires.process.env.injDir) return LibraryRequires.path.resolve(LibraryRequires.process.env.injDir, "plugins/");
-					else switch (LibraryRequires.process.platform) {
-						case "win32": 
-							return LibraryRequires.path.resolve(LibraryRequires.process.env.appdata, "BetterDiscord/themes/");
-						case "darwin": 
-							return LibraryRequires.path.resolve(LibraryRequires.process.env.HOME, "Library/Preferences/BetterDiscord/themes/");
-						default:
-							if (LibraryRequires.process.env.XDG_CONFIG_HOME) return LibraryRequires.path.resolve(LibraryRequires.process.env.XDG_CONFIG_HOME, "BetterDiscord/themes/");
-							else return LibraryRequires.path.resolve(LibraryRequires.process.env.HOME, ".config/BetterDiscord/themes/");
-						}
-				};
-				BDFDB.BDUtils.isPluginEnabled = function (pluginName) {
-					if (!window.BdApi) return null;
-					else if (BdApi.Plugins && typeof BdApi.Plugins.isEnabled == "function") return BdApi.Plugins.isEnabled(pluginName);
-					else if (typeof BdApi.isPluginEnabled == "function") return BdApi.isPluginEnabled(pluginName);
-				};
-				BDFDB.BDUtils.reloadPlugin = function (pluginName) {
-					if (!window.BdApi) return;
-					else if (BdApi.Plugins && typeof BdApi.Plugins.reload == "function") BdApi.Plugins.reload(pluginName);
-					else if (window.pluginModule) window.pluginModule.reloadPlugin(pluginName);
-				};
-				BDFDB.BDUtils.enablePlugin = function (pluginName) {
-					if (!window.BdApi) return;
-					else if (BdApi.Plugins && typeof BdApi.Plugins.enable == "function") BdApi.Plugins.enable(pluginName);
-					else if (window.pluginModule) window.pluginModule.startPlugin(pluginName);
-				};
-				BDFDB.BDUtils.disablePlugin = function (pluginName) {
-					if (!window.BdApi) return;
-					else if (BdApi.Plugins && typeof BdApi.Plugins.disable == "function") BdApi.Plugins.disable(pluginName);
-					else if (window.pluginModule) window.pluginModule.stopPlugin(pluginName);
-				};
-				BDFDB.BDUtils.getPlugin = function (pluginName, hasToBeEnabled = false, overHead = false) {
-					if (window.BdApi && !hasToBeEnabled || BDFDB.BDUtils.isPluginEnabled(pluginName)) {	
-						if (BdApi.Plugins.get && typeof BdApi.Plugins.get == "function") {
-							let plugin = BdApi.Plugins.get(pluginName);
-							if (overHead) return plugin ? {filename: LibraryRequires.fs.existsSync(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), `${pluginName}.plugin.js`)) ? `${pluginName}.plugin.js` : null, id: pluginName, name: pluginName, plugin: plugin} : null;
-							else return plugin;
-						}
-						else if (window.bdplugins) overHead ? window.bdplugins[pluginName] : (window.bdplugins[pluginName] || {}).plugin;
-					}
-					return null;
-				};
-				BDFDB.BDUtils.isThemeEnabled = function (themeName) {
-					if (!window.BdApi) return null;
-					else if (BdApi.Themes && typeof BdApi.Themes.isEnabled == "function") return BdApi.Themes.isEnabled(themeName);
-					else if (typeof BdApi.isThemeEnabled == "function") return BdApi.isThemeEnabled(themeName);
-				};
-				BDFDB.BDUtils.enableTheme = function (themeName) {
-					if (!window.BdApi) return;
-					else if (BdApi.Themes && typeof BdApi.Themes.enable == "function") BdApi.Themes.enable(themeName);
-					else if (window.themeModule) window.themeModule.enableTheme(themeName);
-				};
-				BDFDB.BDUtils.disableTheme = function (themeName) {
-					if (!window.BdApi) return;
-					else if (BdApi.Themes && typeof BdApi.Themes.disable == "function") BdApi.Themes.disable(themeName);
-					else if (window.themeModule) window.themeModule.disableTheme(themeName);
-				};
-				BDFDB.BDUtils.getTheme = function (themeName, hasToBeEnabled = false) {
-					if (window.BdApi && !hasToBeEnabled || BDFDB.BDUtils.isThemeEnabled(themeName)) {
-						if (BdApi.Themes && typeof BdApi.Themes.get == "function") return BdApi.Themes.get(themeName);
-						else if (window.bdthemes) window.bdthemes[themeName];
-					}
-					return null;
-				};
-				BDFDB.BDUtils.settingsIds = {
-					automaticLoading: "settings.addons.autoReload",
-					coloredText: "settings.appearance.coloredText",
-					normalizedClasses: "settings.general.classNormalizer",
-					showToasts: "settings.general.showToasts"
-				};
-				BDFDB.BDUtils.toggleSettings = function (key, state) {
-					if (window.BdApi && typeof key == "string") {
-						let path = key.split(".");
-						let currentState = BDFDB.BDUtils.getSettings(key);
-						if (state === true) {
-							if (currentState === false) BdApi.enableSetting(...path);
-						}
-						else if (state === false) {
-							if (currentState === true) BdApi.disableSetting(...path);
-						}
-						else if (currentState === true || currentState === false) BDFDB.BDUtils.toggleSettings(key, !currentState);
-					}
-				};
-				BDFDB.BDUtils.getSettings = function (key) {
-					if (!window.BdApi) return {};
-					if (typeof key == "string") return BdApi.isSettingEnabled(...key.split("."));
-					else return BdApi.settings.map(n => n.settings.map(m => m.settings.map(l => ({id: [n.id, m.id, l.id].join("."), value:l.value})))).flat(10).reduce((newObj, setting) => (newObj[setting.id] = setting.value, newObj), {});
 				};
 				
 				const DiscordClassModules = Object.assign({}, InternalData.CustomClassModules);

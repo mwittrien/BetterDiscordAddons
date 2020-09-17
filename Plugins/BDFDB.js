@@ -2550,7 +2550,7 @@
 	BDFDB.GuildUtils.markAsRead = function (guilds) {
 		if (!guilds) return;
 		let unreadChannels = [];
-		for (let guild of BDFDB.ArrayUtils.is(guilds) ? guilds : (typeof guilds == "string" || typeof guilds == "number" ? Array.of(guilds) : Array.from(guilds))) {
+		for (let guild of [guilds].map(n => NodeList.prototype.isPrototypeOf(n) ? Array.from(n) : n).flat(10).filter(n => n)) {
 			let id = Node.prototype.isPrototypeOf(guild) ? BDFDB.GuildUtils.getId(guild) : (guild && typeof guild == "object" ? guild.id : guild);
 			let channels = id && LibraryModules.GuildChannelStore.getChannels(id);
 			if (channels) for (let type in channels) if (BDFDB.ArrayUtils.is(channels[type])) for (let channelObj of channels[type]) unreadChannels.push(channelObj.channel.id);
@@ -2675,13 +2675,14 @@
 	BDFDB.ChannelUtils.markAsRead = function (channels) {
 		if (!channels) return;
 		let unreadChannels = [];
-		for (let channel of channels = BDFDB.ArrayUtils.is(channels) ? channels : (typeof channels == "string" || typeof channels == "number" ? Array.of(channels) : Array.from(channels))) {
+		for (let channel of [channels].map(n => NodeList.prototype.isPrototypeOf(n) ? Array.from(n) : n).flat(10).filter(n => n)) {
 			let id = Node.prototype.isPrototypeOf(channel) ? BDFDB.ChannelUtils.getId(channel) : (channel && typeof channel == "object" ? channel.id : channel);
 			if (id && BDFDB.ChannelUtils.isTextChannel(id)) unreadChannels.push({
 				channelId: id,
 				messageId: LibraryModules.UnreadChannelUtils.lastMessageId(id)
 			});
 		}
+		console.log(unreadChannels);
 		if (unreadChannels.length) LibraryModules.AckUtils.bulkAck(unreadChannels);
 	};
 	
@@ -2756,7 +2757,7 @@
 	BDFDB.DMUtils.markAsRead = function (dms) {
 		if (!dms) return;
 		let unreadChannels = [];
-		for (let dm of dms = BDFDB.ArrayUtils.is(dms) ? dms : (typeof dms == "string" || typeof dms == "number" ? Array.of(dms) : Array.from(dms))) {
+		for (let dm of [dms].map(n => NodeList.prototype.isPrototypeOf(n) ? Array.from(n) : n).flat(10).filter(n => n)) {
 			let id = Node.prototype.isPrototypeOf(dm) ? BDFDB.DMUtils.getId(dm) : (dm && typeof dm == "object" ? dm.id : dm);
 			if (id) unreadChannels.push(id);
 		}
@@ -3119,7 +3120,7 @@
 	};
 	BDFDB.DOMUtils.addClass = function (eles, ...classes) {
 		if (!eles || !classes) return;
-		for (let ele of [eles].flat(10).filter(n => n)) {
+		for (let ele of [eles].map(n => NodeList.prototype.isPrototypeOf(n) ? Array.from(n) : n).flat(10).filter(n => n)) {
 			if (Node.prototype.isPrototypeOf(ele)) add(ele);
 			else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) add(e);
 			else if (typeof ele == "string") for (let e of ele.split(",")) if (e && (e = e.trim())) for (let n of document.querySelectorAll(e)) add(n);
@@ -3130,7 +3131,7 @@
 	};
 	BDFDB.DOMUtils.removeClass = function (eles, ...classes) {
 		if (!eles || !classes) return;
-		for (let ele of [eles].flat(10).filter(n => n)) {
+		for (let ele of [eles].map(n => NodeList.prototype.isPrototypeOf(n) ? Array.from(n) : n).flat(10).filter(n => n)) {
 			if (Node.prototype.isPrototypeOf(ele)) remove(ele);
 			else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) remove(e);
 			else if (typeof ele == "string") for (let e of ele.split(",")) if (e && (e = e.trim())) for (let n of document.querySelectorAll(e)) remove(n);
@@ -3147,9 +3148,8 @@
 			force = undefined;
 		}
 		if (!classes.length) return;
-		for (let ele of [eles].flat(10).filter(n => n)) {
-			if (!ele) {}
-			else if (Node.prototype.isPrototypeOf(ele)) toggle(ele);
+		for (let ele of [eles].map(n => NodeList.prototype.isPrototypeOf(n) ? Array.from(n) : n).flat(10).filter(n => n)) {
+			if (Node.prototype.isPrototypeOf(ele)) toggle(ele);
 			else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) toggle(e);
 			else if (typeof ele == "string") for (let e of ele.split(",")) if (e && (e = e.trim())) for (let n of document.querySelectorAll(e)) toggle(n);
 		}
@@ -3166,9 +3166,8 @@
 		}
 		if (!classes.length) return;
 		let contained = undefined;
-		for (let ele of BDFDB.ArrayUtils.is(eles) ? eles : Array.of(eles)) {
-			if (!ele) {}
-			else if (Node.prototype.isPrototypeOf(ele)) contains(ele);
+		for (let ele of [eles].map(n => NodeList.prototype.isPrototypeOf(n) ? Array.from(n) : n).flat(10).filter(n => n)) {
+			if (Node.prototype.isPrototypeOf(ele)) contains(ele);
 			else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) contains(e);
 			else if (typeof ele == "string") for (let c of ele.split(",")) if (c && (c = c.trim())) for (let n of document.querySelectorAll(c)) contains(n);
 		}
@@ -3183,7 +3182,7 @@
 	};
 	BDFDB.DOMUtils.replaceClass = function (eles, oldclass, newclass) {
 		if (!eles || typeof oldclass != "string" || typeof newclass != "string") return;
-		for (let ele of [eles].flat(10).filter(n => n)) {
+		for (let ele of [eles].map(n => NodeList.prototype.isPrototypeOf(n) ? Array.from(n) : n).flat(10).filter(n => n)) {
 			if (Node.prototype.isPrototypeOf(ele)) replace(ele);
 			else if (NodeList.prototype.isPrototypeOf(ele)) for (let e of ele) replace(e);
 			else if (typeof ele == "string") for (let e of ele.split(",")) if (e && (e = e.trim())) for (let n of document.querySelectorAll(e)) replace(n);
