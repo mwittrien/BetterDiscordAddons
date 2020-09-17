@@ -2,11 +2,13 @@
 
 module.exports = (_ => {
 	const config = {
-		name: "BDFDB",
-		author: "DevilBro",
-		version: "1.0.0",
-		description: "Gives other plugins utility functions.",
-		rawUrl: "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
+		"info": {
+			name: "BDFDB",
+			author: "DevilBro",
+			version: "1.0.0",
+			description: "Gives other plugins utility functions."
+		},
+		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
 	};
 	
 	const DiscordObjects = {};
@@ -23,7 +25,7 @@ module.exports = (_ => {
 	
 	const BDFDB = Object.assign({
 		started: true
-	}, config);
+	}, config.info, config.rawUrl);
 	
 	const InternalBDFDB = Object.assign({}, BDFDB, {
 		patchPriority: 0,
@@ -44,20 +46,20 @@ module.exports = (_ => {
 	};
 	const Plugin = function(config) {
 		return class Plugin {
-			getName() {return config.name;}
-			getAuthor() {return config.author;}
-			getVersion() {return config.version;}
-			getDescription() {return config.description;}
+			getName() {return config.info.name;}
+			getAuthor() {return config.info.author;}
+			getVersion() {return config.info.version;}
+			getDescription() {return config.info.description;}
 			load() {
 				if (window.BDFDB_Global.loading) {
 					if (!PluginStores.delayedLoad.includes(this)) PluginStores.delayedLoad.push(this);
 				}
 				else {
-					Object.assign(this, config);
+					Object.assign(this, config.info, BDFDB.ObjectUtils.exclude(config, "info"));
 					BDFDB.TimeUtils.suppress(_ => {
 						BDFDB.PluginUtils.load(this);
 						if (typeof this.onLoad == "function") this.onLoad();
-					}, "Failed to load plugin!", config.name)();
+					}, "Failed to load plugin!", config.info.name)();
 				}
 			}
 			start() {
@@ -70,7 +72,7 @@ module.exports = (_ => {
 					BDFDB.TimeUtils.suppress(_ => {
 						BDFDB.PluginUtils.init(this);
 						if (typeof this.onStart == "function") this.onStart();
-					}, "Failed to start plugin!", config.name)();
+					}, "Failed to start plugin!", config.info.name)();
 					delete this.stopping;
 				}
 			}
@@ -82,7 +84,7 @@ module.exports = (_ => {
 				BDFDB.TimeUtils.suppress(_ => {
 					if (typeof this.onStop == "function") this.onStop();
 					BDFDB.PluginUtils.clear(this);
-				}, "Failed to stop plugin!", config.name)();
+				}, "Failed to stop plugin!", config.info.name)();
 
 				delete this.started;
 			}
@@ -7467,10 +7469,10 @@ module.exports = (_ => {
 	loadLibrary(true);
 	
 	return class BDFDB_Frame {
-		getName () {return config.name;}
-		getAuthor () {return config.author;}
-		getVersion () {return config.version;}
-		getDescription () {return config.description;}
+		getName () {return config.info.name;}
+		getAuthor () {return config.info.author;}
+		getVersion () {return config.info.version;}
+		getDescription () {return config.info.description;}
 		
 		load () {}
 		start() {}
