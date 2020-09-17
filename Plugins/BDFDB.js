@@ -2682,7 +2682,6 @@
 				messageId: LibraryModules.UnreadChannelUtils.lastMessageId(id)
 			});
 		}
-		console.log(unreadChannels);
 		if (unreadChannels.length) LibraryModules.AckUtils.bulkAck(unreadChannels);
 	};
 	

@@ -3,10 +3,10 @@
 module.exports = (_ => {
 	const config = {
 		"info": {
-			name: "BDFDB",
-			author: "DevilBro",
-			version: "1.0.0",
-			description: "Gives other plugins utility functions."
+			"name": "BDFDB",
+			"author": "DevilBro",
+			"version": "1.0.0",
+			"description": "Gives other plugins utility functions."
 		},
 		"rawUrl": "https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js",
 	};
