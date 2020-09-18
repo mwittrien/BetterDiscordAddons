@@ -4727,7 +4727,6 @@
 	DiscordClassModules.TextSize = BDFDB.ModuleUtils.findByProperties("size10", "size14", "size20");
 	DiscordClassModules.TextStyle = BDFDB.ModuleUtils.findByProperties("strikethrough", "underline", "bold");
 	DiscordClassModules.Tip = BDFDB.ModuleUtils.findByProperties("pro", "inline");
-	DiscordClassModules.Title = BDFDB.ModuleUtils.findByProperties("title", "size18");
 	DiscordClassModules.TitleBar = BDFDB.ModuleUtils.findByProperties("titleBar", "wordmark");
 	DiscordClassModules.Tooltip = BDFDB.ModuleUtils.findByProperties("tooltip", "tooltipTop");
 	DiscordClassModules.TooltipGuild = BDFDB.ModuleUtils.findByProperties("rowIcon", "rowGuildName");
@@ -5473,7 +5472,6 @@
 		headertitle: ["Text", "title"],
 		height12: ["UserPopout", "height12"],
 		height16: ["File", "height16"],
-		height24: ["Title", "height24"],
 		height36: ["Notice", "height36"],
 		highlight: ["NotFound", "highlight"],
 		homebuttonicon: ["HomeIcon", "homeIcon"],
@@ -6200,7 +6198,6 @@
 		titlesize12: ["UserPopout", "size12"],
 		titlesize14: ["UserPopout", "size14"],
 		titlesize16: ["UserPopout", "size16"],
-		titlesize18: ["Title", "size18"],
 		tooltip: ["Tooltip", "tooltip"],
 		tooltipactivityicon: ["TooltipGuild", "activityIcon"],
 		tooltipblack: ["Tooltip", "tooltipBlack"],
