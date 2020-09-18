@@ -3530,7 +3530,7 @@ module.exports = (_ => {
 				BDFDB.ContextMenuUtils.createItem = function (component, props = {}) {
 					if (!component) return null;
 					else {
-						if (props.persisting || BDFDB.ObjectUtils.is(props.popoutProps) || (typeof props.color == "string" && !BDFDB.DiscordClasses[`menu${props.color.toLowerCase()}`])) component = InternalComponents.MenuItem;
+						if (props.persisting || BDFDB.ObjectUtils.is(props.popoutProps) || (typeof props.color == "string" && !DiscordClasses[`menu${props.color.toLowerCase()}`])) component = InternalComponents.MenuItem;
 						if (BDFDB.ObjectUtils.toArray(RealMenuItems).some(c => c == component)) return BDFDB.ReactUtils.createElement(component, props);
 						else return BDFDB.ReactUtils.createElement(RealMenuItems.MenuItem, {
 							id: props.id,
@@ -4192,7 +4192,7 @@ module.exports = (_ => {
 						let color = (typeof this.props.color == "string" ? this.props.color : InternalComponents.LibraryComponents.MenuItems.Colors.DEFAULT).toLowerCase();
 						let isCustomColor = false;
 						if (color) {
-							if (BDFDB.DiscordClasses[`menu${color}`]) color = color;
+							if (DiscordClasses[`menu${color}`]) color = color;
 							else if (BDFDB.ColorUtils.getType(color)) {
 								isCustomColor = true;
 								color = BDFDB.ColorUtils.convert(color, "RGBA");
