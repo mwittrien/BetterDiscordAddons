@@ -50,17 +50,13 @@ var ImageUtilities = (_ => {
 	return class ImageUtilities {
 		getName () {return "ImageUtilities";}
 
-		getVersion () {return "4.1.5";}
+		getVersion () {return "4.1.6";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Adds a handful of options for images/emotes/avatars (direct download, reverse image search, zoom, copy image link, copy image to clipboard, gallery mode)";}
 
-		constructor () {
-			this.changelog = {
-				"fixed":[["Gallery Mode Overlap","Fixed Images overlapping in gallery mode if image details is disabled"]]
-			};
-			
+		constructor () {			
 			this.patchedModules = {
 				after: {
 					ImageModal: ["render", "componentDidMount"],
@@ -686,6 +682,8 @@ var ImageUtilities = (_ => {
 							this.cleanupListeners("Zoom");
 							document.removeEventListener("mousemove", dragging);
 							document.removeEventListener("mouseup", releasing);
+							document.removeImageUtilitiesZoomObserver.disconnect();
+							delete document.removeImageUtilitiesZoomObserver;
 							BDFDB.DOMUtils.remove(lense, backdrop);
 							BDFDB.DataUtils.save(zoomSettings, this, "zoomSettings");
 						};
@@ -727,6 +725,14 @@ var ImageUtilities = (_ => {
 						document.addEventListener("wheel", document.wheelImageUtilitiesZoomListener);
 						document.addEventListener("keydown", document.keydownImageUtilitiesZoomListener);
 						document.addEventListener("keyup", document.keyupImageUtilitiesZoomListener);
+							
+						document.removeImageUtilitiesZoomObserver = new MutationObserver(changes => changes.forEach(change => {
+							let nodes = Array.from(change.removedNodes);
+							if (nodes.indexOf(appMount) > -1 || nodes.some(n => n.contains(appMount)) || nodes.indexOf(e.node) > -1 || nodes.some(n => n.contains(e.node))) {
+								releasing();
+							}
+						}));
+						document.removeImageUtilitiesZoomObserver.observe(document.body, {subtree:true, childList:true});
 					});
 				}
 			}
