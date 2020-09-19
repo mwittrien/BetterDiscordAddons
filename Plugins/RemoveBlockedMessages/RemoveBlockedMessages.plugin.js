@@ -7,11 +7,6 @@ module.exports = (_ => {
 			"author": "DevilBro",
 			"version": "1.0.5",
 			"description": "Completely removes blocked messages."
-		},
-		"changeLog": {
-			"fixed": {
-				"Date Deviders": "No longer shows date deviders of blocked messages"
-			}
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

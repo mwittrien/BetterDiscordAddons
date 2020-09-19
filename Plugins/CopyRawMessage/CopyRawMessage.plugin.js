@@ -7,11 +7,6 @@ module.exports = (_ => {
 			"author": "DevilBro",
 			"version": "1.1.1",
 			"description": "Adds a entry in the contextmenu when you right click a message that allows you to copy the raw contents of a message."
-		},
-		"changeLog": {
-			"improved": {
-				"Only copy selection": "Selecting a part of a message/embed and clicking copy raw will now only copy the selected part (including formating symbols like ~, _ and ` etc., can be disabled"
-			}
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

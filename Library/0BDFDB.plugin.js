@@ -7144,6 +7144,7 @@ module.exports = (_ => {
 				};
 
 				BDFDB.PluginUtils.load(BDFDB);
+				BDFDB.PluginUtils.checkChangeLog(BDFDB);
 				
 				InternalBDFDB.patchPlugin(BDFDB);
 				

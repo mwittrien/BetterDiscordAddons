@@ -7,11 +7,6 @@ module.exports = (_ => {
 			"author": "DevilBro",
 			"version": "1.4.8",
 			"description": "Replace all timestamps with complete timestamps."
-		},
-		"changeLog": {
-			"fixed": {
-				"Compact": "Fixed some issues with the timestamp in compact mode"
-			}
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

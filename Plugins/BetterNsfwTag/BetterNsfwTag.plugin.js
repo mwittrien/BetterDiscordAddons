@@ -7,12 +7,6 @@ module.exports = (_ => {
 			"author": "DevilBro",
 			"version": "1.2.4",
 			"description": "Adds a more noticeable tag to NSFW channels."
-		},
-		"changeLog": {
-			"improved": {
-				"Position": "Tag was repositioned similar to the mentions badge",
-				"New Library Structure & React": "Restructured my Library and switched to React rendering instead of DOM manipulation"
-			}
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

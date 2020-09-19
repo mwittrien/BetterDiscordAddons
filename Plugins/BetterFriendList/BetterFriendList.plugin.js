@@ -7,20 +7,6 @@ module.exports = (_ => {
 			"author": "DevilBro",
 			"version": "1.2.9",
 			"description": "Adds extra controls to the friends page, like sort by name/status, search and all/request/blocked amount."
-		},
-		"changeLog": {
-			"progress": {
-				"New Features & Name": "Name was changed from BetterFriendCount to BetterFriendList and new features were added"
-			},
-			"fixed": {
-				"Empty Search": "Empty search no longer stops the friend list from being displayed"
-			},
-			"improved": {
-				"Settings": "You can now disable the single features of this plugin"
-			},
-			"added": {
-				"Mutual Servers": "Mutual servers are now displayed in the friend list again"
-			}
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

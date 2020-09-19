@@ -7,11 +7,6 @@ module.exports = (_ => {
 			"author": "DevilBro",
 			"version": "1.3.9",
 			"description": "Displays the Creation Date of an Account in the UserPopout and UserModal."
-		},
-		"changeLog": {
-			"added": {
-				"Settings": "Added upper limit for $daysago, option to hide the default timestamp text and new year short form placeholder"
-			}
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

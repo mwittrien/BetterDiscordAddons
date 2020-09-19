@@ -7,11 +7,6 @@ module.exports = (_ => {
 			"author": "DevilBro",
 			"version": "2.1.8",
 			"description": "Allows the user to configure their own chat-aliases which will automatically be replaced before the message is being sent."
-		},
-		"changeLog": {
-			"added": {
-				"Don't replace before send": "Added an option to disable the process of aliases being inserted before a message is sent, turning the plugin into a WYSIWYG-esque stylt that only inserts aliases via the autocomplete menu"
-			}
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

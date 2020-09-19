@@ -7,11 +7,6 @@ module.exports = (_ => {
 			"author": "DevilBro",
 			"version": "1.4.9",
 			"description": "Adds a charcounter in the chat."
-		},
-		"changeLog": {
-			"added": {
-				"Custom Status": "Added counter to custom status input"
-			}
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {

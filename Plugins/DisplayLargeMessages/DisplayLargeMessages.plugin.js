@@ -7,11 +7,6 @@ module.exports = (_ => {
 			"author": "DevilBro",
 			"version": "1.0.6",
 			"description": "Injects the contents of large messages that were sent by discord via 'message.txt'."
-		},
-		"changelog": {
-			"fixed": {
-				"Message Update": "Fixed for yet another message update provided by our best friend discord"
-			}
 		}
 	};
     return !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
