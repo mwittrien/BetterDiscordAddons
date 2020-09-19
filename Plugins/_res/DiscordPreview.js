@@ -60,7 +60,7 @@
 						let theme = document.createElement("link");
 						theme.classList.add(data.reason);
 						theme.rel = "stylesheet";
-						theme.href = data.nativecss || data.nativeCSS;
+						theme.href = (data.nativecss || data.nativeCSS).replace("discordapp.com", "discord.com");
 						document.head.appendChild(theme);
 					}
 					
