@@ -537,7 +537,7 @@ module.exports = (_ => {
 	BDFDB.PluginUtils.checkUpdate = function (pluginName, url) {
 		if (pluginName && url && window.PluginUpdates.plugins[url]) return new Promise(callback => {
 			LibraryRequires.request(url, (error, response, body) => {
-				if (error) return callback(null);
+				if (error || !window.PluginUpdates.plugins[url]) return callback(null);
 				let newName = (body.match(/"name"\s*:\s*"([^"]+)"/) || [])[1] || pluginName;
 				let newVersion = body.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i);
 				if (!newVersion) return callback(null);
