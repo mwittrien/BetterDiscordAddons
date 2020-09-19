@@ -7469,7 +7469,7 @@ module.exports = (_ => {
 	};
 	loadLibrary(true);
 	
-	return class BDFDB_Frame {
+	return class BDFDB_Library {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
