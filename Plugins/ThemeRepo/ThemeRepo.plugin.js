@@ -3,7 +3,7 @@
 var ThemeRepo = (_ => {
 	var _this;	
 	var loading, cachedThemes, grabbedThemes, foundThemes, loadedThemes, generatorThemes, updateInterval;
-	var list, header, preview, searchTimeout, updateGeneratorTimeout, forceRerenderGenerator, nativeCSS, forcedSort, forcedOrder, showOnlyOutdated;
+	var list, header, preview, searchTimeout, updateGeneratorTimeout, forceRerenderGenerator, nativeCSS, nativeCSSvars, forcedSort, forcedOrder, showOnlyOutdated;
 	var settings = {}, modalSettings = {}, favorites = [], customList = [];
 	
 	const themeStates = {
@@ -111,9 +111,9 @@ var ThemeRepo = (_ => {
 				showOnReady: true,
 				frame: false,
 				onLoad: _ => {
-					let nativeCSS = document.querySelector("head link[rel='stylesheet'][integrity]");
 					let titleBar = document.querySelector(BDFDB.dotCN.titlebar);
 					preview.executeJavaScriptSafe(`window.onmessage({
+						location: document.location.origin,
 						origin: "ThemeRepo",
 						reason: "OnLoad",
 						username: ${JSON.stringify(BDFDB.UserUtils.me.username || "")},
@@ -122,7 +122,7 @@ var ThemeRepo = (_ => {
 						avatar: ${JSON.stringify(BDFDB.UserUtils.getAvatar() || "")},
 						classes: ${JSON.stringify(JSON.stringify(BDFDB.DiscordClasses))},
 						classModules: ${JSON.stringify(JSON.stringify(BDFDB.DiscordClassModules))},
-						nativeCSS: ${JSON.stringify(nativeCSS && nativeCSS.href || "")},
+						nativeCSS: ${JSON.stringify(nativeCSS || "")},
 						htmlClassName: ${JSON.stringify(document.documentElement.className || "")},
 						titleBar: ${JSON.stringify(titleBar && titleBar.outerHTML || "")}
 					})`);
@@ -224,7 +224,7 @@ var ThemeRepo = (_ => {
 							label: "Choose a Generator Theme",
 							basis: "60%",
 							value: this.props.currentGenerator && this.props.currentGenerator.value || "-----",
-							options: [{value:"-----", label:"-----"}, nativeCSS && {value:"nativediscord", label:"Discord", native:true}].concat((generatorThemes).map(url => ({value:url, label:(loadedThemes[url] || {}).name || "-----"})).sort((x, y) => (x.label < y.label ? -1 : x.label > y.label ? 1 : 0))).filter(n => n),
+							options: [{value:"-----", label:"-----"}, nativeCSSvars && {value:"nativediscord", label:"Discord", native:true}].concat((generatorThemes).map(url => ({value:url, label:(loadedThemes[url] || {}).name || "-----"})).sort((x, y) => (x.label < y.label ? -1 : x.label > y.label ? 1 : 0))).filter(n => n),
 							searchable: true,
 							onChange: (value, instance) => {
 								if (loadedThemes[value.value] || value.native) {
@@ -262,7 +262,7 @@ var ThemeRepo = (_ => {
 								children: "Download",
 								onClick: _ => {
 									if (this.props.currentGenerator.native) {
-										_this.createThemeFile("Discord.theme.css", `//META{"name":"Discord","description":"Allows you to easily customize discords native look","author":"DevilBro","version":"1.0.0","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien"}*//\n\n` + _this.generateTheme(nativeCSS, this.props.generatorValues));
+										_this.createThemeFile("Discord.theme.css", `//META{"name":"Discord","description":"Allows you to easily customize discords native look","author":"DevilBro","version":"1.0.0","authorId":"278543574059057154","invite":"Jx3TjNS","donate":"https://www.paypal.me/MircoWittrien","patreon":"https://www.patreon.com/MircoWittrien"}*//\n\n` + _this.generateTheme(nativeCSSvars, this.props.generatorValues));
 									}
 									else if (loadedThemes[this.props.currentGenerator.value]) {
 										_this.createThemeFile(loadedThemes[this.props.currentGenerator.value].name + ".theme.css", _this.generateTheme(loadedThemes[this.props.currentGenerator.value].fullCSS, this.props.generatorValues));
@@ -273,7 +273,7 @@ var ThemeRepo = (_ => {
 								className: BDFDB.disCN.marginbottom20
 							}),
 							(_ => {
-								let vars = this.props.currentGenerator.native ? nativeCSS.split(".theme-dark, .theme-light") : loadedThemes[this.props.currentGenerator.value].fullCSS.split(":root");
+								let vars = this.props.currentGenerator.native ? nativeCSSvars.split(".theme-dark, .theme-light") : loadedThemes[this.props.currentGenerator.value].fullCSS.split(":root");
 								if (vars.length < 2) return null;
 								vars = vars[1].replace(/\t\(/g, " (").replace(/\r|\t| {2,}/g, "").replace(/\/\*\n*((?!\/\*|\*\/).|\n)*\n+((?!\/\*|\*\/).|\n)*\n*\*\//g, "").replace(/\n\/\*.*?\*\//g, "").replace(/\n/g, "");
 								vars = vars.split("{");
@@ -327,7 +327,7 @@ var ThemeRepo = (_ => {
 														origin: "ThemeRepo",
 														reason: "NewTheme",
 														checked: true,
-														css: ${JSON.stringify(_this.generateTheme(this.props.currentGenerator.native ? nativeCSS : loadedThemes[this.props.currentGenerator.value].fullCSS, this.props.generatorValues) || "")}
+														css: ${JSON.stringify(_this.generateTheme(this.props.currentGenerator.native ? nativeCSSvars : loadedThemes[this.props.currentGenerator.value].fullCSS, this.props.generatorValues) || "")}
 													})`);
 												}, 1000);
 											}
@@ -642,17 +642,13 @@ var ThemeRepo = (_ => {
 	return class ThemeRepo {
 		getName () {return "ThemeRepo";}
 
-		getVersion () {return "2.0.6";}
+		getVersion () {return "2.0.7";}
 
 		getAuthor () {return "DevilBro";}
 
 		getDescription () {return "Allows you to preview all themes from the theme repo and download them on the fly. Repo button is in the theme settings.";}
 
-		constructor () {
-			this.changelog = {
-				"added":[["Discord Native Generator","You can now use discords native stylesheet to create a generated theme using the css variables"]]
-			};
-			
+		constructor () {			
 			this.patchedModules = {
 				before: {
 					SettingsView: "render"
@@ -1059,11 +1055,12 @@ var ThemeRepo = (_ => {
 							
 							BDFDB.LibraryRequires.request(document.querySelector("head link[rel='stylesheet'][integrity]").href, (error3, response3, body3) => {
 								if (!error3 && body3) {
+									nativeCSS = body3;
 									let theme = BDFDB.DiscordUtils.getTheme();
-									let vars = (body3.split(`.${theme}{`)[1] || "").split("}")[0];
-									nativeCSS = vars ? `.theme-dark, .theme-light {${vars}}` : "";
+									let vars = (nativeCSS.split(`.${theme}{`)[1] || "").split("}")[0];
+									nativeCSSvars = vars ? `.theme-dark, .theme-light {${vars}}` : "";
 								}
-								else nativeCSS = "";
+								else nativeCSS = nativeCSSvars = "";
 							});
 						});
 					});

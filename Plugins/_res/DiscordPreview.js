@@ -59,7 +59,7 @@
 					if (data.nativeCSS) {
 						let theme = document.createElement("style");
 						theme.classList.add(data.reason);
-						theme.innerText = data.nativeCSS;
+						theme.innerText = data.nativeCSS.replace(/\/assets\//g, data.location + "/assets/");
 						document.head.appendChild(theme);
 					}
 					
