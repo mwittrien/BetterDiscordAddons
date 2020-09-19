@@ -25,7 +25,7 @@ module.exports = (_ => {
 	
 	const BDFDB = Object.assign({
 		started: true
-	}, config.info, config.rawUrl);
+	}, config.info, {rawUrl: config.rawUrl});
 	
 	const InternalBDFDB = Object.assign({}, BDFDB, {
 		patchPriority: 0,
