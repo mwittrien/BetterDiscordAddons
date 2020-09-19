@@ -56,11 +56,10 @@
 						document.body.innerHTML = newHTML;
 					}
 					
-					if (data.nativecss || data.nativeCSS) {
-						let theme = document.createElement("link");
+					if (data.nativeCSS) {
+						let theme = document.createElement("style");
 						theme.classList.add(data.reason);
-						theme.rel = "stylesheet";
-						theme.href = (data.nativecss || data.nativeCSS).replace("discordapp.com", "discord.com");
+						theme.innerText = data.nativeCSS;
 						document.head.appendChild(theme);
 					}
 					

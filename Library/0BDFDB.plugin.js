@@ -3990,6 +3990,7 @@ module.exports = (_ => {
 				BDFDB.DiscordClassModules = Object.assign({}, DiscordClassModules);
 				
 				const DiscordClasses = Object.assign({}, InternalData.DiscordClasses);
+				BDFDB.DiscordClasses = Object.assign({}, DiscordClasses);
 				InternalBDFDB.getDiscordClass = (item, selector) => {
 					let className = DiscordClassModules.BDFDB.BDFDBundefined;
 					if (DiscordClasses[item] === undefined) {
