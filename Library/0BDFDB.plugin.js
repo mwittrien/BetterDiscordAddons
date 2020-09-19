@@ -291,7 +291,7 @@ module.exports = (_ => {
 	BDFDB.PluginUtils.load = function (plugin) {
 		if (!PluginStores.updateTimeout.includes(plugin.name)) {
 			PluginStores.updateTimeout.push(plugin.name);
-			let url = ["ImageZoom", "ImageGallery", "ReverseImageSearch", "ShowImageDetails"].includes(plugin.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ImageUtilities/ImageUtilities.plugin.js" : ["BetterFriendCount"].includes(plugin.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BetterFriendList/BetterFriendList.plugin.js" : (plugin.rawUrl ||`https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`);
+			let url = plugin.rawUrl ||`https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 
 			if (!BDFDB.ObjectUtils.is(window.PluginUpdates) || !BDFDB.ObjectUtils.is(window.PluginUpdates.plugins)) window.PluginUpdates = {plugins: {}};
 			window.PluginUpdates.plugins[url] = {name: plugin.name, raw: url, version: plugin.version};
@@ -327,7 +327,7 @@ module.exports = (_ => {
 		BDFDB.LogUtils.log(stopMsg, plugin.name);
 		if (settings.showToasts && !BDFDB.BDUtils.getSettings(BDFDB.BDUtils.settingsIds.showToasts)) BDFDB.NotificationUtils.toast(`${plugin.name} ${stopMsg}`, {nopointer: true});
 
-		let url = ["ImageZoom", "ImageGallery", "ReverseImageSearch", "ShowImageDetails"].includes(plugin.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/ImageUtilities/ImageUtilities.plugin.js" : ["BetterFriendCount"].includes(plugin.name) ? "https://mwittrien.github.io/BetterDiscordAddons/Plugins/BetterFriendList/BetterFriendList.plugin.js" : (plugin.rawUrl ||`https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`);
+		let url = plugin.rawUrl ||`https://mwittrien.github.io/BetterDiscordAddons/Plugins/${plugin.name}/${plugin.name}.plugin.js`;
 
 		BDFDB.PluginUtils.cleanUp(plugin);
 		
@@ -498,13 +498,15 @@ module.exports = (_ => {
 				let newName = (body.match(/"name"\s*:\s*"([^"]+)"/) || [])[1] || pluginName;
 				let newVersion = body.match(/['"][0-9]+\.[0-9]+\.[0-9]+['"]/i).toString().replace(/['"]/g, "");
 				let oldVersion = window.PluginUpdates.plugins[url].version;
-				LibraryRequires.fs.writeFile(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), newName + ".plugin.js"), body, _ => {
-					if (pluginName != newName) {
-						url = url.replace(new RegExp(pluginName, "g"), newName);
-						LibraryRequires.fs.unlink(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".plugin.js"), _ => {});
-						let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), pluginName + ".config.json");
+				let fileName = pluginName == "BDFDB" ? "0BDFDB" : pluginName;
+				let newFileName = newName == "BDFDB" ? "0BDFDB" : newName;
+				LibraryRequires.fs.writeFile(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), newFileName + ".plugin.js"), body, _ => {
+					if (fileName != newFileName) {
+						url = url.replace(new RegExp(fileName, "g"), newFileName);
+						LibraryRequires.fs.unlink(LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), fileName + ".plugin.js"), _ => {});
+						let configPath = LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), fileName + ".config.json");
 						LibraryRequires.fs.exists(configPath, exists => {
-							if (exists) LibraryRequires.fs.rename(configPath, LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), newName + ".config.json"), _ => {});
+							if (exists) LibraryRequires.fs.rename(configPath, LibraryRequires.path.join(BDFDB.BDUtils.getPluginsFolder(), newFileName + ".config.json"), _ => {});
 						});
 						BDFDB.TimeUtils.timeout(_ => {if (wasEnabled && !BDFDB.BDUtils.isPluginEnabled(newName)) BDFDB.BDUtils.enablePlugin(newName);}, 3000);
 					}
@@ -7135,6 +7137,8 @@ module.exports = (_ => {
 					}
 				};
 
+				BDFDB.PluginUtils.load(BDFDB);
+				
 				InternalBDFDB.patchPlugin(BDFDB);
 				
 				for (let type of QueuedComponents) if (!PluginStores.patchQueues[type]) PluginStores.patchQueues[type] = {query:[], modules:[]};
@@ -7469,7 +7473,7 @@ module.exports = (_ => {
 	};
 	loadLibrary(true);
 	
-	return class BDFDB_Library {
+	return class BDFDB_Frame {
 		getName () {return config.info.name;}
 		getAuthor () {return config.info.author;}
 		getVersion () {return config.info.version;}
